@@ -459,6 +459,10 @@ class Context
     void detachVertexArray(GLuint vertexArray);
     void detachSampler(GLuint sampler);
 
+    void generateSwizzles();
+    void generateSwizzles(SamplerType type);
+    bool getTextureAndSamplerState(SamplerType type, int index, Texture **outTexture, TextureType *outTextureType,
+                                   SamplerState *outSampler);
     Texture *getIncompleteTexture(TextureType type);
 
     bool skipDraw(GLenum drawMode);
