@@ -42,6 +42,11 @@ Framebuffer::~Framebuffer()
     mStencilbuffer.set(NULL, GL_NONE, 0, 0);
 }
 
+rx::Renderer *Framebuffer::getRenderer() const
+{
+    return mRenderer;
+}
+
 Renderbuffer *Framebuffer::lookupRenderbuffer(GLenum type, GLuint handle, GLint level, GLint layer) const
 {
     gl::Context *context = gl::getContext();

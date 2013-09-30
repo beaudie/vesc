@@ -34,6 +34,8 @@ class Framebuffer
 
     virtual ~Framebuffer();
 
+    rx::Renderer *getRenderer() const;
+
     void setColorbuffer(unsigned int colorAttachment, GLenum type, GLuint colorbuffer, GLint level, GLint layer);
     void setDepthbuffer(GLenum type, GLuint depthbuffer, GLint level, GLint layer);
     void setStencilbuffer(GLenum type, GLuint stencilbuffer, GLint level, GLint layer);
