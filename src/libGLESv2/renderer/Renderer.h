@@ -126,7 +126,7 @@ class Renderer
 
     virtual void setRasterizerState(const gl::RasterizerState &rasterState) = 0;
     virtual void setBlendState(const gl::BlendState &blendState, const gl::ColorF &blendColor,
-                               unsigned int sampleMask) = 0;
+                               unsigned int sampleMask, gl::Framebuffer *framebuffer) = 0;
     virtual void setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
                                       int stencilBackRef, bool frontFaceCCW) = 0;
 

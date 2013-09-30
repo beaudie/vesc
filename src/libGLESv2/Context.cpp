@@ -2340,7 +2340,7 @@ void Context::applyState(GLenum drawMode)
     {
         mask = 0xFFFFFFFF;
     }
-    mRenderer->setBlendState(mState.blend, mState.blendColor, mask);
+    mRenderer->setBlendState(mState.blend, mState.blendColor, mask, framebufferObject);
 
     mRenderer->setDepthStencilState(mState.depthStencil, mState.stencilRef, mState.stencilBackRef,
                                     mState.rasterizer.frontFace == GL_CCW);
