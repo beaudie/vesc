@@ -698,6 +698,34 @@ bool GetDepthStencilInfo(DXGI_FORMAT format, DXGIDepthStencilInfo *outDepthStenc
     }
 }
 
+typedef std::pair<GLint, InitializeTextureDataFunction> InternalFormatInitializerPair;
+typedef std::map<GLint, InitializeTextureDataFunction> InternalFormatInitializerMap;
+
+static InternalFormatInitializerMap BuildInternalFormatInitializerMap()
+{
+    InternalFormatInitializerMap map;
+
+    map.insert(InternalFormatInitializerPair(GL_RGB8,    initialize4ComponentData<GLubyte,  0x00,       0x00,       0x00,       0xFF>          ));
+    map.insert(InternalFormatInitializerPair(GL_RGB565,  initialize4ComponentData<GLubyte,  0x00,       0x00,       0x00,       0xFF>          ));
+    map.insert(InternalFormatInitializerPair(GL_SRGB8,   initialize4ComponentData<GLubyte,  0x00,       0x00,       0x00,       0xFF>          ));
+    map.insert(InternalFormatInitializerPair(GL_RGB16F,  initialize4ComponentData<GLhalf,   0x0000,     0x0000,     0x0000,     gl::Float16One>));
+    map.insert(InternalFormatInitializerPair(GL_RGB32F,  initialize4ComponentData<GLfloat,  0x00000000, 0x00000000, 0x00000000, gl::Float32One>));
+    map.insert(InternalFormatInitializerPair(GL_RGB8UI,  initialize4ComponentData<GLubyte,  0x00,       0x00,       0x00,       0x01>          ));
+    map.insert(InternalFormatInitializerPair(GL_RGB8I,   initialize4ComponentData<GLbyte,   0x00,       0x00,       0x00,       0x01>          ));
+    map.insert(InternalFormatInitializerPair(GL_RGB16UI, initialize4ComponentData<GLushort, 0x0000,     0x0000,     0x0000,     0x0001>        ));
+    map.insert(InternalFormatInitializerPair(GL_RGB16I,  initialize4ComponentData<GLshort,  0x0000,     0x0000,     0x0000,     0x0001>        ));
+    map.insert(InternalFormatInitializerPair(GL_RGB32UI, initialize4ComponentData<GLuint,   0x00000000, 0x00000000, 0x00000000, 0x00000001>    ));
+    map.insert(InternalFormatInitializerPair(GL_RGB32I,  initialize4ComponentData<GLint,    0x00000000, 0x00000000, 0x00000000, 0x00000001>    ));
+
+    return map;
+}
+
+static const InternalFormatInitializerMap &GetInternalFormatInitializerMap()
+{
+    static const InternalFormatInitializerMap map = BuildInternalFormatInitializerMap();
+    return map;
+}
+
 namespace d3d11
 {
 
@@ -1062,6 +1090,28 @@ DXGI_FORMAT GetRenderableFormat(GLenum internalFormat, GLuint clientVersion)
         targetFormat = GetTexFormat(internalFormat, clientVersion);
 
     return targetFormat;
+}
+
+
+bool RequiresTextureDataInitialization(GLint internalFormat)
+{
+    const InternalFormatInitializerMap &map = GetInternalFormatInitializerMap();
+    return map.find(internalFormat) != map.end();
+}
+
+InitializeTextureDataFunction GetTextureDataInitializationFunction(GLint internalFormat)
+{
+    const InternalFormatInitializerMap &map = GetInternalFormatInitializerMap();
+    InternalFormatInitializerMap::const_iterator iter = map.find(internalFormat);
+    if (iter != map.end())
+    {
+        return iter->second;
+    }
+    else
+    {
+        UNREACHABLE();
+        return NULL;
+    }
 }
 
 }
