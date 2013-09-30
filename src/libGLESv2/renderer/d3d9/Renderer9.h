@@ -320,6 +320,7 @@ class Renderer9 : public Renderer
     MultisampleSupportInfo getMultiSampleSupport(D3DFORMAT format);
 
     // current render target states
+    gl::Framebuffer *mCurFramebuffer;
     unsigned int mAppliedRenderTargetSerial;
     unsigned int mAppliedDepthbufferSerial;
     unsigned int mAppliedStencilbufferSerial;

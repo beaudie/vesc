@@ -716,7 +716,7 @@ void Renderer11::setBlendState(const gl::BlendState &blendState, const gl::Color
         memcmp(&blendColor, &mCurBlendColor, sizeof(gl::ColorF)) != 0 ||
         sampleMask != mCurSampleMask)
     {
-        ID3D11BlendState *dxBlendState = mStateCache.getBlendState(blendState);
+        ID3D11BlendState *dxBlendState = mStateCache.getBlendState(blendState, mCurFramebuffer);
         if (!dxBlendState)
         {
             ERR("NULL blend state returned by RenderStateCache::getBlendState, setting the default "
@@ -1066,6 +1066,7 @@ bool Renderer11::applyRenderTarget(gl::Framebuffer *framebuffer)
         mRenderTargetDesc.format = renderTargetFormat;
         mForceSetViewport = true;
         mForceSetScissor = true;
+        mForceSetBlendState = true;
 
         if (!mDepthStencilInitialized || depthSize != mCurDepthSize)
         {
@@ -1075,6 +1076,7 @@ bool Renderer11::applyRenderTarget(gl::Framebuffer *framebuffer)
 
         mCurStencilSize = stencilSize;
 
+        mCurFramebuffer = framebuffer;
         for (unsigned int rtIndex = 0; rtIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; rtIndex++)
         {
             mAppliedRenderTargetSerials[rtIndex] = renderTargetSerials[rtIndex];
@@ -1596,6 +1598,7 @@ void Renderer11::clear(const gl::ClearParameters &clearParams, gl::Framebuffer *
 
 void Renderer11::markAllStateDirty()
 {
+    mCurFramebuffer = NULL;
     for (unsigned int rtIndex = 0; rtIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; rtIndex++)
     {
         mAppliedRenderTargetSerials[rtIndex] = 0;
@@ -2677,6 +2680,7 @@ void Renderer11::setOneTimeRenderTarget(ID3D11RenderTargetView *renderTargetView
     {
         mAppliedRenderTargetSerials[rtIndex] = 0;
     }
+    mCurFramebuffer = NULL;
 }
 
 RenderTarget *Renderer11::createRenderTarget(SwapChain *swapChain, bool depth)
