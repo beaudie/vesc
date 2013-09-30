@@ -50,6 +50,9 @@ DXGI_FORMAT GetRTVFormat(GLenum internalFormat, GLuint clientVersion);
 DXGI_FORMAT GetDSVFormat(GLenum internalFormat, GLuint clientVersion);
 DXGI_FORMAT GetRenderableFormat(GLenum internalFormat, GLuint clientVersion);
 
+bool RequiresTextureDataInitialization(GLint internalFormat);
+InitializeTextureDataFunction GetTextureDataInitializationFunction(GLint internalFormat);
+
 }
 
 namespace d3d11_gl
