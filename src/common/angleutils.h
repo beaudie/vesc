@@ -42,6 +42,16 @@ void SafeRelease(T& resource)
     }
 }
 
+template <typename T>
+void SafeDelete(T& variable)
+{
+    if (variable)
+    {
+        delete variable;
+        variable = NULL;
+    }
+}
+
 #if defined(_MSC_VER)
 #define snprintf _snprintf
 #endif
