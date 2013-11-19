@@ -21,6 +21,16 @@
 #include "libGLESv2/Query.h"
 #include "libGLESv2/Context.h"
 
+#include "third_party/trace_event/trace_event.h"
+
+#if 1
+#define DO_SYNC() glFinish()
+#undef EVENT
+#define EVENT(message, ...) TRACE_EVENT0("gpu", __FUNCTION__)
+#else
+#define DO_SYNC()
+#endif
+
 bool validImageSize(GLint level, GLsizei width, GLsizei height)
 {
     if (level < 0 || width < 0 || height < 0)
@@ -715,6 +725,7 @@ void __stdcall glBlendFuncSeparate(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha
 
 void __stdcall glBufferData(GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage)
 {
+    DO_SYNC();
     EVENT("(GLenum target = 0x%X, GLsizeiptr size = %d, const GLvoid* data = 0x%0.8p, GLenum usage = %d)",
           target, size, data, usage);
 
@@ -765,10 +776,12 @@ void __stdcall glBufferData(GLenum target, GLsizeiptr size, const GLvoid* data, 
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+    DO_SYNC();
 }
 
 void __stdcall glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid* data)
 {
+    DO_SYNC();
     EVENT("(GLenum target = 0x%X, GLintptr offset = %d, GLsizeiptr size = %d, const GLvoid* data = 0x%0.8p)",
           target, offset, size, data);
 
@@ -819,6 +832,7 @@ void __stdcall glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, 
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+    DO_SYNC();
 }
 
 GLenum __stdcall glCheckFramebufferStatus(GLenum target)
@@ -859,6 +873,7 @@ GLenum __stdcall glCheckFramebufferStatus(GLenum target)
 
 void __stdcall glClear(GLbitfield mask)
 {
+    DO_SYNC();
     EVENT("(GLbitfield mask = %X)", mask);
 
     try
@@ -874,6 +889,7 @@ void __stdcall glClear(GLbitfield mask)
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+    DO_SYNC();
 }
 
 void __stdcall glClearColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha)
@@ -1255,6 +1271,7 @@ void __stdcall glCompressedTexSubImage2D(GLenum target, GLint level, GLint xoffs
 
 void __stdcall glCopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border)
 {
+    DO_SYNC();
     EVENT("(GLenum target = 0x%X, GLint level = %d, GLenum internalformat = 0x%X, "
           "GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, GLint border = %d)",
           target, level, internalformat, x, y, width, height, border);
@@ -1447,10 +1464,12 @@ void __stdcall glCopyTexImage2D(GLenum target, GLint level, GLenum internalforma
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+    DO_SYNC();
 }
 
 void __stdcall glCopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height)
 {
+    DO_SYNC();
     EVENT("(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, "
           "GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d)",
           target, level, xoffset, yoffset, x, y, width, height);
@@ -1579,6 +1598,7 @@ void __stdcall glCopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GL
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+    DO_SYNC();
 }
 
 GLuint __stdcall glCreateProgram(void)
@@ -2083,6 +2103,7 @@ void __stdcall glDisableVertexAttribArray(GLuint index)
 
 void __stdcall glDrawArrays(GLenum mode, GLint first, GLsizei count)
 {
+    DO_SYNC();
     EVENT("(GLenum mode = 0x%X, GLint first = %d, GLsizei count = %d)", mode, first, count);
 
     try
@@ -2103,10 +2124,13 @@ void __stdcall glDrawArrays(GLenum mode, GLint first, GLsizei count)
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+
+    DO_SYNC();
 }
 
 void __stdcall glDrawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount)
 {
+    DO_SYNC();
     EVENT("(GLenum mode = 0x%X, GLint first = %d, GLsizei count = %d, GLsizei primcount = %d)", mode, first, count, primcount);
 
     try
@@ -2130,10 +2154,13 @@ void __stdcall glDrawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei coun
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+
+    DO_SYNC();
 }
 
 void __stdcall glDrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid* indices)
 {
+    DO_SYNC();
     EVENT("(GLenum mode = 0x%X, GLsizei count = %d, GLenum type = 0x%X, const GLvoid* indices = 0x%0.8p)",
           mode, count, type, indices);
 
@@ -2170,10 +2197,13 @@ void __stdcall glDrawElements(GLenum mode, GLsizei count, GLenum type, const GLv
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+
+    DO_SYNC();
 }
 
 void __stdcall glDrawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei primcount)
 {
+    DO_SYNC();
     EVENT("(GLenum mode = 0x%X, GLsizei count = %d, GLenum type = 0x%X, const GLvoid* indices = 0x%0.8p, GLsizei primcount = %d)",
           mode, count, type, indices, primcount);
 
@@ -2213,6 +2243,7 @@ void __stdcall glDrawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum t
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+    DO_SYNC();
 }
 
 void __stdcall glEnable(GLenum cap)
@@ -2327,8 +2358,6 @@ void __stdcall glFinishFenceNV(GLuint fence)
 
 void __stdcall glFinish(void)
 {
-    EVENT("()");
-
     try
     {
         gl::Context *context = gl::getNonLostContext();
@@ -4752,6 +4781,7 @@ void __stdcall glReadnPixelsEXT(GLint x, GLint y, GLsizei width, GLsizei height,
                                 GLenum format, GLenum type, GLsizei bufSize,
                                 GLvoid *data)
 {
+    DO_SYNC();
     EVENT("(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, "
           "GLenum format = 0x%X, GLenum type = 0x%X, GLsizei bufSize = 0x%d, GLvoid *data = 0x%0.8p)",
           x, y, width, height, format, type, bufSize, data);
@@ -4787,11 +4817,13 @@ void __stdcall glReadnPixelsEXT(GLint x, GLint y, GLsizei width, GLsizei height,
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+    DO_SYNC();
 }
 
 void __stdcall glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height,
                             GLenum format, GLenum type, GLvoid* pixels)
 {
+    DO_SYNC();
     EVENT("(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, "
           "GLenum format = 0x%X, GLenum type = 0x%X, GLvoid* pixels = 0x%0.8p)",
           x, y, width, height, format, type,  pixels);
@@ -4827,6 +4859,7 @@ void __stdcall glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height,
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+    DO_SYNC();
 }
 
 void __stdcall glReleaseShaderCompiler(void)
@@ -5261,6 +5294,7 @@ GLboolean __stdcall glTestFenceNV(GLuint fence)
 void __stdcall glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height,
                             GLint border, GLenum format, GLenum type, const GLvoid* pixels)
 {
+    DO_SYNC();
     EVENT("(GLenum target = 0x%X, GLint level = %d, GLint internalformat = %d, GLsizei width = %d, GLsizei height = %d, "
           "GLint border = %d, GLenum format = 0x%X, GLenum type = 0x%X, const GLvoid* pixels =  0x%0.8p)",
           target, level, internalformat, width, height, border, format, type, pixels);
@@ -5545,6 +5579,7 @@ void __stdcall glTexImage2D(GLenum target, GLint level, GLint internalformat, GL
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+    DO_SYNC();
 }
 
 void __stdcall glTexParameterf(GLenum target, GLenum pname, GLfloat param)
@@ -5713,6 +5748,7 @@ void __stdcall glTexParameteriv(GLenum target, GLenum pname, const GLint* params
 
 void __stdcall glTexStorage2DEXT(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height)
 {
+    DO_SYNC();
     EVENT("(GLenum target = 0x%X, GLsizei levels = %d, GLenum internalformat = 0x%X, GLsizei width = %d, GLsizei height = %d)",
            target, levels, internalformat, width, height);
 
@@ -5879,11 +5915,13 @@ void __stdcall glTexStorage2DEXT(GLenum target, GLsizei levels, GLenum internalf
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+    DO_SYNC();
 }
 
 void __stdcall glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height,
                                GLenum format, GLenum type, const GLvoid* pixels)
 {
+    DO_SYNC();
     EVENT("(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, "
           "GLsizei width = %d, GLsizei height = %d, GLenum format = 0x%X, GLenum type = 0x%X, "
           "const GLvoid* pixels = 0x%0.8p)",
@@ -5979,6 +6017,7 @@ void __stdcall glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint 
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+    DO_SYNC();
 }
 
 void __stdcall glUniform1f(GLint location, GLfloat x)
@@ -6824,6 +6863,7 @@ void __stdcall glViewport(GLint x, GLint y, GLsizei width, GLsizei height)
 void __stdcall glBlitFramebufferANGLE(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
                                       GLbitfield mask, GLenum filter)
 {
+    DO_SYNC();
     EVENT("(GLint srcX0 = %d, GLint srcY0 = %d, GLint srcX1 = %d, GLint srcY1 = %d, "
           "GLint dstX0 = %d, GLint dstY0 = %d, GLint dstX1 = %d, GLint dstY1 = %d, "
           "GLbitfield mask = 0x%X, GLenum filter = 0x%X)",
@@ -6867,6 +6907,7 @@ void __stdcall glBlitFramebufferANGLE(GLint srcX0, GLint srcY0, GLint srcX1, GLi
     {
         return gl::error(GL_OUT_OF_MEMORY);
     }
+    DO_SYNC();
 }
 
 void __stdcall glTexImage3DOES(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth,

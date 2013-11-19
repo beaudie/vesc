@@ -19,6 +19,13 @@
 #include "libEGL/Display.h"
 #include "libEGL/Surface.h"
 
+//#include <vsgcapture.h>
+
+#include "third_party/trace_event/trace_event.h"
+
+//#undef EVENT
+//#define EVENT(message, ...) TRACE_EVENT0("gpu", __FUNCTION__)
+
 bool validateDisplay(egl::Display *display)
 {
     if (display == EGL_NO_DISPLAY)
@@ -1080,6 +1087,12 @@ EGLBoolean __stdcall eglSwapBuffers(EGLDisplay dpy, EGLSurface surface)
 
         if (eglSurface->swap())
         {
+            static int i = 0;
+            if (i++ % 100 == 0)
+            {
+                //g_pVsgDbg->CaptureCurrentFrame();
+            }
+
             return egl::success(EGL_TRUE);
         }
     }
