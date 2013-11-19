@@ -10,6 +10,7 @@
     },
     'includes':
     [
+        'commit_id.gypi',
         'compiler.gypi',
         'libGLESv2.gypi',
         'libEGL.gypi'
