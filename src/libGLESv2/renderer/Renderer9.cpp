@@ -126,6 +126,7 @@ Renderer9::~Renderer9()
         // If the device is lost, reset it first to prevent leaving the driver in an unstable state
         if (testDeviceLost(false))
         {
+            releaseDeviceResources();
             resetDevice();
         }
     }
