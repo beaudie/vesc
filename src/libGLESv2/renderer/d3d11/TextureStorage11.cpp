@@ -289,7 +289,9 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer *renderer, SwapChain11 *swapch
     : TextureStorage11(renderer, 0, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 {
     mTexture = swapchain->getOffscreenTexture();
+    mTexture->AddRef();
     mSRV = swapchain->getRenderTargetShaderResource();
+    mSRV->AddRef();
 
     mSwizzleTexture = NULL;
     for (unsigned int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; i++)
@@ -314,7 +316,6 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer *renderer, SwapChain11 *swapch
     D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
     offscreenRTV->GetDesc(&rtvDesc);
     mRenderTargetFormat = rtvDesc.Format;
-    SafeRelease(offscreenRTV);
 
     GLint internalFormat = d3d11_gl::GetInternalFormat(mTextureFormat, renderer->getCurrentClientVersion());
     mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalFormat, renderer);
@@ -451,12 +452,10 @@ RenderTarget *TextureStorage11_2D::getRenderTarget(int level)
                 }
                 ASSERT(SUCCEEDED(result));
 
-                // RenderTarget11 expects to be the owner of the resources it is given but TextureStorage11
-                // also needs to keep a reference to the texture/SRV.
-                mTexture->AddRef();
-                srv->AddRef();
-
                 mRenderTarget[level] = new RenderTarget11(mRenderer, rtv, mTexture, srv, getLevelWidth(level), getLevelHeight(level), 1);
+
+                // RenderTarget will take ownership of these resources
+                SafeRelease(rtv);
             }
             else if (mDepthStencilFormat != DXGI_FORMAT_UNKNOWN)
             {
@@ -478,12 +477,10 @@ RenderTarget *TextureStorage11_2D::getRenderTarget(int level)
                 }
                 ASSERT(SUCCEEDED(result));
 
-                // RenderTarget11 expects to be the owner of the resources it is given but TextureStorage11
-                // also needs to keep a reference to the texture/SRV.
-                mTexture->AddRef();
-                srv->AddRef();
-
                 mRenderTarget[level] = new RenderTarget11(mRenderer, dsv, mTexture, srv, getLevelWidth(level), getLevelHeight(level), 1);
+
+                // RenderTarget will take ownership of these resources
+                SafeRelease(dsv);
             }
             else
             {
@@ -785,11 +782,11 @@ RenderTarget *TextureStorage11_Cube::getRenderTargetFace(GLenum faceTarget, int 
                 }
                 ASSERT(SUCCEEDED(result));
 
-                // RenderTarget11 expects to be the owner of the resources it is given but TextureStorage11
-                // also needs to keep a reference to the texture.
-                mTexture->AddRef();
-
                 mRenderTarget[faceIndex][level] = new RenderTarget11(mRenderer, rtv, mTexture, srv, getLevelWidth(level), getLevelHeight(level), 1);
+
+                // RenderTarget will take ownership of these resources
+                SafeRelease(rtv);
+                SafeRelease(srv);
             }
             else if (mDepthStencilFormat != DXGI_FORMAT_UNKNOWN)
             {
@@ -811,11 +808,11 @@ RenderTarget *TextureStorage11_Cube::getRenderTargetFace(GLenum faceTarget, int 
                 }
                 ASSERT(SUCCEEDED(result));
 
-                // RenderTarget11 expects to be the owner of the resources it is given but TextureStorage11
-                // also needs to keep a reference to the texture.
-                mTexture->AddRef();
-
                 mRenderTarget[faceIndex][level] = new RenderTarget11(mRenderer, dsv, mTexture, srv, getLevelWidth(level), getLevelHeight(level), 1);
+
+                // RenderTarget will take ownership of these resources
+                SafeRelease(dsv);
+                SafeRelease(srv);
             }
             else
             {
@@ -1148,12 +1145,10 @@ RenderTarget *TextureStorage11_3D::getRenderTarget(int mipLevel)
                 }
                 ASSERT(SUCCEEDED(result));
 
-                // RenderTarget11 expects to be the owner of the resources it is given but TextureStorage11
-                // also needs to keep a reference to the texture/SRV.
-                mTexture->AddRef();
-                srv->AddRef();
-
                 mLevelRenderTargets[mipLevel] = new RenderTarget11(mRenderer, rtv, mTexture, srv, getLevelWidth(mipLevel), getLevelHeight(mipLevel), getLevelDepth(mipLevel));
+
+                // RenderTarget will take ownership of these resources
+                SafeRelease(rtv);
             }
             else
             {
@@ -1201,11 +1196,11 @@ RenderTarget *TextureStorage11_3D::getRenderTargetLayer(int mipLevel, int layer)
                 }
                 ASSERT(SUCCEEDED(result));
 
-                // RenderTarget11 expects to be the owner of the resources it is given but TextureStorage11
-                // also needs to keep a reference to the texture.
-                mTexture->AddRef();
-
                 mLevelLayerRenderTargets[key] = new RenderTarget11(mRenderer, rtv, mTexture, srv, getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1);
+
+                // RenderTarget will take ownership of these resources
+                SafeRelease(rtv);
+                SafeRelease(srv);
             }
             else
             {
@@ -1515,11 +1510,11 @@ RenderTarget *TextureStorage11_2DArray::getRenderTargetLayer(int mipLevel, int l
                 }
                 ASSERT(SUCCEEDED(result));
 
-                // RenderTarget11 expects to be the owner of the resources it is given but TextureStorage11
-                // also needs to keep a reference to the texture.
-                mTexture->AddRef();
-
                 mRenderTargets[key] = new RenderTarget11(mRenderer, rtv, mTexture, srv, getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1);
+
+                // RenderTarget will take ownership of these resources
+                SafeRelease(rtv);
+                SafeRelease(srv);
             }
             else
             {
