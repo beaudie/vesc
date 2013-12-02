@@ -3,6 +3,10 @@
 # found in the LICENSE file.
 
 {
+    'variables':
+    {
+        'angle_relative_src_path%': '',
+    },
     'target_defaults':
     {
         'defines':
@@ -22,7 +26,7 @@
                 {
                     'target_name': 'libGLESv2',
                     'type': 'shared_library',
-                    'dependencies': [ 'translator_static' ],
+                    'dependencies': [ 'translator_static', 'copy_compiler_dll' ],
                     'include_dirs':
                     [
                         '.',
@@ -47,6 +51,11 @@
                             ]
                         }
                     },
+                },
+                {
+                    'target_name': 'copy_compiler_dll',
+                    'type': 'none',
+                    'sources': [ 'copy_compiler_dll.bat' ],
                     'actions':
                     [
                         {
@@ -55,7 +64,7 @@
                             'message': 'Copying D3D Compiler DLL...',
                             'inputs': [ 'copy_compiler_dll.bat' ],
                             'outputs': [ '<(PRODUCT_DIR)/D3DCompiler_46.dll' ],
-                            'action': ["copy_compiler_dll.bat", "$(PlatformName)", "<(windows_sdk_path)", "<(PRODUCT_DIR)" ],
+                            'action': ["<(angle_relative_src_path)copy_compiler_dll.bat", "$(PlatformName)", "<(windows_sdk_path)", "<(PRODUCT_DIR)" ],
                         }
                     ] #actions
                 },
