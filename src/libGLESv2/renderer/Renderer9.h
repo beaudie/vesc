@@ -97,6 +97,8 @@ class Renderer9 : public Renderer
 
     // lost device
     void notifyDeviceLost();
+    bool lostDeviceWasRemoved() const { return mDeviceWasRemoved; }
+    void clearDeviceWasRemoved() { mDeviceWasRemoved = false; }
     virtual bool isDeviceLost();
     virtual bool testDeviceLost(bool notify);
     virtual bool testDeviceResettable();
@@ -217,7 +219,7 @@ class Renderer9 : public Renderer
     HDC mDc;
 
     void initializeDevice();
-    D3DPRESENT_PARAMETERS getDefaultPresentParameters();
+    D3DPRESENT_PARAMETERS getDefaultPresentParameters() const;
     void releaseDeviceResources();
 
     HRESULT getDeviceStatusCode();
@@ -237,6 +239,7 @@ class Renderer9 : public Renderer
     HWND mDeviceWindow;
 
     bool mDeviceLost;
+    bool mDeviceWasRemoved; // True if we've recently experienced device removed
     D3DCAPS9 mDeviceCaps;
     D3DADAPTER_IDENTIFIER9 mAdapterIdentifier;
 

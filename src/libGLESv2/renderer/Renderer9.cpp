@@ -100,6 +100,7 @@ Renderer9::Renderer9(egl::Display *display, HDC hDc, bool softwareDevice) : Rend
     #endif
 
     mDeviceLost = false;
+    mDeviceWasRemoved = false;
 
     mMaxSupportedSamples = 0;
 
@@ -525,7 +526,7 @@ void Renderer9::initializeDevice()
     mIndexDataManager = new rx::IndexDataManager(this);
 }
 
-D3DPRESENT_PARAMETERS Renderer9::getDefaultPresentParameters()
+D3DPRESENT_PARAMETERS Renderer9::getDefaultPresentParameters() const
 {
     D3DPRESENT_PARAMETERS presentParameters = {0};
 
@@ -2077,6 +2078,14 @@ bool Renderer9::testDeviceLost(bool notify)
         // Note that we don't want to clear the device loss status here
         // -- this needs to be done by resetDevice
         mDeviceLost = true;
+
+        // Mark "was removed" flag if we've ever experienced a removed
+        // device (EG from a driver reinstall)
+        if (status == D3DERR_DEVICEREMOVED)
+        {
+            mDeviceWasRemoved = true;
+        }
+
         if (notify)
         {
             notifyDeviceLost();

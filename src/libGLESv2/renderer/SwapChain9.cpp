@@ -361,7 +361,27 @@ EGLint SwapChain9::swapRect(EGLint x, EGLint y, EGLint width, EGLint height)
         return EGL_BAD_ALLOC;
     }
 
-    ASSERT(SUCCEEDED(result));
+    if (FAILED(result))
+    {
+        // On AMD Systems, handling device removed (EG from driver reinstall) is a bit spotty.
+        // We destroy and recreate the device, and can draw without any errors, until the Present fails.
+        // When we see this, we return device lost (again).
+        if (mRenderer->getAdapterVendor() == VENDOR_ID_AMD && mRenderer->lostDeviceWasRemoved())
+        {
+            ERR("Device lost triggered from failure in IDirect3DSwapChain9::Present");
+            mRenderer->notifyDeviceLost();
+            return EGL_CONTEXT_LOST;
+        }
+
+        // Return general error specifying the native display is no longer valid
+        ERR("IDirect3DSwapChain9::Present returned unexpected error: %d", result);
+        return EGL_BAD_NATIVE_WINDOW;
+    }
+    else
+    {
+        // After a successful swap we've recovered from device removed
+        mRenderer->clearDeviceWasRemoved();
+    }
 
     return EGL_SUCCESS;
 }
