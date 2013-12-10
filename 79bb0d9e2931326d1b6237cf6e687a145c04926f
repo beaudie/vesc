@@ -1,0 +1,8 @@
+Code-Review+2: Nicolas Capens <nicolascapens@chromium.org>
+Commit-Queue+1: Nicolas Capens <nicolascapens@chromium.org>
+Verified+1: Nicolas Capens <nicolascapens@chromium.org>
+Submitted-by: Jamie Madill <jmadill@chromium.org>
+Submitted-at: Tue, 10 Dec 2013 15:55:13 +0000
+Reviewed-on: https://chromium-review.googlesource.com/179351
+Project: angle/angle
+Branch: refs/heads/es3proto
