@@ -2165,6 +2165,24 @@ bool Renderer11::getPostSubBufferSupport() const
     return false;
 }
 
+int Renderer11::getMaxRecommendedElementsIndices() const
+{
+    META_ASSERT(D3D11_REQ_DRAWINDEXED_INDEX_COUNT_2_TO_EXP == 32);
+    META_ASSERT(D3D10_REQ_DRAWINDEXED_INDEX_COUNT_2_TO_EXP == 32);
+
+    // Highest representable 32 bit signed-integer value (must fit in GetIntegerv)
+    return std::numeric_limits<GLint>::max();
+}
+
+int Renderer11::getMaxRecommendedElementsVertices() const
+{
+    META_ASSERT(D3D11_REQ_DRAW_VERTEX_COUNT_2_TO_EXP == 32);
+    META_ASSERT(D3D10_REQ_DRAW_VERTEX_COUNT_2_TO_EXP == 32);
+
+    // Highest representable 32 bit signed-integer value (must fit in GetIntegerv)
+    return std::numeric_limits<GLint>::max();
+}
+
 int Renderer11::getMajorShaderModel() const
 {
     switch (mFeatureLevel)
