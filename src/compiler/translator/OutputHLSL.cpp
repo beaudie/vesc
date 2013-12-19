@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2002-2013 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2002-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -55,6 +55,11 @@ TString OutputHLSL::TextureFunction::name() const
     if (proj)
     {
         name += "Proj";
+    }
+
+    if (offset)
+    {
+        name += "Offset";
     }
 
     switch(method)
@@ -1009,11 +1014,34 @@ void OutputHLSL::header()
         switch(textureFunction->method)
         {
           case TextureFunction::IMPLICIT:                        break;
-          case TextureFunction::BIAS:     out << ", float bias"; break;
+          case TextureFunction::BIAS:                            break;
           case TextureFunction::LOD:      out << ", float lod";  break;
           case TextureFunction::LOD0:                            break;
           case TextureFunction::SIZE:                            break;
           default: UNREACHABLE();
+        }
+
+        if (textureFunction->offset)
+        {
+            switch(textureFunction->sampler)
+            {
+              case EbtSampler2D:            out << ", int2"; break;
+              case EbtSampler3D:            out << ", int3"; break;
+              case EbtSampler2DArray:       out << ", int2"; break;
+              case EbtISampler2D:           out << ", int2"; break;
+              case EbtISampler3D:           out << ", int3"; break;
+              case EbtISampler2DArray:      out << ", int2"; break;
+              case EbtUSampler2D:           out << ", int2"; break;
+              case EbtUSampler3D:           out << ", int3"; break;
+              case EbtUSampler2DArray:      out << ", int2"; break;
+              case EbtSampler2DShadow:      out << ", int2"; break;
+              default: UNREACHABLE();
+            }
+        }
+
+        if (textureFunction->method == TextureFunction::BIAS)
+        {
+            out << ", float bias";
         }
 
         out << ")\n"
@@ -1297,6 +1325,11 @@ void OutputHLSL::header()
                       case TextureFunction::LOD0: out << ", 0";    break;
                       default: UNREACHABLE();
                     }
+                }
+
+                if (textureFunction->offset)
+                {
+                    out << ", offset";
                 }
 
                 out << "));\n";
@@ -2277,6 +2310,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 textureFunction.coords = arguments[1]->getAsTyped()->getNominalSize();
                 textureFunction.method = TextureFunction::IMPLICIT;
                 textureFunction.proj = false;
+                textureFunction.offset = false;
 
                 if (name == "texture2D" || name == "textureCube" || name == "texture")
                 {
@@ -2300,16 +2334,34 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 {
                     textureFunction.method = TextureFunction::SIZE;
                 }
+                else if (name == "textureOffset")
+                {
+                    textureFunction.method = TextureFunction::IMPLICIT;
+                    textureFunction.offset = true;
+                }
                 else UNREACHABLE();
 
                 if (textureFunction.method != TextureFunction::LOD &&
                     textureFunction.method != TextureFunction::SIZE)
                 {
+                    unsigned int nonBiasArgumentCount = 2;
+
+                    if (textureFunction.offset)
+                    {
+                        nonBiasArgumentCount++;
+                    }
+
+                    if (textureFunction.method == TextureFunction::LOD)
+                    {
+                        UNREACHABLE();   // Lod functions can't have bias
+                        nonBiasArgumentCount++;
+                    }
+
                     if (lod0 || mContext.shaderType == SH_VERTEX_SHADER)
                     {
                         textureFunction.method = TextureFunction::LOD0;
                     }
-                    else if (arguments.size() == 3)
+                    else if (arguments.size() > nonBiasArgumentCount)
                     {
                         textureFunction.method = TextureFunction::BIAS;
                     }
