@@ -1,6 +1,6 @@
 #include "precompiled.h"
 //
-// Copyright (c) 2002-2012 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2002-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -53,6 +53,8 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved
     {
       case DLL_PROCESS_ATTACH:
         {
+            //MessageBoxA(0, "Attach debugger now and press OK", "libGLESv2.dll loaded", MB_OK);
+
             currentTLS = TlsAlloc();
 
             if (currentTLS == TLS_OUT_OF_INDEXES)
