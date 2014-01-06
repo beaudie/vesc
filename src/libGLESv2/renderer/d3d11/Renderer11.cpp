@@ -788,7 +788,7 @@ void Renderer11::setDepthStencilState(const gl::DepthStencilState &depthStencilS
                 "setting the default depth stencil state.");
         }
 
-        mDeviceContext->OMSetDepthStencilState(dxDepthStencilState, static_cast<UINT>(stencilRef));
+        mDeviceContext->OMSetDepthStencilState(dxDepthStencilState, static_cast<UINT>(std::min(stencilRef, 0xFF)));
 
         mCurDepthStencilState = depthStencilState;
         mCurStencilRef = stencilRef;
