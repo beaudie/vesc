@@ -71,7 +71,14 @@ bool ValidTextureTarget(const Context *context, GLenum target)
         }
     }
 
-    return true;
+    switch (target)
+    {
+      case GL_TEXTURE_2D:
+      case GL_TEXTURE_CUBE_MAP:
+      case GL_TEXTURE_3D:
+      case GL_TEXTURE_2D_ARRAY: return true;
+      default:                  return false;
+    }
 }
 
 bool ValidFramebufferTarget(const Context *context, GLenum target)
