@@ -2477,7 +2477,7 @@ bool Texture2DArray::isSamplerComplete(const SamplerState &samplerState) const
 {
     GLsizei width = getBaseLevelWidth();
     GLsizei height = getBaseLevelHeight();
-    GLsizei depth = getBaseLevelDepth();
+    GLsizei depth = getDepth(0);
 
     if (width <= 0 || height <= 0 || depth <= 0)
     {
@@ -2518,7 +2518,7 @@ bool Texture2DArray::isMipmapComplete() const
 
 bool Texture2DArray::isLevelComplete(int level) const
 {
-    ASSERT(level >= 0 && level < (int)ArraySize(mImageArray) && mImageArray[level] != NULL);
+    ASSERT(level >= 0 && level < (int)ArraySize(mImageArray));
 
     if (isImmutable())
     {
@@ -2527,7 +2527,7 @@ bool Texture2DArray::isLevelComplete(int level) const
 
     GLsizei width = getBaseLevelWidth();
     GLsizei height = getBaseLevelHeight();
-    GLsizei depth = getBaseLevelDepth();
+    GLsizei depth = getDepth(0);
 
     if (width <= 0 || height <= 0 || depth <= 0)
     {
@@ -2611,7 +2611,7 @@ rx::TextureStorageInterface2DArray *Texture2DArray::createCompleteStorage(bool r
 {
     GLsizei width = getBaseLevelWidth();
     GLsizei height = getBaseLevelHeight();
-    GLsizei depth = getBaseLevelDepth();
+    GLsizei depth = getDepth(0);
 
     ASSERT(width > 0 && height > 0 && depth > 0);
 
@@ -2661,7 +2661,7 @@ bool Texture2DArray::ensureRenderTarget()
 {
     initializeStorage(true);
 
-    if (getBaseLevelWidth() > 0 && getBaseLevelHeight() > 0 && getBaseLevelDepth() > 0)
+    if (getBaseLevelWidth() > 0 && getBaseLevelHeight() > 0 && getDepth(0) > 0)
     {
         ASSERT(mTexStorage);
         if (!mTexStorage->isRenderTarget())
@@ -2724,7 +2724,7 @@ void Texture2DArray::redefineImage(GLint level, GLenum internalformat, GLsizei w
     // If there currently is a corresponding storage texture image, it has these parameters
     const int storageWidth = std::max(1, getBaseLevelWidth() >> level);
     const int storageHeight = std::max(1, getBaseLevelHeight() >> level);
-    const int storageDepth = getBaseLevelDepth();
+    const int storageDepth = getDepth(0);
     const GLenum storageFormat = getBaseLevelInternalFormat();
 
     for (int layer = 0; layer < mLayerCounts[level]; layer++)
