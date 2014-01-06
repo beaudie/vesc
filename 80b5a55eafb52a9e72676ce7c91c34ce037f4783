@@ -1,0 +1,9 @@
+Code-Review+2: Shannon Woods <shannonwoods@chromium.org>
+Verified+1: Jamie Madill <jmadill@chromium.org>
+Code-Review+1: Jamie Madill <jmadill@google.com>
+Commit-Queue+1: Jamie Madill <jmadill@google.com>
+Submitted-by: Jamie Madill <jmadill@chromium.org>
+Submitted-at: Mon, 06 Jan 2014 14:35:03 +0000
+Reviewed-on: https://chromium-review.googlesource.com/181481
+Project: angle/angle
+Branch: refs/heads/es3proto
