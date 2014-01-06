@@ -1450,22 +1450,22 @@ ProgramBinary *Context::getCurrentProgramBinary()
     return mCurrentProgramBinary.get();
 }
 
-Texture2D *Context::getTexture2D()
+Texture2D *Context::getTexture2D() const
 {
     return static_cast<Texture2D*>(getSamplerTexture(mState.activeSampler, TEXTURE_2D));
 }
 
-TextureCubeMap *Context::getTextureCubeMap()
+TextureCubeMap *Context::getTextureCubeMap() const
 {
     return static_cast<TextureCubeMap*>(getSamplerTexture(mState.activeSampler, TEXTURE_CUBE));
 }
 
-Texture3D *Context::getTexture3D()
+Texture3D *Context::getTexture3D() const
 {
     return static_cast<Texture3D*>(getSamplerTexture(mState.activeSampler, TEXTURE_3D));
 }
 
-Texture2DArray *Context::getTexture2DArray()
+Texture2DArray *Context::getTexture2DArray() const
 {
     return static_cast<Texture2DArray*>(getSamplerTexture(mState.activeSampler, TEXTURE_2D_ARRAY));
 }
@@ -1500,7 +1500,7 @@ Buffer *Context::getPixelUnpackBuffer()
     return mState.unpack.pixelBuffer.get();
 }
 
-Texture *Context::getSamplerTexture(unsigned int sampler, TextureType type)
+Texture *Context::getSamplerTexture(unsigned int sampler, TextureType type) const
 {
     GLuint texid = mState.samplerTexture[type][sampler].id();
 
