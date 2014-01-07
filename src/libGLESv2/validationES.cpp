@@ -21,7 +21,47 @@
 namespace gl
 {
 
-bool ValidTextureTarget(gl::Context *context, GLenum target)
+Texture *GetTargetTexture(const Context *context, GLenum target)
+{
+    if (!ValidTextureTarget(context, target))
+    {
+        return NULL;
+    }
+
+    switch (target)
+    {
+      case GL_TEXTURE_2D:       return context->getTexture2D();
+      case GL_TEXTURE_CUBE_MAP: return context->getTextureCubeMap();
+      case GL_TEXTURE_3D:       return context->getTexture3D();
+      case GL_TEXTURE_2D_ARRAY: return context->getTexture2DArray();
+      default:                  return NULL;
+    }
+}
+
+GLuint GetTargetFramebufferHandle(const Context *context, GLenum target)
+{
+    if (!ValidFramebufferTarget(context, target))
+    {
+        return GL_INVALID_INDEX;
+    }
+
+    if (target == GL_READ_FRAMEBUFFER_ANGLE)
+    {
+        return context->getReadFramebufferHandle();
+    }
+    else
+    {
+        return context->getDrawFramebufferHandle();
+    }
+}
+
+Framebuffer *GetTargetFramebuffer(Context *context, GLenum target)
+{
+    GLuint framebufferHandle = GetTargetFramebufferHandle(context, target);
+    return (framebufferHandle == GL_INVALID_INDEX ? NULL : context->getFramebuffer(framebufferHandle));
+}
+
+bool ValidTextureTarget(const Context *context, GLenum target)
 {
     if (context->getClientVersion() < 3)
     {
@@ -32,6 +72,19 @@ bool ValidTextureTarget(gl::Context *context, GLenum target)
     }
 
     return true;
+}
+
+bool ValidFramebufferTarget(const Context *context, GLenum target)
+{
+    META_ASSERT(GL_DRAW_FRAMEBUFFER_ANGLE == GL_DRAW_FRAMEBUFFER && GL_READ_FRAMEBUFFER_ANGLE == GL_READ_FRAMEBUFFER);
+
+    switch (target)
+    {
+      case GL_FRAMEBUFFER:      return true;
+      case GL_READ_FRAMEBUFFER: return true;
+      case GL_DRAW_FRAMEBUFFER: return true;
+      default:                  return false;
+    }
 }
 
 bool ValidMipLevel(const gl::Context *context, GLenum target, GLint level)
@@ -166,6 +219,48 @@ bool ValidateRenderbufferStorageParameters(const gl::Context *context, GLenum ta
     if (handle == 0)
     {
         return gl::error(GL_INVALID_OPERATION, false);
+    }
+
+    return true;
+}
+
+bool ValidateFramebufferRenderbufferParameters(gl::Context *context, GLenum target, GLenum attachment,
+                                               GLenum renderbuffertarget, GLuint renderbuffer)
+{
+    gl::Framebuffer *framebuffer = GetTargetFramebuffer(context, target);
+    GLuint framebufferHandle = GetTargetFramebufferHandle(context, target);
+
+    if (!framebuffer || (framebufferHandle == 0 && renderbuffer != 0))
+    {
+        return gl::error(GL_INVALID_OPERATION, false);
+    }
+
+    if (attachment >= GL_COLOR_ATTACHMENT0_EXT && attachment <= GL_COLOR_ATTACHMENT15_EXT)
+    {
+        const unsigned int colorAttachment = (attachment - GL_COLOR_ATTACHMENT0_EXT);
+
+        if (colorAttachment >= context->getMaximumRenderTargets())
+        {
+            return gl::error(GL_INVALID_VALUE, false);
+        }
+    }
+    else
+    {
+        switch (attachment)
+        {
+          case GL_DEPTH_ATTACHMENT:
+            break;
+          case GL_STENCIL_ATTACHMENT:
+            break;
+          case GL_DEPTH_STENCIL_ATTACHMENT:
+            if (context->getClientVersion() < 3)
+            {
+                return gl::error(GL_INVALID_ENUM, false);
+            }
+            break;
+          default:
+            return gl::error(GL_INVALID_ENUM, false);
+        }
     }
 
     return true;
