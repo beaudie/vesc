@@ -594,7 +594,6 @@ void Renderer11::setSamplerState(gl::SamplerType type, int index, const gl::Samp
 void Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *texture)
 {
     ID3D11ShaderResourceView *textureSRV = NULL;
-    unsigned int serial = 0;
     bool forceSetTexture = false;
 
     if (texture)
@@ -611,7 +610,6 @@ void Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *textur
         // missing the shader resource view
         ASSERT(textureSRV != NULL);
 
-        serial = texture->getTextureSerial();
         forceSetTexture = texture->hasDirtyImages();
     }
 
@@ -623,12 +621,12 @@ void Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *textur
             return;
         }
 
-        if (forceSetTexture || mCurPixelTextureSerials[index] != serial)
+        if (forceSetTexture || mCurPixelTextures[index] != textureSRV)
         {
             mDeviceContext->PSSetShaderResources(index, 1, &textureSRV);
         }
 
-        mCurPixelTextureSerials[index] = serial;
+        mCurPixelTextures[index] = textureSRV;
     }
     else if (type == gl::SAMPLER_VERTEX)
     {
@@ -638,12 +636,12 @@ void Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *textur
             return;
         }
 
-        if (forceSetTexture || mCurVertexTextureSerials[index] != serial)
+        if (forceSetTexture || mCurVertexTextures[index] != textureSRV)
         {
             mDeviceContext->VSSetShaderResources(index, 1, &textureSRV);
         }
 
-        mCurVertexTextureSerials[index] = serial;
+        mCurVertexTextures[index] = textureSRV;
     }
     else UNREACHABLE();
 }
@@ -982,25 +980,6 @@ bool Renderer11::applyRenderTarget(gl::Framebuffer *framebuffer)
                 renderTargetFormat = colorbuffer->getActualFormat();
                 missingColorRenderTarget = false;
             }
-
-#ifdef _DEBUG
-            // Workaround for Debug SETSHADERRESOURCES_HAZARD D3D11 warnings
-            for (unsigned int vertexSerialIndex = 0; vertexSerialIndex < gl::IMPLEMENTATION_MAX_VERTEX_TEXTURE_IMAGE_UNITS; vertexSerialIndex++)
-            {
-                if (colorbuffer->getTextureSerial() != 0 && mCurVertexTextureSerials[vertexSerialIndex] == colorbuffer->getTextureSerial())
-                {
-                    setTexture(gl::SAMPLER_VERTEX, vertexSerialIndex, NULL);
-                }
-            }
-
-            for (unsigned int pixelSerialIndex = 0; pixelSerialIndex < gl::MAX_TEXTURE_IMAGE_UNITS; pixelSerialIndex++)
-            {
-                if (colorbuffer->getTextureSerial() != 0 && mCurPixelTextureSerials[pixelSerialIndex] == colorbuffer->getTextureSerial())
-                {
-                    setTexture(gl::SAMPLER_PIXEL, pixelSerialIndex, NULL);
-                }
-            }
-#endif
         }
     }
 
@@ -1627,12 +1606,12 @@ void Renderer11::markAllStateDirty()
     for (int i = 0; i < gl::IMPLEMENTATION_MAX_VERTEX_TEXTURE_IMAGE_UNITS; i++)
     {
         mForceSetVertexSamplerStates[i] = true;
-        mCurVertexTextureSerials[i] = 0;
+        mCurVertexTextures[i] = NULL;
     }
     for (int i = 0; i < gl::MAX_TEXTURE_IMAGE_UNITS; i++)
     {
         mForceSetPixelSamplerStates[i] = true;
-        mCurPixelTextureSerials[i] = 0;
+        mCurPixelTextures[i] = NULL;
     }
 
     mForceSetBlendState = true;
