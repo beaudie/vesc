@@ -248,22 +248,31 @@ bool ValidateFramebufferRenderbufferParameters(gl::Context *context, GLenum targ
             return gl::error(GL_INVALID_VALUE, false);
         }
     }
-    else
+    else switch (attachment)
     {
-        switch (attachment)
+      case GL_DEPTH_ATTACHMENT:
+        break;
+      case GL_STENCIL_ATTACHMENT:
+        break;
+      case GL_DEPTH_STENCIL_ATTACHMENT:
+        if (context->getClientVersion() < 3)
         {
-          case GL_DEPTH_ATTACHMENT:
-            break;
-          case GL_STENCIL_ATTACHMENT:
-            break;
-          case GL_DEPTH_STENCIL_ATTACHMENT:
-            if (context->getClientVersion() < 3)
-            {
-                return gl::error(GL_INVALID_ENUM, false);
-            }
-            break;
-          default:
             return gl::error(GL_INVALID_ENUM, false);
+        }
+        break;
+      default:
+        return gl::error(GL_INVALID_ENUM, false);
+    }
+
+    // [OpenGL ES 2.0.25] Section 4.4.3 page 112
+    // [OpenGL ES 3.0.2] Section 4.4.2 page 201
+    // 'renderbuffer' must be either zero or the name of an existing renderbuffer object of
+    // type 'renderbuffertarget', otherwise an INVALID_OPERATION error is generated.
+    if (renderbuffer != 0)
+    {
+        if (!context->getRenderbuffer(renderbuffer))
+        {
+            return gl::error(GL_INVALID_OPERATION, false);
         }
     }
 
