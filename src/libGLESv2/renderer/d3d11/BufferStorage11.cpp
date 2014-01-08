@@ -234,7 +234,7 @@ void BufferStorage11::markBufferUsage()
     }
 }
 
-ID3D11Buffer *BufferStorage11::getBuffer(bool isConstantBufferUsage)
+ID3D11Buffer *BufferStorage11::getBuffer(BufferUsage usage)
 {
     markBufferUsage();
 
@@ -242,7 +242,7 @@ ID3D11Buffer *BufferStorage11::getBuffer(bool isConstantBufferUsage)
     {
         DirectBufferStorage11 *directBuffer = mDirectBuffers[bufferIndex];
 
-        if (directBuffer->isConstantBufferUsage() == isConstantBufferUsage)
+        if (directBuffer->getUsage() == usage)
         {
             if (directBuffer->isDirty())
             {
@@ -258,7 +258,7 @@ ID3D11Buffer *BufferStorage11::getBuffer(bool isConstantBufferUsage)
     }
 
     // buffer is not allocated, create it
-    DirectBufferStorage11 *directBuffer = new DirectBufferStorage11(mRenderer, isConstantBufferUsage);
+    DirectBufferStorage11 *directBuffer = new DirectBufferStorage11(mRenderer, usage);
     directBuffer->updateFromStagingBuffer(mStagingBuffer, mSize, 0);
 
     mDirectBuffers.push_back(directBuffer);
@@ -269,7 +269,7 @@ ID3D11Buffer *BufferStorage11::getBuffer(bool isConstantBufferUsage)
 
 ID3D11ShaderResourceView *BufferStorage11::getSRV(DXGI_FORMAT srvFormat)
 {
-    ID3D11Buffer *buffer = getBuffer(false);
+    ID3D11Buffer *buffer = getBuffer(BUFFER_USAGE_PIXEL_BUFFER);
 
     auto bufferSRVIt = mBufferResourceViews.find(srvFormat);
 
@@ -303,9 +303,9 @@ ID3D11ShaderResourceView *BufferStorage11::getSRV(DXGI_FORMAT srvFormat)
     return bufferSRV;
 }
 
-DirectBufferStorage11::DirectBufferStorage11(Renderer11 *renderer, bool isConstantBufferUsage)
+DirectBufferStorage11::DirectBufferStorage11(Renderer11 *renderer, BufferUsage usage)
     : mRenderer(renderer),
-      mIsConstantBufferUsage(isConstantBufferUsage),
+      mUsage(usage),
       mDirectBuffer(NULL),
       mBufferSize(0),
       mDirty(false)
@@ -317,9 +317,9 @@ DirectBufferStorage11::~DirectBufferStorage11()
     SafeRelease(mDirectBuffer);
 }
 
-bool DirectBufferStorage11::isConstantBufferUsage() const
+BufferUsage DirectBufferStorage11::getUsage() const
 {
-    return mIsConstantBufferUsage;
+    return mUsage;
 }
 
 // Returns true if it recreates the direct buffer
@@ -338,7 +338,7 @@ bool DirectBufferStorage11::updateFromStagingBuffer(ID3D11Buffer *stagingBuffer,
     if (createBuffer)
     {
         D3D11_BUFFER_DESC bufferDesc;
-        fillBufferDesc(&bufferDesc, requiredBufferSize);
+        fillBufferDesc(&bufferDesc, mRenderer, mUsage, requiredBufferSize);
 
         ID3D11Buffer *newBuffer;
         HRESULT result = device->CreateBuffer(&bufferDesc, NULL, &newBuffer);
@@ -371,20 +371,33 @@ bool DirectBufferStorage11::updateFromStagingBuffer(ID3D11Buffer *stagingBuffer,
     return createBuffer;
 }
 
-void DirectBufferStorage11::fillBufferDesc(D3D11_BUFFER_DESC* bufferDesc, unsigned int bufferSize)
+void DirectBufferStorage11::fillBufferDesc(D3D11_BUFFER_DESC* bufferDesc, Renderer *renderer, BufferUsage usage, unsigned int bufferSize)
 {
     bufferDesc->ByteWidth = bufferSize;
     bufferDesc->MiscFlags = 0;
     bufferDesc->StructureByteStride = 0;
 
-    if (!mIsConstantBufferUsage)
+    switch (usage)
     {
+      case BUFFER_USAGE_VERTEX_BUFFER:
         bufferDesc->Usage = D3D11_USAGE_DEFAULT;
-        bufferDesc->BindFlags = D3D11_BIND_INDEX_BUFFER | D3D11_BIND_VERTEX_BUFFER | D3D11_BIND_SHADER_RESOURCE;
+        bufferDesc->BindFlags = D3D11_BIND_VERTEX_BUFFER;
         bufferDesc->CPUAccessFlags = 0;
-    }
-    else
-    {
+        break;
+
+      case BUFFER_USAGE_INDEX_BUFFER:
+        bufferDesc->Usage = D3D11_USAGE_DEFAULT;
+        bufferDesc->BindFlags = D3D11_BIND_INDEX_BUFFER;
+        bufferDesc->CPUAccessFlags = 0;
+        break;
+
+      case BUFFER_USAGE_PIXEL_BUFFER:
+        bufferDesc->Usage = D3D11_USAGE_DEFAULT;
+        bufferDesc->BindFlags = D3D11_BIND_SHADER_RESOURCE;
+        bufferDesc->CPUAccessFlags = 0;
+        break;
+
+      case BUFFER_USAGE_UNIFORM_BUFFER:
         bufferDesc->Usage = D3D11_USAGE_DYNAMIC;
         bufferDesc->BindFlags = D3D11_BIND_CONSTANT_BUFFER;
         bufferDesc->CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -392,7 +405,11 @@ void DirectBufferStorage11::fillBufferDesc(D3D11_BUFFER_DESC* bufferDesc, unsign
         // Constant buffers must be of a limited size, and aligned to 16 byte boundaries
         // For our purposes we ignore any buffer data past the maximum constant buffer size
         bufferDesc->ByteWidth = roundUp(bufferDesc->ByteWidth, 16u);
-        bufferDesc->ByteWidth = std::min(bufferDesc->ByteWidth, mRenderer->getMaxUniformBufferSize());
+        bufferDesc->ByteWidth = std::min(bufferDesc->ByteWidth, renderer->getMaxUniformBufferSize());
+        break;
+
+    default:
+        UNREACHABLE();
     }
 }
 
