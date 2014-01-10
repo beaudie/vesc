@@ -19,6 +19,10 @@
                 {
                     'dependencies': [ '../tests/tests.gyp:*', ],
                 }],
+                ['angle_build_utilities==1',
+                {
+                    'dependencies': [ '../utilities/utilities.gyp:*', ],
+                }],
             ],
         },
     ],
