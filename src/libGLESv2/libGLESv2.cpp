@@ -27,23 +27,6 @@
 #include "libGLESv2/validationES2.h"
 #include "libGLESv2/validationES3.h"
 
-gl::Texture *GetTargetTexture(gl::Context *context, GLenum target)
-{
-    if (!ValidTextureTarget(context, target))
-    {
-        return NULL;
-    }
-
-    switch (target)
-    {
-      case GL_TEXTURE_2D:       return context->getTexture2D();
-      case GL_TEXTURE_CUBE_MAP: return context->getTextureCubeMap();
-      case GL_TEXTURE_3D:       return context->getTexture3D();
-      case GL_TEXTURE_2D_ARRAY: return context->getTexture2DArray();
-      default:                  return NULL;
-    }
-}
-
 extern "C"
 {
 
@@ -266,12 +249,12 @@ void __stdcall glBindFramebuffer(GLenum target, GLuint framebuffer)
 
     try
     {
-        if (target != GL_FRAMEBUFFER && target != GL_DRAW_FRAMEBUFFER_ANGLE && target != GL_READ_FRAMEBUFFER_ANGLE)
+        gl::Context *context = gl::getNonLostContext();
+
+        if (!gl::ValidFramebufferTarget(context, target))
         {
             return gl::error(GL_INVALID_ENUM);
         }
-
-        gl::Context *context = gl::getNonLostContext();
 
         if (context)
         {
@@ -780,25 +763,17 @@ GLenum __stdcall glCheckFramebufferStatus(GLenum target)
 
     try
     {
-        if (target != GL_FRAMEBUFFER && target != GL_DRAW_FRAMEBUFFER_ANGLE && target != GL_READ_FRAMEBUFFER_ANGLE)
+        gl::Context *context = gl::getNonLostContext();
+
+        if (!gl::ValidFramebufferTarget(context, target))
         {
             return gl::error(GL_INVALID_ENUM, 0);
         }
 
-        gl::Context *context = gl::getNonLostContext();
-
         if (context)
         {
-            gl::Framebuffer *framebuffer = NULL;
-            if (target == GL_READ_FRAMEBUFFER_ANGLE)
-            {
-                framebuffer = context->getReadFramebuffer();
-            }
-            else
-            {
-                framebuffer = context->getDrawFramebuffer();
-            }
-
+            gl::Framebuffer *framebuffer = context->getTargetFramebuffer(target);
+            ASSERT(framebuffer);
             return framebuffer->completeness();
         }
     }
@@ -2006,65 +1981,42 @@ void __stdcall glFramebufferRenderbuffer(GLenum target, GLenum attachment, GLenu
 
     try
     {
-        if ((target != GL_FRAMEBUFFER && target != GL_DRAW_FRAMEBUFFER_ANGLE && target != GL_READ_FRAMEBUFFER_ANGLE)
-            || (renderbuffertarget != GL_RENDERBUFFER && renderbuffer != 0))
+        gl::Context *context = gl::getNonLostContext();
+
+        if (!gl::ValidFramebufferTarget(context, target) || (renderbuffertarget != GL_RENDERBUFFER && renderbuffer != 0))
         {
             return gl::error(GL_INVALID_ENUM);
         }
 
-        gl::Context *context = gl::getNonLostContext();
-
         if (context)
         {
-            gl::Framebuffer *framebuffer = NULL;
-            GLuint framebufferHandle = 0;
-            if (target == GL_READ_FRAMEBUFFER_ANGLE)
+            if (!gl::ValidateFramebufferRenderbufferParameters(context, target, attachment, renderbuffertarget, renderbuffer))
             {
-                framebuffer = context->getReadFramebuffer();
-                framebufferHandle = context->getReadFramebufferHandle();
-            }
-            else
-            {
-                framebuffer = context->getDrawFramebuffer();
-                framebufferHandle = context->getDrawFramebufferHandle();
+                return;
             }
 
-            if (!framebuffer || (framebufferHandle == 0 && renderbuffer != 0))
-            {
-                return gl::error(GL_INVALID_OPERATION);
-            }
+            gl::Framebuffer *framebuffer = context->getTargetFramebuffer(target);
+            ASSERT(framebuffer);
 
             if (attachment >= GL_COLOR_ATTACHMENT0_EXT && attachment <= GL_COLOR_ATTACHMENT15_EXT)
             {
-                const unsigned int colorAttachment = (attachment - GL_COLOR_ATTACHMENT0_EXT);
-
-                if (colorAttachment >= context->getMaximumRenderTargets())
-                {
-                    return gl::error(GL_INVALID_VALUE);
-                }
-
+                unsigned int colorAttachment = (attachment - GL_COLOR_ATTACHMENT0_EXT);
                 framebuffer->setColorbuffer(colorAttachment, GL_RENDERBUFFER, renderbuffer, 0, 0);
             }
-            else
+            else switch (attachment)
             {
-                switch (attachment)
-                {
-                  case GL_DEPTH_ATTACHMENT:
-                    framebuffer->setDepthbuffer(GL_RENDERBUFFER, renderbuffer, 0, 0);
-                    break;
-                  case GL_STENCIL_ATTACHMENT:
-                    framebuffer->setStencilbuffer(GL_RENDERBUFFER, renderbuffer, 0, 0);
-                    break;
-                  case GL_DEPTH_STENCIL_ATTACHMENT:
-                    if (context->getClientVersion() < 3)
-                    {
-                        return gl::error(GL_INVALID_ENUM);
-                    }
-                    framebuffer->setDepthStencilBuffer(GL_RENDERBUFFER, renderbuffer, 0, 0);
-                    break;
-                  default:
-                    return gl::error(GL_INVALID_ENUM);
-                }
+              case GL_DEPTH_ATTACHMENT:
+                framebuffer->setDepthbuffer(GL_RENDERBUFFER, renderbuffer, 0, 0);
+                break;
+              case GL_STENCIL_ATTACHMENT:
+                framebuffer->setStencilbuffer(GL_RENDERBUFFER, renderbuffer, 0, 0);
+                break;
+              case GL_DEPTH_STENCIL_ATTACHMENT:
+                framebuffer->setDepthStencilBuffer(GL_RENDERBUFFER, renderbuffer, 0, 0);
+                break;
+              default:
+                UNREACHABLE();
+                break;
             }
         }
     }
@@ -2101,15 +2053,7 @@ void __stdcall glFramebufferTexture2D(GLenum target, GLenum attachment, GLenum t
                 textarget = GL_NONE;
             }
 
-            gl::Framebuffer *framebuffer = NULL;
-            if (target == GL_READ_FRAMEBUFFER_ANGLE)
-            {
-                framebuffer = context->getReadFramebuffer();
-            }
-            else
-            {
-                framebuffer = context->getDrawFramebuffer();
-            }
+            gl::Framebuffer *framebuffer = context->getTargetFramebuffer(target);
 
             if (attachment >= GL_COLOR_ATTACHMENT0_EXT && attachment <= GL_COLOR_ATTACHMENT15_EXT)
             {
@@ -2204,7 +2148,7 @@ void __stdcall glGenerateMipmap(GLenum target)
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            gl::Texture *texture = GetTargetTexture(context, target);
+            gl::Texture *texture = context->getTargetTexture(target);
 
             if (texture == NULL)
             {
@@ -2826,8 +2770,7 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
 
         if (context)
         {
-            META_ASSERT(GL_DRAW_FRAMEBUFFER_ANGLE == GL_DRAW_FRAMEBUFFER && GL_READ_FRAMEBUFFER_ANGLE == GL_READ_FRAMEBUFFER);
-            if (target != GL_FRAMEBUFFER && target != GL_DRAW_FRAMEBUFFER && target != GL_READ_FRAMEBUFFER)
+            if (!gl::ValidFramebufferTarget(context, target))
             {
                 return gl::error(GL_INVALID_ENUM);
             }
@@ -2882,9 +2825,8 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
                 break;
             }
 
-            GLuint framebufferHandle = (target == GL_READ_FRAMEBUFFER) ? context->getReadFramebufferHandle()
-                                                                       : context->getDrawFramebufferHandle();
-
+            GLuint framebufferHandle = context->getTargetFramebufferHandle(target);
+            ASSERT(framebufferHandle != GL_INVALID_INDEX);
             gl::Framebuffer *framebuffer = context->getFramebuffer(framebufferHandle);
 
             GLenum attachmentType;
@@ -3708,7 +3650,7 @@ void __stdcall glGetTexParameterfv(GLenum target, GLenum pname, GLfloat* params)
 
         if (context)
         {
-            gl::Texture *texture = GetTargetTexture(context, target);
+            gl::Texture *texture = context->getTargetTexture(target);
 
             if (!texture)
             {
@@ -3806,7 +3748,7 @@ void __stdcall glGetTexParameteriv(GLenum target, GLenum pname, GLint* params)
 
         if (context)
         {
-            gl::Texture *texture = GetTargetTexture(context, target);
+            gl::Texture *texture = context->getTargetTexture(target);
 
             if (!texture)
             {
@@ -5225,7 +5167,7 @@ void __stdcall glTexParameterf(GLenum target, GLenum pname, GLfloat param)
                 return;
             }
 
-            gl::Texture *texture = GetTargetTexture(context, target);
+            gl::Texture *texture =  context->getTargetTexture(target);
 
             if (!texture)
             {
@@ -5285,7 +5227,7 @@ void __stdcall glTexParameteri(GLenum target, GLenum pname, GLint param)
                 return;
             }
 
-            gl::Texture *texture = GetTargetTexture(context, target);
+            gl::Texture *texture = context->getTargetTexture(target);
 
             if (!texture)
             {
@@ -7284,15 +7226,8 @@ void __stdcall glFramebufferTextureLayer(GLenum target, GLenum attachment, GLuin
                 return;
             }
 
-            gl::Framebuffer *framebuffer = NULL;
-            if (target == GL_READ_FRAMEBUFFER)
-            {
-                framebuffer = context->getReadFramebuffer();
-            }
-            else
-            {
-                framebuffer = context->getDrawFramebuffer();
-            }
+            gl::Framebuffer *framebuffer = context->getTargetFramebuffer(target);
+            ASSERT(framebuffer);
 
             gl::Texture *textureObject = context->getTexture(texture);
             GLenum textarget = textureObject ? textureObject->getTarget() : GL_NONE;
