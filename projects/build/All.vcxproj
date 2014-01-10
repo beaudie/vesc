@@ -189,6 +189,10 @@
       <Project>{CBE3D362-43EA-60FC-D5AC-490039CA449A}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\utilities\dds_to_header.vcxproj">
+      <Project>{D026031D-B257-DA26-838C-BB9BF3A67123}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
   <ImportGroup Label="ExtensionTargets"/>
