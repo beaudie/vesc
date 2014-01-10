@@ -55,6 +55,9 @@
     <ClInclude Include="..\..\src\libGLESv2\Renderbuffer.h">
       <Filter>libGLESv2</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\libGLESv2\Fence.h">
+      <Filter>libGLESv2</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\src\libGLESv2\precompiled.cpp">
       <Filter>libGLESv2</Filter>
     </ClCompile>
@@ -148,9 +151,6 @@
     <ClCompile Include="..\..\src\libGLESv2\Texture.cpp">
       <Filter>libGLESv2</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\src\libGLESv2\Fence.h">
-      <Filter>libGLESv2</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\libGLESv2\Framebuffer.h">
       <Filter>libGLESv2</Filter>
     </ClInclude>
@@ -445,10 +445,10 @@
     <None Include="..\..\src\libGLESv2\renderer\d3d9\shaders\Blit.vs">
       <Filter>libGLESv2\renderer\d3d9\shaders</Filter>
     </None>
-    <None Include="..\..\src\libGLESv2\renderer\d3d9\shaders\Blit.ps">
+    <None Include="..\..\src\libGLESv2\renderer\d3d9\shaders\generate_shaders.bat">
       <Filter>libGLESv2\renderer\d3d9\shaders</Filter>
     </None>
-    <None Include="..\..\src\libGLESv2\renderer\d3d9\shaders\generate_shaders.bat">
+    <None Include="..\..\src\libGLESv2\renderer\d3d9\shaders\Blit.ps">
       <Filter>libGLESv2\renderer\d3d9\shaders</Filter>
     </None>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d9\shaders\compiled\luminanceps.h">
@@ -475,9 +475,6 @@
     <ClCompile Include="..\..\src\common\event_tracer.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\src\common\commit.h">
-      <Filter>common</Filter>
-    </ClInclude>
     <ClCompile Include="..\..\src\common\RefCountObject.cpp">
       <Filter>common</Filter>
     </ClCompile>
