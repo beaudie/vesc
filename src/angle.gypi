@@ -27,6 +27,20 @@
                 'targets':
                 [
                     {
+                        'target_name': 'commit_id',
+                        'type': 'none',
+                        'actions':
+                        [
+                            {
+                                'action_name': 'Generate Commit ID Header',
+                                'message': 'Generating commit ID header...',
+                                'inputs': [ 'commit_id.bat' ],
+                                'outputs': ['common/commit.h'],
+                                'action': ['<(angle_relative_src_path)commit_id.bat'],
+                            }
+                        ] #actions
+                    },
+                    {
                         'target_name': 'copy_compiler_dll',
                         'type': 'none',
                         'sources': [ 'copy_compiler_dll.bat' ],
