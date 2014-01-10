@@ -279,6 +279,10 @@
       <Project>{C15697F6-5057-016E-BD29-422971875679}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="commit_id.vcxproj">
+      <Project>{3B7F5656-177F-52EE-26B3-D6A75368D0A9}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="copy_compiler_dll.vcxproj">
       <Project>{22DC02D5-1598-943C-13E1-82185B469F81}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
