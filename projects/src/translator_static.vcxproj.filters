@@ -46,9 +46,6 @@
     <ClCompile Include="..\..\src\common\event_tracer.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\src\common\commit.h">
-      <Filter>common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\common\system.h">
       <Filter>common</Filter>
     </ClInclude>
@@ -95,7 +92,7 @@
       <Filter>compiler\translator</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\compiler\translator\UnfoldShortCircuitAST.h">
-      <Filter>..\..\src\compiler\translator</Filter>
+      <Filter>compiler\translator</Filter>
     </ClInclude>
     <ClCompile Include="..\..\src\compiler\translator\ValidateLimitations.cpp">
       <Filter>compiler\translator</Filter>
@@ -128,6 +125,9 @@
       <Filter>compiler\translator</Filter>
     </ClCompile>
     <ClInclude Include="..\..\src\compiler\translator\PoolAlloc.h">
+      <Filter>compiler\translator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\compiler\translator\DetectDiscontinuity.h">
       <Filter>compiler\translator</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\compiler\translator\BuiltInFunctionEmulator.h">
@@ -256,9 +256,6 @@
     <ClCompile Include="..\..\src\compiler\translator\VariablePacker.cpp">
       <Filter>compiler\translator</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\src\compiler\translator\InitializeParseContext.h">
-      <Filter>compiler\translator</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\compiler\translator\TranslatorHLSL.h">
       <Filter>compiler\translator</Filter>
     </ClInclude>
@@ -335,7 +332,7 @@
       <Filter>compiler\translator</Filter>
     </ClInclude>
     <ClCompile Include="..\..\src\compiler\translator\UnfoldShortCircuitAST.cpp">
-      <Filter>..\..\src\compiler\translator</Filter>
+      <Filter>compiler\translator</Filter>
     </ClCompile>
     <ClInclude Include="..\..\src\compiler\translator\MMap.h">
       <Filter>compiler\translator</Filter>
@@ -349,7 +346,7 @@
     <ClCompile Include="..\..\src\compiler\translator\SymbolTable.cpp">
       <Filter>compiler\translator</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\src\compiler\translator\DetectDiscontinuity.h">
+    <ClInclude Include="..\..\src\compiler\translator\InitializeParseContext.h">
       <Filter>compiler\translator</Filter>
     </ClInclude>
     <ClCompile Include="..\..\src\compiler\translator\DirectiveHandler.cpp">

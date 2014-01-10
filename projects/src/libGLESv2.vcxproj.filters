@@ -721,9 +721,6 @@
     <ClCompile Include="..\..\src\common\event_tracer.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\src\common\commit.h">
-      <Filter>common</Filter>
-    </ClInclude>
     <ClCompile Include="..\..\src\common\RefCountObject.cpp">
       <Filter>common</Filter>
     </ClCompile>
@@ -742,10 +739,10 @@
     <ClInclude Include="..\..\src\common\version.h">
       <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\common\system.h">
+    <ClInclude Include="..\..\src\common\utilities.h">
       <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\common\utilities.h">
+    <ClInclude Include="..\..\src\common\system.h">
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\common\angleutils.h">
