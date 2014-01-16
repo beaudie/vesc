@@ -274,7 +274,6 @@
     <ClInclude Include="..\..\src\common\commit.h"/>
     <ClInclude Include="..\..\src\common\debug.h"/>
     <ClInclude Include="..\..\src\common\version.h"/>
-    <ClInclude Include="..\..\src\common\system.h"/>
     <ClInclude Include="..\..\src\common\utilities.h"/>
     <ClInclude Include="..\..\src\common\angleutils.h"/>
     <ClInclude Include="..\..\src\third_party\murmurhash\MurmurHash3.h"/>
@@ -301,10 +300,10 @@
     <ClCompile Include="..\..\src\libGLESv2\Float16ToFloat32.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\validationES3.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\ResourceManager.cpp"/>
+    <ClCompile Include="..\..\src\libGLESv2\angletypes.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Texture.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\VertexArray.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Sampler.cpp"/>
-    <ClCompile Include="..\..\src\libGLESv2\angletypes.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Framebuffer.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\renderer\copyimage.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\renderer\loadimageSSE2.cpp"/>
