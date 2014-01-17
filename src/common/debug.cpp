@@ -27,7 +27,7 @@ static void output(bool traceFileDebugOnly, PerfOutputFunction perfFunc, const c
     if (perfActive())
     {
         char message[32768];
-        int len = vsprintf_s(message, format, vararg);
+        int len = vsnprintf(message, format, vararg);
         if (len < 0)
         {
             return;

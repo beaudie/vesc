@@ -264,7 +264,7 @@ void ESUTIL_API esLogMessage ( const char *formatStr, ... )
     char buf[BUFSIZ];
 
     va_start ( params, formatStr );
-    vsprintf_s ( buf, sizeof(buf),  formatStr, params );
+    vsnprintf ( buf, sizeof(buf),  formatStr, params );
     
     printf ( "%s", buf );
     

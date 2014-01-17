@@ -58,6 +58,7 @@ void SafeDeleteArray(T*& resource)
 
 #if defined(_MSC_VER)
 #define snprintf _snprintf
+#define vsnprintf _vsnprintf
 #endif
 
 #define VENDOR_ID_AMD 0x1002
