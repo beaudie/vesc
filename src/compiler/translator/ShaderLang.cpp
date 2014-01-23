@@ -82,6 +82,7 @@ void ShInitBuiltInResources(ShBuiltInResources* resources)
     resources->MaxTextureImageUnits = 8;
     resources->MaxFragmentUniformVectors = 16;
     resources->MaxDrawBuffers = 1;
+    resources->MaxTextureCoords = 0;
 
     // Extensions.
     resources->OES_standard_derivatives = 0;
@@ -90,6 +91,7 @@ void ShInitBuiltInResources(ShBuiltInResources* resources)
     resources->EXT_draw_buffers = 0;
     resources->EXT_frag_depth = 0;
     resources->EXT_shader_texture_lod = 0;
+    resources->CHROMIUM_path_rendering = 0;
 
     // Disable highp precision in fragment shader by default.
     resources->FragmentPrecisionHigh = 0;
@@ -120,6 +122,11 @@ ShHandle ShConstructCompiler(ShShaderType type, ShShaderSpec spec,
         ShDestruct(base);
         return 0;
     }
+
+    // CHROMIUM_NV_path_rendering is not defined for HLSL output
+    if (resources->CHROMIUM_path_rendering)
+        ASSERT((output == SH_ESSL_OUTPUT) ||
+               (output == SH_GLSL_OUTPUT));
 
     return reinterpret_cast<void*>(base);
 }

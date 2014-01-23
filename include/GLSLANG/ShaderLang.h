@@ -37,7 +37,7 @@ extern "C" {
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 123
+#define ANGLE_SH_VERSION 124
 
 //
 // The names of the following enums have been derived by replacing GL prefix
@@ -276,6 +276,7 @@ typedef struct
     int MaxTextureImageUnits;
     int MaxFragmentUniformVectors;
     int MaxDrawBuffers;
+    int MaxTextureCoords;
 
     // Extensions.
     // Set to 1 to enable the extension, else 0.
@@ -285,6 +286,7 @@ typedef struct
     int EXT_draw_buffers;
     int EXT_frag_depth;
     int EXT_shader_texture_lod;
+    int CHROMIUM_path_rendering;
 
     // Set to 1 if highp precision is supported in the fragment language.
     // Default is 0.
