@@ -248,6 +248,7 @@ typedef struct
     int MaxTextureImageUnits;
     int MaxFragmentUniformVectors;
     int MaxDrawBuffers;
+    int MaxTextureCoords;
 
     // Extensions.
     // Set to 1 to enable the extension, else 0.
@@ -256,6 +257,7 @@ typedef struct
     int ARB_texture_rectangle;
     int EXT_draw_buffers;
     int EXT_frag_depth;
+    int CHROMIUM_NV_path_rendering;
 
     // Set to 1 if highp precision is supported in the fragment language.
     // Default is 0.
