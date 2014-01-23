@@ -331,6 +331,7 @@ void TCompiler::setResourceString()
               << ":MaxTextureImageUnits:" << compileResources.MaxTextureImageUnits
               << ":MaxFragmentUniformVectors:" << compileResources.MaxFragmentUniformVectors
               << ":MaxDrawBuffers:" << compileResources.MaxDrawBuffers
+              << ":MaxTextureCoords:" << compileResources.MaxTextureCoords
               << ":OES_standard_derivatives:" << compileResources.OES_standard_derivatives
               << ":OES_EGL_image_external:" << compileResources.OES_EGL_image_external
               << ":ARB_texture_rectangle:" << compileResources.ARB_texture_rectangle
@@ -340,6 +341,7 @@ void TCompiler::setResourceString()
               << ":MaxCallStackDepth:" << compileResources.MaxCallStackDepth
               << ":EXT_frag_depth:" << compileResources.EXT_frag_depth
               << ":EXT_shader_texture_lod:" << compileResources.EXT_shader_texture_lod
+              << ":CHROMIUM_NV_path_rendering:" << compileResources.CHROMIUM_NV_path_rendering
               << ":MaxVertexOutputVectors:" << compileResources.MaxVertexOutputVectors
               << ":MaxFragmentInputVectors:" << compileResources.MaxFragmentInputVectors
               << ":MinProgramTexelOffset:" << compileResources.MinProgramTexelOffset

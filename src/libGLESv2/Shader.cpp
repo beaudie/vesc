@@ -192,6 +192,7 @@ void Shader::initializeCompiler()
             resources.MaxTextureImageUnits = MAX_TEXTURE_IMAGE_UNITS;
             resources.MaxFragmentUniformVectors = mRenderer->getMaxFragmentUniformVectors();
             resources.MaxDrawBuffers = mRenderer->getMaxRenderTargets();
+            resources.MaxTextureCoords = 0;
             resources.OES_standard_derivatives = mRenderer->getDerivativeInstructionSupport();
             resources.EXT_draw_buffers = mRenderer->getMaxRenderTargets() > 1;
             resources.EXT_shader_texture_lod = 1;
