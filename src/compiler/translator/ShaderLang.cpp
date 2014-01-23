@@ -76,6 +76,7 @@ void ShInitBuiltInResources(ShBuiltInResources* resources)
     resources->MaxTextureImageUnits = 8;
     resources->MaxFragmentUniformVectors = 16;
     resources->MaxDrawBuffers = 1;
+    resources->MaxTextureCoords = 0;
 
     // Extensions.
     resources->OES_standard_derivatives = 0;
