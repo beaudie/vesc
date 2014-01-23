@@ -415,6 +415,8 @@ void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltI
     if (spec != SH_CSS_SHADERS_SPEC)
     {
         symbolTable.insertConstInt("gl_MaxDrawBuffers", resources.MaxDrawBuffers);
+        if (resources.CHROMIUM_NV_path_rendering)
+            symbolTable.insertConstInt("gl_MaxTextureCoords", resources.MaxTextureCoords);
     }
 }
 
@@ -535,6 +537,13 @@ void IdentifyBuiltIns(ShShaderType type, ShShaderSpec spec,
     }
 
     // Finally add resource-specific variables.
+    if (spec != SH_CSS_SHADERS_SPEC && resources.CHROMIUM_NV_path_rendering) {
+        TType texCoord(EbtFloat, EbpMedium, EvqTexCoord, 4, false, true);
+        texCoord.setArraySize(resources.MaxTextureCoords);
+        symbolTable.insert(*new TVariable(NewPoolTString("gl_TexCoord"),    texCoord));
+        symbolTable.relateToExtension("gl_TexCoord", "GL_CHROMIUM_NV_path_rendering");
+    }
+
     switch(type) {
     case SH_FRAGMENT_SHADER:
         if (spec != SH_CSS_SHADERS_SPEC) {
@@ -561,4 +570,6 @@ void InitExtensionBehavior(const ShBuiltInResources& resources,
         extBehavior["GL_EXT_draw_buffers"] = EBhUndefined;
     if (resources.EXT_frag_depth)
         extBehavior["GL_EXT_frag_depth"] = EBhUndefined;
+    if (resources.CHROMIUM_NV_path_rendering)
+        extBehavior["GL_CHROMIUM_NV_path_rendering"] = EBhUndefined;
 }
