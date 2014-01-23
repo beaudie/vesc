@@ -322,6 +322,12 @@ bool TParseContext::lValueErrorCheck(const TSourceLoc& line, const char* op, TIn
     case EvqFragCoord:      message = "can't modify gl_FragCoord";   break;
     case EvqFrontFacing:    message = "can't modify gl_FrontFacing"; break;
     case EvqPointCoord:     message = "can't modify gl_PointCoord";  break;
+
+    case EvqTexCoord:
+        if (shaderType != SH_VERTEX_SHADER) {
+            message = "can't modify gl_TexCoord";
+        }
+        break;
     default:
 
         //
