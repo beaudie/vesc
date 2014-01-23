@@ -105,6 +105,7 @@ enum TQualifier
     EvqFragCoord,
     EvqFrontFacing,
     EvqPointCoord,
+    EvqTexCoord,
 
     // built-ins written by fragment shader
     EvqFragColor,
@@ -138,6 +139,7 @@ inline const char* getQualifierString(TQualifier q)
     case EvqPosition:       return "Position";       break;
     case EvqPointSize:      return "PointSize";      break;
     case EvqFragCoord:      return "FragCoord";      break;
+    case EvqTexCoord:       return "TexCoord";       break;
     case EvqFrontFacing:    return "FrontFacing";    break;
     case EvqFragColor:      return "FragColor";      break;
     case EvqFragData:       return "FragData";      break;
