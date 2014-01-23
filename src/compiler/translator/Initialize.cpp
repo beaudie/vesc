@@ -586,6 +586,8 @@ void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltI
     if (spec != SH_CSS_SHADERS_SPEC)
     {
         symbolTable.insertConstInt(COMMON_BUILTINS, "gl_MaxDrawBuffers", resources.MaxDrawBuffers);
+        if (resources.CHROMIUM_NV_path_rendering)
+            symbolTable.insertConstInt(COMMON_BUILTINS, "gl_MaxTextureCoords", resources.MaxTextureCoords);
     }
 
     symbolTable.insertConstInt(ESSL3_BUILTINS, "gl_MaxVertexOutputVectors", resources.MaxVertexOutputVectors);
@@ -736,6 +738,13 @@ void IdentifyBuiltIns(ShShaderType type, ShShaderSpec spec,
             TType fragData(EbtFloat, EbpMedium, EvqFragData, 4, 1, true);
             fragData.setArraySize(resources.MaxDrawBuffers);
             symbolTable.insert(ESSL1_BUILTINS, *new TVariable(NewPoolTString("gl_FragData"), fragData));
+
+            if (resources.CHROMIUM_NV_path_rendering) {
+                TType texCoord(EbtFloat, EbpMedium, EvqTexCoord, 4, false, true);
+                texCoord.setArraySize(resources.MaxTextureCoords);
+                symbolTable.insert(ESSL1_BUILTINS, *new TVariable(NewPoolTString("gl_TexCoord"), texCoord));
+                symbolTable.relateToExtension(ESSL1_BUILTINS, "gl_TexCoord", "GL_CHROMIUM_NV_path_rendering");
+            }
         }
         break;
     default: break;
@@ -757,4 +766,6 @@ void InitExtensionBehavior(const ShBuiltInResources& resources,
         extBehavior["GL_EXT_frag_depth"] = EBhUndefined;
     if (resources.EXT_shader_texture_lod)
         extBehavior["GL_EXT_shader_texture_lod"] = EBhUndefined;
+    if (resources.CHROMIUM_NV_path_rendering)
+        extBehavior["GL_CHROMIUM_NV_path_rendering"] = EBhUndefined;
 }
