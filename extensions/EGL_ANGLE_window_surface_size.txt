@@ -1,0 +1,98 @@
+Name
+
+    ANGLE_window_surface_size
+
+Name Strings
+
+    EGL_ANGLE_window_surface_size
+
+Contributors
+
+    John Bauman
+
+Contacts
+
+    John Bauman (jbauman 'at' chromium.org)
+
+Status
+
+    Complete
+
+Version
+
+    Version 1, February 5, 2014
+
+Number
+
+    EGL Extension #??
+
+Dependencies
+
+    This extension is written against the wording of the EGL 1.4
+    Specification. 
+
+Overview
+
+    This extension allows specifying the size of a window surface when it is
+    created.
+
+New Types
+
+    None
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    None
+
+Additions to Chapter 3 of the EGL 1.4 Specification:
+
+    Additions to section 3.5.1 (Creating On-Screen Rendering Surfaces)
+
+    Alter the end of the second paragraph:
+
+        Attributes that can be specified in <attrib_list> include
+        EGL_RENDER_BUFFER, EGL_VG_COLORSPACE, EGL_VG_ALPHA_FORMAT,
+        EGL_WIDTH and EGL_HEIGHT.
+
+    Add before the last paragraph of section 3.5.1:
+
+        EGL_WIDTH and EGL_HEIGHT specify the pixel width and height of the
+        rectangular surface. If neither is set, then the width and height will
+        be equal to those of the native window, and the surface will be said to
+        be autosizing. If only one of EGL_WIDTH or EGL_HEIGHT is specified then
+        an EGL_BAD_PARAMETER error is generated.  If the value specified for
+        either of EGL_WIDTH or EGL_HEIGHT is less than one then an
+        EGL_BAD_PARAMETER error is generated.
+
+    Additions to section 3.5.6 (Surface Attributes)
+
+    Replace paragraph 16 with:
+
+        Querying EGL_WIDTH and EGL_HEIGHT returns respectively the width and
+        height, in pixels, of the surface. For a pixmap surface or autosizing
+        window surface, these values are initially equal to the width and height
+        of the native window or pixmap with respect to which the surface was
+        created. If the native window is resized and the corresponding window
+        surface is autosizing, the corresponding window surface will eventually
+        be resized by the implementation to match (as discussed in section
+        3.9.1). If there is a discrepancy because EGL has not yet resized the
+        window surface, the size returned by eglQuerySurface will always be that
+        of the EGL surface, not the corresponding native window.
+
+    Additions to section 3.9.1 (Posting to a Window)
+
+    Alter the beginning of paragraph 4:
+
+        If <surface> is autosizing and the native window corresponding to
+        <surface> has been resized prior to the swap, <surface> must be resized
+        to match. 
+
+Issues
+
+Revision History
+
+    Version 1, 2014/02/05 - first draft.
