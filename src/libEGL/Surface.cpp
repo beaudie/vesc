@@ -25,7 +25,7 @@
 namespace egl
 {
 
-Surface::Surface(Display *display, const Config *config, HWND window, EGLint postSubBufferSupported) 
+Surface::Surface(Display *display, const Config *config, HWND window, EGLint width, EGLint height, EGLint postSubBufferSupported) 
     : mDisplay(display), mConfig(config), mWindow(window), mPostSubBufferSupported(postSubBufferSupported)
 {
     mRenderer = mDisplay->getRenderer();
@@ -39,9 +39,11 @@ Surface::Surface(Display *display, const Config *config, HWND window, EGLint pos
     mRenderBuffer = EGL_BACK_BUFFER;
     mSwapBehavior = EGL_BUFFER_PRESERVED;
     mSwapInterval = -1;
-    mWidth = -1;
-    mHeight = -1;
+    mWidth = width;
+    mHeight = height;
     setSwapInterval(1);
+
+    mAutodetectSize = mWidth == -1 || mHeight == -1;
 
     subclassWindow();
 }
@@ -61,6 +63,7 @@ Surface::Surface(Display *display, const Config *config, HANDLE shareHandle, EGL
     mSwapBehavior = EGL_BUFFER_PRESERVED;
     mSwapInterval = -1;
     setSwapInterval(1);
+    mAutodetectSize = false;
 }
 
 Surface::~Surface()
@@ -96,7 +99,7 @@ bool Surface::resetSwapChain()
     int width;
     int height;
 
-    if (mWindow)
+    if (mAutodetectSize)
     {
         RECT windowRect;
         if (!GetClientRect(getWindowHandle(), &windowRect))
@@ -300,23 +303,23 @@ void Surface::unsubclassWindow()
 bool Surface::checkForOutOfDateSwapChain()
 {
     RECT client;
-    if (!GetClientRect(getWindowHandle(), &client))
-    {
-        ASSERT(false);
-        return false;
-    }
-
-    // Grow the buffer now, if the window has grown. We need to grow now to avoid losing information.
-    int clientWidth = client.right - client.left;
-    int clientHeight = client.bottom - client.top;
-    bool sizeDirty = clientWidth != getWidth() || clientHeight != getHeight();
-
-    if (IsIconic(getWindowHandle()))
+    int clientWidth = getWidth();
+    int clientHeight = getHeight();
+    if (mAutodetectSize && !IsIconic(getWindowHandle()))
     {
         // The window is automatically resized to 150x22 when it's minimized, but the swapchain shouldn't be resized
         // because that's not a useful size to render to.
-        sizeDirty = false;
+        if (!GetClientRect(getWindowHandle(), &client))
+        {
+            ASSERT(false);
+            return false;
+        }
+
+        // Grow the buffer now, if the window has grown. We need to grow now to avoid losing information.
+        clientWidth = client.right - client.left;
+        clientHeight = client.bottom - client.top;
     }
+    bool sizeDirty = clientWidth != getWidth() || clientHeight != getHeight();
 
     bool wasDirty = (mSwapIntervalDirty || sizeDirty);
 
