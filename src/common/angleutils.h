@@ -78,6 +78,9 @@ inline void StructZero(T *obj)
     memset(obj, 0, sizeof(T));
 }
 
+// Useful for operator<, when we use structs as keys in std::map
+#define ANGLE_LESS_THAN_HELPER(VARA, VARB) (VARA != VARB) ? (VARA < VARB)
+
 #if defined(_MSC_VER)
 #define snprintf _snprintf
 #endif
