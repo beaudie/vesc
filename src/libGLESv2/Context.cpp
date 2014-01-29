@@ -2402,7 +2402,12 @@ void Context::applyState(GLenum drawMode)
 // Applies the shaders and shader constants to the Direct3D 9 device
 void Context::applyShaders(ProgramBinary *programBinary)
 {
-    mRenderer->applyShaders(programBinary);
+    const VertexAttribute *vertexAttributes = getCurrentVertexArray()->getVertexAttributes();
+
+    VertexFormat inputLayout[gl::MAX_VERTEX_ATTRIBS];
+    VertexFormat::GetInputLayout(inputLayout, programBinary, vertexAttributes, mState.vertexAttribCurrentValues);
+
+    mRenderer->applyShaders(programBinary, inputLayout);
     
     programBinary->applyUniforms();
 }

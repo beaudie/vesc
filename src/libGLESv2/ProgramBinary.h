@@ -25,6 +25,7 @@
 #include "libGLESv2/Uniform.h"
 #include "libGLESv2/Shader.h"
 #include "libGLESv2/Constants.h"
+#include "libGLESv2/renderer/VertexDataManager.h"
 
 namespace rx
 {
@@ -57,6 +58,39 @@ struct VariableLocation
     unsigned int index;
 };
 
+class VertexExecutable
+{
+  public:
+    VertexExecutable(rx::Renderer *const renderer, const VertexFormat inputLayout[gl::MAX_VERTEX_ATTRIBS], rx::ShaderExecutable *shaderExecutable)
+        : mShaderExecutable(shaderExecutable)
+    {
+        for (size_t attributeIndex = 0; attributeIndex < gl::MAX_VERTEX_ATTRIBS; attributeIndex++)
+        {
+            mInputs[attributeIndex] = inputLayout[attributeIndex];
+        }
+    }
+
+    bool matchesInputLayout(const VertexFormat attributes[gl::MAX_VERTEX_ATTRIBS]) const
+    {
+        for (size_t attributeIndex = 0; attributeIndex < gl::MAX_VERTEX_ATTRIBS; attributeIndex++)
+        {
+            if (mInputs[attributeIndex] != attributes[attributeIndex])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    const VertexFormat *inputs() const { return mInputs; }
+    rx::ShaderExecutable *shaderExecutable() const { return mShaderExecutable; }
+
+  private:
+    VertexFormat mInputs[gl::MAX_VERTEX_ATTRIBS];
+    rx::ShaderExecutable *mShaderExecutable;
+};
+
 // This is the result of linking a program. It is the state that would be passed to ProgramBinary.
 class ProgramBinary : public RefCountObject
 {
@@ -65,7 +99,7 @@ class ProgramBinary : public RefCountObject
     ~ProgramBinary();
 
     rx::ShaderExecutable *getPixelExecutable() const;
-    rx::ShaderExecutable *getVertexExecutable() const;
+    rx::ShaderExecutable *getVertexExecutableForInputLayout(const VertexFormat inputLayout[gl::MAX_VERTEX_ATTRIBS]);
     rx::ShaderExecutable *getGeometryExecutable() const;
 
     GLuint getAttributeLocation(const char *name);
@@ -188,9 +222,11 @@ class ProgramBinary : public RefCountObject
     rx::Renderer *const mRenderer;
     DynamicHLSL *mDynamicHLSL;
 
-    rx::ShaderExecutable *mPixelExecutable;
-    rx::ShaderExecutable *mVertexExecutable;
+    std::string mVertexHLSL;
+    rx::D3DWorkaroundType mVertexWorkarounds;
+    std::vector<VertexExecutable *> mVertexExecutables;
     rx::ShaderExecutable *mGeometryExecutable;
+    rx::ShaderExecutable *mPixelExecutable;
 
     sh::Attribute mLinkedAttribute[MAX_VERTEX_ATTRIBS];
     int mSemanticIndex[MAX_VERTEX_ATTRIBS];
