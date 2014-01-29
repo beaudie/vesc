@@ -1019,6 +1019,8 @@ bool ProgramBinary::load(InfoLog &infoLog, const void *binary, GLsizei length)
         std::string name;
         stream.read(&name);
         mLinkedAttribute[i].name = name;
+        stream.read(&mShaderAttributes[i].type);
+        stream.read(&mShaderAttributes[i].name);
         stream.read(&mSemanticIndex[i]);
     }
 
@@ -1230,6 +1232,8 @@ bool ProgramBinary::save(void* binary, GLsizei bufSize, GLsizei *length)
     {
         stream.write(mLinkedAttribute[i].type);
         stream.write(mLinkedAttribute[i].name);
+        stream.write(mShaderAttributes[i].type);
+        stream.write(mShaderAttributes[i].name);
         stream.write(mSemanticIndex[i]);
     }
 
@@ -1493,6 +1497,8 @@ bool ProgramBinary::linkAttributes(InfoLog &infoLog, const AttributeBindings &at
     {
         const sh::Attribute &attribute = activeAttributes[attributeIndex];
         const int location = attribute.location == -1 ? attributeBindings.getAttributeBinding(attribute.name) : attribute.location;
+
+        mShaderAttributes[attributeIndex] = attribute;
 
         if (location != -1)   // Set by glBindAttribLocation or by location layout qualifier
         {
