@@ -28,6 +28,37 @@
 #include "libGLESv2/validationES3.h"
 #include "libGLESv2/queryconversions.h"
 
+void SetCap(gl::Context *context, GLenum cap, bool enabled)
+{
+    // Validate ES3 caps
+    switch (cap)
+    {
+      case GL_PRIMITIVE_RESTART_FIXED_INDEX:
+      case GL_RASTERIZER_DISCARD:
+        if (context->getClientVersion() < 3)
+        {
+            return gl::error(GL_INVALID_ENUM);
+        }
+        break;
+    }
+
+    switch (cap)
+    {
+      case GL_CULL_FACE:                     context->setCullFace(enabled);              break;
+      case GL_POLYGON_OFFSET_FILL:           context->setPolygonOffsetFill(enabled);     break;
+      case GL_SAMPLE_ALPHA_TO_COVERAGE:      context->setSampleAlphaToCoverage(enabled); break;
+      case GL_SAMPLE_COVERAGE:               context->setSampleCoverage(enabled);        break;
+      case GL_SCISSOR_TEST:                  context->setScissorTest(enabled);           break;
+      case GL_STENCIL_TEST:                  context->setStencilTest(enabled);           break;
+      case GL_DEPTH_TEST:                    context->setDepthTest(enabled);             break;
+      case GL_BLEND:                         context->setBlend(enabled);                 break;
+      case GL_DITHER:                        context->setDither(enabled);                break;
+      case GL_PRIMITIVE_RESTART_FIXED_INDEX: UNIMPLEMENTED();                            break;
+      case GL_RASTERIZER_DISCARD:            context->setRasterizerDiscard(enabled);     break;
+      default:                               return gl::error(GL_INVALID_ENUM);
+    }
+}
+
 extern "C"
 {
 
@@ -1632,30 +1663,7 @@ void __stdcall glDisable(GLenum cap)
 
         if (context)
         {
-            switch (cap)
-            {
-              case GL_CULL_FACE:                context->setCullFace(false);              break;
-              case GL_POLYGON_OFFSET_FILL:      context->setPolygonOffsetFill(false);     break;
-              case GL_SAMPLE_ALPHA_TO_COVERAGE: context->setSampleAlphaToCoverage(false); break;
-              case GL_SAMPLE_COVERAGE:          context->setSampleCoverage(false);        break;
-              case GL_SCISSOR_TEST:             context->setScissorTest(false);           break;
-              case GL_STENCIL_TEST:             context->setStencilTest(false);           break;
-              case GL_DEPTH_TEST:               context->setDepthTest(false);             break;
-              case GL_BLEND:                    context->setBlend(false);                 break;
-              case GL_DITHER:                   context->setDither(false);                break;
-
-              case GL_PRIMITIVE_RESTART_FIXED_INDEX:
-              case GL_RASTERIZER_DISCARD:
-                if (context->getClientVersion() < 3)
-                {
-                    return gl::error(GL_INVALID_ENUM);
-                }
-                UNIMPLEMENTED();
-                break;
-
-              default:
-                return gl::error(GL_INVALID_ENUM);
-            }
+            SetCap(context, cap, false);
         }
     }
     catch(std::bad_alloc&)
@@ -1832,20 +1840,7 @@ void __stdcall glEnable(GLenum cap)
 
         if (context)
         {
-            switch (cap)
-            {
-              case GL_CULL_FACE:                context->setCullFace(true);              break;
-              case GL_POLYGON_OFFSET_FILL:      context->setPolygonOffsetFill(true);     break;
-              case GL_SAMPLE_ALPHA_TO_COVERAGE: context->setSampleAlphaToCoverage(true); break;
-              case GL_SAMPLE_COVERAGE:          context->setSampleCoverage(true);        break;
-              case GL_SCISSOR_TEST:             context->setScissorTest(true);           break;
-              case GL_STENCIL_TEST:             context->setStencilTest(true);           break;
-              case GL_DEPTH_TEST:               context->setDepthTest(true);             break;
-              case GL_BLEND:                    context->setBlend(true);                 break;
-              case GL_DITHER:                   context->setDither(true);                break;
-              default:
-                return gl::error(GL_INVALID_ENUM);
-            }
+            SetCap(context, cap, true);
         }
     }
     catch(std::bad_alloc&)
@@ -4105,6 +4100,17 @@ GLboolean __stdcall glIsEnabled(GLenum cap)
 
         if (context)
         {
+            // Validate ES3 caps
+            switch (cap)
+            {
+              case GL_RASTERIZER_DISCARD:
+                if (context->getClientVersion() < 3)
+                {
+                    return gl::error(GL_INVALID_ENUM, false);
+                }
+                break;
+            }
+
             switch (cap)
             {
               case GL_CULL_FACE:                return context->isCullFaceEnabled();
@@ -4116,6 +4122,7 @@ GLboolean __stdcall glIsEnabled(GLenum cap)
               case GL_DEPTH_TEST:               return context->isDepthTestEnabled();
               case GL_BLEND:                    return context->isBlendEnabled();
               case GL_DITHER:                   return context->isDitherEnabled();
+              case GL_RASTERIZER_DISCARD:       return context->isRasterizerDiscardEnabled();
               default:
                 return gl::error(GL_INVALID_ENUM, false);
             }

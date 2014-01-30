@@ -152,6 +152,9 @@ class Context
 
     void setClearStencil(int stencil);
 
+    void setRasterizerDiscard(bool enabled);
+    bool isRasterizerDiscardEnabled() const;
+
     void setCullFace(bool enabled);
     bool isCullFaceEnabled() const;
 
@@ -453,7 +456,7 @@ class Context
 
     bool applyRenderTarget(GLenum drawMode, bool ignoreViewport);
     void applyState(GLenum drawMode);
-    void applyShaders(ProgramBinary *programBinary);
+    void applyShaders(ProgramBinary *programBinary, bool rasterizerDiscard);
     void applyTextures(ProgramBinary *programBinary);
     void applyTextures(ProgramBinary *programBinary, SamplerType type);
     bool applyUniformBuffers();
