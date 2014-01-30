@@ -97,6 +97,8 @@ struct RasterizerState
 
     bool pointDrawMode;
     bool multiSample;
+
+    bool rasterizerDiscard;
 };
 
 struct BlendState
