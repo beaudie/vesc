@@ -3032,6 +3032,7 @@ void __stdcall glGetProgramiv(GLuint program, GLenum pname, GLint* params)
                 {
                   case GL_ACTIVE_UNIFORM_BLOCKS:
                   case GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH:
+                  case GL_TRANSFORM_FEEDBACK_VARYINGS:
                     return gl::error(GL_INVALID_ENUM);
                 }
             }
@@ -3073,6 +3074,12 @@ void __stdcall glGetProgramiv(GLuint program, GLenum pname, GLint* params)
                 return;
               case GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH:
                 *params = programObject->getActiveUniformBlockMaxLength();
+                break;
+              case GL_TRANSFORM_FEEDBACK_VARYINGS:
+                *params = programObject->getTransformFeedbackVaryingCount();
+                break;
+              case GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH:
+                *params = gl::IMPLEMENTATION_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH;
                 break;
               default:
                 return gl::error(GL_INVALID_ENUM);

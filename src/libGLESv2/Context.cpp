@@ -1836,7 +1836,7 @@ bool Context::getIntegerv(GLenum pname, GLint *params)
       case GL_MINOR_VERSION:                            *params = 0;                                                    break;
       case GL_MAX_ELEMENTS_INDICES:                     *params = mRenderer->getMaxRecommendedElementsIndices();        break;
       case GL_MAX_ELEMENTS_VERTICES:                    *params = mRenderer->getMaxRecommendedElementsVertices();       break;
-      case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS:  *params = 0; UNIMPLEMENTED();                                   break;
+      case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS:  *params = mRenderer->getMaxTransformFeedbackBuffers();          break;
       case GL_NUM_COMPRESSED_TEXTURE_FORMATS:   
         params[0] = mNumCompressedTextureFormats;
         break;
@@ -2378,6 +2378,7 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
       case GL_MAX_ELEMENTS_INDICES:
       case GL_MAX_ELEMENTS_VERTICES:
       case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS:
+      case GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH:
         {
             *type = GL_INT;
             *numParams = 1;
