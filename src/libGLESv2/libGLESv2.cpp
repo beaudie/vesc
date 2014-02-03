@@ -22,6 +22,7 @@
 #include "libGLESv2/Query.h"
 #include "libGLESv2/Context.h"
 #include "libGLESv2/VertexArray.h"
+#include "libGLESv2/TransformFeedback.h"
 
 #include "libGLESv2/validationES.h"
 #include "libGLESv2/validationES2.h"
@@ -7363,8 +7364,32 @@ void __stdcall glBeginTransformFeedback(GLenum primitiveMode)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            // glBeginTransformFeedback
-            UNIMPLEMENTED();
+            switch (primitiveMode)
+            {
+              case GL_TRIANGLES:
+              case GL_LINES:
+              case GL_POINTS:
+                break;
+              default:
+                return gl::error(GL_INVALID_ENUM);
+            }
+
+            gl::TransformFeedback *transformFeedback = context->getCurrentTransformFeedback();
+            ASSERT(transformFeedback != NULL);
+
+            if (transformFeedback->isStarted())
+            {
+                return gl::error(GL_INVALID_OPERATION);
+            }
+
+            if (transformFeedback->isPaused())
+            {
+                transformFeedback->resume();
+            }
+            else
+            {
+                transformFeedback->start(primitiveMode);
+            }
         }
     }
     catch(std::bad_alloc&)
@@ -7388,8 +7413,15 @@ void __stdcall glEndTransformFeedback(void)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            // glEndTransformFeedback
-            UNIMPLEMENTED();
+            gl::TransformFeedback *transformFeedback = context->getCurrentTransformFeedback();
+            ASSERT(transformFeedback != NULL);
+
+            if (!transformFeedback->isStarted())
+            {
+                return gl::error(GL_INVALID_OPERATION);
+            }
+
+            transformFeedback->stop();
         }
     }
     catch(std::bad_alloc&)
@@ -9508,8 +9540,30 @@ void __stdcall glBindTransformFeedback(GLenum target, GLuint id)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            // glBindTransformFeedback
-            UNIMPLEMENTED();
+            switch (target)
+            {
+              case GL_TRANSFORM_FEEDBACK:
+                {
+                    // Cannot bind a transform feedback object if the current one is started and not paused (3.0.2 pg 85 section 2.14.1)
+                    gl::TransformFeedback *curTransformFeedback = context->getCurrentTransformFeedback();
+                    if (curTransformFeedback && curTransformFeedback->isStarted() && !curTransformFeedback->isPaused())
+                    {
+                        return gl::error(GL_INVALID_OPERATION);
+                    }
+
+                    // Cannot bind a transform feedback object that does not exist (3.0.2 pg 85 section 2.14.1)
+                    if (context->getTransformFeedback(id) == NULL)
+                    {
+                        return gl::error(GL_INVALID_OPERATION);
+                    }
+
+                    context->bindTransformFeedback(id);
+                }
+                break;
+
+              default:
+                return gl::error(GL_INVALID_ENUM);
+            }
         }
     }
     catch(std::bad_alloc&)
@@ -9533,8 +9587,10 @@ void __stdcall glDeleteTransformFeedbacks(GLsizei n, const GLuint* ids)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            // glDeleteTransformFeedbacks
-            UNIMPLEMENTED();
+            for (int i = 0; i < n; i++)
+            {
+                context->deleteTransformFeedback(ids[i]);
+            }
         }
     }
     catch(std::bad_alloc&)
@@ -9558,8 +9614,10 @@ void __stdcall glGenTransformFeedbacks(GLsizei n, GLuint* ids)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            // glGenTransformFeedbacks
-            UNIMPLEMENTED();
+            for (int i = 0; i < n; i++)
+            {
+                ids[i] = context->createTransformFeedback();
+            }
         }
     }
     catch(std::bad_alloc&)
@@ -9583,8 +9641,7 @@ GLboolean __stdcall glIsTransformFeedback(GLuint id)
                 return gl::error(GL_INVALID_OPERATION, GL_FALSE);
             }
 
-            // glIsTransformFeedback
-            UNIMPLEMENTED();
+            return ((context->getTransformFeedback(id) != NULL) ? GL_TRUE : GL_FALSE);
         }
     }
     catch(std::bad_alloc&)
@@ -9610,8 +9667,16 @@ void __stdcall glPauseTransformFeedback(void)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            // glPauseTransformFeedback
-            UNIMPLEMENTED();
+            gl::TransformFeedback *transformFeedback = context->getCurrentTransformFeedback();
+            ASSERT(transformFeedback != NULL);
+
+            // Current transform feedback must be started and not paused in order to pause (3.0.2 pg 86)
+            if (!transformFeedback->isStarted() || transformFeedback->isPaused())
+            {
+                return gl::error(GL_INVALID_OPERATION);
+            }
+
+            transformFeedback->pause();
         }
     }
     catch(std::bad_alloc&)
@@ -9635,8 +9700,16 @@ void __stdcall glResumeTransformFeedback(void)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            // glResumeTransformFeedback
-            UNIMPLEMENTED();
+            gl::TransformFeedback *transformFeedback = context->getCurrentTransformFeedback();
+            ASSERT(transformFeedback != NULL);
+
+            // Current transform feedback must be started and paused in order to resume (3.0.2 pg 86)
+            if (!transformFeedback->isStarted() || !transformFeedback->isPaused())
+            {
+                return gl::error(GL_INVALID_OPERATION);
+            }
+
+            transformFeedback->resume();
         }
     }
     catch(std::bad_alloc&)
