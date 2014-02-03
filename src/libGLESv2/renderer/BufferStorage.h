@@ -26,6 +26,7 @@ class BufferStorage
     virtual void copyData(BufferStorage* sourceStorage, unsigned int size,
                           unsigned int sourceOffset, unsigned int destOffset) = 0;
     virtual void clear() = 0;
+    virtual void markTransformFeedbackUsage() = 0;
     virtual unsigned int getSize() const = 0;
     virtual bool supportsDirectBinding() const = 0;
     unsigned int getSerial() const;

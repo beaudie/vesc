@@ -42,6 +42,8 @@ class Buffer : public RefCountObject
     rx::BufferStorage *getStorage() const;
     unsigned int size() const;
 
+    void markTransformFeedbackUsage();
+
     rx::StaticVertexBufferInterface *getStaticVertexBuffer();
     rx::StaticIndexBufferInterface *getStaticIndexBuffer();
     void invalidateStaticData();

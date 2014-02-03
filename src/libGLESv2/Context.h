@@ -471,6 +471,8 @@ class Context
     void applyTextures(ProgramBinary *programBinary);
     void applyTextures(ProgramBinary *programBinary, SamplerType type);
     bool applyUniformBuffers();
+    GLenum applyTransformFeedbackBuffers(GLenum drawMode, bool *transformFeedbackActive);
+    void markTransformFeedbackUsage();
 
     void detachBuffer(GLuint buffer);
     void detachTexture(GLuint texture);

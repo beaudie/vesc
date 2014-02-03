@@ -78,6 +78,11 @@ void BufferStorage9::clear()
     mSize = 0;
 }
 
+void BufferStorage9::markTransformFeedbackUsage()
+{
+    UNREACHABLE();
+}
+
 unsigned int BufferStorage9::getSize() const
 {
     return mSize;

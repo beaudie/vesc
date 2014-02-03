@@ -80,6 +80,7 @@ class Renderer11 : public Renderer
     virtual GLenum applyVertexBuffer(gl::ProgramBinary *programBinary, const gl::VertexAttribute vertexAttributes[], gl::VertexAttribCurrentValueData currentValues[],
                                      GLint first, GLsizei count, GLsizei instances);
     virtual GLenum applyIndexBuffer(const GLvoid *indices, gl::Buffer *elementArrayBuffer, GLsizei count, GLenum mode, GLenum type, TranslatedIndexData *indexInfo);
+    virtual void applyTransformFeedbackBuffers(gl::Buffer *transformFeedbackBuffers[], GLintptr offsets[]);
 
     virtual void drawArrays(GLenum mode, GLsizei count, GLsizei instances);
     virtual void drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei instances);
@@ -338,10 +339,16 @@ class Renderer11 : public Renderer
     // Currently applied primitive topology
     D3D11_PRIMITIVE_TOPOLOGY mCurrentPrimitiveTopology;
 
+    // Currently applied index buffer
     unsigned int mAppliedIBSerial;
     unsigned int mAppliedStorageIBSerial;
     unsigned int mAppliedIBOffset;
 
+    // Currently applied transform feedback buffers
+    ID3D11Buffer *mAppliedTFBuffers[gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS];
+    GLintptr mAppliedTFOffsets[gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS];
+
+    // Currently applied shaders
     ID3D11VertexShader *mAppliedVertexShader;
     ID3D11GeometryShader *mAppliedGeometryShader;
     ID3D11PixelShader *mAppliedPixelShader;

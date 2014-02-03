@@ -21,6 +21,7 @@ enum BufferUsage
 {
     BUFFER_USAGE_STAGING = 0,
     BUFFER_USAGE_VERTEX = 1,
+    BUFFER_USAGE_TRANSFORM_FEEDBACK = BUFFER_USAGE_VERTEX,
     BUFFER_USAGE_INDEX = 2,
     BUFFER_USAGE_PIXEL_UNPACK = 3,
     BUFFER_USAGE_UNIFORM = 4,
@@ -41,6 +42,7 @@ class BufferStorage11 : public BufferStorage
     virtual void copyData(BufferStorage* sourceStorage, unsigned int size,
                           unsigned int sourceOffset, unsigned int destOffset);
     virtual void clear();
+    virtual void markTransformFeedbackUsage();
     virtual unsigned int getSize() const;
     virtual bool supportsDirectBinding() const;
 

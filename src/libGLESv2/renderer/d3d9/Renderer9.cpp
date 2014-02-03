@@ -1442,6 +1442,11 @@ GLenum Renderer9::applyIndexBuffer(const GLvoid *indices, gl::Buffer *elementArr
     return err;
 }
 
+void Renderer9::applyTransformFeedbackBuffers(gl::Buffer *transformFeedbackBuffers[], GLintptr offsets[])
+{
+    UNREACHABLE();
+}
+
 void Renderer9::drawArrays(GLenum mode, GLsizei count, GLsizei instances)
 {
     startScene();

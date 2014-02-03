@@ -82,6 +82,12 @@ GLenum Buffer::usage() const
     return mUsage;
 }
 
+void Buffer::markTransformFeedbackUsage()
+{
+    mBufferStorage->markTransformFeedbackUsage();
+    invalidateStaticData();
+}
+
 rx::StaticVertexBufferInterface *Buffer::getStaticVertexBuffer()
 {
     return mStaticVertexBuffer;
