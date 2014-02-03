@@ -71,10 +71,22 @@ void ANGLETest::drawQuad(GLuint program, const std::string& positionAttribName, 
 
 GLuint ANGLETest::compileShader(GLenum type, const std::string &source)
 {
+    std::vector<std::string> sourceArray(1);
+    sourceArray[0] = source;
+    return compileShader(type, sourceArray);
+}
+
+GLuint ANGLETest::compileShader(GLenum type, const std::vector<std::string> &source)
+{
     GLuint shader = glCreateShader(type);
 
-    const char *sourceArray[1] = { source.c_str() };
-    glShaderSource(shader, 1, sourceArray, NULL);
+    std::vector<const char *> sourceCstringArray(source.size());
+    for (size_t i = 0; i < sourceCstringArray.size(); i++)
+    {
+        sourceCstringArray[i] = source[i].c_str();
+    }
+
+    glShaderSource(shader, sourceCstringArray.size(), sourceCstringArray.data(), NULL);
     glCompileShader(shader);
 
     GLint compileResult;
@@ -98,6 +110,15 @@ GLuint ANGLETest::compileShader(GLenum type, const std::string &source)
 }
 
 GLuint ANGLETest::compileProgram(const std::string &vsSource, const std::string &fsSource)
+{
+    std::vector<std::string> vsSourceArray(1);
+    vsSourceArray[0] = vsSource;
+    std::vector<std::string> fsSourceArray(1);
+    fsSourceArray[0] = fsSource;
+    return compileProgram(vsSourceArray, fsSourceArray);
+}
+
+GLuint ANGLETest::compileProgram(const std::vector<std::string> &vsSource, const std::vector<std::string> &fsSource)
 {
     GLuint program = glCreateProgram();
 
