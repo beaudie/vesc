@@ -1651,7 +1651,8 @@ bool Context::getBooleanv(GLenum pname, GLboolean *params)
       case GL_BLEND:                     *params = mState.blend.blend;                  break;
       case GL_DITHER:                    *params = mState.blend.dither;                 break;
       case GL_CONTEXT_ROBUST_ACCESS_EXT: *params = mRobustAccess ? GL_TRUE : GL_FALSE;  break;
-      case GL_TRANSFORM_FEEDBACK_ACTIVE: *params = GL_FALSE; UNIMPLEMENTED();           break;
+      case GL_TRANSFORM_FEEDBACK_ACTIVE: *params = getCurrentTransformFeedback()->isStarted(); break;
+      case GL_TRANSFORM_FEEDBACK_PAUSED: *params = getCurrentTransformFeedback()->isPaused();  break;
       default:
         return false;
     }
@@ -1799,7 +1800,9 @@ bool Context::getIntegerv(GLenum pname, GLint *params)
       case GL_MINOR_VERSION:                            *params = 0;                                                    break;
       case GL_MAX_ELEMENTS_INDICES:                     *params = mRenderer->getMaxRecommendedElementsIndices();        break;
       case GL_MAX_ELEMENTS_VERTICES:                    *params = mRenderer->getMaxRecommendedElementsVertices();       break;
-      case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS:  *params = 0; UNIMPLEMENTED();                                   break;
+      case GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: *params = mRenderer->getMaxTransformFeedbackInterleavedComponents(); break;
+      case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS:       *params = mRenderer->getMaxTransformFeedbackBuffers();               break;
+      case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS:    *params = mRenderer->getMaxTransformFeedbackSeperateComponents();    break;
       case GL_NUM_COMPRESSED_TEXTURE_FORMATS:   
         params[0] = mNumCompressedTextureFormats;
         break;
@@ -2359,6 +2362,7 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
         return true;
 
       case GL_TRANSFORM_FEEDBACK_ACTIVE:
+      case GL_TRANSFORM_FEEDBACK_PAUSED:
         {
             *type = GL_BOOL;
             *numParams = 1;

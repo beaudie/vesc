@@ -2130,6 +2130,38 @@ unsigned int Renderer11::getMaxTransformFeedbackBuffers() const
     }
 }
 
+unsigned int Renderer11::getMaxTransformFeedbackSeperateComponents() const
+{
+    switch (mFeatureLevel)
+    {
+      case D3D_FEATURE_LEVEL_11_0:
+        return D3D11_SO_OUTPUT_COMPONENT_COUNT;
+      case D3D_FEATURE_LEVEL_10_1:
+      case D3D_FEATURE_LEVEL_10_0:
+        // D3D10 constant is not a macro but a maximum of 64 is stated on
+        // msdn.microsoft.com/en-us/library/windows/desktop/ff476510.aspx
+        return 64 / D3D10_SO_BUFFER_SLOT_COUNT;
+      default: UNREACHABLE();
+        return 0;
+    }
+}
+
+unsigned int Renderer11::getMaxTransformFeedbackInterleavedComponents() const
+{
+    switch (mFeatureLevel)
+    {
+      case D3D_FEATURE_LEVEL_11_0:
+        return D3D11_SO_OUTPUT_COMPONENT_COUNT;
+      case D3D_FEATURE_LEVEL_10_1:
+      case D3D_FEATURE_LEVEL_10_0:
+        // D3D10 constant is not a macro but a maximum of 64 is stated on
+        // msdn.microsoft.com/en-us/library/windows/desktop/ff476510.aspx
+        return 64;
+      default: UNREACHABLE();
+        return 0;
+    }
+}
+
 unsigned int Renderer11::getMaxUniformBufferSize() const
 {
     // Each component is a 4-element vector of 4-byte units (floats)
