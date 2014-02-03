@@ -1,6 +1,6 @@
 #include "precompiled.h"
 //
-// Copyright (c) 2013 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2013-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -129,6 +129,12 @@ void BufferStorage11::clear()
 {
     mSize = 0;
     mResolvedDataRevision = 0;
+}
+
+void BufferStorage11::markTransformFeedbackUsage()
+{
+    DirectBufferStorage11 *transformFeedbackStorage = getStorage(BUFFER_USAGE_TRANSFORM_FEEDBACK);
+    transformFeedbackStorage->setDataRevision(transformFeedbackStorage->getDataRevision() + 1);
 }
 
 unsigned int BufferStorage11::getSize() const
@@ -337,6 +343,9 @@ void DirectBufferStorage11::fillBufferDesc(D3D11_BUFFER_DESC* bufferDesc, Render
     bufferDesc->MiscFlags = 0;
     bufferDesc->StructureByteStride = 0;
 
+    META_ASSERT_MSG(BUFFER_USAGE_VERTEX == BUFFER_USAGE_TRANSFORM_FEEDBACK, "BUFFER_USAGE_VERTEX must be equal to "
+                    "BUFFER_USAGE_TRANSFORM_FEEDBACK");
+
     switch (usage)
     {
       case BUFFER_USAGE_STAGING:
@@ -347,7 +356,7 @@ void DirectBufferStorage11::fillBufferDesc(D3D11_BUFFER_DESC* bufferDesc, Render
 
       case BUFFER_USAGE_VERTEX:
         bufferDesc->Usage = D3D11_USAGE_DEFAULT;
-        bufferDesc->BindFlags = D3D11_BIND_VERTEX_BUFFER;
+        bufferDesc->BindFlags = D3D11_BIND_VERTEX_BUFFER | D3D11_BIND_STREAM_OUTPUT;
         bufferDesc->CPUAccessFlags = 0;
         break;
 
