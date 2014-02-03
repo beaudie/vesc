@@ -33,6 +33,7 @@ class Program;
 class Texture;
 class Renderbuffer;
 class Sampler;
+class TransformFeedback;
 class FenceSync;
 
 class ResourceManager
@@ -50,6 +51,7 @@ class ResourceManager
     GLuint createTexture();
     GLuint createRenderbuffer();
     GLuint createSampler();
+    GLuint createTransformFeedback();
     GLuint createFenceSync();
 
     void deleteBuffer(GLuint buffer);
@@ -58,6 +60,7 @@ class ResourceManager
     void deleteTexture(GLuint texture);
     void deleteRenderbuffer(GLuint renderbuffer);
     void deleteSampler(GLuint sampler);
+    void deleteTransformFeedback(GLuint transformFeedback);
     void deleteFenceSync(GLuint fenceSync);
 
     Buffer *getBuffer(GLuint handle);
@@ -66,16 +69,19 @@ class ResourceManager
     Texture *getTexture(GLuint handle);
     Renderbuffer *getRenderbuffer(GLuint handle);
     Sampler *getSampler(GLuint handle);
+    TransformFeedback *getTransformFeedback(GLuint handle);
     FenceSync *getFenceSync(GLuint handle);
-    
+
     void setRenderbuffer(GLuint handle, Renderbuffer *renderbuffer);
 
     void checkBufferAllocation(unsigned int buffer);
     void checkTextureAllocation(GLuint texture, TextureType type);
     void checkRenderbufferAllocation(GLuint renderbuffer);
     void checkSamplerAllocation(GLuint sampler);
+    void checkTransformFeedbackAllocation(GLuint transformFeedback);
 
     bool isSampler(GLuint sampler);
+    bool isTransformFeedback(GLuint transformFeedback) const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(ResourceManager);
@@ -105,6 +111,10 @@ class ResourceManager
     typedef std::unordered_map<GLuint, Sampler*> SamplerMap;
     SamplerMap mSamplerMap;
     HandleAllocator mSamplerHandleAllocator;
+
+    typedef std::unordered_map<GLuint, TransformFeedback*> TransformFeedbackMap;
+    TransformFeedbackMap mTransformFeedbackMap;
+    HandleAllocator mTransformFeedbackAllocator;
 
     typedef std::unordered_map<GLuint, FenceSync*> FenceMap;
     FenceMap mFenceSyncMap;

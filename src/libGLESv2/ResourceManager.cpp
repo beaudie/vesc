@@ -16,6 +16,7 @@
 #include "libGLESv2/Shader.h"
 #include "libGLESv2/Texture.h"
 #include "libGLESv2/Sampler.h"
+#include "libGLESv2/TransformFeedback.h"
 #include "libGLESv2/Fence.h"
 
 namespace gl
@@ -61,6 +62,11 @@ ResourceManager::~ResourceManager()
     while (!mFenceSyncMap.empty())
     {
         deleteFenceSync(mFenceSyncMap.begin()->first);
+    }
+
+    while (!mTransformFeedbackMap.empty())
+    {
+        deleteTransformFeedback(mTransformFeedbackMap.begin()->first);
     }
 }
 
@@ -141,6 +147,16 @@ GLuint ResourceManager::createSampler()
     GLuint handle = mSamplerHandleAllocator.allocate();
 
     mSamplerMap[handle] = NULL;
+
+    return handle;
+}
+
+// Returns an unused transform feedback name
+GLuint ResourceManager::createTransformFeedback()
+{
+    GLuint handle = mTransformFeedbackAllocator.allocate();
+
+    mTransformFeedbackMap[handle] = NULL;
 
     return handle;
 }
@@ -238,6 +254,18 @@ void ResourceManager::deleteSampler(GLuint sampler)
         mSamplerHandleAllocator.release(samplerObject->first);
         if (samplerObject->second) samplerObject->second->release();
         mSamplerMap.erase(samplerObject);
+    }
+}
+
+void ResourceManager::deleteTransformFeedback(GLuint transformFeedback)
+{
+    auto transformFeedbackObject = mTransformFeedbackMap.find(transformFeedback);
+
+    if (transformFeedbackObject != mTransformFeedbackMap.end())
+    {
+        mTransformFeedbackAllocator.release(transformFeedbackObject->first);
+        if (transformFeedbackObject->second) transformFeedbackObject->second->release();
+        mTransformFeedbackMap.erase(transformFeedbackObject);
     }
 }
 
@@ -339,6 +367,20 @@ Sampler *ResourceManager::getSampler(unsigned int handle)
     }
 }
 
+TransformFeedback *ResourceManager::getTransformFeedback(GLuint handle)
+{
+    auto transformFeedback = mTransformFeedbackMap.find(handle);
+
+    if (transformFeedback == mTransformFeedbackMap.end())
+    {
+        return NULL;
+    }
+    else
+    {
+        return transformFeedback->second;
+    }
+}
+
 FenceSync *ResourceManager::getFenceSync(unsigned int handle)
 {
     auto fenceObjectIt = mFenceSyncMap.find(handle);
@@ -421,9 +463,24 @@ void ResourceManager::checkSamplerAllocation(GLuint sampler)
     }
 }
 
+void ResourceManager::checkTransformFeedbackAllocation(GLuint transformFeedback)
+{
+    if (transformFeedback != 0 && !getTransformFeedback(transformFeedback))
+    {
+        TransformFeedback *transformFeedbackObject = new TransformFeedback(transformFeedback);
+        mTransformFeedbackMap[transformFeedback] = transformFeedbackObject;
+        transformFeedbackObject->addRef();
+    }
+}
+
 bool ResourceManager::isSampler(GLuint sampler)
 {
     return mSamplerMap.find(sampler) != mSamplerMap.end();
+}
+
+bool ResourceManager::isTransformFeedback(GLuint transformFeedback) const
+{
+    return mTransformFeedbackMap.find(transformFeedback) != mTransformFeedbackMap.end();
 }
 
 }

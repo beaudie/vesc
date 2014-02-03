@@ -28,6 +28,7 @@
 #include "libGLESv2/VertexArray.h"
 #include "libGLESv2/Sampler.h"
 #include "libGLESv2/validationES.h"
+#include "libGLESv2/TransformFeedback.h"
 
 #include "libEGL/Surface.h"
 
@@ -145,6 +146,12 @@ Context::Context(int clientVersion, const gl::Context *shareContext, rx::Rendere
         mResourceManager = new ResourceManager(mRenderer);
     }
 
+    // [OpenGL ES 3.0.2] section 2.14.1 pg 85:
+    // In the initial state, a default transform feedback object is bound and treated as
+    // a transform feedback object with a name of zero. That object is bound any time
+    // BindTransformFeedback is called with id of zero
+    mTransformFeedbackZero.set(new TransformFeedback(0));
+
     // [OpenGL ES 2.0.24] section 3.7 page 83:
     // In the initial state, TEXTURE_2D and TEXTURE_CUBE_MAP have twodimensional
     // and cube map texture state vectors respectively associated with them.
@@ -187,6 +194,8 @@ Context::Context(int clientVersion, const gl::Context *shareContext, rx::Rendere
     bindCopyWriteBuffer(0);
     bindPixelPackBuffer(0);
     bindPixelUnpackBuffer(0);
+
+    bindTransformFeedback(0);
 
     mState.currentProgram = 0;
     mCurrentProgramBinary.set(NULL);
@@ -274,6 +283,9 @@ Context::~Context()
 
     mState.arrayBuffer.set(NULL);
     mState.renderbuffer.set(NULL);
+
+    mState.transformFeedback.set(NULL);
+    mTransformFeedbackZero.set(NULL);
 
     mTexture2DZero.set(NULL);
     mTextureCubeMapZero.set(NULL);
@@ -894,6 +906,11 @@ GLuint Context::createSampler()
     return mResourceManager->createSampler();
 }
 
+GLuint Context::createTransformFeedback()
+{
+    return mResourceManager->createTransformFeedback();
+}
+
 // Returns an unused framebuffer name
 GLuint Context::createFramebuffer()
 {
@@ -996,6 +1013,16 @@ void Context::deleteSampler(GLuint sampler)
     mResourceManager->deleteSampler(sampler);
 }
 
+void Context::deleteTransformFeedback(GLuint transformFeedback)
+{
+    if (mResourceManager->getTransformFeedback(transformFeedback))
+    {
+        detachTransformFeedback(transformFeedback);
+    }
+
+    mResourceManager->getTransformFeedback(transformFeedback);
+}
+
 void Context::deleteFramebuffer(GLuint framebuffer)
 {
     FramebufferMap::iterator framebufferObject = mFramebufferMap.find(framebuffer);
@@ -1085,6 +1112,18 @@ Sampler *Context::getSampler(GLuint handle) const
     return mResourceManager->getSampler(handle);
 }
 
+TransformFeedback *Context::getTransformFeedback(GLuint handle) const
+{
+    if (handle == 0)
+    {
+        return mTransformFeedbackZero.get();
+    }
+    else
+    {
+        return mResourceManager->getTransformFeedback(handle);
+    }
+}
+
 Framebuffer *Context::getReadFramebuffer()
 {
     return getFramebuffer(mState.readFramebuffer);
@@ -1102,9 +1141,19 @@ VertexArray *Context::getCurrentVertexArray() const
     return vao;
 }
 
+TransformFeedback *Context::getCurrentTransformFeedback() const
+{
+    return mState.transformFeedback.get();
+}
+
 bool Context::isSampler(GLuint samplerName) const
 {
     return mResourceManager->isSampler(samplerName);
+}
+
+bool Context::isTransformFeedback(GLuint transformFeedbackName) const
+{
+    return transformFeedbackName == 0 || mResourceManager->isTransformFeedback(transformFeedbackName);
 }
 
 void Context::bindArrayBuffer(unsigned int buffer)
@@ -1303,6 +1352,13 @@ void Context::setProgramBinary(GLuint program, const void *binary, GLint length)
         mCurrentProgramBinary.set(programObject->getProgramBinary());
     }
 
+}
+
+void Context::bindTransformFeedback(GLuint transformFeedback)
+{
+    mResourceManager->checkTransformFeedbackAllocation(transformFeedback);
+
+    mState.transformFeedback.set(getTransformFeedback(transformFeedback));
 }
 
 void Context::beginQuery(GLenum target, GLuint query)
@@ -3447,6 +3503,14 @@ void Context::detachVertexArray(GLuint vertexArray)
     if (mState.vertexArray == vertexArray)
     {
         bindVertexArray(0);
+    }
+}
+
+void Context::detachTransformFeedback(GLuint transformFeedback)
+{
+    if (mState.transformFeedback.id() == transformFeedback)
+    {
+        bindTransformFeedback(0);
     }
 }
 
