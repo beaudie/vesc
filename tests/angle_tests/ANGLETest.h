@@ -38,6 +38,12 @@
 
 #define SHADER_SOURCE(...) #__VA_ARGS__
 
+template <typename T, unsigned int N>
+inline unsigned int ArraySize(T(&)[N])
+{
+    return N;
+}
+
 class ANGLETest : public testing::Test
 {
   protected:
@@ -56,7 +62,9 @@ class ANGLETest : public testing::Test
 
     static void drawQuad(GLuint program, const std::string& positionAttribName, GLfloat quadDepth);
     static GLuint compileShader(GLenum type, const std::string &source);
+    static GLuint compileShader(GLenum type, const std::vector<std::string> &source);
     static GLuint compileProgram(const std::string &vsSource, const std::string &fsSource);
+    static GLuint compileProgram(const std::vector<std::string> &vsSource, const std::vector<std::string> &fsSource);
     static bool extensionEnabled(const std::string &extName);
 
     void setClientVersion(int clientVersion);
