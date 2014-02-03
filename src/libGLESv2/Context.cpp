@@ -1,6 +1,6 @@
 #include "precompiled.h"
 //
-// Copyright (c) 2002-2013 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2002-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -2619,7 +2619,52 @@ bool Context::applyUniformBuffers()
     return programBinary->applyUniformBuffers(boundBuffers);
 }
 
+GLenum Context::applyTransformFeedbackBuffers(GLenum drawMode, bool *transformFeedbackActive)
+{
+    TransformFeedback *curTransformFeedback = getCurrentTransformFeedback();
+    if (curTransformFeedback && curTransformFeedback->isStarted() && !curTransformFeedback->isPaused())
+    {
+        if (curTransformFeedback->getDrawMode() != drawMode)
+        {
+            return GL_INVALID_OPERATION;
+        }
 
+        Buffer *transformFeedbackBuffers[IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS];
+        GLintptr transformFeedbackOffsets[IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS];
+        for (size_t i = 0; i < IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS; i++)
+        {
+            transformFeedbackBuffers[i] = mState.transformFeedbackBuffers[i].get();
+            transformFeedbackOffsets[i] = mState.transformFeedbackBuffers[i].getOffset();
+        }
+        mRenderer->applyTransformFeedbackBuffers(transformFeedbackBuffers, transformFeedbackOffsets);
+
+        if (transformFeedbackActive)
+        {
+            *transformFeedbackActive = true;
+        }
+    }
+    else
+    {
+        if (transformFeedbackActive)
+        {
+            *transformFeedbackActive = false;
+        }
+    }
+
+    return GL_NO_ERROR;
+}
+
+void Context::markTransformFeedbackUsage()
+{
+    for (size_t i = 0; i < IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS; i++)
+    {
+        Buffer *buffer = mState.transformFeedbackBuffers[i].get();
+        if (buffer)
+        {
+            buffer->markTransformFeedbackUsage();
+        }
+    }
+}
 
 void Context::clear(GLbitfield mask)
 {
@@ -2945,6 +2990,13 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instan
         return gl::error(err);
     }
 
+    bool transformFeedbackActive = false;
+    err = applyTransformFeedbackBuffers(mode, &transformFeedbackActive);
+    if (err != GL_NO_ERROR)
+    {
+        return gl::error(err);
+    }
+
     applyShaders(programBinary);
     applyTextures(programBinary);
 
@@ -2961,6 +3013,11 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instan
     if (!skipDraw(mode))
     {
         mRenderer->drawArrays(mode, count, instances);
+
+        if (transformFeedbackActive)
+        {
+            markTransformFeedbackUsage();
+        }
     }
 }
 
@@ -3008,6 +3065,13 @@ void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid
         return gl::error(err);
     }
 
+    bool transformFeedbackActive = false;
+    err = applyTransformFeedbackBuffers(mode, &transformFeedbackActive);
+    if (err != GL_NO_ERROR)
+    {
+        return gl::error(err);
+    }
+
     applyShaders(programBinary);
     applyTextures(programBinary);
 
@@ -3024,6 +3088,11 @@ void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid
     if (!skipDraw(mode))
     {
         mRenderer->drawElements(mode, count, type, indices, vao->getElementArrayBuffer(), indexInfo, instances);
+
+        if (transformFeedbackActive)
+        {
+            markTransformFeedbackUsage();
+        }
     }
 }
 
