@@ -91,6 +91,9 @@
     <ClCompile Include="..\..\src\libGLESv2\formatutils.cpp">
       <Filter>libGLESv2</Filter>
     </ClCompile>
+    <ClInclude Include="..\..\src\libGLESv2\TransformFeedback.h">
+      <Filter>libGLESv2</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\libGLESv2\Context.h">
       <Filter>libGLESv2</Filter>
     </ClInclude>
@@ -113,6 +116,9 @@
       <Filter>libGLESv2</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\libGLESv2\Fence.cpp">
+      <Filter>libGLESv2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\libGLESv2\TransformFeedback.cpp">
       <Filter>libGLESv2</Filter>
     </ClCompile>
     <ClInclude Include="..\..\src\libGLESv2\ProgramBinary.h">
