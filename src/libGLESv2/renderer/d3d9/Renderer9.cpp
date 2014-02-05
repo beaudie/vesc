@@ -3302,8 +3302,13 @@ RenderTarget *Renderer9::createRenderTarget(int width, int height, GLenum format
     return renderTarget;
 }
 
-ShaderExecutable *Renderer9::loadExecutable(const void *function, size_t length, rx::ShaderType type)
+ShaderExecutable *Renderer9::loadExecutable(const void *function, size_t length, rx::ShaderType type,
+                                            const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
+                                            bool seperatedOutputBuffers)
 {
+    // Transform feedback is not supported in ES2 or D3D9
+    ASSERT(transformFeedbackVaryings.size() == 0);
+
     ShaderExecutable9 *executable = NULL;
 
     switch (type)
@@ -3334,8 +3339,13 @@ ShaderExecutable *Renderer9::loadExecutable(const void *function, size_t length,
     return executable;
 }
 
-ShaderExecutable *Renderer9::compileToExecutable(gl::InfoLog &infoLog, const char *shaderHLSL, rx::ShaderType type, D3DWorkaroundType workaround)
+ShaderExecutable *Renderer9::compileToExecutable(gl::InfoLog &infoLog, const char *shaderHLSL, rx::ShaderType type,
+                                                 const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
+                                                 bool seperatedOutputBuffers, D3DWorkaroundType workaround)
 {
+    // Transform feedback is not supported in ES2 or D3D9
+    ASSERT(transformFeedbackVaryings.size() == 0);
+
     const char *profile = NULL;
 
     switch (type)
@@ -3361,7 +3371,8 @@ ShaderExecutable *Renderer9::compileToExecutable(gl::InfoLog &infoLog, const cha
         return NULL;
     }
 
-    ShaderExecutable *executable = loadExecutable(binary->GetBufferPointer(), binary->GetBufferSize(), type);
+    ShaderExecutable *executable = loadExecutable(binary->GetBufferPointer(), binary->GetBufferSize(), type,
+                                                  transformFeedbackVaryings, seperatedOutputBuffers);
     SafeRelease(binary);
 
     return executable;
