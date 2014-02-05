@@ -1452,8 +1452,10 @@ void Renderer9::applyTransformFeedbackBuffers(gl::Buffer *transformFeedbackBuffe
     UNREACHABLE();
 }
 
-void Renderer9::drawArrays(GLenum mode, GLsizei count, GLsizei instances)
+void Renderer9::drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive)
 {
+    ASSERT(!transformFeedbackActive);
+
     startScene();
 
     if (mode == GL_LINE_LOOP)
@@ -1490,8 +1492,12 @@ void Renderer9::drawArrays(GLenum mode, GLsizei count, GLsizei instances)
     }
 }
 
-void Renderer9::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei /*instances*/)
+void Renderer9::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
+                             gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei /*instances*/,
+                             bool transformFeedbackActive)
 {
+    ASSERT(!transformFeedbackActive);
+
     startScene();
 
     if (mode == GL_POINTS)
@@ -1730,8 +1736,9 @@ void Renderer9::drawIndexedPoints(GLsizei count, GLenum type, const GLvoid *indi
     }
 }
 
-void Renderer9::applyShaders(gl::ProgramBinary *programBinary, bool rasterizerDiscard, const gl::VertexFormat inputLayout[])
+void Renderer9::applyShaders(gl::ProgramBinary *programBinary, bool rasterizerDiscard, bool transformFeedbackActive, const gl::VertexFormat inputLayout[])
 {
+    ASSERT(!transformFeedbackActive);
     ASSERT(!rasterizerDiscard);
 
     ShaderExecutable *vertexExe = programBinary->getVertexExecutableForInputLayout(inputLayout);
