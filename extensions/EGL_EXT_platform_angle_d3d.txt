@@ -9,12 +9,12 @@ Name Strings
 
 Contributors
 
-    Scott Graham <scottmg@chromium.org>
-    Shannon Woods <shannonwoods@chromium.org>
+    Scott Graham, Google
+    Shannon Woods, Google
 
 Contacts
 
-    Scott Graham <scottmg@chromium.org>
+    Scott Graham, Google (scottmg@google.com)
 
 Status
 
@@ -44,8 +44,8 @@ Dependencies
 
 Overview
 
-    This extension defines how to create EGL resources from 
-    resources using the functions defined by EGL_EXT_platform_base.
+    This extension defines how to create EGL resources from resources using
+    the functions defined by EGL_EXT_platform_base.
 
 New Types
 
@@ -59,12 +59,12 @@ New Tokens
 
     Accepted as the <platform> argument of eglGetPlatformDisplayEXT:
 
-        EGL_PLATFORM_ANGLE_D3D_EXT                0x31D9                    XXX
+        EGL_PLATFORM_ANGLE_D3D_EXT                0x3201
 
     Accepted as an attribute name in the <attrib_list> argument of
     eglGetPlatformDisplayEXT:
 
-        EGL_PLATFORM_ANGLE_D3D_TYPE_EXT           0x31DA                    XXX
+        EGL_PLATFORM_ANGLE_D3D_TYPE_EXT           0x3202
 
 Additions to the EGL Specification
 
