@@ -2506,9 +2506,9 @@ void Context::applyState(GLenum drawMode)
 }
 
 // Applies the shaders and shader constants to the Direct3D 9 device
-void Context::applyShaders(ProgramBinary *programBinary, bool rasterizerDiscard)
+void Context::applyShaders(ProgramBinary *programBinary, bool rasterizerDiscard, bool transformFeedbackActive)
 {
-    mRenderer->applyShaders(programBinary, rasterizerDiscard);
+    mRenderer->applyShaders(programBinary, rasterizerDiscard, transformFeedbackActive);
 
     programBinary->applyUniforms();
 }
@@ -3030,7 +3030,7 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instan
         return gl::error(err);
     }
 
-    applyShaders(programBinary, mState.rasterizer.rasterizerDiscard);
+    applyShaders(programBinary, mState.rasterizer.rasterizerDiscard, transformFeedbackActive);
     applyTextures(programBinary);
 
     if (!applyUniformBuffers())
@@ -3045,7 +3045,7 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instan
 
     if (!skipDraw(mode))
     {
-        mRenderer->drawArrays(mode, count, instances);
+        mRenderer->drawArrays(mode, count, instances, transformFeedbackActive);
 
         if (transformFeedbackActive)
         {
@@ -3105,7 +3105,7 @@ void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid
         return gl::error(err);
     }
 
-    applyShaders(programBinary, mState.rasterizer.rasterizerDiscard);
+    applyShaders(programBinary, mState.rasterizer.rasterizerDiscard, transformFeedbackActive);
     applyTextures(programBinary);
 
     if (!applyUniformBuffers())
@@ -3120,7 +3120,8 @@ void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid
 
     if (!skipDraw(mode))
     {
-        mRenderer->drawElements(mode, count, type, indices, vao->getElementArrayBuffer(), indexInfo, instances);
+        mRenderer->drawElements(mode, count, type, indices, vao->getElementArrayBuffer(), indexInfo, instances,
+                                transformFeedbackActive);
 
         if (transformFeedbackActive)
         {

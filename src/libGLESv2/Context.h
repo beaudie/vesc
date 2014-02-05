@@ -467,7 +467,7 @@ class Context
 
     bool applyRenderTarget(GLenum drawMode, bool ignoreViewport);
     void applyState(GLenum drawMode);
-    void applyShaders(ProgramBinary *programBinary, bool rasterizerDiscard);
+    void applyShaders(ProgramBinary *programBinary, bool rasterizerDiscard, bool transformFeedbackActive);
     void applyTextures(ProgramBinary *programBinary);
     void applyTextures(ProgramBinary *programBinary, SamplerType type);
     bool applyUniformBuffers();
