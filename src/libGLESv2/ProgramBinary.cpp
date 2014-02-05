@@ -111,6 +111,16 @@ VariableLocation::VariableLocation(const std::string &name, unsigned int element
 {
 }
 
+LinkedVarying::LinkedVarying()
+{
+}
+
+LinkedVarying::LinkedVarying(const std::string &name, GLenum type, GLsizei size, const std::string &semanticName,
+                             unsigned int semanticIndex, unsigned int semanticIndexCount)
+    : name(name), type(type), size(size), semanticName(semanticName), semanticIndex(semanticIndex), semanticIndexCount(semanticIndexCount)
+{
+}
+
 unsigned int ProgramBinary::mCurrentSerial = 1;
 
 ProgramBinary::ProgramBinary(rx::Renderer *renderer)
@@ -396,6 +406,16 @@ GLint ProgramBinary::getFragDataLocation(const char *name) const
     }
 
     return -1;
+}
+
+size_t ProgramBinary::getTransformFeedbackVaryingCount() const
+{
+    return mTransformFeedbackLinkedVaryings.size();
+}
+
+const LinkedVarying &ProgramBinary::getTransformFeedbackVarying(size_t idx) const
+{
+    return mTransformFeedbackLinkedVaryings[idx];
 }
 
 template <typename T>
@@ -936,33 +956,58 @@ bool ProgramBinary::applyUniformBuffers(const std::vector<gl::Buffer*> boundBuff
     return mRenderer->setUniformBuffers(vertexUniformBuffers, fragmentUniformBuffers);
 }
 
-// Packs varyings into generic varying registers, using the algorithm from [OpenGL ES Shading Language 1.00 rev. 17] appendix A section 7 page 111
-// Returns the number of used varying registers, or -1 if unsuccesful
-int ProgramBinary::packVaryings(InfoLog &infoLog, const sh::ShaderVariable *packing[][4], FragmentShader *fragmentShader)
+static bool packVarying(sh::Varying *varying, const int maxVaryingVectors, const sh::ShaderVariable *packing[][4])
 {
-    const int maxVaryingVectors = mRenderer->getMaxVaryingVectors();
+    GLenum transposedType = TransposeMatrixType(varying->type);
 
-    fragmentShader->resetVaryingsRegisterAssignment();
+    // matrices within varying structs are not transposed
+    int registers = (varying->isStruct() ? sh::HLSLVariableRegisterCount(*varying) : gl::VariableRowCount(transposedType)) * varying->elementCount();
+    int elements = (varying->isStruct() ? 4 : VariableColumnCount(transposedType));
+    bool success = false;
 
-    for (unsigned int varyingIndex = 0; varyingIndex < fragmentShader->mVaryings.size(); varyingIndex++)
+    if (elements == 2 || elements == 3 || elements == 4)
     {
-        sh::Varying *varying = &fragmentShader->mVaryings[varyingIndex];
-        GLenum transposedType = TransposeMatrixType(varying->type);
-
-        // matrices within varying structs are not transposed
-        int registers = (varying->isStruct() ? sh::HLSLVariableRegisterCount(*varying) : gl::VariableRowCount(transposedType)) * varying->elementCount();
-        int elements = (varying->isStruct() ? 4 : VariableColumnCount(transposedType));
-        bool success = false;
-
-        if (elements == 2 || elements == 3 || elements == 4)
+        for (int r = 0; r <= maxVaryingVectors - registers && !success; r++)
         {
-            for (int r = 0; r <= maxVaryingVectors - registers && !success; r++)
+            bool available = true;
+
+            for (int y = 0; y < registers && available; y++)
+            {
+                for (int x = 0; x < elements && available; x++)
+                {
+                    if (packing[r + y][x])
+                    {
+                        available = false;
+                    }
+                }
+            }
+
+            if (available)
+            {
+                varying->registerIndex = r;
+                varying->elementIndex = 0;
+
+                for (int y = 0; y < registers; y++)
+                {
+                    for (int x = 0; x < elements; x++)
+                    {
+                        packing[r + y][x] = &*varying;
+                    }
+                }
+
+                success = true;
+            }
+        }
+
+        if (!success && elements == 2)
+        {
+            for (int r = maxVaryingVectors - registers; r >= 0 && !success; r--)
             {
                 bool available = true;
 
                 for (int y = 0; y < registers && available; y++)
                 {
-                    for (int x = 0; x < elements && available; x++)
+                    for (int x = 2; x < 4 && available; x++)
                     {
                         if (packing[r + y][x])
                         {
@@ -974,11 +1019,11 @@ int ProgramBinary::packVaryings(InfoLog &infoLog, const sh::ShaderVariable *pack
                 if (available)
                 {
                     varying->registerIndex = r;
-                    varying->elementIndex = 0;
+                    varying->elementIndex = 2;
 
                     for (int y = 0; y < registers; y++)
                     {
-                        for (int x = 0; x < elements; x++)
+                        for (int x = 2; x < 4; x++)
                         {
                             packing[r + y][x] = &*varying;
                         }
@@ -987,93 +1032,109 @@ int ProgramBinary::packVaryings(InfoLog &infoLog, const sh::ShaderVariable *pack
                     success = true;
                 }
             }
-
-            if (!success && elements == 2)
-            {
-                for (int r = maxVaryingVectors - registers; r >= 0 && !success; r--)
-                {
-                    bool available = true;
-
-                    for (int y = 0; y < registers && available; y++)
-                    {
-                        for (int x = 2; x < 4 && available; x++)
-                        {
-                            if (packing[r + y][x])
-                            {
-                                available = false;
-                            }
-                        }
-                    }
-
-                    if (available)
-                    {
-                        varying->registerIndex = r;
-                        varying->elementIndex = 2;
-
-                        for (int y = 0; y < registers; y++)
-                        {
-                            for (int x = 2; x < 4; x++)
-                            {
-                                packing[r + y][x] = &*varying;
-                            }
-                        }
-
-                        success = true;
-                    }
-                }
-            }
         }
-        else if (elements == 1)
+    }
+    else if (elements == 1)
+    {
+        int space[4] = {0};
+
+        for (int y = 0; y < maxVaryingVectors; y++)
         {
-            int space[4] = {0};
-
-            for (int y = 0; y < maxVaryingVectors; y++)
-            {
-                for (int x = 0; x < 4; x++)
-                {
-                    space[x] += packing[y][x] ? 0 : 1;
-                }
-            }
-
-            int column = 0;
-
             for (int x = 0; x < 4; x++)
             {
-                if (space[x] >= registers && space[x] < space[column])
-                {
-                    column = x;
-                }
-            }
-
-            if (space[column] >= registers)
-            {
-                for (int r = 0; r < maxVaryingVectors; r++)
-                {
-                    if (!packing[r][column])
-                    {
-                        varying->registerIndex = r;
-
-                        for (int y = r; y < r + registers; y++)
-                        {
-                            packing[y][column] = &*varying;
-                        }
-
-                        break;
-                    }
-                }
-
-                varying->elementIndex = column;
-
-                success = true;
+                space[x] += packing[y][x] ? 0 : 1;
             }
         }
-        else UNREACHABLE();
 
-        if (!success)
+        int column = 0;
+
+        for (int x = 0; x < 4; x++)
+        {
+            if (space[x] >= registers && space[x] < space[column])
+            {
+                column = x;
+            }
+        }
+
+        if (space[column] >= registers)
+        {
+            for (int r = 0; r < maxVaryingVectors; r++)
+            {
+                if (!packing[r][column])
+                {
+                    varying->registerIndex = r;
+
+                    for (int y = r; y < r + registers; y++)
+                    {
+                        packing[y][column] = &*varying;
+                    }
+
+                    break;
+                }
+            }
+
+            varying->elementIndex = column;
+
+            success = true;
+        }
+    }
+    else UNREACHABLE();
+
+    return success;
+}
+
+// Packs varyings into generic varying registers, using the algorithm from [OpenGL ES Shading Language 1.00 rev. 17] appendix A section 7 page 111
+// Returns the number of used varying registers, or -1 if unsuccesful
+int ProgramBinary::packVaryings(InfoLog &infoLog, const sh::ShaderVariable *packing[][4], FragmentShader *fragmentShader,
+                                VertexShader *vertexShader, const std::vector<std::string>& transformFeedbackVaryings)
+{
+    const int maxVaryingVectors = mRenderer->getMaxVaryingVectors();
+
+    vertexShader->resetVaryingsRegisterAssignment();
+    fragmentShader->resetVaryingsRegisterAssignment();
+
+    std::set<std::string> packedVaryings;
+
+    for (unsigned int varyingIndex = 0; varyingIndex < fragmentShader->mVaryings.size(); varyingIndex++)
+    {
+        sh::Varying *varying = &fragmentShader->mVaryings[varyingIndex];
+        if (packVarying(varying, maxVaryingVectors, packing))
+        {
+            packedVaryings.insert(varying->name);
+        }
+        else
         {
             infoLog.append("Could not pack varying %s", varying->name.c_str());
-
             return -1;
+        }
+    }
+
+    for (unsigned int feedbackVaryingIndex = 0; feedbackVaryingIndex < transformFeedbackVaryings.size(); feedbackVaryingIndex++)
+    {
+        const std::string &transformFeedbackVarying = transformFeedbackVaryings[feedbackVaryingIndex];
+        if (packedVaryings.find(transformFeedbackVarying) == packedVaryings.end())
+        {
+            bool found = false;
+            for(unsigned int varyingIndex = 0; varyingIndex < vertexShader->mVaryings.size(); varyingIndex++)
+            {
+                sh::Varying *varying = &vertexShader->mVaryings[varyingIndex];
+                if (transformFeedbackVarying == varying->name)
+                {
+                    if (!packVarying(varying, maxVaryingVectors, packing))
+                    {
+                        infoLog.append("Could not pack varying %s", varying->name.c_str());
+                        return -1;
+                    }
+
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                infoLog.append("Transform feedback varying %s does not exist in the vertex shader.", transformFeedbackVarying.c_str());
+            }
         }
     }
 
@@ -1119,7 +1180,9 @@ void ProgramBinary::defineOutputVariables(FragmentShader *fragmentShader)
 
 bool ProgramBinary::linkVaryings(InfoLog &infoLog, int registers, const sh::ShaderVariable *packing[][4],
                                  std::string& pixelHLSL, std::string& vertexHLSL,
-                                 FragmentShader *fragmentShader, VertexShader *vertexShader)
+                                 FragmentShader *fragmentShader, VertexShader *vertexShader,
+                                 const std::vector<std::string>& transformFeedbackVaryings,
+                                 std::vector<LinkedVarying> *linkedVaryings)
 {
     if (pixelHLSL.empty() || vertexHLSL.empty())
     {
@@ -1153,8 +1216,6 @@ bool ProgramBinary::linkVaryings(InfoLog &infoLog, int registers, const sh::Shad
 
         return false;
     }
-
-    vertexShader->resetVaryingsRegisterAssignment();
 
     for (unsigned int fragVaryingIndex = 0; fragVaryingIndex < fragmentShader->mVaryings.size(); fragVaryingIndex++)
     {
@@ -1190,32 +1251,40 @@ bool ProgramBinary::linkVaryings(InfoLog &infoLog, int registers, const sh::Shad
     mUsesPointSize = vertexShader->mUsesPointSize;
     std::string varyingSemantic = (mUsesPointSize && shaderModel == 3) ? "COLOR" : "TEXCOORD";
     std::string targetSemantic = (shaderModel >= 4) ? "SV_Target" : "COLOR";
-    std::string positionSemantic = (shaderModel >= 4) ? "SV_Position" : "POSITION";
+    std::string dxPositionSemantic = (shaderModel >= 4) ? "SV_Position" : "POSITION";
     std::string depthSemantic = (shaderModel >= 4) ? "SV_Depth" : "DEPTH";
 
-    std::string varyingHLSL = generateVaryingHLSL(fragmentShader, varyingSemantic);
+    std::string varyingHLSL = generateVaryingHLSL(vertexShader, varyingSemantic, linkedVaryings);
 
     // special varyings that use reserved registers
     int reservedRegisterIndex = registers;
-    std::string fragCoordSemantic;
-    std::string pointCoordSemantic;
 
+    unsigned int glPositionSemanticIndex = reservedRegisterIndex++;
+    std::string glPositionSemantic = varyingSemantic;
+
+    std::string fragCoordSemantic;
+    unsigned int fragCoordSemanticIndex = 0;
     if (fragmentShader->mUsesFragCoord)
     {
-        fragCoordSemantic = varyingSemantic + str(reservedRegisterIndex++);
+        fragCoordSemanticIndex = reservedRegisterIndex++;
+        fragCoordSemantic = varyingSemantic;
     }
 
+    std::string pointCoordSemantic;
+    unsigned int pointCoordSemanticIndex = 0;
     if (fragmentShader->mUsesPointCoord)
     {
         // Shader model 3 uses a special TEXCOORD semantic for point sprite texcoords.
         // In DX11 we compute this in the GS.
         if (shaderModel == 3)
         {
+            pointCoordSemanticIndex = 0;
             pointCoordSemantic = "TEXCOORD0";
         }
         else if (shaderModel >= 4)
         {
-            pointCoordSemantic = varyingSemantic + str(reservedRegisterIndex++); 
+            pointCoordSemanticIndex = reservedRegisterIndex++;
+            pointCoordSemantic = varyingSemantic;
         }
     }
 
@@ -1240,24 +1309,30 @@ bool ProgramBinary::linkVaryings(InfoLog &infoLog, int registers, const sh::Shad
 
     if (shaderModel < 4)
     {
-        vertexHLSL += "    float4 gl_Position : " + positionSemantic + ";\n";
+        vertexHLSL += "    float4 _dx_Position : " + dxPositionSemantic + ";\n";
+        vertexHLSL += "    float4 gl_Position : " + glPositionSemantic + str(glPositionSemanticIndex) + ";\n";
+        linkedVaryings->push_back(LinkedVarying("gl_Position", GL_FLOAT_VEC4, 1, glPositionSemantic, glPositionSemanticIndex, 1));
     }
 
     vertexHLSL += varyingHLSL;
 
     if (fragmentShader->mUsesFragCoord)
     {
-        vertexHLSL += "    float4 gl_FragCoord : " + fragCoordSemantic + ";\n";
+        vertexHLSL += "    float4 gl_FragCoord : " + fragCoordSemantic + str(fragCoordSemanticIndex) + ";\n";
+        linkedVaryings->push_back(LinkedVarying("gl_FragCoord", GL_FLOAT_VEC4, 1, fragCoordSemantic, fragCoordSemanticIndex, 1));
     }
 
     if (vertexShader->mUsesPointSize && shaderModel >= 3)
     {
         vertexHLSL += "    float gl_PointSize : PSIZE;\n";
+        linkedVaryings->push_back(LinkedVarying("gl_PointSize", GL_FLOAT, 1, "PSIZE", 0, 1));
     }
 
     if (shaderModel >= 4)
     {
-        vertexHLSL += "    float4 gl_Position : " + positionSemantic + ";\n";
+        vertexHLSL += "    float4 _dx_Position : " + dxPositionSemantic + ";\n";
+        vertexHLSL += "    float4 gl_Position : " + glPositionSemantic + str(glPositionSemanticIndex) + ";\n";
+        linkedVaryings->push_back(LinkedVarying("gl_Position", GL_FLOAT_VEC4, 1, glPositionSemantic, glPositionSemanticIndex, 1));
     }
 
     vertexHLSL += "};\n"
@@ -1284,10 +1359,11 @@ bool ProgramBinary::linkVaryings(InfoLog &infoLog, int registers, const sh::Shad
                       "    gl_main();\n"
                       "\n"
                       "    VS_OUTPUT output;\n"
-                      "    output.gl_Position.x = gl_Position.x;\n"
-                      "    output.gl_Position.y = -gl_Position.y;\n"
-                      "    output.gl_Position.z = (gl_Position.z + gl_Position.w) * 0.5;\n"
-                      "    output.gl_Position.w = gl_Position.w;\n";
+                      "    output.gl_Position = gl_Position;\n"
+                      "    output._dx_Position.x = gl_Position.x;\n"
+                      "    output._dx_Position.y = -gl_Position.y;\n"
+                      "    output._dx_Position.z = (gl_Position.z + gl_Position.w) * 0.5;\n"
+                      "    output._dx_Position.w = gl_Position.w;\n";
     }
     else
     {
@@ -1295,10 +1371,11 @@ bool ProgramBinary::linkVaryings(InfoLog &infoLog, int registers, const sh::Shad
                       "    gl_main();\n"
                       "\n"
                       "    VS_OUTPUT output;\n"
-                      "    output.gl_Position.x = gl_Position.x * dx_ViewAdjust.z + dx_ViewAdjust.x * gl_Position.w;\n"
-                      "    output.gl_Position.y = -(gl_Position.y * dx_ViewAdjust.w + dx_ViewAdjust.y * gl_Position.w);\n"
-                      "    output.gl_Position.z = (gl_Position.z + gl_Position.w) * 0.5;\n"
-                      "    output.gl_Position.w = gl_Position.w;\n";
+                      "    output.gl_Position = gl_Position;\n"
+                      "    output._dx_Position.x = gl_Position.x * dx_ViewAdjust.z + dx_ViewAdjust.x * gl_Position.w;\n"
+                      "    output._dx_Position.y = -(gl_Position.y * dx_ViewAdjust.w + dx_ViewAdjust.y * gl_Position.w);\n"
+                      "    output._dx_Position.z = (gl_Position.z + gl_Position.w) * 0.5;\n"
+                      "    output._dx_Position.w = gl_Position.w;\n";
     }
 
     if (vertexShader->mUsesPointSize && shaderModel >= 3)
@@ -1389,7 +1466,7 @@ bool ProgramBinary::linkVaryings(InfoLog &infoLog, int registers, const sh::Shad
         
     if (fragmentShader->mUsesPointCoord && shaderModel >= 3)
     {
-        pixelHLSL += "    float2 gl_PointCoord : " + pointCoordSemantic + ";\n";
+        pixelHLSL += "    float2 gl_PointCoord : " + pointCoordSemantic + str(pointCoordSemanticIndex) + ";\n";
     }
 
     // Must consume the PSIZE element if the geometry shader is not active
@@ -1594,7 +1671,8 @@ bool ProgramBinary::linkVaryings(InfoLog &infoLog, int registers, const sh::Shad
     return true;
 }
 
-std::string ProgramBinary::generateVaryingHLSL(FragmentShader *fragmentShader, const std::string &varyingSemantic) const
+std::string ProgramBinary::generateVaryingHLSL(VertexShader *fragmentShader, const std::string &varyingSemantic,
+                                               std::vector<LinkedVarying> *linkedVaryings)
 {
     std::string varyingHLSL;
 
@@ -1603,10 +1681,11 @@ std::string ProgramBinary::generateVaryingHLSL(FragmentShader *fragmentShader, c
         sh::Varying *varying = &fragmentShader->mVaryings[varyingIndex];
         if (varying->registerAssigned())
         {
+            GLenum transposedType = TransposeMatrixType(varying->type);
+            int variableRows = (varying->isStruct() ? 1 : VariableRowCount(transposedType));
+
             for (unsigned int elementIndex = 0; elementIndex < varying->elementCount(); elementIndex++)
             {
-                GLenum transposedType = TransposeMatrixType(varying->type);
-                int variableRows = (varying->isStruct() ? 1 : VariableRowCount(transposedType));
                 for (int row = 0; row < variableRows; row++)
                 {
                     switch (varying->interpolation)
@@ -1617,7 +1696,8 @@ std::string ProgramBinary::generateVaryingHLSL(FragmentShader *fragmentShader, c
                       default:  UNREACHABLE();
                     }
 
-                    std::string n = str(varying->registerIndex + elementIndex * variableRows + row);
+                    unsigned int semanticIndex = elementIndex * variableRows + varying->registerIndex + row;
+                    std::string n = str(semanticIndex);
 
                     // matrices within structs are not transposed, hence we do not use the special struct prefix "rm"
                     std::string typeString = varying->isStruct() ? "_" + varying->structName :
@@ -1626,8 +1706,14 @@ std::string ProgramBinary::generateVaryingHLSL(FragmentShader *fragmentShader, c
                     varyingHLSL += typeString + " v" + n + " : " + varyingSemantic + n + ";\n";
                 }
             }
+
+            if (linkedVaryings)
+            {
+                linkedVaryings->push_back(LinkedVarying(varying->name, varying->type, varying->elementCount(),
+                                                        varyingSemantic, varying->registerIndex,
+                                                        variableRows * varying->elementCount()));
+            }
         }
-        else UNREACHABLE();
     }
 
     return varyingHLSL;
@@ -1798,6 +1884,21 @@ bool ProgramBinary::load(InfoLog &infoLog, const void *binary, GLsizei length)
         stream.read(&mUniformIndex[i].index);
     }
 
+    stream.read(&mSeperatedOutputBuffers);
+    stream.read(&size);
+    mTransformFeedbackLinkedVaryings.resize(size);
+    for (size_t i = 0; i < mTransformFeedbackLinkedVaryings.size(); i++)
+    {
+        LinkedVarying &varying = mTransformFeedbackLinkedVaryings[i];
+
+        stream.read(&varying.name);
+        stream.read(&varying.type);
+        stream.read(&varying.size);
+        stream.read(&varying.semanticName);
+        stream.read(&varying.semanticIndex);
+        stream.read(&varying.semanticIndexCount);
+    }
+
     unsigned int pixelShaderSize;
     stream.read(&pixelShaderSize);
 
@@ -1829,7 +1930,8 @@ bool ProgramBinary::load(InfoLog &infoLog, const void *binary, GLsizei length)
     ptr += geometryShaderSize;
 
     mPixelExecutable = mRenderer->loadExecutable(reinterpret_cast<const DWORD*>(pixelShaderFunction),
-                                                 pixelShaderSize, rx::SHADER_PIXEL);
+                                                 pixelShaderSize, rx::SHADER_PIXEL, mTransformFeedbackLinkedVaryings,
+                                                 mSeperatedOutputBuffers);
     if (!mPixelExecutable)
     {
         infoLog.append("Could not create pixel shader.");
@@ -1837,7 +1939,8 @@ bool ProgramBinary::load(InfoLog &infoLog, const void *binary, GLsizei length)
     }
 
     mVertexExecutable = mRenderer->loadExecutable(reinterpret_cast<const DWORD*>(vertexShaderFunction),
-                                                  vertexShaderSize, rx::SHADER_VERTEX);
+                                                  vertexShaderSize, rx::SHADER_VERTEX, mTransformFeedbackLinkedVaryings,
+                                                  mSeperatedOutputBuffers);
     if (!mVertexExecutable)
     {
         infoLog.append("Could not create vertex shader.");
@@ -1849,7 +1952,8 @@ bool ProgramBinary::load(InfoLog &infoLog, const void *binary, GLsizei length)
     if (geometryShaderFunction != NULL && geometryShaderSize > 0)
     {
         mGeometryExecutable = mRenderer->loadExecutable(reinterpret_cast<const DWORD*>(geometryShaderFunction),
-                                                        geometryShaderSize, rx::SHADER_GEOMETRY);
+                                                        geometryShaderSize, rx::SHADER_GEOMETRY, mTransformFeedbackLinkedVaryings,
+                                                        mSeperatedOutputBuffers);
         if (!mGeometryExecutable)
         {
             infoLog.append("Could not create geometry shader.");
@@ -1955,6 +2059,20 @@ bool ProgramBinary::save(void* binary, GLsizei bufSize, GLsizei *length)
         stream.write(mUniformIndex[i].index);
     }
 
+    stream.write(mSeperatedOutputBuffers);
+    stream.write(mTransformFeedbackLinkedVaryings.size());
+    for (size_t i = 0; i < mTransformFeedbackLinkedVaryings.size(); i++)
+    {
+        const LinkedVarying &varying = mTransformFeedbackLinkedVaryings[i];
+
+        stream.write(varying.name);
+        stream.write(varying.type);
+        stream.write(varying.size);
+        stream.write(varying.semanticName);
+        stream.write(varying.semanticIndex);
+        stream.write(varying.semanticIndexCount);
+    }
+
     UINT pixelShaderSize = mPixelExecutable->getLength();
     stream.write(pixelShaderSize);
 
@@ -2026,7 +2144,8 @@ GLint ProgramBinary::getLength()
     }
 }
 
-bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBindings, FragmentShader *fragmentShader, VertexShader *vertexShader)
+bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBindings, FragmentShader *fragmentShader, VertexShader *vertexShader,
+                         const std::vector<std::string>& transformFeedbackVaryings, GLenum transformFeedbackBufferMode)
 {
     if (!fragmentShader || !fragmentShader->isCompiled())
     {
@@ -2038,6 +2157,9 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
         return false;
     }
 
+    mTransformFeedbackLinkedVaryings.clear();
+    mSeperatedOutputBuffers = (transformFeedbackBufferMode == GL_SEPARATE_ATTRIBS);
+
     mShaderVersion = vertexShader->getShaderVersion();
 
     std::string pixelHLSL = fragmentShader->getHLSL();
@@ -2045,14 +2167,16 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
 
     // Map the varyings to the register file
     const sh::ShaderVariable *packing[IMPLEMENTATION_MAX_VARYING_VECTORS][4] = {NULL};
-    int registers = packVaryings(infoLog, packing, fragmentShader);
+    int registers = packVaryings(infoLog, packing, fragmentShader, vertexShader, transformFeedbackVaryings);
 
     if (registers < 0)
     {
         return false;
     }
 
-    if (!linkVaryings(infoLog, registers, packing, pixelHLSL, vertexHLSL, fragmentShader, vertexShader))
+    std::vector<LinkedVarying> linkedVaryings;
+    if (!linkVaryings(infoLog, registers, packing, pixelHLSL, vertexHLSL, fragmentShader, vertexShader,
+                      transformFeedbackVaryings, &linkedVaryings))
     {
         return false;
     }
@@ -2084,13 +2208,36 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
 
     if (success)
     {
-        mVertexExecutable = mRenderer->compileToExecutable(infoLog, vertexHLSL.c_str(), rx::SHADER_VERTEX, DiscardWorkaround(vertexShader->mUsesDiscardRewriting));
-        mPixelExecutable = mRenderer->compileToExecutable(infoLog, pixelHLSL.c_str(), rx::SHADER_PIXEL, DiscardWorkaround(fragmentShader->mUsesDiscardRewriting));
+        // Gather the linked varyings that are used for transform feedback, they should all exist.
+        mTransformFeedbackLinkedVaryings.resize(transformFeedbackVaryings.size());
+        for (unsigned int i = 0; i < transformFeedbackVaryings.size(); i++)
+        {
+            bool found = false;
+            for (unsigned int j = 0; j < linkedVaryings.size(); j++)
+            {
+                if (transformFeedbackVaryings[i] == linkedVaryings[j].name)
+                {
+                    mTransformFeedbackLinkedVaryings[i] = linkedVaryings[j];
+                    found = true;
+                    break;
+                }
+            }
+            ASSERT(found);
+        }
+
+        mVertexExecutable = mRenderer->compileToExecutable(infoLog, vertexHLSL.c_str(), rx::SHADER_VERTEX,
+                                                           mTransformFeedbackLinkedVaryings, mSeperatedOutputBuffers,
+                                                           DiscardWorkaround(vertexShader->mUsesDiscardRewriting));
+        mPixelExecutable = mRenderer->compileToExecutable(infoLog, pixelHLSL.c_str(), rx::SHADER_PIXEL,
+                                                          mTransformFeedbackLinkedVaryings, mSeperatedOutputBuffers,
+                                                          DiscardWorkaround(vertexShader->mUsesDiscardRewriting));
 
         if (usesGeometryShader())
         {
             std::string geometryHLSL = generateGeometryShaderHLSL(registers, packing, fragmentShader, vertexShader);
-            mGeometryExecutable = mRenderer->compileToExecutable(infoLog, geometryHLSL.c_str(), rx::SHADER_GEOMETRY, rx::ANGLE_D3D_WORKAROUND_NONE);
+            mGeometryExecutable = mRenderer->compileToExecutable(infoLog, geometryHLSL.c_str(), rx::SHADER_GEOMETRY,
+                                                                 mTransformFeedbackLinkedVaryings, mSeperatedOutputBuffers,
+                                                                 rx::ANGLE_D3D_WORKAROUND_NONE);
         }
 
         if (!mVertexExecutable || !mPixelExecutable || (usesGeometryShader() && !mGeometryExecutable))
@@ -2104,6 +2251,8 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
             mPixelExecutable = NULL;
             delete mGeometryExecutable;
             mGeometryExecutable = NULL;
+
+            mTransformFeedbackLinkedVaryings.clear();
         }
     }
 
@@ -2797,7 +2946,7 @@ std::string ProgramBinary::generatePointSpriteHLSL(int registers, const sh::Shad
                 "struct GS_INPUT\n"
                 "{\n";
 
-    std::string varyingHLSL = generateVaryingHLSL(fragmentShader, varyingSemantic);
+    std::string varyingHLSL = generateVaryingHLSL(vertexShader, varyingSemantic, NULL);
 
     geomHLSL += varyingHLSL;
 

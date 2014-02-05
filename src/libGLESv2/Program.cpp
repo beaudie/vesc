@@ -248,7 +248,8 @@ bool Program::link()
     resetUniformBlockBindings();
 
     mProgramBinary.set(new ProgramBinary(mRenderer));
-    mLinked = mProgramBinary->link(mInfoLog, mAttributeBindings, mFragmentShader, mVertexShader);
+    mLinked = mProgramBinary->link(mInfoLog, mAttributeBindings, mFragmentShader, mVertexShader,
+                                   mTransformFeedbackVaryings, mTransformFeedbackBufferMode);
 
     return mLinked;
 }
@@ -293,7 +294,7 @@ bool Program::isLinked()
     return mLinked;
 }
 
-ProgramBinary* Program::getProgramBinary()
+ProgramBinary* Program::getProgramBinary() const
 {
     return mProgramBinary.get();
 }
@@ -566,6 +567,57 @@ void Program::resetUniformBlockBindings()
     for (unsigned int blockId = 0; blockId < IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS; blockId++)
     {
         mUniformBlockBindings[blockId] = 0;
+    }
+}
+
+void Program::setTransformFeedbackVaryings(GLsizei count, const GLchar *const *varyings, GLenum bufferMode)
+{
+    mTransformFeedbackVaryings.resize(count);
+    for (GLsizei i = 0; i < count; i++)
+    {
+        mTransformFeedbackVaryings[i] = varyings[i];
+    }
+
+    mTransformFeedbackBufferMode = bufferMode;
+}
+
+void Program::getTransformFeedbackVarying(GLuint index, GLsizei bufSize, GLsizei *length, GLsizei *size, GLenum *type, GLchar *name) const
+{
+    ProgramBinary *programBinary = getProgramBinary();
+    if (programBinary && index < programBinary->getTransformFeedbackVaryingCount())
+    {
+        const LinkedVarying &varying = programBinary->getTransformFeedbackVarying(index);
+        GLsizei lastNameIdx = std::min(bufSize - 1, static_cast<GLsizei>(varying.name.length()));
+        if (length)
+        {
+            *length = lastNameIdx;
+        }
+        if (size)
+        {
+            *size = varying.size;
+        }
+        if (type)
+        {
+            *type = varying.type;
+        }
+        if (name)
+        {
+            memcpy(name, varying.name.c_str(), lastNameIdx);
+            name[lastNameIdx] = '\0';
+        }
+    }
+}
+
+GLsizei Program::getTransformFeedbackVaryingCount() const
+{
+    ProgramBinary *programBinary = getProgramBinary();
+    if (programBinary)
+    {
+        return static_cast<GLsizei>(programBinary->getTransformFeedbackVaryingCount());
+    }
+    else
+    {
+        return 0;
     }
 }
 

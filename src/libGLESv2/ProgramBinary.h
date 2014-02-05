@@ -56,6 +56,24 @@ struct VariableLocation
     unsigned int index;
 };
 
+struct LinkedVarying
+{
+    LinkedVarying();
+    LinkedVarying(const std::string &name, GLenum type, GLsizei size, const std::string &semanticName,
+                  unsigned int semanticIndex, unsigned int semanticIndexCount);
+
+    // Original GL name
+    std::string name;
+
+    GLenum type;
+    GLsizei size;
+
+    // DirectX semantic information
+    std::string semanticName;
+    unsigned int semanticIndex;
+    unsigned int semanticIndexCount;
+};
+
 // This is the result of linking a program. It is the state that would be passed to ProgramBinary.
 class ProgramBinary : public RefCountObject
 {
@@ -114,7 +132,8 @@ class ProgramBinary : public RefCountObject
     bool save(void* binary, GLsizei bufSize, GLsizei *length);
     GLint getLength();
 
-    bool link(InfoLog &infoLog, const AttributeBindings &attributeBindings, FragmentShader *fragmentShader, VertexShader *vertexShader);
+    bool link(InfoLog &infoLog, const AttributeBindings &attributeBindings, FragmentShader *fragmentShader, VertexShader *vertexShader,
+              const std::vector<std::string>& transformFeedbackVaryings, GLenum transformFeedbackBufferMode);
     void getAttachedShaders(GLsizei maxCount, GLsizei *count, GLuint *shaders);
 
     void getActiveAttribute(GLuint index, GLsizei bufsize, GLsizei *length, GLint *size, GLenum *type, GLchar *name) const;
@@ -133,6 +152,9 @@ class ProgramBinary : public RefCountObject
     UniformBlock *getUniformBlockByIndex(GLuint blockIndex);
 
     GLint getFragDataLocation(const char *name) const;
+
+    size_t getTransformFeedbackVaryingCount() const;
+    const LinkedVarying &getTransformFeedbackVarying(size_t idx) const;
 
     void validate(InfoLog &infoLog);
     bool validateSamplers(InfoLog *infoLog);
@@ -153,11 +175,15 @@ class ProgramBinary : public RefCountObject
   private:
     DISALLOW_COPY_AND_ASSIGN(ProgramBinary);
 
-    int packVaryings(InfoLog &infoLog, const sh::ShaderVariable *packing[][4], FragmentShader *fragmentShader);
+    int packVaryings(InfoLog &infoLog, const sh::ShaderVariable *packing[][4], FragmentShader *fragmentShader,
+                     VertexShader *vertexShader, const std::vector<std::string>& transformFeedbackVaryings);
     bool linkVaryings(InfoLog &infoLog, int registers, const sh::ShaderVariable *packing[][4],
                       std::string& pixelHLSL, std::string& vertexHLSL,
-                      FragmentShader *fragmentShader, VertexShader *vertexShader);
-    std::string generateVaryingHLSL(FragmentShader *fragmentShader, const std::string &varyingSemantic) const;
+                      FragmentShader *fragmentShader, VertexShader *vertexShader,
+                      const std::vector<std::string>& transformFeedbackVaryings,
+                      std::vector<LinkedVarying> *linkedVaryings);
+    static std::string generateVaryingHLSL(VertexShader *fragmentShader, const std::string &varyingSemantic,
+                                           std::vector<LinkedVarying> *linkedVaryings);
 
     bool linkAttributes(InfoLog &infoLog, const AttributeBindings &attributeBindings, FragmentShader *fragmentShader, VertexShader *vertexShader);
 
@@ -203,6 +229,9 @@ class ProgramBinary : public RefCountObject
     sh::Attribute mLinkedAttribute[MAX_VERTEX_ATTRIBS];
     int mSemanticIndex[MAX_VERTEX_ATTRIBS];
     int mAttributesByLayout[MAX_VERTEX_ATTRIBS];
+
+    bool mSeperatedOutputBuffers;
+    std::vector<LinkedVarying> mTransformFeedbackLinkedVaryings;
 
     struct Sampler
     {
