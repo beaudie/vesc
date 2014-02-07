@@ -66,7 +66,7 @@ enum
     MAX_TEXTURE_IMAGE_UNITS_VTF_SM4 = 16
 };
 
-Renderer11::Renderer11(egl::Display *display, HDC hDc) : Renderer(display), mDc(hDc)
+Renderer11::Renderer11(egl::Display *display, HDC hDc, bool useWarp) : Renderer(display), mDc(hDc), mUseWarp(useWarp)
 {
     mVertexDataManager = NULL;
     mIndexDataManager = NULL;
@@ -167,7 +167,7 @@ EGLint Renderer11::initialize()
 
 #ifdef _DEBUG
     result = D3D11CreateDevice(NULL,
-                               D3D_DRIVER_TYPE_HARDWARE,
+                               mUseWarp ? D3D_DRIVER_TYPE_WARP : D3D_DRIVER_TYPE_HARDWARE,
                                NULL,
                                D3D11_CREATE_DEVICE_DEBUG,
                                featureLevels,
@@ -186,7 +186,7 @@ EGLint Renderer11::initialize()
 #endif
     {
         result = D3D11CreateDevice(NULL,
-                                   D3D_DRIVER_TYPE_HARDWARE,
+                                   mUseWarp ? D3D_DRIVER_TYPE_WARP : D3D_DRIVER_TYPE_HARDWARE,
                                    NULL,
                                    0,
                                    featureLevels,
@@ -1956,7 +1956,7 @@ bool Renderer11::testDeviceResettable()
     ID3D11DeviceContext* dummyContext;
 
     HRESULT result = D3D11CreateDevice(NULL,
-                                       D3D_DRIVER_TYPE_HARDWARE,
+                                       mUseWarp ? D3D_DRIVER_TYPE_WARP : D3D_DRIVER_TYPE_HARDWARE,
                                        NULL,
                                        #if defined(_DEBUG)
                                        D3D11_CREATE_DEVICE_DEBUG,

@@ -172,16 +172,20 @@ ShaderBlob *Renderer::compileToBinary(gl::InfoLog &infoLog, const char *hlsl, co
 extern "C"
 {
 
-rx::Renderer *glCreateRenderer(egl::Display *display, HDC hDc, EGLNativeDisplayType displayId)
+rx::Renderer *glCreateRenderer(egl::Display *display, HDC hDc, EGLNativeDisplayType displayId, EGLint d3dType)
 {
     rx::Renderer *renderer = NULL;
     EGLint status = EGL_BAD_ALLOC;
-    
+
     if (ANGLE_ENABLE_D3D11 ||
         displayId == EGL_D3D11_ELSE_D3D9_DISPLAY_ANGLE ||
-        displayId == EGL_D3D11_ONLY_DISPLAY_ANGLE)
+        displayId == EGL_D3D11_ONLY_DISPLAY_ANGLE ||
+        (displayId == EGL_DEFAULT_DISPLAY &&
+         (d3dType == EGL_PLATFORM_ANGLE_D3D_TYPE_D3D11_ANGLE ||
+          d3dType == EGL_PLATFORM_ANGLE_D3D_TYPE_D3D11_WARP_ANGLE)))
     {
-        renderer = new rx::Renderer11(display, hDc);
+        bool useWarp = d3dType == EGL_PLATFORM_ANGLE_D3D_TYPE_D3D11_WARP_ANGLE;
+        renderer = new rx::Renderer11(display, hDc, useWarp);
     
         if (renderer)
         {
@@ -192,7 +196,7 @@ rx::Renderer *glCreateRenderer(egl::Display *display, HDC hDc, EGLNativeDisplayT
         {
             return renderer;
         }
-        else if (displayId == EGL_D3D11_ONLY_DISPLAY_ANGLE)
+        else if (displayId == EGL_D3D11_ONLY_DISPLAY_ANGLE || displayId == EGL_DEFAULT_DISPLAY)
         {
             return NULL;
         }

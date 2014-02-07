@@ -39,7 +39,7 @@ enum
 class Renderer11 : public Renderer
 {
   public:
-    Renderer11(egl::Display *display, HDC hDc);
+    Renderer11(egl::Display *display, HDC hDc, bool useWarp);
     virtual ~Renderer11();
 
     static Renderer11 *makeRenderer11(Renderer *renderer);
@@ -204,6 +204,7 @@ class Renderer11 : public Renderer
     HMODULE mD3d11Module;
     HMODULE mDxgiModule;
     HDC mDc;
+    bool mUseWarp;
 
     bool mDeviceLost;
 

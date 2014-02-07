@@ -17,6 +17,7 @@ EXPORTS
 	eglGetCurrentDisplay            @28
 	eglGetCurrentSurface            @27
 	eglGetDisplay                   @2
+	eglGetPlatformDisplayEXT        @35
 	eglGetError                     @1
 	eglGetProcAddress               @34
 	eglInitialize                   @3

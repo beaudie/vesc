@@ -34,6 +34,7 @@ class Display
     void terminate();
 
     static egl::Display *getDisplay(EGLNativeDisplayType displayId);
+    static egl::Display *getDisplay(EGLNativeDisplayType displayId, EGLint d3dType);
 
     bool getConfigs(EGLConfig *configs, const EGLint *attribList, EGLint configSize, EGLint *numConfig);
     bool getConfigAttrib(EGLConfig config, EGLint attribute, EGLint *value);
@@ -63,7 +64,7 @@ class Display
   private:
     DISALLOW_COPY_AND_ASSIGN(Display);
 
-    Display(EGLNativeDisplayType displayId, HDC deviceContext);
+    Display(EGLNativeDisplayType displayId, HDC deviceContext, EGLint d3dType);
 
     bool restoreLostDevice();
 
@@ -81,6 +82,8 @@ class Display
     ContextSet mContextSet;
 
     rx::Renderer *mRenderer;
+
+    EGLint mRequestedD3DType;
 
     void initExtensionString();
     void initVendorString();

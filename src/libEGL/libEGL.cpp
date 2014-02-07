@@ -109,6 +109,33 @@ EGLDisplay __stdcall eglGetDisplay(EGLNativeDisplayType display_id)
     }
 }
 
+EGLDisplay __stdcall eglGetPlatformDisplayEXT(EGLenum platform, void* native_display, const EGLint* attrib_list)
+{
+    EVENT("(EGLenum platform = %d, void* native_display = 0x%0.8p, const EGLint* attrib_list = 0x%0.8p)",
+          platform, native_display, attrib_list);
+
+    if (platform != EGL_PLATFORM_ANGLE_D3D_ANGLE)
+    {
+        return egl::error(EGL_BAD_CONFIG, EGL_NO_DISPLAY);
+    }
+
+    try
+    {
+        EGLNativeDisplayType display_id = static_cast<EGLNativeDisplayType>(native_display);
+        EGLint d3dType = 0;
+        if (attrib_list && attrib_list[0] != EGL_NONE &&
+            attrib_list[0] == EGL_PLATFORM_ANGLE_D3D_TYPE_ANGLE && attrib_list[1] != EGL_NONE)
+        {
+            d3dType = attrib_list[1];
+        }
+        return egl::Display::getDisplay(display_id, d3dType);
+    }
+    catch(std::bad_alloc&)
+    {
+        return egl::error(EGL_BAD_ALLOC, EGL_NO_DISPLAY);
+    }
+}
+
 EGLBoolean __stdcall eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
 {
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLint *major = 0x%0.8p, EGLint *minor = 0x%0.8p)",

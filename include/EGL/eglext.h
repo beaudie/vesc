@@ -347,6 +347,25 @@ typedef EGLuint64NV (EGLAPIENTRYP PFNEGLGETSYSTEMTIMENVPROC) (void);
 #define EGL_LOSE_CONTEXT_ON_RESET_EXT		0x31BF
 #endif
 
+
+#ifndef EGL_EXT_platform_base
+#define EGL_EXT_platform_base 1
+
+#ifdef EGL_EGLEXT_PROTOTYPES
+EGLAPI EGLDisplay EGLAPIENTRY eglGetPlatformDisplayEXT(EGLenum platform, void* native_display, const EGLint* attrib_list);
+#endif /* EGL_EGLEXT_PROTOTYPES */
+typedef EGLDisplay(EGLAPIENTRYP PFNEGLGETPLATFORMDISPLAYEXT)(EGLenum platform, void* native_display, const EGLint* attrib_list);
+#endif
+
+#ifndef EGL_ANGLE_platform_angle_d3d
+#define EGL_ANGLE_platform_angle_d3d 1
+#define EGL_PLATFORM_ANGLE_D3D_ANGLE 0x3201
+#define EGL_PLATFORM_ANGLE_D3D_TYPE_ANGLE 0x3202
+#define EGL_PLATFORM_ANGLE_D3D_TYPE_D3D9_ANGLE 0x3203
+#define EGL_PLATFORM_ANGLE_D3D_TYPE_D3D11_ANGLE 0x3204
+#define EGL_PLATFORM_ANGLE_D3D_TYPE_D3D11_WARP_ANGLE 0x3205
+#endif
+
 #ifdef __cplusplus
 }
 #endif
