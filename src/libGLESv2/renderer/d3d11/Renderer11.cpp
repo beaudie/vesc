@@ -113,7 +113,7 @@ Renderer11 *Renderer11::makeRenderer11(Renderer *renderer)
 
 EGLint Renderer11::initialize()
 {
-    if (!initializeCompiler())
+    if (!mCompiler.initialize())
     {
         return EGL_NOT_INITIALIZED;
     }
@@ -1794,6 +1794,8 @@ void Renderer11::release()
         FreeLibrary(mDxgiModule);
         mDxgiModule = NULL;
     }
+
+    mCompiler.release();
 }
 
 bool Renderer11::resetDevice()
@@ -2831,7 +2833,7 @@ ShaderExecutable *Renderer11::compileToExecutable(gl::InfoLog &infoLog, const ch
         return NULL;
     }
 
-    ID3DBlob *binary = (ID3DBlob*)compileToBinary(infoLog, shaderHLSL, profile, D3DCOMPILE_OPTIMIZATION_LEVEL0, false);
+    ID3DBlob *binary = (ID3DBlob*)mCompiler.compileToBinary(infoLog, shaderHLSL, profile, D3DCOMPILE_OPTIMIZATION_LEVEL0, false);
     if (!binary)
     {
         return NULL;
