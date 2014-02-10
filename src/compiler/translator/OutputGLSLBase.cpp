@@ -785,8 +785,10 @@ TString TOutputGLSLBase::hashVariableName(const TString& name)
 TString TOutputGLSLBase::hashFunctionName(const TString& mangled_name)
 {
     TString name = TFunction::unmangleName(mangled_name);
-    if (mSymbolTable.findBuiltIn(mangled_name) != NULL || name == "main")
+    if (mSymbolTable.findBuiltIn(mangled_name) != NULL || name == "main") {
+        overrideFunctionName(name);
         return name;
+    }
     return hashName(name);
 }
 

@@ -50,6 +50,8 @@ protected:
     TString hashVariableName(const TString& name);
     // Same as hashName(), but without hashing built-in functions.
     TString hashFunctionName(const TString& mangled_name);
+    // Place to override some function names
+    virtual bool overrideFunctionName(TString& name) { return false; }
 
 private:
     bool structDeclared(const TStructure* structure) const;

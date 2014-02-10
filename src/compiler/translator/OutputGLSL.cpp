@@ -33,3 +33,25 @@ void TOutputGLSL::visitSymbol(TIntermSymbol* node)
         TOutputGLSLBase::visitSymbol(node);
     }
 }
+
+bool TOutputGLSL::overrideFunctionName(TString& name)
+{
+    static const char *simpleRename[] = {
+        "texture2DLodEXT", "texture2DLod",
+        "texture2DProjLodEXT", "texture2DProjLod",
+        "textureCubeLodEXT", "textureCubeLod",
+        "texture2DGradEXT", "texture2DGradARB",
+        "texture2DProjGradEXT", "texture2DProjGradARB",
+        "textureCubeGradEXT", "textureCubeGradARB",
+        NULL, NULL
+    };
+
+    for (int i = 0; simpleRename[i] != NULL; ++i) {
+        if (name == simpleRename[i]) {
+            name = simpleRename[i+1];
+            return true;
+        }
+    }
+
+    return false;
+}
