@@ -91,7 +91,6 @@
                     'VCLinkerTool':
                     {
                         'FixedBaseAddress': '1',
-                        'GenerateDebugInformation': 'true',
                         'ImportLibrary': '$(OutDir)\\lib\\$(TargetName).lib',
                         'MapFileName': '$(OutDir)\\$(TargetName).map',
                         # Most of the executables we'll ever create are tests
@@ -141,6 +140,7 @@
                     },
                     'VCLinkerTool':
                     {
+                        'GenerateDebugInformation': 'true',
                         'LinkIncremental': '2',
                     },
                 },
@@ -164,6 +164,7 @@
                     },
                     'VCLinkerTool':
                     {
+                        'GenerateDebugInformation': 'false',
                         'LinkIncremental': '1',
                     },
                 },
