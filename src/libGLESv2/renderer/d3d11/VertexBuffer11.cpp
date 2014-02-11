@@ -14,6 +14,7 @@
 #include "libGLESv2/renderer/d3d11/Renderer11.h"
 #include "libGLESv2/VertexAttribute.h"
 #include "libGLESv2/renderer/d3d11/formatutils11.h"
+#include "libGLESv2/renderer/d3d11/renderer11_utils.h"
 
 namespace rx
 {
@@ -25,15 +26,8 @@ VertexBuffer11::VertexBuffer11(rx::Renderer11 *const renderer) : mRenderer(rende
     mDynamicUsage = false;
 }
 
-VertexBuffer11::~VertexBuffer11()
-{
-    SafeRelease(mBuffer);
-}
-
 bool VertexBuffer11::initialize(unsigned int size, bool dynamicUsage)
 {
-    SafeRelease(mBuffer);
-
     updateSerial();
 
     if (size > 0)
@@ -48,11 +42,13 @@ bool VertexBuffer11::initialize(unsigned int size, bool dynamicUsage)
         bufferDesc.MiscFlags = 0;
         bufferDesc.StructureByteStride = 0;
 
-        HRESULT result = dxDevice->CreateBuffer(&bufferDesc, NULL, &mBuffer);
+        ID3D11Buffer *newBuffer = NULL;
+        HRESULT result = dxDevice->CreateBuffer(&bufferDesc, NULL, &newBuffer);
         if (FAILED(result))
         {
             return false;
         }
+        mBuffer = d3d11::MakeSharedCOM(newBuffer);
     }
 
     mBufferSize = size;
@@ -76,7 +72,7 @@ bool VertexBuffer11::storeVertexAttributes(const gl::VertexAttribute &attrib, co
         ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
 
         D3D11_MAPPED_SUBRESOURCE mappedResource;
-        HRESULT result = dxContext->Map(mBuffer, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
+        HRESULT result = dxContext->Map(mBuffer.get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
         if (FAILED(result))
         {
             ERR("Vertex buffer map failed with error 0x%08x", result);
@@ -113,7 +109,7 @@ bool VertexBuffer11::storeVertexAttributes(const gl::VertexAttribute &attrib, co
         ASSERT(conversionFunc != NULL);
         conversionFunc(input, inputStride, count, output);
 
-        dxContext->Unmap(mBuffer, 0);
+        dxContext->Unmap(mBuffer.get(), 0);
 
         return true;
     }
@@ -197,14 +193,14 @@ bool VertexBuffer11::discard()
         ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
 
         D3D11_MAPPED_SUBRESOURCE mappedResource;
-        HRESULT result = dxContext->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+        HRESULT result = dxContext->Map(mBuffer.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
         if (FAILED(result))
         {
             ERR("Vertex buffer map failed with error 0x%08x", result);
             return false;
         }
 
-        dxContext->Unmap(mBuffer, 0);
+        dxContext->Unmap(mBuffer.get(), 0);
 
         return true;
     }
@@ -215,7 +211,7 @@ bool VertexBuffer11::discard()
     }
 }
 
-ID3D11Buffer *VertexBuffer11::getBuffer() const
+std::weak_ptr<ID3D11Buffer> VertexBuffer11::getBuffer() const
 {
     return mBuffer;
 }

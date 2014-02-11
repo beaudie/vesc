@@ -164,7 +164,8 @@ bool PixelTransfer11::copyBufferToTexture(const gl::PixelUnpackState &unpack, un
     DXGI_FORMAT srvFormat = gl_d3d11::GetSRVFormat(sourceFormat, clientVersion);
     ASSERT(srvFormat != DXGI_FORMAT_UNKNOWN);
     BufferStorage11 *bufferStorage11 = BufferStorage11::makeBufferStorage11(sourceBuffer.getStorage());
-    ID3D11ShaderResourceView *bufferSRV = bufferStorage11->getSRV(srvFormat);
+    std::shared_ptr<ID3D11ShaderResourceView> bufferSRV = bufferStorage11->getSRV(srvFormat).lock();
+    ID3D11ShaderResourceView *const srv = bufferSRV.get();
     ASSERT(bufferSRV != NULL);
 
     ID3D11RenderTargetView *textureRTV = RenderTarget11::makeRenderTarget11(destRenderTarget)->getRenderTargetView();
@@ -185,7 +186,7 @@ bool PixelTransfer11::copyBufferToTexture(const gl::PixelUnpackState &unpack, un
     deviceContext->VSSetShader(mBufferToTextureVS, NULL, 0);
     deviceContext->GSSetShader(geometryShader, NULL, 0);
     deviceContext->PSSetShader(pixelShader, NULL, 0);
-    deviceContext->PSSetShaderResources(0, 1, &bufferSRV);
+    deviceContext->PSSetShaderResources(0, 1, &srv);
     deviceContext->IASetInputLayout(NULL);
     deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 

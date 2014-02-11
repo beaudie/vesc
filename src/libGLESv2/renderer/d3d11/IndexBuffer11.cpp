@@ -9,6 +9,7 @@
 
 #include "libGLESv2/renderer/d3d11/IndexBuffer11.h"
 #include "libGLESv2/renderer/d3d11/Renderer11.h"
+#include "libGLESv2/renderer/d3d11/renderer11_utils.h"
 
 namespace rx
 {
@@ -20,15 +21,8 @@ IndexBuffer11::IndexBuffer11(Renderer11 *const renderer) : mRenderer(renderer)
     mDynamicUsage = false;
 }
 
-IndexBuffer11::~IndexBuffer11()
-{
-    SafeRelease(mBuffer);
-}
-
 bool IndexBuffer11::initialize(unsigned int bufferSize, GLenum indexType, bool dynamic)
 {
-    SafeRelease(mBuffer);
-
     updateSerial();
 
     if (bufferSize > 0)
@@ -43,11 +37,13 @@ bool IndexBuffer11::initialize(unsigned int bufferSize, GLenum indexType, bool d
         bufferDesc.MiscFlags = 0;
         bufferDesc.StructureByteStride = 0;
 
-        HRESULT result = dxDevice->CreateBuffer(&bufferDesc, NULL, &mBuffer);
+        ID3D11Buffer *newBuffer = NULL;
+        HRESULT result = dxDevice->CreateBuffer(&bufferDesc, NULL, &newBuffer);
         if (FAILED(result))
         {
             return false;
         }
+        mBuffer = d3d11::MakeSharedCOM(newBuffer);
     }
 
     mBufferSize = bufferSize;
@@ -77,7 +73,7 @@ bool IndexBuffer11::mapBuffer(unsigned int offset, unsigned int size, void** out
         ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
 
         D3D11_MAPPED_SUBRESOURCE mappedResource;
-        HRESULT result = dxContext->Map(mBuffer, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
+        HRESULT result = dxContext->Map(mBuffer.get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
         if (FAILED(result))
         {
             ERR("Index buffer map failed with error 0x%08x", result);
@@ -99,7 +95,7 @@ bool IndexBuffer11::unmapBuffer()
     if (mBuffer)
     {
         ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
-        dxContext->Unmap(mBuffer, 0);
+        dxContext->Unmap(mBuffer.get(), 0);
         return true;
     }
     else
@@ -138,14 +134,14 @@ bool IndexBuffer11::discard()
         ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
 
         D3D11_MAPPED_SUBRESOURCE mappedResource;
-        HRESULT result = dxContext->Map(mBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+        HRESULT result = dxContext->Map(mBuffer.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
         if (FAILED(result))
         {
             ERR("Index buffer map failed with error 0x%08x", result);
             return false;
         }
 
-        dxContext->Unmap(mBuffer, 0);
+        dxContext->Unmap(mBuffer.get(), 0);
 
         return true;
     }
@@ -167,7 +163,7 @@ DXGI_FORMAT IndexBuffer11::getIndexFormat() const
     }
 }
 
-ID3D11Buffer *IndexBuffer11::getBuffer() const
+std::weak_ptr<ID3D11Buffer> IndexBuffer11::getBuffer() const
 {
     return mBuffer;
 }

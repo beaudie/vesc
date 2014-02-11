@@ -32,7 +32,6 @@ class BufferStorage11 : public BufferStorage
 {
   public:
     explicit BufferStorage11(Renderer11 *renderer);
-    virtual ~BufferStorage11();
 
     static BufferStorage11 *makeBufferStorage11(BufferStorage *bufferStorage);
 
@@ -44,15 +43,15 @@ class BufferStorage11 : public BufferStorage
     virtual unsigned int getSize() const;
     virtual bool supportsDirectBinding() const;
 
-    ID3D11Buffer *getBuffer(BufferUsage usage);
-    ID3D11ShaderResourceView *getSRV(DXGI_FORMAT srvFormat);
+    std::weak_ptr<ID3D11Buffer> getBuffer(BufferUsage usage);
+    std::weak_ptr<ID3D11ShaderResourceView> getSRV(DXGI_FORMAT srvFormat);
 
   private:
     Renderer11 *mRenderer;
 
-    std::map<BufferUsage, DirectBufferStorage11*> mDirectBuffers;
+    std::map<BufferUsage, std::shared_ptr<DirectBufferStorage11> > mDirectBuffers;
 
-    typedef std::pair<ID3D11Buffer *, ID3D11ShaderResourceView *> BufferSRVPair;
+    typedef std::pair<std::shared_ptr<ID3D11Buffer>, std::shared_ptr<ID3D11ShaderResourceView> > BufferSRVPair;
     std::map<DXGI_FORMAT, BufferSRVPair> mBufferResourceViews;
 
     std::vector<unsigned char> mResolvedData;
@@ -65,8 +64,8 @@ class BufferStorage11 : public BufferStorage
 
     void markBufferUsage();
 
-    DirectBufferStorage11 *getStorage(BufferUsage usage);
-    DirectBufferStorage11 *getLatestStorage() const;
+    std::weak_ptr<DirectBufferStorage11> getStorage(BufferUsage usage);
+    std::weak_ptr<DirectBufferStorage11> getLatestStorage() const;
 };
 
 // Each instance of BufferStorageD3DBuffer11 is specialized for a class of D3D binding points
@@ -78,13 +77,12 @@ class DirectBufferStorage11
 {
   public:
     DirectBufferStorage11(Renderer11 *renderer, BufferUsage usage);
-    ~DirectBufferStorage11();
 
     BufferUsage getUsage() const;
-    ID3D11Buffer *getD3DBuffer() const { return mDirectBuffer; }
+    std::weak_ptr<ID3D11Buffer> getD3DBuffer() const { return mDirectBuffer; }
     size_t getSize() const {return mBufferSize; }
 
-    bool copyFromStorage(DirectBufferStorage11 *source, size_t sourceOffset, size_t size, size_t destOffset);
+    bool copyFromStorage(std::weak_ptr<DirectBufferStorage11> source, size_t sourceOffset, size_t size, size_t destOffset);
     void resize(size_t size, bool preserveData);
 
     DataRevision getDataRevision() const { return mRevision; }
@@ -95,7 +93,7 @@ class DirectBufferStorage11
     const BufferUsage mUsage;
     DataRevision mRevision;
 
-    ID3D11Buffer *mDirectBuffer;
+    std::shared_ptr<ID3D11Buffer> mDirectBuffer;
     size_t mBufferSize;
 
     static void fillBufferDesc(D3D11_BUFFER_DESC* bufferDesc, Renderer *renderer, BufferUsage usage, unsigned int bufferSize);

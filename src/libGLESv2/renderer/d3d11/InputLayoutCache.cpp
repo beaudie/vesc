@@ -85,7 +85,7 @@ GLenum InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl::M
 
     InputLayoutKey ilKey = { 0 };
 
-    ID3D11Buffer *vertexBuffers[gl::MAX_VERTEX_ATTRIBS] = { NULL };
+    std::shared_ptr<ID3D11Buffer> vertexBuffers[gl::MAX_VERTEX_ATTRIBS] = { NULL };
     unsigned int vertexBufferSerials[gl::MAX_VERTEX_ATTRIBS] = { 0 };
     UINT vertexStrides[gl::MAX_VERTEX_ATTRIBS] = { 0 };
     UINT vertexOffsets[gl::MAX_VERTEX_ATTRIBS] = { 0 };
@@ -118,7 +118,7 @@ GLenum InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl::M
             ilKey.elements[ilKey.elementCount].desc.InstanceDataStepRate = attributes[i].divisor;
             ilKey.elementCount++;
 
-            vertexBuffers[i] = bufferStorage ? bufferStorage->getBuffer(BUFFER_USAGE_VERTEX) : vertexBuffer->getBuffer();
+            vertexBuffers[i] = bufferStorage ? bufferStorage->getBuffer(BUFFER_USAGE_VERTEX).lock() : vertexBuffer->getBuffer().lock();
             vertexBufferSerials[i] = bufferStorage ? bufferStorage->getSerial() : vertexBuffer->getSerial();
             vertexStrides[i] = attributes[i].stride;
             vertexOffsets[i] = attributes[i].offset;
@@ -185,7 +185,8 @@ GLenum InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl::M
         if (vertexBufferSerials[i] != mCurrentBuffers[i] || vertexStrides[i] != mCurrentVertexStrides[i] ||
             vertexOffsets[i] != mCurrentVertexOffsets[i])
         {
-            mDeviceContext->IASetVertexBuffers(i, 1, &vertexBuffers[i], &vertexStrides[i], &vertexOffsets[i]);
+            ID3D11Buffer *const buffer = vertexBuffers[i].get();
+            mDeviceContext->IASetVertexBuffers(i, 1, &buffer, &vertexStrides[i], &vertexOffsets[i]);
             mCurrentBuffers[i] = vertexBufferSerials[i];
             mCurrentVertexStrides[i] = vertexStrides[i];
             mCurrentVertexOffsets[i] = vertexOffsets[i];

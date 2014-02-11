@@ -650,27 +650,25 @@ void Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *textur
 
 bool Renderer11::setUniformBuffers(const gl::Buffer *vertexUniformBuffers[], const gl::Buffer *fragmentUniformBuffers[])
 {
-    // convert buffers to ID3D11Buffer*
-    ID3D11Buffer *vertexConstantBuffers[gl::IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS] = { NULL };
-    ID3D11Buffer *pixelConstantBuffers[gl::IMPLEMENTATION_MAX_FRAGMENT_SHADER_UNIFORM_BUFFERS] = { NULL };
-
     for (unsigned int uniformBufferIndex = 0; uniformBufferIndex < gl::IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS; uniformBufferIndex++)
     {
         const gl::Buffer *uniformBuffer = vertexUniformBuffers[uniformBufferIndex];
         if (uniformBuffer)
         {
             BufferStorage11 *bufferStorage = BufferStorage11::makeBufferStorage11(uniformBuffer->getStorage());
-            ID3D11Buffer *constantBuffer = bufferStorage->getBuffer(BUFFER_USAGE_UNIFORM);
+            std::shared_ptr<ID3D11Buffer> constantBuffer = bufferStorage->getBuffer(BUFFER_USAGE_UNIFORM).lock();
 
             if (!constantBuffer)
             {
                 return false;
             }
 
+            ID3D11Buffer *const buffer = constantBuffer.get();
+
             if (mCurrentConstantBufferVS[uniformBufferIndex] != bufferStorage->getSerial())
             {
                 mDeviceContext->VSSetConstantBuffers(getReservedVertexUniformBuffers() + uniformBufferIndex,
-                                                     1, &constantBuffer);
+                                                     1, &buffer);
                 mCurrentConstantBufferVS[uniformBufferIndex] = bufferStorage->getSerial();
             }
         }
@@ -682,21 +680,23 @@ bool Renderer11::setUniformBuffers(const gl::Buffer *vertexUniformBuffers[], con
         if (uniformBuffer)
         {
             BufferStorage11 *bufferStorage = BufferStorage11::makeBufferStorage11(uniformBuffer->getStorage());
-            ID3D11Buffer *constantBuffer = bufferStorage->getBuffer(BUFFER_USAGE_UNIFORM);
+            std::shared_ptr<ID3D11Buffer> constantBuffer = bufferStorage->getBuffer(BUFFER_USAGE_UNIFORM).lock();
 
             if (!constantBuffer)
             {
                 return false;
             }
 
+            ID3D11Buffer *const buffer = constantBuffer.get();
+
             if (mCurrentConstantBufferPS[uniformBufferIndex] != bufferStorage->getSerial())
             {
                 mDeviceContext->PSSetConstantBuffers(getReservedFragmentUniformBuffers() + uniformBufferIndex,
-                                                     1, &constantBuffer);
+                                                     1, &buffer);
                 mCurrentConstantBufferPS[uniformBufferIndex] = bufferStorage->getSerial();
             }
 
-            pixelConstantBuffers[uniformBufferIndex] = constantBuffer;
+            mCurrentConstantBufferPS[uniformBufferIndex] = bufferStorage->getSerial();
         }
     }
 
@@ -1122,7 +1122,8 @@ GLenum Renderer11::applyIndexBuffer(const GLvoid *indices, gl::Buffer *elementAr
                 BufferStorage11 *storage = BufferStorage11::makeBufferStorage11(indexInfo->storage);
                 IndexBuffer11* indexBuffer = IndexBuffer11::makeIndexBuffer11(indexInfo->indexBuffer);
 
-                mDeviceContext->IASetIndexBuffer(storage->getBuffer(BUFFER_USAGE_INDEX), indexBuffer->getIndexFormat(), indexInfo->startOffset);
+                mDeviceContext->IASetIndexBuffer(storage->getBuffer(BUFFER_USAGE_INDEX).lock().get(),
+                                                 indexBuffer->getIndexFormat(), indexInfo->startOffset);
 
                 mAppliedIBSerial = 0;
                 mAppliedStorageIBSerial = storage->getSerial();
@@ -1133,7 +1134,8 @@ GLenum Renderer11::applyIndexBuffer(const GLvoid *indices, gl::Buffer *elementAr
         {
             IndexBuffer11* indexBuffer = IndexBuffer11::makeIndexBuffer11(indexInfo->indexBuffer);
 
-            mDeviceContext->IASetIndexBuffer(indexBuffer->getBuffer(), indexBuffer->getIndexFormat(), indexInfo->startOffset);
+            mDeviceContext->IASetIndexBuffer(indexBuffer->getBuffer().lock().get(),
+                                             indexBuffer->getIndexFormat(), indexInfo->startOffset);
 
             mAppliedIBSerial = indexInfo->serial;
             mAppliedStorageIBSerial = 0;
@@ -1278,7 +1280,7 @@ void Renderer11::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices,
     {
         IndexBuffer11 *indexBuffer = IndexBuffer11::makeIndexBuffer11(mLineLoopIB->getIndexBuffer());
 
-        mDeviceContext->IASetIndexBuffer(indexBuffer->getBuffer(), indexBuffer->getIndexFormat(), indexBufferOffset);
+        mDeviceContext->IASetIndexBuffer(indexBuffer->getBuffer().lock().get(), indexBuffer->getIndexFormat(), indexBufferOffset);
         mAppliedIBSerial = mLineLoopIB->getSerial();
         mAppliedStorageIBSerial = 0;
         mAppliedIBOffset = indexBufferOffset;
@@ -1387,7 +1389,7 @@ void Renderer11::drawTriangleFan(GLsizei count, GLenum type, const GLvoid *indic
     {
         IndexBuffer11 *indexBuffer = IndexBuffer11::makeIndexBuffer11(mTriangleFanIB->getIndexBuffer());
 
-        mDeviceContext->IASetIndexBuffer(indexBuffer->getBuffer(), indexBuffer->getIndexFormat(), indexBufferOffset);
+        mDeviceContext->IASetIndexBuffer(indexBuffer->getBuffer().lock().get(), indexBuffer->getIndexFormat(), indexBufferOffset);
         mAppliedIBSerial = mTriangleFanIB->getSerial();
         mAppliedStorageIBSerial = 0;
         mAppliedIBOffset = indexBufferOffset;

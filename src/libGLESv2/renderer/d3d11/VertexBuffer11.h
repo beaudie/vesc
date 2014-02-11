@@ -19,7 +19,6 @@ class VertexBuffer11 : public VertexBuffer
 {
   public:
     explicit VertexBuffer11(rx::Renderer11 *const renderer);
-    virtual ~VertexBuffer11();
 
     virtual bool initialize(unsigned int size, bool dynamicUsage);
 
@@ -35,14 +34,14 @@ class VertexBuffer11 : public VertexBuffer
     virtual bool setBufferSize(unsigned int size);
     virtual bool discard();
 
-    ID3D11Buffer *getBuffer() const;
+    std::weak_ptr<ID3D11Buffer> getBuffer() const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(VertexBuffer11);
 
     rx::Renderer11 *const mRenderer;
 
-    ID3D11Buffer *mBuffer;
+    std::shared_ptr<ID3D11Buffer> mBuffer;
     unsigned int mBufferSize;
     bool mDynamicUsage;
 };

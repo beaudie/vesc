@@ -99,6 +99,19 @@ outType* DynamicCastComObject(IUnknown* object)
     }
 }
 
+template <typename T>
+void ReleaseCOMObject(T* object)
+{
+    ASSERT(object != NULL);
+    object->Release();
+}
+
+template <typename T>
+std::shared_ptr<T> MakeSharedCOM(T* object)
+{
+    return std::shared_ptr<T>(object, ReleaseCOMObject<T>);
+}
+
 inline bool isDeviceLostError(HRESULT errorCode)
 {
     switch (errorCode)

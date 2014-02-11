@@ -19,7 +19,6 @@ class IndexBuffer11 : public IndexBuffer
 {
   public:
     explicit IndexBuffer11(Renderer11 *const renderer);
-    virtual ~IndexBuffer11();
 
     virtual bool initialize(unsigned int bufferSize, GLenum indexType, bool dynamic);
 
@@ -35,14 +34,14 @@ class IndexBuffer11 : public IndexBuffer
     virtual bool discard();
 
     DXGI_FORMAT getIndexFormat() const;
-    ID3D11Buffer *getBuffer() const;
+    std::weak_ptr<ID3D11Buffer> getBuffer() const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(IndexBuffer11);
 
     rx::Renderer11 *const mRenderer;
 
-    ID3D11Buffer *mBuffer;
+    std::shared_ptr<ID3D11Buffer> mBuffer;
     unsigned int mBufferSize;
     GLenum mIndexType;
     bool mDynamicUsage;
