@@ -447,7 +447,6 @@ int Renderer11::generateConfigs(ConfigDesc **configDescList)
 
                 if (depthStencilFormat != DXGI_FORMAT_UNKNOWN)
                 {
-                    UINT formatSupport = 0;
                     result = mDevice->CheckFormatSupport(depthStencilFormat, &formatSupport);
                     depthStencilFormatOK = SUCCEEDED(result) && (formatSupport & D3D11_FORMAT_SUPPORT_DEPTH_STENCIL);
                 }
@@ -3292,8 +3291,8 @@ bool Renderer11::blitRenderbufferRect(const gl::Rectangle &readRect, const gl::R
 
             SafeRelease(unresolvedTexture);
 
-            HRESULT result = mDevice->CreateShaderResourceView(readTexture, NULL, &readSRV);
-            if (FAILED(result))
+            HRESULT hresult = mDevice->CreateShaderResourceView(readTexture, NULL, &readSRV);
+            if (FAILED(hresult))
             {
                 SafeRelease(readTexture);
                 return gl::error(GL_OUT_OF_MEMORY, false);
