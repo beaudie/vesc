@@ -8,8 +8,8 @@
 #include "compiler/translator/DetectCallDepth.h"
 #include "compiler/translator/ForLoopUnroll.h"
 #include "compiler/translator/Initialize.h"
-#include "compiler/translator/InitializeGLPosition.h"
 #include "compiler/translator/InitializeParseContext.h"
+#include "compiler/translator/InitializeVariables.h"
 #include "compiler/translator/MapLongVariableNames.h"
 #include "compiler/translator/ParseContext.h"
 #include "compiler/translator/RenameFunction.h"
@@ -190,10 +190,8 @@ bool TCompiler::compile(const char* const shaderStrings[],
         if (success && (compileOptions & SH_MAP_LONG_VARIABLE_NAMES) && hashFunction == NULL)
             mapLongVariableNames(root);
 
-        if (success && shaderType == SH_VERTEX_SHADER && (compileOptions & SH_INIT_GL_POSITION)) {
-            InitializeGLPosition initGLPosition;
-            root->traverse(&initGLPosition);
-        }
+        if (success && shaderType == SH_VERTEX_SHADER && (compileOptions & SH_INIT_GL_POSITION))
+            initializeGLPosition(root);
 
 	if (success && (compileOptions & SH_UNFOLD_SHORT_CIRCUIT)) {
             UnfoldShortCircuitAST unfoldShortCircuit;
@@ -210,6 +208,9 @@ bool TCompiler::compile(const char* const shaderStrings[],
                     infoSink.info << "too many uniforms";
                 }
             }
+            if (success && shaderType == SH_VERTEX_SHADER &&
+                (compileOptions & SH_INIT_VARYINGS_WITHOUT_STATIC_USE))
+                initializeVaryingsWithoutStaticUse(root);
         }
 
         if (success && (compileOptions & SH_INTERMEDIATE_TREE))
@@ -400,6 +401,67 @@ bool TCompiler::enforcePackingRestrictions()
 {
     VariablePacker packer;
     return packer.CheckVariablesWithinPackingLimits(maxUniformVectors, uniforms);
+}
+
+void TCompiler::initializeGLPosition(TIntermNode* root)
+{
+    InitializeVariables::InitVariableInfoList variables;
+    InitializeVariables::InitVariableInfo var(
+        "gl_Position", TType(EbtFloat, EbpUndefined, EvqPosition, 4));
+    variables.push_back(var);
+    InitializeVariables initializer(variables);
+    root->traverse(&initializer);
+}
+
+void TCompiler::initializeVaryingsWithoutStaticUse(TIntermNode* root)
+{
+    InitializeVariables::InitVariableInfoList variables;
+    for (size_t ii = 0; ii < varyings.size(); ++ii) {
+        const TVariableInfo& varying = varyings[ii];
+        if (varying.staticUse)
+            continue;
+        unsigned char size = 0;
+        bool matrix = false;
+        switch (varying.type) {
+            case SH_FLOAT:
+                size = 1;
+                break;
+            case SH_FLOAT_VEC2:
+                size = 2;
+                break;
+            case SH_FLOAT_VEC3:
+                size = 3;
+                break;
+            case SH_FLOAT_VEC4:
+                size = 4;
+                break;
+            case SH_FLOAT_MAT2:
+                size = 2;
+                matrix = true;
+                break;
+            case SH_FLOAT_MAT3:
+                size = 3;
+                matrix = true;
+                break;
+            case SH_FLOAT_MAT4:
+                size = 4;
+                matrix = true;
+                break;
+            default:
+                ASSERT(false);
+        }
+        TType type(EbtFloat, EbpUndefined, EvqVaryingOut, size, matrix, varying.isArray);
+        TString name = varying.name.c_str();
+        if (varying.isArray) {
+            type.setArraySize(varying.size);
+            name = name.substr(0, name.find_first_of('['));
+        }
+
+        InitializeVariables::InitVariableInfo var(name, type);
+        variables.push_back(var);
+    }
+    InitializeVariables initializer(variables);
+    root->traverse(&initializer);        
 }
 
 void TCompiler::mapLongVariableNames(TIntermNode* root)
