@@ -127,11 +127,11 @@ GLenum InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl::M
 
     ID3D11InputLayout *inputLayout = NULL;
 
-    InputLayoutMap::iterator i = mInputLayoutMap.find(ilKey);
-    if (i != mInputLayoutMap.end())
+    InputLayoutMap::iterator keyIter = mInputLayoutMap.find(ilKey);
+    if (keyIter != mInputLayoutMap.end())
     {
-        inputLayout = i->second.inputLayout;
-        i->second.lastUsedTime = mCounter++;
+        inputLayout = keyIter->second.inputLayout;
+        keyIter->second.lastUsedTime = mCounter++;
     }
     else
     {
