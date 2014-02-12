@@ -22,7 +22,7 @@
 #define EXPECT_GL_ERROR(err) EXPECT_EQ(glGetError(), (err))
 #define EXPECT_GL_NO_ERROR() EXPECT_GL_ERROR(GL_NO_ERROR)
 
-#define ASSERT_GL_ERROR(err) EXPECT_EQ(glGetError(), (err))
+#define ASSERT_GL_ERROR(err) ASSERT_EQ(glGetError(), (err))
 #define ASSERT_GL_NO_ERROR() ASSERT_GL_ERROR(GL_NO_ERROR)
 
 #define EXPECT_PIXEL_EQ(x, y, r, g, b, a) \
