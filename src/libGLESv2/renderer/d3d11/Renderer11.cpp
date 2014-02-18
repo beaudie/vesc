@@ -184,6 +184,24 @@ EGLint Renderer11::initialize()
         }
     }
 
+    // In order to create a swap chain for an HWND owned by another process, DXGI 1.2 is required.
+    // The easiest way to check is to query for a IDXGIDevice2.
+    HWND hwnd = WindowFromDC(mDc);
+    DWORD currentProcessId = GetCurrentProcessId();
+    DWORD wndProcessId;
+    GetWindowThreadProcessId(hwnd, &wndProcessId);
+    if (currentProcessId != wndProcessId)
+    {
+        IDXGIDevice2 *dxgiDevice2 = NULL;
+        result = mDevice->QueryInterface(__uuidof(IDXGIDevice2), (void**)&dxgiDevice2);
+        if (FAILED(result))
+        {
+            ERR("DXGI 1.2 required to present to HWNDs owned by another process.\n");
+            return EGL_NOT_INITIALIZED;
+        }
+        SafeRelease(dxgiDevice2);
+    }
+
     IDXGIDevice *dxgiDevice = NULL;
     result = mDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
 

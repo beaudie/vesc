@@ -40,4 +40,5 @@
 #include <d3d9.h>
 #include <D3D11.h>
 #include <dxgi.h>
+#include <dxgi1_2.h>
 #include <D3Dcompiler.h>
