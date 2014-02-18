@@ -41,3 +41,4 @@
 #include <D3D11.h>
 #include <dxgi.h>
 #include <D3Dcompiler.h>
+#include <DXGI1_2.h>
