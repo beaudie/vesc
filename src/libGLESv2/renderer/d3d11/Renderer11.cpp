@@ -184,12 +184,14 @@ EGLint Renderer11::initialize()
         }
     }
 
-    IDXGIDevice *dxgiDevice = NULL;
-    result = mDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
+    // Query for the IDXGIDevice2 instead of IDXGIDevice because it is required to create
+    // swap chains for HWNDs that are owned by other processes.
+    IDXGIDevice2 *dxgiDevice = NULL;
+    result = mDevice->QueryInterface(__uuidof(IDXGIDevice2), (void**)&dxgiDevice);
 
     if (FAILED(result))
     {
-        ERR("Could not query DXGI device - aborting!\n");
+        ERR("Could not query DXGI 1.2 device - aborting!\n");
         return EGL_NOT_INITIALIZED;
     }
 
