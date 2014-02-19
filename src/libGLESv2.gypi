@@ -26,7 +26,7 @@
                 {
                     'target_name': 'libGLESv2',
                     'type': 'shared_library',
-                    'dependencies': [ 'translator', 'commit_id', 'copy_compiler_dll' ],
+                    'dependencies': [ 'translator_static', 'commit_id', 'copy_compiler_dll' ],
                     'include_dirs':
                     [
                         '.',
