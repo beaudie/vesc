@@ -11,11 +11,11 @@
             'dependencies': [ '../src/angle.gyp:*', ],
             'conditions':
             [
-                ['angle_build_samples==1',
+                ['angle_build_samples',
                 {
                     'dependencies': [ '../samples/samples.gyp:*', ],
                 }],
-                ['angle_build_tests==1',
+                ['angle_build_tests',
                 {
                     'dependencies': [ '../tests/tests.gyp:*', ],
                 }],

@@ -31,8 +31,8 @@ if __name__ == '__main__':
     gyp_cmd += ' --generator-output=' + generation_dir
     gyp_cmd += ' --format=' + gyp_generators
     gyp_cmd += ' -G msvs_version=' + msvs_version
-    gyp_cmd += ' -D angle_build_tests=' + ('1' if build_tests else '0')
-    gyp_cmd += ' -D angle_build_samples=' + ('1' if build_samples else '0')
+    gyp_cmd += ' -D angle_build_tests=' + ('true' if build_tests else 'false')
+    gyp_cmd += ' -D angle_build_samples=' + ('true' if build_samples else 'false')
     gyp_cmd += ' -D release_symbols=' + ('true' if release_symbols else 'false')
     gyp_cmd += ' ' + os.path.join(script_dir, 'all.gyp')
 
