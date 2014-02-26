@@ -36,7 +36,7 @@ bool ForLoopUnrollMarker::visitBinary(Visit, TIntermBinary *node)
                         break;
                       default:
                         UNREACHABLE();
-		    }
+                    }
                 }
             }
         }
