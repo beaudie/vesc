@@ -134,13 +134,13 @@
                 {
                     'target_name': 'particle_system',
                     'type': 'executable',
-                    'dependencies': [ 'es_util' ],
-                    'sources': [ '<!@(python <(angle_build_scripts_path)/enumerate_files.py gles2_book/ParticleSystem -types *.c *.h)' ],
+                    'dependencies': [ 'sample_util' ],
+                    'sources': [ '<!@(python <(angle_build_scripts_path)/enumerate_files.py angle/particle_system -types *.cpp *.h)' ],
                     'copies':
                     [
                         {
                             'destination': '<(PRODUCT_DIR)',
-                            'files': [ '<!@(python <(angle_build_scripts_path)/enumerate_files.py gles2_book/ParticleSystem -types *.tga)' ],
+                            'files': [ '<!@(python <(angle_build_scripts_path)/enumerate_files.py angle/particle_system -types *.tga)' ],
                         }
                     ]
                 },
