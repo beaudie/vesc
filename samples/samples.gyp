@@ -120,14 +120,14 @@
                 {
                     'target_name': 'multi_texture',
                     'type': 'executable',
-                    'dependencies': [ 'es_util' ],
-                    'sources': [ '<!@(python <(angle_build_scripts_path)/enumerate_files.py gles2_book/MultiTexture -types *.c *.h)' ],
+                    'dependencies': [ 'sample_util' ],
+                    'sources': [ '<!@(python <(angle_build_scripts_path)/enumerate_files.py angle/multi_texture -types *.cpp *.h)' ],
                     'copies':
                     [
                         {
                             'destination': '<(PRODUCT_DIR)',
-                            'files': [ '<!@(python <(angle_build_scripts_path)/enumerate_files.py gles2_book/MultiTexture -types *.tga)' ],
-                        }
+                            'files': [ '<!@(python <(angle_build_scripts_path)/enumerate_files.py angle/multi_texture -types *.tga)' ],
+                        },
                     ]
                 },
 
