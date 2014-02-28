@@ -3240,13 +3240,19 @@ void Renderer11::readTextureData(ID3D11Texture2D *texture, unsigned int subResou
         srcTex->AddRef();
     }
 
+    // cast out negative values
+    UINT minX = std::max(area.x, 0);
+    UINT minY = std::max(area.y, 0);
+    UINT maxX = std::max(area.x + area.width, 0);
+    UINT maxY = std::max(area.y + area.height, 0);
+
     D3D11_BOX srcBox;
-    srcBox.left = area.x;
-    srcBox.right = area.x + area.width;
-    srcBox.top = area.y;
-    srcBox.bottom = area.y + area.height;
-    srcBox.front = 0;
-    srcBox.back = 1;
+    srcBox.left   = std::min(minX, textureDesc.Width);
+    srcBox.right  = std::min(maxX, textureDesc.Width);
+    srcBox.top    = std::min(minY, textureDesc.Height);
+    srcBox.bottom = std::min(maxY, textureDesc.Height);
+    srcBox.front  = 0;
+    srcBox.back   = 1;
 
     mDeviceContext->CopySubresourceRegion(stagingTex, 0, 0, 0, 0, srcTex, subResource, &srcBox);
 
