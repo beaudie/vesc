@@ -106,8 +106,8 @@
                 {
                     'target_name': 'hello_triangle',
                     'type': 'executable',
-                    'dependencies': [ 'es_util' ],
-                    'sources': [ '<!@(python <(angle_build_scripts_path)/enumerate_files.py gles2_book/Hello_Triangle -types *.c *.h)' ],
+                    'dependencies': [ 'sample_util' ],
+                    'sources': [ '<!@(python <(angle_build_scripts_path)/enumerate_files.py angle/hello_triangle -types *.cpp *.h)' ],
                 },
 
                 {
