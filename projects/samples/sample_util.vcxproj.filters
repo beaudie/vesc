@@ -34,7 +34,13 @@
     <ClCompile Include="..\..\samples\angle\sample_util\randomutil.cpp">
       <Filter>angle\sample_util</Filter>
     </ClCompile>
+    <ClInclude Include="..\..\samples\angle\sample_util\Matrix.h">
+      <Filter>angle\sample_util</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\samples\angle\sample_util\Timer.h">
+      <Filter>angle\sample_util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\samples\angle\sample_util\TGALoader.h">
       <Filter>angle\sample_util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\samples\angle\sample_util\mouse.h">
@@ -73,9 +79,9 @@
     <ClInclude Include="..\..\samples\angle\sample_util\SampleApplication.h">
       <Filter>angle\sample_util</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\samples\angle\sample_util\TGALoader.h">
+    <ClCompile Include="..\..\samples\angle\sample_util\Matrix.cpp">
       <Filter>angle\sample_util</Filter>
-    </ClInclude>
+    </ClCompile>
     <ClCompile Include="..\..\samples\angle\sample_util\win32\Win32_pathutil.cpp">
       <Filter>angle\sample_util\win32</Filter>
     </ClCompile>

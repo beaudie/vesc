@@ -114,7 +114,9 @@
     <ClInclude Include="..\..\samples\angle\sample_util\Window.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\Vector.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\randomutil.h"/>
+    <ClInclude Include="..\..\samples\angle\sample_util\Matrix.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\Timer.h"/>
+    <ClInclude Include="..\..\samples\angle\sample_util\TGALoader.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\mouse.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\Event.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\textureutil.h"/>
@@ -122,7 +124,6 @@
     <ClInclude Include="..\..\samples\angle\sample_util\shaderutil.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\geometryutil.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\SampleApplication.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\TGALoader.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\win32\Win32Window.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\win32\Win32Timer.h"/>
   </ItemGroup>
@@ -135,6 +136,7 @@
     <ClCompile Include="..\..\samples\angle\sample_util\textureutil.cpp"/>
     <ClCompile Include="..\..\samples\angle\sample_util\Vector.cpp"/>
     <ClCompile Include="..\..\samples\angle\sample_util\TGALoader.cpp"/>
+    <ClCompile Include="..\..\samples\angle\sample_util\Matrix.cpp"/>
     <ClCompile Include="..\..\samples\angle\sample_util\win32\Win32_pathutil.cpp"/>
     <ClCompile Include="..\..\samples\angle\sample_util\win32\Win32Timer.cpp"/>
     <ClCompile Include="..\..\samples\angle\sample_util\win32\Win32Window.cpp"/>
