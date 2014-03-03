@@ -120,6 +120,7 @@
     <ClInclude Include="..\..\samples\angle\sample_util\textureutil.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\keyboard.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\shaderutil.h"/>
+    <ClInclude Include="..\..\samples\angle\sample_util\geometryutil.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\SampleApplication.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\TGALoader.h"/>
     <ClInclude Include="..\..\samples\angle\sample_util\win32\Win32Window.h"/>
@@ -129,6 +130,7 @@
     <ClCompile Include="..\..\samples\angle\sample_util\Window.cpp"/>
     <ClCompile Include="..\..\samples\angle\sample_util\shaderutil.cpp"/>
     <ClCompile Include="..\..\samples\angle\sample_util\randomutil.cpp"/>
+    <ClCompile Include="..\..\samples\angle\sample_util\geometryutil.cpp"/>
     <ClCompile Include="..\..\samples\angle\sample_util\SampleApplication.cpp"/>
     <ClCompile Include="..\..\samples\angle\sample_util\textureutil.cpp"/>
     <ClCompile Include="..\..\samples\angle\sample_util\Vector.cpp"/>
