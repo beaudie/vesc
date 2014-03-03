@@ -31,6 +31,9 @@
     <ClInclude Include="..\..\samples\angle\sample_util\randomutil.h">
       <Filter>angle\sample_util</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\samples\angle\sample_util\randomutil.cpp">
+      <Filter>angle\sample_util</Filter>
+    </ClCompile>
     <ClInclude Include="..\..\samples\angle\sample_util\Timer.h">
       <Filter>angle\sample_util</Filter>
     </ClInclude>
@@ -40,10 +43,13 @@
     <ClInclude Include="..\..\samples\angle\sample_util\Event.h">
       <Filter>angle\sample_util</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\samples\angle\sample_util\randomutil.cpp">
+    <ClInclude Include="..\..\samples\angle\sample_util\textureutil.h">
+      <Filter>angle\sample_util</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\samples\angle\sample_util\SampleApplication.cpp">
       <Filter>angle\sample_util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\samples\angle\sample_util\SampleApplication.cpp">
+    <ClCompile Include="..\..\samples\angle\sample_util\textureutil.cpp">
       <Filter>angle\sample_util</Filter>
     </ClCompile>
     <ClCompile Include="..\..\samples\angle\sample_util\Vector.cpp">
