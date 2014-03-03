@@ -17,6 +17,9 @@
 #include <stdlib.h>
 #include "esUtil.h"
 
+const char * vs=  "const vec4 position[4] = {0};"
+"  mat3 mult = position.z > 1817801.65535 ?";
+
 typedef struct
 {
    // Handle to a program object
@@ -98,7 +101,7 @@ int Init ( ESContext *esContext )
       "}                                                   \n";
 
    // Load the shaders and get a linked program object
-   userData->programObject = esLoadProgram ( vShaderStr, fShaderStr );
+   userData->programObject = esLoadProgram ( vs, fShaderStr );
 
    // Get the attribute locations
    userData->positionLoc = glGetAttribLocation ( userData->programObject, "a_position" );

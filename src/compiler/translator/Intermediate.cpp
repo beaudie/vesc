@@ -657,6 +657,36 @@ TIntermTyped* TIntermediate::addSelection(TIntermTyped* cond, TIntermTyped* true
 
 TIntermConstantUnion* TIntermediate::addConstantUnion(ConstantUnion* unionArrayPointer, const TType& t, const TSourceLoc& line)
 {
+    // constants without initializers enter main with undefined values.
+    // in this case we initialize the constant values to zero.
+    // http://crbug.com/348205
+    if (unionArrayPointer == NULL)
+    {
+        infoSink.info.message(EPrefixWarning, line, "Constant without initializer has undefined values.");
+
+        ConstantUnion zero;
+
+        switch (t.getBasicType()) {
+            case EbtInt:
+                zero.setIConst(0);
+                break;
+            case EbtBool:
+                zero.setBConst(false);
+                break;
+            case EbtFloat:
+                zero.setFConst(0.0f);
+                break;
+            default: UNREACHABLE();
+        }
+
+        unionArrayPointer = new ConstantUnion[t.getObjectSize()];
+
+        for (size_t elementIndex = 0; elementIndex < t.getObjectSize(); elementIndex++)
+        {
+            unionArrayPointer[elementIndex] = zero;
+        }
+    }
+
     TIntermConstantUnion* node = new TIntermConstantUnion(unionArrayPointer, t);
     node->setLine(line);
 
@@ -1127,6 +1157,7 @@ bool CompareStructure(const TType& leftNodeType, ConstantUnion* rightUnionArray,
 TIntermTyped* TIntermConstantUnion::fold(TOperator op, TIntermTyped* constantNode, TInfoSink& infoSink)
 {
     ConstantUnion *unionArray = getUnionArrayPointer();
+    assert(unionArray);
     size_t objectSize = getType().getObjectSize();
 
     if (constantNode) {  // binary operations
