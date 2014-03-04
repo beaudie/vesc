@@ -11,9 +11,29 @@
 #include "libGLESv2/main.h"
 #include "libGLESv2/renderer/d3d11/Renderer11.h"
 #include "libGLESv2/renderer/d3d11/formatutils11.h"
+#include "libGLESv2/Buffer.h"
 
 namespace rx
 {
+
+PackPixelsParams::PackPixelsParams()
+    : mFormat(GL_NONE),
+      mType(GL_NONE),
+      mOutputPitch(0),
+      mPackBuffer(NULL),
+      mOffset(0)
+{}
+
+PackPixelsParams::PackPixelsParams(const gl::Rectangle &area, GLenum format, GLenum type, GLuint outputPitch,
+                                   const gl::PixelPackState &pack, ptrdiff_t offset)
+    : mArea(area),
+      mFormat(format),
+      mType(type),
+      mOutputPitch(outputPitch),
+      mPackBuffer(pack.pixelBuffer.get()),
+      mPack(pack.alignment, pack.reverseRowOrder),
+      mOffset(offset)
+{}
 
 namespace gl_d3d11
 {
