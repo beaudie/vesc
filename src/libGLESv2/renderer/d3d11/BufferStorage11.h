@@ -10,6 +10,7 @@
 #define LIBGLESV2_RENDERER_BUFFERSTORAGE11_H_
 
 #include "libGLESv2/renderer/BufferStorage.h"
+#include "libGLESv2/angletypes.h"
 
 namespace rx
 {
@@ -24,6 +25,21 @@ enum BufferUsage
     BUFFER_USAGE_PIXEL_UNPACK,
     BUFFER_USAGE_PIXEL_PACK,
     BUFFER_USAGE_UNIFORM,
+};
+
+struct PackPixelsParams
+{
+    PackPixelsParams();
+    PackPixelsParams(const gl::Rectangle &area, GLenum format, GLenum type, GLuint outputPitch,
+                     const gl::PixelPackState &pack, ptrdiff_t offset);
+
+    gl::Rectangle mArea;
+    GLenum mFormat;
+    GLenum mType;
+    GLuint mOutputPitch;
+    gl::Buffer *mPackBuffer;
+    gl::PixelPackState mPack;
+    ptrdiff_t mOffset;
 };
 
 typedef size_t DataRevision;
