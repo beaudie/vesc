@@ -639,6 +639,11 @@ void __stdcall glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, 
                 return gl::error(GL_INVALID_OPERATION);
             }
 
+            if (buffer->mapped())
+            {
+                return gl::error(GL_INVALID_OPERATION);
+            }
+
             if ((size_t)size + offset > buffer->size())
             {
                 return gl::error(GL_INVALID_VALUE);
@@ -1578,6 +1583,12 @@ void __stdcall glDrawArrays(GLenum mode, GLint first, GLsizei count)
 
         gl::Context *context = gl::getNonLostContext();
 
+        // Check for mapped buffers
+        if (context->hasMappedBuffer(GL_ARRAY_BUFFER))
+        {
+            return gl::error(GL_INVALID_OPERATION);
+        }
+
         if (context)
         {
             context->drawArrays(mode, first, count, 0);
@@ -1603,6 +1614,12 @@ void __stdcall glDrawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei coun
         if (primcount > 0)
         {
             gl::Context *context = gl::getNonLostContext();
+
+            // Check for mapped buffers
+            if (context->hasMappedBuffer(GL_ARRAY_BUFFER))
+            {
+                return gl::error(GL_INVALID_OPERATION);
+            }
 
             if (context)
             {
@@ -1647,6 +1664,12 @@ void __stdcall glDrawElements(GLenum mode, GLsizei count, GLenum type, const GLv
                 return gl::error(GL_INVALID_ENUM);
             }
         
+            // Check for mapped buffers
+            if (context->hasMappedBuffer(GL_ARRAY_BUFFER) || context->hasMappedBuffer(GL_ELEMENT_ARRAY_BUFFER))
+            {
+                return gl::error(GL_INVALID_OPERATION);
+            }
+
             context->drawElements(mode, count, type, indices, 0);
         }
     }
@@ -1689,6 +1712,12 @@ void __stdcall glDrawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum t
                     return gl::error(GL_INVALID_ENUM);
                 }
             
+                // Check for mapped buffers
+                if (context->hasMappedBuffer(GL_ARRAY_BUFFER) || context->hasMappedBuffer(GL_ELEMENT_ARRAY_BUFFER))
+                {
+                    return gl::error(GL_INVALID_OPERATION);
+                }
+
                 context->drawElements(mode, count, type, indices, primcount);
             }
         }
@@ -6550,8 +6579,23 @@ GLboolean __stdcall glUnmapBuffer(GLenum target)
                 return gl::error(GL_INVALID_OPERATION, GL_FALSE);
             }
 
-            // glUnmapBuffer
-            UNIMPLEMENTED();
+            if (!gl::ValidBufferTarget(context, target))
+            {
+                return gl::error(GL_INVALID_ENUM, GL_FALSE);
+            }
+
+            gl::Buffer *buffer = context->getTargetBuffer(target);
+
+            if (buffer == NULL || !buffer->mapped())
+            {
+                return gl::error(GL_INVALID_OPERATION, GL_FALSE);
+            }
+
+            // TODO: detect if we had corruption. if so, throw an error and return false.
+
+            buffer->unmap();
+
+            return GL_TRUE;
         }
     }
     catch(std::bad_alloc&)
@@ -7002,8 +7046,72 @@ GLvoid* __stdcall glMapBufferRange(GLenum target, GLintptr offset, GLsizeiptr le
                 return gl::error(GL_INVALID_OPERATION, reinterpret_cast<GLvoid*>(NULL));
             }
 
-            // glMapBufferRange
-            UNIMPLEMENTED();
+            if (!gl::ValidBufferTarget(context, target))
+            {
+                return gl::error<GLvoid*>(GL_INVALID_ENUM, NULL);
+            }
+
+            if (offset < 0 || length < 0)
+            {
+                return gl::error<GLvoid*>(GL_INVALID_VALUE, NULL);
+            }
+
+            gl::Buffer *buffer = context->getTargetBuffer(target);
+
+            if (buffer == NULL)
+            {
+                return gl::error<GLvoid*>(GL_INVALID_OPERATION, NULL);
+            }
+
+            // Check for buffer overflow
+            size_t offsetSize = static_cast<size_t>(offset);
+            size_t lengthSize = static_cast<size_t>(length);
+
+            if (!rx::IsUnsignedAdditionSafe(offsetSize, lengthSize) ||
+                offsetSize + lengthSize > static_cast<size_t>(buffer->size()))
+            {
+                return gl::error<GLvoid*>(GL_INVALID_VALUE, NULL);
+            }
+
+            // Check for invalid bits in the mask
+            GLbitfield allAccessBits = GL_MAP_READ_BIT |
+                                       GL_MAP_WRITE_BIT |
+                                       GL_MAP_INVALIDATE_RANGE_BIT |
+                                       GL_MAP_INVALIDATE_BUFFER_BIT |
+                                       GL_MAP_FLUSH_EXPLICIT_BIT |
+                                       GL_MAP_UNSYNCHRONIZED_BIT;
+
+            if (access & ~(allAccessBits))
+            {
+                return gl::error<GLvoid*>(GL_INVALID_VALUE, NULL);
+            }
+
+            if (length == 0 || buffer->mapped())
+            {
+                return gl::error<GLvoid*>(GL_INVALID_OPERATION, NULL);
+            }
+
+            // Check for invalid bit combinations
+            if ((access & (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT)) == 0)
+            {
+                return gl::error<GLvoid*>(GL_INVALID_OPERATION, NULL);
+            }
+
+            GLbitfield writeOnlyBits = GL_MAP_INVALIDATE_RANGE_BIT |
+                                       GL_MAP_INVALIDATE_BUFFER_BIT |
+                                       GL_MAP_UNSYNCHRONIZED_BIT;
+
+            if ((access & GL_MAP_READ_BIT) != 0 && (access & writeOnlyBits) != 0)
+            {
+                return gl::error<GLvoid*>(GL_INVALID_OPERATION, NULL);
+            }
+
+            if ((access & GL_MAP_WRITE_BIT) == 0 && (access & GL_MAP_FLUSH_EXPLICIT_BIT) != 0)
+            {
+                return gl::error<GLvoid*>(GL_INVALID_OPERATION, NULL);
+            }
+
+            return buffer->mapRange(offset, length, access);
         }
     }
     catch(std::bad_alloc&)
@@ -7029,8 +7137,34 @@ void __stdcall glFlushMappedBufferRange(GLenum target, GLintptr offset, GLsizeip
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            // glFlushMappedBufferRange
-            UNIMPLEMENTED();
+            if (!gl::ValidBufferTarget(context, target))
+            {
+                return gl::error(GL_INVALID_ENUM);
+            }
+
+            gl::Buffer *buffer = context->getTargetBuffer(target);
+
+            if (buffer == NULL)
+            {
+                return gl::error(GL_INVALID_OPERATION);
+            }
+
+            if (!buffer->mapped() || (buffer->accessFlags() & GL_MAP_FLUSH_EXPLICIT_BIT) == 0)
+            {
+                return gl::error(GL_INVALID_OPERATION);
+            }
+
+            // Check for buffer overflow
+            size_t offsetSize = static_cast<size_t>(offset);
+            size_t lengthSize = static_cast<size_t>(length);
+
+            if (!rx::IsUnsignedAdditionSafe(offsetSize, lengthSize) ||
+                offsetSize + lengthSize > static_cast<size_t>(buffer->mapLength()))
+            {
+                return gl::error(GL_INVALID_VALUE);
+            }
+
+            // We do not support a non-trivial implementation of FlushMappedBufferRange
         }
     }
     catch(std::bad_alloc&)
@@ -8276,6 +8410,11 @@ void __stdcall glCopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintp
             gl::Buffer *writeBuffer = context->getTargetBuffer(writeTarget);
 
             if (!readBuffer || !writeBuffer)
+            {
+                return gl::error(GL_INVALID_OPERATION);
+            }
+
+            if (readBuffer->mapped() || writeBuffer->mapped())
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
