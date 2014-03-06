@@ -16,13 +16,7 @@
     <ClCompile Include="..\..\samples\gles2_book\Common\esShader.c">
       <Filter>gles2_book\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\samples\gles2_book\Common\esUtil.c">
-      <Filter>gles2_book\Common</Filter>
-    </ClCompile>
     <ClInclude Include="..\..\samples\gles2_book\Common\esUtil_win.h">
-      <Filter>gles2_book\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\samples\gles2_book\Common\esUtil.h">
       <Filter>gles2_book\Common</Filter>
     </ClInclude>
     <ClCompile Include="..\..\samples\gles2_book\Common\esTransform.c">
@@ -31,10 +25,16 @@
     <ClCompile Include="..\..\samples\gles2_book\Common\esShapes.c">
       <Filter>gles2_book\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\samples\gles2_book\Common\Win32\esUtil_win32.c">
-      <Filter>gles2_book\Common\Win32</Filter>
+    <ClInclude Include="..\..\samples\gles2_book\Common\esUtil.h">
+      <Filter>gles2_book\Common</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\samples\gles2_book\Common\esUtil.c">
+      <Filter>gles2_book\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\samples\gles2_book\Common\Win32\esUtil_TGA.c">
+      <Filter>gles2_book\Common\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\samples\gles2_book\Common\Win32\esUtil_win32.c">
       <Filter>gles2_book\Common\Win32</Filter>
     </ClCompile>
   </ItemGroup>

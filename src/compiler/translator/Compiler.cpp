@@ -178,13 +178,13 @@ bool TCompiler::compile(const char* const shaderStrings[],
 
         // Unroll for-loop markup needs to happen after validateLimitations pass.
         if (success && (compileOptions & SH_UNROLL_FOR_LOOP_WITH_INTEGER_INDEX))
-	{
-	    ForLoopUnrollMarker marker(ForLoopUnrollMarker::kIntegerIndex);
+        {
+            ForLoopUnrollMarker marker(ForLoopUnrollMarker::kIntegerIndex);
             root->traverse(&marker);
         }
         if (success && (compileOptions & SH_UNROLL_FOR_LOOP_WITH_SAMPLER_ARRAY_INDEX))
-	{
-	    ForLoopUnrollMarker marker(ForLoopUnrollMarker::kSamplerArrayIndex);
+        {
+            ForLoopUnrollMarker marker(ForLoopUnrollMarker::kSamplerArrayIndex);
             root->traverse(&marker);
             if (marker.samplerArrayIndexIsFloatLoopIndex())
             {

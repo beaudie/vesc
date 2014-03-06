@@ -10,11 +10,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\samples\samples.gyp"/>
-    <ClCompile Include="..\..\samples\gles2_book\ParticleSystem\ParticleSystem.c">
-      <Filter>gles2_book\ParticleSystem</Filter>
-    </ClCompile>
     <None Include="..\..\samples\gles2_book\ParticleSystem\smoke.tga">
       <Filter>gles2_book\ParticleSystem</Filter>
     </None>
+    <ClCompile Include="..\..\samples\gles2_book\ParticleSystem\ParticleSystem.c">
+      <Filter>gles2_book\ParticleSystem</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
