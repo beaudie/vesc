@@ -10,14 +10,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\samples\samples.gyp"/>
-    <None Include="..\..\samples\gles2_book\MultiTexture\lightmap.tga">
-      <Filter>gles2_book\MultiTexture</Filter>
-    </None>
     <None Include="..\..\samples\gles2_book\MultiTexture\basemap.tga">
       <Filter>gles2_book\MultiTexture</Filter>
     </None>
     <ClCompile Include="..\..\samples\gles2_book\MultiTexture\MultiTexture.c">
       <Filter>gles2_book\MultiTexture</Filter>
     </ClCompile>
+    <None Include="..\..\samples\gles2_book\MultiTexture\lightmap.tga">
+      <Filter>gles2_book\MultiTexture</Filter>
+    </None>
   </ItemGroup>
 </Project>

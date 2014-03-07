@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{D048EF6F-5312-AF41-8D8A-DB22CD8634E6}</ProjectGuid>
+    <ProjectGuid>{29816A63-009D-E997-FFE3-24ED7A139645}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>All</RootNamespace>
   </PropertyGroup>
@@ -27,7 +27,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros"/>
   <PropertyGroup>
-    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\..\third_party\python_26\</ExecutablePath>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\..\build\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\..\build\..\third_party\python_26\</ExecutablePath>
     <OutDir>$(SolutionDir)$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\samples\gles2_book\Common;..\..\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\build\..\samples\gles2_book\Common;..\..\build\..\include;..\..\build\C:\Program Files (x86)\Windows Kits\8.0\Include\shared;..\..\build\C:\Program Files (x86)\Windows Kits\8.0\Include\um;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <BufferSecurityCheck>true</BufferSecurityCheck>
@@ -45,7 +45,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <MinimalRebuild>false</MinimalRebuild>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;_WIN32_WINNT=0x0600;_WINDOWS;NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;WINVER=0x0600;_DEBUG;ANGLE_TRANSLATOR_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;_WIN32_WINNT=0x0600;_WINDOWS;NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;WINVER=0x0600;_DEBUG;COMPONENT_BUILD;ANGLE_TRANSLATOR_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -65,14 +65,14 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>..\..\samples\gles2_book\Common;..\..\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\build\..\samples\gles2_book\Common;..\..\build\..\include;..\..\build\C:\Program Files (x86)\Windows Kits\8.0\Include\shared;..\..\build\C:\Program Files (x86)\Windows Kits\8.0\Include\um;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>ANGLE_TRANSLATOR_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COMPONENT_BUILD;ANGLE_TRANSLATOR_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\samples\gles2_book\Common;..\..\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\build\..\samples\gles2_book\Common;..\..\build\..\include;..\..\build\C:\Program Files (x86)\Windows Kits\8.0\Include\shared;..\..\build\C:\Program Files (x86)\Windows Kits\8.0\Include\um;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -80,7 +80,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <MinimalRebuild>false</MinimalRebuild>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;_WIN32_WINNT=0x0600;_WINDOWS;NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;WINVER=0x0600;NDEBUG;ANGLE_TRANSLATOR_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_HAS_EXCEPTIONS=0;_WIN32_WINNT=0x0600;_WINDOWS;NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;WINVER=0x0600;NDEBUG;COMPONENT_BUILD;ANGLE_TRANSLATOR_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -100,93 +100,93 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>..\..\samples\gles2_book\Common;..\..\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\build\..\samples\gles2_book\Common;..\..\build\..\include;..\..\build\C:\Program Files (x86)\Windows Kits\8.0\Include\shared;..\..\build\C:\Program Files (x86)\Windows Kits\8.0\Include\um;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>ANGLE_TRANSLATOR_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COMPONENT_BUILD;ANGLE_TRANSLATOR_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\..\build\all.gyp"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\preprocessor.vcxproj">
-      <Project>{C7BAF548-697D-2DCB-9DF3-9D1506A7B444}</Project>
+    <ProjectReference Include="../src/preprocessor.vcxproj">
+      <Project>{3FA19AE1-643C-5BD0-696F-D66653BB4E53}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\src\translator.vcxproj">
-      <Project>{C15697F6-5057-016E-BD29-422971875679}</Project>
+    <ProjectReference Include="../src/translator.vcxproj">
+      <Project>{96AE19C6-7D3B-98C9-3CEB-34D2B9EECB6F}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\src\translator_static.vcxproj">
-      <Project>{19386E01-D811-FA3B-9F1E-122BB0C0E9F5}</Project>
+    <ProjectReference Include="../src/translator_static.vcxproj">
+      <Project>{8A80AF57-0AB8-9E13-8639-F96DA1A4CD29}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\src\commit_id.vcxproj">
-      <Project>{3B7F5656-177F-52EE-26B3-D6A75368D0A9}</Project>
+    <ProjectReference Include="../src/commit_id.vcxproj">
+      <Project>{9E358679-9CE6-7320-1EC4-CD6F7BDB7172}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\src\copy_compiler_dll.vcxproj">
-      <Project>{22DC02D5-1598-943C-13E1-82185B469F81}</Project>
+    <ProjectReference Include="../src/copy_compiler_dll.vcxproj">
+      <Project>{C9265FA2-590E-F626-1E60-FADB7BB16D07}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\src\libGLESv2.vcxproj">
-      <Project>{7FBD6F69-B9A4-69F1-A12B-8DACB3F8CD81}</Project>
+    <ProjectReference Include="../src/libGLESv2.vcxproj">
+      <Project>{46148263-A257-9411-8A77-34C58F2CFC87}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\src\libEGL.vcxproj">
-      <Project>{FBAEE4F6-562A-588F-01F9-72DCABB3B061}</Project>
+    <ProjectReference Include="../src/libEGL.vcxproj">
+      <Project>{C3470C3B-BB94-8AFB-162D-EAF33C31F052}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\samples\essl_to_glsl.vcxproj">
-      <Project>{293E74D1-544C-D368-02A0-52F61A4D0679}</Project>
+    <ProjectReference Include="../samples/essl_to_glsl.vcxproj">
+      <Project>{7A10267F-A327-29F7-9D85-4181338CC7BF}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\samples\essl_to_hlsl.vcxproj">
-      <Project>{B4D06330-EED1-6F99-BCA4-2F913908C38A}</Project>
+    <ProjectReference Include="../samples/essl_to_hlsl.vcxproj">
+      <Project>{7D1C9DB1-8239-BE54-601B-539247612323}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\samples\es_util.vcxproj">
-      <Project>{80E5C3D9-93C2-943E-176F-C9A903E27BC9}</Project>
+    <ProjectReference Include="../samples/es_util.vcxproj">
+      <Project>{B9C6E975-6D81-233B-1DAE-3A956BD37774}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\samples\hello_triangle.vcxproj">
-      <Project>{3F4D97A9-0809-E0E4-5A3F-B6ACB6EABB46}</Project>
+    <ProjectReference Include="../samples/hello_triangle.vcxproj">
+      <Project>{FA132877-259E-1445-C44A-4CA63138A3BC}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\samples\mip_map_2d.vcxproj">
-      <Project>{A6E86EB3-561F-9FAB-670F-EF23556344BE}</Project>
+    <ProjectReference Include="../samples/mip_map_2d.vcxproj">
+      <Project>{E62C5F22-85B5-24DA-D120-E7DD18A72900}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\samples\multi_texture.vcxproj">
-      <Project>{37E1BB43-65DC-A25A-042E-30B88E6C75A2}</Project>
+    <ProjectReference Include="../samples/multi_texture.vcxproj">
+      <Project>{7D744568-8573-4666-3034-8C3DE4DDC776}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\samples\particle_system.vcxproj">
-      <Project>{8C20B90A-FBCB-B63F-435A-3299A1C38B2C}</Project>
+    <ProjectReference Include="../samples/particle_system.vcxproj">
+      <Project>{3C53312C-D4A6-63C8-4EE4-7EAA5EDD7745}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\samples\simple_texture_2d.vcxproj">
-      <Project>{0BD6333E-E82C-7665-C386-CDA40096413D}</Project>
+    <ProjectReference Include="../samples/simple_texture_2d.vcxproj">
+      <Project>{C0185413-DCCE-8FDF-E238-8BE15E83CCE8}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\samples\simple_texture_cubemap.vcxproj">
-      <Project>{93B7F18A-947E-69A1-9CD8-D1E5144E792A}</Project>
+    <ProjectReference Include="../samples/simple_texture_cubemap.vcxproj">
+      <Project>{A310B19D-1628-00E0-49A1-0BAAC8419D07}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\samples\simple_vertex_shader.vcxproj">
-      <Project>{459E5678-892C-4EF9-6ED8-0D9E5272B4FF}</Project>
+    <ProjectReference Include="../samples/simple_vertex_shader.vcxproj">
+      <Project>{171E9EEA-B88D-A002-511A-4B3BE13A0971}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\samples\stencil_test.vcxproj">
-      <Project>{14B6D991-023A-E6E2-1D1B-257A7B7C910A}</Project>
+    <ProjectReference Include="../samples/stencil_test.vcxproj">
+      <Project>{FAB4F56D-7C30-C39B-B13E-AB0D29641E4F}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\samples\texture_wrap.vcxproj">
-      <Project>{46160987-0221-9E14-3B88-80F9FCFCFFBF}</Project>
+    <ProjectReference Include="../samples/texture_wrap.vcxproj">
+      <Project>{8C0CE0FD-0BE5-004D-BFA6-8B86880310CD}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\samples\post_sub_buffer.vcxproj">
-      <Project>{CBE3D362-43EA-60FC-D5AC-490039CA449A}</Project>
+    <ProjectReference Include="../samples/post_sub_buffer.vcxproj">
+      <Project>{E89037DF-87B9-333F-D83A-19259D33FDEA}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
