@@ -271,10 +271,18 @@ std::string DynamicHLSL::generateVaryingHLSL(FragmentShader *fragmentShader, con
                     std::string n = Str(varying->registerIndex + elementIndex * variableRows + row);
 
                     // matrices within structs are not transposed, hence we do not use the special struct prefix "rm"
-                    GLenum componentType = gl::UniformComponentType(transposedType);
-                    int columnCount = gl::VariableColumnCount(transposedType);
-                    std::string componentTypeString = gl_d3d::HLSLComponentTypeString(componentType, columnCount);
-                    std::string typeString = (varying->isStruct() ? "_" + varying->structName : componentTypeString);
+                    std::string typeString;
+
+                    if (varying->isStruct())
+                    {
+                        typeString = decorateVariable(varying->structName);
+                    }
+                    else
+                    {
+                        GLenum componentType = gl::UniformComponentType(transposedType);
+                        int columnCount = gl::VariableColumnCount(transposedType);
+                        typeString = gl_d3d::HLSLComponentTypeString(componentType, columnCount);
+                    }
                     varyingHLSL += typeString + " v" + n + " : " + varyingSemantic + n + ";\n";
                 }
             }
@@ -311,11 +319,11 @@ std::string DynamicHLSL::generateInputLayoutHLSL(const VertexFormat inputLayout[
                 structHLSL += "    " + gl_d3d::HLSLComponentTypeString(componentType, UniformComponentCount(shaderAttribute.type));
             }
 
-            structHLSL += " " + decorateAttribute(shaderAttribute.name) + " : TEXCOORD" + Str(semanticIndex) + ";\n";
+            structHLSL += " " + decorateVariable(shaderAttribute.name) + " : TEXCOORD" + Str(semanticIndex) + ";\n";
             semanticIndex += AttributeRegisterCount(shaderAttribute.type);
 
             // HLSL code for initialization
-            initHLSL += "    " + decorateAttribute(shaderAttribute.name) + " = ";
+            initHLSL += "    " + decorateVariable(shaderAttribute.name) + " = ";
 
             // Mismatched vertex attribute to vertex input may result in an undefined
             // data reinterpretation (eg for pure integer->float, float->pure integer)
@@ -327,7 +335,7 @@ std::string DynamicHLSL::generateInputLayoutHLSL(const VertexFormat inputLayout[
             }
             else
             {
-                initHLSL += "input." + decorateAttribute(shaderAttribute.name);
+                initHLSL += "input." + decorateVariable(shaderAttribute.name);
             }
 
             initHLSL += ";\n";
@@ -924,7 +932,7 @@ std::string DynamicHLSL::generatePointSpriteHLSL(int registers, const sh::Shader
 }
 
 // This method needs to match OutputHLSL::decorate
-std::string DynamicHLSL::decorateAttribute(const std::string &name)
+std::string DynamicHLSL::decorateVariable(const std::string &name)
 {
     if (name.compare(0, 3, "gl_") != 0 && name.compare(0, 3, "dx_") != 0)
     {
@@ -936,7 +944,7 @@ std::string DynamicHLSL::decorateAttribute(const std::string &name)
 
 std::string DynamicHLSL::generateAttributeConversionHLSL(const VertexFormat &vertexFormat, const sh::ShaderVariable &shaderAttrib) const
 {
-    std::string attribString = "input." + decorateAttribute(shaderAttrib.name);
+    std::string attribString = "input." + decorateVariable(shaderAttrib.name);
 
     // Matrix
     if (IsMatrixType(shaderAttrib.type))
