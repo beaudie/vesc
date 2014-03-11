@@ -50,7 +50,7 @@ bool IsValidFormat(GLenum format, GLuint clientVersion);
 bool IsValidType(GLenum type, GLuint clientVersion);
 
 bool IsValidFormatCombination(GLenum internalFormat, GLenum format, GLenum type, GLuint clientVersion);
-bool IsValidCopyTexImageCombination(GLenum textureInternalFormat, GLenum frameBufferInternalFormat, GLuint clientVersion);
+bool IsValidCopyTexImageCombination(GLenum textureInternalFormat, GLenum frameBufferInternalFormat, GLuint readBufferHandle, GLuint clientVersion);
 
 bool IsSizedInternalFormat(GLenum internalFormat, GLuint clientVersion);
 GLenum GetSizedInternalFormat(GLenum format, GLenum type, GLuint clientVersion);
