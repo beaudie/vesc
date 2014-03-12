@@ -286,6 +286,11 @@ bool ValidateES3CopyTexImageParameters(gl::Context *context, GLenum target, GLin
                                        bool isSubImage, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y,
                                        GLsizei width, GLsizei height, GLint border)
 {
+    if (!ValidTexture2DDestinationTarget(context, target))
+    {
+        return gl::error(GL_INVALID_ENUM, false);
+    }
+
     if (level < 0 || xoffset < 0 || yoffset < 0 || zoffset < 0 || width < 0 || height < 0)
     {
         return gl::error(GL_INVALID_VALUE, false);
