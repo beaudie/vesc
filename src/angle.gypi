@@ -45,6 +45,7 @@
                     {
                         'target_name': 'copy_compiler_dll',
                         'type': 'none',
+                        'includes': [ '../build/common_defines.gypi', ],
                         'sources': [ 'copy_compiler_dll.bat' ],
                         'actions':
                         [
@@ -73,6 +74,7 @@
                     {
                         'target_name': 'post_build',
                         'type': 'none',
+                        'includes': [ '../build/common_defines.gypi', ],
                         'dependencies': [ 'libGLESv2', 'libEGL' ],
                         'actions':
                         [
@@ -96,6 +98,7 @@
                     {
                         'target_name': 'commit_id',
                         'type': 'none',
+                        'includes': [ '../build/common_defines.gypi', ],
                         'actions':
                         [
                             {
