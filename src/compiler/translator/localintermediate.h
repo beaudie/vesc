@@ -45,7 +45,6 @@ public:
     TIntermBranch* addBranch(TOperator, TIntermTyped*, const TSourceLoc&);
     TIntermTyped* addSwizzle(TVectorFields&, const TSourceLoc&);
     bool postProcess(TIntermNode*);
-    void remove(TIntermNode*);
     void outputTree(TIntermNode*);
 
 private:

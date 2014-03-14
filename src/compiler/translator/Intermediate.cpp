@@ -15,7 +15,7 @@
 #include "compiler/translator/HashNames.h"
 #include "compiler/translator/localintermediate.h"
 #include "compiler/translator/QualifierAlive.h"
-#include "compiler/translator/RemoveTree.h"
+#include "compiler/translator/SymbolTable.h"
 
 bool CompareStructure(const TType& leftNodeType, ConstantUnion* rightUnionArray, ConstantUnion* leftUnionArray);
 
@@ -726,15 +726,6 @@ bool TIntermediate::postProcess(TIntermNode* root)
         aggRoot->setOp(EOpSequence);
 
     return true;
-}
-
-//
-// This deletes the tree.
-//
-void TIntermediate::remove(TIntermNode* root)
-{
-    if (root)
-        RemoveAllTreeNodes(root);
 }
 
 ////////////////////////////////////////////////////////////////

@@ -236,9 +236,6 @@ bool TCompiler::compile(const char* const shaderStrings[],
             translate(root);
     }
 
-    // Cleanup memory.
-    intermediate.remove(parseContext.treeRoot);
-
     return success;
 }
 
