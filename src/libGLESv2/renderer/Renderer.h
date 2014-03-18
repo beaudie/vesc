@@ -98,6 +98,7 @@ class Renderer
 {
   public:
     explicit Renderer(egl::Display *display);
+    virtual ~Renderer() {}
 
     virtual EGLint initialize() = 0;
     virtual bool resetDevice() = 0;
