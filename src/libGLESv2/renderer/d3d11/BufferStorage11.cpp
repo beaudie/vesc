@@ -72,6 +72,9 @@ class BufferStorage11::TypedBufferStorage11
   protected:
     TypedBufferStorage11(Renderer11 *renderer, BufferUsage usage);
 
+    virtual void *map(GLbitfield access) = 0;
+    virtual void unmap() = 0;
+
     Renderer11 *mRenderer;
     DataRevision mRevision;
     const BufferUsage mUsage;
@@ -94,6 +97,9 @@ class BufferStorage11::NativeBuffer11 : public BufferStorage11::TypedBufferStora
 
   private:
     ID3D11Buffer *mNativeBuffer;
+
+    virtual void *map(GLbitfield access);
+    virtual void unmap();
 
     static void fillBufferDesc(D3D11_BUFFER_DESC* bufferDesc, Renderer *renderer, BufferUsage usage, unsigned int bufferSize);
 };
@@ -351,32 +357,15 @@ bool BufferStorage11::isMapped() const
 void *BufferStorage11::map(GLbitfield access)
 {
     ASSERT(!mIsMapped);
-
-    D3D11_MAPPED_SUBRESOURCE mappedResource;
-    HRESULT result;
-    ID3D11DeviceContext *context = mRenderer->getDeviceContext();
-    D3D11_MAP d3dMapType = gl_d3d11::GetD3DMapTypeFromBits(access);
-    UINT d3dMapFlag = ((access & GL_MAP_UNSYNCHRONIZED_BIT) != 0 ? D3D11_MAP_FLAG_DO_NOT_WAIT : 0);
-    ID3D11Buffer *stagingBuffer = getStagingBuffer()->getNativeBuffer();
-
-    result = context->Map(stagingBuffer, 0, d3dMapType, d3dMapFlag, &mappedResource);
-    ASSERT(SUCCEEDED(result));
-
     mIsMapped = true;
-
-    return mappedResource.pData;
+    return getStagingBuffer()->map(access);
 }
 
 void BufferStorage11::unmap()
 {
     ASSERT(mIsMapped);
-
-    ID3D11DeviceContext *context = mRenderer->getDeviceContext();
-    ID3D11Buffer *stagingBuffer = getStagingBuffer()->getNativeBuffer();
-
-    context->Unmap(stagingBuffer, 0);
-
     mIsMapped = false;
+    getStagingBuffer()->unmap();
 }
 
 BufferStorage11::NativeBuffer11 *BufferStorage11::getStagingBuffer()
@@ -520,6 +509,28 @@ void BufferStorage11::NativeBuffer11::fillBufferDesc(D3D11_BUFFER_DESC* bufferDe
     default:
         UNREACHABLE();
     }
+}
+
+void *BufferStorage11::NativeBuffer11::map(GLbitfield access)
+{
+    ASSERT(mUsage == BUFFER_USAGE_STAGING);
+
+    D3D11_MAPPED_SUBRESOURCE mappedResource;
+    ID3D11DeviceContext *context = mRenderer->getDeviceContext();
+    D3D11_MAP d3dMapType = gl_d3d11::GetD3DMapTypeFromBits(access);
+    UINT d3dMapFlag = ((access & GL_MAP_UNSYNCHRONIZED_BIT) != 0 ? D3D11_MAP_FLAG_DO_NOT_WAIT : 0);
+
+    HRESULT result = context->Map(mNativeBuffer, 0, d3dMapType, d3dMapFlag, &mappedResource);
+    ASSERT(SUCCEEDED(result));
+
+    return mappedResource.pData;
+}
+
+void BufferStorage11::NativeBuffer11::unmap()
+{
+    ASSERT(mUsage == BUFFER_USAGE_STAGING);
+    ID3D11DeviceContext *context = mRenderer->getDeviceContext();
+    context->Unmap(mNativeBuffer, 0);
 }
 
 }
