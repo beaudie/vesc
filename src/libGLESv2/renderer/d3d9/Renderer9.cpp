@@ -3109,8 +3109,8 @@ bool Renderer9::blitRect(gl::Framebuffer *readFramebuffer, const gl::Rectangle &
     return true;
 }
 
-void Renderer9::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type,
-                           GLsizei outputPitch, bool packReverseRowOrder, GLint packAlignment, void* pixels)
+void Renderer9::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
+                           GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, void* pixels)
 {
     RenderTarget9 *renderTarget = NULL;
     IDirect3DSurface9 *surface = NULL;
@@ -3144,7 +3144,7 @@ void Renderer9::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsiz
 
     HRESULT result;
     IDirect3DSurface9 *systemSurface = NULL;
-    bool directToPixels = !packReverseRowOrder && packAlignment <= 4 && getShareHandleSupport() &&
+    bool directToPixels = !pack.reverseRowOrder && pack.alignment <= 4 && getShareHandleSupport() &&
                           x == 0 && y == 0 && UINT(width) == desc.Width && UINT(height) == desc.Height &&
                           desc.Format == D3DFMT_A8R8G8B8 && format == GL_BGRA_EXT && type == GL_UNSIGNED_BYTE;
     if (directToPixels)
@@ -3218,7 +3218,7 @@ void Renderer9::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsiz
 
     unsigned char *source;
     int inputPitch;
-    if (packReverseRowOrder)
+    if (pack.reverseRowOrder)
     {
         source = ((unsigned char*)lock.pBits) + lock.Pitch * (rect.bottom - rect.top - 1);
         inputPitch = -lock.Pitch;
