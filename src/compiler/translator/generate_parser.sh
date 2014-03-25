@@ -23,6 +23,5 @@ bison --no-lines --skeleton=yacc.c --defines=$output_header --output=$output_sou
 script_dir=$(dirname $0)
 
 # Generate Parser
-run_flex glslang
+#run_flex glslang
 run_bison glslang
-patch --silent --forward < 64bit-lexer-safety.patch
