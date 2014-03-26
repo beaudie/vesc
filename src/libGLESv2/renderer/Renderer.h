@@ -186,6 +186,7 @@ class Renderer
     virtual bool getOcclusionQuerySupport() const = 0;
     virtual bool getInstancingSupport() const = 0;
     virtual bool getTextureFilterAnisotropySupport() const = 0;
+    virtual bool getPBOSupport() const = 0;
     virtual float getTextureMaxAnisotropy() const = 0;
     virtual bool getShareHandleSupport() const = 0;
     virtual bool getDerivativeInstructionSupport() const = 0;
