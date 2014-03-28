@@ -41,7 +41,7 @@ class TextureStorage11 : public TextureStorage
     virtual void generateMipmap(int level) {};
     virtual void generateMipmap(int face, int level) {};
 
-    virtual int getLodOffset() const;
+    virtual int getTopLevel() const;
     virtual bool isRenderTarget() const;
     virtual bool isManaged() const;
     virtual int getBaseLevel() const;
@@ -71,7 +71,7 @@ class TextureStorage11 : public TextureStorage
     virtual unsigned int getTextureLevelDepth(int mipLevel) const = 0;
 
     Renderer11 *mRenderer;
-    int mLodOffset;
+    int mTopLevel;
     unsigned int mMipLevels;
     int mBaseLevel;
 
@@ -134,13 +134,13 @@ class TextureStorage11_2D : public TextureStorage11
     DISALLOW_COPY_AND_ASSIGN(TextureStorage11_2D);
 
     ID3D11Texture2D *mTexture;
-    ID3D11ShaderResourceView *mSRV;
-    ID3D11ShaderResourceView *mLevelSRVs[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
     RenderTarget11 *mRenderTarget[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 
     ID3D11Texture2D *mSwizzleTexture;
-    ID3D11ShaderResourceView *mSwizzleSRV;
     ID3D11RenderTargetView *mSwizzleRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
+
+    ID3D11ShaderResourceView *mSRV[2][2];   // [swizzle][mipmapping]
+    ID3D11ShaderResourceView *mLevelSRVs[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 };
 
 class TextureStorage11_Cube : public TextureStorage11
@@ -169,13 +169,13 @@ class TextureStorage11_Cube : public TextureStorage11
     DISALLOW_COPY_AND_ASSIGN(TextureStorage11_Cube);
 
     ID3D11Texture2D *mTexture;
-    ID3D11ShaderResourceView *mSRV;
-    ID3D11ShaderResourceView *mLevelSRVs[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
     RenderTarget11 *mRenderTarget[6][gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 
     ID3D11Texture2D *mSwizzleTexture;
-    ID3D11ShaderResourceView *mSwizzleSRV;
     ID3D11RenderTargetView *mSwizzleRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
+
+    ID3D11ShaderResourceView *mSRV[2][2];   // [swizzle][mipmapping]
+    ID3D11ShaderResourceView *mLevelSRVs[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 };
 
 class TextureStorage11_3D : public TextureStorage11
@@ -212,12 +212,11 @@ class TextureStorage11_3D : public TextureStorage11
     RenderTarget11 *mLevelRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 
     ID3D11Texture3D *mTexture;
-    ID3D11ShaderResourceView *mSRV;
-    ID3D11ShaderResourceView *mLevelSRVs[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
-
     ID3D11Texture3D *mSwizzleTexture;
-    ID3D11ShaderResourceView *mSwizzleSRV;
     ID3D11RenderTargetView *mSwizzleRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
+
+    ID3D11ShaderResourceView *mSRV[2][2];   // [swizzle][mipmapping]
+    ID3D11ShaderResourceView *mLevelSRVs[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 };
 
 class TextureStorage11_2DArray : public TextureStorage11
@@ -251,12 +250,12 @@ class TextureStorage11_2DArray : public TextureStorage11
     RenderTargetMap mRenderTargets;
 
     ID3D11Texture2D *mTexture;
-    ID3D11ShaderResourceView *mSRV;
-    ID3D11ShaderResourceView *mLevelSRVs[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 
     ID3D11Texture2D *mSwizzleTexture;
-    ID3D11ShaderResourceView *mSwizzleSRV;
     ID3D11RenderTargetView *mSwizzleRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
+
+    ID3D11ShaderResourceView *mSRV[2][2];   // [swizzle][mipmapping]
+    ID3D11ShaderResourceView *mLevelSRVs[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 };
 
 }
