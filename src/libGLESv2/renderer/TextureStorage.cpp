@@ -57,11 +57,6 @@ int TextureStorageInterface::getTopLevel() const
     return mInstance->getTopLevel();
 }
 
-int TextureStorageInterface::getBaseLevel() const
-{
-    return mInstance->getBaseLevel();
-}
-
 int TextureStorageInterface::getMaxLevel() const
 {
     return mInstance->getMaxLevel();

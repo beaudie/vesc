@@ -84,14 +84,9 @@ int TextureStorage9::getTopLevel() const
     return mTopLevel;
 }
 
-int TextureStorage9::getBaseLevel() const
-{
-    return mBaseLevel;
-}
-
 int TextureStorage9::getMaxLevel() const
 {
-    return getBaseLevel() + (getBaseTexture() ? getBaseTexture()->GetLevelCount() - getTopLevel() : 0);
+    return getBaseTexture() ? (getBaseTexture()->GetLevelCount() - getTopLevel()) : 0;
 }
 
 TextureStorage9_2D::TextureStorage9_2D(Renderer *renderer, SwapChain9 *swapchain)

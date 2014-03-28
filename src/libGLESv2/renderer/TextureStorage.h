@@ -28,10 +28,9 @@ class TextureStorage
     virtual int getTopLevel() const = 0;
     virtual bool isRenderTarget() const = 0;
     virtual bool isManaged() const = 0;
-    virtual int getBaseLevel() const = 0;
     virtual int getMaxLevel() const = 0;
 
-    int levelCount() const { return getMaxLevel() - getBaseLevel(); }
+    int levelCount() const { return getMaxLevel(); }
 
     virtual RenderTarget *getRenderTarget(int level) = 0;
     virtual RenderTarget *getRenderTargetFace(GLenum faceTarget, int level) = 0;
@@ -57,7 +56,6 @@ class TextureStorageInterface
     virtual int getTopLevel() const;
     virtual bool isRenderTarget() const;
     virtual bool isManaged() const;
-    virtual int getBaseLevel() const;
     virtual int getMaxLevel() const;
 
   protected:

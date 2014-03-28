@@ -1046,7 +1046,7 @@ rx::RenderTarget *Texture2D::getDepthSencil(GLint level)
 
 bool Texture2D::isValidLevel(int level) const
 {
-    return (mTexStorage ? (level >= mTexStorage->getBaseLevel() && level < mTexStorage->getMaxLevel()) : false);
+    return (mTexStorage ? (level >= 0 && level < mTexStorage->getMaxLevel()) : false);
 }
 
 TextureCubeMap::TextureCubeMap(rx::Renderer *renderer, GLuint id) : Texture(renderer, id, GL_TEXTURE_CUBE_MAP)
@@ -1699,7 +1699,7 @@ rx::RenderTarget *TextureCubeMap::getDepthStencil(GLenum target, GLint level)
 
 bool TextureCubeMap::isValidFaceLevel(int faceIndex, int level) const
 {
-    return (mTexStorage ? (level >= mTexStorage->getBaseLevel() && level < mTexStorage->getMaxLevel()) : 0);
+    return (mTexStorage ? (level >= 0 && level < mTexStorage->getMaxLevel()) : 0);
 }
 
 Texture3D::Texture3D(rx::Renderer *renderer, GLuint id) : Texture(renderer, id, GL_TEXTURE_3D)
@@ -2039,7 +2039,7 @@ unsigned int Texture3D::getRenderTargetSerial(GLint level, GLint layer)
 
 bool Texture3D::isValidLevel(int level) const
 {
-    return (mTexStorage ? (level >= mTexStorage->getBaseLevel() && level < mTexStorage->getMaxLevel()) : 0);
+    return (mTexStorage ? (level >= 0 && level < mTexStorage->getMaxLevel()) : 0);
 }
 
 void Texture3D::initializeStorage(bool renderTarget)
@@ -2593,7 +2593,7 @@ unsigned int Texture2DArray::getRenderTargetSerial(GLint level, GLint layer)
 
 bool Texture2DArray::isValidLevel(int level) const
 {
-    return (mTexStorage ? (level >= mTexStorage->getBaseLevel() && level < mTexStorage->getMaxLevel()) : 0);
+    return (mTexStorage ? (level >= 0 && level < mTexStorage->getMaxLevel()) : 0);
 }
 
 void Texture2DArray::initializeStorage(bool renderTarget)

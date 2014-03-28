@@ -2805,7 +2805,7 @@ bool Renderer9::copyToRenderTarget(TextureStorageInterface2D *dest, TextureStora
         TextureStorage9_2D *source9 = TextureStorage9_2D::makeTextureStorage9_2D(source->getStorageInstance());
         TextureStorage9_2D *dest9 = TextureStorage9_2D::makeTextureStorage9_2D(dest->getStorageInstance());
 
-        int levels = source9->getMaxLevel() - source9->getBaseLevel();
+        int levels = source9->getMaxLevel();
         for (int i = 0; i < levels; ++i)
         {
             IDirect3DSurface9 *srcSurf = source9->getSurfaceLevel(i, false);
@@ -2834,7 +2834,7 @@ bool Renderer9::copyToRenderTarget(TextureStorageInterfaceCube *dest, TextureSto
     {
         TextureStorage9_Cube *source9 = TextureStorage9_Cube::makeTextureStorage9_Cube(source->getStorageInstance());
         TextureStorage9_Cube *dest9 = TextureStorage9_Cube::makeTextureStorage9_Cube(dest->getStorageInstance());
-        int levels = source9->getMaxLevel() - source9->getBaseLevel();
+        int levels = source9->getMaxLevel();
         for (int f = 0; f < 6; f++)
         {
             for (int i = 0; i < levels; i++)

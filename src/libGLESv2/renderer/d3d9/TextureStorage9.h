@@ -43,7 +43,6 @@ class TextureStorage9 : public TextureStorage
     virtual int getTopLevel() const;
     virtual bool isRenderTarget() const;
     virtual bool isManaged() const;
-    virtual int getBaseLevel() const;
     virtual int getMaxLevel() const;
 
   protected:

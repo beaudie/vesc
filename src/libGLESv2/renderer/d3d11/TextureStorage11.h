@@ -44,7 +44,6 @@ class TextureStorage11 : public TextureStorage
     virtual int getTopLevel() const;
     virtual bool isRenderTarget() const;
     virtual bool isManaged() const;
-    virtual int getBaseLevel() const;
     virtual int getMaxLevel() const;
     UINT getSubresourceIndex(int mipLevel, int layerTarget) const;
 
