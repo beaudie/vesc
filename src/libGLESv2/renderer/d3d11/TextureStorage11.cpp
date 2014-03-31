@@ -315,7 +315,7 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer *renderer, SwapChain11 *swapch
     mDepthStencilFormat = DXGI_FORMAT_UNKNOWN;
 }
 
-TextureStorage11_2D::TextureStorage11_2D(Renderer *renderer, int maxLevel, GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height)
+TextureStorage11_2D::TextureStorage11_2D(Renderer *renderer, GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, bool mipmaps)
     : TextureStorage11(renderer, GetTextureBindFlags(internalformat, renderer->getCurrentClientVersion(), renderTarget))
 {
     mTexture = NULL;
@@ -632,7 +632,7 @@ unsigned int TextureStorage11_2D::getTextureLevelDepth(int mipLevel) const
     return 1;
 }
 
-TextureStorage11_Cube::TextureStorage11_Cube(Renderer *renderer, int maxLevel, GLenum internalformat, bool renderTarget, int size)
+TextureStorage11_Cube::TextureStorage11_Cube(Renderer *renderer, GLenum internalformat, bool renderTarget, int size, bool mipmaps)
     : TextureStorage11(renderer, GetTextureBindFlags(internalformat, renderer->getCurrentClientVersion(), renderTarget))
 {
     mTexture = NULL;
@@ -986,8 +986,8 @@ unsigned int TextureStorage11_Cube::getTextureLevelDepth(int mipLevel) const
     return 6;
 }
 
-TextureStorage11_3D::TextureStorage11_3D(Renderer *renderer, int maxLevel, GLenum internalformat, bool renderTarget,
-                                         GLsizei width, GLsizei height, GLsizei depth)
+TextureStorage11_3D::TextureStorage11_3D(Renderer *renderer, GLenum internalformat, bool renderTarget,
+                                         GLsizei width, GLsizei height, GLsizei depth, bool mipmaps)
     : TextureStorage11(renderer, GetTextureBindFlags(internalformat, renderer->getCurrentClientVersion(), renderTarget))
 {
     mTexture = NULL;
@@ -1339,8 +1339,8 @@ unsigned int TextureStorage11_3D::getTextureLevelDepth(int mipLevel) const
 }
 
 
-TextureStorage11_2DArray::TextureStorage11_2DArray(Renderer *renderer, int maxLevel, GLenum internalformat, bool renderTarget,
-                                                   GLsizei width, GLsizei height, GLsizei depth)
+TextureStorage11_2DArray::TextureStorage11_2DArray(Renderer *renderer, GLenum internalformat, bool renderTarget,
+                                                   GLsizei width, GLsizei height, GLsizei depth, bool mipmaps)
     : TextureStorage11(renderer, GetTextureBindFlags(internalformat, renderer->getCurrentClientVersion(), renderTarget))
 {
     mTexture = NULL;

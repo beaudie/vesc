@@ -98,7 +98,7 @@ TextureStorage9_2D::TextureStorage9_2D(Renderer *renderer, SwapChain9 *swapchain
     initializeRenderTarget();
 }
 
-TextureStorage9_2D::TextureStorage9_2D(Renderer *renderer, int maxLevel, GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height)
+TextureStorage9_2D::TextureStorage9_2D(Renderer *renderer, GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, bool mipmaps)
     : TextureStorage9(renderer, GetTextureUsage(internalformat, Renderer9::makeRenderer9(renderer), renderTarget))
 {
     mTexture = NULL;
@@ -110,7 +110,7 @@ TextureStorage9_2D::TextureStorage9_2D(Renderer *renderer, int maxLevel, GLenum 
         IDirect3DDevice9 *device = mRenderer->getDevice();
         D3DFORMAT format = gl_d3d9::GetTextureFormat(internalformat, mRenderer);
         d3d9::MakeValidSize(false, format, &width, &height, &mTopLevel);
-        UINT creationLevels = (maxLevel ? maxLevel + mTopLevel : 0);
+        UINT creationLevels = mipmaps ? 0 : 1;
 
         HRESULT result = device->CreateTexture(width, height, creationLevels, getUsage(), format, getPool(), &mTexture, NULL);
 
@@ -193,7 +193,7 @@ void TextureStorage9_2D::initializeRenderTarget()
     }
 }
 
-TextureStorage9_Cube::TextureStorage9_Cube(Renderer *renderer, int maxLevel, GLenum internalformat, bool renderTarget, int size)
+TextureStorage9_Cube::TextureStorage9_Cube(Renderer *renderer, GLenum internalformat, bool renderTarget, int size, bool mipmaps)
     : TextureStorage9(renderer, GetTextureUsage(internalformat, Renderer9::makeRenderer9(renderer), renderTarget))
 {
     mTexture = NULL;
@@ -210,7 +210,7 @@ TextureStorage9_Cube::TextureStorage9_Cube(Renderer *renderer, int maxLevel, GLe
         int height = size;
         D3DFORMAT format = gl_d3d9::GetTextureFormat(internalformat, mRenderer);
         d3d9::MakeValidSize(false, format, &size, &height, &mTopLevel);
-        UINT creationLevels = (maxLevel ? maxLevel + mTopLevel : 0);
+        UINT creationLevels = mipmaps ? 0 : 1;
 
         HRESULT result = device->CreateCubeTexture(size, creationLevels, getUsage(), format, getPool(), &mTexture, NULL);
 
