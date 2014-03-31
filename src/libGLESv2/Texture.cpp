@@ -400,7 +400,7 @@ GLint Texture::creationLevels(GLsizei width, GLsizei height, GLsizei depth) cons
     if ((isPow2(width) && isPow2(height) && isPow2(depth)) || mRenderer->getNonPower2TextureSupport())
     {
         // Maximum number of levels
-        return static_cast<GLint>(log2(std::max(std::max(width, height), depth)));
+        return static_cast<GLint>(log2(std::max(std::max(width, height), depth)) + 1);
     }
     else
     {
