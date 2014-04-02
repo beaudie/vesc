@@ -9,7 +9,6 @@
         'angle_post_build_script%': 0,
         'angle_relative_src_path%': '.',
     },
-
     'includes':
     [
         'compiler.gypi',
