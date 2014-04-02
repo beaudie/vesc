@@ -169,7 +169,7 @@ class ProgramBinary : public RefCountObject
     void initAttributesByLayout();
     void sortAttributesByLayout(rx::TranslatedAttribute attributes[gl::MAX_VERTEX_ATTRIBS], int sortedSemanticIndices[MAX_VERTEX_ATTRIBS]) const;
 
-    const UniformArray &getUniforms() const { return mUniforms; }
+    const std::vector<LinkedUniform*> &getUniforms() const { return mUniforms; }
     const rx::UniformStorage &getVertexUniformStorage() const { return *mVertexUniformStorage; }
     const rx::UniformStorage &getFragmentUniformStorage() const { return *mFragmentUniformStorage; }
 
@@ -179,25 +179,25 @@ class ProgramBinary : public RefCountObject
     bool linkVaryings(InfoLog &infoLog, FragmentShader *fragmentShader, VertexShader *vertexShader);
     bool linkAttributes(InfoLog &infoLog, const AttributeBindings &attributeBindings, FragmentShader *fragmentShader, VertexShader *vertexShader);
 
-    typedef sh::BlockMemberInfoArray::const_iterator BlockInfoItr;
+    typedef gl::BlockMemberInfoArray::const_iterator BlockInfoItr;
 
     template <class ShaderVarType>
     bool linkValidateFields(InfoLog &infoLog, const std::string &varName, const ShaderVarType &vertexVar, const ShaderVarType &fragmentVar);
-    bool linkValidateVariablesBase(InfoLog &infoLog, const std::string &variableName, const sh::ShaderVariable &vertexVariable, const sh::ShaderVariable &fragmentVariable, bool validatePrecision);
+    bool linkValidateVariablesBase(InfoLog &infoLog, const std::string &variableName, const gl::ShaderVariable &vertexVariable, const gl::ShaderVariable &fragmentVariable, bool validatePrecision);
 
-    bool linkValidateVariables(InfoLog &infoLog, const std::string &uniformName, const sh::Uniform &vertexUniform, const sh::Uniform &fragmentUniform);
-    bool linkValidateVariables(InfoLog &infoLog, const std::string &varyingName, const sh::Varying &vertexVarying, const sh::Varying &fragmentVarying);
-    bool linkValidateVariables(InfoLog &infoLog, const std::string &uniformName, const sh::InterfaceBlockField &vertexUniform, const sh::InterfaceBlockField &fragmentUniform);
-    bool linkUniforms(InfoLog &infoLog, const std::vector<sh::Uniform> &vertexUniforms, const std::vector<sh::Uniform> &fragmentUniforms);
-    bool defineUniform(GLenum shader, const sh::Uniform &constant, InfoLog &infoLog);
-    bool areMatchingInterfaceBlocks(InfoLog &infoLog, const sh::InterfaceBlock &vertexInterfaceBlock, const sh::InterfaceBlock &fragmentInterfaceBlock);
-    bool linkUniformBlocks(InfoLog &infoLog, const sh::ActiveInterfaceBlocks &vertexUniformBlocks, const sh::ActiveInterfaceBlocks &fragmentUniformBlocks);
+    bool linkValidateVariables(InfoLog &infoLog, const std::string &uniformName, const gl::Uniform &vertexUniform, const gl::Uniform &fragmentUniform);
+    bool linkValidateVariables(InfoLog &infoLog, const std::string &varyingName, const gl::Varying &vertexVarying, const gl::Varying &fragmentVarying);
+    bool linkValidateVariables(InfoLog &infoLog, const std::string &uniformName, const gl::InterfaceBlockField &vertexUniform, const gl::InterfaceBlockField &fragmentUniform);
+    bool linkUniforms(InfoLog &infoLog, const std::vector<gl::Uniform> &vertexUniforms, const std::vector<gl::Uniform> &fragmentUniforms);
+    bool defineUniform(GLenum shader, const gl::Uniform &constant, InfoLog &infoLog);
+    bool areMatchingInterfaceBlocks(InfoLog &infoLog, const gl::InterfaceBlock &vertexInterfaceBlock, const gl::InterfaceBlock &fragmentInterfaceBlock);
+    bool linkUniformBlocks(InfoLog &infoLog, const std::vector<gl::InterfaceBlock> &vertexUniformBlocks, const std::vector<gl::InterfaceBlock> &fragmentUniformBlocks);
     bool gatherTransformFeedbackLinkedVaryings(InfoLog &infoLog, const std::vector<LinkedVarying> &linkedVaryings,
                                                const std::vector<std::string> &transformFeedbackVaryingNames,
                                                GLenum transformFeedbackBufferMode,
                                                std::vector<LinkedVarying> *outTransformFeedbackLinkedVaryings) const;
-    void defineUniformBlockMembers(const std::vector<sh::InterfaceBlockField> &fields, const std::string &prefix, int blockIndex, BlockInfoItr *blockInfoItr, std::vector<unsigned int> *blockUniformIndexes);
-    bool defineUniformBlock(InfoLog &infoLog, GLenum shader, const sh::InterfaceBlock &interfaceBlock);
+    void defineUniformBlockMembers(const std::vector<gl::InterfaceBlockField> &fields, const std::string &prefix, int blockIndex, BlockInfoItr *blockInfoItr, std::vector<unsigned int> *blockUniformIndexes);
+    bool defineUniformBlock(InfoLog &infoLog, GLenum shader, const gl::InterfaceBlock &interfaceBlock);
     bool assignUniformBlockRegister(InfoLog &infoLog, UniformBlock *uniformBlock, GLenum shader, unsigned int registerIndex);
     void defineOutputVariables(FragmentShader *fragmentShader);
     void initializeUniformStorage();
@@ -240,8 +240,8 @@ class ProgramBinary : public RefCountObject
     rx::ShaderExecutable *mGeometryExecutable;
     rx::ShaderExecutable *mPixelExecutable;
 
-    sh::Attribute mLinkedAttribute[MAX_VERTEX_ATTRIBS];
-    sh::Attribute mShaderAttributes[MAX_VERTEX_ATTRIBS];
+    gl::Attribute mLinkedAttribute[MAX_VERTEX_ATTRIBS];
+    gl::Attribute mShaderAttributes[MAX_VERTEX_ATTRIBS];
     int mSemanticIndex[MAX_VERTEX_ATTRIBS];
     int mAttributesByLayout[MAX_VERTEX_ATTRIBS];
 
@@ -264,8 +264,8 @@ class ProgramBinary : public RefCountObject
     bool mUsesPointSize;
     int mShaderVersion;
 
-    UniformArray mUniforms;
-    UniformBlockArray mUniformBlocks;
+    std::vector<LinkedUniform*> mUniforms;
+    std::vector<UniformBlock*> mUniformBlocks;
     std::vector<VariableLocation> mUniformIndex;
     std::map<int, VariableLocation> mOutputVariables;
     rx::UniformStorage *mVertexUniformStorage;
