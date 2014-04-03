@@ -131,6 +131,8 @@ class TextureStorage11_2D : public TextureStorage11
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureStorage11_2D);
 
+    void createSRV(int baseLevel, int mipLevels, DXGI_FORMAT format, ID3D11Resource *texture, ID3D11ShaderResourceView **SRV);
+
     ID3D11Texture2D *mTexture;
     RenderTarget11 *mRenderTarget[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 
@@ -165,6 +167,8 @@ class TextureStorage11_Cube : public TextureStorage11
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureStorage11_Cube);
+
+    void createSRV(bool array, int baseLevel, int mipLevels, DXGI_FORMAT format, ID3D11Resource *texture, ID3D11ShaderResourceView **SRV);
 
     ID3D11Texture2D *mTexture;
     RenderTarget11 *mRenderTarget[6][gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
@@ -202,6 +206,8 @@ class TextureStorage11_3D : public TextureStorage11
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureStorage11_3D);
+
+    void createSRV(int baseLevel, int mipLevels, DXGI_FORMAT format, ID3D11Resource *texture, ID3D11ShaderResourceView **SRV);
 
     typedef std::pair<int, int> LevelLayerKey;
     typedef std::map<LevelLayerKey, RenderTarget11*> RenderTargetMap;
@@ -242,6 +248,8 @@ class TextureStorage11_2DArray : public TextureStorage11
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureStorage11_2DArray);
+
+    void createSRV(int baseLevel, int mipLevels, DXGI_FORMAT format, ID3D11Resource *texture, ID3D11ShaderResourceView **SRV);
 
     typedef std::pair<int, int> LevelLayerKey;
     typedef std::map<LevelLayerKey, RenderTarget11*> RenderTargetMap;
