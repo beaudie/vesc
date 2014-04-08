@@ -104,6 +104,26 @@ private:
     static void fillBufferDesc(D3D11_BUFFER_DESC* bufferDesc, Renderer *renderer, BufferUsage usage, unsigned int bufferSize);
 };
 
+// Pack storage represents internal storage for pack buffers. We implement pack buffers
+// as CPU memory, tied to a staging texture, for asynchronous texture readback.
+class BufferStorage11::PackStorage11 : public BufferStorage11::TypedBufferStorage11
+{
+  public:
+    PackStorage11(Renderer11 *renderer);
+    ~PackStorage11();
+
+    virtual bool copyFromStorage(TypedBufferStorage11 *source, size_t sourceOffset,
+                                 size_t size, size_t destOffset);
+    virtual void resize(size_t size, bool preserveData);
+
+    virtual void *map(GLbitfield access);
+    virtual void unmap();
+
+  private:
+    ID3D11Texture2D *mStagingTexture;
+    unsigned char *mMemoryBuffer;
+};
+
 BufferStorage11::BufferStorage11(Renderer11 *renderer)
     : mRenderer(renderer),
       mIsMapped(false),
@@ -531,6 +551,47 @@ void BufferStorage11::NativeBuffer11::unmap()
     ASSERT(mUsage == BUFFER_USAGE_STAGING);
     ID3D11DeviceContext *context = mRenderer->getDeviceContext();
     context->Unmap(mNativeBuffer, 0);
+}
+
+BufferStorage11::PackStorage11::PackStorage11(Renderer11 *renderer)
+    : TypedBufferStorage11(renderer, BUFFER_USAGE_PIXEL_PACK),
+      mStagingTexture(NULL),
+      mMemoryBuffer(NULL)
+{
+}
+
+BufferStorage11::PackStorage11::~PackStorage11()
+{
+    SafeRelease(mStagingTexture);
+
+    if (mMemoryBuffer != NULL)
+    {
+        delete [] mMemoryBuffer;
+        mMemoryBuffer = NULL;
+    }
+}
+
+bool BufferStorage11::PackStorage11::copyFromStorage(TypedBufferStorage11 *source, size_t sourceOffset,
+                                                     size_t size, size_t destOffset)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+void BufferStorage11::PackStorage11::resize(size_t size, bool preserveData)
+{
+    UNIMPLEMENTED();
+}
+
+void *BufferStorage11::PackStorage11::map(GLbitfield access)
+{
+    UNIMPLEMENTED();
+    return NULL;
+}
+
+void BufferStorage11::PackStorage11::unmap()
+{
+    UNIMPLEMENTED();
 }
 
 }
