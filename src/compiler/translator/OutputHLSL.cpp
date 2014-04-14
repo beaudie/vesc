@@ -56,9 +56,10 @@ TString OutputHLSL::TextureFunction::name() const
     switch(method)
     {
       case IMPLICIT:                  break;
-      case BIAS:                      break;
+      case BIAS:                      break;   // Extra parameter makes the signature unique
       case LOD:      name += "Lod";   break;
       case LOD0:     name += "Lod0";  break;
+      case LOD0BIAS: name += "Lod0";  break;   // Extra parameter makes the signature unique
       case SIZE:     name += "Size";  break;
       case FETCH:    name += "Fetch"; break;
       case GRAD:     name += "Grad";  break;
@@ -83,9 +84,19 @@ const char *RegisterPrefix(const TType &type)
 bool OutputHLSL::TextureFunction::operator<(const TextureFunction &rhs) const
 {
     if (sampler < rhs.sampler) return true;
+    if (sampler > rhs.sampler) return false;
+
     if (coords < rhs.coords)   return true;
+    if (coords > rhs.coords)   return false;
+
     if (!proj && rhs.proj)     return true;
+    if (proj && !rhs.proj)     return false;
+
+    if (!offset && rhs.offset) return true;
+    if (offset && !rhs.offset) return false;
+
     if (method < rhs.method)   return true;
+    if (method > rhs.method)   return false;
 
     return false;
 }
@@ -982,6 +993,7 @@ void OutputHLSL::header()
               case TextureFunction::BIAS:     hlslCoords = 4; break;
               case TextureFunction::LOD:      hlslCoords = 4; break;
               case TextureFunction::LOD0:     hlslCoords = 4; break;
+              case TextureFunction::LOD0BIAS: hlslCoords = 4; break;
               default: UNREACHABLE();
             }
         }
@@ -1060,9 +1072,10 @@ void OutputHLSL::header()
         switch(textureFunction->method)
         {
           case TextureFunction::IMPLICIT:                        break;
-          case TextureFunction::BIAS:                            break;
+          case TextureFunction::BIAS:                            break;   // Comes after the offset parameter
           case TextureFunction::LOD:      out << ", float lod";  break;
           case TextureFunction::LOD0:                            break;
+          case TextureFunction::LOD0BIAS:                        break;   // Comes after the offset parameter
           case TextureFunction::SIZE:                            break;
           case TextureFunction::FETCH:    out << ", int mip";    break;
           case TextureFunction::GRAD:                            break;
@@ -1088,7 +1101,8 @@ void OutputHLSL::header()
             }
         }
 
-        if (textureFunction->method == TextureFunction::BIAS)
+        if (textureFunction->method == TextureFunction::BIAS ||
+            textureFunction->method == TextureFunction::LOD0BIAS)
         {
             out << ", float bias";
         }
@@ -1176,10 +1190,14 @@ void OutputHLSL::header()
                     if (IsSamplerArray(textureFunction->sampler))
                     {
                         out << "    float width; float height; float layers; float levels;\n";
-                            
+
                         if (textureFunction->method == TextureFunction::LOD0)
                         {
                             out << "    uint mip = 0;\n";
+                        }
+                        else if (textureFunction->method == TextureFunction::LOD0BIAS)
+                        {
+                            out << "    uint mip = bias;\n";
                         }
                         else
                         {
@@ -1211,10 +1229,14 @@ void OutputHLSL::header()
                     else
                     {
                         out << "    float width; float height; float levels;\n";
-                             
+
                         if (textureFunction->method == TextureFunction::LOD0)
                         {
                             out << "    uint mip = 0;\n";
+                        }
+                        else if (textureFunction->method == TextureFunction::LOD0BIAS)
+                        {
+                            out << "    uint mip = bias;\n";
                         }
                         else
                         {
@@ -1251,10 +1273,14 @@ void OutputHLSL::header()
                 else if (IsSampler3D(textureFunction->sampler))
                 {
                     out << "    float width; float height; float depth; float levels;\n";
-                      
+
                     if (textureFunction->method == TextureFunction::LOD0)
                     {
                         out << "    uint mip = 0;\n";
+                    }
+                    else if (textureFunction->method == TextureFunction::LOD0BIAS)
+                    {
+                        out << "    uint mip = bias;\n";
                     }
                     else
                     {
@@ -1304,6 +1330,7 @@ void OutputHLSL::header()
                   case TextureFunction::BIAS:     out << "bias(s, "; break;
                   case TextureFunction::LOD:      out << "lod(s, ";  break;
                   case TextureFunction::LOD0:     out << "lod(s, ";  break;
+                  case TextureFunction::LOD0BIAS: out << "lod(s, ";  break;
                   default: UNREACHABLE();
                 }
             }
@@ -1341,6 +1368,7 @@ void OutputHLSL::header()
                       case TextureFunction::BIAS:     out << "x.SampleBias(s, ";  break;
                       case TextureFunction::LOD:      out << "x.SampleLevel(s, "; break;
                       case TextureFunction::LOD0:     out << "x.SampleLevel(s, "; break;
+                      case TextureFunction::LOD0BIAS: out << "x.SampleLevel(s, "; break;
                       default: UNREACHABLE();
                     }
                 }
@@ -1428,9 +1456,10 @@ void OutputHLSL::header()
                 {
                     switch(textureFunction->method)
                     {
-                      case TextureFunction::BIAS: out << ", bias"; break;
-                      case TextureFunction::LOD:  out << ", lod";  break;
-                      case TextureFunction::LOD0: out << ", 0";    break;
+                      case TextureFunction::BIAS:     out << ", bias"; break;
+                      case TextureFunction::LOD:      out << ", lod";  break;
+                      case TextureFunction::LOD0:     out << ", 0";    break;
+                      case TextureFunction::LOD0BIAS: out << ", bias"; break;
                       default: UNREACHABLE();
                     }
                 }
@@ -1495,6 +1524,7 @@ void OutputHLSL::header()
                       case TextureFunction::BIAS:     out << "), bias"; break;
                       case TextureFunction::LOD:      out << "), lod";  break;
                       case TextureFunction::LOD0:     out << "), 0";    break;
+                      case TextureFunction::LOD0BIAS: out << "), bias"; break;
                       default: UNREACHABLE();
                     }
                 }
@@ -2464,11 +2494,12 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                     textureFunction.method = TextureFunction::IMPLICIT;
                     textureFunction.proj = true;
                 }
-                else if (name == "texture2DLod" || name == "textureCubeLod" || name == "textureLod")
+                else if (name == "texture2DLod" || name == "textureCubeLod" || name == "textureLod" ||
+                         name == "texture2DLodEXT" || name == "textureCubeLodEXT")
                 {
                     textureFunction.method = TextureFunction::LOD;
                 }
-                else if (name == "texture2DProjLod" || name == "textureProjLod")
+                else if (name == "texture2DProjLod" || name == "textureProjLod" || name == "texture2DProjLodEXT")
                 {
                     textureFunction.method = TextureFunction::LOD;
                     textureFunction.proj = true;
@@ -2493,11 +2524,6 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                     textureFunction.method = TextureFunction::LOD;
                     textureFunction.offset = true;
                 }
-                else if (name == "textureProjLod")
-                {
-                    textureFunction.method = TextureFunction::LOD;
-                    textureFunction.proj = true;
-                }
                 else if (name == "textureProjLodOffset")
                 {
                     textureFunction.method = TextureFunction::LOD;
@@ -2513,7 +2539,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                     textureFunction.method = TextureFunction::FETCH;
                     textureFunction.offset = true;
                 }
-                else if (name == "textureGrad")
+                else if (name == "textureGrad" || name == "texture2DGradEXT")
                 {
                     textureFunction.method = TextureFunction::GRAD;
                 }
@@ -2522,7 +2548,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                     textureFunction.method = TextureFunction::GRAD;
                     textureFunction.offset = true;
                 }
-                else if (name == "textureProjGrad")
+                else if (name == "textureProjGrad" || name == "texture2DProjGradEXT" || name == "textureCubeGradEXT")
                 {
                     textureFunction.method = TextureFunction::GRAD;
                     textureFunction.proj = true;
@@ -2537,31 +2563,37 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
 
                 if (textureFunction.method == TextureFunction::IMPLICIT)   // Could require lod 0 or have a bias argument
                 {
+                    unsigned int mandatoryArgumentCount = 2;   // All functions have sampler and coordinate arguments
+
+                    if (textureFunction.offset)
+                    {
+                        mandatoryArgumentCount++;
+                    }
+
+                    bool bias = (arguments.size() > mandatoryArgumentCount);   // Bias argument is optional
+
                     if (lod0 || mContext.shaderType == SH_VERTEX_SHADER)
                     {
-                        textureFunction.method = TextureFunction::LOD0;
+                        if (bias)
+                        {
+                            textureFunction.method = TextureFunction::LOD0BIAS;
+                        }
+                        else
+                        {
+                            textureFunction.method = TextureFunction::LOD0;
+                        }
                     }
-                    else
+                    else if (bias)
                     {
-                        unsigned int mandatoryArgumentCount = 2;   // All functions have sampler and coordinate arguments
-
-                        if (textureFunction.offset)
-                        {
-                            mandatoryArgumentCount++;
-                        }
-
-                        if (arguments.size() > mandatoryArgumentCount)   // Bias argument is optional
-                        {
-                            textureFunction.method = TextureFunction::BIAS;
-                        }
+                        textureFunction.method = TextureFunction::BIAS;
                     }
                 }
 
                 mUsesTexture.insert(textureFunction);
-                
+
                 out << textureFunction.name();
             }
-            
+
             for (TIntermSequence::iterator arg = arguments.begin(); arg != arguments.end(); arg++)
             {
                 if (mOutputType == SH_HLSL11_OUTPUT && IsSampler((*arg)->getAsTyped()->getBasicType()))
