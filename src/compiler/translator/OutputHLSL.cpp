@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <cfloat>
 #include <stdio.h>
+#include <tuple>
 
 namespace sh
 {
@@ -83,12 +84,7 @@ const char *RegisterPrefix(const TType &type)
 
 bool OutputHLSL::TextureFunction::operator<(const TextureFunction &rhs) const
 {
-    if (sampler < rhs.sampler) return true;
-    if (coords < rhs.coords)   return true;
-    if (!proj && rhs.proj)     return true;
-    if (method < rhs.method)   return true;
-
-    return false;
+    return std::tie(sampler, coords, proj, offset, method) < std::tie(rhs.sampler, rhs.coords, rhs.proj, rhs.offset, rhs.method);
 }
 
 OutputHLSL::OutputHLSL(TParseContext &context, const ShBuiltInResources& resources, ShShaderOutput outputType)
