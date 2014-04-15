@@ -2885,6 +2885,14 @@ void Context::blitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1
                     validDrawType = false;
                 }
 
+                // Disallow mismatched internal format for multisampled renderbuffers
+                // http://crbug.com/361931
+                if (readFramebuffer->getSamples() > 0 &&
+                    (drawFramebuffer->getColorbuffer(colorAttachment)->getInternalFormat() != readColorBuffer->getInternalFormat()))
+                {
+                    return gl::error(GL_INVALID_OPERATION);
+                }
+
                 if (drawFramebuffer->getColorbuffer(colorAttachment)->getActualFormat() != readColorBuffer->getActualFormat())
                 {
                     validDrawFormat = false;
