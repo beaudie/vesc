@@ -2494,11 +2494,12 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                     textureFunction.method = TextureFunction::IMPLICIT;
                     textureFunction.proj = true;
                 }
-                else if (name == "texture2DLod" || name == "textureCubeLod" || name == "textureLod")
+                else if (name == "texture2DLod" || name == "textureCubeLod" || name == "textureLod" ||
+                         name == "texture2DLodEXT" || name == "textureCubeLodEXT")
                 {
                     textureFunction.method = TextureFunction::LOD;
                 }
-                else if (name == "texture2DProjLod" || name == "textureProjLod")
+                else if (name == "texture2DProjLod" || name == "textureProjLod" || name == "texture2DProjLodEXT")
                 {
                     textureFunction.method = TextureFunction::LOD;
                     textureFunction.proj = true;
@@ -2543,7 +2544,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                     textureFunction.method = TextureFunction::FETCH;
                     textureFunction.offset = true;
                 }
-                else if (name == "textureGrad")
+                else if (name == "textureGrad" || name == "texture2DGradEXT")
                 {
                     textureFunction.method = TextureFunction::GRAD;
                 }
@@ -2552,7 +2553,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                     textureFunction.method = TextureFunction::GRAD;
                     textureFunction.offset = true;
                 }
-                else if (name == "textureProjGrad")
+                else if (name == "textureProjGrad" || name == "texture2DProjGradEXT" || name == "textureCubeGradEXT")
                 {
                     textureFunction.method = TextureFunction::GRAD;
                     textureFunction.proj = true;
