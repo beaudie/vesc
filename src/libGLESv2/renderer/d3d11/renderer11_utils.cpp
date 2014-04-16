@@ -10,6 +10,7 @@
 
 #include "libGLESv2/renderer/d3d11/renderer11_utils.h"
 #include "libGLESv2/renderer/d3d11/formatutils11.h"
+#include "libGLESv2/caps_utils.h"
 #include "common/debug.h"
 
 namespace rx
@@ -216,6 +217,117 @@ D3D11_QUERY ConvertQueryType(GLenum queryType)
 
 }
 
+
+namespace d3d11_gl
+{
+
+gl::Caps GenerateCaps(ID3D11Device *device)
+{
+    gl::Caps caps;
+
+    const GLuint maxClientVersion = 3;
+    const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats(maxClientVersion);
+    for (gl::FormatSet::const_iterator i = allFormats.begin(); i != allFormats.end(); ++i)
+    {
+        GLenum internalFormat = *i;
+
+        gl::TextureCaps textureCaps;
+
+        DXGI_FORMAT textureFormat = gl_d3d11::GetTexFormat(internalFormat, 3);
+        DXGI_FORMAT srvFormat = gl_d3d11::GetSRVFormat(internalFormat, 3);
+        DXGI_FORMAT rtvFormat = gl_d3d11::GetRTVFormat(internalFormat, 3);
+        DXGI_FORMAT dsvFormat = gl_d3d11::GetDSVFormat(internalFormat, 3);
+
+        UINT formatSupport;
+        if (SUCCEEDED(device->CheckFormatSupport(textureFormat, &formatSupport)))
+        {
+            textureCaps.setTexture2DSupport((formatSupport & D3D11_FORMAT_SUPPORT_TEXTURE2D) != 0);
+            textureCaps.setTextureCubeMapSupport((formatSupport & D3D11_FORMAT_SUPPORT_TEXTURECUBE) != 0);
+            textureCaps.setTexture3DSupport((formatSupport & D3D11_FORMAT_SUPPORT_TEXTURE3D) != 0);
+            textureCaps.setTexture2DArraySupport((formatSupport & D3D11_FORMAT_SUPPORT_TEXTURE2D) != 0);
+
+            if (formatSupport & D3D11_FORMAT_SUPPORT_MULTISAMPLE_RENDERTARGET)
+            {
+                for (size_t sampleCount = 1; sampleCount <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; sampleCount++)
+                {
+                    UINT qualityCount = 0;
+                    if (SUCCEEDED(device->CheckMultisampleQualityLevels(textureFormat, sampleCount, &qualityCount)) &&
+                        qualityCount > 0)
+                    {
+                        textureCaps.addSampleSupport(sampleCount);
+                    }
+                }
+            }
+        }
+
+        if (SUCCEEDED(device->CheckFormatSupport(srvFormat, &formatSupport)))
+        {
+            textureCaps.setTextureFilteringSupport((formatSupport & D3D11_FORMAT_SUPPORT_SHADER_SAMPLE) != 0);
+        }
+
+        if (SUCCEEDED(device->CheckFormatSupport(rtvFormat, &formatSupport)))
+        {
+            textureCaps.setColorRenderingSupport((formatSupport & D3D11_FORMAT_SUPPORT_RENDER_TARGET) != 0);
+        }
+
+        if (SUCCEEDED(device->CheckFormatSupport(dsvFormat, &formatSupport)))
+        {
+            textureCaps.setDepthRenderingSupport(gl::GetDepthBits(internalFormat, maxClientVersion) > 0 &&
+                                                 (formatSupport & D3D11_FORMAT_SUPPORT_DEPTH_STENCIL) != 0);
+            textureCaps.setStencilRenderingSupport(gl::GetStencilBits(internalFormat, maxClientVersion) > 0 &&
+                                                   (formatSupport & D3D11_FORMAT_SUPPORT_DEPTH_STENCIL) != 0);
+        }
+
+        caps.setTextureFormatCaps(internalFormat, textureCaps);
+    }
+
+    D3D_FEATURE_LEVEL featureLevel = device->GetFeatureLevel();
+    const gl::TextureFormatCapsMap &formatSupport = caps.getTextureFormatCapsMap();
+
+    caps.set32BitIndexSupport(true);
+    caps.setPackedDepthStencilSupport(true);
+    caps.setProgramBinarySupport(true);
+    caps.setRGB8AndRGBA8TextureSupport(true);
+    caps.setBGRA8TextureSupport(gl::GetBGRA8TextureSupport(formatSupport));
+    caps.setBGRAReadSupport(true);
+    caps.setPixelBufferObjectSupport(true);
+    caps.setMapBufferSupport(true);
+    caps.setMapBufferRangeSupport(true);
+    caps.setHalfFloatTextureSupport(gl::GetHalfFloatTextureSupport(formatSupport));
+    caps.setHalfFloatTextureFilteringSupport(gl::GetHalfFloatTextureFilteringSupport(formatSupport));
+    caps.setFloatTextureSupport(gl::GetFloatTextureSupport(formatSupport));
+    caps.setFloatTextureFilteringSupport(gl::GetFloatTextureFilteringSupport(formatSupport));
+    caps.setRGTextureSupport(gl::GetRGTextureSupport(formatSupport, caps.getHalfFloatTextureSupport(), caps.getFloatTextureSupport()));
+    caps.setDXT1TextureSupport(gl::GetDXT1TextureSupport(formatSupport));
+    caps.setDXT3TextureSupport(gl::GetDXT3TextureSupport(formatSupport));
+    caps.setDXT5TextureSupport(gl::GetDXT5TextureSupport(formatSupport));
+    caps.setDepthTextureSupport(gl::GetDepthTextureSupport(formatSupport));
+    caps.setNPOTTextureSupport(true);
+    caps.setDrawBuffersSupport(d3d11::GetMaximumSimultaneousRenderTargets(featureLevel) > 1);
+    caps.setTextureStorageSupport(true);
+    caps.setAnisotropicFilteringSupport(true);
+    caps.setMaxTextureAnisotropy(d3d11::GetMaximumAnisotropy(featureLevel));
+    caps.setOcclusionQuerySupport(d3d11::GetOcclusionQuerySupport(featureLevel));
+    caps.setFenceQuerySupport(d3d11::GetEventQuerySupport(featureLevel));
+    caps.setANGLETimerQuerySupport(false); // Unimplemented
+    caps.setRobustnessSupport(true);
+    caps.setMinMaxBlendingSupport(true);
+    caps.setANGLEFramebufferBlitSupport(true);
+    caps.setANGLEFramebufferMultisampleSupport(gl::GetMaximumSupportedSamples(formatSupport) > 1);
+    caps.setANGLEInstancedArraysSupport(d3d11::GetInstancingSupport(featureLevel));
+    caps.setANGLEPackReverseRowOrderSupport(true);
+    caps.setStandardDerivativeSupport(true);
+    caps.setTextureLODSupport(true);
+    caps.setFragDepthSupport(true);
+    caps.setANGLETextureUsageSupport(true); // This could be false since it has no effect in D3D11
+    caps.setANGLETranslatedSourceSupport(true);
+    caps.setColorBufferFloatSupport(gl::GetColorBufferFloatSupport(formatSupport));
+
+    return caps;
+}
+
+}
+
 namespace d3d11
 {
 
@@ -273,6 +385,101 @@ HRESULT SetDebugName(ID3D11DeviceChild *resource, const char *name)
 #else
     return S_OK;
 #endif
+}
+
+float GetMaximumAnisotropy(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+      case D3D_FEATURE_LEVEL_11_1:
+      case D3D_FEATURE_LEVEL_11_0: return D3D11_MAX_MAXANISOTROPY;
+
+      case D3D_FEATURE_LEVEL_10_1:
+      case D3D_FEATURE_LEVEL_10_0: return D3D10_MAX_MAXANISOTROPY;
+
+      // From http://msdn.microsoft.com/en-us/library/windows/desktop/ff476150.aspx ID3D11Device::CreateSamplerState
+      case D3D_FEATURE_LEVEL_9_3:  return 16;
+
+      case D3D_FEATURE_LEVEL_9_2:
+      case D3D_FEATURE_LEVEL_9_1:  return D3D_FL9_1_DEFAULT_MAX_ANISOTROPY;
+
+      default: UNREACHABLE();      return 0;
+    }
+}
+
+bool GetOcclusionQuerySupport(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+      case D3D_FEATURE_LEVEL_11_1:
+      case D3D_FEATURE_LEVEL_11_0:
+      case D3D_FEATURE_LEVEL_10_1:
+      case D3D_FEATURE_LEVEL_10_0: return true;
+
+      // From http://msdn.microsoft.com/en-us/library/windows/desktop/ff476150.aspx ID3D11Device::CreateQuery
+      case D3D_FEATURE_LEVEL_9_3:
+      case D3D_FEATURE_LEVEL_9_2:  return true;
+      case D3D_FEATURE_LEVEL_9_1:  return false;
+
+      default: UNREACHABLE();      return false;
+    }
+}
+
+bool GetEventQuerySupport(D3D_FEATURE_LEVEL featureLevel)
+{
+    // From http://msdn.microsoft.com/en-us/library/windows/desktop/ff476150.aspx ID3D11Device::CreateQuery
+
+    switch (featureLevel)
+    {
+      case D3D_FEATURE_LEVEL_11_1:
+      case D3D_FEATURE_LEVEL_11_0:
+      case D3D_FEATURE_LEVEL_10_1:
+      case D3D_FEATURE_LEVEL_10_0:
+      case D3D_FEATURE_LEVEL_9_3:
+      case D3D_FEATURE_LEVEL_9_2:
+      case D3D_FEATURE_LEVEL_9_1:  return true;
+
+      default: UNREACHABLE();      return false;
+    }
+}
+
+bool GetInstancingSupport(D3D_FEATURE_LEVEL featureLevel)
+{
+    // From http://msdn.microsoft.com/en-us/library/windows/desktop/ff476150.aspx ID3D11Device::CreateInputLayout
+
+    switch (featureLevel)
+    {
+      case D3D_FEATURE_LEVEL_11_1:
+      case D3D_FEATURE_LEVEL_11_0:
+      case D3D_FEATURE_LEVEL_10_1:
+      case D3D_FEATURE_LEVEL_10_0:
+      case D3D_FEATURE_LEVEL_9_3:  return true;
+
+      case D3D_FEATURE_LEVEL_9_2:
+      case D3D_FEATURE_LEVEL_9_1:  return false;
+
+      default: UNREACHABLE();      return false;
+    }
+}
+
+size_t GetMaximumSimultaneousRenderTargets(D3D_FEATURE_LEVEL featureLevel)
+{
+    // From http://msdn.microsoft.com/en-us/library/windows/desktop/ff476150.aspx ID3D11Device::CreateInputLayout
+
+    switch (featureLevel)
+    {
+      case D3D_FEATURE_LEVEL_11_1:
+      case D3D_FEATURE_LEVEL_11_0: return D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT;
+
+      case D3D_FEATURE_LEVEL_10_1:
+      case D3D_FEATURE_LEVEL_10_0: return D3D10_SIMULTANEOUS_RENDER_TARGET_COUNT;
+
+      case D3D_FEATURE_LEVEL_9_3:  return D3D_FL9_3_SIMULTANEOUS_RENDER_TARGET_COUNT;
+      case D3D_FEATURE_LEVEL_9_2:
+      case D3D_FEATURE_LEVEL_9_1:  return D3D_FL9_1_SIMULTANEOUS_RENDER_TARGET_COUNT;
+
+      default: UNREACHABLE();      return 0;
+    }
 }
 
 }
