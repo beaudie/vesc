@@ -175,7 +175,7 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
     }
     else
     {
-        if (!gl::IsValidInternalFormat(actualInternalFormat, context) ||
+        if (!gl::IsValidInternalFormat(actualInternalFormat, context->getCaps().extensions, context->getClientVersion()) ||
             !gl::IsValidFormat(format, context->getClientVersion()) ||
             !gl::IsValidType(type, context->getClientVersion()))
         {
@@ -545,7 +545,7 @@ bool ValidateES3TexStorageParameters(gl::Context *context, GLenum target, GLsize
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
-    if (!gl::IsValidInternalFormat(internalformat, context))
+    if (!gl::IsValidInternalFormat(internalformat, context->getCaps().extensions, context->getClientVersion()))
     {
         return gl::error(GL_INVALID_ENUM, false);
     }
@@ -786,7 +786,7 @@ bool ValidES3ReadFormatType(gl::Context *context, GLenum internalFormat, GLenum 
         break;
       case GL_RG_EXT:
       case GL_RED_EXT:
-        if (!context->supportsRGTextures())
+        if (!context->getCaps().extensions.textureRG)
         {
             return false;
         }
