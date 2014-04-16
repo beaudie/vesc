@@ -41,6 +41,13 @@ Renderer::~Renderer()
     gl::Shader::releaseCompiler();
 }
 
+EGLint Renderer::initialize()
+{
+    EGLint result = doInitialize();
+    mCaps = generateCaps();
+    return result;
+}
+
 }
 
 extern "C"

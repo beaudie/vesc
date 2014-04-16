@@ -11,6 +11,7 @@
 #define LIBGLESV2_RENDERER_RENDERER9_UTILS_H
 
 #include "libGLESv2/angletypes.h"
+#include "libGLESv2/Caps.h"
 
 namespace rx
 {
@@ -29,6 +30,13 @@ D3DCUBEMAP_FACES ConvertCubeFace(GLenum cubeFace);
 DWORD ConvertColorMask(bool red, bool green, bool blue, bool alpha);
 D3DTEXTUREFILTERTYPE ConvertMagFilter(GLenum magFilter, float maxAnisotropy);
 void ConvertMinFilter(GLenum minFilter, D3DTEXTUREFILTERTYPE *d3dMinFilter, D3DTEXTUREFILTERTYPE *d3dMipFilter, float maxAnisotropy);
+
+}
+
+namespace d3d9_gl
+{
+
+gl::Caps GenerateCaps(IDirect3D9 *d3d9, IDirect3DDevice9 *device, D3DDEVTYPE deviceType, UINT adapter);
 
 }
 

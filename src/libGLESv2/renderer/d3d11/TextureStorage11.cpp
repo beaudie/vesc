@@ -16,6 +16,7 @@
 #include "libGLESv2/renderer/d3d11/renderer11_utils.h"
 #include "libGLESv2/renderer/d3d11/Blit11.h"
 #include "libGLESv2/renderer/d3d11/formatutils11.h"
+#include "libGLESv2/caps_utils.h"
 
 #include "common/utilities.h"
 #include "libGLESv2/main.h"
@@ -402,9 +403,11 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer *renderer, SwapChain11 *swapch
     mRenderTargetFormat = rtvDesc.Format;
 
     GLint internalFormat = d3d11_gl::GetInternalFormat(mTextureFormat, renderer->getCurrentClientVersion());
-    mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalFormat, renderer);
-    mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalFormat, renderer);
-    mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalFormat, renderer);
+    const gl::TextureCaps &formatCaps = gl::GetTextureCaps(renderer->getCaps().textureCaps, internalFormat);
+
+    mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalFormat, formatCaps.colorRendering, renderer->getCurrentClientVersion());
+    mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalFormat, formatCaps.colorRendering, renderer->getCurrentClientVersion());
+    mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalFormat, formatCaps.colorRendering, renderer->getCurrentClientVersion());
 
     mDepthStencilFormat = DXGI_FORMAT_UNKNOWN;
 }
@@ -427,9 +430,11 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer *renderer, GLenum internalform
     mShaderResourceFormat = gl_d3d11::GetSRVFormat(internalformat, clientVersion);
     mDepthStencilFormat = gl_d3d11::GetDSVFormat(internalformat, clientVersion);
     mRenderTargetFormat = gl_d3d11::GetRTVFormat(internalformat, clientVersion);
-    mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalformat, renderer);
-    mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalformat, renderer);
-    mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalformat, renderer);
+
+    const gl::TextureCaps &formatCaps = gl::GetTextureCaps(renderer->getCaps().textureCaps, internalformat);
+    mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalformat, formatCaps.colorRendering, clientVersion);
+    mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalformat, formatCaps.colorRendering, clientVersion);
+    mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalformat, formatCaps.colorRendering, clientVersion);
 
     // if the width or height is not positive this should be treated as an incomplete texture
     // we handle that here by skipping the d3d texture creation
@@ -699,9 +704,11 @@ TextureStorage11_Cube::TextureStorage11_Cube(Renderer *renderer, GLenum internal
     mShaderResourceFormat = gl_d3d11::GetSRVFormat(internalformat, clientVersion);
     mDepthStencilFormat = gl_d3d11::GetDSVFormat(internalformat, clientVersion);
     mRenderTargetFormat = gl_d3d11::GetRTVFormat(internalformat, clientVersion);
-    mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalformat, renderer);
-    mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalformat, renderer);
-    mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalformat, renderer);
+
+    const gl::TextureCaps &formatCaps = gl::GetTextureCaps(renderer->getCaps().textureCaps, internalformat);
+    mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalformat, formatCaps.colorRendering, clientVersion);
+    mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalformat, formatCaps.colorRendering, clientVersion);
+    mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalformat, formatCaps.colorRendering, clientVersion);
 
     // if the size is not positive this should be treated as an incomplete texture
     // we handle that here by skipping the d3d texture creation
@@ -1004,9 +1011,11 @@ TextureStorage11_3D::TextureStorage11_3D(Renderer *renderer, GLenum internalform
     mShaderResourceFormat = gl_d3d11::GetSRVFormat(internalformat, clientVersion);
     mDepthStencilFormat = gl_d3d11::GetDSVFormat(internalformat, clientVersion);
     mRenderTargetFormat = gl_d3d11::GetRTVFormat(internalformat, clientVersion);
-    mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalformat, renderer);
-    mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalformat, renderer);
-    mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalformat, renderer);
+
+    const gl::TextureCaps &formatCaps = gl::GetTextureCaps(renderer->getCaps().textureCaps, internalformat);
+    mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalformat, formatCaps.colorRendering, clientVersion);
+    mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalformat, formatCaps.colorRendering, clientVersion);
+    mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalformat, formatCaps.colorRendering, clientVersion);
 
     // If the width, height or depth are not positive this should be treated as an incomplete texture
     // we handle that here by skipping the d3d texture creation
@@ -1309,9 +1318,11 @@ TextureStorage11_2DArray::TextureStorage11_2DArray(Renderer *renderer, GLenum in
     mShaderResourceFormat = gl_d3d11::GetSRVFormat(internalformat, clientVersion);
     mDepthStencilFormat = gl_d3d11::GetDSVFormat(internalformat, clientVersion);
     mRenderTargetFormat = gl_d3d11::GetRTVFormat(internalformat, clientVersion);
-    mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalformat, renderer);
-    mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalformat, renderer);
-    mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalformat, renderer);
+
+    const gl::TextureCaps &formatCaps = gl::GetTextureCaps(renderer->getCaps().textureCaps, internalformat);
+    mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalformat, formatCaps.colorRendering, clientVersion);
+    mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalformat, formatCaps.colorRendering, clientVersion);
+    mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalformat, formatCaps.colorRendering, clientVersion);
 
     // if the width, height or depth is not positive this should be treated as an incomplete texture
     // we handle that here by skipping the d3d texture creation
