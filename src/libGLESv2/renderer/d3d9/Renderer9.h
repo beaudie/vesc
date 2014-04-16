@@ -100,26 +100,13 @@ class Renderer9 : public Renderer
     virtual bool testDeviceResettable();
 
     // Renderer capabilities
+    virtual const gl::Caps &getCaps() const;
+
     IDirect3DDevice9 *getDevice() { return mDevice; }
     virtual DWORD getAdapterVendor() const;
     virtual std::string getRendererDescription() const;
     virtual GUID getAdapterIdentifier() const;
 
-    virtual bool getBGRATextureSupport() const;
-    virtual bool getDXT1TextureSupport() const;
-    virtual bool getDXT3TextureSupport() const;
-    virtual bool getDXT5TextureSupport() const;
-    virtual bool getEventQuerySupport() const;
-    virtual bool getFloat32TextureSupport() const;
-    virtual bool getFloat32TextureFilteringSupport() const;
-    virtual bool getFloat32TextureRenderingSupport() const;
-    virtual bool getFloat16TextureSupport() const;
-    virtual bool getFloat16TextureFilteringSupport() const;
-    virtual bool getFloat16TextureRenderingSupport() const;
-    virtual bool getRGB565TextureSupport() const;
-    virtual bool getLuminanceTextureSupport() const;
-    virtual bool getLuminanceAlphaTextureSupport() const;
-    virtual bool getRGTextureSupport() const;
     virtual unsigned int getMaxVertexTextureImageUnits() const;
     virtual unsigned int getMaxCombinedTextureImageUnits() const;
     virtual unsigned int getReservedVertexUniformVectors() const;
@@ -135,13 +122,6 @@ class Renderer9 : public Renderer
     virtual unsigned int getMaxTransformFeedbackSeparateComponents() const;
     virtual unsigned int getMaxTransformFeedbackInterleavedComponents() const;
     virtual unsigned int getMaxUniformBufferSize() const;
-    virtual bool getNonPower2TextureSupport() const;
-    virtual bool getDepthTextureSupport() const;
-    virtual bool getOcclusionQuerySupport() const;
-    virtual bool getInstancingSupport() const;
-    virtual bool getTextureFilterAnisotropySupport() const;
-    virtual bool getPBOSupport() const;
-    virtual float getTextureMaxAnisotropy() const;
     virtual bool getShareHandleSupport() const;
     virtual bool getDerivativeInstructionSupport() const;
     virtual bool getPostSubBufferSupport() const;
@@ -155,7 +135,6 @@ class Renderer9 : public Renderer
     virtual int getMaxTextureHeight() const;
     virtual int getMaxTextureDepth() const;
     virtual int getMaxTextureArrayLayers() const;
-    virtual bool get32BitIndexSupport() const;
     DWORD getCapsDeclTypes() const;
     virtual int getMinSwapInterval() const;
     virtual int getMaxSwapInterval() const;
@@ -167,8 +146,6 @@ class Renderer9 : public Renderer
     int getNearestSupportedSamples(D3DFORMAT format, int requested) const;
     
     virtual unsigned int getMaxRenderTargets() const;
-
-    D3DFORMAT ConvertTextureInternalFormat(GLenum internalformat);
 
     // Pixel operations
     virtual bool copyToRenderTarget(TextureStorageInterface2D *dest, TextureStorageInterface2D *source);
@@ -281,40 +258,18 @@ class Renderer9 : public Renderer
     D3DCAPS9 mDeviceCaps;
     D3DADAPTER_IDENTIFIER9 mAdapterIdentifier;
 
+    // GL Caps
+    gl::Caps mCaps;
+
     D3DPRIMITIVETYPE mPrimitiveType;
     int mPrimitiveCount;
     GLsizei mRepeatDraw;
 
     bool mSceneStarted;
-    bool mSupportsNonPower2Textures;
-    bool mSupportsTextureFilterAnisotropy;
     int mMinSwapInterval;
     int mMaxSwapInterval;
 
-    bool mOcclusionQuerySupport;
-    bool mEventQuerySupport;
     bool mVertexTextureSupport;
-
-    bool mDepthTextureSupport;
-
-    bool mRGB565TextureSupport;
-
-    bool mFloat32TextureSupport;
-    bool mFloat32FilterSupport;
-    bool mFloat32RenderSupport;
-
-    bool mFloat16TextureSupport;
-    bool mFloat16FilterSupport;
-    bool mFloat16RenderSupport;
-
-    bool mDXT1TextureSupport;
-    bool mDXT3TextureSupport;
-    bool mDXT5TextureSupport;
-
-    bool mLuminanceTextureSupport;
-    bool mLuminanceAlphaTextureSupport;
-
-    bool mRGTextureSupport;
 
     struct MultisampleSupportInfo
     {
@@ -403,7 +358,6 @@ class Renderer9 : public Renderer
         gl::Renderbuffer *buffer;
     } mNullColorbufferCache[NUM_NULL_COLORBUFFER_CACHE_ENTRIES];
     UINT mMaxNullColorbufferLRU;
-
 };
 
 }
