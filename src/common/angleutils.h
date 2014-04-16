@@ -10,6 +10,8 @@
 #define COMMON_ANGLEUTILS_H_
 
 #include <stddef.h>
+#include <string>
+#include <set>
 
 // A macro to disallow the copy constructor and operator= functions
 // This must be used in the private: declarations for a class
@@ -76,6 +78,18 @@ template <typename T>
 inline void StructZero(T *obj)
 {
     memset(obj, 0, sizeof(T));
+}
+
+inline const char* MakeStaticString(const std::string &str)
+{
+    static std::set<std::string> strings;
+    std::set<std::string>::iterator it = strings.find(str);
+    if (it != strings.end())
+    {
+        return it->c_str();
+    }
+
+    return strings.insert(str).first->c_str();
 }
 
 #if defined(_MSC_VER)
