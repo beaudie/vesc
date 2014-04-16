@@ -28,6 +28,7 @@
 
 #include "common/angleutils.h"
 #include "common/RefCountObject.h"
+#include "libGLESv2/Caps.h"
 #include "libGLESv2/HandleAllocator.h"
 #include "libGLESv2/angletypes.h"
 #include "libGLESv2/Constants.h"
@@ -403,6 +404,8 @@ class Context
 
     virtual int getClientVersion() const;
 
+    const Caps &getCaps() const;
+
     int getMajorShaderModel() const;
     float getMaximumPointSize() const;
     unsigned int getMaximumCombinedTextureImageUnits() const;
@@ -423,35 +426,9 @@ class Context
     void getSampleCounts(GLenum internalFormat, GLsizei bufSize, GLint *params) const;
     unsigned int getMaxTransformFeedbackBufferBindings() const;
     GLintptr getUniformBufferOffsetAlignment() const;
-    const char *getCombinedExtensionsString() const;
-    const char *getExtensionString(const GLuint index) const;
-    unsigned int getNumExtensions() const;
     const char *getRendererString() const;
-    bool supportsEventQueries() const;
-    bool supportsOcclusionQueries() const;
-    bool supportsBGRATextures() const;
-    bool supportsDXT1Textures() const;
-    bool supportsDXT3Textures() const;
-    bool supportsDXT5Textures() const;
-    bool supportsFloat32Textures() const;
-    bool supportsFloat32LinearFilter() const;
-    bool supportsFloat32RenderableTextures() const;
-    bool supportsFloat16Textures() const;
-    bool supportsFloat16LinearFilter() const;
-    bool supportsFloat16RenderableTextures() const;
-    bool supportsLuminanceTextures() const;
-    bool supportsLuminanceAlphaTextures() const;
-    bool supportsRGTextures() const;
-    bool supportsDepthTextures() const;
-    bool supports32bitIndices() const;
-    bool supportsNonPower2Texture() const;
-    bool supportsInstancing() const;
-    bool supportsTextureFilterAnisotropy() const;
-    bool supportsPBOs() const;
 
     void getCurrentReadFormatType(GLenum *internalFormat, GLenum *format, GLenum *type);
-
-    float getTextureMaxAnisotropy() const;
 
     void blitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
                          GLbitfield mask, GLenum filter);
@@ -494,7 +471,6 @@ class Context
 
     bool skipDraw(GLenum drawMode);
 
-    void initExtensionString();
     void initRendererString();
 
     size_t getBoundFramebufferTextureSerials(FramebufferTextureSerialArray *outSerialArray);
@@ -531,10 +507,8 @@ class Context
     TransformFeedbackMap mTransformFeedbackMap;
     HandleAllocator mTransformFeedbackAllocator;
 
-    std::vector<std::string> mExtensionStringList;
-    const char *mCombinedExtensionsString;
     const char *mRendererString;
-    
+
     BindingPointer<Texture> mIncompleteTextures[TEXTURE_TYPE_COUNT];
 
     // Recorded errors
@@ -557,8 +531,6 @@ class Context
     int mMajorShaderModel;
     float mMaximumPointSize;
     bool mSupportsVertexTexture;
-    bool mSupportsNonPower2Texture;
-    bool mSupportsInstancing;
     int  mMaxViewportDimension;
     int  mMaxRenderbufferDimension;
     int  mMax2DTextureDimension;
@@ -569,26 +541,6 @@ class Context
     int  mMaxCubeTextureLevel;
     int  mMax3DTextureLevel;
     int  mMax2DArrayTextureLevel;
-    float mMaxTextureAnisotropy;
-    bool mSupportsEventQueries;
-    bool mSupportsOcclusionQueries;
-    bool mSupportsBGRATextures;
-    bool mSupportsDXT1Textures;
-    bool mSupportsDXT3Textures;
-    bool mSupportsDXT5Textures;
-    bool mSupportsFloat32Textures;
-    bool mSupportsFloat32LinearFilter;
-    bool mSupportsFloat32RenderableTextures;
-    bool mSupportsFloat16Textures;
-    bool mSupportsFloat16LinearFilter;
-    bool mSupportsFloat16RenderableTextures;
-    bool mSupportsLuminanceTextures;
-    bool mSupportsLuminanceAlphaTextures;
-    bool mSupportsRGTextures;
-    bool mSupportsDepthTextures;
-    bool mSupports32bitIndices;
-    bool mSupportsTextureFilterAnisotropy;
-    bool mSupportsPBOs;
     int mNumCompressedTextureFormats;
 
     ResourceManager *mResourceManager;

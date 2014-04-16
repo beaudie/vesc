@@ -343,7 +343,7 @@ EGLSurface Display::createOffscreenSurface(EGLConfig config, HANDLE shareHandle,
         return error(EGL_BAD_ATTRIBUTE, EGL_NO_SURFACE);
     }
 
-    if (textureFormat != EGL_NO_TEXTURE && !mRenderer->getNonPower2TextureSupport() && (!gl::isPow2(width) || !gl::isPow2(height)))
+    if (textureFormat != EGL_NO_TEXTURE && !mRenderer->getCaps().getNPOTTextureSupport() && (!gl::isPow2(width) || !gl::isPow2(height)))
     {
         return error(EGL_BAD_MATCH, EGL_NO_SURFACE);
     }

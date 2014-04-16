@@ -110,7 +110,7 @@ bool ValidBufferTarget(const Context *context, GLenum target)
 
       case GL_PIXEL_PACK_BUFFER:
       case GL_PIXEL_UNPACK_BUFFER:
-        return context->supportsPBOs();
+        return context->getCaps().getPixelBufferObjectSupport();
 
       case GL_COPY_READ_BUFFER:
       case GL_COPY_WRITE_BUFFER:
@@ -172,7 +172,7 @@ bool ValidImageSize(const gl::Context *context, GLenum target, GLint level, GLsi
         return false;
     }
 
-    if (!context->supportsNonPower2Texture() && (level != 0 || !gl::isPow2(width) || !gl::isPow2(height) || !gl::isPow2(depth)))
+    if (!context->getCaps().getNPOTTextureSupport() && (level != 0 || !gl::isPow2(width) || !gl::isPow2(height) || !gl::isPow2(depth)))
     {
         return false;
     }
@@ -260,7 +260,8 @@ bool ValidateRenderbufferStorageParameters(const gl::Context *context, GLenum ta
         return gl::error(GL_INVALID_VALUE, false);
     }
 
-    if (!gl::IsValidInternalFormat(internalformat, context))
+    const gl::Caps &caps = context->getCaps();
+    if (!gl::IsValidInternalFormat(internalformat, caps, context->getClientVersion()))
     {
         return gl::error(GL_INVALID_ENUM, false);
     }
@@ -280,9 +281,10 @@ bool ValidateRenderbufferStorageParameters(const gl::Context *context, GLenum ta
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
-    if (!gl::IsColorRenderingSupported(internalformat, context) &&
-        !gl::IsDepthRenderingSupported(internalformat, context) &&
-        !gl::IsStencilRenderingSupported(internalformat, context))
+    const TextureCaps &formatCaps = caps.getTextureFormatCaps(internalformat);
+    if (!formatCaps.getColorRenderingSupport() &&
+        !formatCaps.getDepthRenderingSupport() &&
+        !formatCaps.getStencilRenderingSupport())
     {
         return gl::error(GL_INVALID_ENUM, false);
     }
@@ -727,7 +729,7 @@ bool ValidateTexParamParameters(gl::Context *context, GLenum pname, GLint param)
         break;
 
       case GL_TEXTURE_MAX_ANISOTROPY_EXT:
-        if (!context->supportsTextureFilterAnisotropy())
+        if (!context->getCaps().getAnisotropicFilteringSupport())
         {
             return gl::error(GL_INVALID_ENUM, false);
         }
