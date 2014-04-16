@@ -438,7 +438,7 @@ int Texture::immutableLevelCount()
 
 GLint Texture::creationLevels(GLsizei width, GLsizei height, GLsizei depth) const
 {
-    if ((isPow2(width) && isPow2(height) && isPow2(depth)) || mRenderer->getNonPower2TextureSupport())
+    if ((isPow2(width) && isPow2(height) && isPow2(depth)) || mRenderer->getCaps().getNPOTTextureSupport())
     {
         // Maximum number of levels
         return log2(std::max(std::max(width, height), depth)) + 1;
@@ -781,7 +781,7 @@ bool Texture2D::isSamplerComplete(const SamplerState &samplerState) const
         return false;
     }
 
-    if (!IsTextureFilteringSupported(getInternalFormat(0), mRenderer))
+    if (!mRenderer->getCaps().getTextureFormatCaps(getInternalFormat(0)).getTextureFilteringSupport())
     {
         if (samplerState.magFilter != GL_NEAREST ||
             (samplerState.minFilter != GL_NEAREST && samplerState.minFilter != GL_NEAREST_MIPMAP_NEAREST))
@@ -790,7 +790,7 @@ bool Texture2D::isSamplerComplete(const SamplerState &samplerState) const
         }
     }
 
-    bool npotSupport = mRenderer->getNonPower2TextureSupport();
+    bool npotSupport = mRenderer->getCaps().getNPOTTextureSupport();
 
     if (!npotSupport)
     {
@@ -1224,7 +1224,7 @@ bool TextureCubeMap::isSamplerComplete(const SamplerState &samplerState) const
 
     bool mipmapping = IsMipmapFiltered(samplerState);
 
-    if (!IsTextureFilteringSupported(getInternalFormat(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0), mRenderer))
+    if (!mRenderer->getCaps().getTextureFormatCaps(getInternalFormat(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0)).getTextureFilteringSupport())
     {
         if (samplerState.magFilter != GL_NEAREST ||
             (samplerState.minFilter != GL_NEAREST && samplerState.minFilter != GL_NEAREST_MIPMAP_NEAREST))
@@ -1233,7 +1233,7 @@ bool TextureCubeMap::isSamplerComplete(const SamplerState &samplerState) const
         }
     }
 
-    if (!isPow2(size) && !mRenderer->getNonPower2TextureSupport())
+    if (!isPow2(size) && !mRenderer->getCaps().getNPOTTextureSupport())
     {
         if (samplerState.wrapS != GL_CLAMP_TO_EDGE || samplerState.wrapT != GL_CLAMP_TO_EDGE || mipmapping)
         {
@@ -1983,7 +1983,7 @@ bool Texture3D::isSamplerComplete(const SamplerState &samplerState) const
         return false;
     }
 
-    if (!IsTextureFilteringSupported(getInternalFormat(0), mRenderer))
+    if (!mRenderer->getCaps().getTextureFormatCaps(getInternalFormat(0)).getTextureFilteringSupport())
     {
         if (samplerState.magFilter != GL_NEAREST ||
             (samplerState.minFilter != GL_NEAREST && samplerState.minFilter != GL_NEAREST_MIPMAP_NEAREST))
@@ -2541,7 +2541,7 @@ bool Texture2DArray::isSamplerComplete(const SamplerState &samplerState) const
         return false;
     }
 
-    if (!IsTextureFilteringSupported(getBaseLevelInternalFormat(), mRenderer))
+    if (!mRenderer->getCaps().getTextureFormatCaps(getBaseLevelInternalFormat()).getTextureFilteringSupport())
     {
         if (samplerState.magFilter != GL_NEAREST ||
             (samplerState.minFilter != GL_NEAREST && samplerState.minFilter != GL_NEAREST_MIPMAP_NEAREST))

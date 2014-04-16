@@ -9,10 +9,15 @@
 // specific to the D3D9 renderer.
 
 #include "libGLESv2/renderer/d3d9/renderer9_utils.h"
+#include "libGLESv2/renderer/d3d9/formatutils9.h"
+#include "libGLESv2/formatutils.h"
 #include "common/mathutil.h"
 #include "libGLESv2/Context.h"
+#include "libGLESv2/caps_utils.h"
 
 #include "common/debug.h"
+
+#include "third_party/systeminfo/SystemInfo.h"
 
 namespace rx
 {
@@ -240,6 +245,158 @@ void ConvertMinFilter(GLenum minFilter, D3DTEXTUREFILTERTYPE *d3dMinFilter, D3DT
     {
         *d3dMinFilter = D3DTEXF_ANISOTROPIC;
     }
+}
+
+}
+
+namespace d3d9_gl
+{
+
+static gl::TextureCaps GenerateTextureFormatCaps(GLenum internalFormat, GLuint clientVersion, IDirect3D9 *d3d9, D3DDEVTYPE deviceType,
+                                                 UINT adapter, D3DFORMAT adapterFormat)
+{
+    gl::TextureCaps textureCaps;
+
+    D3DFORMAT textureFormat = gl_d3d9::GetTextureFormat(internalFormat);
+    D3DFORMAT renderFormat = gl_d3d9::GetRenderFormat(internalFormat);
+
+    textureCaps.setTexture2DSupport(SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat,
+                                                                      0, D3DRTYPE_TEXTURE, textureFormat)));
+
+    textureCaps.setTextureCubeMapSupport(SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat,
+                                                                           0, D3DRTYPE_CUBETEXTURE, textureFormat)));
+
+    // D3D9 Renderer doesn't support 3D textures
+    //textureCaps.setTexture3DSupport(SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, currentDisplayMode.Format,
+    //                                                                  0, D3DRTYPE_VOLUMETEXTURE, textureFormat)));
+    textureCaps.setTexture3DSupport(false);
+
+    // D3D9 doesn't support 2D array textures
+    textureCaps.setTexture2DArraySupport(false);
+
+    textureCaps.setTextureFilteringSupport(SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat,
+                                                                                D3DUSAGE_QUERY_FILTER, D3DRTYPE_TEXTURE, textureFormat)));
+
+    textureCaps.setColorRenderingSupport((SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat,
+                                                                            D3DUSAGE_RENDERTARGET, D3DRTYPE_TEXTURE, textureFormat)) ||
+                                          SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat,
+                                                                            D3DUSAGE_RENDERTARGET, D3DRTYPE_TEXTURE, renderFormat))));
+
+    textureCaps.setDepthRenderingSupport(gl::GetDepthBits(internalFormat, clientVersion) > 0 &&
+                                         (SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat,
+                                                                            D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE, textureFormat)) ||
+                                          SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat,
+                                                                            D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE, renderFormat))));
+
+    textureCaps.setStencilRenderingSupport(gl::GetStencilBits(internalFormat, clientVersion) > 0 &&
+                                           (SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat,
+                                                                              D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE, textureFormat)) ||
+                                            SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat,
+                                                                              D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE, renderFormat))));
+
+    textureCaps.addSampleSupport(1);
+    for (size_t i = D3DMULTISAMPLE_2_SAMPLES; i <= D3DMULTISAMPLE_16_SAMPLES; i++)
+    {
+        D3DMULTISAMPLE_TYPE multisampleType = D3DMULTISAMPLE_TYPE(i);
+
+        HRESULT result = d3d9->CheckDeviceMultiSampleType(adapter, deviceType, textureFormat, TRUE, multisampleType, NULL);
+        if (SUCCEEDED(result))
+        {
+            textureCaps.addSampleSupport(i);
+        }
+    }
+
+    return textureCaps;
+}
+
+gl::Caps GenerateCaps(IDirect3D9 *d3d9, IDirect3DDevice9 *device, D3DDEVTYPE deviceType, UINT adapter)
+{
+    gl::Caps caps;
+
+    D3DCAPS9 deviceCaps;
+    if (FAILED(d3d9->GetDeviceCaps(adapter, deviceType, &deviceCaps)))
+    {
+        // Can't continue with out device caps
+        return caps;
+    }
+
+    D3DDISPLAYMODE currentDisplayMode;
+    d3d9->GetAdapterDisplayMode(adapter, &currentDisplayMode);
+
+    const GLuint maxClientVersion = 2;
+    const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats(maxClientVersion);
+    for (gl::FormatSet::const_iterator internalFormat = allFormats.begin(); internalFormat != allFormats.end(); ++internalFormat)
+    {
+        caps.setTextureFormatCaps(*internalFormat, GenerateTextureFormatCaps(*internalFormat, maxClientVersion, d3d9, deviceType, adapter, currentDisplayMode.Format));
+    }
+
+    const gl::TextureFormatCapsMap &formatSupport = caps.getTextureFormatCapsMap();
+
+    caps.set32BitIndexSupport(deviceCaps.MaxVertexIndex >= (1 << 16));
+    caps.setPackedDepthStencilSupport(true);
+    caps.setProgramBinarySupport(true);
+    caps.setRGB8AndRGBA8TextureSupport(true);
+    caps.setBGRA8TextureSupport(gl::GetBGRA8TextureSupport(formatSupport));
+    caps.setBGRAReadSupport(true);
+    caps.setPixelBufferObjectSupport(false);
+    caps.setMapBufferSupport(false);
+    caps.setMapBufferRangeSupport(false);
+    caps.setHalfFloatTextureSupport(gl::GetHalfFloatTextureSupport(formatSupport));
+    caps.setHalfFloatTextureFilteringSupport(gl::GetHalfFloatTextureFilteringSupport(formatSupport));
+    caps.setFloatTextureSupport(gl::GetFloatTextureSupport(formatSupport));
+    caps.setFloatTextureFilteringSupport(gl::GetFloatTextureFilteringSupport(formatSupport));
+    caps.setRGTextureSupport(gl::GetRGTextureSupport(formatSupport, caps.getHalfFloatTextureSupport(), caps.getFloatTextureSupport()));
+    caps.setDXT1TextureSupport(gl::GetDXT1TextureSupport(formatSupport));
+    caps.setDXT3TextureSupport(gl::GetDXT3TextureSupport(formatSupport));
+    caps.setDXT5TextureSupport(gl::GetDXT5TextureSupport(formatSupport));
+    caps.setDepthTextureSupport(gl::GetDepthTextureSupport(formatSupport));
+
+    // ATI cards on XP have problems with non-power-of-two textures.
+    D3DADAPTER_IDENTIFIER9 adapterId = { 0 };
+    if (SUCCEEDED(d3d9->GetAdapterIdentifier(adapter, 0, &adapterId)))
+    {
+        caps.setNPOTTextureSupport(!(deviceCaps.TextureCaps & D3DPTEXTURECAPS_POW2) &&
+                                   !(deviceCaps.TextureCaps & D3DPTEXTURECAPS_CUBEMAP_POW2) &&
+                                   !(deviceCaps.TextureCaps & D3DPTEXTURECAPS_NONPOW2CONDITIONAL) &&
+                                   !(isWindowsVistaOrGreater() && adapterId.VendorId == VENDOR_ID_AMD));
+    }
+    else
+    {
+        caps.setNPOTTextureSupport(false);
+    }
+
+    caps.setDrawBuffersSupport(false);
+    caps.setTextureStorageSupport(true);
+
+    // Must support a minimum of 2:1 anisotropy for max anisotropy to be considered supported, per the spec
+    caps.setAnisotropicFilteringSupport((deviceCaps.RasterCaps & D3DPRASTERCAPS_ANISOTROPY) != 0 && deviceCaps.MaxAnisotropy >= 2);
+    caps.setMaxTextureAnisotropy(static_cast<GLfloat>(deviceCaps.MaxAnisotropy));
+
+    // Check occlusion query support by trying to create one
+    IDirect3DQuery9 *occlusionQuery = NULL;
+    caps.setOcclusionQuerySupport(SUCCEEDED(device->CreateQuery(D3DQUERYTYPE_OCCLUSION, &occlusionQuery)) && occlusionQuery);
+    SafeRelease(occlusionQuery);
+
+    // Check event query support by trying to create one
+    IDirect3DQuery9 *eventQuery = NULL;
+    caps.setFenceQuerySupport(SUCCEEDED(device->CreateQuery(D3DQUERYTYPE_EVENT, &eventQuery)) && eventQuery);
+    SafeRelease(eventQuery);
+
+    caps.setANGLETimerQuerySupport(false); // Unimplemented
+    caps.setRobustnessSupport(true);
+    caps.setMinMaxBlendingSupport(true);
+    caps.setANGLEFramebufferBlitSupport(true);
+    caps.setANGLEFramebufferMultisampleSupport(gl::GetMaximumSupportedSamples(formatSupport) > 1);
+    caps.setANGLEInstancedArraysSupport(deviceCaps.PixelShaderVersion >= D3DPS_VERSION(3, 0));
+    caps.setANGLEPackReverseRowOrderSupport(true);
+    caps.setStandardDerivativeSupport(true);
+    caps.setTextureLODSupport(true);
+    caps.setFragDepthSupport(true);
+    caps.setANGLETextureUsageSupport(true);
+    caps.setANGLETranslatedSourceSupport(true);
+    caps.setColorBufferFloatSupport(gl::GetColorBufferFloatSupport(formatSupport));
+
+    return caps;
 }
 
 }
