@@ -44,7 +44,7 @@ RenderTarget9::RenderTarget9(Renderer *renderer, GLsizei width, GLsizei height, 
     mRenderer = Renderer9::makeRenderer9(renderer);
     mRenderTarget = NULL;
 
-    D3DFORMAT renderFormat = gl_d3d9::GetRenderFormat(internalFormat, mRenderer);
+    D3DFORMAT renderFormat = gl_d3d9::GetRenderFormat(internalFormat);
     int supportedSamples = mRenderer->getNearestSupportedSamples(renderFormat, samples);
 
     if (supportedSamples == -1)

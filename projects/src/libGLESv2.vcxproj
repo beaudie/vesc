@@ -128,6 +128,7 @@
     <ClInclude Include="..\..\src\libGLESv2\BinaryStream.h"/>
     <ClInclude Include="..\..\src\libGLESv2\resource.h"/>
     <ClInclude Include="..\..\src\libGLESv2\Renderbuffer.h"/>
+    <ClInclude Include="..\..\src\libGLESv2\Caps.h"/>
     <ClInclude Include="..\..\src\libGLESv2\precompiled.h"/>
     <ClInclude Include="..\..\src\libGLESv2\TransformFeedback.h"/>
     <ClInclude Include="..\..\src\libGLESv2\Context.h"/>
@@ -151,6 +152,7 @@
     <ClInclude Include="..\..\src\libGLESv2\validationES2.h"/>
     <ClInclude Include="..\..\src\libGLESv2\Fence.h"/>
     <ClInclude Include="..\..\src\libGLESv2\angletypes.h"/>
+    <ClInclude Include="..\..\src\libGLESv2\caps_utils.h"/>
     <ClInclude Include="..\..\src\libGLESv2\main.h"/>
     <ClInclude Include="..\..\src\libGLESv2\Framebuffer.h"/>
     <ClInclude Include="..\..\src\libGLESv2\formatutils.h"/>
@@ -295,6 +297,7 @@
     <ClCompile Include="..\..\src\libGLESv2\DynamicHLSL.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\HandleAllocator.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\queryconversions.cpp"/>
+    <ClCompile Include="..\..\src\libGLESv2\caps_utils.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\RenderbufferProxySet.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Fence.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\validationES.cpp"/>
@@ -316,6 +319,7 @@
     <ClCompile Include="..\..\src\libGLESv2\main.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\ProgramBinary.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Sampler.cpp"/>
+    <ClCompile Include="..\..\src\libGLESv2\Caps.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Framebuffer.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Texture.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\renderer\copyimage.cpp"/>
