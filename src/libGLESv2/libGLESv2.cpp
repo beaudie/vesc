@@ -23,6 +23,7 @@
 #include "libGLESv2/Context.h"
 #include "libGLESv2/VertexArray.h"
 #include "libGLESv2/TransformFeedback.h"
+#include "libGLESv2/caps_utils.h"
 
 #include "libGLESv2/validationES.h"
 #include "libGLESv2/validationES2.h"
@@ -1676,7 +1677,7 @@ void __stdcall glDrawElements(GLenum mode, GLsizei count, GLenum type, const GLv
               case GL_UNSIGNED_SHORT:
                 break;
               case GL_UNSIGNED_INT:
-                if (!context->supports32bitIndices())
+                if (!context->getCaps().extensions.elementIndexUint)
                 {
                     return gl::error(GL_INVALID_ENUM);
                 }
@@ -1732,7 +1733,7 @@ void __stdcall glDrawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum t
                   case GL_UNSIGNED_SHORT:
                     break;
                   case GL_UNSIGNED_INT:
-                    if (!context->supports32bitIndices())
+                    if (!context->getCaps().extensions.elementIndexUint)
                     {
                         return gl::error(GL_INVALID_ENUM);
                     }
@@ -2095,19 +2096,19 @@ void __stdcall glGenerateMipmap(GLenum target)
             // Internally, all texture formats are sized so checking if the format
             // is color renderable and filterable will not fail.
 
-            bool validRenderable = (gl::IsColorRenderingSupported(internalFormat, context) ||
+            const gl::TextureCaps &formatCaps = gl::GetTextureCaps(context->getCaps().textureCaps, internalFormat);
+
+            bool validRenderable = (formatCaps.colorRendering ||
                                     gl::IsSizedInternalFormat(internalFormat, context->getClientVersion()));
 
-            if (gl::IsDepthRenderingSupported(internalFormat, context) ||
-                gl::IsFormatCompressed(internalFormat, context->getClientVersion()) ||
-                !gl::IsTextureFilteringSupported(internalFormat, context) ||
-                !validRenderable)
+            if (formatCaps.depthRendering || gl::IsFormatCompressed(internalFormat, context->getClientVersion()) ||
+                !formatCaps.filtering || !validRenderable)
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
 
             // Non-power of 2 ES2 check
-            if (!context->supportsNonPower2Texture() && (!gl::isPow2(texture->getBaseLevelWidth()) || !gl::isPow2(texture->getBaseLevelHeight())))
+            if (!context->getCaps().extensions.textureNPOT && (!gl::isPow2(texture->getBaseLevelWidth()) || !gl::isPow2(texture->getBaseLevelHeight())))
             {
                 ASSERT(context->getClientVersion() <= 2 && (target == GL_TEXTURE_2D || target == GL_TEXTURE_CUBE_MAP));
                 return gl::error(GL_INVALID_OPERATION);
@@ -3202,14 +3203,11 @@ void __stdcall glGetRenderbufferParameteriv(GLenum target, GLenum pname, GLint* 
               case GL_RENDERBUFFER_DEPTH_SIZE:      *params = renderbuffer->getDepthSize();      break;
               case GL_RENDERBUFFER_STENCIL_SIZE:    *params = renderbuffer->getStencilSize();    break;
               case GL_RENDERBUFFER_SAMPLES_ANGLE:
-                if (context->getMaxSupportedSamples() != 0)
-                {
-                    *params = renderbuffer->getSamples();
-                }
-                else
+                if (!context->getCaps().extensions.framebufferMultisample)
                 {
                     return gl::error(GL_INVALID_ENUM);
                 }
+                *params = renderbuffer->getSamples();
                 break;
               default:
                 return gl::error(GL_INVALID_ENUM);
@@ -3444,7 +3442,7 @@ const GLubyte* __stdcall glGetString(GLenum name)
                 return (GLubyte*)"OpenGL ES GLSL ES 3.00 (ANGLE " ANGLE_VERSION_STRING ")";
             }
           case GL_EXTENSIONS:
-            return (GLubyte*)((context != NULL) ? context->getCombinedExtensionsString() : "");
+            return (GLubyte*)((context != NULL) ? context->getExtensionString() : "");
           default:
             return gl::error(GL_INVALID_ENUM, (GLubyte*)NULL);
         }
@@ -3508,7 +3506,7 @@ void __stdcall glGetTexParameterfv(GLenum target, GLenum pname, GLfloat* params)
                 *params = (GLfloat)texture->getUsage();
                 break;
               case GL_TEXTURE_MAX_ANISOTROPY_EXT:
-                if (!context->supportsTextureFilterAnisotropy())
+                if (!context->getCaps().extensions.textureFilterAnisotropic)
                 {
                     return gl::error(GL_INVALID_ENUM);
                 }
@@ -3634,7 +3632,7 @@ void __stdcall glGetTexParameteriv(GLenum target, GLenum pname, GLint* params)
                 *params = texture->getUsage();
                 break;
               case GL_TEXTURE_MAX_ANISOTROPY_EXT:
-                if (!context->supportsTextureFilterAnisotropy())
+                if (!context->getCaps().extensions.textureFilterAnisotropic)
                 {
                     return gl::error(GL_INVALID_ENUM);
                 }
@@ -5014,7 +5012,7 @@ void __stdcall glTexParameterf(GLenum target, GLenum pname, GLfloat param)
               case GL_TEXTURE_MIN_FILTER:           texture->setMinFilter(gl::uiround<GLenum>(param));   break;
               case GL_TEXTURE_MAG_FILTER:           texture->setMagFilter(gl::uiround<GLenum>(param));   break;
               case GL_TEXTURE_USAGE_ANGLE:          texture->setUsage(gl::uiround<GLenum>(param));       break;
-              case GL_TEXTURE_MAX_ANISOTROPY_EXT:   texture->setMaxAnisotropy(param, context->getTextureMaxAnisotropy()); break;
+              case GL_TEXTURE_MAX_ANISOTROPY_EXT:   texture->setMaxAnisotropy(param, context->getCaps().extensions.maxTextureAnisotropy); break;
               case GL_TEXTURE_COMPARE_MODE:         texture->setCompareMode(gl::uiround<GLenum>(param)); break;
               case GL_TEXTURE_COMPARE_FUNC:         texture->setCompareFunc(gl::uiround<GLenum>(param)); break;
               case GL_TEXTURE_SWIZZLE_R:            texture->setSwizzleRed(gl::uiround<GLenum>(param));   break;
@@ -5070,7 +5068,7 @@ void __stdcall glTexParameteri(GLenum target, GLenum pname, GLint param)
               case GL_TEXTURE_MIN_FILTER:           texture->setMinFilter((GLenum)param);   break;
               case GL_TEXTURE_MAG_FILTER:           texture->setMagFilter((GLenum)param);   break;
               case GL_TEXTURE_USAGE_ANGLE:          texture->setUsage((GLenum)param);       break;
-              case GL_TEXTURE_MAX_ANISOTROPY_EXT:   texture->setMaxAnisotropy((float)param, context->getTextureMaxAnisotropy()); break;
+              case GL_TEXTURE_MAX_ANISOTROPY_EXT:   texture->setMaxAnisotropy((float)param, context->getCaps().extensions.maxTextureAnisotropy); break;
               case GL_TEXTURE_COMPARE_MODE:         texture->setCompareMode((GLenum)param); break;
               case GL_TEXTURE_COMPARE_FUNC:         texture->setCompareFunc((GLenum)param); break;
               case GL_TEXTURE_SWIZZLE_R:            texture->setSwizzleRed((GLenum)param);   break;
@@ -5107,6 +5105,11 @@ void __stdcall glTexStorage2DEXT(GLenum target, GLsizei levels, GLenum internalf
 
         if (context)
         {
+            if (!context->getCaps().extensions.textureStorage)
+            {
+                return gl::error(GL_INVALID_OPERATION);
+            }
+
             if (context->getClientVersion() < 3 &&
                 !ValidateES2TexStorageParameters(context, target, levels, internalformat, width, height))
             {
@@ -8111,11 +8114,11 @@ const GLubyte* __stdcall glGetStringi(GLenum name, GLuint index)
                 return gl::error(GL_INVALID_ENUM, reinterpret_cast<GLubyte*>(NULL));
             }
 
-            if (index >= context->getNumExtensions())
+            if (index >= context->getExtensionStringCount())
             {
                 return gl::error(GL_INVALID_VALUE, reinterpret_cast<GLubyte*>(NULL));
             }
-            
+
             return reinterpret_cast<const GLubyte*>(context->getExtensionString(index));
         }
     }
@@ -9731,9 +9734,8 @@ void __stdcall glGetInternalformativ(GLenum target, GLenum internalformat, GLenu
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            if (!gl::IsColorRenderingSupported(internalformat, context) &&
-                !gl::IsDepthRenderingSupported(internalformat, context) &&
-                !gl::IsStencilRenderingSupported(internalformat, context))
+            const gl::TextureCaps &formatCaps = gl::GetTextureCaps(context->getCaps().textureCaps, internalformat);
+            if (!formatCaps.colorRendering && !formatCaps.depthRendering && !formatCaps.stencilRendering)
             {
                 return gl::error(GL_INVALID_ENUM);
             }
@@ -9960,11 +9962,6 @@ void __stdcall glGetBufferPointervOES(GLenum target, GLenum pname, void** params
 
         if (context)
         {
-            if (!context->supportsPBOs())
-            {
-                return gl::error(GL_INVALID_OPERATION);
-            }
-
             if (!gl::ValidBufferTarget(context, target))
             {
                 return gl::error(GL_INVALID_ENUM);
