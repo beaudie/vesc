@@ -1,0 +1,73 @@
+#include "ANGLETest.h"
+
+class TextureTest : public ANGLETest
+{
+protected:
+    TextureTest(int clientVersion)
+    {
+        setClientVersion(clientVersion);
+        setWindowWidth(128);
+        setWindowHeight(128);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
+
+    virtual void SetUp()
+    {
+        ANGLETest::SetUp();
+        glGenTextures(1, &mTexture);
+
+        glBindTexture(GL_TEXTURE_2D, mTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+        EXPECT_GL_NO_ERROR();
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    virtual void TearDown()
+    {
+        glDeleteTextures(1, &mTexture);
+
+        ANGLETest::TearDown();
+    }
+
+    GLuint mTexture;
+};
+
+class ES2TextureTest : public TextureTest
+{
+protected:
+    ES2TextureTest()
+        : TextureTest(2)
+    {}
+};
+
+class ES3TextureTest : public TextureTest
+{
+protected:
+    ES3TextureTest()
+        : TextureTest(3)
+    {}
+};
+
+TEST_F(ES2TextureTest, negative_api_subimage_es2)
+{
+    glBindTexture(GL_TEXTURE_2D, mTexture);
+    EXPECT_GL_ERROR(GL_NO_ERROR);
+
+    const GLubyte *pixels[20] = { 0 };
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 1, 1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+}
+
+TEST_F(ES3TextureTest, negative_api_subimage_es3)
+{
+    glBindTexture(GL_TEXTURE_2D, mTexture);
+    EXPECT_GL_ERROR(GL_NO_ERROR);
+
+    const GLubyte *pixels[20] = { 0 };
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 1, 1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+}
