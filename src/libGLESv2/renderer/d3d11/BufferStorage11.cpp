@@ -199,6 +199,8 @@ void *BufferStorage11::getData()
         mResolvedDataRevision = stagingBuffer->getDataRevision();
     }
 
+    mReadUsageCount = 0;
+
     return mResolvedData.data();
 }
 
