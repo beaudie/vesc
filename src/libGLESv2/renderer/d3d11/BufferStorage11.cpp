@@ -154,7 +154,6 @@ BufferStorage11::BufferStorage11(Renderer11 *renderer)
       mIsMapped(false),
       mResolvedDataRevision(0),
       mReadUsageCount(0),
-      mWriteUsageCount(0),
       mSize(0)
 {
 }
@@ -235,7 +234,6 @@ void BufferStorage11::setData(const void* data, unsigned int size, unsigned int 
     }
 
     stagingBuffer->setDataRevision(stagingBuffer->getDataRevision() + 1);
-    mWriteUsageCount = 0;
     mSize = std::max(mSize, requiredSize);
 }
 
@@ -287,7 +285,6 @@ bool BufferStorage11::supportsDirectBinding() const
 void BufferStorage11::markBufferUsage()
 {
     mReadUsageCount++;
-    mWriteUsageCount++;
 
     const unsigned int usageLimit = 5;
 
