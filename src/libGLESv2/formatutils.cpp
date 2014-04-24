@@ -319,6 +319,9 @@ ES3FormatSet BuildES3FormatSet()
     set.insert(FormatInfo(GL_LUMINANCE,          GL_LUMINANCE,       GL_HALF_FLOAT                    ));
     set.insert(FormatInfo(GL_ALPHA,              GL_ALPHA,           GL_HALF_FLOAT                    ));
 
+    // From GL_EXT_texture_format_BGRA8888
+    set.insert(FormatInfo(GL_BGRA_EXT,           GL_BGRA_EXT,        GL_UNSIGNED_BYTE                 ));
+
     // From GL_EXT_texture_storage
     //                   | Internal format          | Format            | Type                            |
     //                   |                          |                   |                                 |
