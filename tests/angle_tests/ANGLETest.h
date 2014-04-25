@@ -38,19 +38,46 @@
 
 #define SHADER_SOURCE(...) #__VA_ARGS__
 
+#define ANGLE_TEST_REQUIRE_VERSION(version) \
+    if (getClientVersion() < version) \
+    { \
+        return; \
+    }
+
+#define ANGLE_TEST_REQUIRE_EXTENSION(ext) \
+    if (!extensionEnabled(ext)) \
+    { \
+        return; \
+    }
+
+#define ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(version, ext) \
+    if (getClientVersion() < version && !extensionEnabled(ext)) \
+    { \
+        return; \
+    }
+
 class ANGLETest : public testing::Test
 {
   protected:
     ANGLETest();
 
   public:
-    static bool InitTestWindow();
-    static bool DestroyTestWindow();
+    struct Config
+    {
+        EGLint clientVersion;
+        EGLNativeDisplayType displayType;
+
+        Config();
+        Config(EGLint version, EGLNativeDisplayType display);
+    };
+
+    static bool Init(const Config &config);
+    static bool Destroy();
     static bool ReizeWindow(int width, int height);
 
   protected:
-    virtual void SetUp();
-    virtual void TearDown();
+    void SetUp();
+    void TearDown();
 
     virtual void swapBuffers();
 
@@ -59,7 +86,7 @@ class ANGLETest : public testing::Test
     static GLuint compileProgram(const std::string &vsSource, const std::string &fsSource);
     static bool extensionEnabled(const std::string &extName);
 
-    void setClientVersion(int clientVersion);
+    void setMinimumClientVersion(int clientVersion);
     void setWindowWidth(int width);
     void setWindowHeight(int height);
     void setConfigRedBits(int bits);
@@ -71,6 +98,7 @@ class ANGLETest : public testing::Test
     void setMultisampleEnabled(bool enabled);
 
     int getClientVersion() const;
+    int getMinimumClientVersion() const;
     int getWindowWidth() const;
     int getWindowHeight() const;
     int getConfigRedBits() const;
@@ -81,11 +109,15 @@ class ANGLETest : public testing::Test
     int getConfigStencilBits() const;
     bool isMultisampleEnabled() const;
 
+  protected:
+    virtual void setUp();
+    virtual void tearDown();
+
   private:
     bool createEGLContext();
     bool destroyEGLContext();
 
-    int mClientVersion;
+    int mMinClientVersion;
     int mWidth;
     int mHeight;
     int mRedBits;
@@ -102,14 +134,7 @@ class ANGLETest : public testing::Test
 
     static EGLDisplay mDisplay;
     static EGLNativeWindowType mNativeWindow;
-    static EGLNativeDisplayType mNativeDisplay;
-};
-
-class ANGLETestEnvironment : public testing::Environment
-{
-  public:
-    virtual void SetUp();
-    virtual void TearDown();
+    static Config mCurrentConfig;
 };
 
 #endif  // ANGLE_TESTS_ANGLE_TEST_H_

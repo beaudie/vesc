@@ -65,10 +65,8 @@ protected:
         }
     }
 
-    virtual void SetUp()
+    virtual void setUp()
     {
-        ANGLETest::SetUp();
-
         const std::string testVertexShaderSource = SHADER_SOURCE
         (
             attribute highp vec4 aPosition;
@@ -106,7 +104,7 @@ protected:
         glDisable(GL_DEPTH_TEST);
     }
 
-    void SetUpFramebuffer(GLenum colorFormat)
+    void setUpFramebuffer(GLenum colorFormat)
     {
         glGenFramebuffers(1, &mFramebuffer);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebuffer);
@@ -120,13 +118,11 @@ protected:
         ASSERT_GL_NO_ERROR();
     }
 
-    virtual void TearDown()
+    virtual void tearDown()
     {
         glDeleteProgram(mProgram);
         glDeleteFramebuffers(1, &mFramebuffer);
         glDeleteRenderbuffers(1, &mColorRenderbuffer);
-
-        ANGLETest::TearDown();
     }
 
     GLuint mProgram;
@@ -138,18 +134,18 @@ protected:
 
 TEST_F(BlendMinMaxTest, rgba8)
 {
-    SetUpFramebuffer(GL_RGBA8);
+    setUpFramebuffer(GL_RGBA8);
     runTest();
 }
 
 TEST_F(BlendMinMaxTest, rgba32f)
 {
-    SetUpFramebuffer(GL_RGBA32F);
+    setUpFramebuffer(GL_RGBA32F);
     runTest();
 }
 
 TEST_F(BlendMinMaxTest, rgba16f)
 {
-    SetUpFramebuffer(GL_RGBA16F);
+    setUpFramebuffer(GL_RGBA16F);
     runTest();
 }

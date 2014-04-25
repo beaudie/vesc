@@ -22,7 +22,7 @@ static const PTCHAR GetTestWindowName()
     return TEXT("ANGLE_TEST");
 }
 
-bool ANGLETest::InitTestWindow()
+bool ANGLETest::Init(const Config& config)
 {
     WNDCLASS sWC;
     sWC.style = CS_OWNDC;
@@ -46,46 +46,36 @@ bool ANGLETest::InitTestWindow()
     SetWindowLong(mNativeWindow, GWL_STYLE, 0);
     ShowWindow(mNativeWindow, SW_SHOW);
 
-    mNativeDisplay = GetDC(mNativeWindow);
-    if (!mNativeDisplay)
-    {
-        DestroyTestWindow();
-        return false;
-    }
-
-    mDisplay = eglGetDisplay(mNativeDisplay);
+    mDisplay = eglGetDisplay(config.displayType);
     if(mDisplay == EGL_NO_DISPLAY)
     {
-         mDisplay = eglGetDisplay((EGLNativeDisplayType)EGL_DEFAULT_DISPLAY);
+        Destroy();
+        return false;
     }
 
     EGLint majorVersion, minorVersion;
     if (!eglInitialize(mDisplay, &majorVersion, &minorVersion))
     {
-        DestroyTestWindow();
+        Destroy();
         return false;
     }
 
     eglBindAPI(EGL_OPENGL_ES_API);
     if (eglGetError() != EGL_SUCCESS)
     {
-        DestroyTestWindow();
+        Destroy();
         return false;
     }
+
+    mCurrentConfig = config;
 
     return true;
 }
 
-bool ANGLETest::DestroyTestWindow()
+bool ANGLETest::Destroy()
 {
     eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
     eglTerminate(mDisplay);
-
-    if (mNativeDisplay)
-    {
-        ReleaseDC(mNativeWindow, mNativeDisplay);
-        mNativeDisplay = 0;
-    }
 
     if (mNativeWindow)
     {

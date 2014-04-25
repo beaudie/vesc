@@ -15,10 +15,8 @@ protected:
         setConfigAlphaBits(8);
     }
 
-    virtual void SetUp()
+    virtual void setUp()
     {
-        ANGLETest::SetUp();
-
         const std::string vertexShaderSource = SHADER_SOURCE
         (
             precision highp float;
@@ -53,11 +51,9 @@ protected:
         mTextureUniformLocation = glGetUniformLocation(mProgram, "tex");
     }
 
-    virtual void TearDown()
+    virtual void tearDown()
     {
         glDeleteProgram(mProgram);
-
-        ANGLETest::TearDown();
     }
 
     void fillTextureData(std::vector<GLubyte> &buffer, GLubyte r, GLubyte g, GLubyte b, GLubyte a)

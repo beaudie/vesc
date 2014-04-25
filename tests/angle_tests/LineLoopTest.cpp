@@ -13,10 +13,8 @@ protected:
         setConfigAlphaBits(8);
     }
 
-    virtual void SetUp()
+    virtual void setUp()
     {
-        ANGLETest::SetUp();
-
         const std::string vsSource = SHADER_SOURCE
         (
             attribute highp vec4 position;
@@ -58,11 +56,9 @@ protected:
         ASSERT_GL_NO_ERROR();
     }
 
-    virtual void TearDown()
+    virtual void tearDown()
     {
         glDeleteProgram(mProgram);
-
-        ANGLETest::TearDown();
     }
 
     void runTest(GLenum indexType, GLubyte indexBuffer, const GLvoid *indexPtr)
@@ -140,10 +136,7 @@ TEST_F(LineLoopTest, line_loop_ushort_indices)
 
 TEST_F(LineLoopTest, line_loop_uint_indices)
 {
-    if (!extensionEnabled("GL_OES_element_index_uint"))
-    {
-        return;
-    }
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_OES_element_index_uint");
 
     static const GLuint indices[] = { 0, 7, 6, 9, 8, 0 };
     runTest(GL_UNSIGNED_INT, 0, indices + 1);
@@ -179,10 +172,7 @@ TEST_F(LineLoopTest, line_loop_ushort_index_buffer)
 
 TEST_F(LineLoopTest, line_loop_uint_index_buffer)
 {
-    if (!extensionEnabled("GL_OES_element_index_uint"))
-    {
-        return;
-    }
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_OES_element_index_uint");
 
     static const GLuint indices[] = { 0, 7, 6, 9, 8, 0 };
 
