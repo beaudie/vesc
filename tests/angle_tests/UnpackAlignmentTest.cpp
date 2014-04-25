@@ -18,10 +18,8 @@ protected:
         mProgram = 0;
     }
 
-    virtual void SetUp()
+    virtual void setUp()
     {
-        ANGLETest::SetUp();
-
         const std::string vertexShaderSource = SHADER_SOURCE
         (
             precision highp float;
@@ -50,11 +48,9 @@ protected:
         }
     }
 
-    virtual void TearDown()
+    virtual void tearDown()
     {
         glDeleteProgram(mProgram);
-
-        ANGLETest::TearDown();
     }
 
     void getPixelSize(GLenum format, GLenum type, unsigned int* size)

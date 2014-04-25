@@ -13,7 +13,7 @@ protected:
         setConfigGreenBits(8);
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
-        setClientVersion(3);
+        setMinimumClientVersion(3);
 
         GLenum swizzles[] =
         {
@@ -45,10 +45,8 @@ protected:
         }
     }
 
-    virtual void SetUp()
+    virtual void setUp()
     {
-        ANGLETest::SetUp();
-
         const std::string vertexShaderSource = SHADER_SOURCE
         (
             precision highp float;
@@ -85,12 +83,10 @@ protected:
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
-    virtual void TearDown()
+    virtual void tearDown()
     {
         glDeleteProgram(mProgram);
         glDeleteTextures(1, &mTexture);
-
-        ANGLETest::TearDown();
     }
 
     template <typename T>
@@ -183,6 +179,8 @@ protected:
 
 TEST_F(SwizzleTest, rgba8_2d)
 {
+    ANGLE_TEST_REQUIRE_VERSION(3);
+
     GLubyte data[] = { 1, 64, 128, 200 };
     init2DTexture(GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, data);
     runTest2D();
@@ -190,6 +188,8 @@ TEST_F(SwizzleTest, rgba8_2d)
 
 TEST_F(SwizzleTest, rgb8_2d)
 {
+    ANGLE_TEST_REQUIRE_VERSION(3);
+
     GLubyte data[] = { 77, 66, 55 };
     init2DTexture(GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, data);
     runTest2D();
@@ -197,6 +197,8 @@ TEST_F(SwizzleTest, rgb8_2d)
 
 TEST_F(SwizzleTest, rg8_2d)
 {
+    ANGLE_TEST_REQUIRE_VERSION(3);
+
     GLubyte data[] = { 11, 99 };
     init2DTexture(GL_RG8, GL_RG, GL_UNSIGNED_BYTE, data);
     runTest2D();
@@ -204,6 +206,8 @@ TEST_F(SwizzleTest, rg8_2d)
 
 TEST_F(SwizzleTest, r8_2d)
 {
+    ANGLE_TEST_REQUIRE_VERSION(3);
+
     GLubyte data[] = { 2 };
     init2DTexture<GLubyte>(GL_R8, GL_RED, GL_UNSIGNED_BYTE, data);
     runTest2D();
@@ -211,6 +215,8 @@ TEST_F(SwizzleTest, r8_2d)
 
 TEST_F(SwizzleTest, rgba32f_2d)
 {
+    ANGLE_TEST_REQUIRE_VERSION(3);
+
     GLfloat data[] = { 0.25f, 0.5f, 0.75f, 0.8f };
     init2DTexture(GL_RGBA32F, GL_RGBA, GL_FLOAT, data);
     runTest2D();
@@ -218,6 +224,8 @@ TEST_F(SwizzleTest, rgba32f_2d)
 
 TEST_F(SwizzleTest, rgb32f_2d)
 {
+    ANGLE_TEST_REQUIRE_VERSION(3);
+
     GLfloat data[] = { 0.1f, 0.2f, 0.3f };
     init2DTexture(GL_RGB32F, GL_RGB, GL_FLOAT, data);
     runTest2D();
@@ -225,6 +233,8 @@ TEST_F(SwizzleTest, rgb32f_2d)
 
 TEST_F(SwizzleTest, rg32f_2d)
 {
+    ANGLE_TEST_REQUIRE_VERSION(3);
+
     GLfloat data[] = { 0.9f, 0.1f  };
     init2DTexture(GL_RG32F, GL_RG, GL_FLOAT, data);
     runTest2D();
@@ -232,6 +242,8 @@ TEST_F(SwizzleTest, rg32f_2d)
 
 TEST_F(SwizzleTest, r32f_2d)
 {
+    ANGLE_TEST_REQUIRE_VERSION(3);
+
     GLfloat data[] = { 0.5f };
     init2DTexture(GL_R32F, GL_RED, GL_FLOAT, data);
     runTest2D();
@@ -239,6 +251,8 @@ TEST_F(SwizzleTest, r32f_2d)
 
 TEST_F(SwizzleTest, d32f_2d)
 {
+    ANGLE_TEST_REQUIRE_VERSION(3);
+
     GLfloat data[] = { 0.5f };
     init2DTexture(GL_DEPTH_COMPONENT32F, GL_DEPTH_COMPONENT, GL_FLOAT, data);
     runTest2D();
@@ -246,6 +260,8 @@ TEST_F(SwizzleTest, d32f_2d)
 
 TEST_F(SwizzleTest, d16_2d)
 {
+    ANGLE_TEST_REQUIRE_VERSION(3);
+
     GLushort data[] = { 0xFF };
     init2DTexture(GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, data);
     runTest2D();
@@ -253,6 +269,8 @@ TEST_F(SwizzleTest, d16_2d)
 
 TEST_F(SwizzleTest, d24_2d)
 {
+    ANGLE_TEST_REQUIRE_VERSION(3);
+
     GLuint data[] = { 0xFFFF };
     init2DTexture(GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, data);
     runTest2D();
@@ -262,6 +280,8 @@ TEST_F(SwizzleTest, d24_2d)
 
 TEST_F(SwizzleTest, compressed_dxt_2d)
 {
+    ANGLE_TEST_REQUIRE_VERSION(3);
+
     init2DCompressedTexture(GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, pixel_0_width, pixel_0_height, pixel_0_size, pixel_0_data);
     runTest2D();
 }

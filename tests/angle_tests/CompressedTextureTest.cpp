@@ -14,10 +14,8 @@ protected:
         setConfigAlphaBits(8);
     }
 
-    virtual void SetUp()
+    virtual void setUp()
     {
-        ANGLETest::SetUp();
-
         const std::string vsSource = SHADER_SOURCE
         (
             precision highp float;
@@ -55,11 +53,9 @@ protected:
         ASSERT_GL_NO_ERROR();
     }
 
-    virtual void TearDown()
+    virtual void tearDown()
     {
         glDeleteProgram(mTextureProgram);
-
-        ANGLETest::TearDown();
     }
 
     GLuint mTextureProgram;
@@ -68,10 +64,7 @@ protected:
 
 TEST_F(CompressedTextureTest, compressed_tex_image)
 {
-    if (getClientVersion() < 3 && !extensionEnabled("GL_EXT_texture_compression_dxt1"))
-    {
-        return;
-    }
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_EXT_texture_compression_dxt1");
 
     GLuint texture;
     glGenTextures(1, &texture);
@@ -108,15 +101,9 @@ TEST_F(CompressedTextureTest, compressed_tex_image)
 
 TEST_F(CompressedTextureTest, compressed_tex_storage)
 {
-    if (getClientVersion() < 3 && !extensionEnabled("GL_EXT_texture_compression_dxt1"))
-    {
-        return;
-    }
-
-    if (getClientVersion() < 3 && (!extensionEnabled("GL_EXT_texture_storage") || !extensionEnabled("GL_OES_rgb8_rgba8")))
-    {
-        return;
-    }
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_EXT_texture_compression_dxt1");
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_EXT_texture_storage");
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_OES_rgb8_rgba8");
 
     GLuint texture;
     glGenTextures(1, &texture);
