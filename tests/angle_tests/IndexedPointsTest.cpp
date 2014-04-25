@@ -26,10 +26,8 @@ protected:
         return (idx == 2 || idx == 3) ? -0.5f : 0.5f;
     }
 
-    virtual void SetUp()
+    virtual void initializeTest()
     {
-        ANGLETest::SetUp();
-
         const std::string vertexShaderSource = SHADER_SOURCE
         (
             precision highp float;
@@ -75,11 +73,9 @@ protected:
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(IndexType), indices.data(), GL_STATIC_DRAW);
     }
 
-    virtual void TearDown()
+    virtual void destroyTest()
     {
         glDeleteProgram(mProgram);
-
-        ANGLETest::TearDown();
     }
 
     void runTest(GLuint firstIndex)
@@ -171,40 +167,28 @@ typedef IndexedPointsTest<GLuint, GL_UNSIGNED_INT> IndexedPointsTestUInt;
 
 TEST_F(IndexedPointsTestUInt, unsigned_int_offset_0)
 {
-    if (getClientVersion() < 3 && !extensionEnabled("GL_OES_element_index_uint"))
-    {
-        return;
-    }
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_OES_element_index_uint");
 
     runTest(0);
 }
 
 TEST_F(IndexedPointsTestUInt, unsigned_int_offset_1)
 {
-    if (getClientVersion() < 3 && !extensionEnabled("GL_OES_element_index_uint"))
-    {
-        return;
-    }
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_OES_element_index_uint");
 
     runTest(1);
 }
 
 TEST_F(IndexedPointsTestUInt, unsigned_int_offset_2)
 {
-    if (getClientVersion() < 3 && !extensionEnabled("GL_OES_element_index_uint"))
-    {
-        return;
-    }
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_OES_element_index_uint");
 
     runTest(2);
 }
 
 TEST_F(IndexedPointsTestUInt, unsigned_int_offset_3)
 {
-    if (getClientVersion() < 3 && !extensionEnabled("GL_OES_element_index_uint"))
-    {
-        return;
-    }
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_OES_element_index_uint");
 
     runTest(3);
 }

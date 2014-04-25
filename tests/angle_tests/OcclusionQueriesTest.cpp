@@ -16,10 +16,8 @@ protected:
         mProgram = 0;
     }
 
-    virtual void SetUp()
+    virtual void initializeTest()
     {
-        ANGLETest::SetUp();
-
         const std::string passthroughVS = SHADER_SOURCE
         (
             attribute highp vec4 position;
@@ -45,11 +43,9 @@ protected:
         }
     }
 
-    virtual void TearDown()
+    virtual void destroyTest()
     {
         glDeleteProgram(mProgram);
-
-        ANGLETest::TearDown();
     }
 
     GLuint mProgram;
@@ -57,6 +53,8 @@ protected:
 
 TEST_F(OcclusionQueriesTest, is_occuluded)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_EXT_occlusion_query_boolean");
+
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -97,6 +95,8 @@ TEST_F(OcclusionQueriesTest, is_occuluded)
 
 TEST_F(OcclusionQueriesTest, is_not_occuluded)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_EXT_occlusion_query_boolean");
+
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -124,6 +124,8 @@ TEST_F(OcclusionQueriesTest, is_not_occuluded)
 
 TEST_F(OcclusionQueriesTest, errors)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_EXT_occlusion_query_boolean");
+
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 

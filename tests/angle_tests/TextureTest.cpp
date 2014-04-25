@@ -13,9 +13,8 @@ protected:
         setConfigAlphaBits(8);
     }
 
-    virtual void SetUp()
+    virtual void initializeTest()
     {
-        ANGLETest::SetUp();
         glGenTextures(1, &mTexture);
 
         glBindTexture(GL_TEXTURE_2D, mTexture);
@@ -58,12 +57,10 @@ protected:
         mTextureUniformLocation = glGetUniformLocation(mProgram, "tex");
     }
 
-    virtual void TearDown()
+    virtual void destroyTest()
     {
         glDeleteTextures(1, &mTexture);
         glDeleteProgram(mProgram);
-
-        ANGLETest::TearDown();
     }
 
     GLuint mTexture;

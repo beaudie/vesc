@@ -46,10 +46,8 @@ protected:
         mBGRAMultisampledFBO = 0;
     }
 
-    virtual void SetUp()
+    virtual void initializeTest()
     {
-        ANGLETest::SetUp();
-
         const std::string passthroughVS = SHADER_SOURCE
         (
             precision highp float;
@@ -170,7 +168,7 @@ protected:
         ASSERT_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
         ASSERT_GL_NO_ERROR();
 
-        if (extensionEnabled("GL_EXT_draw_buffers"))
+        if (getClientVersion() >= 3 || extensionEnabled("GL_EXT_draw_buffers"))
         {
             glGenFramebuffers(1, &mMRTFBO);
             glBindFramebuffer(GL_FRAMEBUFFER, mMRTFBO);
@@ -216,7 +214,7 @@ protected:
         glBindFramebuffer(GL_FRAMEBUFFER, mOriginalFBO);
     }
 
-    virtual void TearDown()
+    virtual void destroyTest()
     {
         glDeleteProgram(mCheckerProgram);
         glDeleteProgram(mBlueProgram);
@@ -264,8 +262,6 @@ protected:
         {
             glDeleteFramebuffers(1, &mBGRAMultisampledFBO);
         }
-
-        ANGLETest::TearDown();
     }
 
     GLuint mCheckerProgram;
@@ -304,6 +300,8 @@ protected:
 // Draw to user-created framebuffer, blit whole-buffer color to original framebuffer.
 TEST_F(BlitFramebufferANGLETest, blit_color_to_default)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -331,6 +329,8 @@ TEST_F(BlitFramebufferANGLETest, blit_color_to_default)
 // Draw to system framebuffer, blit whole-buffer color to user-created framebuffer.
 TEST_F(BlitFramebufferANGLETest, reverse_color_blit)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mOriginalFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -358,6 +358,8 @@ TEST_F(BlitFramebufferANGLETest, reverse_color_blit)
 // blit from user-created FBO to system framebuffer, with the scissor test enabled.
 TEST_F(BlitFramebufferANGLETest, scissored_blit)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -393,6 +395,8 @@ TEST_F(BlitFramebufferANGLETest, scissored_blit)
 // blit from system FBO to user-created framebuffer, with the scissor test enabled.
 TEST_F(BlitFramebufferANGLETest, reverse_scissored_blit)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mOriginalFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -428,6 +432,8 @@ TEST_F(BlitFramebufferANGLETest, reverse_scissored_blit)
 // blit from user-created FBO to system framebuffer, using region larger than buffer.
 TEST_F(BlitFramebufferANGLETest, oversized_blit)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -458,6 +464,8 @@ TEST_F(BlitFramebufferANGLETest, oversized_blit)
 // blit from system FBO to user-created framebuffer, using region larger than buffer.
 TEST_F(BlitFramebufferANGLETest, reverse_oversized_blit)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mOriginalFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -487,6 +495,8 @@ TEST_F(BlitFramebufferANGLETest, reverse_oversized_blit)
 // blit from user-created FBO to system framebuffer, with depth buffer.
 TEST_F(BlitFramebufferANGLETest, blit_with_depth)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glDepthMask(GL_TRUE);
@@ -524,6 +534,8 @@ TEST_F(BlitFramebufferANGLETest, blit_with_depth)
 // blit from system FBO to user-created framebuffer, with depth buffer.
 TEST_F(BlitFramebufferANGLETest, reverse_blit_with_depth)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mOriginalFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -561,6 +573,8 @@ TEST_F(BlitFramebufferANGLETest, reverse_blit_with_depth)
 // blit from one region of the system fbo to another-- this should fail.
 TEST_F(BlitFramebufferANGLETest, blit_same_buffer_original)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mOriginalFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -577,6 +591,8 @@ TEST_F(BlitFramebufferANGLETest, blit_same_buffer_original)
 // blit from one region of the system fbo to another.
 TEST_F(BlitFramebufferANGLETest, blit_same_buffer_user)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -592,6 +608,8 @@ TEST_F(BlitFramebufferANGLETest, blit_same_buffer_user)
 
 TEST_F(BlitFramebufferANGLETest, blit_partial_color)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -621,6 +639,8 @@ TEST_F(BlitFramebufferANGLETest, blit_partial_color)
 
 TEST_F(BlitFramebufferANGLETest, blit_different_sizes)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -649,6 +669,8 @@ TEST_F(BlitFramebufferANGLETest, blit_different_sizes)
 
 TEST_F(BlitFramebufferANGLETest, blit_with_missing_attachments)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mColorOnlyFBO);
 
     glClear(GL_COLOR_BUFFER_BIT);
@@ -687,6 +709,8 @@ TEST_F(BlitFramebufferANGLETest, blit_with_missing_attachments)
 
 TEST_F(BlitFramebufferANGLETest, blit_stencil)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glClear(GL_COLOR_BUFFER_BIT);
@@ -729,6 +753,8 @@ TEST_F(BlitFramebufferANGLETest, blit_stencil)
 // make sure that attempting to blit a partial depth buffer issues an error
 TEST_F(BlitFramebufferANGLETest, blit_partial_depth_stencil)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -748,10 +774,8 @@ TEST_F(BlitFramebufferANGLETest, blit_partial_depth_stencil)
 // Test blit with MRT framebuffers
 TEST_F(BlitFramebufferANGLETest, blit_mrt)
 {
-    if (!extensionEnabled("GL_EXT_draw_buffers"))
-    {
-        return;
-    }
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_EXT_draw_buffers");
 
     GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT };
 
@@ -796,6 +820,8 @@ TEST_F(BlitFramebufferANGLETest, blit_mrt)
 // Make sure that attempts to stretch in a blit call issue an error
 TEST_F(BlitFramebufferANGLETest, error_stretching)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -815,6 +841,8 @@ TEST_F(BlitFramebufferANGLETest, error_stretching)
 // Make sure that attempts to flip in a blit call issue an error
 TEST_F(BlitFramebufferANGLETest, error_flipping)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -833,6 +861,8 @@ TEST_F(BlitFramebufferANGLETest, error_flipping)
 
 TEST_F(BlitFramebufferANGLETest, errors)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);

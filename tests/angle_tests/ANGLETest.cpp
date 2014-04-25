@@ -1,7 +1,22 @@
 #include "ANGLETest.h"
 
+EGLDisplay ANGLETest::mDisplay = 0;
+EGLNativeWindowType ANGLETest::mNativeWindow = 0;
+ANGLETest::Config ANGLETest::mCurrentConfig = ANGLETest::Config();
+
+ANGLETest::Config::Config()
+    : clientVersion(2),
+      displayType(EGL_DEFAULT_DISPLAY)
+{
+}
+ANGLETest::Config::Config(EGLint version, EGLNativeDisplayType display)
+    : clientVersion(version),
+      displayType(display)
+{
+}
+
 ANGLETest::ANGLETest()
-    : mClientVersion(2),
+    : mMinClientVersion(2),
       mWidth(1280),
       mHeight(720),
       mRedBits(-1),
@@ -14,25 +29,32 @@ ANGLETest::ANGLETest()
 {
 }
 
-EGLDisplay ANGLETest::mDisplay = 0;
-EGLNativeWindowType ANGLETest::mNativeWindow = 0;
-EGLNativeDisplayType ANGLETest::mNativeDisplay = 0;
-
 void ANGLETest::SetUp()
 {
-    ReizeWindow(mWidth, mHeight);
-    if (!createEGLContext())
+    if (getClientVersion() >= getMinimumClientVersion())
     {
-        FAIL() << "egl context creation failed.";
+        ReizeWindow(mWidth, mHeight);
+        if (!createEGLContext())
+        {
+            FAIL() << "egl context creation failed.";
+        }
+
+        initializeTest();
     }
 }
 
 void ANGLETest::TearDown()
 {
-    swapBuffers();
-    if (!destroyEGLContext())
+    if (getClientVersion() >= getMinimumClientVersion())
     {
-        FAIL() << "egl context destruction failed.";
+        swapBuffers();
+
+        destroyTest();
+
+        if (!destroyEGLContext())
+        {
+            FAIL() << "egl context destruction failed.";
+        }
     }
 }
 
@@ -146,9 +168,9 @@ bool ANGLETest::extensionEnabled(const std::string &extName)
     return strstr(extString, extName.c_str()) != NULL;
 }
 
-void ANGLETest::setClientVersion(int clientVersion)
+void ANGLETest::setMinimumClientVersion(int clientVersion)
 {
-    mClientVersion = clientVersion;
+    mMinClientVersion = clientVersion;
 }
 
 void ANGLETest::setWindowWidth(int width)
@@ -198,7 +220,12 @@ void ANGLETest::setMultisampleEnabled(bool enabled)
 
 int ANGLETest::getClientVersion() const
 {
-    return mClientVersion;
+    return mCurrentConfig.clientVersion;
+}
+
+int ANGLETest::getMinimumClientVersion() const
+{
+    return mMinClientVersion;
 }
 
 int ANGLETest::getWindowWidth() const
@@ -246,6 +273,14 @@ bool ANGLETest::isMultisampleEnabled() const
     return mMultisample;
 }
 
+void ANGLETest::initializeTest()
+{
+}
+
+void ANGLETest::destroyTest()
+{
+}
+
 bool ANGLETest::createEGLContext()
 {
     const EGLint configAttributes[] =
@@ -279,7 +314,7 @@ bool ANGLETest::createEGLContext()
     mMultisample = (samples != 0);
 
     mSurface = eglCreateWindowSurface(mDisplay, mConfig, mNativeWindow, NULL);
-    if(mSurface == EGL_NO_SURFACE)
+    if (mSurface == EGL_NO_SURFACE)
     {
         eglGetError(); // Clear error
         mSurface = eglCreateWindowSurface(mDisplay, mConfig, NULL, NULL);
@@ -293,7 +328,7 @@ bool ANGLETest::createEGLContext()
 
     EGLint contextAttibutes[] =
     {
-        EGL_CONTEXT_CLIENT_VERSION, mClientVersion,
+        EGL_CONTEXT_CLIENT_VERSION, mCurrentConfig.clientVersion,
         EGL_NONE
     };
     mContext = eglCreateContext(mDisplay, mConfig, NULL, contextAttibutes);
@@ -319,17 +354,4 @@ bool ANGLETest::destroyEGLContext()
     eglDestroyContext(mDisplay, mContext);
 
     return true;
-}
-
-void ANGLETestEnvironment::SetUp()
-{
-    if (!ANGLETest::InitTestWindow())
-    {
-        FAIL() << "Failed to create ANGLE test window.";
-    }
-}
-
-void ANGLETestEnvironment::TearDown()
-{
-    ANGLETest::DestroyTestWindow();
 }

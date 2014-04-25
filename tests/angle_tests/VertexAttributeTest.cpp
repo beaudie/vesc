@@ -58,10 +58,8 @@ protected:
         }
     }
 
-    virtual void SetUp()
+    virtual void initializeTest()
     {
-        ANGLETest::SetUp();
-
         const std::string testVertexShaderSource = SHADER_SOURCE
         (
             attribute highp vec4 position;
@@ -104,11 +102,9 @@ protected:
         glDisable(GL_DEPTH_TEST);
     }
 
-    virtual void TearDown()
+    virtual void destroyTest()
     {
         glDeleteProgram(mProgram);
-
-        ANGLETest::TearDown();
     }
 
     static const size_t mVertexCount = 24;

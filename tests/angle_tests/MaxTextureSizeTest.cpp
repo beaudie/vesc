@@ -13,10 +13,8 @@ protected:
         setConfigAlphaBits(8);
     }
 
-    virtual void SetUp()
+    virtual void initializeTest()
     {
-        ANGLETest::SetUp();
-
         const std::string vsSource = SHADER_SOURCE
         (
             precision highp float;
@@ -68,12 +66,10 @@ protected:
         ASSERT_GL_NO_ERROR();
     }
 
-    virtual void TearDown()
+    virtual void destroyTest()
     {
         glDeleteProgram(mTextureProgram);
         glDeleteProgram(mBlueProgram);
-
-        ANGLETest::TearDown();
     }
 
     GLuint mTextureProgram;
@@ -143,10 +139,8 @@ TEST_F(MaxTextureSizeTest, specification_tex_image)
 
 TEST_F(MaxTextureSizeTest, specification_tex_storage)
 {
-    if (getClientVersion() < 3 && (!extensionEnabled("GL_EXT_texture_storage") || !extensionEnabled("GL_OES_rgb8_rgba8")))
-    {
-        return;
-    }
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_EXT_texture_storage");
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_OES_rgb8_rgba8");
 
     GLuint tex;
     glGenTextures(1, &tex);
@@ -213,6 +207,9 @@ TEST_F(MaxTextureSizeTest, specification_tex_storage)
 
 TEST_F(MaxTextureSizeTest, render_to_texture)
 {
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_EXT_texture_format_BGRA8888");
+    ANGLE_TEST_REQUIRE_VERSION_OR_EXTENSION(3, "GL_ANGLE_framebuffer_blit");
+
     GLuint fbo = 0;
     GLuint textureId = 0;
     // create a 1-level texture at maximum size
@@ -227,7 +224,7 @@ TEST_F(MaxTextureSizeTest, render_to_texture)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, textureHeight, textureWidth, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, textureWidth, textureHeight, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, NULL);
     EXPECT_GL_NO_ERROR();
 
     // create an FBO and attach the texture
@@ -258,8 +255,8 @@ TEST_F(MaxTextureSizeTest, render_to_texture)
         // copy corner of texture to LL corner of window
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER_ANGLE, 0);
         glBindFramebuffer(GL_READ_FRAMEBUFFER_ANGLE, fbo);
-        glBlitFramebufferANGLE(0, 0, textureWidth - 1, getWindowHeight() - 1,
-                               0, 0, textureWidth - 1, getWindowHeight() - 1,
+        glBlitFramebufferANGLE(0, 0, textureWidth, getWindowHeight(),
+                               0, 0, textureWidth, getWindowHeight(),
                                GL_COLOR_BUFFER_BIT, GL_NEAREST);
         glBindFramebuffer(GL_READ_FRAMEBUFFER_ANGLE, 0);
         EXPECT_GL_NO_ERROR();

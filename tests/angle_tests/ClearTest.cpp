@@ -14,10 +14,8 @@ protected:
         setConfigDepthBits(24);
     }
 
-    virtual void SetUp()
+    virtual void initializeTest()
     {
-        ANGLETest::SetUp();
-
         const std::string vertexShaderSource = SHADER_SOURCE
         (
             precision highp float;
@@ -46,11 +44,9 @@ protected:
         }
     }
 
-    virtual void TearDown()
+    virtual void destroyTest()
     {
         glDeleteProgram(mProgram);
-
-        ANGLETest::TearDown();
     }
 
     GLuint mProgram;
