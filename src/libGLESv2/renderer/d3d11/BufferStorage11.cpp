@@ -142,11 +142,14 @@ class BufferStorage11::PackStorage11 : public BufferStorage11::TypedBufferStorag
     void packPixels(ID3D11Texture2D *srcTexure, UINT srcSubresource, const PackPixelsParams &params);
 
   private:
+
+    void flushQueuedPackCommand();
+
     ID3D11Texture2D *mStagingTexture;
     DXGI_FORMAT mTextureFormat;
     gl::Extents mTextureSize;
     unsigned char *mMemoryBuffer;
-    PackPixelsParams mPackParams;
+    PackPixelsParams *mQueuedPackCommand;
     bool mDataModified;
 };
 
@@ -635,6 +638,7 @@ BufferStorage11::PackStorage11::PackStorage11(Renderer11 *renderer)
       mStagingTexture(NULL),
       mTextureFormat(DXGI_FORMAT_UNKNOWN),
       mMemoryBuffer(NULL),
+      mQueuedPackCommand(NULL),
       mDataModified(false)
 {
 }
@@ -643,6 +647,7 @@ BufferStorage11::PackStorage11::~PackStorage11()
 {
     SafeRelease(mStagingTexture);
     SafeDeleteArray(mMemoryBuffer);
+    SafeDelete(mQueuedPackCommand);
 }
 
 bool BufferStorage11::PackStorage11::copyFromStorage(TypedBufferStorage11 *source, size_t sourceOffset,
@@ -678,10 +683,8 @@ void *BufferStorage11::PackStorage11::map(GLbitfield access)
     //  and if D3D packs the staging texture memory identically to how we would fill
     //  the pack buffer according to the current pack state.
 
-    ASSERT(mMemoryBuffer);
-    mRenderer->packPixels(mStagingTexture, mPackParams, mMemoryBuffer);
+    flushQueuedPackCommand();
     mDataModified = (mDataModified || (access & GL_MAP_WRITE_BIT) != 0);
-
     return mMemoryBuffer;
 }
 
@@ -692,7 +695,8 @@ void BufferStorage11::PackStorage11::unmap()
 
 void BufferStorage11::PackStorage11::packPixels(ID3D11Texture2D *srcTexure, UINT srcSubresource, const PackPixelsParams &params)
 {
-    mPackParams = params;
+    flushQueuedPackCommand();
+    mQueuedPackCommand = new PackPixelsParams(params);
 
     D3D11_TEXTURE2D_DESC textureDesc;
     srcTexure->GetDesc(&textureDesc);
@@ -751,6 +755,17 @@ void BufferStorage11::PackStorage11::packPixels(ID3D11Texture2D *srcTexure, UINT
 
     // Asynchronous copy
     immediateContext->CopySubresourceRegion(mStagingTexture, 0, 0, 0, 0, srcTexure, srcSubresource, &srcBox);
+}
+
+void BufferStorage11::PackStorage11::flushQueuedPackCommand()
+{
+    ASSERT(mMemoryBuffer);
+
+    if (mQueuedPackCommand)
+    {
+        mRenderer->packPixels(mStagingTexture, *mQueuedPackCommand, mMemoryBuffer);
+        SafeDelete(mQueuedPackCommand);
+    }
 }
 
 }
