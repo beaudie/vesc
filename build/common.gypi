@@ -211,6 +211,16 @@
     },    # target_defaults
     'conditions':
     [
+        ['OS != "win"',
+        {
+            'target_defaults':
+            {
+                'cflags':
+                [
+                    '-fPIC'
+                ],
+            },
+        }],
         ['OS == "win"',
         {
             'target_defaults':
