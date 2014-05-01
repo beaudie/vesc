@@ -99,19 +99,6 @@ ProgramBinary::VertexExecutable::~VertexExecutable()
     delete mShaderExecutable;
 }
 
-bool ProgramBinary::VertexExecutable::matchesInputLayout(const VertexFormat attributes[]) const
-{
-    for (size_t attributeIndex = 0; attributeIndex < gl::MAX_VERTEX_ATTRIBS; attributeIndex++)
-    {
-        if (mInputs[attributeIndex] != attributes[attributeIndex])
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 LinkedVarying::LinkedVarying()
 {
 }
@@ -208,16 +195,19 @@ rx::ShaderExecutable *ProgramBinary::getPixelExecutable() const
 
 rx::ShaderExecutable *ProgramBinary::getVertexExecutableForInputLayout(const VertexFormat inputLayout[gl::MAX_VERTEX_ATTRIBS])
 {
+    // Generate new dynamic layout with attribute conversions
+    const std::string &layoutHLSL = mDynamicHLSL->generateInputLayoutHLSL(inputLayout, mShaderAttributes);
+
     for (size_t executableIndex = 0; executableIndex < mVertexExecutables.size(); executableIndex++)
     {
-        if (mVertexExecutables[executableIndex]->matchesInputLayout(inputLayout))
+        const VertexExecutable &vertexExecutable = *mVertexExecutables[executableIndex];
+        const std::string &storedLayoutHLSL = mDynamicHLSL->generateInputLayoutHLSL(vertexExecutable.inputs(), mShaderAttributes);
+
+        if (layoutHLSL == storedLayoutHLSL)
         {
             return mVertexExecutables[executableIndex]->shaderExecutable();
         }
     }
-
-    // Generate new dynamic layout with attribute conversions
-    const std::string &layoutHLSL = mDynamicHLSL->generateInputLayoutHLSL(inputLayout, mShaderAttributes);
 
     // Generate new shader source by replacing the attributes stub with the defined input layout
     std::string vertexHLSL = mVertexHLSL;
