@@ -644,7 +644,7 @@ void __stdcall glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, 
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            if ((size_t)size + offset > buffer->size())
+            if (static_cast<size_t>(size + offset) > static_cast<size_t>(buffer->size()))
             {
                 return gl::error(GL_INVALID_VALUE);
             }
