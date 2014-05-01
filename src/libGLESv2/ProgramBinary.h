@@ -218,16 +218,19 @@ class ProgramBinary : public RefCountObject
       public:
         VertexExecutable(rx::Renderer *const renderer,
                          const VertexFormat inputLayout[MAX_VERTEX_ATTRIBS],
+                         const VertexFormat convertedLayout[MAX_VERTEX_ATTRIBS],
                          rx::ShaderExecutable *shaderExecutable);
         ~VertexExecutable();
 
-        bool matchesInputLayout(const VertexFormat attributes[MAX_VERTEX_ATTRIBS]) const;
+        bool matchesConvertedLayout(const VertexFormat convertedLayout[MAX_VERTEX_ATTRIBS]) const;
 
         const VertexFormat *inputs() const { return mInputs; }
+        const VertexFormat *convertedInputs() const { return mConvertedInputs; }
         rx::ShaderExecutable *shaderExecutable() const { return mShaderExecutable; }
 
       private:
         VertexFormat mInputs[MAX_VERTEX_ATTRIBS];
+        VertexFormat mConvertedInputs[MAX_VERTEX_ATTRIBS];
         rx::ShaderExecutable *mShaderExecutable;
     };
 

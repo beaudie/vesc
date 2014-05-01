@@ -1027,21 +1027,51 @@ std::string DynamicHLSL::generateAttributeConversionHLSL(const VertexFormat &ver
     GLenum shaderComponentType = UniformComponentType(shaderAttrib.type);
     int shaderComponentCount = UniformComponentCount(shaderAttrib.type);
 
-    std::string padString = "";
-
     // Perform integer to float conversion (if necessary)
     bool requiresTypeConversion = (shaderComponentType == GL_FLOAT && vertexFormat.mType != GL_FLOAT);
 
-    // TODO: normalization for 32-bit integer formats
-    ASSERT(!requiresTypeConversion || !vertexFormat.mNormalized);
-
-    if (requiresTypeConversion || !padString.empty())
+    if (requiresTypeConversion)
     {
-        return "float" + Str(shaderComponentCount) + "(" + attribString + padString + ")";
+        // TODO: normalization for 32-bit integer formats
+        ASSERT(!vertexFormat.mNormalized && !vertexFormat.mPureInteger);
+        return "float" + Str(shaderComponentCount) + "(" + attribString + ")";
     }
 
     // No conversion necessary
     return attribString;
+}
+
+void DynamicHLSL::getConvertedInputLayout(const VertexFormat inputLayout[], const Attribute shaderAttributes[], VertexFormat *convertedLayout)
+{
+    size_t inputIndex = 0;
+
+    for (size_t attributeIndex = 0; attributeIndex < MAX_VERTEX_ATTRIBS; attributeIndex++)
+    {
+        ASSERT(inputIndex < MAX_VERTEX_ATTRIBS);
+
+        const VertexFormat &vertexFormat = inputLayout[inputIndex];
+        const Attribute &shaderAttribute = shaderAttributes[attributeIndex];
+
+        if (!shaderAttribute.name.empty())
+        {
+            convertedLayout[inputIndex] = getConvertedAttributeType(vertexFormat, shaderAttribute);
+            inputIndex += VariableRowCount(TransposeMatrixType(shaderAttribute.type));
+        }
+    }
+}
+
+VertexFormat DynamicHLSL::getConvertedAttributeType(const VertexFormat &vertexFormat, const ShaderVariable &shaderAttrib)
+{
+    GLenum shaderComponentType = UniformComponentType(shaderAttrib.type);
+    int shaderComponentCount = UniformComponentCount(shaderAttrib.type);
+
+    if (shaderComponentType == GL_FLOAT && vertexFormat.mType != GL_FLOAT)
+    {
+        ASSERT(!vertexFormat.mNormalized && !vertexFormat.mPureInteger);
+        return VertexFormat(GL_FLOAT, GL_FALSE, shaderComponentCount, GL_FALSE);
+    }
+
+    return vertexFormat;
 }
 
 }

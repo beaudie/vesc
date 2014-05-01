@@ -45,6 +45,7 @@ class DynamicHLSL
                                 std::map<int, VariableLocation> *programOutputVars) const;
 
     std::string generateGeometryShaderHLSL(int registers, const ShaderVariable *packing[][4], FragmentShader *fragmentShader, VertexShader *vertexShader) const;
+    static void getConvertedInputLayout(const VertexFormat inputLayout[], const Attribute shaderAttributes[], VertexFormat *convertedLayout);
 
     static const std::string VERTEX_ATTRIBUTE_STUB_STRING;
 
@@ -62,6 +63,7 @@ class DynamicHLSL
     static std::string decorateVariable(const std::string &name);
 
     std::string generateAttributeConversionHLSL(const VertexFormat &vertexFormat, const ShaderVariable &shaderAttrib) const;
+    static VertexFormat getConvertedAttributeType(const VertexFormat &vertexFormat, const ShaderVariable &shaderAttrib);
 };
 
 // Utility method shared between ProgramBinary and DynamicHLSL
