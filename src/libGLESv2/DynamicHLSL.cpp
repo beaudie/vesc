@@ -1027,21 +1027,66 @@ std::string DynamicHLSL::generateAttributeConversionHLSL(const VertexFormat &ver
     GLenum shaderComponentType = UniformComponentType(shaderAttrib.type);
     int shaderComponentCount = UniformComponentCount(shaderAttrib.type);
 
-    std::string padString = "";
-
     // Perform integer to float conversion (if necessary)
     bool requiresTypeConversion = (shaderComponentType == GL_FLOAT && vertexFormat.mType != GL_FLOAT);
 
-    // TODO: normalization for 32-bit integer formats
-    ASSERT(!requiresTypeConversion || !vertexFormat.mNormalized);
-
-    if (requiresTypeConversion || !padString.empty())
+    if (requiresTypeConversion)
     {
-        return "float" + Str(shaderComponentCount) + "(" + attribString + padString + ")";
+        // TODO: normalization for 32-bit integer formats
+        ASSERT(!vertexFormat.mNormalized && !vertexFormat.mPureInteger);
+        return "float" + Str(shaderComponentCount) + "(" + attribString + ")";
     }
 
     // No conversion necessary
     return attribString;
+}
+
+void DynamicHLSL::getConvertedInputLayout(const VertexFormat inputLayout[], const Attribute shaderAttributes[], GLenum *convertedLayout)
+{
+    for (size_t initInputIndex = 0; initInputIndex < MAX_VERTEX_ATTRIBS; initInputIndex++)
+    {
+        convertedLayout[initInputIndex] = GL_NONE;
+    }
+
+    size_t inputIndex = 0;
+
+    for (size_t attributeIndex = 0; attributeIndex < MAX_VERTEX_ATTRIBS; attributeIndex++)
+    {
+        ASSERT(inputIndex < MAX_VERTEX_ATTRIBS);
+
+        const VertexFormat &vertexFormat = inputLayout[inputIndex];
+        const Attribute &shaderAttribute = shaderAttributes[attributeIndex];
+
+        if (!shaderAttribute.name.empty())
+        {
+            convertedLayout[inputIndex] = getConvertedAttributeType(vertexFormat, shaderAttribute);
+            inputIndex += VariableRowCount(TransposeMatrixType(shaderAttribute.type));
+        }
+    }
+}
+
+GLenum DynamicHLSL::getConvertedAttributeType(const VertexFormat &vertexFormat, const ShaderVariable &shaderAttrib)
+{
+    GLenum shaderComponentType = UniformComponentType(shaderAttrib.type);
+    int shaderComponentCount = UniformComponentCount(shaderAttrib.type);
+
+    bool requiresConversion = (shaderComponentType == GL_FLOAT && vertexFormat.mType != GL_FLOAT);
+
+    if (IsMatrixType(shaderAttrib.type) || !requiresConversion)
+    {
+        return shaderAttrib.type;
+    }
+
+    ASSERT(!vertexFormat.mPureInteger);
+
+    switch (shaderComponentCount)
+    {
+      case 1:  return GL_FLOAT;
+      case 2:  return GL_FLOAT_VEC2;
+      case 3:  return GL_FLOAT_VEC3;
+      case 4:  return GL_FLOAT_VEC4;
+      default: UNREACHABLE(); return GL_NONE;
+    }
 }
 
 }

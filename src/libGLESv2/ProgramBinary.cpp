@@ -85,12 +85,14 @@ VariableLocation::VariableLocation(const std::string &name, unsigned int element
 
 ProgramBinary::VertexExecutable::VertexExecutable(rx::Renderer *const renderer,
                                                   const VertexFormat inputLayout[],
+                                                  const GLenum convertedLayout[],
                                                   rx::ShaderExecutable *shaderExecutable)
     : mShaderExecutable(shaderExecutable)
 {
     for (size_t attributeIndex = 0; attributeIndex < gl::MAX_VERTEX_ATTRIBS; attributeIndex++)
     {
         mInputs[attributeIndex] = inputLayout[attributeIndex];
+        mConvertedInputs[attributeIndex] = convertedLayout[attributeIndex];
     }
 }
 
@@ -99,11 +101,11 @@ ProgramBinary::VertexExecutable::~VertexExecutable()
     delete mShaderExecutable;
 }
 
-bool ProgramBinary::VertexExecutable::matchesInputLayout(const VertexFormat attributes[]) const
+bool ProgramBinary::VertexExecutable::matchesConvertedLayout(const GLenum convertedLayout[]) const
 {
-    for (size_t attributeIndex = 0; attributeIndex < gl::MAX_VERTEX_ATTRIBS; attributeIndex++)
+    for (size_t attributeIndex = 0; attributeIndex < MAX_VERTEX_ATTRIBS; attributeIndex++)
     {
-        if (mInputs[attributeIndex] != attributes[attributeIndex])
+        if (mConvertedInputs[attributeIndex] != convertedLayout[attributeIndex])
         {
             return false;
         }
@@ -206,11 +208,14 @@ rx::ShaderExecutable *ProgramBinary::getPixelExecutable() const
     return mPixelExecutable;
 }
 
-rx::ShaderExecutable *ProgramBinary::getVertexExecutableForInputLayout(const VertexFormat inputLayout[gl::MAX_VERTEX_ATTRIBS])
+rx::ShaderExecutable *ProgramBinary::getVertexExecutableForInputLayout(const VertexFormat inputLayout[MAX_VERTEX_ATTRIBS])
 {
+    GLenum convertedLayout[MAX_VERTEX_ATTRIBS];
+    DynamicHLSL::getConvertedInputLayout(inputLayout, mShaderAttributes, convertedLayout);
+
     for (size_t executableIndex = 0; executableIndex < mVertexExecutables.size(); executableIndex++)
     {
-        if (mVertexExecutables[executableIndex]->matchesInputLayout(inputLayout))
+        if (mVertexExecutables[executableIndex]->matchesConvertedLayout(convertedLayout))
         {
             return mVertexExecutables[executableIndex]->shaderExecutable();
         }
@@ -240,7 +245,7 @@ rx::ShaderExecutable *ProgramBinary::getVertexExecutableForInputLayout(const Ver
     }
     else
     {
-        mVertexExecutables.push_back(new VertexExecutable(mRenderer, inputLayout, vertexExecutable));
+        mVertexExecutables.push_back(new VertexExecutable(mRenderer, inputLayout, convertedLayout, vertexExecutable));
     }
 
     return vertexExecutable;
@@ -1234,11 +1239,11 @@ bool ProgramBinary::load(InfoLog &infoLog, const void *binary, GLsizei length)
 
     for (unsigned int vertexShaderIndex = 0; vertexShaderIndex < vertexShaderCount; vertexShaderIndex++)
     {
-        VertexFormat vertexInputs[gl::MAX_VERTEX_ATTRIBS];
+        VertexFormat inputLayout[MAX_VERTEX_ATTRIBS];
 
-        for (size_t inputIndex = 0; inputIndex < gl::MAX_VERTEX_ATTRIBS; inputIndex++)
+        for (size_t inputIndex = 0; inputIndex < MAX_VERTEX_ATTRIBS; inputIndex++)
         {
-            VertexFormat *vertexInput = &vertexInputs[inputIndex];
+            VertexFormat *vertexInput = &inputLayout[inputIndex];
             stream.read(&vertexInput->mType);
             stream.read(&vertexInput->mNormalized);
             stream.read(&vertexInput->mComponents);
@@ -1260,7 +1265,12 @@ bool ProgramBinary::load(InfoLog &infoLog, const void *binary, GLsizei length)
             return false;
         }
 
-        mVertexExecutables.push_back(new VertexExecutable(mRenderer, vertexInputs, shaderExecutable));
+        // generated converted input layout
+        GLenum convertedLayout[MAX_VERTEX_ATTRIBS];
+        DynamicHLSL::getConvertedInputLayout(inputLayout, mShaderAttributes, convertedLayout);
+
+        // add new binary
+        mVertexExecutables.push_back(new VertexExecutable(mRenderer, inputLayout, convertedLayout, shaderExecutable));
 
         stream.skip(vertexShaderSize);
     }
