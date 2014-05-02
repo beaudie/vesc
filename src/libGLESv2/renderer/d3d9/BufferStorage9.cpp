@@ -9,6 +9,7 @@
 
 #include "libGLESv2/renderer/d3d9/BufferStorage9.h"
 #include "common/debug.h"
+#include "libGLESv2/main.h"
 
 namespace rx
 {
@@ -41,7 +42,12 @@ void BufferStorage9::setData(const void* data, unsigned int size, unsigned int o
     if (!mMemory || offset + size > mAllocatedSize)
     {
         unsigned int newAllocatedSize = offset + size;
-        void *newMemory = new char[newAllocatedSize];
+        void *newMemory = new (std::nothrow) char[newAllocatedSize];
+
+        if (!newMemory)
+        {
+            return gl::error(GL_OUT_OF_MEMORY);
+        }
 
         if (offset > 0 && mMemory && mAllocatedSize > 0)
         {
