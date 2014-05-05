@@ -42,8 +42,8 @@ struct ShaderVariable
 
 struct Uniform : public ShaderVariable
 {
-    unsigned int registerIndex;
-    unsigned int elementIndex;     // For struct varyings
+    unsigned long registerIndex;
+    unsigned long elementIndex;     // For struct varyings
     std::vector<Uniform> fields;
 
     Uniform(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn,
@@ -88,11 +88,11 @@ struct Varying : public ShaderVariable
 
 struct BlockMemberInfo
 {
-    BlockMemberInfo(int offset, int arrayStride, int matrixStride, bool isRowMajorMatrix);
+    BlockMemberInfo(long offset, long arrayStride, long matrixStride, bool isRowMajorMatrix);
 
-    int offset;
-    int arrayStride;
-    int matrixStride;
+    long offset;
+    long arrayStride;
+    long matrixStride;
     bool isRowMajorMatrix;
 
     static const BlockMemberInfo defaultBlockInfo;

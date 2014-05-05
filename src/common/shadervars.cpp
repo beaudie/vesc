@@ -59,7 +59,7 @@ void Varying::resetRegisterAssignment()
     elementIndex = GL_INVALID_INDEX;
 }
 
-BlockMemberInfo::BlockMemberInfo(int offset, int arrayStride, int matrixStride, bool isRowMajorMatrix)
+BlockMemberInfo::BlockMemberInfo(long offset, long arrayStride, long matrixStride, bool isRowMajorMatrix)
     : offset(offset),
       arrayStride(arrayStride),
       matrixStride(matrixStride),
