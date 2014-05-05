@@ -87,7 +87,7 @@ class BufferStorage11::TypedBufferStorage11
 
     virtual bool copyFromStorage(TypedBufferStorage11 *source, size_t sourceOffset,
                                  size_t size, size_t destOffset) = 0;
-    virtual void resize(size_t size, bool preserveData) = 0;
+    virtual bool resize(size_t size, bool preserveData) = 0;
 
     virtual void *map(GLbitfield access) = 0;
     virtual void unmap() = 0;
@@ -113,7 +113,7 @@ class BufferStorage11::NativeBuffer11 : public BufferStorage11::TypedBufferStora
 
     virtual bool copyFromStorage(TypedBufferStorage11 *source, size_t sourceOffset,
                                  size_t size, size_t destOffset);
-    virtual void resize(size_t size, bool preserveData);
+    virtual bool resize(size_t size, bool preserveData);
 
     virtual void *map(GLbitfield access);
     virtual void unmap();
@@ -134,7 +134,7 @@ class BufferStorage11::PackStorage11 : public BufferStorage11::TypedBufferStorag
 
     virtual bool copyFromStorage(TypedBufferStorage11 *source, size_t sourceOffset,
                                  size_t size, size_t destOffset);
-    virtual void resize(size_t size, bool preserveData);
+    virtual bool resize(size_t size, bool preserveData);
 
     virtual void *map(GLbitfield access);
     virtual void unmap();
@@ -176,6 +176,13 @@ BufferStorage11 *BufferStorage11::makeBufferStorage11(BufferStorage *bufferStora
 void *BufferStorage11::getData()
 {
     NativeBuffer11 *stagingBuffer = getStagingBuffer();
+
+    if (!stagingBuffer)
+    {
+        // Out-of-memory
+        return NULL;
+    }
+
     if (stagingBuffer->getDataRevision() > mResolvedDataRevision)
     {
         if (stagingBuffer->getSize() > mResolvedData.size())
@@ -213,12 +220,22 @@ void BufferStorage11::setData(const void* data, size_t size, size_t offset)
     {
         NativeBuffer11 *stagingBuffer = getStagingBuffer();
 
+        if (!stagingBuffer)
+        {
+            // Out-of-memory
+            return;
+        }
+
         // Explicitly resize the staging buffer, preserving data if the new data will not
         // completely fill the buffer
         if (stagingBuffer->getSize() < requiredSize)
         {
             bool preserveData = (offset > 0);
-            stagingBuffer->resize(requiredSize, preserveData);
+            if (!stagingBuffer->resize(requiredSize, preserveData))
+            {
+                // Out-of-memory
+                return;
+            }
         }
 
         ID3D11DeviceContext *context = mRenderer->getDeviceContext();
@@ -270,7 +287,11 @@ void BufferStorage11::clear()
 void BufferStorage11::markTransformFeedbackUsage()
 {
     TypedBufferStorage11 *transformFeedbackStorage = getStorage(BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK);
-    transformFeedbackStorage->setDataRevision(transformFeedbackStorage->getDataRevision() + 1);
+
+    if (transformFeedbackStorage)
+    {
+        transformFeedbackStorage->setDataRevision(transformFeedbackStorage->getDataRevision() + 1);
+    }
 }
 
 size_t BufferStorage11::getSize() const
@@ -301,6 +322,13 @@ ID3D11Buffer *BufferStorage11::getBuffer(BufferUsage usage)
     markBufferUsage();
 
     TypedBufferStorage11 *typedBuffer = getStorage(usage);
+
+    if (!typedBuffer)
+    {
+        // Storage out-of-memory
+        return NULL;
+    }
+
     ASSERT(HAS_DYNAMIC_TYPE(NativeBuffer11*, typedBuffer));
 
     return static_cast<NativeBuffer11*>(typedBuffer)->getNativeBuffer();
@@ -309,6 +337,13 @@ ID3D11Buffer *BufferStorage11::getBuffer(BufferUsage usage)
 ID3D11ShaderResourceView *BufferStorage11::getSRV(DXGI_FORMAT srvFormat)
 {
     TypedBufferStorage11 *storage = getStorage(BUFFER_USAGE_PIXEL_UNPACK);
+
+    if (!storage)
+    {
+        // Storage out-of-memory
+        return NULL;
+    }
+
     ASSERT(HAS_DYNAMIC_TYPE(NativeBuffer11*, storage));
     ID3D11Buffer *buffer = static_cast<NativeBuffer11*>(storage)->getNativeBuffer();
 
@@ -350,8 +385,11 @@ void BufferStorage11::packPixels(ID3D11Texture2D *srcTexture, UINT srcSubresourc
 
     TypedBufferStorage11 *latestStorage = getLatestStorage();
 
-    packStorage->packPixels(srcTexture, srcSubresource, params);
-    packStorage->setDataRevision(latestStorage ? latestStorage->getDataRevision() + 1 : 1);
+    if (packStorage && latestStorage)
+    {
+        packStorage->packPixels(srcTexture, srcSubresource, params);
+        packStorage->setDataRevision(latestStorage ? latestStorage->getDataRevision() + 1 : 1);
+    }
 }
 
 BufferStorage11::TypedBufferStorage11 *BufferStorage11::getStorage(BufferUsage usage)
@@ -381,7 +419,11 @@ BufferStorage11::TypedBufferStorage11 *BufferStorage11::getStorage(BufferUsage u
     // resize buffer
     if (directBuffer->getSize() < mSize)
     {
-        directBuffer->resize(mSize, true);
+        if (!directBuffer->resize(mSize, true))
+        {
+            // Out of memory error
+            return NULL;
+        }
     }
 
     TypedBufferStorage11 *latestBuffer = getLatestStorage();
@@ -439,6 +481,12 @@ void *BufferStorage11::map(GLbitfield access)
         mMappedStorage = getStagingBuffer();
     }
 
+    if (!mMappedStorage)
+    {
+        // Out-of-memory
+        return NULL;
+    }
+
     return mMappedStorage->map(access);
 }
 
@@ -452,6 +500,13 @@ void BufferStorage11::unmap()
 BufferStorage11::NativeBuffer11 *BufferStorage11::getStagingBuffer()
 {
     TypedBufferStorage11 *stagingStorage = getStorage(BUFFER_USAGE_STAGING);
+
+    if (!stagingStorage)
+    {
+        // Out-of-memory
+        return NULL;
+    }
+
     ASSERT(HAS_DYNAMIC_TYPE(NativeBuffer11*, stagingStorage));
     return static_cast<NativeBuffer11*>(stagingStorage);
 }
@@ -459,6 +514,13 @@ BufferStorage11::NativeBuffer11 *BufferStorage11::getStagingBuffer()
 BufferStorage11::PackStorage11 *BufferStorage11::getPackStorage()
 {
     TypedBufferStorage11 *packStorage = getStorage(BUFFER_USAGE_PIXEL_PACK);
+
+    if (!packStorage)
+    {
+        // Out-of-memory
+        return NULL;
+    }
+
     ASSERT(HAS_DYNAMIC_TYPE(PackStorage11*, packStorage));
     return static_cast<PackStorage11*>(packStorage);
 }
@@ -527,7 +589,7 @@ bool BufferStorage11::NativeBuffer11::copyFromStorage(TypedBufferStorage11 *sour
     return createBuffer;
 }
 
-void BufferStorage11::NativeBuffer11::resize(size_t size, bool preserveData)
+bool BufferStorage11::NativeBuffer11::resize(size_t size, bool preserveData)
 {
     ID3D11Device *device = mRenderer->getDevice();
     ID3D11DeviceContext *context = mRenderer->getDeviceContext();
@@ -540,7 +602,7 @@ void BufferStorage11::NativeBuffer11::resize(size_t size, bool preserveData)
 
     if (FAILED(result))
     {
-        return gl::error(GL_OUT_OF_MEMORY);
+        return gl::error(GL_OUT_OF_MEMORY, false);
     }
 
     if (mNativeBuffer && preserveData)
@@ -561,6 +623,8 @@ void BufferStorage11::NativeBuffer11::resize(size_t size, bool preserveData)
     mNativeBuffer = newBuffer;
 
     mBufferSize = bufferDesc.ByteWidth;
+
+    return true;
 }
 
 void BufferStorage11::NativeBuffer11::fillBufferDesc(D3D11_BUFFER_DESC* bufferDesc, Renderer *renderer,
@@ -656,9 +720,10 @@ bool BufferStorage11::PackStorage11::copyFromStorage(TypedBufferStorage11 *sourc
     return false;
 }
 
-void BufferStorage11::PackStorage11::resize(size_t size, bool preserveData)
+bool BufferStorage11::PackStorage11::resize(size_t size, bool preserveData)
 {
     UNIMPLEMENTED();
+    return true;
 }
 
 void *BufferStorage11::PackStorage11::map(GLbitfield access)
