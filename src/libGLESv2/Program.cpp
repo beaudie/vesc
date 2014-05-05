@@ -101,22 +101,27 @@ void InfoLog::append(const char *format, ...)
     va_end(vararg);
 
     char *logPointer = NULL;
+    size_t logLength = 0;
 
     if (!mInfoLog)
     {
         mInfoLog = new char[infoLength + 2];
         logPointer = mInfoLog;
+        logLength = infoLength + 2;
     }
     else
     {
         size_t currentlogLength = strlen(mInfoLog);
-        char *newLog = new char[currentlogLength + infoLength + 2];
-        strcpy(newLog, mInfoLog);
+        size_t newInfoLogLength = currentlogLength + infoLength + 2;
+        char *newLog = new char[newInfoLogLength];
+        strncpy(newLog, mInfoLog, newInfoLogLength);
+        newLog[newInfoLogLength - 1] = '\0';
 
         delete[] mInfoLog;
         mInfoLog = newLog;
 
         logPointer = mInfoLog + currentlogLength;
+        logLength = newInfoLogLength - currentlogLength;
     }
 
     va_start(vararg, format);
@@ -124,7 +129,8 @@ void InfoLog::append(const char *format, ...)
     va_end(vararg);
 
     logPointer[infoLength] = 0;
-    strcpy(logPointer + infoLength, "\n");
+    strncpy(logPointer + infoLength, "\n", logLength - infoLength);
+    logPointer[logLength - 1] = '\0';
 }
 
 void InfoLog::reset()
