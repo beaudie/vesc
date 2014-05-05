@@ -96,6 +96,7 @@ TCompiler::TCompiler(ShShaderType type, ShShaderSpec spec)
     : shaderType(type),
       shaderSpec(spec),
       maxUniformVectors(0),
+      maxVaryingVectors(0),
       maxExpressionComplexity(0),
       maxCallStackDepth(0),
       fragmentPrecisionHigh(false),
@@ -114,6 +115,7 @@ bool TCompiler::Init(const ShBuiltInResources& resources)
     maxUniformVectors = (shaderType == SH_VERTEX_SHADER) ?
         resources.MaxVertexUniformVectors :
         resources.MaxFragmentUniformVectors;
+    maxVaryingVectors = resources.MaxVaryingVectors;
     maxExpressionComplexity = resources.MaxExpressionComplexity;
     maxCallStackDepth = resources.MaxCallStackDepth;
 
@@ -238,14 +240,7 @@ bool TCompiler::compile(const char* const shaderStrings[],
         {
             collectVariables(root);
             if (compileOptions & SH_ENFORCE_PACKING_RESTRICTIONS)
-            {
                 success = enforcePackingRestrictions();
-                if (!success)
-                {
-                    infoSink.info.prefix(EPrefixError);
-                    infoSink.info << "too many uniforms";
-                }
-            }
             if (success && shaderType == SH_VERTEX_SHADER &&
                 (compileOptions & SH_INIT_VARYINGS_WITHOUT_STATIC_USE))
                 initializeVaryingsWithoutStaticUse(root);
@@ -458,7 +453,21 @@ void TCompiler::collectVariables(TIntermNode* root)
 bool TCompiler::enforcePackingRestrictions()
 {
     VariablePacker packer;
-    return packer.CheckVariablesWithinPackingLimits(maxUniformVectors, uniforms);
+    bool success = packer.CheckVariablesWithinPackingLimits(maxUniformVectors, uniforms);
+    if (!success) {
+        infoSink.info.prefix(EPrefixError);
+        infoSink.info << "too many uniforms";
+        return false;
+    }
+
+    success = packer.CheckVariablesWithinPackingLimits(maxVaryingVectors, varyings);
+
+    if (!success) {
+        infoSink.info.prefix(EPrefixError);
+        infoSink.info << "too many varyings";
+        return false;
+    }
+    return true;
 }
 
 void TCompiler::initializeGLPosition(TIntermNode* root)
