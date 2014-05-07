@@ -8,7 +8,7 @@
 #define _VARIABLEPACKER_INCLUDED_
 
 #include <vector>
-#include "compiler/translator/ShHandle.h"
+#include "compiler/translator/Compiler.h"
 
 class VariablePacker {
  public:
