@@ -989,7 +989,7 @@ static bool ValidateUniformCommonBase(gl::Context *context, GLenum targetUniform
 bool ValidateUniform(gl::Context *context, GLenum uniformType, GLint location, GLsizei count)
 {
     // Check for ES3 uniform entry points
-    if (UniformComponentType(uniformType) == GL_UNSIGNED_INT && context->getClientVersion() < 3)
+    if (VariableComponentType(uniformType) == GL_UNSIGNED_INT && context->getClientVersion() < 3)
     {
         return gl::error(GL_INVALID_OPERATION, false);
     }
@@ -1000,7 +1000,7 @@ bool ValidateUniform(gl::Context *context, GLenum uniformType, GLint location, G
         return false;
     }
 
-    GLenum targetBoolType = UniformBoolVectorType(uniformType);
+    GLenum targetBoolType = VariableBoolVectorType(uniformType);
     bool samplerUniformCheck = (IsSampler(uniform->type) && uniformType == GL_INT);
     if (!samplerUniformCheck && uniformType != uniform->type && targetBoolType != uniform->type)
     {

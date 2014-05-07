@@ -13,12 +13,13 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include "GLSLANG/ShaderLang.h"
 
-#include <GLES3/gl3.h>
-#include <GLES2/gl2.h>
-
-namespace gl
+namespace sh
 {
+
+// GLenum alias
+typedef unsigned int SHenum;
 
 // Varying interpolation qualifier, see section 4.3.9 of the ESSL 3.00.4 spec
 enum InterpolationType
@@ -39,12 +40,12 @@ enum BlockLayoutType
 // Base class for all variables defined in shaders, including Varyings, Uniforms, etc
 struct ShaderVariable
 {
-    GLenum type;
-    GLenum precision;
+    SHenum type;
+    SHenum precision;
     std::string name;
     unsigned int arraySize;
 
-    ShaderVariable(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn)
+    ShaderVariable(SHenum typeIn, SHenum precisionIn, const char *nameIn, unsigned int arraySizeIn)
       : type(typeIn),
         precision(precisionIn),
         name(nameIn),
@@ -64,7 +65,7 @@ struct Uniform : public ShaderVariable
     unsigned int registerIndex;
     unsigned int elementIndex; // Offset within a register, for struct members
 
-    Uniform(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn,
+    Uniform(SHenum typeIn, SHenum precisionIn, const char *nameIn, unsigned int arraySizeIn,
             unsigned int registerIndexIn, unsigned int elementIndexIn)
       : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
         registerIndex(registerIndexIn),
@@ -79,11 +80,11 @@ struct Attribute : public ShaderVariable
     int location;
 
     Attribute()
-      : ShaderVariable(GL_NONE, GL_NONE, "", 0),
+      : ShaderVariable((SHenum)0, (SHenum)0, "", 0),
         location(-1)
     {}
 
-    Attribute(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, int locationIn)
+    Attribute(SHenum typeIn, SHenum precisionIn, const char *nameIn, unsigned int arraySizeIn, int locationIn)
       : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
         location(locationIn)
     {}
@@ -94,7 +95,7 @@ struct InterfaceBlockField : public ShaderVariable
     bool isRowMajorMatrix;
     std::vector<InterfaceBlockField> fields;
 
-    InterfaceBlockField(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, bool isRowMajorMatrix)
+    InterfaceBlockField(SHenum typeIn, SHenum precisionIn, const char *nameIn, unsigned int arraySizeIn, bool isRowMajorMatrix)
       : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
         isRowMajorMatrix(isRowMajorMatrix)
     {}
@@ -108,7 +109,7 @@ struct Varying : public ShaderVariable
     std::vector<Varying> fields;
     std::string structName;
 
-    Varying(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, InterpolationType interpolationIn)
+    Varying(SHenum typeIn, SHenum precisionIn, const char *nameIn, unsigned int arraySizeIn, InterpolationType interpolationIn)
       : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
         interpolation(interpolationIn)
     {}
