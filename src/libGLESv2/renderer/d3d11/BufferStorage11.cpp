@@ -454,7 +454,7 @@ BufferStorage11::TypedBufferStorage11 *BufferStorage11::getLatestStorage() const
     for (auto it = mTypedBuffers.begin(); it != mTypedBuffers.end(); it++)
     {
         TypedBufferStorage11 *storage = it->second;
-        if (storage->getDataRevision() > latestRevision)
+        if (!latestStorage || storage->getDataRevision() > latestRevision)
         {
             latestStorage = storage;
             latestRevision = storage->getDataRevision();
@@ -475,7 +475,8 @@ void *BufferStorage11::map(GLbitfield access)
 
     TypedBufferStorage11 *latestStorage = getLatestStorage();
 
-    if (latestStorage->getUsage() == BUFFER_USAGE_PIXEL_PACK ||
+    if (latestStorage &&
+        latestStorage->getUsage() == BUFFER_USAGE_PIXEL_PACK ||
         latestStorage->getUsage() == BUFFER_USAGE_STAGING)
     {
         mMappedStorage = latestStorage;
