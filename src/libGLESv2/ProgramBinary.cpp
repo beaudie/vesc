@@ -1125,7 +1125,7 @@ bool ProgramBinary::load(InfoLog &infoLog, const void *binary, GLsizei length)
     stream.read(&mUsesPointSize);
     stream.read(&mShaderVersion);
 
-    size_t size;
+    unsigned int size;
     stream.read(&size);
     if (stream.error())
     {
@@ -1192,7 +1192,7 @@ bool ProgramBinary::load(InfoLog &infoLog, const void *binary, GLsizei length)
         stream.read(&uniformBlock.psRegisterIndex);
         stream.read(&uniformBlock.vsRegisterIndex);
 
-        size_t numMembers;
+        unsigned int numMembers;
         stream.read(&numMembers);
         uniformBlock.memberUniformIndexes.resize(numMembers);
         for (unsigned int blockMemberIndex = 0; blockMemberIndex < numMembers; blockMemberIndex++)
