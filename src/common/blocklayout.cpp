@@ -236,6 +236,8 @@ void HLSLVariableGetRegisterInfo(unsigned int baseRegisterIndex, gl::Uniform *va
     {
         encoder->enterAggregateType();
 
+        variable->registerIndex = baseRegisterIndex;
+
         for (size_t fieldIndex = 0; fieldIndex < variable->fields.size(); fieldIndex++)
         {
             HLSLVariableGetRegisterInfo(baseRegisterIndex, &variable->fields[fieldIndex], encoder, blockInfo);
