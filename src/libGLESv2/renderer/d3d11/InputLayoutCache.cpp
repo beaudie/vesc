@@ -185,8 +185,8 @@ GLenum InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl::M
     }
 
     bool dirtyBuffers = false;
-    size_t minDiff = gl::MAX_VERTEX_ATTRIBS;
-    size_t maxDiff = 0;
+    unsigned int minDiff = gl::MAX_VERTEX_ATTRIBS;
+    unsigned int maxDiff = 0;
     for (unsigned int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
     {
         ID3D11Buffer *buffer = NULL;
