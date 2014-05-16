@@ -2426,10 +2426,10 @@ GLint ProgramBinary::getActiveUniformi(GLuint index, GLenum pname) const
     return 0;
 }
 
-GLint ProgramBinary::getMaxUniformLocation() const
+bool ProgramBinary::isValidUniformLocation(GLint location) const
 {
     ASSERT(rx::IsIntegerCastSafe<GLint>(mUniformIndex.size()));
-    return static_cast<GLint>(mUniformIndex.size());
+    return (location >= 0 && location < static_cast<GLint>(mUniformIndex.size()));
 }
 
 LinkedUniform *ProgramBinary::getUniformByLocation(GLint location) const

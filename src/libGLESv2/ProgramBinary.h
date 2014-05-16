@@ -146,7 +146,7 @@ class ProgramBinary : public RefCountObject
     GLint getActiveUniformCount() const;
     GLint getActiveUniformMaxLength() const;
     GLint getActiveUniformi(GLuint index, GLenum pname) const;
-    GLint getMaxUniformLocation() const;
+    bool isValidUniformLocation(GLint location) const;
     LinkedUniform *getUniformByLocation(GLint location) const;
 
     void getActiveUniformBlockName(GLuint uniformBlockIndex, GLsizei bufSize, GLsizei *length, GLchar *uniformBlockName) const;
