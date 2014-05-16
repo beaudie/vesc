@@ -489,7 +489,7 @@ class Context
     void generateSwizzles(Texture *textures[], size_t count);
     size_t getCurrentTexturesAndSamplerStates(ProgramBinary *programBinary, SamplerType type, Texture **outTextures,
                                               TextureType *outTextureTypes, SamplerState *outSamplers);
-    Texture *getIncompleteTexture(TextureType type);
+    Texture *getIncompleteTexture(TextureType type) const;
 
     bool skipDraw(GLenum drawMode);
 
@@ -503,11 +503,6 @@ class Context
     int mClientVersion;
 
     State mState;
-
-    BindingPointer<Texture2D> mTexture2DZero;
-    BindingPointer<TextureCubeMap> mTextureCubeMapZero;
-    BindingPointer<Texture3D> mTexture3DZero;
-    BindingPointer<Texture2DArray> mTexture2DArrayZero;
 
     typedef std::unordered_map<GLuint, Framebuffer*> FramebufferMap;
     FramebufferMap mFramebufferMap;
@@ -533,8 +528,9 @@ class Context
     std::vector<std::string> mExtensionStringList;
     const char *mCombinedExtensionsString;
     const char *mRendererString;
-    
-    BindingPointer<Texture> mIncompleteTextures[TEXTURE_TYPE_COUNT];
+
+    // The incomplete textures are mutable because they're lazily initialized by const methods
+    mutable BindingPointer<Texture> mIncompleteTextures[TEXTURE_TYPE_COUNT];
 
     // Recorded errors
     bool mInvalidEnum;
