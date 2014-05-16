@@ -144,6 +144,22 @@ void ShDestruct(ShHandle handle)
         DeleteCompiler(base->getAsCompiler());
 }
 
+void ShGetBuiltInResourcesString(const ShHandle handle, char *outString)
+{
+    if (!handle || !outString)
+    {
+        return;
+    }
+
+    TShHandleBase *base = static_cast<TShHandleBase*>(handle);
+    TCompiler *compiler = base->getAsCompiler();
+    if (!compiler) 
+    {
+        return;
+    }
+
+    strcpy(outString, compiler->getResourceString().c_str());
+}
 //
 // Do an actual compile on the given strings.  The result is left 
 // in the given compile object.
@@ -228,6 +244,9 @@ void ShGetInfo(const ShHandle handle, ShShaderInfo pname, size_t* params)
         break;
     case SH_SHADER_VERSION:
         *params = compiler->getShaderVersion();
+        break;
+    case SH_RESOURCE_STRING_LENGTH:
+        *params = compiler->getResourceString().length();
         break;
     default: UNREACHABLE();
     }
