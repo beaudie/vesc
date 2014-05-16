@@ -127,8 +127,6 @@ class Texture : public RefCountObject
     bool isImmutable() const;
     int immutableLevelCount();
 
-    static const GLuint INCOMPLETE_TEXTURE_ID = static_cast<GLuint>(-1);   // Every texture takes an id at creation time. The value is arbitrary because it is never registered with the resource manager.
-
   protected:
     void setImage(const PixelUnpackState &unpack, GLenum type, const void *pixels, rx::Image *image);
     bool subImage(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth,
