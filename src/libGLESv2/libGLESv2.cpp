@@ -2957,12 +2957,11 @@ void __stdcall glGetIntegerv(GLenum pname, GLint* params)
         {
             GLenum nativeType;
             unsigned int numParams = 0;
-            if (!context->getQueryParameterInfo(pname, &nativeType, &numParams))
-                return gl::error(GL_INVALID_ENUM);
 
-            // pname is valid, but there are no parameters to return
-            if (numParams == 0)
+            if (!ValidateStateQuery(context, pname, &nativeType, &numParams))
+            {
                 return;
+            }
 
             if (nativeType == GL_INT)
             {
