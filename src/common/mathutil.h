@@ -535,6 +535,14 @@ inline bool IsUnsignedMultiplicationSafe(T lhs, T rhs)
     return (lhs == T(0) || rhs == T(0) || (rhs <= std::numeric_limits<T>::max() / lhs));
 }
 
+template <class SmallIntT, class BigIntT>
+inline bool IsIntegerCastSafe(BigIntT bigValue)
+{
+    META_ASSERT(sizeof(BigIntT) >= sizeof(SmallIntT));
+    size_t smallBits = (sizeof(SmallIntT)* static_cast<size_t>(8));
+    return ((bigValue >> smallBits) == 0);
+}
+
 }
 
 #endif   // LIBGLESV2_MATHUTIL_H_

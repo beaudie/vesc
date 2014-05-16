@@ -16,6 +16,7 @@
 #include "libGLESv2/Renderbuffer.h"
 #include "libGLESv2/formatutils.h"
 #include "libGLESv2/main.h"
+#include "libGLESv2/ProgramBinary.h"
 
 #include "common/mathutil.h"
 #include "common/utilities.h"
@@ -874,7 +875,8 @@ bool ValidateReadPixelsParameters(gl::Context *context, GLint x, GLint y, GLsize
     return true;
 }
 
-static bool ValidateUniformCommonBase(gl::Context *context, GLint location, GLsizei count)
+static bool ValidateUniformCommonBase(gl::Context *context, GLenum targetUniformType,
+                                      GLint location, GLsizei count, LinkedUniform **uniformOut)
 {
     if (count < 0)
     {
@@ -893,6 +895,20 @@ static bool ValidateUniformCommonBase(gl::Context *context, GLint location, GLsi
         return false;
     }
 
+    if (location < 0 || location >= programBinary->getMaxUniformLocation())
+    {
+        return gl::error(GL_INVALID_OPERATION, false);
+    }
+
+    LinkedUniform *uniform = programBinary->getUniformByLocation(location);
+
+    // attempting to write an array to a non-array uniform is an INVALID_OPERATION
+    if (uniform->elementCount() == 1 && count > 1)
+    {
+        return gl::error(GL_INVALID_OPERATION, false);
+    }
+
+    *uniformOut = uniform;
     return true;
 }
 
@@ -904,7 +920,20 @@ bool ValidateUniform(gl::Context *context, GLenum uniformType, GLint location, G
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
-    return ValidateUniformCommonBase(context, location, count);
+    LinkedUniform *uniform = NULL;
+    if (!ValidateUniformCommonBase(context, uniformType, location, count, &uniform))
+    {
+        return false;
+    }
+
+    GLenum targetBoolType = UniformBoolVectorType(uniformType);
+    bool samplerUniformCheck = (IsSampler(uniform->type) && uniformType == GL_INT);
+    if (!samplerUniformCheck && uniformType != uniform->type && targetBoolType != uniform->type)
+    {
+        return gl::error(GL_INVALID_OPERATION, false);
+    }
+
+    return true;
 }
 
 bool ValidateUniformMatrix(gl::Context *context, GLenum matrixType, GLint location, GLsizei count,
@@ -923,7 +952,18 @@ bool ValidateUniformMatrix(gl::Context *context, GLenum matrixType, GLint locati
         return gl::error(GL_INVALID_VALUE, false);
     }
 
-    return ValidateUniformCommonBase(context, location, count);
+    LinkedUniform *uniform = NULL;
+    if (!ValidateUniformCommonBase(context, matrixType, location, count, &uniform))
+    {
+        return false;
+    }
+
+    if (uniform->type != matrixType)
+    {
+        return gl::error(GL_INVALID_OPERATION, false);
+    }
+
+    return true;
 }
 
 }
