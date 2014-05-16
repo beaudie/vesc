@@ -208,7 +208,7 @@ class RenderbufferStorage : public RenderbufferInterface
     virtual GLsizei getSamples() const;
 
     virtual unsigned int getSerial() const;
-    virtual unsigned int getTextureSerial() const { return 0; }
+    virtual unsigned int getTextureSerial() const { return -1; }
 
     static unsigned int issueSerials(GLuint count);
 
