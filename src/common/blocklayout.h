@@ -83,14 +83,35 @@ class HLSLBlockEncoder : public BlockLayoutEncoder
     virtual void advanceOffset(GLenum type, unsigned int arraySize, bool isRowMajorMatrix, int arrayStride, int matrixStride);
 };
 
+// Block layout packed according to D3D9 register packing rules, which just assigns
+// each variable (or struct member) to one or more float4 registers.  Specifically,
+// no packing of struct members is done.
+// See the "Differences" comment in
+// http://msdn.microsoft.com/en-us/library/windows/desktop/bb509581%28v=vs.85%29.aspx
+
+class HLSL9BlockEncoder : public BlockLayoutEncoder
+{
+  public:
+    HLSL9BlockEncoder(std::vector<BlockMemberInfo> *blockInfoOut);
+
+    virtual void enterAggregateType();
+    virtual void exitAggregateType();
+
+  protected:
+    virtual void getBlockLayoutInfo(GLenum type, unsigned int arraySize, bool isRowMajorMatrix, int *arrayStrideOut, int *matrixStrideOut);
+    virtual void advanceOffset(GLenum type, unsigned int arraySize, bool isRowMajorMatrix, int arrayStride, int matrixStride);
+};
+
 // This method assigns values to the variable's "registerIndex" and "elementIndex" fields.
-// "elementIndex" is only used for structures.
-void HLSLVariableGetRegisterInfo(unsigned int baseRegisterIndex, Uniform *variable);
+// "elementIndex" is only used for structures.  Set use11 to true if D3D10+ packing rules are
+// to be used, otherwise d3d9 rules are used.
+ void HLSLVariableGetRegisterInfo(unsigned int baseRegisterIndex, Uniform *variable, bool use11 = true);
 
 // This method returns the number of used registers for a ShaderVariable. It is dependent on the HLSLBlockEncoder
 // class to count the number of used registers in a struct (which are individually packed according to the same rules).
+// Set use11 to true if D3D10+ packing rules are to be used, otherwise d3d9 rules are used.
 unsigned int HLSLVariableRegisterCount(const Varying &variable);
-unsigned int HLSLVariableRegisterCount(const Uniform &variable);
+unsigned int HLSLVariableRegisterCount(const Uniform &variable, bool use11 = true);
 
 }
 

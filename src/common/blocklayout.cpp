@@ -227,7 +227,96 @@ void HLSLBlockEncoder::advanceOffset(GLenum type, unsigned int arraySize, bool i
     }
 }
 
-void HLSLVariableGetRegisterInfo(unsigned int baseRegisterIndex, gl::Uniform *variable, HLSLBlockEncoder *encoder, const std::vector<gl::BlockMemberInfo> &blockInfo)
+HLSL9BlockEncoder::HLSL9BlockEncoder(std::vector<BlockMemberInfo> *blockInfoOut)
+    : BlockLayoutEncoder(blockInfoOut)
+{
+}
+
+void HLSL9BlockEncoder::enterAggregateType()
+{
+    nextRegister();
+}
+
+void HLSL9BlockEncoder::exitAggregateType()
+{
+}
+
+void HLSL9BlockEncoder::getBlockLayoutInfo(GLenum type, unsigned int arraySize, bool isRowMajorMatrix, int *arrayStrideOut, int *matrixStrideOut)
+{
+    // We assume we are only dealing with 4 byte components (no doubles or half-words currently)
+    ASSERT(gl::UniformComponentSize(gl::UniformComponentType(type)) == BytesPerComponent);
+
+    int matrixStride = 0;
+    int arrayStride = 0;
+
+    nextRegister();
+
+    if (gl::IsMatrixType(type))
+    {
+        matrixStride = ComponentsPerRegister;
+
+        if (arraySize > 0)
+        {
+            const int numRegisters = gl::MatrixRegisterCount(type, isRowMajorMatrix);
+            arrayStride = ComponentsPerRegister * numRegisters;
+        }
+    }
+    else if (arraySize > 0)
+    {
+        arrayStride = ComponentsPerRegister;
+    }
+
+    *matrixStrideOut = matrixStride;
+    *arrayStrideOut = arrayStride;
+}
+
+void HLSL9BlockEncoder::advanceOffset(GLenum type, unsigned int arraySize, bool isRowMajorMatrix, int arrayStride, int matrixStride)
+{
+    if (arraySize > 0)
+    {
+        mCurrentOffset += arrayStride * (arraySize - 1);
+    }
+
+    if (gl::IsMatrixType(type))
+    {
+        ASSERT(matrixStride == ComponentsPerRegister);
+        const int numRegisters = gl::MatrixRegisterCount(type, isRowMajorMatrix);
+        const int numComponents = gl::MatrixComponentCount(type, isRowMajorMatrix);
+        mCurrentOffset += ComponentsPerRegister * (numRegisters - 1);
+        mCurrentOffset += numComponents;
+    }
+    else
+    {
+        mCurrentOffset += ComponentsPerRegister;
+    }
+}
+
+template <class ShaderVarType, class HLSLBlockEncoderType>
+void HLSLVariableRegisterCount(const ShaderVarType &variable, HLSLBlockEncoderType *encoder)
+{
+    if (variable.isStruct())
+    {
+        for (size_t arrayElement = 0; arrayElement < variable.elementCount(); arrayElement++)
+        {
+            encoder->enterAggregateType();
+
+            for (size_t fieldIndex = 0; fieldIndex < variable.fields.size(); fieldIndex++)
+            {
+                HLSLVariableRegisterCount(variable.fields[fieldIndex], encoder);
+            }
+
+            encoder->exitAggregateType();
+        }
+    }
+    else
+    {
+        // We operate only on varyings and uniforms, which do not have matrix layout qualifiers
+        encoder->encodeType(variable.type, variable.arraySize, false);
+    }
+}
+
+template <class HLSLBlockEncoderType>
+void HLSLVariableGetRegisterInfo(unsigned int baseRegisterIndex, gl::Uniform *variable, HLSLBlockEncoderType *encoder, const std::vector<gl::BlockMemberInfo> &blockInfo)
 {
     // because this method computes offsets (element indexes) instead of any total sizes,
     // we can ignore the array size of the variable
@@ -253,34 +342,16 @@ void HLSLVariableGetRegisterInfo(unsigned int baseRegisterIndex, gl::Uniform *va
     }
 }
 
-void HLSLVariableGetRegisterInfo(unsigned int baseRegisterIndex, gl::Uniform *variable)
+void HLSLVariableGetRegisterInfo(unsigned int baseRegisterIndex, gl::Uniform *variable, bool use11)
 {
     std::vector<BlockMemberInfo> blockInfo;
-    HLSLBlockEncoder encoder(&blockInfo);
-    HLSLVariableGetRegisterInfo(baseRegisterIndex, variable, &encoder, blockInfo);
-}
 
-template <class ShaderVarType>
-void HLSLVariableRegisterCount(const ShaderVarType &variable, HLSLBlockEncoder *encoder)
-{
-    if (variable.isStruct())
-    {
-        for (size_t arrayElement = 0; arrayElement < variable.elementCount(); arrayElement++)
-        {
-            encoder->enterAggregateType();
-
-            for (size_t fieldIndex = 0; fieldIndex < variable.fields.size(); fieldIndex++)
-            {
-                HLSLVariableRegisterCount(variable.fields[fieldIndex], encoder);
-            }
-
-            encoder->exitAggregateType();
-        }
-    }
-    else
-    {
-        // We operate only on varyings and uniforms, which do not have matrix layout qualifiers
-        encoder->encodeType(variable.type, variable.arraySize, false);
+    if (use11) {
+        HLSLBlockEncoder encoder(&blockInfo);
+        HLSLVariableGetRegisterInfo(baseRegisterIndex, variable, &encoder, blockInfo);
+    } else {
+        HLSL9BlockEncoder encoder(&blockInfo);
+        HLSLVariableGetRegisterInfo(baseRegisterIndex, variable, &encoder, blockInfo);
     }
 }
 
@@ -293,13 +364,21 @@ unsigned int HLSLVariableRegisterCount(const Varying &variable)
     return static_cast<unsigned int>(rx::roundUp<size_t>(encoder.getBlockSize(), registerBytes) / registerBytes);
 }
 
-unsigned int HLSLVariableRegisterCount(const Uniform &variable)
+unsigned int HLSLVariableRegisterCount(const Uniform &variable, bool use11)
 {
-    HLSLBlockEncoder encoder(NULL);
-    HLSLVariableRegisterCount(variable, &encoder);
+    if (use11) {
+        HLSLBlockEncoder encoder(NULL);
+        HLSLVariableRegisterCount(variable, &encoder);
 
-    const size_t registerBytes = (encoder.BytesPerComponent * encoder.ComponentsPerRegister);
-    return static_cast<unsigned int>(rx::roundUp<size_t>(encoder.getBlockSize(), registerBytes) / registerBytes);
+        const size_t registerBytes = (encoder.BytesPerComponent * encoder.ComponentsPerRegister);
+        return static_cast<unsigned int>(rx::roundUp<size_t>(encoder.getBlockSize(), registerBytes) / registerBytes);
+    } else {
+        HLSL9BlockEncoder encoder(NULL);
+        HLSLVariableRegisterCount(variable, &encoder);
+
+        const size_t registerBytes = (encoder.BytesPerComponent * encoder.ComponentsPerRegister);
+        return static_cast<unsigned int>(rx::roundUp<size_t>(encoder.getBlockSize(), registerBytes) / registerBytes);
+    }
 }
 
 }

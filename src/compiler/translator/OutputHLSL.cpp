@@ -3940,7 +3940,7 @@ gl::Uniform OutputHLSL::declareUniformToList(const TType &type, const TString &n
         }
 
         // assign register offset information -- this will override the information in any sub-structures.
-        HLSLVariableGetRegisterInfo(registerIndex, &structUniform);
+        HLSLVariableGetRegisterInfo(registerIndex, &structUniform, mOutputType == SH_HLSL11_OUTPUT);
 
         output.push_back(structUniform);
 
@@ -4008,11 +4008,11 @@ int OutputHLSL::declareUniformAndAssignRegister(const TType &type, const TString
 
     if (IsSampler(type.getBasicType()))
     {
-        mSamplerRegister += gl::HLSLVariableRegisterCount(uniform);
+        mSamplerRegister += gl::HLSLVariableRegisterCount(uniform, mOutputType == SH_HLSL11_OUTPUT);
     }
     else
     {
-        mUniformRegister += gl::HLSLVariableRegisterCount(uniform);
+        mUniformRegister += gl::HLSLVariableRegisterCount(uniform, mOutputType == SH_HLSL11_OUTPUT);
     }
 
     return registerIndex;
