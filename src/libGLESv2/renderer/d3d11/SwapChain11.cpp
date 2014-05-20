@@ -343,7 +343,7 @@ EGLint SwapChain11::resize(EGLint backbufferWidth, EGLint backbufferHeight)
         }
     }
 
-    result = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&mBackBufferTexture);
+    result = mSwapChain->GetBuffer(1, __uuidof(ID3D11Texture2D), (LPVOID*)&mBackBufferTexture);
     ASSERT(SUCCEEDED(result));
     if (SUCCEEDED(result))
     {
@@ -404,10 +404,10 @@ EGLint SwapChain11::reset(int backbufferWidth, int backbufferHeight, EGLint swap
         swapChainDesc.SampleDesc.Count = 1;
         swapChainDesc.SampleDesc.Quality = 0;
         swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        swapChainDesc.BufferCount = 2;
+        swapChainDesc.BufferCount = 3;
         swapChainDesc.OutputWindow = mWindow;
         swapChainDesc.Windowed = TRUE;
-        swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+        swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
         swapChainDesc.Flags = 0;
 
         HRESULT result = factory->CreateSwapChain(device, &swapChainDesc, &mSwapChain);
