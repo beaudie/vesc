@@ -267,14 +267,12 @@ void HLSLVariableRegisterCount(const ShaderVarType &variable, HLSLBlockEncoder *
     {
         for (size_t arrayElement = 0; arrayElement < variable.elementCount(); arrayElement++)
         {
-            encoder->enterAggregateType();
-
             for (size_t fieldIndex = 0; fieldIndex < variable.fields.size(); fieldIndex++)
             {
+                encoder->enterAggregateType();
                 HLSLVariableRegisterCount(variable.fields[fieldIndex], encoder);
+                encoder->exitAggregateType();
             }
-
-            encoder->exitAggregateType();
         }
     }
     else
