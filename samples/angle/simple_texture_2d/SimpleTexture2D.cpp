@@ -50,6 +50,8 @@ class SimpleTexture2DSample : public SampleApplication
             }
         );
 
+        glCopyTexImage2D(GL_RGBA, 0, GL_RGBA, 0, 0, 1, 1, 0);
+
         mProgram = CompileProgram(vs, fs);
         if (!mProgram)
         {
