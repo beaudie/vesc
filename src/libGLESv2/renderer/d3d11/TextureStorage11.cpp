@@ -463,7 +463,7 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer *renderer, GLenum internalform
         }
         else if (FAILED(result))
         {
-            ASSERT(result == E_OUTOFMEMORY);
+            ASSERT(result == E_OUTOFMEMORY || result == E_INVALIDARG);
             ERR("Creating image failed.");
             gl::error(GL_OUT_OF_MEMORY);
         }

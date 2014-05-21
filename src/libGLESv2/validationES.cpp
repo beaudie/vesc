@@ -1149,6 +1149,7 @@ bool ValidateCopyTexImageParametersBase(gl::Context* context, GLenum target, GLi
     GLint textureLevelWidth = 0;
     GLint textureLevelHeight = 0;
     GLint textureLevelDepth = 0;
+    int maxDimension = 0;
 
     switch (target)
     {
@@ -1164,6 +1165,7 @@ bool ValidateCopyTexImageParametersBase(gl::Context* context, GLenum target, GLi
                 textureLevelHeight = texture2d->getHeight(level);
                 textureLevelDepth = 1;
                 texture = texture2d;
+                maxDimension = context->getMaximum2DTextureDimension();
             }
         }
         break;
@@ -1185,6 +1187,7 @@ bool ValidateCopyTexImageParametersBase(gl::Context* context, GLenum target, GLi
                 textureLevelHeight = textureCube->getHeight(target, level);
                 textureLevelDepth = 1;
                 texture = textureCube;
+                maxDimension = context->getMaximumCubeTextureDimension();
             }
         }
         break;
@@ -1201,6 +1204,7 @@ bool ValidateCopyTexImageParametersBase(gl::Context* context, GLenum target, GLi
                 textureLevelHeight = texture2dArray->getHeight(level);
                 textureLevelDepth = texture2dArray->getLayers(level);
                 texture = texture2dArray;
+                maxDimension = context->getMaximum2DTextureDimension();
             }
         }
         break;
@@ -1217,6 +1221,7 @@ bool ValidateCopyTexImageParametersBase(gl::Context* context, GLenum target, GLi
                 textureLevelHeight = texture3d->getHeight(level);
                 textureLevelDepth = texture3d->getDepth(level);
                 texture = texture3d;
+                maxDimension = context->getMaximum3DTextureDimension();
             }
         }
         break;
@@ -1257,6 +1262,24 @@ bool ValidateCopyTexImageParametersBase(gl::Context* context, GLenum target, GLi
         {
             return gl::error(GL_INVALID_VALUE, false);
         }
+    }
+    else
+    {
+        if (IsCubemapTextureTarget(target) && width != height)
+        {
+            return gl::error(GL_INVALID_VALUE, false);
+        }
+    }
+
+    int maxLevelDimension = (maxDimension >> level);
+    if (static_cast<int>(width) >= maxLevelDimension || static_cast<int>(height) >= maxLevelDimension)
+    {
+        return gl::error(GL_INVALID_VALUE, false);
+    }
+
+    if (!IsValidInternalFormat(internalformat, context))
+    {
+        return gl::error(GL_INVALID_ENUM, false);
     }
 
     *textureFormatOut = textureInternalFormat;
