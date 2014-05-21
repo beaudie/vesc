@@ -3403,14 +3403,16 @@ ShaderExecutable *Renderer9::compileToExecutable(gl::InfoLog &infoLog, const cha
     {
         flags,
         flags | D3DCOMPILE_AVOID_FLOW_CONTROL,
-        flags | D3DCOMPILE_PREFER_FLOW_CONTROL
+        flags | D3DCOMPILE_PREFER_FLOW_CONTROL,
+        flags | D3DCOMPILE_SKIP_VALIDATION
     };
 
     const static char *extraFlagNames[] =
     {
         "default",
         "avoid flow control",
-        "prefer flow control"
+        "prefer flow control",
+        "skip validation"
     };
 
     int attempts = ArraySize(extraFlags);
