@@ -25,6 +25,11 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
                                    GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth,
                                    GLint border, GLenum format, GLenum type, const GLvoid *pixels)
 {
+    if (!ValidTexture2DDestinationTarget(context, target))
+    {
+        return gl::error(GL_INVALID_ENUM, false);
+    }
+
     // Validate image size
     if (!ValidImageSize(context, target, level, width, height, depth))
     {
@@ -33,6 +38,14 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
 
     // Verify zero border
     if (border != 0)
+    {
+        return gl::error(GL_INVALID_VALUE, false);
+    }
+
+    if (xoffset < 0 || yoffset < 0 || zoffset < 0 ||
+        std::numeric_limits<GLsizei>::max() - xoffset < width ||
+        std::numeric_limits<GLsizei>::max() - yoffset < height ||
+        std::numeric_limits<GLsizei>::max() - zoffset < depth)
     {
         return gl::error(GL_INVALID_VALUE, false);
     }
@@ -175,8 +188,12 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
     }
     else
     {
-        if (!gl::IsValidInternalFormat(actualInternalFormat, context) ||
-            !gl::IsValidFormat(format, context->getClientVersion()) ||
+        if (!gl::IsValidInternalFormat(actualInternalFormat, context))
+        {
+            return gl::error(GL_INVALID_VALUE, false);
+        }
+
+        if (!gl::IsValidFormat(format, context->getClientVersion()) ||
             !gl::IsValidType(type, context->getClientVersion()))
         {
             return gl::error(GL_INVALID_ENUM, false);
