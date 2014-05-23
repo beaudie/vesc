@@ -2822,14 +2822,6 @@ FenceImpl *Renderer11::createFence()
 
 bool Renderer11::supportsFastCopyBufferToTexture(GLenum internalFormat) const
 {
-    int clientVersion = getCurrentClientVersion();
-
-    // We only support buffer to texture copies in ES3
-    if (clientVersion <= 2)
-    {
-        return false;
-    }
-
     // sRGB formats do not work with D3D11 buffer SRVs
     if (gl::GetColorEncoding(internalFormat) == GL_SRGB)
     {
