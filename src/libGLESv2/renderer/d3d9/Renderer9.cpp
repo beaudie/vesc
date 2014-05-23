@@ -1247,7 +1247,7 @@ gl::FramebufferAttachment *Renderer9::getNullColorbuffer(gl::FramebufferAttachme
     }
 
     gl::Renderbuffer *nullRenderbuffer = new gl::Renderbuffer(this, 0, new gl::Colorbuffer(this, width, height, GL_NONE, 0));
-    gl::FramebufferAttachment *nullbuffer = new gl::FramebufferAttachment(0, new gl::RenderbufferAttachment(nullRenderbuffer));
+    gl::FramebufferAttachment *nullbuffer = new gl::FramebufferAttachment(new gl::RenderbufferAttachment(nullRenderbuffer));
 
     // add nullbuffer to the cache
     NullColorbufferCacheEntry *oldest = &mNullColorbufferCache[0];
