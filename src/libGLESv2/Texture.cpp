@@ -1037,7 +1037,7 @@ FramebufferAttachment *Texture2D::getAttachment(GLint level)
     FramebufferAttachment *attachment = mRenderbufferProxies.get(level, 0);
     if (!attachment)
     {
-        attachment = new FramebufferAttachment(mRenderer, id(), new Texture2DAttachment(this, level));
+        attachment = new FramebufferAttachment(id(), new Texture2DAttachment(this, level));
         mRenderbufferProxies.add(level, 0, attachment);
     }
 
@@ -1686,7 +1686,7 @@ FramebufferAttachment *TextureCubeMap::getAttachment(GLenum target, GLint level)
     FramebufferAttachment *attachment = mRenderbufferProxies.get(level, faceIndex);
     if (!attachment)
     {
-        attachment = new FramebufferAttachment(mRenderer, id(), new TextureCubeMapAttachment(this, target, level));
+        attachment = new FramebufferAttachment(id(), new TextureCubeMapAttachment(this, target, level));
         mRenderbufferProxies.add(level, faceIndex, attachment);
     }
 
@@ -2068,7 +2068,7 @@ FramebufferAttachment *Texture3D::getAttachment(GLint level, GLint layer)
     FramebufferAttachment *attachment = mRenderbufferProxies.get(level, layer);
     if (!attachment)
     {
-        attachment = new FramebufferAttachment(mRenderer, id(), new Texture3DAttachment(this, level, layer));
+        attachment = new FramebufferAttachment(id(), new Texture3DAttachment(this, level, layer));
         mRenderbufferProxies.add(level, 0, attachment);
     }
 
@@ -2624,7 +2624,7 @@ FramebufferAttachment *Texture2DArray::getAttachment(GLint level, GLint layer)
     FramebufferAttachment *attachment = mRenderbufferProxies.get(level, layer);
     if (!attachment)
     {
-        attachment = new FramebufferAttachment(mRenderer, id(), new Texture2DArrayAttachment(this, level, layer));
+        attachment = new FramebufferAttachment(id(), new Texture2DArrayAttachment(this, level, layer));
         mRenderbufferProxies.add(level, 0, attachment);
     }
 
