@@ -423,42 +423,42 @@ GLenum Renderbuffer::getActualFormat() const
 
 GLuint Renderbuffer::getRedSize() const
 {
-    return gl::GetRedBits(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetRedBits(getActualFormat());
 }
 
 GLuint Renderbuffer::getGreenSize() const
 {
-    return gl::GetGreenBits(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetGreenBits(getActualFormat());
 }
 
 GLuint Renderbuffer::getBlueSize() const
 {
-    return gl::GetBlueBits(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetBlueBits(getActualFormat());
 }
 
 GLuint Renderbuffer::getAlphaSize() const
 {
-    return gl::GetAlphaBits(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetAlphaBits(getActualFormat());
 }
 
 GLuint Renderbuffer::getDepthSize() const
 {
-    return gl::GetDepthBits(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetDepthBits(getActualFormat());
 }
 
 GLuint Renderbuffer::getStencilSize() const
 {
-    return gl::GetStencilBits(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetStencilBits(getActualFormat());
 }
 
 GLenum Renderbuffer::getComponentType() const
 {
-    return gl::GetComponentType(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetComponentType(getActualFormat());
 }
 
 GLenum Renderbuffer::getColorEncoding() const
 {
-    return gl::GetColorEncoding(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetColorEncoding(getActualFormat());
 }
 
 GLsizei Renderbuffer::getSamples() const
