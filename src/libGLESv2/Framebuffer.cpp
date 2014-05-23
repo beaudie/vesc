@@ -493,8 +493,8 @@ GLenum Framebuffer::completeness() const
                     return GL_FRAMEBUFFER_UNSUPPORTED;
                 }
 
-                if (gl::GetDepthBits(internalformat, clientVersion) > 0 ||
-                    gl::GetStencilBits(internalformat, clientVersion) > 0)
+                if (gl::GetDepthBits(internalformat) > 0 ||
+                    gl::GetStencilBits(internalformat) > 0)
                 {
                     return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
                 }
@@ -524,7 +524,7 @@ GLenum Framebuffer::completeness() const
                 // in GLES 3.0, there is no such restriction
                 if (clientVersion < 3)
                 {
-                    if (gl::GetPixelBytes(colorbuffer->getInternalFormat(), clientVersion) != colorbufferSize)
+                    if (gl::GetPixelBytes(colorbuffer->getInternalFormat()) != colorbufferSize)
                     {
                         return GL_FRAMEBUFFER_UNSUPPORTED;
                     }
@@ -544,7 +544,7 @@ GLenum Framebuffer::completeness() const
                 width = colorbuffer->getWidth();
                 height = colorbuffer->getHeight();
                 samples = colorbuffer->getSamples();
-                colorbufferSize = gl::GetPixelBytes(colorbuffer->getInternalFormat(), clientVersion);
+                colorbufferSize = gl::GetPixelBytes(colorbuffer->getInternalFormat());
                 missingAttachment = false;
             }
         }
@@ -589,7 +589,7 @@ GLenum Framebuffer::completeness() const
                 return GL_FRAMEBUFFER_UNSUPPORTED;
             }
 
-            if (gl::GetDepthBits(internalformat, clientVersion) == 0)
+            if (gl::GetDepthBits(internalformat) == 0)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
@@ -654,7 +654,7 @@ GLenum Framebuffer::completeness() const
                 return GL_FRAMEBUFFER_UNSUPPORTED;
             }
 
-            if (gl::GetStencilBits(internalformat, clientVersion) == 0)
+            if (gl::GetStencilBits(internalformat) == 0)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
