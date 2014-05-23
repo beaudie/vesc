@@ -25,17 +25,6 @@ FramebufferAttachmentImpl::FramebufferAttachmentImpl()
 {
 }
 
-// The default case for classes inherited from FramebufferAttachmentImpl is not to
-// need to do anything upon the reference count to the parent FramebufferAttachment incrementing
-// or decrementing.
-void FramebufferAttachmentImpl::addProxyRef(const FramebufferAttachment *proxy)
-{
-}
-
-void FramebufferAttachmentImpl::releaseProxy(const FramebufferAttachment *proxy)
-{
-}
-
 ///// Texture2DAttachment Implementation ////////
 
 Texture2DAttachment::Texture2DAttachment(Texture2D *texture, GLint level) : mLevel(level)
@@ -46,18 +35,6 @@ Texture2DAttachment::Texture2DAttachment(Texture2D *texture, GLint level) : mLev
 Texture2DAttachment::~Texture2DAttachment()
 {
     mTexture2D.set(NULL);
-}
-
-// Textures need to maintain their own reference count for references via
-// Renderbuffers acting as proxies. Here, we notify the texture of a reference.
-void Texture2DAttachment::addProxyRef(const FramebufferAttachment *proxy)
-{
-    mTexture2D->addProxyRef(proxy);
-}
-
-void Texture2DAttachment::releaseProxy(const FramebufferAttachment *proxy)
-{
-    mTexture2D->releaseProxy(proxy);
 }
 
 rx::RenderTarget *Texture2DAttachment::getRenderTarget()
@@ -148,18 +125,6 @@ TextureCubeMapAttachment::~TextureCubeMapAttachment()
     mTextureCubeMap.set(NULL);
 }
 
-// Textures need to maintain their own reference count for references via
-// Renderbuffers acting as proxies. Here, we notify the texture of a reference.
-void TextureCubeMapAttachment::addProxyRef(const FramebufferAttachment *proxy)
-{
-    mTextureCubeMap->addProxyRef(proxy);
-}
-
-void TextureCubeMapAttachment::releaseProxy(const FramebufferAttachment *proxy)
-{
-    mTextureCubeMap->releaseProxy(proxy);
-}
-
 rx::RenderTarget *TextureCubeMapAttachment::getRenderTarget()
 {
     return mTextureCubeMap->getRenderTarget(mFaceTarget, mLevel);
@@ -246,18 +211,6 @@ Texture3DAttachment::Texture3DAttachment(Texture3D *texture, GLint level, GLint 
 Texture3DAttachment::~Texture3DAttachment()
 {
     mTexture3D.set(NULL);
-}
-
-// Textures need to maintain their own reference count for references via
-// Renderbuffers acting as proxies. Here, we notify the texture of a reference.
-void Texture3DAttachment::addProxyRef(const FramebufferAttachment *proxy)
-{
-    mTexture3D->addProxyRef(proxy);
-}
-
-void Texture3DAttachment::releaseProxy(const FramebufferAttachment *proxy)
-{
-    mTexture3D->releaseProxy(proxy);
 }
 
 rx::RenderTarget *Texture3DAttachment::getRenderTarget()
@@ -348,16 +301,6 @@ Texture2DArrayAttachment::~Texture2DArrayAttachment()
     mTexture2DArray.set(NULL);
 }
 
-void Texture2DArrayAttachment::addProxyRef(const FramebufferAttachment *proxy)
-{
-    mTexture2DArray->addProxyRef(proxy);
-}
-
-void Texture2DArrayAttachment::releaseProxy(const FramebufferAttachment *proxy)
-{
-    mTexture2DArray->releaseProxy(proxy);
-}
-
 rx::RenderTarget *Texture2DArrayAttachment::getRenderTarget()
 {
     return mTexture2DArray->getRenderTarget(mLevel, mLayer);
@@ -435,66 +378,49 @@ unsigned int Texture2DArrayAttachment::getTextureSerial() const
 
 ////// FramebufferAttachment Implementation //////
 
-FramebufferAttachment::FramebufferAttachment(GLuint id, FramebufferAttachmentImpl *instance) : RefCountObject(id)
+FramebufferAttachment::FramebufferAttachment(FramebufferAttachmentImpl *impl)
+  : mImpl(impl)
 {
-    ASSERT(instance != NULL);
-    mImpl = instance;
 }
 
 FramebufferAttachment::~FramebufferAttachment()
 {
-    delete mImpl;
-}
-
-// The FramebufferAttachmentImpl contained in this FramebufferAttachment may need to maintain
-// its own reference count, so we pass it on here.
-void FramebufferAttachment::addRef() const
-{
-    mImpl->addProxyRef(this);
-
-    RefCountObject::addRef();
-}
-
-void FramebufferAttachment::release() const
-{
-    mImpl->releaseProxy(this);
-
-    RefCountObject::release();
+    SafeDelete(mImpl);
 }
 
 rx::RenderTarget *FramebufferAttachment::getRenderTarget()
 {
-    return mImpl->getRenderTarget();
+    return (mImpl ? mImpl->getRenderTarget() : NULL);
 }
 
 rx::RenderTarget *FramebufferAttachment::getDepthStencil()
 {
-    return mImpl->getDepthStencil();
+    return (mImpl ? mImpl->getDepthStencil() : NULL);
 }
 
 rx::TextureStorage *FramebufferAttachment::getTextureStorage()
 {
-    return mImpl->getTextureStorage();
+    return (mImpl ? mImpl->getTextureStorage() : NULL);
 }
 
 GLsizei FramebufferAttachment::getWidth() const
 {
-    return mImpl->getWidth();
+    return (mImpl ? mImpl->getWidth() : 0);
 }
 
 GLsizei FramebufferAttachment::getHeight() const
 {
-    return mImpl->getHeight();
+    return (mImpl ? mImpl->getHeight() : 0);
 }
 
 GLenum FramebufferAttachment::getInternalFormat() const
 {
-    return mImpl->getInternalFormat();
+    return (mImpl ? mImpl->getInternalFormat() : GL_NONE);
 }
 
 GLenum FramebufferAttachment::getActualFormat() const
 {
-    return mImpl->getActualFormat();
+    return (mImpl ? mImpl->getActualFormat() : GL_NONE);
 }
 
 GLuint FramebufferAttachment::getRedSize(int clientVersion) const
@@ -539,49 +465,47 @@ GLenum FramebufferAttachment::getColorEncoding(int clientVersion) const
 
 GLsizei FramebufferAttachment::getSamples() const
 {
-    return mImpl->getSamples();
+    return (mImpl ? mImpl->getSamples() : 0);
 }
 
 unsigned int FramebufferAttachment::getSerial() const
 {
-    return mImpl->getSerial();
+    return (mImpl ? mImpl->getSerial() : 0);
 }
 
 bool FramebufferAttachment::isTexture() const
 {
-    return mImpl->isTexture();
+    return (mImpl ? mImpl->isTexture() : false);
 }
 
 GLuint FramebufferAttachment::id() const
 {
-    return mImpl->id();
+    return (mImpl ? mImpl->id() : 0);
 }
 
 GLuint FramebufferAttachment::type() const
 {
-    return mImpl->type();
+    return (mImpl ? mImpl->type() : GL_NONE);
 }
 
 GLint FramebufferAttachment::mipLevel() const
 {
-    return mImpl->mipLevel();
+    return (mImpl ? mImpl->mipLevel() : 0);
 }
 
 GLint FramebufferAttachment::layer() const
 {
-    return mImpl->layer();
+    return (mImpl ? mImpl->layer() : 0);
 }
 
 unsigned int FramebufferAttachment::getTextureSerial() const
 {
-    return mImpl->getTextureSerial();
+    return (mImpl ? mImpl->getTextureSerial() : 0);
 }
 
 void FramebufferAttachment::setImplementation(FramebufferAttachmentImpl *newImpl)
 {
-    ASSERT(newImpl != NULL);
-
-    delete mImpl;
+    SafeDelete(mImpl);
     mImpl = newImpl;
 }
 

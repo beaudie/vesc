@@ -13,6 +13,7 @@
 #include "common/angleutils.h"
 #include "common/RefCountObject.h"
 #include "constants.h"
+#include "libGLESv2/FramebufferAttachment.h"
 
 namespace rx
 {
@@ -47,14 +48,15 @@ class Framebuffer
     unsigned int getDepthbufferSerial() const;
     unsigned int getStencilbufferSerial() const;
 
-    FramebufferAttachment *getColorbuffer(unsigned int colorAttachment) const;
-    FramebufferAttachment *getDepthbuffer() const;
-    FramebufferAttachment *getStencilbuffer() const;
-    FramebufferAttachment *getDepthStencilBuffer() const;
-    FramebufferAttachment *getDepthOrStencilbuffer() const;
-    FramebufferAttachment *getReadColorbuffer() const;
+    FramebufferAttachment *getColorbuffer(unsigned int colorAttachment);
+    const FramebufferAttachment *getColorbuffer(unsigned int colorAttachment) const;
+    FramebufferAttachment *getDepthbuffer();
+    FramebufferAttachment *getStencilbuffer();
+    FramebufferAttachment *getDepthStencilBuffer();
+    FramebufferAttachment *getDepthOrStencilbuffer();
+    FramebufferAttachment *getReadColorbuffer();
     GLenum getReadColorbufferType() const;
-    FramebufferAttachment *getFirstColorbuffer() const;
+    FramebufferAttachment *getFirstColorbuffer();
 
     GLenum getColorbufferType(unsigned int colorAttachment) const;
     GLenum getDepthbufferType() const;
@@ -88,12 +90,12 @@ class Framebuffer
     virtual GLenum completeness() const;
 
   protected:
-    FramebufferTextureBindingPointer<FramebufferAttachment> mColorbuffers[IMPLEMENTATION_MAX_DRAW_BUFFERS];
+    FramebufferAttachment mColorbuffers[IMPLEMENTATION_MAX_DRAW_BUFFERS];
     GLenum mDrawBufferStates[IMPLEMENTATION_MAX_DRAW_BUFFERS];
     GLenum mReadBufferState;
 
-    FramebufferTextureBindingPointer<FramebufferAttachment> mDepthbuffer;
-    FramebufferTextureBindingPointer<FramebufferAttachment> mStencilbuffer;
+    FramebufferAttachment mDepthbuffer;
+    FramebufferAttachment mStencilbuffer;
 
     rx::Renderer *mRenderer;
 
