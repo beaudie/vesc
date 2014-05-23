@@ -266,8 +266,7 @@ gl::Caps GenerateCaps(IDirect3D9 *d3d9, IDirect3DDevice9 *device, D3DDEVTYPE dev
     D3DDISPLAYMODE currentDisplayMode;
     d3d9->GetAdapterDisplayMode(adapter, &currentDisplayMode);
 
-    const GLuint maxClientVersion = 2;
-    const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats(maxClientVersion);
+    const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
     for (gl::FormatSet::const_iterator i = allFormats.begin(); i != allFormats.end(); ++i)
     {
         GLenum internalFormat = *i;
@@ -299,13 +298,13 @@ gl::Caps GenerateCaps(IDirect3D9 *d3d9, IDirect3DDevice9 *device, D3DDEVTYPE dev
                                               SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, currentDisplayMode.Format,
                                                                                 D3DUSAGE_RENDERTARGET, D3DRTYPE_TEXTURE, renderFormat))));
 
-        textureCaps.setDepthRenderingSupport(gl::GetDepthBits(internalFormat, maxClientVersion) > 0 &&
+        textureCaps.setDepthRenderingSupport(gl::GetDepthBits(internalFormat) > 0 &&
                                              (SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, currentDisplayMode.Format,
                                                                                 D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE, textureFormat)) ||
                                               SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, currentDisplayMode.Format,
                                                                                 D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE, renderFormat))));
 
-        textureCaps.setStencilRenderingSupport(gl::GetStencilBits(internalFormat, maxClientVersion) > 0 &&
+        textureCaps.setStencilRenderingSupport(gl::GetStencilBits(internalFormat) > 0 &&
                                                (SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, currentDisplayMode.Format,
                                                                                   D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE, textureFormat)) ||
                                                 SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, currentDisplayMode.Format,

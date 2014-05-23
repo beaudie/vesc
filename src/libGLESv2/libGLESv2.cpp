@@ -856,7 +856,7 @@ void __stdcall glCompressedTexImage2D(GLenum target, GLint level, GLenum interna
                 return;
             }
 
-            if (imageSize < 0 || imageSize != (GLsizei)gl::GetBlockSize(internalformat, GL_UNSIGNED_BYTE, context->getClientVersion(), width, height))
+            if (imageSize < 0 || imageSize != (GLsizei)gl::GetBlockSize(internalformat, GL_UNSIGNED_BYTE, width, height))
             {
                 return gl::error(GL_INVALID_VALUE);
             }
@@ -921,7 +921,7 @@ void __stdcall glCompressedTexSubImage2D(GLenum target, GLint level, GLint xoffs
                 return;
             }
 
-            if (imageSize < 0 || imageSize != (GLsizei)gl::GetBlockSize(format, GL_UNSIGNED_BYTE, context->getClientVersion(), width, height))
+            if (imageSize < 0 || imageSize != (GLsizei)gl::GetBlockSize(format, GL_UNSIGNED_BYTE, width, height))
             {
                 return gl::error(GL_INVALID_VALUE);
             }
@@ -2097,11 +2097,10 @@ void __stdcall glGenerateMipmap(GLenum target)
 
             const gl::TextureCaps &formatCaps = context->getCaps().getTextureFormatCaps(internalFormat);
 
-            bool validRenderable = (formatCaps.getColorRenderingSupport() ||
-                                    gl::IsSizedInternalFormat(internalFormat, context->getClientVersion()));
+            bool validRenderable = (formatCaps.getColorRenderingSupport() || gl::IsSizedInternalFormat(internalFormat));
 
             if (formatCaps.getDepthRenderingSupport() ||
-                gl::IsFormatCompressed(internalFormat, context->getClientVersion()) ||
+                gl::IsFormatCompressed(internalFormat) ||
                 !formatCaps.getTextureFilteringSupport() ||
                 !validRenderable)
             {
@@ -6185,7 +6184,7 @@ void __stdcall glCompressedTexImage3D(GLenum target, GLint level, GLenum interna
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            if (imageSize < 0 || imageSize != (GLsizei)gl::GetBlockSize(internalformat, GL_UNSIGNED_BYTE, context->getClientVersion(), width, height))
+            if (imageSize < 0 || imageSize != (GLsizei)gl::GetBlockSize(internalformat, GL_UNSIGNED_BYTE, width, height))
             {
                 return gl::error(GL_INVALID_VALUE);
             }
@@ -6242,7 +6241,7 @@ void __stdcall glCompressedTexSubImage3D(GLenum target, GLint level, GLint xoffs
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            if (imageSize < 0 || imageSize != (GLsizei)gl::GetBlockSize(format, GL_UNSIGNED_BYTE, context->getClientVersion(), width, height))
+            if (imageSize < 0 || imageSize != (GLsizei)gl::GetBlockSize(format, GL_UNSIGNED_BYTE, width, height))
             {
                 return gl::error(GL_INVALID_VALUE);
             }
