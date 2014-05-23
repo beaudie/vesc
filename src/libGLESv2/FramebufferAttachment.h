@@ -40,12 +40,11 @@ class Renderbuffer;
 // FramebufferAttachment implements the GL renderbuffer object.
 // It's only a proxy for a FramebufferAttachmentImpl instance; the internal object
 // can change whenever glRenderbufferStorage is called.
-class FramebufferAttachment : public RefCountObject
+class FramebufferAttachment
 {
   public:
-    FramebufferAttachment(GLuint id, FramebufferAttachmentImpl *storage);
-
-    virtual ~FramebufferAttachment();
+    explicit FramebufferAttachment(FramebufferAttachmentImpl *impl = NULL);
+    ~FramebufferAttachment();
 
     // These functions from RefCountObject are overloaded here because
     // Textures need to maintain their own count of references to them via
@@ -95,9 +94,6 @@ class FramebufferAttachmentImpl
     FramebufferAttachmentImpl();
 
     virtual ~FramebufferAttachmentImpl() {};
-
-    virtual void addProxyRef(const FramebufferAttachment *proxy);
-    virtual void releaseProxy(const FramebufferAttachment *proxy);
 
     virtual rx::RenderTarget *getRenderTarget() = 0;
     virtual rx::RenderTarget *getDepthStencil() = 0;
@@ -165,9 +161,6 @@ class TextureCubeMapAttachment : public FramebufferAttachmentImpl
 
     virtual ~TextureCubeMapAttachment();
 
-    void addProxyRef(const FramebufferAttachment *proxy);
-    void releaseProxy(const FramebufferAttachment *proxy);
-
     rx::RenderTarget *getRenderTarget();
     rx::RenderTarget *getDepthStencil();
     rx::TextureStorage *getTextureStorage();
@@ -202,9 +195,6 @@ class Texture3DAttachment : public FramebufferAttachmentImpl
 
     virtual ~Texture3DAttachment();
 
-    void addProxyRef(const FramebufferAttachment *proxy);
-    void releaseProxy(const FramebufferAttachment *proxy);
-
     rx::RenderTarget *getRenderTarget();
     rx::RenderTarget *getDepthStencil();
     rx::TextureStorage *getTextureStorage();
@@ -238,9 +228,6 @@ class Texture2DArrayAttachment : public FramebufferAttachmentImpl
     Texture2DArrayAttachment(Texture2DArray *texture, GLint level, GLint layer);
 
     virtual ~Texture2DArrayAttachment();
-
-    void addProxyRef(const FramebufferAttachment *proxy);
-    void releaseProxy(const FramebufferAttachment *proxy);
 
     rx::RenderTarget *getRenderTarget();
     rx::RenderTarget *getDepthStencil();

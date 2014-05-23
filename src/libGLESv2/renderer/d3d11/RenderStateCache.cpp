@@ -95,7 +95,7 @@ ID3D11BlendState *RenderStateCache::getBlendState(const gl::Framebuffer *framebu
     key.blendState = blendState;
     for (unsigned int i = 0; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; i++)
     {
-        gl::FramebufferAttachment *attachment = framebuffer->getColorbuffer(i);
+        const gl::FramebufferAttachment *attachment = framebuffer->getColorbuffer(i);
         if (attachment)
         {
             if (i > 0)
