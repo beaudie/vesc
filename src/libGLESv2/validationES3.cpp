@@ -163,7 +163,7 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
             return gl::error(GL_INVALID_OPERATION, false);
         }
 
-        if (!gl::IsFormatCompressed(actualInternalFormat, context->getClientVersion()))
+        if (!gl::IsFormatCompressed(actualInternalFormat))
         {
             return gl::error(GL_INVALID_ENUM, false);
         }
@@ -176,13 +176,13 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
     else
     {
         if (!gl::IsValidInternalFormat(actualInternalFormat, context->getCaps().extensions, context->getClientVersion()) ||
-            !gl::IsValidFormat(format, context->getClientVersion()) ||
-            !gl::IsValidType(type, context->getClientVersion()))
+            !gl::IsValidFormat(format, context->getCaps().extensions, context->getClientVersion()) ||
+            !gl::IsValidType(type, context->getCaps().extensions, context->getClientVersion()))
         {
             return gl::error(GL_INVALID_ENUM, false);
         }
 
-        if (!gl::IsValidFormatCombination(actualInternalFormat, format, type, context->getClientVersion()))
+        if (!gl::IsValidFormatCombination(actualInternalFormat, format, type, context->getCaps().extensions, context->getClientVersion()))
         {
             return gl::error(GL_INVALID_OPERATION, false);
         }
@@ -244,7 +244,7 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
         size_t widthSize = static_cast<size_t>(width);
         size_t heightSize = static_cast<size_t>(height);
         size_t depthSize = static_cast<size_t>(depth);
-        size_t pixelBytes = static_cast<size_t>(gl::GetPixelBytes(actualInternalFormat, context->getClientVersion()));
+        size_t pixelBytes = static_cast<size_t>(gl::GetPixelBytes(actualInternalFormat));
 
         if (!rx::IsUnsignedMultiplicationSafe(widthSize, heightSize) ||
             !rx::IsUnsignedMultiplicationSafe(widthSize * heightSize, depthSize) ||
@@ -550,7 +550,7 @@ bool ValidateES3TexStorageParameters(gl::Context *context, GLenum target, GLsize
         return gl::error(GL_INVALID_ENUM, false);
     }
 
-    if (!gl::IsSizedInternalFormat(internalformat, context->getClientVersion()))
+    if (!gl::IsSizedInternalFormat(internalformat))
     {
         return gl::error(GL_INVALID_ENUM, false);
     }
@@ -745,7 +745,7 @@ bool ValidES3ReadFormatType(gl::Context *context, GLenum internalFormat, GLenum 
             }
             break;
           case GL_FLOAT:
-            if (gl::GetComponentType(internalFormat, 3) != GL_FLOAT)
+            if (gl::GetComponentType(internalFormat) != GL_FLOAT)
             {
                 return false;
             }
@@ -758,13 +758,13 @@ bool ValidES3ReadFormatType(gl::Context *context, GLenum internalFormat, GLenum 
         switch (type)
         {
           case GL_INT:
-            if (gl::GetComponentType(internalFormat, 3) != GL_INT)
+            if (gl::GetComponentType(internalFormat) != GL_INT)
             {
                 return false;
             }
             break;
           case GL_UNSIGNED_INT:
-            if (gl::GetComponentType(internalFormat, 3) != GL_UNSIGNED_INT)
+            if (gl::GetComponentType(internalFormat) != GL_UNSIGNED_INT)
             {
                 return false;
             }

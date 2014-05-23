@@ -76,6 +76,7 @@ static D3D9FormatMap BuildD3D9FormatMap()
     map.insert(D3D9FormatPair(GL_NONE,                             D3D9FormatInfo(D3DFMT_NULL,          D3DFMT_NULL,           UnreachableLoad                          )));
 
     map.insert(D3D9FormatPair(GL_DEPTH_COMPONENT16,                D3D9FormatInfo(D3DFMT_INTZ,          D3DFMT_D24S8,          UnreachableLoad                          )));
+    map.insert(D3D9FormatPair(GL_DEPTH_COMPONENT24_OES,            D3D9FormatInfo(D3DFMT_INTZ,          D3DFMT_D24X8,          UnreachableLoad                          )));
     map.insert(D3D9FormatPair(GL_DEPTH_COMPONENT32_OES,            D3D9FormatInfo(D3DFMT_INTZ,          D3DFMT_D32,            UnreachableLoad                          )));
     map.insert(D3D9FormatPair(GL_DEPTH24_STENCIL8_OES,             D3D9FormatInfo(D3DFMT_INTZ,          D3DFMT_D24S8,          UnreachableLoad                          )));
     map.insert(D3D9FormatPair(GL_STENCIL_INDEX8,                   D3D9FormatInfo(D3DFMT_UNKNOWN,       D3DFMT_D24S8,          UnreachableLoad                          ))); // TODO: What's the texture format?
@@ -421,7 +422,7 @@ ColorReadFunction GetColorReadFunction(D3DFORMAT format)
     }
 }
 
-ColorCopyFunction GetFastCopyFunction(D3DFORMAT sourceFormat, GLenum destFormat, GLenum destType, GLuint clientVersion)
+ColorCopyFunction GetFastCopyFunction(D3DFORMAT sourceFormat, GLenum destFormat, GLenum destType)
 {
     static const D3D9FastCopyMap fastCopyMap = BuildFastCopyMap();
     D3D9FastCopyMap::const_iterator iter = fastCopyMap.find(D3D9FastCopyFormat(sourceFormat, destFormat, destType));
@@ -740,7 +741,6 @@ D3DFORMAT GetTextureFormat(GLenum internalFormat)
     }
     else
     {
-        UNREACHABLE();
         return D3DFMT_UNKNOWN;
     }
 }
@@ -754,7 +754,6 @@ D3DFORMAT GetRenderFormat(GLenum internalFormat)
     }
     else
     {
-        UNREACHABLE();
         return D3DFMT_UNKNOWN;
     }
 }
@@ -810,10 +809,10 @@ GLsizei GetSamplesCount(D3DMULTISAMPLE_TYPE type)
     return (type != D3DMULTISAMPLE_NONMASKABLE) ? type : 0;
 }
 
-bool IsFormatChannelEquivalent(D3DFORMAT d3dformat, GLenum format, GLuint clientVersion)
+bool IsFormatChannelEquivalent(D3DFORMAT d3dformat, GLenum format)
 {
     GLenum internalFormat = d3d9_gl::GetInternalFormat(d3dformat);
-    GLenum convertedFormat = gl::GetFormat(internalFormat, clientVersion);
+    GLenum convertedFormat = gl::GetFormat(internalFormat);
     return convertedFormat == format;
 }
 
