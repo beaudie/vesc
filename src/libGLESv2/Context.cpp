@@ -2609,7 +2609,7 @@ void Context::clear(GLbitfield mask)
                 return;
             }
 
-            if (gl::GetStencilBits(depthStencil->getActualFormat(), mClientVersion) > 0)
+            if (gl::GetStencilBits(depthStencil->getActualFormat()) > 0)
             {
                 clearParams.clearStencil = true;
             }
@@ -2819,9 +2819,9 @@ void Context::readPixels(GLint x, GLint y, GLsizei width, GLsizei height,
 {
     gl::Framebuffer *framebuffer = getReadFramebuffer();
 
-    bool isSized = IsSizedInternalFormat(format, mClientVersion);
-    GLenum sizedInternalFormat = (isSized ? format : GetSizedInternalFormat(format, type, mClientVersion));
-    GLuint outputPitch = GetRowPitch(sizedInternalFormat, type, mClientVersion, width, mState.pack.alignment);
+    bool isSized = IsSizedInternalFormat(format);
+    GLenum sizedInternalFormat = (isSized ? format : GetSizedInternalFormat(format, type));
+    GLuint outputPitch = GetRowPitch(sizedInternalFormat, type, width, mState.pack.alignment);
 
     mRenderer->readPixels(framebuffer, x, y, width, height, format, type, outputPitch, mState.pack, pixels);
 }
@@ -3205,8 +3205,8 @@ void Context::getCurrentReadFormatType(GLenum *internalFormat, GLenum *format, G
     ASSERT(renderbuffer);
 
     *internalFormat = renderbuffer->getActualFormat();
-    *format = gl::GetFormat(renderbuffer->getActualFormat(), mClientVersion);
-    *type = gl::GetType(renderbuffer->getActualFormat(), mClientVersion);
+    *format = gl::GetFormat(renderbuffer->getActualFormat());
+    *type = gl::GetType(renderbuffer->getActualFormat());
 }
 
 void Context::detachBuffer(GLuint buffer)

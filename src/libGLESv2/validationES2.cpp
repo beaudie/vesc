@@ -38,7 +38,7 @@ static bool validateSubImageParams2D(bool compressed, GLsizei width, GLsizei hei
 
     if (format != GL_NONE)
     {
-        GLenum internalformat = gl::GetSizedInternalFormat(format, type, 2);
+        GLenum internalformat = gl::GetSizedInternalFormat(format, type);
         if (internalformat != texture->getInternalFormat(level))
         {
             return gl::error(GL_INVALID_OPERATION, false);
@@ -79,7 +79,7 @@ static bool validateSubImageParamsCube(bool compressed, GLsizei width, GLsizei h
 
     if (format != GL_NONE)
     {
-        GLenum internalformat = gl::GetSizedInternalFormat(format, type, 2);
+        GLenum internalformat = gl::GetSizedInternalFormat(format, type);
         if (internalformat != texture->getInternalFormat(target, level))
         {
             return gl::error(GL_INVALID_OPERATION, false);
@@ -509,7 +509,7 @@ bool ValidateES2CopyTexImageParameters(gl::Context* context, GLenum target, GLin
                     return false; // error already registered by validateSubImageParams
                 }
                 texture = tex2d;
-                textureFormat = gl::GetFormat(tex2d->getInternalFormat(level), context->getClientVersion());
+                textureFormat = gl::GetFormat(tex2d->getInternalFormat(level));
             }
         }
         break;
@@ -540,7 +540,7 @@ bool ValidateES2CopyTexImageParameters(gl::Context* context, GLenum target, GLin
                     return false; // error already registered by validateSubImageParams
                 }
                 texture = texcube;
-                textureFormat = gl::GetFormat(texcube->getInternalFormat(target, level), context->getClientVersion());
+                textureFormat = gl::GetFormat(texcube->getInternalFormat(target, level));
             }
         }
         break;
@@ -789,8 +789,8 @@ bool ValidateES2TexStorageParameters(gl::Context *context, GLenum target, GLsize
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
-    GLenum format = gl::GetFormat(internalformat, context->getClientVersion());
-    GLenum type = gl::GetType(internalformat, context->getClientVersion());
+    GLenum format = gl::GetFormat(internalformat);
+    GLenum type = gl::GetType(internalformat);
 
     if (format == GL_NONE || type == GL_NONE)
     {
