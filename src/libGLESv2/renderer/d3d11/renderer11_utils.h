@@ -168,6 +168,10 @@ bool GetOcclusionQuerySupport(D3D_FEATURE_LEVEL featureLevel);
 bool GetEventQuerySupport(D3D_FEATURE_LEVEL featureLevel);
 bool GetInstancingSupport(D3D_FEATURE_LEVEL featureLevel);
 size_t GetMaximumSimultaneousRenderTargets(D3D_FEATURE_LEVEL featureLevel);
+size_t GetMaximum2DTextureSize(D3D_FEATURE_LEVEL featureLevel);
+size_t GetMaximum2DTextureArraySize(D3D_FEATURE_LEVEL featureLevel);
+size_t GetMaximum3DTextureSize(D3D_FEATURE_LEVEL featureLevel);
+size_t GetMaximumViewportSize(D3D_FEATURE_LEVEL featureLevel);
 
 }
 

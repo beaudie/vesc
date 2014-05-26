@@ -170,12 +170,6 @@ class Renderer
     virtual int getMaxRecommendedElementsVertices() const = 0;
 
     virtual int getMajorShaderModel() const = 0;
-    virtual float getMaxPointSize() const = 0;
-    virtual int getMaxViewportDimension() const = 0;
-    virtual int getMaxTextureWidth() const = 0;
-    virtual int getMaxTextureHeight() const = 0;
-    virtual int getMaxTextureDepth() const = 0;
-    virtual int getMaxTextureArrayLayers() const = 0;
     virtual int getMinSwapInterval() const = 0;
     virtual int getMaxSwapInterval() const = 0;
 
