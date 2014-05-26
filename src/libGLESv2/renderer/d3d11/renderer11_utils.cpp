@@ -287,6 +287,37 @@ gl::Caps GenerateCaps(ID3D11Device *device)
 
     D3D_FEATURE_LEVEL featureLevel = device->GetFeatureLevel();
 
+    // GL core feature limits
+    caps.maxElementIndex = static_cast<GLint64>(std::numeric_limits<unsigned int>::max());
+    caps.max3DTextureSize = d3d11::GetMaximum3DTextureSize(featureLevel);
+    caps.max2DTextureSize = d3d11::GetMaximum2DTextureSize(featureLevel);
+    caps.maxCubeMapTextureSize = d3d11::GetMaximumCubeMapTextureSize(featureLevel);
+    caps.maxArrayTextureLayers = d3d11::GetMaximum2DTextureArraySize(featureLevel);
+
+    // Unimplemented, set to minimum required
+    caps.maxLODBias = 2.0f;
+
+    // No specific limits on render target size, maximum 2D texture size is equivalent
+    caps.maxRenderbufferSize = caps.max2DTextureSize;
+
+    // Maximum draw buffers and color attachments are the same, max color attachments could eventually be
+    // increased to 16
+    caps.maxDrawBuffers = d3d11::GetMaximumSimultaneousRenderTargets(featureLevel);
+    caps.maxColorAttachments = d3d11::GetMaximumSimultaneousRenderTargets(featureLevel);
+
+    // D3D11 has the same limit for viewport width and height
+    caps.maxViewportWidth = d3d11::GetMaximumViewportSize(featureLevel);
+    caps.maxViewportHeight = caps.maxViewportWidth;
+
+    // Choose a reasonable maximum, enforced in the shader.
+    caps.minAliasedPointSize = 1.0f;
+    caps.maxAliasedPointSize = 1024.0f;
+
+    // Wide lines not supported
+    caps.minAliasedLineWidth = 1.0f;
+    caps.maxAliasedLineWidth = 1.0f;
+
+    // GL extension support
     caps.extensions.elementIndexUint = true;
     caps.extensions.packedDepthStencil = true;
     caps.extensions.getProgramBinary = true;
@@ -520,6 +551,97 @@ size_t GetMaximumSimultaneousRenderTargets(D3D_FEATURE_LEVEL featureLevel)
       case D3D_FEATURE_LEVEL_9_3:  return D3D_FL9_3_SIMULTANEOUS_RENDER_TARGET_COUNT;
       case D3D_FEATURE_LEVEL_9_2:
       case D3D_FEATURE_LEVEL_9_1:  return D3D_FL9_1_SIMULTANEOUS_RENDER_TARGET_COUNT;
+
+      default: UNREACHABLE();      return 0;
+    }
+}
+
+size_t GetMaximum2DTextureSize(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+      case D3D_FEATURE_LEVEL_11_1:
+      case D3D_FEATURE_LEVEL_11_0: return D3D11_REQ_TEXTURE2D_U_OR_V_DIMENSION;
+
+      case D3D_FEATURE_LEVEL_10_1:
+      case D3D_FEATURE_LEVEL_10_0: return D3D10_REQ_TEXTURE2D_U_OR_V_DIMENSION;
+
+      case D3D_FEATURE_LEVEL_9_3:  return D3D_FL9_3_REQ_TEXTURE2D_U_OR_V_DIMENSION;
+      case D3D_FEATURE_LEVEL_9_2:
+      case D3D_FEATURE_LEVEL_9_1:  return D3D_FL9_1_REQ_TEXTURE2D_U_OR_V_DIMENSION;
+
+      default: UNREACHABLE();      return 0;
+    }
+}
+
+size_t GetMaximumCubeMapTextureSize(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+      case D3D_FEATURE_LEVEL_11_1:
+      case D3D_FEATURE_LEVEL_11_0: return D3D11_REQ_TEXTURECUBE_DIMENSION;
+
+      case D3D_FEATURE_LEVEL_10_1:
+      case D3D_FEATURE_LEVEL_10_0: return D3D10_REQ_TEXTURECUBE_DIMENSION;
+
+      case D3D_FEATURE_LEVEL_9_3:  return D3D_FL9_3_REQ_TEXTURECUBE_DIMENSION;
+      case D3D_FEATURE_LEVEL_9_2:
+      case D3D_FEATURE_LEVEL_9_1:  return D3D_FL9_1_REQ_TEXTURECUBE_DIMENSION;
+
+      default: UNREACHABLE();      return 0;
+    }
+}
+
+size_t GetMaximum2DTextureArraySize(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+      case D3D_FEATURE_LEVEL_11_1:
+      case D3D_FEATURE_LEVEL_11_0: return D3D11_REQ_TEXTURE2D_ARRAY_AXIS_DIMENSION;
+
+      case D3D_FEATURE_LEVEL_10_1:
+      case D3D_FEATURE_LEVEL_10_0: return D3D10_REQ_TEXTURE2D_ARRAY_AXIS_DIMENSION;
+
+      case D3D_FEATURE_LEVEL_9_3:
+      case D3D_FEATURE_LEVEL_9_2:
+      case D3D_FEATURE_LEVEL_9_1:  return 0;
+
+      default: UNREACHABLE();      return 0;
+    }
+}
+
+size_t GetMaximum3DTextureSize(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+      case D3D_FEATURE_LEVEL_11_1:
+      case D3D_FEATURE_LEVEL_11_0: return D3D11_REQ_TEXTURE3D_U_V_OR_W_DIMENSION;
+
+      case D3D_FEATURE_LEVEL_10_1:
+      case D3D_FEATURE_LEVEL_10_0: return D3D10_REQ_TEXTURE3D_U_V_OR_W_DIMENSION;
+
+      case D3D_FEATURE_LEVEL_9_3:
+      case D3D_FEATURE_LEVEL_9_2:
+      case D3D_FEATURE_LEVEL_9_1:  return D3D_FL9_1_REQ_TEXTURE3D_U_V_OR_W_DIMENSION;
+
+      default: UNREACHABLE();      return 0;
+    }
+}
+
+size_t GetMaximumViewportSize(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+      case D3D_FEATURE_LEVEL_11_1:
+      case D3D_FEATURE_LEVEL_11_0: return D3D11_VIEWPORT_BOUNDS_MAX;
+
+      case D3D_FEATURE_LEVEL_10_1:
+      case D3D_FEATURE_LEVEL_10_0: return D3D10_VIEWPORT_BOUNDS_MAX;
+
+      // No constants for D3D9 viewport size limits, use the maximum texture sizes
+      case D3D_FEATURE_LEVEL_9_3:  return D3D_FL9_3_REQ_TEXTURE2D_U_OR_V_DIMENSION;
+      case D3D_FEATURE_LEVEL_9_2:
+      case D3D_FEATURE_LEVEL_9_1:  return D3D_FL9_1_REQ_TEXTURE2D_U_OR_V_DIMENSION;
 
       default: UNREACHABLE();      return 0;
     }

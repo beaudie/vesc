@@ -125,6 +125,8 @@ bool ValidateES2TexImageParameters(gl::Context *context, GLenum target, GLint le
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
+    const gl::Caps &caps = context->getCaps();
+
     gl::Texture *texture = NULL;
     bool textureCompressed = false;
     GLenum textureInternalFormat = GL_NONE;
@@ -134,8 +136,8 @@ bool ValidateES2TexImageParameters(gl::Context *context, GLenum target, GLint le
     {
       case GL_TEXTURE_2D:
         {
-            if (width > (context->getMaximum2DTextureDimension() >> level) ||
-                height > (context->getMaximum2DTextureDimension() >> level))
+            if (static_cast<GLuint>(width) > (caps.max2DTextureSize >> level) ||
+                static_cast<GLuint>(height) > (caps.max2DTextureSize >> level))
             {
                 return gl::error(GL_INVALID_VALUE, false);
             }
@@ -172,8 +174,8 @@ bool ValidateES2TexImageParameters(gl::Context *context, GLenum target, GLint le
                 return gl::error(GL_INVALID_VALUE, false);
             }
 
-            if (width > (context->getMaximumCubeTextureDimension() >> level) ||
-                height > (context->getMaximumCubeTextureDimension() >> level))
+            if (static_cast<GLuint>(width) > (caps.maxCubeMapTextureSize >> level) ||
+                static_cast<GLuint>(height) > (caps.maxCubeMapTextureSize >> level))
             {
                 return gl::error(GL_INVALID_VALUE, false);
             }
@@ -487,6 +489,8 @@ bool ValidateES2CopyTexImageParameters(gl::Context* context, GLenum target, GLin
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
+    const gl::Caps &caps = context->getCaps();
+
     GLenum colorbufferFormat = framebuffer->getReadColorbuffer()->getInternalFormat();
     gl::Texture *texture = NULL;
     GLenum textureFormat = GL_RGBA;
@@ -495,8 +499,8 @@ bool ValidateES2CopyTexImageParameters(gl::Context* context, GLenum target, GLin
     {
       case GL_TEXTURE_2D:
         {
-            if (width > (context->getMaximum2DTextureDimension() >> level) ||
-                height > (context->getMaximum2DTextureDimension() >> level))
+            if (static_cast<GLuint>(width) > (caps.max2DTextureSize >> level) ||
+                static_cast<GLuint>(height) > (caps.max2DTextureSize >> level))
             {
                 return gl::error(GL_INVALID_VALUE, false);
             }
@@ -526,8 +530,8 @@ bool ValidateES2CopyTexImageParameters(gl::Context* context, GLenum target, GLin
                 return gl::error(GL_INVALID_VALUE, false);
             }
 
-            if (width > (context->getMaximumCubeTextureDimension() >> level) ||
-                height > (context->getMaximumCubeTextureDimension() >> level))
+            if (static_cast<GLuint>(width) > (caps.maxCubeMapTextureSize >> level) ||
+                static_cast<GLuint>(height) > (caps.maxCubeMapTextureSize >> level))
             {
                 return gl::error(GL_INVALID_VALUE, false);
             }
@@ -797,18 +801,20 @@ bool ValidateES2TexStorageParameters(gl::Context *context, GLenum target, GLsize
         return gl::error(GL_INVALID_ENUM, false);
     }
 
+    const gl::Caps &caps = context->getCaps();
+
     switch (target)
     {
       case GL_TEXTURE_2D:
-        if (width > context->getMaximum2DTextureDimension() ||
-            height > context->getMaximum2DTextureDimension())
+        if (static_cast<GLuint>(width) > caps.max2DTextureSize ||
+            static_cast<GLuint>(height) > caps.max2DTextureSize)
         {
             return gl::error(GL_INVALID_VALUE, false);
         }
         break;
       case GL_TEXTURE_CUBE_MAP:
-        if (width > context->getMaximumCubeTextureDimension() ||
-            height > context->getMaximumCubeTextureDimension())
+        if (static_cast<GLuint>(width) > caps.maxCubeMapTextureSize ||
+            static_cast<GLuint>(height) > caps.maxCubeMapTextureSize)
         {
             return gl::error(GL_INVALID_VALUE, false);
         }
@@ -937,7 +943,7 @@ bool ValidateES2FramebufferTextureParameters(gl::Context *context, GLenum target
     if (attachment >= GL_COLOR_ATTACHMENT0 && attachment <= GL_COLOR_ATTACHMENT15)
     {
         const unsigned int colorAttachment = (attachment - GL_COLOR_ATTACHMENT0);
-        if (colorAttachment >= context->getMaximumRenderTargets())
+        if (colorAttachment >= context->getCaps().maxColorAttachments)
         {
             return gl::error(GL_INVALID_VALUE, false);
         }

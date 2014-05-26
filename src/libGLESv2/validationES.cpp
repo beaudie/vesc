@@ -150,16 +150,16 @@ bool ValidMipLevel(const Context *context, GLenum target, GLint level)
     int maxLevel = 0;
     switch (target)
     {
-      case GL_TEXTURE_2D:                  maxLevel = context->getMaximum2DTextureLevel();      break;
+      case GL_TEXTURE_2D:                  maxLevel = gl::log2(context->getCaps().max2DTextureSize) + 1;       break;
       case GL_TEXTURE_CUBE_MAP:
       case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
       case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
       case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
       case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
       case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z: maxLevel = context->getMaximumCubeTextureLevel();    break;
-      case GL_TEXTURE_3D:                  maxLevel = context->getMaximum3DTextureLevel();      break;
-      case GL_TEXTURE_2D_ARRAY:            maxLevel = context->getMaximum2DArrayTextureLevel(); break;
+      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z: maxLevel = gl::log2(context->getCaps().maxCubeMapTextureSize) + 1;  break;
+      case GL_TEXTURE_3D:                  maxLevel = gl::log2(context->getCaps().max3DTextureSize) + 1;       break;
+      case GL_TEXTURE_2D_ARRAY:            maxLevel = gl::log2(context->getCaps().max2DTextureSize) + 1;       break;
       default: UNREACHABLE();
     }
 
@@ -287,7 +287,7 @@ bool ValidateRenderbufferStorageParameters(const gl::Context *context, GLenum ta
         return gl::error(GL_INVALID_ENUM, false);
     }
 
-    if (std::max(width, height) > context->getMaximumRenderbufferDimension())
+    if (static_cast<GLuint>(std::max(width, height)) > context->getCaps().maxRenderbufferSize)
     {
         return gl::error(GL_INVALID_VALUE, false);
     }
@@ -335,7 +335,7 @@ bool ValidateFramebufferRenderbufferParameters(gl::Context *context, GLenum targ
     {
         const unsigned int colorAttachment = (attachment - GL_COLOR_ATTACHMENT0_EXT);
 
-        if (colorAttachment >= context->getMaximumRenderTargets())
+        if (colorAttachment >= context->getCaps().maxColorAttachments)
         {
             return gl::error(GL_INVALID_VALUE, false);
         }
@@ -1047,7 +1047,7 @@ bool ValidateStateQuery(gl::Context *context, GLenum pname, GLenum *nativeType, 
     {
         unsigned int colorAttachment = (pname - GL_DRAW_BUFFER0);
 
-        if (colorAttachment >= context->getMaximumRenderTargets())
+        if (colorAttachment >= context->getCaps().maxDrawBuffers)
         {
             return gl::error(GL_INVALID_OPERATION, false);
         }
