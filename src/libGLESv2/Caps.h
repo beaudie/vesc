@@ -69,6 +69,53 @@ class Caps
   public:
     Caps();
 
+    GLuint64 getMaxElementIndex() const;
+    void setMaxElementIndex(GLuint64 val);
+
+    GLuint getMax3DTextureSize() const;
+    void setMax3DTextureSize(GLuint val);
+
+    // HACK: inlined since it is used by egl::Display
+    GLuint getMax2DTextureSize() const { return mMax2DTextureSize; }
+    void setMax2DTextureSize(GLuint val);
+
+    GLuint getMaxArrayTextureLayers() const;
+    void setMaxArrayTextureLayers(GLuint val);
+
+    GLfloat getMaxLODBias() const;
+    void setMaxLODBias(GLfloat val);
+
+    GLuint getMaxCubeMapTextureSize() const;
+    void setMaxCubeMapTextureSize(GLuint val);
+
+    GLuint getMaxRenderbufferSize() const;
+    void setMaxRenderbufferSize(GLuint val);
+
+    GLuint getMaxDrawBuffers() const;
+    void setMaxDrawBuffers(GLuint val);
+
+    GLuint getMaxColorAttachments() const;
+    void setMaxColorAttachments(GLuint val);
+
+    GLuint getMaxViewportWidth() const;
+    void setMaxViewportWidth(GLuint val);
+
+    GLuint getMaxViewportHeight() const;
+    void setMaxViewportHeight(GLuint val);
+
+    GLfloat getMinAliasedPointSize() const;
+    void setMinAliasedPointSize(GLfloat val);
+
+    GLfloat getMaxAliasedPointSize() const;
+    void setMaxAliasedPointSize(GLfloat val);
+
+    GLfloat getMinAliasedLineWidth() const;
+    void setMinAliasedLineWidth(GLfloat val);
+
+    GLfloat getMaxAliasedLineWidth() const;
+    void setMaxAliasedLineWidth(GLfloat val);
+
+
     const TextureCaps &getTextureFormatCaps(GLenum format) const;
     const TextureFormatCapsMap &getTextureFormatCapsMap() const;
     void setTextureFormatCaps(GLenum format, const TextureCaps &support);
@@ -195,6 +242,23 @@ class Caps
     size_t getExtensionStringCount() const;
 
   private:
+    // Table 6.28, implementation dependent values
+    GLuint64 mMaxElementIndex;
+    GLuint mMax3DTextureSize;
+    GLuint mMax2DTextureSize;
+    GLuint mMaxArrayTextureLayers;
+    GLfloat mMaxLODBias;
+    GLuint mMaxCubeMapTextureSize;
+    GLuint mMaxRenderbufferSize;
+    GLuint mMaxDrawBuffers;
+    GLuint mMaxColorAttachments;
+    GLuint mMaxViewportWidth;
+    GLuint mMaxViewportHeight;
+    GLfloat mMinAliasedPointSize;
+    GLfloat mMaxAliasedPointSize;
+    GLfloat mMinAliasedLineWidth;
+    GLfloat mMaxAliasedLineWidth;
+
     // Texture format support
     TextureFormatCapsMap mTextureCaps;
 

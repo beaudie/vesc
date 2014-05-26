@@ -329,8 +329,44 @@ gl::Caps GenerateCaps(IDirect3D9 *d3d9, IDirect3DDevice9 *device, D3DDEVTYPE dev
         caps.setTextureFormatCaps(*internalFormat, GenerateTextureFormatCaps(*internalFormat, d3d9, deviceType, adapter, currentDisplayMode.Format));
     }
 
-    const gl::TextureFormatCapsMap &formatSupport = caps.getTextureFormatCapsMap();
+    // GL core feature limits
+    caps.setMaxElementIndex(static_cast<GLint64>(std::numeric_limits<unsigned int>::max()));
 
+    // 3D textures are unimplemented in D3D9
+    caps.setMax3DTextureSize(1);
+
+    caps.setMax2DTextureSize(std::min(deviceCaps.MaxTextureWidth, deviceCaps.MaxTextureHeight));
+
+    // Array textures are not available in D3D9
+    caps.setMaxArrayTextureLayers(1);
+
+    // ES3-only feature
+    caps.setMaxLODBias(0.0f);
+
+    // D3D treats cube maps as a special case of 2D textures
+    caps.setMaxCubeMapTextureSize(caps.getMax2DTextureSize());
+
+    // No specific limits on render target size, maximum 2D texture size is equivalent
+    caps.setMaxRenderbufferSize(caps.getMax2DTextureSize());
+
+    // Draw buffers are not supported in D3D9
+    caps.setMaxDrawBuffers(1);
+    caps.setMaxColorAttachments(1);
+
+    // No specific limits on viewport size, maximum 2D texture size is equivalent
+    caps.setMaxViewportWidth(caps.getMax2DTextureSize());
+    caps.setMaxViewportHeight(caps.getMaxViewportWidth());
+
+    // Point size is clamped to 1.0f when the shader model is less than 3
+    caps.setMinAliasedPointSize(1.0f);
+    caps.setMaxAliasedPointSize((D3DSHADER_VERSION_MAJOR(deviceCaps.PixelShaderVersion) >= 3) ? deviceCaps.MaxPointSize : 1.0f);
+
+    // Wide lines not supported
+    caps.setMinAliasedLineWidth(1.0f);
+    caps.setMaxAliasedLineWidth(1.0f);
+
+    // GL extension support
+    const gl::TextureFormatCapsMap &formatSupport = caps.getTextureFormatCapsMap();
     caps.set32BitIndexSupport(deviceCaps.MaxVertexIndex >= (1 << 16));
     caps.setPackedDepthStencilSupport(true);
     caps.setProgramBinarySupport(true);
