@@ -138,7 +138,23 @@ static void UpdateExtensionVector(const std::string& extension, bool supported, 
 }
 
 Caps::Caps()
-    : mSupports32BitIndices(false),
+    : mMaxElementIndex(0),
+      mMax3DTextureSize(0),
+      mMax2DTextureSize(0),
+      mMaxArrayTextureLayers(0),
+      mMaxLODBias(0),
+      mMaxCubeMapTextureSize(0),
+      mMaxRenderbufferSize(0),
+      mMaxDrawBuffers(0),
+      mMaxColorAttachments(0),
+      mMaxViewportWidth(0),
+      mMaxViewportHeight(0),
+      mMinAliasedPointSize(0),
+      mMaxAliasedPointSize(0),
+      mMinAliasedLineWidth(0),
+      mMaxAliasedLineWidth(0),
+
+      mSupports32BitIndices(false),
       mSupportsPackedDepthStencil(false),
       mSupportsProgramBinary(false),
       mSupportsRGB8AndRGBA8Textures(false),
@@ -183,6 +199,151 @@ Caps::Caps()
       mStaticExtensionStrings(),
       mSupportedExtensions()
 {
+}
+
+void Caps::setMaxAliasedLineWidth(GLfloat val)
+{
+    mMaxAliasedLineWidth = val;
+}
+
+GLfloat Caps::getMaxAliasedLineWidth() const
+{
+    return mMaxAliasedLineWidth;
+}
+
+void Caps::setMinAliasedLineWidth(GLfloat val)
+{
+    mMinAliasedLineWidth = val;
+}
+
+GLfloat Caps::getMinAliasedLineWidth() const
+{
+    return mMinAliasedLineWidth;
+}
+
+void Caps::setMaxAliasedPointSize(GLfloat val)
+{
+    mMaxAliasedPointSize = val;
+}
+
+GLfloat Caps::getMaxAliasedPointSize() const
+{
+    return mMaxAliasedPointSize;
+}
+
+void Caps::setMinAliasedPointSize(GLfloat val)
+{
+    mMinAliasedPointSize = val;
+}
+
+GLfloat Caps::getMinAliasedPointSize() const
+{
+    return mMinAliasedPointSize;
+}
+
+GLuint Caps::getMaxViewportWidth() const
+{
+    return mMaxViewportWidth;
+}
+
+void Caps::setMaxViewportWidth(GLuint val)
+{
+    mMaxViewportWidth = val;
+}
+
+GLuint Caps::getMaxViewportHeight() const
+{
+    return mMaxViewportHeight;
+}
+
+void Caps::setMaxViewportHeight(GLuint val)
+{
+    mMaxViewportHeight = val;
+}
+
+void Caps::setMaxColorAttachments(GLuint val)
+{
+    mMaxColorAttachments = val;
+}
+
+GLuint Caps::getMaxColorAttachments() const
+{
+    return mMaxColorAttachments;
+}
+
+void Caps::setMaxDrawBuffers(GLuint val)
+{
+    mMaxDrawBuffers = val;
+}
+
+GLuint Caps::getMaxDrawBuffers() const
+{
+    return mMaxDrawBuffers;
+}
+
+void Caps::setMaxRenderbufferSize(GLuint val)
+{
+    mMaxRenderbufferSize = val;
+}
+
+GLuint Caps::getMaxRenderbufferSize() const
+{
+    return mMaxRenderbufferSize;
+}
+
+void Caps::setMaxCubeMapTextureSize(GLuint val)
+{
+    mMaxCubeMapTextureSize = val;
+}
+
+GLuint Caps::getMaxCubeMapTextureSize() const
+{
+    return mMaxCubeMapTextureSize;
+}
+
+void Caps::setMaxLODBias(GLfloat val)
+{
+    mMaxLODBias = val;
+}
+
+GLfloat Caps::getMaxLODBias() const
+{
+    return mMaxLODBias;
+}
+
+void Caps::setMaxArrayTextureLayers(GLuint val)
+{
+    mMaxArrayTextureLayers = val;
+}
+
+GLuint Caps::getMaxArrayTextureLayers() const
+{
+    return mMaxArrayTextureLayers;
+}
+
+void Caps::setMax2DTextureSize(GLuint val)
+{
+    mMax2DTextureSize = val;
+}
+
+void Caps::setMax3DTextureSize(GLuint val)
+{
+    mMax3DTextureSize = val;
+}
+
+GLuint Caps::getMax3DTextureSize() const
+{
+    return mMax3DTextureSize;
+}
+
+void Caps::setMaxElementIndex(GLuint64 val)
+{
+    mMaxElementIndex = val;
+}
+
+GLuint64 Caps::getMaxElementIndex() const
+{
+    return mMaxElementIndex;
 }
 
 const TextureCaps &Caps::getTextureFormatCaps(GLenum format) const

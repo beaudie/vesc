@@ -734,8 +734,8 @@ bool Renderer11::setViewport(const gl::Rectangle &viewport, float zNear, float z
     D3D11_VIEWPORT dxViewport;
     dxViewport.TopLeftX = gl::clamp(actualViewport.x, viewportBounds.start, viewportBounds.end);
     dxViewport.TopLeftY = gl::clamp(actualViewport.y, viewportBounds.start, viewportBounds.end);
-    dxViewport.Width = gl::clamp(actualViewport.width, 0, getMaxViewportDimension());
-    dxViewport.Height = gl::clamp(actualViewport.height, 0, getMaxViewportDimension());
+    dxViewport.Width = gl::clamp(actualViewport.width, 0, static_cast<int>(mCaps.getMaxViewportWidth()));
+    dxViewport.Height = gl::clamp(actualViewport.height, 0, static_cast<int>(mCaps.getMaxViewportHeight()));
     dxViewport.Width = std::min((int)dxViewport.Width, viewportBounds.end - static_cast<int>(dxViewport.TopLeftX));
     dxViewport.Height = std::min((int)dxViewport.Height, viewportBounds.end - static_cast<int>(dxViewport.TopLeftY));
     dxViewport.MinDepth = actualZNear;
@@ -2065,76 +2065,6 @@ int Renderer11::getMinorShaderModel() const
       case D3D_FEATURE_LEVEL_11_0: return D3D11_SHADER_MINOR_VERSION;   // 0
       case D3D_FEATURE_LEVEL_10_1: return D3D10_1_SHADER_MINOR_VERSION; // 1
       case D3D_FEATURE_LEVEL_10_0: return D3D10_SHADER_MINOR_VERSION;   // 0
-      default: UNREACHABLE();      return 0;
-    }
-}
-
-float Renderer11::getMaxPointSize() const
-{
-    // choose a reasonable maximum. we enforce this in the shader.
-    // (nb: on a Radeon 2600xt, DX9 reports a 256 max point size)
-    return 1024.0f;
-}
-
-int Renderer11::getMaxViewportDimension() const
-{
-    // Maximum viewport size must be at least as large as the largest render buffer (or larger).
-    // In our case return the maximum texture size, which is the maximum render buffer size.
-    META_ASSERT(D3D11_REQ_TEXTURE2D_U_OR_V_DIMENSION * 2 - 1 <= D3D11_VIEWPORT_BOUNDS_MAX);
-    META_ASSERT(D3D10_REQ_TEXTURE2D_U_OR_V_DIMENSION * 2 - 1 <= D3D10_VIEWPORT_BOUNDS_MAX);
-
-    switch (mFeatureLevel)
-    {
-      case D3D_FEATURE_LEVEL_11_0: 
-        return D3D11_REQ_TEXTURE2D_U_OR_V_DIMENSION;   // 16384
-      case D3D_FEATURE_LEVEL_10_1:
-      case D3D_FEATURE_LEVEL_10_0: 
-        return D3D10_REQ_TEXTURE2D_U_OR_V_DIMENSION;   // 8192
-      default: UNREACHABLE();      
-        return 0;
-    }
-}
-
-int Renderer11::getMaxTextureWidth() const
-{
-    switch (mFeatureLevel)
-    {
-      case D3D_FEATURE_LEVEL_11_0: return D3D11_REQ_TEXTURE2D_U_OR_V_DIMENSION;   // 16384
-      case D3D_FEATURE_LEVEL_10_1:
-      case D3D_FEATURE_LEVEL_10_0: return D3D10_REQ_TEXTURE2D_U_OR_V_DIMENSION;   // 8192
-      default: UNREACHABLE();      return 0;
-    }
-}
-
-int Renderer11::getMaxTextureHeight() const
-{
-    switch (mFeatureLevel)
-    {
-      case D3D_FEATURE_LEVEL_11_0: return D3D11_REQ_TEXTURE2D_U_OR_V_DIMENSION;   // 16384
-      case D3D_FEATURE_LEVEL_10_1:
-      case D3D_FEATURE_LEVEL_10_0: return D3D10_REQ_TEXTURE2D_U_OR_V_DIMENSION;   // 8192
-      default: UNREACHABLE();      return 0;
-    }
-}
-
-int Renderer11::getMaxTextureDepth() const
-{
-    switch (mFeatureLevel)
-    {
-      case D3D_FEATURE_LEVEL_11_0: return D3D11_REQ_TEXTURE3D_U_V_OR_W_DIMENSION;   // 2048
-      case D3D_FEATURE_LEVEL_10_1:
-      case D3D_FEATURE_LEVEL_10_0: return D3D10_REQ_TEXTURE3D_U_V_OR_W_DIMENSION;   // 2048
-      default: UNREACHABLE();      return 0;
-    }
-}
-
-int Renderer11::getMaxTextureArrayLayers() const
-{
-    switch (mFeatureLevel)
-    {
-      case D3D_FEATURE_LEVEL_11_0: return D3D11_REQ_TEXTURE2D_ARRAY_AXIS_DIMENSION;   // 2048
-      case D3D_FEATURE_LEVEL_10_1:
-      case D3D_FEATURE_LEVEL_10_0: return D3D10_REQ_TEXTURE2D_ARRAY_AXIS_DIMENSION;   // 512
       default: UNREACHABLE();      return 0;
     }
 }

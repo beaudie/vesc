@@ -129,12 +129,6 @@ class Renderer9 : public Renderer
     virtual int getMaxRecommendedElementsVertices() const;
 
     virtual int getMajorShaderModel() const;
-    virtual float getMaxPointSize() const;
-    virtual int getMaxViewportDimension() const;
-    virtual int getMaxTextureWidth() const;
-    virtual int getMaxTextureHeight() const;
-    virtual int getMaxTextureDepth() const;
-    virtual int getMaxTextureArrayLayers() const;
     DWORD getCapsDeclTypes() const;
     virtual int getMinSwapInterval() const;
     virtual int getMaxSwapInterval() const;
