@@ -226,6 +226,8 @@ StaticVertexBufferInterface::~StaticVertexBufferInterface()
 {
 }
 
+#pragma warning( disable : 4389 )
+
 bool StaticVertexBufferInterface::lookupAttribute(const gl::VertexAttribute &attrib, unsigned int *outStreamOffset)
 {
     for (unsigned int element = 0; element < mCache.size(); element++)

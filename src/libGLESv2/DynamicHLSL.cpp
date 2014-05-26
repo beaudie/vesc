@@ -492,7 +492,7 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
     // - with a 3.0 context, the output color is copied to channel 0
     // - with a 2.0 context, the output color is broadcast to all channels
     const bool broadcast = (fragmentShader->mUsesFragColor && mRenderer->getCurrentClientVersion() < 3);
-    const unsigned int numRenderTargets = (broadcast || usesMRT ? mRenderer->getMaxRenderTargets() : 1);
+    const unsigned int numRenderTargets = (broadcast || usesMRT ? mRenderer->getCaps().maxDrawBuffers : 1);
 
     int shaderVersion = vertexShader->getShaderVersion();
 
@@ -987,8 +987,8 @@ std::string DynamicHLSL::generatePointSpriteHLSL(int registers, FragmentShader *
                   "    float2(0.0f, 0.0f)\n"
                   "};\n"
                   "\n"
-                  "static float minPointSize = " + Str(ALIASED_POINT_SIZE_RANGE_MIN) + ".0f;\n"
-                  "static float maxPointSize = " + Str(mRenderer->getMaxPointSize()) + ".0f;\n"
+                  "static float minPointSize = " + Str(mRenderer->getCaps().minAliasedPointSize) + ".0f;\n"
+                  "static float maxPointSize = " + Str(mRenderer->getCaps().maxAliasedPointSize) + ".0f;\n"
                   "\n"
                   "[maxvertexcount(4)]\n"
                   "void main(point GS_INPUT input[1], inout TriangleStream<GS_OUTPUT> outStream)\n"

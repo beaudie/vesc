@@ -50,6 +50,8 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
         return gl::error(GL_INVALID_VALUE, false);
     }
 
+    const gl::Caps &caps = context->getCaps();
+
     gl::Texture *texture = NULL;
     bool textureCompressed = false;
     GLenum textureInternalFormat = GL_NONE;
@@ -60,8 +62,8 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
     {
       case GL_TEXTURE_2D:
         {
-            if (width > (context->getMaximum2DTextureDimension() >> level) ||
-                height > (context->getMaximum2DTextureDimension() >> level))
+            if (static_cast<GLuint>(width) > (caps.max2DTextureSize >> level) ||
+                static_cast<GLuint>(height) > (caps.max2DTextureSize >> level))
             {
                 return gl::error(GL_INVALID_VALUE, false);
             }
@@ -91,7 +93,7 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
                 return gl::error(GL_INVALID_VALUE, false);
             }
 
-            if (width > (context->getMaximumCubeTextureDimension() >> level))
+            if (static_cast<GLuint>(width) > (caps.maxCubeMapTextureSize >> level))
             {
                 return gl::error(GL_INVALID_VALUE, false);
             }
@@ -111,9 +113,9 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
 
       case GL_TEXTURE_3D:
         {
-            if (width > (context->getMaximum3DTextureDimension() >> level) ||
-                height > (context->getMaximum3DTextureDimension() >> level) ||
-                depth > (context->getMaximum3DTextureDimension() >> level))
+            if (static_cast<GLuint>(width) > (caps.max3DTextureSize >> level) ||
+                static_cast<GLuint>(height) > (caps.max3DTextureSize >> level) ||
+                static_cast<GLuint>(depth) > (caps.max3DTextureSize >> level))
             {
                 return gl::error(GL_INVALID_VALUE, false);
             }
@@ -133,9 +135,9 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
 
         case GL_TEXTURE_2D_ARRAY:
           {
-              if (width > (context->getMaximum2DTextureDimension() >> level) ||
-                  height > (context->getMaximum2DTextureDimension() >> level) ||
-                  depth > (context->getMaximum2DArrayTextureLayers() >> level))
+              if (static_cast<GLuint>(width) > (caps.max2DTextureSize >> level) ||
+                  static_cast<GLuint>(height) > (caps.max2DTextureSize >> level) ||
+                  static_cast<GLuint>(depth) > (caps.maxArrayTextureLayers >> level))
               {
                   return gl::error(GL_INVALID_VALUE, false);
               }
@@ -364,6 +366,8 @@ bool ValidateES3TexStorageParameters(gl::Context *context, GLenum target, GLsize
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
+    const gl::Caps &caps = context->getCaps();
+
     gl::Texture *texture = NULL;
     switch (target)
     {
@@ -371,8 +375,8 @@ bool ValidateES3TexStorageParameters(gl::Context *context, GLenum target, GLsize
         {
             texture = context->getTexture2D();
 
-            if (width > (context->getMaximum2DTextureDimension()) ||
-                height > (context->getMaximum2DTextureDimension()))
+            if (static_cast<GLuint>(width) > caps.max2DTextureSize ||
+                static_cast<GLuint>(height) > caps.max2DTextureSize)
             {
                 return gl::error(GL_INVALID_VALUE, false);
             }
@@ -388,7 +392,7 @@ bool ValidateES3TexStorageParameters(gl::Context *context, GLenum target, GLsize
                 return gl::error(GL_INVALID_VALUE, false);
             }
 
-            if (width > (context->getMaximumCubeTextureDimension()))
+            if (static_cast<GLuint>(width) > caps.maxCubeMapTextureSize)
             {
                 return gl::error(GL_INVALID_VALUE, false);
             }
@@ -399,9 +403,9 @@ bool ValidateES3TexStorageParameters(gl::Context *context, GLenum target, GLsize
         {
             texture = context->getTexture3D();
 
-            if (width > (context->getMaximum3DTextureDimension()) ||
-                height > (context->getMaximum3DTextureDimension()) ||
-                depth > (context->getMaximum3DTextureDimension()))
+            if (static_cast<GLuint>(width) > caps.max3DTextureSize ||
+                static_cast<GLuint>(height) > caps.max3DTextureSize ||
+                static_cast<GLuint>(depth) > caps.max3DTextureSize)
             {
                 return gl::error(GL_INVALID_VALUE, false);
             }
@@ -412,9 +416,9 @@ bool ValidateES3TexStorageParameters(gl::Context *context, GLenum target, GLsize
         {
             texture = context->getTexture2DArray();
 
-            if (width > (context->getMaximum2DTextureDimension()) ||
-                height > (context->getMaximum2DTextureDimension()) ||
-                depth > (context->getMaximum2DArrayTextureLayers()))
+            if (static_cast<GLuint>(width) > caps.max2DTextureSize ||
+                static_cast<GLuint>(height) > caps.max2DTextureSize ||
+                static_cast<GLuint>(depth) > caps.maxArrayTextureLayers)
             {
                 return gl::error(GL_INVALID_VALUE, false);
             }
@@ -457,10 +461,12 @@ bool ValidateES3FramebufferTextureParameters(gl::Context *context, GLenum target
         return gl::error(GL_INVALID_ENUM, false);
     }
 
+    const gl::Caps &caps = context->getCaps();
+
     if (attachment >= GL_COLOR_ATTACHMENT0 && attachment <= GL_COLOR_ATTACHMENT15)
     {
         const unsigned int colorAttachment = (attachment - GL_COLOR_ATTACHMENT0);
-        if (colorAttachment >= context->getMaximumRenderTargets())
+        if (colorAttachment >= caps.maxColorAttachments)
         {
             return gl::error(GL_INVALID_VALUE, false);
         }
@@ -503,7 +509,7 @@ bool ValidateES3FramebufferTextureParameters(gl::Context *context, GLenum target
             {
               case GL_TEXTURE_2D:
                 {
-                    if (level > gl::log2(context->getMaximum2DTextureDimension()))
+                    if (level > gl::log2(caps.max2DTextureSize))
                     {
                         return gl::error(GL_INVALID_VALUE, false);
                     }
@@ -526,7 +532,7 @@ bool ValidateES3FramebufferTextureParameters(gl::Context *context, GLenum target
               case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
               case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
                 {
-                    if (level > gl::log2(context->getMaximumCubeTextureDimension()))
+                    if (level > gl::log2(caps.maxCubeMapTextureSize))
                     {
                         return gl::error(GL_INVALID_VALUE, false);
                     }
@@ -552,12 +558,12 @@ bool ValidateES3FramebufferTextureParameters(gl::Context *context, GLenum target
             {
               case GL_TEXTURE_2D_ARRAY:
                 {
-                    if (level > gl::log2(context->getMaximum2DTextureDimension()))
+                    if (level > gl::log2(caps.max2DTextureSize))
                     {
                         return gl::error(GL_INVALID_VALUE, false);
                     }
 
-                    if (layer >= context->getMaximum2DArrayTextureLayers())
+                    if (static_cast<GLuint>(layer) >= caps.maxArrayTextureLayers)
                     {
                         return gl::error(GL_INVALID_VALUE, false);
                     }
@@ -573,12 +579,12 @@ bool ValidateES3FramebufferTextureParameters(gl::Context *context, GLenum target
 
               case GL_TEXTURE_3D:
                 {
-                    if (level > gl::log2(context->getMaximum3DTextureDimension()))
+                    if (level > gl::log2(caps.max3DTextureSize))
                     {
                         return gl::error(GL_INVALID_VALUE, false);
                     }
 
-                    if (layer >= context->getMaximum3DTextureDimension())
+                    if (static_cast<GLuint>(layer) >= caps.max3DTextureSize)
                     {
                         return gl::error(GL_INVALID_VALUE, false);
                     }
@@ -721,7 +727,7 @@ bool ValidateInvalidateFramebufferParameters(gl::Context *context, GLenum target
                 return gl::error(GL_INVALID_ENUM, false);
             }
 
-            if (attachments[i] >= GL_COLOR_ATTACHMENT0 + context->getMaximumRenderTargets())
+            if (attachments[i] >= GL_COLOR_ATTACHMENT0 + context->getCaps().maxColorAttachments)
             {
                 return gl::error(GL_INVALID_OPERATION, false);
             }
