@@ -2876,7 +2876,6 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instan
     }
 
     ProgramBinary *programBinary = getCurrentProgramBinary();
-    programBinary->applyUniforms();
 
     Texture *vsTextures[IMPLEMENTATION_MAX_VERTEX_TEXTURE_IMAGE_UNITS];
     TextureType vsTextureTypes[IMPLEMENTATION_MAX_VERTEX_TEXTURE_IMAGE_UNITS];
@@ -2954,7 +2953,6 @@ void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid
     }
 
     ProgramBinary *programBinary = getCurrentProgramBinary();
-    programBinary->applyUniforms();
 
     Texture *vsTextures[IMPLEMENTATION_MAX_VERTEX_TEXTURE_IMAGE_UNITS];
     TextureType vsTextureTypes[IMPLEMENTATION_MAX_VERTEX_TEXTURE_IMAGE_UNITS];
