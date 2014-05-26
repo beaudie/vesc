@@ -2583,7 +2583,7 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
 
               default:
                 if (attachment < GL_COLOR_ATTACHMENT0_EXT ||
-                    (attachment - GL_COLOR_ATTACHMENT0_EXT) >= context->getMaximumRenderTargets())
+                    (attachment - GL_COLOR_ATTACHMENT0_EXT) >= context->getCaps().maxColorAttachments)
                 {
                     return gl::error(GL_INVALID_ENUM);
                 }
@@ -7852,7 +7852,7 @@ void __stdcall glClearBufferiv(GLenum buffer, GLint drawbuffer, const GLint* val
             switch (buffer)
             {
               case GL_COLOR:
-                if (drawbuffer < 0 || drawbuffer >= static_cast<GLint>(context->getMaximumRenderTargets()))
+                if (drawbuffer < 0 || static_cast<GLuint>(drawbuffer) >= context->getCaps().maxDrawBuffers)
                 {
                     return gl::error(GL_INVALID_VALUE);
                 }
@@ -7895,7 +7895,7 @@ void __stdcall glClearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint* v
             switch (buffer)
             {
               case GL_COLOR:
-                if (drawbuffer < 0 || drawbuffer >= static_cast<GLint>(context->getMaximumRenderTargets()))
+                if (drawbuffer < 0 || static_cast<GLuint>(drawbuffer) >= context->getCaps().maxDrawBuffers)
                 {
                     return gl::error(GL_INVALID_VALUE);
                 }
@@ -7932,7 +7932,7 @@ void __stdcall glClearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat* v
             switch (buffer)
             {
               case GL_COLOR:
-                if (drawbuffer < 0 || drawbuffer >= static_cast<GLint>(context->getMaximumRenderTargets()))
+                if (drawbuffer < 0 || static_cast<GLuint>(drawbuffer) >= context->getCaps().maxDrawBuffers)
                 {
                     return gl::error(GL_INVALID_VALUE);
                 }
@@ -9478,7 +9478,7 @@ void __stdcall glInvalidateFramebuffer(GLenum target, GLsizei numAttachments, co
                 return;
             }
 
-            int maxDimension = context->getMaximumRenderbufferDimension();
+            GLuint maxDimension = context->getCaps().maxRenderbufferSize;
             context->invalidateFrameBuffer(target, numAttachments, attachments, 0, 0, maxDimension, maxDimension);
         }
     }
@@ -9803,7 +9803,7 @@ void __stdcall glDrawBuffersEXT(GLsizei n, const GLenum *bufs)
 
         if (context)
         {
-            if (n < 0 || (unsigned int)n > context->getMaximumRenderTargets())
+            if (n < 0 || static_cast<GLuint>(n) > context->getCaps().maxDrawBuffers)
             {
                 return gl::error(GL_INVALID_VALUE);
             }
@@ -9834,12 +9834,12 @@ void __stdcall glDrawBuffersEXT(GLsizei n, const GLenum *bufs)
 
             gl::Framebuffer *framebuffer = context->getDrawFramebuffer();
 
-            for (int colorAttachment = 0; colorAttachment < n; colorAttachment++)
+            for (GLuint colorAttachment = 0; colorAttachment < static_cast<GLuint>(n); colorAttachment++)
             {
                 framebuffer->setDrawBufferState(colorAttachment, bufs[colorAttachment]);
             }
 
-            for (int colorAttachment = n; colorAttachment < (int)context->getMaximumRenderTargets(); colorAttachment++)
+            for (GLuint colorAttachment = n; colorAttachment < context->getCaps().maxDrawBuffers; colorAttachment++)
             {
                 framebuffer->setDrawBufferState(colorAttachment, GL_NONE);
             }
