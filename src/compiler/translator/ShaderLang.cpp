@@ -193,6 +193,7 @@ void ShGetInfo(const ShHandle handle, ShShaderInfo pname, size_t* params)
 
     TShHandleBase* base = static_cast<TShHandleBase*>(handle);
     TCompiler* compiler = base->getAsCompiler();
+    TranslatorHLSL* translator = compiler->getAsTranslatorHLSL();
     if (!compiler) return;
 
     switch(pname)
@@ -248,6 +249,9 @@ void ShGetInfo(const ShHandle handle, ShShaderInfo pname, size_t* params)
         break;
     case SH_RESOURCES_STRING_LENGTH:
         *params = compiler->getBuiltInResourcesString().length() + 1;
+        break;
+    case SH_OUTPUT_TYPE:
+        *params = (translator ? translator->getOutputType() : 0);
         break;
     default: UNREACHABLE();
     }

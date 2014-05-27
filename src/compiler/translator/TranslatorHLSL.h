@@ -20,6 +20,7 @@ public:
     const std::vector<gl::Attribute> &getOutputVariables() { return mActiveOutputVariables; }
     const std::vector<gl::Attribute> &getAttributes() { return mActiveAttributes; }
     const std::vector<gl::Varying> &getVaryings() { return mActiveVaryings; }
+    ShShaderOutput getOutputType() const { return mOutputType; }
 
 protected:
     virtual void translate(TIntermNode* root);
