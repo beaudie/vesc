@@ -42,7 +42,7 @@ class Image;
 namespace gl
 {
 class Framebuffer;
-class Renderbuffer;
+class FramebufferAttachment;
 
 enum
 {
@@ -66,8 +66,8 @@ class Texture : public RefCountObject
 
     virtual ~Texture();
 
-    void addProxyRef(const Renderbuffer *proxy);
-    void releaseProxy(const Renderbuffer *proxy);
+    void addProxyRef(const FramebufferAttachment *proxy);
+    void releaseProxy(const FramebufferAttachment *proxy);
 
     GLenum getTarget() const;
 
@@ -162,7 +162,7 @@ class Texture : public RefCountObject
     // because, as the renderbuffer acting as proxy will maintain a binding pointer
     // back to this texture, there would be a circular reference if we used a binding
     // pointer here. This reference count will cause the pointer to be set to NULL if
-    // the count drops to zero, but will not cause deletion of the Renderbuffer.
+    // the count drops to zero, but will not cause deletion of the FramebufferAttachment.
     RenderbufferProxySet mRenderbufferProxies;
 
   private:
@@ -200,11 +200,11 @@ class Texture2D : public Texture
 
     virtual void generateMipmaps();
 
-    Renderbuffer *getRenderbuffer(GLint level);
+    FramebufferAttachment *getAttachment(GLint level);
     unsigned int getRenderTargetSerial(GLint level);
 
   protected:
-    friend class RenderbufferTexture2D;
+    friend class Texture2DAttachment;
     rx::RenderTarget *getRenderTarget(GLint level);
     rx::RenderTarget *getDepthSencil(GLint level);
 
@@ -268,13 +268,13 @@ class TextureCubeMap : public Texture
 
     virtual void generateMipmaps();
 
-    Renderbuffer *getRenderbuffer(GLenum target, GLint level);
+    FramebufferAttachment *getAttachment(GLenum target, GLint level);
     unsigned int getRenderTargetSerial(GLenum target, GLint level);
 
     static int targetToIndex(GLenum target);
 
   protected:
-    friend class RenderbufferTextureCubeMap;
+    friend class TextureCubeMapAttachment;
     rx::RenderTarget *getRenderTarget(GLenum target, GLint level);
     rx::RenderTarget *getDepthStencil(GLenum target, GLint level);
 
@@ -331,11 +331,11 @@ class Texture3D : public Texture
     virtual bool isSamplerComplete(const SamplerState &samplerState) const;
     virtual bool isMipmapComplete() const;
 
-    Renderbuffer *getRenderbuffer(GLint level, GLint layer);
+    FramebufferAttachment *getAttachment(GLint level, GLint layer);
     unsigned int getRenderTargetSerial(GLint level, GLint layer);
 
   protected:
-    friend class RenderbufferTexture3DLayer;
+    friend class Texture3DAttachment;
     rx::RenderTarget *getRenderTarget(GLint level);
     rx::RenderTarget *getRenderTarget(GLint level, GLint layer);
     rx::RenderTarget *getDepthStencil(GLint level, GLint layer);
@@ -392,11 +392,11 @@ class Texture2DArray : public Texture
     virtual bool isSamplerComplete(const SamplerState &samplerState) const;
     virtual bool isMipmapComplete() const;
 
-    Renderbuffer *getRenderbuffer(GLint level, GLint layer);
+    FramebufferAttachment *getAttachment(GLint level, GLint layer);
     unsigned int getRenderTargetSerial(GLint level, GLint layer);
 
   protected:
-    friend class RenderbufferTexture2DArrayLayer;
+    friend class Texture2DArrayAttachment;
     rx::RenderTarget *getRenderTarget(GLint level, GLint layer);
     rx::RenderTarget *getDepthStencil(GLint level, GLint layer);
 
