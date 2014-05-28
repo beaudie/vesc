@@ -323,7 +323,7 @@ bool ValidateES3CopyTexImageParameters(gl::Context *context, GLenum target, GLin
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
-    gl::Renderbuffer *source = framebuffer->getReadColorbuffer();
+    gl::FramebufferAttachment *source = framebuffer->getReadColorbuffer();
     GLenum colorbufferInternalFormat = source->getInternalFormat();
     gl::Texture *texture = NULL;
     GLenum textureInternalFormat = GL_NONE;
