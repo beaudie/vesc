@@ -81,6 +81,8 @@ namespace gl
 #define ASSERT(expression) (void(0))
 #endif
 
+#define UNUSED_VARIABLE(variable) ((void)(variable))
+
 // A macro to indicate unimplemented functionality
 
 // Define NOASSERT_UNIMPLEMENTED to non zero to skip the assert fail in the unimplemented checks

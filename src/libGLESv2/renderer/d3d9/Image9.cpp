@@ -240,6 +240,7 @@ void Image9::unlock()
     if (mSurface)
     {
         HRESULT result = mSurface->UnlockRect();
+        UNUSED_VARIABLE(result);
         ASSERT(SUCCEEDED(result));
     }
 }
@@ -367,6 +368,7 @@ bool Image9::copyToSurface(IDirect3DSurface9 *destSurface, GLint xoffset, GLint 
         {
             // UpdateSurface: source must be SYSTEMMEM, dest must be DEFAULT pools 
             HRESULT result = device->UpdateSurface(sourceSurface, &rect, destSurface, &point);
+            UNUSED_VARIABLE(result);
             ASSERT(SUCCEEDED(result));
         }
     }
@@ -420,7 +422,9 @@ void Image9::loadCompressedData(GLint xoffset, GLint yoffset, GLint zoffset, GLs
     GLuint outputBlockWidth = d3d9::GetBlockWidth(mD3DFormat);
     GLuint outputBlockHeight = d3d9::GetBlockHeight(mD3DFormat);
 
+    UNUSED_VARIABLE(outputBlockWidth);
     ASSERT(xoffset % outputBlockWidth == 0);
+    UNUSED_VARIABLE(outputBlockHeight);
     ASSERT(yoffset % outputBlockHeight == 0);
 
     LoadImageFunction loadFunction = d3d9::GetImageLoadFunction(mInternalFormat, mRenderer);
