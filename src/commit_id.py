@@ -1,19 +1,23 @@
 import subprocess as sp
 import sys
 
-def grab_output(*command):
-    return sp.Popen(command, stdout=sp.PIPE).communicate()[0].strip()
+# Usage: commit_id.py <angle_dir> <file_to_write>
 
+def grab_output(command, cwd):
+    return sp.Popen(command, stdout=sp.PIPE, shell=True, cwd=cwd).communicate()[0].strip()
+
+cwd = sys.argv[1]
+output_file = sys.argv[2]
 commit_id_size = 12
 
 try:
-    commit_id = grab_output('git', 'rev-parse', '--short=%d' % commit_id_size, 'HEAD')
-    commit_date = grab_output('git', 'show', '-s', '--format=%ci', 'HEAD')
+    commit_id = grab_output('git rev-parse --short=%d HEAD' % commit_id_size, cwd)
+    commit_date = grab_output('git show -s --format=%ci HEAD', cwd)
 except:
     commit_id = 'invalid-hash'
     commit_date = 'invalid-date'
 
-hfile = open(sys.argv[1], 'w')
+hfile = open(output_file, 'w')
 
 hfile.write('#define ANGLE_COMMIT_HASH "%s"\n'    % commit_id)
 hfile.write('#define ANGLE_COMMIT_HASH_SIZE %d\n' % commit_id_size)

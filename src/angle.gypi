@@ -24,7 +24,7 @@
             [
                 {
                     'destination': '<(SHARED_INTERMEDIATE_DIR)',
-                    'files': [ 'commit_id.bat', 'copy_compiler_dll.bat', 'commit_id.py' ],
+                    'files': [ 'copy_compiler_dll.bat', 'commit_id.py' ],
                 },
             ],
         },
@@ -34,34 +34,15 @@
             'type': 'none',
             'includes': [ '../build/common_defines.gypi', ],
             'dependencies': [ 'copy_scripts', ],
-            'conditions':
+            'actions':
             [
-                ['OS=="win"',
                 {
-                    'actions':
-                    [
-                        {
-                            'action_name': 'Generate Commit ID Header',
-                            'message': 'Generating commit ID header...',
-                            'msvs_cygwin_shell': 0,
-                            'inputs': [ '<(SHARED_INTERMEDIATE_DIR)/commit_id.bat', '<(angle_path)/.git/index' ],
-                            'outputs': [ '<(SHARED_INTERMEDIATE_DIR)/commit.h' ],
-                            'action': [ '<(SHARED_INTERMEDIATE_DIR)/commit_id.bat', '<(SHARED_INTERMEDIATE_DIR)' ],
-                        },
-                    ],
+                    'action_name': 'Generate Commit ID Header',
+                    'message': 'Generating commit ID header...',
+                    'inputs': [ '<(SHARED_INTERMEDIATE_DIR)/commit_id.py', '<(angle_path)/.git/index' ],
+                    'outputs': [ '<(SHARED_INTERMEDIATE_DIR)/angle_commit.h' ],
+                    'action': [ 'python', '<(SHARED_INTERMEDIATE_DIR)/commit_id.py', '<(angle_path)', '<(SHARED_INTERMEDIATE_DIR)/angle_commit.h' ],
                 },
-                { # OS != win
-                    'actions':
-                    [
-                        {
-                            'action_name': 'Generate Commit ID Header',
-                            'message': 'Generating commit ID header...',
-                            'inputs': [ '<(SHARED_INTERMEDIATE_DIR)/commit_id.py', '<(angle_path)/.git/index' ],
-                            'outputs': [ '<(SHARED_INTERMEDIATE_DIR)/commit.h' ],
-                            'action': [ 'python', '<(SHARED_INTERMEDIATE_DIR)/commit_id.py', '<(SHARED_INTERMEDIATE_DIR)/commit.h' ],
-                        },
-                    ],
-                }],
             ],
             'direct_dependent_settings':
             {
