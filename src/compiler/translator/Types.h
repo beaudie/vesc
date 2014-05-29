@@ -151,9 +151,10 @@ class TStructure : public TFieldListCollection
 {
   public:
     POOL_ALLOCATOR_NEW_DELETE();
-    TStructure(const TString *name, TFieldList *fields)
+    TStructure(const TString *name, TFieldList *fields, const TScopeBracket &scope)
         : TFieldListCollection(name, fields),
-          mDeepestNesting(0)
+          mDeepestNesting(0),
+          mScope(scope)
     {
     }
 
@@ -166,6 +167,7 @@ class TStructure : public TFieldListCollection
     bool containsArrays() const;
 
     bool equals(const TStructure &other) const;
+    const TScopeBracket &scope() const { return mScope; }
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TStructure);
@@ -175,6 +177,7 @@ class TStructure : public TFieldListCollection
     }
     int calculateDeepestNesting() const;
 
+    TScopeBracket mScope;
     mutable int mDeepestNesting;
 };
 
