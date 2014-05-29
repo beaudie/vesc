@@ -34,18 +34,15 @@
             'type': 'none',
             'includes': [ '../build/common_defines.gypi', ],
             'dependencies': [ 'copy_scripts', ],
-            'conditions':
+            'actions':
             [
-                'actions':
-                [
-                    {
-                        'action_name': 'Generate Commit ID Header',
-                        'message': 'Generating commit ID header...',
-                        'inputs': [ '<(SHARED_INTERMEDIATE_DIR)/commit_id.py', '<(angle_path)/.git/index' ],
-                        'outputs': [ '<(SHARED_INTERMEDIATE_DIR)/angle_commit.h' ],
-                        'action': [ 'python', '<(SHARED_INTERMEDIATE_DIR)/commit_id.py', '<(SHARED_INTERMEDIATE_DIR)/angle_commit.h' ],
-                    },
-                ],
+                {
+                    'action_name': 'Generate Commit ID Header',
+                    'message': 'Generating commit ID header...',
+                    'inputs': [ '<(SHARED_INTERMEDIATE_DIR)/commit_id.py', '<(angle_path)/.git/index' ],
+                    'outputs': [ '<(SHARED_INTERMEDIATE_DIR)/angle_commit.h' ],
+                    'action': [ 'python', '<(SHARED_INTERMEDIATE_DIR)/commit_id.py', '<(angle_path)', '<(SHARED_INTERMEDIATE_DIR)/angle_commit.h' ],
+                },
             ],
             'direct_dependent_settings':
             {
