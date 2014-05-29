@@ -4586,12 +4586,12 @@ yyreduce:
 
   case 208:
 
-    { context->symbolTable.push(); }
+    { context->pushScope(); }
     break;
 
   case 209:
 
-    { context->symbolTable.pop(); }
+    { context->popScope(); }
     break;
 
   case 210:
@@ -4617,22 +4617,22 @@ yyreduce:
 
   case 213:
 
-    { context->symbolTable.push(); }
+    { context->pushScope(); }
     break;
 
   case 214:
 
-    { context->symbolTable.pop(); (yyval.interm.intermNode) = (yyvsp[(2) - (2)].interm.intermNode); }
+    { context->popScope(); (yyval.interm.intermNode) = (yyvsp[(2) - (2)].interm.intermNode); }
     break;
 
   case 215:
 
-    { context->symbolTable.push(); }
+    { context->pushScope(); }
     break;
 
   case 216:
 
-    { context->symbolTable.pop(); (yyval.interm.intermNode) = (yyvsp[(2) - (2)].interm.intermNode); }
+    { context->popScope(); (yyval.interm.intermNode) = (yyvsp[(2) - (2)].interm.intermNode); }
     break;
 
   case 217:
@@ -4989,6 +4989,8 @@ yyreduce:
         context->intermediate.setAggregateOperator(paramNodes, EOpParameters, (yylsp[(1) - (1)]));
         (yyvsp[(1) - (1)].interm).intermAggregate = paramNodes;
         context->loopNestingLevel = 0;
+
+        context->scopeBracket.push();
     }
     break;
 
@@ -5012,7 +5014,7 @@ yyreduce:
         (yyval.interm.intermNode)->getAsAggregate()->setOptimize(context->pragma().optimize);
         (yyval.interm.intermNode)->getAsAggregate()->setDebug(context->pragma().debug);
 
-        context->symbolTable.pop();
+        context->popScope();
     }
     break;
 

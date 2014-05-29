@@ -136,8 +136,6 @@ OutputHLSL::OutputHLSL(TParseContext &context, const ShBuiltInResources& resourc
 
     mNumRenderTargets = resources.EXT_draw_buffers ? resources.MaxDrawBuffers : 1;
 
-    mScopeDepth = 0;
-
     mUniqueIndex = 0;
 
     mContainsLoopDiscontinuity = false;
@@ -2258,16 +2256,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 outputLineDirective(node->getLine().first_line);
                 out << "{\n";
 
-                mScopeDepth++;
-
-                if (mScopeBracket.size() < mScopeDepth)
-                {
-                    mScopeBracket.push_back(0);   // New scope level
-                }
-                else
-                {
-                    mScopeBracket[mScopeDepth - 1]++;   // New scope at existing level
-                }
+                mScopeBracket.push();
             }
 
             for (TIntermSequence::iterator sit = node->getSequence().begin(); sit != node->getSequence().end(); sit++)
@@ -2283,8 +2272,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
             {
                 outputLineDirective(node->getLine().last_line);
                 out << "}\n";
-
-                mScopeDepth--;
+                mScopeBracket.pop();
             }
 
             return false;
@@ -3825,12 +3813,12 @@ TString OutputHLSL::scopedStruct(const TString &typeName)
         return typeName;
     }
 
-    return scopeString(mScopeDepth) + typeName;
+    return scopeString(mScopeBracket.depth()) + typeName;
 }
 
 TString OutputHLSL::structLookup(const TString &typeName)
 {
-    for (int depth = mScopeDepth; depth >= 0; depth--)
+    for (int depth = mScopeBracket.depth(); depth >= 0; depth--)
     {
         TString scopedName = scopeString(depth) + typeName;
 
