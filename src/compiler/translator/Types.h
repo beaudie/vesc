@@ -108,6 +108,44 @@ class TFieldListCollection
     mutable size_t mObjectSize;
 };
 
+// Represents a chain of nested scopes
+class TScopeBracket
+{
+  public:
+    TScopeBracket()
+        : mScopeDepth(0)
+    {}
+
+    void push()
+    {
+        if (mScopeData.size() <= mScopeDepth)
+        {
+            // New scope level
+            mScopeData.push_back(0);
+        }
+        else
+        {
+            // New scope at existing level
+            mScopeData[mScopeDepth]++;
+        }
+
+        mScopeDepth++;
+    }
+
+    void pop()
+    {
+        mScopeDepth--;
+    }
+
+    size_t depth() const { return mScopeDepth; }
+    size_t size() const { return mScopeData.size(); }
+    int operator[](size_t index) const { return mScopeData[index]; }
+
+  private:
+    size_t mScopeDepth;
+    std::vector<int> mScopeData;
+};
+
 // May also represent interface blocks
 class TStructure : public TFieldListCollection
 {

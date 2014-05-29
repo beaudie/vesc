@@ -2605,6 +2605,18 @@ TPublicType TParseContext::addStructure(const TSourceLoc& structLine, const TSou
     return publicType;
 }
 
+void TParseContext::pushScope()
+{
+    symbolTable.push();
+    scopeBracket.push();
+}
+
+void TParseContext::popScope()
+{
+    symbolTable.pop();
+    scopeBracket.pop();
+}
+
 //
 // Parse an array of strings using yyparse.
 //
@@ -2626,6 +2638,5 @@ int PaParseStrings(size_t count, const char* const string[], const int length[],
 
     return (error == 0) && (context->numErrors() == 0) ? 0 : 1;
 }
-
 
 

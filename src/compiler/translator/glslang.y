@@ -1635,7 +1635,7 @@ simple_statement
 
 compound_statement
     : LEFT_BRACE RIGHT_BRACE { $$ = 0; }
-    | LEFT_BRACE { context->symbolTable.push(); } statement_list { context->symbolTable.pop(); } RIGHT_BRACE {
+    | LEFT_BRACE { context->pushScope(); } statement_list { context->popScope(); } RIGHT_BRACE {
         if ($3 != 0) {
             $3->setOp(EOpSequence);
             $3->setLine(@$);
@@ -1650,8 +1650,8 @@ statement_no_new_scope
     ;
 
 statement_with_scope
-    : { context->symbolTable.push(); } compound_statement_no_new_scope { context->symbolTable.pop(); $$ = $2; }
-    | { context->symbolTable.push(); } simple_statement                { context->symbolTable.pop(); $$ = $2; }
+    : { context->pushScope(); } compound_statement_no_new_scope { context->popScope(); $$ = $2; }
+    | { context->pushScope(); } simple_statement                { context->popScope(); $$ = $2; }
     ;
 
 compound_statement_no_new_scope
@@ -1921,6 +1921,8 @@ function_definition
         context->intermediate.setAggregateOperator(paramNodes, EOpParameters, @1);
         $1.intermAggregate = paramNodes;
         context->loopNestingLevel = 0;
+
+        context->scopeBracket.push();
     }
     compound_statement_no_new_scope {
         //?? Check that all paths return a value if return type != void ?
@@ -1940,7 +1942,7 @@ function_definition
         $$->getAsAggregate()->setOptimize(context->pragma().optimize);
         $$->getAsAggregate()->setDebug(context->pragma().debug);
 
-        context->symbolTable.pop();
+        context->popScope();
     }
     ;
 

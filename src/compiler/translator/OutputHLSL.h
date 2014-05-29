@@ -162,9 +162,7 @@ class OutputHLSL : public TIntermTraverser
     typedef std::list<TString> StructDeclarations;
     StructDeclarations mStructDeclarations;
 
-    typedef std::vector<int> ScopeBracket;
-    ScopeBracket mScopeBracket;
-    unsigned int mScopeDepth;
+    TScopeBracket mScopeBracket;
 
     int mUniqueIndex;   // For creating unique names
 
