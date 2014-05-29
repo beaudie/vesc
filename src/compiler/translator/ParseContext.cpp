@@ -2564,7 +2564,7 @@ TFieldList *TParseContext::addStructDeclaratorList(const TPublicType& typeSpecif
 
 TPublicType TParseContext::addStructure(const TSourceLoc& structLine, const TSourceLoc& nameLine, const TString *structName, TFieldList* fieldList)
 {
-    TStructure* structure = new TStructure(structName, fieldList);
+    TStructure* structure = new TStructure(structName, fieldList, scopeBracket);
     TType* structureType = new TType(structure);
 
     if (!structName->empty())

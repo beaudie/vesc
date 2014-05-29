@@ -2285,9 +2285,11 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
 
             if (variable && (variable->getQualifier() == EvqTemporary || variable->getQualifier() == EvqGlobal))
             {
-                if (variable->getType().getStruct())
+                TStructure *structure = variable->getType().getStruct();
+
+                if (structure)
                 {
-                    addConstructor(variable->getType(), scopedStruct(variable->getType().getStruct()->name()), NULL);
+                    addConstructor(variable->getType(), scopedStruct(*structure), NULL);
                 }
 
                 if (!variable->getAsSymbolNode() || variable->getAsSymbolNode()->getSymbol() != "")   // Variable declaration
@@ -2412,9 +2414,11 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
 
                 if (symbol)
                 {
-                    if (symbol->getType().getStruct())
+                    TStructure *structure = symbol->getType().getStruct();
+
+                    if (structure)
                     {
-                        addConstructor(symbol->getType(), scopedStruct(symbol->getType().getStruct()->name()), NULL);
+                        addConstructor(symbol->getType(), scopedStruct(*structure), NULL);
                     }
 
                     out << argumentString(symbol);
@@ -2435,6 +2439,12 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 mInsideFunction = true;
                 sequence[1]->traverse(this);
                 mInsideFunction = false;
+            }
+            else
+            {
+                // Track the scope even if the function body is empty
+                mScopeBracket.push();
+                mScopeBracket.pop();
             }
             
             out << "}\n";
@@ -2682,7 +2692,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
         outputTriplet(visit, "mat4(", ", ", ")");
         break;
       case EOpConstructStruct:
-        addConstructor(node->getType(), scopedStruct(node->getType().getStruct()->name()), &node->getSequence());
+        addConstructor(node->getType(), scopedStruct(*node->getType().getStruct()), &node->getSequence());
         outputTriplet(visit, structLookup(node->getType().getStruct()->name()) + "_ctor(", ", ", ")");
         break;
       case EOpLessThan:         outputTriplet(visit, "(", " < ", ")");                 break;
@@ -3794,33 +3804,33 @@ const ConstantUnion *OutputHLSL::writeConstantUnion(const TType &type, const Con
     return constUnion;
 }
 
-TString OutputHLSL::scopeString(unsigned int depthLimit)
+TString OutputHLSL::scopeString(const TScopeBracket &scope, size_t depthLimit)
 {
     TString string;
 
-    for (unsigned int i = 0; i < mScopeBracket.size() && i < depthLimit; i++)
+    for (size_t i = 0; i < scope.size() && i < depthLimit; i++)
     {
-        string += str(mScopeBracket[i]) + "_";
+        string += str(scope[i]) + "_";
     }
 
     return "ss_" + string;
 }
 
-TString OutputHLSL::scopedStruct(const TString &typeName)
+TString OutputHLSL::scopedStruct(const TStructure &structType)
 {
-    if (typeName == "")
+    if (structType.name() == "")
     {
-        return typeName;
+        return "";
     }
 
-    return scopeString(mScopeBracket.depth()) + typeName;
+    return scopeString(structType.scope(), structType.scope().depth()) + structType.name();
 }
 
 TString OutputHLSL::structLookup(const TString &typeName)
 {
-    for (int depth = mScopeBracket.depth(); depth >= 0; depth--)
+    for (size_t depth = mScopeBracket.depth()+1; depth-- > 0; )
     {
-        TString scopedName = scopeString(depth) + typeName;
+        TString scopedName = scopeString(mScopeBracket, depth) + typeName;
 
         for (StructNames::iterator structName = mStructNames.begin(); structName != mStructNames.end(); structName++)
         {

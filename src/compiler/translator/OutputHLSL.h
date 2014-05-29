@@ -74,8 +74,8 @@ class OutputHLSL : public TIntermTraverser
     void addConstructor(const TType &type, const TString &name, const TIntermSequence *parameters);
     const ConstantUnion *writeConstantUnion(const TType &type, const ConstantUnion *constUnion);
 
-    TString scopeString(unsigned int depthLimit);
-    TString scopedStruct(const TString &typeName);
+    static TString scopeString(const TScopeBracket &scope, size_t depthLimit);
+    TString scopedStruct(const TStructure &structure);
     TString structLookup(const TString &typeName);
 
     TParseContext &mContext;
