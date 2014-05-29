@@ -812,7 +812,7 @@ declaration
         prototype->setOp(EOpPrototype);
         $$ = prototype;
 
-        context->symbolTable.pop();
+        context->popScope();
     }
     | init_declarator_list SEMICOLON {
         if ($1.intermAggregate)
@@ -958,7 +958,7 @@ function_header
         function = new TFunction($2.string, type);
         $$ = function;
         
-        context->symbolTable.push();
+        context->pushScope();
     }
     ;
 
@@ -1635,7 +1635,7 @@ simple_statement
 
 compound_statement
     : LEFT_BRACE RIGHT_BRACE { $$ = 0; }
-    | LEFT_BRACE { context->symbolTable.push(); } statement_list { context->symbolTable.pop(); } RIGHT_BRACE {
+    | LEFT_BRACE { context->pushScope(); } statement_list { context->popScope(); } RIGHT_BRACE {
         if ($3 != 0) {
             $3->setOp(EOpSequence);
             $3->setLine(@$);
@@ -1650,8 +1650,8 @@ statement_no_new_scope
     ;
 
 statement_with_scope
-    : { context->symbolTable.push(); } compound_statement_no_new_scope { context->symbolTable.pop(); $$ = $2; }
-    | { context->symbolTable.push(); } simple_statement                { context->symbolTable.pop(); $$ = $2; }
+    : { context->pushScope(); } compound_statement_no_new_scope { context->popScope(); $$ = $2; }
+    | { context->pushScope(); } simple_statement                { context->popScope(); $$ = $2; }
     ;
 
 compound_statement_no_new_scope
@@ -1727,8 +1727,8 @@ condition
     ;
 
 iteration_statement
-    : WHILE LEFT_PAREN { context->symbolTable.push(); ++context->loopNestingLevel; } condition RIGHT_PAREN statement_no_new_scope {
-        context->symbolTable.pop();
+    : WHILE LEFT_PAREN { context->pushScope(); ++context->loopNestingLevel; } condition RIGHT_PAREN statement_no_new_scope {
+        context->popScope();
         $$ = context->intermediate.addLoop(ELoopWhile, 0, $4, 0, $6, @1);
         --context->loopNestingLevel;
     }
@@ -1739,8 +1739,8 @@ iteration_statement
         $$ = context->intermediate.addLoop(ELoopDoWhile, 0, $6, 0, $3, @4);
         --context->loopNestingLevel;
     }
-    | FOR LEFT_PAREN { context->symbolTable.push(); ++context->loopNestingLevel; } for_init_statement for_rest_statement RIGHT_PAREN statement_no_new_scope {
-        context->symbolTable.pop();
+    | FOR LEFT_PAREN { context->pushScope(); ++context->loopNestingLevel; } for_init_statement for_rest_statement RIGHT_PAREN statement_no_new_scope {
+        context->popScope();
         $$ = context->intermediate.addLoop(ELoopFor, $4, reinterpret_cast<TIntermTyped*>($5.node1), reinterpret_cast<TIntermTyped*>($5.node2), $7, @1);
         --context->loopNestingLevel;
     }
@@ -1940,7 +1940,7 @@ function_definition
         $$->getAsAggregate()->setOptimize(context->pragma().optimize);
         $$->getAsAggregate()->setDebug(context->pragma().debug);
 
-        context->symbolTable.pop();
+        context->popScope();
     }
     ;
 

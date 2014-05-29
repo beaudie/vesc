@@ -66,6 +66,7 @@ struct TParseContext {
     TDirectiveHandler directiveHandler;
     pp::Preprocessor preprocessor;
     void* scanner;
+    TScopeBracket scopeBracket;
 
     int getShaderVersion() const { return shaderVersion; }
     int numErrors() const { return diagnostics.numErrors(); }
@@ -161,6 +162,9 @@ struct TParseContext {
     void exitStructDeclaration();
 
     bool structNestingErrorCheck(const TSourceLoc& line, const TField& field);
+
+    void pushScope();
+    void popScope();
 };
 
 int PaParseStrings(size_t count, const char* const string[], const int length[],

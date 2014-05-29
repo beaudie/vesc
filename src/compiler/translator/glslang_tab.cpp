@@ -3336,7 +3336,7 @@ yyreduce:
         prototype->setOp(EOpPrototype);
         (yyval.interm.intermNode) = prototype;
 
-        context->symbolTable.pop();
+        context->popScope();
     }
     break;
 
@@ -3517,7 +3517,7 @@ yyreduce:
         function = new TFunction((yyvsp[(2) - (3)].lex).string, type);
         (yyval.interm.function) = function;
         
-        context->symbolTable.push();
+        context->pushScope();
     }
     break;
 
@@ -4586,12 +4586,12 @@ yyreduce:
 
   case 208:
 
-    { context->symbolTable.push(); }
+    { context->pushScope(); }
     break;
 
   case 209:
 
-    { context->symbolTable.pop(); }
+    { context->popScope(); }
     break;
 
   case 210:
@@ -4617,22 +4617,22 @@ yyreduce:
 
   case 213:
 
-    { context->symbolTable.push(); }
+    { context->pushScope(); }
     break;
 
   case 214:
 
-    { context->symbolTable.pop(); (yyval.interm.intermNode) = (yyvsp[(2) - (2)].interm.intermNode); }
+    { context->popScope(); (yyval.interm.intermNode) = (yyvsp[(2) - (2)].interm.intermNode); }
     break;
 
   case 215:
 
-    { context->symbolTable.push(); }
+    { context->pushScope(); }
     break;
 
   case 216:
 
-    { context->symbolTable.pop(); (yyval.interm.intermNode) = (yyvsp[(2) - (2)].interm.intermNode); }
+    { context->popScope(); (yyval.interm.intermNode) = (yyvsp[(2) - (2)].interm.intermNode); }
     break;
 
   case 217:
@@ -4731,13 +4731,13 @@ yyreduce:
 
   case 228:
 
-    { context->symbolTable.push(); ++context->loopNestingLevel; }
+    { context->pushScope(); ++context->loopNestingLevel; }
     break;
 
   case 229:
 
     {
-        context->symbolTable.pop();
+        context->popScope();
         (yyval.interm.intermNode) = context->intermediate.addLoop(ELoopWhile, 0, (yyvsp[(4) - (6)].interm.intermTypedNode), 0, (yyvsp[(6) - (6)].interm.intermNode), (yylsp[(1) - (6)]));
         --context->loopNestingLevel;
     }
@@ -4761,13 +4761,13 @@ yyreduce:
 
   case 232:
 
-    { context->symbolTable.push(); ++context->loopNestingLevel; }
+    { context->pushScope(); ++context->loopNestingLevel; }
     break;
 
   case 233:
 
     {
-        context->symbolTable.pop();
+        context->popScope();
         (yyval.interm.intermNode) = context->intermediate.addLoop(ELoopFor, (yyvsp[(4) - (7)].interm.intermNode), reinterpret_cast<TIntermTyped*>((yyvsp[(5) - (7)].interm.nodePair).node1), reinterpret_cast<TIntermTyped*>((yyvsp[(5) - (7)].interm.nodePair).node2), (yyvsp[(7) - (7)].interm.intermNode), (yylsp[(1) - (7)]));
         --context->loopNestingLevel;
     }
@@ -5012,7 +5012,7 @@ yyreduce:
         (yyval.interm.intermNode)->getAsAggregate()->setOptimize(context->pragma().optimize);
         (yyval.interm.intermNode)->getAsAggregate()->setDebug(context->pragma().debug);
 
-        context->symbolTable.pop();
+        context->popScope();
     }
     break;
 
