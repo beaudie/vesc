@@ -2,8 +2,7 @@
 #define LIBGLESV2_RENDERER_HLSL_D3DCOMPILER_H_
 
 #include "common/angleutils.h"
-
-#include <windows.h>
+#include "common/platform.h"
 
 namespace gl
 {
