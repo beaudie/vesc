@@ -69,25 +69,37 @@
     <None Include="..\..\src\libEGL\libEGL.def">
       <Filter>src\libEGL</Filter>
     </None>
-    <ClCompile Include="..\..\src\common\mathutil.cpp">
-      <Filter>src\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\common\RefCountObject.cpp">
-      <Filter>src\common</Filter>
-    </ClCompile>
     <ClInclude Include="..\..\src\common\RefCountObject.h">
       <Filter>src\common</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\src\common\RefCountObject.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\mathutil.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\tls.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\UserPointer.cpp">
+      <Filter>src\common</Filter>
+    </ClCompile>
     <ClInclude Include="..\..\src\common\debug.h">
       <Filter>src\common</Filter>
     </ClInclude>
     <ClCompile Include="..\..\src\common\debug.cpp">
       <Filter>src\common</Filter>
     </ClCompile>
+    <ClInclude Include="..\..\src\common\UserPointer.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\common\mathutil.h">
       <Filter>src\common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\common\event_tracer.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\common\platform.h">
       <Filter>src\common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\common\version.h">
@@ -99,6 +111,9 @@
     <ClCompile Include="..\..\src\common\event_tracer.cpp">
       <Filter>src\common</Filter>
     </ClCompile>
+    <ClInclude Include="..\..\src\common\tls.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\src\common\utilities.cpp">
       <Filter>src\common</Filter>
     </ClCompile>
