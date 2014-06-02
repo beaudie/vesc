@@ -2578,6 +2578,8 @@ TPublicType TParseContext::addStructure(const TSourceLoc& structLine, const TSou
             error(nameLine, "redefinition", structName->c_str(), "struct");
             recover();
         }
+
+        structure->setAssociatedSymbol(userTypeDef);
     }
 
     // ensure we do not specify any storage qualifiers on the struct members
