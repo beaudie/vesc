@@ -55,8 +55,6 @@ TOutputGLSLBase::TOutputGLSLBase(TInfoSinkBase &objSink,
       mSymbolTable(symbolTable),
       mShaderVersion(shaderVersion)
 {
-    // Set up global scope.
-    mDeclaredStructs.push_back(ScopedDeclaredStructs());
 }
 
 void TOutputGLSLBase::writeTriplet(
@@ -89,8 +87,15 @@ void TOutputGLSLBase::writeVariableType(const TType &type)
     // Declare the struct if we have not done so already.
     if (type.getBasicType() == EbtStruct && !structDeclared(type.getStruct()))
     {
-        declareStruct(type.getStruct());
-        mDeclaredStructs[mDeclaredStructs.size() - 1].push_back(type.getStruct());
+        TStructure *structure = type.getStruct();
+
+        declareStruct(structure);
+
+        if (!structure->name().empty())
+        {
+            ASSERT(structure->associatedSymbol());
+            mDeclaredStructs.insert(structure->associatedSymbol()->getUniqueId());
+        }
     }
     else
     {
@@ -604,7 +609,6 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
         if (depth > 0)
         {
             out << "{\n";
-            pushDeclaredStructsScope();
         }
 
         incrementDepth(node);
@@ -623,7 +627,6 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
         // Scope the sequences except when at the global scope.
         if (depth > 0)
         {
-            popDeclaredStructsScope();
             out << "}\n";
         }
         visitChildren = false;
@@ -1035,17 +1038,14 @@ TString TOutputGLSLBase::hashFunctionName(const TString &mangled_name)
 bool TOutputGLSLBase::structDeclared(const TStructure *structure) const
 {
     ASSERT(structure);
-    ASSERT(mDeclaredStructs.size() > 0);
-    for (size_t ii = mDeclaredStructs.size(); ii > 0; --ii)
+    if (structure->name().empty())
     {
-        const ScopedDeclaredStructs &scope = mDeclaredStructs[ii - 1];
-        for (size_t jj = 0; jj < scope.size(); ++jj)
-        {
-            if (scope[jj]->equals(*structure))
-                return true;
-        }
+        return false;
     }
-    return false;
+
+    ASSERT(structure->associatedSymbol());
+
+    return (mDeclaredStructs.count(structure->associatedSymbol()->getUniqueId()) > 0);
 }
 
 void TOutputGLSLBase::declareStruct(const TStructure *structure)
@@ -1067,14 +1067,3 @@ void TOutputGLSLBase::declareStruct(const TStructure *structure)
     out << "}";
 }
 
-void TOutputGLSLBase::pushDeclaredStructsScope()
-{
-    mDeclaredStructs.push_back(ScopedDeclaredStructs());
-}
-
-void TOutputGLSLBase::popDeclaredStructsScope()
-{
-    // We should never pop the global scope.
-    ASSERT(mDeclaredStructs.size() >= 2);
-    mDeclaredStructs.pop_back();
-}
