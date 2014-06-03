@@ -168,8 +168,10 @@ void Image11::loadData(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei widt
         return;
     }
 
-    void* offsetMappedData = (void*)((BYTE *)mappedImage.pData + (yoffset * mappedImage.RowPitch + xoffset * outputPixelSize + zoffset * mappedImage.DepthPitch));
-    loadFunction(width, height, depth, input, inputRowPitch, inputDepthPitch, offsetMappedData, mappedImage.RowPitch, mappedImage.DepthPitch);
+    byte* offsetMappedData = (reinterpret_cast<byte*>(mappedImage.pData) + (yoffset * mappedImage.RowPitch + xoffset * outputPixelSize + zoffset * mappedImage.DepthPitch));
+    loadFunction(width, height, depth,
+                 reinterpret_cast<const byte*>(input), inputRowPitch, inputDepthPitch,
+                 offsetMappedData, mappedImage.RowPitch, mappedImage.DepthPitch);
 
     unmap();
 }
@@ -198,11 +200,12 @@ void Image11::loadCompressedData(GLint xoffset, GLint yoffset, GLint zoffset, GL
         return;
     }
 
-    void* offsetMappedData = (void*)((BYTE*)mappedImage.pData + ((yoffset / outputBlockHeight) * mappedImage.RowPitch +
-                                                                 (xoffset / outputBlockWidth) * outputPixelSize +
-                                                                 zoffset * mappedImage.DepthPitch));
+    byte* offsetMappedData = reinterpret_cast<byte*>(mappedImage.pData) + ((yoffset / outputBlockHeight) * mappedImage.RowPitch +
+                                                                           (xoffset / outputBlockWidth) * outputPixelSize +
+                                                                           zoffset * mappedImage.DepthPitch);
 
-    loadFunction(width, height, depth, input, inputRowPitch, inputDepthPitch,
+    loadFunction(width, height, depth,
+                 reinterpret_cast<const byte*>(input), inputRowPitch, inputDepthPitch,
                  offsetMappedData, mappedImage.RowPitch, mappedImage.DepthPitch);
 
     unmap();
