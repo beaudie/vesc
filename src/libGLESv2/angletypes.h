@@ -12,6 +12,10 @@
 #include "libGLESv2/constants.h"
 #include "common/RefCountObject.h"
 
+#include <cstdint>
+
+typedef uint8_t byte;
+
 namespace gl
 {
 class Buffer;
