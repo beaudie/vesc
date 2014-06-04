@@ -1105,7 +1105,7 @@ Texture *Context::getTexture(GLuint handle)
     return mResourceManager->getTexture(handle);
 }
 
-FramebufferAttachment *Context::getRenderbuffer(GLuint handle)
+Renderbuffer *Context::getRenderbuffer(GLuint handle)
 {
     return mResourceManager->getRenderbuffer(handle);
 }
@@ -1440,7 +1440,7 @@ void Context::setRenderbufferStorage(GLsizei width, GLsizei height, GLenum inter
         return;
     }
 
-    FramebufferAttachment *renderbufferObject = mState.renderbuffer.get();
+    Renderbuffer *renderbufferObject = mState.renderbuffer.get();
     renderbufferObject->setStorage(renderbuffer);
 }
 
