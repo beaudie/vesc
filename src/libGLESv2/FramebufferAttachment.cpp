@@ -355,13 +355,10 @@ unsigned int Texture2DArrayAttachment::getTextureSerial() const
 
 ////// FramebufferAttachment Implementation //////
 
-FramebufferAttachment::FramebufferAttachment(rx::Renderer *renderer, GLuint id, FramebufferAttachmentImpl *instance) : RefCountObject(id)
+FramebufferAttachment::FramebufferAttachment(GLuint id, FramebufferAttachmentImpl *instance) : RefCountObject(id)
 {
     ASSERT(instance != NULL);
     mImpl = instance;
-
-    ASSERT(renderer != NULL);
-    mRenderer = renderer;
 }
 
 FramebufferAttachment::~FramebufferAttachment()
@@ -420,44 +417,44 @@ GLenum FramebufferAttachment::getActualFormat() const
     return mImpl->getActualFormat();
 }
 
-GLuint FramebufferAttachment::getRedSize() const
+GLuint FramebufferAttachment::getRedSize(int clientVersion) const
 {
-    return gl::GetRedBits(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetRedBits(getActualFormat(), clientVersion);
 }
 
-GLuint FramebufferAttachment::getGreenSize() const
+GLuint FramebufferAttachment::getGreenSize(int clientVersion) const
 {
-    return gl::GetGreenBits(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetGreenBits(getActualFormat(), clientVersion);
 }
 
-GLuint FramebufferAttachment::getBlueSize() const
+GLuint FramebufferAttachment::getBlueSize(int clientVersion) const
 {
-    return gl::GetBlueBits(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetBlueBits(getActualFormat(), clientVersion);
 }
 
-GLuint FramebufferAttachment::getAlphaSize() const
+GLuint FramebufferAttachment::getAlphaSize(int clientVersion) const
 {
-    return gl::GetAlphaBits(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetAlphaBits(getActualFormat(), clientVersion);
 }
 
-GLuint FramebufferAttachment::getDepthSize() const
+GLuint FramebufferAttachment::getDepthSize(int clientVersion) const
 {
-    return gl::GetDepthBits(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetDepthBits(getActualFormat(), clientVersion);
 }
 
-GLuint FramebufferAttachment::getStencilSize() const
+GLuint FramebufferAttachment::getStencilSize(int clientVersion) const
 {
-    return gl::GetStencilBits(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetStencilBits(getActualFormat(), clientVersion);
 }
 
-GLenum FramebufferAttachment::getComponentType() const
+GLenum FramebufferAttachment::getComponentType(int clientVersion) const
 {
-    return gl::GetComponentType(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetComponentType(getActualFormat(), clientVersion);
 }
 
-GLenum FramebufferAttachment::getColorEncoding() const
+GLenum FramebufferAttachment::getColorEncoding(int clientVersion) const
 {
-    return gl::GetColorEncoding(getActualFormat(), mRenderer->getCurrentClientVersion());
+    return gl::GetColorEncoding(getActualFormat(), clientVersion);
 }
 
 GLsizei FramebufferAttachment::getSamples() const
