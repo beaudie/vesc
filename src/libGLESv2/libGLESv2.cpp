@@ -2694,7 +2694,7 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
             GLuint attachmentHandle;
             GLuint attachmentLevel;
             GLuint attachmentLayer;
-            gl::FramebufferAttachment *attachmentObject;
+            const gl::FramebufferAttachment *attachmentObject;
 
             if (framebufferHandle == 0)
             {
