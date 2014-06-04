@@ -36,7 +36,7 @@ class Renderbuffer;
 class FramebufferAttachment : public RefCountObject
 {
   public:
-    FramebufferAttachment(rx::Renderer *renderer, GLuint id, FramebufferAttachmentImpl *storage);
+    FramebufferAttachment(GLuint id, FramebufferAttachmentImpl *storage);
 
     virtual ~FramebufferAttachment();
 
@@ -55,14 +55,14 @@ class FramebufferAttachment : public RefCountObject
     GLsizei getHeight() const;
     GLenum getInternalFormat() const;
     GLenum getActualFormat() const;
-    GLuint getRedSize() const;
-    GLuint getGreenSize() const;
-    GLuint getBlueSize() const;
-    GLuint getAlphaSize() const;
-    GLuint getDepthSize() const;
-    GLuint getStencilSize() const;
-    GLenum getComponentType() const;
-    GLenum getColorEncoding() const;
+    GLuint getRedSize(int clientVersion) const;
+    GLuint getGreenSize(int clientVersion) const;
+    GLuint getBlueSize(int clientVersion) const;
+    GLuint getAlphaSize(int clientVersion) const;
+    GLuint getDepthSize(int clientVersion) const;
+    GLuint getStencilSize(int clientVersion) const;
+    GLenum getComponentType(int clientVersion) const;
+    GLenum getColorEncoding(int clientVersion) const;
     GLsizei getSamples() const;
 
     unsigned int getSerial() const;
@@ -75,7 +75,6 @@ class FramebufferAttachment : public RefCountObject
   private:
     DISALLOW_COPY_AND_ASSIGN(FramebufferAttachment);
 
-    rx::Renderer const *mRenderer;
     FramebufferAttachmentImpl *mImpl;
 };
 
