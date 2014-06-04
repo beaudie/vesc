@@ -2633,6 +2633,8 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
                 return gl::error(GL_INVALID_ENUM);
             }
 
+            int clientVersion = context->getClientVersion();
+
             switch (pname)
             {
               case GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE:
@@ -2649,7 +2651,7 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
               case GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE:
               case GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING:
               case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER:
-                if (context->getClientVersion() >= 3)
+                if (clientVersion >= 3)
                 {
                     break;
                 }
@@ -2665,7 +2667,7 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
               case GL_DEPTH:
               case GL_STENCIL:
               case GL_DEPTH_STENCIL_ATTACHMENT:
-                if (context->getClientVersion() < 3)
+                if (clientVersion < 3)
                 {
                     return gl::error(GL_INVALID_ENUM);
                 }
@@ -2696,7 +2698,7 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
 
             if (framebufferHandle == 0)
             {
-                if (context->getClientVersion() < 3)
+                if (clientVersion < 3)
                 {
                     return gl::error(GL_INVALID_OPERATION);
                 }
@@ -2809,7 +2811,7 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
                     break;
 
                   case GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME:
-                    if (context->getClientVersion() < 3)
+                    if (clientVersion < 3)
                     {
                         return gl::error(GL_INVALID_ENUM);
                     }
@@ -2817,7 +2819,7 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
                     break;
 
                   default:
-                    if (context->getClientVersion() < 3)
+                    if (clientVersion < 3)
                     {
                         return gl::error(GL_INVALID_ENUM);
                     }
@@ -2864,27 +2866,27 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
                     break;
 
                   case GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE:
-                    *params = attachmentObject->getRedSize();
+                    *params = attachmentObject->getRedSize(clientVersion);
                     break;
 
                   case GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE:
-                    *params = attachmentObject->getGreenSize();
+                    *params = attachmentObject->getGreenSize(clientVersion);
                     break;
 
                   case GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE:
-                    *params = attachmentObject->getBlueSize();
+                    *params = attachmentObject->getBlueSize(clientVersion);
                     break;
 
                   case GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE:
-                    *params = attachmentObject->getAlphaSize();
+                    *params = attachmentObject->getAlphaSize(clientVersion);
                     break;
 
                   case GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE:
-                    *params = attachmentObject->getDepthSize();
+                    *params = attachmentObject->getDepthSize(clientVersion);
                     break;
 
                   case GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE:
-                    *params = attachmentObject->getStencilSize();
+                    *params = attachmentObject->getStencilSize(clientVersion);
                     break;
 
                   case GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE:
@@ -2892,11 +2894,11 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
                     {
                         gl::error(GL_INVALID_OPERATION);
                     }
-                    *params = attachmentObject->getComponentType();
+                    *params = attachmentObject->getComponentType(clientVersion);
                     break;
 
                   case GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING:
-                    *params = attachmentObject->getColorEncoding();
+                    *params = attachmentObject->getColorEncoding(clientVersion);
                     break;
 
                   case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER:
