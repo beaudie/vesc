@@ -21,19 +21,55 @@
 namespace gl
 {
 
-FramebufferAttachmentImpl::FramebufferAttachmentImpl()
+////// FramebufferAttachment Implementation //////
+
+
+FramebufferAttachment::FramebufferAttachment()
 {
 }
 
-// The default case for classes inherited from FramebufferAttachmentImpl is not to
-// need to do anything upon the reference count to the parent FramebufferAttachment incrementing
-// or decrementing.
-void FramebufferAttachmentImpl::addProxyRef(const FramebufferAttachment *proxy)
+FramebufferAttachment::~FramebufferAttachment()
 {
 }
 
-void FramebufferAttachmentImpl::releaseProxy(const FramebufferAttachment *proxy)
+GLuint FramebufferAttachment::getRedSize(int clientVersion) const
 {
+    return gl::GetRedBits(getActualFormat(), clientVersion);
+}
+
+GLuint FramebufferAttachment::getGreenSize(int clientVersion) const
+{
+    return gl::GetGreenBits(getActualFormat(), clientVersion);
+}
+
+GLuint FramebufferAttachment::getBlueSize(int clientVersion) const
+{
+    return gl::GetBlueBits(getActualFormat(), clientVersion);
+}
+
+GLuint FramebufferAttachment::getAlphaSize(int clientVersion) const
+{
+    return gl::GetAlphaBits(getActualFormat(), clientVersion);
+}
+
+GLuint FramebufferAttachment::getDepthSize(int clientVersion) const
+{
+    return gl::GetDepthBits(getActualFormat(), clientVersion);
+}
+
+GLuint FramebufferAttachment::getStencilSize(int clientVersion) const
+{
+    return gl::GetStencilBits(getActualFormat(), clientVersion);
+}
+
+GLenum FramebufferAttachment::getComponentType(int clientVersion) const
+{
+    return gl::GetComponentType(getActualFormat(), clientVersion);
+}
+
+GLenum FramebufferAttachment::getColorEncoding(int clientVersion) const
+{
+    return gl::GetColorEncoding(getActualFormat(), clientVersion);
 }
 
 ///// Texture2DAttachment Implementation ////////
@@ -46,18 +82,6 @@ Texture2DAttachment::Texture2DAttachment(Texture2D *texture, GLint level) : mLev
 Texture2DAttachment::~Texture2DAttachment()
 {
     mTexture2D.set(NULL);
-}
-
-// Textures need to maintain their own reference count for references via
-// Renderbuffers acting as proxies. Here, we notify the texture of a reference.
-void Texture2DAttachment::addProxyRef(const FramebufferAttachment *proxy)
-{
-    mTexture2D->addProxyRef(proxy);
-}
-
-void Texture2DAttachment::releaseProxy(const FramebufferAttachment *proxy)
-{
-    mTexture2D->releaseProxy(proxy);
 }
 
 rx::RenderTarget *Texture2DAttachment::getRenderTarget()
@@ -148,18 +172,6 @@ TextureCubeMapAttachment::~TextureCubeMapAttachment()
     mTextureCubeMap.set(NULL);
 }
 
-// Textures need to maintain their own reference count for references via
-// Renderbuffers acting as proxies. Here, we notify the texture of a reference.
-void TextureCubeMapAttachment::addProxyRef(const FramebufferAttachment *proxy)
-{
-    mTextureCubeMap->addProxyRef(proxy);
-}
-
-void TextureCubeMapAttachment::releaseProxy(const FramebufferAttachment *proxy)
-{
-    mTextureCubeMap->releaseProxy(proxy);
-}
-
 rx::RenderTarget *TextureCubeMapAttachment::getRenderTarget()
 {
     return mTextureCubeMap->getRenderTarget(mFaceTarget, mLevel);
@@ -246,18 +258,6 @@ Texture3DAttachment::Texture3DAttachment(Texture3D *texture, GLint level, GLint 
 Texture3DAttachment::~Texture3DAttachment()
 {
     mTexture3D.set(NULL);
-}
-
-// Textures need to maintain their own reference count for references via
-// Renderbuffers acting as proxies. Here, we notify the texture of a reference.
-void Texture3DAttachment::addProxyRef(const FramebufferAttachment *proxy)
-{
-    mTexture3D->addProxyRef(proxy);
-}
-
-void Texture3DAttachment::releaseProxy(const FramebufferAttachment *proxy)
-{
-    mTexture3D->releaseProxy(proxy);
 }
 
 rx::RenderTarget *Texture3DAttachment::getRenderTarget()
@@ -348,16 +348,6 @@ Texture2DArrayAttachment::~Texture2DArrayAttachment()
     mTexture2DArray.set(NULL);
 }
 
-void Texture2DArrayAttachment::addProxyRef(const FramebufferAttachment *proxy)
-{
-    mTexture2DArray->addProxyRef(proxy);
-}
-
-void Texture2DArrayAttachment::releaseProxy(const FramebufferAttachment *proxy)
-{
-    mTexture2DArray->releaseProxy(proxy);
-}
-
 rx::RenderTarget *Texture2DArrayAttachment::getRenderTarget()
 {
     return mTexture2DArray->getRenderTarget(mLevel, mLayer);
@@ -433,157 +423,7 @@ unsigned int Texture2DArrayAttachment::getTextureSerial() const
     return mTexture2DArray->getTextureSerial();
 }
 
-////// FramebufferAttachment Implementation //////
-
-FramebufferAttachment::FramebufferAttachment(GLuint id, FramebufferAttachmentImpl *instance) : RefCountObject(id)
-{
-    ASSERT(instance != NULL);
-    mImpl = instance;
-}
-
-FramebufferAttachment::~FramebufferAttachment()
-{
-    delete mImpl;
-}
-
-// The FramebufferAttachmentImpl contained in this FramebufferAttachment may need to maintain
-// its own reference count, so we pass it on here.
-void FramebufferAttachment::addRef() const
-{
-    mImpl->addProxyRef(this);
-
-    RefCountObject::addRef();
-}
-
-void FramebufferAttachment::release() const
-{
-    mImpl->releaseProxy(this);
-
-    RefCountObject::release();
-}
-
-rx::RenderTarget *FramebufferAttachment::getRenderTarget()
-{
-    return mImpl->getRenderTarget();
-}
-
-rx::RenderTarget *FramebufferAttachment::getDepthStencil()
-{
-    return mImpl->getDepthStencil();
-}
-
-rx::TextureStorage *FramebufferAttachment::getTextureStorage()
-{
-    return mImpl->getTextureStorage();
-}
-
-GLsizei FramebufferAttachment::getWidth() const
-{
-    return mImpl->getWidth();
-}
-
-GLsizei FramebufferAttachment::getHeight() const
-{
-    return mImpl->getHeight();
-}
-
-GLenum FramebufferAttachment::getInternalFormat() const
-{
-    return mImpl->getInternalFormat();
-}
-
-GLenum FramebufferAttachment::getActualFormat() const
-{
-    return mImpl->getActualFormat();
-}
-
-GLuint FramebufferAttachment::getRedSize(int clientVersion) const
-{
-    return gl::GetRedBits(getActualFormat(), clientVersion);
-}
-
-GLuint FramebufferAttachment::getGreenSize(int clientVersion) const
-{
-    return gl::GetGreenBits(getActualFormat(), clientVersion);
-}
-
-GLuint FramebufferAttachment::getBlueSize(int clientVersion) const
-{
-    return gl::GetBlueBits(getActualFormat(), clientVersion);
-}
-
-GLuint FramebufferAttachment::getAlphaSize(int clientVersion) const
-{
-    return gl::GetAlphaBits(getActualFormat(), clientVersion);
-}
-
-GLuint FramebufferAttachment::getDepthSize(int clientVersion) const
-{
-    return gl::GetDepthBits(getActualFormat(), clientVersion);
-}
-
-GLuint FramebufferAttachment::getStencilSize(int clientVersion) const
-{
-    return gl::GetStencilBits(getActualFormat(), clientVersion);
-}
-
-GLenum FramebufferAttachment::getComponentType(int clientVersion) const
-{
-    return gl::GetComponentType(getActualFormat(), clientVersion);
-}
-
-GLenum FramebufferAttachment::getColorEncoding(int clientVersion) const
-{
-    return gl::GetColorEncoding(getActualFormat(), clientVersion);
-}
-
-GLsizei FramebufferAttachment::getSamples() const
-{
-    return mImpl->getSamples();
-}
-
-unsigned int FramebufferAttachment::getSerial() const
-{
-    return mImpl->getSerial();
-}
-
-bool FramebufferAttachment::isTexture() const
-{
-    return mImpl->isTexture();
-}
-
-GLuint FramebufferAttachment::id() const
-{
-    return mImpl->id();
-}
-
-GLuint FramebufferAttachment::type() const
-{
-    return mImpl->type();
-}
-
-GLint FramebufferAttachment::mipLevel() const
-{
-    return mImpl->mipLevel();
-}
-
-GLint FramebufferAttachment::layer() const
-{
-    return mImpl->layer();
-}
-
-unsigned int FramebufferAttachment::getTextureSerial() const
-{
-    return mImpl->getTextureSerial();
-}
-
-void FramebufferAttachment::setImplementation(FramebufferAttachmentImpl *newImpl)
-{
-    ASSERT(newImpl != NULL);
-
-    delete mImpl;
-    mImpl = newImpl;
-}
+///// RenderbufferAttachment Implementation ////////
 
 RenderbufferAttachment::RenderbufferAttachment(Renderbuffer *renderbuffer)
 {
