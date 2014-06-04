@@ -29,11 +29,37 @@ class TextureStorage;
 
 namespace gl
 {
+class RenderbufferStorage;
+
+class Renderbuffer : public RefCountObject
+{
+  public:
+    Renderbuffer(rx::Renderer *renderer, GLuint id, RenderbufferStorage *newStorage);
+
+    void setStorage(RenderbufferStorage *newStorage);
+    RenderbufferStorage *getStorage();
+
+    GLsizei getWidth() const;
+    GLsizei getHeight() const;
+    GLenum getInternalFormat() const;
+    GLenum getActualFormat() const;
+    GLsizei getSamples() const;
+    GLuint getRedSize() const;
+    GLuint getGreenSize() const;
+    GLuint getBlueSize() const;
+    GLuint getAlphaSize() const;
+    GLuint getDepthSize() const;
+    GLuint getStencilSize() const;
+
+  private:
+    rx::Renderer *mRenderer;
+    RenderbufferStorage *mStorage;
+};
 
 // A class derived from RenderbufferStorage is created whenever glRenderbufferStorage
 // is called. The specific concrete type depends on whether the internal format is
 // colour depth, stencil or packed depth/stencil.
-class RenderbufferStorage : public FramebufferAttachmentInterface
+class RenderbufferStorage
 {
   public:
     RenderbufferStorage();
@@ -126,6 +152,7 @@ class Stencilbuffer : public DepthStencilbuffer
   private:
     DISALLOW_COPY_AND_ASSIGN(Stencilbuffer);
 };
+
 }
 
 #endif   // LIBGLESV2_RENDERBUFFER_H_
