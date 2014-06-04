@@ -68,6 +68,8 @@ class FramebufferAttachment : public RefCountObject
     unsigned int getSerial() const;
 
     bool isTexture() const;
+    GLuint id() const;
+    GLenum type() const;
     unsigned int getTextureSerial() const;
 
     void setImplementation(FramebufferAttachmentImpl *newImpl);
@@ -101,6 +103,8 @@ class FramebufferAttachmentImpl
     virtual unsigned int getSerial() const = 0;
 
     virtual bool isTexture() const = 0;
+    virtual GLuint id() const = 0;
+    virtual GLenum type() const = 0;
     virtual unsigned int getTextureSerial() const = 0;
 
   private:
@@ -130,6 +134,8 @@ class Texture2DAttachment : public FramebufferAttachmentImpl
     virtual unsigned int getSerial() const;
 
     virtual bool isTexture() const;
+    virtual GLuint id() const;
+    virtual GLenum type() const;
     virtual unsigned int getTextureSerial() const;
 
   private:
@@ -162,6 +168,8 @@ class TextureCubeMapAttachment : public FramebufferAttachmentImpl
     virtual unsigned int getSerial() const;
 
     virtual bool isTexture() const;
+    virtual GLuint id() const;
+    virtual GLenum type() const;
     virtual unsigned int getTextureSerial() const;
 
   private:
@@ -195,6 +203,8 @@ class Texture3DAttachment : public FramebufferAttachmentImpl
     virtual unsigned int getSerial() const;
 
     virtual bool isTexture() const;
+    virtual GLuint id() const;
+    virtual GLenum type() const;
     virtual unsigned int getTextureSerial() const;
 
   private:
@@ -228,6 +238,8 @@ class Texture2DArrayAttachment : public FramebufferAttachmentImpl
     virtual unsigned int getSerial() const;
 
     virtual bool isTexture() const;
+    virtual GLuint id() const;
+    virtual GLenum type() const;
     virtual unsigned int getTextureSerial() const;
 
   private:
@@ -258,6 +270,8 @@ class RenderbufferAttachment : public FramebufferAttachmentImpl
     virtual unsigned int getSerial() const;
 
     virtual bool isTexture() const;
+    virtual GLuint id() const;
+    virtual GLenum type() const;
     virtual unsigned int getTextureSerial() const;
 
   private:

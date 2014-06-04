@@ -110,6 +110,16 @@ bool Texture2DAttachment::isTexture() const
     return true;
 }
 
+GLuint Texture2DAttachment::id() const
+{
+    return mTexture2D->id();
+}
+
+GLenum Texture2DAttachment::type() const
+{
+    return GL_TEXTURE_2D;
+}
+
 unsigned int Texture2DAttachment::getTextureSerial() const
 {
     return mTexture2D->getTextureSerial();
@@ -188,6 +198,16 @@ unsigned int TextureCubeMapAttachment::getSerial() const
 bool TextureCubeMapAttachment::isTexture() const
 {
     return true;
+}
+
+GLuint TextureCubeMapAttachment::id() const
+{
+    return mTextureCubeMap->id();
+}
+
+GLenum TextureCubeMapAttachment::type() const
+{
+    return mFaceTarget;
 }
 
 unsigned int TextureCubeMapAttachment::getTextureSerial() const
@@ -270,6 +290,16 @@ bool Texture3DAttachment::isTexture() const
     return true;
 }
 
+GLuint Texture3DAttachment::id() const
+{
+    return mTexture3D->id();
+}
+
+GLenum Texture3DAttachment::type() const
+{
+    return GL_TEXTURE_3D;
+}
+
 unsigned int Texture3DAttachment::getTextureSerial() const
 {
     return mTexture3D->getTextureSerial();
@@ -346,6 +376,16 @@ unsigned int Texture2DArrayAttachment::getSerial() const
 bool Texture2DArrayAttachment::isTexture() const
 {
     return true;
+}
+
+GLuint Texture2DArrayAttachment::id() const
+{
+    return mTexture2DArray->id();
+}
+
+GLenum Texture2DArrayAttachment::type() const
+{
+    return GL_TEXTURE_2D_ARRAY;
 }
 
 unsigned int Texture2DArrayAttachment::getTextureSerial() const
@@ -472,6 +512,16 @@ bool FramebufferAttachment::isTexture() const
     return mImpl->isTexture();
 }
 
+GLuint FramebufferAttachment::id() const
+{
+    return mImpl->id();
+}
+
+GLuint FramebufferAttachment::type() const
+{
+    return mImpl->type();
+}
+
 unsigned int FramebufferAttachment::getTextureSerial() const
 {
     return mImpl->getTextureSerial();
@@ -545,6 +595,16 @@ unsigned int RenderbufferAttachment::getSerial() const
 bool RenderbufferAttachment::isTexture() const
 {
     return false;
+}
+
+GLuint RenderbufferAttachment::id() const
+{
+    return mRenderbuffer->id();
+}
+
+GLenum RenderbufferAttachment::type() const
+{
+    return GL_RENDERBUFFER;
 }
 
 unsigned int RenderbufferAttachment::getTextureSerial() const
