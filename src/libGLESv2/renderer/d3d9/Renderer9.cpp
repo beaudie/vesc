@@ -15,6 +15,7 @@
 #include "libGLESv2/Framebuffer.h"
 #include "libGLESv2/Renderbuffer.h"
 #include "libGLESv2/ProgramBinary.h"
+#include "libGLESv2/FramebufferAttachment.h"
 #include "libGLESv2/renderer/IndexDataManager.h"
 #include "libGLESv2/renderer/d3d9/Renderer9.h"
 #include "libGLESv2/renderer/d3d9/renderer9_utils.h"
@@ -1249,7 +1250,7 @@ gl::FramebufferAttachment *Renderer9::getNullColorbuffer(gl::FramebufferAttachme
     }
 
     gl::Renderbuffer *nullRenderbuffer = new gl::Renderbuffer(this, 0, new gl::Colorbuffer(this, width, height, GL_NONE, 0));
-    gl::FramebufferAttachment *nullbuffer = new gl::FramebufferAttachment(0, new gl::RenderbufferAttachment(nullRenderbuffer));
+    gl::RenderbufferAttachment *nullbuffer = new gl::RenderbufferAttachment(nullRenderbuffer);
 
     // add nullbuffer to the cache
     NullColorbufferCacheEntry *oldest = &mNullColorbufferCache[0];

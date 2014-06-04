@@ -105,9 +105,6 @@
     <ClInclude Include="..\..\src\libGLESv2\Query.h">
       <Filter>src\libGLESv2</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\src\libGLESv2\RenderbufferProxySet.cpp">
-      <Filter>src\libGLESv2</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\libGLESv2\Fence.cpp">
       <Filter>src\libGLESv2</Filter>
     </ClCompile>
@@ -156,9 +153,6 @@
     <ClCompile Include="..\..\src\libGLESv2\FramebufferAttachment.cpp">
       <Filter>src\libGLESv2</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\src\libGLESv2\RenderbufferProxySet.h">
-      <Filter>src\libGLESv2</Filter>
-    </ClInclude>
     <ClCompile Include="..\..\src\libGLESv2\Query.cpp">
       <Filter>src\libGLESv2</Filter>
     </ClCompile>
