@@ -1,6 +1,6 @@
 #include "precompiled.h"
 //
-// Copyright (c) 2002-2013 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2002-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -248,6 +248,7 @@ void Shader::initializeCompiler()
             // resources.OES_EGL_image_external = mRenderer->getShareHandleSupport() ? 1 : 0; // TODO: commented out until the extension is actually supported.
             resources.FragmentPrecisionHigh = 1;   // Shader Model 2+ always supports FP24 (s16e7) which corresponds to highp
             resources.EXT_frag_depth = 1; // Shader Model 2+ always supports explicit depth output
+            resources.MaxTemporaryVectors = mRenderer->getMaxTemporaryVectors();
 
             mFragmentCompiler = ShConstructCompiler(SH_FRAGMENT_SHADER, SH_GLES2_SPEC, hlslVersion, &resources);
             mVertexCompiler = ShConstructCompiler(SH_VERTEX_SHADER, SH_GLES2_SPEC, hlslVersion, &resources);
@@ -360,7 +361,7 @@ void Shader::compileToHLSL(void *compiler)
     // ensure the compiler is loaded
     initializeCompiler();
 
-    int compileOptions = SH_OBJECT_CODE;
+    int compileOptions = SH_OBJECT_CODE | SH_VARIABLES | SH_RESTRICT_TEMPORARY_VECTORS;
     std::string sourcePath;
     if (perfActive())
     {

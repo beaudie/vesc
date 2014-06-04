@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2012-2013 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2012-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -123,6 +123,7 @@ class Renderer9 : public Renderer
     virtual unsigned int getMaxVertexUniformVectors() const;
     virtual unsigned int getMaxFragmentUniformVectors() const;
     virtual unsigned int getMaxVaryingVectors() const;
+    virtual unsigned int getMaxTemporaryVectors() const;
     virtual bool getNonPower2TextureSupport() const;
     virtual bool getDepthTextureSupport() const;
     virtual bool getOcclusionQuerySupport() const;
