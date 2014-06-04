@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2002-2012 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2002-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -96,6 +96,8 @@ protected:
     // Returns true if, after applying the packing rules in the GLSL 1.017 spec
     // Appendix A, section 7, the shader does not use too many uniforms.
     bool enforcePackingRestrictions();
+    // Returns true if the shader does not use too many temporary vectors.
+    bool restrictTemporaryVectors();
     // Insert statements to initialize varyings without static use in the beginning
     // of main(). It is to work around a Mac driver where such varyings in a vertex
     // shader may be optimized out incorrectly at compile time, causing a link failure.
@@ -131,6 +133,7 @@ private:
     int maxUniformVectors;
     int maxExpressionComplexity;
     int maxCallStackDepth;
+    int maxTemporaryVectors;
 
     ShBuiltInResources compileResources;
 
@@ -150,6 +153,7 @@ private:
     TVariableInfoList attribs;  // Active attributes in the compiled shader.
     TVariableInfoList uniforms;  // Active uniforms in the compiled shader.
     TVariableInfoList varyings;  // Varyings in the compiled shader.
+    TVariableInfoList temporaries;  // Active temporary variables in the compiled shader.
 
     // name hashing.
     ShHashFunction64 hashFunction;
