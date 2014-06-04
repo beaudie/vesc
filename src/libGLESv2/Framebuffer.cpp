@@ -422,28 +422,23 @@ GLenum Framebuffer::completeness() const
 
     for (unsigned int colorAttachment = 0; colorAttachment < IMPLEMENTATION_MAX_DRAW_BUFFERS; colorAttachment++)
     {
-        if (mColorbuffers[colorAttachment])
+        const FramebufferAttachment *colorbuffer = mColorbuffers[colorAttachment];
+
+        if (colorbuffer)
         {
-            const FramebufferAttachment *colorbuffer = mColorbuffers[colorAttachment];
-
-            if (colorbuffer->type() == GL_NONE)
-            {
-                return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
-            }
-
             if (colorbuffer->getWidth() == 0 || colorbuffer->getHeight() == 0)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
 
-            if (colorbuffer->type() == GL_RENDERBUFFER)
+            if (!colorbuffer->isTexture())
             {
                 if (!gl::IsColorRenderingSupported(colorbuffer->getInternalFormat(), mRenderer))
                 {
                     return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
                 }
             }
-            else if (IsInternalTextureTarget(colorbuffer->type(), mRenderer->getCurrentClientVersion()))
+            else
             {
                 GLenum internalformat = colorbuffer->getInternalFormat();
 
@@ -457,11 +452,6 @@ GLenum Framebuffer::completeness() const
                 {
                     return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
                 }
-            }
-            else
-            {
-                UNREACHABLE();
-                return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
 
             if (!missingAttachment)
@@ -519,14 +509,14 @@ GLenum Framebuffer::completeness() const
             return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
         }
 
-        if (mDepthbuffer->type() == GL_RENDERBUFFER)
+        if (!mDepthbuffer->isTexture())
         {
             if (!gl::IsDepthRenderingSupported(mDepthbuffer->getInternalFormat(), mRenderer))
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
         }
-        else if (IsInternalTextureTarget(mDepthbuffer->type(), mRenderer->getCurrentClientVersion()))
+        else
         {
             GLenum internalformat = mDepthbuffer->getInternalFormat();
 
@@ -540,11 +530,6 @@ GLenum Framebuffer::completeness() const
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
-        }
-        else
-        {
-            UNREACHABLE();
-            return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
         }
 
         if (missingAttachment)
@@ -571,14 +556,14 @@ GLenum Framebuffer::completeness() const
             return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
         }
 
-        if (mStencilbuffer->type() == GL_RENDERBUFFER)
+        if (!mStencilbuffer->isTexture())
         {
             if (!gl::IsStencilRenderingSupported(mStencilbuffer->getInternalFormat(), mRenderer))
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
         }
-        else if (IsInternalTextureTarget(mStencilbuffer->type(), mRenderer->getCurrentClientVersion()))
+        else
         {
             GLenum internalformat = mStencilbuffer->getInternalFormat();
 
@@ -593,11 +578,6 @@ GLenum Framebuffer::completeness() const
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
-        }
-        else
-        {
-            UNREACHABLE();
-            return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
         }
 
         if (missingAttachment)
