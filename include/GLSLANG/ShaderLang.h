@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2002-2013 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2002-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -37,7 +37,7 @@ extern "C" {
 
 // Version number for shader translation API.
 // It is incremented everytime the API changes.
-#define ANGLE_SH_VERSION 112
+#define ANGLE_SH_VERSION 113
 
 //
 // The names of the following enums have been derived by replacing GL prefix
@@ -206,6 +206,12 @@ typedef enum {
   // It is intended as a workaround for drivers which incorrectly optimize
   // out such varyings and cause a link failure.
   SH_INIT_VARYINGS_WITHOUT_STATIC_USE = 0x20000,
+
+  // This flag enforces a maximum on the number of vectors for temporary
+  // variables. For object code output this limit can be absolute, while for
+  // high-level output it can be conservative (e.g. restrict the size of
+  // arrays, even when not all elements are used).
+  SH_RESTRICT_TEMPORARY_VECTORS = 0x40000,
 } ShCompileOptions;
 
 // Defines alternate strategies for implementing array index clamping.
@@ -235,7 +241,7 @@ typedef khronos_uint64_t (*ShHashFunction64)(const char*, size_t);
 
 //
 // Implementation dependent built-in resources (constants and extensions).
-// The names for these resources has been obtained by stripping gl_/GL_.
+// Some of the names for these resources have been obtained by stripping gl_/GL_.
 //
 typedef struct
 {
@@ -275,6 +281,9 @@ typedef struct
 
     // The maximum depth a call stack can be.
     int MaxCallStackDepth;
+
+    // The maximum number of vectors for temporary variables (conservative).
+    int MaxTemporaryVectors;
 } ShBuiltInResources;
 
 //
