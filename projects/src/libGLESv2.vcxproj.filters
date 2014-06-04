@@ -357,6 +357,9 @@
     <ClCompile Include="..\..\src\libGLESv2\renderer\TextureStorage.cpp">
       <Filter>src\libGLESv2\renderer</Filter>
     </ClCompile>
+    <None Include="..\..\src\libGLESv2\renderer\generatemip.inl">
+      <Filter>src\libGLESv2\renderer</Filter>
+    </None>
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d11\Clear11.cpp">
       <Filter>src\libGLESv2\renderer\d3d11</Filter>
     </ClCompile>

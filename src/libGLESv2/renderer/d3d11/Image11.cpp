@@ -67,8 +67,8 @@ void Image11::generateMipmap(Image11 *dest, Image11 *src)
         return;
     }
 
-    const unsigned char *sourceData = reinterpret_cast<const unsigned char*>(srcMapped.pData);
-    unsigned char *destData = reinterpret_cast<unsigned char*>(destMapped.pData);
+    const byte*sourceData = reinterpret_cast<const byte*>(srcMapped.pData);
+    byte *destData = reinterpret_cast<byte*>(destMapped.pData);
 
     mipFunction(src->getWidth(), src->getHeight(), src->getDepth(), sourceData, srcMapped.RowPitch, srcMapped.DepthPitch,
                 destData, destMapped.RowPitch, destMapped.DepthPitch);
