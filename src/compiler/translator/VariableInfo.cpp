@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2002-2010 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2002-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -187,10 +187,12 @@ TVariableInfo::TVariableInfo(ShDataType type, int size)
 CollectVariables::CollectVariables(TVariableInfoList& attribs,
                                    TVariableInfoList& uniforms,
                                    TVariableInfoList& varyings,
+                                   TVariableInfoList& temporaries,
                                    ShHashFunction64 hashFunction)
     : mAttribs(attribs),
       mUniforms(uniforms),
       mVaryings(varyings),
+      mTemporaries(temporaries),
       mPointCoordAdded(false),
       mFrontFacingAdded(false),
       mFragCoordAdded(false),
@@ -255,6 +257,28 @@ void CollectVariables::visitSymbol(TIntermSymbol* symbol)
             info.staticUse = true;
 	    mVaryings.push_back(info);
             mPointCoordAdded = true;
+        }
+        return;
+    case EvqTemporary:
+    case EvqGlobal:
+        {
+            const TString &name = symbol->getSymbol();
+            TString mappedName;
+            if(!mHashFunction)
+                mappedName = name;
+            else
+                mappedName = TIntermTraverser::hash(name, mHashFunction);
+
+            TVariableInfo info;
+            info.name = name.c_str();
+            info.mappedName = mappedName.c_str();
+            info.size = symbol->totalRegisterCount();
+            info.isArray = symbol->isArray();
+            info.precision = symbol->getPrecision();
+            info.type = getVariableDataType(symbol->getType());
+            info.staticUse = true;
+
+            mTemporaries.push_back(info);
         }
         return;
     default:

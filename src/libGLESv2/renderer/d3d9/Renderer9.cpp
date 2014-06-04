@@ -1,6 +1,6 @@
 #include "precompiled.h"
 //
-// Copyright (c) 2012-2013 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2012-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -2371,6 +2371,11 @@ unsigned int Renderer9::getMaxFragmentUniformVectors() const
 unsigned int Renderer9::getMaxVaryingVectors() const
 {
     return (getMajorShaderModel() >= 3) ? MAX_VARYING_VECTORS_SM3 : MAX_VARYING_VECTORS_SM2;
+}
+
+unsigned int Renderer9::getMaxTemporaryVectors() const
+{
+    return mDeviceCaps.PS20Caps.NumTemps;
 }
 
 bool Renderer9::getNonPower2TextureSupport() const
