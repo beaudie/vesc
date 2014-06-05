@@ -2257,6 +2257,11 @@ unsigned int Renderer11::getMaxUniformBufferSize() const
     }
 }
 
+unsigned int Renderer11::getMaxTemporaryVectors() const
+{
+    return D3D11_COMMONSHADER_TEMP_REGISTER_COUNT;   // 4096
+}
+
 bool Renderer11::getNonPower2TextureSupport() const
 {
     switch (mFeatureLevel)

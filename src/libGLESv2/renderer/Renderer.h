@@ -175,6 +175,7 @@ class Renderer
     virtual unsigned int getMaxTransformFeedbackSeparateComponents() const = 0;
     virtual unsigned int getMaxTransformFeedbackInterleavedComponents() const = 0;
     virtual unsigned int getMaxUniformBufferSize() const = 0;
+    virtual unsigned int getMaxTemporaryVectors() const = 0;
     virtual bool getNonPower2TextureSupport() const = 0;
     virtual bool getDepthTextureSupport() const = 0;
     virtual bool getOcclusionQuerySupport() const = 0;

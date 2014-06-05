@@ -2557,6 +2557,11 @@ unsigned int Renderer9::getMaxUniformBufferSize() const
     return 0;
 }
 
+unsigned int Renderer9::getMaxTemporaryVectors() const
+{
+    return mDeviceCaps.PS20Caps.NumTemps;
+}
+
 bool Renderer9::getNonPower2TextureSupport() const
 {
     return mSupportsNonPower2Textures;

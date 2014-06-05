@@ -99,6 +99,7 @@ TCompiler::TCompiler(ShShaderType type, ShShaderSpec spec, ShShaderOutput output
       maxUniformVectors(0),
       maxExpressionComplexity(0),
       maxCallStackDepth(0),
+      maxTemporaryVectors(0),
       fragmentPrecisionHigh(false),
       clampingStrategy(SH_CLAMP_WITH_CLAMP_INTRINSIC),
       builtInFunctionEmulator(type)
@@ -117,6 +118,7 @@ bool TCompiler::Init(const ShBuiltInResources& resources)
         resources.MaxFragmentUniformVectors;
     maxExpressionComplexity = resources.MaxExpressionComplexity;
     maxCallStackDepth = resources.MaxCallStackDepth;
+    maxTemporaryVectors = resources.MaxTemporaryVectors;
 
     SetGlobalPoolAllocator(&allocator);
 
@@ -245,6 +247,15 @@ bool TCompiler::compile(const char* const shaderStrings[],
                 {
                     infoSink.info.prefix(EPrefixError);
                     infoSink.info << "too many uniforms";
+                }
+            }
+            if (success && (compileOptions & SH_RESTRICT_TEMPORARY_VECTORS))
+            {
+                success = restrictTemporaryVectors();
+                if (!success)
+                {
+                    infoSink.info.prefix(EPrefixError);
+                    infoSink.info << "too many temporary variables";
                 }
             }
             if (success && shaderType == SH_VERTEX_SHADER &&
@@ -481,7 +492,7 @@ bool TCompiler::enforceVertexShaderTimingRestrictions(TIntermNode* root)
 
 void TCompiler::collectVariables(TIntermNode* root)
 {
-    CollectVariables collect(attribs, uniforms, varyings, hashFunction);
+    CollectVariables collect(attribs, uniforms, varyings, temporaries, hashFunction);
     root->traverse(&collect);
 }
 
@@ -489,6 +500,28 @@ bool TCompiler::enforcePackingRestrictions()
 {
     VariablePacker packer;
     return packer.CheckVariablesWithinPackingLimits(maxUniformVectors, uniforms);
+}
+
+bool TCompiler::restrictTemporaryVectors()
+{
+    // For now, only check if each temporary variable fits within the register limit.
+    // This also restricts the total size of temporary arrays. Graph coloring during
+    // register allocation typically reduces the number of registers required to less
+    // than the total size of all temporaries.
+    for (size_t i = 0; i < temporaries.size(); i++)
+    {
+        const TVariableInfo &temporary = temporaries[i];
+
+        if (temporary.staticUse)
+        {
+            if (temporary.size > maxTemporaryVectors)
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;   // Success
 }
 
 void TCompiler::initializeGLPosition(TIntermNode* root)
