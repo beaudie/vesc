@@ -25,6 +25,11 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
                                    GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth,
                                    GLint border, GLenum format, GLenum type, const GLvoid *pixels)
 {
+    if (!ValidTexture2DDestinationTarget(context, target))
+    {
+        return gl::error(GL_INVALID_ENUM, false);
+    }
+
     // Validate image size
     if (!ValidImageSize(context, target, level, width, height, depth))
     {
@@ -33,6 +38,14 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
 
     // Verify zero border
     if (border != 0)
+    {
+        return gl::error(GL_INVALID_VALUE, false);
+    }
+
+    if (xoffset < 0 || yoffset < 0 || zoffset < 0 ||
+        std::numeric_limits<GLsizei>::max() - xoffset < width ||
+        std::numeric_limits<GLsizei>::max() - yoffset < height ||
+        std::numeric_limits<GLsizei>::max() - zoffset < depth)
     {
         return gl::error(GL_INVALID_VALUE, false);
     }
@@ -156,6 +169,7 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
 
     // Validate texture formats
     GLenum actualInternalFormat = isSubImage ? textureInternalFormat : internalformat;
+    int clientVersion = context->getClientVersion();
     if (isCompressed)
     {
         if (!ValidCompressedImageSize(context, actualInternalFormat, width, height))
@@ -163,7 +177,7 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
             return gl::error(GL_INVALID_OPERATION, false);
         }
 
-        if (!gl::IsFormatCompressed(actualInternalFormat, context->getClientVersion()))
+        if (!gl::IsFormatCompressed(actualInternalFormat, clientVersion))
         {
             return gl::error(GL_INVALID_ENUM, false);
         }
@@ -175,14 +189,16 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
     }
     else
     {
+        // Note: dEQP 2013.4 expects an INVALID_VALUE error for TexImage3D with an invalid
+        // internal format. (dEQP-GLES3.functional.negative_api.texture.teximage3d)
         if (!gl::IsValidInternalFormat(actualInternalFormat, context) ||
-            !gl::IsValidFormat(format, context->getClientVersion()) ||
-            !gl::IsValidType(type, context->getClientVersion()))
+            !gl::IsValidFormat(format, clientVersion) ||
+            !gl::IsValidType(type, clientVersion))
         {
             return gl::error(GL_INVALID_ENUM, false);
         }
 
-        if (!gl::IsValidFormatCombination(actualInternalFormat, format, type, context->getClientVersion()))
+        if (!gl::IsValidFormatCombination(actualInternalFormat, format, type, clientVersion))
         {
             return gl::error(GL_INVALID_OPERATION, false);
         }
@@ -244,7 +260,10 @@ bool ValidateES3TexImageParameters(gl::Context *context, GLenum target, GLint le
         size_t widthSize = static_cast<size_t>(width);
         size_t heightSize = static_cast<size_t>(height);
         size_t depthSize = static_cast<size_t>(depth);
-        size_t pixelBytes = static_cast<size_t>(gl::GetPixelBytes(actualInternalFormat, context->getClientVersion()));
+        GLenum sizedFormat = gl::IsSizedInternalFormat(actualInternalFormat, clientVersion) ?
+            actualInternalFormat : gl::GetSizedInternalFormat(actualInternalFormat, type, clientVersion);
+
+        size_t pixelBytes = static_cast<size_t>(gl::GetPixelBytes(sizedFormat, clientVersion));
 
         if (!rx::IsUnsignedMultiplicationSafe(widthSize, heightSize) ||
             !rx::IsUnsignedMultiplicationSafe(widthSize * heightSize, depthSize) ||
