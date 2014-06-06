@@ -64,6 +64,9 @@ bool ValidateDrawElements(const gl::Context *context, GLenum mode, GLsizei count
 bool ValidateDrawElementsInstanced(const gl::Context *context, GLenum mode, GLsizei count, GLenum type,
                                    const GLvoid *indices, GLsizei primcount);
 
+bool ValidateClearBuffer(const gl::Context *context);
+
+
 }
 
 #endif // LIBGLESV2_VALIDATION_ES_H
