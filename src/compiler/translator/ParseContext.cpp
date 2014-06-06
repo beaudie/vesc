@@ -701,10 +701,15 @@ bool TParseContext::arraySizeErrorCheck(const TSourceLoc& line, TIntermTyped* ex
         return true;
     }
 
+    // The size of arrays is restricted here to prevent issues further down the
+    // compiler/translator/driver stack. Shader Model 5 generation hardware is limited to
+    // 4096 registers so this should be reasonable even for aggressively optimizable code.
+    const int sizeLimit = 65536;
+
     if (constant->getBasicType() == EbtUInt)
     {
         unsigned int uintSize = constant->getUConst(0);
-        if (uintSize > static_cast<unsigned int>(std::numeric_limits<int>::max()))
+        if (uintSize > static_cast<unsigned int>(sizeLimit))
         {
             error(line, "array size too large", "");
             size = 1;
@@ -720,6 +725,13 @@ bool TParseContext::arraySizeErrorCheck(const TSourceLoc& line, TIntermTyped* ex
         if (size <= 0)
         {
             error(line, "array size must be a positive integer", "");
+            size = 1;
+            return true;
+        }
+
+        if (size > sizeLimit)
+        {
+            error(line, "array size too large", "");
             size = 1;
             return true;
         }
