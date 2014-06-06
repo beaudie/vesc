@@ -307,9 +307,13 @@ RenderTarget11::RenderTarget11(Renderer *renderer, GLsizei width, GLsizei height
         desc.Usage = D3D11_USAGE_DEFAULT;
         desc.CPUAccessFlags = 0;
         desc.MiscFlags = 0;
-        desc.BindFlags = ((srvFormat != DXGI_FORMAT_UNKNOWN) ? D3D11_BIND_SHADER_RESOURCE : 0) |
-                         ((dsvFormat != DXGI_FORMAT_UNKNOWN) ? D3D11_BIND_DEPTH_STENCIL   : 0) |
-                         ((rtvFormat != DXGI_FORMAT_UNKNOWN) ? D3D11_BIND_RENDER_TARGET   : 0);
+        desc.BindFlags = ((dsvFormat != DXGI_FORMAT_UNKNOWN) ? D3D11_BIND_DEPTH_STENCIL   : 0) |
+                         ((rtvFormat != DXGI_FORMAT_UNKNOWN) ? D3D11_BIND_RENDER_TARGET   : 0) |
+                         (!(dsvFormat != DXGI_FORMAT_UNKNOWN && desc.SampleDesc.Count > 1) ?
+                         ((srvFormat != DXGI_FORMAT_UNKNOWN) ? D3D11_BIND_SHADER_RESOURCE : 0) : 0);
+                         // Multisample targets flagged for binding as depth stencil cannot also be
+                         // flagged for binding as SRV, so make certain not to add the SRV flag for
+                         // these targets.
 
         ID3D11Device *device = mRenderer->getDevice();
         ID3D11Texture2D *texture = NULL;
@@ -323,7 +327,7 @@ RenderTarget11::RenderTarget11(Renderer *renderer, GLsizei width, GLsizei height
         }
         ASSERT(SUCCEEDED(result));
 
-        if (srvFormat != DXGI_FORMAT_UNKNOWN)
+        if ((desc.BindFlags & D3D11_BIND_SHADER_RESOURCE) != 0)
         {
             D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
             srvDesc.Format = srvFormat;
@@ -341,7 +345,7 @@ RenderTarget11::RenderTarget11(Renderer *renderer, GLsizei width, GLsizei height
             ASSERT(SUCCEEDED(result));
         }
 
-        if (dsvFormat != DXGI_FORMAT_UNKNOWN)
+        if ((desc.BindFlags & D3D11_BIND_DEPTH_STENCIL) != 0)
         {
             D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
             dsvDesc.Format = dsvFormat;
@@ -360,7 +364,7 @@ RenderTarget11::RenderTarget11(Renderer *renderer, GLsizei width, GLsizei height
             ASSERT(SUCCEEDED(result));
         }
 
-        if (rtvFormat != DXGI_FORMAT_UNKNOWN)
+        if ((desc.BindFlags & D3D11_BIND_RENDER_TARGET) != 0)
         {
             D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
             rtvDesc.Format = rtvFormat;
