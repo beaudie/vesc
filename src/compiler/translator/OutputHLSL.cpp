@@ -3697,7 +3697,39 @@ void OutputHLSL::addConstructor(const TType &type, const TString &name, const TI
                 }
                 else UNREACHABLE();
             }
-            else if (parameter.isMatrix() || parameter.getStruct())
+            else if (parameter.isMatrix())
+            {
+                int column = 0;
+                while (remainingComponents > 0 && column < parameter.getCols())
+                {
+                    constructor += "[" + str(column) + "]";
+
+                    if (remainingComponents < static_cast<size_t>(parameter.getRows()))
+                    {
+                        switch (remainingComponents)
+                        {
+                          case 1:  constructor += ".x";    break;
+                          case 2:  constructor += ".xy";   break;
+                          case 3:  constructor += ".xyz";  break;
+                          default: UNREACHABLE();
+                        }
+
+                        remainingComponents = 0;
+                    }
+                    else
+                    {
+                        remainingComponents -= parameter.getRows();
+
+                        if (remainingComponents > 0)
+                        {
+                            constructor += ", x" + str(parameterIndex);
+                        }
+                    }
+
+                    column++;
+                }
+            }
+            else if (parameter.getStruct())
             {
                 ASSERT(remainingComponents == parameterSize || moreParameters);
                 ASSERT(parameterSize <= remainingComponents);
