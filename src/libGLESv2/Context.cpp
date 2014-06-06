@@ -1348,6 +1348,11 @@ void Context::setProgramBinary(GLuint program, const void *binary, GLint length)
 
 }
 
+GLuint Context::getCurrentProgram() const
+{
+    return mState.currentProgram;
+}
+
 void Context::bindTransformFeedback(GLuint transformFeedback)
 {
     TransformFeedback *transformFeedbackObject = getTransformFeedback(transformFeedback);
@@ -1491,7 +1496,7 @@ Buffer *Context::getElementArrayBuffer() const
     return getCurrentVertexArray()->getElementArrayBuffer();
 }
 
-ProgramBinary *Context::getCurrentProgramBinary()
+ProgramBinary *Context::getCurrentProgramBinary() const
 {
     return mCurrentProgramBinary.get();
 }
@@ -2844,10 +2849,7 @@ void Context::readPixels(GLint x, GLint y, GLsizei width, GLsizei height,
 
 void Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instances)
 {
-    if (!mState.currentProgram)
-    {
-        return gl::error(GL_INVALID_OPERATION);
-    }
+    ASSERT(mState.currentProgram);
 
     ProgramBinary *programBinary = getCurrentProgramBinary();
     programBinary->applyUniforms();
@@ -2898,11 +2900,6 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instan
         return;
     }
 
-    if (!programBinary->validateSamplers(NULL))
-    {
-        return gl::error(GL_INVALID_OPERATION);
-    }
-
     if (!skipDraw(mode))
     {
         mRenderer->drawArrays(mode, count, instances, transformFeedbackActive);
@@ -2916,16 +2913,7 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instan
 
 void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei instances)
 {
-    if (!mState.currentProgram)
-    {
-        return gl::error(GL_INVALID_OPERATION);
-    }
-
-    VertexArray *vao = getCurrentVertexArray();
-    if (!indices && !vao->getElementArrayBuffer())
-    {
-        return gl::error(GL_INVALID_OPERATION);
-    }
+    ASSERT(mState.currentProgram);
 
     ProgramBinary *programBinary = getCurrentProgramBinary();
     programBinary->applyUniforms();
@@ -2955,6 +2943,7 @@ void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid
 
     applyState(mode);
 
+    VertexArray *vao = getCurrentVertexArray();
     rx::TranslatedIndexData indexInfo;
     GLenum err = mRenderer->applyIndexBuffer(indices, vao->getElementArrayBuffer(), count, mode, type, &indexInfo);
     if (err != GL_NO_ERROR)
@@ -2985,11 +2974,6 @@ void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid
     if (!applyUniformBuffers())
     {
         return;
-    }
-
-    if (!programBinary->validateSamplers(NULL))
-    {
-        return gl::error(GL_INVALID_OPERATION);
     }
 
     if (!skipDraw(mode))
