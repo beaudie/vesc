@@ -1302,6 +1302,16 @@ static bool ValidateDrawBase(const gl::Context *context, GLsizei count)
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
+    const gl::DepthStencilState &depthStencilState = context->getDepthStencilState();
+    if (depthStencilState.stencilWritemask != depthStencilState.stencilBackWritemask ||
+        context->getStencilRef() != context->getStencilBackRef() ||
+        depthStencilState.stencilMask != depthStencilState.stencilBackMask)
+    {
+        ERR("Separate front/back stencil writemasks, reference values, or stencil mask values "
+            "are invalid under WebGL.");
+        return gl::error(GL_INVALID_OPERATION, false);
+    }
+
     // No-op if zero count
     return (count > 0);
 }
