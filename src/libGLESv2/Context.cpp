@@ -825,7 +825,7 @@ void Context::setVertexAttribState(unsigned int attribNum, Buffer *boundBuffer, 
 
 const void *Context::getVertexAttribPointer(unsigned int attribNum) const
 {
-    return getCurrentVertexArray()->getVertexAttribute(attribNum).mPointer;
+    return getCurrentVertexArray()->getVertexAttribute(attribNum).pointer;
 }
 
 void Context::setPackAlignment(GLint alignment)
@@ -4013,8 +4013,8 @@ bool Context::hasMappedBuffer(GLenum target) const
         for (unsigned int attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; attribIndex++)
         {
             const gl::VertexAttribute &vertexAttrib = getVertexAttribState(attribIndex);
-            gl::Buffer *boundBuffer = vertexAttrib.mBoundBuffer.get();
-            if (vertexAttrib.mArrayEnabled && boundBuffer && boundBuffer->mapped())
+            gl::Buffer *boundBuffer = vertexAttrib.buffer.get();
+            if (vertexAttrib.enabled && boundBuffer && boundBuffer->mapped())
             {
                 return true;
             }

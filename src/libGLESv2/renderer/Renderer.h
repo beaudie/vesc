@@ -29,7 +29,7 @@ namespace gl
 class InfoLog;
 class ProgramBinary;
 struct LinkedVarying;
-class VertexAttribute;
+struct VertexAttribute;
 class Buffer;
 class Texture;
 class Framebuffer;
@@ -46,6 +46,7 @@ class VertexBuffer;
 class IndexBuffer;
 class QueryImpl;
 class FenceImpl;
+class VertexArrayImpl;
 class BufferStorage;
 struct TranslatedIndexData;
 class ShaderExecutable;
@@ -252,6 +253,9 @@ class Renderer
     virtual VertexBuffer *createVertexBuffer() = 0;
     virtual IndexBuffer *createIndexBuffer() = 0;
     virtual BufferStorage *createBufferStorage() = 0;
+
+    // Vertex Array creation
+    virtual VertexArrayImpl *createVertexArray() = 0;
 
     // Query and Fence creation
     virtual QueryImpl *createQuery(GLenum type) = 0;

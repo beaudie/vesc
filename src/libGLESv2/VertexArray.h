@@ -20,6 +20,7 @@
 namespace rx
 {
 class Renderer;
+class VertexArrayImpl;
 }
 
 namespace gl
@@ -41,10 +42,12 @@ class VertexArray : public RefCountObject
 
     const VertexAttribute* getVertexAttributes() const { return mVertexAttributes; }
     Buffer *getElementArrayBuffer() const { return mElementArrayBuffer.get(); }
-    void setElementArrayBuffer(Buffer *elementArrayBuffer) { mElementArrayBuffer.set(elementArrayBuffer); }
+    void setElementArrayBuffer(Buffer *buffer);
     GLuint getElementArrayBufferId() const { return mElementArrayBuffer.id(); }
 
   private:
+    rx::VertexArrayImpl *mVertexArray;
+
     VertexAttribute mVertexAttributes[MAX_VERTEX_ATTRIBS];
     BindingPointer<Buffer> mElementArrayBuffer;
 };
