@@ -22,6 +22,7 @@
 #include "libGLESv2/Query.h"
 #include "libGLESv2/Context.h"
 #include "libGLESv2/VertexArray.h"
+#include "libGLESv2/VertexAttribute.h"
 #include "libGLESv2/TransformFeedback.h"
 
 #include "libGLESv2/validationES.h"
@@ -3954,7 +3955,7 @@ void __stdcall glGetVertexAttribfv(GLuint index, GLenum pname, GLfloat* params)
             }
             else
             {
-                *params = attribState.querySingleParameter<GLfloat>(pname);
+                *params = gl::QuerySingleVertexAttributeParameter<GLfloat>(attribState, pname);
             }
         }
     }
@@ -3997,7 +3998,7 @@ void __stdcall glGetVertexAttribiv(GLuint index, GLenum pname, GLint* params)
             }
             else
             {
-                *params = attribState.querySingleParameter<GLint>(pname);
+                *params = gl::QuerySingleVertexAttributeParameter<GLint>(attribState, pname);
             }
         }
     }
@@ -7531,7 +7532,7 @@ void __stdcall glGetVertexAttribIiv(GLuint index, GLenum pname, GLint* params)
             }
             else
             {
-                *params = attribState.querySingleParameter<GLint>(pname);
+                *params = gl::QuerySingleVertexAttributeParameter<GLint>(attribState, pname);
             }
         }
     }
@@ -7579,7 +7580,7 @@ void __stdcall glGetVertexAttribIuiv(GLuint index, GLenum pname, GLuint* params)
             }
             else
             {
-                *params = attribState.querySingleParameter<GLuint>(pname);
+                *params = gl::QuerySingleVertexAttributeParameter<GLuint>(attribState, pname);
             }
         }
     }
