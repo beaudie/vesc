@@ -14,6 +14,7 @@
     <ProjectGuid>{3F4D97A9-0809-E0E4-5A3F-B6ACB6EABB46}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>hello_triangle</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
   <PropertyGroup Label="Configuration">

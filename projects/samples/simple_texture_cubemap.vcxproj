@@ -14,6 +14,7 @@
     <ProjectGuid>{93B7F18A-947E-69A1-9CD8-D1E5144E792A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>simple_texture_cubemap</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
   <PropertyGroup Label="Configuration">

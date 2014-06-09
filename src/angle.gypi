@@ -7,6 +7,8 @@
     {
         'angle_code': 1,
         'angle_post_build_script%': 0,
+        'angle_commit_id_script': 'commit_id.py',
+        'angle_use_commit_id%': '<!(python <(angle_commit_id_script) check .)'
     },
     'includes':
     [
@@ -24,56 +26,59 @@
             [
                 {
                     'destination': '<(SHARED_INTERMEDIATE_DIR)',
-                    'files': [ 'commit_id.bat', 'copy_compiler_dll.bat', 'commit_id.py' ],
+                    'files': [ 'copy_compiler_dll.bat', '<(angle_commit_id_script)' ],
                 },
             ],
-        },
-
-        {
-            'target_name': 'commit_id',
-            'type': 'none',
-            'includes': [ '../build/common_defines.gypi', ],
-            'dependencies': [ 'copy_scripts', ],
-            'conditions':
-            [
-                ['OS=="win"',
-                {
-                    'actions':
-                    [
-                        {
-                            'action_name': 'Generate Commit ID Header',
-                            'message': 'Generating commit ID header...',
-                            'msvs_cygwin_shell': 0,
-                            'inputs': [ '<(SHARED_INTERMEDIATE_DIR)/commit_id.bat', '<(angle_path)/.git/index' ],
-                            'outputs': [ '<(SHARED_INTERMEDIATE_DIR)/commit.h' ],
-                            'action': [ '<(SHARED_INTERMEDIATE_DIR)/commit_id.bat', '<(SHARED_INTERMEDIATE_DIR)' ],
-                        },
-                    ],
-                },
-                { # OS != win
-                    'actions':
-                    [
-                        {
-                            'action_name': 'Generate Commit ID Header',
-                            'message': 'Generating commit ID header...',
-                            'inputs': [ '<(SHARED_INTERMEDIATE_DIR)/commit_id.py', '<(angle_path)/.git/index' ],
-                            'outputs': [ '<(SHARED_INTERMEDIATE_DIR)/commit.h' ],
-                            'action': [ 'python', '<(SHARED_INTERMEDIATE_DIR)/commit_id.py', '<(SHARED_INTERMEDIATE_DIR)/commit.h' ],
-                        },
-                    ],
-                }],
-            ],
-            'direct_dependent_settings':
-            {
-                'include_dirs':
-                [
-                    '<(SHARED_INTERMEDIATE_DIR)',
-                ],
-            },
         },
     ],
     'conditions':
     [
+        ['angle_use_commit_id!=0',
+        {
+            'targets':
+            [
+                {
+                    'target_name': 'commit_id',
+                    'type': 'none',
+                    'includes': [ '../build/common_defines.gypi', ],
+                    'dependencies': [ 'copy_scripts', ],
+                    'actions':
+                    [
+                        {
+                            'action_name': 'Generate ANGLE Commit ID Header',
+                            'message': 'Generating ANGLE Commit ID',
+                            'inputs': [ '<(SHARED_INTERMEDIATE_DIR)/<(angle_commit_id_script)', '<(angle_path)/.git/index' ],
+                            'outputs': [ '<(SHARED_INTERMEDIATE_DIR)/angle_commit.h' ],
+                            'msvs_cygwin_shell': 0,
+                            'action': [ 'python', '<(SHARED_INTERMEDIATE_DIR)/<(angle_commit_id_script)', 'gen', '<(angle_path)', '<(SHARED_INTERMEDIATE_DIR)/angle_commit.h' ],
+                        },
+                    ],
+                    'direct_dependent_settings':
+                    {
+                        'include_dirs':
+                        [
+                            '<(SHARED_INTERMEDIATE_DIR)',
+                        ],
+                    },
+                }
+            ]
+        },
+        { # angle_use_commit_id==0
+            'targets':
+            [
+                {
+                    'target_name': 'commit_id',
+                    'type': 'none',
+                    'copies':
+                    [
+                        {
+                            'destination': '<(SHARED_INTERMEDIATE_DIR)',
+                            'files': ['angle_commit.h']
+                        }
+                    ],
+                }
+            ]
+        }],
         ['OS=="win"',
         {
             'targets':
