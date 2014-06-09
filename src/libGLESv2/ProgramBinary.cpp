@@ -10,6 +10,8 @@
 
 #include "libGLESv2/BinaryStream.h"
 #include "libGLESv2/ProgramBinary.h"
+#include "libGLESv2/Framebuffer.h"
+#include "libGLESv2/Renderbuffer.h"
 #include "libGLESv2/renderer/ShaderExecutable.h"
 
 #include "common/debug.h"
@@ -84,8 +86,7 @@ VariableLocation::VariableLocation(const std::string &name, unsigned int element
 {
 }
 
-ProgramBinary::VertexExecutable::VertexExecutable(rx::Renderer *const renderer,
-                                                  const VertexFormat inputLayout[],
+ProgramBinary::VertexExecutable::VertexExecutable(const VertexFormat inputLayout[],
                                                   const GLenum signature[],
                                                   rx::ShaderExecutable *shaderExecutable)
     : mShaderExecutable(shaderExecutable)
@@ -99,7 +100,7 @@ ProgramBinary::VertexExecutable::VertexExecutable(rx::Renderer *const renderer,
 
 ProgramBinary::VertexExecutable::~VertexExecutable()
 {
-    delete mShaderExecutable;
+    SafeDelete(mShaderExecutable);
 }
 
 bool ProgramBinary::VertexExecutable::matchesSignature(const GLenum signature[]) const
@@ -113,6 +114,22 @@ bool ProgramBinary::VertexExecutable::matchesSignature(const GLenum signature[])
     }
 
     return true;
+}
+
+ProgramBinary::PixelExecutable::PixelExecutable(const std::vector<GLenum> outputTypes, rx::ShaderExecutable *shaderExecutable)
+    : mOutputs(outputTypes),
+      mShaderExecutable(shaderExecutable)
+{
+}
+
+ProgramBinary::PixelExecutable::~PixelExecutable()
+{
+    SafeDelete(mShaderExecutable);
+}
+
+bool ProgramBinary::PixelExecutable::matchesOutput(const std::vector<GLenum> &outputs) const
+{
+    return (mOutputs == outputs);
 }
 
 LinkedVarying::LinkedVarying()
@@ -132,7 +149,7 @@ ProgramBinary::ProgramBinary(rx::Renderer *renderer)
       mRenderer(renderer),
       mDynamicHLSL(NULL),
       mVertexWorkarounds(rx::ANGLE_D3D_WORKAROUND_NONE),
-      mPixelExecutable(NULL),
+      mPixelWorkarounds(rx::ANGLE_D3D_WORKAROUND_NONE),
       mGeometryExecutable(NULL),
       mUsedVertexSamplerRange(0),
       mUsedPixelSamplerRange(0),
@@ -163,29 +180,7 @@ ProgramBinary::ProgramBinary(rx::Renderer *renderer)
 
 ProgramBinary::~ProgramBinary()
 {
-    while (!mVertexExecutables.empty())
-    {
-        delete mVertexExecutables.back();
-        mVertexExecutables.pop_back();
-    }
-
-    SafeDelete(mGeometryExecutable);
-    SafeDelete(mPixelExecutable);
-
-    while (!mUniforms.empty())
-    {
-        delete mUniforms.back();
-        mUniforms.pop_back();
-    }
-
-    while (!mUniformBlocks.empty())
-    {
-        delete mUniformBlocks.back();
-        mUniformBlocks.pop_back();
-    }
-
-    SafeDelete(mVertexUniformStorage);
-    SafeDelete(mFragmentUniformStorage);
+    reset();
     SafeDelete(mDynamicHLSL);
 }
 
@@ -204,9 +199,57 @@ unsigned int ProgramBinary::issueSerial()
     return mCurrentSerial++;
 }
 
-rx::ShaderExecutable *ProgramBinary::getPixelExecutable() const
+rx::ShaderExecutable *ProgramBinary::getPixelExecutableForFramebuffer(const Framebuffer *fbo)
 {
-    return mPixelExecutable;
+    std::vector<GLenum> outputs(IMPLEMENTATION_MAX_DRAW_BUFFERS);
+    for (size_t i = 0; i < IMPLEMENTATION_MAX_DRAW_BUFFERS; i++)
+    {
+        Renderbuffer *rbo = fbo->getColorbuffer(i);
+        if (rbo)
+        {
+            // Always output floats for now
+            outputs[i] = GL_FLOAT;
+        }
+        else
+        {
+            outputs[i] = GL_NONE;
+        }
+    }
+
+    return getPixelExecutableForOutputLayout(outputs);
+}
+
+rx::ShaderExecutable *ProgramBinary::getPixelExecutableForOutputLayout(const std::vector<GLenum> &outputLayout)
+{
+    for (size_t executableIndex = 0; executableIndex < mPixelExecutables.size(); executableIndex++)
+    {
+        if (mPixelExecutables[executableIndex]->matchesOutput(outputLayout))
+        {
+            return mPixelExecutables[executableIndex]->shaderExecutable();
+        }
+    }
+
+    std::string finalPixelHLSL = mDynamicHLSL->generateFinalPixelShader(mPixelHLSL, mPixelShaderKey, outputLayout);
+
+    // Generate new pixel executable
+    InfoLog tempInfoLog;
+    rx::ShaderExecutable *pixelExecutable = mRenderer->compileToExecutable(tempInfoLog, finalPixelHLSL.c_str(), rx::SHADER_PIXEL,
+                                                                           mTransformFeedbackLinkedVaryings,
+                                                                           (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
+                                                                           mPixelWorkarounds);
+
+    if (!pixelExecutable)
+    {
+        std::vector<char> tempCharBuffer(tempInfoLog.getLength() + 3);
+        tempInfoLog.getLog(tempInfoLog.getLength(), NULL, &tempCharBuffer[0]);
+        ERR("Error compiling dynamic pixel executable:\n%s\n", &tempCharBuffer[0]);
+    }
+    else
+    {
+        mPixelExecutables.push_back(new PixelExecutable(outputLayout, pixelExecutable));
+    }
+
+    return pixelExecutable;
 }
 
 rx::ShaderExecutable *ProgramBinary::getVertexExecutableForInputLayout(const VertexFormat inputLayout[MAX_VERTEX_ATTRIBS])
@@ -246,7 +289,7 @@ rx::ShaderExecutable *ProgramBinary::getVertexExecutableForInputLayout(const Ver
     }
     else
     {
-        mVertexExecutables.push_back(new VertexExecutable(mRenderer, inputLayout, signature, vertexExecutable));
+        mVertexExecutables.push_back(new VertexExecutable(inputLayout, signature, vertexExecutable));
     }
 
     return vertexExecutable;
@@ -1018,6 +1061,8 @@ bool ProgramBinary::linkVaryings(InfoLog &infoLog, FragmentShader *fragmentShade
 
 bool ProgramBinary::load(InfoLog &infoLog, const void *binary, GLsizei length)
 {
+    reset();
+
     BinaryInputStream stream(binary, length);
 
     int format = stream.readInt<int>();
@@ -1177,7 +1222,6 @@ bool ProgramBinary::load(InfoLog &infoLog, const void *binary, GLsizei length)
     stream.readInt(&mVertexWorkarounds);
 
     const unsigned int vertexShaderCount = stream.readInt<unsigned int>();
-
     for (unsigned int vertexShaderIndex = 0; vertexShaderIndex < vertexShaderCount; vertexShaderIndex++)
     {
         VertexFormat inputLayout[MAX_VERTEX_ATTRIBS];
@@ -1210,23 +1254,52 @@ bool ProgramBinary::load(InfoLog &infoLog, const void *binary, GLsizei length)
         mDynamicHLSL->getInputLayoutSignature(inputLayout, signature);
 
         // add new binary
-        mVertexExecutables.push_back(new VertexExecutable(mRenderer, inputLayout, signature, shaderExecutable));
+        mVertexExecutables.push_back(new VertexExecutable(inputLayout, signature, shaderExecutable));
 
         stream.skip(vertexShaderSize);
     }
 
-    unsigned int pixelShaderSize = stream.readInt<unsigned int>();
+    stream.readString(&mPixelHLSL);
+    stream.readInt(&mPixelWorkarounds);
 
-    const char *pixelShaderFunction = (const char*) binary + stream.offset();
-    mPixelExecutable = mRenderer->loadExecutable(reinterpret_cast<const DWORD*>(pixelShaderFunction),
-                                                 pixelShaderSize, rx::SHADER_PIXEL, mTransformFeedbackLinkedVaryings,
-                                                 (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS));
-    if (!mPixelExecutable)
+    const size_t pixelShaderKeySize = stream.readInt<unsigned int>();
+    mPixelShaderKey.resize(pixelShaderKeySize);
+    for (size_t pixelShaderKeyIndex = 0; pixelShaderKeyIndex < pixelShaderKeySize; pixelShaderKeyIndex++)
     {
-        infoLog.append("Could not create pixel shader.");
-        return false;
+        stream.readInt(&mPixelShaderKey[pixelShaderKeyIndex].type);
+        stream.readString(&mPixelShaderKey[pixelShaderKeyIndex].name);
+        stream.readString(&mPixelShaderKey[pixelShaderKeyIndex].source);
+        stream.readInt(&mPixelShaderKey[pixelShaderKeyIndex].destinationBuffer);
     }
-    stream.skip(pixelShaderSize);
+
+    const size_t pixelShaderCount = stream.readInt<unsigned int>();
+    for (size_t pixelShaderIndex = 0; pixelShaderIndex < pixelShaderCount; pixelShaderIndex++)
+    {
+        const size_t outputCount = stream.readInt<unsigned int>();
+        std::vector<GLenum> outputs(outputCount);
+        for (size_t outputIndex = 0; outputIndex < outputCount; outputIndex++)
+        {
+            stream.readInt(&outputs[outputIndex]);
+        }
+
+        const size_t pixelShaderSize = stream.readInt<unsigned int>();
+        const unsigned char *pixelShaderFunction = (const unsigned char*)binary + stream.offset();
+
+        rx::ShaderExecutable *shaderExecutable = mRenderer->loadExecutable(pixelShaderFunction, pixelShaderSize,
+                                                                           rx::SHADER_PIXEL,
+                                                                           mTransformFeedbackLinkedVaryings,
+                                                                           (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS));
+        if (!shaderExecutable)
+        {
+            infoLog.append("Could not create pixel shader.");
+            return false;
+        }
+
+        // add new binary
+        mPixelExecutables.push_back(new PixelExecutable(outputs, shaderExecutable));
+
+        stream.skip(pixelShaderSize);
+    }
 
     unsigned int geometryShaderSize = stream.readInt<unsigned int>();
 
@@ -1239,7 +1312,6 @@ bool ProgramBinary::load(InfoLog &infoLog, const void *binary, GLsizei length)
         if (!mGeometryExecutable)
         {
             infoLog.append("Could not create geometry shader.");
-            SafeDelete(mPixelExecutable);
             return false;
         }
         stream.skip(geometryShaderSize);
@@ -1387,11 +1459,37 @@ bool ProgramBinary::save(void* binary, GLsizei bufSize, GLsizei *length)
         stream.writeBytes(vertexBlob, vertexShaderSize);
     }
 
-    size_t pixelShaderSize = mPixelExecutable->getLength();
-    stream.writeInt(pixelShaderSize);
+    stream.writeString(mPixelHLSL);
+    stream.writeInt(mPixelWorkarounds);
 
-    unsigned char *pixelBlob = static_cast<unsigned char *>(mPixelExecutable->getFunction());
-    stream.writeBytes(pixelBlob, pixelShaderSize);
+    stream.writeInt(mPixelShaderKey.size());
+    for (size_t pixelShaderKeyIndex = 0; pixelShaderKeyIndex < mPixelShaderKey.size(); pixelShaderKeyIndex++)
+    {
+        const PixelShaderOuputVariable &variable = mPixelShaderKey[pixelShaderKeyIndex];
+        stream.writeInt(variable.type);
+        stream.writeString(variable.name);
+        stream.writeString(variable.source);
+        stream.writeInt(variable.destinationBuffer);
+    }
+
+    stream.writeInt(mPixelExecutables.size());
+    for (size_t pixelExecutableIndex = 0; pixelExecutableIndex < mPixelExecutables.size(); pixelExecutableIndex++)
+    {
+        PixelExecutable *pixelExecutable = mPixelExecutables[pixelExecutableIndex];
+
+        const std::vector<GLenum> outputs = pixelExecutable->outputs();
+        stream.writeInt(outputs.size());
+        for (size_t outputIndex = 0; outputIndex < outputs.size(); outputIndex++)
+        {
+            stream.writeInt(outputs[outputIndex]);
+        }
+
+        size_t pixelShaderSize = pixelExecutable->shaderExecutable()->getLength();
+        stream.writeInt(pixelShaderSize);
+
+        unsigned char *pixelBlob = static_cast<unsigned char *>(pixelExecutable->shaderExecutable()->getFunction());
+        stream.writeBytes(pixelBlob, pixelShaderSize);
+    }
 
     size_t geometryShaderSize = (mGeometryExecutable != NULL) ? mGeometryExecutable->getLength() : 0;
     stream.writeInt(geometryShaderSize);
@@ -1465,12 +1563,15 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
         return false;
     }
 
-    mTransformFeedbackLinkedVaryings.clear();
+    reset();
+
     mTransformFeedbackBufferMode = transformFeedbackBufferMode;
 
     mShaderVersion = vertexShader->getShaderVersion();
 
-    std::string pixelHLSL = fragmentShader->getHLSL();
+    mPixelHLSL = fragmentShader->getHLSL();
+    mPixelWorkarounds = fragmentShader->getD3DWorkarounds();
+
     mVertexHLSL = vertexShader->getHLSL();
     mVertexWorkarounds = vertexShader->getD3DWorkarounds();
 
@@ -1490,9 +1591,9 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
 
     mUsesPointSize = vertexShader->usesPointSize();
     std::vector<LinkedVarying> linkedVaryings;
-    if (!mDynamicHLSL->generateShaderLinkHLSL(infoLog, registers, packing, pixelHLSL, mVertexHLSL,
+    if (!mDynamicHLSL->generateShaderLinkHLSL(infoLog, registers, packing, mPixelHLSL, mVertexHLSL,
                                               fragmentShader, vertexShader, transformFeedbackVaryings,
-                                              &linkedVaryings, &mOutputVariables))
+                                              &linkedVaryings, &mOutputVariables, &mPixelShaderKey))
     {
         return false;
     }
@@ -1532,12 +1633,14 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
     {
         VertexFormat defaultInputLayout[MAX_VERTEX_ATTRIBS];
         GetInputLayoutFromShader(vertexShader->activeAttributes(), defaultInputLayout);
-
         rx::ShaderExecutable *defaultVertexExecutable = getVertexExecutableForInputLayout(defaultInputLayout);
-        mPixelExecutable = mRenderer->compileToExecutable(infoLog, pixelHLSL.c_str(), rx::SHADER_PIXEL,
-                                                          mTransformFeedbackLinkedVaryings,
-                                                          (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
-                                                          fragmentShader->getD3DWorkarounds());
+
+        std::vector<GLenum> defaultPixelOutput(IMPLEMENTATION_MAX_DRAW_BUFFERS);
+        for (size_t i = 0; i < defaultPixelOutput.size(); i++)
+        {
+            defaultPixelOutput[i] = (i == 0) ? GL_FLOAT : GL_NONE;
+        }
+        rx::ShaderExecutable *defaultPixelExecutable = getPixelExecutableForOutputLayout(defaultPixelOutput);
 
         if (usesGeometryShader())
         {
@@ -1548,21 +1651,11 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
                                                                  rx::ANGLE_D3D_WORKAROUND_NONE);
         }
 
-        if (!defaultVertexExecutable || !mPixelExecutable || (usesGeometryShader() && !mGeometryExecutable))
+        if (!defaultVertexExecutable || !defaultPixelExecutable || (usesGeometryShader() && !mGeometryExecutable))
         {
             infoLog.append("Failed to create D3D shaders.");
             success = false;
-
-            while (!mVertexExecutables.empty())
-            {
-                delete mVertexExecutables.back();
-                mVertexExecutables.pop_back();
-            }
-
-            SafeDelete(mGeometryExecutable);
-            SafeDelete(mPixelExecutable);
-
-            mTransformFeedbackLinkedVaryings.clear();
+            reset();
         }
     }
 
@@ -2682,6 +2775,55 @@ void ProgramBinary::initializeUniformStorage()
 
     mVertexUniformStorage = mRenderer->createUniformStorage(vertexRegisters * 16u);
     mFragmentUniformStorage = mRenderer->createUniformStorage(fragmentRegisters * 16u);
+}
+
+template <typename T>
+static void SafeClearVector(std::vector<T*>* vec)
+{
+    for (size_t i = 0; i < vec->size(); i++)
+    {
+        SafeDelete(vec->at(i));
+    }
+    vec->clear();
+}
+
+void ProgramBinary::reset()
+{
+    mVertexHLSL.clear();
+    mVertexWorkarounds = rx::ANGLE_D3D_WORKAROUND_NONE;
+    SafeClearVector(&mVertexExecutables);
+
+    mPixelHLSL.clear();
+    mPixelWorkarounds = rx::ANGLE_D3D_WORKAROUND_NONE;
+    mPixelShaderKey.clear();
+    SafeClearVector(&mPixelExecutables);
+
+    SafeDelete(mGeometryExecutable);
+
+    mTransformFeedbackBufferMode = GL_NONE;
+    mTransformFeedbackLinkedVaryings.clear();
+
+    for (size_t i = 0; i < ArraySize(mSamplersPS); i++)
+    {
+        mSamplersPS[i] = Sampler();
+    }
+    for (size_t i = 0; i < ArraySize(mSamplersVS); i++)
+    {
+        mSamplersVS[i] = Sampler();
+    }
+    mUsedVertexSamplerRange = 0;
+    mUsedPixelSamplerRange = 0;
+    mUsesPointSize = false;
+    mShaderVersion = 0;
+
+    SafeClearVector(&mUniforms);
+    SafeClearVector(&mUniformBlocks);
+    mUniformIndex.clear();
+    mOutputVariables.clear();
+    SafeDelete(mVertexUniformStorage);
+    SafeDelete(mFragmentUniformStorage);
+
+    mValidated = false;
 }
 
 }

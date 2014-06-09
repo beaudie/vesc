@@ -84,6 +84,9 @@ std::string ArrayString(unsigned int i)
 
 const std::string DynamicHLSL::VERTEX_ATTRIBUTE_STUB_STRING = "@@ VERTEX ATTRIBUTES @@";
 
+const std::string PIXEL_OUTPUT_DECLARATION_STUB_STRING = "@@ PIXEL OUTPUT @@";
+const std::string PIXEL_OUTPUT_COPY_STUB_STRING = "@@ PIXEL COPY @@";
+
 DynamicHLSL::DynamicHLSL(rx::Renderer *const renderer)
     : mRenderer(renderer)
 {
@@ -408,7 +411,8 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
                                          FragmentShader *fragmentShader, VertexShader *vertexShader,
                                          const std::vector<std::string>& transformFeedbackVaryings,
                                          std::vector<LinkedVarying> *linkedVaryings,
-                                         std::map<int, VariableLocation> *programOutputVars) const
+                                         std::map<int, VariableLocation> *programOutputVars,
+                                         std::vector<PixelShaderOuputVariable> *outPixelShaderKey) const
 {
     if (pixelHLSL.empty() || vertexHLSL.empty())
     {
@@ -661,15 +665,22 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
     }
 
     pixelHLSL += "};\n"
-                 "\n"
-                 "struct PS_OUTPUT\n"
-                 "{\n";
+                  "\n"
+                  "struct PS_OUTPUT\n"
+                  "{\n" +
+                  PIXEL_OUTPUT_DECLARATION_STUB_STRING + "\n";
 
     if (shaderVersion < 300)
     {
         for (unsigned int renderTargetIndex = 0; renderTargetIndex < numRenderTargets; renderTargetIndex++)
         {
-            pixelHLSL += "    float4 gl_Color" + Str(renderTargetIndex) + " : " + targetSemantic + Str(renderTargetIndex) + ";\n";
+            PixelShaderOuputVariable outputKeyVariable;
+            outputKeyVariable.type = GL_FLOAT_VEC4;
+            outputKeyVariable.name = "gl_Color" + Str(renderTargetIndex);
+            outputKeyVariable.source = broadcast ? "gl_Color[0]" : "gl_Color[" + Str(renderTargetIndex) + "]";
+            outputKeyVariable.destinationBuffer = renderTargetIndex;
+
+            outPixelShaderKey->push_back(outputKeyVariable);
         }
 
         if (fragmentShader->mUsesFragDepth)
@@ -686,11 +697,16 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
         {
             const VariableLocation &outputLocation = locationIt->second;
             const ShaderVariable &outputVariable = shaderOutputVars[outputLocation.index];
+            const std::string &variableName = "out_" + outputLocation.name;
             const std::string &elementString = (outputLocation.element == GL_INVALID_INDEX ? "" : Str(outputLocation.element));
 
-            pixelHLSL += "    " + gl_d3d::HLSLTypeString(outputVariable.type) +
-                         " out_" + outputLocation.name + elementString +
-                         " : " + targetSemantic + Str(locationIt->first) + ";\n";
+            PixelShaderOuputVariable outputKeyVariable;
+            outputKeyVariable.type = outputVariable.type;
+            outputKeyVariable.name = variableName + elementString;
+            outputKeyVariable.source = variableName + ArrayString(outputLocation.element);
+            outputKeyVariable.destinationBuffer = locationIt->first;
+
+            outPixelShaderKey->push_back(outputKeyVariable);
         }
     }
 
@@ -807,36 +823,8 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
     pixelHLSL += "\n"
                  "    gl_main();\n"
                  "\n"
-                 "    PS_OUTPUT output;\n";
-
-    if (shaderVersion < 300)
-    {
-        for (unsigned int renderTargetIndex = 0; renderTargetIndex < numRenderTargets; renderTargetIndex++)
-        {
-            unsigned int sourceColorIndex = broadcast ? 0 : renderTargetIndex;
-
-            pixelHLSL += "    output.gl_Color" + Str(renderTargetIndex) + " = gl_Color[" + Str(sourceColorIndex) + "];\n";
-        }
-
-        if (fragmentShader->mUsesFragDepth)
-        {
-            pixelHLSL += "    output.gl_Depth = gl_Depth;\n";
-        }
-    }
-    else
-    {
-        for (auto locationIt = programOutputVars->begin(); locationIt != programOutputVars->end(); locationIt++)
-        {
-            const VariableLocation &outputLocation = locationIt->second;
-            const std::string &variableName = "out_" + outputLocation.name;
-            const std::string &outVariableName = variableName + (outputLocation.element == GL_INVALID_INDEX ? "" : Str(outputLocation.element));
-            const std::string &staticVariableName = variableName + ArrayString(outputLocation.element);
-
-            pixelHLSL += "    output." + outVariableName + " = " + staticVariableName + ";\n";
-        }
-    }
-
-    pixelHLSL += "\n"
+                 "    PS_OUTPUT output;\n" +
+                 PIXEL_OUTPUT_COPY_STUB_STRING + "\n"
                  "    return output;\n"
                  "}\n";
 
@@ -1052,6 +1040,38 @@ void DynamicHLSL::getInputLayoutSignature(const VertexFormat inputLayout[], GLen
             signature[inputIndex] = (gpuConverted ? GL_TRUE : GL_FALSE);
         }
     }
+}
+
+std::string DynamicHLSL::generateFinalPixelShader(const std::string& sourceShader, const std::vector<PixelShaderOuputVariable>& outputVariables,
+                                                  const std::vector<GLenum> outputLayout) const
+{
+    std::string pixelHLSL = sourceShader;
+
+    const int shaderModel = mRenderer->getMajorShaderModel();
+    std::string targetSemantic = (shaderModel >= 4) ? "SV_TARGET" : "COLOR";
+
+    std::string declarationHLSL;
+    std::string copyHLSL;
+    for (size_t i = 0; i < outputVariables.size(); i++)
+    {
+        const PixelShaderOuputVariable& outputVariable = outputVariables[i];
+        if (outputLayout.size() > outputVariable.destinationBuffer &&
+            outputLayout[outputVariable.destinationBuffer] != GL_NONE)
+        {
+            declarationHLSL += "    " + gl_d3d::HLSLTypeString(outputVariable.type) + " " + outputVariable.name + 
+                               " : " + targetSemantic + Str(outputVariable.destinationBuffer) + ";\n";
+
+            copyHLSL += "    output." + outputVariable.name + " = " + outputVariable.source + ";\n";
+        }
+    }
+
+    size_t declarationInsertionPos = pixelHLSL.find(PIXEL_OUTPUT_DECLARATION_STUB_STRING);
+    pixelHLSL.replace(declarationInsertionPos, PIXEL_OUTPUT_DECLARATION_STUB_STRING.length(), declarationHLSL);
+
+    size_t copyInsertionPos = pixelHLSL.find(PIXEL_OUTPUT_COPY_STUB_STRING);
+    pixelHLSL.replace(copyInsertionPos, PIXEL_OUTPUT_COPY_STUB_STRING.length(), copyHLSL);
+
+    return pixelHLSL;
 }
 
 }
