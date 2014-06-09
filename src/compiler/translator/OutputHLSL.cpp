@@ -2141,10 +2141,10 @@ bool OutputHLSL::visitUnary(Visit visit, TIntermUnary *node)
       case EOpConvFloatToBool:
         switch (node->getOperand()->getType().getNominalSize())
         {
-          case 1:    outputTriplet(visit, "bool(", "", ")");  break;
-          case 2:    outputTriplet(visit, "bool2(", "", ")"); break;
-          case 3:    outputTriplet(visit, "bool3(", "", ")"); break;
-          case 4:    outputTriplet(visit, "bool4(", "", ")"); break;
+          case 1:    outputConversion(visit, "bvec1", node); break;
+          case 2:    outputConversion(visit, "bvec2", node); break;
+          case 3:    outputConversion(visit, "bvec3", node); break;
+          case 4:    outputConversion(visit, "bvec4", node); break;
           default: UNREACHABLE();
         }
         break;
@@ -2153,10 +2153,10 @@ bool OutputHLSL::visitUnary(Visit visit, TIntermUnary *node)
       case EOpConvUIntToFloat:
         switch (node->getOperand()->getType().getNominalSize())
         {
-          case 1:    outputTriplet(visit, "float(", "", ")");  break;
-          case 2:    outputTriplet(visit, "float2(", "", ")"); break;
-          case 3:    outputTriplet(visit, "float3(", "", ")"); break;
-          case 4:    outputTriplet(visit, "float4(", "", ")"); break;
+          case 1:    outputConversion(visit, "vec1", node); break;
+          case 2:    outputConversion(visit, "vec2", node); break;
+          case 3:    outputConversion(visit, "vec3", node); break;
+          case 4:    outputConversion(visit, "vec4", node); break;
           default: UNREACHABLE();
         }
         break;
@@ -2165,10 +2165,10 @@ bool OutputHLSL::visitUnary(Visit visit, TIntermUnary *node)
       case EOpConvUIntToInt:
         switch (node->getOperand()->getType().getNominalSize())
         {
-          case 1:    outputTriplet(visit, "int(", "", ")");  break;
-          case 2:    outputTriplet(visit, "int2(", "", ")"); break;
-          case 3:    outputTriplet(visit, "int3(", "", ")"); break;
-          case 4:    outputTriplet(visit, "int4(", "", ")"); break;
+          case 1:    outputConversion(visit, "ivec1", node); break;
+          case 2:    outputConversion(visit, "ivec2", node); break;
+          case 3:    outputConversion(visit, "ivec3", node); break;
+          case 4:    outputConversion(visit, "ivec4", node); break;
           default: UNREACHABLE();
         }
         break;
@@ -2177,10 +2177,10 @@ bool OutputHLSL::visitUnary(Visit visit, TIntermUnary *node)
       case EOpConvIntToUInt:
         switch (node->getOperand()->getType().getNominalSize())
         {
-          case 1:    outputTriplet(visit, "uint(", "", ")");  break;
-          case 2:    outputTriplet(visit, "uint2(", "", ")");  break;
-          case 3:    outputTriplet(visit, "uint3(", "", ")");  break;
-          case 4:    outputTriplet(visit, "uint4(", "", ")");  break;
+          case 1:    outputConversion(visit, "uvec1", node); break;
+          case 2:    outputConversion(visit, "uvec2", node); break;
+          case 3:    outputConversion(visit, "uvec3", node); break;
+          case 4:    outputConversion(visit, "uvec4", node); break;
           default: UNREACHABLE();
         }
         break;
@@ -3516,6 +3516,29 @@ TString OutputHLSL::structureTypeName(const TStructure &structure, bool useHLSLR
     }
 
     return prefix + structNameString(structure);
+}
+
+void OutputHLSL::outputConversion(Visit visit, const TString &name, TIntermUnary *parameter)
+{
+    TInfoSinkBase &out = mBody;
+
+    if (visit == PreVisit)
+    {
+        TIntermSequence sequence(1);
+        sequence[0] = parameter->getOperand();
+        addConstructor(parameter->getType(), name, &sequence);
+
+        out << name + "(";
+    }
+    else if (visit == InVisit)
+    {
+        UNREACHABLE();   // Conversions are unary
+        out << "";
+    }
+    else if (visit == PostVisit)
+    {
+        out << ")";
+    }
 }
 
 void OutputHLSL::addConstructor(const TType &type, const TString &name, const TIntermSequence *parameters)
