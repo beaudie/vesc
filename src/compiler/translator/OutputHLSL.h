@@ -71,6 +71,7 @@ class OutputHLSL : public TIntermTraverser
     TString argumentString(const TIntermSymbol *symbol);
     int vectorSize(const TType &type) const;
 
+    void outputConversion(Visit visit, const TString &name, TIntermUnary *parameter);
     void addConstructor(const TType &type, const TString &name, const TIntermSequence *parameters);
     const ConstantUnion *writeConstantUnion(const TType &type, const ConstantUnion *constUnion);
 
