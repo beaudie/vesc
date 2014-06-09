@@ -109,12 +109,6 @@
       <Message>Copying commit_id.py to $(OutDir)obj/global_intermediate\commit_id.py</Message>
       <Outputs>$(OutDir)obj\global_intermediate\commit_id.py</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\src\commit_id.bat">
-      <FileType>Document</FileType>
-      <Command>call mkdir &quot;$(OutDir)obj\global_intermediate&quot; 2&gt;nul &amp; set ERRORLEVEL=0 &amp; copy /Y &quot;..\..\src\commit_id.bat&quot; &quot;$(OutDir)obj\global_intermediate\commit_id.bat&quot;</Command>
-      <Message>Copying commit_id.bat to $(OutDir)obj/global_intermediate\commit_id.bat</Message>
-      <Outputs>$(OutDir)obj\global_intermediate\commit_id.bat</Outputs>
-    </CustomBuild>
     <CustomBuild Include="..\..\src\copy_compiler_dll.bat">
       <FileType>Document</FileType>
       <Command>call mkdir &quot;$(OutDir)obj\global_intermediate&quot; 2&gt;nul &amp; set ERRORLEVEL=0 &amp; copy /Y &quot;..\..\src\copy_compiler_dll.bat&quot; &quot;$(OutDir)obj\global_intermediate\copy_compiler_dll.bat&quot;</Command>
