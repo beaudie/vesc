@@ -2092,16 +2092,21 @@ void __stdcall glGenerateMipmap(GLenum target)
 
             GLenum internalFormat = texture->getBaseLevelInternalFormat();
 
-            // Internally, all texture formats are sized so checking if the format
-            // is color renderable and filterable will not fail.
-
-            bool validRenderable = (gl::IsColorRenderingSupported(internalFormat, context) ||
-                                    gl::IsSizedInternalFormat(internalFormat, context->getClientVersion()));
+            // GenerateMipmap should not generate an INVALID_OPERATION for textures created with
+            // unsized formats or are color renderable and filterable.  Since we do not track if
+            // the texture was created with sized or unsized format (only sized formats are stored),
+            // it is not possible to make sure the the LUMA formats can generate mipmaps (they should
+            // be able to) because they aren't color renderable.  Simply do a special case for LUMA
+            // textures since they're the only texture format that can be created with unsized formats
+            // that is not color renderable.
+            bool isLUMA = internalFormat == GL_LUMINANCE8_EXT ||
+                          internalFormat == GL_LUMINANCE8_ALPHA8_EXT ||
+                          internalFormat == GL_ALPHA8_EXT;
 
             if (gl::IsDepthRenderingSupported(internalFormat, context) ||
                 gl::IsFormatCompressed(internalFormat, context->getClientVersion()) ||
                 !gl::IsTextureFilteringSupported(internalFormat, context) ||
-                !validRenderable)
+                (!gl::IsColorRenderingSupported(internalFormat, context) && !isLUMA))
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
