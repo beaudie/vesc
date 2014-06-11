@@ -2111,6 +2111,13 @@ void __stdcall glGenerateMipmap(GLenum target)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
+            // GL_EXT_sRGB does not support mipmap generation on sRGB textures
+            if (context->getClientVersion() == 2 &&
+                gl::GetColorEncoding(internalFormat, context->getClientVersion()) == GL_SRGB)
+            {
+                return gl::error(GL_INVALID_OPERATION);
+            }
+
             // Non-power of 2 ES2 check
             if (!context->supportsNonPower2Texture() && (!gl::isPow2(texture->getBaseLevelWidth()) || !gl::isPow2(texture->getBaseLevelHeight())))
             {
@@ -2645,6 +2652,12 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
               case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL:
               case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE:
                 break;
+              case GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING:
+                if (context->getClientVersion() < 3 && !context->supportsSRGBTextures())
+                {
+                    return gl::error(GL_INVALID_ENUM);
+                }
+                break;
               case GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE:
               case GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE:
               case GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE:
@@ -2652,12 +2665,12 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
               case GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE:
               case GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE:
               case GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE:
-              case GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING:
               case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER:
-                if (context->getClientVersion() >= 3)
+                if (context->getClientVersion() < 3)
                 {
-                    break;
+                    return gl::error(GL_INVALID_ENUM);
                 }
+                break;
               default:
                 return gl::error(GL_INVALID_ENUM);
             }
