@@ -370,6 +370,7 @@ void Context::makeCurrent(egl::Surface *surface)
         mSupportsTextureFilterAnisotropy = mRenderer->getTextureFilterAnisotropySupport();
         mSupports32bitIndices = mRenderer->get32BitIndexSupport();
         mSupportsPBOs = mRenderer->getPBOSupport();
+        msupportsSRGBTextures = mRenderer->getSRGBTextureSupport();
 
         mNumCompressedTextureFormats = 0;
         if (supportsDXT1Textures())
@@ -3338,6 +3339,11 @@ bool Context::supportsPBOs() const
     return mSupportsPBOs;
 }
 
+bool Context::supportsSRGBTextures() const
+{
+    return msupportsSRGBTextures;
+}
+
 float Context::getTextureMaxAnisotropy() const
 {
     return mMaxTextureAnisotropy;
@@ -3783,6 +3789,11 @@ void Context::initExtensionString()
         mExtensionStringList.push_back("GL_EXT_texture_storage");
         mExtensionStringList.push_back("GL_EXT_frag_depth");
         mExtensionStringList.push_back("GL_EXT_blend_minmax");
+
+        if (supportsSRGBTextures())
+        {
+            mExtensionStringList.push_back("GL_EXT_sRGB");
+        }
 
         // ANGLE-specific extensions
         if (supportsDepthTextures())

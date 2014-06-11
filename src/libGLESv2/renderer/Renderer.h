@@ -187,6 +187,7 @@ class Renderer
     virtual bool getPostSubBufferSupport() const = 0;
     virtual int getMaxRecommendedElementsIndices() const = 0;
     virtual int getMaxRecommendedElementsVertices() const = 0;
+    virtual bool getSRGBTextureSupport() const = 0;
 
     virtual int getMajorShaderModel() const = 0;
     virtual float getMaxPointSize() const = 0;
