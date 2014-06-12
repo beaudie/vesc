@@ -9,21 +9,22 @@
 
 #include "libGLESv2/VertexArray.h"
 #include "libGLESv2/Buffer.h"
-#include "libGLESv2/renderer/Renderer.h"
 #include "libGLESv2/renderer/VertexArrayImpl.h"
 
 namespace gl
 {
 
-VertexArray::VertexArray(rx::Renderer *renderer, GLuint id)
-    : RefCountObject(id)
+VertexArray::VertexArray(rx::VertexArrayImpl *impl, GLuint id, size_t maxAttribs)
+    : RefCountObject(id),
+      mVertexArray(impl),
+      mMaxAttribs(maxAttribs)
 {
-    mVertexArray = renderer->createVertexArray();
+    mVertexAttributes.resize(maxAttribs);
 }
 
 VertexArray::~VertexArray()
 {
-    for (int i = 0; i < MAX_VERTEX_ATTRIBS; i++)
+    for (size_t i = 0; i < mMaxAttribs; i++)
     {
         mVertexAttributes[i].buffer.set(NULL);
     }
@@ -32,7 +33,7 @@ VertexArray::~VertexArray()
 
 void VertexArray::detachBuffer(GLuint bufferName)
 {
-    for (int attribute = 0; attribute < MAX_VERTEX_ATTRIBS; attribute++)
+    for (size_t attribute = 0; attribute < mMaxAttribs; attribute++)
     {
         if (mVertexAttributes[attribute].buffer.id() == bufferName)
         {
@@ -46,22 +47,22 @@ void VertexArray::detachBuffer(GLuint bufferName)
     }
 }
 
-const VertexAttribute& VertexArray::getVertexAttribute(unsigned int attributeIndex) const
+const VertexAttribute& VertexArray::getVertexAttribute(size_t attributeIndex) const
 {
-    ASSERT(attributeIndex < MAX_VERTEX_ATTRIBS);
+    ASSERT(attributeIndex < mMaxAttribs);
     return mVertexAttributes[attributeIndex];
 }
 
 void VertexArray::setVertexAttribDivisor(GLuint index, GLuint divisor)
 {
-    ASSERT(index < gl::MAX_VERTEX_ATTRIBS);
+    ASSERT(index < mMaxAttribs);
     mVertexAttributes[index].divisor = divisor;
     mVertexArray->setAttributeDivisor(index, divisor);
 }
 
 void VertexArray::enableAttribute(unsigned int attributeIndex, bool enabledState)
 {
-    ASSERT(attributeIndex < gl::MAX_VERTEX_ATTRIBS);
+    ASSERT(attributeIndex < mMaxAttribs);
     mVertexAttributes[attributeIndex].enabled = enabledState;
     mVertexArray->enableAttribute(attributeIndex, enabledState);
 }
@@ -69,7 +70,7 @@ void VertexArray::enableAttribute(unsigned int attributeIndex, bool enabledState
 void VertexArray::setAttributeState(unsigned int attributeIndex, gl::Buffer *boundBuffer, GLint size, GLenum type,
                                     bool normalized, bool pureInteger, GLsizei stride, const void *pointer)
 {
-    ASSERT(attributeIndex < gl::MAX_VERTEX_ATTRIBS);
+    ASSERT(attributeIndex < :mMaxAttribs);
     mVertexAttributes[attributeIndex].buffer.set(boundBuffer);
     mVertexAttributes[attributeIndex].size = size;
     mVertexAttributes[attributeIndex].type = type;
@@ -81,7 +82,7 @@ void VertexArray::setAttributeState(unsigned int attributeIndex, gl::Buffer *bou
 }
 
 void VertexArray::setElementArrayBuffer(Buffer *buffer)
-{ 
+{
     mElementArrayBuffer.set(buffer);
     mVertexArray->setElementArrayBuffer(buffer);
 }

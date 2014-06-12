@@ -35,8 +35,8 @@ static int ElementsInBuffer(const gl::VertexAttribute &attrib, unsigned int size
         size = static_cast<unsigned int>(std::numeric_limits<int>::max());
     }
 
-    GLsizei stride = gl::VertexAttributeStride(attrib);
-    return (size - attrib.offset % stride + (stride - VertexAttributeTypeSize(attrib))) / stride;
+    GLsizei stride = ComputeVertexAttributeStride(attrib);
+    return (size - attrib.offset % stride + (stride - ComputeVertexAttributeTypeSize(attrib))) / stride;
 }
 
 static int StreamingBufferElementCount(const gl::VertexAttribute &attrib, int vertexDrawCount, int instanceDrawCount)
@@ -182,7 +182,7 @@ GLenum VertexDataManager::prepareVertexData(const gl::VertexAttribute attribs[],
 
                 if (directStorage)
                 {
-                    outputElementSize = gl::VertexAttributeStride(attribs[i]);
+                    outputElementSize = ComputeVertexAttributeStride(attribs[i]);
                     streamOffset = attribs[i].offset + outputElementSize * start;
                 }
                 else if (staticBuffer)
@@ -196,7 +196,7 @@ GLenum VertexDataManager::prepareVertexData(const gl::VertexAttribute attribs[],
                     {
                         // Convert the entire buffer
                         int totalCount = ElementsInBuffer(attribs[i], storage->getSize());
-                        int startIndex = attribs[i].offset / gl::VertexAttributeStride(attribs[i]);
+                        int startIndex = attribs[i].offset / ComputeVertexAttributeStride(attribs[i]);
 
                         if (!staticBuffer->storeVertexAttributes(attribs[i], currentValues[i], -startIndex, totalCount,
                                                                  0, &streamOffset))
@@ -205,7 +205,7 @@ GLenum VertexDataManager::prepareVertexData(const gl::VertexAttribute attribs[],
                         }
                     }
 
-                    unsigned int firstElementOffset = (attribs[i].offset / gl::VertexAttributeStride(attribs[i])) * outputElementSize;
+                    unsigned int firstElementOffset = (attribs[i].offset / ComputeVertexAttributeStride(attribs[i])) * outputElementSize;
                     unsigned int startOffset = (instances == 0 || attribs[i].divisor == 0) ? start * outputElementSize : 0;
                     if (streamOffset + firstElementOffset + startOffset < streamOffset)
                     {
@@ -282,7 +282,7 @@ GLenum VertexDataManager::prepareVertexData(const gl::VertexAttribute attribs[],
 
             if (buffer)
             {
-                buffer->promoteStaticUsage(count * gl::VertexAttributeTypeSize(attribs[i]));
+                buffer->promoteStaticUsage(count * ComputeVertexAttributeTypeSize(attribs[i]));
             }
         }
     }

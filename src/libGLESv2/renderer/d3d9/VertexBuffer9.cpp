@@ -72,8 +72,8 @@ bool VertexBuffer9::storeVertexAttributes(const gl::VertexAttribute &attrib, con
     {
         gl::Buffer *buffer = attrib.buffer.get();
 
-        int inputStride = gl::VertexAttributeStride(attrib);
-        int elementSize = gl::VertexAttributeTypeSize(attrib);
+        int inputStride = gl::ComputeVertexAttributeStride(attrib);
+        int elementSize = gl::ComputeVertexAttributeTypeSize(attrib);
 
         DWORD lockFlags = mDynamicUsage ? D3DLOCK_NOOVERWRITE : 0;
 

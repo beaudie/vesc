@@ -24,7 +24,7 @@ struct VertexAttribute
   bool normalized;
   bool pureInteger;
   GLuint stride; // 0 means natural stride
-  
+
   union
   {
     const GLvoid *pointer;
@@ -34,7 +34,7 @@ struct VertexAttribute
 
   GLuint divisor;
 
-  VertexAttribute() : enabled(false), type(GL_FLOAT), size(4), normalized(false), pureInteger(false), stride(0), pointer(NULL), divisor(0) { }
+  VertexAttribute();
 };
 
 template <typename T>
@@ -64,8 +64,8 @@ T QuerySingleVertexAttributeParameter(const VertexAttribute& attrib, GLenum pnam
   }
 }
 
-int VertexAttributeTypeSize(const VertexAttribute& attrib);
-GLsizei VertexAttributeStride(const VertexAttribute& attrib);
+size_t ComputeVertexAttributeTypeSize(const VertexAttribute& attrib);
+size_t ComputeVertexAttributeStride(const VertexAttribute& attrib);
 
 struct VertexAttribCurrentValueData
 {

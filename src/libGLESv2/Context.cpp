@@ -912,7 +912,7 @@ GLuint Context::createVertexArray()
     // Although the spec states VAO state is not initialized until the object is bound,
     // we create it immediately. The resulting behaviour is transparent to the application,
     // since it's not currently possible to access the state until the object is bound.
-    mVertexArrayMap[handle] = new VertexArray(mRenderer, handle);
+    mVertexArrayMap[handle] = new VertexArray(mRenderer->createVertexArray(), handle, MAX_VERTEX_ATTRIBS);
 
     return handle;
 }
@@ -1249,7 +1249,7 @@ void Context::bindVertexArray(GLuint vertexArray)
 {
     if (!getVertexArray(vertexArray))
     {
-        mVertexArrayMap[vertexArray] = new VertexArray(mRenderer, vertexArray);
+        mVertexArrayMap[vertexArray] = new VertexArray(mRenderer->createVertexArray(), vertexArray, MAX_VERTEX_ATTRIBS);
     }
 
     mState.vertexArray = vertexArray;

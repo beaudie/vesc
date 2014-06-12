@@ -72,7 +72,7 @@ bool VertexBuffer11::storeVertexAttributes(const gl::VertexAttribute &attrib, co
     if (mBuffer)
     {
         gl::Buffer *buffer = attrib.buffer.get();
-        int inputStride = gl::VertexAttributeStride(attrib);
+        int inputStride = ComputeVertexAttributeStride(attrib);
         ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
 
         D3D11_MAPPED_SUBRESOURCE mappedResource;

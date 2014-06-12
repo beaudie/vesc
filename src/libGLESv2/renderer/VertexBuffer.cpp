@@ -182,7 +182,7 @@ bool VertexBufferInterface::directStoragePossible(const gl::VertexAttribute &att
         requiresConversion = (mRenderer->getVertexConversionType(vertexFormat) & VERTEX_CONVERT_CPU) != 0;
     }
 
-    bool isAligned = (static_cast<size_t>(VertexAttributeStride(attrib)) % alignment == 0) &&
+    bool isAligned = (static_cast<size_t>(ComputeVertexAttributeStride(attrib)) % alignment == 0) &&
                      (static_cast<size_t>(attrib.offset) % alignment == 0);
 
     return !requiresConversion && isAligned;
@@ -232,11 +232,11 @@ bool StaticVertexBufferInterface::lookupAttribute(const gl::VertexAttribute &att
     {
         if (mCache[element].type == attrib.type &&
             mCache[element].size == attrib.size &&
-            mCache[element].stride == VertexAttributeStride(attrib) &&
+            mCache[element].stride == ComputeVertexAttributeStride(attrib) &&
             mCache[element].normalized == attrib.normalized &&
             mCache[element].pureInteger == attrib.pureInteger)
         {
-            if (mCache[element].attributeOffset == attrib.offset % VertexAttributeStride(attrib))
+            if (mCache[element].attributeOffset == attrib.offset % ComputeVertexAttributeStride(attrib))
             {
                 if (outStreamOffset)
                 {
@@ -275,8 +275,8 @@ bool StaticVertexBufferInterface::storeVertexAttributes(const gl::VertexAttribut
     unsigned int streamOffset;
     if (VertexBufferInterface::storeVertexAttributes(attrib, currentValue, start, count, instances, &streamOffset))
     {
-        int attributeOffset = attrib.offset % VertexAttributeStride(attrib);
-        VertexElement element = { attrib.type, attrib.size, VertexAttributeStride(attrib), attrib.normalized, attrib.pureInteger, attributeOffset, streamOffset };
+        int attributeOffset = attrib.offset % ComputeVertexAttributeStride(attrib);
+        VertexElement element = { attrib.type, attrib.size, ComputeVertexAttributeStride(attrib), attrib.normalized, attrib.pureInteger, attributeOffset, streamOffset };
         mCache.push_back(element);
 
         if (outStreamOffset)
