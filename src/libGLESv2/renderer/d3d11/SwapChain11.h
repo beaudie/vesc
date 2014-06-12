@@ -20,7 +20,8 @@ class SwapChain11 : public SwapChain
 {
   public:
     SwapChain11(Renderer11 *renderer, HWND window, HANDLE shareHandle,
-                GLenum backBufferFormat, GLenum depthBufferFormat);
+                GLenum backBufferFormat, GLenum depthBufferFormat,
+                bool isPrimarySwapChain);
     virtual ~SwapChain11();
 
     EGLint resize(EGLint backbufferWidth, EGLint backbufferHeight);
@@ -55,6 +56,7 @@ class SwapChain11 : public SwapChain
     bool mAppCreatedShareHandle;
     unsigned int mSwapInterval;
     bool mPassThroughResourcesInit;
+    bool mIsPrimarySwapChain;
 
     IDXGISwapChain *mSwapChain;
 

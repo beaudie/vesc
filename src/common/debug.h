@@ -15,7 +15,7 @@
 #include "common/angleutils.h"
 
 #if !defined(TRACE_OUTPUT_FILE)
-#define TRACE_OUTPUT_FILE "debug.txt"
+#define TRACE_OUTPUT_FILE "angle_debug.txt"
 #endif
 
 namespace gl

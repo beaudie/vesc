@@ -19,8 +19,11 @@ namespace rx
 {
 
 SwapChain11::SwapChain11(Renderer11 *renderer, HWND window, HANDLE shareHandle,
-                         GLenum backBufferFormat, GLenum depthBufferFormat)
-    : mRenderer(renderer), SwapChain(window, shareHandle, backBufferFormat, depthBufferFormat)
+                         GLenum backBufferFormat, GLenum depthBufferFormat,
+                         bool isPrimarySwapChain)
+    : mRenderer(renderer),
+      SwapChain(window, shareHandle, backBufferFormat, depthBufferFormat),
+      mIsPrimarySwapChain(isPrimarySwapChain)
 {
     mSwapChain = NULL;
     mBackBufferTexture = NULL;
@@ -404,10 +407,10 @@ EGLint SwapChain11::reset(int backbufferWidth, int backbufferHeight, EGLint swap
         swapChainDesc.SampleDesc.Count = 1;
         swapChainDesc.SampleDesc.Quality = 0;
         swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        swapChainDesc.BufferCount = 1;
+        swapChainDesc.BufferCount = mIsPrimarySwapChain ? 2 : 1;
         swapChainDesc.OutputWindow = mWindow;
         swapChainDesc.Windowed = TRUE;
-        swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+        swapChainDesc.SwapEffect = mIsPrimarySwapChain ? DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL : DXGI_SWAP_EFFECT_DISCARD;
         swapChainDesc.Flags = 0;
 
         HRESULT result = factory->CreateSwapChain(device, &swapChainDesc, &mSwapChain);
