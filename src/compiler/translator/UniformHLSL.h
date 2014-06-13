@@ -1,0 +1,62 @@
+//
+// Copyright (c) 2014 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// UniformHLSL.h:
+//   Methods for GLSL to HLSL translation for uniforms and interface blocks.
+//
+
+#ifndef TRANSLATOR_UNIFORMHLSL_H_
+#define TRANSLATOR_UNIFORMHLSL_H_
+
+#include "common/shadervars.h"
+#include "compiler/translator/Types.h"
+
+namespace sh
+{
+class StructureHLSL;
+
+class UniformHLSL
+{
+  public:
+    UniformHLSL(StructureHLSL *structureHLSL, ShShaderOutput outputType);
+
+    void reserveUniformRegisters(unsigned int registerCount);
+    void reserveInterfaceBlockRegisters(unsigned int registerCount);
+    TString uniformsHeader(ShShaderOutput outputType, const ReferencedSymbols &referencedUniforms);
+    TString interfaceBlocksHeader(const ReferencedSymbols &referencedInterfaceBlocks);
+
+    // Used for direct index references
+    TString interfaceBlockInstanceString(const TInterfaceBlock& interfaceBlock, unsigned int arrayIndex);
+
+    const std::vector<gl::Uniform> &getUniforms() const { return mActiveUniforms; }
+    const std::vector<gl::InterfaceBlock> &getInterfaceBlocks() const { return mActiveInterfaceBlocks; }
+
+  private:
+
+    unsigned int mUniformRegister;
+    unsigned int mInterfaceBlockRegister;
+    unsigned int mSamplerRegister;
+    StructureHLSL *mStructureHLSL;
+    ShShaderOutput mOutputType;
+
+    TString interfaceBlockString(const TInterfaceBlock &interfaceBlock, unsigned int registerIndex, unsigned int arrayIndex);
+    TString interfaceBlockStructNameString(const TInterfaceBlock &interfaceBlock);
+    TString interfaceBlockFieldTypeString(const TField &field, TLayoutBlockStorage blockStorage);
+    TString interfaceBlockFieldString(const TInterfaceBlock &interfaceBlock, TLayoutBlockStorage blockStorage);
+    TString interfaceBlockStructString(const TInterfaceBlock &interfaceBlock);
+    TString interfaceBlockFieldString(const TInterfaceBlock &interfaceBlock, const TField &field);
+
+    // Returns the uniform's register index
+    int declareUniformAndAssignRegister(const TType &type, const TString &name);
+    void declareInterfaceBlockField(const TType &type, const TString &name, std::vector<gl::InterfaceBlockField>& output);
+    gl::Uniform declareUniformToList(const TType &type, const TString &name, int registerIndex, std::vector<gl::Uniform> *output);
+
+    std::vector<gl::Uniform> mActiveUniforms;
+    std::vector<gl::InterfaceBlock> mActiveInterfaceBlocks;
+};
+
+}
+
+#endif // TRANSLATOR_UNIFORMHLSL_H_
