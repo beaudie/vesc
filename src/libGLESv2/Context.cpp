@@ -1374,7 +1374,7 @@ void Context::setFramebufferZero(Framebuffer *buffer)
 
 void Context::setRenderbufferStorage(GLsizei width, GLsizei height, GLenum internalformat, GLsizei samples)
 {
-    const TextureCaps &formatCaps = getCaps().textureCaps.get(internalformat);
+    const TextureCaps &formatCaps = getTextureCaps(internalformat);
 
     RenderbufferStorage *renderbuffer = NULL;
 
@@ -3094,6 +3094,11 @@ int Context::getClientVersion() const
 const Caps &Context::getCaps() const
 {
     return mRenderer->getCaps();
+}
+
+const TextureCaps &Context::getTextureCaps(GLenum internalFormat) const
+{
+    return mRenderer->getTextureCaps(internalFormat);
 }
 
 int Context::getMajorShaderModel() const

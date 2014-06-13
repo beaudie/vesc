@@ -402,7 +402,7 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer *renderer, SwapChain11 *swapch
     mRenderTargetFormat = rtvDesc.Format;
 
     GLint internalFormat = d3d11_gl::GetInternalFormat(mTextureFormat, renderer->getCurrentClientVersion());
-    const gl::TextureCaps &formatCaps = renderer->getCaps().textureCaps.get(internalFormat);
+    const gl::TextureCaps &formatCaps = renderer->getTextureCaps(internalFormat);
 
     mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalFormat, formatCaps.colorRendering, renderer->getCurrentClientVersion());
     mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalFormat, formatCaps.colorRendering, renderer->getCurrentClientVersion());
@@ -430,7 +430,7 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer *renderer, GLenum internalform
     mDepthStencilFormat = gl_d3d11::GetDSVFormat(internalformat, clientVersion);
     mRenderTargetFormat = gl_d3d11::GetRTVFormat(internalformat, clientVersion);
 
-    const gl::TextureCaps &formatCaps = renderer->getCaps().textureCaps.get(internalformat);
+    const gl::TextureCaps &formatCaps = renderer->getTextureCaps(internalformat);
     mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalformat, formatCaps.colorRendering, clientVersion);
     mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalformat, formatCaps.colorRendering, clientVersion);
     mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalformat, formatCaps.colorRendering, clientVersion);
@@ -704,7 +704,7 @@ TextureStorage11_Cube::TextureStorage11_Cube(Renderer *renderer, GLenum internal
     mDepthStencilFormat = gl_d3d11::GetDSVFormat(internalformat, clientVersion);
     mRenderTargetFormat = gl_d3d11::GetRTVFormat(internalformat, clientVersion);
 
-    const gl::TextureCaps &formatCaps = renderer->getCaps().textureCaps.get(internalformat);
+    const gl::TextureCaps &formatCaps = renderer->getTextureCaps(internalformat);
     mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalformat, formatCaps.colorRendering, clientVersion);
     mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalformat, formatCaps.colorRendering, clientVersion);
     mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalformat, formatCaps.colorRendering, clientVersion);
@@ -1011,7 +1011,7 @@ TextureStorage11_3D::TextureStorage11_3D(Renderer *renderer, GLenum internalform
     mDepthStencilFormat = gl_d3d11::GetDSVFormat(internalformat, clientVersion);
     mRenderTargetFormat = gl_d3d11::GetRTVFormat(internalformat, clientVersion);
 
-    const gl::TextureCaps &formatCaps = renderer->getCaps().textureCaps.get(internalformat);
+    const gl::TextureCaps &formatCaps = renderer->getTextureCaps(internalformat);
     mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalformat, formatCaps.colorRendering, clientVersion);
     mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalformat, formatCaps.colorRendering, clientVersion);
     mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalformat, formatCaps.colorRendering, clientVersion);
@@ -1318,7 +1318,7 @@ TextureStorage11_2DArray::TextureStorage11_2DArray(Renderer *renderer, GLenum in
     mDepthStencilFormat = gl_d3d11::GetDSVFormat(internalformat, clientVersion);
     mRenderTargetFormat = gl_d3d11::GetRTVFormat(internalformat, clientVersion);
 
-    const gl::TextureCaps &formatCaps = renderer->getCaps().textureCaps.get(internalformat);
+    const gl::TextureCaps &formatCaps = renderer->getTextureCaps(internalformat);
     mSwizzleTextureFormat = gl_d3d11::GetSwizzleTexFormat(internalformat, formatCaps.colorRendering, clientVersion);
     mSwizzleShaderResourceFormat = gl_d3d11::GetSwizzleSRVFormat(internalformat, formatCaps.colorRendering, clientVersion);
     mSwizzleRenderTargetFormat = gl_d3d11::GetSwizzleRTVFormat(internalformat, formatCaps.colorRendering, clientVersion);
