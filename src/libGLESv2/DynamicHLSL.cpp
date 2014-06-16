@@ -459,6 +459,59 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(const std::string
     return pixelHLSL;
 }
 
+std::string DynamicHLSL::generateVaryingLinkHLSL(int startRegisters, bool hlsl4, bool fragCoord, bool pointCoord,
+                                                 bool pointSize, bool pixelShader, const std::string &varyingHLSL)
+{
+    const std::string &varyingSemantic = (pointSize && !hlsl4 ? "COLOR" : "TEXCOORD");
+
+    int reservedRegisterIndex = startRegisters;
+
+    std::string linkHLSL = "{\n";
+
+    if (hlsl4 && pixelShader)
+    {
+        linkHLSL += "    float4 dx_VPos : SV_Position;\n";
+    }
+    else if (hlsl4)
+    {
+        linkHLSL += "    float4 dx_Position : SV_Position;\n";
+    }
+    else if (pixelShader)
+    {
+        linkHLSL += "    float2 dx_VPos : VPOS;\n";
+    }
+    else
+    {
+        linkHLSL += "    float4 dx_Position : POSITION;\n";
+    }
+
+    const std::string &glPositionSemantic = varyingSemantic + Str(reservedRegisterIndex++);
+    linkHLSL += "    float4 gl_Position : " + glPositionSemantic + ";\n";
+
+    if (fragCoord)
+    {
+        const std::string &fragCoordSemantic = varyingSemantic + Str(reservedRegisterIndex++);
+        linkHLSL += "    float4 gl_FragCoord : " + fragCoordSemantic + ";\n";
+    }
+
+    if (pointCoord)
+    {
+        const std::string &pointCoordSemantic = varyingSemantic + Str(reservedRegisterIndex++);
+        linkHLSL += "    float2 gl_PointCoord : " + pointCoordSemantic + ";\n";
+    }
+
+    linkHLSL += varyingHLSL;
+
+    if (pointSize)
+    {
+        linkHLSL += "    float gl_PointSize : PSIZE;\n";
+    }
+
+    linkHLSL += "};\n";
+
+    return linkHLSL;
+}
+
 bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const VaryingPacking packing,
                                          std::string& pixelHLSL, std::string& vertexHLSL,
                                          FragmentShader *fragmentShader, VertexShader *vertexShader,
@@ -504,9 +557,6 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
     }
 
     std::string varyingSemantic = (vertexShader->mUsesPointSize && shaderModel == 3) ? "COLOR" : "TEXCOORD";
-    std::string targetSemantic = (shaderModel >= 4) ? "SV_Target" : "COLOR";
-    std::string dxPositionSemantic = (shaderModel >= 4) ? "SV_Position" : "POSITION";
-
     std::string varyingHLSL = generateVaryingHLSL(vertexShader, varyingSemantic, linkedVaryings);
 
     // special varyings that use reserved registers
@@ -544,40 +594,24 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
     // Add stub string to be replaced when shader is dynamically defined by its layout
     vertexHLSL += "\n" + VERTEX_ATTRIBUTE_STUB_STRING + "\n";
 
-    vertexHLSL += "struct VS_OUTPUT\n"
-                  "{\n";
+    vertexHLSL += "struct VS_OUTPUT\n" +
+                  generateVaryingLinkHLSL(registers, shaderModel >= 4, fragmentShader->mUsesFragCoord,
+                                          false, vertexShader->mUsesPointSize,
+                                          false, varyingHLSL);
 
-    if (shaderModel < 4)
-    {
-        vertexHLSL += "    float4 dx_Position : " + dxPositionSemantic + ";\n";
-        vertexHLSL += "    float4 gl_Position : " + glPositionSemantic + Str(glPositionSemanticIndex) + ";\n";
-        linkedVaryings->push_back(LinkedVarying("gl_Position", GL_FLOAT_VEC4, 1, glPositionSemantic, glPositionSemanticIndex, 1));
-
-    }
-
-    vertexHLSL += varyingHLSL;
+    linkedVaryings->push_back(LinkedVarying("gl_Position", GL_FLOAT_VEC4, 1, glPositionSemantic, glPositionSemanticIndex, 1));
 
     if (fragmentShader->mUsesFragCoord)
     {
-        vertexHLSL += "    float4 gl_FragCoord : " + fragCoordSemantic + Str(fragCoordSemanticIndex) + ";\n";
         linkedVaryings->push_back(LinkedVarying("gl_FragCoord", GL_FLOAT_VEC4, 1, fragCoordSemantic, fragCoordSemanticIndex, 1));
     }
 
-    if (vertexShader->mUsesPointSize && shaderModel >= 3)
+    if (vertexShader->mUsesPointSize)
     {
-        vertexHLSL += "    float gl_PointSize : PSIZE;\n";
         linkedVaryings->push_back(LinkedVarying("gl_PointSize", GL_FLOAT, 1, "PSIZE", 0, 1));
     }
 
-    if (shaderModel >= 4)
-    {
-        vertexHLSL += "    float4 dx_Position : " + dxPositionSemantic + ";\n";
-        vertexHLSL += "    float4 gl_Position : " + glPositionSemantic + Str(glPositionSemanticIndex) + ";\n";
-        linkedVaryings->push_back(LinkedVarying("gl_Position", GL_FLOAT_VEC4, 1, glPositionSemantic, glPositionSemanticIndex, 1));
-    }
-
-    vertexHLSL += "};\n"
-                  "\n"
+    vertexHLSL += "\n"
                   "VS_OUTPUT main(VS_INPUT input)\n"
                   "{\n"
                   "    initAttributes(input);\n";
@@ -683,41 +717,11 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
                   "    return output;\n"
                   "}\n";
 
-    pixelHLSL += "struct PS_INPUT\n"
-                 "{\n";
-
-    pixelHLSL += varyingHLSL;
-
-    if (fragmentShader->mUsesFragCoord)
-    {
-        pixelHLSL += "    float4 gl_FragCoord : " + fragCoordSemantic + Str(fragCoordSemanticIndex) + ";\n";
-    }
-
-    if (fragmentShader->mUsesPointCoord && shaderModel >= 3)
-    {
-        pixelHLSL += "    float2 gl_PointCoord : " + pointCoordSemantic + Str(pointCoordSemanticIndex) + ";\n";
-    }
-
-    // Must consume the PSIZE element if the geometry shader is not active
-    // We won't know if we use a GS until we draw
-    if (vertexShader->mUsesPointSize && shaderModel >= 4)
-    {
-        pixelHLSL += "    float gl_PointSize : PSIZE;\n";
-    }
-
-    if (fragmentShader->mUsesFragCoord)
-    {
-        if (shaderModel >= 4)
-        {
-            pixelHLSL += "    float4 dx_VPos : SV_Position;\n";
-        }
-        else if (shaderModel >= 3)
-        {
-            pixelHLSL += "    float2 dx_VPos : VPOS;\n";
-        }
-    }
-
-    pixelHLSL += "};\n";
+    pixelHLSL += "struct PS_INPUT\n" +
+                 generateVaryingLinkHLSL(registers, shaderModel >= 4, fragmentShader->mUsesFragCoord,
+                                         fragmentShader->mUsesPointCoord,
+                                         vertexShader->mUsesPointSize && shaderModel >= 4,
+                                         true, varyingHLSL);
 
     if (shaderVersion < 300)
     {
@@ -924,6 +928,8 @@ std::string DynamicHLSL::generatePointSpriteHLSL(int registers, FragmentShader *
 
     int reservedRegisterIndex = registers;
 
+    std::string glPositionSemantic = varyingSemantic + Str(reservedRegisterIndex++);
+
     if (fragmentShader->mUsesFragCoord)
     {
         fragCoordSemantic = varyingSemantic + Str(reservedRegisterIndex++);
@@ -934,43 +940,18 @@ std::string DynamicHLSL::generatePointSpriteHLSL(int registers, FragmentShader *
         pointCoordSemantic = varyingSemantic + Str(reservedRegisterIndex++);
     }
 
+    std::string varyingHLSL = generateVaryingHLSL(vertexShader, varyingSemantic, NULL);
+    std::string inLinkHLSL = generateVaryingLinkHLSL(registers, true, fragmentShader->mUsesFragCoord,
+                                                     false, true, false, varyingHLSL);
+    std::string outLinkHLSL = generateVaryingLinkHLSL(registers, true, fragmentShader->mUsesFragCoord,
+                                                      fragmentShader->mUsesPointCoord,
+                                                      true, false, varyingHLSL);
+
     geomHLSL += "uniform float4 dx_ViewCoords : register(c1);\n"
                 "\n"
-                "struct GS_INPUT\n"
-                "{\n";
-
-    std::string varyingHLSL = generateVaryingHLSL(vertexShader, varyingSemantic, NULL);
-
-    geomHLSL += varyingHLSL;
-
-    if (fragmentShader->mUsesFragCoord)
-    {
-        geomHLSL += "    float4 gl_FragCoord : " + fragCoordSemantic + ";\n";
-    }
-
-    geomHLSL += "    float gl_PointSize : PSIZE;\n"
-                "    float4 gl_Position : SV_Position;\n"
-                "};\n"
+                "struct GS_INPUT\n" + inLinkHLSL + "\n" +
+                "struct GS_OUTPUT\n" + outLinkHLSL + "\n" +
                 "\n"
-                "struct GS_OUTPUT\n"
-                "{\n";
-
-    geomHLSL += varyingHLSL;
-
-    if (fragmentShader->mUsesFragCoord)
-    {
-        geomHLSL += "    float4 gl_FragCoord : " + fragCoordSemantic + ";\n";
-    }
-
-    if (fragmentShader->mUsesPointCoord)
-    {
-        geomHLSL += "    float2 gl_PointCoord : " + pointCoordSemantic + ";\n";
-    }
-
-    geomHLSL +=   "    float gl_PointSize : PSIZE;\n"
-                  "    float4 gl_Position : SV_Position;\n"
-                  "};\n"
-                  "\n"
                   "static float2 pointSpriteCorners[] = \n"
                   "{\n"
                   "    float2( 0.5f, -0.5f),\n"
@@ -994,6 +975,7 @@ std::string DynamicHLSL::generatePointSpriteHLSL(int registers, FragmentShader *
                   "void main(point GS_INPUT input[1], inout TriangleStream<GS_OUTPUT> outStream)\n"
                   "{\n"
                   "    GS_OUTPUT output = (GS_OUTPUT)0;\n"
+                  "    output.gl_Position = input[0].gl_Position;\n";
                   "    output.gl_PointSize = input[0].gl_PointSize;\n";
 
     for (int r = 0; r < registers; r++)
@@ -1008,13 +990,13 @@ std::string DynamicHLSL::generatePointSpriteHLSL(int registers, FragmentShader *
 
     geomHLSL += "    \n"
                 "    float gl_PointSize = clamp(input[0].gl_PointSize, minPointSize, maxPointSize);\n"
-                "    float4 gl_Position = input[0].gl_Position;\n"
-                "    float2 viewportScale = float2(1.0f / dx_ViewCoords.x, 1.0f / dx_ViewCoords.y) * gl_Position.w;\n";
+                "    float4 dx_Position = input[0].dx_Position;\n"
+                "    float2 viewportScale = float2(1.0f / dx_ViewCoords.x, 1.0f / dx_ViewCoords.y) * dx_Position.w;\n";
 
     for (int corner = 0; corner < 4; corner++)
     {
         geomHLSL += "    \n"
-                    "    output.gl_Position = gl_Position + float4(pointSpriteCorners[" + Str(corner) + "] * viewportScale * gl_PointSize, 0.0f, 0.0f);\n";
+                    "    output.dx_Position = dx_Position + float4(pointSpriteCorners[" + Str(corner) + "] * viewportScale * gl_PointSize, 0.0f, 0.0f);\n";
 
         if (fragmentShader->mUsesPointCoord)
         {

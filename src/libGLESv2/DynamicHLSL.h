@@ -69,6 +69,8 @@ class DynamicHLSL
 
     rx::Renderer *const mRenderer;
 
+    static std::string generateVaryingLinkHLSL(int startRegisters, bool hlsl4, bool fragCoord, bool pointCoord,
+                                               bool pointSize, bool pixelShader, const std::string &varyingHLSL);
     std::string generateVaryingHLSL(VertexShader *shader, const std::string &varyingSemantic,
                                     std::vector<LinkedVarying> *linkedVaryings) const;
     void defineOutputVariables(FragmentShader *fragmentShader, std::map<int, VariableLocation> *programOutputVars) const;
