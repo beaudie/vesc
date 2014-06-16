@@ -59,6 +59,11 @@ const gl::TextureCaps &Renderer::getTextureCaps(GLenum internalFormat) const
     return getCaps().textureCaps.get(internalFormat);
 }
 
+const gl::Extensions &Renderer::getExtensions() const
+{
+    return getCaps().extensions;
+}
+
 }
 
 extern "C"

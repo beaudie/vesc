@@ -334,15 +334,15 @@ void Context::makeCurrent(egl::Surface *surface)
               mMaxRenderbufferDimension);
 
         mNumCompressedTextureFormats = 0;
-        if (getCaps().extensions.textureCompressionDXT1)
+        if (getExtensions().textureCompressionDXT1)
         {
             mNumCompressedTextureFormats += 2;
         }
-        if (getCaps().extensions.textureCompressionDXT3)
+        if (getExtensions().textureCompressionDXT3)
         {
             mNumCompressedTextureFormats += 1;
         }
-        if (getCaps().extensions.textureCompressionDXT5)
+        if (getExtensions().textureCompressionDXT5)
         {
             mNumCompressedTextureFormats += 1;
         }
@@ -1660,8 +1660,8 @@ void Context::getFloatv(GLenum pname, GLfloat *params)
         params[3] = mState.blendColor.alpha;
         break;
       case GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT:
-        ASSERT(getCaps().extensions.textureFilterAnisotropic);
-        *params = getCaps().extensions.maxTextureAnisotropy;
+        ASSERT(getExtensions().textureFilterAnisotropic);
+        *params = getExtensions().maxTextureAnisotropy;
         break;
       default:
         UNREACHABLE();
@@ -1809,16 +1809,16 @@ void Context::getIntegerv(GLenum pname, GLint *params)
         break;
       case GL_COMPRESSED_TEXTURE_FORMATS:
         {
-            if (getCaps().extensions.textureCompressionDXT1)
+            if (getExtensions().textureCompressionDXT1)
             {
                 *params++ = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
                 *params++ = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
             }
-            if (getCaps().extensions.textureCompressionDXT3)
+            if (getExtensions().textureCompressionDXT3)
             {
                 *params++ = GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE;
             }
-            if (getCaps().extensions.textureCompressionDXT5)
+            if (getExtensions().textureCompressionDXT5)
             {
                 *params++ = GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE;
             }
@@ -2140,7 +2140,7 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
         return true;
       case GL_MAX_SAMPLES_ANGLE:
         {
-            if (getCaps().extensions.framebufferMultisample)
+            if (getExtensions().framebufferMultisample)
             {
                 *type = GL_INT;
                 *numParams = 1;
@@ -2154,7 +2154,7 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
       case GL_PIXEL_PACK_BUFFER_BINDING:
       case GL_PIXEL_UNPACK_BUFFER_BINDING:
         {
-            if (getCaps().extensions.pixelBufferObject)
+            if (getExtensions().pixelBufferObject)
             {
                 *type = GL_INT;
                 *numParams = 1;
@@ -2228,7 +2228,7 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
         }
         return true;
       case GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT:
-        if (!getCaps().extensions.maxTextureAnisotropy)
+        if (!getExtensions().maxTextureAnisotropy)
         {
             return false;
         }
@@ -3103,6 +3103,11 @@ const TextureCaps &Context::getTextureCaps(GLenum internalFormat) const
     return mRenderer->getTextureCaps(internalFormat);
 }
 
+const Extensions &Context::getExtensions() const
+{
+    return mRenderer->getExtensions();
+}
+
 int Context::getMajorShaderModel() const
 {
     return mMajorShaderModel;
@@ -3573,7 +3578,7 @@ void Context::initExtensionStrings()
 {
     std::ostringstream combinedStringStream;
 
-    std::vector<std::string> extensions = getCaps().extensions.getStrings(mClientVersion);
+    std::vector<std::string> extensions = getExtensions().getStrings(mClientVersion);
     for (size_t i = 0; i < extensions.size(); i++)
     {
         combinedStringStream << extensions[i] << " ";

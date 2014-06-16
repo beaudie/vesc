@@ -516,7 +516,7 @@ GLenum Framebuffer::completeness() const
             GLenum internalformat = mDepthbuffer->getInternalFormat();
 
             // depth texture attachments require OES/ANGLE_depth_texture
-            if (!mRenderer->getCaps().extensions.depthTextures)
+            if (!mRenderer->getExtensions().depthTextures)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
@@ -571,7 +571,7 @@ GLenum Framebuffer::completeness() const
 
             // texture stencil attachments come along as part
             // of OES_packed_depth_stencil + OES/ANGLE_depth_texture
-            if (!mRenderer->getCaps().extensions.depthTextures)
+            if (!mRenderer->getExtensions().depthTextures)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
