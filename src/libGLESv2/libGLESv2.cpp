@@ -23,6 +23,7 @@
 #include "libGLESv2/Context.h"
 #include "libGLESv2/VertexArray.h"
 #include "libGLESv2/TransformFeedback.h"
+#include "libGLESv2/FramebufferAttachment.h"
 
 #include "libGLESv2/validationES.h"
 #include "libGLESv2/validationES2.h"
@@ -2598,7 +2599,7 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
             GLuint attachmentHandle;
             GLuint attachmentLevel;
             GLuint attachmentLayer;
-            gl::FramebufferAttachment *attachmentObject;
+            const gl::FramebufferAttachment *attachmentObject;
 
             if (framebufferHandle == 0)
             {
