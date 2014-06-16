@@ -402,6 +402,7 @@ class Context
 
     const Caps &getCaps() const;
     const TextureCaps &getTextureCaps(GLenum internlFormat) const;
+    const Extensions &getExtensions() const;
 
     int getMajorShaderModel() const;
     float getMaximumPointSize() const;

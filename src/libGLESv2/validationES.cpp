@@ -112,7 +112,7 @@ bool ValidBufferTarget(const Context *context, GLenum target)
 
       case GL_PIXEL_PACK_BUFFER:
       case GL_PIXEL_UNPACK_BUFFER:
-        return context->getCaps().extensions.pixelBufferObject;
+        return context->getExtensions().pixelBufferObject;
 
       case GL_COPY_READ_BUFFER:
       case GL_COPY_WRITE_BUFFER:
@@ -174,7 +174,7 @@ bool ValidImageSize(const gl::Context *context, GLenum target, GLint level, GLsi
         return false;
     }
 
-    if (!context->getCaps().extensions.textureNPOT && (level != 0 || !gl::isPow2(width) || !gl::isPow2(height) || !gl::isPow2(depth)))
+    if (!context->getExtensions().textureNPOT && (level != 0 || !gl::isPow2(width) || !gl::isPow2(height) || !gl::isPow2(depth)))
     {
         return false;
     }
@@ -729,7 +729,7 @@ bool ValidateTexParamParameters(gl::Context *context, GLenum pname, GLint param)
         break;
 
       case GL_TEXTURE_MAX_ANISOTROPY_EXT:
-        if (!context->getCaps().extensions.textureFilterAnisotropic)
+        if (!context->getExtensions().textureFilterAnisotropic)
         {
             return gl::error(GL_INVALID_ENUM, false);
         }
@@ -1273,7 +1273,7 @@ bool ValidateCopyTexImageParametersBase(gl::Context* context, GLenum target, GLi
             return gl::error(GL_INVALID_VALUE, false);
         }
 
-        if (!IsValidInternalFormat(internalformat, context->getCaps().extensions, context->getClientVersion()))
+        if (!IsValidInternalFormat(internalformat, context->getExtensions(), context->getClientVersion()))
         {
             return gl::error(GL_INVALID_ENUM, false);
         }
@@ -1355,7 +1355,7 @@ bool ValidateDrawElements(const gl::Context *context, GLenum mode, GLsizei count
       case GL_UNSIGNED_SHORT:
         break;
       case GL_UNSIGNED_INT:
-        if (!context->getCaps().extensions.elementIndexUint)
+        if (!context->getExtensions().elementIndexUint)
         {
             return gl::error(GL_INVALID_ENUM, false);
         }

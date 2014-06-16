@@ -428,7 +428,7 @@ int Texture::immutableLevelCount()
 
 GLint Texture::creationLevels(GLsizei width, GLsizei height, GLsizei depth) const
 {
-    if ((isPow2(width) && isPow2(height) && isPow2(depth)) || mRenderer->getCaps().extensions.textureNPOT)
+    if ((isPow2(width) && isPow2(height) && isPow2(depth)) || mRenderer->getExtensions().textureNPOT)
     {
         // Maximum number of levels
         return log2(std::max(std::max(width, height), depth)) + 1;
@@ -775,7 +775,7 @@ bool Texture2D::isSamplerComplete(const SamplerState &samplerState) const
         }
     }
 
-    bool npotSupport = mRenderer->getCaps().extensions.textureNPOT;
+    bool npotSupport = mRenderer->getExtensions().textureNPOT;
 
     if (!npotSupport)
     {
@@ -1206,7 +1206,7 @@ bool TextureCubeMap::isSamplerComplete(const SamplerState &samplerState) const
         }
     }
 
-    if (!isPow2(size) && !mRenderer->getCaps().extensions.textureNPOT)
+    if (!isPow2(size) && !mRenderer->getExtensions().textureNPOT)
     {
         if (samplerState.wrapS != GL_CLAMP_TO_EDGE || samplerState.wrapT != GL_CLAMP_TO_EDGE || mipmapping)
         {

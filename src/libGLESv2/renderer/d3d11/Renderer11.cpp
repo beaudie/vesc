@@ -2009,7 +2009,7 @@ bool Renderer11::getShareHandleSupport() const
     // We only currently support share handles with BGRA surfaces, because
     // chrome needs BGRA. Once chrome fixes this, we should always support them.
     // PIX doesn't seem to support using share handles, so disable them.
-    return getCaps().extensions.textureFormatBGRA8888 && !gl::perfActive();
+    return getExtensions().textureFormatBGRA8888 && !gl::perfActive();
 }
 
 bool Renderer11::getPostSubBufferSupport() const

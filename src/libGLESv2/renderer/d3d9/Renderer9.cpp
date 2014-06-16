@@ -661,7 +661,7 @@ void Renderer9::setSamplerState(gl::SamplerType type, int index, const gl::Sampl
         mDevice->SetSamplerState(d3dSampler, D3DSAMP_MINFILTER, d3dMinFilter);
         mDevice->SetSamplerState(d3dSampler, D3DSAMP_MIPFILTER, d3dMipFilter);
         mDevice->SetSamplerState(d3dSampler, D3DSAMP_MAXMIPLEVEL, samplerState.baseLevel);
-        if (getCaps().extensions.textureFilterAnisotropic)
+        if (getExtensions().textureFilterAnisotropic)
         {
             mDevice->SetSamplerState(d3dSampler, D3DSAMP_MAXANISOTROPY, (DWORD)samplerState.maxAnisotropy);
         }
@@ -1398,7 +1398,7 @@ void Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices, 
 
     unsigned int startIndex = 0;
 
-    if (getCaps().extensions.elementIndexUint)
+    if (getExtensions().elementIndexUint)
     {
         if (!mLineLoopIB)
         {

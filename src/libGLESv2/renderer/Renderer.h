@@ -144,6 +144,7 @@ class Renderer
     // Renderer capabilities (virtual because it is used by egl::Display, do not override)
     virtual const gl::Caps &getCaps() const;
     const gl::TextureCaps &getTextureCaps(GLenum internalFormat) const;
+    virtual const gl::Extensions &getExtensions() const;
 
     virtual DWORD getAdapterVendor() const = 0;
     virtual std::string getRendererDescription() const = 0;
