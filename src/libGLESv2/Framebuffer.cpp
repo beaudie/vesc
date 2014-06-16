@@ -432,7 +432,7 @@ GLenum Framebuffer::completeness() const
             }
 
             GLenum internalformat = colorbuffer->getInternalFormat();
-            const TextureCaps &formatCaps = mRenderer->getCaps().textureCaps.get(internalformat);
+            const TextureCaps &formatCaps = mRenderer->getTextureCaps(internalformat);
             if (!colorbuffer->isTexture())
             {
                 if (!formatCaps.colorRendering)
@@ -510,7 +510,7 @@ GLenum Framebuffer::completeness() const
         }
 
         GLenum internalformat = mDepthbuffer->getInternalFormat();
-        const TextureCaps &formatCaps = mRenderer->getCaps().textureCaps.get(internalformat);
+        const TextureCaps &formatCaps = mRenderer->getTextureCaps(internalformat);
         if (!mDepthbuffer->isTexture())
         {
             if (!formatCaps.depthRendering)
@@ -564,7 +564,7 @@ GLenum Framebuffer::completeness() const
         }
 
         GLenum internalformat = mStencilbuffer->getInternalFormat();
-        const TextureCaps &formatCaps = mRenderer->getCaps().textureCaps.get(internalformat);
+        const TextureCaps &formatCaps = mRenderer->getTextureCaps(internalformat);
         if (!mStencilbuffer->isTexture())
         {
             if (!formatCaps.stencilRendering)
