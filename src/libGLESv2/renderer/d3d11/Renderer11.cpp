@@ -2823,7 +2823,7 @@ bool Renderer11::supportsFastCopyBufferToTexture(GLenum internalFormat) const
     }
 
     // We cannot support direct copies to non-color-renderable formats
-    if (!getCaps().textureCaps.get(internalFormat).colorRendering)
+    if (!getTextureCaps(internalFormat).colorRendering)
     {
         return false;
     }

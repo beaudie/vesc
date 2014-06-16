@@ -401,6 +401,7 @@ class Context
     virtual int getClientVersion() const;
 
     const Caps &getCaps() const;
+    const TextureCaps &getTextureCaps(GLenum internlFormat) const;
 
     int getMajorShaderModel() const;
     float getMaximumPointSize() const;

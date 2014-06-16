@@ -1997,7 +1997,7 @@ void __stdcall glGenerateMipmap(GLenum target)
             }
 
             GLenum internalFormat = texture->getBaseLevelInternalFormat();
-            const gl::TextureCaps &formatCaps = context->getCaps().textureCaps.get(internalFormat);
+            const gl::TextureCaps &formatCaps = context->getTextureCaps(internalFormat);
 
             // GenerateMipmap should not generate an INVALID_OPERATION for textures created with
             // unsized formats or that are color renderable and filterable.  Since we do not track if
@@ -9653,7 +9653,7 @@ void __stdcall glGetInternalformativ(GLenum target, GLenum internalformat, GLenu
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            const gl::TextureCaps &formatCaps = context->getCaps().textureCaps.get(internalformat);
+            const gl::TextureCaps &formatCaps = context->getTextureCaps(internalformat);
             if (!formatCaps.colorRendering && !formatCaps.depthRendering && !formatCaps.stencilRendering)
             {
                 return gl::error(GL_INVALID_ENUM);
