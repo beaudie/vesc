@@ -422,15 +422,10 @@ GLenum Framebuffer::completeness() const
 
     for (unsigned int colorAttachment = 0; colorAttachment < IMPLEMENTATION_MAX_DRAW_BUFFERS; colorAttachment++)
     {
-        if (mColorbuffers[colorAttachment])
+        const FramebufferAttachment *colorbuffer = mColorbuffers[colorAttachment];
+
+        if (colorbuffer)
         {
-            const FramebufferAttachment *colorbuffer = mColorbuffers[colorAttachment];
-
-            if (colorbuffer->type() == GL_NONE)
-            {
-                return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
-            }
-
             if (colorbuffer->getWidth() == 0 || colorbuffer->getHeight() == 0)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
@@ -438,14 +433,14 @@ GLenum Framebuffer::completeness() const
 
             GLenum internalformat = colorbuffer->getInternalFormat();
             const TextureCaps &formatCaps = mRenderer->getCaps().textureCaps.get(internalformat);
-            if (colorbuffer->type() == GL_RENDERBUFFER)
+            if (!colorbuffer->isTexture())
             {
                 if (!formatCaps.colorRendering)
                 {
                     return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
                 }
             }
-            else if (IsInternalTextureTarget(colorbuffer->type(), mRenderer->getCurrentClientVersion()))
+            else
             {
                 if (!formatCaps.colorRendering)
                 {
@@ -457,11 +452,6 @@ GLenum Framebuffer::completeness() const
                 {
                     return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
                 }
-            }
-            else
-            {
-                UNREACHABLE();
-                return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
 
             if (!missingAttachment)
@@ -521,14 +511,14 @@ GLenum Framebuffer::completeness() const
 
         GLenum internalformat = mDepthbuffer->getInternalFormat();
         const TextureCaps &formatCaps = mRenderer->getCaps().textureCaps.get(internalformat);
-        if (mDepthbuffer->type() == GL_RENDERBUFFER)
+        if (!mDepthbuffer->isTexture())
         {
             if (!formatCaps.depthRendering)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
         }
-        else if (IsInternalTextureTarget(mDepthbuffer->type(), mRenderer->getCurrentClientVersion()))
+        else
         {
             GLenum internalformat = mDepthbuffer->getInternalFormat();
 
@@ -547,11 +537,6 @@ GLenum Framebuffer::completeness() const
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
-        }
-        else
-        {
-            UNREACHABLE();
-            return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
         }
 
         if (missingAttachment)
@@ -580,14 +565,14 @@ GLenum Framebuffer::completeness() const
 
         GLenum internalformat = mStencilbuffer->getInternalFormat();
         const TextureCaps &formatCaps = mRenderer->getCaps().textureCaps.get(internalformat);
-        if (mStencilbuffer->type() == GL_RENDERBUFFER)
+        if (!mStencilbuffer->isTexture())
         {
             if (!formatCaps.stencilRendering)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
         }
-        else if (IsInternalTextureTarget(mStencilbuffer->type(), mRenderer->getCurrentClientVersion()))
+        else
         {
             GLenum internalformat = mStencilbuffer->getInternalFormat();
 
@@ -607,11 +592,6 @@ GLenum Framebuffer::completeness() const
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
-        }
-        else
-        {
-            UNREACHABLE();
-            return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
         }
 
         if (missingAttachment)
