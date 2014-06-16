@@ -139,7 +139,6 @@
     <ClInclude Include="..\..\src\libGLESv2\ProgramBinary.h"/>
     <ClInclude Include="..\..\src\libGLESv2\constants.h"/>
     <ClInclude Include="..\..\src\libGLESv2\Buffer.h"/>
-    <ClInclude Include="..\..\src\libGLESv2\RenderbufferProxySet.h"/>
     <ClInclude Include="..\..\src\libGLESv2\validationES.h"/>
     <ClInclude Include="..\..\src\libGLESv2\queryconversions.h"/>
     <ClInclude Include="..\..\src\libGLESv2\validationES3.h"/>
@@ -299,7 +298,6 @@
     <ClCompile Include="..\..\src\libGLESv2\DynamicHLSL.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\HandleAllocator.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\queryconversions.cpp"/>
-    <ClCompile Include="..\..\src\libGLESv2\RenderbufferProxySet.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Fence.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\validationES.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Renderbuffer.cpp"/>
