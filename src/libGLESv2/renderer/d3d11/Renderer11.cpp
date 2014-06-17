@@ -2639,7 +2639,7 @@ ShaderExecutable *Renderer11::loadExecutable(const void *function, size_t length
                         entry.SemanticName = varying.semanticName.c_str();
                         entry.SemanticIndex = varying.semanticIndex + j;
                         entry.StartComponent = 0;
-                        entry.ComponentCount = gl::VariableRowCount(type);
+                        entry.ComponentCount = gl::VariableRowCount(varying.type);
                         entry.OutputSlot = (separatedOutputBuffers ? i : 0);
                         soDeclaration.push_back(entry);
                     }

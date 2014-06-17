@@ -499,7 +499,10 @@ void *BufferStorage11::map(GLbitfield access)
     ASSERT(!mMappedStorage);
 
     TypedBufferStorage11 *latestStorage = getLatestStorage();
-    ASSERT(latestStorage);
+    if (!latestStorage)
+    {
+        latestStorage = getStagingBuffer();
+    }
 
     if (latestStorage->getUsage() == BUFFER_USAGE_PIXEL_PACK ||
         latestStorage->getUsage() == BUFFER_USAGE_STAGING)
