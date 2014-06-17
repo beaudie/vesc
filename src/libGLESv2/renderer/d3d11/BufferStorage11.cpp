@@ -166,10 +166,17 @@ BufferStorage11::BufferStorage11(Renderer11 *renderer)
 
 BufferStorage11::~BufferStorage11()
 {
+    deleteTypedBuffers();
+}
+
+void BufferStorage11::deleteTypedBuffers()
+{
     for (auto it = mTypedBuffers.begin(); it != mTypedBuffers.end(); it++)
     {
         SafeDelete(it->second);
     }
+
+    mTypedBuffers.clear();
 }
 
 BufferStorage11 *BufferStorage11::makeBufferStorage11(BufferStorage *bufferStorage)
@@ -296,6 +303,8 @@ void BufferStorage11::copyData(BufferStorage* sourceStorage, size_t size, size_t
 
 void BufferStorage11::clear()
 {
+    deleteTypedBuffers();
+
     mSize = 0;
     mResolvedDataRevision = 0;
 }
@@ -499,7 +508,10 @@ void *BufferStorage11::map(GLbitfield access)
     ASSERT(!mMappedStorage);
 
     TypedBufferStorage11 *latestStorage = getLatestStorage();
-    ASSERT(latestStorage);
+    if (!latestStorage)
+    {
+        latestStorage = getStagingBuffer();
+    }
 
     if (latestStorage->getUsage() == BUFFER_USAGE_PIXEL_PACK ||
         latestStorage->getUsage() == BUFFER_USAGE_STAGING)
@@ -515,6 +527,12 @@ void *BufferStorage11::map(GLbitfield access)
     {
         // Out-of-memory
         return NULL;
+    }
+
+    if ((access & GL_MAP_WRITE_BIT) > 0)
+    {
+        // Update the data revision immediately, since the data might be changed at any time
+        mMappedStorage->setDataRevision(mMappedStorage->getDataRevision() + 1);
     }
 
     return mMappedStorage->map(access);
