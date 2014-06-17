@@ -396,10 +396,10 @@ void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltI
     fields->push_back(diff);
     TStructure *depthRangeStruct = new TStructure(NewPoolTString("gl_DepthRangeParameters"), fields);
     TVariable *depthRangeParameters = new TVariable(&depthRangeStruct->name(), depthRangeStruct, true);
-    symbolTable.insert(*depthRangeParameters);
+    symbolTable.insert(depthRangeParameters);
     TVariable *depthRange = new TVariable(NewPoolTString("gl_DepthRange"), TType(depthRangeStruct));
     depthRange->setQualifier(EvqUniform);
-    symbolTable.insert(*depthRange);
+    symbolTable.insert(depthRange);
 
     //
     // Implementation dependent built-in constants.
@@ -428,31 +428,31 @@ void IdentifyBuiltIns(ShShaderType type, ShShaderSpec spec,
     //
     switch(type) {
     case SH_FRAGMENT_SHADER:
-        symbolTable.insert(*new TVariable(NewPoolTString("gl_FragCoord"),                       TType(EbtFloat, EbpMedium, EvqFragCoord,   4)));
-        symbolTable.insert(*new TVariable(NewPoolTString("gl_FrontFacing"),                     TType(EbtBool,  EbpUndefined, EvqFrontFacing, 1)));
-        symbolTable.insert(*new TVariable(NewPoolTString("gl_PointCoord"),                      TType(EbtFloat, EbpMedium, EvqPointCoord,  2)));
+        symbolTable.insert(new TVariable(NewPoolTString("gl_FragCoord"),                       TType(EbtFloat, EbpMedium, EvqFragCoord,   4)));
+        symbolTable.insert(new TVariable(NewPoolTString("gl_FrontFacing"),                     TType(EbtBool,  EbpUndefined, EvqFrontFacing, 1)));
+        symbolTable.insert(new TVariable(NewPoolTString("gl_PointCoord"),                      TType(EbtFloat, EbpMedium, EvqPointCoord,  2)));
 
         //
         // In CSS Shaders, gl_FragColor, gl_FragData, and gl_MaxDrawBuffers are not available.
         // Instead, css_MixColor and css_ColorMatrix are available.
         //
         if (spec != SH_CSS_SHADERS_SPEC) {
-            symbolTable.insert(*new TVariable(NewPoolTString("gl_FragColor"),                   TType(EbtFloat, EbpMedium, EvqFragColor,   4)));
-            symbolTable.insert(*new TVariable(NewPoolTString("gl_FragData[gl_MaxDrawBuffers]"), TType(EbtFloat, EbpMedium, EvqFragData,    4)));
+            symbolTable.insert(new TVariable(NewPoolTString("gl_FragColor"),                   TType(EbtFloat, EbpMedium, EvqFragColor,   4)));
+            symbolTable.insert(new TVariable(NewPoolTString("gl_FragData[gl_MaxDrawBuffers]"), TType(EbtFloat, EbpMedium, EvqFragData,    4)));
             if (resources.EXT_frag_depth) {
-                symbolTable.insert(*new TVariable(NewPoolTString("gl_FragDepthEXT"),            TType(EbtFloat, resources.FragmentPrecisionHigh ? EbpHigh : EbpMedium, EvqFragDepth, 1)));
+                symbolTable.insert(new TVariable(NewPoolTString("gl_FragDepthEXT"),            TType(EbtFloat, resources.FragmentPrecisionHigh ? EbpHigh : EbpMedium, EvqFragDepth, 1)));
                 symbolTable.relateToExtension("gl_FragDepthEXT", "GL_EXT_frag_depth");
             }
         } else {
-            symbolTable.insert(*new TVariable(NewPoolTString("css_MixColor"),                   TType(EbtFloat, EbpMedium, EvqGlobal,      4)));
-            symbolTable.insert(*new TVariable(NewPoolTString("css_ColorMatrix"),                TType(EbtFloat, EbpMedium, EvqGlobal,      4, true)));
+            symbolTable.insert(new TVariable(NewPoolTString("css_MixColor"),                   TType(EbtFloat, EbpMedium, EvqGlobal,      4)));
+            symbolTable.insert(new TVariable(NewPoolTString("css_ColorMatrix"),                TType(EbtFloat, EbpMedium, EvqGlobal,      4, true)));
         }
 
         break;
 
     case SH_VERTEX_SHADER:
-        symbolTable.insert(*new TVariable(NewPoolTString("gl_Position"),    TType(EbtFloat, EbpHigh, EvqPosition,    4)));
-        symbolTable.insert(*new TVariable(NewPoolTString("gl_PointSize"),   TType(EbtFloat, EbpMedium, EvqPointSize,   1)));
+        symbolTable.insert(new TVariable(NewPoolTString("gl_Position"),    TType(EbtFloat, EbpHigh, EvqPosition,    4)));
+        symbolTable.insert(new TVariable(NewPoolTString("gl_PointSize"),   TType(EbtFloat, EbpMedium, EvqPointSize,   1)));
         break;
 
     default: assert(false && "Language not supported");
@@ -541,7 +541,7 @@ void IdentifyBuiltIns(ShShaderType type, ShShaderSpec spec,
             // Set up gl_FragData.  The array size.
             TType fragData(EbtFloat, EbpMedium, EvqFragData, 4, false, true);
             fragData.setArraySize(resources.MaxDrawBuffers);
-            symbolTable.insert(*new TVariable(NewPoolTString("gl_FragData"),    fragData));
+            symbolTable.insert(new TVariable(NewPoolTString("gl_FragData"),    fragData));
         }
         break;
     default: break;
