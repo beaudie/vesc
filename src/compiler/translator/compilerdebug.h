@@ -49,5 +49,10 @@ void Trace(const char* format, ...);
     assert(false); \
 } while(0)
 
+namespace gl
+{
+void WaitForDebugger();
+}
+
 #endif   // COMPILER_DEBUG_H_
 

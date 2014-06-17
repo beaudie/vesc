@@ -36,6 +36,7 @@ Renderer::Renderer(egl::Display *display)
       mCapsInitialized(false),
       mCurrentClientVersion(2)
 {
+    gl::WaitForDebugger();
 }
 
 Renderer::~Renderer()

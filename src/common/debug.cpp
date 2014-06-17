@@ -124,4 +124,141 @@ ScopedPerfEventHelper::~ScopedPerfEventHelper()
     }
 #endif
 }
+
+#if _DEBUG
+
+#include <Windows.h>
+
+class DialogTemplate
+{
+  public:
+    LPCDLGTEMPLATE getTemplate()
+    {
+        return (LPCDLGTEMPLATE)&v[0];
+    }
+
+    void alignToDword()
+    {
+        if (v.size() % 4) write(NULL, 4 - (v.size() % 4));
+    }
+
+    void write(LPCVOID pvWrite, DWORD cbWrite)
+    {
+        v.insert(v.end(), cbWrite, 0);
+        if (pvWrite) CopyMemory(&v[v.size() - cbWrite], pvWrite, cbWrite);
+    }
+
+    template<typename T> void write(T t)
+    {
+        write(&t, sizeof(T));
+    }
+
+    void writeString(LPCWSTR psz)
+    {
+        write(psz, (lstrlenW(psz) + 1) * sizeof(WCHAR));
+    }
+
+  private:
+    std::vector<BYTE> v;
+};
+
+INT_PTR CALLBACK DebuggerWaitDialogProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam)
+{
+    switch (wm)
+    {
+      case WM_INITDIALOG: SetTimer(hwnd, 1, 100, NULL); return TRUE;
+      case WM_COMMAND:
+        if (LOWORD(wParam) == IDCANCEL) EndDialog(hwnd, 0);
+        break;
+      case WM_TIMER: if (IsDebuggerPresent()) EndDialog(hwnd, 0);
+    }
+    return FALSE;
+}
+
+BOOL DebuggerWaitMessageBox(HWND hwnd, LPCWSTR pszMessage, LPCWSTR pszTitle)
+{
+    BOOL fSuccess = FALSE;
+    HDC hdc = GetDC(NULL);
+    if (hdc)
+    {
+        NONCLIENTMETRICSW ncm = { sizeof(ncm) };
+        if (SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0))
+        {
+            DialogTemplate tmp;
+
+            // Write out the extended dialog template header
+            tmp.write<WORD>(1); // dialog version
+            tmp.write<WORD>(0xFFFF); // extended dialog template
+            tmp.write<DWORD>(0); // help ID
+            tmp.write<DWORD>(0); // extended style
+            tmp.write<DWORD>(WS_CAPTION | WS_SYSMENU | DS_SETFONT | DS_MODALFRAME);
+            tmp.write<WORD>(2); // number of controls
+            tmp.write<WORD>(32); // X
+            tmp.write<WORD>(32); // Y
+            tmp.write<WORD>(100); // width
+            tmp.write<WORD>(40); // height
+            tmp.writeString(L""); // no menu
+            tmp.writeString(L""); // default dialog class
+            tmp.writeString(pszTitle); // title
+
+            // Next comes the font description.
+            // See text for discussion of fancy formula.
+            if (ncm.lfMessageFont.lfHeight < 0)
+            {
+                ncm.lfMessageFont.lfHeight = -MulDiv(ncm.lfMessageFont.lfHeight, 72, GetDeviceCaps(hdc, LOGPIXELSY));
+            }
+            tmp.write<WORD>((WORD)ncm.lfMessageFont.lfHeight); // point
+            tmp.write<WORD>((WORD)ncm.lfMessageFont.lfWeight); // weight
+            tmp.write<BYTE>(ncm.lfMessageFont.lfItalic); // Italic
+            tmp.write<BYTE>(ncm.lfMessageFont.lfCharSet); // CharSet
+            tmp.writeString(ncm.lfMessageFont.lfFaceName);
+
+            // Then come the two controls.  First is the static text.
+            tmp.alignToDword();
+            tmp.write<DWORD>(0); // help id
+            tmp.write<DWORD>(0); // window extended style
+            tmp.write<DWORD>(WS_CHILD | WS_VISIBLE); // style
+            tmp.write<WORD>(7); // x
+            tmp.write<WORD>(7); // y
+            tmp.write<WORD>(200-14); // width
+            tmp.write<WORD>(80-7-14-7); // height
+            tmp.write<DWORD>(-1); // control ID
+            tmp.write<DWORD>(0x0082FFFF); // static
+            tmp.writeString(pszMessage); // text
+            tmp.write<WORD>(0); // no extra data
+
+            // Second control is the OK button.
+            tmp.alignToDword();
+            tmp.write<DWORD>(0); // help id
+            tmp.write<DWORD>(0); // window extended style
+            tmp.write<DWORD>(WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP | BS_DEFPUSHBUTTON); // style
+            tmp.write<WORD>(75); // x
+            tmp.write<WORD>(80-7-14); // y
+            tmp.write<WORD>(50); // width
+            tmp.write<WORD>(14); // height
+            tmp.write<DWORD>(IDCANCEL); // control ID
+            tmp.write<DWORD>(0x0080FFFF); // static
+            tmp.writeString(L"OK"); // text
+            tmp.write<WORD>(0); // no extra data
+
+            // Template is ready - go display it.
+            fSuccess = DialogBoxIndirect(GetModuleHandle(NULL), tmp.getTemplate(), hwnd, DebuggerWaitDialogProc) >= 0;
+        }
+        ReleaseDC(NULL, hdc);
+    }
+    return fSuccess;
+}
+
+void WaitForDebugger()
+{
+    if (!IsDebuggerPresent())
+    {
+        DebuggerWaitMessageBox(NULL, L"Waiting for debugger...", L"ANGLE Debugger Attach Dialog");
+    }
+}
+
+#else
+void WaitForDebugger() {}
+#endif // _DEBUG
+
 }

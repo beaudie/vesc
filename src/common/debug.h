@@ -36,6 +36,8 @@ namespace gl
       private:
         DISALLOW_COPY_AND_ASSIGN(ScopedPerfEventHelper);
     };
+
+    void WaitForDebugger();
 }
 
 // A macro to output a trace of a function call and its arguments to the debugging log
