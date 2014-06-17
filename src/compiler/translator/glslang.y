@@ -212,7 +212,7 @@ variable_identifier
         {
             TType type(EbtFloat, EbpUndefined);
             TVariable *fakeVariable = new TVariable($1.string, type);
-            context->symbolTable.insert(*fakeVariable);
+            context->symbolTable.insert(fakeVariable);
             variable = fakeVariable;
         }
 
@@ -977,7 +977,8 @@ function_prototype
         else
         {
             // Insert the unmangled name to detect potential future redefinition as a variable.
-            context->symbolTable.getOuterLevel()->insert($1->getName(), *$1);
+            TFunction *function = new TFunction(NewPoolTString($1->getName().c_str()), $1->getReturnType());
+            context->symbolTable.getOuterLevel()->insert(function);
         }
 
         //
@@ -989,7 +990,7 @@ function_prototype
 
         // We're at the inner scope level of the function's arguments and body statement.
         // Add the function prototype to the surrounding scope instead.
-        context->symbolTable.getOuterLevel()->insert(*$$.function);
+        context->symbolTable.getOuterLevel()->insert($$.function);
     }
     ;
 
@@ -1572,7 +1573,7 @@ struct_specifier
 
         TType* structure = new TType(new TStructure($2.string, $5));
         TVariable* userTypeDef = new TVariable($2.string, *structure, true);
-        if (! context->symbolTable.insert(*userTypeDef)) {
+        if (! context->symbolTable.insert(userTypeDef)) {
             context->error(@2, "redefinition", $2.string->c_str(), "struct");
             context->recover();
         }
@@ -1961,7 +1962,7 @@ function_definition
                 //
                 // Insert the parameters with name in the symbol table.
                 //
-                if (! context->symbolTable.insert(*variable)) {
+                if (! context->symbolTable.insert(variable)) {
                     context->error(@1, "redefinition", variable->getName().c_str());
                     context->recover();
                     delete variable;
