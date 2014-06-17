@@ -87,6 +87,7 @@ class BufferStorage11 : public BufferStorage
 
     size_t mSize;
 
+    void deleteTypedBuffers();
     void markBufferUsage();
     NativeBuffer11 *getStagingBuffer();
     PackStorage11 *getPackStorage();
