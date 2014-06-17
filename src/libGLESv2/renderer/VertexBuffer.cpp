@@ -231,12 +231,13 @@ bool StaticVertexBufferInterface::lookupAttribute(const gl::VertexAttribute &att
     for (unsigned int element = 0; element < mCache.size(); element++)
     {
         if (mCache[element].type == attrib.type &&
-            mCache[element].size == attrib.size &&
-            mCache[element].stride == ComputeVertexAttributeStride(attrib) &&
+            mCache[element].size == static_cast<GLint>(attrib.size) &&
+            mCache[element].stride == static_cast<GLsizei>(ComputeVertexAttributeStride(attrib)) &&
             mCache[element].normalized == attrib.normalized &&
             mCache[element].pureInteger == attrib.pureInteger)
         {
-            if (mCache[element].attributeOffset == attrib.offset % ComputeVertexAttributeStride(attrib))
+            size_t offset = (static_cast<size_t>(attrib.offset) % ComputeVertexAttributeStride(attrib));
+            if (mCache[element].attributeOffset == static_cast<int>(offset))
             {
                 if (outStreamOffset)
                 {
