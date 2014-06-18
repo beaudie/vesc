@@ -1,7 +1,8 @@
 #include "ANGLETest.h"
 
 ANGLETest::ANGLETest()
-    : mClientVersion(2),
+    : mTestPlatform(EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE),
+      mClientVersion(2),
       mWidth(1280),
       mHeight(720),
       mRedBits(-1),
