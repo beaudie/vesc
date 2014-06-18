@@ -23,6 +23,8 @@ VertexArray::VertexArray(rx::VertexArrayImpl *impl, GLuint id, size_t maxAttribs
 
 VertexArray::~VertexArray()
 {
+    delete mVertexArray;
+
     for (size_t i = 0; i < getMaxAttribs(); i++)
     {
         mVertexAttributes[i].buffer.set(NULL);
