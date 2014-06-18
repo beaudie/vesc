@@ -635,7 +635,7 @@ void __stdcall glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, 
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            if (buffer->mapped())
+            if (buffer->isMapped())
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
@@ -646,7 +646,7 @@ void __stdcall glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, 
                 return gl::error(GL_OUT_OF_MEMORY);
             }
 
-            if (size + offset > buffer->size())
+            if (size + offset > buffer->getSize())
             {
                 return gl::error(GL_INVALID_VALUE);
             }
@@ -2407,22 +2407,22 @@ void __stdcall glGetBufferParameteriv(GLenum target, GLenum pname, GLint* params
             switch (pname)
             {
               case GL_BUFFER_USAGE:
-                *params = static_cast<GLint>(buffer->usage());
+                *params = static_cast<GLint>(buffer->getUsage());
                 break;
               case GL_BUFFER_SIZE:
-                *params = gl::clampCast<GLint>(buffer->size());
+                *params = gl::clampCast<GLint>(buffer->getSize());
                 break;
               case GL_BUFFER_ACCESS_FLAGS:
-                *params = buffer->accessFlags();
+                *params = buffer->getAccessFlags();
                 break;
               case GL_BUFFER_MAPPED:
-                *params = static_cast<GLint>(buffer->mapped());
+                *params = static_cast<GLint>(buffer->isMapped());
                 break;
               case GL_BUFFER_MAP_OFFSET:
-                *params = gl::clampCast<GLint>(buffer->mapOffset());
+                *params = gl::clampCast<GLint>(buffer->getMapOffset());
                 break;
               case GL_BUFFER_MAP_LENGTH:
-                *params = gl::clampCast<GLint>(buffer->mapLength());
+                *params = gl::clampCast<GLint>(buffer->getMapLength());
                 break;
               default: UNREACHABLE(); break;
             }
@@ -8059,14 +8059,14 @@ void __stdcall glCopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintp
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            if (readBuffer->mapped() || writeBuffer->mapped())
+            if (readBuffer->isMapped() || writeBuffer->isMapped())
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
 
             if (readOffset < 0 || writeOffset < 0 || size < 0 ||
-                static_cast<unsigned int>(readOffset + size) > readBuffer->size() ||
-                static_cast<unsigned int>(writeOffset + size) > writeBuffer->size())
+                static_cast<unsigned int>(readOffset + size) > readBuffer->getSize() ||
+                static_cast<unsigned int>(writeOffset + size) > writeBuffer->getSize())
             {
                 return gl::error(GL_INVALID_VALUE);
             }
@@ -8851,22 +8851,22 @@ void __stdcall glGetBufferParameteri64v(GLenum target, GLenum pname, GLint64* pa
             switch (pname)
             {
               case GL_BUFFER_USAGE:
-                *params = static_cast<GLint64>(buffer->usage());
+                *params = static_cast<GLint64>(buffer->getUsage());
                 break;
               case GL_BUFFER_SIZE:
-                *params = buffer->size();
+                *params = buffer->getSize();
                 break;
               case GL_BUFFER_ACCESS_FLAGS:
-                *params = static_cast<GLint64>(buffer->accessFlags());
+                *params = static_cast<GLint64>(buffer->getAccessFlags());
                 break;
               case GL_BUFFER_MAPPED:
-                *params = static_cast<GLint64>(buffer->mapped());
+                *params = static_cast<GLint64>(buffer->isMapped());
                 break;
               case GL_BUFFER_MAP_OFFSET:
-                *params = buffer->mapOffset();
+                *params = buffer->getMapOffset();
                 break;
               case GL_BUFFER_MAP_LENGTH:
-                *params = buffer->mapLength();
+                *params = buffer->getMapLength();
                 break;
               default: UNREACHABLE(); break;
             }
@@ -9874,12 +9874,12 @@ void __stdcall glGetBufferPointervOES(GLenum target, GLenum pname, void** params
 
             gl::Buffer *buffer = context->getTargetBuffer(target);
 
-            if (!buffer || !buffer->mapped())
+            if (!buffer || !buffer->isMapped())
             {
                 *params = NULL;
             }
 
-            *params = buffer->mapPointer();
+            *params = buffer->getMapPointer();
         }
     }
     catch (...)
@@ -9915,12 +9915,12 @@ void * __stdcall glMapBufferOES(GLenum target, GLenum access)
                 return gl::error(GL_INVALID_ENUM, reinterpret_cast<GLvoid*>(NULL));
             }
 
-            if (buffer->mapped())
+            if (buffer->isMapped())
             {
                 return gl::error(GL_INVALID_OPERATION, reinterpret_cast<GLvoid*>(NULL));
             }
 
-            return buffer->mapRange(0, buffer->size(), GL_MAP_WRITE_BIT);
+            return buffer->mapRange(0, buffer->getSize(), GL_MAP_WRITE_BIT);
         }
     }
     catch (...)
@@ -9948,7 +9948,7 @@ GLboolean __stdcall glUnmapBufferOES(GLenum target)
 
             gl::Buffer *buffer = context->getTargetBuffer(target);
 
-            if (buffer == NULL || !buffer->mapped())
+            if (buffer == NULL || !buffer->isMapped())
             {
                 return gl::error(GL_INVALID_OPERATION, GL_FALSE);
             }
@@ -10001,7 +10001,7 @@ void* __stdcall glMapBufferRangeEXT (GLenum target, GLintptr offset, GLsizeiptr 
             size_t lengthSize = static_cast<size_t>(length);
 
             if (!rx::IsUnsignedAdditionSafe(offsetSize, lengthSize) ||
-                offsetSize + lengthSize > static_cast<size_t>(buffer->size()))
+                offsetSize + lengthSize > static_cast<size_t>(buffer->getSize()))
             {
                 return gl::error(GL_INVALID_VALUE, reinterpret_cast<GLvoid*>(NULL));
             }
@@ -10019,7 +10019,7 @@ void* __stdcall glMapBufferRangeEXT (GLenum target, GLintptr offset, GLsizeiptr 
                 return gl::error(GL_INVALID_VALUE, reinterpret_cast<GLvoid*>(NULL));
             }
 
-            if (length == 0 || buffer->mapped())
+            if (length == 0 || buffer->isMapped())
             {
                 return gl::error(GL_INVALID_OPERATION, reinterpret_cast<GLvoid*>(NULL));
             }
@@ -10082,7 +10082,7 @@ void __stdcall glFlushMappedBufferRangeEXT (GLenum target, GLintptr offset, GLsi
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            if (!buffer->mapped() || (buffer->accessFlags() & GL_MAP_FLUSH_EXPLICIT_BIT) == 0)
+            if (!buffer->isMapped() || (buffer->getAccessFlags() & GL_MAP_FLUSH_EXPLICIT_BIT) == 0)
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
@@ -10092,7 +10092,7 @@ void __stdcall glFlushMappedBufferRangeEXT (GLenum target, GLintptr offset, GLsi
             size_t lengthSize = static_cast<size_t>(length);
 
             if (!rx::IsUnsignedAdditionSafe(offsetSize, lengthSize) ||
-                offsetSize + lengthSize > static_cast<size_t>(buffer->mapLength()))
+                offsetSize + lengthSize > static_cast<size_t>(buffer->getMapLength()))
             {
                 return gl::error(GL_INVALID_VALUE);
             }

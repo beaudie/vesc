@@ -22,9 +22,8 @@
 #include "libGLESv2/renderer/d3d11/Image11.h"
 #include "libGLESv2/renderer/d3d11/VertexBuffer11.h"
 #include "libGLESv2/renderer/d3d11/IndexBuffer11.h"
-#include "libGLESv2/renderer/d3d11/BufferStorage11.h"
-#include "libGLESv2/renderer/VertexDataManager.h"
-#include "libGLESv2/renderer/IndexDataManager.h"
+#include "libGLESv2/renderer/d3d/VertexDataManager.h"
+#include "libGLESv2/renderer/d3d/IndexDataManager.h"
 #include "libGLESv2/renderer/d3d11/TextureStorage11.h"
 #include "libGLESv2/renderer/d3d11/Query11.h"
 #include "libGLESv2/renderer/d3d11/Fence11.h"
@@ -32,6 +31,7 @@
 #include "libGLESv2/renderer/d3d11/Clear11.h"
 #include "libGLESv2/renderer/d3d11/PixelTransfer11.h"
 #include "libGLESv2/renderer/d3d11/VertexArray11.h"
+#include "libGLESv2/renderer/d3d11/Buffer11.h"
 #include "libEGL/Display.h"
 
 // Enable ANGLE_SKIP_DXGI_1_2_CHECK if there is not a possibility of using cross-process
@@ -544,7 +544,7 @@ bool Renderer11::setUniformBuffers(const gl::Buffer *vertexUniformBuffers[], con
         const gl::Buffer *uniformBuffer = vertexUniformBuffers[uniformBufferIndex];
         if (uniformBuffer)
         {
-            BufferStorage11 *bufferStorage = BufferStorage11::makeBufferStorage11(uniformBuffer->getStorage());
+            Buffer11 *bufferStorage = Buffer11::makeBuffer11(uniformBuffer->getImplementation());
             ID3D11Buffer *constantBuffer = bufferStorage->getBuffer(BUFFER_USAGE_UNIFORM);
 
             if (!constantBuffer)
@@ -566,7 +566,7 @@ bool Renderer11::setUniformBuffers(const gl::Buffer *vertexUniformBuffers[], con
         const gl::Buffer *uniformBuffer = fragmentUniformBuffers[uniformBufferIndex];
         if (uniformBuffer)
         {
-            BufferStorage11 *bufferStorage = BufferStorage11::makeBufferStorage11(uniformBuffer->getStorage());
+            Buffer11 *bufferStorage = Buffer11::makeBuffer11(uniformBuffer->getImplementation());
             ID3D11Buffer *constantBuffer = bufferStorage->getBuffer(BUFFER_USAGE_UNIFORM);
 
             if (!constantBuffer)
@@ -995,7 +995,7 @@ GLenum Renderer11::applyIndexBuffer(const GLvoid *indices, gl::Buffer *elementAr
 
         if (indexInfo->storage)
         {
-            BufferStorage11 *storage = BufferStorage11::makeBufferStorage11(indexInfo->storage);
+            Buffer11 *storage = Buffer11::makeBuffer11(indexInfo->storage);
             buffer = storage->getBuffer(BUFFER_USAGE_INDEX);
         }
         else
@@ -1025,7 +1025,7 @@ void Renderer11::applyTransformFeedbackBuffers(gl::Buffer *transformFeedbackBuff
     {
         if (transformFeedbackBuffers[i])
         {
-            BufferStorage11 *storage = BufferStorage11::makeBufferStorage11(transformFeedbackBuffers[i]->getStorage());
+            Buffer11 *storage = Buffer11::makeBuffer11(transformFeedbackBuffers[i]->getImplementation());
             ID3D11Buffer *buffer = storage->getBuffer(BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK);
 
             d3dBuffers[i] = buffer;
@@ -1133,7 +1133,7 @@ void Renderer11::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices,
     if (type != GL_NONE && elementArrayBuffer)
     {
         gl::Buffer *indexBuffer = elementArrayBuffer;
-        BufferStorage *storage = indexBuffer->getStorage();
+        BufferImpl *storage = indexBuffer->getImplementation();
         intptr_t offset = reinterpret_cast<intptr_t>(indices);
         indices = static_cast<const GLubyte*>(storage->getData()) + offset;
     }
@@ -1238,7 +1238,7 @@ void Renderer11::drawTriangleFan(GLsizei count, GLenum type, const GLvoid *indic
     if (type != GL_NONE && elementArrayBuffer)
     {
         gl::Buffer *indexBuffer = elementArrayBuffer;
-        BufferStorage *storage = indexBuffer->getStorage();
+        BufferImpl *storage = indexBuffer->getImplementation();
         intptr_t offset = reinterpret_cast<intptr_t>(indices);
         indices = static_cast<const GLubyte*>(storage->getData()) + offset;
     }
@@ -2794,9 +2794,9 @@ IndexBuffer *Renderer11::createIndexBuffer()
     return new IndexBuffer11(this);
 }
 
-BufferStorage *Renderer11::createBufferStorage()
+BufferImpl *Renderer11::createBuffer()
 {
-    return new BufferStorage11(this);
+    return new Buffer11(this);
 }
 
 VertexArrayImpl *Renderer11::createVertexArray()
@@ -2982,7 +2982,7 @@ void Renderer11::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsi
 
         if (pack.pixelBuffer.get() != NULL)
         {
-            rx::BufferStorage11 *packBufferStorage = BufferStorage11::makeBufferStorage11(pack.pixelBuffer.get()->getStorage());
+            rx::Buffer11 *packBufferStorage = Buffer11::makeBuffer11(pack.pixelBuffer.get()->getImplementation());
             PackPixelsParams packParams(area, format, type, outputPitch, pack, reinterpret_cast<ptrdiff_t>(pixels));
             packBufferStorage->packPixels(colorBufferTexture, subresourceIndex, packParams);
         }

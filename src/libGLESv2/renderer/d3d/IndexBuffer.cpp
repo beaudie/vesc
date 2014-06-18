@@ -8,7 +8,7 @@
 // IndexBuffer.cpp: Defines the abstract IndexBuffer class and IndexBufferInterface
 // class with derivations, classes that perform graphics API agnostic index buffer operations.
 
-#include "libGLESv2/renderer/IndexBuffer.h"
+#include "libGLESv2/renderer/d3d/IndexBuffer.h"
 #include "libGLESv2/renderer/Renderer.h"
 
 namespace rx

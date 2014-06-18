@@ -9,7 +9,7 @@
 #ifndef LIBGLESV2_RENDERER_INDEXBUFFER11_H_
 #define LIBGLESV2_RENDERER_INDEXBUFFER11_H_
 
-#include "libGLESv2/renderer/IndexBuffer.h"
+#include "libGLESv2/renderer/d3d/IndexBuffer.h"
 
 namespace rx
 {
