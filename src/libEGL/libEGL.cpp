@@ -101,9 +101,70 @@ EGLDisplay __stdcall eglGetDisplay(EGLNativeDisplayType display_id)
 
     try
     {
-        return egl::Display::getDisplay(display_id);
+        return egl::Display::getDisplay(display_id, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
     }
     catch (...)
+    {
+        return egl::error(EGL_BAD_ALLOC, EGL_NO_DISPLAY);
+    }
+}
+
+EGLDisplay __stdcall eglGetPlatformDisplayEXT(EGLenum platform, void* native_display, const EGLint* attrib_list)
+{
+    EVENT("(EGLenum platform = %d, void* native_display = 0x%0.8p, const EGLint* attrib_list = 0x%0.8p)",
+          platform, native_display, attrib_list);
+
+    try
+    {
+        switch (platform)
+        {
+          case EGL_PLATFORM_ANGLE_ANGLE:
+            break;
+
+          default:
+            return egl::error(EGL_BAD_CONFIG, EGL_NO_DISPLAY);
+        }
+
+        EGLNativeDisplayType displayId = static_cast<EGLNativeDisplayType>(native_display);
+
+        EGLint requestedDisplayType = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
+        if (attrib_list)
+        {
+            for (const EGLint* curAttrib = attrib_list; curAttrib[0] != EGL_NONE; curAttrib += 2)
+            {
+                switch (curAttrib[0])
+                {
+                  case EGL_PLATFORM_ANGLE_TYPE_ANGLE:
+                    requestedDisplayType = curAttrib[1];
+                    break;
+
+                  default:
+                    break;
+                }
+            }
+        }
+
+        switch (requestedDisplayType)
+        {
+          case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
+            break;
+
+          case EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE:
+          case EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE:
+          case EGL_PLATFORM_ANGLE_TYPE_D3D11_WARP_ANGLE:
+            break;
+
+          case EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE:
+          case EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE:
+            break;
+
+          default:
+            return EGL_NO_DISPLAY;
+        }
+
+        return egl::Display::getDisplay(displayId, requestedDisplayType);
+    }
+    catch (std::bad_alloc&)
     {
         return egl::error(EGL_BAD_ALLOC, EGL_NO_DISPLAY);
     }
@@ -1178,9 +1239,10 @@ __eglMustCastToProperFunctionPointerType __stdcall eglGetProcAddress(const char 
 
         static const Extension eglExtensions[] =
         {
-            {"eglQuerySurfacePointerANGLE", (__eglMustCastToProperFunctionPointerType)eglQuerySurfacePointerANGLE},
-            {"eglPostSubBufferNV", (__eglMustCastToProperFunctionPointerType)eglPostSubBufferNV},
-            {"", NULL},
+            { "eglQuerySurfacePointerANGLE", (__eglMustCastToProperFunctionPointerType)eglQuerySurfacePointerANGLE },
+            { "eglPostSubBufferNV", (__eglMustCastToProperFunctionPointerType)eglPostSubBufferNV },
+            { "eglGetPlatformDisplayEXT", (__eglMustCastToProperFunctionPointerType)eglGetPlatformDisplayEXT },
+            { "", NULL },
         };
 
         for (unsigned int ext = 0; ext < ArraySize(eglExtensions); ext++)

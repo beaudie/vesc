@@ -32,7 +32,7 @@ namespace
     DisplayMap displays;
 }
 
-egl::Display *Display::getDisplay(EGLNativeDisplayType displayId)
+egl::Display *Display::getDisplay(EGLNativeDisplayType displayId, EGLint displayType)
 {
     if (displays.find(displayId) != displays.end())
     {
@@ -41,16 +41,18 @@ egl::Display *Display::getDisplay(EGLNativeDisplayType displayId)
     
     // FIXME: Check if displayId is a valid display device context
 
-    egl::Display *display = new egl::Display(displayId, (HDC)displayId);
+    egl::Display *display = new egl::Display(displayId, (HDC)displayId, displayType);
 
     displays[displayId] = display;
     return display;
 }
 
-Display::Display(EGLNativeDisplayType displayId, HDC deviceContext) : mDc(deviceContext)
+Display::Display(EGLNativeDisplayType displayId, HDC deviceContext, EGLint displayType)
+    : mDisplayId(displayId),
+      mDc(deviceContext),
+      mRenderer(NULL),
+      mRequestedDisplayType(displayType)
 {
-    mDisplayId = displayId;
-    mRenderer = NULL;
 }
 
 Display::~Display()
@@ -72,7 +74,7 @@ bool Display::initialize()
         return true;
     }
 
-    mRenderer = glCreateRenderer(this, mDc, mDisplayId);
+    mRenderer = glCreateRenderer(this, mDc, mDisplayId, mRequestedDisplayType);
     
     if (!mRenderer)
     {

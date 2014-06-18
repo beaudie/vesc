@@ -33,7 +33,9 @@ class Display
     bool initialize();
     void terminate();
 
-    static egl::Display *getDisplay(EGLNativeDisplayType displayId);
+    static egl::Display *getDisplay(EGLNativeDisplayType displayId, EGLint displayType);
+
+    static const char *getExtensionString(egl::Display *display);
 
     bool getConfigs(EGLConfig *configs, const EGLint *attribList, EGLint configSize, EGLint *numConfig);
     bool getConfigAttrib(EGLConfig config, EGLint attribute, EGLint *value);
@@ -63,7 +65,7 @@ class Display
   private:
     DISALLOW_COPY_AND_ASSIGN(Display);
 
-    Display(EGLNativeDisplayType displayId, HDC deviceContext);
+    Display(EGLNativeDisplayType displayId, HDC deviceContext, EGLint displayType);
 
     bool restoreLostDevice();
 
