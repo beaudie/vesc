@@ -1338,6 +1338,12 @@ static bool ValidateDrawBase(const gl::Context *context, GLenum mode, GLsizei co
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
+    const gl::Framebuffer *fbo = context->getDrawFramebuffer();
+    if (!fbo || fbo->completeness() != GL_FRAMEBUFFER_COMPLETE)
+    {
+        return gl::error(GL_INVALID_FRAMEBUFFER_OPERATION, false);
+    }
+
     // No-op if zero count
     return (count > 0);
 }
@@ -1443,6 +1449,22 @@ bool ValidateDrawElementsInstanced(const gl::Context *context, GLenum mode, GLsi
 
     // No-op zero primitive count
     return (primcount > 0);
+}
+
+bool ValidateClearBuffer(const gl::Context *context)
+{
+    if (context->getClientVersion() < 3)
+    {
+        return gl::error(GL_INVALID_OPERATION, false);
+    }
+
+    const gl::Framebuffer *fbo = context->getDrawFramebuffer();
+    if (!fbo || fbo->completeness() != GL_FRAMEBUFFER_COMPLETE)
+    {
+        return gl::error(GL_INVALID_FRAMEBUFFER_OPERATION, false);
+    }
+
+    return true;
 }
 
 }

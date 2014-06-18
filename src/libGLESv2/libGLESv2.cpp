@@ -7845,9 +7845,9 @@ void __stdcall glClearBufferiv(GLenum buffer, GLint drawbuffer, const GLint* val
 
         if (context)
         {
-            if (context->getClientVersion() < 3)
+            if (!ValidateClearBuffer(context))
             {
-                return gl::error(GL_INVALID_OPERATION);
+                return;
             }
 
             switch (buffer)
@@ -7888,9 +7888,9 @@ void __stdcall glClearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint* v
 
         if (context)
         {
-            if (context->getClientVersion() < 3)
+            if (!ValidateClearBuffer(context))
             {
-                return gl::error(GL_INVALID_OPERATION);
+                return;
             }
 
             switch (buffer)
@@ -7925,9 +7925,9 @@ void __stdcall glClearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat* v
 
         if (context)
         {
-            if (context->getClientVersion() < 3)
+            if (!ValidateClearBuffer(context))
             {
-                return gl::error(GL_INVALID_OPERATION);
+                return;
             }
 
             switch (buffer)
@@ -7968,9 +7968,9 @@ void __stdcall glClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, G
 
         if (context)
         {
-            if (context->getClientVersion() < 3)
+            if (!ValidateClearBuffer(context))
             {
-                return gl::error(GL_INVALID_OPERATION);
+                return;
             }
 
             switch (buffer)
