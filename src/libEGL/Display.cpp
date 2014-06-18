@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <map>
 #include <vector>
+#include <sstream>
 
 #include "common/debug.h"
 #include "common/mathutil.h"
@@ -112,7 +113,7 @@ bool Display::initialize()
         return false;
     }
 
-    initExtensionString();
+    initDisplayExtensionString();
     initVendorString();
 
     return true;
@@ -500,48 +501,72 @@ bool Display::hasExistingWindowSurface(HWND window)
     return false;
 }
 
-void Display::initExtensionString()
+std::string Display::generateClientExtensionString()
 {
-    bool shareHandleSupported = mRenderer->getShareHandleSupport();
+    std::vector<std::string> extensions;
 
-    mExtensionString = "";
+    extensions.push_back("EGL_EXT_client_extensions");
+
+    std::ostringstream stream;
+    for (size_t i = 0; i < extensions.size(); i++)
+    {
+        stream << extensions[i];
+        if (i + 1 < extensions.size())
+        {
+            stream << " ";
+        }
+    }
+    return stream.str();
+}
+
+void Display::initDisplayExtensionString()
+{
+    std::vector<std::string> extensions;
 
     // Multi-vendor (EXT) extensions
-    mExtensionString += "EGL_EXT_create_context_robustness ";
+    extensions.push_back("EGL_EXT_create_context_robustness");
 
     // ANGLE-specific extensions
-    if (shareHandleSupported)
+    if (mRenderer->getShareHandleSupport())
     {
-        mExtensionString += "EGL_ANGLE_d3d_share_handle_client_buffer ";
+        extensions.push_back("EGL_ANGLE_d3d_share_handle_client_buffer");
+        extensions.push_back("EGL_ANGLE_surface_d3d_texture_2d_share_handle");
     }
 
-    mExtensionString += "EGL_ANGLE_query_surface_pointer ";
-
-    mExtensionString += "EGL_ANGLE_window_fixed_size ";
-
-    if (shareHandleSupported)
-    {
-        mExtensionString += "EGL_ANGLE_surface_d3d_texture_2d_share_handle ";
-    }
+    extensions.push_back("EGL_ANGLE_query_surface_pointer");
+    extensions.push_back("EGL_ANGLE_window_fixed_size");
 
     if (mRenderer->getPostSubBufferSupport())
     {
-        mExtensionString += "EGL_NV_post_sub_buffer ";
+        extensions.push_back("EGL_NV_post_sub_buffer");
     }
 
     // TODO: complete support for the EGL_KHR_create_context extension
-    mExtensionString += "EGL_KHR_create_context ";
+    extensions.push_back("EGL_KHR_create_context");
 
-    std::string::size_type end = mExtensionString.find_last_not_of(' ');
-    if (end != std::string::npos)
+    std::ostringstream stream;
+    for (size_t i = 0; i < extensions.size(); i++)
     {
-        mExtensionString.resize(end+1);
+        stream << extensions[i];
+        if (i + 1 < extensions.size())
+        {
+            stream << " ";
+        }
     }
+    mDisplayExtensionString = stream.str();
 }
 
-const char *Display::getExtensionString() const
+const char *Display::getExtensionString(egl::Display *display)
 {
-    return mExtensionString.c_str();
+    if (display != EGL_NO_DISPLAY)
+    {
+        return display->mDisplayExtensionString.c_str();
+    }
+    else
+    {
+        static std::string clientExtensions = generateClientExtensionString();
+        return clientExtensions.c_str();
+    }
 }
 
 void Display::initVendorString()

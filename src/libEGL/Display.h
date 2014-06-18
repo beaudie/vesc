@@ -82,9 +82,14 @@ class Display
 
     rx::Renderer *mRenderer;
 
-    void initExtensionString();
+    EGLint mRequestedDisplayType;
+
+    static std::string generateClientExtensionString();
+
+    void initDisplayExtensionString();
+    std::string mDisplayExtensionString;
+
     void initVendorString();
-    std::string mExtensionString;
     std::string mVendorString;
 };
 }
