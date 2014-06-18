@@ -32,7 +32,7 @@ namespace
     DisplayMap displays;
 }
 
-egl::Display *Display::getDisplay(EGLNativeDisplayType displayId)
+egl::Display *Display::getDisplay(EGLNativeDisplayType displayId, EGLint displayType)
 {
     if (displays.find(displayId) != displays.end())
     {
@@ -41,16 +41,17 @@ egl::Display *Display::getDisplay(EGLNativeDisplayType displayId)
     
     // FIXME: Check if displayId is a valid display device context
 
-    egl::Display *display = new egl::Display(displayId, (HDC)displayId);
+    egl::Display *display = new egl::Display(displayId, displayType);
 
     displays[displayId] = display;
     return display;
 }
 
-Display::Display(EGLNativeDisplayType displayId, HDC deviceContext) : mDc(deviceContext)
+Display::Display(EGLNativeDisplayType displayId, EGLint displayType)
+    : mDisplayId(displayId),
+      mRequestedDisplayType(displayType),
+      mRenderer(NULL)
 {
-    mDisplayId = displayId;
-    mRenderer = NULL;
 }
 
 Display::~Display()
@@ -72,8 +73,8 @@ bool Display::initialize()
         return true;
     }
 
-    mRenderer = glCreateRenderer(this, mDc, mDisplayId);
-    
+    mRenderer = glCreateRenderer(this, mDisplayId, mRequestedDisplayType);
+
     if (!mRenderer)
     {
         terminate();
@@ -507,6 +508,18 @@ std::string Display::generateClientExtensionString()
 
     extensions.push_back("EGL_EXT_client_extensions");
 
+    extensions.push_back("ANGLE_platform_angle");
+
+    if (supportsPlatformD3D())
+    {
+        extensions.push_back("ANGLE_platform_angle_d3d");
+    }
+
+    if (supportsPlatformOpenGL())
+    {
+        extensions.push_back("ANGLE_platform_angle_opengl");
+    }
+
     std::ostringstream stream;
     std::copy(extensions.begin(), extensions.end(), std::ostream_iterator<std::string>(stream, " "));
     return stream.str();
@@ -553,6 +566,20 @@ const char *Display::getExtensionString(egl::Display *display)
         static std::string clientExtensions = generateClientExtensionString();
         return clientExtensions.c_str();
     }
+}
+
+bool Display::supportsPlatformD3D()
+{
+#if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
+    return true;
+#else
+    return false;
+#endif
+}
+
+bool Display::supportsPlatformOpenGL()
+{
+    return false;
 }
 
 void Display::initVendorString()

@@ -3,6 +3,11 @@
 # found in the LICENSE file.
 
 {
+    'variables':
+    {
+        'angle_enable_d3d9%': 1,
+        'angle_enable_d3d11%': 1,
+    },
     'conditions':
     [
         ['OS=="win"',
@@ -30,6 +35,23 @@
                         'GL_APICALL=',
                         'GL_GLEXT_PROTOTYPES=',
                         'EGLAPI=',
+                    ],
+                    'conditions':
+                    [
+                        ['angle_enable_d3d9==1',
+                        {
+                            'defines':
+                            [
+                                'ANGLE_ENABLE_D3D9',
+                            ],
+                        }],
+                        ['angle_enable_d3d11==1',
+                        {
+                            'defines':
+                            [
+                                'ANGLE_ENABLE_D3D11',
+                            ],
+                        }],
                     ],
                     'includes': [ '../build/common_defines.gypi', ],
                     'msvs_settings':
