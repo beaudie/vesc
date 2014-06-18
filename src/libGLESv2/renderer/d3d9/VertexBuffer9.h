@@ -9,7 +9,7 @@
 #ifndef LIBGLESV2_RENDERER_VERTEXBUFFER9_H_
 #define LIBGLESV2_RENDERER_VERTEXBUFFER9_H_
 
-#include "libGLESv2/renderer/VertexBuffer.h"
+#include "libGLESv2/renderer/d3d/VertexBuffer.h"
 
 namespace rx
 {
