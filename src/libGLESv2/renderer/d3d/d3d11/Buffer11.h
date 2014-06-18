@@ -1,20 +1,19 @@
 //
-// Copyright (c) 2013-2014 The ANGLE Project Authors. All rights reserved.
+// Copyright 2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
 
-// BufferStorage11.h Defines the BufferStorage11 class.
+// Buffer11.h: Defines the rx::Buffer11 class which implements rx::BufferImpl via rx::BufferD3D.
 
-#ifndef LIBGLESV2_RENDERER_BUFFERSTORAGE11_H_
-#define LIBGLESV2_RENDERER_BUFFERSTORAGE11_H_
+#ifndef LIBGLESV2_RENDERER_BUFFER11_H_
+#define LIBGLESV2_RENDERER_BUFFER11_H_
 
-#include "libGLESv2/renderer/BufferStorage.h"
+#include "libGLESv2/renderer/d3d/BufferD3D.h"
 #include "libGLESv2/angletypes.h"
 
 namespace rx
 {
-class Renderer;
 class Renderer11;
 
 enum BufferUsage
@@ -44,39 +43,46 @@ struct PackPixelsParams
 
 typedef size_t DataRevision;
 
-class BufferStorage11 : public BufferStorage
+class Buffer11 : public BufferD3D
 {
   public:
-    explicit BufferStorage11(Renderer11 *renderer);
-    virtual ~BufferStorage11();
+    Buffer11(rx::Renderer11 *renderer);
+    virtual ~Buffer11();
 
-    static BufferStorage11 *makeBufferStorage11(BufferStorage *bufferStorage);
-
-    virtual void *getData();
-    virtual void setData(const void* data, size_t size, size_t offset);
-    virtual void copyData(BufferStorage* sourceStorage, size_t size, size_t sourceOffset, size_t destOffset);
-    virtual void clear();
-    virtual void markTransformFeedbackUsage();
-    virtual size_t getSize() const;
-    virtual bool supportsDirectBinding() const;
+    static Buffer11 *makeBuffer11(BufferImpl *buffer);
 
     ID3D11Buffer *getBuffer(BufferUsage usage);
     ID3D11ShaderResourceView *getSRV(DXGI_FORMAT srvFormat);
+    bool isMapped() const { return mMappedStorage != NULL; }
     void packPixels(ID3D11Texture2D *srcTexure, UINT srcSubresource, const PackPixelsParams &params);
 
-    virtual bool isMapped() const;
-    virtual void *map(GLbitfield access);
+    // BufferD3D implementation
+    virtual size_t getSize() const { return mSize; }
+    virtual void clear();
+    virtual bool supportsDirectBinding() const { return true; }
+
+    // BufferImpl implementation
+    virtual void setData(const void* data, size_t size, GLenum usage);
+    virtual void *getData();
+    virtual void setSubData(const void* data, size_t size, size_t offset);
+    virtual void copySubData(BufferImpl* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size);
+    virtual GLvoid* map(size_t offset, size_t length, GLbitfield access);
     virtual void unmap();
+    virtual void markTransformFeedbackUsage();
 
   private:
-    class TypedBufferStorage11;
+    DISALLOW_COPY_AND_ASSIGN(Buffer11);
+
+    class BufferStorage11;
     class NativeBuffer11;
     class PackStorage11;
 
-    Renderer11 *mRenderer;
-    TypedBufferStorage11 *mMappedStorage;
+    rx::Renderer11 *mRenderer11;
+    size_t mSize;
 
-    std::map<BufferUsage, TypedBufferStorage11*> mTypedBuffers;
+    BufferStorage11 *mMappedStorage;
+
+    std::map<BufferUsage, BufferStorage11*> mBufferStorages;
 
     typedef std::pair<ID3D11Buffer *, ID3D11ShaderResourceView *> BufferSRVPair;
     std::map<DXGI_FORMAT, BufferSRVPair> mBufferResourceViews;
@@ -85,16 +91,14 @@ class BufferStorage11 : public BufferStorage
     DataRevision mResolvedDataRevision;
     unsigned int mReadUsageCount;
 
-    size_t mSize;
-
     void markBufferUsage();
     NativeBuffer11 *getStagingBuffer();
     PackStorage11 *getPackStorage();
 
-    TypedBufferStorage11 *getStorage(BufferUsage usage);
-    TypedBufferStorage11 *getLatestStorage() const;
+    BufferStorage11 *getBufferStorage(BufferUsage usage);
+    BufferStorage11 *getLatestBufferStorage() const;
 };
 
 }
 
-#endif // LIBGLESV2_RENDERER_BUFFERSTORAGE11_H_
+#endif // LIBGLESV2_RENDERER_BUFFER11_H_
