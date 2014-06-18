@@ -54,19 +54,46 @@ const gl::Caps &Renderer::getCaps() const
     return mCaps;
 }
 
+typedef rx::Renderer *(*CreateRendererFunction)(egl::Display *, EGLNativeDisplayType, EGLint);
+
+template <typename RendererType>
+rx::Renderer *CreateRenderer(egl::Display *display, EGLNativeDisplayType nativeDisplay, EGLint requestedDisplayType)
+{
+    return new RendererType(display, nativeDisplay, requestedDisplayType);
+}
+
 }
 
 extern "C"
 {
 
-rx::Renderer *glCreateRenderer(egl::Display *display, HDC hDc, EGLNativeDisplayType displayId)
+rx::Renderer *glCreateRenderer(egl::Display *display, EGLNativeDisplayType nativeDisplay, EGLint requestedDisplayType)
 {
+    std::vector<rx::CreateRendererFunction> rendererCreationFunctions;
+
 #if defined(ANGLE_ENABLE_D3D11)
-    if (ANGLE_DEFAULT_D3D11 ||
-        displayId == EGL_D3D11_ELSE_D3D9_DISPLAY_ANGLE ||
-        displayId == EGL_D3D11_ONLY_DISPLAY_ANGLE)
+    if (nativeDisplay == EGL_D3D11_ELSE_D3D9_DISPLAY_ANGLE ||
+        nativeDisplay == EGL_D3D11_ONLY_DISPLAY_ANGLE ||
+        (requestedDisplayType == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE ||
+         requestedDisplayType == EGL_PLATFORM_ANGLE_TYPE_D3D11_WARP_ANGLE ||
+         (requestedDisplayType == EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE && ANGLE_DEFAULT_D3D11)))
     {
-        rx::Renderer11 *renderer = new rx::Renderer11(display, hDc);
+        rendererCreationFunctions.push_back(rx::CreateRenderer<rx::Renderer11>);
+    }
+#endif
+
+#if defined(ANGLE_ENABLE_D3D9)
+    if (nativeDisplay != EGL_D3D11_ONLY_DISPLAY_ANGLE ||
+        (requestedDisplayType == EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE ||
+         (requestedDisplayType == EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE)))
+    {
+        rendererCreationFunctions.push_back(rx::CreateRenderer<rx::Renderer9>);
+    }
+#endif
+
+    for (size_t i = 0; i < rendererCreationFunctions.size(); i++)
+    {
+        rx::Renderer *renderer = rendererCreationFunctions[i](display, nativeDisplay, requestedDisplayType);
         if (renderer->initialize() == EGL_SUCCESS)
         {
             return renderer;
@@ -77,22 +104,6 @@ rx::Renderer *glCreateRenderer(egl::Display *display, HDC hDc, EGLNativeDisplayT
             SafeDelete(renderer);
         }
     }
-#endif
-
-#if defined(ANGLE_ENABLE_D3D9)
-    if (displayId != EGL_D3D11_ONLY_DISPLAY_ANGLE)
-    {
-        rx::Renderer9 *renderer = new rx::Renderer9(display, hDc);
-        if (renderer->initialize() == EGL_SUCCESS)
-        {
-            return renderer;
-        }
-        else
-        {
-            SafeDelete(renderer);
-        }
-    }
-#endif
 
     return NULL;
 }
