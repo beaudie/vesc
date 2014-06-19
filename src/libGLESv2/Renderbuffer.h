@@ -39,7 +39,7 @@ class RenderbufferStorage;
 class Renderbuffer : public RefCountObject
 {
   public:
-    Renderbuffer(rx::Renderer *renderer, GLuint id, RenderbufferStorage *newStorage);
+    Renderbuffer(GLuint id, RenderbufferStorage *newStorage);
 
     void setStorage(RenderbufferStorage *newStorage);
     RenderbufferStorage *getStorage();
@@ -57,7 +57,6 @@ class Renderbuffer : public RefCountObject
     GLuint getStencilSize() const;
 
   private:
-    rx::Renderer *mRenderer;
     RenderbufferStorage *mStorage;
 };
 

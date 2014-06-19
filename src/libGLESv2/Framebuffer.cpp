@@ -178,8 +178,7 @@ void Framebuffer::setDepthStencilBuffer(GLenum type, GLuint depthStencilBuffer, 
     if (attachmentImpl)
     {
         FramebufferAttachment *newAttachment = new FramebufferAttachment(depthStencilBuffer, attachmentImpl);
-        int clientVersion = mRenderer->getCurrentClientVersion();
-        if (newAttachment->getDepthSize(clientVersion) > 0 && newAttachment->getStencilSize(clientVersion) > 0)
+        if (newAttachment->getDepthSize() > 0 && newAttachment->getStencilSize() > 0)
         {
             mDepthbuffer.set(newAttachment, type, level, layer);
             mStencilbuffer.set(newAttachment, type, level, layer);
@@ -446,8 +445,7 @@ bool Framebuffer::hasStencil() const
 
         if (stencilbufferObject)
         {
-            int clientVersion = mRenderer->getCurrentClientVersion();
-            return stencilbufferObject->getStencilSize(clientVersion) > 0;
+            return stencilbufferObject->getStencilSize() > 0;
         }
     }
 
@@ -508,8 +506,8 @@ GLenum Framebuffer::completeness() const
                     return GL_FRAMEBUFFER_UNSUPPORTED;
                 }
 
-                if (gl::GetDepthBits(internalformat, clientVersion) > 0 ||
-                    gl::GetStencilBits(internalformat, clientVersion) > 0)
+                if (gl::GetDepthBits(internalformat) > 0 ||
+                    gl::GetStencilBits(internalformat) > 0)
                 {
                     return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
                 }
@@ -539,7 +537,7 @@ GLenum Framebuffer::completeness() const
                 // in GLES 3.0, there is no such restriction
                 if (clientVersion < 3)
                 {
-                    if (gl::GetPixelBytes(colorbuffer->getInternalFormat(), clientVersion) != colorbufferSize)
+                    if (gl::GetPixelBytes(colorbuffer->getInternalFormat()) != colorbufferSize)
                     {
                         return GL_FRAMEBUFFER_UNSUPPORTED;
                     }
@@ -559,7 +557,7 @@ GLenum Framebuffer::completeness() const
                 width = colorbuffer->getWidth();
                 height = colorbuffer->getHeight();
                 samples = colorbuffer->getSamples();
-                colorbufferSize = gl::GetPixelBytes(colorbuffer->getInternalFormat(), clientVersion);
+                colorbufferSize = gl::GetPixelBytes(colorbuffer->getInternalFormat());
                 missingAttachment = false;
             }
         }
@@ -604,7 +602,7 @@ GLenum Framebuffer::completeness() const
                 return GL_FRAMEBUFFER_UNSUPPORTED;
             }
 
-            if (gl::GetDepthBits(internalformat, clientVersion) == 0)
+            if (gl::GetDepthBits(internalformat) == 0)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
@@ -669,7 +667,7 @@ GLenum Framebuffer::completeness() const
                 return GL_FRAMEBUFFER_UNSUPPORTED;
             }
 
-            if (gl::GetStencilBits(internalformat, clientVersion) == 0)
+            if (gl::GetStencilBits(internalformat) == 0)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
@@ -718,11 +716,11 @@ GLenum Framebuffer::completeness() const
 DefaultFramebuffer::DefaultFramebuffer(rx::Renderer *renderer, Colorbuffer *colorbuffer, DepthStencilbuffer *depthStencil)
     : Framebuffer(renderer)
 {
-    Renderbuffer *colorRenderbuffer = new Renderbuffer(mRenderer, 0, colorbuffer);
+    Renderbuffer *colorRenderbuffer = new Renderbuffer(0, colorbuffer);
     FramebufferAttachment *colorAttachment = new FramebufferAttachment(0, new RenderbufferAttachment(colorRenderbuffer));
     mColorbuffers[0].set(colorAttachment, GL_RENDERBUFFER, 0, 0);
 
-    Renderbuffer *depthStencilRenderbuffer = new Renderbuffer(mRenderer, 0, depthStencil);
+    Renderbuffer *depthStencilRenderbuffer = new Renderbuffer(0, depthStencil);
     FramebufferAttachment *depthStencilAttachment = new FramebufferAttachment(0, new RenderbufferAttachment(depthStencilRenderbuffer));
     mDepthbuffer.set(depthStencilAttachment, (depthStencilRenderbuffer->getDepthSize() != 0) ? GL_RENDERBUFFER : GL_NONE, 0, 0);
     mStencilbuffer.set(depthStencilAttachment, (depthStencilRenderbuffer->getStencilSize() != 0) ? GL_RENDERBUFFER : GL_NONE, 0, 0);
