@@ -75,6 +75,7 @@
             'include_dirs':
             [
                 '../src/compiler/preprocessor',
+                '../src',
                 'third_party/googletest/include',
                 'third_party/googlemock/include',
             ],
@@ -134,6 +135,7 @@
                     'include_dirs':
                     [
                         '../include',
+                        '../src',
                         'angle_tests',
                         'third_party/googletest/include',
                     ],
@@ -154,6 +156,7 @@
                     'include_dirs':
                     [
                         '../include',
+                        '../src',
                         'angle_tests',
                         'third_party/googletest/include',
                         'third_party/googlemock/include',
@@ -184,6 +187,7 @@
                             [
                                 '../src/angle.gyp:libGLESv2',
                                 '../src/angle.gyp:libEGL',
+                                '../src',
                                 'gtest',
                                 'third_party/gles_conformance_tests/conform/GTF_ES/glsl/GTF/es_cts.gyp:es_cts_test_data',
                                 'third_party/gles_conformance_tests/conform/GTF_ES/glsl/GTF/es_cts.gyp:es2_cts',
@@ -242,6 +246,7 @@
                             [
                                 '../src/angle.gyp:libGLESv2',
                                 '../src/angle.gyp:libEGL',
+                                '../src',
                                 'gtest',
                                 'third_party/gles_conformance_tests/conform/GTF_ES/glsl/GTF/es_cts.gyp:es_cts_test_data',
                                 'third_party/gles_conformance_tests/conform/GTF_ES/glsl/GTF/es_cts.gyp:es3_cts',
@@ -306,6 +311,7 @@
                             [
                                 '../src/angle.gyp:libGLESv2',
                                 '../src/angle.gyp:libEGL',
+                                '../src',
                                 'gtest',
                                 'third_party/deqp/src/deqp/modules/gles3/gles3.gyp:deqp-gles3',
                                 'third_party/deqp/src/deqp/framework/platform/platform.gyp:tcutil-platform',
