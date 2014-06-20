@@ -15,6 +15,30 @@
 namespace sh
 {
 
+TParseContext::TParseContext(TSymbolTable& symt, TExtensionBehavior& ext, TIntermediate& interm,
+                             GLenum shaderTypeIn, ShShaderSpec spec, int options, bool checksPrecErrors,
+                             const char* sourcePath, TInfoSink& is)
+    : intermediate(interm),
+      symbolTable(symt),
+      shaderType(shaderTypeIn),
+      shaderSpec(spec),
+      compileOptions(options),
+      sourcePath(sourcePath),
+      treeRoot(0),
+      loopNestingLevel(0),
+      structNestingLevel(0),
+      currentFunctionType(NULL),
+      functionReturnsValue(false),
+      checksPrecisionErrors(checksPrecErrors),
+      defaultMatrixPacking(EmpColumnMajor),
+      defaultBlockStorage(EbsShared),
+      diagnostics(is),
+      shaderVersion(100),
+      directiveHandler(ext, diagnostics, shaderVersion),
+      preprocessor(&diagnostics, &directiveHandler),
+      scanner(NULL)
+{}
+
 ///////////////////////////////////////////////////////////////////////
 //
 // Sub- vector and matrix fields

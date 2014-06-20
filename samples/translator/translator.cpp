@@ -13,7 +13,12 @@
 #include <string.h>
 #include <vector>
 
-using namespace sh;
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+#include <GLES3/gl3.h>
+
+namespace sh
+{
 
 //
 // Return codes from main.
@@ -26,7 +31,7 @@ enum TFailCode {
 };
 
 static void usage();
-static ShShaderType FindShaderType(const char* fileName);
+static GLenum FindShaderType(const char* fileName);
 static bool CompileFile(char* fileName, ShHandle compiler, int compileOptions);
 static void LogMsg(const char* msg, const char* name, const int num, const char* logName);
 static void PrintActiveVariables(ShHandle compiler, ShShaderInfo varType);
@@ -56,157 +61,6 @@ void GenerateResources(ShBuiltInResources* resources)
 
     resources->OES_standard_derivatives = 0;
     resources->OES_EGL_image_external = 0;
-}
-
-int main(int argc, char* argv[])
-{
-    TFailCode failCode = ESuccess;
-
-    int compileOptions = 0;
-    int numCompiles = 0;
-    ShHandle vertexCompiler = 0;
-    ShHandle fragmentCompiler = 0;
-    char* buffer = 0;
-    size_t bufferLen = 0;
-    ShShaderSpec spec = SH_GLES2_SPEC;
-    ShShaderOutput output = SH_ESSL_OUTPUT;
-
-    ShInitialize();
-
-    ShBuiltInResources resources;
-    GenerateResources(&resources);
-
-    argc--;
-    argv++;
-    for (; (argc >= 1) && (failCode == ESuccess); argc--, argv++) {
-        if (argv[0][0] == '-') {
-            switch (argv[0][1]) {
-            case 'i': compileOptions |= SH_INTERMEDIATE_TREE; break;
-            case 'o': compileOptions |= SH_OBJECT_CODE; break;
-            case 'u': compileOptions |= SH_VARIABLES; break;
-            case 'l': compileOptions |= SH_UNROLL_FOR_LOOP_WITH_INTEGER_INDEX; break;
-            case 'e': compileOptions |= SH_EMULATE_BUILT_IN_FUNCTIONS; break;
-            case 'd': compileOptions |= SH_DEPENDENCY_GRAPH; break;
-            case 't': compileOptions |= SH_TIMING_RESTRICTIONS; break;
-            case 's':
-                if (argv[0][2] == '=') {
-                    switch (argv[0][3]) {
-                        case 'e': spec = SH_GLES2_SPEC; break;
-                        case 'w': spec = SH_WEBGL_SPEC; break;
-                        case 'c': spec = SH_CSS_SHADERS_SPEC; break;
-                        default: failCode = EFailUsage;
-                    }                    
-                } else {
-                    failCode = EFailUsage;
-                }
-                break;
-            case 'b':
-                if (argv[0][2] == '=') {
-                    switch (argv[0][3]) {
-                    case 'e': output = SH_ESSL_OUTPUT; break;
-                    case 'g': output = SH_GLSL_OUTPUT; break;
-                    case 'h':
-                        if (argv[0][4] == '1' && argv[0][5] == '1')
-                        {
-                            output = SH_HLSL11_OUTPUT;
-                        }
-                        else
-                        {
-                            output = SH_HLSL9_OUTPUT;
-                        }
-                        break;
-                    default: failCode = EFailUsage;
-                    }
-                } else {
-                    failCode = EFailUsage;
-                }
-                break;
-            case 'x':
-                if (argv[0][2] == '=') {
-                    switch (argv[0][3]) {
-                    case 'i': resources.OES_EGL_image_external = 1; break;
-                    case 'd': resources.OES_standard_derivatives = 1; break;
-                    case 'r': resources.ARB_texture_rectangle = 1; break;
-                    case 'l': resources.EXT_shader_texture_lod = 1; break;
-                    default: failCode = EFailUsage;
-                    }
-                } else {
-                    failCode = EFailUsage;
-                }
-                break;
-            default: failCode = EFailUsage;
-            }
-        } else {
-            ShHandle compiler = 0;
-            switch (FindShaderType(argv[0])) {
-            case SH_VERTEX_SHADER:
-                if (vertexCompiler == 0)
-                    vertexCompiler = ShConstructCompiler(
-                        SH_VERTEX_SHADER, spec, output, &resources);
-                compiler = vertexCompiler;
-                break;
-            case SH_FRAGMENT_SHADER:
-                if (fragmentCompiler == 0)
-                    fragmentCompiler = ShConstructCompiler(
-                        SH_FRAGMENT_SHADER, spec, output, &resources);
-                compiler = fragmentCompiler;
-                break;
-            default: break;
-            }
-            if (compiler) {
-              bool compiled = CompileFile(argv[0], compiler, compileOptions);
-
-              LogMsg("BEGIN", "COMPILER", numCompiles, "INFO LOG");
-              ShGetInfo(compiler, SH_INFO_LOG_LENGTH, &bufferLen);
-              buffer = (char*) realloc(buffer, bufferLen * sizeof(char));
-              ShGetInfoLog(compiler, buffer);
-              puts(buffer);
-              LogMsg("END", "COMPILER", numCompiles, "INFO LOG");
-              printf("\n\n");
-
-              if (compiled && (compileOptions & SH_OBJECT_CODE)) {
-                  LogMsg("BEGIN", "COMPILER", numCompiles, "OBJ CODE");
-                  ShGetInfo(compiler, SH_OBJECT_CODE_LENGTH, &bufferLen);
-                  buffer = (char*) realloc(buffer, bufferLen * sizeof(char));
-                  ShGetObjectCode(compiler, buffer);
-                  puts(buffer);
-                  LogMsg("END", "COMPILER", numCompiles, "OBJ CODE");
-                  printf("\n\n");
-              }
-              if (compiled && (compileOptions & SH_VARIABLES)) {
-                  LogMsg("BEGIN", "COMPILER", numCompiles, "ACTIVE ATTRIBS");
-                  PrintActiveVariables(compiler, SH_ACTIVE_ATTRIBUTES);
-                  LogMsg("END", "COMPILER", numCompiles, "ACTIVE ATTRIBS");
-                  printf("\n\n");
-
-                  LogMsg("BEGIN", "COMPILER", numCompiles, "ACTIVE UNIFORMS");
-                  PrintActiveVariables(compiler, SH_ACTIVE_UNIFORMS);
-                  LogMsg("END", "COMPILER", numCompiles, "ACTIVE UNIFORMS");
-                  printf("\n\n");
-              }
-              if (!compiled)
-                  failCode = EFailCompile;
-              ++numCompiles;
-            } else {
-                failCode = EFailCompilerCreate;
-            }
-        }
-    }
-
-    if ((vertexCompiler == 0) && (fragmentCompiler == 0))
-        failCode = EFailUsage;
-    if (failCode == EFailUsage)
-        usage();
-
-    if (vertexCompiler)
-        ShDestruct(vertexCompiler);
-    if (fragmentCompiler)
-        ShDestruct(fragmentCompiler);
-    if (buffer)
-        free(buffer);
-    ShFinalize();
-
-    return failCode;
 }
 
 //
@@ -244,7 +98,7 @@ void usage()
 //   .frag*    = fragment shader
 //   .vert*    = vertex shader
 //
-ShShaderType FindShaderType(const char* fileName)
+GLenum FindShaderType(const char* fileName)
 {
     assert(fileName);
 
@@ -255,11 +109,11 @@ ShShaderType FindShaderType(const char* fileName)
 
     ext = strrchr(fileName, '.');
     if (ext) {
-        if (strncmp(ext, ".frag", 4) == 0) return SH_FRAGMENT_SHADER;
-        if (strncmp(ext, ".vert", 4) == 0) return SH_VERTEX_SHADER;
+        if (strncmp(ext, ".frag", 4) == 0) return GL_FRAGMENT_SHADER;
+        if (strncmp(ext, ".vert", 4) == 0) return GL_VERTEX_SHADER;
     }
 
-    return SH_FRAGMENT_SHADER;
+    return GL_FRAGMENT_SHADER;
 }
 
 //
@@ -299,7 +153,7 @@ void PrintActiveVariables(ShHandle compiler, ShShaderInfo varType)
 
     size_t activeVars = 0;
     int size = 0;
-    ShDataType type = SH_NONE;
+    GLenum dataType = GL_NONE;
     ShPrecisionType precision = SH_PRECISION_UNDEFINED;
     int staticUse = 0;
     const char* typeName = NULL;
@@ -307,42 +161,42 @@ void PrintActiveVariables(ShHandle compiler, ShShaderInfo varType)
     for (size_t i = 0; i < activeVars; ++i) {
         switch (varType) {
             case SH_ACTIVE_ATTRIBUTES:
-                ShGetVariableInfo(compiler, SH_ACTIVE_ATTRIBUTES, static_cast<int>(i), NULL, &size, &type, &precision, &staticUse, name, NULL);
+                ShGetVariableInfo(compiler, SH_ACTIVE_ATTRIBUTES, static_cast<int>(i), NULL, &size, &dataType, &precision, &staticUse, name, NULL);
                 break;
             case SH_ACTIVE_UNIFORMS:
-                ShGetVariableInfo(compiler, SH_ACTIVE_UNIFORMS, static_cast<int>(i), NULL, &size, &type, &precision, &staticUse, name, NULL);
+                ShGetVariableInfo(compiler, SH_ACTIVE_UNIFORMS, static_cast<int>(i), NULL, &size, &dataType, &precision, &staticUse, name, NULL);
                 break;
             default: assert(0);
         }
-        switch (type) {
-            case SH_FLOAT: typeName = "GL_FLOAT"; break;
-            case SH_FLOAT_VEC2: typeName = "GL_FLOAT_VEC2"; break;
-            case SH_FLOAT_VEC3: typeName = "GL_FLOAT_VEC3"; break;
-            case SH_FLOAT_VEC4: typeName = "GL_FLOAT_VEC4"; break;
-            case SH_INT: typeName = "GL_INT"; break;
-            case SH_INT_VEC2: typeName = "GL_INT_VEC2"; break;
-            case SH_INT_VEC3: typeName = "GL_INT_VEC3"; break;
-            case SH_INT_VEC4: typeName = "GL_INT_VEC4"; break;
-            case SH_UNSIGNED_INT: typeName = "GL_UNSIGNED_INT"; break;
-            case SH_UNSIGNED_INT_VEC2: typeName = "GL_UNSIGNED_INT_VEC2"; break;
-            case SH_UNSIGNED_INT_VEC3: typeName = "GL_UNSIGNED_INT_VEC3"; break;
-            case SH_UNSIGNED_INT_VEC4: typeName = "GL_UNSIGNED_INT_VEC4"; break;
-            case SH_BOOL: typeName = "GL_BOOL"; break;
-            case SH_BOOL_VEC2: typeName = "GL_BOOL_VEC2"; break;
-            case SH_BOOL_VEC3: typeName = "GL_BOOL_VEC3"; break;
-            case SH_BOOL_VEC4: typeName = "GL_BOOL_VEC4"; break;
-            case SH_FLOAT_MAT2: typeName = "GL_FLOAT_MAT2"; break;
-            case SH_FLOAT_MAT3: typeName = "GL_FLOAT_MAT3"; break;
-            case SH_FLOAT_MAT4: typeName = "GL_FLOAT_MAT4"; break;
-            case SH_FLOAT_MAT2x3: typeName = "GL_FLOAT_MAT2x3"; break;
-            case SH_FLOAT_MAT3x2: typeName = "GL_FLOAT_MAT3x2"; break;
-            case SH_FLOAT_MAT4x2: typeName = "GL_FLOAT_MAT4x2"; break;
-            case SH_FLOAT_MAT2x4: typeName = "GL_FLOAT_MAT2x4"; break;
-            case SH_FLOAT_MAT3x4: typeName = "GL_FLOAT_MAT3x4"; break;
-            case SH_FLOAT_MAT4x3: typeName = "GL_FLOAT_MAT4x3"; break;
-            case SH_SAMPLER_2D: typeName = "GL_SAMPLER_2D"; break;
-            case SH_SAMPLER_CUBE: typeName = "GL_SAMPLER_CUBE"; break;
-            case SH_SAMPLER_EXTERNAL_OES: typeName = "GL_SAMPLER_EXTERNAL_OES"; break;
+        switch (dataType) {
+            case GL_FLOAT: typeName = "GL_FLOAT"; break;
+            case GL_FLOAT_VEC2: typeName = "GL_FLOAT_VEC2"; break;
+            case GL_FLOAT_VEC3: typeName = "GL_FLOAT_VEC3"; break;
+            case GL_FLOAT_VEC4: typeName = "GL_FLOAT_VEC4"; break;
+            case GL_INT: typeName = "GL_INT"; break;
+            case GL_INT_VEC2: typeName = "GL_INT_VEC2"; break;
+            case GL_INT_VEC3: typeName = "GL_INT_VEC3"; break;
+            case GL_INT_VEC4: typeName = "GL_INT_VEC4"; break;
+            case GL_UNSIGNED_INT: typeName = "GL_UNSIGNED_INT"; break;
+            case GL_UNSIGNED_INT_VEC2: typeName = "GL_UNSIGNED_INT_VEC2"; break;
+            case GL_UNSIGNED_INT_VEC3: typeName = "GL_UNSIGNED_INT_VEC3"; break;
+            case GL_UNSIGNED_INT_VEC4: typeName = "GL_UNSIGNED_INT_VEC4"; break;
+            case GL_BOOL: typeName = "GL_BOOL"; break;
+            case GL_BOOL_VEC2: typeName = "GL_BOOL_VEC2"; break;
+            case GL_BOOL_VEC3: typeName = "GL_BOOL_VEC3"; break;
+            case GL_BOOL_VEC4: typeName = "GL_BOOL_VEC4"; break;
+            case GL_FLOAT_MAT2: typeName = "GL_FLOAT_MAT2"; break;
+            case GL_FLOAT_MAT3: typeName = "GL_FLOAT_MAT3"; break;
+            case GL_FLOAT_MAT4: typeName = "GL_FLOAT_MAT4"; break;
+            case GL_FLOAT_MAT2x3: typeName = "GL_FLOAT_MAT2x3"; break;
+            case GL_FLOAT_MAT3x2: typeName = "GL_FLOAT_MAT3x2"; break;
+            case GL_FLOAT_MAT4x2: typeName = "GL_FLOAT_MAT4x2"; break;
+            case GL_FLOAT_MAT2x4: typeName = "GL_FLOAT_MAT2x4"; break;
+            case GL_FLOAT_MAT3x4: typeName = "GL_FLOAT_MAT3x4"; break;
+            case GL_FLOAT_MAT4x3: typeName = "GL_FLOAT_MAT4x3"; break;
+            case GL_SAMPLER_2D: typeName = "GL_SAMPLER_2D"; break;
+            case GL_SAMPLER_CUBE: typeName = "GL_SAMPLER_CUBE"; break;
+            case GL_SAMPLER_EXTERNAL_OES: typeName = "GL_SAMPLER_EXTERNAL_OES"; break;
             default: assert(0);
         }
         printf("%lu: name:%s type:%s size:%d\n", i, name, typeName, size);
@@ -385,4 +239,164 @@ static void FreeShaderSource(ShaderSource& source) {
         delete [] source[i];
     }
     source.clear();
+}
+
+}
+
+int main(int argc, char* argv[])
+{
+    using namespace sh;
+
+    TFailCode failCode = ESuccess;
+
+    int compileOptions = 0;
+    int numCompiles = 0;
+    sh::ShHandle vertexCompiler = 0;
+    sh::ShHandle fragmentCompiler = 0;
+    char* buffer = 0;
+    size_t bufferLen = 0;
+    sh::ShShaderSpec spec = SH_GLES2_SPEC;
+    ShShaderOutput output = SH_ESSL_OUTPUT;
+
+    ShInitialize();
+
+    ShBuiltInResources resources;
+    GenerateResources(&resources);
+
+    argc--;
+    argv++;
+    for (; (argc >= 1) && (failCode == ESuccess); argc--, argv++) {
+        if (argv[0][0] == '-') {
+            switch (argv[0][1]) {
+            case 'i': compileOptions |= SH_INTERMEDIATE_TREE; break;
+            case 'o': compileOptions |= SH_OBJECT_CODE; break;
+            case 'u': compileOptions |= SH_VARIABLES; break;
+            case 'l': compileOptions |= SH_UNROLL_FOR_LOOP_WITH_INTEGER_INDEX; break;
+            case 'e': compileOptions |= SH_EMULATE_BUILT_IN_FUNCTIONS; break;
+            case 'd': compileOptions |= SH_DEPENDENCY_GRAPH; break;
+            case 't': compileOptions |= SH_TIMING_RESTRICTIONS; break;
+            case 's':
+                if (argv[0][2] == '=') {
+                    switch (argv[0][3]) {
+                    case 'e': spec = SH_GLES2_SPEC; break;
+                    case 'w': spec = SH_WEBGL_SPEC; break;
+                    case 'c': spec = SH_CSS_SHADERS_SPEC; break;
+                    default: failCode = EFailUsage;
+                    }
+                }
+                else {
+                    failCode = EFailUsage;
+                }
+                break;
+            case 'b':
+                if (argv[0][2] == '=') {
+                    switch (argv[0][3]) {
+                    case 'e': output = SH_ESSL_OUTPUT; break;
+                    case 'g': output = SH_GLSL_OUTPUT; break;
+                    case 'h':
+                        if (argv[0][4] == '1' && argv[0][5] == '1')
+                        {
+                            output = SH_HLSL11_OUTPUT;
+                        }
+                        else
+                        {
+                            output = SH_HLSL9_OUTPUT;
+                        }
+                        break;
+                    default: failCode = EFailUsage;
+                    }
+                }
+                else {
+                    failCode = EFailUsage;
+                }
+                break;
+            case 'x':
+                if (argv[0][2] == '=') {
+                    switch (argv[0][3]) {
+                    case 'i': resources.OES_EGL_image_external = 1; break;
+                    case 'd': resources.OES_standard_derivatives = 1; break;
+                    case 'r': resources.ARB_texture_rectangle = 1; break;
+                    case 'l': resources.EXT_shader_texture_lod = 1; break;
+                    default: failCode = EFailUsage;
+                    }
+                }
+                else {
+                    failCode = EFailUsage;
+                }
+                break;
+            default: failCode = EFailUsage;
+            }
+        }
+        else {
+            ShHandle compiler = 0;
+            switch (FindShaderType(argv[0])) {
+            case GL_VERTEX_SHADER:
+                if (vertexCompiler == 0)
+                    vertexCompiler = ShConstructCompiler(
+                    GL_VERTEX_SHADER, spec, output, &resources);
+                compiler = vertexCompiler;
+                break;
+            case GL_FRAGMENT_SHADER:
+                if (fragmentCompiler == 0)
+                    fragmentCompiler = ShConstructCompiler(
+                    GL_FRAGMENT_SHADER, spec, output, &resources);
+                compiler = fragmentCompiler;
+                break;
+            default: break;
+            }
+            if (compiler) {
+                bool compiled = CompileFile(argv[0], compiler, compileOptions);
+
+                LogMsg("BEGIN", "COMPILER", numCompiles, "INFO LOG");
+                ShGetInfo(compiler, SH_INFO_LOG_LENGTH, &bufferLen);
+                buffer = (char*)realloc(buffer, bufferLen * sizeof(char));
+                ShGetInfoLog(compiler, buffer);
+                puts(buffer);
+                LogMsg("END", "COMPILER", numCompiles, "INFO LOG");
+                printf("\n\n");
+
+                if (compiled && (compileOptions & SH_OBJECT_CODE)) {
+                    LogMsg("BEGIN", "COMPILER", numCompiles, "OBJ CODE");
+                    ShGetInfo(compiler, SH_OBJECT_CODE_LENGTH, &bufferLen);
+                    buffer = (char*)realloc(buffer, bufferLen * sizeof(char));
+                    ShGetObjectCode(compiler, buffer);
+                    puts(buffer);
+                    LogMsg("END", "COMPILER", numCompiles, "OBJ CODE");
+                    printf("\n\n");
+                }
+                if (compiled && (compileOptions & SH_VARIABLES)) {
+                    LogMsg("BEGIN", "COMPILER", numCompiles, "ACTIVE ATTRIBS");
+                    PrintActiveVariables(compiler, SH_ACTIVE_ATTRIBUTES);
+                    LogMsg("END", "COMPILER", numCompiles, "ACTIVE ATTRIBS");
+                    printf("\n\n");
+
+                    LogMsg("BEGIN", "COMPILER", numCompiles, "ACTIVE UNIFORMS");
+                    PrintActiveVariables(compiler, SH_ACTIVE_UNIFORMS);
+                    LogMsg("END", "COMPILER", numCompiles, "ACTIVE UNIFORMS");
+                    printf("\n\n");
+                }
+                if (!compiled)
+                    failCode = EFailCompile;
+                ++numCompiles;
+            }
+            else {
+                failCode = EFailCompilerCreate;
+            }
+        }
+    }
+
+    if ((vertexCompiler == 0) && (fragmentCompiler == 0))
+        failCode = EFailUsage;
+    if (failCode == EFailUsage)
+        usage();
+
+    if (vertexCompiler)
+        ShDestruct(vertexCompiler);
+    if (fragmentCompiler)
+        ShDestruct(fragmentCompiler);
+    if (buffer)
+        free(buffer);
+    ShFinalize();
+
+    return failCode;
 }

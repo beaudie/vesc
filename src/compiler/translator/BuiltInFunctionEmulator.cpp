@@ -8,6 +8,8 @@
 
 #include "compiler/translator/SymbolTable.h"
 
+#include "angle_gl.h"
+
 namespace sh
 {
 
@@ -268,9 +270,9 @@ private:
 
 }  // anonymous namepsace
 
-BuiltInFunctionEmulator::BuiltInFunctionEmulator(ShShaderType shaderType)
+BuiltInFunctionEmulator::BuiltInFunctionEmulator(GLenum shaderType)
 {
-    if (shaderType == SH_FRAGMENT_SHADER) {
+    if (shaderType == GL_FRAGMENT_SHADER) {
         mFunctionMask = kFunctionEmulationFragmentMask;
         mFunctionSource = kFunctionEmulationFragmentSource;
     } else {

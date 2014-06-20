@@ -14,10 +14,12 @@
 
 #include "compiler/translator/intermediate.h"
 
+#include "angle_gl.h"
+
 namespace sh
 {
 
-void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltInResources &resources, TSymbolTable &symbolTable)
+void InsertBuiltInFunctions(GLenum shaderType, ShShaderSpec spec, const ShBuiltInResources &resources, TSymbolTable &symbolTable)
 {
     TType *float1 = new TType(EbtFloat);
     TType *float2 = new TType(EbtFloat, 2);
@@ -365,7 +367,7 @@ void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltI
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "textureCubeGradEXT", samplerCube, float3, float3, float3);
     }
 
-    if (type == SH_FRAGMENT_SHADER)
+    if (shaderType == GL_FRAGMENT_SHADER)
     {
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2D", sampler2D, float2, float1);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DProj", sampler2D, float3, float1);
@@ -399,7 +401,7 @@ void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltI
         }
     }
 
-    if(type == SH_VERTEX_SHADER)
+    if (shaderType == GL_VERTEX_SHADER)
     {
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DLod", sampler2D, float2, float1);
         symbolTable.insertBuiltIn(ESSL1_BUILTINS, float4, "texture2DProjLod", sampler2D, float3, float1);
@@ -429,7 +431,7 @@ void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltI
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureLod", gsamplerCube, float3, float1);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureLod", gsampler2DArray, float3, float1);
 
-    if (type == SH_FRAGMENT_SHADER)
+    if (shaderType == GL_FRAGMENT_SHADER)
     {
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "texture", gsampler2D, float2, float1);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "texture", gsampler3D, float3, float1);
@@ -450,7 +452,7 @@ void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltI
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "textureProj", sampler2DShadow, float4);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "textureLod", sampler2DShadow, float3, float1);
 
-    if (type == SH_FRAGMENT_SHADER)
+    if (shaderType == GL_FRAGMENT_SHADER)
     {
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "texture", sampler2DShadow, float3, float1);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "texture", samplerCubeShadow, float4, float1);
@@ -465,7 +467,7 @@ void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltI
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, int2, "textureSize", samplerCubeShadow, int1);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, int3, "textureSize", sampler2DArrayShadow, int1);
 
-    if(type == SH_FRAGMENT_SHADER)
+    if (shaderType == GL_FRAGMENT_SHADER)
     {
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "dFdx", float1);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, float2, "dFdx", float2);
@@ -488,7 +490,7 @@ void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltI
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "textureOffset", sampler2DShadow, float3, int2);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureOffset", gsampler2DArray, float3, int2);
 
-    if(type == SH_FRAGMENT_SHADER)
+    if (shaderType == GL_FRAGMENT_SHADER)
     {
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureOffset", gsampler2D, float2, int2, float1);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureOffset", gsampler3D, float3, int3, float1);
@@ -501,7 +503,7 @@ void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltI
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureProjOffset", gsampler3D, float4, int3);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "textureProjOffset", sampler2DShadow, float4, int2);
 
-    if(type == SH_FRAGMENT_SHADER)
+    if (shaderType == GL_FRAGMENT_SHADER)
     {
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureProjOffset", gsampler2D, float3, int2, float1);
         symbolTable.insertBuiltIn(ESSL3_BUILTINS, gvec4, "textureProjOffset", gsampler2D, float4, int2, float1);
@@ -597,7 +599,7 @@ void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltI
     symbolTable.insertConstInt(ESSL3_BUILTINS, "gl_MaxProgramTexelOffset", resources.MaxProgramTexelOffset);
 }
 
-void IdentifyBuiltIns(ShShaderType type, ShShaderSpec spec,
+void IdentifyBuiltIns(GLenum shaderType, ShShaderSpec spec,
                       const ShBuiltInResources &resources,
                       TSymbolTable &symbolTable)
 {
@@ -605,8 +607,8 @@ void IdentifyBuiltIns(ShShaderType type, ShShaderSpec spec,
     // First, insert some special built-in variables that are not in 
     // the built-in header files.
     //
-    switch(type) {
-    case SH_FRAGMENT_SHADER:
+    switch (shaderType) {
+    case GL_FRAGMENT_SHADER:
         symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_FragCoord"), TType(EbtFloat, EbpMedium, EvqFragCoord,   4)));
         symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_FrontFacing"), TType(EbtBool,  EbpUndefined, EvqFrontFacing, 1)));
         symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_PointCoord"), TType(EbtFloat, EbpMedium, EvqPointCoord,  2)));
@@ -629,7 +631,7 @@ void IdentifyBuiltIns(ShShaderType type, ShShaderSpec spec,
 
         break;
 
-    case SH_VERTEX_SHADER:
+    case GL_VERTEX_SHADER:
         symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_Position"), TType(EbtFloat, EbpHigh, EvqPosition,    4)));
         symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_PointSize"), TType(EbtFloat, EbpMedium, EvqPointSize,   1)));
         break;
@@ -696,10 +698,10 @@ void IdentifyBuiltIns(ShShaderType type, ShShaderSpec spec,
     symbolTable.relateToOperator(COMMON_BUILTINS, "not",          EOpVectorLogicalNot);
 
     // Map language-specific operators.
-    switch(type) {
-    case SH_VERTEX_SHADER:
+    switch (shaderType) {
+    case GL_VERTEX_SHADER:
         break;
-    case SH_FRAGMENT_SHADER:
+    case GL_FRAGMENT_SHADER:
         if (resources.OES_standard_derivatives)
         {
             symbolTable.relateToOperator(ESSL1_BUILTINS, "dFdx",   EOpDFdx);
@@ -732,8 +734,8 @@ void IdentifyBuiltIns(ShShaderType type, ShShaderSpec spec,
     }
 
     // Finally add resource-specific variables.
-    switch(type) {
-    case SH_FRAGMENT_SHADER:
+    switch (shaderType) {
+    case GL_FRAGMENT_SHADER:
         if (spec != SH_CSS_SHADERS_SPEC) {
             // Set up gl_FragData.  The array size.
             TType fragData(EbtFloat, EbpMedium, EvqFragData, 4, 1, true);

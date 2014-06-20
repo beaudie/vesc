@@ -38,16 +38,18 @@ WHICH GENERATES THE GLSL ES PARSER (glslang_tab.cpp AND glslang_tab.h).
 #include "compiler/translator/ParseContext.h"
 #include "GLSLANG/ShaderLang.h"
 
-using namespace sh;
+#include "angle_gl.h"
 
 #define YYENABLE_NLS 0
 
 #define YYLEX_PARAM context->scanner
 
+using namespace sh;
+
 %}
 %expect 1 /* One shift reduce conflict because of if | else */
 %pure-parser
-%parse-param {TParseContext* context}
+%parse-param {sh::TParseContext* context}
 %locations
 
 %code requires {
@@ -64,25 +66,25 @@ using namespace sh;
             unsigned int u;
             bool b;
         };
-        TSymbol* symbol;
+        sh::TSymbol* symbol;
     } lex;
     struct {
-        TOperator op;
+        sh::TOperator op;
         union {
-            TIntermNode* intermNode;
-            TIntermNodePair nodePair;
-            TIntermTyped* intermTypedNode;
-            TIntermAggregate* intermAggregate;
+            sh::TIntermNode* intermNode;
+            sh::TIntermNodePair nodePair;
+            sh::TIntermTyped* intermTypedNode;
+            sh::TIntermAggregate* intermAggregate;
         };
         union {
-            TPublicType type;
-            TPrecision precision;
-            TLayoutQualifier layoutQualifier;
-            TQualifier qualifier;
-            TFunction* function;
-            TParameter param;
-            TField* field;
-            TFieldList* fieldList;
+            sh::TPublicType type;
+            sh::TPrecision precision;
+            sh::TLayoutQualifier layoutQualifier;
+            sh::TQualifier qualifier;
+            sh::TFunction* function;
+            sh::TParameter param;
+            sh::TField* field;
+            sh::TFieldList* fieldList;
         };
     } interm;
 }
@@ -108,14 +110,14 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, const char* reason)
   } while (0)
 
 #define VERTEX_ONLY(S, L) {  \
-    if (context->shaderType != SH_VERTEX_SHADER) {  \
+    if (context->shaderType != GL_VERTEX_SHADER) {  \
         context->error(L, " supported in vertex shaders only ", S);  \
         context->recover();  \
     }  \
 }
 
 #define FRAG_ONLY(S, L) {  \
-    if (context->shaderType != SH_FRAGMENT_SHADER) {  \
+    if (context->shaderType != GL_FRAGMENT_SHADER) {  \
         context->error(L, " supported in fragment shaders only ", S);  \
         context->recover();  \
     }  \
@@ -822,7 +824,7 @@ declaration
         $$ = $1.intermAggregate;
     }
     | PRECISION precision_qualifier type_specifier_no_prec SEMICOLON {
-        if (($2 == EbpHigh) && (context->shaderType == SH_FRAGMENT_SHADER) && !context->fragmentPrecisionHigh) {
+        if (($2 == EbpHigh) && (context->shaderType == GL_FRAGMENT_SHADER) && !context->fragmentPrecisionHigh) {
             context->error(@1, "precision is not supported in fragment shader", "highp");
             context->recover();
         }
@@ -1164,7 +1166,7 @@ type_qualifier
         ES2_ONLY("varying", @1);
         if (context->globalErrorCheck(@1, context->symbolTable.atGlobalLevel(), "varying"))
             context->recover();
-        if (context->shaderType == SH_VERTEX_SHADER)
+        if (context->shaderType == GL_VERTEX_SHADER)
             $$.setBasic(EbtVoid, EvqVaryingOut, @1);
         else
             $$.setBasic(EbtVoid, EvqVaryingIn, @1);
@@ -1173,7 +1175,7 @@ type_qualifier
         ES2_ONLY("varying", @1);
         if (context->globalErrorCheck(@1, context->symbolTable.atGlobalLevel(), "invariant varying"))
             context->recover();
-        if (context->shaderType == SH_VERTEX_SHADER)
+        if (context->shaderType == GL_VERTEX_SHADER)
             $$.setBasic(EbtVoid, EvqInvariantVaryingOut, @1);
         else
             $$.setBasic(EbtVoid, EvqInvariantVaryingIn, @1);
@@ -1212,29 +1214,29 @@ storage_qualifier
     }
     | IN_QUAL {
         ES3_ONLY("in", @1, "storage qualifier");
-        $$.qualifier = (context->shaderType == SH_FRAGMENT_SHADER) ? EvqFragmentIn : EvqVertexIn;
+        $$.qualifier = (context->shaderType == GL_FRAGMENT_SHADER) ? EvqFragmentIn : EvqVertexIn;
     }
     | OUT_QUAL {
         ES3_ONLY("out", @1, "storage qualifier");
-        $$.qualifier = (context->shaderType == SH_FRAGMENT_SHADER) ? EvqFragmentOut : EvqVertexOut;
+        $$.qualifier = (context->shaderType == GL_FRAGMENT_SHADER) ? EvqFragmentOut : EvqVertexOut;
     }
     | CENTROID IN_QUAL {
         ES3_ONLY("centroid in", @1, "storage qualifier");
-        if (context->shaderType == SH_VERTEX_SHADER)
+        if (context->shaderType == GL_VERTEX_SHADER)
         {
             context->error(@1, "invalid storage qualifier", "it is an error to use 'centroid in' in the vertex shader");
             context->recover();
         }
-        $$.qualifier = (context->shaderType == SH_FRAGMENT_SHADER) ? EvqCentroidIn : EvqVertexIn;
+        $$.qualifier = (context->shaderType == GL_FRAGMENT_SHADER) ? EvqCentroidIn : EvqVertexIn;
     }
     | CENTROID OUT_QUAL {
         ES3_ONLY("centroid out", @1, "storage qualifier");
-        if (context->shaderType == SH_FRAGMENT_SHADER)
+        if (context->shaderType == GL_FRAGMENT_SHADER)
         {
             context->error(@1, "invalid storage qualifier", "it is an error to use 'centroid out' in the fragment shader");
             context->recover();
         }
-        $$.qualifier = (context->shaderType == SH_FRAGMENT_SHADER) ? EvqFragmentOut : EvqCentroidOut;
+        $$.qualifier = (context->shaderType == GL_FRAGMENT_SHADER) ? EvqFragmentOut : EvqCentroidOut;
     }
     | UNIFORM {
         if (context->globalErrorCheck(@1, context->symbolTable.atGlobalLevel(), "uniform"))
@@ -1949,6 +1951,6 @@ function_definition
 
 %%
 
-int glslang_parse(TParseContext* context) {
+int glslang_parse(sh::TParseContext* context) {
     return yyparse(context);
 }

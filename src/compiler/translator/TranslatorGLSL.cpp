@@ -12,9 +12,9 @@
 namespace sh
 {
 
-static void writeVersion(ShShaderType type, TIntermNode* root,
+static void writeVersion(GLenum shaderType, TIntermNode* root,
                          TInfoSinkBase& sink) {
-    TVersionGLSL versionGLSL(type);
+    TVersionGLSL versionGLSL;
     root->traverse(&versionGLSL);
     int version = versionGLSL.getVersion();
     // We need to write version directive only if it is greater than 110.
@@ -24,8 +24,8 @@ static void writeVersion(ShShaderType type, TIntermNode* root,
     }
 }
 
-TranslatorGLSL::TranslatorGLSL(ShShaderType type, ShShaderSpec spec)
-    : TCompiler(type, spec, SH_GLSL_OUTPUT) {
+TranslatorGLSL::TranslatorGLSL(GLenum shaderType, ShShaderSpec spec)
+    : TCompiler(shaderType, spec, SH_GLSL_OUTPUT) {
 }
 
 void TranslatorGLSL::translate(TIntermNode* root) {

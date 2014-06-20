@@ -27,48 +27,10 @@ struct TMatrixFields {
 // The following are extra variables needed during parsing, grouped together so
 // they can be passed to the parser without needing a global.
 //
-struct TParseContext {
-    TParseContext(TSymbolTable& symt, TExtensionBehavior& ext, TIntermediate& interm, ShShaderType type, ShShaderSpec spec, int options, bool checksPrecErrors, const char* sourcePath, TInfoSink& is) :
-            intermediate(interm),
-            symbolTable(symt),
-            shaderType(type),
-            shaderSpec(spec),
-            compileOptions(options),
-            sourcePath(sourcePath),
-            treeRoot(0),
-            loopNestingLevel(0),
-            structNestingLevel(0),
-            currentFunctionType(NULL),
-            functionReturnsValue(false),
-            checksPrecisionErrors(checksPrecErrors),
-            defaultMatrixPacking(EmpColumnMajor),
-            defaultBlockStorage(EbsShared),
-            diagnostics(is),
-            shaderVersion(100),
-            directiveHandler(ext, diagnostics, shaderVersion),
-            preprocessor(&diagnostics, &directiveHandler),
-            scanner(NULL) {  }
-    TIntermediate& intermediate; // to hold and build a parse tree
-    TSymbolTable& symbolTable;   // symbol table that goes with the language currently being parsed
-    ShShaderType shaderType;              // vertex or fragment language (future: pack or unpack)
-    ShShaderSpec shaderSpec;              // The language specification compiler conforms to - GLES2 or WebGL.
-    int shaderVersion;
-    int compileOptions;
-    const char* sourcePath;      // Path of source file or NULL.
-    TIntermNode* treeRoot;       // root of parse tree being created
-    int loopNestingLevel;        // 0 if outside all loops
-    int structNestingLevel;      // incremented while parsing a struct declaration
-    const TType* currentFunctionType;  // the return type of the function that's currently being parsed
-    bool functionReturnsValue;   // true if a non-void function has a return
-    bool checksPrecisionErrors;  // true if an error will be generated when a variable is declared without precision, explicit or implicit.
-    bool fragmentPrecisionHigh;  // true if highp precision is supported in the fragment language.
-    TLayoutMatrixPacking defaultMatrixPacking;
-    TLayoutBlockStorage defaultBlockStorage;
-    TString HashErrMsg;
-    TDiagnostics diagnostics;
-    TDirectiveHandler directiveHandler;
-    pp::Preprocessor preprocessor;
-    void* scanner;
+struct TParseContext
+{
+    TParseContext(TSymbolTable& symt, TExtensionBehavior& ext, TIntermediate& interm, GLenum shaderTypeIn,
+                  ShShaderSpec spec, int options, bool checksPrecErrors, const char* sourcePath, TInfoSink& is);
 
     int getShaderVersion() const { return shaderVersion; }
     int numErrors() const { return diagnostics.numErrors(); }
@@ -162,6 +124,28 @@ struct TParseContext {
     void exitStructDeclaration();
 
     bool structNestingErrorCheck(const TSourceLoc& line, const TField& field);
+
+    TIntermediate& intermediate; // to hold and build a parse tree
+    TSymbolTable& symbolTable;   // symbol table that goes with the language currently being parsed
+    GLenum shaderType;              // vertex or fragment language (future: pack or unpack)
+    ShShaderSpec shaderSpec;              // The language specification compiler conforms to - GLES2 or WebGL.
+    int shaderVersion;
+    int compileOptions;
+    const char* sourcePath;      // Path of source file or NULL.
+    TIntermNode* treeRoot;       // root of parse tree being created
+    int loopNestingLevel;        // 0 if outside all loops
+    int structNestingLevel;      // incremented while parsing a struct declaration
+    const TType* currentFunctionType;  // the return type of the function that's currently being parsed
+    bool functionReturnsValue;   // true if a non-void function has a return
+    bool checksPrecisionErrors;  // true if an error will be generated when a variable is declared without precision, explicit or implicit.
+    bool fragmentPrecisionHigh;  // true if highp precision is supported in the fragment language.
+    TLayoutMatrixPacking defaultMatrixPacking;
+    TLayoutBlockStorage defaultBlockStorage;
+    TString HashErrMsg;
+    TDiagnostics diagnostics;
+    TDirectiveHandler directiveHandler;
+    pp::Preprocessor preprocessor;
+    void* scanner;
 };
 
 int PaParseStrings(size_t count, const char* const string[], const int length[],

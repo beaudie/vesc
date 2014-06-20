@@ -14,7 +14,7 @@ namespace sh
 
 class TranslatorGLSL : public TCompiler {
 public:
-    TranslatorGLSL(ShShaderType type, ShShaderSpec spec);
+    TranslatorGLSL(GLenum shaderType, ShShaderSpec spec);
 
 protected:
     virtual void translate(TIntermNode* root);

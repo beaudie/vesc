@@ -15,7 +15,7 @@ namespace sh
 
 class TranslatorHLSL : public TCompiler {
 public:
-    TranslatorHLSL(ShShaderType type, ShShaderSpec spec, ShShaderOutput output);
+    TranslatorHLSL(GLenum shaderType, ShShaderSpec spec, ShShaderOutput output);
 
     virtual TranslatorHLSL *getAsTranslatorHLSL() { return this; }
     const std::vector<sh::Uniform> &getUniforms() { return mActiveUniforms; }

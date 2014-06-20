@@ -36,18 +36,10 @@ namespace sh
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 126
+#define ANGLE_SH_VERSION 127
 
-//
-// The names of the following enums have been derived by replacing GL prefix
-// with SH. For example, SH_INFO_LOG_LENGTH is equivalent to GL_INFO_LOG_LENGTH.
-// The enum values are also equal to the values of their GL counterpart. This
-// is done to make it easier for applications to use the shader library.
-//
-typedef enum {
-  SH_FRAGMENT_SHADER = 0x8B30,
-  SH_VERTEX_SHADER   = 0x8B31
-} ShShaderType;
+// Alias GLenum so we don't have to include GL headers in our public API
+typedef unsigned int GLenum;
 
 typedef enum {
   SH_GLES2_SPEC = 0x8B40,
@@ -83,52 +75,6 @@ typedef enum {
   SH_HLSL9_OUTPUT  = 0x8B47,
   SH_HLSL11_OUTPUT = 0x8B48
 } ShShaderOutput;
-
-typedef enum {
-  SH_NONE           = 0,
-  SH_INT            = 0x1404,
-  SH_UNSIGNED_INT   = 0x1405,
-  SH_FLOAT          = 0x1406,
-  SH_FLOAT_VEC2     = 0x8B50,
-  SH_FLOAT_VEC3     = 0x8B51,
-  SH_FLOAT_VEC4     = 0x8B52,
-  SH_INT_VEC2       = 0x8B53,
-  SH_INT_VEC3       = 0x8B54,
-  SH_INT_VEC4       = 0x8B55,
-  SH_UNSIGNED_INT_VEC2 = 0x8DC6,
-  SH_UNSIGNED_INT_VEC3 = 0x8DC7,
-  SH_UNSIGNED_INT_VEC4 = 0x8DC8,
-  SH_BOOL           = 0x8B56,
-  SH_BOOL_VEC2      = 0x8B57,
-  SH_BOOL_VEC3      = 0x8B58,
-  SH_BOOL_VEC4      = 0x8B59,
-  SH_FLOAT_MAT2     = 0x8B5A,
-  SH_FLOAT_MAT3     = 0x8B5B,
-  SH_FLOAT_MAT4     = 0x8B5C,
-  SH_FLOAT_MAT2x3   = 0x8B65,
-  SH_FLOAT_MAT2x4   = 0x8B66,
-  SH_FLOAT_MAT3x2   = 0x8B67,
-  SH_FLOAT_MAT3x4   = 0x8B68,
-  SH_FLOAT_MAT4x2   = 0x8B69,
-  SH_FLOAT_MAT4x3   = 0x8B6A,
-  SH_SAMPLER_2D     = 0x8B5E,
-  SH_SAMPLER_3D     = 0x8B5F,
-  SH_SAMPLER_CUBE   = 0x8B60,
-  SH_SAMPLER_2D_RECT_ARB = 0x8B63,
-  SH_SAMPLER_EXTERNAL_OES = 0x8D66,
-  SH_SAMPLER_2D_ARRAY   = 0x8DC1,
-  SH_INT_SAMPLER_2D     = 0x8DCA,
-  SH_INT_SAMPLER_3D     = 0x8DCB,
-  SH_INT_SAMPLER_CUBE   = 0x8DCC,
-  SH_INT_SAMPLER_2D_ARRAY = 0x8DCF,
-  SH_UNSIGNED_INT_SAMPLER_2D     = 0x8DD2,
-  SH_UNSIGNED_INT_SAMPLER_3D     = 0x8DD3,
-  SH_UNSIGNED_INT_SAMPLER_CUBE   = 0x8DD4,
-  SH_UNSIGNED_INT_SAMPLER_2D_ARRAY = 0x8DD7,
-  SH_SAMPLER_2D_SHADOW       = 0x8B62,
-  SH_SAMPLER_CUBE_SHADOW     = 0x8DC5,
-  SH_SAMPLER_2D_ARRAY_SHADOW = 0x8DC4
-} ShDataType;
 
 typedef enum {
   SH_PRECISION_HIGHP     = 0x5001,
@@ -351,7 +297,7 @@ COMPILER_EXPORT void ShGetBuiltInResourcesString(const ShHandle handle, size_t o
 //         SH_HLSL9_OUTPUT or SH_HLSL11_OUTPUT.
 // resources: Specifies the built-in resources.
 COMPILER_EXPORT ShHandle ShConstructCompiler(
-    ShShaderType type,
+    GLenum shaderType,
     ShShaderSpec spec,
     ShShaderOutput output,
     const ShBuiltInResources* resources);
@@ -475,7 +421,7 @@ COMPILER_EXPORT void ShGetVariableInfo(const ShHandle handle,
                                        int index,
                                        size_t* length,
                                        int* size,
-                                       ShDataType* type,
+                                       GLenum* dataType,
                                        ShPrecisionType* precision,
                                        int* staticUse,
                                        char* name,
@@ -513,7 +459,7 @@ COMPILER_EXPORT void ShGetInfoPointer(const ShHandle handle,
 
 typedef struct
 {
-    ShDataType type;
+    GLenum type;
     int size;
 } ShVariableInfo;
 

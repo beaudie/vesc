@@ -88,11 +88,13 @@
 #include "compiler/translator/ParseContext.h"
 #include "GLSLANG/ShaderLang.h"
 
-using namespace sh;
+#include "angle_gl.h"
 
 #define YYENABLE_NLS 0
 
 #define YYLEX_PARAM context->scanner
+
+using namespace sh;
 
 
 
@@ -281,25 +283,25 @@ typedef union YYSTYPE
             unsigned int u;
             bool b;
         };
-        TSymbol* symbol;
+        sh::TSymbol* symbol;
     } lex;
     struct {
-        TOperator op;
+        sh::TOperator op;
         union {
-            TIntermNode* intermNode;
-            TIntermNodePair nodePair;
-            TIntermTyped* intermTypedNode;
-            TIntermAggregate* intermAggregate;
+            sh::TIntermNode* intermNode;
+            sh::TIntermNodePair nodePair;
+            sh::TIntermTyped* intermTypedNode;
+            sh::TIntermAggregate* intermAggregate;
         };
         union {
-            TPublicType type;
-            TPrecision precision;
-            TLayoutQualifier layoutQualifier;
-            TQualifier qualifier;
-            TFunction* function;
-            TParameter param;
-            TField* field;
-            TFieldList* fieldList;
+            sh::TPublicType type;
+            sh::TPrecision precision;
+            sh::TLayoutQualifier layoutQualifier;
+            sh::TQualifier qualifier;
+            sh::TFunction* function;
+            sh::TParameter param;
+            sh::TField* field;
+            sh::TFieldList* fieldList;
         };
     } interm;
 
@@ -333,7 +335,7 @@ int yyparse ();
 #endif
 #else /* ! YYPARSE_PARAM */
 #if defined __STDC__ || defined __cplusplus
-int yyparse (TParseContext* context);
+int yyparse (sh::TParseContext* context);
 #else
 int yyparse ();
 #endif
@@ -364,14 +366,14 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, const char* reason)
   } while (0)
 
 #define VERTEX_ONLY(S, L) {  \
-    if (context->shaderType != SH_VERTEX_SHADER) {  \
+    if (context->shaderType != GL_VERTEX_SHADER) {  \
         context->error(L, " supported in vertex shaders only ", S);  \
         context->recover();  \
     }  \
 }
 
 #define FRAG_ONLY(S, L) {  \
-    if (context->shaderType != SH_FRAGMENT_SHADER) {  \
+    if (context->shaderType != GL_FRAGMENT_SHADER) {  \
         context->error(L, " supported in fragment shaders only ", S);  \
         context->recover();  \
     }  \
@@ -796,32 +798,32 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   205,   205,   206,   209,   264,   267,   272,   277,   282,
-     287,   293,   296,   299,   302,   305,   315,   328,   336,   436,
-     439,   447,   450,   456,   460,   467,   473,   482,   490,   493,
-     503,   506,   516,   526,   547,   548,   549,   554,   555,   563,
-     574,   575,   583,   594,   598,   599,   609,   619,   629,   642,
-     643,   653,   666,   670,   674,   678,   679,   692,   693,   706,
-     707,   720,   721,   738,   739,   752,   753,   754,   755,   756,
-     760,   763,   774,   782,   790,   817,   822,   833,   837,   841,
-     845,   852,   907,   910,   917,   925,   946,   967,   977,  1005,
-    1010,  1020,  1025,  1035,  1038,  1041,  1044,  1050,  1057,  1060,
-    1064,  1068,  1072,  1079,  1083,  1087,  1094,  1098,  1102,  1123,
-    1132,  1138,  1141,  1147,  1153,  1160,  1169,  1178,  1186,  1189,
-    1196,  1200,  1207,  1210,  1214,  1218,  1227,  1236,  1244,  1254,
-    1266,  1269,  1272,  1278,  1285,  1288,  1294,  1297,  1300,  1306,
-    1309,  1324,  1328,  1332,  1336,  1340,  1344,  1349,  1354,  1359,
-    1364,  1369,  1374,  1379,  1384,  1389,  1394,  1399,  1404,  1409,
-    1414,  1419,  1424,  1429,  1434,  1439,  1444,  1449,  1453,  1457,
-    1461,  1465,  1469,  1473,  1477,  1481,  1485,  1489,  1493,  1497,
-    1501,  1505,  1509,  1517,  1525,  1529,  1542,  1542,  1545,  1545,
-    1551,  1554,  1570,  1573,  1582,  1586,  1592,  1599,  1614,  1618,
-    1622,  1623,  1629,  1630,  1631,  1632,  1633,  1637,  1638,  1638,
-    1638,  1648,  1649,  1653,  1653,  1654,  1654,  1659,  1662,  1672,
-    1675,  1681,  1682,  1686,  1694,  1698,  1708,  1713,  1730,  1730,
-    1735,  1735,  1742,  1742,  1750,  1753,  1759,  1762,  1768,  1772,
-    1779,  1786,  1793,  1800,  1811,  1820,  1824,  1831,  1834,  1840,
-    1840
+       0,   209,   209,   210,   213,   268,   271,   276,   281,   286,
+     291,   297,   300,   303,   306,   309,   319,   332,   340,   440,
+     443,   451,   454,   460,   464,   471,   477,   486,   494,   497,
+     507,   510,   520,   530,   551,   552,   553,   558,   559,   567,
+     578,   579,   587,   598,   602,   603,   613,   623,   633,   646,
+     647,   657,   670,   674,   678,   682,   683,   696,   697,   710,
+     711,   724,   725,   742,   743,   756,   757,   758,   759,   760,
+     764,   767,   778,   786,   794,   821,   826,   837,   841,   845,
+     849,   856,   912,   915,   922,   930,   951,   972,   982,  1010,
+    1015,  1025,  1030,  1040,  1043,  1046,  1049,  1055,  1062,  1065,
+    1069,  1073,  1077,  1084,  1088,  1092,  1099,  1103,  1107,  1128,
+    1137,  1143,  1146,  1152,  1158,  1165,  1174,  1183,  1191,  1194,
+    1201,  1205,  1212,  1215,  1219,  1223,  1232,  1241,  1249,  1259,
+    1271,  1274,  1277,  1283,  1290,  1293,  1299,  1302,  1305,  1311,
+    1314,  1329,  1333,  1337,  1341,  1345,  1349,  1354,  1359,  1364,
+    1369,  1374,  1379,  1384,  1389,  1394,  1399,  1404,  1409,  1414,
+    1419,  1424,  1429,  1434,  1439,  1444,  1449,  1454,  1458,  1462,
+    1466,  1470,  1474,  1478,  1482,  1486,  1490,  1494,  1498,  1502,
+    1506,  1510,  1514,  1522,  1530,  1534,  1547,  1547,  1550,  1550,
+    1556,  1559,  1575,  1578,  1587,  1591,  1597,  1604,  1619,  1623,
+    1627,  1628,  1634,  1635,  1636,  1637,  1638,  1642,  1643,  1643,
+    1643,  1653,  1654,  1658,  1658,  1659,  1659,  1664,  1667,  1677,
+    1680,  1686,  1687,  1691,  1699,  1703,  1713,  1718,  1735,  1735,
+    1740,  1740,  1747,  1747,  1755,  1758,  1764,  1767,  1773,  1777,
+    1784,  1791,  1798,  1805,  1816,  1825,  1829,  1836,  1839,  1845,
+    1845
 };
 #endif
 
@@ -1798,7 +1800,7 @@ do {									  \
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, TParseContext* context)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, sh::TParseContext* context)
 #else
 static void
 yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, context)
@@ -1806,7 +1808,7 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, context)
     int yytype;
     YYSTYPE const * const yyvaluep;
     YYLTYPE const * const yylocationp;
-    TParseContext* context;
+    sh::TParseContext* context;
 #endif
 {
   FILE *yyo = yyoutput;
@@ -1832,7 +1834,7 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, context)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, TParseContext* context)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, sh::TParseContext* context)
 #else
 static void
 yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, context)
@@ -1840,7 +1842,7 @@ yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, context)
     int yytype;
     YYSTYPE const * const yyvaluep;
     YYLTYPE const * const yylocationp;
-    TParseContext* context;
+    sh::TParseContext* context;
 #endif
 {
   if (yytype < YYNTOKENS)
@@ -1893,14 +1895,14 @@ do {								\
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, TParseContext* context)
+yy_reduce_print (YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, sh::TParseContext* context)
 #else
 static void
 yy_reduce_print (yyvsp, yylsp, yyrule, context)
     YYSTYPE *yyvsp;
     YYLTYPE *yylsp;
     int yyrule;
-    TParseContext* context;
+    sh::TParseContext* context;
 #endif
 {
   int yynrhs = yyr2[yyrule];
@@ -2202,7 +2204,7 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, TParseContext* context)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, sh::TParseContext* context)
 #else
 static void
 yydestruct (yymsg, yytype, yyvaluep, yylocationp, context)
@@ -2210,7 +2212,7 @@ yydestruct (yymsg, yytype, yyvaluep, yylocationp, context)
     int yytype;
     YYSTYPE *yyvaluep;
     YYLTYPE *yylocationp;
-    TParseContext* context;
+    sh::TParseContext* context;
 #endif
 {
   YYUSE (yyvaluep);
@@ -2245,11 +2247,11 @@ yyparse (YYPARSE_PARAM)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 int
-yyparse (TParseContext* context)
+yyparse (sh::TParseContext* context)
 #else
 int
 yyparse (context)
-    TParseContext* context;
+    sh::TParseContext* context;
 #endif
 #endif
 {
@@ -3354,7 +3356,7 @@ yyreduce:
   case 76:
 
     {
-        if (((yyvsp[(2) - (4)].interm.precision) == EbpHigh) && (context->shaderType == SH_FRAGMENT_SHADER) && !context->fragmentPrecisionHigh) {
+        if (((yyvsp[(2) - (4)].interm.precision) == EbpHigh) && (context->shaderType == GL_FRAGMENT_SHADER) && !context->fragmentPrecisionHigh) {
             context->error((yylsp[(1) - (4)]), "precision is not supported in fragment shader", "highp");
             context->recover();
         }
@@ -3797,7 +3799,7 @@ yyreduce:
         ES2_ONLY("varying", (yylsp[(1) - (1)]));
         if (context->globalErrorCheck((yylsp[(1) - (1)]), context->symbolTable.atGlobalLevel(), "varying"))
             context->recover();
-        if (context->shaderType == SH_VERTEX_SHADER)
+        if (context->shaderType == GL_VERTEX_SHADER)
             (yyval.interm.type).setBasic(EbtVoid, EvqVaryingOut, (yylsp[(1) - (1)]));
         else
             (yyval.interm.type).setBasic(EbtVoid, EvqVaryingIn, (yylsp[(1) - (1)]));
@@ -3810,7 +3812,7 @@ yyreduce:
         ES2_ONLY("varying", (yylsp[(1) - (2)]));
         if (context->globalErrorCheck((yylsp[(1) - (2)]), context->symbolTable.atGlobalLevel(), "invariant varying"))
             context->recover();
-        if (context->shaderType == SH_VERTEX_SHADER)
+        if (context->shaderType == GL_VERTEX_SHADER)
             (yyval.interm.type).setBasic(EbtVoid, EvqInvariantVaryingOut, (yylsp[(1) - (2)]));
         else
             (yyval.interm.type).setBasic(EbtVoid, EvqInvariantVaryingIn, (yylsp[(1) - (2)]));
@@ -3874,7 +3876,7 @@ yyreduce:
 
     {
         ES3_ONLY("in", (yylsp[(1) - (1)]), "storage qualifier");
-        (yyval.interm.type).qualifier = (context->shaderType == SH_FRAGMENT_SHADER) ? EvqFragmentIn : EvqVertexIn;
+        (yyval.interm.type).qualifier = (context->shaderType == GL_FRAGMENT_SHADER) ? EvqFragmentIn : EvqVertexIn;
     }
     break;
 
@@ -3882,7 +3884,7 @@ yyreduce:
 
     {
         ES3_ONLY("out", (yylsp[(1) - (1)]), "storage qualifier");
-        (yyval.interm.type).qualifier = (context->shaderType == SH_FRAGMENT_SHADER) ? EvqFragmentOut : EvqVertexOut;
+        (yyval.interm.type).qualifier = (context->shaderType == GL_FRAGMENT_SHADER) ? EvqFragmentOut : EvqVertexOut;
     }
     break;
 
@@ -3890,12 +3892,12 @@ yyreduce:
 
     {
         ES3_ONLY("centroid in", (yylsp[(1) - (2)]), "storage qualifier");
-        if (context->shaderType == SH_VERTEX_SHADER)
+        if (context->shaderType == GL_VERTEX_SHADER)
         {
             context->error((yylsp[(1) - (2)]), "invalid storage qualifier", "it is an error to use 'centroid in' in the vertex shader");
             context->recover();
         }
-        (yyval.interm.type).qualifier = (context->shaderType == SH_FRAGMENT_SHADER) ? EvqCentroidIn : EvqVertexIn;
+        (yyval.interm.type).qualifier = (context->shaderType == GL_FRAGMENT_SHADER) ? EvqCentroidIn : EvqVertexIn;
     }
     break;
 
@@ -3903,12 +3905,12 @@ yyreduce:
 
     {
         ES3_ONLY("centroid out", (yylsp[(1) - (2)]), "storage qualifier");
-        if (context->shaderType == SH_FRAGMENT_SHADER)
+        if (context->shaderType == GL_FRAGMENT_SHADER)
         {
             context->error((yylsp[(1) - (2)]), "invalid storage qualifier", "it is an error to use 'centroid out' in the fragment shader");
             context->recover();
         }
-        (yyval.interm.type).qualifier = (context->shaderType == SH_FRAGMENT_SHADER) ? EvqFragmentOut : EvqCentroidOut;
+        (yyval.interm.type).qualifier = (context->shaderType == GL_FRAGMENT_SHADER) ? EvqFragmentOut : EvqCentroidOut;
     }
     break;
 
@@ -5261,6 +5263,6 @@ yyreturn:
 
 
 
-int glslang_parse(TParseContext* context) {
+int glslang_parse(sh::TParseContext* context) {
     return yyparse(context);
 }

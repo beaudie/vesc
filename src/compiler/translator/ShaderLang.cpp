@@ -118,11 +118,11 @@ void ShInitBuiltInResources(ShBuiltInResources* resources)
 //
 // Driver calls these to create and destroy compiler objects.
 //
-ShHandle ShConstructCompiler(ShShaderType type, ShShaderSpec spec,
+ShHandle ShConstructCompiler(GLenum shaderType, ShShaderSpec spec,
                              ShShaderOutput output,
                              const ShBuiltInResources* resources)
 {
-    TShHandleBase* base = static_cast<TShHandleBase*>(ConstructCompiler(type, spec, output));
+    TShHandleBase* base = static_cast<TShHandleBase*>(ConstructCompiler(shaderType, spec, output));
     TCompiler* compiler = base->getAsCompiler();
     if (compiler == 0)
         return 0;
@@ -296,13 +296,13 @@ void ShGetVariableInfo(const ShHandle handle,
                        int index,
                        size_t* length,
                        int* size,
-                       ShDataType* type,
+                       GLenum* dataType,
                        ShPrecisionType* precision,
                        int* staticUse,
                        char* name,
                        char* mappedName)
 {
-    if (!handle || !size || !type || !precision || !staticUse || !name)
+    if (!handle || !size || !dataType || !precision || !staticUse || !name)
         return;
     ASSERT((varType == SH_ACTIVE_ATTRIBUTES) ||
            (varType == SH_ACTIVE_UNIFORMS) ||
@@ -323,7 +323,7 @@ void ShGetVariableInfo(const ShHandle handle,
     const TVariableInfo& varInfo = varList[index];
     if (length) *length = varInfo.name.size();
     *size = varInfo.size;
-    *type = varInfo.type;
+    *dataType = varInfo.dataType;
     switch (varInfo.precision) {
     case EbpLow:
         *precision = SH_PRECISION_LOWP;

@@ -16,12 +16,12 @@ namespace sh
 // It is currently being used to store info about active attribs and uniforms.
 struct TVariableInfo
 {
-    TVariableInfo(ShDataType type, int size);
+    TVariableInfo(GLenum dataType, int size);
     TVariableInfo();
 
     TPersistString name;
     TPersistString mappedName;
-    ShDataType type;
+    GLenum dataType;
     int size;
     bool isArray;
     TPrecision precision;

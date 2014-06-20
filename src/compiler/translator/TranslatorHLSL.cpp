@@ -12,8 +12,8 @@
 namespace sh
 {
 
-TranslatorHLSL::TranslatorHLSL(ShShaderType type, ShShaderSpec spec, ShShaderOutput output)
-  : TCompiler(type, spec, output)
+TranslatorHLSL::TranslatorHLSL(GLenum shaderType, ShShaderSpec spec, ShShaderOutput output)
+  : TCompiler(shaderType, spec, output)
 {
 }
 

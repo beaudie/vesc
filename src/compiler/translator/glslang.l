@@ -58,18 +58,19 @@ WHICH GENERATES THE GLSL ES LEXER (glslang_lex.cpp).
 static yy_size_t string_input(char* buf, yy_size_t max_size, yyscan_t yyscanner);
 static int check_type(yyscan_t yyscanner);
 static int reserved_word(yyscan_t yyscanner);
-static int ES2_reserved_ES3_keyword(TParseContext *context, int token);
-static int ES2_keyword_ES3_reserved(TParseContext *context, int token);
-static int ES2_ident_ES3_keyword(TParseContext *context, int token);
-static int uint_constant(TParseContext *context);
+static int ES2_reserved_ES3_keyword(sh::TParseContext *context, int token);
+static int ES2_keyword_ES3_reserved(sh::TParseContext *context, int token);
+static int ES2_ident_ES3_keyword(sh::TParseContext *context, int token);
+static int uint_constant(sh::TParseContext *context);
 static int int_constant(yyscan_t yyscanner);
 static int float_constant(yyscan_t yyscanner);
-static int floatsuffix_check(TParseContext* context);
+static int floatsuffix_check(sh::TParseContext* context);
+
 %}
 
 %option noyywrap nounput never-interactive
 %option yylineno reentrant bison-bridge bison-locations
-%option extra-type="TParseContext*"
+%option extra-type="sh::TParseContext*"
 
 D           [0-9]
 L           [a-zA-Z_]
@@ -80,7 +81,7 @@ O           [0-7]
 %%
 
 %{
-    TParseContext* context = yyextra;
+    sh::TParseContext* context = yyextra;
 %}
 
 "invariant"    { return INVARIANT; }
@@ -399,9 +400,9 @@ int check_type(yyscan_t yyscanner) {
     struct yyguts_t* yyg = (struct yyguts_t*) yyscanner;
     
     int token = IDENTIFIER;
-    TSymbol* symbol = yyextra->symbolTable.find(yytext, yyextra->shaderVersion);
+    sh::TSymbol* symbol = yyextra->symbolTable.find(yytext, yyextra->shaderVersion);
     if (symbol && symbol->isVariable()) {
-        TVariable* variable = static_cast<TVariable*>(symbol);
+        sh::TVariable* variable = static_cast<sh::TVariable*>(symbol);
         if (variable->isUserType()) {
             token = TYPE_NAME;
         }
@@ -418,7 +419,7 @@ int reserved_word(yyscan_t yyscanner) {
     return 0;
 }
 
-int ES2_reserved_ES3_keyword(TParseContext *context, int token)
+int ES2_reserved_ES3_keyword(sh::TParseContext *context, int token)
 {
     yyscan_t yyscanner = (yyscan_t) context->scanner;
 
@@ -430,7 +431,7 @@ int ES2_reserved_ES3_keyword(TParseContext *context, int token)
     return token;
 }
 
-int ES2_keyword_ES3_reserved(TParseContext *context, int token)
+int ES2_keyword_ES3_reserved(sh::TParseContext *context, int token)
 {
     yyscan_t yyscanner = (yyscan_t) context->scanner;
 
@@ -442,7 +443,7 @@ int ES2_keyword_ES3_reserved(TParseContext *context, int token)
     return token;
 }
 
-int ES2_ident_ES3_keyword(TParseContext *context, int token)
+int ES2_ident_ES3_keyword(sh::TParseContext *context, int token)
 {
     struct yyguts_t* yyg = (struct yyguts_t*) context->scanner;
     yyscan_t yyscanner = (yyscan_t) context->scanner;
@@ -457,7 +458,7 @@ int ES2_ident_ES3_keyword(TParseContext *context, int token)
     return token;
 }
 
-int uint_constant(TParseContext *context)
+int uint_constant(sh::TParseContext *context)
 {
     struct yyguts_t* yyg = (struct yyguts_t*) context->scanner;
     yyscan_t yyscanner = (yyscan_t) context->scanner;
@@ -475,7 +476,7 @@ int uint_constant(TParseContext *context)
     return UINTCONSTANT;
 }
 
-int floatsuffix_check(TParseContext* context)
+int floatsuffix_check(sh::TParseContext* context)
 {
     struct yyguts_t* yyg = (struct yyguts_t*) context->scanner;
 
@@ -492,7 +493,7 @@ int floatsuffix_check(TParseContext* context)
     return(FLOATCONSTANT);
 }
 
-void yyerror(YYLTYPE* lloc, TParseContext* context, const char* reason) {
+void yyerror(YYLTYPE* lloc, sh::TParseContext* context, const char* reason) {
     context->error(*lloc, reason, yyget_text(context->scanner));
     context->recover();
 }
@@ -513,7 +514,7 @@ int float_constant(yyscan_t yyscanner) {
     return FLOATCONSTANT;
 }
 
-int glslang_initialize(TParseContext* context) {
+int glslang_initialize(sh::TParseContext* context) {
     yyscan_t scanner = NULL;
     if (yylex_init_extra(context, &scanner))
         return 1;
@@ -522,7 +523,7 @@ int glslang_initialize(TParseContext* context) {
     return 0;
 }
 
-int glslang_finalize(TParseContext* context) {
+int glslang_finalize(sh::TParseContext* context) {
     yyscan_t scanner = context->scanner;
     if (scanner == NULL) return 0;
     
@@ -533,7 +534,7 @@ int glslang_finalize(TParseContext* context) {
 }
 
 int glslang_scan(size_t count, const char* const string[], const int length[],
-                 TParseContext* context) {
+                 sh::TParseContext* context) {
     yyrestart(NULL, context->scanner);
     yyset_column(0, context->scanner);
     yyset_lineno(1, context->scanner);
@@ -555,4 +556,3 @@ int glslang_scan(size_t count, const char* const string[], const int length[],
 
     return 0;
 }
-

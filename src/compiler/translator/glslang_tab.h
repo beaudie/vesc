@@ -196,25 +196,25 @@ typedef union YYSTYPE
             unsigned int u;
             bool b;
         };
-        TSymbol* symbol;
+        sh::TSymbol* symbol;
     } lex;
     struct {
-        TOperator op;
+        sh::TOperator op;
         union {
-            TIntermNode* intermNode;
-            TIntermNodePair nodePair;
-            TIntermTyped* intermTypedNode;
-            TIntermAggregate* intermAggregate;
+            sh::TIntermNode* intermNode;
+            sh::TIntermNodePair nodePair;
+            sh::TIntermTyped* intermTypedNode;
+            sh::TIntermAggregate* intermAggregate;
         };
         union {
-            TPublicType type;
-            TPrecision precision;
-            TLayoutQualifier layoutQualifier;
-            TQualifier qualifier;
-            TFunction* function;
-            TParameter param;
-            TField* field;
-            TFieldList* fieldList;
+            sh::TPublicType type;
+            sh::TPrecision precision;
+            sh::TLayoutQualifier layoutQualifier;
+            sh::TQualifier qualifier;
+            sh::TFunction* function;
+            sh::TParameter param;
+            sh::TField* field;
+            sh::TFieldList* fieldList;
         };
     } interm;
 
@@ -248,7 +248,7 @@ int yyparse ();
 #endif
 #else /* ! YYPARSE_PARAM */
 #if defined __STDC__ || defined __cplusplus
-int yyparse (TParseContext* context);
+int yyparse (sh::TParseContext* context);
 #else
 int yyparse ();
 #endif

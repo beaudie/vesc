@@ -22,6 +22,7 @@
 #include "compiler/translator/timing/RestrictFragmentShaderTiming.h"
 #include "compiler/translator/timing/RestrictVertexShaderTiming.h"
 #include "third_party/compiler/ArrayBoundsClamper.h"
+#include "common/utilities.h"
 
 namespace sh
 {
@@ -95,8 +96,8 @@ TShHandleBase::~TShHandleBase()
     allocator.popAll();
 }
 
-TCompiler::TCompiler(ShShaderType type, ShShaderSpec spec, ShShaderOutput output)
-    : shaderType(type),
+TCompiler::TCompiler(GLenum shaderTypeIn, ShShaderSpec spec, ShShaderOutput output)
+    : shaderType(shaderTypeIn),
       shaderSpec(spec),
       outputType(output),
       maxUniformVectors(0),
@@ -104,7 +105,7 @@ TCompiler::TCompiler(ShShaderType type, ShShaderSpec spec, ShShaderOutput output
       maxCallStackDepth(0),
       fragmentPrecisionHigh(false),
       clampingStrategy(SH_CLAMP_WITH_CLAMP_INTRINSIC),
-      builtInFunctionEmulator(type)
+      builtInFunctionEmulator(shaderTypeIn)
 {
 }
 
@@ -115,7 +116,7 @@ TCompiler::~TCompiler()
 bool TCompiler::Init(const ShBuiltInResources& resources)
 {
     shaderVersion = 100;
-    maxUniformVectors = (shaderType == SH_VERTEX_SHADER) ?
+    maxUniformVectors = (shaderType == GL_VERTEX_SHADER) ?
         resources.MaxVertexUniformVectors :
         resources.MaxFragmentUniformVectors;
     maxExpressionComplexity = resources.MaxExpressionComplexity;
@@ -190,7 +191,7 @@ bool TCompiler::compile(const char* const shaderStrings[],
         if (success)
             success = detectCallDepth(root, infoSink, (compileOptions & SH_LIMIT_CALL_STACK_DEPTH) != 0);
 
-        if (success && shaderVersion == 300 && shaderType == SH_FRAGMENT_SHADER)
+        if (success && shaderVersion == 300 && shaderType == GL_FRAGMENT_SHADER)
             success = validateOutputs(root);
 
         if (success && (compileOptions & SH_VALIDATE_LOOP_INDEXING))
@@ -228,7 +229,7 @@ bool TCompiler::compile(const char* const shaderStrings[],
         if (success && (compileOptions & SH_CLAMP_INDIRECT_ARRAY_BOUNDS))
             arrayBoundsClamper.MarkIndirectArrayBoundsForClamping(root);
 
-        if (success && shaderType == SH_VERTEX_SHADER && (compileOptions & SH_INIT_GL_POSITION))
+        if (success && shaderType == GL_VERTEX_SHADER && (compileOptions & SH_INIT_GL_POSITION))
             initializeGLPosition(root);
 
         if (success && (compileOptions & SH_UNFOLD_SHORT_CIRCUIT))
@@ -250,7 +251,7 @@ bool TCompiler::compile(const char* const shaderStrings[],
                     infoSink.info << "too many uniforms";
                 }
             }
-            if (success && shaderType == SH_VERTEX_SHADER &&
+            if (success && shaderType == GL_VERTEX_SHADER &&
                 (compileOptions & SH_INIT_VARYINGS_WITHOUT_STATIC_USE))
                 initializeVaryingsWithoutStaticUse(root);
         }
@@ -297,10 +298,10 @@ bool TCompiler::InitBuiltInSymbolTable(const ShBuiltInResources &resources)
 
     switch(shaderType)
     {
-      case SH_FRAGMENT_SHADER:
+      case GL_FRAGMENT_SHADER:
         symbolTable.setDefaultPrecision(integer, EbpMedium);
         break;
-      case SH_VERTEX_SHADER:
+      case GL_VERTEX_SHADER:
         symbolTable.setDefaultPrecision(integer, EbpHigh);
         symbolTable.setDefaultPrecision(floatingPoint, EbpHigh);
         break;
@@ -421,7 +422,7 @@ bool TCompiler::enforceTimingRestrictions(TIntermNode* root, bool outputGraph)
         return false;
     }
 
-    if (shaderType == SH_FRAGMENT_SHADER)
+    if (shaderType == GL_FRAGMENT_SHADER)
     {
         TDependencyGraph graph(root);
 
@@ -512,35 +513,8 @@ void TCompiler::initializeVaryingsWithoutStaticUse(TIntermNode* root)
         const TVariableInfo& varying = varyings[ii];
         if (varying.staticUse)
             continue;
-        unsigned char primarySize = 1, secondarySize = 1;
-        switch (varying.type)
-        {
-          case SH_FLOAT:
-            break;
-          case SH_FLOAT_VEC2:
-            primarySize = 2;
-            break;
-          case SH_FLOAT_VEC3:
-            primarySize = 3;
-            break;
-          case SH_FLOAT_VEC4:
-            primarySize = 4;
-            break;
-          case SH_FLOAT_MAT2:
-            primarySize = 2;
-            secondarySize = 2;
-            break;
-          case SH_FLOAT_MAT3:
-            primarySize = 3;
-            secondarySize = 3;
-            break;
-          case SH_FLOAT_MAT4:
-            primarySize = 4;
-            secondarySize = 4;
-            break;
-          default:
-            ASSERT(false);
-        }
+        unsigned char primarySize = static_cast<unsigned char>(gl::VariableColumnCount(varying.dataType));
+        unsigned char secondarySize = static_cast<unsigned char>(gl::VariableRowCount(varying.dataType));
         TType type(EbtFloat, EbpUndefined, EvqVaryingOut, primarySize, secondarySize, varying.isArray);
         TString name = varying.name.c_str();
         if (varying.isArray)

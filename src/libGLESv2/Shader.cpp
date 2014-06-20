@@ -206,8 +206,8 @@ void Shader::initializeCompiler()
             resources.MinProgramTexelOffset = -8;   // D3D10_COMMONSHADER_TEXEL_OFFSET_MAX_NEGATIVE
             resources.MaxProgramTexelOffset = 7;    // D3D10_COMMONSHADER_TEXEL_OFFSET_MAX_POSITIVE
 
-            mFragmentCompiler = ShConstructCompiler(sh::SH_FRAGMENT_SHADER, sh::SH_GLES2_SPEC, hlslVersion, &resources);
-            mVertexCompiler = ShConstructCompiler(sh::SH_VERTEX_SHADER, sh::SH_GLES2_SPEC, hlslVersion, &resources);
+            mFragmentCompiler = ShConstructCompiler(GL_FRAGMENT_SHADER, sh::SH_GLES2_SPEC, hlslVersion, &resources);
+            mVertexCompiler = ShConstructCompiler(GL_VERTEX_SHADER, sh::SH_GLES2_SPEC, hlslVersion, &resources);
         }
     }
 }

@@ -17,16 +17,16 @@ namespace sh
 // a subclass of TCompiler.
 //
 TCompiler* ConstructCompiler(
-    ShShaderType type, ShShaderSpec spec, ShShaderOutput output)
+    GLenum shaderType, ShShaderSpec spec, ShShaderOutput output)
 {
     switch (output) {
     case SH_ESSL_OUTPUT:
-        return new TranslatorESSL(type, spec);
+        return new TranslatorESSL(shaderType, spec);
     case SH_GLSL_OUTPUT:
-        return new TranslatorGLSL(type, spec);
+        return new TranslatorGLSL(shaderType, spec);
     case SH_HLSL9_OUTPUT:
     case SH_HLSL11_OUTPUT:
-        return new TranslatorHLSL(type, spec, output);
+        return new TranslatorHLSL(shaderType, spec, output);
     default:
         return NULL;
     }

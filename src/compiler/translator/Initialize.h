@@ -14,9 +14,9 @@
 namespace sh
 {
 
-void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltInResources &resources, TSymbolTable &table);
+void InsertBuiltInFunctions(GLenum shaderType, ShShaderSpec spec, const ShBuiltInResources &resources, TSymbolTable &table);
 
-void IdentifyBuiltIns(ShShaderType type, ShShaderSpec spec,
+void IdentifyBuiltIns(GLenum shaderType, ShShaderSpec spec,
                       const ShBuiltInResources& resources,
                       TSymbolTable& symbolTable);
 

@@ -29,7 +29,7 @@ namespace sh
 // TODO: ES3 equivalent versions of GLSL
 class TVersionGLSL : public TIntermTraverser {
 public:
-    TVersionGLSL(ShShaderType type);
+    TVersionGLSL();
 
     // Returns 120 if the following is used the shader:
     // - "invariant",
