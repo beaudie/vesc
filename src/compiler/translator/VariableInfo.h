@@ -9,9 +9,13 @@
 
 #include "compiler/translator/intermediate.h"
 
+namespace sh
+{
+
 // Provides information about a variable.
 // It is currently being used to store info about active attribs and uniforms.
-struct TVariableInfo {
+struct TVariableInfo
+{
     TVariableInfo(ShDataType type, int size);
     TVariableInfo();
 
@@ -47,5 +51,7 @@ private:
 
     ShHashFunction64 mHashFunction;
 };
+
+}
 
 #endif  // COMPILER_VARIABLE_INFO_H_

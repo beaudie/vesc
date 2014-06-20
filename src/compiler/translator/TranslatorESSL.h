@@ -9,6 +9,9 @@
 
 #include "compiler/translator/Compiler.h"
 
+namespace sh
+{
+
 class TranslatorESSL : public TCompiler {
 public:
     TranslatorESSL(ShShaderType type, ShShaderSpec spec);
@@ -19,5 +22,7 @@ protected:
 private:
     void writeExtensionBehavior();
 };
+
+}
 
 #endif  // COMPILER_TRANSLATORESSL_H_

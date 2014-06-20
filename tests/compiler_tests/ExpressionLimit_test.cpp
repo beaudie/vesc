@@ -11,6 +11,8 @@
 
 #define SHADER(Src) #Src
 
+using namespace sh;
+
 class ExpressionLimitTest : public testing::Test {
 protected:
     static const int kMaxExpressionComplexity = 16;

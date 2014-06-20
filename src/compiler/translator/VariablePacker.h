@@ -10,7 +10,11 @@
 #include <vector>
 #include "compiler/translator/Compiler.h"
 
-class VariablePacker {
+namespace sh
+{
+
+class VariablePacker
+{
  public:
     // Returns true if the passed in variables pack in maxVectors following
     // the packing rules from the GLSL 1.017 spec, Appendix A, section 7.
@@ -37,5 +41,7 @@ class VariablePacker {
     int maxRows_;
     std::vector<unsigned> rows_;
 };
+
+}
 
 #endif // _VARIABLEPACKER_INCLUDED_

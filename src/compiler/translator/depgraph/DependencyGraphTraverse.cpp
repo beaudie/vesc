@@ -8,6 +8,9 @@
 
 // These methods do a breadth-first traversal through the graph and mark visited nodes.
 
+namespace sh
+{
+
 void TGraphNode::traverse(TDependencyGraphTraverser* graphTraverser)
 {
     graphTraverser->markVisited(this);
@@ -66,4 +69,6 @@ void TGraphLogicalOp::traverse(TDependencyGraphTraverser* graphTraverser)
 {
     graphTraverser->visitLogicalOp(this);
     TGraphNode::traverse(graphTraverser);
+}
+
 }

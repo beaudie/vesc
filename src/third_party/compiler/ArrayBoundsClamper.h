@@ -29,8 +29,12 @@
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/intermediate.h"
 
-class ArrayBoundsClamper {
-public:
+namespace sh
+{
+
+class ArrayBoundsClamper
+{
+  public:
     ArrayBoundsClamper();
 
     // Must be set before compiling any shaders to ensure consistency
@@ -49,12 +53,14 @@ public:
         mArrayBoundsClampDefinitionNeeded = false;
     }
 
-private:
+  private:
     bool GetArrayBoundsClampDefinitionNeeded() const { return mArrayBoundsClampDefinitionNeeded; }
     void SetArrayBoundsClampDefinitionNeeded() { mArrayBoundsClampDefinitionNeeded = true; }
 
     ShArrayIndexClampingStrategy mClampingStrategy;
     bool mArrayBoundsClampDefinitionNeeded;
 };
+
+}
 
 #endif // THIRD_PARTY_COMPILER_ARRAY_BOUNDS_CLAMPER_H_

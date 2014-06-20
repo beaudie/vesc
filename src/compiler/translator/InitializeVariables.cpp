@@ -7,6 +7,9 @@
 #include "compiler/translator/InitializeVariables.h"
 #include "compiler/translator/compilerdebug.h"
 
+namespace sh
+{
+
 namespace
 {
 
@@ -114,3 +117,4 @@ void InitializeVariables::insertInitCode(TIntermSequence& sequence)
     }
 }
 
+}

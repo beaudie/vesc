@@ -31,13 +31,12 @@
 // and the shading language compiler.
 //
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+namespace sh
+{
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 125
+#define ANGLE_SH_VERSION 126
 
 //
 // The names of the following enums have been derived by replacing GL prefix
@@ -531,8 +530,6 @@ COMPILER_EXPORT int ShCheckVariablesWithinPackingLimits(
     ShVariableInfo* varInfoArray,
     size_t varInfoArraySize);
 
-#ifdef __cplusplus
 }
-#endif
 
 #endif // _COMPILER_INTERFACE_INCLUDED_

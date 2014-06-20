@@ -4,8 +4,14 @@
 // found in the LICENSE file.
 //
 
+#ifndef TRANSLATOR_VALIDATELIMITATIONS_H_
+#define TRANSLATOR_VALIDATELIMITATIONS_H_
+
 #include "compiler/translator/intermediate.h"
 #include "compiler/translator/LoopInfo.h"
+
+namespace sh
+{
 
 class TInfoSinkBase;
 
@@ -53,3 +59,6 @@ class ValidateLimitations : public TIntermTraverser
     TLoopStack mLoopStack;
 };
 
+}
+
+#endif // TRANSLATOR_VALIDATELIMITATIONS_H_

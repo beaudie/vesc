@@ -24,6 +24,9 @@
 #include "compiler/translator/Types.h"
 #include "compiler/translator/ConstantUnion.h"
 
+namespace sh
+{
+
 //
 // Operators used by the high-level (parse tree) representation.
 //
@@ -676,5 +679,7 @@ protected:
 
     bool depthCheck() const { return maxDepth < depthLimit; }
 };
+
+}
 
 #endif // __INTERMEDIATE_H

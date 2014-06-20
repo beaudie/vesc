@@ -6,6 +6,9 @@
 
 #include "compiler/translator/timing/RestrictVertexShaderTiming.h"
 
+namespace sh
+{
+
 void RestrictVertexShaderTiming::visitSymbol(TIntermSymbol* node)
 {
     if (IsSampler(node->getBasicType())) {
@@ -14,4 +17,6 @@ void RestrictVertexShaderTiming::visitSymbol(TIntermSymbol* node)
                       node->getLine(),
                       "Samplers are not permitted in vertex shaders.\n");
     }
+}
+
 }

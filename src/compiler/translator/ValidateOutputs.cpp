@@ -9,6 +9,9 @@
 #include "compiler/translator/InitializeParseContext.h"
 #include "compiler/translator/ParseContext.h"
 
+namespace sh
+{
+
 ValidateOutputs::ValidateOutputs(TInfoSinkBase& sink, int maxDrawBuffers)
     : mSink(sink),
       mMaxDrawBuffers(maxDrawBuffers),
@@ -75,4 +78,6 @@ void ValidateOutputs::error(TSourceLoc loc, const char *reason, const char* toke
     mSink.location(loc);
     mSink << "'" << token << "' : " << reason << "\n";
     mNumErrors++;
+}
+
 }

@@ -11,8 +11,12 @@
 #include <stdlib.h>
 #include "compiler/translator/Common.h"
 
+namespace sh
+{
+
 // Returns the fractional part of the given floating-point number.
-inline float fractionalPart(float f) {
+inline float fractionalPart(float f)
+{
   float intPart = 0.0f;
   return modff(f, &intPart);
 }
@@ -21,7 +25,8 @@ inline float fractionalPart(float f) {
 // TPrefixType is used to centralize how info log messages start.
 // See below.
 //
-enum TPrefixType {
+enum TPrefixType
+{
     EPrefixNone,
     EPrefixWarning,
     EPrefixError,
@@ -36,12 +41,14 @@ enum TPrefixType {
 // The methods are a general set of tools for getting a variety of
 // messages and types inserted into the log.
 //
-class TInfoSinkBase {
-public:
+class TInfoSinkBase
+{
+  public:
     TInfoSinkBase() {}
 
     template <typename T>
-    TInfoSinkBase& operator<<(const T& t) {
+    TInfoSinkBase& operator<<(const T& t)
+    {
         TPersistStringStream stream;
         stream << t;
         sink.append(stream.str());
@@ -49,7 +56,8 @@ public:
     }
     // Override << operator for specific types. It is faster to append strings
     // and characters directly to the sink.
-    TInfoSinkBase& operator<<(char c) {
+    TInfoSinkBase& operator<<(char c)
+    {
         sink.append(1, c);
         return *this;
     }
@@ -57,16 +65,19 @@ public:
         sink.append(str);
         return *this;
     }
-    TInfoSinkBase& operator<<(const TPersistString& str) {
+    TInfoSinkBase& operator<<(const TPersistString& str)
+    {
         sink.append(str);
         return *this;
     }
-    TInfoSinkBase& operator<<(const TString& str) {
+    TInfoSinkBase& operator<<(const TString& str)
+    {
         sink.append(str.c_str());
         return *this;
     }
     // Make sure floats are written with correct precision.
-    TInfoSinkBase& operator<<(float f) {
+    TInfoSinkBase& operator<<(float f)
+    {
         // Make sure that at least one decimal point is written. If a number
         // does not have a fractional part, the default precision format does
         // not write the decimal portion which gets interpreted as integer by
@@ -102,15 +113,18 @@ public:
     void location(const TSourceLoc& loc);
     void message(TPrefixType p, const TSourceLoc& loc, const char* m);
 
-private:
+  private:
     TPersistString sink;
 };
 
-class TInfoSink {
-public:
+class TInfoSink
+{
+  public:
     TInfoSinkBase info;
     TInfoSinkBase debug;
     TInfoSinkBase obj;
 };
+
+}
 
 #endif // _INFOSINK_INCLUDED_

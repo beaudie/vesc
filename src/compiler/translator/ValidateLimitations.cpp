@@ -9,6 +9,9 @@
 #include "compiler/translator/InitializeParseContext.h"
 #include "compiler/translator/ParseContext.h"
 
+namespace sh
+{
+
 namespace
 {
 
@@ -467,3 +470,4 @@ bool ValidateLimitations::validateIndexing(TIntermBinary *node)
     return valid;
 }
 
+}

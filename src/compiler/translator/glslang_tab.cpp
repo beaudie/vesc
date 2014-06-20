@@ -88,6 +88,8 @@
 #include "compiler/translator/ParseContext.h"
 #include "GLSLANG/ShaderLang.h"
 
+using namespace sh;
+
 #define YYENABLE_NLS 0
 
 #define YYLEX_PARAM context->scanner

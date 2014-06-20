@@ -6,6 +6,9 @@
 
 #include "compiler/translator/VariableInfo.h"
 
+namespace sh
+{
+
 namespace {
 
 TString arrayBrackets(int index)
@@ -371,4 +374,6 @@ bool CollectVariables::visitAggregate(Visit, TIntermAggregate* node)
     }
 
     return visitChildren;
+}
+
 }

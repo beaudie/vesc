@@ -9,6 +9,9 @@
 
 #include <assert.h>
 
+namespace sh
+{
+
 //
 // Precision qualifiers
 //
@@ -466,6 +469,8 @@ inline const char* getInterpolationString(TQualifier q)
     case EvqFlatIn:         return "flat";     break;
     default:                return "unknown interpolation";
     }
+}
+
 }
 
 #endif // _BASICTYPES_INCLUDED_

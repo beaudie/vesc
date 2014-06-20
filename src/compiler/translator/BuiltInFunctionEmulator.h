@@ -10,13 +10,17 @@
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/intermediate.h"
 
+namespace sh
+{
+
 //
 // This class decides which built-in functions need to be replaced with the
 // emulated ones.
 // It's only a workaround for OpenGL driver bugs, and isn't needed in general.
 //
-class BuiltInFunctionEmulator {
-public:
+class BuiltInFunctionEmulator
+{
+  public:
     BuiltInFunctionEmulator(ShShaderType shaderType);
     // Records that a function is called by the shader and might needs to be
     // emulated.  If the function's group is not in mFunctionGroupFilter, this
@@ -38,7 +42,7 @@ public:
     // "name(" becomes "webgl_name_emu(".
     static TString GetEmulatedFunctionName(const TString& name);
 
-private:
+  private:
     //
     // Built-in functions.
     //
@@ -87,5 +91,7 @@ private:
     const bool* mFunctionMask;  // a boolean flag for each function.
     const char** mFunctionSource;
 };
+
+}
 
 #endif  // COMPILIER_BUILT_IN_FUNCTION_EMULATOR_H_

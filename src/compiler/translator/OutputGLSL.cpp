@@ -6,6 +6,9 @@
 
 #include "compiler/translator/OutputGLSL.h"
 
+namespace sh
+{
+
 TOutputGLSL::TOutputGLSL(TInfoSinkBase& objSink,
                          ShArrayIndexClampingStrategy clampingStrategy,
                          ShHashFunction64 hashFunction,
@@ -54,4 +57,6 @@ TString TOutputGLSL::translateTextureFunction(TString& name)
     }
 
     return name;
+}
+
 }

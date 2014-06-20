@@ -10,6 +10,9 @@
 #include "compiler/translator/depgraph/DependencyGraph.h"
 #include "compiler/translator/InfoSink.h"
 
+namespace sh
+{
+
 class TDependencyGraphOutput : public TDependencyGraphTraverser {
 public:
     TDependencyGraphOutput(TInfoSinkBase& sink) : mSink(sink) {}
@@ -26,5 +29,7 @@ private:
 
     TInfoSinkBase& mSink;
 };
+
+}
 
 #endif  // COMPILER_DEPGRAPH_DEPENDENCY_GRAPH_OUTPUT_H

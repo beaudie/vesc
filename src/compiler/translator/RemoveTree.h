@@ -4,4 +4,14 @@
 // found in the LICENSE file.
 //
 
+#ifndef TRANSLATOR_REMOVETREE_H_
+#define TRANSLATOR_REMOVETREE_H_
+
+namespace sh
+{
+
 void RemoveAllTreeNodes(TIntermNode*);
+
+}
+
+#endif // TRANSLATOR_REMOVETREE_H_

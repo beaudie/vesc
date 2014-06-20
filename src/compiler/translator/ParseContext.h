@@ -13,6 +13,9 @@
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/preprocessor/Preprocessor.h"
 
+namespace sh
+{
+
 struct TMatrixFields {
     bool wholeRow;
     bool wholeCol;
@@ -163,5 +166,7 @@ struct TParseContext {
 
 int PaParseStrings(size_t count, const char* const string[], const int length[],
                    TParseContext* context);
+
+}
 
 #endif // _PARSER_HELPER_INCLUDED_

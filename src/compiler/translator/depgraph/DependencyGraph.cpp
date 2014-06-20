@@ -9,6 +9,9 @@
 #include "compiler/translator/depgraph/DependencyGraph.h"
 #include "compiler/translator/depgraph/DependencyGraphBuilder.h"
 
+namespace sh
+{
+
 TDependencyGraph::TDependencyGraph(TIntermNode* intermNode)
 {
     TDependencyGraphBuilder::build(intermNode, this);
@@ -94,4 +97,6 @@ const char* TGraphLogicalOp::getOpString() const
         default: opString = "unknown"; break;
     }
     return opString;
+}
+
 }

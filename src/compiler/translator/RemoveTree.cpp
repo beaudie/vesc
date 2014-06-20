@@ -7,6 +7,9 @@
 #include "compiler/translator/intermediate.h"
 #include "compiler/translator/RemoveTree.h"
 
+namespace sh
+{
+
 //
 // Code to delete the intermediate tree.
 //
@@ -27,3 +30,4 @@ void RemoveAllTreeNodes(TIntermNode* root)
     }
 }
 
+}

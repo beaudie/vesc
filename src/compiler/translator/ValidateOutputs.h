@@ -8,6 +8,9 @@
 
 #include <set>
 
+namespace sh
+{
+
 class TInfoSinkBase;
 
 class ValidateOutputs : public TIntermTraverser
@@ -31,3 +34,5 @@ class ValidateOutputs : public TIntermTraverser
 
     void error(TSourceLoc loc, const char *reason, const char* token);
 };
+
+}

@@ -13,6 +13,9 @@
 #include <algorithm>
 #include <climits>
 
+namespace sh
+{
+
 TType::TType(const TPublicType &p)
     : type(p.type), precision(p.precision), qualifier(p.qualifier), layoutQualifier(p.layoutQualifier),
       primarySize(p.primarySize), secondarySize(p.secondarySize), array(p.array), arraySize(p.arraySize),
@@ -199,4 +202,6 @@ int TStructure::calculateDeepestNesting() const
     for (size_t i = 0; i < mFields->size(); ++i)
         maxNesting = std::max(maxNesting, (*mFields)[i]->type()->getDeepestStructNesting());
     return 1 + maxNesting;
+}
+
 }

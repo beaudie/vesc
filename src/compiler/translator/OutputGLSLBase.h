@@ -13,6 +13,9 @@
 #include "compiler/translator/LoopInfo.h"
 #include "compiler/translator/ParseContext.h"
 
+namespace sh
+{
+
 class TOutputGLSLBase : public TIntermTraverser
 {
   public:
@@ -79,5 +82,7 @@ class TOutputGLSLBase : public TIntermTraverser
 
     const int mShaderVersion;
 };
+
+}
 
 #endif  // CROSSCOMPILERGLSL_OUTPUTGLSLBASE_H_

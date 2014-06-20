@@ -8,6 +8,9 @@
 
 #include "compiler/translator/SymbolTable.h"
 
+namespace sh
+{
+
 namespace {
 
 // we use macros here instead of function definitions to work around more GLSL
@@ -404,3 +407,4 @@ TString BuiltInFunctionEmulator::GetEmulatedFunctionName(
     return "webgl_" + name.substr(0, name.length() - 1) + "_emu(";
 }
 
+}

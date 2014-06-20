@@ -8,6 +8,9 @@
 #include <algorithm>
 #include "compiler/translator/Compiler.h"
 
+namespace sh
+{
+
 namespace {
 int GetSortOrder(ShDataType type)
 {
@@ -319,5 +322,4 @@ bool VariablePacker::CheckVariablesWithinPackingLimits(int maxVectors, const TVa
     return true;
 }
 
-
-
+}

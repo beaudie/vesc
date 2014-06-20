@@ -4,4 +4,12 @@
 // found in the LICENSE file.
 //
 
+#ifndef TRANSLATOR_COMPILERALIVE_H_
+#define TRANSLATOR_COMPILERALIVE_H_
+
+namespace sh
+{
 bool QualifierWritten(TIntermNode* root, TQualifier);
+}
+
+#endif // TRANSLATOR_COMPILERALIVE_H_

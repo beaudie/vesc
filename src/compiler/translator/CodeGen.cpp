@@ -8,6 +8,9 @@
 #include "compiler/translator/TranslatorGLSL.h"
 #include "compiler/translator/TranslatorHLSL.h"
 
+namespace sh
+{
+
 //
 // This function must be provided to create the actual
 // compile object used by higher level code.  It returns
@@ -35,4 +38,6 @@ TCompiler* ConstructCompiler(
 void DeleteCompiler(TCompiler* compiler)
 {
     delete compiler;
+}
+
 }

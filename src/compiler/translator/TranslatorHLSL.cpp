@@ -9,6 +9,9 @@
 #include "compiler/translator/InitializeParseContext.h"
 #include "compiler/translator/OutputHLSL.h"
 
+namespace sh
+{
+
 TranslatorHLSL::TranslatorHLSL(ShShaderType type, ShShaderSpec spec, ShShaderOutput output)
   : TCompiler(type, spec, output)
 {
@@ -26,4 +29,6 @@ void TranslatorHLSL::translate(TIntermNode *root)
     mActiveOutputVariables  = outputHLSL.getOutputVariables();
     mActiveAttributes       = outputHLSL.getAttributes();
     mActiveVaryings         = outputHLSL.getVaryings();
+}
+
 }

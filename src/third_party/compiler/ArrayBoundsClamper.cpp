@@ -34,6 +34,9 @@
 // temporary variables was difficult because ANGLE would then need to make more
 // brutal changes to the expression tree.
 
+namespace sh
+{
+
 const char* kIntClampBegin = "// BEGIN: Generated code for array bounds clamping\n\n";
 const char* kIntClampEnd = "// END: Generated code for array bounds clamping\n\n";
 const char* kIntClampDefinition = "int webgl_int_clamp(int value, int minValue, int maxValue) { return ((value < minValue) ? minValue : ((value > maxValue) ? maxValue : value)); }\n\n";
@@ -103,4 +106,6 @@ void ArrayBoundsClamper::OutputClampingFunctionDefinition(TInfoSinkBase& out) co
         return;
     }
     out << kIntClampBegin << kIntClampDefinition << kIntClampEnd;
+}
+
 }

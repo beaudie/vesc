@@ -7,6 +7,9 @@
 #include "compiler/translator/localintermediate.h"
 #include "compiler/translator/SymbolTable.h"
 
+namespace sh
+{
+
 //
 // Two purposes:
 // 1.  Show an example of how to iterate tree.  Functions can
@@ -424,4 +427,6 @@ void TIntermediate::outputTree(TIntermNode* root)
     TOutputTraverser it(infoSink.info);
 
     root->traverse(&it);
+}
+
 }

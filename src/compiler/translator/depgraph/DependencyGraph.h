@@ -12,6 +12,9 @@
 #include <set>
 #include <stack>
 
+namespace sh
+{
+
 class TGraphNode;
 class TGraphParentNode;
 class TGraphArgument;
@@ -208,5 +211,7 @@ private:
     int mDepth;
     TGraphNodeSet mVisited;
 };
+
+}
 
 #endif

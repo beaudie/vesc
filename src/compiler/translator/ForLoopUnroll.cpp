@@ -6,6 +6,9 @@
 
 #include "compiler/translator/ForLoopUnroll.h"
 
+namespace sh
+{
+
 bool ForLoopUnrollMarker::visitBinary(Visit, TIntermBinary *node)
 {
     if (mUnrollCondition != kSamplerArrayIndex)
@@ -79,4 +82,6 @@ void ForLoopUnrollMarker::visitSymbol(TIntermSymbol* symbol)
             UNREACHABLE();
         }
     }
+}
+
 }

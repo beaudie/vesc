@@ -6,6 +6,9 @@
 
 #include "compiler/translator/depgraph/DependencyGraphBuilder.h"
 
+namespace sh
+{
+
 void TDependencyGraphBuilder::build(TIntermNode* node, TDependencyGraph* graph)
 {
     TDependencyGraphBuilder builder(graph);
@@ -224,4 +227,6 @@ void TDependencyGraphBuilder::connectMultipleNodesToSingleNode(TParentNodeSet* n
         TGraphParentNode* currentNode = *iter;
         currentNode->addDependentNode(node);
     }
+}
+
 }

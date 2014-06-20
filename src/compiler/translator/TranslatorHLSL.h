@@ -10,6 +10,9 @@
 #include "compiler/translator/Compiler.h"
 #include "common/shadervars.h"
 
+namespace sh
+{
+
 class TranslatorHLSL : public TCompiler {
 public:
     TranslatorHLSL(ShShaderType type, ShShaderSpec spec, ShShaderOutput output);
@@ -30,5 +33,7 @@ protected:
     std::vector<sh::Attribute> mActiveAttributes;
     std::vector<sh::Varying> mActiveVaryings;
 };
+
+}
 
 #endif  // COMPILER_TRANSLATORHLSL_H_

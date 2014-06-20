@@ -7,6 +7,8 @@
 #include "gtest/gtest.h"
 #include "GLSLANG/ShaderLang.h"
 
+using namespace sh;
+
 class CompilerTestEnvironment : public testing::Environment
 {
   public:

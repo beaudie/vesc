@@ -14,6 +14,9 @@
 
 #include "compiler/translator/intermediate.h"
 
+namespace sh
+{
+
 void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltInResources &resources, TSymbolTable &symbolTable)
 {
     TType *float1 = new TType(EbtFloat);
@@ -757,4 +760,6 @@ void InitExtensionBehavior(const ShBuiltInResources& resources,
         extBehavior["GL_EXT_frag_depth"] = EBhUndefined;
     if (resources.EXT_shader_texture_lod)
         extBehavior["GL_EXT_shader_texture_lod"] = EBhUndefined;
+}
+
 }

@@ -16,6 +16,7 @@
 
 namespace sh
 {
+
 UnfoldShortCircuit::UnfoldShortCircuit(TParseContext &context, OutputHLSL *outputHLSL) : mContext(context), mOutputHLSL(outputHLSL)
 {
     mTemporaryIndex = 0;

@@ -175,14 +175,14 @@ void Shader::initializeCompiler()
 {
     if (!mFragmentCompiler)
     {
-        int result = ShInitialize();
+        int result = sh::ShInitialize();
 
         if (result)
         {
-            ShShaderOutput hlslVersion = (mRenderer->getMajorShaderModel() >= 4) ? SH_HLSL11_OUTPUT : SH_HLSL9_OUTPUT;
+            sh::ShShaderOutput hlslVersion = (mRenderer->getMajorShaderModel() >= 4) ? sh::SH_HLSL11_OUTPUT : sh::SH_HLSL9_OUTPUT;
 
-            ShBuiltInResources resources;
-            ShInitBuiltInResources(&resources);
+            sh::ShBuiltInResources resources;
+            sh::ShInitBuiltInResources(&resources);
 
             const gl::Caps &caps = mRenderer->getCaps();
 
@@ -206,21 +206,21 @@ void Shader::initializeCompiler()
             resources.MinProgramTexelOffset = -8;   // D3D10_COMMONSHADER_TEXEL_OFFSET_MAX_NEGATIVE
             resources.MaxProgramTexelOffset = 7;    // D3D10_COMMONSHADER_TEXEL_OFFSET_MAX_POSITIVE
 
-            mFragmentCompiler = ShConstructCompiler(SH_FRAGMENT_SHADER, SH_GLES2_SPEC, hlslVersion, &resources);
-            mVertexCompiler = ShConstructCompiler(SH_VERTEX_SHADER, SH_GLES2_SPEC, hlslVersion, &resources);
+            mFragmentCompiler = ShConstructCompiler(sh::SH_FRAGMENT_SHADER, sh::SH_GLES2_SPEC, hlslVersion, &resources);
+            mVertexCompiler = ShConstructCompiler(sh::SH_VERTEX_SHADER, sh::SH_GLES2_SPEC, hlslVersion, &resources);
         }
     }
 }
 
 void Shader::releaseCompiler()
 {
-    ShDestruct(mFragmentCompiler);
-    ShDestruct(mVertexCompiler);
+    sh::ShDestruct(mFragmentCompiler);
+    sh::ShDestruct(mVertexCompiler);
 
     mFragmentCompiler = NULL;
     mVertexCompiler = NULL;
 
-    ShFinalize();
+    sh::ShFinalize();
 }
 
 void Shader::parseVaryings(void *compiler)
@@ -228,7 +228,7 @@ void Shader::parseVaryings(void *compiler)
     if (!mHlsl.empty())
     {
         std::vector<sh::Varying> *activeVaryings;
-        ShGetInfoPointer(compiler, SH_ACTIVE_VARYINGS_ARRAY, reinterpret_cast<void**>(&activeVaryings));
+        sh::ShGetInfoPointer(compiler, sh::SH_ACTIVE_VARYINGS_ARRAY, reinterpret_cast<void**>(&activeVaryings));
 
         for (size_t varyingIndex = 0; varyingIndex < activeVaryings->size(); varyingIndex++)
         {
@@ -289,13 +289,13 @@ void Shader::compileToHLSL(void *compiler)
     // ensure the compiler is loaded
     initializeCompiler();
 
-    int compileOptions = SH_OBJECT_CODE;
+    int compileOptions = sh::SH_OBJECT_CODE;
     std::string sourcePath;
     if (perfActive())
     {
         sourcePath = getTempPath();
         writeFile(sourcePath.c_str(), mSource.c_str(), mSource.length());
-        compileOptions |= SH_LINE_DIRECTIVES;
+        compileOptions |= sh::SH_LINE_DIRECTIVES;
     }
 
     int result;
@@ -306,7 +306,7 @@ void Shader::compileToHLSL(void *compiler)
             mSource.c_str(),
         };
 
-        result = ShCompile(compiler, sourceStrings, ArraySize(sourceStrings), compileOptions);
+        result = sh::ShCompile(compiler, sourceStrings, ArraySize(sourceStrings), compileOptions);
     }
     else
     {
@@ -316,11 +316,11 @@ void Shader::compileToHLSL(void *compiler)
             mSource.c_str(),
         };
 
-        result = ShCompile(compiler, sourceStrings, ArraySize(sourceStrings), compileOptions | SH_SOURCE_PATH);
+        result = sh::ShCompile(compiler, sourceStrings, ArraySize(sourceStrings), compileOptions | sh::SH_SOURCE_PATH);
     }
 
     size_t shaderVersion = 100;
-    ShGetInfo(compiler, SH_SHADER_VERSION, &shaderVersion);
+    sh::ShGetInfo(compiler, sh::SH_SHADER_VERSION, &shaderVersion);
 
     mShaderVersion = static_cast<int>(shaderVersion);
 
@@ -332,10 +332,10 @@ void Shader::compileToHLSL(void *compiler)
     else if (result)
     {
         size_t objCodeLen = 0;
-        ShGetInfo(compiler, SH_OBJECT_CODE_LENGTH, &objCodeLen);
+        sh::ShGetInfo(compiler, sh::SH_OBJECT_CODE_LENGTH, &objCodeLen);
 
         char* outputHLSL = new char[objCodeLen];
-        ShGetObjectCode(compiler, outputHLSL);
+        sh::ShGetObjectCode(compiler, outputHLSL);
 
 #ifdef _DEBUG
         std::ostringstream hlslStream;
@@ -362,20 +362,20 @@ void Shader::compileToHLSL(void *compiler)
         delete[] outputHLSL;
 
         void *activeUniforms;
-        ShGetInfoPointer(compiler, SH_ACTIVE_UNIFORMS_ARRAY, &activeUniforms);
+        sh::ShGetInfoPointer(compiler, sh::SH_ACTIVE_UNIFORMS_ARRAY, &activeUniforms);
         mActiveUniforms = *(std::vector<sh::Uniform>*)activeUniforms;
 
         void *activeInterfaceBlocks;
-        ShGetInfoPointer(compiler, SH_ACTIVE_INTERFACE_BLOCKS_ARRAY, &activeInterfaceBlocks);
+        sh::ShGetInfoPointer(compiler, sh::SH_ACTIVE_INTERFACE_BLOCKS_ARRAY, &activeInterfaceBlocks);
         mActiveInterfaceBlocks = *(std::vector<sh::InterfaceBlock>*)activeInterfaceBlocks;
     }
     else
     {
         size_t infoLogLen = 0;
-        ShGetInfo(compiler, SH_INFO_LOG_LENGTH, &infoLogLen);
+        sh::ShGetInfo(compiler, sh::SH_INFO_LOG_LENGTH, &infoLogLen);
 
         char* infoLog = new char[infoLogLen];
-        ShGetInfoLog(compiler, infoLog);
+        sh::ShGetInfoLog(compiler, infoLog);
         mInfoLog = infoLog;
 
         TRACE("\n%s", mInfoLog.c_str());
@@ -537,7 +537,7 @@ void VertexShader::parseAttributes()
     if (!hlsl.empty())
     {
         void *activeAttributes;
-        ShGetInfoPointer(mVertexCompiler, SH_ACTIVE_ATTRIBUTES_ARRAY, &activeAttributes);
+        sh::ShGetInfoPointer(mVertexCompiler, sh::SH_ACTIVE_ATTRIBUTES_ARRAY, &activeAttributes);
         mActiveAttributes = *(std::vector<sh::Attribute>*)activeAttributes;
     }
 }
@@ -568,7 +568,7 @@ void FragmentShader::compile()
     if (!hlsl.empty())
     {
         void *activeOutputVariables;
-        ShGetInfoPointer(mFragmentCompiler, SH_ACTIVE_OUTPUT_VARIABLES_ARRAY, &activeOutputVariables);
+        sh::ShGetInfoPointer(mFragmentCompiler, sh::SH_ACTIVE_OUTPUT_VARIABLES_ARRAY, &activeOutputVariables);
         mActiveOutputVariables = *(std::vector<sh::Attribute>*)activeOutputVariables;
     }
 }
@@ -585,7 +585,7 @@ const std::vector<sh::Attribute> &FragmentShader::getOutputVariables() const
     return mActiveOutputVariables;
 }
 
-ShShaderOutput Shader::getCompilerOutputType(GLenum shader)
+sh::ShShaderOutput Shader::getCompilerOutputType(GLenum shader)
 {
     void *compiler = NULL;
 
@@ -593,13 +593,13 @@ ShShaderOutput Shader::getCompilerOutputType(GLenum shader)
     {
       case GL_VERTEX_SHADER:   compiler = mVertexCompiler;   break;
       case GL_FRAGMENT_SHADER: compiler = mFragmentCompiler; break;
-      default: UNREACHABLE();  return SH_HLSL9_OUTPUT;
+      default: UNREACHABLE();  return sh::SH_HLSL9_OUTPUT;
     }
 
     size_t outputType = 0;
-    ShGetInfo(compiler, SH_OUTPUT_TYPE, &outputType);
+    sh::ShGetInfo(compiler, sh::SH_OUTPUT_TYPE, &outputType);
 
-    return static_cast<ShShaderOutput>(outputType);
+    return static_cast<sh::ShShaderOutput>(outputType);
 }
 
 }

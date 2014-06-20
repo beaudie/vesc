@@ -9,6 +9,9 @@
 
 #include "compiler/translator/depgraph/DependencyGraph.h"
 
+namespace sh
+{
+
 //
 // Creates a dependency graph of symbols, function calls, conditions etc. by traversing a
 // intermediate tree.
@@ -177,5 +180,7 @@ private:
     TNodeSetStack mNodeSets;
     TSymbolStack mLeftmostSymbols;
 };
+
+}
 
 #endif  // COMPILER_DEPGRAPH_DEPENDENCY_GRAPH_BUILDER_H

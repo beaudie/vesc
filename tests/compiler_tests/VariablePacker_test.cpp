@@ -6,6 +6,8 @@
 #include "compiler/translator/VariablePacker.h"
 #include "gtest/gtest.h"
 
+using namespace sh;
+
 TEST(VariablePacking, Pack) {
   VariablePacker packer;
   TVariableInfoList vars;

@@ -6,6 +6,9 @@
 
 #include "compiler/translator/UnfoldShortCircuitAST.h"
 
+namespace sh
+{
+
 namespace
 {
 
@@ -79,3 +82,4 @@ void UnfoldShortCircuitAST::updateTree()
     }
 }
 
+}

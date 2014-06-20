@@ -11,6 +11,9 @@
 #include "compiler/translator/intermediate.h"
 #include "compiler/translator/VariableInfo.h"
 
+namespace sh
+{
+
 class TInfoSink;
 
 // Traverses intermediate tree to detect function recursion.
@@ -74,5 +77,7 @@ private:
     DetectCallDepth(const DetectCallDepth&);
     void operator=(const DetectCallDepth&);
 };
+
+}
 
 #endif  // COMPILER_DETECT_RECURSION_H_

@@ -6,8 +6,13 @@
 #ifndef __INITIALIZEDLL_H
 #define __INITIALIZEDLL_H
 
+namespace sh
+{
+
 bool InitProcess();
 void DetachProcess();
+
+}
 
 #endif // __INITIALIZEDLL_H
 

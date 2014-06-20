@@ -12,6 +12,9 @@
 
 #include <assert.h>
 
+namespace sh
+{
+
 bool InitProcess()
 {
     if (!InitializePoolIndex()) {
@@ -31,4 +34,6 @@ void DetachProcess()
 {
     FreeParseContextIndex();
     FreePoolIndex();
+}
+
 }

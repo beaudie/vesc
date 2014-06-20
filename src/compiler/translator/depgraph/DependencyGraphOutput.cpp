@@ -6,6 +6,9 @@
 
 #include "compiler/translator/depgraph/DependencyGraphOutput.h"
 
+namespace sh
+{
+
 void TDependencyGraphOutput::outputIndentation()
 {
     for (int i = 0; i < getDepth(); ++i)
@@ -62,4 +65,6 @@ void TDependencyGraphOutput::outputAllSpanningTrees(TDependencyGraph& graph)
         symbol->traverse(this);
         mSink << "\n";
     }
+}
+
 }

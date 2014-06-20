@@ -10,6 +10,9 @@
 #include "compiler/translator/InfoSink.h"
 #include "compiler/preprocessor/SourceLocation.h"
 
+namespace sh
+{
+
 TDiagnostics::TDiagnostics(TInfoSink& infoSink) :
     mInfoSink(infoSink),
     mNumErrors(0),
@@ -60,4 +63,6 @@ void TDiagnostics::print(ID id,
                          const std::string& text)
 {
     writeInfo(severity(id), loc, message(id), text, "");
+}
+
 }

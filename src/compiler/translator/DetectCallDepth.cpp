@@ -7,6 +7,9 @@
 #include "compiler/translator/DetectCallDepth.h"
 #include "compiler/translator/InfoSink.h"
 
+namespace sh
+{
+
 DetectCallDepth::FunctionNode::FunctionNode(const TString& fname)
     : name(fname),
       visit(PreVisit)
@@ -183,3 +186,4 @@ DetectCallDepth::FunctionNode* DetectCallDepth::findFunctionByName(
     return NULL;
 }
 
+}

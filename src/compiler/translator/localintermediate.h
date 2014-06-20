@@ -9,6 +9,9 @@
 
 #include "compiler/translator/intermediate.h"
 
+namespace sh
+{
+
 struct TVectorFields {
     int offsets[4];
     int num;
@@ -49,5 +52,7 @@ private:
 
     TInfoSink& infoSink;
 };
+
+}
 
 #endif // _LOCAL_INTERMEDIATE_INCLUDED_

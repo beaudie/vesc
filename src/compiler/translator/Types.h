@@ -13,6 +13,9 @@
 #include "compiler/translator/Common.h"
 #include "compiler/translator/compilerdebug.h"
 
+namespace sh
+{
+
 struct TPublicType;
 class TType;
 class TSymbol;
@@ -419,15 +422,15 @@ class TType
 
     const char *getBasicString() const
     {
-        return ::getBasicString(type);
+        return sh::getBasicString(type);
     }
     const char *getPrecisionString() const
     {
-        return ::getPrecisionString(precision);
+        return sh::getPrecisionString(precision);
     }
     const char *getQualifierString() const
     {
-        return ::getQualifierString(qualifier);
+        return sh::getQualifierString(qualifier);
     }
     TString getCompleteString() const;
 
@@ -572,5 +575,7 @@ struct TPublicType
         return array || isMatrix() || isVector();
     }
 };
+
+}
 
 #endif // _TYPES_INCLUDED_

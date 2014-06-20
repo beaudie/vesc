@@ -17,6 +17,9 @@
 #include "compiler/translator/TranslatorHLSL.h"
 #include "compiler/translator/VariablePacker.h"
 
+namespace sh
+{
+
 static bool isInitialized = false;
 
 //
@@ -442,4 +445,6 @@ int ShCheckVariablesWithinPackingLimits(
     }
     VariablePacker packer;
     return packer.CheckVariablesWithinPackingLimits(maxVectors, variables) ? 1 : 0;
+}
+
 }

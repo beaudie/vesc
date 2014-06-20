@@ -6,6 +6,9 @@
 
 #include "compiler/translator/intermediate.h"
 
+namespace sh
+{
+
 class TAliveTraverser : public TIntermTraverser {
 public:
     TAliveTraverser(TQualifier q) : TIntermTraverser(true, false, false, true), found(false), qualifier(q)
@@ -55,4 +58,6 @@ bool TAliveTraverser::visitSelection(Visit preVisit, TIntermSelection* node)
         return false;
 
     return true;
+}
+
 }

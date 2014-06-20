@@ -9,6 +9,9 @@
 
 #include "compiler/translator/intermediate.h"
 
+namespace sh
+{
+
 class InitializeVariables : public TIntermTraverser
 {
   public:
@@ -46,5 +49,7 @@ class InitializeVariables : public TIntermTraverser
     InitVariableInfoList mVariables;
     bool mCodeInserted;
 };
+
+}
 
 #endif  // COMPILER_INITIALIZE_VARIABLES_H_

@@ -9,6 +9,9 @@
 
 #include "compiler/translator/intermediate.h"
 
+namespace sh
+{
+
 // Traverses the intermediate tree to return the minimum GLSL version
 // required to legally access all built-in features used in the shader.
 // GLSL 1.1 which is mandated by OpenGL 2.0 provides:
@@ -51,5 +54,7 @@ protected:
 private:
     int mVersion;
 };
+
+}
 
 #endif  // COMPILER_VERSIONGLSL_H_

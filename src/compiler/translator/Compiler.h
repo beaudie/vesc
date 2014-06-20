@@ -22,6 +22,9 @@
 #include "compiler/translator/VariableInfo.h"
 #include "third_party/compiler/ArrayBoundsClamper.h"
 
+namespace sh
+{
+
 class TCompiler;
 class TDependencyGraph;
 class TranslatorHLSL;
@@ -35,14 +38,15 @@ bool IsWebGLBasedSpec(ShShaderSpec spec);
 //
 // The base class used to back handles returned to the driver.
 //
-class TShHandleBase {
-public:
+class TShHandleBase
+{
+  public:
     TShHandleBase();
     virtual ~TShHandleBase();
     virtual TCompiler* getAsCompiler() { return 0; }
     virtual TranslatorHLSL* getAsTranslatorHLSL() { return 0; }
 
-protected:
+  protected:
     // Memory allocator. Allocates and tracks memory required by the compiler.
     // Deallocates all memory when compiler is destructed.
     TPoolAllocator allocator;
@@ -52,8 +56,9 @@ protected:
 // The base class for the machine dependent compiler to derive from
 // for managing object code from the compile.
 //
-class TCompiler : public TShHandleBase {
-public:
+class TCompiler : public TShHandleBase
+{
+  public:
     TCompiler(ShShaderType type, ShShaderSpec spec, ShShaderOutput output);
     virtual ~TCompiler();
     virtual TCompiler* getAsCompiler() { return this; }
@@ -77,7 +82,7 @@ public:
     ShShaderOutput getOutputType() const { return outputType; }
     std::string getBuiltInResourcesString() const { return builtInResourcesString; }
 
-protected:
+  protected:
     ShShaderType getShaderType() const { return shaderType; }
     // Initialize symbol-table with built-in symbols.
     bool InitBuiltInSymbolTable(const ShBuiltInResources& resources);
@@ -129,7 +134,7 @@ protected:
     ShArrayIndexClampingStrategy getArrayIndexClampingStrategy() const;
     const BuiltInFunctionEmulator& getBuiltInFunctionEmulator() const;
 
-private:
+  private:
     ShShaderType shaderType;
     ShShaderSpec shaderSpec;
     ShShaderOutput outputType;
@@ -176,5 +181,7 @@ private:
 TCompiler* ConstructCompiler(
     ShShaderType type, ShShaderSpec spec, ShShaderOutput output);
 void DeleteCompiler(TCompiler*);
+
+}
 
 #endif // _SHHANDLE_INCLUDED_

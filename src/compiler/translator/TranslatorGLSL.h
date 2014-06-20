@@ -9,6 +9,9 @@
 
 #include "compiler/translator/Compiler.h"
 
+namespace sh
+{
+
 class TranslatorGLSL : public TCompiler {
 public:
     TranslatorGLSL(ShShaderType type, ShShaderSpec spec);
@@ -19,5 +22,7 @@ protected:
 private:
     void writeExtensionBehavior();
 };
+
+}
 
 #endif  // COMPILER_TRANSLATORGLSL_H_

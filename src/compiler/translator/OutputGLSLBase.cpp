@@ -9,6 +9,9 @@
 
 #include <cfloat>
 
+namespace sh
+{
+
 namespace
 {
 TString arrayBrackets(const TType &type)
@@ -1003,3 +1006,4 @@ void TOutputGLSLBase::declareStruct(const TStructure *structure)
     out << "}";
 }
 
+}

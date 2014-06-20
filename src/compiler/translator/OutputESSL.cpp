@@ -6,6 +6,9 @@
 
 #include "compiler/translator/OutputESSL.h"
 
+namespace sh
+{
+
 TOutputESSL::TOutputESSL(TInfoSinkBase& objSink,
                          ShArrayIndexClampingStrategy clampingStrategy,
                          ShHashFunction64 hashFunction,
@@ -24,4 +27,6 @@ bool TOutputESSL::writeVariablePrecision(TPrecision precision)
     TInfoSinkBase& out = objSink();
     out << getPrecisionString(precision);
     return true;
+}
+
 }

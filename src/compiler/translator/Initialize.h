@@ -11,6 +11,9 @@
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/SymbolTable.h"
 
+namespace sh
+{
+
 void InsertBuiltInFunctions(ShShaderType type, ShShaderSpec spec, const ShBuiltInResources &resources, TSymbolTable &table);
 
 void IdentifyBuiltIns(ShShaderType type, ShShaderSpec spec,
@@ -19,5 +22,7 @@ void IdentifyBuiltIns(ShShaderType type, ShShaderSpec spec,
 
 void InitExtensionBehavior(const ShBuiltInResources& resources,
                            TExtensionBehavior& extensionBehavior);
+
+}
 
 #endif // _INITIALIZE_INCLUDED_

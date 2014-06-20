@@ -10,6 +10,9 @@
 #include "compiler/translator/intermediate.h"
 #include "compiler/translator/InfoSink.h"
 
+namespace sh
+{
+
 class TInfoSinkBase;
 
 class RestrictVertexShaderTiming : public TIntermTraverser {
@@ -27,5 +30,7 @@ private:
     TInfoSinkBase& mSink;
     int mNumErrors;
 };
+
+}
 
 #endif  // COMPILER_TIMING_RESTRICT_VERTEX_SHADER_TIMING_H_

@@ -36,6 +36,9 @@
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/intermediate.h"
 
+namespace sh
+{
+
 // Symbol base class. (Can build functions or variables out of these...)
 class TSymbol
 {
@@ -425,5 +428,7 @@ class TSymbolTable
 
     static int uniqueIdCounter;
 };
+
+}
 
 #endif // _SYMBOL_TABLE_INCLUDED_

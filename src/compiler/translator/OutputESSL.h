@@ -9,6 +9,9 @@
 
 #include "compiler/translator/OutputGLSLBase.h"
 
+namespace sh
+{
+
 class TOutputESSL : public TOutputGLSLBase
 {
 public:
@@ -22,5 +25,7 @@ public:
 protected:
     virtual bool writeVariablePrecision(TPrecision precision);
 };
+
+}
 
 #endif  // CROSSCOMPILERGLSL_OUTPUTESSL_H_

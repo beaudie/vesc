@@ -9,6 +9,9 @@
 #include "compiler/translator/OutputGLSL.h"
 #include "compiler/translator/VersionGLSL.h"
 
+namespace sh
+{
+
 static void writeVersion(ShShaderType type, TIntermNode* root,
                          TInfoSinkBase& sink) {
     TVersionGLSL versionGLSL(type);
@@ -61,4 +64,6 @@ void TranslatorGLSL::writeExtensionBehavior() {
                  << getBehaviorString(iter->second) << "\n";
         }
     }
+}
+
 }

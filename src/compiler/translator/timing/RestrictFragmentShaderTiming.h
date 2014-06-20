@@ -10,6 +10,9 @@
 #include "compiler/translator/intermediate.h"
 #include "compiler/translator/depgraph/DependencyGraph.h"
 
+namespace sh
+{
+
 class TInfoSinkBase;
 
 class RestrictFragmentShaderTiming : TDependencyGraphTraverser {
@@ -34,5 +37,7 @@ private:
     typedef std::set<TString> StringSet;
     StringSet mSamplingOps;
 };
+
+}
 
 #endif  // COMPILER_TIMING_RESTRICT_FRAGMENT_SHADER_TIMING_H_

@@ -8,6 +8,9 @@
 
 #include "compiler/translator/OutputESSL.h"
 
+namespace sh
+{
+
 TranslatorESSL::TranslatorESSL(ShShaderType type, ShShaderSpec spec)
     : TCompiler(type, spec, SH_ESSL_OUTPUT) {
 }
@@ -40,4 +43,6 @@ void TranslatorESSL::writeExtensionBehavior() {
                  << getBehaviorString(iter->second) << "\n";
         }
     }
+}
+
 }

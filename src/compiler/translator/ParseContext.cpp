@@ -12,6 +12,9 @@
 #include "compiler/translator/glslang.h"
 #include "compiler/preprocessor/SourceLocation.h"
 
+namespace sh
+{
+
 ///////////////////////////////////////////////////////////////////////
 //
 // Sub- vector and matrix fields
@@ -2508,5 +2511,4 @@ int PaParseStrings(size_t count, const char* const string[], const int length[],
     return (error == 0) && (context->numErrors() == 0) ? 0 : 1;
 }
 
-
-
+}

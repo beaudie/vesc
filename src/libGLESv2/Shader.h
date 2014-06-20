@@ -87,7 +87,7 @@ class Shader
     void resetVaryingsRegisterAssignment();
 
     static void releaseCompiler();
-    static ShShaderOutput getCompilerOutputType(GLenum shader);
+    static sh::ShShaderOutput getCompilerOutputType(GLenum shader);
 
     bool usesDepthRange() const { return mUsesDepthRange; }
     bool usesPointSize() const { return mUsesPointSize; }

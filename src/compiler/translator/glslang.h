@@ -4,7 +4,13 @@
 // found in the LICENSE file.
 //
 
+namespace sh
+{
 struct TParseContext;
+}
+
+using namespace sh;
+
 extern int glslang_initialize(TParseContext* context);
 extern int glslang_finalize(TParseContext* context);
 

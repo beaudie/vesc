@@ -18,6 +18,9 @@
 #include <stdio.h>
 #include <algorithm>
 
+namespace sh
+{
+
 int TSymbolTable::uniqueIdCounter = 0;
 
 //
@@ -233,4 +236,6 @@ TPrecision TSymbolTable::getDefaultPrecision(TBasicType type)
         level--;
     }
     return prec;
+}
+
 }

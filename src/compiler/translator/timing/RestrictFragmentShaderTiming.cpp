@@ -9,6 +9,9 @@
 #include "compiler/translator/depgraph/DependencyGraphOutput.h"
 #include "compiler/translator/timing/RestrictFragmentShaderTiming.h"
 
+namespace sh
+{
+
 RestrictFragmentShaderTiming::RestrictFragmentShaderTiming(TInfoSinkBase& sink)
     : mSink(sink)
     , mNumErrors(0)
@@ -133,4 +136,6 @@ void RestrictFragmentShaderTiming::visitLogicalOp(TGraphLogicalOp* logicalOp)
     mSink << "An expression dependent on a sampler is not permitted on the left hand side of a logical "
           << logicalOp->getOpString()
           << " operator.\n";
+}
+
 }

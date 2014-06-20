@@ -11,6 +11,9 @@
 #include "compiler/translator/compilerdebug.h"
 #include "compiler/translator/Diagnostics.h"
 
+namespace sh
+{
+
 static TBehavior getBehavior(const std::string& str)
 {
     static const std::string kRequire("require");
@@ -163,4 +166,6 @@ void TDirectiveHandler::handleVersion(const pp::SourceLocation& loc,
         mDiagnostics.writeInfo(pp::Diagnostics::PP_ERROR, loc,
                                "version number", str, "not supported");
     }
+}
+
 }

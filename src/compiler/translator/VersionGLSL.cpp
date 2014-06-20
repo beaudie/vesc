@@ -6,6 +6,9 @@
 
 #include "compiler/translator/VersionGLSL.h"
 
+namespace sh
+{
+
 static const int GLSL_VERSION_110 = 110;
 static const int GLSL_VERSION_120 = 120;
 
@@ -137,3 +140,4 @@ void TVersionGLSL::updateVersion(int version)
     mVersion = std::max(version, mVersion);
 }
 
+}

@@ -13,6 +13,8 @@
 #include <string.h>
 #include <vector>
 
+using namespace sh;
+
 //
 // Return codes from main.
 //
@@ -384,4 +386,3 @@ static void FreeShaderSource(ShaderSource& source) {
     }
     source.clear();
 }
-

@@ -9,6 +9,9 @@
 
 #include "compiler/translator/intermediate.h"
 
+namespace sh
+{
+
 class TLoopIndexInfo
 {
   public:
@@ -75,6 +78,8 @@ class TLoopStack : public TVector<TLoopInfo>
     void push(TIntermLoop *info);
     void pop();
 };
+
+}
 
 #endif // COMPILER_TRANSLATOR_LOOP_INDEX_H_
 

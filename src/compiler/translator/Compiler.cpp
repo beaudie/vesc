@@ -23,6 +23,9 @@
 #include "compiler/translator/timing/RestrictVertexShaderTiming.h"
 #include "third_party/compiler/ArrayBoundsClamper.h"
 
+namespace sh
+{
+
 bool IsWebGLBasedSpec(ShShaderSpec spec)
 {
      return spec == SH_WEBGL_SPEC || spec == SH_CSS_SHADERS_SPEC;
@@ -576,4 +579,6 @@ ShArrayIndexClampingStrategy TCompiler::getArrayIndexClampingStrategy() const
 const BuiltInFunctionEmulator& TCompiler::getBuiltInFunctionEmulator() const
 {
     return builtInFunctionEmulator;
+}
+
 }

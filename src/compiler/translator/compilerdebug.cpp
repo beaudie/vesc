@@ -17,6 +17,8 @@
 #ifdef TRACE_ENABLED
 static const int kTraceBufferLen = 1024;
 
+using namespace sh;
+
 extern "C" {
 void Trace(const char *format, ...) {
     if (!format) return;

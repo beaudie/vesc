@@ -18,6 +18,9 @@
 #include "compiler/translator/RemoveTree.h"
 #include "compiler/translator/SymbolTable.h"
 
+namespace sh
+{
+
 bool CompareStructure(const TType& leftNodeType, ConstantUnion* rightUnionArray, ConstantUnion* leftUnionArray);
 
 static TPrecision GetHigherPrecision(TPrecision left, TPrecision right)
@@ -1523,4 +1526,6 @@ TString TIntermTraverser::hash(const TString& name, ShHashFunction64 hashFunctio
     stream << HASHED_NAME_PREFIX << std::hex << number;
     TString hashedName = stream.str();
     return hashedName;
+}
+
 }

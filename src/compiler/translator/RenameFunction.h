@@ -9,6 +9,9 @@
 
 #include "compiler/translator/intermediate.h"
 
+namespace sh
+{
+
 //
 // Renames a function, including its declaration and any calls to it.
 //
@@ -32,5 +35,7 @@ private:
     const TString mOldFunctionName;
     const TString mNewFunctionName;
 };
+
+}
 
 #endif  // COMPILER_RENAME_FUNCTION
