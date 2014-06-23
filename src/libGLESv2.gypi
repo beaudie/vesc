@@ -76,7 +76,7 @@
                             'sources':
                             [
                                 '<!@(python <(angle_path)/enumerate_files.py \
-                                     -dirs libGLESv2/renderer/d3d libGLESv2/renderer/d3d11 \
+                                     -dirs libGLESv2/renderer/d3d libGLESv2/renderer/d3d/d3d11 \
                                      -types *.cpp *.h *.hlsl *.bat)',
                             ],
                             'defines':
