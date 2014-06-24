@@ -274,6 +274,7 @@ Context::~Context()
     mState.renderbuffer.set(NULL);
 
     mState.transformFeedback.set(NULL);
+    mState.vertexArray.set(NULL);
 
     mTexture2DZero.set(NULL);
     mTextureCubeMapZero.set(NULL);
@@ -716,12 +717,12 @@ void Context::setActiveSampler(unsigned int active)
 
 GLuint Context::getReadFramebufferHandle() const
 {
-    return mState.readFramebuffer;
+    return mState.readFramebuffer->id();
 }
 
 GLuint Context::getDrawFramebufferHandle() const
 {
-    return mState.drawFramebuffer;
+    return mState.drawFramebuffer->id();
 }
 
 GLuint Context::getRenderbufferHandle() const
@@ -731,7 +732,7 @@ GLuint Context::getRenderbufferHandle() const
 
 GLuint Context::getVertexArrayHandle() const
 {
-    return mState.vertexArray;
+    return mState.vertexArray->id();
 }
 
 GLuint Context::getSamplerHandle(GLuint textureUnit) const
@@ -889,8 +890,9 @@ GLuint Context::createVertexArray()
     // Although the spec states VAO state is not initialized until the object is bound,
     // we create it immediately. The resulting behaviour is transparent to the application,
     // since it's not currently possible to access the state until the object is bound.
-    mVertexArrayMap[handle] = new VertexArray(mRenderer->createVertexArray(), handle, MAX_VERTEX_ATTRIBS);
-
+    VertexArray *vertexArray = new VertexArray(mRenderer->createVertexArray(), handle, MAX_VERTEX_ATTRIBS);
+    vertexArray->addRef();
+    mVertexArrayMap[handle] = vertexArray;
     return handle;
 }
 
@@ -995,7 +997,7 @@ void Context::deleteVertexArray(GLuint vertexArray)
         detachVertexArray(vertexArray);
 
         mVertexArrayHandleAllocator.release(vertexArrayObject->first);
-        delete vertexArrayObject->second;
+        vertexArrayObject->second->release();
         mVertexArrayMap.erase(vertexArrayObject);
     }
 }
@@ -1126,24 +1128,23 @@ TransformFeedback *Context::getTransformFeedback(GLuint handle) const
 
 Framebuffer *Context::getReadFramebuffer() const
 {
-    return getFramebuffer(mState.readFramebuffer);
+    return mState.readFramebuffer;
 }
 
 Framebuffer *Context::getDrawFramebuffer()
 {
-    return mBoundDrawFramebuffer;
+    return mState.drawFramebuffer;
 }
 
 const Framebuffer *Context::getDrawFramebuffer() const
 {
-    return mBoundDrawFramebuffer;
+    return mState.drawFramebuffer;
 }
 
 VertexArray *Context::getCurrentVertexArray() const
 {
-    VertexArray *vao = getVertexArray(mState.vertexArray);
-    ASSERT(vao != NULL);
-    return vao;
+    ASSERT(mState.vertexArray.get() != NULL);
+    return mState.vertexArray.get();
 }
 
 TransformFeedback *Context::getCurrentTransformFeedback() const
@@ -1202,22 +1203,20 @@ void Context::bindReadFramebuffer(GLuint framebuffer)
 {
     if (!getFramebuffer(framebuffer))
     {
-        mFramebufferMap[framebuffer] = new Framebuffer(mRenderer);
+        mFramebufferMap[framebuffer] = new Framebuffer(mRenderer, framebuffer);
     }
 
-    mState.readFramebuffer = framebuffer;
+    mState.readFramebuffer = getFramebuffer(framebuffer);
 }
 
 void Context::bindDrawFramebuffer(GLuint framebuffer)
 {
     if (!getFramebuffer(framebuffer))
     {
-        mFramebufferMap[framebuffer] = new Framebuffer(mRenderer);
+        mFramebufferMap[framebuffer] = new Framebuffer(mRenderer, framebuffer);
     }
 
-    mState.drawFramebuffer = framebuffer;
-
-    mBoundDrawFramebuffer = getFramebuffer(framebuffer);
+    mState.drawFramebuffer = getFramebuffer(framebuffer);
 }
 
 void Context::bindRenderbuffer(GLuint renderbuffer)
@@ -1231,10 +1230,12 @@ void Context::bindVertexArray(GLuint vertexArray)
 {
     if (!getVertexArray(vertexArray))
     {
-        mVertexArrayMap[vertexArray] = new VertexArray(mRenderer->createVertexArray(), vertexArray, MAX_VERTEX_ATTRIBS);
+        VertexArray *vertexArrayObject = new VertexArray(mRenderer->createVertexArray(), vertexArray, MAX_VERTEX_ATTRIBS);
+        vertexArrayObject->addRef();
+        mVertexArrayMap[vertexArray] = vertexArrayObject;
     }
 
-    mState.vertexArray = vertexArray;
+    mState.vertexArray.set(getVertexArray(vertexArray));
 }
 
 void Context::bindSampler(GLuint textureUnit, GLuint sampler)
@@ -1384,12 +1385,21 @@ void Context::endQuery(GLenum target)
 
 void Context::setFramebufferZero(Framebuffer *buffer)
 {
+    // First, check to see if the old default framebuffer
+    // was set for draw or read framebuffer, and change
+    // the bindings to point to the new one before deleting it.
+    if (mState.drawFramebuffer->id() == 0)
+    {
+        mState.drawFramebuffer = buffer;
+    }
+
+    if (mState.readFramebuffer->id() == 0)
+    {
+        mState.readFramebuffer = buffer;
+    }
+
     delete mFramebufferMap[0];
     mFramebufferMap[0] = buffer;
-    if (mState.drawFramebuffer == 0)
-    {
-        mBoundDrawFramebuffer = buffer;
-    }
 }
 
 void Context::setRenderbufferStorage(GLsizei width, GLsizei height, GLenum internalformat, GLsizei samples)
@@ -1528,11 +1538,11 @@ GLuint Context::getTargetFramebufferHandle(GLenum target) const
 
     if (target == GL_READ_FRAMEBUFFER_ANGLE)
     {
-        return mState.readFramebuffer;
+        return mState.readFramebuffer->id();
     }
     else
     {
-        return mState.drawFramebuffer;
+        return mState.drawFramebuffer->id();
     }
 }
 
@@ -1725,10 +1735,10 @@ void Context::getIntegerv(GLenum pname, GLint *params)
       case GL_ARRAY_BUFFER_BINDING:                     *params = mState.arrayBuffer.id();                              break;
       case GL_ELEMENT_ARRAY_BUFFER_BINDING:             *params = getCurrentVertexArray()->getElementArrayBufferId();   break;
       //case GL_FRAMEBUFFER_BINDING:                    // now equivalent to GL_DRAW_FRAMEBUFFER_BINDING_ANGLE
-      case GL_DRAW_FRAMEBUFFER_BINDING_ANGLE:           *params = mState.drawFramebuffer;                               break;
-      case GL_READ_FRAMEBUFFER_BINDING_ANGLE:           *params = mState.readFramebuffer;                               break;
+      case GL_DRAW_FRAMEBUFFER_BINDING_ANGLE:           *params = mState.drawFramebuffer->id();                         break;
+      case GL_READ_FRAMEBUFFER_BINDING_ANGLE:           *params = mState.readFramebuffer->id();                         break;
       case GL_RENDERBUFFER_BINDING:                     *params = mState.renderbuffer.id();                             break;
-      case GL_VERTEX_ARRAY_BINDING:                     *params = mState.vertexArray;                                   break;
+      case GL_VERTEX_ARRAY_BINDING:                     *params = mState.vertexArray->id();                             break;
       case GL_CURRENT_PROGRAM:                          *params = mState.currentProgram;                                break;
       case GL_PACK_ALIGNMENT:                           *params = mState.pack.alignment;                                break;
       case GL_PACK_REVERSE_ROW_ORDER_ANGLE:             *params = mState.pack.reverseRowOrder;                          break;
@@ -3288,12 +3298,12 @@ void Context::detachFramebuffer(GLuint framebuffer)
     // If a framebuffer that is currently bound to the target FRAMEBUFFER is deleted, it is as though
     // BindFramebuffer had been executed with the target of FRAMEBUFFER and framebuffer of zero.
 
-    if (mState.readFramebuffer == framebuffer)
+    if (mState.readFramebuffer->id() == framebuffer)
     {
         bindReadFramebuffer(0);
     }
 
-    if (mState.drawFramebuffer == framebuffer)
+    if (mState.drawFramebuffer->id() == framebuffer)
     {
         bindDrawFramebuffer(0);
     }
@@ -3334,7 +3344,7 @@ void Context::detachVertexArray(GLuint vertexArray)
     // [OpenGL ES 3.0.2] section 2.10 page 43:
     // If a vertex array object that is currently bound is deleted, the binding
     // for that object reverts to zero and the default vertex array becomes current.
-    if (mState.vertexArray == vertexArray)
+    if (mState.vertexArray->id() == vertexArray)
     {
         bindVertexArray(0);
     }
