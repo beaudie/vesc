@@ -16,6 +16,7 @@
 #include "common/angleutils.h"
 #include "common/RefCountObject.h"
 #include "libGLESv2/Constants.h"
+#include "libGLESv2/ProgramBinary.h"
 
 namespace rx
 {

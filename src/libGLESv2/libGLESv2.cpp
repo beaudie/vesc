@@ -51,7 +51,7 @@ void __stdcall glActiveTexture(GLenum texture)
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            context->setActiveSampler(texture - GL_TEXTURE0);
+            context->getState().setActiveSampler(texture - GL_TEXTURE0);
         }
     }
     ANGLE_CATCH_ALL
@@ -345,7 +345,7 @@ void __stdcall glBlendColor(GLclampf red, GLclampf green, GLclampf blue, GLclamp
 
         if (context)
         {
-            context->setBlendColor(gl::clamp01(red), gl::clamp01(green), gl::clamp01(blue), gl::clamp01(alpha));
+            context->getState().setBlendColor(gl::clamp01(red), gl::clamp01(green), gl::clamp01(blue), gl::clamp01(alpha));
         }
     }
     ANGLE_CATCH_ALL
@@ -395,7 +395,7 @@ void __stdcall glBlendEquationSeparate(GLenum modeRGB, GLenum modeAlpha)
 
         if (context)
         {
-            context->setBlendEquation(modeRGB, modeAlpha);
+            context->getState().setBlendEquation(modeRGB, modeAlpha);
         }
     }
     ANGLE_CATCH_ALL
@@ -534,7 +534,7 @@ void __stdcall glBlendFuncSeparate(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha
 
         if (context)
         {
-            context->setBlendFactors(srcRGB, dstRGB, srcAlpha, dstAlpha);
+            context->getState().setBlendFactors(srcRGB, dstRGB, srcAlpha, dstAlpha);
         }
     }
     ANGLE_CATCH_ALL
@@ -587,7 +587,7 @@ void __stdcall glBufferData(GLenum target, GLsizeiptr size, const GLvoid* data, 
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            gl::Buffer *buffer = context->getTargetBuffer(target);
+            gl::Buffer *buffer = context->getState().getTargetBuffer(target);
 
             if (!buffer)
             {
@@ -629,7 +629,7 @@ void __stdcall glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, 
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            gl::Buffer *buffer = context->getTargetBuffer(target);
+            gl::Buffer *buffer = context->getState().getTargetBuffer(target);
 
             if (!buffer)
             {
@@ -676,7 +676,7 @@ GLenum __stdcall glCheckFramebufferStatus(GLenum target)
 
         if (context)
         {
-            gl::Framebuffer *framebuffer = context->getTargetFramebuffer(target);
+            gl::Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
             ASSERT(framebuffer);
             return framebuffer->completeness();
         }
@@ -699,7 +699,7 @@ void __stdcall glClear(GLbitfield mask)
 
         if (context)
         {
-            gl::Framebuffer *framebufferObject = context->getDrawFramebuffer();
+            gl::Framebuffer *framebufferObject = context->getState().getDrawFramebuffer();
 
             if (!framebufferObject || framebufferObject->completeness() != GL_FRAMEBUFFER_COMPLETE)
             {
@@ -731,7 +731,7 @@ void __stdcall glClearColor(GLclampf red, GLclampf green, GLclampf blue, GLclamp
 
         if (context)
         {
-            context->setClearColor(red, green, blue, alpha);
+            context->getState().setClearColor(red, green, blue, alpha);
         }
     }
     ANGLE_CATCH_ALL
@@ -750,7 +750,7 @@ void __stdcall glClearDepthf(GLclampf depth)
 
         if (context)
         {
-            context->setClearDepth(depth);
+            context->getState().setClearDepth(depth);
         }
     }
     ANGLE_CATCH_ALL
@@ -769,7 +769,7 @@ void __stdcall glClearStencil(GLint s)
 
         if (context)
         {
-            context->setClearStencil(s);
+            context->getState().setClearStencil(s);
         }
     }
     ANGLE_CATCH_ALL
@@ -789,7 +789,7 @@ void __stdcall glColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboo
 
         if (context)
         {
-            context->setColorMask(red == GL_TRUE, green == GL_TRUE, blue == GL_TRUE, alpha == GL_TRUE);
+            context->getState().setColorMask(red == GL_TRUE, green == GL_TRUE, blue == GL_TRUE, alpha == GL_TRUE);
         }
     }
     ANGLE_CATCH_ALL
@@ -986,7 +986,7 @@ void __stdcall glCopyTexImage2D(GLenum target, GLint level, GLenum internalforma
                 return;
             }
 
-            gl::Framebuffer *framebuffer = context->getReadFramebuffer();
+            gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
 
             switch (target)
             {
@@ -1046,7 +1046,7 @@ void __stdcall glCopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GL
                 return;
             }
 
-            gl::Framebuffer *framebuffer = context->getReadFramebuffer();
+            gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
 
             switch (target)
             {
@@ -1146,7 +1146,7 @@ void __stdcall glCullFace(GLenum mode)
 
                 if (context)
                 {
-                    context->setCullMode(mode);
+                    context->getState().setCullMode(mode);
                 }
             }
             break;
@@ -1425,7 +1425,7 @@ void __stdcall glDepthFunc(GLenum func)
 
         if (context)
         {
-            context->setDepthFunc(func);
+            context->getState().setDepthFunc(func);
         }
     }
     ANGLE_CATCH_ALL
@@ -1444,7 +1444,7 @@ void __stdcall glDepthMask(GLboolean flag)
 
         if (context)
         {
-            context->setDepthMask(flag != GL_FALSE);
+            context->getState().setDepthMask(flag != GL_FALSE);
         }
     }
     ANGLE_CATCH_ALL
@@ -1463,7 +1463,7 @@ void __stdcall glDepthRangef(GLclampf zNear, GLclampf zFar)
 
         if (context)
         {
-            context->setDepthRange(zNear, zFar);
+            context->getState().setDepthRange(zNear, zFar);
         }
     }
     ANGLE_CATCH_ALL
@@ -1540,7 +1540,7 @@ void __stdcall glDisable(GLenum cap)
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            context->setCap(cap, false);
+            context->getState().setCap(cap, false);
         }
     }
     ANGLE_CATCH_ALL
@@ -1564,7 +1564,7 @@ void __stdcall glDisableVertexAttribArray(GLuint index)
 
         if (context)
         {
-            context->setEnableVertexAttribArray(index, false);
+            context->getState().setEnableVertexAttribArray(index, false);
         }
     }
     ANGLE_CATCH_ALL
@@ -1686,7 +1686,7 @@ void __stdcall glEnable(GLenum cap)
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            context->setCap(cap, true);
+            context->getState().setCap(cap, true);
         }
     }
     ANGLE_CATCH_ALL
@@ -1710,7 +1710,7 @@ void __stdcall glEnableVertexAttribArray(GLuint index)
 
         if (context)
         {
-            context->setEnableVertexAttribArray(index, true);
+            context->getState().setEnableVertexAttribArray(index, true);
         }
     }
     ANGLE_CATCH_ALL
@@ -1833,7 +1833,7 @@ void __stdcall glFramebufferRenderbuffer(GLenum target, GLenum attachment, GLenu
                 return;
             }
 
-            gl::Framebuffer *framebuffer = context->getTargetFramebuffer(target);
+            gl::Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
             ASSERT(framebuffer);
 
             if (attachment >= GL_COLOR_ATTACHMENT0_EXT && attachment <= GL_COLOR_ATTACHMENT15_EXT)
@@ -1887,7 +1887,7 @@ void __stdcall glFramebufferTexture2D(GLenum target, GLenum attachment, GLenum t
                 textarget = GL_NONE;
             }
 
-            gl::Framebuffer *framebuffer = context->getTargetFramebuffer(target);
+            gl::Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
 
             if (attachment >= GL_COLOR_ATTACHMENT0_EXT && attachment <= GL_COLOR_ATTACHMENT15_EXT)
             {
@@ -1926,7 +1926,7 @@ void __stdcall glFrontFace(GLenum mode)
 
                 if (context)
                 {
-                    context->setFrontFace(mode);
+                    context->getState().setFrontFace(mode);
                 }
             }
             break;
@@ -2401,7 +2401,7 @@ void __stdcall glGetBufferParameteriv(GLenum target, GLenum pname, GLint* params
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            gl::Buffer *buffer = context->getTargetBuffer(target);
+            gl::Buffer *buffer = context->getState().getTargetBuffer(target);
 
             if (!buffer)
             {
@@ -2602,7 +2602,7 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
                 break;
             }
 
-            GLuint framebufferHandle = context->getTargetFramebufferHandle(target);
+            GLuint framebufferHandle = context->getState().getTargetFramebufferHandle(target);
             ASSERT(framebufferHandle != GL_INVALID_INDEX);
             gl::Framebuffer *framebuffer = context->getFramebuffer(framebufferHandle);
 
@@ -3031,7 +3031,7 @@ void __stdcall glGetQueryivEXT(GLenum target, GLenum pname, GLint *params)
             switch (pname)
             {
               case GL_CURRENT_QUERY_EXT:
-                params[0] = context->getActiveQueryId(target);
+                params[0] = context->getState().getActiveQueryId(target);
                 break;
 
               default:
@@ -3062,7 +3062,7 @@ void __stdcall glGetQueryObjectuivEXT(GLuint id, GLenum pname, GLuint *params)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            if (context->getActiveQueryId(queryObject->getType()) == id)
+            if (context->getState().getActiveQueryId(queryObject->getType()) == id)
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
@@ -3101,12 +3101,12 @@ void __stdcall glGetRenderbufferParameteriv(GLenum target, GLenum pname, GLint* 
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            if (context->getRenderbufferHandle() == 0)
+            if (context->getState().getRenderbufferHandle() == 0)
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            gl::Renderbuffer *renderbuffer = context->getRenderbuffer(context->getRenderbufferHandle());
+            gl::Renderbuffer *renderbuffer = context->getRenderbuffer(context->getState().getRenderbufferHandle());
 
             switch (pname)
             {
@@ -3855,7 +3855,7 @@ void __stdcall glGetVertexAttribfv(GLuint index, GLenum pname, GLfloat* params)
                 return gl::error(GL_INVALID_VALUE);
             }
 
-            const gl::VertexAttribute &attribState = context->getVertexAttribState(index);
+            const gl::VertexAttribute &attribState = context->getState().getVertexAttribState(index);
 
             if (!gl::ValidateGetVertexAttribParameters(pname, context->getClientVersion()))
             {
@@ -3864,7 +3864,7 @@ void __stdcall glGetVertexAttribfv(GLuint index, GLenum pname, GLfloat* params)
 
             if (pname == GL_CURRENT_VERTEX_ATTRIB)
             {
-                const gl::VertexAttribCurrentValueData &currentValueData = context->getVertexAttribCurrentValue(index);
+                const gl::VertexAttribCurrentValueData &currentValueData = context->getState().getVertexAttribCurrentValue(index);
                 for (int i = 0; i < 4; ++i)
                 {
                     params[i] = currentValueData.FloatValues[i];
@@ -3897,7 +3897,7 @@ void __stdcall glGetVertexAttribiv(GLuint index, GLenum pname, GLint* params)
                 return gl::error(GL_INVALID_VALUE);
             }
 
-            const gl::VertexAttribute &attribState = context->getVertexAttribState(index);
+            const gl::VertexAttribute &attribState = context->getState().getVertexAttribState(index);
 
             if (!gl::ValidateGetVertexAttribParameters(pname, context->getClientVersion()))
             {
@@ -3906,7 +3906,7 @@ void __stdcall glGetVertexAttribiv(GLuint index, GLenum pname, GLint* params)
 
             if (pname == GL_CURRENT_VERTEX_ATTRIB)
             {
-                const gl::VertexAttribCurrentValueData &currentValueData = context->getVertexAttribCurrentValue(index);
+                const gl::VertexAttribCurrentValueData &currentValueData = context->getState().getVertexAttribCurrentValue(index);
                 for (int i = 0; i < 4; ++i)
                 {
                     float currentValue = currentValueData.FloatValues[i];
@@ -3945,7 +3945,7 @@ void __stdcall glGetVertexAttribPointerv(GLuint index, GLenum pname, GLvoid** po
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            *pointer = const_cast<GLvoid*>(context->getVertexAttribPointer(index));
+            *pointer = const_cast<GLvoid*>(context->getState().getVertexAttribPointer(index));
         }
     }
     ANGLE_CATCH_ALL
@@ -3974,10 +3974,10 @@ void __stdcall glHint(GLenum target, GLenum mode)
         switch (target)
         {
           case GL_GENERATE_MIPMAP_HINT:
-            if (context) context->setGenerateMipmapHint(mode);
+            if (context) context->getState().setGenerateMipmapHint(mode);
             break;
           case GL_FRAGMENT_SHADER_DERIVATIVE_HINT_OES:
-            if (context) context->setFragmentShaderDerivativeHint(mode);
+            if (context) context->getState().setFragmentShaderDerivativeHint(mode);
             break;
           default:
             return gl::error(GL_INVALID_ENUM);
@@ -4030,7 +4030,7 @@ GLboolean __stdcall glIsEnabled(GLenum cap)
                 return gl::error(GL_INVALID_ENUM, false);
             }
 
-            return context->getCap(cap);
+            return context->getState().getCap(cap);
         }
     }
     ANGLE_CATCH_ALL
@@ -4235,7 +4235,7 @@ void __stdcall glLineWidth(GLfloat width)
 
         if (context)
         {
-            context->setLineWidth(width);
+            context->getState().setLineWidth(width);
         }
     }
     ANGLE_CATCH_ALL
@@ -4295,7 +4295,7 @@ void __stdcall glPixelStorei(GLenum pname, GLint param)
                     return gl::error(GL_INVALID_VALUE);
                 }
 
-                context->setUnpackAlignment(param);
+                context->getState().setUnpackAlignment(param);
                 break;
 
               case GL_PACK_ALIGNMENT:
@@ -4304,11 +4304,11 @@ void __stdcall glPixelStorei(GLenum pname, GLint param)
                     return gl::error(GL_INVALID_VALUE);
                 }
 
-                context->setPackAlignment(param);
+                context->getState().setPackAlignment(param);
                 break;
 
               case GL_PACK_REVERSE_ROW_ORDER_ANGLE:
-                context->setPackReverseRowOrder(param != 0);
+                context->getState().setPackReverseRowOrder(param != 0);
                 break;
 
               case GL_UNPACK_IMAGE_HEIGHT:
@@ -4347,7 +4347,7 @@ void __stdcall glPolygonOffset(GLfloat factor, GLfloat units)
 
         if (context)
         {
-            context->setPolygonOffsetParams(factor, units);
+            context->getState().setPolygonOffsetParams(factor, units);
         }
     }
     ANGLE_CATCH_ALL
@@ -4478,7 +4478,7 @@ void __stdcall glSampleCoverage(GLclampf value, GLboolean invert)
 
         if (context)
         {
-            context->setSampleCoverageParams(gl::clamp01(value), invert == GL_TRUE);
+            context->getState().setSampleCoverageParams(gl::clamp01(value), invert == GL_TRUE);
         }
     }
     ANGLE_CATCH_ALL
@@ -4533,7 +4533,7 @@ void __stdcall glScissor(GLint x, GLint y, GLsizei width, GLsizei height)
 
         if (context)
         {
-            context->setScissorParams(x, y, width, height);
+            context->getState().setScissorParams(x, y, width, height);
         }
     }
     ANGLE_CATCH_ALL
@@ -4640,12 +4640,12 @@ void __stdcall glStencilFuncSeparate(GLenum face, GLenum func, GLint ref, GLuint
         {
             if (face == GL_FRONT || face == GL_FRONT_AND_BACK)
             {
-                context->setStencilParams(func, ref, mask);
+                context->getState().setStencilParams(func, ref, mask);
             }
 
             if (face == GL_BACK || face == GL_FRONT_AND_BACK)
             {
-                context->setStencilBackParams(func, ref, mask);
+                context->getState().setStencilBackParams(func, ref, mask);
             }
         }
     }
@@ -4682,12 +4682,12 @@ void __stdcall glStencilMaskSeparate(GLenum face, GLuint mask)
         {
             if (face == GL_FRONT || face == GL_FRONT_AND_BACK)
             {
-                context->setStencilWritemask(mask);
+                context->getState().setStencilWritemask(mask);
             }
 
             if (face == GL_BACK || face == GL_FRONT_AND_BACK)
             {
-                context->setStencilBackWritemask(mask);
+                context->getState().setStencilBackWritemask(mask);
             }
         }
     }
@@ -4770,12 +4770,12 @@ void __stdcall glStencilOpSeparate(GLenum face, GLenum fail, GLenum zfail, GLenu
         {
             if (face == GL_FRONT || face == GL_FRONT_AND_BACK)
             {
-                context->setStencilOperations(fail, zfail, zpass);
+                context->getState().setStencilOperations(fail, zfail, zpass);
             }
 
             if (face == GL_BACK || face == GL_FRONT_AND_BACK)
             {
-                context->setStencilBackOperations(fail, zfail, zpass);
+                context->getState().setStencilBackOperations(fail, zfail, zpass);
             }
         }
     }
@@ -4850,43 +4850,43 @@ void __stdcall glTexImage2D(GLenum target, GLint level, GLint internalformat, GL
               case GL_TEXTURE_2D:
                 {
                     gl::Texture2D *texture = context->getTexture2D();
-                    texture->setImage(level, width, height, internalformat, format, type, context->getUnpackState(), pixels);
+                    texture->setImage(level, width, height, internalformat, format, type, context->getState().getUnpackState(), pixels);
                 }
                 break;
               case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
                 {
                     gl::TextureCubeMap *texture = context->getTextureCubeMap();
-                    texture->setImagePosX(level, width, height, internalformat, format, type, context->getUnpackState(), pixels);
+                    texture->setImagePosX(level, width, height, internalformat, format, type, context->getState().getUnpackState(), pixels);
                 }
                 break;
               case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
                 {
                     gl::TextureCubeMap *texture = context->getTextureCubeMap();
-                    texture->setImageNegX(level, width, height, internalformat, format, type, context->getUnpackState(), pixels);
+                    texture->setImageNegX(level, width, height, internalformat, format, type, context->getState().getUnpackState(), pixels);
                 }
                 break;
               case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
                 {
                     gl::TextureCubeMap *texture = context->getTextureCubeMap();
-                    texture->setImagePosY(level, width, height, internalformat, format, type, context->getUnpackState(), pixels);
+                    texture->setImagePosY(level, width, height, internalformat, format, type, context->getState().getUnpackState(), pixels);
                 }
                 break;
               case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
                 {
                     gl::TextureCubeMap *texture = context->getTextureCubeMap();
-                    texture->setImageNegY(level, width, height, internalformat, format, type, context->getUnpackState(), pixels);
+                    texture->setImageNegY(level, width, height, internalformat, format, type, context->getState().getUnpackState(), pixels);
                 }
                 break;
               case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
                 {
                     gl::TextureCubeMap *texture = context->getTextureCubeMap();
-                    texture->setImagePosZ(level, width, height, internalformat, format, type, context->getUnpackState(), pixels);
+                    texture->setImagePosZ(level, width, height, internalformat, format, type, context->getState().getUnpackState(), pixels);
                 }
                 break;
               case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
                 {
                     gl::TextureCubeMap *texture = context->getTextureCubeMap();
-                    texture->setImageNegZ(level, width, height, internalformat, format, type, context->getUnpackState(), pixels);
+                    texture->setImageNegZ(level, width, height, internalformat, format, type, context->getState().getUnpackState(), pixels);
                 }
                 break;
               default: UNREACHABLE();
@@ -5105,7 +5105,7 @@ void __stdcall glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint 
               case GL_TEXTURE_2D:
                 {
                     gl::Texture2D *texture = context->getTexture2D();
-                    texture->subImage(level, xoffset, yoffset, width, height, format, type, context->getUnpackState(), pixels);
+                    texture->subImage(level, xoffset, yoffset, width, height, format, type, context->getState().getUnpackState(), pixels);
                 }
                 break;
 
@@ -5117,7 +5117,7 @@ void __stdcall glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint 
               case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
                 {
                     gl::TextureCubeMap *texture = context->getTextureCubeMap();
-                    texture->subImage(target, level, xoffset, yoffset, width, height, format, type, context->getUnpackState(), pixels);
+                    texture->subImage(target, level, xoffset, yoffset, width, height, format, type, context->getState().getUnpackState(), pixels);
                 }
                 break;
 
@@ -5152,7 +5152,7 @@ void __stdcall glUniform1fv(GLint location, GLsizei count, const GLfloat* v)
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniform1fv(location, count, v);
         }
     }
@@ -5182,7 +5182,7 @@ void __stdcall glUniform1iv(GLint location, GLsizei count, const GLint* v)
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniform1iv(location, count, v);
         }
     }
@@ -5214,7 +5214,7 @@ void __stdcall glUniform2fv(GLint location, GLsizei count, const GLfloat* v)
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniform2fv(location, count, v);
         }
     }
@@ -5246,7 +5246,7 @@ void __stdcall glUniform2iv(GLint location, GLsizei count, const GLint* v)
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniform2iv(location, count, v);
         }
     }
@@ -5278,7 +5278,7 @@ void __stdcall glUniform3fv(GLint location, GLsizei count, const GLfloat* v)
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniform3fv(location, count, v);
         }
     }
@@ -5310,7 +5310,7 @@ void __stdcall glUniform3iv(GLint location, GLsizei count, const GLint* v)
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniform3iv(location, count, v);
         }
     }
@@ -5342,7 +5342,7 @@ void __stdcall glUniform4fv(GLint location, GLsizei count, const GLfloat* v)
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniform4fv(location, count, v);
         }
     }
@@ -5374,7 +5374,7 @@ void __stdcall glUniform4iv(GLint location, GLsizei count, const GLint* v)
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniform4iv(location, count, v);
         }
     }
@@ -5400,7 +5400,7 @@ void __stdcall glUniformMatrix2fv(GLint location, GLsizei count, GLboolean trans
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniformMatrix2fv(location, count, transpose, value);
         }
     }
@@ -5426,7 +5426,7 @@ void __stdcall glUniformMatrix3fv(GLint location, GLsizei count, GLboolean trans
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniformMatrix3fv(location, count, transpose, value);
         }
     }
@@ -5452,7 +5452,7 @@ void __stdcall glUniformMatrix4fv(GLint location, GLsizei count, GLboolean trans
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniformMatrix4fv(location, count, transpose, value);
         }
     }
@@ -5549,7 +5549,7 @@ void __stdcall glVertexAttrib1f(GLuint index, GLfloat x)
         if (context)
         {
             GLfloat vals[4] = { x, 0, 0, 1 };
-            context->setVertexAttribf(index, vals);
+            context->getState().setVertexAttribf(index, vals);
         }
     }
     ANGLE_CATCH_ALL
@@ -5574,7 +5574,7 @@ void __stdcall glVertexAttrib1fv(GLuint index, const GLfloat* values)
         if (context)
         {
             GLfloat vals[4] = { values[0], 0, 0, 1 };
-            context->setVertexAttribf(index, vals);
+            context->getState().setVertexAttribf(index, vals);
         }
     }
     ANGLE_CATCH_ALL
@@ -5599,7 +5599,7 @@ void __stdcall glVertexAttrib2f(GLuint index, GLfloat x, GLfloat y)
         if (context)
         {
             GLfloat vals[4] = { x, y, 0, 1 };
-            context->setVertexAttribf(index, vals);
+            context->getState().setVertexAttribf(index, vals);
         }
     }
     ANGLE_CATCH_ALL
@@ -5624,7 +5624,7 @@ void __stdcall glVertexAttrib2fv(GLuint index, const GLfloat* values)
         if (context)
         {
             GLfloat vals[4] = { values[0], values[1], 0, 1 };
-            context->setVertexAttribf(index, vals);
+            context->getState().setVertexAttribf(index, vals);
         }
     }
     ANGLE_CATCH_ALL
@@ -5649,7 +5649,7 @@ void __stdcall glVertexAttrib3f(GLuint index, GLfloat x, GLfloat y, GLfloat z)
         if (context)
         {
             GLfloat vals[4] = { x, y, z, 1 };
-            context->setVertexAttribf(index, vals);
+            context->getState().setVertexAttribf(index, vals);
         }
     }
     ANGLE_CATCH_ALL
@@ -5674,7 +5674,7 @@ void __stdcall glVertexAttrib3fv(GLuint index, const GLfloat* values)
         if (context)
         {
             GLfloat vals[4] = { values[0], values[1], values[2], 1 };
-            context->setVertexAttribf(index, vals);
+            context->getState().setVertexAttribf(index, vals);
         }
     }
     ANGLE_CATCH_ALL
@@ -5699,7 +5699,7 @@ void __stdcall glVertexAttrib4f(GLuint index, GLfloat x, GLfloat y, GLfloat z, G
         if (context)
         {
             GLfloat vals[4] = { x, y, z, w };
-            context->setVertexAttribf(index, vals);
+            context->getState().setVertexAttribf(index, vals);
         }
     }
     ANGLE_CATCH_ALL
@@ -5723,7 +5723,7 @@ void __stdcall glVertexAttrib4fv(GLuint index, const GLfloat* values)
 
         if (context)
         {
-            context->setVertexAttribf(index, values);
+            context->getState().setVertexAttribf(index, values);
         }
     }
     ANGLE_CATCH_ALL
@@ -5818,13 +5818,13 @@ void __stdcall glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLbo
             // An INVALID_OPERATION error is generated when a non-zero vertex array object
             // is bound, zero is bound to the ARRAY_BUFFER buffer object binding point,
             // and the pointer argument is not NULL.
-            if (context->getVertexArrayHandle() != 0 && context->getArrayBufferHandle() == 0 && ptr != NULL)
+            if (context->getState().getVertexArrayHandle() != 0 && context->getState().getArrayBufferHandle() == 0 && ptr != NULL)
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            context->setVertexAttribState(index, context->getArrayBuffer(), size, type,
-                                          normalized == GL_TRUE, false, stride, ptr);
+            context->getState().setVertexAttribState(index, context->getArrayBuffer(), size, type,
+                                                     normalized == GL_TRUE, false, stride, ptr);
         }
     }
     ANGLE_CATCH_ALL
@@ -5848,7 +5848,7 @@ void __stdcall glViewport(GLint x, GLint y, GLsizei width, GLsizei height)
 
         if (context)
         {
-            context->setViewportParams(x, y, width, height);
+            context->getState().setViewportParams(x, y, width, height);
         }
     }
     ANGLE_CATCH_ALL
@@ -5940,14 +5940,14 @@ void __stdcall glTexImage3D(GLenum target, GLint level, GLint internalformat, GL
               case GL_TEXTURE_3D:
                 {
                     gl::Texture3D *texture = context->getTexture3D();
-                    texture->setImage(level, width, height, depth, internalformat, format, type, context->getUnpackState(), pixels);
+                    texture->setImage(level, width, height, depth, internalformat, format, type, context->getState().getUnpackState(), pixels);
                 }
                 break;
 
               case GL_TEXTURE_2D_ARRAY:
                 {
                     gl::Texture2DArray *texture = context->getTexture2DArray();
-                    texture->setImage(level, width, height, depth, internalformat, format, type, context->getUnpackState(), pixels);
+                    texture->setImage(level, width, height, depth, internalformat, format, type, context->getState().getUnpackState(), pixels);
                 }
                 break;
 
@@ -5999,14 +5999,14 @@ void __stdcall glTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint 
               case GL_TEXTURE_3D:
                 {
                     gl::Texture3D *texture = context->getTexture3D();
-                    texture->subImage(level, xoffset, yoffset, zoffset, width, height, depth, format, type, context->getUnpackState(), pixels);
+                    texture->subImage(level, xoffset, yoffset, zoffset, width, height, depth, format, type, context->getState().getUnpackState(), pixels);
                 }
                 break;
 
               case GL_TEXTURE_2D_ARRAY:
                 {
                     gl::Texture2DArray *texture = context->getTexture2DArray();
-                    texture->subImage(level, xoffset, yoffset, zoffset, width, height, depth, format, type, context->getUnpackState(), pixels);
+                    texture->subImage(level, xoffset, yoffset, zoffset, width, height, depth, format, type, context->getState().getUnpackState(), pixels);
                 }
                 break;
 
@@ -6044,7 +6044,7 @@ void __stdcall glCopyTexSubImage3D(GLenum target, GLint level, GLint xoffset, GL
                 return;
             }
 
-            gl::Framebuffer *framebuffer = context->getReadFramebuffer();
+            gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
             gl::Texture *texture = NULL;
             switch (target)
             {
@@ -6366,7 +6366,7 @@ void __stdcall glGetQueryiv(GLenum target, GLenum pname, GLint* params)
             switch (pname)
             {
               case GL_CURRENT_QUERY:
-                params[0] = static_cast<GLint>(context->getActiveQueryId(target));
+                params[0] = static_cast<GLint>(context->getState().getActiveQueryId(target));
                 break;
 
               default:
@@ -6402,7 +6402,7 @@ void __stdcall glGetQueryObjectuiv(GLuint id, GLenum pname, GLuint* params)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            if (context->getActiveQueryId(queryObject->getType()) == id)
+            if (context->getState().getActiveQueryId(queryObject->getType()) == id)
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
@@ -6514,7 +6514,7 @@ void __stdcall glUniformMatrix2x3fv(GLint location, GLsizei count, GLboolean tra
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniformMatrix2x3fv(location, count, transpose, value);
         }
     }
@@ -6540,7 +6540,7 @@ void __stdcall glUniformMatrix3x2fv(GLint location, GLsizei count, GLboolean tra
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniformMatrix3x2fv(location, count, transpose, value);
         }
     }
@@ -6566,7 +6566,7 @@ void __stdcall glUniformMatrix2x4fv(GLint location, GLsizei count, GLboolean tra
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniformMatrix2x4fv(location, count, transpose, value);
         }
     }
@@ -6592,7 +6592,7 @@ void __stdcall glUniformMatrix4x2fv(GLint location, GLsizei count, GLboolean tra
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniformMatrix4x2fv(location, count, transpose, value);
         }
     }
@@ -6618,7 +6618,7 @@ void __stdcall glUniformMatrix3x4fv(GLint location, GLsizei count, GLboolean tra
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniformMatrix3x4fv(location, count, transpose, value);
         }
     }
@@ -6644,7 +6644,7 @@ void __stdcall glUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean tra
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniformMatrix4x3fv(location, count, transpose, value);
         }
     }
@@ -6735,7 +6735,7 @@ void __stdcall glFramebufferTextureLayer(GLenum target, GLenum attachment, GLuin
                 return;
             }
 
-            gl::Framebuffer *framebuffer = context->getTargetFramebuffer(target);
+            gl::Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
             ASSERT(framebuffer);
 
             gl::Texture *textureObject = context->getTexture(texture);
@@ -7045,7 +7045,7 @@ void __stdcall glBeginTransformFeedback(GLenum primitiveMode)
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            gl::TransformFeedback *transformFeedback = context->getCurrentTransformFeedback();
+            gl::TransformFeedback *transformFeedback = context->getState().getCurrentTransformFeedback();
             ASSERT(transformFeedback != NULL);
 
             if (transformFeedback->isStarted())
@@ -7084,7 +7084,7 @@ void __stdcall glEndTransformFeedback(void)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            gl::TransformFeedback *transformFeedback = context->getCurrentTransformFeedback();
+            gl::TransformFeedback *transformFeedback = context->getState().getCurrentTransformFeedback();
             ASSERT(transformFeedback != NULL);
 
             if (!transformFeedback->isStarted())
@@ -7392,13 +7392,13 @@ void __stdcall glVertexAttribIPointer(GLuint index, GLint size, GLenum type, GLs
             // An INVALID_OPERATION error is generated when a non-zero vertex array object
             // is bound, zero is bound to the ARRAY_BUFFER buffer object binding point,
             // and the pointer argument is not NULL.
-            if (context->getVertexArrayHandle() != 0 && context->getArrayBufferHandle() == 0 && pointer != NULL)
+            if (context->getState().getVertexArrayHandle() != 0 && context->getState().getArrayBufferHandle() == 0 && pointer != NULL)
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            context->setVertexAttribState(index, context->getArrayBuffer(), size, type, false, true,
-                                          stride, pointer);
+            context->getState().setVertexAttribState(index, context->getArrayBuffer(), size, type, false, true,
+                                                     stride, pointer);
         }
     }
     ANGLE_CATCH_ALL
@@ -7428,7 +7428,7 @@ void __stdcall glGetVertexAttribIiv(GLuint index, GLenum pname, GLint* params)
                 return gl::error(GL_INVALID_VALUE);
             }
 
-            const gl::VertexAttribute &attribState = context->getVertexAttribState(index);
+            const gl::VertexAttribute &attribState = context->getState().getVertexAttribState(index);
 
             if (!gl::ValidateGetVertexAttribParameters(pname, context->getClientVersion()))
             {
@@ -7437,7 +7437,7 @@ void __stdcall glGetVertexAttribIiv(GLuint index, GLenum pname, GLint* params)
 
             if (pname == GL_CURRENT_VERTEX_ATTRIB)
             {
-                const gl::VertexAttribCurrentValueData &currentValueData = context->getVertexAttribCurrentValue(index);
+                const gl::VertexAttribCurrentValueData &currentValueData = context->getState().getVertexAttribCurrentValue(index);
                 for (int i = 0; i < 4; ++i)
                 {
                     params[i] = currentValueData.IntValues[i];
@@ -7476,7 +7476,7 @@ void __stdcall glGetVertexAttribIuiv(GLuint index, GLenum pname, GLuint* params)
                 return gl::error(GL_INVALID_VALUE);
             }
 
-            const gl::VertexAttribute &attribState = context->getVertexAttribState(index);
+            const gl::VertexAttribute &attribState = context->getState().getVertexAttribState(index);
 
             if (!gl::ValidateGetVertexAttribParameters(pname, context->getClientVersion()))
             {
@@ -7485,7 +7485,7 @@ void __stdcall glGetVertexAttribIuiv(GLuint index, GLenum pname, GLuint* params)
 
             if (pname == GL_CURRENT_VERTEX_ATTRIB)
             {
-                const gl::VertexAttribCurrentValueData &currentValueData = context->getVertexAttribCurrentValue(index);
+                const gl::VertexAttribCurrentValueData &currentValueData = context->getState().getVertexAttribCurrentValue(index);
                 for (int i = 0; i < 4; ++i)
                 {
                     params[i] = currentValueData.UnsignedIntValues[i];
@@ -7525,7 +7525,7 @@ void __stdcall glVertexAttribI4i(GLuint index, GLint x, GLint y, GLint z, GLint 
             }
 
             GLint vals[4] = { x, y, z, w };
-            context->setVertexAttribi(index, vals);
+            context->getState().setVertexAttribi(index, vals);
         }
     }
     ANGLE_CATCH_ALL
@@ -7556,7 +7556,7 @@ void __stdcall glVertexAttribI4ui(GLuint index, GLuint x, GLuint y, GLuint z, GL
             }
 
             GLuint vals[4] = { x, y, z, w };
-            context->setVertexAttribu(index, vals);
+            context->getState().setVertexAttribu(index, vals);
         }
     }
     ANGLE_CATCH_ALL
@@ -7585,7 +7585,7 @@ void __stdcall glVertexAttribI4iv(GLuint index, const GLint* v)
                 return gl::error(GL_INVALID_VALUE);
             }
 
-            context->setVertexAttribi(index, v);
+            context->getState().setVertexAttribi(index, v);
         }
     }
     ANGLE_CATCH_ALL
@@ -7614,7 +7614,7 @@ void __stdcall glVertexAttribI4uiv(GLuint index, const GLuint* v)
                 return gl::error(GL_INVALID_VALUE);
             }
 
-            context->setVertexAttribu(index, v);
+            context->getState().setVertexAttribu(index, v);
         }
     }
     ANGLE_CATCH_ALL
@@ -7753,7 +7753,7 @@ void __stdcall glUniform1uiv(GLint location, GLsizei count, const GLuint* value)
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniform1uiv(location, count, value);
         }
     }
@@ -7779,7 +7779,7 @@ void __stdcall glUniform2uiv(GLint location, GLsizei count, const GLuint* value)
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniform2uiv(location, count, value);
         }
     }
@@ -7805,7 +7805,7 @@ void __stdcall glUniform3uiv(GLint location, GLsizei count, const GLuint* value)
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniform3uiv(location, count, value);
         }
     }
@@ -7831,7 +7831,7 @@ void __stdcall glUniform4uiv(GLint location, GLsizei count, const GLuint* value)
                 return;
             }
 
-            gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+            gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
             programBinary->setUniform4uiv(location, count, value);
         }
     }
@@ -8058,8 +8058,8 @@ void __stdcall glCopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintp
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            gl::Buffer *readBuffer = context->getTargetBuffer(readTarget);
-            gl::Buffer *writeBuffer = context->getTargetBuffer(writeTarget);
+            gl::Buffer *readBuffer = context->getState().getTargetBuffer(readTarget);
+            gl::Buffer *writeBuffer = context->getState().getTargetBuffer(writeTarget);
 
             if (!readBuffer || !writeBuffer)
             {
@@ -8847,7 +8847,7 @@ void __stdcall glGetBufferParameteri64v(GLenum target, GLenum pname, GLint64* pa
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            gl::Buffer *buffer = context->getTargetBuffer(target);
+            gl::Buffer *buffer = context->getState().getTargetBuffer(target);
 
             if (!buffer)
             {
@@ -9214,7 +9214,7 @@ void __stdcall glBindTransformFeedback(GLenum target, GLuint id)
               case GL_TRANSFORM_FEEDBACK:
                 {
                     // Cannot bind a transform feedback object if the current one is started and not paused (3.0.2 pg 85 section 2.14.1)
-                    gl::TransformFeedback *curTransformFeedback = context->getCurrentTransformFeedback();
+                    gl::TransformFeedback *curTransformFeedback = context->getState().getCurrentTransformFeedback();
                     if (curTransformFeedback && curTransformFeedback->isStarted() && !curTransformFeedback->isPaused())
                     {
                         return gl::error(GL_INVALID_OPERATION);
@@ -9336,7 +9336,7 @@ void __stdcall glPauseTransformFeedback(void)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            gl::TransformFeedback *transformFeedback = context->getCurrentTransformFeedback();
+            gl::TransformFeedback *transformFeedback = context->getState().getCurrentTransformFeedback();
             ASSERT(transformFeedback != NULL);
 
             // Current transform feedback must be started and not paused in order to pause (3.0.2 pg 86)
@@ -9369,7 +9369,7 @@ void __stdcall glResumeTransformFeedback(void)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            gl::TransformFeedback *transformFeedback = context->getCurrentTransformFeedback();
+            gl::TransformFeedback *transformFeedback = context->getState().getCurrentTransformFeedback();
             ASSERT(transformFeedback != NULL);
 
             // Current transform feedback must be started and paused in order to resume (3.0.2 pg 86)
@@ -9816,7 +9816,7 @@ void __stdcall glDrawBuffersEXT(GLsizei n, const GLenum *bufs)
                 return gl::error(GL_INVALID_VALUE);
             }
 
-            if (context->getDrawFramebufferHandle() == 0)
+            if (context->getState().getDrawFramebufferHandle() == 0)
             {
                 if (n != 1)
                 {
@@ -9840,7 +9840,7 @@ void __stdcall glDrawBuffersEXT(GLsizei n, const GLenum *bufs)
                 }
             }
 
-            gl::Framebuffer *framebuffer = context->getDrawFramebuffer();
+            gl::Framebuffer *framebuffer = context->getState().getDrawFramebuffer();
 
             for (int colorAttachment = 0; colorAttachment < n; colorAttachment++)
             {
@@ -9879,7 +9879,7 @@ void __stdcall glGetBufferPointervOES(GLenum target, GLenum pname, void** params
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            gl::Buffer *buffer = context->getTargetBuffer(target);
+            gl::Buffer *buffer = context->getState().getTargetBuffer(target);
 
             if (!buffer || !buffer->isMapped())
             {
@@ -9912,7 +9912,7 @@ void * __stdcall glMapBufferOES(GLenum target, GLenum access)
                 return gl::error(GL_INVALID_ENUM, reinterpret_cast<GLvoid*>(NULL));
             }
 
-            gl::Buffer *buffer = context->getTargetBuffer(target);
+            gl::Buffer *buffer = context->getState().getTargetBuffer(target);
 
             if (buffer == NULL)
             {
@@ -9955,7 +9955,7 @@ GLboolean __stdcall glUnmapBufferOES(GLenum target)
                 return gl::error(GL_INVALID_ENUM, GL_FALSE);
             }
 
-            gl::Buffer *buffer = context->getTargetBuffer(target);
+            gl::Buffer *buffer = context->getState().getTargetBuffer(target);
 
             if (buffer == NULL || !buffer->isMapped())
             {
@@ -9998,7 +9998,7 @@ void* __stdcall glMapBufferRangeEXT (GLenum target, GLintptr offset, GLsizeiptr 
                 return gl::error(GL_INVALID_VALUE, reinterpret_cast<GLvoid*>(NULL));
             }
 
-            gl::Buffer *buffer = context->getTargetBuffer(target);
+            gl::Buffer *buffer = context->getState().getTargetBuffer(target);
 
             if (buffer == NULL)
             {
@@ -10084,7 +10084,7 @@ void __stdcall glFlushMappedBufferRangeEXT (GLenum target, GLintptr offset, GLsi
                 return gl::error(GL_INVALID_ENUM);
             }
 
-            gl::Buffer *buffer = context->getTargetBuffer(target);
+            gl::Buffer *buffer = context->getState().getTargetBuffer(target);
 
             if (buffer == NULL)
             {
