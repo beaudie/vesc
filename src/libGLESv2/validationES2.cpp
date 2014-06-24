@@ -471,7 +471,7 @@ bool ValidateES2CopyTexImageParameters(gl::Context* context, GLenum target, GLin
         return false;
     }
 
-    gl::Framebuffer *framebuffer = context->getReadFramebuffer();
+    gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
     GLenum colorbufferFormat = framebuffer->getReadColorbuffer()->getInternalFormat();
     GLenum textureFormat = gl::GetFormat(textureInternalFormat);
 
@@ -912,13 +912,13 @@ bool ValidateES2FramebufferTextureParameters(const gl::Context *context, GLenum 
     GLuint framebufferHandle = 0;
     if (target == GL_READ_FRAMEBUFFER)
     {
-        framebuffer = context->getReadFramebuffer();
-        framebufferHandle = context->getReadFramebufferHandle();
+        framebuffer = context->getState().getReadFramebuffer();
+        framebufferHandle = context->getState().getReadFramebufferHandle();
     }
     else
     {
-        framebuffer = context->getDrawFramebuffer();
-        framebufferHandle = context->getDrawFramebufferHandle();
+        framebuffer = context->getState().getDrawFramebuffer();
+        framebufferHandle = context->getState().getDrawFramebufferHandle();
     }
 
     if (framebufferHandle == 0 || !framebuffer)
