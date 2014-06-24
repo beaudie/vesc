@@ -348,7 +348,7 @@ bool ValidateRenderbufferStorageParameters(const gl::Context *context, GLenum ta
         }
     }
 
-    GLuint handle = context->getRenderbufferHandle();
+    GLuint handle = context->getState().getRenderbufferId();
     if (handle == 0)
     {
         return gl::error(GL_INVALID_OPERATION, false);
@@ -365,8 +365,8 @@ bool ValidateFramebufferRenderbufferParameters(gl::Context *context, GLenum targ
         return gl::error(GL_INVALID_ENUM, false);
     }
 
-    gl::Framebuffer *framebuffer = context->getTargetFramebuffer(target);
-    GLuint framebufferHandle = context->getTargetFramebufferHandle(target);
+    gl::Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
+    GLuint framebufferHandle = context->getState().getTargetFramebuffer(target)->id();
 
     if (!framebuffer || (framebufferHandle == 0 && renderbuffer != 0))
     {
@@ -403,14 +403,13 @@ static bool IsPartialBlit(gl::Context *context, gl::FramebufferAttachment *readB
     {
         return true;
     }
-    else if (context->isScissorTestEnabled())
+    else if (context->getState().isScissorTestEnabled())
     {
-        int scissorX, scissorY, scissorWidth, scissorHeight;
-        context->getScissorParams(&scissorX, &scissorY, &scissorWidth, &scissorHeight);
+        const Rectangle &scissor = context->getState().getScissor();
 
-        return scissorX > 0 || scissorY > 0 ||
-               scissorWidth < writeBuffer->getWidth() ||
-               scissorHeight < writeBuffer->getHeight();
+        return scissor.x > 0 || scissor.y > 0 ||
+               scissor.width < writeBuffer->getWidth() ||
+               scissor.height < writeBuffer->getHeight();
     }
     else
     {
@@ -461,7 +460,7 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
-    if (context->getReadFramebufferHandle() == context->getDrawFramebufferHandle())
+    if (context->getState().getReadFramebuffer()->id() == context->getState().getDrawFramebuffer()->id())
     {
         if (fromAngleExtension)
         {
@@ -471,8 +470,8 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
-    gl::Framebuffer *readFramebuffer = context->getReadFramebuffer();
-    gl::Framebuffer *drawFramebuffer = context->getDrawFramebuffer();
+    gl::Framebuffer *readFramebuffer = context->getState().getReadFramebuffer();
+    gl::Framebuffer *drawFramebuffer = context->getState().getDrawFramebuffer();
     if (!readFramebuffer || readFramebuffer->completeness() != GL_FRAMEBUFFER_COMPLETE ||
         !drawFramebuffer || drawFramebuffer->completeness() != GL_FRAMEBUFFER_COMPLETE)
     {
@@ -845,7 +844,7 @@ bool ValidateSamplerObjectParameter(GLenum pname)
 bool ValidateReadPixelsParameters(gl::Context *context, GLint x, GLint y, GLsizei width, GLsizei height,
                                   GLenum format, GLenum type, GLsizei *bufSize, GLvoid *pixels)
 {
-    gl::Framebuffer *framebuffer = context->getReadFramebuffer();
+    gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
     ASSERT(framebuffer);
 
     if (framebuffer->completeness() != GL_FRAMEBUFFER_COMPLETE)
@@ -853,7 +852,7 @@ bool ValidateReadPixelsParameters(gl::Context *context, GLint x, GLint y, GLsize
         return gl::error(GL_INVALID_FRAMEBUFFER_OPERATION, false);
     }
 
-    if (context->getReadFramebufferHandle() != 0 && framebuffer->getSamples() != 0)
+    if (context->getState().getReadFramebuffer()->id() != 0 && framebuffer->getSamples() != 0)
     {
         return gl::error(GL_INVALID_OPERATION, false);
     }
@@ -879,7 +878,7 @@ bool ValidateReadPixelsParameters(gl::Context *context, GLint x, GLint y, GLsize
     GLenum sizedInternalFormat = IsSizedInternalFormat(format) ? format
                                                                : GetSizedInternalFormat(format, type);
 
-    GLsizei outputPitch = GetRowPitch(sizedInternalFormat, type, width, context->getPackAlignment());
+    GLsizei outputPitch = GetRowPitch(sizedInternalFormat, type, width, context->getState().getPackAlignment());
     // sized query sanity check
     if (bufSize)
     {
@@ -920,7 +919,7 @@ bool ValidateBeginQuery(gl::Context *context, GLenum target, GLuint id)
     //    b) There are no active queries for the requested target (and in the case
     //       of GL_ANY_SAMPLES_PASSED_EXT and GL_ANY_SAMPLES_PASSED_CONSERVATIVE_EXT,
     //       no query may be active for either if glBeginQuery targets either.
-    if (context->isQueryActive())
+    if (context->getState().isQueryActive())
     {
         return gl::error(GL_INVALID_OPERATION, false);
     }
@@ -949,7 +948,7 @@ bool ValidateEndQuery(gl::Context *context, GLenum target)
         return gl::error(GL_INVALID_ENUM, false);
     }
 
-    const Query *queryObject = context->getActiveQuery(target);
+    const Query *queryObject = context->getState().getActiveQuery(target);
 
     if (queryObject == NULL)
     {
@@ -972,7 +971,7 @@ static bool ValidateUniformCommonBase(gl::Context *context, GLenum targetUniform
         return gl::error(GL_INVALID_VALUE, false);
     }
 
-    gl::ProgramBinary *programBinary = context->getCurrentProgramBinary();
+    gl::ProgramBinary *programBinary = context->getState().getCurrentProgramBinary();
     if (!programBinary)
     {
         return gl::error(GL_INVALID_OPERATION, false);
@@ -1078,7 +1077,7 @@ bool ValidateStateQuery(gl::Context *context, GLenum pname, GLenum *nativeType, 
       case GL_TEXTURE_BINDING_CUBE_MAP:
       case GL_TEXTURE_BINDING_3D:
       case GL_TEXTURE_BINDING_2D_ARRAY:
-        if (context->getActiveSampler() >= context->getMaximumCombinedTextureImageUnits())
+        if (context->getState().getActiveSampler() >= context->getMaximumCombinedTextureImageUnits())
         {
             return gl::error(GL_INVALID_OPERATION, false);
         }
@@ -1087,7 +1086,7 @@ bool ValidateStateQuery(gl::Context *context, GLenum pname, GLenum *nativeType, 
       case GL_IMPLEMENTATION_COLOR_READ_TYPE:
       case GL_IMPLEMENTATION_COLOR_READ_FORMAT:
         {
-            Framebuffer *framebuffer = context->getReadFramebuffer();
+            Framebuffer *framebuffer = context->getState().getReadFramebuffer();
             ASSERT(framebuffer);
             if (framebuffer->completeness() != GL_FRAMEBUFFER_COMPLETE)
             {
@@ -1145,13 +1144,13 @@ bool ValidateCopyTexImageParametersBase(gl::Context* context, GLenum target, GLi
         return gl::error(GL_INVALID_VALUE, false);
     }
 
-    gl::Framebuffer *framebuffer = context->getReadFramebuffer();
+    gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
     if (framebuffer->completeness() != GL_FRAMEBUFFER_COMPLETE)
     {
         return gl::error(GL_INVALID_FRAMEBUFFER_OPERATION, false);
     }
 
-    if (context->getReadFramebufferHandle() != 0 && framebuffer->getSamples() != 0)
+    if (context->getState().getReadFramebuffer()->id() != 0 && framebuffer->getSamples() != 0)
     {
         return gl::error(GL_INVALID_OPERATION, false);
     }
@@ -1330,9 +1329,9 @@ static bool ValidateDrawBase(const gl::Context *context, GLenum mode, GLsizei co
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
-    const gl::DepthStencilState &depthStencilState = context->getDepthStencilState();
+    const gl::DepthStencilState &depthStencilState = context->getState().getDepthStencilState();
     if (depthStencilState.stencilWritemask != depthStencilState.stencilBackWritemask ||
-        context->getStencilRef() != context->getStencilBackRef() ||
+        context->getState().getStencilRef() != context->getState().getStencilBackRef() ||
         depthStencilState.stencilMask != depthStencilState.stencilBackMask)
     {
         // Note: these separate values are not supported in WebGL, due to D3D's limitations.
@@ -1342,7 +1341,7 @@ static bool ValidateDrawBase(const gl::Context *context, GLenum mode, GLsizei co
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
-    const gl::Framebuffer *fbo = context->getDrawFramebuffer();
+    const gl::Framebuffer *fbo = context->getState().getDrawFramebuffer();
     if (!fbo || fbo->completeness() != GL_FRAMEBUFFER_COMPLETE)
     {
         return gl::error(GL_INVALID_FRAMEBUFFER_OPERATION, false);
@@ -1359,7 +1358,7 @@ bool ValidateDrawArrays(const gl::Context *context, GLenum mode, GLint first, GL
         return gl::error(GL_INVALID_VALUE, false);
     }
 
-    gl::TransformFeedback *curTransformFeedback = context->getCurrentTransformFeedback();
+    gl::TransformFeedback *curTransformFeedback = context->getState().getCurrentTransformFeedback();
     if (curTransformFeedback && curTransformFeedback->isStarted() && !curTransformFeedback->isPaused() &&
         curTransformFeedback->getDrawMode() != mode)
     {
@@ -1410,7 +1409,7 @@ bool ValidateDrawElements(const gl::Context *context, GLenum mode, GLsizei count
         return gl::error(GL_INVALID_ENUM, false);
     }
 
-    gl::TransformFeedback *curTransformFeedback = context->getCurrentTransformFeedback();
+    gl::TransformFeedback *curTransformFeedback = context->getState().getCurrentTransformFeedback();
     if (curTransformFeedback && curTransformFeedback->isStarted() && !curTransformFeedback->isPaused())
     {
         // It is an invalid operation to call DrawElements, DrawRangeElements or DrawElementsInstanced
