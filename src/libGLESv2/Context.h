@@ -96,13 +96,16 @@ struct State
 
     unsigned int activeSampler;   // Active texture unit selector - GL_TEXTURE0
     BindingPointer<Buffer> arrayBuffer;
-    GLuint readFramebuffer;
-    GLuint drawFramebuffer;
+    GLuint readFramebufferId;
+    GLuint drawFramebufferId;
+    Framebuffer *boundDrawFramebuffer;
+    Framebuffer *boundReadFramebuffer;
     BindingPointer<Renderbuffer> renderbuffer;
     GLuint currentProgram;
 
     VertexAttribCurrentValueData vertexAttribCurrentValues[MAX_VERTEX_ATTRIBS]; // From glVertexAttrib
-    unsigned int vertexArray;
+    unsigned int vertexArrayId;
+    VertexArray *boundVertexArray;
 
     BindingPointer<Texture> samplerTexture[TEXTURE_TYPE_COUNT][IMPLEMENTATION_MAX_COMBINED_TEXTURE_IMAGE_UNITS];
     GLuint samplers[IMPLEMENTATION_MAX_COMBINED_TEXTURE_IMAGE_UNITS];
@@ -530,7 +533,6 @@ class Context
     bool mRobustAccess;
 
     BindingPointer<ProgramBinary> mCurrentProgramBinary;
-    Framebuffer *mBoundDrawFramebuffer;
 
     int mMajorShaderModel;
     float mMaximumPointSize;
