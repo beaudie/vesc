@@ -9,51 +9,7 @@
 
 #include <algorithm>
 
-namespace
-{
-
-int GetSortOrder(sh::GLenum type)
-{
-    switch (type) {
-        case GL_FLOAT_MAT4:
-        case GL_FLOAT_MAT2x4:
-        case GL_FLOAT_MAT3x4:
-        case GL_FLOAT_MAT4x2:
-        case GL_FLOAT_MAT4x3:
-            return 0;
-        case GL_FLOAT_MAT2:
-            return 1;
-        case GL_FLOAT_VEC4:
-        case GL_INT_VEC4:
-        case GL_BOOL_VEC4:
-            return 2;
-        case GL_FLOAT_MAT3:
-        case GL_FLOAT_MAT2x3:
-        case GL_FLOAT_MAT3x2:
-            return 3;
-        case GL_FLOAT_VEC3:
-        case GL_INT_VEC3:
-        case GL_BOOL_VEC3:
-            return 4;
-        case GL_FLOAT_VEC2:
-        case GL_INT_VEC2:
-        case GL_BOOL_VEC2:
-            return 5;
-        case GL_FLOAT:
-        case GL_INT:
-        case GL_BOOL:
-        case GL_SAMPLER_2D:
-        case GL_SAMPLER_CUBE:
-        case GL_SAMPLER_EXTERNAL_OES:
-        case GL_SAMPLER_2D_RECT_ARB:
-            return 6;
-        default:
-            ASSERT(false);
-            return 7;
-    }
-}
-
-int GetNumComponentsPerRow(sh::GLenum type)
+static int GetNumComponentsPerRow(sh::GLenum type)
 {
     if (type == GL_FLOAT_MAT2)
     {
@@ -63,13 +19,12 @@ int GetNumComponentsPerRow(sh::GLenum type)
     return gl::VariableColumnCount(type);
 }
 
-}    // namespace
-
-struct TVariableInfoComparer {
+struct TVariableInfoComparer
+{
     bool operator()(const TVariableInfo& lhs, const TVariableInfo& rhs) const
     {
-        int lhsSortOrder = GetSortOrder(lhs.type);
-        int rhsSortOrder = GetSortOrder(rhs.type);
+        int lhsSortOrder = gl::VariableSortOrder(lhs.type);
+        int rhsSortOrder = gl::VariableSortOrder(rhs.type);
         if (lhsSortOrder != rhsSortOrder) {
             return lhsSortOrder < rhsSortOrder;
         }
