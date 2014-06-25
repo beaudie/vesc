@@ -5,10 +5,13 @@
 //
 #include "compiler/translator/VariablePacker.h"
 #include "angle_gl.h"
+#include "common/utilities.h"
 
 #include <algorithm>
 
-namespace {
+namespace
+{
+
 int GetSortOrder(sh::GLenum type)
 {
     switch (type) {
@@ -49,81 +52,40 @@ int GetSortOrder(sh::GLenum type)
             return 7;
     }
 }
+
 }    // namespace
 
 int VariablePacker::GetNumComponentsPerRow(sh::GLenum type)
 {
-    switch (type) {
-        case GL_FLOAT_MAT4:
-        case GL_FLOAT_MAT2:
-        case GL_FLOAT_MAT2x4:
-        case GL_FLOAT_MAT3x4:
-        case GL_FLOAT_MAT4x2:
-        case GL_FLOAT_MAT4x3:
-        case GL_FLOAT_VEC4:
-        case GL_INT_VEC4:
-        case GL_BOOL_VEC4:
-            return 4;
-        case GL_FLOAT_MAT3:
-        case GL_FLOAT_MAT2x3:
-        case GL_FLOAT_MAT3x2:
-        case GL_FLOAT_VEC3:
-        case GL_INT_VEC3:
-        case GL_BOOL_VEC3:
-            return 3;
-        case GL_FLOAT_VEC2:
-        case GL_INT_VEC2:
-        case GL_BOOL_VEC2:
-            return 2;
-        case GL_FLOAT:
-        case GL_INT:
-        case GL_BOOL:
-        case GL_SAMPLER_2D:
-        case GL_SAMPLER_CUBE:
-        case GL_SAMPLER_EXTERNAL_OES:
-        case GL_SAMPLER_2D_RECT_ARB:
-            return 1;
-        default:
-            ASSERT(false);
-            return 5;
-    }
-}
-
-int VariablePacker::GetNumRows(sh::GLenum type)
-{
-    switch (type) {
-        case GL_FLOAT_MAT4:
-        case GL_FLOAT_MAT2x4:
-        case GL_FLOAT_MAT3x4:
-        case GL_FLOAT_MAT4x3:
-        case GL_FLOAT_MAT4x2:
-            return 4;
-        case GL_FLOAT_MAT3:
-        case GL_FLOAT_MAT2x3:
-        case GL_FLOAT_MAT3x2:
-            return 3;
-        case GL_FLOAT_MAT2:
-            return 2;
-        case GL_FLOAT_VEC4:
-        case GL_INT_VEC4:
-        case GL_BOOL_VEC4:
-        case GL_FLOAT_VEC3:
-        case GL_INT_VEC3:
-        case GL_BOOL_VEC3:
-        case GL_FLOAT_VEC2:
-        case GL_INT_VEC2:
-        case GL_BOOL_VEC2:
-        case GL_FLOAT:
-        case GL_INT:
-        case GL_BOOL:
-        case GL_SAMPLER_2D:
-        case GL_SAMPLER_CUBE:
-        case GL_SAMPLER_EXTERNAL_OES:
-        case GL_SAMPLER_2D_RECT_ARB:
-            return 1;
-        default:
-            ASSERT(false);
-            return 100000;
+    switch (type)
+    {
+      case GL_FLOAT_MAT4:
+      case GL_FLOAT_MAT2:
+      case GL_FLOAT_MAT2x4:
+      case GL_FLOAT_MAT3x4:
+      case GL_FLOAT_MAT4x2:
+      case GL_FLOAT_MAT4x3:
+      case GL_FLOAT_VEC4:
+      case GL_INT_VEC4:
+      case GL_BOOL_VEC4:
+      case GL_UNSIGNED_INT_VEC4:
+        return 4;
+      case GL_FLOAT_MAT3:
+      case GL_FLOAT_MAT2x3:
+      case GL_FLOAT_MAT3x2:
+      case GL_FLOAT_VEC3:
+      case GL_INT_VEC3:
+      case GL_BOOL_VEC3:
+      case GL_UNSIGNED_INT_VEC3:
+        return 3;
+      case GL_FLOAT_VEC2:
+      case GL_INT_VEC2:
+      case GL_BOOL_VEC2:
+      case GL_UNSIGNED_INT_VEC2:
+        return 2;
+      default:
+        ASSERT(gl::VariableComponentCount(type) == 1);
+        return 1;
     }
 }
 
@@ -218,7 +180,7 @@ bool VariablePacker::CheckVariablesWithinPackingLimits(int maxVectors, const TVa
     // Check whether each variable fits in the available vectors.
     for (size_t i = 0; i < variables.size(); i++) {
         const TVariableInfo& variable = variables[i];
-        if (variable.size > maxVectors / GetNumRows(variable.type)) {
+        if (variable.size > maxVectors / gl::VariableRowCount(variable.type)) {
             return false;
         }
     }
@@ -236,7 +198,7 @@ bool VariablePacker::CheckVariablesWithinPackingLimits(int maxVectors, const TVa
         if (GetNumComponentsPerRow(variable.type) != 4) {
             break;
         }
-        topNonFullRow_ += GetNumRows(variable.type) * variable.size;
+        topNonFullRow_ += gl::VariableRowCount(variable.type) * variable.size;
     }
 
     if (topNonFullRow_ > maxRows_) {
@@ -250,7 +212,7 @@ bool VariablePacker::CheckVariablesWithinPackingLimits(int maxVectors, const TVa
         if (GetNumComponentsPerRow(variable.type) != 3) {
             break;
         }
-        num3ColumnRows += GetNumRows(variable.type) * variable.size;
+        num3ColumnRows += gl::VariableRowCount(variable.type) * variable.size;
     }
 
     if (topNonFullRow_ + num3ColumnRows > maxRows_) {
@@ -269,7 +231,7 @@ bool VariablePacker::CheckVariablesWithinPackingLimits(int maxVectors, const TVa
         if (GetNumComponentsPerRow(variable.type) != 2) {
             break;
         }
-        int numRows = GetNumRows(variable.type) * variable.size;
+        int numRows = gl::VariableRowCount(variable.type) * variable.size;
         if (numRows <= rowsAvailableInColumns01) {
             rowsAvailableInColumns01 -= numRows;
         } else if (numRows <= rowsAvailableInColumns23) {
@@ -291,7 +253,7 @@ bool VariablePacker::CheckVariablesWithinPackingLimits(int maxVectors, const TVa
     for (; ii < variables.size(); ++ii) {
         const TVariableInfo& variable = variables[ii];
         ASSERT(1 == GetNumComponentsPerRow(variable.type));
-        int numRows = GetNumRows(variable.type) * variable.size;
+        int numRows = gl::VariableRowCount(variable.type) * variable.size;
         int smallestColumn = -1;
         int smallestSize = maxRows_ + 1;
         int topRow = -1;

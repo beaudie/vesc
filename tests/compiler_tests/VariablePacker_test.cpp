@@ -6,6 +6,7 @@
 #include "compiler/translator/VariablePacker.h"
 #include "gtest/gtest.h"
 #include "angle_gl.h"
+#include "common/utilities.h"
 
 TEST(VariablePacking, Pack) {
   VariablePacker packer;
@@ -38,7 +39,7 @@ TEST(VariablePacking, Pack) {
 
   for (size_t tt = 0; tt < sizeof(types) / sizeof(types[0]); ++tt) {
     sh::GLenum type = types[tt];
-    int num_rows = VariablePacker::GetNumRows(type);
+    int num_rows = gl::VariableRowCount(type);
     int num_components_per_row = VariablePacker::GetNumComponentsPerRow(type);
     // Check 1 of the type.
     vars.clear();
