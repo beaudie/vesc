@@ -2617,7 +2617,7 @@ void Context::clear(GLbitfield mask)
 
     if (mask & GL_DEPTH_BUFFER_BIT)
     {
-        if (mState.depthStencil.depthMask && framebufferObject->getDepthbufferType() != GL_NONE)
+        if (mState.depthStencil.depthMask && framebufferObject->getDepthbuffer() != NULL)
         {
             clearParams.clearDepth = true;
         }
@@ -2625,7 +2625,7 @@ void Context::clear(GLbitfield mask)
 
     if (mask & GL_STENCIL_BUFFER_BIT)
     {
-        if (framebufferObject->getStencilbufferType() != GL_NONE)
+        if (framebufferObject->getStencilbuffer() != NULL)
         {
             rx::RenderTarget *depthStencil = framebufferObject->getStencilbuffer()->getDepthStencil();
             if (!depthStencil)
