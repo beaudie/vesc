@@ -863,6 +863,12 @@ bool ValidateES2FramebufferTextureParameters(const gl::Context *context, GLenum 
             return gl::error(GL_INVALID_OPERATION, false);
         }
 
+        // difference
+        if (level != 0)
+        {
+            return gl::error(GL_INVALID_VALUE, false);
+        }
+
         switch (textarget)
         {
           case GL_TEXTURE_2D:
@@ -900,11 +906,6 @@ bool ValidateES2FramebufferTextureParameters(const gl::Context *context, GLenum 
 
           default:
             return gl::error(GL_INVALID_ENUM, false);
-        }
-
-        if (level != 0)
-        {
-            return gl::error(GL_INVALID_VALUE, false);
         }
     }
 
