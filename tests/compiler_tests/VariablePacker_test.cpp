@@ -8,9 +8,14 @@
 #include "angle_gl.h"
 #include "common/utilities.h"
 
+static sh::ShaderVariable SimpleVar(GLenum type, unsigned int size)
+{
+    return sh::ShaderVariable(type, GL_NONE, "", size == 1 ? 0 : size);
+}
+
 TEST(VariablePacking, Pack) {
   VariablePacker packer;
-  TVariableInfoList vars;
+  std::vector<sh::ShaderVariable> vars;
   const int kMaxRows = 16;
   // test no vars.
   EXPECT_TRUE(packer.CheckVariablesWithinPackingLimits(kMaxRows, vars));
@@ -66,18 +71,18 @@ TEST(VariablePacking, Pack) {
     int num_components_per_row = VariablePacker::GetNumComponentsPerRow(type);
     // Check 1 of the type.
     vars.clear();
-    vars.push_back(TVariableInfo(type, 1));
+    vars.push_back(SimpleVar(type, 1));
     EXPECT_TRUE(packer.CheckVariablesWithinPackingLimits(kMaxRows, vars));
 
     // Check exactly the right amount of 1 type as an array.
     int num_vars = kMaxRows / num_rows;
     vars.clear();
-    vars.push_back(TVariableInfo(type, num_vars));
+    vars.push_back(SimpleVar(type, num_vars));
     EXPECT_TRUE(packer.CheckVariablesWithinPackingLimits(kMaxRows, vars));
 
     // test too many
     vars.clear();
-    vars.push_back(TVariableInfo(type, num_vars + 1));
+    vars.push_back(SimpleVar(type, num_vars + 1));
     EXPECT_FALSE(packer.CheckVariablesWithinPackingLimits(kMaxRows, vars));
 
     // Check exactly the right amount of 1 type as individual vars.
@@ -85,26 +90,26 @@ TEST(VariablePacking, Pack) {
         ((num_components_per_row > 2) ? 1 : (4 / num_components_per_row));
     vars.clear();
     for (int ii = 0; ii < num_vars; ++ii) {
-      vars.push_back(TVariableInfo(type, 1));
+      vars.push_back(SimpleVar(type, 1));
     }
     EXPECT_TRUE(packer.CheckVariablesWithinPackingLimits(kMaxRows, vars));
 
     // Check 1 too many.
-    vars.push_back(TVariableInfo( type, 1));
+    vars.push_back(SimpleVar(type, 1));
     EXPECT_FALSE(packer.CheckVariablesWithinPackingLimits(kMaxRows, vars));
   }
 
   // Test example from GLSL ES 3.0 spec chapter 11.
   vars.clear();
-  vars.push_back(TVariableInfo(GL_FLOAT_VEC4, 1));
-  vars.push_back(TVariableInfo(GL_FLOAT_MAT3, 1));
-  vars.push_back(TVariableInfo(GL_FLOAT_MAT3, 1));
-  vars.push_back(TVariableInfo(GL_FLOAT_VEC2, 6));
-  vars.push_back(TVariableInfo(GL_FLOAT_VEC2, 4));
-  vars.push_back(TVariableInfo(GL_FLOAT_VEC2, 1));
-  vars.push_back(TVariableInfo(GL_FLOAT, 3));
-  vars.push_back(TVariableInfo(GL_FLOAT, 2));
-  vars.push_back(TVariableInfo(GL_FLOAT, 1));
+  vars.push_back(SimpleVar(GL_FLOAT_VEC4, 1));
+  vars.push_back(SimpleVar(GL_FLOAT_MAT3, 1));
+  vars.push_back(SimpleVar(GL_FLOAT_MAT3, 1));
+  vars.push_back(SimpleVar(GL_FLOAT_VEC2, 6));
+  vars.push_back(SimpleVar(GL_FLOAT_VEC2, 4));
+  vars.push_back(SimpleVar(GL_FLOAT_VEC2, 1));
+  vars.push_back(SimpleVar(GL_FLOAT, 3));
+  vars.push_back(SimpleVar(GL_FLOAT, 2));
+  vars.push_back(SimpleVar(GL_FLOAT, 1));
   EXPECT_TRUE(packer.CheckVariablesWithinPackingLimits(kMaxRows, vars));
 }
 
