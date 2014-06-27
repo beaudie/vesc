@@ -844,7 +844,7 @@ bool ValidateES2FramebufferTextureParameters(gl::Context *context, GLenum target
 {
     META_ASSERT(GL_DRAW_FRAMEBUFFER == GL_DRAW_FRAMEBUFFER_ANGLE && GL_READ_FRAMEBUFFER == GL_READ_FRAMEBUFFER_ANGLE);
 
-    if (target != GL_FRAMEBUFFER && target != GL_DRAW_FRAMEBUFFER && target != GL_READ_FRAMEBUFFER)
+    if (!ValidFramebufferTarget(target))
     {
         return gl::error(GL_INVALID_ENUM, false);
     }

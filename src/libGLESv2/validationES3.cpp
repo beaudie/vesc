@@ -453,7 +453,7 @@ bool ValidateES3FramebufferTextureParameters(gl::Context *context, GLenum target
                                              GLenum textarget, GLuint texture, GLint level, GLint layer,
                                              bool layerCall)
 {
-    if (target != GL_FRAMEBUFFER && target != GL_DRAW_FRAMEBUFFER && target != GL_READ_FRAMEBUFFER)
+    if (!ValidFramebufferTarget(target))
     {
         return gl::error(GL_INVALID_ENUM, false);
     }

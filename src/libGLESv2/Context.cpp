@@ -1531,11 +1531,6 @@ Texture *Context::getTargetTexture(GLenum target) const
 
 GLuint Context::getTargetFramebufferHandle(GLenum target) const
 {
-    if (!ValidFramebufferTarget(target))
-    {
-        return GL_INVALID_INDEX;
-    }
-
     if (target == GL_READ_FRAMEBUFFER_ANGLE)
     {
         return mState.readFramebufferId;
