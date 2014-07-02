@@ -1997,7 +1997,7 @@ void __stdcall glGenerateMipmap(GLenum target)
             }
 
             GLenum internalFormat = texture->getBaseLevelInternalFormat();
-            const gl::TextureCaps &formatCaps = context->getCaps().textureCaps.get(internalFormat);
+            const gl::TextureCaps &formatCaps = context->getTextureCaps().get(internalFormat);
 
             // GenerateMipmap should not generate an INVALID_OPERATION for textures created with
             // unsized formats or that are color renderable and filterable.  Since we do not track if
@@ -2024,7 +2024,7 @@ void __stdcall glGenerateMipmap(GLenum target)
             }
 
             // Non-power of 2 ES2 check
-            if (!context->getCaps().extensions.textureNPOT && (!gl::isPow2(texture->getBaseLevelWidth()) || !gl::isPow2(texture->getBaseLevelHeight())))
+            if (!context->getExtensions().textureNPOT && (!gl::isPow2(texture->getBaseLevelWidth()) || !gl::isPow2(texture->getBaseLevelHeight())))
             {
                 ASSERT(context->getClientVersion() <= 2 && (target == GL_TEXTURE_2D || target == GL_TEXTURE_CUBE_MAP));
                 return gl::error(GL_INVALID_OPERATION);
@@ -2560,7 +2560,7 @@ void __stdcall glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
               case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE:
                 break;
               case GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING:
-                if (clientVersion < 3 && !context->getCaps().extensions.sRGB)
+                if (clientVersion < 3 && !context->getExtensions().sRGB)
                 {
                     return gl::error(GL_INVALID_ENUM);
                 }
@@ -3127,7 +3127,7 @@ void __stdcall glGetRenderbufferParameteriv(GLenum target, GLenum pname, GLint* 
               case GL_RENDERBUFFER_DEPTH_SIZE:      *params = renderbuffer->getDepthSize();      break;
               case GL_RENDERBUFFER_STENCIL_SIZE:    *params = renderbuffer->getStencilSize();    break;
               case GL_RENDERBUFFER_SAMPLES_ANGLE:
-                if (!context->getCaps().extensions.framebufferMultisample)
+                if (!context->getExtensions().framebufferMultisample)
                 {
                     return gl::error(GL_INVALID_ENUM);
                 }
@@ -3346,7 +3346,7 @@ const GLubyte* __stdcall glGetString(GLenum name)
           case GL_VENDOR:
             return (GLubyte*)"Google Inc.";
           case GL_RENDERER:
-            return (GLubyte*)((context != NULL) ? context->getRendererString() : "ANGLE");
+            return (GLubyte*)((context != NULL) ? context->getRendererString().c_str() : "ANGLE");
           case GL_VERSION:
             if (context->getClientVersion() == 2)
             {
@@ -3366,7 +3366,7 @@ const GLubyte* __stdcall glGetString(GLenum name)
                 return (GLubyte*)"OpenGL ES GLSL ES 3.00 (ANGLE " ANGLE_VERSION_STRING ")";
             }
           case GL_EXTENSIONS:
-            return (GLubyte*)((context != NULL) ? context->getExtensionString() : "");
+            return (GLubyte*)((context != NULL) ? context->getExtensionString().c_str() : "");
           default:
             return gl::error(GL_INVALID_ENUM, (GLubyte*)NULL);
         }
@@ -3430,7 +3430,7 @@ void __stdcall glGetTexParameterfv(GLenum target, GLenum pname, GLfloat* params)
                 *params = (GLfloat)texture->getUsage();
                 break;
               case GL_TEXTURE_MAX_ANISOTROPY_EXT:
-                if (!context->getCaps().extensions.textureFilterAnisotropic)
+                if (!context->getExtensions().textureFilterAnisotropic)
                 {
                     return gl::error(GL_INVALID_ENUM);
                 }
@@ -3556,7 +3556,7 @@ void __stdcall glGetTexParameteriv(GLenum target, GLenum pname, GLint* params)
                 *params = texture->getUsage();
                 break;
               case GL_TEXTURE_MAX_ANISOTROPY_EXT:
-                if (!context->getCaps().extensions.textureFilterAnisotropic)
+                if (!context->getExtensions().textureFilterAnisotropic)
                 {
                     return gl::error(GL_INVALID_ENUM);
                 }
@@ -4936,7 +4936,7 @@ void __stdcall glTexParameterf(GLenum target, GLenum pname, GLfloat param)
               case GL_TEXTURE_MIN_FILTER:           texture->setMinFilter(gl::uiround<GLenum>(param));   break;
               case GL_TEXTURE_MAG_FILTER:           texture->setMagFilter(gl::uiround<GLenum>(param));   break;
               case GL_TEXTURE_USAGE_ANGLE:          texture->setUsage(gl::uiround<GLenum>(param));       break;
-              case GL_TEXTURE_MAX_ANISOTROPY_EXT:   texture->setMaxAnisotropy(param, context->getCaps().extensions.maxTextureAnisotropy); break;
+              case GL_TEXTURE_MAX_ANISOTROPY_EXT:   texture->setMaxAnisotropy(param, context->getExtensions().maxTextureAnisotropy); break;
               case GL_TEXTURE_COMPARE_MODE:         texture->setCompareMode(gl::uiround<GLenum>(param)); break;
               case GL_TEXTURE_COMPARE_FUNC:         texture->setCompareFunc(gl::uiround<GLenum>(param)); break;
               case GL_TEXTURE_SWIZZLE_R:            texture->setSwizzleRed(gl::uiround<GLenum>(param));   break;
@@ -4992,7 +4992,7 @@ void __stdcall glTexParameteri(GLenum target, GLenum pname, GLint param)
               case GL_TEXTURE_MIN_FILTER:           texture->setMinFilter((GLenum)param);   break;
               case GL_TEXTURE_MAG_FILTER:           texture->setMagFilter((GLenum)param);   break;
               case GL_TEXTURE_USAGE_ANGLE:          texture->setUsage((GLenum)param);       break;
-              case GL_TEXTURE_MAX_ANISOTROPY_EXT:   texture->setMaxAnisotropy((float)param, context->getCaps().extensions.maxTextureAnisotropy); break;
+              case GL_TEXTURE_MAX_ANISOTROPY_EXT:   texture->setMaxAnisotropy((float)param, context->getExtensions().maxTextureAnisotropy); break;
               case GL_TEXTURE_COMPARE_MODE:         texture->setCompareMode((GLenum)param); break;
               case GL_TEXTURE_COMPARE_FUNC:         texture->setCompareFunc((GLenum)param); break;
               case GL_TEXTURE_SWIZZLE_R:            texture->setSwizzleRed((GLenum)param);   break;
@@ -5029,7 +5029,7 @@ void __stdcall glTexStorage2DEXT(GLenum target, GLsizei levels, GLenum internalf
 
         if (context)
         {
-            if (!context->getCaps().extensions.textureStorage)
+            if (!context->getExtensions().textureStorage)
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
@@ -8037,7 +8037,7 @@ const GLubyte* __stdcall glGetStringi(GLenum name, GLuint index)
                 return gl::error(GL_INVALID_VALUE, reinterpret_cast<GLubyte*>(NULL));
             }
 
-            return reinterpret_cast<const GLubyte*>(context->getExtensionString(index));
+            return reinterpret_cast<const GLubyte*>(context->getExtensionString(index).c_str());
         }
     }
     ANGLE_CATCH_ALL
@@ -9652,7 +9652,7 @@ void __stdcall glGetInternalformativ(GLenum target, GLenum internalformat, GLenu
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            const gl::TextureCaps &formatCaps = context->getCaps().textureCaps.get(internalformat);
+            const gl::TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
             if (!formatCaps.colorRendering && !formatCaps.depthRendering && !formatCaps.stencilRendering)
             {
                 return gl::error(GL_INVALID_ENUM);
