@@ -178,6 +178,7 @@ class ProgramBinary : public RefCountObject
 
     void reset();
 
+    void updateSamplerUniforms();
     bool linkVaryings(InfoLog &infoLog, FragmentShader *fragmentShader, VertexShader *vertexShader);
     bool linkAttributes(InfoLog &infoLog, const AttributeBindings &attributeBindings, FragmentShader *fragmentShader, VertexShader *vertexShader);
 
