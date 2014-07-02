@@ -909,8 +909,7 @@ void ProgramBinary::dirtyAllUniforms()
     }
 }
 
-// Applies all the uniforms set for this program object to the renderer
-void ProgramBinary::applyUniforms()
+void ProgramBinary::updateSamplerUniforms()
 {
     // Retrieve sampler uniform values
     for (size_t uniformIndex = 0; uniformIndex < mUniforms.size(); uniformIndex++)
@@ -922,7 +921,7 @@ void ProgramBinary::applyUniforms()
             if (IsSampler(targetUniform->type))
             {
                 int count = targetUniform->elementCount();
-                GLint (*v)[4] = (GLint(*)[4])targetUniform->data;
+                GLint(*v)[4] = (GLint(*)[4])targetUniform->data;
 
                 if (targetUniform->isReferencedByFragmentShader())
                 {
@@ -958,6 +957,12 @@ void ProgramBinary::applyUniforms()
             }
         }
     }
+}
+
+// Applies all the uniforms set for this program object to the renderer
+void ProgramBinary::applyUniforms()
+{
+    updateSamplerUniforms();
 
     mRenderer->applyUniforms(*this);
 
@@ -2615,6 +2620,7 @@ bool ProgramBinary::validateSamplers(InfoLog *infoLog)
     // if any two active samplers in a program are of different types, but refer to the same
     // texture image unit, and this is the current program, then ValidateProgram will fail, and
     // DrawArrays and DrawElements will issue the INVALID_OPERATION error.
+    updateSamplerUniforms();
 
     const unsigned int maxCombinedTextureImageUnits = mRenderer->getMaxCombinedTextureImageUnits();
     TextureType textureUnitType[IMPLEMENTATION_MAX_COMBINED_TEXTURE_IMAGE_UNITS];
