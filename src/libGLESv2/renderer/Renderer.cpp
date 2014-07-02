@@ -47,11 +47,33 @@ const gl::Caps &Renderer::getCaps() const
 {
     if (!mCapsInitialized)
     {
-        mCaps = generateCaps();
+        generateCaps(&mCaps, &mTextureCaps, &mExtensions);
         mCapsInitialized = true;
     }
 
     return mCaps;
+}
+
+const gl::TextureCapsMap &Renderer::getTextureCaps() const
+{
+    if (!mCapsInitialized)
+    {
+        generateCaps(&mCaps, &mTextureCaps, &mExtensions);
+        mCapsInitialized = true;
+    }
+
+    return mTextureCaps;
+}
+
+const gl::Extensions &Renderer::getExtensions() const
+{
+    if (!mCapsInitialized)
+    {
+        generateCaps(&mCaps, &mTextureCaps, &mExtensions);
+        mCapsInitialized = true;
+    }
+
+    return mExtensions;
 }
 
 }

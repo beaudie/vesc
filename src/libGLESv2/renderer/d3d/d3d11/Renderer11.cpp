@@ -1986,7 +1986,7 @@ bool Renderer11::getShareHandleSupport() const
     // We only currently support share handles with BGRA surfaces, because
     // chrome needs BGRA. Once chrome fixes this, we should always support them.
     // PIX doesn't seem to support using share handles, so disable them.
-    return getCaps().extensions.textureFormatBGRA8888 && !gl::perfActive();
+    return getExtensions().textureFormatBGRA8888 && !gl::perfActive();
 }
 
 bool Renderer11::getPostSubBufferSupport() const
@@ -2709,7 +2709,7 @@ FenceImpl *Renderer11::createFence()
 
 bool Renderer11::supportsFastCopyBufferToTexture(GLenum internalFormat) const
 {
-    ASSERT(getCaps().extensions.pixelBufferObject);
+    ASSERT(getExtensions().pixelBufferObject);
 
     // sRGB formats do not work with D3D11 buffer SRVs
     if (gl::GetColorEncoding(internalFormat) == GL_SRGB)
@@ -2718,7 +2718,7 @@ bool Renderer11::supportsFastCopyBufferToTexture(GLenum internalFormat) const
     }
 
     // We cannot support direct copies to non-color-renderable formats
-    if (!getCaps().textureCaps.get(internalFormat).colorRendering)
+    if (!getTextureCaps().get(internalFormat).colorRendering)
     {
         return false;
     }
@@ -3426,9 +3426,9 @@ Renderer11::MultisampleSupportInfo Renderer11::getMultisampleSupportInfo(DXGI_FO
     return supportInfo;
 }
 
-gl::Caps Renderer11::generateCaps() const
+void Renderer11::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureCaps, gl::Extensions *outExtensions) const
 {
-    return d3d11_gl::GenerateCaps(mDevice);
+    d3d11_gl::GenerateCaps(mDevice, outCaps, outTextureCaps, outExtensions);
 }
 
 }
