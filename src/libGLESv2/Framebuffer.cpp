@@ -422,7 +422,7 @@ GLenum Framebuffer::completeness() const
             }
 
             GLenum internalformat = colorbuffer->getInternalFormat();
-            const TextureCaps &formatCaps = mRenderer->getCaps().textureCaps.get(internalformat);
+            const TextureCaps &formatCaps = mRenderer->getTextureCaps().get(internalformat);
             if (colorbuffer->isTexture())
             {
                 if (!formatCaps.colorRendering)
@@ -498,13 +498,13 @@ GLenum Framebuffer::completeness() const
         }
 
         GLenum internalformat = mDepthbuffer->getInternalFormat();
-        const TextureCaps &formatCaps = mRenderer->getCaps().textureCaps.get(internalformat);
+        const TextureCaps &formatCaps = mRenderer->getTextureCaps().get(internalformat);
         if (mDepthbuffer->isTexture())
         {
             GLenum internalformat = mDepthbuffer->getInternalFormat();
 
             // depth texture attachments require OES/ANGLE_depth_texture
-            if (!mRenderer->getCaps().extensions.depthTextures)
+            if (!mRenderer->getExtensions().depthTextures)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
@@ -552,14 +552,14 @@ GLenum Framebuffer::completeness() const
         }
 
         GLenum internalformat = mStencilbuffer->getInternalFormat();
-        const TextureCaps &formatCaps = mRenderer->getCaps().textureCaps.get(internalformat);
+        const TextureCaps &formatCaps = mRenderer->getTextureCaps().get(internalformat);
         if (mStencilbuffer->isTexture())
         {
             GLenum internalformat = mStencilbuffer->getInternalFormat();
 
             // texture stencil attachments come along as part
             // of OES_packed_depth_stencil + OES/ANGLE_depth_texture
-            if (!mRenderer->getCaps().extensions.depthTextures)
+            if (!mRenderer->getExtensions().depthTextures)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }

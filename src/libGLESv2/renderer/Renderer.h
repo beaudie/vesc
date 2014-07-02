@@ -145,6 +145,8 @@ class Renderer
 
     // Renderer capabilities (virtual because it is used by egl::Display, do not override)
     virtual const gl::Caps &getCaps() const;
+    virtual const gl::TextureCapsMap &getTextureCaps() const;
+    virtual const gl::Extensions &getExtensions() const;
 
     virtual DWORD getAdapterVendor() const = 0;
     virtual std::string getRendererDescription() const = 0;
@@ -255,10 +257,12 @@ class Renderer
   private:
     DISALLOW_COPY_AND_ASSIGN(Renderer);
 
-    virtual gl::Caps generateCaps() const = 0;
+    virtual void generateCaps(gl::Caps *outCaps, gl::TextureCapsMap* outTextureCaps, gl::Extensions *outExtensions) const = 0;
 
     mutable bool mCapsInitialized;
     mutable gl::Caps mCaps;
+    mutable gl::TextureCapsMap mTextureCaps;
+    mutable gl::Extensions mExtensions;
 
     int mCurrentClientVersion;
 };
