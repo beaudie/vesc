@@ -3066,11 +3066,6 @@ const Extensions &Context::getExtensions() const
     return mExtensions;
 }
 
-int Context::getMajorShaderModel() const
-{
-    return mMajorShaderModel;
-}
-
 unsigned int Context::getMaximumCombinedTextureImageUnits() const
 {
     return mRenderer->getMaxCombinedTextureImageUnits();
