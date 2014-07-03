@@ -425,20 +425,19 @@ GLenum Framebuffer::completeness() const
             const TextureCaps &formatCaps = mRenderer->getRendererTextureCaps().get(internalformat);
             if (colorbuffer->isTexture())
             {
-                if (!formatCaps.colorRendering)
+                if (!formatCaps.rendering)
                 {
                     return GL_FRAMEBUFFER_UNSUPPORTED;
                 }
 
-                if (gl::GetDepthBits(internalformat) > 0 ||
-                    gl::GetStencilBits(internalformat) > 0)
+                if (gl::GetDepthBits(internalformat) > 0 || gl::GetStencilBits(internalformat) > 0)
                 {
                     return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
                 }
             }
             else
             {
-                if (!formatCaps.colorRendering)
+                if (!formatCaps.rendering || gl::GetDepthBits(internalformat) > 0 || gl::GetStencilBits(internalformat) > 0)
                 {
                     return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
                 }
@@ -509,7 +508,7 @@ GLenum Framebuffer::completeness() const
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
 
-            if (!formatCaps.depthRendering)
+            if (!formatCaps.rendering)
             {
                 return GL_FRAMEBUFFER_UNSUPPORTED;
             }
@@ -521,7 +520,7 @@ GLenum Framebuffer::completeness() const
         }
         else
         {
-            if (!formatCaps.depthRendering)
+            if (!formatCaps.rendering || gl::GetDepthBits(internalformat) == 0)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
@@ -564,7 +563,7 @@ GLenum Framebuffer::completeness() const
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
 
-            if (!formatCaps.stencilRendering)
+            if (!formatCaps.rendering)
             {
                 return GL_FRAMEBUFFER_UNSUPPORTED;
             }
@@ -576,7 +575,7 @@ GLenum Framebuffer::completeness() const
         }
         else
         {
-            if (!formatCaps.stencilRendering)
+            if (!formatCaps.rendering || gl::GetStencilBits(internalformat) == 0)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }

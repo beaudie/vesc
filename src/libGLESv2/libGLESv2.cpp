@@ -2011,8 +2011,8 @@ void __stdcall glGenerateMipmap(GLenum target)
                           internalFormat == GL_LUMINANCE8_ALPHA8_EXT ||
                           internalFormat == GL_ALPHA8_EXT;
 
-            if (formatCaps.depthRendering || !formatCaps.filtering || (!formatCaps.colorRendering && !isLUMA) ||
-                gl::IsFormatCompressed(internalFormat))
+            if (gl::GetDepthBits(internalFormat) > 0 || gl::GetStencilBits(internalFormat) || !formatCaps.filtering ||
+                (!formatCaps.rendering && !isLUMA) || gl::IsFormatCompressed(internalFormat))
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
@@ -9653,7 +9653,7 @@ void __stdcall glGetInternalformativ(GLenum target, GLenum internalformat, GLenu
             }
 
             const gl::TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
-            if (!formatCaps.colorRendering && !formatCaps.depthRendering && !formatCaps.stencilRendering)
+            if (!formatCaps.rendering)
             {
                 return gl::error(GL_INVALID_ENUM);
             }
