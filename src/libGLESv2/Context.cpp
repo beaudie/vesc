@@ -3115,26 +3115,6 @@ unsigned int Context::getMaximumCombinedUniformBufferBindings() const
            mRenderer->getMaxFragmentShaderUniformBuffers();
 }
 
-int Context::getMaxSupportedSamples() const
-{
-    return mRenderer->getMaxSupportedSamples();
-}
-
-GLsizei Context::getMaxSupportedFormatSamples(GLenum internalFormat) const
-{
-    return mRenderer->getMaxSupportedFormatSamples(internalFormat);
-}
-
-GLsizei Context::getNumSampleCounts(GLenum internalFormat) const
-{
-    return mRenderer->getNumSampleCounts(internalFormat);
-}
-
-void Context::getSampleCounts(GLenum internalFormat, GLsizei bufSize, GLint *params) const
-{
-    mRenderer->getSampleCounts(internalFormat, bufSize, params);
-}
-
 unsigned int Context::getMaxTransformFeedbackBufferBindings() const
 {
     return mRenderer->getMaxTransformFeedbackBuffers();
@@ -3709,6 +3689,7 @@ void Context::initCaps(GLuint clientVersion)
         //mExtensions.sRGB = false;
     }
 
+    GLuint maxSamples = 0;
     const TextureCapsMap &rendererFormats = mRenderer->getRendererTextureCaps();
     for (TextureCapsMap::const_iterator i = rendererFormats.begin(); i != rendererFormats.end(); i++)
     {
@@ -3721,8 +3702,17 @@ void Context::initCaps(GLuint clientVersion)
             formatCaps.rendering = IsRenderingSupported(format, mExtensions, clientVersion);
             formatCaps.filtering = IsFilteringSupported(format, mExtensions, clientVersion);
             mTextureCaps.insert(format, formatCaps);
+
+            maxSamples = std::max(maxSamples, formatCaps.getMaxSamples());
+
+            if (IsFormatCompressed(format))
+            {
+                mCompressedTextureFormats.push_back(format);
+            }
         }
     }
+
+    mExtensions.maxSamples = maxSamples;
 }
 
 }
