@@ -957,9 +957,7 @@ void Context::getIntegerv(GLenum pname, GLint *params)
       case GL_NUM_COMPRESSED_TEXTURE_FORMATS:
         params[0] = mNumCompressedTextureFormats;
         break;
-      case GL_MAX_SAMPLES_ANGLE:
-        *params = static_cast<GLint>(getMaxSupportedSamples());
-        break;
+      case GL_MAX_SAMPLES_ANGLE:                        *params = mExtensions.maxSamples;                               break;
       case GL_IMPLEMENTATION_COLOR_READ_TYPE:
       case GL_IMPLEMENTATION_COLOR_READ_FORMAT:
         {
@@ -2005,26 +2003,6 @@ unsigned int Context::getMaximumCombinedUniformBufferBindings() const
            mRenderer->getMaxFragmentShaderUniformBuffers();
 }
 
-int Context::getMaxSupportedSamples() const
-{
-    return mRenderer->getMaxSupportedSamples();
-}
-
-GLsizei Context::getMaxSupportedFormatSamples(GLenum internalFormat) const
-{
-    return mRenderer->getMaxSupportedFormatSamples(internalFormat);
-}
-
-GLsizei Context::getNumSampleCounts(GLenum internalFormat) const
-{
-    return mRenderer->getNumSampleCounts(internalFormat);
-}
-
-void Context::getSampleCounts(GLenum internalFormat, GLsizei bufSize, GLint *params) const
-{
-    mRenderer->getSampleCounts(internalFormat, bufSize, params);
-}
-
 unsigned int Context::getMaxTransformFeedbackBufferBindings() const
 {
     return mRenderer->getMaxTransformFeedbackBuffers();
@@ -2524,6 +2502,7 @@ void Context::initCaps(GLuint clientVersion)
         //mExtensions.sRGB = false;
     }
 
+    GLuint maxSamples = 0;
     const TextureCapsMap &rendererFormats = mRenderer->getRendererTextureCaps();
     for (TextureCapsMap::const_iterator i = rendererFormats.begin(); i != rendererFormats.end(); i++)
     {
@@ -2536,8 +2515,12 @@ void Context::initCaps(GLuint clientVersion)
             formatCaps.renderable = IsRenderingSupported(format, mExtensions, clientVersion);
             formatCaps.filterable = IsFilteringSupported(format, mExtensions, clientVersion);
             mTextureCaps.insert(format, formatCaps);
+
+            maxSamples = std::max(maxSamples, formatCaps.getMaxSamples());
         }
     }
+
+    mExtensions.maxSamples = maxSamples;
 }
 
 }
