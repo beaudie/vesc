@@ -14,6 +14,7 @@
 #include <stddef.h>
 #include <string>
 #include <set>
+#include <sstream>
 
 // A macro to disallow the copy constructor and operator= functions
 // This must be used in the private: declarations for a class
@@ -113,6 +114,29 @@ inline const char* MakeStaticString(const std::string &str)
     }
 
     return strings.insert(str).first->c_str();
+}
+
+inline std::string ArrayString(unsigned int i)
+{
+    if (i == std::numeric_limits<unsigned int>::max())
+    {
+        return "";
+    }
+
+    std::stringstream strstr;
+
+    strstr << "[";
+    strstr << i;
+    strstr << "]";
+
+    return strstr.str();
+}
+
+inline std::string Str(int i)
+{
+    std::stringstream strstr;
+    strstr << i;
+    return strstr.str();
 }
 
 #if defined(_MSC_VER)
