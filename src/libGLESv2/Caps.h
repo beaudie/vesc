@@ -21,14 +21,9 @@ struct TextureCaps
 {
     TextureCaps();
 
-    bool texture2D;
-    bool textureCubeMap;
-    bool texture3D;
-    bool texture2DArray;
-    bool filtering;
-    bool colorRendering;
-    bool depthRendering;
-    bool stencilRendering;
+    bool texturable;
+    bool filterable;
+    bool renderable;
 
     std::set<GLuint> sampleCounts;
 };
