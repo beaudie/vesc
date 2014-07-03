@@ -294,6 +294,21 @@ FramebufferAttachment *Framebuffer::getAttachment(GLenum attachment) const
     }
 }
 
+bool Framebuffer::hasExistingAttachment(GLenum attachment, GLenum type, GLuint id, GLint mipLevel, GLint layer) const
+{
+    const FramebufferAttachment *attachmentObj = getAttachment(attachment);
+
+    if (!attachmentObj && id == 0)
+    {
+        return true;
+    }
+
+    return (attachmentObj->type()     == type     &&
+            attachmentObj->id()       == id       &&
+            attachmentObj->mipLevel() == mipLevel &&
+            attachmentObj->layer()    == layer    );
+}
+
 GLenum Framebuffer::getDrawBufferState(unsigned int colorAttachment) const
 {
     return mDrawBufferStates[colorAttachment];

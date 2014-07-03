@@ -1474,18 +1474,8 @@ bool ValidateFramebufferTextureBase(const gl::Context *context, GLenum target, G
         }
     }
 
-    const gl::Framebuffer *framebuffer = NULL;
-    GLuint framebufferHandle = 0;
-    if (target == GL_READ_FRAMEBUFFER)
-    {
-        framebuffer = context->getReadFramebuffer();
-        framebufferHandle = context->getReadFramebufferHandle();
-    }
-    else
-    {
-        framebuffer = context->getDrawFramebuffer();
-        framebufferHandle = context->getDrawFramebufferHandle();
-    }
+    const gl::Framebuffer *framebuffer = context->getTargetFramebuffer(target);
+    GLuint framebufferHandle = context->getTargetFramebufferHandle(target);
 
     if (framebufferHandle == 0 || !framebuffer)
     {
@@ -1562,7 +1552,10 @@ bool ValidateFramebufferTexture2D(const gl::Context *context, GLenum target, GLe
         }
     }
 
-    return true;
+    // Check for no-op
+    const gl::Framebuffer *framebuffer = context->getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+    return (!framebuffer->hasExistingAttachment(attachment, textarget, texture, level, 0));
 }
 
 }
