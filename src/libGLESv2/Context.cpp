@@ -208,8 +208,6 @@ Context::Context(int clientVersion, const gl::Context *shareContext, rx::Rendere
     mResetStatus = GL_NO_ERROR;
     mResetStrategy = (notifyResets ? GL_LOSE_CONTEXT_ON_RESET_EXT : GL_NO_RESET_NOTIFICATION_EXT);
     mRobustAccess = robustAccess;
-
-    mNumCompressedTextureFormats = 0;
 }
 
 Context::~Context()
@@ -310,22 +308,7 @@ void Context::makeCurrent(egl::Surface *surface)
 {
     if (!mHasBeenCurrent)
     {
-        mMajorShaderModel = mRenderer->getMajorShaderModel();
         mSupportsVertexTexture = mRenderer->getVertexTextureSupport();
-
-        mNumCompressedTextureFormats = 0;
-        if (mExtensions.textureCompressionDXT1)
-        {
-            mNumCompressedTextureFormats += 2;
-        }
-        if (mExtensions.textureCompressionDXT3)
-        {
-            mNumCompressedTextureFormats += 1;
-        }
-        if (mExtensions.textureCompressionDXT5)
-        {
-            mNumCompressedTextureFormats += 1;
-        }
 
         initRendererString();
         initExtensionStrings();
@@ -1751,12 +1734,8 @@ void Context::getIntegerv(GLenum pname, GLint *params)
       case GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: *params = mRenderer->getMaxTransformFeedbackInterleavedComponents(); break;
       case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS:       *params = mRenderer->getMaxTransformFeedbackBuffers();               break;
       case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS:    *params = mRenderer->getMaxTransformFeedbackSeparateComponents();    break;
-      case GL_NUM_COMPRESSED_TEXTURE_FORMATS:
-        params[0] = mNumCompressedTextureFormats;
-        break;
-      case GL_MAX_SAMPLES_ANGLE:
-        *params = static_cast<GLint>(getMaxSupportedSamples());
-        break;
+      case GL_NUM_COMPRESSED_TEXTURE_FORMATS:           *params = mCompressedTextureFormats.size();                     break;
+      case GL_MAX_SAMPLES_ANGLE:                        *params = mExtensions.maxSamples;                               break;
       case GL_SAMPLE_BUFFERS:
       case GL_SAMPLES:
         {
@@ -1805,19 +1784,7 @@ void Context::getIntegerv(GLenum pname, GLint *params)
         break;
       case GL_COMPRESSED_TEXTURE_FORMATS:
         {
-            if (mExtensions.textureCompressionDXT1)
-            {
-                *params++ = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
-                *params++ = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
-            }
-            if (mExtensions.textureCompressionDXT3)
-            {
-                *params++ = GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE;
-            }
-            if (mExtensions.textureCompressionDXT5)
-            {
-                *params++ = GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE;
-            }
+            std::copy(mCompressedTextureFormats.begin(), mCompressedTextureFormats.end(), params);
         }
         break;
       case GL_VIEWPORT:
@@ -2053,7 +2020,7 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
       case GL_COMPRESSED_TEXTURE_FORMATS:
         {
             *type = GL_INT;
-            *numParams = mNumCompressedTextureFormats;
+            *numParams = mCompressedTextureFormats.size();
         }
         return true;
       case GL_SHADER_BINARY_FORMATS:
@@ -3704,6 +3671,11 @@ void Context::initCaps(GLuint clientVersion)
             mTextureCaps.insert(format, formatCaps);
 
             maxSamples = std::max(maxSamples, formatCaps.getMaxSamples());
+
+            if (IsFormatCompressed(format))
+            {
+                mCompressedTextureFormats.push_back(format);
+            }
         }
     }
 
