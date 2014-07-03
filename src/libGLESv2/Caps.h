@@ -17,6 +17,8 @@
 namespace gl
 {
 
+typedef std::set<GLuint> SupportedSampleSet;
+
 struct TextureCaps
 {
     TextureCaps();
@@ -25,7 +27,14 @@ struct TextureCaps
     bool filterable;
     bool renderable;
 
-    std::set<GLuint> sampleCounts;
+    SupportedSampleSet sampleCounts;
+
+    // Get the maximum number of samples supported
+    GLuint getMaxSamples() const;
+
+    // Get the number of supported samples that is at least as many as requested.  Returns 0 if
+    // there are no sample counts available
+    GLuint getNearestSamples(GLuint requestedSamples) const;
 };
 
 class TextureCapsMap
@@ -161,6 +170,7 @@ struct Extensions
 
     // GL_ANGLE_framebuffer_multisample
     bool framebufferMultisample;
+    GLuint maxSamples;
 
     // GL_ANGLE_instanced_arrays
     bool instancedArrays;
