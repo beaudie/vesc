@@ -318,7 +318,7 @@ bool ValidateRenderbufferStorageParameters(const gl::Context *context, GLenum ta
     }
 
     const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
-    if (!formatCaps.colorRendering && !formatCaps.depthRendering && !formatCaps.stencilRendering)
+    if (!formatCaps.rendering)
     {
         return gl::error(GL_INVALID_ENUM, false);
     }
