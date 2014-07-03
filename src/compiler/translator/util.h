@@ -32,6 +32,70 @@ bool IsVarying(TQualifier qualifier);
 InterpolationType GetInterpolationType(TQualifier qualifier);
 TString ArrayString(const TType &type);
 
+struct MatrixPackingCallback
+{
+  public:
+    MatrixPackingCallback(bool isRowMajorMatrix);
+    void operator()(sh::InterfaceBlockField &interfaceBlockField);
+
+  private:
+    bool mIsRowMajorMatrix;
+};
+
+template <typename VarT, typename CallbackT>
+inline VarT GetVariableInfo(const TType &type, const TString &name,
+                            std::vector<VarT> *output, CallbackT *callback)
+{
+    ASSERT(output);
+    const TStructure *structure = type.getStruct();
+
+    if (!structure)
+    {
+        VarT variable;
+
+        variable.type = GLVariableType(type);
+        variable.precision = GLVariablePrecision(type);
+        variable.name = name.c_str();
+        variable.arraySize = static_cast<unsigned int>(type.getArraySize());
+
+        if (callback)
+        {
+            (*callback)(variable);
+        }
+
+        output->push_back(variable);
+
+        return variable;
+    }
+    else
+    {
+        VarT variable;
+
+        variable.type = GL_STRUCT_ANGLEX;
+        variable.name = name.c_str();
+        variable.arraySize = static_cast<unsigned int>(type.getArraySize());
+
+        const TFieldList &fields = structure->fields();
+
+        for (size_t fieldIndex = 0; fieldIndex < fields.size(); fieldIndex++)
+        {
+            TField *field = fields[fieldIndex];
+            TType *fieldType = field->type();
+
+            GetVariableInfo(*fieldType, field->name(), &variable.fields, callback);
+        }
+
+        if (callback)
+        {
+            (*callback)(variable);
+        }
+
+        output->push_back(variable);
+
+        return variable;
+    }
+}
+
 }
 
 #endif // COMPILER_UTIL_H

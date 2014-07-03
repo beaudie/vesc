@@ -10,6 +10,7 @@
 
 #include "compiler/preprocessor/numeric_lex.h"
 #include "common/shadervars.h"
+#include "common/utilities.h"
 
 bool atof_clamp(const char *str, float *value)
 {
@@ -276,6 +277,18 @@ InterpolationType GetInterpolationType(TQualifier qualifier)
 
       default: UNREACHABLE();
         return INTERPOLATION_SMOOTH;
+    }
+}
+
+MatrixPackingCallback::MatrixPackingCallback(bool isRowMajorMatrix)
+    : mIsRowMajorMatrix(isRowMajorMatrix)
+{}
+
+void MatrixPackingCallback::operator()(sh::InterfaceBlockField &interfaceBlockField)
+{
+    if (gl::IsMatrixType(interfaceBlockField.type))
+    {
+        interfaceBlockField.isRowMajorMatrix = mIsRowMajorMatrix;
     }
 }
 
