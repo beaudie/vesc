@@ -9661,10 +9661,30 @@ void __stdcall glGetInternalformativ(GLenum target, GLenum internalformat, GLenu
             {
               case GL_NUM_SAMPLE_COUNTS:
                 if (bufSize != 0)
-                    *params = context->getNumSampleCounts(internalformat);
+                {
+                    // ES3 does not support multisampling with integer formats
+                    GLenum componentType = gl::GetComponentType(internalformat);
+                    if (componentType != GL_INT && componentType != GL_UNSIGNED_INT)
+                    {
+                        const gl::TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
+                        *params = formatCaps.sampleCounts.size();
+                    }
+                    else
+                    {
+                        *params = 0;
+                    }
+                }
                 break;
               case GL_SAMPLES:
-                context->getSampleCounts(internalformat, bufSize, params);
+                {
+                    // ES3 does not support multisampling with integer formats
+                    GLenum componentType = gl::GetComponentType(internalformat);
+                    if (componentType != GL_INT && componentType != GL_UNSIGNED_INT)
+                    {
+                        const gl::TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
+                        std::copy(formatCaps.sampleCounts.begin(), formatCaps.sampleCounts.end(), params);
+                    }
+                }
                 break;
               default:
                 return gl::error(GL_INVALID_ENUM);
