@@ -467,12 +467,16 @@ bool ValidateFramebufferTextureLayer(const gl::Context *context, GLenum target, 
         return false;
     }
 
+    GLenum textarget = GL_NONE;
+
     if (texture != 0)
     {
         gl::Texture *tex = context->getTexture(texture);
         ASSERT(tex);
 
-        switch (tex->getTarget())
+        textarget = tex->getTarget();
+
+        switch (textarget)
         {
           case GL_TEXTURE_2D_ARRAY:
             {
@@ -518,6 +522,11 @@ bool ValidateFramebufferTextureLayer(const gl::Context *context, GLenum target, 
             return gl::error(GL_INVALID_OPERATION, false);
         }
     }
+
+    // Check for no-op
+    const gl::Framebuffer *framebuffer = context->getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+    return (!framebuffer->hasExistingAttachment(attachment, textarget, texture, level, layer));
 
     return true;
 }
