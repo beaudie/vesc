@@ -1577,7 +1577,10 @@ bool ValidateFramebufferTexture2D(const gl::Context *context, GLenum target, GLe
         }
     }
 
-    return true;
+    // Check for no-op
+    const gl::Framebuffer *framebuffer = context->getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+    return (!framebuffer->hasMatchingAttachment(attachment, textarget, texture, level, 0));
 }
 
 }

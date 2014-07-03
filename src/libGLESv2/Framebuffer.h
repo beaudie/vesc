@@ -54,6 +54,7 @@ class Framebuffer
     FramebufferAttachment *getFirstColorbuffer() const;
 
     virtual FramebufferAttachment *getAttachment(GLenum attachment) const;
+    bool hasMatchingAttachment(GLenum attachment, GLenum type, GLuint id, GLint level, GLint layer) const;
 
     GLenum getDrawBufferState(unsigned int colorAttachment) const;
     void setDrawBufferState(unsigned int colorAttachment, GLenum drawBuffer);
