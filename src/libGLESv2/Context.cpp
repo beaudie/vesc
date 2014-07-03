@@ -1377,29 +1377,25 @@ void Context::setFramebufferZero(Framebuffer *buffer)
 void Context::setRenderbufferStorage(GLsizei width, GLsizei height, GLenum internalformat, GLsizei samples)
 {
     const TextureCaps &formatCaps = getTextureCaps().get(internalformat);
+    ASSERT(formatCaps.rendering);
 
     RenderbufferStorage *renderbuffer = NULL;
 
-    if (formatCaps.colorRendering)
-    {
-        renderbuffer = new gl::Colorbuffer(mRenderer,width, height, internalformat, samples);
-    }
-    else if (formatCaps.depthRendering && formatCaps.stencilRendering)
+    if (GetDepthBits(internalformat) > 0 && GetStencilBits(internalformat) > 0)
     {
         renderbuffer = new gl::DepthStencilbuffer(mRenderer, width, height, samples);
     }
-    else if (formatCaps.depthRendering)
+    else if (GetDepthBits(internalformat) > 0)
     {
         renderbuffer = new gl::Depthbuffer(mRenderer, width, height, samples);
     }
-    else if (formatCaps.stencilRendering)
+    else if (GetStencilBits(internalformat) > 0)
     {
         renderbuffer = new gl::Stencilbuffer(mRenderer, width, height, samples);
     }
     else
     {
-        UNREACHABLE();
-        return;
+        renderbuffer = new gl::Colorbuffer(mRenderer, width, height, internalformat, samples);
     }
 
     Renderbuffer *renderbufferObject = mState.renderbuffer.get();
