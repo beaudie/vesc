@@ -405,7 +405,6 @@ class Context
     const TextureCapsMap &getTextureCaps() const;
     const Extensions &getExtensions() const;
 
-    int getMajorShaderModel() const;
     unsigned int getMaximumCombinedTextureImageUnits() const;
     unsigned int getMaximumCombinedUniformBufferBindings() const;
     unsigned int getMaxTransformFeedbackBufferBindings() const;
@@ -528,7 +527,6 @@ class Context
     BindingPointer<ProgramBinary> mCurrentProgramBinary;
     Framebuffer *mBoundDrawFramebuffer;
 
-    int mMajorShaderModel;
     bool mSupportsVertexTexture;
 
     ResourceManager *mResourceManager;
