@@ -2895,31 +2895,27 @@ const ConstantUnion *OutputHLSL::writeConstantUnion(const TType &type, const Con
     return constUnion;
 }
 
-void OutputHLSL::declareVaryingToList(const TType &type, TQualifier baseTypeQualifier, const TString &name, std::vector<Varying> &fieldsOut)
+struct GetVaryingCallback
 {
-    const TStructure *structure = type.getStruct();
+  public:
+    GetVaryingCallback(InterpolationType interpolation)
+        : mInterpolation(interpolation)
+    {}
 
-    InterpolationType interpolation = GetInterpolationType(baseTypeQualifier);
-    if (!structure)
+    void operator()(Varying &varying)
     {
-        sh::Varying varying(GLVariableType(type), GLVariablePrecision(type), name.c_str(), (unsigned int)type.getArraySize(), interpolation);
-        fieldsOut.push_back(varying);
+        varying.interpolation = mInterpolation;
     }
-    else
-    {
-        sh::Varying structVarying(GL_STRUCT_ANGLEX, GL_NONE, name.c_str(), (unsigned int)type.getArraySize(), interpolation);
-        const TFieldList &fields = structure->fields();
 
-        structVarying.structName = structure->name().c_str();
+  private:
+    InterpolationType mInterpolation;
+};
 
-        for (size_t fieldIndex = 0; fieldIndex < fields.size(); fieldIndex++)
-        {
-            const TField &field = *fields[fieldIndex];
-            declareVaryingToList(*field.type(), baseTypeQualifier, field.name(), structVarying.fields);
-        }
-
-        fieldsOut.push_back(structVarying);
-    }
+void OutputHLSL::declareVaryingToList(const TType &type, TQualifier baseTypeQualifier,
+                                      const TString &name, std::vector<Varying> &fieldsOut)
+{
+    GetVaryingCallback callback(GetInterpolationType(baseTypeQualifier));
+    GetVariableInfo(type, name, &fieldsOut, &callback);
 }
 
 }
