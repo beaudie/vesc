@@ -17,13 +17,6 @@
 #include "libGLESv2/formatutils.h"
 #include "common/blocklayout.h"
 
-static std::string Str(int i)
-{
-    char buffer[20];
-    snprintf(buffer, sizeof(buffer), "%d", i);
-    return buffer;
-}
-
 namespace gl_d3d
 {
 
@@ -76,11 +69,6 @@ std::string HLSLTypeString(GLenum type)
 
 namespace gl
 {
-
-std::string ArrayString(unsigned int i)
-{
-    return (i == GL_INVALID_INDEX ? "" : "[" + Str(i) + "]");
-}
 
 const std::string VERTEX_ATTRIBUTE_STUB_STRING = "@@ VERTEX ATTRIBUTES @@";
 const std::string PIXEL_OUTPUT_STUB_STRING = "@@ PIXEL OUTPUT @@";
