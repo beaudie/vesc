@@ -33,6 +33,9 @@ private:
     ShHashFunction64 mHashFunction;
 
     template <typename VarT>
+    void visitVariable(const TIntermSymbol* variable, std::vector<VarT> *infoList) const;
+
+    template <typename VarT>
     void visitInfoList(const TIntermSequence& sequence, std::vector<VarT> *infoList) const;
 };
 
