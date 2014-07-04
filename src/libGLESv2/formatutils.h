@@ -34,52 +34,62 @@ typedef void (*VertexCopyFunction)(const void *input, size_t stride, size_t coun
 namespace gl
 {
 
+struct FormatTypeInfo
+{
+    GLenum internalFormat;
+    ColorWriteFunction colorWriteFunction;
+};
+const FormatTypeInfo &GetFormatTypeInfo(GLenum format, GLenum type);
+
+struct TypeInfo
+{
+    GLuint bytes;
+    bool specialInterpretation;
+};
+const TypeInfo &GetTypeInfo(GLenum type);
+
+struct InternalFormatInfo
+{
+    GLuint redBits;
+    GLuint greenBits;
+    GLuint blueBits;
+
+    GLuint luminanceBits;
+
+    GLuint alphaBits;
+    GLuint sharedBits;
+
+    GLuint depthBits;
+    GLuint stencilBits;
+
+    GLuint pixelBytes;
+
+    GLuint componentCount;
+
+    GLuint compressedBlockWidth;
+    GLuint compressedBlockHeight;
+
+    GLenum format;
+    GLenum type;
+
+    GLenum componentType;
+    GLenum colorEncoding;
+
+    bool isCompressed;
+
+    typedef bool (*SupportCheckFunction)(GLuint, const Extensions &);
+    SupportCheckFunction textureSupport;
+    SupportCheckFunction renderSupport;
+    SupportCheckFunction filterSupport;
+
+    GLuint computeRowPitch(GLenum type, GLsizei width, GLint alignment) const;
+    GLuint computeDepthPitch(GLenum type, GLsizei width, GLsizei height, GLint alignment) const;
+    GLuint computeBlockSize(GLenum type, GLsizei width, GLsizei height) const;
+};
+const InternalFormatInfo &GetInternalFormatInfo(GLenum internalFormat);
+
 typedef std::set<GLenum> FormatSet;
-
-bool IsValidInternalFormat(GLenum internalFormat, const Extensions &extensions, GLuint clientVersion);
-bool IsValidFormat(GLenum format, const Extensions &extensions, GLuint clientVersion);
-bool IsValidType(GLenum type, const Extensions &extensions, GLuint clientVersion);
-
-bool IsValidFormatCombination(GLenum internalFormat, GLenum format, GLenum type, const Extensions &extensions, GLuint clientVersion);
-bool IsValidCopyTexImageCombination(GLenum textureInternalFormat, GLenum frameBufferInternalFormat, GLuint readBufferHandle, GLuint clientVersion);
-
-bool IsRenderingSupported(GLenum internalFormat, const Extensions &extensions, GLuint clientVersion);
-bool IsFilteringSupported(GLenum internalFormat, const Extensions &extensions, GLuint clientVersion);
-
-bool IsSizedInternalFormat(GLenum internalFormat);
-GLenum GetSizedInternalFormat(GLenum format, GLenum type);
-
-GLuint GetPixelBytes(GLenum internalFormat);
-GLuint GetAlphaBits(GLenum internalFormat);
-GLuint GetRedBits(GLenum internalFormat);
-GLuint GetGreenBits(GLenum internalFormat);
-GLuint GetBlueBits(GLenum internalFormat);
-GLuint GetLuminanceBits(GLenum internalFormat);
-GLuint GetDepthBits(GLenum internalFormat);
-GLuint GetStencilBits(GLenum internalFormat);
-
-GLuint GetTypeBytes(GLenum type);
-bool IsSpecialInterpretationType(GLenum type);
-bool IsFloatOrFixedComponentType(GLenum type);
-
-GLenum GetFormat(GLenum internalFormat);
-GLenum GetType(GLenum internalFormat);
-
-GLenum GetComponentType(GLenum internalFormat);
-GLuint GetComponentCount(GLenum internalFormat);
-GLenum GetColorEncoding(GLenum internalFormat);
-
-GLuint GetRowPitch(GLenum internalFormat, GLenum type, GLsizei width, GLint alignment);
-GLuint GetDepthPitch(GLenum internalFormat, GLenum type, GLsizei width, GLsizei height, GLint alignment);
-GLuint GetBlockSize(GLenum internalFormat, GLenum type, GLsizei width, GLsizei height);
-
-bool IsFormatCompressed(GLenum internalFormat);
-GLuint GetCompressedBlockWidth(GLenum internalFormat);
-GLuint GetCompressedBlockHeight(GLenum internalFormat);
-
 const FormatSet &GetAllSizedInternalFormats();
-
-ColorWriteFunction GetColorWriteFunction(GLenum format, GLenum type);
 
 }
 
