@@ -53,8 +53,8 @@ void Image9::generateMip(IDirect3DSurface9 *destSurface, IDirect3DSurface9 *sour
     ASSERT(sourceDesc.Width == 1 || sourceDesc.Width / 2 == destDesc.Width);
     ASSERT(sourceDesc.Height == 1 || sourceDesc.Height / 2 == destDesc.Height);
 
-    MipGenerationFunction mipFunction = d3d9::GetMipGenerationFunction(sourceDesc.Format);
-    ASSERT(mipFunction != NULL);
+    const d3d9::D3DFormatInfo &d3dFormatInfo = d3d9::GetD3DFormatInfo(sourceDesc.Format);
+    ASSERT(d3dFormatInfo.mipGenerationFunction != NULL);
 
     D3DLOCKED_RECT sourceLocked = {0};
     result = sourceSurface->LockRect(&sourceLocked, NULL, D3DLOCK_READONLY);
@@ -69,8 +69,8 @@ void Image9::generateMip(IDirect3DSurface9 *destSurface, IDirect3DSurface9 *sour
 
     if (sourceData && destData)
     {
-        mipFunction(sourceDesc.Width, sourceDesc.Height, 1, sourceData, sourceLocked.Pitch, 0,
-                    destData, destLocked.Pitch, 0);
+        d3dFormatInfo.mipGenerationFunction(sourceDesc.Width, sourceDesc.Height, 1, sourceData, sourceLocked.Pitch, 0,
+                                            destData, destLocked.Pitch, 0);
     }
 
     destSurface->UnlockRect();
@@ -108,10 +108,10 @@ void Image9::copyLockableSurfaces(IDirect3DSurface9 *dest, IDirect3DSurface9 *so
         D3DSURFACE_DESC desc;
         source->GetDesc(&desc);
 
-        int blockHeight = d3d9::GetBlockHeight(desc.Format);
-        int rows = desc.Height / blockHeight;
+        const d3d9::D3DFormatInfo &d3dFormatInfo = d3d9::GetD3DFormatInfo(desc.Format);
+        int rows = desc.Height / d3dFormatInfo.blockHeight;
 
-        int bytes = d3d9::GetBlockSize(desc.Format, desc.Width, blockHeight);
+        int bytes = d3d9::ComputeBlockSize(desc.Format, desc.Width, d3dFormatInfo.blockHeight);
         ASSERT(bytes <= sourceLock.Pitch && bytes <= destLock.Pitch);
 
         for(int i = 0; i < rows; i++)
@@ -147,12 +147,14 @@ bool Image9::redefine(rx::Renderer *renderer, GLenum target, GLenum internalform
         mInternalFormat = internalformat;
 
         // compute the d3d format that will be used
-        mD3DFormat = gl_d3d9::GetTextureFormat(internalformat);
-        mActualFormat = d3d9_gl::GetInternalFormat(mD3DFormat);
-        mRenderable = gl_d3d9::GetRenderFormat(internalformat) != D3DFMT_UNKNOWN;
+        const gl_d3d9::D3D9FormatInfo &d3d9FormatInfo = gl_d3d9::GetD3D9FormatInfo(internalformat);
+        const d3d9::D3DFormatInfo &d3dFormatInfo = d3d9::GetD3DFormatInfo(d3d9FormatInfo.texFormat);
+        mD3DFormat = d3d9FormatInfo.texFormat;
+        mActualFormat = d3dFormatInfo.internalFormat;
+        mRenderable = (d3d9FormatInfo.renderFormat != D3DFMT_UNKNOWN);
 
         SafeRelease(mSurface);
-        mDirty = gl_d3d9::RequiresTextureDataInitialization(mInternalFormat);
+        mDirty = (d3d9FormatInfo.dataInitializerFunction != NULL);
 
         return true;
     }
@@ -194,10 +196,9 @@ void Image9::createSurface()
         newTexture->GetSurfaceLevel(levelToFetch, &newSurface);
         SafeRelease(newTexture);
 
-        if (gl_d3d9::RequiresTextureDataInitialization(mInternalFormat))
+        const gl_d3d9::D3D9FormatInfo &d3dFormatInfo = gl_d3d9::GetD3D9FormatInfo(mInternalFormat);
+        if (d3dFormatInfo.dataInitializerFunction != NULL)
         {
-            InitializeTextureDataFunction initializeFunc = gl_d3d9::GetTextureDataInitializationFunction(mInternalFormat);
-
             RECT entireRect;
             entireRect.left = 0;
             entireRect.right = mWidth;
@@ -208,7 +209,8 @@ void Image9::createSurface()
             result = newSurface->LockRect(&lockedRect, &entireRect, 0);
             ASSERT(SUCCEEDED(result));
 
-            initializeFunc(mWidth, mHeight, 1, reinterpret_cast<uint8_t*>(lockedRect.pBits), lockedRect.Pitch, 0);
+            d3dFormatInfo.dataInitializerFunction(mWidth, mHeight, 1, reinterpret_cast<uint8_t*>(lockedRect.pBits),
+                                                  lockedRect.Pitch, 0);
 
             result = newSurface->UnlockRect();
             ASSERT(SUCCEEDED(result));
@@ -260,7 +262,7 @@ bool Image9::isDirty() const
 {
     // Make sure to that this image is marked as dirty even if the staging texture hasn't been created yet
     // if initialization is required before use.
-    return (mSurface || gl_d3d9::RequiresTextureDataInitialization(mInternalFormat)) && mDirty;
+    return (mSurface || gl_d3d9::GetD3D9FormatInfo(mInternalFormat).dataInitializerFunction != NULL) && mDirty;
 }
 
 IDirect3DSurface9 *Image9::getSurface()
@@ -390,8 +392,8 @@ void Image9::loadData(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width
     const gl::InternalFormatInfo &formatInfo = gl::GetInternalFormatInfo(mInternalFormat);
     GLsizei inputRowPitch = formatInfo.computeRowPitch(type, width, unpackAlignment);
 
-    LoadImageFunction loadFunction = d3d9::GetImageLoadFunction(mInternalFormat);
-    ASSERT(loadFunction != NULL);
+    const gl_d3d9::D3D9FormatInfo &d3dFormatInfo = gl_d3d9::GetD3D9FormatInfo(mInternalFormat);
+    ASSERT(d3dFormatInfo.loadFunction != NULL);
 
     RECT lockRect =
     {
@@ -406,9 +408,9 @@ void Image9::loadData(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width
         return;
     }
 
-    loadFunction(width, height, depth,
-                 reinterpret_cast<const uint8_t*>(input), inputRowPitch, 0,
-                 reinterpret_cast<uint8_t*>(locked.pBits), locked.Pitch, 0);
+    d3dFormatInfo.loadFunction(width, height, depth,
+                               reinterpret_cast<const uint8_t*>(input), inputRowPitch, 0,
+                               reinterpret_cast<uint8_t*>(locked.pBits), locked.Pitch, 0);
 
     unlock();
 }
@@ -423,11 +425,13 @@ void Image9::loadCompressedData(GLint xoffset, GLint yoffset, GLint zoffset, GLs
     GLsizei inputRowPitch = formatInfo.computeRowPitch(GL_UNSIGNED_BYTE, width, 1);
     GLsizei inputDepthPitch = formatInfo.computeDepthPitch(GL_UNSIGNED_BYTE, width, height, 1);
 
-    ASSERT(xoffset % d3d9::GetBlockWidth(mD3DFormat) == 0);
-    ASSERT(yoffset % d3d9::GetBlockHeight(mD3DFormat) == 0);
+    const gl_d3d9::D3D9FormatInfo &d3d9FormatInfo = gl_d3d9::GetD3D9FormatInfo(mInternalFormat);
+    const d3d9::D3DFormatInfo &d3dFormatInfo = d3d9::GetD3DFormatInfo(d3d9FormatInfo.texFormat);
 
-    LoadImageFunction loadFunction = d3d9::GetImageLoadFunction(mInternalFormat);
-    ASSERT(loadFunction != NULL);
+    ASSERT(xoffset % d3dFormatInfo.blockWidth == 0);
+    ASSERT(yoffset % d3dFormatInfo.blockHeight == 0);
+
+    ASSERT(d3d9FormatInfo.loadFunction != NULL);
 
     RECT lockRect =
     {
@@ -442,9 +446,9 @@ void Image9::loadCompressedData(GLint xoffset, GLint yoffset, GLint zoffset, GLs
         return;
     }
 
-    loadFunction(width, height, depth,
-                 reinterpret_cast<const uint8_t*>(input), inputRowPitch, inputDepthPitch,
-                 reinterpret_cast<uint8_t*>(locked.pBits), locked.Pitch, 0);
+    d3d9FormatInfo.loadFunction(width, height, depth,
+                                reinterpret_cast<const uint8_t*>(input), inputRowPitch, inputDepthPitch,
+                                reinterpret_cast<uint8_t*>(locked.pBits), locked.Pitch, 0);
 
     unlock();
 }
