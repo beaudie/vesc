@@ -133,10 +133,11 @@ GLenum VertexDeclarationCache::applyDeclaration(IDirect3DDevice9 *device, Transl
             }
 
             gl::VertexFormat vertexFormat(*attributes[i].attribute, GL_FLOAT);
+            const d3d9::D3D9VertexFormatInfo &d3d9VertexInfo = d3d9::GetD3D9VertexFormatInfo(vertexFormat);
 
             element->Stream = stream;
             element->Offset = 0;
-            element->Type = d3d9::GetNativeVertexFormat(vertexFormat);
+            element->Type = d3d9VertexInfo.nativeFormat;
             element->Method = D3DDECLMETHOD_DEFAULT;
             element->Usage = D3DDECLUSAGE_TEXCOORD;
             element->UsageIndex = programBinary->getSemanticIndex(i);
