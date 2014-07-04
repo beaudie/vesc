@@ -117,7 +117,8 @@ bool VertexBuffer9::storeVertexAttributes(const gl::VertexAttribute &attrib, con
         }
 
         gl::VertexFormat vertexFormat(attrib, currentValue.Type);
-        bool needsConversion = (d3d9::GetVertexConversionType(vertexFormat) & VERTEX_CONVERT_CPU) > 0;
+        const d3d9::D3D9VertexFormatInfo &d3dVertexInfo = d3d9::GetD3D9VertexFormatInfo(vertexFormat);
+        bool needsConversion = (d3dVertexInfo.conversionType & VERTEX_CONVERT_CPU) > 0;
 
         if (!needsConversion && inputStride == elementSize)
         {
@@ -126,8 +127,7 @@ bool VertexBuffer9::storeVertexAttributes(const gl::VertexAttribute &attrib, con
         }
         else
         {
-            VertexCopyFunction copyFunction = d3d9::GetVertexCopyFunction(vertexFormat);
-            copyFunction(input, inputStride, count, mapPtr);
+            d3dVertexInfo.copyFunction(input, inputStride, count, mapPtr);
         }
 
         mVertexBuffer->Unlock();
@@ -203,7 +203,7 @@ bool VertexBuffer9::spaceRequired(const gl::VertexAttribute &attrib, std::size_t
                                   unsigned int *outSpaceRequired)
 {
     gl::VertexFormat vertexFormat(attrib, GL_FLOAT);
-    unsigned int elementSize = d3d9::GetVertexElementSize(vertexFormat);
+    const d3d9::D3D9VertexFormatInfo &d3d9VertexInfo = d3d9::GetD3D9VertexFormatInfo(vertexFormat);
 
     if (attrib.enabled)
     {
@@ -225,11 +225,11 @@ bool VertexBuffer9::spaceRequired(const gl::VertexAttribute &attrib, std::size_t
             }
         }
 
-        if (elementSize <= std::numeric_limits<unsigned int>::max() / elementCount)
+        if (d3d9VertexInfo.outputElementSize <= std::numeric_limits<unsigned int>::max() / elementCount)
         {
             if (outSpaceRequired)
             {
-                *outSpaceRequired = elementSize * elementCount;
+                *outSpaceRequired = d3d9VertexInfo.outputElementSize * elementCount;
             }
             return true;
         }
