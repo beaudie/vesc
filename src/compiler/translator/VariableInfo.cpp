@@ -7,6 +7,7 @@
 #include "angle_gl.h"
 #include "compiler/translator/VariableInfo.h"
 #include "compiler/translator/util.h"
+#include "common/utilities.h"
 
 template <typename VarT>
 static void ExpandUserDefinedVariable(const VarT &variable,
@@ -98,12 +99,16 @@ static VarT* findVariable(const TString &name,
 }
 
 CollectVariables::CollectVariables(std::vector<sh::Attribute> *attribs,
+                                   std::vector<sh::Attribute> *outputVariables,
                                    std::vector<sh::Uniform> *uniforms,
                                    std::vector<sh::Varying> *varyings,
+                                   std::vector<sh::InterfaceBlock> *interfaceBlocks,
                                    ShHashFunction64 hashFunction)
     : mAttribs(attribs),
+      mOutputVariables(outputVariables),
       mUniforms(uniforms),
       mVaryings(varyings),
+      mInterfaceBlocks(interfaceBlocks),
       mPointCoordAdded(false),
       mFrontFacingAdded(false),
       mFragCoordAdded(false),
@@ -125,10 +130,21 @@ void CollectVariables::visitSymbol(TIntermSymbol* symbol)
     {
         var = findVariable(symbol->getSymbol(), mVaryings);
     }
+    else if (symbol->getType().getBasicType() == EbtInterfaceBlock)
+    {
+        sh::InterfaceBlock *interfaceBlock = findVariable(symbol->getSymbol(), mInterfaceBlocks);
+        if (interfaceBlock)
+        {
+            interfaceBlock->staticUse = true;
+        }
+    }
     else
     {
         switch (symbol->getQualifier())
         {
+          case EvqFragmentOut:
+            var = findVariable(symbol->getSymbol(), mOutputVariables);
+            break;
           case EvqUniform:
             var = findVariable(symbol->getSymbol(), mUniforms);
             break;
@@ -211,6 +227,50 @@ void CollectVariables::visitVariable(const TIntermSymbol* variable,
     infoList->push_back(attribute);
 }
 
+struct MatrixPackingCallback
+{
+  public:
+    MatrixPackingCallback(bool isRowMajorMatrix)
+        : mIsRowMajorMatrix(isRowMajorMatrix)
+    {}
+
+    void operator()(sh::InterfaceBlockField &interfaceBlockField)
+    {
+        if (gl::IsMatrixType(interfaceBlockField.type))
+        {
+            interfaceBlockField.isRowMajorMatrix = mIsRowMajorMatrix;
+        }
+    }
+
+  private:
+    bool mIsRowMajorMatrix;
+};
+
+template <>
+void CollectVariables::visitVariable(const TIntermSymbol* variable,
+                                     std::vector<sh::InterfaceBlock> *infoList) const
+{
+    sh::InterfaceBlock interfaceBlock;
+    const TInterfaceBlock *blockType = variable->getType().getInterfaceBlock();
+
+    interfaceBlock.name = variable->getSymbol().c_str();
+    interfaceBlock.mappedName = TIntermTraverser::hash(variable->getSymbol(), mHashFunction).c_str();
+    interfaceBlock.arraySize = variable->getArraySize();
+    interfaceBlock.isRowMajorLayout = (blockType->matrixPacking() == EmpRowMajor);
+    interfaceBlock.layout = sh::GetBlockLayoutType(blockType->blockStorage());
+
+    ASSERT(blockType);
+    const TFieldList &blockFields = blockType->fields();
+    MatrixPackingCallback callback(interfaceBlock.isRowMajorLayout);
+
+    for (size_t fieldIndex = 0; fieldIndex < blockFields.size(); fieldIndex++)
+    {
+        const TField *field = blockFields[fieldIndex];
+        ASSERT(field);
+        sh::GetVariableInfo(*field->type(), field->name(), &interfaceBlock.fields, &callback);
+    }
+}
+
 template <typename VarT>
 void CollectVariables::visitVariable(const TIntermSymbol* variable,
                                      std::vector<VarT> *infoList) const
@@ -245,15 +305,25 @@ bool CollectVariables::visitAggregate(Visit, TIntermAggregate* node)
       case EOpDeclaration:
         {
             const TIntermSequence& sequence = node->getSequence();
-            TQualifier qualifier = sequence.front()->getAsTyped()->getQualifier();
-            if (qualifier == EvqAttribute || qualifier == EvqVertexIn || qualifier == EvqUniform ||
-                sh::IsVarying(qualifier))
+            const TIntermTyped &typedNode = *sequence.front()->getAsTyped();
+            TQualifier qualifier = typedNode.getQualifier();
+
+            if (typedNode.getBasicType() == EbtInterfaceBlock)
+            {
+                visitInfoList(sequence, mInterfaceBlocks);
+            }
+            else if (qualifier == EvqAttribute || qualifier == EvqVertexIn ||
+                     qualifier == EvqFragmentOut || qualifier == EvqUniform ||
+                     sh::IsVarying(qualifier))
             {
                 switch (qualifier)
                 {
                   case EvqAttribute:
                   case EvqVertexIn:
                     visitInfoList(sequence, mAttribs);
+                    break;
+                  case EvqFragmentOut:
+                    visitInfoList(sequence, mOutputVariables);
                     break;
                   case EvqUniform:
                     visitInfoList(sequence, mUniforms);

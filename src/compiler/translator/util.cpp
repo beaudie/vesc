@@ -279,4 +279,15 @@ InterpolationType GetInterpolationType(TQualifier qualifier)
     }
 }
 
+BlockLayoutType GetBlockLayoutType(TLayoutBlockStorage blockStorage)
+{
+    switch (blockStorage)
+    {
+      case EbsPacked:         return BLOCKLAYOUT_PACKED;
+      case EbsShared:         return BLOCKLAYOUT_SHARED;
+      case EbsStd140:         return BLOCKLAYOUT_STANDARD;
+      default: UNREACHABLE(); return BLOCKLAYOUT_SHARED;
+    }
+}
+
 }
