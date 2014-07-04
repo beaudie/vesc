@@ -350,8 +350,6 @@ EGLint Renderer9::initialize()
 
     initializeDevice();
 
-    d3d9::InitializeVertexTranslations(this);
-
     return EGL_SUCCESS;
 }
 
@@ -417,40 +415,24 @@ int Renderer9::generateConfigs(ConfigDesc **configDescList)
 
     for (unsigned int formatIndex = 0; formatIndex < numRenderFormats; formatIndex++)
     {
-        D3DFORMAT renderTargetFormat = RenderTargetFormats[formatIndex];
-
-        HRESULT result = mD3d9->CheckDeviceFormat(mAdapter, mDeviceType, currentDisplayMode.Format, D3DUSAGE_RENDERTARGET, D3DRTYPE_SURFACE, renderTargetFormat);
-
-        if (SUCCEEDED(result))
+        const d3d9::D3DFormatInfo &renderTargetFormatInfo = d3d9::GetD3DFormatInfo(RenderTargetFormats[formatIndex]);
+        const gl::TextureCaps &renderTargetFormatCaps = getRendererTextureCaps().get(renderTargetFormatInfo.internalFormat);
+        if (renderTargetFormatCaps.renderable)
         {
             for (unsigned int depthStencilIndex = 0; depthStencilIndex < numDepthFormats; depthStencilIndex++)
             {
-                D3DFORMAT depthStencilFormat = DepthStencilFormats[depthStencilIndex];
-                HRESULT result = D3D_OK;
-
-                if(depthStencilFormat != D3DFMT_UNKNOWN)
+                const d3d9::D3DFormatInfo &depthStencilFormatInfo = d3d9::GetD3DFormatInfo(DepthStencilFormats[depthStencilIndex]);
+                const gl::TextureCaps &depthStencilFormatCaps = getRendererTextureCaps().get(depthStencilFormatInfo.internalFormat);
+                if (depthStencilFormatCaps.renderable || DepthStencilFormats[depthStencilIndex] == D3DFMT_UNKNOWN)
                 {
-                    result = mD3d9->CheckDeviceFormat(mAdapter, mDeviceType, currentDisplayMode.Format, D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_SURFACE, depthStencilFormat);
-                }
+                    ConfigDesc newConfig;
+                    newConfig.renderTargetFormat = renderTargetFormatInfo.internalFormat;
+                    newConfig.depthStencilFormat = depthStencilFormatInfo.internalFormat;
+                    newConfig.multiSample = 0; // FIXME: enumerate multi-sampling
+                    newConfig.fastConfig = (currentDisplayMode.Format == RenderTargetFormats[formatIndex]);
+                    newConfig.es3Capable = false;
 
-                if (SUCCEEDED(result))
-                {
-                    if(depthStencilFormat != D3DFMT_UNKNOWN)
-                    {
-                        result = mD3d9->CheckDepthStencilMatch(mAdapter, mDeviceType, currentDisplayMode.Format, renderTargetFormat, depthStencilFormat);
-                    }
-
-                    if (SUCCEEDED(result))
-                    {
-                        ConfigDesc newConfig;
-                        newConfig.renderTargetFormat = d3d9_gl::GetInternalFormat(renderTargetFormat);
-                        newConfig.depthStencilFormat = d3d9_gl::GetInternalFormat(depthStencilFormat);
-                        newConfig.multiSample = 0; // FIXME: enumerate multi-sampling
-                        newConfig.fastConfig = (currentDisplayMode.Format == renderTargetFormat);
-                        newConfig.es3Capable = false;
-
-                        (*configDescList)[numConfigs++] = newConfig;
-                    }
+                    (*configDescList)[numConfigs++] = newConfig;
                 }
             }
         }
@@ -2758,7 +2740,8 @@ void Renderer9::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsiz
         inputPitch = lock.Pitch;
     }
 
-    const gl::InternalFormatInfo &sourceFormatInfo = gl::GetInternalFormatInfo(d3d9_gl::GetInternalFormat(desc.Format));
+    const d3d9::D3DFormatInfo &d3dFormatInfo = d3d9::GetD3DFormatInfo(desc.Format);
+    const gl::InternalFormatInfo &sourceFormatInfo = gl::GetInternalFormatInfo(d3dFormatInfo.internalFormat);
     if (sourceFormatInfo.format == format && sourceFormatInfo.type == type)
     {
         // Direct copy possible
@@ -2770,9 +2753,13 @@ void Renderer9::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsiz
     }
     else
     {
+        const d3d9::D3DFormatInfo &sourceD3DFormatInfo = d3d9::GetD3DFormatInfo(desc.Format);
+        d3d9::FastCopyFunctionMap::const_iterator fastCopyIter = sourceD3DFormatInfo.fastCopyFunctions.find(std::make_pair(format, type));
+        ColorCopyFunction fastCopyFunc = (fastCopyIter != sourceD3DFormatInfo.fastCopyFunctions.end()) ? fastCopyIter->second : NULL;
+
         const gl::FormatTypeInfo &destFormatTypeInfo = gl::GetFormatTypeInfo(format, type);
         const gl::InternalFormatInfo &destFormatInfo = gl::GetInternalFormatInfo(destFormatTypeInfo.internalFormat);
-        ColorCopyFunction fastCopyFunc = d3d9::GetFastCopyFunction(desc.Format, format, type);
+
         if (fastCopyFunc)
         {
             // Fast copy is possible through some special function
@@ -2789,8 +2776,6 @@ void Renderer9::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsiz
         }
         else
         {
-            ColorReadFunction readFunc = d3d9::GetColorReadFunction(desc.Format);
-
             gl::ColorF temp;
             for (int y = 0; y < rect.bottom - rect.top; y++)
             {
@@ -2801,7 +2786,7 @@ void Renderer9::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsiz
 
                     // readFunc and writeFunc will be using the same type of color, CopyTexImage
                     // will not allow the copy otherwise.
-                    readFunc(src, &temp);
+                    sourceD3DFormatInfo.colorReadFunction(src, &temp);
                     destFormatTypeInfo.colorWriteFunction(&temp, dest);
                 }
             }
@@ -3090,13 +3075,12 @@ bool Renderer9::getLUID(LUID *adapterLuid) const
 
 rx::VertexConversionType Renderer9::getVertexConversionType(const gl::VertexFormat &vertexFormat) const
 {
-    return d3d9::GetVertexConversionType(vertexFormat);
+    return d3d9::GetD3D9VertexFormatInfo(getCapsDeclTypes(), vertexFormat).conversionType;
 }
 
 GLenum Renderer9::getVertexComponentType(const gl::VertexFormat &vertexFormat) const
 {
-    D3DDECLTYPE declType = d3d9::GetNativeVertexFormat(vertexFormat);
-    return d3d9::GetDeclTypeComponentType(declType);
+    return d3d9::GetD3D9VertexFormatInfo(getCapsDeclTypes(), vertexFormat).componenetType;
 }
 
 void Renderer9::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureCaps, gl::Extensions *outExtensions) const
