@@ -20,55 +20,54 @@ class Renderer9;
 namespace d3d9
 {
 
-typedef std::set<D3DFORMAT> D3DFormatSet;
+typedef std::map<std::pair<GLenum, GLenum>, ColorCopyFunction> FastCopyFunctionMap;
 
-MipGenerationFunction GetMipGenerationFunction(D3DFORMAT format);
-LoadImageFunction GetImageLoadFunction(GLenum internalFormat);
+struct D3DFormat
+{
+    D3DFormat();
 
-GLuint GetFormatPixelBytes(D3DFORMAT format);
-GLuint GetBlockWidth(D3DFORMAT format);
-GLuint GetBlockHeight(D3DFORMAT format);
-GLuint GetBlockSize(D3DFORMAT format, GLuint width, GLuint height);
+    GLuint pixelBytes;
+    GLuint blockWidth;
+    GLuint blockHeight;
 
-void MakeValidSize(bool isImage, D3DFORMAT format, GLsizei *requestWidth, GLsizei *requestHeight, int *levelOffset);
+    GLenum internalFormat;
 
-const D3DFormatSet &GetAllUsedD3DFormats();
+    MipGenerationFunction mipGenerationFunction;
+    ColorReadFunction colorReadFunction;
 
-ColorReadFunction GetColorReadFunction(D3DFORMAT format);
-ColorCopyFunction GetFastCopyFunction(D3DFORMAT sourceFormat, GLenum destFormat, GLenum destType);
+    FastCopyFunctionMap fastCopyFunctions;
+};
+const D3DFormat &GetD3DFormatInfo(D3DFORMAT format);
 
-VertexCopyFunction GetVertexCopyFunction(const gl::VertexFormat &vertexFormat);
-size_t GetVertexElementSize(const gl::VertexFormat &vertexFormat);
-VertexConversionType GetVertexConversionType(const gl::VertexFormat &vertexFormat);
-D3DDECLTYPE GetNativeVertexFormat(const gl::VertexFormat &vertexFormat);
+struct D3D9VertexFormat
+{
+    D3D9VertexFormat();
 
-GLenum GetDeclTypeComponentType(D3DDECLTYPE declType);
-int GetDeclTypeComponentCount(D3DDECLTYPE declType);
-bool IsDeclTypeNormalized(D3DDECLTYPE declType);
-
-void InitializeVertexTranslations(const rx::Renderer9 *renderer);
+    VertexConversionType conversionType;
+    size_t outputElementSize;
+    VertexCopyFunction copyFunction;
+    D3DDECLTYPE nativeFormat;
+    GLenum componentType;
+};
+const D3D9VertexFormat &GetD3D9VertexFormatInfo(DWORD supportedDeclTypes, const gl::VertexFormat &vertexFormat);
 
 }
 
 namespace gl_d3d9
 {
 
-D3DFORMAT GetTextureFormat(GLenum internalForma);
-D3DFORMAT GetRenderFormat(GLenum internalFormat);
-
-D3DMULTISAMPLE_TYPE GetMultisampleType(GLuint samples);
-
-bool RequiresTextureDataInitialization(GLint internalFormat);
-InitializeTextureDataFunction GetTextureDataInitializationFunction(GLint internalFormat);
-
-}
-
-namespace d3d9_gl
+struct D3D9Format
 {
+    D3D9Format();
 
-GLenum GetInternalFormat(D3DFORMAT format);
-GLsizei GetSamplesCount(D3DMULTISAMPLE_TYPE type);
-bool IsFormatChannelEquivalent(D3DFORMAT d3dformat, GLenum format);
+    D3DFORMAT texFormat;
+    D3DFORMAT renderFormat;
+
+    InitializeTextureDataFunction dataInitializerFunction;
+
+    LoadImageFunction loadFunction;
+};
+const D3D9Format &GetD3D9FormatInfo(GLenum internalFormat);
 
 }
 
