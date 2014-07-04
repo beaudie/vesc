@@ -228,7 +228,7 @@ static bool ValidateTexImageFormatCombination(gl::Context *context, GLenum inter
         return gl::error(GL_INVALID_ENUM, false);
     }
 
-    // The type and format are valid if any supported internal format has that type and format
+    // The type and format are valid if any supported internal format loads with this format and type
     bool formatSupported = false;
     bool typeSupported = false;
 
