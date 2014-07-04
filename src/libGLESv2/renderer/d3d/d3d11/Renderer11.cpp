@@ -311,29 +311,17 @@ int Renderer11::generateConfigs(ConfigDesc **configDescList)
     {
         for (unsigned int depthStencilIndex = 0; depthStencilIndex < numDepthFormats; depthStencilIndex++)
         {
-            DXGI_FORMAT renderTargetFormat = RenderTargetFormats[formatIndex];
-
-            UINT formatSupport = 0;
-            HRESULT result = mDevice->CheckFormatSupport(renderTargetFormat, &formatSupport);
-
-            if (SUCCEEDED(result) && (formatSupport & D3D11_FORMAT_SUPPORT_RENDER_TARGET))
+            const d3d11::DXGIFormatInfo &renderTargetFormatInfo = d3d11::GetDXGIFormatInfo(RenderTargetFormats[formatIndex]);
+            const gl::TextureCaps &renderTargetFormatCaps = getRendererTextureCaps().get(renderTargetFormatInfo.internalFormat);
+            if (renderTargetFormatCaps.rendering)
             {
-                DXGI_FORMAT depthStencilFormat = DepthStencilFormats[depthStencilIndex];
-
-                bool depthStencilFormatOK = true;
-
-                if (depthStencilFormat != DXGI_FORMAT_UNKNOWN)
-                {
-                    UINT depthStencilSupport = 0;
-                    result = mDevice->CheckFormatSupport(depthStencilFormat, &depthStencilSupport);
-                    depthStencilFormatOK = SUCCEEDED(result) && (depthStencilSupport & D3D11_FORMAT_SUPPORT_DEPTH_STENCIL);
-                }
-
-                if (depthStencilFormatOK)
+                const d3d11::DXGIFormatInfo &depthStencilFormatInfo = d3d11::GetDXGIFormatInfo(DepthStencilFormats[depthStencilIndex]);
+                const gl::TextureCaps &depthStencilFormatCaps = getRendererTextureCaps().get(depthStencilFormatInfo.internalFormat);
+                if (depthStencilFormatCaps.rendering || DepthStencilFormats[depthStencilIndex] == DXGI_FORMAT_UNKNOWN)
                 {
                     ConfigDesc newConfig;
-                    newConfig.renderTargetFormat = d3d11_gl::GetInternalFormat(renderTargetFormat);
-                    newConfig.depthStencilFormat = d3d11_gl::GetInternalFormat(depthStencilFormat);
+                    newConfig.renderTargetFormat = renderTargetFormatInfo.internalFormat;
+                    newConfig.depthStencilFormat = depthStencilFormatInfo.internalFormat;
                     newConfig.multiSample = 0;     // FIXME: enumerate multi-sampling
                     newConfig.fastConfig = true;   // Assume all DX11 format conversions to be fast
                     newConfig.es3Capable = true;
@@ -2611,28 +2599,30 @@ bool Renderer11::supportsFastCopyBufferToTexture(GLenum internalFormat) const
 {
     ASSERT(getRendererExtensions().pixelBufferObject);
 
-    const gl::InternalFormatInfo &formatInfo = gl::GetInternalFormatInfo(internalFormat);
+    const gl::InternalFormatInfo &internalFormatInfo = gl::GetInternalFormatInfo(internalFormat);
+    const gl_d3d11::D3D11FormatInfo &d3d11FormatInfo = gl_d3d11::GetD3D11FormatInfo(internalFormat);
+    const d3d11::DXGIFormatInfo &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(d3d11FormatInfo.texFormat);
 
     // sRGB formats do not work with D3D11 buffer SRVs
-    if (formatInfo.colorEncoding == GL_SRGB)
+    if (internalFormatInfo.colorEncoding == GL_SRGB)
     {
         return false;
     }
 
     // We cannot support direct copies to non-color-renderable formats
-    if (gl_d3d11::GetRTVFormat(internalFormat) != DXGI_FORMAT_UNKNOWN)
+    if (d3d11FormatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN)
     {
         return false;
     }
 
     // We skip all 3-channel formats since sometimes format support is missing
-    if (formatInfo.componentCount == 3)
+    if (internalFormatInfo.componentCount == 3)
     {
         return false;
     }
 
     // We don't support formats which we can't represent without conversion
-    if (getNativeTextureFormat(internalFormat) != internalFormat)
+    if (dxgiFormatInfo.internalFormat != internalFormat)
     {
         return false;
     }
@@ -2946,7 +2936,8 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
         inputPitch = static_cast<int>(mapping.RowPitch);
     }
 
-    const gl::InternalFormatInfo &sourceFormatInfo = gl::GetInternalFormatInfo(d3d11_gl::GetInternalFormat(textureDesc.Format));
+    const d3d11::DXGIFormatInfo &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(textureDesc.Format);
+    const gl::InternalFormatInfo &sourceFormatInfo = gl::GetInternalFormatInfo(dxgiFormatInfo.internalFormat);
     if (sourceFormatInfo.format == params.format && sourceFormatInfo.type == params.type)
     {
         unsigned char *dest = static_cast<unsigned char*>(pixelsOut) + params.offset;
@@ -2957,9 +2948,13 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
     }
     else
     {
+        const d3d11::DXGIFormatInfo &sourceDXGIFormatInfo = d3d11::GetDXGIFormatInfo(textureDesc.Format);
+        d3d11::FastCopyFunctionMap::const_iterator fastCopyIter = sourceDXGIFormatInfo.fastCopyFunctions.find(std::make_pair(params.format, params.type));
+        ColorCopyFunction fastCopyFunc = (fastCopyIter != sourceDXGIFormatInfo.fastCopyFunctions.end()) ? fastCopyIter->second : NULL;
+
         const gl::FormatTypeInfo &destFormatTypeInfo = gl::GetFormatTypeInfo(params.format, params.type);
         const gl::InternalFormatInfo &destFormatInfo = gl::GetInternalFormatInfo(destFormatTypeInfo.internalFormat);
-        ColorCopyFunction fastCopyFunc = d3d11::GetFastCopyFunction(textureDesc.Format, params.format, params.type);
+
         if (fastCopyFunc)
         {
             // Fast copy is possible through some special function
@@ -2976,8 +2971,6 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
         }
         else
         {
-            ColorReadFunction readFunc = d3d11::GetColorReadFunction(textureDesc.Format);
-
             unsigned char temp[16]; // Maximum size of any Color<T> type used.
             META_ASSERT(sizeof(temp) >= sizeof(gl::ColorF)  &&
                         sizeof(temp) >= sizeof(gl::ColorUI) &&
@@ -2992,7 +2985,7 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
 
                     // readFunc and writeFunc will be using the same type of color, CopyTexImage
                     // will not allow the copy otherwise.
-                    readFunc(src, temp);
+                    sourceDXGIFormatInfo.colorReadFunction(src, temp);
                     destFormatTypeInfo.colorWriteFunction(temp, dest);
                 }
             }
@@ -3278,19 +3271,14 @@ bool Renderer11::getLUID(LUID *adapterLuid) const
     return true;
 }
 
-GLenum Renderer11::getNativeTextureFormat(GLenum internalFormat) const
-{
-    return d3d11_gl::GetInternalFormat(gl_d3d11::GetTexFormat(internalFormat));
-}
-
 rx::VertexConversionType Renderer11::getVertexConversionType(const gl::VertexFormat &vertexFormat) const
 {
-    return gl_d3d11::GetVertexConversionType(vertexFormat);
+    return gl_d3d11::GetD3D11VertexInfo(vertexFormat).conversionType;
 }
 
 GLenum Renderer11::getVertexComponentType(const gl::VertexFormat &vertexFormat) const
 {
-    return d3d11::GetComponentType(gl_d3d11::GetNativeVertexFormat(vertexFormat));
+    return d3d11::GetDXGIFormatInfo(gl_d3d11::GetD3D11VertexInfo(vertexFormat).nativeFormat).componentType;
 }
 
 void Renderer11::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureCaps, gl::Extensions *outExtensions) const
