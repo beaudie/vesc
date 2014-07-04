@@ -1378,15 +1378,16 @@ void Context::setRenderbufferStorage(GLsizei width, GLsizei height, GLenum inter
 
     RenderbufferStorage *renderbuffer = NULL;
 
-    if (GetDepthBits(internalformat) > 0 && GetStencilBits(internalformat) > 0)
+    const InternalFormatInfo formatInfo = GetInternalFormatInfo(internalformat);
+    if (formatInfo.depthBits > 0 && formatInfo.stencilBits > 0)
     {
         renderbuffer = new gl::DepthStencilbuffer(mRenderer, width, height, samples);
     }
-    else if (GetDepthBits(internalformat) > 0)
+    else if (formatInfo.depthBits > 0)
     {
         renderbuffer = new gl::Depthbuffer(mRenderer, width, height, samples);
     }
-    else if (GetStencilBits(internalformat) > 0)
+    else if (formatInfo.stencilBits > 0)
     {
         renderbuffer = new gl::Stencilbuffer(mRenderer, width, height, samples);
     }
@@ -2602,7 +2603,7 @@ void Context::clear(GLbitfield mask)
                 return;
             }
 
-            if (gl::GetStencilBits(depthStencil->getActualFormat()) > 0)
+            if (GetInternalFormatInfo(depthStencil->getActualFormat()).stencilBits > 0)
             {
                 clearParams.clearStencil = true;
             }
@@ -2809,13 +2810,12 @@ void Context::clearBufferfi(GLenum buffer, int drawbuffer, float depth, int sten
 void Context::readPixels(GLint x, GLint y, GLsizei width, GLsizei height,
                          GLenum format, GLenum type, GLsizei *bufSize, void* pixels)
 {
-    gl::Framebuffer *framebuffer = getReadFramebuffer();
+    GLenum sizedInternalFormat = GetInternalFormatInfo(format).pixelBytes > 0 ? format
+                                                                              : GetFormatTypeInfo(format, type).internalFormat;
+    const InternalFormatInfo &sizedFormatInfo = GetInternalFormatInfo(sizedInternalFormat);
+    GLuint outputPitch = sizedFormatInfo.computeRowPitch(type, width, mState.pack.alignment);
 
-    bool isSized = IsSizedInternalFormat(format);
-    GLenum sizedInternalFormat = (isSized ? format : GetSizedInternalFormat(format, type));
-    GLuint outputPitch = GetRowPitch(sizedInternalFormat, type, width, mState.pack.alignment);
-
-    mRenderer->readPixels(framebuffer, x, y, width, height, format, type, outputPitch, mState.pack, pixels);
+    mRenderer->readPixels(getReadFramebuffer(), x, y, width, height, format, type, outputPitch, mState.pack, pixels);
 }
 
 void Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instances)
@@ -3126,9 +3126,12 @@ void Context::getCurrentReadFormatType(GLenum *internalFormat, GLenum *format, G
     FramebufferAttachment *attachment = framebuffer->getReadColorbuffer();
     ASSERT(attachment);
 
-    *internalFormat = attachment->getActualFormat();
-    *format = gl::GetFormat(attachment->getActualFormat());
-    *type = gl::GetType(attachment->getActualFormat());
+    GLenum actualFormat = attachment->getActualFormat();
+    const InternalFormatInfo &actualFormatInfo = GetInternalFormatInfo(actualFormat);
+
+    *internalFormat = actualFormat;
+    *format = actualFormatInfo.format;
+    *type = actualFormatInfo.type;
 }
 
 void Context::detachBuffer(GLuint buffer)
@@ -3688,11 +3691,12 @@ void Context::initCaps(GLuint clientVersion)
         GLenum format = i->first;
         TextureCaps formatCaps = i->second;
 
-        if (formatCaps.texture && IsValidInternalFormat(format, mExtensions, clientVersion))
+        const InternalFormatInfo &formatInfo = GetInternalFormatInfo(format);
+        if (formatCaps.texture && formatInfo.textureSupport(clientVersion, mExtensions))
         {
             // Update the format caps based on the client version and extensions
-            formatCaps.rendering = IsRenderingSupported(format, mExtensions, clientVersion);
-            formatCaps.filtering = IsFilteringSupported(format, mExtensions, clientVersion);
+            formatCaps.rendering = formatInfo.renderSupport(clientVersion, mExtensions);
+            formatCaps.filtering = formatInfo.filterSupport(clientVersion, mExtensions);
             mTextureCaps.insert(format, formatCaps);
 
             maxSamples = std::max(maxSamples, formatCaps.getMaxSamples());
