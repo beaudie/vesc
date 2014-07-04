@@ -30,6 +30,7 @@ bool IsVaryingIn(TQualifier qualifier);
 bool IsVaryingOut(TQualifier qualifier);
 bool IsVarying(TQualifier qualifier);
 InterpolationType GetInterpolationType(TQualifier qualifier);
+BlockLayoutType GetBlockLayoutType(TLayoutBlockStorage blockStorage);
 TString ArrayString(const TType &type);
 
 struct MatrixPackingCallback
