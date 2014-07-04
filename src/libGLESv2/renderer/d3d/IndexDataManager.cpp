@@ -138,7 +138,7 @@ GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer
           default: UNREACHABLE(); alignedOffset = false;
         }
 
-        unsigned int typeSize = gl::GetTypeBytes(type);
+        unsigned int typeSize = gl::GetTypeInfo(type).bytes;
 
         // check for integer overflows
         if (static_cast<unsigned int>(count) > (std::numeric_limits<unsigned int>::max() / typeSize) ||
@@ -183,7 +183,7 @@ GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer
         if (!staticBuffer->getIndexRangeCache()->findRange(type, offset, count, &translated->minIndex,
                                                            &translated->maxIndex, &streamOffset))
         {
-            streamOffset = (offset / gl::GetTypeBytes(type)) * gl::GetTypeBytes(destinationIndexType);
+            streamOffset = (offset / gl::GetTypeInfo(type).bytes) * gl::GetTypeInfo(destinationIndexType).bytes;
             computeRange(type, indices, count, &translated->minIndex, &translated->maxIndex);
             staticBuffer->getIndexRangeCache()->addRange(type, offset, count, translated->minIndex,
                                                          translated->maxIndex, streamOffset);
@@ -198,7 +198,7 @@ GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer
             if (staticBuffer->getBufferSize() == 0 && alignedOffset)
             {
                 indexBuffer = staticBuffer;
-                convertCount = storage->getSize() / gl::GetTypeBytes(type);
+                convertCount = storage->getSize() / gl::GetTypeInfo(type).bytes;
             }
             else
             {
@@ -213,7 +213,7 @@ GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer
             return GL_INVALID_OPERATION;
         }
 
-        unsigned int indexTypeSize = gl::GetTypeBytes(destinationIndexType);
+        unsigned int indexTypeSize = gl::GetTypeInfo(destinationIndexType).bytes;
         if (convertCount > std::numeric_limits<unsigned int>::max() / indexTypeSize)
         {
             ERR("Reserving %u indicies of %u bytes each exceeds the maximum buffer size.", convertCount, indexTypeSize);
@@ -246,7 +246,7 @@ GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer
 
         if (staticBuffer)
         {
-            streamOffset = (offset / gl::GetTypeBytes(type)) * gl::GetTypeBytes(destinationIndexType);
+            streamOffset = (offset / gl::GetTypeInfo(type).bytes) * gl::GetTypeInfo(destinationIndexType).bytes;
             staticBuffer->getIndexRangeCache()->addRange(type, offset, count, translated->minIndex,
                                                          translated->maxIndex, streamOffset);
         }
@@ -255,12 +255,12 @@ GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer
     translated->storage = directStorage ? storage : NULL;
     translated->indexBuffer = indexBuffer->getIndexBuffer();
     translated->serial = directStorage ? storage->getSerial() : indexBuffer->getSerial();
-    translated->startIndex = streamOffset / gl::GetTypeBytes(destinationIndexType);
+    translated->startIndex = streamOffset / gl::GetTypeInfo(destinationIndexType).bytes;
     translated->startOffset = streamOffset;
 
     if (storage)
     {
-        storage->promoteStaticUsage(count * gl::GetTypeBytes(type));
+        storage->promoteStaticUsage(count * gl::GetTypeInfo(type).bytes);
     }
 
     return GL_NO_ERROR;
