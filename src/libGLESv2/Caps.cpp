@@ -381,7 +381,11 @@ Caps::Caps()
       maxViewportHeight(0),
       minAliasedPointSize(0),
       maxAliasedPointSize(0),
-      minAliasedLineWidth(0)
+      minAliasedLineWidth(0),
+
+      maxElementsIndices(0),
+      maxElementsVertices(0),
+      maxServerWaitTimeout(0)
 {
 }
 

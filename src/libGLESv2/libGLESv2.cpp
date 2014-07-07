@@ -4553,8 +4553,20 @@ void __stdcall glShaderBinary(GLsizei n, const GLuint* shaders, GLenum binaryfor
 
     ANGLE_TRY
     {
-        // No binary shader formats are supported.
-        return gl::error(GL_INVALID_ENUM);
+
+        gl::Context* context = gl::getNonLostContext();
+
+        if (context)
+        {
+            const std::vector<GLenum> &shaderBinaryFormats = context->getCaps().shaderBinaryFormats;
+            if (std::find(shaderBinaryFormats.begin(), shaderBinaryFormats.end(), binaryformat) == shaderBinaryFormats.end())
+            {
+                return gl::error(GL_INVALID_ENUM);
+            }
+
+            // No binary shader formats are supported.
+            UNIMPLEMENTED();
+        }
     }
     ANGLE_CATCH_ALL
     {
@@ -9778,12 +9790,10 @@ void __stdcall glGetProgramBinaryOES(GLuint program, GLsizei bufSize, GLsizei *l
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            if (!programBinary->save(binary, bufSize, length))
+            if (!programBinary->save(binaryFormat, binary, bufSize, length))
             {
                 return gl::error(GL_INVALID_OPERATION);
             }
-
-            *binaryFormat = GL_PROGRAM_BINARY_ANGLE;
         }
     }
     ANGLE_CATCH_ALL
@@ -9804,7 +9814,8 @@ void __stdcall glProgramBinaryOES(GLuint program, GLenum binaryFormat,
 
         if (context)
         {
-            if (binaryFormat != GL_PROGRAM_BINARY_ANGLE)
+            const std::vector<GLenum> &programBinaryFormats = context->getCaps().programBinaryFormats;
+            if (std::find(programBinaryFormats.begin(), programBinaryFormats.end(), binaryFormat) == programBinaryFormats.end())
             {
                 return gl::error(GL_INVALID_ENUM);
             }
@@ -9816,7 +9827,7 @@ void __stdcall glProgramBinaryOES(GLuint program, GLenum binaryFormat,
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            context->setProgramBinary(program, binary, length);
+            context->setProgramBinary(program, binaryFormat, binary, length);
         }
     }
     ANGLE_CATCH_ALL

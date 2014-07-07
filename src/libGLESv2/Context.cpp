@@ -208,8 +208,6 @@ Context::Context(int clientVersion, const gl::Context *shareContext, rx::Rendere
     mResetStatus = GL_NO_ERROR;
     mResetStrategy = (notifyResets ? GL_LOSE_CONTEXT_ON_RESET_EXT : GL_NO_RESET_NOTIFICATION_EXT);
     mRobustAccess = robustAccess;
-
-    mNumCompressedTextureFormats = 0;
 }
 
 Context::~Context()
@@ -311,20 +309,6 @@ void Context::makeCurrent(egl::Surface *surface)
     if (!mHasBeenCurrent)
     {
         mSupportsVertexTexture = mRenderer->getVertexTextureSupport();
-
-        mNumCompressedTextureFormats = 0;
-        if (mExtensions.textureCompressionDXT1)
-        {
-            mNumCompressedTextureFormats += 2;
-        }
-        if (mExtensions.textureCompressionDXT3)
-        {
-            mNumCompressedTextureFormats += 1;
-        }
-        if (mExtensions.textureCompressionDXT5)
-        {
-            mNumCompressedTextureFormats += 1;
-        }
 
         initRendererString();
         initExtensionStrings();
@@ -1318,11 +1302,11 @@ void Context::linkProgram(GLuint program)
     }
 }
 
-void Context::setProgramBinary(GLuint program, const void *binary, GLint length)
+void Context::setProgramBinary(GLuint program, GLenum binaryFormat, const void *binary, GLint length)
 {
     Program *programObject = mResourceManager->getProgram(program);
 
-    bool loaded = programObject->setProgramBinary(binary, length);
+    bool loaded = programObject->setProgramBinary(binaryFormat, binary, length);
 
     // if the current program was reloaded successfully we
     // need to install the new executables
@@ -1696,8 +1680,6 @@ void Context::getIntegerv(GLenum pname, GLint *params)
       case GL_MAX_RENDERBUFFER_SIZE:                    *params = mCaps.maxRenderbufferSize;                            break;
       case GL_MAX_COLOR_ATTACHMENTS_EXT:                *params = mCaps.maxColorAttachments;                            break;
       case GL_MAX_DRAW_BUFFERS_EXT:                     *params = mCaps.maxDrawBuffers;                                 break;
-      case GL_NUM_SHADER_BINARY_FORMATS:                *params = 0;                                                    break;
-      case GL_SHADER_BINARY_FORMATS:                    /* no shader binary formats are supported */                    break;
       case GL_ARRAY_BUFFER_BINDING:                     *params = mState.arrayBuffer.id();                              break;
       case GL_ELEMENT_ARRAY_BUFFER_BINDING:             *params = getCurrentVertexArray()->getElementArrayBufferId();   break;
       //case GL_FRAMEBUFFER_BINDING:                    // now equivalent to GL_DRAW_FRAMEBUFFER_BINDING_ANGLE
@@ -1746,14 +1728,12 @@ void Context::getIntegerv(GLenum pname, GLint *params)
       case GL_MAX_COMBINED_UNIFORM_BLOCKS:              *params = getMaximumCombinedUniformBufferBindings();            break;
       case GL_MAJOR_VERSION:                            *params = mClientVersion;                                       break;
       case GL_MINOR_VERSION:                            *params = 0;                                                    break;
-      case GL_MAX_ELEMENTS_INDICES:                     *params = mRenderer->getMaxRecommendedElementsIndices();        break;
-      case GL_MAX_ELEMENTS_VERTICES:                    *params = mRenderer->getMaxRecommendedElementsVertices();       break;
+      case GL_MAX_ELEMENTS_INDICES:                     *params = mCaps.maxElementsIndices;                             break;
+      case GL_MAX_ELEMENTS_VERTICES:                    *params = mCaps.maxElementsVertices;                            break;
       case GL_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: *params = mRenderer->getMaxTransformFeedbackInterleavedComponents(); break;
       case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS:       *params = mRenderer->getMaxTransformFeedbackBuffers();               break;
       case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS:    *params = mRenderer->getMaxTransformFeedbackSeparateComponents();    break;
-      case GL_NUM_COMPRESSED_TEXTURE_FORMATS:
-        params[0] = mNumCompressedTextureFormats;
-        break;
+      case GL_NUM_COMPRESSED_TEXTURE_FORMATS:           *params = mCaps.compressedTextureFormats.size();                break;
       case GL_MAX_SAMPLES_ANGLE:                        *params = mExtensions.maxSamples;                               break;
       case GL_SAMPLE_BUFFERS:
       case GL_SAMPLES:
@@ -1802,21 +1782,7 @@ void Context::getIntegerv(GLenum pname, GLint *params)
         }
         break;
       case GL_COMPRESSED_TEXTURE_FORMATS:
-        {
-            if (mExtensions.textureCompressionDXT1)
-            {
-                *params++ = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
-                *params++ = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
-            }
-            if (mExtensions.textureCompressionDXT3)
-            {
-                *params++ = GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE;
-            }
-            if (mExtensions.textureCompressionDXT5)
-            {
-                *params++ = GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE;
-            }
-        }
+        std::copy(mCaps.compressedTextureFormats.begin(), mCaps.compressedTextureFormats.end(), params);
         break;
       case GL_VIEWPORT:
         params[0] = mState.viewport.x;
@@ -1905,11 +1871,17 @@ void Context::getIntegerv(GLenum pname, GLint *params)
       case GL_RESET_NOTIFICATION_STRATEGY_EXT:
         *params = mResetStrategy;
         break;
-      case GL_NUM_PROGRAM_BINARY_FORMATS_OES:
-        *params = 1;
+      case GL_NUM_SHADER_BINARY_FORMATS:
+        *params = mCaps.shaderBinaryFormats.size();
         break;
-      case GL_PROGRAM_BINARY_FORMATS_OES:
-        *params = GL_PROGRAM_BINARY_ANGLE;
+      case GL_SHADER_BINARY_FORMATS:
+        std::copy(mCaps.shaderBinaryFormats.begin(), mCaps.shaderBinaryFormats.end(), params);
+        break;
+      case GL_NUM_PROGRAM_BINARY_FORMATS:
+        *params = mCaps.programBinaryFormats.size();
+        break;
+      case GL_PROGRAM_BINARY_FORMATS:
+        std::copy(mCaps.programBinaryFormats.begin(), mCaps.programBinaryFormats.end(), params);
         break;
       case GL_UNIFORM_BUFFER_BINDING:
         *params = mState.genericUniformBuffer.id();
@@ -1963,8 +1935,7 @@ void Context::getInteger64v(GLenum pname, GLint64 *params)
         }
         break;
       case GL_MAX_SERVER_WAIT_TIMEOUT:
-        // We do not wait for server fence objects internally, so report a max timeout of zero.
-        *params = 0;
+        *params = mCaps.maxServerWaitTimeout;
         break;
       default:
         UNREACHABLE();
@@ -2051,13 +2022,19 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
       case GL_COMPRESSED_TEXTURE_FORMATS:
         {
             *type = GL_INT;
-            *numParams = mNumCompressedTextureFormats;
+            *numParams = mCaps.compressedTextureFormats.size();
+        }
+        return true;
+      case GL_PROGRAM_BINARY_FORMATS_OES:
+        {
+            *type = GL_INT;
+            *numParams = mCaps.programBinaryFormats.size();
         }
         return true;
       case GL_SHADER_BINARY_FORMATS:
         {
             *type = GL_INT;
-            *numParams = 0;
+            *numParams = mCaps.shaderBinaryFormats.size();
         }
         return true;
       case GL_MAX_VERTEX_ATTRIBS:
@@ -2126,7 +2103,6 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
       case GL_TEXTURE_BINDING_CUBE_MAP:
       case GL_RESET_NOTIFICATION_STRATEGY_EXT:
       case GL_NUM_PROGRAM_BINARY_FORMATS_OES:
-      case GL_PROGRAM_BINARY_FORMATS_OES:
         {
             *type = GL_INT;
             *numParams = 1;
@@ -3685,6 +3661,8 @@ void Context::initCaps(GLuint clientVersion)
     }
 
     GLuint maxSamples = 0;
+    mCaps.compressedTextureFormats.clear();
+
     const TextureCapsMap &rendererFormats = mRenderer->getRendererTextureCaps();
     for (TextureCapsMap::const_iterator i = rendererFormats.begin(); i != rendererFormats.end(); i++)
     {
@@ -3700,6 +3678,11 @@ void Context::initCaps(GLuint clientVersion)
             mTextureCaps.insert(format, formatCaps);
 
             maxSamples = std::max(maxSamples, formatCaps.getMaxSamples());
+
+            if (formatInfo.compressed)
+            {
+                mCaps.compressedTextureFormats.push_back(format);
+            }
         }
     }
 

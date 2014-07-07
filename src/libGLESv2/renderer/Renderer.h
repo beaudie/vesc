@@ -170,8 +170,6 @@ class Renderer
     virtual unsigned int getMaxUniformBufferSize() const = 0;
     virtual bool getShareHandleSupport() const = 0;
     virtual bool getPostSubBufferSupport() const = 0;
-    virtual int getMaxRecommendedElementsIndices() const = 0;
-    virtual int getMaxRecommendedElementsVertices() const = 0;
 
     virtual int getMajorShaderModel() const = 0;
     virtual int getMinSwapInterval() const = 0;
