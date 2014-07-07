@@ -134,7 +134,7 @@ class Context
     void bindPixelUnpackBuffer(GLuint buffer);
     void useProgram(GLuint program);
     void linkProgram(GLuint program);
-    void setProgramBinary(GLuint program, const void *binary, GLint length);
+    void setProgramBinary(GLuint program, GLenum binaryFormat, const void *binary, GLint length);
     void bindTransformFeedback(GLuint transformFeedback);
 
     void beginQuery(GLenum target, GLuint query);
@@ -330,7 +330,6 @@ class Context
     bool mRobustAccess;
 
     bool mSupportsVertexTexture;
-    int mNumCompressedTextureFormats;
 
     ResourceManager *mResourceManager;
 };
