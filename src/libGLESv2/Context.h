@@ -471,6 +471,8 @@ class Context
     TextureCapsMap mTextureCaps;
     Extensions mExtensions;
 
+    std::vector<GLenum> mCompressedTextureFormats;
+
     rx::Renderer *const mRenderer;
 
     int mClientVersion;
@@ -528,7 +530,6 @@ class Context
 
     int mMajorShaderModel;
     bool mSupportsVertexTexture;
-    int mNumCompressedTextureFormats;
 
     ResourceManager *mResourceManager;
 };
