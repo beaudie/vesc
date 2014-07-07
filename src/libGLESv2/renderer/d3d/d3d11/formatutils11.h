@@ -15,62 +15,69 @@
 namespace rx
 {
 
-class Renderer;
-
 namespace d3d11
 {
 
-typedef std::set<DXGI_FORMAT> DXGIFormatSet;
+typedef std::map<std::pair<GLenum, GLenum>, ColorCopyFunction> FastCopyFunctionMap;
 
-MipGenerationFunction GetMipGenerationFunction(DXGI_FORMAT format);
-LoadImageFunction GetImageLoadFunction(GLenum internalFormat, GLenum type);
+struct DXGIFormat
+{
+    DXGIFormat();
 
-GLuint GetFormatPixelBytes(DXGI_FORMAT format);
-GLuint GetBlockWidth(DXGI_FORMAT format);
-GLuint GetBlockHeight(DXGI_FORMAT format);
-GLenum GetComponentType(DXGI_FORMAT format);
+    GLuint pixelBytes;
+    GLuint blockWidth;
+    GLuint blockHeight;
 
-GLuint GetDepthBits(DXGI_FORMAT format);
-GLuint GetDepthOffset(DXGI_FORMAT format);
-GLuint GetStencilBits(DXGI_FORMAT format);
-GLuint GetStencilOffset(DXGI_FORMAT format);
+    GLuint depthBits;
+    GLuint depthOffset;
+    GLuint stencilBits;
+    GLuint stencilOffset;
 
-void MakeValidSize(bool isImage, DXGI_FORMAT format, GLsizei *requestWidth, GLsizei *requestHeight, int *levelOffset);
+    GLenum internalFormat;
+    GLenum componentType;
 
-const DXGIFormatSet &GetAllUsedDXGIFormats();
+    MipGenerationFunction mipGenerationFunction;
+    ColorReadFunction colorReadFunction;
 
-ColorReadFunction GetColorReadFunction(DXGI_FORMAT format);
-ColorCopyFunction GetFastCopyFunction(DXGI_FORMAT sourceFormat, GLenum destFormat, GLenum destType);
+    FastCopyFunctionMap fastCopyFunctions;
+};
+const DXGIFormat &GetDXGIFormatInfo(DXGI_FORMAT format);
 
 }
 
 namespace gl_d3d11
 {
 
-DXGI_FORMAT GetTexFormat(GLenum internalFormat);
-DXGI_FORMAT GetSRVFormat(GLenum internalFormat);
-DXGI_FORMAT GetRTVFormat(GLenum internalFormat);
-DXGI_FORMAT GetDSVFormat(GLenum internalFormat);
-DXGI_FORMAT GetRenderableFormat(GLenum internalFormat);
-
-DXGI_FORMAT GetSwizzleTexFormat(GLint internalFormat);
-DXGI_FORMAT GetSwizzleSRVFormat(GLint internalFormat);
-DXGI_FORMAT GetSwizzleRTVFormat(GLint internalFormat);
-
-bool RequiresTextureDataInitialization(GLint internalFormat);
-InitializeTextureDataFunction GetTextureDataInitializationFunction(GLint internalFormat);
-
-VertexCopyFunction GetVertexCopyFunction(const gl::VertexFormat &vertexFormat);
-size_t GetVertexElementSize(const gl::VertexFormat &vertexFormat);
-VertexConversionType GetVertexConversionType(const gl::VertexFormat &vertexFormat);
-DXGI_FORMAT GetNativeVertexFormat(const gl::VertexFormat &vertexFormat);
-
-}
-
-namespace d3d11_gl
+struct D3D11Format
 {
+    D3D11Format();
 
-GLenum GetInternalFormat(DXGI_FORMAT format);
+    DXGI_FORMAT texFormat;
+    DXGI_FORMAT srvFormat;
+    DXGI_FORMAT rtvFormat;
+    DXGI_FORMAT dsvFormat;
+    DXGI_FORMAT renderFormat;
+
+    DXGI_FORMAT swizzleTexFormat;
+    DXGI_FORMAT swizzleSRVFormat;
+    DXGI_FORMAT swizzleRTVFormat;
+
+    InitializeTextureDataFunction dataInitializerFunction;
+
+    typedef std::map<GLenum, LoadImageFunction> LoadFunctionMap;
+    LoadFunctionMap loadFunctions;
+};
+const D3D11Format &GetD3D11FormatInfo(GLenum internalFormat);
+
+struct D3D11VertexFormat
+{
+    D3D11VertexFormat();
+
+    VertexConversionType conversionType;
+    DXGI_FORMAT nativeFormat;
+    VertexCopyFunction copyFunction;
+};
+const D3D11VertexFormat &GetD3D11VertexInfo(const gl::VertexFormat &vertexFormat);
 
 }
 
