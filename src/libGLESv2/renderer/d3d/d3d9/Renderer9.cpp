@@ -3089,11 +3089,6 @@ bool Renderer9::getLUID(LUID *adapterLuid) const
     return false;
 }
 
-GLenum Renderer9::getNativeTextureFormat(GLenum internalFormat) const
-{
-    return d3d9_gl::GetInternalFormat(gl_d3d9::GetTextureFormat(internalFormat));
-}
-
 rx::VertexConversionType Renderer9::getVertexConversionType(const gl::VertexFormat &vertexFormat) const
 {
     return d3d9::GetVertexConversionType(vertexFormat);
