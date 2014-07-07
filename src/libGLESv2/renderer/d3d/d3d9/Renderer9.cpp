@@ -2262,20 +2262,6 @@ bool Renderer9::getPostSubBufferSupport() const
     return true;
 }
 
-int Renderer9::getMaxRecommendedElementsIndices() const
-{
-    // ES3 only
-    UNREACHABLE();
-    return 0;
-}
-
-int Renderer9::getMaxRecommendedElementsVertices() const
-{
-    // ES3 only
-    UNREACHABLE();
-    return 0;
-}
-
 int Renderer9::getMajorShaderModel() const
 {
     return D3DSHADER_VERSION_MAJOR(mDeviceCaps.PixelShaderVersion);
