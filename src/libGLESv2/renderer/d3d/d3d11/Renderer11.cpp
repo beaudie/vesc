@@ -1991,11 +1991,6 @@ int Renderer11::getMaxRecommendedElementsVertices() const
     return std::numeric_limits<GLint>::max();
 }
 
-bool Renderer11::getSRGBTextureSupport() const
-{
-    return true;
-}
-
 int Renderer11::getMajorShaderModel() const
 {
     switch (mFeatureLevel)
