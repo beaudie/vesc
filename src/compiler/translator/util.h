@@ -42,6 +42,21 @@ struct SetMatrixPackingCallback
     bool mIsRowMajorMatrix;
 };
 
+template <typename VarT>
+inline VarT GetSingleVariableInfo(const TType &type, const TString &name)
+{
+    ASSERT(!type.getStruct());
+
+    VarT variable;
+
+    variable.type = GLVariableType(type);
+    variable.precision = GLVariablePrecision(type);
+    variable.name = name.c_str();
+    variable.arraySize = static_cast<unsigned int>(type.getArraySize());
+
+    return variable;
+}
+
 template <typename VarT, typename CallbackT>
 inline VarT GetVariableInfo(const TType &type, const TString &name,
                             std::vector<VarT> *output, CallbackT *callback)
@@ -50,17 +65,16 @@ inline VarT GetVariableInfo(const TType &type, const TString &name,
     const TStructure *structure = type.getStruct();
 
     VarT variable;
-    variable.name = name.c_str();
-    variable.arraySize = static_cast<unsigned int>(type.getArraySize());
 
     if (!structure)
     {
-        variable.type = GLVariableType(type);
-        variable.precision = GLVariablePrecision(type);
+        variable = GetSingleVariableInfo<VarT>(type, name);
     }
     else
     {
         variable.type = GL_STRUCT_ANGLEX;
+        variable.name = name.c_str();
+        variable.arraySize = static_cast<unsigned int>(type.getArraySize());
 
         const TFieldList &fields = structure->fields();
 
