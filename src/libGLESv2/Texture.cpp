@@ -18,7 +18,8 @@
 #include "libGLESv2/Renderbuffer.h"
 #include "libGLESv2/renderer/Image.h"
 #include "libGLESv2/renderer/Renderer.h"
-#include "libGLESv2/renderer/TextureStorage.h"
+#include "libGLESv2/renderer/d3d/ImageD3D.h"
+#include "libGLESv2/renderer/d3d/TextureStorage.h"
 #include "libEGL/Surface.h"
 #include "libGLESv2/Buffer.h"
 #include "libGLESv2/renderer/BufferImpl.h"
@@ -445,7 +446,7 @@ void Texture2D::commitRect(GLint level, GLint xoffset, GLint yoffset, GLsizei wi
 {
     if (isValidLevel(level))
     {
-        rx::Image *image = mImageArray[level];
+        rx::ImageD3D *image = rx::ImageD3D::makeImageD3D(mImageArray[level]);
         if (image->copyToStorage(mTexStorage, level, xoffset, yoffset, width, height))
         {
             image->markClean();
@@ -574,7 +575,7 @@ void Texture2D::setCompleteTexStorage(rx::TextureStorageInterface2D *newComplete
     {
         for (int level = 0; level < mTexStorage->getLevelCount(); level++)
         {
-            mImageArray[level]->setManagedSurface(mTexStorage, level);
+            rx::ImageD3D::makeImageD3D(mImageArray[level])->setManagedSurface(mTexStorage, level);
         }
     }
 
@@ -991,7 +992,7 @@ void TextureCubeMap::commitRect(int faceIndex, GLint level, GLint xoffset, GLint
 {
     if (isValidFaceLevel(faceIndex, level))
     {
-        rx::Image *image = mImageArray[faceIndex][level];
+        rx::ImageD3D *image = rx::ImageD3D::makeImageD3D(mImageArray[faceIndex][level]);
         if (image->copyToStorage(mTexStorage, faceIndex, level, xoffset, yoffset, width, height))
             image->markClean();
     }
@@ -1208,7 +1209,7 @@ void TextureCubeMap::setCompleteTexStorage(rx::TextureStorageInterfaceCube *newC
         {
             for (int level = 0; level < mTexStorage->getLevelCount(); level++)
             {
-                mImageArray[faceIndex][level]->setManagedSurface(mTexStorage, faceIndex, level);
+                rx::ImageD3D::makeImageD3D(mImageArray[faceIndex][level])->setManagedSurface(mTexStorage, faceIndex, level);
             }
         }
     }
@@ -2021,7 +2022,7 @@ void Texture3D::commitRect(GLint level, GLint xoffset, GLint yoffset, GLint zoff
 {
     if (isValidLevel(level))
     {
-        rx::Image *image = mImageArray[level];
+        rx::ImageD3D *image = rx::ImageD3D::makeImageD3D(mImageArray[level]);
         if (image->copyToStorage(mTexStorage, level, xoffset, yoffset, zoffset, width, height, depth))
         {
             image->markClean();
@@ -2559,7 +2560,7 @@ void Texture2DArray::commitRect(GLint level, GLint xoffset, GLint yoffset, GLint
 {
     if (isValidLevel(level) && layerTarget < getLayers(level))
     {
-        rx::Image *image = mImageArray[level][layerTarget];
+        rx::ImageD3D *image = rx::ImageD3D::makeImageD3D(mImageArray[level][layerTarget]);
         if (image->copyToStorage(mTexStorage, level, xoffset, yoffset, layerTarget, width, height))
         {
             image->markClean();
