@@ -10,7 +10,7 @@
 #ifndef LIBGLESV2_RENDERER_IMAGE9_H_
 #define LIBGLESV2_RENDERER_IMAGE9_H_
 
-#include "libGLESv2/renderer/Image.h"
+#include "libGLESv2/renderer/d3d/Image.h"
 #include "common/debug.h"
 
 namespace gl
