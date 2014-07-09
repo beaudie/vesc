@@ -525,8 +525,6 @@ class Context
     BindingPointer<ProgramBinary> mCurrentProgramBinary;
     Framebuffer *mBoundDrawFramebuffer;
 
-    bool mSupportsVertexTexture;
-
     ResourceManager *mResourceManager;
 };
 }
