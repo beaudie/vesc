@@ -115,6 +115,7 @@
     <None Include="..\..\src\libGLESv2\libGLESv2.def"/>
     <None Include="..\..\src\libGLESv2\renderer\loadimage.inl"/>
     <None Include="..\..\src\libGLESv2\renderer\copyvertex.inl"/>
+    <None Include="..\..\src\libGLESv2\renderer\copyimage.inl"/>
     <None Include="..\..\src\libGLESv2\renderer\generatemip.inl"/>
     <None Include="..\..\src\libGLESv2\renderer\d3d\d3d11\shaders\Swizzle11.hlsl"/>
     <None Include="..\..\src\libGLESv2\renderer\d3d\d3d11\shaders\generate_shaders.bat"/>
