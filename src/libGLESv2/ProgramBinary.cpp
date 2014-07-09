@@ -1628,7 +1628,7 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
         success = false;
     }
 
-    if (!linkUniforms(infoLog, vertexShader->getUniforms(), fragmentShader->getUniforms()))
+    if (!linkUniforms(infoLog, *vertexShader, *fragmentShader))
     {
         success = false;
     }
@@ -1880,8 +1880,11 @@ bool ProgramBinary::linkValidateVariables(InfoLog &infoLog, const std::string &u
     return true;
 }
 
-bool ProgramBinary::linkUniforms(InfoLog &infoLog, const std::vector<sh::Uniform> &vertexUniforms, const std::vector<sh::Uniform> &fragmentUniforms)
+bool ProgramBinary::linkUniforms(InfoLog &infoLog, const VertexShader &vertexShader, const FragmentShader &fragmentShader)
 {
+    const std::vector<sh::Uniform> &vertexUniforms = vertexShader.getUniforms();
+    const std::vector<sh::Uniform> &fragmentUniforms = fragmentShader.getUniforms();
+
     // Check that uniforms defined in the vertex and fragment shaders are identical
     typedef std::map<std::string, const sh::Uniform*> UniformMap;
     UniformMap linkedUniforms;
@@ -1910,13 +1913,25 @@ bool ProgramBinary::linkUniforms(InfoLog &infoLog, const std::vector<sh::Uniform
     for (unsigned int uniformIndex = 0; uniformIndex < vertexUniforms.size(); uniformIndex++)
     {
         const sh::Uniform &uniform = vertexUniforms[uniformIndex];
-        linkUniform(GL_VERTEX_SHADER, uniform, uniform.name, uniform.registerIndex);
+        unsigned int uniformRegister = vertexShader.getUniformRegister(uniform.name);
+
+        ShShaderOutput outputType = Shader::getCompilerOutputType(GL_VERTEX_SHADER);
+        sh::HLSLBlockEncoder encoder(outputType);
+        encoder.skipRegisters(uniformRegister);
+
+        linkUniform(GL_VERTEX_SHADER, uniform, uniform.name, &encoder);
     }
 
     for (unsigned int uniformIndex = 0; uniformIndex < fragmentUniforms.size(); uniformIndex++)
     {
         const sh::Uniform &uniform = fragmentUniforms[uniformIndex];
-        linkUniform(GL_FRAGMENT_SHADER, uniform, uniform.name, uniform.registerIndex);
+        unsigned int uniformRegister = fragmentShader.getUniformRegister(uniform.name);
+
+        ShShaderOutput outputType = Shader::getCompilerOutputType(GL_FRAGMENT_SHADER);
+        sh::HLSLBlockEncoder encoder(outputType);
+        encoder.skipRegisters(uniformRegister);
+
+        linkUniform(GL_FRAGMENT_SHADER, uniform, uniform.name, &encoder);
     }
 
     if (!indexUniforms(infoLog))
@@ -1930,40 +1945,34 @@ bool ProgramBinary::linkUniforms(InfoLog &infoLog, const std::vector<sh::Uniform
 }
 
 void ProgramBinary::linkUniform(GLenum shader, const sh::Uniform &uniform,
-                                const std::string &fullName, unsigned int baseRegisterIndex)
+                                const std::string &fullName, sh::HLSLBlockEncoder *encoder)
 {
     if (uniform.isStruct())
     {
-        if (uniform.arraySize > 0)
+        for (unsigned int elementIndex = 0; elementIndex < uniform.elementCount(); elementIndex++)
         {
-            ShShaderOutput outputType = Shader::getCompilerOutputType(shader);
-            const unsigned int elementRegisterCount = HLSLVariableRegisterCount(uniform, outputType) / uniform.arraySize;
+            encoder->enterAggregateType();
 
-            for (unsigned int elementIndex = 0; elementIndex < uniform.arraySize; elementIndex++)
-            {
-                const unsigned int elementRegisterOffset = elementRegisterCount * elementIndex;
-
-                for (size_t fieldIndex = 0; fieldIndex < uniform.fields.size(); fieldIndex++)
-                {
-                    const sh::Uniform &field = uniform.fields[fieldIndex];
-                    const std::string &fieldFullName = fullName + ArrayString(elementIndex) + "." + field.name;
-                    const unsigned int fieldRegisterIndex = field.registerIndex + elementRegisterOffset;
-                    linkUniform(shader, field, fieldFullName, fieldRegisterIndex);
-                }
-            }
-        }
-        else
-        {
             for (size_t fieldIndex = 0; fieldIndex < uniform.fields.size(); fieldIndex++)
             {
                 const sh::Uniform &field = uniform.fields[fieldIndex];
-                const std::string &fieldFullName = fullName + "." + field.name;
-                linkUniform(shader, field, fieldFullName, field.registerIndex);
+                const std::string &elementString = (uniform.isArray() ? ArrayString(elementIndex) : "");
+                const std::string &fieldFullName = (fullName + elementString + "." + field.name);
+
+                linkUniform(shader, field, fieldFullName, encoder);
             }
+
+            encoder->exitAggregateType();
         }
     }
     else // Not a struct
     {
+        // Arrays are treated as aggregate types
+        if (uniform.isArray())
+        {
+            encoder->enterAggregateType();
+        }
+
         LinkedUniform *linkedUniform = getUniformByName(fullName);
 
         if (!linkedUniform)
@@ -1971,19 +1980,30 @@ void ProgramBinary::linkUniform(GLenum shader, const sh::Uniform &uniform,
             linkedUniform = new LinkedUniform(uniform.type, uniform.precision, fullName, uniform.arraySize,
                                               -1, sh::BlockMemberInfo::getDefaultBlockInfo());
             ASSERT(linkedUniform);
-            linkedUniform->registerElement = uniform.elementIndex;
+            linkedUniform->registerElement = encoder->getCurrentElement();
             mUniforms.push_back(linkedUniform);
         }
 
+        ASSERT(linkedUniform->registerElement == encoder->getCurrentElement());
+
         if (shader == GL_FRAGMENT_SHADER)
         {
-            linkedUniform->psRegisterIndex = baseRegisterIndex;
+            linkedUniform->psRegisterIndex = encoder->getCurrentRegister();
         }
         else if (shader == GL_VERTEX_SHADER)
         {
-            linkedUniform->vsRegisterIndex = baseRegisterIndex;
+            linkedUniform->vsRegisterIndex = encoder->getCurrentRegister();
         }
         else UNREACHABLE();
+
+        // Advance the uniform offset, to track registers allocation for structs
+        encoder->encodeType(uniform.type, uniform.arraySize, false);
+
+        // Arrays are treated as aggregate types
+        if (uniform.isArray())
+        {
+            encoder->exitAggregateType();
+        }
     }
 }
 
