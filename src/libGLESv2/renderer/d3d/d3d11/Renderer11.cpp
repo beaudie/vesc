@@ -2633,7 +2633,7 @@ bool Renderer11::blitRect(gl::Framebuffer *readTarget, const gl::Rectangle &read
 }
 
 void Renderer11::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
-                            GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, void* pixels)
+                            GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, uint8_t *pixels)
 {
     ID3D11Texture2D *colorBufferTexture = NULL;
     unsigned int subresourceIndex = 0;
@@ -2717,7 +2717,7 @@ Texture3DImpl *Renderer11::createTexture3D()
 }
 
 void Renderer11::readTextureData(ID3D11Texture2D *texture, unsigned int subResource, const gl::Rectangle &area, GLenum format,
-                                 GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, void *pixels)
+                                 GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, uint8_t *pixels)
 {
     ASSERT(area.width >= 0);
     ASSERT(area.height >= 0);
@@ -2817,7 +2817,7 @@ void Renderer11::readTextureData(ID3D11Texture2D *texture, unsigned int subResou
     SafeRelease(stagingTex);
 }
 
-void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams &params, void *pixelsOut)
+void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams &params, uint8_t *pixelsOut)
 {
     D3D11_TEXTURE2D_DESC textureDesc;
     readTexture->GetDesc(&textureDesc);
@@ -2827,16 +2827,16 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
     UNUSED_ASSERTION_VARIABLE(hr);
     ASSERT(SUCCEEDED(hr));
 
-    unsigned char *source;
+    uint8_t *source;
     int inputPitch;
     if (params.pack.reverseRowOrder)
     {
-        source = static_cast<unsigned char*>(mapping.pData) + mapping.RowPitch * (params.area.height - 1);
+        source = static_cast<uint8_t*>(mapping.pData) + mapping.RowPitch * (params.area.height - 1);
         inputPitch = -static_cast<int>(mapping.RowPitch);
     }
     else
     {
-        source = static_cast<unsigned char*>(mapping.pData);
+        source = static_cast<uint8_t*>(mapping.pData);
         inputPitch = static_cast<int>(mapping.RowPitch);
     }
 
@@ -2844,7 +2844,7 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
     const gl::InternalFormatInfo &sourceFormatInfo = gl::GetInternalFormatInfo(dxgiFormatInfo.internalFormat);
     if (sourceFormatInfo.format == params.format && sourceFormatInfo.type == params.type)
     {
-        unsigned char *dest = static_cast<unsigned char*>(pixelsOut) + params.offset;
+        uint8_t *dest = pixelsOut + params.offset;
         for (int y = 0; y < params.area.height; y++)
         {
             memcpy(dest + y * params.outputPitch, source + y * inputPitch, params.area.width * sourceFormatInfo.pixelBytes);
@@ -2866,8 +2866,8 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
             {
                 for (int x = 0; x < params.area.width; x++)
                 {
-                    void *dest = static_cast<unsigned char*>(pixelsOut) + params.offset + y * params.outputPitch + x * destFormatInfo.pixelBytes;
-                    void *src = static_cast<unsigned char*>(source) + y * inputPitch + x * sourceFormatInfo.pixelBytes;
+                    uint8_t *dest = pixelsOut + params.offset + y * params.outputPitch + x * destFormatInfo.pixelBytes;
+                    const uint8_t *src = source + y * inputPitch + x * sourceFormatInfo.pixelBytes;
 
                     fastCopyFunc(src, dest);
                 }
@@ -2875,7 +2875,7 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
         }
         else
         {
-            unsigned char temp[16]; // Maximum size of any Color<T> type used.
+            uint8_t temp[16]; // Maximum size of any Color<T> type used.
             META_ASSERT(sizeof(temp) >= sizeof(gl::ColorF)  &&
                         sizeof(temp) >= sizeof(gl::ColorUI) &&
                         sizeof(temp) >= sizeof(gl::ColorI));
@@ -2884,8 +2884,8 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
             {
                 for (int x = 0; x < params.area.width; x++)
                 {
-                    void *dest = static_cast<unsigned char*>(pixelsOut) + params.offset + y * params.outputPitch + x * destFormatInfo.pixelBytes;
-                    void *src = static_cast<unsigned char*>(source) + y * inputPitch + x * sourceFormatInfo.pixelBytes;
+                    uint8_t *dest = pixelsOut + params.offset + y * params.outputPitch + x * destFormatInfo.pixelBytes;
+                    const uint8_t *src = source + y * inputPitch + x * sourceFormatInfo.pixelBytes;
 
                     // readFunc and writeFunc will be using the same type of color, CopyTexImage
                     // will not allow the copy otherwise.
