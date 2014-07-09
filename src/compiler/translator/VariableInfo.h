@@ -15,8 +15,10 @@ class CollectVariables : public TIntermTraverser
 {
   public:
     CollectVariables(std::vector<sh::Attribute> *attribs,
+                     std::vector<sh::Attribute> *outputVariables,
                      std::vector<sh::Uniform> *uniforms,
                      std::vector<sh::Varying> *varyings,
+                     std::vector<sh::InterfaceBlock> *interfaceBlocks,
                      ShHashFunction64 hashFunction);
 
     virtual void visitSymbol(TIntermSymbol *symbol);
@@ -24,8 +26,10 @@ class CollectVariables : public TIntermTraverser
 
   private:
     std::vector<sh::Attribute> *mAttribs;
+    std::vector<sh::Attribute> *mOutputVariables;
     std::vector<sh::Uniform> *mUniforms;
     std::vector<sh::Varying> *mVaryings;
+    std::vector<sh::InterfaceBlock> *mInterfaceBlocks;
 
     bool mPointCoordAdded;
     bool mFrontFacingAdded;
