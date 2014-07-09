@@ -331,8 +331,6 @@ class Context
     GLenum mResetStrategy;
     bool mRobustAccess;
 
-    bool mSupportsVertexTexture;
-
     ResourceManager *mResourceManager;
 };
 }
