@@ -67,24 +67,15 @@ struct ShaderVariable
 struct Uniform : public ShaderVariable
 {
     Uniform()
-        : registerIndex(-1),
-          elementIndex(-1)
     {}
 
-    Uniform(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn,
-            unsigned int registerIndexIn, unsigned int elementIndexIn)
-        : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
-          registerIndex(registerIndexIn),
-          elementIndex(elementIndexIn)
+    Uniform(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn)
+        : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn)
     {}
 
     bool isStruct() const { return !fields.empty(); }
 
     std::vector<Uniform> fields;
-
-    // HLSL-specific members
-    unsigned int registerIndex;
-    unsigned int elementIndex; // Offset within a register, for struct members
 };
 
 struct Attribute : public ShaderVariable
