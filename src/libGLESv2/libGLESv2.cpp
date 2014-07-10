@@ -46,7 +46,7 @@ void __stdcall glActiveTexture(GLenum texture)
 
         if (context)
         {
-            if (texture < GL_TEXTURE0 || texture > GL_TEXTURE0 + context->getMaximumCombinedTextureImageUnits() - 1)
+            if (texture < GL_TEXTURE0 || texture > GL_TEXTURE0 + context->getCaps().maxCombinedTextureImageUnits - 1)
             {
                 return gl::error(GL_INVALID_ENUM);
             }
@@ -6980,6 +6980,7 @@ void __stdcall glGetIntegeri_v(GLenum target, GLuint index, GLint* data)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
+            const gl::Caps &caps = context->getCaps();
             switch (target)
             {
               case GL_TRANSFORM_FEEDBACK_BUFFER_START:
@@ -6991,8 +6992,10 @@ void __stdcall glGetIntegeri_v(GLenum target, GLuint index, GLint* data)
               case GL_UNIFORM_BUFFER_START:
               case GL_UNIFORM_BUFFER_SIZE:
               case GL_UNIFORM_BUFFER_BINDING:
-                if (index >= context->getMaximumCombinedUniformBufferBindings())
+                if (index >= caps.maxUniformBufferBindings)
+                {
                     return gl::error(GL_INVALID_VALUE);
+                }
                 break;
               default:
                 return gl::error(GL_INVALID_ENUM);
@@ -7134,6 +7137,7 @@ void __stdcall glBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLi
                 return gl::error(GL_INVALID_OPERATION);
             }
 
+            const gl::Caps &caps = context->getCaps();
             switch (target)
             {
               case GL_TRANSFORM_FEEDBACK_BUFFER:
@@ -7144,7 +7148,7 @@ void __stdcall glBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLi
                 break;
 
               case GL_UNIFORM_BUFFER:
-                if (index >= context->getMaximumCombinedUniformBufferBindings())
+                if (index >= caps.maxUniformBufferBindings)
                 {
                     return gl::error(GL_INVALID_VALUE);
                 }
@@ -7176,7 +7180,7 @@ void __stdcall glBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLi
               case GL_UNIFORM_BUFFER:
 
                 // it is an error to bind an offset not a multiple of the alignment
-                if (buffer != 0 && (offset % context->getUniformBufferOffsetAlignment()) != 0)
+                if (buffer != 0 && (offset % caps.uniformBufferOffsetAlignment) != 0)
                 {
                     return gl::error(GL_INVALID_VALUE);
                 }
@@ -7212,6 +7216,7 @@ void __stdcall glBindBufferBase(GLenum target, GLuint index, GLuint buffer)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
+            const gl::Caps &caps = context->getCaps();
             switch (target)
             {
               case GL_TRANSFORM_FEEDBACK_BUFFER:
@@ -7222,7 +7227,7 @@ void __stdcall glBindBufferBase(GLenum target, GLuint index, GLuint buffer)
                 break;
 
               case GL_UNIFORM_BUFFER:
-                if (index >= context->getMaximumCombinedUniformBufferBindings())
+                if (index >= caps.maxUniformBufferBindings)
                 {
                     return gl::error(GL_INVALID_VALUE);
                 }
@@ -8423,7 +8428,7 @@ void __stdcall glUniformBlockBinding(GLuint program, GLuint uniformBlockIndex, G
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            if (uniformBlockBinding >= context->getMaximumCombinedUniformBufferBindings())
+            if (uniformBlockBinding >= context->getCaps().maxUniformBufferBindings)
             {
                 return gl::error(GL_INVALID_VALUE);
             }
@@ -8784,6 +8789,7 @@ void __stdcall glGetInteger64i_v(GLenum target, GLuint index, GLint64* data)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
+            const gl::Caps &caps = context->getCaps();
             switch (target)
             {
               case GL_TRANSFORM_FEEDBACK_BUFFER_START:
@@ -8795,8 +8801,10 @@ void __stdcall glGetInteger64i_v(GLenum target, GLuint index, GLint64* data)
               case GL_UNIFORM_BUFFER_START:
               case GL_UNIFORM_BUFFER_SIZE:
               case GL_UNIFORM_BUFFER_BINDING:
-                if (index >= context->getMaximumCombinedUniformBufferBindings())
+                if (index >= caps.maxUniformBufferBindings)
+                {
                     return gl::error(GL_INVALID_VALUE);
+                }
                 break;
               default:
                 return gl::error(GL_INVALID_ENUM);
@@ -9012,7 +9020,7 @@ void __stdcall glBindSampler(GLuint unit, GLuint sampler)
                 return gl::error(GL_INVALID_OPERATION);
             }
 
-            if (unit >= context->getMaximumCombinedTextureImageUnits())
+            if (unit >= context->getCaps().maxCombinedTextureImageUnits)
             {
                 return gl::error(GL_INVALID_VALUE);
             }
