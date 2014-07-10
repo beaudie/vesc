@@ -425,6 +425,19 @@ void GenerateCaps(IDirect3D9 *d3d9, IDirect3DDevice9 *device, D3DDEVTYPE deviceT
     caps->minProgramTexelOffset = 0;
     caps->maxProgramTexelOffset = 0;
 
+    // Aggregate shader limits
+    caps->maxUniformBufferBindings = 0;
+    caps->maxUniformBlockSize = 0;
+    caps->uniformBufferOffsetAlignment = 0;
+    caps->maxCombinedUniformBlocks = caps->maxVertexUniformBlocks + caps->maxFragmentUniformBlocks;
+    caps->maxCombinedVertexUniformComponents = (static_cast<GLint64>(caps->maxVertexUniformBlocks) * static_cast<GLint64>(caps->maxUniformBlockSize / 4)) +
+                                               static_cast<GLint64>(caps->maxVertexUniformComponents);
+    caps->maxCombinedFragmentUniformComponents = (static_cast<GLint64>(caps->maxFragmentUniformBlocks) * static_cast<GLint64>(caps->maxUniformBlockSize / 4)) +
+                                                 static_cast<GLint64>(caps->maxFragmentUniformComponents);
+    caps->maxVaryingComponents = caps->maxVertexOutputComponents;
+    caps->maxVaryingVectors = caps->maxVertexOutputComponents / 4;
+    caps->maxCombinedTextureImageUnits = caps->maxVertexTextureImageUnits + caps->maxFragmentInputComponents;
+
     // GL extension support
     extensions->setTextureExtensionSupport(*textureCapsMap);
     extensions->elementIndexUint = deviceCaps.MaxVertexIndex >= (1 << 16);
