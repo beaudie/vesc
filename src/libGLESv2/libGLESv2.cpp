@@ -5682,8 +5682,10 @@ void __stdcall glGetIntegeri_v(GLenum target, GLuint index, GLint* data)
           case GL_TRANSFORM_FEEDBACK_BUFFER_START:
           case GL_TRANSFORM_FEEDBACK_BUFFER_SIZE:
           case GL_TRANSFORM_FEEDBACK_BUFFER_BINDING:
-            if (index >= context->getMaxTransformFeedbackBufferBindings())
+            if (index >= caps.maxTransformFeedbackSeparateAttributes)
+            {
                 return gl::error(GL_INVALID_VALUE);
+            }
             break;
           case GL_UNIFORM_BUFFER_START:
           case GL_UNIFORM_BUFFER_SIZE:
@@ -5816,7 +5818,7 @@ void __stdcall glBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLi
         switch (target)
         {
           case GL_TRANSFORM_FEEDBACK_BUFFER:
-            if (index >= context->getMaxTransformFeedbackBufferBindings())
+            if (index >= caps.maxTransformFeedbackSeparateAttributes)
             {
                 return gl::error(GL_INVALID_VALUE);
             }
@@ -5888,7 +5890,7 @@ void __stdcall glBindBufferBase(GLenum target, GLuint index, GLuint buffer)
         switch (target)
         {
           case GL_TRANSFORM_FEEDBACK_BUFFER:
-            if (index >= context->getMaxTransformFeedbackBufferBindings())
+            if (index >= caps.maxTransformFeedbackSeparateAttributes)
             {
                 return gl::error(GL_INVALID_VALUE);
             }
@@ -5942,12 +5944,13 @@ void __stdcall glTransformFeedbackVaryings(GLuint program, GLsizei count, const 
             return gl::error(GL_INVALID_VALUE);
         }
 
+        const gl::Caps &caps = context->getCaps();
         switch (bufferMode)
         {
           case GL_INTERLEAVED_ATTRIBS:
             break;
           case GL_SEPARATE_ATTRIBS:
-            if (static_cast<GLuint>(count) > context->getMaxTransformFeedbackBufferBindings())
+            if (static_cast<GLuint>(count) > caps.maxTransformFeedbackSeparateAttributes)
             {
                 return gl::error(GL_INVALID_VALUE);
             }
@@ -7204,8 +7207,10 @@ void __stdcall glGetInteger64i_v(GLenum target, GLuint index, GLint64* data)
           case GL_TRANSFORM_FEEDBACK_BUFFER_START:
           case GL_TRANSFORM_FEEDBACK_BUFFER_SIZE:
           case GL_TRANSFORM_FEEDBACK_BUFFER_BINDING:
-            if (index >= context->getMaxTransformFeedbackBufferBindings())
+            if (index >= caps.maxTransformFeedbackSeparateAttributes)
+            {
                 return gl::error(GL_INVALID_VALUE);
+            }
             break;
           case GL_UNIFORM_BUFFER_START:
           case GL_UNIFORM_BUFFER_SIZE:
