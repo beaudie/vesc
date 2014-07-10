@@ -208,7 +208,8 @@ static bool packVarying(PackedVarying *varying, const int maxVaryingVectors, Var
 int DynamicHLSL::packVaryings(InfoLog &infoLog, VaryingPacking packing, FragmentShader *fragmentShader,
                               VertexShader *vertexShader, const std::vector<std::string>& transformFeedbackVaryings)
 {
-    const int maxVaryingVectors = mRenderer->getMaxVaryingVectors();
+    // TODO (geofflang):  Use context's caps
+    const int maxVaryingVectors = mRenderer->getRendererCaps().maxVaryingVectors;
 
     vertexShader->resetVaryingsRegisterAssignment();
     fragmentShader->resetVaryingsRegisterAssignment();
@@ -651,7 +652,9 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
 
     // Write the HLSL input/output declarations
     const int shaderModel = mRenderer->getMajorShaderModel();
-    const int maxVaryingVectors = mRenderer->getMaxVaryingVectors();
+
+    // TODO (geofflang):  Use context's caps
+    const int maxVaryingVectors = mRenderer->getRendererCaps().maxVaryingVectors;
 
     const int registersNeeded = registers + (usesFragCoord ? 1 : 0) + (usesPointCoord ? 1 : 0);
 
