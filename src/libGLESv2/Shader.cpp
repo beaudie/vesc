@@ -115,6 +115,12 @@ void Shader::getTranslatedSource(GLsizei bufSize, GLsizei *length, char *buffer)
     getSourceImpl(mHlsl, bufSize, length, buffer);
 }
 
+unsigned int Shader::getInterfaceBlockRegister(const std::string &blockName) const
+{
+    ASSERT(mInterfaceBlockRegisterMap.count(blockName) > 0);
+    return mInterfaceBlockRegisterMap.find(blockName)->second;
+}
+
 const std::vector<sh::Uniform> &Shader::getUniforms() const
 {
     return mActiveUniforms;
@@ -368,6 +374,18 @@ void Shader::compileToHLSL(void *compiler)
         void *activeInterfaceBlocks;
         ShGetInfoPointer(compiler, SH_ACTIVE_INTERFACE_BLOCKS_ARRAY, &activeInterfaceBlocks);
         mActiveInterfaceBlocks = *(std::vector<sh::InterfaceBlock>*)activeInterfaceBlocks;
+
+        for (size_t blockIndex = 0; blockIndex < mActiveInterfaceBlocks.size(); blockIndex++)
+        {
+            const sh::InterfaceBlock &interfaceBlock = mActiveInterfaceBlocks[blockIndex];
+
+            unsigned int index = -1;
+            bool result = ShGetInterfaceBlockRegister(compiler, interfaceBlock.name.c_str(), &index);
+            UNUSED_ASSERTION_VARIABLE(result);
+            ASSERT(result);
+
+            mInterfaceBlockRegisterMap[interfaceBlock.name] = index;
+        }
     }
     else
     {
@@ -438,7 +456,7 @@ VertexShader::~VertexShader()
 {
 }
 
-GLenum VertexShader::getType()
+GLenum VertexShader::getType() const
 {
     return GL_VERTEX_SHADER;
 }
@@ -501,7 +519,7 @@ FragmentShader::~FragmentShader()
 {
 }
 
-GLenum FragmentShader::getType()
+GLenum FragmentShader::getType() const
 {
     return GL_FRAGMENT_SHADER;
 }
