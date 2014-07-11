@@ -283,6 +283,8 @@ public:
 
     int getArraySize() const { return type.getArraySize(); }
 
+    virtual TIntermTyped *clone() const = 0;
+
 protected:
     TType type;
 };
@@ -381,6 +383,13 @@ public:
 
     virtual void enqueueChildren(std::queue<TIntermNode*> *nodeQueue) const {}
 
+    virtual TIntermTyped *clone() const
+    {
+        TIntermSymbol *sym = new TIntermSymbol(id, symbol, type);
+        sym->setLine(getLine());
+        return sym;
+    }
+
 protected:
     int id;
     TString symbol;
@@ -404,6 +413,13 @@ public:
     virtual TIntermRaw* getAsRawNode() { return this; }
     virtual bool replaceChildNode(TIntermNode *, TIntermNode *) { return false; }
     virtual void enqueueChildren(std::queue<TIntermNode*> *nodeQueue) const {}
+
+    virtual TIntermTyped *clone() const
+    {
+        TIntermTyped* raw = new TIntermRaw(type, rawText);
+        raw->setLine(getLine());
+        return raw;
+    }
 
 protected:
     TString rawText;
@@ -429,6 +445,13 @@ public:
     TIntermTyped* fold(TOperator, TIntermTyped*, TInfoSink&);
 
     virtual void enqueueChildren(std::queue<TIntermNode*> *nodeQueue) const {}
+
+    virtual TIntermTyped *clone() const
+    {
+        TIntermConstantUnion *constant = new TIntermConstantUnion(unionArrayPointer, type);
+        constant->setLine(getLine());
+        return constant;
+    }
 
 protected:
     ConstantUnion *unionArrayPointer;
@@ -478,6 +501,18 @@ public:
 
     virtual void enqueueChildren(std::queue<TIntermNode*> *nodeQueue) const;
 
+    virtual TIntermTyped *clone() const
+    {
+        TIntermBinary *binary = new TIntermBinary(op);
+        binary->left = (left == NULL ? NULL : left->clone());
+        binary->right = (right == NULL ? NULL : right->clone());
+        binary->addIndexClamp = addIndexClamp;
+
+        binary->type = type;
+        binary->setLine(getLine());
+        return binary;
+    }
+
 protected:
     TIntermTyped* left;
     TIntermTyped* right;
@@ -509,6 +544,15 @@ public:
     bool getUseEmulatedFunction() { return useEmulatedFunction; }
 
     virtual void enqueueChildren(std::queue<TIntermNode*> *nodeQueue) const;
+
+    virtual TIntermTyped *clone() const
+    {
+        TIntermUnary *unary = new TIntermUnary(op, type);
+        unary->operand = (operand == NULL ? NULL : operand->clone());
+        unary->useEmulatedFunction = useEmulatedFunction;
+        unary->setLine(getLine());
+        return unary;
+    }
 
 protected:
     TIntermTyped* operand;
@@ -554,7 +598,43 @@ public:
     void setUseEmulatedFunction() { useEmulatedFunction = true; }
     bool getUseEmulatedFunction() { return useEmulatedFunction; }
 
+    bool areAllChildrenTyped() const
+    {
+        for (size_t ii = 0; ii < sequence.size(); ++ii)
+        {
+            if (sequence[ii]->getAsTyped() == NULL)
+                return false;
+        }
+        return true;
+    }
+
     virtual void enqueueChildren(std::queue<TIntermNode*> *nodeQueue) const;
+
+    virtual TIntermTyped *clone() const
+    {
+        if (getBasicType() == EbtVoid || areAllChildrenTyped() == false)
+        {
+            // It's not really a TIntermTyped.
+            UNREACHABLE();
+            return NULL;
+        }
+        TIntermAggregate *aggregate = new TIntermAggregate(op);
+        aggregate->name = name;
+        aggregate->userDefined = userDefined;
+        aggregate->optimize = optimize;
+        aggregate->debug = debug;
+        aggregate->useEmulatedFunction = useEmulatedFunction;
+        for (size_t ii = 0; ii < sequence.size(); ++ii)
+        {
+            TIntermTyped *node = sequence[ii]->getAsTyped()->clone();
+            ASSERT(node);
+            aggregate->sequence.push_back(node);
+        }
+
+        aggregate->type = type;
+        aggregate->setLine(getLine());
+        return aggregate;
+    }
 
 protected:
     TIntermAggregate(const TIntermAggregate&); // disallow copy constructor
@@ -595,6 +675,28 @@ public:
     TIntermSelection* getAsSelectionNode() { return this; }
 
     virtual void enqueueChildren(std::queue<TIntermNode*> *nodeQueue) const;
+
+    virtual TIntermTyped *clone() const
+    {
+        if (getBasicType() == EbtVoid)
+        {
+            // It's not really a TIntermTyped.
+            UNREACHABLE();
+            return NULL;
+        }
+        // Ternary expression.
+        ASSERT(condition);
+        ASSERT(trueBlock && trueBlock->getAsTyped());
+        ASSERT(falseBlock && falseBlock->getAsTyped());
+        TIntermSelection *selection = new TIntermSelection(
+            condition->clone(),
+            trueBlock->getAsTyped()->clone(),
+            falseBlock->getAsTyped()->clone(),
+            type);
+
+        selection->setLine(getLine());
+        return selection;
+    }
 
 protected:
     TIntermTyped* condition;
