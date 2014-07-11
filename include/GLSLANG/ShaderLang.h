@@ -185,6 +185,11 @@ typedef enum {
   // It is intended as a workaround for drivers which incorrectly optimize
   // out such varyings and cause a link failure.
   SH_INIT_VARYINGS_WITHOUT_STATIC_USE = 0x20000,
+
+  // This flag rewrites vec/ivec/bvec/mat constructors that take vec/mat
+  // as input, expanding vectors to a list of scalars.
+  // It is intended as a workaround for Linux drivers (AMD, NVIDIA).
+  SH_REWRITE_CONSTRUCTORS = 0x40000,
 } ShCompileOptions;
 
 // Defines alternate strategies for implementing array index clamping.
