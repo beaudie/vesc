@@ -24,6 +24,7 @@
             '../include/angle_gl.h',
             'common/RefCountObject.cpp',
             'common/RefCountObject.h',
+            'common/angleutils.cpp',
             'common/angleutils.h',
             'common/blocklayout.cpp',
             'common/blocklayout.h',
