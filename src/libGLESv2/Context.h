@@ -196,11 +196,7 @@ class Context
     void drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei instances);
     void sync(bool block);   // flush/finish
 
-    void recordInvalidEnum();
-    void recordInvalidValue();
-    void recordInvalidOperation();
-    void recordOutOfMemory();
-    void recordInvalidFramebufferOperation();
+    void recordError(GLenum error);
 
     GLenum getError();
     GLenum getResetStatus();
@@ -314,11 +310,8 @@ class Context
     BindingPointer<Texture> mIncompleteTextures[TEXTURE_TYPE_COUNT];
 
     // Recorded errors
-    bool mInvalidEnum;
-    bool mInvalidValue;
-    bool mInvalidOperation;
-    bool mOutOfMemory;
-    bool mInvalidFramebufferOperation;
+    typedef std::set<GLenum> ErrorSet;
+    ErrorSet mErrors;
 
     // Current/lost context flags
     bool mHasBeenCurrent;
