@@ -8,7 +8,6 @@
 #define COMPILER_VARIABLE_INFO_H_
 
 #include "compiler/translator/intermediate.h"
-#include "common/shadervars.h"
 
 // Traverses intermediate tree to collect all attributes, uniforms, varyings.
 class CollectVariables : public TIntermTraverser

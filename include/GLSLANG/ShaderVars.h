@@ -13,7 +13,6 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "GLSLANG/ShaderLang.h"
 
 namespace sh
 {
@@ -131,7 +130,7 @@ struct InterfaceBlock
 {
     InterfaceBlock()
         : arraySize(0),
-          layout(BLOCKLAYOUT_PACKED),
+          layout(BLOCKLAYOUT_SHARED),
           isRowMajorLayout(false),
           staticUse(false)
     {}

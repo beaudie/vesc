@@ -524,3 +524,103 @@ bool ShGetUniformRegister(const ShHandle handle,
     *indexOut = translator->getUniformRegister(uniformName);
     return true;
 }
+
+unsigned int ShGetUniforms(
+    const ShHandle handle,
+    std::vector<sh::Uniform> *variablesOut)
+{
+    if (!handle || !variablesOut)
+    {
+        return 0u;
+    }
+
+    TShHandleBase* base = static_cast<TShHandleBase*>(handle);
+    TCompiler* compiler = base->getAsCompiler();
+    if (!compiler)
+    {
+        return 0u;
+    }
+
+    *variablesOut = compiler->getUniforms();
+    return static_cast<unsigned int>(variablesOut->size());
+}
+
+unsigned int ShGetAttributes(
+    const ShHandle handle,
+    std::vector<sh::Attribute> *variablesOut)
+{
+    if (!handle || !variablesOut)
+    {
+        return 0u;
+    }
+
+    TShHandleBase* base = static_cast<TShHandleBase*>(handle);
+    TCompiler* compiler = base->getAsCompiler();
+    if (!compiler)
+    {
+        return 0u;
+    }
+
+    *variablesOut = compiler->getAttributes();
+    return static_cast<unsigned int>(variablesOut->size());
+}
+
+unsigned int ShGetOutputVariables(
+    const ShHandle handle,
+    std::vector<sh::Attribute> *variablesOut)
+{
+    if (!handle || !variablesOut)
+    {
+        return 0u;
+    }
+
+    TShHandleBase* base = static_cast<TShHandleBase*>(handle);
+    TCompiler* compiler = base->getAsCompiler();
+    if (!compiler)
+    {
+        return 0u;
+    }
+
+    *variablesOut = compiler->getOutputVariables();
+    return static_cast<unsigned int>(variablesOut->size());
+}
+
+unsigned int ShGetVaryings(
+    const ShHandle handle,
+    std::vector<sh::Varying> *variablesOut)
+{
+    if (!handle || !variablesOut)
+    {
+        return 0u;
+    }
+
+    TShHandleBase* base = static_cast<TShHandleBase*>(handle);
+    TCompiler* compiler = base->getAsCompiler();
+    if (!compiler)
+    {
+        return 0u;
+    }
+
+    *variablesOut = compiler->getVaryings();
+    return static_cast<unsigned int>(variablesOut->size());
+}
+
+unsigned int ShGetInterfaceBlocks(
+    const ShHandle handle,
+    std::vector<sh::InterfaceBlock> *variablesOut)
+{
+    if (!handle || !variablesOut)
+    {
+        return 0u;
+    }
+
+    TShHandleBase* base = static_cast<TShHandleBase*>(handle);
+    TCompiler* compiler = base->getAsCompiler();
+    if (!compiler)
+    {
+        return 0u;
+    }
+
+    *variablesOut = compiler->getInterfaceBlocks();
+    return static_cast<unsigned int>(variablesOut->size());
+}

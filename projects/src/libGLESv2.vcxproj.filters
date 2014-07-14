@@ -183,6 +183,9 @@
     <ClInclude Include="..\..\src\libGLESv2\Program.h">
       <Filter>src\libGLESv2</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\src\libGLESv2\Caps.cpp">
+      <Filter>src\libGLESv2</Filter>
+    </ClCompile>
     <ClInclude Include="..\..\src\libGLESv2\Sampler.h">
       <Filter>src\libGLESv2</Filter>
     </ClInclude>
@@ -240,9 +243,6 @@
     <ClInclude Include="..\..\src\libGLESv2\formatutils.h">
       <Filter>src\libGLESv2</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\src\libGLESv2\Caps.cpp">
-      <Filter>src\libGLESv2</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\libGLESv2\Framebuffer.cpp">
       <Filter>src\libGLESv2</Filter>
     </ClCompile>
@@ -402,12 +402,12 @@
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\d3d11\Query11.cpp">
       <Filter>src\libGLESv2\renderer\d3d\d3d11</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\d3d11\ShaderExecutable11.cpp">
-      <Filter>src\libGLESv2\renderer\d3d\d3d11</Filter>
-    </ClCompile>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\d3d11\Buffer11.h">
       <Filter>src\libGLESv2\renderer\d3d\d3d11</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\d3d11\ShaderExecutable11.cpp">
+      <Filter>src\libGLESv2\renderer\d3d\d3d11</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\d3d11\RenderTarget11.cpp">
       <Filter>src\libGLESv2\renderer\d3d\d3d11</Filter>
     </ClCompile>
@@ -795,9 +795,6 @@
     <ClInclude Include="..\..\src\common\debug.h">
       <Filter>src\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\common\shadervars.h">
-      <Filter>src\common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\common\utilities.h">
       <Filter>src\common</Filter>
     </ClInclude>
@@ -847,6 +844,9 @@
       <Filter>include\KHR</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\GLSLANG\ShaderLang.h">
+      <Filter>include\GLSLANG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GLSLANG\ShaderVars.h">
       <Filter>include\GLSLANG</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\GLES2\gl2ext.h">

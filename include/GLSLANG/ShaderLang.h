@@ -23,8 +23,9 @@
 #define COMPILER_EXPORT
 #endif
 
-#include "KHR/khrplatform.h"
 #include <stddef.h>
+
+#include <KHR/khrplatform.h>
 
 //
 // This is the platform independent interface between an OGL driver
@@ -37,13 +38,16 @@ namespace sh
 typedef unsigned int GLenum;
 }
 
+// Must be included after the GLenum definition
+#include <GLSLANG/ShaderVars.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 128
+#define ANGLE_SH_VERSION 129
 
 typedef enum {
   SH_GLES2_SPEC = 0x8B40,
@@ -502,6 +506,35 @@ COMPILER_EXPORT bool ShGetInterfaceBlockRegister(const ShHandle handle,
 COMPILER_EXPORT bool ShGetUniformRegister(const ShHandle handle,
                                           const char *uniformName,
                                           unsigned int *indexOut);
+
+// Shader variable inspection
+// These methods return the variables from the compiler shader.
+// the variables types: uniforms, attributes, varyings, and for
+// GLES 3 or higher shaders, output variables and interface blocks.
+// Returns: the number of variables.
+// Parameters:
+// handle: Specifies the compiler.
+// variablesOut: Returns the queried variables.
+
+COMPILER_EXPORT unsigned int ShGetUniforms(
+    const ShHandle handle,
+    std::vector<sh::Uniform> *variablesOut);
+
+COMPILER_EXPORT unsigned int ShGetAttributes(
+    const ShHandle handle,
+    std::vector<sh::Attribute> *variablesOut);
+
+COMPILER_EXPORT unsigned int ShGetOutputVariables(
+    const ShHandle handle,
+    std::vector<sh::Attribute> *variablesOut);
+
+COMPILER_EXPORT unsigned int ShGetVaryings(
+    const ShHandle handle,
+    std::vector<sh::Varying> *variablesOut);
+
+COMPILER_EXPORT unsigned int ShGetInterfaceBlocks(
+    const ShHandle handle,
+    std::vector<sh::InterfaceBlock> *variablesOut);
 
 #ifdef __cplusplus
 }
