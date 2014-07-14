@@ -429,36 +429,6 @@ void ShGetNameHashingEntry(const ShHandle handle,
     hashedName[len - 1] = '\0';
 }
 
-void ShGetInfoPointer(const ShHandle handle, ShShaderInfo pname, void** params)
-{
-    if (!handle || !params)
-        return;
-
-    TShHandleBase* base = static_cast<TShHandleBase*>(handle);
-    TranslatorHLSL* translator = base->getAsTranslatorHLSL();
-    if (!translator) return;
-
-    switch(pname)
-    {
-    case SH_ACTIVE_UNIFORMS_ARRAY:
-        *params = (void*)&translator->getUniforms();
-        break;
-    case SH_ACTIVE_INTERFACE_BLOCKS_ARRAY:
-        *params = (void*)&translator->getInterfaceBlocks();
-        break;
-    case SH_ACTIVE_OUTPUT_VARIABLES_ARRAY:
-        *params = (void*)&translator->getOutputVariables();
-        break;
-    case SH_ACTIVE_ATTRIBUTES_ARRAY:
-        *params = (void*)&translator->getAttributes();
-        break;
-    case SH_ACTIVE_VARYINGS_ARRAY:
-        *params = (void*)&translator->getVaryings();
-        break;
-    default: UNREACHABLE();
-    }
-}
-
 int ShCheckVariablesWithinPackingLimits(
     int maxVectors, ShVariableInfo* varInfoArray, size_t varInfoArraySize)
 {
