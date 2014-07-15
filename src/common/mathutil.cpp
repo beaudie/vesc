@@ -64,15 +64,157 @@ void convert999E5toRGBFloats(unsigned int input, float *red, float *green, float
 }
 
 } // namespace gl
-#if 1
+
+
 #include "common/shadervars.h"
 namespace gl
 {
-ShaderVariable::ShaderVariable(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn)
+
+  ShaderVariable::ShaderVariable(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn)
   : type(typeIn),
     precision(precisionIn),
     name(nameIn),
     arraySize(arraySizeIn)
 {}
-#endif // 0
+
+ShaderVariable::ShaderVariable(const ShaderVariable& other)
+  : type(other.type),
+    precision(other.precision),
+    name(other.name),
+    arraySize(other.arraySize)
+{}
+
+void ShaderVariable::operator=(const ShaderVariable& other)
+{
+    type = other.type;
+    precision = other.precision;
+    name = other.name;
+    arraySize = other.arraySize;
+}
+
+
+Uniform::Uniform(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn,
+        unsigned int registerIndexIn, unsigned int elementIndexIn)
+  : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
+    fields(),
+    registerIndex(registerIndexIn),
+    elementIndex(elementIndexIn)
+{}
+
+Uniform::Uniform(const Uniform& other)
+  : ShaderVariable(other),
+    fields(other.fields),
+    registerIndex(other.registerIndex),
+    elementIndex(other.elementIndex)
+{
+}
+
+void Uniform::operator=(const Uniform& other)
+{
+    ShaderVariable::operator=(other);
+    fields = other.fields;
+    registerIndex = other.registerIndex;
+    elementIndex = other.elementIndex;
+}
+
+
+Attribute::Attribute()
+  : ShaderVariable(GL_NONE, GL_NONE, "", 0),
+    location(-1)
+{}
+
+Attribute::Attribute(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, int locationIn)
+  : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
+    location(locationIn)
+{}
+
+Attribute::Attribute(const Attribute& other)
+  : ShaderVariable(other),
+    location(other.location)
+{}
+
+void Attribute::operator=(const Attribute& other)
+{
+    ShaderVariable::operator=(other);
+    location = other.location;
+}
+
+
+InterfaceBlockField::InterfaceBlockField(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, bool isRowMajorMatrix)
+  : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
+    isRowMajorMatrix(isRowMajorMatrix),
+    fields()
+{}
+
+InterfaceBlockField::InterfaceBlockField(const InterfaceBlockField& other)
+  : ShaderVariable(other),
+    isRowMajorMatrix(other.isRowMajorMatrix),
+    fields(other.fields)
+{}
+
+void InterfaceBlockField::operator=(const InterfaceBlockField& other)
+{
+    ShaderVariable::operator=(other);
+    isRowMajorMatrix = other.isRowMajorMatrix;
+    fields = other.fields;
+}
+
+
+Varying::Varying(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, InterpolationType interpolationIn)
+  : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
+    interpolation(interpolationIn),
+    fields(),
+    structName()
+{}
+
+Varying::Varying(const Varying& other)
+  : ShaderVariable(other),
+    interpolation(other.interpolation),
+    fields(other.fields),
+    structName(other.structName)
+{}
+
+void Varying::operator=(const Varying& other)
+{
+    ShaderVariable::operator=(other);
+    interpolation = other.interpolation;
+    fields = other.fields;
+    structName = other.structName;
+}
+
+
+InterfaceBlock::InterfaceBlock(const char *name, unsigned int arraySize, unsigned int registerIndex)
+  : name(name),
+    arraySize(arraySize),
+    // dataSize(), // Intentionally left uninitialized.
+    layout(BLOCKLAYOUT_SHARED),
+    registerIndex(registerIndex),
+    isRowMajorLayout(false),
+    fields(),
+    blockInfo()
+{}
+
+InterfaceBlock::InterfaceBlock(const InterfaceBlock& other)
+  : name(other.name),
+    arraySize(other.arraySize),
+    dataSize(other.dataSize),
+    layout(other.layout),
+    registerIndex(other.registerIndex),
+    isRowMajorLayout(other.isRowMajorLayout),
+    fields(other.fields),
+    blockInfo(other.blockInfo)
+{}
+
+void InterfaceBlock::operator=(const InterfaceBlock& other)
+{
+    name = other.name;
+    arraySize = other.arraySize;
+    dataSize = other.dataSize;
+    layout = other.layout;
+    registerIndex = other.registerIndex;
+    isRowMajorLayout = other.isRowMajorLayout;
+    fields = other.fields;
+    blockInfo = other.blockInfo;
+}
+
 } // namespace gl

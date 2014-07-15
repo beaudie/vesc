@@ -45,9 +45,15 @@ struct ShaderVariable
     unsigned int arraySize;
 
     ShaderVariable(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn);
+    ShaderVariable(const ShaderVariable& other);
+    void operator=(const ShaderVariable& other);
 
     bool isArray() const { return arraySize > 0; }
     unsigned int elementCount() const { return std::max(1u, arraySize); }
+
+private:
+    // To prevent large automatic inline code generation.
+    bool operator==(const ShaderVariable& other) const;
 };
 
 // Uniform registers (and element indices) are assigned when outputting shader code
@@ -60,28 +66,27 @@ struct Uniform : public ShaderVariable
     unsigned int elementIndex; // Offset within a register, for struct members
 
     Uniform(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn,
-            unsigned int registerIndexIn, unsigned int elementIndexIn)
-      : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
-        registerIndex(registerIndexIn),
-        elementIndex(elementIndexIn)
-    {}
+            unsigned int registerIndexIn, unsigned int elementIndexIn);
+    Uniform(const Uniform& other);
+    void operator=(const Uniform& other);
 
     bool isStruct() const { return !fields.empty(); }
+private:
+    // To prevent large automatic inline code generation.
+    bool operator==(const Uniform& other) const;
 };
 
 struct Attribute : public ShaderVariable
 {
     int location;
 
-    Attribute()
-      : ShaderVariable(GL_NONE, GL_NONE, "", 0),
-        location(-1)
-    {}
-
-    Attribute(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, int locationIn)
-      : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
-        location(locationIn)
-    {}
+    Attribute();
+    Attribute(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, int locationIn);
+    Attribute(const Attribute& other);
+    void operator=(const Attribute& other);
+private:
+    // To prevent large automatic inline code generation.
+    bool operator==(const Attribute& other) const;
 };
 
 struct InterfaceBlockField : public ShaderVariable
@@ -89,12 +94,14 @@ struct InterfaceBlockField : public ShaderVariable
     bool isRowMajorMatrix;
     std::vector<InterfaceBlockField> fields;
 
-    InterfaceBlockField(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, bool isRowMajorMatrix)
-      : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
-        isRowMajorMatrix(isRowMajorMatrix)
-    {}
+    InterfaceBlockField(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, bool isRowMajorMatrix);
+    InterfaceBlockField(const InterfaceBlockField& other);
+    void operator=(const InterfaceBlockField& other);
 
     bool isStruct() const { return !fields.empty(); }
+private:
+    // To prevent large automatic inline code generation.
+    bool operator==(const InterfaceBlockField& other) const;
 };
 
 struct Varying : public ShaderVariable
@@ -103,12 +110,14 @@ struct Varying : public ShaderVariable
     std::vector<Varying> fields;
     std::string structName;
 
-    Varying(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, InterpolationType interpolationIn)
-      : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
-        interpolation(interpolationIn)
-    {}
+    Varying(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, InterpolationType interpolationIn);
+    Varying(const Varying& other);
+    void operator=(const Varying& other);
 
     bool isStruct() const { return !fields.empty(); }
+private:
+    // To prevent large automatic inline code generation.
+    bool operator==(const Varying& other) const;
 };
 
 struct BlockMemberInfo
@@ -123,6 +132,9 @@ struct BlockMemberInfo
         return BlockMemberInfo(-1, -1, -1, false);
     }
 
+    // Borderline too large for inline. If someone adds another field, or makes one of the
+    // existing fields more complicated, outline this and add explicit copy and assignment
+    // constructors/operators.
     BlockMemberInfo(int offset, int arrayStride, int matrixStride, bool isRowMajorMatrix)
       : offset(offset),
         arrayStride(arrayStride),
@@ -146,13 +158,14 @@ struct InterfaceBlock
     // HLSL-specific members
     unsigned int registerIndex;
 
-    InterfaceBlock(const char *name, unsigned int arraySize, unsigned int registerIndex)
-      : name(name),
-        arraySize(arraySize),
-        layout(BLOCKLAYOUT_SHARED),
-        registerIndex(registerIndex),
-        isRowMajorLayout(false)
-    {}
+    InterfaceBlock(const char *name, unsigned int arraySize, unsigned int registerIndex);
+    InterfaceBlock(const InterfaceBlock& other);
+    void operator=(const InterfaceBlock& other);
+
+private:
+    // To prevent large automatic inline code generation.
+    bool operator==(const InterfaceBlock& other) const;
+
 };
 
 }
