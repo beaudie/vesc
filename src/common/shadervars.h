@@ -44,12 +44,7 @@ struct ShaderVariable
     std::string name;
     unsigned int arraySize;
 
-    ShaderVariable(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn)
-      : type(typeIn),
-        precision(precisionIn),
-        name(nameIn),
-        arraySize(arraySizeIn)
-    {}
+    ShaderVariable(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn);
 
     bool isArray() const { return arraySize > 0; }
     unsigned int elementCount() const { return std::max(1u, arraySize); }

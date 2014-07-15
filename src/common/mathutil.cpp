@@ -63,4 +63,16 @@ void convert999E5toRGBFloats(unsigned int input, float *red, float *green, float
     *blue = inputData->B * pow(2.0f, (int)inputData->E - g_sharedexp_bias - g_sharedexp_mantissabits);
 }
 
-}
+} // namespace gl
+#if 1
+#include "common/shadervars.h"
+namespace gl
+{
+ShaderVariable::ShaderVariable(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn)
+  : type(typeIn),
+    precision(precisionIn),
+    name(nameIn),
+    arraySize(arraySizeIn)
+{}
+#endif // 0
+} // namespace gl
