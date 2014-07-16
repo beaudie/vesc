@@ -65,7 +65,10 @@ static sh::GLenum nonSqMatTypes[] = {
 
 static sh::ShaderVariable SimpleVar(GLenum type, unsigned int size)
 {
-    return sh::ShaderVariable(type, GL_NONE, "", size == 1 ? 0 : size);
+    sh::ShaderVariable variable;
+    variable.type = type;
+    variable.arraySize = (size == 1 ? 0 : size);
+    return variable;
 }
 
 TEST(VariablePacking, Pack) {
