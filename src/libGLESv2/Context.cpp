@@ -1515,13 +1515,11 @@ void Context::applyTextures(SamplerType shaderType, Texture *textures[], Texture
             {
                 mRenderer->setSamplerState(shaderType, samplerIndex, sampler);
                 mRenderer->setTexture(shaderType, samplerIndex, texture);
-                texture->resetDirty();
             }
             else
             {
                 Texture *incompleteTexture = getIncompleteTexture(textureType);
                 mRenderer->setTexture(shaderType, samplerIndex, incompleteTexture);
-                incompleteTexture->resetDirty();
             }
         }
         else
