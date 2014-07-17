@@ -44,14 +44,6 @@ struct ShaderVariable
           staticUse(false)
     {}
 
-    ShaderVariable(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn)
-        : type(typeIn),
-          precision(precisionIn),
-          name(nameIn),
-          arraySize(arraySizeIn),
-          staticUse(false)
-    {}
-
     bool isArray() const { return arraySize > 0; }
     unsigned int elementCount() const { return std::max(1u, arraySize); }
 
@@ -65,12 +57,7 @@ struct ShaderVariable
 
 struct Uniform : public ShaderVariable
 {
-    Uniform()
-    {}
-
-    Uniform(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn)
-        : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn)
-    {}
+    Uniform() {}
 
     bool isStruct() const { return !fields.empty(); }
 
@@ -83,11 +70,6 @@ struct Attribute : public ShaderVariable
         : location(-1)
     {}
 
-    Attribute(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, int locationIn)
-      : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
-        location(locationIn)
-    {}
-
     int location;
 };
 
@@ -95,11 +77,6 @@ struct InterfaceBlockField : public ShaderVariable
 {
     InterfaceBlockField()
         : isRowMajorMatrix(false)
-    {}
-
-    InterfaceBlockField(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, bool isRowMajorMatrix)
-        : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
-          isRowMajorMatrix(isRowMajorMatrix)
     {}
 
     bool isStruct() const { return !fields.empty(); }
@@ -114,11 +91,6 @@ struct Varying : public ShaderVariable
         : interpolation(INTERPOLATION_SMOOTH)
     {}
 
-    Varying(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn, InterpolationType interpolationIn)
-        : ShaderVariable(typeIn, precisionIn, nameIn, arraySizeIn),
-          interpolation(interpolationIn)
-    {}
-
     bool isStruct() const { return !fields.empty(); }
 
     InterpolationType interpolation;
@@ -131,14 +103,6 @@ struct InterfaceBlock
     InterfaceBlock()
         : arraySize(0),
           layout(BLOCKLAYOUT_PACKED),
-          isRowMajorLayout(false),
-          staticUse(false)
-    {}
-
-    InterfaceBlock(const char *name, unsigned int arraySize)
-        : name(name),
-          arraySize(arraySize),
-          layout(BLOCKLAYOUT_SHARED),
           isRowMajorLayout(false),
           staticUse(false)
     {}
