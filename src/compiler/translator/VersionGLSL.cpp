@@ -75,7 +75,7 @@ bool TVersionGLSL::visitAggregate(Visit, TIntermAggregate* node)
         visitChildren = true;
         break;
       case EOpDeclaration: {
-        const TIntermSequence& sequence = node->getSequence();
+        const TIntermSequence& sequence = *(node->getSequence());
         TQualifier qualifier = sequence.front()->getAsTyped()->getQualifier();
         if ((qualifier == EvqInvariantVaryingIn) ||
             (qualifier == EvqInvariantVaryingOut)) {
@@ -84,7 +84,7 @@ bool TVersionGLSL::visitAggregate(Visit, TIntermAggregate* node)
         break;
       }
       case EOpParameters: {
-        const TIntermSequence& params = node->getSequence();
+        const TIntermSequence& params = *(node->getSequence());
         for (TIntermSequence::const_iterator iter = params.begin();
              iter != params.end(); ++iter)
         {
@@ -106,7 +106,7 @@ bool TVersionGLSL::visitAggregate(Visit, TIntermAggregate* node)
       case EOpConstructMat2:
       case EOpConstructMat3:
       case EOpConstructMat4: {
-        const TIntermSequence& sequence = node->getSequence();
+        const TIntermSequence& sequence = *(node->getSequence());
         if (sequence.size() == 1) {
           TIntermTyped* typed = sequence.front()->getAsTyped();
           if (typed && typed->isMatrix()) {

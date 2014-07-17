@@ -105,12 +105,12 @@ bool TConstTraverser::visitAggregate(Visit visit, TIntermAggregate* node)
         return false;  
     }
 
-    if (node->getSequence().size() == 0) {
+    if (node->getSequence()->size() == 0) {
         error = true;
         return false;
     }
 
-    bool flag = node->getSequence().size() == 1 && node->getSequence()[0]->getAsTyped()->getAsConstantUnion();
+    bool flag = node->getSequence()->size() == 1 && (*node->getSequence())[0]->getAsTyped()->getAsConstantUnion();
     if (flag) 
     {
         singleConstantParam = true; 
@@ -124,8 +124,8 @@ bool TConstTraverser::visitAggregate(Visit visit, TIntermAggregate* node)
         }
     }       
 
-    for (TIntermSequence::iterator p = node->getSequence().begin(); 
-                                   p != node->getSequence().end(); p++) {
+    for (TIntermSequence::iterator p = node->getSequence()->begin(); 
+                                   p != node->getSequence()->end(); p++) {
 
         if (node->getOp() == EOpComma)
             index = 0;           
@@ -242,7 +242,7 @@ bool TIntermediate::parseConstTree(const TSourceLoc& line, TIntermNode* root, Co
     if (root == 0)
         return false;
 
-    TConstTraverser it(unionArray, singleConstantParam, constructorType, infoSink, t);
+    TConstTraverser it(unionArray, singleConstantParam, constructorType, mInfoSink, t);
 
     root->traverse(&it);
     if (it.error)

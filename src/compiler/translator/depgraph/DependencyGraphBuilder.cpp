@@ -40,9 +40,9 @@ void TDependencyGraphBuilder::visitFunctionCall(TIntermAggregate* intermFunction
 
     // Run through the function call arguments.
     int argumentNumber = 0;
-    TIntermSequence& intermArguments = intermFunctionCall->getSequence();
-    for (TIntermSequence::const_iterator iter = intermArguments.begin();
-         iter != intermArguments.end();
+    TIntermSequence* intermArguments = intermFunctionCall->getSequence();
+    for (TIntermSequence::const_iterator iter = intermArguments->begin();
+         iter != intermArguments->end();
          ++iter, ++argumentNumber)
     {
         TNodeSetMaintainer nodeSetMaintainer(this);
@@ -68,8 +68,8 @@ void TDependencyGraphBuilder::visitFunctionCall(TIntermAggregate* intermFunction
 
 void TDependencyGraphBuilder::visitAggregateChildren(TIntermAggregate* intermAggregate)
 {
-    TIntermSequence& sequence = intermAggregate->getSequence();
-    for(TIntermSequence::const_iterator iter = sequence.begin(); iter != sequence.end(); ++iter)
+    TIntermSequence* sequence = intermAggregate->getSequence();
+    for(TIntermSequence::const_iterator iter = sequence->begin(); iter != sequence->end(); ++iter)
     {
         TIntermNode* intermChild = *iter;
         intermChild->traverse(this);
