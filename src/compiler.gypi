@@ -21,11 +21,18 @@
                 '.',
                 '../include',
             ],
+            'defines':
+            [
+                # define the static translator to indicate exported
+                # classes are (in fact) locally defined
+                'ANGLE_TRANSLATOR_STATIC',
+            ],
             'sources':
             [
                 '<!@(python <(angle_path)/enumerate_files.py \
                      -dirs compiler/translator third_party/compiler common ../include \
                      -excludes compiler/translator/ShaderLang.cpp \
+                               compiler/translator/ShaderVars.cpp \
                      -types *.cpp *.h *.y *.l)',
             ],
             'msvs_settings':
@@ -53,7 +60,8 @@
             ],
             'sources':
             [
-                'compiler/translator/ShaderLang.cpp'
+                'compiler/translator/ShaderLang.cpp',
+                'compiler/translator/ShaderVars.cpp'
             ],
         },
 
@@ -80,7 +88,8 @@
             },
             'sources':
             [
-                'compiler/translator/ShaderLang.cpp'
+                'compiler/translator/ShaderLang.cpp',
+                'compiler/translator/ShaderVars.cpp'
             ],
         },
     ],

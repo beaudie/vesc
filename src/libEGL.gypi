@@ -23,6 +23,7 @@
                     [
                         '<!@(python <(angle_path)/enumerate_files.py \
                              -dirs common libEGL ../include \
+                             -excludes common/blocklayout.* \
                              -types *.cpp *.h *.def *.rc)',
                     ],
                     'defines':

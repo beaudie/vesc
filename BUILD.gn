@@ -85,6 +85,7 @@ static_library("preprocessor") {
 
 }
 
+#TODO(jmadill): define static for this config only
 static_library("translator_lib") {
   sources = [
     "src/common/RefCountObject.cpp",
@@ -99,7 +100,6 @@ static_library("translator_lib") {
     "src/common/mathutil.cpp",
     "src/common/mathutil.h",
     "src/common/platform.h",
-    "src/common/shadervars.cpp",
     "src/common/tls.cpp",
     "src/common/tls.h",
     "src/common/utilities.cpp",
@@ -245,6 +245,7 @@ config("translator_static_config") {
 static_library("translator_static") {
   sources = [
     "src/compiler/translator/ShaderLang.cpp",
+    "src/compiler/translator/ShaderVars.cpp",
   ]
 
   configs -= [ "//build/config/compiler:chromium_code" ]
@@ -296,7 +297,6 @@ if (is_win) {
       "src/common/mathutil.cpp",
       "src/common/mathutil.h",
       "src/common/platform.h",
-      "src/common/shadervars.cpp",
       "src/common/tls.cpp",
       "src/common/tls.h",
       "src/common/utilities.cpp",
@@ -602,15 +602,12 @@ if (is_win) {
       "src/common/RefCountObject.cpp",
       "src/common/RefCountObject.h",
       "src/common/angleutils.h",
-      "src/common/blocklayout.cpp",
-      "src/common/blocklayout.h",
       "src/common/debug.cpp",
       "src/common/debug.h",
       "src/common/event_tracer.cpp",
       "src/common/event_tracer.h",
       "src/common/mathutil.cpp",
       "src/common/mathutil.h",
-      "src/common/shadervars.cpp",
       "src/common/utilities.cpp",
       "src/common/utilities.h",
       "src/common/version.h",
