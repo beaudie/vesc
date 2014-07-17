@@ -83,42 +83,48 @@ bool ElseBlockRewriter::visitAggregate(Visit visit, TIntermAggregate *node)
 
 TIntermNode *ElseBlockRewriter::rewriteSelection(TIntermSelection *selection)
 {
-    ASSERT(selection->getFalseBlock() != NULL);
+    ASSERT(selection != NULL);
 
     TString temporaryName = "cond_" + str(mTemporaryIndex++);
     TIntermTyped *typedCondition = selection->getCondition()->getAsTyped();
     TType resultType(EbtBool, EbpUndefined);
-    TIntermSymbol *conditionSymbolA = MakeNewTemporary(temporaryName, EbtBool);
-    TIntermSymbol *conditionSymbolB = MakeNewTemporary(temporaryName, EbtBool);
-    TIntermSymbol *conditionSymbolC = MakeNewTemporary(temporaryName, EbtBool);
-    TIntermBinary *storeCondition = MakeNewBinary(EOpInitialize, conditionSymbolA,
+    TIntermSymbol *conditionSymbolInit = MakeNewTemporary(temporaryName, EbtBool);
+    TIntermBinary *storeCondition = MakeNewBinary(EOpInitialize, conditionSymbolInit,
                                                   typedCondition, resultType);
-    TIntermUnary *negatedCondition = MakeNewUnary(EOpLogicalNot, conditionSymbolB);
     TIntermNode *negatedElse = NULL;
 
-    // crbug.com/346463
-    // D3D generates error messages claiming a function has no return value, when rewriting
-    // an if-else clause that returns something non-void in a function. By appending dummy
-    // returns (that are unreachable) we can silence this compile error.
-    if (mFunctionType && mFunctionType->getBasicType() != EbtVoid)
+    TIntermSelection *falseBlock = NULL;
+
+    if (selection->getFalseBlock())
     {
-        TString typeString = mFunctionType->getStruct() ? mFunctionType->getStruct()->name() :
-            mFunctionType->getBasicString();
-        TString rawText = "return (" + typeString + ")0";
-        negatedElse = new TIntermRaw(*mFunctionType, rawText);
+        // crbug.com/346463
+        // D3D generates error messages claiming a function has no return value, when rewriting
+        // an if-else clause that returns something non-void in a function. By appending dummy
+        // returns (that are unreachable) we can silence this compile error.
+        if (mFunctionType && mFunctionType->getBasicType() != EbtVoid)
+        {
+            TString typeString = mFunctionType->getStruct() ? mFunctionType->getStruct()->name() :
+                mFunctionType->getBasicString();
+            TString rawText = "return (" + typeString + ")0";
+            negatedElse = new TIntermRaw(*mFunctionType, rawText);
+        }
+
+        TIntermSymbol *conditionSymbolElse = MakeNewTemporary(temporaryName, EbtBool);
+        TIntermUnary *negatedCondition = MakeNewUnary(EOpLogicalNot, conditionSymbolElse);
+        falseBlock = new TIntermSelection(negatedCondition,
+                                          selection->getFalseBlock(), negatedElse);
     }
 
-    TIntermSelection *falseBlock = new TIntermSelection(negatedCondition,
-                                                        selection->getFalseBlock(), negatedElse);
-    TIntermSelection *newIfElse = new TIntermSelection(conditionSymbolC,
-                                                       selection->getTrueBlock(), falseBlock);
+    TIntermSymbol *conditionSymbolSel = MakeNewTemporary(temporaryName, EbtBool);
+    TIntermSelection *newSelection = new TIntermSelection(conditionSymbolSel,
+                                                          selection->getTrueBlock(), falseBlock);
 
     TIntermAggregate *declaration = new TIntermAggregate(EOpDeclaration);
     declaration->getSequence()->push_back(storeCondition);
 
     TIntermAggregate *block = new TIntermAggregate(EOpSequence);
     block->getSequence()->push_back(declaration);
-    block->getSequence()->push_back(newIfElse);
+    block->getSequence()->push_back(newSelection);
 
     return block;
 }
