@@ -143,3 +143,28 @@ TEST_F(GLSLTest, DxPositionBug)
     GLuint program = compileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_NE(0u, program);
 }
+
+TEST_F(GLSLTest, ElseIfRewriting)
+{
+    const std::string &vertexShaderSource =
+        "attribute vec4 a_position;\n"
+        "varying float v;\n"
+        "void main() {\n"
+        "  gl_Position = a_position;\n"
+        "  if (a_position.x > 0.0) {\n"
+        "    v = 1.0;\n"
+        "  } else if (a_position.x > 0.5) {\n"
+        "    v = 0.0;\n"
+        "  }\n"
+        "}\n";
+
+    const std::string &fragmentShaderSource =
+        "precision highp float;\n"
+        "varying float v;\n"
+        "void main() {\n"
+        "  gl_FragColor = vec4(v, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    GLuint program = compileProgram(vertexShaderSource, fragmentShaderSource);
+    EXPECT_NE(0u, program);
+}
