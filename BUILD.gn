@@ -41,6 +41,7 @@ source_set("includes") {
     "include/GLES3/gl3ext.h",
     "include/GLES3/gl3platform.h",
     "include/GLSLANG/ShaderLang.h",
+    "include/GLSLANG/ShaderVars.h",
     "include/KHR/khrplatform.h",
   ]
 }
@@ -99,7 +100,6 @@ static_library("translator_lib") {
     "src/common/mathutil.h",
     "src/common/platform.h",
     "src/common/shadervars.cpp",
-    "src/common/shadervars.h",
     "src/common/tls.cpp",
     "src/common/tls.h",
     "src/common/utilities.cpp",
@@ -297,7 +297,6 @@ if (is_win) {
       "src/common/mathutil.h",
       "src/common/platform.h",
       "src/common/shadervars.cpp",
-      "src/common/shadervars.h",
       "src/common/tls.cpp",
       "src/common/tls.h",
       "src/common/utilities.cpp",
@@ -612,7 +611,6 @@ if (is_win) {
       "src/common/mathutil.cpp",
       "src/common/mathutil.h",
       "src/common/shadervars.cpp",
-      "src/common/shadervars.h",
       "src/common/utilities.cpp",
       "src/common/utilities.h",
       "src/common/version.h",

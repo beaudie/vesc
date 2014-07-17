@@ -13,7 +13,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "GLSLANG/ShaderLang.h"
+
+#include "ShaderLang.h"
 
 namespace sh
 {
