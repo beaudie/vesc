@@ -23,8 +23,9 @@
 #define COMPILER_EXPORT
 #endif
 
-#include "KHR/khrplatform.h"
 #include <stddef.h>
+
+#include "KHR/khrplatform.h"
 
 //
 // This is the platform independent interface between an OGL driver
@@ -43,7 +44,7 @@ extern "C" {
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 128
+#define ANGLE_SH_VERSION 129
 
 typedef enum {
   SH_GLES2_SPEC = 0x8B40,
@@ -100,12 +101,12 @@ typedef enum {
   SH_NAME_MAX_LENGTH                = 0x6001,
   SH_HASHED_NAME_MAX_LENGTH         = 0x6002,
   SH_HASHED_NAMES_COUNT             = 0x6003,
-  SH_ACTIVE_UNIFORMS_ARRAY          = 0x6004,
+  SH_UNIFORMS_ARRAY                 = 0x6004,
   SH_SHADER_VERSION                 = 0x6005,
-  SH_ACTIVE_INTERFACE_BLOCKS_ARRAY  = 0x6006,
-  SH_ACTIVE_OUTPUT_VARIABLES_ARRAY  = 0x6007,
-  SH_ACTIVE_ATTRIBUTES_ARRAY        = 0x6008,
-  SH_ACTIVE_VARYINGS_ARRAY          = 0x6009,
+  SH_INTERFACE_BLOCKS_ARRAY         = 0x6006,
+  SH_OUTPUT_VARIABLES_ARRAY         = 0x6007,
+  SH_ATTRIBUTES_ARRAY               = 0x6008,
+  SH_VARYINGS_ARRAY                 = 0x6009,
   SH_RESOURCES_STRING_LENGTH        = 0x600A,
   SH_OUTPUT_TYPE                    = 0x600B
 } ShShaderInfo;
@@ -457,13 +458,17 @@ COMPILER_EXPORT void ShGetNameHashingEntry(const ShHandle handle,
 // Parameters:
 // handle: Specifies the compiler
 // pname: Specifies the parameter to query.
+// Returns true on success, false on error.
 // The following parameters are defined:
-// SH_ACTIVE_UNIFORMS_ARRAY: an STL vector of active uniforms. Valid only for
-//                           HLSL output.
+// SH_UNIFORMS_ARRAY: an STL vector of uniforms.
+// SH_VARYINGS_ARRAY: an STL vector of varyings.
+// SH_INTERFACE_BLOCKS_ARRAY: an STL vector of interface blocks.
+// SH_ATTRIBUTES_ARRAY: an STL vector of attributes.
+// SH_OUTPUT_VARIABLES_ARRAY: an STL vector of output variables.
 // params: Requested parameter
-COMPILER_EXPORT void ShGetInfoPointer(const ShHandle handle,
+COMPILER_EXPORT bool ShGetInfoPointer(const ShHandle handle,
                                       ShShaderInfo pname,
-                                      void** params);
+                                      const void** params);
 
 typedef struct
 {

@@ -22,6 +22,17 @@ namespace gl
 void *Shader::mFragmentCompiler = NULL;
 void *Shader::mVertexCompiler = NULL;
 
+template <typename VarT>
+void GetShaderVariables(void *compiler, ShShaderInfo pname, std::vector<VarT> *variableList)
+{
+    // TODO: handle staticUse. for now, assume all returned variables are active.
+    const std::vector<VarT> *variablePointer;
+    bool success = ShGetInfoPointer(compiler, pname, reinterpret_cast<const void **>(&variablePointer));
+    UNUSED_ASSERTION_VARIABLE(success);
+    ASSERT(success);
+    *variableList = *variablePointer;
+}
+
 Shader::Shader(ResourceManager *manager, const rx::Renderer *renderer, GLuint handle)
     : mHandle(handle), mRenderer(renderer), mResourceManager(manager)
 {
@@ -241,8 +252,9 @@ void Shader::parseVaryings(void *compiler)
 {
     if (!mHlsl.empty())
     {
-        std::vector<sh::Varying> *activeVaryings;
-        ShGetInfoPointer(compiler, SH_ACTIVE_VARYINGS_ARRAY, reinterpret_cast<void**>(&activeVaryings));
+        const std::vector<sh::Varying> *activeVaryings;
+        ShGetInfoPointer(compiler, SH_VARYINGS_ARRAY,
+                         reinterpret_cast<const void**>(&activeVaryings));
 
         for (size_t varyingIndex = 0; varyingIndex < activeVaryings->size(); varyingIndex++)
         {
@@ -373,11 +385,9 @@ void Shader::compileToHLSL(void *compiler)
         mHlsl = outputHLSL;
 #endif
 
-        delete[] outputHLSL;
+        SafeDeleteArray(outputHLSL);
 
-        void *activeUniforms;
-        ShGetInfoPointer(compiler, SH_ACTIVE_UNIFORMS_ARRAY, &activeUniforms);
-        mActiveUniforms = *(std::vector<sh::Uniform>*)activeUniforms;
+        GetShaderVariables(compiler, SH_UNIFORMS_ARRAY, &mActiveUniforms);
 
         for (size_t uniformIndex = 0; uniformIndex < mActiveUniforms.size(); uniformIndex++)
         {
@@ -391,9 +401,7 @@ void Shader::compileToHLSL(void *compiler)
             mUniformRegisterMap[uniform.name] = index;
         }
 
-        void *activeInterfaceBlocks;
-        ShGetInfoPointer(compiler, SH_ACTIVE_INTERFACE_BLOCKS_ARRAY, &activeInterfaceBlocks);
-        mActiveInterfaceBlocks = *(std::vector<sh::InterfaceBlock>*)activeInterfaceBlocks;
+        GetShaderVariables(compiler, SH_INTERFACE_BLOCKS_ARRAY, &mActiveInterfaceBlocks);
 
         for (size_t blockIndex = 0; blockIndex < mActiveInterfaceBlocks.size(); blockIndex++)
         {
@@ -524,9 +532,7 @@ void VertexShader::parseAttributes()
     const std::string &hlsl = getHLSL();
     if (!hlsl.empty())
     {
-        void *activeAttributes;
-        ShGetInfoPointer(mVertexCompiler, SH_ACTIVE_ATTRIBUTES_ARRAY, &activeAttributes);
-        mActiveAttributes = *(std::vector<sh::Attribute>*)activeAttributes;
+        GetShaderVariables(mVertexCompiler, SH_ATTRIBUTES_ARRAY, &mActiveAttributes);
     }
 }
 
@@ -555,9 +561,7 @@ void FragmentShader::compile()
     const std::string &hlsl = getHLSL();
     if (!hlsl.empty())
     {
-        void *activeOutputVariables;
-        ShGetInfoPointer(mFragmentCompiler, SH_ACTIVE_OUTPUT_VARIABLES_ARRAY, &activeOutputVariables);
-        mActiveOutputVariables = *(std::vector<sh::Attribute>*)activeOutputVariables;
+        GetShaderVariables(mFragmentCompiler, SH_OUTPUT_VARIABLES_ARRAY, &mActiveOutputVariables);
     }
 }
 

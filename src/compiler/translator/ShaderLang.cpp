@@ -429,34 +429,36 @@ void ShGetNameHashingEntry(const ShHandle handle,
     hashedName[len - 1] = '\0';
 }
 
-void ShGetInfoPointer(const ShHandle handle, ShShaderInfo pname, void** params)
+bool ShGetInfoPointer(const ShHandle handle, ShShaderInfo pname, const void** params)
 {
     if (!handle || !params)
-        return;
+        return false;
 
     TShHandleBase* base = static_cast<TShHandleBase*>(handle);
-    TranslatorHLSL* translator = base->getAsTranslatorHLSL();
-    if (!translator) return;
+    TCompiler* compiler = base->getAsCompiler();
+    if (!compiler) return false;
 
     switch(pname)
     {
-    case SH_ACTIVE_UNIFORMS_ARRAY:
-        *params = (void*)&translator->getUniforms();
+      case SH_UNIFORMS_ARRAY:
+        *params = reinterpret_cast<const void*>(&compiler->getUniforms());
         break;
-    case SH_ACTIVE_INTERFACE_BLOCKS_ARRAY:
-        *params = (void*)&translator->getInterfaceBlocks();
+      case SH_INTERFACE_BLOCKS_ARRAY:
+        *params = reinterpret_cast<const void*>(&compiler->getInterfaceBlocks());
         break;
-    case SH_ACTIVE_OUTPUT_VARIABLES_ARRAY:
-        *params = (void*)&translator->getOutputVariables();
+      case SH_OUTPUT_VARIABLES_ARRAY:
+        *params = reinterpret_cast<const void*>(&compiler->getOutputVariables());
         break;
-    case SH_ACTIVE_ATTRIBUTES_ARRAY:
-        *params = (void*)&translator->getAttributes();
+      case SH_ATTRIBUTES_ARRAY:
+        *params = reinterpret_cast<const void*>(&compiler->getAttributes());
         break;
-    case SH_ACTIVE_VARYINGS_ARRAY:
-        *params = (void*)&translator->getVaryings();
+      case SH_VARYINGS_ARRAY:
+        *params = reinterpret_cast<const void*>(&compiler->getVaryings());
         break;
-    default: UNREACHABLE();
+      default: return false;
     }
+
+    return true;
 }
 
 int ShCheckVariablesWithinPackingLimits(
