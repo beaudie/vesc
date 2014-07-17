@@ -35,14 +35,15 @@ enum BlockLayoutType
 };
 
 // Base class for all variables defined in shaders, including Varyings, Uniforms, etc
+// Note: we must override the copy constructor and assignment operator so we can
+// work around excessive GCC binary bloating:
+// See https://code.google.com/p/angleproject/issues/detail?id=697
 struct ShaderVariable
 {
-    ShaderVariable()
-        : type(0),
-          precision(0),
-          arraySize(0),
-          staticUse(false)
-    {}
+    ShaderVariable();
+    ~ShaderVariable();
+    ShaderVariable(const ShaderVariable &other);
+    ShaderVariable &operator=(const ShaderVariable &other);
 
     bool isArray() const { return arraySize > 0; }
     unsigned int elementCount() const { return std::max(1u, arraySize); }
@@ -57,7 +58,10 @@ struct ShaderVariable
 
 struct Uniform : public ShaderVariable
 {
-    Uniform() {}
+    Uniform();
+    ~Uniform();
+    Uniform(const Uniform &other);
+    Uniform &operator=(const Uniform &other);
 
     bool isStruct() const { return !fields.empty(); }
 
@@ -66,18 +70,20 @@ struct Uniform : public ShaderVariable
 
 struct Attribute : public ShaderVariable
 {
-    Attribute()
-        : location(-1)
-    {}
+    Attribute();
+    ~Attribute();
+    Attribute(const Attribute &other);
+    Attribute &operator=(const Attribute &other);
 
     int location;
 };
 
 struct InterfaceBlockField : public ShaderVariable
 {
-    InterfaceBlockField()
-        : isRowMajorMatrix(false)
-    {}
+    InterfaceBlockField();
+    ~InterfaceBlockField();
+    InterfaceBlockField(const InterfaceBlockField &other);
+    InterfaceBlockField &operator=(const InterfaceBlockField &other);
 
     bool isStruct() const { return !fields.empty(); }
 
@@ -87,9 +93,10 @@ struct InterfaceBlockField : public ShaderVariable
 
 struct Varying : public ShaderVariable
 {
-    Varying()
-        : interpolation(INTERPOLATION_SMOOTH)
-    {}
+    Varying();
+    ~Varying();
+    Varying(const Varying &other);
+    Varying &operator=(const Varying &other);
 
     bool isStruct() const { return !fields.empty(); }
 
@@ -100,12 +107,10 @@ struct Varying : public ShaderVariable
 
 struct InterfaceBlock
 {
-    InterfaceBlock()
-        : arraySize(0),
-          layout(BLOCKLAYOUT_PACKED),
-          isRowMajorLayout(false),
-          staticUse(false)
-    {}
+    InterfaceBlock();
+    ~InterfaceBlock();
+    InterfaceBlock(const InterfaceBlock &other);
+    InterfaceBlock &operator=(const InterfaceBlock &other);
 
     std::string name;
     std::string mappedName;
