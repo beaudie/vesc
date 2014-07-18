@@ -67,8 +67,8 @@ struct ShaderVariable
 struct Uniform : public ShaderVariable
 {
     Uniform()
-        : registerIndex(-1),
-          elementIndex(-1)
+        : registerIndex(static_cast<unsigned int>(-1)),
+          elementIndex(static_cast<unsigned int>(-1))
     {}
 
     Uniform(GLenum typeIn, GLenum precisionIn, const char *nameIn, unsigned int arraySizeIn,
