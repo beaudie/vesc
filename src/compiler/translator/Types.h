@@ -103,6 +103,17 @@ class TFieldListCollection
 
     mutable TString mMangledName;
     mutable size_t mObjectSize;
+
+  private:
+    // TODO(zmo): Find a way to get rid of the const_cast in setName().
+    // For now we keep it as private so only RegenerateStructNames may use it.
+    friend class RegenerateStructNames;
+
+    void setName(const TString &name)
+    {
+        TString *mutableName = const_cast<TString *>(mName);
+        *mutableName = name;
+    }
 };
 
 // May also represent interface blocks
