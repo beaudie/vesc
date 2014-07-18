@@ -138,6 +138,19 @@ class TStructure : public TFieldListCollection
         return mUniqueId;
     }
 
+    // Map mName to _webgl_struct_mUniqueId_mName.
+    void addPrefixToName()
+    {
+        if (name().find("_webgl") == 0)
+            return;
+
+        TString tmp = "_webgl_struct_" + TString(Str(mUniqueId).c_str());
+        tmp += "_" + name();
+        // TOD(zmo): Get rid of const_cast.
+        TString *newName = const_cast<TString *>(&name());
+        *newName = tmp;
+    }
+
   private:
     DISALLOW_COPY_AND_ASSIGN(TStructure);
     virtual TString mangledNamePrefix() const
