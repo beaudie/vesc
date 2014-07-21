@@ -53,7 +53,7 @@ bool ANGLETest::InitTestWindow()
         return false;
     }
 
-    mDisplay = eglGetDisplay(mNativeDisplay);
+    mDisplay = eglGetDisplay(EGL_D3D11_ELSE_D3D9_DISPLAY_ANGLE);
     if(mDisplay == EGL_NO_DISPLAY)
     {
          mDisplay = eglGetDisplay((EGLNativeDisplayType)EGL_DEFAULT_DISPLAY);
