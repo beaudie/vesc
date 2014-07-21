@@ -89,7 +89,7 @@ class Texture : public RefCountObject
   private:
     DISALLOW_COPY_AND_ASSIGN(Texture);
 
-    virtual const rx::Image *getBaseLevelImage() const = 0;
+    const rx::Image *getBaseLevelImage() const;
 };
 
 class Texture2D : public Texture
@@ -128,12 +128,10 @@ class Texture2D : public Texture
   protected:
     friend class Texture2DAttachment;
     rx::RenderTarget *getRenderTarget(GLint level);
-    rx::RenderTarget *getDepthSencil(GLint level);
+    rx::RenderTarget *getDepthStencil(GLint level);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Texture2D);
-
-    virtual const rx::Image *getBaseLevelImage() const;
 
     void redefineImage(GLint level, GLenum internalformat, GLsizei width, GLsizei height);
 
@@ -177,6 +175,9 @@ class TextureCubeMap : public Texture
 
     unsigned int getRenderTargetSerial(GLenum target, GLint level);
 
+    static int targetToLayerIndex(GLenum target);
+    static GLenum layerIndexToTarget(GLint layer);
+
     virtual rx::TextureImpl *getImplementation() { return mTexture; }
     virtual const rx::TextureImpl *getImplementation() const { return mTexture; }
 
@@ -187,8 +188,6 @@ class TextureCubeMap : public Texture
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureCubeMap);
-
-    virtual const rx::Image *getBaseLevelImage() const;
 
     rx::TextureCubeImpl *mTexture;
 };
@@ -231,8 +230,6 @@ class Texture3D : public Texture
   private:
     DISALLOW_COPY_AND_ASSIGN(Texture3D);
 
-    virtual const rx::Image *getBaseLevelImage() const;
-
     rx::Texture3DImpl *mTexture;
 };
 
@@ -273,8 +270,6 @@ class Texture2DArray : public Texture
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Texture2DArray);
-
-    virtual const rx::Image *getBaseLevelImage() const;
 
     rx::Texture2DArrayImpl *mTexture;
 };

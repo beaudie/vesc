@@ -125,6 +125,11 @@ int Texture::mipLevels() const
     return log2(std::max(std::max(getBaseLevelWidth(), getBaseLevelHeight()), getBaseLevelDepth())) + 1;
 }
 
+const rx::Image *Texture::getBaseLevelImage() const
+{
+    return (getImplementation()->getLayerCount(0) > 0 ? getImplementation()->getImage(0, 0) : NULL);
+}
+
 Texture2D::Texture2D(rx::Texture2DImpl *impl, GLuint id)
     : Texture(id, GL_TEXTURE_2D),
       mTexture(impl)
@@ -152,7 +157,7 @@ void Texture2D::setUsage(GLenum usage)
 GLsizei Texture2D::getWidth(GLint level) const
 {
     if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(level)->getWidth();
+        return mTexture->getImage(level, 0)->getWidth();
     else
         return 0;
 }
@@ -160,7 +165,7 @@ GLsizei Texture2D::getWidth(GLint level) const
 GLsizei Texture2D::getHeight(GLint level) const
 {
     if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(level)->getHeight();
+        return mTexture->getImage(level, 0)->getHeight();
     else
         return 0;
 }
@@ -168,7 +173,7 @@ GLsizei Texture2D::getHeight(GLint level) const
 GLenum Texture2D::getInternalFormat(GLint level) const
 {
     if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(level)->getInternalFormat();
+        return mTexture->getImage(level, 0)->getInternalFormat();
     else
         return GL_NONE;
 }
@@ -176,7 +181,7 @@ GLenum Texture2D::getInternalFormat(GLint level) const
 GLenum Texture2D::getActualFormat(GLint level) const
 {
     if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(level)->getActualFormat();
+        return mTexture->getImage(level, 0)->getActualFormat();
     else
         return GL_NONE;
 }
@@ -194,7 +199,7 @@ void Texture2D::setImage(GLint level, GLsizei width, GLsizei height, GLenum inte
                                                                        : GetSizedInternalFormat(format, type);
     redefineImage(level, sizedInternalFormat, width, height);
 
-    mTexture->setImage(level, width, height, internalFormat, format, type, unpack, pixels);
+    mTexture->setImage(level, width, height, 1, internalFormat, format, type, unpack, pixels);
 }
 
 void Texture2D::bindTexImage(egl::Surface *surface)
@@ -223,17 +228,17 @@ void Texture2D::setCompressedImage(GLint level, GLenum format, GLsizei width, GL
     // compressed formats don't have separate sized internal formats-- we can just use the compressed format directly
     redefineImage(level, format, width, height);
 
-    mTexture->setCompressedImage(level, format, width, height, imageSize, pixels);
+    mTexture->setCompressedImage(level, format, width, height, 1, imageSize, pixels);
 }
 
 void Texture2D::subImage(GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const PixelUnpackState &unpack, const void *pixels)
 {
-    mTexture->subImage(level, xoffset, yoffset, width, height, format, type, unpack, pixels);
+    mTexture->subImage(level, xoffset, yoffset, 0, width, height, 1, format, type, unpack, pixels);
 }
 
 void Texture2D::subImageCompressed(GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void *pixels)
 {
-    mTexture->subImageCompressed(level, xoffset, yoffset, width, height, format, imageSize, pixels);
+    mTexture->subImageCompressed(level, xoffset, yoffset, 0, width, height, 1, format, imageSize, pixels);
 }
 
 void Texture2D::copyImage(GLint level, GLenum format, GLint x, GLint y, GLsizei width, GLsizei height, Framebuffer *source)
@@ -249,7 +254,7 @@ void Texture2D::storage(GLsizei levels, GLenum internalformat, GLsizei width, GL
 {
     mImmutable = true;
 
-    mTexture->storage(levels, internalformat, width, height);
+    mTexture->storage(levels, internalformat, width, height, 1);
 }
 
 bool Texture2D::isCompressed(GLint level) const
@@ -276,24 +281,19 @@ void Texture2D::generateMipmaps()
     mTexture->generateMipmaps();
 }
 
-const rx::Image *Texture2D::getBaseLevelImage() const
-{
-    return mTexture->getImage(0);
-}
-
 unsigned int Texture2D::getRenderTargetSerial(GLint level)
 {
-    return mTexture->getRenderTargetSerial(level);
+    return mTexture->getRenderTargetSerial(level, 0);
 }
 
 rx::RenderTarget *Texture2D::getRenderTarget(GLint level)
 {
-    return mTexture->getRenderTarget(level);
+    return mTexture->getRenderTarget(level, 0);
 }
 
-rx::RenderTarget *Texture2D::getDepthSencil(GLint level)
+rx::RenderTarget *Texture2D::getDepthStencil(GLint level)
 {
-    return mTexture->getDepthSencil(level);
+    return mTexture->getDepthStencil(level, 0);
 }
 
 TextureCubeMap::TextureCubeMap(rx::TextureCubeImpl *impl, GLuint id)
@@ -316,7 +316,7 @@ void TextureCubeMap::setUsage(GLenum usage)
 GLsizei TextureCubeMap::getWidth(GLenum target, GLint level) const
 {
     if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(target, level)->getWidth();
+        return mTexture->getImage(level, targetToLayerIndex(target))->getWidth();
     else
         return 0;
 }
@@ -324,7 +324,7 @@ GLsizei TextureCubeMap::getWidth(GLenum target, GLint level) const
 GLsizei TextureCubeMap::getHeight(GLenum target, GLint level) const
 {
     if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(target, level)->getHeight();
+        return mTexture->getImage(level, targetToLayerIndex(target))->getHeight();
     else
         return 0;
 }
@@ -332,7 +332,7 @@ GLsizei TextureCubeMap::getHeight(GLenum target, GLint level) const
 GLenum TextureCubeMap::getInternalFormat(GLenum target, GLint level) const
 {
     if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(target, level)->getInternalFormat();
+        return mTexture->getImage(level, targetToLayerIndex(target))->getInternalFormat();
     else
         return GL_NONE;
 }
@@ -340,54 +340,54 @@ GLenum TextureCubeMap::getInternalFormat(GLenum target, GLint level) const
 GLenum TextureCubeMap::getActualFormat(GLenum target, GLint level) const
 {
     if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(target, level)->getActualFormat();
+        return mTexture->getImage(level, targetToLayerIndex(target))->getActualFormat();
     else
         return GL_NONE;
 }
 
 void TextureCubeMap::setImagePosX(GLint level, GLsizei width, GLsizei height, GLenum internalFormat, GLenum format, GLenum type, const PixelUnpackState &unpack, const void *pixels)
 {
-    mTexture->setImage(0, level, width, height, internalFormat, format, type, unpack, pixels);
+    mTexture->setImage(level, width, height, 0, internalFormat, format, type, unpack, pixels);
 }
 
 void TextureCubeMap::setImageNegX(GLint level, GLsizei width, GLsizei height, GLenum internalFormat, GLenum format, GLenum type, const PixelUnpackState &unpack, const void *pixels)
 {
-    mTexture->setImage(1, level, width, height, internalFormat, format, type, unpack, pixels);
+    mTexture->setImage(level, width, height, 1, internalFormat, format, type, unpack, pixels);
 }
 
 void TextureCubeMap::setImagePosY(GLint level, GLsizei width, GLsizei height, GLenum internalFormat, GLenum format, GLenum type, const PixelUnpackState &unpack, const void *pixels)
 {
-    mTexture->setImage(2, level, width, height, internalFormat, format, type, unpack, pixels);
+    mTexture->setImage(level, width, height, 2, internalFormat, format, type, unpack, pixels);
 }
 
 void TextureCubeMap::setImageNegY(GLint level, GLsizei width, GLsizei height, GLenum internalFormat, GLenum format, GLenum type, const PixelUnpackState &unpack, const void *pixels)
 {
-    mTexture->setImage(3, level, width, height, internalFormat, format, type, unpack, pixels);
+    mTexture->setImage(level, width, height, 3, internalFormat, format, type, unpack, pixels);
 }
 
 void TextureCubeMap::setImagePosZ(GLint level, GLsizei width, GLsizei height, GLenum internalFormat, GLenum format, GLenum type, const PixelUnpackState &unpack, const void *pixels)
 {
-    mTexture->setImage(4, level, width, height, internalFormat, format, type, unpack, pixels);
+    mTexture->setImage(level, width, height, 4, internalFormat, format, type, unpack, pixels);
 }
 
 void TextureCubeMap::setImageNegZ(GLint level, GLsizei width, GLsizei height, GLenum internalFormat, GLenum format, GLenum type, const PixelUnpackState &unpack, const void *pixels)
 {
-    mTexture->setImage(5, level, width, height, internalFormat, format, type, unpack, pixels);
+    mTexture->setImage(level, width, height, 5, internalFormat, format, type, unpack, pixels);
 }
 
 void TextureCubeMap::setCompressedImage(GLenum target, GLint level, GLenum format, GLsizei width, GLsizei height, GLsizei imageSize, const void *pixels)
 {
-    mTexture->setCompressedImage(target, level, format, width, height, imageSize, pixels);
+    mTexture->setCompressedImage(level, format, width, height, targetToLayerIndex(target), imageSize, pixels);
 }
 
 void TextureCubeMap::subImage(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const PixelUnpackState &unpack, const void *pixels)
 {
-    mTexture->subImage(target, level, xoffset, yoffset, width, height, format, type, unpack, pixels);
+    mTexture->subImage(level, xoffset, yoffset, 0, width, height, targetToLayerIndex(target), format, type, unpack, pixels);
 }
 
 void TextureCubeMap::subImageCompressed(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void *pixels)
 {
-    mTexture->subImageCompressed(target, level, xoffset, yoffset, width, height, format, imageSize, pixels);
+    mTexture->subImageCompressed(level, xoffset, yoffset, 0, width, height, targetToLayerIndex(target), format, imageSize, pixels);
 }
 
 // Tests for cube texture completeness. [OpenGL ES 2.0.24] section 3.7.10 page 81.
@@ -415,7 +415,7 @@ void TextureCubeMap::storage(GLsizei levels, GLenum internalformat, GLsizei size
 {
     mImmutable = true;
 
-    mTexture->storage(levels, internalformat, size);
+    mTexture->storage(levels, internalformat, size, size, 1);
 }
 
 void TextureCubeMap::generateMipmaps()
@@ -423,26 +423,41 @@ void TextureCubeMap::generateMipmaps()
     mTexture->generateMipmaps();
 }
 
-const rx::Image *TextureCubeMap::getBaseLevelImage() const
-{
-    // Note: if we are not cube-complete, there is no single base level image that can describe all
-    // cube faces, so this method is only well-defined for a cube-complete base level.
-    return mTexture->getImage(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0);
-}
-
 unsigned int TextureCubeMap::getRenderTargetSerial(GLenum target, GLint level)
 {
-    return mTexture->getRenderTargetSerial(target, level);
+    return mTexture->getRenderTargetSerial(level, targetToLayerIndex(target));
+}
+
+int TextureCubeMap::targetToLayerIndex(GLenum target)
+{
+    META_ASSERT(GL_TEXTURE_CUBE_MAP_NEGATIVE_X - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 1);
+    META_ASSERT(GL_TEXTURE_CUBE_MAP_POSITIVE_Y - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 2);
+    META_ASSERT(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 3);
+    META_ASSERT(GL_TEXTURE_CUBE_MAP_POSITIVE_Z - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 4);
+    META_ASSERT(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 5);
+
+    return target - GL_TEXTURE_CUBE_MAP_POSITIVE_X;
+}
+
+GLenum TextureCubeMap::layerIndexToTarget(GLint layer)
+{
+    META_ASSERT(GL_TEXTURE_CUBE_MAP_NEGATIVE_X - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 1);
+    META_ASSERT(GL_TEXTURE_CUBE_MAP_POSITIVE_Y - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 2);
+    META_ASSERT(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 3);
+    META_ASSERT(GL_TEXTURE_CUBE_MAP_POSITIVE_Z - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 4);
+    META_ASSERT(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 5);
+
+    return GL_TEXTURE_CUBE_MAP_POSITIVE_X + layer;
 }
 
 rx::RenderTarget *TextureCubeMap::getRenderTarget(GLenum target, GLint level)
 {
-    return mTexture->getRenderTarget(target, level);
+    return mTexture->getRenderTarget(level, targetToLayerIndex(target));
 }
 
 rx::RenderTarget *TextureCubeMap::getDepthStencil(GLenum target, GLint level)
 {
-    return mTexture->getDepthStencil(target, level);
+    return mTexture->getDepthStencil(level, targetToLayerIndex(target));
 }
 
 Texture3D::Texture3D(rx::Texture3DImpl *impl, GLuint id)
@@ -464,27 +479,27 @@ void Texture3D::setUsage(GLenum usage)
 
 GLsizei Texture3D::getWidth(GLint level) const
 {
-    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level)->getWidth() : 0;
+    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level, 0)->getWidth() : 0;
 }
 
 GLsizei Texture3D::getHeight(GLint level) const
 {
-    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level)->getHeight() : 0;
+    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level, 0)->getHeight() : 0;
 }
 
 GLsizei Texture3D::getDepth(GLint level) const
 {
-    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level)->getDepth() : 0;
+    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level, 0)->getDepth() : 0;
 }
 
 GLenum Texture3D::getInternalFormat(GLint level) const
 {
-    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level)->getInternalFormat() : GL_NONE;
+    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level, 0)->getInternalFormat() : GL_NONE;
 }
 
 GLenum Texture3D::getActualFormat(GLint level) const
 {
-    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level)->getActualFormat() : GL_NONE;
+    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level, 0)->getActualFormat() : GL_NONE;
 }
 
 bool Texture3D::isCompressed(GLint level) const
@@ -527,11 +542,6 @@ void Texture3D::storage(GLsizei levels, GLenum internalformat, GLsizei width, GL
 void Texture3D::generateMipmaps()
 {
     mTexture->generateMipmaps();
-}
-
-const rx::Image *Texture3D::getBaseLevelImage() const
-{
-    return mTexture->getImage(0);
 }
 
 unsigned int Texture3D::getRenderTargetSerial(GLint level, GLint layer)
@@ -632,11 +642,6 @@ void Texture2DArray::storage(GLsizei levels, GLenum internalformat, GLsizei widt
 void Texture2DArray::generateMipmaps()
 {
     mTexture->generateMipmaps();
-}
-
-const rx::Image *Texture2DArray::getBaseLevelImage() const
-{
-    return (mTexture->getLayerCount(0) > 0 ? mTexture->getImage(0, 0) : NULL);
 }
 
 unsigned int Texture2DArray::getRenderTargetSerial(GLint level, GLint layer)
