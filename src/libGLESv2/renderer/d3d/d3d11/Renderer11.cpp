@@ -2601,8 +2601,10 @@ bool Renderer11::supportsFastCopyBufferToTexture(GLenum internalFormat) const
 {
     ASSERT(getRendererExtensions().pixelBufferObject);
 
+    const gl::InternalFormatInfo &formatInfo = gl::GetInternalFormatInfo(internalFormat);
+
     // sRGB formats do not work with D3D11 buffer SRVs
-    if (gl::GetColorEncoding(internalFormat) == GL_SRGB)
+    if (formatInfo.colorEncoding == GL_SRGB)
     {
         return false;
     }
@@ -2614,7 +2616,7 @@ bool Renderer11::supportsFastCopyBufferToTexture(GLenum internalFormat) const
     }
 
     // We skip all 3-channel formats since sometimes format support is missing
-    if (gl::GetComponentCount(internalFormat) == 3)
+    if (formatInfo.componentCount == 3)
     {
         return false;
     }
@@ -2949,25 +2951,19 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
         inputPitch = static_cast<int>(mapping.RowPitch);
     }
 
-    GLenum sourceInternalFormat = d3d11_gl::GetInternalFormat(textureDesc.Format);
-    GLenum sourceFormat = gl::GetFormat(sourceInternalFormat);
-    GLenum sourceType = gl::GetType(sourceInternalFormat);
-
-    GLuint sourcePixelSize = gl::GetPixelBytes(sourceInternalFormat);
-
-    if (sourceFormat == params.format && sourceType == params.type)
+    const gl::InternalFormatInfo &sourceFormatInfo = gl::GetInternalFormatInfo(d3d11_gl::GetInternalFormat(textureDesc.Format));
+    if (sourceFormatInfo.format == params.format && sourceFormatInfo.type == params.type)
     {
         unsigned char *dest = static_cast<unsigned char*>(pixelsOut) + params.offset;
         for (int y = 0; y < params.area.height; y++)
         {
-            memcpy(dest + y * params.outputPitch, source + y * inputPitch, params.area.width * sourcePixelSize);
+            memcpy(dest + y * params.outputPitch, source + y * inputPitch, params.area.width * sourceFormatInfo.pixelBytes);
         }
     }
     else
     {
-        GLenum destInternalFormat = gl::GetSizedInternalFormat(params.format, params.type);
-        GLuint destPixelSize = gl::GetPixelBytes(destInternalFormat);
-
+        const gl::FormatTypeInfo &destFormatTypeInfo = gl::GetFormatTypeInfo(params.format, params.type);
+        const gl::InternalFormatInfo &destFormatInfo = gl::GetInternalFormatInfo(destFormatTypeInfo.internalFormat);
         ColorCopyFunction fastCopyFunc = d3d11::GetFastCopyFunction(textureDesc.Format, params.format, params.type);
         if (fastCopyFunc)
         {
@@ -2976,8 +2972,8 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
             {
                 for (int x = 0; x < params.area.width; x++)
                 {
-                    void *dest = static_cast<unsigned char*>(pixelsOut) + params.offset + y * params.outputPitch + x * destPixelSize;
-                    void *src = static_cast<unsigned char*>(source) + y * inputPitch + x * sourcePixelSize;
+                    void *dest = static_cast<unsigned char*>(pixelsOut) + params.offset + y * params.outputPitch + x * destFormatInfo.pixelBytes;
+                    void *src = static_cast<unsigned char*>(source) + y * inputPitch + x * sourceFormatInfo.pixelBytes;
 
                     fastCopyFunc(src, dest);
                 }
@@ -2986,7 +2982,6 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
         else
         {
             ColorReadFunction readFunc = d3d11::GetColorReadFunction(textureDesc.Format);
-            ColorWriteFunction writeFunc = gl::GetColorWriteFunction(params.format, params.type);
 
             unsigned char temp[16]; // Maximum size of any Color<T> type used.
             META_ASSERT(sizeof(temp) >= sizeof(gl::ColorF)  &&
@@ -2997,13 +2992,13 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
             {
                 for (int x = 0; x < params.area.width; x++)
                 {
-                    void *dest = static_cast<unsigned char*>(pixelsOut) + params.offset + y * params.outputPitch + x * destPixelSize;
-                    void *src = static_cast<unsigned char*>(source) + y * inputPitch + x * sourcePixelSize;
+                    void *dest = static_cast<unsigned char*>(pixelsOut) + params.offset + y * params.outputPitch + x * destFormatInfo.pixelBytes;
+                    void *src = static_cast<unsigned char*>(source) + y * inputPitch + x * sourceFormatInfo.pixelBytes;
 
                     // readFunc and writeFunc will be using the same type of color, CopyTexImage
                     // will not allow the copy otherwise.
                     readFunc(src, temp);
-                    writeFunc(temp, dest);
+                    destFormatTypeInfo.colorWriteFunction(temp, dest);
                 }
             }
         }
@@ -3102,9 +3097,8 @@ bool Renderer11::blitRenderbufferRect(const gl::Rectangle &readRect, const gl::R
                        drawRect.x < 0 || drawRect.x + drawRect.width > drawSize.width ||
                        drawRect.y < 0 || drawRect.y + drawRect.height > drawSize.height;
 
-    bool hasDepth = gl::GetDepthBits(drawRenderTarget11->getActualFormat()) > 0;
-    bool hasStencil = gl::GetStencilBits(drawRenderTarget11->getActualFormat()) > 0;
-    bool partialDSBlit = (hasDepth && depthBlit) != (hasStencil && stencilBlit);
+    const gl::InternalFormatInfo &actualFormatInfo = gl::GetInternalFormatInfo(drawRenderTarget->getActualFormat());
+    bool partialDSBlit = (actualFormatInfo.depthBits > 0 && depthBlit) != (actualFormatInfo.stencilBits > 0 && stencilBlit);
 
     if (readRenderTarget11->getActualFormat() == drawRenderTarget->getActualFormat() &&
         !stretchRequired && !outOfBounds && !flipRequired && !partialDSBlit &&
@@ -3178,7 +3172,7 @@ bool Renderer11::blitRenderbufferRect(const gl::Rectangle &readRect, const gl::R
         }
         else
         {
-            GLenum format = gl::GetFormat(drawRenderTarget->getInternalFormat());
+            GLenum format = gl::GetInternalFormatInfo(drawRenderTarget->getInternalFormat()).format;
             result = mBlit->copyTexture(readSRV, readArea, readSize, drawRTV, drawArea, drawSize,
                                         scissor, format, filter);
         }
