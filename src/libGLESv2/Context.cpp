@@ -754,15 +754,16 @@ void Context::setRenderbufferStorage(GLsizei width, GLsizei height, GLenum inter
 
     RenderbufferStorage *renderbuffer = NULL;
 
-    if (GetDepthBits(internalformat) > 0 && GetStencilBits(internalformat) > 0)
+    const InternalFormatInfo formatInfo = GetInternalFormatInfo(internalformat);
+    if (formatInfo.depthBits > 0 && formatInfo.stencilBits > 0)
     {
         renderbuffer = new gl::DepthStencilbuffer(mRenderer, width, height, samples);
     }
-    else if (GetDepthBits(internalformat) > 0)
+    else if (formatInfo.depthBits > 0)
     {
         renderbuffer = new gl::Depthbuffer(mRenderer, width, height, samples);
     }
-    else if (GetStencilBits(internalformat) > 0)
+    else if (formatInfo.stencilBits > 0)
     {
         renderbuffer = new gl::Stencilbuffer(mRenderer, width, height, samples);
     }
@@ -1722,9 +1723,10 @@ void Context::readPixels(GLint x, GLint y, GLsizei width, GLsizei height,
 {
     gl::Framebuffer *framebuffer = mState.getReadFramebuffer();
 
-    bool isSized = IsSizedInternalFormat(format);
-    GLenum sizedInternalFormat = (isSized ? format : GetSizedInternalFormat(format, type));
-    GLuint outputPitch = GetRowPitch(sizedInternalFormat, type, width, mState.getPackAlignment());
+    GLenum sizedInternalFormat = GetInternalFormatInfo(format).pixelBytes > 0 ? format
+                                                                              : GetFormatTypeInfo(format, type).internalFormat;
+    const InternalFormatInfo &sizedFormatInfo = GetInternalFormatInfo(sizedInternalFormat);
+    GLuint outputPitch = sizedFormatInfo.computeRowPitch(type, width, mState.getPackAlignment());
 
     mRenderer->readPixels(framebuffer, x, y, width, height, format, type, outputPitch, mState.getPackState(), pixels);
 }
@@ -2016,9 +2018,12 @@ void Context::getCurrentReadFormatType(GLenum *internalFormat, GLenum *format, G
     FramebufferAttachment *attachment = framebuffer->getReadColorbuffer();
     ASSERT(attachment);
 
-    *internalFormat = attachment->getActualFormat();
-    *format = gl::GetFormat(attachment->getActualFormat());
-    *type = gl::GetType(attachment->getActualFormat());
+    GLenum actualFormat = attachment->getActualFormat();
+    const InternalFormatInfo &actualFormatInfo = GetInternalFormatInfo(actualFormat);
+
+    *internalFormat = actualFormat;
+    *format = actualFormatInfo.format;
+    *type = actualFormatInfo.type;
 }
 
 void Context::detachTexture(GLuint texture)
@@ -2503,11 +2508,12 @@ void Context::initCaps(GLuint clientVersion)
         GLenum format = i->first;
         TextureCaps formatCaps = i->second;
 
-        if (formatCaps.texturable && IsValidInternalFormat(format, mExtensions, clientVersion))
+        const InternalFormatInfo &formatInfo = GetInternalFormatInfo(format);
+        if (formatCaps.texturable && formatInfo.textureSupport(clientVersion, mExtensions))
         {
             // Update the format caps based on the client version and extensions
-            formatCaps.renderable = IsRenderingSupported(format, mExtensions, clientVersion);
-            formatCaps.filterable = IsFilteringSupported(format, mExtensions, clientVersion);
+            formatCaps.renderable = formatInfo.renderSupport(clientVersion, mExtensions);
+            formatCaps.filterable = formatInfo.filterSupport(clientVersion, mExtensions);
             mTextureCaps.insert(format, formatCaps);
 
             maxSamples = std::max(maxSamples, formatCaps.getMaxSamples());
