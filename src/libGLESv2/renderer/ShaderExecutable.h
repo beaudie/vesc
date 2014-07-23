@@ -27,12 +27,12 @@ class ShaderExecutable
     
     virtual ~ShaderExecutable()
     {
-        delete[] mFunction;
+        SafeDeleteArray(mFunction);
     }
 
     void *getFunction() const
     {
-        return mFunction;
+        return static_cast<void *>(mFunction);
     }
 
     size_t getLength() const
@@ -43,7 +43,7 @@ class ShaderExecutable
   private:
     DISALLOW_COPY_AND_ASSIGN(ShaderExecutable);
 
-    void *mFunction;
+    char *mFunction;
     const size_t mLength;
 };
 
