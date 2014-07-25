@@ -655,7 +655,12 @@ void __stdcall glClear(GLbitfield mask)
             return;
         }
 
-        context->clear(mask);
+        gl::Error error = context->clear(mask);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
@@ -6675,7 +6680,12 @@ void __stdcall glClearBufferiv(GLenum buffer, GLint drawbuffer, const GLint* val
             return;
         }
 
-        context->clearBufferiv(buffer, drawbuffer, value);
+        gl::Error error = context->clearBufferiv(buffer, drawbuffer, value);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
@@ -6707,7 +6717,12 @@ void __stdcall glClearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint* v
             return;
         }
 
-        context->clearBufferuiv(buffer, drawbuffer, value);
+        gl::Error error = context->clearBufferuiv(buffer, drawbuffer, value);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
@@ -6747,7 +6762,12 @@ void __stdcall glClearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat* v
             return;
         }
 
-        context->clearBufferfv(buffer, drawbuffer, value);
+        gl::Error error = context->clearBufferfv(buffer, drawbuffer, value);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
@@ -6779,7 +6799,12 @@ void __stdcall glClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, G
             return;
         }
 
-        context->clearBufferfi(buffer, drawbuffer, depth, stencil);
+        gl::Error error = context->clearBufferfi(buffer, drawbuffer, depth, stencil);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
