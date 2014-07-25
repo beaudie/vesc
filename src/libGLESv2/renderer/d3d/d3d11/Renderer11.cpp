@@ -2736,8 +2736,8 @@ bool Renderer11::blitRect(gl::Framebuffer *readTarget, const gl::Rectangle &read
     return true;
 }
 
-void Renderer11::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
-                            GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, void* pixels)
+gl::Error Renderer11::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
+                                 GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, void* pixels)
 {
     ID3D11Texture2D *colorBufferTexture = NULL;
     unsigned int subresourceIndex = 0;
@@ -2758,16 +2758,27 @@ void Renderer11::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsi
             rx::Buffer11 *packBufferStorage = Buffer11::makeBuffer11(packBuffer->getImplementation());
             PackPixelsParams packParams(area, format, type, outputPitch, pack, reinterpret_cast<ptrdiff_t>(pixels));
 
+            gl::Error error = packBufferStorage->packPixels(colorBufferTexture, subresourceIndex, packParams);
+            if (error.isError())
+            {
+                return error;
+            }
+
             packBuffer->getIndexRangeCache()->clear();
-            packBufferStorage->packPixels(colorBufferTexture, subresourceIndex, packParams);
         }
         else
         {
-            readTextureData(colorBufferTexture, subresourceIndex, area, format, type, outputPitch, pack, pixels);
+            gl::Error error = readTextureData(colorBufferTexture, subresourceIndex, area, format, type, outputPitch, pack, pixels);
+            if (error.isError())
+            {
+                return error;
+            }
         }
 
         SafeRelease(colorBufferTexture);
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 Image *Renderer11::createImage()
@@ -2823,8 +2834,8 @@ TextureImpl *Renderer11::createTexture(GLenum target)
     return NULL;
 }
 
-void Renderer11::readTextureData(ID3D11Texture2D *texture, unsigned int subResource, const gl::Rectangle &area, GLenum format,
-                                 GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, void *pixels)
+gl::Error Renderer11::readTextureData(ID3D11Texture2D *texture, unsigned int subResource, const gl::Rectangle &area, GLenum format,
+                                      GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, void *pixels)
 {
     ASSERT(area.width >= 0);
     ASSERT(area.height >= 0);
@@ -2849,7 +2860,7 @@ void Renderer11::readTextureData(ID3D11Texture2D *texture, unsigned int subResou
     if (safeArea.width == 0 || safeArea.height == 0)
     {
         // no work to do
-        return;
+        return gl::Error(GL_NO_ERROR);
     }
 
     D3D11_TEXTURE2D_DESC stagingDesc;
@@ -2869,8 +2880,7 @@ void Renderer11::readTextureData(ID3D11Texture2D *texture, unsigned int subResou
     HRESULT result = mDevice->CreateTexture2D(&stagingDesc, NULL, &stagingTex);
     if (FAILED(result))
     {
-        ERR("Failed to create staging texture for readPixels, HRESULT: 0x%X.", result);
-        return;
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal staging texture for ReadPixels, HRESULT: 0x%X.", result);
     }
 
     ID3D11Texture2D* srcTex = NULL;
@@ -2892,9 +2902,8 @@ void Renderer11::readTextureData(ID3D11Texture2D *texture, unsigned int subResou
         result = mDevice->CreateTexture2D(&resolveDesc, NULL, &srcTex);
         if (FAILED(result))
         {
-            ERR("Failed to create resolve texture for readPixels, HRESULT: 0x%X.", result);
             SafeRelease(stagingTex);
-            return;
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal resolve texture for ReadPixels, HRESULT: 0x%X.", result);
         }
 
         mDeviceContext->ResolveSubresource(srcTex, 0, texture, subResource, textureDesc.Format);
@@ -2922,6 +2931,8 @@ void Renderer11::readTextureData(ID3D11Texture2D *texture, unsigned int subResou
     packPixels(stagingTex, packParams, pixels);
 
     SafeRelease(stagingTex);
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams &params, void *pixelsOut)
