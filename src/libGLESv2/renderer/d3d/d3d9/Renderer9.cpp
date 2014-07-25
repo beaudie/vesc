@@ -1710,13 +1710,13 @@ void Renderer9::applyUniformnbv(gl::LinkedUniform *targetUniform, const GLint *v
     applyUniformnfv(targetUniform, (GLfloat*)vector);
 }
 
-void Renderer9::clear(const gl::ClearParameters &clearParams, gl::Framebuffer *frameBuffer)
+gl::Error Renderer9::clear(const gl::ClearParameters &clearParams, gl::Framebuffer *frameBuffer)
 {
     if (clearParams.colorClearType != GL_FLOAT)
     {
         // Clearing buffers with non-float values is not supported by Renderer9 and ES 2.0
         UNREACHABLE();
-        return;
+        return gl::Error(GL_INVALID_OPERATION);
     }
 
     bool clearColor = clearParams.clearColor[0];
@@ -1726,7 +1726,7 @@ void Renderer9::clear(const gl::ClearParameters &clearParams, gl::Framebuffer *f
         {
             // Clearing individual buffers other than buffer zero is not supported by Renderer9 and ES 2.0
             UNREACHABLE();
-            return;
+            return gl::Error(GL_INVALID_OPERATION);
         }
     }
 
@@ -1923,6 +1923,8 @@ void Renderer9::clear(const gl::ClearParameters &clearParams, gl::Framebuffer *f
 
         mDevice->Clear(0, NULL, dxClearFlags, color, depth, stencil);
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void Renderer9::markAllStateDirty()
