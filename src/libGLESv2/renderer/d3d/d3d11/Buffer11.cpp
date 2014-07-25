@@ -139,7 +139,7 @@ class Buffer11::PackStorage11 : public Buffer11::BufferStorage11
     virtual void *map(size_t offset, size_t length, GLbitfield access);
     virtual void unmap();
 
-    void packPixels(ID3D11Texture2D *srcTexure, UINT srcSubresource, const PackPixelsParams &params);
+    gl::Error packPixels(ID3D11Texture2D *srcTexure, UINT srcSubresource, const PackPixelsParams &params);
 
   private:
 
@@ -484,7 +484,7 @@ ID3D11ShaderResourceView *Buffer11::getSRV(DXGI_FORMAT srvFormat)
     return bufferSRV;
 }
 
-void Buffer11::packPixels(ID3D11Texture2D *srcTexture, UINT srcSubresource, const PackPixelsParams &params)
+gl::Error Buffer11::packPixels(ID3D11Texture2D *srcTexture, UINT srcSubresource, const PackPixelsParams &params)
 {
     PackStorage11 *packStorage = getPackStorage();
 
@@ -492,11 +492,17 @@ void Buffer11::packPixels(ID3D11Texture2D *srcTexture, UINT srcSubresource, cons
 
     if (packStorage)
     {
-        packStorage->packPixels(srcTexture, srcSubresource, params);
+        gl::Error error = packStorage->packPixels(srcTexture, srcSubresource, params);
+        if (error.isError())
+        {
+            return error;
+        }
         packStorage->setDataRevision(latestStorage ? latestStorage->getDataRevision() + 1 : 1);
     }
 
     mIndexRangeCache.clear();
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 Buffer11::BufferStorage11 *Buffer11::getBufferStorage(BufferUsage usage)
@@ -850,7 +856,7 @@ void Buffer11::PackStorage11::unmap()
     // No-op
 }
 
-void Buffer11::PackStorage11::packPixels(ID3D11Texture2D *srcTexure, UINT srcSubresource, const PackPixelsParams &params)
+gl::Error Buffer11::PackStorage11::packPixels(ID3D11Texture2D *srcTexure, UINT srcSubresource, const PackPixelsParams &params)
 {
     flushQueuedPackCommand();
     mQueuedPackCommand = new PackPixelsParams(params);
@@ -892,7 +898,11 @@ void Buffer11::PackStorage11::packPixels(ID3D11Texture2D *srcTexure, UINT srcSub
         stagingDesc.MiscFlags = 0;
 
         hr = device->CreateTexture2D(&stagingDesc, NULL, &mStagingTexture);
-        ASSERT(SUCCEEDED(hr));
+        if (FAILED(hr))
+        {
+            ASSERT(hr == E_OUTOFMEMORY);
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal staging texture.");
+        }
     }
 
     // ReadPixels from multisampled FBOs isn't supported in current GL
@@ -909,6 +919,8 @@ void Buffer11::PackStorage11::packPixels(ID3D11Texture2D *srcTexure, UINT srcSub
 
     // Asynchronous copy
     immediateContext->CopySubresourceRegion(mStagingTexture, 0, 0, 0, 0, srcTexure, srcSubresource, &srcBox);
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void Buffer11::PackStorage11::flushQueuedPackCommand()

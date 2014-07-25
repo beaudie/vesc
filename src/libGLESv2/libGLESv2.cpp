@@ -3763,7 +3763,12 @@ void __stdcall glReadnPixelsEXT(GLint x, GLint y, GLsizei width, GLsizei height,
             return;
         }
 
-        context->readPixels(x, y, width, height, format, type, &bufSize, data);
+        gl::Error error = context->readPixels(x, y, width, height, format, type, &bufSize, data);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
@@ -3789,7 +3794,12 @@ void __stdcall glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height,
             return;
         }
 
-        context->readPixels(x, y, width, height, format, type, NULL, pixels);
+        gl::Error error = context->readPixels(x, y, width, height, format, type, NULL, pixels);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
