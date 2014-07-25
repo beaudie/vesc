@@ -13,6 +13,7 @@
 #include "libGLESv2/Uniform.h"
 #include "libGLESv2/angletypes.h"
 #include "libGLESv2/Caps.h"
+#include "libGLESv2/Error.h"
 
 #if !defined(ANGLE_COMPILE_OPTIMIZATION_LEVEL)
 // WARNING: D3DCOMPILE_OPTIMIZATION_LEVEL3 may lead to a DX9 shader compiler hang.
@@ -134,7 +135,7 @@ class Renderer
     virtual void drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
                               gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei instances) = 0;
 
-    virtual void clear(const gl::ClearParameters &clearParams, gl::Framebuffer *frameBuffer) = 0;
+    virtual gl::Error clear(const gl::ClearParameters &clearParams, gl::Framebuffer *frameBuffer) = 0;
 
     virtual void markAllStateDirty() = 0;
 

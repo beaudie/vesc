@@ -149,7 +149,7 @@ Clear11::~Clear11()
     SafeRelease(mRasterizerState);
 }
 
-void Clear11::clearFramebuffer(const gl::ClearParameters &clearParams, gl::Framebuffer *frameBuffer)
+gl::Error Clear11::clearFramebuffer(const gl::ClearParameters &clearParams, gl::Framebuffer *frameBuffer)
 {
     // First determine if a scissored clear is needed, this will always require drawing a quad.
     //
@@ -184,7 +184,7 @@ void Clear11::clearFramebuffer(const gl::ClearParameters &clearParams, gl::Frame
     else
     {
         UNREACHABLE();
-        return;
+        return gl::Error(GL_INVALID_OPERATION);
     }
 
     if (clearParams.scissorEnabled && (clearParams.scissor.x >= framebufferSize.width || 
@@ -193,7 +193,7 @@ void Clear11::clearFramebuffer(const gl::ClearParameters &clearParams, gl::Frame
                                        clearParams.scissor.y + clearParams.scissor.height <= 0))
     {
         // Scissor is enabled and the scissor rectangle is outside the renderbuffer
-        return;
+        return gl::Error(GL_NO_ERROR);
     }
 
     bool needScissoredClear = clearParams.scissorEnabled && (clearParams.scissor.x > 0 || clearParams.scissor.y > 0 ||
@@ -215,8 +215,7 @@ void Clear11::clearFramebuffer(const gl::ClearParameters &clearParams, gl::Frame
                 RenderTarget11 *renderTarget = RenderTarget11::makeRenderTarget11(attachment->getRenderTarget());
                 if (!renderTarget)
                 {
-                    ERR("Render target pointer unexpectedly null.");
-                    return;
+                    return gl::Error(GL_OUT_OF_MEMORY, "Internal render target view pointer unexpectedly null.");
                 }
 
                 const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(attachment->getInternalFormat());
@@ -260,8 +259,7 @@ void Clear11::clearFramebuffer(const gl::ClearParameters &clearParams, gl::Frame
                     ID3D11RenderTargetView *framebufferRTV = renderTarget->getRenderTargetView();
                     if (!framebufferRTV)
                     {
-                        ERR("Render target view pointer unexpectedly null.");
-                        return;
+                        return gl::Error(GL_OUT_OF_MEMORY, "Internal render target view pointer unexpectedly null.");
                     }
 
                     const gl::InternalFormat &actualFormatInfo = gl::GetInternalFormatInfo(attachment->getActualFormat());
@@ -290,8 +288,7 @@ void Clear11::clearFramebuffer(const gl::ClearParameters &clearParams, gl::Frame
             RenderTarget11 *renderTarget = RenderTarget11::makeRenderTarget11(attachment->getDepthStencil());
             if (!renderTarget)
             {
-                ERR("Depth stencil render target pointer unexpectedly null.");
-                return;
+                return gl::Error(GL_OUT_OF_MEMORY, "Internal depth stencil view pointer unexpectedly null.");
             }
 
             const gl::InternalFormat &actualFormatInfo = gl::GetInternalFormatInfo(attachment->getActualFormat());
@@ -308,8 +305,7 @@ void Clear11::clearFramebuffer(const gl::ClearParameters &clearParams, gl::Frame
                 ID3D11DepthStencilView *framebufferDSV = renderTarget->getDepthStencilView();
                 if (!framebufferDSV)
                 {
-                    ERR("Depth stencil view pointer unexpectedly null.");
-                    return;
+                    return gl::Error(GL_OUT_OF_MEMORY, "Internal depth stencil view pointer unexpectedly null.");
                 }
 
                 UINT clearFlags = (clearParams.clearDepth   ? D3D11_CLEAR_DEPTH   : 0) |
@@ -356,8 +352,7 @@ void Clear11::clearFramebuffer(const gl::ClearParameters &clearParams, gl::Frame
             ID3D11RenderTargetView *rtv = renderTarget->getRenderTargetView();
             if (!rtv)
             {
-                ERR("Render target view unexpectedly null.");
-                return;
+                return gl::Error(GL_OUT_OF_MEMORY, "Internal render target view pointer unexpectedly null.");
             }
 
             rtvs[i] = rtv;
@@ -379,8 +374,7 @@ void Clear11::clearFramebuffer(const gl::ClearParameters &clearParams, gl::Frame
         HRESULT result = deviceContext->Map(mVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
         if (FAILED(result))
         {
-            ERR("Failed to map masked clear vertex buffer, HRESULT: 0x%X.", result);
-            return;
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to map internal masked clear vertex buffer, HRESULT: 0x%X.", result);
         }
 
         const gl::Rectangle *scissorPtr = clearParams.scissorEnabled ? &clearParams.scissor : NULL;
@@ -445,6 +439,8 @@ void Clear11::clearFramebuffer(const gl::ClearParameters &clearParams, gl::Frame
         // Clean up
         mRenderer->markAllStateDirty();
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 ID3D11BlendState *Clear11::getBlendState(const std::vector<MaskedRenderTarget>& rts)
