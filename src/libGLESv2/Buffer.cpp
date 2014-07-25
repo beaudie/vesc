@@ -34,50 +34,61 @@ Buffer::~Buffer()
     delete mBuffer;
 }
 
-void Buffer::bufferData(const void *data, GLsizeiptr size, GLenum usage)
+Error Buffer::bufferData(const void *data, GLsizeiptr size, GLenum usage)
 {
-    mUsage = usage;
-    mSize = size;
-    mBuffer->setData(data, size, usage);
+    Error error = mBuffer->setData(data, size, usage);
+    if (!error.isError())
+    {
+        mUsage = usage;
+        mSize = size;
+    }
+    return error;
 }
 
-void Buffer::bufferSubData(const void *data, GLsizeiptr size, GLintptr offset)
+Error Buffer::bufferSubData(const void *data, GLsizeiptr size, GLintptr offset)
 {
-    mBuffer->setSubData(data, size, offset);
+    return mBuffer->setSubData(data, size, offset);
 }
 
-void Buffer::copyBufferSubData(Buffer* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size)
+Error Buffer::copyBufferSubData(Buffer* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size)
 {
-    mBuffer->copySubData(source->getImplementation(), sourceOffset, destOffset, size);
+    return mBuffer->copySubData(source->getImplementation(), sourceOffset, destOffset, size);
 }
 
-GLvoid *Buffer::mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access)
+Error Buffer::mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access)
 {
     ASSERT(!mMapped);
     ASSERT(offset + length <= mSize);
 
-    void *dataPointer = mBuffer->map(offset, length, access);
-
-    mMapped = GL_TRUE;
-    mMapPointer = static_cast<GLvoid*>(static_cast<GLubyte*>(dataPointer));
-    mMapOffset = static_cast<GLint64>(offset);
-    mMapLength = static_cast<GLint64>(length);
-    mAccessFlags = static_cast<GLint>(access);
-
-    return mMapPointer;
+    Error error = mBuffer->map(offset, length, access, &mMapPointer);
+    if (!error.isError())
+    {
+        mMapped = GL_TRUE;
+        mMapOffset = static_cast<GLint64>(offset);
+        mMapLength = static_cast<GLint64>(length);
+        mAccessFlags = static_cast<GLint>(access);
+    }
+    else
+    {
+        mMapPointer = NULL;
+    }
+    return error;
 }
 
-void Buffer::unmap()
+Error Buffer::unmap()
 {
     ASSERT(mMapped);
 
-    mBuffer->unmap();
-
-    mMapped = GL_FALSE;
-    mMapPointer = NULL;
-    mMapOffset = 0;
-    mMapLength = 0;
-    mAccessFlags = 0;
+    Error error = mBuffer->unmap();
+    if (!error.isError())
+    {
+        mMapped = GL_FALSE;
+        mMapPointer = NULL;
+        mMapOffset = 0;
+        mMapLength = 0;
+        mAccessFlags = 0;
+    }
+    return error;
 }
 
 void Buffer::markTransformFeedbackUsage()
