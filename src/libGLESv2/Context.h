@@ -192,10 +192,10 @@ class Context
     Error clearBufferfi(GLenum buffer, int drawbuffer, float depth, int stencil);
 
     Error readPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei *bufSize, void* pixels);
-    void drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instances);
-    void drawElements(GLenum mode, GLsizei count, GLenum type,
-                      const GLvoid *indices, GLsizei instances,
-                      const rx::RangeUI &indexRange);
+    Error drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instances);
+    Error drawElements(GLenum mode, GLsizei count, GLenum type,
+                       const GLvoid *indices, GLsizei instances,
+                       const rx::RangeUI &indexRange);
     void sync(bool block);   // flush/finish
 
     void recordError(const Error &error);
@@ -235,12 +235,12 @@ class Context
     typedef std::array<unsigned int, IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS> FramebufferTextureSerialArray;
 
     bool applyRenderTarget(GLenum drawMode, bool ignoreViewport);
-    void applyState(GLenum drawMode);
-    void applyShaders(ProgramBinary *programBinary, bool transformFeedbackActive);
-    void applyTextures(SamplerType shaderType, Texture *textures[], TextureType *textureTypes, SamplerState *samplers,
-                       size_t textureCount, const FramebufferTextureSerialArray& framebufferSerials,
-                       size_t framebufferSerialCount);
-    bool applyUniformBuffers();
+    Error applyState(GLenum drawMode);
+    Error applyShaders(ProgramBinary *programBinary, bool transformFeedbackActive);
+    Error applyTextures(SamplerType shaderType, Texture *textures[], TextureType *textureTypes, SamplerState *samplers,
+                        size_t textureCount, const FramebufferTextureSerialArray& framebufferSerials,
+                        size_t framebufferSerialCount);
+    gl::Error applyUniformBuffers();
     bool applyTransformFeedbackBuffers();
     void markTransformFeedbackUsage();
 
@@ -252,7 +252,7 @@ class Context
     void detachTransformFeedback(GLuint transformFeedback);
     void detachSampler(GLuint sampler);
 
-    void generateSwizzles(Texture *textures[], size_t count);
+    Error generateSwizzles(Texture *textures[], size_t count);
     size_t getCurrentTexturesAndSamplerStates(ProgramBinary *programBinary, SamplerType type, Texture **outTextures,
                                               TextureType *outTextureTypes, SamplerState *outSamplers);
     Texture *getIncompleteTexture(TextureType type);
