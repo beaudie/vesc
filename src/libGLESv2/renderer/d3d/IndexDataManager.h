@@ -12,6 +12,7 @@
 
 #include "common/angleutils.h"
 #include "common/mathutil.h"
+#include "libGLESv2/Error.h"
 
 namespace
 {
@@ -49,8 +50,7 @@ class IndexDataManager
     explicit IndexDataManager(Renderer *renderer);
     virtual ~IndexDataManager();
 
-    GLenum prepareIndexData(GLenum type, GLsizei count, gl::Buffer *arrayElementBuffer, const GLvoid *indices, TranslatedIndexData *translated);
-    StaticIndexBufferInterface *getCountingIndices(GLsizei count);
+    gl::Error prepareIndexData(GLenum type, GLsizei count, gl::Buffer *arrayElementBuffer, const GLvoid *indices, TranslatedIndexData *translated);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(IndexDataManager);
@@ -59,7 +59,6 @@ class IndexDataManager
 
     StreamingIndexBufferInterface *mStreamingBufferShort;
     StreamingIndexBufferInterface *mStreamingBufferInt;
-    StaticIndexBufferInterface *mCountingBuffer;
 };
 
 }

@@ -130,8 +130,8 @@ class ProgramBinary : public RefCountObject
     bool getUniformuiv(GLint location, GLsizei *bufSize, GLuint *params);
 
     void dirtyAllUniforms();
-    void applyUniforms();
-    bool applyUniformBuffers(const std::vector<Buffer*> boundBuffers);
+    Error applyUniforms();
+    Error applyUniformBuffers(const std::vector<Buffer*> boundBuffers);
 
     bool load(InfoLog &infoLog, GLenum binaryFormat, const void *binary, GLsizei length);
     bool save(GLenum *binaryFormat, void *binary, GLsizei bufSize, GLsizei *length);
