@@ -84,12 +84,12 @@ VertexDataManager::~VertexDataManager()
     }
 }
 
-GLenum VertexDataManager::prepareVertexData(const gl::VertexAttribute attribs[], const gl::VertexAttribCurrentValueData currentValues[],
-                                            gl::ProgramBinary *programBinary, GLint start, GLsizei count, TranslatedAttribute *translated, GLsizei instances)
+gl::Error VertexDataManager::prepareVertexData(const gl::VertexAttribute attribs[], const gl::VertexAttribCurrentValueData currentValues[],
+                                               gl::ProgramBinary *programBinary, GLint start, GLsizei count, TranslatedAttribute *translated, GLsizei instances)
 {
     if (!mStreamingBuffer)
     {
-        return GL_OUT_OF_MEMORY;
+        return gl::Error(GL_OUT_OF_MEMORY, "Internal streaming vertex buffer is unexpectedly NULL.");
     }
 
     for (int attributeIndex = 0; attributeIndex < gl::MAX_VERTEX_ATTRIBS; attributeIndex++)
@@ -135,9 +135,10 @@ GLenum VertexDataManager::prepareVertexData(const gl::VertexAttribute attribs[],
                     if (staticBuffer->getBufferSize() == 0)
                     {
                         int totalCount = ElementsInBuffer(attribs[i], bufferImpl->getSize());
-                        if (!staticBuffer->reserveVertexSpace(attribs[i], totalCount, 0))
+                        gl::Error error = staticBuffer->reserveVertexSpace(attribs[i], totalCount, 0);
+                        if (error.isError())
                         {
-                            return GL_OUT_OF_MEMORY;
+                            return error;
                         }
                     }
                 }
@@ -149,12 +150,13 @@ GLenum VertexDataManager::prepareVertexData(const gl::VertexAttribute attribs[],
                     // We can return INVALID_OPERATION if our vertex attribute does not have enough backing data.
                     if (bufferImpl && ElementsInBuffer(attribs[i], bufferImpl->getSize()) < totalCount)
                     {
-                        return GL_INVALID_OPERATION;
+                        return gl::Error(GL_INVALID_OPERATION, "Buffer for attribute %i is not large enough.", i);
                     }
 
-                    if (!mStreamingBuffer->reserveVertexSpace(attribs[i], totalCount, instances))
+                    gl::Error error = mStreamingBuffer->reserveVertexSpace(attribs[i], totalCount, instances);
+                    if (error.isError())
                     {
-                        return GL_OUT_OF_MEMORY;
+                        return error;
                     }
                 }
             }
@@ -166,12 +168,14 @@ GLenum VertexDataManager::prepareVertexData(const gl::VertexAttribute attribs[],
     {
         if (translated[i].active)
         {
-            GLenum result;
-
             if (attribs[i].enabled)
             {
-                result = storeAttribute(attribs[i], currentValues[i], &translated[i],
-                                        start, count, instances);
+                gl::Error error = storeAttribute(attribs[i], currentValues[i], &translated[i],
+                                                 start, count, instances);
+                if (error.isError())
+                {
+                    return error;
+                }
             }
             else
             {
@@ -180,14 +184,13 @@ GLenum VertexDataManager::prepareVertexData(const gl::VertexAttribute attribs[],
                     mCurrentValueBuffer[i] = new StreamingVertexBufferInterface(mRenderer, CONSTANT_VERTEX_BUFFER_SIZE);
                 }
 
-                result = storeCurrentValue(attribs[i], currentValues[i], &translated[i],
-                                           &mCurrentValue[i], &mCurrentValueOffsets[i],
-                                           mCurrentValueBuffer[i]);
-            }
-
-            if (result != GL_NO_ERROR)
-            {
-                return result;
+                gl::Error error = storeCurrentValue(attribs[i], currentValues[i], &translated[i],
+                                                    &mCurrentValue[i], &mCurrentValueOffsets[i],
+                                                    mCurrentValueBuffer[i]);
+                if (error.isError())
+                {
+                    return error;
+                }
             }
         }
     }
@@ -206,23 +209,22 @@ GLenum VertexDataManager::prepareVertexData(const gl::VertexAttribute attribs[],
         }
     }
 
-    return GL_NO_ERROR;
+    return gl::Error(GL_NO_ERROR);
 }
 
-GLenum VertexDataManager::storeAttribute(const gl::VertexAttribute &attrib,
-                                         const gl::VertexAttribCurrentValueData &currentValue,
-                                         TranslatedAttribute *translated,
-                                         GLint start,
-                                         GLsizei count,
-                                         GLsizei instances)
+gl::Error VertexDataManager::storeAttribute(const gl::VertexAttribute &attrib,
+                                            const gl::VertexAttribCurrentValueData &currentValue,
+                                            TranslatedAttribute *translated,
+                                            GLint start,
+                                            GLsizei count,
+                                            GLsizei instances)
 {
     gl::Buffer *buffer = attrib.buffer.get();
 
     if (!buffer && attrib.pointer == NULL)
     {
         // This is an application error that would normally result in a crash, but we catch it and return an error
-        ERR("An enabled vertex array has no buffer and no pointer.");
-        return GL_INVALID_OPERATION;
+        return gl::Error(GL_INVALID_OPERATION, "An enabled vertex array has no buffer and no pointer.");
     }
 
     BufferD3D *storage = buffer ? BufferD3D::makeBufferD3D(buffer->getImplementation()) : NULL;
@@ -240,9 +242,10 @@ GLenum VertexDataManager::storeAttribute(const gl::VertexAttribute &attrib,
     }
     else if (staticBuffer)
     {
-        if (!staticBuffer->getVertexBuffer()->getSpaceRequired(attrib, 1, 0, &outputElementSize))
+        gl::Error error = staticBuffer->getVertexBuffer()->getSpaceRequired(attrib, 1, 0, &outputElementSize);
+        if (error.isError())
         {
-            return GL_OUT_OF_MEMORY;
+            return error;
         }
 
         if (!staticBuffer->lookupAttribute(attrib, &streamOffset))
@@ -251,10 +254,11 @@ GLenum VertexDataManager::storeAttribute(const gl::VertexAttribute &attrib,
             int totalCount = ElementsInBuffer(attrib, storage->getSize());
             int startIndex = attrib.offset / ComputeVertexAttributeStride(attrib);
 
-            if (!staticBuffer->storeVertexAttributes(attrib, currentValue, -startIndex, totalCount,
-                0, &streamOffset))
+            gl::Error error = staticBuffer->storeVertexAttributes(attrib, currentValue, -startIndex, totalCount,
+                                                                  0, &streamOffset);
+            if (error.isError())
             {
-                return GL_OUT_OF_MEMORY;
+                return error;
             }
         }
 
@@ -262,7 +266,7 @@ GLenum VertexDataManager::storeAttribute(const gl::VertexAttribute &attrib,
         unsigned int startOffset = (instances == 0 || attrib.divisor == 0) ? start * outputElementSize : 0;
         if (streamOffset + firstElementOffset + startOffset < streamOffset)
         {
-            return GL_OUT_OF_MEMORY;
+            return gl::Error(GL_OUT_OF_MEMORY);
         }
 
         streamOffset += firstElementOffset + startOffset;
@@ -270,11 +274,16 @@ GLenum VertexDataManager::storeAttribute(const gl::VertexAttribute &attrib,
     else
     {
         int totalCount = StreamingBufferElementCount(attrib, count, instances);
-        if (!mStreamingBuffer->getVertexBuffer()->getSpaceRequired(attrib, 1, 0, &outputElementSize) ||
-            !mStreamingBuffer->storeVertexAttributes(attrib, currentValue, start, totalCount, instances,
-            &streamOffset))
+        gl::Error error = mStreamingBuffer->getVertexBuffer()->getSpaceRequired(attrib, 1, 0, &outputElementSize);
+        if (error.isError())
         {
-            return GL_OUT_OF_MEMORY;
+            return error;
+        }
+
+        error = mStreamingBuffer->storeVertexAttributes(attrib, currentValue, start, totalCount, instances, &streamOffset);
+        if (error.isError())
+        {
+            return error;
         }
     }
 
@@ -288,27 +297,29 @@ GLenum VertexDataManager::storeAttribute(const gl::VertexAttribute &attrib,
     translated->stride = outputElementSize;
     translated->offset = streamOffset;
 
-    return GL_NO_ERROR;
+    return gl::Error(GL_NO_ERROR);
 }
 
-GLenum VertexDataManager::storeCurrentValue(const gl::VertexAttribute &attrib,
-                                            const gl::VertexAttribCurrentValueData &currentValue,
-                                            TranslatedAttribute *translated,
-                                            gl::VertexAttribCurrentValueData *cachedValue,
-                                            size_t *cachedOffset,
-                                            StreamingVertexBufferInterface *buffer)
+gl::Error VertexDataManager::storeCurrentValue(const gl::VertexAttribute &attrib,
+                                               const gl::VertexAttribCurrentValueData &currentValue,
+                                               TranslatedAttribute *translated,
+                                               gl::VertexAttribCurrentValueData *cachedValue,
+                                               size_t *cachedOffset,
+                                               StreamingVertexBufferInterface *buffer)
 {
     if (*cachedValue != currentValue)
     {
-        if (!buffer->reserveVertexSpace(attrib, 1, 0))
+        gl::Error error = buffer->reserveVertexSpace(attrib, 1, 0);
+        if (error.isError())
         {
-            return GL_OUT_OF_MEMORY;
+            return error;
         }
 
         unsigned int streamOffset;
-        if (!buffer->storeVertexAttributes(attrib, currentValue, 0, 1, 0, &streamOffset))
+        error = buffer->storeVertexAttributes(attrib, currentValue, 0, 1, 0, &streamOffset);
+        if (error.isError())
         {
-            return GL_OUT_OF_MEMORY;
+            return error;
         }
 
         *cachedValue = currentValue;
@@ -325,7 +336,7 @@ GLenum VertexDataManager::storeCurrentValue(const gl::VertexAttribute &attrib,
     translated->stride = 0;
     translated->offset = *cachedOffset;
 
-    return GL_NO_ERROR;
+    return gl::Error(GL_NO_ERROR);
 }
 
 }

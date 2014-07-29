@@ -1349,7 +1349,12 @@ void __stdcall glDrawArrays(GLenum mode, GLint first, GLsizei count)
             return;
         }
 
-        context->drawArrays(mode, first, count, 0);
+        gl::Error error = context->drawArrays(mode, first, count, 0);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 

@@ -20,39 +20,17 @@
 namespace rx
 {
 
-IndexDataManager::IndexDataManager(Renderer *renderer) : mRenderer(renderer)
+IndexDataManager::IndexDataManager(Renderer *renderer)
+    : mRenderer(renderer),
+      mStreamingBufferShort(NULL),
+      mStreamingBufferInt(NULL)
 {
-    mStreamingBufferShort = new StreamingIndexBufferInterface(mRenderer);
-    if (!mStreamingBufferShort->reserveBufferSpace(INITIAL_INDEX_BUFFER_SIZE, GL_UNSIGNED_SHORT))
-    {
-        delete mStreamingBufferShort;
-        mStreamingBufferShort = NULL;
-    }
-
-    mStreamingBufferInt = new StreamingIndexBufferInterface(mRenderer);
-    if (!mStreamingBufferInt->reserveBufferSpace(INITIAL_INDEX_BUFFER_SIZE, GL_UNSIGNED_INT))
-    {
-        delete mStreamingBufferInt;
-        mStreamingBufferInt = NULL;
-    }
-
-    if (!mStreamingBufferShort)
-    {
-        // Make sure both buffers are deleted.
-        delete mStreamingBufferInt;
-        mStreamingBufferInt = NULL;
-
-        ERR("Failed to allocate the streaming index buffer(s).");
-    }
-
-    mCountingBuffer = NULL;
 }
 
 IndexDataManager::~IndexDataManager()
 {
     delete mStreamingBufferShort;
     delete mStreamingBufferInt;
-    delete mCountingBuffer;
 }
 
 static void convertIndices(GLenum sourceType, GLenum destinationType, const void *input, GLsizei count, void *output)
@@ -125,13 +103,8 @@ static RangeUI computeRange(GLenum type, const GLvoid *indices, GLsizei count)
     }
 }
 
-GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer *buffer, const GLvoid *indices, TranslatedIndexData *translated)
+gl::Error IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer *buffer, const GLvoid *indices, TranslatedIndexData *translated)
 {
-    if (!mStreamingBufferShort)
-    {
-        return GL_OUT_OF_MEMORY;
-    }
-
     const gl::Type &typeInfo = gl::GetTypeInfo(type);
 
     GLenum destinationIndexType = (type == GL_UNSIGNED_INT) ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT;
@@ -145,7 +118,7 @@ GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer
     {
         if (reinterpret_cast<uintptr_t>(indices) > std::numeric_limits<unsigned int>::max())
         {
-            return GL_OUT_OF_MEMORY;
+            return gl::Error(GL_OUT_OF_MEMORY, "Unable to support an index pointer greater than the maximum unsigned integer.");
         }
         offset = static_cast<unsigned int>(reinterpret_cast<uintptr_t>(indices));
 
@@ -163,12 +136,12 @@ GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer
         if (static_cast<unsigned int>(count) > (std::numeric_limits<unsigned int>::max() / typeInfo.bytes) ||
             typeInfo.bytes * static_cast<unsigned int>(count) + offset < offset)
         {
-            return GL_OUT_OF_MEMORY;
+            return gl::Error(GL_OUT_OF_MEMORY, "Maximum index location is too large and would result in an overflow.");
         }
 
         if (typeInfo.bytes * static_cast<unsigned int>(count) + offset > storage->getSize())
         {
-            return GL_INVALID_OPERATION;
+            return gl::Error(GL_OUT_OF_MEMORY, "Maximum index location is too large and would result in an overflow.");
         }
 
         indices = static_cast<const GLubyte*>(storage->getData()) + offset;
@@ -219,7 +192,34 @@ GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer
 
     if (!directStorage && !indexBuffer)
     {
-        indexBuffer = (destinationIndexType == GL_UNSIGNED_INT) ? mStreamingBufferInt : mStreamingBufferShort;
+        if (destinationIndexType == GL_UNSIGNED_INT)
+        {
+            if (!mStreamingBufferInt)
+            {
+                mStreamingBufferInt = new StreamingIndexBufferInterface(mRenderer);
+                gl::Error error = mStreamingBufferInt->reserveBufferSpace(INITIAL_INDEX_BUFFER_SIZE, GL_UNSIGNED_INT);
+                if (error.isError())
+                {
+                    return error;
+                }
+            }
+            indexBuffer = mStreamingBufferInt;
+        }
+        else
+        {
+            ASSERT(destinationIndexType == GL_UNSIGNED_SHORT);
+
+            if (!mStreamingBufferShort)
+            {
+                mStreamingBufferShort = new StreamingIndexBufferInterface(mRenderer);
+                gl::Error error = mStreamingBufferShort->reserveBufferSpace(INITIAL_INDEX_BUFFER_SIZE, GL_UNSIGNED_SHORT);
+                if (error.isError())
+                {
+                    return error;
+                }
+            }
+            indexBuffer = mStreamingBufferShort;
+        }
 
         unsigned int convertCount = count;
 
@@ -239,36 +239,35 @@ GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer
 
         if (!indexBuffer)
         {
-            ERR("No valid index buffer.");
-            return GL_INVALID_OPERATION;
+            return gl::Error(GL_INVALID_OPERATION, "No valid index data available.");
         }
 
         if (convertCount > std::numeric_limits<unsigned int>::max() / destTypeInfo.bytes)
         {
-            ERR("Reserving %u indicies of %u bytes each exceeds the maximum buffer size.", convertCount, destTypeInfo.bytes);
-            return GL_OUT_OF_MEMORY;
+            return gl::Error(GL_OUT_OF_MEMORY, "Reserving %u indices of %u bytes each exceeds the maximum buffer size.",
+                             convertCount, destTypeInfo.bytes);
         }
 
         unsigned int bufferSizeRequired = convertCount * destTypeInfo.bytes;
-        if (!indexBuffer->reserveBufferSpace(bufferSizeRequired, type))
+        gl::Error error = indexBuffer->reserveBufferSpace(bufferSizeRequired, type);
+        if (error.isError())
         {
-            ERR("Failed to reserve %u bytes in an index buffer.", bufferSizeRequired);
-            return GL_OUT_OF_MEMORY;
+            return error;
         }
 
         void* output = NULL;
-        if (!indexBuffer->mapBuffer(bufferSizeRequired, &output, &streamOffset))
+        error = indexBuffer->mapBuffer(bufferSizeRequired, &output, &streamOffset);
+        if (error.isError())
         {
-            ERR("Failed to map index buffer.");
-            return GL_OUT_OF_MEMORY;
+            return error;
         }
 
         convertIndices(type, destinationIndexType, staticBuffer ? storage->getData() : indices, convertCount, output);
 
-        if (!indexBuffer->unmapBuffer())
+        error = indexBuffer->unmapBuffer();
+        if (error.isError())
         {
-            ERR("Failed to unmap index buffer.");
-            return GL_OUT_OF_MEMORY;
+            return error;
         }
 
         if (staticBuffer)
@@ -290,77 +289,7 @@ GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer
         storage->promoteStaticUsage(count * typeInfo.bytes);
     }
 
-    return GL_NO_ERROR;
-}
-
-StaticIndexBufferInterface *IndexDataManager::getCountingIndices(GLsizei count)
-{
-    if (count <= 65536)   // 16-bit indices
-    {
-        const unsigned int spaceNeeded = count * sizeof(unsigned short);
-
-        if (!mCountingBuffer || mCountingBuffer->getBufferSize() < spaceNeeded)
-        {
-            delete mCountingBuffer;
-            mCountingBuffer = new StaticIndexBufferInterface(mRenderer);
-            mCountingBuffer->reserveBufferSpace(spaceNeeded, GL_UNSIGNED_SHORT);
-
-            void* mappedMemory = NULL;
-            if (!mCountingBuffer->mapBuffer(spaceNeeded, &mappedMemory, NULL))
-            {
-                ERR("Failed to map counting buffer.");
-                return NULL;
-            }
-
-            unsigned short *data = reinterpret_cast<unsigned short*>(mappedMemory);
-            for(int i = 0; i < count; i++)
-            {
-                data[i] = i;
-            }
-
-            if (!mCountingBuffer->unmapBuffer())
-            {
-                ERR("Failed to unmap counting buffer.");
-                return NULL;
-            }
-        }
-    }
-    else if (mStreamingBufferInt)   // 32-bit indices supported
-    {
-        const unsigned int spaceNeeded = count * sizeof(unsigned int);
-
-        if (!mCountingBuffer || mCountingBuffer->getBufferSize() < spaceNeeded)
-        {
-            delete mCountingBuffer;
-            mCountingBuffer = new StaticIndexBufferInterface(mRenderer);
-            mCountingBuffer->reserveBufferSpace(spaceNeeded, GL_UNSIGNED_INT);
-
-            void* mappedMemory = NULL;
-            if (!mCountingBuffer->mapBuffer(spaceNeeded, &mappedMemory, NULL))
-            {
-                ERR("Failed to map counting buffer.");
-                return NULL;
-            }
-
-            unsigned int *data = reinterpret_cast<unsigned int*>(mappedMemory);
-            for(int i = 0; i < count; i++)
-            {
-                data[i] = i;
-            }
-
-            if (!mCountingBuffer->unmapBuffer())
-            {
-                ERR("Failed to unmap counting buffer.");
-                return NULL;
-            }
-        }
-    }
-    else
-    {
-        return NULL;
-    }
-
-    return mCountingBuffer;
+    return gl::Error(GL_NO_ERROR);
 }
 
 }

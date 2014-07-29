@@ -52,25 +52,25 @@ class VertexDataManager
     VertexDataManager(rx::Renderer *renderer);
     virtual ~VertexDataManager();
 
-    GLenum prepareVertexData(const gl::VertexAttribute attribs[], const gl::VertexAttribCurrentValueData currentValues[],
-                             gl::ProgramBinary *programBinary, GLint start, GLsizei count, TranslatedAttribute *outAttribs, GLsizei instances);
+    gl::Error prepareVertexData(const gl::VertexAttribute attribs[], const gl::VertexAttribCurrentValueData currentValues[],
+                                gl::ProgramBinary *programBinary, GLint start, GLsizei count, TranslatedAttribute *outAttribs, GLsizei instances);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(VertexDataManager);
 
-    GLenum storeAttribute(const gl::VertexAttribute &attrib,
-                          const gl::VertexAttribCurrentValueData &currentValue,
-                          TranslatedAttribute *translated,
-                          GLint start,
-                          GLsizei count,
-                          GLsizei instances);
-
-    GLenum storeCurrentValue(const gl::VertexAttribute &attrib,
+    gl::Error storeAttribute(const gl::VertexAttribute &attrib,
                              const gl::VertexAttribCurrentValueData &currentValue,
                              TranslatedAttribute *translated,
-                             gl::VertexAttribCurrentValueData *cachedValue,
-                             size_t *cachedOffset,
-                             StreamingVertexBufferInterface *buffer);
+                             GLint start,
+                             GLsizei count,
+                             GLsizei instances);
+
+    gl::Error storeCurrentValue(const gl::VertexAttribute &attrib,
+                                const gl::VertexAttribCurrentValueData &currentValue,
+                                TranslatedAttribute *translated,
+                                gl::VertexAttribCurrentValueData *cachedValue,
+                                size_t *cachedOffset,
+                                StreamingVertexBufferInterface *buffer);
 
     rx::Renderer *const mRenderer;
 
