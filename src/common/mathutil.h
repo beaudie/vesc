@@ -503,14 +503,20 @@ inline unsigned int averageFloat10(unsigned int a, unsigned int b)
 namespace rx
 {
 
-struct Range
+template <typename T>
+struct Range2
 {
-    Range() {}
-    Range(int lo, int hi) : start(lo), end(hi) { ASSERT(lo <= hi); }
+    Range2() {}
+    Range2(T lo, T hi) : start(lo), end(hi) { ASSERT(lo <= hi); }
 
-    int start;
-    int end;
+    T start;
+    T end;
+
+    T length() const { return end - start; }
 };
+
+typedef Range2<int> Range2i;
+typedef Range2<unsigned int> Range2ui;
 
 template <typename T>
 T roundUp(const T value, const T alignment)
