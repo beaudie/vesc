@@ -131,10 +131,7 @@ GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer
             return GL_OUT_OF_MEMORY;
         }
 
-        if (typeSize * static_cast<unsigned int>(count) + offset > storage->getSize())
-        {
-            return GL_INVALID_OPERATION;
-        }
+        ASSERT(typeSize * static_cast<unsigned int>(count) + offset <= storage->getSize());
 
         indices = static_cast<const GLubyte*>(storage->getData()) + offset;
     }
@@ -194,11 +191,7 @@ GLenum IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buffer
             }
         }
 
-        if (!indexBuffer)
-        {
-            ERR("No valid index buffer.");
-            return GL_INVALID_OPERATION;
-        }
+        ASSERT(indexBuffer);
 
         unsigned int indexTypeSize = gl::GetTypeBytes(destinationIndexType);
         if (convertCount > std::numeric_limits<unsigned int>::max() / indexTypeSize)
