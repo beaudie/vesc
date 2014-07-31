@@ -518,6 +518,21 @@ T roundUp(const T value, const T alignment)
     return value + alignment - 1 - (value - 1) % alignment;
 }
 
+template <typename T>
+T SafeRoundUp(T value, T divisor)
+{
+    if (value <= std::numeric_limits<T>::max() - divisor)
+    {
+        // Safe, do rounding operation
+        return rx::roundUp(value, divisor);
+    }
+    else
+    {
+        // Unsafe, return value unchanged
+        return value;
+    }
+}
+
 template <class T>
 inline bool IsUnsignedAdditionSafe(T lhs, T rhs)
 {
