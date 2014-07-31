@@ -25,7 +25,6 @@ Buffer9::Buffer9(rx::Renderer9 *renderer)
 Buffer9::~Buffer9()
 {
     mSize = 0;
-    mIndexRangeCache.clear();
 }
 
 Buffer9 *Buffer9::makeBuffer9(BufferImpl *buffer)
@@ -50,7 +49,6 @@ void Buffer9::setData(const void* data, size_t size, GLenum usage)
         memcpy(mMemory.data(), data, size);
     }
 
-    mIndexRangeCache.clear();
     invalidateStaticData();
 
     if (usage == GL_STATIC_DRAW)
@@ -80,8 +78,6 @@ void Buffer9::setSubData(const void* data, size_t size, size_t offset)
         memcpy(mMemory.data() + offset, data, size);
     }
 
-    mIndexRangeCache.invalidateRange(offset, size);
-
     invalidateStaticData();
 }
 
@@ -94,7 +90,6 @@ void Buffer9::copySubData(BufferImpl* source, GLintptr sourceOffset, GLintptr de
         memcpy(mMemory.data() + destOffset, sourceBuffer->mMemory.data() + sourceOffset, size);
     }
 
-    mIndexRangeCache.invalidateRange(destOffset, size);
     invalidateStaticData();
 }
 
