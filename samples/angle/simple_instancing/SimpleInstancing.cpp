@@ -90,31 +90,76 @@ class SimpleInstancingSample : public SampleApplication
         // Initialize the vertex and index vectors
         const GLfloat quadRadius = 0.01f;
 
-        mVertices.push_back(Vector3(-quadRadius,  quadRadius, 0.0f));
-        mVertices.push_back(Vector3(-quadRadius, -quadRadius, 0.0f));
-        mVertices.push_back(Vector3( quadRadius, -quadRadius, 0.0f));
-        mVertices.push_back(Vector3( quadRadius,  quadRadius, 0.0f));
+        std::vector<Vector4> vertices;
+        vertices.push_back(Vector4(-quadRadius,  quadRadius, 0.0f, 1.0f));
+        vertices.push_back(Vector4(-quadRadius, -quadRadius, 0.0f, 1.0f));
+        vertices.push_back(Vector4( quadRadius, -quadRadius, 0.0f, 1.0f));
+        vertices.push_back(Vector4( quadRadius,  quadRadius, 0.0f, 1.0f));
 
-        mTexcoords.push_back(Vector2(0.0f, 0.0f));
-        mTexcoords.push_back(Vector2(0.0f, 1.0f));
-        mTexcoords.push_back(Vector2(1.0f, 1.0f));
-        mTexcoords.push_back(Vector2(1.0f, 0.0f));
+        std::vector<Vector4> texcoords;
+        texcoords.push_back(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+        texcoords.push_back(Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+        texcoords.push_back(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+        texcoords.push_back(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 
-        mIndices.push_back(0);
-        mIndices.push_back(1);
-        mIndices.push_back(2);
-        mIndices.push_back(0);
-        mIndices.push_back(2);
-        mIndices.push_back(3);
+        std::vector<GLushort> indices;
+        indices.push_back(0);
+        indices.push_back(1);
+        indices.push_back(2);
+        indices.push_back(0);
+        indices.push_back(2);
+        indices.push_back(3);
+        mPrimitiveCount = indices.size();
 
         // Tile thousands of quad instances
+        std::vector<Vector4> instances;
         for (float y = -1.0f + quadRadius; y < 1.0f - quadRadius; y += quadRadius * 3)
         {
             for (float x = -1.0f + quadRadius; x < 1.0f - quadRadius; x += quadRadius * 3)
             {
-                mInstances.push_back(Vector3(x, y, 0.0f));
+                instances.push_back(Vector4(x, y, 0.0f, 1.0f));
             }
         }
+        mInstanceCount = instances.size();
+
+        // Load the vertex position
+        glGenBuffers(1, &mVertices);
+        glBindBuffer(GL_ARRAY_BUFFER, mVertices);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vector4), vertices.data(), GL_STATIC_DRAW);
+        glVertexAttribPointer(mPositionLoc, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+        glEnableVertexAttribArray(mPositionLoc);
+
+        // Load the texcoords
+        glGenBuffers(1, &mTexcoords);
+        glBindBuffer(GL_ARRAY_BUFFER, mTexcoords);
+        glBufferData(GL_ARRAY_BUFFER, texcoords.size() * sizeof(Vector4), texcoords.data(), GL_STATIC_DRAW);
+        glVertexAttribPointer(mTexCoordLoc, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+        glEnableVertexAttribArray(mTexCoordLoc);
+
+        // Load the vertex position
+        glGenBuffers(1, &mInstances);
+        glBindBuffer(GL_ARRAY_BUFFER, mInstances);
+        glBufferData(GL_ARRAY_BUFFER, instances.size() * sizeof(Vector4), instances.data(), GL_STATIC_DRAW);
+        glVertexAttribPointer(mInstancePosLoc, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+        glEnableVertexAttribArray(mInstancePosLoc);
+
+        // Enable instancing
+        mVertexAttribDivisorANGLE(mInstancePosLoc, 1);
+
+        // Load the indices
+        glGenBuffers(1, &mIndices);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndices);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLushort), indices.data(), GL_STATIC_DRAW);
+
+        // Bind the texture
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, mTextureID);
+
+        // Set the sampler texture unit to 0
+        glUniform1i(mSamplerLoc, 0);
+
+        // Use the program object
+        glUseProgram(mProgram);
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -135,33 +180,8 @@ class SimpleInstancingSample : public SampleApplication
         // Clear the color buffer
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Use the program object
-        glUseProgram(mProgram);
-
-        // Load the vertex position
-        glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, mVertices.data());
-        glEnableVertexAttribArray(mPositionLoc);
-
-        // Load the texture coordinate
-        glVertexAttribPointer(mTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 0, mTexcoords.data());
-        glEnableVertexAttribArray(mTexCoordLoc);
-
-        // Load the instance position
-        glVertexAttribPointer(mInstancePosLoc, 3, GL_FLOAT, GL_FALSE, 0, mInstances.data());
-        glEnableVertexAttribArray(mInstancePosLoc);
-
-        // Enable instancing
-        mVertexAttribDivisorANGLE(mInstancePosLoc, 1);
-
-        // Bind the texture
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mTextureID);
-
-        // Set the sampler texture unit to 0
-        glUniform1i(mSamplerLoc, 0);
-
         // Do the instanced draw
-        mDrawElementsInstancedANGLE(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_SHORT, mIndices.data(), mInstances.size());
+        mDrawElementsInstancedANGLE(GL_TRIANGLES, mPrimitiveCount, GL_UNSIGNED_SHORT, 0, mInstanceCount);
     }
 
   private:
@@ -187,10 +207,13 @@ class SimpleInstancingSample : public SampleApplication
     PFNGLDRAWELEMENTSINSTANCEDANGLEPROC mDrawElementsInstancedANGLE;
 
     // Vertex data
-    std::vector<Vector3> mVertices;
-    std::vector<Vector2> mTexcoords;
-    std::vector<Vector3> mInstances;
-    std::vector<GLushort> mIndices;
+    GLuint mVertices;
+    GLuint mTexcoords;
+    GLuint mInstances;
+    GLuint mIndices;
+
+    GLuint mPrimitiveCount;
+    GLuint mInstanceCount;
 };
 
 int main(int argc, char **argv)
