@@ -16,6 +16,37 @@
 namespace rx
 {
 
+template <class IndexType>
+static Range2ui ComputeTypedRange(const IndexType *indices, GLsizei count)
+{
+    unsigned int minIndex = indices[0];
+    unsigned int maxIndex = indices[0];
+
+    for (GLsizei i = 1; i < count; i++)
+    {
+        if (minIndex > indices[i]) minIndex = indices[i];
+        if (maxIndex < indices[i]) maxIndex = indices[i];
+    }
+
+    return Range2ui(minIndex, maxIndex);
+}
+
+Range2ui IndexRangeCache::ComputeRange(GLenum type, const GLvoid *indices, GLsizei count)
+{
+    switch (type)
+    {
+      case GL_UNSIGNED_BYTE:
+        return ComputeTypedRange(static_cast<const GLubyte*>(indices), count);
+      case GL_UNSIGNED_INT:
+        return ComputeTypedRange(static_cast<const GLuint*>(indices), count);
+      case GL_UNSIGNED_SHORT:
+        return ComputeTypedRange(static_cast<const GLushort*>(indices), count);
+      default:
+        UNREACHABLE();
+        return Range2ui();
+    }
+}
+
 void IndexRangeCache::addRange(GLenum type, unsigned int offset, GLsizei count, const Range2ui &range,
                                unsigned int streamOffset)
 {

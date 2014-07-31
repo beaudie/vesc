@@ -1791,7 +1791,9 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instan
     }
 }
 
-void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei instances)
+void Context::drawElements(GLenum mode, GLsizei count, GLenum type,
+                           const GLvoid *indices, GLsizei instances,
+                           const rx::Range2ui &indexRange)
 {
     ASSERT(mState.getCurrentProgramId() != 0);
 
@@ -1825,6 +1827,7 @@ void Context::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid
 
     VertexArray *vao = mState.getVertexArray();
     rx::TranslatedIndexData indexInfo;
+    indexInfo.indexRange = indexRange;
     GLenum err = mRenderer->applyIndexBuffer(indices, vao->getElementArrayBuffer(), count, mode, type, &indexInfo);
     if (err != GL_NO_ERROR)
     {
