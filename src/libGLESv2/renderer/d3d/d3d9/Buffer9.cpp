@@ -24,18 +24,14 @@ Buffer9::Buffer9(rx::Renderer9 *renderer)
 
 Buffer9::~Buffer9()
 {
-
+    mSize = 0;
+    mIndexRangeCache.clear();
 }
 
 Buffer9 *Buffer9::makeBuffer9(BufferImpl *buffer)
 {
     ASSERT(HAS_DYNAMIC_TYPE(Buffer9*, buffer));
     return static_cast<Buffer9*>(buffer);
-}
-
-void Buffer9::clear()
-{
-    mSize = 0;
 }
 
 void Buffer9::setData(const void* data, size_t size, GLenum usage)
@@ -55,7 +51,6 @@ void Buffer9::setData(const void* data, size_t size, GLenum usage)
     }
 
     mIndexRangeCache.clear();
-
     invalidateStaticData();
 
     if (usage == GL_STATIC_DRAW)
@@ -99,6 +94,7 @@ void Buffer9::copySubData(BufferImpl* source, GLintptr sourceOffset, GLintptr de
         memcpy(mMemory.data() + destOffset, sourceBuffer->mMemory.data() + sourceOffset, size);
     }
 
+    mIndexRangeCache.invalidateRange(destOffset, size);
     invalidateStaticData();
 }
 
