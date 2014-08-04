@@ -518,6 +518,13 @@ T roundUp(const T value, const T alignment)
     return value + alignment - 1 - (value - 1) % alignment;
 }
 
+template <typename T>
+T CeilDivide(T value, T divisor)
+{
+    T divided = value / divisor;
+    return (divided + ((value % divisor == 0) ? 0 : 1));
+}
+
 template <class T>
 inline bool IsUnsignedAdditionSafe(T lhs, T rhs)
 {
