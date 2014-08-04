@@ -167,8 +167,6 @@ Buffer11::Buffer11(Renderer11 *renderer)
 
 Buffer11::~Buffer11()
 {
-    mIndexRangeCache.clear();
-
     for (auto it = mBufferStorages.begin(); it != mBufferStorages.end(); it++)
     {
         SafeDelete(it->second);
@@ -188,8 +186,6 @@ Buffer11 *Buffer11::makeBuffer11(BufferImpl *buffer)
 
 void Buffer11::setData(const void* data, size_t size, GLenum usage)
 {
-    mIndexRangeCache.clear();
-
     setSubData(data, size, 0);
 
     if (usage == GL_STATIC_DRAW)
@@ -244,7 +240,6 @@ void Buffer11::setSubData(const void* data, size_t size, size_t offset)
     size_t requiredSize = size + offset;
     mSize = std::max(mSize, requiredSize);
 
-    mIndexRangeCache.invalidateRange(offset, size);
     invalidateStaticData();
 
     if (data && size > 0)
@@ -319,7 +314,6 @@ void Buffer11::copySubData(BufferImpl* source, GLintptr sourceOffset, GLintptr d
         mSize = std::max<size_t>(mSize, destOffset + size);
     }
 
-    mIndexRangeCache.invalidateRange(destOffset, size);
     invalidateStaticData();
 }
 
@@ -350,8 +344,6 @@ GLvoid *Buffer11::map(size_t offset, size_t length, GLbitfield access)
 
     if ((access & GL_MAP_WRITE_BIT) > 0)
     {
-        mIndexRangeCache.invalidateRange(offset, length);
-
         // Update the data revision immediately, since the data might be changed at any time
         mMappedStorage->setDataRevision(mMappedStorage->getDataRevision() + 1);
     }
@@ -375,7 +367,6 @@ void Buffer11::markTransformFeedbackUsage()
         transformFeedbackStorage->setDataRevision(transformFeedbackStorage->getDataRevision() + 1);
     }
 
-    mIndexRangeCache.clear();
     invalidateStaticData();
 }
 
@@ -471,8 +462,6 @@ void Buffer11::packPixels(ID3D11Texture2D *srcTexture, UINT srcSubresource, cons
         packStorage->packPixels(srcTexture, srcSubresource, params);
         packStorage->setDataRevision(latestStorage ? latestStorage->getDataRevision() + 1 : 1);
     }
-
-    mIndexRangeCache.clear();
 }
 
 Buffer11::BufferStorage11 *Buffer11::getBufferStorage(BufferUsage usage)
