@@ -17,7 +17,7 @@ namespace rx
 class QueryImpl
 {
   public:
-    explicit QueryImpl(GLenum type) : mType(type), mStatus(GL_FALSE), mResult(0) { }
+    QueryImpl() { };
     virtual ~QueryImpl() { }
 
     virtual void begin() = 0;
@@ -25,17 +25,7 @@ class QueryImpl
     virtual GLuint getResult() = 0;
     virtual GLboolean isResultAvailable() = 0;
     virtual bool isStarted() const = 0;
-
-    GLenum getType() const { return mType; }
-
-  protected:
-    GLuint mResult;
-    GLboolean mStatus;
-
-  private:
-    DISALLOW_COPY_AND_ASSIGN(QueryImpl);
-
-    GLenum mType;
+    virtual GLenum getType() const = 0;
 };
 
 }
