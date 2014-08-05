@@ -238,7 +238,7 @@ class Renderer
     virtual VertexArrayImpl *createVertexArray() = 0;
 
     // Query and Fence creation
-    virtual QueryImpl *createQuery(GLenum type) = 0;
+    virtual QueryImpl *createQuery() = 0;
     virtual FenceImpl *createFence() = 0;
 
     // Current GLES client version

@@ -187,7 +187,7 @@ class Renderer9 : public Renderer
     virtual VertexArrayImpl *createVertexArray();
 
     // Query and Fence creation
-    virtual QueryImpl *createQuery(GLenum type);
+    virtual QueryImpl *createQuery();
     virtual FenceImpl *createFence();
 
     // Buffer-to-texture and Texture-to-buffer copies

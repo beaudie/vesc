@@ -14,9 +14,9 @@
 namespace gl
 {
 
-Query::Query(rx::Renderer *renderer, GLenum type, GLuint id) : RefCountObject(id)
-{ 
-    mQuery = renderer->createQuery(type);
+Query::Query(rx::Renderer *renderer, GLenum type, GLuint id) : RefCountObject(id), mType(type), mStarted(false)
+{
+    mQuery = renderer->createQuery();
 }
 
 Query::~Query()
@@ -26,7 +26,7 @@ Query::~Query()
 
 void Query::begin()
 {
-    mQuery->begin();
+    mStarted = mQuery->begin(mType);
 }
 
 void Query::end()
@@ -36,22 +36,24 @@ void Query::end()
 
 GLuint Query::getResult()
 {
-    return mQuery->getResult();
+    return mQuery->getResult(mType);
 }
 
 GLboolean Query::isResultAvailable()
 {
-    return mQuery->isResultAvailable();
+    return mQuery->isResultAvailable(mType);
 }
 
 GLenum Query::getType() const
 {
-    return mQuery->getType();
+    //return mQuery->getType();
+    return mType;
 }
 
 bool Query::isStarted() const
 {
-    return mQuery->isStarted();
+    //return mQuery->isStarted();
+    return mStarted;
 }
 
 }

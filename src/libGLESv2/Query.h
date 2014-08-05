@@ -41,6 +41,9 @@ class Query : public RefCountObject
   private:
     DISALLOW_COPY_AND_ASSIGN(Query);
 
+    GLenum mType;
+    bool mStarted;
+
     rx::QueryImpl *mQuery;
 };
 

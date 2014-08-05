@@ -29,7 +29,7 @@ static bool checkStreamOutPrimitivesWritten(ID3D11DeviceContext *context, ID3D11
     return (result == S_OK);
 }
 
-Query11::Query11(rx::Renderer11 *renderer, GLenum type) : QueryImpl(type)
+Query11::Query11(rx::Renderer11 *renderer) : mStatus(GL_FALSE), mResult(0)
 {
     mRenderer = renderer;
     mQuery = NULL;
@@ -40,21 +40,22 @@ Query11::~Query11()
     SafeRelease(mQuery);
 }
 
-void Query11::begin()
+bool Query11::begin(GLenum type)
 {
     if (mQuery == NULL)
     {
         D3D11_QUERY_DESC queryDesc;
-        queryDesc.Query = gl_d3d11::ConvertQueryType(getType());
+        queryDesc.Query = gl_d3d11::ConvertQueryType(type);
         queryDesc.MiscFlags = 0;
 
         if (FAILED(mRenderer->getDevice()->CreateQuery(&queryDesc, &mQuery)))
         {
-            return gl::error(GL_OUT_OF_MEMORY);
+            return gl::error(GL_OUT_OF_MEMORY, false);
         }
     }
 
     mRenderer->getDeviceContext()->Begin(mQuery);
+    return true;
 }
 
 void Query11::end()
@@ -66,11 +67,11 @@ void Query11::end()
     mResult = GL_FALSE;
 }
 
-GLuint Query11::getResult()
+GLuint Query11::getResult(GLenum type)
 {
     if (mQuery != NULL)
     {
-        while (!testQuery())
+        while (!testQuery(type))
         {
             Sleep(0);
             // explicitly check for device loss, some drivers seem to return S_FALSE
@@ -85,24 +86,24 @@ GLuint Query11::getResult()
     return mResult;
 }
 
-GLboolean Query11::isResultAvailable()
+GLboolean Query11::isResultAvailable(GLenum type)
 {
     if (mQuery != NULL)
     {
-        testQuery();
+        testQuery(type);
     }
 
     return mStatus;
 }
 
-GLboolean Query11::testQuery()
+GLboolean Query11::testQuery(GLenum type)
 {
     if (mQuery != NULL && mStatus != GL_TRUE)
     {
         ID3D11DeviceContext *context = mRenderer->getDeviceContext();
 
         bool queryFinished = false;
-        switch (getType())
+        switch (type)
         {
           case GL_ANY_SAMPLES_PASSED_EXT:
           case GL_ANY_SAMPLES_PASSED_CONSERVATIVE_EXT:
@@ -145,11 +146,6 @@ GLboolean Query11::testQuery()
     }
 
     return GL_TRUE; // prevent blocking when query is null
-}
-
-bool Query11::isStarted() const
-{
-    return (mQuery != NULL);
 }
 
 }

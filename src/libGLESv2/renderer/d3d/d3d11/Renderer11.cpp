@@ -2571,9 +2571,9 @@ VertexArrayImpl *Renderer11::createVertexArray()
     return new VertexArray11(this);
 }
 
-QueryImpl *Renderer11::createQuery(GLenum type)
+QueryImpl *Renderer11::createQuery()
 {
-    return new Query11(this, type);
+    return new Query11(this);
 }
 
 FenceImpl *Renderer11::createFence()

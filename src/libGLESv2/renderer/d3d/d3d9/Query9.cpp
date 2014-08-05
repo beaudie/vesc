@@ -16,7 +16,7 @@
 namespace rx
 {
 
-Query9::Query9(rx::Renderer9 *renderer, GLenum type) : QueryImpl(type)
+Query9::Query9(rx::Renderer9 *renderer) : mStatus(GL_FALSE), mResult(0)
 {
     mRenderer = renderer;
     mQuery = NULL;
@@ -27,19 +27,20 @@ Query9::~Query9()
     SafeRelease(mQuery);
 }
 
-void Query9::begin()
+bool Query9::begin(GLenum type)
 {
     if (mQuery == NULL)
     {
         if (FAILED(mRenderer->getDevice()->CreateQuery(D3DQUERYTYPE_OCCLUSION, &mQuery)))
         {
-            return gl::error(GL_OUT_OF_MEMORY);
+            return gl::error(GL_OUT_OF_MEMORY, false);
         }
     }
 
     HRESULT result = mQuery->Issue(D3DISSUE_BEGIN);
     UNUSED_ASSERTION_VARIABLE(result);
     ASSERT(SUCCEEDED(result));
+    return true;
 }
 
 void Query9::end()
@@ -54,11 +55,11 @@ void Query9::end()
     mResult = GL_FALSE;
 }
 
-GLuint Query9::getResult()
+GLuint Query9::getResult(GLenum type)
 {
     if (mQuery != NULL)
     {
-        while (!testQuery())
+        while (!testQuery(type))
         {
             Sleep(0);
             // explicitly check for device loss
@@ -74,17 +75,17 @@ GLuint Query9::getResult()
     return mResult;
 }
 
-GLboolean Query9::isResultAvailable()
+GLboolean Query9::isResultAvailable(GLenum type)
 {
     if (mQuery != NULL)
     {
-        testQuery();
+        testQuery(type);
     }
 
     return mStatus;
 }
 
-GLboolean Query9::testQuery()
+GLboolean Query9::testQuery(GLenum type)
 {
     if (mQuery != NULL && mStatus != GL_TRUE)
     {
@@ -95,7 +96,7 @@ GLboolean Query9::testQuery()
         {
             mStatus =  GL_TRUE;
 
-            switch (getType())
+            switch (type)
             {
               case GL_ANY_SAMPLES_PASSED_EXT:
               case GL_ANY_SAMPLES_PASSED_CONSERVATIVE_EXT:
@@ -115,11 +116,6 @@ GLboolean Query9::testQuery()
     }
 
     return GL_TRUE; // prevent blocking when query is null
-}
-
-bool Query9::isStarted() const
-{
-    return (mQuery != NULL);
 }
 
 }

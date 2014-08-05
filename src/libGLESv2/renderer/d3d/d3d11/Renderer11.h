@@ -185,7 +185,7 @@ class Renderer11 : public Renderer
     virtual VertexArrayImpl *createVertexArray();
 
     // Query and Fence creation
-    virtual QueryImpl *createQuery(GLenum type);
+    virtual QueryImpl *createQuery();
     virtual FenceImpl *createFence();
 
     // D3D11-renderer specific methods

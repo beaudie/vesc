@@ -590,9 +590,9 @@ VertexArrayImpl *Renderer9::createVertexArray()
     return new VertexArray9(this);
 }
 
-QueryImpl *Renderer9::createQuery(GLenum type)
+QueryImpl *Renderer9::createQuery()
 {
-    return new Query9(this, type);
+    return new Query9(this);
 }
 
 FenceImpl *Renderer9::createFence()
