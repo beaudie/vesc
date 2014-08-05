@@ -12,7 +12,6 @@
 
 namespace gl
 {
-
 Query::Query(rx::QueryImpl *impl, GLuint id)
     : RefCountObject(id),
       mQuery(impl)
@@ -26,7 +25,7 @@ Query::~Query()
 
 void Query::begin()
 {
-    mQuery->begin();
+    mStarted = mQuery->begin();
 }
 
 void Query::end()
@@ -51,7 +50,7 @@ GLenum Query::getType() const
 
 bool Query::isStarted() const
 {
-    return mQuery->isStarted();
+    return mStarted;
 }
 
 }
