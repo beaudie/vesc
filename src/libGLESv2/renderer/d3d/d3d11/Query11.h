@@ -26,11 +26,16 @@ class Query11 : public QueryImpl
     virtual GLuint getResult();
     virtual GLboolean isResultAvailable();
     virtual bool isStarted() const;
+    GLenum getType() const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Query11);
 
     GLboolean testQuery();
+
+    GLuint mResult;
+    GLboolean mStatus;
+    GLenum mType;
 
     rx::Renderer11 *mRenderer;
     ID3D11Query *mQuery;
