@@ -29,7 +29,7 @@ static bool checkStreamOutPrimitivesWritten(ID3D11DeviceContext *context, ID3D11
     return (result == S_OK);
 }
 
-Query11::Query11(rx::Renderer11 *renderer, GLenum type) : QueryImpl(type)
+Query11::Query11(rx::Renderer11 *renderer, GLenum type) : mType(type), mStatus(GL_FALSE), mResult(0)
 {
     mRenderer = renderer;
     mQuery = NULL;
@@ -150,6 +150,11 @@ GLboolean Query11::testQuery()
 bool Query11::isStarted() const
 {
     return (mQuery != NULL);
+}
+
+GLenum Query11::getType() const
+{
+    return mType;
 }
 
 }

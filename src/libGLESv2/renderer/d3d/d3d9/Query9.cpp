@@ -16,7 +16,7 @@
 namespace rx
 {
 
-Query9::Query9(rx::Renderer9 *renderer, GLenum type) : QueryImpl(type)
+Query9::Query9(rx::Renderer9 *renderer, GLenum type) : mType(type), mStatus(GL_FALSE), mResult(0)
 {
     mRenderer = renderer;
     mQuery = NULL;
@@ -120,6 +120,11 @@ GLboolean Query9::testQuery()
 bool Query9::isStarted() const
 {
     return (mQuery != NULL);
+}
+
+GLenum Query9::getType() const
+{
+    return mType;
 }
 
 }
