@@ -574,6 +574,32 @@ void GenerateCaps(ID3D11Device *device, gl::Caps *caps, gl::TextureCapsMap *text
 namespace d3d11
 {
 
+HRESULT CreateD3D11DeviceWithWARPFallback(PFN_D3D11_CREATE_DEVICE D3D11CreateDevice, unsigned int createflags, D3D_FEATURE_LEVEL* featureLevels, unsigned int numFeatureLevels,
+                                          bool forceWarp, ID3D11Device** device, D3D_FEATURE_LEVEL* featureLevel, ID3D11DeviceContext** context)
+{
+    HRESULT result = S_OK;
+
+    // Attempt to create a hardware device first, then fallback to WARP on failure if WARP was not forced by the caller.
+    result = D3D11CreateDevice(NULL, forceWarp ? D3D_DRIVER_TYPE_WARP : D3D_DRIVER_TYPE_HARDWARE, NULL, createflags, featureLevels, 
+                               numFeatureLevels, D3D11_SDK_VERSION, device, featureLevel, context);
+
+    if (!forceWarp && FAILED(result) && result == DXGI_ERROR_UNSUPPORTED)
+    {
+        ERR("Failed creating D3D11 device - falling back to WARP D3D11 device.\n");
+        // If the WARP fallback attempt fails, return the original error from the hardware device creation attempt.
+        if SUCCEEDED(D3D11CreateDevice(NULL, D3D_DRIVER_TYPE_WARP, NULL, createflags, featureLevels, numFeatureLevels, D3D11_SDK_VERSION, device, featureLevel, context))
+        {
+            return S_OK;
+        }
+        else
+        {
+            ERR("Failed creating fallback D3D11 WARP device.");
+        }
+    }
+
+    return result;
+}
+
 void MakeValidSize(bool isImage, DXGI_FORMAT format, GLsizei *requestWidth, GLsizei *requestHeight, int *levelOffset)
 {
     const DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(format);

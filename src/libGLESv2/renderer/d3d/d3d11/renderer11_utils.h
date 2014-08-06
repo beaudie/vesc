@@ -46,6 +46,8 @@ void GenerateCaps(ID3D11Device *device, gl::Caps *caps, gl::TextureCapsMap *text
 
 namespace d3d11
 {
+HRESULT CreateD3D11DeviceWithWARPFallback(PFN_D3D11_CREATE_DEVICE D3D11CreateDevice, unsigned int createflags, D3D_FEATURE_LEVEL* featureLevels, unsigned int numFeatureLevels,
+                                          bool forceWarp, ID3D11Device** device, D3D_FEATURE_LEVEL* featureLevel, ID3D11DeviceContext** context);
 
 void MakeValidSize(bool isImage, DXGI_FORMAT format, GLsizei *requestWidth, GLsizei *requestHeight, int *levelOffset);
 
