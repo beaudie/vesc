@@ -799,20 +799,17 @@ EGLBoolean __stdcall eglMakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface 
         return EGL_FALSE;
     }
 
-    if (dpy != EGL_NO_DISPLAY)
+    if (dpy != EGL_NO_DISPLAY && display->isInitialized())
     {
         rx::Renderer *renderer = display->getRenderer();
-        if (renderer != NULL)
+        if (renderer->testDeviceLost(true))
         {
-            if (renderer->testDeviceLost(true))
-            {
-                return EGL_FALSE;
-            }
+            return EGL_FALSE;
+        }
 
-            if (renderer->isDeviceLost())
-            {
-                return egl::error(EGL_CONTEXT_LOST, EGL_FALSE);
-            }
+        if (renderer->isDeviceLost())
+        {
+            return egl::error(EGL_CONTEXT_LOST, EGL_FALSE);
         }
     }
 
