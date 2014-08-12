@@ -217,12 +217,15 @@ TextureD3D_2D::TextureD3D_2D(Renderer *renderer)
 
 TextureD3D_2D::~TextureD3D_2D()
 {
-    SafeDelete(mTexStorage);
-
+    // Delete the Images before the TextureStorage.
+    // Images might be relying on the TextureStorage for some of their data.
+    // If TextureStorage is deleted before the Images, then their data will be wastefully copied back from the GPU before we delete the Images.
     for (int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; ++i)
     {
         delete mImageArray[i];
     }
+
+    SafeDelete(mTexStorage);
 }
 
 TextureD3D_2D *TextureD3D_2D::makeTextureD3D_2D(Texture2DImpl *texture)
@@ -866,8 +869,9 @@ TextureD3D_Cube::TextureD3D_Cube(Renderer *renderer)
 
 TextureD3D_Cube::~TextureD3D_Cube()
 {
-    SafeDelete(mTexStorage);
-
+    // Delete the Images before the TextureStorage.
+    // Images might be relying on the TextureStorage for some of their data.
+    // If TextureStorage is deleted before the Images, then their data will be wastefully copied back from the GPU before we delete the Images.
     for (int i = 0; i < 6; i++)
     {
         for (int j = 0; j < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; ++j)
@@ -875,6 +879,8 @@ TextureD3D_Cube::~TextureD3D_Cube()
             SafeDelete(mImageArray[i][j]);
         }
     }
+
+    SafeDelete(mTexStorage);
 }
 
 TextureD3D_Cube *TextureD3D_Cube::makeTextureD3D_Cube(TextureCubeImpl *texture)
@@ -1469,12 +1475,15 @@ TextureD3D_3D::TextureD3D_3D(Renderer *renderer)
 
 TextureD3D_3D::~TextureD3D_3D()
 {
-    SafeDelete(mTexStorage);
-
+    // Delete the Images before the TextureStorage.
+    // Images might be relying on the TextureStorage for some of their data.
+    // If TextureStorage is deleted before the Images, then their data will be wastefully copied back from the GPU before we delete the Images.
     for (int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; ++i)
     {
         delete mImageArray[i];
     }
+
+    SafeDelete(mTexStorage);
 }
 
 TextureD3D_3D *TextureD3D_3D::makeTextureD3D_3D(Texture3DImpl *texture)
@@ -2038,9 +2047,11 @@ TextureD3D_2DArray::TextureD3D_2DArray(Renderer *renderer)
 
 TextureD3D_2DArray::~TextureD3D_2DArray()
 {
-    SafeDelete(mTexStorage);
-
+    // Delete the Images before the TextureStorage.
+    // Images might be relying on the TextureStorage for some of their data.
+    // If TextureStorage is deleted before the Images, then their data will be wastefully copied back from the GPU before we delete the Images.
     deleteImages();
+    SafeDelete(mTexStorage);
 }
 
 TextureD3D_2DArray *TextureD3D_2DArray::makeTextureD3D_2DArray(Texture2DArrayImpl *texture)
