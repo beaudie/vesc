@@ -128,7 +128,11 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
     {
         var = FindVariable(symbolName, mVaryings);
     }
-    else if (symbol->getType() != EbtInterfaceBlock)
+    else if (symbol->getType().getBasicType() == EbtInterfaceBlock)
+    {
+        UNREACHABLE();
+    }
+    else
     {
         switch (symbol->getQualifier())
         {
@@ -146,10 +150,14 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
                 {
                     sh::InterfaceBlock *namedBlock = FindVariable(interfaceBlock->name(), mInterfaceBlocks);
                     ASSERT(namedBlock);
-                    var = FindVariable(symbolName, &namedBlock->fields);
 
                     // Set static use on the parent interface block here
                     namedBlock->staticUse = true;
+
+                    // Skip interface block references
+                    if (symbol->getType().getBasicType() == EbtInterfaceBlock) break;
+
+                    var = FindVariable(symbolName, &namedBlock->fields);
                 }
                 else
                 {
@@ -314,6 +322,7 @@ bool CollectVariables::visitAggregate(Visit, TIntermAggregate *node)
             if (typedNode.getBasicType() == EbtInterfaceBlock)
             {
                 visitInfoList(sequence, mInterfaceBlocks);
+                visitChildren = false;
             }
             else if (qualifier == EvqAttribute || qualifier == EvqVertexIn ||
                      qualifier == EvqFragmentOut || qualifier == EvqUniform ||
@@ -344,6 +353,31 @@ bool CollectVariables::visitAggregate(Visit, TIntermAggregate *node)
     }
 
     return visitChildren;
+}
+
+bool CollectVariables::visitBinary(Visit, TIntermBinary *binaryNode)
+{
+    if (binaryNode->getOp() == EOpIndexDirectInterfaceBlock)
+    {
+        TIntermSymbol *symbol = binaryNode->getLeft()->getAsSymbolNode();
+        ASSERT(symbol);
+
+        TIntermConstantUnion *constantUnion = binaryNode->getRight()->getAsConstantUnion();
+        ASSERT(constantUnion);
+
+        const TInterfaceBlock *interfaceBlock = symbol->getType().getInterfaceBlock();
+        sh::InterfaceBlock *namedBlock = FindVariable(interfaceBlock->name(),
+            mInterfaceBlocks);
+        ASSERT(namedBlock);
+        namedBlock->staticUse = true;
+
+        unsigned int fieldIndex = constantUnion->getUConst(0);
+        ASSERT(fieldIndex < namedBlock->fields.size());
+        namedBlock->fields[fieldIndex].staticUse = true;
+        return false;
+    }
+
+    return true;
 }
 
 template <typename VarT>
