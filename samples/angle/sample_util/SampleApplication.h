@@ -50,6 +50,9 @@ class SampleApplication
     int run();
     void exit();
 
+  protected:
+    std::unique_ptr<Timer> mTimer;
+
   private:
     bool initializeGL();
     void destroyGL();
@@ -67,7 +70,6 @@ class SampleApplication
 
     bool mRunning;
 
-    std::unique_ptr<Timer> mTimer;
     std::unique_ptr<Window> mWindow;
 };
 

@@ -123,6 +123,14 @@
                 },
 
                 {
+                    'target_name': 'simple_benchmarks',
+                    'type': 'executable',
+                    'dependencies': [ 'sample_util' ],
+                    'includes': [ '../build/common_defines.gypi', ],
+                    'sources': [ '<!@(python <(angle_path)/enumerate_files.py angle/simple_benchmarks -types *.cpp *.h)' ],
+                },
+
+                {
                     'target_name': 'simple_instancing',
                     'type': 'executable',
                     'dependencies': [ 'sample_util' ],
