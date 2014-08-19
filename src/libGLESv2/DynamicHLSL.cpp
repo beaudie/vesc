@@ -218,6 +218,13 @@ int DynamicHLSL::packVaryings(InfoLog &infoLog, VaryingPacking packing, Fragment
     for (unsigned int varyingIndex = 0; varyingIndex < fragmentShader->mVaryings.size(); varyingIndex++)
     {
         PackedVarying *varying = &fragmentShader->mVaryings[varyingIndex];
+
+        // Do not assign registers to built-in or unreferenced varyings
+        if (varying->isBuiltIn() || !varying->staticUse)
+        {
+            continue;
+        }
+
         if (packVarying(varying, maxVaryingVectors, packing))
         {
             packedVaryings.insert(varying->name);
@@ -283,6 +290,7 @@ std::string DynamicHLSL::generateVaryingHLSL(VertexShader *shader) const
         const PackedVarying &varying = shader->mVaryings[varyingIndex];
         if (varying.registerAssigned())
         {
+            ASSERT(!varying.isBuiltIn());
             GLenum transposedType = TransposeMatrixType(varying.type);
             int variableRows = (varying.isStruct() ? 1 : VariableRowCount(transposedType));
 
@@ -610,8 +618,10 @@ void DynamicHLSL::storeUserLinkedVaryings(const VertexShader *vertexShader,
     for (unsigned int varyingIndex = 0; varyingIndex < varyings.size(); varyingIndex++)
     {
         const PackedVarying &varying = varyings[varyingIndex];
+
         if (varying.registerAssigned())
         {
+            ASSERT(!varying.isBuiltIn());
             GLenum transposedType = TransposeMatrixType(varying.type);
             int variableRows = (varying.isStruct() ? 1 : VariableRowCount(transposedType));
 
@@ -808,13 +818,15 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
     {
         defineOutputVariables(fragmentShader, programOutputVars);
 
-        const std::vector<sh::Attribute> &shaderOutputVars = fragmentShader->getOutputVariables();
+        const std::vector<sh::Attribute> &shaderOutputVars = fragmentShader->getActiveOutputVariables();
         for (auto locationIt = programOutputVars->begin(); locationIt != programOutputVars->end(); locationIt++)
         {
             const VariableLocation &outputLocation = locationIt->second;
             const sh::ShaderVariable &outputVariable = shaderOutputVars[outputLocation.index];
             const std::string &variableName = "out_" + outputLocation.name;
             const std::string &elementString = (outputLocation.element == GL_INVALID_INDEX ? "" : Str(outputLocation.element));
+
+            ASSERT(outputVariable.staticUse);
 
             PixelShaderOuputVariable outputKeyVariable;
             outputKeyVariable.type = outputVariable.type;
@@ -897,6 +909,7 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
         const PackedVarying &varying = fragmentShader->mVaryings[varyingIndex];
         if (varying.registerAssigned())
         {
+            ASSERT(!varying.isBuiltIn());
             for (unsigned int elementIndex = 0; elementIndex < varying.elementCount(); elementIndex++)
             {
                 GLenum transposedType = TransposeMatrixType(varying.type);
@@ -934,7 +947,10 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
                 }
             }
         }
-        else UNREACHABLE();
+        else
+        {
+            ASSERT(varying.isBuiltIn() || !varying.staticUse);
+        }
     }
 
     pixelHLSL += "\n"
@@ -948,12 +964,14 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
 
 void DynamicHLSL::defineOutputVariables(FragmentShader *fragmentShader, std::map<int, VariableLocation> *programOutputVars) const
 {
-    const std::vector<sh::Attribute> &shaderOutputVars = fragmentShader->getOutputVariables();
+    const std::vector<sh::Attribute> &shaderOutputVars = fragmentShader->getActiveOutputVariables();
 
     for (unsigned int outputVariableIndex = 0; outputVariableIndex < shaderOutputVars.size(); outputVariableIndex++)
     {
         const sh::Attribute &outputVariable = shaderOutputVars[outputVariableIndex];
         const int baseLocation = outputVariable.location == -1 ? 0 : outputVariable.location;
+
+        ASSERT(outputVariable.staticUse);
 
         if (outputVariable.arraySize > 0)
         {

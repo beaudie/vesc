@@ -19,7 +19,7 @@ class StructureHLSL;
 class UniformHLSL
 {
   public:
-    UniformHLSL(StructureHLSL *structureHLSL, ShShaderOutput outputType);
+    UniformHLSL(StructureHLSL *structureHLSL, TranslatorHLSL *translator);
 
     void reserveUniformRegisters(unsigned int registerCount);
     void reserveInterfaceBlockRegisters(unsigned int registerCount);
@@ -29,8 +29,6 @@ class UniformHLSL
     // Used for direct index references
     static TString interfaceBlockInstanceString(const TInterfaceBlock& interfaceBlock, unsigned int arrayIndex);
 
-    const std::vector<Uniform> &getUniforms() const { return mActiveUniforms; }
-    const std::vector<InterfaceBlock> &getInterfaceBlocks() const { return mActiveInterfaceBlocks; }
     const std::map<std::string, unsigned int> &getInterfaceBlockRegisterMap() const
     {
         return mInterfaceBlockRegisterMap;
@@ -54,8 +52,7 @@ class UniformHLSL
     StructureHLSL *mStructureHLSL;
     ShShaderOutput mOutputType;
 
-    std::vector<Uniform> mActiveUniforms;
-    std::vector<InterfaceBlock> mActiveInterfaceBlocks;
+    const std::vector<Uniform> &mUniforms;
     std::map<std::string, unsigned int> mInterfaceBlockRegisterMap;
     std::map<std::string, unsigned int> mUniformRegisterMap;
 };
