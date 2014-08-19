@@ -1077,7 +1077,7 @@ bool ProgramBinary::linkVaryings(InfoLog &infoLog, FragmentShader *fragmentShade
             PackedVarying *output = &vertexVaryings[vertVaryingIndex];
             if (output->name == input->name)
             {
-                if (!linkValidateVariables(infoLog, output->name, *input, *output))
+                if (!linkValidateVaryings(infoLog, output->name, *input, *output))
                 {
                     return false;
                 }
@@ -1811,32 +1811,29 @@ bool ProgramBinary::linkValidateVariablesBase(InfoLog &infoLog, const std::strin
         return false;
     }
 
-    return true;
-}
-
-template <class ShaderVarType>
-bool ProgramBinary::linkValidateFields(InfoLog &infoLog, const std::string &varName, const ShaderVarType &vertexVar, const ShaderVarType &fragmentVar)
-{
-    if (vertexVar.fields.size() != fragmentVar.fields.size())
+    if (vertexVariable.fields.size() != fragmentVariable.fields.size())
     {
-        infoLog.append("Structure lengths for %s differ between vertex and fragment shaders", varName.c_str());
+        infoLog.append("Structure lengths for %s differ between vertex and fragment shaders", variableName.c_str());
         return false;
     }
-    const unsigned int numMembers = vertexVar.fields.size();
+    const unsigned int numMembers = vertexVariable.fields.size();
     for (unsigned int memberIndex = 0; memberIndex < numMembers; memberIndex++)
     {
-        const ShaderVarType &vertexMember = vertexVar.fields[memberIndex];
-        const ShaderVarType &fragmentMember = fragmentVar.fields[memberIndex];
+        const sh::ShaderVariable &vertexMember = vertexVariable.fields[memberIndex];
+        const sh::ShaderVariable &fragmentMember = fragmentVariable.fields[memberIndex];
 
         if (vertexMember.name != fragmentMember.name)
         {
             infoLog.append("Name mismatch for field '%d' of %s: (in vertex: '%s', in fragment: '%s')",
-                           memberIndex, varName.c_str(), vertexMember.name.c_str(), fragmentMember.name.c_str());
+                           memberIndex, variableName.c_str(),
+                           vertexMember.name.c_str(), fragmentMember.name.c_str());
             return false;
         }
 
-        const std::string memberName = varName.substr(0, varName.length()-1) + "." + vertexVar.name + "'";
-        if (!linkValidateVariables(infoLog, memberName, vertexMember, fragmentMember))
+        const std::string memberName = variableName.substr(0, variableName.length() - 1) + "." +
+                                       vertexMember.name + "'";
+
+        if (!linkValidateVariablesBase(infoLog, vertexMember.name, vertexMember, fragmentMember, validatePrecision))
         {
             return false;
         }
@@ -1845,22 +1842,17 @@ bool ProgramBinary::linkValidateFields(InfoLog &infoLog, const std::string &varN
     return true;
 }
 
-bool ProgramBinary::linkValidateVariables(InfoLog &infoLog, const std::string &uniformName, const sh::Uniform &vertexUniform, const sh::Uniform &fragmentUniform)
+bool ProgramBinary::linkValidateUniforms(InfoLog &infoLog, const std::string &uniformName, const sh::Uniform &vertexUniform, const sh::Uniform &fragmentUniform)
 {
     if (!linkValidateVariablesBase(infoLog, uniformName, vertexUniform, fragmentUniform, true))
     {
         return false;
     }
 
-    if (!linkValidateFields<sh::Uniform>(infoLog, uniformName, vertexUniform, fragmentUniform))
-    {
-        return false;
-    }
-
     return true;
 }
 
-bool ProgramBinary::linkValidateVariables(InfoLog &infoLog, const std::string &varyingName, const sh::Varying &vertexVarying, const sh::Varying &fragmentVarying)
+bool ProgramBinary::linkValidateVaryings(InfoLog &infoLog, const std::string &varyingName, const sh::Varying &vertexVarying, const sh::Varying &fragmentVarying)
 {
     if (!linkValidateVariablesBase(infoLog, varyingName, vertexVarying, fragmentVarying, false))
     {
@@ -1873,15 +1865,10 @@ bool ProgramBinary::linkValidateVariables(InfoLog &infoLog, const std::string &v
         return false;
     }
 
-    if (!linkValidateFields<sh::Varying>(infoLog, varyingName, vertexVarying, fragmentVarying))
-    {
-        return false;
-    }
-
     return true;
 }
 
-bool ProgramBinary::linkValidateVariables(InfoLog &infoLog, const std::string &uniformName, const sh::InterfaceBlockField &vertexUniform, const sh::InterfaceBlockField &fragmentUniform)
+bool ProgramBinary::linkValidateInterfaceBlockFields(InfoLog &infoLog, const std::string &uniformName, const sh::InterfaceBlockField &vertexUniform, const sh::InterfaceBlockField &fragmentUniform)
 {
     if (!linkValidateVariablesBase(infoLog, uniformName, vertexUniform, fragmentUniform, true))
     {
@@ -1891,11 +1878,6 @@ bool ProgramBinary::linkValidateVariables(InfoLog &infoLog, const std::string &u
     if (vertexUniform.isRowMajorMatrix != fragmentUniform.isRowMajorMatrix)
     {
         infoLog.append("Matrix packings for %s differ between vertex and fragment shaders", uniformName.c_str());
-        return false;
-    }
-
-    if (!linkValidateFields<sh::InterfaceBlockField>(infoLog, uniformName, vertexUniform, fragmentUniform))
-    {
         return false;
     }
 
@@ -1925,7 +1907,7 @@ bool ProgramBinary::linkUniforms(InfoLog &infoLog, const VertexShader &vertexSha
         {
             const sh::Uniform &vertexUniform = *entry->second;
             const std::string &uniformName = "uniform '" + vertexUniform.name + "'";
-            if (!linkValidateVariables(infoLog, uniformName, vertexUniform, fragmentUniform))
+            if (!linkValidateUniforms(infoLog, uniformName, vertexUniform, fragmentUniform))
             {
                 return false;
             }
@@ -1963,7 +1945,7 @@ void ProgramBinary::defineUniformBase(GLenum shader, const sh::Uniform &uniform,
     defineUniform(shader, uniform, uniform.name, &encoder);
 }
 
-void ProgramBinary::defineUniform(GLenum shader, const sh::Uniform &uniform,
+void ProgramBinary::defineUniform(GLenum shader, const sh::ShaderVariable &uniform,
                                   const std::string &fullName, sh::HLSLBlockEncoder *encoder)
 {
     if (uniform.isStruct())
@@ -1976,7 +1958,7 @@ void ProgramBinary::defineUniform(GLenum shader, const sh::Uniform &uniform,
 
             for (size_t fieldIndex = 0; fieldIndex < uniform.fields.size(); fieldIndex++)
             {
-                const sh::Uniform &field = uniform.fields[fieldIndex];
+                const sh::ShaderVariable &field = uniform.fields[fieldIndex];
                 const std::string &fieldFullName = (fullName + elementString + "." + field.name);
 
                 defineUniform(shader, field, fieldFullName, encoder);
@@ -2163,8 +2145,8 @@ bool ProgramBinary::areMatchingInterfaceBlocks(InfoLog &infoLog, const sh::Inter
             return false;
         }
 
-        std::string uniformName = "interface block '" + vertexInterfaceBlock.name + "' member '" + vertexMember.name + "'";
-        if (!linkValidateVariables(infoLog, uniformName, vertexMember, fragmentMember))
+        std::string memberName = "interface block '" + vertexInterfaceBlock.name + "' member '" + vertexMember.name + "'";
+        if (!linkValidateInterfaceBlockFields(infoLog, memberName, vertexMember, fragmentMember))
         {
             return false;
         }
@@ -2280,12 +2262,13 @@ bool ProgramBinary::gatherTransformFeedbackLinkedVaryings(InfoLog &infoLog, cons
     return true;
 }
 
-void ProgramBinary::defineUniformBlockMembers(const std::vector<sh::InterfaceBlockField> &fields, const std::string &prefix, int blockIndex,
+template <typename VarT>
+void ProgramBinary::defineUniformBlockMembers(const std::vector<VarT> &fields, const std::string &prefix, int blockIndex,
                                               sh::BlockLayoutEncoder *encoder, std::vector<unsigned int> *blockUniformIndexes)
 {
     for (unsigned int uniformIndex = 0; uniformIndex < fields.size(); uniformIndex++)
     {
-        const sh::InterfaceBlockField &field = fields[uniformIndex];
+        const VarT &field = fields[uniformIndex];
         const std::string &fieldName = (prefix.empty() ? field.name : prefix + "." + field.name);
 
         if (field.isStruct())
@@ -2302,7 +2285,7 @@ void ProgramBinary::defineUniformBlockMembers(const std::vector<sh::InterfaceBlo
         }
         else
         {
-            sh::BlockMemberInfo memberInfo = encoder->encodeInterfaceBlockField(field);
+            sh::BlockMemberInfo memberInfo = encoder->encodeVariable(field);
 
             LinkedUniform *newUniform = new LinkedUniform(field.type, field.precision, fieldName, field.arraySize,
                                                           blockIndex, memberInfo);
