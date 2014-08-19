@@ -19,14 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{297C46B0-9263-A9EA-82B1-EA221E7D7C7F}</ProjectGuid>
+    <ProjectGuid>{B433FD57-9405-9242-938B-26FF1495D589}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>sample_util</RootNamespace>
+    <RootNamespace>simple_benchmarks</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
   <PropertyGroup Label="Configuration">
     <CharacterSet>MultiByte</CharacterSet>
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Locals">
     <PlatformToolset>v120</PlatformToolset>
@@ -46,7 +46,7 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
     <TargetName>$(ProjectName)</TargetName>
-    <TargetPath>$(OutDir)lib\$(ProjectName)$(TargetExt)</TargetPath>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -55,7 +55,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4201;4100;4127;4239;4244;4245;4251;4512;4702;4530;4718;4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4127;4239;4244;4245;4251;4512;4702;4530;4718;4267;4201;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>false</ExceptionHandling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <MinimalRebuild>false</MinimalRebuild>
@@ -68,7 +68,6 @@
     </ClCompile>
     <Lib>
       <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
     </Lib>
     <Link>
       <AdditionalDependencies>kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
@@ -77,6 +76,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
@@ -93,7 +93,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4201;4100;4127;4239;4244;4245;4251;4512;4702;4530;4718;4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4127;4239;4244;4245;4251;4512;4702;4530;4718;4267;4201;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>false</ExceptionHandling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <MinimalRebuild>false</MinimalRebuild>
@@ -106,7 +106,6 @@
     </ClCompile>
     <Lib>
       <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
     </Lib>
     <Link>
       <AdditionalDependencies>kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
@@ -115,6 +114,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
@@ -129,7 +129,7 @@
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4201;4100;4127;4239;4244;4245;4251;4512;4702;4530;4718;4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4127;4239;4244;4245;4251;4512;4702;4530;4718;4267;4201;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>false</ExceptionHandling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <MinimalRebuild>false</MinimalRebuild>
@@ -142,7 +142,6 @@
     </ClCompile>
     <Lib>
       <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
     </Lib>
     <Link>
       <AdditionalDependencies>kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
@@ -151,6 +150,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
@@ -166,7 +166,7 @@
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4201;4100;4127;4239;4244;4245;4251;4512;4702;4530;4718;4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4127;4239;4244;4245;4251;4512;4702;4530;4718;4267;4201;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>false</ExceptionHandling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <MinimalRebuild>false</MinimalRebuild>
@@ -179,7 +179,6 @@
     </ClCompile>
     <Lib>
       <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
     </Lib>
     <Link>
       <AdditionalDependencies>kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
@@ -188,6 +187,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
@@ -200,40 +200,16 @@
     <None Include="..\..\samples\samples.gyp"/>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\samples\angle\sample_util\Window.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\path_utils.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\Vector.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\keyboard.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\shader_utils.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\Matrix.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\Timer.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\mouse.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\geometry_utils.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\Event.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\random_utils.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\tga_utils.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\SimpleBenchmark.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\SampleApplication.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\texture_utils.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\win32\Win32Timer.h"/>
-    <ClInclude Include="..\..\samples\angle\sample_util\win32\Win32Window.h"/>
+    <ClInclude Include="..\..\samples\angle\simple_benchmarks\BufferSubData.h"/>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\samples\angle\sample_util\Window.cpp"/>
-    <ClCompile Include="..\..\samples\angle\sample_util\SimpleBenchmark.cpp"/>
-    <ClCompile Include="..\..\samples\angle\sample_util\texture_utils.cpp"/>
-    <ClCompile Include="..\..\samples\angle\sample_util\Vector.cpp"/>
-    <ClCompile Include="..\..\samples\angle\sample_util\shader_utils.cpp"/>
-    <ClCompile Include="..\..\samples\angle\sample_util\SampleApplication.cpp"/>
-    <ClCompile Include="..\..\samples\angle\sample_util\geometry_utils.cpp"/>
-    <ClCompile Include="..\..\samples\angle\sample_util\tga_utils.cpp"/>
-    <ClCompile Include="..\..\samples\angle\sample_util\random_utils.cpp"/>
-    <ClCompile Include="..\..\samples\angle\sample_util\Matrix.cpp"/>
-    <ClCompile Include="..\..\samples\angle\sample_util\win32\Win32Timer.cpp"/>
-    <ClCompile Include="..\..\samples\angle\sample_util\win32\Win32Window.cpp"/>
-    <ClCompile Include="..\..\samples\angle\sample_util\win32\Win32_path_utils.cpp"/>
+    <ClCompile Include="..\..\samples\angle\simple_benchmarks\SimpleBenchmarks.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="sample_util.vcxproj">
+      <Project>{297C46B0-9263-A9EA-82B1-EA221E7D7C7F}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="..\src\libEGL.vcxproj">
       <Project>{FBAEE4F6-562A-588F-01F9-72DCABB3B061}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
