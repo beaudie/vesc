@@ -42,6 +42,7 @@ struct PackedVarying : public sh::Varying
     {}
 
     bool registerAssigned() const { return registerIndex != GL_INVALID_INDEX; }
+    bool isBuiltIn() const { return name.compare(0, 3, "gl_") == 0; }
 
     void resetRegisterAssignment()
     {
@@ -136,8 +137,8 @@ class Shader
     std::string mSource;
     std::string mHlsl;
     std::string mInfoLog;
-    std::vector<sh::Uniform> mActiveUniforms;
-    std::vector<sh::InterfaceBlock> mActiveInterfaceBlocks;
+    std::vector<sh::Uniform> mUniforms;
+    std::vector<sh::InterfaceBlock> mInterfaceBlocks;
     std::map<std::string, unsigned int> mUniformRegisterMap;
     std::map<std::string, unsigned int> mInterfaceBlockRegisterMap;
 
@@ -158,7 +159,7 @@ class VertexShader : public Shader
     virtual void uncompile();
     int getSemanticIndex(const std::string &attributeName);
 
-    const std::vector<sh::Attribute> &activeAttributes() const { return mActiveAttributes; }
+    const std::vector<sh::Attribute> &getActiveAttributes() const { return mActiveAttributes; }
 
   private:
     DISALLOW_COPY_AND_ASSIGN(VertexShader);
@@ -178,7 +179,7 @@ class FragmentShader : public Shader
     virtual GLenum getType() const;
     virtual void compile();
     virtual void uncompile();
-    const std::vector<sh::Attribute> &getOutputVariables() const;
+    const std::vector<sh::Attribute> &getActiveOutputVariables() const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(FragmentShader);
