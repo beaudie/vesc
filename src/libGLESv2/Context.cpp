@@ -2453,6 +2453,11 @@ void Context::invalidateFrameBuffer(GLenum target, GLsizei numAttachments, const
     }
 }
 
+void Context::releaseShaderCompiler()
+{
+    mRenderer->releaseShaderCompiler();
+}
+
 void Context::initCaps(GLuint clientVersion)
 {
     mCaps = mRenderer->getRendererCaps();
