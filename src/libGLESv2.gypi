@@ -149,6 +149,8 @@
             'libGLESv2/renderer/d3d/IndexDataManager.h',
             'libGLESv2/renderer/d3d/MemoryBuffer.cpp',
             'libGLESv2/renderer/d3d/MemoryBuffer.h',
+            'libGLESv2/renderer/d3d/ShaderD3D.cpp',
+            'libGLESv2/renderer/d3d/ShaderD3D.h',
             'libGLESv2/renderer/d3d/TextureD3D.cpp',
             'libGLESv2/renderer/d3d/TextureD3D.h',
             'libGLESv2/renderer/d3d/TextureStorage.cpp',
