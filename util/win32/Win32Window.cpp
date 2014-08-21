@@ -474,3 +474,19 @@ OSWindow *CreateOSWindow()
 {
     return new Win32Window();
 }
+
+bool Win32Window::resize(int width, int height)
+{
+    RECT windowRect;
+    if (!GetWindowRect(mNativeWindow, &windowRect))
+    {
+        return false;
+    }
+
+    if (!MoveWindow(mNativeWindow, windowRect.left, windowRect.top, width, height, FALSE))
+    {
+        return false;
+    }
+
+    return true;
+}

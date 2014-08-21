@@ -33,6 +33,7 @@ class OSWindow
     void pushEvent(Event event);
 
     virtual void setMousePosition(int x, int y) = 0;
+    virtual bool resize(int width, int height) = 0;
 
   private:
     int mWidth;
