@@ -512,7 +512,7 @@ struct Range
     T start;
     T end;
 
-    T length() const { return end - start; }
+    T length() const { return (end > start ? (end - start) : 0); }
 };
 
 typedef Range<int> RangeI;
