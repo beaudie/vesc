@@ -209,6 +209,7 @@
     <None Include="..\..\src\libGLESv2\renderer\generatemip.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\DynamicHLSL.h" />
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\ShaderD3D.h" />
     <ClInclude Include="..\..\src\libGLESv2\renderer\ShaderImpl.h" />
     <ClInclude Include="..\..\src\libGLESv2\Shader.h" />
@@ -231,7 +232,6 @@
     <ClInclude Include="..\..\src\libGLESv2\Program.h" />
     <ClInclude Include="..\..\src\libGLESv2\HandleAllocator.h" />
     <ClInclude Include="..\..\src\libGLESv2\ResourceManager.h" />
-    <ClInclude Include="..\..\src\libGLESv2\DynamicHLSL.h" />
     <ClInclude Include="..\..\src\libGLESv2\VertexAttribute.h" />
     <ClInclude Include="..\..\src\libGLESv2\validationES2.h" />
     <ClInclude Include="..\..\src\libGLESv2\Fence.h" />
@@ -389,10 +389,10 @@
     <ClInclude Include="..\..\include\EGL\eglplatform.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\DynamicHLSL.cpp" />
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\ShaderD3D.cpp" />
     <ClCompile Include="..\..\src\libGLESv2\validationES2.cpp" />
     <ClCompile Include="..\..\src\libGLESv2\precompiled.cpp" />
-    <ClCompile Include="..\..\src\libGLESv2\DynamicHLSL.cpp" />
     <ClCompile Include="..\..\src\libGLESv2\HandleAllocator.cpp" />
     <ClCompile Include="..\..\src\libGLESv2\queryconversions.cpp" />
     <ClCompile Include="..\..\src\libGLESv2\formatutils.cpp" />

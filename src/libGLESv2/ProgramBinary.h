@@ -22,7 +22,7 @@
 #include "libGLESv2/Shader.h"
 #include "libGLESv2/Constants.h"
 #include "libGLESv2/renderer/d3d/VertexDataManager.h"
-#include "libGLESv2/DynamicHLSL.h"
+#include "libGLESv2/renderer/d3d/DynamicHLSL.h"
 
 namespace sh
 {
@@ -270,7 +270,7 @@ class ProgramBinary : public RefCountObject
     };
 
     rx::Renderer *const mRenderer;
-    DynamicHLSL *mDynamicHLSL;
+    rx::DynamicHLSL *mDynamicHLSL;
 
     std::string mVertexHLSL;
     rx::D3DWorkaroundType mVertexWorkarounds;
@@ -279,7 +279,7 @@ class ProgramBinary : public RefCountObject
     std::string mPixelHLSL;
     rx::D3DWorkaroundType mPixelWorkarounds;
     bool mUsesFragDepth;
-    std::vector<PixelShaderOuputVariable> mPixelShaderKey;
+    std::vector<rx::PixelShaderOuputVariable> mPixelShaderKey;
     std::vector<PixelExecutable *> mPixelExecutables;
 
     rx::ShaderExecutable *mGeometryExecutable;
