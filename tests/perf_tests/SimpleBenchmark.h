@@ -8,6 +8,7 @@
 #define SAMPLE_UTIL_SIMPLE_BENCHMARK_H
 
 #include <memory>
+#include <vector>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 #include <string>
@@ -45,6 +46,8 @@ class SimpleBenchmark
     bool popEvent(Event *event);
 
     OSWindow *getWindow();
+    EGLWindow *getEGLWindow() { return mEGLWindow.get(); }
+    const std::string &getName() const { return mName; }
 
   private:
     DISALLOW_COPY_AND_ASSIGN(SimpleBenchmark);
@@ -80,6 +83,27 @@ int RunMultiRendererBenchmark()
     {
         Benchmark benchmark11(renderers[i]);
         result = benchmark11.run();
+        if (result != 0) { return result; }
+    }
+
+    return 0;
+}
+
+// Base class
+struct BenchmarkParams
+{
+    virtual std::string name() const = 0;
+};
+
+template <typename BenchmarkT, typename ParamsT>
+inline int RunBenchmarks(const std::vector<ParamsT> &benchmarks)
+{
+    int result;
+
+    for (size_t benchIndex = 0; benchIndex < benchmarks.size(); benchIndex++)
+    {
+        BenchmarkT benchmark(benchmarks[benchIndex]);
+        result = benchmark.run();
         if (result != 0) { return result; }
     }
 

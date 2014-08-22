@@ -17,18 +17,11 @@ SimpleBenchmark::SimpleBenchmark(const std::string &name, size_t width, size_t h
     mOSWindow.reset(CreateOSWindow());
     mEGLWindow.reset(new EGLWindow(width, height, glesMajorVersion, requestedRenderer));
     mTimer.reset(CreateTimer());
-
-    cout << "========= " << name << " - ";
-    switch (requestedRenderer) {
-      case EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE: cout << "D3D11"; break;
-      case EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE: cout << "D3D9"; break;
-      default: cout << "UNKNOWN RENDERER (" << requestedRenderer << ")"; break;
-    }
-    cout << " =========" << endl;
 }
 
 bool SimpleBenchmark::initialize()
 {
+    cout << "========= " << getName() << " =========" << endl;
     return initializeBenchmark();
 }
 
