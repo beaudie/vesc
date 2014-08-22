@@ -1,0 +1,140 @@
+//
+// Copyright (c) 2014 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+#include "SimpleBenchmark.h"
+#include <iostream>
+
+using namespace std;
+
+SimpleBenchmark::SimpleBenchmark(const std::string &name, size_t width, size_t height, EGLint glesMajorVersion, EGLint requestedRenderer)
+    : mNumFrames(0),
+      mName(name),
+      mRunning(false)
+{
+    mOSWindow.reset(CreateOSWindow());
+    mEGLWindow.reset(new EGLWindow(width, height, glesMajorVersion, requestedRenderer));
+    mTimer.reset(CreateTimer());
+
+    cout << "========= " << name << " - ";
+    switch (requestedRenderer) {
+      case EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE: cout << "D3D11"; break;
+      case EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE: cout << "D3D9"; break;
+      default: cout << "UNKNOWN RENDERER (" << requestedRenderer << ")"; break;
+    }
+    cout << " =========" << endl;
+}
+
+bool SimpleBenchmark::initialize()
+{
+    return initializeBenchmark();
+}
+
+void SimpleBenchmark::destroy()
+{
+    double totalTime = mTimer->getElapsedTime();
+    cout << " - total time: " << totalTime << " sec" << endl;
+    cout << " - frames: " << mNumFrames << endl;
+    cout << " - average frame time: " << 1000.0 * totalTime / mNumFrames << " msec" << endl;
+    cout << "=========" << endl << endl;
+
+    destroyBenchmark();
+}
+
+void SimpleBenchmark::step(float dt, double totalTime)
+{
+    stepBenchmark(dt, totalTime);
+}
+
+void SimpleBenchmark::draw()
+{
+    if (mTimer->getElapsedTime() > runTimeSeconds()) {
+        mRunning = false;
+        return;
+    }
+
+    ++mNumFrames;
+
+    beginDrawBenchmark();
+
+    for (int i = 0; i < drawIterations(); ++i)
+    {
+        drawBenchmark();
+    }
+
+    endDrawBenchmark();
+}
+
+int SimpleBenchmark::run()
+{
+    if (!mOSWindow->initialize(mName, mEGLWindow->getWidth(), mEGLWindow->getHeight()))
+    {
+        return -1;
+    }
+
+    if (!mEGLWindow->initializeGL(mOSWindow.get()))
+    {
+        return -1;
+    }
+
+    mRunning = true;
+    int result = 0;
+
+    if (!initialize())
+    {
+        mRunning = false;
+        result = -1;
+    }
+
+    mTimer->start();
+    double prevTime = 0.0;
+
+    while (mRunning)
+    {
+        double elapsedTime = mTimer->getElapsedTime();
+        double deltaTime = elapsedTime - prevTime;
+
+        step(static_cast<float>(deltaTime), elapsedTime);
+
+        // Clear events that the application did not process from this frame
+        Event event;
+        while (popEvent(&event))
+        {
+            // If the application did not catch a close event, close now
+            if (event.Type == Event::EVENT_CLOSED)
+            {
+                mRunning = false;
+            }
+        }
+
+        if (!mRunning)
+        {
+            break;
+        }
+
+        draw();
+        mEGLWindow->swap();
+
+        mOSWindow->messageLoop();
+
+        prevTime = elapsedTime;
+    }
+
+    destroy();
+    mEGLWindow->destroyGL();
+    mOSWindow->destroy();
+
+    return result;
+}
+
+bool SimpleBenchmark::popEvent(Event *event)
+{
+    return mOSWindow->popEvent(event);
+}
+
+OSWindow *SimpleBenchmark::getWindow()
+{
+    return mOSWindow.get();
+}
