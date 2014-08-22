@@ -14,12 +14,12 @@ EGLint platforms[] =
     EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE
 };
 
-GLenum vertexTypes[] = { GL_FLOAT };
-GLint componentCounts[] = { 2, 3, 4 };
-GLboolean vertexNorms[] = { GL_FALSE };
+GLenum vertexTypes[] = { GL_FLOAT, GL_BYTE };
+GLint componentCounts[] = { /*2, 3,*/ 4 };
+GLboolean vertexNorms[] = { GL_FALSE, GL_TRUE };
 GLsizeiptr updateSizes[] = { 300 };
 GLsizeiptr bufferSizes[] = { 1024 * 1024 };
-unsigned int iterationCounts[] = { 10 };
+unsigned int iterationCounts[] = { 3 };
 
 int main(int argc, char **argv)
 {
@@ -33,6 +33,12 @@ int main(int argc, char **argv)
             {
                 for (size_t normIt = 0; normIt < ArraySize(vertexNorms); normIt++)
                 {
+                    // No normalized float data
+                    if (vertexTypes[typeIt] == GL_FLOAT && vertexNorms[normIt] == GL_TRUE)
+                    {
+                        continue;
+                    }
+
                     for (size_t updateIt = 0; updateIt < ArraySize(updateSizes); updateIt++)
                     {
                         for (size_t bufszIt = 0; bufszIt < ArraySize(bufferSizes); bufszIt++)
