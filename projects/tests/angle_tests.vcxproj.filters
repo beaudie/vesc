@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="angle_tests">
+      <UniqueIdentifier>{48DD3339-474D-E2E8-9CF2-CEBFCA2FAFD7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="angle_tests\win32">
+      <UniqueIdentifier>{789FEF16-EFE7-512E-F91B-DF7E0D72FB79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="angle_tests\media">
+      <UniqueIdentifier>{2699B576-DA2C-16EE-9C4A-F0CAB500D719}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\tests\tests.gyp"/>
+    <ClCompile Include="..\..\tests\angle_tests\GLSLTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\OcclusionQueriesTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\VertexAttributeTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\UnpackAlignmentTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\IndexedPointsTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\BufferDataTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\tests\angle_tests\ANGLETest.h">
+      <Filter>angle_tests</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\tests\angle_tests\LineLoopTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\TextureTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\ProgramBinaryTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\angle_test_main.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\SwizzleTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\PBOExtensionTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\IncompleteTextureTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\BlendMinMaxTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\CompressedTextureTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\FramebufferFormatsTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\ANGLETest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\ReadPixelsTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\MaxTextureSizeTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\SRGBTextureTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\BlitFramebufferANGLETest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\ClearTest.cpp">
+      <Filter>angle_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\angle_tests\win32\ANGLETest_win32.cpp">
+      <Filter>angle_tests\win32</Filter>
+    </ClCompile>
+    <None Include="..\..\tests\angle_tests\media\pixel.inl">
+      <Filter>angle_tests\media</Filter>
+    </None>
+  </ItemGroup>
+</Project>

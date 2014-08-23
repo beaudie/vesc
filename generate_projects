@@ -20,7 +20,7 @@ generation_dir = "projects"
 gyp_generators = "msvs"
 msvs_version = "2013e"
 build_samples = True
-build_tests = False
+build_tests = True
 release_symbols = False
 
 if __name__ == '__main__':
