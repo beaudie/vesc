@@ -94,6 +94,9 @@ class TextureAttachment : public FramebufferAttachment
     virtual GLint mipLevel() const;
     virtual GLint layer() const;
 
+    virtual rx::RenderTarget *getRenderTarget();
+    virtual unsigned int getSerial() const;
+
   protected:
     virtual Texture *getTexture() const = 0;
     ImageIndex mIndex;
@@ -106,12 +109,7 @@ class Texture2DAttachment : public TextureAttachment
 {
   public:
     Texture2DAttachment(Texture2D *texture, GLint level);
-
     virtual ~Texture2DAttachment();
-
-    rx::RenderTarget *getRenderTarget();
-    virtual unsigned int getSerial() const;
-
     virtual Texture *getTexture() const;
 
   private:
@@ -125,12 +123,7 @@ class TextureCubeMapAttachment : public TextureAttachment
 {
   public:
     TextureCubeMapAttachment(TextureCubeMap *texture, GLenum faceTarget, GLint level);
-
     virtual ~TextureCubeMapAttachment();
-
-    rx::RenderTarget *getRenderTarget();
-    virtual unsigned int getSerial() const;
-
     virtual Texture *getTexture() const;
 
   private:
@@ -145,12 +138,7 @@ class Texture3DAttachment : public TextureAttachment
 {
   public:
     Texture3DAttachment(Texture3D *texture, GLint level, GLint layer);
-
     virtual ~Texture3DAttachment();
-
-    rx::RenderTarget *getRenderTarget();
-    virtual unsigned int getSerial() const;
-
     virtual Texture *getTexture() const;
 
   private:
@@ -165,12 +153,7 @@ class Texture2DArrayAttachment : public TextureAttachment
 {
   public:
     Texture2DArrayAttachment(Texture2DArray *texture, GLint level, GLint layer);
-
     virtual ~Texture2DArrayAttachment();
-
-    rx::RenderTarget *getRenderTarget();
-    virtual unsigned int getSerial() const;
-
     virtual Texture *getTexture() const;
 
   private:
