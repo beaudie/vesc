@@ -124,7 +124,7 @@ class DepthStencilbuffer : public RenderbufferStorage
 
     ~DepthStencilbuffer();
 
-    virtual rx::RenderTarget *getDepthStencil();
+    virtual rx::RenderTarget *getRenderTarget();
 
   protected:
     rx::RenderTarget  *mDepthStencil;
