@@ -562,8 +562,14 @@ GLenum Framebuffer::completeness() const
     return GL_FRAMEBUFFER_COMPLETE;
 }
 
-void Framebuffer::invalidate(GLsizei numAttachments, const GLenum* attachments,
-                             GLint x, GLint y, GLsizei width, GLsizei height)
+void Framebuffer::invalidate(const Caps &caps, GLsizei numAttachments, const GLenum *attachments)
+{
+    GLuint maxDimension = caps.maxRenderbufferSize;
+    invalidateSub(caps, numAttachments, attachments, 0, 0, maxDimension, maxDimension);
+}
+
+void Framebuffer::invalidateSub(const Caps &caps, GLsizei numAttachments, const GLenum *attachments,
+                                GLint x, GLint y, GLsizei width, GLsizei height)
 {
     ASSERT(completeness() == GL_FRAMEBUFFER_COMPLETE);
     for (int i = 0; i < numAttachments; ++i)
@@ -618,8 +624,6 @@ void Framebuffer::invalidate(GLsizei numAttachments, const GLenum* attachments,
         }
     }
 }
-
-
 
 DefaultFramebuffer::DefaultFramebuffer(rx::Renderer *renderer, Colorbuffer *colorbuffer, DepthStencilbuffer *depthStencil)
     : Framebuffer(renderer, 0)
