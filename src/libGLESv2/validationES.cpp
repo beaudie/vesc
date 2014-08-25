@@ -1489,6 +1489,22 @@ bool ValidateDrawElements(const gl::Context *context, GLenum mode, GLsizei count
         return gl::error(GL_INVALID_OPERATION, false);
     }
 
+    if (elementArrayBuffer)
+    {
+        // Check for reading past the end of the bound buffer object
+        GLint64 typeSize = static_cast<GLint64>(gl::GetTypeInfo(type).bytes);
+        GLint64 offset = reinterpret_cast<GLint64>(indices);
+        if (typeSize * static_cast<GLint64>(count)+offset > elementArrayBuffer->getSize())
+        {
+            return gl::error(GL_INVALID_OPERATION, false);
+        }
+    }
+    else if (!indices)
+    {
+        // Catch this programming error here
+        return gl::error(GL_INVALID_OPERATION, false);
+    }
+
     // Use max index to validate if our vertex buffers are large enough for the pull.
     // TODO: offer fast path, with disabled index validation.
     // TODO: also disable index checking on back-ends that are robust to out-of-range accesses.
