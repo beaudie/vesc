@@ -15,6 +15,8 @@
 #include "third_party/trace_event/trace_event.h"
 #include "libGLESv2/Shader.h"
 
+#define ANGLE_DEFAULT_D3D11 1
+
 #if defined (ANGLE_ENABLE_D3D9)
 #include "libGLESv2/renderer/d3d/d3d9/Renderer9.h"
 #endif // ANGLE_ENABLE_D3D9
