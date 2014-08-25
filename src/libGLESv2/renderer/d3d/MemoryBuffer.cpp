@@ -9,6 +9,8 @@
 #include <algorithm>
 #include <cstdlib>
 
+#include "common/angleutils.h"
+
 namespace rx
 {
 
@@ -28,9 +30,7 @@ bool MemoryBuffer::resize(size_t size)
 {
     if (size == 0)
     {
-        free(mData);
-        mData = NULL;
-        mSize = 0;
+        clear();
     }
     else
     {
@@ -67,6 +67,13 @@ const uint8_t *MemoryBuffer::data() const
 uint8_t *MemoryBuffer::data()
 {
     return mData;
+}
+
+void MemoryBuffer::clear()
+{
+    free(mData);
+    mData = NULL;
+    mSize = 0;
 }
 
 }
