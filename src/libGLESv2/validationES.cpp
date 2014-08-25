@@ -1673,7 +1673,9 @@ bool ValidateFramebufferTexture2D(const gl::Context *context, GLenum target, GLe
 
 bool ValidateGetUniformBase(const gl::Context *context, GLuint program, GLint location)
 {
-    if (program == 0)
+    // Apps query program names with GetIntegerv,
+    // therefore the name should not be greater than "max(GLint)"
+    if (program == 0 || program > static_cast<GLuint>(std::numeric_limits<GLint>::max()))
     {
         return gl::error(GL_INVALID_VALUE, false);
     }
