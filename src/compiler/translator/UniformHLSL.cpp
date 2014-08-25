@@ -14,6 +14,7 @@
 #include "compiler/translator/StructureHLSL.h"
 #include "compiler/translator/util.h"
 #include "compiler/translator/UtilsHLSL.h"
+#include "compiler/translator/TranslatorHLSL.h"
 
 namespace sh
 {
@@ -60,12 +61,13 @@ static TString InterfaceBlockStructName(const TInterfaceBlock &interfaceBlock)
     return DecoratePrivate(interfaceBlock.name()) + "_type";
 }
 
-UniformHLSL::UniformHLSL(StructureHLSL *structureHLSL, ShShaderOutput outputType)
+UniformHLSL::UniformHLSL(StructureHLSL *structureHLSL, TranslatorHLSL *translator)
     : mUniformRegister(0),
       mInterfaceBlockRegister(0),
       mSamplerRegister(0),
       mStructureHLSL(structureHLSL),
-      mOutputType(outputType)
+      mOutputType(translator->getOutputType()),
+      mUniforms(translator->getUniforms())
 {}
 
 void UniformHLSL::reserveUniformRegisters(unsigned int registerCount)
@@ -82,14 +84,24 @@ unsigned int UniformHLSL::declareUniformAndAssignRegister(const TType &type, con
 {
     unsigned int registerIndex = (IsSampler(type.getBasicType()) ? mSamplerRegister : mUniformRegister);
 
-    GetVariableTraverser traverser;
-    traverser.traverse(type, name, &mActiveUniforms);
+    const Uniform *uniform = NULL;
 
-    const sh::Uniform &activeUniform = mActiveUniforms.back();
-    mUniformRegisterMap[activeUniform.name] = registerIndex;
+    for (size_t uniformIndex = 0; uniformIndex < mUniforms.size(); uniformIndex++)
+    {
+        if (mUniforms[uniformIndex].name == name.c_str())
+        {
+            uniform = &mUniforms[uniformIndex];
+            break;
+        }
+    }
 
-    unsigned int registerCount = HLSLVariableRegisterCount(activeUniform, mOutputType);
-    if (IsSampler(type.getBasicType()))
+    ASSERT(uniform);
+
+    mUniformRegisterMap[uniform->name] = registerIndex;
+
+    unsigned int registerCount = HLSLVariableRegisterCount(*uniform, mOutputType);
+
+    if (gl::IsSampler(uniform->type))
     {
         mSamplerRegister += registerCount;
     }
@@ -154,23 +166,10 @@ TString UniformHLSL::interfaceBlocksHeader(const ReferencedSymbols &referencedIn
         unsigned int arraySize = static_cast<unsigned int>(interfaceBlock.arraySize());
         unsigned int activeRegister = mInterfaceBlockRegister;
 
-        InterfaceBlock activeBlock;
-        activeBlock.name = interfaceBlock.name().c_str();
-        activeBlock.arraySize = arraySize;
-
-        GetInterfaceBlockFields(interfaceBlock, &activeBlock.fields);
-
-        mInterfaceBlockRegisterMap[activeBlock.name] = activeRegister;
+        mInterfaceBlockRegisterMap[interfaceBlock.name().c_str()] = activeRegister;
         mInterfaceBlockRegister += std::max(1u, arraySize);
 
-        activeBlock.layout = GetBlockLayoutType(interfaceBlock.blockStorage());
-
-        if (interfaceBlock.matrixPacking() == EmpRowMajor)
-        {
-            activeBlock.isRowMajorLayout = true;
-        }
-
-        mActiveInterfaceBlocks.push_back(activeBlock);
+        // FIXME: interface block field names
 
         if (interfaceBlock.hasInstanceName())
         {

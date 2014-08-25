@@ -9,6 +9,29 @@
 #include "compiler/translator/util.h"
 #include "common/utilities.h"
 
+static TString InterfaceBlockFieldName(const TInterfaceBlock &interfaceBlock, const TField &field)
+{
+    if (interfaceBlock.hasInstanceName())
+    {
+        return interfaceBlock.name() + "." + field.name();
+    }
+    else
+    {
+        return field.name();
+    }
+}
+
+static sh::BlockLayoutType GetBlockLayoutType(TLayoutBlockStorage blockStorage)
+{
+    switch (blockStorage)
+    {
+      case EbsPacked:         return sh::BLOCKLAYOUT_PACKED;
+      case EbsShared:         return sh::BLOCKLAYOUT_SHARED;
+      case EbsStd140:         return sh::BLOCKLAYOUT_STANDARD;
+      default: UNREACHABLE(); return sh::BLOCKLAYOUT_SHARED;
+    }
+}
+
 static void ExpandUserDefinedVariable(const sh::ShaderVariable &variable,
                                       const std::string &name,
                                       const std::string &mappedName,
@@ -270,10 +293,22 @@ void CollectVariables::visitVariable(const TIntermSymbol *variable,
     interfaceBlock.instanceName = (blockType->hasInstanceName() ? blockType->instanceName().c_str() : "");
     interfaceBlock.arraySize = variable->getArraySize();
     interfaceBlock.isRowMajorLayout = (blockType->matrixPacking() == EmpRowMajor);
-    interfaceBlock.layout = sh::GetBlockLayoutType(blockType->blockStorage());
+    interfaceBlock.layout = GetBlockLayoutType(blockType->blockStorage());
 
     // Gather field information
-    sh::GetInterfaceBlockFields(*blockType, &interfaceBlock.fields);
+    const TFieldList &fieldList = blockType->fields();
+
+    for (size_t fieldIndex = 0; fieldIndex < fieldList.size(); fieldIndex++)
+    {
+        const TField &field = *fieldList[fieldIndex];
+        const TString &fullFieldName = InterfaceBlockFieldName(*blockType, field);
+        const TType &fieldType = *field.type();
+
+        sh::GetVariableTraverser traverser;
+        traverser.traverse(fieldType, fullFieldName, &interfaceBlock.fields);
+
+        interfaceBlock.fields.back().isRowMajorLayout = (fieldType.getLayoutQualifier().matrixPacking == EmpRowMajor);
+    }
 
     infoList->push_back(interfaceBlock);
 }
