@@ -255,6 +255,7 @@
     <ClInclude Include="..\..\src\libGLESv2\renderer\BufferImpl.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\vertexconversion.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\RenderTarget.h"/>
+    <ClInclude Include="..\..\src\libGLESv2\renderer\ProgramBinaryImpl.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\VertexArrayImpl.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\copyvertex.h"/>
     <ClInclude Include="..\..\src\common\RefCountObject.h"/>

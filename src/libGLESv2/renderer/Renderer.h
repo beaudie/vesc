@@ -56,6 +56,7 @@ class VertexArrayImpl;
 class BufferStorage;
 struct TranslatedIndexData;
 class ShaderImpl;
+class ProgramBinaryImpl;
 class ShaderExecutable;
 class SwapChain;
 class RenderTarget;
@@ -196,6 +197,7 @@ class Renderer
 
     // Shader creation
     virtual ShaderImpl *createShader(GLenum type) = 0;
+    virtual ProgramBinaryImpl *createProgramBinary() = 0;
 
     // Shader operations
     virtual void releaseShaderCompiler() = 0;
