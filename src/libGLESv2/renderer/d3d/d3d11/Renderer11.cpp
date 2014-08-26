@@ -1949,50 +1949,44 @@ bool Renderer11::copyToRenderTarget(TextureStorageInterface2DArray *dest, Textur
     return false;
 }
 
-bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+gl::Error Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                            GLint xoffset, GLint yoffset, TextureStorageInterface2D *storage, GLint level)
 {
     gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
     if (!colorbuffer)
     {
-        ERR("Failed to retrieve the color buffer from the frame buffer.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the color buffer from the frame buffer.");
     }
 
     RenderTarget11 *sourceRenderTarget = d3d11::GetAttachmentRenderTarget(colorbuffer);
     if (!sourceRenderTarget)
     {
-        ERR("Failed to retrieve the render target from the frame buffer.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target from the frame buffer.");
     }
 
     ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
     if (!source)
     {
-        ERR("Failed to retrieve the render target view from the render target.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target view from the render target.");
     }
 
     TextureStorage11_2D *storage11 = TextureStorage11_2D::makeTextureStorage11_2D(storage->getStorageInstance());
     if (!storage11)
     {
-        ERR("Failed to retrieve the texture storage from the destination.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the texture storage from the destination.");
     }
 
     gl::ImageIndex index = gl::ImageIndex::Make2D(level);
     RenderTarget11 *destRenderTarget = RenderTarget11::makeRenderTarget11(storage11->getRenderTarget(index));
     if (!destRenderTarget)
     {
-        ERR("Failed to retrieve the render target from the destination storage.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target from the destination storage.");
     }
 
     ID3D11RenderTargetView *dest = destRenderTarget->getRenderTargetView();
     if (!dest)
     {
-        ERR("Failed to retrieve the render target view from the destination render target.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target view from the destination render target.");
     }
 
     gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
@@ -2003,61 +1997,56 @@ bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &so
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    if (mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                           destFormat, GL_NEAREST).isError())
+    gl::Error error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
+                                         destFormat, GL_NEAREST);
+    if (error.isError())
     {
-        return false;
+        return error;
     }
 
     storage11->invalidateSwizzleCacheLevel(level);
 
-    return true;
+    return gl::Error(GL_NO_ERROR);
 }
 
-bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+gl::Error Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                            GLint xoffset, GLint yoffset, TextureStorageInterfaceCube *storage, GLenum target, GLint level)
 {
     gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
     if (!colorbuffer)
     {
-        ERR("Failed to retrieve the color buffer from the frame buffer.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the color buffer from the frame buffer.");
     }
 
     RenderTarget11 *sourceRenderTarget = d3d11::GetAttachmentRenderTarget(colorbuffer);
     if (!sourceRenderTarget)
     {
-        ERR("Failed to retrieve the render target from the frame buffer.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target from the frame buffer.");
     }
 
     ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
     if (!source)
     {
-        ERR("Failed to retrieve the render target view from the render target.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target view from the render target.");
     }
 
     TextureStorage11_Cube *storage11 = TextureStorage11_Cube::makeTextureStorage11_Cube(storage->getStorageInstance());
     if (!storage11)
     {
-        ERR("Failed to retrieve the texture storage from the destination.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the texture storage from the destination.");;
     }
 
     gl::ImageIndex index = gl::ImageIndex::MakeCube(target, level);
     RenderTarget11 *destRenderTarget = RenderTarget11::makeRenderTarget11(storage11->getRenderTarget(index));
     if (!destRenderTarget)
     {
-        ERR("Failed to retrieve the render target from the destination storage.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target from the destination storage.");
     }
 
     ID3D11RenderTargetView *dest = destRenderTarget->getRenderTargetView();
     if (!dest)
     {
-        ERR("Failed to retrieve the render target view from the destination render target.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target view from the destination render target.");
     }
 
     gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
@@ -2068,61 +2057,56 @@ bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &so
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    if (mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                           destFormat, GL_NEAREST).isError())
+    gl::Error error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
+                                         destFormat, GL_NEAREST);
+    if (error.isError())
     {
-        return false;
+        return error;
     }
 
     storage11->invalidateSwizzleCacheLevel(level);
 
-    return true;
+    return gl::Error(GL_NO_ERROR);
 }
 
-bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+gl::Error Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                            GLint xoffset, GLint yoffset, GLint zOffset, TextureStorageInterface3D *storage, GLint level)
 {
     gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
     if (!colorbuffer)
     {
-        ERR("Failed to retrieve the color buffer from the frame buffer.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the color buffer from the frame buffer.");
     }
 
     RenderTarget11 *sourceRenderTarget = d3d11::GetAttachmentRenderTarget(colorbuffer);
     if (!sourceRenderTarget)
     {
-        ERR("Failed to retrieve the render target from the frame buffer.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target from the frame buffer.");
     }
 
     ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
     if (!source)
     {
-        ERR("Failed to retrieve the render target view from the render target.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target view from the render target.");
     }
 
     TextureStorage11_3D *storage11 = TextureStorage11_3D::makeTextureStorage11_3D(storage->getStorageInstance());
     if (!storage11)
     {
-        ERR("Failed to retrieve the texture storage from the destination.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the texture storage from the destination.");
     }
 
     gl::ImageIndex index = gl::ImageIndex::Make3D(level, zOffset);
     RenderTarget11 *destRenderTarget = RenderTarget11::makeRenderTarget11(storage11->getRenderTarget(index));
     if (!destRenderTarget)
     {
-        ERR("Failed to retrieve the render target from the destination storage.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target from the destination storage.");
     }
 
     ID3D11RenderTargetView *dest = destRenderTarget->getRenderTargetView();
     if (!dest)
     {
-        ERR("Failed to retrieve the render target view from the destination render target.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target view from the destination render target.");
     }
 
     gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
@@ -2133,47 +2117,44 @@ bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &so
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    if (mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                           destFormat, GL_NEAREST).isError())
+    gl::Error error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
+                                         destFormat, GL_NEAREST);
+    if (error.isError())
     {
-        return false;
+        return error;
     }
 
     storage11->invalidateSwizzleCacheLevel(level);
 
-    return true;
+    return gl::Error(GL_NO_ERROR);
 }
 
-bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+gl::Error Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                            GLint xoffset, GLint yoffset, GLint zOffset, TextureStorageInterface2DArray *storage, GLint level)
 {
     gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
     if (!colorbuffer)
     {
-        ERR("Failed to retrieve the color buffer from the frame buffer.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the color buffer from the frame buffer.");
     }
 
     RenderTarget11 *sourceRenderTarget = d3d11::GetAttachmentRenderTarget(colorbuffer);
     if (!sourceRenderTarget)
     {
-        ERR("Failed to retrieve the render target from the frame buffer.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target from the frame buffer.");
     }
 
     ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
     if (!source)
     {
-        ERR("Failed to retrieve the render target view from the render target.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target view from the render target.");
     }
 
     TextureStorage11_2DArray *storage11 = TextureStorage11_2DArray::makeTextureStorage11_2DArray(storage->getStorageInstance());
     if (!storage11)
     {
         SafeRelease(source);
-        ERR("Failed to retrieve the texture storage from the destination.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the texture storage from the destination.");
     }
 
     gl::ImageIndex index = gl::ImageIndex::Make2DArray(level, zOffset);
@@ -2181,15 +2162,13 @@ bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &so
     if (!destRenderTarget)
     {
         SafeRelease(source);
-        ERR("Failed to retrieve the render target from the destination storage.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target from the destination storage.");
     }
 
     ID3D11RenderTargetView *dest = destRenderTarget->getRenderTargetView();
     if (!dest)
     {
-        ERR("Failed to retrieve the render target view from the destination render target.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target view from the destination render target.");
     }
 
     gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
@@ -2200,15 +2179,16 @@ bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &so
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    if (mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                           destFormat, GL_NEAREST).isError())
+    gl::Error error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
+                                         destFormat, GL_NEAREST);
+    if (error.isError())
     {
-        return false;
+        return error;
     }
 
     storage11->invalidateSwizzleCacheLevel(level);
 
-    return true;
+    return gl::Error(GL_NO_ERROR);
 }
 
 void Renderer11::unapplyRenderTargets()
