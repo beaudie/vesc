@@ -21,6 +21,7 @@
 #include "libGLESv2/main.h"
 #include "libGLESv2/Shader.h"
 #include "libGLESv2/Program.h"
+#include "libGLESv2/renderer/ProgramBinaryImpl.h"
 #include "libGLESv2/renderer/Renderer.h"
 #include "libGLESv2/renderer/d3d/DynamicHLSL.h"
 #include "libGLESv2/renderer/d3d/ShaderD3D.h"
@@ -177,10 +178,9 @@ LinkedVarying::LinkedVarying(const std::string &name, GLenum type, GLsizei size,
 
 unsigned int ProgramBinary::mCurrentSerial = 1;
 
-ProgramBinary::ProgramBinary(rx::Renderer *renderer)
+ProgramBinary::ProgramBinary(rx::ProgramBinaryImpl *impl)
     : RefCountObject(0),
-      mRenderer(renderer),
-      mDynamicHLSL(NULL),
+      mProgramBinary(impl),
       mVertexWorkarounds(rx::ANGLE_D3D_WORKAROUND_NONE),
       mPixelWorkarounds(rx::ANGLE_D3D_WORKAROUND_NONE),
       mGeometryExecutable(NULL),
@@ -189,11 +189,11 @@ ProgramBinary::ProgramBinary(rx::Renderer *renderer)
       mUsesPointSize(false),
       mShaderVersion(100),
       mDirtySamplerMapping(true),
-      mVertexUniformStorage(NULL),
-      mFragmentUniformStorage(NULL),
       mValidated(false),
       mSerial(issueSerial())
 {
+    ASSERT(impl);
+
     for (int index = 0; index < MAX_VERTEX_ATTRIBS; index++)
     {
         mSemanticIndex[index] = -1;
@@ -208,14 +208,12 @@ ProgramBinary::ProgramBinary(rx::Renderer *renderer)
     {
         mSamplersVS[index].active = false;
     }
-
-    mDynamicHLSL = new rx::DynamicHLSL(renderer);
 }
 
 ProgramBinary::~ProgramBinary()
 {
     reset();
-    SafeDelete(mDynamicHLSL);
+    SafeDelete(mProgramBinary);
 }
 
 unsigned int ProgramBinary::getSerial() const
@@ -262,12 +260,12 @@ rx::ShaderExecutable *ProgramBinary::getPixelExecutableForOutputLayout(const std
         }
     }
 
-    std::string finalPixelHLSL = mDynamicHLSL->generatePixelShaderForOutputSignature(mPixelHLSL, mPixelShaderKey, mUsesFragDepth,
+    std::string finalPixelHLSL = mProgramBinary->getDynamicHLSL()->generatePixelShaderForOutputSignature(mPixelHLSL, mPixelShaderKey, mUsesFragDepth,
                                                                                      outputSignature);
 
     // Generate new pixel executable
     InfoLog tempInfoLog;
-    rx::ShaderExecutable *pixelExecutable = mRenderer->compileToExecutable(tempInfoLog, finalPixelHLSL.c_str(), rx::SHADER_PIXEL,
+    rx::ShaderExecutable *pixelExecutable = mProgramBinary->getRenderer()->compileToExecutable(tempInfoLog, finalPixelHLSL.c_str(), rx::SHADER_PIXEL,
                                                                            mTransformFeedbackLinkedVaryings,
                                                                            (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
                                                                            mPixelWorkarounds);
@@ -289,7 +287,7 @@ rx::ShaderExecutable *ProgramBinary::getPixelExecutableForOutputLayout(const std
 rx::ShaderExecutable *ProgramBinary::getVertexExecutableForInputLayout(const VertexFormat inputLayout[MAX_VERTEX_ATTRIBS])
 {
     GLenum signature[MAX_VERTEX_ATTRIBS];
-    mDynamicHLSL->getInputLayoutSignature(inputLayout, signature);
+    mProgramBinary->getDynamicHLSL()->getInputLayoutSignature(inputLayout, signature);
 
     for (size_t executableIndex = 0; executableIndex < mVertexExecutables.size(); executableIndex++)
     {
@@ -300,11 +298,11 @@ rx::ShaderExecutable *ProgramBinary::getVertexExecutableForInputLayout(const Ver
     }
 
     // Generate new dynamic layout with attribute conversions
-    std::string finalVertexHLSL = mDynamicHLSL->generateVertexShaderForInputLayout(mVertexHLSL, inputLayout, mShaderAttributes);
+    std::string finalVertexHLSL = mProgramBinary->getDynamicHLSL()->generateVertexShaderForInputLayout(mVertexHLSL, inputLayout, mShaderAttributes);
 
     // Generate new vertex executable
     InfoLog tempInfoLog;
-    rx::ShaderExecutable *vertexExecutable = mRenderer->compileToExecutable(tempInfoLog, finalVertexHLSL.c_str(),
+    rx::ShaderExecutable *vertexExecutable = mProgramBinary->getRenderer()->compileToExecutable(tempInfoLog, finalVertexHLSL.c_str(),
                                                                             rx::SHADER_VERTEX,
                                                                             mTransformFeedbackLinkedVaryings,
                                                                             (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
@@ -374,7 +372,7 @@ bool ProgramBinary::usesPointSize() const
 
 bool ProgramBinary::usesPointSpriteEmulation() const
 {
-    return mUsesPointSize && mRenderer->getMajorShaderModel() >= 4;
+    return mUsesPointSize && mProgramBinary->getRenderer()->getMajorShaderModel() >= 4;
 }
 
 bool ProgramBinary::usesGeometryShader() const
@@ -1005,7 +1003,7 @@ void ProgramBinary::applyUniforms()
 {
     updateSamplerMapping();
 
-    mRenderer->applyUniforms(*this);
+    mProgramBinary->getRenderer()->applyUniforms(*this);
 
     for (size_t uniformIndex = 0; uniformIndex < mUniforms.size(); uniformIndex++)
     {
@@ -1018,8 +1016,8 @@ bool ProgramBinary::applyUniformBuffers(const std::vector<gl::Buffer*> boundBuff
     const gl::Buffer *vertexUniformBuffers[gl::IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS] = {NULL};
     const gl::Buffer *fragmentUniformBuffers[gl::IMPLEMENTATION_MAX_FRAGMENT_SHADER_UNIFORM_BUFFERS] = {NULL};
 
-    const unsigned int reservedBuffersInVS = mRenderer->getReservedVertexUniformBuffers();
-    const unsigned int reservedBuffersInFS = mRenderer->getReservedFragmentUniformBuffers();
+    const unsigned int reservedBuffersInVS = mProgramBinary->getRenderer()->getReservedVertexUniformBuffers();
+    const unsigned int reservedBuffersInFS = mProgramBinary->getRenderer()->getReservedFragmentUniformBuffers();
 
     ASSERT(boundBuffers.size() == mUniformBlocks.size());
 
@@ -1055,7 +1053,7 @@ bool ProgramBinary::applyUniformBuffers(const std::vector<gl::Buffer*> boundBuff
         }
     }
 
-    return mRenderer->setUniformBuffers(vertexUniformBuffers, fragmentUniformBuffers);
+    return mProgramBinary->getRenderer()->setUniformBuffers(vertexUniformBuffers, fragmentUniformBuffers);
 }
 
 bool ProgramBinary::linkVaryings(InfoLog &infoLog, Shader *fragmentShader, Shader *vertexShader)
@@ -1281,7 +1279,7 @@ bool ProgramBinary::load(InfoLog &infoLog, GLenum binaryFormat, const void *bina
 
         unsigned int vertexShaderSize = stream.readInt<unsigned int>();
         const unsigned char *vertexShaderFunction = reinterpret_cast<const unsigned char*>(binary) + stream.offset();
-        rx::ShaderExecutable *shaderExecutable = mRenderer->loadExecutable(reinterpret_cast<const DWORD*>(vertexShaderFunction),
+        rx::ShaderExecutable *shaderExecutable = mProgramBinary->getRenderer()->loadExecutable(reinterpret_cast<const DWORD*>(vertexShaderFunction),
                                                                            vertexShaderSize, rx::SHADER_VERTEX,
                                                                            mTransformFeedbackLinkedVaryings,
                                                                            (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS));
@@ -1293,7 +1291,7 @@ bool ProgramBinary::load(InfoLog &infoLog, GLenum binaryFormat, const void *bina
 
         // generated converted input layout
         GLenum signature[MAX_VERTEX_ATTRIBS];
-        mDynamicHLSL->getInputLayoutSignature(inputLayout, signature);
+        mProgramBinary->getDynamicHLSL()->getInputLayoutSignature(inputLayout, signature);
 
         // add new binary
         mVertexExecutables.push_back(new VertexExecutable(inputLayout, signature, shaderExecutable));
@@ -1327,7 +1325,7 @@ bool ProgramBinary::load(InfoLog &infoLog, GLenum binaryFormat, const void *bina
 
         const size_t pixelShaderSize = stream.readInt<unsigned int>();
         const unsigned char *pixelShaderFunction = reinterpret_cast<const unsigned char*>(binary) + stream.offset();
-        rx::ShaderExecutable *shaderExecutable = mRenderer->loadExecutable(pixelShaderFunction, pixelShaderSize,
+        rx::ShaderExecutable *shaderExecutable = mProgramBinary->getRenderer()->loadExecutable(pixelShaderFunction, pixelShaderSize,
                                                                            rx::SHADER_PIXEL,
                                                                            mTransformFeedbackLinkedVaryings,
                                                                            (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS));
@@ -1348,7 +1346,7 @@ bool ProgramBinary::load(InfoLog &infoLog, GLenum binaryFormat, const void *bina
     if (geometryShaderSize > 0)
     {
         const char *geometryShaderFunction = (const char*) binary + stream.offset();
-        mGeometryExecutable = mRenderer->loadExecutable(reinterpret_cast<const DWORD*>(geometryShaderFunction),
+        mGeometryExecutable = mProgramBinary->getRenderer()->loadExecutable(reinterpret_cast<const DWORD*>(geometryShaderFunction),
                                                         geometryShaderSize, rx::SHADER_GEOMETRY, mTransformFeedbackLinkedVaryings,
                                                         (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS));
         if (!mGeometryExecutable)
@@ -1364,14 +1362,14 @@ bool ProgramBinary::load(InfoLog &infoLog, GLenum binaryFormat, const void *bina
     const GUID *binaryIdentifier = (const GUID *) ptr;
     ptr += sizeof(GUID);
 
-    GUID identifier = mRenderer->getAdapterIdentifier();
+    GUID identifier = mProgramBinary->getRenderer()->getAdapterIdentifier();
     if (memcmp(&identifier, binaryIdentifier, sizeof(GUID)) != 0)
     {
         infoLog.append("Invalid program binary.");
         return false;
     }
 
-    initializeUniformStorage();
+    mProgramBinary->initializeUniformStorage(mUniforms);
 
     return true;
 #endif // #ifdef ANGLE_DISABLE_PROGRAM_BINARY_LOAD
@@ -1549,7 +1547,7 @@ bool ProgramBinary::save(GLenum *binaryFormat, void *binary, GLsizei bufSize, GL
         stream.writeBytes(geometryBlob, geometryShaderSize);
     }
 
-    GUID identifier = mRenderer->getAdapterIdentifier();
+    GUID identifier = mProgramBinary->getRenderer()->getAdapterIdentifier();
 
     GLsizei streamLength = stream.length();
     const void *streamData = stream.data();
@@ -1631,7 +1629,7 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
 
     // Map the varyings to the register file
     rx::VaryingPacking packing = { NULL };
-    int registers = mDynamicHLSL->packVaryings(infoLog, packing, fragmentShaderD3D, vertexShaderD3D, transformFeedbackVaryings);
+    int registers = mProgramBinary->getDynamicHLSL()->packVaryings(infoLog, packing, fragmentShaderD3D, vertexShaderD3D, transformFeedbackVaryings);
 
     if (registers < 0)
     {
@@ -1645,7 +1643,7 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
 
     mUsesPointSize = vertexShaderD3D->usesPointSize();
     std::vector<LinkedVarying> linkedVaryings;
-    if (!mDynamicHLSL->generateShaderLinkHLSL(infoLog, registers, packing, mPixelHLSL, mVertexHLSL,
+    if (!mProgramBinary->getDynamicHLSL()->generateShaderLinkHLSL(infoLog, registers, packing, mPixelHLSL, mVertexHLSL,
                                               fragmentShaderD3D, vertexShaderD3D, transformFeedbackVaryings,
                                               &linkedVaryings, &mOutputVariables, &mPixelShaderKey, &mUsesFragDepth))
     {
@@ -1700,8 +1698,8 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
 
         if (usesGeometryShader())
         {
-            std::string geometryHLSL = mDynamicHLSL->generateGeometryShaderHLSL(registers, fragmentShaderD3D, vertexShaderD3D);
-            mGeometryExecutable = mRenderer->compileToExecutable(infoLog, geometryHLSL.c_str(), rx::SHADER_GEOMETRY,
+            std::string geometryHLSL = mProgramBinary->getDynamicHLSL()->generateGeometryShaderHLSL(registers, fragmentShaderD3D, vertexShaderD3D);
+            mGeometryExecutable = mProgramBinary->getRenderer()->compileToExecutable(infoLog, geometryHLSL.c_str(), rx::SHADER_GEOMETRY,
                                                                  mTransformFeedbackLinkedVaryings,
                                                                  (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
                                                                  rx::ANGLE_D3D_WORKAROUND_NONE);
@@ -1947,7 +1945,7 @@ bool ProgramBinary::linkUniforms(InfoLog &infoLog, const Shader &vertexShader, c
         return false;
     }
 
-    initializeUniformStorage();
+    mProgramBinary->initializeUniformStorage(mUniforms);
 
     return true;
 }
@@ -2040,7 +2038,7 @@ bool ProgramBinary::indexSamplerUniform(const LinkedUniform &uniform, InfoLog &i
             return false;
         }
 
-        unsigned int maxVertexVectors = mRenderer->getReservedVertexUniformVectors() + caps.maxVertexUniformVectors;
+        unsigned int maxVertexVectors = mProgramBinary->getRenderer()->getReservedVertexUniformVectors() + caps.maxVertexUniformVectors;
         if (uniform.vsRegisterIndex + uniform.registerCount > maxVertexVectors)
         {
             infoLog.append("Vertex shader active uniforms exceed GL_MAX_VERTEX_UNIFORM_VECTORS (%u)",
@@ -2059,7 +2057,7 @@ bool ProgramBinary::indexSamplerUniform(const LinkedUniform &uniform, InfoLog &i
             return false;
         }
 
-        unsigned int maxFragmentVectors = mRenderer->getReservedFragmentUniformVectors() + caps.maxFragmentUniformVectors;
+        unsigned int maxFragmentVectors = mProgramBinary->getRenderer()->getReservedFragmentUniformVectors() + caps.maxFragmentUniformVectors;
         if (uniform.psRegisterIndex + uniform.registerCount > maxFragmentVectors)
         {
             infoLog.append("Fragment shader active uniforms exceed GL_MAX_FRAGMENT_UNIFORM_VECTORS (%u)",
@@ -2390,7 +2388,7 @@ bool ProgramBinary::assignUniformBlockRegister(InfoLog &infoLog, UniformBlock *u
     if (shader == GL_VERTEX_SHADER)
     {
         uniformBlock->vsRegisterIndex = registerIndex;
-        if (registerIndex - mRenderer->getReservedVertexUniformBuffers() >= caps.maxVertexUniformBlocks)
+        if (registerIndex - mProgramBinary->getRenderer()->getReservedVertexUniformBuffers() >= caps.maxVertexUniformBlocks)
         {
             infoLog.append("Vertex shader uniform block count exceed GL_MAX_VERTEX_UNIFORM_BLOCKS (%u)", caps.maxVertexUniformBlocks);
             return false;
@@ -2399,7 +2397,7 @@ bool ProgramBinary::assignUniformBlockRegister(InfoLog &infoLog, UniformBlock *u
     else if (shader == GL_FRAGMENT_SHADER)
     {
         uniformBlock->psRegisterIndex = registerIndex;
-        if (registerIndex - mRenderer->getReservedFragmentUniformBuffers() >= caps.maxFragmentUniformBlocks)
+        if (registerIndex - mProgramBinary->getRenderer()->getReservedFragmentUniformBuffers() >= caps.maxFragmentUniformBlocks)
         {
             infoLog.append("Fragment shader uniform block count exceed GL_MAX_FRAGMENT_UNIFORM_BLOCKS (%u)", caps.maxFragmentUniformBlocks);
             return false;
@@ -2820,32 +2818,6 @@ void ProgramBinary::sortAttributesByLayout(rx::TranslatedAttribute attributes[MA
     }
 }
 
-void ProgramBinary::initializeUniformStorage()
-{
-    // Compute total default block size
-    unsigned int vertexRegisters = 0;
-    unsigned int fragmentRegisters = 0;
-    for (size_t uniformIndex = 0; uniformIndex < mUniforms.size(); uniformIndex++)
-    {
-        const LinkedUniform &uniform = *mUniforms[uniformIndex];
-
-        if (!IsSampler(uniform.type))
-        {
-            if (uniform.isReferencedByVertexShader())
-            {
-                vertexRegisters = std::max(vertexRegisters, uniform.vsRegisterIndex + uniform.registerCount);
-            }
-            if (uniform.isReferencedByFragmentShader())
-            {
-                fragmentRegisters = std::max(fragmentRegisters, uniform.psRegisterIndex + uniform.registerCount);
-            }
-        }
-    }
-
-    mVertexUniformStorage = mRenderer->createUniformStorage(vertexRegisters * 16u);
-    mFragmentUniformStorage = mRenderer->createUniformStorage(fragmentRegisters * 16u);
-}
-
 void ProgramBinary::reset()
 {
     mVertexHLSL.clear();
@@ -2881,8 +2853,8 @@ void ProgramBinary::reset()
     SafeDeleteContainer(mUniformBlocks);
     mUniformIndex.clear();
     mOutputVariables.clear();
-    SafeDelete(mVertexUniformStorage);
-    SafeDelete(mFragmentUniformStorage);
+
+    mProgramBinary->reset();
 
     mValidated = false;
 }

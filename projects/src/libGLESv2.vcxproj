@@ -261,11 +261,13 @@
     <ClInclude Include="..\..\src\libGLESv2\renderer\generatemip.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\RenderTarget.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\vertexconversion.h"/>
+    <ClInclude Include="..\..\src\libGLESv2\renderer\ProgramBinaryImpl.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\DynamicHLSL.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\IndexBuffer.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\HLSLCompiler.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\ImageD3D.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\MemoryBuffer.h"/>
+    <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\ProgramBinaryD3D.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\TextureD3D.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\TextureStorage.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\IndexDataManager.h"/>
@@ -432,6 +434,7 @@
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\HLSLCompiler.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\DynamicHLSL.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\ShaderD3D.cpp"/>
+    <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\ProgramBinaryD3D.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\BufferD3D.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\IndexBuffer.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\VertexBuffer.cpp"/>

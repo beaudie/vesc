@@ -42,6 +42,7 @@ class ShaderExecutable;
 class Renderer;
 struct TranslatedAttribute;
 class UniformStorage;
+class ProgramBinaryImpl;
 }
 
 namespace gl
@@ -89,8 +90,11 @@ struct LinkedVarying
 class ProgramBinary : public RefCountObject
 {
   public:
-    explicit ProgramBinary(rx::Renderer *renderer);
+    explicit ProgramBinary(rx::ProgramBinaryImpl *impl);
     ~ProgramBinary();
+
+    rx::ProgramBinaryImpl *getImplementation() { return mProgramBinary; }
+    const rx::ProgramBinaryImpl *getImplementation() const { return mProgramBinary; }
 
     rx::ShaderExecutable *getPixelExecutableForFramebuffer(const Framebuffer *fbo);
     rx::ShaderExecutable *getPixelExecutableForOutputLayout(const std::vector<GLenum> &outputLayout);
@@ -184,8 +188,6 @@ class ProgramBinary : public RefCountObject
     void sortAttributesByLayout(rx::TranslatedAttribute attributes[MAX_VERTEX_ATTRIBS], int sortedSemanticIndices[MAX_VERTEX_ATTRIBS]) const;
 
     const std::vector<LinkedUniform*> &getUniforms() const { return mUniforms; }
-    const rx::UniformStorage &getVertexUniformStorage() const { return *mVertexUniformStorage; }
-    const rx::UniformStorage &getFragmentUniformStorage() const { return *mFragmentUniformStorage; }
 
   private:
     DISALLOW_COPY_AND_ASSIGN(ProgramBinary);
@@ -234,7 +236,6 @@ class ProgramBinary : public RefCountObject
     bool defineUniformBlock(InfoLog &infoLog, const Shader &shader, const sh::InterfaceBlock &interfaceBlock, const Caps &caps);
     bool assignUniformBlockRegister(InfoLog &infoLog, UniformBlock *uniformBlock, GLenum shader, unsigned int registerIndex, const Caps &caps);
     void defineOutputVariables(Shader *fragmentShader);
-    void initializeUniformStorage();
 
     template <typename T>
     void setUniform(GLint location, GLsizei count, const T* v, GLenum targetUniformType);
@@ -282,8 +283,7 @@ class ProgramBinary : public RefCountObject
         rx::ShaderExecutable *mShaderExecutable;
     };
 
-    rx::Renderer *const mRenderer;
-    rx::DynamicHLSL *mDynamicHLSL;
+    rx::ProgramBinaryImpl *mProgramBinary;
 
     std::string mVertexHLSL;
     rx::D3DWorkaroundType mVertexWorkarounds;
