@@ -273,6 +273,9 @@
     <ClInclude Include="..\..\src\libGLESv2\renderer\QueryImpl.h">
       <Filter>src\libGLESv2\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\libGLESv2\renderer\ProgramImpl.h">
+      <Filter>src\libGLESv2\renderer</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\libGLESv2\renderer\loadimage.h">
       <Filter>src\libGLESv2\renderer</Filter>
     </ClInclude>

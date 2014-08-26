@@ -246,6 +246,7 @@
     <ClInclude Include="..\..\src\libGLESv2\renderer\imageformats.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\ShaderExecutable.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\QueryImpl.h"/>
+    <ClInclude Include="..\..\src\libGLESv2\renderer\ProgramImpl.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\loadimage.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\copyimage.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\IndexRangeCache.h"/>

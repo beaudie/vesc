@@ -140,6 +140,7 @@ class Renderer11 : public Renderer
 
     // Shader creation
     virtual ShaderImpl *createShader(GLenum type);
+    virtual ProgramImpl *createProgram();
 
     // Shader operations
     virtual void releaseShaderCompiler();
