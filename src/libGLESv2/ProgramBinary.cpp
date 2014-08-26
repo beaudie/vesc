@@ -1087,6 +1087,7 @@ bool ProgramBinary::linkVaryings(InfoLog &infoLog, Shader *fragmentShader, Shade
                 }
 
                 output->registerIndex = input->registerIndex;
+                output->columnIndex = input->columnIndex;
 
                 matched = true;
                 break;
