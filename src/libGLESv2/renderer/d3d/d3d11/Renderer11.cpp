@@ -11,6 +11,7 @@
 #include "libGLESv2/FramebufferAttachment.h"
 #include "libGLESv2/ProgramBinary.h"
 #include "libGLESv2/Framebuffer.h"
+#include "libGLESv2/renderer/d3d/ProgramBinaryD3D.h"
 #include "libGLESv2/renderer/d3d/ShaderD3D.h"
 #include "libGLESv2/renderer/d3d/TextureD3D.h"
 #include "libGLESv2/renderer/d3d/TransformFeedbackD3D.h"
@@ -1392,8 +1393,9 @@ void Renderer11::applyUniforms(const gl::ProgramBinary &programBinary)
         }
     }
 
-    const UniformStorage11 *vertexUniformStorage = UniformStorage11::makeUniformStorage11(&programBinary.getVertexUniformStorage());
-    const UniformStorage11 *fragmentUniformStorage = UniformStorage11::makeUniformStorage11(&programBinary.getFragmentUniformStorage());
+    const ProgramBinaryD3D *programBinaryD3D = ProgramBinaryD3D::makeProgramBinaryD3D(programBinary.getImplementation());
+    const UniformStorage11 *vertexUniformStorage = UniformStorage11::makeUniformStorage11(&programBinaryD3D->getVertexUniformStorage());
+    const UniformStorage11 *fragmentUniformStorage = UniformStorage11::makeUniformStorage11(&programBinaryD3D->getFragmentUniformStorage());
     ASSERT(vertexUniformStorage);
     ASSERT(fragmentUniformStorage);
 
@@ -2217,6 +2219,11 @@ ShaderImpl *Renderer11::createShader(GLenum type)
         UNREACHABLE();
         return NULL;
     }
+}
+
+ProgramBinaryImpl *Renderer11::createProgramBinary()
+{
+    return new ProgramBinaryD3D(this);
 }
 
 void Renderer11::releaseShaderCompiler()

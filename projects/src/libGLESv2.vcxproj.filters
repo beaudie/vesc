@@ -333,6 +333,9 @@
     <ClInclude Include="..\..\src\libGLESv2\renderer\vertexconversion.h">
       <Filter>src\libGLESv2\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\libGLESv2\renderer\ProgramBinaryImpl.h">
+      <Filter>src\libGLESv2\renderer</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\src\libGLESv2\renderer\Renderer.cpp">
       <Filter>src\libGLESv2\renderer</Filter>
     </ClCompile>
@@ -357,6 +360,9 @@
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\ShaderD3D.cpp">
       <Filter>src\libGLESv2\renderer\d3d</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\ProgramBinaryD3D.cpp">
+      <Filter>src\libGLESv2\renderer\d3d</Filter>
+    </ClCompile>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\HLSLCompiler.h">
       <Filter>src\libGLESv2\renderer\d3d</Filter>
     </ClInclude>
@@ -367,6 +373,9 @@
       <Filter>src\libGLESv2\renderer\d3d</Filter>
     </ClCompile>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\MemoryBuffer.h">
+      <Filter>src\libGLESv2\renderer\d3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\ProgramBinaryD3D.h">
       <Filter>src\libGLESv2\renderer\d3d</Filter>
     </ClInclude>
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\IndexBuffer.cpp">
