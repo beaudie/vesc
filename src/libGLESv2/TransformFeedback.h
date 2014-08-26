@@ -15,7 +15,7 @@
 namespace rx
 {
 class TransformFeedbackImpl;
-};
+}
 
 namespace gl
 {

@@ -11,7 +11,8 @@
 
 namespace {
 
-class MockTransformFeedbackImpl : public rx::TransformFeedbackImpl {
+class MockTransformFeedbackImpl : public rx::TransformFeedbackImpl
+{
   public:
     virtual ~MockTransformFeedbackImpl() { destroy(); }
 

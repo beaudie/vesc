@@ -17,11 +17,12 @@ TransformFeedback::TransformFeedback(rx::TransformFeedbackImpl* impl, GLuint id)
       mPrimitiveMode(GL_NONE),
       mPaused(GL_FALSE)
 {
+    ASSERT(impl != NULL);
 }
 
 TransformFeedback::~TransformFeedback()
 {
-    delete mTransformFeedback;
+    SafeDelete(mTransformFeedback);
 }
 
 void TransformFeedback::start(GLenum primitiveMode)
