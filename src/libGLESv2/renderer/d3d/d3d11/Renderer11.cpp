@@ -1996,12 +1996,15 @@ bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &so
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    bool ret = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                                  destFormat, GL_NEAREST);
+    if (mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
+                           destFormat, GL_NEAREST).isError())
+    {
+        return false;
+    }
 
     storage11->invalidateSwizzleCacheLevel(level);
 
-    return ret;
+    return true;
 }
 
 bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
@@ -2057,12 +2060,15 @@ bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &so
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    bool ret = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                                  destFormat, GL_NEAREST);
+    if (mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
+                           destFormat, GL_NEAREST).isError())
+    {
+        return false;
+    }
 
     storage11->invalidateSwizzleCacheLevel(level);
 
-    return ret;
+    return true;
 }
 
 bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
@@ -2118,12 +2124,15 @@ bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &so
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    bool ret = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                                  destFormat, GL_NEAREST);
+    if (mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
+                           destFormat, GL_NEAREST).isError())
+    {
+        return false;
+    }
 
     storage11->invalidateSwizzleCacheLevel(level);
 
-    return ret;
+    return true;
 }
 
 bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
@@ -2181,12 +2190,15 @@ bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &so
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    bool ret = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                                  destFormat, GL_NEAREST);
+    if (mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
+                           destFormat, GL_NEAREST).isError())
+    {
+        return false;
+    }
 
     storage11->invalidateSwizzleCacheLevel(level);
 
-    return ret;
+    return true;
 }
 
 void Renderer11::unapplyRenderTargets()
@@ -2537,17 +2549,15 @@ bool Renderer11::getRenderTargetResource(gl::FramebufferAttachment *colorbuffer,
     return false;
 }
 
-bool Renderer11::blitRect(gl::Framebuffer *readTarget, const gl::Rectangle &readRect, gl::Framebuffer *drawTarget, const gl::Rectangle &drawRect,
-                          const gl::Rectangle *scissor, bool blitRenderTarget, bool blitDepth, bool blitStencil, GLenum filter)
+gl::Error Renderer11::blitRect(gl::Framebuffer *readTarget, const gl::Rectangle &readRect, gl::Framebuffer *drawTarget, const gl::Rectangle &drawRect,
+                               const gl::Rectangle *scissor, bool blitRenderTarget, bool blitDepth, bool blitStencil, GLenum filter)
 {
     if (blitRenderTarget)
     {
         gl::FramebufferAttachment *readBuffer = readTarget->getReadColorbuffer();
-
         if (!readBuffer)
         {
-            ERR("Failed to retrieve the read buffer from the read framebuffer.");
-            return gl::error(GL_OUT_OF_MEMORY, false);
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the read buffer from the read framebuffer.");
         }
 
         RenderTarget *readRenderTarget = readBuffer->getRenderTarget();
@@ -2560,16 +2570,16 @@ bool Renderer11::blitRect(gl::Framebuffer *readTarget, const gl::Rectangle &read
 
                 if (!drawBuffer)
                 {
-                    ERR("Failed to retrieve the draw buffer from the draw framebuffer.");
-                    return gl::error(GL_OUT_OF_MEMORY, false);
+                    return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the draw buffer from the draw framebuffer.");
                 }
 
                 RenderTarget *drawRenderTarget = drawBuffer->getRenderTarget();
 
-                if (!blitRenderbufferRect(readRect, drawRect, readRenderTarget, drawRenderTarget, filter, scissor,
-                                          blitRenderTarget, false, false))
+                gl::Error error = blitRenderbufferRect(readRect, drawRect, readRenderTarget, drawRenderTarget, filter,
+                                                       scissor, blitRenderTarget, false, false);
+                if (error.isError())
                 {
-                    return false;
+                    return error;
                 }
             }
         }
@@ -2578,34 +2588,32 @@ bool Renderer11::blitRect(gl::Framebuffer *readTarget, const gl::Rectangle &read
     if (blitDepth || blitStencil)
     {
         gl::FramebufferAttachment *readBuffer = readTarget->getDepthOrStencilbuffer();
-        gl::FramebufferAttachment *drawBuffer = drawTarget->getDepthOrStencilbuffer();
-
         if (!readBuffer)
         {
-            ERR("Failed to retrieve the read depth-stencil buffer from the read framebuffer.");
-            return gl::error(GL_OUT_OF_MEMORY, false);
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the read depth-stencil buffer from the read framebuffer.");
         }
 
+        gl::FramebufferAttachment *drawBuffer = drawTarget->getDepthOrStencilbuffer();
         if (!drawBuffer)
         {
-            ERR("Failed to retrieve the draw depth-stencil buffer from the draw framebuffer.");
-            return gl::error(GL_OUT_OF_MEMORY, false);
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the draw depth-stencil buffer from the draw framebuffer.");
         }
 
         RenderTarget *readRenderTarget = readBuffer->getRenderTarget();
         RenderTarget *drawRenderTarget = drawBuffer->getRenderTarget();
         ASSERT(readRenderTarget && drawRenderTarget);
 
-        if (!blitRenderbufferRect(readRect, drawRect, readRenderTarget, drawRenderTarget, filter, scissor,
-                                  false, blitDepth, blitStencil))
+        gl::Error error = blitRenderbufferRect(readRect, drawRect, readRenderTarget, drawRenderTarget, filter, scissor,
+                                               false, blitDepth, blitStencil);
+        if (error.isError())
         {
-            return false;
+            return error;
         }
     }
 
     invalidateFramebufferSwizzles(drawTarget);
 
-    return true;
+    return gl::Error(GL_NO_ERROR);
 }
 
 gl::Error Renderer11::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
@@ -2888,22 +2896,19 @@ void Renderer11::packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams
     mDeviceContext->Unmap(readTexture, 0);
 }
 
-bool Renderer11::blitRenderbufferRect(const gl::Rectangle &readRect, const gl::Rectangle &drawRect, RenderTarget *readRenderTarget,
-                                      RenderTarget *drawRenderTarget, GLenum filter, const gl::Rectangle *scissor,
-                                      bool colorBlit, bool depthBlit, bool stencilBlit)
+gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRect, const gl::Rectangle &drawRect, RenderTarget *readRenderTarget,
+                                           RenderTarget *drawRenderTarget, GLenum filter, const gl::Rectangle *scissor,
+                                           bool colorBlit, bool depthBlit, bool stencilBlit)
 {
     // Since blitRenderbufferRect is called for each render buffer that needs to be blitted,
     // it should never be the case that both color and depth/stencil need to be blitted at
     // at the same time.
     ASSERT(colorBlit != (depthBlit || stencilBlit));
 
-    bool result = true;
-
     RenderTarget11 *drawRenderTarget11 = RenderTarget11::makeRenderTarget11(drawRenderTarget);
     if (!drawRenderTarget)
     {
-        ERR("Failed to retrieve the draw render target from the draw framebuffer.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the internal draw render target from the draw framebuffer.");
     }
 
     ID3D11Resource *drawTexture = drawRenderTarget11->getTexture();
@@ -2914,8 +2919,7 @@ bool Renderer11::blitRenderbufferRect(const gl::Rectangle &readRect, const gl::R
     RenderTarget11 *readRenderTarget11 = RenderTarget11::makeRenderTarget11(readRenderTarget);
     if (!readRenderTarget)
     {
-        ERR("Failed to retrieve the read render target from the read framebuffer.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the internal read render target from the read framebuffer.");
     }
 
     ID3D11Resource *readTexture = NULL;
@@ -2937,7 +2941,7 @@ bool Renderer11::blitRenderbufferRect(const gl::Rectangle &readRect, const gl::R
             if (FAILED(hresult))
             {
                 SafeRelease(readTexture);
-                return gl::error(GL_OUT_OF_MEMORY, false);
+                return gl::Error(GL_OUT_OF_MEMORY, "Failed to create shader resource view to resolve multisampled framebuffer.");
             }
         }
     }
@@ -2954,8 +2958,7 @@ bool Renderer11::blitRenderbufferRect(const gl::Rectangle &readRect, const gl::R
     {
         SafeRelease(readTexture);
         SafeRelease(readSRV);
-        ERR("Failed to retrieve the read render target view from the read render target.");
-        return gl::error(GL_OUT_OF_MEMORY, false);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the internal read render target view from the read render target.");
     }
 
     gl::Extents readSize(readRenderTarget->getWidth(), readRenderTarget->getHeight(), 1);
@@ -2980,6 +2983,8 @@ bool Renderer11::blitRenderbufferRect(const gl::Rectangle &readRect, const gl::R
 
     const gl::InternalFormat &actualFormatInfo = gl::GetInternalFormatInfo(drawRenderTarget->getActualFormat());
     bool partialDSBlit = (actualFormatInfo.depthBits > 0 && depthBlit) != (actualFormatInfo.stencilBits > 0 && stencilBlit);
+
+    gl::Error result(GL_NO_ERROR);
 
     if (readRenderTarget11->getActualFormat() == drawRenderTarget->getActualFormat() &&
         !stretchRequired && !outOfBounds && !flipRequired && !partialDSBlit &&
@@ -3027,7 +3032,7 @@ bool Renderer11::blitRenderbufferRect(const gl::Rectangle &readRect, const gl::R
 
         mDeviceContext->CopySubresourceRegion(drawTexture, drawSubresource, dstX, dstY, 0,
                                               readTexture, readSubresource, pSrcBox);
-        result = true;
+        result = gl::Error(GL_NO_ERROR);
     }
     else
     {

@@ -2359,8 +2359,8 @@ size_t Context::getBoundFramebufferTextureSerials(FramebufferTextureSerialArray 
     return serialCount;
 }
 
-void Context::blitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
-                              GLbitfield mask, GLenum filter)
+Error Context::blitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
+                               GLbitfield mask, GLenum filter)
 {
     Framebuffer *readFramebuffer = mState.getReadFramebuffer();
     Framebuffer *drawFramebuffer = mState.getDrawFramebuffer();
@@ -2386,9 +2386,15 @@ void Context::blitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1
     if (blitRenderTarget || blitDepth || blitStencil)
     {
         const gl::Rectangle *scissor = mState.isScissorTestEnabled() ? &mState.getScissor() : NULL;
-        mRenderer->blitRect(readFramebuffer, srcRect, drawFramebuffer, dstRect, scissor,
-                            blitRenderTarget, blitDepth, blitStencil, filter);
+        gl::Error error = mRenderer->blitRect(readFramebuffer, srcRect, drawFramebuffer, dstRect, scissor,
+                                              blitRenderTarget, blitDepth, blitStencil, filter);
+        if (error.isError())
+        {
+            return error;
+        }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void Context::releaseShaderCompiler()
