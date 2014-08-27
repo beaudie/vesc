@@ -661,7 +661,7 @@ bool TextureD3D_2D::ensureRenderTarget()
         {
             TextureStorageInterface2D *newRenderTargetStorage = createCompleteStorage(true);
 
-            if (!mRenderer->copyToRenderTarget(newRenderTargetStorage, mTexStorage))
+            if (mRenderer->copyToRenderTarget(newRenderTargetStorage, mTexStorage).isError())
             {
                 delete newRenderTargetStorage;
                 return gl::error(GL_OUT_OF_MEMORY, false);
@@ -1116,7 +1116,7 @@ bool TextureD3D_Cube::ensureRenderTarget()
         {
             TextureStorageInterfaceCube *newRenderTargetStorage = createCompleteStorage(true);
 
-            if (!mRenderer->copyToRenderTarget(newRenderTargetStorage, mTexStorage))
+            if (mRenderer->copyToRenderTarget(newRenderTargetStorage, mTexStorage).isError())
             {
                 delete newRenderTargetStorage;
                 return gl::error(GL_OUT_OF_MEMORY, false);
@@ -1601,7 +1601,7 @@ bool TextureD3D_3D::ensureRenderTarget()
         {
             TextureStorageInterface3D *newRenderTargetStorage = createCompleteStorage(true);
 
-            if (!mRenderer->copyToRenderTarget(newRenderTargetStorage, mTexStorage))
+            if (mRenderer->copyToRenderTarget(newRenderTargetStorage, mTexStorage).isError())
             {
                 delete newRenderTargetStorage;
                 return gl::error(GL_OUT_OF_MEMORY, false);
@@ -2078,7 +2078,7 @@ bool TextureD3D_2DArray::ensureRenderTarget()
         {
             TextureStorageInterface2DArray *newRenderTargetStorage = createCompleteStorage(true);
 
-            if (!mRenderer->copyToRenderTarget(newRenderTargetStorage, mTexStorage))
+            if (mRenderer->copyToRenderTarget(newRenderTargetStorage, mTexStorage).isError())
             {
                 delete newRenderTargetStorage;
                 return gl::error(GL_OUT_OF_MEMORY, false);

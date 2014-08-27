@@ -119,10 +119,10 @@ class Renderer9 : public Renderer
     virtual int getMaxSwapInterval() const;
 
     // Pixel operations
-    virtual bool copyToRenderTarget(TextureStorageInterface2D *dest, TextureStorageInterface2D *source);
-    virtual bool copyToRenderTarget(TextureStorageInterfaceCube *dest, TextureStorageInterfaceCube *source);
-    virtual bool copyToRenderTarget(TextureStorageInterface3D *dest, TextureStorageInterface3D *source);
-    virtual bool copyToRenderTarget(TextureStorageInterface2DArray *dest, TextureStorageInterface2DArray *source);
+    virtual gl::Error copyToRenderTarget(TextureStorageInterface2D *dest, TextureStorageInterface2D *source);
+    virtual gl::Error copyToRenderTarget(TextureStorageInterfaceCube *dest, TextureStorageInterfaceCube *source);
+    virtual gl::Error copyToRenderTarget(TextureStorageInterface3D *dest, TextureStorageInterface3D *source);
+    virtual gl::Error copyToRenderTarget(TextureStorageInterface2DArray *dest, TextureStorageInterface2DArray *source);
 
     virtual gl::Error copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                 GLint xoffset, GLint yoffset, TextureStorageInterface2D *storage, GLint level);
@@ -214,7 +214,7 @@ class Renderer9 : public Renderer
 
     gl::Error getCountingIB(size_t count, StaticIndexBufferInterface **outIB);
 
-    bool copyToRenderTarget(IDirect3DSurface9 *dest, IDirect3DSurface9 *source, bool fromManaged);
+    gl::Error copyToRenderTarget(IDirect3DSurface9 *dest, IDirect3DSurface9 *source, bool fromManaged);
     gl::FramebufferAttachment *getNullColorbuffer(gl::FramebufferAttachment *depthbuffer);
 
     D3DPOOL getBufferPool(DWORD usage) const;
