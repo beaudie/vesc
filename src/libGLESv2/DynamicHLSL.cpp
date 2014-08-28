@@ -989,6 +989,7 @@ std::string DynamicHLSL::generateGeometryShaderHLSL(int registers, FragmentShade
     rx::VertexShaderD3D *vertexShaderD3D = rx::VertexShaderD3D::makeVertexShaderD3D(vertexShader->getImplementation());
     // for now we only handle point sprite emulation
     ASSERT(vertexShaderD3D->mUsesPointSize && mRenderer->getMajorShaderModel() >= 4);
+    UNUSED_ASSERTION_VARIABLE(vertexShaderD3D);
     return generatePointSpriteHLSL(registers, fragmentShader, vertexShader);
 }
 
@@ -998,6 +999,7 @@ std::string DynamicHLSL::generatePointSpriteHLSL(int registers, FragmentShader *
     rx::FragmentShaderD3D *fragmentShaderD3D = rx::FragmentShaderD3D::makeFragmentShaderD3D(fragmentShader->getImplementation());
     ASSERT(registers >= 0);
     ASSERT(vertexShaderD3D->mUsesPointSize);
+    UNUSED_ASSERTION_VARIABLE(vertexShaderD3D);
     ASSERT(mRenderer->getMajorShaderModel() >= 4);
 
     std::string geomHLSL;
