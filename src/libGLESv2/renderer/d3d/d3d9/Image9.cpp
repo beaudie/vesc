@@ -301,40 +301,42 @@ void Image9::setManagedSurface(IDirect3DSurface9 *surface)
     }
 }
 
-bool Image9::copyToStorage2D(TextureStorage *storage, int level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height)
+gl::Error Image9::copyToStorage2D(TextureStorage *storage, int level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height)
 {
     ASSERT(getSurface() != NULL);
     TextureStorage9_2D *storage9 = TextureStorage9_2D::makeTextureStorage9_2D(storage);
     return copyToSurface(storage9->getSurfaceLevel(level, true), xoffset, yoffset, width, height);
 }
 
-bool Image9::copyToStorageCube(TextureStorage *storage, int face, int level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height)
+gl::Error Image9::copyToStorageCube(TextureStorage *storage, int face, int level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height)
 {
     ASSERT(getSurface() != NULL);
     TextureStorage9_Cube *storage9 = TextureStorage9_Cube::makeTextureStorage9_Cube(storage);
     return copyToSurface(storage9->getCubeMapSurface(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, level, true), xoffset, yoffset, width, height);
 }
 
-bool Image9::copyToStorage3D(TextureStorage *storage, int level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth)
+gl::Error Image9::copyToStorage3D(TextureStorage *storage, int level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth)
 {
     // 3D textures are not supported by the D3D9 backend.
     UNREACHABLE();
-    return false;
+    return gl::Error(GL_INVALID_OPERATION);
 }
 
-bool Image9::copyToStorage2DArray(TextureStorage *storage, int level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height)
+gl::Error Image9::copyToStorage2DArray(TextureStorage *storage, int level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height)
 {
     // 2D array textures are not supported by the D3D9 backend.
     UNREACHABLE();
-    return false;
+    return gl::Error(GL_INVALID_OPERATION);
 }
 
-bool Image9::copyToSurface(IDirect3DSurface9 *destSurface, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height)
+gl::Error Image9::copyToSurface(IDirect3DSurface9 *destSurface, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height)
 {
     ASSERT(width > 0 && height > 0);
 
     if (!destSurface)
-        return false;
+    {
+        gl::Error(GL_OUT_OF_MEMORY, "Internal destination copy surface unexpectedly NULL.");
+    }
 
     IDirect3DSurface9 *sourceSurface = getSurface();
 
@@ -357,32 +359,43 @@ bool Image9::copyToSurface(IDirect3DSurface9 *destSurface, GLint xoffset, GLint 
 
             IDirect3DSurface9 *surf = 0;
             HRESULT result = device->CreateOffscreenPlainSurface(desc.Width, desc.Height, desc.Format, D3DPOOL_SYSTEMMEM, &surf, NULL);
-
-            if (SUCCEEDED(result))
+            if (FAILED(result))
             {
-                copyLockableSurfaces(surf, sourceSurface);
-                result = device->UpdateSurface(surf, &rect, destSurface, &point);
-                ASSERT(SUCCEEDED(result));
-                SafeRelease(surf);
+                SafeRelease(destSurface);
+                return gl::Error(GL_OUT_OF_MEMORY, "Internal CreateOffscreenPlainSurface call failed, result: 0x%X.", result);
+            }
+
+            copyLockableSurfaces(surf, sourceSurface);
+            result = device->UpdateSurface(surf, &rect, destSurface, &point);
+            SafeRelease(surf);
+            ASSERT(SUCCEEDED(result));
+            if (FAILED(result))
+            {
+                SafeRelease(destSurface);
+                return gl::Error(GL_OUT_OF_MEMORY, "Internal UpdateSurface call failed, result: 0x%X.", result);
             }
         }
         else
         {
             // UpdateSurface: source must be SYSTEMMEM, dest must be DEFAULT pools
             HRESULT result = device->UpdateSurface(sourceSurface, &rect, destSurface, &point);
-            UNUSED_ASSERTION_VARIABLE(result);
             ASSERT(SUCCEEDED(result));
+            if (FAILED(result))
+            {
+                SafeRelease(destSurface);
+                return gl::Error(GL_OUT_OF_MEMORY, "Internal UpdateSurface call failed, result: 0x%X.", result);
+            }
         }
     }
 
     SafeRelease(destSurface);
-    return true;
+    return gl::Error(GL_NO_ERROR);
 }
 
 // Store the pixel rectangle designated by xoffset,yoffset,width,height with pixels stored as format/type at input
 // into the target pixel rectangle.
-void Image9::loadData(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth,
-                      GLint unpackAlignment, GLenum type, const void *input)
+gl::Error Image9::loadData(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth,
+                           GLint unpackAlignment, GLenum type, const void *input)
 {
     // 3D textures are not supported by the D3D9 backend.
     ASSERT(zoffset == 0 && depth == 1);
@@ -403,7 +416,7 @@ void Image9::loadData(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width
     HRESULT result = lock(&locked, &lockRect);
     if (FAILED(result))
     {
-        return;
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to lock internal texture for loading data, result: 0x%X.", result);
     }
 
     d3dFormatInfo.loadFunction(width, height, depth,
@@ -411,6 +424,8 @@ void Image9::loadData(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width
                                reinterpret_cast<uint8_t*>(locked.pBits), locked.Pitch, 0);
 
     unlock();
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void Image9::loadCompressedData(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth,
