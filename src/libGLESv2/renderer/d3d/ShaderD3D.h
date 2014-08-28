@@ -16,6 +16,7 @@
 
 namespace rx
 {
+class DynamicHLSL;
 class Renderer;
 
 class ShaderD3D : public ShaderImpl
@@ -66,6 +67,7 @@ class ShaderD3D : public ShaderImpl
     static void *mFragmentCompiler;
     static void *mVertexCompiler;
 
+    gl::Shader *mShader;
     rx::Renderer *mRenderer;
 
     int mShaderVersion;
