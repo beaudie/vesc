@@ -11,17 +11,29 @@
 
 #include "common/angleutils.h"
 
+namespace gl
+{
+class Shader;
+}
+
 namespace rx
 {
 
 class ShaderImpl
 {
+    friend class gl::Shader;
+
   public:
     virtual ~ShaderImpl() { }
 
     virtual bool compile(const std::string &source) = 0;
     virtual const std::string &getInfoLog() const = 0;
     virtual const std::string &getTranslatedSource() const = 0;
+
+  protected:
+    ShaderImpl() : mShader(NULL) {}
+
+    gl::Shader *mShader;
 };
 
 }
