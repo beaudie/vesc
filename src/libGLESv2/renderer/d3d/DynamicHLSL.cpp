@@ -217,9 +217,11 @@ int DynamicHLSL::packVaryings(InfoLog &infoLog, VaryingPacking packing, rx::Frag
 
     std::set<std::string> packedVaryings;
 
-    for (unsigned int varyingIndex = 0; varyingIndex < fragmentShader->mVaryings.size(); varyingIndex++)
+    std::vector<gl::PackedVarying> &fragmentVaryings = fragmentShader->mShader->getVaryings();
+    std::vector<gl::PackedVarying> &vertexVaryings = vertexShader->mShader->getVaryings();
+    for (unsigned int varyingIndex = 0; varyingIndex < fragmentVaryings.size(); varyingIndex++)
     {
-        PackedVarying *varying = &fragmentShader->mVaryings[varyingIndex];
+        PackedVarying *varying = &fragmentVaryings[varyingIndex];
         if (packVarying(varying, maxVaryingVectors, packing))
         {
             packedVaryings.insert(varying->name);
@@ -237,9 +239,9 @@ int DynamicHLSL::packVaryings(InfoLog &infoLog, VaryingPacking packing, rx::Frag
         if (packedVaryings.find(transformFeedbackVarying) == packedVaryings.end())
         {
             bool found = false;
-            for (unsigned int varyingIndex = 0; varyingIndex < vertexShader->mVaryings.size(); varyingIndex++)
+            for (unsigned int varyingIndex = 0; varyingIndex < vertexVaryings.size(); varyingIndex++)
             {
-                PackedVarying *varying = &vertexShader->mVaryings[varyingIndex];
+                PackedVarying *varying = &vertexVaryings[varyingIndex];
                 if (transformFeedbackVarying == varying->name)
                 {
                     if (!packVarying(varying, maxVaryingVectors, packing))
@@ -280,9 +282,10 @@ std::string DynamicHLSL::generateVaryingHLSL(rx::VertexShaderD3D *shader) const
     std::string varyingSemantic = getVaryingSemantic(shader->mUsesPointSize);
     std::string varyingHLSL;
 
-    for (unsigned int varyingIndex = 0; varyingIndex < shader->mVaryings.size(); varyingIndex++)
+    std::vector<gl::PackedVarying> &varyings = shader->mShader->getVaryings();
+    for (unsigned int varyingIndex = 0; varyingIndex < varyings.size(); varyingIndex++)
     {
-        const PackedVarying &varying = shader->mVaryings[varyingIndex];
+        const PackedVarying &varying = varyings[varyingIndex];
         if (varying.registerAssigned())
         {
             GLenum transposedType = TransposeMatrixType(varying.type);
@@ -607,7 +610,7 @@ void DynamicHLSL::storeUserLinkedVaryings(const rx::VertexShaderD3D *vertexShade
                                           std::vector<LinkedVarying> *linkedVaryings) const
 {
     const std::string &varyingSemantic = getVaryingSemantic(vertexShader->mUsesPointSize);
-    const std::vector<PackedVarying> &varyings = vertexShader->mVaryings;
+    const std::vector<PackedVarying> &varyings = vertexShader->mShader->getVaryings();
 
     for (unsigned int varyingIndex = 0; varyingIndex < varyings.size(); varyingIndex++)
     {
@@ -720,9 +723,10 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
         vertexHLSL += "    output.gl_FragCoord = gl_Position;\n";
     }
 
-    for (unsigned int vertVaryingIndex = 0; vertVaryingIndex < vertexShader->mVaryings.size(); vertVaryingIndex++)
+    const std::vector<PackedVarying> &vertexVaryings = vertexShader->mShader->getVaryings();
+    for (unsigned int vertVaryingIndex = 0; vertVaryingIndex < vertexVaryings.size(); vertVaryingIndex++)
     {
-        const PackedVarying &varying = vertexShader->mVaryings[vertVaryingIndex];
+        const PackedVarying &varying = vertexVaryings[vertVaryingIndex];
         if (varying.registerAssigned())
         {
             for (unsigned int elementIndex = 0; elementIndex < varying.elementCount(); elementIndex++)
@@ -810,7 +814,7 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
     {
         defineOutputVariables(fragmentShader, programOutputVars);
 
-        const std::vector<sh::Attribute> &shaderOutputVars = fragmentShader->getOutputVariables();
+        const std::vector<sh::Attribute> &shaderOutputVars = fragmentShader->mShader->getActiveOutputVariables();
         for (auto locationIt = programOutputVars->begin(); locationIt != programOutputVars->end(); locationIt++)
         {
             const VariableLocation &outputLocation = locationIt->second;
@@ -894,9 +898,10 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
         }
     }
 
-    for (unsigned int varyingIndex = 0; varyingIndex < fragmentShader->mVaryings.size(); varyingIndex++)
+    const std::vector<PackedVarying> &fragmentVaryings = fragmentShader->mShader->getVaryings();
+    for (unsigned int varyingIndex = 0; varyingIndex < fragmentVaryings.size(); varyingIndex++)
     {
-        const PackedVarying &varying = fragmentShader->mVaryings[varyingIndex];
+        const PackedVarying &varying = fragmentVaryings[varyingIndex];
         if (varying.registerAssigned())
         {
             for (unsigned int elementIndex = 0; elementIndex < varying.elementCount(); elementIndex++)
@@ -950,7 +955,7 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
 
 void DynamicHLSL::defineOutputVariables(rx::FragmentShaderD3D *fragmentShader, std::map<int, VariableLocation> *programOutputVars) const
 {
-    const std::vector<sh::Attribute> &shaderOutputVars = fragmentShader->getOutputVariables();
+    const std::vector<sh::Attribute> &shaderOutputVars = fragmentShader->mShader->getActiveOutputVariables();
 
     for (unsigned int outputVariableIndex = 0; outputVariableIndex < shaderOutputVars.size(); outputVariableIndex++)
     {

@@ -32,6 +32,8 @@ Shader::Shader(ResourceManager *manager, rx::ShaderImpl *impl, GLenum type, GLui
       mDeleteStatus(false),
       mCompiled(false)
 {
+    ASSERT(impl);
+    impl->mShader = this;
 }
 
 Shader::~Shader()

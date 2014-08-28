@@ -80,6 +80,18 @@ class Shader
     bool isFlaggedForDeletion() const;
     void flagForDeletion();
 
+    const std::vector<gl::PackedVarying> &getVaryings() const { return mVaryings; }
+    const std::vector<sh::Uniform> &getUniforms() const { return mActiveUniforms; }
+    const std::vector<sh::InterfaceBlock> &getInterfaceBlocks() const  { return mActiveInterfaceBlocks; }
+    const std::vector<sh::Attribute> &getActiveAttributes() const { return mActiveAttributes; }
+    const std::vector<sh::Attribute> &getActiveOutputVariables() const { return mActiveOutputVariables; }
+
+    std::vector<gl::PackedVarying> &getVaryings() { return mVaryings; }
+    std::vector<sh::Uniform> &getUniforms() { return mActiveUniforms; }
+    std::vector<sh::InterfaceBlock> &getInterfaceBlocks() { return mActiveInterfaceBlocks; }
+    std::vector<sh::Attribute> &getActiveAttributes() { return mActiveAttributes; }
+    std::vector<sh::Attribute> &getActiveOutputVariables() { return mActiveOutputVariables; }
+
   private:
     DISALLOW_COPY_AND_ASSIGN(Shader);
 
@@ -94,6 +106,12 @@ class Shader
     bool mCompiled;             // Indicates if this shader has been successfully compiled
 
     ResourceManager *mResourceManager;
+
+    std::vector<gl::PackedVarying> mVaryings;
+    std::vector<sh::Uniform> mActiveUniforms;
+    std::vector<sh::InterfaceBlock> mActiveInterfaceBlocks;
+    std::vector<sh::Attribute> mActiveAttributes;
+    std::vector<sh::Attribute> mActiveOutputVariables;
 };
 
 }
