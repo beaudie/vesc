@@ -90,12 +90,12 @@ GLenum TextureD3D::getBaseLevelInternalFormat() const
     return (baseImage ? baseImage->getInternalFormat() : GL_NONE);
 }
 
-void TextureD3D::setImage(const gl::PixelUnpackState &unpack, GLenum type, const void *pixels, Image *image)
+gl::Error TextureD3D::setImage(const gl::PixelUnpackState &unpack, GLenum type, const void *pixels, Image *image)
 {
     // No-op
     if (image->getWidth() == 0 || image->getHeight() == 0 || image->getDepth() == 0)
     {
-        return;
+        return gl::Error(GL_NO_ERROR);
     }
 
     // We no longer need the "GLenum format" parameter to TexImage to determine what data format "pixels" contains.
@@ -115,13 +115,20 @@ void TextureD3D::setImage(const gl::PixelUnpackState &unpack, GLenum type, const
 
     if (pixelData != NULL)
     {
-        image->loadData(0, 0, 0, image->getWidth(), image->getHeight(), image->getDepth(), unpack.alignment, type, pixelData);
+        gl::Error error = image->loadData(0, 0, 0, image->getWidth(), image->getHeight(), image->getDepth(), unpack.alignment, type, pixelData);
+        if (error.isError())
+        {
+            return error;
+        }
+
         mDirtyImages = true;
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
-bool TextureD3D::subImage(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth,
-                          GLenum format, GLenum type, const gl::PixelUnpackState &unpack, const void *pixels, const gl::ImageIndex &index)
+gl::Error TextureD3D::subImage(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth,
+                               GLenum format, GLenum type, const gl::PixelUnpackState &unpack, const void *pixels, const gl::ImageIndex &index)
 {
     const void *pixelData = pixels;
 
@@ -141,11 +148,17 @@ bool TextureD3D::subImage(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei w
         Image *image = getImage(index);
         ASSERT(image);
 
-        image->loadData(xoffset, yoffset, zoffset, width, height, depth, unpack.alignment, type, pixelData);
+        gl::Error error = image->loadData(xoffset, yoffset, zoffset, width, height, depth, unpack.alignment,
+                                          type, pixelData);
+        if (error.isError())
+        {
+            return error;
+        }
+
         mDirtyImages = true;
     }
 
-    return true;
+    return gl::Error(GL_NO_ERROR);
 }
 
 void TextureD3D::setCompressedImage(GLsizei imageSize, const void *pixels, Image *image)
@@ -174,12 +187,12 @@ bool TextureD3D::isFastUnpackable(const gl::PixelUnpackState &unpack, GLenum siz
     return unpack.pixelBuffer.id() != 0 && mRenderer->supportsFastCopyBufferToTexture(sizedInternalFormat);
 }
 
-bool TextureD3D::fastUnpackPixels(const gl::PixelUnpackState &unpack, const void *pixels, const gl::Box &destArea,
-                               GLenum sizedInternalFormat, GLenum type, RenderTarget *destRenderTarget)
+gl::Error TextureD3D::fastUnpackPixels(const gl::PixelUnpackState &unpack, const void *pixels, const gl::Box &destArea,
+                                       GLenum sizedInternalFormat, GLenum type, RenderTarget *destRenderTarget)
 {
     if (destArea.width <= 0 && destArea.height <= 0 && destArea.depth <= 0)
     {
-        return true;
+        return gl::Error(GL_NO_ERROR);
     }
 
     // In order to perform the fast copy through the shader, we must have the right format, and be able
@@ -188,7 +201,7 @@ bool TextureD3D::fastUnpackPixels(const gl::PixelUnpackState &unpack, const void
 
     unsigned int offset = reinterpret_cast<unsigned int>(pixels);
 
-    return !mRenderer->fastCopyBufferToTexture(unpack, offset, destRenderTarget, sizedInternalFormat, type, destArea).isError();
+    return mRenderer->fastCopyBufferToTexture(unpack, offset, destRenderTarget, sizedInternalFormat, type, destArea);
 }
 
 GLint TextureD3D::creationLevels(GLsizei width, GLsizei height, GLsizei depth) const
@@ -292,7 +305,9 @@ bool TextureD3D_2D::isDepth(GLint level) const
     return gl::GetInternalFormatInfo(getInternalFormat(level)).depthBits > 0;
 }
 
-void TextureD3D_2D::setImage(GLenum target, GLint level, GLsizei width, GLsizei height, GLsizei depth, GLenum internalFormat, GLenum format, GLenum type, const gl::PixelUnpackState &unpack, const void *pixels)
+gl::Error TextureD3D_2D::setImage(GLenum target, GLint level, GLsizei width, GLsizei height, GLsizei depth,
+                                  GLenum internalFormat, GLenum format, GLenum type, const gl::PixelUnpackState &unpack,
+                                  const void *pixels)
 {
     ASSERT(target == GL_TEXTURE_2D && depth == 1);
 
@@ -311,8 +326,14 @@ void TextureD3D_2D::setImage(GLenum target, GLint level, GLsizei width, GLsizei 
         RenderTarget *destRenderTarget = getRenderTarget(index);
         gl::Box destArea(0, 0, 0, getWidth(level), getHeight(level), 1);
 
-        if (destRenderTarget && fastUnpackPixels(unpack, pixels, destArea, sizedInternalFormat, type, destRenderTarget))
+        if (destRenderTarget)
         {
+            gl::Error error = fastUnpackPixels(unpack, pixels, destArea, sizedInternalFormat, type, destRenderTarget);
+            if (error.isError())
+            {
+                return error;
+            }
+
             // Ensure we don't overwrite our newly initialized data
             mImageArray[level]->markClean();
 
@@ -322,8 +343,14 @@ void TextureD3D_2D::setImage(GLenum target, GLint level, GLsizei width, GLsizei 
 
     if (!fastUnpacked)
     {
-        TextureD3D::setImage(unpack, type, pixels, mImageArray[level]);
+        gl::Error error = TextureD3D::setImage(unpack, type, pixels, mImageArray[level]);
+        if (error.isError())
+        {
+            return error;
+        }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void TextureD3D_2D::setCompressedImage(GLenum target, GLint level, GLenum format, GLsizei width, GLsizei height, GLsizei depth, GLsizei imageSize, const void *pixels)
@@ -336,7 +363,9 @@ void TextureD3D_2D::setCompressedImage(GLenum target, GLint level, GLenum format
     TextureD3D::setCompressedImage(imageSize, pixels, mImageArray[level]);
 }
 
-void TextureD3D_2D::subImage(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const gl::PixelUnpackState &unpack, const void *pixels)
+gl::Error TextureD3D_2D::subImage(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset,
+                                  GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type,
+                                  const gl::PixelUnpackState &unpack, const void *pixels)
 {
     ASSERT(target == GL_TEXTURE_2D && depth == 1 && zoffset == 0);
 
@@ -348,8 +377,14 @@ void TextureD3D_2D::subImage(GLenum target, GLint level, GLint xoffset, GLint yo
         RenderTarget *renderTarget = getRenderTarget(index);
         gl::Box destArea(xoffset, yoffset, 0, width, height, 1);
 
-        if (renderTarget && fastUnpackPixels(unpack, pixels, destArea, getInternalFormat(level), type, renderTarget))
+        if (renderTarget)
         {
+            gl::Error error = fastUnpackPixels(unpack, pixels, destArea, getInternalFormat(level), type, renderTarget);
+            if (error.isError())
+            {
+                return error;
+            }
+
             // Ensure we don't overwrite our newly initialized data
             mImageArray[level]->markClean();
 
@@ -357,10 +392,24 @@ void TextureD3D_2D::subImage(GLenum target, GLint level, GLint xoffset, GLint yo
         }
     }
 
-    if (!fastUnpacked && TextureD3D::subImage(xoffset, yoffset, 0, width, height, 1, format, type, unpack, pixels, index))
+    if (!fastUnpacked)
     {
-        commitRect(level, xoffset, yoffset, width, height);
+        gl::ImageIndex index = gl::ImageIndex::Make2D(level);
+        gl::Error error = TextureD3D::subImage(xoffset, yoffset, 0, width, height, 1, format, type, unpack,
+                                               pixels, index);
+        if (error.isError())
+        {
+            return error;
+        }
+
+        error = commitRect(level, xoffset, yoffset, width, height);
+        if (error.isError())
+        {
+            return error;
+        }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void TextureD3D_2D::subImageCompressed(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const void *pixels)
@@ -724,16 +773,21 @@ void TextureD3D_2D::redefineImage(GLint level, GLenum internalformat, GLsizei wi
     }
 }
 
-void TextureD3D_2D::commitRect(GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height)
+gl::Error TextureD3D_2D::commitRect(GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height)
 {
     if (isValidLevel(level))
     {
         ImageD3D *image = mImageArray[level];
-        if (image->copyToStorage(mTexStorage, level, xoffset, yoffset, width, height))
+        gl::Error error = image->copyToStorage(mTexStorage, level, xoffset, yoffset, width, height);
+        if (error.isError())
         {
-            image->markClean();
+            return error;
         }
+
+        image->markClean();
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 
@@ -799,7 +853,9 @@ bool TextureD3D_Cube::isDepth(GLint level, GLint layer) const
     return gl::GetInternalFormatInfo(getInternalFormat(level, layer)).depthBits > 0;
 }
 
-void TextureD3D_Cube::setImage(GLenum target, GLint level, GLsizei width, GLsizei height, GLsizei depth, GLenum internalFormat, GLenum format, GLenum type, const gl::PixelUnpackState &unpack, const void *pixels)
+gl::Error TextureD3D_Cube::setImage(GLenum target, GLint level, GLsizei width, GLsizei height, GLsizei depth,
+                                    GLenum internalFormat, GLenum format, GLenum type, const gl::PixelUnpackState &unpack,
+                                    const void *pixels)
 {
     ASSERT(depth == 1);
 
@@ -808,7 +864,7 @@ void TextureD3D_Cube::setImage(GLenum target, GLint level, GLsizei width, GLsize
 
     redefineImage(faceIndex, level, sizedInternalFormat, width, height);
 
-    TextureD3D::setImage(unpack, type, pixels, mImageArray[faceIndex][level]);
+    return TextureD3D::setImage(unpack, type, pixels, mImageArray[faceIndex][level]);
 }
 
 void TextureD3D_Cube::setCompressedImage(GLenum target, GLint level, GLenum format, GLsizei width, GLsizei height, GLsizei depth, GLsizei imageSize, const void *pixels)
@@ -823,17 +879,29 @@ void TextureD3D_Cube::setCompressedImage(GLenum target, GLint level, GLenum form
     TextureD3D::setCompressedImage(imageSize, pixels, mImageArray[faceIndex][level]);
 }
 
-void TextureD3D_Cube::subImage(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const gl::PixelUnpackState &unpack, const void *pixels)
+gl::Error TextureD3D_Cube::subImage(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset,
+                                    GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type,
+                                    const gl::PixelUnpackState &unpack, const void *pixels)
 {
     ASSERT(depth == 1 && zoffset == 0);
 
     int faceIndex = gl::TextureCubeMap::targetToLayerIndex(target);
 
     gl::ImageIndex index = gl::ImageIndex::MakeCube(target, level);
-    if (TextureD3D::subImage(xoffset, yoffset, 0, width, height, 1, format, type, unpack, pixels, index))
+    gl::Error error = TextureD3D::subImage(xoffset, yoffset, 0, width, height, 1, format, type, unpack, pixels,
+                                           index);
+    if (error.isError())
     {
-        commitRect(faceIndex, level, xoffset, yoffset, width, height);
+        return error;
     }
+
+    error = commitRect(faceIndex, level, xoffset, yoffset, width, height);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void TextureD3D_Cube::subImageCompressed(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const void *pixels)
@@ -1230,14 +1298,21 @@ void TextureD3D_Cube::redefineImage(int faceIndex, GLint level, GLenum internalf
     }
 }
 
-void TextureD3D_Cube::commitRect(int faceIndex, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height)
+gl::Error TextureD3D_Cube::commitRect(int faceIndex, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height)
 {
     if (isValidFaceLevel(faceIndex, level))
     {
         ImageD3D *image = mImageArray[faceIndex][level];
-        if (image->copyToStorage(mTexStorage, faceIndex, level, xoffset, yoffset, width, height))
-            image->markClean();
+        gl::Error error = image->copyToStorage(mTexStorage, faceIndex, level, xoffset, yoffset, width, height);
+        if (error.isError())
+        {
+            return error;
+        }
+
+        image->markClean();
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 
@@ -1322,7 +1397,9 @@ bool TextureD3D_3D::isDepth(GLint level) const
     return gl::GetInternalFormatInfo(getInternalFormat(level)).depthBits > 0;
 }
 
-void TextureD3D_3D::setImage(GLenum target, GLint level, GLsizei width, GLsizei height, GLsizei depth, GLenum internalFormat, GLenum format, GLenum type, const gl::PixelUnpackState &unpack, const void *pixels)
+gl::Error TextureD3D_3D::setImage(GLenum target, GLint level, GLsizei width, GLsizei height, GLsizei depth,
+                                  GLenum internalFormat, GLenum format, GLenum type, const gl::PixelUnpackState &unpack,
+                                  const void *pixels)
 {
     ASSERT(target == GL_TEXTURE_3D);
     GLenum sizedInternalFormat = gl::GetSizedInternalFormat(internalFormat, type);
@@ -1339,8 +1416,14 @@ void TextureD3D_3D::setImage(GLenum target, GLint level, GLsizei width, GLsizei 
         RenderTarget *destRenderTarget = getRenderTarget(index);
         gl::Box destArea(0, 0, 0, getWidth(level), getHeight(level), getDepth(level));
 
-        if (destRenderTarget && fastUnpackPixels(unpack, pixels, destArea, sizedInternalFormat, type, destRenderTarget))
+        if (destRenderTarget)
         {
+            gl::Error error = fastUnpackPixels(unpack, pixels, destArea, sizedInternalFormat, type, destRenderTarget);
+            if (error.isError())
+            {
+                return error;
+            }
+
             // Ensure we don't overwrite our newly initialized data
             mImageArray[level]->markClean();
 
@@ -1350,8 +1433,14 @@ void TextureD3D_3D::setImage(GLenum target, GLint level, GLsizei width, GLsizei 
 
     if (!fastUnpacked)
     {
-        TextureD3D::setImage(unpack, type, pixels, mImageArray[level]);
+        gl::Error error = TextureD3D::setImage(unpack, type, pixels, mImageArray[level]);
+        if (error.isError())
+        {
+            return error;
+        }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void TextureD3D_3D::setCompressedImage(GLenum target, GLint level, GLenum format, GLsizei width, GLsizei height, GLsizei depth, GLsizei imageSize, const void *pixels)
@@ -1364,7 +1453,9 @@ void TextureD3D_3D::setCompressedImage(GLenum target, GLint level, GLenum format
     TextureD3D::setCompressedImage(imageSize, pixels, mImageArray[level]);
 }
 
-void TextureD3D_3D::subImage(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const gl::PixelUnpackState &unpack, const void *pixels)
+gl::Error TextureD3D_3D::subImage(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset,
+                                  GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type,
+                                  const gl::PixelUnpackState &unpack, const void *pixels)
 {
     ASSERT(target == GL_TEXTURE_3D);
 
@@ -1378,8 +1469,14 @@ void TextureD3D_3D::subImage(GLenum target, GLint level, GLint xoffset, GLint yo
         RenderTarget *destRenderTarget = getRenderTarget(index);
         gl::Box destArea(xoffset, yoffset, zoffset, width, height, depth);
 
-        if (destRenderTarget && fastUnpackPixels(unpack, pixels, destArea, getInternalFormat(level), type, destRenderTarget))
+        if (destRenderTarget)
         {
+            gl::Error error = fastUnpackPixels(unpack, pixels, destArea, getInternalFormat(level), type, destRenderTarget);
+            if (error.isError())
+            {
+                return error;
+            }
+
             // Ensure we don't overwrite our newly initialized data
             mImageArray[level]->markClean();
 
@@ -1387,10 +1484,24 @@ void TextureD3D_3D::subImage(GLenum target, GLint level, GLint xoffset, GLint yo
         }
     }
 
-    if (!fastUnpacked && TextureD3D::subImage(xoffset, yoffset, zoffset, width, height, depth, format, type, unpack, pixels, index))
+    if (!fastUnpacked)
     {
-        commitRect(level, xoffset, yoffset, zoffset, width, height, depth);
+        gl::ImageIndex index = gl::ImageIndex::Make3D(level);
+        gl::Error error = TextureD3D::subImage(xoffset, yoffset, zoffset, width, height, depth, format, type, unpack,
+                                               pixels, index);
+        if (error.isError())
+        {
+            return error;
+        }
+
+        error = commitRect(level, xoffset, yoffset, zoffset, width, height, depth);
+        if (error.isError())
+        {
+            return error;
+        }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void TextureD3D_3D::subImageCompressed(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const void *pixels)
@@ -1719,16 +1830,21 @@ void TextureD3D_3D::redefineImage(GLint level, GLenum internalformat, GLsizei wi
     }
 }
 
-void TextureD3D_3D::commitRect(GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth)
+gl::Error TextureD3D_3D::commitRect(GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth)
 {
     if (isValidLevel(level))
     {
         ImageD3D *image = mImageArray[level];
-        if (image->copyToStorage(mTexStorage, level, xoffset, yoffset, zoffset, width, height, depth))
+        gl::Error error = image->copyToStorage(mTexStorage, level, xoffset, yoffset, zoffset, width, height, depth);
+        if (error.isError())
         {
-            image->markClean();
+            return error;
         }
+
+        image->markClean();
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 
@@ -1798,7 +1914,9 @@ bool TextureD3D_2DArray::isDepth(GLint level) const
     return gl::GetInternalFormatInfo(getInternalFormat(level)).depthBits > 0;
 }
 
-void TextureD3D_2DArray::setImage(GLenum target, GLint level, GLsizei width, GLsizei height, GLsizei depth, GLenum internalFormat, GLenum format, GLenum type, const gl::PixelUnpackState &unpack, const void *pixels)
+gl::Error TextureD3D_2DArray::setImage(GLenum target, GLint level, GLsizei width, GLsizei height, GLsizei depth,
+                                       GLenum internalFormat, GLenum format, GLenum type, const gl::PixelUnpackState &unpack,
+                                       const void *pixels)
 {
     ASSERT(target == GL_TEXTURE_2D_ARRAY);
 
@@ -1812,8 +1930,14 @@ void TextureD3D_2DArray::setImage(GLenum target, GLint level, GLsizei width, GLs
     for (int i = 0; i < depth; i++)
     {
         const void *layerPixels = pixels ? (reinterpret_cast<const unsigned char*>(pixels) + (inputDepthPitch * i)) : NULL;
-        TextureD3D::setImage(unpack, type, layerPixels, mImageArray[level][i]);
+        gl::Error error = TextureD3D::setImage(unpack, type, layerPixels, mImageArray[level][i]);
+        if (error.isError())
+        {
+            return error;
+        }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void TextureD3D_2DArray::setCompressedImage(GLenum target, GLint level, GLenum format, GLsizei width, GLsizei height, GLsizei depth, GLsizei imageSize, const void *pixels)
@@ -1833,7 +1957,9 @@ void TextureD3D_2DArray::setCompressedImage(GLenum target, GLint level, GLenum f
     }
 }
 
-void TextureD3D_2DArray::subImage(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const gl::PixelUnpackState &unpack, const void *pixels)
+gl::Error TextureD3D_2DArray::subImage(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset,
+                                       GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type,
+                                       const gl::PixelUnpackState &unpack, const void *pixels)
 {
     ASSERT(target == GL_TEXTURE_2D_ARRAY);
 
@@ -1846,11 +1972,21 @@ void TextureD3D_2DArray::subImage(GLenum target, GLint level, GLint xoffset, GLi
         const void *layerPixels = pixels ? (reinterpret_cast<const unsigned char*>(pixels) + (inputDepthPitch * i)) : NULL;
 
         gl::ImageIndex index = gl::ImageIndex::Make2DArray(level, layer);
-        if (TextureD3D::subImage(xoffset, yoffset, zoffset, width, height, 1, format, type, unpack, layerPixels, index))
+        gl::Error error = TextureD3D::subImage(xoffset, yoffset, zoffset, width, height, 1, format, type, unpack,
+                                               layerPixels, index);
+        if (error.isError())
         {
-            commitRect(level, xoffset, yoffset, layer, width, height);
+            return error;
+        }
+
+        error = commitRect(level, xoffset, yoffset, layer, width, height);
+        if (error.isError())
+        {
+            return error;
         }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void TextureD3D_2DArray::subImageCompressed(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const void *pixels)
@@ -2233,16 +2369,21 @@ void TextureD3D_2DArray::redefineImage(GLint level, GLenum internalformat, GLsiz
     }
 }
 
-void TextureD3D_2DArray::commitRect(GLint level, GLint xoffset, GLint yoffset, GLint layerTarget, GLsizei width, GLsizei height)
+gl::Error TextureD3D_2DArray::commitRect(GLint level, GLint xoffset, GLint yoffset, GLint layerTarget, GLsizei width, GLsizei height)
 {
     if (isValidLevel(level) && layerTarget < getLayers(level))
     {
         ImageD3D *image = mImageArray[level][layerTarget];
-        if (image->copyToStorage(mTexStorage, level, xoffset, yoffset, layerTarget, width, height))
+        gl::Error error = image->copyToStorage(mTexStorage, level, xoffset, yoffset, layerTarget, width, height);
+        if (error.isError())
         {
-            image->markClean();
+            return error;
         }
+
+        image->markClean();
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 }
