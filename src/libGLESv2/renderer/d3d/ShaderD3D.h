@@ -39,6 +39,7 @@ class ShaderD3D : public ShaderImpl
     void resetVaryingsRegisterAssignment();
     unsigned int getUniformRegister(const std::string &uniformName) const;
     unsigned int getInterfaceBlockRegister(const std::string &blockName) const;
+    int getSemanticIndex(const std::string &attributeName) const;
 
     rx::D3DWorkaroundType getD3DWorkarounds() const;
     int getShaderVersion() const { return mShaderVersion; }
@@ -48,9 +49,17 @@ class ShaderD3D : public ShaderImpl
     static void releaseCompiler();
     static ShShaderOutput getCompilerOutputType(GLenum shader);
 
-  protected:
+    virtual bool compile(const std::string &source);
+
+  private:
+    DISALLOW_COPY_AND_ASSIGN(ShaderD3D);
+
     void compileToHLSL(void *compiler, const std::string &source);
     void parseVaryings(void *compiler);
+
+    void initializeCompiler();
+    void parseAttributes(void *compiler);
+    void *getCompiler();
 
     static bool compareVarying(const gl::PackedVarying &x, const gl::PackedVarying &y);
 
@@ -73,53 +82,10 @@ class ShaderD3D : public ShaderImpl
     bool mUsesDiscardRewriting;
     bool mUsesNestedBreak;
 
-  private:
-    DISALLOW_COPY_AND_ASSIGN(ShaderD3D);
-
-    void initializeCompiler();
-
     std::string mHlsl;
     std::string mInfoLog;
     std::map<std::string, unsigned int> mUniformRegisterMap;
     std::map<std::string, unsigned int> mInterfaceBlockRegisterMap;
-};
-
-class VertexShaderD3D : public ShaderD3D
-{
-    friend class DynamicHLSL;
-
-  public:
-    VertexShaderD3D(rx::Renderer *renderer);
-    virtual ~VertexShaderD3D();
-
-    static VertexShaderD3D *makeVertexShaderD3D(ShaderImpl *impl);
-    static const VertexShaderD3D *makeVertexShaderD3D(const ShaderImpl *impl);
-
-    virtual bool compile(const std::string &source);
-
-    int getSemanticIndex(const std::string &attributeName) const;
-
-  private:
-    DISALLOW_COPY_AND_ASSIGN(VertexShaderD3D);
-
-    void parseAttributes();
-};
-
-class FragmentShaderD3D : public ShaderD3D
-{
-    friend class DynamicHLSL;
-
-  public:
-    FragmentShaderD3D(rx::Renderer *renderer);
-    virtual ~FragmentShaderD3D();
-
-    static FragmentShaderD3D *makeFragmentShaderD3D(ShaderImpl *impl);
-    static const FragmentShaderD3D *makeFragmentShaderD3D(const ShaderImpl *impl);
-
-    virtual bool compile(const std::string &source);
-
-  private:
-    DISALLOW_COPY_AND_ASSIGN(FragmentShaderD3D);
 };
 
 }
