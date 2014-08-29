@@ -256,7 +256,9 @@ rx::ShaderExecutable *ProgramBinary::getPixelExecutableForOutputLayout(const std
 {
     for (size_t executableIndex = 0; executableIndex < mPixelExecutables.size(); executableIndex++)
     {
+#if (ANGLE_MRT_PERF_WORKAROUND == ANGLE_WORKAROUND_ENABLED)
         if (mPixelExecutables[executableIndex]->matchesSignature(outputSignature))
+#endif
         {
             return mPixelExecutables[executableIndex]->shaderExecutable();
         }
