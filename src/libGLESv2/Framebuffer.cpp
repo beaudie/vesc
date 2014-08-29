@@ -69,8 +69,7 @@ FramebufferAttachment *Framebuffer::createAttachment(GLenum type, GLuint handle,
             Texture *texture = context->getTexture(handle);
             if (texture && texture->getTarget() == GL_TEXTURE_2D)
             {
-                Texture2D *tex2D = static_cast<Texture2D*>(texture);
-                return new Texture2DAttachment(tex2D, level);
+                return new TextureAttachment(texture, ImageIndex::Make2D(level));
             }
             else
             {
@@ -88,8 +87,7 @@ FramebufferAttachment *Framebuffer::createAttachment(GLenum type, GLuint handle,
             Texture *texture = context->getTexture(handle);
             if (texture && texture->getTarget() == GL_TEXTURE_CUBE_MAP)
             {
-                TextureCubeMap *texCube = static_cast<TextureCubeMap*>(texture);
-                return new TextureCubeMapAttachment(texCube, type, level);
+                return new TextureAttachment(texture, ImageIndex::MakeCube(type, level));
             }
             else
             {
@@ -102,8 +100,7 @@ FramebufferAttachment *Framebuffer::createAttachment(GLenum type, GLuint handle,
             Texture *texture = context->getTexture(handle);
             if (texture && texture->getTarget() == GL_TEXTURE_3D)
             {
-                Texture3D *tex3D = static_cast<Texture3D*>(texture);
-                return new Texture3DAttachment(tex3D, level, layer);
+                return new TextureAttachment(texture, ImageIndex::Make3D(level, layer));
             }
             else
             {
@@ -116,8 +113,7 @@ FramebufferAttachment *Framebuffer::createAttachment(GLenum type, GLuint handle,
             Texture *texture = context->getTexture(handle);
             if (texture && texture->getTarget() == GL_TEXTURE_2D_ARRAY)
             {
-                Texture2DArray *tex2DArray = static_cast<Texture2DArray*>(texture);
-                return new Texture2DArrayAttachment(tex2DArray, level, layer);
+                return new TextureAttachment(texture, ImageIndex::Make2DArray(level, layer));
             }
             else
             {
