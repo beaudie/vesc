@@ -15,4 +15,10 @@
     TypeName(const TypeName&);             \
     void operator=(const TypeName&)
 
+template <typename T, size_t N>
+inline unsigned int ArraySize(T(&)[N])
+{
+    return N;
+}
+
 #endif // UTIL_SHARED_UTILS_H
