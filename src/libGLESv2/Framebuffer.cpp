@@ -618,10 +618,12 @@ std::vector<FramebufferAttachment *> Framebuffer::getColorbuffersForRender() con
             ASSERT(drawBufferState == GL_BACK || drawBufferState == (GL_COLOR_ATTACHMENT0_EXT + colorAttachment));
             colorbuffersForRender.push_back(colorbuffer);
         }
+#if (ANGLE_MRT_PERF_WORKAROUND == ANGLE_WORKAROUND_DISABLED)
         else
         {
             colorbuffersForRender.push_back(NULL);
         }
+#endif
     }
 
     return colorbuffersForRender;

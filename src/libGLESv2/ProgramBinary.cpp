@@ -238,7 +238,8 @@ rx::ShaderExecutable *ProgramBinary::getPixelExecutableForFramebuffer(const Fram
     std::vector<GLenum> outputs(IMPLEMENTATION_MAX_DRAW_BUFFERS);
     for (size_t outputIndex = 0; outputIndex < IMPLEMENTATION_MAX_DRAW_BUFFERS; outputIndex++)
     {
-        if (fbo->getColorbuffer(outputIndex) != NULL)
+        if (fbo->getColorbuffer(outputIndex) != NULL &&
+            fbo->getDrawBufferState(outputIndex) != GL_NONE)
         {
             // Always output floats for now
             outputs[outputIndex] = GL_FLOAT;
@@ -256,7 +257,9 @@ rx::ShaderExecutable *ProgramBinary::getPixelExecutableForOutputLayout(const std
 {
     for (size_t executableIndex = 0; executableIndex < mPixelExecutables.size(); executableIndex++)
     {
+#if (ANGLE_MRT_PERF_WORKAROUND == ANGLE_WORKAROUND_ENABLED)
         if (mPixelExecutables[executableIndex]->matchesSignature(outputSignature))
+#endif
         {
             return mPixelExecutables[executableIndex]->shaderExecutable();
         }
