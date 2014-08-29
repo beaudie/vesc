@@ -409,17 +409,21 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(const std::string
 
     std::string declarationHLSL;
     std::string copyHLSL;
+
+    // Compact RTVs to have no gaps. This works around an nVidia driver bug where
+    // NULLs between non-NULL in OMSetRenderTargets would be ignored.
+    unsigned int renderTargetCount = 0;
+
     for (size_t i = 0; i < outputVariables.size(); i++)
     {
-        const PixelShaderOuputVariable& outputVariable = outputVariables[i];
+        const PixelShaderOuputVariable &outputVariable = outputVariables[i];
         ASSERT(outputLayout.size() > outputVariable.outputIndex);
 
-        // FIXME(geofflang): Work around NVIDIA driver bug by repacking buffers
-        bool outputIndexEnabled = true; // outputLayout[outputVariable.outputIndex] != GL_NONE
+        bool outputIndexEnabled = (outputLayout[outputVariable.outputIndex] != GL_NONE);
         if (outputIndexEnabled)
         {
             declarationHLSL += "    " + gl_d3d::HLSLTypeString(outputVariable.type) + " " + outputVariable.name +
-                               " : " + targetSemantic + Str(outputVariable.outputIndex) + ";\n";
+                               " : " + targetSemantic + Str(renderTargetCount++) + ";\n";
 
             copyHLSL += "    output." + outputVariable.name + " = " + outputVariable.source + ";\n";
         }
@@ -813,13 +817,17 @@ bool DynamicHLSL::generateShaderLinkHLSL(InfoLog &infoLog, int registers, const 
     {
         defineOutputVariables(fragmentShader, programOutputVars);
 
+        // Compact RTVs to have no gaps. This works around an nVidia driver bug where
+        // NULLs between non-NULL in OMSetRenderTargets would be ignored.
+        unsigned int renderTargetCount = 0;
+
         const std::vector<sh::Attribute> &shaderOutputVars = fragmentShader->getOutputVariables();
         for (auto locationIt = programOutputVars->begin(); locationIt != programOutputVars->end(); locationIt++)
         {
             const VariableLocation &outputLocation = locationIt->second;
             const sh::ShaderVariable &outputVariable = shaderOutputVars[outputLocation.index];
             const std::string &variableName = "out_" + outputLocation.name;
-            const std::string &elementString = (outputLocation.element == GL_INVALID_INDEX ? "" : Str(outputLocation.element));
+            const std::string &elementString = (outputLocation.element == GL_INVALID_INDEX ? "" : Str(renderTargetCount++));
 
             PixelShaderOuputVariable outputKeyVariable;
             outputKeyVariable.type = outputVariable.type;

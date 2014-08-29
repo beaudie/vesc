@@ -793,6 +793,10 @@ bool Renderer11::applyRenderTarget(gl::Framebuffer *framebuffer)
     ID3D11RenderTargetView* framebufferRTVs[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS] = {NULL};
     bool missingColorRenderTarget = true;
 
+    // Compact RTVs to have no gaps. This works around an nVidia driver bug where
+    // NULLs between non-NULL in OMSetRenderTargets would be ignored.
+    unsigned int renderTargetIndex = 0;
+
     for (unsigned int colorAttachment = 0; colorAttachment < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; colorAttachment++)
     {
         const GLenum drawBufferState = framebuffer->getDrawBufferState(colorAttachment);
@@ -811,7 +815,7 @@ bool Renderer11::applyRenderTarget(gl::Framebuffer *framebuffer)
                 return false;
             }
 
-            renderTargetSerials[colorAttachment] = colorbuffer->getSerial();
+            renderTargetSerials[renderTargetIndex] = colorbuffer->getSerial();
 
             // Extract the render target dimensions and view
             RenderTarget11 *renderTarget = RenderTarget11::makeRenderTarget11(colorbuffer->getRenderTarget());
@@ -821,8 +825,8 @@ bool Renderer11::applyRenderTarget(gl::Framebuffer *framebuffer)
                 return false;
             }
 
-            framebufferRTVs[colorAttachment] = renderTarget->getRenderTargetView();
-            if (!framebufferRTVs[colorAttachment])
+            framebufferRTVs[renderTargetIndex] = renderTarget->getRenderTargetView();
+            if (!framebufferRTVs[renderTargetIndex])
             {
                 ERR("render target view pointer unexpectedly null.");
                 return false;
@@ -835,6 +839,8 @@ bool Renderer11::applyRenderTarget(gl::Framebuffer *framebuffer)
                 renderTargetFormat = colorbuffer->getActualFormat();
                 missingColorRenderTarget = false;
             }
+
+            renderTargetIndex++;
 
             // TODO: Detect if this color buffer is already bound as a texture and unbind it first to prevent
             //       D3D11 warnings.
