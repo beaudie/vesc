@@ -91,27 +91,34 @@ ID3D11BlendState *RenderStateCache::getBlendState(const gl::Framebuffer *framebu
 
     BlendStateKey key = { 0 };
     key.blendState = blendState;
-    for (unsigned int i = 0; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; i++)
+
+    // Compact RTVs to have no gaps. This works around an nVidia driver bug where
+    // NULLs between non-NULL in OMSetRenderTargets would be ignored.
+    unsigned int renderTargetCount = 0;
+
+    for (unsigned int i = 0; i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i)
     {
-        const gl::FramebufferAttachment *attachment = framebuffer->getColorbuffer(i);
+        key.rtChannels[i][0] = false;
+        key.rtChannels[i][1] = false;
+        key.rtChannels[i][2] = false;
+        key.rtChannels[i][3] = false;
+    }
+
+    for (unsigned int colorBufferIndex = 0; colorBufferIndex < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; ++colorBufferIndex)
+    {
+        const gl::FramebufferAttachment *attachment = framebuffer->getColorbuffer(colorBufferIndex);
         if (attachment)
         {
-            if (i > 0)
+            if (renderTargetCount > 0)
             {
                 mrt = true;
             }
 
-            key.rtChannels[i][0] = attachment->getRedSize()   > 0;
-            key.rtChannels[i][1] = attachment->getGreenSize() > 0;
-            key.rtChannels[i][2] = attachment->getBlueSize()  > 0;
-            key.rtChannels[i][3] = attachment->getAlphaSize() > 0;
-        }
-        else
-        {
-            key.rtChannels[i][0] = false;
-            key.rtChannels[i][1] = false;
-            key.rtChannels[i][2] = false;
-            key.rtChannels[i][3] = false;
+            key.rtChannels[renderTargetCount][0] = attachment->getRedSize()   > 0;
+            key.rtChannels[renderTargetCount][1] = attachment->getGreenSize() > 0;
+            key.rtChannels[renderTargetCount][2] = attachment->getBlueSize()  > 0;
+            key.rtChannels[renderTargetCount][3] = attachment->getAlphaSize() > 0;
+            renderTargetCount++;
         }
     }
 
