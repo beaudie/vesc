@@ -409,17 +409,20 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(const std::string
 
     std::string declarationHLSL;
     std::string copyHLSL;
+
+    unsigned int nonNULLCount = 0;
+
     for (size_t i = 0; i < outputVariables.size(); i++)
     {
         const PixelShaderOuputVariable& outputVariable = outputVariables[i];
         ASSERT(outputLayout.size() > outputVariable.outputIndex);
 
-        // FIXME(geofflang): Work around NVIDIA driver bug by repacking buffers
-        bool outputIndexEnabled = true; // outputLayout[outputVariable.outputIndex] != GL_NONE
-        if (outputIndexEnabled)
+#if (ANGLE_MRT_PERF_WORKAROUND == ANGLE_WORKAROUND_ENABLED)
+        if (outputLayout[outputVariable.outputIndex] != GL_NONE)
+#endif
         {
             declarationHLSL += "    " + gl_d3d::HLSLTypeString(outputVariable.type) + " " + outputVariable.name +
-                               " : " + targetSemantic + Str(outputVariable.outputIndex) + ";\n";
+                               " : " + targetSemantic + Str(nonNULLCount++) + ";\n";
 
             copyHLSL += "    output." + outputVariable.name + " = " + outputVariable.source + ";\n";
         }
