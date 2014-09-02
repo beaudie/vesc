@@ -236,16 +236,17 @@ unsigned int ProgramBinary::issueSerial()
 rx::ShaderExecutable *ProgramBinary::getPixelExecutableForFramebuffer(const Framebuffer *fbo)
 {
     std::vector<GLenum> outputs(IMPLEMENTATION_MAX_DRAW_BUFFERS);
-    for (size_t outputIndex = 0; outputIndex < IMPLEMENTATION_MAX_DRAW_BUFFERS; outputIndex++)
+
+    for (size_t colorAttachment = 0; colorAttachment < IMPLEMENTATION_MAX_DRAW_BUFFERS; ++colorAttachment)
     {
-        if (fbo->getColorbuffer(outputIndex) != NULL)
+        if (fbo->getColorbuffer(colorAttachment) != NULL)
         {
             // Always output floats for now
-            outputs[outputIndex] = GL_FLOAT;
+            outputs[colorAttachment] = GL_FLOAT;
         }
         else
         {
-            outputs[outputIndex] = GL_NONE;
+            outputs[colorAttachment] = GL_NONE;
         }
     }
 
