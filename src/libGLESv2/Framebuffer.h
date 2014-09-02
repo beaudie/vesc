@@ -10,6 +10,8 @@
 #ifndef LIBGLESV2_FRAMEBUFFER_H_
 #define LIBGLESV2_FRAMEBUFFER_H_
 
+#include <vector>
+
 #include "common/angleutils.h"
 #include "common/RefCountObject.h"
 #include "constants.h"
@@ -66,6 +68,11 @@ class Framebuffer
 
     virtual GLenum completeness() const;
     bool hasValidDepthStencil() const;
+
+    // Use this method to retrieve the color buffer map when doing rendering.
+    // It will apply a workaround for poor shader performance on some systems
+    // by compacting the list to skip NULL values.
+    std::vector<FramebufferAttachment *> getColorbuffersForRender() const;
 
   protected:
     rx::Renderer *mRenderer;
