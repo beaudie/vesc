@@ -44,6 +44,11 @@ class ShaderImpl
     std::vector<sh::Attribute> &getActiveOutputVariables() { return mActiveOutputVariables; }
 
   protected:
+    ShaderImpl(GLenum type)
+        : mType(type)
+    {}
+
+    GLenum mType;
     std::vector<gl::PackedVarying> mVaryings;
     std::vector<sh::Uniform> mUniforms;
     std::vector<sh::InterfaceBlock> mInterfaceBlocks;
