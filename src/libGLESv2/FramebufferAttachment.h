@@ -39,7 +39,7 @@ class Renderbuffer;
 class FramebufferAttachment
 {
   public:
-    FramebufferAttachment();
+    explicit FramebufferAttachment(GLenum binding);
     virtual ~FramebufferAttachment();
 
     // Helper methods
@@ -55,6 +55,8 @@ class FramebufferAttachment
 
     bool isTextureWithId(GLuint textureId) const { return isTexture() && id() == textureId; }
     bool isRenderbufferWithId(GLuint renderbufferId) const { return !isTexture() && id() == renderbufferId; }
+
+    GLenum getBinding() const { return mBinding; }
 
     // Child class interface
     virtual rx::RenderTarget *getRenderTarget() = 0;
@@ -76,12 +78,14 @@ class FramebufferAttachment
 
   private:
     DISALLOW_COPY_AND_ASSIGN(FramebufferAttachment);
+
+    GLenum mBinding;
 };
 
 class Texture2DAttachment : public FramebufferAttachment
 {
   public:
-    Texture2DAttachment(Texture2D *texture, GLint level);
+    Texture2DAttachment(GLenum binding, Texture2D *texture, GLint level);
 
     virtual ~Texture2DAttachment();
 
@@ -112,7 +116,7 @@ class Texture2DAttachment : public FramebufferAttachment
 class TextureCubeMapAttachment : public FramebufferAttachment
 {
   public:
-    TextureCubeMapAttachment(TextureCubeMap *texture, GLenum faceTarget, GLint level);
+    TextureCubeMapAttachment(GLenum binding, TextureCubeMap *texture, GLenum faceTarget, GLint level);
 
     virtual ~TextureCubeMapAttachment();
 
@@ -144,7 +148,7 @@ class TextureCubeMapAttachment : public FramebufferAttachment
 class Texture3DAttachment : public FramebufferAttachment
 {
   public:
-    Texture3DAttachment(Texture3D *texture, GLint level, GLint layer);
+    Texture3DAttachment(GLenum binding, Texture3D *texture, GLint level, GLint layer);
 
     virtual ~Texture3DAttachment();
 
@@ -176,7 +180,7 @@ class Texture3DAttachment : public FramebufferAttachment
 class Texture2DArrayAttachment : public FramebufferAttachment
 {
   public:
-    Texture2DArrayAttachment(Texture2DArray *texture, GLint level, GLint layer);
+    Texture2DArrayAttachment(GLenum binding, Texture2DArray *texture, GLint level, GLint layer);
 
     virtual ~Texture2DArrayAttachment();
 
@@ -208,7 +212,7 @@ class Texture2DArrayAttachment : public FramebufferAttachment
 class RenderbufferAttachment : public FramebufferAttachment
 {
   public:
-    RenderbufferAttachment(Renderbuffer *renderbuffer);
+    RenderbufferAttachment(GLenum binding, Renderbuffer *renderbuffer);
 
     virtual ~RenderbufferAttachment();
 
