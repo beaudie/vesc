@@ -403,6 +403,20 @@ std::string DynamicHLSL::generateVertexShaderForInputLayout(const std::string &s
     return vertexHLSL;
 }
 
+const PixelShaderOuputVariable &GetOutputAtLocation(const std::vector<PixelShaderOuputVariable> &outputVariables, unsigned int location)
+{
+    for (size_t variableIndex = 0; variableIndex < outputVariables.size(); ++variableIndex)
+    {
+        if (outputVariables[variableIndex].outputIndex == location)
+        {
+            return outputVariables[variableIndex];
+        }
+    }
+
+    UNREACHABLE();
+    return outputVariables[0];
+}
+
 std::string DynamicHLSL::generatePixelShaderForOutputSignature(const std::string &sourceShader, const std::vector<PixelShaderOuputVariable> &outputVariables,
                                                                bool usesFragDepth, const std::vector<GLenum> &outputLayout) const
 {
@@ -412,17 +426,19 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(const std::string
 
     std::string declarationHLSL;
     std::string copyHLSL;
-    for (size_t i = 0; i < outputVariables.size(); i++)
-    {
-        const PixelShaderOuputVariable& outputVariable = outputVariables[i];
-        ASSERT(outputLayout.size() > outputVariable.outputIndex);
 
-        // FIXME(geofflang): Work around NVIDIA driver bug by repacking buffers
-        bool outputIndexEnabled = true; // outputLayout[outputVariable.outputIndex] != GL_NONE
-        if (outputIndexEnabled)
+    for (size_t layoutIndex = 0; layoutIndex < outputLayout.size(); ++layoutIndex)
+    {
+        GLenum binding = outputLayout[layoutIndex];
+
+        if (binding != GL_NONE)
         {
+            unsigned int location = (binding - GL_COLOR_ATTACHMENT0);
+
+            const PixelShaderOuputVariable &outputVariable = GetOutputAtLocation(outputVariables, location);
+
             declarationHLSL += "    " + gl_d3d::HLSLTypeString(outputVariable.type) + " " + outputVariable.name +
-                               " : " + targetSemantic + Str(outputVariable.outputIndex) + ";\n";
+                                " : " + targetSemantic + Str(layoutIndex) + ";\n";
 
             copyHLSL += "    output." + outputVariable.name + " = " + outputVariable.source + ";\n";
         }

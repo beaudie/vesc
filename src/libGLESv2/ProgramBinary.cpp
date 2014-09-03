@@ -108,6 +108,24 @@ void GetInputLayoutFromShader(const std::vector<sh::Attribute> &shaderAttributes
     }
 }
 
+std::vector<GLenum> GetOutputLayoutFromShader(const std::vector<rx::PixelShaderOuputVariable> &shaderOutputVars)
+{
+#if (ANGLE_MRT_PERF_WORKAROUND == ANGLE_WORKAROUND_ENABLED)
+    std::vector<GLenum> defaultPixelOutput(1);
+#else
+    std::vector<GLenum> defaultPixelOutput(IMPLEMENTATION_MAX_DRAW_BUFFERS);
+#endif
+    for (size_t i = 0; i < defaultPixelOutput.size(); i++)
+    {
+        defaultPixelOutput[i] = GL_NONE;
+    }
+
+    ASSERT(!shaderOutputVars.empty());
+    defaultPixelOutput[0] = GL_COLOR_ATTACHMENT0 + shaderOutputVars[0].outputIndex;
+
+    return defaultPixelOutput;
+}
+
 bool IsRowMajorLayout(const sh::InterfaceBlockField &var)
 {
     return var.isRowMajorLayout;
@@ -261,7 +279,9 @@ rx::ShaderExecutable *ProgramBinary::getPixelExecutableForOutputLayout(const std
 {
     for (size_t executableIndex = 0; executableIndex < mPixelExecutables.size(); executableIndex++)
     {
+#if (ANGLE_MRT_PERF_WORKAROUND == ANGLE_WORKAROUND_ENABLED)
         if (mPixelExecutables[executableIndex]->matchesSignature(outputSignature))
+#endif
         {
             return mPixelExecutables[executableIndex]->shaderExecutable();
         }
@@ -1693,11 +1713,7 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
         GetInputLayoutFromShader(vertexShader->getActiveAttributes(), defaultInputLayout);
         rx::ShaderExecutable *defaultVertexExecutable = getVertexExecutableForInputLayout(defaultInputLayout);
 
-        std::vector<GLenum> defaultPixelOutput(IMPLEMENTATION_MAX_DRAW_BUFFERS);
-        for (size_t i = 0; i < defaultPixelOutput.size(); i++)
-        {
-            defaultPixelOutput[i] = (i == 0) ? GL_COLOR_ATTACHMENT0 : GL_NONE;
-        }
+        std::vector<GLenum> defaultPixelOutput = GetOutputLayoutFromShader(mPixelShaderKey);
         rx::ShaderExecutable *defaultPixelExecutable = getPixelExecutableForOutputLayout(defaultPixelOutput);
 
         if (usesGeometryShader())
