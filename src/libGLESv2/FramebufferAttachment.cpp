@@ -77,13 +77,20 @@ bool FramebufferAttachment::isTexture() const
 
 ///// TextureAttachment Implementation ////////
 
-TextureAttachment::TextureAttachment(const ImageIndex &index)
+TextureAttachment::TextureAttachment(Texture *texture, const ImageIndex &index)
     : mIndex(index)
-{}
+{
+    mTexture.set(texture);
+}
+
+TextureAttachment::~TextureAttachment()
+{
+    mTexture.set(NULL);
+}
 
 rx::TextureStorage *TextureAttachment::getTextureStorage()
 {
-    return getTexture()->getNativeTexture()->getStorageInstance();
+    return mTexture->getNativeTexture()->getStorageInstance();
 }
 
 GLsizei TextureAttachment::getSamples() const
@@ -93,32 +100,32 @@ GLsizei TextureAttachment::getSamples() const
 
 GLuint TextureAttachment::id() const
 {
-    return getTexture()->id();
+    return mTexture->id();
 }
 
 unsigned int TextureAttachment::getTextureSerial() const
 {
-    return getTexture()->getTextureSerial();
+    return mTexture->getTextureSerial();
 }
 
 GLsizei TextureAttachment::getWidth() const
 {
-    return getTexture()->getWidth(mIndex);
+    return mTexture->getWidth(mIndex);
 }
 
 GLsizei TextureAttachment::getHeight() const
 {
-    return getTexture()->getHeight(mIndex);
+    return mTexture->getHeight(mIndex);
 }
 
 GLenum TextureAttachment::getInternalFormat() const
 {
-    return getTexture()->getInternalFormat(mIndex);
+    return mTexture->getInternalFormat(mIndex);
 }
 
 GLenum TextureAttachment::getActualFormat() const
 {
-    return getTexture()->getActualFormat(mIndex);
+    return mTexture->getActualFormat(mIndex);
 }
 
 GLenum TextureAttachment::type() const
@@ -138,91 +145,12 @@ GLint TextureAttachment::layer() const
 
 rx::RenderTarget *TextureAttachment::getRenderTarget()
 {
-    return getTexture()->getRenderTarget(mIndex);
+    return mTexture->getRenderTarget(mIndex);
 }
 
 unsigned int TextureAttachment::getSerial() const
 {
-    return getTexture()->getRenderTargetSerial(mIndex);
-}
-
-///// Texture2DAttachment Implementation ////////
-
-Texture2DAttachment::Texture2DAttachment(Texture2D *texture, GLint level)
-    : TextureAttachment(ImageIndex::Make2D(level)),
-      mLevel(level)
-{
-    mTexture2D.set(texture);
-}
-
-Texture2DAttachment::~Texture2DAttachment()
-{
-    mTexture2D.set(NULL);
-}
-
-Texture *Texture2DAttachment::getTexture() const
-{
-    return mTexture2D.get();
-}
-
-///// TextureCubeMapAttachment Implementation ////////
-
-TextureCubeMapAttachment::TextureCubeMapAttachment(TextureCubeMap *texture, GLenum faceTarget, GLint level)
-    : TextureAttachment(ImageIndex::MakeCube(faceTarget, level)),
-      mFaceTarget(faceTarget),
-      mLevel(level)
-{
-    mTextureCubeMap.set(texture);
-}
-
-TextureCubeMapAttachment::~TextureCubeMapAttachment()
-{
-    mTextureCubeMap.set(NULL);
-}
-
-Texture *TextureCubeMapAttachment::getTexture() const
-{
-    return mTextureCubeMap.get();
-}
-
-///// Texture3DAttachment Implementation ////////
-
-Texture3DAttachment::Texture3DAttachment(Texture3D *texture, GLint level, GLint layer)
-    : TextureAttachment(ImageIndex::Make3D(level, layer)),
-      mLevel(level),
-      mLayer(layer)
-{
-    mTexture3D.set(texture);
-}
-
-Texture3DAttachment::~Texture3DAttachment()
-{
-    mTexture3D.set(NULL);
-}
-
-Texture *Texture3DAttachment::getTexture() const
-{
-    return mTexture3D.get();
-}
-
-////// Texture2DArrayAttachment Implementation //////
-
-Texture2DArrayAttachment::Texture2DArrayAttachment(Texture2DArray *texture, GLint level, GLint layer)
-    : TextureAttachment(ImageIndex::Make2DArray(level, layer)),
-      mLevel(level),
-      mLayer(layer)
-{
-    mTexture2DArray.set(texture);
-}
-
-Texture2DArrayAttachment::~Texture2DArrayAttachment()
-{
-    mTexture2DArray.set(NULL);
-}
-
-Texture *Texture2DArrayAttachment::getTexture() const
-{
-    return mTexture2DArray.get();
+    return mTexture->getRenderTargetSerial(mIndex);
 }
 
 ////// RenderbufferAttachment Implementation //////
