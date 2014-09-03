@@ -22,7 +22,8 @@ namespace gl
 
 ////// FramebufferAttachment Implementation //////
 
-FramebufferAttachment::FramebufferAttachment()
+FramebufferAttachment::FramebufferAttachment(GLenum binding)
+    : mBinding(binding)
 {
 }
 
@@ -77,7 +78,9 @@ bool FramebufferAttachment::isTexture() const
 
 ///// Texture2DAttachment Implementation ////////
 
-Texture2DAttachment::Texture2DAttachment(Texture2D *texture, GLint level) : mLevel(level)
+Texture2DAttachment::Texture2DAttachment(GLenum binding, Texture2D *texture, GLint level)
+    : FramebufferAttachment(binding),
+      mLevel(level)
 {
     mTexture2D.set(texture);
 }
@@ -154,8 +157,9 @@ unsigned int Texture2DAttachment::getTextureSerial() const
 
 ///// TextureCubeMapAttachment Implementation ////////
 
-TextureCubeMapAttachment::TextureCubeMapAttachment(TextureCubeMap *texture, GLenum faceTarget, GLint level)
-    : mFaceTarget(faceTarget), mLevel(level)
+TextureCubeMapAttachment::TextureCubeMapAttachment(GLenum binding, TextureCubeMap *texture, GLenum faceTarget, GLint level)
+    : FramebufferAttachment(binding),
+      mFaceTarget(faceTarget), mLevel(level)
 {
     mTextureCubeMap.set(texture);
 }
@@ -232,8 +236,10 @@ unsigned int TextureCubeMapAttachment::getTextureSerial() const
 
 ///// Texture3DAttachment Implementation ////////
 
-Texture3DAttachment::Texture3DAttachment(Texture3D *texture, GLint level, GLint layer)
-    : mLevel(level), mLayer(layer)
+Texture3DAttachment::Texture3DAttachment(GLenum binding, Texture3D *texture, GLint level, GLint layer)
+    : FramebufferAttachment(binding),
+      mLevel(level),
+      mLayer(layer)
 {
     mTexture3D.set(texture);
 }
@@ -310,8 +316,10 @@ unsigned int Texture3DAttachment::getTextureSerial() const
 
 ////// Texture2DArrayAttachment Implementation //////
 
-Texture2DArrayAttachment::Texture2DArrayAttachment(Texture2DArray *texture, GLint level, GLint layer)
-    : mLevel(level), mLayer(layer)
+Texture2DArrayAttachment::Texture2DArrayAttachment(GLenum binding, Texture2DArray *texture, GLint level, GLint layer)
+    : FramebufferAttachment(binding),
+      mLevel(level),
+      mLayer(layer)
 {
     mTexture2DArray.set(texture);
 }
@@ -388,7 +396,8 @@ unsigned int Texture2DArrayAttachment::getTextureSerial() const
 
 ////// RenderbufferAttachment Implementation //////
 
-RenderbufferAttachment::RenderbufferAttachment(Renderbuffer *renderbuffer)
+RenderbufferAttachment::RenderbufferAttachment(GLenum binding, Renderbuffer *renderbuffer)
+    : FramebufferAttachment(binding)
 {
     ASSERT(renderbuffer);
     mRenderbuffer.set(renderbuffer);
