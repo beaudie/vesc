@@ -35,7 +35,7 @@ class Image9 : public ImageD3D
 
     static void generateMipmap(Image9 *dest, Image9 *source);
     static void generateMip(IDirect3DSurface9 *destSurface, IDirect3DSurface9 *sourceSurface);
-    static void copyLockableSurfaces(IDirect3DSurface9 *dest, IDirect3DSurface9 *source);
+    static gl::Error copyLockableSurfaces(IDirect3DSurface9 *dest, IDirect3DSurface9 *source);
 
     virtual bool redefine(Renderer *renderer, GLenum target, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, bool forceRelease);
 
@@ -44,8 +44,8 @@ class Image9 : public ImageD3D
     virtual bool isDirty() const;
     IDirect3DSurface9 *getSurface();
 
-    virtual void setManagedSurface(TextureStorageInterface2D *storage, int level);
-    virtual void setManagedSurface(TextureStorageInterfaceCube *storage, int face, int level);
+    virtual gl::Error setManagedSurface(TextureStorageInterface2D *storage, int level);
+    virtual gl::Error setManagedSurface(TextureStorageInterfaceCube *storage, int face, int level);
     virtual gl::Error copyToStorage(TextureStorageInterface2D *storage, int level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height);
     virtual gl::Error copyToStorage(TextureStorageInterfaceCube *storage, int face, int level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height);
     virtual gl::Error copyToStorage(TextureStorageInterface3D *storage, int level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth);
@@ -56,13 +56,13 @@ class Image9 : public ImageD3D
     virtual gl::Error loadCompressedData(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth,
                                          const void *input);
 
-    virtual void copy(GLint xoffset, GLint yoffset, GLint zoffset,GLint x, GLint y, GLsizei width, GLsizei height, gl::Framebuffer *source);
+    virtual gl::Error copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height, gl::Framebuffer *source);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Image9);
 
     void createSurface();
-    void setManagedSurface(IDirect3DSurface9 *surface);
+    gl::Error setManagedSurface(IDirect3DSurface9 *surface);
     gl::Error copyToSurface(IDirect3DSurface9 *dest, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height);
 
     HRESULT lock(D3DLOCKED_RECT *lockedRect, const RECT *rect);
