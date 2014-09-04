@@ -209,6 +209,12 @@
   <ItemGroup>
     <ResourceCompile Include="..\..\src\libGLESv2\libGLESv2.rc"/>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="libANGLE.vcxproj">
+      <Project>{CAAA04EE-A56A-43FB-D011-1A56053C070C}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
   <ImportGroup Label="ExtensionTargets"/>
 </Project>

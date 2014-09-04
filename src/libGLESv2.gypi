@@ -309,6 +309,8 @@
                     #TODO(jamdill/geofflang): support shared
                     'type': 'static_library',
                     'dependencies': [ 'translator', 'commit_id', 'copy_compiler_dll' ],
+                    # mark libANGLE as a hard dep, because it triggers the commit_id script
+                    'hard_dependency': 1,
                     'includes': [ '../build/common_defines.gypi', ],
                     'include_dirs':
                     [
