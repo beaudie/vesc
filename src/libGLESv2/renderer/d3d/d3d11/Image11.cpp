@@ -321,7 +321,7 @@ gl::Error Image11::loadCompressedData(GLint xoffset, GLint yoffset, GLint zoffse
     return gl::Error(GL_NO_ERROR);
 }
 
-void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &sourceArea, RenderTarget *source)
+gl::Error Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &sourceArea, RenderTarget *source)
 {
     RenderTarget11 *sourceRenderTarget = RenderTarget11::makeRenderTarget11(source);
     ASSERT(sourceRenderTarget->getTexture());
@@ -331,14 +331,13 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectan
 
     if (!sourceTexture2D)
     {
-        // Error already generated
-        return;
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the ID3D11Texture2D from the source RenderTarget.");
     }
 
-    copy(xoffset, yoffset, zoffset, sourceArea, sourceTexture2D, subresourceIndex);
+    return copy(xoffset, yoffset, zoffset, sourceArea, sourceTexture2D, subresourceIndex);
 }
 
-void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &sourceArea, const gl::ImageIndex &sourceIndex, TextureStorage *source)
+gl::Error Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &sourceArea, const gl::ImageIndex &sourceIndex, TextureStorage *source)
 {
     TextureStorage11 *sourceStorage11 = TextureStorage11::makeTextureStorage11(source);
 
@@ -347,14 +346,13 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectan
 
     if (!sourceTexture2D)
     {
-        // Error already generated
-        return;
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the ID3D11Texture2D from the source TextureStorage.");
     }
 
-    copy(xoffset, yoffset, zoffset, sourceArea, sourceTexture2D, subresourceIndex);
+    return copy(xoffset, yoffset, zoffset, sourceArea, sourceTexture2D, subresourceIndex);
 }
 
-void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &sourceArea, ID3D11Texture2D *source, UINT sourceSubResource)
+gl::Error Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &sourceArea, ID3D11Texture2D *source, UINT sourceSubResource)
 {
     // TODO(jmadill): get the actual/native/dxgi format without a GetDesc query
     D3D11_TEXTURE2D_DESC sourceDesc;
@@ -390,8 +388,7 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectan
             HRESULT result = device->CreateTexture2D(&resolveDesc, NULL, &srcTex);
             if (FAILED(result))
             {
-                ERR("Failed to create resolve texture for Image11::copy, HRESULT: 0x%X.", result);
-                return;
+                return gl::Error(GL_OUT_OF_MEMORY, "Failed to create resolve texture for Image11::copy, HRESULT: 0x%X.", result);
             }
 
             deviceContext->ResolveSubresource(srcTex, 0, source, sourceSubResource, textureDesc.Format);
@@ -423,8 +420,7 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectan
         HRESULT result = map(D3D11_MAP_WRITE, &mappedImage);
         if (FAILED(result))
         {
-            ERR("Failed to map texture for Image11::copy, HRESULT: 0x%X.", result);
-            return;
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to map texture for Image11::copy, HRESULT: 0x%X.", result);
         }
 
         // determine the offset coordinate into the destination buffer
@@ -433,10 +429,17 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectan
 
         const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(mInternalFormat);
 
-        mRenderer->readTextureData(source, sourceSubResource, sourceArea, formatInfo.format, formatInfo.type, mappedImage.RowPitch, gl::PixelPackState(), dataOffset);
+        gl::Error error =mRenderer->readTextureData(source, sourceSubResource, sourceArea, formatInfo.format, formatInfo.type, mappedImage.RowPitch, gl::PixelPackState(), dataOffset);
 
         unmap();
+
+        if (error.isError())
+        {
+            return error;
+        }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 ID3D11Resource *Image11::getStagingTexture()
