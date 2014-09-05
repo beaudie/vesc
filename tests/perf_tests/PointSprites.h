@@ -12,6 +12,7 @@ struct PointSpritesParams : public BenchmarkParams
     unsigned int iterations;
     unsigned int count;
     float size;
+    unsigned int numVaryings;
 
     virtual std::string name() const;
 };
