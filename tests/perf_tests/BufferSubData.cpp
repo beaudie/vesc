@@ -9,6 +9,8 @@
 #include <cassert>
 #include <sstream>
 
+#include "shader_utils.h"
+
 namespace
 {
 
