@@ -314,6 +314,17 @@ void Renderer11::initializeDevice()
     ASSERT(!mPixelTransfer);
     mPixelTransfer = new PixelTransfer11(this);
 
+    const gl::Caps &rendererCaps = getRendererCaps();
+
+    mForceSetVertexSamplerStates.resize(rendererCaps.maxVertexTextureImageUnits);
+    mCurVertexSamplerStates.resize(rendererCaps.maxVertexTextureImageUnits);
+
+    mForceSetPixelSamplerStates.resize(rendererCaps.maxTextureImageUnits);
+    mCurPixelSamplerStates.resize(rendererCaps.maxTextureImageUnits);
+
+    mCurVertexSRVs.resize(rendererCaps.maxVertexTextureImageUnits);
+    mCurPixelSRVs.resize(rendererCaps.maxTextureImageUnits);
+
     markAllStateDirty();
 }
 
@@ -1545,12 +1556,15 @@ void Renderer11::markAllStateDirty()
     mDepthStencilInitialized = false;
     mRenderTargetDescInitialized = false;
 
-    for (int i = 0; i < gl::IMPLEMENTATION_MAX_VERTEX_TEXTURE_IMAGE_UNITS; i++)
+    ASSERT(mForceSetVertexSamplerStates.size() == mCurVertexSRVs.size());
+    for (int i = 0; i < mForceSetVertexSamplerStates.size(); i++)
     {
         mForceSetVertexSamplerStates[i] = true;
         mCurVertexSRVs[i] = NULL;
     }
-    for (int i = 0; i < gl::MAX_TEXTURE_IMAGE_UNITS; i++)
+
+    ASSERT(mForceSetPixelSamplerStates.size() == mCurPixelSRVs.size());
+    for (int i = 0; i < mForceSetPixelSamplerStates.size(); i++)
     {
         mForceSetPixelSamplerStates[i] = true;
         mCurPixelSRVs[i] = NULL;
