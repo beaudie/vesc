@@ -6,6 +6,7 @@
 
 #include "SimpleBenchmark.h"
 #include "BufferSubData.h"
+#include "TexSubImage.h"
 
 EGLint platforms[] =
 {
@@ -22,7 +23,7 @@ unsigned int iterationCounts[] = { 10 };
 
 int main(int argc, char **argv)
 {
-    std::vector<BufferSubDataParams> benchmarks;
+    std::vector<BufferSubDataParams> subDataParams;
 
     for (size_t platIt = 0; platIt < ArraySize(platforms); platIt++)
     {
@@ -53,7 +54,7 @@ int main(int argc, char **argv)
                                 params.bufferSize = bufferSizes[bufszIt];
                                 params.iterations = iterationCounts[itIt];
 
-                                benchmarks.push_back(params);
+                                subDataParams.push_back(params);
                             }
                         }
                     }
@@ -63,5 +64,23 @@ int main(int argc, char **argv)
     }
 
     // Enumerates permutations
-    RunBenchmarks<BufferSubDataBenchmark>(benchmarks);
+    RunBenchmarks<BufferSubDataBenchmark>(subDataParams);
+
+    std::vector<TexSubImageParams> subImageParams;
+
+    for (size_t platIt = 0; platIt < ArraySize(platforms); platIt++)
+    {
+        TexSubImageParams params;
+
+        params.requestedRenderer = platforms[platIt];
+        params.imageWidth = 1024;
+        params.imageHeight = 1024;
+        params.subImageHeight = 64;
+        params.subImageWidth = 64;
+        params.iterations = 10;
+
+        subImageParams.push_back(params);
+    }
+
+    RunBenchmarks<TexSubImageBenchmark>(subImageParams);
 }
