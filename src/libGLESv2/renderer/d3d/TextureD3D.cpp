@@ -679,7 +679,7 @@ gl::Error TextureD3D_2D::copySubImage(GLenum target, GLint level, GLint xoffset,
     return gl::Error(GL_NO_ERROR);
 }
 
-void TextureD3D_2D::storage(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth)
+gl::Error TextureD3D_2D::storage(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth)
 {
     ASSERT(target == GL_TEXTURE_2D && depth == 1);
 
@@ -695,11 +695,20 @@ void TextureD3D_2D::storage(GLenum target, GLsizei levels, GLenum internalformat
         mImageArray[level]->redefine(mRenderer, GL_TEXTURE_2D, GL_NONE, 0, 0, 0, true);
     }
 
-    mImmutable = true;
-
+    // TODO(geofflang): Verify storage creation had no errors
     bool renderTarget = IsRenderTargetUsage(mUsage);
     TextureStorage *storage = mRenderer->createTextureStorage2D(internalformat, renderTarget, width, height, levels);
-    setCompleteTexStorage(storage);
+
+    gl::Error error = setCompleteTexStorage(storage);
+    if (error.isError())
+    {
+        SafeDelete(storage);
+        return error;
+    }
+
+    mImmutable = true;
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void TextureD3D_2D::bindTexImage(egl::Surface *surface)
@@ -1209,7 +1218,7 @@ gl::Error TextureD3D_Cube::copySubImage(GLenum target, GLint level, GLint xoffse
     return gl::Error(GL_NO_ERROR);
 }
 
-void TextureD3D_Cube::storage(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth)
+gl::Error TextureD3D_Cube::storage(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth)
 {
     ASSERT(width == height);
     ASSERT(depth == 1);
@@ -1231,11 +1240,20 @@ void TextureD3D_Cube::storage(GLenum target, GLsizei levels, GLenum internalform
         }
     }
 
-    mImmutable = true;
-
+    // TODO(geofflang): Verify storage creation had no errors
     bool renderTarget = IsRenderTargetUsage(mUsage);
     TextureStorage *storage = mRenderer->createTextureStorageCube(internalformat, renderTarget, width, levels);
-    setCompleteTexStorage(storage);
+
+    gl::Error error = setCompleteTexStorage(storage);
+    if (error.isError())
+    {
+        SafeDelete(storage);
+        return error;
+    }
+
+    mImmutable = true;
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 // Tests for cube texture completeness. [OpenGL ES 2.0.24] section 3.7.10 page 81.
@@ -1802,7 +1820,7 @@ gl::Error TextureD3D_3D::copySubImage(GLenum target, GLint level, GLint xoffset,
     return gl::Error(GL_NO_ERROR);
 }
 
-void TextureD3D_3D::storage(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth)
+gl::Error TextureD3D_3D::storage(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth)
 {
     ASSERT(target == GL_TEXTURE_3D);
 
@@ -1819,11 +1837,20 @@ void TextureD3D_3D::storage(GLenum target, GLsizei levels, GLenum internalformat
         mImageArray[level]->redefine(mRenderer, GL_TEXTURE_3D, GL_NONE, 0, 0, 0, true);
     }
 
-    mImmutable = true;
-
+    // TODO(geofflang): Verify storage creation had no errors
     bool renderTarget = IsRenderTargetUsage(mUsage);
     TextureStorage *storage = mRenderer->createTextureStorage3D(internalformat, renderTarget, width, height, depth, levels);
-    setCompleteTexStorage(storage);
+
+    gl::Error error = setCompleteTexStorage(storage);
+    if (error.isError())
+    {
+        SafeDelete(storage);
+        return error;
+    }
+
+    mImmutable = true;
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void TextureD3D_3D::bindTexImage(egl::Surface *surface)
@@ -2332,7 +2359,7 @@ gl::Error TextureD3D_2DArray::copySubImage(GLenum target, GLint level, GLint xof
     return gl::Error(GL_NO_ERROR);
 }
 
-void TextureD3D_2DArray::storage(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth)
+gl::Error TextureD3D_2DArray::storage(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth)
 {
     ASSERT(target == GL_TEXTURE_2D_ARRAY);
 
@@ -2359,11 +2386,20 @@ void TextureD3D_2DArray::storage(GLenum target, GLsizei levels, GLenum internalf
         }
     }
 
-    mImmutable = true;
-
+    // TODO(geofflang): Verify storage creation had no errors
     bool renderTarget = IsRenderTargetUsage(mUsage);
     TextureStorage *storage = mRenderer->createTextureStorage2DArray(internalformat, renderTarget, width, height, depth, levels);
-    setCompleteTexStorage(storage);
+
+    gl::Error error = setCompleteTexStorage(storage);
+    if (error.isError())
+    {
+        SafeDelete(storage);
+        return error;
+    }
+
+    mImmutable = true;
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void TextureD3D_2DArray::bindTexImage(egl::Surface *surface)
