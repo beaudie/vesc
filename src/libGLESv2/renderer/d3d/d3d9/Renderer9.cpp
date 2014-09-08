@@ -631,7 +631,7 @@ gl::Error Renderer9::generateSwizzle(gl::Texture *texture)
     return gl::Error(GL_INVALID_OPERATION);
 }
 
-void Renderer9::setSamplerState(gl::SamplerType type, int index, const gl::SamplerState &samplerState)
+gl::Error Renderer9::setSamplerState(gl::SamplerType type, int index, const gl::SamplerState &samplerState)
 {
     bool *forceSetSamplers = (type == gl::SAMPLER_PIXEL) ? mForceSetPixelSamplerStates : mForceSetVertexSamplerStates;
     gl::SamplerState *appliedSamplers = (type == gl::SAMPLER_PIXEL) ? mCurPixelSamplerStates: mCurVertexSamplerStates;
@@ -658,9 +658,11 @@ void Renderer9::setSamplerState(gl::SamplerType type, int index, const gl::Sampl
 
     forceSetSamplers[index] = false;
     appliedSamplers[index] = samplerState;
+
+    return gl::Error(GL_NO_ERROR);
 }
 
-void Renderer9::setTexture(gl::SamplerType type, int index, gl::Texture *texture)
+gl::Error Renderer9::setTexture(gl::SamplerType type, int index, gl::Texture *texture)
 {
     int d3dSamplerOffset = (type == gl::SAMPLER_PIXEL) ? 0 : D3DVERTEXTEXTURESAMPLER0;
     int d3dSampler = index + d3dSamplerOffset;
@@ -695,15 +697,17 @@ void Renderer9::setTexture(gl::SamplerType type, int index, gl::Texture *texture
     }
 
     appliedSerials[index] = serial;
+
+    return gl::Error(GL_NO_ERROR);
 }
 
-bool Renderer9::setUniformBuffers(const gl::Buffer* /*vertexUniformBuffers*/[], const gl::Buffer* /*fragmentUniformBuffers*/[])
+gl::Error Renderer9::setUniformBuffers(const gl::Buffer* /*vertexUniformBuffers*/[], const gl::Buffer* /*fragmentUniformBuffers*/[])
 {
     // No effect in ES2/D3D9
-    return true;
+    return gl::Error(GL_NO_ERROR);
 }
 
-void Renderer9::setRasterizerState(const gl::RasterizerState &rasterState)
+gl::Error Renderer9::setRasterizerState(const gl::RasterizerState &rasterState)
 {
     bool rasterStateChanged = mForceSetRasterState || memcmp(&rasterState, &mCurRasterState, sizeof(gl::RasterizerState)) != 0;
 
@@ -739,10 +743,12 @@ void Renderer9::setRasterizerState(const gl::RasterizerState &rasterState)
     }
 
     mForceSetRasterState = false;
+
+    return gl::Error(GL_NO_ERROR);
 }
 
-void Renderer9::setBlendState(gl::Framebuffer *framebuffer, const gl::BlendState &blendState, const gl::ColorF &blendColor,
-                              unsigned int sampleMask)
+gl::Error Renderer9::setBlendState(gl::Framebuffer *framebuffer, const gl::BlendState &blendState, const gl::ColorF &blendColor,
+                                   unsigned int sampleMask)
 {
     bool blendStateChanged = mForceSetBlendState || memcmp(&blendState, &mCurBlendState, sizeof(gl::BlendState)) != 0;
     bool blendColorChanged = mForceSetBlendState || memcmp(&blendColor, &mCurBlendColor, sizeof(gl::ColorF)) != 0;
@@ -843,10 +849,12 @@ void Renderer9::setBlendState(gl::Framebuffer *framebuffer, const gl::BlendState
     }
 
     mForceSetBlendState = false;
+
+    return gl::Error(GL_NO_ERROR);
 }
 
-void Renderer9::setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
-                                     int stencilBackRef, bool frontFaceCCW)
+gl::Error Renderer9::setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
+                                          int stencilBackRef, bool frontFaceCCW)
 {
     bool depthStencilStateChanged = mForceSetDepthStencilState ||
                                     memcmp(&depthStencilState, &mCurDepthStencilState, sizeof(gl::DepthStencilState)) != 0;
@@ -935,6 +943,8 @@ void Renderer9::setDepthStencilState(const gl::DepthStencilState &depthStencilSt
     }
 
     mForceSetDepthStencilState = false;
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void Renderer9::setScissorRectangle(const gl::Rectangle &scissor, bool enabled)
@@ -1296,7 +1306,7 @@ void Renderer9::applyTransformFeedbackBuffers(gl::Buffer *transformFeedbackBuffe
     UNREACHABLE();
 }
 
-void Renderer9::drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive)
+gl::Error Renderer9::drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive)
 {
     ASSERT(!transformFeedbackActive);
 
@@ -1304,7 +1314,7 @@ void Renderer9::drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool t
 
     if (mode == GL_LINE_LOOP)
     {
-        drawLineLoop(count, GL_NONE, NULL, 0, NULL);
+        return drawLineLoop(count, GL_NONE, NULL, 0, NULL);
     }
     else if (instances > 0)
     {
@@ -1323,8 +1333,7 @@ void Renderer9::drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool t
                 gl::Error error = mCountingIB->mapBuffer(spaceNeeded, &mappedMemory, NULL);
                 if (error.isError())
                 {
-                    ERR("Failed to map counting buffer.");
-                    return;
+                    return error;
                 }
 
                 unsigned short *data = reinterpret_cast<unsigned short*>(mappedMemory);
@@ -1336,8 +1345,7 @@ void Renderer9::drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool t
                 error = mCountingIB->unmapBuffer();
                 if (error.isError())
                 {
-                    ERR("Failed to unmap counting buffer.");
-                    return;
+                    return error;
                 }
             }
         }
@@ -1355,8 +1363,7 @@ void Renderer9::drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool t
                 gl::Error error = mCountingIB->mapBuffer(spaceNeeded, &mappedMemory, NULL);
                 if (error.isError())
                 {
-                    ERR("Failed to map counting buffer.");
-                    return;
+                    return error;
                 }
 
                 unsigned int *data = reinterpret_cast<unsigned int*>(mappedMemory);
@@ -1368,15 +1375,14 @@ void Renderer9::drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool t
                 error = mCountingIB->unmapBuffer();
                 if (error.isError())
                 {
-                    ERR("Failed to unmap counting buffer.");
-                    return;
+                    return error;
                 }
             }
         }
         else
         {
-            ERR("Could not create a counting index buffer for glDrawArraysInstanced.");
-            return gl::error(GL_OUT_OF_MEMORY);
+            return gl::Error(GL_OUT_OF_MEMORY, "Unable to create an internal counting index buffer, cannot create a "
+                             "buffer large enough.");
         }
 
         if (mAppliedIBSerial != mCountingIB->getSerial())
@@ -1391,15 +1397,18 @@ void Renderer9::drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool t
         {
             mDevice->DrawIndexedPrimitive(mPrimitiveType, 0, 0, count, 0, mPrimitiveCount);
         }
+
+        return gl::Error(GL_NO_ERROR);
     }
     else   // Regular case
     {
         mDevice->DrawPrimitive(mPrimitiveType, 0, mPrimitiveCount);
+        return gl::Error(GL_NO_ERROR);
     }
 }
 
-void Renderer9::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
-                             gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei /*instances*/)
+gl::Error Renderer9::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
+                                  gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei /*instances*/)
 {
     startScene();
 
@@ -1407,11 +1416,11 @@ void Renderer9::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvo
 
     if (mode == GL_POINTS)
     {
-        drawIndexedPoints(count, type, indices, minIndex, elementArrayBuffer);
+        return drawIndexedPoints(count, type, indices, minIndex, elementArrayBuffer);
     }
     else if (mode == GL_LINE_LOOP)
     {
-        drawLineLoop(count, type, indices, minIndex, elementArrayBuffer);
+        return drawLineLoop(count, type, indices, minIndex, elementArrayBuffer);
     }
     else
     {
@@ -1420,10 +1429,11 @@ void Renderer9::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvo
             GLsizei vertexCount = static_cast<int>(indexInfo.indexRange.length()) + 1;
             mDevice->DrawIndexedPrimitive(mPrimitiveType, -minIndex, minIndex, vertexCount, indexInfo.startIndex, mPrimitiveCount);
         }
+        return gl::Error(GL_NO_ERROR);
     }
 }
 
-void Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices, int minIndex, gl::Buffer *elementArrayBuffer)
+gl::Error Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices, int minIndex, gl::Buffer *elementArrayBuffer)
 {
     // Get the raw indices for an indexed draw
     if (type != GL_NONE && elementArrayBuffer)
@@ -1445,9 +1455,7 @@ void Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices, 
             if (error.isError())
             {
                 SafeDelete(mLineLoopIB);
-
-                ERR("Could not create a 32-bit looping index buffer for GL_LINE_LOOP.");
-                return gl::error(GL_OUT_OF_MEMORY);
+                return error;
             }
         }
 
@@ -1456,16 +1464,14 @@ void Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices, 
 
         if (static_cast<unsigned int>(count) + 1 > (std::numeric_limits<unsigned int>::max() / sizeof(unsigned int)))
         {
-            ERR("Could not create a 32-bit looping index buffer for GL_LINE_LOOP, too many indices required.");
-            return gl::error(GL_OUT_OF_MEMORY);
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to create a 32-bit looping index buffer for GL_LINE_LOOP, too many indices required.");
         }
 
         const unsigned int spaceNeeded = (static_cast<unsigned int>(count)+1) * sizeof(unsigned int);
         gl::Error error = mLineLoopIB->reserveBufferSpace(spaceNeeded, GL_UNSIGNED_INT);
         if (error.isError())
         {
-            ERR("Could not reserve enough space in looping index buffer for GL_LINE_LOOP.");
-            return gl::error(GL_OUT_OF_MEMORY);
+            return error;
         }
 
         void* mappedMemory = NULL;
@@ -1473,8 +1479,7 @@ void Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices, 
         error = mLineLoopIB->mapBuffer(spaceNeeded, &mappedMemory, &offset);
         if (error.isError())
         {
-            ERR("Could not map index buffer for GL_LINE_LOOP.");
-            return gl::error(GL_OUT_OF_MEMORY);
+            return error;
         }
 
         startIndex = static_cast<unsigned int>(offset) / 4;
@@ -1516,8 +1521,7 @@ void Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices, 
         error = mLineLoopIB->unmapBuffer();
         if (error.isError())
         {
-            ERR("Could not unmap index buffer for GL_LINE_LOOP.");
-            return gl::error(GL_OUT_OF_MEMORY);
+            return error;
         }
     }
     else
@@ -1529,9 +1533,7 @@ void Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices, 
             if (error.isError())
             {
                 SafeDelete(mLineLoopIB);
-
-                ERR("Could not create a 16-bit looping index buffer for GL_LINE_LOOP.");
-                return gl::error(GL_OUT_OF_MEMORY);
+                return error;
             }
         }
 
@@ -1540,16 +1542,14 @@ void Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices, 
 
         if (static_cast<unsigned int>(count) + 1 > (std::numeric_limits<unsigned short>::max() / sizeof(unsigned short)))
         {
-            ERR("Could not create a 16-bit looping index buffer for GL_LINE_LOOP, too many indices required.");
-            return gl::error(GL_OUT_OF_MEMORY);
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to create a 16-bit looping index buffer for GL_LINE_LOOP, too many indices required.");
         }
 
         const unsigned int spaceNeeded = (static_cast<unsigned int>(count) + 1) * sizeof(unsigned short);
         gl::Error error = mLineLoopIB->reserveBufferSpace(spaceNeeded, GL_UNSIGNED_SHORT);
         if (error.isError())
         {
-            ERR("Could not reserve enough space in looping index buffer for GL_LINE_LOOP.");
-            return gl::error(GL_OUT_OF_MEMORY);
+            return error;
         }
 
         void* mappedMemory = NULL;
@@ -1557,8 +1557,7 @@ void Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices, 
         error = mLineLoopIB->mapBuffer(spaceNeeded, &mappedMemory, &offset);
         if (error.isError())
         {
-            ERR("Could not map index buffer for GL_LINE_LOOP.");
-            return gl::error(GL_OUT_OF_MEMORY);
+            return error;
         }
 
         startIndex = static_cast<unsigned int>(offset) / 2;
@@ -1600,8 +1599,7 @@ void Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices, 
         error = mLineLoopIB->unmapBuffer();
         if (error.isError())
         {
-            ERR("Could not unmap index buffer for GL_LINE_LOOP.");
-            return gl::error(GL_OUT_OF_MEMORY);
+            return error;
         }
     }
 
@@ -1614,19 +1612,23 @@ void Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices, 
     }
 
     mDevice->DrawIndexedPrimitive(D3DPT_LINESTRIP, -minIndex, minIndex, count, startIndex, count);
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 template <typename T>
-static void drawPoints(IDirect3DDevice9* device, GLsizei count, const GLvoid *indices, int minIndex)
+static gl::Error drawPoints(IDirect3DDevice9* device, GLsizei count, const GLvoid *indices, int minIndex)
 {
     for (int i = 0; i < count; i++)
     {
         unsigned int indexValue = static_cast<unsigned int>(static_cast<const T*>(indices)[i]) - minIndex;
         device->DrawPrimitive(D3DPT_POINTLIST, indexValue, 1);
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
-void Renderer9::drawIndexedPoints(GLsizei count, GLenum type, const GLvoid *indices, int minIndex, gl::Buffer *elementArrayBuffer)
+gl::Error Renderer9::drawIndexedPoints(GLsizei count, GLenum type, const GLvoid *indices, int minIndex, gl::Buffer *elementArrayBuffer)
 {
     // Drawing index point lists is unsupported in d3d9, fall back to a regular DrawPrimitive call
     // for each individual point. This call is not expected to happen often.
@@ -1640,15 +1642,15 @@ void Renderer9::drawIndexedPoints(GLsizei count, GLenum type, const GLvoid *indi
 
     switch (type)
     {
-        case GL_UNSIGNED_BYTE:  drawPoints<GLubyte>(mDevice, count, indices, minIndex);  break;
-        case GL_UNSIGNED_SHORT: drawPoints<GLushort>(mDevice, count, indices, minIndex); break;
-        case GL_UNSIGNED_INT:   drawPoints<GLuint>(mDevice, count, indices, minIndex);   break;
-        default: UNREACHABLE();
+        case GL_UNSIGNED_BYTE:  return drawPoints<GLubyte>(mDevice, count, indices, minIndex);
+        case GL_UNSIGNED_SHORT: return drawPoints<GLushort>(mDevice, count, indices, minIndex);
+        case GL_UNSIGNED_INT:   return drawPoints<GLuint>(mDevice, count, indices, minIndex);
+        default: UNREACHABLE(); return gl::Error(GL_INVALID_OPERATION);
     }
 }
 
-void Renderer9::applyShaders(gl::ProgramBinary *programBinary, const gl::VertexFormat inputLayout[], const gl::Framebuffer *framebuffer,
-                             bool rasterizerDiscard, bool transformFeedbackActive)
+gl::Error Renderer9::applyShaders(gl::ProgramBinary *programBinary, const gl::VertexFormat inputLayout[], const gl::Framebuffer *framebuffer,
+                                  bool rasterizerDiscard, bool transformFeedbackActive)
 {
     ASSERT(!transformFeedbackActive);
     ASSERT(!rasterizerDiscard);
@@ -1683,9 +1685,11 @@ void Renderer9::applyShaders(gl::ProgramBinary *programBinary, const gl::VertexF
         mDxUniformsDirty = true;
         mAppliedProgramSerial = programSerial;
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
-void Renderer9::applyUniforms(const gl::ProgramBinary &programBinary)
+gl::Error Renderer9::applyUniforms(const gl::ProgramBinary &programBinary)
 {
     const std::vector<gl::LinkedUniform*> &uniformArray = programBinary.getUniforms();
 
@@ -1737,6 +1741,8 @@ void Renderer9::applyUniforms(const gl::ProgramBinary &programBinary)
         mDevice->SetPixelShaderConstantF(0, (float*)&mPixelConstants, sizeof(dx_PixelConstants) / sizeof(float[4]));
         mDxUniformsDirty = false;
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void Renderer9::applyUniformnfv(gl::LinkedUniform *targetUniform, const GLfloat *v)
