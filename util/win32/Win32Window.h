@@ -33,9 +33,11 @@ class Win32Window : public OSWindow
     bool setVisible(bool isVisible);
 
   private:
-    std::string mClassName;
+    std::string mParentClassName;
+    std::string mChildClassName;
 
     EGLNativeWindowType mNativeWindow;
+    EGLNativeWindowType mParentWindow;
     EGLNativeDisplayType mNativeDisplay;
 };
 
