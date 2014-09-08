@@ -252,7 +252,7 @@ class Context
     void detachTransformFeedback(GLuint transformFeedback);
     void detachSampler(GLuint sampler);
 
-    void generateSwizzles(Texture *textures[], size_t count);
+    Error generateSwizzles(Texture *textures[], size_t count);
     size_t getCurrentTexturesAndSamplerStates(ProgramBinary *programBinary, SamplerType type, Texture **outTextures,
                                               TextureType *outTextureTypes, SamplerState *outSamplers);
     Texture *getIncompleteTexture(TextureType type);
