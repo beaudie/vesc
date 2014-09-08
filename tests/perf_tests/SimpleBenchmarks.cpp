@@ -14,9 +14,9 @@ EGLint platforms[] =
 };
 
 GLenum vertexTypes[] = { GL_FLOAT };
-GLint componentCounts[] = { 2, 3, 4 };
+GLint componentCounts[] = { 4 };
 GLboolean vertexNorms[] = { GL_FALSE };
-GLsizeiptr updateSizes[] = { 300 };
+GLsizeiptr updateSizes[] = { 0, 300 };
 GLsizeiptr bufferSizes[] = { 1024 * 1024 };
 unsigned int iterationCounts[] = { 10 };
 
