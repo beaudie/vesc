@@ -191,6 +191,10 @@ gl::Error Buffer11::setData(const void *data, size_t size, GLenum usage)
         {
             return gl::Error(GL_OUT_OF_MEMORY);
         }
+
+        mSize = size;
+        mDynamicDirtyRange.start = 0;
+        mDynamicDirtyRange.end = size;
     }
 
     gl::Error error = setSubData(data, size, 0);
@@ -209,6 +213,11 @@ gl::Error Buffer11::setData(const void *data, size_t size, GLenum usage)
 
 void *Buffer11::getData()
 {
+    if (mDynamicUsage)
+    {
+        return mDynamicData.data();
+    }
+
     NativeBuffer11 *stagingBuffer = getStagingBuffer();
 
     if (!stagingBuffer)
@@ -252,41 +261,45 @@ gl::Error Buffer11::setSubData(const void *data, size_t size, size_t offset)
 {
     size_t requiredSize = size + offset;
 
-    if (data && size > 0)
+    if (mDynamicUsage)
     {
-        if (mDynamicUsage)
+        if (data && size > 0)
         {
             mDynamicDirtyRange.start = std::min(mDynamicDirtyRange.start, offset);
             mDynamicDirtyRange.end = std::max(mDynamicDirtyRange.end, size + offset);
+
             memcpy(mDynamicData.data() + offset, data, size);
         }
-        else
+
+        return gl::Error(GL_NO_ERROR);
+    }
+
+    if (data && size > 0)
+    {
+        NativeBuffer11 *stagingBuffer = getStagingBuffer();
+
+        if (!stagingBuffer)
         {
-            NativeBuffer11 *stagingBuffer = getStagingBuffer();
-
-            if (!stagingBuffer)
-            {
-                return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal staging buffer.");
-            }
-
-            // Explicitly resize the staging buffer, preserving data if the new data will not
-            // completely fill the buffer
-            if (stagingBuffer->getSize() < requiredSize)
-            {
-                bool preserveData = (offset > 0);
-                if (!stagingBuffer->resize(requiredSize, preserveData))
-                {
-                    return gl::Error(GL_OUT_OF_MEMORY, "Failed to resize internal staging buffer.");
-                }
-            }
-
-            if (!stagingBuffer->setData(D3D11_MAP_WRITE, reinterpret_cast<const uint8_t *>(data), size, offset))
-            {
-                return gl::Error(GL_OUT_OF_MEMORY, "Failed to set data on internal staging buffer.");
-            }
-
-            stagingBuffer->setDataRevision(stagingBuffer->getDataRevision() + 1);
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal staging buffer.");
         }
+
+        // Explicitly resize the staging buffer, preserving data if the new data will not
+        // completely fill the buffer
+        if (stagingBuffer->getSize() < requiredSize)
+        {
+            bool preserveData = (offset > 0);
+            if (!stagingBuffer->resize(requiredSize, preserveData))
+            {
+                return gl::Error(GL_OUT_OF_MEMORY, "Failed to resize internal staging buffer.");
+            }
+        }
+
+        if (!stagingBuffer->setData(D3D11_MAP_WRITE, reinterpret_cast<const uint8_t *>(data), size, offset))
+        {
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to set data on internal staging buffer.");
+        }
+
+        stagingBuffer->setDataRevision(stagingBuffer->getDataRevision() + 1);
     }
 
     mSize = std::max(mSize, requiredSize);
@@ -573,6 +586,8 @@ Buffer11::BufferStorage11 *Buffer11::getBufferStorage(BufferUsage requestedUsage
             ASSERT(HAS_DYNAMIC_TYPE(NativeBuffer11*, directBuffer));
             NativeBuffer11 *dynamicBuffer = static_cast<NativeBuffer11*>(directBuffer);
             dynamicBuffer->setData(D3D11_MAP_WRITE_NO_OVERWRITE, mDynamicData.data(), mDynamicDirtyRange.length(), mDynamicDirtyRange.start);
+            mDynamicDirtyRange.start = std::numeric_limits<size_t>::max();
+            mDynamicDirtyRange.end = std::numeric_limits<size_t>::min();
         }
 
         return directBuffer;
@@ -856,7 +871,7 @@ bool Buffer11::NativeBuffer11::setData(D3D11_MAP mapMode, const uint8_t *data, s
     }
 
     uint8_t *offsetBufferPointer = reinterpret_cast<uint8_t *>(mappedResource.pData) + offset;
-    memcpy(offsetBufferPointer, data, size);
+    memcpy(offsetBufferPointer, data + offset, size);
 
     context->Unmap(mNativeBuffer, 0);
 
