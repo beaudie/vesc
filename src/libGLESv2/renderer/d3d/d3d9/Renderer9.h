@@ -27,6 +27,7 @@ namespace rx
 class VertexDataManager;
 class IndexDataManager;
 class StreamingIndexBufferInterface;
+class StaticIndexBufferInterface;
 struct TranslatedAttribute;
 class Blit9;
 
@@ -320,6 +321,7 @@ class Renderer9 : public Renderer
 
     IndexDataManager *mIndexDataManager;
     StreamingIndexBufferInterface *mLineLoopIB;
+    StaticIndexBufferInterface *mCountingIB;
 
     enum { NUM_NULL_COLORBUFFER_CACHE_ENTRIES = 12 };
     struct NullColorbufferCacheEntry
