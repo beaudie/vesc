@@ -1428,15 +1428,21 @@ size_t Context::getCurrentTexturesAndSamplerStates(ProgramBinary *programBinary,
     return samplerRange;
 }
 
-void Context::generateSwizzles(Texture *textures[], size_t count)
+Error Context::generateSwizzles(Texture *textures[], size_t count)
 {
     for (size_t i = 0; i < count; i++)
     {
         if (textures[i] && textures[i]->getSamplerState().swizzleRequired())
         {
-            mRenderer->generateSwizzle(textures[i]);
+            Error error = mRenderer->generateSwizzle(textures[i]);
+            if (error.isError())
+            {
+                return error;
+            }
         }
     }
+
+    return Error(GL_NO_ERROR);
 }
 
 // For each Direct3D sampler of either the pixel or vertex stage,
@@ -1704,8 +1710,17 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instan
     SamplerState psSamplers[MAX_TEXTURE_IMAGE_UNITS];
     size_t psTextureCount = getCurrentTexturesAndSamplerStates(programBinary, SAMPLER_PIXEL, psTextures, psTextureTypes, psSamplers);
 
-    generateSwizzles(vsTextures, vsTextureCount);
-    generateSwizzles(psTextures, psTextureCount);
+    gl::Error error = generateSwizzles(vsTextures, vsTextureCount);
+    if (error.isError())
+    {
+        return gl::error(error.getCode());
+    }
+
+    error = generateSwizzles(psTextures, psTextureCount);
+    if (error.isError())
+    {
+        return gl::error(error.getCode());
+    }
 
     if (!mRenderer->applyPrimitiveType(mode, count))
     {
@@ -1719,7 +1734,7 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instan
 
     applyState(mode);
 
-    Error error = mRenderer->applyVertexBuffer(programBinary, mState.getVertexArray()->getVertexAttributes(), mState.getVertexAttribCurrentValues(), first, count, instances);
+    error = mRenderer->applyVertexBuffer(programBinary, mState.getVertexArray()->getVertexAttributes(), mState.getVertexAttribCurrentValues(), first, count, instances);
     if (error.isError())
     {
         return gl::error(error.getCode());
@@ -1770,8 +1785,17 @@ void Context::drawElements(GLenum mode, GLsizei count, GLenum type,
     SamplerState psSamplers[MAX_TEXTURE_IMAGE_UNITS];
     size_t psTextureCount = getCurrentTexturesAndSamplerStates(programBinary, SAMPLER_PIXEL, psTextures, psTextureTypes, psSamplers);
 
-    generateSwizzles(vsTextures, vsTextureCount);
-    generateSwizzles(psTextures, psTextureCount);
+    Error error = generateSwizzles(vsTextures, vsTextureCount);
+    if (error.isError())
+    {
+        return gl::error(error.getCode());
+    }
+
+    error = generateSwizzles(psTextures, psTextureCount);
+    if (error.isError())
+    {
+        return gl::error(error.getCode());
+    }
 
     if (!mRenderer->applyPrimitiveType(mode, count))
     {
@@ -1788,7 +1812,7 @@ void Context::drawElements(GLenum mode, GLsizei count, GLenum type,
     VertexArray *vao = mState.getVertexArray();
     rx::TranslatedIndexData indexInfo;
     indexInfo.indexRange = indexRange;
-    Error error = mRenderer->applyIndexBuffer(indices, vao->getElementArrayBuffer(), count, mode, type, &indexInfo);
+    error = mRenderer->applyIndexBuffer(indices, vao->getElementArrayBuffer(), count, mode, type, &indexInfo);
     if (error.isError())
     {
         return gl::error(error.getCode());
