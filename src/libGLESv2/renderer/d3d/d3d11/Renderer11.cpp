@@ -940,37 +940,38 @@ GLenum Renderer11::applyVertexBuffer(gl::ProgramBinary *programBinary, const gl:
     return mInputLayoutCache.applyVertexBuffers(attributes, programBinary);
 }
 
-GLenum Renderer11::applyIndexBuffer(const GLvoid *indices, gl::Buffer *elementArrayBuffer, GLsizei count, GLenum mode, GLenum type, TranslatedIndexData *indexInfo)
+gl::Error Renderer11::applyIndexBuffer(const GLvoid *indices, gl::Buffer *elementArrayBuffer, GLsizei count, GLenum mode, GLenum type, TranslatedIndexData *indexInfo)
 {
-    GLenum err = mIndexDataManager->prepareIndexData(type, count, elementArrayBuffer, indices, indexInfo);
-
-    if (err == GL_NO_ERROR)
+    gl::Error error = mIndexDataManager->prepareIndexData(type, count, elementArrayBuffer, indices, indexInfo);
+    if (error.isError())
     {
-        ID3D11Buffer *buffer = NULL;
-        DXGI_FORMAT bufferFormat = (indexInfo->indexType == GL_UNSIGNED_INT) ? DXGI_FORMAT_R32_UINT : DXGI_FORMAT_R16_UINT;
-
-        if (indexInfo->storage)
-        {
-            Buffer11 *storage = Buffer11::makeBuffer11(indexInfo->storage);
-            buffer = storage->getBuffer(BUFFER_USAGE_INDEX);
-        }
-        else
-        {
-            IndexBuffer11* indexBuffer = IndexBuffer11::makeIndexBuffer11(indexInfo->indexBuffer);
-            buffer = indexBuffer->getBuffer();
-        }
-
-        if (buffer != mAppliedIB || bufferFormat != mAppliedIBFormat || indexInfo->startOffset != mAppliedIBOffset)
-        {
-            mDeviceContext->IASetIndexBuffer(buffer, bufferFormat, indexInfo->startOffset);
-
-            mAppliedIB = buffer;
-            mAppliedIBFormat = bufferFormat;
-            mAppliedIBOffset = indexInfo->startOffset;
-        }
+        return error;
     }
 
-    return err;
+    ID3D11Buffer *buffer = NULL;
+    DXGI_FORMAT bufferFormat = (indexInfo->indexType == GL_UNSIGNED_INT) ? DXGI_FORMAT_R32_UINT : DXGI_FORMAT_R16_UINT;
+
+    if (indexInfo->storage)
+    {
+        Buffer11 *storage = Buffer11::makeBuffer11(indexInfo->storage);
+        buffer = storage->getBuffer(BUFFER_USAGE_INDEX);
+    }
+    else
+    {
+        IndexBuffer11* indexBuffer = IndexBuffer11::makeIndexBuffer11(indexInfo->indexBuffer);
+        buffer = indexBuffer->getBuffer();
+    }
+
+    if (buffer != mAppliedIB || bufferFormat != mAppliedIBFormat || indexInfo->startOffset != mAppliedIBOffset)
+    {
+        mDeviceContext->IASetIndexBuffer(buffer, bufferFormat, indexInfo->startOffset);
+
+        mAppliedIB = buffer;
+        mAppliedIBFormat = bufferFormat;
+        mAppliedIBOffset = indexInfo->startOffset;
+    }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void Renderer11::applyTransformFeedbackBuffers(gl::Buffer *transformFeedbackBuffers[], GLintptr offsets[])
@@ -1100,10 +1101,10 @@ void Renderer11::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices,
     if (!mLineLoopIB)
     {
         mLineLoopIB = new StreamingIndexBufferInterface(this);
-        if (!mLineLoopIB->reserveBufferSpace(INITIAL_INDEX_BUFFER_SIZE, GL_UNSIGNED_INT))
+        gl::Error error = mLineLoopIB->reserveBufferSpace(INITIAL_INDEX_BUFFER_SIZE, GL_UNSIGNED_INT);
+        if (error.isError())
         {
-            delete mLineLoopIB;
-            mLineLoopIB = NULL;
+            SafeDelete(mLineLoopIB);
 
             ERR("Could not create a 32-bit looping index buffer for GL_LINE_LOOP.");
             return gl::error(GL_OUT_OF_MEMORY);
@@ -1120,7 +1121,8 @@ void Renderer11::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices,
     }
 
     const unsigned int spaceNeeded = (static_cast<unsigned int>(count) + 1) * sizeof(unsigned int);
-    if (!mLineLoopIB->reserveBufferSpace(spaceNeeded, GL_UNSIGNED_INT))
+    gl::Error error = mLineLoopIB->reserveBufferSpace(spaceNeeded, GL_UNSIGNED_INT);
+    if (error.isError())
     {
         ERR("Could not reserve enough space in looping index buffer for GL_LINE_LOOP.");
         return gl::error(GL_OUT_OF_MEMORY);
@@ -1128,7 +1130,8 @@ void Renderer11::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices,
 
     void* mappedMemory = NULL;
     unsigned int offset;
-    if (!mLineLoopIB->mapBuffer(spaceNeeded, &mappedMemory, &offset))
+    error = mLineLoopIB->mapBuffer(spaceNeeded, &mappedMemory, &offset);
+    if (error.isError())
     {
         ERR("Could not map index buffer for GL_LINE_LOOP.");
         return gl::error(GL_OUT_OF_MEMORY);
@@ -1170,7 +1173,8 @@ void Renderer11::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indices,
       default: UNREACHABLE();
     }
 
-    if (!mLineLoopIB->unmapBuffer())
+    error = mLineLoopIB->unmapBuffer();
+    if (error.isError())
     {
         ERR("Could not unmap index buffer for GL_LINE_LOOP.");
         return gl::error(GL_OUT_OF_MEMORY);
@@ -1205,10 +1209,10 @@ void Renderer11::drawTriangleFan(GLsizei count, GLenum type, const GLvoid *indic
     if (!mTriangleFanIB)
     {
         mTriangleFanIB = new StreamingIndexBufferInterface(this);
-        if (!mTriangleFanIB->reserveBufferSpace(INITIAL_INDEX_BUFFER_SIZE, GL_UNSIGNED_INT))
+        gl::Error error = mTriangleFanIB->reserveBufferSpace(INITIAL_INDEX_BUFFER_SIZE, GL_UNSIGNED_INT);
+        if (error.isError())
         {
-            delete mTriangleFanIB;
-            mTriangleFanIB = NULL;
+            SafeDelete(mTriangleFanIB);
 
             ERR("Could not create a scratch index buffer for GL_TRIANGLE_FAN.");
             return gl::error(GL_OUT_OF_MEMORY);
@@ -1227,7 +1231,8 @@ void Renderer11::drawTriangleFan(GLsizei count, GLenum type, const GLvoid *indic
     }
 
     const unsigned int spaceNeeded = (numTris * 3) * sizeof(unsigned int);
-    if (!mTriangleFanIB->reserveBufferSpace(spaceNeeded, GL_UNSIGNED_INT))
+    gl::Error error = mTriangleFanIB->reserveBufferSpace(spaceNeeded, GL_UNSIGNED_INT);
+    if (error.isError())
     {
         ERR("Could not reserve enough space in scratch index buffer for GL_TRIANGLE_FAN.");
         return gl::error(GL_OUT_OF_MEMORY);
@@ -1235,7 +1240,8 @@ void Renderer11::drawTriangleFan(GLsizei count, GLenum type, const GLvoid *indic
 
     void* mappedMemory = NULL;
     unsigned int offset;
-    if (!mTriangleFanIB->mapBuffer(spaceNeeded, &mappedMemory, &offset))
+    error = mTriangleFanIB->mapBuffer(spaceNeeded, &mappedMemory, &offset);
+    if (error.isError())
     {
         ERR("Could not map scratch index buffer for GL_TRIANGLE_FAN.");
         return gl::error(GL_OUT_OF_MEMORY);
@@ -1281,7 +1287,8 @@ void Renderer11::drawTriangleFan(GLsizei count, GLenum type, const GLvoid *indic
       default: UNREACHABLE();
     }
 
-    if (!mTriangleFanIB->unmapBuffer())
+    error = mTriangleFanIB->unmapBuffer();
+    if (error.isError())
     {
         ERR("Could not unmap scratch index buffer for GL_TRIANGLE_FAN.");
         return gl::error(GL_OUT_OF_MEMORY);
