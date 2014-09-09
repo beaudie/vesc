@@ -216,7 +216,7 @@ bool Blit9::copy(gl::Framebuffer *framebuffer, const RECT &sourceRect, GLenum de
 
     if (colorbuffer)
     {
-        renderTarget = RenderTarget9::makeRenderTarget9(colorbuffer->getRenderTarget());
+        renderTarget = d3d9::GetAttachmentRenderTarget(colorbuffer);
     }
     
     if (renderTarget)
@@ -252,7 +252,7 @@ bool Blit9::copy(gl::Framebuffer *framebuffer, const RECT &sourceRect, GLenum de
 
     if (colorbuffer)
     {
-        renderTarget = RenderTarget9::makeRenderTarget9(colorbuffer->getRenderTarget());
+        renderTarget = d3d9::GetAttachmentRenderTarget(colorbuffer);
     }
     
     if (renderTarget)
