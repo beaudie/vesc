@@ -597,6 +597,13 @@ Buffer11::PackStorage11 *Buffer11::getPackStorage()
     return static_cast<PackStorage11*>(packStorage);
 }
 
+bool Buffer11::supportsDirectBinding() const
+{
+    // Do not support direct buffers for dynamic data. The streaming buffer
+    // offers better performance for data which changes every frame.
+    return mUnmodifiedDataUse > 0;
+}
+
 Buffer11::BufferStorage11::BufferStorage11(Renderer11 *renderer, BufferUsage usage)
     : mRenderer(renderer),
       mUsage(usage),
