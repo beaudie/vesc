@@ -814,7 +814,7 @@ bool Renderer11::applyRenderTarget(gl::Framebuffer *framebuffer)
             renderTargetSerials[colorAttachment] = colorbuffer->getSerial();
 
             // Extract the render target dimensions and view
-            RenderTarget11 *renderTarget = RenderTarget11::makeRenderTarget11(colorbuffer->getRenderTarget());
+            RenderTarget11 *renderTarget = d3d11::GetAttachmentRenderTarget(colorbuffer);
             if (!renderTarget)
             {
                 ERR("render target pointer unexpectedly null.");
@@ -858,7 +858,7 @@ bool Renderer11::applyRenderTarget(gl::Framebuffer *framebuffer)
     ID3D11DepthStencilView* framebufferDSV = NULL;
     if (depthStencil)
     {
-        RenderTarget11 *depthStencilRenderTarget = RenderTarget11::makeRenderTarget11(depthStencil->getRenderTarget());
+        RenderTarget11 *depthStencilRenderTarget = d3d11::GetAttachmentRenderTarget(depthStencil);
         if (!depthStencilRenderTarget)
         {
             ERR("render target pointer unexpectedly null.");
@@ -1926,7 +1926,7 @@ bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &so
         return gl::error(GL_OUT_OF_MEMORY, false);
     }
 
-    RenderTarget11 *sourceRenderTarget = RenderTarget11::makeRenderTarget11(colorbuffer->getRenderTarget());
+    RenderTarget11 *sourceRenderTarget = d3d11::GetAttachmentRenderTarget(colorbuffer);
     if (!sourceRenderTarget)
     {
         ERR("Failed to retrieve the render target from the frame buffer.");
@@ -1987,7 +1987,7 @@ bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &so
         return gl::error(GL_OUT_OF_MEMORY, false);
     }
 
-    RenderTarget11 *sourceRenderTarget = RenderTarget11::makeRenderTarget11(colorbuffer->getRenderTarget());
+    RenderTarget11 *sourceRenderTarget = d3d11::GetAttachmentRenderTarget(colorbuffer);
     if (!sourceRenderTarget)
     {
         ERR("Failed to retrieve the render target from the frame buffer.");
@@ -2048,7 +2048,7 @@ bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &so
         return gl::error(GL_OUT_OF_MEMORY, false);
     }
 
-    RenderTarget11 *sourceRenderTarget = RenderTarget11::makeRenderTarget11(colorbuffer->getRenderTarget());
+    RenderTarget11 *sourceRenderTarget = d3d11::GetAttachmentRenderTarget(colorbuffer);
     if (!sourceRenderTarget)
     {
         ERR("Failed to retrieve the render target from the frame buffer.");
@@ -2109,7 +2109,7 @@ bool Renderer11::copyImage(gl::Framebuffer *framebuffer, const gl::Rectangle &so
         return gl::error(GL_OUT_OF_MEMORY, false);
     }
 
-    RenderTarget11 *sourceRenderTarget = RenderTarget11::makeRenderTarget11(colorbuffer->getRenderTarget());
+    RenderTarget11 *sourceRenderTarget = d3d11::GetAttachmentRenderTarget(colorbuffer);
     if (!sourceRenderTarget)
     {
         ERR("Failed to retrieve the render target from the frame buffer.");
@@ -2478,7 +2478,7 @@ bool Renderer11::getRenderTargetResource(gl::FramebufferAttachment *colorbuffer,
 {
     ASSERT(colorbuffer != NULL);
 
-    RenderTarget11 *renderTarget = RenderTarget11::makeRenderTarget11(colorbuffer->getRenderTarget());
+    RenderTarget11 *renderTarget = d3d11::GetAttachmentRenderTarget(colorbuffer);
     if (renderTarget)
     {
         *subresourceIndex = renderTarget->getSubresourceIndex();
@@ -2523,7 +2523,7 @@ bool Renderer11::blitRect(gl::Framebuffer *readTarget, const gl::Rectangle &read
             return gl::error(GL_OUT_OF_MEMORY, false);
         }
 
-        RenderTarget *readRenderTarget = readBuffer->getRenderTarget();
+        RenderTarget *readRenderTarget = GetAttachmentRenderTarget(readBuffer);
 
         for (unsigned int colorAttachment = 0; colorAttachment < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; colorAttachment++)
         {
@@ -2537,7 +2537,7 @@ bool Renderer11::blitRect(gl::Framebuffer *readTarget, const gl::Rectangle &read
                     return gl::error(GL_OUT_OF_MEMORY, false);
                 }
 
-                RenderTarget *drawRenderTarget = drawBuffer->getRenderTarget();
+                RenderTarget *drawRenderTarget = GetAttachmentRenderTarget(drawBuffer);
 
                 if (!blitRenderbufferRect(readRect, drawRect, readRenderTarget, drawRenderTarget, filter, scissor,
                                           blitRenderTarget, false, false))
@@ -2565,8 +2565,8 @@ bool Renderer11::blitRect(gl::Framebuffer *readTarget, const gl::Rectangle &read
             return gl::error(GL_OUT_OF_MEMORY, false);
         }
 
-        RenderTarget *readRenderTarget = readBuffer->getRenderTarget();
-        RenderTarget *drawRenderTarget = drawBuffer->getRenderTarget();
+        RenderTarget *readRenderTarget = GetAttachmentRenderTarget(readBuffer);
+        RenderTarget *drawRenderTarget = GetAttachmentRenderTarget(drawBuffer);
         ASSERT(readRenderTarget && drawRenderTarget);
 
         if (!blitRenderbufferRect(readRect, drawRect, readRenderTarget, drawRenderTarget, filter, scissor,
@@ -3080,6 +3080,7 @@ void Renderer11::invalidateFBOAttachmentSwizzles(gl::FramebufferAttachment *atta
 {
     ASSERT(attachment->isTexture());
     gl::Texture *texture = attachment->getTexture();
+
     TextureStorage *texStorage = texture->getNativeTexture()->getStorageInstance();
     if (texStorage)
     {
