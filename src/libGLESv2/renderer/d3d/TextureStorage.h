@@ -11,6 +11,8 @@
 #ifndef LIBGLESV2_RENDERER_TEXTURESTORAGE_H_
 #define LIBGLESV2_RENDERER_TEXTURESTORAGE_H_
 
+#include "libGLESv2/Error.h"
+
 #include "common/debug.h"
 
 #include <GLES2/gl2.h>
@@ -37,7 +39,8 @@ class TextureStorage
     virtual bool isManaged() const = 0;
     virtual int getLevelCount() const = 0;
 
-    virtual RenderTarget *getRenderTarget(const gl::ImageIndex &index) = 0;
+    virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT) = 0;
+
     virtual void generateMipmap(int level) = 0;
     virtual void generateMipmap(int face, int level) = 0;
 

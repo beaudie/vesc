@@ -8200,7 +8200,12 @@ void __stdcall glInvalidateFramebuffer(GLenum target, GLsizei numAttachments, co
         gl::Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
         if (framebuffer && framebuffer->completeness() == GL_FRAMEBUFFER_COMPLETE)
         {
-            framebuffer->invalidate(context->getCaps(), numAttachments, attachments);
+            gl::Error error = framebuffer->invalidate(context->getCaps(), numAttachments, attachments);
+            if (error.isError())
+            {
+                context->recordError(error);
+                return;
+            }
         }
     }
 }
@@ -8228,7 +8233,12 @@ void __stdcall glInvalidateSubFramebuffer(GLenum target, GLsizei numAttachments,
         gl::Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
         if (framebuffer && framebuffer->completeness() == GL_FRAMEBUFFER_COMPLETE)
         {
-            framebuffer->invalidateSub(context->getCaps(), numAttachments, attachments, x, y, width, height);
+            gl::Error error = framebuffer->invalidateSub(numAttachments, attachments, x, y, width, height);
+            if (error.isError())
+            {
+                context->recordError(error);
+                return;
+            }
         }
     }
 }

@@ -491,24 +491,19 @@ gl::Error Image9::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLi
     // ES3.0 only behaviour to copy into a 3d texture
     ASSERT(zoffset == 0);
 
-    RenderTarget9 *renderTarget = NULL;
-    IDirect3DSurface9 *surface = NULL;
     gl::FramebufferAttachment *colorbuffer = source->getColorbuffer(0);
+    ASSERT(colorbuffer);
 
-    if (colorbuffer)
+    RenderTarget9 *renderTarget9 = NULL;
+    gl::Error error = d3d9::GetAttachmentRenderTarget(colorbuffer, &renderTarget9);
+    if (error.isError())
     {
-        renderTarget = d3d9::GetAttachmentRenderTarget(colorbuffer);
+        return error;
     }
+    ASSERT(renderTarget9);
 
-    if (renderTarget)
-    {
-        surface = renderTarget->getSurface();
-    }
-
-    if (!surface)
-    {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the internal render target.");
-    }
+    IDirect3DSurface9 *surface = renderTarget9->getSurface();
+    ASSERT(surface);
 
     IDirect3DDevice9 *device = mRenderer->getDevice();
 

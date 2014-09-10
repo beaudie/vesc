@@ -208,32 +208,23 @@ gl::Error Blit9::boxFilter(IDirect3DSurface9 *source, IDirect3DSurface9 *dest)
 
 gl::Error Blit9::copy(gl::Framebuffer *framebuffer, const RECT &sourceRect, GLenum destFormat, GLint xoffset, GLint yoffset, TextureStorageInterface2D *storage, GLint level)
 {
-    RenderTarget9 *renderTarget = NULL;
-    IDirect3DSurface9 *source = NULL;
     gl::FramebufferAttachment *colorbuffer = framebuffer->getColorbuffer(0);
+    ASSERT(colorbuffer);
 
-    if (colorbuffer)
+    RenderTarget9 *renderTarget9 = NULL;
+    gl::Error error = d3d9::GetAttachmentRenderTarget(colorbuffer, &renderTarget9);
+    if (error.isError())
     {
-        renderTarget = d3d9::GetAttachmentRenderTarget(colorbuffer);
+        return error;
     }
+    ASSERT(renderTarget9);
 
-    if (renderTarget)
-    {
-        source = renderTarget->getSurface();
-    }
-
-    if (!source)
-    {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the internal render target for texture blit.");
-    }
+    IDirect3DSurface9 *source = renderTarget9->getSurface();
+    ASSERT(source);
 
     TextureStorage9_2D *storage9 = TextureStorage9_2D::makeTextureStorage9_2D(storage->getStorageInstance());
     IDirect3DSurface9 *destSurface = storage9->getSurfaceLevel(level, true);
-    if (!destSurface)
-    {
-        SafeRelease(source);
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the destination surface for texture blit.");
-    }
+    ASSERT(destSurface);
 
     gl::Error result = copy(source, sourceRect, destFormat, xoffset, yoffset, destSurface);
 
@@ -245,33 +236,23 @@ gl::Error Blit9::copy(gl::Framebuffer *framebuffer, const RECT &sourceRect, GLen
 
 gl::Error Blit9::copy(gl::Framebuffer *framebuffer, const RECT &sourceRect, GLenum destFormat, GLint xoffset, GLint yoffset, TextureStorageInterfaceCube *storage, GLenum target, GLint level)
 {
-    RenderTarget9 *renderTarget = NULL;
-    IDirect3DSurface9 *source = NULL;
     gl::FramebufferAttachment *colorbuffer = framebuffer->getColorbuffer(0);
+    ASSERT(colorbuffer);
 
-    if (colorbuffer)
+    RenderTarget9 *renderTarget9 = NULL;
+    gl::Error error = d3d9::GetAttachmentRenderTarget(colorbuffer, &renderTarget9);
+    if (error.isError())
     {
-        renderTarget = d3d9::GetAttachmentRenderTarget(colorbuffer);
+        return error;
     }
+    ASSERT(renderTarget9);
 
-    if (renderTarget)
-    {
-        source = renderTarget->getSurface();
-    }
-
-    if (!source)
-    {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the internal render target for texture blit.");
-    }
+    IDirect3DSurface9 *source = renderTarget9->getSurface();
+    ASSERT(source);
 
     TextureStorage9_Cube *storage9 = TextureStorage9_Cube::makeTextureStorage9_Cube(storage->getStorageInstance());
     IDirect3DSurface9 *destSurface = storage9->getCubeMapSurface(target, level, true);
-
-    if (!destSurface)
-    {
-        SafeRelease(source);
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the destination surface for texture blit.");
-    }
+    ASSERT(destSurface);
 
     gl::Error result = copy(source, sourceRect, destFormat, xoffset, yoffset, destSurface);
 
