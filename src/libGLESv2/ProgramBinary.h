@@ -113,8 +113,6 @@ class ProgramBinary : public RefCountObject
     GLenum getSamplerTextureType(SamplerType type, unsigned int samplerIndex);
     GLint getUsedSamplerRange(SamplerType type);
     bool usesPointSize() const;
-    bool usesPointSpriteEmulation() const;
-    bool usesGeometryShader() const;
 
     GLint getUniformLocation(std::string name);
     GLuint getUniformIndex(std::string name);
@@ -187,7 +185,6 @@ class ProgramBinary : public RefCountObject
     void updateSamplerMapping();
 
     unsigned int getSerial() const;
-    int getShaderVersion() const;
 
     void initAttributesByLayout();
     void sortAttributesByLayout(rx::TranslatedAttribute attributes[MAX_VERTEX_ATTRIBS], int sortedSemanticIndices[MAX_VERTEX_ATTRIBS]) const;
@@ -292,7 +289,6 @@ class ProgramBinary : public RefCountObject
 
     std::vector<VertexExecutable *> mVertexExecutables;
     std::vector<PixelExecutable *> mPixelExecutables;
-
     rx::ShaderExecutable *mGeometryExecutable;
 
     sh::Attribute mLinkedAttribute[MAX_VERTEX_ATTRIBS];
@@ -307,8 +303,6 @@ class ProgramBinary : public RefCountObject
     std::vector<Sampler> mSamplersVS;
     GLuint mUsedVertexSamplerRange;
     GLuint mUsedPixelSamplerRange;
-    bool mUsesPointSize;
-    int mShaderVersion;
     bool mDirtySamplerMapping;
 
     std::vector<LinkedUniform*> mUniforms;
