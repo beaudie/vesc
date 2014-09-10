@@ -335,7 +335,6 @@ gl::Error Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::R
 
     ID3D11Texture2D *sourceTexture2D = d3d11::DynamicCastComObject<ID3D11Texture2D>(sourceRenderTarget->getTexture());
     unsigned int subresourceIndex = sourceRenderTarget->getSubresourceIndex();
-
     if (!sourceTexture2D)
     {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the ID3D11Texture2D from the source RenderTarget.");
