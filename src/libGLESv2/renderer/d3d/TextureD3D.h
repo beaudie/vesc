@@ -48,7 +48,7 @@ class TextureD3D : public TextureImpl
 
     bool isImmutable() const { return mImmutable; }
 
-    virtual RenderTarget *getRenderTarget(const gl::ImageIndex &index) = 0;
+    virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT) = 0;
     virtual unsigned int getRenderTargetSerial(const gl::ImageIndex &index) = 0;
 
   protected:
@@ -112,7 +112,7 @@ class TextureD3D_2D : public TextureD3D
 
     virtual void generateMipmaps();
 
-    virtual RenderTarget *getRenderTarget(const gl::ImageIndex &index);
+    virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT);
     virtual unsigned int getRenderTargetSerial(const gl::ImageIndex &index);
 
   private:
@@ -169,7 +169,7 @@ class TextureD3D_Cube : public TextureD3D
 
     virtual void generateMipmaps();
 
-    virtual RenderTarget *getRenderTarget(const gl::ImageIndex &index);
+    virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT);
     virtual unsigned int getRenderTargetSerial(const gl::ImageIndex &index);
 
   private:
@@ -226,7 +226,7 @@ class TextureD3D_3D : public TextureD3D
 
     virtual void generateMipmaps();
 
-    virtual RenderTarget *getRenderTarget(const gl::ImageIndex &index);
+    virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT);
     virtual unsigned int getRenderTargetSerial(const gl::ImageIndex &index);
 
   private:
@@ -282,7 +282,7 @@ class TextureD3D_2DArray : public TextureD3D
 
     virtual void generateMipmaps();
 
-    virtual RenderTarget *getRenderTarget(const gl::ImageIndex &index);
+    virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT);
     virtual unsigned int getRenderTargetSerial(const gl::ImageIndex &index);
 
   private:

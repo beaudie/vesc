@@ -335,22 +335,25 @@ gl::Error TextureD3D_2D::setImage(GLenum target, GLint level, GLsizei width, GLs
         gl::ImageIndex index = gl::ImageIndex::Make2D(level);
 
         // Will try to create RT storage if it does not exist
-        RenderTarget *destRenderTarget = getRenderTarget(index);
+        RenderTarget *destRenderTarget = NULL;
+        gl::Error error = getRenderTarget(index, &destRenderTarget);
+        if (error.isError())
+        {
+            return error;
+        }
+
         gl::Box destArea(0, 0, 0, getWidth(level), getHeight(level), 1);
 
-        if (destRenderTarget)
+        error = fastUnpackPixels(unpack, pixels, destArea, sizedInternalFormat, type, destRenderTarget);
+        if (error.isError())
         {
-            gl::Error error = fastUnpackPixels(unpack, pixels, destArea, sizedInternalFormat, type, destRenderTarget);
-            if (error.isError())
-            {
-                return error;
-            }
-
-            // Ensure we don't overwrite our newly initialized data
-            mImageArray[level]->markClean();
-
-            fastUnpacked = true;
+            return error;
         }
+
+        // Ensure we don't overwrite our newly initialized data
+        mImageArray[level]->markClean();
+
+        fastUnpacked = true;
     }
 
     if (!fastUnpacked)
@@ -388,22 +391,25 @@ gl::Error TextureD3D_2D::subImage(GLenum target, GLint level, GLint xoffset, GLi
     gl::ImageIndex index = gl::ImageIndex::Make2D(level);
     if (isFastUnpackable(unpack, getInternalFormat(level)) && isLevelComplete(level))
     {
-        RenderTarget *renderTarget = getRenderTarget(index);
+        RenderTarget *renderTarget = NULL;
+        gl::Error error = getRenderTarget(index, &renderTarget);
+        if (error.isError())
+        {
+            return error;
+        }
+
         gl::Box destArea(xoffset, yoffset, 0, width, height, 1);
 
-        if (renderTarget)
+        error = fastUnpackPixels(unpack, pixels, destArea, getInternalFormat(level), type, renderTarget);
+        if (error.isError())
         {
-            gl::Error error = fastUnpackPixels(unpack, pixels, destArea, getInternalFormat(level), type, renderTarget);
-            if (error.isError())
-            {
-                return error;
-            }
-
-            // Ensure we don't overwrite our newly initialized data
-            mImageArray[level]->markClean();
-
-            fastUnpacked = true;
+            return error;
         }
+
+        // Ensure we don't overwrite our newly initialized data
+        mImageArray[level]->markClean();
+
+        fastUnpacked = true;
     }
 
     if (!fastUnpacked)
@@ -643,7 +649,7 @@ unsigned int TextureD3D_2D::getRenderTargetSerial(const gl::ImageIndex &index)
     return (!ensureRenderTarget().isError() ? mTexStorage->getRenderTargetSerial(index) : 0);
 }
 
-RenderTarget *TextureD3D_2D::getRenderTarget(const gl::ImageIndex &index)
+gl::Error TextureD3D_2D::getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT)
 {
     ASSERT(!index.hasLayer());
 
@@ -651,16 +657,16 @@ RenderTarget *TextureD3D_2D::getRenderTarget(const gl::ImageIndex &index)
     gl::Error error = ensureRenderTarget();
     if (error.isError())
     {
-        return NULL;
+        return error;
     }
 
     error = updateStorageLevel(index.mipIndex);
     if (error.isError())
     {
-        return NULL;
+        return error;
     }
 
-    return mTexStorage->getRenderTarget(index);
+    return mTexStorage->getRenderTarget(index, outRT);
 }
 
 bool TextureD3D_2D::isValidLevel(int level) const
@@ -1285,7 +1291,7 @@ unsigned int TextureD3D_Cube::getRenderTargetSerial(const gl::ImageIndex &index)
     return (ensureRenderTarget().isError() ? mTexStorage->getRenderTargetSerial(index) : 0);
 }
 
-RenderTarget *TextureD3D_Cube::getRenderTarget(const gl::ImageIndex &index)
+gl::Error TextureD3D_Cube::getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT)
 {
     ASSERT(gl::IsCubemapTextureTarget(index.type));
 
@@ -1293,16 +1299,16 @@ RenderTarget *TextureD3D_Cube::getRenderTarget(const gl::ImageIndex &index)
     gl::Error error = ensureRenderTarget();
     if (error.isError())
     {
-        return NULL;
+        return error;
     }
 
     error = updateStorageFaceLevel(index.layerIndex, index.mipIndex);
     if (error.isError())
     {
-        return NULL;
+        return error;
     }
 
-    return mTexStorage->getRenderTarget(index);
+    return mTexStorage->getRenderTarget(index, outRT);
 }
 
 gl::Error TextureD3D_Cube::initializeStorage(bool renderTarget)
@@ -1669,22 +1675,25 @@ gl::Error TextureD3D_3D::setImage(GLenum target, GLint level, GLsizei width, GLs
     {
         // Will try to create RT storage if it does not exist
         gl::ImageIndex index = gl::ImageIndex::Make3D(level);
-        RenderTarget *destRenderTarget = getRenderTarget(index);
+        RenderTarget *destRenderTarget = NULL;
+        gl::Error error = getRenderTarget(index, &destRenderTarget);
+        if (error.isError())
+        {
+            return error;
+        }
+
         gl::Box destArea(0, 0, 0, getWidth(level), getHeight(level), getDepth(level));
 
-        if (destRenderTarget)
+        error = fastUnpackPixels(unpack, pixels, destArea, sizedInternalFormat, type, destRenderTarget);
+        if (error.isError())
         {
-            gl::Error error = fastUnpackPixels(unpack, pixels, destArea, sizedInternalFormat, type, destRenderTarget);
-            if (error.isError())
-            {
-                return error;
-            }
-
-            // Ensure we don't overwrite our newly initialized data
-            mImageArray[level]->markClean();
-
-            fastUnpacked = true;
+            return error;
         }
+
+        // Ensure we don't overwrite our newly initialized data
+        mImageArray[level]->markClean();
+
+        fastUnpacked = true;
     }
 
     if (!fastUnpacked)
@@ -1724,22 +1733,25 @@ gl::Error TextureD3D_3D::subImage(GLenum target, GLint level, GLint xoffset, GLi
     // Attempt a fast gpu copy of the pixel data to the surface if the app bound an unpack buffer
     if (isFastUnpackable(unpack, getInternalFormat(level)))
     {
-        RenderTarget *destRenderTarget = getRenderTarget(index);
+        RenderTarget *destRenderTarget = NULL;
+        gl::Error error = getRenderTarget(index, &destRenderTarget);
+        if (error.isError())
+        {
+            return error;
+        }
+
         gl::Box destArea(xoffset, yoffset, zoffset, width, height, depth);
 
-        if (destRenderTarget)
+        error = fastUnpackPixels(unpack, pixels, destArea, getInternalFormat(level), type, destRenderTarget);
+        if (error.isError())
         {
-            gl::Error error = fastUnpackPixels(unpack, pixels, destArea, getInternalFormat(level), type, destRenderTarget);
-            if (error.isError())
-            {
-                return error;
-            }
-
-            // Ensure we don't overwrite our newly initialized data
-            mImageArray[level]->markClean();
-
-            fastUnpacked = true;
+            return error;
         }
+
+        // Ensure we don't overwrite our newly initialized data
+        mImageArray[level]->markClean();
+
+        fastUnpacked = true;
     }
 
     if (!fastUnpacked)
@@ -1923,13 +1935,13 @@ unsigned int TextureD3D_3D::getRenderTargetSerial(const gl::ImageIndex &index)
     return (!ensureRenderTarget().isError() ? mTexStorage->getRenderTargetSerial(index) : 0);
 }
 
-RenderTarget *TextureD3D_3D::getRenderTarget(const gl::ImageIndex &index)
+gl::Error TextureD3D_3D::getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT)
 {
     // ensure the underlying texture is created
     gl::Error error = ensureRenderTarget();
     if (error.isError())
     {
-        return NULL;
+        return error;
     }
 
     if (index.hasLayer())
@@ -1937,7 +1949,7 @@ RenderTarget *TextureD3D_3D::getRenderTarget(const gl::ImageIndex &index)
         error = updateStorage();
         if (error.isError())
         {
-            return NULL;
+            return error;
         }
     }
     else
@@ -1945,11 +1957,11 @@ RenderTarget *TextureD3D_3D::getRenderTarget(const gl::ImageIndex &index)
         error = updateStorageLevel(index.mipIndex);
         if (error.isError())
         {
-            return NULL;
+            return error;
         }
     }
 
-    return mTexStorage->getRenderTarget(index);
+    return mTexStorage->getRenderTarget(index, outRT);
 }
 
 gl::Error TextureD3D_3D::initializeStorage(bool renderTarget)
@@ -2543,22 +2555,22 @@ unsigned int TextureD3D_2DArray::getRenderTargetSerial(const gl::ImageIndex &ind
     return (!ensureRenderTarget().isError() ? mTexStorage->getRenderTargetSerial(index) : 0);
 }
 
-RenderTarget *TextureD3D_2DArray::getRenderTarget(const gl::ImageIndex &index)
+gl::Error TextureD3D_2DArray::getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT)
 {
     // ensure the underlying texture is created
     gl::Error error = ensureRenderTarget();
     if (error.isError())
     {
-        return NULL;
+        return error;
     }
 
     error = updateStorageLevel(index.mipIndex);
     if (error.isError())
     {
-        return NULL;
+        return error;
     }
 
-    return mTexStorage->getRenderTarget(index);
+    return mTexStorage->getRenderTarget(index, outRT);
 }
 
 gl::Error TextureD3D_2DArray::initializeStorage(bool renderTarget)

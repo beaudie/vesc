@@ -1620,7 +1620,11 @@ Error Context::clear(GLbitfield mask)
 
     ClearParameters clearParams = mState.getClearParameters(mask);
 
-    applyRenderTarget(GL_TRIANGLES, true);   // Clips the clear to the scissor rectangle but not the viewport
+    Error error = applyRenderTarget(GL_TRIANGLES, true);   // Clips the clear to the scissor rectangle but not the viewport
+    if (error.isError())
+    {
+        return error;
+    }
 
     return mRenderer->clear(clearParams, mState.getDrawFramebuffer());
 }
@@ -1651,7 +1655,11 @@ Error Context::clearBufferfv(GLenum buffer, int drawbuffer, const float *values)
         clearParams.depthClearValue = values[0];
     }
 
-    applyRenderTarget(GL_TRIANGLES, true);   // Clips the clear to the scissor rectangle but not the viewport
+    Error error = applyRenderTarget(GL_TRIANGLES, true);   // Clips the clear to the scissor rectangle but not the viewport
+    if (error.isError())
+    {
+        return error;
+    }
 
     return mRenderer->clear(clearParams, mState.getDrawFramebuffer());
 }
@@ -1672,7 +1680,11 @@ Error Context::clearBufferuiv(GLenum buffer, int drawbuffer, const unsigned int 
     clearParams.colorUIClearValue = ColorUI(values[0], values[1], values[2], values[3]);
     clearParams.colorClearType = GL_UNSIGNED_INT;
 
-    applyRenderTarget(GL_TRIANGLES, true);   // Clips the clear to the scissor rectangle but not the viewport
+    Error error = applyRenderTarget(GL_TRIANGLES, true);   // Clips the clear to the scissor rectangle but not the viewport
+    if (error.isError())
+    {
+        return error;
+    }
 
     return mRenderer->clear(clearParams, mState.getDrawFramebuffer());
 }
@@ -1703,7 +1715,11 @@ Error Context::clearBufferiv(GLenum buffer, int drawbuffer, const int *values)
         clearParams.stencilClearValue = values[1];
     }
 
-    applyRenderTarget(GL_TRIANGLES, true);   // Clips the clear to the scissor rectangle but not the viewport
+    Error error = applyRenderTarget(GL_TRIANGLES, true);   // Clips the clear to the scissor rectangle but not the viewport
+    if (error.isError())
+    {
+        return error;
+    }
 
     return mRenderer->clear(clearParams, mState.getDrawFramebuffer());
 }
@@ -1722,7 +1738,11 @@ Error Context::clearBufferfi(GLenum buffer, int drawbuffer, float depth, int ste
     clearParams.clearStencil = true;
     clearParams.stencilClearValue = stencil;
 
-    applyRenderTarget(GL_TRIANGLES, true);   // Clips the clear to the scissor rectangle but not the viewport
+    Error error = applyRenderTarget(GL_TRIANGLES, true);   // Clips the clear to the scissor rectangle but not the viewport
+    if (error.isError())
+    {
+        return error;
+    }
 
     return mRenderer->clear(clearParams, mState.getDrawFramebuffer());
 }
