@@ -320,25 +320,23 @@ gl::Error TextureStorage11::updateSubresourceLevel(ID3D11Resource *srcTexture, u
     }
 }
 
-bool TextureStorage11::copySubresourceLevel(ID3D11Resource* dstTexture, unsigned int dstSubresource,
+gl::Error TextureStorage11::copySubresourceLevel(ID3D11Resource* dstTexture, unsigned int dstSubresource,
                                             int level, int layerTarget, GLint xoffset, GLint yoffset, GLint zoffset,
                                             GLsizei width, GLsizei height, GLsizei depth)
 {
-    if (dstTexture)
-    {
-        ID3D11Resource *srcTexture = getResource();
-        unsigned int srcSubresource = getSubresourceIndex(level + mTopLevel, layerTarget);
+    ASSERT(dstTexture);
 
-        ASSERT(srcTexture);
+    ID3D11Resource *srcTexture = getResource();
+    unsigned int srcSubresource = getSubresourceIndex(level + mTopLevel, layerTarget);
 
-        ID3D11DeviceContext *context = mRenderer->getDeviceContext();
+    ASSERT(srcTexture);
 
-        context->CopySubresourceRegion(dstTexture, dstSubresource, xoffset, yoffset, zoffset,
-                                       srcTexture, srcSubresource, NULL);
-        return true;
-    }
+    ID3D11DeviceContext *context = mRenderer->getDeviceContext();
 
-    return false;
+    context->CopySubresourceRegion(dstTexture, dstSubresource, xoffset, yoffset, zoffset,
+                                    srcTexture, srcSubresource, NULL);
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void TextureStorage11::generateMipmapLayer(RenderTarget11 *source, RenderTarget11 *dest)
@@ -498,7 +496,12 @@ TextureStorage11_2D::~TextureStorage11_2D()
             if (imageAssociationCorrect)
             {
                 // We must let the Images recover their data before we delete it from the TextureStorage.
-                mAssociatedImages[i]->recoverFromAssociatedStorage();
+                gl::Error error = mAssociatedImages[i]->recoverFromAssociatedStorage();
+                if (error.isError())
+                {
+                    // TODO: Find a way to report this back to the context
+                    ERR(error.getMessage().c_str());
+                }
             }
         }
     }
@@ -559,7 +562,7 @@ void TextureStorage11_2D::disassociateImage(int level, int layerTarget, Image11*
 }
 
 // releaseAssociatedImage prepares the Storage for a new Image association. It lets the old Image recover its data before ending the association.
-void TextureStorage11_2D::releaseAssociatedImage(int level, int layerTarget, Image11* incomingImage)
+gl::Error TextureStorage11_2D::releaseAssociatedImage(int level, int layerTarget, Image11* incomingImage)
 {
     ASSERT(0 <= level && level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS);
 
@@ -576,10 +579,16 @@ void TextureStorage11_2D::releaseAssociatedImage(int level, int layerTarget, Ima
             {
                 // Force the image to recover from storage before its data is overwritten.
                 // This will reset mAssociatedImages[level] to NULL too.
-                mAssociatedImages[level]->recoverFromAssociatedStorage();
+                gl::Error error = mAssociatedImages[level]->recoverFromAssociatedStorage();
+                if (error.isError())
+                {
+                    return error;
+                }
             }
         }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 ID3D11Resource *TextureStorage11_2D::getResource() const
@@ -931,7 +940,7 @@ void TextureStorage11_Cube::disassociateImage(int level, int layerTarget, Image1
 }
 
 // releaseAssociatedImage prepares the Storage for a new Image association. It lets the old Image recover its data before ending the association.
-void TextureStorage11_Cube::releaseAssociatedImage(int level, int layerTarget, Image11* incomingImage)
+gl::Error TextureStorage11_Cube::releaseAssociatedImage(int level, int layerTarget, Image11* incomingImage)
 {
     ASSERT(0 <= level && level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS);
     ASSERT(0 <= layerTarget && layerTarget < 6);
@@ -951,11 +960,17 @@ void TextureStorage11_Cube::releaseAssociatedImage(int level, int layerTarget, I
                 {
                     // Force the image to recover from storage before its data is overwritten.
                     // This will reset mAssociatedImages[level] to NULL too.
-                    mAssociatedImages[layerTarget][level]->recoverFromAssociatedStorage();
+                    gl::Error error = mAssociatedImages[layerTarget][level]->recoverFromAssociatedStorage();
+                    if (error.isError())
+                    {
+                        return error;
+                    }
                 }
             }
         }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 ID3D11Resource *TextureStorage11_Cube::getResource() const
@@ -1332,7 +1347,7 @@ void TextureStorage11_3D::disassociateImage(int level, int layerTarget, Image11*
 }
 
 // releaseAssociatedImage prepares the Storage for a new Image association. It lets the old Image recover its data before ending the association.
-void TextureStorage11_3D::releaseAssociatedImage(int level, int layerTarget, Image11* incomingImage)
+gl::Error TextureStorage11_3D::releaseAssociatedImage(int level, int layerTarget, Image11* incomingImage)
 {
     ASSERT((0 <= level && level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS));
 
@@ -1349,10 +1364,16 @@ void TextureStorage11_3D::releaseAssociatedImage(int level, int layerTarget, Ima
             {
                 // Force the image to recover from storage before its data is overwritten.
                 // This will reset mAssociatedImages[level] to NULL too.
-                mAssociatedImages[level]->recoverFromAssociatedStorage();
+                gl::Error error = mAssociatedImages[level]->recoverFromAssociatedStorage();
+                if (error.isError())
+                {
+                    return error;
+                }
             }
         }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 ID3D11Resource *TextureStorage11_3D::getResource() const
@@ -1698,7 +1719,7 @@ void TextureStorage11_2DArray::disassociateImage(int level, int layerTarget, Ima
 }
 
 // releaseAssociatedImage prepares the Storage for a new Image association. It lets the old Image recover its data before ending the association.
-void TextureStorage11_2DArray::releaseAssociatedImage(int level, int layerTarget, Image11* incomingImage)
+gl::Error TextureStorage11_2DArray::releaseAssociatedImage(int level, int layerTarget, Image11* incomingImage)
 {
     LevelLayerKey key(level, layerTarget);
 
@@ -1716,10 +1737,16 @@ void TextureStorage11_2DArray::releaseAssociatedImage(int level, int layerTarget
             {
                 // Force the image to recover from storage before its data is overwritten.
                 // This will reset mAssociatedImages[level] to NULL too.
-                mAssociatedImages[key]->recoverFromAssociatedStorage();
+                gl::Error error = mAssociatedImages[key]->recoverFromAssociatedStorage();
+                if (error.isError())
+                {
+                    return error;
+                }
             }
         }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 ID3D11Resource *TextureStorage11_2DArray::getResource() const

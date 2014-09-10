@@ -53,7 +53,7 @@ class Image11 : public ImageD3D
 
     virtual gl::Error copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height, gl::Framebuffer *source);
 
-    bool recoverFromAssociatedStorage();
+    gl::Error recoverFromAssociatedStorage();
     bool isAssociatedStorageValid(TextureStorage11* textureStorage) const;
     void disassociateStorage();
 
