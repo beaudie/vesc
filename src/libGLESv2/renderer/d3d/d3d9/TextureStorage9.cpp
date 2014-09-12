@@ -95,6 +95,7 @@ TextureStorage9_2D::TextureStorage9_2D(Renderer *renderer, SwapChain9 *swapchain
     mRenderTarget = NULL;
 
     initializeRenderTarget();
+    initializeSerials(1, 0);
 }
 
 TextureStorage9_2D::TextureStorage9_2D(Renderer *renderer, GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels)
@@ -121,6 +122,7 @@ TextureStorage9_2D::TextureStorage9_2D(Renderer *renderer, GLenum internalformat
     }
 
     initializeRenderTarget();
+    initializeSerials(getLevelCount(), 0);
 }
 
 TextureStorage9_2D::~TextureStorage9_2D()
@@ -228,6 +230,7 @@ TextureStorage9_Cube::TextureStorage9_Cube(Renderer *renderer, GLenum internalfo
     }
 
     initializeRenderTarget();
+    initializeSerials(getLevelCount() * 6, 6);
 }
 
 TextureStorage9_Cube::~TextureStorage9_Cube()
