@@ -58,9 +58,6 @@ class TextureImpl
 
     virtual void generateMipmaps() = 0;
 
-    virtual unsigned int getRenderTargetSerial(GLint level, GLint layer) = 0;
-    virtual RenderTarget *getRenderTarget(GLint level, GLint layer) = 0;
-
     virtual void bindTexImage(egl::Surface *surface) = 0;
     virtual void releaseTexImage() = 0;
 };
