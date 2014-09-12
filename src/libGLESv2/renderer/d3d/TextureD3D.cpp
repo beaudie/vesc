@@ -49,12 +49,12 @@ TextureD3D *TextureD3D::makeTextureD3D(TextureImpl *texture)
     return static_cast<TextureD3D*>(texture);
 }
 
-TextureStorageInterface *TextureD3D::getNativeTexture()
+TextureStorage *TextureD3D::getNativeTexture()
 {
     // ensure the underlying texture is created
     initializeStorage(false);
 
-    TextureStorageInterface *storage = getBaseLevelStorage();
+    TextureStorage *storage = getBaseLevelStorage();
     if (storage)
     {
         updateStorage();
@@ -457,7 +457,7 @@ void TextureD3D_2D::storage(GLenum target, GLsizei levels, GLenum internalformat
 
     bool renderTarget = IsRenderTargetUsage(mUsage);
     TextureStorage *storage = mRenderer->createTextureStorage2D(internalformat, renderTarget, width, height, levels);
-    setCompleteTexStorage(new TextureStorageInterface(storage, 0));
+    setCompleteTexStorage(storage);
 }
 
 void TextureD3D_2D::bindTexImage(egl::Surface *surface)
@@ -470,8 +470,8 @@ void TextureD3D_2D::bindTexImage(egl::Surface *surface)
     {
         SafeDelete(mTexStorage);
     }
-    TextureStorage *storage = mRenderer->createTextureStorage2D(surface->getSwapChain());
-    mTexStorage = new TextureStorageInterface(storage, 0);
+
+    mTexStorage = mRenderer->createTextureStorage2D(surface->getSwapChain());
 
     mDirtyImages = true;
 }
@@ -502,7 +502,7 @@ void TextureD3D_2D::generateMipmaps()
 
     if (mTexStorage && mTexStorage->isRenderTarget())
     {
-        mTexStorage->getStorageInstance()->generateMipmaps();
+        mTexStorage->generateMipmaps();
         for (int level = 1; level < levelCount; level++)
         {
             mImageArray[level]->markClean();
@@ -534,7 +534,7 @@ RenderTarget *TextureD3D_2D::getRenderTarget(const gl::ImageIndex &index)
     }
 
     updateStorageLevel(index.mipIndex);
-    return mTexStorage->getStorageInstance()->getRenderTarget(index);
+    return mTexStorage->getRenderTarget(index);
 }
 
 bool TextureD3D_2D::isValidLevel(int level) const
@@ -610,7 +610,7 @@ void TextureD3D_2D::initializeStorage(bool renderTarget)
     updateStorage();
 }
 
-TextureStorageInterface *TextureD3D_2D::createCompleteStorage(bool renderTarget) const
+TextureStorage *TextureD3D_2D::createCompleteStorage(bool renderTarget) const
 {
     GLsizei width = getBaseLevelWidth();
     GLsizei height = getBaseLevelHeight();
@@ -621,11 +621,10 @@ TextureStorageInterface *TextureD3D_2D::createCompleteStorage(bool renderTarget)
     // use existing storage level count, when previously specified by TexStorage*D
     GLint levels = (mTexStorage ? mTexStorage->getLevelCount() : creationLevels(width, height, 1));
 
-    TextureStorage *storageInstance = mRenderer->createTextureStorage2D(internalFormat, renderTarget, width, height, levels);
-    return new TextureStorageInterface(storageInstance, 0);
+    return mRenderer->createTextureStorage2D(internalFormat, renderTarget, width, height, levels);
 }
 
-void TextureD3D_2D::setCompleteTexStorage(TextureStorageInterface *newCompleteTexStorage)
+void TextureD3D_2D::setCompleteTexStorage(TextureStorage *newCompleteTexStorage)
 {
     SafeDelete(mTexStorage);
     mTexStorage = newCompleteTexStorage;
@@ -663,7 +662,7 @@ bool TextureD3D_2D::ensureRenderTarget()
         ASSERT(mTexStorage);
         if (!mTexStorage->isRenderTarget())
         {
-            TextureStorageInterface *newRenderTargetStorage = createCompleteStorage(true);
+            TextureStorage *newRenderTargetStorage = createCompleteStorage(true);
 
             if (!mRenderer->copyToRenderTarget2D(newRenderTargetStorage, mTexStorage))
             {
@@ -678,7 +677,7 @@ bool TextureD3D_2D::ensureRenderTarget()
     return (mTexStorage && mTexStorage->isRenderTarget());
 }
 
-TextureStorageInterface *TextureD3D_2D::getBaseLevelStorage()
+TextureStorage *TextureD3D_2D::getBaseLevelStorage()
 {
     return mTexStorage;
 }
@@ -943,8 +942,8 @@ void TextureD3D_Cube::storage(GLenum target, GLsizei levels, GLenum internalform
     mImmutable = true;
 
     bool renderTarget = IsRenderTargetUsage(mUsage);
-    TextureStorage *storageInstance = mRenderer->createTextureStorageCube(internalformat, renderTarget, width, levels);
-    setCompleteTexStorage(new TextureStorageInterface(storageInstance, 6));
+    TextureStorage *storage = mRenderer->createTextureStorageCube(internalformat, renderTarget, width, levels);
+    setCompleteTexStorage(storage);
 }
 
 // Tests for cube texture completeness. [OpenGL ES 2.0.24] section 3.7.10 page 81.
@@ -1000,7 +999,7 @@ void TextureD3D_Cube::generateMipmaps()
 
     if (mTexStorage && mTexStorage->isRenderTarget())
     {
-        mTexStorage->getStorageInstance()->generateMipmaps();
+        mTexStorage->generateMipmaps();
 
         for (int faceIndex = 0; faceIndex < 6; faceIndex++)
         {
@@ -1038,7 +1037,7 @@ RenderTarget *TextureD3D_Cube::getRenderTarget(const gl::ImageIndex &index)
     }
 
     updateStorageFaceLevel(index.layerIndex, index.mipIndex);
-    return mTexStorage->getStorageInstance()->getRenderTarget(index);
+    return mTexStorage->getRenderTarget(index);
 }
 
 void TextureD3D_Cube::initializeStorage(bool renderTarget)
@@ -1064,7 +1063,7 @@ void TextureD3D_Cube::initializeStorage(bool renderTarget)
     updateStorage();
 }
 
-TextureStorageInterface *TextureD3D_Cube::createCompleteStorage(bool renderTarget) const
+TextureStorage *TextureD3D_Cube::createCompleteStorage(bool renderTarget) const
 {
     GLsizei size = getBaseLevelWidth();
 
@@ -1073,11 +1072,10 @@ TextureStorageInterface *TextureD3D_Cube::createCompleteStorage(bool renderTarge
     // use existing storage level count, when previously specified by TexStorage*D
     GLint levels = (mTexStorage ? mTexStorage->getLevelCount() : creationLevels(size, size, 1));
 
-    TextureStorage *storage = mRenderer->createTextureStorageCube(getBaseLevelInternalFormat(), renderTarget, size, levels);
-    return new TextureStorageInterface(storage, 6);
+    return mRenderer->createTextureStorageCube(getBaseLevelInternalFormat(), renderTarget, size, levels);
 }
 
-void TextureD3D_Cube::setCompleteTexStorage(TextureStorageInterface *newCompleteTexStorage)
+void TextureD3D_Cube::setCompleteTexStorage(TextureStorage *newCompleteTexStorage)
 {
     SafeDelete(mTexStorage);
     mTexStorage = newCompleteTexStorage;
@@ -1121,7 +1119,7 @@ bool TextureD3D_Cube::ensureRenderTarget()
         ASSERT(mTexStorage);
         if (!mTexStorage->isRenderTarget())
         {
-            TextureStorageInterface *newRenderTargetStorage = createCompleteStorage(true);
+            TextureStorage *newRenderTargetStorage = createCompleteStorage(true);
 
             if (!mRenderer->copyToRenderTargetCube(newRenderTargetStorage, mTexStorage))
             {
@@ -1136,7 +1134,7 @@ bool TextureD3D_Cube::ensureRenderTarget()
     return (mTexStorage && mTexStorage->isRenderTarget());
 }
 
-TextureStorageInterface *TextureD3D_Cube::getBaseLevelStorage()
+TextureStorage *TextureD3D_Cube::getBaseLevelStorage()
 {
     return mTexStorage;
 }
@@ -1468,7 +1466,7 @@ void TextureD3D_3D::storage(GLenum target, GLsizei levels, GLenum internalformat
 
     bool renderTarget = IsRenderTargetUsage(mUsage);
     TextureStorage *storage = mRenderer->createTextureStorage3D(internalformat, renderTarget, width, height, depth, levels);
-    setCompleteTexStorage(new TextureStorageInterface(storage, depth));
+    setCompleteTexStorage(storage);
 }
 
 void TextureD3D_3D::bindTexImage(egl::Surface *surface)
@@ -1496,7 +1494,7 @@ void TextureD3D_3D::generateMipmaps()
 
     if (mTexStorage && mTexStorage->isRenderTarget())
     {
-        mTexStorage->getStorageInstance()->generateMipmaps();
+        mTexStorage->generateMipmaps();
 
         for (int level = 1; level < levelCount; level++)
         {
@@ -1528,7 +1526,7 @@ RenderTarget *TextureD3D_3D::getRenderTarget(GLint level)
     updateStorageLevel(level);
 
     gl::ImageIndex index = gl::ImageIndex::Make3D(level);
-    return mTexStorage->getStorageInstance()->getRenderTarget(index);
+    return mTexStorage->getRenderTarget(index);
 }
 
 RenderTarget *TextureD3D_3D::getRenderTarget(const gl::ImageIndex &index)
@@ -1541,7 +1539,7 @@ RenderTarget *TextureD3D_3D::getRenderTarget(const gl::ImageIndex &index)
 
     updateStorage();
 
-    return mTexStorage->getStorageInstance()->getRenderTarget(index);
+    return mTexStorage->getRenderTarget(index);
 }
 
 void TextureD3D_3D::initializeStorage(bool renderTarget)
@@ -1567,7 +1565,7 @@ void TextureD3D_3D::initializeStorage(bool renderTarget)
     updateStorage();
 }
 
-TextureStorageInterface *TextureD3D_3D::createCompleteStorage(bool renderTarget) const
+TextureStorage *TextureD3D_3D::createCompleteStorage(bool renderTarget) const
 {
     GLsizei width = getBaseLevelWidth();
     GLsizei height = getBaseLevelHeight();
@@ -1579,11 +1577,10 @@ TextureStorageInterface *TextureD3D_3D::createCompleteStorage(bool renderTarget)
     // use existing storage level count, when previously specified by TexStorage*D
     GLint levels = (mTexStorage ? mTexStorage->getLevelCount() : creationLevels(width, height, depth));
 
-    TextureStorage *storage = mRenderer->createTextureStorage3D(internalFormat, renderTarget, width, height, depth, levels);
-    return new TextureStorageInterface(storage, depth);
+    return mRenderer->createTextureStorage3D(internalFormat, renderTarget, width, height, depth, levels);
 }
 
-void TextureD3D_3D::setCompleteTexStorage(TextureStorageInterface *newCompleteTexStorage)
+void TextureD3D_3D::setCompleteTexStorage(TextureStorage *newCompleteTexStorage)
 {
     SafeDelete(mTexStorage);
     mTexStorage = newCompleteTexStorage;
@@ -1615,7 +1612,7 @@ bool TextureD3D_3D::ensureRenderTarget()
         ASSERT(mTexStorage);
         if (!mTexStorage->isRenderTarget())
         {
-            TextureStorageInterface *newRenderTargetStorage = createCompleteStorage(true);
+            TextureStorage *newRenderTargetStorage = createCompleteStorage(true);
 
             if (!mRenderer->copyToRenderTarget3D(newRenderTargetStorage, mTexStorage))
             {
@@ -1630,7 +1627,7 @@ bool TextureD3D_3D::ensureRenderTarget()
     return (mTexStorage && mTexStorage->isRenderTarget());
 }
 
-TextureStorageInterface *TextureD3D_3D::getBaseLevelStorage()
+TextureStorage *TextureD3D_3D::getBaseLevelStorage()
 {
     return mTexStorage;
 }
@@ -1957,7 +1954,7 @@ void TextureD3D_2DArray::storage(GLenum target, GLsizei levels, GLenum internalf
 
     bool renderTarget = IsRenderTargetUsage(mUsage);
     TextureStorage *storage = mRenderer->createTextureStorage2DArray(internalformat, renderTarget, width, height, depth, levels);
-    setCompleteTexStorage(new TextureStorageInterface(storage, depth));
+    setCompleteTexStorage(storage);
 }
 
 void TextureD3D_2DArray::bindTexImage(egl::Surface *surface)
@@ -1987,7 +1984,7 @@ void TextureD3D_2DArray::generateMipmaps()
 
     if (mTexStorage && mTexStorage->isRenderTarget())
     {
-        mTexStorage->getStorageInstance()->generateMipmaps();
+        mTexStorage->generateMipmaps();
 
         for (int level = 1; level < levelCount; level++)
         {
@@ -2023,7 +2020,7 @@ RenderTarget *TextureD3D_2DArray::getRenderTarget(const gl::ImageIndex &index)
     }
 
     updateStorageLevel(index.mipIndex);
-    return mTexStorage->getStorageInstance()->getRenderTarget(index);
+    return mTexStorage->getRenderTarget(index);
 }
 
 void TextureD3D_2DArray::initializeStorage(bool renderTarget)
@@ -2049,7 +2046,7 @@ void TextureD3D_2DArray::initializeStorage(bool renderTarget)
     updateStorage();
 }
 
-TextureStorageInterface *TextureD3D_2DArray::createCompleteStorage(bool renderTarget) const
+TextureStorage *TextureD3D_2DArray::createCompleteStorage(bool renderTarget) const
 {
     GLsizei width = getBaseLevelWidth();
     GLsizei height = getBaseLevelHeight();
@@ -2061,11 +2058,10 @@ TextureStorageInterface *TextureD3D_2DArray::createCompleteStorage(bool renderTa
     // use existing storage level count, when previously specified by TexStorage*D
     GLint levels = (mTexStorage ? mTexStorage->getLevelCount() : creationLevels(width, height, 1));
 
-    TextureStorage *storage = mRenderer->createTextureStorage2DArray(internalFormat, renderTarget, width, height, depth, levels);
-    return new TextureStorageInterface(storage, depth);
+    return mRenderer->createTextureStorage2DArray(internalFormat, renderTarget, width, height, depth, levels);
 }
 
-void TextureD3D_2DArray::setCompleteTexStorage(TextureStorageInterface *newCompleteTexStorage)
+void TextureD3D_2DArray::setCompleteTexStorage(TextureStorage *newCompleteTexStorage)
 {
     SafeDelete(mTexStorage);
     mTexStorage = newCompleteTexStorage;
@@ -2097,7 +2093,7 @@ bool TextureD3D_2DArray::ensureRenderTarget()
         ASSERT(mTexStorage);
         if (!mTexStorage->isRenderTarget())
         {
-            TextureStorageInterface *newRenderTargetStorage = createCompleteStorage(true);
+            TextureStorage *newRenderTargetStorage = createCompleteStorage(true);
 
             if (!mRenderer->copyToRenderTarget2DArray(newRenderTargetStorage, mTexStorage))
             {
@@ -2117,7 +2113,7 @@ const ImageD3D *TextureD3D_2DArray::getBaseLevelImage() const
     return (mLayerCounts[0] > 0 ? mImageArray[0][0] : NULL);
 }
 
-TextureStorageInterface *TextureD3D_2DArray::getBaseLevelStorage()
+TextureStorage *TextureD3D_2DArray::getBaseLevelStorage()
 {
     return mTexStorage;
 }
