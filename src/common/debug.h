@@ -89,6 +89,8 @@ namespace gl
 #define UNUSED_TRACE_VARIABLE(variable)
 #endif
 
+#define UNUSED_PARAMETER(variable) ((void)variable)
+
 // A macro to indicate unimplemented functionality
 
 // Define NOASSERT_UNIMPLEMENTED to non zero to skip the assert fail in the unimplemented checks

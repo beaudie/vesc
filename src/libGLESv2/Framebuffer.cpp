@@ -29,8 +29,7 @@ RenderTarget *GetAttachmentRenderTarget(gl::FramebufferAttachment *attachment)
         gl::Texture *texture = attachment->getTexture();
         ASSERT(texture);
         TextureD3D *textureD3D = TextureD3D::makeTextureD3D(texture->getImplementation());
-
-        return textureD3D->getRenderTarget(attachment->mipLevel(), attachment->layer());
+        return textureD3D->getRenderTarget(attachment->getTextureImageIndex());
     }
 
     gl::Renderbuffer *renderbuffer = attachment->getRenderbuffer();
@@ -48,7 +47,7 @@ unsigned int GetAttachmentSerial(gl::FramebufferAttachment *attachment)
         gl::Texture *texture = attachment->getTexture();
         ASSERT(texture);
         TextureD3D *textureD3D = TextureD3D::makeTextureD3D(texture->getImplementation());
-        return textureD3D->getRenderTargetSerial(attachment->mipLevel(), attachment->layer());
+        return textureD3D->getRenderTargetSerial(attachment->getTextureImageIndex());
     }
 
     gl::Renderbuffer *renderbuffer = attachment->getRenderbuffer();
