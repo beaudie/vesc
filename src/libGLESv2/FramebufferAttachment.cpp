@@ -140,6 +140,11 @@ Texture *TextureAttachment::getTexture()
     return mTexture.get();
 }
 
+ImageIndex TextureAttachment::getTextureImageIndex() const
+{
+    return mIndex;
+}
+
 Renderbuffer *TextureAttachment::getRenderbuffer()
 {
     UNREACHABLE();
@@ -209,6 +214,12 @@ Texture *RenderbufferAttachment::getTexture()
 {
     UNREACHABLE();
     return NULL;
+}
+
+ImageIndex RenderbufferAttachment::getTextureImageIndex() const
+{
+    UNREACHABLE();
+    return gl::ImageIndex::Make2D(0);
 }
 
 Renderbuffer *RenderbufferAttachment::getRenderbuffer()
