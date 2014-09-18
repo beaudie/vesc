@@ -47,10 +47,11 @@ class Blit9
   private:
     rx::Renderer9 *mRenderer;
 
+    bool mGeometryLoaded;
     IDirect3DVertexBuffer9 *mQuadVertexBuffer;
     IDirect3DVertexDeclaration9 *mQuadVertexDeclaration;
 
-    void initGeometry();
+    gl::Error initGeometry();
 
     gl::Error setFormatConvertShaders(GLenum destFormat);
 
