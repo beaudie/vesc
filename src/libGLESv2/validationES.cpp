@@ -263,7 +263,8 @@ bool ValidateRenderbufferStorageParameters(const gl::Context *context, GLenum ta
         return gl::error(GL_INVALID_VALUE, false);
     }
 
-    if (!gl::IsValidInternalFormat(internalformat, context))
+    // GL_DEPTH24_STENCIL8 is always available from GL_OES_packed_depth_stencil or ES3
+    if (internalformat != GL_DEPTH24_STENCIL8 && !gl::IsValidInternalFormat(internalformat, context))
     {
         return gl::error(GL_INVALID_ENUM, false);
     }
