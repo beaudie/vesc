@@ -10,6 +10,7 @@
 #define LIBGLESV2_VALIDATION_ES_H
 
 #include "common/mathutil.h"
+#include "libGLESv2/Error.h"
 
 #include <GLES2/gl2.h>
 #include <GLES3/gl3.h>
@@ -18,6 +19,33 @@ namespace gl
 {
 
 class Context;
+class State;
+struct Caps;
+class TextureCapsMap;
+struct Extensions;
+struct TextureCaps;
+
+class Validator
+{
+  public:
+    explicit Validator(const gl::Context *context);
+    Validator(int clientVersion, const gl::State &state, const gl::Caps &caps,
+              const gl::TextureCapsMap &textureCaps, const gl::Extensions &extensions);
+
+    bool ready() { return !mError.isError() && !mNoop; }
+    void fail(const gl::Error &error) { mError = error; }
+    bool failed() { return mError.isError(); }
+    const Error &getError() const { return mError; }
+
+  protected:
+    int mClientVersion;
+    const gl::State &mState;
+    const gl::Caps &mCaps;
+    const gl::TextureCapsMap &mTextureCaps;
+    const gl::Extensions &mExtensions;
+    Error mError;
+    bool mNoop;
+};
 
 bool ValidCap(const Context *context, GLenum cap);
 bool ValidTextureTarget(const Context *context, GLenum target);
@@ -32,9 +60,6 @@ bool ValidQueryType(const Context *context, GLenum queryType);
 bool ValidProgram(Context *context, GLuint id);
 
 bool ValidateAttachmentTarget(Context *context, GLenum attachment);
-bool ValidateRenderbufferStorageParameters(Context *context, GLenum target, GLsizei samples,
-                                           GLenum internalformat, GLsizei width, GLsizei height,
-                                           bool angleExtension);
 bool ValidateFramebufferRenderbufferParameters(Context *context, GLenum target, GLenum attachment,
                                                GLenum renderbuffertarget, GLuint renderbuffer);
 
@@ -86,6 +111,26 @@ bool ValidateGetUniformfv(Context *context, GLuint program, GLint location, GLfl
 bool ValidateGetUniformiv(Context *context, GLuint program, GLint location, GLint* params);
 bool ValidateGetnUniformfvEXT(Context *context, GLuint program, GLint location, GLsizei bufSize, GLfloat* params);
 bool ValidateGetnUniformivEXT(Context *context, GLuint program, GLint location, GLsizei bufSize, GLint* params);
+
+class ES2Validator : public Validator
+{
+  public:
+    explicit ES2Validator(const gl::Context *context);
+    ES2Validator(int clientVersion, const gl::State &state, const gl::Caps &caps,
+                 const gl::TextureCapsMap &textureCaps, const gl::Extensions &extensions);
+
+    void renderbufferStorageMultisample(GLenum target, GLsizei samples, GLenum internalformat,
+                                        GLsizei width, GLsizei height);
+    void renderbufferStorageMultisampleANGLE(GLenum target, GLsizei samples, GLenum internalformat,
+                                             GLsizei width, GLsizei height);
+
+  private:
+    void renderbufferStorageMultisampleBase(GLenum target, GLsizei samples, GLenum internalformat,
+                                            GLsizei width, GLsizei height);
+
+    // cached queries
+    const gl::TextureCaps *mFormatCaps;
+};
 
 }
 
