@@ -3788,13 +3788,17 @@ void __stdcall glRenderbufferStorageMultisampleANGLE(GLenum target, GLsizei samp
     gl::Context *context = gl::getNonLostContext();
     if (context)
     {
-        if (!ValidateRenderbufferStorageParameters(context, target, samples, internalformat,
-                                                   width, height, true))
-        {
-            return;
-        }
+        gl::ES2Validator validate(context);
+        validate.renderbufferStorageMultisampleANGLE(target, samples, internalformat, width, height);
 
-        context->setRenderbufferStorage(width, height, internalformat, samples);
+        if (validate.shouldRunAPICall())
+        {
+            context->setRenderbufferStorage(width, height, internalformat, samples);
+        }
+        else if (validate.hasError())
+        {
+            context->recordError(validate.getError());
+        }
     }
 }
 
@@ -5657,19 +5661,17 @@ void __stdcall glRenderbufferStorageMultisample(GLenum target, GLsizei samples, 
     gl::Context *context = gl::getNonLostContext();
     if (context)
     {
-        if (context->getClientVersion() < 3)
-        {
-            context->recordError(gl::Error(GL_INVALID_OPERATION));
-            return;
-        }
+        gl::ES2Validator validate(context);
+        validate.renderbufferStorageMultisample(target, samples, internalformat, width, height);
 
-        if (!ValidateRenderbufferStorageParameters(context, target, samples, internalformat,
-                                                   width, height, false))
+        if (validate.shouldRunAPICall())
         {
-            return;
+            context->setRenderbufferStorage(width, height, internalformat, samples);
         }
-
-        context->setRenderbufferStorage(width, height, internalformat, samples);
+        else if (validate.hasError())
+        {
+            context->recordError(validate.getError());
+        }
     }
 }
 
