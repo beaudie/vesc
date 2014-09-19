@@ -233,6 +233,18 @@ void *Buffer11::getData()
 
     mReadUsageCount = 0;
 
+    // Only happens if we initialized the buffer with no data (NULL)
+    if (mResolvedData.empty())
+    {
+        if (!mResolvedData.resize(mSize))
+        {
+            // out-of-memory
+            return NULL;
+        }
+    }
+
+    ASSERT(mResolvedData.size() >= mSize);
+
     return mResolvedData.data();
 }
 
