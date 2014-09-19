@@ -1377,7 +1377,13 @@ gl::Error Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indi
         gl::Buffer *indexBuffer = elementArrayBuffer;
         BufferImpl *storage = indexBuffer->getImplementation();
         intptr_t offset = reinterpret_cast<intptr_t>(indices);
-        indices = static_cast<const GLubyte*>(storage->getData()) + offset;
+        const uint8_t *bufferData = NULL;
+        gl::Error error = storage->getData(&bufferData);
+        if (error.isError())
+        {
+            return error;
+        }
+        indices = bufferData + offset;
     }
 
     unsigned int startIndex = 0;
@@ -1573,7 +1579,15 @@ gl::Error Renderer9::drawIndexedPoints(GLsizei count, GLenum type, const GLvoid 
     {
         BufferImpl *storage = elementArrayBuffer->getImplementation();
         intptr_t offset = reinterpret_cast<intptr_t>(indices);
-        indices = static_cast<const GLubyte*>(storage->getData()) + offset;
+
+        const uint8_t *bufferData = NULL;
+        gl::Error error = storage->getData(&bufferData);
+        if (error.isError())
+        {
+            return error;
+        }
+
+        indices = bufferData + offset;
     }
 
     switch (type)
