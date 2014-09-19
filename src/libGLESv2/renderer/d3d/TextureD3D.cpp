@@ -109,8 +109,13 @@ gl::Error TextureD3D::setImage(const gl::PixelUnpackState &unpack, GLenum type, 
         ptrdiff_t offset = reinterpret_cast<ptrdiff_t>(pixels);
         // TODO: setImage/subImage is the only place outside of renderer that asks for a buffers raw data.
         // This functionality should be moved into renderer and the getData method of BufferImpl removed.
-        const void *bufferData = pixelBuffer->getImplementation()->getData();
-        pixelData = static_cast<const unsigned char *>(bufferData) + offset;
+        const uint8_t *bufferData = NULL;
+        gl::Error error = pixelBuffer->getImplementation()->getData(&bufferData);
+        if (error.isError())
+        {
+            return error;
+        }
+        pixelData = bufferData + offset;
     }
 
     if (pixelData != NULL)
@@ -139,8 +144,13 @@ gl::Error TextureD3D::subImage(GLint xoffset, GLint yoffset, GLint zoffset, GLsi
         uintptr_t offset = reinterpret_cast<uintptr_t>(pixels);
         // TODO: setImage/subImage is the only place outside of renderer that asks for a buffers raw data.
         // This functionality should be moved into renderer and the getData method of BufferImpl removed.
-        const void *bufferData = pixelBuffer->getImplementation()->getData();
-        pixelData = static_cast<const uint8_t *>(bufferData)+offset;
+        const uint8_t *bufferData = NULL;
+        gl::Error error = pixelBuffer->getImplementation()->getData(&bufferData);
+        if (error.isError())
+        {
+            return error;
+        }
+        pixelData = bufferData + offset;
     }
 
     if (pixelData != NULL)
