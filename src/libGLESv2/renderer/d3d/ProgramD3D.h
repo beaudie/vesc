@@ -58,6 +58,9 @@ class ProgramD3D : public ProgramImpl
     ShaderExecutable *getGeometryExecutable(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
                                             const std::vector<gl::LinkedVarying> &transformFeedbackLinkedVaryings,
                                             bool separatedOutputBuffers, int registers);
+    ShaderExecutable *loadExecutable(const void *function, size_t length, rx::ShaderType type,
+                                     const std::vector<gl::LinkedVarying> &transformFeedbackLinkedVaryings,
+                                     bool separatedOutputBuffers);
 
     bool link(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
               const std::vector<std::string> &transformFeedbackVaryings, int *registers,
@@ -67,6 +70,9 @@ class ProgramD3D : public ProgramImpl
 
     // D3D only
     void initializeUniformStorage(const std::vector<gl::LinkedUniform*> &uniforms);
+    void applyUniforms(const std::vector<gl::LinkedUniform*> &uniforms);
+    bool applyUniformBuffers(const std::vector<gl::UniformBlock*> uniformBlocks, const std::vector<gl::Buffer*> boundBuffers,
+                             const gl::Caps &caps);
 
     const UniformStorage &getVertexUniformStorage() const { return *mVertexUniformStorage; }
     const UniformStorage &getFragmentUniformStorage() const { return *mFragmentUniformStorage; }

@@ -13,6 +13,7 @@
 #include "libGLESv2/BinaryStream.h"
 #include "libGLESv2/Constants.h"
 #include "libGLESv2/ProgramBinary.h"
+#include "libGLESv2/renderer/Renderer.h"
 
 namespace rx
 {
@@ -47,6 +48,9 @@ public:
     virtual rx::ShaderExecutable *getGeometryExecutable(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
                                                         const std::vector<gl::LinkedVarying> &transformFeedbackLinkedVaryings,
                                                         bool separatedOutputBuffers, int registers) = 0;
+    virtual rx::ShaderExecutable *loadExecutable(const void *function, size_t length, rx::ShaderType type,
+                                                 const std::vector<gl::LinkedVarying> &transformFeedbackLinkedVaryings,
+                                                 bool separatedOutputBuffers) = 0;
 
     virtual bool link(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
                       const std::vector<std::string> &transformFeedbackVaryings, int *registers,
@@ -56,6 +60,10 @@ public:
     virtual void getInputLayoutSignature(const gl::VertexFormat inputLayout[], GLenum signature[]) const = 0;
 
     virtual void initializeUniformStorage(const std::vector<gl::LinkedUniform*> &uniforms) = 0;
+
+    virtual void applyUniforms(const std::vector<gl::LinkedUniform*> &uniforms) = 0;
+    virtual bool applyUniformBuffers(const std::vector<gl::UniformBlock*> uniformBlocks, const std::vector<gl::Buffer*> boundBuffers,
+                                     const gl::Caps &caps) = 0;
 
     virtual void reset() = 0;
 };
