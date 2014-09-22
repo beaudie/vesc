@@ -956,7 +956,7 @@ void ProgramBinary::applyUniforms()
 {
     updateSamplerMapping();
 
-    mProgram->getRenderer()->applyUniforms(*this);
+    mProgram->applyUniforms(mUniforms);
 
     for (size_t uniformIndex = 0; uniformIndex < mUniforms.size(); uniformIndex++)
     {
@@ -966,51 +966,9 @@ void ProgramBinary::applyUniforms()
 
 bool ProgramBinary::applyUniformBuffers(const std::vector<gl::Buffer*> boundBuffers, const Caps &caps)
 {
-    const gl::Buffer *vertexUniformBuffers[gl::IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS] = {NULL};
-    const gl::Buffer *fragmentUniformBuffers[gl::IMPLEMENTATION_MAX_FRAGMENT_SHADER_UNIFORM_BUFFERS] = {NULL};
-
-    const unsigned int reservedBuffersInVS = mProgram->getRenderer()->getReservedVertexUniformBuffers();
-    const unsigned int reservedBuffersInFS = mProgram->getRenderer()->getReservedFragmentUniformBuffers();
-
     ASSERT(boundBuffers.size() == mUniformBlocks.size());
 
-    for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < mUniformBlocks.size(); uniformBlockIndex++)
-    {
-        UniformBlock *uniformBlock = getUniformBlockByIndex(uniformBlockIndex);
-        gl::Buffer *uniformBuffer = boundBuffers[uniformBlockIndex];
-
-        ASSERT(uniformBlock && uniformBuffer);
-
-        if (uniformBuffer->getSize() < uniformBlock->dataSize)
-        {
-            // undefined behaviour
-            return false;
-        }
-
-        // Unnecessary to apply an unreferenced standard or shared UBO
-        if (!uniformBlock->isReferencedByVertexShader() && !uniformBlock->isReferencedByFragmentShader())
-        {
-            continue;
-        }
-
-        if (uniformBlock->isReferencedByVertexShader())
-        {
-            unsigned int registerIndex = uniformBlock->vsRegisterIndex - reservedBuffersInVS;
-            ASSERT(vertexUniformBuffers[registerIndex] == NULL);
-            ASSERT(registerIndex < caps.maxVertexUniformBlocks);
-            vertexUniformBuffers[registerIndex] = uniformBuffer;
-        }
-
-        if (uniformBlock->isReferencedByFragmentShader())
-        {
-            unsigned int registerIndex = uniformBlock->psRegisterIndex - reservedBuffersInFS;
-            ASSERT(fragmentUniformBuffers[registerIndex] == NULL);
-            ASSERT(registerIndex < caps.maxFragmentUniformBlocks);
-            fragmentUniformBuffers[registerIndex] = uniformBuffer;
-        }
-    }
-
-    return mProgram->getRenderer()->setUniformBuffers(vertexUniformBuffers, fragmentUniformBuffers);
+    return mProgram->applyUniformBuffers(mUniformBlocks, boundBuffers, caps);
 }
 
 bool ProgramBinary::linkVaryings(InfoLog &infoLog, Shader *fragmentShader, Shader *vertexShader)
@@ -1240,10 +1198,10 @@ bool ProgramBinary::load(InfoLog &infoLog, GLenum binaryFormat, const void *bina
 
         unsigned int vertexShaderSize = stream.readInt<unsigned int>();
         const unsigned char *vertexShaderFunction = reinterpret_cast<const unsigned char*>(binary) + stream.offset();
-        rx::ShaderExecutable *shaderExecutable = mProgram->getRenderer()->loadExecutable(reinterpret_cast<const DWORD*>(vertexShaderFunction),
-                                                                           vertexShaderSize, rx::SHADER_VERTEX,
-                                                                           mTransformFeedbackLinkedVaryings,
-                                                                           (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS));
+        rx::ShaderExecutable *shaderExecutable = mProgram->loadExecutable(reinterpret_cast<const DWORD*>(vertexShaderFunction),
+                                                                          vertexShaderSize, rx::SHADER_VERTEX,
+                                                                          mTransformFeedbackLinkedVaryings,
+                                                                          (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS));
         if (!shaderExecutable)
         {
             infoLog.append("Could not create vertex shader.");
@@ -1272,8 +1230,7 @@ bool ProgramBinary::load(InfoLog &infoLog, GLenum binaryFormat, const void *bina
 
         const size_t pixelShaderSize = stream.readInt<unsigned int>();
         const unsigned char *pixelShaderFunction = reinterpret_cast<const unsigned char*>(binary) + stream.offset();
-        rx::Renderer *renderer = mProgram->getRenderer();
-        rx::ShaderExecutable *shaderExecutable = renderer->loadExecutable(pixelShaderFunction, pixelShaderSize,
+        rx::ShaderExecutable *shaderExecutable = mProgram->loadExecutable(pixelShaderFunction, pixelShaderSize,
                                                                           rx::SHADER_PIXEL, mTransformFeedbackLinkedVaryings,
                                                                           (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS));
 
@@ -1294,8 +1251,7 @@ bool ProgramBinary::load(InfoLog &infoLog, GLenum binaryFormat, const void *bina
     if (geometryShaderSize > 0)
     {
         const char *geometryShaderFunction = (const char*) binary + stream.offset();
-        rx::Renderer *renderer = mProgram->getRenderer();
-        mGeometryExecutable = renderer->loadExecutable(reinterpret_cast<const DWORD*>(geometryShaderFunction),
+        mGeometryExecutable = mProgram->loadExecutable(reinterpret_cast<const DWORD*>(geometryShaderFunction),
                                                        geometryShaderSize, rx::SHADER_GEOMETRY, mTransformFeedbackLinkedVaryings,
                                                        (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS));
 
@@ -1309,18 +1265,6 @@ bool ProgramBinary::load(InfoLog &infoLog, GLenum binaryFormat, const void *bina
 
     if (!mProgram->load(infoLog, &stream))
     {
-        return false;
-    }
-
-    const char *ptr = (const char*) binary + stream.offset();
-
-    const GUID *binaryIdentifier = (const GUID *) ptr;
-    ptr += sizeof(GUID);
-
-    GUID identifier = mProgram->getRenderer()->getAdapterIdentifier();
-    if (memcmp(&identifier, binaryIdentifier, sizeof(GUID)) != 0)
-    {
-        infoLog.append("Invalid program binary.");
         return false;
     }
 
@@ -1495,13 +1439,10 @@ bool ProgramBinary::save(GLenum *binaryFormat, void *binary, GLsizei bufSize, GL
         return false;
     }
 
-    GUID identifier = mProgram->getRenderer()->getAdapterIdentifier();
-
     GLsizei streamLength = stream.length();
     const void *streamData = stream.data();
 
-    GLsizei totalLength = streamLength + sizeof(GUID);
-    if (totalLength > bufSize)
+    if (streamLength > bufSize)
     {
         if (length)
         {
@@ -1518,15 +1459,12 @@ bool ProgramBinary::save(GLenum *binaryFormat, void *binary, GLsizei bufSize, GL
         memcpy(ptr, streamData, streamLength);
         ptr += streamLength;
 
-        memcpy(ptr, &identifier, sizeof(GUID));
-        ptr += sizeof(GUID);
-
-        ASSERT(ptr - totalLength == binary);
+        ASSERT(ptr - streamLength == binary);
     }
 
     if (length)
     {
-        *length = totalLength;
+        *length = streamLength;
     }
 
     return true;
