@@ -939,11 +939,11 @@ gl::Error Renderer11::applyRenderTarget(gl::Framebuffer *framebuffer)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::applyVertexBuffer(gl::ProgramBinary *programBinary, const gl::VertexAttribute vertexAttributes[], const gl::VertexAttribCurrentValueData currentValues[],
+gl::Error Renderer11::applyVertexBuffer(gl::ProgramBinary *programBinary, const gl::State &state,
                                         GLint first, GLsizei count, GLsizei instances)
 {
     TranslatedAttribute attributes[gl::MAX_VERTEX_ATTRIBS];
-    gl::Error error = mVertexDataManager->prepareVertexData(vertexAttributes, currentValues, programBinary, first, count, attributes, instances);
+    gl::Error error = mVertexDataManager->prepareVertexData(state, programBinary, first, count, attributes, instances);
     if (error.isError())
     {
         return error;

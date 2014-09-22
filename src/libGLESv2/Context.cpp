@@ -1398,7 +1398,7 @@ Error Context::applyShaders(ProgramBinary *programBinary, bool transformFeedback
     const VertexAttribute *vertexAttributes = mState.getVertexArray()->getVertexAttributes();
 
     VertexFormat inputLayout[MAX_VERTEX_ATTRIBS];
-    VertexFormat::GetInputLayout(inputLayout, programBinary, vertexAttributes, mState.getVertexAttribCurrentValues());
+    VertexFormat::GetInputLayout(inputLayout, programBinary, vertexAttributes, mState);
 
     const Framebuffer *fbo = mState.getDrawFramebuffer();
 
@@ -1768,7 +1768,7 @@ Error Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei insta
         return error;
     }
 
-    error = mRenderer->applyVertexBuffer(programBinary, mState.getVertexArray()->getVertexAttributes(), mState.getVertexAttribCurrentValues(), first, count, instances);
+    error = mRenderer->applyVertexBuffer(programBinary, mState, first, count, instances);
     if (error.isError())
     {
         return error;
@@ -1853,8 +1853,7 @@ Error Context::drawElements(GLenum mode, GLsizei count, GLenum type,
     }
 
     GLsizei vertexCount = indexInfo.indexRange.length() + 1;
-    error = mRenderer->applyVertexBuffer(programBinary, vao->getVertexAttributes(),
-                                         mState.getVertexAttribCurrentValues(),
+    error = mRenderer->applyVertexBuffer(programBinary, mState,
                                          indexInfo.indexRange.start, vertexCount, instances);
     if (error.isError())
     {
