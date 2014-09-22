@@ -128,7 +128,7 @@ class Renderer
     virtual bool applyRenderTarget(gl::Framebuffer *frameBuffer) = 0;
     virtual void applyShaders(gl::ProgramBinary *programBinary, const gl::VertexFormat inputLayout[], const gl::Framebuffer *framebuffer,
                               bool rasterizerDiscard, bool transformFeedbackActive) = 0;
-    virtual void applyUniforms(const gl::ProgramBinary &programBinary) = 0;
+    virtual void applyUniforms(const ProgramImpl &program, const std::vector<gl::LinkedUniform*> &uniformArray) = 0;
     virtual bool applyPrimitiveType(GLenum primitiveType, GLsizei elementCount) = 0;
     virtual gl::Error applyVertexBuffer(gl::ProgramBinary *programBinary, const gl::VertexAttribute vertexAttributes[], const gl::VertexAttribCurrentValueData currentValues[],
                                         GLint first, GLsizei count, GLsizei instances) = 0;
