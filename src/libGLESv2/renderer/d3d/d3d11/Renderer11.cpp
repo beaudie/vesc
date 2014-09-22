@@ -1906,9 +1906,22 @@ gl::Error Renderer11::copyToRenderTarget2D(TextureStorage *dest, TextureStorage 
     }
 
     TextureStorage11_2D *source11 = TextureStorage11_2D::makeTextureStorage11_2D(source);
-    TextureStorage11_2D *dest11 = TextureStorage11_2D::makeTextureStorage11_2D(dest);
+    ID3D11Resource *sourceResource = NULL;
+    gl::Error error = source11->getResource(&sourceResource);
+    if (error.isError())
+    {
+        return error;
+    }
 
-    mDeviceContext->CopyResource(dest11->getResource(), source11->getResource());
+    TextureStorage11_2D *dest11 = TextureStorage11_2D::makeTextureStorage11_2D(dest);
+    ID3D11Resource *destResource = NULL;
+    error = dest11->getResource(&destResource);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mDeviceContext->CopyResource(sourceResource, destResource);
 
     dest11->invalidateSwizzleCache();
 
@@ -1923,9 +1936,22 @@ gl::Error Renderer11::copyToRenderTargetCube(TextureStorage *dest, TextureStorag
     }
 
     TextureStorage11_Cube *source11 = TextureStorage11_Cube::makeTextureStorage11_Cube(source);
-    TextureStorage11_Cube *dest11 = TextureStorage11_Cube::makeTextureStorage11_Cube(dest);
+    ID3D11Resource *sourceResource = NULL;
+    gl::Error error = source11->getResource(&sourceResource);
+    if (error.isError())
+    {
+        return error;
+    }
 
-    mDeviceContext->CopyResource(dest11->getResource(), source11->getResource());
+    TextureStorage11_Cube *dest11 = TextureStorage11_Cube::makeTextureStorage11_Cube(dest);
+    ID3D11Resource *destResource = NULL;
+    error = dest11->getResource(&destResource);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mDeviceContext->CopyResource(sourceResource, destResource);
 
     dest11->invalidateSwizzleCache();
 
@@ -1940,9 +1966,22 @@ gl::Error Renderer11::copyToRenderTarget3D(TextureStorage *dest, TextureStorage 
     }
 
     TextureStorage11_3D *source11 = TextureStorage11_3D::makeTextureStorage11_3D(source);
-    TextureStorage11_3D *dest11 = TextureStorage11_3D::makeTextureStorage11_3D(dest);
+    ID3D11Resource *sourceResource = NULL;
+    gl::Error error = source11->getResource(&sourceResource);
+    if (error.isError())
+    {
+        return error;
+    }
 
-    mDeviceContext->CopyResource(dest11->getResource(), source11->getResource());
+    TextureStorage11_3D *dest11 = TextureStorage11_3D::makeTextureStorage11_3D(dest);
+    ID3D11Resource *destResource = NULL;
+    error = dest11->getResource(&destResource);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mDeviceContext->CopyResource(sourceResource, destResource);
 
     dest11->invalidateSwizzleCache();
 
@@ -1957,9 +1996,22 @@ gl::Error Renderer11::copyToRenderTarget2DArray(TextureStorage *dest, TextureSto
     }
 
     TextureStorage11_2DArray *source11 = TextureStorage11_2DArray::makeTextureStorage11_2DArray(source);
-    TextureStorage11_2DArray *dest11 = TextureStorage11_2DArray::makeTextureStorage11_2DArray(dest);
+    ID3D11Resource *sourceResource = NULL;
+    gl::Error error = source11->getResource(&sourceResource);
+    if (error.isError())
+    {
+        return error;
+    }
 
-    mDeviceContext->CopyResource(dest11->getResource(), source11->getResource());
+    TextureStorage11_2DArray *dest11 = TextureStorage11_2DArray::makeTextureStorage11_2DArray(dest);
+    ID3D11Resource *destResource = NULL;
+    error = dest11->getResource(&destResource);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mDeviceContext->CopyResource(sourceResource, destResource);
 
     dest11->invalidateSwizzleCache();
 
