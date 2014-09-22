@@ -347,6 +347,13 @@ gl::Error Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::R
 {
     TextureStorage11 *sourceStorage11 = TextureStorage11::makeTextureStorage11(source);
 
+    ID3D11Resource *resource = NULL;
+    gl::Error error = sourceStorage11->getResource(&resource);
+    if (error.isError())
+    {
+        return error;
+    }
+
     UINT subresourceIndex = sourceStorage11->getSubresourceIndex(sourceIndex.mipIndex, sourceIndex.layerIndex);
     ID3D11Texture2D *sourceTexture2D = d3d11::DynamicCastComObject<ID3D11Texture2D>(sourceStorage11->getResource());
 
