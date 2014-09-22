@@ -1392,7 +1392,7 @@ void Context::applyShaders(ProgramBinary *programBinary, bool transformFeedbackA
     const VertexAttribute *vertexAttributes = mState.getVertexArray()->getVertexAttributes();
 
     VertexFormat inputLayout[MAX_VERTEX_ATTRIBS];
-    VertexFormat::GetInputLayout(inputLayout, programBinary, vertexAttributes, mState.getVertexAttribCurrentValues());
+    VertexFormat::GetInputLayout(inputLayout, programBinary, vertexAttributes, mState);
 
     const Framebuffer *fbo = mState.getDrawFramebuffer();
 
@@ -1719,7 +1719,7 @@ void Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instan
 
     applyState(mode);
 
-    GLenum err = mRenderer->applyVertexBuffer(programBinary, mState.getVertexArray()->getVertexAttributes(), mState.getVertexAttribCurrentValues(), first, count, instances);
+    GLenum err = mRenderer->applyVertexBuffer(programBinary, mState, first, count, instances);
     if (err != GL_NO_ERROR)
     {
         return gl::error(err);
@@ -1795,9 +1795,7 @@ void Context::drawElements(GLenum mode, GLsizei count, GLenum type,
     }
 
     GLsizei vertexCount = indexInfo.indexRange.length() + 1;
-    GLenum err = mRenderer->applyVertexBuffer(programBinary, vao->getVertexAttributes(),
-                                              mState.getVertexAttribCurrentValues(),
-                                              indexInfo.indexRange.start, vertexCount, instances);
+    GLenum err = mRenderer->applyVertexBuffer(programBinary, mState, indexInfo.indexRange.start, vertexCount, instances);
     if (err != GL_NO_ERROR)
     {
         return gl::error(err);
