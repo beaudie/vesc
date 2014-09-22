@@ -1703,10 +1703,8 @@ void Renderer9::applyShaders(gl::ProgramBinary *programBinary, const gl::VertexF
     }
 }
 
-void Renderer9::applyUniforms(const gl::ProgramBinary &programBinary)
+void Renderer9::applyUniforms(const ProgramImpl &program, const std::vector<gl::LinkedUniform*> &uniformArray)
 {
-    const std::vector<gl::LinkedUniform*> &uniformArray = programBinary.getUniforms();
-
     for (size_t uniformIndex = 0; uniformIndex < uniformArray.size(); uniformIndex++)
     {
         gl::LinkedUniform *targetUniform = uniformArray[uniformIndex];
