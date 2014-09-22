@@ -97,12 +97,6 @@ State::State()
     mBlend.colorMaskBlue = true;
     mBlend.colorMaskAlpha = true;
 
-    const GLfloat defaultFloatValues[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-    for (int attribIndex = 0; attribIndex < MAX_VERTEX_ATTRIBS; attribIndex++)
-    {
-        mVertexAttribCurrentValues[attribIndex].setFloatValues(defaultFloatValues);
-    }
-
     for (unsigned int textureUnit = 0; textureUnit < ArraySize(mSamplers); textureUnit++)
     {
         mSamplers[textureUnit].set(NULL);
@@ -131,11 +125,7 @@ State::~State()
         }
     }
 
-    const GLfloat defaultFloatValues[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-    for (int attribIndex = 0; attribIndex < MAX_VERTEX_ATTRIBS; attribIndex++)
-    {
-        mVertexAttribCurrentValues[attribIndex].setFloatValues(defaultFloatValues);
-    }
+    mVertexAttribCurrentValues.clear();
 
     mArrayBuffer.set(NULL);
     mRenderbuffer.set(NULL);
@@ -164,6 +154,20 @@ State::~State()
 
     mPack.pixelBuffer.set(NULL);
     mUnpack.pixelBuffer.set(NULL);
+}
+
+void State::setContext(Context *context)
+{
+    mContext = context;
+    const Caps &ctxCaps = context->getCaps();
+
+    // Allocate context-dependent containers
+    const GLfloat defaultFloatValues[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+    mVertexAttribCurrentValues.resize(ctxCaps.maxVertexAttributes);
+    for (unsigned int attribIndex = 0; attribIndex < mVertexAttribCurrentValues.size(); ++attribIndex)
+    {
+        mVertexAttribCurrentValues[attribIndex].setFloatValues(defaultFloatValues);
+    }
 }
 
 const RasterizerState &State::getRasterizerState() const
@@ -1008,19 +1012,19 @@ void State::setEnableVertexAttribArray(unsigned int attribNum, bool enabled)
 
 void State::setVertexAttribf(GLuint index, const GLfloat values[4])
 {
-    ASSERT(index < gl::MAX_VERTEX_ATTRIBS);
+    ASSERT(index < mVertexAttribCurrentValues.size());
     mVertexAttribCurrentValues[index].setFloatValues(values);
 }
 
 void State::setVertexAttribu(GLuint index, const GLuint values[4])
 {
-    ASSERT(index < gl::MAX_VERTEX_ATTRIBS);
+    ASSERT(index < mVertexAttribCurrentValues.size());
     mVertexAttribCurrentValues[index].setUnsignedIntValues(values);
 }
 
 void State::setVertexAttribi(GLuint index, const GLint values[4])
 {
-    ASSERT(index < gl::MAX_VERTEX_ATTRIBS);
+    ASSERT(index < mVertexAttribCurrentValues.size());
     mVertexAttribCurrentValues[index].setIntValues(values);
 }
 
@@ -1037,7 +1041,7 @@ const VertexAttribute &State::getVertexAttribState(unsigned int attribNum) const
 
 const VertexAttribCurrentValueData &State::getVertexAttribCurrentValue(unsigned int attribNum) const
 {
-    ASSERT(attribNum < MAX_VERTEX_ATTRIBS);
+    ASSERT(attribNum < mVertexAttribCurrentValues.size());
     return mVertexAttribCurrentValues[attribNum];
 }
 
@@ -1403,7 +1407,7 @@ bool State::hasMappedBuffer(GLenum target) const
 {
     if (target == GL_ARRAY_BUFFER)
     {
-        for (unsigned int attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; attribIndex++)
+        for (unsigned int attribIndex = 0; attribIndex < mVertexAttribCurrentValues.size(); attribIndex++)
         {
             const gl::VertexAttribute &vertexAttrib = getVertexAttribState(attribIndex);
             gl::Buffer *boundBuffer = vertexAttrib.buffer.get();

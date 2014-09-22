@@ -31,7 +31,7 @@ class State
     State();
     ~State();
 
-    void setContext(Context *context) { mContext = context; }
+    void setContext(Context *context);
 
     // State chunk getters
     const RasterizerState &getRasterizerState() const;
@@ -279,7 +279,7 @@ class State
     GLuint mCurrentProgramId;
     BindingPointer<ProgramBinary> mCurrentProgramBinary;
 
-    VertexAttribCurrentValueData mVertexAttribCurrentValues[MAX_VERTEX_ATTRIBS]; // From glVertexAttrib
+    std::vector<VertexAttribCurrentValueData> mVertexAttribCurrentValues; // From glVertexAttrib
     VertexArray *mVertexArray;
 
     BindingPointer<Texture> mSamplerTexture[TEXTURE_TYPE_COUNT][IMPLEMENTATION_MAX_COMBINED_TEXTURE_IMAGE_UNITS];
