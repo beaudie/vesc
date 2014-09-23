@@ -71,7 +71,7 @@ class Texture : public RefCountObject
 
     rx::TextureStorage *getNativeTexture();
 
-    virtual void generateMipmaps();
+    virtual Error generateMipmaps();
     virtual Error copySubImage(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height, Framebuffer *source);
 
     unsigned int getTextureSerial();
@@ -127,7 +127,7 @@ class Texture2D : public Texture
     virtual void bindTexImage(egl::Surface *surface);
     virtual void releaseTexImage();
 
-    virtual void generateMipmaps();
+    virtual Error generateMipmaps();
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Texture2D);
