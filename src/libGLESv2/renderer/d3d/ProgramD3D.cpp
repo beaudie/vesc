@@ -100,7 +100,7 @@ rx::ShaderExecutable *ProgramD3D::getPixelExecutableForOutputLayout(gl::InfoLog 
                                                                                      outputSignature);
 
     // Generate new pixel executable
-    rx::ShaderExecutable *pixelExecutable = mRenderer->compileToExecutable(infoLog, finalPixelHLSL.c_str(), rx::SHADER_PIXEL,
+    rx::ShaderExecutable *pixelExecutable = mRenderer->compileToExecutable(infoLog, finalPixelHLSL, rx::SHADER_PIXEL,
                                                                            transformFeedbackLinkedVaryings, separatedOutputBuffers,
                                                                            mPixelWorkarounds);
 
@@ -117,7 +117,7 @@ rx::ShaderExecutable *ProgramD3D::getVertexExecutableForInputLayout(gl::InfoLog 
     std::string finalVertexHLSL = mDynamicHLSL->generateVertexShaderForInputLayout(mVertexHLSL, inputLayout, shaderAttributes);
 
     // Generate new vertex executable
-    rx::ShaderExecutable *vertexExecutable = mRenderer->compileToExecutable(infoLog, finalVertexHLSL.c_str(),
+    rx::ShaderExecutable *vertexExecutable = mRenderer->compileToExecutable(infoLog, finalVertexHLSL,
                                                                             rx::SHADER_VERTEX,
                                                                             transformFeedbackLinkedVaryings, separatedOutputBuffers,
                                                                             mVertexWorkarounds);
