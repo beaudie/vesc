@@ -692,7 +692,12 @@ gl::Error Renderer9::setTexture(gl::SamplerType type, int index, gl::Texture *te
         if (texStorage)
         {
             TextureStorage9 *storage9 = TextureStorage9::makeTextureStorage9(texStorage);
-            d3dTexture = storage9->getBaseTexture();
+
+            gl::Error error = storage9->getBaseTexture(&d3dTexture);
+            if (error.isError())
+            {
+                return error;
+            }
         }
         // If we get NULL back from getBaseTexture here, something went wrong
         // in the texture class and we're unexpectedly missing the d3d texture
@@ -2358,10 +2363,22 @@ gl::Error Renderer9::copyToRenderTarget2D(TextureStorage *dest, TextureStorage *
     int levels = source9->getLevelCount();
     for (int i = 0; i < levels; ++i)
     {
-        IDirect3DSurface9 *srcSurf = source9->getSurfaceLevel(i, false);
-        IDirect3DSurface9 *dstSurf = dest9->getSurfaceLevel(i, false);
+        IDirect3DSurface9 *srcSurf = NULL;
+        gl::Error error = source9->getSurfaceLevel(i, false, &srcSurf);
+        if (error.isError())
+        {
+            return error;
+        }
 
-        gl::Error error = copyToRenderTarget(dstSurf, srcSurf, source9->isManaged());
+        IDirect3DSurface9 *dstSurf = NULL;
+        error = dest9->getSurfaceLevel(i, false, &dstSurf);
+        if (error.isError())
+        {
+            SafeRelease(srcSurf);
+            return error;
+        }
+
+        error = copyToRenderTarget(dstSurf, srcSurf, source9->isManaged());
 
         SafeRelease(srcSurf);
         SafeRelease(dstSurf);
@@ -2389,10 +2406,22 @@ gl::Error Renderer9::copyToRenderTargetCube(TextureStorage *dest, TextureStorage
     {
         for (int i = 0; i < levels; i++)
         {
-            IDirect3DSurface9 *srcSurf = source9->getCubeMapSurface(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, i, false);
-            IDirect3DSurface9 *dstSurf = dest9->getCubeMapSurface(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, i, true);
+            IDirect3DSurface9 *srcSurf = NULL;
+            gl::Error error = source9->getCubeMapSurface(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, i, false, &srcSurf);
+            if (error.isError())
+            {
+                return error;
+            }
 
-            gl::Error error = copyToRenderTarget(dstSurf, srcSurf, source9->isManaged());
+            IDirect3DSurface9 *dstSurf = NULL;
+            error = dest9->getCubeMapSurface(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, i, true, &dstSurf);
+            if (error.isError())
+            {
+                SafeRelease(srcSurf);
+                return error;
+            }
+
+            error = copyToRenderTarget(dstSurf, srcSurf, source9->isManaged());
 
             SafeRelease(srcSurf);
             SafeRelease(dstSurf);

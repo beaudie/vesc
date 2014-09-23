@@ -284,14 +284,26 @@ IDirect3DSurface9 *Image9::getSurface()
 
 gl::Error Image9::setManagedSurface2D(TextureStorage *storage, int level)
 {
+    IDirect3DSurface9 *surface = NULL;
     TextureStorage9_2D *storage9 = TextureStorage9_2D::makeTextureStorage9_2D(storage);
-    return setManagedSurface(storage9->getSurfaceLevel(level, false));
+    gl::Error error = storage9->getSurfaceLevel(level, false, &surface);
+    if (error.isError())
+    {
+        return error;
+    }
+    return setManagedSurface(surface);
 }
 
 gl::Error Image9::setManagedSurfaceCube(TextureStorage *storage, int face, int level)
 {
+    IDirect3DSurface9 *surface = NULL;
     TextureStorage9_Cube *storage9 = TextureStorage9_Cube::makeTextureStorage9_Cube(storage);
-    return setManagedSurface(storage9->getCubeMapSurface(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, level, false));
+    gl::Error error = storage9->getCubeMapSurface(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, level, false, &surface);
+    if (error.isError())
+    {
+        return error;
+    }
+    return setManagedSurface(surface);
 }
 
 gl::Error Image9::setManagedSurface(IDirect3DSurface9 *surface)
@@ -322,15 +334,31 @@ gl::Error Image9::setManagedSurface(IDirect3DSurface9 *surface)
 gl::Error Image9::copyToStorage2D(TextureStorage *storage, int level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height)
 {
     ASSERT(getSurface() != NULL);
+
+    IDirect3DSurface9 *surface = NULL;
     TextureStorage9_2D *storage9 = TextureStorage9_2D::makeTextureStorage9_2D(storage);
-    return copyToSurface(storage9->getSurfaceLevel(level, true), xoffset, yoffset, width, height);
+    gl::Error error = storage9->getSurfaceLevel(level, true, &surface);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    return copyToSurface(surface, xoffset, yoffset, width, height);
 }
 
 gl::Error Image9::copyToStorageCube(TextureStorage *storage, int face, int level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height)
 {
     ASSERT(getSurface() != NULL);
+
+    IDirect3DSurface9 *surface = NULL;
     TextureStorage9_Cube *storage9 = TextureStorage9_Cube::makeTextureStorage9_Cube(storage);
-    return copyToSurface(storage9->getCubeMapSurface(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, level, true), xoffset, yoffset, width, height);
+    gl::Error error = storage9->getCubeMapSurface(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, level, true, &surface);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    return copyToSurface(surface, xoffset, yoffset, width, height);
 }
 
 gl::Error Image9::copyToStorage3D(TextureStorage *storage, int level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth)
