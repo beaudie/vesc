@@ -1654,7 +1654,7 @@ bool ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attributeBin
         if (usesGeometryShader())
         {
             std::string geometryHLSL = mProgram->getDynamicHLSL()->generateGeometryShaderHLSL(registers, fragmentShaderD3D, vertexShaderD3D);
-            mGeometryExecutable = mProgram->getRenderer()->compileToExecutable(infoLog, geometryHLSL.c_str(),
+            mGeometryExecutable = mProgram->getRenderer()->compileToExecutable(infoLog, geometryHLSL,
                                                                                rx::SHADER_GEOMETRY, mTransformFeedbackLinkedVaryings,
                                                                                (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
                                                                                rx::ANGLE_D3D_WORKAROUND_NONE);
