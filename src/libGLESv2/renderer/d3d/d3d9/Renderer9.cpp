@@ -2947,15 +2947,11 @@ ShaderExecutable *Renderer9::compileToExecutable(gl::InfoLog &infoLog, const std
 
     if (gl::perfActive())
     {
-#ifndef NDEBUG
-        flags = D3DCOMPILE_SKIP_OPTIMIZATION;
-#endif
+#       ifndef NDEBUG
+            flags = D3DCOMPILE_SKIP_OPTIMIZATION;
+#       endif
 
         flags |= D3DCOMPILE_DEBUG;
-
-        std::string sourcePath = getTempPath();
-        std::string sourceText = std::string("#line 2 \"") + sourcePath + std::string("\"\n\n") + std::string(shaderHLSL);
-        writeFile(sourcePath.c_str(), sourceText.c_str(), sourceText.size());
     }
 
     // Sometimes D3DCompile will fail with the default compilation flags for complicated shaders when it would otherwise pass with alternative options.
