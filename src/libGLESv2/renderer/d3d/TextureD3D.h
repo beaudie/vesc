@@ -58,7 +58,7 @@ class TextureD3D : public TextureImpl
     // slices of their depth texures, so 3D textures ignore the layer parameter.
     virtual gl::ImageIndex getImageIndex(GLint mip, GLint layer) const = 0;
 
-    virtual void generateMipmaps();
+    virtual gl::Error generateMipmaps();
     TextureStorage *getStorage();
     Image *getBaseLevelImage() const;
 
