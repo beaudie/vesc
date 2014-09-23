@@ -311,7 +311,7 @@ Image *TextureD3D::getBaseLevelImage() const
     return getImage(getImageIndex(0, 0));
 }
 
-void TextureD3D::generateMipmaps()
+gl::Error TextureD3D::generateMipmaps()
 {
     GLint mipCount = mipLevels();
 
@@ -363,15 +363,25 @@ void TextureD3D::generateMipmaps()
             if (renderableStorage)
             {
                 // GPU-side mipmapping
-                mTexStorage->generateMipmap(sourceIndex, destIndex);
+                gl::Error error = mTexStorage->generateMipmap(sourceIndex, destIndex);
+                if (error.isError())
+                {
+                    return error;
+                }
             }
             else
             {
                 // CPU-side mipmapping
-                mRenderer->generateMipmap(getImage(destIndex), getImage(sourceIndex));
+                gl::Error error = mRenderer->generateMipmap(getImage(destIndex), getImage(sourceIndex));
+                if (error.isError())
+                {
+                    return error;
+                }
             }
         }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 bool TextureD3D::isBaseImageZeroSize() const
@@ -1347,7 +1357,6 @@ void TextureD3D_Cube::releaseTexImage()
     UNREACHABLE();
 }
 
-
 void TextureD3D_Cube::initMipmapsImages()
 {
     // Purge array levels 1 through q and reset them to represent the generated mipmap levels.
@@ -1923,7 +1932,6 @@ void TextureD3D_3D::releaseTexImage()
     UNREACHABLE();
 }
 
-
 void TextureD3D_3D::initMipmapsImages()
 {
     // Purge array levels 1 through q and reset them to represent the generated mipmap levels.
@@ -2472,7 +2480,6 @@ void TextureD3D_2DArray::releaseTexImage()
 {
     UNREACHABLE();
 }
-
 
 void TextureD3D_2DArray::initMipmapsImages()
 {
