@@ -1756,7 +1756,12 @@ void __stdcall glGenerateMipmap(GLenum target)
             }
         }
 
-        texture->generateMipmaps();
+        gl::Error error = texture->generateMipmaps();
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 

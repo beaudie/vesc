@@ -45,7 +45,7 @@ class TextureStorage11 : public TextureStorage
     virtual gl::Error getSRV(const gl::SamplerState &samplerState, ID3D11ShaderResourceView **outSRV);
     virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT) = 0;
 
-    virtual void generateMipmap(const gl::ImageIndex &sourceIndex, const gl::ImageIndex &destIndex);
+    virtual gl::Error generateMipmap(const gl::ImageIndex &sourceIndex, const gl::ImageIndex &destIndex);
 
     virtual int getTopLevel() const;
     virtual bool isRenderTarget() const;
@@ -76,6 +76,7 @@ class TextureStorage11 : public TextureStorage
 
   protected:
     TextureStorage11(Renderer *renderer, UINT bindFlags);
+
     int getLevelWidth(int mipLevel) const;
     int getLevelHeight(int mipLevel) const;
     int getLevelDepth(int mipLevel) const;
