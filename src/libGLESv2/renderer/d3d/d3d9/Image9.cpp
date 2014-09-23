@@ -284,14 +284,26 @@ IDirect3DSurface9 *Image9::getSurface()
 
 gl::Error Image9::setManagedSurface2D(TextureStorage *storage, int level)
 {
+    IDirect3DSurface9 *surface = NULL;
     TextureStorage9_2D *storage9 = TextureStorage9_2D::makeTextureStorage9_2D(storage);
-    return setManagedSurface(storage9->getSurfaceLevel(level, false));
+    gl::Error error = storage9->getSurfaceLevel(level, false, &surface);
+    if (error.isError())
+    {
+        return error;
+    }
+    return setManagedSurface(surface);
 }
 
 gl::Error Image9::setManagedSurfaceCube(TextureStorage *storage, int face, int level)
 {
+    IDirect3DSurface9 *surface = NULL;
     TextureStorage9_Cube *storage9 = TextureStorage9_Cube::makeTextureStorage9_Cube(storage);
-    return setManagedSurface(storage9->getCubeMapSurface(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, level, false));
+    gl::Error error = storage9->getCubeMapSurface(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, level, false, &surface);
+    if (error.isError())
+    {
+        return error;
+    }
+    return setManagedSurface(surface);
 }
 
 gl::Error Image9::setManagedSurface(IDirect3DSurface9 *surface)
@@ -322,10 +334,17 @@ gl::Error Image9::setManagedSurface(IDirect3DSurface9 *surface)
 gl::Error Image9::copyToStorage2D(TextureStorage *storage, const gl::ImageIndex &index, const gl::Box &region)
 {
     ASSERT(getSurface() != NULL);
-    TextureStorage9_2D *storage9 = TextureStorage9_2D::makeTextureStorage9_2D(storage);
-    IDirect3DSurface9 *destSurface = storage9->getSurfaceLevel(index.mipIndex, true);
 
-    gl::Error error = copyToSurface(destSurface, region.x, region.y, region.width, region.height);
+    TextureStorage9_2D *storage9 = TextureStorage9_2D::makeTextureStorage9_2D(storage);
+
+    IDirect3DSurface9 *destSurface = NULL;
+    gl::Error error = storage9->getSurfaceLevel(index.mipIndex, true, &destSurface);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    error = copyToSurface(destSurface, region.x, region.y, region.width, region.height);
     SafeRelease(destSurface);
     return error;
 }
@@ -333,10 +352,17 @@ gl::Error Image9::copyToStorage2D(TextureStorage *storage, const gl::ImageIndex 
 gl::Error Image9::copyToStorageCube(TextureStorage *storage, const gl::ImageIndex &index, const gl::Box &region)
 {
     ASSERT(getSurface() != NULL);
-    TextureStorage9_Cube *storage9 = TextureStorage9_Cube::makeTextureStorage9_Cube(storage);
-    IDirect3DSurface9 *destSurface = storage9->getCubeMapSurface(index.type, index.mipIndex, true);
 
-    gl::Error error = copyToSurface(destSurface, region.x, region.y, region.width, region.height);
+    TextureStorage9_Cube *storage9 = TextureStorage9_Cube::makeTextureStorage9_Cube(storage);
+
+    IDirect3DSurface9 *destSurface = NULL;
+    gl::Error error = storage9->getCubeMapSurface(index.type, index.mipIndex, true, &destSurface);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    error = copyToSurface(destSurface, region.x, region.y, region.width, region.height);
     SafeRelease(destSurface);
     return error;
 }
