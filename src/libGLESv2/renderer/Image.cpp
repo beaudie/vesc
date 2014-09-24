@@ -9,6 +9,7 @@
 // surfaces or resources.
 
 #include "libGLESv2/renderer/Image.h"
+#include "common/utilities.h"
 
 namespace rx
 {
