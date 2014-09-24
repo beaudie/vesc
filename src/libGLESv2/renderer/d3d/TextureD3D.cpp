@@ -210,6 +210,37 @@ int TextureD3D::mipLevels() const
     return gl::log2(std::max(std::max(getBaseLevelWidth(), getBaseLevelHeight()), getBaseLevelDepth())) + 1;
 }
 
+void TextureD3D::generateMipmaps()
+{
+    // We know that all layers have the same dimension, for the texture to be complete
+    GLint layerCount = static_cast<GLint>(getLayerCount(0));
+    GLint mipCount = mipLevels();
+
+    // The following will create and initialize the storage, or update it if it exists
+    TextureStorage *storage = getNativeTexture();
+
+    bool renderableStorage = (storage && storage->isRenderTarget());
+
+    for (GLint layer = 0; layer < layerCount; ++layer)
+    {
+        for (GLint mip = 1; mip < mipCount; ++mip)
+        {
+            gl::ImageIndex sourceIndex = getImageIndex(mip - 1, layer);
+            gl::ImageIndex destIndex = getImageIndex(mip, layer);
+
+            if (renderableStorage)
+            {
+                // GPU-side mipmapping
+                storage->generateMipmap(sourceIndex, destIndex);
+            }
+            else
+            {
+                // CPU-side mipmapping
+                mRenderer->generateMipmap(getImage(destIndex), getImage(sourceIndex));
+            }
+        }
+    }
+}
 
 TextureD3D_2D::TextureD3D_2D(Renderer *renderer)
     : TextureD3D(renderer),
@@ -500,21 +531,7 @@ void TextureD3D_2D::generateMipmaps()
                       std::max(getBaseLevelHeight() >> level, 1));
     }
 
-    if (mTexStorage && mTexStorage->isRenderTarget())
-    {
-        mTexStorage->generateMipmaps();
-        for (int level = 1; level < levelCount; level++)
-        {
-            mImageArray[level]->markClean();
-        }
-    }
-    else
-    {
-        for (int level = 1; level < levelCount; level++)
-        {
-            mRenderer->generateMipmap(mImageArray[level], mImageArray[level - 1]);
-        }
-    }
+    TextureD3D::generateMipmaps();
 }
 
 unsigned int TextureD3D_2D::getRenderTargetSerial(const gl::ImageIndex &index)
@@ -1007,28 +1024,7 @@ void TextureD3D_Cube::generateMipmaps()
         }
     }
 
-    if (mTexStorage && mTexStorage->isRenderTarget())
-    {
-        mTexStorage->generateMipmaps();
-
-        for (int faceIndex = 0; faceIndex < 6; faceIndex++)
-        {
-            for (int level = 1; level < levelCount; level++)
-            {
-                mImageArray[faceIndex][level]->markClean();
-            }
-        }
-    }
-    else
-    {
-        for (int faceIndex = 0; faceIndex < 6; faceIndex++)
-        {
-            for (int level = 1; level < levelCount; level++)
-            {
-                mRenderer->generateMipmap(mImageArray[faceIndex][level], mImageArray[faceIndex][level - 1]);
-            }
-        }
-    }
+    TextureD3D::generateMipmaps();
 }
 
 unsigned int TextureD3D_Cube::getRenderTargetSerial(const gl::ImageIndex &index)
@@ -1514,22 +1510,7 @@ void TextureD3D_3D::generateMipmaps()
                       std::max(getBaseLevelDepth() >> level, 1));
     }
 
-    if (mTexStorage && mTexStorage->isRenderTarget())
-    {
-        mTexStorage->generateMipmaps();
-
-        for (int level = 1; level < levelCount; level++)
-        {
-            mImageArray[level]->markClean();
-        }
-    }
-    else
-    {
-        for (int level = 1; level < levelCount; level++)
-        {
-            mRenderer->generateMipmap(mImageArray[level], mImageArray[level - 1]);
-        }
-    }
+    TextureD3D::generateMipmaps();
 }
 
 unsigned int TextureD3D_3D::getRenderTargetSerial(const gl::ImageIndex &index)
@@ -2008,28 +1989,7 @@ void TextureD3D_2DArray::generateMipmaps()
         redefineImage(level, baseFormat, std::max(baseWidth >> level, 1), std::max(baseHeight >> level, 1), baseDepth);
     }
 
-    if (mTexStorage && mTexStorage->isRenderTarget())
-    {
-        mTexStorage->generateMipmaps();
-
-        for (int level = 1; level < levelCount; level++)
-        {
-            for (int layer = 0; layer < mLayerCounts[level]; layer++)
-            {
-                mImageArray[level][layer]->markClean();
-            }
-        }
-    }
-    else
-    {
-        for (int level = 1; level < levelCount; level++)
-        {
-            for (int layer = 0; layer < mLayerCounts[level]; layer++)
-            {
-                mRenderer->generateMipmap(mImageArray[level][layer], mImageArray[level - 1][layer]);
-            }
-        }
-    }
+    TextureD3D::generateMipmaps();
 }
 
 unsigned int TextureD3D_2DArray::getRenderTargetSerial(const gl::ImageIndex &index)

@@ -72,6 +72,8 @@ class TextureD3D : public TextureImpl
     GLint creationLevels(GLsizei width, GLsizei height, GLsizei depth) const;
     int mipLevels() const;
 
+    virtual void generateMipmaps();
+
     Renderer *mRenderer;
 
     GLenum mUsage;
