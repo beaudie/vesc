@@ -3134,6 +3134,7 @@ GLenum Renderer9::getVertexComponentType(const gl::VertexFormat &vertexFormat) c
 void Renderer9::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureCaps, gl::Extensions *outExtensions) const
 {
     d3d9_gl::GenerateCaps(mD3d9, mDevice, mDeviceType, mAdapter, outCaps, outTextureCaps, outExtensions);
+    d3d9::GenerateWorkarounds(&mWorkarounds);
 }
 
 }
