@@ -202,6 +202,34 @@ void TextureStorage9_2D::initializeRenderTarget()
     }
 }
 
+bool TextureStorage9_2D::copyToStorage(TextureStorage *destStorage)
+{
+    ASSERT(destStorage);
+
+    bool result = false;
+
+    TextureStorage9_2D *dest9 = TextureStorage9_2D::makeTextureStorage9_2D(destStorage);
+
+    int levels = getLevelCount();
+    for (int i = 0; i < levels; ++i)
+    {
+        IDirect3DSurface9 *srcSurf = getSurfaceLevel(i, false);
+        IDirect3DSurface9 *dstSurf = dest9->getSurfaceLevel(i, false);
+
+        result = mRenderer->copyToRenderTarget(dstSurf, srcSurf, isManaged());
+
+        SafeRelease(srcSurf);
+        SafeRelease(dstSurf);
+
+        if (!result)
+        {
+            return false;
+        }
+    }
+
+    return result;
+}
+
 TextureStorage9_Cube::TextureStorage9_Cube(Renderer *renderer, GLenum internalformat, bool renderTarget, int size, int levels)
     : TextureStorage9(renderer, GetTextureUsage(internalformat, renderTarget))
 {
@@ -312,6 +340,37 @@ void TextureStorage9_Cube::initializeRenderTarget()
             mRenderTarget[i] = new RenderTarget9(mRenderer, surface);
         }
     }
+}
+
+bool TextureStorage9_Cube::copyToStorage(TextureStorage *destStorage)
+{
+    ASSERT(destStorage);
+
+    bool result = false;
+
+    TextureStorage9_Cube *dest9 = TextureStorage9_Cube::makeTextureStorage9_Cube(destStorage);
+
+    int levels = getLevelCount();
+    for (int f = 0; f < 6; f++)
+    {
+        for (int i = 0; i < levels; i++)
+        {
+            IDirect3DSurface9 *srcSurf = getCubeMapSurface(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, i, false);
+            IDirect3DSurface9 *dstSurf = dest9->getCubeMapSurface(GL_TEXTURE_CUBE_MAP_POSITIVE_X + f, i, true);
+
+            result = mRenderer->copyToRenderTarget(dstSurf, srcSurf, isManaged());
+
+            SafeRelease(srcSurf);
+            SafeRelease(dstSurf);
+
+            if (!result)
+            {
+                return false;
+            }
+        }
+    }
+
+    return result;
 }
 
 }

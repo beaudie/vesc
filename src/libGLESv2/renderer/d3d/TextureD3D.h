@@ -58,6 +58,8 @@ class TextureD3D : public TextureImpl
     // slices of their depth texures, so 3D textures ignore the layer parameter.
     virtual gl::ImageIndex getImageIndex(GLint mip, GLint layer) const = 0;
 
+    TextureStorage *getStorage();
+
   protected:
     void setImage(const gl::PixelUnpackState &unpack, GLenum type, const void *pixels, Image *image);
     bool subImage(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth,
@@ -81,6 +83,7 @@ class TextureD3D : public TextureImpl
     bool mDirtyImages;
 
     bool mImmutable;
+    TextureStorage *mTexStorage;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureD3D);
@@ -88,7 +91,6 @@ class TextureD3D : public TextureImpl
     virtual void initializeStorage(bool renderTarget) = 0;
 
     virtual void updateStorage() = 0;
-    virtual TextureStorage *getBaseLevelStorage() = 0;
     virtual const ImageD3D *getBaseLevelImage() const = 0;
 };
 
@@ -136,7 +138,6 @@ class TextureD3D_2D : public TextureD3D
 
     virtual void updateStorage();
     bool ensureRenderTarget();
-    virtual TextureStorage *getBaseLevelStorage();
     virtual const ImageD3D *getBaseLevelImage() const;
 
     bool isValidLevel(int level) const;
@@ -147,7 +148,6 @@ class TextureD3D_2D : public TextureD3D
     void redefineImage(GLint level, GLenum internalformat, GLsizei width, GLsizei height);
     void commitRect(GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height);
 
-    TextureStorage *mTexStorage;
     ImageD3D *mImageArray[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 };
 
@@ -196,7 +196,6 @@ class TextureD3D_Cube : public TextureD3D
 
     virtual void updateStorage();
     bool ensureRenderTarget();
-    virtual TextureStorage *getBaseLevelStorage();
     virtual const ImageD3D *getBaseLevelImage() const;
 
     bool isValidFaceLevel(int faceIndex, int level) const;
@@ -208,8 +207,6 @@ class TextureD3D_Cube : public TextureD3D
     void commitRect(int faceIndex, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height);
 
     ImageD3D *mImageArray[6][gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
-
-    TextureStorage *mTexStorage;
 };
 
 class TextureD3D_3D : public TextureD3D
@@ -256,7 +253,6 @@ class TextureD3D_3D : public TextureD3D
 
     virtual void updateStorage();
     bool ensureRenderTarget();
-    virtual TextureStorage *getBaseLevelStorage();
     virtual const ImageD3D *getBaseLevelImage() const;
 
     bool isValidLevel(int level) const;
@@ -267,8 +263,6 @@ class TextureD3D_3D : public TextureD3D
     void commitRect(GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth);
 
     ImageD3D *mImageArray[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
-
-    TextureStorage *mTexStorage;
 };
 
 class TextureD3D_2DArray : public TextureD3D
@@ -315,7 +309,6 @@ class TextureD3D_2DArray : public TextureD3D
 
     virtual void updateStorage();
     bool ensureRenderTarget();
-    virtual TextureStorage *getBaseLevelStorage();
     virtual const ImageD3D *getBaseLevelImage() const;
 
     bool isValidLevel(int level) const;
@@ -332,8 +325,6 @@ class TextureD3D_2DArray : public TextureD3D
     // sense for the Image class to not have to worry about layer subresource as well as mip subresources.
     GLsizei mLayerCounts[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
     ImageD3D **mImageArray[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
-
-    TextureStorage *mTexStorage;
 };
 
 }

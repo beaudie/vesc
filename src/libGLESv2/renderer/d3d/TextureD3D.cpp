@@ -35,7 +35,8 @@ TextureD3D::TextureD3D(Renderer *renderer)
     : mRenderer(renderer),
       mUsage(GL_NONE),
       mDirtyImages(true),
-      mImmutable(false)
+      mImmutable(false),
+      mTexStorage(NULL)
 {
 }
 
@@ -54,13 +55,12 @@ TextureStorage *TextureD3D::getNativeTexture()
     // ensure the underlying texture is created
     initializeStorage(false);
 
-    TextureStorage *storage = getBaseLevelStorage();
-    if (storage)
+    if (mTexStorage)
     {
         updateStorage();
     }
 
-    return storage;
+    return mTexStorage;
 }
 
 GLint TextureD3D::getBaseLevelWidth() const
@@ -210,6 +210,11 @@ int TextureD3D::mipLevels() const
     return gl::log2(std::max(std::max(getBaseLevelWidth(), getBaseLevelHeight()), getBaseLevelDepth())) + 1;
 }
 
+TextureStorage *TextureD3D::getStorage()
+{
+    return mTexStorage;
+}
+
 void TextureD3D::generateMipmaps()
 {
     // We know that all layers have the same dimension, for the texture to be complete
@@ -243,8 +248,7 @@ void TextureD3D::generateMipmaps()
 }
 
 TextureD3D_2D::TextureD3D_2D(Renderer *renderer)
-    : TextureD3D(renderer),
-      mTexStorage(NULL)
+    : TextureD3D(renderer)
 {
     for (int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; ++i)
     {
@@ -681,7 +685,7 @@ bool TextureD3D_2D::ensureRenderTarget()
         {
             TextureStorage *newRenderTargetStorage = createCompleteStorage(true);
 
-            if (!mRenderer->copyToRenderTarget2D(newRenderTargetStorage, mTexStorage))
+            if (!mTexStorage->copyToStorage(newRenderTargetStorage))
             {
                 delete newRenderTargetStorage;
                 return gl::error(GL_OUT_OF_MEMORY, false);
@@ -692,11 +696,6 @@ bool TextureD3D_2D::ensureRenderTarget()
     }
 
     return (mTexStorage && mTexStorage->isRenderTarget());
-}
-
-TextureStorage *TextureD3D_2D::getBaseLevelStorage()
-{
-    return mTexStorage;
 }
 
 const ImageD3D *TextureD3D_2D::getBaseLevelImage() const
@@ -768,8 +767,7 @@ gl::ImageIndex TextureD3D_2D::getImageIndex(GLint mip, GLint /*layer*/) const
 }
 
 TextureD3D_Cube::TextureD3D_Cube(Renderer *renderer)
-    : TextureD3D(renderer),
-      mTexStorage(NULL)
+    : TextureD3D(renderer)
 {
     for (int i = 0; i < 6; i++)
     {
@@ -1127,7 +1125,7 @@ bool TextureD3D_Cube::ensureRenderTarget()
         {
             TextureStorage *newRenderTargetStorage = createCompleteStorage(true);
 
-            if (!mRenderer->copyToRenderTargetCube(newRenderTargetStorage, mTexStorage))
+            if (!mTexStorage->copyToStorage(newRenderTargetStorage))
             {
                 delete newRenderTargetStorage;
                 return gl::error(GL_OUT_OF_MEMORY, false);
@@ -1138,11 +1136,6 @@ bool TextureD3D_Cube::ensureRenderTarget()
     }
 
     return (mTexStorage && mTexStorage->isRenderTarget());
-}
-
-TextureStorage *TextureD3D_Cube::getBaseLevelStorage()
-{
-    return mTexStorage;
 }
 
 const ImageD3D *TextureD3D_Cube::getBaseLevelImage() const
@@ -1263,8 +1256,7 @@ gl::ImageIndex TextureD3D_Cube::getImageIndex(GLint mip, GLint layer) const
 }
 
 TextureD3D_3D::TextureD3D_3D(Renderer *renderer)
-    : TextureD3D(renderer),
-      mTexStorage(NULL)
+    : TextureD3D(renderer)
 {
     for (int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; ++i)
     {
@@ -1610,7 +1602,7 @@ bool TextureD3D_3D::ensureRenderTarget()
         {
             TextureStorage *newRenderTargetStorage = createCompleteStorage(true);
 
-            if (!mRenderer->copyToRenderTarget3D(newRenderTargetStorage, mTexStorage))
+            if (!mTexStorage->copyToStorage(newRenderTargetStorage))
             {
                 delete newRenderTargetStorage;
                 return gl::error(GL_OUT_OF_MEMORY, false);
@@ -1621,11 +1613,6 @@ bool TextureD3D_3D::ensureRenderTarget()
     }
 
     return (mTexStorage && mTexStorage->isRenderTarget());
-}
-
-TextureStorage *TextureD3D_3D::getBaseLevelStorage()
-{
-    return mTexStorage;
 }
 
 const ImageD3D *TextureD3D_3D::getBaseLevelImage() const
@@ -1753,8 +1740,7 @@ gl::ImageIndex TextureD3D_3D::getImageIndex(GLint mip, GLint /*layer*/) const
 }
 
 TextureD3D_2DArray::TextureD3D_2DArray(Renderer *renderer)
-    : TextureD3D(renderer),
-      mTexStorage(NULL)
+    : TextureD3D(renderer)
 {
     for (int level = 0; level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; ++level)
     {
@@ -2081,7 +2067,7 @@ bool TextureD3D_2DArray::ensureRenderTarget()
         {
             TextureStorage *newRenderTargetStorage = createCompleteStorage(true);
 
-            if (!mRenderer->copyToRenderTarget2DArray(newRenderTargetStorage, mTexStorage))
+            if (!mTexStorage->copyToStorage(newRenderTargetStorage))
             {
                 delete newRenderTargetStorage;
                 return gl::error(GL_OUT_OF_MEMORY, false);
@@ -2097,11 +2083,6 @@ bool TextureD3D_2DArray::ensureRenderTarget()
 const ImageD3D *TextureD3D_2DArray::getBaseLevelImage() const
 {
     return (mLayerCounts[0] > 0 ? mImageArray[0][0] : NULL);
-}
-
-TextureStorage *TextureD3D_2DArray::getBaseLevelStorage()
-{
-    return mTexStorage;
 }
 
 bool TextureD3D_2DArray::isValidLevel(int level) const
