@@ -542,6 +542,7 @@ Workarounds GenerateWorkarounds()
 {
     Workarounds workarounds;
     workarounds.mrtPerfWorkaround = true;
+    workarounds.texSubDataWorkaround = false;
     return workarounds;
 }
 
