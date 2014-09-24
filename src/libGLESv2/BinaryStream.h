@@ -115,6 +115,11 @@ class BinaryInputStream
         return mOffset == mLength;
     }
 
+    const void *data()
+    {
+        return mData;
+    }
+
   private:
     DISALLOW_COPY_AND_ASSIGN(BinaryInputStream);
     bool mError;
