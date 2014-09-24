@@ -54,4 +54,86 @@ ImageIndex::ImageIndex(GLenum typeIn, GLint mipIndexIn, GLint layerIndexIn)
       layerIndex(layerIndexIn)
 {}
 
+ImageIndexIterator ImageIndexIterator::Make2D(GLint minMip, GLint maxMip)
+{
+    return ImageIndexIterator(GL_TEXTURE_2D, minMip, maxMip, ImageIndex::ENTIRE_LEVEL,
+                              ImageIndex::ENTIRE_LEVEL, NULL);
+}
+
+ImageIndexIterator ImageIndexIterator::MakeCube(GLint minMip, GLint maxMip)
+{
+    return ImageIndexIterator(GL_TEXTURE_CUBE_MAP, minMip, maxMip, 0, 6, NULL);
+}
+
+ImageIndexIterator ImageIndexIterator::Make3D(GLint minMip, GLint maxMip,
+                                              GLint minLayer, GLint maxLayer)
+{
+    return ImageIndexIterator(GL_TEXTURE_3D, minMip, maxMip, minLayer, maxLayer, NULL);
+}
+
+ImageIndexIterator ImageIndexIterator::Make2DArray(GLint minMip, GLint maxMip,
+                                                   const GLsizei *layerCounts)
+{
+    return ImageIndexIterator(GL_TEXTURE_2D_ARRAY, minMip, maxMip, 0,
+                              IMPLEMENTATION_MAX_2D_ARRAY_TEXTURE_LAYERS, layerCounts);
+}
+
+ImageIndexIterator::ImageIndexIterator(GLenum type, GLint minMip, GLint maxMip,
+                                       GLint minLayer, GLint maxLayer, const GLsizei *layerCounts)
+    : mType(type),
+      mMinMip(minMip),
+      mMaxMip(maxMip),
+      mMinLayer(minLayer),
+      mMaxLayer(maxLayer),
+      mLayerCounts(layerCounts),
+      mCurrentMip(minMip),
+      mCurrentLayer(minLayer),
+      mMipMajorIteration(true)
+{}
+
+GLint ImageIndexIterator::maxLayer() const
+{
+    return (mLayerCounts ? static_cast<GLint>(mLayerCounts[mCurrentMip]) : mMaxLayer);
+}
+
+ImageIndex ImageIndexIterator::next()
+{
+    ASSERT(hasNext());
+
+    ImageIndex value = ImageIndex(mType, mCurrentMip, mCurrentLayer);
+
+    if (mType == GL_TEXTURE_CUBE_MAP)
+    {
+        value.type = TextureCubeMap::layerIndexToTarget(mCurrentLayer);
+    }
+
+    // Iterate layers in the inner loop for now. We can add switchable
+    // layer or mip iteration if we need it.
+
+    if (mCurrentLayer != ImageIndex::ENTIRE_LEVEL)
+    {
+        if (mCurrentLayer < maxLayer()-1)
+        {
+            mCurrentLayer++;
+        }
+        else if (mCurrentMip < mMaxMip-1)
+        {
+            mCurrentMip++;
+            mCurrentLayer = mMinLayer;
+        }
+    }
+    else if (mCurrentMip < mMaxMip-1)
+    {
+        mCurrentMip++;
+        mCurrentLayer = mMinLayer;
+    }
+
+    return value;
+}
+
+bool ImageIndexIterator::hasNext() const
+{
+    return (mCurrentMip < mMaxMip || mCurrentLayer < maxLayer());
+}
+
 }
