@@ -15,6 +15,7 @@
 #include "libGLESv2/Caps.h"
 #include "common/NativeWindow.h"
 #include "libGLESv2/Error.h"
+#include "libGLESv2/renderer/Workarounds.h"
 
 #include <cstdint>
 
@@ -249,8 +250,11 @@ class Renderer
     virtual rx::VertexConversionType getVertexConversionType(const gl::VertexFormat &vertexFormat) const = 0;
     virtual GLenum getVertexComponentType(const gl::VertexFormat &vertexFormat) const = 0;
 
+    const Workarounds &getWorkarounds() const { return mWorkarounds; }
+
   protected:
     egl::Display *mDisplay;
+    mutable Workarounds mWorkarounds;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Renderer);
