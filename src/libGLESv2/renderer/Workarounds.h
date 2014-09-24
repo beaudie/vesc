@@ -26,6 +26,7 @@ enum D3DWorkaroundType
 struct Workarounds
 {
     bool mrtPerfWorkaround;
+    bool texSubDataWorkaround;
 };
 
 }
