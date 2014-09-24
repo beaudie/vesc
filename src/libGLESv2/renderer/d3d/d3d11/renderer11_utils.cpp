@@ -1075,6 +1075,7 @@ RenderTarget11 *GetAttachmentRenderTarget(gl::FramebufferAttachment *attachment)
 void GenerateWorkarounds(Workarounds *workarounds)
 {
     workarounds->mrtPerfWorkaround = true;
+    workarounds->texSubDataWorkaround = true;
 }
 
 }
