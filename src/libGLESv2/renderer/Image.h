@@ -22,8 +22,8 @@ class Framebuffer;
 
 namespace rx
 {
-
 class Renderer;
+class RenderTarget;
 
 class Image
 {
@@ -50,7 +50,8 @@ class Image
     virtual void loadCompressedData(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth,
                                     const void *input) = 0;
 
-    virtual void copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height, gl::Framebuffer *source) = 0;
+    void copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height, gl::Framebuffer *source);
+    virtual void copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height, RenderTarget *renderTarget) = 0;
 
   protected:
     GLsizei mWidth;
