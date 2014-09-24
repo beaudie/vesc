@@ -215,6 +215,11 @@ TextureStorage *TextureD3D::getStorage()
     return mTexStorage;
 }
 
+Image *TextureD3D::getBaseLevelImage() const
+{
+    return getImage(getImageIndex(0, 0));
+}
+
 void TextureD3D::generateMipmaps()
 {
     // We know that all layers have the same dimension, for the texture to be complete
@@ -249,7 +254,7 @@ void TextureD3D::generateMipmaps()
 
 bool TextureD3D::zeroSize() const
 {
-    Image *baseImage = getImage(getImageIndex(0, 0));
+    Image *baseImage = getBaseLevelImage();
 
     if (!baseImage || baseImage->getWidth() <= 0)
     {
@@ -725,11 +730,6 @@ void TextureD3D_2D::updateStorage()
     }
 }
 
-const ImageD3D *TextureD3D_2D::getBaseLevelImage() const
-{
-    return mImageArray[0];
-}
-
 void TextureD3D_2D::updateStorageLevel(int level)
 {
     ASSERT(level <= (int)ArraySize(mImageArray) && mImageArray[level] != NULL);
@@ -1139,13 +1139,6 @@ void TextureD3D_Cube::updateStorage()
             }
         }
     }
-}
-
-const ImageD3D *TextureD3D_Cube::getBaseLevelImage() const
-{
-    // Note: if we are not cube-complete, there is no single base level image that can describe all
-    // cube faces, so this method is only well-defined for a cube-complete base level.
-    return mImageArray[0][0];
 }
 
 bool TextureD3D_Cube::isValidFaceLevel(int faceIndex, int level) const
@@ -1594,11 +1587,6 @@ void TextureD3D_3D::updateStorage()
     }
 }
 
-const ImageD3D *TextureD3D_3D::getBaseLevelImage() const
-{
-    return mImageArray[0];
-}
-
 bool TextureD3D_3D::isValidLevel(int level) const
 {
     return (mTexStorage ? (level >= 0 && level < mTexStorage->getLevelCount()) : 0);
@@ -1766,11 +1754,6 @@ GLsizei TextureD3D_2DArray::getWidth(GLint level) const
 GLsizei TextureD3D_2DArray::getHeight(GLint level) const
 {
     return (level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS && mLayerCounts[level] > 0) ? mImageArray[level][0]->getHeight() : 0;
-}
-
-GLsizei TextureD3D_2DArray::getLayers(GLint level) const
-{
-    return (level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mLayerCounts[level] : 0;
 }
 
 GLenum TextureD3D_2DArray::getInternalFormat(GLint level) const
@@ -2001,7 +1984,7 @@ TextureStorage *TextureD3D_2DArray::createCompleteStorage(bool renderTarget) con
 {
     GLsizei width = getBaseLevelWidth();
     GLsizei height = getBaseLevelHeight();
-    GLsizei depth = getLayers(0);
+    GLsizei depth = getLayerCount(0);
     GLenum internalFormat = getBaseLevelInternalFormat();
 
     ASSERT(width > 0 && height > 0 && depth > 0);
@@ -2035,11 +2018,6 @@ void TextureD3D_2DArray::updateStorage()
     }
 }
 
-const ImageD3D *TextureD3D_2DArray::getBaseLevelImage() const
-{
-    return (mLayerCounts[0] > 0 ? mImageArray[0][0] : NULL);
-}
-
 bool TextureD3D_2DArray::isValidLevel(int level) const
 {
     return (mTexStorage ? (level >= 0 && level < mTexStorage->getLevelCount()) : 0);
@@ -2056,7 +2034,7 @@ bool TextureD3D_2DArray::isLevelComplete(int level) const
 
     GLsizei width = getBaseLevelWidth();
     GLsizei height = getBaseLevelHeight();
-    GLsizei layers = getLayers(0);
+    GLsizei layers = getLayerCount(0);
 
     if (width <= 0 || height <= 0 || layers <= 0)
     {
@@ -2083,7 +2061,7 @@ bool TextureD3D_2DArray::isLevelComplete(int level) const
         return false;
     }
 
-    if (getLayers(level) != layers)
+    if (getLayerCount(level) != layers)
     {
         return false;
     }
@@ -2125,7 +2103,7 @@ void TextureD3D_2DArray::redefineImage(GLint level, GLenum internalformat, GLsiz
     // If there currently is a corresponding storage texture image, it has these parameters
     const int storageWidth = std::max(1, getBaseLevelWidth() >> level);
     const int storageHeight = std::max(1, getBaseLevelHeight() >> level);
-    const int storageDepth = getLayers(0);
+    const int storageDepth = getLayerCount(0);
     const GLenum storageFormat = getBaseLevelInternalFormat();
 
     for (int layer = 0; layer < mLayerCounts[level]; layer++)
@@ -2174,7 +2152,7 @@ void TextureD3D_2DArray::redefineImage(GLint level, GLenum internalformat, GLsiz
 
 void TextureD3D_2DArray::commitRect(GLint level, GLint xoffset, GLint yoffset, GLint layerTarget, GLsizei width, GLsizei height)
 {
-    if (isValidLevel(level) && layerTarget < getLayers(level))
+    if (isValidLevel(level) && layerTarget < getLayerCount(level))
     {
         ImageD3D *image = mImageArray[level][layerTarget];
         if (image->copyToStorage2DArray(mTexStorage, level, xoffset, yoffset, layerTarget, width, height))
