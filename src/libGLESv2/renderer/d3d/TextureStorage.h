@@ -10,6 +10,7 @@
 #define LIBGLESV2_RENDERER_TEXTURESTORAGE_H_
 
 #include "common/debug.h"
+#include "libGLESv2/Error.h"
 
 #include <GLES2/gl2.h>
 #include <cstdint>
@@ -43,6 +44,8 @@ class TextureStorage
 
     virtual bool setData(const gl::ImageIndex &index, const gl::Box &sourceBox, GLenum internalFormat, GLenum type,
                          const gl::PixelUnpackState &unpack, const uint8_t *pixelData) = 0;
+
+    virtual gl::Error copyToStorage(TextureStorage *destStorage) = 0;
 
     unsigned int getRenderTargetSerial(const gl::ImageIndex &index) const;
     unsigned int getTextureSerial() const;
