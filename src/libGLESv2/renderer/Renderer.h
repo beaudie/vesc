@@ -64,6 +64,7 @@ class TextureStorage;
 class UniformStorage;
 class TextureImpl;
 class TransformFeedbackImpl;
+class TextureD3D;
 
 struct ConfigDesc
 {
@@ -171,11 +172,6 @@ class Renderer
     virtual int getMaxSwapInterval() const = 0;
 
     // Pixel operations
-    virtual bool copyToRenderTarget2D(TextureStorage *dest, TextureStorage *source) = 0;
-    virtual bool copyToRenderTargetCube(TextureStorage *dest, TextureStorage *source) = 0;
-    virtual bool copyToRenderTarget3D(TextureStorage *dest, TextureStorage *source) = 0;
-    virtual bool copyToRenderTarget2DArray(TextureStorage *dest, TextureStorage *source) = 0;
-
     virtual bool copyImage2D(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                              GLint xoffset, GLint yoffset, TextureStorage *storage, GLint level) = 0;
     virtual bool copyImageCube(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,

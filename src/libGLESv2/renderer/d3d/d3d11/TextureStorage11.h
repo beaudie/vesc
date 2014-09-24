@@ -73,6 +73,8 @@ class TextureStorage11 : public TextureStorage
     virtual bool setData(const gl::ImageIndex &index, const gl::Box &sourceBox, GLenum internalFormat, GLenum type,
                          const gl::PixelUnpackState &unpack, const uint8_t *pixelData);
 
+    virtual bool copyToStorage(TextureStorage *destStorage);
+
   protected:
     TextureStorage11(Renderer *renderer, UINT bindFlags);
     int getLevelWidth(int mipLevel) const;
