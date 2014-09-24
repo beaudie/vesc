@@ -42,6 +42,8 @@ class TextureStorage9 : public TextureStorage
     virtual bool isManaged() const;
     virtual int getLevelCount() const;
 
+    virtual gl::Error copyToStorage(TextureStorage *destStorage) = 0;
+
   protected:
     int mTopLevel;
     Renderer9 *mRenderer;
@@ -68,6 +70,7 @@ class TextureStorage9_2D : public TextureStorage9
     virtual RenderTarget *getRenderTarget(const gl::ImageIndex &index);
     virtual IDirect3DBaseTexture9 *getBaseTexture() const;
     virtual void generateMipmap(const gl::ImageIndex &sourceIndex, const gl::ImageIndex &destIndex);
+    virtual gl::Error copyToStorage(TextureStorage *destStorage);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureStorage9_2D);
@@ -90,6 +93,7 @@ class TextureStorage9_Cube : public TextureStorage9
     virtual RenderTarget *getRenderTarget(const gl::ImageIndex &index);
     virtual IDirect3DBaseTexture9 *getBaseTexture() const;
     virtual void generateMipmap(const gl::ImageIndex &sourceIndex, const gl::ImageIndex &destIndex);
+    virtual gl::Error copyToStorage(TextureStorage *destStorage);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureStorage9_Cube);
