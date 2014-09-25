@@ -305,6 +305,8 @@ void ShaderD3D::compileToHLSL(void *compiler, const std::string &source)
         ShGetInfoLog(compiler, infoLog);
         mInfoLog = infoLog;
 
+        SafeDeleteArray(infoLog);
+
         TRACE("\n%s", mInfoLog.c_str());
     }
 }
