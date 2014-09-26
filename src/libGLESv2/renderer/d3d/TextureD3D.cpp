@@ -304,7 +304,8 @@ gl::Error TextureD3D::generateMipmaps()
 
     if (mipCount == 1)
     {
-        return; // no-op
+        // no-op
+        return gl::Error(GL_NO_ERROR);
     }
 
     // Set up proper mipmap chain in our Image array.
