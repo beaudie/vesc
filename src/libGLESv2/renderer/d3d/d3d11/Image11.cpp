@@ -57,18 +57,18 @@ gl::Error Image11::generateMipmap(Image11 *dest, Image11 *src)
     ASSERT(dxgiFormatInfo.mipGenerationFunction != NULL);
 
     D3D11_MAPPED_SUBRESOURCE destMapped;
-    HRESULT destMapResult = dest->map(D3D11_MAP_WRITE, &destMapped);
-    if (FAILED(destMapResult))
+    gl::Error error = dest->map(D3D11_MAP_WRITE, &destMapped);
+    if (error.isError())
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to map destination image for mipmap generationm, result: 0x%X", destMapResult);
+        return error;
     }
 
     D3D11_MAPPED_SUBRESOURCE srcMapped;
-    HRESULT srcMapResult = src->map(D3D11_MAP_READ, &srcMapped);
-    if (FAILED(srcMapResult))
+    error = src->map(D3D11_MAP_READ, &srcMapped);
+    if (error.isError())
     {
         dest->unmap();
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to map source image for mip map generation, result: 0x%X", srcMapResult);
+        return error;
     }
 
     const uint8_t *sourceData = reinterpret_cast<const uint8_t*>(srcMapped.pData);
@@ -120,8 +120,15 @@ gl::Error Image11::copyToStorage(TextureStorage *storage, const gl::ImageIndex &
         }
     }
 
-    gl::Error error = storage11->updateSubresourceLevel(getStagingTexture(), getStagingSubresource(),
-                                                        index, region);
+    ID3D11Resource *stagingTexture = NULL;
+    unsigned int stagingSubresourceIndex = 0;
+    gl::Error error = getStagingTexture(&stagingTexture, &stagingSubresourceIndex);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    error = storage11->updateSubresourceLevel(stagingTexture, stagingSubresourceIndex, index, region);
     if (error.isError())
     {
         return error;
@@ -149,7 +156,11 @@ gl::Error Image11::recoverFromAssociatedStorage()
 {
     if (mRecoverFromStorage)
     {
-        createStagingTexture();
+        gl::Error error = createStagingTexture();
+        if (error.isError())
+        {
+            return error;
+        }
 
         bool textureStorageCorrect = mAssociatedStorage->isAssociatedImageValid(mAssociatedImageIndex, this);
 
@@ -161,7 +172,7 @@ gl::Error Image11::recoverFromAssociatedStorage()
         {
             // CopySubResource from the Storage to the Staging texture
             gl::Box region(0, 0, 0, mWidth, mHeight, mDepth);
-            gl::Error error = mAssociatedStorage->copySubresourceLevel(mStagingTexture, mStagingSubresource, mAssociatedImageIndex, region);
+            error = mAssociatedStorage->copySubresourceLevel(mStagingTexture, mStagingSubresource, mAssociatedImageIndex, region);
             if (error.isError())
             {
                 return error;
@@ -217,7 +228,7 @@ bool Image11::redefine(Renderer *renderer, GLenum target, GLenum internalformat,
         mActualFormat = dxgiFormatInfo.internalFormat;
         mRenderable = (formatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN);
 
-        SafeRelease(mStagingTexture);
+        releaseStagingTexture();
         mDirty = (formatInfo.dataInitializerFunction != NULL);
 
         return true;
@@ -251,10 +262,10 @@ gl::Error Image11::loadData(GLint xoffset, GLint yoffset, GLint zoffset, GLsizei
     LoadImageFunction loadFunction = d3dFormatInfo.loadFunctions.at(type);
 
     D3D11_MAPPED_SUBRESOURCE mappedImage;
-    HRESULT result = map(D3D11_MAP_WRITE, &mappedImage);
-    if (FAILED(result))
+    gl::Error error = map(D3D11_MAP_WRITE, &mappedImage);
+    if (error.isError())
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Could not map internal image for loading texture data, result: 0x%X.", result);
+        return error;
     }
 
     uint8_t* offsetMappedData = (reinterpret_cast<uint8_t*>(mappedImage.pData) + (yoffset * mappedImage.RowPitch + xoffset * outputPixelSize + zoffset * mappedImage.DepthPitch));
@@ -286,10 +297,10 @@ gl::Error Image11::loadCompressedData(GLint xoffset, GLint yoffset, GLint zoffse
     LoadImageFunction loadFunction = d3dFormatInfo.loadFunctions.at(GL_UNSIGNED_BYTE);
 
     D3D11_MAPPED_SUBRESOURCE mappedImage;
-    HRESULT result = map(D3D11_MAP_WRITE, &mappedImage);
-    if (FAILED(result))
+    gl::Error error = map(D3D11_MAP_WRITE, &mappedImage);
+    if (error.isError())
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Could not map internal image for loading texture data, result: 0x%X.", result);
+        return error;
     }
 
     uint8_t* offsetMappedData = reinterpret_cast<uint8_t*>(mappedImage.pData) + ((yoffset / outputBlockHeight) * mappedImage.RowPitch +
@@ -359,6 +370,17 @@ gl::Error Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::R
     if (textureDesc.Format == mDXGIFormat)
     {
         // No conversion needed-- use copyback fastpath
+        ID3D11Resource *stagingTexture = NULL;
+        unsigned int stagingSubresourceIndex = 0;
+        gl::Error error = getStagingTexture(&stagingTexture, &stagingSubresourceIndex);
+        if (error.isError())
+        {
+            return error;
+        }
+
+        D3D11_TEXTURE2D_DESC textureDesc;
+        source->GetDesc(&textureDesc);
+
         ID3D11Device *device = mRenderer->getDevice();
         ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
 
@@ -402,7 +424,7 @@ gl::Error Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::R
         srcBox.front = 0;
         srcBox.back = 1;
 
-        deviceContext->CopySubresourceRegion(getStagingTexture(), 0, xoffset, yoffset, zoffset, srcTex, subresourceAfterResolve, &srcBox);
+        deviceContext->CopySubresourceRegion(stagingTexture, stagingSubresourceIndex, xoffset, yoffset, zoffset, srcTex, subresourceAfterResolve, &srcBox);
 
         if (textureDesc.SampleDesc.Count > 1)
         {
@@ -413,10 +435,10 @@ gl::Error Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::R
     {
         // This format requires conversion, so we must copy the texture to staging and manually convert via readPixels
         D3D11_MAPPED_SUBRESOURCE mappedImage;
-        HRESULT result = map(D3D11_MAP_WRITE, &mappedImage);
-        if (FAILED(result))
+        gl::Error error = map(D3D11_MAP_WRITE, &mappedImage);
+        if (error.isError())
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to map texture for Image11::copy, HRESULT: 0x%X.", result);
+            return error;
         }
 
         // determine the offset coordinate into the destination buffer
@@ -425,7 +447,7 @@ gl::Error Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::R
 
         const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(mInternalFormat);
 
-        gl::Error error = mRenderer->readTextureData(source, sourceSubResource, sourceArea, formatInfo.format, formatInfo.type, mappedImage.RowPitch, gl::PixelPackState(), dataOffset);
+        error = mRenderer->readTextureData(source, sourceSubResource, sourceArea, formatInfo.format, formatInfo.type, mappedImage.RowPitch, gl::PixelPackState(), dataOffset);
 
         unmap();
 
@@ -440,11 +462,17 @@ gl::Error Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::R
     return gl::Error(GL_NO_ERROR);
 }
 
-ID3D11Resource *Image11::getStagingTexture()
+gl::Error Image11::getStagingTexture(ID3D11Resource **outStagingTexture, unsigned int *outSubresourceIndex)
 {
-    createStagingTexture();
+    gl::Error error = createStagingTexture();
+    if (error.isError())
+    {
+        return error;
+    }
 
-    return mStagingTexture;
+    *outStagingTexture = mStagingTexture;
+    *outSubresourceIndex = mStagingSubresource;
+    return gl::Error(GL_NO_ERROR);
 }
 
 void Image11::releaseStagingTexture()
@@ -452,18 +480,11 @@ void Image11::releaseStagingTexture()
     SafeRelease(mStagingTexture);
 }
 
-unsigned int Image11::getStagingSubresource()
-{
-    createStagingTexture();
-
-    return mStagingSubresource;
-}
-
-void Image11::createStagingTexture()
+gl::Error Image11::createStagingTexture()
 {
     if (mStagingTexture)
     {
-        return;
+        return gl::Error(GL_NO_ERROR);
     }
 
     const DXGI_FORMAT dxgiFormat = getDXGIFormat();
@@ -512,8 +533,7 @@ void Image11::createStagingTexture()
             if (FAILED(result))
             {
                 ASSERT(result == E_OUTOFMEMORY);
-                ERR("Creating image failed.");
-                return gl::error(GL_OUT_OF_MEMORY);
+                return gl::Error(GL_OUT_OF_MEMORY, "Failed to create staging texture, result: 0x%X.", result);
             }
 
             mStagingTexture = newTexture;
@@ -553,8 +573,7 @@ void Image11::createStagingTexture()
             if (FAILED(result))
             {
                 ASSERT(result == E_OUTOFMEMORY);
-                ERR("Creating image failed.");
-                return gl::error(GL_OUT_OF_MEMORY);
+                return gl::Error(GL_OUT_OF_MEMORY, "Failed to create staging texture, result: 0x%X.", result);
             }
 
             mStagingTexture = newTexture;
@@ -567,34 +586,44 @@ void Image11::createStagingTexture()
     }
 
     mDirty = false;
+    return gl::Error(GL_NO_ERROR);
 }
 
-HRESULT Image11::map(D3D11_MAP mapType, D3D11_MAPPED_SUBRESOURCE *map)
+gl::Error Image11::map(D3D11_MAP mapType, D3D11_MAPPED_SUBRESOURCE *map)
 {
-    createStagingTexture();
-
     // We must recover from the TextureStorage if necessary, even for D3D11_MAP_WRITE.
-    recoverFromAssociatedStorage();
-
-    HRESULT result = E_FAIL;
-
-    if (mStagingTexture)
+    gl::Error error = recoverFromAssociatedStorage();
+    if (error.isError())
     {
-        ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
-        result = deviceContext->Map(mStagingTexture, mStagingSubresource, mapType, 0, map);
-
-        // this can fail if the device is removed (from TDR)
-        if (d3d11::isDeviceLostError(result))
-        {
-            mRenderer->notifyDeviceLost();
-        }
-        else if (SUCCEEDED(result))
-        {
-            mDirty = true;
-        }
+        return error;
     }
 
-    return result;
+    ID3D11Resource *stagingTexture = NULL;
+    unsigned int subresourceIndex = 0;
+    error = getStagingTexture(&stagingTexture, &subresourceIndex);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+
+    ASSERT(mStagingTexture);
+    HRESULT result = deviceContext->Map(stagingTexture, subresourceIndex, mapType, 0, map);
+
+    // this can fail if the device is removed (from TDR)
+    if (d3d11::isDeviceLostError(result))
+    {
+        mRenderer->notifyDeviceLost();
+    }
+    else if (FAILED(result))
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to map staging texture, result: 0x%X.", result);
+    }
+
+    mDirty = true;
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void Image11::unmap()
