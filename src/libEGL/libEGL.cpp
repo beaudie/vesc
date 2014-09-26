@@ -207,6 +207,7 @@ EGLBoolean __stdcall eglTerminate(EGLDisplay dpy)
     egl::Display *display = static_cast<egl::Display*>(dpy);
 
     display->terminate();
+    delete display;
 
     return egl::success(EGL_TRUE);
 }
