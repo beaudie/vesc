@@ -986,12 +986,12 @@ gl::Error Renderer11::applyIndexBuffer(const GLvoid *indices, gl::Buffer *elemen
     return gl::Error(GL_NO_ERROR);
 }
 
-void Renderer11::applyTransformFeedbackBuffers(gl::Buffer *transformFeedbackBuffers[], GLintptr offsets[])
+void Renderer11::applyTransformFeedbackBuffers(const std::vector<gl::Buffer*> &transformFeedbackBuffers, const std::vector<GLintptr> offsets)
 {
-    ID3D11Buffer* d3dBuffers[gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS];
-    UINT d3dOffsets[gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS];
+    std::vector<ID3D11Buffer*> d3dBuffers;
+    std::vector<UINT> d3dOffsets;
     bool requiresUpdate = false;
-    for (size_t i = 0; i < gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS; i++)
+    for (size_t i = 0; i < transformFeedbackBuffers.size(); i++)
     {
         if (transformFeedbackBuffers[i])
         {
@@ -1015,9 +1015,14 @@ void Renderer11::applyTransformFeedbackBuffers(gl::Buffer *transformFeedbackBuff
 
     if (requiresUpdate)
     {
-        mDeviceContext->SOSetTargets(ArraySize(d3dBuffers), d3dBuffers, d3dOffsets);
-        for (size_t i = 0; i < gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS; i++)
+        mDeviceContext->SOSetTargets(d3dBuffers.size(), d3dBuffers.data(), d3dOffsets.data());
+
+        for (size_t i = 0; i < d3dBuffers.size(); i++)
         {
+            // TODO: mAppliedTFBuffers and friends should also be kept in a vector.
+            // IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS is by definition as large as
+            // or larger than the renderer-dependent XFB buffer vector, so it's safe for now.
+            ASSERT(ArraySize(mAppliedTFBuffers) >= d3dBuffers.size());
             mAppliedTFBuffers[i] = d3dBuffers[i];
             mAppliedTFOffsets[i] = offsets[i];
         }

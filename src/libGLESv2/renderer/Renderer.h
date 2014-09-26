@@ -134,7 +134,7 @@ class Renderer
     virtual gl::Error applyVertexBuffer(gl::ProgramBinary *programBinary, const gl::State &state,
                                         GLint first, GLsizei count, GLsizei instances) = 0;
     virtual gl::Error applyIndexBuffer(const GLvoid *indices, gl::Buffer *elementArrayBuffer, GLsizei count, GLenum mode, GLenum type, TranslatedIndexData *indexInfo) = 0;
-    virtual void applyTransformFeedbackBuffers(gl::Buffer *transformFeedbackBuffers[], GLintptr offsets[]) = 0;
+    virtual void applyTransformFeedbackBuffers(const std::vector<gl::Buffer*> &transformFeedbackBuffers, const std::vector<GLintptr> offsets) = 0;
 
     virtual gl::Error drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive) = 0;
     virtual gl::Error drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
