@@ -300,12 +300,12 @@ class State
     ActiveQueryMap mActiveQueries;
 
     BindingPointer<Buffer> mGenericUniformBuffer;
-    typedef std::vector< OffsetBindingPointer<Buffer> > UniformBufferVector;
-    UniformBufferVector mUniformBuffers;
+    typedef std::vector< OffsetBindingPointer<Buffer> > BufferVector;
+    BufferVector mUniformBuffers;
 
     BindingPointer<TransformFeedback> mTransformFeedback;
     BindingPointer<Buffer> mGenericTransformFeedbackBuffer;
-    OffsetBindingPointer<Buffer> mTransformFeedbackBuffers[IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS];
+    BufferVector mTransformFeedbackBuffers;
 
     BindingPointer<Buffer> mCopyReadBuffer;
     BindingPointer<Buffer> mCopyWriteBuffer;
