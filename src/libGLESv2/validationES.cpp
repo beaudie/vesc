@@ -27,6 +27,55 @@
 namespace gl
 {
 
+Validator::Validator(const gl::Context *context)
+    : mClientVersion(context->getClientVersion()),
+      mState(context->getState()),
+      mCaps(context->getCaps()),
+      mTextureCaps(context->getTextureCaps()),
+      mExtensions(context->getExtensions()),
+      mError(GL_NO_ERROR),
+      mCallHasNoSideEffects(false)
+{}
+
+Validator::Validator(int clientVersion, const gl::State &state, const gl::Caps &caps,
+                     const gl::TextureCapsMap &textureCaps, const gl::Extensions &extensions)
+    : mClientVersion(clientVersion),
+      mState(state),
+      mCaps(caps),
+      mTextureCaps(textureCaps),
+      mExtensions(extensions),
+      mError(GL_NO_ERROR),
+      mCallHasNoSideEffects(false)
+{}
+
+ValidateResult Validator::getResult()
+{
+    ValidateResult result(mError, mCallHasNoSideEffects);
+
+    // Reset state in the off-case the app calls this validator twice
+    mError = Error(GL_NO_ERROR);
+    mCallHasNoSideEffects = false;
+
+    return result;
+}
+
+ES2Validator::ES2Validator(const gl::Context *context)
+    : Validator(context),
+      mFormatCaps(NULL)
+{}
+
+ES2Validator::ES2Validator(int clientVersion, const gl::State &state, const gl::Caps &caps,
+                           const gl::TextureCapsMap &textureCaps, const gl::Extensions &extensions)
+    : Validator(clientVersion, state, caps, textureCaps, extensions),
+      mFormatCaps(NULL)
+{}
+
+ES2Validator ValidateES2(const Context *context)
+{
+    ES2Validator validator(context);
+    return validator;
+}
+
 bool ValidCap(const Context *context, GLenum cap)
 {
     switch (cap)
@@ -285,30 +334,29 @@ bool ValidateAttachmentTarget(gl::Context *context, GLenum attachment)
     return true;
 }
 
-bool ValidateRenderbufferStorageParameters(gl::Context *context, GLenum target, GLsizei samples,
-                                           GLenum internalformat, GLsizei width, GLsizei height,
-                                           bool angleExtension)
+void ES2Validator::RenderbufferStorageMultisampleBase(GLenum target, GLsizei samples, GLenum internalformat,
+                                                      GLsizei width, GLsizei height)
 {
     switch (target)
     {
       case GL_RENDERBUFFER:
         break;
       default:
-        context->recordError(Error(GL_INVALID_ENUM));
-        return false;
+        error(GL_INVALID_ENUM);
+        return;
     }
 
     if (width < 0 || height < 0 || samples < 0)
     {
-        context->recordError(Error(GL_INVALID_VALUE));
-        return false;
+        error(GL_INVALID_VALUE);
+        return;
     }
 
-    const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
-    if (!formatCaps.renderable)
+    mFormatCaps = &mTextureCaps.get(internalformat);
+    if (!mFormatCaps->renderable)
     {
-        context->recordError(Error(GL_INVALID_ENUM));
-        return false;
+        error(GL_INVALID_ENUM);
+        return;
     }
 
     // ANGLE_framebuffer_multisample does not explicitly state that the internal format must be
@@ -318,59 +366,80 @@ bool ValidateRenderbufferStorageParameters(gl::Context *context, GLenum target, 
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalformat);
     if (formatInfo.pixelBytes == 0)
     {
-        context->recordError(Error(GL_INVALID_ENUM));
-        return false;
+        error(GL_INVALID_ENUM);
+        return;
     }
 
     if ((formatInfo.componentType == GL_UNSIGNED_INT || formatInfo.componentType == GL_INT) && samples > 0)
     {
-        context->recordError(Error(GL_INVALID_OPERATION));
-        return false;
+        error(GL_INVALID_OPERATION);
+        return;
     }
 
-    if (static_cast<GLuint>(std::max(width, height)) > context->getCaps().maxRenderbufferSize)
+    if (static_cast<GLuint>(std::max(width, height)) > mCaps.maxRenderbufferSize)
     {
-        context->recordError(Error(GL_INVALID_VALUE));
-        return false;
+        error(GL_INVALID_VALUE);
+        return;
     }
+
+    GLuint handle = mState.getRenderbufferId();
+    if (handle == 0)
+    {
+        error(GL_INVALID_OPERATION);
+        return;
+    }
+}
+
+ValidateResult ES2Validator::RenderbufferStorageMultisample(GLenum target, GLsizei samples, GLenum internalformat,
+                                                            GLsizei width, GLsizei height)
+{
+    if (mClientVersion < 3)
+    {
+        error(GL_INVALID_OPERATION);
+        return getResult();
+    }
+
+    RenderbufferStorageMultisampleBase(target, samples, internalformat, width, height);
+
+    if (hasError()) return getResult();
+
+    ASSERT(mFormatCaps);
+    if (static_cast<GLuint>(samples) > mFormatCaps->getMaxSamples())
+    {
+        error(GL_INVALID_VALUE);
+        return getResult();
+    }
+
+    return getResult();
+}
+
+ValidateResult ES2Validator::RenderbufferStorageMultisampleANGLE(GLenum target, GLsizei samples, GLenum internalformat,
+                                                                 GLsizei width, GLsizei height)
+{
+    RenderbufferStorageMultisampleBase(target, samples, internalformat, width, height);
+
+    if (hasError()) return getResult();
 
     // ANGLE_framebuffer_multisample states that the value of samples must be less than or equal
     // to MAX_SAMPLES_ANGLE (Context::getMaxSupportedSamples) while the ES3.0 spec (section 4.4.2)
     // states that samples must be less than or equal to the maximum samples for the specified
     // internal format.
-    if (angleExtension)
+    ASSERT(mExtensions.framebufferMultisample);
+    if (static_cast<GLuint>(samples) > mExtensions.maxSamples)
     {
-        ASSERT(context->getExtensions().framebufferMultisample);
-        if (static_cast<GLuint>(samples) > context->getExtensions().maxSamples)
-        {
-            context->recordError(Error(GL_INVALID_VALUE));
-            return false;
-        }
-
-        // Check if this specific format supports enough samples
-        if (static_cast<GLuint>(samples) > formatCaps.getMaxSamples())
-        {
-            context->recordError(Error(GL_OUT_OF_MEMORY));
-            return false;
-        }
-    }
-    else
-    {
-        if (static_cast<GLuint>(samples) > formatCaps.getMaxSamples())
-        {
-            context->recordError(Error(GL_INVALID_VALUE));
-            return false;
-        }
+        error(GL_INVALID_VALUE);
+        return getResult();
     }
 
-    GLuint handle = context->getState().getRenderbufferId();
-    if (handle == 0)
+    // Check if this specific format supports enough samples
+    ASSERT(mFormatCaps);
+    if (static_cast<GLuint>(samples) > mFormatCaps->getMaxSamples())
     {
-        context->recordError(Error(GL_INVALID_OPERATION));
-        return false;
+        error(GL_OUT_OF_MEMORY);
+        return getResult();
     }
 
-    return true;
+    return getResult();
 }
 
 bool ValidateFramebufferRenderbufferParameters(gl::Context *context, GLenum target, GLenum attachment,
