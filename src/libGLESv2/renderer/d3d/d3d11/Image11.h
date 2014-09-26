@@ -60,7 +60,7 @@ class Image11 : public ImageD3D
     void disassociateStorage();
 
   protected:
-    HRESULT map(D3D11_MAP mapType, D3D11_MAPPED_SUBRESOURCE *map);
+    gl::Error map(D3D11_MAP mapType, D3D11_MAPPED_SUBRESOURCE *map);
     void unmap();
 
   private:
@@ -69,9 +69,8 @@ class Image11 : public ImageD3D
     gl::Error copyToStorageImpl(TextureStorage11 *storage11, int level, int layerTarget, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height);
     gl::Error copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &sourceArea, ID3D11Texture2D *source, UINT sourceSubResource);
 
-    ID3D11Resource *getStagingTexture();
-    unsigned int getStagingSubresource();
-    void createStagingTexture();
+    gl::Error getStagingTexture(ID3D11Resource **outStagingTexture, unsigned int *outSubresourceIndex);
+    gl::Error createStagingTexture();
     void releaseStagingTexture();
 
     Renderer11 *mRenderer;

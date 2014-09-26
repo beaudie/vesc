@@ -458,7 +458,12 @@ gl::Error TextureStorage11::copyToStorage(TextureStorage *destStorage)
 gl::Error TextureStorage11::setData(const gl::ImageIndex &index, const gl::Box &destBox, GLenum internalFormat, GLenum type,
                                     const gl::PixelUnpackState &unpack, const uint8_t *pixelData)
 {
-    ID3D11Resource *resource = getResource();
+    ID3D11Resource *resource = NULL;
+    gl::Error error = getResource(&resource);
+    if (error.isError())
+    {
+        return error;
+    }
     ASSERT(resource);
 
     UINT destSubresource = getSubresourceIndex(index.mipIndex, index.hasLayer() ? index.layerIndex : 0);
