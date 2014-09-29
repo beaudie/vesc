@@ -43,6 +43,8 @@ class TextureStorage9 : public TextureStorage
     virtual int getLevelCount() const;
 
     virtual gl::Error copyToStorage(TextureStorage *destStorage) = 0;
+    virtual bool setData(const gl::ImageIndex &index, const gl::Box &sourceBox, GLenum internalFormat, GLenum type,
+                         const gl::PixelUnpackState &unpack, const uint8_t *pixelData);
 
   protected:
     int mTopLevel;
