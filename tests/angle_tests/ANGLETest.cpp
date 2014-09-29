@@ -2,17 +2,25 @@
 #include "EGLWindow.h"
 #include "OSWindow.h"
 
-OSWindow *ANGLETest::mOSWindow = NULL;
-
 ANGLETest::ANGLETest()
-    : mEGLWindow(NULL)
+    : mEGLWindow(NULL),
+      mOSWindow(NULL)
 {
     mEGLWindow = new EGLWindow(1280, 720, 2, EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE);
 }
 
 void ANGLETest::SetUp()
 {
-    ResizeWindow(mEGLWindow->getWidth(), mEGLWindow->getHeight());
+    if (!initTestWindow())
+    {
+        FAIL() << "Failed to create ANGLE test window.";
+    }
+
+    if (!resizeWindow(mEGLWindow->getWidth(), mEGLWindow->getHeight()))
+    {
+        FAIL() << "Failed to resize ANGLE test window.";
+    }
+
     if (!createEGLContext())
     {
         FAIL() << "egl context creation failed.";
@@ -37,6 +45,11 @@ void ANGLETest::TearDown()
         {
             exit(0);
         }
+    }
+
+    if (!destroyTestWindow())
+    {
+        FAIL() << "ANGLE test window destruction failed.";
     }
 }
 
@@ -188,7 +201,7 @@ bool ANGLETest::destroyEGLContext()
     return true;
 }
 
-bool ANGLETest::InitTestWindow()
+bool ANGLETest::initTestWindow()
 {
     mOSWindow = CreateOSWindow();
     if (!mOSWindow->initialize("ANGLE_TEST", 128, 128))
@@ -201,7 +214,7 @@ bool ANGLETest::InitTestWindow()
     return true;
 }
 
-bool ANGLETest::DestroyTestWindow()
+bool ANGLETest::destroyTestWindow()
 {
     if (mOSWindow)
     {
@@ -213,20 +226,15 @@ bool ANGLETest::DestroyTestWindow()
     return true;
 }
 
-bool ANGLETest::ResizeWindow(int width, int height)
+bool ANGLETest::resizeWindow(int width, int height)
 {
     return mOSWindow->resize(width, height);
 }
 
 void ANGLETestEnvironment::SetUp()
 {
-    if (!ANGLETest::InitTestWindow())
-    {
-        FAIL() << "Failed to create ANGLE test window.";
-    }
 }
 
 void ANGLETestEnvironment::TearDown()
 {
-    ANGLETest::DestroyTestWindow();
 }
