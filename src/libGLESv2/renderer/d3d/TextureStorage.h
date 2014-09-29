@@ -12,10 +12,13 @@
 #include "common/debug.h"
 
 #include <GLES2/gl2.h>
+#include <cstdint>
 
 namespace gl
 {
 struct ImageIndex;
+struct Box;
+struct PixelUnpackState;
 }
 
 namespace rx
@@ -37,6 +40,9 @@ class TextureStorage
 
     virtual RenderTarget *getRenderTarget(const gl::ImageIndex &index) = 0;
     virtual void generateMipmap(const gl::ImageIndex &sourceIndex, const gl::ImageIndex &destIndex) = 0;
+
+    virtual bool setData(const gl::ImageIndex &index, const gl::Box &sourceBox, GLenum internalFormat, GLenum type,
+                         const gl::PixelUnpackState &unpack, const uint8_t *pixelData) = 0;
 
     unsigned int getRenderTargetSerial(const gl::ImageIndex &index) const;
     unsigned int getTextureSerial() const;
