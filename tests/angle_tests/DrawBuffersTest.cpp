@@ -19,6 +19,9 @@ class DrawBuffersTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
+        // This test seems to fail on an nVidia machine when the window is hidden
+        setWindowVisible(true);
+
         glGenFramebuffers(1, &mFBO);
         glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 

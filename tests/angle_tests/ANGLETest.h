@@ -43,9 +43,8 @@ class ANGLETest : public testing::Test
     ANGLETest();
 
   public:
-    static bool InitTestWindow();
-    static bool DestroyTestWindow();
-    static bool ResizeWindow(int width, int height);
+    bool resizeWindow(int width, int height);
+    void setWindowVisible(bool isVisible);
 
   protected:
     virtual void SetUp();
@@ -74,12 +73,13 @@ class ANGLETest : public testing::Test
     bool isMultisampleEnabled() const;
 
   private:
+    bool initTestWindow();
+    bool destroyTestWindow();
     bool createEGLContext();
     bool destroyEGLContext();
 
     EGLWindow *mEGLWindow;
-
-    static OSWindow *mOSWindow;
+    OSWindow *mOSWindow;
 };
 
 class ANGLETestEnvironment : public testing::Environment
