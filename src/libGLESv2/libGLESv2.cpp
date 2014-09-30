@@ -3654,7 +3654,12 @@ void __stdcall glLinkProgram(GLuint program)
             }
         }
 
-        context->linkProgram(program);
+        gl::Error error = context->linkProgram(program);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
@@ -8433,7 +8438,12 @@ void __stdcall glProgramBinaryOES(GLuint program, GLenum binaryFormat,
             return;
         }
 
-        context->setProgramBinary(program, binaryFormat, binary, length);
+        gl::Error error = context->setProgramBinary(program, binaryFormat, binary, length);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
