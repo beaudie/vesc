@@ -28,74 +28,102 @@ namespace gl
 {
 
 FenceNV::FenceNV(rx::Renderer *renderer)
+    : mFence(renderer->createFence()),
+      mIsSet(false),
+      mStatus(GL_FALSE),
+      mCondition(GL_NONE)
 {
-    mFence = renderer->createFence();
 }
 
 FenceNV::~FenceNV()
 {
-    delete mFence;
+    SafeDelete(mFence);
 }
 
 GLboolean FenceNV::isFence() const
 {
     // GL_NV_fence spec:
     // A name returned by GenFencesNV, but not yet set via SetFenceNV, is not the name of an existing fence.
-    return (mFence->isSet() ? GL_TRUE : GL_FALSE);
+    return (mIsSet ? GL_TRUE : GL_FALSE);
 }
 
-void FenceNV::setFence(GLenum condition)
+Error FenceNV::setFence(GLenum condition)
 {
-    mFence->set();
+    Error error = mFence->set();
+    if (error.isError())
+    {
+        return error;
+    }
 
     mCondition = condition;
     mStatus = GL_FALSE;
+    mIsSet = true;
+
+    return Error(GL_NO_ERROR);
 }
 
-GLboolean FenceNV::testFence()
+Error FenceNV::testFence(GLboolean *outResult)
 {
     // Flush the command buffer by default
-    bool result = mFence->test(true);
+    Error error = mFence->test(true, &mStatus);
+    if (error.isError())
+    {
+        return error;
+    }
 
-    mStatus = (result ? GL_TRUE : GL_FALSE);
-    return mStatus;
+    *outResult = mStatus;
+    return Error(GL_NO_ERROR);
 }
 
-void FenceNV::finishFence()
+Error FenceNV::finishFence()
 {
-    ASSERT(mFence->isSet());
+    ASSERT(mIsSet);
 
-    while (!mFence->test(true))
+    while (mStatus != GL_TRUE)
     {
+        Error error = mFence->test(true, &mStatus);
+        if (error.isError())
+        {
+            return error;
+        }
+
         Sleep(0);
     }
+
+    return Error(GL_NO_ERROR);
 }
 
-GLint FenceNV::getFencei(GLenum pname)
+Error FenceNV::getFencei(GLenum pname, GLint *params)
 {
-    ASSERT(mFence->isSet());
+    ASSERT(mIsSet);
 
     switch (pname)
     {
       case GL_FENCE_STATUS_NV:
+        // GL_NV_fence spec:
+        // Once the status of a fence has been finished (via FinishFenceNV) or tested and the returned status is TRUE (via either TestFenceNV
+        // or GetFenceivNV querying the FENCE_STATUS_NV), the status remains TRUE until the next SetFenceNV of the fence.
+        if (mStatus != GL_TRUE)
         {
-            // GL_NV_fence spec:
-            // Once the status of a fence has been finished (via FinishFenceNV) or tested and the returned status is TRUE (via either TestFenceNV
-            // or GetFenceivNV querying the FENCE_STATUS_NV), the status remains TRUE until the next SetFenceNV of the fence.
-            if (mStatus == GL_TRUE)
+            Error error = mFence->test(false, &mStatus);
+            if (error.isError())
             {
-                return GL_TRUE;
+                return error;
             }
-
-            mStatus = (mFence->test(false) ? GL_TRUE : GL_FALSE);
-            return mStatus;
         }
+        *params = mStatus;
+        break;
 
       case GL_FENCE_CONDITION_NV:
-        return mCondition;
+        *params = mCondition;
+        break;
 
-      default: UNREACHABLE(); return 0;
+      default:
+        UNREACHABLE();
+        return gl::Error(GL_INVALID_OPERATION);
     }
+
+    return Error(GL_NO_ERROR);
 }
 
 FenceSync::FenceSync(rx::Renderer *renderer, GLuint id)
@@ -113,82 +141,103 @@ FenceSync::FenceSync(rx::Renderer *renderer, GLuint id)
 
 FenceSync::~FenceSync()
 {
-    delete mFence;
+    SafeDelete(mFence);
 }
 
-void FenceSync::set(GLenum condition)
+Error FenceSync::set(GLenum condition)
 {
-    mCondition = condition;
-    mFence->set();
-}
-
-GLenum FenceSync::clientWait(GLbitfield flags, GLuint64 timeout)
-{
-    ASSERT(mFence->isSet());
-
-    bool flushCommandBuffer = ((flags & GL_SYNC_FLUSH_COMMANDS_BIT) != 0);
-
-    if (mFence->test(flushCommandBuffer))
+    Error error = mFence->set();
+    if (error.isError())
     {
-        return GL_ALREADY_SIGNALED;
+        return error;
     }
 
-    if (mFence->hasError())
+    mCondition = condition;
+    return Error(GL_NO_ERROR);
+}
+
+Error FenceSync::clientWait(GLbitfield flags, GLuint64 timeout, GLenum *outResult)
+{
+    bool flushCommandBuffer = ((flags & GL_SYNC_FLUSH_COMMANDS_BIT) != 0);
+
+    GLboolean result = GL_FALSE;
+    Error error = mFence->test(flushCommandBuffer, &result);
+    if (error.isError())
     {
-        return GL_WAIT_FAILED;
+        return error;
+    }
+
+    if (result == GL_TRUE)
+    {
+        *outResult = GL_ALREADY_SIGNALED;
+        return Error(GL_NO_ERROR);
     }
 
     if (timeout == 0)
     {
-        return GL_TIMEOUT_EXPIRED;
+        *outResult = GL_TIMEOUT_EXPIRED;
+        return Error(GL_NO_ERROR);
     }
 
     LARGE_INTEGER currentCounter = { 0 };
     BOOL success = QueryPerformanceCounter(&currentCounter);
-    UNUSED_ASSERTION_VARIABLE(success);
     ASSERT(success);
+    if (!success)
+    {
+        return Error(GL_OUT_OF_MEMORY, "Failed to QueryPerformanceCounter.");
+    }
 
     LONGLONG timeoutInSeconds = static_cast<LONGLONG>(timeout) * static_cast<LONGLONG>(1000000ll);
     LONGLONG endCounter = currentCounter.QuadPart + mCounterFrequency * timeoutInSeconds;
 
-    while (currentCounter.QuadPart < endCounter && !mFence->test(flushCommandBuffer))
+    while (currentCounter.QuadPart < endCounter && !result)
     {
         Sleep(0);
         BOOL success = QueryPerformanceCounter(&currentCounter);
-        UNUSED_ASSERTION_VARIABLE(success);
         ASSERT(success);
-    }
+        if (!success)
+        {
+            return Error(GL_OUT_OF_MEMORY, "Failed to QueryPerformanceCounter.");
+        }
 
-    if (mFence->hasError())
-    {
-        return GL_WAIT_FAILED;
+        error = mFence->test(flushCommandBuffer, &result);
+        if (error.isError())
+        {
+            return error;
+        }
     }
 
     if (currentCounter.QuadPart >= endCounter)
     {
-        return GL_TIMEOUT_EXPIRED;
+        *outResult = GL_TIMEOUT_EXPIRED;
+    }
+    else
+    {
+        *outResult = GL_CONDITION_SATISFIED;
     }
 
-    return GL_CONDITION_SATISFIED;
+    return Error(GL_NO_ERROR);
 }
 
-void FenceSync::serverWait()
+Error FenceSync::serverWait()
 {
     // Because our API is currently designed to be called from a single thread, we don't need to do
     // extra work for a server-side fence. GPU commands issued after the fence is created will always
     // be processed after the fence is signaled.
+    return Error(GL_NO_ERROR);
 }
 
-GLenum FenceSync::getStatus() const
+Error FenceSync::getStatus(GLint *outResult) const
 {
-    if (mFence->test(false))
+    GLboolean result = GL_FALSE;
+    Error error = mFence->test(false, &result);
+    if (error.isError())
     {
-        // The spec does not specify any way to report errors during the status test (e.g. device lost)
-        // so we report the fence is unblocked in case of error or signaled.
-        return GL_SIGNALED;
+        return error;
     }
 
-    return GL_UNSIGNALED;
+    *outResult = (result ? GL_SIGNALED : GL_UNSIGNALED);
+    return Error(GL_NO_ERROR);
 }
 
 }
