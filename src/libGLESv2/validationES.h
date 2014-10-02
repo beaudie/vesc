@@ -10,6 +10,7 @@
 #define LIBGLESV2_VALIDATION_ES_H
 
 #include "common/mathutil.h"
+#include "libGLESv2/Error.h"
 
 #include <GLES2/gl2.h>
 #include <GLES3/gl3.h>
@@ -18,6 +19,77 @@ namespace gl
 {
 
 class Context;
+class State;
+struct Caps;
+class TextureCapsMap;
+struct Extensions;
+struct TextureCaps;
+
+struct ValidateResult
+{
+    ValidateResult(const Error &errorIn, bool callHasNoSideEffectsIn)
+        : error(errorIn),
+          callHasNoSideEffects(callHasNoSideEffectsIn)
+    {}
+
+    // This test indicates the call did not produce a validation error, and the
+    // validator determined it may have side effects (may not be a no-op).
+    bool shouldRunAPICall() const { return !error.isError() && !callHasNoSideEffects; }
+    bool hasError() { return error.isError(); }
+
+    Error error;
+    bool callHasNoSideEffects;
+};
+
+class Validator
+{
+  public:
+    explicit Validator(const Context *context);
+    Validator(int clientVersion, const State &state, const Caps &caps,
+              const TextureCapsMap &textureCaps, const Extensions &extensions);
+
+    ValidateResult getResult();
+
+  protected:
+    // TODO(jmadill): varargs
+    void error(GLenum value) { mError = Error(value); }
+    bool hasError() { return mError.isError(); }
+
+    int mClientVersion;
+    const State &mState;
+    const Caps &mCaps;
+    const TextureCapsMap &mTextureCaps;
+    const Extensions &mExtensions;
+    Error mError;
+
+    // The validator sets this flag to true when it knows the API call will have
+    // no side effects, and we may skip any further work after validation.
+    bool mCallHasNoSideEffects;
+};
+
+class ES2Validator : public Validator
+{
+  public:
+    explicit ES2Validator(const Context *context);
+    ES2Validator(int clientVersion, const State &state, const Caps &caps,
+                 const TextureCapsMap &textureCaps, const Extensions &extensions);
+
+    // Entry-point validation.
+    // When implementing an entry point validation stub, make sure you call getResult()
+    // to return the current ValidateResult to the API call. You should call getResult as
+    // the last step before returning to the API.
+    void renderbufferStorageMultisample(GLenum target, GLsizei samples, GLenum internalformat,
+                                        GLsizei width, GLsizei height);
+    void renderbufferStorageMultisampleANGLE(GLenum target, GLsizei samples, GLenum internalformat,
+                                             GLsizei width, GLsizei height);
+
+  private:
+    void renderbufferStorageMultisampleBase(GLenum target, GLsizei samples, GLenum internalformat,
+                                            GLsizei width, GLsizei height);
+
+    // cached queries
+    const TextureCaps *mFormatCaps;
+};
 
 bool ValidCap(const Context *context, GLenum cap);
 bool ValidTextureTarget(const Context *context, GLenum target);
@@ -32,9 +104,6 @@ bool ValidQueryType(const Context *context, GLenum queryType);
 bool ValidProgram(Context *context, GLuint id);
 
 bool ValidateAttachmentTarget(Context *context, GLenum attachment);
-bool ValidateRenderbufferStorageParameters(Context *context, GLenum target, GLsizei samples,
-                                           GLenum internalformat, GLsizei width, GLsizei height,
-                                           bool angleExtension);
 bool ValidateFramebufferRenderbufferParameters(Context *context, GLenum target, GLenum attachment,
                                                GLenum renderbuffertarget, GLuint renderbuffer);
 
