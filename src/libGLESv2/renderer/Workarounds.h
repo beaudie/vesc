@@ -26,10 +26,12 @@ enum D3DWorkaroundType
 struct Workarounds
 {
     Workarounds()
-        : mrtPerfWorkaround(false)
+        : mrtPerfWorkaround(false),
+          texSubDataWorkaround(false)
     {}
 
     bool mrtPerfWorkaround;
+    bool texSubDataWorkaround;
 };
 
 }
