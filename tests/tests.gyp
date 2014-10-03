@@ -164,6 +164,46 @@
                         '<!@(python <(angle_path)/enumerate_files.py standalone_tests -types *.cpp *.h)'
                     ],
                 },
+
+                {
+                    'target_name': 'rapidjson',
+                    'type': 'none',
+                    'direct_dependent_settings':
+                    {
+                        'sources':
+                        [
+                            'perf_tests/third_party/rapidjson/include/rapidjson/allocators.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/document.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/encodedstream.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/encodings.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/filereadstream.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/filestream.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/filewritestream.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/memorybuffer.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/memorystream.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/prettywriter.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/rapidjson.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/reader.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/stringbuffer.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/writer.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/error/en.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/error/error.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/internal/dtoa.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/internal/itoa.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/internal/meta.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/internal/pow10.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/internal/stack.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/internal/strfunc.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/msinttypes/inttypes.h',
+                            'perf_tests/third_party/rapidjson/include/rapidjson/msinttypes/stdint.h',
+                        ],
+                        'include_dirs':
+                        [
+                            'perf_tests/third_party/rapidjson/include',
+                        ],
+                    },
+                },
+
                 {
                     'target_name': 'angle_perf_tests',
                     'type': 'executable',
@@ -173,6 +213,7 @@
                         '../src/angle.gyp:libGLESv2',
                         '../src/angle.gyp:libEGL',
                         '../util/util.gyp:angle_util',
+                        'rapidjson',
                     ],
                     'include_dirs':
                     [
