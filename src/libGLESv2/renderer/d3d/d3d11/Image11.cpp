@@ -323,26 +323,56 @@ gl::Error Image11::loadCompressedData(GLint xoffset, GLint yoffset, GLint zoffse
 
 void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &sourceArea, RenderTarget *source)
 {
-    RenderTarget11 *renderTarget = RenderTarget11::makeRenderTarget11(source);
-    ASSERT(renderTarget->getTexture());
+    RenderTarget11 *sourceRenderTarget = RenderTarget11::makeRenderTarget11(source);
+    ASSERT(sourceRenderTarget->getTexture());
 
-    ID3D11Texture2D *colorBufferTexture = d3d11::DynamicCastComObject<ID3D11Texture2D>(renderTarget->getTexture());
-    unsigned int subresourceIndex = renderTarget->getSubresourceIndex();
+    ID3D11Texture2D *sourceTexture2D = d3d11::DynamicCastComObject<ID3D11Texture2D>(sourceRenderTarget->getTexture());
+    unsigned int subresourceIndex = sourceRenderTarget->getSubresourceIndex();
 
-    if (!colorBufferTexture)
+    if (!sourceTexture2D)
     {
         // Error already generated
         return;
     }
 
-    if (source->getActualFormat() == mActualFormat)
+    copy(xoffset, yoffset, zoffset, sourceArea, sourceTexture2D, subresourceIndex);
+
+    sourceTexture2D->Release();
+}
+
+void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &sourceArea, const gl::ImageIndex &sourceIndex, TextureStorage *source)
+{
+    TextureStorage11 *sourceStorage11 = TextureStorage11::makeTextureStorage11(source);
+
+    UINT subresourceIndex = sourceStorage11->getSubresourceIndex(sourceIndex.mipIndex, sourceIndex.hasLayer() ? sourceIndex.layerIndex : 0);
+
+    ASSERT(subresourceIndex != std::numeric_limits<UINT>::max());
+
+    ID3D11Texture2D *sourceTexture2D = d3d11::DynamicCastComObject<ID3D11Texture2D>(sourceStorage11->getResource());
+
+    if (!sourceTexture2D)
+    {
+        // Error already generated
+        return;
+    }
+
+    copy(xoffset, yoffset, zoffset, sourceArea, sourceTexture2D, subresourceIndex);
+
+    sourceTexture2D->Release();
+}
+
+void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &sourceArea, ID3D11Texture2D *source, UINT sourceSubResource)
+{
+    D3D11_TEXTURE2D_DESC textureDesc;
+    source->GetDesc(&textureDesc);
+
+    if (textureDesc.Format == mDXGIFormat)
     {
         // No conversion needed-- use copyback fastpath
-        D3D11_TEXTURE2D_DESC textureDesc;
-        colorBufferTexture->GetDesc(&textureDesc);
-
         ID3D11Device *device = mRenderer->getDevice();
         ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+
+        UINT subresourceAfterResolve = sourceSubResource;
 
         ID3D11Texture2D* srcTex = NULL;
         if (textureDesc.SampleDesc.Count > 1)
@@ -367,13 +397,12 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectan
                 return;
             }
 
-            deviceContext->ResolveSubresource(srcTex, 0, colorBufferTexture, subresourceIndex, textureDesc.Format);
-            subresourceIndex = 0;
+            deviceContext->ResolveSubresource(srcTex, 0, source, sourceSubResource, textureDesc.Format);
+            subresourceAfterResolve = 0;
         }
         else
         {
-            srcTex = colorBufferTexture;
-            srcTex->AddRef();
+            srcTex = source;
         }
 
         D3D11_BOX srcBox;
@@ -384,10 +413,12 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectan
         srcBox.front = 0;
         srcBox.back = 1;
 
-        deviceContext->CopySubresourceRegion(mStagingTexture, 0, xoffset, yoffset, zoffset, srcTex, subresourceIndex, &srcBox);
+        deviceContext->CopySubresourceRegion(getStagingTexture(), 0, xoffset, yoffset, zoffset, srcTex, subresourceAfterResolve, &srcBox);
 
-        SafeRelease(srcTex);
-        SafeRelease(colorBufferTexture);
+        if (textureDesc.SampleDesc.Count > 1)
+        {
+            SafeRelease(srcTex);
+        }
     }
     else
     {
@@ -406,10 +437,12 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectan
 
         const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(mInternalFormat);
 
-        mRenderer->readTextureData(colorBufferTexture, subresourceIndex, sourceArea, formatInfo.format, formatInfo.type, mappedImage.RowPitch, gl::PixelPackState(), dataOffset);
+        mRenderer->readTextureData(source, sourceSubResource, sourceArea, formatInfo.format, formatInfo.type, mappedImage.RowPitch, gl::PixelPackState(), dataOffset);
 
         unmap();
     }
+
+    mDirty = true;
 }
 
 ID3D11Resource *Image11::getStagingTexture()
