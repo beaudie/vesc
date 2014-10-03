@@ -191,6 +191,11 @@
                         'perf_tests/SimpleBenchmarks.cpp',
                         'perf_tests/TexSubImage.cpp',
                         'perf_tests/TexSubImage.h',
+                        'perf_tests/third_party/dmg_fp/dmg_fp.h',
+                        'perf_tests/third_party/dmg_fp/g_fmt.cc',
+                        'perf_tests/third_party/dmg_fp/dtoa.cc',
+                        'perf_tests/third_party/perf/perf_test.cc',
+                        'perf_tests/third_party/perf/perf_test.h',
                     ],
                 },
 
