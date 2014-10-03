@@ -36,16 +36,6 @@ Context *getContext();
 Context *getNonLostContext();
 egl::Display *getDisplay();
 
-void error(GLenum errorCode);
-
-template<class T>
-const T &error(GLenum errorCode, const T &returnValue)
-{
-    error(errorCode);
-
-    return returnValue;
-}
-
 }
 
 namespace rx
