@@ -34,8 +34,9 @@
 
 namespace sh
 {
-// GLenum alias
+// GL type alias
 typedef unsigned int GLenum;
+typedef int GLint;
 }
 
 // Must be included after GLenum proxy typedef

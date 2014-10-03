@@ -43,23 +43,37 @@ enum BlockLayoutType
 struct COMPILER_EXPORT ShaderVariable
 {
     ShaderVariable();
-    ShaderVariable(GLenum typeIn, unsigned int arraySizeIn);
+    ShaderVariable(GLenum typeIn, GLint arraySizeIn);
     ~ShaderVariable();
     ShaderVariable(const ShaderVariable &other);
     ShaderVariable &operator=(const ShaderVariable &other);
 
     bool isArray() const { return arraySize > 0; }
-    unsigned int elementCount() const { return std::max(1u, arraySize); }
+    unsigned int elementCount() const { return std::max(1, arraySize); }
     bool isStruct() const { return !fields.empty(); }
+
+    // Given a mapped name like 'a[0].b.c[0]', return the ShaderVariable
+    // that defines 'c' in |leafVar|, and the original name 'A[0].B.C[0]'
+    // in |originalName|, based on the assumption that |this| defines 'a'.
+    // If no match is found, return false.
+    bool findInfoByMappedName(const std::string &mappedFullName,
+                              const ShaderVariable **leafVar,
+                              std::string* originalFullName) const;
 
     GLenum type;
     GLenum precision;
     std::string name;
     std::string mappedName;
-    unsigned int arraySize;
+    GLint arraySize;
     bool staticUse;
     std::vector<ShaderVariable> fields;
     std::string structName;
+
+  protected:
+    bool isSameVariableAtLinkTime(const ShaderVariable &other,
+                                  bool matchPrecision) const;
+
+    bool operator==(const ShaderVariable &other) const;
 };
 
 struct COMPILER_EXPORT Uniform : public ShaderVariable
@@ -68,6 +82,12 @@ struct COMPILER_EXPORT Uniform : public ShaderVariable
     ~Uniform();
     Uniform(const Uniform &other);
     Uniform &operator=(const Uniform &other);
+    bool operator==(const Uniform &other) const;
+
+    // Decide whether two uniforms are the same at shader link time,
+    // assuming one from vertex shader and the other from fragment shader.
+    // See GLSL ES Spec 3.00.3, sec 4.3.5.
+    bool isSameUniformAtLinkTime(const Uniform &other) const;
 };
 
 struct COMPILER_EXPORT Attribute : public ShaderVariable
@@ -76,6 +96,7 @@ struct COMPILER_EXPORT Attribute : public ShaderVariable
     ~Attribute();
     Attribute(const Attribute &other);
     Attribute &operator=(const Attribute &other);
+    bool operator==(const Attribute &other) const;
 
     int location;
 };
@@ -86,6 +107,14 @@ struct COMPILER_EXPORT InterfaceBlockField : public ShaderVariable
     ~InterfaceBlockField();
     InterfaceBlockField(const InterfaceBlockField &other);
     InterfaceBlockField &operator=(const InterfaceBlockField &other);
+    bool operator==(const InterfaceBlockField &other) const;
+
+    // Decide whether two InterfaceBlock fieldss are the same at shader
+    // link time, assuming one from vertex shader and the other from
+    // fragment shader.
+    // See GLSL ES Spec 3.00.3, sec 4.3.7.
+    bool isSameInterfaceBlockFieldAtLinkTime(
+        const InterfaceBlockField &other) const;
 
     bool isRowMajorLayout;
 };
@@ -96,6 +125,12 @@ struct COMPILER_EXPORT Varying : public ShaderVariable
     ~Varying();
     Varying(const Varying &other);
     Varying &operator=(const Varying &other);
+    bool operator==(const Varying &other) const;
+
+    // Decide whether two varyings are the same at shader link time,
+    // assuming one from vertex shader and the other from fragment shader.
+    // See GLSL ES Spec 3.00.3, sec 4.3.9.
+    bool isSameVaryingAtLinkTime(const Varying &other) const;
 
     InterpolationType interpolation;
     bool isInvariant;
@@ -111,7 +146,7 @@ struct COMPILER_EXPORT InterfaceBlock
     std::string name;
     std::string mappedName;
     std::string instanceName;
-    unsigned int arraySize;
+    GLint arraySize;
     BlockLayoutType layout;
     bool isRowMajorLayout;
     bool staticUse;
