@@ -20,12 +20,14 @@ namespace gl
 {
 class Framebuffer;
 struct Rectangle;
+struct ImageIndex;
 }
 
 namespace rx
 {
 class Renderer;
 class RenderTarget;
+class TextureStorage;
 
 class Image
 {
@@ -54,6 +56,7 @@ class Image
 
     void copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &area, gl::Framebuffer *source);
     virtual void copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &area, RenderTarget *renderTarget) = 0;
+    virtual void copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &area, const gl::ImageIndex &srcIndex, TextureStorage *srcStorage) = 0;
 
   protected:
     GLsizei mWidth;

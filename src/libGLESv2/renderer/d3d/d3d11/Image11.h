@@ -52,6 +52,7 @@ class Image11 : public ImageD3D
                                          const void *input);
 
     virtual void copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &area, RenderTarget *source);
+    virtual void copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &area, const gl::ImageIndex &srcIndex, TextureStorage *srcStorage);
 
     bool recoverFromAssociatedStorage();
     bool isAssociatedStorageValid(TextureStorage11* textureStorage) const;
@@ -65,6 +66,7 @@ class Image11 : public ImageD3D
     DISALLOW_COPY_AND_ASSIGN(Image11);
 
     gl::Error copyToStorageImpl(TextureStorage11 *storage11, int level, int layerTarget, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height);
+    void copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &area, ID3D11Texture2D *source, UINT sourceSubResource);
 
     ID3D11Resource *getStagingTexture();
     unsigned int getStagingSubresource();

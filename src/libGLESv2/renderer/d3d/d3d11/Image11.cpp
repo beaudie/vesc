@@ -335,14 +335,41 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectan
         return;
     }
 
-    if (source->getActualFormat() == mActualFormat)
+    copy(xoffset, yoffset, zoffset, area, colorBufferTexture, subresourceIndex);
+}
+
+void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &area, const gl::ImageIndex &srcIndex, TextureStorage *srcStorage)
+{
+    TextureStorage11 *sourceStorage11 = TextureStorage11::makeTextureStorage11(srcStorage);
+
+    UINT subresourceIndex = sourceStorage11->getSubresourceIndex(srcIndex.mipIndex, srcIndex.layerIndex);
+    ID3D11Texture2D *sourceTexture2D = mRenderer->getTexture2DFromResource(sourceStorage11->getResource());
+
+    if (!sourceTexture2D)
+    {
+        // Error already generated
+        return;
+    }
+
+    copy(xoffset, yoffset, zoffset, area, sourceTexture2D, subresourceIndex);
+}
+
+void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &area, ID3D11Texture2D *source, UINT sourceSubResource)
+{
+    // TODO(jmadill): get the actual/native/dxgi format without a GetDesc query
+    D3D11_TEXTURE2D_DESC sourceDesc;
+    source->GetDesc(&sourceDesc);
+
+    if (sourceDesc.Format == mDXGIFormat)
     {
         // No conversion needed-- use copyback fastpath
         D3D11_TEXTURE2D_DESC textureDesc;
-        colorBufferTexture->GetDesc(&textureDesc);
+        source->GetDesc(&textureDesc);
 
         ID3D11Device *device = mRenderer->getDevice();
         ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+
+        UINT subresourceAfterResolve = sourceSubResource;
 
         ID3D11Texture2D* srcTex = NULL;
         if (textureDesc.SampleDesc.Count > 1)
@@ -367,12 +394,12 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectan
                 return;
             }
 
-            deviceContext->ResolveSubresource(srcTex, 0, colorBufferTexture, subresourceIndex, textureDesc.Format);
-            subresourceIndex = 0;
+            deviceContext->ResolveSubresource(srcTex, 0, source, sourceSubResource, textureDesc.Format);
+            subresourceAfterResolve = 0;
         }
         else
         {
-            srcTex = colorBufferTexture;
+            srcTex = source;
             srcTex->AddRef();
         }
 
@@ -384,10 +411,10 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectan
         srcBox.front = 0;
         srcBox.back = 1;
 
-        deviceContext->CopySubresourceRegion(mStagingTexture, 0, xoffset, yoffset, zoffset, srcTex, subresourceIndex, &srcBox);
+        deviceContext->CopySubresourceRegion(mStagingTexture, 0, xoffset, yoffset, zoffset, srcTex, subresourceAfterResolve, &srcBox);
 
         SafeRelease(srcTex);
-        SafeRelease(colorBufferTexture);
+        SafeRelease(source);
     }
     else
     {
@@ -406,7 +433,7 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectan
 
         const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(mInternalFormat);
 
-        mRenderer->readTextureData(colorBufferTexture, subresourceIndex, area, formatInfo.format, formatInfo.type, mappedImage.RowPitch, gl::PixelPackState(), dataOffset);
+        mRenderer->readTextureData(source, sourceSubResource, area, formatInfo.format, formatInfo.type, mappedImage.RowPitch, gl::PixelPackState(), dataOffset);
 
         unmap();
     }
