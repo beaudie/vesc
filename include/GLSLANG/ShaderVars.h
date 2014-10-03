@@ -52,6 +52,16 @@ struct COMPILER_EXPORT ShaderVariable
     unsigned int elementCount() const { return std::max(1u, arraySize); }
     bool isStruct() const { return !fields.empty(); }
 
+    // Given a mapped name like 'a[0].b.c[0]', return the ShaderVariable
+    // that defines 'c' in |leafVar|, and the original name 'A[0].B.C[0]'
+    // in |originalName|, based on the assumption that |this| defines 'a'.
+    // If no match is found, return false.
+    bool findVariableInfo(const std::string &mappedFullName,
+                          const ShaderVariable **leafVar,
+                          std::string* originalFullName) const;
+
+    std::string getOriginalName(const std::string &mappedFullName) const;
+
     GLenum type;
     GLenum precision;
     std::string name;
@@ -60,6 +70,12 @@ struct COMPILER_EXPORT ShaderVariable
     bool staticUse;
     std::vector<ShaderVariable> fields;
     std::string structName;
+  
+  protected:
+    static bool isSameType(const ShaderVariable &var,
+                           const ShaderVariable &other,
+                           bool matchPrecision,
+                           bool matchName);
 };
 
 struct COMPILER_EXPORT Uniform : public ShaderVariable
@@ -68,6 +84,9 @@ struct COMPILER_EXPORT Uniform : public ShaderVariable
     ~Uniform();
     Uniform(const Uniform &other);
     Uniform &operator=(const Uniform &other);
+
+    static bool isSameType(const Uniform &uniform,
+                           const Uniform &other);
 };
 
 struct COMPILER_EXPORT Attribute : public ShaderVariable
@@ -96,6 +115,9 @@ struct COMPILER_EXPORT Varying : public ShaderVariable
     ~Varying();
     Varying(const Varying &other);
     Varying &operator=(const Varying &other);
+
+    static bool isSameType(const Varying &varying,
+                           const Varying &other);
 
     InterpolationType interpolation;
     bool isInvariant;
