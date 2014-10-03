@@ -72,7 +72,7 @@ TEST_F(CollectFragmentVariablesTest, SimpleOutputVar)
 
     const sh::Attribute &outputVariable = outputVariables[0];
 
-    EXPECT_EQ(0u, outputVariable.arraySize);
+    EXPECT_EQ(0, outputVariable.arraySize);
     EXPECT_EQ(-1, outputVariable.location);
     EXPECT_GLENUM_EQ(GL_MEDIUM_FLOAT, outputVariable.precision);
     EXPECT_TRUE(outputVariable.staticUse);
@@ -98,7 +98,7 @@ TEST_F(CollectFragmentVariablesTest, LocationOutputVar)
 
     const sh::Attribute &outputVariable = outputVariables[0];
 
-    EXPECT_EQ(0u, outputVariable.arraySize);
+    EXPECT_EQ(0, outputVariable.arraySize);
     EXPECT_EQ(5, outputVariable.location);
     EXPECT_GLENUM_EQ(GL_MEDIUM_FLOAT, outputVariable.precision);
     EXPECT_TRUE(outputVariable.staticUse);
@@ -123,7 +123,7 @@ TEST_F(CollectVertexVariablesTest, LocationAttribute)
 
     const sh::Attribute &attribute = attributes[0];
 
-    EXPECT_EQ(0u, attribute.arraySize);
+    EXPECT_EQ(0, attribute.arraySize);
     EXPECT_EQ(5, attribute.location);
     EXPECT_GLENUM_EQ(GL_HIGH_FLOAT, attribute.precision);
     EXPECT_TRUE(attribute.staticUse);
@@ -150,7 +150,7 @@ TEST_F(CollectVertexVariablesTest, SimpleInterfaceBlock)
 
     const sh::InterfaceBlock &interfaceBlock = interfaceBlocks[0];
 
-    EXPECT_EQ(0u, interfaceBlock.arraySize);
+    EXPECT_EQ(0, interfaceBlock.arraySize);
     EXPECT_FALSE(interfaceBlock.isRowMajorLayout);
     EXPECT_EQ(sh::BLOCKLAYOUT_SHARED, interfaceBlock.layout);
     EXPECT_EQ("b", interfaceBlock.name);
@@ -187,7 +187,7 @@ TEST_F(CollectVertexVariablesTest, SimpleInstancedInterfaceBlock)
 
     const sh::InterfaceBlock &interfaceBlock = interfaceBlocks[0];
 
-    EXPECT_EQ(0u, interfaceBlock.arraySize);
+    EXPECT_EQ(0, interfaceBlock.arraySize);
     EXPECT_FALSE(interfaceBlock.isRowMajorLayout);
     EXPECT_EQ(sh::BLOCKLAYOUT_SHARED, interfaceBlock.layout);
     EXPECT_EQ("b", interfaceBlock.name);
@@ -225,7 +225,7 @@ TEST_F(CollectVertexVariablesTest, StructInterfaceBlock)
 
     const sh::InterfaceBlock &interfaceBlock = interfaceBlocks[0];
 
-    EXPECT_EQ(0u, interfaceBlock.arraySize);
+    EXPECT_EQ(0, interfaceBlock.arraySize);
     EXPECT_FALSE(interfaceBlock.isRowMajorLayout);
     EXPECT_EQ(sh::BLOCKLAYOUT_SHARED, interfaceBlock.layout);
     EXPECT_EQ("b", interfaceBlock.name);
@@ -269,7 +269,7 @@ TEST_F(CollectVertexVariablesTest, StructInstancedInterfaceBlock)
 
     const sh::InterfaceBlock &interfaceBlock = interfaceBlocks[0];
 
-    EXPECT_EQ(0u, interfaceBlock.arraySize);
+    EXPECT_EQ(0, interfaceBlock.arraySize);
     EXPECT_FALSE(interfaceBlock.isRowMajorLayout);
     EXPECT_EQ(sh::BLOCKLAYOUT_SHARED, interfaceBlock.layout);
     EXPECT_EQ("b", interfaceBlock.name);
@@ -313,7 +313,7 @@ TEST_F(CollectVertexVariablesTest, NestedStructRowMajorInterfaceBlock)
 
     const sh::InterfaceBlock &interfaceBlock = interfaceBlocks[0];
 
-    EXPECT_EQ(0u, interfaceBlock.arraySize);
+    EXPECT_EQ(0, interfaceBlock.arraySize);
     EXPECT_TRUE(interfaceBlock.isRowMajorLayout);
     EXPECT_EQ(sh::BLOCKLAYOUT_SHARED, interfaceBlock.layout);
     EXPECT_EQ("b", interfaceBlock.name);
