@@ -148,7 +148,7 @@ std::string BufferSubDataParams::suffix() const
     }
 
     strstr << vertexComponentCount;
-    strstr << "_every" << updatesEveryNFrames;
+    strstr << "_every" << updateRate;
 
     return strstr.str();
 }
@@ -281,7 +281,7 @@ void BufferSubDataBenchmark::drawBenchmark()
 {
     for (unsigned int it = 0; it < mParams.iterations; it++)
     {
-        if (mParams.updateSize > 0 && ((mNumFrames % mParams.updatesEveryNFrames) == 0))
+        if (mParams.updateSize > 0 && ((mNumFrames % mParams.updateRate) == 0))
         {
             glBufferSubData(GL_ARRAY_BUFFER, 0, mParams.updateSize, mUpdateData);
         }
