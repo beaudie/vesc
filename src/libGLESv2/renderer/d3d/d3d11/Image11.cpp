@@ -324,8 +324,9 @@ gl::Error Image11::loadCompressedData(GLint xoffset, GLint yoffset, GLint zoffse
 void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &area, RenderTarget *source)
 {
     RenderTarget11 *renderTarget = RenderTarget11::makeRenderTarget11(source);
+    ASSERT(renderTarget->getTexture());
 
-    ID3D11Texture2D *colorBufferTexture = mRenderer->getRenderTargetResource(renderTarget);
+    ID3D11Texture2D *colorBufferTexture = mRenderer->getTexture2DFromResource(renderTarget->getTexture());
     unsigned int subresourceIndex = renderTarget->getSubresourceIndex();
 
     if (!colorBufferTexture)

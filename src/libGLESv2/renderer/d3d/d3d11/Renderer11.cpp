@@ -2472,7 +2472,7 @@ gl::Error Renderer11::fastCopyBufferToTexture(const gl::PixelUnpackState &unpack
     return mPixelTransfer->copyBufferToTexture(unpack, offset, destRenderTarget, destinationFormat, sourcePixelsType, destArea);
 }
 
-bool Renderer11::getRenderTargetResource(gl::FramebufferAttachment *colorbuffer, unsigned int *subresourceIndex, ID3D11Texture2D **resource)
+bool Renderer11::getRenderTargetResource(gl::FramebufferAttachment *colorbuffer, unsigned int *subresourceIndexOut, ID3D11Texture2D **texture2DOut)
 {
     ASSERT(colorbuffer != NULL);
 
@@ -2482,35 +2482,29 @@ bool Renderer11::getRenderTargetResource(gl::FramebufferAttachment *colorbuffer,
         return false;
     }
 
-    *subresourceIndex = renderTarget->getSubresourceIndex();
-    *resource = getRenderTargetResource(renderTarget);
+    ID3D11Resource *renderTargetResource = renderTarget->getTexture();
 
-    return (*resource != NULL);
+    *subresourceIndexOut = renderTarget->getSubresourceIndex();
+    *texture2DOut = getTexture2DFromResource(renderTargetResource);
+
+    return (*texture2DOut != NULL);
 }
 
-ID3D11Texture2D *Renderer11::getRenderTargetResource(RenderTarget11 *renderTarget)
+ID3D11Texture2D *Renderer11::getTexture2DFromResource(ID3D11Resource *resource)
 {
-    ASSERT(renderTarget);
+    ASSERT(resource);
 
-    ID3D11RenderTargetView *colorBufferRTV = renderTarget->getRenderTargetView();
     ID3D11Texture2D *texture2D = NULL;
 
-    if (colorBufferRTV)
+    if (resource)
     {
-        ID3D11Resource *textureResource = NULL;
-        colorBufferRTV->GetResource(&textureResource);
+        HRESULT result = resource->QueryInterface(__uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&texture2D));
 
-        if (textureResource)
+        if (FAILED(result))
         {
-            HRESULT result = textureResource->QueryInterface(__uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&texture2D));
-            SafeRelease(textureResource);
-
-            if (FAILED(result))
-            {
-                ERR("Failed to extract the ID3D11Texture2D from the render target resource, "
-                    "HRESULT: 0x%X.", result);
-                return gl::error(GL_OUT_OF_MEMORY, static_cast <ID3D11Texture2D*>(NULL));
-            }
+            ERR("Failed to extract the ID3D11Texture2D from the render target resource, "
+                "HRESULT: 0x%X.", result);
+            return gl::error(GL_OUT_OF_MEMORY, static_cast <ID3D11Texture2D*>(NULL));
         }
     }
 
