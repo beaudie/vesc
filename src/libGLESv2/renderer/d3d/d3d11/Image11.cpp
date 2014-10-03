@@ -321,7 +321,7 @@ gl::Error Image11::loadCompressedData(GLint xoffset, GLint yoffset, GLint zoffse
     return gl::Error(GL_NO_ERROR);
 }
 
-void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height, RenderTarget *source)
+void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &area, RenderTarget *source)
 {
     RenderTarget11 *renderTarget = RenderTarget11::makeRenderTarget11(source);
 
@@ -376,10 +376,10 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y
         }
 
         D3D11_BOX srcBox;
-        srcBox.left = x;
-        srcBox.right = x + width;
-        srcBox.top = y;
-        srcBox.bottom = y + height;
+        srcBox.left = area.x;
+        srcBox.right = area.x + area.width;
+        srcBox.top = area.y;
+        srcBox.bottom = area.y + area.height;
         srcBox.front = 0;
         srcBox.back = 1;
 
@@ -405,7 +405,6 @@ void Image11::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y
 
         const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(mInternalFormat);
 
-        gl::Rectangle area(x, y, width, height);
         mRenderer->readTextureData(colorBufferTexture, subresourceIndex, area, formatInfo.format, formatInfo.type, mappedImage.RowPitch, gl::PixelPackState(), dataOffset);
 
         unmap();

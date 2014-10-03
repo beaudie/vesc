@@ -466,7 +466,7 @@ gl::Error Image9::loadCompressedData(GLint xoffset, GLint yoffset, GLint zoffset
 }
 
 // This implements glCopyTex[Sub]Image2D for non-renderable internal texture formats and incomplete textures
-void Image9::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height, RenderTarget *source)
+void Image9::copy(GLint xoffset, GLint yoffset, GLint zoffset, const gl::Rectangle &area, RenderTarget *source)
 {
     ASSERT(source);
 
@@ -512,8 +512,8 @@ void Image9::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y,
         return gl::error(GL_OUT_OF_MEMORY);
     }
 
-    RECT sourceRect = {x, y, x + width, y + height};
-    RECT destRect = {xoffset, yoffset, xoffset + width, yoffset + height};
+    RECT sourceRect = { area.x, area.y, area.x + area.width, area.y + area.height};
+    RECT destRect = {xoffset, yoffset, xoffset + area.width, yoffset + area.height};
 
     D3DLOCKED_RECT sourceLock = {0};
     result = renderTargetData->LockRect(&sourceLock, &sourceRect, 0);
@@ -551,18 +551,18 @@ void Image9::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y,
             {
               case D3DFMT_X8R8G8B8:
               case D3DFMT_A8R8G8B8:
-                for(int y = 0; y < height; y++)
+                for (int y = 0; y < area.height; y++)
                 {
-                    memcpy(dest, source, 4 * width);
+                    memcpy(dest, source, 4 * area.width);
 
                     source += sourceLock.Pitch;
                     dest += destLock.Pitch;
                 }
                 break;
               case D3DFMT_L8:
-                for(int y = 0; y < height; y++)
+                for (int y = 0; y < area.height; y++)
                 {
-                    for(int x = 0; x < width; x++)
+                    for (int x = 0; x < area.width; x++)
                     {
                         dest[x] = source[x * 4 + 2];
                     }
@@ -572,9 +572,9 @@ void Image9::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y,
                 }
                 break;
               case D3DFMT_A8L8:
-                for(int y = 0; y < height; y++)
+                for (int y = 0; y < area.height; y++)
                 {
-                    for(int x = 0; x < width; x++)
+                    for (int x = 0; x < area.width; x++)
                     {
                         dest[x * 2 + 0] = source[x * 4 + 2];
                         dest[x * 2 + 1] = source[x * 4 + 3];
@@ -592,9 +592,9 @@ void Image9::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y,
             switch(getD3DFormat())
             {
               case D3DFMT_X8R8G8B8:
-                for(int y = 0; y < height; y++)
+                for (int y = 0; y < area.height; y++)
                 {
-                    for(int x = 0; x < width; x++)
+                    for (int x = 0; x < area.width; x++)
                     {
                         unsigned short rgb = ((unsigned short*)source)[x];
                         unsigned char red = (rgb & 0xF800) >> 8;
@@ -611,9 +611,9 @@ void Image9::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y,
                 }
                 break;
               case D3DFMT_L8:
-                for(int y = 0; y < height; y++)
+                for (int y = 0; y < area.height; y++)
                 {
-                    for(int x = 0; x < width; x++)
+                    for (int x = 0; x < area.width; x++)
                     {
                         unsigned char red = source[x * 2 + 1] & 0xF8;
                         dest[x] = red | (red >> 5);
@@ -628,12 +628,12 @@ void Image9::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y,
             }
             break;
           case D3DFMT_A1R5G5B5:
-            switch(getD3DFormat())
+            switch (getD3DFormat())
             {
               case D3DFMT_X8R8G8B8:
-                for(int y = 0; y < height; y++)
+                for (int y = 0; y < area.height; y++)
                 {
-                    for(int x = 0; x < width; x++)
+                    for (int x = 0; x < area.width; x++)
                     {
                         unsigned short argb = ((unsigned short*)source)[x];
                         unsigned char red = (argb & 0x7C00) >> 7;
@@ -650,9 +650,9 @@ void Image9::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y,
                 }
                 break;
               case D3DFMT_A8R8G8B8:
-                for(int y = 0; y < height; y++)
+                for (int y = 0; y < area.height; y++)
                 {
-                    for(int x = 0; x < width; x++)
+                    for (int x = 0; x < area.width; x++)
                     {
                         unsigned short argb = ((unsigned short*)source)[x];
                         unsigned char red = (argb & 0x7C00) >> 7;
@@ -670,9 +670,9 @@ void Image9::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y,
                 }
                 break;
               case D3DFMT_L8:
-                for(int y = 0; y < height; y++)
+                for (int y = 0; y < area.height; y++)
                 {
-                    for(int x = 0; x < width; x++)
+                    for (int x = 0; x < area.width; x++)
                     {
                         unsigned char red = source[x * 2 + 1] & 0x7C;
                         dest[x] = (red << 1) | (red >> 4);
@@ -683,9 +683,9 @@ void Image9::copy(GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y,
                 }
                 break;
               case D3DFMT_A8L8:
-                for(int y = 0; y < height; y++)
+                for (int y = 0; y < area.height; y++)
                 {
-                    for(int x = 0; x < width; x++)
+                    for (int x = 0; x < area.width; x++)
                     {
                         unsigned char red = source[x * 2 + 1] & 0x7C;
                         dest[x * 2 + 0] = (red << 1) | (red >> 4);
