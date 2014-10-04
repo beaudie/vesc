@@ -5715,6 +5715,34 @@ void __stdcall glFramebufferTextureLayer(GLenum target, GLenum attachment, GLuin
     }
 }
 
+void __stdcall glEGLImageTargetTexture2DOES(GLenum target, GLeglImageOES image)
+{
+	EVENT("(GLenum target = 0x%X, GLeglImageOES image = 0x%X)", target, image);
+
+	gl::Context *context = gl::getNonLostContext();
+	if (context)
+	{
+		if (target == GL_TEXTURE_2D)
+		{
+			//only if GL_OES_EGL_image is supported, else set GL_INVALID_ENUM
+			if (image == NULL)
+			{
+				return gl::error(GL_INVALID_OPERATION);
+			}
+
+		}
+		else if (target == GL_TEXTURE_EXTERNAL_OES)
+		{
+			//TODO
+			if (image == NULL)
+			{
+				return gl::error(GL_INVALID_OPERATION);
+			}
+		}
+	}
+}
+
+
 GLvoid* __stdcall glMapBufferRange(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access)
 {
     EVENT("(GLenum target = 0x%X, GLintptr offset = %d, GLsizeiptr length = %d, GLbitfield access = 0x%X)",
@@ -8734,7 +8762,8 @@ __eglMustCastToProperFunctionPointerType __stdcall glGetProcAddress(const char *
         {"glMapBufferOES", (__eglMustCastToProperFunctionPointerType)glMapBufferOES},
         {"glUnmapBufferOES", (__eglMustCastToProperFunctionPointerType)glUnmapBufferOES},
         {"glMapBufferRangeEXT", (__eglMustCastToProperFunctionPointerType)glMapBufferRangeEXT},
-        {"glFlushMappedBufferRangeEXT", (__eglMustCastToProperFunctionPointerType)glFlushMappedBufferRangeEXT},    };
+        {"glFlushMappedBufferRangeEXT", (__eglMustCastToProperFunctionPointerType)glFlushMappedBufferRangeEXT},
+        {"glEGLImageTargetTexture2DOES", (__eglMustCastToProperFunctionPointerType)glEGLImageTargetTexture2DOES }, };
 
     for (unsigned int ext = 0; ext < ArraySize(glExtensions); ext++)
     {

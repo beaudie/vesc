@@ -535,6 +535,7 @@ void Display::initDisplayExtensionString()
 
     // Multi-vendor (EXT) extensions
     extensions.push_back("EGL_EXT_create_context_robustness");
+    extensions.push_back("EGL_KHR_image");
 
     // ANGLE-specific extensions
     if (mRenderer->getShareHandleSupport())

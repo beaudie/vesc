@@ -101,6 +101,9 @@ struct Extensions
     // Implies that TextureCaps for GL_BGRA8 exist
     bool textureFormatBGRA8888;
 
+	// GL_OES_EGL_image_external
+	bool eglImageExternal;
+
     // GL_EXT_read_format_bgra
     bool readFormatBGRA;
 

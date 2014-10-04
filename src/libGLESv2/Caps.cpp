@@ -90,6 +90,7 @@ Extensions::Extensions()
       getProgramBinary(false),
       rgb8rgba8(false),
       textureFormatBGRA8888(false),
+      eglImageExternal(false),
       readFormatBGRA(false),
       pixelBufferObject(false),
       mapBuffer(false),
@@ -150,6 +151,7 @@ std::vector<std::string> Extensions::getStrings() const
     InsertExtensionString("GL_OES_texture_float_linear",       textureFloatLinear,       &extensionStrings);
     InsertExtensionString("GL_OES_texture_npot",               textureNPOT,              &extensionStrings);
     InsertExtensionString("GL_OES_standard_derivatives",       standardDerivatives,      &extensionStrings);
+    InsertExtensionString("GL_OES_EGL_image_external",         eglImageExternal,         &extensionStrings);
     InsertExtensionString("GL_EXT_texture_format_BGRA8888",    textureFormatBGRA8888,    &extensionStrings);
     InsertExtensionString("GL_EXT_read_format_bgra",           readFormatBGRA,           &extensionStrings);
     InsertExtensionString("GL_EXT_map_buffer_range",           mapBufferRange,           &extensionStrings);

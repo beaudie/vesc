@@ -1001,6 +1001,45 @@ EGLBoolean __stdcall eglPostSubBufferNV(EGLDisplay dpy, EGLSurface surface, EGLi
     return EGL_FALSE;
 }
 
+EGLImageKHR __stdcall eglCreateImageKHR(EGLDisplay dpy, EGLContext ctx, EGLenum target, EGLClientBuffer buffer, const EGLint *attrib_list)
+{
+	EVENT("(EGLDisplay dpy = 0x%0.8p, EGLContext ctx = 0x%X, EGLenum target = %d, EGLClientBuffer buffer = 0x%X, EGLint* attrib_list = 0x%X)", dpy, ctx, target, buffer, attrib_list);
+
+    if (buffer == 0 || attrib_list == 0)
+    {
+		return 0;
+	}
+
+	egl::Display *display = static_cast<egl::Display*>(dpy);
+
+	if (display->getRenderer()->isDeviceLost())
+	{
+		return 0;
+	}
+
+	//TODO - EGL_KHR_image to be implemented
+	//TODO - add logic for creation and maintenance and usage of the image
+	//TODO - prime the buffer
+
+	return (EGLImageKHR)0x0;
+}
+
+EGLBoolean __stdcall eglDestroyImageKHR(EGLDisplay dpy, EGLImageKHR image)
+{
+    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLImageKHR image = 0x%X)", dpy, image);
+
+    egl::Display *display = static_cast<egl::Display*>(dpy);
+
+    if (display->getRenderer()->isDeviceLost())
+    {
+        return egl::error(EGL_CONTEXT_LOST, EGL_FALSE);
+    }
+
+    //TODO - locate the buffer and free all bindings and resources
+
+    return egl::success(EGL_TRUE);
+}
+
 __eglMustCastToProperFunctionPointerType __stdcall eglGetProcAddress(const char *procname)
 {
     EVENT("(const char *procname = \"%s\")", procname);
@@ -1016,6 +1055,8 @@ __eglMustCastToProperFunctionPointerType __stdcall eglGetProcAddress(const char 
         { "eglQuerySurfacePointerANGLE", (__eglMustCastToProperFunctionPointerType)eglQuerySurfacePointerANGLE },
         { "eglPostSubBufferNV", (__eglMustCastToProperFunctionPointerType)eglPostSubBufferNV },
         { "eglGetPlatformDisplayEXT", (__eglMustCastToProperFunctionPointerType)eglGetPlatformDisplayEXT },
+        { "eglCreateImageKHR", (__eglMustCastToProperFunctionPointerType)eglCreateImageKHR },
+        { "eglDestroyImageKHR", (__eglMustCastToProperFunctionPointerType)eglDestroyImageKHR },
         { "", NULL },
     };
 
