@@ -62,7 +62,9 @@ class FenceSync : public RefCountObject
     DISALLOW_COPY_AND_ASSIGN(FenceSync);
 
     rx::FenceImpl *mFence;
+#ifdef ANGLE_PLATFORM_WINDOWS
     LONGLONG mCounterFrequency;
+#endif /* ANGLE_PLATFORM_WINDOWS */
 
     GLenum mCondition;
 };

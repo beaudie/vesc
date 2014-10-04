@@ -23,7 +23,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "third_party/systeminfo/SystemInfo.h"
+
+#ifdef ANGLE_PLATFORM_WINDOWS
 #include <windows.h>
+#endif /* ANGLE_PLATFORM_WINDOWS */
 
 #if _WIN32_WINNT_WINBLUE
 #include <versionhelpers.h>
@@ -31,6 +35,7 @@
 
 namespace rx {
 
+#ifdef ANGLE_PLATFORM_WINDOWS
 #ifndef _WIN32_WINNT_WINBLUE
 static bool IsWindowsVistaOrGreater()
 {
@@ -56,5 +61,6 @@ bool isWindowsVistaOrGreater()
     }
     return cachedIsWindowsVistaOrGreater;
 }
+#endif /* ANGLE_PLATFORM_WINDOWS */
 
 } // namespace rx

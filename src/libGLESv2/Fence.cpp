@@ -67,7 +67,11 @@ void FenceNV::finishFence()
 
     while (!mFence->test(true))
     {
+#ifdef ANGLE_PLATFORM_WINDOWS
         Sleep(0);
+#else
+        // Port FenceNV to your platform
+#endif /* ANGLE_PLATFORM_WINDOWS */
     }
 }
 
@@ -103,12 +107,14 @@ FenceSync::FenceSync(rx::Renderer *renderer, GLuint id)
 {
     mFence = renderer->createFence();
 
+#ifdef ANGLE_PLATFORM_WINDOWS
     LARGE_INTEGER counterFreqency = { 0 };
     BOOL success = QueryPerformanceFrequency(&counterFreqency);
     UNUSED_ASSERTION_VARIABLE(success);
     ASSERT(success);
 
     mCounterFrequency = counterFreqency.QuadPart;
+#endif /* ANGLE_PLATFORM_WINDOWS */
 }
 
 FenceSync::~FenceSync()
@@ -143,6 +149,7 @@ GLenum FenceSync::clientWait(GLbitfield flags, GLuint64 timeout)
         return GL_TIMEOUT_EXPIRED;
     }
 
+#ifdef ANGLE_PLATFORM_WINDOWS
     LARGE_INTEGER currentCounter = { 0 };
     BOOL success = QueryPerformanceCounter(&currentCounter);
     UNUSED_ASSERTION_VARIABLE(success);
@@ -168,6 +175,9 @@ GLenum FenceSync::clientWait(GLbitfield flags, GLuint64 timeout)
     {
         return GL_TIMEOUT_EXPIRED;
     }
+#else
+    // Port fences to your platform
+#endif /* ANGLE_PLATFORM_WINDOWS */
 
     return GL_CONDITION_SATISFIED;
 }

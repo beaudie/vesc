@@ -10,9 +10,12 @@
 
 #include "libGLESv2/renderer/loadimage.h"
 
+#include "common/platform.h"
+
 namespace rx
 {
 
+#ifdef ANGLE_PLATFORM_WINDOWS
 void LoadA8ToBGRA8_SSE2(size_t width, size_t height, size_t depth,
                         const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,
                         uint8_t *output, size_t outputRowPitch, size_t outputDepthPitch)
@@ -100,5 +103,6 @@ void LoadRGBA8ToBGRA8_SSE2(size_t width, size_t height, size_t depth,
         }
     }
 }
+#endif /* ANGLE_PLATFORM_WINDOWS */
 
 }

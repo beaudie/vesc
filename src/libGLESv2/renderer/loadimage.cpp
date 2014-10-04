@@ -341,7 +341,16 @@ void LoadRGBA8ToBGRA8(size_t width, size_t height, size_t depth,
             for (size_t x = 0; x < width; x++)
             {
                 uint32_t rgba = source[x];
+#ifdef _MSC_VER
                 dest[x] = (_rotl(rgba, 16) & 0x00ff00ff) | (rgba & 0xff00ff00);
+#else
+                // TODO(kbr): need big-endian/little-endian detection.
+                // See WebGLImageConversion in Blink workspace.
+                // Input value is really "abgr".
+                uint32_t brMask = 0x00ff00ff;
+                uint32_t gaMask = 0xff00ff00;
+                dest[x] = (((rgba >> 16) | (rgba << 16)) & brMask) | (rgba & gaMask);
+#endif
             }
         }
     }

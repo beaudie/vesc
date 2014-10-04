@@ -22,9 +22,14 @@
 #include <EGL/egl.h>
 
 #if !defined(ANGLE_COMPILE_OPTIMIZATION_LEVEL)
+#ifdef ANGLE_PLATFORM_WINDOWS
 // WARNING: D3DCOMPILE_OPTIMIZATION_LEVEL3 may lead to a DX9 shader compiler hang.
 // It should only be used selectively to work around specific bugs.
 #define ANGLE_COMPILE_OPTIMIZATION_LEVEL D3DCOMPILE_OPTIMIZATION_LEVEL1
+#else
+// TODO(kbr): figure out what to do with this constant on non-Windows platforms.
+#define ANGLE_COMPILE_OPTIMIZATION_LEVEL 1
+#endif
 #endif
 
 namespace egl
@@ -109,7 +114,9 @@ class Renderer
 
     virtual void sync(bool block) = 0;
 
+#ifdef ANGLE_PLATFORM_WINDOWS
     virtual SwapChain *createSwapChain(rx::NativeWindow nativeWindow, HANDLE shareHandle, GLenum backBufferFormat, GLenum depthBufferFormat) = 0;
+#endif /* ANGLE_PLATFORM_WINDOWS */
 
     virtual gl::Error generateSwizzle(gl::Texture *texture) = 0;
     virtual gl::Error setSamplerState(gl::SamplerType type, int index, const gl::SamplerState &sampler) = 0;
@@ -155,9 +162,13 @@ class Renderer
     virtual const gl::TextureCapsMap &getRendererTextureCaps() const;
     virtual const gl::Extensions &getRendererExtensions() const;
 
+#ifdef ANGLE_PLATFORM_WINDOWS
     virtual DWORD getAdapterVendor() const = 0;
+#endif /* ANGLE_PLATFORM_WINDOWS */
     virtual std::string getRendererDescription() const = 0;
+#ifdef ANGLE_PLATFORM_WINDOWS
     virtual GUID getAdapterIdentifier() const = 0;
+#endif /* ANGLE_PLATFORM_WINDOWS */
 
     virtual unsigned int getReservedVertexUniformVectors() const = 0;
     virtual unsigned int getReservedFragmentUniformVectors() const = 0;
@@ -240,7 +251,9 @@ class Renderer
     virtual gl::Error fastCopyBufferToTexture(const gl::PixelUnpackState &unpack, unsigned int offset, RenderTarget *destRenderTarget,
                                               GLenum destinationFormat, GLenum sourcePixelsType, const gl::Box &destArea) = 0;
 
+#ifdef ANGLE_PLATFORM_WINDOWS
     virtual bool getLUID(LUID *adapterLuid) const = 0;
+#endif /* ANGLE_PLATFORM_WINDOWS */
     virtual rx::VertexConversionType getVertexConversionType(const gl::VertexFormat &vertexFormat) const = 0;
     virtual GLenum getVertexComponentType(const gl::VertexFormat &vertexFormat) const = 0;
 

@@ -10,6 +10,7 @@
 #define LIBGLESV2_MAIN_H_
 
 #include "common/debug.h"
+#include "common/platform.h"
 
 #include <GLES2/gl2.h>
 #include <EGL/egl.h>
@@ -63,8 +64,8 @@ gl::Context *glGetCurrentContext();
 rx::Renderer *glCreateRenderer(egl::Display *display, EGLNativeDisplayType nativeDisplay, EGLint requestedDisplayType);
 void glDestroyRenderer(rx::Renderer *renderer);
 
-__eglMustCastToProperFunctionPointerType __stdcall glGetProcAddress(const char *procname);
-bool __stdcall glBindTexImage(egl::Surface *surface);
+__eglMustCastToProperFunctionPointerType ANGLE_STDCALL glGetProcAddress(const char *procname);
+bool ANGLE_STDCALL glBindTexImage(egl::Surface *surface);
 }
 
 #endif   // LIBGLESV2_MAIN_H_

@@ -25,6 +25,7 @@ namespace rx
 {
 RenderTarget *GetAttachmentRenderTarget(gl::FramebufferAttachment *attachment)
 {
+#ifdef ANGLE_PLATFORM_WINDOWS
     if (attachment->isTexture())
     {
         gl::Texture *texture = attachment->getTexture();
@@ -40,11 +41,16 @@ RenderTarget *GetAttachmentRenderTarget(gl::FramebufferAttachment *attachment)
 
     // TODO: cast to RenderbufferD3D
     return renderbuffer->getStorage()->getRenderTarget();
+#else
+    // TODO(kbr): above code needs to be refactored.
+    return NULL;
+#endif
 }
 
 // Note: RenderTarget serials should ideally be in the RenderTargets themselves.
 unsigned int GetAttachmentSerial(gl::FramebufferAttachment *attachment)
 {
+#ifdef ANGLE_PLATFORM_WINDOWS
     if (attachment->isTexture())
     {
         gl::Texture *texture = attachment->getTexture();
@@ -60,6 +66,10 @@ unsigned int GetAttachmentSerial(gl::FramebufferAttachment *attachment)
 
     // TODO: cast to RenderbufferD3D
     return renderbuffer->getStorage()->getSerial();
+#else
+    // TODO(kbr): above code needs to be refactored.
+    return 0;
+#endif
 }
 
 }

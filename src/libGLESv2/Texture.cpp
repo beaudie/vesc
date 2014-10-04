@@ -155,8 +155,13 @@ void Texture::copySubImage(GLenum target, GLint level, GLint xoffset, GLint yoff
 
 unsigned int Texture::getTextureSerial()
 {
+#ifdef ANGLE_PLATFORM_WINDOWS
     rx::TextureStorage *texture = getNativeTexture();
     return texture ? texture->getTextureSerial() : 0;
+#else
+    // TODO(kbr): needs to be refactored.
+    return 0;
+#endif
 }
 
 bool Texture::isImmutable() const
