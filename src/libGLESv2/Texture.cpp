@@ -430,6 +430,8 @@ TextureExternalOES::TextureExternalOES(rx::TextureImpl *impl, GLuint id)
     : Texture(impl, id, GL_TEXTURE_EXTERNAL_OES)
 {
     mSurface = NULL;
+    getSamplerState().magFilter = GL_LINEAR;
+    getSamplerState().minFilter = GL_LINEAR;
 }
 
 TextureExternalOES::~TextureExternalOES()

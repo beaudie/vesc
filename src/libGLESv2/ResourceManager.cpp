@@ -376,6 +376,10 @@ void ResourceManager::checkTextureAllocation(GLuint texture, GLenum type)
         {
             textureObject = new Texture2D(mRenderer->createTexture(GL_TEXTURE_2D), texture);
         }
+        if (type == GL_TEXTURE_EXTERNAL_OES)
+        {
+            textureObject = new TextureExternalOES(mRenderer->createTexture(GL_TEXTURE_EXTERNAL_OES), texture);
+        }
         else if (type == GL_TEXTURE_CUBE_MAP)
         {
             textureObject = new TextureCubeMap(mRenderer->createTexture(GL_TEXTURE_CUBE_MAP), texture);

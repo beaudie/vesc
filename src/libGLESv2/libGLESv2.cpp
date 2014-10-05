@@ -265,6 +265,7 @@ void __stdcall glBindTexture(GLenum target, GLuint texture)
         switch (target)
         {
           case GL_TEXTURE_2D:
+          case GL_TEXTURE_EXTERNAL_OES:
           case GL_TEXTURE_CUBE_MAP:
             break;
 
