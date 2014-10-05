@@ -120,12 +120,16 @@ class Renderer9 : public Renderer
 
     // Pixel operations
     virtual gl::Error copyToRenderTarget2D(TextureStorage *dest, TextureStorage *source);
+    virtual gl::Error copyToRenderTargetExternalOES(TextureStorage *dest, TextureStorage *source);
     virtual gl::Error copyToRenderTargetCube(TextureStorage *dest, TextureStorage *source);
     virtual gl::Error copyToRenderTarget3D(TextureStorage *dest, TextureStorage *source);
     virtual gl::Error copyToRenderTarget2DArray(TextureStorage *dest, TextureStorage *source);
 
     virtual gl::Error copyImage2D(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                   GLint xoffset, GLint yoffset, TextureStorage *storage, GLint level);
+    virtual gl::Error copyImageExternalOES(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+        GLint xoffset, GLint yoffset, TextureStorage *storage, GLint level);
+
     virtual gl::Error copyImageCube(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                     GLint xoffset, GLint yoffset, TextureStorage *storage, GLenum target, GLint level);
     virtual gl::Error copyImage3D(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
@@ -162,6 +166,9 @@ class Renderer9 : public Renderer
     virtual void generateMipmap(Image *dest, Image *source);
     virtual TextureStorage *createTextureStorage2D(SwapChain *swapChain);
     virtual TextureStorage *createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels);
+    virtual TextureStorage *createTextureStorageExternalOES(SwapChain *swapChain);
+    virtual TextureStorage *createTextureStorageExternalOES(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels);
+
     virtual TextureStorage *createTextureStorageCube(GLenum internalformat, bool renderTarget, int size, int levels);
     virtual TextureStorage *createTextureStorage3D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels);
     virtual TextureStorage *createTextureStorage2DArray(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels);

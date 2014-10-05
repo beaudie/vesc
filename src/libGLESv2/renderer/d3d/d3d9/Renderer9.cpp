@@ -2364,6 +2364,13 @@ gl::Error Renderer9::copyToRenderTarget2D(TextureStorage *dest, TextureStorage *
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error Renderer9::copyToRenderTargetExternalOES(TextureStorage *dest, TextureStorage *source)
+{
+    ASSERT(source && dest);
+    //TODO
+    return gl::Error(GL_NO_ERROR);
+}
+
 gl::Error Renderer9::copyToRenderTargetCube(TextureStorage *dest, TextureStorage *source)
 {
     ASSERT(source && dest);
@@ -2426,6 +2433,18 @@ D3DPOOL Renderer9::getBufferPool(DWORD usage) const
 
 gl::Error Renderer9::copyImage2D(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                  GLint xoffset, GLint yoffset, TextureStorage *storage, GLint level)
+{
+    RECT rect;
+    rect.left = sourceRect.x;
+    rect.top = sourceRect.y;
+    rect.right = sourceRect.x + sourceRect.width;
+    rect.bottom = sourceRect.y + sourceRect.height;
+
+    return mBlit->copy2D(framebuffer, rect, destFormat, xoffset, yoffset, storage, level);
+}
+
+gl::Error Renderer9::copyImageExternalOES(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+    GLint xoffset, GLint yoffset, TextureStorage *storage, GLint level)
 {
     RECT rect;
     rect.left = sourceRect.x;
@@ -3049,6 +3068,17 @@ TextureStorage *Renderer9::createTextureStorage2D(GLenum internalformat, bool re
     return new TextureStorage9_2D(this, internalformat, renderTarget, width, height, levels);
 }
 
+TextureStorage *Renderer9::createTextureStorageExternalOES(SwapChain *swapChain)
+{
+    SwapChain9 *swapChain9 = SwapChain9::makeSwapChain9(swapChain);
+    return new TextureStorage9_ExternalOES(this, swapChain9);
+}
+
+TextureStorage *Renderer9::createTextureStorageExternalOES(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels)
+{
+    return new TextureStorage9_ExternalOES(this, internalformat, renderTarget, width, height, levels);
+}
+
 TextureStorage *Renderer9::createTextureStorageCube(GLenum internalformat, bool renderTarget, int size, int levels)
 {
     return new TextureStorage9_Cube(this, internalformat, renderTarget, size, levels);
@@ -3075,6 +3105,7 @@ TextureImpl *Renderer9::createTexture(GLenum target)
     switch(target)
     {
       case GL_TEXTURE_2D:       return new TextureD3D_2D(this);
+      case GL_TEXTURE_EXTERNAL_OES:       return new TextureD3D_ExternalOES(this);
       case GL_TEXTURE_CUBE_MAP: return new TextureD3D_Cube(this);
       default:                  UNREACHABLE();
     }

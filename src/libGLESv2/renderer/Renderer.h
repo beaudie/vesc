@@ -172,6 +172,7 @@ class Renderer
 
     // Pixel operations
     virtual gl::Error copyToRenderTarget2D(TextureStorage *dest, TextureStorage *source) = 0;
+    virtual gl::Error copyToRenderTargetExternalOES(TextureStorage *dest, TextureStorage *source) = 0;
     virtual gl::Error copyToRenderTargetCube(TextureStorage *dest, TextureStorage *source) = 0;
     virtual gl::Error copyToRenderTarget3D(TextureStorage *dest, TextureStorage *source) = 0;
     virtual gl::Error copyToRenderTarget2DArray(TextureStorage *dest, TextureStorage *source) = 0;
@@ -214,6 +215,8 @@ class Renderer
     virtual void generateMipmap(Image *dest, Image *source) = 0;
     virtual TextureStorage *createTextureStorage2D(SwapChain *swapChain) = 0;
     virtual TextureStorage *createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels) = 0;
+    virtual TextureStorage *createTextureStorageExternalOES(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels) = 0;
+    virtual TextureStorage *createTextureStorageExternalOES(SwapChain *swapChain) = 0;
     virtual TextureStorage *createTextureStorageCube(GLenum internalformat, bool renderTarget, int size, int levels) = 0;
     virtual TextureStorage *createTextureStorage3D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels) = 0;
     virtual TextureStorage *createTextureStorage2DArray(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels) = 0;

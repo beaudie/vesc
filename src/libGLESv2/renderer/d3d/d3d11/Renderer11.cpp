@@ -1894,6 +1894,21 @@ gl::Error Renderer11::copyToRenderTarget2D(TextureStorage *dest, TextureStorage 
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error Renderer11::copyToRenderTargetExternalOES(TextureStorage *dest, TextureStorage *source)
+{
+    ASSERT(source && dest);
+
+    TextureStorage11_ExternalOES *source11 = TextureStorage11_ExternalOES::makeTextureStorage11_ExternalOES(source);
+    TextureStorage11_ExternalOES *dest11 = TextureStorage11_ExternalOES::makeTextureStorage11_ExternalOES(dest);
+
+    mDeviceContext->CopyResource(dest11->getResource(), source11->getResource());
+
+    dest11->invalidateSwizzleCache();
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+
 gl::Error Renderer11::copyToRenderTargetCube(TextureStorage *dest, TextureStorage *source)
 {
     ASSERT(source && dest);
@@ -1986,6 +2001,66 @@ gl::Error Renderer11::copyImage2D(gl::Framebuffer *framebuffer, const gl::Rectan
     // copy
     gl::Error error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
                                          destFormat, GL_NEAREST);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    storage11->invalidateSwizzleCacheLevel(level);
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error Renderer11::copyImageExternalOES(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+    GLint xoffset, GLint yoffset, TextureStorage *storage, GLint level)
+{
+    gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
+    if (!colorbuffer)
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the color buffer from the frame buffer.");
+    }
+
+    RenderTarget11 *sourceRenderTarget = d3d11::GetAttachmentRenderTarget(colorbuffer);
+    if (!sourceRenderTarget)
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target from the frame buffer.");
+    }
+
+    ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
+    if (!source)
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target view from the render target.");
+    }
+
+    TextureStorage11_ExternalOES *storage11 = TextureStorage11_ExternalOES::makeTextureStorage11_ExternalOES(storage);
+    if (!storage11)
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the texture storage from the destination.");
+    }
+
+    gl::ImageIndex index = gl::ImageIndex::MakeExternalOES(level);
+    RenderTarget11 *destRenderTarget = RenderTarget11::makeRenderTarget11(storage11->getRenderTarget(index));
+    if (!destRenderTarget)
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target from the destination storage.");
+    }
+
+    ID3D11RenderTargetView *dest = destRenderTarget->getRenderTargetView();
+    if (!dest)
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the render target view from the destination render target.");
+    }
+
+    gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
+    gl::Extents sourceSize(sourceRenderTarget->getWidth(), sourceRenderTarget->getHeight(), 1);
+
+    gl::Box destArea(xoffset, yoffset, 0, sourceRect.width, sourceRect.height, 1);
+    gl::Extents destSize(destRenderTarget->getWidth(), destRenderTarget->getHeight(), 1);
+
+    // Use nearest filtering because source and destination are the same size for the direct
+    // copy
+    gl::Error error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
+        destFormat, GL_NEAREST);
     if (error.isError())
     {
         return error;
@@ -2654,6 +2729,17 @@ TextureStorage *Renderer11::createTextureStorage2D(GLenum internalformat, bool r
     return new TextureStorage11_2D(this, internalformat, renderTarget, width, height, levels);
 }
 
+TextureStorage *Renderer11::createTextureStorageExternalOES(SwapChain *swapChain)
+{
+    SwapChain11 *swapChain11 = SwapChain11::makeSwapChain11(swapChain);
+    return new TextureStorage11_ExternalOES(this, swapChain11);
+}
+
+TextureStorage *Renderer11::createTextureStorageExternalOES(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels)
+{
+    return new TextureStorage11_ExternalOES(this, internalformat, renderTarget, width, height, levels);
+}
+
 TextureStorage *Renderer11::createTextureStorageCube(GLenum internalformat, bool renderTarget, int size, int levels)
 {
     return new TextureStorage11_Cube(this, internalformat, renderTarget, size, levels);
@@ -2674,6 +2760,7 @@ TextureImpl *Renderer11::createTexture(GLenum target)
     switch(target)
     {
       case GL_TEXTURE_2D: return new TextureD3D_2D(this);
+	  case GL_TEXTURE_EXTERNAL_OES: return new TextureD3D_ExternalOES(this);
       case GL_TEXTURE_CUBE_MAP: return new TextureD3D_Cube(this);
       case GL_TEXTURE_3D: return new TextureD3D_3D(this);
       case GL_TEXTURE_2D_ARRAY: return new TextureD3D_2DArray(this);
