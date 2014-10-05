@@ -138,6 +138,42 @@ class Texture2D : public Texture
     egl::Surface *mSurface;
 };
 
+class TextureExternalOES : public Texture
+{
+public:
+	TextureExternalOES(rx::TextureImpl *impl, GLuint id);
+
+	virtual ~TextureExternalOES();
+
+	GLsizei getWidth(GLint level) const;
+	GLsizei getHeight(GLint level) const;
+	GLenum getInternalFormat(GLint level) const;
+	GLenum getActualFormat(GLint level) const;
+	bool isCompressed(GLint level) const;
+	bool isDepth(GLint level) const;
+
+	void setImage(GLint level, GLsizei width, GLsizei height, GLenum internalFormat, GLenum format, GLenum type, const PixelUnpackState &unpack, const void *pixels);
+	void setCompressedImage(GLint level, GLenum format, GLsizei width, GLsizei height, GLsizei imageSize, const void *pixels);
+	void subImage(GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const PixelUnpackState &unpack, const void *pixels);
+	void subImageCompressed(GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void *pixels);
+	void copyImage(GLint level, GLenum format, GLint x, GLint y, GLsizei width, GLsizei height, Framebuffer *source);
+	void storage(GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height);
+
+	virtual bool isSamplerComplete(const SamplerState &samplerState, const TextureCapsMap &textureCaps, const Extensions &extensions, int clientVersion) const;
+	virtual void bindTexImage(egl::Surface *surface);
+	virtual void releaseTexImage();
+
+	virtual void generateMipmaps();
+
+private:
+	DISALLOW_COPY_AND_ASSIGN(TextureExternalOES);
+
+	bool isMipmapComplete() const;
+	bool isLevelComplete(int level) const;
+
+	egl::Surface *mSurface;
+};
+
 class TextureCubeMap : public Texture
 {
   public:

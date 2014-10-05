@@ -78,6 +78,30 @@ class TextureStorage9_2D : public TextureStorage9
     RenderTarget9 *mRenderTarget;
 };
 
+class TextureStorage9_ExternalOES : public TextureStorage9
+{
+public:
+    TextureStorage9_ExternalOES(Renderer *renderer, SwapChain9 *swapchain);
+    TextureStorage9_ExternalOES(Renderer *renderer, GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels);
+    virtual ~TextureStorage9_ExternalOES();
+
+    static TextureStorage9_ExternalOES *makeTextureStorage9_ExternalOES(TextureStorage *storage);
+
+    IDirect3DSurface9 *getSurfaceLevel(int level, bool dirty);
+    virtual RenderTarget *getRenderTarget(const gl::ImageIndex &index);
+    virtual IDirect3DBaseTexture9 *getBaseTexture() const;
+    virtual void generateMipmaps();
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(TextureStorage9_ExternalOES);
+
+    void initializeRenderTarget();
+
+    IDirect3DTexture9 *mTexture;
+    RenderTarget9 *mRenderTarget;
+};
+
+
 class TextureStorage9_Cube : public TextureStorage9
 {
   public:

@@ -188,6 +188,43 @@ class TextureStorage11_2D : public TextureStorage11
     Image11 *mAssociatedImages[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 };
 
+class TextureStorage11_ExternalOES : public TextureStorage11
+{
+public:
+    TextureStorage11_ExternalOES(Renderer *renderer, SwapChain11 *swapchain);
+    TextureStorage11_ExternalOES(Renderer *renderer, GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels);
+    virtual ~TextureStorage11_ExternalOES();
+
+    static TextureStorage11_ExternalOES *makeTextureStorage11_ExternalOES(TextureStorage *storage);
+
+    virtual ID3D11Resource *getResource() const;
+    virtual RenderTarget *getRenderTarget(const gl::ImageIndex &index);
+
+    virtual void generateMipmaps();
+
+    virtual void associateImage(Image11* image, int level, int layerTarget);
+    virtual void disassociateImage(int level, int layerTarget, Image11* expectedImage);
+    virtual bool isAssociatedImageValid(int level, int layerTarget, Image11* expectedImage);
+    virtual void releaseAssociatedImage(int level, int layerTarget, Image11* incomingImage);
+
+protected:
+    virtual ID3D11Resource *getSwizzleTexture();
+    virtual ID3D11RenderTargetView *getSwizzleRenderTarget(int mipLevel);
+
+private:
+    DISALLOW_COPY_AND_ASSIGN(TextureStorage11_ExternalOES);
+
+    virtual ID3D11ShaderResourceView *createSRV(int baseLevel, int mipLevels, DXGI_FORMAT format, ID3D11Resource *texture);
+
+    ID3D11Texture2D *mTexture;
+    RenderTarget11 *mRenderTarget[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL];
+
+    ID3D11Texture2D *mSwizzleTexture;
+    ID3D11RenderTargetView *mSwizzleRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL];
+
+    Image11 *mAssociatedImages[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL];
+};
+
 class TextureStorage11_Cube : public TextureStorage11
 {
   public:

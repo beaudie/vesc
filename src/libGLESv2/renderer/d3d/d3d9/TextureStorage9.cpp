@@ -200,6 +200,106 @@ void TextureStorage9_2D::initializeRenderTarget()
     }
 }
 
+TextureStorage9_ExternalOES::TextureStorage9_ExternalOES(Renderer *renderer, SwapChain9 *swapchain)
+: TextureStorage9(renderer, D3DUSAGE_RENDERTARGET)
+{
+    IDirect3DTexture9 *surfaceTexture = swapchain->getOffscreenTexture();
+    mTexture = surfaceTexture;
+    mRenderTarget = NULL;
+
+    initializeRenderTarget();
+    initializeSerials(1, 1);
+}
+
+TextureStorage9_ExternalOES::TextureStorage9_ExternalOES(Renderer *renderer, GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels)
+: TextureStorage9(renderer, GetTextureUsage(internalformat, renderTarget))
+{
+    mTexture = NULL;
+    mRenderTarget = NULL;
+    // if the width or height is not positive this should be treated as an incomplete texture
+    // we handle that here by skipping the d3d texture creation
+    if (width > 0 && height > 0)
+    {
+        IDirect3DDevice9 *device = mRenderer->getDevice();
+        const d3d9::TextureFormat &d3dFormatInfo = d3d9::GetTextureFormatInfo(internalformat);
+        d3d9::MakeValidSize(false, d3dFormatInfo.texFormat, &width, &height, &mTopLevel);
+        UINT creationLevels = (levels == 0) ? 0 : mTopLevel + levels;
+
+        HRESULT result = device->CreateTexture(width, height, creationLevels, getUsage(), d3dFormatInfo.texFormat, getPool(), &mTexture, NULL);
+
+        if (FAILED(result))
+        {
+            ASSERT(result == D3DERR_OUTOFVIDEOMEMORY || result == E_OUTOFMEMORY);
+            gl::error(GL_OUT_OF_MEMORY);
+        }
+    }
+
+    initializeRenderTarget();
+    initializeSerials(getLevelCount(), 1);
+}
+
+TextureStorage9_ExternalOES::~TextureStorage9_ExternalOES()
+{
+    SafeRelease(mTexture);
+    SafeDelete(mRenderTarget);
+}
+
+TextureStorage9_ExternalOES *TextureStorage9_ExternalOES::makeTextureStorage9_ExternalOES(TextureStorage *storage)
+{
+    ASSERT(HAS_DYNAMIC_TYPE(TextureStorage9_ExternalOES*, storage));
+    return static_cast<TextureStorage9_ExternalOES*>(storage);
+}
+
+// Increments refcount on surface.
+// caller must Release() the returned surface
+IDirect3DSurface9 *TextureStorage9_ExternalOES::getSurfaceLevel(int level, bool dirty)
+{
+    IDirect3DSurface9 *surface = NULL;
+
+    if (mTexture)
+    {
+        HRESULT result = mTexture->GetSurfaceLevel(level + mTopLevel, &surface);
+        UNUSED_ASSERTION_VARIABLE(result);
+        ASSERT(SUCCEEDED(result));
+
+        // With managed textures the driver needs to be informed of updates to the lower mipmap levels
+        if (level + mTopLevel != 0 && isManaged() && dirty)
+        {
+            mTexture->AddDirtyRect(NULL);
+        }
+    }
+
+    return surface;
+}
+
+RenderTarget *TextureStorage9_ExternalOES::getRenderTarget(const gl::ImageIndex &/*index*/)
+{
+    return mRenderTarget;
+}
+
+void TextureStorage9_ExternalOES::generateMipmaps()
+{
+    // Not needed for external
+}
+
+IDirect3DBaseTexture9 *TextureStorage9_ExternalOES::getBaseTexture() const
+{
+    return mTexture;
+}
+
+void TextureStorage9_ExternalOES::initializeRenderTarget()
+{
+    ASSERT(mRenderTarget == NULL);
+
+    if (mTexture != NULL && isRenderTarget())
+    {
+        IDirect3DSurface9 *surface = getSurfaceLevel(0, false);
+
+        mRenderTarget = new RenderTarget9(mRenderer, surface);
+    }
+}
+
+
 TextureStorage9_Cube::TextureStorage9_Cube(Renderer *renderer, GLenum internalformat, bool renderTarget, int size, int levels)
     : TextureStorage9(renderer, GetTextureUsage(internalformat, renderTarget))
 {

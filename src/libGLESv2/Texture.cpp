@@ -426,6 +426,230 @@ bool Texture2D::isLevelComplete(int level) const
     return true;
 }
 
+TextureExternalOES::TextureExternalOES(rx::TextureImpl *impl, GLuint id)
+    : Texture(impl, id, GL_TEXTURE_EXTERNAL_OES)
+{
+    mSurface = NULL;
+}
+
+TextureExternalOES::~TextureExternalOES()
+{
+    if (mSurface)
+    {
+        mSurface->setBoundTexture(NULL);
+        mSurface = NULL;
+    }
+}
+
+GLsizei TextureExternalOES::getWidth(GLint level) const
+{
+	if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL)
+        return mTexture->getImage(level, 0)->getWidth();
+    else
+        return 0;
+}
+
+GLsizei TextureExternalOES::getHeight(GLint level) const
+{
+	if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL)
+        return mTexture->getImage(level, 0)->getHeight();
+    else
+        return 0;
+}
+
+GLenum TextureExternalOES::getInternalFormat(GLint level) const
+{
+	if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL)
+        return mTexture->getImage(level, 0)->getInternalFormat();
+    else
+        return GL_NONE;
+}
+
+GLenum TextureExternalOES::getActualFormat(GLint level) const
+{
+	if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL)
+        return mTexture->getImage(level, 0)->getActualFormat();
+    else
+        return GL_NONE;
+}
+
+void TextureExternalOES::setImage(GLint level, GLsizei width, GLsizei height, GLenum internalFormat, GLenum format, GLenum type, const PixelUnpackState &unpack, const void *pixels)
+{
+}
+
+void TextureExternalOES::bindTexImage(egl::Surface *surface)
+{
+    releaseTexImage();
+
+    mTexture->bindTexImage(surface);
+
+    mSurface = surface;
+    //TODO - should really not do this
+    //mSurface->setBoundTexture(this);
+}
+
+void TextureExternalOES::releaseTexImage()
+{
+    if (mSurface)
+    {
+        mSurface->setBoundTexture(NULL);
+        mSurface = NULL;
+
+        mTexture->releaseTexImage();
+    }
+}
+
+void TextureExternalOES::setCompressedImage(GLint level, GLenum format, GLsizei width, GLsizei height, GLsizei imageSize, const void *pixels)
+{
+}
+
+void TextureExternalOES::subImage(GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const PixelUnpackState &unpack, const void *pixels)
+{
+}
+
+void TextureExternalOES::subImageCompressed(GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void *pixels)
+{
+}
+
+void TextureExternalOES::copyImage(GLint level, GLenum format, GLint x, GLint y, GLsizei width, GLsizei height, Framebuffer *source)
+{
+}
+
+void TextureExternalOES::storage(GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height)
+{
+    mImmutable = true;
+
+    mTexture->storage(GL_TEXTURE_EXTERNAL_OES, levels, internalformat, width, height, 1);
+}
+
+// Tests for 2D texture sampling completeness. [OpenGL ES 2.0.24] section 3.8.2 page 85.
+bool TextureExternalOES::isSamplerComplete(const SamplerState &samplerState, const TextureCapsMap &textureCaps, const Extensions &extensions, int clientVersion) const
+{
+    GLsizei width = getBaseLevelWidth();
+    GLsizei height = getBaseLevelHeight();
+
+    if (width <= 0 || height <= 0)
+    {
+        return false;
+    }
+
+    if (!textureCaps.get(getInternalFormat(0)).filterable && !IsPointSampled(samplerState))
+    {
+        return false;
+    }
+
+    bool npotSupport = extensions.textureNPOT;
+
+    if (!npotSupport)
+    {
+        if ((samplerState.wrapS != GL_CLAMP_TO_EDGE && !gl::isPow2(width)) ||
+            (samplerState.wrapT != GL_CLAMP_TO_EDGE && !gl::isPow2(height)))
+        {
+            return false;
+        }
+    }
+
+    if (IsMipmapFiltered(samplerState))
+    {
+        if (!npotSupport)
+        {
+            if (!gl::isPow2(width) || !gl::isPow2(height))
+            {
+                return false;
+            }
+        }
+
+        if (!isMipmapComplete())
+        {
+            return false;
+        }
+    }
+
+    // OpenGLES 3.0.2 spec section 3.8.13 states that a texture is not mipmap complete if:
+    // The internalformat specified for the texture arrays is a sized internal depth or
+    // depth and stencil format (see table 3.13), the value of TEXTURE_COMPARE_-
+    // MODE is NONE, and either the magnification filter is not NEAREST or the mini-
+    // fication filter is neither NEAREST nor NEAREST_MIPMAP_NEAREST.
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(getInternalFormat(0));
+    if (formatInfo.depthBits > 0 && clientVersion > 2)
+    {
+        if (samplerState.compareMode == GL_NONE)
+        {
+            if ((samplerState.minFilter != GL_NEAREST && samplerState.minFilter != GL_NEAREST_MIPMAP_NEAREST) ||
+                samplerState.magFilter != GL_NEAREST)
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool TextureExternalOES::isCompressed(GLint level) const
+{
+    return false;
+}
+
+bool TextureExternalOES::isDepth(GLint level) const
+{
+    return false;
+}
+
+void TextureExternalOES::generateMipmaps()
+{
+}
+
+// Tests for 2D texture (mipmap) completeness. [OpenGL ES 2.0.24] section 3.7.10 page 81.
+bool TextureExternalOES::isMipmapComplete() const
+{
+    return true;
+}
+
+bool TextureExternalOES::isLevelComplete(int level) const
+{
+    if (isImmutable())
+    {
+        return true;
+    }
+
+    const rx::Image *baseImage = getBaseLevelImage();
+
+    GLsizei width = baseImage->getWidth();
+    GLsizei height = baseImage->getHeight();
+
+    if (width <= 0 || height <= 0)
+    {
+        return false;
+    }
+
+    // The base image level is complete if the width and height are positive
+    if (level == 0)
+    {
+        return true;
+    }
+
+    ASSERT(level >= 1 && level < IMPLEMENTATION_MAX_TEXTURE_LEVELS && mTexture->getImage(level, 0) != NULL);
+    rx::Image *image = mTexture->getImage(level, 0);
+
+    if (image->getInternalFormat() != baseImage->getInternalFormat())
+    {
+        return false;
+    }
+
+    if (image->getWidth() != std::max(1, width >> level))
+    {
+        return false;
+    }
+
+    if (image->getHeight() != std::max(1, height >> level))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 TextureCubeMap::TextureCubeMap(rx::TextureImpl *impl, GLuint id)
     : Texture(impl, id, GL_TEXTURE_CUBE_MAP)
 {

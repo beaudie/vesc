@@ -794,6 +794,405 @@ ID3D11RenderTargetView *TextureStorage11_2D::getSwizzleRenderTarget(int mipLevel
     }
 }
 
+TextureStorage11_ExternalOES::TextureStorage11_ExternalOES(Renderer *renderer, SwapChain11 *swapchain)
+: TextureStorage11(renderer, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+mTexture(swapchain->getOffscreenTexture()),
+mSwizzleTexture(NULL)
+{
+    mTexture->AddRef();
+
+    for (unsigned int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL; i++)
+    {
+        mAssociatedImages[i] = NULL;
+        mRenderTarget[i] = NULL;
+        mSwizzleRenderTargets[i] = NULL;
+    }
+
+    D3D11_TEXTURE2D_DESC texDesc;
+    mTexture->GetDesc(&texDesc);
+    mMipLevels = texDesc.MipLevels;
+    mTextureFormat = texDesc.Format;
+    mTextureWidth = texDesc.Width;
+    mTextureHeight = texDesc.Height;
+    mTextureDepth = 1;
+
+    ID3D11ShaderResourceView *srv = swapchain->getRenderTargetShaderResource();
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+    srv->GetDesc(&srvDesc);
+    mShaderResourceFormat = srvDesc.Format;
+
+    ID3D11RenderTargetView* offscreenRTV = swapchain->getRenderTarget();
+    D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+    offscreenRTV->GetDesc(&rtvDesc);
+    mRenderTargetFormat = rtvDesc.Format;
+
+    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mTextureFormat);
+    const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(dxgiFormatInfo.internalFormat);
+    mSwizzleTextureFormat = formatInfo.swizzleTexFormat;
+    mSwizzleShaderResourceFormat = formatInfo.swizzleSRVFormat;
+    mSwizzleRenderTargetFormat = formatInfo.swizzleRTVFormat;
+
+    mDepthStencilFormat = DXGI_FORMAT_UNKNOWN;
+
+    initializeSerials(1, 1);
+}
+
+TextureStorage11_ExternalOES::TextureStorage11_ExternalOES(Renderer *renderer, GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels)
+: TextureStorage11(renderer, GetTextureBindFlags(internalformat, renderTarget)),
+mTexture(NULL),
+mSwizzleTexture(NULL)
+{
+    for (unsigned int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL; i++)
+    {
+        mAssociatedImages[i] = NULL;
+        mRenderTarget[i] = NULL;
+        mSwizzleRenderTargets[i] = NULL;
+    }
+
+    const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalformat);
+    mTextureFormat = formatInfo.texFormat;
+    mShaderResourceFormat = formatInfo.srvFormat;
+    mDepthStencilFormat = formatInfo.dsvFormat;
+    mRenderTargetFormat = formatInfo.rtvFormat;
+    mSwizzleTextureFormat = formatInfo.swizzleTexFormat;
+    mSwizzleShaderResourceFormat = formatInfo.swizzleSRVFormat;
+    mSwizzleRenderTargetFormat = formatInfo.swizzleRTVFormat;
+
+    // if the width or height is not positive this should be treated as an incomplete texture
+    // we handle that here by skipping the d3d texture creation
+    if (width > 0 && height > 0)
+    {
+        // adjust size if needed for compressed textures
+        d3d11::MakeValidSize(false, mTextureFormat, &width, &height, &mTopLevel);
+
+        ID3D11Device *device = mRenderer->getDevice();
+
+        D3D11_TEXTURE2D_DESC desc;
+        desc.Width = width;      // Compressed texture size constraints?
+        desc.Height = height;
+        desc.MipLevels = ((levels > 0) ? (mTopLevel + levels) : 0);
+        desc.ArraySize = 1;
+        desc.Format = mTextureFormat;
+        desc.SampleDesc.Count = 1;
+        desc.SampleDesc.Quality = 0;
+        desc.Usage = D3D11_USAGE_DEFAULT;
+        desc.BindFlags = getBindFlags();
+        desc.CPUAccessFlags = 0;
+        desc.MiscFlags = 0;
+
+        HRESULT result = device->CreateTexture2D(&desc, NULL, &mTexture);
+
+        // this can happen from windows TDR
+        if (d3d11::isDeviceLostError(result))
+        {
+            mRenderer->notifyDeviceLost();
+            gl::error(GL_OUT_OF_MEMORY);
+        }
+        else if (FAILED(result))
+        {
+            ASSERT(result == E_OUTOFMEMORY);
+            ERR("Creating image failed.");
+            gl::error(GL_OUT_OF_MEMORY);
+        }
+        else
+        {
+            mTexture->GetDesc(&desc);
+            mMipLevels = desc.MipLevels;
+            mTextureWidth = desc.Width;
+            mTextureHeight = desc.Height;
+            mTextureDepth = 1;
+        }
+    }
+
+    initializeSerials(getLevelCount(), 1);
+}
+
+TextureStorage11_ExternalOES::~TextureStorage11_ExternalOES()
+{
+    for (unsigned i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL; i++)
+    {
+        if (mAssociatedImages[i] != NULL)
+        {
+            bool imageAssociationCorrect = mAssociatedImages[i]->isAssociatedStorageValid(this);
+            ASSERT(imageAssociationCorrect);
+
+            if (imageAssociationCorrect)
+            {
+                // We must let the Images recover their data before we delete it from the TextureStorage.
+                mAssociatedImages[i]->recoverFromAssociatedStorage();
+            }
+        }
+    }
+
+    SafeRelease(mTexture);
+    SafeRelease(mSwizzleTexture);
+
+    for (unsigned int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL; i++)
+    {
+        SafeDelete(mRenderTarget[i]);
+        SafeRelease(mSwizzleRenderTargets[i]);
+    }
+}
+
+TextureStorage11_ExternalOES *TextureStorage11_ExternalOES::makeTextureStorage11_ExternalOES(TextureStorage *storage)
+{
+    ASSERT(HAS_DYNAMIC_TYPE(TextureStorage11_ExternalOES*, storage));
+    return static_cast<TextureStorage11_ExternalOES*>(storage);
+}
+
+void TextureStorage11_ExternalOES::associateImage(Image11* image, int level, int layerTarget)
+{
+    ASSERT(0 <= level && level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL);
+
+    if (0 <= level && level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL)
+    {
+        mAssociatedImages[level] = image;
+    }
+}
+
+bool TextureStorage11_ExternalOES::isAssociatedImageValid(int level, int layerTarget, Image11* expectedImage)
+{
+    if (0 <= level && level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL)
+    {
+        // This validation check should never return false. It means the Image/TextureStorage association is broken.
+        bool retValue = (mAssociatedImages[level] == expectedImage);
+        ASSERT(retValue);
+        return retValue;
+    }
+
+    return false;
+}
+
+// disassociateImage allows an Image to end its association with a Storage.
+void TextureStorage11_ExternalOES::disassociateImage(int level, int layerTarget, Image11* expectedImage)
+{
+    ASSERT(0 <= level && level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL);
+
+    if (0 <= level && level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL)
+    {
+        ASSERT(mAssociatedImages[level] == expectedImage);
+
+        if (mAssociatedImages[level] == expectedImage)
+        {
+            mAssociatedImages[level] = NULL;
+        }
+    }
+}
+
+// releaseAssociatedImage prepares the Storage for a new Image association. It lets the old Image recover its data before ending the association.
+void TextureStorage11_ExternalOES::releaseAssociatedImage(int level, int layerTarget, Image11* incomingImage)
+{
+    ASSERT(0 <= level && level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL);
+
+    if (0 <= level && level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL)
+    {
+        // No need to let the old Image recover its data, if it is also the incoming Image.
+        if (mAssociatedImages[level] != NULL && mAssociatedImages[level] != incomingImage)
+        {
+            // Ensure that the Image is still associated with this TextureStorage. This should be true.
+            bool imageAssociationCorrect = mAssociatedImages[level]->isAssociatedStorageValid(this);
+            ASSERT(imageAssociationCorrect);
+
+            if (imageAssociationCorrect)
+            {
+                // Force the image to recover from storage before its data is overwritten.
+                // This will reset mAssociatedImages[level] to NULL too.
+                mAssociatedImages[level]->recoverFromAssociatedStorage();
+            }
+        }
+    }
+}
+
+ID3D11Resource *TextureStorage11_ExternalOES::getResource() const
+{
+    return mTexture;
+}
+
+RenderTarget *TextureStorage11_ExternalOES::getRenderTarget(const gl::ImageIndex &index)
+{
+    ASSERT(!index.hasLayer());
+
+    int level = index.mipIndex;
+
+    if (level >= 0 && level < getLevelCount())
+    {
+        if (!mRenderTarget[level])
+        {
+            ID3D11ShaderResourceView *srv = getSRVLevel(level);
+            if (!srv)
+            {
+                return NULL;
+            }
+
+            if (mRenderTargetFormat != DXGI_FORMAT_UNKNOWN)
+            {
+                ID3D11Device *device = mRenderer->getDevice();
+
+                D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+                rtvDesc.Format = mRenderTargetFormat;
+                rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+                rtvDesc.Texture2D.MipSlice = mTopLevel + level;
+
+                ID3D11RenderTargetView *rtv;
+                HRESULT result = device->CreateRenderTargetView(mTexture, &rtvDesc, &rtv);
+
+                if (result == E_OUTOFMEMORY)
+                {
+                    return gl::error(GL_OUT_OF_MEMORY, static_cast<RenderTarget*>(NULL));
+                }
+                ASSERT(SUCCEEDED(result));
+
+                mRenderTarget[level] = new RenderTarget11(mRenderer, rtv, mTexture, srv, getLevelWidth(level), getLevelHeight(level), 1);
+
+                // RenderTarget will take ownership of these resources
+                SafeRelease(rtv);
+            }
+            else if (mDepthStencilFormat != DXGI_FORMAT_UNKNOWN)
+            {
+                ID3D11Device *device = mRenderer->getDevice();
+
+                D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+                dsvDesc.Format = mDepthStencilFormat;
+                dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+                dsvDesc.Texture2D.MipSlice = mTopLevel + level;
+                dsvDesc.Flags = 0;
+
+                ID3D11DepthStencilView *dsv;
+                HRESULT result = device->CreateDepthStencilView(mTexture, &dsvDesc, &dsv);
+
+                if (result == E_OUTOFMEMORY)
+                {
+                    SafeRelease(srv);
+                    return gl::error(GL_OUT_OF_MEMORY, static_cast<RenderTarget*>(NULL));
+                }
+                ASSERT(SUCCEEDED(result));
+
+                mRenderTarget[level] = new RenderTarget11(mRenderer, dsv, mTexture, srv, getLevelWidth(level), getLevelHeight(level), 1);
+
+                // RenderTarget will take ownership of these resources
+                SafeRelease(dsv);
+            }
+            else
+            {
+                UNREACHABLE();
+            }
+        }
+
+        return mRenderTarget[level];
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
+ID3D11ShaderResourceView *TextureStorage11_ExternalOES::createSRV(int baseLevel, int mipLevels, DXGI_FORMAT format, ID3D11Resource *texture)
+{
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+    srvDesc.Format = format;
+    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.Texture2D.MostDetailedMip = mTopLevel + baseLevel;
+    srvDesc.Texture2D.MipLevels = mipLevels;
+
+    ID3D11ShaderResourceView *SRV = NULL;
+
+    ID3D11Device *device = mRenderer->getDevice();
+    HRESULT result = device->CreateShaderResourceView(texture, &srvDesc, &SRV);
+
+    if (result == E_OUTOFMEMORY)
+    {
+        gl::error(GL_OUT_OF_MEMORY);
+    }
+    ASSERT(SUCCEEDED(result));
+
+    return SRV;
+}
+
+void TextureStorage11_ExternalOES::generateMipmaps()
+{
+    // Base level must already be defined
+
+    for (int level = 1; level < getLevelCount(); level++)
+    {
+        invalidateSwizzleCacheLevel(level);
+
+        gl::ImageIndex srcIndex = gl::ImageIndex::Make2D(level - 1);
+        gl::ImageIndex destIndex = gl::ImageIndex::Make2D(level);
+
+        RenderTarget11 *source = RenderTarget11::makeRenderTarget11(getRenderTarget(srcIndex));
+        RenderTarget11 *dest = RenderTarget11::makeRenderTarget11(getRenderTarget(destIndex));
+
+        generateMipmapLayer(source, dest);
+    }
+}
+
+ID3D11Resource *TextureStorage11_ExternalOES::getSwizzleTexture()
+{
+    if (!mSwizzleTexture)
+    {
+        ID3D11Device *device = mRenderer->getDevice();
+
+        D3D11_TEXTURE2D_DESC desc;
+        desc.Width = mTextureWidth;
+        desc.Height = mTextureHeight;
+        desc.MipLevels = mMipLevels;
+        desc.ArraySize = 1;
+        desc.Format = mSwizzleTextureFormat;
+        desc.SampleDesc.Count = 1;
+        desc.SampleDesc.Quality = 0;
+        desc.Usage = D3D11_USAGE_DEFAULT;
+        desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+        desc.CPUAccessFlags = 0;
+        desc.MiscFlags = 0;
+
+        HRESULT result = device->CreateTexture2D(&desc, NULL, &mSwizzleTexture);
+
+        if (result == E_OUTOFMEMORY)
+        {
+            return gl::error(GL_OUT_OF_MEMORY, static_cast<ID3D11Texture2D*>(NULL));
+        }
+        ASSERT(SUCCEEDED(result));
+    }
+
+    return mSwizzleTexture;
+}
+
+ID3D11RenderTargetView *TextureStorage11_ExternalOES::getSwizzleRenderTarget(int mipLevel)
+{
+    if (mipLevel >= 0 && mipLevel < getLevelCount())
+    {
+        if (!mSwizzleRenderTargets[mipLevel])
+        {
+            ID3D11Resource *swizzleTexture = getSwizzleTexture();
+            if (!swizzleTexture)
+            {
+                return NULL;
+            }
+
+            ID3D11Device *device = mRenderer->getDevice();
+
+            D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+            rtvDesc.Format = mSwizzleRenderTargetFormat;
+            rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+            rtvDesc.Texture2D.MipSlice = mTopLevel + mipLevel;
+
+            HRESULT result = device->CreateRenderTargetView(mSwizzleTexture, &rtvDesc, &mSwizzleRenderTargets[mipLevel]);
+            if (result == E_OUTOFMEMORY)
+            {
+                return gl::error(GL_OUT_OF_MEMORY, static_cast<ID3D11RenderTargetView*>(NULL));
+            }
+            ASSERT(SUCCEEDED(result));
+        }
+
+        return mSwizzleRenderTargets[mipLevel];
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
+
 TextureStorage11_Cube::TextureStorage11_Cube(Renderer *renderer, GLenum internalformat, bool renderTarget, int size, int levels)
     : TextureStorage11(renderer, GetTextureBindFlags(internalformat, renderTarget))
 {

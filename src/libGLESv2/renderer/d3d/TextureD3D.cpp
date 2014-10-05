@@ -740,6 +740,284 @@ void TextureD3D_2D::commitRect(GLint level, GLint xoffset, GLint yoffset, GLsize
 }
 
 
+TextureD3D_ExternalOES::TextureD3D_ExternalOES(Renderer *renderer)
+: TextureD3D(renderer),
+mTexStorage(NULL)
+{
+    for (int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL; ++i)
+    {
+        mImageArray[i] = ImageD3D::makeImageD3D(renderer->createImage());
+    }
+}
+
+TextureD3D_ExternalOES::~TextureD3D_ExternalOES()
+{
+    // Delete the Images before the TextureStorage.
+    // Images might be relying on the TextureStorage for some of their data.
+    // If TextureStorage is deleted before the Images, then their data will be wastefully copied back from the GPU before we delete the Images.
+    for (int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL; ++i)
+    {
+        delete mImageArray[i];
+    }
+
+    SafeDelete(mTexStorage);
+}
+
+Image *TextureD3D_ExternalOES::getImage(int level, int layer) const
+{
+    ASSERT(level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL);
+    ASSERT(layer == 0);
+    return mImageArray[level];
+}
+
+Image *TextureD3D_ExternalOES::getImage(const gl::ImageIndex &index) const
+{
+    ASSERT(index.mipIndex < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL);
+    ASSERT(!index.hasLayer());
+    ASSERT(index.type == GL_TEXTURE_EXTERNAL_OES);
+    return mImageArray[index.mipIndex];
+}
+
+GLsizei TextureD3D_ExternalOES::getLayerCount(int level) const
+{
+    ASSERT(level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL);
+    return 1;
+}
+
+GLsizei TextureD3D_ExternalOES::getWidth(GLint level) const
+{
+    if (level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL)
+        return mImageArray[level]->getWidth();
+    else
+        return 0;
+}
+
+GLsizei TextureD3D_ExternalOES::getHeight(GLint level) const
+{
+    if (level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL)
+        return mImageArray[level]->getHeight();
+    else
+        return 0;
+}
+
+GLenum TextureD3D_ExternalOES::getInternalFormat(GLint level) const
+{
+    if (level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL)
+        return mImageArray[level]->getInternalFormat();
+    else
+        return GL_NONE;
+}
+
+GLenum TextureD3D_ExternalOES::getActualFormat(GLint level) const
+{
+    if (level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL)
+        return mImageArray[level]->getActualFormat();
+    else
+        return GL_NONE;
+}
+
+bool TextureD3D_ExternalOES::isDepth(GLint level) const
+{
+    return gl::GetInternalFormatInfo(getInternalFormat(level)).depthBits > 0;
+}
+
+void TextureD3D_ExternalOES::setImage(GLenum target, GLint level, GLsizei width, GLsizei height, GLsizei depth, GLenum internalFormat, GLenum format, GLenum type, const gl::PixelUnpackState &unpack, const void *pixels)
+{
+
+}
+
+void TextureD3D_ExternalOES::setCompressedImage(GLenum target, GLint level, GLenum format, GLsizei width, GLsizei height, GLsizei depth, GLsizei imageSize, const void *pixels)
+{
+}
+
+void TextureD3D_ExternalOES::subImage(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const gl::PixelUnpackState &unpack, const void *pixels)
+{
+}
+
+void TextureD3D_ExternalOES::subImageCompressed(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const void *pixels)
+{
+}
+
+void TextureD3D_ExternalOES::copyImage(GLenum target, GLint level, GLenum format, GLint x, GLint y, GLsizei width, GLsizei height, gl::Framebuffer *source)
+{
+}
+
+void TextureD3D_ExternalOES::copySubImage(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height, gl::Framebuffer *source)
+{
+}
+
+void TextureD3D_ExternalOES::storage(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth)
+{
+    ASSERT(target == GL_TEXTURE_EXTERNAL_OES && depth == 1);
+
+    for (int level = 0; level < levels; level++)
+    {
+        GLsizei levelWidth = std::max(1, width >> level);
+        GLsizei levelHeight = std::max(1, height >> level);
+        mImageArray[level]->redefine(mRenderer, GL_TEXTURE_EXTERNAL_OES, internalformat, levelWidth, levelHeight, 1, true);
+    }
+
+    for (int level = levels; level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL; level++)
+    {
+        mImageArray[level]->redefine(mRenderer, GL_TEXTURE_EXTERNAL_OES, GL_NONE, 0, 0, 0, true);
+    }
+
+    mImmutable = true;
+
+    bool renderTarget = IsRenderTargetUsage(mUsage);
+    TextureStorage *storage = mRenderer->createTextureStorageExternalOES(internalformat, renderTarget, width, height, levels);
+    setCompleteTexStorage(storage);
+}
+
+void TextureD3D_ExternalOES::bindTexImage(egl::Surface *surface)
+{
+    GLenum internalformat = surface->getFormat();
+
+    mImageArray[0]->redefine(mRenderer, GL_TEXTURE_EXTERNAL_OES, internalformat, surface->getWidth(), surface->getHeight(), 1, true);
+
+    if (mTexStorage)
+    {
+        SafeDelete(mTexStorage);
+    }
+
+    mTexStorage = mRenderer->createTextureStorage2D(surface->getSwapChain());
+
+    mDirtyImages = true;
+}
+
+void TextureD3D_ExternalOES::releaseTexImage()
+{
+    if (mTexStorage)
+    {
+        SafeDelete(mTexStorage);
+    }
+
+    for (int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS_EGLIMAGE_EXTERNAL; i++)
+    {
+        mImageArray[i]->redefine(mRenderer, GL_TEXTURE_EXTERNAL_OES, GL_NONE, 0, 0, 0, true);
+    }
+}
+
+void TextureD3D_ExternalOES::generateMipmaps()
+{
+}
+
+unsigned int TextureD3D_ExternalOES::getRenderTargetSerial(const gl::ImageIndex &index)
+{
+    ASSERT(!index.hasLayer());
+    return (ensureRenderTarget() ? mTexStorage->getRenderTargetSerial(index) : 0);
+}
+
+RenderTarget *TextureD3D_ExternalOES::getRenderTarget(const gl::ImageIndex &index)
+{
+    ASSERT(!index.hasLayer());
+
+    // ensure the underlying texture is created
+    if (!ensureRenderTarget())
+    {
+        return NULL;
+    }
+
+    updateStorageLevel(index.mipIndex);
+    return mTexStorage->getRenderTarget(index);
+}
+
+bool TextureD3D_ExternalOES::isValidLevel(int level) const
+{
+    return (mTexStorage ? (level >= 0 && level < mTexStorage->getLevelCount()) : false);
+}
+
+bool TextureD3D_ExternalOES::isLevelComplete(int level) const
+{
+    if (isImmutable())
+    {
+        return true;
+    }
+
+    const Image *baseImage = getBaseLevelImage();
+
+    GLsizei width = baseImage->getWidth();
+    GLsizei height = baseImage->getHeight();
+
+    if (width <= 0 || height <= 0)
+    {
+        return false;
+    }
+
+    // The base image level is complete if the width and height are positive
+    if (level == 0)
+    {
+        return true;
+    }
+
+    ASSERT(level >= 1 && level <= (int)ArraySize(mImageArray) && mImageArray[level] != NULL);
+    ImageD3D *image = mImageArray[level];
+
+    if (image->getInternalFormat() != baseImage->getInternalFormat())
+    {
+        return false;
+    }
+
+    if (image->getWidth() != std::max(1, width >> level))
+    {
+        return false;
+    }
+
+    if (image->getHeight() != std::max(1, height >> level))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+// Constructs a native texture resource from the texture images
+void TextureD3D_ExternalOES::initializeStorage(bool renderTarget)
+{
+    //TODO - get this from eglimage type
+}
+
+TextureStorage *TextureD3D_ExternalOES::createCompleteStorage(bool renderTarget) const
+{
+    return NULL;
+}
+
+void TextureD3D_ExternalOES::setCompleteTexStorage(TextureStorage *newCompleteTexStorage)
+{
+}
+
+void TextureD3D_ExternalOES::updateStorage()
+{
+}
+
+bool TextureD3D_ExternalOES::ensureRenderTarget()
+{
+    return true;
+}
+
+TextureStorage *TextureD3D_ExternalOES::getBaseLevelStorage()
+{
+    return mTexStorage;
+}
+
+const ImageD3D *TextureD3D_ExternalOES::getBaseLevelImage() const
+{
+    return mImageArray[0];
+}
+
+void TextureD3D_ExternalOES::updateStorageLevel(int level)
+{
+}
+
+void TextureD3D_ExternalOES::redefineImage(GLint level, GLenum internalformat, GLsizei width, GLsizei height)
+{
+    // Invalid operation on this type
+}
+
+void TextureD3D_ExternalOES::commitRect(GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height)
+{
+}
+
 TextureD3D_Cube::TextureD3D_Cube(Renderer *renderer)
     : TextureD3D(renderer),
       mTexStorage(NULL)
