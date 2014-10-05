@@ -1653,7 +1653,7 @@ void __stdcall glGenerateMipmap(GLenum target)
     gl::Context *context = gl::getNonLostContext();
     if (context)
     {
-        if (!ValidTextureTarget(context, target))
+        if (!ValidTextureTargetForMipmap(context, target))
         {
             context->recordError(gl::Error(GL_INVALID_ENUM));
             return;
