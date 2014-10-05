@@ -54,6 +54,7 @@ bool ValidTextureTarget(const Context *context, GLenum target)
     switch (target)
     {
       case GL_TEXTURE_2D:
+      case GL_TEXTURE_EXTERNAL_OES:
       case GL_TEXTURE_CUBE_MAP:
         return true;
 
@@ -65,6 +66,24 @@ bool ValidTextureTarget(const Context *context, GLenum target)
         return false;
     }
 }
+
+bool ValidTextureTargetForMipmap(const Context *context, GLenum target)
+{
+	switch (target)
+	{
+	case GL_TEXTURE_2D:
+	case GL_TEXTURE_CUBE_MAP:
+		return true;
+
+	case GL_TEXTURE_3D:
+	case GL_TEXTURE_2D_ARRAY:
+		return (context->getClientVersion() >= 3);
+
+	default:
+		return false;
+	}
+}
+
 
 // This function differs from ValidTextureTarget in that the target must be
 // usable as the destination of a 2D operation-- so a cube face is valid, but
