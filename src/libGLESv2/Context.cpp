@@ -68,6 +68,9 @@ Context::Context(int clientVersion, const gl::Context *shareContext, rx::Rendere
     mZeroTextures[GL_TEXTURE_2D].set(new Texture2D(mRenderer->createTexture(GL_TEXTURE_2D), 0));
     bindTexture(GL_TEXTURE_2D, 0);
 
+    mZeroTextures[GL_TEXTURE_EXTERNAL_OES].set(new Texture2D(mRenderer->createTexture(GL_TEXTURE_EXTERNAL_OES), 0));
+    bindTexture(GL_TEXTURE_EXTERNAL_OES, 0);
+
     mZeroTextures[GL_TEXTURE_CUBE_MAP].set(new TextureCubeMap(mRenderer->createTexture(GL_TEXTURE_CUBE_MAP), 0));
     bindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
@@ -807,6 +810,7 @@ Texture *Context::getTargetTexture(GLenum target) const
     switch (target)
     {
       case GL_TEXTURE_2D:       return getTexture2D();
+      case GL_TEXTURE_EXTERNAL_OES:       return getTextureExternalOES();
       case GL_TEXTURE_CUBE_MAP: return getTextureCubeMap();
       case GL_TEXTURE_3D:       return getTexture3D();
       case GL_TEXTURE_2D_ARRAY: return getTexture2DArray();
@@ -817,6 +821,11 @@ Texture *Context::getTargetTexture(GLenum target) const
 Texture2D *Context::getTexture2D() const
 {
     return static_cast<Texture2D*>(getSamplerTexture(mState.getActiveSampler(), GL_TEXTURE_2D));
+}
+
+TextureExternalOES *Context::getTextureExternalOES() const
+{
+    return static_cast<TextureExternalOES*>(getSamplerTexture(mState.getActiveSampler(), GL_TEXTURE_EXTERNAL_OES));
 }
 
 TextureCubeMap *Context::getTextureCubeMap() const

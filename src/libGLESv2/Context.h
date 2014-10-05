@@ -45,6 +45,7 @@ class Program;
 class ProgramBinary;
 class Texture;
 class Texture2D;
+class TextureExternalOES;
 class TextureCubeMap;
 class Texture3D;
 class Texture2DArray;
@@ -163,6 +164,7 @@ class Context
 
     Texture *getTargetTexture(GLenum target) const;
     Texture2D *getTexture2D() const;
+    TextureExternalOES *Context::getTextureExternalOES() const;
     TextureCubeMap *getTextureCubeMap() const;
     Texture3D *getTexture3D() const;
     Texture2DArray *getTexture2DArray() const;
