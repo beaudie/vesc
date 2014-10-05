@@ -45,6 +45,7 @@ GLenum VariableComponentType(GLenum type)
         return GL_FLOAT;
       case GL_INT:
       case GL_SAMPLER_2D:
+      case GL_SAMPLER_EXTERNAL_OES:
       case GL_SAMPLER_3D:
       case GL_SAMPLER_CUBE:
       case GL_SAMPLER_2D_ARRAY:

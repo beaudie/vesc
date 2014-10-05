@@ -566,6 +566,7 @@ void OutputHLSL::header()
             switch(textureFunction->sampler)
             {
               case EbtSampler2D:            out << "float4 "; break;
+              case EbtSamplerExternalOES:   out << "float4 "; break;
               case EbtSampler3D:            out << "float4 "; break;
               case EbtSamplerCube:          out << "float4 "; break;
               case EbtSampler2DArray:       out << "float4 "; break;
@@ -614,6 +615,7 @@ void OutputHLSL::header()
             switch(textureFunction->sampler)
             {
               case EbtSampler2D:            out << "Texture2D x, SamplerState s";                hlslCoords = 2; break;
+              case EbtSamplerExternalOES:   out << "Texture2D x, SamplerState s";                hlslCoords = 2; break;
               case EbtSampler3D:            out << "Texture3D x, SamplerState s";                hlslCoords = 3; break;
               case EbtSamplerCube:          out << "TextureCube x, SamplerState s";              hlslCoords = 3; break;
               case EbtSampler2DArray:       out << "Texture2DArray x, SamplerState s";           hlslCoords = 3; break;
