@@ -32,6 +32,11 @@ ImageIndex ImageIndex::Make2D(GLint mipIndex)
     return ImageIndex(GL_TEXTURE_2D, mipIndex, ENTIRE_LEVEL);
 }
 
+ImageIndex ImageIndex::MakeExternalOES(GLint mipIndex)
+{
+    return ImageIndex(GL_TEXTURE_EXTERNAL_OES, mipIndex, ENTIRE_LEVEL);
+}
+
 ImageIndex ImageIndex::MakeCube(GLenum target, GLint mipIndex)
 {
     ASSERT(gl::IsCubemapTextureTarget(target));

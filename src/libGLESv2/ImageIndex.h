@@ -26,6 +26,7 @@ struct ImageIndex
     bool hasLayer() const { return layerIndex != ENTIRE_LEVEL; }
 
     static ImageIndex Make2D(GLint mipIndex);
+    static ImageIndex MakeExternalOES(GLint mipIndex);
     static ImageIndex MakeCube(GLenum target, GLint mipIndex);
     static ImageIndex Make2DArray(GLint mipIndex, GLint layerIndex);
     static ImageIndex Make3D(GLint mipIndex, GLint layerIndex = ENTIRE_LEVEL);
