@@ -3038,7 +3038,9 @@ void __stdcall glGetTexParameterfv(GLenum target, GLenum pname, GLfloat* params)
             }
             *params = texture->getSamplerState().maxLod;
             break;
-
+          case GL_REQUIRED_TEXTURE_IMAGE_UNITS_OES:
+              *params = 1.0;
+              break;
           default:
             context->recordError(gl::Error(GL_INVALID_ENUM));
             return;
@@ -3170,7 +3172,9 @@ void __stdcall glGetTexParameteriv(GLenum target, GLenum pname, GLint* params)
             }
             *params = (GLint)texture->getSamplerState().maxLod;
             break;
-
+          case GL_REQUIRED_TEXTURE_IMAGE_UNITS_OES:
+              *params = 1;
+              break;
           default:
             context->recordError(gl::Error(GL_INVALID_ENUM));
             return;
