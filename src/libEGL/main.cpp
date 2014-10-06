@@ -112,11 +112,11 @@ Current *GetCurrentData()
     return (current ? current : AllocateCurrent());
 }
 
-void setCurrentError(EGLint error)
+void recordError(const Error &error)
 {
     Current *current = GetCurrentData();
 
-    current->error = error;
+    current->error = error.getCode();
 }
 
 EGLint getCurrentError()
@@ -180,11 +180,6 @@ EGLSurface getCurrentReadSurface()
     Current *current = GetCurrentData();
 
     return current->readSurface;
-}
-
-void error(EGLint errorCode)
-{
-    egl::setCurrentError(errorCode);
 }
 
 }
