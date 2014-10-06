@@ -109,6 +109,24 @@ GLuint CompileProgram(const std::string &vsSource, const std::string &fsSource)
         return 0;
     }
 
+	// Retrieve vertex shader source with debug info
+	// Includes hlsl and disassembly of internal geometry shader 
+    int buf_size = 65536;
+    char* buf = new char[buf_size];
+    int set_size = 0;
+    glGetTranslatedShaderSourceANGLE(vs, buf_size, &set_size, buf);
+	if (set_size > 0)
+	{
+		std::cout << "Shader debug info of vertex shader\n\n" << buf;
+	}
+
+	// Retrieve fragment shader source with debug info
+	glGetTranslatedShaderSourceANGLE(fs, buf_size, &set_size, buf);
+	if (set_size > 0) {
+		std::cout << "\n\nShader debug info of fragment shader\n\n" << buf;
+	}
+	delete[] buf;
+
     return program;
 }
 

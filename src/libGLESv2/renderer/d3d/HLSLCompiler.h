@@ -40,11 +40,19 @@ class HLSLCompiler
     gl::Error compileToBinary(gl::InfoLog &infoLog, const std::string &hlsl, const std::string &profile,
                               const std::vector<CompileConfig> &configs, ID3DBlob **outCompiledBlob) const;
 
+#ifdef GENERATE_SHADER_DEBUG_INFO
+    std::string disassembleBinary(ID3DBlob* shaderBinary) const;
+#endif
+
   private:
     DISALLOW_COPY_AND_ASSIGN(HLSLCompiler);
 
     HMODULE mD3DCompilerModule;
     pD3DCompile mD3DCompileFunc;
+
+#ifdef GENERATE_SHADER_DEBUG_INFO
+    pD3DDisassemble mD3DDisassembleFunc;
+#endif
 };
 
 }

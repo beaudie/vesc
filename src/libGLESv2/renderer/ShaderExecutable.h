@@ -40,10 +40,26 @@ class ShaderExecutable
         return mFunctionBuffer.size();
     }
 
+#ifdef GENERATE_SHADER_DEBUG_INFO
+    std::stringstream& GetDebugInfo() 
+    { 
+        return mDebugInfo; 
+    }
+
+    const std::stringstream& GetDebugInfo() const 
+    { 
+        return mDebugInfo; 
+    }
+#endif
+
   private:
     DISALLOW_COPY_AND_ASSIGN(ShaderExecutable);
 
     std::vector<uint8_t> mFunctionBuffer;
+
+#ifdef GENERATE_SHADER_DEBUG_INFO
+    std::stringstream mDebugInfo;
+#endif
 };
 
 class UniformStorage

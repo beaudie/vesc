@@ -237,28 +237,7 @@ void ShaderD3D::compileToHLSL(void *compiler, const std::string &source)
 
         std::vector<char> outputHLSL(objCodeLen);
         ShGetObjectCode(compiler, outputHLSL.data());
-
-#ifdef _DEBUG
-        std::ostringstream hlslStream;
-        hlslStream << "// GLSL\n";
-        hlslStream << "//\n";
-
-        size_t curPos = 0;
-        while (curPos != std::string::npos)
-        {
-            size_t nextLine = source.find("\n", curPos);
-            size_t len = (nextLine == std::string::npos) ? std::string::npos : (nextLine - curPos + 1);
-
-            hlslStream << "// " << source.substr(curPos, len);
-
-            curPos = (nextLine == std::string::npos) ? std::string::npos : (nextLine + 1);
-        }
-        hlslStream << "\n\n";
-        hlslStream << outputHLSL.data();
-        mHlsl = hlslStream.str();
-#else
         mHlsl = outputHLSL.data();
-#endif
 
         mUniforms = *GetShaderVariables(ShGetUniforms(compiler));
 
@@ -452,4 +431,36 @@ int ShaderD3D::getSemanticIndex(const std::string &attributeName) const
     return -1;
 }
 
+std::string ShaderD3D::getTranslatedSourceWithDebugInfo(const gl::Shader *shader) const
+{
+#ifdef GENERATE_SHADER_DEBUG_INFO
+    const char *typeName = "UNKNOWN";
+    switch (shader->getType())
+    {
+    case GL_VERTEX_SHADER:
+        typeName = "VERTEX";
+        break;
+    case GL_FRAGMENT_SHADER:
+        typeName = "FRAGMENT";
+        break;
+    }
+
+    int sourceLength = shader->getSourceLength();
+    std::vector<char> glslSource(sourceLength);
+    int setLength;
+    shader->getSource(sourceLength, &setLength, glslSource.data());
+
+    std::stringstream info;
+    info << "// " << typeName << " SHADER BEGIN\n";
+    info << "\n// GLSL BEGIN\n\n" << glslSource.data() << "\n\n// GLSL END\n\n\n";
+    info << "// INITIAL HLSL BEGIN\n\n" << getTranslatedSource() << "\n// INITIAL HLSL END\n\n\n";
+    info << GetDebugInfo().str();
+    info << "\n// " << typeName << " SHADER END\n\n";
+
+    return info.str();
+#else
+    return getTranslatedSource();
+#endif
 }
+
+} // namespace rx

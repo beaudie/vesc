@@ -30,6 +30,11 @@ CompileConfig::CompileConfig(UINT flags, const std::string &name)
 HLSLCompiler::HLSLCompiler()
     : mD3DCompilerModule(NULL),
       mD3DCompileFunc(NULL)
+
+#ifdef GENERATE_SHADER_DEBUG_INFO
+      ,
+      mD3DDisassembleFunc(NULL)
+#endif 
 {
 }
 
@@ -69,6 +74,10 @@ bool HLSLCompiler::initialize()
     mD3DCompileFunc = reinterpret_cast<pD3DCompile>(GetProcAddress(mD3DCompilerModule, "D3DCompile"));
     ASSERT(mD3DCompileFunc);
 
+#ifdef GENERATE_SHADER_DEBUG_INFO
+    mD3DDisassembleFunc = reinterpret_cast<pD3DDisassemble>(GetProcAddress(mD3DCompilerModule, "D3DDisassemble"));
+#endif
+
     return mD3DCompileFunc != NULL;
 }
 
@@ -79,6 +88,10 @@ void HLSLCompiler::release()
         FreeLibrary(mD3DCompilerModule);
         mD3DCompilerModule = NULL;
         mD3DCompileFunc = NULL;
+
+#ifdef GENERATE_SHADER_DEBUG_INFO
+		mD3DDisassembleFunc = NULL;
+#endif
     }
 }
 
@@ -115,6 +128,8 @@ gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string 
 
         if (SUCCEEDED(result))
         {
+            infoLog.append(" Compilation succeeded with %s.\n", configs[i].name.c_str());
+
             *outCompiledBlob = binary;
             return gl::Error(GL_NO_ERROR);
         }
@@ -139,5 +154,30 @@ gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string 
     *outCompiledBlob = NULL;
     return gl::Error(GL_NO_ERROR);
 }
+
+#ifdef GENERATE_SHADER_DEBUG_INFO
+std::string HLSLCompiler::disassembleBinary(ID3DBlob* shaderBinary) const
+{
+    std::string asm_src;
+    if (mD3DDisassembleFunc)
+    {
+        // Retrieve disassembly 
+        UINT flags = D3D_DISASM_ENABLE_DEFAULT_VALUE_PRINTS | D3D_DISASM_ENABLE_INSTRUCTION_NUMBERING;
+        ID3DBlob *disassembly = NULL;
+        pD3DDisassemble disassembleFunc = reinterpret_cast<pD3DDisassemble>(mD3DDisassembleFunc);
+        HRESULT result = disassembleFunc(((ID3DBlob*)shaderBinary)->GetBufferPointer(), ((ID3DBlob*)shaderBinary)->GetBufferSize(), flags, "", &disassembly);
+
+        if (SUCCEEDED(result))
+        {
+            asm_src = (const char*)disassembly->GetBufferPointer();
+        }
+
+        if (disassembly)
+            disassembly->Release();
+    }
+
+    return asm_src;
+}
+#endif // GENERATE_SHADER_DEBUG_INFO
 
 }

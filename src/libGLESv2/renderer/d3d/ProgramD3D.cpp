@@ -534,6 +534,24 @@ gl::LinkResult ProgramD3D::compileProgramExecutables(gl::InfoLog &infoLog, gl::S
         }
     }
 
+#ifdef GENERATE_SHADER_DEBUG_INFO
+    if (usesGeometryShader() && mGeometryExecutable)
+    {
+        // Geometry shaders are currently only used internally, so there is no corresponding shader object at the interface level.
+        // For now the geometry shader debug info is pre-pended to the vertex shader, this is a bit of a clutch
+        vertexShader->getImplementation()->GetDebugInfo() << "// GEOMETRY SHADER BEGIN\n\n" << mGeometryExecutable->GetDebugInfo().str() << "\nGEOMETRY SHADER END\n\n\n";
+    }
+
+    if (defaultVertexExecutable) {
+        vertexShader->getImplementation()->GetDebugInfo() << defaultVertexExecutable->GetDebugInfo().str();
+    }
+
+    if (defaultPixelExecutable)
+    {
+        fragmentShader->getImplementation()->GetDebugInfo() << defaultPixelExecutable->GetDebugInfo().str();
+    }
+#endif
+
     bool linkSuccess = (defaultVertexExecutable && defaultPixelExecutable && (!usesGeometryShader() || mGeometryExecutable));
     return gl::LinkResult(linkSuccess, gl::Error(GL_NO_ERROR));
 }

@@ -35,6 +35,9 @@ class ShaderD3D : public ShaderImpl
     const std::string &getInfoLog() const { return mInfoLog; }
     const std::string &getTranslatedSource() const { return mHlsl; }
 
+    // Returns concatenation of initial glsl shader with intermediate code transforms and assembly
+    std::string getTranslatedSourceWithDebugInfo(const gl::Shader *shader) const;
+
     // D3D-specific methods
     virtual void uncompile();
     void resetVaryingsRegisterAssignment();

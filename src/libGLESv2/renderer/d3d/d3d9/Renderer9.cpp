@@ -2895,6 +2895,10 @@ gl::Error Renderer9::compileToExecutable(gl::InfoLog &infoLog, const std::string
     configs.push_back(CompileConfig(flags | D3DCOMPILE_AVOID_FLOW_CONTROL,  "avoid flow control" ));
     configs.push_back(CompileConfig(flags | D3DCOMPILE_PREFER_FLOW_CONTROL, "prefer flow control"));
 
+#ifdef GENERATE_SHADER_DEBUG_INFO
+    int infoLogBeginIx = infoLog.getLength();
+#endif 
+
     ID3DBlob *binary = NULL;
     gl::Error error = mCompiler.compileToBinary(infoLog, shaderHLSL, profile, configs, &binary);
     if (error.isError())
@@ -2912,6 +2916,24 @@ gl::Error Renderer9::compileToExecutable(gl::InfoLog &infoLog, const std::string
 
     error = loadExecutable(binary->GetBufferPointer(), binary->GetBufferSize(), type,
                            transformFeedbackVaryings, separatedOutputBuffers, outExectuable);
+
+#ifdef GENERATE_SHADER_DEBUG_INFO
+    (*outExectuable)->GetDebugInfo() << "// COMPILER INPUT HLSL BEGIN\n\n" << shaderHLSL << "\n// COMPILER INPUT HLSL END\n";
+    (*outExectuable)->GetDebugInfo() << "\n\n// ASSEMBLY BEGIN\n\n";
+
+    // Append compile flag info
+    int infoLogLength = infoLog.getLength();
+    int loggedTextLength = infoLogLength - infoLogBeginIx;
+    if (loggedTextLength > 0) {
+        std::vector<char> log(infoLogLength);
+        infoLog.getLog(infoLogLength, NULL, log.data());
+
+        (*outExectuable)->GetDebugInfo() << "// Compile info : " << (log.data() + infoLogBeginIx);
+    }
+
+    (*outExectuable)->GetDebugInfo() << mCompiler.disassembleBinary(binary) << "\n// ASSEMBLY END\n";
+#endif
+
     SafeRelease(binary);
     if (error.isError())
     {

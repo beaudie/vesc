@@ -26,6 +26,7 @@ class ShaderImpl
     virtual bool compile(const std::string &source) = 0;
     virtual const std::string &getInfoLog() const = 0;
     virtual const std::string &getTranslatedSource() const = 0;
+    virtual std::string getTranslatedSourceWithDebugInfo(const gl::Shader *shader) const = 0;
 
     const std::vector<gl::PackedVarying> &getVaryings() const { return mVaryings; }
     const std::vector<sh::Uniform> &getUniforms() const { return mUniforms; }
@@ -39,6 +40,11 @@ class ShaderImpl
     std::vector<sh::Attribute> &getActiveAttributes() { return mActiveAttributes; }
     std::vector<sh::Attribute> &getActiveOutputVariables() { return mActiveOutputVariables; }
 
+#ifdef GENERATE_SHADER_DEBUG_INFO
+	std::stringstream& GetDebugInfo() { return mDebugInfo; }
+    const std::stringstream& GetDebugInfo() const { return mDebugInfo; }
+#endif
+
   protected:
     DISALLOW_COPY_AND_ASSIGN(ShaderImpl);
 
@@ -47,6 +53,10 @@ class ShaderImpl
     std::vector<sh::InterfaceBlock> mInterfaceBlocks;
     std::vector<sh::Attribute> mActiveAttributes;
     std::vector<sh::Attribute> mActiveOutputVariables;
+
+#ifdef GENERATE_SHADER_DEBUG_INFO
+	std::stringstream mDebugInfo;
+#endif
 };
 
 }
