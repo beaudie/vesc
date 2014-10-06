@@ -117,6 +117,11 @@ void Shader::getTranslatedSource(GLsizei bufSize, GLsizei *length, char *buffer)
     getSourceImpl(mShader->getTranslatedSource(), bufSize, length, buffer);
 }
 
+void Shader::getTranslatedSourceWithDebugInfo(GLsizei bufSize, GLsizei *length, char *buffer) const
+{
+    getSourceImpl(mShader->getTranslatedSourceWithDebugInfo(), bufSize, length, buffer);
+}
+
 void Shader::compile()
 {
     mCompiled = mShader->compile(mSource);
