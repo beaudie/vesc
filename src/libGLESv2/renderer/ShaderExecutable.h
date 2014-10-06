@@ -40,10 +40,21 @@ class ShaderExecutable
         return mFunctionBuffer.size();
     }
 
+    std::stringstream &getDebugInfo()
+    {
+        return mDebugInfo;
+    }
+
+    const std::stringstream &getDebugInfo() const
+    {
+        return mDebugInfo;
+    }
+
   private:
     DISALLOW_COPY_AND_ASSIGN(ShaderExecutable);
 
     std::vector<uint8_t> mFunctionBuffer;
+    std::stringstream    mDebugInfo;
 };
 
 class UniformStorage
@@ -64,4 +75,4 @@ class UniformStorage
 
 }
 
-#endif // LIBGLESV2_RENDERER_SHADEREXECUTABLE9_H_
+#endif // LIBGLESV2_RENDERER_SHADEREXECUTABLE_H_
