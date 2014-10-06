@@ -39,6 +39,9 @@ class ShaderImpl
     std::vector<sh::Attribute> &getActiveAttributes() { return mActiveAttributes; }
     std::vector<sh::Attribute> &getActiveOutputVariables() { return mActiveOutputVariables; }
 
+    std::stringstream &getDebugInfo() { return mDebugInfo; }
+    const std::stringstream &getDebugInfo() const { return mDebugInfo; }
+
   protected:
     DISALLOW_COPY_AND_ASSIGN(ShaderImpl);
 
@@ -47,6 +50,7 @@ class ShaderImpl
     std::vector<sh::InterfaceBlock> mInterfaceBlocks;
     std::vector<sh::Attribute> mActiveAttributes;
     std::vector<sh::Attribute> mActiveOutputVariables;
+    std::stringstream mDebugInfo;
 };
 
 }

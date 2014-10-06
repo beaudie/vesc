@@ -417,6 +417,7 @@
                             'defines':
                             [
                                 'ANGLE_ENABLE_PERF',
+                                'ANGLE_GENERATE_SHADER_DEBUG_INFO'
                             ],
                             'msvs_settings':
                             {
