@@ -2364,6 +2364,10 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog, const std::strin
     configs.push_back(CompileConfig(flags | D3DCOMPILE_SKIP_VALIDATION,   "skip validation"  ));
     configs.push_back(CompileConfig(flags | D3DCOMPILE_SKIP_OPTIMIZATION, "skip optimization"));
 
+#ifdef ANGLE_GENERATE_SHADER_DEBUG_INFO
+    int infoLogBeginIx = infoLog.getLength();
+#endif
+
     ID3DBlob *binary = NULL;
     gl::Error error = mCompiler.compileToBinary(infoLog, shaderHLSL, profile, configs, &binary);
     if (error.isError())
@@ -2381,6 +2385,25 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog, const std::strin
 
     error = loadExecutable(binary->GetBufferPointer(), binary->GetBufferSize(), type,
                            transformFeedbackVaryings, separatedOutputBuffers, outExectuable);
+
+#ifdef ANGLE_GENERATE_SHADER_DEBUG_INFO
+    (*outExectuable)->getDebugInfo() << "// COMPILER INPUT HLSL BEGIN\n\n" << shaderHLSL << "\n// COMPILER INPUT HLSL END\n";
+    (*outExectuable)->getDebugInfo() << "\n\n// ASSEMBLY BEGIN\n\n";
+
+    // Append compile flag info
+    int infoLogLength = infoLog.getLength();
+    int loggedTextLength = infoLogLength - infoLogBeginIx;
+    if (loggedTextLength > 0)
+    {
+        std::vector<char> log(infoLogLength);
+        infoLog.getLog(infoLogLength, NULL, log.data());
+
+        (*outExectuable)->getDebugInfo() << "// Compile info : " << (log.data() + infoLogBeginIx);
+    }
+
+    (*outExectuable)->getDebugInfo() << mCompiler.disassembleBinary(binary) << "\n// ASSEMBLY END\n";
+#endif
+
     SafeRelease(binary);
     if (error.isError())
     {

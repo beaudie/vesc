@@ -183,6 +183,7 @@ void ShaderD3D::uncompile()
     mInterfaceBlocks.clear();
     mActiveAttributes.clear();
     mActiveOutputVariables.clear();
+    mDebugInfo.str(std::string());
 }
 
 void ShaderD3D::compileToHLSL(void *compiler, const std::string &source)
@@ -239,6 +240,8 @@ void ShaderD3D::compileToHLSL(void *compiler, const std::string &source)
         ShGetObjectCode(compiler, outputHLSL.data());
 
 #ifdef _DEBUG
+        // Prefix hlsl shader with commented out glsl shader
+        // Useful in diagnostics tools like pix which capture the hlsl shaders
         std::ostringstream hlslStream;
         hlslStream << "// GLSL\n";
         hlslStream << "//\n";
@@ -399,9 +402,17 @@ bool ShaderD3D::compile(const std::string &source)
 
     compileToHLSL(compiler, source);
 
+#ifdef ANGLE_GENERATE_SHADER_DEBUG_INFO
+    const char *typeName = "UNKNOWN";
+#endif
+
     if (mType == GL_VERTEX_SHADER)
     {
         parseAttributes(compiler);
+
+#ifdef ANGLE_GENERATE_SHADER_DEBUG_INFO
+        typeName = "VERTEX";
+#endif
     }
 
     parseVaryings(compiler);
@@ -416,7 +427,20 @@ bool ShaderD3D::compile(const std::string &source)
             mActiveOutputVariables = *GetShaderVariables(ShGetOutputVariables(compiler));
             FilterInactiveVariables(&mActiveOutputVariables);
         }
+
+#ifdef ANGLE_GENERATE_SHADER_DEBUG_INFO
+        typeName = "FRAGMENT";
+#endif
     }
+
+#ifdef ANGLE_GENERATE_SHADER_DEBUG_INFO
+    mDebugInfo << "// " << typeName << " SHADER BEGIN\n";
+    mDebugInfo << "\n// GLSL BEGIN\n\n" << source << "\n\n// GLSL END\n\n\n";
+    mDebugInfo << "// INITIAL HLSL BEGIN\n\n" << getTranslatedSource() << "\n// INITIAL HLSL END\n\n\n";
+    // Successive steps will append more info
+#else
+    mDebugInfo << getTranslatedSource();
+#endif
 
     return !getTranslatedSource().empty();
 }
