@@ -13,6 +13,7 @@
 #include "libGLESv2/renderer/Workarounds.h"
 #include "libGLESv2/ProgramBinary.h"
 #include "libGLESv2/Framebuffer.h"
+#include "libGLESv2/ImageIndex.h"
 
 #include "common/debug.h"
 
@@ -1077,6 +1078,11 @@ Workarounds GenerateWorkarounds()
     Workarounds workarounds;
     workarounds.mrtPerfWorkaround = true;
     return workarounds;
+}
+
+UINT GetArraySliceFromIndex(const gl::ImageIndex &index)
+{
+    return index.hasLayer() ? static_cast<UINT>(index.layerIndex) : 0u;
 }
 
 }
