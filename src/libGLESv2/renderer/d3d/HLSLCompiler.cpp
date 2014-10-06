@@ -29,7 +29,8 @@ CompileConfig::CompileConfig(UINT flags, const std::string &name)
 
 HLSLCompiler::HLSLCompiler()
     : mD3DCompilerModule(NULL),
-      mD3DCompileFunc(NULL)
+      mD3DCompileFunc(NULL),
+      mD3DDisassembleFunc(NULL)
 {
 }
 
@@ -69,6 +70,8 @@ bool HLSLCompiler::initialize()
     mD3DCompileFunc = reinterpret_cast<pD3DCompile>(GetProcAddress(mD3DCompilerModule, "D3DCompile"));
     ASSERT(mD3DCompileFunc);
 
+    mD3DDisassembleFunc = reinterpret_cast<pD3DDisassemble>(GetProcAddress(mD3DCompilerModule, "D3DDisassemble"));
+
     return mD3DCompileFunc != NULL;
 }
 
@@ -79,6 +82,7 @@ void HLSLCompiler::release()
         FreeLibrary(mD3DCompilerModule);
         mD3DCompilerModule = NULL;
         mD3DCompileFunc = NULL;
+        mD3DDisassembleFunc = NULL;
     }
 }
 
@@ -104,7 +108,7 @@ gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string 
 
         if (errorMessage)
         {
-            const char *message = (const char*)errorMessage->GetBufferPointer();
+            const char *message = reinterpret_cast<const char*>(errorMessage->GetBufferPointer());
 
             infoLog.appendSanitized(message);
             TRACE("\n%s", hlsl);
@@ -138,6 +142,30 @@ gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string 
     // None of the configurations succeeded in compiling this shader but the compiler is still intact
     *outCompiledBlob = NULL;
     return gl::Error(GL_NO_ERROR);
+}
+
+std::string HLSLCompiler::disassembleBinary(ID3DBlob *shaderBinary) const
+{
+    std::string asmSrc;
+    if (mD3DDisassembleFunc)
+    {
+        // Retrieve disassembly
+        UINT flags = D3D_DISASM_ENABLE_DEFAULT_VALUE_PRINTS | D3D_DISASM_ENABLE_INSTRUCTION_NUMBERING;
+        ID3DBlob *disassembly = NULL;
+        pD3DDisassemble disassembleFunc = reinterpret_cast<pD3DDisassemble>(mD3DDisassembleFunc);
+        LPCVOID buffer = shaderBinary->GetBufferPointer();
+        SIZE_T bufSize = shaderBinary->GetBufferSize();
+        HRESULT result = disassembleFunc(buffer, bufSize, flags, "", &disassembly);
+
+        if (SUCCEEDED(result))
+        {
+            asmSrc = reinterpret_cast<const char*>(disassembly->GetBufferPointer());
+        }
+
+        SafeRelease(disassembly);
+    }
+
+    return asmSrc;
 }
 
 }
