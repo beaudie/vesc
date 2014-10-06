@@ -18,6 +18,7 @@
 namespace gl
 {
 class FramebufferAttachment;
+struct ImageIndex;
 }
 
 namespace rx
@@ -180,6 +181,8 @@ inline void SetBufferData(ID3D11DeviceContext *context, ID3D11Buffer *constantBu
 RenderTarget11 *GetAttachmentRenderTarget(gl::FramebufferAttachment *attachment);
 
 Workarounds GenerateWorkarounds();
+
+UINT GetArraySliceFromIndex(const gl::ImageIndex &index);
 
 }
 
