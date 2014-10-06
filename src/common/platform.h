@@ -62,6 +62,10 @@
 
 #   undef near
 #   undef far
+
+#   define ANGLE_STDCALL __stdcall
+#else
+#   define ANGLE_STDCALL
 #endif
 
 #endif // COMMON_PLATFORM_H_
