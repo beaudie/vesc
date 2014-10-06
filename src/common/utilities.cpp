@@ -437,6 +437,22 @@ int VariableSortOrder(GLenum type)
     }
 }
 
+const char *getShaderTypeString(GLenum type)
+{
+    switch (type)
+    {
+      case GL_VERTEX_SHADER:
+        return "VERTEX";
+
+      case GL_FRAGMENT_SHADER:
+        return "FRAGMENT";
+
+      default:
+        UNREACHABLE();
+        return "";
+    }
+}
+
 }
 
 std::string getTempPath()

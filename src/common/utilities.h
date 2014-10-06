@@ -44,6 +44,8 @@ bool IsTriangleMode(GLenum drawMode);
 template <typename outT> outT iround(GLfloat value) { return static_cast<outT>(value > 0.0f ? floor(value + 0.5f) : ceil(value - 0.5f)); }
 template <typename outT> outT uiround(GLfloat value) { return static_cast<outT>(value + 0.5f); }
 
+const char *getShaderTypeString(GLenum);
+
 }
 
 std::string getTempPath();

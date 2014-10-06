@@ -38,13 +38,29 @@ class HLSLCompiler
     // Attempt to compile a HLSL shader using the supplied configurations, may output a NULL compiled blob
     // even if no GL errors are returned.
     gl::Error compileToBinary(gl::InfoLog &infoLog, const std::string &hlsl, const std::string &profile,
-                              const std::vector<CompileConfig> &configs, ID3DBlob **outCompiledBlob) const;
+                              const std::vector<CompileConfig> &configs, ID3DBlob **outCompiledBlob,
+                              std::stringstream *outDebugInfo) const;
+
+    std::string disassembleBinary(ID3DBlob* shaderBinary) const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(HLSLCompiler);
 
     HMODULE mD3DCompilerModule;
     pD3DCompile mD3DCompileFunc;
+    pD3DDisassemble mD3DDisassembleFunc;
+
+    // Utilities to list the compiler flags in the debug info
+    static bool getCompilerFlagName(UINT mask, size_t flagIx, const char **outFlagName);
+    static bool isCompilerFlagSet(UINT mask, UINT flag);
+
+    struct compilerFlagInfo
+    {
+        UINT mFlag;
+        const char* mName;
+    };
+
+    static compilerFlagInfo sCompilerFlagsInfo[];
 };
 
 }

@@ -29,7 +29,8 @@ CompileConfig::CompileConfig(UINT flags, const std::string &name)
 
 HLSLCompiler::HLSLCompiler()
     : mD3DCompilerModule(NULL),
-      mD3DCompileFunc(NULL)
+      mD3DCompileFunc(NULL),
+      mD3DDisassembleFunc(NULL)
 {
 }
 
@@ -69,6 +70,8 @@ bool HLSLCompiler::initialize()
     mD3DCompileFunc = reinterpret_cast<pD3DCompile>(GetProcAddress(mD3DCompilerModule, "D3DCompile"));
     ASSERT(mD3DCompileFunc);
 
+    mD3DDisassembleFunc = reinterpret_cast<pD3DDisassemble>(GetProcAddress(mD3DCompilerModule, "D3DDisassemble"));
+
     return mD3DCompileFunc != NULL;
 }
 
@@ -79,11 +82,13 @@ void HLSLCompiler::release()
         FreeLibrary(mD3DCompilerModule);
         mD3DCompilerModule = NULL;
         mD3DCompileFunc = NULL;
+        mD3DDisassembleFunc = NULL;
     }
 }
 
 gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string &hlsl, const std::string &profile,
-                                        const std::vector<CompileConfig> &configs, ID3DBlob **outCompiledBlob) const
+                                        const std::vector<CompileConfig> &configs, ID3DBlob **outCompiledBlob,
+                                        std::stringstream *outDebugInfo) const
 {
     ASSERT(mD3DCompilerModule && mD3DCompileFunc);
 
@@ -104,7 +109,7 @@ gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string 
 
         if (errorMessage)
         {
-            const char *message = (const char*)errorMessage->GetBufferPointer();
+            const char *message = reinterpret_cast<const char*>(errorMessage->GetBufferPointer());
 
             infoLog.appendSanitized(message);
             TRACE("\n%s", hlsl);
@@ -116,6 +121,25 @@ gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string 
         if (SUCCEEDED(result))
         {
             *outCompiledBlob = binary;
+
+#ifdef ANGLE_GENERATE_SHADER_DEBUG_INFO
+            (*outDebugInfo) << "// COMPILER INPUT HLSL BEGIN\n\n" << hlsl << "\n// COMPILER INPUT HLSL END\n";
+            (*outDebugInfo) << "\n\n// ASSEMBLY BEGIN\n\n";
+            (*outDebugInfo) << "// Compiler configuration: " << configs[i].name << "\n// Flags:\n";
+
+            // Append compiler flag names
+            const char *flagName = nullptr;
+            for (size_t flagIx = 0; HLSLCompiler::getCompilerFlagName(configs[i].flags, flagIx, &flagName); ++flagIx)
+            {
+                if (flagName)
+                {
+                    (*outDebugInfo) << "// " << flagName << "\n";
+                }
+            }
+
+            (*outDebugInfo) << "\n" << disassembleBinary(binary) << "\n// ASSEMBLY END\n";
+#endif
+
             return gl::Error(GL_NO_ERROR);
         }
         else
@@ -138,6 +162,106 @@ gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string 
     // None of the configurations succeeded in compiling this shader but the compiler is still intact
     *outCompiledBlob = NULL;
     return gl::Error(GL_NO_ERROR);
+}
+
+std::string HLSLCompiler::disassembleBinary(ID3DBlob *shaderBinary) const
+{
+    std::string asmSrc;
+    if (mD3DDisassembleFunc)
+    {
+        // Retrieve disassembly
+        UINT flags = D3D_DISASM_ENABLE_DEFAULT_VALUE_PRINTS | D3D_DISASM_ENABLE_INSTRUCTION_NUMBERING;
+        ID3DBlob *disassembly = NULL;
+        pD3DDisassemble disassembleFunc = reinterpret_cast<pD3DDisassemble>(mD3DDisassembleFunc);
+        LPCVOID buffer = shaderBinary->GetBufferPointer();
+        SIZE_T bufSize = shaderBinary->GetBufferSize();
+        HRESULT result = disassembleFunc(buffer, bufSize, flags, "", &disassembly);
+
+        if (SUCCEEDED(result))
+        {
+            asmSrc = reinterpret_cast<const char*>(disassembly->GetBufferPointer());
+        }
+
+        SafeRelease(disassembly);
+    }
+
+    return asmSrc;
+}
+
+#ifdef CREATE_COMPILER_FLAG_INFO
+    #undef CREATE_COMPILER_FLAG_INFO
+#endif
+
+#define CREATE_COMPILER_FLAG_INFO(flag) { flag, #flag }
+
+HLSLCompiler::compilerFlagInfo HLSLCompiler::sCompilerFlagsInfo[] = {
+    // NOTE: The data below is copied from d3dcompiler.h
+    // If something changes there it should be changed here as well
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_DEBUG),                          // (1 << 0)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_SKIP_VALIDATION),                // (1 << 1)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_SKIP_OPTIMIZATION),              // (1 << 2)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_PACK_MATRIX_ROW_MAJOR),          // (1 << 3)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_PACK_MATRIX_COLUMN_MAJOR),       // (1 << 4)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_PARTIAL_PRECISION),              // (1 << 5)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_FORCE_VS_SOFTWARE_NO_OPT),       // (1 << 6)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_FORCE_PS_SOFTWARE_NO_OPT),       // (1 << 7)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_NO_PRESHADER),                   // (1 << 8)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_AVOID_FLOW_CONTROL),             // (1 << 9)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_PREFER_FLOW_CONTROL),            // (1 << 10)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_ENABLE_STRICTNESS),              // (1 << 11)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_ENABLE_BACKWARDS_COMPATIBILITY), // (1 << 12)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_IEEE_STRICTNESS),                // (1 << 13)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_OPTIMIZATION_LEVEL0),            // (1 << 14)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_OPTIMIZATION_LEVEL1),            // 0
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_OPTIMIZATION_LEVEL2),            // ((1 << 14) | (1 << 15))
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_OPTIMIZATION_LEVEL3),            // (1 << 15)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_RESERVED16),                     // (1 << 16)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_RESERVED17),                     // (1 << 17)
+    CREATE_COMPILER_FLAG_INFO(D3DCOMPILE_WARNINGS_ARE_ERRORS)             // (1 << 18)
+};
+
+#undef CREATE_COMPILER_FLAG_INFO
+
+// static
+bool HLSLCompiler::isCompilerFlagSet(UINT mask, UINT flag)
+{
+    bool isFlagSet = MaskIsFlagSet(mask, flag);
+
+    switch(flag)
+    {
+      case D3DCOMPILE_OPTIMIZATION_LEVEL0:
+        return isFlagSet && !MaskIsFlagSet(mask, UINT(D3DCOMPILE_OPTIMIZATION_LEVEL3));
+
+      case D3DCOMPILE_OPTIMIZATION_LEVEL1:
+        return (mask & D3DCOMPILE_OPTIMIZATION_LEVEL2) == UINT(0);
+
+      case D3DCOMPILE_OPTIMIZATION_LEVEL3:
+        return isFlagSet && !MaskIsFlagSet(mask, UINT(D3DCOMPILE_OPTIMIZATION_LEVEL0));
+
+      default:
+        return  isFlagSet;
+    }
+}
+
+// Returns true if flag index is valid
+// Flag name is set if flag is in mask
+// static
+bool HLSLCompiler::getCompilerFlagName(UINT mask, size_t flagIx, const char **outFlagName)
+{
+    *outFlagName = nullptr;
+
+    if (flagIx >= ArraySize(sCompilerFlagsInfo))
+    {
+        return false;
+    }
+
+    compilerFlagInfo flagInfo = sCompilerFlagsInfo[flagIx];
+    if (HLSLCompiler::isCompilerFlagSet(mask, flagInfo.mFlag))
+    {
+        *outFlagName = flagInfo.mName;
+    }
+
+    return true;
 }
 
 }

@@ -2365,7 +2365,8 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog, const std::strin
     configs.push_back(CompileConfig(flags | D3DCOMPILE_SKIP_OPTIMIZATION, "skip optimization"));
 
     ID3DBlob *binary = NULL;
-    gl::Error error = mCompiler.compileToBinary(infoLog, shaderHLSL, profile, configs, &binary);
+    std::stringstream debugInfo;
+    gl::Error error = mCompiler.compileToBinary(infoLog, shaderHLSL, profile, configs, &binary, &debugInfo);
     if (error.isError())
     {
         return error;
@@ -2381,6 +2382,14 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog, const std::strin
 
     error = loadExecutable(binary->GetBufferPointer(), binary->GetBufferSize(), type,
                            transformFeedbackVaryings, separatedOutputBuffers, outExectuable);
+
+#ifdef ANGLE_GENERATE_SHADER_DEBUG_INFO
+    if (debugInfo.rdbuf()->in_avail())
+    {
+        (*outExectuable)->getDebugInfo() << debugInfo.str();
+    }
+#endif
+
     SafeRelease(binary);
     if (error.isError())
     {
