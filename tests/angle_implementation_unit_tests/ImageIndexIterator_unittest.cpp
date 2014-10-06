@@ -88,7 +88,7 @@ TEST(ImageIndexTest, Iterator2DArray)
 {
     testing::InSequence seq;
 
-    GLsizei layerCounts[] = { 1, 3, 5 };
+    GLsizei layerCounts[] = { 1, 3, 5, 2 };
 
     ImageIndexIterator iter = ImageIndexIterator::Make2DArray(minMip, maxMip, layerCounts);
 
