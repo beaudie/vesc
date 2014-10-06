@@ -57,6 +57,7 @@ class TextureD3D : public TextureImpl
     // Returns an ImageIndex for a particular "Image". 3D Textures do not have images for
     // slices of their depth texures, so 3D textures ignore the layer parameter.
     virtual gl::ImageIndex getImageIndex(GLint mip, GLint layer) const = 0;
+    virtual bool isValidIndex(const gl::ImageIndex &index) const = 0;
 
     virtual void generateMipmaps();
     TextureStorage *getStorage();
@@ -82,7 +83,7 @@ class TextureD3D : public TextureImpl
 
     virtual gl::Error createCompleteStorage(bool renderTarget, TextureStorage **outTexStorage) const = 0;
     virtual gl::Error setCompleteTexStorage(TextureStorage *newCompleteTexStorage) = 0;
-    virtual gl::Error commitRegion(const gl::ImageIndex &index, const gl::Box &region) = 0;
+    gl::Error commitRegion(const gl::ImageIndex &index, const gl::Box &region);
 
     Renderer *mRenderer;
 
@@ -133,14 +134,14 @@ class TextureD3D_2D : public TextureD3D
 
     virtual gl::ImageIndexIterator imageIterator() const;
     virtual gl::ImageIndex getImageIndex(GLint mip, GLint layer) const;
+    virtual bool isValidIndex(const gl::ImageIndex &index) const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureD3D_2D);
 
     virtual gl::Error initializeStorage(bool renderTarget);
-    gl::Error createCompleteStorage(bool renderTarget, TextureStorage **outTexStorage) const;
-    gl::Error setCompleteTexStorage(TextureStorage *newCompleteTexStorage);
-    gl::Error commitRegion(const gl::ImageIndex &index, const gl::Box &region);
+    virtual gl::Error createCompleteStorage(bool renderTarget, TextureStorage **outTexStorage) const;
+    virtual gl::Error setCompleteTexStorage(TextureStorage *newCompleteTexStorage);
 
     virtual gl::Error updateStorage();
     virtual void initMipmapsImages();
@@ -188,14 +189,14 @@ class TextureD3D_Cube : public TextureD3D
 
     virtual gl::ImageIndexIterator imageIterator() const;
     virtual gl::ImageIndex getImageIndex(GLint mip, GLint layer) const;
+    virtual bool isValidIndex(const gl::ImageIndex &index) const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureD3D_Cube);
 
     virtual gl::Error initializeStorage(bool renderTarget);
-    gl::Error createCompleteStorage(bool renderTarget, TextureStorage **outTexStorage) const;
-    gl::Error setCompleteTexStorage(TextureStorage *newCompleteTexStorage);
-    virtual gl::Error commitRegion(const gl::ImageIndex &index, const gl::Box &region);
+    virtual gl::Error createCompleteStorage(bool renderTarget, TextureStorage **outTexStorage) const;
+    virtual gl::Error setCompleteTexStorage(TextureStorage *newCompleteTexStorage);
 
     virtual gl::Error updateStorage();
     virtual void initMipmapsImages();
@@ -242,14 +243,14 @@ class TextureD3D_3D : public TextureD3D
 
     virtual gl::ImageIndexIterator imageIterator() const;
     virtual gl::ImageIndex getImageIndex(GLint mip, GLint layer) const;
+    virtual bool isValidIndex(const gl::ImageIndex &index) const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureD3D_3D);
 
     virtual gl::Error initializeStorage(bool renderTarget);
-    gl::Error createCompleteStorage(bool renderTarget, TextureStorage **outStorage) const;
-    gl::Error setCompleteTexStorage(TextureStorage *newCompleteTexStorage);
-    virtual gl::Error commitRegion(const gl::ImageIndex &index, const gl::Box &region);
+    virtual gl::Error createCompleteStorage(bool renderTarget, TextureStorage **outStorage) const;
+    virtual gl::Error setCompleteTexStorage(TextureStorage *newCompleteTexStorage);
 
     virtual gl::Error updateStorage();
     virtual void initMipmapsImages();
@@ -294,14 +295,14 @@ class TextureD3D_2DArray : public TextureD3D
 
     virtual gl::ImageIndexIterator imageIterator() const;
     virtual gl::ImageIndex getImageIndex(GLint mip, GLint layer) const;
+    virtual bool isValidIndex(const gl::ImageIndex &index) const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureD3D_2DArray);
 
     virtual gl::Error initializeStorage(bool renderTarget);
-    gl::Error createCompleteStorage(bool renderTarget, TextureStorage **outStorage) const;
-    gl::Error setCompleteTexStorage(TextureStorage *newCompleteTexStorage);
-    virtual gl::Error commitRegion(const gl::ImageIndex &index, const gl::Box &region);
+    virtual gl::Error createCompleteStorage(bool renderTarget, TextureStorage **outStorage) const;
+    virtual gl::Error setCompleteTexStorage(TextureStorage *newCompleteTexStorage);
 
     virtual gl::Error updateStorage();
     virtual void initMipmapsImages();
