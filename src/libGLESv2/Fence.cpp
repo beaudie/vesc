@@ -79,18 +79,7 @@ Error FenceNV::finishFence()
 {
     ASSERT(mIsSet);
 
-    while (mStatus != GL_TRUE)
-    {
-        Error error = mFence->test(true, &mStatus);
-        if (error.isError())
-        {
-            return error;
-        }
-
-        Sleep(0);
-    }
-
-    return Error(GL_NO_ERROR);
+    return mFence->finishFence(&mStatus);
 }
 
 Error FenceNV::getFencei(GLenum pname, GLint *params)
@@ -129,15 +118,9 @@ Error FenceNV::getFencei(GLenum pname, GLint *params)
 FenceSync::FenceSync(rx::Renderer *renderer, GLuint id)
     : RefCountObject(id),
       mFence(renderer->createFence()),
-      mCounterFrequency(0),
       mCondition(GL_NONE)
 {
-    LARGE_INTEGER counterFreqency = { 0 };
-    BOOL success = QueryPerformanceFrequency(&counterFreqency);
-    UNUSED_ASSERTION_VARIABLE(success);
-    ASSERT(success);
-
-    mCounterFrequency = counterFreqency.QuadPart;
+    mFence->initFenceSync();
 }
 
 FenceSync::~FenceSync()
@@ -160,62 +143,7 @@ Error FenceSync::set(GLenum condition)
 Error FenceSync::clientWait(GLbitfield flags, GLuint64 timeout, GLenum *outResult)
 {
     ASSERT(mCondition != GL_NONE);
-
-    bool flushCommandBuffer = ((flags & GL_SYNC_FLUSH_COMMANDS_BIT) != 0);
-
-    GLboolean result = GL_FALSE;
-    Error error = mFence->test(flushCommandBuffer, &result);
-    if (error.isError())
-    {
-        *outResult = GL_WAIT_FAILED;
-        return error;
-    }
-
-    if (result == GL_TRUE)
-    {
-        *outResult = GL_ALREADY_SIGNALED;
-        return Error(GL_NO_ERROR);
-    }
-
-    if (timeout == 0)
-    {
-        *outResult = GL_TIMEOUT_EXPIRED;
-        return Error(GL_NO_ERROR);
-    }
-
-    LARGE_INTEGER currentCounter = { 0 };
-    BOOL success = QueryPerformanceCounter(&currentCounter);
-    UNUSED_ASSERTION_VARIABLE(success);
-    ASSERT(success);
-
-    LONGLONG timeoutInSeconds = static_cast<LONGLONG>(timeout) * static_cast<LONGLONG>(1000000ll);
-    LONGLONG endCounter = currentCounter.QuadPart + mCounterFrequency * timeoutInSeconds;
-
-    while (currentCounter.QuadPart < endCounter && !result)
-    {
-        Sleep(0);
-        BOOL success = QueryPerformanceCounter(&currentCounter);
-        UNUSED_ASSERTION_VARIABLE(success);
-        ASSERT(success);
-
-        error = mFence->test(flushCommandBuffer, &result);
-        if (error.isError())
-        {
-            *outResult = GL_WAIT_FAILED;
-            return error;
-        }
-    }
-
-    if (currentCounter.QuadPart >= endCounter)
-    {
-        *outResult = GL_TIMEOUT_EXPIRED;
-    }
-    else
-    {
-        *outResult = GL_CONDITION_SATISFIED;
-    }
-
-    return Error(GL_NO_ERROR);
+    return mFence->clientWait(flags, timeout, outResult);
 }
 
 Error FenceSync::serverWait()

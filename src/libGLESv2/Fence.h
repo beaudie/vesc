@@ -66,7 +66,6 @@ class FenceSync : public RefCountObject
     DISALLOW_COPY_AND_ASSIGN(FenceSync);
 
     rx::FenceImpl *mFence;
-    LONGLONG mCounterFrequency;
 
     GLenum mCondition;
 };
