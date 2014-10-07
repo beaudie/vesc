@@ -6,20 +6,26 @@
 
 // main.cpp: DLL entry point and management of thread-local data.
 
+// TODO(kbr): figure out what to do for this file. Would be ideal to
+// link against Chromium's base/ and pick up its TLS implementation
+// from there. Alternatively, move this entirely into a libGLESv2/win/
+// directory and add a POSIX version referencing common/tls.{cpp,h}.
+
 #include "libGLESv2/main.h"
 #include "libGLESv2/Context.h"
 
 #include "common/tls.h"
 
-static TLSIndex currentTLS = TLS_OUT_OF_INDEXES;
+static TLSIndex currentTLS = TLS_INVALID_INDEX;
 
 namespace gl
 {
 
 Current *AllocateCurrent()
 {
-    ASSERT(currentTLS != TLS_OUT_OF_INDEXES);
-    if (currentTLS == TLS_OUT_OF_INDEXES)
+#ifdef ANGLE_PLATFORM_WINDOWS
+    ASSERT(currentTLS != TLS_INVALID_INDEX);
+    if (currentTLS == TLS_INVALID_INDEX)
     {
         return NULL;
     }
@@ -35,17 +41,26 @@ Current *AllocateCurrent()
     }
 
     return current;
+#else
+    // TODO(kbr): refactor.
+    return NULL;
+#endif
 }
 
 void DeallocateCurrent()
 {
+#ifdef ANGLE_PLATFORM_WINDOWS
     Current *current = reinterpret_cast<Current*>(GetTLSValue(currentTLS));
     SafeDelete(current);
     SetTLSValue(currentTLS, NULL);
+#else
+    // TODO(kbr): refactor.
+#endif
 }
 
 }
 
+#ifdef ANGLE_PLATFORM_WINDOWS
 extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved)
 {
     switch (reason)
@@ -53,7 +68,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved
       case DLL_PROCESS_ATTACH:
         {
             currentTLS = CreateTLSIndex();
-            if (currentTLS == TLS_OUT_OF_INDEXES)
+            if (currentTLS == TLS_INVALID_INDEX)
             {
                 return FALSE;
             }
@@ -81,21 +96,30 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved
 
     return TRUE;
 }
+#else
+    // TODO(kbr): refactor.
+#endif
 
 namespace gl
 {
 
 Current *GetCurrentData()
 {
+#ifdef ANGLE_PLATFORM_WINDOWS
     Current *current = reinterpret_cast<Current*>(GetTLSValue(currentTLS));
 
     // ANGLE issue 488: when the dll is loaded after thread initialization,
     // thread local storage (current) might not exist yet.
     return (current ? current : AllocateCurrent());
+#else
+    // TODO(kbr): refactor.
+    return NULL;
+#endif
 }
 
 void makeCurrent(Context *context, egl::Display *display, egl::Surface *surface)
 {
+#ifdef ANGLE_PLATFORM_WINDOWS
     Current *current = GetCurrentData();
 
     current->context = context;
@@ -105,13 +129,21 @@ void makeCurrent(Context *context, egl::Display *display, egl::Surface *surface)
     {
         context->makeCurrent(surface);
     }
+#else
+    // TODO(kbr): refactor.
+#endif
 }
 
 Context *getContext()
 {
+#ifdef ANGLE_PLATFORM_WINDOWS
     Current *current = GetCurrentData();
 
     return current->context;
+#else
+    // TODO(kbr): refactor.
+    return NULL;
+#endif
 }
 
 Context *getNonLostContext()
@@ -135,9 +167,14 @@ Context *getNonLostContext()
 
 egl::Display *getDisplay()
 {
+#ifdef ANGLE_PLATFORM_WINDOWS
     Current *current = GetCurrentData();
 
     return current->display;
+#else
+    // TODO(kbr): refactor.
+    return NULL;
+#endif
 }
 
 // Records an error code
@@ -168,4 +205,3 @@ void error(GLenum errorCode)
 }
 
 }
-

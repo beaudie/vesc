@@ -26,9 +26,15 @@
 #ifndef SystemInfo_h
 #define SystemInfo_h
 
+#include "common/platform.h"
+
 namespace rx {
 
+#ifdef ANGLE_PLATFORM_WINDOWS
+
 bool isWindowsVistaOrGreater();
+
+#endif /* ANGLE_PLATFORM_WINDOWS */
 
 } // namespace rx
 

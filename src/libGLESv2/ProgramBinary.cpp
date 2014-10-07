@@ -1183,6 +1183,7 @@ LinkResult ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attrib
     mSamplersPS.resize(caps.maxTextureImageUnits);
     mSamplersVS.resize(caps.maxVertexTextureImageUnits);
 
+#ifdef ANGLE_PLATFORM_WINDOWS
     rx::ShaderD3D *vertexShaderD3D = rx::ShaderD3D::makeShaderD3D(vertexShader->getImplementation());
     rx::ShaderD3D *fragmentShaderD3D = rx::ShaderD3D::makeShaderD3D(fragmentShader->getImplementation());
 
@@ -1237,11 +1238,16 @@ LinkResult ProgramBinary::link(InfoLog &infoLog, const AttributeBindings &attrib
     }
 
     return LinkResult(true, Error(GL_NO_ERROR));
+#else
+    // TODO(kbr): refactor.
+    return LinkResult(false, Error(GL_NO_ERROR));
+#endif
 }
 
 // Determines the mapping between GL attributes and Direct3D 9 vertex stream usage indices
 bool ProgramBinary::linkAttributes(InfoLog &infoLog, const AttributeBindings &attributeBindings, const Shader *vertexShader)
 {
+#ifdef ANGLE_PLATFORM_WINDOWS
     const rx::ShaderD3D *vertexShaderD3D = rx::ShaderD3D::makeShaderD3D(vertexShader->getImplementation());
 
     unsigned int usedLocations = 0;
@@ -1318,7 +1324,12 @@ bool ProgramBinary::linkAttributes(InfoLog &infoLog, const AttributeBindings &at
 
     for (int attributeIndex = 0; attributeIndex < MAX_VERTEX_ATTRIBS; )
     {
+#ifdef ANGLE_PLATFORM_WINDOWS
         int index = vertexShaderD3D->getSemanticIndex(mLinkedAttribute[attributeIndex].name);
+#else
+        // TODO(kbr): refactor.
+        int index = 0;
+#endif
         int rows = VariableRegisterCount(mLinkedAttribute[attributeIndex].type);
 
         for (int r = 0; r < rows; r++)
@@ -1330,6 +1341,10 @@ bool ProgramBinary::linkAttributes(InfoLog &infoLog, const AttributeBindings &at
     initAttributesByLayout();
 
     return true;
+#else
+    // TODO(kbr): refactor.
+    return false;
+#endif
 }
 
 bool ProgramBinary::linkValidateVariablesBase(InfoLog &infoLog, const std::string &variableName, const sh::ShaderVariable &vertexVariable,
@@ -1426,6 +1441,7 @@ bool ProgramBinary::linkValidateInterfaceBlockFields(InfoLog &infoLog, const std
 
 bool ProgramBinary::linkUniforms(InfoLog &infoLog, const Shader &vertexShader, const Shader &fragmentShader, const Caps &caps)
 {
+#ifdef ANGLE_PLATFORM_WINDOWS
     const rx::ShaderD3D *vertexShaderD3D = rx::ShaderD3D::makeShaderD3D(vertexShader.getImplementation());
     const rx::ShaderD3D *fragmentShaderD3D = rx::ShaderD3D::makeShaderD3D(fragmentShader.getImplementation());
 
@@ -1485,15 +1501,23 @@ bool ProgramBinary::linkUniforms(InfoLog &infoLog, const Shader &vertexShader, c
     mProgram->initializeUniformStorage(mUniforms);
 
     return true;
+#else
+    // TODO(kbr): refactor.
+    return false;
+#endif
 }
 
 void ProgramBinary::defineUniformBase(GLenum shader, const sh::Uniform &uniform, unsigned int uniformRegister)
 {
+#ifdef ANGLE_PLATFORM_WINDOWS
     ShShaderOutput outputType = rx::ShaderD3D::getCompilerOutputType(shader);
     sh::HLSLBlockEncoder encoder(sh::HLSLBlockEncoder::GetStrategyFor(outputType));
     encoder.skipRegisters(uniformRegister);
 
     defineUniform(shader, uniform, uniform.name, &encoder);
+#else
+    // TODO(kbr): refactor.
+#endif
 }
 
 void ProgramBinary::defineUniform(GLenum shader, const sh::ShaderVariable &uniform,
@@ -1863,6 +1887,7 @@ void ProgramBinary::defineUniformBlockMembers(const std::vector<VarT> &fields, c
 
 bool ProgramBinary::defineUniformBlock(InfoLog &infoLog, const Shader &shader, const sh::InterfaceBlock &interfaceBlock, const Caps &caps)
 {
+#ifdef ANGLE_PLATFORM_WINDOWS
     const rx::ShaderD3D* shaderD3D = rx::ShaderD3D::makeShaderD3D(shader.getImplementation());
 
     // create uniform block entries if they do not exist
@@ -1930,6 +1955,10 @@ bool ProgramBinary::defineUniformBlock(InfoLog &infoLog, const Shader &shader, c
     }
 
     return true;
+#else
+    // TODO(kbr): refactor.
+    return false;
+#endif
 }
 
 bool ProgramBinary::isValidated() const

@@ -27,10 +27,18 @@ namespace rx
 class SwapChain
 {
   public:
+#ifdef ANGLE_PLATFORM_WINDOWS
+    // TODO(kbr): refactor.
     SwapChain(rx::NativeWindow nativeWindow, HANDLE shareHandle, GLenum backBufferFormat, GLenum depthBufferFormat)
         : mNativeWindow(nativeWindow), mShareHandle(shareHandle), mBackBufferFormat(backBufferFormat), mDepthBufferFormat(depthBufferFormat)
     {
     }
+#else
+    SwapChain(rx::NativeWindow nativeWindow, GLenum backBufferFormat, GLenum depthBufferFormat)
+        : mNativeWindow(nativeWindow), mBackBufferFormat(backBufferFormat), mDepthBufferFormat(depthBufferFormat)
+    {
+    }
+#endif
 
     virtual ~SwapChain() {};
 
@@ -39,14 +47,20 @@ class SwapChain
     virtual EGLint swapRect(EGLint x, EGLint y, EGLint width, EGLint height) = 0;
     virtual void recreate() = 0;
 
+#ifdef ANGLE_PLATFORM_WINDOWS
+    // TODO(kbr): refactor.
     virtual HANDLE getShareHandle() {return mShareHandle;};
+#endif /* ANGLE_PLATFORM_WINDOWS */
 
   protected:
     rx::NativeWindow mNativeWindow;  // Handler for the Window that the surface is created for.
     const GLenum mBackBufferFormat;
     const GLenum mDepthBufferFormat;
 
+#ifdef ANGLE_PLATFORM_WINDOWS
+    // TODO(kbr): refactor.
     HANDLE mShareHandle;
+#endif /* ANGLE_PLATFORM_WINDOWS */
 };
 
 }

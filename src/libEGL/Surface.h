@@ -35,7 +35,10 @@ class Surface
 {
   public:
     Surface(Display *display, const egl::Config *config, EGLNativeWindowType window, EGLint fixedSize, EGLint width, EGLint height, EGLint postSubBufferSupported);
+#ifdef ANGLE_PLATFORM_WINDOWS
+    // TODO(kbr): refactor.
     Surface(Display *display, const egl::Config *config, HANDLE shareHandle, EGLint width, EGLint height, EGLenum textureFormat, EGLenum textureTarget);
+#endif /* ANGLE_PLATFORM_WINDOWS */
 
     virtual ~Surface();
 
@@ -75,7 +78,10 @@ private:
     Display *const mDisplay;
     rx::Renderer *mRenderer;
 
+    // TODO(kbr): refactor.
+#ifdef ANGLE_PLATFORM_WINDOWS
     HANDLE mShareHandle;
+#endif /* ANGLE_PLATFORM_WINDOWS */
     rx::SwapChain *mSwapChain;
 
     void subclassWindow();
