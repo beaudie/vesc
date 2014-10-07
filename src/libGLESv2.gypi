@@ -147,6 +147,8 @@
             'libGLESv2/renderer/d3d/BufferD3D.h',
             'libGLESv2/renderer/d3d/DynamicHLSL.cpp',
             'libGLESv2/renderer/d3d/DynamicHLSL.h',
+            'libGLESv2/renderer/d3d/FenceD3D.cpp',
+            'libGLESv2/renderer/d3d/FenceD3D.h',
             'libGLESv2/renderer/d3d/HLSLCompiler.cpp',
             'libGLESv2/renderer/d3d/HLSLCompiler.h',
             'libGLESv2/renderer/d3d/ImageD3D.cpp',

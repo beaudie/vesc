@@ -15,6 +15,7 @@ namespace rx
 {
 
 Fence9::Fence9(rx::Renderer9 *renderer)
+    : FenceD3D()
 {
     mRenderer = renderer;
     mQuery = NULL;

@@ -65,10 +65,7 @@ void FenceNV::finishFence()
 {
     ASSERT(mFence->isSet());
 
-    while (!mFence->test(true))
-    {
-        Sleep(0);
-    }
+    mFence->finishFence();
 }
 
 GLint FenceNV::getFencei(GLenum pname)
@@ -103,12 +100,7 @@ FenceSync::FenceSync(rx::Renderer *renderer, GLuint id)
 {
     mFence = renderer->createFence();
 
-    LARGE_INTEGER counterFreqency = { 0 };
-    BOOL success = QueryPerformanceFrequency(&counterFreqency);
-    UNUSED_ASSERTION_VARIABLE(success);
-    ASSERT(success);
-
-    mCounterFrequency = counterFreqency.QuadPart;
+    mFence->initFenceSync();
 }
 
 FenceSync::~FenceSync()
@@ -126,50 +118,7 @@ GLenum FenceSync::clientWait(GLbitfield flags, GLuint64 timeout)
 {
     ASSERT(mFence->isSet());
 
-    bool flushCommandBuffer = ((flags & GL_SYNC_FLUSH_COMMANDS_BIT) != 0);
-
-    if (mFence->test(flushCommandBuffer))
-    {
-        return GL_ALREADY_SIGNALED;
-    }
-
-    if (mFence->hasError())
-    {
-        return GL_WAIT_FAILED;
-    }
-
-    if (timeout == 0)
-    {
-        return GL_TIMEOUT_EXPIRED;
-    }
-
-    LARGE_INTEGER currentCounter = { 0 };
-    BOOL success = QueryPerformanceCounter(&currentCounter);
-    UNUSED_ASSERTION_VARIABLE(success);
-    ASSERT(success);
-
-    LONGLONG timeoutInSeconds = static_cast<LONGLONG>(timeout) * static_cast<LONGLONG>(1000000ll);
-    LONGLONG endCounter = currentCounter.QuadPart + mCounterFrequency * timeoutInSeconds;
-
-    while (currentCounter.QuadPart < endCounter && !mFence->test(flushCommandBuffer))
-    {
-        Sleep(0);
-        BOOL success = QueryPerformanceCounter(&currentCounter);
-        UNUSED_ASSERTION_VARIABLE(success);
-        ASSERT(success);
-    }
-
-    if (mFence->hasError())
-    {
-        return GL_WAIT_FAILED;
-    }
-
-    if (currentCounter.QuadPart >= endCounter)
-    {
-        return GL_TIMEOUT_EXPIRED;
-    }
-
-    return GL_CONDITION_SATISFIED;
+    return mFence->clientWait(flags, timeout);
 }
 
 void FenceSync::serverWait()

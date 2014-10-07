@@ -10,6 +10,7 @@
 #define LIBGLESV2_RENDERER_FENCEIMPL_H_
 
 #include "common/angleutils.h"
+#include "angle_gl.h"
 
 namespace rx
 {
@@ -24,6 +25,11 @@ class FenceImpl
     virtual void set() = 0;
     virtual bool test(bool flushCommandBuffer) = 0;
     virtual bool hasError() const = 0;
+    // Helps implement FenceNV::finishFence.
+    virtual void finishFence() = 0;
+    // Helps implement FenceSync, in particular clientWait.
+    virtual void initFenceSync() = 0;
+    virtual GLenum clientWait(GLbitfield flags, GLuint64 timeout) = 0;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(FenceImpl);
