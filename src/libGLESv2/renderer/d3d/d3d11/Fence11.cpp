@@ -14,7 +14,8 @@ namespace rx
 {
 
 Fence11::Fence11(rx::Renderer11 *renderer)
-    : mRenderer(renderer),
+    : FenceD3D(),
+      mRenderer(renderer),
       mQuery(NULL)
 {
 }

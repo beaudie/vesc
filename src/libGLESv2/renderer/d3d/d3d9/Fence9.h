@@ -9,13 +9,13 @@
 #ifndef LIBGLESV2_RENDERER_FENCE9_H_
 #define LIBGLESV2_RENDERER_FENCE9_H_
 
-#include "libGLESv2/renderer/FenceImpl.h"
+#include "libGLESv2/renderer/d3d/FenceD3D.h"
 
 namespace rx
 {
 class Renderer9;
 
-class Fence9 : public FenceImpl
+class Fence9 : public FenceD3D
 {
   public:
     explicit Fence9(rx::Renderer9 *renderer);
