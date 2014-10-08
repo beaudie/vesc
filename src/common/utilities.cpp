@@ -12,6 +12,13 @@
 
 #include <set>
 
+#if defined(ANGLE_ENABLE_WINDOWS_STORE)
+#  include <wrl.h>
+#  include <wrl/wrappers/corewrappers.h>
+#  include <windows.applicationmodel.core.h>
+#  include <windows.graphics.display.h>
+#endif
+
 namespace gl
 {
 
@@ -442,22 +449,79 @@ int VariableSortOrder(GLenum type)
 std::string getTempPath()
 {
 #ifdef ANGLE_PLATFORM_WINDOWS
-    char path[MAX_PATH];
-    DWORD pathLen = GetTempPathA(sizeof(path) / sizeof(path[0]), path);
-    if (pathLen == 0)
-    {
+    #if defined(ANGLE_ENABLE_WINDOWS_STORE)
+
+        using namespace Microsoft::WRL;
+        using namespace Microsoft::WRL::Wrappers;
+        using namespace ABI::Windows::ApplicationModel::Core;
+        using namespace ABI::Windows::Foundation;
+        using namespace ABI::Windows::Foundation::Collections;
+
+        ComPtr<IActivationFactory> pActivationFactory;
+        ComPtr<ABI::Windows::ApplicationModel::IPackageStatics> packageStatics;
+        ComPtr<ABI::Windows::ApplicationModel::IPackage> package;
+        ComPtr<ABI::Windows::Storage::IStorageFolder> storageFolder;
+        ComPtr<ABI::Windows::Storage::IStorageItem> storageItem;
+        HString hstrPath;
+
+        HRESULT result = GetActivationFactory(HStringReference(RuntimeClass_Windows_ApplicationModel_Package).Get(), &pActivationFactory);
+        ASSERT(SUCCEEDED(result));
+        if (SUCCEEDED(result))
+        {
+            result = pActivationFactory.As(&packageStatics);
+            ASSERT(SUCCEEDED(result));
+        }
+
+        if (SUCCEEDED(result))
+        {
+            result = packageStatics->get_Current(&package);
+            ASSERT(SUCCEEDED(result));
+        }
+
+        if (SUCCEEDED(result))
+        {
+            result = package->get_InstalledLocation(&storageFolder);
+            ASSERT(SUCCEEDED(result));
+        }
+
+        if (SUCCEEDED(result))
+        {
+            result = storageFolder.As(&storageItem);
+            ASSERT(SUCCEEDED(result));
+        }
+
+        if (SUCCEEDED(result))
+        {
+            result = storageItem->get_Path(hstrPath.GetAddressOf());
+            ASSERT(SUCCEEDED(result));
+        }
+
+        if (SUCCEEDED(result))
+        {
+            std::wstring t = std::wstring(hstrPath.GetRawBuffer(nullptr));
+            return std::string(t.begin(), t.end());
+        }
+
         UNREACHABLE();
         return std::string();
-    }
+    #else
+        char path[MAX_PATH];
+        DWORD pathLen = GetTempPathA(sizeof(path) / sizeof(path[0]), path);
+        if (pathLen == 0)
+        {
+            UNREACHABLE();
+            return std::string();
+        }
 
-    UINT unique = GetTempFileNameA(path, "sh", 0, path);
-    if (unique == 0)
-    {
-        UNREACHABLE();
-        return std::string();
-    }
+        UINT unique = GetTempFileNameA(path, "sh", 0, path);
+        if (unique == 0)
+        {
+            UNREACHABLE();
+            return std::string();
+        }
 
-    return path;
+        return path;
+    #endif
 #else
     UNIMPLEMENTED();
     return "";
@@ -476,3 +540,4 @@ void writeFile(const char* path, const void* content, size_t size)
     fwrite(content, sizeof(char), size, file);
     fclose(file);
 }
+
