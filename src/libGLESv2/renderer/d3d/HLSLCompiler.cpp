@@ -41,6 +41,7 @@ HLSLCompiler::~HLSLCompiler()
 bool HLSLCompiler::initialize()
 {
     TRACE_EVENT0("gpu", "initializeCompiler");
+#if !defined(ANGLE_ENABLE_WINDOWS_STORE)
 #if defined(ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES)
     // Find a D3DCompiler module that had already been loaded based on a predefined list of versions.
     static const char *d3dCompilerNames[] = ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES;
@@ -68,6 +69,12 @@ bool HLSLCompiler::initialize()
 
     mD3DCompileFunc = reinterpret_cast<pD3DCompile>(GetProcAddress(mD3DCompilerModule, "D3DCompile"));
     ASSERT(mD3DCompileFunc);
+#else
+    // D3D Shader compiler is linked already into this module, so the export
+    // can be directly assigned.
+    mD3DCompilerModule = NULL;
+    mD3DCompileFunc = reinterpret_cast<pD3DCompile>(D3DCompile);
+#endif
 
     return mD3DCompileFunc != NULL;
 }
@@ -85,7 +92,10 @@ void HLSLCompiler::release()
 gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string &hlsl, const std::string &profile,
                                         const std::vector<CompileConfig> &configs, ID3DBlob **outCompiledBlob) const
 {
-    ASSERT(mD3DCompilerModule && mD3DCompileFunc);
+#if !defined(ANGLE_ENABLE_WINDOWS_STORE)
+    ASSERT(mD3DCompilerModule);
+#endif
+    ASSERT(mD3DCompileFunc);
 
     if (gl::perfActive())
     {
