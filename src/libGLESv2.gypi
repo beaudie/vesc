@@ -42,7 +42,6 @@
             'common/utilities.cpp',
             'common/utilities.h',
             'common/version.h',
-            'common/win32/NativeWindow.cpp',
             'libGLESv2/BinaryStream.h',
             'libGLESv2/Buffer.cpp',
             'libGLESv2/Buffer.h',
@@ -140,6 +139,19 @@
             'third_party/murmurhash/MurmurHash3.h',
             'third_party/systeminfo/SystemInfo.cpp',
             'third_party/systeminfo/SystemInfo.h',
+        ],
+        'angle_libangle_win32_sources':
+        [
+            'common/win32/NativeWindow.cpp',
+        ],
+        'angle_libangle_winrt_sources':
+        [
+            'common/winrt/CoreWindowNativeWindow.cpp',
+            'common/winrt/CoreWindowNativeWindow.h',
+            'common/winrt/IInspectableNativeWindow.cpp',
+            'common/winrt/IInspectableNativeWindow.h',
+            'third_party/threademulation/ThreadEmulation.cpp',
+            'third_party/threademulation/ThreadEmulation.h',
         ],
         'angle_d3d_shared_sources':
         [
@@ -403,13 +415,46 @@
                                         'AdditionalDependencies':
                                         [
                                             'dxguid.lib',
+                                            'd3d11.lib',
+                                            'd3dcompiler.lib',
                                         ]
                                     }
                                 },
                             },
                         }],
+                        ['angle_build_winrt==0',
+                        {
+                            'sources':
+                            [
+                                '<@(angle_libangle_win32_sources)',
+                            ],
+                        }],
+                        ['angle_build_winrt==1',
+                        {
+                            'sources':
+                            [
+                                '<@(angle_libangle_winrt_sources)',
+                            ],
+                            'defines':
+                            [
+                                'NTDDI_VERSION=NTDDI_WINBLUE',
+                            ],
+                            'msvs_enable_winrt' : '1',
+                            'msvs_requires_importlibrary' : 'true',
+                            'msvs_settings':
+                            {
+                                'VCLinkerTool':
+                                {
+                                    'EnableCOMDATFolding': '1',
+                                    'OptimizeReferences': '1',
+                                }
+                            },
+                        }],
+                        ['angle_build_winphone==1',
+                        {
+                            'msvs_enable_winphone' : '1',
+                        }],
                     ],
-
                     'configurations':
                     {
                         'Debug':
@@ -442,6 +487,26 @@
                         'libGLESv2/libGLESv2.def',
                         'libGLESv2/libGLESv2.rc',
                     ],
+                    'conditions':
+                    [
+                        ['angle_build_winrt==1',
+                        {
+                            'msvs_enable_winrt' : '1',
+                            'msvs_requires_importlibrary' : 'true',
+                            'msvs_settings':
+                            {
+                                'VCLinkerTool':
+                                {
+                                    'EnableCOMDATFolding': '1',
+                                    'OptimizeReferences': '1',
+                                }
+                            },
+                        }],
+                        ['angle_build_winphone==1',
+                        {
+                            'msvs_enable_winphone' : '1',
+                        }],
+                    ],
                 },
                 {
                     'target_name': 'libGLESv2_static',
@@ -454,6 +519,26 @@
                     [
                         'libGLESv2/libGLESv2.cpp',
                         'libGLESv2/libGLESv2.rc',
+                    ],
+                    'conditions':
+                    [
+                        ['angle_build_winrt==1',
+                        {
+                            'msvs_enable_winrt' : '1',
+                            'msvs_requires_importlibrary' : 'true',
+                            'msvs_settings':
+                            {
+                                'VCLinkerTool':
+                                {
+                                    'EnableCOMDATFolding': '1',
+                                    'OptimizeReferences': '1',
+                                }
+                            },
+                        }],
+                        ['angle_build_winphone==1',
+                        {
+                            'msvs_enable_winphone' : '1',
+                        }],
                     ],
                 },
             ],
