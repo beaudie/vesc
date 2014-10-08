@@ -143,6 +143,15 @@
             # TODO(kbr): port NativeWindow to other EGL platforms.
             'common/win32/NativeWindow.cpp',
         ],
+        'angle_libangle_winrt_sources':
+        [
+            'common/winrt/CoreWindowNativeWindow.cpp',
+            'common/winrt/CoreWindowNativeWindow.h',
+            'common/winrt/IInspectableNativeWindow.cpp',
+            'common/winrt/IInspectableNativeWindow.h',
+            'third_party/threademulation/ThreadEmulation.cpp',
+            'third_party/threademulation/ThreadEmulation.h',
+        ],
         'angle_d3d_shared_sources':
         [
             'libGLESv2/renderer/d3d/BufferD3D.cpp',
@@ -402,12 +411,14 @@
                                 'AdditionalDependencies':
                                 [
                                     'dxguid.lib',
+                                    'd3d11.lib',
+                                    'd3dcompiler.lib',
                                 ]
                             }
                         },
                     },
                 }],
-                ['OS=="win"',
+                ['angle_build_winrt==0',
                 {
                     'sources':
                     [
@@ -417,54 +428,118 @@
                     [
                         'copy_compiler_dll'
                     ],
-                    'configurations':
+                }],
+                ['angle_build_winrt==1',
+                {
+                    'sources':
+                    [
+                        '<@(angle_libangle_winrt_sources)',
+                    ],
+                    'defines':
+                    [
+                        'NTDDI_VERSION=NTDDI_WINBLUE',
+                    ],
+                    'msvs_enable_winrt' : '1',
+                    'msvs_requires_importlibrary' : 'true',
+                    'msvs_settings':
                     {
-                        'Debug':
+                        'VCLinkerTool':
                         {
-                            'defines':
-                            [
-                                'ANGLE_ENABLE_PERF',
-                            ],
-                            'msvs_settings':
-                            {
-                                'VCLinkerTool':
-                                {
-                                    'AdditionalDependencies':
-                                    [
-                                        'd3d9.lib',
-                                    ]
-                                }
-                            },
-                        },
+                            'EnableCOMDATFolding': '1',
+                            'OptimizeReferences': '1',
+                        }
                     },
                 }],
+                ['angle_build_winphone==1',
+                {
+                    'msvs_enable_winphone' : '1',
+                }],
             ],
-
+            'configurations':
+            {
+                'Debug':
+                {
+                    'defines':
+                    [
+                        'ANGLE_ENABLE_PERF',
+                    ],
+                    'msvs_settings':
+                    {
+                        'VCLinkerTool':
+                        {
+                            'AdditionalDependencies':
+                            [
+                                'd3d9.lib',
+                            ]
+                        }
+                    },
+                },
+            },
         },
-        {
-            'target_name': 'libGLESv2',
-            'type': 'shared_library',
-            'dependencies': [ 'libANGLE' ],
-            'includes': [ '../build/common_defines.gypi', ],
-            'sources':
-            [
-                'libGLESv2/libGLESv2.cpp',
-                'libGLESv2/libGLESv2.def',
-                'libGLESv2/libGLESv2.rc',
-            ],
+    {
+        'target_name': 'libGLESv2',
+        'type': 'shared_library',
+        'dependencies': [ 'libANGLE' ],
+        'includes': [ '../build/common_defines.gypi', ],
+        'sources':
+        [
+            'libGLESv2/libGLESv2.cpp',
+            'libGLESv2/libGLESv2.def',
+            'libGLESv2/libGLESv2.rc',
+        ],
+        'conditions':
+        [
+            ['angle_build_winrt==1',
+            {
+                'msvs_enable_winrt' : '1',
+                'msvs_requires_importlibrary' : 'true',
+                'msvs_settings':
+                {
+                    'VCLinkerTool':
+                    {
+                        'EnableCOMDATFolding': '1',
+                        'OptimizeReferences': '1',
+                    }
+                },
+            }],
+            ['angle_build_winphone==1',
+            {
+                'msvs_enable_winphone' : '1',
+            }],
+        ],
+    },
+    {
+        'target_name': 'libGLESv2_static',
+        'type': 'static_library',
+        # make sure we depend on commit_id as a hard dependency, otherwise
+        # we will try to build the static_lib in parallel
+        'dependencies': [ 'libANGLE', 'commit_id' ],
+        'includes': [ '../build/common_defines.gypi', ],
+        'sources':
+        [
+            'libGLESv2/libGLESv2.cpp',
+            'libGLESv2/libGLESv2.rc',
+        ],
+        'conditions':
+        [
+            ['angle_build_winrt==1',
+            {
+                'msvs_enable_winrt' : '1',
+                'msvs_requires_importlibrary' : 'true',
+                'msvs_settings':
+                {
+                    'VCLinkerTool':
+                    {
+                        'EnableCOMDATFolding': '1',
+                        'OptimizeReferences': '1',
+                    }
         },
-        {
-            'target_name': 'libGLESv2_static',
-            'type': 'static_library',
-            # make sure we depend on commit_id as a hard dependency, otherwise
-            # we will try to build the static_lib in parallel
-            'dependencies': [ 'libANGLE', 'commit_id' ],
-            'includes': [ '../build/common_defines.gypi', ],
-            'sources':
-            [
-                'libGLESv2/libGLESv2.cpp',
-                'libGLESv2/libGLESv2.rc',
-            ],
-        },
-    ],
+            }],
+            ['angle_build_winphone==1',
+            {
+                'msvs_enable_winphone' : '1',
+            }],
+        ],
+    },
+],
 }
