@@ -187,7 +187,8 @@ TIntermTyped *TIntermediate::addUnaryMath(
         if (child->getType().getBasicType() != EbtBool ||
             child->getType().isMatrix() ||
             child->getType().isArray() ||
-            child->getType().isVector())
+            child->getType().isVector() ||
+            child->getType().getBasicType() == EbtStruct)
         {
             return NULL;
         }
@@ -198,6 +199,7 @@ TIntermTyped *TIntermediate::addUnaryMath(
       case EOpPostDecrement:
       case EOpPreDecrement:
       case EOpNegative:
+      case EOpPositive:
         if (child->getType().getBasicType() == EbtStruct ||
             child->getType().isArray())
         {
