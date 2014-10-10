@@ -164,6 +164,10 @@ class Renderer9 : public Renderer
     // Texture creation
     virtual TextureImpl *createTexture(GLenum target);
 
+    // Renderbuffer creation
+    virtual RenderbufferImpl *createRenderbuffer(SwapChain *swapChain, bool depth);
+    virtual RenderbufferImpl *createRenderbuffer(GLsizei width, GLsizei height, GLenum format, GLsizei samples);
+
     // Buffer creation
     virtual BufferImpl *createBuffer();
     virtual VertexBuffer *createVertexBuffer();
