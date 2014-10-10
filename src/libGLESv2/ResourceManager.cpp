@@ -403,7 +403,14 @@ void ResourceManager::checkRenderbufferAllocation(GLuint renderbuffer)
 {
     if (renderbuffer != 0 && !getRenderbuffer(renderbuffer))
     {
-        Renderbuffer *renderbufferObject = new Renderbuffer(renderbuffer, new Colorbuffer(mRenderer, 0, 0, GL_RGBA4, 0));
+        rx::RenderTarget *renderTarget = NULL;
+        gl::Error error = mRenderer->createRenderTarget(0, 0, GL_RGBA4, 0, &renderTarget);
+        if (error.isError())
+        {
+            return;
+        }
+
+        Renderbuffer *renderbufferObject = new Renderbuffer(renderbuffer, new RenderbufferStorage(renderTarget));
         mRenderbufferMap[renderbuffer] = renderbufferObject;
         renderbufferObject->addRef();
     }
