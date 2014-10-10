@@ -2814,15 +2814,7 @@ gl::Error Renderer9::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, 
 gl::Error Renderer9::createRenderTarget(SwapChain *swapChain, bool depth, RenderTarget **outRT)
 {
     SwapChain9 *swapChain9 = SwapChain9::makeSwapChain9(swapChain);
-    if (depth)
-    {
-        *outRT = new RenderTarget9(swapChain9->getDepthStencil(), swapChain9->GetDepthBufferInternalFormat());
-    }
-    else
-    {
-        *outRT = new RenderTarget9(swapChain9->getRenderTarget(), swapChain9->GetBackBufferInternalFormat());
-    }
-
+    *outRT = new SwapChainRenderTarget9(swapChain9, depth);
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -2875,7 +2867,7 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
         }
     }
 
-    *outRT = new RenderTarget9(renderTarget, format);
+    *outRT = new SurfaceRenderTarget9(renderTarget, format);
     return gl::Error(GL_NO_ERROR);
 }
 

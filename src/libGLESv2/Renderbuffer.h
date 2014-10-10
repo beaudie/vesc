@@ -87,11 +87,6 @@ class RenderbufferStorage
 
   protected:
     rx::RenderTarget *mRenderTarget;
-    GLsizei mWidth;
-    GLsizei mHeight;
-    GLenum mInternalFormat;
-    GLenum mActualFormat;
-    GLsizei mSamples;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(RenderbufferStorage);
