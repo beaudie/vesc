@@ -10,14 +10,29 @@
 #include "libGLESv2/renderer/d3d/d3d9/RenderTarget9.h"
 #include "libGLESv2/renderer/d3d/d3d9/Renderer9.h"
 #include "libGLESv2/renderer/d3d/d3d9/renderer9_utils.h"
+#include "libGLESv2/renderer/d3d/d3d9/SwapChain9.h"
 #include "libGLESv2/renderer/d3d/d3d9/formatutils9.h"
 #include "libGLESv2/main.h"
 
 namespace rx
 {
 
+RenderTarget9::RenderTarget9()
+{
+}
+
+RenderTarget9::~RenderTarget9()
+{
+}
+
+RenderTarget9 *RenderTarget9::makeRenderTarget9(RenderTarget *target)
+{
+    ASSERT(HAS_DYNAMIC_TYPE(rx::RenderTarget9*, target));
+    return static_cast<rx::RenderTarget9*>(target);
+}
+
 // TODO: AddRef the incoming surface to take ownership instead of expecting that its ref is being given.
-RenderTarget9::RenderTarget9(IDirect3DSurface9 *surface, GLenum internalFormat)
+SurfaceRenderTarget9::SurfaceRenderTarget9(IDirect3DSurface9 *surface, GLenum internalFormat)
 {
     mRenderTarget = surface;
 
@@ -37,23 +52,17 @@ RenderTarget9::RenderTarget9(IDirect3DSurface9 *surface, GLenum internalFormat)
     }
 }
 
-RenderTarget9::~RenderTarget9()
+SurfaceRenderTarget9::~SurfaceRenderTarget9()
 {
     SafeRelease(mRenderTarget);
 }
 
-RenderTarget9 *RenderTarget9::makeRenderTarget9(RenderTarget *target)
-{
-    ASSERT(HAS_DYNAMIC_TYPE(rx::RenderTarget9*, target));
-    return static_cast<rx::RenderTarget9*>(target);
-}
-
-void RenderTarget9::invalidate(GLint x, GLint y, GLsizei width, GLsizei height)
+void SurfaceRenderTarget9::invalidate(GLint x, GLint y, GLsizei width, GLsizei height)
 {
     // Currently a no-op
 }
 
-IDirect3DSurface9 *RenderTarget9::getSurface()
+IDirect3DSurface9 * SurfaceRenderTarget9::getSurface()
 {
     // Caller is responsible for releasing the returned surface reference.
     // TODO: remove the AddRef to match RenderTarget11
@@ -63,6 +72,58 @@ IDirect3DSurface9 *RenderTarget9::getSurface()
     }
 
     return mRenderTarget;
+}
+
+
+SwapChainRenderTarget9::SwapChainRenderTarget9(SwapChain9 *swapChain, bool depth)
+    : mSwapChain(swapChain),
+      mDepth(depth)
+{
+}
+
+SwapChainRenderTarget9::~SwapChainRenderTarget9()
+{
+
+}
+
+GLsizei SwapChainRenderTarget9::getWidth() const
+{
+    return mSwapChain->getWidth();
+}
+
+GLsizei SwapChainRenderTarget9::getHeight() const
+{
+    return mSwapChain->getHeight();
+}
+
+GLsizei SwapChainRenderTarget9::getDepth() const
+{
+    return 1;
+}
+
+GLenum SwapChainRenderTarget9::getInternalFormat() const
+{
+    return (mDepth ? mSwapChain->GetDepthBufferInternalFormat() : mSwapChain->GetBackBufferInternalFormat());
+}
+
+GLenum SwapChainRenderTarget9::getActualFormat() const
+{
+    return d3d9::GetD3DFormatInfo(d3d9::GetTextureFormatInfo(getInternalFormat()).texFormat).internalFormat;
+}
+
+GLsizei SwapChainRenderTarget9::getSamples() const
+{
+    return 0;
+}
+
+void SwapChainRenderTarget9::invalidate(GLint x, GLint y, GLsizei width, GLsizei height)
+{
+    // Currently a no-op
+}
+
+IDirect3DSurface9 *SwapChainRenderTarget9::getSurface()
+{
+    return (mDepth ? mSwapChain->getDepthStencil() : mSwapChain->getRenderTarget());
 }
 
 }
