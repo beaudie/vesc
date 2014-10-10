@@ -66,9 +66,9 @@ class Renderbuffer : public RefCountObject
 class RenderbufferStorage
 {
   public:
-    RenderbufferStorage();
+    RenderbufferStorage(rx::RenderTarget *renderTarget);
 
-    virtual ~RenderbufferStorage() = 0;
+    virtual ~RenderbufferStorage();
 
     virtual rx::RenderTarget *getRenderTarget();
 
@@ -86,6 +86,7 @@ class RenderbufferStorage
     static unsigned int issueSerials(unsigned int count);
 
   protected:
+    rx::RenderTarget *mRenderTarget;
     GLsizei mWidth;
     GLsizei mHeight;
     GLenum mInternalFormat;
@@ -98,61 +99,6 @@ class RenderbufferStorage
     const unsigned int mSerial;
 
     static unsigned int mCurrentSerial;
-};
-
-class Colorbuffer : public RenderbufferStorage
-{
-  public:
-    Colorbuffer(rx::Renderer *renderer, rx::SwapChain *swapChain);
-    Colorbuffer(rx::Renderer *renderer, GLsizei width, GLsizei height, GLenum format, GLsizei samples);
-
-    virtual ~Colorbuffer();
-
-    virtual rx::RenderTarget *getRenderTarget();
-
-  private:
-    DISALLOW_COPY_AND_ASSIGN(Colorbuffer);
-
-    rx::RenderTarget *mRenderTarget;
-};
-
-class DepthStencilbuffer : public RenderbufferStorage
-{
-  public:
-    DepthStencilbuffer(rx::Renderer *renderer, rx::SwapChain *swapChain);
-    DepthStencilbuffer(rx::Renderer *renderer, GLsizei width, GLsizei height, GLsizei samples);
-
-    ~DepthStencilbuffer();
-
-    virtual rx::RenderTarget *getRenderTarget();
-
-  protected:
-    rx::RenderTarget  *mDepthStencil;
-
-  private:
-    DISALLOW_COPY_AND_ASSIGN(DepthStencilbuffer);
-};
-
-class Depthbuffer : public DepthStencilbuffer
-{
-  public:
-    Depthbuffer(rx::Renderer *renderer, GLsizei width, GLsizei height, GLsizei samples);
-
-    virtual ~Depthbuffer();
-
-  private:
-    DISALLOW_COPY_AND_ASSIGN(Depthbuffer);
-};
-
-class Stencilbuffer : public DepthStencilbuffer
-{
-  public:
-    Stencilbuffer(rx::Renderer *renderer, GLsizei width, GLsizei height, GLsizei samples);
-
-    virtual ~Stencilbuffer();
-
-  private:
-    DISALLOW_COPY_AND_ASSIGN(Stencilbuffer);
 };
 
 }
