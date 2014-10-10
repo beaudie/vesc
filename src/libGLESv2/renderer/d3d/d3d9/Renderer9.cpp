@@ -26,6 +26,7 @@
 #include "libGLESv2/renderer/d3d/ShaderD3D.h"
 #include "libGLESv2/renderer/d3d/TextureD3D.h"
 #include "libGLESv2/renderer/d3d/TransformFeedbackD3D.h"
+#include "libGLESv2/renderer/d3d/RenderbufferD3D.h"
 #include "libGLESv2/main.h"
 #include "libGLESv2/Buffer.h"
 #include "libGLESv2/Texture.h"
@@ -1153,7 +1154,7 @@ gl::FramebufferAttachment *Renderer9::getNullColorbuffer(gl::FramebufferAttachme
         }
     }
 
-    gl::Renderbuffer *nullRenderbuffer = new gl::Renderbuffer(0, new gl::Colorbuffer(this, width, height, GL_NONE, 0));
+    gl::Renderbuffer *nullRenderbuffer = new gl::Renderbuffer(createRenderbuffer(width, height, GL_NONE, 0), 0);
     gl::RenderbufferAttachment *nullbuffer = new gl::RenderbufferAttachment(GL_NONE, nullRenderbuffer);
 
     // add nullbuffer to the cache
@@ -3062,6 +3063,26 @@ TextureImpl *Renderer9::createTexture(GLenum target)
     }
 
     return NULL;
+}
+
+RenderbufferImpl *Renderer9::createRenderbuffer(SwapChain *swapChain, bool depth)
+{
+    RenderTarget *newRT = createRenderTarget(swapChain, depth);
+    return new RenderbufferD3D(newRT, newRT->getInternalFormat());
+}
+
+RenderbufferImpl *Renderer9::createRenderbuffer(GLsizei width, GLsizei height, GLenum format, GLsizei samples)
+{
+    // If the renderbuffer parameters are queried, the calling function
+    // will expect one of the valid renderbuffer formats for use in
+    // glRenderbufferStorage, but we should create depth and stencil buffers
+    // as DEPTH24_STENCIL8
+    GLenum creationFormat = format;
+    if (format == GL_DEPTH_COMPONENT16 || format == GL_STENCIL_INDEX8)
+    {
+        creationFormat = GL_DEPTH24_STENCIL8_OES;
+    }
+    return new RenderbufferD3D(createRenderTarget(width, height, creationFormat, samples), format);
 }
 
 bool Renderer9::getLUID(LUID *adapterLuid) const

@@ -39,7 +39,7 @@ RenderTarget *GetAttachmentRenderTarget(gl::FramebufferAttachment *attachment)
     ASSERT(renderbuffer);
 
     // TODO: cast to RenderbufferD3D
-    return renderbuffer->getStorage()->getRenderTarget();
+    return renderbuffer->getImpl()->getRenderTarget();
 }
 
 // Note: RenderTarget serials should ideally be in the RenderTargets themselves.
@@ -59,7 +59,7 @@ unsigned int GetAttachmentSerial(gl::FramebufferAttachment *attachment)
     ASSERT(renderbuffer);
 
     // TODO: cast to RenderbufferD3D
-    return renderbuffer->getStorage()->getSerial();
+    return renderbuffer->getImpl()->getSerial();
 }
 
 }
@@ -632,13 +632,13 @@ void Framebuffer::invalidateSub(const Caps &caps, GLsizei numAttachments, const 
     }
 }
 
-DefaultFramebuffer::DefaultFramebuffer(rx::Renderer *renderer, Colorbuffer *colorbuffer, DepthStencilbuffer *depthStencil)
+DefaultFramebuffer::DefaultFramebuffer(rx::Renderer *renderer, rx::RenderbufferImpl *colorbuffer, rx::RenderbufferImpl *depthStencil)
     : Framebuffer(renderer, 0)
 {
-    Renderbuffer *colorRenderbuffer = new Renderbuffer(0, colorbuffer);
+    Renderbuffer *colorRenderbuffer = new Renderbuffer(colorbuffer, 0);
     mColorbuffers[0] = new RenderbufferAttachment(GL_BACK, colorRenderbuffer);
 
-    Renderbuffer *depthStencilBuffer = new Renderbuffer(0, depthStencil);
+    Renderbuffer *depthStencilBuffer = new Renderbuffer(depthStencil, 0);
 
     // Make a new attachment objects to ensure we do not double-delete
     // See angle issue 686

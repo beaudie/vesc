@@ -28,7 +28,7 @@ TextureStorage::TextureStorage()
 
 void TextureStorage::initializeSerials(unsigned int rtSerialsToReserve, unsigned int rtSerialsLayerStride)
 {
-    mFirstRenderTargetSerial = gl::RenderbufferStorage::issueSerials(rtSerialsToReserve);
+    mFirstRenderTargetSerial = RenderbufferImpl::issueSerials(rtSerialsToReserve);
     mRenderTargetSerialsLayerStride = rtSerialsLayerStride;
 }
 
