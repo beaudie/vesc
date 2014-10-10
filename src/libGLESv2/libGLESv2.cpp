@@ -3859,7 +3859,12 @@ void GL_APIENTRY glRenderbufferStorageMultisampleANGLE(GLenum target, GLsizei sa
             return;
         }
 
-        context->setRenderbufferStorage(width, height, internalformat, samples);
+        gl::Error error = context->setRenderbufferStorage(width, height, internalformat, samples);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
@@ -5804,7 +5809,12 @@ void GL_APIENTRY glRenderbufferStorageMultisample(GLenum target, GLsizei samples
             return;
         }
 
-        context->setRenderbufferStorage(width, height, internalformat, samples);
+        gl::Error error = context->setRenderbufferStorage(width, height, internalformat, samples);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 

@@ -62,6 +62,7 @@ TextureStorage11::TextureStorage11(Renderer *renderer, UINT bindFlags)
     : mBindFlags(bindFlags),
       mTopLevel(0),
       mMipLevels(0),
+      mInternalFormat(GL_NONE),
       mTextureFormat(DXGI_FORMAT_UNKNOWN),
       mShaderResourceFormat(DXGI_FORMAT_UNKNOWN),
       mRenderTargetFormat(DXGI_FORMAT_UNKNOWN),
@@ -538,6 +539,8 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer *renderer, SwapChain11 *swapch
     mTextureHeight = texDesc.Height;
     mTextureDepth = 1;
 
+    mInternalFormat = swapchain->GetBackBufferInternalFormat();
+
     ID3D11ShaderResourceView *srv = swapchain->getRenderTargetShaderResource();
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
     srv->GetDesc(&srvDesc);
@@ -570,6 +573,8 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer *renderer, GLenum internalform
         mRenderTarget[i] = NULL;
         mSwizzleRenderTargets[i] = NULL;
     }
+
+    mInternalFormat = internalformat;
 
     const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalformat);
     mTextureFormat = formatInfo.texFormat;
@@ -785,7 +790,7 @@ gl::Error TextureStorage11_2D::getRenderTarget(const gl::ImageIndex &index, Rend
                 return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal render target view for texture storage, result: 0x%X.", result);
             }
 
-            mRenderTarget[level] = new RenderTarget11(mRenderer, rtv, texture, srv, getLevelWidth(level), getLevelHeight(level), 1);
+            mRenderTarget[level] = new RenderTarget11(rtv, texture, srv, mInternalFormat, getLevelWidth(level), getLevelHeight(level), 1);
 
             // RenderTarget will take ownership of these resources
             SafeRelease(rtv);
@@ -809,7 +814,7 @@ gl::Error TextureStorage11_2D::getRenderTarget(const gl::ImageIndex &index, Rend
                 return gl::Error(GL_OUT_OF_MEMORY,"Failed to create internal depth stencil view for texture storage, result: 0x%X.", result);
             }
 
-            mRenderTarget[level] = new RenderTarget11(mRenderer, dsv, texture, srv, getLevelWidth(level), getLevelHeight(level), 1);
+            mRenderTarget[level] = new RenderTarget11(dsv, texture, srv, mInternalFormat, getLevelWidth(level), getLevelHeight(level), 1);
 
             // RenderTarget will take ownership of these resources
             SafeRelease(dsv);
@@ -931,6 +936,8 @@ TextureStorage11_Cube::TextureStorage11_Cube(Renderer *renderer, GLenum internal
             mRenderTarget[face][level] = NULL;
         }
     }
+
+    mInternalFormat = internalformat;
 
     const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalformat);
     mTextureFormat = formatInfo.texFormat;
@@ -1184,7 +1191,7 @@ gl::Error TextureStorage11_Cube::getRenderTarget(const gl::ImageIndex &index, Re
                 return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal render target view for texture storage, result: 0x%X.", result);
             }
 
-            mRenderTarget[faceIndex][level] = new RenderTarget11(mRenderer, rtv, texture, srv, getLevelWidth(level), getLevelHeight(level), 1);
+            mRenderTarget[faceIndex][level] = new RenderTarget11(rtv, texture, srv, mInternalFormat, getLevelWidth(level), getLevelHeight(level), 1);
 
             // RenderTarget will take ownership of these resources
             SafeRelease(rtv);
@@ -1210,7 +1217,7 @@ gl::Error TextureStorage11_Cube::getRenderTarget(const gl::ImageIndex &index, Re
                 return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal depth stencil view for texture storage, result: 0x%X.", result);
             }
 
-            mRenderTarget[faceIndex][level] = new RenderTarget11(mRenderer, dsv, texture, srv, getLevelWidth(level), getLevelHeight(level), 1);
+            mRenderTarget[faceIndex][level] = new RenderTarget11(dsv, texture, srv, mInternalFormat, getLevelWidth(level), getLevelHeight(level), 1);
 
             // RenderTarget will take ownership of these resources
             SafeRelease(dsv);
@@ -1347,6 +1354,8 @@ TextureStorage11_3D::TextureStorage11_3D(Renderer *renderer, GLenum internalform
         mLevelRenderTargets[i] = NULL;
         mSwizzleRenderTargets[i] = NULL;
     }
+
+    mInternalFormat = internalformat;
 
     const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalformat);
     mTextureFormat = formatInfo.texFormat;
@@ -1589,7 +1598,7 @@ gl::Error TextureStorage11_3D::getRenderTarget(const gl::ImageIndex &index, Rend
                 return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal render target view for texture storage, result: 0x%X.", result);
             }
 
-            mLevelRenderTargets[mipLevel] = new RenderTarget11(mRenderer, rtv, texture, srv, getLevelWidth(mipLevel), getLevelHeight(mipLevel), getLevelDepth(mipLevel));
+            mLevelRenderTargets[mipLevel] = new RenderTarget11(rtv, texture, srv, mInternalFormat, getLevelWidth(mipLevel), getLevelHeight(mipLevel), getLevelDepth(mipLevel));
 
             // RenderTarget will take ownership of these resources
             SafeRelease(rtv);
@@ -1636,7 +1645,7 @@ gl::Error TextureStorage11_3D::getRenderTarget(const gl::ImageIndex &index, Rend
             }
             ASSERT(SUCCEEDED(result));
 
-            mLevelLayerRenderTargets[key] = new RenderTarget11(mRenderer, rtv, texture, srv, getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1);
+            mLevelLayerRenderTargets[key] = new RenderTarget11(rtv, texture, srv, mInternalFormat, getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1);
 
             // RenderTarget will take ownership of these resources
             SafeRelease(rtv);
@@ -1727,6 +1736,8 @@ TextureStorage11_2DArray::TextureStorage11_2DArray(Renderer *renderer, GLenum in
     {
         mSwizzleRenderTargets[level] = NULL;
     }
+
+    mInternalFormat = internalformat;
 
     const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalformat);
     mTextureFormat = formatInfo.texFormat;
@@ -1983,7 +1994,7 @@ gl::Error TextureStorage11_2DArray::getRenderTarget(const gl::ImageIndex &index,
                 return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal render target view for texture storage, result: 0x%X.", result);
             }
 
-            mRenderTargets[key] = new RenderTarget11(mRenderer, rtv, texture, srv, getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1);
+            mRenderTargets[key] = new RenderTarget11(rtv, texture, srv, mInternalFormat, getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1);
 
             // RenderTarget will take ownership of these resources
             SafeRelease(rtv);
