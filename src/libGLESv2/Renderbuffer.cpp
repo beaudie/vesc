@@ -112,12 +112,6 @@ RenderbufferStorage::RenderbufferStorage(rx::RenderTarget *renderTarget)
       mRenderTarget(renderTarget)
 {
     ASSERT(mRenderTarget);
-
-    mWidth = mRenderTarget->getWidth();
-    mHeight = mRenderTarget->getHeight();
-    mInternalFormat = mRenderTarget->getInternalFormat();
-    mActualFormat = mRenderTarget->getActualFormat();
-    mSamples = mRenderTarget->getSamples();
 }
 
 RenderbufferStorage::~RenderbufferStorage()
@@ -132,27 +126,27 @@ rx::RenderTarget *RenderbufferStorage::getRenderTarget()
 
 GLsizei RenderbufferStorage::getWidth() const
 {
-    return mWidth;
+    return mRenderTarget->getWidth();
 }
 
 GLsizei RenderbufferStorage::getHeight() const
 {
-    return mHeight;
+    return mRenderTarget->getHeight();
 }
 
 GLenum RenderbufferStorage::getInternalFormat() const
 {
-    return mInternalFormat;
+    return mRenderTarget->getInternalFormat();
 }
 
 GLenum RenderbufferStorage::getActualFormat() const
 {
-    return mActualFormat;
+    return mRenderTarget->getActualFormat();
 }
 
 GLsizei RenderbufferStorage::getSamples() const
 {
-    return mSamples;
+    return mRenderTarget->getSamples();
 }
 
 unsigned int RenderbufferStorage::getSerial() const
