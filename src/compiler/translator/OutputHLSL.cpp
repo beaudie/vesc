@@ -2292,7 +2292,7 @@ bool OutputHLSL::visitSelection(Visit visit, TIntermSelection *node)
     {
         mUnfoldShortCircuit->traverse(node->getCondition());
 
-        out << "if (";
+        out << "FLATTEN if (";
 
         node->getCondition()->traverse(this);
 
@@ -2372,14 +2372,14 @@ bool OutputHLSL::visitLoop(Visit visit, TIntermLoop *node)
 
     if (node->getType() == ELoopDoWhile)
     {
-        out << "{do\n";
+        out << "{LOOP do\n";
 
         outputLineDirective(node->getLine().first_line);
         out << "{\n";
     }
     else
     {
-        out << "{for(";
+        out << "{LOOP for(";
 
         if (node->getInit())
         {
@@ -2686,7 +2686,7 @@ bool OutputHLSL::handleExcessiveLoop(TIntermLoop *node)
 
                 // for(int index = initial; index < clampedLimit; index += increment)
 
-                out << "for(";
+                out << "LOOP for(";
                 index->traverse(this);
                 out << " = ";
                 out << initial;
