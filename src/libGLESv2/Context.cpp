@@ -176,7 +176,7 @@ Context::~Context()
     mResourceManager->release();
 }
 
-void Context::makeCurrent(egl::Surface *surface)
+Error Context::makeCurrent(egl::Surface *surface)
 {
     if (!mHasBeenCurrent)
     {
@@ -192,14 +192,30 @@ void Context::makeCurrent(egl::Surface *surface)
     // Wrap the existing swapchain resources into GL objects and assign them to the '0' names
     rx::SwapChain *swapchain = surface->getSwapChain();
 
-    Colorbuffer *colorbufferZero = new Colorbuffer(mRenderer, swapchain);
-    DepthStencilbuffer *depthStencilbufferZero = new DepthStencilbuffer(mRenderer, swapchain);
+    rx::RenderTarget *colorRenderTarget = NULL;
+    Error error = mRenderer->createRenderTarget(swapchain, false, &colorRenderTarget);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    rx::RenderTarget *depthStencilRenderTarget = NULL;
+    error = mRenderer->createRenderTarget(swapchain, true, &depthStencilRenderTarget);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    RenderbufferStorage *colorbufferZero = new RenderbufferStorage(colorRenderTarget);
+    RenderbufferStorage *depthStencilbufferZero = new RenderbufferStorage(depthStencilRenderTarget);
     Framebuffer *framebufferZero = new DefaultFramebuffer(mRenderer, colorbufferZero, depthStencilbufferZero);
 
     setFramebufferZero(framebufferZero);
 
     // Store the current client version in the renderer
     mRenderer->setCurrentClientVersion(mClientVersion);
+
+    return Error(GL_NO_ERROR);
 }
 
 // NOTE: this function should not assume that this context is current!
@@ -728,31 +744,21 @@ void Context::setFramebufferZero(Framebuffer *buffer)
     mFramebufferMap[0] = buffer;
 }
 
-void Context::setRenderbufferStorage(GLsizei width, GLsizei height, GLenum internalformat, GLsizei samples)
+Error Context::setRenderbufferStorage(GLsizei width, GLsizei height, GLenum internalformat, GLsizei samples)
 {
     ASSERT(getTextureCaps().get(internalformat).renderable);
 
-    RenderbufferStorage *renderbuffer = NULL;
-
-    const InternalFormat &formatInfo = GetInternalFormatInfo(internalformat);
-    if (formatInfo.depthBits > 0 && formatInfo.stencilBits > 0)
+    rx::RenderTarget *rendertarget = NULL;
+    gl::Error error = mRenderer->createRenderTarget(width, height, internalformat, samples, &rendertarget);
+    if (error.isError())
     {
-        renderbuffer = new gl::DepthStencilbuffer(mRenderer, width, height, samples);
-    }
-    else if (formatInfo.depthBits > 0)
-    {
-        renderbuffer = new gl::Depthbuffer(mRenderer, width, height, samples);
-    }
-    else if (formatInfo.stencilBits > 0)
-    {
-        renderbuffer = new gl::Stencilbuffer(mRenderer, width, height, samples);
-    }
-    else
-    {
-        renderbuffer = new gl::Colorbuffer(mRenderer, width, height, internalformat, samples);
+        return error;
     }
 
+    RenderbufferStorage *renderbuffer = new RenderbufferStorage(rendertarget);
     mState.getCurrentRenderbuffer()->setStorage(renderbuffer);
+
+    return Error(GL_NO_ERROR);
 }
 
 Framebuffer *Context::getFramebuffer(unsigned int handle) const
