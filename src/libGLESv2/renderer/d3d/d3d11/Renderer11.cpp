@@ -36,6 +36,7 @@
 #include "libGLESv2/renderer/d3d/d3d11/PixelTransfer11.h"
 #include "libGLESv2/renderer/d3d/d3d11/VertexArray11.h"
 #include "libGLESv2/renderer/d3d/d3d11/Buffer11.h"
+#include "libGLESv2/renderer/d3d/RenderbufferD3d.h"
 
 #include "libEGL/Display.h"
 
@@ -2663,6 +2664,26 @@ TextureImpl *Renderer11::createTexture(GLenum target)
     }
 
     return NULL;
+}
+
+RenderbufferImpl *Renderer11::createRenderbuffer(SwapChain *swapChain, bool depth)
+{
+    RenderTarget *newRT = createRenderTarget(swapChain, depth);
+    return new RenderbufferD3D(newRT, newRT->getInternalFormat());
+}
+
+RenderbufferImpl *Renderer11::createRenderbuffer(GLsizei width, GLsizei height, GLenum format, GLsizei samples)
+{
+    // If the renderbuffer parameters are queried, the calling function
+    // will expect one of the valid renderbuffer formats for use in
+    // glRenderbufferStorage, but we should create depth and stencil buffers
+    // as DEPTH24_STENCIL8
+    GLenum creationFormat = format;
+    if (format == GL_DEPTH_COMPONENT16 || format == GL_STENCIL_INDEX8)
+    {
+        creationFormat = GL_DEPTH24_STENCIL8_OES;
+    }
+    return new RenderbufferD3D(createRenderTarget(width, height, creationFormat, samples), format);
 }
 
 gl::Error Renderer11::readTextureData(ID3D11Texture2D *texture, unsigned int subResource, const gl::Rectangle &area, GLenum format,
