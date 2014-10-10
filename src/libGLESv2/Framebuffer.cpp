@@ -638,7 +638,7 @@ Error Framebuffer::invalidateSub(GLsizei numAttachments, const GLenum *attachmen
     return Error(GL_NO_ERROR);
 }
 
-DefaultFramebuffer::DefaultFramebuffer(rx::Renderer *renderer, Colorbuffer *colorbuffer, DepthStencilbuffer *depthStencil)
+DefaultFramebuffer::DefaultFramebuffer(rx::Renderer *renderer, RenderbufferStorage *colorbuffer, RenderbufferStorage *depthStencil)
     : Framebuffer(renderer, 0)
 {
     Renderbuffer *colorRenderbuffer = new Renderbuffer(0, colorbuffer);

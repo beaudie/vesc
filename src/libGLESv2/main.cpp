@@ -103,7 +103,11 @@ void makeCurrent(Context *context, egl::Display *display, egl::Surface *surface)
 
     if (context && display && surface)
     {
-        context->makeCurrent(surface);
+        Error error = context->makeCurrent(surface);
+        if (error.isError())
+        {
+            context->recordError(error);
+        }
     }
 }
 

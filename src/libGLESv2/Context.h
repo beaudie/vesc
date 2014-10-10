@@ -72,7 +72,7 @@ class Context
 
     virtual ~Context();
 
-    void makeCurrent(egl::Surface *surface);
+    Error makeCurrent(egl::Surface *surface);
 
     virtual void markContextLost();
     bool isContextLost();
@@ -139,7 +139,7 @@ class Context
 
     void setFramebufferZero(Framebuffer *framebuffer);
 
-    void setRenderbufferStorage(GLsizei width, GLsizei height, GLenum internalformat, GLsizei samples);
+    Error setRenderbufferStorage(GLsizei width, GLsizei height, GLenum internalformat, GLsizei samples);
 
     void setVertexAttribDivisor(GLuint index, GLuint divisor);
 
