@@ -428,11 +428,13 @@ gl::Error Renderer11::generateSwizzle(gl::Texture *texture)
 {
     if (texture)
     {
-        TextureStorage *texStorage = texture->getNativeTexture();
+        TextureD3D *textureD3D = TextureD3D::makeTextureD3D(texture->getImplementation());
+        ASSERT(textureD3D);
+
+        TextureStorage *texStorage = textureD3D->getNativeTexture();
         if (texStorage)
         {
             TextureStorage11 *storage11 = TextureStorage11::makeTextureStorage11(texStorage);
-
             gl::Error error = storage11->generateSwizzles(texture->getSamplerState().swizzleRed,
                                                           texture->getSamplerState().swizzleGreen,
                                                           texture->getSamplerState().swizzleBlue,
@@ -3072,7 +3074,8 @@ void Renderer11::invalidateFBOAttachmentSwizzles(gl::FramebufferAttachment *atta
     ASSERT(attachment->isTexture());
     gl::Texture *texture = attachment->getTexture();
 
-    TextureStorage *texStorage = texture->getNativeTexture();
+    TextureD3D *textureD3D = TextureD3D::makeTextureD3D(texture->getImplementation());
+    TextureStorage *texStorage = textureD3D->getNativeTexture();
     if (texStorage)
     {
         TextureStorage11 *texStorage11 = TextureStorage11::makeTextureStorage11(texStorage);
