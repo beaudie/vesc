@@ -13,6 +13,7 @@
 #include "libGLESv2/Renderbuffer.h"
 #include "libGLESv2/renderer/RenderTarget.h"
 #include "libGLESv2/renderer/Renderer.h"
+#include "libGLESv2/renderer/RenderbufferImpl.h"
 #include "libGLESv2/renderer/d3d/TextureStorage.h"
 
 #include "common/utilities.h"
@@ -187,7 +188,7 @@ GLenum RenderbufferAttachment::getActualFormat() const
 
 GLsizei RenderbufferAttachment::getSamples() const
 {
-    return mRenderbuffer->getStorage()->getSamples();
+    return mRenderbuffer->getImpl()->getSamples();
 }
 
 GLuint RenderbufferAttachment::id() const
