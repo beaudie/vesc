@@ -2346,7 +2346,7 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog, const std::strin
 
     std::string profile = FormatString("%s_%u_%u", profileType, profileMajorVersion, profileMinorVersion);
 
-    UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL0;
+    UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL2;
 
     if (gl::perfActive())
     {

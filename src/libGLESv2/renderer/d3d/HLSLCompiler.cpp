@@ -94,23 +94,35 @@ gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string 
         writeFile(sourcePath.c_str(), sourceText.c_str(), sourceText.size());
     }
 
+    D3D_SHADER_MACRO defaultMacros[] = { { "LOOP", ""}, {"FLATTEN", ""}, {0, 0} };
+    D3D_SHADER_MACRO loopMacros[] = { {"LOOP", "[loop]"}, {"FLATTEN", "[flatten]"}, {0, 0} };
+    const D3D_SHADER_MACRO *macros = loopMacros;
+
     for (size_t i = 0; i < configs.size(); ++i)
     {
         ID3DBlob *errorMessage = NULL;
         ID3DBlob *binary = NULL;
 
-        HRESULT result = mD3DCompileFunc(hlsl.c_str(), hlsl.length(), gl::g_fakepath, NULL, NULL, "main", profile.c_str(),
+        HRESULT result = mD3DCompileFunc(hlsl.c_str(), hlsl.length(), gl::g_fakepath, macros, NULL, "main", profile.c_str(),
                                          configs[i].flags, 0, &binary, &errorMessage);
 
         if (errorMessage)
         {
-            const char *message = (const char*)errorMessage->GetBufferPointer();
+            std::string message = (const char*)errorMessage->GetBufferPointer();
+			SafeRelease(errorMessage);
 
-            infoLog.appendSanitized(message);
+            infoLog.appendSanitized(message.c_str());
             TRACE("\n%s", hlsl);
             TRACE("\n%s", message);
 
-            SafeRelease(errorMessage);
+            if (message.find("X3531") != std::string::npos)   // "can't unroll loops marked with loop attribute"
+            {
+                macros = defaultMacros;   // Disable [loop] and [flatten]
+				
+				// Retry without changing compiler flags
+				i--;
+				continue;
+            }
         }
 
         if (SUCCEEDED(result))
