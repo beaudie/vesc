@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 
-// Fence11.h: Defines the rx::Fence11 class which implements rx::FenceImpl.
+// Fence11.h: Defines the rx::FenceNV11 and rx::FenceSync11 classes which implement rx::FenceNVImpl and rx::FenceSyncImpl.
 
 #ifndef LIBGLESV2_RENDERER_Fence11_H_
 #define LIBGLESV2_RENDERER_Fence11_H_
@@ -15,20 +15,45 @@ namespace rx
 {
 class Renderer11;
 
-class Fence11 : public FenceImpl
+class FenceNV11 : public FenceNVImpl
 {
   public:
-    explicit Fence11(rx::Renderer11 *renderer);
-    virtual ~Fence11();
+    explicit FenceNV11(rx::Renderer11 *renderer);
+    virtual ~FenceNV11();
 
     gl::Error set();
     gl::Error test(bool flushCommandBuffer, GLboolean *outFinished);
+    gl::Error finishFence(GLboolean* outFinished);
 
   private:
-    DISALLOW_COPY_AND_ASSIGN(Fence11);
+    DISALLOW_COPY_AND_ASSIGN(FenceNV11);
+
+    template<class T> friend gl::Error FenceSetHelper(T* fence);
+    template<class T> friend gl::Error FenceTestHelper(T* fence, bool flushCommandBuffer, GLboolean *outFinished);
 
     rx::Renderer11 *mRenderer;
     ID3D11Query *mQuery;
+};
+
+class FenceSync11 : public FenceSyncImpl
+{
+  public:
+    explicit FenceSync11(rx::Renderer11 *renderer);
+    virtual ~FenceSync11();
+
+    gl::Error set();
+    gl::Error test(bool flushCommandBuffer, GLboolean *outFinished);
+    gl::Error clientWait(GLbitfield flags, GLuint64 timeout, GLenum* outResult);
+
+  private:
+    DISALLOW_COPY_AND_ASSIGN(FenceSync11);
+
+    template<class T> friend gl::Error FenceSetHelper(T* fence);
+    template<class T> friend gl::Error FenceTestHelper(T* fence, bool flushCommandBuffer, GLboolean *outFinished);
+
+    rx::Renderer11 *mRenderer;
+    ID3D11Query *mQuery;
+    LONGLONG mCounterFrequency;
 };
 
 }

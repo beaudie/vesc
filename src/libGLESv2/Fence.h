@@ -17,7 +17,8 @@
 namespace rx
 {
 class Renderer;
-class FenceImpl;
+class FenceNVImpl;
+class FenceSyncImpl;
 }
 
 namespace gl
@@ -41,7 +42,7 @@ class FenceNV
   private:
     DISALLOW_COPY_AND_ASSIGN(FenceNV);
 
-    rx::FenceImpl *mFence;
+    rx::FenceNVImpl *mFence;
 
     bool mIsSet;
 
@@ -65,8 +66,7 @@ class FenceSync : public RefCountObject
   private:
     DISALLOW_COPY_AND_ASSIGN(FenceSync);
 
-    rx::FenceImpl *mFence;
-    LONGLONG mCounterFrequency;
+    rx::FenceSyncImpl *mFence;
 
     GLenum mCondition;
 };
