@@ -30,6 +30,26 @@ struct Current
     egl::Display *display;
 };
 
+// TODO(kbr): figure out how these are going to be managed on
+// non-Windows platforms. These routines would need to be exported
+// from ANGLE and called cooperatively when users create and destroy
+// threads -- or the initialization of the TLS index, and allocation
+// of thread-local data, will have to be done lazily. Will have to use
+// destructor function with pthread_create_key on POSIX platforms to
+// clean up thread-local data.
+
+// Call this exactly once at process startup.
+bool CreateThreadLocalIndex();
+
+// Call this exactly once at process shutdown.
+void DestroyThreadLocalIndex();
+
+// Call this upon thread startup.
+Current *AllocateCurrent();
+
+// Call this upon thread shutdown.
+void DeallocateCurrent();
+
 void makeCurrent(Context *context, egl::Display *display, egl::Surface *surface);
 
 Context *getContext();

@@ -11,15 +11,31 @@
 
 #include "common/tls.h"
 
-static TLSIndex currentTLS = TLS_OUT_OF_INDEXES;
+static TLSIndex currentTLS = TLS_INVALID_INDEX;
 
 namespace gl
 {
 
+bool CreateThreadLocalIndex()
+{
+    currentTLS = CreateTLSIndex();
+    if (currentTLS == TLS_INVALID_INDEX)
+    {
+        return false;
+    }
+    return true;
+}
+
+void DestroyThreadLocalIndex()
+{
+    DestroyTLSIndex(currentTLS);
+    currentTLS = TLS_INVALID_INDEX;
+}
+
 Current *AllocateCurrent()
 {
-    ASSERT(currentTLS != TLS_OUT_OF_INDEXES);
-    if (currentTLS == TLS_OUT_OF_INDEXES)
+    ASSERT(currentTLS != TLS_INVALID_INDEX);
+    if (currentTLS == TLS_INVALID_INDEX)
     {
         return NULL;
     }
@@ -46,15 +62,14 @@ void DeallocateCurrent()
 
 }
 
+#ifdef ANGLE_PLATFORM_WINDOWS
 extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved)
 {
     switch (reason)
     {
       case DLL_PROCESS_ATTACH:
         {
-            currentTLS = CreateTLSIndex();
-            if (currentTLS == TLS_OUT_OF_INDEXES)
-            {
+            if (!gl::CreateThreadLocalIndex()) {
                 return FALSE;
             }
         }
@@ -72,7 +87,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved
       case DLL_PROCESS_DETACH:
         {
             gl::DeallocateCurrent();
-            DestroyTLSIndex(currentTLS);
+            gl::DestroyThreadLocalIndex();
         }
         break;
       default:
@@ -81,6 +96,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved
 
     return TRUE;
 }
+#endif
 
 namespace gl
 {
@@ -168,4 +184,3 @@ void error(GLenum errorCode)
 }
 
 }
-
