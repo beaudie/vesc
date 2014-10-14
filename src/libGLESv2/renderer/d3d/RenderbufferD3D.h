@@ -26,6 +26,7 @@ public:
     static RenderbufferD3D *makeRenderbufferD3D(RenderbufferImpl *texture);
 
     virtual rx::RenderTarget *getRenderTarget();
+    virtual void invalidate(GLint x, GLint y, GLsizei width, GLsizei height);
 
 private:
     DISALLOW_COPY_AND_ASSIGN(RenderbufferD3D);

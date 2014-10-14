@@ -71,6 +71,8 @@ class FramebufferAttachment
     virtual const ImageIndex *getTextureImageIndex() const = 0;
     virtual Renderbuffer *getRenderbuffer() = 0;
 
+    virtual void invalidate(GLint x, GLint y, GLsizei width, GLsizei height) = 0;
+
   private:
     DISALLOW_COPY_AND_ASSIGN(FramebufferAttachment);
 
@@ -98,6 +100,8 @@ class TextureAttachment : public FramebufferAttachment
     virtual Texture *getTexture();
     virtual const ImageIndex *getTextureImageIndex() const;
     virtual Renderbuffer *getRenderbuffer();
+
+    virtual void invalidate(GLint x, GLint y, GLsizei width, GLsizei height);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureAttachment);
@@ -127,6 +131,8 @@ class RenderbufferAttachment : public FramebufferAttachment
     virtual Texture *getTexture();
     virtual const ImageIndex *getTextureImageIndex() const;
     virtual Renderbuffer *getRenderbuffer();
+
+    virtual void invalidate(GLint x, GLint y, GLsizei width, GLsizei height);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(RenderbufferAttachment);

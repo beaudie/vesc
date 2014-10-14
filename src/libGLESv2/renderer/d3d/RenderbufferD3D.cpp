@@ -47,4 +47,10 @@ RenderTarget *RenderbufferD3D::getRenderTarget()
     return mRenderTarget;
 }
 
+void RenderbufferD3D::invalidate(GLint x, GLint y, GLsizei width, GLsizei height)
+{
+    ASSERT(mRenderTarget);
+    mRenderTarget->invalidate(x, y, width, height);
+}
+
 }

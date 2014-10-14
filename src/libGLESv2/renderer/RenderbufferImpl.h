@@ -25,6 +25,7 @@ public:
     virtual ~RenderbufferImpl() = 0;
 
     virtual RenderTarget *getRenderTarget();
+    virtual void invalidate(GLint x, GLint y, GLsizei width, GLsizei height) = 0;
 
     virtual GLsizei getWidth() const;
     virtual GLsizei getHeight() const;

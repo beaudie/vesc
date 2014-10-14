@@ -152,6 +152,11 @@ Renderbuffer *TextureAttachment::getRenderbuffer()
     return NULL;
 }
 
+void TextureAttachment::invalidate(GLint x, GLint y, GLsizei width, GLsizei height)
+{
+    mTexture->getImplementation()->invalidate(mIndex, x, y, width, height);
+}
+
 ////// RenderbufferAttachment Implementation //////
 
 RenderbufferAttachment::RenderbufferAttachment(GLenum binding, Renderbuffer *renderbuffer)
@@ -226,6 +231,11 @@ const ImageIndex *RenderbufferAttachment::getTextureImageIndex() const
 Renderbuffer *RenderbufferAttachment::getRenderbuffer()
 {
     return mRenderbuffer.get();
+}
+
+void RenderbufferAttachment::invalidate(GLint x, GLint y, GLsizei width, GLsizei height)
+{
+    mRenderbuffer->getImpl()->invalidate(x, y, width, height);
 }
 
 }

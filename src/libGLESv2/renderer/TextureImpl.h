@@ -45,6 +45,8 @@ class TextureImpl
     // higher level code should not rely on it.
     virtual TextureStorage *getNativeTexture() = 0;
 
+    virtual void invalidate(const gl::ImageIndex &index, GLint x, GLint y, GLsizei width, GLsizei height) = 0;
+
     // Deprecated in favour of the ImageIndex method
     virtual Image *getImage(int level, int layer) const = 0;
     virtual Image *getImage(const gl::ImageIndex &index) const = 0;
