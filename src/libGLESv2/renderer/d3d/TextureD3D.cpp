@@ -63,6 +63,11 @@ TextureStorage *TextureD3D::getNativeTexture()
     return mTexStorage;
 }
 
+void TextureD3D::invalidate(const gl::ImageIndex &index, GLint x, GLint y, GLsizei width, GLsizei height)
+{
+    getRenderTarget(index)->invalidate(x, y, width, height);
+}
+
 GLint TextureD3D::getBaseLevelWidth() const
 {
     const Image *baseImage = getBaseLevelImage();

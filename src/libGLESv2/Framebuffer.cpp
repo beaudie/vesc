@@ -625,11 +625,7 @@ void Framebuffer::invalidateSub(const Caps &caps, GLsizei numAttachments, const 
 
         if (attachment)
         {
-            rx::RenderTarget *renderTarget = rx::GetAttachmentRenderTarget(attachment);
-            if (renderTarget)
-            {
-                renderTarget->invalidate(x, y, width, height);
-            }
+            attachment->invalidate(x, y, width, height);
         }
     }
 }

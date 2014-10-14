@@ -29,6 +29,8 @@ public:
     virtual unsigned int getSerial() const;
     static unsigned int issueSerials(unsigned int count);
 
+    virtual void invalidate(GLint x, GLint y, GLsizei width, GLsizei height);
+
 private:
     DISALLOW_COPY_AND_ASSIGN(RenderbufferD3D);
 

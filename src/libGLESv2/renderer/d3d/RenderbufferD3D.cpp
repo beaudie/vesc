@@ -61,4 +61,10 @@ unsigned int RenderbufferD3D::issueSerials(unsigned int count)
     return firstSerial;
 }
 
+void RenderbufferD3D::invalidate(GLint x, GLint y, GLsizei width, GLsizei height)
+{
+    ASSERT(mRenderTarget);
+    mRenderTarget->invalidate(x, y, width, height);
+}
+
 }
