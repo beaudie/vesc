@@ -47,7 +47,7 @@
 #   include <windows.h>
 #   include <intrin.h>
 
-#   if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_PERF)
+#   if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_DEBUG_ANNOTATIONS)
 #       include <d3d9.h>
 #       include <d3dcompiler.h>
 #   endif
