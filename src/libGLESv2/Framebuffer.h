@@ -27,6 +27,9 @@ class RenderbufferImpl;
 namespace gl
 {
 class FramebufferAttachment;
+class Texture;
+class Renderbuffer;
+struct ImageIndex;
 struct Caps;
 
 typedef std::vector<FramebufferAttachment *> ColorbufferInfo;
@@ -40,10 +43,9 @@ class Framebuffer
 
     GLuint id() const { return mId; }
 
-    void setColorbuffer(unsigned int colorAttachment, GLenum type, GLuint colorbuffer, GLint level, GLint layer);
-    void setDepthbuffer(GLenum type, GLuint depthbuffer, GLint level, GLint layer);
-    void setStencilbuffer(GLenum type, GLuint stencilbuffer, GLint level, GLint layer);
-    void setDepthStencilBuffer(GLenum type, GLuint depthStencilBuffer, GLint level, GLint layer);
+    void setTextureAttachment(GLenum attachment, Texture *texture, const ImageIndex &imageIndex);
+    void setRenderbufferAttachment(GLenum attachment, Renderbuffer *renderbuffer);
+    void setNULLAttachment(GLenum attachment);
 
     void detachTexture(GLuint texture);
     void detachRenderbuffer(GLuint renderbuffer);
@@ -94,7 +96,7 @@ class Framebuffer
   private:
     DISALLOW_COPY_AND_ASSIGN(Framebuffer);
 
-    FramebufferAttachment *createAttachment(GLenum binding, GLenum type, GLuint handle, GLint level, GLint layer) const;
+    void setAttachment(GLenum attachment, FramebufferAttachment *attachmentObj);
 };
 
 class DefaultFramebuffer : public Framebuffer

@@ -1593,28 +1593,14 @@ void GL_APIENTRY glFramebufferRenderbuffer(GLenum target, GLenum attachment, GLe
         gl::Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
         ASSERT(framebuffer);
 
-        if (attachment >= GL_COLOR_ATTACHMENT0_EXT && attachment <= GL_COLOR_ATTACHMENT15_EXT)
+        gl::Renderbuffer *renderbufferObject = context->getRenderbuffer(renderbuffer);
+        if (renderbufferObject)
         {
-            unsigned int colorAttachment = (attachment - GL_COLOR_ATTACHMENT0_EXT);
-            framebuffer->setColorbuffer(colorAttachment, GL_RENDERBUFFER, renderbuffer, 0, 0);
+            framebuffer->setRenderbufferAttachment(attachment, renderbufferObject);
         }
         else
         {
-            switch (attachment)
-            {
-              case GL_DEPTH_ATTACHMENT:
-                framebuffer->setDepthbuffer(GL_RENDERBUFFER, renderbuffer, 0, 0);
-                break;
-              case GL_STENCIL_ATTACHMENT:
-                framebuffer->setStencilbuffer(GL_RENDERBUFFER, renderbuffer, 0, 0);
-                break;
-              case GL_DEPTH_STENCIL_ATTACHMENT:
-                framebuffer->setDepthStencilBuffer(GL_RENDERBUFFER, renderbuffer, 0, 0);
-                break;
-              default:
-                UNREACHABLE();
-                break;
-            }
+            framebuffer->setNULLAttachment(attachment);
         }
     }
 }
@@ -1632,26 +1618,18 @@ void GL_APIENTRY glFramebufferTexture2D(GLenum target, GLenum attachment, GLenum
             return;
         }
 
-        if (texture == 0)
-        {
-            textarget = GL_NONE;
-        }
-
         gl::Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
+        ASSERT(framebuffer);
 
-        if (attachment >= GL_COLOR_ATTACHMENT0_EXT && attachment <= GL_COLOR_ATTACHMENT15_EXT)
+        gl::Texture *textureObj = context->getTexture(texture);
+        if (textureObj)
         {
-            const unsigned int colorAttachment = (attachment - GL_COLOR_ATTACHMENT0_EXT);
-            framebuffer->setColorbuffer(colorAttachment, textarget, texture, level, 0);
+            gl::ImageIndex index(textarget, level, gl::ImageIndex::ENTIRE_LEVEL);
+            framebuffer->setTextureAttachment(attachment, textureObj, index);
         }
         else
         {
-            switch (attachment)
-            {
-              case GL_DEPTH_ATTACHMENT:         framebuffer->setDepthbuffer(textarget, texture, level, 0);        break;
-              case GL_STENCIL_ATTACHMENT:       framebuffer->setStencilbuffer(textarget, texture, level, 0);      break;
-              case GL_DEPTH_STENCIL_ATTACHMENT: framebuffer->setDepthStencilBuffer(textarget, texture, level, 0); break;
-            }
+            framebuffer->setNULLAttachment(attachment);
         }
     }
 }
@@ -5845,21 +5823,14 @@ void GL_APIENTRY glFramebufferTextureLayer(GLenum target, GLenum attachment, GLu
         ASSERT(framebuffer);
 
         gl::Texture *textureObject = context->getTexture(texture);
-        GLenum textarget = textureObject ? textureObject->getTarget() : GL_NONE;
-
-        if (attachment >= GL_COLOR_ATTACHMENT0_EXT && attachment <= GL_COLOR_ATTACHMENT15_EXT)
+        if (textureObject)
         {
-            const unsigned int colorAttachment = (attachment - GL_COLOR_ATTACHMENT0_EXT);
-            framebuffer->setColorbuffer(colorAttachment, textarget, texture, level, layer);
+            gl::ImageIndex index(textureObject->getTarget(), level, layer);
+            framebuffer->setTextureAttachment(attachment, textureObject, index);
         }
         else
         {
-            switch (attachment)
-            {
-              case GL_DEPTH_ATTACHMENT:         framebuffer->setDepthbuffer(textarget, texture, level, layer);        break;
-              case GL_STENCIL_ATTACHMENT:       framebuffer->setStencilbuffer(textarget, texture, level, layer);      break;
-              case GL_DEPTH_STENCIL_ATTACHMENT: framebuffer->setDepthStencilBuffer(textarget, texture, level, layer); break;
-            }
+            framebuffer->setNULLAttachment(attachment);
         }
     }
 }
