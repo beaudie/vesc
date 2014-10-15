@@ -224,7 +224,6 @@ typedef khronos_uint64_t (*ShHashFunction64)(const char*, size_t);
 //
 // Implementation dependent built-in resources (constants and extensions).
 // The names for these resources has been obtained by stripping gl_/GL_.
-//
 typedef struct
 {
     // Constants.
@@ -280,6 +279,8 @@ typedef struct
 
 //
 // Initialize built-in resources with minimum expected values.
+// Parameters:
+// resources: The object to initialize. Will be comparable with memcmp.
 //
 COMPILER_EXPORT void ShInitBuiltInResources(ShBuiltInResources* resources);
 
