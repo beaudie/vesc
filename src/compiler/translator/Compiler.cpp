@@ -508,7 +508,8 @@ void TCompiler::collectVariables(TIntermNode* root)
                                  &uniforms,
                                  &varyings,
                                  &interfaceBlocks,
-                                 hashFunction);
+                                 hashFunction,
+                                 symbolTable);
     root->traverse(&collect);
 
     // For backwards compatiblity with ShGetVariableInfo, expand struct
