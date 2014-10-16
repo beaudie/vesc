@@ -54,11 +54,14 @@ void TDirectiveHandler::handlePragma(const pp::SourceLocation& loc,
     static const std::string kOn("on");
     static const std::string kOff("off");
 
+    assert(false);
+
     bool invalidValue = false;
     if (name == kSTDGL)
     {
-        // The STDGL pragma is used to reserve pragmas for use by future
-        // revisions of GLSL. Ignore it.
+        static const std::string kInvariantAll("invariant(all)");
+        if (value == kInvariantAll)
+            mPragma.stdgl.invariantAll = true;
         return;
     }
     else if (name == kOptimize)
@@ -80,9 +83,11 @@ void TDirectiveHandler::handlePragma(const pp::SourceLocation& loc,
     }
 
     if (invalidValue)
-      mDiagnostics.writeInfo(pp::Diagnostics::PP_ERROR, loc,
-                             "invalid pragma value", value,
-                             "'on' or 'off' expected");
+    {
+        mDiagnostics.writeInfo(pp::Diagnostics::PP_ERROR, loc,
+                               "invalid pragma value", value,
+                               "'on' or 'off' expected");
+    }
 }
 
 void TDirectiveHandler::handleExtension(const pp::SourceLocation& loc,
