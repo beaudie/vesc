@@ -1364,11 +1364,18 @@ TIntermAggregate* TParseContext::parseInvariantDeclaration(const TSourceLoc &inv
     {
         error(identifierLoc, "undeclared identifier declared as invariant", identifier->c_str());
         recover();
-
         return NULL;
     }
     else
     {
+        const TString kGlFrontFacing("gl_FrontFacing");
+        if (*identifier == kGlFrontFacing)
+	{
+            error(identifierLoc, "identifier should not be declared as invariant", identifier->c_str());
+            recover();
+            return NULL;
+        }
+        symbolTable.addInvariantVarying(*identifier);
         const TVariable *variable = getNamedVariable(identifierLoc, identifier, symbol);
         ASSERT(variable);
         const TType &type = variable->getType();

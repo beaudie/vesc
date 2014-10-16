@@ -53,6 +53,34 @@ TEST_F(PragmaTest, NameValue)
     preprocess(str, expected);
 }
 
+TEST_F(PragmaTest, STDGL)
+{
+    const char* str = "#pragma STDGL\n";
+    const char* expected = "\n";
+
+    using testing::_;
+    EXPECT_CALL(mDirectiveHandler,
+                handlePragma(pp::SourceLocation(0, 1), "STDGL", ""));
+    // No error or warning.
+    EXPECT_CALL(mDiagnostics, print(_, _, _)).Times(0);
+
+    preprocess(str, expected);
+}
+
+TEST_F(PragmaTest, STDGLInvariantAll)
+{
+    const char* str = "#pragma STDGL invariant(all)\n";
+    const char* expected = "\n";
+
+    using testing::_;
+    EXPECT_CALL(mDirectiveHandler,
+                handlePragma(pp::SourceLocation(0, 1), "STDGL", "invariant(all)"));
+    // No error or warning.
+    EXPECT_CALL(mDiagnostics, print(_, _, _)).Times(0);
+
+    preprocess(str, expected);
+}
+
 TEST_F(PragmaTest, Comments)
 {
     const char* str = "/*foo*/"
