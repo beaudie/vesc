@@ -592,9 +592,10 @@ void DirectiveParser::parsePragma(Token *token)
     int state = PRAGMA_NAME;
 
     mTokenizer->lex(token);
+    bool stdgl = token->text == "STDGL";
     while ((token->type != '\n') && (token->type != Token::LAST))
     {
-        switch(state++)
+        switch(state)
         {
           case PRAGMA_NAME:
             name = token->text;
@@ -604,8 +605,10 @@ void DirectiveParser::parsePragma(Token *token)
             valid = valid && (token->type == '(');
             break;
           case PRAGMA_VALUE:
-            value = token->text;
-            valid = valid && (token->type == Token::IDENTIFIER);
+            // TODO(zmo): here we may lose whitespaces, etc for STDGL.
+            value += token->text;
+            if (!stdgl)
+                valid = valid && (token->type == Token::IDENTIFIER);
             break;
           case RIGHT_PAREN:
             valid = valid && (token->type == ')');
@@ -614,12 +617,24 @@ void DirectiveParser::parsePragma(Token *token)
             valid = false;
             break;
         }
+        if (stdgl)
+        {
+            if (state == PRAGMA_NAME)
+                state = PRAGMA_VALUE;
+        }
+        else
+        {
+            ++state;
+        }
         mTokenizer->lex(token);
     }
 
-    valid = valid && ((state == PRAGMA_NAME) ||     // Empty pragma.
-                      (state == LEFT_PAREN) ||      // Without value.
-                      (state == RIGHT_PAREN + 1));  // With value.
+    if (!stdgl)
+    {
+        valid = valid && ((state == PRAGMA_NAME) ||     // Empty pragma.
+                          (state == LEFT_PAREN) ||      // Without value.
+                          (state == RIGHT_PAREN + 1));  // With value.
+    }
     if (!valid)
     {
         mDiagnostics->report(Diagnostics::PP_UNRECOGNIZED_PRAGMA,
