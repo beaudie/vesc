@@ -5,6 +5,7 @@
 //
 
 #include "angle_gl.h"
+#include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/VariableInfo.h"
 #include "compiler/translator/util.h"
 #include "common/utilities.h"
@@ -131,7 +132,8 @@ CollectVariables::CollectVariables(std::vector<sh::Attribute> *attribs,
                                    std::vector<sh::Uniform> *uniforms,
                                    std::vector<sh::Varying> *varyings,
                                    std::vector<sh::InterfaceBlock> *interfaceBlocks,
-                                   ShHashFunction64 hashFunction)
+                                   ShHashFunction64 hashFunction,
+                                   const TSymbolTable &symbolTable)
     : mAttribs(attribs),
       mOutputVariables(outputVariables),
       mUniforms(uniforms),
@@ -140,7 +142,8 @@ CollectVariables::CollectVariables(std::vector<sh::Attribute> *attribs,
       mPointCoordAdded(false),
       mFrontFacingAdded(false),
       mFragCoordAdded(false),
-      mHashFunction(hashFunction)
+      mHashFunction(hashFunction),
+      mSymbolTable(symbolTable)
 {
 }
 
@@ -200,12 +203,14 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
             if (!mFragCoordAdded)
             {
                 Varying info;
-                info.name = "gl_FragCoord";
-                info.mappedName = "gl_FragCoord";
+                const char kName[] = "gl_FragCoord";
+                info.name = kName;
+                info.mappedName = kName;
                 info.type = GL_FLOAT_VEC4;
                 info.arraySize = 0;
                 info.precision = GL_MEDIUM_FLOAT;  // Use mediump as it doesn't really matter.
                 info.staticUse = true;
+                info.isInvariant = mSymbolTable.isVaryingInvariant(kName);
                 mVaryings->push_back(info);
                 mFragCoordAdded = true;
             }
@@ -214,12 +219,14 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
             if (!mFrontFacingAdded)
             {
                 Varying info;
-                info.name = "gl_FrontFacing";
-                info.mappedName = "gl_FrontFacing";
+                const char kName[] = "gl_FrontFacing";
+                info.name = kName;
+                info.mappedName = kName;
                 info.type = GL_BOOL;
                 info.arraySize = 0;
                 info.precision = GL_NONE;
                 info.staticUse = true;
+                info.isInvariant = mSymbolTable.isVaryingInvariant(kName);
                 mVaryings->push_back(info);
                 mFrontFacingAdded = true;
             }
@@ -228,12 +235,14 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
             if (!mPointCoordAdded)
             {
                 Varying info;
-                info.name = "gl_PointCoord";
-                info.mappedName = "gl_PointCoord";
+                const char kName[] = "gl_PointCoord";
+                info.name = kName;
+                info.mappedName = kName;
                 info.type = GL_FLOAT_VEC2;
                 info.arraySize = 0;
                 info.precision = GL_MEDIUM_FLOAT;  // Use mediump as it doesn't really matter.
                 info.staticUse = true;
+                info.isInvariant = mSymbolTable.isVaryingInvariant(kName);
                 mVaryings->push_back(info);
                 mPointCoordAdded = true;
             }
@@ -251,8 +260,10 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
 class NameHashingTraverser : public GetVariableTraverser
 {
   public:
-    NameHashingTraverser(ShHashFunction64 hashFunction)
-        : mHashFunction(hashFunction)
+    NameHashingTraverser(ShHashFunction64 hashFunction,
+                         const TSymbolTable &symbolTable)
+        : GetVariableTraverser(symbolTable),
+          mHashFunction(hashFunction)
     {}
 
   private:
@@ -312,7 +323,7 @@ void CollectVariables::visitVariable(const TIntermSymbol *variable,
         const TString &fullFieldName = InterfaceBlockFieldName(*blockType, field);
         const TType &fieldType = *field.type();
 
-        GetVariableTraverser traverser;
+        GetVariableTraverser traverser(mSymbolTable);
         traverser.traverse(fieldType, fullFieldName, &interfaceBlock.fields);
 
         interfaceBlock.fields.back().isRowMajorLayout = (fieldType.getLayoutQualifier().matrixPacking == EmpRowMajor);
@@ -325,7 +336,7 @@ template <typename VarT>
 void CollectVariables::visitVariable(const TIntermSymbol *variable,
                                      std::vector<VarT> *infoList) const
 {
-    NameHashingTraverser traverser(mHashFunction);
+    NameHashingTraverser traverser(mHashFunction, mSymbolTable);
     traverser.traverse(variable->getType(), variable->getSymbol(), infoList);
 }
 
