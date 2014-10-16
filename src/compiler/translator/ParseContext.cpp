@@ -1369,6 +1369,7 @@ TIntermAggregate* TParseContext::parseInvariantDeclaration(const TSourceLoc &inv
     }
     else
     {
+        symbolTable.addInvariantVarying(*identifier);
         const TVariable *variable = getNamedVariable(identifierLoc, identifier, symbol);
         ASSERT(variable);
         const TType &type = variable->getType();
