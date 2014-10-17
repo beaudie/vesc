@@ -14,6 +14,7 @@
 //            http://www.opengles-book.com
 
 #include "SampleApplication.h"
+#include "Font.h"
 #include "shader_utils.h"
 #include "texture_utils.h"
 
@@ -68,6 +69,16 @@ class SimpleTexture2DSample : public SampleApplication
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
+        if (!mFontRenderer.initialize())
+        {
+            return false;
+        }
+
+        if (!LoadTTFFontFromFile("d:/temp/arial.ttf", &mFont))
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -79,15 +90,19 @@ class SimpleTexture2DSample : public SampleApplication
 
     virtual void draw()
     {
+        Vector2 size;
+        std::vector<Glyph> glyphs;
+        mFont.prepareText("The quick brown fox\njumps over the\nlazy dog", 72, &size, &glyphs);
+
         GLfloat vertices[] =
         {
-            -0.5f,  0.5f, 0.0f,  // Position 0
+            -0.5f, -0.5f, 0.0f,  // Position 0
              0.0f,  0.0f,        // TexCoord 0
-            -0.5f, -0.5f, 0.0f,  // Position 1
+            -0.5f,  0.5f, 0.0f,  // Position 1
              0.0f,  1.0f,        // TexCoord 1
-             0.5f, -0.5f, 0.0f,  // Position 2
+             0.5f,  0.5f, 0.0f,  // Position 2
              1.0f,  1.0f,        // TexCoord 2
-             0.5f,  0.5f, 0.0f,  // Position 3
+             0.5f, -0.5f, 0.0f,  // Position 3
              1.0f,  0.0f         // TexCoord 3
         };
         GLushort indices[] = { 0, 1, 2, 0, 2, 3 };
@@ -108,7 +123,6 @@ class SimpleTexture2DSample : public SampleApplication
 
         glEnableVertexAttribArray(mPositionLoc);
         glEnableVertexAttribArray(mTexCoordLoc);
-
         // Bind the texture
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, mTexture);
@@ -117,6 +131,8 @@ class SimpleTexture2DSample : public SampleApplication
         glUniform1i(mSamplerLoc, 0);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
+
+        mFontRenderer.renderText(glyphs, Vector2(0, getWindow()->getHeight() * 0.5f), Vector4(1, 1, 1, 1));
     }
 
   private:
@@ -132,6 +148,9 @@ class SimpleTexture2DSample : public SampleApplication
 
     // Texture handle
     GLuint mTexture;
+
+    Font mFont;
+    FontRenderer mFontRenderer;
 };
 
 int main(int argc, char **argv)

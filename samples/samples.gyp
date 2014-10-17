@@ -55,6 +55,7 @@
                         '../src/angle.gyp:libEGL',
                         '../src/angle.gyp:libGLESv2',
                         '../util/util.gyp:angle_util',
+                        'third_party/stb/stb.gyp:stb',
                     ],
                     'include_dirs':
                     [
@@ -193,6 +194,21 @@
                     'dependencies': [ 'sample_util' ],
                     'includes': [ '../build/common_defines.gypi', ],
                     'sources': [ '<!@(python <(angle_path)/enumerate_files.py angle/post_sub_buffer -types *.cpp *.h)' ],
+                },
+
+                {
+                    'target_name': 'simple_text',
+                    'type': 'executable',
+                    'dependencies': [ 'sample_util' ],
+                    'includes': [ '../build/common_defines.gypi', ],
+                    'sources': [ '<!@(python <(angle_path)/enumerate_files.py angle/simple_text -types *.cpp *.h *.ttf)' ],
+                    'copies':
+                    [
+                        {
+                            'destination': '<(PRODUCT_DIR)',
+                            'files': [ '<!@(python <(angle_path)/enumerate_files.py angle/simple_text -types *.ttf)' ],
+                        }
+                    ]
                 },
             ],
         }

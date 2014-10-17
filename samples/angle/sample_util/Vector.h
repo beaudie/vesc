@@ -27,6 +27,9 @@ struct Vector2
     static Vector2 normalize(const Vector2 &vec);
 };
 
+Vector2 operator+(const Vector2 &a, const Vector2 &b);
+Vector2 operator*(const Vector2 &a, float b);
+
 struct Vector3
 {
     union
