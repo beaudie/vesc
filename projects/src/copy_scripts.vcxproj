@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{63FB0B97-D1D9-5158-8E85-7F5B1E403817}</ProjectGuid>
+    <ProjectGuid>{D4FD3C6F-CED9-0BCD-DDA0-6A925E944FB1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>copy_scripts</RootNamespace>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros"/>
   <PropertyGroup>
-    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\..\third_party\python_26\</ExecutablePath>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\..\src\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\..\src\..\third_party\python_26\</ExecutablePath>
     <OutDir>$(SolutionDir)$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
@@ -191,13 +191,13 @@
     <CustomBuild Include="..\..\src\commit_id.py">
       <FileType>Document</FileType>
       <Command>call mkdir &quot;$(OutDir)obj\global_intermediate\angle&quot; 2&gt;nul &amp; set ERRORLEVEL=0 &amp; copy /Y &quot;..\..\src\commit_id.py&quot; &quot;$(OutDir)obj\global_intermediate\angle\commit_id.py&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%</Command>
-      <Message>Copying commit_id.py to $(OutDir)obj/global_intermediate/angle\commit_id.py</Message>
+      <Message>Copying commit_id.py to $(OutDir)obj/global_intermediate/angle/commit_id.py</Message>
       <Outputs>$(OutDir)obj\global_intermediate\angle\commit_id.py</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\src\copy_compiler_dll.bat">
       <FileType>Document</FileType>
       <Command>call mkdir &quot;$(OutDir)obj\global_intermediate\angle&quot; 2&gt;nul &amp; set ERRORLEVEL=0 &amp; copy /Y &quot;..\..\src\copy_compiler_dll.bat&quot; &quot;$(OutDir)obj\global_intermediate\angle\copy_compiler_dll.bat&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%</Command>
-      <Message>Copying copy_compiler_dll.bat to $(OutDir)obj/global_intermediate/angle\copy_compiler_dll.bat</Message>
+      <Message>Copying copy_compiler_dll.bat to $(OutDir)obj/global_intermediate/angle/copy_compiler_dll.bat</Message>
       <Outputs>$(OutDir)obj\global_intermediate\angle\copy_compiler_dll.bat</Outputs>
     </CustomBuild>
   </ItemGroup>
