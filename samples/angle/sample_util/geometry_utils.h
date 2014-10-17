@@ -7,10 +7,12 @@
 #ifndef SAMPLE_UTIL_GEOMETRY_UTILS_H
 #define SAMPLE_UTIL_GEOMETRY_UTILS_H
 
-#include <GLES2/gl2.h>
-
+#include "Rectangle.h"
 #include "Vector.h"
+
 #include <vector>
+
+#include <GLES2/gl2.h>
 
 struct SphereGeometry
 {
@@ -30,5 +32,20 @@ struct CubeGeometry
 };
 
 void GenerateCubeGeometry(float radius, CubeGeometry *result);
+
+class RectanglePacker
+{
+  public:
+    RectanglePacker(const Vector2 &size);
+    RectanglePacker(const RectanglePacker &other);
+
+    bool insert(const Vector2 &requiredSize, Vector2 *outPosition);
+
+  private:
+    Vector2 mSize;
+
+    typedef std::vector<Vector2> heightVector;
+    heightVector mHeights;
+};
 
 #endif // SAMPLE_UTIL_GEOMETRY_UTILS_H

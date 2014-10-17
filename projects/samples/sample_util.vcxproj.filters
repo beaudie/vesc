@@ -73,12 +73,48 @@
     <Filter Include="angle\sample_util">
       <UniqueIdentifier>{60D21765-6E5A-8668-B584-931D7874AF54}</UniqueIdentifier>
     </Filter>
+    <Filter Include="angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="angle\sample_util">
+      <UniqueIdentifier>{60D21765-6E5A-8668-B584-931D7874AF54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="angle\sample_util">
+      <UniqueIdentifier>{60D21765-6E5A-8668-B584-931D7874AF54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="angle\sample_util">
+      <UniqueIdentifier>{60D21765-6E5A-8668-B584-931D7874AF54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="angle">
+      <UniqueIdentifier>{2039F76D-4C9A-B8A0-444A-4766C6F6104A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="angle\sample_util">
+      <UniqueIdentifier>{60D21765-6E5A-8668-B584-931D7874AF54}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\samples\angle\sample_util\Font.cpp">
+      <Filter>angle\sample_util</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\samples\angle\sample_util\Font.h">
+      <Filter>angle\sample_util</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\samples\angle\sample_util\Matrix.cpp">
       <Filter>angle\sample_util</Filter>
     </ClCompile>
     <ClInclude Include="..\..\samples\angle\sample_util\Matrix.h">
+      <Filter>angle\sample_util</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\samples\angle\sample_util\Rectangle.cpp">
+      <Filter>angle\sample_util</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\samples\angle\sample_util\Rectangle.h">
       <Filter>angle\sample_util</Filter>
     </ClInclude>
     <ClCompile Include="..\..\samples\angle\sample_util\SampleApplication.cpp">

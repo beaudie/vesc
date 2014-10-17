@@ -8,6 +8,7 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <algorithm>
 
 void CreateSphereGeometry(size_t sliceCount, float radius, SphereGeometry *result)
 {
@@ -142,4 +143,83 @@ void GenerateCubeGeometry(float radius, CubeGeometry *result)
     result->indices[27] = 16; result->indices[28] = 18; result->indices[29] = 19;
     result->indices[30] = 20; result->indices[31] = 23; result->indices[32] = 22;
     result->indices[33] = 20; result->indices[34] = 22; result->indices[35] = 21;
+}
+
+RectanglePacker::RectanglePacker(const Vector2 &size)
+    : mSize(size)
+{
+    mHeights.push_back(Vector2(0, 0));
+    mHeights.push_back(mSize);
+}
+
+RectanglePacker::RectanglePacker(const RectanglePacker &other)
+    : mSize(other.mSize),
+      mHeights(other.mHeights)
+{
+}
+
+bool RectanglePacker::insert(const Vector2 &requiredSize, Vector2 *outPosition)
+{
+    std::pair<int, int> bestRange(-1, -1);
+    float minHeight = mSize.y;
+    float minScore = std::numeric_limits<float>::max();
+
+    const int numHeights = static_cast<int>(mHeights.size());
+    for (int i = 0; i < numHeights; i++)
+    {
+        float maxHeight = mHeights[i].y;
+        for (int j = i + 1; j < numHeights; j++)
+        {
+            if (mHeights[j].x - mHeights[i].x > requiredSize.x)
+            {
+                // Compute score
+                float wastedSpace = 0.0f;
+                float remainingWidth = requiredSize.x;
+                for (int k = i; k + 1 < j; k++)
+                {
+                    float width = mHeights[k+1].x - mHeights[k].x;
+                    wastedSpace += width * (maxHeight - mHeights[k].y);
+                    remainingWidth -= width;
+                }
+                wastedSpace += remainingWidth * (maxHeight - mHeights[j-1].y);
+
+                float score = (maxHeight * maxHeight) + wastedSpace;
+                if (score < minScore && maxHeight + requiredSize.y < mSize.y)
+                {
+                    minScore = score;
+                    minHeight = maxHeight;
+                    bestRange.first = i;
+                    bestRange.second = j - 1;
+                }
+
+                break;
+            }
+
+            maxHeight = std::max(maxHeight, mHeights[j].y);
+        }
+    }
+
+    if (bestRange.first != -1)
+    {
+        // Preform the insertion
+        Vector2 newStart = mHeights[bestRange.first];
+        newStart.y = minHeight + requiredSize.y;
+
+        Vector2 newEnd = mHeights[bestRange.second];
+        newEnd.x = newStart.x + requiredSize.x;
+
+        mHeights.erase(mHeights.begin() + bestRange.first, mHeights.begin() + bestRange.second + 1);
+
+        heightVector::iterator newElemIter = mHeights.insert(mHeights.begin() + bestRange.first, newEnd);
+        mHeights.insert(newElemIter, newStart);
+
+        outPosition->x = newStart.x;
+        outPosition->y = newStart.y - requiredSize.y;
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
