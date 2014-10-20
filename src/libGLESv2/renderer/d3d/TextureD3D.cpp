@@ -1010,7 +1010,7 @@ gl::Error TextureD3D_2D::commitRegion(const gl::ImageIndex &index, const gl::Box
     if (isValidLevel(level))
     {
         ImageD3D *image = mImageArray[level];
-        gl::Error error = image->copyToStorage2D(mTexStorage, index, region);
+        gl::Error error = image->copyToStorage(mTexStorage, index, region);
         if (error.isError())
         {
             return error;
@@ -1570,7 +1570,7 @@ gl::Error TextureD3D_Cube::commitRegion(const gl::ImageIndex &index, const gl::B
     if (isValidFaceLevel(faceIndex, level))
     {
         ImageD3D *image = mImageArray[faceIndex][level];
-        gl::Error error = image->copyToStorageCube(mTexStorage, index, region);
+        gl::Error error = image->copyToStorage(mTexStorage, index, region);
         if (error.isError())
         {
             return error;
@@ -2140,7 +2140,7 @@ gl::Error TextureD3D_3D::commitRegion(const gl::ImageIndex &index, const gl::Box
     if (isValidLevel(level))
     {
         ImageD3D *image = mImageArray[level];
-        gl::Error error = image->copyToStorage3D(mTexStorage, index, region);
+        gl::Error error = image->copyToStorage(mTexStorage, index, region);
         if (error.isError())
         {
             return error;
@@ -2719,7 +2719,7 @@ gl::Error TextureD3D_2DArray::commitRegion(const gl::ImageIndex &index, const gl
     if (isValidLevel(level) && layerTarget < getLayerCount(level))
     {
         ImageD3D *image = mImageArray[level][layerTarget];
-        gl::Error error = image->copyToStorage2DArray(mTexStorage, index, region);
+        gl::Error error = image->copyToStorage(mTexStorage, index, region);
         if (error.isError())
         {
             return error;
