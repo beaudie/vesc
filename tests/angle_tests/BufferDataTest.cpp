@@ -10,7 +10,7 @@ template<typename T>
 class BufferDataTest : public ANGLETest
 {
   protected:
-    BufferDataTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    BufferDataTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(16);
         setWindowHeight(16);
@@ -210,7 +210,7 @@ template<typename T>
 class IndexedBufferCopyTest : public ANGLETest
 {
   protected:
-    IndexedBufferCopyTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    IndexedBufferCopyTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(16);
         setWindowHeight(16);

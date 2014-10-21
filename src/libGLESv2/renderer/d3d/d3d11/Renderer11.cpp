@@ -109,10 +109,10 @@ bool UnsetSRVsWithResource(std::vector<ID3D11ShaderResourceView *> &srvs, const 
 
 }
 
-Renderer11::Renderer11(egl::Display *display, EGLNativeDisplayType hDc, EGLint requestedDisplay)
+Renderer11::Renderer11(egl::Display *display, EGLNativeDisplayType hDc, egl::RequestedDisplayAttributes requestedDisplayAttributes)
     : Renderer(display),
       mDc(hDc),
-      mRequestedDisplay(requestedDisplay)
+      mRequestedDisplayAttributes(requestedDisplayAttributes)
 {
     mVertexDataManager = NULL;
     mIndexDataManager = NULL;
@@ -189,15 +189,18 @@ EGLint Renderer11::initialize()
     }
 #endif
 
-    D3D_FEATURE_LEVEL featureLevels[] =
+    std::vector<D3D_FEATURE_LEVEL> featureLevels;
+
+    if (!d3d11::GetRequestedFeatureLevels(mRequestedDisplayAttributes, featureLevels))
     {
-        D3D_FEATURE_LEVEL_11_0,
-        D3D_FEATURE_LEVEL_10_1,
-        D3D_FEATURE_LEVEL_10_0,
-    };
+        // GetRequestedFeatureLevels will call ERR() for us.
+        return EGL_NOT_INITIALIZED;
+    }
+ 
+    ASSERT(featureLevels.size() > 0);
 
     D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_HARDWARE;
-    if (mRequestedDisplay == EGL_PLATFORM_ANGLE_TYPE_D3D11_WARP_ANGLE)
+    if (mRequestedDisplayAttributes.useWARP)
     {
         driverType = D3D_DRIVER_TYPE_WARP;
     }
@@ -209,8 +212,8 @@ EGLint Renderer11::initialize()
                                driverType,
                                NULL,
                                D3D11_CREATE_DEVICE_DEBUG,
-                               featureLevels,
-                               ArraySize(featureLevels),
+                               &(featureLevels[0]),
+                               featureLevels.size(),
                                D3D11_SDK_VERSION,
                                &mDevice,
                                &mFeatureLevel,
@@ -228,8 +231,8 @@ EGLint Renderer11::initialize()
                                    driverType,
                                    NULL,
                                    0,
-                                   featureLevels,
-                                   ArraySize(featureLevels),
+                                   &(featureLevels[0]),
+                                   featureLevels.size(),
                                    D3D11_SDK_VERSION,
                                    &mDevice,
                                    &mFeatureLevel,
@@ -1811,27 +1814,36 @@ bool Renderer11::testDeviceResettable()
         return false;
     }
 
-    D3D_FEATURE_LEVEL featureLevels[] =
+    std::vector<D3D_FEATURE_LEVEL> featureLevels;
+
+    if (!d3d11::GetRequestedFeatureLevels(mRequestedDisplayAttributes, featureLevels))
     {
-        D3D_FEATURE_LEVEL_11_0,
-        D3D_FEATURE_LEVEL_10_1,
-        D3D_FEATURE_LEVEL_10_0,
-    };
+        // GetRequestedFeatureLevels will call ERR() for us.
+        return false;
+    }
+ 
+    ASSERT(featureLevels.size() > 0);
+
+    D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_HARDWARE;
+    if (mRequestedDisplayAttributes.useWARP)
+    {
+        driverType = D3D_DRIVER_TYPE_WARP;
+    }
 
     ID3D11Device* dummyDevice;
     D3D_FEATURE_LEVEL dummyFeatureLevel;
     ID3D11DeviceContext* dummyContext;
 
     HRESULT result = D3D11CreateDevice(NULL,
-                                       D3D_DRIVER_TYPE_HARDWARE,
+                                       driverType,
                                        NULL,
                                        #if defined(_DEBUG)
                                        D3D11_CREATE_DEVICE_DEBUG,
                                        #else
                                        0,
                                        #endif
-                                       featureLevels,
-                                       ArraySize(featureLevels),
+                                       &(featureLevels[0]),
+                                       featureLevels.size(),
                                        D3D11_SDK_VERSION,
                                        &dummyDevice,
                                        &dummyFeatureLevel,

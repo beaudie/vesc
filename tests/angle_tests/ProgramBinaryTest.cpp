@@ -10,7 +10,7 @@ template<typename T>
 class ProgramBinaryTest : public ANGLETest
 {
 protected:
-    ProgramBinaryTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    ProgramBinaryTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

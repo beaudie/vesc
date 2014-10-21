@@ -8,7 +8,7 @@ template<typename T>
 class VertexAttributeTest : public ANGLETest
 {
 protected:
-    VertexAttributeTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    VertexAttributeTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

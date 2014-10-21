@@ -8,7 +8,7 @@ template<typename T>
 class GLSLTest : public ANGLETest
 {
 protected:
-    GLSLTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    GLSLTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

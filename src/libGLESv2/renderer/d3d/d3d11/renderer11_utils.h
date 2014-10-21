@@ -16,6 +16,11 @@
 
 #include <vector>
 
+namespace egl
+{
+struct RequestedDisplayAttributes;
+}
+
 namespace gl
 {
 class FramebufferAttachment;
@@ -56,6 +61,8 @@ void GenerateCaps(ID3D11Device *device, gl::Caps *caps, gl::TextureCapsMap *text
 
 namespace d3d11
 {
+
+bool GetRequestedFeatureLevels(egl::RequestedDisplayAttributes requestedDisplayAttributes, std::vector<D3D_FEATURE_LEVEL> &outFeatureLevels);
 
 void MakeValidSize(bool isImage, DXGI_FORMAT format, GLsizei *requestWidth, GLsizei *requestHeight, int *levelOffset);
 

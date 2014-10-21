@@ -8,7 +8,7 @@ template<typename T>
 class MaxTextureSizeTest : public ANGLETest
 {
 protected:
-    MaxTextureSizeTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    MaxTextureSizeTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(512);
         setWindowHeight(512);

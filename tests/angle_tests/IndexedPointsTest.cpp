@@ -1,11 +1,17 @@
 #include "ANGLETest.h"
 #include <array>
 
+static const EGLint testDisplayAttributes[] =
+{
+    EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE,
+    EGL_NONE,
+};
+
 template <typename IndexType, GLenum IndexTypeName>
 class IndexedPointsTest : public ANGLETest
 {
 protected:
-    IndexedPointsTest() : ANGLETest(2, EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
+    IndexedPointsTest() : ANGLETest(2, testDisplayAttributes)
     {
         setWindowWidth(128);
         setWindowHeight(128);

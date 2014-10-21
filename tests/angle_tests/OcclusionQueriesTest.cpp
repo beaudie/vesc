@@ -11,7 +11,7 @@ template<typename T>
 class OcclusionQueriesTest : public ANGLETest
 {
 protected:
-    OcclusionQueriesTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    OcclusionQueriesTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

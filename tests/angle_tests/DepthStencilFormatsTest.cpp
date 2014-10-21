@@ -11,7 +11,7 @@ template<typename T>
 class DepthStencilFormatsTestBase : public ANGLETest
 {
   protected:
-    DepthStencilFormatsTestBase() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    DepthStencilFormatsTestBase() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

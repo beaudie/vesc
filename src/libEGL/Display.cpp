@@ -35,7 +35,7 @@ static DisplayMap *GetDisplayMap()
     return &displays;
 }
 
-egl::Display *Display::getDisplay(EGLNativeDisplayType displayId, EGLint displayType)
+egl::Display *Display::getDisplay(EGLNativeDisplayType displayId, RequestedDisplayAttributes requestedAttributes)
 {
     DisplayMap *displays = GetDisplayMap();
     DisplayMap::const_iterator iter = displays->find(displayId);
@@ -46,15 +46,15 @@ egl::Display *Display::getDisplay(EGLNativeDisplayType displayId, EGLint display
     
     // FIXME: Check if displayId is a valid display device context
 
-    egl::Display *display = new egl::Display(displayId, displayType);
+    egl::Display *display = new egl::Display(displayId, requestedAttributes);
     displays->insert(std::make_pair(displayId, display));
 
     return display;
 }
 
-Display::Display(EGLNativeDisplayType displayId, EGLint displayType)
+Display::Display(EGLNativeDisplayType displayId, RequestedDisplayAttributes requestedAttributes)
     : mDisplayId(displayId),
-      mRequestedDisplayType(displayType),
+      mRequestedAttributes(requestedAttributes),
       mRenderer(NULL)
 {
 }
@@ -78,7 +78,7 @@ bool Display::initialize()
         return true;
     }
 
-    mRenderer = glCreateRenderer(this, mDisplayId, mRequestedDisplayType);
+    mRenderer = glCreateRenderer(this, mDisplayId, mRequestedAttributes);
 
     if (!mRenderer)
     {

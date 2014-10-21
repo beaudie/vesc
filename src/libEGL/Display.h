@@ -15,6 +15,7 @@
 #include <vector>
 
 #include "libEGL/Config.h"
+#include "EGL\eglext.h"
 
 namespace gl
 {
@@ -25,6 +26,26 @@ namespace egl
 {
 class Surface;
 
+struct RequestedDisplayAttributes
+{
+    RequestedDisplayAttributes()
+    {
+        displayType = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
+        hasMajorVersion = EGL_FALSE;
+        hasMinorVersion = EGL_FALSE;
+        majorVersion = 0;
+        minorVersion = 0;
+        useWARP = EGL_FALSE;
+    }
+
+    EGLint displayType;
+    EGLBoolean hasMajorVersion;
+    EGLBoolean hasMinorVersion;
+    EGLint majorVersion;
+    EGLint minorVersion;
+    EGLBoolean useWARP;
+};
+
 class Display
 {
   public:
@@ -33,7 +54,7 @@ class Display
     bool initialize();
     void terminate();
 
-    static egl::Display *getDisplay(EGLNativeDisplayType displayId, EGLint displayType);
+    static egl::Display *getDisplay(EGLNativeDisplayType displayId, RequestedDisplayAttributes requestedAttributes);
 
     static const char *getExtensionString(egl::Display *display);
 
@@ -68,12 +89,12 @@ class Display
   private:
     DISALLOW_COPY_AND_ASSIGN(Display);
 
-    Display(EGLNativeDisplayType displayId, EGLint displayType);
+    Display(EGLNativeDisplayType displayId, RequestedDisplayAttributes requestedAttributes);
 
     bool restoreLostDevice();
 
     EGLNativeDisplayType mDisplayId;
-    EGLint mRequestedDisplayType;
+    RequestedDisplayAttributes mRequestedAttributes;
 
     typedef std::set<Surface*> SurfaceSet;
     SurfaceSet mSurfaceSet;

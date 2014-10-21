@@ -8,7 +8,7 @@ template<typename T>
 class BlendMinMaxTest : public ANGLETest
 {
 protected:
-    BlendMinMaxTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    BlendMinMaxTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

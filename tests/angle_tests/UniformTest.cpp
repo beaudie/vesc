@@ -8,7 +8,7 @@ template<typename T>
 class UniformTest : public ANGLETest
 {
   protected:
-    UniformTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    UniformTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

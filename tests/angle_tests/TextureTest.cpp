@@ -8,7 +8,7 @@ template<typename T>
 class TextureTest : public ANGLETest
 {
 protected:
-    TextureTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    TextureTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

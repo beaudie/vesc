@@ -8,7 +8,7 @@ template<typename T>
 class DrawBuffersTest : public ANGLETest
 {
   protected:
-    DrawBuffersTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    DrawBuffersTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

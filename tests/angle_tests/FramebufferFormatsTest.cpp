@@ -8,7 +8,7 @@ template<typename T>
 class FramebufferFormatsTest : public ANGLETest
 {
 protected:
-    FramebufferFormatsTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    FramebufferFormatsTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

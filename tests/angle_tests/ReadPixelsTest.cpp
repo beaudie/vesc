@@ -8,7 +8,7 @@ template<typename T>
 class ReadPixelsTest : public ANGLETest
 {
 protected:
-    ReadPixelsTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    ReadPixelsTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(32);
         setWindowHeight(32);

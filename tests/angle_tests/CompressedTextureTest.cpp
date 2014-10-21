@@ -9,7 +9,7 @@ template<typename T>
 class CompressedTextureTest : public ANGLETest
 {
 protected:
-    CompressedTextureTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    CompressedTextureTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(512);
         setWindowHeight(512);
