@@ -8,7 +8,7 @@ template<typename T>
 class TransformFeedbackTest : public ANGLETest
 {
   protected:
-    TransformFeedbackTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    TransformFeedbackTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

@@ -8,7 +8,7 @@ template<typename T>
 class BlitFramebufferANGLETest : public ANGLETest
 {
 protected:
-    BlitFramebufferANGLETest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    BlitFramebufferANGLETest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(256);
         setWindowHeight(256);

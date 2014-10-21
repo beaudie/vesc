@@ -101,7 +101,9 @@ EGLDisplay __stdcall eglGetDisplay(EGLNativeDisplayType display_id)
 {
     EVENT("(EGLNativeDisplayType display_id = 0x%0.8p)", display_id);
 
-    return egl::Display::getDisplay(display_id, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
+    egl::RequestedDisplayAttributes requestedAttributes;
+
+    return egl::Display::getDisplay(display_id, requestedAttributes);
 }
 
 EGLDisplay __stdcall eglGetPlatformDisplayEXT(EGLenum platform, void *native_display, const EGLint *attrib_list)
@@ -128,7 +130,8 @@ EGLDisplay __stdcall eglGetPlatformDisplayEXT(EGLenum platform, void *native_dis
     }
 #endif
 
-    EGLint requestedDisplayType = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
+    egl::RequestedDisplayAttributes requestedAttributes;
+       
     if (attrib_list)
     {
         for (const EGLint *curAttrib = attrib_list; curAttrib[0] != EGL_NONE; curAttrib += 2)
@@ -136,7 +139,21 @@ EGLDisplay __stdcall eglGetPlatformDisplayEXT(EGLenum platform, void *native_dis
             switch (curAttrib[0])
             {
               case EGL_PLATFORM_ANGLE_TYPE_ANGLE:
-                requestedDisplayType = curAttrib[1];
+                requestedAttributes.displayType = curAttrib[1];
+                break;
+    
+              case EGL_PLATFORM_ANGLE_VERSION_MAJOR:
+                requestedAttributes.hasMajorVersion = EGL_TRUE;
+                requestedAttributes.majorVersion = curAttrib[1];
+                break;
+
+              case EGL_PLATFORM_ANGLE_VERSION_MINOR:
+                requestedAttributes.hasMinorVersion = EGL_TRUE;
+                requestedAttributes.minorVersion = curAttrib[1];
+                break;
+
+              case EGL_PLATFORM_ANGLE_D3D11_USE_WARP:
+                requestedAttributes.useWARP = curAttrib[1];
                 break;
 
               default:
@@ -145,14 +162,13 @@ EGLDisplay __stdcall eglGetPlatformDisplayEXT(EGLenum platform, void *native_dis
         }
     }
 
-    switch (requestedDisplayType)
+    switch (requestedAttributes.displayType)
     {
       case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
         break;
 
       case EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE:
       case EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE:
-      case EGL_PLATFORM_ANGLE_TYPE_D3D11_WARP_ANGLE:
         if (!egl::Display::supportsPlatformD3D())
         {
             return egl::success(EGL_NO_DISPLAY);
@@ -171,7 +187,19 @@ EGLDisplay __stdcall eglGetPlatformDisplayEXT(EGLenum platform, void *native_dis
         return egl::success(EGL_NO_DISPLAY);
     }
 
-    return egl::Display::getDisplay(displayId, requestedDisplayType);
+    // The caller shouldn't request a minor version without a major version
+    if (requestedAttributes.hasMinorVersion && !requestedAttributes.hasMajorVersion)
+    {
+        return egl::success(EGL_NO_DISPLAY);
+    }
+
+    // WARP should only be requested with D3D11
+    if (requestedAttributes.useWARP && !(requestedAttributes.displayType == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE))
+    {
+        return egl::success(EGL_NO_DISPLAY);
+    }
+
+    return egl::Display::getDisplay(displayId, requestedAttributes);
 }
 
 EGLBoolean __stdcall eglInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor)

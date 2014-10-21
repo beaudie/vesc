@@ -22,7 +22,6 @@ EGLWindow::EGLWindow(size_t width, size_t height,
       mContext(EGL_NO_CONTEXT),
       mDisplay(EGL_NO_DISPLAY),
       mClientVersion(glesMajorVersion),
-      mRequestedRenderer(requestedRenderer),
       mWidth(width),
       mHeight(height),
       mRedBits(-1),
@@ -34,6 +33,35 @@ EGLWindow::EGLWindow(size_t width, size_t height,
       mMultisample(false),
       mSwapInterval(-1)
 {
+    mRequestedDisplayAttributes.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
+    mRequestedDisplayAttributes.push_back(requestedRenderer);
+    mRequestedDisplayAttributes.push_back(EGL_NONE);
+}
+
+EGLWindow::EGLWindow(size_t width, size_t height,
+                     EGLint glesMajorVersion, const EGLint *displayAttributes)
+    : mSurface(EGL_NO_SURFACE),
+      mContext(EGL_NO_CONTEXT),
+      mDisplay(EGL_NO_DISPLAY),
+      mClientVersion(glesMajorVersion),
+      mWidth(width),
+      mHeight(height),
+      mRedBits(-1),
+      mGreenBits(-1),
+      mBlueBits(-1),
+      mAlphaBits(-1),
+      mDepthBits(-1),
+      mStencilBits(-1),
+      mMultisample(false),
+      mSwapInterval(-1)
+{
+    for (const EGLint *curAttrib = displayAttributes; curAttrib[0] != EGL_NONE; curAttrib += 2)
+    {
+        mRequestedDisplayAttributes.push_back(curAttrib[0]);
+        mRequestedDisplayAttributes.push_back(curAttrib[1]);
+    }
+
+    mRequestedDisplayAttributes.push_back(EGL_NONE);    
 }
 
 EGLWindow::~EGLWindow()
@@ -74,13 +102,7 @@ bool EGLWindow::initializeGL(OSWindow *osWindow)
         return false;
     }
 
-    const EGLint displayAttributes[] =
-    {
-        EGL_PLATFORM_ANGLE_TYPE_ANGLE, mRequestedRenderer,
-        EGL_NONE,
-    };
-
-    mDisplay = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE, osWindow->getNativeDisplay(), displayAttributes);
+    mDisplay = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE, osWindow->getNativeDisplay(), &(mRequestedDisplayAttributes.front()));
     if (mDisplay == EGL_NO_DISPLAY)
     {
         destroyGL();

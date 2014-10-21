@@ -11,7 +11,7 @@ template<typename T>
 class ClearTestBase : public ANGLETest
 {
   protected:
-    ClearTestBase() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    ClearTestBase() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

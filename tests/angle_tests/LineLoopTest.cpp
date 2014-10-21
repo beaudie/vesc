@@ -8,7 +8,7 @@ template<typename T>
 class LineLoopTest : public ANGLETest
 {
 protected:
-    LineLoopTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    LineLoopTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(256);
         setWindowHeight(256);

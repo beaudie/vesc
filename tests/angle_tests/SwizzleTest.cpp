@@ -10,7 +10,7 @@ template<typename T>
 class SwizzleTest : public ANGLETest
 {
 protected:
-    SwizzleTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    SwizzleTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

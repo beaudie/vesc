@@ -8,7 +8,7 @@ template<typename T>
 class PBOExtensionTest : public ANGLETest
 {
 protected:
-    PBOExtensionTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    PBOExtensionTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(32);
         setWindowHeight(32);

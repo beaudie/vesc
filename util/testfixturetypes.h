@@ -36,25 +36,41 @@ namespace Rend
 
 struct D3D11
 {
-    static EGLint GetRequestedRenderer()
+    static const EGLint *GetDisplayAttributes()
     {
-        return EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE;
+        static const EGLint displayAttributes[] =
+        {
+            EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE,
+            EGL_NONE,
+        };
+        return &(displayAttributes[0]);
     };
 };
 
 struct D3D9
 {
-    static EGLint GetRequestedRenderer()
+    static const EGLint *GetDisplayAttributes()
     {
-        return EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE;
+        static const EGLint displayAttributes[] =
+        {
+            EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE,
+            EGL_NONE,
+        };
+        return &(displayAttributes[0]);
     };
 };
 
 struct WARP
 {
-    static EGLint GetRequestedRenderer()
+    static const EGLint *GetDisplayAttributes()
     {
-        return EGL_PLATFORM_ANGLE_TYPE_D3D11_WARP_ANGLE;
+        static const EGLint displayAttributes[] =
+        {
+            EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE,
+            EGL_PLATFORM_ANGLE_D3D11_USE_WARP, EGL_TRUE,
+            EGL_NONE,
+        };
+        return &(displayAttributes[0]);
     };
 };
 
@@ -69,9 +85,9 @@ struct TFT
         return GlesVersionT::GetGlesMajorVersion();
     }
 
-    static EGLint GetRequestedRenderer()
+    static const EGLint *GetDisplayAttributes()
     {
-        return RendererT::GetRequestedRenderer();
+        return RendererT::GetDisplayAttributes();
     }
 };
 

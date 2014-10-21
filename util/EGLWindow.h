@@ -20,6 +20,7 @@
 #include <list>
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 #include "shared_utils.h"
 
@@ -31,6 +32,10 @@ class EGLWindow
     EGLWindow(size_t width, size_t height,
               EGLint glesMajorVersion,
               EGLint requestedRenderer);
+
+    EGLWindow(size_t width, size_t height,
+              EGLint glesMajorVersion,
+              const EGLint *displayAttributes);
 
     ~EGLWindow();
 
@@ -49,7 +54,6 @@ class EGLWindow
     void swap();
 
     GLuint getClientVersion() const { return mClientVersion; }
-    EGLint getRequestedRenderer() const { return mRequestedRenderer; }
     EGLConfig getConfig() const;
     EGLDisplay getDisplay() const;
     EGLSurface getSurface() const;
@@ -77,7 +81,7 @@ class EGLWindow
     EGLContext mContext;
 
     GLuint mClientVersion;
-    EGLint mRequestedRenderer;
+    std::vector<EGLint> mRequestedDisplayAttributes;
     size_t mWidth;
     size_t mHeight;
     int mRedBits;

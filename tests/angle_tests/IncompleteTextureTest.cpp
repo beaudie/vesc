@@ -10,7 +10,7 @@ template<typename T>
 class IncompleteTextureTest : public ANGLETest
 {
 protected:
-    IncompleteTextureTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    IncompleteTextureTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

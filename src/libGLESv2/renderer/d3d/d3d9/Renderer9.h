@@ -17,6 +17,11 @@
 #include "libGLESv2/renderer/Renderer.h"
 #include "libGLESv2/renderer/RenderTarget.h"
 
+namespace egl
+{
+struct RequestedDisplayAttributes;
+}
+
 namespace gl
 {
 class FramebufferAttachment;
@@ -34,7 +39,7 @@ class Blit9;
 class Renderer9 : public Renderer
 {
   public:
-    Renderer9(egl::Display *display, EGLNativeDisplayType hDc, EGLint requestedDisplay);
+    Renderer9(egl::Display *display, EGLNativeDisplayType hDc, egl::RequestedDisplayAttributes requestedDisplayAttributes);
     virtual ~Renderer9();
 
     static Renderer9 *makeRenderer9(Renderer *renderer);

@@ -10,7 +10,7 @@ template<typename T>
 class UnpackAlignmentTest : public ANGLETest
 {
 protected:
-    UnpackAlignmentTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    UnpackAlignmentTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetDisplayAttributes())
     {
         setWindowWidth(128);
         setWindowHeight(128);

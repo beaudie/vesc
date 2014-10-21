@@ -53,7 +53,7 @@ class OSWindow;
 class ANGLETest : public testing::Test
 {
   protected:
-    ANGLETest(EGLint requestedRenderer, EGLint glesMajorVersion);
+    ANGLETest(EGLint glesMajorVersion, const EGLint *displayAttributes);
 
   public:
     bool resizeWindow(int width, int height);

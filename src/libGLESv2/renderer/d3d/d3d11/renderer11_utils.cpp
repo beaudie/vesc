@@ -13,7 +13,7 @@
 #include "libGLESv2/renderer/Workarounds.h"
 #include "libGLESv2/ProgramBinary.h"
 #include "libGLESv2/Framebuffer.h"
-
+#include "libEGL/display.h"
 #include "common/debug.h"
 
 #include <algorithm>
@@ -988,6 +988,50 @@ void GenerateCaps(ID3D11Device *device, gl::Caps *caps, gl::TextureCapsMap *text
 
 namespace d3d11
 {
+
+bool IsFeatureLevelRequested(egl::RequestedDisplayAttributes requestedDisplayAttributes, int majorVersion, int minorVersion)
+{
+    // If the application didn't request a major or minor version, or the requested major/minor versions match the current feature level, then return true.
+    // Note: specifiying a minor version without a major version is forbidden and is validated at the gl* API level, so we don't need to check for that here.
+    if (!requestedDisplayAttributes.hasMajorVersion || requestedDisplayAttributes.majorVersion == majorVersion)
+    {
+        if (!requestedDisplayAttributes.hasMinorVersion || requestedDisplayAttributes.minorVersion == minorVersion)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool GetRequestedFeatureLevels(egl::RequestedDisplayAttributes requestedDisplayAttributes, std::vector<D3D_FEATURE_LEVEL> &outFeatureLevels)
+{
+    ASSERT(outFeatureLevels.empty());
+    outFeatureLevels.clear();
+
+    if (IsFeatureLevelRequested(requestedDisplayAttributes, 11, 0))
+    {
+        outFeatureLevels.push_back(D3D_FEATURE_LEVEL_11_0);
+    }
+
+    if (IsFeatureLevelRequested(requestedDisplayAttributes, 10, 1))
+    {
+        outFeatureLevels.push_back(D3D_FEATURE_LEVEL_10_1);
+    }
+
+    if (IsFeatureLevelRequested(requestedDisplayAttributes, 10, 0))
+    {
+        outFeatureLevels.push_back(D3D_FEATURE_LEVEL_10_0);
+    }
+
+    if (outFeatureLevels.empty())
+    {
+        ERR("No supported D3D11 feature levels found for requested display attributes.");
+        return false;
+    }
+
+    return true;
+}
 
 void MakeValidSize(bool isImage, DXGI_FORMAT format, GLsizei *requestWidth, GLsizei *requestHeight, int *levelOffset)
 {
