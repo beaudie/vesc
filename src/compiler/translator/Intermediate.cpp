@@ -16,6 +16,15 @@
 #include "compiler/translator/RemoveTree.h"
 #include "compiler/translator/SymbolTable.h"
 
+namespace {
+
+TPrecision GetHigherPrecision(TPrecision left, TPrecision right)
+{
+    return left > right ? left : right;
+}
+
+} // Anonymous namespace
+
 ////////////////////////////////////////////////////////////////////////////
 //
 // First set of functions are to help build the intermediate representation.
@@ -275,6 +284,22 @@ TIntermAggregate *TIntermediate::setAggregateOperator(
     aggNode->setLine(line);
 
     return aggNode;
+}
+
+void TIntermediate::setAggregatePrecision(TIntermNode *node)
+{
+    TIntermAggregate *aggNode = node->getAsAggregate();
+    TPrecision precision = EbpUndefined;
+    TIntermSequence *seq = aggNode->getSequence();
+    TIntermSequence::iterator iter = seq->begin();
+    while (iter != seq->end())
+    {
+        TIntermTyped *typed = (*iter)->getAsTyped();
+        if (typed)
+            precision = GetHigherPrecision(typed->getPrecision(), precision);
+        ++iter;
+    }
+    aggNode->setPrecision(precision);
 }
 
 //
