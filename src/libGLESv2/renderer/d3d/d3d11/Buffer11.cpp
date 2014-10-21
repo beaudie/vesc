@@ -195,7 +195,7 @@ gl::Error Buffer11::setData(const void *data, size_t size, GLenum usage)
     return error;
 }
 
-void *Buffer11::getData()
+const uint8_t *Buffer11::getData()
 {
     NativeBuffer11 *stagingBuffer = getStagingBuffer();
 
@@ -211,7 +211,7 @@ void *Buffer11::getData()
         {
             if (!mResolvedData.resize(stagingBuffer->getSize()))
             {
-                return gl::error(GL_OUT_OF_MEMORY, (void*)NULL);
+                return gl::error(GL_OUT_OF_MEMORY, static_cast<const uint8_t*>(NULL));
             }
         }
 
@@ -221,7 +221,7 @@ void *Buffer11::getData()
         HRESULT result = context->Map(stagingBuffer->getNativeBuffer(), 0, D3D11_MAP_READ, 0, &mappedResource);
         if (FAILED(result))
         {
-            return gl::error(GL_OUT_OF_MEMORY, (void*)NULL);
+            return gl::error(GL_OUT_OF_MEMORY, static_cast<const uint8_t*>(NULL));
         }
 
         memcpy(mResolvedData.data(), mappedResource.pData, stagingBuffer->getSize());
@@ -238,7 +238,7 @@ void *Buffer11::getData()
     {
         if (!mResolvedData.resize(mSize))
         {
-            return gl::error(GL_OUT_OF_MEMORY, (void*)NULL);
+            return gl::error(GL_OUT_OF_MEMORY, static_cast<const uint8_t*>(NULL));
         }
     }
 
