@@ -133,6 +133,16 @@ bool CompareStructure(const TType &leftNodeType,
 //
 ////////////////////////////////////////////////////////////////
 
+void TIntermTyped::setTypeNotPrecision(const TType &t)
+{
+    TPrecision precision = getPrecision();
+    mType = t;
+    if (mType.getBasicType() == EbtBool)
+        mType.setPrecision(EbpUndefined);
+    else
+        mType.setPrecision(precision);
+}
+
 #define REPLACE_IF_IS(node, type, original, replacement) \
     if (node == original) { \
         node = static_cast<type *>(replacement); \
@@ -350,7 +360,6 @@ bool TIntermUnary::promote(TInfoSink &)
       case EOpAll:
       case EOpVectorLogicalNot:
         return true;
-
       default:
         if (mOperand->getBasicType() != EbtFloat)
             return false;
