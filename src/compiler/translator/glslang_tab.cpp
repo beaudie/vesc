@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 2.7.1.  */
+/* A Bison parser, made by GNU Bison 2.7.12-4996.  */
 
 /* Bison implementation for Yacc-like parsers in C
    
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "2.7.1"
+#define YYBISON_VERSION "2.7.12-4996"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -796,31 +796,31 @@ static const yytype_int16 yyrhs[] =
 static const yytype_uint16 yyrline[] =
 {
        0,   206,   206,   207,   210,   234,   237,   242,   247,   252,
-     257,   263,   266,   269,   272,   275,   285,   298,   306,   406,
-     409,   417,   420,   426,   430,   437,   443,   452,   460,   463,
-     473,   476,   486,   496,   517,   518,   519,   524,   525,   533,
-     544,   545,   553,   564,   568,   569,   579,   589,   599,   612,
-     613,   623,   636,   640,   644,   648,   649,   662,   663,   676,
-     677,   690,   691,   708,   709,   722,   723,   724,   725,   726,
-     730,   733,   744,   752,   760,   787,   793,   804,   808,   812,
-     816,   823,   879,   882,   889,   897,   918,   939,   949,   977,
-     982,   992,   997,  1007,  1010,  1013,  1016,  1022,  1029,  1032,
-    1036,  1040,  1044,  1051,  1055,  1059,  1066,  1070,  1074,  1081,
-    1090,  1096,  1099,  1105,  1111,  1118,  1127,  1136,  1144,  1147,
-    1154,  1158,  1165,  1168,  1172,  1176,  1185,  1194,  1202,  1212,
-    1224,  1227,  1230,  1236,  1243,  1246,  1252,  1255,  1258,  1264,
-    1267,  1282,  1286,  1290,  1294,  1298,  1302,  1307,  1312,  1317,
-    1322,  1327,  1332,  1337,  1342,  1347,  1352,  1357,  1362,  1367,
-    1372,  1377,  1382,  1387,  1392,  1397,  1402,  1407,  1411,  1415,
-    1419,  1423,  1427,  1431,  1435,  1439,  1443,  1447,  1451,  1455,
-    1459,  1463,  1467,  1475,  1483,  1487,  1500,  1500,  1503,  1503,
-    1509,  1512,  1528,  1531,  1540,  1544,  1550,  1557,  1572,  1576,
-    1580,  1581,  1587,  1588,  1589,  1590,  1591,  1595,  1596,  1596,
-    1596,  1606,  1607,  1611,  1611,  1612,  1612,  1617,  1620,  1630,
-    1633,  1639,  1640,  1644,  1652,  1656,  1666,  1671,  1688,  1688,
-    1693,  1693,  1700,  1700,  1708,  1711,  1717,  1720,  1726,  1730,
-    1737,  1744,  1751,  1758,  1769,  1778,  1782,  1789,  1792,  1798,
-    1798
+     257,   263,   266,   269,   272,   275,   285,   298,   306,   420,
+     423,   431,   434,   440,   444,   451,   457,   466,   474,   477,
+     487,   490,   500,   510,   532,   533,   534,   539,   540,   548,
+     559,   560,   568,   579,   583,   584,   594,   604,   614,   627,
+     628,   638,   651,   655,   659,   663,   664,   677,   678,   691,
+     692,   705,   706,   723,   724,   737,   738,   739,   740,   741,
+     745,   748,   759,   767,   775,   802,   808,   819,   823,   827,
+     831,   838,   894,   897,   904,   912,   933,   954,   964,   992,
+     997,  1007,  1012,  1022,  1025,  1028,  1031,  1037,  1044,  1047,
+    1051,  1055,  1059,  1066,  1070,  1074,  1081,  1085,  1089,  1096,
+    1105,  1111,  1114,  1120,  1126,  1133,  1142,  1151,  1159,  1162,
+    1169,  1173,  1180,  1183,  1187,  1191,  1200,  1209,  1217,  1227,
+    1239,  1242,  1245,  1251,  1258,  1261,  1267,  1270,  1273,  1279,
+    1282,  1297,  1301,  1305,  1309,  1313,  1317,  1322,  1327,  1332,
+    1337,  1342,  1347,  1352,  1357,  1362,  1367,  1372,  1377,  1382,
+    1387,  1392,  1397,  1402,  1407,  1412,  1417,  1422,  1426,  1430,
+    1434,  1438,  1442,  1446,  1450,  1454,  1458,  1462,  1466,  1470,
+    1474,  1478,  1482,  1490,  1498,  1502,  1515,  1515,  1518,  1518,
+    1524,  1527,  1543,  1546,  1555,  1559,  1565,  1572,  1587,  1591,
+    1595,  1596,  1602,  1603,  1604,  1605,  1606,  1610,  1611,  1611,
+    1611,  1621,  1622,  1626,  1626,  1627,  1627,  1632,  1635,  1645,
+    1648,  1654,  1655,  1659,  1667,  1671,  1681,  1686,  1703,  1703,
+    1708,  1708,  1715,  1715,  1723,  1726,  1732,  1735,  1741,  1745,
+    1752,  1759,  1766,  1773,  1784,  1793,  1797,  1804,  1807,  1813,
+    1813
 };
 #endif
 
@@ -2736,6 +2736,15 @@ yyreduce:
                         // Treat it like a built-in unary operator.
                         //
                         (yyval.interm.intermTypedNode) = context->intermediate.addUnaryMath(op, (yyvsp[(1) - (1)].interm).intermNode, (yylsp[(1) - (1)]));
+                        const TType& returnType = fnCandidate->getReturnType();
+                        if (returnType.getBasicType() == EbtBool) {
+                            // Bool types should not have precision, so we'll override any precision
+                            // that might have been set by addUnaryMath.
+                            (yyval.interm.intermTypedNode)->setType(returnType);
+                        } else {
+                            // addUnaryMath has set the precision of the node based on the operand.
+                            (yyval.interm.intermTypedNode)->setTypePreservePrecision(returnType);
+                        }
                         if ((yyval.interm.intermTypedNode) == 0)  {
                             std::stringstream extraInfoStream;
                             extraInfoStream << "built in unary operator function.  Type: " << static_cast<TIntermTyped*>((yyvsp[(1) - (1)].interm).intermNode)->getCompleteString();
@@ -2745,6 +2754,8 @@ yyreduce:
                         }
                     } else {
                         (yyval.interm.intermTypedNode) = context->intermediate.setAggregateOperator((yyvsp[(1) - (1)].interm).intermAggregate, op, (yylsp[(1) - (1)]));
+                        (yyval.interm.intermTypedNode)->setType(fnCandidate->getReturnType());
+                        context->intermediate.setAggregatePrecision((yyval.interm.intermTypedNode));
                     }
                 } else {
                     // This is a real function call
@@ -2759,6 +2770,10 @@ yyreduce:
                         (yyval.interm.intermTypedNode)->getAsAggregate()->setUserDefined();
                     (yyval.interm.intermTypedNode)->getAsAggregate()->setName(fnCandidate->getMangledName());
 
+                    // This needs to happen after the name is set
+                    if (builtIn)
+                        context->intermediate.setBuiltInFunctionPrecision((yyval.interm.intermTypedNode));
+
                     TQualifier qual;
                     for (size_t i = 0; i < fnCandidate->getParamCount(); ++i) {
                         qual = fnCandidate->getParam(i).type->getQualifier();
@@ -2770,7 +2785,6 @@ yyreduce:
                         }
                     }
                 }
-                (yyval.interm.intermTypedNode)->setType(fnCandidate->getReturnType());
             } else {
                 // error message was put out by PaFindFunction()
                 // Put on a dummy node for error recovery

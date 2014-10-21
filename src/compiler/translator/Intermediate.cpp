@@ -277,6 +277,59 @@ TIntermAggregate *TIntermediate::setAggregateOperator(
     return aggNode;
 }
 
+void TIntermediate::setAggregatePrecision(TIntermNode *node)
+{
+    TIntermAggregate *aggNode = node->getAsAggregate();
+
+    if (aggNode->getBasicType() == EbtBool)
+    {
+        aggNode->setPrecision(EbpUndefined);
+        return;
+    }
+
+    TPrecision precision = EbpUndefined;
+    TIntermSequence *seq = aggNode->getSequence();
+    TIntermSequence::iterator iter = seq->begin();
+    while (iter != seq->end())
+    {
+        TIntermTyped *typed = (*iter)->getAsTyped();
+        if (typed)
+            precision = GetHigherPrecision(typed->getPrecision(), precision);
+        ++iter;
+    }
+    aggNode->setPrecision(precision);
+}
+
+void TIntermediate::setBuiltInFunctionPrecision(TIntermNode *node)
+{
+    TIntermAggregate *aggNode = node->getAsAggregate();
+
+    // All built-ins returning bool should be handled as ops, not functions.
+    ASSERT(aggNode->getBasicType() != EbtBool);
+
+    TPrecision precision = EbpUndefined;
+    TIntermSequence *seq = aggNode->getSequence();
+    TIntermSequence::iterator iter = seq->begin();
+
+    while (iter != seq->end())
+    {
+        TIntermTyped *typed = (*iter)->getAsTyped();
+        // ESSL spec section 8: texture functions get their precision from the sampler.
+        if (typed && IsSampler(typed->getBasicType()))
+        {
+            precision = typed->getPrecision();
+            break;
+        }
+        ++iter;
+    }
+    // ESSL 3.0 spec section 8: textureSize always gets highp precision.
+    // All other functions that take a sampler are assumed to be texture functions.
+    if (aggNode->getName().find("textureSize") == 0)
+        aggNode->setPrecision(EbpHigh);
+    else
+        aggNode->setPrecision(precision);
+}
+
 //
 // Safe way to combine two nodes into an aggregate.  Works with null pointers,
 // a node that's not a aggregate yet, etc.

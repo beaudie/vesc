@@ -19,11 +19,6 @@
 namespace
 {
 
-TPrecision GetHigherPrecision(TPrecision left, TPrecision right)
-{
-    return left > right ? left : right;
-}
-
 bool ValidateMultiplication(TOperator op, const TType &left, const TType &right)
 {
     switch (op)
@@ -132,6 +127,14 @@ bool CompareStructure(const TType &leftNodeType,
 // Member functions of the nodes used for building the tree.
 //
 ////////////////////////////////////////////////////////////////
+
+void TIntermTyped::setTypePreservePrecision(const TType &t)
+{
+    TPrecision precision = getPrecision();
+    mType = t;
+    ASSERT(mType.getBasicType() != EbtBool || precision == EbpUndefined);
+    mType.setPrecision(precision);
+}
 
 #define REPLACE_IF_IS(node, type, original, replacement) \
     if (node == original) { \

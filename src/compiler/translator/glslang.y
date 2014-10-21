@@ -354,6 +354,15 @@ function_call
                         // Treat it like a built-in unary operator.
                         //
                         $$ = context->intermediate.addUnaryMath(op, $1.intermNode, @1);
+                        const TType& returnType = fnCandidate->getReturnType();
+                        if (returnType.getBasicType() == EbtBool) {
+                            // Bool types should not have precision, so we'll override any precision
+                            // that might have been set by addUnaryMath.
+                            $$->setType(returnType);
+                        } else {
+                            // addUnaryMath has set the precision of the node based on the operand.
+                            $$->setTypePreservePrecision(returnType);
+                        }
                         if ($$ == 0)  {
                             std::stringstream extraInfoStream;
                             extraInfoStream << "built in unary operator function.  Type: " << static_cast<TIntermTyped*>($1.intermNode)->getCompleteString();
@@ -363,6 +372,8 @@ function_call
                         }
                     } else {
                         $$ = context->intermediate.setAggregateOperator($1.intermAggregate, op, @1);
+                        $$->setType(fnCandidate->getReturnType());
+                        context->intermediate.setAggregatePrecision($$);
                     }
                 } else {
                     // This is a real function call
@@ -377,6 +388,10 @@ function_call
                         $$->getAsAggregate()->setUserDefined();
                     $$->getAsAggregate()->setName(fnCandidate->getMangledName());
 
+                    // This needs to happen after the name is set
+                    if (builtIn)
+                        context->intermediate.setBuiltInFunctionPrecision($$);
+
                     TQualifier qual;
                     for (size_t i = 0; i < fnCandidate->getParamCount(); ++i) {
                         qual = fnCandidate->getParam(i).type->getQualifier();
@@ -388,7 +403,6 @@ function_call
                         }
                     }
                 }
-                $$->setType(fnCandidate->getReturnType());
             } else {
                 // error message was put out by PaFindFunction()
                 // Put on a dummy node for error recovery
