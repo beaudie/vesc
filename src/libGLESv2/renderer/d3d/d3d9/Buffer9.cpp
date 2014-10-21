@@ -56,7 +56,7 @@ gl::Error Buffer9::setData(const void* data, size_t size, GLenum usage)
     return gl::Error(GL_NO_ERROR);
 }
 
-void *Buffer9::getData()
+const uint8_t *Buffer9::getData()
 {
     return mMemory.data();
 }

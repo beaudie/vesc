@@ -1412,10 +1412,9 @@ gl::Error Renderer9::drawLineLoop(GLsizei count, GLenum type, const GLvoid *indi
     // Get the raw indices for an indexed draw
     if (type != GL_NONE && elementArrayBuffer)
     {
-        gl::Buffer *indexBuffer = elementArrayBuffer;
-        BufferImpl *storage = indexBuffer->getImplementation();
+        BufferD3D *storage = BufferD3D::makeFromBuffer(elementArrayBuffer);
         intptr_t offset = reinterpret_cast<intptr_t>(indices);
-        indices = static_cast<const GLubyte*>(storage->getData()) + offset;
+        indices = storage->getData() + offset;
     }
 
     unsigned int startIndex = 0;
@@ -1609,9 +1608,9 @@ gl::Error Renderer9::drawIndexedPoints(GLsizei count, GLenum type, const GLvoid 
 
     if (elementArrayBuffer)
     {
-        BufferImpl *storage = elementArrayBuffer->getImplementation();
+        BufferD3D *storage = BufferD3D::makeFromBuffer(elementArrayBuffer);
         intptr_t offset = reinterpret_cast<intptr_t>(indices);
-        indices = static_cast<const GLubyte*>(storage->getData()) + offset;
+        indices = storage->getData() + offset;
     }
 
     switch (type)
