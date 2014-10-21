@@ -70,15 +70,16 @@ bool HLSLCompiler::initialize()
 
     mD3DCompileFunc = reinterpret_cast<pD3DCompile>(GetProcAddress(mD3DCompilerModule, "D3DCompile"));
     ASSERT(mD3DCompileFunc);
+
+    mD3DDisassembleFunc = reinterpret_cast<pD3DDisassemble>(GetProcAddress(mD3DCompilerModule, "D3DDisassemble"));
+    ASSERT(mD3DDisassembleFunc);
 #else
     // D3D Shader compiler is linked already into this module, so the export
     // can be directly assigned.
     mD3DCompilerModule = NULL;
     mD3DCompileFunc = reinterpret_cast<pD3DCompile>(D3DCompile);
+    mD3DDisassembleFunc = reinterpret_cast<pD3DDisassemble>(D3DDisassemble);
 #endif
-
-    mD3DDisassembleFunc = reinterpret_cast<pD3DDisassemble>(GetProcAddress(mD3DCompilerModule, "D3DDisassemble"));
-    ASSERT(mD3DDisassembleFunc);
 
     return mD3DCompileFunc != NULL;
 }
@@ -103,12 +104,14 @@ gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string 
 #endif
     ASSERT(mD3DCompileFunc);
 
+#if !defined(ANGLE_ENABLE_WINDOWS_STORE)
     if (gl::perfActive())
     {
         std::string sourcePath = getTempPath();
         std::string sourceText = FormatString("#line 2 \"%s\"\n\n%s", sourcePath.c_str(), hlsl.c_str());
         writeFile(sourcePath.c_str(), sourceText.c_str(), sourceText.size());
     }
+#endif
 
     const D3D_SHADER_MACRO *macros = overrideMacros ? overrideMacros : NULL;
 
