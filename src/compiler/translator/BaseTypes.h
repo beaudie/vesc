@@ -32,6 +32,11 @@ inline const char* getPrecisionString(TPrecision p)
     }
 }
 
+inline TPrecision getHigherPrecision(TPrecision left, TPrecision right)
+{
+    return left > right ? left : right;
+}
+
 //
 // Basic type.  Arrays, vectors, etc., are orthogonal to this.
 //

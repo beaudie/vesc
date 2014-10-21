@@ -266,12 +266,14 @@ class TIntermTyped : public TIntermNode
     virtual bool hasSideEffects() const = 0;
 
     void setType(const TType &t) { mType = t; }
+    void setTypePreservePrecision(const TType &t);
     const TType &getType() const { return mType; }
     TType *getTypePointer() { return &mType; }
 
     TBasicType getBasicType() const { return mType.getBasicType(); }
     TQualifier getQualifier() const { return mType.getQualifier(); }
     TPrecision getPrecision() const { return mType.getPrecision(); }
+    void setPrecision(TPrecision precision) { mType.setPrecision(precision); }
     int getCols() const { return mType.getCols(); }
     int getRows() const { return mType.getRows(); }
     int getNominalSize() const { return mType.getNominalSize(); }

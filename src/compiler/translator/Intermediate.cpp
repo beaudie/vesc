@@ -277,6 +277,28 @@ TIntermAggregate *TIntermediate::setAggregateOperator(
     return aggNode;
 }
 
+void TIntermediate::setAggregatePrecision(TIntermNode *node)
+{
+    TIntermAggregate *aggNode = node->getAsAggregate();
+
+    if (aggNode->getBasicType() == EbtBool) {
+        aggNode->setPrecision(EbpUndefined);
+        return;
+    }
+
+    TPrecision precision = EbpUndefined;
+    TIntermSequence *seq = aggNode->getSequence();
+    TIntermSequence::iterator iter = seq->begin();
+    while (iter != seq->end())
+    {
+        TIntermTyped *typed = (*iter)->getAsTyped();
+        if (typed)
+            precision = getHigherPrecision(typed->getPrecision(), precision);
+        ++iter;
+    }
+    aggNode->setPrecision(precision);
+}
+
 //
 // Safe way to combine two nodes into an aggregate.  Works with null pointers,
 // a node that's not a aggregate yet, etc.
