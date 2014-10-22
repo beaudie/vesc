@@ -15,10 +15,10 @@
     'msvs_disabled_warnings': [ 4100, 4127, 4239, 4244, 4245, 4251, 4512, 4702, 4530, 4718, 4267, 4264, 4447, 4075 ],
     'msvs_system_include_dirs':
     [
-        '<(windows_sdk_path)/Include/shared',
-        '<(windows_sdk_path)/Include/um',
         '<(windows_8_1_sdk_path)/Include/shared',
         '<(windows_8_1_sdk_path)/Include/um',
+        '<(windows_sdk_path)/Include/shared',
+        '<(windows_sdk_path)/Include/um',
     ],
     'msvs_settings':
     {
@@ -78,16 +78,16 @@
                 {
                     'AdditionalLibraryDirectories':
                     [
-                        '<(windows_sdk_path)/Lib/win8/um/x86',
                         '<(windows_8_1_sdk_path)/Lib/winv6.3/um/x86',
+                        '<(windows_sdk_path)/Lib/win8/um/x86',
                     ],
                 },
                 'VCLibrarianTool':
                 {
                     'AdditionalLibraryDirectories':
                     [
-                        '<(windows_sdk_path)/Lib/win8/um/x86',
                         '<(windows_8_1_sdk_path)/Lib/winv6.3/um/x86',
+                        '<(windows_sdk_path)/Lib/win8/um/x86',
                     ],
                 },
             },
@@ -100,16 +100,16 @@
                 {
                     'AdditionalLibraryDirectories':
                     [
-                        '<(windows_sdk_path)/Lib/win8/um/x86',
                         '<(windows_8_1_sdk_path)/Lib/winv6.3/um/x86',
+                        '<(windows_sdk_path)/Lib/win8/um/x86',
                     ],
                 },
                 'VCLibrarianTool':
                 {
                     'AdditionalLibraryDirectories':
                     [
-                        '<(windows_sdk_path)/Lib/win8/um/x86',
                         '<(windows_8_1_sdk_path)/Lib/winv6.3/um/x86',
+                        '<(windows_sdk_path)/Lib/win8/um/x86',
                     ],
                 },
             },

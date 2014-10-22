@@ -7,6 +7,7 @@
 // iinspectablehost.cpp: NativeWindow base class for managing IInspectable native window types.
 
 #include "common/winrt/CoreWindowNativeWindow.h"
+#include "common/winrt/SwapChainPanelNativeWindow.h"
 
 namespace rx
 {
@@ -32,8 +33,8 @@ bool NativeWindow::initialize()
         mWindow = eglNativeWindow.Get();
     }
 
-    // If the native window is a ICoreWindow, initialize a CoreWindowNativeWindow
     ComPtr<ABI::Windows::UI::Core::ICoreWindow> coreWindow;
+    ComPtr<ABI::Windows::UI::Xaml::Controls::ISwapChainPanel> swapChainPanel;
     if (isCoreWindow(mWindow, &coreWindow))
     {
         mImpl = std::make_shared<CoreWindowNativeWindow>();
@@ -42,9 +43,17 @@ bool NativeWindow::initialize()
             return mImpl->initialize(mWindow, propertySet.Get());
         }
     }
+    else if (isSwapChainPanel(mWindow, &swapChainPanel))
+    {
+        mImpl = std::make_shared<SwapChainPanelNativeWindow>();
+        if (mImpl)
+        {
+            return mImpl->initialize(mWindow, propertySet.Get());
+        }
+    }
     else
     {
-        ERR("Invalid IInspectable EGLNativeWindowType detected. Valid IInspectables include ICoreWindow and IPropertySet");
+        ERR("Invalid IInspectable EGLNativeWindowType detected. Valid IInspectables include ICoreWindow, ISwapChainPanel and IPropertySet");
     }
 
     return false;
@@ -91,6 +100,27 @@ bool isCoreWindow(EGLNativeWindowType window, ComPtr<ABI::Windows::UI::Core::ICo
         if (coreWindow != nullptr)
         {
             *coreWindow = coreWin.Detach();
+        }
+        return true;
+    }
+
+    return false;
+}
+
+bool isSwapChainPanel(EGLNativeWindowType window, ComPtr<ABI::Windows::UI::Xaml::Controls::ISwapChainPanel> *swapChainPanel)
+{
+    if (!window)
+    {
+        return false;
+    }
+
+    ComPtr<IInspectable> win = window;
+    ComPtr<ABI::Windows::UI::Xaml::Controls::ISwapChainPanel> panel;
+    if (SUCCEEDED(win.As(&panel)))
+    {
+        if (swapChainPanel != nullptr)
+        {
+            *swapChainPanel = panel.Detach();
         }
         return true;
     }
