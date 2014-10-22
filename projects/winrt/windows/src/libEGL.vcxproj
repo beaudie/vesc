@@ -375,6 +375,7 @@
     <ClInclude Include="..\..\..\..\src\libEGL\Surface.h"/>
     <ClInclude Include="..\..\..\..\src\libEGL\main.h"/>
     <ClInclude Include="..\..\..\..\src\libEGL\resource.h"/>
+    <ClInclude Include="..\..\..\..\src\common\winrt\SwapChainPanelNativeWindow.h"/>
     <ClInclude Include="..\..\..\..\src\common\winrt\CoreWindowNativeWindow.h"/>
     <ClInclude Include="..\..\..\..\src\common\winrt\IInspectableNativeWindow.h"/>
   </ItemGroup>
@@ -391,6 +392,7 @@
     <ClCompile Include="..\..\..\..\src\libEGL\Surface.cpp"/>
     <ClCompile Include="..\..\..\..\src\libEGL\libEGL.cpp"/>
     <ClCompile Include="..\..\..\..\src\libEGL\main.cpp"/>
+    <ClCompile Include="..\..\..\..\src\common\winrt\SwapChainPanelNativeWindow.cpp"/>
     <ClCompile Include="..\..\..\..\src\common\winrt\CoreWindowNativeWindow.cpp"/>
     <ClCompile Include="..\..\..\..\src\common\winrt\IInspectableNativeWindow.cpp"/>
   </ItemGroup>
