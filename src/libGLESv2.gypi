@@ -145,6 +145,8 @@
         ],
         'angle_libangle_winrt_sources':
         [
+            'common/winrt/SwapChainPanelNativeWindow.cpp',
+            'common/winrt/SwapChainPanelNativeWindow.h',
             'common/winrt/CoreWindowNativeWindow.cpp',
             'common/winrt/CoreWindowNativeWindow.h',
             'common/winrt/IInspectableNativeWindow.cpp',
