@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2002-2014 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -29,7 +29,10 @@ typedef IDXGIFactory2 DXGIFactory;
 #include <windows.applicationmodel.core.h>
 #include <memory>
 
+namespace rx
+{
 class IInspectableNativeWindow;
+}
 
 using namespace Microsoft::WRL;
 using namespace Microsoft::WRL::Wrappers;
@@ -66,6 +69,6 @@ private:
 };
 }
 
-bool isValidEGLNativeWindowType(EGLNativeWindowType window);
+bool IsValidEGLNativeWindowType(EGLNativeWindowType window);
 
 #endif // COMMON_NATIVEWINDOW_H_
