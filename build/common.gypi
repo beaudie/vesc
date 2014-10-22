@@ -156,6 +156,7 @@
                         'TargetMachine': '1',
                         'AdditionalLibraryDirectories':
                         [
+                            '<(windows_8_1_sdk_path)/Lib/winv6.3/um/x86',
                             '<(windows_sdk_path)/Lib/win8/um/x86',
                         ],
                     },
@@ -164,6 +165,7 @@
                         'TargetMachine': '1',
                         'AdditionalLibraryDirectories':
                         [
+                            '<(windows_8_1_sdk_path)/Lib/winv6.3/um/x86',
                             '<(windows_sdk_path)/Lib/win8/um/x86',
                         ],
                     },
@@ -181,6 +183,7 @@
                         'TargetMachine': '17', # x86 - 64
                         'AdditionalLibraryDirectories':
                         [
+                            '<(windows_8_1_sdk_path)/Lib/winv6.3/um/x64',
                             '<(windows_sdk_path)/Lib/win8/um/x64',
                         ],
                     },
@@ -188,6 +191,7 @@
                     {
                         'AdditionalLibraryDirectories':
                         [
+                            '<(windows_8_1_sdk_path)/Lib/winv6.3/um/x64',
                             '<(windows_sdk_path)/Lib/win8/um/x64',
                         ],
                     },
@@ -205,14 +209,14 @@
                         'TargetMachine': '3', # ARM
                         'AdditionalLibraryDirectories':
                         [
-                            '<(windows_8_1_sdk_path)/Lib/win8/um/arm',
+                            '<(windows_8_1_sdk_path)/Lib/winv6.3/um/arm',
                         ],
                     },
                     'VCLibrarianTool':
                     {
                         'AdditionalLibraryDirectories':
                         [
-                            '<(windows_8_1_sdk_path)/Lib/win8/um/arm',
+                            '<(windows_8_1_sdk_path)/Lib/winv6.3/um/arm',
                         ],
                     },
                 },
