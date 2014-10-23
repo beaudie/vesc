@@ -7,72 +7,58 @@
 #ifndef UTIL_TEST_FIXTURE_TYPES_H
 #define UTIL_TEST_FIXTURE_TYPES_H
 
+#include "EGLWindow.h"
+
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
-namespace Gles
-{
-
-struct Two
-{
-    static EGLint GetGlesMajorVersion()
-    {
-        return 2;
-    };
-};
-
-struct Three
-{
-    static EGLint GetGlesMajorVersion()
-    {
-        return 3;
-    };
-};
-
-}
-
-namespace Rend
-{
-
 struct D3D11
 {
-    static EGLint GetRequestedRenderer()
+    static EGLPlatformParameters GetPlatform()
     {
-        return EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE;
+        return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE, EGL_DONT_CARE, EGL_DONT_CARE, EGL_FALSE);
+    };
+};
+
+struct D3D11_WARP
+{
+    static EGLPlatformParameters GetPlatform()
+    {
+        return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE, EGL_DONT_CARE, EGL_DONT_CARE, EGL_TRUE);
     };
 };
 
 struct D3D9
 {
-    static EGLint GetRequestedRenderer()
+    static EGLPlatformParameters GetPlatform()
     {
-        return EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE;
+        return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE, EGL_DONT_CARE, EGL_DONT_CARE, EGL_FALSE);
     };
 };
-
-struct WARP
-{
-    static EGLint GetRequestedRenderer()
-    {
-        return EGL_PLATFORM_ANGLE_TYPE_D3D11_WARP_ANGLE;
-    };
-};
-
-}
 
 // Test Fixture Type
-template<typename GlesVersionT, typename RendererT>
-struct TFT
+template<GLint GLESMajorVersion, typename PlatformT>
+struct TestFixture
 {
     static EGLint GetGlesMajorVersion()
     {
-        return GlesVersionT::GetGlesMajorVersion();
+        return GLESMajorVersion;
     }
 
-    static EGLint GetRequestedRenderer()
+    static EGLPlatformParameters GetPlatform()
     {
-        return RendererT::GetRequestedRenderer();
+        return PlatformT::GetPlatform();
     }
 };
+
+// Typedefs of common fixture types
+typedef TestFixture<2, D3D9>       ES2_D3D9;
+
+typedef TestFixture<2, D3D11>      ES2_D3D11;
+typedef TestFixture<2, D3D11_WARP> ES2_D3D11_WARP;
+typedef TestFixture<3, D3D11>      ES3_D3D11;
+typedef TestFixture<3, D3D11_WARP> ES3_D3D11_WARP;
+
+#define ANGLE_TYPED_TEST_CASE(testName, ...) TYPED_TEST_CASE(testName, ::testing::Types<__VA_ARGS__>);
 
 #endif // UTIL_TEST_FIXTURE_TYPES_H

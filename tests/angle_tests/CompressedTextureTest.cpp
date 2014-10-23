@@ -2,14 +2,13 @@
 #include "media/pixel.inl"
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-typedef ::testing::Types<TFT<Gles::Two, Rend::D3D11>, TFT<Gles::Two, Rend::D3D9>> TestFixtureTypes;
-TYPED_TEST_CASE(CompressedTextureTest, TestFixtureTypes);
+ANGLE_TYPED_TEST_CASE(CompressedTextureTest, ES2_D3D9, ES2_D3D11);
 
 template<typename T>
 class CompressedTextureTest : public ANGLETest
 {
 protected:
-    CompressedTextureTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetRequestedRenderer())
+    CompressedTextureTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetPlatform())
     {
         setWindowWidth(512);
         setWindowHeight(512);

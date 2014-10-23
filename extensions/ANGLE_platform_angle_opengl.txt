@@ -51,8 +51,8 @@ New Tokens
 
     Accepted as values for the EGL_PLATFORM_ANGLE_TYPE_ANGLE attribute:
 
-        EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE               0x3207
-        EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE             0x3208
+        EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE               0x3209
+        EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE             0x3210
 
 Additions to the EGL Specification
 
