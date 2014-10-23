@@ -68,10 +68,12 @@ New Tokens
     eglGetPlatformDisplayEXT:
 
         EGL_PLATFORM_ANGLE_TYPE_ANGLE                      0x3202
+        EGL_PLATFORM_ANGLE_VERSION_MAJOR_ANGLE             0x3203
+        EGL_PLATFORM_ANGLE_VERSION_MINOR_ANGLE             0x3204
 
     Accepted as values for the EGL_PLATFORM_ANGLE_TYPE_ANGLE attribute:
 
-        EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE              0x3203
+        EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE              0x3205
 
 Additions to the EGL Specification
 
@@ -102,11 +104,35 @@ New Behavior
         to OpenGL ES,
       - EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE for a D3D11 display which
         translates to OpenGL ES,
-      - EGL_PLATFORM_ANGLE_TYPE_D3D11_WARP_ANGLE a D3D11 WARP display which
-        translates to OpenGL ES,
       - EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE for an OpenGL display which
         translates to OpenGL ES,
       - EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE for a native OpenGL ES display
+
+    If no <attrib_list> is specified, the values of
+    EGL_PLATFORM_ANGLE_VERSION_MAJOR_ANGLE and
+    EGL_PLATFORM_ANGLE_VERSION_MINOR_ANGLE are implicitly set to EGL_DONT_CARE.
+    Otherwise the values of EGL_PLATFORM_ANGLE_VERSION_MAJOR_ANGLE and
+    EGL_PLATFORM_ANGLE_VERSION_MINOR_ANGLE specify the maximum version of the
+    underlying graphics API to translate to depending on the requested platform
+    type. If either EGL_PLATFORM_ANGLE_VERSION_MAJOR_ANGLE or
+    EGL_PLATFORM_ANGLE_VERSION_MINOR_ANGLE is set to EGL_DONT_CARE then the
+    version of the underlying platform is implementation dependent.
+      - If EGL_PLATFORM_ANGLE_TYPE_ANGLE is set to
+        EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE or
+        EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE, then
+        EGL_PLATFORM_ANGLE_VERSION_MAJOR_ANGLE and
+        EGL_PLATFORM_ANGLE_VERSION_MINOR_ANGLE have no effect.
+      - If EGL_PLATFORM_ANGLE_TYPE_ANGLE is set to
+        EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE, then
+        EGL_PLATFORM_ANGLE_VERSION_MAJOR_ANGLE and
+        EGL_PLATFORM_ANGLE_VERSION_MINOR_ANGLE specify the maximum feature
+        level to request.
+      - If EGL_PLATFORM_ANGLE_TYPE_ANGLE is set to
+        EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE or
+        EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE, then
+        EGL_PLATFORM_ANGLE_VERSION_MAJOR_ANGLE and
+        EGL_PLATFORM_ANGLE_VERSION_MINOR_ANGLE specify the maximum client
+        version to request on the underlying OpenGL or OpenGL ES context.
 
     If no display matching the requested <native_display> or of the type
     requested by the value of EGL_PLATFORM_ANGLE_TYPE_ANGLE is available,
@@ -114,9 +140,9 @@ New Behavior
 
 Dependencies on ANGLE_platform_angle_d3d
 
-    The EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE,
-    EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE and
-    EGL_PLATFORM_ANGLE_TYPE_D3D11_WARP_ANGLE <native_display> parameters to
+    The EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE and
+    EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE <native_display> and
+    EGL_PLATFORM_ANGLE_USE_WARP_ANGLE specifier parameters to
     eglGetPlatformDisplayEXT are only valid if ANGLE_platform_angle_d3d is
     supported.
 
@@ -134,8 +160,9 @@ Issues
 Revision History
 
     Version 1, 2014-02-04 (Scott Graham)
-        - Initial draft
+      - Initial draft
     Version 2, 2014-06-05 (Geoff Lang)
-        - Rename extension from ANGLE_platform_angle_d3d to
-          ANGLE_platform_angle.
-        - Add sub-extensions for specific platforms.
+      - Rename extension from ANGLE_platform_angle_d3d to ANGLE_platform_angle.
+      - Add sub-extensions for specific platforms.
+    Version 3, 2014-10-20 (Geoff Lang)
+      - Add attributes to request specific feature level and context versions.

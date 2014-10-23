@@ -2,11 +2,11 @@
 #include "EGLWindow.h"
 #include "OSWindow.h"
 
-ANGLETest::ANGLETest(EGLint glesMajorVersion, EGLint requestedRenderer)
+ANGLETest::ANGLETest(EGLint glesMajorVersion, const EGLPlatformParameters &platform)
     : mEGLWindow(NULL),
       mOSWindow(NULL)
 {
-    mEGLWindow = new EGLWindow(1280, 720, glesMajorVersion, requestedRenderer);
+    mEGLWindow = new EGLWindow(1280, 720, glesMajorVersion, platform);
 }
 
 void ANGLETest::SetUp()
