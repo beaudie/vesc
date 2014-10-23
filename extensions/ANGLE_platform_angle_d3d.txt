@@ -51,13 +51,25 @@ New Tokens
 
     Accepted as values for the EGL_PLATFORM_ANGLE_TYPE_ANGLE attribute:
 
-        EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE                 0x3204
-        EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE                0x3205
-        EGL_PLATFORM_ANGLE_TYPE_D3D11_WARP_ANGLE           0x3206
+        EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE                 0x3206
+        EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE                0x3207
+
+    Accepted as an attribute name in the <attrib_list> argument of
+    eglGetPlatformDisplayEXT:
+
+        EGL_PLATFORM_ANGLE_USE_WARP_ANGLE                  0x3208
 
 Additions to the EGL Specification
 
     None.
+
+New Behavior
+
+    If no <attrib_list> is specified to eglGetPlatformDisplayEXT, the value of
+    EGL_PLATFORM_ANGLE_USE_WARP_ANGLE is implicitly set to
+    EGL_FALSE. Otherwise, the value of EGL_PLATFORM_ANGLE_TYPE_ANGLE should be:
+      - EGL_TRUE to request a WARP device.
+      - EGL_FALSE to request a hardware accelerated device.
 
 Issues
 
@@ -66,4 +78,6 @@ Issues
 Revision History
 
     Version 1, 2014-06-05 (Geoff Lang)
-        - Initial draft
+      - Initial draft
+    Version 2, 2014-10-20 (Geoff Lang)
+      - Separate WARP devices into a new attribute instead of a platform type.
