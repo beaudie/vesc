@@ -99,9 +99,9 @@ enum
     MAX_TEXTURE_IMAGE_UNITS_VTF_SM3 = 4
 };
 
-Renderer9::Renderer9(egl::Display *display, EGLNativeDisplayType hDc, EGLint requestedDisplay)
+Renderer9::Renderer9(egl::Display *display, EGLNativeDisplayType nativeDisplay, const egl::AttributeMap &attributes)
     : Renderer(display),
-      mDc(hDc)
+      mDc(nativeDisplay)
 {
     mD3d9Module = NULL;
 

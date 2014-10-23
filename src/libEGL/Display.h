@@ -12,9 +12,11 @@
 #define LIBEGL_DISPLAY_H_
 
 #include <set>
+#include <map>
 #include <vector>
 
 #include "libEGL/Config.h"
+#include "libEGL/AttributeMap.h"
 
 namespace gl
 {
@@ -33,7 +35,7 @@ class Display
     bool initialize();
     void terminate();
 
-    static egl::Display *getDisplay(EGLNativeDisplayType displayId, EGLint displayType);
+    static egl::Display *getDisplay(EGLNativeDisplayType displayId, const AttributeMap &attribMap);
 
     static const char *getExtensionString(egl::Display *display);
 
@@ -68,12 +70,12 @@ class Display
   private:
     DISALLOW_COPY_AND_ASSIGN(Display);
 
-    Display(EGLNativeDisplayType displayId, EGLint displayType);
+    Display(EGLNativeDisplayType displayId, const AttributeMap &attribMap);
 
     bool restoreLostDevice();
 
     EGLNativeDisplayType mDisplayId;
-    EGLint mRequestedDisplayType;
+    AttributeMap mAttributeMap;
 
     typedef std::set<Surface*> SurfaceSet;
     SurfaceSet mSurfaceSet;

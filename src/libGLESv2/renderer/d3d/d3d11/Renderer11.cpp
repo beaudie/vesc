@@ -109,10 +109,9 @@ bool UnsetSRVsWithResource(std::vector<ID3D11ShaderResourceView *> &srvs, const 
 
 }
 
-Renderer11::Renderer11(egl::Display *display, EGLNativeDisplayType hDc, EGLint requestedDisplay)
+Renderer11::Renderer11(egl::Display *display, EGLNativeDisplayType nativeDisplay, const egl::AttributeMap &attributes)
     : Renderer(display),
-      mDc(hDc),
-      mRequestedDisplay(requestedDisplay)
+      mDc(nativeDisplay)
 {
     mVertexDataManager = NULL;
     mIndexDataManager = NULL;
@@ -144,6 +143,51 @@ Renderer11::Renderer11(egl::Display *display, EGLNativeDisplayType hDc, EGLint r
     mAppliedGeometryShader = NULL;
     mCurPointGeometryShader = NULL;
     mAppliedPixelShader = NULL;
+
+    EGLint requestedMajorVersion = attributes.get(EGL_PLATFORM_ANGLE_VERSION_MAJOR_ANGLE, EGL_DONT_CARE);
+    EGLint requestedMinorVersion = attributes.get(EGL_PLATFORM_ANGLE_VERSION_MINOR_ANGLE, EGL_DONT_CARE);
+
+    if (requestedMajorVersion == EGL_DONT_CARE || requestedMajorVersion >= 11)
+    {
+        if (requestedMinorVersion == EGL_DONT_CARE || requestedMinorVersion >= 1)
+        {
+            mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_11_1);
+        }
+        if (requestedMinorVersion == EGL_DONT_CARE || requestedMinorVersion >= 0)
+        {
+            mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_11_0);
+        }
+    }
+
+    if (requestedMajorVersion == EGL_DONT_CARE || requestedMajorVersion >= 10)
+    {
+        if (requestedMinorVersion == EGL_DONT_CARE || requestedMinorVersion >= 1)
+        {
+            mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_10_1);
+        }
+        if (requestedMinorVersion == EGL_DONT_CARE || requestedMinorVersion >= 0)
+        {
+            mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_10_0);
+        }
+    }
+
+    if (requestedMajorVersion == EGL_DONT_CARE || requestedMajorVersion >= 9)
+    {
+        if (requestedMinorVersion == EGL_DONT_CARE || requestedMinorVersion >= 3)
+        {
+            mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_9_3);
+        }
+        if (requestedMinorVersion == EGL_DONT_CARE || requestedMinorVersion >= 2)
+        {
+            mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_9_2);
+        }
+        if (requestedMinorVersion == EGL_DONT_CARE || requestedMinorVersion >= 1)
+        {
+            mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_9_1);
+        }
+    }
+
+    mUseWarp = (attributes.get(EGL_PLATFORM_ANGLE_USE_WARP_ANGLE, EGL_FALSE) == EGL_TRUE);
 }
 
 Renderer11::~Renderer11()
@@ -189,28 +233,16 @@ EGLint Renderer11::initialize()
     }
 #endif
 
-    D3D_FEATURE_LEVEL featureLevels[] =
-    {
-        D3D_FEATURE_LEVEL_11_0,
-        D3D_FEATURE_LEVEL_10_1,
-        D3D_FEATURE_LEVEL_10_0,
-    };
-
-    D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_HARDWARE;
-    if (mRequestedDisplay == EGL_PLATFORM_ANGLE_TYPE_D3D11_WARP_ANGLE)
-    {
-        driverType = D3D_DRIVER_TYPE_WARP;
-    }
+    D3D_DRIVER_TYPE driverType = (mUseWarp ? D3D_DRIVER_TYPE_WARP : D3D_DRIVER_TYPE_HARDWARE);
 
     HRESULT result = S_OK;
-
 #ifdef _DEBUG
     result = D3D11CreateDevice(NULL,
                                driverType,
                                NULL,
                                D3D11_CREATE_DEVICE_DEBUG,
-                               featureLevels,
-                               ArraySize(featureLevels),
+                               mAvailableFeatureLevels.data(),
+                               mAvailableFeatureLevels.size(),
                                D3D11_SDK_VERSION,
                                &mDevice,
                                &mFeatureLevel,
@@ -228,8 +260,8 @@ EGLint Renderer11::initialize()
                                    driverType,
                                    NULL,
                                    0,
-                                   featureLevels,
-                                   ArraySize(featureLevels),
+                                   mAvailableFeatureLevels.data(),
+                                   mAvailableFeatureLevels.size(),
                                    D3D11_SDK_VERSION,
                                    &mDevice,
                                    &mFeatureLevel,
@@ -327,6 +359,8 @@ EGLint Renderer11::initialize()
 #endif
 
     initializeDevice();
+
+    mDeviceLost = false;
 
     return EGL_SUCCESS;
 }
