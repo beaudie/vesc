@@ -431,7 +431,7 @@ Error Display::createContext(EGLConfig configHandle, EGLint clientVersion, const
         }
     }
 
-    if (clientVersion > 2 && mRenderer->getMajorShaderModel() < 4)
+    if (clientVersion == 3 && !(mRenderer->getClientVersion3Support()))
     {
         return Error(EGL_BAD_CONFIG);
     }

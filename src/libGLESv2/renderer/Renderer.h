@@ -74,6 +74,7 @@ struct ConfigDesc
     GLenum  depthStencilFormat;
     GLint   multiSample;
     bool    fastConfig;
+    bool    es2Conformant;
     bool    es3Capable;
 };
 
@@ -156,6 +157,8 @@ class Renderer
     virtual const gl::Caps &getRendererCaps() const;
     virtual const gl::TextureCapsMap &getRendererTextureCaps() const;
     virtual const gl::Extensions &getRendererExtensions() const;
+
+    virtual bool getClientVersion3Support() const = 0;
 
     virtual DWORD getAdapterVendor() const = 0;
     virtual std::string getRendererDescription() const = 0;
