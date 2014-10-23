@@ -110,7 +110,7 @@ bool UnsetSRVsWithResource(std::vector<ID3D11ShaderResourceView *> &srvs, const 
 }
 
 Renderer11::Renderer11(egl::Display *display, EGLNativeDisplayType hDc, EGLint requestedDisplay)
-    : Renderer(display),
+    : RendererD3D(display),
       mDc(hDc),
       mRequestedDisplay(requestedDisplay)
 {
