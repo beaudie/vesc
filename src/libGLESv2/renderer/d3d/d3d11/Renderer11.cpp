@@ -390,7 +390,11 @@ int Renderer11::generateConfigs(ConfigDesc **configDescList)
                     newConfig.depthStencilFormat = depthStencilFormatInfo.internalFormat;
                     newConfig.multiSample = 0;     // FIXME: enumerate multi-sampling
                     newConfig.fastConfig = true;   // Assume all DX11 format conversions to be fast
-                    newConfig.es3Capable = true;
+                    
+                    // Before we check mFeatureLevel, we need to ensure that the D3D device has been created.
+                    ASSERT(mDevice != NULL);
+                    newConfig.es2Conformant = (mFeatureLevel >= D3D_FEATURE_LEVEL_10_0);
+                    newConfig.es3Capable = getClientVersion3Support();
 
                     (*configDescList)[numConfigs++] = newConfig;
                 }
@@ -1895,6 +1899,11 @@ bool Renderer11::resetDevice()
     mDeviceLost = false;
 
     return true;
+}
+
+bool Renderer11::getClientVersion3Support() const
+{
+    return (mFeatureLevel >= D3D_FEATURE_LEVEL_10_0);
 }
 
 DWORD Renderer11::getAdapterVendor() const
