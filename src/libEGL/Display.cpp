@@ -417,6 +417,8 @@ Error Display::createOffscreenSurface(EGLConfig config, HANDLE shareHandle, cons
 Error Display::createContext(EGLConfig configHandle, EGLint clientVersion, const gl::Context *shareContext, bool notifyResets,
                              bool robustAccess, EGLContext *outContext)
 {
+    const Config *configuration = mConfigSet.get(configHandle);
+
     if (!mRenderer)
     {
         *outContext = EGL_NO_CONTEXT;
@@ -431,7 +433,7 @@ Error Display::createContext(EGLConfig configHandle, EGLint clientVersion, const
         }
     }
 
-    if (clientVersion > 2 && mRenderer->getMajorShaderModel() < 4)
+    if (clientVersion == 3 && !(configuration->mConformant & EGL_OPENGL_ES3_BIT_KHR))
     {
         return Error(EGL_BAD_CONFIG);
     }

@@ -74,6 +74,7 @@ struct ConfigDesc
     GLenum  depthStencilFormat;
     GLint   multiSample;
     bool    fastConfig;
+    bool    es2Conformant;
     bool    es3Capable;
 };
 
