@@ -14,8 +14,7 @@
 
 namespace rx
 {
-
-class Renderer;
+class RendererD3D;
 class StaticIndexBufferInterface;
 class StaticVertexBufferInterface;
 
@@ -31,7 +30,7 @@ class BufferD3D : public BufferImpl
 
     virtual size_t getSize() const = 0;
     virtual bool supportsDirectBinding() const = 0;
-    virtual Renderer* getRenderer() = 0;
+    virtual RendererD3D *getRenderer() = 0;
 
     rx::StaticVertexBufferInterface *getStaticVertexBuffer() { return mStaticVertexBuffer; }
     rx::StaticIndexBufferInterface *getStaticIndexBuffer() { return mStaticIndexBuffer; }

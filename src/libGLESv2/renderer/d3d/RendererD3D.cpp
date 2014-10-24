@@ -4,8 +4,7 @@
 // found in the LICENSE file.
 //
 
-// RendererD3D.cpp: Implements EGL dependencies for creating and destroying
-// Renderer3D instances.
+// RendererD3D.cpp: Implementation of the base D3D Renderer.
 
 #include "libGLESv2/renderer/d3d/RendererD3D.h"
 
@@ -13,7 +12,8 @@ namespace rx
 {
 
 RendererD3D::RendererD3D(egl::Display *display)
-    : Renderer(display)
+    : mDisplay(display),
+      mCurrentClientVersion(2)
 {
 }
 
@@ -21,4 +21,17 @@ RendererD3D::~RendererD3D()
 {
 }
 
-}  // namespace rx
+// static
+RendererD3D *RendererD3D::makeRendererD3D(RendererImpl *renderer)
+{
+    ASSERT(HAS_DYNAMIC_TYPE(RendererD3D*, renderer));
+    return static_cast<RendererD3D*>(renderer);
+}
+
+// static
+RendererD3D *RendererD3D::makeRendererD3D(gl::Renderer *renderer)
+{
+    return makeRendererD3D(renderer->getImplementation());
+}
+
+}
