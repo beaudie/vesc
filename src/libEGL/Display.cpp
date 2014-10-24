@@ -86,6 +86,7 @@ bool Display::initialize()
         return error(EGL_NOT_INITIALIZED, false);
     }
 
+    //TODO(jmadill): should be part of caps?
     EGLint minSwapInterval = mRenderer->getMinSwapInterval();
     EGLint maxSwapInterval = mRenderer->getMaxSwapInterval();
     EGLint maxTextureSize = mRenderer->getRendererCaps().max2DTextureSize;
@@ -405,6 +406,7 @@ EGLContext Display::createContext(EGLConfig configHandle, EGLint clientVersion, 
         }
     }
 
+    //TODO(jmadill): shader model is not cross-platform
     if (clientVersion > 2 && mRenderer->getMajorShaderModel() < 4)
     {
         return error(EGL_BAD_CONFIG, EGL_NO_CONTEXT);
@@ -595,6 +597,7 @@ void Display::initVendorString()
 
     LUID adapterLuid = {0};
 
+    //TODO(jmadill): LUID is not cross-platform
     if (mRenderer && mRenderer->getLUID(&adapterLuid))
     {
         char adapterLuidString[64];

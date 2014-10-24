@@ -14,14 +14,13 @@
 
 namespace rx
 {
-class Renderer;
 class Renderer9;
 
 class RenderTarget9 : public RenderTarget
 {
   public:
-    RenderTarget9(Renderer *renderer, IDirect3DSurface9 *surface);
-    RenderTarget9(Renderer *renderer, GLsizei width, GLsizei height, GLenum internalFormat, GLsizei samples);
+    RenderTarget9(Renderer9 *renderer, IDirect3DSurface9 *surface);
+    RenderTarget9(Renderer9 *renderer, GLsizei width, GLsizei height, GLenum internalFormat, GLsizei samples);
     virtual ~RenderTarget9();
 
     static RenderTarget9 *makeRenderTarget9(RenderTarget *renderTarget);
@@ -33,9 +32,8 @@ class RenderTarget9 : public RenderTarget
   private:
     DISALLOW_COPY_AND_ASSIGN(RenderTarget9);
 
-    IDirect3DSurface9 *mRenderTarget;
-
     Renderer9 *mRenderer;
+    IDirect3DSurface9 *mRenderTarget;
 };
 
 }

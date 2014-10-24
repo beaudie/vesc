@@ -9,10 +9,8 @@
 
 #include "libGLESv2/Context.h"
 
-#include "libGLESv2/main.h"
 #include "common/utilities.h"
 #include "common/platform.h"
-#include "libGLESv2/formatutils.h"
 #include "libGLESv2/Buffer.h"
 #include "libGLESv2/Fence.h"
 #include "libGLESv2/Framebuffer.h"
@@ -21,24 +19,29 @@
 #include "libGLESv2/Program.h"
 #include "libGLESv2/ProgramBinary.h"
 #include "libGLESv2/Query.h"
-#include "libGLESv2/Texture.h"
 #include "libGLESv2/ResourceManager.h"
-#include "libGLESv2/renderer/d3d/IndexDataManager.h"
-#include "libGLESv2/renderer/Renderer.h"
-#include "libGLESv2/VertexArray.h"
 #include "libGLESv2/Sampler.h"
-#include "libGLESv2/validationES.h"
+#include "libGLESv2/Texture.h"
 #include "libGLESv2/TransformFeedback.h"
+#include "libGLESv2/VertexArray.h"
+#include "libGLESv2/formatutils.h"
+#include "libGLESv2/main.h"
+#include "libGLESv2/validationES.h"
+#include "libGLESv2/renderer/Renderer.h"
 
 #include "libEGL/Surface.h"
 
 #include <sstream>
 #include <iterator>
 
+// TODO(jmadill): phase these out
+#include "libGLESv2/renderer/d3d/IndexDataManager.h"
+#include "libGLESv2/renderer/d3d/RendererD3D.h"
+
 namespace gl
 {
 
-Context::Context(int clientVersion, const gl::Context *shareContext, rx::Renderer *renderer, bool notifyResets, bool robustAccess)
+Context::Context(int clientVersion, const Context *shareContext, Renderer *renderer, bool notifyResets, bool robustAccess)
     : mRenderer(renderer)
 {
     ASSERT(robustAccess == false);   // Unimplemented
@@ -192,14 +195,16 @@ void Context::makeCurrent(egl::Surface *surface)
     // Wrap the existing swapchain resources into GL objects and assign them to the '0' names
     rx::SwapChain *swapchain = surface->getSwapChain();
 
-    Colorbuffer *colorbufferZero = new Colorbuffer(mRenderer, swapchain);
-    DepthStencilbuffer *depthStencilbufferZero = new DepthStencilbuffer(mRenderer, swapchain);
+    //TODO(jmadill): MANGLE refactor
+    rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
+    Colorbuffer *colorbufferZero = new Colorbuffer(rendererD3D, swapchain);
+    DepthStencilbuffer *depthStencilbufferZero = new DepthStencilbuffer(rendererD3D, swapchain);
     Framebuffer *framebufferZero = new DefaultFramebuffer(colorbufferZero, depthStencilbufferZero);
 
     setFramebufferZero(framebufferZero);
 
     // Store the current client version in the renderer
-    mRenderer->setCurrentClientVersion(mClientVersion);
+    rendererD3D->setCurrentClientVersion(mClientVersion);
 }
 
 // NOTE: this function should not assume that this context is current!
@@ -735,21 +740,25 @@ void Context::setRenderbufferStorage(GLsizei width, GLsizei height, GLenum inter
     RenderbufferStorage *renderbuffer = NULL;
 
     const InternalFormat &formatInfo = GetInternalFormatInfo(internalformat);
+
+    //TODO(jmadill): MANGLE refactor
+    rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
+
     if (formatInfo.depthBits > 0 && formatInfo.stencilBits > 0)
     {
-        renderbuffer = new gl::DepthStencilbuffer(mRenderer, width, height, samples);
+        renderbuffer = new gl::DepthStencilbuffer(rendererD3D, width, height, samples);
     }
     else if (formatInfo.depthBits > 0)
     {
-        renderbuffer = new gl::Depthbuffer(mRenderer, width, height, samples);
+        renderbuffer = new gl::Depthbuffer(rendererD3D, width, height, samples);
     }
     else if (formatInfo.stencilBits > 0)
     {
-        renderbuffer = new gl::Stencilbuffer(mRenderer, width, height, samples);
+        renderbuffer = new gl::Stencilbuffer(rendererD3D, width, height, samples);
     }
     else
     {
-        renderbuffer = new gl::Colorbuffer(mRenderer, width, height, internalformat, samples);
+        renderbuffer = new gl::Colorbuffer(rendererD3D, width, height, internalformat, samples);
     }
 
     mState.getCurrentRenderbuffer()->setStorage(renderbuffer);
@@ -1320,7 +1329,10 @@ Error Context::applyRenderTarget(GLenum drawMode, bool ignoreViewport)
     Framebuffer *framebufferObject = mState.getDrawFramebuffer();
     ASSERT(framebufferObject && framebufferObject->completeness(mClientVersion, mTextureCaps, mExtensions) == GL_FRAMEBUFFER_COMPLETE);
 
-    gl::Error error = mRenderer->applyRenderTarget(framebufferObject);
+    //TODO(jmadill): MANGLE refactor
+    rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
+
+    gl::Error error = rendererD3D->applyRenderTarget(framebufferObject);
     if (error.isError())
     {
         return error;
@@ -1328,10 +1340,10 @@ Error Context::applyRenderTarget(GLenum drawMode, bool ignoreViewport)
 
     float nearZ, farZ;
     mState.getDepthRange(&nearZ, &farZ);
-    mRenderer->setViewport(mState.getViewport(), nearZ, farZ, drawMode, mState.getRasterizerState().frontFace,
-                           ignoreViewport);
+    rendererD3D->setViewport(mState.getViewport(), nearZ, farZ, drawMode, mState.getRasterizerState().frontFace,
+                             ignoreViewport);
 
-    mRenderer->setScissorRectangle(mState.getScissor(), mState.isScissorTestEnabled());
+    rendererD3D->setScissorRectangle(mState.getScissor(), mState.isScissorTestEnabled());
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -1346,7 +1358,10 @@ Error Context::applyState(GLenum drawMode)
     rasterizer.pointDrawMode = (drawMode == GL_POINTS);
     rasterizer.multiSample = (samples != 0);
 
-    Error error = mRenderer->setRasterizerState(rasterizer);
+    //TODO(jmadill): MANGLE refactor
+    rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
+
+    Error error = rendererD3D->setRasterizerState(rasterizer);
     if (error.isError())
     {
         return error;
@@ -1383,14 +1398,14 @@ Error Context::applyState(GLenum drawMode)
     {
         mask = 0xFFFFFFFF;
     }
-    error = mRenderer->setBlendState(framebufferObject, mState.getBlendState(), mState.getBlendColor(), mask);
+    error = rendererD3D->setBlendState(framebufferObject, mState.getBlendState(), mState.getBlendColor(), mask);
     if (error.isError())
     {
         return error;
     }
 
-    error = mRenderer->setDepthStencilState(mState.getDepthStencilState(), mState.getStencilRef(), mState.getStencilBackRef(),
-                                            rasterizer.frontFace == GL_CCW);
+    error = rendererD3D->setDepthStencilState(mState.getDepthStencilState(), mState.getStencilRef(), mState.getStencilBackRef(),
+                                              rasterizer.frontFace == GL_CCW);
     if (error.isError())
     {
         return error;
@@ -1407,7 +1422,10 @@ Error Context::applyShaders(ProgramBinary *programBinary, bool transformFeedback
 
     const Framebuffer *fbo = mState.getDrawFramebuffer();
 
-    Error error = mRenderer->applyShaders(programBinary, inputLayout, fbo, mState.getRasterizerState().rasterizerDiscard, transformFeedbackActive);
+    //TODO(jmadill): MANGLE refactor
+    rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
+
+    Error error = rendererD3D->applyShaders(programBinary, inputLayout, fbo, mState.getRasterizerState().rasterizerDiscard, transformFeedbackActive);
     if (error.isError())
     {
         return error;
@@ -1429,7 +1447,10 @@ Error Context::generateSwizzles(ProgramBinary *programBinary, SamplerType type)
             Texture* texture = getSamplerTexture(textureUnit, textureType);
             if (texture->getSamplerState().swizzleRequired())
             {
-                Error error = mRenderer->generateSwizzle(texture);
+                //TODO(jmadill): MANGLE refactor
+                rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
+
+                Error error = rendererD3D->generateSwizzle(texture);
                 if (error.isError())
                 {
                     return error;
@@ -1464,6 +1485,9 @@ Error Context::generateSwizzles(ProgramBinary *programBinary)
 Error Context::applyTextures(ProgramBinary *programBinary, SamplerType shaderType,
                              const FramebufferTextureSerialArray &framebufferSerials, size_t framebufferSerialCount)
 {
+    //TODO(jmadill): MANGLE refactor
+    rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
+
     size_t samplerRange = programBinary->getUsedSamplerRange(shaderType);
     for (size_t samplerIndex = 0; samplerIndex < samplerRange; samplerIndex++)
     {
@@ -1484,13 +1508,13 @@ Error Context::applyTextures(ProgramBinary *programBinary, SamplerType shaderTyp
             if (texture->isSamplerComplete(sampler, mTextureCaps, mExtensions, mClientVersion) &&
                 !std::binary_search(framebufferSerials.begin(), framebufferSerials.begin() + framebufferSerialCount, texture->getTextureSerial()))
             {
-                Error error = mRenderer->setSamplerState(shaderType, samplerIndex, texture, sampler);
+                Error error = rendererD3D->setSamplerState(shaderType, samplerIndex, texture, sampler);
                 if (error.isError())
                 {
                     return error;
                 }
 
-                error = mRenderer->setTexture(shaderType, samplerIndex, texture);
+                error = rendererD3D->setTexture(shaderType, samplerIndex, texture);
                 if (error.isError())
                 {
                     return error;
@@ -1500,7 +1524,7 @@ Error Context::applyTextures(ProgramBinary *programBinary, SamplerType shaderTyp
             {
                 // Texture is not sampler complete or it is in use by the framebuffer.  Bind the incomplete texture.
                 Texture *incompleteTexture = getIncompleteTexture(textureType);
-                gl::Error error = mRenderer->setTexture(shaderType, samplerIndex, incompleteTexture);
+                gl::Error error = rendererD3D->setTexture(shaderType, samplerIndex, incompleteTexture);
                 if (error.isError())
                 {
                     return error;
@@ -1510,7 +1534,7 @@ Error Context::applyTextures(ProgramBinary *programBinary, SamplerType shaderTyp
         else
         {
             // No texture bound to this slot even though it is used by the shader, bind a NULL texture
-            Error error = mRenderer->setTexture(shaderType, samplerIndex, NULL);
+            Error error = rendererD3D->setTexture(shaderType, samplerIndex, NULL);
             if (error.isError())
             {
                 return error;
@@ -1523,7 +1547,10 @@ Error Context::applyTextures(ProgramBinary *programBinary, SamplerType shaderTyp
                                                         : mCaps.maxVertexTextureImageUnits;
     for (size_t samplerIndex = samplerRange; samplerIndex < samplerCount; samplerIndex++)
     {
-        Error error = mRenderer->setTexture(shaderType, samplerIndex, NULL);
+        //TODO(jmadill): MANGLE refactor
+        rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
+
+        Error error = rendererD3D->setTexture(shaderType, samplerIndex, NULL);
         if (error.isError())
         {
             return error;
@@ -1582,10 +1609,13 @@ Error Context::applyUniformBuffers()
 
 bool Context::applyTransformFeedbackBuffers()
 {
+    //TODO(jmadill): MANGLE refactor
+    rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
+
     TransformFeedback *curTransformFeedback = mState.getCurrentTransformFeedback();
     if (curTransformFeedback && curTransformFeedback->isStarted() && !curTransformFeedback->isPaused())
     {
-        mRenderer->applyTransformFeedbackBuffers(mState);
+        rendererD3D->applyTransformFeedbackBuffers(mState);
         return true;
     }
     else
@@ -1768,7 +1798,10 @@ Error Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei insta
         return error;
     }
 
-    if (!mRenderer->applyPrimitiveType(mode, count))
+    //TODO(jmadill): MANGLE refactor
+    rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
+
+    if (!rendererD3D->applyPrimitiveType(mode, count))
     {
         return Error(GL_NO_ERROR);
     }
@@ -1785,7 +1818,7 @@ Error Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei insta
         return error;
     }
 
-    error = mRenderer->applyVertexBuffer(mState, first, count, instances);
+    error = rendererD3D->applyVertexBuffer(mState, first, count, instances);
     if (error.isError())
     {
         return error;
@@ -1843,7 +1876,10 @@ Error Context::drawElements(GLenum mode, GLsizei count, GLenum type,
         return error;
     }
 
-    if (!mRenderer->applyPrimitiveType(mode, count))
+    //TODO(jmadill): MANGLE refactor
+    rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
+
+    if (!rendererD3D->applyPrimitiveType(mode, count))
     {
         return Error(GL_NO_ERROR);
     }
@@ -1863,14 +1899,14 @@ Error Context::drawElements(GLenum mode, GLsizei count, GLenum type,
     VertexArray *vao = mState.getVertexArray();
     rx::TranslatedIndexData indexInfo;
     indexInfo.indexRange = indexRange;
-    error = mRenderer->applyIndexBuffer(indices, vao->getElementArrayBuffer(), count, mode, type, &indexInfo);
+    error = rendererD3D->applyIndexBuffer(indices, vao->getElementArrayBuffer(), count, mode, type, &indexInfo);
     if (error.isError())
     {
         return error;
     }
 
     GLsizei vertexCount = indexInfo.indexRange.length() + 1;
-    error = mRenderer->applyVertexBuffer(mState, indexInfo.indexRange.start, vertexCount, instances);
+    error = rendererD3D->applyVertexBuffer(mState, indexInfo.indexRange.start, vertexCount, instances);
     if (error.isError())
     {
         return error;
@@ -2359,8 +2395,10 @@ Error Context::blitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY
     if (blitRenderTarget || blitDepth || blitStencil)
     {
         const gl::Rectangle *scissor = mState.isScissorTestEnabled() ? &mState.getScissor() : NULL;
-        gl::Error error = mRenderer->blitRect(readFramebuffer, srcRect, drawFramebuffer, dstRect, scissor,
-                                              blitRenderTarget, blitDepth, blitStencil, filter);
+        //TODO(jmadill): MANGLE refactor
+        rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
+        gl::Error error = rendererD3D->blitRect(readFramebuffer, srcRect, drawFramebuffer, dstRect, scissor,
+                                                blitRenderTarget, blitDepth, blitStencil, filter);
         if (error.isError())
         {
             return error;
@@ -2438,7 +2476,7 @@ void Context::initCaps(GLuint clientVersion)
 
 extern "C"
 {
-gl::Context *glCreateContext(int clientVersion, const gl::Context *shareContext, rx::Renderer *renderer, bool notifyResets, bool robustAccess)
+gl::Context *glCreateContext(int clientVersion, const gl::Context *shareContext, gl::Renderer *renderer, bool notifyResets, bool robustAccess)
 {
     return new gl::Context(clientVersion, shareContext, renderer, notifyResets, robustAccess);
 }

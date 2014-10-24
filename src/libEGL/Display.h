@@ -19,6 +19,7 @@
 namespace gl
 {
 class Context;
+class Renderer;
 }
 
 namespace egl
@@ -56,7 +57,7 @@ class Display
     bool isValidSurface(egl::Surface *surface);
     bool hasExistingWindowSurface(EGLNativeWindowType window);
 
-    rx::Renderer *getRenderer() { return mRenderer; };
+    gl::Renderer *getRenderer() { return mRenderer; };
 
     // exported methods must be virtual
     virtual void notifyDeviceLost();
@@ -83,7 +84,7 @@ class Display
     typedef std::set<gl::Context*> ContextSet;
     ContextSet mContextSet;
 
-    rx::Renderer *mRenderer;
+    gl::Renderer *mRenderer;
 
     static std::string generateClientExtensionString();
 

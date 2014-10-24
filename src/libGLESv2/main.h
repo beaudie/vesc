@@ -23,7 +23,8 @@ class Surface;
 namespace gl
 {
 class Context;
-    
+class Renderer;
+
 struct Current
 {
     Context *context;
@@ -48,20 +49,15 @@ const T &error(GLenum errorCode, const T &returnValue)
 
 }
 
-namespace rx
-{
-class Renderer;
-}
-
 extern "C"
 {
 // Exported functions for use by EGL
-gl::Context *glCreateContext(int clientVersion, const gl::Context *shareContext, rx::Renderer *renderer, bool notifyResets, bool robustAccess);
+gl::Context *glCreateContext(int clientVersion, const gl::Context *shareContext, gl::Renderer *renderer, bool notifyResets, bool robustAccess);
 void glDestroyContext(gl::Context *context);
 void glMakeCurrent(gl::Context *context, egl::Display *display, egl::Surface *surface);
 gl::Context *glGetCurrentContext();
-rx::Renderer *glCreateRenderer(egl::Display *display, EGLNativeDisplayType nativeDisplay, EGLint requestedDisplayType);
-void glDestroyRenderer(rx::Renderer *renderer);
+gl::Renderer *glCreateRenderer(egl::Display *display, EGLNativeDisplayType nativeDisplay, EGLint requestedDisplayType);
+void glDestroyRenderer(gl::Renderer *renderer);
 
 __eglMustCastToProperFunctionPointerType EGLAPIENTRY glGetProcAddress(const char *procname);
 bool EGLAPIENTRY glBindTexImage(egl::Surface *surface);

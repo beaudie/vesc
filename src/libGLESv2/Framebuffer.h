@@ -20,7 +20,6 @@
 
 namespace rx
 {
-class Renderer;
 struct Workarounds;
 }
 
@@ -31,6 +30,7 @@ class Colorbuffer;
 class Depthbuffer;
 class Stencilbuffer;
 class DepthStencilbuffer;
+class Renderer;
 struct Caps;
 struct Extensions;
 class TextureCapsMap;
@@ -41,7 +41,6 @@ class Framebuffer
 {
   public:
     Framebuffer(GLuint id);
-
     virtual ~Framebuffer();
 
     GLuint id() const { return mId; }
