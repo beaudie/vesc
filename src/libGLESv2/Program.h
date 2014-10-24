@@ -21,13 +21,9 @@
 #include <string>
 #include <set>
 
-namespace rx
-{
-class Renderer;
-}
-
 namespace gl
 {
+class Renderer;
 struct Caps;
 class ResourceManager;
 class Shader;
@@ -67,7 +63,7 @@ class InfoLog
 class Program
 {
   public:
-    Program(rx::Renderer *renderer, ResourceManager *manager, GLuint handle);
+    Program(Renderer *renderer, ResourceManager *manager, GLuint handle);
 
     ~Program();
 
@@ -140,7 +136,7 @@ class Program
     unsigned int mRefCount;
 
     ResourceManager *mResourceManager;
-    rx::Renderer *mRenderer;
+    Renderer *mRenderer;
     const GLuint mHandle;
 
     InfoLog mInfoLog;

@@ -12,7 +12,7 @@
 #include "libGLESv2/Texture.h"
 #include "libGLESv2/formatutils.h"
 #include "libGLESv2/FramebufferAttachment.h"
-#include "libGLESv2/renderer/Renderer.h"
+#include "libGLESv2/renderer/d3d/RendererD3D.h"
 #include "libGLESv2/renderer/RenderTarget.h"
 
 #include "common/utilities.h"
@@ -172,7 +172,7 @@ unsigned int RenderbufferStorage::getTextureSerial() const
     return -1;
 }
 
-Colorbuffer::Colorbuffer(rx::Renderer *renderer, rx::SwapChain *swapChain)
+Colorbuffer::Colorbuffer(rx::RendererD3D *renderer, rx::SwapChain *swapChain)
 {
     mRenderTarget = renderer->createRenderTarget(swapChain, false); 
 
@@ -186,7 +186,7 @@ Colorbuffer::Colorbuffer(rx::Renderer *renderer, rx::SwapChain *swapChain)
     }
 }
 
-Colorbuffer::Colorbuffer(rx::Renderer *renderer, int width, int height, GLenum format, GLsizei samples) : mRenderTarget(NULL)
+Colorbuffer::Colorbuffer(rx::RendererD3D *renderer, int width, int height, GLenum format, GLsizei samples) : mRenderTarget(NULL)
 {
     mRenderTarget = renderer->createRenderTarget(width, height, format, samples);
 
@@ -213,7 +213,7 @@ rx::RenderTarget *Colorbuffer::getRenderTarget()
     return mRenderTarget;
 }
 
-DepthStencilbuffer::DepthStencilbuffer(rx::Renderer *renderer, rx::SwapChain *swapChain)
+DepthStencilbuffer::DepthStencilbuffer(rx::RendererD3D *renderer, rx::SwapChain *swapChain)
 {
     mDepthStencil = renderer->createRenderTarget(swapChain, true);
     if (mDepthStencil)
@@ -226,7 +226,7 @@ DepthStencilbuffer::DepthStencilbuffer(rx::Renderer *renderer, rx::SwapChain *sw
     }
 }
 
-DepthStencilbuffer::DepthStencilbuffer(rx::Renderer *renderer, int width, int height, GLsizei samples)
+DepthStencilbuffer::DepthStencilbuffer(rx::RendererD3D *renderer, int width, int height, GLsizei samples)
 {
 
     mDepthStencil = renderer->createRenderTarget(width, height, GL_DEPTH24_STENCIL8_OES, samples);
@@ -251,7 +251,7 @@ rx::RenderTarget *DepthStencilbuffer::getRenderTarget()
     return mDepthStencil;
 }
 
-Depthbuffer::Depthbuffer(rx::Renderer *renderer, int width, int height, GLsizei samples) : DepthStencilbuffer(renderer, width, height, samples)
+Depthbuffer::Depthbuffer(rx::RendererD3D *renderer, int width, int height, GLsizei samples) : DepthStencilbuffer(renderer, width, height, samples)
 {
     if (mDepthStencil)
     {
@@ -265,7 +265,7 @@ Depthbuffer::~Depthbuffer()
 {
 }
 
-Stencilbuffer::Stencilbuffer(rx::Renderer *renderer, int width, int height, GLsizei samples) : DepthStencilbuffer(renderer, width, height, samples)
+Stencilbuffer::Stencilbuffer(rx::RendererD3D *renderer, int width, int height, GLsizei samples) : DepthStencilbuffer(renderer, width, height, samples)
 {
     if (mDepthStencil)
     {
