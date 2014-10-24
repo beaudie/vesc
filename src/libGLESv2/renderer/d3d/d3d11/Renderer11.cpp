@@ -2187,26 +2187,7 @@ void Renderer11::setOneTimeRenderTarget(ID3D11RenderTargetView *renderTargetView
 gl::Error Renderer11::createRenderTarget(SwapChain *swapChain, bool depth, RenderTarget **outRT)
 {
     SwapChain11 *swapChain11 = SwapChain11::makeSwapChain11(swapChain);
-
-    if (depth)
-    {
-        // Note: depth stencil may be NULL for 0 sized surfaces
-        *outRT = new RenderTarget11(swapChain11->getDepthStencil(),
-                                    swapChain11->getDepthStencilTexture(),
-                                    swapChain11->getDepthStencilShaderResource(),
-                                    swapChain11->GetDepthBufferInternalFormat(),
-                                    swapChain11->getWidth(), swapChain11->getHeight(), 1);
-    }
-    else
-    {
-        // Note: render target may be NULL for 0 sized surfaces
-        *outRT = new RenderTarget11(swapChain11->getRenderTarget(),
-                                    swapChain11->getOffscreenTexture(),
-                                    swapChain11->getRenderTargetShaderResource(),
-                                    swapChain11->GetBackBufferInternalFormat(),
-                                    swapChain11->getWidth(), swapChain11->getHeight(), 1);
-    }
-
+    *outRT = new SwapChainRenderTarget11(swapChain11, depth);
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -2298,7 +2279,7 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
                 return gl::Error(GL_OUT_OF_MEMORY, "Failed to create render target depth stencil view, result: 0x%X.", result);
             }
 
-            *outRT = new RenderTarget11(dsv, texture, srv, format, width, height, 1);
+            *outRT = new ResourceRenderTarget11(dsv, texture, srv, format, width, height, 1);
         }
         else if (bindRTV)
         {
@@ -2323,7 +2304,7 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
                 mDeviceContext->ClearRenderTargetView(rtv, clearValues);
             }
 
-            *outRT = new RenderTarget11(rtv, texture, srv, format, width, height, 1);
+            *outRT = new ResourceRenderTarget11(rtv, texture, srv, format, width, height, 1);
         }
         else
         {
@@ -2332,7 +2313,7 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
     }
     else
     {
-        *outRT = new RenderTarget11(reinterpret_cast<ID3D11RenderTargetView*>(NULL), NULL, NULL, format, height, format, samples);
+        *outRT = new ResourceRenderTarget11(reinterpret_cast<ID3D11RenderTargetView*>(NULL), NULL, NULL, format, height, format, samples);
     }
 
     return gl::Error(GL_NO_ERROR);
