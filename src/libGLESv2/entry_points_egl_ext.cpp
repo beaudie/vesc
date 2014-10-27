@@ -76,6 +76,8 @@ EGLBoolean EGLAPIENTRY QuerySurfacePointerANGLE(EGLDisplay dpy, EGLSurface surfa
     {
       case EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE:
         break;
+      case EGL_DXGI_KEYED_MUTEX_ANGLE:
+        break;
       default:
         SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
         return EGL_FALSE;

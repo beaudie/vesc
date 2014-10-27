@@ -45,6 +45,7 @@ class SwapChain
     GLenum GetDepthBufferInternalFormat() const { return mDepthBufferFormat; }
 
     virtual HANDLE getShareHandle() {return mShareHandle;};
+    virtual void *getKeyedMutex() {return NULL;};
 
   protected:
     rx::NativeWindow mNativeWindow;  // Handler for the Window that the surface is created for.

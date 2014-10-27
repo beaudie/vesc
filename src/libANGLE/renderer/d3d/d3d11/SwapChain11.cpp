@@ -18,6 +18,12 @@
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2d11ps.h"
 
 
+#ifdef ANGLE_ENABLE_KEYEDMUTEX
+#define ANGLE_RESOURCE_SHARE_TYPE D3D11_RESOURCE_MISC_SHARED_KEYEDMUTEX
+#else
+#define ANGLE_RESOURCE_SHARE_TYPE D3D11_RESOURCE_MISC_SHARED
+#endif
+
 namespace rx
 {
 
@@ -27,6 +33,7 @@ SwapChain11::SwapChain11(Renderer11 *renderer, NativeWindow nativeWindow, HANDLE
       SwapChain(nativeWindow, shareHandle, backBufferFormat, depthBufferFormat)
 {
     mSwapChain = NULL;
+    mKeyedMutex = NULL;
     mBackBufferTexture = NULL;
     mBackBufferRTView = NULL;
     mOffscreenTexture = NULL;
@@ -55,6 +62,7 @@ SwapChain11::~SwapChain11()
 void SwapChain11::release()
 {
     SafeRelease(mSwapChain);
+    SafeRelease(mKeyedMutex);
     SafeRelease(mBackBufferTexture);
     SafeRelease(mBackBufferRTView);
     SafeRelease(mOffscreenTexture);
@@ -162,7 +170,7 @@ EGLint SwapChain11::resetOffscreenTexture(int backbufferWidth, int backbufferHei
         offscreenTextureDesc.Usage = D3D11_USAGE_DEFAULT;
         offscreenTextureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
         offscreenTextureDesc.CPUAccessFlags = 0;
-        offscreenTextureDesc.MiscFlags = useSharedResource ? D3D11_RESOURCE_MISC_SHARED : 0;
+        offscreenTextureDesc.MiscFlags = useSharedResource ? ANGLE_RESOURCE_SHARE_TYPE : 0;
 
         HRESULT result = device->CreateTexture2D(&offscreenTextureDesc, NULL, &mOffscreenTexture);
 
@@ -206,6 +214,7 @@ EGLint SwapChain11::resetOffscreenTexture(int backbufferWidth, int backbufferHei
                 }
             }
         }
+        mKeyedMutex = d3d11::DynamicCastComObject<IDXGIKeyedMutext>(mOffscreenTexture);
     }
 
 
