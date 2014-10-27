@@ -37,7 +37,7 @@ class Renderer9 : public RendererD3D
     Renderer9(egl::Display *display, EGLNativeDisplayType hDc, EGLint requestedDisplay);
     virtual ~Renderer9();
 
-    static Renderer9 *makeRenderer9(rx::RendererImpl *renderer);
+    static Renderer9 *makeRenderer9(RendererImpl *renderer);
 
     virtual EGLint initialize();
     virtual bool resetDevice();
@@ -50,7 +50,7 @@ class Renderer9 : public RendererD3D
 
     virtual gl::Error sync(bool block);
 
-    virtual SwapChain *createSwapChain(rx::NativeWindow nativeWindow, HANDLE shareHandle, GLenum backBufferFormat, GLenum depthBufferFormat);
+    virtual SwapChain *createSwapChain(NativeWindow nativeWindow, HANDLE shareHandle, GLenum backBufferFormat, GLenum depthBufferFormat);
 
     gl::Error allocateEventQuery(IDirect3DQuery9 **outQuery);
     void freeEventQuery(IDirect3DQuery9* query);
@@ -144,10 +144,10 @@ class Renderer9 : public RendererD3D
 
     // Shader operations
     void releaseShaderCompiler() override;
-    virtual gl::Error loadExecutable(const void *function, size_t length, rx::ShaderType type,
+    virtual gl::Error loadExecutable(const void *function, size_t length, ShaderType type,
                                      const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
                                      bool separatedOutputBuffers, ShaderExecutable **outExecutable);
-    virtual gl::Error compileToExecutable(gl::InfoLog &infoLog, const std::string &shaderHLSL, rx::ShaderType type,
+    virtual gl::Error compileToExecutable(gl::InfoLog &infoLog, const std::string &shaderHLSL, ShaderType type,
                                           const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
                                           bool separatedOutputBuffers, D3DWorkaroundType workaround,
                                           ShaderExecutable **outExectuable);
@@ -192,7 +192,7 @@ class Renderer9 : public RendererD3D
     D3DPOOL getTexturePool(DWORD usage) const;
 
     virtual bool getLUID(LUID *adapterLuid) const;
-    virtual rx::VertexConversionType getVertexConversionType(const gl::VertexFormat &vertexFormat) const;
+    virtual VertexConversionType getVertexConversionType(const gl::VertexFormat &vertexFormat) const;
     virtual GLenum getVertexComponentType(const gl::VertexFormat &vertexFormat) const;
 
     gl::Error copyToRenderTarget(IDirect3DSurface9 *dest, IDirect3DSurface9 *source, bool fromManaged);
@@ -262,7 +262,7 @@ class Renderer9 : public RendererD3D
     unsigned int mAppliedStencilbufferSerial;
     bool mDepthStencilInitialized;
     bool mRenderTargetDescInitialized;
-    rx::RenderTarget::Desc mRenderTargetDesc;
+    RenderTarget::Desc mRenderTargetDesc;
     unsigned int mCurStencilSize;
     unsigned int mCurDepthSize;
 
@@ -309,8 +309,8 @@ class Renderer9 : public RendererD3D
     IDirect3DPixelShader9 *mAppliedPixelShader;
     unsigned int mAppliedProgramSerial;
 
-    rx::dx_VertexConstants mVertexConstants;
-    rx::dx_PixelConstants mPixelConstants;
+    dx_VertexConstants mVertexConstants;
+    dx_PixelConstants mPixelConstants;
     bool mDxUniformsDirty;
 
     // A pool of event queries that are currently unused.
