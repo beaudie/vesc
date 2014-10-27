@@ -1181,7 +1181,8 @@ void State::getFloatv(GLenum pname, GLfloat *params)
     }
 }
 
-void State::getIntegerv(GLenum pname, GLint *params)
+void State::getIntegerv(GLint clientVersion, const TextureCapsMap &textureCaps,
+                        const Extensions &extensions, GLenum pname, GLint *params)
 {
     if (pname >= GL_DRAW_BUFFER0_EXT && pname <= GL_DRAW_BUFFER15_EXT)
     {
@@ -1239,12 +1240,12 @@ void State::getIntegerv(GLenum pname, GLint *params)
       case GL_SAMPLES:
         {
             gl::Framebuffer *framebuffer = mDrawFramebuffer;
-            if (framebuffer->completeness() == GL_FRAMEBUFFER_COMPLETE)
+            if (framebuffer->completeness(clientVersion, textureCaps, extensions) == GL_FRAMEBUFFER_COMPLETE)
             {
                 switch (pname)
                 {
                   case GL_SAMPLE_BUFFERS:
-                    if (framebuffer->getSamples() != 0)
+                    if (framebuffer->getSamples(clientVersion, textureCaps, extensions) != 0)
                     {
                         *params = 1;
                     }
@@ -1254,7 +1255,7 @@ void State::getIntegerv(GLenum pname, GLint *params)
                     }
                     break;
                   case GL_SAMPLES:
-                    *params = framebuffer->getSamples();
+                    *params = framebuffer->getSamples(clientVersion, textureCaps, extensions);
                     break;
                 }
             }
