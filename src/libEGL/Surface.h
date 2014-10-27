@@ -19,11 +19,12 @@
 namespace gl
 {
 class Texture2D;
+class Renderer;
 }
 namespace rx
 {
-class Renderer;
 class SwapChain;
+class RendererD3D; //TODO(jmadill): remove this
 }
 
 namespace egl
@@ -69,11 +70,11 @@ class Surface
 
     EGLint isFixedSize() const;
 
-private:
+  private:
     DISALLOW_COPY_AND_ASSIGN(Surface);
 
     Display *const mDisplay;
-    rx::Renderer *mRenderer;
+    rx::RendererD3D *mRenderer;
 
     HANDLE mShareHandle;
     rx::SwapChain *mSwapChain;
