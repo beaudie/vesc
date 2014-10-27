@@ -1,0 +1,96 @@
+Name
+
+    ANGLE_keyed_mutex
+
+Name Strings
+
+    EGL_ANGLE_keyed_mutex
+
+Contributors
+
+    Jeff Muizelaar
+
+Contacts
+
+    Jeff Muizelaar, Mozilla (jmuizelaar 'at' mozilla.org)
+
+Status
+
+    Implemented in ANGLE.
+
+Version
+
+    Version 1, Oct 29, 2014
+
+Number
+
+    EGL Extension #??
+
+Dependencies
+
+    Requires the EGL_ANGLE_query_surface_pointer extension.
+
+    This extension is written against the wording of the EGL 1.4
+    Specification.
+
+Overview
+
+    This extension allows creating EGL surfaces from handles to textures
+    shared from the Direct3D API or from
+    EGL_ANGLE_surface_texture_2d_share_handle.
+
+New Types
+
+    None
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    Accepted in the <attribute> parameter of eglQuerySurfacePointerANGLE:
+
+        EGL_DXGI_KEYED_MUTEX_ANGLE                       0x3209
+
+    New EGLSurface attribute name:
+
+        EGL_SHARED_KEYED_MUTEX_ANGLE                     0x3210
+
+Additions to Chapter 3 of the EGL 1.4 Specification (Rendering Surfaces)
+
+    Change the second paragraph in section 3.5 on p. 30 (describing
+    eglCreatePbufferSurface):
+
+        "Attributes that can be specified in attrib list include EGL_WIDTH,
+        EGL_HEIGHT, EGL_LARGEST_PBUFFER, EGL_TEXTURE_FORMAT, EGL_TEXTURE_TARGET,
+        EGL_MIPMAP_TEXTURE, EGL_SHARED_KEYED_MUTEX_ANGLE, EGL_VG_COLORSPACE, and
+        EGL_VG_ALPHA_FORMAT."
+
+    Add following the second paragraph in section 3.5 on p. 31 (describing
+    eglCreatePbufferSurface attrib_list):
+
+        "EGL_SHARED_KEYED_MUTEX_ANGLE specifies that the underlying D3D surface
+        should be created with the RESOURCE_MISC_SHARED_KEYEDMUTEX flag. This
+        allows synchronization of the surface using the IDXGIKeyedMutex inteface.
+
+    Add to table 3.5, "Queryable surface attributes and types":
+
+        Attribute                              Type      Description
+        ---------                              ----      -----------
+        EGL_DXGI_KEYED_MUTEX_ANGLE   pointer   Direct3D share handle
+
+    Add before the last paragraph in section 3.5, "Surface attributes":
+
+        "Querying EGL_DXGI_KEYED_MUTEX_ANGLE returns a IDXGIKeyedMutex,
+        or NULL if a keyed mutex for the surface is not
+        available.  The keyed mutex must be queried using
+        eglQuerySurfaceAttribPointerANGLE.  Before using a Direct3D surface
+        created with this share handle, ensure that all rendering
+        to the EGLSurface with EGL client APIs has completed."
+
+Issues
+
+Revision History
+
+    Version 1, 2014/10/29 - first draft.

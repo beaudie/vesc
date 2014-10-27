@@ -439,9 +439,9 @@ gl::Error Renderer11::sync(bool block)
     return gl::Error(GL_NO_ERROR);
 }
 
-SwapChain *Renderer11::createSwapChain(rx::NativeWindow nativeWindow, HANDLE shareHandle, GLenum backBufferFormat, GLenum depthBufferFormat)
+SwapChain *Renderer11::createSwapChain(rx::NativeWindow nativeWindow, HANDLE shareHandle, bool keyedMutex, GLenum backBufferFormat, GLenum depthBufferFormat)
 {
-    return new rx::SwapChain11(this, nativeWindow, shareHandle, backBufferFormat, depthBufferFormat);
+    return new rx::SwapChain11(this, nativeWindow, shareHandle, keyedMutex, backBufferFormat, depthBufferFormat);
 }
 
 gl::Error Renderer11::generateSwizzle(gl::Texture *texture)

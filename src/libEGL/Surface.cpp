@@ -33,6 +33,7 @@ Surface::Surface(Display *display, const Config *config, EGLNativeWindowType win
     mRenderer = mDisplay->getRenderer();
     mSwapChain = NULL;
     mShareHandle = NULL;
+    mKeyedMutex = false;
     mTexture = NULL;
     mTextureFormat = EGL_NO_TEXTURE;
     mTextureTarget = EGL_NO_TEXTURE;
@@ -49,8 +50,8 @@ Surface::Surface(Display *display, const Config *config, EGLNativeWindowType win
     subclassWindow();
 }
 
-Surface::Surface(Display *display, const Config *config, HANDLE shareHandle, EGLint width, EGLint height, EGLenum textureFormat, EGLenum textureType)
-    : mDisplay(display), mNativeWindow(NULL), mConfig(config), mShareHandle(shareHandle), mWidth(width), mHeight(height), mPostSubBufferSupported(EGL_FALSE)
+Surface::Surface(Display *display, const Config *config, HANDLE shareHandle, bool keyedMutex, EGLint width, EGLint height, EGLenum textureFormat, EGLenum textureType)
+    : mDisplay(display), mNativeWindow(NULL), mConfig(config), mShareHandle(shareHandle), mKeyedMutex(keyedMutex), mWidth(width), mHeight(height), mPostSubBufferSupported(EGL_FALSE)
 {
     mRenderer = mDisplay->getRenderer();
     mSwapChain = NULL;
@@ -130,7 +131,7 @@ bool Surface::resetSwapChain()
         height = mHeight;
     }
 
-    mSwapChain = mRenderer->createSwapChain(mNativeWindow, mShareHandle,
+    mSwapChain = mRenderer->createSwapChain(mNativeWindow, mShareHandle, mKeyedMutex,
                                             mConfig->mRenderTargetFormat,
                                             mConfig->mDepthStencilFormat);
     if (!mSwapChain)
