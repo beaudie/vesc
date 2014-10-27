@@ -1839,6 +1839,13 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
             {
                 outputLineDirective((*sit)->getLine().first_line);
 
+                if ((*sit)->getAsAggregate() &&
+                    (*sit)->getAsAggregate()->getOp() == EOpInvariantDeclaration)
+                {
+                    // Do not do any translation to avoid an empty statement with ";\n".
+                    continue;
+                }
+
                 traverseStatements(*sit);
 
                 out << ";\n";
@@ -1934,7 +1941,8 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
         }
         break;
       case EOpInvariantDeclaration:
-        // Do not do any translation
+        // This is handled in EopSequence.
+        UNREACHABLE();
         return false;
       case EOpPrototype:
         if (visit == PreVisit)
