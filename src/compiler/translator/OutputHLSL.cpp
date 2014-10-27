@@ -1934,7 +1934,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
         }
         break;
       case EOpInvariantDeclaration:
-        // Do not do any translation
+        // Do not do any translation.
         return false;
       case EOpPrototype:
         if (visit == PreVisit)
