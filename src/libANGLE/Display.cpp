@@ -664,6 +664,10 @@ void Display::initDisplayExtensionString()
     extensions.push_back("EGL_KHR_create_context");
 #endif
 
+#if defined (ANGLE_ENABLE_KEYEDMUTEX)
+    extensions.push_back("EGL_ANGLE_keyed_mutex");
+#endif
+
     std::ostringstream stream;
     std::copy(extensions.begin(), extensions.end(), std::ostream_iterator<std::string>(stream, " "));
     mDisplayExtensionString = stream.str();
