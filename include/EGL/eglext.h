@@ -415,6 +415,11 @@ EGLAPI EGLint EGLAPIENTRY eglDupNativeFenceFDANDROID (EGLDisplay dpy, EGLSyncKHR
 #define EGL_FIXED_SIZE_ANGLE        0x3201
 #endif /* EGL_ANGLE_window_fixed_size */
 
+#ifndef EGL_ANGLE_keyed_mutex
+#define EGL_ANGLE_keyed_mutex 1
+#define EGL_KEYED_MUTEX_ANGLE       0x3202
+#endif /* EGL_ANGLE_keyed_mutex */
+
 #ifndef EGL_ANGLE_query_surface_pointer
 #define EGL_ANGLE_query_surface_pointer 1
 typedef EGLBoolean (EGLAPIENTRYP PFNEGLQUERYSURFACEPOINTERANGLEPROC) (EGLDisplay dpy, EGLSurface surface, EGLint attribute, void **value);
@@ -462,6 +467,12 @@ EGLAPI EGLBoolean EGLAPIENTRY eglQuerySurfacePointerANGLE (EGLDisplay dpy, EGLSu
 #define EGL_ARM_pixmap_multisample_discard 1
 #define EGL_DISCARD_SAMPLES_ARM           0x3286
 #endif /* EGL_ARM_pixmap_multisample_discard */
+
+
+#ifndef EGL_ANGLE_d3d_keyed_mutex_client_buffer
+#define EGL_ANGLE_d3d_keyed_mutxt_client_buffer 1
+#define EGL_D3D_TEXTURE_2D_KEYED_MUTEX 0x3209
+#endif /* EGL_ANGLE_d3d_keyed_mutex_client_buffer */
 
 #ifndef EGL_EXT_buffer_age
 #define EGL_EXT_buffer_age 1

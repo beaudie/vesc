@@ -35,7 +35,7 @@ class Surface
 {
   public:
     Surface(Display *display, const egl::Config *config, EGLNativeWindowType window, EGLint fixedSize, EGLint width, EGLint height, EGLint postSubBufferSupported);
-    Surface(Display *display, const egl::Config *config, HANDLE shareHandle, EGLint width, EGLint height, EGLenum textureFormat, EGLenum textureTarget);
+    Surface(Display *display, const egl::Config *config, HANDLE shareHandle, bool keyedMutex, EGLint width, EGLint height, EGLenum textureFormat, EGLenum textureTarget);
 
     virtual ~Surface();
 
@@ -76,6 +76,7 @@ private:
     rx::Renderer *mRenderer;
 
     HANDLE mShareHandle;
+    bool mKeyedMutex;
     rx::SwapChain *mSwapChain;
 
     void subclassWindow();

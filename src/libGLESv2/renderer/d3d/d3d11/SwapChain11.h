@@ -20,7 +20,7 @@ class SwapChain11 : public SwapChain
 {
   public:
     SwapChain11(Renderer11 *renderer, rx::NativeWindow nativeWindow, HANDLE shareHandle,
-                GLenum backBufferFormat, GLenum depthBufferFormat);
+                bool keyedMutex, GLenum backBufferFormat, GLenum depthBufferFormat);
     virtual ~SwapChain11();
 
     EGLint resize(EGLint backbufferWidth, EGLint backbufferHeight);
@@ -38,6 +38,7 @@ class SwapChain11 : public SwapChain
 
     EGLint getWidth() const { return mWidth; }
     EGLint getHeight() const { return mHeight; }
+    virtual void* getKeyedMutex() {return mKeyedMutex; };
 
     static SwapChain11 *makeSwapChain11(SwapChain *swapChain);
 
@@ -50,6 +51,7 @@ class SwapChain11 : public SwapChain
     EGLint resetOffscreenTexture(int backbufferWidth, int backbufferHeight);
 
     Renderer11 *mRenderer;
+    bool mTryKeyedMutex;
     EGLint mHeight;
     EGLint mWidth;
     bool mAppCreatedShareHandle;
@@ -57,6 +59,7 @@ class SwapChain11 : public SwapChain
     bool mPassThroughResourcesInit;
 
     DXGISwapChain *mSwapChain;
+    IDXGIKeyedMutex *mKeyedMutex;
 
     ID3D11Texture2D *mBackBufferTexture;
     ID3D11RenderTargetView *mBackBufferRTView;

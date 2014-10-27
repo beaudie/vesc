@@ -283,6 +283,7 @@ EGLSurface Display::createOffscreenSurface(EGLConfig config, HANDLE shareHandle,
     EGLint width = 0, height = 0;
     EGLenum textureFormat = EGL_NO_TEXTURE;
     EGLenum textureTarget = EGL_NO_TEXTURE;
+    bool keyedMutex = false;
     const Config *configuration = mConfigSet.get(config);
 
     if (attribList)
@@ -332,6 +333,9 @@ EGLSurface Display::createOffscreenSurface(EGLConfig config, HANDLE shareHandle,
                 return error(EGL_BAD_MATCH, EGL_NO_SURFACE);
               case EGL_VG_ALPHA_FORMAT:
                 return error(EGL_BAD_MATCH, EGL_NO_SURFACE);
+              case EGL_KEYED_MUTEX_ANGLE:
+                keyedMutex = attribList[1];
+                break;
               default:
                 return error(EGL_BAD_ATTRIBUTE, EGL_NO_SURFACE);
             }
@@ -378,7 +382,7 @@ EGLSurface Display::createOffscreenSurface(EGLConfig config, HANDLE shareHandle,
             return EGL_NO_SURFACE;
     }
 
-    Surface *surface = new Surface(this, configuration, shareHandle, width, height, textureFormat, textureTarget);
+    Surface *surface = new Surface(this, configuration, shareHandle, keyedMutex, width, height, textureFormat, textureTarget);
 
     if (!surface->initialize())
     {
