@@ -39,6 +39,8 @@ class SwapChain9 : public SwapChainD3D
     EGLint getWidth() const { return mWidth; }
     EGLint getHeight() const { return mHeight; }
 
+    virtual void *getKeyedMutex() override { return nullptr; }
+
   private:
     void release();
 

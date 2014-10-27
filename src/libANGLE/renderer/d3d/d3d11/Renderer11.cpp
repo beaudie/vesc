@@ -2552,6 +2552,12 @@ bool Renderer11::getShareHandleSupport() const
     return true;
 }
 
+bool Renderer11::getKeyedMutexSupport() const
+{
+    return true;
+}
+
+
 bool Renderer11::getPostSubBufferSupport() const
 {
     // D3D11 does not support present with dirty rectangles until DXGI 1.2.
