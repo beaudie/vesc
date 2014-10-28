@@ -315,6 +315,29 @@ class State
     PixelPackState mPack;
 };
 
+typedef std::map< GLenum, BindingPointer<Texture> > TextureMap;
+
+struct Data final
+{
+  public:
+    Data() : clientVersion(2), resourceManager(NULL) {}
+    ~Data();
+
+    Texture *getSamplerTexture(unsigned int sampler, GLenum type) const;
+
+    GLint clientVersion;
+    State state;
+    Caps caps;
+    TextureCapsMap textureCaps;
+    Extensions extensions;
+    ResourceManager *resourceManager;
+
+    TextureMap zeroTextures;
+
+  private:
+    DISALLOW_COPY_AND_ASSIGN(Data);
+};
+
 }
 
 #endif // LIBGLESV2_STATE_H_

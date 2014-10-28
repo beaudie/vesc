@@ -10,12 +10,13 @@
 
 #include "libGLESv2/Context.h"
 #include "libGLESv2/Caps.h"
-#include "libGLESv2/VertexArray.h"
-#include "libGLESv2/Query.h"
 #include "libGLESv2/Framebuffer.h"
 #include "libGLESv2/FramebufferAttachment.h"
-#include "libGLESv2/renderer/RenderTarget.h"
+#include "libGLESv2/Query.h"
+#include "libGLESv2/ResourceManager.h"
+#include "libGLESv2/VertexArray.h"
 #include "libGLESv2/formatutils.h"
+#include "libGLESv2/renderer/RenderTarget.h"
 
 namespace gl
 {
@@ -1450,6 +1451,32 @@ bool State::hasMappedBuffer(GLenum target) const
     {
         Buffer *buffer = getTargetBuffer(target);
         return (buffer && buffer->isMapped());
+    }
+}
+
+Data::~Data()
+{
+    for (auto &zeroTexture : zeroTextures)
+    {
+        zeroTexture.second.set(NULL);
+    }
+    zeroTextures.clear();
+
+    if (resourceManager)
+    {
+        resourceManager->release();
+    }
+}
+
+Texture *Data::getSamplerTexture(unsigned int sampler, GLenum type) const
+{
+    if (state.getSamplerTextureId(sampler, type) == 0)
+    {
+        return zeroTextures.at(type).get();
+    }
+    else
+    {
+        return state.getSamplerTexture(sampler, type);
     }
 }
 
