@@ -86,9 +86,29 @@ gl::Error Renderer::drawElements(const gl::Data &data, GLenum mode, GLsizei coun
     return mImplementation->drawElements(data, mode, count, type, indices, instances, indexRange);
 }
 
-gl::Error Renderer::clear(const gl::ClearParameters &clearParams, gl::Framebuffer *frameBuffer)
+gl::Error Renderer::clear(const gl::Data &data, GLbitfield mask)
 {
-    return mImplementation->clear(clearParams, frameBuffer);
+    return mImplementation->clear(data, mask);
+}
+
+gl::Error Renderer::clearBufferfv(const gl::Data &data, GLenum buffer, GLint drawbuffer, const GLfloat *values)
+{
+    return mImplementation->clearBufferfv(data, buffer, drawbuffer, values);
+}
+
+gl::Error Renderer::clearBufferuiv(const gl::Data &data, GLenum buffer, GLint drawbuffer, const GLuint *values)
+{
+    return mImplementation->clearBufferuiv(data, buffer, drawbuffer, values);
+}
+
+gl::Error Renderer::clearBufferiv(const gl::Data &data, GLenum buffer, GLint drawbuffer, const GLint *values)
+{
+    return mImplementation->clearBufferiv(data, buffer, drawbuffer, values);
+}
+
+gl::Error Renderer::clearBufferfi(const gl::Data &data, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil)
+{
+    return mImplementation->clearBufferfi(data, buffer, drawbuffer, depth, stencil);
 }
 
 gl::Error Renderer::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
