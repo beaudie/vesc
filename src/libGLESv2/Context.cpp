@@ -186,7 +186,7 @@ void Context::makeCurrent(egl::Surface *surface)
 
     Colorbuffer *colorbufferZero = new Colorbuffer(mRenderer, swapchain);
     DepthStencilbuffer *depthStencilbufferZero = new DepthStencilbuffer(mRenderer, swapchain);
-    Framebuffer *framebufferZero = new DefaultFramebuffer(mRenderer, colorbufferZero, depthStencilbufferZero);
+    Framebuffer *framebufferZero = new DefaultFramebuffer(colorbufferZero, depthStencilbufferZero);
 
     setFramebufferZero(framebufferZero);
 
@@ -511,7 +511,7 @@ void Context::bindReadFramebuffer(GLuint framebuffer)
 {
     if (!getFramebuffer(framebuffer))
     {
-        mFramebufferMap[framebuffer] = new Framebuffer(mRenderer, framebuffer);
+        mFramebufferMap[framebuffer] = new Framebuffer(framebuffer);
     }
 
     mData.state.setReadFramebufferBinding(getFramebuffer(framebuffer));
@@ -521,7 +521,7 @@ void Context::bindDrawFramebuffer(GLuint framebuffer)
 {
     if (!getFramebuffer(framebuffer))
     {
-        mFramebufferMap[framebuffer] = new Framebuffer(mRenderer, framebuffer);
+        mFramebufferMap[framebuffer] = new Framebuffer(framebuffer);
     }
 
     mData.state.setDrawFramebufferBinding(getFramebuffer(framebuffer));
@@ -951,7 +951,7 @@ void Context::getIntegerv(GLenum pname, GLint *params)
         *params = static_cast<GLint>(mExtensionStrings.size());
         break;
       default:
-        mData.state.getIntegerv(pname, params);
+        mData.state.getIntegerv(mData, pname, params);
         break;
     }
 }
@@ -1303,7 +1303,7 @@ bool Context::getIndexedQueryParameterInfo(GLenum target, GLenum *type, unsigned
 Error Context::applyRenderTarget(GLenum drawMode, bool ignoreViewport)
 {
     Framebuffer *framebufferObject = mData.state.getDrawFramebuffer();
-    ASSERT(framebufferObject && framebufferObject->completeness() == GL_FRAMEBUFFER_COMPLETE);
+    ASSERT(framebufferObject && framebufferObject->completeness(mData) == GL_FRAMEBUFFER_COMPLETE);
 
     gl::Error error = mRenderer->applyRenderTarget(framebufferObject);
     if (error.isError())
@@ -1325,7 +1325,7 @@ Error Context::applyRenderTarget(GLenum drawMode, bool ignoreViewport)
 Error Context::applyState(GLenum drawMode)
 {
     Framebuffer *framebufferObject = mData.state.getDrawFramebuffer();
-    int samples = framebufferObject->getSamples();
+    int samples = framebufferObject->getSamples(mData);
 
     RasterizerState rasterizer = mData.state.getRasterizerState();
     rasterizer.pointDrawMode = (drawMode == GL_POINTS);
@@ -1978,7 +1978,7 @@ const Extensions &Context::getExtensions() const
 void Context::getCurrentReadFormatType(GLenum *internalFormat, GLenum *format, GLenum *type)
 {
     Framebuffer *framebuffer = mData.state.getReadFramebuffer();
-    ASSERT(framebuffer && framebuffer->completeness() == GL_FRAMEBUFFER_COMPLETE);
+    ASSERT(framebuffer && framebuffer->completeness(mData) == GL_FRAMEBUFFER_COMPLETE);
 
     FramebufferAttachment *attachment = framebuffer->getReadColorbuffer();
     ASSERT(attachment);
