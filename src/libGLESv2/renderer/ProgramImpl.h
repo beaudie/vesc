@@ -18,8 +18,6 @@
 namespace rx
 {
 
-class Renderer;
-
 class ProgramImpl
 {
 public:
