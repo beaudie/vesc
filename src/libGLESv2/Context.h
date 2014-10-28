@@ -226,19 +226,6 @@ class Context
   private:
     DISALLOW_COPY_AND_ASSIGN(Context);
 
-    // TODO: std::array may become unavailable using older versions of GCC
-    typedef std::array<unsigned int, IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS> FramebufferTextureSerialArray;
-
-    Error applyRenderTarget(GLenum drawMode, bool ignoreViewport);
-    Error applyState(GLenum drawMode);
-    Error applyShaders(ProgramBinary *programBinary, bool transformFeedbackActive);
-    Error applyTextures(ProgramBinary *programBinary, SamplerType shaderType, const FramebufferTextureSerialArray &framebufferSerials,
-                        size_t framebufferSerialCount);
-    Error applyTextures(ProgramBinary *programBinary);
-    Error applyUniformBuffers();
-    bool applyTransformFeedbackBuffers();
-    void markTransformFeedbackUsage();
-
     void detachBuffer(GLuint buffer);
     void detachTexture(GLuint texture);
     void detachFramebuffer(GLuint framebuffer);
@@ -247,25 +234,14 @@ class Context
     void detachTransformFeedback(GLuint transformFeedback);
     void detachSampler(GLuint sampler);
 
-    Error generateSwizzles(ProgramBinary *programBinary, SamplerType type);
-    Error generateSwizzles(ProgramBinary *programBinary);
-
-    Texture *getIncompleteTexture(GLenum type);
-
-    bool skipDraw(GLenum drawMode);
-
     void initRendererString();
     void initExtensionStrings();
-
-    size_t getBoundFramebufferTextureSerials(FramebufferTextureSerialArray *outSerialArray);
 
     void initCaps(GLuint clientVersion);
 
     Renderer *const mRenderer;
 
     Data mData;
-
-    TextureMap mIncompleteTextures;
 
     typedef std::unordered_map<GLuint, Framebuffer*> FramebufferMap;
     FramebufferMap mFramebufferMap;
