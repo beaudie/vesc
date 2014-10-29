@@ -136,7 +136,7 @@ Renderer11::~Renderer11()
     release();
 }
 
-Renderer11 *Renderer11::makeRenderer11(Renderer *renderer)
+Renderer11 *Renderer11::makeRenderer11(RendererImpl *renderer)
 {
     ASSERT(HAS_DYNAMIC_TYPE(rx::Renderer11*, renderer));
     return static_cast<rx::Renderer11*>(renderer);

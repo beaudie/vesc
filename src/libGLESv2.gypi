@@ -108,6 +108,8 @@
             'libGLESv2/renderer/RenderTarget.h',
             'libGLESv2/renderer/Renderer.cpp',
             'libGLESv2/renderer/Renderer.h',
+            'libGLESv2/renderer/RendererImpl.cpp',
+            'libGLESv2/renderer/RendererImpl.h',
             'libGLESv2/renderer/ShaderExecutable.h',
             'libGLESv2/renderer/ShaderImpl.h',
             'libGLESv2/renderer/SwapChain.h',

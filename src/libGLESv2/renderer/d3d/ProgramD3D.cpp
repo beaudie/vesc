@@ -13,11 +13,11 @@
 #include "libGLESv2/FramebufferAttachment.h"
 #include "libGLESv2/Program.h"
 #include "libGLESv2/ProgramBinary.h"
-#include "libGLESv2/renderer/Renderer.h"
+#include "libGLESv2/main.h"
 #include "libGLESv2/renderer/ShaderExecutable.h"
 #include "libGLESv2/renderer/d3d/DynamicHLSL.h"
+#include "libGLESv2/renderer/d3d/RendererD3D.h"
 #include "libGLESv2/renderer/d3d/ShaderD3D.h"
-#include "libGLESv2/main.h"
 
 namespace rx
 {
@@ -104,7 +104,7 @@ ProgramD3D::PixelExecutable::~PixelExecutable()
     SafeDelete(mShaderExecutable);
 }
 
-ProgramD3D::ProgramD3D(Renderer *renderer)
+ProgramD3D::ProgramD3D(RendererD3D *renderer)
     : ProgramImpl(),
       mRenderer(renderer),
       mDynamicHLSL(NULL),
