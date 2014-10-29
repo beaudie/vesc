@@ -13,12 +13,12 @@
 #include "common/angleutils.h"
 #include "common/RefCountObject.h"
 #include "libGLESv2/Caps.h"
+#include "libGLESv2/Constants.h"
+#include "libGLESv2/Data.h"
 #include "libGLESv2/Error.h"
 #include "libGLESv2/HandleAllocator.h"
-#include "libGLESv2/angletypes.h"
-#include "libGLESv2/Constants.h"
 #include "libGLESv2/VertexAttribute.h"
-#include "libGLESv2/State.h"
+#include "libGLESv2/angletypes.h"
 
 #include "angle_gl.h"
 
@@ -220,8 +220,10 @@ class Context
 
     rx::Renderer *getRenderer() { return mRenderer; }
 
-    State &getState() { return mState; }
-    const State &getState() const { return mState; }
+    State &getState() { return mData.state; }
+    const State &getState() const { return mData.state; }
+
+    const Data &getData() const { return mData; }
 
     void releaseShaderCompiler();
 
@@ -263,18 +265,10 @@ class Context
 
     void initCaps(GLuint clientVersion);
 
-    // Caps to use for validation
-    Caps mCaps;
-    TextureCapsMap mTextureCaps;
-    Extensions mExtensions;
-
     rx::Renderer *const mRenderer;
-    State mState;
 
-    int mClientVersion;
+    Data mData;
 
-    typedef std::map< GLenum, BindingPointer<Texture> > TextureMap;
-    TextureMap mZeroTextures;
     TextureMap mIncompleteTextures;
 
     typedef std::unordered_map<GLuint, Framebuffer*> FramebufferMap;
@@ -312,8 +306,6 @@ class Context
     GLenum mResetStatus;
     GLenum mResetStrategy;
     bool mRobustAccess;
-
-    ResourceManager *mResourceManager;
 };
 }
 
