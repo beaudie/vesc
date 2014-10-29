@@ -95,13 +95,20 @@ class Renderer
     gl::Error drawElements(const gl::Data &data, GLenum mode, GLsizei count, GLenum type,
                            const GLvoid *indices, GLsizei instances,
                            const rx::RangeUI &indexRange);
+
     gl::Error clear(const gl::Data &data, GLbitfield mask);
     gl::Error clearBufferfv(const gl::Data &data, GLenum buffer, GLint drawbuffer, const GLfloat *values);
     gl::Error clearBufferuiv(const gl::Data &data, GLenum buffer, GLint drawbuffer, const GLuint *values);
     gl::Error clearBufferiv(const gl::Data &data, GLenum buffer, GLint drawbuffer, const GLint *values);
     gl::Error clearBufferfi(const gl::Data &data, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
+
     gl::Error readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
                          GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, uint8_t *pixels);
+
+    gl::Error blitFramebuffer(const gl::Data &data,
+                              GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1,
+                              GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
+                              GLbitfield mask, GLenum filter);
 
     // TODO(jmadill): caps? and virtual for egl::Display
     virtual bool getShareHandleSupport() const;
