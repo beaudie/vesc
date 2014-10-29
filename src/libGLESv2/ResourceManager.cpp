@@ -18,9 +18,12 @@
 #include "libGLESv2/Fence.h"
 #include "libGLESv2/renderer/Renderer.h"
 
+//TODO(jmadill): phase this out
+#include "libGLESv2/renderer/d3d/RendererD3D.h"
+
 namespace gl
 {
-ResourceManager::ResourceManager(rx::Renderer *renderer)
+ResourceManager::ResourceManager(Renderer *renderer)
 {
     mRefCount = 1;
     mRenderer = renderer;
@@ -403,7 +406,8 @@ void ResourceManager::checkRenderbufferAllocation(GLuint renderbuffer)
 {
     if (renderbuffer != 0 && !getRenderbuffer(renderbuffer))
     {
-        Renderbuffer *renderbufferObject = new Renderbuffer(renderbuffer, new Colorbuffer(mRenderer, 0, 0, GL_RGBA4, 0));
+        //TODO(swoods): renderbuffer refactor
+        Renderbuffer *renderbufferObject = new Renderbuffer(renderbuffer, new Colorbuffer(rx::RendererD3D::makeRendererD3D(mRenderer->getImplementation()), 0, 0, GL_RGBA4, 0));
         mRenderbufferMap[renderbuffer] = renderbufferObject;
         renderbufferObject->addRef();
     }
