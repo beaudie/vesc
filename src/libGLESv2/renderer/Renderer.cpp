@@ -111,10 +111,10 @@ gl::Error Renderer::clearBufferfi(const gl::Data &data, GLenum buffer, GLint dra
     return mImplementation->clearBufferfi(data, buffer, drawbuffer, depth, stencil);
 }
 
-gl::Error Renderer::readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
-                               GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, uint8_t *pixels)
+gl::Error Renderer::readPixels(const gl::Data &data, GLint x, GLint y, GLsizei width, GLsizei height,
+                               GLenum format, GLenum type, GLsizei *bufSize, void* pixels)
 {
-    return mImplementation->readPixels(framebuffer, x, y, width, height, format, type, outputPitch, pack, pixels);
+    return mImplementation->readPixels(data, x, y, width, height, format, type, bufSize, pixels);
 }
 
 gl::Error Renderer::blitFramebuffer(const gl::Data &data,
