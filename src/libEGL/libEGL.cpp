@@ -810,7 +810,7 @@ EGLBoolean __stdcall eglMakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface 
 
     if (dpy != EGL_NO_DISPLAY && display->isInitialized())
     {
-        rx::Renderer *renderer = display->getRenderer();
+        gl::Renderer *renderer = display->getRenderer();
         if (renderer->testDeviceLost(true))
         {
             return EGL_FALSE;
