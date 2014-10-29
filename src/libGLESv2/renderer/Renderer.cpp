@@ -73,15 +73,17 @@ gl::Error Renderer::sync(bool block)
     return mImplementation->sync(block);
 }
 
-gl::Error Renderer::drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive)
+gl::Error Renderer::drawArrays(const gl::Data &data, GLenum mode,
+                              GLint first, GLsizei count, GLsizei instances)
 {
-    return mImplementation->drawArrays(mode, count, instances, transformFeedbackActive);
+    return mImplementation->drawArrays(data, mode, first, count, instances);
 }
 
-gl::Error Renderer::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
-                                 gl::Buffer *elementArrayBuffer, const rx::TranslatedIndexData &indexInfo, GLsizei instances)
+gl::Error Renderer::drawElements(const gl::Data &data, GLenum mode, GLsizei count, GLenum type,
+                                 const GLvoid *indices, GLsizei instances,
+                                 const rx::RangeUI &indexRange)
 {
-    return mImplementation->drawElements(mode, count, type, indices, elementArrayBuffer, indexInfo, instances);
+    return mImplementation->drawElements(data, mode, count, type, indices, instances, indexRange);
 }
 
 gl::Error Renderer::clear(const gl::ClearParameters &clearParams, gl::Framebuffer *frameBuffer)
