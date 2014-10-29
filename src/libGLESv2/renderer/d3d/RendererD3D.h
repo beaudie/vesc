@@ -44,7 +44,11 @@ class RendererD3D : public RendererImpl
                            const GLvoid *indices, GLsizei instances,
                            const RangeUI &indexRange) override;
 
-    gl::Error clear(const gl::ClearParameters &clearParams, gl::Framebuffer *frameBuffer) override = 0;
+    gl::Error clear(const gl::Data &data, GLbitfield mask) override;
+    gl::Error clearBufferfv(const gl::Data &data, GLenum buffer, int drawbuffer, const GLfloat *values) override;
+    gl::Error clearBufferuiv(const gl::Data &data, GLenum buffer, int drawbuffer, const GLuint *values) override;
+    gl::Error clearBufferiv(const gl::Data &data, GLenum buffer, int drawbuffer, const GLint *values) override;
+    gl::Error clearBufferfi(const gl::Data &data, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil) override;
 
     // Shader creation
     ShaderImpl *createShader(GLenum type) override = 0;
@@ -181,6 +185,7 @@ class RendererD3D : public RendererImpl
     virtual gl::Error drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive) = 0;
     virtual gl::Error drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
                                    gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei instances) = 0;
+    virtual gl::Error clear(const gl::ClearParameters &clearParams, const gl::Framebuffer *frameBuffer) = 0;
 
     egl::Display *mDisplay;
 
