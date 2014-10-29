@@ -29,9 +29,11 @@ class RendererImpl
 
     virtual gl::Error sync(bool block) = 0;
 
-    virtual gl::Error drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive) = 0;
-    virtual gl::Error drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
-                                   gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei instances) = 0;
+    virtual gl::Error drawArrays(const gl::Data &data, GLenum mode, GLint first, GLsizei count, GLsizei instances) = 0;
+    virtual gl::Error drawElements(const gl::Data &data,
+                                   GLenum mode, GLsizei count, GLenum type,
+                                   const GLvoid *indices, GLsizei instances,
+                                   const rx::RangeUI &indexRange) = 0;
     virtual gl::Error clear(const gl::ClearParameters &clearParams, gl::Framebuffer *frameBuffer) = 0;
     virtual gl::Error readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
                                  GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, uint8_t *pixels) = 0;
