@@ -813,7 +813,7 @@ gl::Error ProgramD3D::getPixelExecutableForFramebuffer(const gl::Framebuffer *fb
 {
     std::vector<GLenum> outputs;
 
-    const gl::ColorbufferInfo &colorbuffers = fbo->getColorbuffersForRender();
+    const gl::ColorbufferInfo &colorbuffers = fbo->getColorbuffersForRender(mRenderer->getWorkarounds());
 
     for (size_t colorAttachment = 0; colorAttachment < colorbuffers.size(); ++colorAttachment)
     {
