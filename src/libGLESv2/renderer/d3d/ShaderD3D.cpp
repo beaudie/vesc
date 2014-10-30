@@ -340,13 +340,13 @@ void ShaderD3D::compileToHLSL(void *compiler, const std::string &source)
     }
 }
 
-rx::D3DWorkaroundType ShaderD3D::getD3DWorkarounds() const
+D3DWorkaroundType ShaderD3D::getD3DWorkarounds() const
 {
     if (mUsesDiscardRewriting)
     {
         // ANGLE issue 486:
         // Work-around a D3D9 compiler bug that presents itself when using conditional discard, by disabling optimization
-        return rx::ANGLE_D3D_WORKAROUND_SKIP_OPTIMIZATION;
+        return ANGLE_D3D_WORKAROUND_SKIP_OPTIMIZATION;
     }
 
     if (mUsesNestedBreak)
@@ -354,10 +354,10 @@ rx::D3DWorkaroundType ShaderD3D::getD3DWorkarounds() const
         // ANGLE issue 603:
         // Work-around a D3D9 compiler bug that presents itself when using break in a nested loop, by maximizing optimization
         // We want to keep the use of ANGLE_D3D_WORKAROUND_MAX_OPTIMIZATION minimal to prevent hangs, so usesDiscard takes precedence
-        return rx::ANGLE_D3D_WORKAROUND_MAX_OPTIMIZATION;
+        return ANGLE_D3D_WORKAROUND_MAX_OPTIMIZATION;
     }
 
-    return rx::ANGLE_D3D_WORKAROUND_NONE;
+    return ANGLE_D3D_WORKAROUND_NONE;
 }
 
 // true if varying x has a higher priority in packing than y
