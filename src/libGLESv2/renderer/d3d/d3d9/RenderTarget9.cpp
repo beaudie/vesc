@@ -17,11 +17,10 @@ namespace rx
 {
 
 // TODO: AddRef the incoming surface to take ownership instead of expecting that its ref is being given.
-RenderTarget9::RenderTarget9(Renderer *renderer, IDirect3DSurface9 *surface)
+RenderTarget9::RenderTarget9(Renderer9 *renderer, IDirect3DSurface9 *surface)
+    : mRenderer(renderer),
+      mRenderTarget(surface)
 {
-    mRenderer = Renderer9::makeRenderer9(renderer);
-    mRenderTarget = surface;
-
     if (mRenderTarget)
     {
         D3DSURFACE_DESC description;
@@ -38,11 +37,10 @@ RenderTarget9::RenderTarget9(Renderer *renderer, IDirect3DSurface9 *surface)
     }
 }
 
-RenderTarget9::RenderTarget9(Renderer *renderer, GLsizei width, GLsizei height, GLenum internalFormat, GLsizei samples)
+RenderTarget9::RenderTarget9(Renderer9 *renderer, GLsizei width, GLsizei height, GLenum internalFormat, GLsizei samples)
+    : mRenderer(renderer),
+      mRenderTarget(NULL)
 {
-    mRenderer = Renderer9::makeRenderer9(renderer);
-    mRenderTarget = NULL;
-
     const d3d9::TextureFormat &d3d9FormatInfo = d3d9::GetTextureFormatInfo(internalFormat);
     const d3d9::D3DFormat &d3dFormatInfo = d3d9::GetD3DFormatInfo(d3d9FormatInfo.renderFormat);
 

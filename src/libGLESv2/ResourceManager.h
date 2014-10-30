@@ -18,11 +18,6 @@
 
 #include <unordered_map>
 
-namespace rx
-{
-class Renderer;
-}
-
 namespace gl
 {
 class Buffer;
@@ -32,11 +27,12 @@ class Texture;
 class Renderbuffer;
 class Sampler;
 class FenceSync;
+class Renderer;
 
 class ResourceManager
 {
   public:
-    explicit ResourceManager(rx::Renderer *renderer);
+    explicit ResourceManager(Renderer *renderer);
     ~ResourceManager();
 
     void addRef();
@@ -79,7 +75,7 @@ class ResourceManager
     DISALLOW_COPY_AND_ASSIGN(ResourceManager);
 
     std::size_t mRefCount;
-    rx::Renderer *mRenderer;
+    Renderer *mRenderer;
 
     typedef std::unordered_map<GLuint, Buffer*> BufferMap;
     BufferMap mBufferMap;
