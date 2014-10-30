@@ -28,11 +28,6 @@
 #include <unordered_map>
 #include <array>
 
-namespace rx
-{
-class Renderer;
-}
-
 namespace egl
 {
 class Surface;
@@ -40,6 +35,7 @@ class Surface;
 
 namespace gl
 {
+class Renderer;
 class Shader;
 class Program;
 class ProgramBinary;
@@ -68,7 +64,7 @@ class TransformFeedback;
 class Context
 {
   public:
-    Context(int clientVersion, const gl::Context *shareContext, rx::Renderer *renderer, bool notifyResets, bool robustAccess);
+    Context(int clientVersion, const Context *shareContext, Renderer *renderer, bool notifyResets, bool robustAccess);
 
     virtual ~Context();
 
@@ -218,7 +214,7 @@ class Context
     Error blitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
                           GLbitfield mask, GLenum filter);
 
-    rx::Renderer *getRenderer() { return mRenderer; }
+    Renderer *getRenderer() { return mRenderer; }
 
     State &getState() { return mData.state; }
     const State &getState() const { return mData.state; }
@@ -265,7 +261,7 @@ class Context
 
     void initCaps(GLuint clientVersion);
 
-    rx::Renderer *const mRenderer;
+    Renderer *const mRenderer;
 
     Data mData;
 
