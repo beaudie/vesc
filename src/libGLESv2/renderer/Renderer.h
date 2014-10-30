@@ -10,12 +10,13 @@
 #ifndef LIBGLESV2_RENDERER_RENDERER_H_
 #define LIBGLESV2_RENDERER_RENDERER_H_
 
+#include "libGLESv2/Caps.h"
+#include "libGLESv2/Error.h"
 #include "libGLESv2/Uniform.h"
 #include "libGLESv2/angletypes.h"
-#include "libGLESv2/Caps.h"
-#include "common/NativeWindow.h"
-#include "libGLESv2/Error.h"
 #include "libGLESv2/renderer/Workarounds.h"
+#include "common/NativeWindow.h"
+#include "common/mathutil.h"
 
 #include <cstdint>
 
@@ -42,6 +43,7 @@ class Buffer;
 class Texture;
 class Framebuffer;
 struct VertexAttribCurrentValueData;
+struct Data;
 }
 
 namespace rx
@@ -84,15 +86,18 @@ class Renderer
 
     virtual gl::Error sync(bool block) = 0;
 
+    virtual gl::Error drawArrays(const gl::Data &data, GLenum mode,
+                                 GLint first, GLsizei count, GLsizei instances) = 0;
+    virtual gl::Error drawElements(const gl::Data &data, GLenum mode, GLsizei count, GLenum type,
+                                   const GLvoid *indices, GLsizei instances,
+                                   const RangeUI &indexRange) = 0;
+
     // TODO(jmadill): pass state and essetial params only
-    virtual gl::Error drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive) = 0;
-    virtual gl::Error drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
-                                   gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei instances) = 0;
     virtual gl::Error clear(const gl::ClearParameters &clearParams, gl::Framebuffer *frameBuffer) = 0;
     virtual gl::Error readPixels(gl::Framebuffer *framebuffer, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
                                  GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, uint8_t *pixels) = 0;
 
-    // TODO(jmadill): caps?
+    // TODO(jmadill): caps? and virtual for egl::Display
     virtual bool getShareHandleSupport() const = 0;
     virtual bool getPostSubBufferSupport() const = 0;
 
