@@ -35,6 +35,12 @@ class RendererD3D : public RendererImpl
                            const GLvoid *indices, GLsizei instances,
                            const RangeUI &indexRange) override;
 
+    gl::Error clear(const gl::Data &data, GLbitfield mask) override;
+    gl::Error clearBufferfv(const gl::Data &data, GLenum buffer, int drawbuffer, const GLfloat *values) override;
+    gl::Error clearBufferuiv(const gl::Data &data, GLenum buffer, int drawbuffer, const GLuint *values) override;
+    gl::Error clearBufferiv(const gl::Data &data, GLenum buffer, int drawbuffer, const GLint *values) override;
+    gl::Error clearBufferfi(const gl::Data &data, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil) override;
+
     // Direct3D Specific methods
     virtual SwapChain *createSwapChain(rx::NativeWindow nativeWindow, HANDLE shareHandle, GLenum backBufferFormat, GLenum depthBufferFormat) = 0;
 
@@ -127,13 +133,11 @@ class RendererD3D : public RendererImpl
     virtual VertexBuffer *createVertexBuffer() = 0;
     virtual IndexBuffer *createIndexBuffer() = 0;
 
-    //TODO(jmadill): Should be private or protected
-    gl::Error applyRenderTarget(const gl::Data &data, GLenum drawMode, bool ignoreViewport);
-
   protected:
     virtual gl::Error drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive) = 0;
     virtual gl::Error drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
                                    gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei instances) = 0;
+    virtual gl::Error clear(const gl::ClearParameters &clearParams, const gl::Framebuffer *frameBuffer) = 0;
 
     egl::Display *mDisplay;
 
@@ -146,6 +150,7 @@ class RendererD3D : public RendererImpl
     gl::Error generateSwizzles(const gl::Data &data, gl::SamplerType type);
     gl::Error generateSwizzles(const gl::Data &data);
 
+    gl::Error applyRenderTarget(const gl::Data &data, GLenum drawMode, bool ignoreViewport);
     gl::Error applyState(const gl::Data &data, GLenum drawMode);
     bool applyTransformFeedbackBuffers(const gl::Data &data);
     gl::Error applyShaders(const gl::Data &data, bool transformFeedbackActive);
