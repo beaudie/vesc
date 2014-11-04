@@ -10,37 +10,19 @@
 #include "libGLESv2/renderer/d3d/d3d9/RenderTarget9.h"
 #include "libGLESv2/renderer/d3d/d3d9/Renderer9.h"
 #include "libGLESv2/renderer/d3d/d3d9/renderer9_utils.h"
+#include "libGLESv2/renderer/d3d/d3d9/SwapChain9.h"
 #include "libGLESv2/renderer/d3d/d3d9/formatutils9.h"
 #include "libGLESv2/main.h"
 
 namespace rx
 {
 
-// TODO: AddRef the incoming surface to take ownership instead of expecting that its ref is being given.
-RenderTarget9::RenderTarget9(IDirect3DSurface9 *surface, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth,
-                             GLsizei samples)
-    : mRenderTarget(surface)
+RenderTarget9::RenderTarget9()
 {
-    mWidth = width;
-    mHeight = height;
-    mDepth = depth;
-    mSamples = samples;
-    mInternalFormat = internalFormat;
-    mActualFormat = internalFormat;
-
-    if (mRenderTarget)
-    {
-        D3DSURFACE_DESC description;
-        mRenderTarget->GetDesc(&description);
-
-        const d3d9::D3DFormat &d3dFormatInfo = d3d9::GetD3DFormatInfo(description.Format);
-        mActualFormat = d3dFormatInfo.internalFormat;
-    }
 }
 
 RenderTarget9::~RenderTarget9()
 {
-    SafeRelease(mRenderTarget);
 }
 
 RenderTarget9 *RenderTarget9::makeRenderTarget9(RenderTarget *target)
@@ -51,10 +33,36 @@ RenderTarget9 *RenderTarget9::makeRenderTarget9(RenderTarget *target)
 
 void RenderTarget9::invalidate(GLint x, GLint y, GLsizei width, GLsizei height)
 {
-    // Currently a no-op
+        // Currently a no-op
 }
 
-IDirect3DSurface9 *RenderTarget9::getSurface()
+// TODO: AddRef the incoming surface to take ownership instead of expecting that its ref is being given.
+SurfaceRenderTarget9::SurfaceRenderTarget9(IDirect3DSurface9 *surface, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth,
+                                           GLsizei samples)
+    : mWidth(width),
+      mHeight(height),
+      mDepth(1),
+      mInternalFormat(internalFormat),
+      mActualFormat(internalFormat),
+      mSamples(samples),
+      mRenderTarget(surface)
+{
+    if (mRenderTarget)
+    {
+        D3DSURFACE_DESC description;
+        mRenderTarget->GetDesc(&description);
+
+        const d3d9::D3DFormat &d3dFormatInfo = d3d9::GetD3DFormatInfo(description.Format);
+        mActualFormat = d3dFormatInfo.internalFormat;
+    }
+}
+
+SurfaceRenderTarget9::~SurfaceRenderTarget9()
+{
+    SafeRelease(mRenderTarget);
+}
+
+IDirect3DSurface9 *SurfaceRenderTarget9::getSurface()
 {
     // Caller is responsible for releasing the returned surface reference.
     // TODO: remove the AddRef to match RenderTarget11
@@ -64,6 +72,52 @@ IDirect3DSurface9 *RenderTarget9::getSurface()
     }
 
     return mRenderTarget;
+}
+
+
+SwapChainRenderTarget9::SwapChainRenderTarget9(SwapChain9 *swapChain, bool depth)
+    : mSwapChain(swapChain),
+      mDepth(depth)
+{
+}
+
+SwapChainRenderTarget9::~SwapChainRenderTarget9()
+{
+}
+
+GLsizei SwapChainRenderTarget9::getWidth() const
+{
+    return mSwapChain->getWidth();
+}
+
+GLsizei SwapChainRenderTarget9::getHeight() const
+{
+    return mSwapChain->getHeight();
+}
+
+GLsizei SwapChainRenderTarget9::getDepth() const
+{
+    return 1;
+}
+
+GLenum SwapChainRenderTarget9::getInternalFormat() const
+{
+    return (mDepth ? mSwapChain->GetDepthBufferInternalFormat() : mSwapChain->GetBackBufferInternalFormat());
+}
+
+GLenum SwapChainRenderTarget9::getActualFormat() const
+{
+    return d3d9::GetD3DFormatInfo(d3d9::GetTextureFormatInfo(getInternalFormat()).texFormat).internalFormat;
+}
+
+GLsizei SwapChainRenderTarget9::getSamples() const
+{
+    return 0;
+}
+
+IDirect3DSurface9 *SwapChainRenderTarget9::getSurface()
+{
+    return (mDepth ? mSwapChain->getDepthStencil() : mSwapChain->getRenderTarget());
 }
 
 }
