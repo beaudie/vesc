@@ -325,7 +325,8 @@ bool ValidateRenderbufferStorageParameters(gl::Context *context, GLenum target, 
         return false;
     }
 
-    if ((formatInfo.componentType == GL_UNSIGNED_INT || formatInfo.componentType == GL_INT) && samples > 0)
+    // Do not check that the format is not an integer when using the ANGLE extension as ES 2.0 doesn't have integer formats.
+    if (!angleExtension && (formatInfo.componentType == GL_UNSIGNED_INT || formatInfo.componentType == GL_INT) && samples > 0)
     {
         context->recordError(Error(GL_INVALID_OPERATION));
         return false;
