@@ -288,9 +288,8 @@ bool ValidateAttachmentTarget(gl::Context *context, GLenum attachment)
     return true;
 }
 
-bool ValidateRenderbufferStorageParameters(gl::Context *context, GLenum target, GLsizei samples,
-                                           GLenum internalformat, GLsizei width, GLsizei height,
-                                           bool angleExtension)
+bool ValidateRenderbufferStorageParametersBase(gl::Context *context, GLenum target, GLsizei samples,
+                                               GLenum internalformat, GLsizei width, GLsizei height)
 {
     switch (target)
     {
@@ -316,18 +315,11 @@ bool ValidateRenderbufferStorageParameters(gl::Context *context, GLenum target, 
 
     // ANGLE_framebuffer_multisample does not explicitly state that the internal format must be
     // sized but it does state that the format must be in the ES2.0 spec table 4.5 which contains
-    // only sized internal formats. The ES3 spec (section 4.4.2) does, however, state that the
-    // internal format must be sized and not an integer format if samples is greater than zero.
+    // only sized internal formats.
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalformat);
     if (formatInfo.pixelBytes == 0)
     {
         context->recordError(Error(GL_INVALID_ENUM));
-        return false;
-    }
-
-    if ((formatInfo.componentType == GL_UNSIGNED_INT || formatInfo.componentType == GL_INT) && samples > 0)
-    {
-        context->recordError(Error(GL_INVALID_OPERATION));
         return false;
     }
 
@@ -337,39 +329,38 @@ bool ValidateRenderbufferStorageParameters(gl::Context *context, GLenum target, 
         return false;
     }
 
-    // ANGLE_framebuffer_multisample states that the value of samples must be less than or equal
-    // to MAX_SAMPLES_ANGLE (Context::getMaxSupportedSamples) while the ES3.0 spec (section 4.4.2)
-    // states that samples must be less than or equal to the maximum samples for the specified
-    // internal format.
-    if (angleExtension)
-    {
-        ASSERT(context->getExtensions().framebufferMultisample);
-        if (static_cast<GLuint>(samples) > context->getExtensions().maxSamples)
-        {
-            context->recordError(Error(GL_INVALID_VALUE));
-            return false;
-        }
 
-        // Check if this specific format supports enough samples
-        if (static_cast<GLuint>(samples) > formatCaps.getMaxSamples())
-        {
-            context->recordError(Error(GL_OUT_OF_MEMORY));
-            return false;
-        }
-    }
-    else
+    if (static_cast<GLuint>(samples) > formatCaps.getMaxSamples())
     {
-        if (static_cast<GLuint>(samples) > formatCaps.getMaxSamples())
-        {
-            context->recordError(Error(GL_INVALID_VALUE));
-            return false;
-        }
+        context->recordError(Error(GL_INVALID_VALUE));
+        return false;
     }
 
     GLuint handle = context->getState().getRenderbufferId();
     if (handle == 0)
     {
         context->recordError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateRenderbufferStorageParametersANGLE(gl::Context *context, GLenum target, GLsizei samples,
+                                                GLenum internalformat, GLsizei width, GLsizei height)
+{
+    if (!ValidateRenderbufferStorageParametersBase(context, target, samples, internalformat, width, height))
+    {
+        return false;
+    }
+
+    ASSERT(context->getExtensions().framebufferMultisample);
+
+    // ANGLE_framebuffer_multisample states that the value of samples must be less than or equal
+    // to MAX_SAMPLES_ANGLE (Context::getMaxSupportedSamples).
+    if (static_cast<GLuint>(samples) > context->getExtensions().maxSamples)
+    {
+        context->recordError(Error(GL_INVALID_VALUE));
         return false;
     }
 
