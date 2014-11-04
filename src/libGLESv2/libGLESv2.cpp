@@ -5802,8 +5802,15 @@ void GL_APIENTRY glRenderbufferStorageMultisample(GLenum target, GLsizei samples
             return;
         }
 
-        if (!ValidateRenderbufferStorageParameters(context, target, samples, internalformat,
+        if (context->getClientVersion() < 3 &&
+            !ValidateRenderbufferStorageParameters(context, target, samples, internalformat,
                                                    width, height, false))
+        {
+            return;
+        }
+
+        if (context->getClientVersion() >= 3 &&
+            !ValidateES3RenderbufferStorageParameters(context, target, samples, internalformat, width, height))
         {
             return;
         }

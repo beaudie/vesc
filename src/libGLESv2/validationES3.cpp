@@ -1187,6 +1187,25 @@ bool ValidES3ReadFormatType(Context *context, GLenum internalFormat, GLenum form
     return true;
 }
 
+bool ValidateES3RenderbufferStorageParameters(gl::Context *context, GLenum target, GLsizei samples,
+    GLenum internalformat, GLsizei width, GLsizei height)
+{
+    if (!ValidateRenderbufferStorageParameters(context, target, samples, internalformat, width, height, false))
+    {
+        return false;
+    }
+
+    //The ES3 spec(section 4.4.2) states that the internal format must be sized and not an integer format if samples is greater than zero.
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalformat);
+    if ((formatInfo.componentType == GL_UNSIGNED_INT || formatInfo.componentType == GL_INT) && samples > 0)
+    {
+        context->recordError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    return true;
+}
+
 bool ValidateInvalidateFramebufferParameters(Context *context, GLenum target, GLsizei numAttachments,
                                              const GLenum* attachments)
 {
