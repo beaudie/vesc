@@ -1,7 +1,7 @@
 #include "ANGLETest.h"
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-ANGLE_TYPED_TEST_CASE(FramebufferFormatsTest, ES2_D3D9, ES2_D3D11);
+ANGLE_TYPED_TEST_CASE(FramebufferFormatsTest, ES2_D3D9, ES2_D3D11, ES3_D3D11);
 
 template<typename T>
 class FramebufferFormatsTest : public ANGLETest
@@ -64,6 +64,33 @@ protected:
         glDeleteFramebuffers(1, &fbo);
     }
 
+    void testRenderbufferMultisampleFormat(int minESVersion, GLenum attachmentType, GLenum internalFormat)
+    {
+        if (T::GetGlesMajorVersion() < minESVersion)
+        {
+	        return;
+        }
+
+        GLuint framebufferID;
+        glGenFramebuffers(1, &framebufferID);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebufferID);
+
+        GLuint renderbufferID;
+        glGenRenderbuffers(1, &renderbufferID);
+        glBindRenderbuffer(GL_RENDERBUFFER, renderbufferID);
+
+        EXPECT_EQ(GL_NO_ERROR, glGetError());
+
+        glRenderbufferStorageMultisampleANGLE(GL_RENDERBUFFER, 2, internalFormat, 128, 128);
+
+        EXPECT_EQ(GL_NO_ERROR, glGetError());
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachmentType, GL_RENDERBUFFER, renderbufferID);
+        EXPECT_EQ(GL_NO_ERROR, glGetError());
+
+        glDeleteRenderbuffers(1, &renderbufferID);
+        glDeleteFramebuffers(1, &framebufferID);
+    }
+
     virtual void SetUp()
     {
         ANGLETest::SetUp();
@@ -100,3 +127,28 @@ TYPED_TEST(FramebufferFormatsTest, RGBA8)
     testTextureFormat(GL_RGBA8_OES, 8, 8, 8, 8);
 }
 
+struct RenderbufferFormatTest {
+    int minESVersion;
+    GLenum attachment;
+    GLenum internalFormat;
+};
+
+static RenderbufferFormatTest renderbufferFormats[] = {
+    {2, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT16 },
+    {3, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24},
+    {3, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT32F},
+    {3, GL_DEPTH_STENCIL_ATTACHMENT, GL_DEPTH24_STENCIL8},
+    {3, GL_DEPTH_STENCIL_ATTACHMENT, GL_DEPTH32F_STENCIL8},
+    {2, GL_STENCIL_ATTACHMENT, GL_STENCIL_INDEX8},
+};
+
+static int renderbufferFormatNumber = sizeof(renderbufferFormats) / sizeof(renderbufferFormats[0]);
+
+TYPED_TEST(FramebufferFormatsTest, RenderbufferFormats)
+{
+    for (int i = 0; i < renderbufferFormatNumber; i++)
+    {
+        const RenderbufferFormatTest& format = renderbufferFormats[i];
+        testRenderbufferMultisampleFormat(format.minESVersion, format.attachment, format.internalFormat);
+    }
+}
