@@ -138,7 +138,7 @@ class Renderer11 : public RendererD3D
     virtual RenderTarget *createRenderTarget(int width, int height, GLenum format, GLsizei samples);
 
     // Shader creation
-    virtual ShaderImpl *createShader(GLenum type);
+    virtual ShaderImpl *createShader(const gl::Data &data, GLenum type);
     virtual ProgramImpl *createProgram();
 
     // Shader operations

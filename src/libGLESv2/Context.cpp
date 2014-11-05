@@ -240,7 +240,7 @@ GLuint Context::createProgram()
 
 GLuint Context::createShader(GLenum type)
 {
-    return mResourceManager->createShader(type);
+    return mResourceManager->createShader(getData(), type);
 }
 
 GLuint Context::createTexture()
