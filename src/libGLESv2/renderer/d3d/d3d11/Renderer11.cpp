@@ -154,10 +154,15 @@ Renderer11::Renderer11(egl::Display *display, EGLNativeDisplayType hDc, const eg
 
     mDriverType = (attributes.get(EGL_PLATFORM_ANGLE_USE_WARP_ANGLE, EGL_FALSE) == EGL_TRUE) ? D3D_DRIVER_TYPE_WARP
                                                                                              : D3D_DRIVER_TYPE_HARDWARE;
+
+#if defined(ANGLE_ENABLE_WINDOWS_STORE)
+    mApplicationSuspendedEventToken = {};
+#endif
 }
 
 Renderer11::~Renderer11()
 {
+    unregisterForRendererTrimRequest();
     release();
 }
 
@@ -174,6 +179,11 @@ Renderer11 *Renderer11::makeRenderer11(Renderer *renderer)
 EGLint Renderer11::initialize()
 {
     if (!mCompiler.initialize())
+    {
+        return EGL_NOT_INITIALIZED;
+    }
+
+    if (!registerForRendererTrimRequest())
     {
         return EGL_NOT_INITIALIZED;
     }
@@ -3229,4 +3239,69 @@ void Renderer11::setShaderResource(gl::SamplerType shaderType, UINT resourceSlot
     }
 }
 
+void Renderer11::trim()
+{
+    if (!mDevice)
+    {
+        return;
+    }
+#if defined (ANGLE_ENABLE_WINDOWS_STORE)
+    // IDXGIDevice3 is only supported on Windows 8.1 and Windows Phone 8.1 and above.
+    IDXGIDevice3 *dxgiDevice3 = NULL;
+    if (SUCCEEDED(mDevice->QueryInterface(__uuidof(IDXGIDevice3), (void**)&dxgiDevice3)))
+    {
+        dxgiDevice3->Trim();
+    }
+    SafeRelease(dxgiDevice3);
+#endif // defined (ANGLE_ENABLE_WINDOWS_STORE)
+}
+
+bool Renderer11::registerForRendererTrimRequest()
+{
+#if defined (ANGLE_ENABLE_WINDOWS_STORE)
+    using namespace ABI::Windows::Foundation;
+    using namespace ABI::Windows::ApplicationModel;
+    using namespace ABI::Windows::ApplicationModel::Core;
+    ICoreApplication* coreApplication = nullptr;
+    HRESULT result = GetActivationFactory(HStringReference(RuntimeClass_Windows_ApplicationModel_Core_CoreApplication).Get(), &coreApplication);
+    if (SUCCEEDED(result))
+    {
+        auto suspendHandler = Callback<IEventHandler<SuspendingEventArgs*>>(
+            [=](IInspectable*, ISuspendingEventArgs*) -> HRESULT
+        {
+            trim();
+            return S_OK;
+        });
+        result = coreApplication->add_Suspending(suspendHandler.Get(), &mApplicationSuspendedEventToken);
+    }
+    SafeRelease(coreApplication);
+
+    if (FAILED(result))
+    {
+        return false;
+    }
+#endif
+    return true;
+}
+
+void Renderer11::unregisterForRendererTrimRequest()
+{
+#if defined (ANGLE_ENABLE_WINDOWS_STORE)
+    using namespace ABI::Windows::Foundation;
+    using namespace ABI::Windows::ApplicationModel;
+    using namespace ABI::Windows::ApplicationModel::Core;
+    // Unregister the application suspending event because the
+    // renderer attached to this display is being destroyed.
+    if (mApplicationSuspendedEventToken.value != 0)
+    {
+        ICoreApplication* coreApplication = nullptr;
+        if (SUCCEEDED(GetActivationFactory(HStringReference(RuntimeClass_Windows_ApplicationModel_Core_CoreApplication).Get(), &coreApplication)))
+        {
+            coreApplication->remove_Suspending(mApplicationSuspendedEventToken);
+        }
+        mApplicationSuspendedEventToken.value = 0;
+        SafeRelease(coreApplication);
+    }
+#endif
+}
 }

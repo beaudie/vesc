@@ -244,6 +244,14 @@ class Renderer11 : public Renderer
     int getMinorShaderModel() const;
     void release();
 
+    // Trim support for Windows Store applications
+    void trim();
+    bool registerForRendererTrimRequest();
+    void unregisterForRendererTrimRequest();
+#if defined(ANGLE_ENABLE_WINDOWS_STORE)
+    EventRegistrationToken mApplicationSuspendedEventToken;
+#endif
+
     RenderStateCache mStateCache;
 
     // current render target states
