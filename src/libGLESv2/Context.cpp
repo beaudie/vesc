@@ -14,6 +14,7 @@
 #include "common/platform.h"
 #include "libGLESv2/formatutils.h"
 #include "libGLESv2/Buffer.h"
+#include "libGLESv2/Compiler.h"
 #include "libGLESv2/Fence.h"
 #include "libGLESv2/Framebuffer.h"
 #include "libGLESv2/FramebufferAttachment.h"
@@ -119,6 +120,8 @@ Context::Context(int clientVersion, const gl::Context *shareContext, rx::Rendere
     mResetStatus = GL_NO_ERROR;
     mResetStrategy = (notifyResets ? GL_LOSE_CONTEXT_ON_RESET_EXT : GL_NO_RESET_NOTIFICATION_EXT);
     mRobustAccess = robustAccess;
+
+    mCompiler = new Compiler(mRenderer->createCompiler(mClientVersion, mCaps, mExtensions));
 }
 
 Context::~Context()
@@ -174,6 +177,8 @@ Context::~Context()
     mZeroTextures.clear();
 
     mResourceManager->release();
+
+    SafeDelete(mCompiler);
 }
 
 void Context::makeCurrent(egl::Surface *surface)
@@ -822,6 +827,11 @@ Texture *Context::getSamplerTexture(unsigned int sampler, GLenum type) const
     {
         return mState.getSamplerTexture(sampler, type);
     }
+}
+
+Compiler *Context::getCompiler() const
+{
+    return mCompiler;
 }
 
 void Context::getBooleanv(GLenum pname, GLboolean *params)
@@ -2341,11 +2351,6 @@ Error Context::blitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY
     }
 
     return gl::Error(GL_NO_ERROR);
-}
-
-void Context::releaseShaderCompiler()
-{
-    mRenderer->releaseShaderCompiler();
 }
 
 void Context::initCaps(GLuint clientVersion)

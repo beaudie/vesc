@@ -15,6 +15,11 @@
 
 #include <map>
 
+namespace gl
+{
+class Compiler;
+}
+
 namespace rx
 {
 class DynamicHLSL;
@@ -49,28 +54,22 @@ class ShaderD3D : public ShaderImpl
     bool usesDepthRange() const { return mUsesDepthRange; }
     bool usesPointSize() const { return mUsesPointSize; }
 
-    static void releaseCompiler();
-    static ShShaderOutput getCompilerOutputType(GLenum shader);
+    GLenum getShaderType() const;
+    ShShaderOutput getCompilerOutputType() const;
 
-    virtual bool compile(const std::string &source);
+    virtual bool compile(const std::string &source, gl::Compiler *compiler);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(ShaderD3D);
 
-    void compileToHLSL(void *compiler, const std::string &source);
-    void parseVaryings(void *compiler);
+    void compileToHLSL(ShHandle compiler, const std::string &source);
+    void parseVaryings(ShHandle compiler);
 
-    void initializeCompiler();
-    void parseAttributes(void *compiler);
-    void *getCompiler();
+    void parseAttributes(ShHandle compiler);
 
     static bool compareVarying(const gl::PackedVarying &x, const gl::PackedVarying &y);
 
-    static void *mFragmentCompiler;
-    static void *mVertexCompiler;
-
     GLenum mType;
-    rx::Renderer *mRenderer;
 
     int mShaderVersion;
 
@@ -86,6 +85,7 @@ class ShaderD3D : public ShaderImpl
     bool mUsesDiscardRewriting;
     bool mUsesNestedBreak;
 
+    ShShaderOutput mLanguage;
     std::string mHlsl;
     std::string mInfoLog;
     std::string mDebugInfo;

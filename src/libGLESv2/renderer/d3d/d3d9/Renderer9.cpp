@@ -27,6 +27,7 @@
 #include "libGLESv2/renderer/d3d/TextureD3D.h"
 #include "libGLESv2/renderer/d3d/TransformFeedbackD3D.h"
 #include "libGLESv2/renderer/d3d/RenderbufferD3D.h"
+#include "libGLESv2/renderer/d3d/CompilerD3D.h"
 #include "libGLESv2/main.h"
 #include "libGLESv2/Buffer.h"
 #include "libGLESv2/Texture.h"
@@ -153,7 +154,6 @@ Renderer9::~Renderer9()
 
 void Renderer9::release()
 {
-    releaseShaderCompiler();
     releaseDeviceResources();
 
     SafeRelease(mDevice);
@@ -2824,6 +2824,11 @@ RenderTarget *Renderer9::createRenderTarget(int width, int height, GLenum format
     return renderTarget;
 }
 
+CompilerImpl *Renderer9::createCompiler(GLuint clientVersion, const gl::Caps &caps, const gl::Extensions &extensions)
+{
+    return new CompilerD3D(clientVersion, caps, extensions, SH_HLSL9_OUTPUT);
+}
+
 ShaderImpl *Renderer9::createShader(GLenum type)
 {
     return new ShaderD3D(type, this);
@@ -2832,11 +2837,6 @@ ShaderImpl *Renderer9::createShader(GLenum type)
 ProgramImpl *Renderer9::createProgram()
 {
     return new ProgramD3D(this);
-}
-
-void Renderer9::releaseShaderCompiler()
-{
-    ShaderD3D::releaseCompiler();
 }
 
 gl::Error Renderer9::loadExecutable(const void *function, size_t length, rx::ShaderType type,

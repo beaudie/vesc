@@ -26,6 +26,7 @@ class Renderer;
 namespace gl
 {
 class Buffer;
+class Compiler;
 class Shader;
 class Program;
 class Texture;
