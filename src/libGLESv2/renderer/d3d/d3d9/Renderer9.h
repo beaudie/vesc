@@ -143,11 +143,11 @@ class Renderer9 : public RendererD3D
     virtual RenderTarget *createRenderTarget(int width, int height, GLenum format, GLsizei samples);
 
     // Shader creation
+    virtual CompilerImpl *createCompiler(GLuint clientVersion, const gl::Caps &caps, const gl::Extensions &extensions);
     virtual ShaderImpl *createShader(GLenum type);
     virtual ProgramImpl *createProgram();
 
     // Shader operations
-    virtual void releaseShaderCompiler();
     virtual gl::Error loadExecutable(const void *function, size_t length, rx::ShaderType type,
                                      const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
                                      bool separatedOutputBuffers, ShaderExecutable **outExecutable);

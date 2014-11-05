@@ -67,6 +67,7 @@ class UniformStorage;
 class TextureImpl;
 class TransformFeedbackImpl;
 class RenderbufferImpl;
+class CompilerImpl;
 
 struct ConfigDesc
 {
@@ -193,11 +194,11 @@ class Renderer
     virtual RenderTarget *createRenderTarget(int width, int height, GLenum format, GLsizei samples) = 0;
 
     // Shader creation
+    virtual CompilerImpl *createCompiler(GLuint clientVersion, const gl::Caps &caps, const gl::Extensions &extensions) = 0;
     virtual ShaderImpl *createShader(GLenum type) = 0;
     virtual ProgramImpl *createProgram() = 0;
 
     // Shader operations
-    virtual void releaseShaderCompiler() = 0;
     virtual gl::Error loadExecutable(const void *function, size_t length, rx::ShaderType type,
                                      const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
                                      bool separatedOutputBuffers, ShaderExecutable **outExecutable) = 0;

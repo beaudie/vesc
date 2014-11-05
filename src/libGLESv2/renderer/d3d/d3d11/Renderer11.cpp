@@ -16,6 +16,7 @@
 #include "libGLESv2/renderer/d3d/ShaderD3D.h"
 #include "libGLESv2/renderer/d3d/TextureD3D.h"
 #include "libGLESv2/renderer/d3d/TransformFeedbackD3D.h"
+#include "libGLESv2/renderer/d3d/CompilerD3D.h"
 #include "libGLESv2/renderer/d3d/d3d11/Renderer11.h"
 #include "libGLESv2/renderer/d3d/d3d11/RenderTarget11.h"
 #include "libGLESv2/renderer/d3d/d3d11/renderer11_utils.h"
@@ -1821,7 +1822,6 @@ bool Renderer11::testDeviceResettable()
 
 void Renderer11::release()
 {
-    releaseShaderCompiler();
     releaseDeviceResources();
 
     SafeRelease(mDxgiFactory);
@@ -2218,19 +2218,19 @@ RenderTarget *Renderer11::createRenderTarget(int width, int height, GLenum forma
     return renderTarget;
 }
 
+CompilerImpl *Renderer11::createCompiler(GLuint clientVersion, const gl::Caps &caps, const gl::Extensions &extensions)
+{
+    return new CompilerD3D(clientVersion, caps, extensions, SH_HLSL11_OUTPUT);
+}
+
 ShaderImpl *Renderer11::createShader(GLenum type)
 {
-    return new ShaderD3D(type, this);
+    return new ShaderD3D(type);
 }
 
 ProgramImpl *Renderer11::createProgram()
 {
     return new ProgramD3D(this);
-}
-
-void Renderer11::releaseShaderCompiler()
-{
-    ShaderD3D::releaseCompiler();
 }
 
 gl::Error Renderer11::loadExecutable(const void *function, size_t length, rx::ShaderType type,
