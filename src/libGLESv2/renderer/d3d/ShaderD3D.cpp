@@ -7,9 +7,11 @@
 // ShaderD3D.cpp: Defines the rx::ShaderD3D class which implements rx::ShaderImpl.
 
 #include "libGLESv2/Shader.h"
+#include "libGLESv2/Compiler.h"
 #include "libGLESv2/main.h"
 #include "libGLESv2/renderer/d3d/RendererD3D.h"
 #include "libGLESv2/renderer/d3d/ShaderD3D.h"
+#include "libGLESv2/renderer/d3d/CompilerD3D.h"
 
 #include "common/features.h"
 #include "common/utilities.h"
@@ -57,9 +59,6 @@ void FilterInactiveVariables(std::vector<VarT> *variableList)
     }
 }
 
-void *ShaderD3D::mFragmentCompiler = NULL;
-void *ShaderD3D::mVertexCompiler = NULL;
-
 template <typename VarT>
 const std::vector<VarT> *GetShaderVariables(const std::vector<VarT> *variableList)
 {
@@ -67,13 +66,11 @@ const std::vector<VarT> *GetShaderVariables(const std::vector<VarT> *variableLis
     return variableList;
 }
 
-ShaderD3D::ShaderD3D(GLenum type, RendererD3D *renderer)
+ShaderD3D::ShaderD3D(GLenum type)
     : mType(type),
-      mRenderer(renderer),
       mShaderVersion(100)
 {
     uncompile();
-    initializeCompiler();
 }
 
 ShaderD3D::~ShaderD3D()
@@ -97,63 +94,7 @@ std::string ShaderD3D::getDebugInfo() const
     return mDebugInfo + std::string("\n// ") + GetShaderTypeString(mType) + " SHADER END\n";
 }
 
-// Perform a one-time initialization of the shader compiler (or after being destructed by releaseCompiler)
-void ShaderD3D::initializeCompiler()
-{
-    if (!mFragmentCompiler)
-    {
-        bool result = ShInitialize();
-
-        if (result)
-        {
-            ShShaderSpec specVersion = (mRenderer->getCurrentClientVersion() >= 3) ? SH_GLES3_SPEC : SH_GLES2_SPEC;
-            ShShaderOutput hlslVersion = (mRenderer->getMajorShaderModel() >= 4) ? SH_HLSL11_OUTPUT : SH_HLSL9_OUTPUT;
-
-            ShBuiltInResources resources;
-            ShInitBuiltInResources(&resources);
-
-            // TODO(geofflang): use context's caps
-            const gl::Caps &caps = mRenderer->getRendererCaps();
-            const gl::Extensions &extensions = mRenderer->getRendererExtensions();
-
-            resources.MaxVertexAttribs = caps.maxVertexAttributes;
-            resources.MaxVertexUniformVectors = caps.maxVertexUniformVectors;
-            resources.MaxVaryingVectors = caps.maxVaryingVectors;
-            resources.MaxVertexTextureImageUnits = caps.maxVertexTextureImageUnits;
-            resources.MaxCombinedTextureImageUnits = caps.maxCombinedTextureImageUnits;
-            resources.MaxTextureImageUnits = caps.maxTextureImageUnits;
-            resources.MaxFragmentUniformVectors = caps.maxFragmentUniformVectors;
-            resources.MaxDrawBuffers = caps.maxDrawBuffers;
-            resources.OES_standard_derivatives = extensions.standardDerivatives;
-            resources.EXT_draw_buffers = extensions.drawBuffers;
-            resources.EXT_shader_texture_lod = 1;
-            // resources.OES_EGL_image_external = mRenderer->getShareHandleSupport() ? 1 : 0; // TODO: commented out until the extension is actually supported.
-            resources.FragmentPrecisionHigh = 1;   // Shader Model 2+ always supports FP24 (s16e7) which corresponds to highp
-            resources.EXT_frag_depth = 1; // Shader Model 2+ always supports explicit depth output
-            // GLSL ES 3.0 constants
-            resources.MaxVertexOutputVectors = caps.maxVertexOutputComponents / 4;
-            resources.MaxFragmentInputVectors = caps.maxFragmentInputComponents / 4;
-            resources.MinProgramTexelOffset = caps.minProgramTexelOffset;
-            resources.MaxProgramTexelOffset = caps.maxProgramTexelOffset;
-
-            mFragmentCompiler = ShConstructCompiler(GL_FRAGMENT_SHADER, specVersion, hlslVersion, &resources);
-            mVertexCompiler = ShConstructCompiler(GL_VERTEX_SHADER, specVersion, hlslVersion, &resources);
-        }
-    }
-}
-
-void ShaderD3D::releaseCompiler()
-{
-    ShDestruct(mFragmentCompiler);
-    ShDestruct(mVertexCompiler);
-
-    mFragmentCompiler = NULL;
-    mVertexCompiler = NULL;
-
-    ShFinalize();
-}
-
-void ShaderD3D::parseVaryings(void *compiler)
+void ShaderD3D::parseVaryings(ShHandle compiler)
 {
     if (!mHlsl.empty())
     {
@@ -191,6 +132,7 @@ void ShaderD3D::resetVaryingsRegisterAssignment()
 void ShaderD3D::uncompile()
 {
     // set by compileToHLSL
+    mLanguage = SH_ESSL_OUTPUT;
     mHlsl.clear();
     mInfoLog.clear();
 
@@ -215,11 +157,8 @@ void ShaderD3D::uncompile()
     mDebugInfo.clear();
 }
 
-void ShaderD3D::compileToHLSL(void *compiler, const std::string &source)
+void ShaderD3D::compileToHLSL(ShHandle compiler, const std::string &source)
 {
-    // ensure the compiler is loaded
-    initializeCompiler();
-
     int compileOptions = (SH_OBJECT_CODE | SH_VARIABLES);
     std::string sourcePath;
 
@@ -255,12 +194,7 @@ void ShaderD3D::compileToHLSL(void *compiler, const std::string &source)
 
     mShaderVersion = ShGetShaderVersion(compiler);
 
-    if (mShaderVersion == 300 && mRenderer->getCurrentClientVersion() < 3)
-    {
-        mInfoLog = "GLSL ES 3.00 is not supported by OpenGL ES 2.0 contexts";
-        TRACE("\n%s", mInfoLog.c_str());
-    }
-    else if (result)
+    if (result)
     {
         mHlsl = ShGetObjectCode(compiler);
 
@@ -382,47 +316,33 @@ unsigned int ShaderD3D::getInterfaceBlockRegister(const std::string &blockName) 
     return mInterfaceBlockRegisterMap.find(blockName)->second;
 }
 
-void *ShaderD3D::getCompiler()
+GLenum ShaderD3D::getShaderType() const
 {
-    if (mType == GL_VERTEX_SHADER)
-    {
-        return mVertexCompiler;
-    }
-    else
-    {
-        ASSERT(mType == GL_FRAGMENT_SHADER);
-        return mFragmentCompiler;
-    }
+    return mType;
 }
 
-ShShaderOutput ShaderD3D::getCompilerOutputType(GLenum shader)
+ShShaderOutput ShaderD3D::getCompilerOutputType() const
 {
-    void *compiler = NULL;
-
-    switch (shader)
-    {
-      case GL_VERTEX_SHADER:   compiler = mVertexCompiler;   break;
-      case GL_FRAGMENT_SHADER: compiler = mFragmentCompiler; break;
-      default: UNREACHABLE();  return SH_HLSL9_OUTPUT;
-    }
-
-    return ShGetShaderOutputType(compiler);
+    return mLanguage;
 }
 
-bool ShaderD3D::compile(const std::string &source)
+bool ShaderD3D::compile(const std::string &source, gl::Compiler *compiler)
 {
     uncompile();
 
-    void *compiler = getCompiler();
+    CompilerD3D *compilerD3D = CompilerD3D::makeCompilerD3D(compiler->getImplementation());
+    ShHandle compilerHandle = compilerD3D->getCompilerHandle(mType);
 
-    compileToHLSL(compiler, source);
+    mLanguage = ShGetShaderOutputType(compilerHandle);
+
+    compileToHLSL(compilerHandle, source);
 
     if (mType == GL_VERTEX_SHADER)
     {
-        parseAttributes(compiler);
+        parseAttributes(compilerHandle);
     }
 
-    parseVaryings(compiler);
+    parseVaryings(compilerHandle);
 
     if (mType == GL_FRAGMENT_SHADER)
     {
@@ -431,7 +351,7 @@ bool ShaderD3D::compile(const std::string &source)
         const std::string &hlsl = getTranslatedSource();
         if (!hlsl.empty())
         {
-            mActiveOutputVariables = *GetShaderVariables(ShGetOutputVariables(compiler));
+            mActiveOutputVariables = *GetShaderVariables(ShGetOutputVariables(compilerHandle));
             FilterInactiveVariables(&mActiveOutputVariables);
         }
     }
@@ -448,7 +368,7 @@ bool ShaderD3D::compile(const std::string &source)
     return !getTranslatedSource().empty();
 }
 
-void ShaderD3D::parseAttributes(void *compiler)
+void ShaderD3D::parseAttributes(ShHandle compiler)
 {
     const std::string &hlsl = getTranslatedSource();
     if (!hlsl.empty())

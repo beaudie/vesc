@@ -52,6 +52,7 @@ class ProgramImpl;
 class TextureImpl;
 class TransformFeedbackImpl;
 class RenderbufferImpl;
+class CompilerImpl;
 struct TranslatedIndexData;
 struct Workarounds;
 class SwapChain;
@@ -104,11 +105,9 @@ class Renderer
     virtual bool getPostSubBufferSupport() const = 0;
 
     // Shader creation
+    virtual CompilerImpl *createCompiler(GLuint clientVersion, const gl::Caps &caps, const gl::Extensions &extensions) = 0;
     virtual ShaderImpl *createShader(GLenum type) = 0;
     virtual ProgramImpl *createProgram() = 0;
-
-    // Shader operations
-    virtual void releaseShaderCompiler() = 0;
 
     // Texture creation
     virtual TextureImpl *createTexture(GLenum target) = 0;

@@ -12,6 +12,7 @@
 #include "libGLESv2/main.h"
 #include "libGLESv2/formatutils.h"
 #include "libGLESv2/Buffer.h"
+#include "libGLESv2/Compiler.h"
 #include "libGLESv2/Fence.h"
 #include "libGLESv2/Framebuffer.h"
 #include "libGLESv2/Renderbuffer.h"
@@ -728,7 +729,7 @@ void GL_APIENTRY glCompileShader(GLuint shader)
             }
         }
 
-        shaderObject->compile();
+        shaderObject->compile(context->getCompiler());
     }
 }
 
@@ -3839,7 +3840,13 @@ void GL_APIENTRY glReleaseShaderCompiler(void)
 
     if (context)
     {
-        context->releaseShaderCompiler();
+        gl::Compiler *compiler = context->getCompiler();
+        gl::Error error = compiler->release();
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 

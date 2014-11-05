@@ -12,6 +12,7 @@
 #include "common/utilities.h"
 #include "common/platform.h"
 #include "libGLESv2/Buffer.h"
+#include "libGLESv2/Compiler.h"
 #include "libGLESv2/Fence.h"
 #include "libGLESv2/Framebuffer.h"
 #include "libGLESv2/FramebufferAttachment.h"
@@ -123,6 +124,8 @@ Context::Context(int clientVersion, const Context *shareContext, rx::Renderer *r
     mResetStatus = GL_NO_ERROR;
     mResetStrategy = (notifyResets ? GL_LOSE_CONTEXT_ON_RESET_EXT : GL_NO_RESET_NOTIFICATION_EXT);
     mRobustAccess = robustAccess;
+
+    mCompiler = new Compiler(mRenderer->createCompiler(mClientVersion, mCaps, mExtensions));
 }
 
 Context::~Context()
@@ -181,6 +184,8 @@ Context::~Context()
     {
         mResourceManager->release();
     }
+
+    SafeDelete(mCompiler);
 }
 
 void Context::makeCurrent(egl::Surface *surface)
@@ -836,6 +841,11 @@ Texture2DArray *Context::getTexture2DArray() const
 Texture *Context::getSamplerTexture(unsigned int sampler, GLenum type) const
 {
     return mState.getSamplerTexture(sampler, type);
+}
+
+Compiler *Context::getCompiler() const
+{
+    return mCompiler;
 }
 
 void Context::getBooleanv(GLenum pname, GLboolean *params)
@@ -1680,11 +1690,6 @@ Error Context::blitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY
 {
     return mRenderer->blitFramebuffer(getData(), srcX0, srcY0, srcX1, srcY1,
                                       dstX0, dstY0, dstX1, dstY1, mask, filter);
-}
-
-void Context::releaseShaderCompiler()
-{
-    mRenderer->releaseShaderCompiler();
 }
 
 void Context::initCaps(GLuint clientVersion)

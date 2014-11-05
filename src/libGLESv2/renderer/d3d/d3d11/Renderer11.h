@@ -138,11 +138,11 @@ class Renderer11 : public RendererD3D
     virtual gl::Error createRenderTarget(int width, int height, GLenum format, GLsizei samples, RenderTarget **outRT);
 
     // Shader creation
+    virtual CompilerImpl *createCompiler(GLuint clientVersion, const gl::Caps &caps, const gl::Extensions &extensions);
     virtual ShaderImpl *createShader(GLenum type);
     virtual ProgramImpl *createProgram();
 
     // Shader operations
-    void releaseShaderCompiler() override;
     virtual gl::Error loadExecutable(const void *function, size_t length, rx::ShaderType type,
                                      const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
                                      bool separatedOutputBuffers, ShaderExecutable **outExecutable);
