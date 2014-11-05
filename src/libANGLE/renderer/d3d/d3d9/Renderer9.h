@@ -147,12 +147,12 @@ class Renderer9 : public RendererD3D
     virtual FramebufferImpl *createFramebuffer() override;
 
     // Shader creation
-    virtual ShaderImpl *createShader(const gl::Data &data, GLenum type);
+    virtual CompilerImpl *createCompiler(GLuint clientVersion, const gl::Caps &caps, const gl::Extensions &extensions);
+    virtual ShaderImpl *createShader(GLenum type);
     virtual ProgramImpl *createProgram();
 
     // Shader operations
-    void releaseShaderCompiler() override;
-    virtual gl::Error loadExecutable(const void *function, size_t length, ShaderType type,
+    virtual gl::Error loadExecutable(const void *function, size_t length, rx::ShaderType type,
                                      const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
                                      bool separatedOutputBuffers, ShaderExecutable **outExecutable);
     virtual gl::Error compileToExecutable(gl::InfoLog &infoLog, const std::string &shaderHLSL, ShaderType type,
