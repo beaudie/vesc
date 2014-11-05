@@ -124,9 +124,9 @@ void Shader::getTranslatedSourceWithDebugInfo(GLsizei bufSize, GLsizei *length, 
     getSourceImpl(debugInfo, bufSize, length, buffer);
 }
 
-void Shader::compile()
+void Shader::compile(Compiler *compiler)
 {
-    mCompiled = mShader->compile(mSource);
+    mCompiled = mShader->compile(mSource, compiler);
 }
 
 void Shader::addRef()

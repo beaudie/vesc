@@ -259,6 +259,7 @@
     <ClInclude Include="..\..\src\libGLESv2\BinaryStream.h"/>
     <ClInclude Include="..\..\src\libGLESv2\Buffer.h"/>
     <ClInclude Include="..\..\src\libGLESv2\Caps.h"/>
+    <ClInclude Include="..\..\src\libGLESv2\Compiler.h"/>
     <ClInclude Include="..\..\src\libGLESv2\Constants.h"/>
     <ClInclude Include="..\..\src\libGLESv2\Context.h"/>
     <ClInclude Include="..\..\src\libGLESv2\Error.h"/>
@@ -285,6 +286,7 @@
     <ClInclude Include="..\..\src\libGLESv2\main.h"/>
     <ClInclude Include="..\..\src\libGLESv2\queryconversions.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\BufferImpl.h"/>
+    <ClInclude Include="..\..\src\libGLESv2\renderer\CompilerImpl.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\FenceImpl.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\Image.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\IndexRangeCache.h"/>
@@ -313,6 +315,7 @@
     <ClInclude Include="..\..\src\third_party\murmurhash\MurmurHash3.h"/>
     <ClInclude Include="..\..\src\third_party\systeminfo\SystemInfo.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\BufferD3D.h"/>
+    <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\CompilerD3D.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\DynamicHLSL.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\HLSLCompiler.h"/>
     <ClInclude Include="..\..\src\libGLESv2\renderer\d3d\ImageD3D.h"/>
@@ -431,6 +434,7 @@
     <ClCompile Include="..\..\src\common\utilities.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Buffer.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Caps.cpp"/>
+    <ClCompile Include="..\..\src\libGLESv2\Compiler.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Context.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Error.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\Fence.cpp"/>
@@ -471,6 +475,7 @@
     <ClCompile Include="..\..\src\third_party\murmurhash\MurmurHash3.cpp"/>
     <ClCompile Include="..\..\src\third_party\systeminfo\SystemInfo.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\BufferD3D.cpp"/>
+    <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\CompilerD3D.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\DynamicHLSL.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\HLSLCompiler.cpp"/>
     <ClCompile Include="..\..\src\libGLESv2\renderer\d3d\ImageD3D.cpp"/>

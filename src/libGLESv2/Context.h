@@ -40,6 +40,7 @@ class Surface;
 
 namespace gl
 {
+class Compiler;
 class Shader;
 class Program;
 class ProgramBinary;
@@ -162,6 +163,8 @@ class Context
 
     Texture *getSamplerTexture(unsigned int sampler, GLenum type) const;
 
+    Compiler *getCompiler() const;
+
     bool isSampler(GLuint samplerName) const;
 
     void getBooleanv(GLenum pname, GLboolean *params);
@@ -216,8 +219,6 @@ class Context
     State &getState() { return mState; }
     const State &getState() const { return mState; }
 
-    void releaseShaderCompiler();
-
   private:
     DISALLOW_COPY_AND_ASSIGN(Context);
 
@@ -260,6 +261,9 @@ class Context
     Caps mCaps;
     TextureCapsMap mTextureCaps;
     Extensions mExtensions;
+
+    // Shader compiler
+    Compiler *mCompiler;
 
     rx::Renderer *const mRenderer;
     State mState;
