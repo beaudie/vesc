@@ -367,6 +367,7 @@
     <ClInclude Include="..\..\..\..\src\compiler\translator\DetectDiscontinuity.h"/>
     <ClInclude Include="..\..\..\..\src\compiler\translator\Diagnostics.h"/>
     <ClInclude Include="..\..\..\..\src\compiler\translator\DirectiveHandler.h"/>
+    <ClInclude Include="..\..\..\..\src\compiler\translator\EmulatePrecision.h"/>
     <ClInclude Include="..\..\..\..\src\compiler\translator\ExtensionBehavior.h"/>
     <ClInclude Include="..\..\..\..\src\compiler\translator\FlagStd140Structs.h"/>
     <ClInclude Include="..\..\..\..\src\compiler\translator\ForLoopUnroll.h"/>
@@ -440,6 +441,7 @@
     <ClCompile Include="..\..\..\..\src\compiler\translator\DetectDiscontinuity.cpp"/>
     <ClCompile Include="..\..\..\..\src\compiler\translator\Diagnostics.cpp"/>
     <ClCompile Include="..\..\..\..\src\compiler\translator\DirectiveHandler.cpp"/>
+    <ClCompile Include="..\..\..\..\src\compiler\translator\EmulatePrecision.cpp"/>
     <ClCompile Include="..\..\..\..\src\compiler\translator\FlagStd140Structs.cpp"/>
     <ClCompile Include="..\..\..\..\src\compiler\translator\ForLoopUnroll.cpp"/>
     <ClCompile Include="..\..\..\..\src\compiler\translator\InfoSink.cpp"/>
