@@ -6,12 +6,15 @@
 
 // Renderer.cpp: Implements EGL dependencies for creating and destroying Renderer instances.
 
+#include "common/utilities.h"
 #include "libGLESv2/main.h"
+#include "libGLESv2/Shader.h"
 #include "libGLESv2/Program.h"
 #include "libGLESv2/renderer/Renderer.h"
-#include "common/utilities.h"
+
 #include "third_party/trace_event/trace_event.h"
-#include "libGLESv2/Shader.h"
+
+#include <EGL/eglext.h>
 
 #include "libEGL/AttributeMap.h"
 
@@ -32,16 +35,12 @@
 #define ANGLE_DEFAULT_D3D11 0
 #endif
 
-#include <EGL/eglext.h>
-
 namespace rx
 {
 
-Renderer::Renderer(egl::Display *display)
-    : mDisplay(display),
-      mCapsInitialized(false),
-      mWorkaroundsInitialized(false),
-      mCurrentClientVersion(2)
+Renderer::Renderer()
+    : mCapsInitialized(false),
+      mWorkaroundsInitialized(false)
 {
 }
 
@@ -171,7 +170,8 @@ rx::Renderer *glCreateRenderer(egl::Display *display, EGLNativeDisplayType nativ
 
 void glDestroyRenderer(rx::Renderer *renderer)
 {
-    delete renderer;
+    ASSERT(renderer);
+    SafeDelete(renderer);
 }
 
 }
