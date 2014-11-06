@@ -2218,9 +2218,9 @@ RenderTarget *Renderer11::createRenderTarget(int width, int height, GLenum forma
     return renderTarget;
 }
 
-ShaderImpl *Renderer11::createShader(GLenum type)
+ShaderImpl *Renderer11::createShader(const gl::Data &data, GLenum type)
 {
-    return new ShaderD3D(type, this);
+    return new ShaderD3D(data, type, this);
 }
 
 ProgramImpl *Renderer11::createProgram()
