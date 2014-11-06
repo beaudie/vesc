@@ -107,8 +107,8 @@ RenderTarget9::~RenderTarget9()
 
 RenderTarget9 *RenderTarget9::makeRenderTarget9(RenderTarget *target)
 {
-    ASSERT(HAS_DYNAMIC_TYPE(rx::RenderTarget9*, target));
-    return static_cast<rx::RenderTarget9*>(target);
+    ASSERT(HAS_DYNAMIC_TYPE(RenderTarget9*, target));
+    return static_cast<RenderTarget9*>(target);
 }
 
 void RenderTarget9::invalidate(GLint x, GLint y, GLsizei width, GLsizei height)
