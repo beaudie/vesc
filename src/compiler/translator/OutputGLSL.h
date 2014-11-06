@@ -17,7 +17,8 @@ public:
                 ShHashFunction64 hashFunction,
                 NameMap& nameMap,
                 TSymbolTable& symbolTable,
-                int shaderVersion);
+                int shaderVersion,
+                bool precisionEmulation);
 
 protected:
     virtual bool writeVariablePrecision(TPrecision);

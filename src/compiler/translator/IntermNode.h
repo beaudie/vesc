@@ -280,6 +280,7 @@ class TIntermTyped : public TIntermNode
 
     bool isInterfaceBlock() const { return mType.isInterfaceBlock(); }
     bool isMatrix() const { return mType.isMatrix(); }
+    bool isNonSquareMatrix() const { return mType.isNonSquareMatrix(); }
     bool isArray()  const { return mType.isArray(); }
     bool isVector() const { return mType.isVector(); }
     bool isScalar() const { return mType.isScalar(); }
