@@ -101,6 +101,8 @@
             'compiler/translator/RemoveTree.cpp',
             'compiler/translator/RemoveTree.h',
             'compiler/translator/RenameFunction.h',
+            'compiler/translator/ReplaceNodesAST.cpp',
+            'compiler/translator/ReplaceNodesAST.h',
             'compiler/translator/RewriteElseBlocks.cpp',
             'compiler/translator/RewriteElseBlocks.h',
             'compiler/translator/ScalarizeVecAndMatConstructorArgs.cpp',
