@@ -30,6 +30,7 @@
 namespace egl
 {
 class Display;
+class Surface;
 }
 
 namespace gl
@@ -50,6 +51,7 @@ class ProgramImpl;
 class TextureImpl;
 class TransformFeedbackImpl;
 class RenderbufferImpl;
+class DefaultAttachmentImpl;
 struct TranslatedIndexData;
 struct Workarounds;
 class SwapChain;
@@ -96,12 +98,14 @@ class Renderer
     // Shader operations
     virtual void releaseShaderCompiler() = 0;
 
+    // Framebuffer creation
+    virtual DefaultAttachmentImpl *createDefaultAttachment(GLenum type, egl::Surface *surface) = 0;
+
     // Texture creation
     virtual TextureImpl *createTexture(GLenum target) = 0;
 
     // Renderbuffer creation
     virtual RenderbufferImpl *createRenderbuffer() = 0;
-    virtual RenderbufferImpl *createRenderbuffer(SwapChain *swapChain, bool depth) = 0;
 
     // Buffer creation
     virtual BufferImpl *createBuffer() = 0;
