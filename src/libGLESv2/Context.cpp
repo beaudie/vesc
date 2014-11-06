@@ -197,12 +197,9 @@ void Context::makeCurrent(egl::Surface *surface)
         mHasBeenCurrent = true;
     }
 
-    // Wrap the existing swapchain resources into GL objects and assign them to the '0' names
-    rx::SwapChain *swapchain = surface->getSwapChain();
-
-    rx::RenderbufferImpl *colorbufferZero = mRenderer->createRenderbuffer(swapchain, false);
-    rx::RenderbufferImpl *depthStencilbufferZero = mRenderer->createRenderbuffer(swapchain, true);
-    Framebuffer *framebufferZero = new DefaultFramebuffer(colorbufferZero, depthStencilbufferZero);
+    Framebuffer *framebufferZero = new DefaultFramebuffer(mRenderer->createDefaultAttachment(GL_BACK, surface),
+                                                          mRenderer->createDefaultAttachment(GL_DEPTH, surface),
+                                                          mRenderer->createDefaultAttachment(GL_STENCIL, surface));
 
     setFramebufferZero(framebufferZero);
 
@@ -2333,7 +2330,7 @@ size_t Context::getBoundFramebufferTextureSerials(FramebufferTextureSerialArray 
     for (unsigned int i = 0; i < IMPLEMENTATION_MAX_DRAW_BUFFERS; i++)
     {
         FramebufferAttachment *attachment = drawFramebuffer->getColorbuffer(i);
-        if (attachment && attachment->isTexture())
+        if (attachment && attachment->type() == GL_TEXTURE)
         {
             Texture *texture = attachment->getTexture();
             (*outSerialArray)[serialCount++] = texture->getTextureSerial();
@@ -2341,7 +2338,7 @@ size_t Context::getBoundFramebufferTextureSerials(FramebufferTextureSerialArray 
     }
 
     FramebufferAttachment *depthStencilAttachment = drawFramebuffer->getDepthOrStencilbuffer();
-    if (depthStencilAttachment && depthStencilAttachment->isTexture())
+    if (depthStencilAttachment && depthStencilAttachment->type() == GL_TEXTURE)
     {
         Texture *depthStencilTexture = depthStencilAttachment->getTexture();
         (*outSerialArray)[serialCount++] = depthStencilTexture->getTextureSerial();
