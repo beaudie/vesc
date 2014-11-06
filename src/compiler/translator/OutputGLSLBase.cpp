@@ -45,17 +45,29 @@ TOutputGLSLBase::TOutputGLSLBase(TInfoSinkBase &objSink,
                                  ShHashFunction64 hashFunction,
                                  NameMap &nameMap,
                                  TSymbolTable &symbolTable,
-                                 int shaderVersion)
+                                 int shaderVersion,
+                                 bool precisionEmulation)
     : TIntermTraverser(true, true, true),
       mObjSink(objSink),
       mDeclaringVariables(false),
+      mInLValue(false),
+      mInFunctionCallOutParameter(false),
       mClampingStrategy(clampingStrategy),
       mHashFunction(hashFunction),
       mNameMap(nameMap),
       mSymbolTable(symbolTable),
-      mShaderVersion(shaderVersion)
+      mShaderVersion(shaderVersion),
+      mPrecisionEmulation(precisionEmulation)
 {
 }
+
+bool TOutputGLSLBase::canRoundFloat(const TType &type)
+{
+    return mPrecisionEmulation &&
+        type.getBasicType() == EbtFloat && !type.isNonSquareMatrix() && !type.isArray() &&
+        (type.getPrecision() == EbpLow || type.getPrecision() == EbpMedium);
+}
+
 
 void TOutputGLSLBase::writeTriplet(
     Visit visit, const char *preStr, const char *inStr, const char *postStr)
@@ -69,12 +81,96 @@ void TOutputGLSLBase::writeTriplet(
         out << postStr;
 }
 
+void TOutputGLSLBase::writeTriplet(
+    Visit visit, const char *preStr, const char *inStr, const char *postStr,
+    const TType &type)
+{
+    bool roundFloat = canRoundFloat(type);
+    TInfoSinkBase &out = objSink();
+    if (visit == PreVisit && preStr)
+    {
+        if (roundFloat && type.getPrecision() == EbpMedium)
+            out << "webgl_frm(";
+        if (roundFloat && type.getPrecision() == EbpLow)
+            out << "webgl_frl(";
+        out << preStr;
+    }
+    else if (visit == InVisit && inStr)
+    {
+        out << inStr;
+    }
+    else if (visit == PostVisit && postStr)
+    {
+        out << postStr;
+        if (roundFloat)
+            out << ")";
+    }
+}
+
 void TOutputGLSLBase::writeBuiltInFunctionTriplet(
-    Visit visit, const char *preStr, bool useEmulatedFunction)
+    Visit visit, const char *preStr, bool useEmulatedFunction, const TType &type)
 {
     TString preString = useEmulatedFunction ?
         BuiltInFunctionEmulator::GetEmulatedFunctionName(preStr) : preStr;
-    writeTriplet(visit, preString.c_str(), ", ", ")");
+    writeTriplet(visit, preString.c_str(), ", ", ")", type);
+}
+
+void TOutputGLSLBase::writeCompoundAssignment(
+    Visit visit, const TOperator &op, const TType &type)
+{
+    bool roundFloat = canRoundFloat(type);
+    if (!roundFloat)
+    {
+        switch (op)
+        {
+          case EOpAddAssign:
+            writeTriplet(visit, "(", " += ", ")");
+            break;
+          case EOpSubAssign:
+            writeTriplet(visit, "(", " -= ", ")");
+            break;
+          case EOpDivAssign:
+            writeTriplet(visit, "(", " /= ", ")");
+            break;
+          // Notice the fall-through.
+          case EOpMulAssign:
+          case EOpVectorTimesMatrixAssign:
+          case EOpVectorTimesScalarAssign:
+          case EOpMatrixTimesScalarAssign:
+          case EOpMatrixTimesMatrixAssign:
+            writeTriplet(visit, "(", " *= ", ")");
+            break;
+          default:
+            UNREACHABLE();
+        }
+    }
+    else
+    {
+        TString preString;
+        switch (op) {
+          case EOpAddAssign:
+            preString = type.getPrecision() == EbpMedium ? "webgl_compound_add_frm(" : "webgl_compound_add_frl(";
+            break;
+          case EOpSubAssign:
+            preString = type.getPrecision() == EbpMedium ? "webgl_compound_sub_frm(" : "webgl_compound_sub_frl(";
+            break;
+          case EOpDivAssign:
+            preString = type.getPrecision() == EbpMedium ? "webgl_compound_div_frm(" : "webgl_compound_div_frl(";
+            break;
+          // Notice the fall-through.
+          case EOpMulAssign:
+          case EOpVectorTimesMatrixAssign:
+          case EOpVectorTimesScalarAssign:
+          case EOpMatrixTimesScalarAssign:
+          case EOpMatrixTimesMatrixAssign:
+            preString = type.getPrecision() == EbpMedium ? "webgl_compound_mul_frm(" : "webgl_compound_mul_frl(";
+            break;
+          default:
+            UNREACHABLE();
+        }
+        // Note: call to the writeTriplet version without precision emulation, the return value is already rounded by the function.
+        writeTriplet(visit, preString.c_str(), ", ", ")");
+    }
 }
 
 void TOutputGLSLBase::writeVariableType(const TType &type)
@@ -183,10 +279,21 @@ const ConstantUnion *TOutputGLSLBase::writeConstantUnion(
 void TOutputGLSLBase::visitSymbol(TIntermSymbol *node)
 {
     TInfoSinkBase &out = objSink();
+
+    bool roundFloat = canRoundFloat(node->getType()) &&
+        !mDeclaringVariables && !mInLValue && !mInFunctionCallOutParameter;
+    if (roundFloat && node->getPrecision() == EbpMedium)
+        out << "webgl_frm(";
+    if (roundFloat && node->getPrecision() == EbpLow)
+        out << "webgl_frl(";
+
     if (mLoopUnrollStack.needsToReplaceSymbolWithValue(node))
         out << mLoopUnrollStack.getLoopIndexValue(node);
     else
         out << hashVariableName(node->getSymbol());
+
+    if (roundFloat)
+        out << ")";
 
     if (mDeclaringVariables && node->getType().isArray())
         out << arrayBrackets(node->getType());
@@ -201,6 +308,15 @@ bool TOutputGLSLBase::visitBinary(Visit visit, TIntermBinary *node)
 {
     bool visitChildren = true;
     TInfoSinkBase &out = objSink();
+
+    if (node->isAssignment())
+    {
+        if (visit == PreVisit)
+            mInLValue = true;
+        else if (visit == InVisit)
+            mInLValue = false;
+    }
+
     switch (node->getOp())
     {
       case EOpInitialize:
@@ -212,24 +328,18 @@ bool TOutputGLSLBase::visitBinary(Visit visit, TIntermBinary *node)
         }
         break;
       case EOpAssign:
-        writeTriplet(visit, "(", " = ", ")");
-        break;
-      case EOpAddAssign:
-        writeTriplet(visit, "(", " += ", ")");
-        break;
-      case EOpSubAssign:
-        writeTriplet(visit, "(", " -= ", ")");
-        break;
-      case EOpDivAssign:
-        writeTriplet(visit, "(", " /= ", ")");
+        writeTriplet(visit, "(", " = ", ")", node->getType());
         break;
       // Notice the fall-through.
+      case EOpAddAssign:
+      case EOpSubAssign:
+      case EOpDivAssign:
       case EOpMulAssign:
       case EOpVectorTimesMatrixAssign:
       case EOpVectorTimesScalarAssign:
       case EOpMatrixTimesScalarAssign:
       case EOpMatrixTimesMatrixAssign:
-        writeTriplet(visit, "(", " *= ", ")");
+        writeCompoundAssignment(visit, node->getOp(), node->getType());
         break;
 
       case EOpIndexDirect:
@@ -329,16 +439,16 @@ bool TOutputGLSLBase::visitBinary(Visit visit, TIntermBinary *node)
         break;
 
       case EOpAdd:
-        writeTriplet(visit, "(", " + ", ")");
+        writeTriplet(visit, "(", " + ", ")", node->getType());
         break;
       case EOpSub:
-        writeTriplet(visit, "(", " - ", ")");
+        writeTriplet(visit, "(", " - ", ")", node->getType());
         break;
       case EOpMul:
-        writeTriplet(visit, "(", " * ", ")");
+        writeTriplet(visit, "(", " * ", ")", node->getType());
         break;
       case EOpDiv:
-        writeTriplet(visit, "(", " / ", ")");
+        writeTriplet(visit, "(", " / ", ")", node->getType());
         break;
       case EOpMod:
         UNIMPLEMENTED();
@@ -368,7 +478,7 @@ bool TOutputGLSLBase::visitBinary(Visit visit, TIntermBinary *node)
       case EOpMatrixTimesVector:
       case EOpMatrixTimesScalar:
       case EOpMatrixTimesMatrix:
-        writeTriplet(visit, "(", " * ", ")");
+        writeTriplet(visit, "(", " * ", ")", node->getType());
         break;
 
       case EOpLogicalOr:
@@ -494,7 +604,27 @@ bool TOutputGLSLBase::visitUnary(Visit visit, TIntermUnary *node)
 
     if (visit == PreVisit && node->getUseEmulatedFunction())
         preString = BuiltInFunctionEmulator::GetEmulatedFunctionName(preString);
-    writeTriplet(visit, preString.c_str(), NULL, postString.c_str());
+    switch (node->getOp())
+    {
+      case EOpNegative:
+      //case EOpPositive:
+      case EOpVectorLogicalNot:
+      case EOpLogicalNot:
+        writeTriplet(visit, preString.c_str(), NULL, postString.c_str());
+        break;
+      case EOpPostIncrement:
+      case EOpPostDecrement:
+      case EOpPreIncrement:
+      case EOpPreDecrement:
+        if (visit == PreVisit)
+            mInLValue = true;
+        else if (visit == PostVisit)
+            mInLValue = false;
+        writeTriplet(visit, preString.c_str(), NULL, postString.c_str());
+        break;
+      default:
+        writeTriplet(visit, preString.c_str(), NULL, postString.c_str(), node->getType());
+    }
 
     return true;
 }
@@ -578,6 +708,7 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
         out << " " << hashFunctionName(node->getName());
 
         out << "(";
+        mFunctionMap[node->getName()] = node->getSequence();
         writeFunctionParameters(*(node->getSequence()));
         out << ")";
 
@@ -601,6 +732,7 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
         TIntermAggregate *params = (*seqIter)->getAsAggregate();
         ASSERT(params != NULL);
         ASSERT(params->getOp() == EOpParameters);
+        mFunctionMap[node->getName()] = params->getSequence();
         params->traverse(this);
 
         // Traverse function body.
@@ -614,14 +746,57 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
         break;
       }
       case EOpFunctionCall:
+      {
         // Function call.
+        bool inFunctionMap = (mFunctionMap.find(node->getName()) != mFunctionMap.end());
+        bool roundFloat = canRoundFloat(node->getType()) && !inFunctionMap;
+
         if (visit == PreVisit)
+        {
+            if (roundFloat && node->getPrecision() == EbpLow)
+                out << "webgl_frl(";
+            if (roundFloat && node->getPrecision() == EbpMedium)
+                out << "webgl_frm(";
             out << hashFunctionName(node->getName()) << "(";
+            if (inFunctionMap)
+            {
+                mSeqIterStack.push_back(mFunctionMap[node->getName()]->begin());
+                if (mSeqIterStack.back() != mFunctionMap[node->getName()]->end())
+                {
+                    TQualifier qualifier = (*mSeqIterStack.back())->getAsTyped()->getQualifier();
+                    mInFunctionCallOutParameter = (qualifier == EvqOut || qualifier == EvqInOut);
+                }
+            }
+            else
+            {
+                // The function is not user-defined - it is likely built-in texture function.
+                // Assume that those do not have out parameters.
+                mInFunctionCallOutParameter = false;
+            }
+        }
         else if (visit == InVisit)
+        {
             out << ", ";
+            if (inFunctionMap)
+            {
+                ++mSeqIterStack.back();
+                TQualifier qualifier = (*mSeqIterStack.back())->getAsTyped()->getQualifier();
+                mInFunctionCallOutParameter = (qualifier == EvqOut || qualifier == EvqInOut);
+            }
+        }
         else
+        {
             out << ")";
+            if (roundFloat)
+                out << ")";
+            if (inFunctionMap)
+            {
+                mSeqIterStack.pop_back();
+                mInFunctionCallOutParameter = false;
+            }
+        }
         break;
+      }
       case EOpParameters:
         // Function parameters.
         ASSERT(visit == PreVisit);
@@ -666,46 +841,46 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
         writeTriplet(visit, "float(", NULL, ")");
         break;
       case EOpConstructVec2:
-        writeBuiltInFunctionTriplet(visit, "vec2(", false);
+        writeBuiltInFunctionTriplet(visit, "vec2(", false, node->getType());
         break;
       case EOpConstructVec3:
-        writeBuiltInFunctionTriplet(visit, "vec3(", false);
+        writeBuiltInFunctionTriplet(visit, "vec3(", false, node->getType());
         break;
       case EOpConstructVec4:
-        writeBuiltInFunctionTriplet(visit, "vec4(", false);
+        writeBuiltInFunctionTriplet(visit, "vec4(", false, node->getType());
         break;
       case EOpConstructBool:
         writeTriplet(visit, "bool(", NULL, ")");
         break;
       case EOpConstructBVec2:
-        writeBuiltInFunctionTriplet(visit, "bvec2(", false);
+        writeBuiltInFunctionTriplet(visit, "bvec2(", false, node->getType());
         break;
       case EOpConstructBVec3:
-        writeBuiltInFunctionTriplet(visit, "bvec3(", false);
+        writeBuiltInFunctionTriplet(visit, "bvec3(", false, node->getType());
         break;
       case EOpConstructBVec4:
-        writeBuiltInFunctionTriplet(visit, "bvec4(", false);
+        writeBuiltInFunctionTriplet(visit, "bvec4(", false, node->getType());
         break;
       case EOpConstructInt:
         writeTriplet(visit, "int(", NULL, ")");
         break;
       case EOpConstructIVec2:
-        writeBuiltInFunctionTriplet(visit, "ivec2(", false);
+        writeBuiltInFunctionTriplet(visit, "ivec2(", false, node->getType());
         break;
       case EOpConstructIVec3:
-        writeBuiltInFunctionTriplet(visit, "ivec3(", false);
+        writeBuiltInFunctionTriplet(visit, "ivec3(", false, node->getType());
         break;
       case EOpConstructIVec4:
-        writeBuiltInFunctionTriplet(visit, "ivec4(", false);
+        writeBuiltInFunctionTriplet(visit, "ivec4(", false, node->getType());
         break;
       case EOpConstructMat2:
-        writeBuiltInFunctionTriplet(visit, "mat2(", false);
+        writeBuiltInFunctionTriplet(visit, "mat2(", false, node->getType());
         break;
       case EOpConstructMat3:
-        writeBuiltInFunctionTriplet(visit, "mat3(", false);
+        writeBuiltInFunctionTriplet(visit, "mat3(", false, node->getType());
         break;
       case EOpConstructMat4:
-        writeBuiltInFunctionTriplet(visit, "mat4(", false);
+        writeBuiltInFunctionTriplet(visit, "mat4(", false, node->getType());
         break;
       case EOpConstructStruct:
         if (visit == PreVisit)
@@ -725,74 +900,74 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
         break;
 
       case EOpLessThan:
-        writeBuiltInFunctionTriplet(visit, "lessThan(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "lessThan(", useEmulatedFunction, node->getType());
         break;
       case EOpGreaterThan:
-        writeBuiltInFunctionTriplet(visit, "greaterThan(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "greaterThan(", useEmulatedFunction, node->getType());
         break;
       case EOpLessThanEqual:
-        writeBuiltInFunctionTriplet(visit, "lessThanEqual(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "lessThanEqual(", useEmulatedFunction, node->getType());
         break;
       case EOpGreaterThanEqual:
-        writeBuiltInFunctionTriplet(visit, "greaterThanEqual(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "greaterThanEqual(", useEmulatedFunction, node->getType());
         break;
       case EOpVectorEqual:
-        writeBuiltInFunctionTriplet(visit, "equal(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "equal(", useEmulatedFunction, node->getType());
         break;
       case EOpVectorNotEqual:
-        writeBuiltInFunctionTriplet(visit, "notEqual(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "notEqual(", useEmulatedFunction, node->getType());
         break;
       case EOpComma:
         writeTriplet(visit, "(", ", ", ")");
         break;
 
       case EOpMod:
-        writeBuiltInFunctionTriplet(visit, "mod(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "mod(", useEmulatedFunction, node->getType());
         break;
       case EOpPow:
-        writeBuiltInFunctionTriplet(visit, "pow(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "pow(", useEmulatedFunction, node->getType());
         break;
       case EOpAtan:
-        writeBuiltInFunctionTriplet(visit, "atan(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "atan(", useEmulatedFunction, node->getType());
         break;
       case EOpMin:
-        writeBuiltInFunctionTriplet(visit, "min(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "min(", useEmulatedFunction, node->getType());
         break;
       case EOpMax:
-        writeBuiltInFunctionTriplet(visit, "max(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "max(", useEmulatedFunction, node->getType());
         break;
       case EOpClamp:
-        writeBuiltInFunctionTriplet(visit, "clamp(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "clamp(", useEmulatedFunction, node->getType());
         break;
       case EOpMix:
-        writeBuiltInFunctionTriplet(visit, "mix(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "mix(", useEmulatedFunction, node->getType());
         break;
       case EOpStep:
-        writeBuiltInFunctionTriplet(visit, "step(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "step(", useEmulatedFunction, node->getType());
         break;
       case EOpSmoothStep:
-        writeBuiltInFunctionTriplet(visit, "smoothstep(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "smoothstep(", useEmulatedFunction, node->getType());
         break;
       case EOpDistance:
-        writeBuiltInFunctionTriplet(visit, "distance(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "distance(", useEmulatedFunction, node->getType());
         break;
       case EOpDot:
-        writeBuiltInFunctionTriplet(visit, "dot(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "dot(", useEmulatedFunction, node->getType());
         break;
       case EOpCross:
-        writeBuiltInFunctionTriplet(visit, "cross(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "cross(", useEmulatedFunction, node->getType());
         break;
       case EOpFaceForward:
-        writeBuiltInFunctionTriplet(visit, "faceforward(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "faceforward(", useEmulatedFunction, node->getType());
         break;
       case EOpReflect:
-        writeBuiltInFunctionTriplet(visit, "reflect(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "reflect(", useEmulatedFunction, node->getType());
         break;
       case EOpRefract:
-        writeBuiltInFunctionTriplet(visit, "refract(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "refract(", useEmulatedFunction, node->getType());
         break;
       case EOpMul:
-        writeBuiltInFunctionTriplet(visit, "matrixCompMult(", useEmulatedFunction);
+        writeBuiltInFunctionTriplet(visit, "matrixCompMult(", useEmulatedFunction, node->getType());
         break;
 
       default:

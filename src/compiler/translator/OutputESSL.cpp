@@ -12,7 +12,7 @@ TOutputESSL::TOutputESSL(TInfoSinkBase& objSink,
                          NameMap& nameMap,
                          TSymbolTable& symbolTable,
                          int shaderVersion)
-    : TOutputGLSLBase(objSink, clampingStrategy, hashFunction, nameMap, symbolTable, shaderVersion)
+    : TOutputGLSLBase(objSink, clampingStrategy, hashFunction, nameMap, symbolTable, shaderVersion, false)
 {
 }
 

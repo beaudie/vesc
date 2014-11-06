@@ -21,11 +21,13 @@ class TOutputGLSLBase : public TIntermTraverser
                     ShHashFunction64 hashFunction,
                     NameMap &nameMap,
                     TSymbolTable& symbolTable,
-                    int shaderVersion);
+                    int shaderVersion,
+                    bool precisionEmulation);
 
   protected:
     TInfoSinkBase &objSink() { return mObjSink; }
     void writeTriplet(Visit visit, const char *preStr, const char *inStr, const char *postStr);
+    void writeTriplet(Visit visit, const char *preStr, const char *inStr, const char *postStr, const TType &type);
     void writeVariableType(const TType &type);
     virtual bool writeVariablePrecision(TPrecision precision) = 0;
     void writeFunctionParameters(const TIntermSequence &args);
@@ -57,10 +59,26 @@ class TOutputGLSLBase : public TIntermTraverser
     bool structDeclared(const TStructure *structure) const;
     void declareStruct(const TStructure *structure);
 
-    void writeBuiltInFunctionTriplet(Visit visit, const char *preStr, bool useEmulatedFunction);
+    bool canRoundFloat(const TType &type);
+
+    void writeBuiltInFunctionTriplet(Visit visit, const char *preStr, bool useEmulatedFunction, const TType &type);
+    void writeCompoundAssignment(Visit visit, const TOperator &op, const TType &type);
 
     TInfoSinkBase &mObjSink;
     bool mDeclaringVariables;
+    bool mInLValue;
+    bool mInFunctionCallOutParameter;
+
+    struct TStringComparator
+    {
+        bool operator()(const TString& a, const TString& b) const { return a.compare(b) < 0; }
+    };
+
+    // Map from function names to their parameter sequences
+    std::map<TString, TIntermSequence*, TStringComparator> mFunctionMap;
+
+    // Stack of function call parameter iterators
+    std::vector<TIntermSequence::const_iterator> mSeqIterStack;
 
     // This set contains all the ids of the structs from every scope.
     std::set<int> mDeclaredStructs;
@@ -78,6 +96,8 @@ class TOutputGLSLBase : public TIntermTraverser
     TSymbolTable &mSymbolTable;
 
     const int mShaderVersion;
+
+    bool mPrecisionEmulation;
 };
 
 #endif  // CROSSCOMPILERGLSL_OUTPUTGLSLBASE_H_
