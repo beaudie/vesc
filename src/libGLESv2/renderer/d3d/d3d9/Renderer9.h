@@ -139,8 +139,10 @@ class Renderer9 : public Renderer
                                  GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, uint8_t *pixels);
 
     // RenderTarget creation
-    virtual gl::Error createRenderTarget(SwapChain *swapChain, bool depth, RenderTarget **outRT);
     virtual gl::Error createRenderTarget(int width, int height, GLenum format, GLsizei samples, RenderTarget **outRT);
+
+    // Framebuffer creation
+    virtual DefaultAttachmentImpl *createDefaultAttachment(GLenum type, egl::Surface *surface);
 
     // Shader creation
     virtual ShaderImpl *createShader(GLenum type);
@@ -171,7 +173,6 @@ class Renderer9 : public Renderer
 
     // Renderbuffer creation
     virtual RenderbufferImpl *createRenderbuffer();
-    virtual RenderbufferImpl *createRenderbuffer(SwapChain *swapChain, bool depth);
 
     // Buffer creation
     virtual BufferImpl *createBuffer();

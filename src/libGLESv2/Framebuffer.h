@@ -21,7 +21,7 @@
 namespace rx
 {
 class Renderer;
-class RenderbufferImpl;
+class DefaultAttachmentImpl;
 }
 
 namespace gl
@@ -100,7 +100,8 @@ class Framebuffer
 class DefaultFramebuffer : public Framebuffer
 {
   public:
-    DefaultFramebuffer(rx::Renderer *Renderer, rx::RenderbufferImpl *colorbuffer, rx::RenderbufferImpl *depthStencil);
+    DefaultFramebuffer(rx::Renderer *renderer, rx::DefaultAttachmentImpl *colorAttachment, rx::DefaultAttachmentImpl *depthAttachment,
+                       rx::DefaultAttachmentImpl *stencilAttachment);
 
     virtual GLenum completeness() const;
     virtual FramebufferAttachment *getAttachment(GLenum attachment) const;
