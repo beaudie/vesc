@@ -11,8 +11,9 @@ TOutputGLSL::TOutputGLSL(TInfoSinkBase& objSink,
                          ShHashFunction64 hashFunction,
                          NameMap& nameMap,
                          TSymbolTable& symbolTable,
-                         int shaderVersion)
-    : TOutputGLSLBase(objSink, clampingStrategy, hashFunction, nameMap, symbolTable, shaderVersion)
+                         int shaderVersion,
+                         bool precisionEmulation)
+    : TOutputGLSLBase(objSink, clampingStrategy, hashFunction, nameMap, symbolTable, shaderVersion, precisionEmulation)
 {
 }
 
