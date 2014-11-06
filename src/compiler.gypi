@@ -55,6 +55,8 @@
             'compiler/translator/Diagnostics.h',
             'compiler/translator/DirectiveHandler.cpp',
             'compiler/translator/DirectiveHandler.h',
+            'compiler/translator/EmulateCompoundAssignment.cpp',
+            'compiler/translator/EmulateCompoundAssignment.h',
             'compiler/translator/ExtensionBehavior.h',
             'compiler/translator/FlagStd140Structs.cpp',
             'compiler/translator/FlagStd140Structs.h',

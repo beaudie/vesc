@@ -758,4 +758,6 @@ void InitExtensionBehavior(const ShBuiltInResources& resources,
         extBehavior["GL_EXT_frag_depth"] = EBhUndefined;
     if (resources.EXT_shader_texture_lod)
         extBehavior["GL_EXT_shader_texture_lod"] = EBhUndefined;
+    if (resources.WEBGL_debug_shader_precision)
+        extBehavior["GL_WEBGL_debug_shader_precision"] = EBhUndefined;
 }
