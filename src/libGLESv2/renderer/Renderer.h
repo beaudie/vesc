@@ -30,6 +30,7 @@
 namespace egl
 {
 class Display;
+class Surface;
 }
 
 namespace gl
@@ -67,6 +68,7 @@ class UniformStorage;
 class TextureImpl;
 class TransformFeedbackImpl;
 class RenderbufferImpl;
+class DefaultAttachmentImpl;
 
 struct ConfigDesc
 {
@@ -189,8 +191,10 @@ class Renderer
                                  GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, uint8_t *pixels) = 0;
 
     // RenderTarget creation
-    virtual gl::Error createRenderTarget(SwapChain *swapChain, bool depth, RenderTarget **outRT) = 0;
     virtual gl::Error createRenderTarget(int width, int height, GLenum format, GLsizei samples, RenderTarget **outRT) = 0;
+
+    // Framebuffer creation
+    virtual DefaultAttachmentImpl *createDefaultAttachment(GLenum type, egl::Surface *surface) = 0;
 
     // Shader creation
     virtual ShaderImpl *createShader(GLenum type) = 0;
@@ -221,7 +225,6 @@ class Renderer
 
     // Renderbuffer creation
     virtual RenderbufferImpl *createRenderbuffer() = 0;
-    virtual RenderbufferImpl *createRenderbuffer(SwapChain *swapChain, bool depth) = 0;
 
     // Buffer creation
     virtual BufferImpl *createBuffer() = 0;

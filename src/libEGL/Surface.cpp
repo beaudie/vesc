@@ -358,17 +358,7 @@ bool Surface::checkForOutOfDateSwapChain()
         resizeSwapChain(clientWidth, clientHeight);
     }
 
-    if (wasDirty)
-    {
-        if (static_cast<egl::Surface*>(getCurrentDrawSurface()) == this)
-        {
-            glMakeCurrent(glGetCurrentContext(), static_cast<egl::Display*>(getCurrentDisplay()), this);
-        }
-
-        return true;
-    }
-
-    return false;
+    return wasDirty;
 }
 
 Error Surface::swap()
