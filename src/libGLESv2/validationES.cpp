@@ -1878,6 +1878,11 @@ bool ValidateGetUniformBase(Context *context, GLuint program, GLint location)
         context->recordError(Error(GL_INVALID_VALUE));
         return false;
     }
+    
+    if (!ValidProgram(context, program))
+    {
+        return false;
+    }
 
     gl::Program *programObject = context->getProgram(program);
 
