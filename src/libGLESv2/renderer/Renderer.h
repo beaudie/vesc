@@ -35,7 +35,6 @@ class Display;
 namespace gl
 {
 class InfoLog;
-class ProgramBinary;
 struct LinkedVarying;
 struct VertexAttribute;
 class Buffer;
@@ -130,7 +129,7 @@ class Renderer
                              bool ignoreViewport) = 0;
 
     virtual gl::Error applyRenderTarget(gl::Framebuffer *frameBuffer) = 0;
-    virtual gl::Error applyShaders(gl::ProgramBinary *programBinary, const gl::VertexFormat inputLayout[], const gl::Framebuffer *framebuffer,
+    virtual gl::Error applyShaders(gl::Program *program, const gl::VertexFormat inputLayout[], const gl::Framebuffer *framebuffer,
                                    bool rasterizerDiscard, bool transformFeedbackActive) = 0;
     virtual gl::Error applyUniforms(const ProgramImpl &program, const std::vector<gl::LinkedUniform*> &uniformArray) = 0;
     virtual bool applyPrimitiveType(GLenum primitiveType, GLsizei elementCount) = 0;

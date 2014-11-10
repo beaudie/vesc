@@ -11,7 +11,6 @@
 #include "libGLESv2/renderer/Renderer.h"
 #include "libGLESv2/Shader.h"
 #include "libGLESv2/Program.h"
-#include "libGLESv2/ProgramBinary.h"
 #include "libGLESv2/formatutils.h"
 
 #include "common/utilities.h"

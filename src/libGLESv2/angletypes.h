@@ -15,8 +15,8 @@
 namespace gl
 {
 class Buffer;
+class Program;
 class State;
-class ProgramBinary;
 struct VertexAttribute;
 struct VertexAttribCurrentValueData;
 
@@ -231,7 +231,7 @@ struct VertexFormat
     VertexFormat(const VertexAttribute &attribute, GLenum currentValueType);
 
     static void GetInputLayout(VertexFormat *inputLayout,
-                               ProgramBinary *programBinary,
+                               Program *program,
                                const State& currentValues);
 
     bool operator==(const VertexFormat &other) const;
