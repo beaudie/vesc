@@ -10,7 +10,6 @@
 #include "libGLESv2/renderer/d3d/ShaderD3D.h"
 #include "libGLESv2/renderer/d3d/RendererD3D.h"
 #include "libGLESv2/Program.h"
-#include "libGLESv2/ProgramBinary.h"
 #include "libGLESv2/Shader.h"
 #include "libGLESv2/formatutils.h"
 

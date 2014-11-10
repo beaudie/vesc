@@ -382,7 +382,6 @@
     <ClInclude Include="..\..\..\..\src\libGLESv2\HandleAllocator.h"/>
     <ClInclude Include="..\..\..\..\src\libGLESv2\ImageIndex.h"/>
     <ClInclude Include="..\..\..\..\src\libGLESv2\Program.h"/>
-    <ClInclude Include="..\..\..\..\src\libGLESv2\ProgramBinary.h"/>
     <ClInclude Include="..\..\..\..\src\libGLESv2\Query.h"/>
     <ClInclude Include="..\..\..\..\src\libGLESv2\Renderbuffer.h"/>
     <ClInclude Include="..\..\..\..\src\libGLESv2\ResourceManager.h"/>
@@ -539,7 +538,6 @@
     <ClCompile Include="..\..\..\..\src\libGLESv2\HandleAllocator.cpp"/>
     <ClCompile Include="..\..\..\..\src\libGLESv2\ImageIndex.cpp"/>
     <ClCompile Include="..\..\..\..\src\libGLESv2\Program.cpp"/>
-    <ClCompile Include="..\..\..\..\src\libGLESv2\ProgramBinary.cpp"/>
     <ClCompile Include="..\..\..\..\src\libGLESv2\Query.cpp"/>
     <ClCompile Include="..\..\..\..\src\libGLESv2\Renderbuffer.cpp"/>
     <ClCompile Include="..\..\..\..\src\libGLESv2\ResourceManager.cpp"/>

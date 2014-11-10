@@ -17,7 +17,6 @@
 #include "libGLESv2/FramebufferAttachment.h"
 #include "libGLESv2/Renderbuffer.h"
 #include "libGLESv2/Program.h"
-#include "libGLESv2/ProgramBinary.h"
 #include "libGLESv2/Query.h"
 #include "libGLESv2/ResourceManager.h"
 #include "libGLESv2/Sampler.h"
@@ -124,17 +123,12 @@ Context::Context(int clientVersion, const Context *shareContext, rx::Renderer *r
 
 Context::~Context()
 {
-    GLuint currentProgram = mState.getCurrentProgramId();
-    if (currentProgram != 0)
+    Program *currentProgram = mState.getProgram();
+    if (currentProgram)
     {
-        Program *programObject = mResourceManager->getProgram(currentProgram);
-        if (programObject)
-        {
-            programObject->release();
-        }
-        currentProgram = 0;
+        currentProgram->release();
     }
-    mState.setCurrentProgram(0, NULL);
+    mState.setProgram(NULL);
 
     while (!mFramebufferMap.empty())
     {
@@ -632,58 +626,16 @@ void Context::bindPixelUnpackBuffer(GLuint buffer)
 
 void Context::useProgram(GLuint program)
 {
-    GLuint priorProgramId = mState.getCurrentProgramId();
-    Program *priorProgram = mResourceManager->getProgram(priorProgramId);
-
-    if (priorProgramId != program)
+    Program *priorProgram = mState.getProgram();
+    Program *newProgram = getProgram(program);
+    if (priorProgram != newProgram)
     {
-        mState.setCurrentProgram(program, mResourceManager->getProgram(program));
-
+        mState.setProgram(newProgram);
         if (priorProgram)
         {
             priorProgram->release();
         }
     }
-}
-
-Error Context::linkProgram(GLuint program)
-{
-    Program *programObject = mResourceManager->getProgram(program);
-
-    Error error = programObject->link(getData());
-    if (error.isError())
-    {
-        return error;
-    }
-
-    // if the current program was relinked successfully we
-    // need to install the new executables
-    if (programObject->isLinked() && program == mState.getCurrentProgramId())
-    {
-        mState.setCurrentProgramBinary(programObject->getProgramBinary());
-    }
-
-    return Error(GL_NO_ERROR);
-}
-
-Error Context::setProgramBinary(GLuint program, GLenum binaryFormat, const void *binary, GLint length)
-{
-    Program *programObject = mResourceManager->getProgram(program);
-
-    Error error = programObject->setProgramBinary(binaryFormat, binary, length);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    // if the current program was reloaded successfully we
-    // need to install the new executables
-    if (programObject->isLinked() && program == mState.getCurrentProgramId())
-    {
-        mState.setCurrentProgramBinary(programObject->getProgramBinary());
-    }
-
-    return Error(GL_NO_ERROR);
 }
 
 void Context::bindTransformFeedback(GLuint transformFeedback)
