@@ -6,6 +6,8 @@
 
 // TextureD3D.cpp: Implementations of the Texture interfaces shared betweeen the D3D backends.
 
+#include "libEGL/Surface.h"
+#include "libEGL/SurfaceD3D.h"
 #include "libGLESv2/Buffer.h"
 #include "libGLESv2/Framebuffer.h"
 #include "libGLESv2/Texture.h"
@@ -18,8 +20,6 @@
 #include "libGLESv2/renderer/d3d/TextureStorage.h"
 #include "libGLESv2/renderer/d3d/ImageD3D.h"
 #include "libGLESv2/renderer/d3d/RendererD3D.h"
-
-#include "libEGL/Surface.h"
 
 #include "common/mathutil.h"
 #include "common/utilities.h"
@@ -848,7 +848,11 @@ void TextureD3D_2D::bindTexImage(egl::Surface *surface)
         SafeDelete(mTexStorage);
     }
 
-    mTexStorage = mRenderer->createTextureStorage2D(surface->getSwapChain());
+    //TODO(jmadill): Can't call makeSurfaceD3D because of bad DLL export issues
+    egl::SurfaceD3D *surfaceD3D = static_cast<egl::SurfaceD3D*>(surface->getImplementation());
+    ASSERT(surfaceD3D);
+
+    mTexStorage = mRenderer->createTextureStorage2D(surfaceD3D->getSwapChain());
 
     mDirtyImages = true;
 }

@@ -375,6 +375,7 @@
     <ClInclude Include="..\..\..\..\src\libEGL\Display.h"/>
     <ClInclude Include="..\..\..\..\src\libEGL\Error.h"/>
     <ClInclude Include="..\..\..\..\src\libEGL\Surface.h"/>
+    <ClInclude Include="..\..\..\..\src\libEGL\SurfaceImpl.h"/>
     <ClInclude Include="..\..\..\..\src\libEGL\main.h"/>
     <ClInclude Include="..\..\..\..\src\libEGL\resource.h"/>
     <ClInclude Include="..\..\..\..\src\common\winrt\SwapChainPanelNativeWindow.h"/>
@@ -394,6 +395,7 @@
     <ClCompile Include="..\..\..\..\src\libEGL\Display.cpp"/>
     <ClCompile Include="..\..\..\..\src\libEGL\Error.cpp"/>
     <ClCompile Include="..\..\..\..\src\libEGL\Surface.cpp"/>
+    <ClCompile Include="..\..\..\..\src\libEGL\SurfaceImpl.cpp"/>
     <ClCompile Include="..\..\..\..\src\libEGL\libEGL.cpp"/>
     <ClCompile Include="..\..\..\..\src\libEGL\main.cpp"/>
     <ClCompile Include="..\..\..\..\src\common\winrt\SwapChainPanelNativeWindow.cpp"/>

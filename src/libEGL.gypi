@@ -48,6 +48,8 @@
             'libEGL/Error.h',
             'libEGL/Surface.cpp',
             'libEGL/Surface.h',
+            'libEGL/SurfaceImpl.cpp',
+            'libEGL/SurfaceImpl.h',
             'libEGL/libEGL.cpp',
             'libEGL/libEGL.def',
             'libEGL/libEGL.rc',
@@ -58,6 +60,8 @@
         'angle_libegl_win32_sources':
         [
             'common/win32/NativeWindow.cpp',
+            'libEGL/SurfaceD3D.cpp',
+            'libEGL/SurfaceD3D.h',
         ],
         'angle_libegl_winrt_sources':
         [

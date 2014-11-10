@@ -11,6 +11,9 @@
 
 #include "common/utilities.h"
 #include "common/platform.h"
+#include "libEGL/Display.h"
+#include "libEGL/Surface.h"
+#include "libEGL/SurfaceD3D.h"
 #include "libGLESv2/Buffer.h"
 #include "libGLESv2/Fence.h"
 #include "libGLESv2/Framebuffer.h"
@@ -28,9 +31,6 @@
 #include "libGLESv2/main.h"
 #include "libGLESv2/validationES.h"
 #include "libGLESv2/renderer/Renderer.h"
-
-#include "libEGL/Display.h"
-#include "libEGL/Surface.h"
 
 #include <sstream>
 #include <iterator>
@@ -195,7 +195,11 @@ void Context::makeCurrent(egl::Surface *surface)
     }
 
     // Wrap the existing swapchain resources into GL objects and assign them to the '0' names
-    rx::SwapChain *swapchain = surface->getSwapChain();
+
+    //TODO(jmadill): Can't call makeSurfaceD3D because of bad DLL export issues
+    egl::SurfaceD3D *surfaceD3D = static_cast<egl::SurfaceD3D*>(surface->getImplementation());
+
+    rx::SwapChain *swapchain = surfaceD3D->getSwapChain();
 
     rx::RenderbufferImpl *colorbufferZero = mRenderer->createRenderbuffer(swapchain, false);
     rx::RenderbufferImpl *depthStencilbufferZero = mRenderer->createRenderbuffer(swapchain, true);
