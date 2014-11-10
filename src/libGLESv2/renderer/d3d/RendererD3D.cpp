@@ -21,7 +21,8 @@ namespace rx
 {
 
 RendererD3D::RendererD3D(egl::Display *display)
-    : Renderer(display)
+    : Renderer(display),
+      mDeviceLost(false)
 {
 }
 
@@ -791,6 +792,11 @@ gl::Error RendererD3D::readPixels(const gl::Data &data, GLint x, GLint y, GLsize
 
     return readPixels(framebuffer, x, y, width, height, format, type, outputPitch, data.state->getPackState(),
                       reinterpret_cast<uint8_t*>(pixels));
+}
+
+bool RendererD3D::isDeviceLost() const
+{
+    return mDeviceLost;
 }
 
 }
