@@ -11,6 +11,7 @@
 
 #include "libGLESv2/renderer/ProgramImpl.h"
 #include "libGLESv2/renderer/Workarounds.h"
+#include "libGLESv2/renderer/d3d/DynamicHLSL.h"
 
 #include <string>
 #include <vector>
@@ -26,6 +27,7 @@ namespace rx
 {
 class RendererD3D;
 class UniformStorage;
+class ShaderExecutable;
 
 class ProgramD3D : public ProgramImpl
 {
@@ -51,7 +53,7 @@ class ProgramD3D : public ProgramImpl
     bool usesGeometryShader() const;
 
     GLenum getBinaryFormat() { return GL_PROGRAM_BINARY_ANGLE; }
-    gl::LinkResult load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream);
+    LinkResult load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream);
     gl::Error save(gl::BinaryOutputStream *stream);
 
     gl::Error getPixelExecutableForFramebuffer(const gl::Framebuffer *fbo, ShaderExecutable **outExectuable);
@@ -59,13 +61,13 @@ class ProgramD3D : public ProgramImpl
     gl::Error getVertexExecutableForInputLayout(const gl::VertexFormat inputLayout[gl::MAX_VERTEX_ATTRIBS], ShaderExecutable **outExectuable);
     ShaderExecutable *getGeometryExecutable() const { return mGeometryExecutable; }
 
-    gl::LinkResult compileProgramExecutables(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
-                                             int registers);
+    LinkResult compileProgramExecutables(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
+                                         int registers);
 
-    gl::LinkResult link(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
-                        const std::vector<std::string> &transformFeedbackVaryings, GLenum transformFeedbackBufferMode,
-                        int *registers, std::vector<gl::LinkedVarying> *linkedVaryings,
-                        std::map<int, gl::VariableLocation> *outputVariables, const gl::Caps &caps);
+    LinkResult link(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
+                    const std::vector<std::string> &transformFeedbackVaryings, GLenum transformFeedbackBufferMode,
+                    int *registers, std::vector<gl::LinkedVarying> *linkedVaryings,
+                    std::map<int, gl::VariableLocation> *outputVariables, const gl::Caps &caps);
 
     void getInputLayoutSignature(const gl::VertexFormat inputLayout[], GLenum signature[]) const;
 
@@ -110,6 +112,8 @@ class ProgramD3D : public ProgramImpl
     bool defineUniformBlock(gl::InfoLog &infoLog, const gl::Shader &shader, const sh::InterfaceBlock &interfaceBlock, const gl::Caps &caps);
 
     void reset();
+
+    unsigned int getSerial() const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(ProgramD3D);
@@ -210,6 +214,11 @@ class ProgramD3D : public ProgramImpl
     bool mDirtySamplerMapping;
 
     int mShaderVersion;
+
+    unsigned int mSerial;
+
+    static unsigned int issueSerial();
+    static unsigned int mCurrentSerial;
 };
 
 }

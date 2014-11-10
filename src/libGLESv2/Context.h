@@ -42,7 +42,6 @@ namespace gl
 {
 class Shader;
 class Program;
-class ProgramBinary;
 class Texture;
 class Texture2D;
 class TextureCubeMap;
@@ -125,8 +124,6 @@ class Context
     void bindPixelPackBuffer(GLuint buffer);
     void bindPixelUnpackBuffer(GLuint buffer);
     void useProgram(GLuint program);
-    Error linkProgram(GLuint program);
-    Error setProgramBinary(GLuint program, GLenum binaryFormat, const void *binary, GLint length);
     void bindTransformFeedback(GLuint transformFeedback);
 
     Error beginQuery(GLenum target, GLuint query);
@@ -228,10 +225,10 @@ class Context
 
     Error applyRenderTarget(GLenum drawMode, bool ignoreViewport);
     Error applyState(GLenum drawMode);
-    Error applyShaders(ProgramBinary *programBinary, bool transformFeedbackActive);
-    Error applyTextures(ProgramBinary *programBinary, SamplerType shaderType, const FramebufferTextureSerialArray &framebufferSerials,
+    Error applyShaders(Program *program, bool transformFeedbackActive);
+    Error applyTextures(Program *program, SamplerType shaderType, const FramebufferTextureSerialArray &framebufferSerials,
                         size_t framebufferSerialCount);
-    Error applyTextures(ProgramBinary *programBinary);
+    Error applyTextures(Program *program);
     Error applyUniformBuffers();
     bool applyTransformFeedbackBuffers();
     void markTransformFeedbackUsage();
@@ -244,8 +241,8 @@ class Context
     void detachTransformFeedback(GLuint transformFeedback);
     void detachSampler(GLuint sampler);
 
-    Error generateSwizzles(ProgramBinary *programBinary, SamplerType type);
-    Error generateSwizzles(ProgramBinary *programBinary);
+    Error generateSwizzles(Program *program, SamplerType type);
+    Error generateSwizzles(Program *program);
 
     Texture *getIncompleteTexture(GLenum type);
 

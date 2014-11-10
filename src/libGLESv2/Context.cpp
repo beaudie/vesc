@@ -17,7 +17,6 @@
 #include "libGLESv2/FramebufferAttachment.h"
 #include "libGLESv2/Renderbuffer.h"
 #include "libGLESv2/Program.h"
-#include "libGLESv2/ProgramBinary.h"
 #include "libGLESv2/Query.h"
 #include "libGLESv2/ResourceManager.h"
 #include "libGLESv2/Sampler.h"
@@ -128,17 +127,12 @@ Context::Context(int clientVersion, const Context *shareContext, rx::Renderer *r
 
 Context::~Context()
 {
-    GLuint currentProgram = mState.getCurrentProgramId();
-    if (currentProgram != 0)
+    Program *currentProgram = mState.getProgram();
+    if (currentProgram)
     {
-        Program *programObject = mResourceManager->getProgram(currentProgram);
-        if (programObject)
-        {
-            programObject->release();
-        }
-        currentProgram = 0;
+        currentProgram->release();
     }
-    mState.setCurrentProgram(0, NULL);
+    mState.setProgram(NULL);
 
     while (!mFramebufferMap.empty())
     {
@@ -641,58 +635,16 @@ void Context::bindPixelUnpackBuffer(GLuint buffer)
 
 void Context::useProgram(GLuint program)
 {
-    GLuint priorProgramId = mState.getCurrentProgramId();
-    Program *priorProgram = mResourceManager->getProgram(priorProgramId);
-
-    if (priorProgramId != program)
+    Program *priorProgram = mState.getProgram();
+    Program *newProgram = getProgram(program);
+    if (priorProgram != newProgram)
     {
-        mState.setCurrentProgram(program, mResourceManager->getProgram(program));
-
+        mState.setProgram(newProgram);
         if (priorProgram)
         {
             priorProgram->release();
         }
     }
-}
-
-Error Context::linkProgram(GLuint program)
-{
-    Program *programObject = mResourceManager->getProgram(program);
-
-    Error error = programObject->link(getCaps());
-    if (error.isError())
-    {
-        return error;
-    }
-
-    // if the current program was relinked successfully we
-    // need to install the new executables
-    if (programObject->isLinked() && program == mState.getCurrentProgramId())
-    {
-        mState.setCurrentProgramBinary(programObject->getProgramBinary());
-    }
-
-    return Error(GL_NO_ERROR);
-}
-
-Error Context::setProgramBinary(GLuint program, GLenum binaryFormat, const void *binary, GLint length)
-{
-    Program *programObject = mResourceManager->getProgram(program);
-
-    Error error = programObject->setProgramBinary(binaryFormat, binary, length);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    // if the current program was reloaded successfully we
-    // need to install the new executables
-    if (programObject->isLinked() && program == mState.getCurrentProgramId())
-    {
-        mState.setCurrentProgramBinary(programObject->getProgramBinary());
-    }
-
-    return Error(GL_NO_ERROR);
 }
 
 void Context::bindTransformFeedback(GLuint transformFeedback)
@@ -1394,17 +1346,17 @@ Error Context::applyState(GLenum drawMode)
 }
 
 // Applies the shaders and shader constants to the Direct3D 9 device
-Error Context::applyShaders(ProgramBinary *programBinary, bool transformFeedbackActive)
+Error Context::applyShaders(Program *program, bool transformFeedbackActive)
 {
     VertexFormat inputLayout[MAX_VERTEX_ATTRIBS];
-    VertexFormat::GetInputLayout(inputLayout, programBinary, mState);
+    VertexFormat::GetInputLayout(inputLayout, program, mState);
 
     const Framebuffer *fbo = mState.getDrawFramebuffer();
 
     //TODO(jmadill): MANGLE refactor
     rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
 
-    Error error = rendererD3D->applyShaders(programBinary, inputLayout, fbo,
+    Error error = rendererD3D->applyShaders(program, inputLayout, fbo,
                                             mState.getRasterizerState().rasterizerDiscard,
                                             transformFeedbackActive);
     if (error.isError())
@@ -1412,17 +1364,17 @@ Error Context::applyShaders(ProgramBinary *programBinary, bool transformFeedback
         return error;
     }
 
-    return programBinary->applyUniforms();
+    return program->applyUniforms();
 }
 
-Error Context::generateSwizzles(ProgramBinary *programBinary, SamplerType type)
+Error Context::generateSwizzles(Program *program, SamplerType type)
 {
-    size_t samplerRange = programBinary->getUsedSamplerRange(type);
+    size_t samplerRange = program->getUsedSamplerRange(type);
 
     for (size_t i = 0; i < samplerRange; i++)
     {
-        GLenum textureType = programBinary->getSamplerTextureType(type, i);
-        GLint textureUnit = programBinary->getSamplerMapping(type, i, getCaps());
+        GLenum textureType = program->getSamplerTextureType(type, i);
+        GLint textureUnit = program->getSamplerMapping(type, i, getCaps());
         if (textureUnit != -1)
         {
             Texture *texture = getSamplerTexture(textureUnit, textureType);
@@ -1444,15 +1396,15 @@ Error Context::generateSwizzles(ProgramBinary *programBinary, SamplerType type)
     return Error(GL_NO_ERROR);
 }
 
-Error Context::generateSwizzles(ProgramBinary *programBinary)
+Error Context::generateSwizzles(Program *program)
 {
-    Error error = generateSwizzles(programBinary, SAMPLER_VERTEX);
+    Error error = generateSwizzles(program, SAMPLER_VERTEX);
     if (error.isError())
     {
         return error;
     }
 
-    error = generateSwizzles(programBinary, SAMPLER_PIXEL);
+    error = generateSwizzles(program, SAMPLER_PIXEL);
     if (error.isError())
     {
         return error;
@@ -1464,17 +1416,17 @@ Error Context::generateSwizzles(ProgramBinary *programBinary)
 // For each Direct3D sampler of either the pixel or vertex stage,
 // looks up the corresponding OpenGL texture image unit and texture type,
 // and sets the texture and its addressing/filtering state (or NULL when inactive).
-Error Context::applyTextures(ProgramBinary *programBinary, SamplerType shaderType,
+Error Context::applyTextures(Program *program, SamplerType shaderType,
                              const FramebufferTextureSerialArray &framebufferSerials, size_t framebufferSerialCount)
 {
     //TODO(jmadill): MANGLE refactor
     rx::RendererD3D *rendererD3D = rx::RendererD3D::makeRendererD3D(mRenderer);
 
-    size_t samplerRange = programBinary->getUsedSamplerRange(shaderType);
+    size_t samplerRange = program->getUsedSamplerRange(shaderType);
     for (size_t samplerIndex = 0; samplerIndex < samplerRange; samplerIndex++)
     {
-        GLenum textureType = programBinary->getSamplerTextureType(shaderType, samplerIndex);
-        GLint textureUnit = programBinary->getSamplerMapping(shaderType, samplerIndex, getCaps());
+        GLenum textureType = program->getSamplerTextureType(shaderType, samplerIndex);
+        GLint textureUnit = program->getSamplerMapping(shaderType, samplerIndex, getCaps());
         if (textureUnit != -1)
         {
             Texture *texture = getSamplerTexture(textureUnit, textureType);
@@ -1543,18 +1495,18 @@ Error Context::applyTextures(ProgramBinary *programBinary, SamplerType shaderTyp
     return Error(GL_NO_ERROR);
 }
 
-Error Context::applyTextures(ProgramBinary *programBinary)
+Error Context::applyTextures(Program *program)
 {
     FramebufferTextureSerialArray framebufferSerials;
     size_t framebufferSerialCount = getBoundFramebufferTextureSerials(&framebufferSerials);
 
-    Error error = applyTextures(programBinary, SAMPLER_VERTEX, framebufferSerials, framebufferSerialCount);
+    Error error = applyTextures(program, SAMPLER_VERTEX, framebufferSerials, framebufferSerialCount);
     if (error.isError())
     {
         return error;
     }
 
-    error = applyTextures(programBinary, SAMPLER_PIXEL, framebufferSerials, framebufferSerialCount);
+    error = applyTextures(program, SAMPLER_PIXEL, framebufferSerials, framebufferSerialCount);
     if (error.isError())
     {
         return error;
@@ -1565,14 +1517,13 @@ Error Context::applyTextures(ProgramBinary *programBinary)
 
 Error Context::applyUniformBuffers()
 {
-    Program *programObject = getProgram(mState.getCurrentProgramId());
-    ProgramBinary *programBinary = programObject->getProgramBinary();
+    Program *program = mState.getProgram();
 
     std::vector<Buffer*> boundBuffers;
 
-    for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < programBinary->getActiveUniformBlockCount(); uniformBlockIndex++)
+    for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
     {
-        GLuint blockBinding = programObject->getUniformBlockBinding(uniformBlockIndex);
+        GLuint blockBinding = program->getUniformBlockBinding(uniformBlockIndex);
 
         if (mState.getIndexedUniformBuffer(blockBinding)->id() == 0)
         {
@@ -1587,7 +1538,7 @@ Error Context::applyUniformBuffers()
         }
     }
 
-    return programBinary->applyUniformBuffers(boundBuffers, getCaps());
+    return program->applyUniformBuffers(boundBuffers, getCaps());
 }
 
 bool Context::applyTransformFeedbackBuffers()
@@ -1770,12 +1721,12 @@ Error Context::readPixels(GLint x, GLint y, GLsizei width, GLsizei height,
 
 Error Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instances)
 {
-    ASSERT(mState.getCurrentProgramId() != 0);
+    gl::Program *program = mState.getProgram();
+    ASSERT(program);
 
-    ProgramBinary *programBinary = mState.getCurrentProgramBinary();
-    programBinary->updateSamplerMapping();
+    program->updateSamplerMapping();
 
-    Error error = generateSwizzles(programBinary);
+    Error error = generateSwizzles(program);
     if (error.isError())
     {
         return error;
@@ -1809,13 +1760,13 @@ Error Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei insta
 
     bool transformFeedbackActive = applyTransformFeedbackBuffers();
 
-    error = applyShaders(programBinary, transformFeedbackActive);
+    error = applyShaders(program, transformFeedbackActive);
     if (error.isError())
     {
         return error;
     }
 
-    error = applyTextures(programBinary);
+    error = applyTextures(program);
     if (error.isError())
     {
         return error;
@@ -1848,12 +1799,12 @@ Error Context::drawElements(GLenum mode, GLsizei count, GLenum type,
                             const GLvoid *indices, GLsizei instances,
                             const rx::RangeUI &indexRange)
 {
-    ASSERT(mState.getCurrentProgramId() != 0);
+    gl::Program *program = mState.getProgram();
+    ASSERT(program);
 
-    ProgramBinary *programBinary = mState.getCurrentProgramBinary();
-    programBinary->updateSamplerMapping();
+    program->updateSamplerMapping();
 
-    Error error = generateSwizzles(programBinary);
+    Error error = generateSwizzles(program);
     if (error.isError())
     {
         return error;
@@ -1900,13 +1851,13 @@ Error Context::drawElements(GLenum mode, GLsizei count, GLenum type,
     // layer.
     ASSERT(!transformFeedbackActive);
 
-    error = applyShaders(programBinary, transformFeedbackActive);
+    error = applyShaders(program, transformFeedbackActive);
     if (error.isError())
     {
         return error;
     }
 
-    error = applyTextures(programBinary);
+    error = applyTextures(program);
     if (error.isError())
     {
         return error;
@@ -2170,10 +2121,10 @@ bool Context::skipDraw(GLenum drawMode)
 {
     if (drawMode == GL_POINTS)
     {
-        // ProgramBinary assumes non-point rendering if gl_PointSize isn't written,
+        // Program assumes non-point rendering if gl_PointSize isn't written,
         // which affects varying interpolation. Since the value of gl_PointSize is
         // undefined when not written, just skip drawing to avoid unexpected results.
-        if (!mState.getCurrentProgramBinary()->usesPointSize())
+        if (!mState.getProgram()->usesPointSize())
         {
             // This is stictly speaking not an error, but developers should be
             // notified of risking undefined behavior.

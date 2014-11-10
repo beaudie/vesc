@@ -12,7 +12,7 @@
 #include "common/angleutils.h"
 #include "libGLESv2/BinaryStream.h"
 #include "libGLESv2/Constants.h"
-#include "libGLESv2/ProgramBinary.h"
+#include "libGLESv2/Program.h"
 #include "libGLESv2/Shader.h"
 #include "libGLESv2/renderer/Renderer.h"
 
@@ -20,6 +20,13 @@
 
 namespace rx
 {
+
+struct LinkResult
+{
+    bool linkSuccess;
+    gl::Error error;
+    LinkResult(bool linkSuccess, const gl::Error &error);
+};
 
 class ProgramImpl
 {
@@ -52,13 +59,13 @@ class ProgramImpl
     virtual GLenum getTransformFeedbackBufferMode() const = 0;
 
     virtual GLenum getBinaryFormat() = 0;
-    virtual gl::LinkResult load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream) = 0;
+    virtual LinkResult load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream) = 0;
     virtual gl::Error save(gl::BinaryOutputStream *stream) = 0;
 
-    virtual gl::LinkResult link(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
-                                const std::vector<std::string> &transformFeedbackVaryings, GLenum transformFeedbackBufferMode,
-                                int *registers, std::vector<gl::LinkedVarying> *linkedVaryings,
-                                std::map<int, gl::VariableLocation> *outputVariables, const gl::Caps &caps) = 0;
+    virtual LinkResult link(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
+                            const std::vector<std::string> &transformFeedbackVaryings, GLenum transformFeedbackBufferMode,
+                            int *registers, std::vector<gl::LinkedVarying> *linkedVaryings,
+                            std::map<int, gl::VariableLocation> *outputVariables, const gl::Caps &caps) = 0;
 
     virtual void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) = 0;
     virtual void setUniform2fv(GLint location, GLsizei count, const GLfloat *v) = 0;
@@ -96,8 +103,8 @@ class ProgramImpl
     virtual void updateSamplerMapping() = 0;
     virtual bool validateSamplers(gl::InfoLog *infoLog, const gl::Caps &caps) = 0;
 
-    virtual gl::LinkResult compileProgramExecutables(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
-                                                     int registers) = 0;
+    virtual LinkResult compileProgramExecutables(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
+                                                 int registers) = 0;
 
     virtual bool linkUniforms(gl::InfoLog &infoLog, const gl::Shader &vertexShader, const gl::Shader &fragmentShader,
                               const gl::Caps &caps) = 0;
