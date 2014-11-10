@@ -11,7 +11,7 @@
 #include "libGLESv2/renderer/d3d/d3d11/formatutils11.h"
 #include "libGLESv2/renderer/d3d/d3d11/RenderTarget11.h"
 #include "libGLESv2/renderer/Workarounds.h"
-#include "libGLESv2/ProgramBinary.h"
+#include "libGLESv2/Program.h"
 #include "libGLESv2/Framebuffer.h"
 
 #include "common/debug.h"
