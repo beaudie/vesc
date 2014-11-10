@@ -14,6 +14,9 @@
 
 namespace sh
 {
+
+// Detect Loop Discontinuity
+
 bool DetectLoopDiscontinuity::traverse(TIntermNode *node)
 {
     mLoopDepth = 0;
@@ -73,6 +76,56 @@ bool containsLoopDiscontinuity(TIntermNode *node)
     DetectLoopDiscontinuity detectLoopDiscontinuity;
     return detectLoopDiscontinuity.traverse(node);
 }
+
+// Detect Any Loop
+
+bool DetectAnyLoop::traverse(TIntermNode *node)
+{
+    mHasLoop = false;
+    node->traverse(this);
+    return mHasLoop;
+}
+
+bool DetectAnyLoop::visitLoop(Visit visit, TIntermLoop *loop)
+{
+    mHasLoop = true;
+    return false;
+}
+
+// The following defintions stop all traversal when we have found a loop
+// BEFORE MERGE: choose that or TTraverse.stopTraversal()
+bool DetectAnyLoop::visitBinary(Visit, TIntermBinary *)
+{
+    return !mHasLoop;
+}
+
+bool DetectAnyLoop::visitUnary(Visit, TIntermUnary *)
+{
+    return !mHasLoop;
+}
+
+bool DetectAnyLoop::visitSelection(Visit, TIntermSelection *)
+{
+    return !mHasLoop;
+}
+
+bool DetectAnyLoop::visitAggregate(Visit, TIntermAggregate *)
+{
+    return !mHasLoop;
+}
+
+bool DetectAnyLoop::visitBranch(Visit, TIntermBranch *)
+{
+    return !mHasLoop;
+}
+
+bool containsAnyLoop(TIntermNode *node)
+{
+    DetectAnyLoop detectAnyLoop;
+    return detectAnyLoop.traverse(node);
+}
+
+// Detect Gradient Operation
 
 bool DetectGradientOperation::traverse(TIntermNode *node)
 {
