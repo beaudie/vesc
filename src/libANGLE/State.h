@@ -167,10 +167,8 @@ class State
     bool removeVertexArrayBinding(GLuint vertexArray);
 
     // Program binding manipulation
-    void setCurrentProgram(GLuint programId, Program *newProgram);
-    void setCurrentProgramBinary(ProgramBinary *binary);
-    GLuint getCurrentProgramId() const;
-    ProgramBinary *getCurrentProgramBinary() const;
+    void setProgram(Program *newProgram);
+    Program *getProgram() const;
 
     // Transform feedback object (not buffer) binding manipulation
     void setTransformFeedbackBinding(TransformFeedback *transformFeedback);
@@ -284,8 +282,7 @@ class State
     Framebuffer *mReadFramebuffer;
     Framebuffer *mDrawFramebuffer;
     BindingPointer<Renderbuffer> mRenderbuffer;
-    GLuint mCurrentProgramId;
-    BindingPointer<ProgramBinary> mCurrentProgramBinary;
+    Program *mProgram;
 
     typedef std::vector<VertexAttribCurrentValueData> VertexAttribVector;
     VertexAttribVector mVertexAttribCurrentValues; // From glVertexAttrib
