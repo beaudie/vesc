@@ -33,7 +33,7 @@
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Renderbuffer.h"
-#include "libANGLE/ProgramBinary.h"
+#include "libANGLE/Program.h"
 #include "libANGLE/State.h"
 #include "libANGLE/angletypes.h"
 
@@ -1321,7 +1321,7 @@ gl::Error Renderer9::applyVertexBuffer(const gl::State &state, GLint first, GLsi
         return error;
     }
 
-    return mVertexDeclarationCache.applyDeclaration(mDevice, attributes, state.getCurrentProgramBinary(), instances, &mRepeatDraw);
+    return mVertexDeclarationCache.applyDeclaration(mDevice, attributes, state.getProgram(), instances, &mRepeatDraw);
 }
 
 // Applies the indices and element array bindings to the Direct3D 9 device
@@ -1720,13 +1720,13 @@ gl::Error Renderer9::getCountingIB(size_t count, StaticIndexBufferInterface **ou
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer9::applyShaders(gl::ProgramBinary *programBinary, const gl::VertexFormat inputLayout[], const gl::Framebuffer *framebuffer,
+gl::Error Renderer9::applyShaders(gl::Program *program, const gl::VertexFormat inputLayout[], const gl::Framebuffer *framebuffer,
                                   bool rasterizerDiscard, bool transformFeedbackActive)
 {
     ASSERT(!transformFeedbackActive);
     ASSERT(!rasterizerDiscard);
 
-    ProgramD3D *programD3D = ProgramD3D::makeProgramD3D(programBinary->getImplementation());
+    ProgramD3D *programD3D = ProgramD3D::makeProgramD3D(program->getImplementation());
 
     ShaderExecutable *vertexExe = NULL;
     gl::Error error = programD3D->getVertexExecutableForInputLayout(inputLayout, &vertexExe);
@@ -1762,7 +1762,7 @@ gl::Error Renderer9::applyShaders(gl::ProgramBinary *programBinary, const gl::Ve
     // per-program, checking the program serial guarantees we upload fresh
     // uniform data even if our shader pointers are the same.
     // https://code.google.com/p/angleproject/issues/detail?id=661
-    unsigned int programSerial = programBinary->getSerial();
+    unsigned int programSerial = programD3D->getSerial();
     if (programSerial != mAppliedProgramSerial)
     {
         programD3D->dirtyAllUniforms();
