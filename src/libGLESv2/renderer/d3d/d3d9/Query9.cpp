@@ -10,6 +10,7 @@
 #include "libGLESv2/renderer/d3d/d3d9/renderer9_utils.h"
 #include "libGLESv2/renderer/d3d/d3d9/Renderer9.h"
 #include "libGLESv2/main.h"
+#include "libEGL/Display.h"
 
 #include <GLES2/gl2ext.h>
 
@@ -132,8 +133,9 @@ gl::Error Query9::testQuery()
             mRenderer->notifyDeviceLost();
             return gl::Error(GL_OUT_OF_MEMORY, "Failed to test get query result, device is lost.");
         }
-        else if (mRenderer->testDeviceLost(true))
+        else if (mRenderer->testDeviceLost(false))
         {
+            mRenderer->getDisplay()->notifyDeviceLost();
             return gl::Error(GL_OUT_OF_MEMORY, "Failed to test get query result, device is lost.");
         }
     }
