@@ -10,6 +10,7 @@
 #include "libGLESv2/renderer/d3d/d3d11/Renderer11.h"
 #include "libGLESv2/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libGLESv2/main.h"
+#include "libEGL/Display.h"
 #include "common/utilities.h"
 
 #include <GLES2/gl2ext.h>
@@ -145,8 +146,9 @@ gl::Error Query11::testQuery()
             break;
         }
 
-        if (!mQueryFinished && mRenderer->testDeviceLost(true))
+        if (!mQueryFinished && mRenderer->testDeviceLost(false))
         {
+            mRenderer->getDisplay()->notifyDeviceLost();
             return gl::Error(GL_OUT_OF_MEMORY, "Failed to test get query result, device is lost.");
         }
     }
