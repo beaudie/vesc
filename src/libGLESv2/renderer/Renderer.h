@@ -139,7 +139,6 @@ class Renderer
 
     virtual uint32_t getAdapterVendor() const = 0;
     virtual std::string getRendererDescription() const = 0;
-    virtual GUID getAdapterIdentifier() const = 0;
 
     // Renderer capabilities (virtual because of egl::Display)
     virtual const gl::Caps &getRendererCaps() const;
