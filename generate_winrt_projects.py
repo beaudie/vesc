@@ -19,11 +19,9 @@ gyp_dir = os.path.join(angle_dir, 'third_party', 'gyp')
 generation_dir = "projects"
 gyp_generators = "msvs"
 msvs_version = "2013e"
-build_tests = False
 release_symbols = False
 
 def generateProjects( generation_dir,
-                      build_samples,
                       build_winrt,
                       build_winphone,
                       enable_d3d9 ) :
@@ -34,8 +32,6 @@ def generateProjects( generation_dir,
     gyp_cmd += ' --generator-output=' + generation_dir
     gyp_cmd += ' --format=' + gyp_generators
     gyp_cmd += ' -G msvs_version=' + msvs_version
-    gyp_cmd += ' -D angle_build_tests=' + ('1' if build_tests else '0')
-    gyp_cmd += ' -D angle_build_samples=' + ('1' if build_samples else '0')
     gyp_cmd += ' -D release_symbols=' + ('true' if release_symbols else 'false')
     gyp_cmd += ' -D angle_use_commit_id=0'
     gyp_cmd += ' -D angle_build_winrt=' + ('1' if build_winrt else '0')
@@ -48,17 +44,8 @@ def generateProjects( generation_dir,
     sys.stdout.flush()
     os.system(gyp_cmd)
 
-    git_add_cmd = 'git add ' + generation_dir + ' -u'
-    print '\nRunning git add on updated Visual Studio projects...'
-    print git_add_cmd
-    sys.stdout.flush()
-    os.system(git_add_cmd)
     return;
 
 if __name__ == '__main__':
-
-    # Generate Windows Desktop projects
-    generateProjects("projects", True, False, False, True);
-
     # Generate Windows 8.1 projects
-    generateProjects("projects/winrt/windows", False, True, False, False);
+    generateProjects("winrt/windows", False, False, True);
