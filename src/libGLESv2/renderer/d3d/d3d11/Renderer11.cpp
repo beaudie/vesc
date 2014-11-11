@@ -1858,7 +1858,7 @@ bool Renderer11::resetDevice()
     return true;
 }
 
-DWORD Renderer11::getAdapterVendor() const
+uint32_t Renderer11::getAdapterVendor() const
 {
     return mAdapterDescription.VendorId;
 }

@@ -2309,9 +2309,9 @@ bool Renderer9::resetRemovedDevice()
     return (initialize() == EGL_SUCCESS);
 }
 
-DWORD Renderer9::getAdapterVendor() const
+uint32_t Renderer9::getAdapterVendor() const
 {
-    return mAdapterIdentifier.VendorId;
+    return static_cast<uint32_t>(mAdapterIdentifier.VendorId);
 }
 
 std::string Renderer9::getRendererDescription() const
