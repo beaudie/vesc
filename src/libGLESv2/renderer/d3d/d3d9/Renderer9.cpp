@@ -114,8 +114,6 @@ Renderer9::Renderer9(egl::Display *display, EGLNativeDisplayType hDc, const egl:
         mDeviceType = D3DDEVTYPE_HAL;
     #endif
 
-    mDeviceLost = false;
-
     mMaskedClearSavedState = NULL;
 
     mVertexDataManager = NULL;
@@ -2151,11 +2149,6 @@ void Renderer9::notifyDeviceLost()
 {
     mDeviceLost = true;
     mDisplay->notifyDeviceLost();
-}
-
-bool Renderer9::isDeviceLost()
-{
-    return mDeviceLost;
 }
 
 // set notify to true to broadcast a message to all contexts of the device loss

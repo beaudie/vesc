@@ -65,6 +65,8 @@ class RendererD3D : public Renderer
                               GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
                               GLbitfield mask, GLenum filter) override;
 
+    bool isDeviceLost() const override;
+
     // Direct3D Specific methods
     virtual SwapChain *createSwapChain(NativeWindow nativeWindow, HANDLE shareHandle, GLenum backBufferFormat, GLenum depthBufferFormat) = 0;
 
@@ -162,6 +164,8 @@ class RendererD3D : public Renderer
                                const gl::Framebuffer *drawTarget, const gl::Rectangle &drawRect,
                                const gl::Rectangle *scissor, bool blitRenderTarget,
                                bool blitDepth, bool blitStencil, GLenum filter) = 0;
+
+    bool mDeviceLost;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(RendererD3D);
