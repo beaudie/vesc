@@ -150,7 +150,7 @@ if (is_win) {
   import("//build/config/win/visual_studio_version.gni")
   copy("copy_compiler_dll") {
     sources = [ "$windows_sdk_path/Redist/D3D/$cpu_arch/d3dcompiler_46.dll" ]
-    outputs = [ "$target_out_dir/d3dcompiler_46.dll" ]
+    outputs = [ "$root_build_dir/d3dcompiler_46.dll" ]
   }
 
   shared_library("libGLESv2") {
