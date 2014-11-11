@@ -66,9 +66,11 @@ class RendererD3D : public Renderer
                               GLbitfield mask, GLenum filter) override;
 
     bool isDeviceLost() const override;
+    std::string getVendorString() const override;
 
     // Direct3D Specific methods
     virtual GUID getAdapterIdentifier() const = 0;
+    virtual bool getLUID(LUID *adapterLuid) const = 0;
 
     virtual SwapChain *createSwapChain(NativeWindow nativeWindow, HANDLE shareHandle, GLenum backBufferFormat, GLenum depthBufferFormat) = 0;
 

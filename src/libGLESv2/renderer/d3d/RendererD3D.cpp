@@ -799,4 +799,18 @@ bool RendererD3D::isDeviceLost() const
     return mDeviceLost;
 }
 
+std::string RendererD3D::getVendorString() const
+{
+    LUID adapterLuid = { 0 };
+
+    if (getLUID(&adapterLuid))
+    {
+        char adapterLuidString[64];
+        sprintf_s(adapterLuidString, sizeof(adapterLuidString), "(adapter LUID: %08x%08x)", adapterLuid.HighPart, adapterLuid.LowPart);
+        return std::string(adapterLuidString);
+    }
+
+    return std::string("");
+}
+
 }
