@@ -396,6 +396,13 @@ Error Surface::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
     return swapRect(x, y, width, height);
 }
 
+Error Surface::querySurfacePointerANGLE(EGLint attribute, void **value)
+{
+    ASSERT(attribute == EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE);
+    *value = mShareHandle;
+    return Error(EGL_SUCCESS);
+}
+
 EGLint Surface::isPostSubBufferSupported() const
 {
     return mPostSubBufferSupported;
