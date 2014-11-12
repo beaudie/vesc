@@ -287,7 +287,7 @@ static gl::TextureCaps GenerateTextureFormatCaps(GLenum internalFormat, IDirect3
     }
 
     textureCaps.filterable = SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, D3DUSAGE_QUERY_FILTER, D3DRTYPE_TEXTURE, d3dFormatInfo.texFormat));
-    textureCaps.renderable = SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE, d3dFormatInfo.renderFormat)) ||
+    textureCaps.renderable = ((formatInfo.depthBits > 0 || formatInfo.stencilBits > 0) && SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_TEXTURE, d3dFormatInfo.renderFormat))) ||
                              SUCCEEDED(d3d9->CheckDeviceFormat(adapter, deviceType, adapterFormat, D3DUSAGE_RENDERTARGET, D3DRTYPE_TEXTURE, d3dFormatInfo.renderFormat));
 
     textureCaps.sampleCounts.insert(1);
@@ -295,10 +295,13 @@ static gl::TextureCaps GenerateTextureFormatCaps(GLenum internalFormat, IDirect3
     {
         D3DMULTISAMPLE_TYPE multisampleType = D3DMULTISAMPLE_TYPE(i);
 
-        HRESULT result = d3d9->CheckDeviceMultiSampleType(adapter, deviceType, d3dFormatInfo.renderFormat, TRUE, multisampleType, NULL);
-        if (SUCCEEDED(result))
+        if (d3dFormatInfo.renderFormat != D3DFMT_UNKNOWN)
         {
-            textureCaps.sampleCounts.insert(i);
+            HRESULT result = d3d9->CheckDeviceMultiSampleType(adapter, deviceType, d3dFormatInfo.renderFormat, TRUE, multisampleType, NULL);
+            if (SUCCEEDED(result))
+            {
+                textureCaps.sampleCounts.insert(i);
+            }
         }
     }
 
