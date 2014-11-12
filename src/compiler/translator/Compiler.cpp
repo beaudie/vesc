@@ -223,8 +223,20 @@ bool TCompiler::compile(const char* const shaderStrings[],
         if (success && (compileOptions & SH_LIMIT_EXPRESSION_COMPLEXITY))
             success = limitExpressionComplexity(root);
 
+        // Create the function DAG and check there is no recursion
         if (success)
-            success = detectCallDepth(root, infoSink, (compileOptions & SH_LIMIT_CALL_STACK_DEPTH) != 0);
+            success = createDag(root);
+
+        if (success && (compileOptions & SH_LIMIT_CALL_STACK_DEPTH))
+            success = checkCallDepth();
+
+        if (success)
+            functionAnalyses.clear();
+            functionAnalyses.resize(dag.size());
+
+        // Check which functions are used and also returns true if "main" exists
+        if (success)
+            success = tagUsedFunctions();
 
         if (success && shaderVersion == 300 && shaderType == GL_FRAGMENT_SHADER)
             success = validateOutputs(root);
@@ -421,29 +433,80 @@ void TCompiler::clearResults()
     nameMap.clear();
 }
 
-bool TCompiler::detectCallDepth(TIntermNode* root, TInfoSink& infoSink, bool limitCallStackDepth)
+bool TCompiler::createDag(TIntermNode* root)
 {
-    DetectCallDepth detect(infoSink, limitCallStackDepth, maxCallStackDepth);
-    root->traverse(&detect);
-    switch (detect.detectCallDepth())
-    {
-      case DetectCallDepth::kErrorNone:
-        return true;
-      case DetectCallDepth::kErrorMissingMain:
-        infoSink.info.prefix(EPrefixError);
-        infoSink.info << "Missing main()";
-        return false;
-      case DetectCallDepth::kErrorRecursion:
+    if (dag.create(root, &infoSink) != CallDAG::CRSuccess) {
         infoSink.info.prefix(EPrefixError);
         infoSink.info << "Function recursion detected";
         return false;
-      case DetectCallDepth::kErrorMaxDepthExceeded:
+    }
+
+    return true;
+}
+
+bool TCompiler::checkCallDepth()
+{
+    std::vector<int> depths(dag.size());
+
+    for (int i = 0; i < dag.size(); i++) {
+        int depth = 0;
+        auto& record = dag.getRecord(i);
+
+        for (auto& calleeIndex : record.callees) {
+            depth = std::max(depth, depths[calleeIndex + 1]);
+        }
+
+        depths[i] = depth;
+
+        if (depth >= maxCallStackDepth) {
+            // Trace back the function chain to have a meaningful info log.
+            infoSink.info.prefix(EPrefixError);
+            infoSink.info << "Call stack too deep (larger than " << maxCallStackDepth
+                          << ") with the following call chain: " << record.name;
+
+            int currentFunction = i;
+            int currentDepth = depth;
+
+            while (currentFunction != -1) {
+                currentFunction = -1;
+
+                for (auto& calleeIndex : dag.getRecord(currentFunction).callees) {
+                    if (depths[calleeIndex] == currentDepth - 1) {
+                        currentDepth--;
+                        currentFunction = calleeIndex;
+                    }
+                }
+
+                infoSink.info << " -> " << dag.getRecord(currentFunction).name;
+            }
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool TCompiler::tagUsedFunctions()
+{
+    int mainIndex = dag.mangledNameToIndex("main(");
+    if (mainIndex == -1) {
         infoSink.info.prefix(EPrefixError);
-        infoSink.info << "Function call stack too deep";
+        infoSink.info << "Missing main()";
         return false;
-      default:
-        UNREACHABLE();
-        return false;
+    }
+
+    internalTagUsedFunction(mainIndex);
+
+    return true;
+}
+
+void TCompiler::internalTagUsedFunction(int index)
+{
+    functionAnalyses[index].used = true;
+
+    for (int calleeIndex : dag.getRecord(index).callees) {
+        internalTagUsedFunction(calleeIndex);
     }
 }
 
