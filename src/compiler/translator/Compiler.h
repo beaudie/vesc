@@ -15,6 +15,7 @@
 //
 
 #include "compiler/translator/BuiltInFunctionEmulator.h"
+#include "compiler/translator/DetectCallDepth.h"
 #include "compiler/translator/ExtensionBehavior.h"
 #include "compiler/translator/HashNames.h"
 #include "compiler/translator/InfoSink.h"
@@ -93,8 +94,13 @@ class TCompiler : public TShHandleBase
     void setResourceString();
     // Clears the results from the previous compilation.
     void clearResults();
-    // Return true if function recursion is detected or call depth exceeded.
-    bool detectCallDepth(TIntermNode* root, TInfoSink& infoSink, bool limitCallStackDepth);
+    // Creates the function call DAG for further analysis, returning false if there is a recursion
+    bool createDag(TIntermNode* root);
+    // Return false if the call depth is exceeded.
+    bool checkCallDepth();
+    // Return false if "main" doesn't exist
+    bool tagUsedFunctions();
+    void internalTagUsedFunction(int index);
     // Returns true if a program has no conflicting or missing fragment outputs
     bool validateOutputs(TIntermNode* root);
     // Rewrites a shader's intermediate tree according to the CSS Shaders spec.
@@ -148,6 +154,17 @@ class TCompiler : public TShHandleBase
     sh::GLenum shaderType;
     ShShaderSpec shaderSpec;
     ShShaderOutput outputType;
+
+    struct FunctionAnalysisData {
+        FunctionAnalysisData()
+        :used(false)
+        {
+        }
+        bool used;
+    };
+
+    CallDAG dag;
+    std::vector<FunctionAnalysisData> functionAnalyses;
 
     int maxUniformVectors;
     int maxExpressionComplexity;

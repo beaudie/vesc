@@ -11,68 +11,80 @@
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/VariableInfo.h"
 
-class TInfoSink;
 
-// Traverses intermediate tree to detect function recursion.
-class DetectCallDepth : public TIntermTraverser {
+//TODO move to its own file, make a higher lvel API?
+//TODO document better
+
+#include "unordered_map"
+
+// Basically a vector of function records, one per function in the IR.
+// Records in the vector are in reverse topological order, that is a function
+// caller is always at a later position in the vector.
+class CallDAG : public TIntermTraverser
+{
 public:
-    enum ErrorCode {
-        kErrorMissingMain,
-        kErrorRecursion,
-        kErrorMaxDepthExceeded,
-        kErrorNone
+    CallDAG();
+    ~CallDAG();
+
+    // FIXME should we include the index too?
+    struct Record {
+        TString name;
+        TIntermAggregate* node;
+        std::vector<int> callees;
     };
 
-    DetectCallDepth(TInfoSink& infoSync, bool limitCallStackDepth, int maxCallStackDepth);
-    ~DetectCallDepth();
+    enum CreateResult {
+        CRSuccess,
+        CRRecursion,
+    };
 
-    virtual bool visitAggregate(Visit, TIntermAggregate*);
+    // Returns false if it was not able to create the DAG, signals a recursion
+    // if present, the recursion chain will be output to info
+    CreateResult create(TIntermNode* root, TInfoSink* info);
 
-    bool checkExceedsMaxDepth(int depth);
-
-    ErrorCode detectCallDepth();
+    // Returns -1 if the function wasn't found
+    int mangledNameToIndex(const TString& name) const;
+    const Record& getRecord(int index) const;
+    int size() const;
 
 private:
-    class FunctionNode {
+    std::vector<Record> records;
+    std::unordered_map<TString, int> nameToIndex;
+
+    class CallDAGCreator : public TIntermTraverser
+    {
     public:
-        static const int kInfiniteCallDepth = INT_MAX;
+        CallDAGCreator(TInfoSink* info);
+        ~CallDAGCreator();
 
-        FunctionNode(const TString& fname);
+        virtual bool visitAggregate(Visit visit, TIntermAggregate* node);
 
-        const TString& getName() const;
-
-        // If a function is already in the callee list, this becomes a no-op.
-        void addCallee(FunctionNode* callee);
-
-        // Returns kInifinityCallDepth if recursive function calls are detected.
-        int detectCallDepth(DetectCallDepth* detectCallDepth, int depth);
-
-        // Reset state.
-        void reset();
+        bool assignIndices();
+        void fillDataStructures(std::vector<Record>& records, std::unordered_map<TString, int>& nameToIndex);
 
     private:
-        // mangled function name is unique.
-        TString name;
+        TInfoSink* creationInfo;
 
-        // functions that are directly called by this function.
-        TVector<FunctionNode*> callees;
+        struct CreatorFunctionData
+        {
+            std::set<CreatorFunctionData*> callees;
+            TIntermAggregate* node;
+            TString name;
+            int index = 0;
+            bool indexAssigned = false;
+            bool visiting = false;
+        };
 
-        Visit visit;
+        bool assignIndicesInternal(CreatorFunctionData* function);
+
+        std::unordered_map<TString, CreatorFunctionData> functions;
+        CreatorFunctionData* currentFunction;
+
+        int currentIndex;
     };
 
-    ErrorCode detectCallDepthForFunction(FunctionNode* func);
-    FunctionNode* findFunctionByName(const TString& name);
-    void resetFunctionNodes();
-
-    TInfoSink& getInfoSink() { return infoSink; }
-
-    TVector<FunctionNode*> functions;
-    FunctionNode* currentFunction;
-    TInfoSink& infoSink;
-    int maxDepth;
-
-    DetectCallDepth(const DetectCallDepth&);
-    void operator=(const DetectCallDepth&);
+    CallDAG(const CallDAG&);
+    void operator=(const CallDAG&);
 };
 
 #endif  // COMPILER_DETECT_RECURSION_H_
