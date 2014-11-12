@@ -7,6 +7,216 @@
 #include "compiler/translator/DetectCallDepth.h"
 #include "compiler/translator/InfoSink.h"
 
+CallDAG::CallDAG()
+{
+}
+
+CallDAG::~CallDAG()
+{
+}
+
+int CallDAG::mangledNameToIndex(const TString& name) const
+{
+    auto& it = nameToIndex.find(name);
+
+    if (it == nameToIndex.end()) {
+        return -1;
+    } else {
+        return it->second;
+    }
+}
+
+const CallDAG::Record& CallDAG::getRecord(int index) const
+{
+    ASSERT(index >= 0);
+    ASSERT(index < records.size());
+    return records[index];
+}
+
+int CallDAG::size() const
+{
+    return records.size();
+}
+
+//TODO(kangz) return an error code?
+bool CallDAG::create(TIntermNode* root)
+{
+    CallDAGCreator creator;
+
+    // Creates the mapping of functions to callees
+    root->traverse(&creator);
+
+    // Does the topological sort and detects recursions
+    if (!creator.assignIndices()) {
+        return false;
+    }
+
+    creator.fillDataStructures(records, nameToIndex);
+    return true;
+}
+
+// CallDAGCreator
+
+CallDAG::CallDAGCreator::CallDAGCreator()
+: currentFunction(NULL), currentIndex(0)
+{
+}
+
+CallDAG::CallDAGCreator::~CallDAGCreator()
+{
+}
+
+// Aggregates the AST node for each function as well as the functions called by it
+bool CallDAG::CallDAGCreator::visitAggregate(Visit visit, TIntermAggregate* node)
+{
+    switch (node->getOp())
+    {
+    case EOpPrototype:
+        // Function declaration, create an empty record.
+        functions.emplace(node->getName(), CreatorFunctionData());
+        break;
+    case EOpFunction: {
+        // Function definition, create the record if need be and remember the node.
+        if (visit == PreVisit) {
+            auto& it = functions.find(node->getName());
+
+            if (it == functions.end()) {
+                currentFunction = &functions.emplace(node->getName(), CreatorFunctionData()).first->second;
+            } else {
+                currentFunction = &it->second;
+            }
+
+            currentFunction->node = node;
+            currentFunction->name = node->getName();
+
+        } else if (visit == PostVisit) {
+            currentFunction = NULL;
+        }
+        break;
+    }
+    case EOpFunctionCall: {
+        // Function call.
+        if (visit == PreVisit) {
+            ASSERT(currentFunction != NULL);
+
+            // Do not handle calls to builtin functions
+            if (node->isUserDefined()) {
+                auto& it = functions.find(node->getName());
+                ASSERT(it != functions.end());
+
+                currentFunction->callees.insert(&it->second);
+            }
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    return true;
+}
+
+bool CallDAG::CallDAGCreator::assignIndices()
+{
+    for (auto& it : functions) {
+        if (!assignIndicesInternal(&it.second)) {
+            return false;
+        }
+    }
+    ASSERT(currentIndex == functions.size());
+    return true;
+}
+
+bool CallDAG::CallDAGCreator::assignIndicesInternal(CreatorFunctionData* function)
+{
+    ASSERT(function);
+
+    if (function->indexAssigned) {
+        return true;
+    }
+
+    if (function->visiting) {
+        return false;
+    }
+    function->visiting = true;
+
+    for (auto& callee : function->callees) {
+        if (!assignIndicesInternal(callee)) {
+            return false;
+        }
+    }
+    function->index = currentIndex ++;
+    function->indexAssigned = true;
+
+    function->visiting = false;
+    return true;
+}
+
+void CallDAG::CallDAGCreator::fillDataStructures(std::vector<Record>& records,
+                                                 std::unordered_map<TString, int>& nameToIndex)
+{
+    ASSERT(records.empty());
+    ASSERT(nameToIndex.empty());
+
+    records.resize(functions.size());
+
+    for (auto& it : functions) {
+        CreatorFunctionData& data = it.second;
+        Record& record = records[data.index];
+
+        record.name = data.name;
+        record.node = data.node;
+
+        for (auto& callee : data.callees) {
+            record.callees.push_back(callee->index);
+        }
+
+        nameToIndex.emplace(data.name, data.index);
+    }
+}
+
+
+
+
+
+// TODO doesn't handle builtins
+DetectCallDepth::ErrorCode myDetectCallDepth(TIntermNode* root, bool limitCallStackDepth, int maxCallStackDepth, DetectCallDepth::ErrorCode expected) {
+    CallDAG dag;
+    if (!dag.create(root)) {
+        return DetectCallDepth::kErrorRecursion;
+    }
+
+    std::vector<int> depths(dag.size());
+    bool foundMain = false;
+
+    for (int i = 0; i < dag.size(); i++) {
+        int depth = 0;
+        auto& record = dag.getRecord(i);
+
+        for (auto& calleeIndex :record.callees) {
+            depth = std::max(depths[i], depths[calleeIndex + 1]);
+        }
+
+        if (limitCallStackDepth && depth >= maxCallStackDepth) {
+            return DetectCallDepth::kErrorMaxDepthExceeded;
+        }
+
+        if (record.name == "main(") {
+            foundMain = true;
+        }
+    }
+
+    if (!foundMain) {
+        return DetectCallDepth::kErrorMissingMain;
+    }
+
+    return DetectCallDepth::kErrorNone;
+}
+
+
+
+
+
+
 DetectCallDepth::FunctionNode::FunctionNode(const TString& fname)
     : name(fname),
       visit(PreVisit)

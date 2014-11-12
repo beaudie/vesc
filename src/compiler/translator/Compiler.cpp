@@ -421,8 +421,12 @@ void TCompiler::clearResults()
 bool TCompiler::detectCallDepth(TIntermNode* root, TInfoSink& infoSink, bool limitCallStackDepth)
 {
     DetectCallDepth detect(infoSink, limitCallStackDepth, maxCallStackDepth);
+    // Check that our CallDAG works at least a little bit by using it to verify the call depth
     root->traverse(&detect);
-    switch (detect.detectCallDepth())
+    DetectCallDepth::ErrorCode err1 = detect.detectCallDepth();
+    DetectCallDepth::ErrorCode err2 = myDetectCallDepth(root, limitCallStackDepth, maxCallStackDepth, err1);
+    ASSERT(err1 == err2);
+    switch (err1)
     {
       case DetectCallDepth::kErrorNone:
         return true;

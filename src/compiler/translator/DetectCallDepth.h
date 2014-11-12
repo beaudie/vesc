@@ -11,6 +11,73 @@
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/VariableInfo.h"
 
+
+//TODO move to its own file, make a higher lvel API?
+//TODO document better
+
+#include "unordered_map"
+// Basically a vector of function records, one per function in the IR.
+// Records in the vector are in reverse topological order, that is a function
+// caller is always at a later position in the vector.
+class CallDAG : public TIntermTraverser
+{
+public:
+    CallDAG();
+    ~CallDAG();
+
+    // FIXME should we include the index too?
+    struct Record {
+        TString name;
+        TIntermAggregate* node;
+        std::vector<int> callees;
+    };
+
+    // Returns false if it was not able to create the DAG, signals a recursion
+    // FIXME proper error codes?
+    bool create(TIntermNode* root);
+
+    int mangledNameToIndex(const TString& name) const;
+    const Record& getRecord(int index) const;
+    int size() const;
+
+private:
+    std::vector<Record> records;
+    std::unordered_map<TString, int> nameToIndex;
+
+    class CallDAGCreator : public TIntermTraverser
+    {
+    public:
+        CallDAGCreator();
+        ~CallDAGCreator();
+
+        virtual bool visitAggregate(Visit visit, TIntermAggregate* node);
+
+        bool assignIndices();
+        void fillDataStructures(std::vector<Record>& records, std::unordered_map<TString, int>& nameToIndex);
+
+    private:
+        struct CreatorFunctionData
+        {
+            std::set<CreatorFunctionData*> callees;
+            TIntermAggregate* node;
+            TString name;
+            int index = 0;
+            bool indexAssigned = false;
+            bool visiting = false;
+        };
+
+        bool assignIndicesInternal(CreatorFunctionData* function);
+
+        std::unordered_map<TString, CreatorFunctionData> functions;
+        CreatorFunctionData* currentFunction;
+
+        int currentIndex;
+    };
+
+    CallDAG(const CallDAG&);
+    void operator=(const CallDAG&);
+};
+
 class TInfoSink;
 
 // Traverses intermediate tree to detect function recursion.
@@ -74,5 +141,7 @@ private:
     DetectCallDepth(const DetectCallDepth&);
     void operator=(const DetectCallDepth&);
 };
+
+DetectCallDepth::ErrorCode myDetectCallDepth(TIntermNode* root, bool limitCallStackDepth, int maxCallStackDepth, DetectCallDepth::ErrorCode expected);
 
 #endif  // COMPILER_DETECT_RECURSION_H_
