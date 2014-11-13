@@ -160,8 +160,6 @@ class RendererD3D : public Renderer
                                const gl::Rectangle *scissor, bool blitRenderTarget,
                                bool blitDepth, bool blitStencil, GLenum filter) = 0;
 
-    egl::Display *mDisplay;
-
   private:
     DISALLOW_COPY_AND_ASSIGN(RendererD3D);
 
