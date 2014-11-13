@@ -68,7 +68,7 @@ struct ConfigDesc
 class Renderer
 {
   public:
-    Renderer();
+    explicit Renderer(egl::Display *display);
     virtual ~Renderer();
 
     virtual EGLint initialize() = 0;
@@ -153,6 +153,11 @@ class Renderer
     virtual int getMinSwapInterval() const = 0;
     virtual int getMaxSwapInterval() const = 0;
     virtual bool getLUID(LUID *adapterLuid) const = 0;
+
+    egl::Display *getDisplay() const { return mDisplay; }
+
+  protected:
+    egl::Display *mDisplay;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Renderer);
