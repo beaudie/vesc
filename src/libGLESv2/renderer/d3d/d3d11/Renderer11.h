@@ -98,7 +98,6 @@ class Renderer11 : public RendererD3D
 
     // lost device
     void notifyDeviceLost() override;
-    bool isDeviceLost() override;
     bool testDeviceLost() override;
     bool testDeviceResettable() override;
 
