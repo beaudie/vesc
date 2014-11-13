@@ -590,21 +590,15 @@ EGLBoolean __stdcall eglQuerySurfacePointerANGLE(EGLDisplay dpy, EGLSurface surf
         return EGL_FALSE;
     }
 
-    switch (attribute)
+    if (attribute != EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE)
     {
-      case EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE:
-        {
-            rx::SwapChain *swapchain = eglSurface->getSwapChain();
-            *value = (void*) (swapchain ? swapchain->getShareHandle() : NULL);
-        }
-        break;
-      default:
         recordError(egl::Error(EGL_BAD_ATTRIBUTE));
         return EGL_FALSE;
     }
 
-    recordError(egl::Error(EGL_SUCCESS));
-    return EGL_TRUE;
+    egl::Error error = eglSurface->querySurfacePointerANGLE(attribute, value);
+    recordError(error);
+    return (error.isError() ? EGL_FALSE : EGL_TRUE);
 }
 
 EGLBoolean __stdcall eglBindAPI(EGLenum api)
