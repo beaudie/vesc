@@ -187,7 +187,9 @@ Error Surface::resetSwapChain(int backbufferWidth, int backbufferHeight)
 
     if (status == EGL_CONTEXT_LOST)
     {
-        mRenderer->notifyDeviceLost();
+        //TODO(jmadill): MANGLE refactor
+        rx::RendererD3D *rendererD3D = static_cast<rx::RendererD3D*>(mRenderer);
+        rendererD3D->notifyDeviceLost();
         return Error(status);
     }
     else if (status != EGL_SUCCESS)
@@ -228,7 +230,9 @@ Error Surface::swapRect(EGLint x, EGLint y, EGLint width, EGLint height)
 
     if (status == EGL_CONTEXT_LOST)
     {
-        mRenderer->notifyDeviceLost();
+        //TODO(jmadill): MANGLE refactor
+        rx::RendererD3D *rendererD3D = static_cast<rx::RendererD3D*>(mRenderer);
+        rendererD3D->notifyDeviceLost();
         return Error(status);
     }
     else if (status != EGL_SUCCESS)
