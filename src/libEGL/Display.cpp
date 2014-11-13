@@ -18,12 +18,14 @@
 
 #include "common/debug.h"
 #include "common/mathutil.h"
-#include "libGLESv2/main.h"
-#include "libGLESv2/Context.h"
-#include "libGLESv2/renderer/SwapChain.h"
-
 #include "libEGL/main.h"
 #include "libEGL/Surface.h"
+#include "libGLESv2/main.h"
+#include "libGLESv2/Context.h"
+
+//TODO(jmadill): remove these
+#include "libEGL/SurfaceD3D.h"
+#include "libGLESv2/renderer/SwapChain.h"
 
 namespace egl
 {
@@ -284,7 +286,10 @@ Error Display::createWindowSurface(EGLNativeWindowType window, EGLConfig config,
         }
     }
 
-    Surface *surface = new Surface(this, configuration, window, fixedSize, width, height, postSubBufferSupported);
+    //TODO(jmadill): MANGLE refactor
+    SurfaceD3D *surfaceD3D = SurfaceD3D::createWindow(this, configuration, window, fixedSize, width, height, postSubBufferSupported);
+
+    Surface *surface = new Surface(surfaceD3D);
     Error error = surface->initialize();
     if (error.isError())
     {
@@ -401,7 +406,10 @@ Error Display::createOffscreenSurface(EGLConfig config, EGLClientBuffer shareHan
         }
     }
 
-    Surface *surface = new Surface(this, configuration, shareHandle, width, height, textureFormat, textureTarget);
+    //TODO(jmadill): MANGLE refactor
+    SurfaceD3D *surfaceD3D = SurfaceD3D::createOffscreen(this, configuration, shareHandle, width, height, textureFormat, textureTarget);
+
+    Surface *surface = new Surface(surfaceD3D);
     Error error = surface->initialize();
     if (error.isError())
     {
@@ -457,9 +465,11 @@ Error Display::restoreLostDevice()
     }
 
     // Release surface resources to make the Reset() succeed
-    for (SurfaceSet::iterator surface = mSurfaceSet.begin(); surface != mSurfaceSet.end(); surface++)
+    for (const auto &surface : mSurfaceSet)
     {
-        (*surface)->release();
+        //TODO(jmadill): MANGLE refactor
+        SurfaceD3D *surfaceD3D = SurfaceD3D::makeSurfaceD3D(surface);
+        surfaceD3D->release();
     }
 
     if (!mRenderer->resetDevice())
@@ -468,9 +478,12 @@ Error Display::restoreLostDevice()
     }
 
     // Restore any surfaces that may have been lost
-    for (SurfaceSet::iterator surface = mSurfaceSet.begin(); surface != mSurfaceSet.end(); surface++)
+    for (const auto &surface : mSurfaceSet)
     {
-        Error error = (*surface)->resetSwapChain();
+        //TODO(jmadill): MANGLE refactor
+        SurfaceD3D *surfaceD3D = SurfaceD3D::makeSurfaceD3D(surface);
+
+        Error error = surfaceD3D->resetSwapChain();
         if (error.isError())
         {
             return error;
@@ -503,9 +516,11 @@ void Display::notifyDeviceLost()
 
 void Display::recreateSwapChains()
 {
-    for (SurfaceSet::iterator surface = mSurfaceSet.begin(); surface != mSurfaceSet.end(); surface++)
+    for (const auto &surface : mSurfaceSet)
     {
-        (*surface)->getSwapChain()->recreate();
+        //TODO(jmadill): MANGLE refactor
+        SurfaceD3D *surfaceD3D = SurfaceD3D::makeSurfaceD3D(surface);
+        surfaceD3D->getSwapChain()->recreate();
     }
 }
 
