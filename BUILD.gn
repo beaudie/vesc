@@ -149,8 +149,8 @@ if (is_win) {
 
   import("//build/config/win/visual_studio_version.gni")
   copy("copy_compiler_dll") {
-    sources = [ "$windows_sdk_path/Redist/D3D/$cpu_arch/d3dcompiler_46.dll" ]
-    outputs = [ "$root_build_dir/d3dcompiler_46.dll" ]
+    sources = [ "$windows_sdk_path/Redist/D3D/$cpu_arch/d3dcompiler_47.dll" ]
+    outputs = [ "$root_build_dir/d3dcompiler_47.dll" ]
   }
 
   shared_library("libGLESv2") {
@@ -166,7 +166,7 @@ if (is_win) {
 
     defines = [
       "ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES={ " +
-        "\"d3dcompiler_46.dll\", \"d3dcompiler_43.dll\" }",
+        "\"d3dcompiler_47.dll\", "\"d3dcompiler_46.dll\", \"d3dcompiler_43.dll\" }",
       "GL_APICALL=",
       "GL_GLEXT_PROTOTYPES=",
       "EGLAPI=",
