@@ -153,6 +153,9 @@ void ShInitBuiltInResources(ShBuiltInResources* resources)
     resources->EXT_draw_buffers = 0;
     resources->EXT_frag_depth = 0;
     resources->EXT_shader_texture_lod = 0;
+    resources->EXT_shader_framebuffer_fetch = 0;
+    resources->NV_shader_framebuffer_fetch = 0;
+    resources->ARM_shader_framebuffer_fetch = 0;
 
     resources->NV_draw_buffers = 0;
 
