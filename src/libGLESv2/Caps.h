@@ -190,6 +190,9 @@ struct Extensions
     // GL_EXT_shader_texture_lod
     bool shaderTextureLOD;
 
+    // GL_EXT_shader_framebuffer_fetch
+    bool shaderFramebufferFetch;
+
     // GL_EXT_frag_depth
     bool fragDepth;
 
