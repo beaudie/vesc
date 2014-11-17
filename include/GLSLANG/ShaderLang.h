@@ -48,7 +48,7 @@ typedef unsigned int GLenum;
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 132
+#define ANGLE_SH_VERSION 133
 
 typedef enum {
   SH_GLES2_SPEC = 0x8B40,
@@ -223,6 +223,9 @@ typedef struct
     int EXT_draw_buffers;
     int EXT_frag_depth;
     int EXT_shader_texture_lod;
+    int EXT_shader_framebuffer_fetch;
+    int NV_shader_framebuffer_fetch;
+    int ARM_shader_framebuffer_fetch;
 
     // Set to 1 to enable replacing GL_EXT_draw_buffers #extension directives
     // with GL_NV_draw_buffers in ESSL output. This flag can be used to emulate
