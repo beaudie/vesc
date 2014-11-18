@@ -430,7 +430,9 @@ class TIntermConstantUnion : public TIntermTyped
   public:
     TIntermConstantUnion(ConstantUnion *unionPointer, const TType &type)
         : TIntermTyped(type),
-          mUnionArrayPointer(unionPointer) { }
+          mUnionArrayPointer(unionPointer),
+          mAssociatedStruct(NULL)
+    {}
 
     virtual bool hasSideEffects() const { return false; }
 
@@ -461,8 +463,13 @@ class TIntermConstantUnion : public TIntermTyped
 
     virtual void enqueueChildren(std::queue<TIntermNode *> *nodeQueue) const {}
 
+    // For structure indexes
+    void associateStruct(TStructure *structure) { mAssociatedStruct = structure; }
+    TStructure *getAssociatedStruct() const { return mAssociatedStruct; }
+
   protected:
     ConstantUnion *mUnionArrayPointer;
+    TStructure *mAssociatedStruct;
 };
 
 //

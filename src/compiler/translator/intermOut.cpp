@@ -405,35 +405,49 @@ void TOutputTraverser::visitConstantUnion(TIntermConstantUnion *node)
 
     size_t size = node->getType().getObjectSize();
 
-    for (size_t i = 0; i < size; i++)
+    // Structure indexes take the type of their field, while
+    // only storing an integer representing the field they're
+    // indexing.
+    TStructure *structure = node->getAssociatedStruct();
+    if (structure)
     {
+        const TField *field = structure->fields()[node->getUnionArrayPointer()[0].getIConst()];
         OutputTreeText(out, node, mDepth);
-        switch (node->getUnionArrayPointer()[i].getType())
+        out << node->getUnionArrayPointer()[0].getIConst()
+            << " (field '" << field->name() << "')";
+    }
+    else
+    {
+        for (size_t i = 0; i < size; i++)
         {
-          case EbtBool:
-            if (node->getUnionArrayPointer()[i].getBConst())
-                out << "true";
-            else
-                out << "false";
+            OutputTreeText(out, node, mDepth);
+            switch (node->getUnionArrayPointer()[i].getType())
+            {
+              case EbtBool:
+                if (node->getUnionArrayPointer()[i].getBConst())
+                    out << "true";
+                else
+                    out << "false";
 
-            out << " (" << "const bool" << ")";
-            out << "\n";
-            break;
-          case EbtFloat:
-            out << node->getUnionArrayPointer()[i].getFConst();
-            out << " (const float)\n";
-            break;
-          case EbtInt:
-            out << node->getUnionArrayPointer()[i].getIConst();
-            out << " (const int)\n";
-            break;
-          case EbtUInt:
-            out << node->getUnionArrayPointer()[i].getUConst();
-            out << " (const uint)\n";
-            break;
-          default:
-            out.message(EPrefixInternalError, node->getLine(), "Unknown constant");
-            break;
+                out << " (" << "const bool" << ")";
+                out << "\n";
+                break;
+              case EbtFloat:
+                out << node->getUnionArrayPointer()[i].getFConst();
+                out << " (const float)\n";
+                break;
+              case EbtInt:
+                out << node->getUnionArrayPointer()[i].getIConst();
+                out << " (const int)\n";
+                break;
+              case EbtUInt:
+                out << node->getUnionArrayPointer()[i].getUConst();
+                out << " (const uint)\n";
+                break;
+              default:
+                out.message(EPrefixInternalError, node->getLine(), "Unknown constant");
+                break;
+            }
         }
     }
 }

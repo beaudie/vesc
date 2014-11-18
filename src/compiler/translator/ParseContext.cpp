@@ -2282,9 +2282,12 @@ TIntermTyped* TParseContext::addFieldSelectionExpression(TIntermTyped *baseExpre
                 {
                     ConstantUnion *unionArray = new ConstantUnion[1];
                     unionArray->setIConst(i);
-                    TIntermTyped* index = intermediate.addConstantUnion(unionArray, *fields[i]->type(), fieldLocation);
+                    TIntermConstantUnion *index = intermediate.addConstantUnion(unionArray, *fields[i]->type(), fieldLocation);
                     indexedExpression = intermediate.addIndex(EOpIndexDirectStruct, baseExpression, index, dotLocation);
                     indexedExpression->setType(*fields[i]->type());
+
+                    // Associate the struct with the constant union index
+                    index->associateStruct(baseExpression->getType().getStruct());
                 }
             }
             else
