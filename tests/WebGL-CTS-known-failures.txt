@@ -1,0 +1,12 @@
+Known failures in the WebGL CTS, top of tree, using Chromium
+https://www.khronos.org/registry/webgl/sdk/tests/webgl-conformance-tests.html
+
+conformance/glsl/bugs/compound-assignment-type-combination.html
+conformance/glsl/misc/struct-equals.html
+conformance/glsl/misc/struct-specifiers-in-uniforms.html
+conformance/glsl/misc/ternary-operators-in-global-initializers.html
+conformance/textures/tex-image-and-sub-image-2d-with-webgl-canvas.html
+conformance/textures/tex-image-and-sub-image-2d-with-webgl-canvas-rgb565.html
+conformance/textures/tex-image-and-sub-image-2d-with-webgl-canvas-rgba4444.html
+conformance/textures/tex-image-and-sub-image-2d-with-webgl-canvas-rgba5551.html
+conformance/uniforms/gl-uniform-arrays.html
