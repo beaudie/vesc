@@ -391,7 +391,6 @@
     <ClInclude Include="..\..\..\..\src\compiler\translator\Pragma.h"/>
     <ClInclude Include="..\..\..\..\src\compiler\translator\QualifierAlive.h"/>
     <ClInclude Include="..\..\..\..\src\compiler\translator\RegenerateStructNames.h"/>
-    <ClInclude Include="..\..\..\..\src\compiler\translator\RemoveTree.h"/>
     <ClInclude Include="..\..\..\..\src\compiler\translator\RenameFunction.h"/>
     <ClInclude Include="..\..\..\..\src\compiler\translator\RewriteElseBlocks.h"/>
     <ClInclude Include="..\..\..\..\src\compiler\translator\ScalarizeVecAndMatConstructorArgs.h"/>
@@ -459,7 +458,6 @@
     <ClCompile Include="..\..\..\..\src\compiler\translator\PoolAlloc.cpp"/>
     <ClCompile Include="..\..\..\..\src\compiler\translator\QualifierAlive.cpp"/>
     <ClCompile Include="..\..\..\..\src\compiler\translator\RegenerateStructNames.cpp"/>
-    <ClCompile Include="..\..\..\..\src\compiler\translator\RemoveTree.cpp"/>
     <ClCompile Include="..\..\..\..\src\compiler\translator\RewriteElseBlocks.cpp"/>
     <ClCompile Include="..\..\..\..\src\compiler\translator\ScalarizeVecAndMatConstructorArgs.cpp"/>
     <ClCompile Include="..\..\..\..\src\compiler\translator\SearchSymbol.cpp"/>
