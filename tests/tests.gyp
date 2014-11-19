@@ -215,7 +215,7 @@
                     'type': 'executable',
                     'dependencies':
                     [
-                        '../src/angle.gyp:libGLESv2_static',
+                        '../src/angle.gyp:libANGLE',
                         'gtest',
                         'gmock',
                     ],
