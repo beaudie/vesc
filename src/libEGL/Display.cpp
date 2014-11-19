@@ -22,8 +22,10 @@
 #include "libGLESv2/Context.h"
 #include "libGLESv2/renderer/SwapChain.h"
 
-#include "libEGL/main.h"
 #include "libEGL/Surface.h"
+
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
 
 namespace egl
 {
