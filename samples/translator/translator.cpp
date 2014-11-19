@@ -28,7 +28,8 @@ static void usage();
 static sh::GLenum FindShaderType(const char* fileName);
 static bool CompileFile(char* fileName, ShHandle compiler, int compileOptions);
 static void LogMsg(const char* msg, const char* name, const int num, const char* logName);
-static void PrintActiveVariables(ShHandle compiler, ShShaderInfo varType);
+static void PrintActiveAttributes(ShHandle compiler);
+static void PrintActiveUniforms(ShHandle compiler);
 
 // If NUM_SOURCE_STRINGS is set to a value > 1, the input file data is
 // broken into that many chunks.
@@ -65,8 +66,6 @@ int main(int argc, char* argv[])
     int numCompiles = 0;
     ShHandle vertexCompiler = 0;
     ShHandle fragmentCompiler = 0;
-    char* buffer = 0;
-    size_t bufferLen = 0;
     ShShaderSpec spec = SH_GLES2_SPEC;
     ShShaderOutput output = SH_ESSL_OUTPUT;
 
@@ -94,7 +93,7 @@ int main(int argc, char* argv[])
                         case 'w': spec = SH_WEBGL_SPEC; break;
                         case 'c': spec = SH_CSS_SHADERS_SPEC; break;
                         default: failCode = EFailUsage;
-                    }                    
+                    }
                 } else {
                     failCode = EFailUsage;
                 }
@@ -156,30 +155,24 @@ int main(int argc, char* argv[])
               bool compiled = CompileFile(argv[0], compiler, compileOptions);
 
               LogMsg("BEGIN", "COMPILER", numCompiles, "INFO LOG");
-              ShGetInfo(compiler, SH_INFO_LOG_LENGTH, &bufferLen);
-              buffer = (char*) realloc(buffer, bufferLen * sizeof(char));
-              ShGetInfoLog(compiler, buffer);
-              puts(buffer);
+              printf("%s\n", ShGetInfoLog(compiler).c_str());
               LogMsg("END", "COMPILER", numCompiles, "INFO LOG");
               printf("\n\n");
 
               if (compiled && (compileOptions & SH_OBJECT_CODE)) {
                   LogMsg("BEGIN", "COMPILER", numCompiles, "OBJ CODE");
-                  ShGetInfo(compiler, SH_OBJECT_CODE_LENGTH, &bufferLen);
-                  buffer = (char*) realloc(buffer, bufferLen * sizeof(char));
-                  ShGetObjectCode(compiler, buffer);
-                  puts(buffer);
+                  printf("%s\n", ShGetObjectCode(compiler).c_str());
                   LogMsg("END", "COMPILER", numCompiles, "OBJ CODE");
                   printf("\n\n");
               }
               if (compiled && (compileOptions & SH_VARIABLES)) {
                   LogMsg("BEGIN", "COMPILER", numCompiles, "ACTIVE ATTRIBS");
-                  PrintActiveVariables(compiler, SH_ACTIVE_ATTRIBUTES);
+                  PrintActiveAttributes(compiler);
                   LogMsg("END", "COMPILER", numCompiles, "ACTIVE ATTRIBS");
                   printf("\n\n");
 
                   LogMsg("BEGIN", "COMPILER", numCompiles, "ACTIVE UNIFORMS");
-                  PrintActiveVariables(compiler, SH_ACTIVE_UNIFORMS);
+                  PrintActiveUniforms(compiler);
                   LogMsg("END", "COMPILER", numCompiles, "ACTIVE UNIFORMS");
                   printf("\n\n");
               }
@@ -201,8 +194,6 @@ int main(int argc, char* argv[])
         ShDestruct(vertexCompiler);
     if (fragmentCompiler)
         ShDestruct(fragmentCompiler);
-    if (buffer)
-        free(buffer);
     ShFinalize();
 
     return failCode;
@@ -281,72 +272,59 @@ void LogMsg(const char* msg, const char* name, const int num, const char* logNam
     printf("#### %s %s %d %s ####\n", msg, name, num, logName);
 }
 
-void PrintActiveVariables(ShHandle compiler, ShShaderInfo varType)
+void PrintVariable(size_t i, const sh::ShaderVariable& variable)
 {
-    size_t nameSize = 0;
-    switch (varType) {
-        case SH_ACTIVE_ATTRIBUTES:
-            ShGetInfo(compiler, SH_ACTIVE_ATTRIBUTE_MAX_LENGTH, &nameSize);
-            break;
-        case SH_ACTIVE_UNIFORMS:
-            ShGetInfo(compiler, SH_ACTIVE_UNIFORM_MAX_LENGTH, &nameSize);
-            break;
+    const char* typeName = NULL;
+    switch (variable.type) {
+        case GL_FLOAT: typeName = "GL_FLOAT"; break;
+        case GL_FLOAT_VEC2: typeName = "GL_FLOAT_VEC2"; break;
+        case GL_FLOAT_VEC3: typeName = "GL_FLOAT_VEC3"; break;
+        case GL_FLOAT_VEC4: typeName = "GL_FLOAT_VEC4"; break;
+        case GL_INT: typeName = "GL_INT"; break;
+        case GL_INT_VEC2: typeName = "GL_INT_VEC2"; break;
+        case GL_INT_VEC3: typeName = "GL_INT_VEC3"; break;
+        case GL_INT_VEC4: typeName = "GL_INT_VEC4"; break;
+        case GL_UNSIGNED_INT: typeName = "GL_UNSIGNED_INT"; break;
+        case GL_UNSIGNED_INT_VEC2: typeName = "GL_UNSIGNED_INT_VEC2"; break;
+        case GL_UNSIGNED_INT_VEC3: typeName = "GL_UNSIGNED_INT_VEC3"; break;
+        case GL_UNSIGNED_INT_VEC4: typeName = "GL_UNSIGNED_INT_VEC4"; break;
+        case GL_BOOL: typeName = "GL_BOOL"; break;
+        case GL_BOOL_VEC2: typeName = "GL_BOOL_VEC2"; break;
+        case GL_BOOL_VEC3: typeName = "GL_BOOL_VEC3"; break;
+        case GL_BOOL_VEC4: typeName = "GL_BOOL_VEC4"; break;
+        case GL_FLOAT_MAT2: typeName = "GL_FLOAT_MAT2"; break;
+        case GL_FLOAT_MAT3: typeName = "GL_FLOAT_MAT3"; break;
+        case GL_FLOAT_MAT4: typeName = "GL_FLOAT_MAT4"; break;
+        case GL_FLOAT_MAT2x3: typeName = "GL_FLOAT_MAT2x3"; break;
+        case GL_FLOAT_MAT3x2: typeName = "GL_FLOAT_MAT3x2"; break;
+        case GL_FLOAT_MAT4x2: typeName = "GL_FLOAT_MAT4x2"; break;
+        case GL_FLOAT_MAT2x4: typeName = "GL_FLOAT_MAT2x4"; break;
+        case GL_FLOAT_MAT3x4: typeName = "GL_FLOAT_MAT3x4"; break;
+        case GL_FLOAT_MAT4x3: typeName = "GL_FLOAT_MAT4x3"; break;
+        case GL_SAMPLER_2D: typeName = "GL_SAMPLER_2D"; break;
+        case GL_SAMPLER_CUBE: typeName = "GL_SAMPLER_CUBE"; break;
+        case GL_SAMPLER_EXTERNAL_OES: typeName = "GL_SAMPLER_EXTERNAL_OES"; break;
         default: assert(0);
     }
-    if (nameSize <= 1) return;
-    char* name = new char[nameSize];
+    printf("%lu: name:%s type:%s size:%d\n", i, variable.name.c_str(), typeName, variable.arraySize);
+}
 
-    size_t activeVars = 0;
-    int size = 0;
-    sh::GLenum type = GL_NONE;
-    ShPrecisionType precision = SH_PRECISION_UNDEFINED;
-    int staticUse = 0;
-    const char* typeName = NULL;
-    ShGetInfo(compiler, varType, &activeVars);
-    for (size_t i = 0; i < activeVars; ++i) {
-        switch (varType) {
-            case SH_ACTIVE_ATTRIBUTES:
-                ShGetVariableInfo(compiler, SH_ACTIVE_ATTRIBUTES, static_cast<int>(i), NULL, &size, &type, &precision, &staticUse, name, NULL);
-                break;
-            case SH_ACTIVE_UNIFORMS:
-                ShGetVariableInfo(compiler, SH_ACTIVE_UNIFORMS, static_cast<int>(i), NULL, &size, &type, &precision, &staticUse, name, NULL);
-                break;
-            default: assert(0);
-        }
-        switch (type) {
-            case GL_FLOAT: typeName = "GL_FLOAT"; break;
-            case GL_FLOAT_VEC2: typeName = "GL_FLOAT_VEC2"; break;
-            case GL_FLOAT_VEC3: typeName = "GL_FLOAT_VEC3"; break;
-            case GL_FLOAT_VEC4: typeName = "GL_FLOAT_VEC4"; break;
-            case GL_INT: typeName = "GL_INT"; break;
-            case GL_INT_VEC2: typeName = "GL_INT_VEC2"; break;
-            case GL_INT_VEC3: typeName = "GL_INT_VEC3"; break;
-            case GL_INT_VEC4: typeName = "GL_INT_VEC4"; break;
-            case GL_UNSIGNED_INT: typeName = "GL_UNSIGNED_INT"; break;
-            case GL_UNSIGNED_INT_VEC2: typeName = "GL_UNSIGNED_INT_VEC2"; break;
-            case GL_UNSIGNED_INT_VEC3: typeName = "GL_UNSIGNED_INT_VEC3"; break;
-            case GL_UNSIGNED_INT_VEC4: typeName = "GL_UNSIGNED_INT_VEC4"; break;
-            case GL_BOOL: typeName = "GL_BOOL"; break;
-            case GL_BOOL_VEC2: typeName = "GL_BOOL_VEC2"; break;
-            case GL_BOOL_VEC3: typeName = "GL_BOOL_VEC3"; break;
-            case GL_BOOL_VEC4: typeName = "GL_BOOL_VEC4"; break;
-            case GL_FLOAT_MAT2: typeName = "GL_FLOAT_MAT2"; break;
-            case GL_FLOAT_MAT3: typeName = "GL_FLOAT_MAT3"; break;
-            case GL_FLOAT_MAT4: typeName = "GL_FLOAT_MAT4"; break;
-            case GL_FLOAT_MAT2x3: typeName = "GL_FLOAT_MAT2x3"; break;
-            case GL_FLOAT_MAT3x2: typeName = "GL_FLOAT_MAT3x2"; break;
-            case GL_FLOAT_MAT4x2: typeName = "GL_FLOAT_MAT4x2"; break;
-            case GL_FLOAT_MAT2x4: typeName = "GL_FLOAT_MAT2x4"; break;
-            case GL_FLOAT_MAT3x4: typeName = "GL_FLOAT_MAT3x4"; break;
-            case GL_FLOAT_MAT4x3: typeName = "GL_FLOAT_MAT4x3"; break;
-            case GL_SAMPLER_2D: typeName = "GL_SAMPLER_2D"; break;
-            case GL_SAMPLER_CUBE: typeName = "GL_SAMPLER_CUBE"; break;
-            case GL_SAMPLER_EXTERNAL_OES: typeName = "GL_SAMPLER_EXTERNAL_OES"; break;
-            default: assert(0);
-        }
-        printf("%lu: name:%s type:%s size:%d\n", i, name, typeName, size);
+static void PrintActiveAttributes(ShHandle compiler)
+{
+    const std::vector<sh::Attribute> *attributes = ShGetAttributes(compiler);
+    for (size_t i = 0; i < attributes->size(); ++i)
+    {
+        PrintVariable(i, (*attributes)[i]);
     }
-    delete [] name;
+}
+
+static void PrintActiveUniforms(ShHandle compiler)
+{
+    const std::vector<sh::Uniform> *uniforms = ShGetUniforms(compiler);
+    for (size_t i = 0; i < uniforms->size(); ++i)
+    {
+        PrintVariable(i, (*uniforms)[i]);
+    }
 }
 
 static bool ReadShaderSource(const char* fileName, ShaderSource& source) {
