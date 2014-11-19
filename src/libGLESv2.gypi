@@ -335,7 +335,10 @@
             'libANGLE/renderer/d3d/d3d11/VertexArray11.h',
             'libANGLE/renderer/d3d/d3d11/VertexBuffer11.cpp',
             'libANGLE/renderer/d3d/d3d11/VertexBuffer11.h',
-        ]
+        ],
+        'angle_id_script': 'commit_id.py',
+        'angle_id_header': '<(angle_gen_path)/id/commit.h',
+        'angle_use_commit_id%': '<!(python <(angle_id_script) check ..)',
     },
     # Everything below this is duplicated in the GN build. If you change
     # anything also change angle/BUILD.gn
@@ -345,7 +348,8 @@
             'target_name': 'libANGLE',
             #TODO(jamdill/geofflang): support shared
             'type': 'static_library',
-            'dependencies': [ 'translator', 'commit_id', ],
+            'hard_dependency': 1,
+            'dependencies': [ 'translator', ],
             'includes': [ '../build/common_defines.gypi', ],
 
             'include_dirs':
@@ -353,6 +357,7 @@
                 '.',
                 '../include',
                 'libANGLE',
+                '<(angle_gen_path)',
             ],
             'sources':
             [
@@ -515,6 +520,33 @@
                 ['angle_build_winphone==1',
                 {
                     'msvs_enable_winphone' : '1',
+                }],
+                ['angle_use_commit_id!=0',
+                {
+                    'actions':
+                    [
+                        {
+                            'action_name': 'Generate ANGLE Commit ID Header',
+                            'message': 'Generating ANGLE Commit ID',
+                            # reference the git index as an input, so we rebuild on changes to the index
+                            'inputs': [ '<(angle_id_script)', '<(angle_path)/.git/index' ],
+                            'outputs': [ '<(angle_id_header)' ],
+                            'msvs_cygwin_shell': 0,
+                            'action':
+                            [
+                                'python', '<(angle_id_script)', 'gen', '<(angle_path)', '<(angle_id_header)'
+                            ],
+                        },
+                    ],
+                },
+                { # angle_use_commit_id==0
+                    'copies':
+                    [
+                        {
+                            'destination': '<(angle_gen_path)/id',
+                            'files': [ '<(angle_id_header_base)' ]
+                        }
+                    ],
                 }],
             ],
             'configurations':
