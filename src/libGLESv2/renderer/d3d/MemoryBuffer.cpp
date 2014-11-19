@@ -33,8 +33,9 @@ bool MemoryBuffer::resize(size_t size)
         mData = NULL;
         mSize = 0;
     }
-    else
+    else if (size != mSize)
     {
+        // Only reallocate if the size has changed.
         uint8_t *newMemory = reinterpret_cast<uint8_t*>(malloc(sizeof(uint8_t) * size));
         if (newMemory == NULL)
         {

@@ -500,8 +500,9 @@ gl::Error TextureStorage11::setData(const gl::ImageIndex &index, Image *image, c
     UINT bufferRowPitch = outputPixelSize * width;
     UINT bufferDepthPitch = bufferRowPitch * height;
 
-    MemoryBuffer conversionBuffer;
-    if (!conversionBuffer.resize(bufferDepthPitch * depth))
+    static MemoryBuffer conversionBuffer;
+    size_t neededSize = bufferDepthPitch * depth;
+    if (conversionBuffer.size() < neededSize && !conversionBuffer.resize(neededSize))
     {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal buffer.");
     }
