@@ -61,7 +61,6 @@
             'libANGLE/Error.h',
             'libANGLE/Fence.cpp',
             'libANGLE/Fence.h',
-            'libANGLE/Float16ToFloat32.cpp',
             'libANGLE/Framebuffer.cpp',
             'libANGLE/Framebuffer.h',
             'libANGLE/FramebufferAttachment.cpp',
@@ -340,6 +339,7 @@
         'angle_id_script': 'commit_id.py',
         'angle_id_header': '<(angle_gen_path)/id/commit.h',
         'angle_use_commit_id%': '<!(python <(angle_id_script) check ..)',
+        'angle_float_conversion_file': '<(angle_gen_path)/float16ToFloat32.cpp',
     },
     # Everything below this is duplicated in the GN build. If you change
     # anything also change angle/BUILD.gn
@@ -363,6 +363,7 @@
             'sources':
             [
                 '<@(angle_libangle_sources)',
+                '<(angle_float_conversion_file)',
             ],
             'defines':
             [
@@ -370,6 +371,26 @@
                 'GL_GLEXT_PROTOTYPES=',
                 'EGLAPI=',
                 'ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES={ "d3dcompiler_47.dll", "d3dcompiler_46.dll", "d3dcompiler_43.dll" }',
+            ],
+            'actions':
+            [
+                {
+                    'variables':
+                    {
+                        'float_conversion_script': 'libANGLE/Float16ToFloat32.py',
+                    },
+                    'action_name': 'gen_float_conversions',
+                    'message': 'Generating Float16 to Float32 Conversion Tables...',
+                    'msvs_cygwin_shell': 0,
+                    'inputs': [ '<(float_conversion_script)' ],
+                    'outputs': [ '<(angle_float_conversion_file)', ],
+                    'action':
+                    [
+                        "python",
+                        "<(float_conversion_script)",
+                        "<(angle_float_conversion_file)",
+                    ],
+                },
             ],
             'direct_dependent_settings':
             {
