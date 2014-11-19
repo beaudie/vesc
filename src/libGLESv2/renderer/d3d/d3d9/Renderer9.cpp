@@ -27,7 +27,6 @@
 #include "libGLESv2/renderer/d3d/TextureD3D.h"
 #include "libGLESv2/renderer/d3d/TransformFeedbackD3D.h"
 #include "libGLESv2/renderer/d3d/RenderbufferD3D.h"
-#include "libGLESv2/main.h"
 #include "libGLESv2/Buffer.h"
 #include "libGLESv2/Texture.h"
 #include "libGLESv2/Framebuffer.h"
