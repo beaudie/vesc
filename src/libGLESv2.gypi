@@ -344,6 +344,7 @@
             'libANGLE/renderer/d3d/d3d11/VertexBuffer11.h',
         ],
         'libangle_static%': 0,
+        'angle_gen_path': '<(SHARED_INTERMEDIATE_DIR)/angle',
         'angle_id_script': 'commit_id.py',
         'angle_id_header': '<(angle_gen_path)/id/commit.h',
         'angle_use_commit_id%': '<!(python <(angle_id_script) check ..)',
@@ -447,6 +448,29 @@
                     [
                         '<@(angle_d3d_shared_sources)',
                     ],
+                    'conditions':
+                    [
+                        ['angle_build_winrt==0',
+                        {
+                            'actions':
+                            [
+                                {
+                                    'action_name': 'copy_dll',
+                                    'message': 'Copying D3D Compiler DLL...',
+                                    'msvs_cygwin_shell': 0,
+                                    'inputs': [ 'copy_compiler_dll.bat' ],
+                                    'outputs': [ '<(PRODUCT_DIR)/d3dcompiler_47.dll' ],
+                                    'action':
+                                    [
+                                        "<(angle_gen_path)/copy_compiler_dll.bat",
+                                        "$(PlatformName)",
+                                        "<(windows_sdk_path)",
+                                        "<(PRODUCT_DIR)",
+                                    ],
+                                },
+                            ],
+                        }],
+                    ],
                 }],
                 ['angle_enable_d3d9==1',
                 {
@@ -516,10 +540,6 @@
                     'sources':
                     [
                         '<@(angle_libangle_win_sources)',
-                    ],
-                    'dependencies':
-                    [
-                        'copy_compiler_dll'
                     ],
                 }],
                 ['angle_build_winrt==1',
