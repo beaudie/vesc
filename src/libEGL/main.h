@@ -9,7 +9,7 @@
 #ifndef LIBEGL_MAIN_H_
 #define LIBEGL_MAIN_H_
 
-#include "libEGL/Error.h"
+#include "libANGLE/Error.h"
 
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
