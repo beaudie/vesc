@@ -7,8 +7,8 @@
 //  Types to represent GL variables (varyings, uniforms, etc)
 //
 
-#ifndef _COMPILER_INTERFACE_VARIABLES_
-#define _COMPILER_INTERFACE_VARIABLES_
+#ifndef _GLSLANG_SHADERVARS_H_
+#define _GLSLANG_SHADERVARS_H_
 
 #include <string>
 #include <vector>
@@ -182,4 +182,4 @@ struct COMPILER_EXPORT InterfaceBlock
 
 }
 
-#endif // _COMPILER_INTERFACE_VARIABLES_
+#endif // _GLSLANG_SHADERVARS_H_
