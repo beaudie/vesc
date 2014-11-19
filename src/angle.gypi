@@ -7,7 +7,6 @@
     {
         'angle_code': 1,
         'angle_post_build_script%': 0,
-        'angle_gen_path': '<(SHARED_INTERMEDIATE_DIR)/angle',
         'angle_enable_d3d9%': 0,
         'angle_enable_d3d11%': 0,
         'conditions':
@@ -26,80 +25,8 @@
         'libEGL.gypi'
     ],
 
-    'targets':
-    [
-        {
-            'target_name': 'copy_scripts',
-            'type': 'none',
-            'includes': [ '../build/common_defines.gypi', ],
-            'hard_dependency': 1,
-            'copies':
-            [
-                {
-                    'destination': '<(angle_gen_path)',
-                    'files': [ 'copy_compiler_dll.bat', ],
-                },
-            ],
-            'conditions':
-            [
-                ['angle_build_winrt==1',
-                {
-                    'msvs_enable_winrt' : '1',
-                    'type' : 'shared_library',
-                }],
-                ['angle_build_winphone==1',
-                {
-                    'msvs_enable_winphone' : '1',
-                }],
-            ],
-        },
-    ],
     'conditions':
     [
-        ['OS=="win"',
-        {
-            'targets':
-            [
-                {
-                    'target_name': 'copy_compiler_dll',
-                    'type': 'none',
-                    'dependencies': [ 'copy_scripts', ],
-                    'includes': [ '../build/common_defines.gypi', ],
-                    'conditions':
-                    [
-                        ['angle_build_winrt==0',
-                        {
-                            'actions':
-                            [
-                                {
-                                    'action_name': 'copy_dll',
-                                    'message': 'Copying D3D Compiler DLL...',
-                                    'msvs_cygwin_shell': 0,
-                                    'inputs': [ 'copy_compiler_dll.bat' ],
-                                    'outputs': [ '<(PRODUCT_DIR)/d3dcompiler_47.dll' ],
-                                    'action':
-                                    [
-                                        "<(angle_gen_path)/copy_compiler_dll.bat",
-                                        "$(PlatformName)",
-                                        "<(windows_sdk_path)",
-                                        "<(PRODUCT_DIR)"
-                                    ],
-                                },
-                            ], #actions
-                        }],
-                        ['angle_build_winrt==1',
-                        {
-                            'msvs_enable_winrt' : '1',
-                            'type' : 'shared_library',
-                        }],
-                        ['angle_build_winphone==1',
-                        {
-                            'msvs_enable_winphone' : '1',
-                        }],
-                    ]
-                },
-            ], # targets
-        }],
         ['angle_post_build_script!=0 and OS=="win"',
         {
             'targets':
