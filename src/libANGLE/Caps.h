@@ -1,5 +1,5 @@
-#ifndef LIBGLESV2_CAPS_H
-#define LIBGLESV2_CAPS_H
+#ifndef LIBANGLE_CAPS_H
+#define LIBANGLE_CAPS_H
 
 //
 // Copyright (c) 2014 The ANGLE Project Authors. All rights reserved.
@@ -270,4 +270,4 @@ struct Caps
 
 }
 
-#endif // LIBGLESV2_CAPS_H
+#endif // LIBANGLE_CAPS_H
