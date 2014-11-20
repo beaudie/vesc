@@ -12,9 +12,12 @@
 #ifndef LIBANGLE_RENDERER_D3D_D3D11_NATIVEWINDOW_H_
 #define LIBANGLE_RENDERER_D3D_D3D11_NATIVEWINDOW_H_
 
-#include <EGL/eglplatform.h>
+#include "libANGLE/export.h"
+
 #include "common/debug.h"
 #include "common/platform.h"
+
+#include <EGL/eglplatform.h>
 
 // DXGISwapChain and DXGIFactory are typedef'd to specific required
 // types. The HWND NativeWindow implementation requires IDXGISwapChain
@@ -44,7 +47,8 @@ typedef IDXGIFactory DXGIFactory;
 
 namespace rx
 {
-class NativeWindow
+// TODO: don't export this class.
+class ANGLE_EXPORT NativeWindow
 {
   public:
     explicit NativeWindow(EGLNativeWindowType window);
@@ -68,7 +72,8 @@ class NativeWindow
 
 };
 
-bool IsValidEGLNativeWindowType(EGLNativeWindowType window);
+// TODO: don't export this function.
+ANGLE_EXPORT bool IsValidEGLNativeWindowType(EGLNativeWindowType window);
 }
 
 #endif // LIBANGLE_RENDERER_D3D_D3D11_NATIVEWINDOW_H_
