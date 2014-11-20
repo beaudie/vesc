@@ -527,6 +527,13 @@ DefaultFramebuffer::DefaultFramebuffer(rx::RenderbufferImpl *colorbuffer, rx::Re
     mDepthbuffer = (depthStencilBuffer->getDepthSize() != 0 ? new RenderbufferAttachment(GL_DEPTH_ATTACHMENT, depthStencilBuffer) : NULL);
     mStencilbuffer = (depthStencilBuffer->getStencilSize() != 0 ? new RenderbufferAttachment(GL_STENCIL_ATTACHMENT, depthStencilBuffer) : NULL);
 
+    // If mDepthbuffer or mStencilbuffer has not taken ownership of
+    // depthStencilBuffer, we need to delete it.
+    if (!mDepthbuffer && !mStencilbuffer)
+    {
+      delete depthStencilBuffer;
+    }
+
     mDrawBufferStates[0] = GL_BACK;
     mReadBufferState = GL_BACK;
 }
