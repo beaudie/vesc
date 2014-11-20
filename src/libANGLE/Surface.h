@@ -15,6 +15,7 @@
 
 // TODO: don't expose this to egl::Surface
 #include "libANGLE/renderer/d3d/d3d11/NativeWindow.h"
+#include "libANGLE/export.h"
 
 #include <EGL/egl.h>
 
@@ -35,7 +36,7 @@ namespace egl
 class Display;
 class Config;
 
-class Surface
+class ANGLE_EXPORT Surface
 {
   public:
     Surface(Display *display, const egl::Config *config, EGLNativeWindowType window, EGLint fixedSize, EGLint width, EGLint height, EGLint postSubBufferSupported);
