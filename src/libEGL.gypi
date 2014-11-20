@@ -26,6 +26,12 @@
                     ],
                     'sources':
                     [
+                        'common/angleutils.cpp',
+                        'common/angleutils.h',
+                        'common/debug.cpp',
+                        'common/debug.h',
+                        'common/tls.cpp',
+                        'common/tls.h',
                         'libEGL/libEGL.cpp',
                         'libEGL/libEGL.def',
                         'libEGL/libEGL.rc',

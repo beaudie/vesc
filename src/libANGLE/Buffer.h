@@ -13,6 +13,7 @@
 
 #include "libANGLE/Error.h"
 #include "libANGLE/RefCountObject.h"
+#include "libANGLE/export.h"
 
 #include "common/angleutils.h"
 #include "libANGLE/renderer/IndexRangeCache.h"
@@ -25,7 +26,7 @@ class BufferImpl;
 namespace gl
 {
 
-class Buffer : public RefCountObject
+class ANGLE_EXPORT Buffer : public RefCountObject
 {
   public:
     Buffer(rx::BufferImpl *impl, GLuint id);
