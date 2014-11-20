@@ -7,6 +7,7 @@
 // debug.cpp: Debugging utilities.
 
 #include "common/debug.h"
+
 #include "common/platform.h"
 #include "common/angleutils.h"
 

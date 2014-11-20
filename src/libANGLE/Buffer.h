@@ -12,9 +12,9 @@
 #define LIBANGLE_BUFFER_H_
 
 #include "libANGLE/Error.h"
+#include "libANGLE/RefCountObject.h"
 
 #include "common/angleutils.h"
-#include "common/RefCountObject.h"
 #include "libANGLE/renderer/IndexRangeCache.h"
 
 namespace rx

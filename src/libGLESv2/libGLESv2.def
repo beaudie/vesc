@@ -288,6 +288,3 @@ EXPORTS
     ; EGL dependencies
     glMakeCurrent                   @146 NONAME
     glGetCurrentContext             @147 NONAME
-
-    ; Setting up TRACE macro callbacks
-    SetTraceFunctionPointers        @284

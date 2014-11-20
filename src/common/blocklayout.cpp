@@ -10,6 +10,7 @@
 #include "common/blocklayout.h"
 #include "common/mathutil.h"
 #include "common/utilities.h"
+#include "common/debug.h"
 
 namespace sh
 {

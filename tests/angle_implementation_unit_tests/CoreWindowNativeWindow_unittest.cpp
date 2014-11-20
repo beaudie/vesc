@@ -15,7 +15,7 @@
 // set to WINAPI_FAMILY_DESKTOP_APP
 #undef WINAPI_FAMILY
 #define WINAPI_FAMILY WINAPI_FAMILY_PC_APP
-#include "common/nativewindow.h"
+#include "libANGLE/renderer/d3d/d3d11/NativeWindow.h"
 #include <angle_windowsstore.h>
 
 using namespace rx;
