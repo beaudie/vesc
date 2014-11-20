@@ -16,12 +16,12 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/Surface.h"
+#include "libANGLE/NativeWindow.h"
 #include "libANGLE/renderer/SwapChain.h"
+#include "libANGLE/version.h"
 
 #include "common/debug.h"
-#include "common/version.h"
 
-#include "common/NativeWindow.h"
 
 bool validateDisplay(egl::Display *display)
 {

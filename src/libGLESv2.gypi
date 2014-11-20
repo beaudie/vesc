@@ -6,7 +6,25 @@
     'variables':
     {
         # These file lists are shared with the GN build.
-        'angle_libangle_sources':
+        'angle_libangle_common_sources':
+        [
+            'common/angleutils.cpp',
+            'common/angleutils.h',
+            'common/blocklayout.cpp',
+            'common/blocklayout.h',
+            'common/debug.cpp',
+            'common/debug.h',
+            'common/event_tracer.cpp',
+            'common/event_tracer.h',
+            'common/mathutil.cpp',
+            'common/mathutil.h',
+            'common/platform.h',
+            'common/tls.cpp',
+            'common/tls.h',
+            'common/utilities.cpp',
+            'common/utilities.h',
+        ],
+        'angle_libangle_includes':
         [
             '../include/EGL/egl.h',
             '../include/EGL/eglext.h',
@@ -21,26 +39,9 @@
             '../include/GLSLANG/ShaderVars.h',
             '../include/KHR/khrplatform.h',
             '../include/angle_gl.h',
-            'common/RefCountObject.cpp',
-            'common/RefCountObject.h',
-            'common/angleutils.cpp',
-            'common/angleutils.h',
-            'common/blocklayout.cpp',
-            'common/blocklayout.h',
-            'common/debug.cpp',
-            'common/debug.h',
-            'common/event_tracer.cpp',
-            'common/event_tracer.h',
-            'common/features.h',
-            'common/mathutil.cpp',
-            'common/mathutil.h',
-            'common/platform.h',
-            'common/NativeWindow.h',
-            'common/tls.cpp',
-            'common/tls.h',
-            'common/utilities.cpp',
-            'common/utilities.h',
-            'common/version.h',
+        ],
+        'angle_libangle_sources':
+        [
             'libANGLE/AttributeMap.cpp',
             'libANGLE/AttributeMap.h',
             'libANGLE/BinaryStream.h',
@@ -59,6 +60,7 @@
             'libANGLE/Display.h',
             'libANGLE/Error.cpp',
             'libANGLE/Error.h',
+            'libANGLE/features.h',
             'libANGLE/Fence.cpp',
             'libANGLE/Fence.h',
             'libANGLE/Float16ToFloat32.cpp',
@@ -70,12 +72,15 @@
             'libANGLE/HandleAllocator.h',
             'libANGLE/ImageIndex.h',
             'libANGLE/ImageIndex.cpp',
+            'libANGLE/NativeWindow.h',
             'libANGLE/Program.cpp',
             'libANGLE/Program.h',
             'libANGLE/ProgramBinary.cpp',
             'libANGLE/ProgramBinary.h',
             'libANGLE/Query.cpp',
             'libANGLE/Query.h',
+            'libANGLE/RefCountObject.cpp',
+            'libANGLE/RefCountObject.h',
             'libANGLE/Renderbuffer.cpp',
             'libANGLE/Renderbuffer.h',
             'libANGLE/ResourceManager.cpp',
@@ -94,6 +99,7 @@
             'libANGLE/TransformFeedback.h',
             'libANGLE/Uniform.cpp',
             'libANGLE/Uniform.h',
+            'libANGLE/version.h',
             'libANGLE/VertexArray.cpp',
             'libANGLE/VertexArray.h',
             'libANGLE/VertexAttribute.cpp',
@@ -154,16 +160,16 @@
         'angle_libangle_win_sources':
         [
             # TODO(kbr): port NativeWindow to other EGL platforms.
-            'common/win32/NativeWindow.cpp',
+            'libANGLE/win32/NativeWindow.cpp',
         ],
         'angle_libangle_winrt_sources':
         [
-            'common/winrt/SwapChainPanelNativeWindow.cpp',
-            'common/winrt/SwapChainPanelNativeWindow.h',
-            'common/winrt/CoreWindowNativeWindow.cpp',
-            'common/winrt/CoreWindowNativeWindow.h',
-            'common/winrt/InspectableNativeWindow.cpp',
-            'common/winrt/InspectableNativeWindow.h',
+            'libANGLE/winrt/SwapChainPanelNativeWindow.cpp',
+            'libANGLE/winrt/SwapChainPanelNativeWindow.h',
+            'libANGLE/winrt/CoreWindowNativeWindow.cpp',
+            'libANGLE/winrt/CoreWindowNativeWindow.h',
+            'libANGLE/winrt/InspectableNativeWindow.cpp',
+            'libANGLE/winrt/InspectableNativeWindow.h',
         ],
         'angle_d3d_shared_sources':
         [
@@ -335,7 +341,7 @@
             'libANGLE/renderer/d3d/d3d11/VertexArray11.h',
             'libANGLE/renderer/d3d/d3d11/VertexBuffer11.cpp',
             'libANGLE/renderer/d3d/d3d11/VertexBuffer11.h',
-        ]
+        ],
     },
     # Everything below this is duplicated in the GN build. If you change
     # anything also change angle/BUILD.gn
@@ -357,6 +363,8 @@
             'sources':
             [
                 '<@(angle_libangle_sources)',
+                '<@(angle_libangle_common_sources)',
+                '<@(angle_libangle_includes)',
             ],
             'defines':
             [
@@ -384,8 +392,8 @@
                 {
                     'Debug_Base':
                     {
-                      'defines':
-                      [
+                        'defines':
+                        [
                             'ANGLE_ENABLE_DEBUG_ANNOTATIONS',
                         ],
                     },

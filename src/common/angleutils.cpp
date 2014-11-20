@@ -5,9 +5,10 @@
 //
 
 #include "common/angleutils.h"
-#include "debug.h"
+
 #include <stdio.h>
 #include <vector>
+#include <assert.h>
 
 size_t FormatStringIntoVector(const char *fmt, va_list vararg, std::vector<char>& outBuffer)
 {
@@ -22,7 +23,7 @@ size_t FormatStringIntoVector(const char *fmt, va_list vararg, std::vector<char>
         // Print again
         len = vsnprintf(&(outBuffer.front()), outBuffer.size(), fmt, vararg);
     }
-    ASSERT(len >= 0);
+    assert(len >= 0);
     return static_cast<size_t>(len);
 }
 

@@ -19,8 +19,7 @@
 #include "libANGLE/renderer/SwapChain.h"
 
 #include "libANGLE/Display.h"
-
-#include "common/NativeWindow.h"
+#include "libANGLE/NativeWindow.h"
 
 //TODO(jmadill): phase this out
 #include "libANGLE/renderer/d3d/RendererD3D.h"

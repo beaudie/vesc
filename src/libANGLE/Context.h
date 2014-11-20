@@ -11,7 +11,7 @@
 #define LIBANGLE_CONTEXT_H_
 
 #include "common/angleutils.h"
-#include "common/RefCountObject.h"
+#include "libANGLE/RefCountObject.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/Data.h"
@@ -19,6 +19,7 @@
 #include "libANGLE/HandleAllocator.h"
 #include "libANGLE/VertexAttribute.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/export.h"
 
 #include "angle_gl.h"
 
@@ -60,7 +61,7 @@ class VertexArray;
 class Sampler;
 class TransformFeedback;
 
-class Context
+class ANGLE_EXPORT Context
 {
   public:
     Context(int clientVersion, const Context *shareContext, rx::Renderer *renderer, bool notifyResets, bool robustAccess);

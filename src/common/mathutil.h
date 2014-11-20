@@ -15,6 +15,7 @@
 #include <limits>
 #include <algorithm>
 #include <string.h>
+#include <assert.h>
 
 namespace gl
 {
@@ -68,8 +69,8 @@ inline DestT clampCast(SrcT value)
 {
     // This assumes SrcT can properly represent DestT::min/max
     // Unfortunately we can't use META_ASSERT without C++11 constexpr support
-    ASSERT(static_cast<DestT>(static_cast<SrcT>(std::numeric_limits<DestT>::min())) == std::numeric_limits<DestT>::min());
-    ASSERT(static_cast<DestT>(static_cast<SrcT>(std::numeric_limits<DestT>::max())) == std::numeric_limits<DestT>::max());
+    assert(static_cast<DestT>(static_cast<SrcT>(std::numeric_limits<DestT>::min())) == std::numeric_limits<DestT>::min());
+    assert(static_cast<DestT>(static_cast<SrcT>(std::numeric_limits<DestT>::max())) == std::numeric_limits<DestT>::max());
 
     SrcT lo = static_cast<SrcT>(std::numeric_limits<DestT>::min());
     SrcT hi = static_cast<SrcT>(std::numeric_limits<DestT>::max());
@@ -132,7 +133,7 @@ inline bool supportsSSE2()
 
     return supports;
 #else
-    UNIMPLEMENTED();
+    assert(false);
     return false;
 #endif
 }
@@ -402,7 +403,7 @@ inline float float10ToFloat32(unsigned short fp11)
 template <typename T>
 inline float normalizedToFloat(T input)
 {
-    META_ASSERT(std::numeric_limits<T>::is_integer);
+    static_assert(std::numeric_limits<T>::is_integer, "T must be an integer.");
 
     const float inverseMax = 1.0f / std::numeric_limits<T>::max();
     return input * inverseMax;
@@ -411,8 +412,8 @@ inline float normalizedToFloat(T input)
 template <unsigned int inputBitCount, typename T>
 inline float normalizedToFloat(T input)
 {
-    META_ASSERT(std::numeric_limits<T>::is_integer);
-    META_ASSERT(inputBitCount < (sizeof(T) * 8));
+    static_assert(std::numeric_limits<T>::is_integer, "T must be an integer.");
+    static_assert(inputBitCount < (sizeof(T) * 8), "Not enough bits in T.");
 
     const float inverseMax = 1.0f / ((1 << inputBitCount) - 1);
     return input * inverseMax;
@@ -427,14 +428,14 @@ inline T floatToNormalized(float input)
 template <unsigned int outputBitCount, typename T>
 inline T floatToNormalized(float input)
 {
-    META_ASSERT(outputBitCount < (sizeof(T) * 8));
+    static_assert(outputBitCount < (sizeof(T) * 8), "Not enough bits in T.");
     return ((1 << outputBitCount) - 1) * input + 0.5f;
 }
 
 template <unsigned int inputBitCount, unsigned int inputBitStart, typename T>
 inline T getShiftedData(T input)
 {
-    META_ASSERT(inputBitCount + inputBitStart <= (sizeof(T) * 8));
+    static_assert(inputBitCount + inputBitStart <= (sizeof(T) * 8), "Not enough bits in T.");
     const T mask = (1 << inputBitCount) - 1;
     return (input >> inputBitStart) & mask;
 }
@@ -442,7 +443,7 @@ inline T getShiftedData(T input)
 template <unsigned int inputBitCount, unsigned int inputBitStart, typename T>
 inline T shiftData(T input)
 {
-    META_ASSERT(inputBitCount + inputBitStart <= (sizeof(T) * 8));
+    static_assert(inputBitCount + inputBitStart <= (sizeof(T) * 8), "Not enough bits in T.");
     const T mask = (1 << inputBitCount) - 1;
     return (input & mask) << inputBitStart;
 }
@@ -546,14 +547,14 @@ inline unsigned int UnsignedCeilDivide(unsigned int value, unsigned int divisor)
 template <class T>
 inline bool IsUnsignedAdditionSafe(T lhs, T rhs)
 {
-    META_ASSERT(!std::numeric_limits<T>::is_signed);
+    static_assert(!std::numeric_limits<T>::is_signed, "T must be signed.");
     return (rhs <= std::numeric_limits<T>::max() - lhs);
 }
 
 template <class T>
 inline bool IsUnsignedMultiplicationSafe(T lhs, T rhs)
 {
-    META_ASSERT(!std::numeric_limits<T>::is_signed);
+    static_assert(!std::numeric_limits<T>::is_signed, "T cannot be signed.");
     return (lhs == T(0) || rhs == T(0) || (rhs <= std::numeric_limits<T>::max() / lhs));
 }
 

@@ -9,6 +9,7 @@
 #include "common/utilities.h"
 #include "common/mathutil.h"
 #include "common/platform.h"
+#include "common/debug.h"
 
 #include <set>
 

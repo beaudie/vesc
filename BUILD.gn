@@ -167,6 +167,7 @@ if (is_win) {
 
   static_library("libANGLE") {
     sources = rebase_path(gles_gypi.angle_libangle_sources, ".", "src")
+    sources += rebase_path(gles_gypi.angle_libangle_win_sources, ".", "src")
 
     libs = []
     defines = []

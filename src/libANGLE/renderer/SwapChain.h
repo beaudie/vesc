@@ -10,8 +10,9 @@
 #ifndef LIBANGLE_RENDERER_SWAPCHAIN_H_
 #define LIBANGLE_RENDERER_SWAPCHAIN_H_
 
+#include "libANGLE/NativeWindow.h"
+
 #include "common/angleutils.h"
-#include "common/NativeWindow.h"
 #include "common/platform.h"
 
 #include <GLES2/gl2.h>
