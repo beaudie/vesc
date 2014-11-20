@@ -9,8 +9,8 @@
 // It is used for HWND (Desktop Windows) and IInspectable objects
 //(Windows Store Applications).
 
-#ifndef COMMON_NATIVEWINDOW_H_
-#define COMMON_NATIVEWINDOW_H_
+#ifndef LIBANGLE_NATIVEWINDOW_H_
+#define LIBANGLE_NATIVEWINDOW_H_
 
 #include <EGL/eglplatform.h>
 #include "common/debug.h"
@@ -71,4 +71,4 @@ class NativeWindow
 bool IsValidEGLNativeWindowType(EGLNativeWindowType window);
 }
 
-#endif // COMMON_NATIVEWINDOW_H_
+#endif // LIBANGLE_NATIVEWINDOW_H_
