@@ -6,9 +6,11 @@
 
 // SwapChainPanelNativeWindow.cpp: NativeWindow for managing ISwapChainPanel native window types.
 
-#include "common/winrt/SwapChainPanelNativeWindow.h"
+#include "libANGLE/winrt/SwapChainPanelNativeWindow.h"
+
 #include <algorithm>
 #include <math.h>
+
 using namespace ABI::Windows::Foundation::Collections;
 
 namespace rx
