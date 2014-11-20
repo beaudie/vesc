@@ -5,9 +5,11 @@
 //
 
 #include "common/angleutils.h"
-#include "debug.h"
+#include "common/debug.h"
+
 #include <stdio.h>
 #include <vector>
+#include <assert.h>
 
 size_t FormatStringIntoVector(const char *fmt, va_list vararg, std::vector<char>& outBuffer)
 {
