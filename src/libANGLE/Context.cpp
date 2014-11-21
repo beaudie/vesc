@@ -1,3 +1,4 @@
+
 //
 // Copyright (c) 2002-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
@@ -12,6 +13,7 @@
 #include "common/utilities.h"
 #include "common/platform.h"
 #include "libANGLE/Buffer.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/Fence.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
@@ -21,14 +23,13 @@
 #include "libANGLE/Query.h"
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/Sampler.h"
+#include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/validationES.h"
 #include "libANGLE/renderer/Renderer.h"
-
-#include "libANGLE/Surface.h"
 
 #include <sstream>
 #include <iterator>
@@ -1387,7 +1388,10 @@ GLenum Context::getResetStatus()
     {
         // mResetStatus will be set by the markContextLost callback
         // in the case a notification is sent
-        mRenderer->testDeviceLost(true);
+        if (mRenderer->testDeviceLost(false))
+        {
+            mRenderer->notifyDeviceLost();
+        }
     }
 
     GLenum status = mResetStatus;
