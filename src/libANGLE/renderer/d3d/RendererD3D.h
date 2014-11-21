@@ -156,7 +156,9 @@ class RendererD3D : public Renderer
     virtual VertexBuffer *createVertexBuffer() = 0;
     virtual IndexBuffer *createIndexBuffer() = 0;
 
+    // Device lost
     void notifyDeviceLost() override;
+    virtual bool resetDevice() = 0;
 
   protected:
     virtual gl::Error drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive) = 0;

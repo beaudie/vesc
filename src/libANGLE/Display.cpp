@@ -10,22 +10,23 @@
 
 #include "libANGLE/Display.h"
 
+#include "common/debug.h"
+#include "common/mathutil.h"
+#include "libANGLE/Context.h"
+#include "libANGLE/Surface.h"
+
 #include <algorithm>
 #include <map>
 #include <vector>
 #include <sstream>
 #include <iterator>
 
-#include "common/debug.h"
-#include "common/mathutil.h"
-#include "libANGLE/Context.h"
-#include "libANGLE/Surface.h"
-
-//TODO(jmadill): remove these
-#include "libANGLE/renderer/SwapChain.h"
-#include "libANGLE/renderer/d3d/SurfaceD3D.h"
-
 #include <EGL/eglext.h>
+
+#ifdef ANGLE_PLATFORM_WINDOWS
+#include "libANGLE/renderer/d3d/DisplayD3D.h"
+#include "libANGLE/renderer/d3d/RendererD3D.h"
+#endif
 
 #if defined (ANGLE_ENABLE_D3D9)
 #   include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
@@ -125,7 +126,7 @@ static DisplayMap *GetDisplayMap()
     return &displays;
 }
 
-egl::Display *Display::getDisplay(EGLNativeDisplayType displayId, const AttributeMap &attribMap)
+Display *Display::getDisplay(EGLNativeDisplayType displayId, const AttributeMap &attribMap)
 {
     Display *display = NULL;
 
@@ -137,7 +138,7 @@ egl::Display *Display::getDisplay(EGLNativeDisplayType displayId, const Attribut
     }
     else
     {
-        display = new egl::Display(displayId);
+        display = new Display(displayId);
         displays->insert(std::make_pair(displayId, display));
     }
 
@@ -151,7 +152,8 @@ egl::Display *Display::getDisplay(EGLNativeDisplayType displayId, const Attribut
 }
 
 Display::Display(EGLNativeDisplayType displayId)
-    : mDisplayId(displayId),
+    : mImplementation(NULL),
+      mDisplayId(displayId),
       mAttributeMap(),
       mRenderer(NULL)
 {
@@ -188,6 +190,8 @@ Error Display::initialize()
         terminate();
         return Error(EGL_NOT_INITIALIZED);
     }
+
+    initImplementation();
 
     //TODO(jmadill): should be part of caps?
     EGLint minSwapInterval = mRenderer->getMinSwapInterval();
@@ -231,11 +235,6 @@ Error Display::initialize()
 
 void Display::terminate()
 {
-    while (!mSurfaceSet.empty())
-    {
-        destroySurface(*mSurfaceSet.begin());
-    }
-
     while (!mContextSet.empty())
     {
         destroyContext(*mContextSet.begin());
@@ -373,11 +372,11 @@ Error Display::createWindowSurface(EGLNativeWindowType window, EGLConfig config,
         }
     }
 
-    //TODO(jmadill): MANGLE refactor
-    rx::SurfaceD3D *surfaceD3D = rx::SurfaceD3D::createFromWindow(this, configuration, window, fixedSize,
-                                                                  width, height, postSubBufferSupported);
+    rx::SurfaceImpl *surfaceImpl = mImplementation->createWindowSurface(this, configuration, window,
+                                                                        fixedSize, width, height,
+                                                                        postSubBufferSupported);
 
-    Surface *surface = new Surface(surfaceD3D);
+    Surface *surface = new Surface(surfaceImpl);
     Error error = surface->initialize();
     if (error.isError())
     {
@@ -385,7 +384,7 @@ Error Display::createWindowSurface(EGLNativeWindowType window, EGLConfig config,
         return error;
     }
 
-    mSurfaceSet.insert(surface);
+    mImplementation->getSurfaceSet().insert(surface);
 
     *outSurface = surface;
     return Error(EGL_SUCCESS);
@@ -495,11 +494,10 @@ Error Display::createOffscreenSurface(EGLConfig config, EGLClientBuffer shareHan
         }
     }
 
-    //TODO(jmadill): MANGLE refactor
-    rx::SurfaceD3D *surfaceD3D = rx::SurfaceD3D::createOffscreen(this, configuration, shareHandle,
-                                                                 width, height, textureFormat, textureTarget);
+    rx::SurfaceImpl *surfaceImpl = mImplementation->createOffscreenSurface(this, configuration, shareHandle,
+                                                                           width, height, textureFormat, textureTarget);
 
-    Surface *surface = new Surface(surfaceD3D);
+    Surface *surface = new Surface(surfaceImpl);
     Error error = surface->initialize();
     if (error.isError())
     {
@@ -507,7 +505,7 @@ Error Display::createOffscreenSurface(EGLConfig config, EGLClientBuffer shareHan
         return error;
     }
 
-    mSurfaceSet.insert(surface);
+    mImplementation->getSurfaceSet().insert(surface);
 
     *outSurface = surface;
     return Error(EGL_SUCCESS);
@@ -555,40 +553,13 @@ Error Display::restoreLostDevice()
         }
     }
 
-    // Release surface resources to make the Reset() succeed
-    for (const auto &surface : mSurfaceSet)
-    {
-        //TODO(jmadill): MANGLE refactor
-        rx::SurfaceD3D *surfaceD3D = rx::SurfaceD3D::makeSurfaceD3D(surface);
-        surfaceD3D->release();
-    }
-
-    if (!mRenderer->resetDevice())
-    {
-        return Error(EGL_BAD_ALLOC);
-    }
-
-    // Restore any surfaces that may have been lost
-    for (const auto &surface : mSurfaceSet)
-    {
-        //TODO(jmadill): MANGLE refactor
-        rx::SurfaceD3D *surfaceD3D = rx::SurfaceD3D::makeSurfaceD3D(surface);
-
-        Error error = surfaceD3D->resetSwapChain();
-        if (error.isError())
-        {
-            return error;
-        }
-    }
-
-    return Error(EGL_SUCCESS);
+    return mImplementation->restoreLostDevice();
 }
 
 
-void Display::destroySurface(egl::Surface *surface)
+void Display::destroySurface(Surface *surface)
 {
-    mSurfaceSet.erase(surface);
-    SafeDelete(surface);
+    mImplementation->destroySurface(surface);
 }
 
 void Display::destroyContext(gl::Context *context)
@@ -620,16 +591,16 @@ bool Display::isValidContext(gl::Context *context)
     return mContextSet.find(context) != mContextSet.end();
 }
 
-bool Display::isValidSurface(egl::Surface *surface)
+bool Display::isValidSurface(Surface *surface)
 {
-    return mSurfaceSet.find(surface) != mSurfaceSet.end();
+    return mImplementation->getSurfaceSet().find(surface) != mImplementation->getSurfaceSet().end();
 }
 
 bool Display::hasExistingWindowSurface(EGLNativeWindowType window)
 {
-    for (SurfaceSet::iterator surface = mSurfaceSet.begin(); surface != mSurfaceSet.end(); surface++)
+    for (const auto &surfaceIt : mImplementation->getSurfaceSet())
     {
-        if ((*surface)->getWindowHandle() == window)
+        if (surfaceIt->getWindowHandle() == window)
         {
             return true;
         }
@@ -734,6 +705,17 @@ void Display::initVendorString()
 const char *Display::getVendorString() const
 {
     return mVendorString.c_str();
+}
+
+// TODO(jmadill): other platforms
+void Display::initImplementation()
+{
+#ifdef ANGLE_PLATFORM_WINDOWS
+    mImplementation = new rx::DisplayD3D(static_cast<rx::RendererD3D*>(mRenderer));
+#else
+    // TODO(jmadill): implement this
+    mImplementation = NULL;
+#endif
 }
 
 }
