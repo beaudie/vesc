@@ -138,7 +138,6 @@ class Renderer
 
     // lost device
     //TODO(jmadill): investigate if this stuff is necessary in GL
-    virtual void notifyDeviceLost() = 0;
     virtual bool isDeviceLost() = 0;
     virtual bool testDeviceLost(bool notify) = 0;
     virtual bool testDeviceResettable() = 0;

@@ -29,6 +29,7 @@
 #include "libGLESv2/validationES.h"
 #include "libGLESv2/renderer/Renderer.h"
 
+#include "libEGL/Display.h"
 #include "libEGL/Surface.h"
 
 #include <sstream>
@@ -1388,7 +1389,10 @@ GLenum Context::getResetStatus()
     {
         // mResetStatus will be set by the markContextLost callback
         // in the case a notification is sent
-        mRenderer->testDeviceLost(true);
+        if (mRenderer->testDeviceLost(false))
+        {
+            getDisplay()->notifyDeviceLost();
+        }
     }
 
     GLenum status = mResetStatus;
