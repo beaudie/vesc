@@ -11,55 +11,51 @@
 #ifndef LIBANGLE_SURFACE_H_
 #define LIBANGLE_SURFACE_H_
 
+#include "common/angleutils.h"
 #include "libANGLE/Error.h"
 
-// TODO: don't expose this to egl::Surface
-#include "libANGLE/renderer/d3d/d3d11/NativeWindow.h"
-
 #include <EGL/egl.h>
-
-#include "common/angleutils.h"
 
 namespace gl
 {
 class Texture2D;
 }
+
 namespace rx
 {
-class SwapChain;
-class RendererD3D; //TODO(jmadill): remove this
+class SurfaceImpl;
 }
 
 namespace egl
 {
 class Display;
 class Config;
+class Surface;
 
 class Surface
 {
   public:
-    Surface(Display *display, const egl::Config *config, EGLNativeWindowType window, EGLint fixedSize, EGLint width, EGLint height, EGLint postSubBufferSupported);
-    Surface(Display *display, const egl::Config *config, EGLClientBuffer shareHandle, EGLint width, EGLint height, EGLenum textureFormat, EGLenum textureTarget);
-
+    Surface(rx::SurfaceImpl *impl);
     virtual ~Surface();
 
-    Error initialize();
-    void release();
-    Error resetSwapChain();
+    rx::SurfaceImpl *getImplementation() const { return mImplementation; }
 
-    EGLNativeWindowType getWindowHandle();
+    Error initialize();
     Error swap();
     Error postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height);
     Error querySurfacePointerANGLE(EGLint attribute, void **value);
+    Error bindTexImage(EGLint buffer);
+    Error releaseTexImage(EGLint buffer);
+
+    EGLNativeWindowType getWindowHandle() const;
 
     virtual EGLint isPostSubBufferSupported() const;
 
-    virtual rx::SwapChain *getSwapChain() const;
-
     void setSwapInterval(EGLint interval);
-    bool checkForOutOfDateSwapChain();   // Returns true if swapchain changed due to resize or interval update
 
     virtual EGLint getConfigID() const;
+
+    // width and height can change with client window resizing
     virtual EGLint getWidth() const;
     virtual EGLint getHeight() const;
     virtual EGLint getPixelAspectRatio() const;
@@ -77,23 +73,8 @@ class Surface
   private:
     DISALLOW_COPY_AND_ASSIGN(Surface);
 
-    Display *const mDisplay;
-    rx::RendererD3D *mRenderer;
+    rx::SurfaceImpl *mImplementation;
 
-    EGLClientBuffer mShareHandle;
-    rx::SwapChain *mSwapChain;
-
-    void subclassWindow();
-    void unsubclassWindow();
-    Error resizeSwapChain(int backbufferWidth, int backbufferHeight);
-    Error resetSwapChain(int backbufferWidth, int backbufferHeight);
-    Error swapRect(EGLint x, EGLint y, EGLint width, EGLint height);
-
-    rx::NativeWindow mNativeWindow;   // Handler for the Window that the surface is created for.
-    bool mWindowSubclassed;        // Indicates whether we successfully subclassed mWindow for WM_RESIZE hooking
-    const egl::Config *mConfig;    // EGL config surface was created with
-    EGLint mHeight;                // Height of surface
-    EGLint mWidth;                 // Width of surface
 //  EGLint horizontalResolution;   // Horizontal dot pitch
 //  EGLint verticalResolution;     // Vertical dot pitch
 //  EGLBoolean largestPBuffer;     // If true, create largest pbuffer possible
@@ -103,17 +84,10 @@ class Surface
     EGLint mPixelAspectRatio;      // Display aspect ratio
     EGLenum mRenderBuffer;         // Render buffer
     EGLenum mSwapBehavior;         // Buffer swap behavior
-    EGLenum mTextureFormat;        // Format of texture: RGB, RGBA, or no texture
-    EGLenum mTextureTarget;        // Type of texture: 2D or no texture
 //  EGLenum vgAlphaFormat;         // Alpha format for OpenVG
 //  EGLenum vgColorSpace;          // Color space for OpenVG
-    EGLint mSwapInterval;
-    EGLint mPostSubBufferSupported;
-    EGLint mFixedSize;
-
-    bool mSwapIntervalDirty;
-    gl::Texture2D *mTexture;
 };
+
 }
 
 #endif   // LIBANGLE_SURFACE_H_
