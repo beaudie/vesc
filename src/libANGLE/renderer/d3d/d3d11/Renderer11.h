@@ -102,7 +102,7 @@ class Renderer11 : public RendererD3D
     bool testDeviceLost() override;
     bool testDeviceResettable() override;
 
-    DWORD getAdapterVendor() const override;
+    uint32_t getAdapterVendor() const override;
     std::string getRendererDescription() const override;
     GUID getAdapterIdentifier() const override;
 
