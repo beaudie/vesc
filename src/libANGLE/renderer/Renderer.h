@@ -144,7 +144,7 @@ class Renderer
     virtual bool testDeviceLost() = 0;
     virtual bool testDeviceResettable() = 0;
 
-    virtual DWORD getAdapterVendor() const = 0;
+    virtual AdapterVendor getAdapterVendor() const = 0;
     virtual std::string getRendererDescription() const = 0;
     virtual GUID getAdapterIdentifier() const = 0;
 

@@ -1935,9 +1935,9 @@ bool Renderer11::resetDevice()
     return true;
 }
 
-DWORD Renderer11::getAdapterVendor() const
+AdapterVendor Renderer11::getAdapterVendor() const
 {
-    return mAdapterDescription.VendorId;
+    return static_cast<AdapterVendor>(mAdapterDescription.VendorId);
 }
 
 std::string Renderer11::getRendererDescription() const
