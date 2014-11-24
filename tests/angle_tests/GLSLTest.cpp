@@ -729,3 +729,70 @@ TYPED_TEST(GLSLTest, MaxVaryingVec3ArrayAndMaxPlusOneFloatArray)
     GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
     EXPECT_EQ(0u, program);
 }
+
+TYPED_TEST(GLSLTest, FixedShaderLength)
+{
+    GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
+
+    const std::string appendGarbage = "abcasdfasdfasdfasdfasdf";
+    const std::string source = "void main() { gl_FragColor = vec4(0, 0, 0, 0); }" + appendGarbage;
+    const char *sourceArray[1] = { source.c_str() };
+    GLint lengths[1] = { source.length() - appendGarbage.length() };
+    glShaderSource(shader, ArraySize(sourceArray), sourceArray, lengths);
+    glCompileShader(shader);
+
+    GLint compileResult;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileResult);
+    EXPECT_NE(compileResult, 0);
+}
+
+TYPED_TEST(GLSLTest, NegativeShaderLength)
+{
+    GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
+
+    const char *sourceArray[1] = { "void main() { gl_FragColor = vec4(0, 0, 0, 0); }" };
+    GLint lengths[1] = { -10 };
+    glShaderSource(shader, ArraySize(sourceArray), sourceArray, lengths);
+    glCompileShader(shader);
+
+    GLint compileResult;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileResult);
+    EXPECT_NE(compileResult, 0);
+}
+
+TYPED_TEST(GLSLTest, MixedShaderLengths)
+{
+    GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
+
+    const char *sourceArray[] =
+    {
+        "void main()",
+        "{",
+        "    gl_FragColor = vec4(0, 0, 0, 0);",
+        "}",
+    };
+    GLint lengths[] =
+    {
+        -10,
+        1,
+        std::strlen(sourceArray[2]),
+        -1,
+    };
+    ASSERT_EQ(ArraySize(sourceArray), ArraySize(lengths));
+
+    glShaderSource(shader, ArraySize(sourceArray), sourceArray, lengths);
+    glCompileShader(shader);
+
+    GLint compileResult;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileResult);
+    EXPECT_NE(compileResult, 0);
+}
+
+TYPED_TEST(GLSLTest, InvalidShaderLength)
+{
+    GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
+
+    const char *sourceArray[1] = { "" };
+    GLint lengths[1] = { std::numeric_limits<GLint>::max() };
+    EXPECT_ANY_THROW(glShaderSource(shader, ArraySize(sourceArray), sourceArray, lengths));
+}
