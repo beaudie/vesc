@@ -23,6 +23,7 @@ namespace rx
 class RenderbufferImpl;
 struct Workarounds;
 class DefaultAttachmentImpl;
+class FramebufferImpl;
 }
 
 namespace gl
@@ -35,14 +36,19 @@ struct Caps;
 struct Extensions;
 class TextureCapsMap;
 struct Data;
+class State;
+struct Rectangle;
 
 typedef std::vector<FramebufferAttachment *> ColorbufferInfo;
 
 class Framebuffer
 {
   public:
-    Framebuffer(GLuint id);
+    Framebuffer(rx::FramebufferImpl *impl, GLuint id);
     virtual ~Framebuffer();
+
+    const rx::FramebufferImpl *getImplementation() const { return mImpl; }
+    rx::FramebufferImpl *getImplementation() { return mImpl; }
 
     GLuint id() const { return mId; }
 
@@ -65,7 +71,7 @@ class Framebuffer
     virtual FramebufferAttachment *getAttachment(GLenum attachment) const;
 
     GLenum getDrawBufferState(unsigned int colorAttachment) const;
-    void setDrawBufferState(unsigned int colorAttachment, GLenum drawBuffer);
+    void setDrawBuffers(size_t count, const GLenum *buffers);
 
     bool isEnabledColorAttachment(unsigned int colorAttachment) const;
     bool hasEnabledColorAttachment() const;
@@ -76,8 +82,21 @@ class Framebuffer
     virtual GLenum completeness(const gl::Data &data) const;
     bool hasValidDepthStencil() const;
 
-    Error invalidate(const Caps &caps, GLsizei numAttachments, const GLenum *attachments);
-    Error invalidateSub(GLsizei numAttachments, const GLenum *attachments, GLint x, GLint y, GLsizei width, GLsizei height);
+    Error invalidate(size_t count, const GLenum *attachments);
+    Error invalidate(size_t count, const GLenum *attachments, const gl::Rectangle &area);
+
+    Error clear(const State &state, GLbitfield mask);
+    Error clearBufferfv(const State &state, GLenum buffer, GLint drawbuffer, const GLfloat *values);
+    Error clearBufferuiv(const State &state, GLenum buffer, GLint drawbuffer, const GLuint *values);
+    Error clearBufferiv(const State &state, GLenum buffer, GLint drawbuffer, const GLint *values);
+    Error clearBufferfi(const State &state, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
+
+    GLenum getPreferredReadFormat() const;
+    GLenum getPreferredReadType() const;
+    Error readPixels(const gl::State &state, const gl::Rectangle &area, GLenum format, GLenum type, GLvoid *pixels) const;
+
+    Error blit(const gl::State &state, const gl::Rectangle &sourceArea, const gl::Rectangle &destArea,
+               GLbitfield mask, GLenum filter, const gl::Framebuffer *sourceFramebuffer);
 
     // Use this method to retrieve the color buffer map when doing rendering.
     // It will apply a workaround for poor shader performance on some systems
@@ -85,6 +104,9 @@ class Framebuffer
     ColorbufferInfo getColorbuffersForRender(const rx::Workarounds &workarounds) const;
 
   protected:
+    void setAttachment(GLenum attachment, FramebufferAttachment *attachmentObj);
+
+    rx::FramebufferImpl *mImpl;
     GLuint mId;
 
     FramebufferAttachment *mColorbuffers[IMPLEMENTATION_MAX_DRAW_BUFFERS];
@@ -96,19 +118,13 @@ class Framebuffer
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Framebuffer);
-
-    void setAttachment(GLenum attachment, FramebufferAttachment *attachmentObj);
 };
 
 class DefaultFramebuffer : public Framebuffer
 {
   public:
-    DefaultFramebuffer(rx::DefaultAttachmentImpl *colorAttachment, rx::DefaultAttachmentImpl *depthAttachment,
-                       rx::DefaultAttachmentImpl *stencilAttachment);
-
-    GLenum completeness(const gl::Data &data) const override;
-    virtual FramebufferAttachment *getAttachment(GLenum attachment) const;
-
+    DefaultFramebuffer(rx::FramebufferImpl *impl, rx::DefaultAttachmentImpl *colorAttachment,
+                       rx::DefaultAttachmentImpl *depthAttachment, rx::DefaultAttachmentImpl *stencilAttachment);
   private:
     DISALLOW_COPY_AND_ASSIGN(DefaultFramebuffer);
 };
@@ -120,8 +136,8 @@ namespace rx
 class RenderTarget;
 
 // TODO: place this in FramebufferD3D.h
-gl::Error GetAttachmentRenderTarget(gl::FramebufferAttachment *attachment, RenderTarget **outRT);
-unsigned int GetAttachmentSerial(gl::FramebufferAttachment *attachment);
+gl::Error GetAttachmentRenderTarget(const gl::FramebufferAttachment *attachment, RenderTarget **outRT);
+unsigned int GetAttachmentSerial(const gl::FramebufferAttachment *attachment);
 
 }
 

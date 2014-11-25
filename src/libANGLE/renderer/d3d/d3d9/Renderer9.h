@@ -82,6 +82,7 @@ class Renderer9 : public RendererD3D
                              bool ignoreViewport);
 
     gl::Error applyRenderTarget(const gl::Framebuffer *frameBuffer) override;
+    gl::Error applyRenderTarget(const gl::FramebufferAttachment *colorBuffer, const gl::FramebufferAttachment *depthStencilBuffer);
     virtual gl::Error applyShaders(gl::ProgramBinary *programBinary, const gl::VertexFormat inputLayout[], const gl::Framebuffer *framebuffer,
                                    bool rasterizerDiscard, bool transformFeedbackActive);
     virtual gl::Error applyUniforms(const ProgramImpl &program, const std::vector<gl::LinkedUniform*> &uniformArray);
@@ -95,7 +96,8 @@ class Renderer9 : public RendererD3D
     virtual gl::Error drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
                                    gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei instances);
 
-    gl::Error clear(const gl::ClearParameters &clearParams, const gl::Framebuffer *frameBuffer) override;
+    gl::Error clear(const gl::ClearParameters &clearParams, const gl::FramebufferAttachment *colorBuffer, 
+                    const gl::FramebufferAttachment *depthStencilBuffer);
 
     virtual void markAllStateDirty();
 
@@ -131,19 +133,12 @@ class Renderer9 : public RendererD3D
     virtual gl::Error copyImage2DArray(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                        GLint xoffset, GLint yoffset, GLint zOffset, TextureStorage *storage, GLint level);
 
-    gl::Error blitRect(const gl::Framebuffer *readTarget, const gl::Rectangle &readRect,
-                       const gl::Framebuffer *drawTarget, const gl::Rectangle &drawRect,
-                       const gl::Rectangle *scissor, bool blitRenderTarget,
-                       bool blitDepth, bool blitStencil, GLenum filter) override;
-
-    virtual gl::Error readPixels(const gl::Framebuffer *framebuffer, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
-                                 GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, uint8_t *pixels);
-
     // RenderTarget creation
     virtual gl::Error createRenderTarget(int width, int height, GLenum format, GLsizei samples, RenderTarget **outRT);
 
     // Framebuffer creation
     virtual DefaultAttachmentImpl *createDefaultAttachment(GLenum type, egl::Surface *surface) override;
+    virtual FramebufferImpl *createFramebuffer() override;
 
     // Shader creation
     virtual ShaderImpl *createShader(const gl::Data &data, GLenum type);
@@ -224,7 +219,7 @@ class Renderer9 : public RendererD3D
 
     gl::Error getCountingIB(size_t count, StaticIndexBufferInterface **outIB);
 
-    gl::Error getNullColorbuffer(gl::FramebufferAttachment *depthbuffer, gl::FramebufferAttachment **outColorBuffer);
+    gl::Error getNullColorbuffer(const gl::FramebufferAttachment *depthbuffer, const gl::FramebufferAttachment **outColorBuffer);
 
     D3DPOOL getBufferPool(DWORD usage) const;
 
@@ -268,8 +263,7 @@ class Renderer9 : public RendererD3D
 
     // current render target states
     unsigned int mAppliedRenderTargetSerial;
-    unsigned int mAppliedDepthbufferSerial;
-    unsigned int mAppliedStencilbufferSerial;
+    unsigned int mAppliedDepthStencilSerial;
     bool mDepthStencilInitialized;
     bool mRenderTargetDescInitialized;
     RenderTarget::Desc mRenderTargetDesc;

@@ -31,6 +31,7 @@
 #include "libANGLE/renderer/d3d/d3d9/Blit9.h"
 #include "libANGLE/renderer/d3d/d3d9/Buffer9.h"
 #include "libANGLE/renderer/d3d/d3d9/Fence9.h"
+#include "libANGLE/renderer/d3d/d3d9/Framebuffer9.h"
 #include "libANGLE/renderer/d3d/d3d9/Image9.h"
 #include "libANGLE/renderer/d3d/d3d9/IndexBuffer9.h"
 #include "libANGLE/renderer/d3d/d3d9/Query9.h"
@@ -1145,7 +1146,7 @@ bool Renderer9::applyPrimitiveType(GLenum mode, GLsizei count)
 }
 
 
-gl::Error Renderer9::getNullColorbuffer(gl::FramebufferAttachment *depthbuffer, gl::FramebufferAttachment **outColorBuffer)
+gl::Error Renderer9::getNullColorbuffer(const gl::FramebufferAttachment *depthbuffer, const gl::FramebufferAttachment **outColorBuffer)
 {
     ASSERT(depthbuffer);
 
@@ -1194,29 +1195,27 @@ gl::Error Renderer9::getNullColorbuffer(gl::FramebufferAttachment *depthbuffer, 
     *outColorBuffer = nullbuffer;
     return gl::Error(GL_NO_ERROR);
 }
-
-gl::Error Renderer9::applyRenderTarget(const gl::Framebuffer *framebuffer)
+gl::Error Renderer9::applyRenderTarget(const gl::FramebufferAttachment *colorBuffer, const gl::FramebufferAttachment *depthStencilBuffer)
 {
     // if there is no color attachment we must synthesize a NULL colorattachment
     // to keep the D3D runtime happy.  This should only be possible if depth texturing.
-    gl::FramebufferAttachment *attachment = framebuffer->getColorbuffer(0);
-    if (!attachment)
+    if (!colorBuffer)
     {
-        gl::Error error = getNullColorbuffer(framebuffer->getDepthbuffer(), &attachment);
+        gl::Error error = getNullColorbuffer(depthStencilBuffer, &colorBuffer);
         if (error.isError())
         {
             return error;
         }
     }
-    ASSERT(attachment);
+    ASSERT(colorBuffer);
 
     bool renderTargetChanged = false;
-    unsigned int renderTargetSerial = GetAttachmentSerial(attachment);
+    unsigned int renderTargetSerial = GetAttachmentSerial(colorBuffer);
     if (renderTargetSerial != mAppliedRenderTargetSerial)
     {
         // Apply the render target on the device
         RenderTarget9 *renderTarget = NULL;
-        gl::Error error = d3d9::GetAttachmentRenderTarget(attachment, &renderTarget);
+        gl::Error error = d3d9::GetAttachmentRenderTarget(colorBuffer, &renderTarget);
         if (error.isError())
         {
             return error;
@@ -1233,31 +1232,17 @@ gl::Error Renderer9::applyRenderTarget(const gl::Framebuffer *framebuffer)
         renderTargetChanged = true;
     }
 
-    gl::FramebufferAttachment *depthStencil = framebuffer->getDepthbuffer();
-    unsigned int depthbufferSerial = 0;
-    unsigned int stencilbufferSerial = 0;
-    if (depthStencil)
-    {
-        depthbufferSerial = GetAttachmentSerial(depthStencil);
-    }
-    else if (framebuffer->getStencilbuffer())
-    {
-        depthStencil = framebuffer->getStencilbuffer();
-        stencilbufferSerial = GetAttachmentSerial(depthStencil);
-    }
-
-    if (depthbufferSerial != mAppliedDepthbufferSerial ||
-        stencilbufferSerial != mAppliedStencilbufferSerial ||
-        !mDepthStencilInitialized)
+    unsigned int depthStencilSerial = (depthStencilBuffer != nullptr) ? GetAttachmentSerial(depthStencilBuffer) : 0;
+    if (depthStencilSerial != mAppliedDepthStencilSerial || !mDepthStencilInitialized)
     {
         unsigned int depthSize = 0;
         unsigned int stencilSize = 0;
 
         // Apply the depth stencil on the device
-        if (depthStencil)
+        if (depthStencilBuffer)
         {
             RenderTarget9 *depthStencilRenderTarget = NULL;
-            gl::Error error = d3d9::GetAttachmentRenderTarget(depthStencil, &depthStencilRenderTarget);
+            gl::Error error = d3d9::GetAttachmentRenderTarget(depthStencilBuffer, &depthStencilRenderTarget);
             if (error.isError())
             {
                 return error;
@@ -1270,8 +1255,8 @@ gl::Error Renderer9::applyRenderTarget(const gl::Framebuffer *framebuffer)
             mDevice->SetDepthStencilSurface(depthStencilSurface);
             SafeRelease(depthStencilSurface);
 
-            depthSize = depthStencil->getDepthSize();
-            stencilSize = depthStencil->getStencilSize();
+            depthSize = depthStencilBuffer->getDepthSize();
+            stencilSize = depthStencilBuffer->getStencilSize();
         }
         else
         {
@@ -1290,8 +1275,7 @@ gl::Error Renderer9::applyRenderTarget(const gl::Framebuffer *framebuffer)
             mForceSetDepthStencilState = true;
         }
 
-        mAppliedDepthbufferSerial = depthbufferSerial;
-        mAppliedStencilbufferSerial = stencilbufferSerial;
+        mAppliedDepthStencilSerial = depthStencilSerial;
         mDepthStencilInitialized = true;
     }
 
@@ -1301,13 +1285,18 @@ gl::Error Renderer9::applyRenderTarget(const gl::Framebuffer *framebuffer)
         mForceSetViewport = true;
         mForceSetBlendState = true;
 
-        mRenderTargetDesc.width = attachment->getWidth();
-        mRenderTargetDesc.height = attachment->getHeight();
-        mRenderTargetDesc.format = attachment->getActualFormat();
+        mRenderTargetDesc.width = colorBuffer->getWidth();
+        mRenderTargetDesc.height = colorBuffer->getHeight();
+        mRenderTargetDesc.format = colorBuffer->getActualFormat();
         mRenderTargetDescInitialized = true;
     }
 
     return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error Renderer9::applyRenderTarget(const gl::Framebuffer *framebuffer)
+{
+    return applyRenderTarget(framebuffer->getColorbuffer(0), framebuffer->getDepthOrStencilbuffer());
 }
 
 gl::Error Renderer9::applyVertexBuffer(const gl::State &state, GLint first, GLsizei count, GLsizei instances)
@@ -1870,7 +1859,8 @@ void Renderer9::applyUniformnbv(gl::LinkedUniform *targetUniform, const GLint *v
     applyUniformnfv(targetUniform, (GLfloat*)vector);
 }
 
-gl::Error Renderer9::clear(const gl::ClearParameters &clearParams, const gl::Framebuffer *frameBuffer)
+gl::Error Renderer9::clear(const gl::ClearParameters &clearParams, const gl::FramebufferAttachment *colorBuffer,
+                           const gl::FramebufferAttachment *depthStencilBuffer)
 {
     if (clearParams.colorClearType != GL_FLOAT)
     {
@@ -1894,9 +1884,9 @@ gl::Error Renderer9::clear(const gl::ClearParameters &clearParams, const gl::Fra
     DWORD stencil = clearParams.stencilClearValue & 0x000000FF;
 
     unsigned int stencilUnmasked = 0x0;
-    if (clearParams.clearStencil && frameBuffer->hasStencil())
+    if (clearParams.clearStencil && depthStencilBuffer->getStencilSize() > 0)
     {
-        unsigned int stencilSize = gl::GetInternalFormatInfo((frameBuffer->getStencilbuffer()->getActualFormat())).stencilBits;
+        unsigned int stencilSize = gl::GetInternalFormatInfo((depthStencilBuffer->getActualFormat())).stencilBits;
         stencilUnmasked = (0x1 << stencilSize) - 1;
     }
 
@@ -1907,9 +1897,8 @@ gl::Error Renderer9::clear(const gl::ClearParameters &clearParams, const gl::Fra
     D3DCOLOR color = D3DCOLOR_ARGB(255, 0, 0, 0);
     if (clearColor)
     {
-        const gl::FramebufferAttachment *attachment = frameBuffer->getFirstColorbuffer();
-        const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(attachment->getInternalFormat());
-        const gl::InternalFormat &actualFormatInfo = gl::GetInternalFormatInfo(attachment->getActualFormat());
+        const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(colorBuffer->getInternalFormat());
+        const gl::InternalFormat &actualFormatInfo = gl::GetInternalFormatInfo(colorBuffer->getActualFormat());
 
         color = D3DCOLOR_ARGB(gl::unorm<8>((formatInfo.alphaBits == 0 && actualFormatInfo.alphaBits > 0) ? 1.0f : clearParams.colorFClearValue.alpha),
                               gl::unorm<8>((formatInfo.redBits   == 0 && actualFormatInfo.redBits   > 0) ? 0.0f : clearParams.colorFClearValue.red),
@@ -2090,8 +2079,7 @@ gl::Error Renderer9::clear(const gl::ClearParameters &clearParams, const gl::Fra
 void Renderer9::markAllStateDirty()
 {
     mAppliedRenderTargetSerial = 0;
-    mAppliedDepthbufferSerial = 0;
-    mAppliedStencilbufferSerial = 0;
+    mAppliedDepthStencilSerial = 0;
     mDepthStencilInitialized = false;
     mRenderTargetDescInitialized = false;
 
@@ -2445,358 +2433,6 @@ gl::Error Renderer9::copyImage2DArray(gl::Framebuffer *framebuffer, const gl::Re
     return gl::Error(GL_INVALID_OPERATION);
 }
 
-gl::Error Renderer9::blitRect(const gl::Framebuffer *readFramebuffer, const gl::Rectangle &readRect,
-                              const gl::Framebuffer *drawFramebuffer, const gl::Rectangle &drawRect,
-                              const gl::Rectangle *scissor, bool blitRenderTarget,
-                              bool blitDepth, bool blitStencil, GLenum filter)
-{
-    ASSERT(filter == GL_NEAREST);
-
-    endScene();
-
-    if (blitRenderTarget)
-    {
-        gl::FramebufferAttachment *readBuffer = readFramebuffer->getColorbuffer(0);
-        ASSERT(readBuffer);
-
-        RenderTarget9 *readRenderTarget = NULL;
-        gl::Error error = d3d9::GetAttachmentRenderTarget(readBuffer, &readRenderTarget);
-        if (error.isError())
-        {
-            return error;
-        }
-        ASSERT(readRenderTarget);
-
-        gl::FramebufferAttachment *drawBuffer = drawFramebuffer->getColorbuffer(0);
-        ASSERT(drawBuffer);
-
-        RenderTarget9 *drawRenderTarget = NULL;
-        error = d3d9::GetAttachmentRenderTarget(drawBuffer, &drawRenderTarget);
-        if (error.isError())
-        {
-            return error;
-        }
-        ASSERT(drawRenderTarget);
-
-        // The getSurface calls do an AddRef so save them until after no errors are possible
-        IDirect3DSurface9* readSurface = readRenderTarget->getSurface();
-        ASSERT(readSurface);
-
-        IDirect3DSurface9* drawSurface = drawRenderTarget->getSurface();
-        ASSERT(drawSurface);
-
-        gl::Extents srcSize(readRenderTarget->getWidth(), readRenderTarget->getHeight(), 1);
-        gl::Extents dstSize(drawRenderTarget->getWidth(), drawRenderTarget->getHeight(), 1);
-
-        RECT srcRect;
-        srcRect.left = readRect.x;
-        srcRect.right = readRect.x + readRect.width;
-        srcRect.top = readRect.y;
-        srcRect.bottom = readRect.y + readRect.height;
-
-        RECT dstRect;
-        dstRect.left = drawRect.x;
-        dstRect.right = drawRect.x + drawRect.width;
-        dstRect.top = drawRect.y;
-        dstRect.bottom = drawRect.y + drawRect.height;
-
-        // Clip the rectangles to the scissor rectangle
-        if (scissor)
-        {
-            if (dstRect.left < scissor->x)
-            {
-                srcRect.left += (scissor->x - dstRect.left);
-                dstRect.left = scissor->x;
-            }
-            if (dstRect.top < scissor->y)
-            {
-                srcRect.top += (scissor->y - dstRect.top);
-                dstRect.top = scissor->y;
-            }
-            if (dstRect.right > scissor->x + scissor->width)
-            {
-                srcRect.right -= (dstRect.right - (scissor->x + scissor->width));
-                dstRect.right = scissor->x + scissor->width;
-            }
-            if (dstRect.bottom > scissor->y + scissor->height)
-            {
-                srcRect.bottom -= (dstRect.bottom - (scissor->y + scissor->height));
-                dstRect.bottom = scissor->y + scissor->height;
-            }
-        }
-
-        // Clip the rectangles to the destination size
-        if (dstRect.left < 0)
-        {
-            srcRect.left += -dstRect.left;
-            dstRect.left = 0;
-        }
-        if (dstRect.right > dstSize.width)
-        {
-            srcRect.right -= (dstRect.right - dstSize.width);
-            dstRect.right = dstSize.width;
-        }
-        if (dstRect.top < 0)
-        {
-            srcRect.top += -dstRect.top;
-            dstRect.top = 0;
-        }
-        if (dstRect.bottom > dstSize.height)
-        {
-            srcRect.bottom -= (dstRect.bottom - dstSize.height);
-            dstRect.bottom = dstSize.height;
-        }
-
-        // Clip the rectangles to the source size
-        if (srcRect.left < 0)
-        {
-            dstRect.left += -srcRect.left;
-            srcRect.left = 0;
-        }
-        if (srcRect.right > srcSize.width)
-        {
-            dstRect.right -= (srcRect.right - srcSize.width);
-            srcRect.right = srcSize.width;
-        }
-        if (srcRect.top < 0)
-        {
-            dstRect.top += -srcRect.top;
-            srcRect.top = 0;
-        }
-        if (srcRect.bottom > srcSize.height)
-        {
-            dstRect.bottom -= (srcRect.bottom - srcSize.height);
-            srcRect.bottom = srcSize.height;
-        }
-
-        HRESULT result = mDevice->StretchRect(readSurface, &srcRect, drawSurface, &dstRect, D3DTEXF_NONE);
-
-        SafeRelease(readSurface);
-        SafeRelease(drawSurface);
-
-        if (FAILED(result))
-        {
-            return gl::Error(GL_OUT_OF_MEMORY, "Internal blit failed, StretchRect returned 0x%X.", result);
-        }
-    }
-
-    if (blitDepth || blitStencil)
-    {
-        gl::FramebufferAttachment *readBuffer = readFramebuffer->getDepthOrStencilbuffer();
-        ASSERT(readBuffer);
-
-        RenderTarget9 *readDepthStencil = NULL;
-        gl::Error error = d3d9::GetAttachmentRenderTarget(readBuffer, &readDepthStencil);
-        if (error.isError())
-        {
-            return error;
-        }
-        ASSERT(readDepthStencil);
-
-        gl::FramebufferAttachment *drawBuffer = drawFramebuffer->getDepthOrStencilbuffer();
-        ASSERT(drawBuffer);
-
-        RenderTarget9 *drawDepthStencil = NULL;
-        error = d3d9::GetAttachmentRenderTarget(drawBuffer, &drawDepthStencil);
-        if (error.isError())
-        {
-            return error;
-        }
-        ASSERT(drawDepthStencil);
-
-        // The getSurface calls do an AddRef so save them until after no errors are possible
-        IDirect3DSurface9* readSurface = readDepthStencil->getSurface();
-        ASSERT(readDepthStencil);
-
-        IDirect3DSurface9* drawSurface = drawDepthStencil->getSurface();
-        ASSERT(drawDepthStencil);
-
-        HRESULT result = mDevice->StretchRect(readSurface, NULL, drawSurface, NULL, D3DTEXF_NONE);
-
-        SafeRelease(readSurface);
-        SafeRelease(drawSurface);
-
-        if (FAILED(result))
-        {
-            return gl::Error(GL_OUT_OF_MEMORY, "Internal blit failed, StretchRect returned 0x%X.", result);
-        }
-    }
-
-    return gl::Error(GL_NO_ERROR);
-}
-
-gl::Error Renderer9::readPixels(const gl::Framebuffer *framebuffer, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
-                                GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, uint8_t *pixels)
-{
-    ASSERT(pack.pixelBuffer.get() == NULL);
-
-    gl::FramebufferAttachment *colorbuffer = framebuffer->getColorbuffer(0);
-    ASSERT(colorbuffer);
-
-    RenderTarget9 *renderTarget = NULL;
-    gl::Error error = d3d9::GetAttachmentRenderTarget(colorbuffer, &renderTarget);
-    if (error.isError())
-    {
-        return error;
-    }
-    ASSERT(renderTarget);
-
-    IDirect3DSurface9 *surface = renderTarget->getSurface();
-    ASSERT(surface);
-
-    D3DSURFACE_DESC desc;
-    surface->GetDesc(&desc);
-
-    if (desc.MultiSampleType != D3DMULTISAMPLE_NONE)
-    {
-        UNIMPLEMENTED();   // FIXME: Requires resolve using StretchRect into non-multisampled render target
-        SafeRelease(surface);
-        return gl::Error(GL_OUT_OF_MEMORY, "ReadPixels is unimplemented for multisampled framebuffer attachments.");
-    }
-
-    HRESULT result;
-    IDirect3DSurface9 *systemSurface = NULL;
-    bool directToPixels = !pack.reverseRowOrder && pack.alignment <= 4 && getShareHandleSupport() &&
-                          x == 0 && y == 0 && UINT(width) == desc.Width && UINT(height) == desc.Height &&
-                          desc.Format == D3DFMT_A8R8G8B8 && format == GL_BGRA_EXT && type == GL_UNSIGNED_BYTE;
-    if (directToPixels)
-    {
-        // Use the pixels ptr as a shared handle to write directly into client's memory
-        result = mDevice->CreateOffscreenPlainSurface(desc.Width, desc.Height, desc.Format,
-                                                      D3DPOOL_SYSTEMMEM, &systemSurface, reinterpret_cast<void**>(&pixels));
-        if (FAILED(result))
-        {
-            // Try again without the shared handle
-            directToPixels = false;
-        }
-    }
-
-    if (!directToPixels)
-    {
-        result = mDevice->CreateOffscreenPlainSurface(desc.Width, desc.Height, desc.Format,
-                                                      D3DPOOL_SYSTEMMEM, &systemSurface, NULL);
-        if (FAILED(result))
-        {
-            ASSERT(result == D3DERR_OUTOFVIDEOMEMORY || result == E_OUTOFMEMORY);
-            SafeRelease(surface);
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal texture for ReadPixels.");
-        }
-    }
-
-    result = mDevice->GetRenderTargetData(surface, systemSurface);
-    SafeRelease(surface);
-
-    if (FAILED(result))
-    {
-        SafeRelease(systemSurface);
-
-        // It turns out that D3D will sometimes produce more error
-        // codes than those documented.
-        if (d3d9::isDeviceLostError(result))
-        {
-            notifyDeviceLost();
-        }
-        else
-        {
-            UNREACHABLE();
-        }
-
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to read internal render target data.");
-    }
-
-    if (directToPixels)
-    {
-        SafeRelease(systemSurface);
-        return gl::Error(GL_NO_ERROR);
-    }
-
-    RECT rect;
-    rect.left = gl::clamp(x, 0L, static_cast<LONG>(desc.Width));
-    rect.top = gl::clamp(y, 0L, static_cast<LONG>(desc.Height));
-    rect.right = gl::clamp(x + width, 0L, static_cast<LONG>(desc.Width));
-    rect.bottom = gl::clamp(y + height, 0L, static_cast<LONG>(desc.Height));
-
-    D3DLOCKED_RECT lock;
-    result = systemSurface->LockRect(&lock, &rect, D3DLOCK_READONLY);
-
-    if (FAILED(result))
-    {
-        UNREACHABLE();
-        SafeRelease(systemSurface);
-
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to lock internal render target.");
-    }
-
-    uint8_t *source;
-    int inputPitch;
-    if (pack.reverseRowOrder)
-    {
-        source = reinterpret_cast<uint8_t*>(lock.pBits) + lock.Pitch * (rect.bottom - rect.top - 1);
-        inputPitch = -lock.Pitch;
-    }
-    else
-    {
-        source = reinterpret_cast<uint8_t*>(lock.pBits);
-        inputPitch = lock.Pitch;
-    }
-
-    const d3d9::D3DFormat &d3dFormatInfo = d3d9::GetD3DFormatInfo(desc.Format);
-    const gl::InternalFormat &sourceFormatInfo = gl::GetInternalFormatInfo(d3dFormatInfo.internalFormat);
-    if (sourceFormatInfo.format == format && sourceFormatInfo.type == type)
-    {
-        // Direct copy possible
-        for (int y = 0; y < rect.bottom - rect.top; y++)
-        {
-            memcpy(pixels + y * outputPitch, source + y * inputPitch, (rect.right - rect.left) * sourceFormatInfo.pixelBytes);
-        }
-    }
-    else
-    {
-        const d3d9::D3DFormat &sourceD3DFormatInfo = d3d9::GetD3DFormatInfo(desc.Format);
-        ColorCopyFunction fastCopyFunc = sourceD3DFormatInfo.getFastCopyFunction(format, type);
-
-        const gl::FormatType &destFormatTypeInfo = gl::GetFormatTypeInfo(format, type);
-        const gl::InternalFormat &destFormatInfo = gl::GetInternalFormatInfo(destFormatTypeInfo.internalFormat);
-
-        if (fastCopyFunc)
-        {
-            // Fast copy is possible through some special function
-            for (int y = 0; y < rect.bottom - rect.top; y++)
-            {
-                for (int x = 0; x < rect.right - rect.left; x++)
-                {
-                    uint8_t *dest = pixels + y * outputPitch + x * destFormatInfo.pixelBytes;
-                    const uint8_t *src = source + y * inputPitch + x * sourceFormatInfo.pixelBytes;
-
-                    fastCopyFunc(src, dest);
-                }
-            }
-        }
-        else
-        {
-            uint8_t temp[sizeof(gl::ColorF)];
-            for (int y = 0; y < rect.bottom - rect.top; y++)
-            {
-                for (int x = 0; x < rect.right - rect.left; x++)
-                {
-                    uint8_t *dest = pixels + y * outputPitch + x * destFormatInfo.pixelBytes;
-                    const uint8_t *src = source + y * inputPitch + x * sourceFormatInfo.pixelBytes;
-
-                    // readFunc and writeFunc will be using the same type of color, CopyTexImage
-                    // will not allow the copy otherwise.
-                    sourceD3DFormatInfo.colorReadFunction(src, temp);
-                    destFormatTypeInfo.colorWriteFunction(temp, dest);
-                }
-            }
-        }
-    }
-
-    systemSurface->UnlockRect();
-    SafeRelease(systemSurface);
-
-    return gl::Error(GL_NO_ERROR);
-}
-
 gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GLsizei samples, RenderTarget **outRT)
 {
     const d3d9::TextureFormat &d3d9FormatInfo = d3d9::GetTextureFormatInfo(format);
@@ -2882,6 +2518,11 @@ DefaultAttachmentImpl *Renderer9::createDefaultAttachment(GLenum type, egl::Surf
         UNREACHABLE();
         return NULL;
     }
+}
+
+FramebufferImpl *Renderer9::createFramebuffer()
+{
+    return new Framebuffer9(this);
 }
 
 ShaderImpl *Renderer9::createShader(const gl::Data &data, GLenum type)

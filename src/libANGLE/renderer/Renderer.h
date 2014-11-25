@@ -54,6 +54,7 @@ class TextureImpl;
 class TransformFeedbackImpl;
 class RenderbufferImpl;
 class DefaultAttachmentImpl;
+class FramebufferImpl;
 struct TranslatedIndexData;
 struct Workarounds;
 class SwapChain;
@@ -88,20 +89,6 @@ class Renderer
                                    const GLvoid *indices, GLsizei instances,
                                    const RangeUI &indexRange) = 0;
 
-    virtual gl::Error clear(const gl::Data &data, GLbitfield mask) = 0;
-    virtual gl::Error clearBufferfv(const gl::Data &data, GLenum buffer, GLint drawbuffer, const GLfloat *values) = 0;
-    virtual gl::Error clearBufferuiv(const gl::Data &data, GLenum buffer, GLint drawbuffer, const GLuint *values) = 0;
-    virtual gl::Error clearBufferiv(const gl::Data &data, GLenum buffer, GLint drawbuffer, const GLint *values) = 0;
-    virtual gl::Error clearBufferfi(const gl::Data &data, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil) = 0;
-
-    virtual gl::Error readPixels(const gl::Data &data, GLint x, GLint y, GLsizei width, GLsizei height,
-                                 GLenum format, GLenum type, GLsizei *bufSize, void* pixels) = 0;
-
-    virtual gl::Error blitFramebuffer(const gl::Data &data,
-                                      GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1,
-                                      GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
-                                      GLbitfield mask, GLenum filter) = 0;
-
     // TODO(jmadill): caps? and virtual for egl::Display
     virtual bool getShareHandleSupport() const = 0;
     virtual bool getPostSubBufferSupport() const = 0;
@@ -115,6 +102,7 @@ class Renderer
 
     // Framebuffer creation
     virtual DefaultAttachmentImpl *createDefaultAttachment(GLenum type, egl::Surface *surface) = 0;
+    virtual FramebufferImpl *createFramebuffer() = 0;
 
     // Texture creation
     virtual TextureImpl *createTexture(GLenum target) = 0;
