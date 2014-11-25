@@ -2424,6 +2424,12 @@ DefaultAttachmentImpl *Renderer11::createDefaultAttachment(GLenum type, egl::Sur
     }
 }
 
+FramebufferImpl *Renderer11::createFramebuffer()
+{
+    UNIMPLEMENTED();
+    return NULL;
+}
+
 ShaderImpl *Renderer11::createShader(const gl::Data &data, GLenum type)
 {
     return new ShaderD3D(data, type, this);

@@ -9,7 +9,14 @@
 #ifndef LIBANGLE_RENDERER_FRAMBUFFERIMPL_H_
 #define LIBANGLE_RENDERER_FRAMBUFFERIMPL_H_
 
+#include "libANGLE/Error.h"
+
 #include "angle_gl.h"
+
+namespace gl
+{
+class FramebufferAttachment;
+}
 
 namespace rx
 {
@@ -24,6 +31,27 @@ class DefaultAttachmentImpl
     virtual GLenum getInternalFormat() const = 0;
     virtual GLenum getActualFormat() const = 0;
     virtual GLsizei getSamples() const = 0;
+};
+
+class FramebufferImpl
+{
+  public:
+    virtual ~FramebufferImpl() {};
+
+    virtual void setColorAttachment(size_t index, const gl::FramebufferAttachment *attachment) = 0;
+    virtual void setDepthttachment(const gl::FramebufferAttachment *attachment) = 0;
+    virtual void setStencilAttachment(const gl::FramebufferAttachment *attachment) = 0;
+    virtual void setDepthStencilAttachment(const gl::FramebufferAttachment *attachment) = 0;
+
+    virtual void setDrawBuffers(size_t count, const GLenum *buffers) = 0;
+
+    virtual gl::Error invalidate(size_t count, const GLenum *attachments) = 0;
+    virtual gl::Error invalidateSub(size_t count, const GLenum *attachments, GLint x, GLint y, GLsizei width, GLsizei height) = 0;
+
+    virtual GLenum getPreferredReadFormat() const = 0;
+    virtual GLenum getPreferredReadType() const = 0;
+
+    virtual GLenum getStatus() const = 0;
 };
 
 }

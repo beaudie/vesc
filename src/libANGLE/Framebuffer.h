@@ -24,6 +24,7 @@ namespace rx
 class RenderbufferImpl;
 struct Workarounds;
 class DefaultAttachmentImpl;
+class FramebufferImpl;
 }
 
 namespace gl
@@ -42,7 +43,7 @@ typedef std::vector<FramebufferAttachment *> ColorbufferInfo;
 class ANGLE_EXPORT Framebuffer
 {
   public:
-    Framebuffer(GLuint id);
+    Framebuffer(rx::FramebufferImpl *impl, GLuint id);
     virtual ~Framebuffer();
 
     GLuint id() const { return mId; }
@@ -86,6 +87,7 @@ class ANGLE_EXPORT Framebuffer
     ColorbufferInfo getColorbuffersForRender(const rx::Workarounds &workarounds) const;
 
   protected:
+    rx::FramebufferImpl *mImpl;
     GLuint mId;
 
     FramebufferAttachment *mColorbuffers[IMPLEMENTATION_MAX_DRAW_BUFFERS];
@@ -104,8 +106,8 @@ class ANGLE_EXPORT Framebuffer
 class DefaultFramebuffer : public Framebuffer
 {
   public:
-    DefaultFramebuffer(rx::DefaultAttachmentImpl *colorAttachment, rx::DefaultAttachmentImpl *depthAttachment,
-                       rx::DefaultAttachmentImpl *stencilAttachment);
+    DefaultFramebuffer(rx::FramebufferImpl *impl, rx::DefaultAttachmentImpl *colorAttachment,
+                       rx::DefaultAttachmentImpl *depthAttachment, rx::DefaultAttachmentImpl *stencilAttachment);
 
     GLenum completeness(const gl::Data &data) const override;
     virtual FramebufferAttachment *getAttachment(GLenum attachment) const;
