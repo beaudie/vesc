@@ -171,10 +171,8 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform, void *native_disp
         return EGL_NO_DISPLAY;
     }
 
-    EGLint platformType = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
     bool majorVersionSpecified = false;
     bool minorVersionSpecified = false;
-    bool requestedWARP = false;
 
     if (attrib_list)
     {
@@ -210,7 +208,6 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform, void *native_disp
                     SetGlobalError(Error(EGL_SUCCESS));
                     return EGL_NO_DISPLAY;
                 }
-                platformType = curAttrib[1];
                 break;
 
               case EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE:
@@ -227,7 +224,7 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform, void *native_disp
                 }
                 break;
 
-              case EGL_PLATFORM_ANGLE_USE_WARP_ANGLE:
+              case EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE:
                 if (!clientExtensions.platformANGLED3D)
                 {
                     SetGlobalError(Error(EGL_SUCCESS));
@@ -236,16 +233,16 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform, void *native_disp
 
                 switch (curAttrib[1])
                 {
-                  case EGL_FALSE:
-                  case EGL_TRUE:
+                  case EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE:
+                  case EGL_PLATFORM_ANGLE_DEVICE_TYPE_SOFTWARE_ANGLE:
+                  case EGL_PLATFORM_ANGLE_DEVICE_TYPE_REFERENCE_ANGLE:
+                  case EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE:
                     break;
 
                   default:
                     SetGlobalError(Error(EGL_SUCCESS));
                     return EGL_NO_DISPLAY;
                 }
-
-                requestedWARP = (curAttrib[1] == EGL_TRUE);
                 break;
 
               default:
@@ -255,12 +252,6 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform, void *native_disp
     }
 
     if (!majorVersionSpecified && minorVersionSpecified)
-    {
-        SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
-        return EGL_NO_DISPLAY;
-    }
-
-    if (platformType != EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE && requestedWARP)
     {
         SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
         return EGL_NO_DISPLAY;

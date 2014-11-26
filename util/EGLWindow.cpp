@@ -20,7 +20,7 @@ EGLPlatformParameters::EGLPlatformParameters()
     : renderer(EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE),
       majorVersion(EGL_DONT_CARE),
       minorVersion(EGL_DONT_CARE),
-      useWarp(EGL_FALSE)
+      deviceType(EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE)
 {
 }
 
@@ -28,7 +28,7 @@ EGLPlatformParameters::EGLPlatformParameters(EGLint renderer)
     : renderer(renderer),
       majorVersion(EGL_DONT_CARE),
       minorVersion(EGL_DONT_CARE),
-      useWarp(EGL_FALSE)
+      deviceType(EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE)
 {
 }
 
@@ -36,7 +36,7 @@ EGLPlatformParameters::EGLPlatformParameters(EGLint renderer, EGLint majorVersio
     : renderer(renderer),
       majorVersion(majorVersion),
       minorVersion(minorVersion),
-      useWarp(useWarp)
+      deviceType(useWarp)
 {
 }
 
@@ -103,7 +103,7 @@ bool EGLWindow::initializeGL(OSWindow *osWindow)
         EGL_PLATFORM_ANGLE_TYPE_ANGLE,              mPlatform.renderer,
         EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE, mPlatform.majorVersion,
         EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE, mPlatform.minorVersion,
-        EGL_PLATFORM_ANGLE_USE_WARP_ANGLE,          mPlatform.useWarp,
+        EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE,       mPlatform.deviceType,
         EGL_NONE,
     };
 
