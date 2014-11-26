@@ -499,8 +499,10 @@ gl::Error TextureStorage11::setData(const gl::ImageIndex &index, Image *image, c
     UINT bufferRowPitch = outputPixelSize * width;
     UINT bufferDepthPitch = bufferRowPitch * height;
 
-    MemoryBuffer conversionBuffer;
-    if (!conversionBuffer.resize(bufferDepthPitch * depth))
+    MemoryBuffer *conversionBuffer = mRenderer->getScratchMemoryBuffer();
+
+    size_t neededSize = bufferDepthPitch * depth;
+    if (conversionBuffer->size() < neededSize && !conversionBuffer->resize(neededSize))
     {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal buffer.");
     }
@@ -509,7 +511,7 @@ gl::Error TextureStorage11::setData(const gl::ImageIndex &index, Image *image, c
     LoadImageFunction loadFunction = d3d11Format.loadFunctions.at(type);
     loadFunction(width, height, depth,
                  pixelData, srcRowPitch, srcDepthPitch,
-                 conversionBuffer.data(), bufferRowPitch, bufferDepthPitch);
+                 conversionBuffer->data(), bufferRowPitch, bufferDepthPitch);
 
     ID3D11DeviceContext *immediateContext = mRenderer->getDeviceContext();
 
@@ -526,13 +528,13 @@ gl::Error TextureStorage11::setData(const gl::ImageIndex &index, Image *image, c
         destD3DBox.back = 1;
 
         immediateContext->UpdateSubresource(resource, destSubresource,
-                                            &destD3DBox, conversionBuffer.data(),
+                                            &destD3DBox, conversionBuffer->data(),
                                             bufferRowPitch, bufferDepthPitch);
     }
     else
     {
         immediateContext->UpdateSubresource(resource, destSubresource,
-                                            NULL, conversionBuffer.data(),
+                                            NULL, conversionBuffer->data(),
                                             bufferRowPitch, bufferDepthPitch);
     }
 

@@ -17,13 +17,18 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/d3d/IndexDataManager.h"
+#include "libANGLE/renderer/d3d/MemoryBuffer.h"
 
 namespace rx
 {
 
+const int ScratchMemoryBufferLifetime = 1000;
+
 RendererD3D::RendererD3D(egl::Display *display)
     : mDisplay(display),
-      mDeviceLost(false)
+      mDeviceLost(false),
+      mScratchMemoryBuffer(NULL),
+      mScratchMemoryBufferResetCounter(0)
 {
 }
 
@@ -34,6 +39,8 @@ RendererD3D::~RendererD3D()
 
 void RendererD3D::cleanup()
 {
+    SafeDelete(mScratchMemoryBuffer);
+
     for (auto &incompleteTexture : mIncompleteTextures)
     {
         incompleteTexture.second.set(NULL);
@@ -809,6 +816,26 @@ void RendererD3D::notifyDeviceLost()
 {
     mDeviceLost = true;
     mDisplay->notifyDeviceLost();
+}
+
+MemoryBuffer *RendererD3D::getScratchMemoryBuffer()
+{
+    // Have a fallback plan where we reset the buffer every so often to ensure
+    // we don't have a degenerate case where we are stuck hogging memory.
+    if (mScratchMemoryBufferResetCounter == 0)
+    {
+        SafeDelete(mScratchMemoryBuffer);
+    }
+
+    if (mScratchMemoryBuffer == NULL)
+    {
+        mScratchMemoryBuffer = new MemoryBuffer;
+        mScratchMemoryBufferResetCounter = ScratchMemoryBufferLifetime;
+    }
+
+    mScratchMemoryBufferResetCounter--;
+
+    return mScratchMemoryBuffer;
 }
 
 }
