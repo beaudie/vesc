@@ -25,15 +25,15 @@ class Texture;
 
 namespace rx
 {
-class TextureStorage;
-class VertexBuffer;
+class Image;
 class IndexBuffer;
+class MemoryBuffer;
+class RenderTarget;
 class ShaderExecutable;
 class SwapChain;
-class RenderTarget;
-class Image;
 class TextureStorage;
 class UniformStorage;
+class VertexBuffer;
 
 class RendererD3D : public Renderer
 {
@@ -154,6 +154,8 @@ class RendererD3D : public Renderer
 
     void notifyDeviceLost() override;
 
+    gl::Error getScratchMemoryBuffer(size_t requestedSize, MemoryBuffer **bufferOut);
+
   protected:
     virtual gl::Error drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive) = 0;
     virtual gl::Error drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
@@ -195,6 +197,8 @@ class RendererD3D : public Renderer
     gl::Texture *getIncompleteTexture(GLenum type);
 
     gl::TextureMap mIncompleteTextures;
+    MemoryBuffer *mScratchMemoryBuffer;
+    unsigned int mScratchMemoryBufferResetCounter;
 };
 
 }
