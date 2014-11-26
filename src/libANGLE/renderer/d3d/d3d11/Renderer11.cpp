@@ -218,8 +218,29 @@ Renderer11::Renderer11(egl::Display *display, EGLNativeDisplayType hDc, const eg
         mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_9_3);
     }
 
-    mDriverType = (attributes.get(EGL_PLATFORM_ANGLE_USE_WARP_ANGLE, EGL_FALSE) == EGL_TRUE) ? D3D_DRIVER_TYPE_WARP
-                                                                                             : D3D_DRIVER_TYPE_HARDWARE;
+    EGLint requestedDeviceType = attributes.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE,
+                                                EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE);
+    switch (requestedDeviceType)
+    {
+      case EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE:
+        mDriverType = D3D_DRIVER_TYPE_HARDWARE;
+        break;
+
+      case EGL_PLATFORM_ANGLE_DEVICE_TYPE_SOFTWARE_ANGLE:
+        mDriverType = D3D_DRIVER_TYPE_WARP;
+        break;
+
+      case EGL_PLATFORM_ANGLE_DEVICE_TYPE_REFERENCE_ANGLE:
+        mDriverType = D3D_DRIVER_TYPE_REFERENCE;
+        break;
+
+      case EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE:
+        mDriverType = D3D_DRIVER_TYPE_NULL;
+        break;
+
+      default:
+        UNREACHABLE();
+    }
 }
 
 Renderer11::~Renderer11()
