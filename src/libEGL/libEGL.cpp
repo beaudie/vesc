@@ -133,10 +133,8 @@ EGLDisplay __stdcall eglGetPlatformDisplayEXT(EGLenum platform, void *native_dis
     }
 #endif
 
-    EGLint platformType = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
     bool majorVersionSpecified = false;
     bool minorVersionSpecified = false;
-    bool requestedWARP = false;
 
     if (attrib_list)
     {
@@ -172,7 +170,6 @@ EGLDisplay __stdcall eglGetPlatformDisplayEXT(EGLenum platform, void *native_dis
                     recordError(egl::Error(EGL_SUCCESS));
                     return EGL_NO_DISPLAY;
                 }
-                platformType = curAttrib[1];
                 break;
 
               case EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE:
@@ -189,7 +186,7 @@ EGLDisplay __stdcall eglGetPlatformDisplayEXT(EGLenum platform, void *native_dis
                 }
                 break;
 
-              case EGL_PLATFORM_ANGLE_USE_WARP_ANGLE:
+              case EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE:
                 if (!egl::Display::supportsPlatformD3D())
                 {
                     recordError(egl::Error(EGL_SUCCESS));
@@ -198,16 +195,15 @@ EGLDisplay __stdcall eglGetPlatformDisplayEXT(EGLenum platform, void *native_dis
 
                 switch (curAttrib[1])
                 {
-                  case EGL_FALSE:
-                  case EGL_TRUE:
+                  case EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE:
+                  case EGL_PLATFORM_ANGLE_DEVICE_TYPE_SOFTWARE_ANGLE:
+                  case EGL_PLATFORM_ANGLE_DEVICE_TYPE_REFERENCE_ANGLE:
                     break;
 
                   default:
                     recordError(egl::Error(EGL_SUCCESS));
                     return EGL_NO_DISPLAY;
                 }
-
-                requestedWARP = (curAttrib[1] == EGL_TRUE);
                 break;
 
               default:
@@ -217,12 +213,6 @@ EGLDisplay __stdcall eglGetPlatformDisplayEXT(EGLenum platform, void *native_dis
     }
 
     if (!majorVersionSpecified && minorVersionSpecified)
-    {
-        recordError(egl::Error(EGL_BAD_ATTRIBUTE));
-        return EGL_NO_DISPLAY;
-    }
-
-    if (platformType != EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE && requestedWARP)
     {
         recordError(egl::Error(EGL_BAD_ATTRIBUTE));
         return EGL_NO_DISPLAY;
