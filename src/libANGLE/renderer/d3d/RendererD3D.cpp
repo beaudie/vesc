@@ -17,13 +17,17 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/d3d/IndexDataManager.h"
+#include "libANGLE/renderer/d3d/MemoryBuffer.h"
 
 namespace rx
 {
 
+const int ScratchMemoryBufferLifetime = 1000;
+
 RendererD3D::RendererD3D(egl::Display *display)
     : mDisplay(display),
-      mDeviceLost(false)
+      mDeviceLost(false),
+      mScratchMemoryBufferResetCounter(0)
 {
 }
 
@@ -34,6 +38,7 @@ RendererD3D::~RendererD3D()
 
 void RendererD3D::cleanup()
 {
+    mScratchMemoryBuffer.resize(0);
     for (auto &incompleteTexture : mIncompleteTextures)
     {
         incompleteTexture.second.set(NULL);
@@ -809,6 +814,34 @@ void RendererD3D::notifyDeviceLost()
 {
     mDeviceLost = true;
     mDisplay->notifyDeviceLost();
+}
+
+gl::Error RendererD3D::getScratchMemoryBuffer(size_t requestedSize, MemoryBuffer **bufferOut)
+{
+    // Have a fallback plan where we reset the buffer every so often to ensure
+    // we don't have a degenerate case where we are stuck hogging memory.
+    if (mScratchMemoryBufferResetCounter <= 0)
+    {
+        mScratchMemoryBuffer.resize(0);
+    }
+
+    if (mScratchMemoryBuffer.size() < requestedSize)
+    {
+        // Reset to 0 size to avoid the internal copy in MemoryBuffer
+        mScratchMemoryBuffer.resize(0);
+        if (!mScratchMemoryBuffer.resize(requestedSize))
+        {
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal buffer.");
+        }
+        mScratchMemoryBufferResetCounter = ScratchMemoryBufferLifetime;
+    }
+    else if (mScratchMemoryBuffer.size() > requestedSize)
+    {
+        mScratchMemoryBufferResetCounter--;
+    }
+
+    *bufferOut = &mScratchMemoryBuffer;
+    return gl::Error(GL_NO_ERROR);
 }
 
 }
