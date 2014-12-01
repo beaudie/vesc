@@ -13,6 +13,11 @@
 
 #include <vector>
 
+namespace gl
+{
+struct ClearParameters;
+}
+
 namespace rx
 {
 class RenderTarget;
@@ -55,13 +60,26 @@ class FramebufferD3D : public FramebufferImpl
     gl::Error invalidate(size_t count, const GLenum *attachments) override;
     gl::Error invalidateSub(size_t count, const GLenum *attachments, const gl::Rectangle &area) override;
 
+    gl::Error clear(const gl::State &state, GLbitfield mask) override;
+    gl::Error clearBufferfv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLfloat *values) override;
+    gl::Error clearBufferuiv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLuint *values) override;
+    gl::Error clearBufferiv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLint *values) override;
+    gl::Error clearBufferfi(const gl::State &state, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil) override;
+
     GLenum getStatus() const override;
 
   protected:
     std::vector<const gl::FramebufferAttachment*> mColorBuffers;
+    const gl::FramebufferAttachment *mDepthbuffer;
+    const gl::FramebufferAttachment *mStencilbuffer;
+
+    std::vector<GLenum> mDrawBuffers;
 
   private:
     RendererD3D *const mRenderer;
+
+    virtual gl::Error clear(const gl::State &state, const gl::ClearParameters &clearParams) = 0;
+
 };
 
 }
