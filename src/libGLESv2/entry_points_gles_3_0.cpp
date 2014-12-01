@@ -1785,7 +1785,10 @@ void GL_APIENTRY ClearBufferiv(GLenum buffer, GLint drawbuffer, const GLint* val
             return;
         }
 
-        Error error = context->clearBufferiv(buffer, drawbuffer, value);
+        Framebuffer *framebufferObject = context->getState().getDrawFramebuffer();
+        ASSERT(framebufferObject);
+
+        Error error = framebufferObject->clearBufferiv(context->getState(), buffer, drawbuffer, value);
         if (error.isError())
         {
             context->recordError(error);
@@ -1822,7 +1825,10 @@ void GL_APIENTRY ClearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint* v
             return;
         }
 
-        Error error = context->clearBufferuiv(buffer, drawbuffer, value);
+        Framebuffer *framebufferObject = context->getState().getDrawFramebuffer();
+        ASSERT(framebufferObject);
+
+        Error error = framebufferObject->clearBufferuiv(context->getState(), buffer, drawbuffer, value);
         if (error.isError())
         {
             context->recordError(error);
@@ -1867,7 +1873,10 @@ void GL_APIENTRY ClearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat* v
             return;
         }
 
-        Error error = context->clearBufferfv(buffer, drawbuffer, value);
+        Framebuffer *framebufferObject = context->getState().getDrawFramebuffer();
+        ASSERT(framebufferObject);
+
+        Error error = framebufferObject->clearBufferfv(context->getState(), buffer, drawbuffer, value);
         if (error.isError())
         {
             context->recordError(error);
@@ -1904,7 +1913,10 @@ void GL_APIENTRY ClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, G
             return;
         }
 
-        Error error = context->clearBufferfi(buffer, drawbuffer, depth, stencil);
+        Framebuffer *framebufferObject = context->getState().getDrawFramebuffer();
+        ASSERT(framebufferObject);
+
+        Error error = framebufferObject->clearBufferfi(context->getState(), buffer, drawbuffer, depth, stencil);
         if (error.isError())
         {
             context->recordError(error);
