@@ -89,28 +89,33 @@ void FramebufferD3D::setColorAttachment(size_t index, const gl::FramebufferAttac
 {
     ASSERT(index < mColorBuffers.size());
     mColorBuffers[index] = attachment;
+    updateRenderColorBuffers();
 }
 
 void FramebufferD3D::setDepthttachment(const gl::FramebufferAttachment *attachment)
 {
     mDepthbuffer = attachment;
+    updateRenderColorBuffers();
 }
 
 void FramebufferD3D::setStencilAttachment(const gl::FramebufferAttachment *attachment)
 {
     mStencilbuffer = attachment;
+    updateRenderColorBuffers();
 }
 
 void FramebufferD3D::setDepthStencilAttachment(const gl::FramebufferAttachment *attachment)
 {
     mDepthbuffer = attachment;
     mStencilbuffer = attachment;
+    updateRenderColorBuffers();
 }
 
 void FramebufferD3D::setDrawBuffers(size_t count, const GLenum *buffers)
 {
     std::copy_n(buffers, count, mDrawBuffers.begin());
     std::fill(mDrawBuffers.begin() + count, mDrawBuffers.end(), GL_NONE);
+    updateRenderColorBuffers();
 }
 
 void FramebufferD3D::setReadBuffer(GLenum buffer)
@@ -310,6 +315,33 @@ GLenum FramebufferD3D::getStatus() const
     }
 
     return GL_FRAMEBUFFER_COMPLETE;
+}
+
+const ColorbufferInfoVector &FramebufferD3D::getColorbuffersForRender() const
+{
+    return mRenderColorBuffers;
+}
+
+void FramebufferD3D::updateRenderColorBuffers()
+{
+    bool mrtPerfWorkaround = mRenderer->getWorkarounds().mrtPerfWorkaround;
+
+    mRenderColorBuffers.clear();
+    for (size_t colorAttachment = 0; colorAttachment < mColorBuffers.size(); ++colorAttachment)
+    {
+        GLenum drawBufferState = mDrawBuffers[colorAttachment];
+        const gl::FramebufferAttachment *colorbuffer = mColorBuffers[colorAttachment];
+
+        if (colorbuffer != NULL && drawBufferState != GL_NONE)
+        {
+            ASSERT(drawBufferState == GL_BACK || drawBufferState == (GL_COLOR_ATTACHMENT0_EXT + colorAttachment));
+            mRenderColorBuffers.push_back(colorbuffer);
+        }
+        else if (!mrtPerfWorkaround)
+        {
+            mRenderColorBuffers.push_back(NULL);
+        }
+    }
 }
 
 }

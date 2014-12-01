@@ -25,6 +25,8 @@ namespace rx
 class RenderTarget;
 class RendererD3D;
 
+typedef std::vector<const gl::FramebufferAttachment *> ColorbufferInfoVector;
+
 class DefaultAttachmentD3D : public DefaultAttachmentImpl
 {
   public:
@@ -77,6 +79,11 @@ class FramebufferD3D : public FramebufferImpl
 
     GLenum getStatus() const override;
 
+    // Use this method to retrieve the color buffer map when doing rendering.
+    // It will apply a workaround for poor shader performance on some systems
+    // by compacting the list to skip NULL values.
+    const ColorbufferInfoVector &getColorbuffersForRender() const;
+
   protected:
     std::vector<const gl::FramebufferAttachment*> mColorBuffers;
     const gl::FramebufferAttachment *mDepthbuffer;
@@ -87,6 +94,9 @@ class FramebufferD3D : public FramebufferImpl
 
   private:
     RendererD3D *const mRenderer;
+
+    void updateRenderColorBuffers();
+    ColorbufferInfoVector mRenderColorBuffers;
 
     virtual gl::Error clear(const gl::State &state, const gl::ClearParameters &clearParams) = 0;
 
