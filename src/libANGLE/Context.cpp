@@ -1283,62 +1283,6 @@ bool Context::getIndexedQueryParameterInfo(GLenum target, GLenum *type, unsigned
     return false;
 }
 
-Error Context::clear(GLbitfield mask)
-{
-    if (mState.isRasterizerDiscardEnabled())
-    {
-        return Error(GL_NO_ERROR);
-    }
-
-    return mRenderer->clear(getData(), mask);
-}
-
-Error Context::clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *values)
-{
-    if (mState.isRasterizerDiscardEnabled())
-    {
-        return Error(GL_NO_ERROR);
-    }
-
-    return mRenderer->clearBufferfv(getData(), buffer, drawbuffer, values);
-}
-
-Error Context::clearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *values)
-{
-    if (mState.isRasterizerDiscardEnabled())
-    {
-        return Error(GL_NO_ERROR);
-    }
-
-    return mRenderer->clearBufferuiv(getData(), buffer, drawbuffer, values);
-}
-
-Error Context::clearBufferiv(GLenum buffer, GLint drawbuffer, const GLint *values)
-{
-    if (mState.isRasterizerDiscardEnabled())
-    {
-        return Error(GL_NO_ERROR);
-    }
-
-    return mRenderer->clearBufferiv(getData(), buffer, drawbuffer, values);
-}
-
-Error Context::clearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil)
-{
-    if (mState.isRasterizerDiscardEnabled())
-    {
-        return Error(GL_NO_ERROR);
-    }
-
-    return mRenderer->clearBufferfi(getData(), buffer, drawbuffer, depth, stencil);
-}
-
-Error Context::readPixels(GLint x, GLint y, GLsizei width, GLsizei height,
-                          GLenum format, GLenum type, GLsizei *bufSize, void* pixels)
-{
-    return mRenderer->readPixels(getData(), x, y, width, height, format, type, bufSize, pixels);
-}
-
 Error Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instances)
 {
     return mRenderer->drawArrays(getData(), mode, first, count, instances);
@@ -1658,14 +1602,6 @@ const std::string &Context::getExtensionString(size_t idx) const
 size_t Context::getExtensionStringCount() const
 {
     return mExtensionStrings.size();
-}
-
-Error Context::blitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1,
-                               GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
-                               GLbitfield mask, GLenum filter)
-{
-    return mRenderer->blitFramebuffer(getData(), srcX0, srcY0, srcX1, srcY1,
-                                      dstX0, dstY0, dstX1, dstY1, mask, filter);
 }
 
 void Context::releaseShaderCompiler()

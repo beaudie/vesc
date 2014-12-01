@@ -12,11 +12,20 @@
 #include "libANGLE/renderer/FramebufferImpl.h"
 
 #include <vector>
+#include <cstdint>
+
+namespace gl
+{
+struct ClearParameters;
+struct PixelPackState;
+}
 
 namespace rx
 {
 class RenderTarget;
 class RendererD3D;
+
+typedef std::vector<const gl::FramebufferAttachment *> ColorbufferInfoVector;
 
 class DefaultAttachmentD3D : public DefaultAttachmentImpl
 {
@@ -54,13 +63,48 @@ class FramebufferD3D : public FramebufferImpl
     gl::Error invalidate(size_t count, const GLenum *attachments) override;
     gl::Error invalidate(size_t count, const GLenum *attachments, const gl::Rectangle &area) override;
 
+    gl::Error clear(const gl::State &state, GLbitfield mask) override;
+    gl::Error clearBufferfv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLfloat *values) override;
+    gl::Error clearBufferuiv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLuint *values) override;
+    gl::Error clearBufferiv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLint *values) override;
+    gl::Error clearBufferfi(const gl::State &state, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil) override;
+
+    GLenum getPreferredReadFormat() const override;
+    GLenum getPreferredReadType() const override;
+    gl::Error readPixels(const gl::State &state, const gl::Rectangle &area, GLenum format, GLenum type, GLvoid *pixels) const override;
+
+    gl::Error blit(const gl::State &state, const gl::Rectangle &sourceArea, const gl::Rectangle &destArea,
+                   GLbitfield mask, GLenum filter, const gl::Framebuffer *sourceFramebuffer) override;
+
     GLenum getStatus() const override;
 
+    // Use this method to retrieve the color buffer map when doing rendering.
+    // It will apply a workaround for poor shader performance on some systems
+    // by compacting the list to skip NULL values.
+    const ColorbufferInfoVector &getColorbuffersForRender() const;
+
   protected:
+    RendererD3D *const mRenderer;
+
     std::vector<const gl::FramebufferAttachment*> mColorBuffers;
+    const gl::FramebufferAttachment *mDepthbuffer;
+    const gl::FramebufferAttachment *mStencilbuffer;
+
+    std::vector<GLenum> mDrawBuffers;
+    GLenum mReadBuffer;
+
+    void updateRenderColorBuffers();
+    ColorbufferInfoVector mRenderColorBuffers;
 
   private:
-    RendererD3D *const mRenderer;
+    virtual gl::Error clear(const gl::State &state, const gl::ClearParameters &clearParams) = 0;
+
+    virtual gl::Error readPixels(const gl::Rectangle &area, GLenum format, GLenum type, size_t outputPitch,
+                                 const gl::PixelPackState &pack, uint8_t *pixels) const = 0;
+
+    virtual gl::Error blit(const gl::Rectangle &sourceArea, const gl::Rectangle &destArea, const gl::Rectangle *scissor,
+                           bool blitRenderTarget, bool blitDepth, bool blitStencil, GLenum filter,
+                           const gl::Framebuffer *sourceFramebuffer) = 0;
 };
 
 }

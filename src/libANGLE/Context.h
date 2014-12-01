@@ -175,13 +175,6 @@ class Context
     bool getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *numParams);
     bool getIndexedQueryParameterInfo(GLenum target, GLenum *type, unsigned int *numParams);
 
-    Error clear(GLbitfield mask);
-    Error clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *values);
-    Error clearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *values);
-    Error clearBufferiv(GLenum buffer, GLint drawbuffer, const GLint *values);
-    Error clearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
-
-    Error readPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei *bufSize, void* pixels);
     Error drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instances);
     Error drawElements(GLenum mode, GLsizei count, GLenum type,
                        const GLvoid *indices, GLsizei instances,
@@ -207,9 +200,6 @@ class Context
     size_t getExtensionStringCount() const;
 
     void getCurrentReadFormatType(GLenum *internalFormat, GLenum *format, GLenum *type);
-
-    Error blitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
-                          GLbitfield mask, GLenum filter);
 
     rx::Renderer *getRenderer() { return mRenderer; }
 

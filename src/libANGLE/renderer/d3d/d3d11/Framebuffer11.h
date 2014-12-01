@@ -21,7 +21,19 @@ class Framebuffer11 : public FramebufferD3D
     Framebuffer11(Renderer11 *renderer);
     virtual ~Framebuffer11();
 
+    // Invalidate the cached swizzles of all bound texture attachments.
+    void invalidateSwizzles();
+
   private:
+    gl::Error clear(const gl::State &state, const gl::ClearParameters &clearParams) override;
+
+    gl::Error readPixels(const gl::Rectangle &area, GLenum format, GLenum type, size_t outputPitch,
+                         const gl::PixelPackState &pack, uint8_t *pixels) const override;
+
+    gl::Error blit(const gl::Rectangle &sourceArea, const gl::Rectangle &destArea, const gl::Rectangle *scissor,
+                   bool blitRenderTarget, bool blitDepth, bool blitStencil, GLenum filter,
+                   const gl::Framebuffer *sourceFramebuffer) override;
+
     Renderer11 *const mRenderer;
 };
 

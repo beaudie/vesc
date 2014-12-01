@@ -36,6 +36,7 @@ struct Caps;
 struct Extensions;
 class TextureCapsMap;
 struct Data;
+class State;
 struct Rectangle;
 
 typedef std::vector<FramebufferAttachment *> ColorbufferInfo;
@@ -83,6 +84,19 @@ class Framebuffer
 
     Error invalidate(size_t count, const GLenum *attachments);
     Error invalidate(size_t count, const GLenum *attachments, const gl::Rectangle &area);
+
+    Error clear(const State &state, GLbitfield mask);
+    Error clearBufferfv(const State &state, GLenum buffer, GLint drawbuffer, const GLfloat *values);
+    Error clearBufferuiv(const State &state, GLenum buffer, GLint drawbuffer, const GLuint *values);
+    Error clearBufferiv(const State &state, GLenum buffer, GLint drawbuffer, const GLint *values);
+    Error clearBufferfi(const State &state, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
+
+    GLenum getPreferredReadFormat() const;
+    GLenum getPreferredReadType() const;
+    Error readPixels(const gl::State &state, const gl::Rectangle &area, GLenum format, GLenum type, GLvoid *pixels) const;
+
+    Error blit(const gl::State &state, const gl::Rectangle &sourceArea, const gl::Rectangle &destArea,
+               GLbitfield mask, GLenum filter, const gl::Framebuffer *sourceFramebuffer);
 
     // Use this method to retrieve the color buffer map when doing rendering.
     // It will apply a workaround for poor shader performance on some systems
