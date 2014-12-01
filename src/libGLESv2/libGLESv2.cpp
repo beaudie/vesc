@@ -3749,7 +3749,12 @@ void GL_APIENTRY glReadnPixelsEXT(GLint x, GLint y, GLsizei width, GLsizei heigh
             return;
         }
 
-        gl::Error error = context->readPixels(x, y, width, height, format, type, &bufSize, data);
+        gl::Framebuffer *framebufferObject = context->getState().getReadFramebuffer();
+        ASSERT(framebufferObject);
+
+        gl::Rectangle area(x, y, width, height);
+
+        gl::Error error = framebufferObject->readPixels(context->getState(), area, format, type, data);
         if (error.isError())
         {
             context->recordError(error);
@@ -3780,7 +3785,12 @@ void GL_APIENTRY glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height,
             return;
         }
 
-        gl::Error error = context->readPixels(x, y, width, height, format, type, NULL, pixels);
+        gl::Framebuffer *framebufferObject = context->getState().getReadFramebuffer();
+        ASSERT(framebufferObject);
+
+        gl::Rectangle area(x, y, width, height);
+
+        gl::Error error = framebufferObject->readPixels(context->getState(), area, format, type, pixels);
         if (error.isError())
         {
             context->recordError(error);
