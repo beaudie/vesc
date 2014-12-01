@@ -78,7 +78,7 @@ class Framebuffer
     int getSamples(const gl::Data &data) const;
     bool usingExtendedDrawBuffers() const;
 
-    GLenum completeness(const gl::Data &data) const;
+    GLenum getStatus(const gl::Data &data) const;
     bool hasValidDepthStencil() const;
 
     Error invalidate(size_t count, const GLenum *attachments);

@@ -496,13 +496,13 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
         return false;
     }
 
-    if (!readFramebuffer->completeness(context->getData()))
+    if (!readFramebuffer->getStatus(context->getData()))
     {
         context->recordError(Error(GL_INVALID_FRAMEBUFFER_OPERATION));
         return false;
     }
 
-    if (!drawFramebuffer->completeness(context->getData()))
+    if (!drawFramebuffer->getStatus(context->getData()))
     {
         context->recordError(Error(GL_INVALID_FRAMEBUFFER_OPERATION));
         return false;
@@ -925,7 +925,7 @@ bool ValidateReadPixelsParameters(gl::Context *context, GLint x, GLint y, GLsize
     gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
     ASSERT(framebuffer);
 
-    if (framebuffer->completeness(context->getData()) != GL_FRAMEBUFFER_COMPLETE)
+    if (framebuffer->getStatus(context->getData()) != GL_FRAMEBUFFER_COMPLETE)
     {
         context->recordError(Error(GL_INVALID_FRAMEBUFFER_OPERATION));
         return false;
@@ -1186,7 +1186,7 @@ bool ValidateStateQuery(gl::Context *context, GLenum pname, GLenum *nativeType, 
         {
             Framebuffer *framebuffer = context->getState().getReadFramebuffer();
             ASSERT(framebuffer);
-            if (framebuffer->completeness(context->getData()) != GL_FRAMEBUFFER_COMPLETE)
+            if (framebuffer->getStatus(context->getData()) != GL_FRAMEBUFFER_COMPLETE)
             {
                 context->recordError(Error(GL_INVALID_OPERATION));
                 return false;
@@ -1250,7 +1250,7 @@ bool ValidateCopyTexImageParametersBase(gl::Context* context, GLenum target, GLi
     }
 
     gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
-    if (framebuffer->completeness(context->getData()) != GL_FRAMEBUFFER_COMPLETE)
+    if (framebuffer->getStatus(context->getData()) != GL_FRAMEBUFFER_COMPLETE)
     {
         context->recordError(Error(GL_INVALID_FRAMEBUFFER_OPERATION));
         return false;
@@ -1455,7 +1455,7 @@ static bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count, GLsiz
     }
 
     const gl::Framebuffer *fbo = state.getDrawFramebuffer();
-    if (!fbo || fbo->completeness(context->getData()) != GL_FRAMEBUFFER_COMPLETE)
+    if (!fbo || fbo->getStatus(context->getData()) != GL_FRAMEBUFFER_COMPLETE)
     {
         context->recordError(Error(GL_INVALID_FRAMEBUFFER_OPERATION));
         return false;
