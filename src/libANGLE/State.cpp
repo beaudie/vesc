@@ -1250,7 +1250,7 @@ void State::getIntegerv(const gl::Data &data, GLenum pname, GLint *params)
       case GL_SAMPLES:
         {
             gl::Framebuffer *framebuffer = mDrawFramebuffer;
-            if (framebuffer->completeness(data) == GL_FRAMEBUFFER_COMPLETE)
+            if (framebuffer->getStatus(data) == GL_FRAMEBUFFER_COMPLETE)
             {
                 switch (pname)
                 {
