@@ -5755,8 +5755,16 @@ void GL_APIENTRY glBlitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint 
             return;
         }
 
-        gl::Error error = context->blitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1,
-                                                   mask, filter);
+        gl::Framebuffer *readFramebuffer = context->getState().getReadFramebuffer();
+        ASSERT(readFramebuffer);
+
+        gl::Framebuffer *drawFramebuffer = context->getState().getDrawFramebuffer();
+        ASSERT(drawFramebuffer);
+
+        gl::Rectangle srcArea(srcX0, srcY0, srcX1 - srcX0, srcY1 - srcY0);
+        gl::Rectangle dstArea(dstX0, dstY0, dstX1 - dstX0, dstY1 - dstY0);
+
+        gl::Error error = drawFramebuffer->blit(context->getState(), srcArea, dstArea, mask, filter, readFramebuffer);
         if (error.isError())
         {
             context->recordError(error);
@@ -8483,8 +8491,16 @@ void GL_APIENTRY glBlitFramebufferANGLE(GLint srcX0, GLint srcY0, GLint srcX1, G
             return;
         }
 
-        gl::Error error = context->blitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1,
-                                                   mask, filter);
+        gl::Framebuffer *readFramebuffer = context->getState().getReadFramebuffer();
+        ASSERT(readFramebuffer);
+
+        gl::Framebuffer *drawFramebuffer = context->getState().getDrawFramebuffer();
+        ASSERT(drawFramebuffer);
+
+        gl::Rectangle srcArea(srcX0, srcY0, srcX1 - srcX0, srcY1 - srcY0);
+        gl::Rectangle dstArea(dstX0, dstY0, dstX1 - dstX0, dstY1 - dstY0);
+
+        gl::Error error = drawFramebuffer->blit(context->getState(), srcArea, dstArea, mask, filter, readFramebuffer);
         if (error.isError())
         {
             context->recordError(error);
