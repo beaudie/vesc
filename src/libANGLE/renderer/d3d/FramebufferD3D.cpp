@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/d3d/FramebufferD3D.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/RenderTarget.h"
+#include "libANGLE/FramebufferAttachment.h"
 
 namespace rx
 {
@@ -68,6 +69,26 @@ FramebufferD3D::FramebufferD3D(RendererD3D *renderer)
 }
 
 FramebufferD3D::~FramebufferD3D()
+{
+}
+
+void FramebufferD3D::setColorAttachment(size_t index, const gl::FramebufferAttachment *attachment)
+{
+}
+
+void FramebufferD3D::setDepthttachment(const gl::FramebufferAttachment *attachment)
+{
+}
+
+void FramebufferD3D::setStencilAttachment(const gl::FramebufferAttachment *attachment)
+{
+}
+
+void FramebufferD3D::setDepthStencilAttachment(const gl::FramebufferAttachment *attachment)
+{
+}
+
+void FramebufferD3D::setDrawBuffers(size_t count, const GLenum *buffers)
 {
 }
 

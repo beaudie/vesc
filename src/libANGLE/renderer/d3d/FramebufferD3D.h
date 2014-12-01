@@ -42,6 +42,13 @@ class FramebufferD3D : public FramebufferImpl
     FramebufferD3D(RendererD3D *renderer);
     virtual ~FramebufferD3D();
 
+    void setColorAttachment(size_t index, const gl::FramebufferAttachment *attachment) override;
+    void setDepthttachment(const gl::FramebufferAttachment *attachment) override;
+    void setStencilAttachment(const gl::FramebufferAttachment *attachment) override;
+    void setDepthStencilAttachment(const gl::FramebufferAttachment *attachment) override;
+
+    void setDrawBuffers(size_t count, const GLenum *buffers) override;
+
     gl::Error invalidate(size_t count, const GLenum *attachments) override;
     gl::Error invalidate(size_t count, const GLenum *attachments, const gl::Rectangle &area) override;
 
