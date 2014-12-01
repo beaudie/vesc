@@ -219,9 +219,19 @@ void State::setClearColor(float red, float green, float blue, float alpha)
     mColorClearValue.alpha = alpha;
 }
 
+const ColorF &State::getClearColor() const
+{
+    return mColorClearValue;
+}
+
 void State::setClearDepth(float depth)
 {
     mDepthClearValue = depth;
+}
+
+float State::getClearDepth() const
+{
+    return mDepthClearValue;
 }
 
 void State::setClearStencil(int stencil)
@@ -229,60 +239,9 @@ void State::setClearStencil(int stencil)
     mStencilClearValue = stencil;
 }
 
-ClearParameters State::getClearParameters(GLbitfield mask) const
+int State::getClearStencil() const
 {
-    ClearParameters clearParams = { 0 };
-    for (unsigned int i = 0; i < ArraySize(clearParams.clearColor); i++)
-    {
-        clearParams.clearColor[i] = false;
-    }
-    clearParams.colorFClearValue = mColorClearValue;
-    clearParams.colorClearType = GL_FLOAT;
-    clearParams.colorMaskRed = mBlend.colorMaskRed;
-    clearParams.colorMaskGreen = mBlend.colorMaskGreen;
-    clearParams.colorMaskBlue = mBlend.colorMaskBlue;
-    clearParams.colorMaskAlpha = mBlend.colorMaskAlpha;
-    clearParams.clearDepth = false;
-    clearParams.depthClearValue = mDepthClearValue;
-    clearParams.clearStencil = false;
-    clearParams.stencilClearValue = mStencilClearValue;
-    clearParams.stencilWriteMask = mDepthStencil.stencilWritemask;
-    clearParams.scissorEnabled = mScissorTest;
-    clearParams.scissor = mScissor;
-
-    const Framebuffer *framebufferObject = getDrawFramebuffer();
-    if (mask & GL_COLOR_BUFFER_BIT)
-    {
-        if (framebufferObject->hasEnabledColorAttachment())
-        {
-            for (unsigned int i = 0; i < ArraySize(clearParams.clearColor); i++)
-            {
-                clearParams.clearColor[i] = true;
-            }
-        }
-    }
-
-    if (mask & GL_DEPTH_BUFFER_BIT)
-    {
-        if (mDepthStencil.depthMask && framebufferObject->getDepthbuffer() != NULL)
-        {
-            clearParams.clearDepth = true;
-        }
-    }
-
-    if (mask & GL_STENCIL_BUFFER_BIT)
-    {
-        if (framebufferObject->getStencilbuffer() != NULL)
-        {
-            GLenum stencilActualFormat = framebufferObject->getStencilbuffer()->getActualFormat();
-            if (GetInternalFormatInfo(stencilActualFormat).stencilBits > 0)
-            {
-                clearParams.clearStencil = true;
-            }
-        }
-    }
-
-    return clearParams;
+    return mStencilClearValue;
 }
 
 void State::setColorMask(bool red, bool green, bool blue, bool alpha)

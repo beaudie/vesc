@@ -21,7 +21,6 @@
 
 namespace rx
 {
-class RenderbufferImpl;
 struct Workarounds;
 class DefaultAttachmentImpl;
 class FramebufferImpl;
@@ -39,8 +38,6 @@ class TextureCapsMap;
 struct Data;
 class State;
 struct Rectangle;
-
-typedef std::vector<FramebufferAttachment *> ColorbufferInfo;
 
 class ANGLE_EXPORT Framebuffer
 {
@@ -78,7 +75,6 @@ class ANGLE_EXPORT Framebuffer
     void setReadBuffer(GLenum buffer);
 
     bool isEnabledColorAttachment(unsigned int colorAttachment) const;
-    bool hasEnabledColorAttachment() const;
     bool hasStencil() const;
     int getSamples(const gl::Data &data) const;
     bool usingExtendedDrawBuffers() const;
@@ -101,11 +97,6 @@ class ANGLE_EXPORT Framebuffer
 
     Error blit(const gl::State &state, const gl::Rectangle &sourceArea, const gl::Rectangle &destArea,
                GLbitfield mask, GLenum filter, const gl::Framebuffer *sourceFramebuffer);
-
-    // Use this method to retrieve the color buffer map when doing rendering.
-    // It will apply a workaround for poor shader performance on some systems
-    // by compacting the list to skip NULL values.
-    ColorbufferInfo getColorbuffersForRender(const rx::Workarounds &workarounds) const;
 
   protected:
     void setAttachment(GLenum attachment, FramebufferAttachment *attachmentObj);
@@ -133,16 +124,6 @@ class DefaultFramebuffer : public Framebuffer
   private:
     DISALLOW_COPY_AND_ASSIGN(DefaultFramebuffer);
 };
-
-}
-
-namespace rx
-{
-class RenderTarget;
-
-// TODO: place this in FramebufferD3D.h
-gl::Error GetAttachmentRenderTarget(const gl::FramebufferAttachment *attachment, RenderTarget **outRT);
-unsigned int GetAttachmentSerial(const gl::FramebufferAttachment *attachment);
 
 }
 

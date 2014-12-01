@@ -13,6 +13,7 @@
 #include "libANGLE/Program.h"
 #include "libANGLE/renderer/ShaderExecutable.h"
 #include "libANGLE/renderer/d3d/DynamicHLSL.h"
+#include "libANGLE/renderer/d3d/FramebufferD3D.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/ShaderD3D.h"
 
@@ -815,7 +816,8 @@ gl::Error ProgramD3D::getPixelExecutableForFramebuffer(const gl::Framebuffer *fb
 {
     std::vector<GLenum> outputs;
 
-    const gl::ColorbufferInfo &colorbuffers = fbo->getColorbuffersForRender(mRenderer->getWorkarounds());
+    const FramebufferD3D *framebufferD3D = FramebufferD3D::makeFramebufferD3D(fbo->getImplementation());
+    const ColorbufferInfoVector &colorbuffers = framebufferD3D->getColorbuffersForRender();
 
     for (size_t colorAttachment = 0; colorAttachment < colorbuffers.size(); ++colorAttachment)
     {

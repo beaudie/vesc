@@ -46,9 +46,13 @@ class ANGLE_EXPORT State
 
     // Clear behavior setters & state parameter block generation function
     void setClearColor(float red, float green, float blue, float alpha);
+    const ColorF &getClearColor() const;
+
     void setClearDepth(float depth);
+    float getClearDepth() const;
+
     void setClearStencil(int stencil);
-    ClearParameters getClearParameters(GLbitfield mask) const;
+    int getClearStencil() const;
 
     // Write mask manipulation
     void setColorMask(bool red, bool green, bool blue, bool alpha);

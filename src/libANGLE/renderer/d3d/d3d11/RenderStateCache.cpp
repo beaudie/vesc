@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/d3d/d3d11/RenderStateCache.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
+#include "libANGLE/renderer/d3d/FramebufferD3D.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
 
@@ -92,7 +93,8 @@ gl::Error RenderStateCache::getBlendState(const gl::Framebuffer *framebuffer, co
 
     bool mrt = false;
 
-    const gl::ColorbufferInfo &colorbuffers = framebuffer->getColorbuffersForRender(mRenderer->getWorkarounds());
+    const FramebufferD3D *framebufferD3D = FramebufferD3D::makeFramebufferD3D(framebuffer->getImplementation());
+    const ColorbufferInfoVector &colorbuffers = framebufferD3D->getColorbuffersForRender();
 
     BlendStateKey key = { 0 };
     key.blendState = blendState;

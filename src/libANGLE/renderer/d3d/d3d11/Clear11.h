@@ -9,7 +9,6 @@
 #ifndef LIBANGLE_RENDERER_D3D_D3D11_CLEAR11_H_
 #define LIBANGLE_RENDERER_D3D_D3D11_CLEAR11_H_
 
-#include "libANGLE/angletypes.h"
 #include "libANGLE/Error.h"
 
 #include <map>
@@ -24,6 +23,7 @@ namespace rx
 {
 class Renderer11;
 class RenderTarget11;
+struct ClearParameters;
 
 class Clear11
 {
@@ -32,7 +32,7 @@ class Clear11
     ~Clear11();
 
     // Clears the framebuffer with the supplied clear parameters, assumes that the framebuffer is currently applied.
-    gl::Error clearFramebuffer(const gl::ClearParameters &clearParams, const std::vector<const gl::FramebufferAttachment*> &colorAttachments,
+    gl::Error clearFramebuffer(const ClearParameters &clearParams, const std::vector<const gl::FramebufferAttachment*> &colorAttachments,
                                const std::vector<GLenum> &drawBufferStates, const gl::FramebufferAttachment *depthAttachment,
                                const gl::FramebufferAttachment *stencilAttachment);
 
@@ -78,7 +78,7 @@ class Clear11
     typedef std::map<ClearDepthStencilInfo, ID3D11DepthStencilState*, ClearDepthStencilInfoComparisonFunction> ClearDepthStencilStateMap;
     ClearDepthStencilStateMap mClearDepthStencilStates;
 
-    ID3D11DepthStencilState *getDepthStencilState(const gl::ClearParameters &clearParams);
+    ID3D11DepthStencilState *getDepthStencilState(const ClearParameters &clearParams);
 
     ID3D11Buffer *mVertexBuffer;
     ID3D11RasterizerState *mRasterizerState;
