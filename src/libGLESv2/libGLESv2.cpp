@@ -651,7 +651,7 @@ void GL_APIENTRY glClear(GLbitfield mask)
             return;
         }
 
-        gl::Error error = context->clear(mask);
+        gl::Error error = framebufferObject->clear(context->getState(), mask);
         if (error.isError())
         {
             context->recordError(error);
@@ -6753,7 +6753,10 @@ void GL_APIENTRY glClearBufferiv(GLenum buffer, GLint drawbuffer, const GLint* v
             return;
         }
 
-        gl::Error error = context->clearBufferiv(buffer, drawbuffer, value);
+        gl::Framebuffer *framebufferObject = context->getState().getDrawFramebuffer();
+        ASSERT(framebufferObject);
+
+        gl::Error error = framebufferObject->clearBufferiv(context->getState(), buffer, drawbuffer, value);
         if (error.isError())
         {
             context->recordError(error);
@@ -6790,7 +6793,10 @@ void GL_APIENTRY glClearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint*
             return;
         }
 
-        gl::Error error = context->clearBufferuiv(buffer, drawbuffer, value);
+        gl::Framebuffer *framebufferObject = context->getState().getDrawFramebuffer();
+        ASSERT(framebufferObject);
+
+        gl::Error error = framebufferObject->clearBufferuiv(context->getState(), buffer, drawbuffer, value);
         if (error.isError())
         {
             context->recordError(error);
@@ -6835,7 +6841,10 @@ void GL_APIENTRY glClearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat*
             return;
         }
 
-        gl::Error error = context->clearBufferfv(buffer, drawbuffer, value);
+        gl::Framebuffer *framebufferObject = context->getState().getDrawFramebuffer();
+        ASSERT(framebufferObject);
+
+        gl::Error error = framebufferObject->clearBufferfv(context->getState(), buffer, drawbuffer, value);
         if (error.isError())
         {
             context->recordError(error);
@@ -6872,7 +6881,10 @@ void GL_APIENTRY glClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth,
             return;
         }
 
-        gl::Error error = context->clearBufferfi(buffer, drawbuffer, depth, stencil);
+        gl::Framebuffer *framebufferObject = context->getState().getDrawFramebuffer();
+        ASSERT(framebufferObject);
+
+        gl::Error error = framebufferObject->clearBufferfi(context->getState(), buffer, drawbuffer, depth, stencil);
         if (error.isError())
         {
             context->recordError(error);
