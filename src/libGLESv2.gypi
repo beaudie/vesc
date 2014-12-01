@@ -554,6 +554,10 @@
                     ],
                     'msvs_settings':
                     {
+                        'VCCLCompilerTool':
+                        {
+                            'RuntimeLibrary': '3',  # /MDd (Debug Multithreaded DLL)
+                        },
                         'VCLinkerTool':
                         {
                             'AdditionalDependencies':
@@ -561,6 +565,16 @@
                                 'd3d9.lib',
                             ]
                         }
+                    },
+                },
+                'Release_Base':
+                {
+                    'msvs_settings':
+                    {
+                        'VCCLCompilerTool':
+                        {
+                            'RuntimeLibrary': '2',  # /MD (Multithreaded DLL)
+                        },
                     },
                 },
             },
@@ -611,6 +625,29 @@
                     'msvs_enable_winphone' : '1',
                 }],
             ],
+            'configurations':
+            {
+                'Debug_Base':
+                {
+                    'msvs_settings':
+                    {
+                        'VCCLCompilerTool':
+                        {
+                            'RuntimeLibrary': '3',  # /MDd (Debug Multithreaded DLL)
+                        },
+                    },
+                },
+                'Release_Base':
+                {
+                    'msvs_settings':
+                    {
+                        'VCCLCompilerTool':
+                        {
+                            'RuntimeLibrary': '2',  # /MD (Multithreaded DLL)
+                        },
+                    },
+                },
+            },
         },
     ],
 }
