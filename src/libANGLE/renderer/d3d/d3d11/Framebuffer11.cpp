@@ -61,7 +61,7 @@ void Framebuffer11::invalidateSwizzles()
     invalidateAttachmentSwizzles(mStencilbuffer);
 }
 
-gl::Error Framebuffer11::clear(const gl::State &state, const gl::ClearParameters &clearParams)
+gl::Error Framebuffer11::clear(const gl::State &state, const ClearParameters &clearParams)
 {
     gl::Error error = mRenderer->getClearer()->clearFramebuffer(clearParams, mColorBuffers, mDrawBuffers,
                                                                 mDepthbuffer, mStencilbuffer);
