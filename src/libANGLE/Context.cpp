@@ -897,17 +897,6 @@ void Context::getIntegerv(GLenum pname, GLint *params)
       case GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS:    *params = mCaps.maxTransformFeedbackSeparateComponents;    break;
       case GL_NUM_COMPRESSED_TEXTURE_FORMATS:           *params = mCaps.compressedTextureFormats.size();                break;
       case GL_MAX_SAMPLES_ANGLE:                        *params = mExtensions.maxSamples;                               break;
-      case GL_IMPLEMENTATION_COLOR_READ_TYPE:
-      case GL_IMPLEMENTATION_COLOR_READ_FORMAT:
-        {
-            GLenum internalFormat, format, type;
-            getCurrentReadFormatType(&internalFormat, &format, &type);
-            if (pname == GL_IMPLEMENTATION_COLOR_READ_FORMAT)
-                *params = format;
-            else
-                *params = type;
-        }
-        break;
       case GL_MAX_VIEWPORT_DIMS:
         {
             params[0] = mCaps.maxViewportWidth;
@@ -1281,12 +1270,6 @@ bool Context::getIndexedQueryParameterInfo(GLenum target, GLenum *type, unsigned
     }
 
     return false;
-}
-
-Error Context::readPixels(GLint x, GLint y, GLsizei width, GLsizei height,
-                          GLenum format, GLenum type, GLsizei *bufSize, void* pixels)
-{
-    return mRenderer->readPixels(getData(), x, y, width, height, format, type, bufSize, pixels);
 }
 
 Error Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instances)

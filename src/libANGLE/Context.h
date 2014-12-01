@@ -176,7 +176,6 @@ class ANGLE_EXPORT Context
     bool getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *numParams);
     bool getIndexedQueryParameterInfo(GLenum target, GLenum *type, unsigned int *numParams);
 
-    Error readPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei *bufSize, void* pixels);
     Error drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instances);
     Error drawElements(GLenum mode, GLsizei count, GLenum type,
                        const GLvoid *indices, GLsizei instances,

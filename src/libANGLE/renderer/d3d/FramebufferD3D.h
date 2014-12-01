@@ -12,10 +12,12 @@
 #include "libANGLE/renderer/FramebufferImpl.h"
 
 #include <vector>
+#include <cstdint>
 
 namespace gl
 {
 struct ClearParameters;
+struct PixelPackState;
 }
 
 namespace rx
@@ -66,6 +68,10 @@ class FramebufferD3D : public FramebufferImpl
     gl::Error clearBufferiv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLint *values) override;
     gl::Error clearBufferfi(const gl::State &state, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil) override;
 
+    GLenum getPreferredReadFormat() const override;
+    GLenum getPreferredReadType() const override;
+    gl::Error readPixels(const gl::State &state, const gl::Rectangle &area, GLenum format, GLenum type, GLvoid *pixels) const override;
+
     GLenum getStatus() const override;
 
   protected:
@@ -74,12 +80,15 @@ class FramebufferD3D : public FramebufferImpl
     const gl::FramebufferAttachment *mStencilbuffer;
 
     std::vector<GLenum> mDrawBuffers;
+    GLenum mReadBuffer;
 
   private:
     RendererD3D *const mRenderer;
 
     virtual gl::Error clear(const gl::State &state, const gl::ClearParameters &clearParams) = 0;
 
+    virtual gl::Error readPixels(const gl::Rectangle &area, GLenum format, GLenum type, size_t outputPitch,
+                                 const gl::PixelPackState &pack, uint8_t *pixels) const = 0;
 };
 
 }
