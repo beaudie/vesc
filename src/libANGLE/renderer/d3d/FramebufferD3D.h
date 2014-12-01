@@ -10,6 +10,8 @@
 #define LIBANGLE_RENDERER_D3D_FRAMBUFFERD3D_H_
 
 #include "libANGLE/renderer/FramebufferImpl.h"
+#include "libANGLE/angletypes.h"
+#include "libANGLE/Constants.h"
 
 #include <vector>
 #include <cstdint>
@@ -25,6 +27,31 @@ namespace rx
 {
 class RenderTarget;
 class RendererD3D;
+
+typedef std::vector<const gl::FramebufferAttachment *> ColorbufferInfoVector;
+
+struct ClearParameters
+{
+    bool clearColor[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS];
+    gl::ColorF colorFClearValue;
+    gl::ColorI colorIClearValue;
+    gl::ColorUI colorUIClearValue;
+    GLenum colorClearType;
+    bool colorMaskRed;
+    bool colorMaskGreen;
+    bool colorMaskBlue;
+    bool colorMaskAlpha;
+
+    bool clearDepth;
+    float depthClearValue;
+
+    bool clearStencil;
+    GLint stencilClearValue;
+    GLuint stencilWriteMask;
+
+    bool scissorEnabled;
+    gl::Rectangle scissor;
+};
 
 class DefaultAttachmentD3D : public DefaultAttachmentImpl
 {
@@ -52,6 +79,9 @@ class FramebufferD3D : public FramebufferImpl
     FramebufferD3D(RendererD3D *renderer);
     virtual ~FramebufferD3D();
 
+    static const FramebufferD3D *makeFramebufferD3D(const FramebufferImpl *impl);
+    static FramebufferD3D *makeFramebufferD3D(FramebufferImpl *impl);
+
     void setColorAttachment(size_t index, const gl::FramebufferAttachment *attachment) override;
     void setDepthttachment(const gl::FramebufferAttachment *attachment) override;
     void setStencilAttachment(const gl::FramebufferAttachment *attachment) override;
@@ -78,6 +108,11 @@ class FramebufferD3D : public FramebufferImpl
 
     GLenum checkStatus() const override;
 
+    // Use this method to retrieve the color buffer map when doing rendering.
+    // It will apply a workaround for poor shader performance on some systems
+    // by compacting the list to skip NULL values.
+    const ColorbufferInfoVector &getColorbuffersForRender() const;
+
   protected:
     std::vector<const gl::FramebufferAttachment*> mColorBuffers;
     const gl::FramebufferAttachment *mDepthbuffer;
@@ -89,7 +124,12 @@ class FramebufferD3D : public FramebufferImpl
   private:
     RendererD3D *const mRenderer;
 
-    virtual gl::Error clear(const gl::State &state, const gl::ClearParameters &clearParams) = 0;
+    void updateRenderColorBuffers();
+    ColorbufferInfoVector mRenderColorBuffers;
+
+    ClearParameters getClearParameters(const gl::State &state, GLbitfield mask);
+
+    virtual gl::Error clear(const gl::State &state, const ClearParameters &clearParams) = 0;
 
     virtual gl::Error readPixels(const gl::Rectangle &area, GLenum format, GLenum type, size_t outputPitch,
                                  const gl::PixelPackState &pack, uint8_t *pixels) const = 0;

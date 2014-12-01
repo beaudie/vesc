@@ -214,19 +214,6 @@ bool Framebuffer::isEnabledColorAttachment(unsigned int colorAttachment) const
     return (mColorbuffers[colorAttachment] && mDrawBufferStates[colorAttachment] != GL_NONE);
 }
 
-bool Framebuffer::hasEnabledColorAttachment() const
-{
-    for (unsigned int colorAttachment = 0; colorAttachment < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; colorAttachment++)
-    {
-        if (isEnabledColorAttachment(colorAttachment))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 bool Framebuffer::hasStencil() const
 {
     return (mStencilbuffer && mStencilbuffer->getStencilSize() > 0);
@@ -534,29 +521,6 @@ bool Framebuffer::hasValidDepthStencil() const
     return (mDepthbuffer && mStencilbuffer &&
             mDepthbuffer->type() == mStencilbuffer->type() &&
             mDepthbuffer->id() == mStencilbuffer->id());
-}
-
-ColorbufferInfo Framebuffer::getColorbuffersForRender(const rx::Workarounds &workarounds) const
-{
-    ColorbufferInfo colorbuffersForRender;
-
-    for (size_t colorAttachment = 0; colorAttachment < IMPLEMENTATION_MAX_DRAW_BUFFERS; ++colorAttachment)
-    {
-        GLenum drawBufferState = mDrawBufferStates[colorAttachment];
-        FramebufferAttachment *colorbuffer = mColorbuffers[colorAttachment];
-
-        if (colorbuffer != NULL && drawBufferState != GL_NONE)
-        {
-            ASSERT(drawBufferState == GL_BACK || drawBufferState == (GL_COLOR_ATTACHMENT0_EXT + colorAttachment));
-            colorbuffersForRender.push_back(colorbuffer);
-        }
-        else if (!workarounds.mrtPerfWorkaround)
-        {
-            colorbuffersForRender.push_back(NULL);
-        }
-    }
-
-    return colorbuffersForRender;
 }
 
 void Framebuffer::setTextureAttachment(GLenum attachment, Texture *texture, const ImageIndex &imageIndex)
