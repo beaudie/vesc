@@ -314,6 +314,9 @@ bool TCompiler::compile(const char* const shaderStrings[],
     // Cleanup. The IntermNode tree doesn't need to be deleted here, since the
     // memory will be freed in a big chunk by the PoolAllocator.
     SetGlobalParseContext(NULL);
+
+    symbolTable.clearInvariantVaryings();
+
     return success;
 }
 
