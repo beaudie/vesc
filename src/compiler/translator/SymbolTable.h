@@ -411,6 +411,11 @@ class TSymbolTable
     // for the specified TBasicType
     TPrecision getDefaultPrecision(TBasicType type) const;
 
+    void clearInvariantVaryings()
+    {
+        mInvariantVaryings.clear();
+    }
+
     // This records invariant varyings declared through
     // "invariant varying_name;".
     void addInvariantVarying(const TString &originalName)

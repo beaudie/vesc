@@ -314,6 +314,9 @@ bool TCompiler::compile(const char* const shaderStrings[],
     // Cleanup memory.
     intermediate.remove(parseContext.treeRoot);
     SetGlobalParseContext(NULL);
+
+    symbolTable.clearInvariantVaryings();
+
     return success;
 }
 
