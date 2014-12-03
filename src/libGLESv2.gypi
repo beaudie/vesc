@@ -561,23 +561,20 @@
             'includes': [ '../build/common_defines.gypi', ],
             'sources':
             [
-                'common/angleutils.cpp',
-                'common/angleutils.h',
-                'common/debug.cpp',
-                'common/debug.h',
                 'common/event_tracer.cpp',
                 'common/event_tracer.h',
-                'common/tls.cpp',
-                'common/tls.h',
+                'libGLESv2/entry_points.cpp',
+                'libGLESv2/entry_points.h',
                 'libGLESv2/libGLESv2.cpp',
                 'libGLESv2/libGLESv2.def',
                 'libGLESv2/libGLESv2.rc',
-                'libGLESv2/main.cpp',
-                'libGLESv2/main.h',
                 'libGLESv2/resource.h',
             ],
             'defines':
             [
+                'GL_APICALL=',
+                'GL_GLEXT_PROTOTYPES=',
+                'EGLAPI=',
                 'LIBGLESV2_IMPLEMENTATION',
             ],
             'conditions':
