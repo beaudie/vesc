@@ -691,6 +691,13 @@ TYPED_TEST(BlitFramebufferANGLETest, BlitWithMissingAttachments)
 
 TYPED_TEST(BlitFramebufferANGLETest, BlitStencil)
 {
+    // TODO(jmadill): Figure out if we can fix this on D3D9.
+    std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
+    if (rendererString.find("Intel") != std::string::npos && rendererString.find("vs_3_0") != std::string::npos)
+    {
+        return;
+    }
+
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
 
     glClear(GL_COLOR_BUFFER_BIT);
