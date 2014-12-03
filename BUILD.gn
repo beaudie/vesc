@@ -222,10 +222,6 @@ if (is_win) {
 
   shared_library("libGLESv2") {
     sources = [
-      "src/common/angleutils.cpp",
-      "src/common/angleutils.h",
-      "src/common/debug.cpp",
-      "src/common/debug.h",
       "src/common/event_tracer.cpp",
       "src/common/event_tracer.h",
       "src/common/tls.cpp",
@@ -233,8 +229,6 @@ if (is_win) {
       "src/libGLESv2/libGLESv2.cpp",
       "src/libGLESv2/libGLESv2.def",
       "src/libGLESv2/libGLESv2.rc",
-      "src/libGLESv2/main.cpp",
-      "src/libGLESv2/main.h",
       "src/libGLESv2/resource.h",
     ]
 
@@ -244,6 +238,7 @@ if (is_win) {
     configs -= [ "//build/config/compiler:chromium_code" ]
     configs += [
       ":internal_config",
+      ":libANGLE_config",
       "//build/config/compiler:no_chromium_code",
     ]
 
@@ -259,19 +254,9 @@ if (is_win) {
 
   shared_library("libEGL") {
     sources = [
-      "src/common/angleutils.cpp",
-      "src/common/angleutils.h",
-      "src/common/debug.cpp",
-      "src/common/debug.h",
-      "src/common/event_tracer.cpp",
-      "src/common/event_tracer.h",
-      "src/common/tls.cpp",
-      "src/common/tls.h",
       "src/libEGL/libEGL.cpp",
       "src/libEGL/libEGL.def",
       "src/libEGL/libEGL.rc",
-      "src/libEGL/main.cpp",
-      "src/libEGL/main.h",
       "src/libEGL/resource.h",
     ]
 
@@ -281,6 +266,7 @@ if (is_win) {
     configs -= [ "//build/config/compiler:chromium_code" ]
     configs += [
       ":internal_config",
+      ":libANGLE_config",
       "//build/config/compiler:no_chromium_code",
     ]
 
@@ -290,7 +276,6 @@ if (is_win) {
 
     deps = [
       ":includes",
-      ":libANGLE",
       ":libGLESv2",
     ]
   }
