@@ -467,6 +467,10 @@ void GenerateCaps(IDirect3D9 *d3d9, IDirect3DDevice9 *device, D3DDEVTYPE deviceT
         if (adapterId.VendorId == VENDOR_ID_AMD)
         {
             extensions->depthTextures = false;
+
+            // TODO(jmadill): Force sRGB off for now, until we resolve the bug.
+            // See: https://code.google.com/p/angleproject/issues/detail?id=839
+            extensions->sRGB = false;
         }
     }
     else

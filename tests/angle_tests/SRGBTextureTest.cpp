@@ -7,7 +7,7 @@ template<typename T>
 class SRGBTextureTest : public ANGLETest
 {
 protected:
-    SRGBTextureTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetPlatform())
+    SRGBTextureTest() : ANGLETest(T::GetGlesMajorVersion(), T::GetPlatform()), mSkipTests(false)
     {
         setWindowWidth(128);
         setWindowHeight(128);
@@ -20,16 +20,29 @@ protected:
     virtual void SetUp()
     {
         ANGLETest::SetUp();
+
+        // TODO(jmadill): sRGB is broken currently on AMD D3D9
+        // See: https://code.google.com/p/angleproject/issues/detail?id=839
+        std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
+        mSkipTests = (rendererString.find("AMD") != std::string::npos) &&
+                     (rendererString.find("vs_3_0") != std::string::npos);
     }
 
     virtual void TearDown()
     {
         ANGLETest::TearDown();
     }
+
+    bool mSkipTests;
 };
 
 TYPED_TEST(SRGBTextureTest, SRGBValidation)
 {
+    if (mSkipTests)
+    {
+        return;
+    }
+
     bool supported = extensionEnabled("GL_EXT_sRGB") || getClientVersion() == 3;
 
     GLuint tex = 0;
@@ -58,6 +71,11 @@ TYPED_TEST(SRGBTextureTest, SRGBValidation)
 
 TYPED_TEST(SRGBTextureTest, SRGBAValidation)
 {
+    if (mSkipTests)
+    {
+        return;
+    }
+
     bool supported = extensionEnabled("GL_EXT_sRGB") || getClientVersion() == 3;
 
     GLuint tex = 0;
@@ -93,6 +111,11 @@ TYPED_TEST(SRGBTextureTest, SRGBAValidation)
 
 TYPED_TEST(SRGBTextureTest, SRGBARenderbuffer)
 {
+    if (mSkipTests)
+    {
+        return;
+    }
+
     bool supported = extensionEnabled("GL_EXT_sRGB") || getClientVersion() == 3;
 
     GLuint rbo = 0;
