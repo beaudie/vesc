@@ -587,6 +587,13 @@ bool ValidateES2CopyTexImageParameters(Context* context, GLenum target, GLint le
                 return false;
             }
             break;
+          case GL_BGRA_EXT:
+            if (colorbufferFormat != GL_BGRA8_EXT)
+            {
+                context->recordError(Error(GL_INVALID_OPERATION));
+                return false;
+            }
+            break;
           case GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
           case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
           case GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE:
@@ -676,6 +683,13 @@ bool ValidateES2CopyTexImageParameters(Context* context, GLenum target, GLint le
                 colorbufferFormat != GL_RGB5_A1 &&
                 colorbufferFormat != GL_BGRA8_EXT &&
                 colorbufferFormat != GL_RGBA8_OES)
+            {
+                context->recordError(Error(GL_INVALID_OPERATION));
+                return false;
+            }
+            break;
+          case GL_BGRA_EXT:
+            if (colorbufferFormat != GL_BGRA8_EXT)
             {
                 context->recordError(Error(GL_INVALID_OPERATION));
                 return false;
