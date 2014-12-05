@@ -177,6 +177,7 @@ Renderer11::Renderer11(egl::Display *display, EGLNativeDisplayType hDc, const eg
 
     mDevice = NULL;
     mDeviceContext = NULL;
+    mDeviceContext1 = NULL;
     mDxgiAdapter = NULL;
     mDxgiFactory = NULL;
 
@@ -187,6 +188,8 @@ Renderer11::Renderer11(egl::Display *display, EGLNativeDisplayType hDc, const eg
     mAppliedGeometryShader = NULL;
     mCurPointGeometryShader = NULL;
     mAppliedPixelShader = NULL;
+
+    mSupportsClearView = false;
 
     EGLint requestedMajorVersion = attributes.get(EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE, EGL_DONT_CARE);
     EGLint requestedMinorVersion = attributes.get(EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE, EGL_DONT_CARE);
@@ -329,6 +332,11 @@ EGLint Renderer11::initialize()
 #endif
 #endif
 
+    // Cast the DeviceContext to a DeviceContext1.
+    // This could fail on Windows 7 without the Platform Update.
+    // Don't error in this case- just don't use mDeviceContext1.
+    mDeviceContext1 = d3d11::DynamicCastComObject<ID3D11DeviceContext1>(mDeviceContext);
+
     IDXGIDevice *dxgiDevice = NULL;
     result = mDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
 
@@ -380,6 +388,13 @@ EGLint Renderer11::initialize()
         SafeRelease(infoQueue);
     }
 #endif
+
+    if (mDeviceContext1 != NULL)
+    {
+        D3D11_FEATURE_DATA_D3D11_OPTIONS d3d11Options;
+        mDevice->CheckFeatureSupport(D3D11_FEATURE_D3D11_OPTIONS, &d3d11Options, sizeof(D3D11_FEATURE_DATA_D3D11_OPTIONS));
+        mSupportsClearView = !!(d3d11Options.ClearView);
+    }
 
     initializeDevice();
 
@@ -1892,6 +1907,8 @@ void Renderer11::release()
 
     SafeRelease(mDxgiFactory);
     SafeRelease(mDxgiAdapter);
+
+    SafeRelease(mDeviceContext1);
 
     if (mDeviceContext)
     {
