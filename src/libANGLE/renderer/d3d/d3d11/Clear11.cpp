@@ -15,14 +15,12 @@
 #include "libANGLE/FramebufferAttachment.h"
 
 // Precompiled shaders
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloat11vs.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloat11ps.h"
-
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearuint11vs.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearuint11ps.h"
-
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearsint11vs.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/clearsint11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/ClearFloat_PS.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/ClearFloat_VS.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/ClearSint_PS.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/ClearSint_VS.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/ClearUint_PS.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/ClearUint_VS.h"
 
 namespace rx
 {

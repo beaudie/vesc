@@ -14,9 +14,8 @@
 #include "libANGLE/features.h"
 
 // Precompiled shaders
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough2d11vs.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2d11ps.h"
-
+#include "libANGLE/renderer/d3d/d3d11/shaders/Passthrough2D_VS.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/PassthroughRGBA2D_PS.h"
 
 namespace rx
 {

@@ -18,11 +18,11 @@
 namespace
 {
 // Precompiled shaders
-#include "libANGLE/renderer/d3d/d3d9/shaders/compiled/standardvs.h"
-#include "libANGLE/renderer/d3d/d3d9/shaders/compiled/flipyvs.h"
-#include "libANGLE/renderer/d3d/d3d9/shaders/compiled/passthroughps.h"
-#include "libANGLE/renderer/d3d/d3d9/shaders/compiled/luminanceps.h"
-#include "libANGLE/renderer/d3d/d3d9/shaders/compiled/componentmaskps.h"
+#include "libANGLE/renderer/d3d/d3d9/shaders/Standard_VS.h"
+#include "libANGLE/renderer/d3d/d3d9/shaders/FlipY_VS.h"
+#include "libANGLE/renderer/d3d/d3d9/shaders/Passthrough_PS.h"
+#include "libANGLE/renderer/d3d/d3d9/shaders/Luminance_PS.h"
+#include "libANGLE/renderer/d3d/d3d9/shaders/ComponentMask_PS.h"
 
 const BYTE* const g_shaderCode[] =
 {

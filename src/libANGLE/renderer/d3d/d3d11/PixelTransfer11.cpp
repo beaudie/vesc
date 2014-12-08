@@ -22,11 +22,11 @@
 #include "libANGLE/Context.h"
 
 // Precompiled shaders
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/buffertotexture11_vs.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/buffertotexture11_gs.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/buffertotexture11_ps_4f.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/buffertotexture11_ps_4i.h"
-#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/buffertotexture11_ps_4ui.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/BufferToTexture_4F_PS.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/BufferToTexture_4I_PS.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/BufferToTexture_4UI_PS.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/BufferToTexture_GS.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/BufferToTexture_VS.h"
 
 namespace rx
 {

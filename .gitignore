@@ -13,6 +13,9 @@ Release_ARM/
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+*.xml
+*.targets
+*.props
 patches-*
 *.target.mk
 ipch
