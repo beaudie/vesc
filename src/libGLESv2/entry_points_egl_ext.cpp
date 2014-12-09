@@ -180,6 +180,9 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform, void *native_disp
                     }
                     break;
 
+                  case EGL_PLATFORM_ANGLE_TYPE_EXPERIMENTAL_ANGLEX:
+                    break;
+
                   default:
                     SetGlobalError(Error(EGL_SUCCESS));
                     return EGL_NO_DISPLAY;

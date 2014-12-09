@@ -46,6 +46,8 @@ namespace egl
 
 typedef rx::Renderer *(*CreateRendererFunction)(Display*, EGLNativeDisplayType, const AttributeMap &);
 
+extern CreateRendererFunction CreateExperimentalRenderer;
+
 template <typename RendererType>
 static rx::Renderer *CreateTypedRenderer(Display *display, EGLNativeDisplayType nativeDisplay, const AttributeMap &attributes)
 {
@@ -74,6 +76,11 @@ rx::Renderer *CreateRenderer(Display *display, EGLNativeDisplayType nativeDispla
             rendererCreationFunctions.push_back(CreateTypedRenderer<rx::Renderer9>);
         }
 #   endif
+
+    if (requestedDisplayType == EGL_PLATFORM_ANGLE_TYPE_EXPERIMENTAL_ANGLEX)
+    {
+        rendererCreationFunctions.push_back(CreateExperimentalRenderer);
+    }
 
     if (nativeDisplay != EGL_D3D11_ELSE_D3D9_DISPLAY_ANGLE &&
         nativeDisplay != EGL_D3D11_ONLY_DISPLAY_ANGLE &&

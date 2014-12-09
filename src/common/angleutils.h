@@ -157,4 +157,6 @@ std::string FormatString(const char *fmt, ...);
 #define GL_INT_64_ANGLEX 0x6ABE
 #define GL_STRUCT_ANGLEX 0x6ABF
 
+#define EGL_PLATFORM_ANGLE_TYPE_EXPERIMENTAL_ANGLEX 0xBADF00D
+
 #endif // COMMON_ANGLEUTILS_H_
