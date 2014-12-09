@@ -391,7 +391,7 @@
             'target_name': 'libANGLE',
             'type': 'static_library',
             'dependencies': [ 'translator', 'commit_id', ],
-            'includes': [ '../build/common_defines.gypi', ],
+            'includes': [ '../build/common_defines.gypi', '../angle_internal/src/libANGLE_experimental.gypi', ],
             'include_dirs':
             [
                 '.',
