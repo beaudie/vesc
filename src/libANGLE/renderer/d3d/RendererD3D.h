@@ -69,6 +69,9 @@ class RendererD3D : public Renderer
     bool isDeviceLost() const override;
     std::string getVendorString() const override;
 
+    virtual int getMinorShaderModel() const = 0;
+    virtual std::string getShaderModelSuffix() const = 0;
+
     DisplayImpl *createDisplay() override;
 
     // Direct3D Specific methods
