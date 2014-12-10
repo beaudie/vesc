@@ -1743,11 +1743,15 @@ gl::Error Renderer11::applyUniforms(const ProgramImpl &program, const std::vecto
         memcpy(&mAppliedPixelConstants, &mPixelConstants, sizeof(dx_PixelConstants));
     }
 
-    // needed for the point sprite geometry shader
-    if (mCurrentGeometryConstantBuffer != mDriverConstantBufferPS)
+    // TODO: once point sprites are implemented on Feature Level 9_3, ensure that GSSetConstantBuffers isn't called.
+    if (!(mFeatureLevel <= D3D_FEATURE_LEVEL_9_3))
     {
-        mDeviceContext->GSSetConstantBuffers(0, 1, &mDriverConstantBufferPS);
-        mCurrentGeometryConstantBuffer = mDriverConstantBufferPS;
+        // needed for the point sprite geometry shader
+        if (mCurrentGeometryConstantBuffer != mDriverConstantBufferPS)
+        {
+            mDeviceContext->GSSetConstantBuffers(0, 1, &mDriverConstantBufferPS);
+            mCurrentGeometryConstantBuffer = mDriverConstantBufferPS;
+        }
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -2924,9 +2928,9 @@ TextureStorage *Renderer11::createTextureStorage2D(SwapChain *swapChain)
     return new TextureStorage11_2D(this, swapChain11);
 }
 
-TextureStorage *Renderer11::createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels)
+TextureStorage *Renderer11::createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly)
 {
-    return new TextureStorage11_2D(this, internalformat, renderTarget, width, height, levels);
+    return new TextureStorage11_2D(this, internalformat, renderTarget, width, height, levels, hintLevelZeroOnly);
 }
 
 TextureStorage *Renderer11::createTextureStorageCube(GLenum internalformat, bool renderTarget, int size, int levels)
@@ -3445,7 +3449,7 @@ void Renderer11::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureC
 
 Workarounds Renderer11::generateWorkarounds() const
 {
-    return d3d11::GenerateWorkarounds();
+    return d3d11::GenerateWorkarounds(mFeatureLevel);
 }
 
 void Renderer11::setShaderResource(gl::SamplerType shaderType, UINT resourceSlot, ID3D11ShaderResourceView *srv)
