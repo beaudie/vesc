@@ -871,15 +871,21 @@ bool DynamicHLSL::generateShaderLinkHLSL(const gl::Data &data, InfoLog &infoLog,
     {
         pixelHLSL += "    float rhw = 1.0 / input.gl_FragCoord.w;\n";
 
-        if (shaderModel >= 4)
+        // Certain Shader Models (4_0+ and 3_0) allow reading from dx_Position in the pixel shader.
+        // Other Shader Models (4_0_level_9_3 and 2_x) don't support this, so we emulate it using dx_ViewCoords.
+        if (shaderModel >= 3 && mRenderer->getShaderModelSuffix() == "")
         {
-            pixelHLSL += "    gl_FragCoord.x = input.dx_Position.x;\n"
-                         "    gl_FragCoord.y = input.dx_Position.y;\n";
-        }
-        else if (shaderModel >= 3)
-        {
-            pixelHLSL += "    gl_FragCoord.x = input.dx_Position.x + 0.5;\n"
-                         "    gl_FragCoord.y = input.dx_Position.y + 0.5;\n";
+            if (shaderModel >= 4)
+            {
+                pixelHLSL += "    gl_FragCoord.x = input.dx_Position.x;\n"
+                             "    gl_FragCoord.y = input.dx_Position.y;\n";
+            }
+            else
+            {
+                // Shader Model 3
+                pixelHLSL += "    gl_FragCoord.x = input.dx_Position.x + 0.5;\n"
+                             "    gl_FragCoord.y = input.dx_Position.y + 0.5;\n";
+            }
         }
         else
         {
