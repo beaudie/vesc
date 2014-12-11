@@ -450,9 +450,19 @@ EGLBoolean EGLAPIENTRY QuerySurface(EGLDisplay dpy, EGLSurface surface, EGLint a
         *value = eglSurface->getWidth();
         break;
       case EGL_POST_SUB_BUFFER_SUPPORTED_NV:
+        if (!display->getExtensions().postSubBuffer)
+        {
+            SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+            return EGL_FALSE;
+        }
         *value = eglSurface->isPostSubBufferSupported();
         break;
       case EGL_FIXED_SIZE_ANGLE:
+        if (!display->getExtensions().windowFixedSize)
+        {
+            SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+            return EGL_FALSE;
+        }
         *value = eglSurface->isFixedSize();
         break;
       default:
@@ -469,13 +479,18 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy, EGLConfig config, EGLContex
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLConfig config = 0x%0.8p, EGLContext share_context = 0x%0.8p, "
           "const EGLint *attrib_list = 0x%0.8p)", dpy, config, share_context, attrib_list);
 
+    Display *display = static_cast<Display*>(dpy);
+    if (!ValidateDisplay(display))
+    {
+        return EGL_NO_CONTEXT;
+    }
+
     // Get the requested client version (default is 1) and check it is 2 or 3.
     EGLint clientMajorVersion = 1;
     EGLint clientMinorVersion = 0;
     EGLint contextFlags = 0;
     bool resetNotification = false;
     bool robustAccess = false;
-
     if (attrib_list)
     {
         for (const EGLint* attribute = attrib_list; attribute[0] != EGL_NONE; attribute += 2)
@@ -488,31 +503,36 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy, EGLConfig config, EGLContex
               case EGL_CONTEXT_MINOR_VERSION:
                 clientMinorVersion = attribute[1];
                 break;
-
               case EGL_CONTEXT_FLAGS_KHR:
                 contextFlags = attribute[1];
                 break;
-
               case EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR:
                 // Only valid for OpenGL (non-ES) contexts
                 SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
                 return EGL_NO_CONTEXT;
-
               case EGL_CONTEXT_OPENGL_ROBUST_ACCESS_EXT:
+                if (!display->getExtensions().createContextRobustness)
+                {
+                    SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+                    return EGL_NO_CONTEXT;
+                }
                 if (attribute[1] != EGL_TRUE && attribute[1] != EGL_FALSE)
                 {
                     SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
                     return EGL_NO_CONTEXT;
                 }
-
                 robustAccess = (attribute[1] == EGL_TRUE);
                 break;
-
               case EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_KHR:
                 META_ASSERT(EGL_LOSE_CONTEXT_ON_RESET_EXT == EGL_LOSE_CONTEXT_ON_RESET_KHR);
                 META_ASSERT(EGL_NO_RESET_NOTIFICATION_EXT == EGL_NO_RESET_NOTIFICATION_KHR);
                 // same as EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT, fall through
               case EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT:
+                if (!display->getExtensions().createContextRobustness)
+                {
+                    SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+                    return EGL_NO_CONTEXT;
+                }
                 if (attribute[1] == EGL_LOSE_CONTEXT_ON_RESET_EXT)
                 {
                     resetNotification = true;
@@ -529,13 +549,11 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy, EGLConfig config, EGLContex
             }
         }
     }
-
     if ((clientMajorVersion != 2 && clientMajorVersion != 3) || clientMinorVersion != 0)
     {
         SetGlobalError(Error(EGL_BAD_CONFIG));
         return EGL_NO_CONTEXT;
     }
-
     // Note: EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR does not apply to ES
     const EGLint validContextFlags = (EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR |
                                       EGL_CONTEXT_OPENGL_ROBUST_ACCESS_BIT_KHR);
@@ -544,12 +562,10 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy, EGLConfig config, EGLContex
         SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
         return EGL_NO_CONTEXT;
     }
-
     if ((contextFlags & EGL_CONTEXT_OPENGL_ROBUST_ACCESS_BIT_KHR) > 0)
     {
         robustAccess = true;
     }
-
     if (robustAccess)
     {
         // Unimplemented
@@ -557,24 +573,19 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy, EGLConfig config, EGLContex
         return EGL_NO_CONTEXT;
     }
 
-    Display *display = static_cast<Display*>(dpy);
-
     if (share_context)
     {
         gl::Context* sharedGLContext = static_cast<gl::Context*>(share_context);
-
         if (sharedGLContext->isResetNotificationEnabled() != resetNotification)
         {
             SetGlobalError(Error(EGL_BAD_MATCH));
             return EGL_NO_CONTEXT;
         }
-
         if (sharedGLContext->getClientVersion() != clientMajorVersion)
         {
             SetGlobalError(Error(EGL_BAD_CONTEXT));
             return EGL_NO_CONTEXT;
         }
-
         // Can not share contexts between displays
         if (sharedGLContext->getRenderer() != display->getRenderer())
         {
@@ -582,12 +593,10 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy, EGLConfig config, EGLContex
             return EGL_NO_CONTEXT;
         }
     }
-
     if (!ValidateConfig(display, config))
     {
         return EGL_NO_CONTEXT;
     }
-
     EGLContext context = EGL_NO_CONTEXT;
     Error error = display->createContext(config, clientMajorVersion, static_cast<gl::Context*>(share_context),
                                          resetNotification, robustAccess, &context);
@@ -596,7 +605,6 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy, EGLConfig config, EGLContex
         SetGlobalError(error);
         return EGL_NO_CONTEXT;
     }
-
     return context;
 }
 
