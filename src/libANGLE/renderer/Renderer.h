@@ -97,10 +97,6 @@ class Renderer
                                       GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
                                       GLbitfield mask, GLenum filter) = 0;
 
-    // TODO(jmadill): caps? and virtual for egl::Display
-    virtual bool getShareHandleSupport() const = 0;
-    virtual bool getPostSubBufferSupport() const = 0;
-
     // Shader creation
     virtual ShaderImpl *createShader(const gl::Data &data, GLenum type) = 0;
     virtual ProgramImpl *createProgram() = 0;

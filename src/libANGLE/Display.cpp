@@ -656,28 +656,7 @@ const std::string &Display::getClientExtensionString()
 
 void Display::initDisplayExtensions()
 {
-    mDisplayExtensions.createContextRobustness = true;
-
-    // ANGLE-specific extensions
-    if (mRenderer->getShareHandleSupport())
-    {
-        mDisplayExtensions.d3dShareHandleClientBuffer = true;
-        mDisplayExtensions.surfaceD3DTexture2DShareHandle = true;
-    }
-
-    mDisplayExtensions.querySurfacePointer = true;
-    mDisplayExtensions.windowFixedSize = true;
-
-    if (mRenderer->getPostSubBufferSupport())
-    {
-        mDisplayExtensions.postSubBuffer = true;
-    }
-
-#if defined (ANGLE_TEST_CONFIG)
-    // TODO: complete support for the EGL_KHR_create_context extension
-    mDisplayExtensions.createContext = true;
-#endif
-
+    mDisplayExtensions = mImplementation->getExtensions();
     mDisplayExtensionString = GenerateExtensionsString(mDisplayExtensions);
 }
 
