@@ -21,6 +21,7 @@
 #include "angle_gl.h"
 
 #include <vector>
+#include <map>
 
 namespace egl
 {
@@ -69,9 +70,25 @@ class Texture : public RefCountObject
 
     virtual bool isSamplerComplete(const SamplerState &samplerState, const Data &data) const = 0;
 
-    virtual Error generateMipmaps();
 
-    virtual Error copySubImage(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height, Framebuffer *source);
+    virtual Error setImage(GLenum target, size_t level, GLenum internalFormat, const Extents &size, GLenum format, GLenum type,
+                           const PixelUnpackState &unpack, const void *pixels);
+    virtual Error setSubImage(GLenum target, size_t level, const Box &area, GLenum format, GLenum type,
+                              const PixelUnpackState &unpack, const void *pixels);
+
+    virtual Error setCompressedImage(GLenum target, size_t level, GLenum internalFormat, const Extents &size,
+                                     const PixelUnpackState &unpack, const void *pixels);
+    virtual Error setCompressedSubImage(GLenum target, size_t level, const Box &area, GLenum format,
+                                        const PixelUnpackState &unpack, const void *pixels);
+
+    virtual Error copyImage(GLenum target, size_t level, const Rectangle &sourceArea, GLenum internalFormat,
+                            const Framebuffer *source);
+    virtual Error copySubImage(GLenum target, size_t level, const Extents &destOffset, const Rectangle &sourceArea,
+                              const Framebuffer *source);
+
+    virtual Error setStorage(GLenum target, size_t levels, GLenum internalFormat, const Extents &size);
+
+    virtual Error generateMipmaps();
 
     // Texture serials provide a unique way of identifying a Texture that isn't a raw pointer.
     // "id" is not good enough, as Textures can be deleted, then re-allocated with the same id.
@@ -99,11 +116,44 @@ class Texture : public RefCountObject
 
     GLenum mTarget;
 
+    struct ImageIdentifier
+    {
+        size_t level;
+        size_t layerIndex;
+
+        ImageIdentifier();
+        ImageIdentifier(size_t level, size_t layerIndex);
+        static ImageIdentifier FromTarget(GLenum target, size_t level);
+
+        bool operator<(const ImageIdentifier &other) const;
+    };
+
+    struct ImageInfo
+    {
+        Extents size;
+
+        GLenum internalFormat;
+        GLenum type;
+        GLenum format;
+
+        ImageInfo();
+        ImageInfo(const Extents &size, GLenum internalFormat, GLenum type, GLenum format);
+    };
+
+    const ImageInfo &getImageInfo(const ImageIdentifier& index) const;
+    void insertImageInfo(const ImageIdentifier& index, const ImageInfo &info);
+    void clearImageInfo();
+
     const unsigned int mTextureSerial;
     static unsigned int mCurrentTextureSerial;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Texture);
+
+    void setMipChainImageInfos(size_t levels, Extents baseSize, GLenum internalFormat, GLenum format, GLenum type);
+
+    typedef std::map<ImageIdentifier, ImageInfo> ImageInfoMap;
+    ImageInfoMap mImageInfo;
 };
 
 class Texture2D : public Texture
