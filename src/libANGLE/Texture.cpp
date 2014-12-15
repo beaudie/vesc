@@ -282,7 +282,7 @@ Error Texture2D::storage(GLsizei levels, GLenum internalformat, GLsizei width, G
 }
 
 // Tests for 2D texture sampling completeness. [OpenGL ES 2.0.24] section 3.8.2 page 85.
-bool Texture2D::isSamplerComplete(const SamplerState &samplerState, const TextureCapsMap &textureCaps, const Extensions &extensions, int clientVersion) const
+bool Texture2D::isSamplerComplete(const SamplerState &samplerState, const Data &data) const
 {
     GLsizei width = getBaseLevelWidth();
     GLsizei height = getBaseLevelHeight();
@@ -292,13 +292,12 @@ bool Texture2D::isSamplerComplete(const SamplerState &samplerState, const Textur
         return false;
     }
 
-    if (!textureCaps.get(getInternalFormat(0)).filterable && !IsPointSampled(samplerState))
+    if (!data.textureCaps->get(getInternalFormat(0)).filterable && !IsPointSampled(samplerState))
     {
         return false;
     }
 
-    bool npotSupport = extensions.textureNPOT;
-
+    bool npotSupport = data.extensions->textureNPOT;
     if (!npotSupport)
     {
         if ((samplerState.wrapS != GL_CLAMP_TO_EDGE && !gl::isPow2(width)) ||
@@ -330,7 +329,7 @@ bool Texture2D::isSamplerComplete(const SamplerState &samplerState, const Textur
     // MODE is NONE, and either the magnification filter is not NEAREST or the mini-
     // fication filter is neither NEAREST nor NEAREST_MIPMAP_NEAREST.
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(getInternalFormat(0));
-    if (formatInfo.depthBits > 0 && clientVersion > 2)
+    if (formatInfo.depthBits > 0 && data.clientVersion > 2)
     {
         if (samplerState.compareMode == GL_NONE)
         {
@@ -543,18 +542,18 @@ Error TextureCubeMap::storage(GLsizei levels, GLenum internalformat, GLsizei siz
 }
 
 // Tests for texture sampling completeness
-bool TextureCubeMap::isSamplerComplete(const SamplerState &samplerState, const TextureCapsMap &textureCaps, const Extensions &extensions, int clientVersion) const
+bool TextureCubeMap::isSamplerComplete(const SamplerState &samplerState, const Data &data) const
 {
     int size = getBaseLevelWidth();
 
     bool mipmapping = IsMipmapFiltered(samplerState);
 
-    if (!textureCaps.get(getInternalFormat(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0)).filterable && !IsPointSampled(samplerState))
+    if (!data.textureCaps->get(getInternalFormat(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0)).filterable && !IsPointSampled(samplerState))
     {
         return false;
     }
 
-    if (!gl::isPow2(size) && !extensions.textureNPOT)
+    if (!gl::isPow2(size) && !data.extensions->textureNPOT)
     {
         if (samplerState.wrapS != GL_CLAMP_TO_EDGE || samplerState.wrapT != GL_CLAMP_TO_EDGE || mipmapping)
         {
@@ -751,7 +750,7 @@ Error Texture3D::storage(GLsizei levels, GLenum internalformat, GLsizei width, G
     return Error(GL_NO_ERROR);
 }
 
-bool Texture3D::isSamplerComplete(const SamplerState &samplerState, const TextureCapsMap &textureCaps, const Extensions &extensions, int clientVersion) const
+bool Texture3D::isSamplerComplete(const SamplerState &samplerState, const Data &data) const
 {
     GLsizei width = getBaseLevelWidth();
     GLsizei height = getBaseLevelHeight();
@@ -762,7 +761,7 @@ bool Texture3D::isSamplerComplete(const SamplerState &samplerState, const Textur
         return false;
     }
 
-    if (!textureCaps.get(getInternalFormat(0)).filterable && !IsPointSampled(samplerState))
+    if (!data.textureCaps->get(getInternalFormat(0)).filterable && !IsPointSampled(samplerState))
     {
         return false;
     }
@@ -918,7 +917,7 @@ Error Texture2DArray::storage(GLsizei levels, GLenum internalformat, GLsizei wid
     return Error(GL_NO_ERROR);
 }
 
-bool Texture2DArray::isSamplerComplete(const SamplerState &samplerState, const TextureCapsMap &textureCaps, const Extensions &extensions, int clientVersion) const
+bool Texture2DArray::isSamplerComplete(const SamplerState &samplerState, const Data &data) const
 {
     GLsizei width = getBaseLevelWidth();
     GLsizei height = getBaseLevelHeight();
@@ -929,7 +928,7 @@ bool Texture2DArray::isSamplerComplete(const SamplerState &samplerState, const T
         return false;
     }
 
-    if (!textureCaps.get(getBaseLevelInternalFormat()).filterable && !IsPointSampled(samplerState))
+    if (!data.textureCaps->get(getBaseLevelInternalFormat()).filterable && !IsPointSampled(samplerState))
     {
         return false;
     }
