@@ -1743,11 +1743,15 @@ gl::Error Renderer11::applyUniforms(const ProgramImpl &program, const std::vecto
         memcpy(&mAppliedPixelConstants, &mPixelConstants, sizeof(dx_PixelConstants));
     }
 
-    // needed for the point sprite geometry shader
-    if (mCurrentGeometryConstantBuffer != mDriverConstantBufferPS)
+    // TODO: Once point sprites are supported on Feature Level 9_3, ensure that GSSetConstantBuffers isn't called.
+    if (!(mFeatureLevel <= D3D_FEATURE_LEVEL_9_3))
     {
-        mDeviceContext->GSSetConstantBuffers(0, 1, &mDriverConstantBufferPS);
-        mCurrentGeometryConstantBuffer = mDriverConstantBufferPS;
+        // needed for the point sprite geometry shader
+        if (mCurrentGeometryConstantBuffer != mDriverConstantBufferPS)
+        {
+            mDeviceContext->GSSetConstantBuffers(0, 1, &mDriverConstantBufferPS);
+            mCurrentGeometryConstantBuffer = mDriverConstantBufferPS;
+        }
     }
 
     return gl::Error(GL_NO_ERROR);
