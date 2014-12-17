@@ -79,49 +79,28 @@ GLenum Texture::getUsage() const
     return mUsage;
 }
 
-GLint Texture::getBaseLevelWidth() const
+size_t Texture::getWidth(GLenum target, size_t level) const
 {
-    const rx::Image *baseImage = getBaseLevelImage();
-    return (baseImage ? baseImage->getWidth() : 0);
+    ASSERT(target == mTarget || (mTarget == GL_TEXTURE_CUBE_MAP && IsCubemapTextureTarget(target)));
+    return getImageInfo(ImageIdentifier::FromTarget(target, level)).size.width;
 }
 
-GLint Texture::getBaseLevelHeight() const
+size_t Texture::getHeight(GLenum target, size_t level) const
 {
-    const rx::Image *baseImage = getBaseLevelImage();
-    return (baseImage ? baseImage->getHeight() : 0);
+    ASSERT(target == mTarget || (mTarget == GL_TEXTURE_CUBE_MAP && IsCubemapTextureTarget(target)));
+    return getImageInfo(ImageIdentifier::FromTarget(target, level)).size.height;
 }
 
-GLint Texture::getBaseLevelDepth() const
+size_t Texture::getDepth(GLenum target, size_t level) const
 {
-    const rx::Image *baseImage = getBaseLevelImage();
-    return (baseImage ? baseImage->getDepth() : 0);
+    ASSERT(target == mTarget || (mTarget == GL_TEXTURE_CUBE_MAP && IsCubemapTextureTarget(target)));
+    return getImageInfo(ImageIdentifier::FromTarget(target, level)).size.depth;
 }
 
-// Note: "base level image" is loosely defined to be any image from the base level,
-// where in the base of 2D array textures and cube maps there are several. Don't use
-// the base level image for anything except querying texture format and size.
-GLenum Texture::getBaseLevelInternalFormat() const
+GLenum Texture::getInternalFormat(GLenum target, size_t level) const
 {
-    const rx::Image *baseImage = getBaseLevelImage();
-    return (baseImage ? baseImage->getInternalFormat() : GL_NONE);
-}
-
-GLsizei Texture::getWidth(const ImageIndex &index) const
-{
-    rx::Image *image = mTexture->getImage(index);
-    return image->getWidth();
-}
-
-GLsizei Texture::getHeight(const ImageIndex &index) const
-{
-    rx::Image *image = mTexture->getImage(index);
-    return image->getHeight();
-}
-
-GLenum Texture::getInternalFormat(const ImageIndex &index) const
-{
-    rx::Image *image = mTexture->getImage(index);
-    return image->getInternalFormat();
+    ASSERT(target == mTarget || (mTarget == GL_TEXTURE_CUBE_MAP && IsCubemapTextureTarget(target)));
+    return getImageInfo(ImageIdentifier::FromTarget(target, level)).internalFormat;
 }
 
 unsigned int Texture::getTextureSerial() const
@@ -144,16 +123,6 @@ int Texture::immutableLevelCount()
     return mImmutableLevelCount;
 }
 
-int Texture::mipLevels() const
-{
-    return log2(std::max(std::max(getBaseLevelWidth(), getBaseLevelHeight()), getBaseLevelDepth())) + 1;
-}
-
-const rx::Image *Texture::getBaseLevelImage() const
-{
-    return (getImplementation()->getLayerCount(0) > 0 ? getImplementation()->getImage(0, 0) : NULL);
-}
-
 Error Texture::setImage(GLenum target, size_t level, GLenum internalFormat, const Extents &size, GLenum format, GLenum type,
                         const PixelUnpackState &unpack, const void *pixels)
 {
@@ -164,6 +133,8 @@ Error Texture::setImage(GLenum target, size_t level, GLenum internalFormat, cons
     {
         return error;
     }
+
+    insertImageInfo(ImageIdentifier::FromTarget(target, level), ImageInfo(size, internalFormat, type, format));
 
     return Error(GL_NO_ERROR);
 }
@@ -193,6 +164,10 @@ Error Texture::setCompressedImage(GLenum target, size_t level, GLenum internalFo
         return error;
     }
 
+    const InternalFormat &internalFormatInfo = GetInternalFormatInfo(internalFormat);
+    insertImageInfo(ImageIdentifier::FromTarget(target, level), ImageInfo(size, internalFormat, internalFormatInfo.type,
+                                                                          internalFormatInfo.format));
+
     return Error(GL_NO_ERROR);
 }
 
@@ -220,6 +195,11 @@ Error Texture::copyImage(GLenum target, size_t level, const Rectangle &sourceAre
     {
         return error;
     }
+
+    const InternalFormat &internalFormatInfo = GetInternalFormatInfo(internalFormat);
+    insertImageInfo(ImageIdentifier::FromTarget(target, level), ImageInfo(Extents(sourceArea.width, sourceArea.height, 1),
+                                                                          internalFormat, internalFormatInfo.type,
+                                                                          internalFormatInfo.format));
 
     return Error(GL_NO_ERROR);
 }
@@ -249,6 +229,8 @@ Error Texture::setStorage(GLenum target, size_t levels, GLenum internalFormat, c
     }
 
     mImmutableLevelCount = levels;
+    const InternalFormat &internalFormatInfo = GetInternalFormatInfo(internalFormat);
+    setMipChainImageInfos(levels, size, internalFormat, internalFormatInfo.type, internalFormatInfo.format);
 
     return Error(GL_NO_ERROR);
 }
@@ -262,7 +244,86 @@ Error Texture::generateMipmaps()
         return error;
     }
 
+    const ImageInfo &baseImageInfo = getImageInfo(ImageIdentifier(0, 0));
+    size_t mipLevels = log2(std::max(std::max(baseImageInfo.size.width, baseImageInfo.size.height), baseImageInfo.size.depth)) + 1;
+    setMipChainImageInfos(mipLevels, baseImageInfo.size, baseImageInfo.internalFormat, baseImageInfo.format, baseImageInfo.type);
+
     return Error(GL_NO_ERROR);
+}
+
+void Texture::setMipChainImageInfos(size_t levels, Extents baseSize, GLenum internalFormat, GLenum format, GLenum type)
+{
+    clearImageInfo();
+    for (size_t level = 0; level < levels; level++)
+    {
+        Extents levelSize(std::max<size_t>(baseSize.width >> level, 1),
+                          std::max<size_t>(baseSize.height >> level, 1),
+                          (mTarget == GL_TEXTURE_2D_ARRAY) ? baseSize.depth : std::max<size_t>(baseSize.depth >> level, 1));
+        ImageInfo levelInfo(levelSize, internalFormat, type, format);
+
+        if (mTarget == GL_TEXTURE_CUBE_MAP)
+        {
+            for (size_t face = GL_TEXTURE_CUBE_MAP_POSITIVE_X; face <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z; face++)
+            {
+                insertImageInfo(ImageIdentifier::FromTarget(face, level), levelInfo);
+            }
+        }
+        else
+        {
+            insertImageInfo(ImageIdentifier::FromTarget(mTarget, level), levelInfo);
+        }
+    }
+}
+
+Texture::ImageIdentifier::ImageIdentifier()
+    : ImageIdentifier(0, 0)
+{
+}
+
+Texture::ImageIdentifier::ImageIdentifier(size_t level, size_t layerIndex)
+    : level(level),
+      layerIndex(layerIndex)
+{
+}
+
+Texture::ImageIdentifier Texture::ImageIdentifier::FromTarget(GLenum target, size_t level)
+{
+    return ImageIdentifier(level, IsCubemapTextureTarget(target) ? (target - GL_TEXTURE_CUBE_MAP_POSITIVE_X) : 0);
+}
+
+bool Texture::ImageIdentifier::operator<(const ImageIdentifier &other) const
+{
+    return (level != other.level) ? level < other.level : layerIndex < other.layerIndex;
+}
+
+Texture::ImageInfo::ImageInfo()
+    : ImageInfo(Extents(0, 0, 0), GL_NONE, GL_NONE, GL_NONE)
+{
+}
+
+Texture::ImageInfo::ImageInfo(const Extents &size, GLenum internalFormat, GLenum type, GLenum format)
+    : size(size),
+      internalFormat(internalFormat),
+      type(type),
+      format(format)
+{
+}
+
+const Texture::ImageInfo &Texture::getImageInfo(const ImageIdentifier& index) const
+{
+    static const Texture::ImageInfo defaultInfo;
+    ImageInfoMap::const_iterator iter = mImageInfo.find(index);
+    return (iter != mImageInfo.end()) ? iter->second : defaultInfo;
+}
+
+void Texture::insertImageInfo(const ImageIdentifier& index, const ImageInfo &info)
+{
+    mImageInfo.insert(std::make_pair(index, info));
+}
+
+void Texture::clearImageInfo()
+{
+    mImageInfo.clear();
 }
 
 Texture2D::Texture2D(rx::TextureImpl *impl, GLuint id)
@@ -278,30 +339,6 @@ Texture2D::~Texture2D()
         mSurface->releaseTexImage(EGL_BACK_BUFFER);
         mSurface = NULL;
     }
-}
-
-GLsizei Texture2D::getWidth(GLint level) const
-{
-    if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(level, 0)->getWidth();
-    else
-        return 0;
-}
-
-GLsizei Texture2D::getHeight(GLint level) const
-{
-    if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(level, 0)->getHeight();
-    else
-        return 0;
-}
-
-GLenum Texture2D::getInternalFormat(GLint level) const
-{
-    if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(level, 0)->getInternalFormat();
-    else
-        return GL_NONE;
 }
 
 Error Texture2D::setImage(GLenum target, size_t level, GLenum internalFormat, const Extents &size, GLenum format, GLenum type,
@@ -391,15 +428,15 @@ void Texture2D::releaseTexImage()
 // Tests for 2D texture sampling completeness. [OpenGL ES 2.0.24] section 3.8.2 page 85.
 bool Texture2D::isSamplerComplete(const SamplerState &samplerState, const Data &data) const
 {
-    GLsizei width = getBaseLevelWidth();
-    GLsizei height = getBaseLevelHeight();
-
-    if (width <= 0 || height <= 0)
+    size_t width = getWidth(GL_TEXTURE_2D, 0);
+    size_t height = getHeight(GL_TEXTURE_2D, 0);
+    if (width == 0 || height == 0)
     {
         return false;
     }
 
-    if (!data.textureCaps->get(getInternalFormat(0)).filterable && !IsPointSampled(samplerState))
+    GLenum internalFormat = getInternalFormat(GL_TEXTURE_2D, 0);
+    if (!data.textureCaps->get(internalFormat).filterable && !IsPointSampled(samplerState))
     {
         return false;
     }
@@ -435,7 +472,7 @@ bool Texture2D::isSamplerComplete(const SamplerState &samplerState, const Data &
     // depth and stencil format (see table 3.13), the value of TEXTURE_COMPARE_-
     // MODE is NONE, and either the magnification filter is not NEAREST or the mini-
     // fication filter is neither NEAREST nor NEAREST_MIPMAP_NEAREST.
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(getInternalFormat(0));
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat);
     if (formatInfo.depthBits > 0 && data.clientVersion > 2)
     {
         if (samplerState.compareMode == GL_NONE)
@@ -451,22 +488,14 @@ bool Texture2D::isSamplerComplete(const SamplerState &samplerState, const Data &
     return true;
 }
 
-bool Texture2D::isCompressed(GLint level) const
-{
-    return GetInternalFormatInfo(getInternalFormat(level)).compressed;
-}
-
-bool Texture2D::isDepth(GLint level) const
-{
-    return GetInternalFormatInfo(getInternalFormat(level)).depthBits > 0;
-}
-
 // Tests for 2D texture (mipmap) completeness. [OpenGL ES 2.0.24] section 3.7.10 page 81.
 bool Texture2D::isMipmapComplete() const
 {
-    int levelCount = mipLevels();
+    size_t width = getWidth(GL_TEXTURE_2D, 0);
+    size_t height = getHeight(GL_TEXTURE_2D, 0);
 
-    for (int level = 0; level < levelCount; level++)
+    size_t expectedMipLevels = log2(std::max(width, height)) + 1;
+    for (size_t level = 0; level < expectedMipLevels; level++)
     {
         if (!isLevelComplete(level))
         {
@@ -477,19 +506,18 @@ bool Texture2D::isMipmapComplete() const
     return true;
 }
 
-bool Texture2D::isLevelComplete(int level) const
+bool Texture2D::isLevelComplete(size_t level) const
 {
+    ASSERT(level >= 1 && level < IMPLEMENTATION_MAX_TEXTURE_LEVELS);
+
     if (isImmutable())
     {
         return true;
     }
 
-    const rx::Image *baseImage = getBaseLevelImage();
-
-    GLsizei width = baseImage->getWidth();
-    GLsizei height = baseImage->getHeight();
-
-    if (width <= 0 || height <= 0)
+    size_t width = getWidth(GL_TEXTURE_2D, 0);
+    size_t height = getHeight(GL_TEXTURE_2D, 0);
+    if (width == 0 || height == 0)
     {
         return false;
     }
@@ -500,20 +528,17 @@ bool Texture2D::isLevelComplete(int level) const
         return true;
     }
 
-    ASSERT(level >= 1 && level < IMPLEMENTATION_MAX_TEXTURE_LEVELS && mTexture->getImage(level, 0) != NULL);
-    rx::Image *image = mTexture->getImage(level, 0);
-
-    if (image->getInternalFormat() != baseImage->getInternalFormat())
+    if (getInternalFormat(GL_TEXTURE_2D, level) != getInternalFormat(GL_TEXTURE_2D, 0))
     {
         return false;
     }
 
-    if (image->getWidth() != std::max(1, width >> level))
+    if (getWidth(GL_TEXTURE_2D, level) != std::max<size_t>(1, width >> level))
     {
         return false;
     }
 
-    if (image->getHeight() != std::max(1, height >> level))
+    if (getHeight(GL_TEXTURE_2D, level) != std::max<size_t>(1, height >> level))
     {
         return false;
     }
@@ -530,49 +555,22 @@ TextureCubeMap::~TextureCubeMap()
 {
 }
 
-GLsizei TextureCubeMap::getWidth(GLenum target, GLint level) const
-{
-    if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(level, targetToLayerIndex(target))->getWidth();
-    else
-        return 0;
-}
-
-GLsizei TextureCubeMap::getHeight(GLenum target, GLint level) const
-{
-    if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(level, targetToLayerIndex(target))->getHeight();
-    else
-        return 0;
-}
-
-GLenum TextureCubeMap::getInternalFormat(GLenum target, GLint level) const
-{
-    if (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-        return mTexture->getImage(level, targetToLayerIndex(target))->getInternalFormat();
-    else
-        return GL_NONE;
-}
-
 // Tests for cube texture completeness. [OpenGL ES 2.0.24] section 3.7.10 page 81.
 bool TextureCubeMap::isCubeComplete() const
 {
-    int    baseWidth  = getBaseLevelWidth();
-    int    baseHeight = getBaseLevelHeight();
-    GLenum baseFormat = getBaseLevelInternalFormat();
-
-    if (baseWidth <= 0 || baseWidth != baseHeight)
+    size_t width = getWidth(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0);
+    size_t height = getWidth(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0);
+    if (width == 0 || width != height)
     {
         return false;
     }
 
-    for (int faceIndex = 1; faceIndex < 6; faceIndex++)
+    GLenum internalFormat = getInternalFormat(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0);
+    for (GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1; face <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z; face++)
     {
-        const rx::Image *faceBaseImage = mTexture->getImage(0, faceIndex);
-
-        if (faceBaseImage->getWidth()          != baseWidth  ||
-            faceBaseImage->getHeight()         != baseHeight ||
-            faceBaseImage->getInternalFormat() != baseFormat )
+        if (getWidth(face, 0)          != width  ||
+            getHeight(face, 0)         != height ||
+            getInternalFormat(face, 0) != internalFormat)
         {
             return false;
         }
@@ -581,28 +579,18 @@ bool TextureCubeMap::isCubeComplete() const
     return true;
 }
 
-bool TextureCubeMap::isCompressed(GLenum target, GLint level) const
-{
-    return GetInternalFormatInfo(getInternalFormat(target, level)).compressed;
-}
-
-bool TextureCubeMap::isDepth(GLenum target, GLint level) const
-{
-    return GetInternalFormatInfo(getInternalFormat(target, level)).depthBits > 0;
-}
-
 // Tests for texture sampling completeness
 bool TextureCubeMap::isSamplerComplete(const SamplerState &samplerState, const Data &data) const
 {
-    int size = getBaseLevelWidth();
-
     bool mipmapping = IsMipmapFiltered(samplerState);
 
-    if (!data.textureCaps->get(getInternalFormat(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0)).filterable && !IsPointSampled(samplerState))
+    GLenum internalFormat = getInternalFormat(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0);
+    if (!data.textureCaps->get(internalFormat).filterable && !IsPointSampled(samplerState))
     {
         return false;
     }
 
+    size_t size = getWidth(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0);
     if (!gl::isPow2(size) && !data.extensions->textureNPOT)
     {
         if (samplerState.wrapS != GL_CLAMP_TO_EDGE || samplerState.wrapT != GL_CLAMP_TO_EDGE || mipmapping)
@@ -663,11 +651,13 @@ bool TextureCubeMap::isMipmapComplete() const
         return false;
     }
 
-    int levelCount = mipLevels();
+    size_t width = getWidth(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0);
+    size_t height = getHeight(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0);
 
-    for (int face = 0; face < 6; face++)
+    size_t expectedMipLevels = log2(std::max(width, height)) + 1;
+    for (GLenum face = GL_TEXTURE_CUBE_MAP_NEGATIVE_X; face <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z; face++)
     {
-        for (int level = 1; level < levelCount; level++)
+        for (size_t level = 1; level < expectedMipLevels; level++)
         {
             if (!isFaceLevelComplete(face, level))
             {
@@ -679,18 +669,17 @@ bool TextureCubeMap::isMipmapComplete() const
     return true;
 }
 
-bool TextureCubeMap::isFaceLevelComplete(int faceIndex, int level) const
+bool TextureCubeMap::isFaceLevelComplete(GLenum target, size_t level) const
 {
-    ASSERT(level >= 0 && faceIndex < 6 && level < IMPLEMENTATION_MAX_TEXTURE_LEVELS && mTexture->getImage(level, faceIndex) != NULL);
+    ASSERT(level >= 0 && level < IMPLEMENTATION_MAX_TEXTURE_LEVELS && IsCubemapTextureTarget(target));
 
     if (isImmutable())
     {
         return true;
     }
 
-    int baseSize = getBaseLevelWidth();
-
-    if (baseSize <= 0)
+    size_t baseSize = getWidth(target, 0);
+    if (baseSize == 0)
     {
         return false;
     }
@@ -704,14 +693,12 @@ bool TextureCubeMap::isFaceLevelComplete(int faceIndex, int level) const
     }
 
     // Check that non-zero levels are consistent with the base level.
-    const rx::Image *faceLevelImage = mTexture->getImage(level, faceIndex);
-
-    if (faceLevelImage->getInternalFormat() != getBaseLevelInternalFormat())
+    if (getInternalFormat(target, level) != getInternalFormat(target, 0))
     {
         return false;
     }
 
-    if (faceLevelImage->getWidth() != std::max(1, baseSize >> level))
+    if (getWidth(target, level) != std::max<size_t>(1, baseSize >> level))
     {
         return false;
     }
@@ -729,48 +716,18 @@ Texture3D::~Texture3D()
 {
 }
 
-GLsizei Texture3D::getWidth(GLint level) const
-{
-    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level, 0)->getWidth() : 0;
-}
-
-GLsizei Texture3D::getHeight(GLint level) const
-{
-    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level, 0)->getHeight() : 0;
-}
-
-GLsizei Texture3D::getDepth(GLint level) const
-{
-    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level, 0)->getDepth() : 0;
-}
-
-GLenum Texture3D::getInternalFormat(GLint level) const
-{
-    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getImage(level, 0)->getInternalFormat() : GL_NONE;
-}
-
-bool Texture3D::isCompressed(GLint level) const
-{
-    return GetInternalFormatInfo(getInternalFormat(level)).compressed;
-}
-
-bool Texture3D::isDepth(GLint level) const
-{
-    return GetInternalFormatInfo(getInternalFormat(level)).depthBits > 0;
-}
-
 bool Texture3D::isSamplerComplete(const SamplerState &samplerState, const Data &data) const
 {
-    GLsizei width = getBaseLevelWidth();
-    GLsizei height = getBaseLevelHeight();
-    GLsizei depth = getBaseLevelDepth();
-
-    if (width <= 0 || height <= 0 || depth <= 0)
+    size_t width = getWidth(GL_TEXTURE_3D, 0);
+    size_t height = getHeight(GL_TEXTURE_3D, 0);
+    size_t depth = getDepth(GL_TEXTURE_3D, 0);
+    if (width == 0 || height == 0 || depth == 0)
     {
         return false;
     }
 
-    if (!data.textureCaps->get(getInternalFormat(0)).filterable && !IsPointSampled(samplerState))
+    GLenum internalFormat = getInternalFormat(GL_TEXTURE_3D, 0);
+    if (!data.textureCaps->get(internalFormat).filterable && !IsPointSampled(samplerState))
     {
         return false;
     }
@@ -785,9 +742,12 @@ bool Texture3D::isSamplerComplete(const SamplerState &samplerState, const Data &
 
 bool Texture3D::isMipmapComplete() const
 {
-    int levelCount = mipLevels();
+    size_t width = getWidth(GL_TEXTURE_2D_ARRAY, 0);
+    size_t height = getHeight(GL_TEXTURE_2D_ARRAY, 0);
+    size_t depth = getDepth(GL_TEXTURE_3D, 0);
 
-    for (int level = 0; level < levelCount; level++)
+    size_t expectedMipLevels = log2(std::max(std::max(width, height), depth)) + 1;
+    for (size_t level = 0; level < expectedMipLevels; level++)
     {
         if (!isLevelComplete(level))
         {
@@ -798,7 +758,7 @@ bool Texture3D::isMipmapComplete() const
     return true;
 }
 
-bool Texture3D::isLevelComplete(int level) const
+bool Texture3D::isLevelComplete(size_t level) const
 {
     ASSERT(level >= 0 && level < IMPLEMENTATION_MAX_TEXTURE_LEVELS && mTexture->getImage(level, 0) != NULL);
 
@@ -807,11 +767,10 @@ bool Texture3D::isLevelComplete(int level) const
         return true;
     }
 
-    GLsizei width = getBaseLevelWidth();
-    GLsizei height = getBaseLevelHeight();
-    GLsizei depth = getBaseLevelDepth();
-
-    if (width <= 0 || height <= 0 || depth <= 0)
+    size_t width = getWidth(GL_TEXTURE_3D, level);
+    size_t height = getHeight(GL_TEXTURE_3D, level);
+    size_t depth = getDepth(GL_TEXTURE_3D, level);
+    if (width == 0 || height == 0 || depth == 0)
     {
         return false;
     }
@@ -821,24 +780,22 @@ bool Texture3D::isLevelComplete(int level) const
         return true;
     }
 
-    rx::Image *levelImage = mTexture->getImage(level, 0);
-
-    if (levelImage->getInternalFormat() != getBaseLevelInternalFormat())
+    if (getInternalFormat(GL_TEXTURE_3D, level) != getInternalFormat(GL_TEXTURE_3D, 0))
     {
         return false;
     }
 
-    if (levelImage->getWidth() != std::max(1, width >> level))
+    if (getWidth(GL_TEXTURE_3D, level) != std::max<size_t>(1, width >> level))
     {
         return false;
     }
 
-    if (levelImage->getHeight() != std::max(1, height >> level))
+    if (getHeight(GL_TEXTURE_3D, level) != std::max<size_t>(1, height >> level))
     {
         return false;
     }
 
-    if (levelImage->getDepth() != std::max(1, depth >> level))
+    if (getDepth(GL_TEXTURE_3D, level) != std::max<size_t>(1, depth >> level))
     {
         return false;
     }
@@ -855,48 +812,18 @@ Texture2DArray::~Texture2DArray()
 {
 }
 
-GLsizei Texture2DArray::getWidth(GLint level) const
-{
-    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS && mTexture->getLayerCount(level) > 0) ? mTexture->getImage(level, 0)->getWidth() : 0;
-}
-
-GLsizei Texture2DArray::getHeight(GLint level) const
-{
-    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS && mTexture->getLayerCount(level) > 0) ? mTexture->getImage(level, 0)->getHeight() : 0;
-}
-
-GLsizei Texture2DArray::getLayers(GLint level) const
-{
-    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS) ? mTexture->getLayerCount(level) : 0;
-}
-
-GLenum Texture2DArray::getInternalFormat(GLint level) const
-{
-    return (level < IMPLEMENTATION_MAX_TEXTURE_LEVELS && mTexture->getLayerCount(level) > 0) ? mTexture->getImage(level, 0)->getInternalFormat() : GL_NONE;
-}
-
-bool Texture2DArray::isCompressed(GLint level) const
-{
-    return GetInternalFormatInfo(getInternalFormat(level)).compressed;
-}
-
-bool Texture2DArray::isDepth(GLint level) const
-{
-    return GetInternalFormatInfo(getInternalFormat(level)).depthBits > 0;
-}
-
 bool Texture2DArray::isSamplerComplete(const SamplerState &samplerState, const Data &data) const
 {
-    GLsizei width = getBaseLevelWidth();
-    GLsizei height = getBaseLevelHeight();
-    GLsizei depth = getLayers(0);
-
-    if (width <= 0 || height <= 0 || depth <= 0)
+    size_t width = getWidth(GL_TEXTURE_2D_ARRAY, 0);
+    size_t height = getHeight(GL_TEXTURE_2D_ARRAY, 0);
+    size_t depth = getDepth(GL_TEXTURE_2D_ARRAY, 0);
+    if (width == 0 || height == 0 || depth == 0)
     {
         return false;
     }
 
-    if (!data.textureCaps->get(getBaseLevelInternalFormat()).filterable && !IsPointSampled(samplerState))
+    GLenum internalFormat = getInternalFormat(GL_TEXTURE_2D_ARRAY, 0);
+    if (!data.textureCaps->get(internalFormat).filterable && !IsPointSampled(samplerState))
     {
         return false;
     }
@@ -911,9 +838,11 @@ bool Texture2DArray::isSamplerComplete(const SamplerState &samplerState, const D
 
 bool Texture2DArray::isMipmapComplete() const
 {
-    int levelCount = mipLevels();
+    size_t width = getWidth(GL_TEXTURE_2D_ARRAY, 0);
+    size_t height = getHeight(GL_TEXTURE_2D_ARRAY, 0);
 
-    for (int level = 1; level < levelCount; level++)
+    size_t expectedMipLevels = log2(std::max(width, height)) + 1;
+    for (size_t level = 1; level < expectedMipLevels; level++)
     {
         if (!isLevelComplete(level))
         {
@@ -924,7 +853,7 @@ bool Texture2DArray::isMipmapComplete() const
     return true;
 }
 
-bool Texture2DArray::isLevelComplete(int level) const
+bool Texture2DArray::isLevelComplete(size_t level) const
 {
     ASSERT(level >= 0 && level < IMPLEMENTATION_MAX_TEXTURE_LEVELS);
 
@@ -933,11 +862,10 @@ bool Texture2DArray::isLevelComplete(int level) const
         return true;
     }
 
-    GLsizei width = getBaseLevelWidth();
-    GLsizei height = getBaseLevelHeight();
-    GLsizei layers = getLayers(0);
-
-    if (width <= 0 || height <= 0 || layers <= 0)
+    size_t width = getWidth(GL_TEXTURE_2D_ARRAY, level);
+    size_t height = getHeight(GL_TEXTURE_2D_ARRAY, level);
+    size_t layers = getDepth(GL_TEXTURE_2D_ARRAY, 0);
+    if (width == 0 || height == 0 || layers == 0)
     {
         return false;
     }
@@ -947,22 +875,22 @@ bool Texture2DArray::isLevelComplete(int level) const
         return true;
     }
 
-    if (getInternalFormat(level) != getInternalFormat(0))
+    if (getInternalFormat(GL_TEXTURE_2D_ARRAY, level) != getInternalFormat(GL_TEXTURE_2D_ARRAY, 0))
     {
         return false;
     }
 
-    if (getWidth(level) != std::max(1, width >> level))
+    if (getWidth(GL_TEXTURE_2D_ARRAY, level) != std::max<size_t>(1, width >> level))
     {
         return false;
     }
 
-    if (getHeight(level) != std::max(1, height >> level))
+    if (getHeight(GL_TEXTURE_2D_ARRAY, level) != std::max<size_t>(1, height >> level))
     {
         return false;
     }
 
-    if (getLayers(level) != layers)
+    if (getDepth(GL_TEXTURE_2D_ARRAY, level) != layers)
     {
         return false;
     }
