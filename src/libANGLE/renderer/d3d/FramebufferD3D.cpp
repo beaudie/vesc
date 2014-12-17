@@ -50,11 +50,6 @@ GLenum DefaultAttachmentD3D::getInternalFormat() const
     return mRenderTarget->getInternalFormat();
 }
 
-GLenum DefaultAttachmentD3D::getActualFormat() const
-{
-    return mRenderTarget->getActualFormat();
-}
-
 GLsizei DefaultAttachmentD3D::getSamples() const
 {
     return mRenderTarget->getSamples();
@@ -222,7 +217,14 @@ GLenum FramebufferD3D::getImplementationColorReadFormat() const
         return GL_NONE;
     }
 
-    GLenum actualFormat = mColorBuffers[0]->getActualFormat();
+    RenderTarget *attachmentRenderTarget = NULL;
+    gl::Error error = GetAttachmentRenderTarget(mColorBuffers[0], &attachmentRenderTarget);
+    if (error.isError())
+    {
+        return GL_NONE;
+    }
+
+    GLenum actualFormat = getRenderTargetActualFormat(attachmentRenderTarget);
     const gl::InternalFormat &actualFormatInfo = gl::GetInternalFormatInfo(actualFormat);
 
     return actualFormatInfo.format;
@@ -238,7 +240,14 @@ GLenum FramebufferD3D::getImplementationColorReadType() const
         return GL_NONE;
     }
 
-    GLenum actualFormat = mColorBuffers[0]->getActualFormat();
+    RenderTarget *attachmentRenderTarget = NULL;
+    gl::Error error = GetAttachmentRenderTarget(mColorBuffers[0], &attachmentRenderTarget);
+    if (error.isError())
+    {
+        return GL_NONE;
+    }
+
+    GLenum actualFormat = getRenderTargetActualFormat(attachmentRenderTarget);
     const gl::InternalFormat &actualFormatInfo = gl::GetInternalFormatInfo(actualFormat);
 
     return actualFormatInfo.type;
