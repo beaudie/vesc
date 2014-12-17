@@ -21,6 +21,7 @@
 #include "angle_gl.h"
 
 #include <vector>
+#include <map>
 
 namespace egl
 {
@@ -114,11 +115,44 @@ class Texture : public RefCountObject
 
     GLenum mTarget;
 
+    struct ImageIdentifier
+    {
+        size_t level;
+        size_t layerIndex;
+
+        ImageIdentifier();
+        ImageIdentifier(size_t level, size_t layerIndex);
+        static ImageIdentifier FromTarget(GLenum target, size_t level);
+
+        bool operator<(const ImageIdentifier &other) const;
+    };
+
+    struct ImageInfo
+    {
+        Extents size;
+
+        GLenum internalFormat;
+        GLenum type;
+        GLenum format;
+
+        ImageInfo();
+        ImageInfo(const Extents &size, GLenum internalFormat, GLenum type, GLenum format);
+    };
+
+    const ImageInfo &getImageInfo(const ImageIdentifier& index) const;
+
     const unsigned int mTextureSerial;
     static unsigned int mCurrentTextureSerial;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Texture);
+
+    void insertImageInfo(const ImageIdentifier& index, const ImageInfo &info);
+    void setMipChainImageInfos(size_t levels, Extents baseSize, GLenum internalFormat, GLenum format, GLenum type);
+    void clearImageInfo();
+
+    typedef std::map<ImageIdentifier, ImageInfo> ImageInfoMap;
+    ImageInfoMap mImageInfo;
 };
 
 class Texture2D : public Texture
