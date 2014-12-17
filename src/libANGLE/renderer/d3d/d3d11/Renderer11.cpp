@@ -2101,7 +2101,7 @@ int Renderer11::getMaxSwapInterval() const
     return 4;
 }
 
-gl::Error Renderer11::copyImage2D(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                   GLint xoffset, GLint yoffset, TextureStorage *storage, GLint level)
 {
     gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
@@ -2152,7 +2152,7 @@ gl::Error Renderer11::copyImage2D(gl::Framebuffer *framebuffer, const gl::Rectan
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::copyImageCube(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                     GLint xoffset, GLint yoffset, TextureStorage *storage, GLenum target, GLint level)
 {
     gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
@@ -2203,7 +2203,7 @@ gl::Error Renderer11::copyImageCube(gl::Framebuffer *framebuffer, const gl::Rect
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::copyImage3D(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                   GLint xoffset, GLint yoffset, GLint zOffset, TextureStorage *storage, GLint level)
 {
     gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
@@ -2254,7 +2254,7 @@ gl::Error Renderer11::copyImage3D(gl::Framebuffer *framebuffer, const gl::Rectan
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::copyImage2DArray(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                        GLint xoffset, GLint yoffset, GLint zOffset, TextureStorage *storage, GLint level)
 {
     gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
