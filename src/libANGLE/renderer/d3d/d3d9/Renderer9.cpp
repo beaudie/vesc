@@ -2425,7 +2425,7 @@ D3DPOOL Renderer9::getBufferPool(DWORD usage) const
     return D3DPOOL_DEFAULT;
 }
 
-gl::Error Renderer9::copyImage2D(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+gl::Error Renderer9::copyImage2D(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                  GLint xoffset, GLint yoffset, TextureStorage *storage, GLint level)
 {
     RECT rect;
@@ -2437,7 +2437,7 @@ gl::Error Renderer9::copyImage2D(gl::Framebuffer *framebuffer, const gl::Rectang
     return mBlit->copy2D(framebuffer, rect, destFormat, xoffset, yoffset, storage, level);
 }
 
-gl::Error Renderer9::copyImageCube(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+gl::Error Renderer9::copyImageCube(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                    GLint xoffset, GLint yoffset, TextureStorage *storage, GLenum target, GLint level)
 {
     RECT rect;
@@ -2449,7 +2449,7 @@ gl::Error Renderer9::copyImageCube(gl::Framebuffer *framebuffer, const gl::Recta
     return mBlit->copyCube(framebuffer, rect, destFormat, xoffset, yoffset, storage, target, level);
 }
 
-gl::Error Renderer9::copyImage3D(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+gl::Error Renderer9::copyImage3D(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                  GLint xoffset, GLint yoffset, GLint zOffset, TextureStorage *storage, GLint level)
 {
     // 3D textures are not available in the D3D9 backend.
@@ -2457,7 +2457,7 @@ gl::Error Renderer9::copyImage3D(gl::Framebuffer *framebuffer, const gl::Rectang
     return gl::Error(GL_INVALID_OPERATION);
 }
 
-gl::Error Renderer9::copyImage2DArray(gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
+gl::Error Renderer9::copyImage2DArray(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                       GLint xoffset, GLint yoffset, GLint zOffset, TextureStorage *storage, GLint level)
 {
     // 2D array textures are not available in the D3D9 backend.

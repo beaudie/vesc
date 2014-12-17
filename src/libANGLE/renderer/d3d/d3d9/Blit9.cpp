@@ -227,7 +227,7 @@ gl::Error Blit9::boxFilter(IDirect3DSurface9 *source, IDirect3DSurface9 *dest)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Blit9::copy2D(gl::Framebuffer *framebuffer, const RECT &sourceRect, GLenum destFormat, GLint xoffset, GLint yoffset, TextureStorage *storage, GLint level)
+gl::Error Blit9::copy2D(const gl::Framebuffer *framebuffer, const RECT &sourceRect, GLenum destFormat, GLint xoffset, GLint yoffset, TextureStorage *storage, GLint level)
 {
     gl::Error error = initialize();
     if (error.isError())
@@ -266,7 +266,7 @@ gl::Error Blit9::copy2D(gl::Framebuffer *framebuffer, const RECT &sourceRect, GL
     return result;
 }
 
-gl::Error Blit9::copyCube(gl::Framebuffer *framebuffer, const RECT &sourceRect, GLenum destFormat, GLint xoffset, GLint yoffset, TextureStorage *storage, GLenum target, GLint level)
+gl::Error Blit9::copyCube(const gl::Framebuffer *framebuffer, const RECT &sourceRect, GLenum destFormat, GLint xoffset, GLint yoffset, TextureStorage *storage, GLenum target, GLint level)
 {
     gl::Error error = initialize();
     if (error.isError())
