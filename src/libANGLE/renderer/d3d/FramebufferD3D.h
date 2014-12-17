@@ -34,7 +34,6 @@ class DefaultAttachmentD3D : public DefaultAttachmentImpl
     virtual GLsizei getWidth() const override;
     virtual GLsizei getHeight() const override;
     virtual GLenum getInternalFormat() const override;
-    virtual GLenum getActualFormat() const override;
     virtual GLsizei getSamples() const override;
 
     RenderTarget *getRenderTarget() const;

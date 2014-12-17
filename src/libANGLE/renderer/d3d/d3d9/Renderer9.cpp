@@ -1220,6 +1220,10 @@ gl::Error Renderer9::applyRenderTarget(const gl::Framebuffer *framebuffer)
     }
     ASSERT(attachment);
 
+    size_t renderTargetWidth = 0;
+    size_t renderTargetHeight = 0;
+    D3DFORMAT renderTargetFormat = D3DFMT_UNKNOWN;
+
     bool renderTargetChanged = false;
     unsigned int renderTargetSerial = GetAttachmentSerial(attachment);
     if (renderTargetSerial != mAppliedRenderTargetSerial)
@@ -1238,6 +1242,10 @@ gl::Error Renderer9::applyRenderTarget(const gl::Framebuffer *framebuffer)
 
         mDevice->SetRenderTarget(0, renderTargetSurface);
         SafeRelease(renderTargetSurface);
+
+        renderTargetWidth = renderTarget->getWidth();
+        renderTargetHeight = renderTarget->getHeight();
+        renderTargetFormat = renderTarget->getD3DFormat();
 
         mAppliedRenderTargetSerial = renderTargetSerial;
         renderTargetChanged = true;
@@ -1311,9 +1319,9 @@ gl::Error Renderer9::applyRenderTarget(const gl::Framebuffer *framebuffer)
         mForceSetViewport = true;
         mForceSetBlendState = true;
 
-        mRenderTargetDesc.width = attachment->getWidth();
-        mRenderTargetDesc.height = attachment->getHeight();
-        mRenderTargetDesc.format = attachment->getActualFormat();
+        mRenderTargetDesc.width = renderTargetWidth;
+        mRenderTargetDesc.height = renderTargetHeight;
+        mRenderTargetDesc.format = renderTargetFormat;
         mRenderTargetDescInitialized = true;
     }
 
@@ -1906,8 +1914,18 @@ gl::Error Renderer9::clear(const gl::ClearParameters &clearParams, const gl::Fra
     unsigned int stencilUnmasked = 0x0;
     if (clearParams.clearStencil && frameBuffer->hasStencil())
     {
-        unsigned int stencilSize = gl::GetInternalFormatInfo((frameBuffer->getStencilbuffer()->getActualFormat())).stencilBits;
-        stencilUnmasked = (0x1 << stencilSize) - 1;
+        RenderTarget *stencilRenderTarget = NULL;
+        gl::Error error = GetAttachmentRenderTarget(frameBuffer->getStencilbuffer(), &stencilRenderTarget);
+        if (error.isError())
+        {
+            return error;
+        }
+
+        RenderTarget9 *stencilRenderTarget9 = RenderTarget9::makeRenderTarget9(stencilRenderTarget);
+        ASSERT(stencilRenderTarget9);
+
+        const d3d9::D3DFormat &d3dFormatInfo = d3d9::GetD3DFormatInfo(stencilRenderTarget9->getD3DFormat());
+        stencilUnmasked = (0x1 << d3dFormatInfo.stencilBits) - 1;
     }
 
     const bool needMaskedStencilClear = clearParams.clearStencil &&
@@ -1918,13 +1936,24 @@ gl::Error Renderer9::clear(const gl::ClearParameters &clearParams, const gl::Fra
     if (clearColor)
     {
         const gl::FramebufferAttachment *attachment = frameBuffer->getFirstColorbuffer();
-        const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(attachment->getInternalFormat());
-        const gl::InternalFormat &actualFormatInfo = gl::GetInternalFormatInfo(attachment->getActualFormat());
 
-        color = D3DCOLOR_ARGB(gl::unorm<8>((formatInfo.alphaBits == 0 && actualFormatInfo.alphaBits > 0) ? 1.0f : clearParams.colorFClearValue.alpha),
-                              gl::unorm<8>((formatInfo.redBits   == 0 && actualFormatInfo.redBits   > 0) ? 0.0f : clearParams.colorFClearValue.red),
-                              gl::unorm<8>((formatInfo.greenBits == 0 && actualFormatInfo.greenBits > 0) ? 0.0f : clearParams.colorFClearValue.green),
-                              gl::unorm<8>((formatInfo.blueBits  == 0 && actualFormatInfo.blueBits  > 0) ? 0.0f : clearParams.colorFClearValue.blue));
+        RenderTarget *colorRenderTarget = NULL;
+        gl::Error error = GetAttachmentRenderTarget(attachment, &colorRenderTarget);
+        if (error.isError())
+        {
+            return error;
+        }
+
+        RenderTarget9 *colorRenderTarget9 = RenderTarget9::makeRenderTarget9(colorRenderTarget);
+        ASSERT(colorRenderTarget9);
+
+        const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(attachment->getInternalFormat());
+        const d3d9::D3DFormat &d3dFormatInfo = d3d9::GetD3DFormatInfo(colorRenderTarget9->getD3DFormat());
+
+        color = D3DCOLOR_ARGB(gl::unorm<8>((formatInfo.alphaBits == 0 && d3dFormatInfo.alphaBits > 0) ? 1.0f : clearParams.colorFClearValue.alpha),
+                              gl::unorm<8>((formatInfo.redBits   == 0 && d3dFormatInfo.redBits   > 0) ? 0.0f : clearParams.colorFClearValue.red),
+                              gl::unorm<8>((formatInfo.greenBits == 0 && d3dFormatInfo.greenBits > 0) ? 0.0f : clearParams.colorFClearValue.green),
+                              gl::unorm<8>((formatInfo.blueBits  == 0 && d3dFormatInfo.blueBits  > 0) ? 0.0f : clearParams.colorFClearValue.blue));
 
         if ((formatInfo.redBits   > 0 && !clearParams.colorMaskRed) ||
             (formatInfo.greenBits > 0 && !clearParams.colorMaskGreen) ||

@@ -48,11 +48,6 @@ GLenum DefaultAttachmentD3D::getInternalFormat() const
     return mRenderTarget->getInternalFormat();
 }
 
-GLenum DefaultAttachmentD3D::getActualFormat() const
-{
-    return mRenderTarget->getActualFormat();
-}
-
 GLsizei DefaultAttachmentD3D::getSamples() const
 {
     return mRenderTarget->getSamples();

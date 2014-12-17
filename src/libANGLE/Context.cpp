@@ -1390,7 +1390,8 @@ void Context::getCurrentReadFormatType(GLenum *internalFormat, GLenum *format, G
     FramebufferAttachment *attachment = framebuffer->getReadColorbuffer();
     ASSERT(attachment);
 
-    GLenum actualFormat = attachment->getActualFormat();
+    // TODO:incorrect
+    GLenum actualFormat = attachment->getInternalFormat();
     const InternalFormat &actualFormatInfo = GetInternalFormatInfo(actualFormat);
 
     *internalFormat = actualFormat;

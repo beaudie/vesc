@@ -275,8 +275,8 @@ ClearParameters State::getClearParameters(GLbitfield mask) const
     {
         if (framebufferObject->getStencilbuffer() != NULL)
         {
-            GLenum stencilActualFormat = framebufferObject->getStencilbuffer()->getActualFormat();
-            if (GetInternalFormatInfo(stencilActualFormat).stencilBits > 0)
+            GLenum stencilFormat = framebufferObject->getStencilbuffer()->getInternalFormat();
+            if (GetInternalFormatInfo(stencilFormat).stencilBits > 0)
             {
                 clearParams.clearStencil = true;
             }

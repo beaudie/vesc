@@ -222,9 +222,7 @@ bool Image11::redefine(RendererD3D *renderer, GLenum target, GLenum internalform
 
         // compute the d3d format that will be used
         const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalformat);
-        const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(formatInfo.texFormat);
         mDXGIFormat = formatInfo.texFormat;
-        mActualFormat = dxgiFormatInfo.internalFormat;
         mRenderable = (formatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN);
 
         releaseStagingTexture();
@@ -437,7 +435,8 @@ gl::Error Image11::copy(const gl::Extents &destOffset, const gl::Rectangle &sour
         }
 
         // determine the offset coordinate into the destination buffer
-        GLsizei rowOffset = gl::GetInternalFormatInfo(mActualFormat).pixelBytes * destOffset.width;
+        const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mDXGIFormat);
+        GLsizei rowOffset = dxgiFormatInfo.pixelBytes * destOffset.width;
         uint8_t *dataOffset = static_cast<uint8_t*>(mappedImage.pData) + mappedImage.RowPitch * destOffset.height + rowOffset + destOffset.depth * mappedImage.DepthPitch;
 
         const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(mInternalFormat);
