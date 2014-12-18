@@ -9,6 +9,7 @@
 #include "common/angleutils.h"
 #include "common/utilities.h"
 #include "common/blocklayout.h"
+#include "compiler/translator/BuiltInFunctionEmulator.h"
 #include "compiler/translator/compilerdebug.h"
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/DetectDiscontinuity.h"
@@ -1772,6 +1773,21 @@ bool OutputHLSL::visitUnary(Visit visit, TIntermUnary *node)
       case EOpAsin:             outputTriplet(visit, "asin(", "", ")");      break;
       case EOpAcos:             outputTriplet(visit, "acos(", "", ")");      break;
       case EOpAtan:             outputTriplet(visit, "atan(", "", ")");      break;
+      case EOpSinh:             outputTriplet(visit, "sinh(", "", ")");      break;
+      case EOpCosh:             outputTriplet(visit, "cosh(", "", ")");      break;
+      case EOpTanh:             outputTriplet(visit, "tanh(", "", ")");      break;
+      case EOpAsinh:
+        ASSERT(node->getUseEmulatedFunction());
+        writeEmulatedFunctionTriplet(visit, "asinh(");
+        break;
+      case EOpAcosh:
+        ASSERT(node->getUseEmulatedFunction());
+        writeEmulatedFunctionTriplet(visit, "acosh(");
+        break;
+      case EOpAtanh:
+        ASSERT(node->getUseEmulatedFunction());
+        writeEmulatedFunctionTriplet(visit, "atanh(");
+        break;
       case EOpExp:              outputTriplet(visit, "exp(", "", ")");       break;
       case EOpLog:              outputTriplet(visit, "log(", "", ")");       break;
       case EOpExp2:             outputTriplet(visit, "exp2(", "", ")");      break;
@@ -2910,6 +2926,12 @@ const ConstantUnion *OutputHLSL::writeConstantUnion(const TType &type, const Con
     }
 
     return constUnion;
+}
+
+void OutputHLSL::writeEmulatedFunctionTriplet(Visit visit, const char *preStr)
+{
+    TString preString = BuiltInFunctionEmulator::GetEmulatedFunctionName(preStr);
+    outputTriplet(visit, preString.c_str(), ", ", ")");
 }
 
 }

@@ -429,6 +429,25 @@ bool TOutputGLSLBase::visitUnary(Visit visit, TIntermUnary *node)
         preString = "atan(";
         break;
 
+      case EOpSinh:
+        preString = "sinh(";
+        break;
+      case EOpCosh:
+        preString = "cosh(";
+        break;
+      case EOpTanh:
+        preString = "tanh(";
+        break;
+      case EOpAsinh:
+        preString = "asinh(";
+        break;
+      case EOpAcosh:
+        preString = "acosh(";
+        break;
+      case EOpAtanh:
+        preString = "atanh(";
+        break;
+
       case EOpExp:
         preString = "exp(";
         break;

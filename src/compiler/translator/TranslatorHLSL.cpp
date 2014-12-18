@@ -6,6 +6,7 @@
 
 #include "compiler/translator/TranslatorHLSL.h"
 
+#include "compiler/translator/BuiltInFunctionEmulatorHLSL.h"
 #include "compiler/translator/InitializeParseContext.h"
 #include "compiler/translator/OutputHLSL.h"
 
@@ -18,6 +19,14 @@ void TranslatorHLSL::translate(TIntermNode *root)
 {
     TParseContext& parseContext = *GetGlobalParseContext();
     sh::OutputHLSL outputHLSL(parseContext, this);
+
+    TInfoSinkBase& sink = getInfoSink().obj;
+
+    // Write emulated built-in functions if needed.
+    BuiltInFunctionEmulatorHLSL builtInFunctionEmulator;
+    builtInFunctionEmulator.MarkBuiltInFunctionsForEmulation(root);
+    builtInFunctionEmulator.OutputEmulatedFunctionDefinition(sink, false);
+    builtInFunctionEmulator.Cleanup();
 
     outputHLSL.output();
 
