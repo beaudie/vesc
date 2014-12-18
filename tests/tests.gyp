@@ -104,29 +104,16 @@
             ],
         },
         {
-            'target_name': 'angle_compiler_tests',
+            'target_name': 'angle_unittests',
             'type': 'executable',
-            'dependencies':
-            [
-                '../src/angle.gyp:preprocessor',
-                '../src/angle.gyp:translator_static',
-                'angle_test_support',
-            ],
-            'include_dirs':
-            [
-                '../include',
-                '../src',
-                '../src/compiler/preprocessor',
-            ],
             'includes':
             [
                 '../build/common_defines.gypi',
-                'compiler_tests/compiler_tests.gypi',
-                'preprocessor_tests/preprocessor_tests.gypi',
+                'angle_unittests.gypi',
             ],
             'sources':
             [
-                'compiler_tests/compiler_test_main.cpp',
+                'angle_unittests_main.cpp',
             ],
             'msvs_settings':
             {
@@ -145,54 +132,6 @@
                 },
             },
         },
-        {
-            'target_name': 'angle_implementation_unit_tests',
-            'type': 'executable',
-            'dependencies':
-            [
-                '../src/angle.gyp:libANGLE',
-                'angle_test_support',
-            ],
-            'include_dirs':
-            [
-                '../include',
-                '../src',
-            ],
-            'includes':
-            [
-                '../build/common_defines.gypi',
-                'angle_implementation_unit_tests/angle_implementation_unit_tests.gypi',
-            ],
-            'sources':
-            [
-                'angle_implementation_unit_tests/angle_implementation_unit_tests_main.cpp',
-            ],
-            'conditions':
-            [
-                ['angle_build_winrt==1',
-                {
-                    'sources':
-                    [
-                        'angle_implementation_unit_tests/CoreWindowNativeWindow_unittest.cpp',
-                        'angle_implementation_unit_tests/SwapChainPanelNativeWindow_unittest.cpp',
-                    ],
-                    'defines':
-                    [
-                        'ANGLE_ENABLE_D3D11',
-                    ],
-                    'msvs_settings':
-                    {
-                        'VCLinkerTool':
-                        {
-                            'AdditionalDependencies':
-                            [
-                                'runtimeobject.lib',
-                            ],
-                        },
-                    },
-                }],
-            ],
-        },
     ],
 
     'conditions':
@@ -204,40 +143,14 @@
                 {
                     'target_name': 'angle_end2end_tests',
                     'type': 'executable',
-                    'includes': [ '../build/common_defines.gypi', ],
-                    'dependencies':
+                    'includes':
                     [
-                        '../src/angle.gyp:libGLESv2',
-                        '../src/angle.gyp:libEGL',
-                        '../util/util.gyp:angle_util',
-                        'angle_test_support',
-                    ],
-                    'include_dirs':
-                    [
-                        '../include',
-                        'angle_tests',
+                        '../build/common_defines.gypi',
+                        'angle_end2end_tests.gypi',
                     ],
                     'sources':
                     [
-                        '<!@(python <(angle_path)/enumerate_files.py angle_tests -types *.cpp *.h *.inl)'
-                    ],
-                },
-                {
-                    'target_name': 'angle_standalone_tests',
-                    'type': 'executable',
-                    'includes': [ '../build/common_defines.gypi', ],
-                    'dependencies':
-                    [
-                        'angle_test_support',
-                    ],
-                    'include_dirs':
-                    [
-                        '../include',
-                        'angle_tests',
-                    ],
-                    'sources':
-                    [
-                        '<!@(python <(angle_path)/enumerate_files.py standalone_tests -types *.cpp *.h)'
+                        'angle_end2end_tests_main.cpp',
                     ],
                 },
                 {
