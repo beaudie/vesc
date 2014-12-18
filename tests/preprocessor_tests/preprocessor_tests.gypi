@@ -10,4 +10,10 @@
           -types *.cpp *.h \
           -excludes <(angle_path)/tests/preprocessor_tests/preprocessor_test_main.cpp)'
     ],
+    'include_dirs':
+    [
+        '../../include',
+        '../../src',
+        '../../src/compiler/preprocessor',
+    ],
 }
