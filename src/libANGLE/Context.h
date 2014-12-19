@@ -44,10 +44,6 @@ class Compiler;
 class Shader;
 class Program;
 class Texture;
-class Texture2D;
-class TextureCubeMap;
-class Texture3D;
-class Texture2DArray;
 class Framebuffer;
 class Renderbuffer;
 class FenceNV;
@@ -153,11 +149,6 @@ class Context
     TransformFeedback *getTransformFeedback(GLuint handle) const;
 
     Texture *getTargetTexture(GLenum target) const;
-    Texture2D *getTexture2D() const;
-    TextureCubeMap *getTextureCubeMap() const;
-    Texture3D *getTexture3D() const;
-    Texture2DArray *getTexture2DArray() const;
-
     Texture *getSamplerTexture(unsigned int sampler, GLenum type) const;
 
     Compiler *getCompiler() const;
