@@ -34,7 +34,11 @@ int VariableSortOrder(GLenum type);
 
 int AllocateFirstFreeBits(unsigned int *bits, unsigned int allocationSize, unsigned int bitsSize);
 
-bool IsCubemapTextureTarget(GLenum target);
+GLenum FirstCubeMapTextureTarget();
+GLenum LastCubeMapTextureTarget();
+bool IsCubeMapTextureTarget(GLenum target);
+size_t CubeMapTextureTargetToLayerIndex(GLenum target);
+GLenum LayerIndexToCubeMapTextureTarget(size_t index);
 
 bool IsTriangleMode(GLenum drawMode);
 
