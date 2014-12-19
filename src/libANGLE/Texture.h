@@ -84,6 +84,9 @@ class Texture : public RefCountObject
     bool isImmutable() const;
     GLsizei immutableLevelCount();
 
+    void bindTexImage(egl::Surface *surface);
+    void releaseTexImage();
+
     rx::TextureImpl *getImplementation() { return mTexture; }
     const rx::TextureImpl *getImplementation() const { return mTexture; }
 
@@ -134,6 +137,8 @@ class Texture : public RefCountObject
 
     typedef std::map<ImageIdentifier, ImageInfo> ImageInfoMap;
     ImageInfoMap mImageInfo;
+
+    egl::Surface *mBoundSurface;
 };
 
 class Texture2D : public Texture
@@ -143,30 +148,13 @@ class Texture2D : public Texture
 
     virtual ~Texture2D();
 
-    Error setImage(GLenum target, size_t level, GLenum internalFormat, const Extents &size, GLenum format, GLenum type,
-                   const PixelUnpackState &unpack, const void *pixels) override;
-
-    Error setCompressedImage(GLenum target, size_t level, GLenum internalFormat, const Extents &size,
-                             const PixelUnpackState &unpack, const void *pixels) override;
-
-    Error copyImage(GLenum target, size_t level, const Rectangle &sourceArea, GLenum internalFormat,
-                    const Framebuffer *source) override;
-
-    Error setStorage(GLenum target, size_t levels, GLenum internalFormat, const Extents &size) override;
-
-    Error generateMipmaps() override;
-
     virtual bool isSamplerComplete(const SamplerState &samplerState, const Data &data) const;
-    virtual void bindTexImage(egl::Surface *surface);
-    virtual void releaseTexImage();
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Texture2D);
 
     bool isMipmapComplete() const;
     bool isLevelComplete(size_t level) const;
-
-    egl::Surface *mSurface;
 };
 
 class TextureCubeMap : public Texture

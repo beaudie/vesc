@@ -54,12 +54,14 @@ Texture::Texture(rx::TextureImpl *impl, GLuint id, GLenum target)
       mTextureSerial(issueTextureSerial()),
       mUsage(GL_NONE),
       mImmutableLevelCount(0),
-      mTarget(target)
+      mTarget(target),
+      mBoundSurface(NULL)
 {
 }
 
 Texture::~Texture()
 {
+    releaseTexImage();
     SafeDelete(mTexture);
 }
 
@@ -134,6 +136,8 @@ Error Texture::setImage(GLenum target, size_t level, GLenum internalFormat, cons
         return error;
     }
 
+    releaseTexImage();
+
     insertImageInfo(ImageIdentifier(target, level), ImageInfo(size, GetSizedInternalFormat(internalFormat, type)));
 
     return Error(GL_NO_ERROR);
@@ -163,6 +167,8 @@ Error Texture::setCompressedImage(GLenum target, size_t level, GLenum internalFo
     {
         return error;
     }
+
+    releaseTexImage();
 
     insertImageInfo(ImageIdentifier(target, level), ImageInfo(size, GetSizedInternalFormat(internalFormat, GL_UNSIGNED_BYTE)));
 
@@ -194,6 +200,8 @@ Error Texture::copyImage(GLenum target, size_t level, const Rectangle &sourceAre
         return error;
     }
 
+    releaseTexImage();
+
     insertImageInfo(ImageIdentifier(target, level), ImageInfo(Extents(sourceArea.width, sourceArea.height, 1),
                                                               GetSizedInternalFormat(internalFormat, GL_UNSIGNED_BYTE)));
 
@@ -224,6 +232,8 @@ Error Texture::setStorage(GLenum target, size_t levels, GLenum internalFormat, c
         return error;
     }
 
+    releaseTexImage();
+
     mImmutableLevelCount = levels;
     clearImageInfo();
     setMipChainImageInfos(levels, size, internalFormat);
@@ -239,6 +249,8 @@ Error Texture::generateMipmaps()
     {
         return error;
     }
+
+    releaseTexImage();
 
     ImageIdentifier baseLevel(mTarget == GL_TEXTURE_CUBE_MAP ? GL_TEXTURE_CUBE_MAP_POSITIVE_X : mTarget, 0);
     const ImageInfo &baseImageInfo = getImageInfo(baseLevel);
@@ -315,103 +327,29 @@ void Texture::clearImageInfo()
     mImageInfo.clear();
 }
 
+void Texture::bindTexImage(egl::Surface *surface)
+{
+    releaseTexImage();
+    mTexture->bindTexImage(surface);
+    mBoundSurface = surface;
+}
+
+void Texture::releaseTexImage()
+{
+    if (mBoundSurface)
+    {
+        mBoundSurface = NULL;
+        mTexture->releaseTexImage();
+    }
+}
+
 Texture2D::Texture2D(rx::TextureImpl *impl, GLuint id)
     : Texture(impl, id, GL_TEXTURE_2D)
 {
-    mSurface = NULL;
 }
 
 Texture2D::~Texture2D()
 {
-    if (mSurface)
-    {
-        mSurface->releaseTexImage(EGL_BACK_BUFFER);
-        mSurface = NULL;
-    }
-}
-
-Error Texture2D::setImage(GLenum target, size_t level, GLenum internalFormat, const Extents &size, GLenum format, GLenum type,
-                          const PixelUnpackState &unpack, const void *pixels)
-{
-    Error error = Texture::setImage(target, level, internalFormat, size, format, type, unpack, pixels);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    releaseTexImage();
-
-    return Error(GL_NO_ERROR);
-}
-
-Error Texture2D::setCompressedImage(GLenum target, size_t level, GLenum internalFormat, const Extents &size,
-                                    const PixelUnpackState &unpack, const void *pixels)
-{
-    Error error = Texture::setCompressedImage(target, level, internalFormat, size, unpack, pixels);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    releaseTexImage();
-
-    return Error(GL_NO_ERROR);
-}
-
-Error Texture2D::copyImage(GLenum target, size_t level, const Rectangle &sourceArea, GLenum internalFormat,
-                           const Framebuffer *source)
-{
-    Error error = Texture::copyImage(target, level, sourceArea, internalFormat, source);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    releaseTexImage();
-
-    return Error(GL_NO_ERROR);
-}
-
-Error Texture2D::setStorage(GLenum target, size_t levels, GLenum internalFormat, const Extents &size)
-{
-    Error error = Texture::setStorage(target, levels, internalFormat, size);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    releaseTexImage();
-
-    return Error(GL_NO_ERROR);
-}
-
-Error Texture2D::generateMipmaps()
-{
-    Error error = Texture::generateMipmaps();
-    if (error.isError())
-    {
-        return error;
-    }
-
-    releaseTexImage();
-
-    return Error(GL_NO_ERROR);
-}
-
-void Texture2D::bindTexImage(egl::Surface *surface)
-{
-    releaseTexImage();
-    mTexture->bindTexImage(surface);
-    mSurface = surface;
-}
-
-void Texture2D::releaseTexImage()
-{
-    if (mSurface)
-    {
-        mSurface = NULL;
-        mTexture->releaseTexImage();
-    }
 }
 
 // Tests for 2D texture sampling completeness. [OpenGL ES 2.0.24] section 3.8.2 page 85.
