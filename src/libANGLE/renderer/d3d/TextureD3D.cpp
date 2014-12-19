@@ -1212,7 +1212,7 @@ gl::Error TextureD3D_Cube::setCompressedImage(GLenum target, size_t level, GLenu
     ASSERT(size.depth == 1);
 
     // compressed formats don't have separate sized internal formats-- we can just use the compressed format directly
-    int faceIndex = gl::TextureCubeMap::targetToLayerIndex(target);
+    size_t faceIndex = gl::CubemapTextureTargetToLayerIndex(target);
 
     redefineImage(faceIndex, level, internalFormat, size);
 
@@ -1239,7 +1239,7 @@ gl::Error TextureD3D_Cube::setCompressedSubImage(GLenum target, size_t level, co
 gl::Error TextureD3D_Cube::copyImage(GLenum target, size_t level, const gl::Rectangle &sourceArea, GLenum internalFormat,
                                      const gl::Framebuffer *source)
 {
-    int faceIndex = gl::TextureCubeMap::targetToLayerIndex(target);
+    size_t faceIndex = gl::CubemapTextureTargetToLayerIndex(target);
     GLenum sizedInternalFormat = gl::GetSizedInternalFormat(internalFormat, GL_UNSIGNED_BYTE);
 
     gl::Extents size(sourceArea.width, sourceArea.height, 1);
@@ -1285,7 +1285,7 @@ gl::Error TextureD3D_Cube::copyImage(GLenum target, size_t level, const gl::Rect
 gl::Error TextureD3D_Cube::copySubImage(GLenum target, size_t level, const gl::Extents &destOffset, const gl::Rectangle &sourceArea,
                                         const gl::Framebuffer *source)
 {
-    int faceIndex = gl::TextureCubeMap::targetToLayerIndex(target);
+    size_t faceIndex = gl::CubemapTextureTargetToLayerIndex(target);
 
     gl::ImageIndex index = gl::ImageIndex::MakeCube(target, level);
 
@@ -1603,7 +1603,7 @@ gl::Error TextureD3D_Cube::updateStorageFaceLevel(int faceIndex, int level)
 
     if (image->isDirty())
     {
-        GLenum faceTarget = gl::TextureCubeMap::layerIndexToTarget(faceIndex);
+        GLenum faceTarget = gl::LayerIndexToCubemapTextureTarget(faceIndex);
         gl::ImageIndex index = gl::ImageIndex::MakeCube(faceTarget, level);
         gl::Box region(0, 0, 0, image->getWidth(), image->getHeight(), 1);
         gl::Error error = commitRegion(index, region);
@@ -1657,7 +1657,7 @@ gl::ImageIndexIterator TextureD3D_Cube::imageIterator() const
 gl::ImageIndex TextureD3D_Cube::getImageIndex(GLint mip, GLint layer) const
 {
     // The "layer" of the image index corresponds to the cube face
-    return gl::ImageIndex::MakeCube(gl::TextureCubeMap::layerIndexToTarget(layer), mip);
+    return gl::ImageIndex::MakeCube(gl::LayerIndexToCubemapTextureTarget(layer), mip);
 }
 
 bool TextureD3D_Cube::isValidIndex(const gl::ImageIndex &index) const

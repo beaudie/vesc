@@ -343,9 +343,37 @@ int AllocateFirstFreeBits(unsigned int *bits, unsigned int allocationSize, unsig
     return -1;
 }
 
+META_ASSERT(GL_TEXTURE_CUBE_MAP_NEGATIVE_X - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 1);
+META_ASSERT(GL_TEXTURE_CUBE_MAP_POSITIVE_Y - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 2);
+META_ASSERT(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 3);
+META_ASSERT(GL_TEXTURE_CUBE_MAP_POSITIVE_Z - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 4);
+META_ASSERT(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z - GL_TEXTURE_CUBE_MAP_POSITIVE_X == 5);
+
+GLenum FirstCubemapTextureTarget()
+{
+    return GL_TEXTURE_CUBE_MAP_POSITIVE_X;
+}
+
+GLenum LastCubemapTextureTarget()
+{
+    return GL_TEXTURE_CUBE_MAP_NEGATIVE_Z;
+}
+
 bool IsCubemapTextureTarget(GLenum target)
 {
-    return (target >= GL_TEXTURE_CUBE_MAP_POSITIVE_X && target <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z);
+    return (target >= FirstCubemapTextureTarget() && target <= LastCubemapTextureTarget());
+}
+
+size_t CubemapTextureTargetToLayerIndex(GLenum target)
+{
+    ASSERT(IsCubemapTextureTarget(target));
+    return target - FirstCubemapTextureTarget();
+}
+
+GLenum LayerIndexToCubemapTextureTarget(size_t index)
+{
+    ASSERT(index < (LastCubemapTextureTarget() - FirstCubemapTextureTarget()));
+    return FirstCubemapTextureTarget() + index;
 }
 
 bool IsTriangleMode(GLenum drawMode)

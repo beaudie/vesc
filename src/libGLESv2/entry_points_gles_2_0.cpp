@@ -1491,14 +1491,10 @@ void GL_APIENTRY GenerateMipmap(GLenum target)
         }
 
         // Cube completeness check
-        if (target == GL_TEXTURE_CUBE_MAP)
+        if (target == GL_TEXTURE_CUBE_MAP && !texture->isCubeComplete())
         {
-            TextureCubeMap *textureCube = static_cast<TextureCubeMap *>(texture);
-            if (!textureCube->isCubeComplete())
-            {
-                context->recordError(Error(GL_INVALID_OPERATION));
-                return;
-            }
+            context->recordError(Error(GL_INVALID_OPERATION));
+            return;
         }
 
         Error error = texture->generateMipmaps();

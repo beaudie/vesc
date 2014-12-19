@@ -7,7 +7,7 @@
 // ImageIndex.cpp: Implementation for ImageIndex methods.
 
 #include "libANGLE/ImageIndex.h"
-#include "libANGLE/Texture.h"
+#include "libANGLE/Constants.h"
 #include "common/utilities.h"
 
 namespace gl
@@ -35,7 +35,7 @@ ImageIndex ImageIndex::Make2D(GLint mipIndex)
 ImageIndex ImageIndex::MakeCube(GLenum target, GLint mipIndex)
 {
     ASSERT(gl::IsCubemapTextureTarget(target));
-    return ImageIndex(target, mipIndex, TextureCubeMap::targetToLayerIndex(target));
+    return ImageIndex(target, mipIndex, CubemapTextureTargetToLayerIndex(target));
 }
 
 ImageIndex ImageIndex::Make2DArray(GLint mipIndex, GLint layerIndex)
@@ -134,7 +134,7 @@ ImageIndex ImageIndexIterator::current() const
 
     if (mType == GL_TEXTURE_CUBE_MAP)
     {
-        value.type = TextureCubeMap::layerIndexToTarget(mCurrentLayer);
+        value.type = LayerIndexToCubemapTextureTarget(mCurrentLayer);
     }
 
     return value;

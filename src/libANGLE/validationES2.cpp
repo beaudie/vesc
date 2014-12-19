@@ -793,19 +793,7 @@ bool ValidateES2TexStorageParameters(Context *context, GLenum target, GLsizei le
         break;
     }
 
-    gl::Texture *texture = NULL;
-    switch(target)
-    {
-      case GL_TEXTURE_2D:
-        texture = context->getTexture2D();
-        break;
-      case GL_TEXTURE_CUBE_MAP:
-        texture = context->getTextureCubeMap();
-        break;
-      default:
-        UNREACHABLE();
-    }
-
+    gl::Texture *texture = context->getTargetTexture(target);
     if (!texture || texture->id() == 0)
     {
         context->recordError(Error(GL_INVALID_OPERATION));

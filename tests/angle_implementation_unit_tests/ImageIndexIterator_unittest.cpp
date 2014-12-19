@@ -6,8 +6,10 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+
 #include "libANGLE/ImageIndex.h"
-#include "libANGLE/Texture.h"
+
+#include "common/utilities.h"
 
 using namespace gl;
 
@@ -55,7 +57,7 @@ TEST(ImageIndexTest, IteratorCube)
             EXPECT_TRUE(iter.hasNext());
             ImageIndex nextIndex = iter.next();
 
-            GLenum cubeTarget = TextureCubeMap::layerIndexToTarget(layer);
+            GLenum cubeTarget = LayerIndexToCubemapTextureTarget(layer);
 
             EXPECT_EQ(cubeTarget, nextIndex.type);
             EXPECT_EQ(mip, nextIndex.mipIndex);
