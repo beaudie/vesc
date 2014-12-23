@@ -2301,7 +2301,7 @@ void Renderer11::setOneTimeRenderTarget(ID3D11RenderTargetView *renderTargetView
 
 gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, GLsizei samples, RenderTarget **outRT)
 {
-    const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(format);
+    const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(format, mFeatureLevel);
 
     const gl::TextureCaps &textureCaps = getRendererTextureCaps().get(format);
     GLuint supportedSamples = textureCaps.getNearestSamples(samples);
@@ -2441,12 +2441,12 @@ DefaultAttachmentImpl *Renderer11::createDefaultAttachment(GLenum type, egl::Sur
     switch (type)
     {
       case GL_BACK:
-        return new DefaultAttachmentD3D(new SurfaceRenderTarget11(swapChain, false));
+        return new DefaultAttachmentD3D(new SurfaceRenderTarget11(swapChain, this, false));
 
       case GL_DEPTH:
         if (gl::GetInternalFormatInfo(swapChain->GetDepthBufferInternalFormat()).depthBits > 0)
         {
-            return new DefaultAttachmentD3D(new SurfaceRenderTarget11(swapChain, true));
+            return new DefaultAttachmentD3D(new SurfaceRenderTarget11(swapChain, this, true));
         }
         else
         {
@@ -2456,7 +2456,7 @@ DefaultAttachmentImpl *Renderer11::createDefaultAttachment(GLenum type, egl::Sur
       case GL_STENCIL:
         if (gl::GetInternalFormatInfo(swapChain->GetDepthBufferInternalFormat()).stencilBits > 0)
         {
-            return new DefaultAttachmentD3D(new SurfaceRenderTarget11(swapChain, true));
+            return new DefaultAttachmentD3D(new SurfaceRenderTarget11(swapChain, this, true));
         }
         else
         {
@@ -2703,7 +2703,7 @@ bool Renderer11::supportsFastCopyBufferToTexture(GLenum internalFormat) const
     ASSERT(getRendererExtensions().pixelBufferObject);
 
     const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(internalFormat);
-    const d3d11::TextureFormat &d3d11FormatInfo = d3d11::GetTextureFormatInfo(internalFormat);
+    const d3d11::TextureFormat &d3d11FormatInfo = d3d11::GetTextureFormatInfo(internalFormat, mFeatureLevel);
     const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(d3d11FormatInfo.texFormat);
 
     // sRGB formats do not work with D3D11 buffer SRVs
@@ -2742,7 +2742,7 @@ gl::Error Renderer11::fastCopyBufferToTexture(const gl::PixelUnpackState &unpack
 
 Image *Renderer11::createImage()
 {
-    return new Image11();
+    return new Image11(this);
 }
 
 gl::Error Renderer11::generateMipmap(Image *dest, Image *src)
