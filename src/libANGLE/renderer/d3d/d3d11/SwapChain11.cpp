@@ -106,7 +106,7 @@ EGLint SwapChain11::resetOffscreenTexture(int backbufferWidth, int backbufferHei
 
     releaseOffscreenTexture();
 
-    const d3d11::TextureFormat &backbufferFormatInfo = d3d11::GetTextureFormatInfo(mBackBufferFormat);
+    const d3d11::TextureFormat &backbufferFormatInfo = d3d11::GetTextureFormatInfo(mBackBufferFormat, mRenderer->getFeatureLevel());
 
     // If the app passed in a share handle, open the resource
     // See EGL_ANGLE_d3d_share_handle_client_buffer
@@ -228,7 +228,7 @@ EGLint SwapChain11::resetOffscreenTexture(int backbufferWidth, int backbufferHei
     ASSERT(SUCCEEDED(result));
     d3d11::SetDebugName(mOffscreenSRView, "Offscreen back buffer shader resource");
 
-    const d3d11::TextureFormat &depthBufferFormatInfo = d3d11::GetTextureFormatInfo(mDepthBufferFormat);
+    const d3d11::TextureFormat &depthBufferFormatInfo = d3d11::GetTextureFormatInfo(mDepthBufferFormat, mRenderer->getFeatureLevel());
 
     if (mDepthBufferFormat != GL_NONE)
     {
@@ -335,7 +335,7 @@ EGLint SwapChain11::resize(EGLint backbufferWidth, EGLint backbufferHeight)
     // Resize swap chain
     DXGI_SWAP_CHAIN_DESC desc;
     mSwapChain->GetDesc(&desc);
-    const d3d11::TextureFormat &backbufferFormatInfo = d3d11::GetTextureFormatInfo(mBackBufferFormat);
+    const d3d11::TextureFormat &backbufferFormatInfo = d3d11::GetTextureFormatInfo(mBackBufferFormat, mRenderer->getFeatureLevel());
     HRESULT result = mSwapChain->ResizeBuffers(desc.BufferCount, backbufferWidth, backbufferHeight, backbufferFormatInfo.texFormat, 0);
 
     if (FAILED(result))
@@ -401,7 +401,7 @@ EGLint SwapChain11::reset(int backbufferWidth, int backbufferHeight, EGLint swap
 
     if (mNativeWindow.getNativeWindow())
     {
-        const d3d11::TextureFormat &backbufferFormatInfo = d3d11::GetTextureFormatInfo(mBackBufferFormat);
+        const d3d11::TextureFormat &backbufferFormatInfo = d3d11::GetTextureFormatInfo(mBackBufferFormat, mRenderer->getFeatureLevel());
 
         HRESULT result = mNativeWindow.createSwapChain(device, mRenderer->getDxgiFactory(),
                                                backbufferFormatInfo.texFormat,

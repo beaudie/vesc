@@ -28,7 +28,7 @@ class TextureStorage11;
 class Image11 : public ImageD3D
 {
   public:
-    Image11();
+    Image11(Renderer11 *renderer);
     virtual ~Image11();
 
     static Image11 *makeImage11(Image *img);
@@ -71,6 +71,7 @@ class Image11 : public ImageD3D
     void releaseStagingTexture();
 
     Renderer11 *mRenderer;
+    D3D_FEATURE_LEVEL mFeatureLevel;
 
     DXGI_FORMAT mDXGIFormat;
     ID3D11Resource *mStagingTexture;
