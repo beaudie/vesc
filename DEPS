@@ -9,6 +9,15 @@ deps = {
 
   "tests/third_party/googlemock":
       "http://googlemock.googlecode.com/svn/trunk@410",
+
+  "tests/third_party/deqp":
+      "https://android.googlesource.com/platform/external/deqp@7665e4ff5452f9fc261434f98484728a233ef452",
+
+  "tests/third_party/libpng":
+      "https://android.googlesource.com/platform/external/libpng@094e181e79a3d6c23fd005679025058b7df1ad6c",
+
+  "tests/third_party/zlib":
+      "https://chromium.googlesource.com/chromium/src/third_party/zlib@afd8c4593c010c045902f6c0501718f1823064a3",
 }
 
 hooks = [
