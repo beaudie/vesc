@@ -45,7 +45,7 @@ enum
 	WAIT_WINDOW_VISIBLE_MS		= 500	//!< Time to wait before issuing screenshot after changing window visibility (hack for DWM)
 };
 
-static const eglu::NativeDisplay::Capability	DISPLAY_CAPABILITIES	= eglu::NativeDisplay::CAPABILITY_GET_DISPLAY_LEGACY;
+static const eglu::NativeDisplay::Capability	DISPLAY_CAPABILITIES	= eglu::NativeDisplay::CAPABILITY_GET_DISPLAY_PLATFORM;
 static const eglu::NativePixmap::Capability		BITMAP_CAPABILITIES		= eglu::NativePixmap::CAPABILITY_CREATE_SURFACE_LEGACY;
 static const eglu::NativeWindow::Capability		WINDOW_CAPABILITIES		= (eglu::NativeWindow::Capability)
 																		   (eglu::NativeWindow::CAPABILITY_CREATE_SURFACE_LEGACY	|
@@ -61,7 +61,7 @@ public:
 									NativeDisplay			(void);
 	virtual							~NativeDisplay			(void) {}
 
-	virtual EGLNativeDisplayType	getLegacyNative			(void) { return m_deviceContext; }
+	virtual void*					getPlatformNative		(void) { return m_deviceContext; }
 
 	HDC								getDeviceContext		(void) { return m_deviceContext; }
 
@@ -126,7 +126,7 @@ private:
 // NativeDisplay
 
 NativeDisplay::NativeDisplay (void)
-	: eglu::NativeDisplay	(DISPLAY_CAPABILITIES, EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE, "EGL_EXT_platform_base")
+	: eglu::NativeDisplay	(DISPLAY_CAPABILITIES, EGL_PLATFORM_ANGLE_ANGLE, "EGL_EXT_platform_base")
 	, m_deviceContext		(EGL_DEFAULT_DISPLAY)
 {
 }
@@ -366,7 +366,7 @@ void NativeWindow::readScreenPixels (tcu::TextureLevel* dst) const
 } // anonymous
 
 Win32EGLNativeDisplayFactory::Win32EGLNativeDisplayFactory (HINSTANCE instance)
-	: eglu::NativeDisplayFactory	("angle", "Native ANGLE Display", DISPLAY_CAPABILITIES)
+	: eglu::NativeDisplayFactory	("angle", "Native ANGLE Display", DISPLAY_CAPABILITIES, EGL_PLATFORM_ANGLE_ANGLE, "EGL_EXT_platform_base")
 	, m_instance					(instance)
 {
 	m_nativeWindowRegistry.registerFactory(new NativeWindowFactory(m_instance));

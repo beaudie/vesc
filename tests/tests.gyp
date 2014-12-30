@@ -787,6 +787,20 @@
                         '<(deqp_dir)/modules/internal/ditTestLogTests.cpp',
                         '<(deqp_dir)/modules/internal/ditTestPackage.cpp',
                         '<(deqp_dir)/modules/internal/ditTestPackageEntry.cpp',
+                        'deqp_support/tcuMain.cpp',
+                    ],
+                },
+
+                {
+                    'target_name': 'angle_deqp_tests',
+                    'type': 'executable',
+                    'dependencies':
+                    [
+                        'angle_deqp_libtester',
+                    ],
+                    'sources':
+                    [
+                        'deqp_support/deqp_test_main.cpp',
                     ],
                 },
 

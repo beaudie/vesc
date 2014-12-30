@@ -30,3 +30,4 @@ Makefile
 *~
 .gclient
 angle_internal
+TestResults.qpa
