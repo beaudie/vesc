@@ -11,6 +11,8 @@
 
 #include <tuple>
 
+#include "libANGLE/formatutils.h"
+#include "libANGLE/ImageIndex.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
 #include "libANGLE/renderer/d3d/d3d11/SwapChain11.h"
@@ -20,7 +22,6 @@
 #include "libANGLE/renderer/d3d/d3d11/Image11.h"
 #include "libANGLE/renderer/d3d/MemoryBuffer.h"
 #include "libANGLE/renderer/d3d/TextureD3D.h"
-#include "libANGLE/ImageIndex.h"
 
 #include "common/utilities.h"
 
