@@ -13,6 +13,7 @@
 #include "libANGLE/renderer/d3d/generatemip.h"
 #include "libANGLE/renderer/d3d/loadimage.h"
 #include "libANGLE/renderer/Renderer.h"
+#include "libANGLE/formatutils.h"
 
 namespace rx
 {
