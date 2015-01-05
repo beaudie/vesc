@@ -1075,7 +1075,7 @@ HRESULT SetDebugName(ID3D11DeviceChild *resource, const char *name)
 
 gl::Error GetAttachmentRenderTarget(const gl::FramebufferAttachment *attachment, RenderTarget11 **outRT)
 {
-    RenderTarget *renderTarget = NULL;
+    RenderTargetD3D *renderTarget = NULL;
     gl::Error error = rx::GetAttachmentRenderTarget(attachment, &renderTarget);
     if (error.isError())
     {
