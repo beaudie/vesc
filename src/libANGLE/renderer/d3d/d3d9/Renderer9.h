@@ -55,7 +55,7 @@ class Renderer9 : public RendererD3D
 
     virtual gl::Error sync(bool block);
 
-    virtual SwapChain *createSwapChain(NativeWindow nativeWindow, HANDLE shareHandle, GLenum backBufferFormat, GLenum depthBufferFormat);
+    virtual SwapChainD3D *createSwapChain(NativeWindow nativeWindow, HANDLE shareHandle, GLenum backBufferFormat, GLenum depthBufferFormat);
 
     gl::Error allocateEventQuery(IDirect3DQuery9 **outQuery);
     void freeEventQuery(IDirect3DQuery9* query);
@@ -161,7 +161,7 @@ class Renderer9 : public RendererD3D
     // Image operations
     virtual ImageD3D *createImage();
     gl::Error generateMipmap(ImageD3D *dest, ImageD3D *source) override;
-    virtual TextureStorage *createTextureStorage2D(SwapChain *swapChain);
+    virtual TextureStorage *createTextureStorage2D(SwapChainD3D *swapChain);
     virtual TextureStorage *createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels);
     virtual TextureStorage *createTextureStorageCube(GLenum internalformat, bool renderTarget, int size, int levels);
     virtual TextureStorage *createTextureStorage3D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels);
