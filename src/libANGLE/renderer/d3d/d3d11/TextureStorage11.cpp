@@ -397,14 +397,14 @@ gl::Error TextureStorage11::generateMipmap(const gl::ImageIndex &sourceIndex, co
 
     invalidateSwizzleCacheLevel(destIndex.mipIndex);
 
-    RenderTarget *source = NULL;
+    RenderTargetD3D *source = NULL;
     gl::Error error = getRenderTarget(sourceIndex, &source);
     if (error.isError())
     {
         return error;
     }
 
-    RenderTarget *dest = NULL;
+    RenderTargetD3D *dest = NULL;
     error = getRenderTarget(destIndex, &dest);
     if (error.isError())
     {
@@ -774,7 +774,7 @@ gl::Error TextureStorage11_2D::getResource(ID3D11Resource **outResource)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error TextureStorage11_2D::getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT)
+gl::Error TextureStorage11_2D::getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT)
 {
     ASSERT(!index.hasLayer());
 
@@ -1162,7 +1162,7 @@ gl::Error TextureStorage11_Cube::getResource(ID3D11Resource **outResource)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error TextureStorage11_Cube::getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT)
+gl::Error TextureStorage11_Cube::getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT)
 {
     int faceIndex = index.layerIndex;
     int level = index.mipIndex;
@@ -1583,7 +1583,7 @@ gl::Error TextureStorage11_3D::createSRV(int baseLevel, int mipLevels, DXGI_FORM
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error TextureStorage11_3D::getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT)
+gl::Error TextureStorage11_3D::getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT)
 {
     int mipLevel = index.mipIndex;
     ASSERT(mipLevel >= 0 && mipLevel < getLevelCount());
@@ -1968,7 +1968,7 @@ gl::Error TextureStorage11_2DArray::createSRV(int baseLevel, int mipLevels, DXGI
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error TextureStorage11_2DArray::getRenderTarget(const gl::ImageIndex &index, RenderTarget **outRT)
+gl::Error TextureStorage11_2DArray::getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT)
 {
     ASSERT(index.hasLayer());
 
