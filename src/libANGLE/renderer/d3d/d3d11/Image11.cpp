@@ -7,6 +7,7 @@
 // Image11.h: Implements the rx::Image11 class, which acts as the interface to
 // the actual underlying resources of a Texture
 
+#include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Image11.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
