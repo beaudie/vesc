@@ -17,7 +17,8 @@
 
 #include <EGL/egl.h>
 
-#include <set>
+#include <map>
+#include <list>
 
 namespace egl
 {
@@ -26,13 +27,12 @@ class Display;
 class Config
 {
   public:
+    Config();
     Config(rx::ConfigDesc desc, EGLint minSwapInterval, EGLint maxSwapInterval, EGLint texWidth, EGLint texHeight);
 
-    EGLConfig getHandle() const;
-
-    const GLenum mRenderTargetFormat;
-    const GLenum mDepthStencilFormat;
-    const GLint mMultiSample;
+    GLenum mRenderTargetFormat;
+    GLenum mDepthStencilFormat;
+    GLint mMultiSample;
 
     EGLint mBufferSize;              // Depth of the color buffer
     EGLint mRedSize;                 // Bits of Red in the color buffer
@@ -69,45 +69,24 @@ class Config
     EGLint mTransparentBlueValue;    // Transparent blue value
 };
 
-// Function object used by STL sorting routines for ordering Configs according to [EGL] section 3.4.1 page 24.
-class SortConfig
-{
-  public:
-    explicit SortConfig(const EGLint *attribList);
-
-    bool operator()(const Config *x, const Config *y) const;
-    bool operator()(const Config &x, const Config &y) const;
-
-  private:
-    void scanForWantedComponents(const EGLint *attribList);
-    EGLint wantedComponentsSize(const Config &config) const;
-
-    bool mWantRed;
-    bool mWantGreen;
-    bool mWantBlue;
-    bool mWantAlpha;
-    bool mWantLuminance;
-};
-
 class ConfigSet
 {
-    friend Display;
-
   public:
-    ConfigSet();
+    void add(const Config &config);
+    const Config &get(EGLint id) const;
 
-    void add(rx::ConfigDesc desc, EGLint minSwapInterval, EGLint maxSwapInterval, EGLint texWidth, EGLint texHeight);
+    void clear();
+
     size_t size() const;
-    bool getConfigs(EGLConfig *configs, const EGLint *attribList, EGLint configSize, EGLint *numConfig);
-    const egl::Config *get(EGLConfig configHandle);
+
+    bool contains(const Config *config) const;
+    std::vector<const Config*> filter(const AttributeMap &attributeMap) const;
 
   private:
-    typedef std::set<Config, SortConfig> Set;
-    typedef Set::iterator Iterator;
-    Set mSet;
-
-    static const EGLint mSortAttribs[];
+    typedef std::map<EGLint, const Config> ConfigMap;
+    ConfigMap mConfigs;
 };
+
 }
 
 #endif   // INCLUDE_CONFIG_H_
