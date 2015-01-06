@@ -107,10 +107,20 @@
                     {
                         'Optimization': '0',    # /Od
                         'BasicRuntimeChecks': '3',
-
-                        # Use the static C runtime to match chromium and make sure we don't depend on
-                        # the dynamic runtime's shared heaps
-                        'RuntimeLibrary': '1',  # /MTd (debug static)
+                        'conditions':
+                        [
+                            ['angle_build_winrt==0',
+                            {
+                                # Use the static C runtime to match chromium and make sure we don't depend on
+                                # the dynamic runtime's shared heaps
+                                'RuntimeLibrary': '1',  # /MTd (debug static)
+                            }],
+                            ['angle_build_winrt==1',
+                            {
+                                # Use the dynamic C runtime to match windows store requirements
+                                'RuntimeLibrary': '3',  # /MDd (debug multithreaded dll)
+                            }],
+                        ],
                     },
                     'VCLinkerTool':
                     {
@@ -148,10 +158,20 @@
                     'VCCLCompilerTool':
                     {
                         'Optimization': '2',    # /Os
-
-                        # Use the static C runtime to match chromium and make sure we don't depend on
-                        # the dynamic runtime's shared heaps
-                        'RuntimeLibrary': '0', #  /MT (nondebug static)
+                        'conditions':
+                        [
+                            ['angle_build_winrt==0',
+                            {
+                                # Use the static C runtime to match chromium and make sure we don't depend on
+                                # the dynamic runtime's shared heaps
+                                'RuntimeLibrary': '0', #  /MT (nondebug static)
+                            }],
+                            ['angle_build_winrt==1',
+                            {
+                                # Use the dynamic C runtime to match windows store requirements
+                                'RuntimeLibrary': '2',  # /MD (nondebug multithreaded dll)
+                            }],
+                        ],
                     },
                     'VCLinkerTool':
                     {
