@@ -576,20 +576,23 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy, EGLConfig config, EGLContex
     if (share_context)
     {
         gl::Context* sharedGLContext = static_cast<gl::Context*>(share_context);
+
+        // Shared context is invalid or is owned by another display
+        if (!display->isValidContext(sharedGLContext))
+        {
+            SetGlobalError(Error(EGL_BAD_MATCH));
+            return EGL_NO_CONTEXT;
+        }
+
         if (sharedGLContext->isResetNotificationEnabled() != resetNotification)
         {
             SetGlobalError(Error(EGL_BAD_MATCH));
             return EGL_NO_CONTEXT;
         }
+
         if (sharedGLContext->getClientVersion() != clientMajorVersion)
         {
             SetGlobalError(Error(EGL_BAD_CONTEXT));
-            return EGL_NO_CONTEXT;
-        }
-        // Can not share contexts between displays
-        if (sharedGLContext->getRenderer() != display->getRenderer())
-        {
-            SetGlobalError(Error(EGL_BAD_MATCH));
             return EGL_NO_CONTEXT;
         }
     }
@@ -598,8 +601,7 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy, EGLConfig config, EGLContex
         return EGL_NO_CONTEXT;
     }
     EGLContext context = EGL_NO_CONTEXT;
-    Error error = display->createContext(config, clientMajorVersion, static_cast<gl::Context*>(share_context),
-                                         resetNotification, robustAccess, &context);
+    Error error = display->createContext(config, share_context, egl::AttributeMap(attrib_list), &context);
     if (error.isError())
     {
         SetGlobalError(error);
@@ -661,14 +663,13 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
 
     if (dpy != EGL_NO_DISPLAY && display->isInitialized())
     {
-        rx::Renderer *renderer = display->getRenderer();
-        if (renderer->testDeviceLost())
+        if (display->testDeviceLost())
         {
             display->notifyDeviceLost();
             return EGL_FALSE;
         }
 
-        if (renderer->isDeviceLost())
+        if (display->isDeviceLost())
         {
             SetGlobalError(Error(EGL_CONTEXT_LOST));
             return EGL_FALSE;
@@ -785,7 +786,7 @@ EGLBoolean EGLAPIENTRY SwapBuffers(EGLDisplay dpy, EGLSurface surface)
         return EGL_FALSE;
     }
 
-    if (display->getRenderer()->isDeviceLost())
+    if (display->isDeviceLost())
     {
         SetGlobalError(Error(EGL_CONTEXT_LOST));
         return EGL_FALSE;
@@ -820,7 +821,7 @@ EGLBoolean EGLAPIENTRY CopyBuffers(EGLDisplay dpy, EGLSurface surface, EGLNative
         return EGL_FALSE;
     }
 
-    if (display->getRenderer()->isDeviceLost())
+    if (display->isDeviceLost())
     {
         SetGlobalError(Error(EGL_CONTEXT_LOST));
         return EGL_FALSE;
