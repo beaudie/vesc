@@ -73,9 +73,6 @@ class Renderer
 
     virtual EGLint initialize() = 0;
 
-    virtual int generateConfigs(ConfigDesc **configDescList) = 0;
-    virtual void deleteConfigs(ConfigDesc *configDescList) = 0;
-
     virtual gl::Error flush() = 0;
     virtual gl::Error finish() = 0;
 
