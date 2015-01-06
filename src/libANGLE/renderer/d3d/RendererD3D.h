@@ -50,6 +50,8 @@ class RendererD3D : public Renderer
 
     static RendererD3D *makeRendererD3D(Renderer *renderer);
 
+    virtual EGLint initialize() = 0;
+
     virtual std::vector<ConfigDesc> generateConfigs() const = 0;
 
     gl::Error drawArrays(const gl::Data &data,
@@ -66,8 +68,6 @@ class RendererD3D : public Renderer
 
     virtual int getMinorShaderModel() const = 0;
     virtual std::string getShaderModelSuffix() const = 0;
-
-    DisplayImpl *createDisplay() override;
 
     // Direct3D Specific methods
     virtual GUID getAdapterIdentifier() const = 0;

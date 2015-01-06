@@ -71,8 +71,6 @@ class Renderer
     Renderer();
     virtual ~Renderer();
 
-    virtual EGLint initialize() = 0;
-
     virtual gl::Error sync(bool block) = 0;
 
     virtual gl::Error drawArrays(const gl::Data &data, GLenum mode,
@@ -132,8 +130,6 @@ class Renderer
     virtual int getMajorShaderModel() const = 0;
     virtual int getMinSwapInterval() const = 0;
     virtual int getMaxSwapInterval() const = 0;
-
-    virtual DisplayImpl *createDisplay() = 0;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Renderer);
