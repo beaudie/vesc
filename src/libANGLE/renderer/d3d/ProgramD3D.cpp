@@ -19,6 +19,9 @@
 #include "libANGLE/renderer/d3d/ShaderD3D.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
 
+#include <ppltasks.h> // For create_task
+using namespace Concurrency;
+
 namespace rx
 {
 
@@ -965,18 +968,38 @@ LinkResult ProgramD3D::compileProgramExecutables(gl::InfoLog &infoLog, gl::Shade
     ShaderD3D *vertexShaderD3D = ShaderD3D::makeShaderD3D(vertexShader->getImplementation());
     ShaderD3D *fragmentShaderD3D = ShaderD3D::makeShaderD3D(fragmentShader->getImplementation());
 
-    gl::VertexFormat defaultInputLayout[gl::MAX_VERTEX_ATTRIBS];
-    GetDefaultInputLayoutFromShader(vertexShader->getActiveAttributes(), defaultInputLayout);
-    ShaderExecutable *defaultVertexExecutable = NULL;
-    gl::Error error = getVertexExecutableForInputLayout(defaultInputLayout, &defaultVertexExecutable, &infoLog);
-    if (error.isError())
+    auto vertexShaderTaskResult = std::make_shared<gl::Error>(gl::Error(GL_NO_ERROR));
+    gl::InfoLog tempVertexShaderInfoLog;
+
+    task<ShaderExecutable*> vertexShaderTask = create_task([this, vertexShader, &tempVertexShaderInfoLog, &vertexShaderTaskResult]()
     {
-        return LinkResult(false, error);
-    }
+        gl::VertexFormat defaultInputLayout[gl::MAX_VERTEX_ATTRIBS];
+        GetDefaultInputLayoutFromShader(vertexShader->getActiveAttributes(), defaultInputLayout);
+        ShaderExecutable *defaultVertexExecutable = NULL;
+        *vertexShaderTaskResult = getVertexExecutableForInputLayout(defaultInputLayout, &defaultVertexExecutable, &tempVertexShaderInfoLog);
+        return defaultVertexExecutable;
+    });
 
     std::vector<GLenum> defaultPixelOutput = GetDefaultOutputLayoutFromShader(getPixelShaderKey());
     ShaderExecutable *defaultPixelExecutable = NULL;
-    error = getPixelExecutableForOutputLayout(defaultPixelOutput, &defaultPixelExecutable, &infoLog);
+    gl::Error error = getPixelExecutableForOutputLayout(defaultPixelOutput, &defaultPixelExecutable, &infoLog);
+
+    ShaderExecutable* defaultVertexExecutable = vertexShaderTask.get();
+
+    // Combine the temporary infoLog with the real one
+    if (tempVertexShaderInfoLog.getLength() > 0)
+    {
+        std::vector<char> tempCharBuffer(tempVertexShaderInfoLog.getLength() + 3);
+        tempVertexShaderInfoLog.getLog(tempVertexShaderInfoLog.getLength(), NULL, &tempCharBuffer[0]);
+        infoLog.append(&tempCharBuffer[0]);
+    }
+
+    if (vertexShaderTaskResult->isError())
+    {
+        return LinkResult(false, gl::Error(*vertexShaderTaskResult.get()));
+    }
+
+    // If the pixel shader compilation failed, then return error
     if (error.isError())
     {
         return LinkResult(false, error);
