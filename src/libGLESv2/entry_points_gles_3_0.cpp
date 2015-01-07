@@ -2363,8 +2363,17 @@ void GL_APIENTRY DrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GL
             return;
         }
 
-        // glDrawArraysInstanced
-        UNIMPLEMENTED();
+        if (!ValidateDrawArraysInstanced(context, mode, first, count, instanceCount))
+        {
+            return;
+        }
+
+        Error error = context->drawArrays(mode, first, count, instanceCount);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
@@ -2382,8 +2391,18 @@ void GL_APIENTRY DrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, 
             return;
         }
 
-        // glDrawElementsInstanced
-        UNIMPLEMENTED();
+        rx::RangeUI indexRange;
+        if (!ValidateDrawElementsInstanced(context, mode, count, type, indices, instanceCount, &indexRange))
+        {
+            return;
+        }
+
+        Error error = context->drawElements(mode, count, type, indices, instanceCount, indexRange);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
