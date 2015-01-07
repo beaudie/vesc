@@ -46,7 +46,8 @@ static int StreamingBufferElementCount(const gl::VertexAttribute &attrib, int ve
     // non-instanced vertices, and the instanced vertex index advances once every "mDivisor" instances.
     if (instanceDrawCount > 0 && attrib.divisor > 0)
     {
-        return instanceDrawCount / attrib.divisor;
+        // The division must round up.
+        return (instanceDrawCount + attrib.divisor - 1) / attrib.divisor;
     }
 
     return vertexDrawCount;
