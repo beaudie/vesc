@@ -19,6 +19,8 @@
 #include "libANGLE/renderer/d3d/ShaderD3D.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
 
+using namespace Concurrency;
+
 namespace rx
 {
 
@@ -861,10 +863,10 @@ gl::Error ProgramD3D::getPixelExecutableForFramebuffer(const gl::Framebuffer *fb
         }
     }
 
-    return getPixelExecutableForOutputLayout(outputs, outExecutable, nullptr);
+    return getPixelExecutableForOutputLayout(outputs, true, outExecutable, nullptr);
 }
 
-gl::Error ProgramD3D::getPixelExecutableForOutputLayout(const std::vector<GLenum> &outputSignature,
+gl::Error ProgramD3D::getPixelExecutableForOutputLayout(const std::vector<GLenum> &outputSignature, bool compileIfNecessary,
                                                         ShaderExecutable **outExectuable,
                                                         gl::InfoLog *infoLog)
 {
@@ -877,45 +879,65 @@ gl::Error ProgramD3D::getPixelExecutableForOutputLayout(const std::vector<GLenum
         }
     }
 
-    std::string finalPixelHLSL = mDynamicHLSL->generatePixelShaderForOutputSignature(mPixelHLSL, mPixelShaderKey, mUsesFragDepth,
-                                                                                     outputSignature);
-
-    // Generate new pixel executable
-    ShaderExecutable *pixelExecutable = NULL;
-
-    gl::InfoLog tempInfoLog;
-    gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
-
-    gl::Error error = mRenderer->compileToExecutable(*currentInfoLog, finalPixelHLSL, SHADER_PIXEL,
-                                                     mTransformFeedbackLinkedVaryings,
-                                                     (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
-                                                     mPixelWorkarounds, &pixelExecutable);
-    if (error.isError())
+    // No shader found
+    if (compileIfNecessary)
     {
-        return error;
+        return compilePixelExecutableForOutputLayout(outputSignature, outExectuable, infoLog).get();
     }
-
-    if (pixelExecutable)
+    else
     {
-        mPixelExecutables.push_back(new PixelExecutable(outputSignature, pixelExecutable));
+        *outExectuable = NULL;
+        return gl::Error(GL_NO_ERROR);
     }
-    else if (!infoLog)
-    {
-        std::vector<char> tempCharBuffer(tempInfoLog.getLength() + 3);
-        tempInfoLog.getLog(tempInfoLog.getLength(), NULL, &tempCharBuffer[0]);
-        ERR("Error compiling dynamic pixel executable:\n%s\n", &tempCharBuffer[0]);
-    }
-
-    *outExectuable = pixelExecutable;
-    return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error ProgramD3D::getVertexExecutableForInputLayout(const gl::VertexFormat inputLayout[gl::MAX_VERTEX_ATTRIBS],
-                                                        ShaderExecutable **outExectuable,
-                                                        gl::InfoLog *infoLog)
+task<gl::Error> ProgramD3D::compilePixelExecutableForOutputLayout(const std::vector<GLenum> &outputSignature,
+                                                                  ShaderExecutable **outExectuable,
+                                                                  gl::InfoLog *infoLog)
+{
+    auto task = create_task([this, outputSignature, outExectuable, &infoLog]()
+    {
+
+        std::string finalPixelHLSL = mDynamicHLSL->generatePixelShaderForOutputSignature(mPixelHLSL, mPixelShaderKey, mUsesFragDepth,
+                                                                                         outputSignature);
+
+        // Generate new pixel executable
+        ShaderExecutable *pixelExecutable = NULL;
+
+        gl::InfoLog tempInfoLog;
+        gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
+
+        gl::Error error = mRenderer->compileToExecutable(*currentInfoLog, finalPixelHLSL, SHADER_PIXEL,
+                                                         mTransformFeedbackLinkedVaryings,
+                                                         (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
+                                                         mPixelWorkarounds, &pixelExecutable).get();
+        if (error.isError())
+        {
+            return error;
+        }
+
+        if (pixelExecutable)
+        {
+            mPixelExecutables.push_back(new PixelExecutable(outputSignature, pixelExecutable));
+        }
+        else if (!infoLog)
+        {
+            std::vector<char> tempCharBuffer(tempInfoLog.getLength() + 3);
+            tempInfoLog.getLog(tempInfoLog.getLength(), NULL, &tempCharBuffer[0]);
+            ERR("Error compiling dynamic pixel executable:\n%s\n", &tempCharBuffer[0]);
+        }
+
+        *outExectuable = pixelExecutable;
+        return gl::Error(GL_NO_ERROR);
+    });
+
+    return task;
+}
+
+gl::Error ProgramD3D::getVertexExecutableForInputLayout(const gl::VertexFormat inputLayout[gl::MAX_VERTEX_ATTRIBS], 
+                                                        bool compileIfNecessary, ShaderExecutable **outExectuable, gl::InfoLog *infoLog)
 {
     GLenum signature[gl::MAX_VERTEX_ATTRIBS];
-    getInputLayoutSignature(inputLayout, signature);
 
     for (size_t executableIndex = 0; executableIndex < mVertexExecutables.size(); executableIndex++)
     {
@@ -926,37 +948,71 @@ gl::Error ProgramD3D::getVertexExecutableForInputLayout(const gl::VertexFormat i
         }
     }
 
-    // Generate new dynamic layout with attribute conversions
-    std::string finalVertexHLSL = mDynamicHLSL->generateVertexShaderForInputLayout(mVertexHLSL, inputLayout, mShaderAttributes);
-
-    // Generate new vertex executable
-    ShaderExecutable *vertexExecutable = NULL;
-
-    gl::InfoLog tempInfoLog;
-    gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
-
-    gl::Error error = mRenderer->compileToExecutable(*currentInfoLog, finalVertexHLSL, SHADER_VERTEX,
-                                                     mTransformFeedbackLinkedVaryings,
-                                                     (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
-                                                     mVertexWorkarounds, &vertexExecutable);
-    if (error.isError())
+    // No shader found
+    if (compileIfNecessary)
     {
-        return error;
+        return compileVertexExecutableForInputLayout(inputLayout, outExectuable, infoLog).get();
     }
-
-    if (vertexExecutable)
+    else
     {
-        mVertexExecutables.push_back(new VertexExecutable(inputLayout, signature, vertexExecutable));
+        *outExectuable = NULL;
+        return gl::Error(GL_NO_ERROR);
     }
-    else if (!infoLog)
-    {
-        std::vector<char> tempCharBuffer(tempInfoLog.getLength() + 3);
-        tempInfoLog.getLog(tempInfoLog.getLength(), NULL, &tempCharBuffer[0]);
-        ERR("Error compiling dynamic vertex executable:\n%s\n", &tempCharBuffer[0]);
-    }
+}
 
-    *outExectuable = vertexExecutable;
-    return gl::Error(GL_NO_ERROR);
+task<gl::Error> ProgramD3D::compileVertexExecutableForInputLayout(const gl::VertexFormat inputLayout[gl::MAX_VERTEX_ATTRIBS],
+                                                        ShaderExecutable **outExectuable, gl::InfoLog *infoLog)
+{
+    auto task = create_task([this, inputLayout, outExectuable, &infoLog]()
+    {
+        GLenum signature[gl::MAX_VERTEX_ATTRIBS];
+        getInputLayoutSignature(inputLayout, signature);
+
+        for (size_t executableIndex = 0; executableIndex < mVertexExecutables.size(); executableIndex++)
+        {
+            if (mVertexExecutables[executableIndex]->matchesSignature(signature))
+            {
+                *outExectuable = mVertexExecutables[executableIndex]->shaderExecutable();
+                return gl::Error(GL_NO_ERROR);
+            }
+        }
+
+        // Generate new dynamic layout with attribute conversions
+        std::string finalVertexHLSL = mDynamicHLSL->generateVertexShaderForInputLayout(mVertexHLSL, inputLayout, mShaderAttributes);
+
+        // Generate new vertex executable
+        ShaderExecutable *vertexExecutable = NULL;
+
+        gl::InfoLog tempInfoLog;
+        gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
+
+        // Async compile
+        gl::Error error = mRenderer->compileToExecutable(*currentInfoLog, finalVertexHLSL, SHADER_VERTEX,
+                                                        mTransformFeedbackLinkedVaryings,
+                                                        (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
+                                                        mVertexWorkarounds, &vertexExecutable).get();
+
+        if (error.isError())
+        {
+            return error;
+        }
+
+        if (vertexExecutable)
+        {
+            mVertexExecutables.push_back(new VertexExecutable(inputLayout, signature, vertexExecutable));
+        }
+        else if (!infoLog)
+        {
+            std::vector<char> tempCharBuffer(tempInfoLog.getLength() + 3);
+            tempInfoLog.getLog(tempInfoLog.getLength(), NULL, &tempCharBuffer[0]);
+            ERR("Error compiling dynamic vertex executable:\n%s\n", &tempCharBuffer[0]);
+        }
+
+        *outExectuable = vertexExecutable;
+        return gl::Error(GL_NO_ERROR);
+    });
+
+    return task;
 }
 
 LinkResult ProgramD3D::compileProgramExecutables(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
@@ -965,35 +1021,93 @@ LinkResult ProgramD3D::compileProgramExecutables(gl::InfoLog &infoLog, gl::Shade
     ShaderD3D *vertexShaderD3D = ShaderD3D::makeShaderD3D(vertexShader->getImplementation());
     ShaderD3D *fragmentShaderD3D = ShaderD3D::makeShaderD3D(fragmentShader->getImplementation());
 
+    // TODO: research creating empty tasks
+    auto psTask = create_task([]{ return gl::Error(NO_ERROR); });
+    auto vsTask = create_task([]{ return gl::Error(NO_ERROR); });
+    auto gsTask = create_task([]{ return gl::Error(NO_ERROR); });
+
+    gl::InfoLog tempVertexShaderInfoLog;
     gl::VertexFormat defaultInputLayout[gl::MAX_VERTEX_ATTRIBS];
     GetDefaultInputLayoutFromShader(vertexShader->getActiveAttributes(), defaultInputLayout);
     ShaderExecutable *defaultVertexExecutable = NULL;
-    gl::Error error = getVertexExecutableForInputLayout(defaultInputLayout, &defaultVertexExecutable, &infoLog);
+    gl::Error error = getVertexExecutableForInputLayout(defaultInputLayout, false, &defaultVertexExecutable, &infoLog);
     if (error.isError())
     {
         return LinkResult(false, error);
     }
 
+    if (defaultVertexExecutable == NULL)
+    {
+        vsTask = compileVertexExecutableForInputLayout(defaultInputLayout, &defaultVertexExecutable, &tempVertexShaderInfoLog);
+    }
+
+    gl::InfoLog tempPixelShaderInfoLog;
     std::vector<GLenum> defaultPixelOutput = GetDefaultOutputLayoutFromShader(getPixelShaderKey());
     ShaderExecutable *defaultPixelExecutable = NULL;
-    error = getPixelExecutableForOutputLayout(defaultPixelOutput, &defaultPixelExecutable, &infoLog);
+    error = getPixelExecutableForOutputLayout(defaultPixelOutput, false, &defaultPixelExecutable, &infoLog);
     if (error.isError())
     {
         return LinkResult(false, error);
     }
 
+    if (defaultPixelExecutable == NULL)
+    {
+        psTask = compilePixelExecutableForOutputLayout(defaultPixelOutput, &defaultPixelExecutable, &tempPixelShaderInfoLog);
+    }
+
+    gl::InfoLog tempGeometryShaderInfoLog;
     if (usesGeometryShader())
     {
-        std::string geometryHLSL = mDynamicHLSL->generateGeometryShaderHLSL(registers, fragmentShaderD3D, vertexShaderD3D);
-
-
-        error = mRenderer->compileToExecutable(infoLog, geometryHLSL, SHADER_GEOMETRY, mTransformFeedbackLinkedVaryings,
-                                               (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
-                                               ANGLE_D3D_WORKAROUND_NONE, &mGeometryExecutable);
-        if (error.isError())
+        gsTask = create_task([this, registers, fragmentShaderD3D, vertexShaderD3D, &tempGeometryShaderInfoLog]()
         {
-            return LinkResult(false, error);
-        }
+            std::string geometryHLSL = mDynamicHLSL->generateGeometryShaderHLSL(registers, fragmentShaderD3D, vertexShaderD3D);
+
+            return mRenderer->compileToExecutable(tempGeometryShaderInfoLog, geometryHLSL, SHADER_GEOMETRY, mTransformFeedbackLinkedVaryings,
+                                                  (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
+                                                  ANGLE_D3D_WORKAROUND_NONE, &mGeometryExecutable).get();
+        });
+
+    }
+
+    gl::Error psError = psTask.get();
+    gl::Error vsError = vsTask.get();
+    gl::Error gsError = gsTask.get();
+
+    // Combine the temporary infoLog with the real ones. // TODO: tidy this up
+    if (tempVertexShaderInfoLog.getLength() > 0)
+    {
+        std::vector<char> tempCharBuffer(tempVertexShaderInfoLog.getLength() + 3);
+        tempVertexShaderInfoLog.getLog(tempVertexShaderInfoLog.getLength(), NULL, &tempCharBuffer[0]);
+        infoLog.append(&tempCharBuffer[0]);
+    }
+
+    if (tempPixelShaderInfoLog.getLength() > 0)
+    {
+        std::vector<char> tempCharBuffer(tempPixelShaderInfoLog.getLength() + 3);
+        tempPixelShaderInfoLog.getLog(tempPixelShaderInfoLog.getLength(), NULL, &tempCharBuffer[0]);
+        infoLog.append(&tempCharBuffer[0]);
+    }
+
+    if (tempGeometryShaderInfoLog.getLength() > 0)
+    {
+        std::vector<char> tempCharBuffer(tempGeometryShaderInfoLog.getLength() + 3);
+        tempGeometryShaderInfoLog.getLog(tempGeometryShaderInfoLog.getLength(), NULL, &tempCharBuffer[0]);
+        infoLog.append(&tempCharBuffer[0]);
+    }
+
+    if (vsError.isError())
+    {
+        return LinkResult(false, vsError);
+    }
+
+    if (psError.isError())
+    {
+        return LinkResult(false, psError);
+    }
+
+    if (gsError.isError())
+    {
+        return LinkResult(false, gsError);
     }
 
 #if ANGLE_SHADER_DEBUG_INFO == ANGLE_ENABLED

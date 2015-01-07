@@ -49,6 +49,8 @@
 #include <sstream>
 #include <EGL/eglext.h>
 
+using namespace Concurrency;
+
 // Enable ANGLE_SKIP_DXGI_1_2_CHECK if there is not a possibility of using cross-process
 // HWNDs or the Windows 7 Platform Update (KB2670838) is expected to be installed.
 #ifndef ANGLE_SKIP_DXGI_1_2_CHECK
@@ -1549,7 +1551,7 @@ gl::Error Renderer11::applyShaders(gl::Program *program, const gl::VertexFormat 
     ProgramD3D *programD3D = ProgramD3D::makeProgramD3D(program->getImplementation());
 
     ShaderExecutable *vertexExe = NULL;
-    gl::Error error = programD3D->getVertexExecutableForInputLayout(inputLayout, &vertexExe, nullptr);
+    gl::Error error = programD3D->getVertexExecutableForInputLayout(inputLayout, true, &vertexExe, nullptr);
     if (error.isError())
     {
         return error;
@@ -2604,81 +2606,86 @@ gl::Error Renderer11::loadExecutable(const void *function, size_t length, Shader
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog, const std::string &shaderHLSL, ShaderType type,
+task<gl::Error> Renderer11::compileToExecutable(gl::InfoLog &infoLog, const std::string &shaderHLSL, ShaderType type,
                                           const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
                                           bool separatedOutputBuffers, D3DWorkaroundType workaround,
                                           ShaderExecutable **outExectuable)
 {
-    const char *profileType = NULL;
-    switch (type)
+    task<gl::Error> compileToExecutableTask = create_task([this, &infoLog, &shaderHLSL, type, &transformFeedbackVaryings, separatedOutputBuffers, workaround, outExectuable]()
     {
-      case SHADER_VERTEX:
-        profileType = "vs";
-        break;
-      case SHADER_PIXEL:
-        profileType = "ps";
-        break;
-      case SHADER_GEOMETRY:
-        profileType = "gs";
-        break;
-      default:
-        UNREACHABLE();
-        return gl::Error(GL_INVALID_OPERATION);
-    }
+        const char *profileType = NULL;
+        switch (type)
+        {
+        case SHADER_VERTEX:
+            profileType = "vs";
+            break;
+        case SHADER_PIXEL:
+            profileType = "ps";
+            break;
+        case SHADER_GEOMETRY:
+            profileType = "gs";
+            break;
+        default:
+            UNREACHABLE();
+            return gl::Error(GL_INVALID_OPERATION);
+        }
 
-    std::string profile = FormatString("%s_%d_%d%s", profileType, getMajorShaderModel(), getMinorShaderModel(), getShaderModelSuffix().c_str());
+        std::string profile = FormatString("%s_%d_%d%s", profileType, getMajorShaderModel(), getMinorShaderModel(), getShaderModelSuffix().c_str());
 
-    UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL2;
+        UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL2;
 
-    if (gl::perfActive())
-    {
+        if (gl::perfActive())
+        {
 #ifndef NDEBUG
-        flags = D3DCOMPILE_SKIP_OPTIMIZATION;
+            flags = D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
-        flags |= D3DCOMPILE_DEBUG;
-    }
+            flags |= D3DCOMPILE_DEBUG;
+        }
 
-    // Sometimes D3DCompile will fail with the default compilation flags for complicated shaders when it would otherwise pass with alternative options.
-    // Try the default flags first and if compilation fails, try some alternatives.
-    std::vector<CompileConfig> configs;
-    configs.push_back(CompileConfig(flags,                                "default"          ));
-    configs.push_back(CompileConfig(flags | D3DCOMPILE_SKIP_VALIDATION,   "skip validation"  ));
-    configs.push_back(CompileConfig(flags | D3DCOMPILE_SKIP_OPTIMIZATION, "skip optimization"));
+        // Sometimes D3DCompile will fail with the default compilation flags for complicated shaders when it would otherwise pass with alternative options.
+        // Try the default flags first and if compilation fails, try some alternatives.
+        std::vector<CompileConfig> configs;
+        configs.push_back(CompileConfig(flags, "default"));
+        configs.push_back(CompileConfig(flags | D3DCOMPILE_SKIP_VALIDATION, "skip validation"));
+        configs.push_back(CompileConfig(flags | D3DCOMPILE_SKIP_OPTIMIZATION, "skip optimization"));
 
-    D3D_SHADER_MACRO loopMacros[] = { {"ANGLE_ENABLE_LOOP_FLATTEN", "1"}, {0, 0} };
+        D3D_SHADER_MACRO loopMacros[] = { { "ANGLE_ENABLE_LOOP_FLATTEN", "1" }, { 0, 0 } };
 
-    ID3DBlob *binary = NULL;
-    std::string debugInfo;
-    gl::Error error = mCompiler.compileToBinary(infoLog, shaderHLSL, profile, configs, loopMacros, &binary, &debugInfo);
-    if (error.isError())
-    {
-        return error;
-    }
+        ID3DBlob *binary = NULL;
+        std::string debugInfo;
+        gl::Error error = mCompiler.compileToBinary(infoLog, shaderHLSL, profile, configs, loopMacros, &binary, &debugInfo);
+        if (error.isError())
+        {
+            return error;
+        }
 
-    // It's possible that binary is NULL if the compiler failed in all configurations.  Set the executable to NULL
-    // and return GL_NO_ERROR to signify that there was a link error but the internal state is still OK.
-    if (!binary)
-    {
-        *outExectuable = NULL;
+        // It's possible that binary is NULL if the compiler failed in all configurations.  Set the executable to NULL
+        // and return GL_NO_ERROR to signify that there was a link error but the internal state is still OK.
+        if (!binary)
+        {
+            *outExectuable = NULL;
+            return  gl::Error(GL_NO_ERROR);
+        }
+
+        error = loadExecutable(binary->GetBufferPointer(), binary->GetBufferSize(), type,
+            transformFeedbackVaryings, separatedOutputBuffers, outExectuable);
+
+        SafeRelease(binary);
+        if (error.isError())
+        {
+            return error;
+        }
+
+        if (!debugInfo.empty())
+        {
+            (*outExectuable)->appendDebugInfo(debugInfo);
+        }
+
         return gl::Error(GL_NO_ERROR);
-    }
+    });
 
-    error = loadExecutable(binary->GetBufferPointer(), binary->GetBufferSize(), type,
-                           transformFeedbackVaryings, separatedOutputBuffers, outExectuable);
-
-    SafeRelease(binary);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    if (!debugInfo.empty())
-    {
-        (*outExectuable)->appendDebugInfo(debugInfo);
-    }
-
-    return gl::Error(GL_NO_ERROR);
+    return compileToExecutableTask;
 }
 
 UniformStorage *Renderer11::createUniformStorage(size_t storageSize)

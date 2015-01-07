@@ -16,6 +16,12 @@
 namespace gl
 {
 
+Error::Error()
+    : mCode(GL_NO_ERROR),
+      mMessage()
+{
+}
+
 Error::Error(GLenum errorCode)
     : mCode(errorCode),
       mMessage()

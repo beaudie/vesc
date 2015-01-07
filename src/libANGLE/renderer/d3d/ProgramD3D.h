@@ -17,6 +17,8 @@
 #include <string>
 #include <vector>
 
+#include <ppltasks.h> // For create_task
+
 namespace gl
 {
 struct LinkedUniform;
@@ -64,8 +66,8 @@ class ProgramD3D : public ProgramImpl
     gl::Error save(gl::BinaryOutputStream *stream);
 
     gl::Error getPixelExecutableForFramebuffer(const gl::Framebuffer *fbo, ShaderExecutable **outExectuable);
-    gl::Error getPixelExecutableForOutputLayout(const std::vector<GLenum> &outputLayout, ShaderExecutable **outExectuable, gl::InfoLog *infoLog);
-    gl::Error getVertexExecutableForInputLayout(const gl::VertexFormat inputLayout[gl::MAX_VERTEX_ATTRIBS], ShaderExecutable **outExectuable, gl::InfoLog *infoLog);
+    gl::Error getPixelExecutableForOutputLayout(const std::vector<GLenum> &outputLayout, bool compileIfNecessary, ShaderExecutable **outExectuable, gl::InfoLog *infoLog);
+    gl::Error getVertexExecutableForInputLayout(const gl::VertexFormat inputLayout[gl::MAX_VERTEX_ATTRIBS], bool compileIfNecessary, ShaderExecutable **outExectuable, gl::InfoLog *infoLog);
     ShaderExecutable *getGeometryExecutable() const { return mGeometryExecutable; }
 
     LinkResult compileProgramExecutables(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
@@ -175,6 +177,9 @@ class ProgramD3D : public ProgramImpl
         GLint logicalTextureUnit;
         GLenum textureType;
     };
+
+    Concurrency::task<gl::Error> compilePixelExecutableForOutputLayout(const std::vector<GLenum> &outputLayout, ShaderExecutable **outExectuable, gl::InfoLog *infoLog);
+    Concurrency::task<gl::Error> compileVertexExecutableForInputLayout(const gl::VertexFormat inputLayout[gl::MAX_VERTEX_ATTRIBS], ShaderExecutable **outExectuable, gl::InfoLog *infoLog);
 
     void defineUniformBase(const ShaderD3D *shader, const sh::Uniform &uniform, unsigned int uniformRegister);
     void defineUniform(const ShaderD3D *shader, const sh::ShaderVariable &uniform, const std::string &fullName,

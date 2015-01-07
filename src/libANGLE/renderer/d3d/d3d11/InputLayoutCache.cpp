@@ -170,7 +170,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
         ProgramD3D *programD3D = ProgramD3D::makeProgramD3D(program->getImplementation());
 
         ShaderExecutable *shader = NULL;
-        gl::Error error = programD3D->getVertexExecutableForInputLayout(shaderInputLayout, &shader, nullptr);
+        gl::Error error = programD3D->getVertexExecutableForInputLayout(shaderInputLayout, true, &shader, nullptr);
         if (error.isError())
         {
             return error;

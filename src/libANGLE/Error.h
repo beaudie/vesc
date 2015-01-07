@@ -21,6 +21,7 @@ class Error
 {
   public:
     explicit Error(GLenum errorCode);
+    Error();
     Error(GLenum errorCode, const char *msg, ...);
     Error(const Error &other);
     Error &operator=(const Error &other);

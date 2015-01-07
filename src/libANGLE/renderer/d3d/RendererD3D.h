@@ -9,6 +9,8 @@
 #ifndef LIBANGLE_RENDERER_D3D_RENDERERD3D_H_
 #define LIBANGLE_RENDERER_D3D_RENDERERD3D_H_
 
+#include <ppltasks.h> // For create_task
+
 #include "libANGLE/Data.h"
 #include "libANGLE/renderer/Renderer.h"
 #include "libANGLE/renderer/d3d/MemoryBuffer.h"
@@ -123,10 +125,10 @@ class RendererD3D : public Renderer
     virtual gl::Error loadExecutable(const void *function, size_t length, ShaderType type,
                                      const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
                                      bool separatedOutputBuffers, ShaderExecutable **outExecutable) = 0;
-    virtual gl::Error compileToExecutable(gl::InfoLog &infoLog, const std::string &shaderHLSL, ShaderType type,
-                                          const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
-                                          bool separatedOutputBuffers, D3DWorkaroundType workaround,
-                                          ShaderExecutable **outExectuable) = 0;
+    virtual Concurrency::task<gl::Error> compileToExecutable(gl::InfoLog &infoLog, const std::string &shaderHLSL, ShaderType type,
+                                                             const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
+                                                             bool separatedOutputBuffers, D3DWorkaroundType workaround,
+                                                             ShaderExecutable **outExectuable) = 0;
     virtual UniformStorage *createUniformStorage(size_t storageSize) = 0;
 
     // Image operations
