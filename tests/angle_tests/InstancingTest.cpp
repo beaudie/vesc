@@ -39,14 +39,14 @@ class InstancingTest : public ANGLETest
         ASSERT_TRUE(mDrawElementsInstancedANGLE != NULL);
 
         // Initialize the vertex and index vectors
-        GLfloat vertex1[3] = {-quadRadius,  quadRadius, 0.0f};
-        GLfloat vertex2[3] = {-quadRadius, -quadRadius, 0.0f};
-        GLfloat vertex3[3] = { quadRadius, -quadRadius, 0.0f};
-        GLfloat vertex4[3] = { quadRadius,  quadRadius, 0.0f};
-        mVertices.insert(mVertices.end(), vertex1, vertex1 + 3);
-        mVertices.insert(mVertices.end(), vertex2, vertex2 + 3);
-        mVertices.insert(mVertices.end(), vertex3, vertex3 + 3);
-        mVertices.insert(mVertices.end(), vertex4, vertex4 + 3);
+        GLfloat qvertex1[3] = {-quadRadius,  quadRadius, 0.0f};
+        GLfloat qvertex2[3] = {-quadRadius, -quadRadius, 0.0f};
+        GLfloat qvertex3[3] = { quadRadius, -quadRadius, 0.0f};
+        GLfloat qvertex4[3] = { quadRadius,  quadRadius, 0.0f};
+        mQuadVertices.insert(mQuadVertices.end(), qvertex1, qvertex1 + 3);
+        mQuadVertices.insert(mQuadVertices.end(), qvertex2, qvertex2 + 3);
+        mQuadVertices.insert(mQuadVertices.end(), qvertex3, qvertex3 + 3);
+        mQuadVertices.insert(mQuadVertices.end(), qvertex4, qvertex4 + 3);
 
         GLfloat coord1[2] = {0.0f, 0.0f};
         GLfloat coord2[2] = {0.0f, 1.0f};
@@ -64,7 +64,21 @@ class InstancingTest : public ANGLETest
         mIndices.push_back(2);
         mIndices.push_back(3);
 
-        // Tile a 3x3 grid of the tiles
+        for (size_t vertexIndex = 0; vertexIndex < 6; ++vertexIndex)
+        {
+            mNonIndexedVertices.insert(mNonIndexedVertices.end(),
+                                       mQuadVertices.begin() + mIndices[vertexIndex] * 3,
+                                       mQuadVertices.begin() + mIndices[vertexIndex] * 3 + 3);
+        }
+
+        for (size_t vertexIndex = 0; vertexIndex < 6; ++vertexIndex)
+        {
+            mNonIndexedVertices.insert(mNonIndexedVertices.end(),
+                                       mQuadVertices.begin() + mIndices[vertexIndex] * 3,
+                                       mQuadVertices.begin() + mIndices[vertexIndex] * 3 + 3);
+        }
+
+        // Tile a 2x2 grid of the tiles
         for (float y = -1.0f + quadRadius; y < 1.0f - quadRadius; y += quadRadius * 3)
         {
             for (float x = -1.0f + quadRadius; x < 1.0f - quadRadius; x += quadRadius * 3)
@@ -79,7 +93,83 @@ class InstancingTest : public ANGLETest
         ASSERT_GL_NO_ERROR();
     }
 
-    virtual void runTest(std::string vs, bool shouldAttribZeroBeInstanced)
+    GLuint setupDrawArraysTest(const std::string &vs)
+    {
+        const std::string fs = SHADER_SOURCE
+        (
+            precision mediump float;
+            void main()
+            {
+                gl_FragColor = vec4(1.0, 0, 0, 1.0);
+            }
+        );
+
+        GLuint program = CompileProgram(vs, fs);
+        if (program == 0)
+        {
+            return 0;
+        }
+
+        // Set the viewport
+        glViewport(0, 0, getWindowWidth(), getWindowHeight());
+
+        // Clear the color buffer
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Use the program object
+        glUseProgram(program);
+
+        return program;
+    }
+
+    void runDrawArraysTest(GLuint program, GLint first, GLsizei count, GLsizei instanceCount, float *offset)
+    {
+        GLuint vertexBuffer;
+        glGenBuffers(1, &vertexBuffer);
+
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, mInstances.size() * sizeof(mInstances[0]), &mInstances[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        // Get the attribute locations
+        GLint positionLoc = glGetAttribLocation(program, "a_position");
+        GLint instancePosLoc = glGetAttribLocation(program, "a_instancePos");
+
+        // Load the vertex position
+        glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, mNonIndexedVertices.data());
+        glEnableVertexAttribArray(positionLoc);
+
+        // Load the instance position
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        glVertexAttribPointer(instancePosLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glEnableVertexAttribArray(instancePosLoc);
+
+        // Enable instancing
+        mVertexAttribDivisorANGLE(instancePosLoc, 1);
+
+        // Offset
+        GLint uniformLoc = glGetUniformLocation(program, "u_offset");
+        ASSERT_NE(uniformLoc, -1);
+        glUniform3fv(uniformLoc, 1, offset);
+
+        // Do the instanced draw
+        mDrawArraysInstancedANGLE(GL_TRIANGLES, first, count, instanceCount);
+
+        ASSERT_GL_NO_ERROR();
+
+        swapBuffers();
+
+        // Check that various pixels are the expected color.
+
+        // Check the four quads
+        float quadx = ((mInstances[0] + offset[0]) * 0.5f + 0.5f) * getWindowWidth();
+        float quady = ((mInstances[1] + offset[1]) * 0.5f + 0.5f) * getWindowHeight();
+
+        EXPECT_PIXEL_EQ(quadx, quady, 255, 0, 0, 255);
+    }
+
+    virtual void runDrawElementsTest(std::string vs, bool shouldAttribZeroBeInstanced)
     {
         const std::string fs = SHADER_SOURCE
         (
@@ -110,7 +200,7 @@ class InstancingTest : public ANGLETest
         glUseProgram(program);
 
         // Load the vertex position
-        glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, mVertices.data());
+        glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, mQuadVertices.data());
         glEnableVertexAttribArray(positionLoc);
 
         // Load the instance position
@@ -121,7 +211,7 @@ class InstancingTest : public ANGLETest
         mVertexAttribDivisorANGLE(instancePosLoc, 1);
 
         // Do the instanced draw
-        mDrawElementsInstancedANGLE(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_SHORT, mIndices.data(), mInstances.size());
+        mDrawElementsInstancedANGLE(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_SHORT, mIndices.data(), mInstances.size() / 3);
 
         ASSERT_GL_NO_ERROR();
 
@@ -139,12 +229,13 @@ class InstancingTest : public ANGLETest
     PFNGLDRAWELEMENTSINSTANCEDANGLEPROC mDrawElementsInstancedANGLE;
 
     // Vertex data
-    std::vector<GLfloat> mVertices;
+    std::vector<GLfloat> mQuadVertices;
+    std::vector<GLfloat> mNonIndexedVertices;
     std::vector<GLfloat> mTexcoords;
     std::vector<GLfloat> mInstances;
     std::vector<GLushort> mIndices;
 
-    const GLfloat quadRadius = 0.2f;
+    const GLfloat quadRadius = 0.30f;
 };
 
 // This test uses a vertex shader with the first attribute (attribute zero) instanced.
@@ -162,7 +253,7 @@ TYPED_TEST(InstancingTest, AttributeZeroInstanced)
         }
     );
 
-    runTest(vs, true);
+    runDrawElementsTest(vs, true);
 }
 
 // Same as AttributeZeroInstanced, but attribute zero is not instanced.
@@ -179,5 +270,32 @@ TYPED_TEST(InstancingTest, AttributeZeroNotInstanced)
         }
     );
 
-    runTest(vs, false);
+    runDrawElementsTest(vs, false);
+}
+
+// Tests that the "first" parameter to glDrawArraysInstancedANGLE is only an offset into
+// the non-instanced vertex attributes.
+TYPED_TEST(InstancingTest, DrawArraysWithOffset)
+{
+    const std::string vs = SHADER_SOURCE
+    (
+        attribute vec3 a_position;
+        attribute vec3 a_instancePos;
+        uniform vec3 u_offset;
+        void main()
+        {
+            gl_Position = vec4(a_position.xyz + a_instancePos.xyz + u_offset, 1.0);
+        }
+    );
+
+    GLuint program = setupDrawArraysTest(vs);
+    ASSERT_NE(program, 0u);
+
+    float offset1[3] = { 0, 0, 0 };
+    runDrawArraysTest(program, 0, 6, 2, offset1);
+
+    float offset2[3] = { 0.0f, 1.0f, 0 };
+    runDrawArraysTest(program, 6, 6, 2, offset2);
+
+    glDeleteProgram(program);
 }
