@@ -35,6 +35,9 @@ class VertexBuffer11 : public VertexBuffer
     virtual gl::Error setBufferSize(unsigned int size);
     virtual gl::Error discard();
 
+    virtual gl::Error hintMapResource();
+    virtual void hintUnmapResource();
+
     ID3D11Buffer *getBuffer() const;
 
   private:
@@ -45,6 +48,9 @@ class VertexBuffer11 : public VertexBuffer
     ID3D11Buffer *mBuffer;
     unsigned int mBufferSize;
     bool mDynamicUsage;
+
+    D3D11_MAPPED_SUBRESOURCE mMappedResourceCache;
+    int mMappedResourceCacheHintCount;
 };
 
 }

@@ -117,12 +117,28 @@ gl::Error VertexDataManager::prepareVertexData(const gl::State &state, GLint sta
         }
     }
 
+    bool hintedMapResource = false;
+
     // Perform the vertex data translations
     for (int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
     {
         const gl::VertexAttribute &curAttrib = state.getVertexAttribState(i);
         if (translated[i].active)
         {
+            if (!hintedMapResource)
+            {
+                // Hint to the buffer that it should map (and cache) the resource.
+                // This allows the buffer to map the resource once, rather than once per attribute.
+                // NOTE: only make the hint if there is an active attribute, to prevent a wasted call to Map()
+                gl::Error error = mStreamingBuffer->getVertexBuffer()->hintMapResource();
+                if (error.isError())
+                {
+                    return error;
+                }
+
+                hintedMapResource = true;
+            }
+
             if (curAttrib.enabled)
             {
                 gl::Error error = storeAttribute(curAttrib, state.getVertexAttribCurrentValue(i),
@@ -130,6 +146,10 @@ gl::Error VertexDataManager::prepareVertexData(const gl::State &state, GLint sta
 
                 if (error.isError())
                 {
+                    if (hintedMapResource)
+                    {
+                        mStreamingBuffer->getVertexBuffer()->hintUnmapResource();
+                    }
                     return error;
                 }
             }
@@ -145,10 +165,19 @@ gl::Error VertexDataManager::prepareVertexData(const gl::State &state, GLint sta
                                                     mCurrentValueBuffer[i]);
                 if (error.isError())
                 {
+                    if (hintedMapResource)
+                    {
+                        mStreamingBuffer->getVertexBuffer()->hintUnmapResource();
+                    }
                     return error;
                 }
             }
         }
+    }
+
+    if (hintedMapResource)
+    {
+        mStreamingBuffer->getVertexBuffer()->hintUnmapResource();
     }
 
     for (int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)

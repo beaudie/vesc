@@ -47,6 +47,10 @@ class VertexBuffer
 
     unsigned int getSerial() const;
 
+    // These methods have empty implementations. They may be overridden (e.g. by VertexBuffer11) if necessary.
+    virtual gl::Error hintMapResource() { return gl::Error(GL_NO_ERROR); };
+    virtual void hintUnmapResource() { };
+
   protected:
     void updateSerial();
 

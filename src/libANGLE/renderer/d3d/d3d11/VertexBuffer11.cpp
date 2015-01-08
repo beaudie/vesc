@@ -21,10 +21,12 @@ VertexBuffer11::VertexBuffer11(Renderer11 *const renderer) : mRenderer(renderer)
     mBuffer = NULL;
     mBufferSize = 0;
     mDynamicUsage = false;
+    mMappedResourceCacheHintCount = 0;
 }
 
 VertexBuffer11::~VertexBuffer11()
 {
+    ASSERT(mMappedResourceCacheHintCount == 0);
     SafeRelease(mBuffer);
 }
 
@@ -65,6 +67,38 @@ VertexBuffer11 *VertexBuffer11::makeVertexBuffer11(VertexBuffer *vetexBuffer)
     return static_cast<VertexBuffer11*>(vetexBuffer);
 }
 
+// mMappedResourceCacheHintCount acts like a ref count for the mapped resource.
+// We map the resource the first time hintMapResource() is called, and release it when the ref count hints zero.
+gl::Error VertexBuffer11::hintMapResource()
+{
+    if (mMappedResourceCacheHintCount == 0)
+    {
+        ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
+
+        HRESULT result = dxContext->Map(mBuffer, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mMappedResourceCache);
+        if (FAILED(result))
+        {
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to map internal vertex buffer, HRESULT: 0x%08x.", result);
+        }
+    }
+
+    mMappedResourceCacheHintCount++;
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+void VertexBuffer11::hintUnmapResource()
+{
+    mMappedResourceCacheHintCount--;
+    ASSERT(mMappedResourceCacheHintCount >= 0);
+
+    if (mMappedResourceCacheHintCount == 0)
+    {
+        ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
+        dxContext->Unmap(mBuffer, 0);
+    }
+}
+
 gl::Error VertexBuffer11::storeVertexAttributes(const gl::VertexAttribute &attrib, const gl::VertexAttribCurrentValueData &currentValue,
                                                 GLint start, GLsizei count, GLsizei instances, unsigned int offset)
 {
@@ -75,16 +109,15 @@ gl::Error VertexBuffer11::storeVertexAttributes(const gl::VertexAttribute &attri
 
     gl::Buffer *buffer = attrib.buffer.get();
     int inputStride = ComputeVertexAttributeStride(attrib);
-    ID3D11DeviceContext *dxContext = mRenderer->getDeviceContext();
-
-    D3D11_MAPPED_SUBRESOURCE mappedResource;
-    HRESULT result = dxContext->Map(mBuffer, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
-    if (FAILED(result))
+    
+    // This will map the resource if it isn't already mapped.
+    gl::Error error = hintMapResource();
+    if (error.isError())
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to map internal vertex buffer, HRESULT: 0x%08x.", result);
+        return error;
     }
 
-    uint8_t *output = reinterpret_cast<uint8_t*>(mappedResource.pData) + offset;
+    uint8_t *output = reinterpret_cast<uint8_t*>(mMappedResourceCache.pData) + offset;
 
     const uint8_t *input = NULL;
     if (attrib.enabled)
@@ -95,6 +128,7 @@ gl::Error VertexBuffer11::storeVertexAttributes(const gl::VertexAttribute &attri
             gl::Error error = storage->getData(&input);
             if (error.isError())
             {
+                hintUnmapResource();
                 return error;
             }
             input += static_cast<int>(attrib.offset);
@@ -119,7 +153,8 @@ gl::Error VertexBuffer11::storeVertexAttributes(const gl::VertexAttribute &attri
     ASSERT(vertexFormatInfo.copyFunction != NULL);
     vertexFormatInfo.copyFunction(input, inputStride, count, output);
 
-    dxContext->Unmap(mBuffer, 0);
+    // This will unmap the resource if we mapped it earlier in this method.
+    hintUnmapResource();
 
     return gl::Error(GL_NO_ERROR);
 }
