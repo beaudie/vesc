@@ -420,7 +420,8 @@ gl::Error RenderStateCache::getSamplerState(const gl::SamplerState &samplerState
         samplerDesc.BorderColor[2] = 0.0f;
         samplerDesc.BorderColor[3] = 0.0f;
         samplerDesc.MinLOD = samplerState.minLod;
-        samplerDesc.MaxLOD = samplerState.maxLod;
+        // D3D11 FL9_* requires MaxLOD to be set to FLT_MAX in the D3D11_SAMPLER_DESC.
+        samplerDesc.MaxLOD = (mRenderer->getFeatureLevel() <= D3D_FEATURE_LEVEL_9_3) ? FLT_MAX : samplerState.maxLod;
 
         ID3D11SamplerState *dx11SamplerState = NULL;
         HRESULT result = mDevice->CreateSamplerState(&samplerDesc, &dx11SamplerState);

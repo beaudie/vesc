@@ -27,11 +27,18 @@ struct Workarounds
 {
     Workarounds()
         : mrtPerfWorkaround(false),
-          setDataFasterThanImageUpload(false)
+          setDataFasterThanImageUpload(false),
+          useInstancedPointSpriteEmulation(false)
     {}
 
     bool mrtPerfWorkaround;
     bool setDataFasterThanImageUpload;
+
+    // Some renderers do not support Geometry Shaders so the Geometry Shader-based
+    // PointSprite emulation will not work.
+    // To work around this, D3D11 FL9_3 has to use a different pointsprite
+    // emulation that is implemented using instanced quads.
+    bool useInstancedPointSpriteEmulation;
 };
 
 }
