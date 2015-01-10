@@ -94,6 +94,9 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
 
     int sortedSemanticIndices[gl::MAX_VERTEX_ATTRIBS];
     programD3D->sortAttributesByLayout(attributes, sortedSemanticIndices);
+    bool usesInstancedPointSpriteEmulation = programD3D->usesPointSize() && programD3D->usesInstancedPointSpriteEmulation();
+    ID3D11Buffer *pointSpriteVertexBuffer = NULL;
+    ID3D11Buffer *pointSpriteIndexBuffer = NULL;
 
     if (!mDevice || !mDeviceContext)
     {
@@ -106,12 +109,15 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
 
     unsigned int firstIndexedElement = gl::MAX_VERTEX_ATTRIBS;
     unsigned int firstInstancedElement = gl::MAX_VERTEX_ATTRIBS;
+    unsigned int nextAvailableInputSlot = 0;
 
     for (unsigned int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
     {
         if (attributes[i].active)
         {
             D3D11_INPUT_CLASSIFICATION inputClass = attributes[i].divisor > 0 ? D3D11_INPUT_PER_INSTANCE_DATA : D3D11_INPUT_PER_VERTEX_DATA;
+            // If instanced pointsprite emulation is being used, the inputClass is required to be configured as per instance data
+            inputClass = usesInstancedPointSpriteEmulation ? D3D11_INPUT_PER_INSTANCE_DATA : inputClass;
 
             gl::VertexFormat vertexFormat(*attributes[i].attribute, attributes[i].currentValueType);
             const d3d11::VertexFormat &vertexFormatInfo = d3d11::GetVertexFormatInfo(vertexFormat, mFeatureLevel);
@@ -127,7 +133,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
             ilKey.elements[ilKey.elementCount].desc.InputSlot = i;
             ilKey.elements[ilKey.elementCount].desc.AlignedByteOffset = 0;
             ilKey.elements[ilKey.elementCount].desc.InputSlotClass = inputClass;
-            ilKey.elements[ilKey.elementCount].desc.InstanceDataStepRate = attributes[i].divisor;
+            ilKey.elements[ilKey.elementCount].desc.InstanceDataStepRate = usesInstancedPointSpriteEmulation ? 1 : attributes[i].divisor;
 
             if (inputClass == D3D11_INPUT_PER_VERTEX_DATA && firstIndexedElement == gl::MAX_VERTEX_ATTRIBS)
             {
@@ -139,7 +145,41 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
             }
 
             ilKey.elementCount++;
+            nextAvailableInputSlot = i + 1;
         }
+    }
+
+    // Instanced PointSprite emulation requires additional entries in the
+    // inputlayout to support the vertices that make up the pointsprite quad.
+    if (usesInstancedPointSpriteEmulation)
+    {
+        ilKey.elements[ilKey.elementCount].desc.SemanticName = "SPRITEPOSITION";
+        ilKey.elements[ilKey.elementCount].desc.SemanticIndex = 0;
+        ilKey.elements[ilKey.elementCount].desc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+        ilKey.elements[ilKey.elementCount].desc.InputSlot = nextAvailableInputSlot;
+        ilKey.elements[ilKey.elementCount].desc.AlignedByteOffset = 0;
+        ilKey.elements[ilKey.elementCount].desc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+        ilKey.elements[ilKey.elementCount].desc.InstanceDataStepRate = 0;
+
+        // The new elements are D3D11_INPUT_PER_VERTEX_DATA data so the indexed element
+        // tracking must be applied.  This ensures that the instancing specific
+        // buffer swapping logic continues to work.
+        if (firstIndexedElement == gl::MAX_VERTEX_ATTRIBS)
+        {
+            firstIndexedElement = ilKey.elementCount;
+        }
+
+        ilKey.elementCount++;
+
+        ilKey.elements[ilKey.elementCount].desc.SemanticName = "SPRITETEXCOORD";
+        ilKey.elements[ilKey.elementCount].desc.SemanticIndex = 0;
+        ilKey.elements[ilKey.elementCount].desc.Format = DXGI_FORMAT_R32G32_FLOAT;
+        ilKey.elements[ilKey.elementCount].desc.InputSlot = nextAvailableInputSlot;
+        ilKey.elements[ilKey.elementCount].desc.AlignedByteOffset = sizeof(float) * 3;
+        ilKey.elements[ilKey.elementCount].desc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+        ilKey.elements[ilKey.elementCount].desc.InstanceDataStepRate = 0;
+
+        ilKey.elementCount++;
     }
 
     // On 9_3, we must ensure that slot 0 contains non-instanced data.
@@ -153,6 +193,13 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
     {
         ilKey.elements[firstInstancedElement].desc.InputSlot = ilKey.elements[firstIndexedElement].desc.InputSlot;
         ilKey.elements[firstIndexedElement].desc.InputSlot = 0;
+
+        // Instanced PointSprite emulation uses multiple layout entries across a single vertex buffer.
+        // If an index swap is performed, we need to ensure that all elements get the proper InputSlot.
+        if (usesInstancedPointSpriteEmulation)
+        {
+            ilKey.elements[firstIndexedElement + 1].desc.InputSlot = 0;
+        }
     }
 
     ID3D11InputLayout *inputLayout = NULL;
@@ -223,6 +270,8 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
     bool dirtyBuffers = false;
     size_t minDiff = gl::MAX_VERTEX_ATTRIBS;
     size_t maxDiff = 0;
+    unsigned int nextAvailableIndex = 0;
+
     for (unsigned int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
     {
         ID3D11Buffer *buffer = NULL;
@@ -249,7 +298,71 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
             mCurrentBuffers[i] = buffer;
             mCurrentVertexStrides[i] = vertexStride;
             mCurrentVertexOffsets[i] = vertexOffset;
+
+            // If a non null ID3D11Buffer is being assigned to mCurrentBuffers,
+            // then the next available index needs to be tracked to ensure 
+            // that any instanced pointsprite emulation buffers will be properly packed.
+            if (buffer)
+            {
+                nextAvailableIndex = i + 1;
+            }
         }
+    }
+
+    // Instanced PointSprite emulation requires two additional ID3D11Buffers.
+    // A vertex buffer needs to be created and added to the list of current buffers, 
+    // strides and offsets collections.  This buffer contains the vertices for a single
+    // PointSprite quad.
+    // An index buffer also needs to be created and applied because rendering instanced
+    // data on D3D11 FL9_3 requires DrawIndexedInstanced() to be used.
+    if (usesInstancedPointSpriteEmulation)
+    {
+        HRESULT result = S_OK;
+
+        const UINT pointSpriteVertexStride = sizeof(float) * 5;
+        static const float pointSpriteVertices[] =
+        {
+            // Position        // TexCoord
+           -1.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+           -1.0f,  1.0f, 0.0f, 0.0f, 0.0f,
+            1.0f,  1.0f, 0.0f, 1.0f, 0.0f,
+            1.0f, -1.0f, 0.0f, 1.0f, 1.0f,
+           -1.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+            1.0f,  1.0f, 0.0f, 1.0f, 0.0f,
+        };
+
+        D3D11_SUBRESOURCE_DATA vertexBufferData = { pointSpriteVertices, 0, 0 };
+        CD3D11_BUFFER_DESC vertexBufferDesc(sizeof(pointSpriteVertices), D3D11_BIND_VERTEX_BUFFER);
+        result = mDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &pointSpriteVertexBuffer);
+        if (FAILED(result))
+        {
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to create instanced pointsprite emulation vertex buffer, HRESULT: 0x%08x", result);
+        }
+
+        mCurrentBuffers[nextAvailableIndex] = pointSpriteVertexBuffer;
+        mCurrentVertexStrides[nextAvailableIndex] = pointSpriteVertexStride;
+        mCurrentVertexOffsets[nextAvailableIndex] = 0;
+
+        // Create an index buffer and set it for pointsprite rendering
+        static const unsigned short pointSpriteIndices[] =
+        {
+            0,1,2,3,4,5,
+        };
+
+        D3D11_SUBRESOURCE_DATA indexBufferData = { pointSpriteIndices, 0, 0 };
+        CD3D11_BUFFER_DESC indexBufferDesc(sizeof(pointSpriteIndices), D3D11_BIND_INDEX_BUFFER);
+        result = mDevice->CreateBuffer(&indexBufferDesc, &indexBufferData, &pointSpriteIndexBuffer);
+        if (FAILED(result))
+        {
+            SafeRelease(pointSpriteVertexBuffer);
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to create instanced pointsprite emulation index buffer, HRESULT: 0x%08x", result);
+        }
+
+        // The index buffer is applied here because Instanced PointSprite emulation uses
+        // the a non-indexed rendering path in ANGLE (DrawArrays).  This means that applyIndexBuffer()
+        // on the renderer will not be called and setting this buffer here ensures that the rendering
+        // path will contain the correct index buffers.
+        mDeviceContext->IASetIndexBuffer(pointSpriteIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
     }
 
     if (moveFirstIndexedIntoSlotZero)
@@ -268,6 +381,12 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
         mDeviceContext->IASetVertexBuffers(minDiff, maxDiff - minDiff + 1, mCurrentBuffers + minDiff,
                                            mCurrentVertexStrides + minDiff, mCurrentVertexOffsets + minDiff);
     }
+
+    // Instanced PointSprite emulation requires additional ID3D11Buffers
+    // which were created and applied above.  These need to be released here
+    // to ensure there are no memory leaks.
+    SafeRelease(pointSpriteVertexBuffer);
+    SafeRelease(pointSpriteIndexBuffer);
 
     return gl::Error(GL_NO_ERROR);
 }
