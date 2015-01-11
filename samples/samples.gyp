@@ -149,6 +149,14 @@
                 },
 
                 {
+                    'target_name': 'restart_index_microbench',
+                    'type': 'executable',
+                    'dependencies': [ 'sample_util' ],
+                    'includes': [ '../build/common_defines.gypi', ],
+                    'sources': [ '<!@(python <(angle_path)/enumerate_files.py angle/restart_index_microbench -types *.cpp *.h *.glsl)' ],
+                },
+
+                {
                     'target_name': 'multiple_draw_buffers',
                     'type': 'executable',
                     'dependencies': [ 'sample_util' ],
