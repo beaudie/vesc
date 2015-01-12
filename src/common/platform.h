@@ -63,6 +63,11 @@
 #       include <d3dcompiler.h>
 #   endif
 
+#   if defined(ANGLE_ENABLE_OPENGL)
+#       include <GLES2/gl2.h>
+#       include <WGL/wglext.h>
+#   endif
+
 #   if defined(ANGLE_ENABLE_WINDOWS_STORE)
 #       include <dxgi1_3.h>
 #       if defined(_DEBUG)
