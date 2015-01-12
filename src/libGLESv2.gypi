@@ -354,6 +354,20 @@
             'libANGLE/renderer/d3d/d3d11/winrt/InspectableNativeWindow.cpp',
             'libANGLE/renderer/d3d/d3d11/winrt/InspectableNativeWindow.h',
         ],
+        'libangle_gl_sources':
+        [
+            'libANGLE/renderer/gl/DisplayGL.cpp',
+            'libANGLE/renderer/gl/DisplayGL.h',
+            'libANGLE/renderer/gl/SurfaceGL.cpp',
+            'libANGLE/renderer/gl/SurfaceGL.h',
+        ],
+        'libangle_gl_wgl_sources':
+        [
+            'libANGLE/renderer/gl/wgl/DisplayWGL.cpp',
+            'libANGLE/renderer/gl/wgl/DisplayWGL.h',
+            'libANGLE/renderer/gl/wgl/SurfaceWGL.cpp',
+            'libANGLE/renderer/gl/wgl/SurfaceWGL.h',
+        ],
         'libglesv2_sources':
         [
             'common/angleutils.h',
@@ -446,6 +460,13 @@
                             'ANGLE_ENABLE_D3D11',
                         ],
                     }],
+                    ['angle_enable_gl==1',
+                    {
+                        'defines':
+                        [
+                            'ANGLE_ENABLE_OPENGL',
+                        ],
+                    }],
                 ],
             },
             'conditions':
@@ -532,6 +553,40 @@
                             'sources':
                             [
                                 '<@(libangle_d3d11_win32_sources)',
+                            ],
+                        }],
+                    ],
+                }],
+                ['angle_enable_gl==1',
+                {
+                    'sources':
+                    [
+                        '<@(libangle_gl_sources)',
+                    ],
+                    'defines':
+                    [
+                        'ANGLE_ENABLE_OPENGL',
+                    ],
+                    'link_settings':
+                    {
+                        'msvs_settings':
+                        {
+                            'VCLinkerTool':
+                            {
+                                'AdditionalDependencies':
+                                [
+                                    'OpenGL32.lib',
+                                ],
+                            },
+                        },
+                    },
+                    'conditions':
+                    [
+                        ['OS=="win"',
+                        {
+                            'sources':
+                            [
+                                '<@(libangle_gl_wgl_sources)',
                             ],
                         }],
                     ],
