@@ -1,0 +1,28 @@
+//
+// Copyright 2015 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+// CompilerGL.h: Defines the CompilerGL class.
+
+#ifndef LIBANGLE_RENDERER_GL_COMPILERGL_H_
+#define LIBANGLE_RENDERER_GL_COMPILERGL_H_
+
+#include "libANGLE/renderer/CompilerImpl.h"
+
+namespace rx
+{
+
+class CompilerGL : public CompilerImpl
+{
+  public:
+    CompilerGL();
+    virtual ~CompilerGL();
+
+    gl::Error release() override;
+};
+
+}
+
+#endif // LIBANGLE_RENDERER_GL_COMPILERGL_H_
