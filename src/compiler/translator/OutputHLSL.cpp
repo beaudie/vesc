@@ -8,8 +8,8 @@
 
 #include "common/angleutils.h"
 #include "common/utilities.h"
-#include "common/blocklayout.h"
 #include "compiler/translator/BuiltInFunctionEmulatorHLSL.h"
+#include "compiler/translator/blocklayout.h"
 #include "compiler/translator/compilerdebug.h"
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/DetectDiscontinuity.h"

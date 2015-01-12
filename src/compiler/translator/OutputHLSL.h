@@ -7,14 +7,14 @@
 #ifndef COMPILER_TRANSLATOR_OUTPUTHLSL_H_
 #define COMPILER_TRANSLATOR_OUTPUTHLSL_H_
 
-#include <list>
-#include <set>
-#include <map>
-
 #include "angle_gl.h"
 
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/ParseContext.h"
+
+#include <list>
+#include <set>
+#include <map>
 
 namespace sh
 {
