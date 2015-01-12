@@ -12,6 +12,7 @@
 
 #include "common/debug.h"
 #include "common/mathutil.h"
+#include "common/platform.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/DisplayImpl.h"
@@ -26,6 +27,14 @@
 
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
 #   include "libANGLE/renderer/d3d/DisplayD3D.h"
+#endif
+
+#if defined(ANGLE_ENABLE_OPENGL)
+#   if defined(ANGLE_PLATFORM_WINDOWS)
+#       include "libANGLE/renderer/gl/wgl/DisplayWGL.h"
+#   else
+#       error Unsupported OpenGL platform.
+#   endif
 #endif
 
 namespace egl
@@ -55,7 +64,7 @@ Display *Display::getDisplay(EGLNativeDisplayType displayId, const AttributeMap 
         EGLint displayType = attribMap.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
         switch (displayType)
         {
-        case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
+          case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
             // Default to D3D displays
             impl = new rx::DisplayD3D();
@@ -65,8 +74,8 @@ Display *Display::getDisplay(EGLNativeDisplayType displayId, const AttributeMap 
 #endif
             break;
 
-        case EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE:
-        case EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE:
+          case EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE:
+          case EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE:
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
             impl = new rx::DisplayD3D();
 #else
@@ -75,7 +84,19 @@ Display *Display::getDisplay(EGLNativeDisplayType displayId, const AttributeMap 
 #endif
             break;
 
-        default:
+          case EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE:
+#if defined(ANGLE_ENABLE_OPENGL)
+#if defined(ANGLE_PLATFORM_WINDOWS)
+            impl = new rx::DisplayWGL();
+#else
+#error Unsupported OpenGL platform.
+#endif
+#else
+            UNREACHABLE();
+#endif
+            break;
+
+          default:
             UNREACHABLE();
             break;
         }

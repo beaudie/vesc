@@ -21,7 +21,7 @@ class SimpleTexture2DSample : public SampleApplication
 {
   public:
     SimpleTexture2DSample::SimpleTexture2DSample()
-        : SampleApplication("SimpleTexture2D", 1280, 720)
+        : SampleApplication("SimpleTexture2D", 1280, 720, 2, EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
     {
     }
 
