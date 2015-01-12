@@ -8,6 +8,7 @@
 // in a separated file for GCC, which can enable SSE usage only per-file,
 // not for code blocks that use SSE2 explicitly.
 
+#include "common/platform.h"
 #include "libANGLE/renderer/loadimage.h"
 
 namespace rx
@@ -17,7 +18,7 @@ void LoadA8ToBGRA8_SSE2(size_t width, size_t height, size_t depth,
                         const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,
                         uint8_t *output, size_t outputRowPitch, size_t outputDepthPitch)
 {
-#if defined(_M_ARM)
+#if !defined(ANGLE_USE_SSE)
     // Ensure that this function is reported as not implemented for ARM builds because
     // the instructions below are not present for that architecture.
     UNIMPLEMENTED();
@@ -67,7 +68,7 @@ void LoadRGBA8ToBGRA8_SSE2(size_t width, size_t height, size_t depth,
                            const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,
                            uint8_t *output, size_t outputRowPitch, size_t outputDepthPitch)
 {
-#if defined(_M_ARM)
+#if !defined(ANGLE_USE_SSE)
     // Ensure that this function is reported as not implemented for ARM builds because
     // the instructions below are not present for that architecture.
     UNIMPLEMENTED();
@@ -116,3 +117,4 @@ void LoadRGBA8ToBGRA8_SSE2(size_t width, size_t height, size_t depth,
 }
 
 }
+
