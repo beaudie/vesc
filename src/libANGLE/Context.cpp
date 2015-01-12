@@ -107,12 +107,15 @@ Context::Context(int clientVersion, const Context *shareContext, rx::Renderer *r
     bindPixelPackBuffer(0);
     bindPixelUnpackBuffer(0);
 
-    // [OpenGL ES 3.0.2] section 2.14.1 pg 85:
-    // In the initial state, a default transform feedback object is bound and treated as
-    // a transform feedback object with a name of zero. That object is bound any time
-    // BindTransformFeedback is called with id of zero
-    mTransformFeedbackZero.set(new TransformFeedback(mRenderer->createTransformFeedback(), 0));
-    bindTransformFeedback(0);
+    if (mClientVersion >= 3)
+    {
+        // [OpenGL ES 3.0.2] section 2.14.1 pg 85:
+        // In the initial state, a default transform feedback object is bound and treated as
+        // a transform feedback object with a name of zero. That object is bound any time
+        // BindTransformFeedback is called with id of zero
+        mTransformFeedbackZero.set(new TransformFeedback(mRenderer->createTransformFeedback(), 0));
+        bindTransformFeedback(0);
+    }
 
     mHasBeenCurrent = false;
     mContextLost = false;

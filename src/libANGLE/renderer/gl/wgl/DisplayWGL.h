@@ -1,0 +1,78 @@
+//
+// Copyright (c) 2015 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+// DisplayWGL.h: WGL implementation of egl::Display
+
+#ifndef LIBANGLE_RENDERER_GL_WGL_DISPLAYWGL_H_
+#define LIBANGLE_RENDERER_GL_WGL_DISPLAYWGL_H_
+
+#include "common/platform.h"
+#include "libANGLE/renderer/gl/DisplayGL.h"
+
+namespace rx
+{
+
+class DisplayWGL : public DisplayGL
+{
+  public:
+    DisplayWGL();
+    virtual ~DisplayWGL();
+
+    egl::Error initialize(egl::Display *display, EGLNativeDisplayType nativeDisplay, const egl::AttributeMap &attribMap) override;
+    void terminate() override;
+
+    egl::Error createWindowSurface(const egl::Config *configuration, EGLNativeWindowType window, const egl::AttributeMap &attribs,
+                                   SurfaceImpl **outSurface) override;
+    egl::Error createPbufferSurface(const egl::Config *configuration, const egl::AttributeMap &attribs,
+                                    SurfaceImpl **outSurface) override;
+    egl::Error createPbufferFromClientBuffer(const egl::Config *configuration, EGLClientBuffer shareHandle,
+                                             const egl::AttributeMap &attribs, SurfaceImpl **outSurface) override;
+
+    egl::Error makeCurrent(egl::Surface *drawSurface, egl::Surface *readSurface, gl::Context *context) override;;
+
+    virtual egl::ConfigSet generateConfigs() const;
+
+    virtual bool isDeviceLost() const;
+    virtual bool testDeviceLost();
+    virtual egl::Error restoreLostDevice();
+
+    virtual bool isValidNativeWindow(EGLNativeWindowType window) const;
+
+    virtual std::string getVendorString() const;
+
+  private:
+    DISALLOW_COPY_AND_ASSIGN(DisplayWGL);
+
+    virtual void generateExtensions(egl::DisplayExtensions *outExtensions) const;
+    virtual void generateCaps(egl::Caps *outCaps) const;
+
+    bool isWGLExtensionSupported(HDC deviceContext, const std::string &name) const;
+
+    HMODULE mOpenGLModule;
+    GLuint mGLVersionMajor;
+    GLuint mGLVersionMinor;
+
+    PFNWGLGETEXTENSIONSSTRINGEXTPROC mGetExtensionStringEXT;
+    PFNWGLGETEXTENSIONSSTRINGARBPROC mGetExtensionStringARB;
+
+    PFNWGLCREATECONTEXTATTRIBSARBPROC mCreateContextAttribsARB;
+
+    PFNWGLGETPIXELFORMATATTRIBIVARBPROC mGetPixelFormatAttribivARB;
+
+    PFNWGLSWAPINTERVALEXTPROC mSwapIntervalEXT;
+
+    ATOM mWindowClass;
+    HWND mWindow;
+    HDC mDeviceContext;
+    int mPixelFormat;
+    HGLRC mWGLContext;
+
+    egl::Display *mDisplay;
+};
+
+}
+
+#endif // LIBANGLE_RENDERER_GL_WGL_DISPLAYWGL_H_
