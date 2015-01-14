@@ -130,8 +130,9 @@ class Texture final : public RefCountObject
     GLenum getBaseImageTarget() const;
     size_t getExpectedMipLevels() const;
 
-    bool isMipmapComplete() const;
-    bool isLevelComplete(GLenum target, size_t level) const;
+    bool isMipmapComplete(const gl::SamplerState &samplerState) const;
+    bool isLevelComplete(const gl::SamplerState &samplerState,
+                         GLenum target, size_t level) const;
 
     const ImageDesc &getImageDesc(const ImageIdentifier& index) const;
     void setImageDesc(const ImageIdentifier& index, const ImageDesc &desc);
