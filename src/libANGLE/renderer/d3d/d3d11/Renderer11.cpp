@@ -195,6 +195,10 @@ Renderer11::Renderer11(egl::Display *display, EGLNativeDisplayType hDc, const eg
 
     if (requestedMajorVersion == EGL_DONT_CARE || requestedMajorVersion >= 11)
     {
+        if (requestedMinorVersion == EGL_DONT_CARE || requestedMinorVersion >= 1)
+        {
+            mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_11_1);
+        }
         if (requestedMinorVersion == EGL_DONT_CARE || requestedMinorVersion >= 0)
         {
             mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_11_0);
@@ -2059,6 +2063,7 @@ int Renderer11::getMajorShaderModel() const
 {
     switch (mFeatureLevel)
     {
+      case D3D_FEATURE_LEVEL_11_1: return D3D11_SHADER_MAJOR_VERSION;   // 5
       case D3D_FEATURE_LEVEL_11_0: return D3D11_SHADER_MAJOR_VERSION;   // 5
       case D3D_FEATURE_LEVEL_10_1: return D3D10_1_SHADER_MAJOR_VERSION; // 4
       case D3D_FEATURE_LEVEL_10_0: return D3D10_SHADER_MAJOR_VERSION;   // 4
@@ -2071,6 +2076,7 @@ int Renderer11::getMinorShaderModel() const
 {
     switch (mFeatureLevel)
     {
+      case D3D_FEATURE_LEVEL_11_1: return D3D11_SHADER_MINOR_VERSION;   // 0
       case D3D_FEATURE_LEVEL_11_0: return D3D11_SHADER_MINOR_VERSION;   // 0
       case D3D_FEATURE_LEVEL_10_1: return D3D10_1_SHADER_MINOR_VERSION; // 1
       case D3D_FEATURE_LEVEL_10_0: return D3D10_SHADER_MINOR_VERSION;   // 0
@@ -2083,6 +2089,7 @@ std::string Renderer11::getShaderModelSuffix() const
 {
     switch (mFeatureLevel)
     {
+      case D3D_FEATURE_LEVEL_11_1: return "";
       case D3D_FEATURE_LEVEL_11_0: return "";
       case D3D_FEATURE_LEVEL_10_1: return "";
       case D3D_FEATURE_LEVEL_10_0: return "";
