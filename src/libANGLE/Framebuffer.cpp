@@ -244,6 +244,23 @@ bool Framebuffer::usingExtendedDrawBuffers() const
     return false;
 }
 
+static bool ValidTextureAttachmentLayer(const FramebufferAttachment *attachment)
+{
+    Texture *texture = attachment->getTexture();
+    const ImageIndex &imageIndex = *attachment->getTextureImageIndex();
+
+    // Check that the layer exists in the texture
+    if ((imageIndex.type == GL_TEXTURE_2D_ARRAY || imageIndex.type == GL_TEXTURE_3D) &&
+        static_cast<size_t>(attachment->layer()) >= texture->getDepth(imageIndex.type, imageIndex.layerIndex))
+    {
+        ASSERT(imageIndex.hasLayer());
+
+        return false;
+    }
+
+    return true;
+}
+
 GLenum Framebuffer::checkStatus(const gl::Data &data) const
 {
     // The default framebuffer *must* always be complete, though it may not be
@@ -278,6 +295,11 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
                 if (!formatCaps.renderable)
                 {
                     return GL_FRAMEBUFFER_UNSUPPORTED;
+                }
+
+                if (!ValidTextureAttachmentLayer(colorbuffer))
+                {
+                    return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
                 }
 
                 if (formatInfo.depthBits > 0 || formatInfo.stencilBits > 0)
@@ -352,6 +374,11 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
                 return GL_FRAMEBUFFER_UNSUPPORTED;
             }
 
+            if (!ValidTextureAttachmentLayer(mDepthbuffer))
+            {
+                return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
+            }
+
             if (formatInfo.depthBits == 0)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
@@ -404,6 +431,11 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
             if (!formatCaps.renderable)
             {
                 return GL_FRAMEBUFFER_UNSUPPORTED;
+            }
+
+            if (!ValidTextureAttachmentLayer(mStencilbuffer))
+            {
+                return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
 
             if (formatInfo.stencilBits == 0)
