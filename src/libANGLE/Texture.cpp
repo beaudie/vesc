@@ -103,6 +103,38 @@ GLenum Texture::getInternalFormat(GLenum target, size_t level) const
     return getImageDesc(ImageIndex::MakeGeneric(target, level)).internalFormat;
 }
 
+bool Texture::isValidImageIndex(const ImageIndex &index) const
+{
+    ASSERT(index.type == mTarget || (mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(index.type)));
+
+    ImageIndex searchIndex = ImageIndex::MakeGeneric(index.type, index.layerIndex);
+    ImageDescMap::const_iterator iter = mImageDescs.find(index);
+    if (iter != mImageDescs.end())
+    {
+        const ImageDesc &desc = iter->second;
+
+        if (desc.size.width == 0 || desc.size.height == 0)
+        {
+            return false;
+        }
+
+        if (mTarget == GL_TEXTURE_2D_ARRAY || mTarget == GL_TEXTURE_3D)
+        {
+            ASSERT(index.hasLayer());
+            if (static_cast<size_t>(index.layerIndex) >= desc.size.depth)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 bool Texture::isSamplerComplete(const SamplerState &samplerState, const Data &data) const
 {
     GLenum baseTarget = getBaseImageTarget();

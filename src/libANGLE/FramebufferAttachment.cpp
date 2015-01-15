@@ -125,7 +125,7 @@ GLenum TextureAttachment::cubeMapFace() const
 
 GLint TextureAttachment::layer() const
 {
-    return mIndex.layerIndex;
+    return (mIndex.type == GL_TEXTURE_3D || mIndex.type == GL_TEXTURE_2D_ARRAY) ? mIndex.layerIndex : 0;
 }
 
 Texture *TextureAttachment::getTexture() const

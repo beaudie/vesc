@@ -244,6 +244,30 @@ bool Framebuffer::usingExtendedDrawBuffers() const
     return false;
 }
 
+static bool ValidTextureAttachmentIndex(const FramebufferAttachment *attachment)
+{
+    Texture *texture = attachment->getTexture();
+    const ImageIndex &imageIndex = *attachment->getTextureImageIndex();
+
+    if (texture->getHeight(imageIndex.type, imageIndex.mipIndex) == 0)
+    {
+        return false;
+    }
+
+    if (texture->getWidth(imageIndex.type, imageIndex.mipIndex) == 0)
+    {
+        return false;
+    }
+
+    // Check that the layer exists in the texture
+    if (static_cast<size_t>(attachment->layer()) >= texture->getDepth(imageIndex.type, imageIndex.mipIndex))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 GLenum Framebuffer::checkStatus(const gl::Data &data) const
 {
     // The default framebuffer *must* always be complete, though it may not be
@@ -278,6 +302,11 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
                 if (!formatCaps.renderable)
                 {
                     return GL_FRAMEBUFFER_UNSUPPORTED;
+                }
+
+                if (!ValidTextureAttachmentIndex(colorbuffer))
+                {
+                    return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
                 }
 
                 if (formatInfo.depthBits > 0 || formatInfo.stencilBits > 0)
@@ -352,6 +381,11 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
                 return GL_FRAMEBUFFER_UNSUPPORTED;
             }
 
+            if (!ValidTextureAttachmentIndex(mDepthbuffer))
+            {
+                return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
+            }
+
             if (formatInfo.depthBits == 0)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
@@ -404,6 +438,11 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
             if (!formatCaps.renderable)
             {
                 return GL_FRAMEBUFFER_UNSUPPORTED;
+            }
+
+            if (!ValidTextureAttachmentIndex(mStencilbuffer))
+            {
+                return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
 
             if (formatInfo.stencilBits == 0)
