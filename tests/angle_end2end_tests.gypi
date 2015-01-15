@@ -24,6 +24,7 @@
             '<(angle_path)/tests/angle_tests/CubeMapTextureTest.cpp',
             '<(angle_path)/tests/angle_tests/DepthStencilFormatsTest.cpp',
             '<(angle_path)/tests/angle_tests/DrawBuffersTest.cpp',
+            '<(angle_path)/tests/angle_tests/FramebufferCompletenessTest.cpp',
             '<(angle_path)/tests/angle_tests/FramebufferFormatsTest.cpp',
             '<(angle_path)/tests/angle_tests/GLSLTest.cpp',
             '<(angle_path)/tests/angle_tests/IncompleteTextureTest.cpp',

@@ -53,6 +53,8 @@ class Texture final : public RefCountObject
     size_t getDepth(GLenum target, size_t level) const;
     GLenum getInternalFormat(GLenum target, size_t level) const;
 
+    bool isValidImageIndex(const ImageIndex &index) const;
+
     bool isSamplerComplete(const SamplerState &samplerState, const Data &data) const;
     bool isCubeComplete() const;
 
