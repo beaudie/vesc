@@ -23,16 +23,19 @@ class Error
     explicit Error(GLenum errorCode);
     Error(GLenum errorCode, const char *msg, ...);
     Error(const Error &other);
+    ~Error();
     Error &operator=(const Error &other);
 
     GLenum getCode() const { return mCode; }
     bool isError() const { return (mCode != GL_NO_ERROR); }
 
-    const std::string &getMessage() const { return mMessage; }
+    const std::string &getMessage();
 
   private:
+    void createMessageString();
+
     GLenum mCode;
-    std::string mMessage;
+    std::string *mMessage;
 };
 
 }
@@ -46,16 +49,19 @@ class Error
     explicit Error(EGLint errorCode);
     Error(EGLint errorCode, const char *msg, ...);
     Error(const Error &other);
+    ~Error();
     Error &operator=(const Error &other);
 
     EGLint getCode() const { return mCode; }
     bool isError() const { return (mCode != EGL_SUCCESS); }
 
-    const std::string &getMessage() const { return mMessage; }
+    const std::string &getMessage();
 
   private:
+    void createMessageString();
+
     EGLint mCode;
-    std::string mMessage;
+    std::string *mMessage;
 };
 
 }
