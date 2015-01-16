@@ -204,7 +204,9 @@ gl::Error RendererD3D::drawArrays(const gl::Data &data,
 
     if (!skipDraw(data, mode))
     {
-        error = drawArrays(mode, count, instances, transformFeedbackActive);
+        ProgramD3D *programD3D = ProgramD3D::makeProgramD3D(data.state->getProgram()->getImplementation());
+
+        error = drawArrays(data, mode, count, instances, transformFeedbackActive, programD3D);
         if (error.isError())
         {
             return error;

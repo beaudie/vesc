@@ -13,6 +13,7 @@
 #include "libANGLE/renderer/Renderer.h"
 #include "libANGLE/renderer/d3d/MemoryBuffer.h"
 #include "libANGLE/renderer/d3d/d3d11/NativeWindow.h"
+#include "libANGLE/renderer/d3d/ProgramD3D.h"
 
 //FIXME(jmadill): std::array is currently prohibited by Chromium style guide
 #include <array>
@@ -156,7 +157,7 @@ class RendererD3D : public Renderer
     gl::Error getScratchMemoryBuffer(size_t requestedSize, MemoryBuffer **bufferOut);
 
   protected:
-    virtual gl::Error drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive) = 0;
+    virtual gl::Error drawArrays(const gl::Data &data, GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive, ProgramD3D *programD3D) = 0;
     virtual gl::Error drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
                                    gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei instances) = 0;
 
