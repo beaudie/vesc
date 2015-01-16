@@ -1827,6 +1827,10 @@ void Renderer11::markAllStateDirty()
     mCurPointGeometryShader = NULL;
     mAppliedPixelShader = NULL;
 
+    mDeviceContext->VSSetShader(NULL, NULL, 0);
+    mDeviceContext->GSSetShader(NULL, NULL, 0);
+    mDeviceContext->PSSetShader(NULL, NULL, 0);
+
     for (size_t i = 0; i < gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS; i++)
     {
         mAppliedTFBuffers[i] = NULL;
