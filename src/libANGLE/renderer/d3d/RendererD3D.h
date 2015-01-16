@@ -17,6 +17,8 @@
 //FIXME(jmadill): std::array is currently prohibited by Chromium style guide
 #include <array>
 
+#include <limits>
+
 namespace gl
 {
 class InfoLog;
@@ -41,6 +43,8 @@ enum ShaderType
     SHADER_PIXEL,
     SHADER_GEOMETRY
 };
+
+static const uintptr_t dirtyPointer = std::numeric_limits<uintptr_t>::max();
 
 class RendererD3D : public Renderer
 {

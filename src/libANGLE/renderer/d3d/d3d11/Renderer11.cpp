@@ -1822,10 +1822,10 @@ void Renderer11::markAllStateDirty()
     mAppliedIBFormat = DXGI_FORMAT_UNKNOWN;
     mAppliedIBOffset = 0;
 
-    mAppliedVertexShader = NULL;
-    mAppliedGeometryShader = NULL;
+    mAppliedVertexShader = reinterpret_cast<ID3D11VertexShader*>(dirtyPointer);
+    mAppliedGeometryShader = reinterpret_cast<ID3D11GeometryShader*>(dirtyPointer);
     mCurPointGeometryShader = NULL;
-    mAppliedPixelShader = NULL;
+    mAppliedPixelShader = reinterpret_cast<ID3D11PixelShader*>(dirtyPointer);
 
     for (size_t i = 0; i < gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS; i++)
     {
