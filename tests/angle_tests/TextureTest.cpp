@@ -242,3 +242,50 @@ TYPED_TEST(TextureTest, CubeMapFBO)
 
     EXPECT_GL_NO_ERROR();
 }
+
+TYPED_TEST(TextureTest, CopySubImageFloat)
+{
+    GLfloat imageDataRGBA[] =
+    {
+        1.0f, 0.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 0.0f, 1.0f
+    };
+
+    GLuint textures[2];
+
+    glGenTextures(2, textures);
+
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
+    glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA32F, 2, 2);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 2, 2, GL_RGBA, GL_FLOAT, imageDataRGBA);
+
+    GLuint fbo;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[0], 0);
+
+    glBindTexture(GL_TEXTURE_2D, textures[1]);
+    glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA32F, 2, 2);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 2, 2);
+    ASSERT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    drawQuad(m2DProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 255);
+    EXPECT_PIXEL_EQ(0, getWindowWidth()-1, 0, 0, 255, 255);
+    EXPECT_PIXEL_EQ(getWindowHeight() - 1, 0, 0, 255, 0, 255);
+    EXPECT_PIXEL_EQ(getWindowHeight() - 1, getWindowWidth() - 1, 255, 255, 0, 255);
+
+    //glDeleteFramebuffers(1, &fbo);
+    glDeleteTextures(2, textures);
+
+    ASSERT_GL_NO_ERROR();
+}
