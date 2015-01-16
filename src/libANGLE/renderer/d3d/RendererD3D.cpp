@@ -204,7 +204,7 @@ gl::Error RendererD3D::drawArrays(const gl::Data &data,
 
     if (!skipDraw(data, mode))
     {
-        error = drawArrays(mode, count, instances, transformFeedbackActive);
+        error = drawArrays(data, mode, count, instances, transformFeedbackActive);
         if (error.isError())
         {
             return error;
