@@ -230,6 +230,8 @@ class Renderer11 : public RendererD3D
     static void invalidateFBOAttachmentSwizzles(gl::FramebufferAttachment *attachment, int mipLevel);
     static void invalidateFramebufferSwizzles(const gl::Framebuffer *framebuffer);
 
+    static const uintptr_t mDirtyPointer = -1;
+
     HMODULE mD3d11Module;
     HMODULE mDxgiModule;
     HDC mDc;
@@ -322,10 +324,10 @@ class Renderer11 : public RendererD3D
                                                                                  // to different append behavior
 
     // Currently applied shaders
-    ID3D11VertexShader *mAppliedVertexShader;
-    ID3D11GeometryShader *mAppliedGeometryShader;
+    uintptr_t mAppliedVertexShader;
+    uintptr_t mAppliedGeometryShader;
     ID3D11GeometryShader *mCurPointGeometryShader;
-    ID3D11PixelShader *mAppliedPixelShader;
+    uintptr_t mAppliedPixelShader;
 
     dx_VertexConstants mVertexConstants;
     dx_VertexConstants mAppliedVertexConstants;

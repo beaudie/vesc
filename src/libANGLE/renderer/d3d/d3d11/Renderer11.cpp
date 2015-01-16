@@ -1247,7 +1247,7 @@ gl::Error Renderer11::drawArrays(GLenum mode, GLsizei count, GLsizei instances, 
         }
 
         mDeviceContext->GSSetShader(mCurPointGeometryShader, NULL, 0);
-        mDeviceContext->PSSetShader(mAppliedPixelShader, NULL, 0);
+        mDeviceContext->PSSetShader(reinterpret_cast<ID3D11PixelShader*>(mAppliedPixelShader), NULL, 0);
 
         if (instances > 0)
         {
@@ -1258,7 +1258,7 @@ gl::Error Renderer11::drawArrays(GLenum mode, GLsizei count, GLsizei instances, 
             mDeviceContext->Draw(count, 0);
         }
 
-        mDeviceContext->GSSetShader(mAppliedGeometryShader, NULL, 0);
+        mDeviceContext->GSSetShader(reinterpret_cast<ID3D11GeometryShader*>(mAppliedGeometryShader), NULL, 0);
 
         return gl::Error(GL_NO_ERROR);
     }
@@ -1584,17 +1584,17 @@ gl::Error Renderer11::applyShaders(gl::Program *program, const gl::VertexFormat 
 
     bool dirtyUniforms = false;
 
-    if (vertexShader != mAppliedVertexShader)
+    if (reinterpret_cast<uintptr_t>(vertexShader) != mAppliedVertexShader)
     {
         mDeviceContext->VSSetShader(vertexShader, NULL, 0);
-        mAppliedVertexShader = vertexShader;
+        mAppliedVertexShader = reinterpret_cast<uintptr_t>(vertexShader);
         dirtyUniforms = true;
     }
 
-    if (geometryShader != mAppliedGeometryShader)
+    if (reinterpret_cast<uintptr_t>(geometryShader) != mAppliedGeometryShader)
     {
         mDeviceContext->GSSetShader(geometryShader, NULL, 0);
-        mAppliedGeometryShader = geometryShader;
+        mAppliedGeometryShader = reinterpret_cast<uintptr_t>(geometryShader);
         dirtyUniforms = true;
     }
 
@@ -1607,10 +1607,10 @@ gl::Error Renderer11::applyShaders(gl::Program *program, const gl::VertexFormat 
         mCurPointGeometryShader = NULL;
     }
 
-    if (pixelShader != mAppliedPixelShader)
+    if (reinterpret_cast<uintptr_t>(pixelShader) != mAppliedPixelShader)
     {
         mDeviceContext->PSSetShader(pixelShader, NULL, 0);
-        mAppliedPixelShader = pixelShader;
+        mAppliedPixelShader = reinterpret_cast<uintptr_t>(pixelShader);
         dirtyUniforms = true;
     }
 
@@ -1822,10 +1822,10 @@ void Renderer11::markAllStateDirty()
     mAppliedIBFormat = DXGI_FORMAT_UNKNOWN;
     mAppliedIBOffset = 0;
 
-    mAppliedVertexShader = NULL;
-    mAppliedGeometryShader = NULL;
+    mAppliedVertexShader = mDirtyPointer;
+    mAppliedGeometryShader = mDirtyPointer;
     mCurPointGeometryShader = NULL;
-    mAppliedPixelShader = NULL;
+    mAppliedPixelShader = mDirtyPointer;
 
     for (size_t i = 0; i < gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS; i++)
     {
