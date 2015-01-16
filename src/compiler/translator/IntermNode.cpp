@@ -265,6 +265,11 @@ bool TIntermOperator::isAssignment() const
       case EOpMatrixTimesMatrixAssign:
       case EOpDivAssign:
       case EOpModAssign:
+      case EOpBitShiftLeftAssign:
+      case EOpBitShiftRightAssign:
+      case EOpBitwiseAndAssign:
+      case EOpBitwiseXorAssign:
+      case EOpBitwiseOrAssign:
         return true;
       default:
         return false;
@@ -318,6 +323,10 @@ bool TIntermUnary::promote(TInfoSink &)
         if (mOperand->getBasicType() != EbtBool)
             return false;
         break;
+      // bit-wise not is already checked
+      case EOpBitwiseNot:
+        break;
+
       case EOpNegative:
       case EOpPositive:
       case EOpPostIncrement:
@@ -364,8 +373,34 @@ bool TIntermBinary::promote(TInfoSink &infoSink)
     }
 
     // GLSL ES 2.0 does not support implicit type casting.
-    // So the basic type should always match.
-    if (mLeft->getBasicType() != mRight->getBasicType())
+    // So the basic type should usually match.
+    bool basicTypesMustMatch = true;
+
+    // Check ops which require integer / ivec parameters
+    switch (mOp)
+    {
+      case EOpBitShiftLeft:
+      case EOpBitShiftRight:
+      case EOpBitShiftLeftAssign:
+      case EOpBitShiftRightAssign:
+        basicTypesMustMatch = false;
+        if (mRight->getBasicType() != EbtInt && mRight->getBasicType() != EbtUInt)
+            return false;
+        // Intentional fall-through
+      case EOpBitwiseAnd:
+      case EOpBitwiseXor:
+      case EOpBitwiseOr:
+      case EOpBitwiseAndAssign:
+      case EOpBitwiseXorAssign:
+      case EOpBitwiseOrAssign:
+        if (mLeft->getBasicType() != EbtInt && mLeft->getBasicType() != EbtUInt)
+            return false;
+        break;
+      default:
+        break;
+    }
+
+    if (basicTypesMustMatch && mLeft->getBasicType() != mRight->getBasicType())
     {
         return false;
     }
@@ -560,10 +595,20 @@ bool TIntermBinary::promote(TInfoSink &infoSink)
       case EOpSub:
       case EOpDiv:
       case EOpMod:
+      case EOpBitShiftLeft:
+      case EOpBitShiftRight:
+      case EOpBitwiseAnd:
+      case EOpBitwiseXor:
+      case EOpBitwiseOr:
       case EOpAddAssign:
       case EOpSubAssign:
       case EOpDivAssign:
       case EOpModAssign:
+      case EOpBitShiftLeftAssign:
+      case EOpBitShiftRightAssign:
+      case EOpBitwiseAndAssign:
+      case EOpBitwiseXorAssign:
+      case EOpBitwiseOrAssign:
         if ((mLeft->isMatrix() && mRight->isVector()) ||
             (mLeft->isVector() && mRight->isMatrix()))
         {
@@ -579,13 +624,14 @@ bool TIntermBinary::promote(TInfoSink &infoSink)
             if (!mLeft->isScalar() && !mRight->isScalar())
                 return false;
 
-            // In the case of compound assignment, the right side needs to be a
-            // scalar. Otherwise a vector/matrix would be assigned to a scalar.
+            // In the case of compound assignment other than multiply-assign,
+            // the right side needs to be a scalar. Otherwise a vector/matrix
+            // would be assigned to a scalar. A scalar can't be shifted by a
+            // vector either.
             if (!mRight->isScalar() &&
-                (mOp == EOpAddAssign ||
-                mOp == EOpSubAssign ||
-                mOp == EOpDivAssign ||
-                mOp == EOpModAssign))
+                (isAssignment() ||
+                mOp == EOpBitShiftLeft ||
+                mOp == EOpBitShiftRight))
                 return false;
 
             // Operator cannot be of type pure assignment.
