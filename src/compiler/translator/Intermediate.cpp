@@ -87,6 +87,8 @@ TIntermTyped *TIntermediate::addBinaryMath(
             return NULL;
         }
         break;
+      // Note that for bitwise ops, type checking is done in promote() to
+      // share code between ops and compound assignment
       default:
         break;
     }

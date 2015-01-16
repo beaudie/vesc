@@ -82,6 +82,13 @@ enum TOperator
     EOpLogicalXor,
     EOpLogicalAnd,
 
+    EOpBitShiftLeft,
+    EOpBitShiftRight,
+
+    EOpBitwiseAnd,
+    EOpBitwiseXor,
+    EOpBitwiseOr,
+
     EOpIndexDirect,
     EOpIndexIndirect,
     EOpIndexDirectStruct,
@@ -206,7 +213,12 @@ enum TOperator
     EOpMatrixTimesScalarAssign,
     EOpMatrixTimesMatrixAssign,
     EOpDivAssign,
-    EOpModAssign
+    EOpModAssign,
+    EOpBitShiftLeftAssign,
+    EOpBitShiftRightAssign,
+    EOpBitwiseAndAssign,
+    EOpBitwiseXorAssign,
+    EOpBitwiseOrAssign
 };
 
 class TIntermTraverser;
