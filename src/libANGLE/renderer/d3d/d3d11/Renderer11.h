@@ -91,7 +91,7 @@ class Renderer11 : public RendererD3D
     virtual gl::Error applyIndexBuffer(const GLvoid *indices, gl::Buffer *elementArrayBuffer, GLsizei count, GLenum mode, GLenum type, TranslatedIndexData *indexInfo);
     virtual void applyTransformFeedbackBuffers(const gl::State &state);
 
-    virtual gl::Error drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive);
+    virtual gl::Error drawArrays(GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive, ProgramD3D *programD3D);
     virtual gl::Error drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
                                    gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei instances);
 
@@ -230,6 +230,8 @@ class Renderer11 : public RendererD3D
     static void invalidateFBOAttachmentSwizzles(gl::FramebufferAttachment *attachment, int mipLevel);
     static void invalidateFramebufferSwizzles(const gl::Framebuffer *framebuffer);
 
+    static const uintptr_t mDirtyPointer = -1;
+
     HMODULE mD3d11Module;
     HMODULE mDxgiModule;
     HDC mDc;
@@ -322,10 +324,9 @@ class Renderer11 : public RendererD3D
                                                                                  // to different append behavior
 
     // Currently applied shaders
-    ID3D11VertexShader *mAppliedVertexShader;
-    ID3D11GeometryShader *mAppliedGeometryShader;
-    ID3D11GeometryShader *mCurPointGeometryShader;
-    ID3D11PixelShader *mAppliedPixelShader;
+    uintptr_t mAppliedVertexShader;
+    uintptr_t mAppliedGeometryShader;
+    uintptr_t mAppliedPixelShader;
 
     dx_VertexConstants mVertexConstants;
     dx_VertexConstants mAppliedVertexConstants;
