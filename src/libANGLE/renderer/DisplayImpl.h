@@ -34,6 +34,7 @@ namespace rx
 {
 class SurfaceImpl;
 struct ConfigDesc;
+class Renderer;
 
 class DisplayImpl
 {
@@ -41,7 +42,11 @@ class DisplayImpl
     DisplayImpl();
     virtual ~DisplayImpl();
 
-    virtual egl::Error initialize(egl::Display *display, EGLNativeDisplayType nativeDisplay, const egl::AttributeMap &attribMap) = 0;
+    virtual std::vector<Renderer *> getCandidateRenderers(egl::Display *display,
+                                                          EGLNativeDisplayType nativeDisplay,
+                                                          EGLint requestedDisplayType) = 0;
+
+    virtual void initialize(Renderer *newRenderer) = 0;
     virtual void terminate() = 0;
 
     virtual SurfaceImpl *createWindowSurface(egl::Display *display, const egl::Config *config,

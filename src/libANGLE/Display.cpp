@@ -15,6 +15,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/DisplayImpl.h"
+#include "libANGLE/renderer/Renderer.h"
 
 #include <algorithm>
 #include <map>
@@ -139,7 +140,38 @@ Error Display::initialize()
         return Error(EGL_SUCCESS);
     }
 
-    Error error = mImplementation->initialize(this, mDisplayId, mAttributeMap);
+    EGLint requestedDisplayType = mAttributeMap.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE,
+                                                    EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
+
+    auto candidateRenderers = mImplementation->getCandidateRenderers(this, mDisplayId,
+                                                                     requestedDisplayType);
+
+    egl::Error error(EGL_NOT_INITIALIZED, "No enabled Renderers available.");
+
+    for (rx::Renderer *candidateRenderer : candidateRenderers)
+    {
+        // Delete any Renderers after we've found one that works.
+        if (!error.isError())
+        {
+            SafeDelete(candidateRenderer);
+            continue;
+        }
+
+        // Call the heavy-duty Renderer init.
+        error = candidateRenderer->initialize();
+
+        if (error.isError())
+        {
+            // Failure case: try next Renderer if any are left.
+            SafeDelete(candidateRenderer);
+        }
+        else
+        {
+            // Pass the Renderer pointer to the Impl.
+            mImplementation->initialize(candidateRenderer);
+        }
+    }
+
     if (error.isError())
     {
         return error;
