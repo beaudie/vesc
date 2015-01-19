@@ -106,6 +106,9 @@ Display *Display::getDisplay(EGLNativeDisplayType displayId, const AttributeMap 
 
 Display::Display(rx::DisplayImpl *impl, EGLNativeDisplayType displayId)
     : mImplementation(impl),
+      mCurrentDrawSurface(nullptr),
+      mCurrentReadSurface(nullptr),
+      mCurrentContext(nullptr),
       mDisplayId(displayId),
       mAttributeMap(),
       mInitialized(false)
@@ -162,6 +165,8 @@ Error Display::initialize()
 
 void Display::terminate()
 {
+    makeCurrent(nullptr, nullptr, nullptr);
+
     while (!mContextSet.empty())
     {
         destroyContext(*mContextSet.begin());
@@ -465,6 +470,41 @@ Error Display::createContext(const Config *configuration, EGLContext shareContex
 
     *outContext = context;
     return Error(EGL_SUCCESS);
+}
+
+Error Display::makeCurrent(egl::Surface *drawSurface, egl::Surface *readSurface, gl::Context *context)
+{
+    Error error = mImplementation->makeCurrent(drawSurface, readSurface, context);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mCurrentDrawSurface = drawSurface;
+    mCurrentReadSurface = readSurface;
+    mCurrentContext = context;
+
+    if (mCurrentContext && mCurrentDrawSurface)
+    {
+        mCurrentContext->makeCurrent(mCurrentDrawSurface);
+    }
+
+    return egl::Error(EGL_SUCCESS);
+}
+
+egl::Surface *Display::getCurrentDrawSurface() const
+{
+    return mCurrentDrawSurface;
+}
+
+egl::Surface *Display::getCurrentReadSurface() const
+{
+    return mCurrentReadSurface;
+}
+
+gl::Context *Display::getCurrentContext() const
+{
+    return mCurrentContext;
 }
 
 Error Display::restoreLostDevice()

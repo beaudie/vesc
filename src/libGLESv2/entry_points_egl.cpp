@@ -146,15 +146,12 @@ EGLBoolean EGLAPIENTRY Terminate(EGLDisplay dpy)
     }
 
     Display *display = static_cast<Display*>(dpy);
-    gl::Context *context = GetGlobalContext();
-
-    if (display->isValidContext(context))
-    {
-        SetGlobalContext(NULL);
-        SetGlobalDisplay(NULL);
-    }
-
     display->terminate();
+
+    if (display == GetGlobalDisplay())
+    {
+        SetGlobalDisplay(nullptr);
+    }
 
     SetGlobalError(Error(EGL_SUCCESS));
     return EGL_TRUE;
@@ -640,10 +637,9 @@ EGLBoolean EGLAPIENTRY DestroyContext(EGLDisplay dpy, EGLContext ctx)
         return EGL_FALSE;
     }
 
-    if (context == GetGlobalContext())
+    if (context == display->getCurrentContext())
     {
-        SetGlobalDisplay(NULL);
-        SetGlobalContext(NULL);
+        display->makeCurrent(nullptr, nullptr, nullptr);
     }
 
     display->destroyContext(context);
@@ -702,16 +698,14 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
         UNIMPLEMENTED();   // FIXME
     }
 
-    SetGlobalDisplay(display);
-    SetGlobalDrawSurface(drawSurface);
-    SetGlobalReadSurface(readSurface);
-    SetGlobalContext(context);
-
-    if (context != nullptr && display != nullptr && drawSurface != nullptr)
+    Error error = display->makeCurrent(drawSurface, readSurface, context);
+    if (error.isError())
     {
-        context->makeCurrent(drawSurface);
+        SetGlobalError(error);
+        return EGL_FALSE;
     }
 
+    SetGlobalDisplay(display);
     SetGlobalError(Error(EGL_SUCCESS));
     return EGL_TRUE;
 }
@@ -720,18 +714,24 @@ EGLSurface EGLAPIENTRY GetCurrentSurface(EGLint readdraw)
 {
     EVENT("(EGLint readdraw = %d)", readdraw);
 
-    if (readdraw == EGL_READ)
+    egl::Display *currentDisplay = GetGlobalDisplay();
+    if (currentDisplay == nullptr)
     {
         SetGlobalError(Error(EGL_SUCCESS));
-        return GetGlobalReadSurface();
+        return EGL_NO_SURFACE;
     }
-    else if (readdraw == EGL_DRAW)
+
+    switch (readdraw)
     {
+      case EGL_READ:
         SetGlobalError(Error(EGL_SUCCESS));
-        return GetGlobalDrawSurface();
-    }
-    else
-    {
+        return static_cast<EGLSurface>(currentDisplay->getCurrentReadSurface());
+
+      case EGL_DRAW:
+        SetGlobalError(Error(EGL_SUCCESS));
+        return static_cast<EGLSurface>(currentDisplay->getCurrentDrawSurface());
+
+      default:
         SetGlobalError(Error(EGL_BAD_PARAMETER));
         return EGL_NO_SURFACE;
     }
@@ -882,7 +882,7 @@ EGLBoolean EGLAPIENTRY BindTexImage(EGLDisplay dpy, EGLSurface surface, EGLint b
         return EGL_FALSE;
     }
 
-    gl::Context *context = GetGlobalContext();
+    gl::Context *context = display->getCurrentContext();
     if (context)
     {
         gl::Texture *textureObject = context->getTargetTexture(GL_TEXTURE_2D);
@@ -966,21 +966,19 @@ EGLBoolean EGLAPIENTRY SwapInterval(EGLDisplay dpy, EGLint interval)
     EVENT("(EGLDisplay dpy = 0x%0.8p, EGLint interval = %d)", dpy, interval);
 
     Display *display = static_cast<Display*>(dpy);
-
     if (!ValidateDisplay(display))
     {
         return EGL_FALSE;
     }
 
-    Surface *draw_surface = static_cast<Surface*>(GetGlobalDrawSurface());
-
-    if (draw_surface == NULL)
+    Surface *drawSurface = display->getCurrentDrawSurface();
+    if (drawSurface == nullptr)
     {
         SetGlobalError(Error(EGL_BAD_SURFACE));
         return EGL_FALSE;
     }
 
-    draw_surface->setSwapInterval(interval);
+    drawSurface->setSwapInterval(interval);
 
     SetGlobalError(Error(EGL_SUCCESS));
     return EGL_TRUE;
@@ -1077,10 +1075,15 @@ EGLContext EGLAPIENTRY GetCurrentContext(void)
 {
     EVENT("()");
 
-    gl::Context *context = GetGlobalContext();
+    egl::Display *currentDisplay = GetGlobalDisplay();
+    if (currentDisplay == nullptr)
+    {
+        SetGlobalError(Error(EGL_SUCCESS));
+        return EGL_NO_SURFACE;
+    }
 
     SetGlobalError(Error(EGL_SUCCESS));
-    return static_cast<EGLContext>(context);
+    return static_cast<EGLContext>(currentDisplay->getCurrentContext());
 }
 
 // EGL 1.5
