@@ -51,12 +51,10 @@ enum ShaderType
 class RendererD3D : public Renderer
 {
   public:
-    explicit RendererD3D(egl::Display *display);
+    RendererD3D(egl::Display *display);
     virtual ~RendererD3D();
 
     static RendererD3D *makeRendererD3D(Renderer *renderer);
-
-    virtual EGLint initialize() = 0;
 
     virtual egl::ConfigSet generateConfigs() const = 0;
 
@@ -174,7 +172,6 @@ class RendererD3D : public Renderer
 
     void cleanup();
 
-    egl::Display *mDisplay;
     bool mDeviceLost;
 
   private:
