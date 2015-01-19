@@ -207,7 +207,12 @@ gl::Error TextureD3D::subImage(const gl::ImageIndex &index, const gl::Box &area,
 
         if (shouldUseSetData(image))
         {
-            return mTexStorage->setData(index, image, &area, type, unpack, pixelData);
+            gl::Error error = mTexStorage->setData(index, image, &area, type, unpack, pixelData);
+
+            // Ensure we don't overwrite our newly initialized data
+            image->markClean();
+
+            return error;
         }
 
         gl::Error error = image->loadData(area, unpack.alignment, type, pixelData);
