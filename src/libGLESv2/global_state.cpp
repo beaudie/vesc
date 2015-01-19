@@ -9,6 +9,7 @@
 #include "libGLESv2/global_state.h"
 
 #include "libANGLE/Context.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/Error.h"
 
 #include "common/debug.h"
@@ -25,9 +26,6 @@ struct Current
     EGLint error;
     EGLenum API;
     egl::Display *display;
-    egl::Surface *drawSurface;
-    egl::Surface *readSurface;
-    gl::Context *context;
 };
 
 Current *AllocateCurrent()
@@ -42,9 +40,6 @@ Current *AllocateCurrent()
     current->error = EGL_SUCCESS;
     current->API = EGL_OPENGL_ES_API;
     current->display = reinterpret_cast<egl::Display*>(EGL_NO_DISPLAY);
-    current->drawSurface = reinterpret_cast<egl::Surface*>(EGL_NO_SURFACE);
-    current->readSurface = reinterpret_cast<egl::Surface*>(EGL_NO_SURFACE);
-    current->context = reinterpret_cast<gl::Context*>(EGL_NO_CONTEXT);
 
     if (!SetTLSValue(currentTLS, current))
     {
@@ -122,7 +117,7 @@ Context *GetGlobalContext()
 {
     Current *current = GetCurrentData();
 
-    return current->context;
+    return (current->display != nullptr) ? current->display->getCurrentContext() : nullptr;
 }
 
 Context *GetValidGlobalContext()
@@ -188,48 +183,6 @@ Display *GetGlobalDisplay()
     Current *current = GetCurrentData();
 
     return current->display;
-}
-
-void SetGlobalDrawSurface(Surface *surface)
-{
-    Current *current = GetCurrentData();
-
-    current->drawSurface = surface;
-}
-
-Surface *GetGlobalDrawSurface()
-{
-    Current *current = GetCurrentData();
-
-    return current->drawSurface;
-}
-
-void SetGlobalReadSurface(Surface *surface)
-{
-    Current *current = GetCurrentData();
-
-    current->readSurface = surface;
-}
-
-Surface *GetGlobalReadSurface()
-{
-    Current *current = GetCurrentData();
-
-    return current->readSurface;
-}
-
-void SetGlobalContext(gl::Context *context)
-{
-    Current *current = GetCurrentData();
-
-    current->context = context;
-}
-
-gl::Context *GetGlobalContext()
-{
-    Current *current = GetCurrentData();
-
-    return current->context;
 }
 
 }
