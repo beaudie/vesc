@@ -24,7 +24,6 @@ namespace egl
 {
 class Error;
 class Display;
-class Surface;
 
 void SetGlobalError(const Error &error);
 EGLint GetGlobalError();
@@ -34,15 +33,6 @@ EGLenum GetGlobalAPI();
 
 void SetGlobalDisplay(Display *dpy);
 Display *GetGlobalDisplay();
-
-void SetGlobalDrawSurface(Surface *surface);
-Surface *GetGlobalDrawSurface();
-
-void SetGlobalReadSurface(Surface *surface);
-Surface *GetGlobalReadSurface();
-
-void SetGlobalContext(gl::Context *context);
-gl::Context *GetGlobalContext();
 
 }
 
