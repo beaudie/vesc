@@ -53,6 +53,12 @@ class Display final
     Error createOffscreenSurface(const Config *configuration, EGLClientBuffer shareHandle, const EGLint *attribList, EGLSurface *outSurface);
     Error createContext(const Config *configuration, EGLContext shareContext, const egl::AttributeMap &attribs, EGLContext *outContext);
 
+    Error makeCurrent(egl::Surface *drawSurface, egl::Surface *readSurface, gl::Context *context);
+
+    egl::Surface *getCurrentDrawSurface() const;
+    egl::Surface *getCurrentReadSurface() const;
+    gl::Context *getCurrentContext() const;
+
     void destroySurface(egl::Surface *surface);
     void destroyContext(gl::Context *context);
 
@@ -87,6 +93,10 @@ class Display final
     void initVendorString();
 
     rx::DisplayImpl *mImplementation;
+
+    egl::Surface *mCurrentDrawSurface;
+    egl::Surface *mCurrentReadSurface;
+    gl::Context *mCurrentContext;
 
     EGLNativeDisplayType mDisplayId;
     AttributeMap mAttributeMap;
