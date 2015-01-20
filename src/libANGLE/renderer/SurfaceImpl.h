@@ -29,7 +29,6 @@ class SurfaceImpl
                 EGLenum textureType, EGLClientBuffer shareHandle);
     virtual ~SurfaceImpl();
 
-    virtual egl::Error initialize() = 0;
     virtual egl::Error swap() = 0;
     virtual egl::Error postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height) = 0;
     virtual egl::Error querySurfacePointerANGLE(EGLint attribute, void **value) = 0;
