@@ -83,6 +83,8 @@ class SurfaceD3D : public SurfaceImpl
     EGLint mHeight;
 
     EGLint mSwapInterval;
+
+    HANDLE mShareHandle;
 };
 
 
