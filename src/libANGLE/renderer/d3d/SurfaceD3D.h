@@ -34,7 +34,8 @@ class SurfaceD3D : public SurfaceImpl
     ~SurfaceD3D() override;
     void releaseSwapChain();
 
-    egl::Error initialize() override;
+    egl::Error initialize();
+
     egl::Error swap() override;
     egl::Error postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height) override;
     egl::Error querySurfacePointerANGLE(EGLint attribute, void **value) override;
