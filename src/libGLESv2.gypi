@@ -394,6 +394,9 @@
             'libANGLE/renderer/gl/wgl/DisplayWGL.h',
             'libANGLE/renderer/gl/wgl/SurfaceWGL.cpp',
             'libANGLE/renderer/gl/wgl/SurfaceWGL.h',
+            'libANGLE/renderer/gl/wgl/wgl_utils.cpp',
+            'libANGLE/renderer/gl/wgl/wgl_utils.h',
+            'libANGLE/renderer/gl/wgl/wglext.h',
         ],
         'libglesv2_sources':
         [
