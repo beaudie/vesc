@@ -178,8 +178,8 @@ size_t TType::getObjectSize() const
 
     if (isArray())
     {
-        size_t arraySize = getArraySize();
-        if (arraySize > INT_MAX / totalSize)
+        ASSERT(totalSize <= INT_MAX);
+        if (arraySize > INT_MAX / static_cast<int>(totalSize))
             totalSize = INT_MAX;
         else
             totalSize *= arraySize;
