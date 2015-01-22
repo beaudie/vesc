@@ -252,6 +252,12 @@ shared_library("libGLESv2") {
     "LIBGLESV2_IMPLEMENTATION",
   ]
 
+  if (is_debug) {
+    defines += [
+      "ANGLE_ENABLE_DEBUG_ANNOTATIONS",
+    ]
+  }
+  
   deps = [
     ":includes",
     ":libANGLE",
