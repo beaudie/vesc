@@ -10,6 +10,7 @@
 #define LIBANGLE_RENDERER_GL_WGL_DISPLAYWGL_H_
 
 #include "libANGLE/renderer/gl/DisplayGL.h"
+#include "libANGLE/renderer/gl/wgl/wglext.h"
 
 namespace rx
 {
@@ -47,6 +48,29 @@ class DisplayWGL : public DisplayGL
 
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
     void generateCaps(egl::Caps *outCaps) const override;
+
+    bool isWGLExtensionSupported(HDC deviceContext, const std::string &name) const;
+
+    HMODULE mOpenGLModule;
+    GLuint mGLVersionMajor;
+    GLuint mGLVersionMinor;
+
+    PFNWGLGETEXTENSIONSSTRINGEXTPROC mGetExtensionStringEXT;
+    PFNWGLGETEXTENSIONSSTRINGARBPROC mGetExtensionStringARB;
+
+    PFNWGLCREATECONTEXTATTRIBSARBPROC mCreateContextAttribsARB;
+
+    PFNWGLGETPIXELFORMATATTRIBIVARBPROC mGetPixelFormatAttribivARB;
+
+    PFNWGLSWAPINTERVALEXTPROC mSwapIntervalEXT;
+
+    ATOM mWindowClass;
+    HWND mWindow;
+    HDC mDeviceContext;
+    int mPixelFormat;
+    HGLRC mWGLContext;
+
+    egl::Display *mDisplay;
 };
 
 }
