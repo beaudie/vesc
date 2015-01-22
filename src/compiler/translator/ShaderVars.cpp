@@ -99,7 +99,7 @@ bool ShaderVariable::findInfoByMappedName(
     }
     else
     {
-        std::string topName = mappedFullName.substr(0, pos);
+        topName = mappedFullName.substr(0, pos);
         if (topName != this->mappedName)
             return false;
         std::string originalName = this->name;
