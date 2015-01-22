@@ -396,6 +396,9 @@
             'libANGLE/renderer/gl/wgl/DisplayWGL.h',
             'libANGLE/renderer/gl/wgl/SurfaceWGL.cpp',
             'libANGLE/renderer/gl/wgl/SurfaceWGL.h',
+            'libANGLE/renderer/gl/wgl/wgl_utils.cpp',
+            'libANGLE/renderer/gl/wgl/wgl_utils.h',
+            'third_party/khronos/GL/wglext.h',
         ],
         'libglesv2_sources':
         [
@@ -447,6 +450,7 @@
             [
                 '.',
                 '../include',
+                'third_party/khronos',
             ],
             'sources':
             [
