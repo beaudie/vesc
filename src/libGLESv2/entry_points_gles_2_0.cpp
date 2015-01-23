@@ -13,6 +13,7 @@
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Compiler.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Renderbuffer.h"
@@ -32,12 +33,14 @@
 #include "common/utilities.h"
 #include "common/version.h"
 
+#define ENTRY_POINT_EVENT(message, ...) ScopedEvent scopedENTRY_POINT_EVENT(GetValidGlobalContext()->getDebug(), "%s" message "\n", __FUNCTION__, __VA_ARGS__)
+
 namespace gl
 {
 
 void GL_APIENTRY ActiveTexture(GLenum texture)
 {
-    EVENT("(GLenum texture = 0x%X)", texture);
+    ENTRY_POINT_EVENT("(GLenum texture = 0x%X)", texture);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -54,7 +57,7 @@ void GL_APIENTRY ActiveTexture(GLenum texture)
 
 void GL_APIENTRY AttachShader(GLuint program, GLuint shader)
 {
-    EVENT("(GLuint program = %d, GLuint shader = %d)", program, shader);
+    ENTRY_POINT_EVENT("(GLuint program = %d, GLuint shader = %d)", program, shader);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -100,7 +103,7 @@ void GL_APIENTRY AttachShader(GLuint program, GLuint shader)
 
 void GL_APIENTRY BindAttribLocation(GLuint program, GLuint index, const GLchar* name)
 {
-    EVENT("(GLuint program = %d, GLuint index = %d, const GLchar* name = 0x%0.8p)", program, index, name);
+    ENTRY_POINT_EVENT("(GLuint program = %d, GLuint index = %d, const GLchar* name = 0x%0.8p)", program, index, name);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -139,7 +142,7 @@ void GL_APIENTRY BindAttribLocation(GLuint program, GLuint index, const GLchar* 
 
 void GL_APIENTRY BindBuffer(GLenum target, GLuint buffer)
 {
-    EVENT("(GLenum target = 0x%X, GLuint buffer = %d)", target, buffer);
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLuint buffer = %d)", target, buffer);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -186,7 +189,7 @@ void GL_APIENTRY BindBuffer(GLenum target, GLuint buffer)
 
 void GL_APIENTRY BindFramebuffer(GLenum target, GLuint framebuffer)
 {
-    EVENT("(GLenum target = 0x%X, GLuint framebuffer = %d)", target, framebuffer);
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLuint framebuffer = %d)", target, framebuffer);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -211,7 +214,7 @@ void GL_APIENTRY BindFramebuffer(GLenum target, GLuint framebuffer)
 
 void GL_APIENTRY BindRenderbuffer(GLenum target, GLuint renderbuffer)
 {
-    EVENT("(GLenum target = 0x%X, GLuint renderbuffer = %d)", target, renderbuffer);
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLuint renderbuffer = %d)", target, renderbuffer);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -228,7 +231,7 @@ void GL_APIENTRY BindRenderbuffer(GLenum target, GLuint renderbuffer)
 
 void GL_APIENTRY BindTexture(GLenum target, GLuint texture)
 {
-    EVENT("(GLenum target = 0x%X, GLuint texture = %d)", target, texture);
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLuint texture = %d)", target, texture);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -267,7 +270,7 @@ void GL_APIENTRY BindTexture(GLenum target, GLuint texture)
 
 void GL_APIENTRY BlendColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha)
 {
-    EVENT("(GLclampf red = %f, GLclampf green = %f, GLclampf blue = %f, GLclampf alpha = %f)",
+    ENTRY_POINT_EVENT("(GLclampf red = %f, GLclampf green = %f, GLclampf blue = %f, GLclampf alpha = %f)",
           red, green, blue, alpha);
 
     Context *context = GetValidGlobalContext();
@@ -284,7 +287,7 @@ void GL_APIENTRY BlendEquation(GLenum mode)
 
 void GL_APIENTRY BlendEquationSeparate(GLenum modeRGB, GLenum modeAlpha)
 {
-    EVENT("(GLenum modeRGB = 0x%X, GLenum modeAlpha = 0x%X)", modeRGB, modeAlpha);
+    ENTRY_POINT_EVENT("(GLenum modeRGB = 0x%X, GLenum modeAlpha = 0x%X)", modeRGB, modeAlpha);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -328,7 +331,7 @@ void GL_APIENTRY BlendFunc(GLenum sfactor, GLenum dfactor)
 
 void GL_APIENTRY BlendFuncSeparate(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha)
 {
-    EVENT("(GLenum srcRGB = 0x%X, GLenum dstRGB = 0x%X, GLenum srcAlpha = 0x%X, GLenum dstAlpha = 0x%X)",
+    ENTRY_POINT_EVENT("(GLenum srcRGB = 0x%X, GLenum dstRGB = 0x%X, GLenum srcAlpha = 0x%X, GLenum dstAlpha = 0x%X)",
           srcRGB, dstRGB, srcAlpha, dstAlpha);
 
     Context *context = GetValidGlobalContext();
@@ -463,7 +466,7 @@ void GL_APIENTRY BlendFuncSeparate(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha
 
 void GL_APIENTRY BufferData(GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage)
 {
-    EVENT("(GLenum target = 0x%X, GLsizeiptr size = %d, const GLvoid* data = 0x%0.8p, GLenum usage = %d)",
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLsizeiptr size = %d, const GLvoid* data = 0x%0.8p, GLenum usage = %d)",
           target, size, data, usage);
 
     Context *context = GetValidGlobalContext();
@@ -525,7 +528,7 @@ void GL_APIENTRY BufferData(GLenum target, GLsizeiptr size, const GLvoid* data, 
 
 void GL_APIENTRY BufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid* data)
 {
-    EVENT("(GLenum target = 0x%X, GLintptr offset = %d, GLsizeiptr size = %d, const GLvoid* data = 0x%0.8p)",
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLintptr offset = %d, GLsizeiptr size = %d, const GLvoid* data = 0x%0.8p)",
           target, offset, size, data);
 
     Context *context = GetValidGlobalContext();
@@ -586,7 +589,7 @@ void GL_APIENTRY BufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, 
 
 GLenum GL_APIENTRY CheckFramebufferStatus(GLenum target)
 {
-    EVENT("(GLenum target = 0x%X)", target);
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X)", target);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -608,7 +611,7 @@ GLenum GL_APIENTRY CheckFramebufferStatus(GLenum target)
 
 void GL_APIENTRY Clear(GLbitfield mask)
 {
-    EVENT("(GLbitfield mask = 0x%X)", mask);
+    ENTRY_POINT_EVENT("(GLbitfield mask = 0x%X)", mask);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -639,7 +642,7 @@ void GL_APIENTRY Clear(GLbitfield mask)
 
 void GL_APIENTRY ClearColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha)
 {
-    EVENT("(GLclampf red = %f, GLclampf green = %f, GLclampf blue = %f, GLclampf alpha = %f)",
+    ENTRY_POINT_EVENT("(GLclampf red = %f, GLclampf green = %f, GLclampf blue = %f, GLclampf alpha = %f)",
           red, green, blue, alpha);
 
     Context *context = GetValidGlobalContext();
@@ -651,7 +654,7 @@ void GL_APIENTRY ClearColor(GLclampf red, GLclampf green, GLclampf blue, GLclamp
 
 void GL_APIENTRY ClearDepthf(GLclampf depth)
 {
-    EVENT("(GLclampf depth = %f)", depth);
+    ENTRY_POINT_EVENT("(GLclampf depth = %f)", depth);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -662,7 +665,7 @@ void GL_APIENTRY ClearDepthf(GLclampf depth)
 
 void GL_APIENTRY ClearStencil(GLint s)
 {
-    EVENT("(GLint s = %d)", s);
+    ENTRY_POINT_EVENT("(GLint s = %d)", s);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -673,7 +676,7 @@ void GL_APIENTRY ClearStencil(GLint s)
 
 void GL_APIENTRY ColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha)
 {
-    EVENT("(GLboolean red = %d, GLboolean green = %u, GLboolean blue = %u, GLboolean alpha = %u)",
+    ENTRY_POINT_EVENT("(GLboolean red = %d, GLboolean green = %u, GLboolean blue = %u, GLboolean alpha = %u)",
           red, green, blue, alpha);
 
     Context *context = GetValidGlobalContext();
@@ -685,7 +688,7 @@ void GL_APIENTRY ColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboo
 
 void GL_APIENTRY CompileShader(GLuint shader)
 {
-    EVENT("(GLuint shader = %d)", shader);
+    ENTRY_POINT_EVENT("(GLuint shader = %d)", shader);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -713,7 +716,7 @@ void GL_APIENTRY CompileShader(GLuint shader)
 void GL_APIENTRY CompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height,
                                       GLint border, GLsizei imageSize, const GLvoid* data)
 {
-    EVENT("(GLenum target = 0x%X, GLint level = %d, GLenum internalformat = 0x%X, GLsizei width = %d, "
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLint level = %d, GLenum internalformat = 0x%X, GLsizei width = %d, "
           "GLsizei height = %d, GLint border = %d, GLsizei imageSize = %d, const GLvoid* data = 0x%0.8p)",
           target, level, internalformat, width, height, border, imageSize, data);
 
@@ -756,7 +759,7 @@ void GL_APIENTRY CompressedTexImage2D(GLenum target, GLint level, GLenum interna
 void GL_APIENTRY CompressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height,
                                          GLenum format, GLsizei imageSize, const GLvoid* data)
 {
-    EVENT("(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, "
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, "
           "GLsizei width = %d, GLsizei height = %d, GLenum format = 0x%X, "
           "GLsizei imageSize = %d, const GLvoid* data = 0x%0.8p)",
           target, level, xoffset, yoffset, width, height, format, imageSize, data);
@@ -800,7 +803,7 @@ void GL_APIENTRY CompressedTexSubImage2D(GLenum target, GLint level, GLint xoffs
 
 void GL_APIENTRY CopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border)
 {
-    EVENT("(GLenum target = 0x%X, GLint level = %d, GLenum internalformat = 0x%X, "
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLint level = %d, GLenum internalformat = 0x%X, "
           "GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, GLint border = %d)",
           target, level, internalformat, x, y, width, height, border);
 
@@ -836,7 +839,7 @@ void GL_APIENTRY CopyTexImage2D(GLenum target, GLint level, GLenum internalforma
 
 void GL_APIENTRY CopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height)
 {
-    EVENT("(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, "
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, "
           "GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d)",
           target, level, xoffset, yoffset, x, y, width, height);
 
@@ -873,7 +876,7 @@ void GL_APIENTRY CopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GL
 
 GLuint GL_APIENTRY CreateProgram(void)
 {
-    EVENT("()");
+    ENTRY_POINT_EVENT("()");
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -886,7 +889,7 @@ GLuint GL_APIENTRY CreateProgram(void)
 
 GLuint GL_APIENTRY CreateShader(GLenum type)
 {
-    EVENT("(GLenum type = 0x%X)", type);
+    ENTRY_POINT_EVENT("(GLenum type = 0x%X)", type);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -908,7 +911,7 @@ GLuint GL_APIENTRY CreateShader(GLenum type)
 
 void GL_APIENTRY CullFace(GLenum mode)
 {
-    EVENT("(GLenum mode = 0x%X)", mode);
+    ENTRY_POINT_EVENT("(GLenum mode = 0x%X)", mode);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -931,7 +934,7 @@ void GL_APIENTRY CullFace(GLenum mode)
 
 void GL_APIENTRY DeleteBuffers(GLsizei n, const GLuint* buffers)
 {
-    EVENT("(GLsizei n = %d, const GLuint* buffers = 0x%0.8p)", n, buffers);
+    ENTRY_POINT_EVENT("(GLsizei n = %d, const GLuint* buffers = 0x%0.8p)", n, buffers);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -951,7 +954,7 @@ void GL_APIENTRY DeleteBuffers(GLsizei n, const GLuint* buffers)
 
 void GL_APIENTRY DeleteFramebuffers(GLsizei n, const GLuint* framebuffers)
 {
-    EVENT("(GLsizei n = %d, const GLuint* framebuffers = 0x%0.8p)", n, framebuffers);
+    ENTRY_POINT_EVENT("(GLsizei n = %d, const GLuint* framebuffers = 0x%0.8p)", n, framebuffers);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -974,7 +977,7 @@ void GL_APIENTRY DeleteFramebuffers(GLsizei n, const GLuint* framebuffers)
 
 void GL_APIENTRY DeleteProgram(GLuint program)
 {
-    EVENT("(GLuint program = %d)", program);
+    ENTRY_POINT_EVENT("(GLuint program = %d)", program);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1004,7 +1007,7 @@ void GL_APIENTRY DeleteProgram(GLuint program)
 
 void GL_APIENTRY DeleteRenderbuffers(GLsizei n, const GLuint* renderbuffers)
 {
-    EVENT("(GLsizei n = %d, const GLuint* renderbuffers = 0x%0.8p)", n, renderbuffers);
+    ENTRY_POINT_EVENT("(GLsizei n = %d, const GLuint* renderbuffers = 0x%0.8p)", n, renderbuffers);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1024,7 +1027,7 @@ void GL_APIENTRY DeleteRenderbuffers(GLsizei n, const GLuint* renderbuffers)
 
 void GL_APIENTRY DeleteShader(GLuint shader)
 {
-    EVENT("(GLuint shader = %d)", shader);
+    ENTRY_POINT_EVENT("(GLuint shader = %d)", shader);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1054,7 +1057,7 @@ void GL_APIENTRY DeleteShader(GLuint shader)
 
 void GL_APIENTRY DeleteTextures(GLsizei n, const GLuint* textures)
 {
-    EVENT("(GLsizei n = %d, const GLuint* textures = 0x%0.8p)", n, textures);
+    ENTRY_POINT_EVENT("(GLsizei n = %d, const GLuint* textures = 0x%0.8p)", n, textures);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1077,7 +1080,7 @@ void GL_APIENTRY DeleteTextures(GLsizei n, const GLuint* textures)
 
 void GL_APIENTRY DepthFunc(GLenum func)
 {
-    EVENT("(GLenum func = 0x%X)", func);
+    ENTRY_POINT_EVENT("(GLenum func = 0x%X)", func);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1104,7 +1107,7 @@ void GL_APIENTRY DepthFunc(GLenum func)
 
 void GL_APIENTRY DepthMask(GLboolean flag)
 {
-    EVENT("(GLboolean flag = %u)", flag);
+    ENTRY_POINT_EVENT("(GLboolean flag = %u)", flag);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1115,7 +1118,7 @@ void GL_APIENTRY DepthMask(GLboolean flag)
 
 void GL_APIENTRY DepthRangef(GLclampf zNear, GLclampf zFar)
 {
-    EVENT("(GLclampf zNear = %f, GLclampf zFar = %f)", zNear, zFar);
+    ENTRY_POINT_EVENT("(GLclampf zNear = %f, GLclampf zFar = %f)", zNear, zFar);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1126,7 +1129,7 @@ void GL_APIENTRY DepthRangef(GLclampf zNear, GLclampf zFar)
 
 void GL_APIENTRY DetachShader(GLuint program, GLuint shader)
 {
-    EVENT("(GLuint program = %d, GLuint shader = %d)", program, shader);
+    ENTRY_POINT_EVENT("(GLuint program = %d, GLuint shader = %d)", program, shader);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1175,7 +1178,7 @@ void GL_APIENTRY DetachShader(GLuint program, GLuint shader)
 
 void GL_APIENTRY Disable(GLenum cap)
 {
-    EVENT("(GLenum cap = 0x%X)", cap);
+    ENTRY_POINT_EVENT("(GLenum cap = 0x%X)", cap);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1192,7 +1195,7 @@ void GL_APIENTRY Disable(GLenum cap)
 
 void GL_APIENTRY DisableVertexAttribArray(GLuint index)
 {
-    EVENT("(GLuint index = %d)", index);
+    ENTRY_POINT_EVENT("(GLuint index = %d)", index);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1209,7 +1212,7 @@ void GL_APIENTRY DisableVertexAttribArray(GLuint index)
 
 void GL_APIENTRY DrawArrays(GLenum mode, GLint first, GLsizei count)
 {
-    EVENT("(GLenum mode = 0x%X, GLint first = %d, GLsizei count = %d)", mode, first, count);
+    ENTRY_POINT_EVENT("(GLenum mode = 0x%X, GLint first = %d, GLsizei count = %d)", mode, first, count);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1230,7 +1233,7 @@ void GL_APIENTRY DrawArrays(GLenum mode, GLint first, GLsizei count)
 
 void GL_APIENTRY DrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid* indices)
 {
-    EVENT("(GLenum mode = 0x%X, GLsizei count = %d, GLenum type = 0x%X, const GLvoid* indices = 0x%0.8p)",
+    ENTRY_POINT_EVENT("(GLenum mode = 0x%X, GLsizei count = %d, GLenum type = 0x%X, const GLvoid* indices = 0x%0.8p)",
           mode, count, type, indices);
 
     Context *context = GetValidGlobalContext();
@@ -1253,7 +1256,7 @@ void GL_APIENTRY DrawElements(GLenum mode, GLsizei count, GLenum type, const GLv
 
 void GL_APIENTRY Enable(GLenum cap)
 {
-    EVENT("(GLenum cap = 0x%X)", cap);
+    ENTRY_POINT_EVENT("(GLenum cap = 0x%X)", cap);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1270,7 +1273,7 @@ void GL_APIENTRY Enable(GLenum cap)
 
 void GL_APIENTRY EnableVertexAttribArray(GLuint index)
 {
-    EVENT("(GLuint index = %d)", index);
+    ENTRY_POINT_EVENT("(GLuint index = %d)", index);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1287,7 +1290,7 @@ void GL_APIENTRY EnableVertexAttribArray(GLuint index)
 
 void GL_APIENTRY Finish(void)
 {
-    EVENT("()");
+    ENTRY_POINT_EVENT("()");
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1303,7 +1306,7 @@ void GL_APIENTRY Finish(void)
 
 void GL_APIENTRY Flush(void)
 {
-    EVENT("()");
+    ENTRY_POINT_EVENT("()");
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1319,7 +1322,7 @@ void GL_APIENTRY Flush(void)
 
 void GL_APIENTRY FramebufferRenderbuffer(GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer)
 {
-    EVENT("(GLenum target = 0x%X, GLenum attachment = 0x%X, GLenum renderbuffertarget = 0x%X, "
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLenum attachment = 0x%X, GLenum renderbuffertarget = 0x%X, "
           "GLuint renderbuffer = %d)", target, attachment, renderbuffertarget, renderbuffer);
 
     Context *context = GetValidGlobalContext();
@@ -1353,7 +1356,7 @@ void GL_APIENTRY FramebufferRenderbuffer(GLenum target, GLenum attachment, GLenu
 
 void GL_APIENTRY FramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
 {
-    EVENT("(GLenum target = 0x%X, GLenum attachment = 0x%X, GLenum textarget = 0x%X, "
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLenum attachment = 0x%X, GLenum textarget = 0x%X, "
           "GLuint texture = %d, GLint level = %d)", target, attachment, textarget, texture, level);
 
     Context *context = GetValidGlobalContext();
@@ -1394,7 +1397,7 @@ void GL_APIENTRY FramebufferTexture2D(GLenum target, GLenum attachment, GLenum t
 
 void GL_APIENTRY FrontFace(GLenum mode)
 {
-    EVENT("(GLenum mode = 0x%X)", mode);
+    ENTRY_POINT_EVENT("(GLenum mode = 0x%X)", mode);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1414,7 +1417,7 @@ void GL_APIENTRY FrontFace(GLenum mode)
 
 void GL_APIENTRY GenBuffers(GLsizei n, GLuint* buffers)
 {
-    EVENT("(GLsizei n = %d, GLuint* buffers = 0x%0.8p)", n, buffers);
+    ENTRY_POINT_EVENT("(GLsizei n = %d, GLuint* buffers = 0x%0.8p)", n, buffers);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1434,7 +1437,7 @@ void GL_APIENTRY GenBuffers(GLsizei n, GLuint* buffers)
 
 void GL_APIENTRY GenerateMipmap(GLenum target)
 {
-    EVENT("(GLenum target = 0x%X)", target);
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X)", target);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1510,7 +1513,7 @@ void GL_APIENTRY GenerateMipmap(GLenum target)
 
 void GL_APIENTRY GenFramebuffers(GLsizei n, GLuint* framebuffers)
 {
-    EVENT("(GLsizei n = %d, GLuint* framebuffers = 0x%0.8p)", n, framebuffers);
+    ENTRY_POINT_EVENT("(GLsizei n = %d, GLuint* framebuffers = 0x%0.8p)", n, framebuffers);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1530,7 +1533,7 @@ void GL_APIENTRY GenFramebuffers(GLsizei n, GLuint* framebuffers)
 
 void GL_APIENTRY GenRenderbuffers(GLsizei n, GLuint* renderbuffers)
 {
-    EVENT("(GLsizei n = %d, GLuint* renderbuffers = 0x%0.8p)", n, renderbuffers);
+    ENTRY_POINT_EVENT("(GLsizei n = %d, GLuint* renderbuffers = 0x%0.8p)", n, renderbuffers);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1550,7 +1553,7 @@ void GL_APIENTRY GenRenderbuffers(GLsizei n, GLuint* renderbuffers)
 
 void GL_APIENTRY GenTextures(GLsizei n, GLuint* textures)
 {
-    EVENT("(GLsizei n = %d, GLuint* textures = 0x%0.8p)", n, textures);
+    ENTRY_POINT_EVENT("(GLsizei n = %d, GLuint* textures = 0x%0.8p)", n, textures);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1570,7 +1573,7 @@ void GL_APIENTRY GenTextures(GLsizei n, GLuint* textures)
 
 void GL_APIENTRY GetActiveAttrib(GLuint program, GLuint index, GLsizei bufsize, GLsizei *length, GLint *size, GLenum *type, GLchar *name)
 {
-    EVENT("(GLuint program = %d, GLuint index = %d, GLsizei bufsize = %d, GLsizei *length = 0x%0.8p, "
+    ENTRY_POINT_EVENT("(GLuint program = %d, GLuint index = %d, GLsizei bufsize = %d, GLsizei *length = 0x%0.8p, "
           "GLint *size = 0x%0.8p, GLenum *type = %0.8p, GLchar *name = %0.8p)",
           program, index, bufsize, length, size, type, name);
 
@@ -1611,7 +1614,7 @@ void GL_APIENTRY GetActiveAttrib(GLuint program, GLuint index, GLsizei bufsize, 
 
 void GL_APIENTRY GetActiveUniform(GLuint program, GLuint index, GLsizei bufsize, GLsizei* length, GLint* size, GLenum* type, GLchar* name)
 {
-    EVENT("(GLuint program = %d, GLuint index = %d, GLsizei bufsize = %d, "
+    ENTRY_POINT_EVENT("(GLuint program = %d, GLuint index = %d, GLsizei bufsize = %d, "
           "GLsizei* length = 0x%0.8p, GLint* size = 0x%0.8p, GLenum* type = 0x%0.8p, GLchar* name = 0x%0.8p)",
           program, index, bufsize, length, size, type, name);
 
@@ -1653,7 +1656,7 @@ void GL_APIENTRY GetActiveUniform(GLuint program, GLuint index, GLsizei bufsize,
 
 void GL_APIENTRY GetAttachedShaders(GLuint program, GLsizei maxcount, GLsizei* count, GLuint* shaders)
 {
-    EVENT("(GLuint program = %d, GLsizei maxcount = %d, GLsizei* count = 0x%0.8p, GLuint* shaders = 0x%0.8p)",
+    ENTRY_POINT_EVENT("(GLuint program = %d, GLsizei maxcount = %d, GLsizei* count = 0x%0.8p, GLuint* shaders = 0x%0.8p)",
           program, maxcount, count, shaders);
 
     Context *context = GetValidGlobalContext();
@@ -1687,7 +1690,7 @@ void GL_APIENTRY GetAttachedShaders(GLuint program, GLsizei maxcount, GLsizei* c
 
 GLint GL_APIENTRY GetAttribLocation(GLuint program, const GLchar* name)
 {
-    EVENT("(GLuint program = %d, const GLchar* name = %s)", program, name);
+    ENTRY_POINT_EVENT("(GLuint program = %d, const GLchar* name = %s)", program, name);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1722,7 +1725,7 @@ GLint GL_APIENTRY GetAttribLocation(GLuint program, const GLchar* name)
 
 void GL_APIENTRY GetBooleanv(GLenum pname, GLboolean* params)
 {
-    EVENT("(GLenum pname = 0x%X, GLboolean* params = 0x%0.8p)",  pname, params);
+    ENTRY_POINT_EVENT("(GLenum pname = 0x%X, GLboolean* params = 0x%0.8p)",  pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1747,7 +1750,7 @@ void GL_APIENTRY GetBooleanv(GLenum pname, GLboolean* params)
 
 void GL_APIENTRY GetBufferParameteriv(GLenum target, GLenum pname, GLint* params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint* params = 0x%0.8p)", target, pname, params);
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint* params = 0x%0.8p)", target, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1800,7 +1803,7 @@ void GL_APIENTRY GetBufferParameteriv(GLenum target, GLenum pname, GLint* params
 
 GLenum GL_APIENTRY GetError(void)
 {
-    EVENT("()");
+    ENTRY_POINT_EVENT("()");
 
     Context *context = GetGlobalContext();
 
@@ -1814,7 +1817,7 @@ GLenum GL_APIENTRY GetError(void)
 
 void GL_APIENTRY GetFloatv(GLenum pname, GLfloat* params)
 {
-    EVENT("(GLenum pname = 0x%X, GLfloat* params = 0x%0.8p)", pname, params);
+    ENTRY_POINT_EVENT("(GLenum pname = 0x%X, GLfloat* params = 0x%0.8p)", pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1839,7 +1842,7 @@ void GL_APIENTRY GetFloatv(GLenum pname, GLfloat* params)
 
 void GL_APIENTRY GetFramebufferAttachmentParameteriv(GLenum target, GLenum attachment, GLenum pname, GLint* params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum attachment = 0x%X, GLenum pname = 0x%X, GLint* params = 0x%0.8p)",
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLenum attachment = 0x%X, GLenum pname = 0x%X, GLint* params = 0x%0.8p)",
           target, attachment, pname, params);
 
     Context *context = GetValidGlobalContext();
@@ -2103,7 +2106,7 @@ void GL_APIENTRY GetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
 
 void GL_APIENTRY GetIntegerv(GLenum pname, GLint* params)
 {
-    EVENT("(GLenum pname = 0x%X, GLint* params = 0x%0.8p)", pname, params);
+    ENTRY_POINT_EVENT("(GLenum pname = 0x%X, GLint* params = 0x%0.8p)", pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2129,7 +2132,7 @@ void GL_APIENTRY GetIntegerv(GLenum pname, GLint* params)
 
 void GL_APIENTRY GetProgramiv(GLuint program, GLenum pname, GLint* params)
 {
-    EVENT("(GLuint program = %d, GLenum pname = %d, GLint* params = 0x%0.8p)", program, pname, params);
+    ENTRY_POINT_EVENT("(GLuint program = %d, GLenum pname = %d, GLint* params = 0x%0.8p)", program, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2213,7 +2216,7 @@ void GL_APIENTRY GetProgramiv(GLuint program, GLenum pname, GLint* params)
 
 void GL_APIENTRY GetProgramInfoLog(GLuint program, GLsizei bufsize, GLsizei* length, GLchar* infolog)
 {
-    EVENT("(GLuint program = %d, GLsizei bufsize = %d, GLsizei* length = 0x%0.8p, GLchar* infolog = 0x%0.8p)",
+    ENTRY_POINT_EVENT("(GLuint program = %d, GLsizei bufsize = %d, GLsizei* length = 0x%0.8p, GLchar* infolog = 0x%0.8p)",
           program, bufsize, length, infolog);
 
     Context *context = GetValidGlobalContext();
@@ -2239,7 +2242,7 @@ void GL_APIENTRY GetProgramInfoLog(GLuint program, GLsizei bufsize, GLsizei* len
 
 void GL_APIENTRY GetRenderbufferParameteriv(GLenum target, GLenum pname, GLint* params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint* params = 0x%0.8p)", target, pname, params);
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint* params = 0x%0.8p)", target, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2288,7 +2291,7 @@ void GL_APIENTRY GetRenderbufferParameteriv(GLenum target, GLenum pname, GLint* 
 
 void GL_APIENTRY GetShaderiv(GLuint shader, GLenum pname, GLint* params)
 {
-    EVENT("(GLuint shader = %d, GLenum pname = %d, GLint* params = 0x%0.8p)", shader, pname, params);
+    ENTRY_POINT_EVENT("(GLuint shader = %d, GLenum pname = %d, GLint* params = 0x%0.8p)", shader, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2331,7 +2334,7 @@ void GL_APIENTRY GetShaderiv(GLuint shader, GLenum pname, GLint* params)
 
 void GL_APIENTRY GetShaderInfoLog(GLuint shader, GLsizei bufsize, GLsizei* length, GLchar* infolog)
 {
-    EVENT("(GLuint shader = %d, GLsizei bufsize = %d, GLsizei* length = 0x%0.8p, GLchar* infolog = 0x%0.8p)",
+    ENTRY_POINT_EVENT("(GLuint shader = %d, GLsizei bufsize = %d, GLsizei* length = 0x%0.8p, GLchar* infolog = 0x%0.8p)",
           shader, bufsize, length, infolog);
 
     Context *context = GetValidGlobalContext();
@@ -2357,7 +2360,7 @@ void GL_APIENTRY GetShaderInfoLog(GLuint shader, GLsizei bufsize, GLsizei* lengt
 
 void GL_APIENTRY GetShaderPrecisionFormat(GLenum shadertype, GLenum precisiontype, GLint* range, GLint* precision)
 {
-    EVENT("(GLenum shadertype = 0x%X, GLenum precisiontype = 0x%X, GLint* range = 0x%0.8p, GLint* precision = 0x%0.8p)",
+    ENTRY_POINT_EVENT("(GLenum shadertype = 0x%X, GLenum precisiontype = 0x%X, GLint* range = 0x%0.8p, GLint* precision = 0x%0.8p)",
           shadertype, precisiontype, range, precision);
 
     Context *context = GetValidGlobalContext();
@@ -2404,7 +2407,7 @@ void GL_APIENTRY GetShaderPrecisionFormat(GLenum shadertype, GLenum precisiontyp
 
 void GL_APIENTRY GetShaderSource(GLuint shader, GLsizei bufsize, GLsizei* length, GLchar* source)
 {
-    EVENT("(GLuint shader = %d, GLsizei bufsize = %d, GLsizei* length = 0x%0.8p, GLchar* source = 0x%0.8p)",
+    ENTRY_POINT_EVENT("(GLuint shader = %d, GLsizei bufsize = %d, GLsizei* length = 0x%0.8p, GLchar* source = 0x%0.8p)",
           shader, bufsize, length, source);
 
     Context *context = GetValidGlobalContext();
@@ -2430,7 +2433,7 @@ void GL_APIENTRY GetShaderSource(GLuint shader, GLsizei bufsize, GLsizei* length
 
 const GLubyte *GL_APIENTRY GetString(GLenum name)
 {
-    EVENT("(GLenum name = 0x%X)", name);
+    ENTRY_POINT_EVENT("(GLenum name = 0x%X)", name);
 
     Context *context = GetValidGlobalContext();
 
@@ -2476,7 +2479,7 @@ const GLubyte *GL_APIENTRY GetString(GLenum name)
 
 void GL_APIENTRY GetTexParameterfv(GLenum target, GLenum pname, GLfloat* params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfloat* params = 0x%0.8p)", target, pname, params);
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLfloat* params = 0x%0.8p)", target, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2608,7 +2611,7 @@ void GL_APIENTRY GetTexParameterfv(GLenum target, GLenum pname, GLfloat* params)
 
 void GL_APIENTRY GetTexParameteriv(GLenum target, GLenum pname, GLint* params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint* params = 0x%0.8p)", target, pname, params);
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint* params = 0x%0.8p)", target, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2740,7 +2743,7 @@ void GL_APIENTRY GetTexParameteriv(GLenum target, GLenum pname, GLint* params)
 
 void GL_APIENTRY GetUniformfv(GLuint program, GLint location, GLfloat* params)
 {
-    EVENT("(GLuint program = %d, GLint location = %d, GLfloat* params = 0x%0.8p)", program, location, params);
+    ENTRY_POINT_EVENT("(GLuint program = %d, GLint location = %d, GLfloat* params = 0x%0.8p)", program, location, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2759,7 +2762,7 @@ void GL_APIENTRY GetUniformfv(GLuint program, GLint location, GLfloat* params)
 
 void GL_APIENTRY GetUniformiv(GLuint program, GLint location, GLint* params)
 {
-    EVENT("(GLuint program = %d, GLint location = %d, GLint* params = 0x%0.8p)", program, location, params);
+    ENTRY_POINT_EVENT("(GLuint program = %d, GLint location = %d, GLint* params = 0x%0.8p)", program, location, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2778,7 +2781,7 @@ void GL_APIENTRY GetUniformiv(GLuint program, GLint location, GLint* params)
 
 GLint GL_APIENTRY GetUniformLocation(GLuint program, const GLchar* name)
 {
-    EVENT("(GLuint program = %d, const GLchar* name = 0x%0.8p)", program, name);
+    ENTRY_POINT_EVENT("(GLuint program = %d, const GLchar* name = 0x%0.8p)", program, name);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2818,7 +2821,7 @@ GLint GL_APIENTRY GetUniformLocation(GLuint program, const GLchar* name)
 
 void GL_APIENTRY GetVertexAttribfv(GLuint index, GLenum pname, GLfloat* params)
 {
-    EVENT("(GLuint index = %d, GLenum pname = 0x%X, GLfloat* params = 0x%0.8p)", index, pname, params);
+    ENTRY_POINT_EVENT("(GLuint index = %d, GLenum pname = 0x%X, GLfloat* params = 0x%0.8p)", index, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2852,7 +2855,7 @@ void GL_APIENTRY GetVertexAttribfv(GLuint index, GLenum pname, GLfloat* params)
 
 void GL_APIENTRY GetVertexAttribiv(GLuint index, GLenum pname, GLint* params)
 {
-    EVENT("(GLuint index = %d, GLenum pname = 0x%X, GLint* params = 0x%0.8p)", index, pname, params);
+    ENTRY_POINT_EVENT("(GLuint index = %d, GLenum pname = 0x%X, GLint* params = 0x%0.8p)", index, pname, params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2888,7 +2891,7 @@ void GL_APIENTRY GetVertexAttribiv(GLuint index, GLenum pname, GLint* params)
 
 void GL_APIENTRY GetVertexAttribPointerv(GLuint index, GLenum pname, GLvoid** pointer)
 {
-    EVENT("(GLuint index = %d, GLenum pname = 0x%X, GLvoid** pointer = 0x%0.8p)", index, pname, pointer);
+    ENTRY_POINT_EVENT("(GLuint index = %d, GLenum pname = 0x%X, GLvoid** pointer = 0x%0.8p)", index, pname, pointer);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2911,7 +2914,7 @@ void GL_APIENTRY GetVertexAttribPointerv(GLuint index, GLenum pname, GLvoid** po
 
 void GL_APIENTRY Hint(GLenum target, GLenum mode)
 {
-    EVENT("(GLenum target = 0x%X, GLenum mode = 0x%X)", target, mode);
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLenum mode = 0x%X)", target, mode);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2947,7 +2950,7 @@ void GL_APIENTRY Hint(GLenum target, GLenum mode)
 
 GLboolean GL_APIENTRY IsBuffer(GLuint buffer)
 {
-    EVENT("(GLuint buffer = %d)", buffer);
+    ENTRY_POINT_EVENT("(GLuint buffer = %d)", buffer);
 
     Context *context = GetValidGlobalContext();
     if (context && buffer)
@@ -2965,7 +2968,7 @@ GLboolean GL_APIENTRY IsBuffer(GLuint buffer)
 
 GLboolean GL_APIENTRY IsEnabled(GLenum cap)
 {
-    EVENT("(GLenum cap = 0x%X)", cap);
+    ENTRY_POINT_EVENT("(GLenum cap = 0x%X)", cap);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -2984,7 +2987,7 @@ GLboolean GL_APIENTRY IsEnabled(GLenum cap)
 
 GLboolean GL_APIENTRY IsFramebuffer(GLuint framebuffer)
 {
-    EVENT("(GLuint framebuffer = %d)", framebuffer);
+    ENTRY_POINT_EVENT("(GLuint framebuffer = %d)", framebuffer);
 
     Context *context = GetValidGlobalContext();
     if (context && framebuffer)
@@ -3002,7 +3005,7 @@ GLboolean GL_APIENTRY IsFramebuffer(GLuint framebuffer)
 
 GLboolean GL_APIENTRY IsProgram(GLuint program)
 {
-    EVENT("(GLuint program = %d)", program);
+    ENTRY_POINT_EVENT("(GLuint program = %d)", program);
 
     Context *context = GetValidGlobalContext();
     if (context && program)
@@ -3020,7 +3023,7 @@ GLboolean GL_APIENTRY IsProgram(GLuint program)
 
 GLboolean GL_APIENTRY IsRenderbuffer(GLuint renderbuffer)
 {
-    EVENT("(GLuint renderbuffer = %d)", renderbuffer);
+    ENTRY_POINT_EVENT("(GLuint renderbuffer = %d)", renderbuffer);
 
     Context *context = GetValidGlobalContext();
     if (context && renderbuffer)
@@ -3038,7 +3041,7 @@ GLboolean GL_APIENTRY IsRenderbuffer(GLuint renderbuffer)
 
 GLboolean GL_APIENTRY IsShader(GLuint shader)
 {
-    EVENT("(GLuint shader = %d)", shader);
+    ENTRY_POINT_EVENT("(GLuint shader = %d)", shader);
 
     Context *context = GetValidGlobalContext();
     if (context && shader)
@@ -3056,7 +3059,7 @@ GLboolean GL_APIENTRY IsShader(GLuint shader)
 
 GLboolean GL_APIENTRY IsTexture(GLuint texture)
 {
-    EVENT("(GLuint texture = %d)", texture);
+    ENTRY_POINT_EVENT("(GLuint texture = %d)", texture);
 
     Context *context = GetValidGlobalContext();
     if (context && texture)
@@ -3074,7 +3077,7 @@ GLboolean GL_APIENTRY IsTexture(GLuint texture)
 
 void GL_APIENTRY LineWidth(GLfloat width)
 {
-    EVENT("(GLfloat width = %f)", width);
+    ENTRY_POINT_EVENT("(GLfloat width = %f)", width);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3091,7 +3094,7 @@ void GL_APIENTRY LineWidth(GLfloat width)
 
 void GL_APIENTRY LinkProgram(GLuint program)
 {
-    EVENT("(GLuint program = %d)", program);
+    ENTRY_POINT_EVENT("(GLuint program = %d)", program);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3123,7 +3126,7 @@ void GL_APIENTRY LinkProgram(GLuint program)
 
 void GL_APIENTRY PixelStorei(GLenum pname, GLint param)
 {
-    EVENT("(GLenum pname = 0x%X, GLint param = %d)", pname, param);
+    ENTRY_POINT_EVENT("(GLenum pname = 0x%X, GLint param = %d)", pname, param);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3179,7 +3182,7 @@ void GL_APIENTRY PixelStorei(GLenum pname, GLint param)
 
 void GL_APIENTRY PolygonOffset(GLfloat factor, GLfloat units)
 {
-    EVENT("(GLfloat factor = %f, GLfloat units = %f)", factor, units);
+    ENTRY_POINT_EVENT("(GLfloat factor = %f, GLfloat units = %f)", factor, units);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3191,7 +3194,7 @@ void GL_APIENTRY PolygonOffset(GLfloat factor, GLfloat units)
 void GL_APIENTRY ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height,
                             GLenum format, GLenum type, GLvoid* pixels)
 {
-    EVENT("(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, "
+    ENTRY_POINT_EVENT("(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d, "
           "GLenum format = 0x%X, GLenum type = 0x%X, GLvoid* pixels = 0x%0.8p)",
           x, y, width, height, format, type,  pixels);
 
@@ -3225,7 +3228,7 @@ void GL_APIENTRY ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height,
 
 void GL_APIENTRY ReleaseShaderCompiler(void)
 {
-    EVENT("()");
+    ENTRY_POINT_EVENT("()");
 
     Context *context = GetValidGlobalContext();
 
@@ -3243,7 +3246,7 @@ void GL_APIENTRY ReleaseShaderCompiler(void)
 
 void GL_APIENTRY RenderbufferStorage(GLenum target, GLenum internalformat, GLsizei width, GLsizei height)
 {
-    EVENT("(GLenum target = 0x%X, GLenum internalformat = 0x%X, GLsizei width = %d, GLsizei height = %d)",
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLenum internalformat = 0x%X, GLsizei width = %d, GLsizei height = %d)",
           target, internalformat, width, height);
 
     Context *context = GetValidGlobalContext();
@@ -3267,7 +3270,7 @@ void GL_APIENTRY RenderbufferStorage(GLenum target, GLenum internalformat, GLsiz
 
 void GL_APIENTRY SampleCoverage(GLclampf value, GLboolean invert)
 {
-    EVENT("(GLclampf value = %f, GLboolean invert = %u)", value, invert);
+    ENTRY_POINT_EVENT("(GLclampf value = %f, GLboolean invert = %u)", value, invert);
 
     Context* context = GetValidGlobalContext();
 
@@ -3279,7 +3282,7 @@ void GL_APIENTRY SampleCoverage(GLclampf value, GLboolean invert)
 
 void GL_APIENTRY Scissor(GLint x, GLint y, GLsizei width, GLsizei height)
 {
-    EVENT("(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d)", x, y, width, height);
+    ENTRY_POINT_EVENT("(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d)", x, y, width, height);
 
     Context* context = GetValidGlobalContext();
     if (context)
@@ -3296,7 +3299,7 @@ void GL_APIENTRY Scissor(GLint x, GLint y, GLsizei width, GLsizei height)
 
 void GL_APIENTRY ShaderBinary(GLsizei n, const GLuint* shaders, GLenum binaryformat, const GLvoid* binary, GLsizei length)
 {
-    EVENT("(GLsizei n = %d, const GLuint* shaders = 0x%0.8p, GLenum binaryformat = 0x%X, "
+    ENTRY_POINT_EVENT("(GLsizei n = %d, const GLuint* shaders = 0x%0.8p, GLenum binaryformat = 0x%X, "
           "const GLvoid* binary = 0x%0.8p, GLsizei length = %d)",
           n, shaders, binaryformat, binary, length);
 
@@ -3317,7 +3320,7 @@ void GL_APIENTRY ShaderBinary(GLsizei n, const GLuint* shaders, GLenum binaryfor
 
 void GL_APIENTRY ShaderSource(GLuint shader, GLsizei count, const GLchar* const* string, const GLint* length)
 {
-    EVENT("(GLuint shader = %d, GLsizei count = %d, const GLchar** string = 0x%0.8p, const GLint* length = 0x%0.8p)",
+    ENTRY_POINT_EVENT("(GLuint shader = %d, GLsizei count = %d, const GLchar** string = 0x%0.8p, const GLint* length = 0x%0.8p)",
           shader, count, string, length);
 
     Context *context = GetValidGlobalContext();
@@ -3356,7 +3359,7 @@ void GL_APIENTRY StencilFunc(GLenum func, GLint ref, GLuint mask)
 
 void GL_APIENTRY StencilFuncSeparate(GLenum face, GLenum func, GLint ref, GLuint mask)
 {
-    EVENT("(GLenum face = 0x%X, GLenum func = 0x%X, GLint ref = %d, GLuint mask = %d)", face, func, ref, mask);
+    ENTRY_POINT_EVENT("(GLenum face = 0x%X, GLenum func = 0x%X, GLint ref = %d, GLuint mask = %d)", face, func, ref, mask);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3409,7 +3412,7 @@ void GL_APIENTRY StencilMask(GLuint mask)
 
 void GL_APIENTRY StencilMaskSeparate(GLenum face, GLuint mask)
 {
-    EVENT("(GLenum face = 0x%X, GLuint mask = %d)", face, mask);
+    ENTRY_POINT_EVENT("(GLenum face = 0x%X, GLuint mask = %d)", face, mask);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3445,7 +3448,7 @@ void GL_APIENTRY StencilOp(GLenum fail, GLenum zfail, GLenum zpass)
 
 void GL_APIENTRY StencilOpSeparate(GLenum face, GLenum fail, GLenum zfail, GLenum zpass)
 {
-    EVENT("(GLenum face = 0x%X, GLenum fail = 0x%X, GLenum zfail = 0x%X, GLenum zpas = 0x%Xs)",
+    ENTRY_POINT_EVENT("(GLenum face = 0x%X, GLenum fail = 0x%X, GLenum zfail = 0x%X, GLenum zpas = 0x%Xs)",
           face, fail, zfail, zpass);
 
     Context *context = GetValidGlobalContext();
@@ -3529,7 +3532,7 @@ void GL_APIENTRY StencilOpSeparate(GLenum face, GLenum fail, GLenum zfail, GLenu
 void GL_APIENTRY TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height,
                             GLint border, GLenum format, GLenum type, const GLvoid* pixels)
 {
-    EVENT("(GLenum target = 0x%X, GLint level = %d, GLint internalformat = %d, GLsizei width = %d, GLsizei height = %d, "
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLint level = %d, GLint internalformat = %d, GLsizei width = %d, GLsizei height = %d, "
           "GLint border = %d, GLenum format = 0x%X, GLenum type = 0x%X, const GLvoid* pixels = 0x%0.8p)",
           target, level, internalformat, width, height, border, format, type, pixels);
 
@@ -3564,7 +3567,7 @@ void GL_APIENTRY TexImage2D(GLenum target, GLint level, GLint internalformat, GL
 
 void GL_APIENTRY TexParameterf(GLenum target, GLenum pname, GLfloat param)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint param = %f)", target, pname, param);
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint param = %f)", target, pname, param);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3613,7 +3616,7 @@ void GL_APIENTRY TexParameterfv(GLenum target, GLenum pname, const GLfloat* para
 
 void GL_APIENTRY TexParameteri(GLenum target, GLenum pname, GLint param)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint param = %d)", target, pname, param);
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint param = %d)", target, pname, param);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3663,7 +3666,7 @@ void GL_APIENTRY TexParameteriv(GLenum target, GLenum pname, const GLint* params
 void GL_APIENTRY TexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height,
                                GLenum format, GLenum type, const GLvoid* pixels)
 {
-    EVENT("(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, "
+    ENTRY_POINT_EVENT("(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, "
           "GLsizei width = %d, GLsizei height = %d, GLenum format = 0x%X, GLenum type = 0x%X, "
           "const GLvoid* pixels = 0x%0.8p)",
            target, level, xoffset, yoffset, width, height, format, type, pixels);
@@ -3710,7 +3713,7 @@ void GL_APIENTRY Uniform1f(GLint location, GLfloat x)
 
 void GL_APIENTRY Uniform1fv(GLint location, GLsizei count, const GLfloat* v)
 {
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat* v = 0x%0.8p)", location, count, v);
+    ENTRY_POINT_EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat* v = 0x%0.8p)", location, count, v);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3732,7 +3735,7 @@ void GL_APIENTRY Uniform1i(GLint location, GLint x)
 
 void GL_APIENTRY Uniform1iv(GLint location, GLsizei count, const GLint* v)
 {
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLint* v = 0x%0.8p)", location, count, v);
+    ENTRY_POINT_EVENT("(GLint location = %d, GLsizei count = %d, const GLint* v = 0x%0.8p)", location, count, v);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3756,7 +3759,7 @@ void GL_APIENTRY Uniform2f(GLint location, GLfloat x, GLfloat y)
 
 void GL_APIENTRY Uniform2fv(GLint location, GLsizei count, const GLfloat* v)
 {
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat* v = 0x%0.8p)", location, count, v);
+    ENTRY_POINT_EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat* v = 0x%0.8p)", location, count, v);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3780,7 +3783,7 @@ void GL_APIENTRY Uniform2i(GLint location, GLint x, GLint y)
 
 void GL_APIENTRY Uniform2iv(GLint location, GLsizei count, const GLint* v)
 {
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLint* v = 0x%0.8p)", location, count, v);
+    ENTRY_POINT_EVENT("(GLint location = %d, GLsizei count = %d, const GLint* v = 0x%0.8p)", location, count, v);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3804,7 +3807,7 @@ void GL_APIENTRY Uniform3f(GLint location, GLfloat x, GLfloat y, GLfloat z)
 
 void GL_APIENTRY Uniform3fv(GLint location, GLsizei count, const GLfloat* v)
 {
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat* v = 0x%0.8p)", location, count, v);
+    ENTRY_POINT_EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat* v = 0x%0.8p)", location, count, v);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3828,7 +3831,7 @@ void GL_APIENTRY Uniform3i(GLint location, GLint x, GLint y, GLint z)
 
 void GL_APIENTRY Uniform3iv(GLint location, GLsizei count, const GLint* v)
 {
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLint* v = 0x%0.8p)", location, count, v);
+    ENTRY_POINT_EVENT("(GLint location = %d, GLsizei count = %d, const GLint* v = 0x%0.8p)", location, count, v);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3852,7 +3855,7 @@ void GL_APIENTRY Uniform4f(GLint location, GLfloat x, GLfloat y, GLfloat z, GLfl
 
 void GL_APIENTRY Uniform4fv(GLint location, GLsizei count, const GLfloat* v)
 {
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat* v = 0x%0.8p)", location, count, v);
+    ENTRY_POINT_EVENT("(GLint location = %d, GLsizei count = %d, const GLfloat* v = 0x%0.8p)", location, count, v);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3876,7 +3879,7 @@ void GL_APIENTRY Uniform4i(GLint location, GLint x, GLint y, GLint z, GLint w)
 
 void GL_APIENTRY Uniform4iv(GLint location, GLsizei count, const GLint* v)
 {
-    EVENT("(GLint location = %d, GLsizei count = %d, const GLint* v = 0x%0.8p)", location, count, v);
+    ENTRY_POINT_EVENT("(GLint location = %d, GLsizei count = %d, const GLint* v = 0x%0.8p)", location, count, v);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3893,7 +3896,7 @@ void GL_APIENTRY Uniform4iv(GLint location, GLsizei count, const GLint* v)
 
 void GL_APIENTRY UniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value)
 {
-    EVENT("(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat* value = 0x%0.8p)",
+    ENTRY_POINT_EVENT("(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat* value = 0x%0.8p)",
           location, count, transpose, value);
 
     Context *context = GetValidGlobalContext();
@@ -3911,7 +3914,7 @@ void GL_APIENTRY UniformMatrix2fv(GLint location, GLsizei count, GLboolean trans
 
 void GL_APIENTRY UniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value)
 {
-    EVENT("(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat* value = 0x%0.8p)",
+    ENTRY_POINT_EVENT("(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat* value = 0x%0.8p)",
           location, count, transpose, value);
 
     Context *context = GetValidGlobalContext();
@@ -3929,7 +3932,7 @@ void GL_APIENTRY UniformMatrix3fv(GLint location, GLsizei count, GLboolean trans
 
 void GL_APIENTRY UniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value)
 {
-    EVENT("(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat* value = 0x%0.8p)",
+    ENTRY_POINT_EVENT("(GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, const GLfloat* value = 0x%0.8p)",
           location, count, transpose, value);
 
     Context *context = GetValidGlobalContext();
@@ -3947,7 +3950,7 @@ void GL_APIENTRY UniformMatrix4fv(GLint location, GLsizei count, GLboolean trans
 
 void GL_APIENTRY UseProgram(GLuint program)
 {
-    EVENT("(GLuint program = %d)", program);
+    ENTRY_POINT_EVENT("(GLuint program = %d)", program);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -3980,7 +3983,7 @@ void GL_APIENTRY UseProgram(GLuint program)
 
 void GL_APIENTRY ValidateProgram(GLuint program)
 {
-    EVENT("(GLuint program = %d)", program);
+    ENTRY_POINT_EVENT("(GLuint program = %d)", program);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4007,7 +4010,7 @@ void GL_APIENTRY ValidateProgram(GLuint program)
 
 void GL_APIENTRY VertexAttrib1f(GLuint index, GLfloat x)
 {
-    EVENT("(GLuint index = %d, GLfloat x = %f)", index, x);
+    ENTRY_POINT_EVENT("(GLuint index = %d, GLfloat x = %f)", index, x);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4025,7 +4028,7 @@ void GL_APIENTRY VertexAttrib1f(GLuint index, GLfloat x)
 
 void GL_APIENTRY VertexAttrib1fv(GLuint index, const GLfloat* values)
 {
-    EVENT("(GLuint index = %d, const GLfloat* values = 0x%0.8p)", index, values);
+    ENTRY_POINT_EVENT("(GLuint index = %d, const GLfloat* values = 0x%0.8p)", index, values);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4043,7 +4046,7 @@ void GL_APIENTRY VertexAttrib1fv(GLuint index, const GLfloat* values)
 
 void GL_APIENTRY VertexAttrib2f(GLuint index, GLfloat x, GLfloat y)
 {
-    EVENT("(GLuint index = %d, GLfloat x = %f, GLfloat y = %f)", index, x, y);
+    ENTRY_POINT_EVENT("(GLuint index = %d, GLfloat x = %f, GLfloat y = %f)", index, x, y);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4061,7 +4064,7 @@ void GL_APIENTRY VertexAttrib2f(GLuint index, GLfloat x, GLfloat y)
 
 void GL_APIENTRY VertexAttrib2fv(GLuint index, const GLfloat* values)
 {
-    EVENT("(GLuint index = %d, const GLfloat* values = 0x%0.8p)", index, values);
+    ENTRY_POINT_EVENT("(GLuint index = %d, const GLfloat* values = 0x%0.8p)", index, values);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4079,7 +4082,7 @@ void GL_APIENTRY VertexAttrib2fv(GLuint index, const GLfloat* values)
 
 void GL_APIENTRY VertexAttrib3f(GLuint index, GLfloat x, GLfloat y, GLfloat z)
 {
-    EVENT("(GLuint index = %d, GLfloat x = %f, GLfloat y = %f, GLfloat z = %f)", index, x, y, z);
+    ENTRY_POINT_EVENT("(GLuint index = %d, GLfloat x = %f, GLfloat y = %f, GLfloat z = %f)", index, x, y, z);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4097,7 +4100,7 @@ void GL_APIENTRY VertexAttrib3f(GLuint index, GLfloat x, GLfloat y, GLfloat z)
 
 void GL_APIENTRY VertexAttrib3fv(GLuint index, const GLfloat* values)
 {
-    EVENT("(GLuint index = %d, const GLfloat* values = 0x%0.8p)", index, values);
+    ENTRY_POINT_EVENT("(GLuint index = %d, const GLfloat* values = 0x%0.8p)", index, values);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4115,7 +4118,7 @@ void GL_APIENTRY VertexAttrib3fv(GLuint index, const GLfloat* values)
 
 void GL_APIENTRY VertexAttrib4f(GLuint index, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
-    EVENT("(GLuint index = %d, GLfloat x = %f, GLfloat y = %f, GLfloat z = %f, GLfloat w = %f)", index, x, y, z, w);
+    ENTRY_POINT_EVENT("(GLuint index = %d, GLfloat x = %f, GLfloat y = %f, GLfloat z = %f, GLfloat w = %f)", index, x, y, z, w);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4133,7 +4136,7 @@ void GL_APIENTRY VertexAttrib4f(GLuint index, GLfloat x, GLfloat y, GLfloat z, G
 
 void GL_APIENTRY VertexAttrib4fv(GLuint index, const GLfloat* values)
 {
-    EVENT("(GLuint index = %d, const GLfloat* values = 0x%0.8p)", index, values);
+    ENTRY_POINT_EVENT("(GLuint index = %d, const GLfloat* values = 0x%0.8p)", index, values);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -4150,7 +4153,7 @@ void GL_APIENTRY VertexAttrib4fv(GLuint index, const GLfloat* values)
 
 void GL_APIENTRY VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid* ptr)
 {
-    EVENT("(GLuint index = %d, GLint size = %d, GLenum type = 0x%X, "
+    ENTRY_POINT_EVENT("(GLuint index = %d, GLint size = %d, GLenum type = 0x%X, "
           "GLboolean normalized = %u, GLsizei stride = %d, const GLvoid* ptr = 0x%0.8p)",
           index, size, type, normalized, stride, ptr);
 
@@ -4225,7 +4228,7 @@ void GL_APIENTRY VertexAttribPointer(GLuint index, GLint size, GLenum type, GLbo
 
 void GL_APIENTRY Viewport(GLint x, GLint y, GLsizei width, GLsizei height)
 {
-    EVENT("(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d)", x, y, width, height);
+    ENTRY_POINT_EVENT("(GLint x = %d, GLint y = %d, GLsizei width = %d, GLsizei height = %d)", x, y, width, height);
 
     Context *context = GetValidGlobalContext();
     if (context)

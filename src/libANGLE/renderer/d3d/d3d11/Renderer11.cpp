@@ -31,6 +31,7 @@
 #include "libANGLE/renderer/d3d/d3d11/Blit11.h"
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Clear11.h"
+#include "libANGLE/renderer/d3d/d3d11/Debug11.h"
 #include "libANGLE/renderer/d3d/d3d11/Fence11.h"
 #include "libANGLE/renderer/d3d/d3d11/Framebuffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Image11.h"
@@ -2762,6 +2763,15 @@ FenceSyncImpl *Renderer11::createFenceSync()
 TransformFeedbackImpl* Renderer11::createTransformFeedback()
 {
     return new TransformFeedbackD3D();
+}
+
+DebugImpl *Renderer11::createDebug()
+{
+    ID3DUserDefinedAnnotation *debugAnnotation = d3d11::DynamicCastComObject<ID3DUserDefinedAnnotation>(mDeviceContext);
+    DebugImpl *debug = new Debug11(debugAnnotation);
+    SafeRelease(debugAnnotation);
+
+    return debug;
 }
 
 bool Renderer11::supportsFastCopyBufferToTexture(GLenum internalFormat) const

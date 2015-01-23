@@ -53,6 +53,7 @@ struct VertexAttribute;
 class VertexArray;
 class Sampler;
 class TransformFeedback;
+class Debug;
 
 class Context
 {
@@ -151,6 +152,8 @@ class Context
 
     Compiler *getCompiler() const;
 
+    Debug *getDebug() const;
+
     bool isSampler(GLuint samplerName) const;
 
     void getBooleanv(GLenum pname, GLboolean *params);
@@ -219,6 +222,9 @@ class Context
 
     // Shader compiler
     Compiler *mCompiler;
+
+    // Debugger
+    Debug *mDebug;
 
     rx::Renderer *const mRenderer;
     State mState;

@@ -13,6 +13,7 @@
 #include "common/platform.h"
 #include "libANGLE/Compiler.h"
 #include "libANGLE/Buffer.h"
+#include "libANGLE/Debug.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Fence.h"
 #include "libANGLE/Framebuffer.h"
@@ -121,6 +122,8 @@ Context::Context(int clientVersion, const Context *shareContext, rx::Renderer *r
     mRobustAccess = robustAccess;
 
     mCompiler = new Compiler(mRenderer->createCompiler(getData()));
+
+    mDebug = new Debug(mRenderer->createDebug());
 }
 
 Context::~Context()
@@ -165,6 +168,8 @@ Context::~Context()
     }
 
     SafeDelete(mCompiler);
+
+    SafeDelete(mDebug);
 }
 
 void Context::makeCurrent(egl::Surface *surface)
@@ -737,6 +742,11 @@ Texture *Context::getSamplerTexture(unsigned int sampler, GLenum type) const
 Compiler *Context::getCompiler() const
 {
     return mCompiler;
+}
+
+Debug *Context::getDebug() const
+{
+    return mDebug;
 }
 
 void Context::getBooleanv(GLenum pname, GLboolean *params)

@@ -53,6 +53,7 @@ class CompilerImpl;
 struct TranslatedIndexData;
 struct Workarounds;
 class DisplayImpl;
+class DebugImpl;
 
 struct ConfigDesc
 {
@@ -116,6 +117,9 @@ class Renderer
 
     // Transform Feedback creation
     virtual TransformFeedbackImpl *createTransformFeedback() = 0;
+
+    // Debug creation
+    virtual DebugImpl *createDebug() = 0;
 
     // lost device
     //TODO(jmadill): investigate if this stuff is necessary in GL
