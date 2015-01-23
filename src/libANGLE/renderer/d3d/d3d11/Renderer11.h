@@ -181,6 +181,9 @@ class Renderer11 : public RendererD3D
     // Transform Feedback creation
     virtual TransformFeedbackImpl* createTransformFeedback();
 
+    // Debug creation
+    DebugImpl *createDebug() override;
+
     // D3D11-renderer specific methods
     ID3D11Device *getDevice() { return mDevice; }
     ID3D11DeviceContext *getDeviceContext() { return mDeviceContext; };

@@ -32,6 +32,7 @@
 #include "libANGLE/renderer/d3d/TransformFeedbackD3D.h"
 #include "libANGLE/renderer/d3d/d3d9/Blit9.h"
 #include "libANGLE/renderer/d3d/d3d9/Buffer9.h"
+#include "libANGLE/renderer/d3d/d3d9/Debug9.h"
 #include "libANGLE/renderer/d3d/d3d9/Fence9.h"
 #include "libANGLE/renderer/d3d/d3d9/Framebuffer9.h"
 #include "libANGLE/renderer/d3d/d3d9/Image9.h"
@@ -694,6 +695,11 @@ FenceSyncImpl *Renderer9::createFenceSync()
 TransformFeedbackImpl* Renderer9::createTransformFeedback()
 {
     return new TransformFeedbackD3D();
+}
+
+DebugImpl *Renderer9::createDebug()
+{
+    return new Debug9();
 }
 
 bool Renderer9::supportsFastCopyBufferToTexture(GLenum internalFormat) const

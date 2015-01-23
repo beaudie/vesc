@@ -13,6 +13,7 @@
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Compiler.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Renderbuffer.h"
@@ -31,6 +32,9 @@
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "common/version.h"
+
+#undef EVENT
+#define EVENT(message, ...) ScopedEvent scopedENTRY_POINT_EVENT(GetValidGlobalContext()->getDebug(), "%s" message "\n", __FUNCTION__, __VA_ARGS__)
 
 namespace gl
 {
