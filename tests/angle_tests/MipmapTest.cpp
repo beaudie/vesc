@@ -414,7 +414,7 @@ TYPED_TEST(MipmapTest, DISABLED_ThreeLevelsInitData)
 // To do this, D3D11 has to convert the TextureStorage into a renderable one.
 // This test ensures that the conversion works correctly.
 // In particular, on D3D11 Feature Level 9_3 it ensures that both the zero LOD workaround texture AND the 'normal' texture are copied during conversion.
-TYPED_TEST(MipmapTest, DISABLED_GenerateMipmapFromInitDataThenRender)
+TYPED_TEST(MipmapTest, GenerateMipmapFromInitDataThenRender)
 {
     // Pass in initial data so the texture is blue.
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getWindowWidth(), getWindowHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, mLevelZeroBlueInitData);
@@ -469,7 +469,7 @@ TYPED_TEST(MipmapTest, DISABLED_GenerateMipmapFromInitDataThenRender)
 // This test ensures that mips are correctly generated from a rendered image.
 // In particular, on D3D11 Feature Level 9_3, the clear call will be performed on the zero-level texture, rather than the mipped one.
 // The test ensures that the zero-level texture is correctly copied into the mipped texture before the mipmaps are generated.
-TYPED_TEST(MipmapTest, DISABLED_GenerateMipmapFromRenderedImage)
+TYPED_TEST(MipmapTest, GenerateMipmapFromRenderedImage)
 {
     // Bind the offscreen framebuffer/texture.
     glBindFramebuffer(GL_FRAMEBUFFER, mOffscreenFramebuffer);
@@ -500,7 +500,7 @@ TYPED_TEST(MipmapTest, DISABLED_GenerateMipmapFromRenderedImage)
 
 // Test to ensure that rendering to a mipmapped texture works, regardless of whether mipmaps are enabled or not.
 // TODO: This test hits a texture rebind bug in the D3D11 renderer. Fix this.
-TYPED_TEST(MipmapTest, DISABLED_RenderOntoLevelZeroAfterGenerateMipmap)
+TYPED_TEST(MipmapTest, RenderOntoLevelZeroAfterGenerateMipmap)
 {
     // Bind the offscreen texture/framebuffer.
     glBindFramebuffer(GL_FRAMEBUFFER, mOffscreenFramebuffer);
@@ -569,7 +569,7 @@ TYPED_TEST(MipmapTest, DISABLED_RenderOntoLevelZeroAfterGenerateMipmap)
 
 // This test ensures that the level-zero workaround for TextureCubes (on D3D11 Feature Level 9_3)
 // works as expected. It tests enabling/disabling mipmaps, generating mipmaps, and rendering to level zero.
-TYPED_TEST(MipmapTest, DISABLED_TextureCubeGeneralLevelZero)
+TYPED_TEST(MipmapTest, TextureCubeGeneralLevelZero)
 {
     GLfloat vertexLocations[] =
     {
@@ -609,8 +609,6 @@ TYPED_TEST(MipmapTest, DISABLED_TextureCubeGeneralLevelZero)
     EXPECT_PIXEL_EQ(0, 0, 0, 0, 255, 255);
 
     // Now clear the negative-Y face of the cube to red.
-    GLuint mOffscreenFramebuffer;
-    glGenFramebuffers(0, &mOffscreenFramebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, mOffscreenFramebuffer);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, mOffscreenTextureCube, 0);
     ASSERT_EQ(glCheckFramebufferStatus(GL_FRAMEBUFFER), GL_FRAMEBUFFER_COMPLETE);
@@ -645,7 +643,7 @@ TYPED_TEST(MipmapTest, DISABLED_TextureCubeGeneralLevelZero)
 }
 
 // This test ensures that rendering to level-zero of a TextureCube works as expected.
-TYPED_TEST(MipmapTest, DISABLED_TextureCubeRenderToLevelZero)
+TYPED_TEST(MipmapTest, TextureCubeRenderToLevelZero)
 {
     GLfloat vertexLocations[] =
     {
@@ -671,8 +669,6 @@ TYPED_TEST(MipmapTest, DISABLED_TextureCubeRenderToLevelZero)
     EXPECT_PIXEL_EQ(0, 0, 0, 0, 255, 255);
 
     // Now clear the negative-Y face of the cube to red.
-    GLuint mOffscreenFramebuffer;
-    glGenFramebuffers(0, &mOffscreenFramebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, mOffscreenFramebuffer);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, mOffscreenTextureCube, 0);
     ASSERT_EQ(glCheckFramebufferStatus(GL_FRAMEBUFFER), GL_FRAMEBUFFER_COMPLETE);
@@ -699,7 +695,7 @@ TYPED_TEST(MipmapTest, DISABLED_TextureCubeRenderToLevelZero)
 
 // Creates a mipmapped 2D array texture with three layers, and calls ANGLE's GenerateMipmap.
 // Then tests if the mipmaps are rendered correctly for all three layers.
-TYPED_TEST(MipmapTestES3, DISABLED_MipmapsForTextureArray)
+TYPED_TEST(MipmapTestES3, MipmapsForTextureArray)
 {
     int px = getWindowWidth() / 2;
     int py = getWindowHeight() / 2;
