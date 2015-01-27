@@ -50,7 +50,7 @@ class ImageD3D
 
     virtual bool redefine(GLenum target, GLenum internalformat, const gl::Extents &size, bool forceRelease) = 0;
 
-    virtual gl::Error loadData(const gl::Box &area, GLint unpackAlignment, GLenum type, const void *input) = 0;
+    virtual gl::Error loadData(const gl::Box &area, GLint unpackAlignment, GLint unpackRowLength, GLenum type, const void *input) = 0;
     virtual gl::Error loadCompressedData(const gl::Box &area, const void *input) = 0;
 
     virtual gl::Error setManagedSurface2D(TextureStorage *storage, int level) { return gl::Error(GL_NO_ERROR); };

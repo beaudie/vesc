@@ -1128,6 +1128,16 @@ GLint State::getUnpackAlignment() const
     return mUnpack.alignment;
 }
 
+void State::setUnpackRowLength(GLint rowLength)
+{
+    mUnpack.rowLength = rowLength;
+}
+
+GLint State::getUnpackRowLength() const
+{
+    return mUnpack.rowLength;
+}
+
 const PixelUnpackState &State::getUnpackState() const
 {
     return mUnpack;
