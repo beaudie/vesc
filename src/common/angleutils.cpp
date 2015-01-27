@@ -10,6 +10,14 @@
 #include <stdio.h>
 #include <vector>
 
+#ifdef ANGLE_PLATFORM_WINDOWS
+// The D3D11 renderer compiles the pixel and vertex shaders on different threads.
+// That code uses FormatString(), so FormatString() must be made thread safe.
+#include <mutex>
+
+std::mutex formatStringMutex;
+#endif
+
 size_t FormatStringIntoVector(const char *fmt, va_list vararg, std::vector<char>& outBuffer)
 {
     // Attempt to just print to the current buffer
@@ -30,6 +38,11 @@ size_t FormatStringIntoVector(const char *fmt, va_list vararg, std::vector<char>
 std::string FormatString(const char *fmt, va_list vararg)
 {
     static std::vector<char> buffer(512);
+
+#ifdef ANGLE_PLATFORM_WINDOWS
+    // buffer isn't thread-safe
+    std::lock_guard<std::mutex> lock(formatStringMutex);
+#endif
 
     size_t len = FormatStringIntoVector(fmt, vararg, buffer);
     return std::string(&buffer[0], len);
