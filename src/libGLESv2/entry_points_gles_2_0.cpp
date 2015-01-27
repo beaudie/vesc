@@ -27,6 +27,7 @@
 #include "libANGLE/validationES2.h"
 #include "libANGLE/validationES3.h"
 #include "libANGLE/queryconversions.h"
+#include "libANGLE/queryutils.h"
 
 #include "common/debug.h"
 #include "common/utilities.h"

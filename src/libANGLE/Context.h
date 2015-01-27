@@ -175,6 +175,7 @@ class Context
 
     GLenum getError();
     GLenum getResetStatus();
+    GLenum getResetNotificationStrategy() const;
     virtual bool isResetNotificationEnabled();
 
     virtual int getClientVersion() const;

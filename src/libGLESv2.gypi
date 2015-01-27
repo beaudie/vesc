@@ -107,6 +107,8 @@
             'libANGLE/formatutils.h',
             'libANGLE/queryconversions.cpp',
             'libANGLE/queryconversions.h',
+            'libANGLE/queryutils.cpp',
+            'libANGLE/queryutils.h',
             'libANGLE/renderer/BufferImpl.h',
             'libANGLE/renderer/CompilerImpl.h',
             'libANGLE/renderer/DisplayImpl.cpp',

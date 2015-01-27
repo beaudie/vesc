@@ -228,6 +228,21 @@ void State::setClearStencil(int stencil)
     mStencilClearValue = stencil;
 }
 
+const ColorF &State::getColorClearValue() const
+{
+    return mColorClearValue;
+}
+
+float State::getDepthClearValue() const
+{
+    return mDepthClearValue;
+}
+
+int State::getStencilClearValue() const
+{
+    return mStencilClearValue;
+}
+
 ClearParameters State::getClearParameters(GLbitfield mask) const
 {
     ClearParameters clearParams;
@@ -936,9 +951,9 @@ void State::setArrayBufferBinding(Buffer *buffer)
     mArrayBuffer.set(buffer);
 }
 
-GLuint State::getArrayBufferId() const
+Buffer *State::getArrayBuffer() const
 {
-    return mArrayBuffer.id();
+    return mArrayBuffer.get();
 }
 
 bool State::removeArrayBufferBinding(GLuint buffer)
@@ -1022,6 +1037,16 @@ void State::setCopyWriteBufferBinding(Buffer *buffer)
     mCopyWriteBuffer.set(buffer);
 }
 
+Buffer *State::getCopyReadBuffer() const
+{
+    return mCopyReadBuffer.get();
+}
+
+Buffer *State::getCopyWriteBuffer() const
+{
+    return mCopyWriteBuffer.get();
+}
+
 void State::setPixelPackBufferBinding(Buffer *buffer)
 {
     mPack.pixelBuffer.set(buffer);
@@ -1030,6 +1055,16 @@ void State::setPixelPackBufferBinding(Buffer *buffer)
 void State::setPixelUnpackBufferBinding(Buffer *buffer)
 {
     mUnpack.pixelBuffer.set(buffer);
+}
+
+Buffer *State::getPixelPackBuffer() const
+{
+    return mPack.pixelBuffer.get();
+}
+
+Buffer *State::getPixelUnpackuffer() const
+{
+    return mUnpack.pixelBuffer.get();
 }
 
 Buffer *State::getTargetBuffer(GLenum target) const

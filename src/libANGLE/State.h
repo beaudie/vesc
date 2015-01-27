@@ -47,6 +47,9 @@ class State
     void setClearColor(float red, float green, float blue, float alpha);
     void setClearDepth(float depth);
     void setClearStencil(int stencil);
+    const ColorF &getColorClearValue() const;
+    float getDepthClearValue() const;
+    int getStencilClearValue() const;
     ClearParameters getClearParameters(GLbitfield mask) const;
 
     // Write mask manipulation
@@ -184,7 +187,7 @@ class State
     //// Typed buffer binding point manipulation ////
     // GL_ARRAY_BUFFER
     void setArrayBufferBinding(Buffer *buffer);
-    GLuint getArrayBufferId() const;
+    Buffer *getArrayBuffer() const;
     bool removeArrayBufferBinding(GLuint buffer);
 
     // GL_UNIFORM_BUFFER - Both indexed and generic targets
@@ -204,10 +207,14 @@ class State
     // GL_COPY_[READ/WRITE]_BUFFER
     void setCopyReadBufferBinding(Buffer *buffer);
     void setCopyWriteBufferBinding(Buffer *buffer);
+    Buffer *getCopyReadBuffer() const;
+    Buffer *getCopyWriteBuffer() const;
 
     // GL_PIXEL[PACK/UNPACK]_BUFFER
     void setPixelPackBufferBinding(Buffer *buffer);
     void setPixelUnpackBufferBinding(Buffer *buffer);
+    Buffer *getPixelPackBuffer() const;
+    Buffer *getPixelUnpackuffer() const;
 
     // Retrieve typed buffer by target (non-indexed)
     Buffer *getTargetBuffer(GLenum target) const;
