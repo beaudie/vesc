@@ -1264,6 +1264,11 @@ GLenum Context::getResetStatus()
     return status;
 }
 
+GLenum Context::getResetNotificationStrategy() const
+{
+    return mResetStrategy;
+}
+
 bool Context::isResetNotificationEnabled()
 {
     return (mResetStrategy == GL_LOSE_CONTEXT_ON_RESET_EXT);
