@@ -21,8 +21,10 @@ class Framebuffer11 : public FramebufferD3D
     Framebuffer11(Renderer11 *renderer);
     virtual ~Framebuffer11();
 
+    static const Framebuffer11 *makeFramebuffer11(const FramebufferImpl *framebuffer);
+
     // Invalidate the cached swizzles of all bound texture attachments.
-    void invalidateSwizzles();
+    gl::Error invalidateSwizzles() const;
 
   private:
     gl::Error clear(const gl::State &state, const gl::ClearParameters &clearParams) override;
