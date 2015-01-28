@@ -585,6 +585,7 @@ void Context::bindIndexedTransformFeedbackBuffer(GLuint buffer, GLuint index, GL
     mResourceManager->checkBufferAllocation(buffer);
 
     mState.setIndexedTransformFeedbackBufferBinding(index, getBuffer(buffer), offset, size);
+    mRenderer->markTransformFeedbackOffsetDirty(index);
 }
 
 void Context::bindCopyReadBuffer(GLuint buffer)

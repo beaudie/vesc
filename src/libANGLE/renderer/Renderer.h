@@ -110,6 +110,9 @@ class Renderer
     // Transform Feedback creation
     virtual TransformFeedbackImpl *createTransformFeedback() = 0;
 
+    // Transform feedback offset
+    virtual void markTransformFeedbackOffsetDirty(GLuint index) = 0;
+
     // lost device
     //TODO(jmadill): investigate if this stuff is necessary in GL
     virtual void notifyDeviceLost() = 0;
