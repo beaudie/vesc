@@ -1385,6 +1385,11 @@ void Renderer9::applyTransformFeedbackBuffers(const gl::State& state)
     UNREACHABLE();
 }
 
+void Renderer9::markTransformFeedbackOffsetDirty(GLuint index)
+{
+    UNREACHABLE();
+}
+
 gl::Error Renderer9::drawArrays(const gl::Data &data, GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive, bool usesPointSize)
 {
     ASSERT(!transformFeedbackActive);
