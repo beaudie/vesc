@@ -77,24 +77,34 @@ TextureD3D::TextureD3D(RendererD3D *renderer)
 TextureD3D::~TextureD3D()
 {
 }
-
 TextureD3D *TextureD3D::makeTextureD3D(TextureImpl *texture)
 {
     ASSERT(HAS_DYNAMIC_TYPE(TextureD3D*, texture));
     return static_cast<TextureD3D*>(texture);
 }
 
-TextureStorage *TextureD3D::getNativeTexture()
+gl::Error TextureD3D::getNativeTexture(TextureStorage **outStorage)
 {
     // ensure the underlying texture is created
-    initializeStorage(false);
+    gl::Error error = initializeStorage(false);
+    if (error.isError())
+    {
+        return error;
+    }
 
     if (mTexStorage)
     {
-        updateStorage();
+        error = updateStorage();
+        if (error.isError())
+        {
+            return error;
+        }
     }
 
-    return mTexStorage;
+    ASSERT(outStorage);
+
+    *outStorage = mTexStorage;
+    return gl::Error(GL_NO_ERROR);
 }
 
 GLint TextureD3D::getBaseLevelWidth() const

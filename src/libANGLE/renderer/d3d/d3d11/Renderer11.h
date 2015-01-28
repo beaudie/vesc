@@ -227,9 +227,6 @@ class Renderer11 : public RendererD3D
     ID3D11Texture2D *resolveMultisampledTexture(ID3D11Texture2D *source, unsigned int subresource);
     void unsetConflictingSRVs(gl::SamplerType shaderType, const ID3D11Resource *resource, const gl::ImageIndex *index);
 
-    static void invalidateFBOAttachmentSwizzles(gl::FramebufferAttachment *attachment, int mipLevel);
-    static void invalidateFramebufferSwizzles(const gl::Framebuffer *framebuffer);
-
     HMODULE mD3d11Module;
     HMODULE mDxgiModule;
     HDC mDc;
