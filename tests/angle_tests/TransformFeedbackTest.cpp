@@ -113,3 +113,73 @@ TYPED_TEST(TransformFeedbackTest, ZeroSizedViewport)
 
     EXPECT_EQ(primitivesWritten, 2);
 }
+
+// Test resetting to zero the transform feedback offset between two draw calls, to test an ANGLE bug
+// https://code.google.com/p/angleproject/issues/detail?id=898
+TYPED_TEST(TransformFeedbackTest, CounterReset)
+{
+    // Set the program's transform feedback varyings (just gl_Position)
+    const GLchar* transformFeedbackVaryings[] =
+    {
+        "gl_Position"
+    };
+    glTransformFeedbackVaryings(mProgram, ArraySize(transformFeedbackVaryings), transformFeedbackVaryings, GL_INTERLEAVED_ATTRIBS);
+    glLinkProgram(mProgram);
+
+    // Re-link the program
+    GLint linkStatus;
+    glGetProgramiv(mProgram, GL_LINK_STATUS, &linkStatus);
+    ASSERT_NE(linkStatus, 0);
+
+    glUseProgram(mProgram);
+
+    // Set the storage to zeros (for the first 12 primitives)
+    const size_t maxNumPrimitives = 12;
+    float zeros[4 * maxNumPrimitives] = { 0 };
+
+    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, mTransformFeedbackBuffer);
+    glBufferSubData(GL_TRANSFORM_FEEDBACK_BUFFER, 0, sizeof(zeros), zeros);
+
+    // Bind the buffer for transform feedback output and start transform feedback
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBuffer);
+    glBeginTransformFeedback(GL_TRIANGLES);
+
+    // Create a query to check how many primitives were written
+    GLuint primitivesWrittenQuery = 0;
+    glGenQueries(1, &primitivesWrittenQuery);
+    glBeginQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, primitivesWrittenQuery);
+
+    // Draw a quad
+    drawQuad(mProgram, "position", 0.5f);
+
+    // At this point, we should have written 6 vertices
+
+    // Reset the buffer internal counter to zero
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBuffer);
+
+    // Draw a quad
+    drawQuad(mProgram, "position", 0.5f);
+
+    // At this point, we should have overwritten the 6 previously written vertices
+    // The data after offset 6 should still be zeros.
+
+    // End the query and transform feedkback
+    glEndQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN);
+    glEndTransformFeedback();
+
+    // Check how many primitives were written and verify that some were written even if
+    // no pixels were rendered
+    GLuint primitivesWritten = 0;
+    glGetQueryObjectuiv(primitivesWrittenQuery, GL_QUERY_RESULT_EXT, &primitivesWritten);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_EQ(4, primitivesWritten);
+
+    // Read back the data after offset 6 to check if it is still zero
+    float *data = reinterpret_cast<float*>(glMapBufferRange(GL_TRANSFORM_FEEDBACK_BUFFER, 6 * 4 * sizeof(float), 6 * 4 * sizeof(float), GL_MAP_READ_BIT));
+
+    for (size_t i = 0; i < 6 * 4; ++i)
+    {
+        EXPECT_EQ(0, data[i]);
+    }
+}
