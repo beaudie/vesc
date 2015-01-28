@@ -29,7 +29,8 @@ namespace rx
 namespace
 {
 
-gl::Error GetUnpackPointer(const gl::PixelUnpackState &unpack, const uint8_t *pixels, const uint8_t **pointerOut)
+gl::Error GetUnpackPointer(const gl::PixelUnpackState &unpack, const uint8_t *pixels,
+                           ptrdiff_t layerOffset, const uint8_t **pointerOut)
 {
     if (unpack.pixelBuffer.id() != 0)
     {
@@ -53,6 +54,12 @@ gl::Error GetUnpackPointer(const gl::PixelUnpackState &unpack, const uint8_t *pi
     else
     {
         *pointerOut = pixels;
+    }
+
+    // Offset the pointer for 2D array layer (if it's valid)
+    if (*pointerOut != nullptr)
+    {
+        *pointerOut += layerOffset;
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -144,7 +151,9 @@ bool TextureD3D::shouldUseSetData(const ImageD3D *image) const
     return (mTexStorage && !internalFormat.compressed);
 }
 
-gl::Error TextureD3D::setImage(const gl::ImageIndex &index, GLenum type, const gl::PixelUnpackState &unpack, const uint8_t *pixels)
+gl::Error TextureD3D::setImage(const gl::ImageIndex &index, GLenum type,
+                               const gl::PixelUnpackState &unpack, const uint8_t *pixels,
+                               ptrdiff_t layerOffset)
 {
     ImageD3D *image = getImage(index);
     ASSERT(image);
@@ -158,7 +167,7 @@ gl::Error TextureD3D::setImage(const gl::ImageIndex &index, GLenum type, const g
     // We no longer need the "GLenum format" parameter to TexImage to determine what data format "pixels" contains.
     // From our image internal format we know how many channels to expect, and "type" gives the format of pixel's components.
     const uint8_t *pixelData = NULL;
-    gl::Error error = GetUnpackPointer(unpack, pixels, &pixelData);
+    gl::Error error = GetUnpackPointer(unpack, pixels, layerOffset, &pixelData);
     if (error.isError())
     {
         return error;
@@ -188,11 +197,11 @@ gl::Error TextureD3D::setImage(const gl::ImageIndex &index, GLenum type, const g
 }
 
 gl::Error TextureD3D::subImage(const gl::ImageIndex &index, const gl::Box &area, GLenum format, GLenum type,
-                               const gl::PixelUnpackState &unpack, const uint8_t *pixels)
+                               const gl::PixelUnpackState &unpack, const uint8_t *pixels, ptrdiff_t layerOffset)
 {
     // CPU readback & copy where direct GPU copy is not supported
     const uint8_t *pixelData = NULL;
-    gl::Error error = GetUnpackPointer(unpack, pixels, &pixelData);
+    gl::Error error = GetUnpackPointer(unpack, pixels, layerOffset, &pixelData);
     if (error.isError())
     {
         return error;
@@ -226,12 +235,13 @@ gl::Error TextureD3D::subImage(const gl::ImageIndex &index, const gl::Box &area,
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error TextureD3D::setCompressedImage(const gl::ImageIndex &index, const gl::PixelUnpackState &unpack, const uint8_t *pixels)
+gl::Error TextureD3D::setCompressedImage(const gl::ImageIndex &index, const gl::PixelUnpackState &unpack,
+                                         const uint8_t *pixels, ptrdiff_t layerOffset)
 {
     // We no longer need the "GLenum format" parameter to TexImage to determine what data format "pixels" contains.
     // From our image internal format we know how many channels to expect, and "type" gives the format of pixel's components.
     const uint8_t *pixelData = NULL;
-    gl::Error error = GetUnpackPointer(unpack, pixels, &pixelData);
+    gl::Error error = GetUnpackPointer(unpack, pixels, layerOffset, &pixelData);
     if (error.isError())
     {
         return error;
@@ -256,10 +266,11 @@ gl::Error TextureD3D::setCompressedImage(const gl::ImageIndex &index, const gl::
 }
 
 gl::Error TextureD3D::subImageCompressed(const gl::ImageIndex &index, const gl::Box &area, GLenum format,
-                                         const gl::PixelUnpackState &unpack, const uint8_t *pixels)
+                                         const gl::PixelUnpackState &unpack, const uint8_t *pixels,
+                                         ptrdiff_t layerOffset)
 {
     const uint8_t *pixelData = NULL;
-    gl::Error error = GetUnpackPointer(unpack, pixels, &pixelData);
+    gl::Error error = GetUnpackPointer(unpack, pixels, layerOffset, &pixelData);
     if (error.isError())
     {
         return error;
@@ -641,7 +652,7 @@ gl::Error TextureD3D_2D::setImage(GLenum target, size_t level, GLenum internalFo
 
     if (!fastUnpacked)
     {
-        gl::Error error = TextureD3D::setImage(index, type, unpack, pixels);
+        gl::Error error = TextureD3D::setImage(index, type, unpack, pixels, 0);
         if (error.isError())
         {
             return error;
@@ -682,7 +693,7 @@ gl::Error TextureD3D_2D::setSubImage(GLenum target, size_t level, const gl::Box 
 
     if (!fastUnpacked)
     {
-        return TextureD3D::subImage(index, area, format, type, unpack, pixels);
+        return TextureD3D::subImage(index, area, format, type, unpack, pixels, 0);
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -697,7 +708,7 @@ gl::Error TextureD3D_2D::setCompressedImage(GLenum target, size_t level, GLenum 
     // compressed formats don't have separate sized internal formats-- we can just use the compressed format directly
     redefineImage(level, internalFormat, size);
 
-    return TextureD3D::setCompressedImage(gl::ImageIndex::Make2D(level), unpack, pixels);
+    return TextureD3D::setCompressedImage(gl::ImageIndex::Make2D(level), unpack, pixels, 0);
 }
 
 gl::Error TextureD3D_2D::setCompressedSubImage(GLenum target, size_t level, const gl::Box &area, GLenum format,
@@ -706,7 +717,7 @@ gl::Error TextureD3D_2D::setCompressedSubImage(GLenum target, size_t level, cons
     ASSERT(target == GL_TEXTURE_2D && area.depth == 1 && area.z == 0);
 
     gl::ImageIndex index = gl::ImageIndex::Make2D(level);
-    gl::Error error = TextureD3D::subImageCompressed(index, area, format, unpack, pixels);
+    gl::Error error = TextureD3D::subImageCompressed(index, area, format, unpack, pixels, 0);
     if (error.isError())
     {
         return error;
@@ -1223,7 +1234,7 @@ gl::Error TextureD3D_Cube::setImage(GLenum target, size_t level, GLenum internal
 
     redefineImage(index.layerIndex, level, sizedInternalFormat, size);
 
-    return TextureD3D::setImage(index, type, unpack, pixels);
+    return TextureD3D::setImage(index, type, unpack, pixels, 0);
 }
 
 gl::Error TextureD3D_Cube::setSubImage(GLenum target, size_t level, const gl::Box &area, GLenum format, GLenum type,
@@ -1232,7 +1243,7 @@ gl::Error TextureD3D_Cube::setSubImage(GLenum target, size_t level, const gl::Bo
     ASSERT(area.depth == 1 && area.z == 0);
 
     gl::ImageIndex index = gl::ImageIndex::MakeCube(target, level);
-    return TextureD3D::subImage(index, area, format, type, unpack, pixels);
+    return TextureD3D::subImage(index, area, format, type, unpack, pixels, 0);
 }
 
 gl::Error TextureD3D_Cube::setCompressedImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size,
@@ -1246,7 +1257,7 @@ gl::Error TextureD3D_Cube::setCompressedImage(GLenum target, size_t level, GLenu
     redefineImage(faceIndex, level, internalFormat, size);
 
     gl::ImageIndex index = gl::ImageIndex::MakeCube(target, level);
-    return TextureD3D::setCompressedImage(index, unpack, pixels);
+    return TextureD3D::setCompressedImage(index, unpack, pixels, 0);
 }
 
 gl::Error TextureD3D_Cube::setCompressedSubImage(GLenum target, size_t level, const gl::Box &area, GLenum format,
@@ -1256,7 +1267,7 @@ gl::Error TextureD3D_Cube::setCompressedSubImage(GLenum target, size_t level, co
 
     gl::ImageIndex index = gl::ImageIndex::MakeCube(target, level);
 
-    gl::Error error = TextureD3D::subImageCompressed(index, area, format, unpack, pixels);
+    gl::Error error = TextureD3D::subImageCompressed(index, area, format, unpack, pixels, 0);
     if (error.isError())
     {
         return error;
@@ -1831,7 +1842,7 @@ gl::Error TextureD3D_3D::setImage(GLenum target, size_t level, GLenum internalFo
 
     if (!fastUnpacked)
     {
-        gl::Error error = TextureD3D::setImage(index, type, unpack, pixels);
+        gl::Error error = TextureD3D::setImage(index, type, unpack, pixels, 0);
         if (error.isError())
         {
             return error;
@@ -1874,7 +1885,7 @@ gl::Error TextureD3D_3D::setSubImage(GLenum target, size_t level, const gl::Box 
 
     if (!fastUnpacked)
     {
-        return TextureD3D::subImage(index, area, format, type, unpack, pixels);
+        return TextureD3D::subImage(index, area, format, type, unpack, pixels, 0);
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -1889,7 +1900,7 @@ gl::Error TextureD3D_3D::setCompressedImage(GLenum target, size_t level, GLenum 
     redefineImage(level, internalFormat, size);
 
     gl::ImageIndex index = gl::ImageIndex::Make3D(level);
-    return TextureD3D::setCompressedImage(index, unpack, pixels);
+    return TextureD3D::setCompressedImage(index, unpack, pixels, 0);
 }
 
 gl::Error TextureD3D_3D::setCompressedSubImage(GLenum target, size_t level, const gl::Box &area, GLenum format,
@@ -1898,7 +1909,7 @@ gl::Error TextureD3D_3D::setCompressedSubImage(GLenum target, size_t level, cons
     ASSERT(target == GL_TEXTURE_3D);
 
     gl::ImageIndex index = gl::ImageIndex::Make3D(level);
-    gl::Error error = TextureD3D::subImageCompressed(index, area, format, unpack, pixels);
+    gl::Error error = TextureD3D::subImageCompressed(index, area, format, unpack, pixels, 0);
     if (error.isError())
     {
         return error;
@@ -2344,9 +2355,9 @@ gl::Error TextureD3D_2DArray::setImage(GLenum target, size_t level, GLenum inter
 
     for (int i = 0; i < size.depth; i++)
     {
-        const uint8_t *layerPixels = pixels ? (pixels + (inputDepthPitch * i)) : NULL;
+        const ptrdiff_t layerOffset = (inputDepthPitch * i);
         gl::ImageIndex index = gl::ImageIndex::Make2DArray(level, i);
-        gl::Error error = TextureD3D::setImage(index, type, unpack, layerPixels);
+        gl::Error error = TextureD3D::setImage(index, type, unpack, pixels, layerOffset);
         if (error.isError())
         {
             return error;
@@ -2367,12 +2378,12 @@ gl::Error TextureD3D_2DArray::setSubImage(GLenum target, size_t level, const gl:
     for (int i = 0; i < area.depth; i++)
     {
         int layer = area.z + i;
-        const uint8_t *layerPixels = pixels ? (pixels + (inputDepthPitch * i)) : NULL;
+        const ptrdiff_t layerOffset = (inputDepthPitch * i);
 
         gl::Box layerArea(area.x, area.y, 0, area.width, area.height, 1);
 
         gl::ImageIndex index = gl::ImageIndex::Make2DArray(level, layer);
-        gl::Error error = TextureD3D::subImage(index, layerArea, format, type, unpack, layerPixels);
+        gl::Error error = TextureD3D::subImage(index, layerArea, format, type, unpack, pixels, layerOffset);
         if (error.isError())
         {
             return error;
@@ -2395,10 +2406,10 @@ gl::Error TextureD3D_2DArray::setCompressedImage(GLenum target, size_t level, GL
 
     for (int i = 0; i < size.depth; i++)
     {
-        const uint8_t *layerPixels = pixels ? (pixels + (inputDepthPitch * i)) : NULL;
+        const ptrdiff_t layerOffset = (inputDepthPitch * i);
 
         gl::ImageIndex index = gl::ImageIndex::Make2DArray(level, i);
-        gl::Error error = TextureD3D::setCompressedImage(index, unpack, layerPixels);
+        gl::Error error = TextureD3D::setCompressedImage(index, unpack, pixels, layerOffset);
         if (error.isError())
         {
             return error;
@@ -2419,12 +2430,12 @@ gl::Error TextureD3D_2DArray::setCompressedSubImage(GLenum target, size_t level,
     for (int i = 0; i < area.depth; i++)
     {
         int layer = area.z + i;
-        const uint8_t *layerPixels = pixels ? (pixels + (inputDepthPitch * i)) : NULL;
+        const ptrdiff_t layerOffset = (inputDepthPitch * i);
 
         gl::Box layerArea(area.x, area.y, 0, area.width, area.height, 1);
 
         gl::ImageIndex index = gl::ImageIndex::Make2DArray(level, layer);
-        gl::Error error = TextureD3D::subImageCompressed(index, layerArea, format, unpack, layerPixels);
+        gl::Error error = TextureD3D::subImageCompressed(index, layerArea, format, unpack, pixels, layerOffset);
         if (error.isError())
         {
             return error;
