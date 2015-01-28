@@ -567,7 +567,13 @@ gl::Error Renderer11::generateSwizzle(gl::Texture *texture)
         TextureD3D *textureD3D = TextureD3D::makeTextureD3D(texture->getImplementation());
         ASSERT(textureD3D);
 
-        TextureStorage *texStorage = textureD3D->getNativeTexture();
+        TextureStorage *texStorage = NULL;
+        gl::Error error = textureD3D->getNativeTexture(&texStorage);
+        if (error.isError())
+        {
+            return error;
+        }
+
         if (texStorage)
         {
             TextureStorage11 *storage11 = TextureStorage11::makeTextureStorage11(texStorage);
@@ -590,7 +596,18 @@ gl::Error Renderer11::setSamplerState(gl::SamplerType type, int index, gl::Textu
     // Make sure to add the level offset for our tiny compressed texture workaround
     TextureD3D *textureD3D = TextureD3D::makeTextureD3D(texture->getImplementation());
     gl::SamplerState samplerStateInternal = samplerStateParam;
-    samplerStateInternal.baseLevel += textureD3D->getNativeTexture()->getTopLevel();
+
+    TextureStorage *storage = NULL;
+    gl::Error error = textureD3D->getNativeTexture(&storage);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    // Storage should exist, texture should be complete
+    ASSERT(storage);
+
+    samplerStateInternal.baseLevel += storage->getTopLevel();
 
     if (type == gl::SAMPLER_PIXEL)
     {
@@ -646,8 +663,16 @@ gl::Error Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *t
     if (texture)
     {
         TextureD3D *textureImpl = TextureD3D::makeTextureD3D(texture->getImplementation());
-        TextureStorage *texStorage = textureImpl->getNativeTexture();
-        ASSERT(texStorage != NULL);
+
+        TextureStorage *texStorage = NULL;
+        gl::Error error = textureImpl->getNativeTexture(&texStorage);
+        if (error.isError())
+        {
+            return error;
+        }
+
+        // Texture should be complete and have a storage
+        ASSERT(texStorage);
 
         TextureStorage11 *storage11 = TextureStorage11::makeTextureStorage11(texStorage);
 
@@ -655,7 +680,7 @@ gl::Error Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *t
         gl::SamplerState samplerState = texture->getSamplerState();
         samplerState.baseLevel += storage11->getTopLevel();
 
-        gl::Error error = storage11->getSRV(samplerState, &textureSRV);
+        error = storage11->getSRV(samplerState, &textureSRV);
         if (error.isError())
         {
             return error;
@@ -1123,7 +1148,12 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
         mDepthStencilInitialized = true;
     }
 
-    invalidateFramebufferSwizzles(framebuffer);
+    const Framebuffer11 *framebuffer11 = Framebuffer11::makeFramebuffer11(framebuffer->getImplementation());
+    gl::Error error = framebuffer11->invalidateSwizzles();
+    if (error.isError())
+    {
+        return error;
+    }
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -3222,50 +3252,6 @@ ID3D11Texture2D *Renderer11::resolveMultisampledTexture(ID3D11Texture2D *source,
     {
         source->AddRef();
         return source;
-    }
-}
-
-void Renderer11::invalidateFBOAttachmentSwizzles(gl::FramebufferAttachment *attachment, int mipLevel)
-{
-    ASSERT(attachment->type() == GL_TEXTURE);
-    gl::Texture *texture = attachment->getTexture();
-
-    TextureD3D *textureD3D = TextureD3D::makeTextureD3D(texture->getImplementation());
-    TextureStorage *texStorage = textureD3D->getNativeTexture();
-    if (texStorage)
-    {
-        TextureStorage11 *texStorage11 = TextureStorage11::makeTextureStorage11(texStorage);
-        if (!texStorage11)
-        {
-            ERR("texture storage pointer unexpectedly null.");
-            return;
-        }
-
-        texStorage11->invalidateSwizzleCacheLevel(mipLevel);
-    }
-}
-
-void Renderer11::invalidateFramebufferSwizzles(const gl::Framebuffer *framebuffer)
-{
-    for (unsigned int colorAttachment = 0; colorAttachment < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; colorAttachment++)
-    {
-        gl::FramebufferAttachment *attachment = framebuffer->getColorbuffer(colorAttachment);
-        if (attachment && attachment->type() == GL_TEXTURE)
-        {
-            invalidateFBOAttachmentSwizzles(attachment, attachment->mipLevel());
-        }
-    }
-
-    gl::FramebufferAttachment *depthAttachment = framebuffer->getDepthbuffer();
-    if (depthAttachment && depthAttachment->type() == GL_TEXTURE)
-    {
-        invalidateFBOAttachmentSwizzles(depthAttachment, depthAttachment->mipLevel());
-    }
-
-    gl::FramebufferAttachment *stencilAttachment = framebuffer->getStencilbuffer();
-    if (stencilAttachment && stencilAttachment->type() == GL_TEXTURE)
-    {
-        invalidateFBOAttachmentSwizzles(stencilAttachment, stencilAttachment->mipLevel());
     }
 }
 

@@ -728,7 +728,18 @@ gl::Error Renderer9::setSamplerState(gl::SamplerType type, int index, gl::Textur
 
         // Make sure to add the level offset for our tiny compressed texture workaround
         TextureD3D *textureD3D = TextureD3D::makeTextureD3D(texture->getImplementation());
-        DWORD baseLevel = samplerState.baseLevel + textureD3D->getNativeTexture()->getTopLevel();
+
+        TextureStorage *storage = NULL;
+        gl::Error error = textureD3D->getNativeTexture(&storage);
+        if (error.isError())
+        {
+            return error;
+        }
+
+        // Storage should exist, texture should be complete
+        ASSERT(storage);
+
+        DWORD baseLevel = samplerState.baseLevel + storage->getTopLevel();
 
         mDevice->SetSamplerState(d3dSampler, D3DSAMP_ADDRESSU, gl_d3d9::ConvertTextureWrap(samplerState.wrapS));
         mDevice->SetSamplerState(d3dSampler, D3DSAMP_ADDRESSV, gl_d3d9::ConvertTextureWrap(samplerState.wrapT));
@@ -765,17 +776,23 @@ gl::Error Renderer9::setTexture(gl::SamplerType type, int index, gl::Texture *te
     {
         TextureD3D* textureImpl = TextureD3D::makeTextureD3D(texture->getImplementation());
 
-        TextureStorage *texStorage = textureImpl->getNativeTexture();
-        if (texStorage)
+        TextureStorage *texStorage = NULL;
+        gl::Error error = textureImpl->getNativeTexture(&texStorage);
+        if (error.isError())
         {
-            TextureStorage9 *storage9 = TextureStorage9::makeTextureStorage9(texStorage);
-
-            gl::Error error = storage9->getBaseTexture(&d3dTexture);
-            if (error.isError())
-            {
-                return error;
-            }
+            return error;
         }
+
+        // Texture should be complete and have a storage
+        ASSERT(texStorage);
+
+        TextureStorage9 *storage9 = TextureStorage9::makeTextureStorage9(texStorage);
+        error = storage9->getBaseTexture(&d3dTexture);
+        if (error.isError())
+        {
+            return error;
+        }
+
         // If we get NULL back from getBaseTexture here, something went wrong
         // in the texture class and we're unexpectedly missing the d3d texture
         ASSERT(d3dTexture != NULL);
