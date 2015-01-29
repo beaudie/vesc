@@ -16,6 +16,7 @@
 #include "libANGLE/renderer/Image.h"
 #include "libANGLE/renderer/d3d/TextureStorage.h"
 
+#include "libANGLE/Config.h"
 #include "libANGLE/Surface.h"
 
 #include "common/mathutil.h"
@@ -308,6 +309,15 @@ void Texture::setImageDesc(const ImageIdentifier& index, const ImageDesc &desc)
     mImageDescs[index] = desc;
 }
 
+void Texture::clearImageDesc(const ImageIdentifier& index)
+{
+    ImageDescMap::iterator iter = mImageDescs.find(index);
+    if (iter != mImageDescs.end())
+    {
+        mImageDescs.erase(iter);
+    }
+}
+
 void Texture::clearImageDescs()
 {
     mImageDescs.clear();
@@ -315,9 +325,18 @@ void Texture::clearImageDescs()
 
 void Texture::bindTexImage(egl::Surface *surface)
 {
+    ASSERT(surface);
+
     releaseTexImage();
     mTexture->bindTexImage(surface);
     mBoundSurface = surface;
+
+    // Set the image info to the size and format of the surface
+    ASSERT(mTarget == GL_TEXTURE_2D);
+
+    Extents size(surface->getWidth(), surface->getHeight(), 1);
+    ImageDesc desc(size, surface->getConfig()->mRenderTargetFormat);
+    setImageDesc(ImageIdentifier(mTarget, 0), desc);
 }
 
 void Texture::releaseTexImage()
@@ -326,6 +345,10 @@ void Texture::releaseTexImage()
     {
         mBoundSurface = NULL;
         mTexture->releaseTexImage();
+
+        // Erase the image info for level 0
+        ASSERT(mTarget == GL_TEXTURE_2D);
+        clearImageDesc(ImageIdentifier(mTarget, 0));
     }
 }
 

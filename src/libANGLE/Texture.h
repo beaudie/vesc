@@ -132,6 +132,7 @@ class Texture : public RefCountObject
     const ImageDesc &getImageDesc(const ImageIdentifier& index) const;
     void setImageDesc(const ImageIdentifier& index, const ImageDesc &desc);
     void setImageDescChain(size_t levels, Extents baseSize, GLenum sizedInternalFormat);
+    void clearImageDesc(const ImageIdentifier& index);
     void clearImageDescs();
 
     typedef std::map<ImageIdentifier, ImageDesc> ImageDescMap;
