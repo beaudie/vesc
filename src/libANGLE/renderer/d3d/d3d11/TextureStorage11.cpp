@@ -585,8 +585,8 @@ gl::Error TextureStorage11::setData(const gl::ImageIndex &index, ImageD3D *image
         destD3DBox.right = destBox->x + destBox->width;
         destD3DBox.top = destBox->y;
         destD3DBox.bottom = destBox->y + destBox->height;
-        destD3DBox.front = 0;
-        destD3DBox.back = 1;
+        destD3DBox.front = destBox->z;
+        destD3DBox.back = destBox->z + destBox->depth;
 
         immediateContext->UpdateSubresource(resource, destSubresource,
                                             &destD3DBox, conversionBuffer->data(),
