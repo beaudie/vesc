@@ -433,23 +433,6 @@
                     'EGLAPI=',
                     'ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES={ "d3dcompiler_47.dll", "d3dcompiler_46.dll", "d3dcompiler_43.dll" }',
                 ],
-                'conditions':
-                [
-                    ['angle_enable_d3d9==1',
-                    {
-                        'defines':
-                        [
-                            'ANGLE_ENABLE_D3D9',
-                        ],
-                    }],
-                    ['angle_enable_d3d11==1',
-                    {
-                        'defines':
-                        [
-                            'ANGLE_ENABLE_D3D11',
-                        ],
-                    }],
-                ],
             },
             'conditions':
             [
@@ -465,10 +448,6 @@
                     'sources':
                     [
                         '<@(libangle_d3d9_sources)',
-                    ],
-                    'defines':
-                    [
-                        'ANGLE_ENABLE_D3D9',
                     ],
                     'link_settings':
                     {
@@ -627,6 +606,19 @@
                 ['angle_build_winphone==1',
                 {
                     'msvs_enable_winphone' : '1',
+                }],
+                ['OS=="win"',
+                {
+                    'configurations':
+                    {
+                        'Debug_Base':
+                        {
+                            'defines':
+                            [
+                                'ANGLE_ENABLE_DEBUG_ANNOTATIONS',
+                            ],
+                        },
+                    },
                 }],
             ],
         },

@@ -21,7 +21,24 @@
     [
         ['component=="shared_library"',
         {
-            'defines': [ 'COMPONENT_BUILD' ],
+            'defines':
+            [
+                'COMPONENT_BUILD'
+            ],
+        }],
+        ['angle_enable_d3d9==1',
+        {
+            'defines':
+            [
+                'ANGLE_ENABLE_D3D9',
+            ],
+        }],
+        ['angle_enable_d3d11==1',
+        {
+            'defines':
+            [
+                'ANGLE_ENABLE_D3D11',
+            ],
         }],
     ],
     'msvs_settings':

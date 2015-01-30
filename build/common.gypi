@@ -8,6 +8,8 @@
     {
         'angle_build_winrt%': '0',
         'angle_build_winphone%': '0',
+        'angle_enable_d3d9%': 0,
+        'angle_enable_d3d11%': 0,
         # angle_code is set to 1 for the core ANGLE targets defined in src/build_angle.gyp.
         # angle_code is set to 0 for test code, sample code, and third party code.
         # When angle_code is 1, we build with additional warning flags on Mac and Linux.
@@ -115,14 +117,14 @@
                                 # Windows Application Store requirements
 
                                 # The C runtime for Windows Store applications
-                                # is a framework package that is managed by                                
+                                # is a framework package that is managed by
                                 # the Windows deployment model and can be
                                 # shared by multiple packages.
 
                                 'RuntimeLibrary': '3', # /MDd (debug dll)
                             },
                             {
-                                # Use the static C runtime to 
+                                # Use the static C runtime to
                                 # match chromium and make sure
                                 # we don't depend on the dynamic
                                 # runtime's shared heaps
@@ -174,13 +176,13 @@
                                 # Windows Application Store requirements
 
                                 # The C runtime for Windows Store applications
-                                # is a framework package that is managed by                                
+                                # is a framework package that is managed by
                                 # the Windows deployment model and can be
                                 # shared by multiple packages.
                                 'RuntimeLibrary': '2', # /MD (nondebug dll)
                             },
                             {
-                                # Use the static C runtime to 
+                                # Use the static C runtime to
                                 # match chromium and make sure
                                 # we don't depend on the dynamic
                                 'RuntimeLibrary': '0', # /MT (nondebug static)

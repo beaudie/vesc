@@ -18,6 +18,8 @@
 #define TRACE_OUTPUT_FILE "debug.txt"
 #endif
 
+#define ANGLE_ENABLE_DEBUG_TRACE
+
 namespace gl
 {
     enum MessageType
