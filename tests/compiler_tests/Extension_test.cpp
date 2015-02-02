@@ -41,7 +41,7 @@ class ExtensionTest : public testing::Test
     {
         DestroyCompiler();
         mCompiler = ShConstructCompiler(GL_FRAGMENT_SHADER, SH_WEBGL_SPEC, SH_GLSL_OUTPUT, &mResources);
-        ASSERT_TRUE(mCompiler != NULL) << "Compiler could not be constructed.";
+        ASSERT_TRUE(mCompiler) << "Compiler could not be constructed.";
     }
 
     void TestShaderExtension(const char** shaderStrings, int stringCount, bool expectation)
