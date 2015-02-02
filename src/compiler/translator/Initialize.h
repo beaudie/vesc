@@ -20,4 +20,6 @@ void IdentifyBuiltIns(sh::GLenum type, ShShaderSpec spec,
 void InitExtensionBehavior(const ShBuiltInResources& resources,
                            TExtensionBehavior& extensionBehavior);
 
+void ResetExtensionBehavior(TExtensionBehavior &extensionBehavior);
+
 #endif // COMPILER_TRANSLATOR_INITIALIZE_H_
