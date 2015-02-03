@@ -39,6 +39,7 @@ class InputLayoutCache
     void markDirty();
 
     gl::Error applyVertexBuffers(TranslatedAttribute attributes[gl::MAX_VERTEX_ATTRIBS],
+                                 GLenum mode,
                                  gl::Program *program);
 
   private:
