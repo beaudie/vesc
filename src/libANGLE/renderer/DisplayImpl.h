@@ -12,6 +12,7 @@
 #include "common/angleutils.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/renderer/Renderer.h"
 
 #include <set>
 #include <vector>
@@ -33,7 +34,6 @@ class Context;
 namespace rx
 {
 class SurfaceImpl;
-struct ConfigDesc;
 
 class DisplayImpl
 {
