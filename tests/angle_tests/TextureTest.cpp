@@ -3,6 +3,8 @@
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_TYPED_TEST_CASE(TextureTest, ES2_D3D9, ES2_D3D11);
 
+ANGLE_TYPED_TEST_CASE(TextureTest_ES3, ES2_D3D9, ES2_D3D11, ES3_D3D11);
+
 template<typename T>
 class TextureTest : public ANGLETest
 {
@@ -219,6 +221,9 @@ class TextureTest : public ANGLETest
     GLint mTexture2DUniformLocation;
     GLint mTextureScaleUniformLocation;
 };
+
+template<typename T>
+class TextureTest_ES3 : public TextureTest<T> { };
 
 TYPED_TEST(TextureTest, NegativeAPISubImage)
 {
@@ -520,4 +525,65 @@ TYPED_TEST(TextureTest, CopySubImageFloat_RGBA_RGBA)
     }
 
     testFloatCopySubImage(4, 4);
+}
+
+// In ES3 or with the GL_OES_fbo_render_mipmap extension, it is possible to render to arbitrary mipmap levels
+// of a texture.  TextureStorage fails assertions when the texture is not mip complete.
+TYPED_TEST(TextureTest_ES3, DISABLED_RenderToIncompleteTextureBug)
+{
+    bool renderToMipmapSupported = extensionEnabled("GL_OES_fbo_render_mipmap") || getClientVersion() > 2;
+    if (!renderToMipmapSupported)
+    {
+        return;
+    }
+
+    GLuint fbo = 0;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    EXPECT_GL_NO_ERROR();
+
+    GLuint tex = 0;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+
+    const size_t levels = 5;
+    for (size_t i = 0; i < levels; i++)
+    {
+        glTexImage2D(GL_TEXTURE_2D, i, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    }
+    EXPECT_GL_NO_ERROR();
+
+    for (size_t i = 0; i < levels; i++)
+    {
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, i);
+        EXPECT_GL_NO_ERROR();
+
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    glDeleteFramebuffers(1, &fbo);
+    glDeleteTextures(1, &tex);
+}
+
+TYPED_TEST(TextureTest_ES3, MissmatchedCubeFaceSizesBug)
+{
+    GLuint tex = 0;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
+
+    for (GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X; face <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z; face++)
+    {
+        glTexImage2D(face, 0, GL_RGBA, 256, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    }
+    EXPECT_GL_NO_ERROR();
+
+    // Ensure a texture storage is created
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X, tex, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Resize a face
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, 256, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+    // Clear again
+    glClear(GL_COLOR_BUFFER_BIT);
 }
