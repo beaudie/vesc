@@ -98,7 +98,7 @@ class RendererD3D : public Renderer
     virtual bool applyPrimitiveType(GLenum primitiveType, GLsizei elementCount, bool usesPointSize) = 0;
     virtual gl::Error applyVertexBuffer(const gl::State &state, GLint first, GLsizei count, GLsizei instances) = 0;
     virtual gl::Error applyIndexBuffer(const GLvoid *indices, gl::Buffer *elementArrayBuffer, GLsizei count, GLenum mode, GLenum type, TranslatedIndexData *indexInfo) = 0;
-    virtual void applyTransformFeedbackBuffers(const gl::State& state) = 0;
+    virtual bool applyTransformFeedbackBuffers(const gl::State& state) = 0;
 
     virtual void markAllStateDirty() = 0;
 
@@ -181,14 +181,13 @@ class RendererD3D : public Renderer
 
     gl::Error applyRenderTarget(const gl::Data &data, GLenum drawMode, bool ignoreViewport);
     gl::Error applyState(const gl::Data &data, GLenum drawMode);
-    bool applyTransformFeedbackBuffers(const gl::Data &data);
     gl::Error applyShaders(const gl::Data &data, bool transformFeedbackActive);
     gl::Error applyTextures(const gl::Data &data, gl::SamplerType shaderType,
                             const FramebufferTextureSerialArray &framebufferSerials, size_t framebufferSerialCount);
     gl::Error applyTextures(const gl::Data &data);
     gl::Error applyUniformBuffers(const gl::Data &data);
 
-    bool skipDraw(const gl::Data &data, GLenum drawMode);
+    bool skipDraw(const gl::Data &data, GLenum drawMode, bool transformFeedbackActive);
     void markTransformFeedbackUsage(const gl::Data &data);
 
     size_t getBoundFramebufferTextureSerials(const gl::Data &data,

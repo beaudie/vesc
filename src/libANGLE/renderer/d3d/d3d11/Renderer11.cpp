@@ -1184,28 +1184,41 @@ gl::Error Renderer11::applyIndexBuffer(const GLvoid *indices, gl::Buffer *elemen
     return gl::Error(GL_NO_ERROR);
 }
 
-void Renderer11::applyTransformFeedbackBuffers(const gl::State& state)
+bool Renderer11::applyTransformFeedbackBuffers(const gl::State& state)
 {
-    size_t numXFBBindings = state.getTransformFeedbackBufferIndexRange();
-    ASSERT(numXFBBindings <= gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS);
+    gl::TransformFeedback *curTransformFeedback = state.getCurrentTransformFeedback();
+    bool transformFeedbackActive = curTransformFeedback && curTransformFeedback->isStarted() && !curTransformFeedback->isPaused();
 
+    size_t numXFBBindings = 0;
     bool requiresUpdate = false;
-    for (size_t i = 0; i < numXFBBindings; i++)
-    {
-        gl::Buffer *curXFBBuffer = state.getIndexedTransformFeedbackBuffer(i);
-        GLintptr curXFBOffset = state.getIndexedTransformFeedbackBufferOffset(i);
-        ID3D11Buffer *d3dBuffer = NULL;
-        if (curXFBBuffer)
-        {
-            Buffer11 *storage = Buffer11::makeBuffer11(curXFBBuffer->getImplementation());
-            d3dBuffer = storage->getBuffer(BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK);
-        }
 
-        // TODO: mAppliedTFBuffers and friends should also be kept in a vector.
-        if (d3dBuffer != mAppliedTFBuffers[i] || curXFBOffset != mAppliedTFOffsets[i])
+    if (transformFeedbackActive)
+    {
+        numXFBBindings = state.getTransformFeedbackBufferIndexRange();
+        ASSERT(numXFBBindings <= gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS);
+
+        for (size_t i = 0; i < numXFBBindings; i++)
         {
-            requiresUpdate = true;
+            gl::Buffer *curXFBBuffer = state.getIndexedTransformFeedbackBuffer(i);
+            GLintptr curXFBOffset = state.getIndexedTransformFeedbackBufferOffset(i);
+            ID3D11Buffer *d3dBuffer = NULL;
+            if (curXFBBuffer)
+            {
+                Buffer11 *storage = Buffer11::makeBuffer11(curXFBBuffer->getImplementation());
+                d3dBuffer = storage->getBuffer(BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK);
+            }
+
+            // TODO: mAppliedTFBuffers and friends should also be kept in a vector.
+            if (d3dBuffer != mAppliedTFBuffers[i] || curXFBOffset != mAppliedTFOffsets[i])
+            {
+                requiresUpdate = true;
+            }
         }
+    }
+
+    if (numXFBBindings != mAppliedNumXFBBindings)
+    {
+        requiresUpdate = true;
     }
 
     if (requiresUpdate)
@@ -1232,8 +1245,12 @@ void Renderer11::applyTransformFeedbackBuffers(const gl::State& state)
             mAppliedTFOffsets[i] = curXFBOffset;
         }
 
+        mAppliedNumXFBBindings = numXFBBindings;
+
         mDeviceContext->SOSetTargets(numXFBBindings, mAppliedTFBuffers, mCurrentD3DOffsets);
     }
+
+    return transformFeedbackActive;
 }
 
 gl::Error Renderer11::drawArrays(const gl::Data &data, GLenum mode, GLsizei count, GLsizei instances, bool transformFeedbackActive, bool usesPointSize)
@@ -1860,6 +1877,8 @@ void Renderer11::markAllStateDirty()
     mAppliedVertexShader = dirtyPointer;
     mAppliedGeometryShader = dirtyPointer;
     mAppliedPixelShader = dirtyPointer;
+
+    mAppliedNumXFBBindings = -1;
 
     for (size_t i = 0; i < gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS; i++)
     {
