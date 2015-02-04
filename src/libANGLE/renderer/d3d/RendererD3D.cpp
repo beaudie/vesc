@@ -16,9 +16,9 @@
 #include "libANGLE/State.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
+#include "libANGLE/renderer/MemoryBuffer.h"
 #include "libANGLE/renderer/d3d/DisplayD3D.h"
 #include "libANGLE/renderer/d3d/IndexDataManager.h"
-#include "libANGLE/renderer/d3d/MemoryBuffer.h"
 
 namespace rx
 {
