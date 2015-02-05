@@ -15,6 +15,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/DisplayImpl.h"
+#include "libANGLE/renderer/Renderer.h"
 
 #include <algorithm>
 #include <map>
@@ -139,7 +140,7 @@ Error Display::initialize()
         return Error(EGL_SUCCESS);
     }
 
-    Error error = mImplementation->initialize(this, mDisplayId, mAttributeMap);
+    Error error = mImplementation->initialize(this);
     if (error.isError())
     {
         return error;
