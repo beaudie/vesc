@@ -108,13 +108,13 @@ class Renderer
     virtual VendorID getVendorId() const = 0;
     virtual std::string getRendererDescription() const = 0;
 
-    // Renderer capabilities (virtual because of egl::Display)
-    virtual const gl::Caps &getRendererCaps() const;
-    const gl::TextureCapsMap &getRendererTextureCaps() const;
-    virtual const gl::Extensions &getRendererExtensions() const;
-    const Workarounds &getWorkarounds() const;
-
     virtual std::string getVendorString() const = 0;
+
+    // Renderer capabilities
+    const gl::Caps &getRendererCaps() const;
+    const gl::TextureCapsMap &getRendererTextureCaps() const;
+    const gl::Extensions &getRendererExtensions() const;
+    const Workarounds &getWorkarounds() const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Renderer);

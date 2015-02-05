@@ -11,7 +11,9 @@
 
 #include "common/angleutils.h"
 #include "libANGLE/Caps.h"
+#include "libANGLE/Config.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/renderer/Renderer.h"
 
 #include <set>
 #include <vector>
@@ -21,7 +23,6 @@ namespace egl
 class AttributeMap;
 class Display;
 struct Config;
-class ConfigSet;
 class Surface;
 }
 
@@ -33,7 +34,6 @@ class Context;
 namespace rx
 {
 class SurfaceImpl;
-struct ConfigDesc;
 
 class DisplayImpl
 {
