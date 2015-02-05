@@ -15,8 +15,9 @@
 namespace rx
 {
 
-Renderer::Renderer()
-    : mCapsInitialized(false),
+Renderer::Renderer(egl::Display *display)
+    : mDisplay(display),
+      mCapsInitialized(false),
       mWorkaroundsInitialized(false)
 {
 }

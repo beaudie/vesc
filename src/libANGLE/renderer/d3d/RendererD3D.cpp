@@ -32,7 +32,7 @@ const int ScratchMemoryBufferLifetime = 1000;
 }
 
 RendererD3D::RendererD3D(egl::Display *display)
-    : mDisplay(display),
+    : Renderer(display),
       mDeviceLost(false),
       mScratchMemoryBufferResetCounter(0)
 {
