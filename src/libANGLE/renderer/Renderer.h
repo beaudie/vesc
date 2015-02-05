@@ -57,8 +57,10 @@ class DisplayImpl;
 class Renderer
 {
   public:
-    Renderer();
+    explicit Renderer(egl::Display *display);
     virtual ~Renderer();
+
+    virtual egl::Error initialize() = 0;
 
     virtual gl::Error flush() = 0;
     virtual gl::Error finish() = 0;
@@ -115,6 +117,9 @@ class Renderer
     const Workarounds &getWorkarounds() const;
 
     virtual std::string getVendorString() const = 0;
+
+  protected:
+    egl::Display *mDisplay;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Renderer);
