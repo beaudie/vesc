@@ -435,11 +435,12 @@ class TSymbolTable
         return ++uniqueIdCounter;
     }
 
-  private:
     ESymbolLevel currentLevel() const
     {
         return static_cast<ESymbolLevel>(table.size() - 1);
     }
+
+  private:
 
     std::vector<TSymbolTableLevel *> table;
     typedef TMap<TBasicType, TPrecision> PrecisionStackLevel;
