@@ -101,7 +101,7 @@ static bool packVarying(PackedVarying *varying, const int maxVaryingVectors, Var
     GLenum transposedType = TransposeMatrixType(varying->type);
 
     // matrices within varying structs are not transposed
-    int registers = (varying->isStruct() ? HLSLVariableRegisterCount(*varying) : VariableRowCount(transposedType)) * varying->elementCount();
+    int registers = (varying->isStruct() ? HLSLVariableRegisterCount(*varying, true) : VariableRowCount(transposedType)) * varying->elementCount();
     int elements = (varying->isStruct() ? 4 : VariableColumnCount(transposedType));
 
     if (elements >= 2 && elements <= 4)
@@ -340,7 +340,9 @@ std::string DynamicHLSL::generateVaryingHLSL(const ShaderD3D *shader) const
                       default:  UNREACHABLE();
                     }
 
-                    unsigned int semanticIndex = elementIndex * variableRows + varying.columnIndex * mRenderer->getRendererCaps().maxVaryingVectors + varying.registerIndex + row;
+                    unsigned int semanticIndex = elementIndex * variableRows +
+                                                 varying.columnIndex * mRenderer->getRendererCaps().maxVaryingVectors +
+                                                 varying.registerIndex + row;
                     std::string n = Str(semanticIndex);
 
                     std::string typeString;
