@@ -57,8 +57,10 @@ class DisplayImpl;
 class Renderer
 {
   public:
-    Renderer();
+    explicit Renderer(egl::Display *display);
     virtual ~Renderer();
+
+    virtual EGLint initialize() = 0;
 
     virtual gl::Error flush() = 0;
     virtual gl::Error finish() = 0;
@@ -114,6 +116,9 @@ class Renderer
     const gl::TextureCapsMap &getRendererTextureCaps() const;
     const gl::Extensions &getRendererExtensions() const;
     const Workarounds &getWorkarounds() const;
+
+  protected:
+    egl::Display *mDisplay;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Renderer);
