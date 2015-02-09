@@ -2545,7 +2545,12 @@ TPublicType TParseContext::addStructure(const TSourceLoc& structLine, const TSou
     TStructure* structure = new TStructure(structName, fieldList);
     TType* structureType = new TType(structure);
 
-    structure->setUniqueId(TSymbolTable::nextUniqueId());
+    // Check for global struct. Because structs introduce their own local scope, we will be
+    // one level depper than global in this method, if the struct is at the global scope.
+    if (!symbolTable.atGlobalLevel())
+    {
+        structure->setUniqueId(TSymbolTable::nextUniqueId());
+    }
 
     if (!structName->empty())
     {
