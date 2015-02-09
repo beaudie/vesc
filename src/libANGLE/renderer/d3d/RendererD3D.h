@@ -56,8 +56,6 @@ class RendererD3D : public Renderer
 
     static RendererD3D *makeRendererD3D(Renderer *renderer);
 
-    virtual EGLint initialize() = 0;
-
     virtual egl::ConfigSet generateConfigs() const = 0;
 
     gl::Error drawArrays(const gl::Data &data,

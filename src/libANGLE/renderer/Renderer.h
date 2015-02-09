@@ -60,7 +60,7 @@ class Renderer
     explicit Renderer(egl::Display *display);
     virtual ~Renderer();
 
-    virtual EGLint initialize() = 0;
+    virtual egl::Error initialize() = 0;
 
     virtual gl::Error flush() = 0;
     virtual gl::Error finish() = 0;
