@@ -1,6 +1,10 @@
 #include "ANGLETest.h"
 #include <array>
 
+ANGLE_TYPED_TEST_CASE(IndexedPointsTestUByte, ES2_D3D11, ES2_D3D11_FL9_3);
+ANGLE_TYPED_TEST_CASE(IndexedPointsTestUShort, ES2_D3D11, ES2_D3D11_FL9_3);
+ANGLE_TYPED_TEST_CASE(IndexedPointsTestUInt, ES2_D3D11, ES2_D3D11_FL9_3);
+
 template <typename T, typename IndexType, GLenum IndexTypeName>
 class IndexedPointsTest : public ANGLETest
 {
@@ -61,15 +65,15 @@ protected:
         std::array<GLfloat, mPointCount * 2> vertices =
         {
             getIndexPositionX(0), getIndexPositionY(0),
-            getIndexPositionX(1), getIndexPositionY(1),
             getIndexPositionX(2), getIndexPositionY(2),
+            getIndexPositionX(1), getIndexPositionY(1),
             getIndexPositionX(3), getIndexPositionY(3),
         };
         glGenBuffers(1, &mVertexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
 
-        std::array<IndexType, mPointCount> indices = { 0, 1, 2, 3 };
+        std::array<IndexType, mPointCount> indices = { 0, 2, 1, 3 };
         glGenBuffers(1, &mIndexBuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(IndexType), &indices[0], GL_STATIC_DRAW);
@@ -78,7 +82,6 @@ protected:
     virtual void TearDown()
     {
         glDeleteProgram(mProgram);
-
         ANGLETest::TearDown();
     }
 
@@ -123,53 +126,62 @@ protected:
     static const GLuint mPointCount = 4;
 };
 
-typedef IndexedPointsTest<ES2_D3D11, GLubyte, GL_UNSIGNED_BYTE> IndexedPointsTestUByte;
+template <typename T>
+class IndexedPointsTestUByte : public IndexedPointsTest<T, GLubyte, GL_UNSIGNED_BYTE>
+{
+};
 
-TEST_F(IndexedPointsTestUByte, UnsignedByteOffset0)
+TYPED_TEST(IndexedPointsTestUByte, UnsignedByteOffset0)
 {
     runTest(0);
 }
 
-TEST_F(IndexedPointsTestUByte, UnsignedByteOffset1)
+TYPED_TEST(IndexedPointsTestUByte, UnsignedByteOffset1)
 {
     runTest(1);
 }
 
-TEST_F(IndexedPointsTestUByte, UnsignedByteOffset2)
+TYPED_TEST(IndexedPointsTestUByte, UnsignedByteOffset2)
 {
     runTest(2);
 }
 
-TEST_F(IndexedPointsTestUByte, UnsignedByteOffset3)
+TYPED_TEST(IndexedPointsTestUByte, UnsignedByteOffset3)
 {
     runTest(3);
 }
 
-typedef IndexedPointsTest<ES2_D3D11, GLushort, GL_UNSIGNED_SHORT> IndexedPointsTestUShort;
+template <typename T>
+class IndexedPointsTestUShort : public IndexedPointsTest<T, GLushort, GL_UNSIGNED_SHORT>
+{
+};
 
-TEST_F(IndexedPointsTestUShort, UnsignedShortOffset0)
+TYPED_TEST(IndexedPointsTestUShort, UnsignedShortOffset0)
 {
     runTest(0);
 }
 
-TEST_F(IndexedPointsTestUShort, UnsignedShortOffset1)
+TYPED_TEST(IndexedPointsTestUShort, UnsignedShortOffset1)
 {
     runTest(1);
 }
 
-TEST_F(IndexedPointsTestUShort, UnsignedShortOffset2)
+TYPED_TEST(IndexedPointsTestUShort, UnsignedShortOffset2)
 {
     runTest(2);
 }
 
-TEST_F(IndexedPointsTestUShort, UnsignedShortOffset3)
+TYPED_TEST(IndexedPointsTestUShort, UnsignedShortOffset3)
 {
     runTest(3);
 }
 
-typedef IndexedPointsTest<ES2_D3D11, GLuint, GL_UNSIGNED_INT> IndexedPointsTestUInt;
+template <typename T>
+class IndexedPointsTestUInt : public IndexedPointsTest<T, GLuint, GL_UNSIGNED_INT>
+{
+};
 
-TEST_F(IndexedPointsTestUInt, UnsignedIntOffset0)
+TYPED_TEST(IndexedPointsTestUInt, UnsignedIntOffset0)
 {
     if (getClientVersion() < 3 && !extensionEnabled("GL_OES_element_index_uint"))
     {
@@ -179,7 +191,7 @@ TEST_F(IndexedPointsTestUInt, UnsignedIntOffset0)
     runTest(0);
 }
 
-TEST_F(IndexedPointsTestUInt, UnsignedIntOffset1)
+TYPED_TEST(IndexedPointsTestUInt, UnsignedIntOffset1)
 {
     if (getClientVersion() < 3 && !extensionEnabled("GL_OES_element_index_uint"))
     {
@@ -189,7 +201,7 @@ TEST_F(IndexedPointsTestUInt, UnsignedIntOffset1)
     runTest(1);
 }
 
-TEST_F(IndexedPointsTestUInt, UnsignedIntOffset2)
+TYPED_TEST(IndexedPointsTestUInt, UnsignedIntOffset2)
 {
     if (getClientVersion() < 3 && !extensionEnabled("GL_OES_element_index_uint"))
     {
@@ -199,7 +211,7 @@ TEST_F(IndexedPointsTestUInt, UnsignedIntOffset2)
     runTest(2);
 }
 
-TEST_F(IndexedPointsTestUInt, UnsignedIntOffset3)
+TYPED_TEST(IndexedPointsTestUInt, UnsignedIntOffset3)
 {
     if (getClientVersion() < 3 && !extensionEnabled("GL_OES_element_index_uint"))
     {
