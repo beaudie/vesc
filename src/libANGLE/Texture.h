@@ -120,9 +120,9 @@ class Texture final : public RefCountObject
     GLenum getBaseImageTarget() const;
     size_t getExpectedMipLevels() const;
 
-    bool isMipmapComplete(const gl::SamplerState &samplerState) const;
-    bool isLevelComplete(GLenum target, size_t level,
-                         const gl::SamplerState &samplerState) const;
+    bool computeSamplerCompleteness(const SamplerState &samplerState, const Data &data) const;
+    bool computeMipmapCompleteness(const gl::SamplerState &samplerState) const;
+    bool compueteLevelCompleteness(GLenum target, size_t level, const gl::SamplerState &samplerState) const;
 
     const ImageDesc &getImageDesc(GLenum target, size_t level) const;
     void setImageDesc(GLenum target, size_t level, const ImageDesc &desc);
@@ -132,6 +132,22 @@ class Texture final : public RefCountObject
 
     typedef std::vector<ImageDesc> ImageDescVector;
     ImageDescVector mImageDescs;
+
+    struct SamplerCompletenessCache
+    {
+        bool cacheValid;
+
+        // All values that affect sampler completeness that are not stored within
+        // the texture itself
+        SamplerState samplerState;
+        bool filterable;
+        GLint clientVersion;
+        bool supportsNPOT;
+
+        // Result of the sampler completeness with the above parameters
+        bool samplerComplete;
+    };
+    mutable SamplerCompletenessCache mCompletenessCache;
 
     egl::Surface *mBoundSurface;
 };

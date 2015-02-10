@@ -53,6 +53,7 @@ Texture::Texture(rx::TextureImpl *impl, GLuint id, GLenum target)
       mImageDescs(IMPLEMENTATION_MAX_TEXTURE_LEVELS * (target == GL_TEXTURE_CUBE_MAP ? 6 : 1)),
       mBoundSurface(NULL)
 {
+    mCompletenessCache.cacheValid = false;
 }
 
 Texture::~Texture()
@@ -108,74 +109,21 @@ GLenum Texture::getInternalFormat(GLenum target, size_t level) const
 bool Texture::isSamplerComplete(const SamplerState &samplerState, const Data &data) const
 {
     const ImageDesc &baseImageDesc = getImageDesc(getBaseImageTarget(), samplerState.baseLevel);
-    if (baseImageDesc.size.width == 0 || baseImageDesc.size.height == 0 || baseImageDesc.size.depth == 0)
-    {
-        return false;
-    }
-
-    if (mTarget == GL_TEXTURE_CUBE_MAP && baseImageDesc.size.width != baseImageDesc.size.height)
-    {
-        return false;
-    }
-
     const TextureCaps &textureCaps = data.textureCaps->get(baseImageDesc.internalFormat);
-    if (!textureCaps.filterable && !IsPointSampled(samplerState))
+    if (!mCompletenessCache.cacheValid ||
+        mCompletenessCache.samplerState != samplerState ||
+        mCompletenessCache.filterable != textureCaps.filterable ||
+        mCompletenessCache.clientVersion != data.clientVersion ||
+        mCompletenessCache.supportsNPOT != data.extensions->textureNPOT)
     {
-        return false;
+        mCompletenessCache.cacheValid = true;
+        mCompletenessCache.samplerState = samplerState;
+        mCompletenessCache.filterable = textureCaps.filterable;
+        mCompletenessCache.clientVersion = data.clientVersion;
+        mCompletenessCache.supportsNPOT = data.extensions->textureNPOT;
+        mCompletenessCache.samplerComplete = computeSamplerCompleteness(samplerState, data);
     }
-
-    bool npotSupport = data.extensions->textureNPOT || data.clientVersion >= 3;
-    if (!npotSupport)
-    {
-        if ((samplerState.wrapS != GL_CLAMP_TO_EDGE && !gl::isPow2(baseImageDesc.size.width)) ||
-            (samplerState.wrapT != GL_CLAMP_TO_EDGE && !gl::isPow2(baseImageDesc.size.height)))
-        {
-            return false;
-        }
-    }
-
-    if (IsMipmapFiltered(samplerState))
-    {
-        if (!npotSupport)
-        {
-            if (!gl::isPow2(baseImageDesc.size.width) || !gl::isPow2(baseImageDesc.size.height))
-            {
-                return false;
-            }
-        }
-
-        if (!isMipmapComplete(samplerState))
-        {
-            return false;
-        }
-    }
-    else
-    {
-        if (mTarget == GL_TEXTURE_CUBE_MAP && !isCubeComplete())
-        {
-            return false;
-        }
-    }
-
-    // OpenGLES 3.0.2 spec section 3.8.13 states that a texture is not mipmap complete if:
-    // The internalformat specified for the texture arrays is a sized internal depth or
-    // depth and stencil format (see table 3.13), the value of TEXTURE_COMPARE_-
-    // MODE is NONE, and either the magnification filter is not NEAREST or the mini-
-    // fication filter is neither NEAREST nor NEAREST_MIPMAP_NEAREST.
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(baseImageDesc.internalFormat);
-    if (formatInfo.depthBits > 0 && data.clientVersion > 2)
-    {
-        if (samplerState.compareMode == GL_NONE)
-        {
-            if ((samplerState.minFilter != GL_NEAREST && samplerState.minFilter != GL_NEAREST_MIPMAP_NEAREST) ||
-                samplerState.magFilter != GL_NEAREST)
-            {
-                return false;
-            }
-        }
-    }
-
-    return true;
+    return mCompletenessCache.samplerComplete;
 }
 
 // Tests for cube texture completeness. [OpenGL ES 2.0.24] section 3.7.10 page 81.
@@ -390,6 +338,7 @@ void Texture::setImageDesc(GLenum target, size_t level, const ImageDesc &desc)
     size_t descIndex = GetImageDescIndex(target, level);
     ASSERT(descIndex < mImageDescs.size());
     mImageDescs[descIndex] = desc;
+    mCompletenessCache.cacheValid = false;
 }
 
 void Texture::clearImageDesc(GLenum target, size_t level)
@@ -403,6 +352,7 @@ void Texture::clearImageDescs()
     {
         mImageDescs[descIndex] = ImageDesc();
     }
+    mCompletenessCache.cacheValid = false;
 }
 
 void Texture::bindTexImage(egl::Surface *surface)
@@ -451,7 +401,80 @@ size_t Texture::getExpectedMipLevels() const
     }
 }
 
-bool Texture::isMipmapComplete(const gl::SamplerState &samplerState) const
+bool Texture::computeSamplerCompleteness(const SamplerState &samplerState, const Data &data) const
+{
+    const ImageDesc &baseImageDesc = getImageDesc(getBaseImageTarget(), samplerState.baseLevel);
+    if (baseImageDesc.size.width == 0 || baseImageDesc.size.height == 0 || baseImageDesc.size.depth == 0)
+    {
+        return false;
+    }
+
+    if (mTarget == GL_TEXTURE_CUBE_MAP && baseImageDesc.size.width != baseImageDesc.size.height)
+    {
+        return false;
+    }
+
+    const TextureCaps &textureCaps = data.textureCaps->get(baseImageDesc.internalFormat);
+    if (!textureCaps.filterable && !IsPointSampled(samplerState))
+    {
+        return false;
+    }
+
+    bool npotSupport = data.extensions->textureNPOT || data.clientVersion >= 3;
+    if (!npotSupport)
+    {
+        if ((samplerState.wrapS != GL_CLAMP_TO_EDGE && !gl::isPow2(baseImageDesc.size.width)) ||
+            (samplerState.wrapT != GL_CLAMP_TO_EDGE && !gl::isPow2(baseImageDesc.size.height)))
+        {
+            return false;
+        }
+    }
+
+    if (IsMipmapFiltered(samplerState))
+    {
+        if (!npotSupport)
+        {
+            if (!gl::isPow2(baseImageDesc.size.width) || !gl::isPow2(baseImageDesc.size.height))
+            {
+                return false;
+            }
+        }
+
+        if (!computeMipmapCompleteness(samplerState))
+        {
+            return false;
+        }
+    }
+    else
+    {
+        if (mTarget == GL_TEXTURE_CUBE_MAP && !isCubeComplete())
+        {
+            return false;
+        }
+    }
+
+    // OpenGLES 3.0.2 spec section 3.8.13 states that a texture is not mipmap complete if:
+    // The internalformat specified for the texture arrays is a sized internal depth or
+    // depth and stencil format (see table 3.13), the value of TEXTURE_COMPARE_-
+    // MODE is NONE, and either the magnification filter is not NEAREST or the mini-
+    // fication filter is neither NEAREST nor NEAREST_MIPMAP_NEAREST.
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(baseImageDesc.internalFormat);
+    if (formatInfo.depthBits > 0 && data.clientVersion > 2)
+    {
+        if (samplerState.compareMode == GL_NONE)
+        {
+            if ((samplerState.minFilter != GL_NEAREST && samplerState.minFilter != GL_NEAREST_MIPMAP_NEAREST) ||
+                samplerState.magFilter != GL_NEAREST)
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool Texture::computeMipmapCompleteness(const gl::SamplerState &samplerState) const
 {
     size_t expectedMipLevels = getExpectedMipLevels();
 
@@ -463,7 +486,7 @@ bool Texture::isMipmapComplete(const gl::SamplerState &samplerState) const
         {
             for (GLenum face = FirstCubeMapTextureTarget; face <= LastCubeMapTextureTarget; face++)
             {
-                if (!isLevelComplete(face, level, samplerState))
+                if (!compueteLevelCompleteness(face, level, samplerState))
                 {
                     return false;
                 }
@@ -471,7 +494,7 @@ bool Texture::isMipmapComplete(const gl::SamplerState &samplerState) const
         }
         else
         {
-            if (!isLevelComplete(mTarget, level, samplerState))
+            if (!compueteLevelCompleteness(mTarget, level, samplerState))
             {
                 return false;
             }
@@ -482,8 +505,7 @@ bool Texture::isMipmapComplete(const gl::SamplerState &samplerState) const
 }
 
 
-bool Texture::isLevelComplete(GLenum target, size_t level,
-                              const gl::SamplerState &samplerState) const
+bool Texture::compueteLevelCompleteness(GLenum target, size_t level, const gl::SamplerState &samplerState) const
 {
     ASSERT(level < IMPLEMENTATION_MAX_TEXTURE_LEVELS);
 
