@@ -1409,7 +1409,7 @@ gl::Error Renderer9::applyRenderTarget(const gl::Framebuffer *framebuffer)
     return applyRenderTarget(framebuffer->getColorbuffer(0), framebuffer->getDepthOrStencilbuffer());
 }
 
-gl::Error Renderer9::applyVertexBuffer(const gl::State &state, GLenum mode, GLint first, GLsizei count, GLsizei instances)
+gl::Error Renderer9::applyVertexBuffer(const gl::State &state, GLenum mode, GLint first, GLsizei count, GLsizei instances, TranslatedIndexData *indexInfo)
 {
     TranslatedAttribute attributes[gl::MAX_VERTEX_ATTRIBS];
     gl::Error error = mVertexDataManager->prepareVertexData(state, first, count, attributes, instances);
@@ -1491,7 +1491,7 @@ gl::Error Renderer9::drawArrays(const gl::Data &data, GLenum mode, GLsizei count
 }
 
 gl::Error Renderer9::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
-                                  gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei /*instances*/)
+                                  gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei /*instances*/, bool /*usesPointSize*/)
 {
     startScene();
 

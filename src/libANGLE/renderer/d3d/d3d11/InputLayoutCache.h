@@ -27,6 +27,7 @@ class Program;
 namespace rx
 {
 struct TranslatedAttribute;
+struct TranslatedIndexData;
 
 class InputLayoutCache
 {
@@ -39,7 +40,8 @@ class InputLayoutCache
     void markDirty();
 
     gl::Error applyVertexBuffers(TranslatedAttribute attributes[gl::MAX_VERTEX_ATTRIBS],
-                                 GLenum mode, gl::Program *program);
+                                 GLenum mode, gl::Program *program, TranslatedIndexData *indexInfo,
+                                 bool appliedIndexBufferChanged);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(InputLayoutCache);
@@ -79,9 +81,11 @@ class InputLayoutCache
 
     ID3D11Buffer *mPointSpriteVertexBuffer;
     ID3D11Buffer *mPointSpriteIndexBuffer;
+    ID3D11Buffer *mIndexedPointSpriteEnableBuffer;
 
     static std::size_t hashInputLayout(const InputLayoutKey &inputLayout);
     static bool compareInputLayouts(const InputLayoutKey &a, const InputLayoutKey &b);
+    static void configureIndexedPointSpriteEnableBuffer(std::vector<float> &enableBuffer, TranslatedIndexData *indexInfo);
 
     typedef std::size_t (*InputLayoutHashFunction)(const InputLayoutKey &);
     typedef bool (*InputLayoutEqualityFunction)(const InputLayoutKey &, const InputLayoutKey &);

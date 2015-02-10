@@ -155,6 +155,7 @@ Renderer11::Renderer11(egl::Display *display)
 
     mLineLoopIB = NULL;
     mTriangleFanIB = NULL;
+    mAppliedIBChanged = false;
 
     mBlit = NULL;
     mPixelTransfer = NULL;
@@ -1245,7 +1246,7 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::applyVertexBuffer(const gl::State &state, GLenum mode, GLint first, GLsizei count, GLsizei instances)
+gl::Error Renderer11::applyVertexBuffer(const gl::State &state, GLenum mode, GLint first, GLsizei count, GLsizei instances, TranslatedIndexData *indexInfo)
 {
     TranslatedAttribute attributes[gl::MAX_VERTEX_ATTRIBS];
     gl::Error error = mVertexDataManager->prepareVertexData(state, first, count, attributes, instances);
@@ -1254,7 +1255,7 @@ gl::Error Renderer11::applyVertexBuffer(const gl::State &state, GLenum mode, GLi
         return error;
     }
 
-    return mInputLayoutCache.applyVertexBuffers(attributes, mode, state.getProgram());
+    return mInputLayoutCache.applyVertexBuffers(attributes, mode, state.getProgram(), indexInfo, mAppliedIBChanged);
 }
 
 gl::Error Renderer11::applyIndexBuffer(const GLvoid *indices, gl::Buffer *elementArrayBuffer, GLsizei count, GLenum mode, GLenum type, TranslatedIndexData *indexInfo)
@@ -1279,6 +1280,8 @@ gl::Error Renderer11::applyIndexBuffer(const GLvoid *indices, gl::Buffer *elemen
         buffer = indexBuffer->getBuffer();
     }
 
+    mAppliedIBChanged = false;
+
     if (buffer != mAppliedIB || bufferFormat != mAppliedIBFormat || indexInfo->startOffset != mAppliedIBOffset)
     {
         mDeviceContext->IASetIndexBuffer(buffer, bufferFormat, indexInfo->startOffset);
@@ -1286,6 +1289,7 @@ gl::Error Renderer11::applyIndexBuffer(const GLvoid *indices, gl::Buffer *elemen
         mAppliedIB = buffer;
         mAppliedIBFormat = bufferFormat;
         mAppliedIBOffset = indexInfo->startOffset;
+        mAppliedIBChanged = true;
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -1422,7 +1426,7 @@ gl::Error Renderer11::drawArrays(const gl::Data &data, GLenum mode, GLsizei coun
     else
     {
         // If gl_PointSize is used and GL_POINTS is specified, then it is expected to render pointsprites.
-        // If instanced pointsprite emulation is being used the topology is expexted to be 
+        // If instanced pointsprite emulation is being used the topology is expected to be
         // D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST and DrawIndexedInstanced must be used.
         if (mode == GL_POINTS && useInstancedPointSpriteEmulation)
         {
@@ -1437,8 +1441,10 @@ gl::Error Renderer11::drawArrays(const gl::Data &data, GLenum mode, GLsizei coun
 }
 
 gl::Error Renderer11::drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
-                                   gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei instances)
+                                   gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei instances,
+                                   bool usesPointSize)
 {
+    bool useInstancedPointSpriteEmulation = usesPointSize && getWorkarounds().useInstancedPointSpriteEmulation;
     int minIndex = static_cast<int>(indexInfo.indexRange.start);
 
     if (mode == GL_LINE_LOOP)
@@ -1456,8 +1462,28 @@ gl::Error Renderer11::drawElements(GLenum mode, GLsizei count, GLenum type, cons
     }
     else
     {
-        mDeviceContext->DrawIndexed(count, 0, -minIndex);
-        return gl::Error(GL_NO_ERROR);
+        // If gl_PointSize is used and GL_POINTS is specified, then it is expected to render pointsprites.
+        // If instanced pointsprite emulation is being used the topology is expected to be
+        // D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST and DrawIndexedInstanced must be used.
+        if (mode == GL_POINTS && useInstancedPointSpriteEmulation)
+        {
+            // The count parameter passed to drawElements represents the total number of instances
+            // to be rendered.  Each instance is referenced by the bound index buffer from the
+            // the caller.
+            //
+            // Indexed pointsprite emulation requires that all available primitives
+            // in the vertex buffers are sent to be rendered. The emulation technique
+            // will cull out points that are not referenced by the caller's
+            // index buffer.  The remaining instances are rendered using the pointsprite instanced
+            // rendering code path.
+            mDeviceContext->DrawIndexedInstanced(6, (indexInfo.indexRange.end + 1), 0, 0, 0);
+            return gl::Error(GL_NO_ERROR);
+        }
+        else
+        {
+            mDeviceContext->DrawIndexed(count, 0, -minIndex);
+            return gl::Error(GL_NO_ERROR);
+        }
     }
 }
 

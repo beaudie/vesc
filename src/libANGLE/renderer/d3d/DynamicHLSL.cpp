@@ -404,6 +404,7 @@ std::string DynamicHLSL::generateVertexShaderForInputLayout(const std::string &s
     {
         structHLSL += "    float3 spriteVertexPos : SPRITEPOSITION0;\n";
         structHLSL += "    float2 spriteTexCoord : SPRITETEXCOORD0;\n";
+        structHLSL += "    float spriteEnabled : SPRITEENABLEMAP0;\n";
     }
 
     for (unsigned int attributeIndex = 0; attributeIndex < MAX_VERTEX_ATTRIBS; attributeIndex++)
@@ -878,6 +879,7 @@ bool DynamicHLSL::generateShaderLinkHLSL(const gl::Data &data, InfoLog &infoLog,
         vertexHLSL += "\n"
                       "    gl_PointSize = clamp(gl_PointSize, minPointSize, maxPointSize);\n"
                       "    output.dx_Position.xyz += float3(input.spriteVertexPos.x * gl_PointSize / (dx_ViewCoords.x*2), input.spriteVertexPos.y * gl_PointSize / (dx_ViewCoords.y*2), input.spriteVertexPos.z) * output.dx_Position.w;\n"
+                      "    output.dx_Position.z += input.spriteEnabled;\n"
                       "    output.gl_PointSize = gl_PointSize;\n";
 
         if (usesPointCoord)
