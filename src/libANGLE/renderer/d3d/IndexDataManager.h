@@ -45,6 +45,16 @@ struct TranslatedIndexData
     BufferD3D *storage;
     GLenum indexType;
     unsigned int serial;
+
+    GLvoid *rawIndices;
+};
+
+struct UntranslatedIndexData
+{
+    const void* indices;
+    unsigned int count;
+    GLenum indexType;
+    unsigned int maxIndex;
 };
 
 class IndexDataManager

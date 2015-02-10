@@ -106,6 +106,8 @@ gl::Error IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buf
         indices = bufferData + offset;
     }
 
+    translated->rawIndices = (GLvoid*)indices;
+
     StaticIndexBufferInterface *staticBuffer = storage ? storage->getStaticIndexBuffer() : NULL;
     IndexBufferInterface *indexBuffer = NULL;
     bool directStorage = alignedOffset && storage && storage->supportsDirectBinding() &&

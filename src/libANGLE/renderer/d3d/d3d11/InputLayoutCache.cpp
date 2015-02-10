@@ -9,11 +9,14 @@
 
 #include "libANGLE/renderer/d3d/d3d11/InputLayoutCache.h"
 #include "libANGLE/renderer/d3d/d3d11/VertexBuffer11.h"
+#include "libANGLE/renderer/d3d/d3d11/IndexBuffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/ShaderExecutable11.h"
 #include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
+#include "libANGLE/renderer/d3d/IndexDataManager.h"
+#include "libANGLE/renderer/d3d/IndexBuffer.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/VertexAttribute.h"
 
@@ -53,6 +56,7 @@ InputLayoutCache::InputLayoutCache() : mInputLayoutMap(kMaxInputLayouts, hashInp
     }
     mPointSpriteVertexBuffer = NULL;
     mPointSpriteIndexBuffer = NULL;
+    mIndexedPointSpriteEnableBuffer = NULL;
 }
 
 InputLayoutCache::~InputLayoutCache()
@@ -77,6 +81,7 @@ void InputLayoutCache::clear()
     mInputLayoutMap.clear();
     SafeRelease(mPointSpriteVertexBuffer);
     SafeRelease(mPointSpriteIndexBuffer);
+    SafeRelease(mIndexedPointSpriteEnableBuffer);
     markDirty();
 }
 
@@ -91,8 +96,48 @@ void InputLayoutCache::markDirty()
     }
 }
 
+void InputLayoutCache::configureIndexedPointSpriteEnableBuffer(std::vector<float> &enableBuffer, UntranslatedIndexData *indexInfo)
+{
+    // Reset the temporary enable buffer to ensure that all pointsprites are configured to not
+    // be rendered.  Only pointsprites indicated in the caller's supplied index buffer will be
+    // marked as enabled.
+    std::fill(enableBuffer.begin(), enableBuffer.end(), 1.0f);
+
+    // The caller's specified index buffer is read and translated into the point mapping
+    // buffer by setting a value to 0 (meaning the point is to be rendered) or
+    // or 1 (meaning the point is not to be rendered).
+    // 0 is chosen to represent enabled because it simplifies the shader implementation
+    // by eliminating the need for a branch (if statement) for determining if the point should be
+    // rendered or not.  Branches in shaders are expensive and non performant.
+
+    // Iterate over the indices list and update the temporary buffer that represents the
+    // enable/disable points map.
+    // Note that the total number of indices is calculated using the start offset configured
+    // in the index information.  This ensures that we start reading indices from the correct
+    // position.
+    ASSERT(indexInfo->count <= enableBuffer.size());
+    uint8_t *ptr = (uint8_t*)indexInfo->indices;
+    // The indices pointer must also be offset to start at the read position.
+    for (unsigned int i = 0; i < indexInfo->count; i++)
+    {
+        unsigned int idx = 0;
+        switch (indexInfo->indexType)
+        {
+          case GL_UNSIGNED_INT: idx = ((GLuint*)ptr)[i]; break;
+          case GL_UNSIGNED_SHORT: idx = ((GLushort*)ptr)[i]; break;
+          case GL_UNSIGNED_BYTE: idx = ((GLubyte*)ptr)[i]; break;
+          default: idx = ((GLushort*)ptr)[i]; break;
+        }
+
+        // Only enable points read from the the indices data
+        ASSERT(idx < enableBuffer.size());
+        enableBuffer[idx] = 0.0f;
+    }
+}
+
 gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl::MAX_VERTEX_ATTRIBS],
-                                               GLenum mode, gl::Program *program)
+                                               GLenum mode, gl::Program *program, UntranslatedIndexData *indexInfo,
+                                               bool appliedIndexBufferChanged)
 {
     ProgramD3D *programD3D = GetImplAs<ProgramD3D>(program);
 
@@ -100,6 +145,8 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
     programD3D->sortAttributesByLayout(attributes, sortedSemanticIndices);
     bool programUsesInstancedPointSprites = programD3D->usesPointSize() && programD3D->usesInstancedPointSpriteEmulation();
     bool instancedPointSpritesActive = programUsesInstancedPointSprites && (mode == GL_POINTS);
+    bool indexedPointSpritesActive = instancedPointSpritesActive && (indexInfo != nullptr);
+    int indexedPointSpriteCount = (indexInfo != nullptr) ? (indexInfo->maxIndex + 1) : 0;
 
     if (!mDevice || !mDeviceContext)
     {
@@ -182,6 +229,26 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
         ilKey.elements[ilKey.elementCount].desc.AlignedByteOffset = sizeof(float) * 3;
         ilKey.elements[ilKey.elementCount].desc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
         ilKey.elements[ilKey.elementCount].desc.InstanceDataStepRate = 0;
+
+        ilKey.elementCount++;
+        nextAvailableInputSlot++;
+
+        // Add index mapping buffer.  This buffer will be a per instance value if indexed points
+        // are being rendered, othewise it will be treated as a per vertex data.  The shader
+        // will read this value to determine the point needs to be rendered or not.
+        // 0 = render point, 1 = do not render (render off screen)
+        ilKey.elements[ilKey.elementCount].desc.SemanticName = "SPRITEENABLEMAP";
+        ilKey.elements[ilKey.elementCount].desc.SemanticIndex = 0;
+        ilKey.elements[ilKey.elementCount].desc.Format = DXGI_FORMAT_R32_FLOAT;
+        ilKey.elements[ilKey.elementCount].desc.InputSlot = nextAvailableInputSlot;
+        ilKey.elements[ilKey.elementCount].desc.AlignedByteOffset = 0;
+        ilKey.elements[ilKey.elementCount].desc.InputSlotClass = indexedPointSpritesActive ? D3D11_INPUT_PER_INSTANCE_DATA : D3D11_INPUT_PER_VERTEX_DATA;
+        ilKey.elements[ilKey.elementCount].desc.InstanceDataStepRate = 0;
+
+        if (ilKey.elements[ilKey.elementCount].desc.InputSlotClass == D3D11_INPUT_PER_INSTANCE_DATA && firstInstancedElement == gl::MAX_VERTEX_ATTRIBS)
+        {
+            firstInstancedElement = ilKey.elementCount;
+        }
 
         ilKey.elementCount++;
     }
@@ -300,10 +367,10 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
 
             mCurrentBuffers[i] = buffer;
             mCurrentVertexStrides[i] = vertexStride;
-            mCurrentVertexOffsets[i] = vertexOffset;
+            mCurrentVertexOffsets[i] = indexedPointSpritesActive ? 0 : vertexOffset;
 
             // If a non null ID3D11Buffer is being assigned to mCurrentBuffers,
-            // then the next available index needs to be tracked to ensure 
+            // then the next available index needs to be tracked to ensure
             // that any instanced pointsprite emulation buffers will be properly packed.
             if (buffer)
             {
@@ -313,7 +380,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
     }
 
     // Instanced PointSprite emulation requires two additional ID3D11Buffers.
-    // A vertex buffer needs to be created and added to the list of current buffers, 
+    // A vertex buffer needs to be created and added to the list of current buffers,
     // strides and offsets collections.  This buffer contains the vertices for a single
     // PointSprite quad.
     // An index buffer also needs to be created and applied because rendering instanced
@@ -355,6 +422,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
         mCurrentBuffers[nextAvailableIndex] = mPointSpriteVertexBuffer;
         mCurrentVertexStrides[nextAvailableIndex] = pointSpriteVertexStride;
         mCurrentVertexOffsets[nextAvailableIndex] = 0;
+        nextAvailableIndex++;
 
         if (!mPointSpriteIndexBuffer)
         {
@@ -382,11 +450,82 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
         }
 
         // The index buffer is applied here because Instanced PointSprite emulation uses
-        // the a non-indexed rendering path in ANGLE (DrawArrays).  This means that applyIndexBuffer()
-        // on the renderer will not be called and setting this buffer here ensures that the rendering
-        // path will contain the correct index buffers.
+        // this buffer to render an instanced indexed quad.
+        // If indexed point points are being rendered, this index buffer will replace the
+        // current index buffer set previously in applyIndexBuffer(). The caller's specified
+        // index buffer will still be referred to in the enable/disable point sprite
+        // logic below.
+        // Setting this buffer here ensures that the rendering path will contain the correct index buffer
+        // for rendering an instanced point sprite.
         mDeviceContext->IASetIndexBuffer(mPointSpriteIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+
+        // If an index buffer was applied and has changed the sprite enable mapping buffer
+        // must also be invalidated.  This ensures that a new enable buffer is created that matches
+        // the currently applied index buffer.
+        if (appliedIndexBufferChanged)
+        {
+            SafeRelease(mIndexedPointSpriteEnableBuffer);
+        }
+
+        // Indexed PointSprite emulation leverages the existing Instanced PointSprite rendering path with an
+        // additional ID3D11Buffer that contains on/off values enabling/disabling points to be rendered.
+        // The enable/disable state is configured by reading the caller's supplied index buffer.
+        //
+        // This code path is shared between glDrawArrays( ) and glDrawElements( ).
+        //
+        // The glDrawArrays path uses the point mapping buffers as a per-vertex
+        // buffer.  All values in the mapping buffer are set to an enabled state.
+        //
+        // The glDrawElements path uses the point enable buffers as a per instance buffer.
+        // The caller's specified index buffer is read and translated into the point mapping
+        // buffer by setting a value to 0 (meaning the point is to be rendered) or
+        // or 1 (meaning the point is not to be rendered).
+        // 0 is chosen to represent enabled because it simplifies the shader implementation
+        // by eliminating the need for a branch (if statement) for determining if the point should be
+        // rendered or not.  Branches in shaders are expensive and non performant.
+        // Create a enable buffer if one is not currently available to use.
+        if (!mIndexedPointSpriteEnableBuffer)
+        {
+            // glDrawArrays is a more common rendering path for rendering points. For this case,
+            // the mapping buffer will contain 6 entries that indicated that all points
+            // of the instanced quad should be rendered.
+            std::vector<float> indexedPointSpriteEnable(6, 0.0f);
+
+            // If indexed points are being rendered (via glDrawElements), then the enable buffer must be updated
+            // to reflect the contents of the supplied index buffer.
+            if (indexedPointSpritesActive)
+            {
+                // Resize the indexed pointsprite enable buffer to be the total number of point instances possible to render.
+                // All points must be considered because of reuse of the instanced pointsprite rendering path.
+                // The shader will cull points that should not be rendered using this enabled buffer.
+                indexedPointSpriteEnable.resize(indexedPointSpriteCount);
+                configureIndexedPointSpriteEnableBuffer(indexedPointSpriteEnable, indexInfo);
+            }
+
+            D3D11_SUBRESOURCE_DATA indexBufferData = { indexedPointSpriteEnable.data(), 0, 0 };
+            D3D11_BUFFER_DESC indexBufferDesc;
+            indexBufferDesc.ByteWidth = indexedPointSpriteEnable.size() * sizeof(float);
+            indexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+            indexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+            indexBufferDesc.CPUAccessFlags = 0;
+            indexBufferDesc.MiscFlags = 0;
+            indexBufferDesc.StructureByteStride = 0;
+
+            result = mDevice->CreateBuffer(&indexBufferDesc, &indexBufferData, &mIndexedPointSpriteEnableBuffer);
+            if (FAILED(result))
+            {
+                SafeRelease(mPointSpriteIndexBuffer);
+                SafeRelease(mPointSpriteVertexBuffer);
+                return gl::Error(GL_OUT_OF_MEMORY, "Failed to create indexed pointsprite emulation enable buffer, HRESULT: 0x%08x", result);
+            }
+        }
+
+        mCurrentBuffers[nextAvailableIndex] = mIndexedPointSpriteEnableBuffer;
+        mCurrentVertexStrides[nextAvailableIndex] = sizeof(float);
+        mCurrentVertexOffsets[nextAvailableIndex] = 0;
     }
+
+    nextAvailableIndex++;
 
     if (moveFirstIndexedIntoSlotZero)
     {

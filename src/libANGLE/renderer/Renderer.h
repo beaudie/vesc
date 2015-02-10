@@ -39,6 +39,7 @@ struct Data;
 namespace rx
 {
 struct TranslatedIndexData;
+struct UntranslatedIndexData;
 struct Workarounds;
 class DisplayImpl;
 
