@@ -3040,6 +3040,7 @@ yyreduce:
         TIntermAggregate *prototype = new TIntermAggregate;
         prototype->setType(function.getReturnType());
         prototype->setName(function.getMangledName());
+        prototype->setUniqueId(function.getUniqueId());
         
         for (size_t i = 0; i < function.getParamCount(); i++)
         {
@@ -4916,6 +4917,7 @@ yyreduce:
         context->intermediate.setAggregateOperator((yyval.interm.intermNode), EOpFunction, (yylsp[-2]));
         (yyval.interm.intermNode)->getAsAggregate()->setName((yyvsp[-2].interm).function->getMangledName().c_str());
         (yyval.interm.intermNode)->getAsAggregate()->setType((yyvsp[-2].interm).function->getReturnType());
+        (yyval.interm.intermNode)->getAsAggregate()->setUniqueId((yyvsp[-2].interm).function->getUniqueId());
 
         // store the pragma information for debug and optimize and other vendor specific
         // information. This information can be queried from the parse tree

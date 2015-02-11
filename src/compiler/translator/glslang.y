@@ -614,6 +614,7 @@ declaration
         TIntermAggregate *prototype = new TIntermAggregate;
         prototype->setType(function.getReturnType());
         prototype->setName(function.getMangledName());
+        prototype->setUniqueId(function.getUniqueId());
         
         for (size_t i = 0; i < function.getParamCount(); i++)
         {
@@ -1739,6 +1740,7 @@ function_definition
         context->intermediate.setAggregateOperator($$, EOpFunction, @1);
         $$->getAsAggregate()->setName($1.function->getMangledName().c_str());
         $$->getAsAggregate()->setType($1.function->getReturnType());
+        $$->getAsAggregate()->setUniqueId($1.function->getUniqueId());
 
         // store the pragma information for debug and optimize and other vendor specific
         // information. This information can be queried from the parse tree
