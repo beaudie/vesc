@@ -174,7 +174,6 @@ class RendererD3D : public Renderer
 
     void cleanup();
 
-    egl::Display *mDisplay;
     bool mDeviceLost;
 
   private:
