@@ -25,6 +25,7 @@
         ],
         'libangle_includes':
         [
+            '../include/angle_gl.h',
             '../include/EGL/egl.h',
             '../include/EGL/eglext.h',
             '../include/EGL/eglplatform.h',
@@ -37,7 +38,7 @@
             '../include/GLSLANG/ShaderLang.h',
             '../include/GLSLANG/ShaderVars.h',
             '../include/KHR/khrplatform.h',
-            '../include/angle_gl.h',
+            '../include/platform/Platform.h',
         ],
         'libangle_sources':
         [
@@ -107,6 +108,8 @@
             'libANGLE/features.h',
             'libANGLE/formatutils.cpp',
             'libANGLE/formatutils.h',
+            'libANGLE/platform_utils.cpp',
+            'libANGLE/platform_utils.h',
             'libANGLE/queryconversions.cpp',
             'libANGLE/queryconversions.h',
             'libANGLE/renderer/BufferImpl.h',
