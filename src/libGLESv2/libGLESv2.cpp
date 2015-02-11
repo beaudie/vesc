@@ -12,6 +12,7 @@
 #include "libGLESv2/entry_points_gles_3_0_ext.h"
 
 #include "common/event_tracer.h"
+#include "libANGLE/platform_utils.h"
 
 extern "C"
 {
@@ -1416,6 +1417,11 @@ void GL_APIENTRY SetTraceFunctionPointers(GetCategoryEnabledFlagFunc getCategory
 {
     gl::g_getCategoryEnabledFlag = getCategoryEnabledFlag;
     gl::g_addTraceEvent = addTraceEvent;
+}
+
+void GL_APIENTRY SetANGLEPlatformImpl(angle::Platform *platformImpl)
+{
+    return angle::SetGlobalPlatformImpl(platformImpl);
 }
 
 }

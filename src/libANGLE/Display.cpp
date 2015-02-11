@@ -14,6 +14,7 @@
 #include "common/mathutil.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Surface.h"
+#include "libANGLE/platform_utils.h"
 #include "libANGLE/renderer/DisplayImpl.h"
 
 #include <algorithm>
@@ -40,6 +41,9 @@ static DisplayMap *GetDisplayMap()
 
 Display *Display::getDisplay(EGLNativeDisplayType displayId, const AttributeMap &attribMap)
 {
+    // Initialize the global platform if not already
+    angle::InitDefaultPlatformImpl();
+
     Display *display = NULL;
 
     DisplayMap *displays = GetDisplayMap();
@@ -174,6 +178,9 @@ void Display::terminate()
 
     mImplementation->terminate();
     mInitialized = false;
+
+    // De-init default platform
+    angle::DeinitDefaultPlatformImpl();
 }
 
 std::vector<const Config*> Display::getConfigs(const egl::AttributeMap &attribs) const
