@@ -164,6 +164,13 @@ struct TParseContext {
     void exitStructDeclaration();
 
     bool structNestingErrorCheck(const TSourceLoc& line, const TField& field);
+
+    TIntermTyped *addUnaryMath(TOperator op, const char* opStr, TIntermTyped *child,
+        const TSourceLoc &);
+    TIntermTyped *addBinaryMath(TOperator op, const char* opStr, TIntermTyped *left,
+        TIntermTyped *right, const TSourceLoc &);
+    TIntermTyped *addBinaryMathBooleanResult(TOperator op, const char* opStr, TIntermTyped *left,
+        TIntermTyped *right, const TSourceLoc &);
 };
 
 int PaParseStrings(size_t count, const char* const string[], const int length[],

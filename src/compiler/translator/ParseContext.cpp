@@ -2585,6 +2585,47 @@ TPublicType TParseContext::addStructure(const TSourceLoc& structLine, const TSou
     return publicType;
 }
 
+TIntermTyped *TParseContext::addUnaryMath(TOperator op, const char* opStr, TIntermTyped *child,
+    const TSourceLoc &loc)
+{
+    TIntermTyped *node = intermediate.addUnaryMath(op, child, loc);
+    if (node == 0)
+    {
+        unaryOpError(loc, opStr, child->getCompleteString());
+        recover();
+        return child;
+    }
+    return node;
+}
+
+TIntermTyped *TParseContext::addBinaryMath(TOperator op, const char* opStr, TIntermTyped *left,
+    TIntermTyped *right, const TSourceLoc &loc)
+{
+    TIntermTyped *node = intermediate.addBinaryMath(op, left, right, loc);
+    if (node == 0)
+    {
+        binaryOpError(loc, opStr, left->getCompleteString(), right->getCompleteString());
+        recover();
+        return left;
+    }
+    return node;
+}
+
+TIntermTyped *TParseContext::addBinaryMathBooleanResult(TOperator op, const char* opStr, TIntermTyped *left,
+    TIntermTyped *right, const TSourceLoc &loc)
+{
+    TIntermTyped *node = intermediate.addBinaryMath(op, left, right, loc);
+    if (node == 0)
+    {
+        binaryOpError(loc, opStr, left->getCompleteString(), right->getCompleteString());
+        recover();
+        ConstantUnion *unionArray = new ConstantUnion[1];
+        unionArray->setBConst(false);
+        return intermediate.addConstantUnion(unionArray, TType(EbtBool, EbpUndefined, EvqConst), loc);
+    }
+    return node;
+}
+
 //
 // Parse an array of strings using yyparse.
 //
