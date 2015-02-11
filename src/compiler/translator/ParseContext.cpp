@@ -3140,6 +3140,7 @@ TIntermTyped *TParseContext::addFunctionCallOrMethod(TFunction *fnCall, TIntermN
                 if (!builtIn)
                     aggregate->setUserDefined();
                 aggregate->setName(fnCandidate->getMangledName());
+                aggregate->setFunctionId(fnCandidate->getUniqueId());
 
                 // This needs to happen after the name is set
                 if (builtIn)
