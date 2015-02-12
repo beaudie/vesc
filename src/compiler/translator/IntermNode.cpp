@@ -826,9 +826,18 @@ TIntermTyped *TIntermConstantUnion::fold(
                         }
                         else
                         {
-                            tempConstArray[i].setIConst(
-                                unionArray[i].getIConst() /
-                                rightUnionArray[i].getIConst());
+                            if (op == EOpDiv)
+                            {
+                                tempConstArray[i].setIConst(
+                                    unionArray[i].getIConst() /
+                                    rightUnionArray[i].getIConst());
+                            }
+                            else
+                            {
+                                tempConstArray[i].setIConst(
+                                    unionArray[i].getIConst() %
+                                    rightUnionArray[i].getIConst());
+                            }
                         }
                         break;
 
@@ -842,9 +851,18 @@ TIntermTyped *TIntermConstantUnion::fold(
                         }
                         else
                         {
-                            tempConstArray[i].setUConst(
-                                unionArray[i].getUConst() /
-                                rightUnionArray[i].getUConst());
+                            if (op == EOpDiv)
+                            {
+                                tempConstArray[i].setUConst(
+                                    unionArray[i].getUConst() /
+                                    rightUnionArray[i].getUConst());
+                            }
+                            else
+                            {
+                                tempConstArray[i].setUConst(
+                                    unionArray[i].getUConst() %
+                                    rightUnionArray[i].getUConst());
+                            }
                         }
                         break;
 
