@@ -9,16 +9,27 @@
 #include "libANGLE/renderer/gl/ProgramGL.h"
 
 #include "common/debug.h"
+#include "libANGLE/renderer/gl/FunctionsGL.h"
+#include "libANGLE/renderer/gl/ShaderGL.h"
 
 namespace rx
 {
 
-ProgramGL::ProgramGL()
-    : ProgramImpl()
-{}
+ProgramGL::ProgramGL(const FunctionsGL *functions)
+    : ProgramImpl(),
+      mFunctions(functions),
+      mProgramID(0)
+{
+    ASSERT(mFunctions);
+}
 
 ProgramGL::~ProgramGL()
-{}
+{
+    if (mProgramID != 0)
+    {
+        mFunctions->deleteProgram(mProgramID);
+    }
+}
 
 bool ProgramGL::usesPointSize() const
 {
@@ -63,8 +74,45 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog,
                            int *registers, std::vector<gl::LinkedVarying> *linkedVaryings,
                            std::map<int, gl::VariableLocation> *outputVariables)
 {
-    UNIMPLEMENTED();
-    return LinkResult(false, gl::Error(GL_INVALID_OPERATION));
+    ShaderGL *vertexShaderGL = GetImplAs<ShaderGL>(vertexShader);
+    ShaderGL *fragmentShaderGL = GetImplAs<ShaderGL>(fragmentShader);
+
+    // Generate a new program, make sure one doesn't already exist
+    ASSERT(mProgramID == 0);
+    mProgramID = mFunctions->createProgram();
+
+    // Attach the shaders
+    mFunctions->attachShader(mProgramID, vertexShaderGL->getShaderID());
+    mFunctions->attachShader(mProgramID, fragmentShaderGL->getShaderID());
+
+    // TODO: bind attribute locations
+
+    // Link and verify
+    mFunctions->linkProgram(mProgramID);
+
+    GLint linkStatus = GL_FALSE;
+    mFunctions->getProgramiv(mProgramID, GL_LINK_STATUS, &linkStatus);
+    ASSERT(linkStatus == GL_TRUE);
+    if (linkStatus == GL_FALSE)
+    {
+        // Linking failed, put the error into the info log
+        GLint infoLogLength = 0;
+        mFunctions->getProgramiv(mProgramID, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+        std::vector<char> buf(infoLogLength);
+        mFunctions->getProgramInfoLog(mProgramID, infoLogLength, nullptr, &buf[0]);
+
+        mFunctions->deleteProgram(mProgramID);
+        mProgramID = 0;
+
+        infoLog.append(&buf[0]);
+        TRACE("\n%s", &buf[0]);
+
+        // TODO, return GL_OUT_OF_MEMORY or just fail the link? This is an unexpected case
+        return LinkResult(false, gl::Error(GL_NO_ERROR));
+    }
+
+    return LinkResult(true, gl::Error(GL_NO_ERROR));
 }
 
 void ProgramGL::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
@@ -213,21 +261,21 @@ void ProgramGL::updateSamplerMapping()
 bool ProgramGL::validateSamplers(gl::InfoLog *infoLog, const gl::Caps &caps)
 {
     UNIMPLEMENTED();
-    return bool();
+    return true;
 }
 
 LinkResult ProgramGL::compileProgramExecutables(gl::InfoLog &infoLog, gl::Shader *fragmentShader, gl::Shader *vertexShader,
                                                 int registers)
 {
     UNIMPLEMENTED();
-    return LinkResult(false, gl::Error(GL_INVALID_OPERATION));
+    return LinkResult(true, gl::Error(GL_NO_ERROR));
 }
 
 bool ProgramGL::linkUniforms(gl::InfoLog &infoLog, const gl::Shader &vertexShader, const gl::Shader &fragmentShader,
                              const gl::Caps &caps)
 {
     UNIMPLEMENTED();
-    return bool();
+    return true;
 }
 
 bool ProgramGL::defineUniformBlock(gl::InfoLog &infoLog, const gl::Shader &shader, const sh::InterfaceBlock &interfaceBlock,
