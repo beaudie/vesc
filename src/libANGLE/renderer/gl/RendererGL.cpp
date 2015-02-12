@@ -71,17 +71,17 @@ gl::Error RendererGL::drawElements(const gl::Data &data, GLenum mode, GLsizei co
 
 CompilerImpl *RendererGL::createCompiler(const gl::Data &data)
 {
-    return new CompilerGL();
+    return new CompilerGL(data);
 }
 
 ShaderImpl *RendererGL::createShader(GLenum type)
 {
-    return new ShaderGL();
+    return new ShaderGL(type, mFunctions);
 }
 
 ProgramImpl *RendererGL::createProgram()
 {
-    return new ProgramGL();
+    return new ProgramGL(mFunctions, mStateManager);
 }
 
 DefaultAttachmentImpl *RendererGL::createDefaultAttachment(GLenum type, egl::Surface *surface)
