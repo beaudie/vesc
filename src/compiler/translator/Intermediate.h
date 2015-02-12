@@ -55,7 +55,6 @@ class TIntermediate
     TIntermBranch *addBranch(TOperator, TIntermTyped *, const TSourceLoc &);
     TIntermTyped *addSwizzle(TVectorFields &, const TSourceLoc &);
     bool postProcess(TIntermNode *);
-    void outputTree(TIntermNode *);
 
   private:
     void operator=(TIntermediate &); // prevent assignments

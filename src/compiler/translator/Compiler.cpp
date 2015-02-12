@@ -158,15 +158,10 @@ bool TCompiler::Init(const ShBuiltInResources& resources)
     return true;
 }
 
-bool TCompiler::compile(const char* const shaderStrings[],
-                        size_t numStrings,
-                        int compileOptions)
+TIntermNode *TCompiler::compileTree(const char* const shaderStrings[],
+    size_t numStrings, int compileOptions)
 {
-    TScopedPoolAllocator scopedAlloc(&allocator);
     clearResults();
-
-    if (numStrings == 0)
-        return true;
 
     // Reset the extension behavior for each compilation unit.
     ResetExtensionBehavior(extensionBehavior);
@@ -306,17 +301,39 @@ bool TCompiler::compile(const char* const shaderStrings[],
             root->traverse(&gen);
         }
 
-        if (success && (compileOptions & SH_INTERMEDIATE_TREE))
-            intermediate.outputTree(root);
-
-        if (success && (compileOptions & SH_OBJECT_CODE))
-            translate(root);
+        if (success)
+        {
+            SetGlobalParseContext(NULL);
+            return root;
+        }
     }
 
-    // Cleanup. The IntermNode tree doesn't need to be deleted here, since the
-    // memory will be freed in a big chunk by the PoolAllocator.
     SetGlobalParseContext(NULL);
-    return success;
+    return NULL;
+}
+
+bool TCompiler::compile(const char* const shaderStrings[],
+    size_t numStrings, int compileOptions)
+{
+    if (numStrings == 0)
+        return true;
+
+    TScopedPoolAllocator scopedAlloc(&allocator);
+    TIntermNode *root = compileTree(shaderStrings, numStrings, compileOptions);
+
+    if (root)
+    {
+        if (compileOptions & SH_INTERMEDIATE_TREE)
+            root->outputTree(infoSink.info);
+
+        if (compileOptions & SH_OBJECT_CODE)
+            translate(root);
+
+        // The IntermNode tree doesn't need to be deleted here, since the
+        // memory will be freed in a big chunk by the PoolAllocator.
+        return true;
+    }
+    return false;
 }
 
 bool TCompiler::InitBuiltInSymbolTable(const ShBuiltInResources &resources)

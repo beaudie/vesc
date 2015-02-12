@@ -61,9 +61,14 @@ class TCompiler : public TShHandleBase
     virtual TCompiler* getAsCompiler() { return this; }
 
     bool Init(const ShBuiltInResources& resources);
+
+    // compileTree should be used only when tests require access to the AST.
+    // Users of this function need to manually manage the global pool allocator.
+    TIntermNode *compileTree(const char* const shaderStrings[],
+        size_t numStrings, int compileOptions);
+
     bool compile(const char* const shaderStrings[],
-                 size_t numStrings,
-                 int compileOptions);
+        size_t numStrings, int compileOptions);
 
     // Get results of the last compilation.
     int getShaderVersion() const { return shaderVersion; }
