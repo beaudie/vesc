@@ -14,10 +14,13 @@
 namespace rx
 {
 
+class FunctionsGL;
+class RendererGL;
+
 class ProgramGL : public ProgramImpl
 {
   public:
-    ProgramGL();
+    ProgramGL(RendererGL* renderer, const FunctionsGL *functions);
     ~ProgramGL() override;
 
     bool usesPointSize() const override;
@@ -82,6 +85,11 @@ class ProgramGL : public ProgramImpl
 
   private:
     DISALLOW_COPY_AND_ASSIGN(ProgramGL);
+
+    RendererGL *const mRenderer;
+    const FunctionsGL *mFunctions;
+
+    GLuint mProgramID;
 };
 
 }

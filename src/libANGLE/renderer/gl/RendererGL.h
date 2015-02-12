@@ -69,6 +69,9 @@ class RendererGL : public Renderer
     std::string getVendorString() const override;
     std::string getRendererDescription() const override;
 
+    // State application
+    void setCurrentProgram(GLuint program);
+
   private:
     DISALLOW_COPY_AND_ASSIGN(RendererGL);
 
@@ -76,6 +79,9 @@ class RendererGL : public Renderer
     Workarounds generateWorkarounds() const override;
 
     const FunctionsGL *mFunctions;
+
+    // Current applied state
+    GLuint mCurrentProgram;
 };
 
 }
