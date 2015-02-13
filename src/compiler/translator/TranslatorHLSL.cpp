@@ -14,12 +14,13 @@ TranslatorHLSL::TranslatorHLSL(sh::GLenum type, ShShaderSpec spec, ShShaderOutpu
 {
 }
 
-void TranslatorHLSL::translate(TIntermNode *root)
+void TranslatorHLSL::translate(TIntermNode *root, int compileOptions)
 {
     TParseContext& parseContext = *GetGlobalParseContext();
-    sh::OutputHLSL outputHLSL(parseContext, this);
+    sh::OutputHLSL outputHLSL(this, getShaderType(), getShaderVersion(),
+        getExtensionBehavior(), getSourcePath(), compileOptions);
 
-    outputHLSL.output();
+    outputHLSL.output(root, getInfoSink().obj);
 
     mInterfaceBlockRegisterMap = outputHLSL.getInterfaceBlockRegisterMap();
     mUniformRegisterMap = outputHLSL.getUniformRegisterMap();

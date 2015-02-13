@@ -36,6 +36,7 @@ class TIntermTyped;
 class TIntermSymbol;
 class TIntermLoop;
 class TInfoSink;
+class TInfoSinkBase;
 class TIntermRaw;
 
 //
@@ -72,6 +73,8 @@ class TIntermNode
     // node and it is replaced; otherwise, return false.
     virtual bool replaceChildNode(
         TIntermNode *original, TIntermNode *replacement) = 0;
+
+    void outputTree(TInfoSinkBase &);
 
   protected:
     TSourceLoc mLine;

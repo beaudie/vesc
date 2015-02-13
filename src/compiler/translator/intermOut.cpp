@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 
-#include "compiler/translator/Intermediate.h"
+#include "compiler/translator/IntermNode.h"
 #include "compiler/translator/SymbolTable.h"
 
 namespace
@@ -613,14 +613,11 @@ bool TOutputTraverser::visitBranch(Visit visit, TIntermBranch *node)
 //
 // This function is the one to call externally to start the traversal.
 // Individual functions can be initialized to 0 to skip processing of that
-// type of node.  It's children will still be processed.
+// type of node. Its children will still be processed.
 //
-void TIntermediate::outputTree(TIntermNode *root)
+void TIntermNode::outputTree(TInfoSinkBase &infoSink)
 {
-    if (root == NULL)
-        return;
+    TOutputTraverser it(infoSink);
 
-    TOutputTraverser it(mInfoSink.info);
-
-    root->traverse(&it);
+    traverse(&it);
 }
