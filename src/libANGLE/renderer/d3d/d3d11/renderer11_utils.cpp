@@ -228,13 +228,18 @@ D3D11_QUERY ConvertQueryType(GLenum queryType)
 namespace d3d11_gl
 {
 
-static gl::TextureCaps GenerateTextureFormatCaps(GLenum internalFormat, ID3D11Device *device)
+static gl::TextureCaps GenerateTextureFormatCaps(GLint maxClientVersion, GLenum internalFormat, ID3D11Device *device)
 {
     gl::TextureCaps textureCaps;
 
     const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalFormat, device->GetFeatureLevel());
 
     UINT formatSupport;
+    UINT formatSupportMask = D3D11_FORMAT_SUPPORT_TEXTURE2D | D3D11_FORMAT_SUPPORT_TEXTURECUBE;
+    if (maxClientVersion > 2)
+    {
+        formatSupportMask |= D3D11_FORMAT_SUPPORT_TEXTURE3D;
+    }
     if (SUCCEEDED(device->CheckFormatSupport(formatInfo.texFormat, &formatSupport)))
     {
         const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(internalFormat);
@@ -244,9 +249,7 @@ static gl::TextureCaps GenerateTextureFormatCaps(GLenum internalFormat, ID3D11De
         }
         else
         {
-            textureCaps.texturable = ((formatSupport & D3D11_FORMAT_SUPPORT_TEXTURE2D) != 0) &&
-                                     ((formatSupport & D3D11_FORMAT_SUPPORT_TEXTURECUBE) != 0) &&
-                                     ((formatSupport & D3D11_FORMAT_SUPPORT_TEXTURE3D) != 0);
+            textureCaps.texturable = ((formatSupport & formatSupportMask) == formatSupportMask);
         }
     }
 
@@ -914,13 +917,32 @@ static size_t GetMaximumStreamOutputSeparateComponents(D3D_FEATURE_LEVEL feature
     }
 }
 
+static GLint GetMaximumClientVersion(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+    case D3D_FEATURE_LEVEL_11_1:
+    case D3D_FEATURE_LEVEL_11_0:
+    case D3D_FEATURE_LEVEL_10_1:
+    case D3D_FEATURE_LEVEL_10_0: return 3;
+
+    case D3D_FEATURE_LEVEL_9_3:
+    case D3D_FEATURE_LEVEL_9_2:
+    case D3D_FEATURE_LEVEL_9_1:  return 2;
+
+    default: UNREACHABLE();      return 0;
+    }
+}
+
 void GenerateCaps(ID3D11Device *device, gl::Caps *caps, gl::TextureCapsMap *textureCapsMap, gl::Extensions *extensions)
 {
+    D3D_FEATURE_LEVEL featureLevel = device->GetFeatureLevel();
+
     GLuint maxSamples = 0;
     const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
     for (gl::FormatSet::const_iterator internalFormat = allFormats.begin(); internalFormat != allFormats.end(); ++internalFormat)
     {
-        gl::TextureCaps textureCaps = GenerateTextureFormatCaps(*internalFormat, device);
+        gl::TextureCaps textureCaps = GenerateTextureFormatCaps(GetMaximumClientVersion(featureLevel), *internalFormat, device);
         textureCapsMap->insert(*internalFormat, textureCaps);
 
         maxSamples = std::max(maxSamples, textureCaps.getMaxSamples());
@@ -930,8 +952,6 @@ void GenerateCaps(ID3D11Device *device, gl::Caps *caps, gl::TextureCapsMap *text
             caps->compressedTextureFormats.push_back(*internalFormat);
         }
     }
-
-    D3D_FEATURE_LEVEL featureLevel = device->GetFeatureLevel();
 
     // GL core feature limits
     caps->maxElementIndex = static_cast<GLint64>(std::numeric_limits<unsigned int>::max());
