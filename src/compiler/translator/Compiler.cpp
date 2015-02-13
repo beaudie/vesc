@@ -125,7 +125,8 @@ TCompiler::TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
       maxCallStackDepth(0),
       fragmentPrecisionHigh(false),
       clampingStrategy(SH_CLAMP_WITH_CLAMP_INTRINSIC),
-      builtInFunctionEmulator(type)
+      builtInFunctionEmulator(type),
+      sourcePath(NULL)
 {
 }
 
@@ -158,15 +159,12 @@ bool TCompiler::Init(const ShBuiltInResources& resources)
     return true;
 }
 
-bool TCompiler::compile(const char* const shaderStrings[],
-                        size_t numStrings,
-                        int compileOptions)
+TIntermNode *TCompiler::compileTree(const char* const shaderStrings[],
+    size_t numStrings, int compileOptions)
 {
-    TScopedPoolAllocator scopedAlloc(&allocator);
     clearResults();
 
-    if (numStrings == 0)
-        return true;
+    ASSERT(numStrings > 0);
 
     // Reset the extension behavior for each compilation unit.
     ResetExtensionBehavior(extensionBehavior);
@@ -176,7 +174,6 @@ bool TCompiler::compile(const char* const shaderStrings[],
         compileOptions |= SH_VALIDATE_LOOP_INDEXING;
 
     // First string is path of source file if flag is set. The actual source follows.
-    const char* sourcePath = NULL;
     size_t firstSource = 0;
     if (compileOptions & SH_SOURCE_PATH)
     {
@@ -188,7 +185,7 @@ bool TCompiler::compile(const char* const shaderStrings[],
     TIntermediate intermediate(infoSink);
     TParseContext parseContext(symbolTable, extensionBehavior, intermediate,
                                shaderType, shaderSpec, compileOptions, true,
-                               sourcePath, infoSink, debugShaderPrecision);
+                               infoSink, debugShaderPrecision);
 
     parseContext.fragmentPrecisionHigh = fragmentPrecisionHigh;
     SetGlobalParseContext(&parseContext);
@@ -210,6 +207,8 @@ bool TCompiler::compile(const char* const shaderStrings[],
         success = false;
     }
 
+    TIntermNode *root = NULL;
+
     if (success)
     {
         mPragma = parseContext.pragma();
@@ -218,7 +217,7 @@ bool TCompiler::compile(const char* const shaderStrings[],
             symbolTable.setGlobalInvariant();
         }
 
-        TIntermNode* root = parseContext.treeRoot;
+        root = parseContext.treeRoot;
         success = intermediate.postProcess(root);
 
         // Disallow expressions deemed too complex.
@@ -305,18 +304,37 @@ bool TCompiler::compile(const char* const shaderStrings[],
             RegenerateStructNames gen(symbolTable, shaderVersion);
             root->traverse(&gen);
         }
-
-        if (success && (compileOptions & SH_INTERMEDIATE_TREE))
-            intermediate.outputTree(root);
-
-        if (success && (compileOptions & SH_OBJECT_CODE))
-            translate(root);
     }
 
-    // Cleanup. The IntermNode tree doesn't need to be deleted here, since the
-    // memory will be freed in a big chunk by the PoolAllocator.
     SetGlobalParseContext(NULL);
-    return success;
+    if (success)
+        return root;
+    else
+        return NULL;
+}
+
+bool TCompiler::compile(const char* const shaderStrings[],
+    size_t numStrings, int compileOptions)
+{
+    if (numStrings == 0)
+        return true;
+
+    TScopedPoolAllocator scopedAlloc(&allocator);
+    TIntermNode *root = compileTree(shaderStrings, numStrings, compileOptions);
+
+    if (root)
+    {
+        if (compileOptions & SH_INTERMEDIATE_TREE)
+            root->outputTree(infoSink.info);
+
+        if (compileOptions & SH_OBJECT_CODE)
+            translate(root, compileOptions);
+
+        // The IntermNode tree doesn't need to be deleted here, since the
+        // memory will be freed in a big chunk by the PoolAllocator.
+        return true;
+    }
+    return false;
 }
 
 bool TCompiler::InitBuiltInSymbolTable(const ShBuiltInResources &resources)
@@ -424,6 +442,8 @@ void TCompiler::clearResults()
     builtInFunctionEmulator.Cleanup();
 
     nameMap.clear();
+
+    sourcePath = NULL;
 }
 
 bool TCompiler::detectCallDepth(TIntermNode* inputRoot, TInfoSink& inputInfoSink, bool limitCallStackDepth)
@@ -600,6 +620,11 @@ void TCompiler::initializeVaryingsWithoutStaticUse(TIntermNode* root)
 const TExtensionBehavior& TCompiler::getExtensionBehavior() const
 {
     return extensionBehavior;
+}
+
+const char *TCompiler::getSourcePath() const
+{
+    return sourcePath;
 }
 
 const ShBuiltInResources& TCompiler::getResources() const
