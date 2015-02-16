@@ -115,6 +115,8 @@ class Renderer
     const gl::Extensions &getRendererExtensions() const;
     const Workarounds &getWorkarounds() const;
 
+    void getShaderPrecisionFormat(GLenum shadertype, GLenum precisiontype, int *range, int *precision) const = 0;
+
   private:
     DISALLOW_COPY_AND_ASSIGN(Renderer);
 

@@ -1197,6 +1197,11 @@ bool Context::getIndexedQueryParameterInfo(GLenum target, GLenum *type, unsigned
     return false;
 }
 
+void Context::getShaderPrecisionFormat(GLenum shaderType, GLenum precisionType, int *range, int *precision) const
+{
+    mRenderer->getShaderPrecisionFormat(shaderType, precisionType, range, precision);
+}
+
 Error Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instances)
 {
     return mRenderer->drawArrays(getData(), mode, first, count, instances);

@@ -104,6 +104,8 @@ class Renderer11 : public RendererD3D
     std::string getRendererDescription() const override;
     GUID getAdapterIdentifier() const override;
 
+    void getShaderPrecisionFormat(GLenum shaderType, GLenum precisionType, int *range, int *precision) const override;
+
     virtual unsigned int getReservedVertexUniformVectors() const;
     virtual unsigned int getReservedFragmentUniformVectors() const;
     virtual unsigned int getReservedVertexUniformBuffers() const;
