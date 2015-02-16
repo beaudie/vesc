@@ -377,6 +377,41 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     colorBufferFloat = DetermineColorBufferFloatSupport(textureCaps);
 }
 
+TypePrecision::TypePrecision()
+{
+    range[0] = 0;
+    range[1] = 0;
+    precision = 0;
+}
+
+TypePrecision::setIEEEFloat()
+{
+    range[0] = 127;
+    range[1] = 127;
+    precision = 23;
+}
+
+TypePrecision::setTwosComplementInt(unsigned int bits)
+{
+    range[0] = GLint(bits) - 1;
+    range[1] = GLint(bits) - 2;
+    precision = 0;
+}
+
+TypePrecision::setSimulatedInt(unsigned int range)
+{
+    range[0] = GLint(range);
+    range[1] = GLint(range);
+    precision = 0;
+}
+
+TypePrecision::get(GLint *returnRange, GLint *returnPrecision)
+{
+    returnRange[0] = range[0];
+    returnRange[1] = range[1];
+    *returnPrecision = precision;
+}
+
 Caps::Caps()
     : maxElementIndex(0),
       max3DTextureSize(0),
