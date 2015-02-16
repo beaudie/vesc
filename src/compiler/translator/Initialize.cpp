@@ -280,6 +280,20 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     symbolTable.insertBuiltIn(COMMON_BUILTINS, float3, "smoothstep", float1, float1, float3);
     symbolTable.insertBuiltIn(COMMON_BUILTINS, float4, "smoothstep", float1, float1, float4);
 
+    TType *outInt1 = new TType(EbtInt);
+    TType *outInt2 = new TType(EbtInt, 2);
+    TType *outInt3 = new TType(EbtInt, 3);
+    TType *outInt4 = new TType(EbtInt, 4);
+    outInt1->setQualifier(EvqOut);
+    outInt2->setQualifier(EvqOut);
+    outInt3->setQualifier(EvqOut);
+    outInt4->setQualifier(EvqOut);
+
+    symbolTable.insertBuiltIn(ESSL3_BUILTINS, float1, "modf", float1, outInt1);
+    symbolTable.insertBuiltIn(ESSL3_BUILTINS, float2, "modf", float2, outInt2);
+    symbolTable.insertBuiltIn(ESSL3_BUILTINS, float3, "modf", float3, outInt3);
+    symbolTable.insertBuiltIn(ESSL3_BUILTINS, float4, "modf", float4, outInt4);
+
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, int1, "floatBitsToInt", float1);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, int2, "floatBitsToInt", float2);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, int3, "floatBitsToInt", float3);
@@ -886,6 +900,7 @@ void IdentifyBuiltIns(sh::GLenum type, ShShaderSpec spec,
     symbolTable.relateToOperator(ESSL3_BUILTINS, "min",           EOpMin);
     symbolTable.relateToOperator(ESSL3_BUILTINS, "max",           EOpMax);
     symbolTable.relateToOperator(ESSL3_BUILTINS, "clamp",         EOpClamp);
+    symbolTable.relateToOperator(ESSL3_BUILTINS, "modf",          EOpModf);
 
     symbolTable.relateToOperator(ESSL3_BUILTINS, "floatBitsToInt",  EOpFloatBitsToInt);
     symbolTable.relateToOperator(ESSL3_BUILTINS, "floatBitsToUint", EOpFloatBitsToUint);
