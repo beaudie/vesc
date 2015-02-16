@@ -990,6 +990,20 @@ void GenerateCaps(ID3D11Device *device, gl::Caps *caps, gl::TextureCapsMap *text
     // Program and shader binary formats (no supported shader binary formats)
     caps->programBinaryFormats.push_back(GL_PROGRAM_BINARY_ANGLE);
 
+    // 32-bit integers are natively supported
+    caps->vertexHighpIntRange[0] = 31;
+    caps->vertexHighpIntRange[1] = 30;
+    caps->vertexMediumpIntRange[0] = 31;
+    caps->vertexMediumpIntRange[1] = 30;
+    caps->vertexLowpIntRange[0] = 31;
+    caps->vertexLowpIntRange[1] = 30;
+    caps->fragmentHighpIntRange[0] = 31;
+    caps->fragmentHighpIntRange[1] = 30;
+    caps->fragmentMediumpIntRange[0] = 31;
+    caps->fragmentMediumpIntRange[1] = 30;
+    caps->fragmentLowpIntRange[0] = 31;
+    caps->fragmentLowpIntRange[1] = 30;
+
     // We do not wait for server fence objects internally, so report a max timeout of zero.
     caps->maxServerWaitTimeout = 0;
 

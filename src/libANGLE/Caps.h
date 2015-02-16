@@ -242,6 +242,24 @@ struct Caps
     std::vector<GLenum> compressedTextureFormats;
     std::vector<GLenum> programBinaryFormats;
     std::vector<GLenum> shaderBinaryFormats;
+    GLuint vertexHighpFloatRange;
+    GLuint vertexHighpFloatPrecision;
+    GLuint vertexMediumpFloatRange;
+    GLuint vertexMediumpFloatPrecision;
+    GLuint vertexLowpFloatRange;
+    GLuint vertexLowpFloatPrecision;
+    GLuint vertexHighpIntRange[2];
+    GLuint vertexMediumpIntRange[2];
+    GLuint vertexLowpIntRange[2];
+    GLuint fragmentHighpFloatRange;
+    GLuint fragmentHighpFloatPrecision;
+    GLuint fragmentMediumpFloatRange;
+    GLuint fragmentMediumpFloatPrecision;
+    GLuint fragmentLowpFloatRange;
+    GLuint fragmentLowpFloatPrecision;
+    GLuint fragmentHighpIntRange[2];
+    GLuint fragmentMediumpIntRange[2];
+    GLuint fragmentLowpIntRange[2];
     GLuint64 maxServerWaitTimeout;
 
     // Table 6.31, implementation dependent vertex shader limits

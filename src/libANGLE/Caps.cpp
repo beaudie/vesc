@@ -395,6 +395,19 @@ Caps::Caps()
       // Table 6.29
       maxElementsIndices(0),
       maxElementsVertices(0),
+      // Assume IEEE-754 32-bit floats by default
+      vertexHighpFloatRange(127),
+      vertexHighpFloatPrecision(23),
+      vertexMediumpFloatRange(127),
+      vertexMediumpFloatPrecision(23),
+      vertexLowpFloatRange(127),
+      vertexLowpFloatPrecision(23),
+      fragmentHighpFloatRange(127),
+      fragmentHighpFloatPrecision(23),
+      fragmentMediumpFloatRange(127),
+      fragmentMediumpFloatPrecision(23),
+      fragmentLowpFloatRange(127),
+      fragmentLowpFloatPrecision(23),
       maxServerWaitTimeout(0),
       // Table 6.31
       maxVertexAttributes(0),
@@ -426,6 +439,19 @@ Caps::Caps()
       maxTransformFeedbackSeparateAttributes(0),
       maxTransformFeedbackSeparateComponents(0)
 {
+    // No assumptions about integer ranges
+    vertexHighpIntRange[0] = 0;
+    vertexHighpIntRange[1] = 0;
+    vertexMediumpIntRange[0] = 0;
+    vertexMediumpIntRange[1] = 0;
+    vertexLowpIntRange[0] = 0;
+    vertexLowpIntRange[1] = 0;
+    fragmentHighpIntRange[0] = 0;
+    fragmentHighpIntRange[1] = 0;
+    fragmentMediumpIntRange[0] = 0;
+    fragmentMediumpIntRange[1] = 0;
+    fragmentLowpIntRange[0] = 0;
+    fragmentLowpIntRange[1] = 0;
 }
 
 }

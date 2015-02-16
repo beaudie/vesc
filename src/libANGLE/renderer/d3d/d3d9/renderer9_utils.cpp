@@ -391,6 +391,21 @@ void GenerateCaps(IDirect3D9 *d3d9, IDirect3DDevice9 *device, D3DDEVTYPE deviceT
     // Program and shader binary formats (no supported shader binary formats)
     caps->programBinaryFormats.push_back(GL_PROGRAM_BINARY_ANGLE);
 
+    // Some (most) hardware only supports single-precision floating-point numbers,
+    // which can accurately represent integers up to +/-16777216
+    caps->vertexHighpIntRange[0] = 24;
+    caps->vertexHighpIntRange[1] = 24;
+    caps->vertexMediumpIntRange[0] = 24;
+    caps->vertexMediumpIntRange[1] = 24;
+    caps->vertexLowpIntRange[0] = 24;
+    caps->vertexLowpIntRange[1] = 24;
+    caps->fragmentHighpIntRange[0] = 24;
+    caps->fragmentHighpIntRange[1] = 24;
+    caps->fragmentMediumpIntRange[0] = 24;
+    caps->fragmentMediumpIntRange[1] = 24;
+    caps->fragmentLowpIntRange[0] = 24;
+    caps->fragmentLowpIntRange[1] = 24;
+
     // WaitSync is ES3-only, set to zero
     caps->maxServerWaitTimeout = 0;
 

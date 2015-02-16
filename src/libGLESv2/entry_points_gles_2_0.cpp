@@ -2366,39 +2366,90 @@ void GL_APIENTRY GetShaderPrecisionFormat(GLenum shadertype, GLenum precisiontyp
         switch (shadertype)
         {
           case GL_VERTEX_SHADER:
+            switch (precisiontype)
+            {
+              case GL_LOW_FLOAT:
+                range[0] = context->getCaps().vertexLowpFloatRange;
+                range[1] = context->getCaps().vertexLowpFloatRange;
+                *precision = context->getCaps().vertexLowpFloatPrecision;
+                break;
+              case GL_MEDIUM_FLOAT:
+                range[0] = context->getCaps().vertexMediumpFloatRange;
+                range[1] = context->getCaps().vertexMediumpFloatRange;
+                *precision = context->getCaps().vertexMediumpFloatPrecision;
+                break;
+              case GL_HIGH_FLOAT:
+                range[0] = context->getCaps().vertexHighpFloatRange;
+                range[1] = context->getCaps().vertexHighpFloatRange;
+                *precision = context->getCaps().vertexHighpFloatPrecision;
+                break;
+
+              case GL_LOW_INT:
+                range[0] = context->getCaps().vertexLowpIntRange[0];
+                range[1] = context->getCaps().vertexLowpIntRange[1];
+                *precision = 0;
+                break;
+              case GL_MEDIUM_INT:
+                range[0] = context->getCaps().vertexMediumpIntRange[0];
+                range[1] = context->getCaps().vertexMediumpIntRange[1];
+                *precision = 0;
+                break;
+              case GL_HIGH_INT:
+                range[0] = context->getCaps().vertexHighpIntRange[0];
+                range[1] = context->getCaps().vertexHighpIntRange[1];
+                *precision = 0;
+                break;
+
+              default:
+                context->recordError(Error(GL_INVALID_ENUM));
+                return;
+            }
+            break;
           case GL_FRAGMENT_SHADER:
-            break;
+            switch (precisiontype)
+            {
+              case GL_LOW_FLOAT:
+                range[0] = context->getCaps().fragmentLowpFloatRange;
+                range[1] = context->getCaps().fragmentLowpFloatRange;
+                *precision = context->getCaps().fragmentLowpFloatPrecision;
+                break;
+              case GL_MEDIUM_FLOAT:
+                range[0] = context->getCaps().fragmentMediumpFloatRange;
+                range[1] = context->getCaps().fragmentMediumpFloatRange;
+                *precision = context->getCaps().fragmentMediumpFloatPrecision;
+                break;
+              case GL_HIGH_FLOAT:
+                range[0] = context->getCaps().fragmentHighpFloatRange;
+                range[1] = context->getCaps().fragmentHighpFloatRange;
+                *precision = context->getCaps().fragmentHighpFloatPrecision;
+                break;
 
+              case GL_LOW_INT:
+                range[0] = context->getCaps().fragmentLowpIntRange[0];
+                range[1] = context->getCaps().fragmentLowpIntRange[1];
+                *precision = 0;
+                break;
+              case GL_MEDIUM_INT:
+                range[0] = context->getCaps().fragmentMediumpIntRange[0];
+                range[1] = context->getCaps().fragmentMediumpIntRange[1];
+                *precision = 0;
+                break;
+              case GL_HIGH_INT:
+                range[0] = context->getCaps().fragmentHighpIntRange[0];
+                range[1] = context->getCaps().fragmentHighpIntRange[1];
+                *precision = 0;
+                break;
+
+              default:
+                context->recordError(Error(GL_INVALID_ENUM));
+                return;
+            }
+            break;
           default:
             context->recordError(Error(GL_INVALID_ENUM));
             return;
         }
 
-        switch (precisiontype)
-        {
-          case GL_LOW_FLOAT:
-          case GL_MEDIUM_FLOAT:
-          case GL_HIGH_FLOAT:
-            // Assume IEEE 754 precision
-            range[0] = 127;
-            range[1] = 127;
-            *precision = 23;
-            break;
-
-          case GL_LOW_INT:
-          case GL_MEDIUM_INT:
-          case GL_HIGH_INT:
-            // Some (most) hardware only supports single-precision floating-point numbers,
-            // which can accurately represent integers up to +/-16777216
-            range[0] = 24;
-            range[1] = 24;
-            *precision = 0;
-            break;
-
-          default:
-            context->recordError(Error(GL_INVALID_ENUM));
-            return;
-        }
     }
 }
 
