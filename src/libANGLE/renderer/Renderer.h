@@ -109,6 +109,9 @@ class Renderer
     virtual std::string getVendorString() const = 0;
     virtual std::string getRendererDescription() const = 0;
 
+    virtual void getShaderPrecisionFormat(GLenum shadertype, GLenum precisiontype,
+        int *range, int *precision) const = 0;
+
     // Renderer capabilities
     const gl::Caps &getRendererCaps() const;
     const gl::TextureCapsMap &getRendererTextureCaps() const;

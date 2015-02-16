@@ -166,6 +166,12 @@ std::string RendererGL::getRendererDescription() const
     return std::string();
 }
 
+void RendererGL::getShaderPrecisionFormat(GLenum shaderType, GLenum precisionType, int *range, int *precision) const
+{
+    UNIMPLEMENTED();
+}
+
+
 void RendererGL::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap* outTextureCaps, gl::Extensions *outExtensions) const
 {
     // Set some minimum GLES2 caps, TODO: query for real GL caps

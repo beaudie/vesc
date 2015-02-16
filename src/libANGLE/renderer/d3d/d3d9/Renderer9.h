@@ -109,6 +109,8 @@ class Renderer9 : public RendererD3D
     std::string getRendererDescription() const override;
     GUID getAdapterIdentifier() const override;
 
+    void getShaderPrecisionFormat(GLenum shaderType, GLenum precisionType, int *range, int *precision) const override;
+
     IDirect3DDevice9 *getDevice() { return mDevice; }
 
     virtual unsigned int getReservedVertexUniformVectors() const;

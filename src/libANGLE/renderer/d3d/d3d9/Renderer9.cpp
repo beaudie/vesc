@@ -2426,6 +2426,35 @@ std::string Renderer9::getRendererDescription() const
     return rendererString.str();
 }
 
+void Renderer9::getShaderPrecisionFormat(GLenum, GLenum precisionType, int *range, int *precision) const
+{
+    switch (precisionType)
+    {
+      case GL_LOW_FLOAT:
+      case GL_MEDIUM_FLOAT:
+      case GL_HIGH_FLOAT:
+        // Assume IEEE 754 precision
+        range[0] = 127;
+        range[1] = 127;
+        *precision = 23;
+        break;
+
+      case GL_LOW_INT:
+      case GL_MEDIUM_INT:
+      case GL_HIGH_INT:
+        // Native 32-bit integers were added in DirectX 10, so they're not
+        // available in the DirectX 9 backend.
+        // Some (most) DirectX 9 hardware only supports single-precision floating-point numbers,
+        // which can accurately represent integers up to +/-16777216
+        range[0] = 24;
+        range[1] = 24;
+        *precision = 0;
+        break;
+      default:
+        UNREACHABLE();
+    }
+}
+
 GUID Renderer9::getAdapterIdentifier() const
 {
     return mAdapterIdentifier.DeviceIdentifier;

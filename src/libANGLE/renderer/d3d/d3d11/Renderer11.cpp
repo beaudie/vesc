@@ -2102,6 +2102,32 @@ std::string Renderer11::getRendererDescription() const
     return rendererString.str();
 }
 
+void Renderer11::getShaderPrecisionFormat(GLenum, GLenum precisionType, int *range, int *precision) const
+{
+    switch (precisionType)
+    {
+      case GL_LOW_FLOAT:
+      case GL_MEDIUM_FLOAT:
+      case GL_HIGH_FLOAT:
+        // DirectX uses IEEE 754 precision
+        range[0] = 127;
+        range[1] = 127;
+        *precision = 23;
+        break;
+
+      case GL_LOW_INT:
+      case GL_MEDIUM_INT:
+      case GL_HIGH_INT:
+        // DirectX got native 32-bit integers in DirectX 10.
+        range[0] = 31; // min is -2^31
+        range[1] = 30; // max is 2^31 - 1
+        *precision = 0;
+        break;
+      default:
+        UNREACHABLE();
+    }
+}
+
 GUID Renderer11::getAdapterIdentifier() const
 {
     // Use the adapter LUID as our adapter ID

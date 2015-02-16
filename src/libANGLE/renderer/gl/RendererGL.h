@@ -68,6 +68,8 @@ class RendererGL : public Renderer
     std::string getVendorString() const override;
     std::string getRendererDescription() const override;
 
+    void getShaderPrecisionFormat(GLenum shaderType, GLenum precisionType, int *range, int *precision) const override;
+
   private:
     DISALLOW_COPY_AND_ASSIGN(RendererGL);
 
