@@ -458,6 +458,47 @@ TIntermTyped *TIntermediate::addSelection(
     return node;
 }
 
+TIntermSwitch *TIntermediate::addSwitch(
+    TIntermNode *init, TIntermNode *statementList, const TSourceLoc &line)
+{
+    // TODO: check that there are no two identical cases
+    // TODO: check that there's a statement between the last case statement and the end
+    TIntermTyped *initTyped = init->getAsTyped();
+    if (initTyped == NULL)
+        return NULL;
+    if (initTyped->getBasicType() != EbtInt)
+        return NULL;
+    TIntermAggregate *statementListAgg = statementList->getAsAggregate();
+    if (statementListAgg == NULL)
+        return NULL;
+    TIntermSwitch *node = new TIntermSwitch(initTyped, statementListAgg);
+    node->setLine(line);
+
+    return node;
+}
+
+TIntermCase *TIntermediate::addCase(
+    TIntermNode *condition, const TSourceLoc &line)
+{
+    TIntermCase *node;
+    if (condition)
+    {
+        TIntermConstantUnion *conditionConst = condition->getAsConstantUnion();
+        if (conditionConst == NULL)
+            return NULL;
+        if (conditionConst->getBasicType() != EbtInt)
+            return NULL;
+        node = new TIntermCase(conditionConst);
+    }
+    else
+    {
+        node = new TIntermCase(NULL);
+    }
+    node->setLine(line);
+
+    return node;
+}
+
 //
 // Constant terminal nodes.  Has a union that contains bool, float or int constants
 //

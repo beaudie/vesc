@@ -55,6 +55,7 @@ struct TParseContext {
     TIntermNode* treeRoot;       // root of parse tree being created
     int loopNestingLevel;        // 0 if outside all loops
     int structNestingLevel;      // incremented while parsing a struct declaration
+    std::vector<TIntermSwitch *> mSwitchStatements;
     const TType* currentFunctionType;  // the return type of the function that's currently being parsed
     bool functionReturnsValue;   // true if a non-void function has a return
     bool checksPrecisionErrors;  // true if an error will be generated when a variable is declared without precision, explicit or implicit.
@@ -164,6 +165,10 @@ struct TParseContext {
     void exitStructDeclaration();
 
     bool structNestingErrorCheck(const TSourceLoc& line, const TField& field);
+
+    TIntermSwitch *addSwitch(TIntermNode *init, TIntermNode *statementList, const TSourceLoc &);
+    TIntermCase *addCase(TIntermNode *condition, const TSourceLoc &);
+    TIntermCase *addDefault(const TSourceLoc &);
 
     TIntermTyped *addUnaryMath(TOperator op, TIntermTyped *child, const TSourceLoc &);
     TIntermTyped *addUnaryMathLValue(TOperator op, TIntermTyped *child, const TSourceLoc &);

@@ -2588,6 +2588,35 @@ TPublicType TParseContext::addStructure(const TSourceLoc& structLine, const TSou
     return publicType;
 }
 
+TIntermSwitch *TParseContext::addSwitch(TIntermNode *init, TIntermNode *statementList, const TSourceLoc &loc)
+{
+    TIntermSwitch *node = intermediate.addSwitch(init, statementList, loc);
+    if (node == 0)
+    {
+        error(loc, "integral expression required in switch", "switch");
+        recover();
+        return NULL;
+    }
+    return node;
+}
+
+TIntermCase *TParseContext::addCase(TIntermNode *condition, const TSourceLoc &loc)
+{
+    TIntermCase *node = intermediate.addCase(condition, loc);
+    if (node == 0)
+    {
+        error(loc, "integral expression required in case", "case");
+        recover();
+        return NULL;
+    }
+    return node;
+}
+
+TIntermCase *TParseContext::addDefault(const TSourceLoc &loc)
+{
+    return intermediate.addCase(NULL, loc);
+}
+
 TIntermTyped *TParseContext::addUnaryMath(TOperator op, TIntermTyped *child, const TSourceLoc &loc)
 {
     TIntermTyped *node = intermediate.addUnaryMath(op, child, loc);

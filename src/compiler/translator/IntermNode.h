@@ -32,6 +32,8 @@ class TIntermBinary;
 class TIntermUnary;
 class TIntermConstantUnion;
 class TIntermSelection;
+class TIntermSwitch;
+class TIntermCase;
 class TIntermTyped;
 class TIntermSymbol;
 class TIntermLoop;
@@ -64,6 +66,8 @@ class TIntermNode
     virtual TIntermBinary *getAsBinaryNode() { return 0; }
     virtual TIntermUnary *getAsUnaryNode() { return 0; }
     virtual TIntermSelection *getAsSelectionNode() { return 0; }
+    virtual TIntermSwitch *getAsSwitchNode() { return 0; }
+    virtual TIntermCase *getAsCaseNode() { return 0; }
     virtual TIntermSymbol *getAsSymbolNode() { return 0; }
     virtual TIntermLoop *getAsLoopNode() { return 0; }
     virtual TIntermRaw *getAsRawNode() { return 0; }
@@ -451,7 +455,7 @@ class TIntermAggregate : public TIntermOperator
 };
 
 //
-// For if tests.  Simplified since there is no switch statement.
+// For if tests.
 //
 class TIntermSelection : public TIntermTyped
 {
@@ -485,6 +489,56 @@ protected:
     TIntermTyped *mCondition;
     TIntermNode *mTrueBlock;
     TIntermNode *mFalseBlock;
+};
+
+//
+// Switch statement.
+//
+class TIntermSwitch : public TIntermNode
+{
+  public:
+    TIntermSwitch(TIntermTyped *init, TIntermAggregate *statementList)
+        : TIntermNode(),
+          mInit(init),
+          mStatementList(statementList) {}
+
+    virtual void traverse(TIntermTraverser *);
+    virtual bool replaceChildNode(
+        TIntermNode *original, TIntermNode *replacement);
+
+    // Conservatively assume switch statements have side-effects
+    virtual bool hasSideEffects() const { return true; }
+
+    virtual TIntermSwitch *getAsSwitchNode() { return this; }
+
+  protected:
+    TIntermTyped *mInit;
+    TIntermAggregate *mStatementList;
+};
+
+//
+// Case label.
+//
+class TIntermCase : public TIntermNode
+{
+  public:
+    TIntermCase(TIntermTyped *condition)
+        : TIntermNode(),
+          mCondition(condition) {}
+
+    virtual void traverse(TIntermTraverser *);
+    virtual bool replaceChildNode(
+        TIntermNode *original, TIntermNode *replacement);
+
+    // Case labels only contain constant expressions and so don't have side effects.
+    virtual bool hasSideEffects() const { return false; }
+
+    virtual TIntermCase *getAsCaseNode() { return this; }
+
+    bool hasCondition() const { return mCondition != NULL; }
+
+  protected:
+    TIntermTyped *mCondition;
 };
 
 enum Visit
@@ -523,6 +577,8 @@ class TIntermTraverser
     virtual bool visitBinary(Visit, TIntermBinary *) { return true; }
     virtual bool visitUnary(Visit, TIntermUnary *) { return true; }
     virtual bool visitSelection(Visit, TIntermSelection *) { return true; }
+    virtual bool visitSwitch(Visit, TIntermSwitch *) { return true; }
+    virtual bool visitCase(Visit, TIntermCase *) { return true; }
     virtual bool visitAggregate(Visit, TIntermAggregate *) { return true; }
     virtual bool visitLoop(Visit, TIntermLoop *) { return true; }
     virtual bool visitBranch(Visit, TIntermBranch *) { return true; }

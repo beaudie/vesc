@@ -36,6 +36,14 @@ bool isSingleStatement(TIntermNode *node)
     {
         return false;
     }
+    else if (node->getAsSwitchNode())
+    {
+        return false;
+    }
+    else if (node->getAsCaseNode())
+    {
+        return false;
+    }
     return true;
 }
 }  // namespace
@@ -630,6 +638,28 @@ bool TOutputGLSLBase::visitSelection(Visit visit, TIntermSelection *node)
         decrementDepth();
     }
     return false;
+}
+
+bool TOutputGLSLBase::visitSwitch(Visit visit, TIntermSwitch *node)
+{
+    writeTriplet(visit, "switch (", ") ", NULL);
+    // The curly braces get written when visiting the statementList aggregate
+    return true;
+}
+
+bool TOutputGLSLBase::visitCase(Visit visit, TIntermCase *node)
+{
+    if (node->hasCondition())
+    {
+        writeTriplet(visit, "case (", NULL, "):\n");
+        return true;
+    }
+    else
+    {
+        TInfoSinkBase &out = objSink();
+        out << "default:\n";
+        return false;
+    }
 }
 
 bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)

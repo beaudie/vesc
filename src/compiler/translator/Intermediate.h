@@ -43,6 +43,10 @@ class TIntermediate
     TIntermNode *addSelection(TIntermTyped *cond, TIntermNodePair code, const TSourceLoc &);
     TIntermTyped *addSelection(
         TIntermTyped *cond, TIntermTyped *trueBlock, TIntermTyped *falseBlock, const TSourceLoc &);
+    TIntermSwitch *addSwitch(
+        TIntermNode *init, TIntermNode *statementList, const TSourceLoc &);
+    TIntermCase *addCase(
+        TIntermNode *condition, const TSourceLoc &);
     TIntermTyped *addComma(
         TIntermTyped *left, TIntermTyped *right, const TSourceLoc &);
     TIntermConstantUnion *addConstantUnion(ConstantUnion *, const TType &, const TSourceLoc &);
