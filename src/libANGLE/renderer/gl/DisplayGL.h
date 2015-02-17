@@ -10,6 +10,7 @@
 #define LIBANGLE_RENDERER_GL_DISPLAYGL_H_
 
 #include "libANGLE/renderer/DisplayImpl.h"
+#include "libANGLE/renderer/gl/FunctionsGL.h"
 
 namespace rx
 {
@@ -31,6 +32,9 @@ class DisplayGL : public DisplayImpl
   private:
     DISALLOW_COPY_AND_ASSIGN(DisplayGL);
 
+    virtual const FunctionsGL *getFunctionsGL() const = 0;
+
+    FunctionsGL *mFunctions;
     RendererGL *mRenderer;
 };
 

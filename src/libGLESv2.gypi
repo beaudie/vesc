@@ -375,6 +375,8 @@
             'libANGLE/renderer/gl/FenceSyncGL.h',
             'libANGLE/renderer/gl/FramebufferGL.cpp',
             'libANGLE/renderer/gl/FramebufferGL.h',
+            'libANGLE/renderer/gl/FunctionsGL.cpp',
+            'libANGLE/renderer/gl/FunctionsGL.h',
             'libANGLE/renderer/gl/ProgramGL.cpp',
             'libANGLE/renderer/gl/ProgramGL.h',
             'libANGLE/renderer/gl/QueryGL.cpp',
