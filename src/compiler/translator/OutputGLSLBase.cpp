@@ -517,6 +517,12 @@ bool TOutputGLSLBase::visitUnary(Visit visit, TIntermUnary *node)
       case EOpFract:
         preString = "fract(";
         break;
+      case EOpIsNAN:
+          preString = "isnan(";
+          break;
+      case EOpIsINF:
+          preString = "isinf(";
+          break;
 
       case EOpFloatBitsToInt:
         preString = "floatBitsToInt(";

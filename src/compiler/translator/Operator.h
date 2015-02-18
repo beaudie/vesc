@@ -120,6 +120,8 @@ enum TOperator
     EOpMix,
     EOpStep,
     EOpSmoothStep,
+    EOpIsNAN,
+    EOpIsINF,
 
     EOpFloatBitsToInt,
     EOpFloatBitsToUint,

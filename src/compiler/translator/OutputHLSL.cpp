@@ -1655,6 +1655,8 @@ bool OutputHLSL::visitUnary(Visit visit, TIntermUnary *node)
       case EOpFloor:            outputTriplet(visit, "floor(", "", ")");     break;
       case EOpCeil:             outputTriplet(visit, "ceil(", "", ")");      break;
       case EOpFract:            outputTriplet(visit, "frac(", "", ")");      break;
+      case EOpIsNAN:            outputTriplet(visit, "isnan(", "", ")");     break;
+      case EOpIsINF:            outputTriplet(visit, "isinf(", "", ")");     break;
       case EOpFloatBitsToInt:   outputTriplet(visit, "asint(", "", ")");     break;
       case EOpFloatBitsToUint:  outputTriplet(visit, "asuint(", "", ")");    break;
       case EOpIntBitsToFloat:   outputTriplet(visit, "asfloat(", "", ")");   break;
