@@ -348,6 +348,10 @@ bool TIntermUnary::promote(TInfoSink &)
       case EOpUnpackHalf2x16:
         return true;
 
+      case EOpAbs:
+      case EOpSign:
+        break;
+
       default:
         if (mOperand->getBasicType() != EbtFloat)
             return false;
