@@ -58,11 +58,14 @@ class OutputHLSL : public TIntermTraverser
     void traverseStatements(TIntermNode *node);
     bool isSingleStatement(TIntermNode *node);
     bool handleExcessiveLoop(TIntermLoop *node);
+
+    // Emit one of three strings depending on traverse phase. Called with literal strings so using const char* instead of TString.
     void outputTriplet(Visit visit, const char *preString, const char *inString, const char *postString);
     void outputLineDirective(int line);
     TString argumentString(const TIntermSymbol *symbol);
     int vectorSize(const TType &type) const;
 
+    // Emit constructor. Called with literal names so using const char* instead of TString.
     void outputConstructor(Visit visit, const TType &type, const char *name, const TIntermSequence *parameters);
     const ConstantUnion *writeConstantUnion(const TType &type, const ConstantUnion *constUnion);
 
