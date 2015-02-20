@@ -513,6 +513,8 @@ class TIntermSwitch : public TIntermNode
 
     virtual TIntermSwitch *getAsSwitchNode() { return this; }
 
+    TIntermAggregate *getStatementList() { return mStatementList; }
+
   protected:
     TIntermTyped *mInit;
     TIntermAggregate *mStatementList;
