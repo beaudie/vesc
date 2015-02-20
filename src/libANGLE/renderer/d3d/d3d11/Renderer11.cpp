@@ -632,6 +632,11 @@ SwapChainD3D *Renderer11::createSwapChain(NativeWindow nativeWindow, HANDLE shar
     return new SwapChain11(this, nativeWindow, shareHandle, backBufferFormat, depthBufferFormat);
 }
 
+void *Renderer11::getD3DDevice()
+{
+    return getDevice();
+}
+
 gl::Error Renderer11::generateSwizzle(gl::Texture *texture)
 {
     if (texture)

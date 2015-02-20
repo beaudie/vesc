@@ -54,6 +54,13 @@ struct TranslatedIndexData;
 struct Workarounds;
 class DisplayImpl;
 
+enum RendererClass
+{
+    RENDERER_D3D11,
+    RENDERER_D3D9,
+    RENDERER_OPENGL
+};
+
 class Renderer
 {
   public:
@@ -108,6 +115,7 @@ class Renderer
     virtual VendorID getVendorId() const = 0;
     virtual std::string getVendorString() const = 0;
     virtual std::string getRendererDescription() const = 0;
+    virtual RendererClass getRendererClass() const = 0;
 
     // Renderer capabilities
     const gl::Caps &getRendererCaps() const;
