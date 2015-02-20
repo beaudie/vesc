@@ -14,10 +14,13 @@
 namespace rx
 {
 
+class FunctionsGL;
+class StateManagerGL;
+
 class ProgramGL : public ProgramImpl
 {
   public:
-    ProgramGL();
+    ProgramGL(const FunctionsGL *functions, StateManagerGL *stateManager);
     ~ProgramGL() override;
 
     bool usesPointSize() const override;
@@ -80,8 +83,15 @@ class ProgramGL : public ProgramImpl
     bool assignUniformBlockRegister(gl::InfoLog &infoLog, gl::UniformBlock *uniformBlock, GLenum shader,
                                     unsigned int registerIndex, const gl::Caps &caps) override;
 
+    GLuint getProgramID() const;
+
   private:
     DISALLOW_COPY_AND_ASSIGN(ProgramGL);
+
+    const FunctionsGL *mFunctions;
+    StateManagerGL *mStateManager;
+
+    GLuint mProgramID;
 };
 
 }
