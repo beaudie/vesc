@@ -44,12 +44,28 @@
     {
         'VCCLCompilerTool':
         {
-            'PreprocessorDefinitions':
+            'conditions':
             [
-                '_CRT_SECURE_NO_DEPRECATE',
-                '_SCL_SECURE_NO_WARNINGS',
-                '_HAS_EXCEPTIONS=0',
-                'NOMINMAX',
+                ['angle_build_winrt==0',
+                {
+                    'PreprocessorDefinitions':
+                    [
+                        '_CRT_SECURE_NO_DEPRECATE',
+                        '_SCL_SECURE_NO_WARNINGS',
+                        '_HAS_EXCEPTIONS=0',
+                        'NOMINMAX',
+                    ],
+                }],
+                ['angle_build_winrt==1',
+                {
+                    'PreprocessorDefinitions':
+                    [
+                        '_CRT_SECURE_NO_DEPRECATE',
+                        '_SCL_SECURE_NO_WARNINGS',
+                        '_HAS_EXCEPTIONS=1', # winrt only uses MSVC compiler, which supports exceptions
+                        'NOMINMAX',
+                    ],
+                }],
             ],
         },
         'VCLinkerTool':

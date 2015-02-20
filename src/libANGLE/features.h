@@ -37,4 +37,16 @@
 #define ANGLE_SHADER_DEBUG_INFO ANGLE_DISABLED
 #endif
 
+// Should we compile the D3D vertex and pixel shaders on separate threads at glLinkProgram() time?
+// Note: the multithreaded shader compilation implementation requires exceptions
+#if !defined(ANGLE_MULTITHREADED_D3D_SHADER_COMPILE)
+#if defined(ANGLE_ENABLE_WINDOWS_STORE)
+// MSVC is the only compiler used for Windows Store versions of ANGLE, and it supports exceptions
+#define ANGLE_MULTITHREADED_D3D_SHADER_COMPILE ANGLE_ENABLED
+#else
+// Some compilers used for non-Windows Store versions of ANGLE (e.g. Clang) don't support exceptions.
+#define ANGLE_MULTITHREADED_D3D_SHADER_COMPILE ANGLE_DISABLED
+#endif
+#endif
+
 #endif // LIBANGLE_FEATURES_H_

@@ -72,7 +72,16 @@
                         'AdditionalOptions': ['/MP'],
                         'BufferSecurityCheck': 'true',
                         'DebugInformationFormat': '3',
-                        'ExceptionHandling': '0',
+                        'conditions':
+                        [
+                            ['angle_build_winrt==1',
+                            {
+                                'ExceptionHandling': '1',
+                            },
+                            {
+                                'ExceptionHandling': '0',
+                            }],
+                        ],
                         'EnableFunctionLevelLinking': 'true',
                         'MinimalRebuild': 'false',
                         'RuntimeTypeInfo': 'true',
