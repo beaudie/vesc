@@ -57,22 +57,6 @@ TSymbol *TSymbolTableLevel::find(const TString &name) const
         return (*it).second;
 }
 
-//
-// Change all function entries in the table with the non-mangled name
-// to be related to the provided built-in extension. This is a low
-// performance operation, and only intended for symbol tables that
-// live across a large number of compiles.
-//
-void TSymbolTableLevel::relateToExtension(const char *name, const TString &ext)
-{
-    for (tLevel::iterator it = level.begin(); it != level.end(); ++it)
-    {
-        TSymbol *symbol = it->second;
-        if (symbol->getName() == name)
-            symbol->relateToExtension(ext);
-    }
-}
-
 TSymbol *TSymbolTable::find(const TString &name, int shaderVersion,
                             bool *builtIn, bool *sameScope) const
 {
@@ -187,7 +171,8 @@ TType *VecType(TType *type, int size)
     }
 }
 
-void TSymbolTable::insertBuiltIn(ESymbolLevel level, TOperator op, TType *rvalue, const char *name, TType *ptype1, TType *ptype2, TType *ptype3, TType *ptype4, TType *ptype5)
+void TSymbolTable::insertBuiltIn(ESymbolLevel level, TOperator op, const char *ext, TType *rvalue, const char *name,
+                                 TType *ptype1, TType *ptype2, TType *ptype3, TType *ptype4, TType *ptype5)
 {
     if(ptype1->getBasicType() == EbtGSampler2D)
     {
