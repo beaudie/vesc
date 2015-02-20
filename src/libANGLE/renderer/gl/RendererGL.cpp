@@ -197,6 +197,11 @@ std::string RendererGL::getRendererDescription() const
     return std::string();
 }
 
+RendererClass RendererGL::getRendererClass() const
+{
+    return RENDERER_OPENGL;
+}
+
 void RendererGL::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap* outTextureCaps, gl::Extensions *outExtensions) const
 {
     nativegl_gl::GenerateCaps(mFunctions, outCaps, outTextureCaps, outExtensions);

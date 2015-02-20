@@ -66,6 +66,8 @@ class DisplayImpl
 
     virtual std::string getVendorString() const = 0;
 
+    virtual egl::Error getDevice(EGLAttrib *value) = 0;
+
     const egl::Caps &getCaps() const;
 
     typedef std::set<egl::Surface*> SurfaceSet;
