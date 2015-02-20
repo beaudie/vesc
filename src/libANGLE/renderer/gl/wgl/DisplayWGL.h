@@ -44,6 +44,8 @@ class DisplayWGL : public DisplayGL
 
     bool isValidNativeWindow(EGLNativeWindowType window) const override;
 
+    egl::Error getDevice(EGLAttrib *value) override;
+
     std::string getVendorString() const override;
 
   private:

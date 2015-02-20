@@ -38,6 +38,7 @@
             '<(angle_path)/tests/angle_tests/PBOExtensionTest.cpp',
             '<(angle_path)/tests/angle_tests/PointSpritesTest.cpp',
             '<(angle_path)/tests/angle_tests/ProgramBinaryTest.cpp',
+            '<(angle_path)/tests/angle_tests/QueryDisplayAttribTest.cpp',
             '<(angle_path)/tests/angle_tests/ReadPixelsTest.cpp',
             '<(angle_path)/tests/angle_tests/RendererTest.cpp',
             '<(angle_path)/tests/angle_tests/SimpleOperationTest.cpp',

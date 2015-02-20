@@ -69,6 +69,7 @@ class RendererGL : public Renderer
     VendorID getVendorId() const override;
     std::string getVendorString() const override;
     std::string getRendererDescription() const override;
+    RendererClass getRendererClass() const override;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(RendererGL);
