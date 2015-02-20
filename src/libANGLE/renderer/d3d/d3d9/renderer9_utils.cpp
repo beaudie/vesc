@@ -518,6 +518,7 @@ void GenerateCaps(IDirect3D9 *d3d9, IDirect3DDevice9 *device, D3DDEVTYPE deviceT
     extensions->textureUsage = true;
     extensions->translatedShaderSource = true;
     extensions->colorBufferFloat = false;
+    extensions->bgra = true;
 }
 
 }
