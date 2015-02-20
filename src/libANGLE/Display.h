@@ -18,6 +18,7 @@
 #include "libANGLE/Caps.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/AttributeMap.h"
+#include "libANGLE/renderer/renderer.h"
 
 namespace gl
 {
@@ -69,6 +70,7 @@ class Display final
     bool isValidSurface(egl::Surface *surface) const;
     bool hasExistingWindowSurface(EGLNativeWindowType window) const;
     bool isValidNativeWindow(EGLNativeWindowType window) const;
+    rx::RendererClass getRendererClass() const;
 
     static bool isValidNativeDisplay(EGLNativeDisplayType display);
 
@@ -86,6 +88,7 @@ class Display final
     EGLNativeDisplayType getNativeDisplayId() const { return mDisplayId; }
 
     rx::DisplayImpl *getImplementation() { return mImplementation; }
+    Error getDevice(EGLAttrib *value);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Display);
