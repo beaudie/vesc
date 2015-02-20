@@ -37,4 +37,12 @@
 #define ANGLE_SHADER_DEBUG_INFO ANGLE_DISABLED
 #endif
 
+// MULTITHREADED_D3D_SHADER_COMPILE_WIN8_PLUS
+// ENABLED - on machines running Win8+, compile the D3D VS and PS on separate threads simultaneously
+//         - on machines running Win7, compile the D3D VS and PS on the same thread back-to-back
+// DISABLED - compile the D3D VS and PS shaders on the same thread back-to-back
+#if !defined(ANGLE_MULTITHREADED_D3D_SHADER_COMPILE_WIN8_PLUS)
+#define ANGLE_MULTITHREADED_D3D_SHADER_COMPILE_WIN8_PLUS ANGLE_ENABLED
+#endif
+
 #endif // LIBANGLE_FEATURES_H_

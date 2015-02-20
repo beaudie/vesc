@@ -8,6 +8,8 @@
 
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
 
+#include <VersionHelpers.h>
+
 #include "common/utilities.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
@@ -19,6 +21,14 @@
 #include "libANGLE/renderer/d3d/ShaderD3D.h"
 #include "libANGLE/renderer/d3d/ShaderExecutableD3D.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
+
+#if ANGLE_MULTITHREADED_D3D_SHADER_COMPILE_WIN8_PLUS == ANGLE_ENABLED
+// We do not want to set _HAS_EXCEPTIONS=1 for Clang builds, nor turn on exception handlers.
+// We therefore must disable C4530 to allow <future> to compile.
+#pragma warning(disable: 4530) // C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+#include <eh.h> // To allow <future> to compile when _HAS_EXCEPTIONS=0.
+#include <future> // For std::async
+#endif // ANGLE_MULTITHREADED_D3D_SHADER_COMPILE_WIN8_PLUS == ANGLE_ENABLED
 
 namespace rx
 {
@@ -176,11 +186,11 @@ unsigned int ProgramD3D::mCurrentSerial = 1;
 ProgramD3D::ProgramD3D(RendererD3D *renderer)
     : ProgramImpl(),
       mRenderer(renderer),
-      mDynamicHLSL(NULL),
-      mGeometryExecutable(NULL),
+      mDynamicHLSL(nullptr),
+      mGeometryExecutable(nullptr),
       mUsesPointSize(false),
-      mVertexUniformStorage(NULL),
-      mFragmentUniformStorage(NULL),
+      mVertexUniformStorage(nullptr),
+      mFragmentUniformStorage(nullptr),
       mUsedVertexSamplerRange(0),
       mUsedPixelSamplerRange(0),
       mDirtySamplerMapping(true),
@@ -595,7 +605,7 @@ LinkResult ProgramD3D::load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream)
         unsigned int vertexShaderSize = stream->readInt<unsigned int>();
         const unsigned char *vertexShaderFunction = binary + stream->offset();
 
-        ShaderExecutableD3D *shaderExecutable = NULL;
+        ShaderExecutableD3D *shaderExecutable = nullptr;
         gl::Error error = mRenderer->loadExecutable(vertexShaderFunction, vertexShaderSize,
                                                     SHADER_VERTEX,
                                                     mTransformFeedbackLinkedVaryings,
@@ -634,7 +644,7 @@ LinkResult ProgramD3D::load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream)
 
         const size_t pixelShaderSize = stream->readInt<unsigned int>();
         const unsigned char *pixelShaderFunction = binary + stream->offset();
-        ShaderExecutableD3D *shaderExecutable = NULL;
+        ShaderExecutableD3D *shaderExecutable = nullptr;
         gl::Error error = mRenderer->loadExecutable(pixelShaderFunction, pixelShaderSize, SHADER_PIXEL,
                                                     mTransformFeedbackLinkedVaryings,
                                                     (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
@@ -840,10 +850,10 @@ gl::Error ProgramD3D::save(gl::BinaryOutputStream *stream)
         stream->writeBytes(pixelBlob, pixelShaderSize);
     }
 
-    size_t geometryShaderSize = (mGeometryExecutable != NULL) ? mGeometryExecutable->getLength() : 0;
+    size_t geometryShaderSize = (mGeometryExecutable != nullptr) ? mGeometryExecutable->getLength() : 0;
     stream->writeInt(geometryShaderSize);
 
-    if (mGeometryExecutable != NULL && geometryShaderSize > 0)
+    if (mGeometryExecutable != nullptr && geometryShaderSize > 0)
     {
         const uint8_t *geometryBlob = mGeometryExecutable->getFunction();
         stream->writeBytes(geometryBlob, geometryShaderSize);
@@ -896,7 +906,7 @@ gl::Error ProgramD3D::getPixelExecutableForOutputLayout(const std::vector<GLenum
                                                                                      outputSignature);
 
     // Generate new pixel executable
-    ShaderExecutableD3D *pixelExecutable = NULL;
+    ShaderExecutableD3D *pixelExecutable = nullptr;
 
     gl::InfoLog tempInfoLog;
     gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
@@ -917,7 +927,7 @@ gl::Error ProgramD3D::getPixelExecutableForOutputLayout(const std::vector<GLenum
     else if (!infoLog)
     {
         std::vector<char> tempCharBuffer(tempInfoLog.getLength() + 3);
-        tempInfoLog.getLog(tempInfoLog.getLength(), NULL, &tempCharBuffer[0]);
+        tempInfoLog.getLog(tempInfoLog.getLength(), nullptr, &tempCharBuffer[0]);
         ERR("Error compiling dynamic pixel executable:\n%s\n", &tempCharBuffer[0]);
     }
 
@@ -945,7 +955,7 @@ gl::Error ProgramD3D::getVertexExecutableForInputLayout(const gl::VertexFormat i
     std::string finalVertexHLSL = mDynamicHLSL->generateVertexShaderForInputLayout(mVertexHLSL, inputLayout, getShaderAttributes());
 
     // Generate new vertex executable
-    ShaderExecutableD3D *vertexExecutable = NULL;
+    ShaderExecutableD3D *vertexExecutable = nullptr;
 
     gl::InfoLog tempInfoLog;
     gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
@@ -965,8 +975,9 @@ gl::Error ProgramD3D::getVertexExecutableForInputLayout(const gl::VertexFormat i
     }
     else if (!infoLog)
     {
-        std::vector<char> tempCharBuffer(tempInfoLog.getLength() + 3);
-        tempInfoLog.getLog(tempInfoLog.getLength(), NULL, &tempCharBuffer[0]);
+        // This isn't thread-safe, so we should ensure that we always pass in an infoLog if using multiple threads.
+        std::vector<char> tempCharBuffer(tempInfoLog.getLength());
+        tempInfoLog.getLog(tempInfoLog.getLength(), nullptr, &tempCharBuffer[0]);
         ERR("Error compiling dynamic vertex executable:\n%s\n", &tempCharBuffer[0]);
     }
 
@@ -979,22 +990,83 @@ LinkResult ProgramD3D::compileProgramExecutables(gl::InfoLog &infoLog, gl::Shade
 {
     ShaderD3D *vertexShaderD3D = GetImplAs<ShaderD3D>(vertexShader);
     ShaderD3D *fragmentShaderD3D = GetImplAs<ShaderD3D>(fragmentShader);
+    ShaderExecutableD3D *defaultVertexExecutable = nullptr;
+    ShaderExecutableD3D *defaultPixelExecutable = nullptr;
 
-    gl::VertexFormat defaultInputLayout[gl::MAX_VERTEX_ATTRIBS];
-    GetDefaultInputLayoutFromShader(vertexShader->getActiveAttributes(), defaultInputLayout);
-    ShaderExecutableD3D *defaultVertexExecutable = NULL;
-    gl::Error error = getVertexExecutableForInputLayout(defaultInputLayout, &defaultVertexExecutable, &infoLog);
-    if (error.isError())
+    gl::Error vertexShaderResult(GL_NO_ERROR);
+    gl::Error pixelShaderResult(GL_NO_ERROR);
+    gl::InfoLog tempVertexShaderInfoLog;
+
+#if ANGLE_MULTITHREADED_D3D_SHADER_COMPILE_WIN8_PLUS == ANGLE_ENABLED
+    // Compile the pixel and vertex shader simultaneously on different threads to speed things up.
+    // Don't do this on Windows 7. The implementation uses std::async, and this doesn't work
+    // on some Windows 7 machines due to missing DLLs relating to ETW traces.
+    const bool useMultithreadedShaderCompilation = IsWindows8OrGreater();
+#else
+    const bool useMultithreadedShaderCompilation = false;
+#endif
+
+    if (useMultithreadedShaderCompilation)
     {
-        return LinkResult(false, error);
+        // You are not allowed to call .wait() on async tasks from certain threads in Windows Store applications.
+        // We work around this by using event handles instead.
+        HANDLE vertexShaderTaskHandle = CreateEventEx(nullptr, nullptr, 0, EVENT_ALL_ACCESS);
+        if (vertexShaderTaskHandle == nullptr)
+        {
+            return LinkResult(false, gl::Error(GL_OUT_OF_MEMORY));
+        }
+
+        // Use an async task to begin compiling the vertex shader asynchronously on its own thread.
+        std::future<void> vertexShaderTask = std::async([this, vertexShader, &tempVertexShaderInfoLog,
+                                                         &defaultVertexExecutable, &vertexShaderTaskHandle, &vertexShaderResult]()
+        {
+            gl::VertexFormat defaultInputLayout[gl::MAX_VERTEX_ATTRIBS];
+            GetDefaultInputLayoutFromShader(vertexShader->getActiveAttributes(), defaultInputLayout);
+            vertexShaderResult = getVertexExecutableForInputLayout(defaultInputLayout, &defaultVertexExecutable, &tempVertexShaderInfoLog);
+
+            SetEvent(vertexShaderTaskHandle);
+        });
+
+        // Continue to compile the pixel shader on the main thread
+        std::vector<GLenum> defaultPixelOutput = GetDefaultOutputLayoutFromShader(getPixelShaderKey());
+        pixelShaderResult = getPixelExecutableForOutputLayout(defaultPixelOutput, &defaultPixelExecutable, &infoLog);
+
+        // Wait on the vertex shader compilation.
+        WaitForSingleObjectEx(vertexShaderTaskHandle, INFINITE, false);
+        CloseHandle(vertexShaderTaskHandle);
+
+        // At this point, the vertex shader and the pixel shader compilations are complete
+    }
+    else
+    {
+        // Compile the vertex shader
+        gl::VertexFormat defaultInputLayout[gl::MAX_VERTEX_ATTRIBS];
+        GetDefaultInputLayoutFromShader(vertexShader->getActiveAttributes(), defaultInputLayout);
+        vertexShaderResult = getVertexExecutableForInputLayout(defaultInputLayout, &defaultVertexExecutable, &tempVertexShaderInfoLog);
+
+        // Compile the pixel shader
+        std::vector<GLenum> defaultPixelOutput = GetDefaultOutputLayoutFromShader(getPixelShaderKey());
+        pixelShaderResult = getPixelExecutableForOutputLayout(defaultPixelOutput, &defaultPixelExecutable, &infoLog);
     }
 
-    std::vector<GLenum> defaultPixelOutput = GetDefaultOutputLayoutFromShader(getPixelShaderKey());
-    ShaderExecutableD3D *defaultPixelExecutable = NULL;
-    error = getPixelExecutableForOutputLayout(defaultPixelOutput, &defaultPixelExecutable, &infoLog);
-    if (error.isError())
+    // Combine the temporary infoLog with the real one
+    if (tempVertexShaderInfoLog.getLength() > 0)
     {
-        return LinkResult(false, error);
+        std::vector<char> tempCharBuffer(tempVertexShaderInfoLog.getLength() + 3);
+        tempVertexShaderInfoLog.getLog(tempVertexShaderInfoLog.getLength(), nullptr, &tempCharBuffer[0]);
+        infoLog.appendSanitized(&tempCharBuffer[0]);
+    }
+
+    // If the vertex shader compilation failed, then return error
+    if (vertexShaderResult.isError())
+    {
+        return LinkResult(false, vertexShaderResult);
+    }
+
+    // If the pixel shader compilation failed, then return error
+    if (pixelShaderResult.isError())
+    {
+        return LinkResult(false, pixelShaderResult);
     }
 
     if (usesGeometryShader())
@@ -1002,9 +1074,9 @@ LinkResult ProgramD3D::compileProgramExecutables(gl::InfoLog &infoLog, gl::Shade
         std::string geometryHLSL = mDynamicHLSL->generateGeometryShaderHLSL(registers, fragmentShaderD3D, vertexShaderD3D);
 
 
-        error = mRenderer->compileToExecutable(infoLog, geometryHLSL, SHADER_GEOMETRY, mTransformFeedbackLinkedVaryings,
-                                               (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
-                                               D3DCompilerWorkarounds(), &mGeometryExecutable);
+        gl::Error error = mRenderer->compileToExecutable(infoLog, geometryHLSL, SHADER_GEOMETRY, mTransformFeedbackLinkedVaryings,
+                                                         (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
+                                                         D3DCompilerWorkarounds(), &mGeometryExecutable);
         if (error.isError())
         {
             return LinkResult(false, error);
@@ -1059,7 +1131,7 @@ LinkResult ProgramD3D::link(const gl::Data &data, gl::InfoLog &infoLog,
     mShaderVersion = vertexShaderD3D->getShaderVersion();
 
     // Map the varyings to the register file
-    VaryingPacking packing = { NULL };
+    VaryingPacking packing = { nullptr };
     *registers = mDynamicHLSL->packVaryings(infoLog, packing, fragmentShaderD3D, vertexShaderD3D, transformFeedbackVaryings);
 
     if (*registers < 0)
@@ -1502,8 +1574,8 @@ void ProgramD3D::defineUniform(const ShaderD3D *shader, const sh::ShaderVariable
 template <typename T>
 static inline void SetIfDirty(T *dest, const T& source, bool *dirtyFlag)
 {
-    ASSERT(dest != NULL);
-    ASSERT(dirtyFlag != NULL);
+    ASSERT(dest != nullptr);
+    ASSERT(dirtyFlag != nullptr);
 
     *dirtyFlag = *dirtyFlag || (memcmp(dest, &source, sizeof(T)) != 0);
     *dest = source;
@@ -1804,7 +1876,7 @@ bool ProgramD3D::defineUniformBlock(gl::InfoLog &infoLog, const gl::Shader &shad
         const unsigned int blockIndex = mUniformBlocks.size();
 
         // define member uniforms
-        sh::BlockLayoutEncoder *encoder = NULL;
+        sh::BlockLayoutEncoder *encoder = nullptr;
 
         if (interfaceBlock.layout == sh::BLOCKLAYOUT_STANDARD)
         {
