@@ -1061,6 +1061,7 @@ void GenerateCaps(ID3D11Device *device, gl::Caps *caps, gl::TextureCapsMap *text
     extensions->fragDepth = true;
     extensions->textureUsage = true; // This could be false since it has no effect in D3D11
     extensions->translatedShaderSource = true;
+    extensions->bgra = true;
 }
 
 }

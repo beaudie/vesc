@@ -213,6 +213,9 @@ struct Extensions
 
     // GL_EXT_color_buffer_float
     bool colorBufferFloat;
+
+    // GL_EXT_bgra
+    bool bgra;
 };
 
 struct Caps
