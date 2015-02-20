@@ -364,6 +364,12 @@ egl::Error DisplayWGL::createPbufferFromClientBuffer(const egl::Config *configur
     return egl::Error(EGL_BAD_DISPLAY);
 }
 
+egl::Error DisplayWGL::getDevice(EGLAttrib *value)
+{
+    UNIMPLEMENTED();
+    return egl::Error(EGL_BAD_ATTRIBUTE);
+}
+
 egl::Error DisplayWGL::makeCurrent(egl::Surface *drawSurface, egl::Surface *readSurface, gl::Context *context)
 {
     if (!drawSurface)
