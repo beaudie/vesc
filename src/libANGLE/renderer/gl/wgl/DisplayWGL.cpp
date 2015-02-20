@@ -367,6 +367,12 @@ egl::Error DisplayWGL::createPixmapSurface(const egl::Config *configuration, Nat
     return egl::Error(EGL_BAD_DISPLAY);
 }
 
+egl::Error DisplayWGL::getDevice(EGLAttrib *value)
+{
+    UNIMPLEMENTED();
+    return egl::Error(EGL_BAD_DISPLAY);
+}
+
 egl::ConfigSet DisplayWGL::generateConfigs() const
 {
     egl::ConfigSet configs;

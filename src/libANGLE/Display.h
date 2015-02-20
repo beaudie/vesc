@@ -18,6 +18,7 @@
 #include "libANGLE/Caps.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/AttributeMap.h"
+#include "libANGLE/renderer/renderer.h"
 
 namespace gl
 {
@@ -88,6 +89,7 @@ class Display final : angle::NonCopyable
     EGLNativeDisplayType getNativeDisplayId() const { return mDisplayId; }
 
     rx::DisplayImpl *getImplementation() { return mImplementation; }
+    Error getDevice(EGLAttrib *value);
 
   private:
     Display(EGLNativeDisplayType displayId);

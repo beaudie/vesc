@@ -39,6 +39,7 @@
             '<(angle_path)/src/tests/end2end_tests/PBOExtensionTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/PointSpritesTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/ProgramBinaryTest.cpp',
+            '<(angle_path)/src/tests/end2end_tests/QueryDisplayAttribTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/ReadPixelsTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/RendererTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/SimpleOperationTest.cpp',
