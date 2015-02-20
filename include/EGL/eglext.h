@@ -463,6 +463,26 @@ EGLAPI EGLBoolean EGLAPIENTRY eglQuerySurfacePointerANGLE (EGLDisplay dpy, EGLSu
 #define EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE 0x320E
 #endif /* EGL_ANGLE_platform_angle_opengl */
 
+#ifndef EGL_ANGLE_device_base
+#define EGL_ANGLE_device_base 1
+typedef void *EGLDeviceANGLE;
+#define EGL_BAD_DEVICE_ANGLE              0x322B
+#define EGL_DEVICE_ANGLE                  0x322C
+#define EGL_NO_DEVICE_ANGLE               ((EGLDeviceANGLE)(0))
+typedef EGLBoolean(EGLAPIENTRYP PFNEGLQUERYDEVICEATTRIBANGLEPROC) (EGLDeviceANGLE device, EGLint attribute, EGLAttrib *value);
+typedef EGLBoolean(EGLAPIENTRYP PFNEGLQUERYDISPLAYATTRIBANGLEPROC) (EGLDisplay dpy, EGLint attribute, EGLAttrib *value);
+#ifdef EGL_EGLEXT_PROTOTYPES
+EGLAPI EGLBoolean EGLAPIENTRY eglQueryDeviceAttribANGLE(EGLDeviceANGLE device, EGLint attribute, EGLAttrib *value);
+EGLAPI EGLBoolean EGLAPIENTRY eglQueryDisplayAttribANGLE(EGLDisplay dpy, EGLint attribute, EGLAttrib *value);
+#endif
+#endif /* EGL_ANGLE_device_base */
+
+#ifndef EGL_ANGLE_device_d3d
+#define EGL_ANGLE_device_d3d 1
+#define EGL_D3D11_DEVICE_ANGLE            0x322D
+#define EGL_D3D9_DEVICE_ANGLE             0x322E
+#endif /* EGL_ANGLE_device_d3d */
+
 #ifndef EGL_ARM_pixmap_multisample_discard
 #define EGL_ARM_pixmap_multisample_discard 1
 #define EGL_DISCARD_SAMPLES_ARM           0x3286
