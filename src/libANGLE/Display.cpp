@@ -672,4 +672,9 @@ const std::string &Display::getVendorString() const
     return mVendorString;
 }
 
+Error Display::getDevice(EGLAttrib *value)
+{
+    return mImplementation->getDevice(value);
+}
+
 }
