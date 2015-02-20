@@ -10,6 +10,7 @@
 #include <stdio.h>
 
 #include "compiler/translator/glslang.h"
+#include "compiler/translator/ValidateSwitch.h"
 #include "compiler/preprocessor/SourceLocation.h"
 
 ///////////////////////////////////////////////////////////////////////
@@ -2619,6 +2620,17 @@ TIntermSwitch *TParseContext::addSwitch(TIntermTyped *init, TIntermAggregate *st
         error(loc, "init-expression in a switch statement must be a scalar integer", "switch");
         recover();
         return NULL;
+    }
+
+    if (statementList)
+    {
+        ValidateSwitch validate(switchType, this);
+        statementList->traverse(&validate);
+        if (!validate.validate(loc))
+        {
+            recover();
+            return NULL;
+        }
     }
 
     TIntermSwitch *node = intermediate.addSwitch(init, statementList, loc);
