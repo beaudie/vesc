@@ -16,6 +16,7 @@
 #include "libANGLE/renderer/d3d/SurfaceD3D.h"
 #include "libANGLE/renderer/d3d/SwapChainD3D.h"
 #include "platform/Platform.h"
+#include "libANGLE/renderer/d3d/deviced3d.h"
 
 #include <EGL/eglext.h>
 
@@ -138,7 +139,8 @@ egl::Error CreateRendererD3D(egl::Display *display, RendererD3D **outRenderer)
 }
 
 DisplayD3D::DisplayD3D()
-    : mRenderer(nullptr)
+    : mRenderer(nullptr),
+      mDevice(nullptr)
 {
 }
 
@@ -217,6 +219,13 @@ egl::Error DisplayD3D::createPbufferFromClientBuffer(const egl::Config *configur
     return egl::Error(EGL_SUCCESS);
 }
 
+egl::Error DisplayD3D::getDevice(EGLAttrib *value)
+{
+    *value = reinterpret_cast<EGLAttrib>(mDevice);
+    ASSERT(*value != 0);
+    return egl::Error(EGL_SUCCESS);
+}
+
 egl::Error DisplayD3D::createContext(const egl::Config *config, const gl::Context *shareContext, const egl::AttributeMap &attribs,
                                      gl::Context **outContext)
 {
@@ -239,11 +248,16 @@ egl::Error DisplayD3D::initialize(egl::Display *display)
 {
     ASSERT(mRenderer == nullptr && display != nullptr);
     mDisplay = display;
-    return CreateRendererD3D(display, &mRenderer);
+    egl::Error error = CreateRendererD3D(display, &mRenderer);
+
+    ASSERT(mDevice == nullptr);
+    mDevice = new rx::DeviceD3D(display, mRenderer);
+    return error;
 }
 
 void DisplayD3D::terminate()
 {
+    SafeDelete(mDevice);
     SafeDelete(mRenderer);
 }
 
@@ -303,6 +317,11 @@ bool DisplayD3D::isValidNativeWindow(EGLNativeWindowType window) const
     return NativeWindow::isValidNativeWindow(window);
 }
 
+rx::RendererClass DisplayD3D::getRendererClass() const
+{
+    return mRenderer->getRendererClass();
+}
+
 void DisplayD3D::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     outExtensions->createContextRobustness = true;
@@ -323,6 +342,9 @@ void DisplayD3D::generateExtensions(egl::DisplayExtensions *outExtensions) const
     }
 
     outExtensions->createContext = true;
+
+    outExtensions->deviceBase = true;
+    outExtensions->deviceD3D = true;
 }
 
 std::string DisplayD3D::getVendorString() const

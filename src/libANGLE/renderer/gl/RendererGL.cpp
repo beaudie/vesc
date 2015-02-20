@@ -176,6 +176,11 @@ std::string RendererGL::getRendererDescription() const
     return std::string();
 }
 
+RendererClass RendererGL::getRendererClass() const
+{
+    return RENDERER_OPENGL;
+}
+
 void RendererGL::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap* outTextureCaps, gl::Extensions *outExtensions) const
 {
     // Set some minimum GLES2 caps, TODO: query for real GL caps
