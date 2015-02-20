@@ -1778,7 +1778,8 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
 
                 traverseStatements(*sit);
 
-                out << ";\n";
+                if ((*sit)->getAsCaseNode() == nullptr)
+                    out << ";\n";
             }
 
             if (mInsideFunction)
@@ -2268,16 +2269,34 @@ bool OutputHLSL::visitSelection(Visit visit, TIntermSelection *node)
     return false;
 }
 
-bool OutputHLSL::visitSwitch(Visit, TIntermSwitch *)
+bool OutputHLSL::visitSwitch(Visit visit, TIntermSwitch *node)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (node->getStatementList())
+    {
+        outputTriplet(visit, "switch (", ") ", "");
+        // The curly braces get written when visiting the statementList aggregate
+    }
+    else
+    {
+        // No statementList, so it won't output curly braces
+        outputTriplet(visit, "switch (", ") {", "}\n");
+    }
+    return true;
 }
 
-bool OutputHLSL::visitCase(Visit, TIntermCase *)
+bool OutputHLSL::visitCase(Visit visit, TIntermCase *node)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (node->hasCondition())
+    {
+        outputTriplet(visit, "case (", "", "):\n");
+        return true;
+    }
+    else
+    {
+        TInfoSinkBase &out = getInfoSink();
+        out << "default:\n";
+        return false;
+    }
 }
 
 void OutputHLSL::visitConstantUnion(TIntermConstantUnion *node)
