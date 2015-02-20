@@ -15,6 +15,7 @@
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/SurfaceD3D.h"
 #include "libANGLE/renderer/d3d/SwapChainD3D.h"
+#include "libANGLE/renderer/d3d/deviced3d.h"
 
 #include <EGL/eglext.h>
 
@@ -118,7 +119,7 @@ egl::Error CreateRendererD3D(egl::Display *display, RendererD3D **outRenderer)
 }
 
 DisplayD3D::DisplayD3D()
-    : mRenderer(nullptr)
+    : mRenderer(nullptr), mDevice(nullptr)
 {
 }
 
@@ -197,6 +198,18 @@ egl::Error DisplayD3D::createPbufferFromClientBuffer(const egl::Config *configur
     return egl::Error(EGL_SUCCESS);
 }
 
+egl::Error DisplayD3D::queryAttribute(EGLint attribute, EGLAttrib *value)
+{
+    if (attribute == EGL_DEVICE_ANGLE)
+    {
+        *value = reinterpret_cast<EGLAttrib>(mDevice);
+        ASSERT(*value != 0);
+        return egl::Error(EGL_SUCCESS);
+    }
+
+    return egl::Error(EGL_BAD_ATTRIBUTE);
+}
+
 egl::Error DisplayD3D::createContext(const egl::Config *config, const gl::Context *shareContext, const egl::AttributeMap &attribs,
                                      gl::Context **outContext)
 {
@@ -219,11 +232,16 @@ egl::Error DisplayD3D::initialize(egl::Display *display)
 {
     ASSERT(mRenderer == nullptr && display != nullptr);
     mDisplay = display;
-    return CreateRendererD3D(display, &mRenderer);
+    egl::Error error = CreateRendererD3D(display, &mRenderer);
+
+    ASSERT(mDevice == nullptr);
+    mDevice = new egl::Device(new rx::DeviceD3D(display, mRenderer));
+    return error;
 }
 
 void DisplayD3D::terminate()
 {
+    SafeDelete(mDevice);
     SafeDelete(mRenderer);
 }
 
@@ -303,6 +321,13 @@ void DisplayD3D::generateExtensions(egl::DisplayExtensions *outExtensions) const
     }
 
     outExtensions->createContext = true;
+
+    int shaderModel = mRenderer->getMajorShaderModel();
+
+    outExtensions->d3d9Device = (shaderModel < 4);
+    outExtensions->d3d11Device = (shaderModel >= 4);
+
+    outExtensions->deviceBase = true;
 }
 
 std::string DisplayD3D::getVendorString() const

@@ -18,6 +18,7 @@
 #include "libANGLE/Caps.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/AttributeMap.h"
+#include "libANGLE/Device.h"
 
 namespace gl
 {
@@ -85,6 +86,7 @@ class Display final
     EGLNativeDisplayType getNativeDisplayId() const { return mDisplayId; }
 
     rx::DisplayImpl *getImplementation() { return mImplementation; }
+    Error queryAttribute(EGLint attribute, EGLAttrib *value);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Display);

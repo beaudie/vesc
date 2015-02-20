@@ -49,6 +49,7 @@
 #include "third_party/trace_event/trace_event.h"
 
 #include <sstream>
+#include <EGL/eglext.h>
 
 #include <EGL/eglext.h>
 
@@ -630,6 +631,12 @@ gl::Error Renderer9::finish()
 SwapChainD3D *Renderer9::createSwapChain(NativeWindow nativeWindow, HANDLE shareHandle, GLenum backBufferFormat, GLenum depthBufferFormat)
 {
     return new SwapChain9(this, nativeWindow, shareHandle, backBufferFormat, depthBufferFormat);
+}
+
+void *Renderer9::getD3DDevice(EGLint attribute)
+{
+    ASSERT(attribute == EGL_D3D9_DEVICE_ANGLE);
+    return getDevice();
 }
 
 gl::Error Renderer9::allocateEventQuery(IDirect3DQuery9 **outQuery)

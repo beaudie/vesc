@@ -480,7 +480,10 @@ DisplayExtensions::DisplayExtensions()
       querySurfacePointer(false),
       windowFixedSize(false),
       postSubBuffer(false),
-      createContext(false)
+      createContext(false),
+      d3d11Device(false),
+      d3d9Device(false),
+      deviceBase(false)
 {
 }
 
@@ -496,6 +499,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_ANGLE_window_fixed_size",                   windowFixedSize,                &extensionStrings);
     InsertExtensionString("EGL_NV_post_sub_buffer",                        postSubBuffer,                  &extensionStrings);
     InsertExtensionString("EGL_KHR_create_context",                        createContext,                  &extensionStrings);
+    InsertExtensionString("EGL_ANGLE_device_base",                         deviceBase,                     &extensionStrings);
 
     return extensionStrings;
 }
@@ -506,7 +510,8 @@ ClientExtensions::ClientExtensions()
       platformBase(false),
       platformANGLE(false),
       platformANGLED3D(false),
-      platformANGLEOpenGL(false)
+      platformANGLEOpenGL(false),
+      deviceBase(false)
 {
 }
 
@@ -520,6 +525,7 @@ std::vector<std::string> ClientExtensions::getStrings() const
     InsertExtensionString("EGL_ANGLE_platform_angle",        platformANGLE,       &extensionStrings);
     InsertExtensionString("EGL_ANGLE_platform_angle_d3d",    platformANGLED3D,    &extensionStrings);
     InsertExtensionString("EGL_ANGLE_platform_angle_opengl", platformANGLEOpenGL, &extensionStrings);
+    InsertExtensionString("EGL_ANGLE_device_base",           deviceBase,          &extensionStrings);
 
     return extensionStrings;
 }

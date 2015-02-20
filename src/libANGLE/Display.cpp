@@ -238,6 +238,7 @@ void Display::terminate()
     mConfigSet.clear();
 
     mImplementation->terminate();
+    mImplementation->invalidateExtensions();
     mInitialized = false;
 
     // De-init default platform
@@ -514,6 +515,7 @@ static ClientExtensions GenerateClientExtensions()
     extensions.clientExtensions = true;
     extensions.platformBase = true;
     extensions.platformANGLE = true;
+    extensions.deviceBase = true;
 
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
     extensions.platformANGLED3D = true;
@@ -598,6 +600,11 @@ const std::string &Display::getExtensionString() const
 const std::string &Display::getVendorString() const
 {
     return mVendorString;
+}
+
+Error Display::queryAttribute(EGLint attribute, EGLAttrib *value)
+{
+    return mImplementation->queryAttribute(attribute, value);
 }
 
 }

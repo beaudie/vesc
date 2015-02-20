@@ -344,6 +344,15 @@ struct DisplayExtensions
 
     // EGL_KHR_create_context
     bool createContext;
+
+    // EGL_ANGLE_device_base
+    bool deviceBase;
+
+    // EGL_ANGLE_d3d11_device
+    bool d3d11Device;
+
+    // EGL_ANGLE_d3d9_device
+    bool d3d9Device;
 };
 
 struct ClientExtensions
@@ -367,6 +376,9 @@ struct ClientExtensions
 
     // EGL_ANGLE_platform_angle_opengl
     bool platformANGLEOpenGL;
+
+    // EGL_ANGLE_device_base
+    bool deviceBase;
 };
 
 }
