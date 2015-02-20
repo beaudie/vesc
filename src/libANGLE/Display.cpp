@@ -574,6 +574,11 @@ bool Display::isValidNativeWindow(EGLNativeWindowType window) const
     return mImplementation->isValidNativeWindow(window);
 }
 
+rx::RendererClass Display::getRendererClass() const
+{
+    return mImplementation->getRendererClass();
+}
+
 bool Display::isValidNativeDisplay(EGLNativeDisplayType display)
 {
     // TODO(jmadill): handle this properly
@@ -613,6 +618,11 @@ const std::string &Display::getExtensionString() const
 const std::string &Display::getVendorString() const
 {
     return mVendorString;
+}
+
+Error Display::getDevice(EGLAttrib *value)
+{
+    return mImplementation->getDevice(value);
 }
 
 }

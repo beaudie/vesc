@@ -10,6 +10,7 @@
 #define LIBANGLE_RENDERER_D3D_DISPLAYD3D_H_
 
 #include "libANGLE/renderer/DisplayImpl.h"
+#include "libANGLE/Device.h"
 
 namespace rx
 {
@@ -42,6 +43,9 @@ class DisplayD3D : public DisplayImpl
     egl::Error restoreLostDevice() override;
 
     bool isValidNativeWindow(EGLNativeWindowType window) const override;
+    rx::RendererClass getRendererClass() const override;
+
+    egl::Error getDevice(EGLAttrib *value) override;
 
     std::string getVendorString() const override;
 
@@ -54,6 +58,8 @@ class DisplayD3D : public DisplayImpl
     egl::Display *mDisplay;
 
     rx::RendererD3D *mRenderer;
+
+    egl::Device *mDevice;
 };
 
 }
