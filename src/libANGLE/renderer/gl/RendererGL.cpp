@@ -10,6 +10,7 @@
 
 #include "common/debug.h"
 #include "libANGLE/Data.h"
+#include "libANGLE/VertexArray.h"
 #include "libANGLE/renderer/gl/BufferGL.h"
 #include "libANGLE/renderer/gl/CompilerGL.h"
 #include "libANGLE/renderer/gl/DefaultAttachmentGL.h"
@@ -82,7 +83,7 @@ ShaderImpl *RendererGL::createShader(GLenum type)
 
 ProgramImpl *RendererGL::createProgram()
 {
-    return new ProgramGL();
+    return new ProgramGL(mFunctions, mStateManager);
 }
 
 DefaultAttachmentImpl *RendererGL::createDefaultAttachment(GLenum type, egl::Surface *surface)
