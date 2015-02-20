@@ -243,4 +243,46 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform, void *native_disp
     return Display::getDisplay(displayId, AttributeMap(attrib_list));
 }
 
+// EGL_ANGLE_query_display_attrib
+EGLBoolean EGLAPIENTRY QueryDisplayAttribANGLE(EGLDisplay dpy, EGLint attribute, void **value)
+{
+    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLint attribute = %d, void **value = 0x%0.8p)",
+        dpy, attribute, value);
+
+    Display *display = static_cast<Display*>(dpy);
+
+    if (!display->getExtensions().queryDisplayAttrib)
+    {
+        SetGlobalError(Error(EGL_SUCCESS));
+        return EGL_FALSE;
+    }
+
+    // validate the attribute parameter
+    switch (attribute)
+    {
+    case EGL_D3D11_DEVICE_ANGLE:
+        if (!display->getExtensions().d3d11Device)
+        {
+            SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+            return EGL_FALSE;
+        }
+        break;
+    case EGL_D3D9_DEVICE_ANGLE:
+        if (!display->getExtensions().d3d9Device)
+        {
+            SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+            return EGL_FALSE;
+        }
+        break;
+
+    default:
+        SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+        return EGL_FALSE;
+    }
+
+    Error error = display->queryDisplayAttribute(attribute, value);
+    SetGlobalError(error);
+    return (error.isError() ? EGL_FALSE : EGL_TRUE);
+}
+
 }

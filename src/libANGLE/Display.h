@@ -84,6 +84,8 @@ class Display final
     const AttributeMap &getAttributeMap() const { return mAttributeMap; }
     EGLNativeDisplayType getNativeDisplayId() const { return mDisplayId; }
 
+    Error queryDisplayAttribute(EGLint attribute, void **value);
+
   private:
     DISALLOW_COPY_AND_ASSIGN(Display);
 

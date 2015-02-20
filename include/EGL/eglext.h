@@ -488,15 +488,19 @@ typedef void *EGLDeviceEXT;
 #define EGL_NO_DEVICE_EXT                 ((EGLDeviceEXT)(0))
 #define EGL_BAD_DEVICE_EXT                0x322B
 #define EGL_DEVICE_EXT                    0x322C
+#define EGL_D3D11_DEVICE_ANGLE            0x322D
+#define EGL_D3D9_DEVICE_ANGLE             0x322E
 typedef EGLBoolean (EGLAPIENTRYP PFNEGLQUERYDEVICEATTRIBEXTPROC) (EGLDeviceEXT device, EGLint attribute, EGLAttrib *value);
 typedef const char *(EGLAPIENTRYP PFNEGLQUERYDEVICESTRINGEXTPROC) (EGLDeviceEXT device, EGLint name);
 typedef EGLBoolean (EGLAPIENTRYP PFNEGLQUERYDEVICESEXTPROC) (EGLint max_devices, EGLDeviceEXT *devices, EGLint *num_devices);
 typedef EGLBoolean (EGLAPIENTRYP PFNEGLQUERYDISPLAYATTRIBEXTPROC) (EGLDisplay dpy, EGLint attribute, EGLAttrib *value);
+typedef EGLBoolean (EGLAPIENTRYP PFNEGLQUERYDISPLAYATTRIBANGLEPROC) (EGLDisplay dpy, EGLint attribute, void **value);
 #ifdef EGL_EGLEXT_PROTOTYPES
 EGLAPI EGLBoolean EGLAPIENTRY eglQueryDeviceAttribEXT (EGLDeviceEXT device, EGLint attribute, EGLAttrib *value);
 EGLAPI const char *EGLAPIENTRY eglQueryDeviceStringEXT (EGLDeviceEXT device, EGLint name);
 EGLAPI EGLBoolean EGLAPIENTRY eglQueryDevicesEXT (EGLint max_devices, EGLDeviceEXT *devices, EGLint *num_devices);
 EGLAPI EGLBoolean EGLAPIENTRY eglQueryDisplayAttribEXT (EGLDisplay dpy, EGLint attribute, EGLAttrib *value);
+EGLAPI EGLBoolean EGLAPIENTRY eglQueryDisplayAttribANGLE(EGLDisplay dpy, EGLint attribute, void **value);
 #endif
 #endif /* EGL_EXT_device_base */
 

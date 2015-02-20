@@ -1071,6 +1071,7 @@ __eglMustCastToProperFunctionPointerType EGLAPIENTRY GetProcAddress(const char *
 
     static const Extension extensions[] =
     {
+        { "eglQueryDisplayAttribANGLE", (__eglMustCastToProperFunctionPointerType)QueryDisplayAttribANGLE },
         { "eglQuerySurfacePointerANGLE", (__eglMustCastToProperFunctionPointerType)QuerySurfacePointerANGLE },
         { "eglPostSubBufferNV", (__eglMustCastToProperFunctionPointerType)PostSubBufferNV },
         { "eglGetPlatformDisplayEXT", (__eglMustCastToProperFunctionPointerType)GetPlatformDisplayEXT },

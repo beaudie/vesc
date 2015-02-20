@@ -197,6 +197,13 @@ egl::Error DisplayD3D::createPbufferFromClientBuffer(const egl::Config *configur
     return egl::Error(EGL_SUCCESS);
 }
 
+egl::Error DisplayD3D::queryDisplayAttribute(EGLint attribute, void **value)
+{
+    *value = mRenderer->getD3DDevice(attribute);
+    ASSERT(*value != nullptr);
+    return egl::Error(EGL_SUCCESS);
+}
+
 egl::Error DisplayD3D::createContext(const egl::Config *config, const gl::Context *shareContext, const egl::AttributeMap &attribs,
                                      gl::Context **outContext)
 {
@@ -303,6 +310,13 @@ void DisplayD3D::generateExtensions(egl::DisplayExtensions *outExtensions) const
     }
 
     outExtensions->createContext = true;
+
+    outExtensions->queryDisplayAttrib = true;
+
+    int shaderModel = mRenderer->getMajorShaderModel();
+
+    outExtensions->d3d9Device = (shaderModel < 4);
+    outExtensions->d3d11Device = (shaderModel >= 4);
 }
 
 std::string DisplayD3D::getVendorString() const

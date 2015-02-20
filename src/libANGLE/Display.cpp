@@ -238,6 +238,7 @@ void Display::terminate()
     mConfigSet.clear();
 
     mImplementation->terminate();
+    mImplementation->invalidateExtensions();
     mInitialized = false;
 
     // De-init default platform
@@ -598,6 +599,11 @@ const std::string &Display::getExtensionString() const
 const std::string &Display::getVendorString() const
 {
     return mVendorString;
+}
+
+Error Display::queryDisplayAttribute(EGLint attribute, void **value)
+{
+    return mImplementation->queryDisplayAttribute(attribute, value);
 }
 
 }

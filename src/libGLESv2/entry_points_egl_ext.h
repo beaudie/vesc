@@ -25,6 +25,9 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY PostSubBufferNV(EGLDisplay dpy, EGLSurface s
 // EGL_EXT_platform_base
 ANGLE_EXPORT EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform, void *native_display, const EGLint *attrib_list);
 
+// EGL_ANGLE_query_display_attrib
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY QueryDisplayAttribANGLE(EGLDisplay dpy, EGLint attribute, void **value);
+
 }
 
 #endif // LIBGLESV2_ENTRYPOINTSEGLEXT_H_

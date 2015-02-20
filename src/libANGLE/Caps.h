@@ -344,6 +344,15 @@ struct DisplayExtensions
 
     // EGL_KHR_create_context
     bool createContext;
+
+    // EGL_ANGLE_query_display_attrib
+    bool queryDisplayAttrib;
+
+    // EGL_ANGLE_d3d11_device
+    bool d3d11Device;
+
+    // EGL_ANGLE_d3d9_device
+    bool d3d9Device;
 };
 
 struct ClientExtensions

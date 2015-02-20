@@ -33,6 +33,11 @@ void DisplayImpl::destroySurface(egl::Surface *surface)
     SafeDelete(surface);
 }
 
+void DisplayImpl::invalidateExtensions()
+{
+    mExtensionsInitialized = false;
+}
+
 const egl::DisplayExtensions &DisplayImpl::getExtensions() const
 {
     if (!mExtensionsInitialized)

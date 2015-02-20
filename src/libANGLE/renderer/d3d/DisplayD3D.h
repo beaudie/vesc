@@ -43,6 +43,8 @@ class DisplayD3D : public DisplayImpl
 
     bool isValidNativeWindow(EGLNativeWindowType window) const override;
 
+    egl::Error queryDisplayAttribute(EGLint attribute, void **value) override;
+
     std::string getVendorString() const override;
 
   private:

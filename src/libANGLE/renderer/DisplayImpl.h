@@ -66,6 +66,8 @@ class DisplayImpl
 
     virtual std::string getVendorString() const = 0;
 
+    virtual egl::Error queryDisplayAttribute(EGLint attribute, void **value) = 0;
+
     const egl::Caps &getCaps() const;
 
     typedef std::set<egl::Surface*> SurfaceSet;
@@ -74,6 +76,7 @@ class DisplayImpl
 
     void destroySurface(egl::Surface *surface);
 
+    void invalidateExtensions();
     const egl::DisplayExtensions &getExtensions() const;
 
   protected:
