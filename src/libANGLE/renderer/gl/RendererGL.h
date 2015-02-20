@@ -69,6 +69,7 @@ class RendererGL : public Renderer
     VendorID getVendorId() const override;
     std::string getVendorString() const override;
     std::string getRendererDescription() const override;
+    RendererClass getRendererClass() const override;
 
   private:
     void generateCaps(gl::Caps *outCaps, gl::TextureCapsMap* outTextureCaps, gl::Extensions *outExtensions) const override;
