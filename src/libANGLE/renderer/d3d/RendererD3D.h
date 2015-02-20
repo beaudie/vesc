@@ -48,12 +48,6 @@ enum ShaderType
     SHADER_GEOMETRY
 };
 
-enum RendererClass
-{
-    RENDERER_D3D11,
-    RENDERER_D3D9,
-};
-
 class RendererD3D : public Renderer
 {
   public:
@@ -168,8 +162,7 @@ class RendererD3D : public Renderer
     // Device lost
     void notifyDeviceLost() override;
     virtual bool resetDevice() = 0;
-
-    virtual RendererClass getRendererClass() const = 0;
+    virtual void *getD3DDevice() = 0;
 
     gl::Error getScratchMemoryBuffer(size_t requestedSize, MemoryBuffer **bufferOut);
 

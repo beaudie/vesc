@@ -242,6 +242,16 @@ EGLDisplay EGLAPIENTRY eglGetPlatformDisplayEXT(EGLenum platform, void *native_d
     return egl::GetPlatformDisplayEXT(platform, native_display, attrib_list);
 }
 
+EGLBoolean EGLAPIENTRY eglQueryDisplayAttribEXT(EGLDisplay dpy, EGLint attribute, EGLAttrib *value)
+{
+    return egl::QueryDisplayAttribEXT(dpy, attribute, value);
+}
+
+EGLBoolean EGLAPIENTRY eglQueryDeviceAttribEXT(EGLDeviceEXT device, EGLint attribute, EGLAttrib *value)
+{
+    return egl::QueryDeviceAttribEXT(device, attribute, value);
+}
+
 __eglMustCastToProperFunctionPointerType EGLAPIENTRY eglGetProcAddress(const char *procname)
 {
     return egl::GetProcAddress(procname);
