@@ -14,6 +14,10 @@
 #include <vector>
 #include <algorithm>
 
+// Exporting STL containers from DLLs produces a Warning on MSVS.
+#pragma warning(push)
+#pragma warning(disable:4251)
+
 // Assume ShaderLang.h is included before ShaderVars.h, for sh::GLenum
 // Note: make sure to increment ANGLE_SH_VERSION when changing ShaderVars.h
 
@@ -179,6 +183,8 @@ struct COMPILER_EXPORT InterfaceBlock
     bool staticUse;
     std::vector<InterfaceBlockField> fields;
 };
+
+#pragma warning(pop)
 
 }
 
