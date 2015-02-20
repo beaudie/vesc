@@ -10,6 +10,7 @@
 #ifndef COMPILER_TRANSLATOR_UNIFORMHLSL_H_
 #define COMPILER_TRANSLATOR_UNIFORMHLSL_H_
 
+#ifdef ANGLE_ENABLE_HLSL
 #include "compiler/translator/OutputHLSL.h"
 
 namespace sh
@@ -61,5 +62,5 @@ class UniformHLSL
 };
 
 }
-
+#endif // ANGLE_ENABLE_HLSL
 #endif // COMPILER_TRANSLATOR_UNIFORMHLSL_H_

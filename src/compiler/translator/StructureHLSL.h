@@ -10,6 +10,7 @@
 #ifndef COMPILER_TRANSLATOR_STRUCTUREHLSL_H_
 #define COMPILER_TRANSLATOR_STRUCTUREHLSL_H_
 
+#ifdef ANGLE_ENABLE_HLSL
 #include "compiler/translator/Common.h"
 #include "compiler/translator/IntermNode.h"
 
@@ -79,5 +80,5 @@ class StructureHLSL
 };
 
 }
-
+#endif // ANGLE_ENABLE_HLSL
 #endif // COMPILER_TRANSLATOR_STRUCTUREHLSL_H_
