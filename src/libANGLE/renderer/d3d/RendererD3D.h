@@ -168,6 +168,7 @@ class RendererD3D : public Renderer
     // Device lost
     void notifyDeviceLost() override;
     virtual bool resetDevice() = 0;
+    virtual void *getD3DDevice() = 0;
 
     virtual RendererClass getRendererClass() const = 0;
 

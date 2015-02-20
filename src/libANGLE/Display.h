@@ -86,6 +86,7 @@ class Display final
     EGLNativeDisplayType getNativeDisplayId() const { return mDisplayId; }
 
     rx::DisplayImpl *getImplementation() { return mImplementation; }
+    Error getDevice(EGLAttrib *value);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Display);

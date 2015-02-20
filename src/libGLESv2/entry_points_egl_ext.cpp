@@ -10,6 +10,7 @@
 #include "libGLESv2/global_state.h"
 
 #include "libANGLE/Display.h"
+#include "libANGLE/Device.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/validationEGL.h"
 
@@ -244,6 +245,80 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform, void *native_disp
 
     EGLNativeDisplayType displayId = static_cast<EGLNativeDisplayType>(native_display);
     return Display::getDisplay(displayId, AttributeMap(attrib_list));
+}
+
+// EGL_ANGLE_device_base
+EGLBoolean EGLAPIENTRY QueryDeviceAttribANGLE(EGLDeviceANGLE device, EGLint attribute, EGLAttrib *value)
+{
+    EVENT("(EGLDeviceANGLE device = 0x%0.8p, EGLint attribute = %d, EGLAttrib *value = 0x%0.8p)",
+        device, attribute, value);
+
+    Device *dev = static_cast<Device*>(device);
+    Display *display = dev->getDisplay();
+    Error error(EGL_SUCCESS);
+
+    // validate the attribute parameter
+    switch (attribute)
+    {
+    case EGL_D3D11_DEVICE_ANGLE:
+        if (!display->getExtensions().deviceD3D || !display->getExtensions().deviceD3D11)
+        {
+            SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+            return EGL_FALSE;
+        }
+        error = dev->getDevice(value);
+        break;
+    case EGL_D3D9_DEVICE_ANGLE:
+        if (!display->getExtensions().deviceD3D || !display->getExtensions().deviceD3D9)
+        {
+            SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+            return EGL_FALSE;
+        }
+        error = dev->getDevice(value);
+        break;
+    default:
+        SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+        return EGL_FALSE;
+    }
+
+    SetGlobalError(error);
+    return (error.isError() ? EGL_FALSE : EGL_TRUE);
+}
+
+// EGL_ANGLE_device_base
+EGLBoolean EGLAPIENTRY QueryDisplayAttribANGLE(EGLDisplay dpy, EGLint attribute, EGLAttrib *value)
+{
+    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLint attribute = %d, EGLAttrib *value = 0x%0.8p)",
+        dpy, attribute, value);
+
+    Display *display = static_cast<Display*>(dpy);
+    Error error(EGL_SUCCESS);
+
+    if (!display->getExtensions().deviceBase)
+    {
+        SetGlobalError(Error(EGL_SUCCESS));
+        return EGL_FALSE;
+    }
+
+    // validate the attribute parameter
+    switch (attribute)
+    {
+    case EGL_DEVICE_ANGLE:
+        if (!display->getExtensions().deviceBase)
+        {
+            SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+            return EGL_FALSE;
+        }
+        error = display->getDevice(value);
+        break;
+
+    default:
+        SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+        return EGL_FALSE;
+    }
+
+    SetGlobalError(error);
+    return (error.isError() ? EGL_FALSE : EGL_TRUE);
 }
 
 }
