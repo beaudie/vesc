@@ -12,6 +12,12 @@
 #include "common/debug.h"
 #include "libANGLE/renderer/gl/functionsgl_typedefs.h"
 
+namespace gl
+{
+class State;
+struct VertexAttribute;
+}
+
 namespace rx
 {
 
@@ -24,12 +30,21 @@ class StateManagerGL
 
     void setProgram(GLuint program);
 
+    void setVertexAttribute(size_t index, const gl::VertexAttribute &attribute);
+
+    void setDrawState(const gl::State &state);
+
   private:
     DISALLOW_COPY_AND_ASSIGN(StateManagerGL);
 
     const FunctionsGL *mFunctions;
 
     GLuint mProgram;
+
+    struct CachedVertexAtribute
+    {
+
+    };
 };
 
 }
