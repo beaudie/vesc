@@ -61,5 +61,4 @@ class UniformHLSL
 };
 
 }
-
 #endif // COMPILER_TRANSLATOR_UNIFORMHLSL_H_

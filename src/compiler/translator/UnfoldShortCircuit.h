@@ -34,5 +34,4 @@ class UnfoldShortCircuit : public TIntermTraverser
     int mTemporaryIndex;
 };
 }
-
 #endif   // COMPILER_TRANSLATOR_UNFOLDSHORTCIRCUIT_H_

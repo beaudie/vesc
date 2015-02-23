@@ -79,5 +79,4 @@ class StructureHLSL
 };
 
 }
-
 #endif // COMPILER_TRANSLATOR_STRUCTUREHLSL_H_
