@@ -58,7 +58,9 @@ gl::Error RendererGL::finish()
 gl::Error RendererGL::drawArrays(const gl::Data &data, GLenum mode,
                                  GLint first, GLsizei count, GLsizei instances)
 {
-    UNIMPLEMENTED();
+    mStateManager->setDrawState(*data.state);
+    mFunctions->drawArrays(mode, first, count);
+
     return gl::Error(GL_INVALID_OPERATION);
 }
 
