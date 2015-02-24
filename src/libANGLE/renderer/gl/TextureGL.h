@@ -14,10 +14,13 @@
 namespace rx
 {
 
+class FunctionsGL;
+class StateManagerGL;
+
 class TextureGL : public TextureImpl
 {
   public:
-    TextureGL();
+    TextureGL(GLenum type, const FunctionsGL *functions, StateManagerGL *stateManager);
     ~TextureGL() override;
 
     void setUsage(GLenum usage) override;
@@ -44,8 +47,17 @@ class TextureGL : public TextureImpl
     void bindTexImage(egl::Surface *surface) override;
     void releaseTexImage() override;
 
+    GLuint getTextureID() const;
+
   private:
     DISALLOW_COPY_AND_ASSIGN(TextureGL);
+
+    GLenum mTextureType;
+
+    const FunctionsGL *mFunctions;
+    StateManagerGL *mStateManager;
+
+    GLuint mTextureID;
 };
 
 }

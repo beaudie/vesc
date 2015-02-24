@@ -21,9 +21,17 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions)
     : mFunctions(functions),
       mProgram(0),
       mVAO(0),
-      mBuffers()
+      mBuffers(),
+      mTextureUnit(GL_TEXTURE0),
+      mTextures(),
+      mUnpackAlignment(4),
+      mUnpackRowLength(0)
 {
     ASSERT(mFunctions);
+
+    GLint textureUnits;
+    mFunctions->getIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &textureUnits);
+    mTextures.resize(textureUnits);
 }
 
 void StateManagerGL::setProgram(GLuint program)
@@ -53,6 +61,39 @@ void StateManagerGL::setBuffer(GLenum type, GLuint buffer)
     }
 }
 
+void StateManagerGL::setTextureUnit(GLenum unit)
+{
+    if (mTextureUnit != unit)
+    {
+        mTextureUnit = unit;
+        mFunctions->activeTexture(unit);
+    }
+}
+
+void StateManagerGL::setTexture(GLenum type, GLuint texture)
+{
+    if (mTextures[mTextureUnit] != texture)
+    {
+        mTextures[mTextureUnit] = texture;
+        mFunctions->bindTexture(type, texture);
+    }
+}
+
+void StateManagerGL::setPixelUnpackState(GLint alignment, GLint rowLength)
+{
+    if (mUnpackAlignment != alignment)
+    {
+        mUnpackAlignment = alignment;
+        mFunctions->pixelStorei(GL_UNPACK_ALIGNMENT, mUnpackAlignment);
+    }
+
+    if (mUnpackRowLength != rowLength)
+    {
+        mUnpackRowLength = rowLength;
+        mFunctions->pixelStorei(GL_UNPACK_ROW_LENGTH, mUnpackRowLength);
+    }
+}
+
 void StateManagerGL::setDrawState(const gl::State &state)
 {
     const gl::VertexArray *vao = state.getVertexArray();
@@ -62,6 +103,10 @@ void StateManagerGL::setDrawState(const gl::State &state)
     const gl::Program *program = state.getProgram();
     const ProgramGL *programGL = GetImplAs<ProgramGL>(program);
     setProgram(programGL->getProgramID());
+
+    for (size_t textureUnitIndex = 0; textureUnitIndex < mTextures.size(); textureUnitIndex++)
+    {
+    }
 }
 
 }

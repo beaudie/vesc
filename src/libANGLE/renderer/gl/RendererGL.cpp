@@ -106,7 +106,7 @@ FramebufferImpl *RendererGL::createFramebuffer()
 
 TextureImpl *RendererGL::createTexture(GLenum target)
 {
-    return new TextureGL();
+    return new TextureGL(target, mFunctions, mStateManager);
 }
 
 RenderbufferImpl *RendererGL::createRenderbuffer()
