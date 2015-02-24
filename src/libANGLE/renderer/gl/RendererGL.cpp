@@ -58,7 +58,9 @@ gl::Error RendererGL::finish()
 gl::Error RendererGL::drawArrays(const gl::Data &data, GLenum mode,
                                  GLint first, GLsizei count, GLsizei instances)
 {
-    UNIMPLEMENTED();
+    mStateManager->setDrawState(*data.state);
+    mFunctions->drawArrays(mode, first, count);
+
     return gl::Error(GL_INVALID_OPERATION);
 }
 
@@ -66,7 +68,14 @@ gl::Error RendererGL::drawElements(const gl::Data &data, GLenum mode, GLsizei co
                                    const GLvoid *indices, GLsizei instances,
                                    const RangeUI &indexRange)
 {
-    UNIMPLEMENTED();
+    if (instances > 0)
+    {
+        UNIMPLEMENTED();
+    }
+
+    mStateManager->setDrawState(*data.state);
+    mFunctions->drawElements(mode, count, type, indices);
+
     return gl::Error(GL_INVALID_OPERATION);
 }
 
