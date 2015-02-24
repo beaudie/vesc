@@ -32,6 +32,9 @@ class StateManagerGL
     void setProgram(GLuint program);
     void setVertexArray(GLuint vao);
     void setBuffer(GLenum type, GLuint buffer);
+    void setTextureUnit(GLenum unit);
+    void setTexture(GLenum type, GLuint texture);
+    void setPixelUnpackState(GLint alignment, GLint rowLength);
 
     void setDrawState(const gl::State &state);
 
@@ -43,6 +46,12 @@ class StateManagerGL
     GLuint mProgram;
     GLuint mVAO;
     std::map<GLenum, GLuint> mBuffers;
+
+    GLuint mTextureUnit;
+    std::vector<GLuint> mTextures;
+
+    GLint mUnpackAlignment;
+    GLint mUnpackRowLength;
 };
 
 }
