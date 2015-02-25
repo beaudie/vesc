@@ -766,6 +766,11 @@ bool ValidateTexParamParameters(gl::Context *context, GLenum pname, GLint param)
         break;
 
       case GL_TEXTURE_USAGE_ANGLE:
+        if (!context->getExtensions().textureUsage)
+        {
+            context->recordError(Error(GL_INVALID_ENUM));
+            return false;
+        }
         switch (param)
         {
           case GL_NONE:
