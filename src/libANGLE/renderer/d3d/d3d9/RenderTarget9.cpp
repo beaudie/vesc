@@ -8,10 +8,12 @@
 // pointers retained by renderbuffers.
 
 #include "libANGLE/renderer/d3d/d3d9/RenderTarget9.h"
+
+#include "libANGLE/renderer/d3d/SurfaceD3D.h"
 #include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
-#include "libANGLE/renderer/d3d/d3d9/renderer9_utils.h"
 #include "libANGLE/renderer/d3d/d3d9/SwapChain9.h"
 #include "libANGLE/renderer/d3d/d3d9/formatutils9.h"
+#include "libANGLE/renderer/d3d/d3d9/renderer9_utils.h"
 
 namespace rx
 {
@@ -90,10 +92,11 @@ D3DFORMAT TextureRenderTarget9::getD3DFormat() const
     return mD3DFormat;
 }
 
-SurfaceRenderTarget9::SurfaceRenderTarget9(SwapChain9 *swapChain, bool depth)
-    : mSwapChain(swapChain),
+SurfaceRenderTarget9::SurfaceRenderTarget9(SurfaceD3D *surface, bool depth)
+    : mSurface(surface),
       mDepth(depth)
 {
+    ASSERT(mSurface);
 }
 
 SurfaceRenderTarget9::~SurfaceRenderTarget9()
@@ -102,12 +105,12 @@ SurfaceRenderTarget9::~SurfaceRenderTarget9()
 
 GLsizei SurfaceRenderTarget9::getWidth() const
 {
-    return mSwapChain->getWidth();
+    return getSwapChain()->getWidth();
 }
 
 GLsizei SurfaceRenderTarget9::getHeight() const
 {
-    return mSwapChain->getHeight();
+    return getSwapChain()->getHeight();
 }
 
 GLsizei SurfaceRenderTarget9::getDepth() const
@@ -117,7 +120,7 @@ GLsizei SurfaceRenderTarget9::getDepth() const
 
 GLenum SurfaceRenderTarget9::getInternalFormat() const
 {
-    return (mDepth ? mSwapChain->GetDepthBufferInternalFormat() : mSwapChain->GetBackBufferInternalFormat());
+    return (mDepth ? getSwapChain()->GetDepthBufferInternalFormat() : getSwapChain()->GetBackBufferInternalFormat());
 }
 
 GLsizei SurfaceRenderTarget9::getSamples() const
@@ -128,12 +131,17 @@ GLsizei SurfaceRenderTarget9::getSamples() const
 
 IDirect3DSurface9 *SurfaceRenderTarget9::getSurface()
 {
-    return (mDepth ? mSwapChain->getDepthStencil() : mSwapChain->getRenderTarget());
+    return (mDepth ? getSwapChain()->getDepthStencil() : getSwapChain()->getRenderTarget());
 }
 
 D3DFORMAT SurfaceRenderTarget9::getD3DFormat() const
 {
     return d3d9::GetTextureFormatInfo(getInternalFormat()).texFormat;
+}
+
+SwapChain9 *SurfaceRenderTarget9::getSwapChain() const
+{
+    return GetAs<SwapChain9>(mSurface->getSwapChain());
 }
 
 }

@@ -22,6 +22,10 @@ class SurfaceGL : public SurfaceImpl
               EGLenum textureType);
     ~SurfaceGL() override;
 
+    // Default framebuffer creation
+    FramebufferImpl *createDefaultFramebuffer() override;
+    DefaultAttachmentImpl *createDefaultAttachment(GLenum type) override;
+
   private:
     DISALLOW_COPY_AND_ASSIGN(SurfaceGL);
 };

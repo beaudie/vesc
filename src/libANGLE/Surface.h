@@ -18,6 +18,7 @@
 
 namespace gl
 {
+class Framebuffer;
 class Texture;
 }
 
@@ -68,6 +69,8 @@ class Surface final
 
     EGLint isFixedSize() const;
 
+    gl::Framebuffer *getFramebuffer() const;
+
   private:
     DISALLOW_COPY_AND_ASSIGN(Surface);
 
@@ -78,6 +81,8 @@ class Surface final
     EGLenum mSwapBehavior;         // Buffer swap behavior
 
     gl::Texture *mTexture;
+
+    gl::Framebuffer *mFramebuffer;
 };
 
 }
