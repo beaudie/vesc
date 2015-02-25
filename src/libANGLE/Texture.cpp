@@ -71,6 +71,17 @@ Texture::~Texture()
     SafeDelete(mTexture);
 }
 
+const SamplerState &Texture::getSamplerState() const
+{
+    return mSamplerState;
+}
+
+void Texture::setSamplerState(const SamplerState &samplerState)
+{
+    mSamplerState = samplerState;
+    mTexture->setSamplerState(mSamplerState);
+}
+
 GLenum Texture::getTarget() const
 {
     return mTarget;

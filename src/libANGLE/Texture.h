@@ -42,8 +42,8 @@ class Texture final : public RefCountObject
 
     GLenum getTarget() const;
 
-    const SamplerState &getSamplerState() const { return mSamplerState; }
-    SamplerState &getSamplerState() { return mSamplerState; }
+    const SamplerState &getSamplerState() const;
+    void setSamplerState(const SamplerState &samplerState);
 
     void setUsage(GLenum usage);
     GLenum getUsage() const;

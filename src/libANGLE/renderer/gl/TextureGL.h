@@ -21,6 +21,7 @@ class TextureGL : public TextureImpl
     ~TextureGL() override;
 
     void setUsage(GLenum usage) override;
+    void setSamplerState(const gl::SamplerState &samplerState) override;
 
     gl::Error setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
                        const gl::PixelUnpackState &unpack, const uint8_t *pixels) override;
