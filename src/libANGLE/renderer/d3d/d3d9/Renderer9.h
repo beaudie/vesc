@@ -138,7 +138,7 @@ class Renderer9 : public RendererD3D
     virtual gl::Error createRenderTarget(int width, int height, GLenum format, GLsizei samples, RenderTargetD3D **outRT);
 
     // Framebuffer creation
-    virtual DefaultAttachmentImpl *createDefaultAttachment(GLenum type, egl::Surface *surface) override;
+    virtual DefaultAttachmentD3D *createDefaultAttachment(GLenum type, SurfaceD3D *surface) override;
     virtual FramebufferImpl *createFramebuffer() override;
 
     // Shader creation

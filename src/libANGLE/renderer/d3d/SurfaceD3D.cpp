@@ -10,6 +10,7 @@
 
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
+#include "libANGLE/renderer/d3d/FramebufferD3D.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/SwapChainD3D.h"
 
@@ -391,6 +392,16 @@ egl::Error SurfaceD3D::querySurfacePointerANGLE(EGLint attribute, void **value)
     ASSERT(attribute == EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE);
     *value = mSwapChain->getShareHandle();
     return egl::Error(EGL_SUCCESS);
+}
+
+FramebufferImpl *SurfaceD3D::createDefaultFramebuffer()
+{
+    return mRenderer->createFramebuffer();
+}
+
+DefaultAttachmentImpl *SurfaceD3D::createDefaultAttachment(GLenum type)
+{
+    return mRenderer->createDefaultAttachment(type, this);
 }
 
 }

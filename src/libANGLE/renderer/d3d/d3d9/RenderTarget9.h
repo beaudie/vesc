@@ -15,6 +15,7 @@
 namespace rx
 {
 class Renderer9;
+class SurfaceD3D;
 class SwapChain9;
 
 class RenderTarget9 : public RenderTargetD3D
@@ -66,7 +67,7 @@ class TextureRenderTarget9 : public RenderTarget9
 class SurfaceRenderTarget9 : public RenderTarget9
 {
   public:
-    SurfaceRenderTarget9(SwapChain9 *swapChain, bool depth);
+    SurfaceRenderTarget9(SurfaceD3D *surface, bool depth);
     virtual ~SurfaceRenderTarget9();
 
     GLsizei getWidth() const override;
@@ -82,7 +83,9 @@ class SurfaceRenderTarget9 : public RenderTarget9
   private:
     DISALLOW_COPY_AND_ASSIGN(SurfaceRenderTarget9);
 
-    SwapChain9 *mSwapChain;
+    SwapChain9 *getSwapChain() const;
+
+    SurfaceD3D *mSurface;
     bool mDepth;
 };
 
