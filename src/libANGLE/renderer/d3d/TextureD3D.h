@@ -35,7 +35,8 @@ class TextureD3D : public TextureImpl
 
     gl::Error getNativeTexture(TextureStorage **outStorage);
 
-    virtual void setUsage(GLenum usage) { mUsage = usage; }
+    void setUsage(GLenum usage) override { mUsage = usage; }
+    void setSamplerState(const gl::SamplerState &samplerState) override { }
     bool hasDirtyImages() const { return mDirtyImages; }
     void resetDirty() { mDirtyImages = false; }
 

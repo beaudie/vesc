@@ -25,6 +25,11 @@ void TextureGL::setUsage(GLenum usage)
     UNIMPLEMENTED();
 }
 
+void TextureGL::setSamplerState(const gl::SamplerState &samplerState)
+{
+    UNIMPLEMENTATED();
+}
+
 gl::Error TextureGL::setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
                               const gl::PixelUnpackState &unpack, const uint8_t *pixels)
 {

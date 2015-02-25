@@ -3626,27 +3626,31 @@ void GL_APIENTRY TexParameterf(GLenum target, GLenum pname, GLfloat param)
             return;
         }
 
+        SamplerState samplerState = texture->getSamplerState();
+
         switch (pname)
         {
-          case GL_TEXTURE_WRAP_S:               texture->getSamplerState().wrapS = uiround<GLenum>(param);        break;
-          case GL_TEXTURE_WRAP_T:               texture->getSamplerState().wrapT = uiround<GLenum>(param);        break;
-          case GL_TEXTURE_WRAP_R:               texture->getSamplerState().wrapR = uiround<GLenum>(param);        break;
-          case GL_TEXTURE_MIN_FILTER:           texture->getSamplerState().minFilter = uiround<GLenum>(param);    break;
-          case GL_TEXTURE_MAG_FILTER:           texture->getSamplerState().magFilter = uiround<GLenum>(param);    break;
-          case GL_TEXTURE_USAGE_ANGLE:          texture->setUsage(uiround<GLenum>(param));                        break;
-          case GL_TEXTURE_MAX_ANISOTROPY_EXT:   texture->getSamplerState().maxAnisotropy = std::min(param, context->getExtensions().maxTextureAnisotropy); break;
-          case GL_TEXTURE_COMPARE_MODE:         texture->getSamplerState().compareMode = uiround<GLenum>(param);  break;
-          case GL_TEXTURE_COMPARE_FUNC:         texture->getSamplerState().compareFunc = uiround<GLenum>(param);  break;
-          case GL_TEXTURE_SWIZZLE_R:            texture->getSamplerState().swizzleRed = uiround<GLenum>(param);   break;
-          case GL_TEXTURE_SWIZZLE_G:            texture->getSamplerState().swizzleGreen = uiround<GLenum>(param); break;
-          case GL_TEXTURE_SWIZZLE_B:            texture->getSamplerState().swizzleBlue = uiround<GLenum>(param);  break;
-          case GL_TEXTURE_SWIZZLE_A:            texture->getSamplerState().swizzleAlpha = uiround<GLenum>(param); break;
-          case GL_TEXTURE_BASE_LEVEL:           texture->getSamplerState().baseLevel = iround<GLint>(param);      break;
-          case GL_TEXTURE_MAX_LEVEL:            texture->getSamplerState().maxLevel = iround<GLint>(param);       break;
-          case GL_TEXTURE_MIN_LOD:              texture->getSamplerState().minLod = param;                            break;
-          case GL_TEXTURE_MAX_LOD:              texture->getSamplerState().maxLod = param;                            break;
+          case GL_TEXTURE_WRAP_S:               samplerState.wrapS = uiround<GLenum>(param);        break;
+          case GL_TEXTURE_WRAP_T:               samplerState.wrapT = uiround<GLenum>(param);        break;
+          case GL_TEXTURE_WRAP_R:               samplerState.wrapR = uiround<GLenum>(param);        break;
+          case GL_TEXTURE_MIN_FILTER:           samplerState.minFilter = uiround<GLenum>(param);    break;
+          case GL_TEXTURE_MAG_FILTER:           samplerState.magFilter = uiround<GLenum>(param);    break;
+          case GL_TEXTURE_USAGE_ANGLE:          texture->setUsage(uiround<GLenum>(param));          break;
+          case GL_TEXTURE_MAX_ANISOTROPY_EXT:   samplerState.maxAnisotropy = std::min(param, context->getExtensions().maxTextureAnisotropy); break;
+          case GL_TEXTURE_COMPARE_MODE:         samplerState.compareMode = uiround<GLenum>(param);  break;
+          case GL_TEXTURE_COMPARE_FUNC:         samplerState.compareFunc = uiround<GLenum>(param);  break;
+          case GL_TEXTURE_SWIZZLE_R:            samplerState.swizzleRed = uiround<GLenum>(param);   break;
+          case GL_TEXTURE_SWIZZLE_G:            samplerState.swizzleGreen = uiround<GLenum>(param); break;
+          case GL_TEXTURE_SWIZZLE_B:            samplerState.swizzleBlue = uiround<GLenum>(param);  break;
+          case GL_TEXTURE_SWIZZLE_A:            samplerState.swizzleAlpha = uiround<GLenum>(param); break;
+          case GL_TEXTURE_BASE_LEVEL:           samplerState.baseLevel = iround<GLint>(param);      break;
+          case GL_TEXTURE_MAX_LEVEL:            samplerState.maxLevel = iround<GLint>(param);       break;
+          case GL_TEXTURE_MIN_LOD:              samplerState.minLod = param;                        break;
+          case GL_TEXTURE_MAX_LOD:              samplerState.maxLod = param;                        break;
           default: UNREACHABLE(); break;
         }
+
+        texture->setSamplerState(samplerState);
     }
 }
 
@@ -3675,27 +3679,31 @@ void GL_APIENTRY TexParameteri(GLenum target, GLenum pname, GLint param)
             return;
         }
 
+        SamplerState samplerState = texture->getSamplerState();
+
         switch (pname)
         {
-          case GL_TEXTURE_WRAP_S:               texture->getSamplerState().wrapS = (GLenum)param;        break;
-          case GL_TEXTURE_WRAP_T:               texture->getSamplerState().wrapT = (GLenum)param;        break;
-          case GL_TEXTURE_WRAP_R:               texture->getSamplerState().wrapR = (GLenum)param;        break;
-          case GL_TEXTURE_MIN_FILTER:           texture->getSamplerState().minFilter = (GLenum)param;    break;
-          case GL_TEXTURE_MAG_FILTER:           texture->getSamplerState().magFilter = (GLenum)param;    break;
-          case GL_TEXTURE_USAGE_ANGLE:          texture->setUsage((GLenum)param);                        break;
-          case GL_TEXTURE_MAX_ANISOTROPY_EXT:   texture->getSamplerState().maxAnisotropy = std::min((float)param, context->getExtensions().maxTextureAnisotropy); break;
-          case GL_TEXTURE_COMPARE_MODE:         texture->getSamplerState().compareMode = (GLenum)param;  break;
-          case GL_TEXTURE_COMPARE_FUNC:         texture->getSamplerState().compareFunc = (GLenum)param;  break;
-          case GL_TEXTURE_SWIZZLE_R:            texture->getSamplerState().swizzleRed = (GLenum)param;   break;
-          case GL_TEXTURE_SWIZZLE_G:            texture->getSamplerState().swizzleGreen = (GLenum)param; break;
-          case GL_TEXTURE_SWIZZLE_B:            texture->getSamplerState().swizzleBlue = (GLenum)param;  break;
-          case GL_TEXTURE_SWIZZLE_A:            texture->getSamplerState().swizzleAlpha = (GLenum)param; break;
-          case GL_TEXTURE_BASE_LEVEL:           texture->getSamplerState().baseLevel = param;            break;
-          case GL_TEXTURE_MAX_LEVEL:            texture->getSamplerState().maxLevel = param;             break;
-          case GL_TEXTURE_MIN_LOD:              texture->getSamplerState().minLod = (GLfloat)param;      break;
-          case GL_TEXTURE_MAX_LOD:              texture->getSamplerState().maxLod = (GLfloat)param;      break;
+          case GL_TEXTURE_WRAP_S:               samplerState.wrapS = (GLenum)param;        break;
+          case GL_TEXTURE_WRAP_T:               samplerState.wrapT = (GLenum)param;        break;
+          case GL_TEXTURE_WRAP_R:               samplerState.wrapR = (GLenum)param;        break;
+          case GL_TEXTURE_MIN_FILTER:           samplerState.minFilter = (GLenum)param;    break;
+          case GL_TEXTURE_MAG_FILTER:           samplerState.magFilter = (GLenum)param;    break;
+          case GL_TEXTURE_USAGE_ANGLE:          texture->setUsage((GLenum)param);          break;
+          case GL_TEXTURE_MAX_ANISOTROPY_EXT:   samplerState.maxAnisotropy = std::min((float)param, context->getExtensions().maxTextureAnisotropy); break;
+          case GL_TEXTURE_COMPARE_MODE:         samplerState.compareMode = (GLenum)param;  break;
+          case GL_TEXTURE_COMPARE_FUNC:         samplerState.compareFunc = (GLenum)param;  break;
+          case GL_TEXTURE_SWIZZLE_R:            samplerState.swizzleRed = (GLenum)param;   break;
+          case GL_TEXTURE_SWIZZLE_G:            samplerState.swizzleGreen = (GLenum)param; break;
+          case GL_TEXTURE_SWIZZLE_B:            samplerState.swizzleBlue = (GLenum)param;  break;
+          case GL_TEXTURE_SWIZZLE_A:            samplerState.swizzleAlpha = (GLenum)param; break;
+          case GL_TEXTURE_BASE_LEVEL:           samplerState.baseLevel = param;            break;
+          case GL_TEXTURE_MAX_LEVEL:            samplerState.maxLevel = param;             break;
+          case GL_TEXTURE_MIN_LOD:              samplerState.minLod = (GLfloat)param;      break;
+          case GL_TEXTURE_MAX_LOD:              samplerState.maxLod = (GLfloat)param;      break;
           default: UNREACHABLE(); break;
         }
+
+        texture->setSamplerState(samplerState);
     }
 }
 
