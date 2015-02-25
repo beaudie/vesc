@@ -7,6 +7,8 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "libANGLE/Surface.h"
+#include "libANGLE/renderer/DefaultAttachmentImpl.h"
+#include "libANGLE/renderer/FramebufferImpl.h"
 #include "libANGLE/renderer/SurfaceImpl.h"
 
 namespace
@@ -24,11 +26,21 @@ class MockSurfaceImpl : public rx::SurfaceImpl
     MOCK_METHOD1(bindTexImage, egl::Error(EGLint));
     MOCK_METHOD1(releaseTexImage, egl::Error(EGLint));
     MOCK_METHOD1(setSwapInterval, void(EGLint));
+    MOCK_CONST_METHOD0(getWindowHandle, EGLNativeWindowType());
     MOCK_CONST_METHOD0(getWidth, EGLint());
     MOCK_CONST_METHOD0(getHeight, EGLint());
-    MOCK_CONST_METHOD0(getWindowHandle, EGLNativeWindowType());
 
     MOCK_METHOD0(destroy, void());
+
+    rx::FramebufferImpl* createDefaultFramebuffer(const gl::Framebuffer::Data &data) override
+    {
+        return nullptr;
+    }
+
+    rx::DefaultAttachmentImpl* createDefaultAttachment(GLenum) override
+    {
+        return nullptr;
+    }
 };
 
 class SurfaceTest : public testing::Test

@@ -8,10 +8,12 @@
 // retained by Renderbuffers.
 
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
+
+#include "libANGLE/renderer/d3d/SurfaceD3D.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
-#include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/SwapChain11.h"
 #include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
+#include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 
 namespace rx
 {
@@ -323,12 +325,12 @@ DXGI_FORMAT TextureRenderTarget11::getDXGIFormat() const
     return mDXGIFormat;
 }
 
-SurfaceRenderTarget11::SurfaceRenderTarget11(SwapChain11 *swapChain, Renderer11 *renderer, bool depth)
-    : mSwapChain(swapChain),
+SurfaceRenderTarget11::SurfaceRenderTarget11(SurfaceD3D *surface, Renderer11 *renderer, bool depth)
+    : mSurface(surface),
       mRenderer(renderer),
       mDepth(depth)
 {
-    ASSERT(mSwapChain);
+    ASSERT(mSurface);
 }
 
 SurfaceRenderTarget11::~SurfaceRenderTarget11()
@@ -337,12 +339,12 @@ SurfaceRenderTarget11::~SurfaceRenderTarget11()
 
 GLsizei SurfaceRenderTarget11::getWidth() const
 {
-    return mSwapChain->getWidth();
+    return getSwapChain()->getWidth();
 }
 
 GLsizei SurfaceRenderTarget11::getHeight() const
 {
-    return mSwapChain->getHeight();
+    return getSwapChain()->getHeight();
 }
 
 GLsizei SurfaceRenderTarget11::getDepth() const
@@ -352,7 +354,7 @@ GLsizei SurfaceRenderTarget11::getDepth() const
 
 GLenum SurfaceRenderTarget11::getInternalFormat() const
 {
-    return (mDepth ? mSwapChain->GetDepthBufferInternalFormat() : mSwapChain->GetBackBufferInternalFormat());
+    return (mDepth ? getSwapChain()->GetDepthBufferInternalFormat() : getSwapChain()->GetBackBufferInternalFormat());
 }
 
 GLsizei SurfaceRenderTarget11::getSamples() const
@@ -363,22 +365,22 @@ GLsizei SurfaceRenderTarget11::getSamples() const
 
 ID3D11Resource *SurfaceRenderTarget11::getTexture() const
 {
-    return (mDepth ? mSwapChain->getDepthStencilTexture() : mSwapChain->getOffscreenTexture());
+    return (mDepth ? getSwapChain()->getDepthStencilTexture() : getSwapChain()->getOffscreenTexture());
 }
 
 ID3D11RenderTargetView *SurfaceRenderTarget11::getRenderTargetView() const
 {
-    return (mDepth ? NULL : mSwapChain->getRenderTarget());
+    return (mDepth ? NULL : getSwapChain()->getRenderTarget());
 }
 
 ID3D11DepthStencilView *SurfaceRenderTarget11::getDepthStencilView() const
 {
-    return (mDepth ? mSwapChain->getDepthStencil() : NULL);
+    return (mDepth ? getSwapChain()->getDepthStencil() : NULL);
 }
 
 ID3D11ShaderResourceView *SurfaceRenderTarget11::getShaderResourceView() const
 {
-    return (mDepth ? mSwapChain->getDepthStencilShaderResource() : mSwapChain->getRenderTargetShaderResource());
+    return (mDepth ? getSwapChain()->getDepthStencilShaderResource() : getSwapChain()->getRenderTargetShaderResource());
 }
 
 unsigned int SurfaceRenderTarget11::getSubresourceIndex() const
@@ -389,6 +391,11 @@ unsigned int SurfaceRenderTarget11::getSubresourceIndex() const
 DXGI_FORMAT SurfaceRenderTarget11::getDXGIFormat() const
 {
     return d3d11::GetTextureFormatInfo(getInternalFormat(), mRenderer->getFeatureLevel()).texFormat;
+}
+
+SwapChain11 *SurfaceRenderTarget11::getSwapChain() const
+{
+    return GetAs<SwapChain11>(mSurface->getSwapChain());
 }
 
 }

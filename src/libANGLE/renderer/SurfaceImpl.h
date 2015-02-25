@@ -11,6 +11,7 @@
 
 #include "common/angleutils.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/Framebuffer.h"
 
 namespace egl
 {
@@ -20,6 +21,9 @@ struct Config;
 
 namespace rx
 {
+
+class FramebufferImpl;
+class DefaultAttachmentImpl;
 
 class SurfaceImpl
 {
@@ -43,6 +47,10 @@ class SurfaceImpl
     // width and height can change with client window resizing
     virtual EGLint getWidth() const = 0;
     virtual EGLint getHeight() const = 0;
+
+    // Default framebuffer creation
+    virtual FramebufferImpl *createDefaultFramebuffer(const gl::Framebuffer::Data &data) = 0;
+    virtual DefaultAttachmentImpl *createDefaultAttachment(GLenum type) = 0;
 
     const egl::Config *getConfig() const { return mConfig; }
     EGLint isFixedSize() const { return mFixedSize; }

@@ -184,10 +184,22 @@ void Context::makeCurrent(egl::Surface *surface)
         mHasBeenCurrent = true;
     }
 
-    // TODO(jmadill): do not allocate new pointers here
-    Framebuffer *framebufferZero = new DefaultFramebuffer(mCaps, mRenderer, surface);
+    // Update the default framebuffer to the new one owned by the surface
+    Framebuffer *framebufferZero = surface->getFramebuffer();
 
-    setFramebufferZero(framebufferZero);
+    // Check to see if the old default framebuffer was set for draw or read framebuffer and change
+    // the bindings to point to the new one
+    if (mState.getDrawFramebuffer()->id() == 0)
+    {
+        mState.setDrawFramebufferBinding(framebufferZero);
+    }
+
+    if (mState.getReadFramebuffer()->id() == 0)
+    {
+        mState.setReadFramebufferBinding(framebufferZero);
+    }
+
+    mFramebufferMap[0] = framebufferZero;
 
     mRenderBuffer = surface->getRenderBuffer();
 }
@@ -379,15 +391,21 @@ void Context::deleteTransformFeedback(GLuint transformFeedback)
 
 void Context::deleteFramebuffer(GLuint framebuffer)
 {
-    FramebufferMap::iterator framebufferObject = mFramebufferMap.find(framebuffer);
+    FramebufferMap::iterator framebufferIter = mFramebufferMap.find(framebuffer);
 
-    if (framebufferObject != mFramebufferMap.end())
+    if (framebufferIter != mFramebufferMap.end())
     {
+        Framebuffer *framebufferObject = framebufferIter->second;
+
         detachFramebuffer(framebuffer);
 
-        mFramebufferHandleAllocator.release(framebufferObject->first);
-        delete framebufferObject->second;
-        mFramebufferMap.erase(framebufferObject);
+        mFramebufferHandleAllocator.release(framebuffer);
+        mFramebufferMap.erase(framebufferIter);
+
+        if (framebuffer != 0)
+        {
+            SafeDelete(framebufferObject);
+        }
     }
 }
 
@@ -658,25 +676,6 @@ Error Context::endQuery(GLenum target)
     mState.setActiveQuery(target, NULL);
 
     return error;
-}
-
-void Context::setFramebufferZero(Framebuffer *buffer)
-{
-    // First, check to see if the old default framebuffer
-    // was set for draw or read framebuffer, and change
-    // the bindings to point to the new one before deleting it.
-    if (mState.getDrawFramebuffer()->id() == 0)
-    {
-        mState.setDrawFramebufferBinding(buffer);
-    }
-
-    if (mState.getReadFramebuffer()->id() == 0)
-    {
-        mState.setReadFramebufferBinding(buffer);
-    }
-
-    delete mFramebufferMap[0];
-    mFramebufferMap[0] = buffer;
 }
 
 Framebuffer *Context::getFramebuffer(unsigned int handle) const

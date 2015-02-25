@@ -2591,20 +2591,17 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
     return gl::Error(GL_NO_ERROR);
 }
 
-DefaultAttachmentImpl *Renderer11::createDefaultAttachment(GLenum type, egl::Surface *surface)
+DefaultAttachmentD3D *Renderer11::createDefaultAttachment(GLenum type, SurfaceD3D *surface)
 {
-    SurfaceD3D *surfaceD3D = GetImplAs<SurfaceD3D>(surface);
-    SwapChain11 *swapChain = SwapChain11::makeSwapChain11(surfaceD3D->getSwapChain());
-
     switch (type)
     {
       case GL_BACK:
-        return new DefaultAttachmentD3D(new SurfaceRenderTarget11(swapChain, this, false));
+        return new DefaultAttachmentD3D(new SurfaceRenderTarget11(surface, this, false));
 
       case GL_DEPTH:
-        if (gl::GetInternalFormatInfo(swapChain->GetDepthBufferInternalFormat()).depthBits > 0)
+        if (surface->getConfig()->depthSize > 0)
         {
-            return new DefaultAttachmentD3D(new SurfaceRenderTarget11(swapChain, this, true));
+            return new DefaultAttachmentD3D(new SurfaceRenderTarget11(surface, this, true));
         }
         else
         {
@@ -2612,9 +2609,9 @@ DefaultAttachmentImpl *Renderer11::createDefaultAttachment(GLenum type, egl::Sur
         }
 
       case GL_STENCIL:
-        if (gl::GetInternalFormatInfo(swapChain->GetDepthBufferInternalFormat()).stencilBits > 0)
+        if (surface->getConfig()->stencilSize > 0)
         {
-            return new DefaultAttachmentD3D(new SurfaceRenderTarget11(swapChain, this, true));
+            return new DefaultAttachmentD3D(new SurfaceRenderTarget11(surface, this, true));
         }
         else
         {

@@ -23,6 +23,7 @@ class DefaultAttachmentImpl;
 class FramebufferImpl;
 class RenderbufferImpl;
 class Renderer;
+class SurfaceImpl;
 struct Workarounds;
 }
 
@@ -53,7 +54,7 @@ class Framebuffer
     class Data final
     {
       public:
-        Data(const Caps &caps);
+        Data(size_t maxColorAttachments, size_t maxDrawBuffers);
         ~Data();
 
         FramebufferAttachment *getReadAttachment() const;
@@ -129,6 +130,8 @@ class Framebuffer
                GLbitfield mask, GLenum filter, const gl::Framebuffer *sourceFramebuffer);
 
   protected:
+    Framebuffer(rx::SurfaceImpl *surfaceImpl, GLuint id);
+
     void setAttachment(GLenum attachment, FramebufferAttachment *attachmentObj);
     void detachResourceById(GLenum resourceType, GLuint resourceId);
 
@@ -143,7 +146,7 @@ class Framebuffer
 class DefaultFramebuffer : public Framebuffer
 {
   public:
-    DefaultFramebuffer(const gl::Caps &caps, rx::Renderer *renderer, egl::Surface *surface);
+    DefaultFramebuffer(rx::SurfaceImpl *surfaceImpl);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(DefaultFramebuffer);

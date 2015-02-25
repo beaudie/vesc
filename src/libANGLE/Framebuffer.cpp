@@ -11,11 +11,12 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/Context.h"
-#include "libANGLE/Renderbuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
+#include "libANGLE/Renderbuffer.h"
 #include "libANGLE/renderer/FramebufferImpl.h"
 #include "libANGLE/renderer/Renderer.h"
 #include "libANGLE/renderer/RenderbufferImpl.h"
+#include "libANGLE/renderer/SurfaceImpl.h"
 #include "libANGLE/renderer/Workarounds.h"
 
 #include "common/utilities.h"
@@ -34,11 +35,11 @@ void DeleteMatchingAttachment(FramebufferAttachment *&attachment, GLenum matchTy
 }
 }
 
-Framebuffer::Data::Data(const Caps &caps)
-    : mColorAttachments(caps.maxColorAttachments, nullptr),
+Framebuffer::Data::Data(size_t maxColorAttachments, size_t maxDrawBuffers)
+    : mColorAttachments(maxColorAttachments, nullptr),
       mDepthAttachment(nullptr),
       mStencilAttachment(nullptr),
-      mDrawBufferStates(caps.maxDrawBuffers, GL_NONE),
+      mDrawBufferStates(maxDrawBuffers, GL_NONE),
       mReadBufferState(GL_COLOR_ATTACHMENT0_EXT)
 {
     mDrawBufferStates[0] = GL_COLOR_ATTACHMENT0_EXT;
@@ -81,8 +82,16 @@ FramebufferAttachment *Framebuffer::Data::getDepthOrStencilAttachment() const
 }
 
 Framebuffer::Framebuffer(const Caps &caps, rx::Renderer *renderer, GLuint id)
-    : mData(caps),
+    : mData(caps.maxColorAttachments, caps.maxDrawBuffers),
       mImpl(renderer->createFramebuffer(mData)),
+      mId(id)
+{
+    ASSERT(mImpl != nullptr);
+}
+
+Framebuffer::Framebuffer(rx::SurfaceImpl *surfaceImpl, GLuint id)
+    : mData(1, 1),
+      mImpl(surfaceImpl->createDefaultFramebuffer(mData)),
       mId(id)
 {
     ASSERT(mImpl != nullptr);
@@ -622,12 +631,12 @@ void Framebuffer::setAttachment(GLenum attachment, FramebufferAttachment *attach
     }
 }
 
-DefaultFramebuffer::DefaultFramebuffer(const Caps &caps, rx::Renderer *renderer, egl::Surface *surface)
-    : Framebuffer(caps, renderer, 0)
+DefaultFramebuffer::DefaultFramebuffer(rx::SurfaceImpl *surfaceImpl)
+    : Framebuffer(surfaceImpl, 0)
 {
-    rx::DefaultAttachmentImpl *colorAttachment = renderer->createDefaultAttachment(GL_BACK, surface);
-    rx::DefaultAttachmentImpl *depthAttachment = renderer->createDefaultAttachment(GL_DEPTH, surface);
-    rx::DefaultAttachmentImpl *stencilAttachment = renderer->createDefaultAttachment(GL_STENCIL, surface);
+    rx::DefaultAttachmentImpl *colorAttachment = surfaceImpl->createDefaultAttachment(GL_BACK);
+    rx::DefaultAttachmentImpl *depthAttachment = surfaceImpl->createDefaultAttachment(GL_DEPTH);
+    rx::DefaultAttachmentImpl *stencilAttachment = surfaceImpl->createDefaultAttachment(GL_STENCIL);
 
     ASSERT(colorAttachment);
     setAttachment(GL_BACK, new DefaultAttachment(GL_BACK, colorAttachment));

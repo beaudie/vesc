@@ -8,6 +8,9 @@
 
 #include "libANGLE/renderer/gl/SurfaceGL.h"
 
+#include "libANGLE/renderer/gl/DefaultAttachmentGL.h"
+#include "libANGLE/renderer/gl/FramebufferGL.h"
+
 namespace rx
 {
 
@@ -20,6 +23,16 @@ SurfaceGL::SurfaceGL(egl::Display *display, const egl::Config *config,
 
 SurfaceGL::~SurfaceGL()
 {
+}
+
+FramebufferImpl *SurfaceGL::createDefaultFramebuffer(const gl::Framebuffer::Data &data)
+{
+    return new FramebufferGL(data);
+}
+
+DefaultAttachmentImpl *SurfaceGL::createDefaultAttachment(GLenum type)
+{
+    return new DefaultAttachmentGL();
 }
 
 }
