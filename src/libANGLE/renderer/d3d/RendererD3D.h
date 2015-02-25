@@ -32,10 +32,12 @@ class Texture;
 
 namespace rx
 {
+class DefaultAttachmentD3D;
 class ImageD3D;
 class IndexBuffer;
 class RenderTargetD3D;
 class ShaderExecutableD3D;
+class SurfaceD3D;
 class SwapChainD3D;
 class TextureStorage;
 class UniformStorageD3D;
@@ -134,6 +136,9 @@ class RendererD3D : public Renderer
 
     // RenderTarget creation
     virtual gl::Error createRenderTarget(int width, int height, GLenum format, GLsizei samples, RenderTargetD3D **outRT) = 0;
+
+    // Framebuffer creation
+    virtual DefaultAttachmentD3D *createDefaultAttachment(GLenum type, SurfaceD3D *surface) = 0;
 
     // Shader operations
     virtual gl::Error loadExecutable(const void *function, size_t length, ShaderType type,

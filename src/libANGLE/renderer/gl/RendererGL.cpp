@@ -95,11 +95,6 @@ ProgramImpl *RendererGL::createProgram()
     return new ProgramGL(mFunctions, mStateManager);
 }
 
-DefaultAttachmentImpl *RendererGL::createDefaultAttachment(GLenum type, egl::Surface *surface)
-{
-    return new DefaultAttachmentGL();
-}
-
 FramebufferImpl *RendererGL::createFramebuffer()
 {
     return new FramebufferGL();

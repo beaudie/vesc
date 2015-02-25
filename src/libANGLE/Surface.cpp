@@ -11,7 +11,9 @@
 #include "libANGLE/Surface.h"
 
 #include "libANGLE/Config.h"
+#include "libANGLE/Framebuffer.h"
 #include "libANGLE/Texture.h"
+#include "libANGLE/renderer/DefaultAttachmentImpl.h"
 #include "libANGLE/renderer/SurfaceImpl.h"
 
 namespace egl
@@ -23,8 +25,14 @@ Surface::Surface(rx::SurfaceImpl *impl)
       mPixelAspectRatio(static_cast<EGLint>(1.0 * EGL_DISPLAY_SCALING)),
       mRenderBuffer(EGL_BACK_BUFFER),
       mSwapBehavior(EGL_BUFFER_PRESERVED),
-      mTexture(NULL)
+      mTexture(nullptr),
+      mFramebuffer(nullptr)
 {
+    ASSERT(mImplementation);
+    mFramebuffer = new gl::DefaultFramebuffer(mImplementation->createDefaultFramebuffer(),
+                                              mImplementation->createDefaultAttachment(GL_BACK),
+                                              mImplementation->createDefaultAttachment(GL_DEPTH),
+                                              mImplementation->createDefaultAttachment(GL_STENCIL));
 }
 
 Surface::~Surface()
@@ -38,6 +46,7 @@ Surface::~Surface()
         mTexture->releaseTexImage();
         mTexture = NULL;
     }
+    SafeDelete(mFramebuffer);
 
     SafeDelete(mImplementation);
 }
@@ -144,6 +153,11 @@ Error Surface::releaseTexImage(EGLint buffer)
 
     boundTexture->releaseTexImage();
     return mImplementation->releaseTexImage(buffer);
+}
+
+gl::Framebuffer *Surface::getFramebuffer() const
+{
+    return mFramebuffer;
 }
 
 }
