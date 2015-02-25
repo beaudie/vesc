@@ -16,7 +16,8 @@
 
 namespace gl
 {
-class State;
+struct Caps;
+struct Data;
 }
 
 namespace rx
@@ -27,13 +28,16 @@ class FunctionsGL;
 class StateManagerGL
 {
   public:
-    StateManagerGL(const FunctionsGL *functions);
+    StateManagerGL(const FunctionsGL *functions, const gl::Caps &rendererCaps);
 
     void setProgram(GLuint program);
     void setVertexArray(GLuint vao);
     void setBuffer(GLenum type, GLuint buffer);
+    void setTextureUnit(size_t unit);
+    void setTexture(GLenum type, GLuint texture);
+    void setPixelUnpackState(GLint alignment, GLint rowLength);
 
-    void setDrawState(const gl::State &state);
+    void setDrawState(const gl::Data &data);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(StateManagerGL);
@@ -43,6 +47,12 @@ class StateManagerGL
     GLuint mProgram;
     GLuint mVAO;
     std::map<GLenum, GLuint> mBuffers;
+
+    size_t mTextureUnitIndex;
+    std::map<GLenum, std::vector<GLuint>> mTextures;
+
+    GLint mUnpackAlignment;
+    GLint mUnpackRowLength;
 };
 
 }
