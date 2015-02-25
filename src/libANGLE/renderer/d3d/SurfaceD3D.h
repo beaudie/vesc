@@ -46,6 +46,10 @@ class SurfaceD3D : public SurfaceImpl
     EGLint getWidth() const override;
     EGLint getHeight() const override;
 
+    // Default framebuffer creation
+    FramebufferImpl *createDefaultFramebuffer() override;
+    DefaultAttachmentImpl *createDefaultAttachment(GLenum type) override;
+
     // D3D implementations (some virtual to hack across DLL boundaries)
     virtual SwapChainD3D *getSwapChain() const;
 

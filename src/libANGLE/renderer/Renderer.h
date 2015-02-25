@@ -75,7 +75,6 @@ class Renderer
     virtual ProgramImpl *createProgram() = 0;
 
     // Framebuffer creation
-    virtual DefaultAttachmentImpl *createDefaultAttachment(GLenum type, egl::Surface *surface) = 0;
     virtual FramebufferImpl *createFramebuffer() = 0;
 
     // Texture creation

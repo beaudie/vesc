@@ -21,6 +21,9 @@ struct Config;
 namespace rx
 {
 
+class FramebufferImpl;
+class DefaultAttachmentImpl;
+
 class SurfaceImpl
 {
   public:
@@ -43,6 +46,10 @@ class SurfaceImpl
     // width and height can change with client window resizing
     virtual EGLint getWidth() const = 0;
     virtual EGLint getHeight() const = 0;
+
+    // Default framebuffer creation
+    virtual FramebufferImpl *createDefaultFramebuffer() = 0;
+    virtual DefaultAttachmentImpl *createDefaultAttachment(GLenum type) = 0;
 
     const egl::Config *getConfig() const { return mConfig; }
     EGLint isFixedSize() const { return mFixedSize; }
