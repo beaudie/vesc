@@ -31,10 +31,10 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
 
     // Table 6.28, implementation dependent values
     caps->maxElementIndex = static_cast<GLint64>(std::numeric_limits<unsigned int>::max());
-    caps->max3DTextureSize = 0;
-    caps->max2DTextureSize = 1024;
-    caps->maxCubeMapTextureSize = caps->max2DTextureSize;
-    caps->maxArrayTextureLayers = 1;
+    caps->max3DTextureSize = QuerySingleGLInt(functions, GL_MAX_3D_TEXTURE_SIZE);
+    caps->max2DTextureSize = QuerySingleGLInt(functions, GL_MAX_TEXTURE_SIZE);
+    caps->maxCubeMapTextureSize = QuerySingleGLInt(functions, GL_MAX_CUBE_MAP_TEXTURE_SIZE);
+    caps->maxArrayTextureLayers = QuerySingleGLInt(functions, GL_MAX_ARRAY_TEXTURE_LAYERS);
     caps->maxLODBias = 0.0f;
     caps->maxRenderbufferSize = caps->max2DTextureSize;
     caps->maxDrawBuffers = 1;
@@ -69,14 +69,14 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
     caps->maxVertexUniformVectors = caps->maxVertexUniformVectors * 4;
     caps->maxVertexUniformBlocks = 0;
     caps->maxVertexOutputComponents = 16;
-    caps->maxVertexTextureImageUnits = caps->maxTextureImageUnits;
+    caps->maxVertexTextureImageUnits = QuerySingleGLInt(functions, GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS);
 
     // Table 6.32, implementation dependent fragment shader limits
     caps->maxFragmentUniformVectors = 256;
     caps->maxFragmentUniformComponents = caps->maxFragmentUniformVectors * 4;
     caps->maxFragmentUniformBlocks = 0;
     caps->maxFragmentInputComponents = caps->maxVertexOutputComponents;
-    caps->maxTextureImageUnits = 16;
+    caps->maxTextureImageUnits = QuerySingleGLInt(functions, GL_MAX_TEXTURE_IMAGE_UNITS);
     caps->minProgramTexelOffset = 0;
     caps->maxProgramTexelOffset = 0;
 
