@@ -378,6 +378,31 @@ BuiltInFunctionEmulatorHLSL::BuiltInFunctionEmulatorHLSL()
                             " cof02, cof12, cof22, cof32, cof03, cof13, cof23, cof33 };\n"
         "    return cof / determinant(transpose(m));\n"
         "}\n");
+
+// Provide isnan() implementation here as the one in HLSL doesn't seem to be working correctly.
+// Single precision NAN:
+//     Exponent: 255, Mantissa: non-zero
+// Exponent mask: ((1u << 8) - 1u) << 23 = 0x7f800000u
+// Mantissa mask: ((1u << 23) - 1u) = 0x7fffffu
+#define DEFINE_WEBGL_ISNAN \
+    "{\n" \
+    "    return ((asuint(x) & 0x7f800000u) == 0x7f800000u) && (asuint(x) & 0x7fffffu);\n" \
+    "}\n" \
+    "\n"
+
+    AddEmulatedFunction(EOpIsNan, float1,
+        "bool webgl_isnan_emu(float x)\n"
+        DEFINE_WEBGL_ISNAN);
+    AddEmulatedFunction(EOpIsNan, float2,
+        "bool2 webgl_isnan_emu(float2 x)\n"
+        DEFINE_WEBGL_ISNAN);
+    AddEmulatedFunction(EOpIsNan, float3,
+        "bool3 webgl_isnan_emu(float3 x)\n"
+        DEFINE_WEBGL_ISNAN);
+    AddEmulatedFunction(EOpIsNan, float4,
+        "bool4 webgl_isnan_emu(float4 x)\n"
+        DEFINE_WEBGL_ISNAN);
+
 }
 
 void BuiltInFunctionEmulatorHLSL::OutputEmulatedFunctionDefinition(
