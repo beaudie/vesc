@@ -44,6 +44,24 @@ typedef std::vector<FramebufferAttachment *> ColorbufferInfo;
 class Framebuffer
 {
   public:
+
+    // Owned by the Impl
+    struct Data final
+    {
+        Data();
+        ~Data();
+
+        std::vector<FramebufferAttachment *> mColorAttachments;
+        FramebufferAttachment *mDepthAttachment;
+        FramebufferAttachment *mStencilAttachment;
+
+        std::vector<GLenum> mDrawBufferStates;
+        GLenum mReadBufferState;
+
+      private:
+        DISALLOW_COPY_AND_ASSIGN(Data);
+    };
+
     Framebuffer(rx::FramebufferImpl *impl, GLuint id);
     virtual ~Framebuffer();
 
@@ -108,16 +126,11 @@ class Framebuffer
 
   protected:
     void setAttachment(GLenum attachment, FramebufferAttachment *attachmentObj);
+    void detachResourceById(GLenum resourceType, GLuint resourceId);
 
     rx::FramebufferImpl *mImpl;
     GLuint mId;
-
-    FramebufferAttachment *mColorbuffers[IMPLEMENTATION_MAX_DRAW_BUFFERS];
-    GLenum mDrawBufferStates[IMPLEMENTATION_MAX_DRAW_BUFFERS];
-    GLenum mReadBufferState;
-
-    FramebufferAttachment *mDepthbuffer;
-    FramebufferAttachment *mStencilbuffer;
+    Data *mData;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(Framebuffer);
