@@ -63,7 +63,8 @@ RenderTargetD3D *DefaultAttachmentD3D::getRenderTarget() const
 
 FramebufferD3D::FramebufferD3D(RendererD3D *renderer)
     : mRenderer(renderer),
-      mColorAttachmentsForRender(renderer->getRendererCaps().maxColorAttachments)
+      mColorAttachmentsForRender(renderer->getRendererCaps().maxColorAttachments),
+      mInvalidateColorAttachmentCache(true)
 {
     ASSERT(mRenderer != nullptr);
 
@@ -76,25 +77,27 @@ FramebufferD3D::~FramebufferD3D()
 
 void FramebufferD3D::setColorAttachment(size_t index, const gl::FramebufferAttachment *attachment)
 {
+    mInvalidateColorAttachmentCache = true;
 }
 
-void FramebufferD3D::setDepthttachment(const gl::FramebufferAttachment *attachment)
+void FramebufferD3D::setDepthttachment(const gl::FramebufferAttachment *)
 {
 }
 
-void FramebufferD3D::setStencilAttachment(const gl::FramebufferAttachment *attachment)
+void FramebufferD3D::setStencilAttachment(const gl::FramebufferAttachment *)
 {
 }
 
-void FramebufferD3D::setDepthStencilAttachment(const gl::FramebufferAttachment *attachment)
+void FramebufferD3D::setDepthStencilAttachment(const gl::FramebufferAttachment *)
 {
 }
 
 void FramebufferD3D::setDrawBuffers(size_t count, const GLenum *buffers)
 {
+    mInvalidateColorAttachmentCache = true;
 }
 
-void FramebufferD3D::setReadBuffer(GLenum buffer)
+void FramebufferD3D::setReadBuffer(GLenum)
 {
 }
 
@@ -310,6 +313,16 @@ GLenum FramebufferD3D::checkStatus() const
 
 const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const Workarounds &workarounds) const
 {
+    if (!workarounds.mrtPerfWorkaround)
+    {
+        return mData->mColorAttachments;
+    }
+
+    if (!mInvalidateColorAttachmentCache)
+    {
+        return mColorAttachmentsForRender;
+    }
+
     // Does not actually free memory
     mColorAttachmentsForRender.clear();
 
@@ -323,12 +336,9 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const Wor
             ASSERT(drawBufferState == GL_BACK || drawBufferState == (GL_COLOR_ATTACHMENT0_EXT + attachmentIndex));
             mColorAttachmentsForRender.push_back(colorAttachment);
         }
-        else if (!workarounds.mrtPerfWorkaround)
-        {
-            mColorAttachmentsForRender.push_back(nullptr);
-        }
     }
 
+    mInvalidateColorAttachmentCache = false;
     return mColorAttachmentsForRender;
 }
 
