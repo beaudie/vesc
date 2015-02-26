@@ -3138,8 +3138,7 @@ void GL_APIENTRY GetProgramBinary(GLuint program, GLsizei bufSize, GLsizei* leng
             return;
         }
 
-        // glGetProgramBinary
-        UNIMPLEMENTED();
+        return GetProgramBinaryOES(program, bufSize, length, binaryFormat, binary);
     }
 }
 
@@ -3157,8 +3156,7 @@ void GL_APIENTRY ProgramBinary(GLuint program, GLenum binaryFormat, const GLvoid
             return;
         }
 
-        // glProgramBinary
-        UNIMPLEMENTED();
+        return ProgramBinaryOES(program, binaryFormat, binary, length);
     }
 }
 
