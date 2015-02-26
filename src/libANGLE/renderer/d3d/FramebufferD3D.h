@@ -20,6 +20,8 @@ namespace gl
 struct ClearParameters;
 class FramebufferAttachment;
 struct PixelPackState;
+
+typedef std::vector<gl::FramebufferAttachment *> AttachmentList;
 }
 
 namespace rx
@@ -80,11 +82,12 @@ class FramebufferD3D : public FramebufferImpl
 
     GLenum checkStatus() const override;
 
-    const gl::AttachmentList &getColorAttachmentsForRender(const Workarounds &workarounds) const override;
+    const gl::AttachmentList &getColorAttachmentsForRender(const Workarounds &workarounds) const;
 
   protected:
     // Cache variable
     mutable gl::AttachmentList mColorAttachmentsForRender;
+    mutable bool mInvalidateColorAttachmentCache;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(FramebufferD3D);
