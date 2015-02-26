@@ -378,6 +378,58 @@ BuiltInFunctionEmulatorHLSL::BuiltInFunctionEmulatorHLSL()
                             " cof02, cof12, cof22, cof32, cof03, cof13, cof23, cof33 };\n"
         "    return cof / determinant(transpose(m));\n"
         "}\n");
+
+// Provide isnan() implementation here as the one in HLSL doesn't seem to be working correctly.
+// This implementation will work properly only for highp, NANs support is
+// required only for highp and not for mediump/lowp.
+// Single precision NAN:
+//     Exponent: 255, Mantissa: non-zero
+#define DEFINE_WEBGL_ISNAN \
+    "bool webgl_isnan(float x)\n" \
+    "{\n" \
+    "    uint xuint = asuint(x);\n" \
+    "    // Ignore sign.\n" \
+    "    xuint = xuint&((1u<<31)-1u);\n" \
+    "    // Check exponent bits.\n" \
+    "    uint expMask = ((1u<<8)-1u)<<23;\n" \
+    "    if ((xuint & expMask) == expMask) {\n" \
+    "        // Check for nonzero mantissa.\n" \
+    "        uint mantissaMask = ((1u<<23)-1u);\n" \
+    "        if (xuint & mantissaMask) {\n" \
+    "            return true;\n" \
+    "        }\n" \
+    "    }\n" \
+    "    return false;\n" \
+    "}\n"
+    AddEmulatedFunction(EOpIsNan, float1,
+        DEFINE_WEBGL_ISNAN
+        "bool webgl_isnan_emu(float x)\n"
+        "{\n"
+        "    return webgl_isnan(x); \n"
+        "}\n"
+        "\n");
+    AddEmulatedFunction(EOpIsNan, float2,
+        DEFINE_WEBGL_ISNAN
+        "bool2 webgl_isnan_emu(float2 f)\n"
+        "{\n"
+        "    return bool2(webgl_isnan(f.x), webgl_isnan(f.y)); \n"
+        "}\n"
+        "\n");
+    AddEmulatedFunction(EOpIsNan, float3,
+        DEFINE_WEBGL_ISNAN
+        "bool3 webgl_isnan_emu(float3 f)\n"
+        "{\n"
+        "    return bool3(webgl_isnan(f.x), webgl_isnan(f.y), webgl_isnan(f.z)); \n"
+        "}\n"
+        "\n");
+    AddEmulatedFunction(EOpIsNan, float4,
+        DEFINE_WEBGL_ISNAN
+        "bool4 webgl_isnan_emu(float4 f)\n"
+        "{\n"
+        "    return bool4(webgl_isnan(f.x), webgl_isnan(f.y), webgl_isnan(f.z), webgl_isnan(f.w)); \n"
+        "}\n"
+        "\n");
+
 }
 
 void BuiltInFunctionEmulatorHLSL::OutputEmulatedFunctionDefinition(
