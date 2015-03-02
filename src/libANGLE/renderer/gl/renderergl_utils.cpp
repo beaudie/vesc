@@ -10,13 +10,67 @@
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
 #include "libANGLE/Caps.h"
+#include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
+#include "libANGLE/renderer/gl/formatutilsgl.h"
+
+#include <algorithm>
 
 namespace rx
 {
 
+namespace nativegl
+{
+
+void GetGLVersion(PFNGLGETSTRINGPROC getStringFunction, GLuint *outMajorVersion, GLuint *outMinorVersion,
+                  bool *outIsES)
+{
+    const std::string version = reinterpret_cast<const char*>(getStringFunction(GL_VERSION));
+    if (version.find("OpenGL ES") == std::string::npos)
+    {
+        *outIsES = false;
+        *outMajorVersion = version[0] - '0';
+        *outMinorVersion = version[2] - '0';
+    }
+    else
+    {
+        *outIsES = true;
+        *outMajorVersion = version[10] - '0';
+        *outMinorVersion = version[12] - '0';
+    }
+}
+
+std::vector<std::string> GetGLExtensions(PFNGLGETSTRINGPROC getStringFunction)
+{
+    std::vector<std::string> result;
+
+    std::istringstream stream(reinterpret_cast<const char*>(getStringFunction(GL_EXTENSIONS)));
+    std::string extension;
+    while (std::getline(stream, extension, ' '))
+    {
+        result.push_back(extension);
+    }
+
+    return result;
+}
+
+}
+
 namespace nativegl_gl
 {
+
+static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions, GLenum internalFormat, GLuint majorVersion, GLuint minorVersion,
+                                                 const std::vector<std::string> &extensions)
+{
+    gl::TextureCaps textureCaps;
+
+    const nativegl::InternalFormat &formatInfo = nativegl::GetInternalFormatInfo(internalFormat);
+    textureCaps.texturable = formatInfo.textureSupport(majorVersion, minorVersion, extensions);
+    textureCaps.renderable = formatInfo.renderSupport(majorVersion, minorVersion, extensions);
+    textureCaps.filterable = formatInfo.filterSupport(majorVersion, minorVersion, extensions);
+
+    return textureCaps;
+}
 
 static GLint QuerySingleGLInt(const FunctionsGL *functions, GLenum name)
 {
@@ -28,6 +82,30 @@ static GLint QuerySingleGLInt(const FunctionsGL *functions, GLenum name)
 void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsMap *textureCapsMap,
                   gl::Extensions *extensions)
 {
+    GLuint majorVersion = 0;
+    GLuint minorVersion = 0;
+    bool isES = false;
+    nativegl::GetGLVersion(functions->getString, &majorVersion, &minorVersion, &isES);
+
+    std::vector<std::string> nativeExtensions = nativegl::GetGLExtensions(functions->getString);
+
+    GLuint maxSamples = 0;
+    const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
+    for (gl::FormatSet::const_iterator internalFormat = allFormats.begin(); internalFormat != allFormats.end(); ++internalFormat)
+    {
+        gl::TextureCaps textureCaps = GenerateTextureFormatCaps(functions, *internalFormat, majorVersion, minorVersion, nativeExtensions);
+        textureCapsMap->insert(*internalFormat, textureCaps);
+
+        maxSamples = std::max(maxSamples, textureCaps.getMaxSamples());
+
+        if (gl::GetInternalFormatInfo(*internalFormat).compressed)
+        {
+            caps->compressedTextureFormats.push_back(*internalFormat);
+        }
+    }
+
+    // Texture format support checks
+
     // Set some minimum GLES2 caps, TODO: query for real GL caps
 
     // Table 6.28, implementation dependent values
@@ -96,21 +174,6 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
     caps->maxTransformFeedbackInterleavedComponents = 64;
     caps->maxTransformFeedbackSeparateAttributes = 4;
     caps->maxTransformFeedbackSeparateComponents = 4;
-
-    // Texture Caps
-    gl::TextureCaps supportedTextureFormat;
-    supportedTextureFormat.texturable = true;
-    supportedTextureFormat.filterable = true;
-    supportedTextureFormat.renderable = true;
-
-    textureCapsMap->insert(GL_RGB565, supportedTextureFormat);
-    textureCapsMap->insert(GL_RGBA4, supportedTextureFormat);
-    textureCapsMap->insert(GL_RGB5_A1, supportedTextureFormat);
-    textureCapsMap->insert(GL_RGB8_OES, supportedTextureFormat);
-    textureCapsMap->insert(GL_RGBA8_OES, supportedTextureFormat);
-
-    textureCapsMap->insert(GL_DEPTH_COMPONENT16, supportedTextureFormat);
-    textureCapsMap->insert(GL_STENCIL_INDEX8, supportedTextureFormat);
 
     // Extension support
     extensions->setTextureExtensionSupport(*textureCapsMap);
