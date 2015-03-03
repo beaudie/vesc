@@ -45,6 +45,16 @@ gl::Error RenderbufferGL::setStorageMultisample(size_t samples, GLenum internalf
 {
     mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mRenderbufferID);
     mFunctions->renderbufferStorageMultisample(GL_RENDERBUFFER, samples, internalformat, width, height);
+
+    // Before version 4.2, it is unknown if the specific internal format can support the requested number
+    // of samples.  It is expected that GL_OUT_OF_MEMORY is returned if the renderbuffer cannot be created.
+    GLenum error = mFunctions->getError();
+    ASSERT(error == GL_NO_ERROR || error == GL_OUT_OF_MEMORY);
+    if (error == GL_OUT_OF_MEMORY)
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "Renderbuffer format does not support %u samples.", samples);
+    }
+
     return gl::Error(GL_NO_ERROR);
 }
 
