@@ -7,6 +7,7 @@
 // FunctionsGL.cpp: Implements the FuntionsGL class to contain loaded GL functions
 
 #include "libANGLE/renderer/gl/FunctionsGL.h"
+#include "libANGLE/renderer/gl/renderergl_utils.h"
 
 namespace rx
 {
@@ -15,6 +16,15 @@ template <typename T>
 static void AssignGLEntryPoint(void *function, T *outFunction)
 {
     *outFunction = reinterpret_cast<T>(function);
+}
+
+template <typename T>
+static void AssignExtensionGLEntryPoint(const std::vector<std::string> &extensions, const std::string &extension, void *function, T *outFunction)
+{
+    if (std::find(extensions.begin(), extensions.end(), extension) != extensions.end())
+    {
+        *outFunction = reinterpret_cast<T>(function);
+    }
 }
 
 FunctionsGL::FunctionsGL()
@@ -696,6 +706,9 @@ FunctionsGL::~FunctionsGL()
 
 void FunctionsGL::initialize(GLuint majorVersion, GLuint minorVersion)
 {
+    // Grab the GL extensions
+    std::vector<std::string> extensions = nativegl::GetGLExtensions(reinterpret_cast<PFNGLGETSTRINGPROC>(loadProcAddress("glGetString")));
+
     // 1.0
     if (majorVersion > 1 || majorVersion == 1 && minorVersion >= 0)
     {
@@ -1024,6 +1037,9 @@ void FunctionsGL::initialize(GLuint majorVersion, GLuint minorVersion)
         AssignGLEntryPoint(loadProcAddress("glVertexAttribI4uiv"), &vertexAttribI4uiv);
         AssignGLEntryPoint(loadProcAddress("glVertexAttribI4usv"), &vertexAttribI4usv);
         AssignGLEntryPoint(loadProcAddress("glVertexAttribIPointer"), &vertexAttribIPointer);
+
+        // Extensions
+        AssignExtensionGLEntryPoint(extensions, "GL_ARB_internalformat_query", loadProcAddress("glGetInternalformativ"), &getInternalformativ);
     }
 
     // 3.1

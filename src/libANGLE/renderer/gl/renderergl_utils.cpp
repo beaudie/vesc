@@ -69,6 +69,24 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions, G
     textureCaps.renderable = formatInfo.renderSupport(majorVersion, minorVersion, extensions);
     textureCaps.filterable = formatInfo.filterSupport(majorVersion, minorVersion, extensions);
 
+    // glGetInternalformativ is not available until version 4.2 but may be available through the 3.0
+    // extension GL_ARB_internalformat_query
+    if (textureCaps.renderable && functions->getInternalformativ)
+    {
+        GLint numSamples = 0;
+        functions->getInternalformativ(GL_RENDERBUFFER, internalFormat, GL_NUM_SAMPLE_COUNTS, 1, &numSamples);
+
+        if (numSamples > 0)
+        {
+            std::vector<GLint> samples(numSamples);
+            functions->getInternalformativ(GL_RENDERBUFFER, internalFormat, GL_SAMPLES, samples.size(), &samples[0]);
+            for (size_t sampleIndex = 0; sampleIndex < samples.size(); sampleIndex++)
+            {
+                textureCaps.sampleCounts.insert(samples[sampleIndex]);
+            }
+        }
+    }
+
     return textureCaps;
 }
 
