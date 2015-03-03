@@ -10,6 +10,7 @@
 
 #include "common/debug.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/renderer/gl/renderergl_utils.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
@@ -55,7 +56,8 @@ gl::Error RenderbufferGL::setStorageMultisample(size_t samples, GLenum internalf
     mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mRenderbufferID);
     GLCallNoCheck(mFunctions, renderbufferStorageMultisample, GL_RENDERBUFFER, samples, internalformat, width, height);
 
-    // Call probably allocates, check for OOM explicitly
+    // Before version 4.2, it is unknown if the specific internal format can support the requested number
+    // of samples.  It is expected that GL_OUT_OF_MEMORY is returned if the renderbuffer cannot be created.
     gl::Error error = nativegl::CheckForGLOutOfMemoryError(mFunctions);
     if (error.isError())
     {
