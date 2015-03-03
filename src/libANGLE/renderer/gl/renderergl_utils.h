@@ -29,7 +29,17 @@ namespace nativegl
 {
 
 void GetGLVersion(PFNGLGETSTRINGPROC getStringFunction, GLuint *outMajorVersion, GLuint *outMinorVersion, bool *outIsES);
-std::vector<std::string> GetGLExtensions(PFNGLGETSTRINGPROC getStringFunction);
+
+// Reads the GL extensions by calling glGetString(GL_EXTENSIONS).  This method is deprecated in OpenGL core profile.
+std::vector<std::string> GetNonIndexedExtensions(PFNGLGETSTRINGPROC getStringFunction);
+
+// Read the GL extensions by calling glGetInteger(GL_NUM_EXTENSIONS) and glGetStringi(GL_EXTENSIONS).  This method
+// is available as of OpenGL 3.0 and OpenGL ES 3.0.
+std::vector<std::string> GetIndexedExtensions(PFNGLGETINTEGERVPROC getIntegerFunction, PFNGLGETSTRINGIPROC getStringIFunction);
+
+// Reads the GL extensions by determining the best GL functions to call.
+std::vector<std::string> GetGLExtensions(const FunctionsGL *functions);
+
 
 }
 
