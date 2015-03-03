@@ -11,8 +11,15 @@ TOutputGLSL::TOutputGLSL(TInfoSinkBase& objSink,
                          ShHashFunction64 hashFunction,
                          NameMap& nameMap,
                          TSymbolTable& symbolTable,
-                         int shaderVersion)
-    : TOutputGLSLBase(objSink, clampingStrategy, hashFunction, nameMap, symbolTable, shaderVersion)
+                         int shaderVersion,
+                         ShShaderOutput output)
+    : TOutputGLSLBase(objSink,
+                      clampingStrategy,
+                      hashFunction,
+                      nameMap,
+                      symbolTable,
+                      shaderVersion,
+                      output)
 {
 }
 
@@ -21,13 +28,22 @@ bool TOutputGLSL::writeVariablePrecision(TPrecision)
     return false;
 }
 
-void TOutputGLSL::visitSymbol(TIntermSymbol* node)
+void TOutputGLSL::visitSymbol(TIntermSymbol *node)
 {
     TInfoSinkBase& out = objSink();
 
-    if (node->getSymbol() == "gl_FragDepthEXT")
+    const TString &symbol = node->getSymbol();
+    if (symbol == "gl_FragDepthEXT")
     {
         out << "gl_FragDepth";
+    }
+    else if (symbol == "gl_FragColor" && getShaderOutput() == SH_GLSL_CORE_OUTPUT)
+    {
+        out << "webgl_FragColor";
+    }
+    else if (symbol == "gl_FragData" && getShaderOutput() == SH_GLSL_CORE_OUTPUT)
+    {
+        out << "webgl_FragData";
     }
     else
     {
