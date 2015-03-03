@@ -31,6 +31,8 @@ namespace nativegl
 void GetGLVersion(PFNGLGETSTRINGPROC getStringFunction, GLuint *outMajorVersion, GLuint *outMinorVersion, bool *outIsES);
 std::vector<std::string> GetGLExtensions(PFNGLGETSTRINGPROC getStringFunction);
 
+void ClearErrors(const FunctionsGL *functions);
+
 }
 
 namespace nativegl_gl
