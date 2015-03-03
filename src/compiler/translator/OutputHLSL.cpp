@@ -12,6 +12,7 @@
 
 #include "common/angleutils.h"
 #include "common/utilities.h"
+#include "compiler/translator/BuiltInFunctionEmulator.h"
 #include "compiler/translator/BuiltInFunctionEmulatorHLSL.h"
 #include "compiler/translator/DetectDiscontinuity.h"
 #include "compiler/translator/FlagStd140Structs.h"
@@ -177,7 +178,8 @@ void OutputHLSL::output(TIntermNode *treeRoot, TInfoSinkBase &objSink)
         RewriteElseBlocks(treeRoot);
     }
 
-    BuiltInFunctionEmulatorHLSL builtInFunctionEmulator;
+    BuiltInFunctionEmulator builtInFunctionEmulator;
+    InitBuiltInFunctionEmulatorForHLSL(&builtInFunctionEmulator);
     builtInFunctionEmulator.MarkBuiltInFunctionsForEmulation(treeRoot);
 
     // Output the body and footer first to determine what has to go in the header

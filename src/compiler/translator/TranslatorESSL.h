@@ -14,6 +14,8 @@ public:
     TranslatorESSL(sh::GLenum type, ShShaderSpec spec);
 
 protected:
+    void initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu) override;
+
     virtual void translate(TIntermNode *root, int compileOptions);
 
 private:

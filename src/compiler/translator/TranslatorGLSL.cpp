@@ -6,6 +6,7 @@
 
 #include "compiler/translator/TranslatorGLSL.h"
 
+#include "compiler/translator/BuiltInFunctionEmulatorGLSL.h"
 #include "compiler/translator/EmulatePrecision.h"
 #include "compiler/translator/OutputGLSL.h"
 #include "compiler/translator/VersionGLSL.h"
@@ -13,6 +14,11 @@
 
 TranslatorGLSL::TranslatorGLSL(sh::GLenum type, ShShaderSpec spec)
     : TCompiler(type, spec, SH_GLSL_OUTPUT) {
+}
+
+void TranslatorGLSL::initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu)
+{
+    InitBuiltInFunctionEmulatorForGLSL(emu, getShaderType());
 }
 
 void TranslatorGLSL::translate(TIntermNode *root, int) {

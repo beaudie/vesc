@@ -100,7 +100,7 @@ class BuiltInFunctionEmulator::BuiltInFunctionEmulationMarker : public TIntermTr
 BuiltInFunctionEmulator::BuiltInFunctionEmulator()
 {}
 
-void BuiltInFunctionEmulator::AddEmulatedFunction(
+void BuiltInFunctionEmulator::addEmulatedFunction(
     TOperator op, const TType& param,
     const char* emulatedFunctionDefinition)
 {
@@ -108,7 +108,7 @@ void BuiltInFunctionEmulator::AddEmulatedFunction(
         std::string(emulatedFunctionDefinition);
 }
 
-void BuiltInFunctionEmulator::AddEmulatedFunction(
+void BuiltInFunctionEmulator::addEmulatedFunction(
     TOperator op, const TType& param1, const TType& param2,
     const char* emulatedFunctionDefinition)
 {
@@ -116,7 +116,7 @@ void BuiltInFunctionEmulator::AddEmulatedFunction(
         std::string(emulatedFunctionDefinition);
 }
 
-void BuiltInFunctionEmulator::AddEmulatedFunction(
+void BuiltInFunctionEmulator::addEmulatedFunction(
     TOperator op, const TType& param1, const TType& param2, const TType& param3,
     const char* emulatedFunctionDefinition)
 {
