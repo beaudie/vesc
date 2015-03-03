@@ -20,4 +20,6 @@
 #define GL_SAMPLER_2D_RECT_ARB 0x8B63
 #endif
 
+#define MOOSE 1
+
 #endif // ANGLEGL_H_
