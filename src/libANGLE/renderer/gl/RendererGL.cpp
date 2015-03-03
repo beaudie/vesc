@@ -196,18 +196,13 @@ std::string RendererGL::getRendererDescription() const
     std::string nativeVendorString(reinterpret_cast<const char*>(mFunctions->getString(GL_VENDOR)));
     std::string nativeRendererString(reinterpret_cast<const char*>(mFunctions->getString(GL_RENDERER)));
 
-    GLuint major;
-    GLuint minor;
-    bool isES;
-    nativegl::GetGLVersion(mFunctions->getString, &major, &minor, &isES);
-
     std::ostringstream rendererString;
     rendererString << nativeVendorString << " " << nativeRendererString << " OpenGL";
-    if (isES)
+    if (mFunctions->openGLES)
     {
         rendererString << " ES";
     }
-    rendererString << " " << major << "." << minor;
+    rendererString << " " << mFunctions->majorVersion << "." << mFunctions->minorVersion;
 
     return rendererString.str();
 }
