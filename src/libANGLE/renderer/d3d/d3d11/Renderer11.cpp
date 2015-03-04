@@ -2735,7 +2735,7 @@ gl::Error Renderer11::loadExecutable(const void *function, size_t length, Shader
 
 gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog, const std::string &shaderHLSL, ShaderType type,
                                           const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
-                                          bool separatedOutputBuffers, D3DWorkaroundType workaround,
+                                          bool separatedOutputBuffers, UINT workaround,
                                           ShaderExecutableD3D **outExectuable)
 {
     const char *profileType = NULL;
@@ -2767,6 +2767,9 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog, const std::strin
 
         flags |= D3DCOMPILE_DEBUG;
     }
+
+    if (workaround & ANGLE_D3D_WORKAROUND_COMPILE_IEEE_STRICTNESS)
+        flags |= D3DCOMPILE_IEEE_STRICTNESS;
 
     // Sometimes D3DCompile will fail with the default compilation flags for complicated shaders when it would otherwise pass with alternative options.
     // Try the default flags first and if compilation fails, try some alternatives.

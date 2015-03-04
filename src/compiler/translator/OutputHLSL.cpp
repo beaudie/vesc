@@ -125,6 +125,7 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType, int shaderVersion,
     mUsesXor = false;
     mUsesDiscardRewriting = false;
     mUsesNestedBreak = false;
+    mRequiresIEEEStrictCompiling = false;
 
     mUniqueIndex = 0;
 
@@ -349,6 +350,11 @@ void OutputHLSL::header(const BuiltInFunctionEmulatorHLSL *builtInFunctionEmulat
     if (mUsesNestedBreak)
     {
         out << "#define ANGLE_USES_NESTED_BREAK\n";
+    }
+
+    if (mRequiresIEEEStrictCompiling)
+    {
+        out << "#define ANGLE_REQUIRES_IEEE_STRICT_COMPILING\n";
     }
 
     out << "#ifdef ANGLE_ENABLE_LOOP_FLATTEN\n"
@@ -1688,7 +1694,10 @@ bool OutputHLSL::visitUnary(Visit visit, TIntermUnary *node)
         break;
       case EOpCeil:             outputTriplet(visit, "ceil(", "", ")");      break;
       case EOpFract:            outputTriplet(visit, "frac(", "", ")");      break;
-      case EOpIsNan:            outputTriplet(visit, "isnan(", "", ")");     break;
+      case EOpIsNan:
+        outputTriplet(visit, "isnan(", "", ")");
+        mRequiresIEEEStrictCompiling = true;
+        break;
       case EOpIsInf:            outputTriplet(visit, "isinf(", "", ")");     break;
       case EOpFloatBitsToInt:   outputTriplet(visit, "asint(", "", ")");     break;
       case EOpFloatBitsToUint:  outputTriplet(visit, "asuint(", "", ")");    break;

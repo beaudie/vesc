@@ -106,18 +106,19 @@ void ShaderD3D::parseVaryings(ShHandle compiler)
             mVaryings.push_back(gl::PackedVarying((*varyings)[varyingIndex]));
         }
 
-        mUsesMultipleRenderTargets = mTranslatedSource.find("GL_USES_MRT")                  != std::string::npos;
-        mUsesFragColor             = mTranslatedSource.find("GL_USES_FRAG_COLOR")           != std::string::npos;
-        mUsesFragData              = mTranslatedSource.find("GL_USES_FRAG_DATA")            != std::string::npos;
-        mUsesFragCoord             = mTranslatedSource.find("GL_USES_FRAG_COORD")           != std::string::npos;
-        mUsesFrontFacing           = mTranslatedSource.find("GL_USES_FRONT_FACING")         != std::string::npos;
-        mUsesPointSize             = mTranslatedSource.find("GL_USES_POINT_SIZE")           != std::string::npos;
-        mUsesPointCoord            = mTranslatedSource.find("GL_USES_POINT_COORD")          != std::string::npos;
-        mUsesDepthRange            = mTranslatedSource.find("GL_USES_DEPTH_RANGE")          != std::string::npos;
-        mUsesFragDepth             = mTranslatedSource.find("GL_USES_FRAG_DEPTH")           != std::string::npos;
-        mUsesDiscardRewriting      = mTranslatedSource.find("ANGLE_USES_DISCARD_REWRITING") != std::string::npos;
-        mUsesNestedBreak           = mTranslatedSource.find("ANGLE_USES_NESTED_BREAK")      != std::string::npos;
-        mUsesDeferredInit          = mTranslatedSource.find("ANGLE_USES_DEFERRED_INIT")     != std::string::npos;
+        mUsesMultipleRenderTargets   = mTranslatedSource.find("GL_USES_MRT")                          != std::string::npos;
+        mUsesFragColor               = mTranslatedSource.find("GL_USES_FRAG_COLOR")                   != std::string::npos;
+        mUsesFragData                = mTranslatedSource.find("GL_USES_FRAG_DATA")                    != std::string::npos;
+        mUsesFragCoord               = mTranslatedSource.find("GL_USES_FRAG_COORD")                   != std::string::npos;
+        mUsesFrontFacing             = mTranslatedSource.find("GL_USES_FRONT_FACING")                 != std::string::npos;
+        mUsesPointSize               = mTranslatedSource.find("GL_USES_POINT_SIZE")                   != std::string::npos;
+        mUsesPointCoord              = mTranslatedSource.find("GL_USES_POINT_COORD")                  != std::string::npos;
+        mUsesDepthRange              = mTranslatedSource.find("GL_USES_DEPTH_RANGE")                  != std::string::npos;
+        mUsesFragDepth               = mTranslatedSource.find("GL_USES_FRAG_DEPTH")                   != std::string::npos;
+        mUsesDiscardRewriting        = mTranslatedSource.find("ANGLE_USES_DISCARD_REWRITING")         != std::string::npos;
+        mUsesNestedBreak             = mTranslatedSource.find("ANGLE_USES_NESTED_BREAK")              != std::string::npos;
+        mUsesDeferredInit            = mTranslatedSource.find("ANGLE_USES_DEFERRED_INIT")             != std::string::npos;
+        mRequiresIEEEStrictCompiling = mTranslatedSource.find("ANGLE_REQUIRES_IEEE_STRICT_COMPILING") != std::string::npos;
     }
 }
 
@@ -150,6 +151,7 @@ void ShaderD3D::uncompile()
     mUsesDiscardRewriting = false;
     mUsesNestedBreak = false;
     mUsesDeferredInit = false;
+    mRequiresIEEEStrictCompiling = false;
 
     mVaryings.clear();
     mUniforms.clear();
@@ -264,24 +266,29 @@ void ShaderD3D::compileToHLSL(ShHandle compiler, const std::string &source)
     }
 }
 
-D3DWorkaroundType ShaderD3D::getD3DWorkarounds() const
+UINT ShaderD3D::getD3DWorkarounds() const
 {
+    UINT flags = ANGLE_D3D_WORKAROUND_NONE;
+
     if (mUsesDiscardRewriting)
     {
         // ANGLE issue 486:
         // Work-around a D3D9 compiler bug that presents itself when using conditional discard, by disabling optimization
-        return ANGLE_D3D_WORKAROUND_SKIP_OPTIMIZATION;
-    }
-
-    if (mUsesNestedBreak)
-    {
+        flags |= ANGLE_D3D_WORKAROUND_SKIP_OPTIMIZATION;
+    } else if (mUsesNestedBreak) {
         // ANGLE issue 603:
         // Work-around a D3D9 compiler bug that presents itself when using break in a nested loop, by maximizing optimization
         // We want to keep the use of ANGLE_D3D_WORKAROUND_MAX_OPTIMIZATION minimal to prevent hangs, so usesDiscard takes precedence
-        return ANGLE_D3D_WORKAROUND_MAX_OPTIMIZATION;
+        flags |= ANGLE_D3D_WORKAROUND_SKIP_OPTIMIZATION;
     }
 
-    return ANGLE_D3D_WORKAROUND_NONE;
+    if (mRequiresIEEEStrictCompiling)
+    {
+        // IEEE Strictness for D3D compiler needs to be enabled for NaNs to work.
+        flags |= ANGLE_D3D_WORKAROUND_COMPILE_IEEE_STRICTNESS;
+    }
+
+    return flags;
 }
 
 // true if varying x has a higher priority in packing than y
