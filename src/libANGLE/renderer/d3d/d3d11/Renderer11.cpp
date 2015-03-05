@@ -149,6 +149,9 @@ Renderer11::Renderer11(egl::Display *display)
     : RendererD3D(display),
       mStateCache(this)
 {
+    // Initialize global annotator
+    gl::InitializeDebugAnnotations(&mAnnotator);
+
     mVertexDataManager = NULL;
     mIndexDataManager = NULL;
 
@@ -2185,7 +2188,7 @@ bool Renderer11::getShareHandleSupport() const
     // chrome needs BGRA. Once chrome fixes this, we should always support them.
     // PIX doesn't seem to support using share handles, so disable them.
     // Also disable share handles on Feature Level 9_3, since it doesn't support share handles on RGBA8 textures/swapchains.
-    return getRendererExtensions().textureFormatBGRA8888 && !gl::perfActive() && !(mFeatureLevel <= D3D_FEATURE_LEVEL_9_3);
+    return getRendererExtensions().textureFormatBGRA8888 && !gl::DebugAnnotationsActive() && !(mFeatureLevel <= D3D_FEATURE_LEVEL_9_3);
 }
 
 bool Renderer11::getPostSubBufferSupport() const
@@ -2759,7 +2762,7 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog, const std::strin
 
     UINT flags = D3DCOMPILE_OPTIMIZATION_LEVEL2;
 
-    if (gl::perfActive())
+    if (gl::DebugAnnotationsActive())
     {
 #ifndef NDEBUG
         flags = D3DCOMPILE_SKIP_OPTIMIZATION;
