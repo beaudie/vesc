@@ -44,7 +44,7 @@ struct Extensions;
 struct ImageIndex;
 struct Rectangle;
 
-typedef std::vector<FramebufferAttachment *> AttachmentList;
+typedef std::vector<gl::FramebufferAttachment *> AttachmentList;
 
 class Framebuffer
 {
@@ -61,7 +61,7 @@ class Framebuffer
         FramebufferAttachment *getFirstColorAttachment() const;
         FramebufferAttachment *getDepthOrStencilAttachment() const;
 
-        std::vector<FramebufferAttachment *> mColorAttachments;
+        AttachmentList mColorAttachments;
         FramebufferAttachment *mDepthAttachment;
         FramebufferAttachment *mStencilAttachment;
 
@@ -128,11 +128,6 @@ class Framebuffer
 
     Error blit(const gl::State &state, const gl::Rectangle &sourceArea, const gl::Rectangle &destArea,
                GLbitfield mask, GLenum filter, const gl::Framebuffer *sourceFramebuffer);
-
-    // Use this method to retrieve the color attachment map when doing rendering.
-    // It will apply a workaround for poor shader performance on some systems
-    // by compacting the list to skip NULL values.
-    AttachmentList getColorAttachmentsForRender(const rx::Workarounds &workarounds) const;
 
   protected:
     void setAttachment(GLenum attachment, FramebufferAttachment *attachmentObj);
