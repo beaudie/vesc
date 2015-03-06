@@ -98,8 +98,9 @@ class ANGLETest : public testing::Test
     bool createEGLContext();
     bool destroyEGLContext();
 
-    EGLWindow *mEGLWindow;
+    bool mEGLWindowNeedsReinit;
 
+    static EGLWindow *mEGLWindow;
     static OSWindow *mOSWindow;
 };
 

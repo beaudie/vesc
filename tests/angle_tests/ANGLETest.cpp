@@ -2,20 +2,77 @@
 #include "EGLWindow.h"
 #include "OSWindow.h"
 
-ANGLETest::ANGLETest(EGLint glesMajorVersion, const EGLPlatformParameters &platform)
-    : mEGLWindow(NULL)
+EGLWindow *ANGLETest::mEGLWindow = nullptr;
+OSWindow *ANGLETest::mOSWindow = nullptr;
+
+namespace
 {
-    mEGLWindow = new EGLWindow(1280, 720, glesMajorVersion, platform);
+
+bool ShouldRecreateEGL(EGLint glesMajorVersion, const EGLPlatformParameters &platform, EGLWindow *eglWindow)
+{
+    if (static_cast<EGLint>(eglWindow->getClientVersion()) != glesMajorVersion)
+    {
+        return true;
+    }
+
+    if (eglWindow->getPlatform().deviceType != platform.deviceType)
+    {
+        return true;
+    }
+
+    if (eglWindow->getPlatform().majorVersion != platform.majorVersion)
+    {
+        return true;
+    }
+
+    if (eglWindow->getPlatform().minorVersion != platform.minorVersion)
+    {
+        return true;
+    }
+
+    if (eglWindow->getPlatform().renderer != platform.renderer)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+}
+
+ANGLETest::ANGLETest(EGLint glesMajorVersion, const EGLPlatformParameters &platform)
+    : mEGLWindowNeedsReinit(false)
+{
+    if (mEGLWindow != nullptr && ShouldRecreateEGL(glesMajorVersion, platform, mEGLWindow))
+    {
+        delete mEGLWindow;
+        mEGLWindow = nullptr;
+        mEGLWindowNeedsReinit = true;
+    }
+
+    if (mEGLWindow == nullptr)
+    {
+        mEGLWindow = new EGLWindow(1280, 720, glesMajorVersion, platform);
+        mEGLWindowNeedsReinit = true;
+    }
 }
 
 ANGLETest::~ANGLETest()
 {
-    delete mEGLWindow;
-    mEGLWindow = NULL;
 }
 
 void ANGLETest::SetUp()
 {
+    if (!mEGLWindowNeedsReinit)
+    {
+        return;
+    }
+
+    if (!destroyEGLContext())
+    {
+        FAIL() << "egl context destruction failed.";
+    }
+
     if (!ResizeWindow(mEGLWindow->getWidth(), mEGLWindow->getHeight()))
     {
         FAIL() << "Failed to resize ANGLE test window.";
@@ -25,17 +82,14 @@ void ANGLETest::SetUp()
     {
         FAIL() << "egl context creation failed.";
     }
+
+    mEGLWindowNeedsReinit = false;
 }
 
 void ANGLETest::TearDown()
 {
     swapBuffers();
     mOSWindow->messageLoop();
-
-    if (!destroyEGLContext())
-    {
-        FAIL() << "egl context destruction failed.";
-    }
 
     // Check for quit message
     Event myEvent;
@@ -117,47 +171,83 @@ bool ANGLETest::extensionEnabled(const std::string &extName)
 
 void ANGLETest::setWindowWidth(int width)
 {
-    mEGLWindow->setWidth(width);
+    if (width != mEGLWindow->getWidth())
+    {
+        mEGLWindow->setWidth(width);
+        mEGLWindowNeedsReinit = true;
+    }
 }
 
 void ANGLETest::setWindowHeight(int height)
 {
-    mEGLWindow->setHeight(height);
+    if (height != mEGLWindow->getHeight())
+    {
+        mEGLWindow->setHeight(height);
+        mEGLWindowNeedsReinit = true;
+    }
 }
 
 void ANGLETest::setConfigRedBits(int bits)
 {
-    mEGLWindow->setConfigRedBits(bits);
+    if (bits != mEGLWindow->getConfigRedBits())
+    {
+        mEGLWindow->setConfigRedBits(bits);
+        mEGLWindowNeedsReinit = true;
+    }
 }
 
 void ANGLETest::setConfigGreenBits(int bits)
 {
-    mEGLWindow->setConfigGreenBits(bits);
+    if (bits != mEGLWindow->getConfigGreenBits())
+    {
+        mEGLWindow->setConfigGreenBits(bits);
+        mEGLWindowNeedsReinit = true;
+    }
 }
 
 void ANGLETest::setConfigBlueBits(int bits)
 {
-    mEGLWindow->setConfigBlueBits(bits);
+    if (bits != mEGLWindow->getConfigBlueBits())
+    {
+        mEGLWindow->setConfigBlueBits(bits);
+        mEGLWindowNeedsReinit = true;
+    }
 }
 
 void ANGLETest::setConfigAlphaBits(int bits)
 {
-    mEGLWindow->setConfigAlphaBits(bits);
+    if (bits != mEGLWindow->getConfigAlphaBits())
+    {
+        mEGLWindow->setConfigAlphaBits(bits);
+        mEGLWindowNeedsReinit = true;
+    }
 }
 
 void ANGLETest::setConfigDepthBits(int bits)
 {
-    mEGLWindow->setConfigDepthBits(bits);
+    if (bits != mEGLWindow->getConfigDepthBits())
+    {
+        mEGLWindow->setConfigDepthBits(bits);
+        mEGLWindowNeedsReinit = true;
+    }
 }
 
 void ANGLETest::setConfigStencilBits(int bits)
 {
-    mEGLWindow->setConfigStencilBits(bits);
+    if (bits != mEGLWindow->getConfigStencilBits())
+    {
+        mEGLWindow->setConfigStencilBits(bits);
+        mEGLWindowNeedsReinit = true;
+    }
 }
 
 void ANGLETest::setMultisampleEnabled(bool enabled)
 {
-    mEGLWindow->setMultisample(enabled);
+    if (enabled != mEGLWindow->isMultisample())
+    {
+        mEGLWindow->setMultisample(enabled);
+        mEGLWindowNeedsReinit = true;
+    }
 }
 
 int ANGLETest::getClientVersion() const
@@ -215,7 +305,13 @@ bool ANGLETest::DestroyTestWindow()
     {
         mOSWindow->destroy();
         delete mOSWindow;
-        mOSWindow = NULL;
+        mOSWindow = nullptr;
+    }
+
+    if (mEGLWindow)
+    {
+        delete mEGLWindow;
+        mEGLWindow = nullptr;
     }
 
     return true;
@@ -255,8 +351,6 @@ EGLint ANGLETest::getPlatformRenderer() const
     assert(mEGLWindow);
     return mEGLWindow->getPlatform().renderer;
 }
-
-OSWindow *ANGLETest::mOSWindow = NULL;
 
 void ANGLETestEnvironment::SetUp()
 {
