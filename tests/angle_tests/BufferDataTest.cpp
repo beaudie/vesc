@@ -86,7 +86,7 @@ TYPED_TEST(BufferDataTest, NULLData)
     glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
     EXPECT_GL_NO_ERROR();
 
-    const int numIterations = 128;
+    const int numIterations = 32;
     for (int i = 0; i < numIterations; ++i)
     {
         GLsizei bufferSize = sizeof(GLfloat) * (i + 1);

@@ -42,6 +42,7 @@
             '<(angle_path)/tests/angle_tests/RendererTest.cpp',
             '<(angle_path)/tests/angle_tests/SimpleOperationTest.cpp',
             '<(angle_path)/tests/angle_tests/SRGBTextureTest.cpp',
+            '<(angle_path)/tests/angle_tests/StateReset.cpp',
             '<(angle_path)/tests/angle_tests/SwizzleTest.cpp',
             '<(angle_path)/tests/angle_tests/TextureTest.cpp',
             '<(angle_path)/tests/angle_tests/TransformFeedbackTest.cpp',

@@ -101,13 +101,15 @@ protected:
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         glEnableVertexAttribArray(mPositionLocation);
         glVertexAttribPointer(mPositionLocation, 2, GL_FLOAT, GL_FALSE, 0, loopPositions);
-        glUniform4f(mColorLocation, 0.0f, 0.0f, 1.0f, 1.0f);
         glDrawElements(GL_LINE_LOOP, 4, indexType, indexPtr);
+
+        EXPECT_GL_NO_ERROR();
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glVertexAttribPointer(mPositionLocation, 2, GL_FLOAT, GL_FALSE, 0, stripPositions);
-        glUniform4f(mColorLocation, 0, 1, 0, 1);
         glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_BYTE, stripIndices);
+
+        EXPECT_GL_NO_ERROR();
 
         std::vector<GLubyte> pixels(getWindowWidth() * getWindowHeight() * 4);
         glReadPixels(0, 0, getWindowWidth(), getWindowHeight(), GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]);
@@ -123,6 +125,8 @@ protected:
                 EXPECT_EQ(pixel[3], 255);
             }
         }
+
+        EXPECT_GL_NO_ERROR();
     }
 
     GLuint mProgram;

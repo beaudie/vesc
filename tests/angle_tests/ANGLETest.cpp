@@ -65,6 +65,7 @@ void ANGLETest::SetUp()
 {
     if (!mEGLWindowNeedsReinit)
     {
+        resetState();
         return;
     }
 

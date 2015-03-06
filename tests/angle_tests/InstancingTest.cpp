@@ -29,8 +29,7 @@ class InstancingTest : public ANGLETest
         mDrawArraysInstancedANGLE = NULL;
         mDrawElementsInstancedANGLE = NULL;
 
-        char *extensionString = (char*)glGetString(GL_EXTENSIONS);
-        if (strstr(extensionString, "GL_ANGLE_instanced_arrays"))
+        if (extensionEnabled("GL_ANGLE_instanced_arrays"))
         {
             mVertexAttribDivisorANGLE = (PFNGLVERTEXATTRIBDIVISORANGLEPROC)eglGetProcAddress("glVertexAttribDivisorANGLE");
             mDrawArraysInstancedANGLE = (PFNGLDRAWARRAYSINSTANCEDANGLEPROC)eglGetProcAddress("glDrawArraysInstancedANGLE");
@@ -184,6 +183,7 @@ class InstancingTest : public ANGLETest
 
         // If this ASSERT fails then the vertex shader code should be refactored
         ASSERT_EQ(shouldAttribZeroBeInstanced, (instancePosLoc == 0));
+        ASSERT_GL_NO_ERROR();
 
         // Set the viewport
         glViewport(0, 0, getWindowWidth(), getWindowHeight());
@@ -197,6 +197,7 @@ class InstancingTest : public ANGLETest
         // Load the vertex position
         glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, mQuadVertices.data());
         glEnableVertexAttribArray(positionLoc);
+        ASSERT_GL_NO_ERROR();
 
         // Load the instance position
         glVertexAttribPointer(instancePosLoc, 3, GL_FLOAT, GL_FALSE, 0, mInstances.data());

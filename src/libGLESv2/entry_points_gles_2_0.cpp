@@ -3211,7 +3211,6 @@ void GL_APIENTRY PixelStorei(GLenum pname, GLint param)
           case GL_PACK_SKIP_ROWS:
           case GL_PACK_SKIP_PIXELS:
             ASSERT(context->getClientVersion() >= 3);
-            UNIMPLEMENTED();
             break;
 
           default:

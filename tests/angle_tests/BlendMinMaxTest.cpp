@@ -34,7 +34,7 @@ protected:
 
     void runTest()
     {
-        const size_t colorCount = 1024;
+        const size_t colorCount = 10;
         Color colors[colorCount];
         for (size_t i = 0; i < colorCount; i++)
         {
@@ -121,6 +121,8 @@ protected:
         glRenderbufferStorage(GL_RENDERBUFFER, colorFormat, getWindowWidth(), getWindowHeight());
         glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, mColorRenderbuffer);
 
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         ASSERT_GL_NO_ERROR();
     }
 
@@ -144,16 +146,19 @@ TYPED_TEST(BlendMinMaxTest, RGBA8)
 {
     SetUpFramebuffer(GL_RGBA8);
     runTest();
+    EXPECT_GL_NO_ERROR();
 }
 
 TYPED_TEST(BlendMinMaxTest, RGBA32f)
 {
     SetUpFramebuffer(GL_RGBA32F);
     runTest();
+    EXPECT_GL_NO_ERROR();
 }
 
 TYPED_TEST(BlendMinMaxTest, RGBA16F)
 {
     SetUpFramebuffer(GL_RGBA16F);
     runTest();
+    EXPECT_GL_NO_ERROR();
 }

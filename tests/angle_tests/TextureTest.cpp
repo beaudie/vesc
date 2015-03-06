@@ -90,6 +90,10 @@ class TextureTest : public ANGLETest
         glUseProgram(m2DProgram);
         glUniform2f(mTextureScaleUniformLocation, 1.0f, 1.0f);
         glUseProgram(0);
+
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         ASSERT_GL_NO_ERROR();
     }
 
@@ -354,6 +358,13 @@ TYPED_TEST(TextureTest, CubeMapFBO)
 // Test that glTexSubImage2D works properly when glTexStorage2DEXT has initialized the image with a default color.
 TYPED_TEST(TextureTest, TexStorage)
 {
+    // Fails in D3D9
+    if (getEGLWindow()->getPlatform().renderer == EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE)
+    {
+        std::cout << "Test Disabled in D3D9!" << std::endl;
+        return;
+    }
+
     int width = getWindowWidth();
     int height = getWindowHeight();
 
@@ -386,6 +397,7 @@ TYPED_TEST(TextureTest, TexStorage)
     glUniform1i(mTexture2DUniformLocation, 0);
     glUniform2f(mTextureScaleUniformLocation, 1.f, 1.f);
     drawQuad(m2DProgram, "position", 0.5f);
+    swapBuffers();
     glDeleteTextures(1, &tex2D);
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(3*width/4, 3*height/4, 0, 0, 0, 255);

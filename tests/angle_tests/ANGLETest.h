@@ -97,6 +97,7 @@ class ANGLETest : public testing::Test
   private:
     bool createEGLContext();
     bool destroyEGLContext();
+    void resetState();
 
     bool mEGLWindowNeedsReinit;
 
