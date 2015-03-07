@@ -181,6 +181,12 @@ Error Texture::setImage(GLenum target, size_t level, GLenum internalFormat, cons
 {
     ASSERT(target == mTarget || (mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
 
+    if (unpack.skipRows != 0 || unpack.skipPixels != 0 || unpack.imageHeight != 0 || unpack.skipImages != 0)
+    {
+        UNIMPLEMENTED();
+        return gl::Error(GL_INVALID_OPERATION, "unimplemented pixel store state");
+    }
+
     Error error = mTexture->setImage(target, level, internalFormat, size, format, type, unpack, pixels);
     if (error.isError())
     {
@@ -199,6 +205,12 @@ Error Texture::setSubImage(GLenum target, size_t level, const Box &area, GLenum 
 {
     ASSERT(target == mTarget || (mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
 
+    if (unpack.skipRows != 0 || unpack.skipPixels != 0 || unpack.imageHeight != 0 || unpack.skipImages != 0)
+    {
+        UNIMPLEMENTED();
+        return gl::Error(GL_INVALID_OPERATION, "unimplemented pixel store state");
+    }
+
     return mTexture->setSubImage(target, level, area, format, type, unpack, pixels);
 }
 
@@ -206,6 +218,12 @@ Error Texture::setCompressedImage(GLenum target, size_t level, GLenum internalFo
                                   const PixelUnpackState &unpack, const uint8_t *pixels)
 {
     ASSERT(target == mTarget || (mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+
+    if (unpack.skipRows != 0 || unpack.skipPixels != 0 || unpack.imageHeight != 0 || unpack.skipImages != 0)
+    {
+        UNIMPLEMENTED();
+        return gl::Error(GL_INVALID_OPERATION, "unimplemented pixel store state");
+    }
 
     Error error = mTexture->setCompressedImage(target, level, internalFormat, size, unpack, pixels);
     if (error.isError())
@@ -224,6 +242,12 @@ Error Texture::setCompressedSubImage(GLenum target, size_t level, const Box &are
                                      const PixelUnpackState &unpack, const uint8_t *pixels)
 {
     ASSERT(target == mTarget || (mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+
+    if (unpack.skipRows != 0 || unpack.skipPixels != 0 || unpack.imageHeight != 0 || unpack.skipImages != 0)
+    {
+        UNIMPLEMENTED();
+        return gl::Error(GL_INVALID_OPERATION, "unimplemented pixel store state");
+    }
 
     return mTexture->setCompressedSubImage(target, level, area, format, unpack, pixels);
 }
