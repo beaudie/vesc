@@ -53,11 +53,11 @@ void StateManagerGL::bindBuffer(GLenum type, GLuint buffer)
     }
 }
 
-void StateManagerGL::setDrawState(const gl::State &state)
+void StateManagerGL::setDrawState(const gl::State &state, GLint first, GLsizei count)
 {
     const gl::VertexArray *vao = state.getVertexArray();
     const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
-    vaoGL->setDrawState();
+    vaoGL->setDrawState(first, count);
     bindVertexArray(vaoGL->getVertexArrayID());
 
     const gl::Program *program = state.getProgram();

@@ -28,7 +28,7 @@ class VertexArrayGL : public VertexArrayImpl
     void setAttributeDivisor(size_t idx, GLuint divisor) override;
     void enableAttribute(size_t idx, bool enabledState) override;
 
-    void setDrawState() const;
+    void setDrawState(GLint first, GLsizei count) const;
 
     GLuint getVertexArrayID() const;
 
@@ -45,6 +45,9 @@ class VertexArrayGL : public VertexArrayImpl
 
     mutable GLuint mAppliedElementArrayBuffer;
     mutable std::vector<gl::VertexAttribute> mAppliedAttributes;
+
+    mutable size_t mScratchBufferSize;
+    mutable GLuint mStreamingScratchBuffer;
 };
 
 }
