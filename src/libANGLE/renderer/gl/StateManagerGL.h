@@ -37,10 +37,14 @@ class StateManagerGL
     void bindTexture(GLenum type, GLuint texture);
     void setPixelUnpackState(GLint alignment, GLint rowLength);
 
-    void setDrawState(const gl::Data &data);
+    void setDrawArraysState(const gl::Data &data, GLint first, GLsizei count);
+    void setDrawElementsState(const gl::Data &data, GLsizei count, GLenum type, const GLvoid *indices,
+                              const GLvoid **outIndices);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(StateManagerGL);
+
+    void setGenericDrawState(const gl::Data &data);
 
     const FunctionsGL *mFunctions;
 

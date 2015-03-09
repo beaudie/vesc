@@ -96,15 +96,35 @@ void StateManagerGL::setPixelUnpackState(GLint alignment, GLint rowLength)
     }
 }
 
-void StateManagerGL::setDrawState(const gl::Data &data)
+void StateManagerGL::setDrawArraysState(const gl::Data &data, GLint first, GLsizei count)
 {
     const gl::State &state = *data.state;
-    const gl::Caps &caps = *data.caps;
 
     const gl::VertexArray *vao = state.getVertexArray();
     const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
-    vaoGL->syncState();
+    vaoGL->syncDrawArraysState(first, count);
     bindVertexArray(vaoGL->getVertexArrayID());
+
+    setGenericDrawState(data);
+}
+
+void StateManagerGL::setDrawElementsState(const gl::Data &data, GLsizei count, GLenum type, const GLvoid *indices,
+                                          const GLvoid **outIndices)
+{
+    const gl::State &state = *data.state;
+
+    const gl::VertexArray *vao = state.getVertexArray();
+    const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
+    vaoGL->syncDrawElementsState(count, type, indices, outIndices);
+    bindVertexArray(vaoGL->getVertexArrayID());
+
+    setGenericDrawState(data);
+}
+
+void StateManagerGL::setGenericDrawState(const gl::Data &data)
+{
+    const gl::State &state = *data.state;
+    const gl::Caps &caps = *data.caps;
 
     const gl::Program *program = state.getProgram();
     const ProgramGL *programGL = GetImplAs<ProgramGL>(program);
