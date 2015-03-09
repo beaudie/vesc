@@ -79,6 +79,9 @@ enum
 Renderer9::Renderer9(egl::Display *display)
     : RendererD3D(display)
 {
+    // Initialize global annotator
+    gl::InitializeDebugAnnotations(&mAnnotator);
+
     mD3d9Module = NULL;
 
     mD3d9 = NULL;
@@ -2478,7 +2481,7 @@ unsigned int Renderer9::getReservedFragmentUniformBuffers() const
 bool Renderer9::getShareHandleSupport() const
 {
     // PIX doesn't seem to support using share handles, so disable them.
-    return (mD3d9Ex != NULL) && !gl::perfActive();
+    return (mD3d9Ex != NULL) && !gl::DebugAnnotationsActive();
 }
 
 bool Renderer9::getPostSubBufferSupport() const
@@ -2746,7 +2749,7 @@ gl::Error Renderer9::compileToExecutable(gl::InfoLog &infoLog, const std::string
     }
     else ASSERT(workaround == ANGLE_D3D_WORKAROUND_NONE);
 
-    if (gl::perfActive())
+    if (gl::DebugAnnotationsActive())
     {
 #ifndef NDEBUG
         flags = D3DCOMPILE_SKIP_OPTIMIZATION;
