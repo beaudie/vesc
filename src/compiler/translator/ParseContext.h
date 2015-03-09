@@ -182,6 +182,8 @@ struct TParseContext {
 
     TIntermTyped *addFunctionCallOrMethod(TFunction *fnCall, TIntermNode *node,
         const TSourceLoc &loc, bool *fatalError);
+
+    TFunction *functionFromIdentifier(const TString *identifier, const TSourceLoc &loc);
 };
 
 int PaParseStrings(size_t count, const char* const string[], const int length[],

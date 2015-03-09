@@ -2924,6 +2924,14 @@ TIntermTyped *TParseContext::addFunctionCallOrMethod(TFunction *fnCall, TIntermN
     return callNode;
 }
 
+TFunction *TParseContext::functionFromIdentifier(const TString *identifier, const TSourceLoc &loc)
+{
+    if (reservedErrorCheck(loc, *identifier))
+        recover();
+    TType type(EbtVoid, EbpUndefined);
+    return new TFunction(identifier, type);
+}
+
 
 //
 // Parse an array of strings using yyparse.

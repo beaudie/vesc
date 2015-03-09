@@ -197,7 +197,9 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
 %type <interm.fieldList> struct_declarator_list struct_declaration struct_declaration_list
 %type <interm.function> function_header function_declarator function_identifier
 %type <interm.function> function_header_with_parameters function_call_header
+%type <interm.function> method_call_header
 %type <interm> function_call_header_with_parameters function_call_header_no_parameters function_call_generic function_prototype
+%type <interm> method_call_header_with_parameters method_call_header_no_parameters method_call_generic
 %type <interm> function_call_or_method
 
 %type <lex> enter_struct
@@ -306,7 +308,7 @@ function_call_or_method
     : function_call_generic {
         $$ = $1;
     }
-    | postfix_expression DOT function_call_generic {
+    | postfix_expression DOT method_call_generic {
         context->error(@3, "methods are not supported", "");
         context->recover();
         $$ = $3;
@@ -322,12 +324,32 @@ function_call_generic
     }
     ;
 
+method_call_generic
+    : method_call_header_with_parameters RIGHT_PAREN {
+        $$ = $1;
+    }
+    | method_call_header_no_parameters RIGHT_PAREN {
+        $$ = $1;
+    }
+    ;
+
 function_call_header_no_parameters
     : function_call_header VOID_TYPE {
         $$.function = $1;
         $$.intermNode = 0;
     }
     | function_call_header {
+        $$.function = $1;
+        $$.intermNode = 0;
+    }
+    ;
+
+method_call_header_no_parameters
+    : method_call_header VOID_TYPE {
+        $$.function = $1;
+        $$.intermNode = 0;
+    }
+    | method_call_header {
         $$.function = $1;
         $$.intermNode = 0;
     }
@@ -348,9 +370,30 @@ function_call_header_with_parameters
     }
     ;
 
+method_call_header_with_parameters
+    : method_call_header assignment_expression {
+        TParameter param = { 0, new TType($2->getType()) };
+        $1->addParameter(param);
+        $$.function = $1;
+        $$.intermNode = $2;
+    }
+    | method_call_header_with_parameters COMMA assignment_expression {
+        TParameter param = { 0, new TType($3->getType()) };
+        $1.function->addParameter(param);
+        $$.function = $1.function;
+        $$.intermNode = context->intermediate.growAggregate($1.intermNode, $3, @2);
+    }
+    ;
+
 function_call_header
     : function_identifier LEFT_PAREN {
         $$ = $1;
+    }
+    ;
+
+method_call_header
+    : identifier LEFT_PAREN {
+        $$ = context->functionFromIdentifier($1.string, @1);
     }
     ;
 
@@ -361,11 +404,7 @@ function_identifier
         $$ = context->addConstructorFunc($1);
     }
     | IDENTIFIER {
-        if (context->reservedErrorCheck(@1, *$1.string))
-            context->recover();
-        TType type(EbtVoid, EbpUndefined);
-        TFunction *function = new TFunction($1.string, type);
-        $$ = function;
+        $$ = context->functionFromIdentifier($1.string, @1);
     }
     ;
 
