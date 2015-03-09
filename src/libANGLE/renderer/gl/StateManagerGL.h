@@ -33,10 +33,14 @@ class StateManagerGL
     void bindVertexArray(GLuint vao);
     void bindBuffer(GLenum type, GLuint buffer);
 
-    void setDrawState(const gl::State &state);
+    void setDrawArraysState(const gl::State &state, GLint first, GLsizei count);
+    void setDrawElementsState(const gl::State &state, GLsizei count, GLenum type, const GLvoid *indices,
+                              const GLvoid **outIndices);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(StateManagerGL);
+
+    void setGenericDrawState(const gl::State &state);
 
     const FunctionsGL *mFunctions;
 

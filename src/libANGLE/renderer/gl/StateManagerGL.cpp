@@ -53,13 +53,29 @@ void StateManagerGL::bindBuffer(GLenum type, GLuint buffer)
     }
 }
 
-void StateManagerGL::setDrawState(const gl::State &state)
+void StateManagerGL::setDrawArraysState(const gl::State &state, GLint first, GLsizei count)
 {
     const gl::VertexArray *vao = state.getVertexArray();
     const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
-    vaoGL->syncState();
+    vaoGL->syncDrawArraysState(first, count);
     bindVertexArray(vaoGL->getVertexArrayID());
 
+    setGenericDrawState(state);
+}
+
+void StateManagerGL::setDrawElementsState(const gl::State &state, GLsizei count, GLenum type, const GLvoid *indices,
+                                          const GLvoid **outIndices)
+{
+    const gl::VertexArray *vao = state.getVertexArray();
+    const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
+    vaoGL->syncDrawElementsState(count, type, indices, outIndices);
+    bindVertexArray(vaoGL->getVertexArrayID());
+
+    setGenericDrawState(state);
+}
+
+void StateManagerGL::setGenericDrawState(const gl::State &state)
+{
     const gl::Program *program = state.getProgram();
     const ProgramGL *programGL = GetImplAs<ProgramGL>(program);
     useProgram(programGL->getProgramID());

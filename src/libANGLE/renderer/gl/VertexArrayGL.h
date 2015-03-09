@@ -28,12 +28,15 @@ class VertexArrayGL : public VertexArrayImpl
     void setAttributeDivisor(size_t idx, GLuint divisor) override;
     void enableAttribute(size_t idx, bool enabledState) override;
 
-    void syncState() const;
+    void syncDrawArraysState(GLint first, GLsizei count) const;
+    void syncDrawElementsState(GLsizei count, GLenum type, const GLvoid *indices, const GLvoid **outIndices) const;
 
     GLuint getVertexArrayID() const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(VertexArrayGL);
+
+    void syncDrawState(GLint first, GLsizei count, GLenum type, const GLvoid *indices, const GLvoid **outIndices) const;
 
     const FunctionsGL *mFunctions;
     StateManagerGL *mStateManager;
@@ -45,6 +48,12 @@ class VertexArrayGL : public VertexArrayImpl
 
     mutable GLuint mAppliedElementArrayBuffer;
     mutable std::vector<gl::VertexAttribute> mAppliedAttributes;
+
+    mutable size_t mStreamingElementArrayBufferSize;
+    mutable GLuint mStreamingElementArrayBuffer;
+
+    mutable size_t mStreamingArrayBufferSize;
+    mutable GLuint mStreamingArrayBuffer;
 };
 
 }

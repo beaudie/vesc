@@ -59,7 +59,7 @@ gl::Error RendererGL::finish()
 gl::Error RendererGL::drawArrays(const gl::Data &data, GLenum mode,
                                  GLint first, GLsizei count, GLsizei instances)
 {
-    mStateManager->setDrawState(*data.state);
+    mStateManager->setDrawArraysState(*data.state, first, count);
     mFunctions->drawArrays(mode, first, count);
 
     return gl::Error(GL_NO_ERROR);
@@ -74,8 +74,9 @@ gl::Error RendererGL::drawElements(const gl::Data &data, GLenum mode, GLsizei co
         UNIMPLEMENTED();
     }
 
-    mStateManager->setDrawState(*data.state);
-    mFunctions->drawElements(mode, count, type, indices);
+    const GLvoid *drawIndexPointer = nullptr;
+    mStateManager->setDrawElementsState(*data.state, count, type, indices, &drawIndexPointer);
+    mFunctions->drawElements(mode, count, type, drawIndexPointer);
 
     return gl::Error(GL_NO_ERROR);
 }
