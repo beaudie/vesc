@@ -97,7 +97,7 @@ ProgramImpl *RendererGL::createProgram()
 
 FramebufferImpl *RendererGL::createFramebuffer(const gl::Framebuffer::Data &data)
 {
-    return new FramebufferGL(data);
+    return new FramebufferGL(data, mFunctions, mStateManager, false);
 }
 
 TextureImpl *RendererGL::createTexture(GLenum target)
@@ -190,6 +190,16 @@ Workarounds RendererGL::generateWorkarounds() const
 {
     Workarounds workarounds;
     return workarounds;
+}
+
+const FunctionsGL * RendererGL::getFunctions() const
+{
+    return mFunctions;
+}
+
+StateManagerGL *RendererGL::getStateManager()
+{
+    return mStateManager;
 }
 
 }

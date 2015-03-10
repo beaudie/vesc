@@ -32,6 +32,7 @@ class StateManagerGL
     void useProgram(GLuint program);
     void bindVertexArray(GLuint vao);
     void bindBuffer(GLenum type, GLuint buffer);
+    void bindFramebuffer(GLenum type, GLuint framebuffer);
 
     void setDrawState(const gl::State &state);
 
@@ -43,6 +44,8 @@ class StateManagerGL
     GLuint mProgram;
     GLuint mVAO;
     std::map<GLenum, GLuint> mBuffers;
+
+    std::map<GLenum, GLuint> mFramebuffers;
 };
 
 }

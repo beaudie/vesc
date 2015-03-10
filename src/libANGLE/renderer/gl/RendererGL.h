@@ -69,6 +69,9 @@ class RendererGL : public Renderer
     std::string getVendorString() const override;
     std::string getRendererDescription() const override;
 
+    const FunctionsGL *getFunctions() const;
+    StateManagerGL *getStateManager();
+
   private:
     DISALLOW_COPY_AND_ASSIGN(RendererGL);
 

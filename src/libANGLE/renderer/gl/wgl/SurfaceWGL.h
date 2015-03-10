@@ -17,13 +17,14 @@ namespace rx
 {
 
 class FunctionsWGL;
+class RendererGL;
 
 class SurfaceWGL : public SurfaceGL
 {
   public:
     SurfaceWGL(egl::Display *display, const egl::Config *config, EGLint fixedSize, EGLint postSubBufferSupported,
                EGLenum textureFormat, EGLenum textureType, EGLNativeWindowType window, ATOM windowClass, int pixelFormat,
-               HGLRC wglContext, const FunctionsWGL *functions);
+               HGLRC wglContext, RendererGL *renderer, const FunctionsWGL *functions);
 
     ~SurfaceWGL() override;
 

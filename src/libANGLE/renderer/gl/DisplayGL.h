@@ -29,6 +29,9 @@ class DisplayGL : public DisplayImpl
     egl::Error createContext(const egl::Config *config, const gl::Context *shareContext, const egl::AttributeMap &attribs,
                              gl::Context **outContext) override;
 
+  protected:
+    RendererGL *getRenderer();
+
   private:
     DISALLOW_COPY_AND_ASSIGN(DisplayGL);
 

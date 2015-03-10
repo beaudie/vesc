@@ -10,14 +10,16 @@
 
 #include "libANGLE/renderer/gl/DefaultAttachmentGL.h"
 #include "libANGLE/renderer/gl/FramebufferGL.h"
+#include "libANGLE/renderer/gl/RendererGL.h"
 
 namespace rx
 {
 
 SurfaceGL::SurfaceGL(egl::Display *display, const egl::Config *config,
                      EGLint fixedSize, EGLint postSubBufferSupported, EGLenum textureFormat,
-                     EGLenum textureType)
-    : SurfaceImpl(display, config, fixedSize, postSubBufferSupported, textureFormat, textureType)
+                     EGLenum textureType, RendererGL *renderer)
+    : SurfaceImpl(display, config, fixedSize, postSubBufferSupported, textureFormat, textureType),
+      mRenderer(renderer)
 {
 }
 
@@ -27,12 +29,12 @@ SurfaceGL::~SurfaceGL()
 
 FramebufferImpl *SurfaceGL::createDefaultFramebuffer(const gl::Framebuffer::Data &data)
 {
-    return new FramebufferGL(data);
+    return new FramebufferGL(data, mRenderer->getFunctions(), mRenderer->getStateManager(), true);
 }
 
 DefaultAttachmentImpl *SurfaceGL::createDefaultAttachment(GLenum type)
 {
-    return new DefaultAttachmentGL();
+    return new DefaultAttachmentGL(type, this);
 }
 
 }

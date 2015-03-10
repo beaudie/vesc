@@ -9,16 +9,33 @@
 #include "libANGLE/renderer/gl/FramebufferGL.h"
 
 #include "common/debug.h"
+#include "libANGLE/angletypes.h"
+#include "libANGLE/renderer/gl/FunctionsGL.h"
+#include "libANGLE/renderer/gl/StateManagerGL.h"
 
 namespace rx
 {
 
-FramebufferGL::FramebufferGL(const gl::Framebuffer::Data &data)
-    : FramebufferImpl(data)
-{}
+FramebufferGL::FramebufferGL(const gl::Framebuffer::Data &data, const FunctionsGL *functions, StateManagerGL *stateManager, bool isDefault)
+    : FramebufferImpl(data),
+      mFunctions(functions),
+      mStateManager(stateManager),
+      mFramebufferID(0)
+{
+    if (!isDefault)
+    {
+        mFunctions->genFramebuffers(1, &mFramebufferID);
+    }
+}
 
 FramebufferGL::~FramebufferGL()
-{}
+{
+    if (mFramebufferID != 0)
+    {
+        mFunctions->deleteFramebuffers(1, &mFramebufferID);
+        mFramebufferID = 0;
+    }
+}
 
 void FramebufferGL::setColorAttachment(size_t index, const gl::FramebufferAttachment *attachment)
 {
@@ -106,8 +123,12 @@ GLenum FramebufferGL::getImplementationColorReadType() const
 
 gl::Error FramebufferGL::readPixels(const gl::State &state, const gl::Rectangle &area, GLenum format, GLenum type, GLvoid *pixels) const
 {
-    UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    // TODO: set unpack state
+
+    mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, mFramebufferID);
+    mFunctions->readPixels(area.x, area.y, area.width, area.height, format, type, pixels);
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 gl::Error FramebufferGL::blit(const gl::State &state, const gl::Rectangle &sourceArea, const gl::Rectangle &destArea,
@@ -121,6 +142,11 @@ GLenum FramebufferGL::checkStatus() const
 {
     UNIMPLEMENTED();
     return GLenum();
+}
+
+GLuint FramebufferGL::getFramebufferID() const
+{
+    return mFramebufferID;
 }
 
 }

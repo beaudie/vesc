@@ -11,15 +11,18 @@
 
 #include "libANGLE/renderer/SurfaceImpl.h"
 
+
 namespace rx
 {
+
+class RendererGL;
 
 class SurfaceGL : public SurfaceImpl
 {
   public:
     SurfaceGL(egl::Display *display, const egl::Config *config,
               EGLint fixedSize, EGLint postSubBufferSupported, EGLenum textureFormat,
-              EGLenum textureType);
+              EGLenum textureType, RendererGL *renderer);
     ~SurfaceGL() override;
 
     // Default framebuffer creation
@@ -28,6 +31,8 @@ class SurfaceGL : public SurfaceImpl
 
   private:
     DISALLOW_COPY_AND_ASSIGN(SurfaceGL);
+
+    RendererGL *mRenderer;
 };
 
 }

@@ -338,7 +338,7 @@ egl::Error DisplayWGL::createWindowSurface(const egl::Config *configuration, EGL
                                            const egl::AttributeMap &attribs, SurfaceImpl **outSurface)
 {
     SurfaceWGL *surface = new SurfaceWGL(mDisplay, configuration, EGL_FALSE, EGL_FALSE, EGL_NO_TEXTURE, EGL_NO_TEXTURE,
-                                         window, mWindowClass, mPixelFormat, mWGLContext, mFunctionsWGL);
+                                         window, mWindowClass, mPixelFormat, mWGLContext, getRenderer(), mFunctionsWGL);
     egl::Error error = surface->initialize();
     if (error.isError())
     {

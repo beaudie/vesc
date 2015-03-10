@@ -49,4 +49,9 @@ egl::Error DisplayGL::createContext(const egl::Config *config, const gl::Context
     return egl::Error(EGL_SUCCESS);
 }
 
+RendererGL *DisplayGL::getRenderer()
+{
+    return mRenderer;
+}
+
 }

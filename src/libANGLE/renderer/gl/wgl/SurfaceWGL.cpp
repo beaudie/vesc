@@ -17,8 +17,8 @@ namespace rx
 
 SurfaceWGL::SurfaceWGL(egl::Display *display, const egl::Config *config, EGLint fixedSize, EGLint postSubBufferSupported,
                        EGLenum textureFormat, EGLenum textureType, EGLNativeWindowType window, ATOM windowClass, int pixelFormat,
-                       HGLRC wglContext, const FunctionsWGL *functions)
-    : SurfaceGL(display, config, fixedSize, postSubBufferSupported, textureFormat, textureType),
+                       HGLRC wglContext, RendererGL *renderer, const FunctionsWGL *functions)
+    : SurfaceGL(display, config, fixedSize, postSubBufferSupported, textureFormat, textureType, renderer),
       mWindowClass(windowClass),
       mPixelFormat(pixelFormat),
       mShareWGLContext(wglContext),
