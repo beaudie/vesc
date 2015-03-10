@@ -719,7 +719,7 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
 {
     bool visitChildren = true;
     TInfoSinkBase &out = objSink();
-    TString preString;
+    TString constructorBaseTypeString;
     bool useEmulatedFunction = (visit == PreVisit && node->getUseEmulatedFunction());
     switch (node->getOp())
     {
@@ -851,66 +851,57 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
         visitChildren = false;
         break;
       case EOpConstructFloat:
-        writeTriplet(visit, "float(", NULL, ")");
+        constructorBaseTypeString = "float";
         break;
       case EOpConstructVec2:
-        writeBuiltInFunctionTriplet(visit, "vec2(", false);
+        constructorBaseTypeString = "vec2";
         break;
       case EOpConstructVec3:
-        writeBuiltInFunctionTriplet(visit, "vec3(", false);
+        constructorBaseTypeString = "vec3";
         break;
       case EOpConstructVec4:
-        writeBuiltInFunctionTriplet(visit, "vec4(", false);
+        constructorBaseTypeString = "vec4";
         break;
       case EOpConstructBool:
-        writeTriplet(visit, "bool(", NULL, ")");
+        constructorBaseTypeString = "bool";
         break;
       case EOpConstructBVec2:
-        writeBuiltInFunctionTriplet(visit, "bvec2(", false);
+        constructorBaseTypeString = "bvec2";
         break;
       case EOpConstructBVec3:
-        writeBuiltInFunctionTriplet(visit, "bvec3(", false);
+        constructorBaseTypeString = "bvec3";
         break;
       case EOpConstructBVec4:
-        writeBuiltInFunctionTriplet(visit, "bvec4(", false);
+        constructorBaseTypeString = "bvec4";
         break;
       case EOpConstructInt:
-        writeTriplet(visit, "int(", NULL, ")");
+        constructorBaseTypeString = "int";
         break;
       case EOpConstructIVec2:
-        writeBuiltInFunctionTriplet(visit, "ivec2(", false);
+        constructorBaseTypeString = "ivec2";
         break;
       case EOpConstructIVec3:
-        writeBuiltInFunctionTriplet(visit, "ivec3(", false);
+        constructorBaseTypeString = "ivec3";
         break;
       case EOpConstructIVec4:
-        writeBuiltInFunctionTriplet(visit, "ivec4(", false);
+        constructorBaseTypeString = "ivec4";
         break;
       case EOpConstructMat2:
-        writeBuiltInFunctionTriplet(visit, "mat2(", false);
+        constructorBaseTypeString = "mat2";
         break;
       case EOpConstructMat3:
-        writeBuiltInFunctionTriplet(visit, "mat3(", false);
+        constructorBaseTypeString = "mat3";
         break;
       case EOpConstructMat4:
-        writeBuiltInFunctionTriplet(visit, "mat4(", false);
+        constructorBaseTypeString = "mat4";
         break;
       case EOpConstructStruct:
-        if (visit == PreVisit)
         {
             const TType &type = node->getType();
             ASSERT(type.getBasicType() == EbtStruct);
-            out << hashName(type.getStruct()->name()) << "(";
+            constructorBaseTypeString = hashName(type.getStruct()->name());
+            break;
         }
-        else if (visit == InVisit)
-        {
-            out << ", ";
-        }
-        else
-        {
-            out << ")";
-        }
-        break;
 
       case EOpOuterProduct:
         writeBuiltInFunctionTriplet(visit, "outerProduct(", useEmulatedFunction);
@@ -992,6 +983,27 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
 
       default:
         UNREACHABLE();
+    }
+
+    if (constructorBaseTypeString != "")
+    {
+        if (visit == PreVisit)
+        {
+            if (node->getType().isArray())
+            {
+                out << constructorBaseTypeString;
+                out << arrayBrackets(node->getType());
+                out << "(";
+            }
+            else
+            {
+                out << constructorBaseTypeString << "(";
+            }
+        }
+        else
+        {
+            writeTriplet(visit, NULL, ", ", ")");
+        }
     }
     return visitChildren;
 }
