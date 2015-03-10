@@ -38,6 +38,7 @@ class RendererGL : public Renderer
 
     // Framebuffer creation
     DefaultAttachmentImpl *createDefaultAttachment(GLenum type, egl::Surface *surface) override;
+    FramebufferImpl *createDefaultFramebuffer(const gl::Framebuffer::Data &data) override;
     FramebufferImpl *createFramebuffer(const gl::Framebuffer::Data &data) override;
 
     // Texture creation
@@ -69,6 +70,9 @@ class RendererGL : public Renderer
     VendorID getVendorId() const override;
     std::string getVendorString() const override;
     std::string getRendererDescription() const override;
+
+    const FunctionsGL *getFunctions() const;
+    StateManagerGL *getStateManager();
 
   private:
     DISALLOW_COPY_AND_ASSIGN(RendererGL);
