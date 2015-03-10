@@ -1651,7 +1651,23 @@ TIntermTyped *TParseContext::addConstructor(TIntermNode *arguments, TType *type,
         aggregateArguments->getSequence()->push_back(arguments);
     }
 
-    if (op == EOpConstructStruct)
+    if (type->isArray())
+    {
+        // GLSL ES 3.00 section 5.4.4: Each argument must be the same type as the element type of the array.
+        TIntermSequence *args = aggregateArguments->getSequence();
+        for (size_t i = 0; i < args->size(); i++)
+        {
+            // It has already been checked that the argument is not an array.
+            ASSERT(!(*args)[i]->getAsTyped()->getType().isArray());
+            if (!(*args)[i]->getAsTyped()->getType().sameElementType(*type))
+            {
+                error(line, "Array constructor argument has an incorrect type", "Error");
+                recover();
+                return nullptr;
+            }
+        }
+    }
+    else if (op == EOpConstructStruct)
     {
         const TFieldList &fields = type->getStruct()->fields();
         TIntermSequence *args = aggregateArguments->getSequence();
@@ -1689,7 +1705,8 @@ TIntermTyped *TParseContext::addConstructor(TIntermNode *arguments, TType *type,
 
 TIntermTyped* TParseContext::foldConstConstructor(TIntermAggregate* aggrNode, const TType& type)
 {
-    bool canBeFolded = areAllChildConst(aggrNode);
+    // TODO: Add support for folding array constructors
+    bool canBeFolded = areAllChildConst(aggrNode) && !type.isArray();
     aggrNode->setType(type);
     if (canBeFolded) {
         bool returnVal = false;
