@@ -387,9 +387,6 @@ bool TIntermUnary::promote(TInfoSink &)
 //
 bool TIntermBinary::promote(TInfoSink &infoSink)
 {
-    // This function only handles scalars, vectors, and matrices.
-    ASSERT(!mLeft->isArray() && !mRight->isArray());
-
     // GLSL ES 2.0 does not support implicit type casting.
     // So the basic type should usually match.
     bool basicTypesMustMatch = true;
@@ -670,6 +667,12 @@ bool TIntermBinary::promote(TInfoSink &infoSink)
                 mLeft->getSecondarySize(), mRight->getSecondarySize());
             setType(TType(basicType, higherPrecision, EvqTemporary,
                           nominalSize, secondarySize));
+            if (mLeft->isArray()) {
+                const int arraySize = mLeft->getArraySize();
+                ASSERT(mRight->isArray());
+                ASSERT(arraySize == mRight->getArraySize());
+                mType.setArraySize(mLeft->getArraySize());
+            }
         }
         break;
 

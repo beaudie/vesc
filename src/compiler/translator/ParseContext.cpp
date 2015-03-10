@@ -1651,7 +1651,23 @@ TIntermTyped *TParseContext::addConstructor(TIntermNode *arguments, TType *type,
         aggregateArguments->getSequence()->push_back(arguments);
     }
 
-    if (op == EOpConstructStruct)
+    if (type->isArray())
+    {
+        // GLSL ES 3.00 section 5.4.4: Each argument must be the same type as the element type of the array.
+        TIntermSequence *args = aggregateArguments->getSequence();
+        for (size_t i = 0; i < args->size(); i++)
+        {
+            // It has already been checked that the argument is not an array.
+            ASSERT(!(*args)[i]->getAsTyped()->getType().isArray());
+            if (!(*args)[i]->getAsTyped()->getType().sameElementType(*type))
+            {
+                error(line, "Array constructor argument has an incorrect type", "Error");
+                recover();
+                return nullptr;
+            }
+        }
+    }
+    else if (op == EOpConstructStruct)
     {
         const TFieldList &fields = type->getStruct()->fields();
         TIntermSequence *args = aggregateArguments->getSequence();
@@ -1689,7 +1705,8 @@ TIntermTyped *TParseContext::addConstructor(TIntermNode *arguments, TType *type,
 
 TIntermTyped* TParseContext::foldConstConstructor(TIntermAggregate* aggrNode, const TType& type)
 {
-    bool canBeFolded = areAllChildConst(aggrNode);
+    // TODO: Add support for folding array constructors
+    bool canBeFolded = areAllChildConst(aggrNode) && !type.isArray();
     aggrNode->setType(type);
     if (canBeFolded) {
         bool returnVal = false;
@@ -2721,8 +2738,34 @@ bool TParseContext::binaryOpArrayCheck(TOperator op, TIntermTyped *left, TInterm
 {
     if (left->isArray() || right->isArray())
     {
-        error(loc, "Invalid operation for arrays", GetOperatorString(op));
-        return false;
+        if (shaderVersion < 300)
+        {
+            error(loc, "Invalid operation for arrays", GetOperatorString(op));
+            return false;
+        }
+
+        if (left->isArray() != right->isArray())
+        {
+            error(loc, "array / non-array mismatch", GetOperatorString(op));
+            return false;
+        }
+
+        switch (op)
+        {
+          case EOpEqual:
+          case EOpNotEqual:
+          case EOpAssign:
+          case EOpInitialize:
+            break;
+          default:
+            error(loc, "Invalid operation for arrays", GetOperatorString(op));
+            return false;
+        }
+        if (left->getArraySize() != right->getArraySize())
+        {
+            error(loc, "array size mismatch", GetOperatorString(op));
+            return false;
+        }
     }
     return true;
 }
