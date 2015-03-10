@@ -2172,6 +2172,10 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
       case EOpConstructMat4:    outputConstructor(visit, node->getType(), "mat4", node->getSequence());  break;
       case EOpConstructStruct:
         {
+            if (node->getType().isArray())
+            {
+                UNIMPLEMENTED();
+            }
             const TString &structName = StructNameString(*node->getType().getStruct());
             mStructureHLSL->addConstructor(node->getType(), structName, node->getSequence());
             outputTriplet(visit, (structName + "_ctor(").c_str(), ", ", ")");
@@ -2796,6 +2800,10 @@ TString OutputHLSL::initializer(const TType &type)
 
 void OutputHLSL::outputConstructor(Visit visit, const TType &type, const char *name, const TIntermSequence *parameters)
 {
+    if (type.isArray())
+    {
+        UNIMPLEMENTED();
+    }
     TInfoSinkBase &out = getInfoSink();
 
     if (visit == PreVisit)
