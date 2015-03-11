@@ -146,6 +146,7 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform, void *native_disp
     EGLint deviceType = EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE;
     bool majorVersionSpecified = false;
     bool minorVersionSpecified = false;
+    bool enableAutoTrim = true;
 
     if (attrib_list)
     {
@@ -195,6 +196,13 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform, void *native_disp
                 if (curAttrib[1] != EGL_DONT_CARE)
                 {
                     minorVersionSpecified = true;
+                }
+                break;
+
+              case EGL_PLATFORM_ANGLE_ENABLE_AUTOMATIC_TRIM_ANGLE:
+                if (curAttrib[1] == EGL_FALSE)
+                {
+                    enableAutoTrim = false;
                 }
                 break;
 
