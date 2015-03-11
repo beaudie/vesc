@@ -37,6 +37,7 @@
                         'EGLWindow.cpp',
                         'EGLWindow.h',
                         'Event.h',
+                        'Optional.h',
                         'OSWindow.cpp',
                         'OSWindow.h',
                         'Timer.h',
