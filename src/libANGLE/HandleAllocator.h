@@ -29,6 +29,7 @@ class HandleAllocator
 
     GLuint allocate();
     void release(GLuint handle);
+    void reserve(GLuint handle);
 
   private:
     DISALLOW_COPY_AND_ASSIGN(HandleAllocator);
@@ -37,6 +38,18 @@ class HandleAllocator
     GLuint mNextValue;
     typedef std::vector<GLuint> HandleList;
     HandleList mFreeValues;
+
+    struct HandleRange
+    {
+        HandleRange(GLuint beginIn, GLuint endIn) : begin(beginIn), end(endIn) {}
+
+        GLuint begin;
+        GLuint end;
+    };
+
+    struct HandleRangeComparator;
+
+    std::vector<HandleRange> mFreeList;
 };
 
 }
