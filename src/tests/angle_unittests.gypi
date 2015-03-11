@@ -18,6 +18,7 @@
             '<(angle_path)/src/libANGLE/Config_unittest.cpp',
             '<(angle_path)/src/libANGLE/Fence_unittest.cpp',
             '<(angle_path)/src/libANGLE/ImageIndexIterator_unittest.cpp',
+            '<(angle_path)/src/libANGLE/ResourceManager_unittest.cpp',
             '<(angle_path)/src/libANGLE/Surface_unittest.cpp',
             '<(angle_path)/src/libANGLE/TransformFeedback_unittest.cpp',
             '<(angle_path)/src/tests/compiler_tests/API_test.cpp',

@@ -9,13 +9,24 @@
 
 #include "libANGLE/HandleAllocator.h"
 
+#include <algorithm>
+
 #include "common/debug.h"
 
 namespace gl
 {
 
+struct HandleAllocator::HandleRangeComparator
+{
+    bool operator()(const HandleRange &range, GLuint handle) const
+    {
+        return (handle < range.begin);
+    }
+};
+
 HandleAllocator::HandleAllocator() : mBaseValue(1), mNextValue(1)
 {
+    mFreeList.push_back(HandleRange(1, std::numeric_limits<GLuint>::max() - 1));
 }
 
 HandleAllocator::~HandleAllocator()
@@ -31,32 +42,63 @@ void HandleAllocator::setBaseHandle(GLuint value)
 
 GLuint HandleAllocator::allocate()
 {
-    if (mFreeValues.size())
+    ASSERT(!mFreeList.empty());
+    auto freeListIt = mFreeList.begin();
+
+    GLuint freeListHandle = freeListIt->begin;
+    ASSERT(freeListHandle > 0);
+
+    freeListIt->begin++;
+    if (freeListIt->begin == freeListIt->end)
     {
-        GLuint handle = mFreeValues.back();
-        mFreeValues.pop_back();
-        return handle;
+        mFreeList.erase(freeListIt);
     }
-    return mNextValue++;
+
+    return freeListHandle;
 }
 
-void HandleAllocator::release(GLuint handle)
+void HandleAllocator::release(GLuint)
 {
-    if (handle == mNextValue - 1)
+    // Can re-use handles if we feel like it
+}
+
+void HandleAllocator::reserve(GLuint handle)
+{
+    auto boundIt = std::lower_bound(mFreeList.begin(), mFreeList.end(), handle, HandleRangeComparator());
+
+    ASSERT(boundIt != mFreeList.end());
+
+    GLuint begin = boundIt->begin;
+    GLuint end = boundIt->end;
+
+    if (handle == begin || handle == end)
     {
-        // Don't drop below base value
-        if(mNextValue > mBaseValue)
+        if (begin + 1 == end)
         {
-            mNextValue--;
+            mFreeList.erase(boundIt);
         }
+        else if (handle == begin)
+        {
+            boundIt->begin++;
+        }
+        else
+        {
+            ASSERT(handle == end);
+            boundIt->end--;
+        }
+        return;
     }
-    else
+
+    // need to split the range
+    auto placementIt = mFreeList.erase(boundIt);
+
+    if (begin != handle)
     {
-        // Only free handles that we own - don't drop below the base value
-        if (handle >= mBaseValue)
-        {
-            mFreeValues.push_back(handle);
-        }
+        placementIt = mFreeList.insert(placementIt, HandleRange(begin, handle));
+    }
+    if (handle + 1 != end)
+    {
+        mFreeList.insert(placementIt, HandleRange(handle + 1, end));
     }
 }
 
