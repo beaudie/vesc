@@ -143,16 +143,8 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType, int shaderVersion,
 
     if (mOutputType == SH_HLSL9_OUTPUT)
     {
-        if (mShaderType == GL_FRAGMENT_SHADER)
-        {
-            // Reserve registers for dx_DepthRange, dx_ViewCoords and dx_DepthFront
-            mUniformHLSL->reserveUniformRegisters(3);
-        }
-        else
-        {
-            // Reserve registers for dx_DepthRange, dx_ViewAdjust and dx_ViewCoords
-            mUniformHLSL->reserveUniformRegisters(3);
-        }
+        // Reserve registers for dx_DepthRange, dx_ViewCoords and dx_DepthFront or dx_ViewAdjust
+        mUniformHLSL->reserveUniformRegisters(3);
     }
 
     // Reserve registers for the default uniform block and driver constants
