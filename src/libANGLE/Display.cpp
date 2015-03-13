@@ -55,14 +55,14 @@ DefaultPlatform *defaultPlatform = nullptr;
 
 void InitDefaultPlatformImpl()
 {
-    if (angle::Platform::current() == nullptr)
+    if (ANGLE_Platform_Current == nullptr)
     {
         if (defaultPlatform == nullptr)
         {
             defaultPlatform = new DefaultPlatform();
         }
 
-        angle::Platform::initialize(defaultPlatform);
+        ANGLE_Platform_Initialize(defaultPlatform);
     }
 }
 
@@ -70,9 +70,9 @@ void DeinitDefaultPlatformImpl()
 {
     if (defaultPlatform != nullptr)
     {
-        if (angle::Platform::current() == defaultPlatform)
+        if (ANGLE_Platform_Current() == defaultPlatform)
         {
-            angle::Platform::shutdown();
+            ANGLE_Platform_Shutdown();
         }
 
         SafeDelete(defaultPlatform);
