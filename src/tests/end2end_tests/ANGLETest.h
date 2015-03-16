@@ -4,8 +4,6 @@
 // found in the LICENSE file.
 //
 
-// TODO(jmadill): Remove this file once we're ready on the Chromium side.
-
 #ifndef ANGLE_TESTS_ANGLE_TEST_H_
 #define ANGLE_TESTS_ANGLE_TEST_H_
 
