@@ -673,9 +673,10 @@ bool TParseContext::arraySizeErrorCheck(const TSourceLoc& line, TIntermTyped* ex
 {
     TIntermConstantUnion* constant = expr->getAsConstantUnion();
 
-    if (constant == 0 || !constant->isScalarInt())
+    if (constant == nullptr || !constant->isScalarInt())
     {
         error(line, "array size must be a constant integer expression", "");
+        size = 1;
         return true;
     }
 
@@ -1236,7 +1237,6 @@ TIntermAggregate *TParseContext::parseSingleDeclaration(TPublicType &publicType,
                                                         const TString &identifier)
 {
     TIntermSymbol *symbol = intermediate.addSymbol(0, identifier, TType(publicType), identifierOrTypeLocation);
-    TIntermAggregate *aggregate = intermediate.makeAggregate(symbol, identifierOrTypeLocation);
 
     declarationWasEmpty = (identifier == "");
 
@@ -1253,15 +1253,17 @@ TIntermAggregate *TParseContext::parseSingleDeclaration(TPublicType &publicType,
             recover();
 
         if (variable && symbol)
-        {
             symbol->setId(variable->getUniqueId());
-        }
     }
 
-    return aggregate;
+    return intermediate.makeAggregate(symbol, identifierOrTypeLocation);
 }
 
-TIntermAggregate* TParseContext::parseSingleArrayDeclaration(TPublicType &publicType, const TSourceLoc& identifierLocation, const TString &identifier, const TSourceLoc& indexLocation, TIntermTyped *indexExpression)
+TIntermAggregate *TParseContext::parseSingleArrayDeclaration(TPublicType &publicType,
+                                                             const TSourceLoc &identifierLocation,
+                                                             const TString &identifier,
+                                                             const TSourceLoc &indexLocation,
+                                                             TIntermTyped *indexExpression)
 {
     declarationWasEmpty = false;
 
@@ -1283,27 +1285,26 @@ TIntermAggregate* TParseContext::parseSingleArrayDeclaration(TPublicType &public
     {
         recover();
     }
-    else
-    {
-        arrayType.setArraySize(size);
-    }
-
-    TIntermSymbol *symbol = intermediate.addSymbol(0, identifier, arrayType, identifierLocation);
-    TIntermAggregate* aggregate = intermediate.makeAggregate(symbol, identifierLocation);
+    // Make the type an array even if size check failed.
+    // This ensures useless error messages regarding the variable's non-arrayness won't follow.
+    arrayType.setArraySize(size);
 
     TVariable *variable = nullptr;
     if (!declareVariable(identifierLocation, identifier, arrayType, &variable))
         recover();
 
+    TIntermSymbol *symbol = intermediate.addSymbol(0, identifier, arrayType, identifierLocation);
     if (variable && symbol)
-    {
         symbol->setId(variable->getUniqueId());
-    }
 
-    return aggregate;
+    return intermediate.makeAggregate(symbol, identifierLocation);
 }
 
-TIntermAggregate* TParseContext::parseSingleInitDeclaration(TPublicType &publicType, const TSourceLoc& identifierLocation, const TString &identifier, const TSourceLoc& initLocation, TIntermTyped *initializer)
+TIntermAggregate *TParseContext::parseSingleInitDeclaration(TPublicType &publicType,
+                                                            const TSourceLoc &identifierLocation,
+                                                            const TString &identifier,
+                                                            const TSourceLoc &initLocation,
+                                                            TIntermTyped *initializer)
 {
     declarationWasEmpty = false;
 
@@ -1316,16 +1317,16 @@ TIntermAggregate* TParseContext::parseSingleInitDeclaration(TPublicType &publicT
         //
         // Build intermediate representation
         //
-        return intermNode ? intermediate.makeAggregate(intermNode, initLocation) : NULL;
+        return intermNode ? intermediate.makeAggregate(intermNode, initLocation) : nullptr;
     }
     else
     {
         recover();
-        return NULL;
+        return nullptr;
     }
 }
 
-TIntermAggregate* TParseContext::parseInvariantDeclaration(const TSourceLoc &invariantLoc,
+TIntermAggregate *TParseContext::parseInvariantDeclaration(const TSourceLoc &invariantLoc,
                                                            const TSourceLoc &identifierLoc,
                                                            const TString *identifier,
                                                            const TSymbol *symbol)
@@ -1340,7 +1341,7 @@ TIntermAggregate* TParseContext::parseInvariantDeclaration(const TSourceLoc &inv
     {
         error(identifierLoc, "undeclared identifier declared as invariant", identifier->c_str());
         recover();
-        return NULL;
+        return nullptr;
     }
     else
     {
@@ -1349,7 +1350,7 @@ TIntermAggregate* TParseContext::parseInvariantDeclaration(const TSourceLoc &inv
         {
             error(identifierLoc, "identifier should not be declared as invariant", identifier->c_str());
             recover();
-            return NULL;
+            return nullptr;
         }
         symbolTable.addInvariantVarying(std::string(identifier->c_str()));
         const TVariable *variable = getNamedVariable(identifierLoc, identifier, symbol);
@@ -1364,7 +1365,8 @@ TIntermAggregate* TParseContext::parseInvariantDeclaration(const TSourceLoc &inv
     }
 }
 
-TIntermAggregate* TParseContext::parseDeclarator(TPublicType &publicType, TIntermAggregate *aggregateDeclaration, TSymbol *identifierSymbol, const TSourceLoc& identifierLocation, const TString &identifier)
+TIntermAggregate *TParseContext::parseDeclarator(TPublicType &publicType, TIntermAggregate *aggregateDeclaration,
+                                                 const TSourceLoc &identifierLocation, const TString &identifier)
 {
     // If the declaration starting this declarator list was empty (example: int,), some checks were not performed.
     if (declarationWasEmpty)
@@ -1373,9 +1375,6 @@ TIntermAggregate* TParseContext::parseDeclarator(TPublicType &publicType, TInter
             recover();
         declarationWasEmpty = false; // no need to repeat these checks in case there are more declarators.
     }
-
-    TIntermSymbol* symbol = intermediate.addSymbol(0, identifier, TType(publicType), identifierLocation);
-    TIntermAggregate* intermAggregate = intermediate.growAggregate(aggregateDeclaration, symbol, identifierLocation);
 
     if (locationDeclaratorListCheck(identifierLocation, publicType))
         recover();
@@ -1386,13 +1385,17 @@ TIntermAggregate* TParseContext::parseDeclarator(TPublicType &publicType, TInter
     TVariable *variable = nullptr;
     if (!declareVariable(identifierLocation, identifier, TType(publicType), &variable))
         recover();
-    if (symbol && variable)
+
+    TIntermSymbol* symbol = intermediate.addSymbol(0, identifier, TType(publicType), identifierLocation);
+    if (variable && symbol)
         symbol->setId(variable->getUniqueId());
 
-    return intermAggregate;
+    return intermediate.growAggregate(aggregateDeclaration, symbol, identifierLocation);
 }
 
-TIntermAggregate* TParseContext::parseArrayDeclarator(TPublicType &publicType, const TSourceLoc& identifierLocation, const TString &identifier, const TSourceLoc& arrayLocation, TIntermNode *declaratorList, TIntermTyped *indexExpression)
+TIntermAggregate *TParseContext::parseArrayDeclarator(TPublicType &publicType, TIntermAggregate *aggregateDeclaration,
+                                                      const TSourceLoc &identifierLocation, const TString &identifier,
+                                                      const TSourceLoc &arrayLocation, TIntermTyped *indexExpression)
 {
     // If the declaration starting this declarator list was empty (example: int,), some checks were not performed.
     if (declarationWasEmpty)
@@ -1414,27 +1417,31 @@ TIntermAggregate* TParseContext::parseArrayDeclarator(TPublicType &publicType, c
     }
     else
     {
+        TType arrayType = TType(publicType);
         int size;
         if (arraySizeErrorCheck(arrayLocation, indexExpression, size))
+        {
             recover();
-        TType arrayType = TType(publicType);
+        }
         arrayType.setArraySize(size);
+
         TVariable *variable = nullptr;
-        if (!declareVariable(arrayLocation, identifier, arrayType, &variable))
+        if (!declareVariable(identifierLocation, identifier, arrayType, &variable))
             recover();
 
         TIntermSymbol *symbol = intermediate.addSymbol(0, identifier, arrayType, identifierLocation);
         if (variable && symbol)
-        {
             symbol->setId(variable->getUniqueId());
-        }
-        return intermediate.growAggregate(declaratorList, symbol, identifierLocation);
+
+        return intermediate.growAggregate(aggregateDeclaration, symbol, identifierLocation);
     }
 
     return nullptr;
 }
 
-TIntermAggregate* TParseContext::parseInitDeclarator(TPublicType &publicType, TIntermAggregate *declaratorList, const TSourceLoc& identifierLocation, const TString &identifier, const TSourceLoc& initLocation, TIntermTyped *initializer)
+TIntermAggregate *TParseContext::parseInitDeclarator(TPublicType &publicType, TIntermAggregate *aggregateDeclaration,
+                                                     const TSourceLoc &identifierLocation, const TString &identifier,
+                                                     const TSourceLoc &initLocation, TIntermTyped *initializer)
 {
     // If the declaration starting this declarator list was empty (example: int,), some checks were not performed.
     if (declarationWasEmpty)
@@ -1447,7 +1454,7 @@ TIntermAggregate* TParseContext::parseInitDeclarator(TPublicType &publicType, TI
     if (locationDeclaratorListCheck(identifierLocation, publicType))
         recover();
 
-    TIntermNode* intermNode;
+    TIntermNode *intermNode = nullptr;
     if (!executeInitializer(identifierLocation, identifier, publicType, initializer, intermNode))
     {
         //
@@ -1455,17 +1462,17 @@ TIntermAggregate* TParseContext::parseInitDeclarator(TPublicType &publicType, TI
         //
         if (intermNode)
         {
-            return intermediate.growAggregate(declaratorList, intermNode, initLocation);
+            return intermediate.growAggregate(aggregateDeclaration, intermNode, initLocation);
         }
         else
         {
-            return declaratorList;
+            return aggregateDeclaration;
         }
     }
     else
     {
         recover();
-        return NULL;
+        return nullptr;
     }
 }
 

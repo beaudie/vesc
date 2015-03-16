@@ -883,11 +883,11 @@ init_declarator_list
     }
     | init_declarator_list COMMA identifier {
         $$ = $1;
-        $$.intermAggregate = context->parseDeclarator($$.type, $1.intermAggregate, $3.symbol, @3, *$3.string);
+        $$.intermAggregate = context->parseDeclarator($$.type, $1.intermAggregate, @3, *$3.string);
     }
     | init_declarator_list COMMA identifier LEFT_BRACKET constant_expression RIGHT_BRACKET {
         $$ = $1;
-        $$.intermAggregate = context->parseArrayDeclarator($$.type, @3, *$3.string, @4, $1.intermNode, $5);
+        $$.intermAggregate = context->parseArrayDeclarator($$.type, $1.intermAggregate, @3, *$3.string, @4, $5);
     }
     | init_declarator_list COMMA identifier EQUAL initializer {
         $$ = $1;

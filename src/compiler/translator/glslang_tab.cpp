@@ -3385,7 +3385,7 @@ yyreduce:
 
     {
         (yyval.interm) = (yyvsp[-2].interm);
-        (yyval.interm).intermAggregate = context->parseDeclarator((yyval.interm).type, (yyvsp[-2].interm).intermAggregate, (yyvsp[0].lex).symbol, (yylsp[0]), *(yyvsp[0].lex).string);
+        (yyval.interm).intermAggregate = context->parseDeclarator((yyval.interm).type, (yyvsp[-2].interm).intermAggregate, (yylsp[0]), *(yyvsp[0].lex).string);
     }
 
     break;
@@ -3394,7 +3394,7 @@ yyreduce:
 
     {
         (yyval.interm) = (yyvsp[-5].interm);
-        (yyval.interm).intermAggregate = context->parseArrayDeclarator((yyval.interm).type, (yylsp[-3]), *(yyvsp[-3].lex).string, (yylsp[-2]), (yyvsp[-5].interm).intermNode, (yyvsp[-1].interm.intermTypedNode));
+        (yyval.interm).intermAggregate = context->parseArrayDeclarator((yyval.interm).type, (yyvsp[-5].interm).intermAggregate, (yylsp[-3]), *(yyvsp[-3].lex).string, (yylsp[-2]), (yyvsp[-1].interm.intermTypedNode));
     }
 
     break;
