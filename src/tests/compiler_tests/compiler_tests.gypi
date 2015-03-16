@@ -12,6 +12,7 @@
         'ExpressionLimit_test.cpp',
         'MalformedShader_test.cpp',
         'NV_draw_buffers_test.cpp',
+        'Pack_Unpack_test.cpp',
         'PruneUnusedFunctions_test.cpp',
         'ShaderExtension_test.cpp',
         'ShaderVariable_test.cpp',
