@@ -33,13 +33,15 @@
             '<(angle_path)/src/tests/gl_tests/MaxTextureSizeTest.cpp',
             '<(angle_path)/src/tests/gl_tests/MipmapTest.cpp',
             '<(angle_path)/src/tests/gl_tests/media/pixel.inl',
+            '<(angle_path)/src/tests/gl_tests/PackUnpackTest.cpp',
+            '<(angle_path)/src/tests/gl_tests/PbufferTest.cpp',
             '<(angle_path)/src/tests/gl_tests/PBOExtensionTest.cpp',
             '<(angle_path)/src/tests/gl_tests/PointSpritesTest.cpp',
+            '<(angle_path)/src/tests/gl_tests/OcclusionQueriesTest.cpp',
             '<(angle_path)/src/tests/gl_tests/ProgramBinaryTest.cpp',
             '<(angle_path)/src/tests/gl_tests/ReadPixelsTest.cpp',
             '<(angle_path)/src/tests/gl_tests/RendererTest.cpp',
             '<(angle_path)/src/tests/gl_tests/SimpleOperationTest.cpp',
-            '<(angle_path)/src/tests/gl_tests/SixteenBppTextureTest.cpp',
             '<(angle_path)/src/tests/gl_tests/SRGBTextureTest.cpp',
             '<(angle_path)/src/tests/gl_tests/SwizzleTest.cpp',
             '<(angle_path)/src/tests/gl_tests/TextureTest.cpp',
@@ -60,10 +62,6 @@
         ],
         'angle_end2end_tests_win_sources':
         [
-            # TODO(cwallez) for Linux, requires a portable implementation of sleep
-            '<(angle_path)/src/tests/gl_tests/OcclusionQueriesTest.cpp',
-            # TODO(cwallez) for Linux, requires implementation of eglBindTexImage for pbuffers
-            '<(angle_path)/src/tests/gl_tests/PbufferTest.cpp',
             '<(angle_path)/src/tests/gl_tests/QueryDisplayAttribTest.cpp',
             # TODO(cwallez) for Linux, requires a portable implementation of threads
             '<(angle_path)/src/tests/egl_tests/EGLThreadTest.cpp',
