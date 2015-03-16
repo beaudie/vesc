@@ -29,6 +29,8 @@ class TOutputGLSLBase : public TIntermTraverser
         return mOutput;
     }
 
+    static bool isGLSL(ShShaderOutput output);
+
   protected:
     TInfoSinkBase &objSink() { return mObjSink; }
     void writeTriplet(Visit visit, const char *preStr, const char *inStr, const char *postStr);
