@@ -66,6 +66,8 @@ void TranslatorGLSL::initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu, i
 {
     if (compileOptions & SH_EMULATE_BUILT_IN_FUNCTIONS)
         InitBuiltInFunctionEmulatorForGLSL(emu, getShaderType());
+	if (compileOptions & SH_EMULATE_BUILT_INS_MISSING_FROM_GL_4_1)
+		InitBuiltInFunctionEmulatorForGLSL(emu, getShaderType());
 }
 
 void TranslatorGLSL::translate(TIntermNode *root, int) {
