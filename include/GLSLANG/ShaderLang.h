@@ -85,12 +85,14 @@ typedef enum {
   // SH_GLSL_OUTPUT is deprecated. This is to not break the build.
   SH_GLSL_OUTPUT               = 0x8B46,
   SH_GLSL_COMPATIBILITY_OUTPUT = 0x8B46,
-  SH_GLSL_CORE_OUTPUT          = 0x8B47,
+  SH_GLSL_150_CORE_OUTPUT      = 0x8B47,
+  SH_GLSL_410_CORE_OUTPUT      = 0x8B48,
+  SH_GLSL_420_CORE_OUTPUT      = 0x8B49,
 
   // HLSL output only supported in some configurations.
-  SH_HLSL_OUTPUT   = 0x8B48,
-  SH_HLSL9_OUTPUT  = 0x8B48,
-  SH_HLSL11_OUTPUT = 0x8B49
+  SH_HLSL_OUTPUT   = 0x8B88,
+  SH_HLSL9_OUTPUT  = 0x8B88,
+  SH_HLSL11_OUTPUT = 0x8B89
 } ShShaderOutput;
 
 // Compile options.

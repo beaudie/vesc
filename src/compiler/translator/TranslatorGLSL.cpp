@@ -66,6 +66,8 @@ void TranslatorGLSL::initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu, i
 {
     if (compileOptions & SH_EMULATE_BUILT_IN_FUNCTIONS)
         InitBuiltInFunctionEmulatorForGLSL(emu, getShaderType());
+	if (getOutputType() == SH_GLSL_410_CORE_OUTPUT)
+        InitBuiltInFunctionEmulatorForGLSL4_1(emu, getShaderType());
 }
 
 void TranslatorGLSL::translate(TIntermNode *root, int) {
@@ -104,7 +106,7 @@ void TranslatorGLSL::translate(TIntermNode *root, int) {
     // Declare gl_FragColor and glFragData as webgl_FragColor and webgl_FragData
     // if it's core profile shaders and they are used.
     if (getShaderType() == GL_FRAGMENT_SHADER &&
-        getOutputType() == SH_GLSL_CORE_OUTPUT)
+		(getOutputType() == SH_GLSL_150_CORE_OUTPUT || getOutputType() == SH_GLSL_410_CORE_OUTPUT || getOutputType() == SH_GLSL_420_CORE_OUTPUT))
     {
         TFragmentOutSearcher searcher;
         root->traverse(&searcher);
