@@ -1,4 +1,4 @@
-# Copyright (c) 2014 The ANGLE Project Authors. All rights reserved.
+# Copyright (c) 2015 The ANGLE Project Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -34,6 +34,7 @@
             '<(angle_path)/src/tests/compiler_tests/ExpressionLimit_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/MalformedShader_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/NV_draw_buffers_test.cpp',
+            '<(angle_path)/src/tests/compiler_tests/Pack_Unpack_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/PruneUnusedFunctions_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/ShaderExtension_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/ShaderVariable_test.cpp',
