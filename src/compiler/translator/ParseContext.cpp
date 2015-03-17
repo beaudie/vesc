@@ -1198,7 +1198,7 @@ bool TParseContext::executeInitializer(const TSourceLoc& line, const TString& id
  
     if (qualifier != EvqConst) {
         TIntermSymbol* intermSymbol = intermediate.addSymbol(variable->getUniqueId(), variable->getName(), variable->getType(), line);
-        intermNode = intermediate.addAssign(EOpInitialize, intermSymbol, initializer, line);
+        intermNode = addAssignInternal(EOpInitialize, intermSymbol, initializer, line);
         if (intermNode == 0) {
             assignError(line, "=", intermSymbol->getCompleteString(), initializer->getCompleteString());
             return true;
@@ -2716,21 +2716,33 @@ TIntermTyped *TParseContext::addUnaryMathLValue(TOperator op, TIntermTyped *chil
     return addUnaryMath(op, child, loc);
 }
 
+bool TParseContext::binaryOpArrayCheck(TOperator op, TIntermTyped *left, TIntermTyped *right,
+    const TSourceLoc &loc)
+{
+    if (left->isArray() || right->isArray())
+    {
+        error(loc, "Invalid operation for arrays", GetOperatorString(op));
+        return false;
+    }
+    return true;
+}
+
 TIntermTyped *TParseContext::addBinaryMathInternal(TOperator op, TIntermTyped *left, TIntermTyped *right,
     const TSourceLoc &loc)
 {
+    if (!binaryOpArrayCheck(op, left, right, loc))
+        return nullptr;
+
     switch (op)
     {
       case EOpEqual:
       case EOpNotEqual:
-        if (left->isArray())
-            return nullptr;
         break;
       case EOpLessThan:
       case EOpGreaterThan:
       case EOpLessThanEqual:
       case EOpGreaterThanEqual:
-        if (left->isMatrix() || left->isArray() || left->isVector() ||
+        if (left->isMatrix() || left->isVector() ||
             left->getBasicType() == EbtStruct)
         {
             return nullptr;
@@ -2740,7 +2752,7 @@ TIntermTyped *TParseContext::addBinaryMathInternal(TOperator op, TIntermTyped *l
       case EOpLogicalXor:
       case EOpLogicalAnd:
         if (left->getBasicType() != EbtBool ||
-            left->isMatrix() || left->isArray() || left->isVector())
+            left->isMatrix() || left->isVector())
         {
             return nullptr;
         }
@@ -2800,6 +2812,28 @@ TIntermTyped *TParseContext::addBinaryMathBooleanResult(TOperator op, TIntermTyp
         ConstantUnion *unionArray = new ConstantUnion[1];
         unionArray->setBConst(false);
         return intermediate.addConstantUnion(unionArray, TType(EbtBool, EbpUndefined, EvqConst), loc);
+    }
+    return node;
+}
+
+TIntermTyped *TParseContext::addAssignInternal(TOperator op, TIntermTyped *left, TIntermTyped *right,
+    const TSourceLoc &loc)
+{
+    if (binaryOpArrayCheck(op, left, right, loc))
+    {
+        return intermediate.addAssign(op, left, right, loc);
+    }
+    return nullptr;
+}
+
+TIntermTyped *TParseContext::addAssign(TOperator op, TIntermTyped *left, TIntermTyped *right,
+    const TSourceLoc &loc)
+{
+    TIntermTyped *node = addAssignInternal(op, left, right, loc);
+    if (node == nullptr) {
+        assignError(loc, "assign", left->getCompleteString(), right->getCompleteString());
+        recover();
+        return left;
     }
     return node;
 }

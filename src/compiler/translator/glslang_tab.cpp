@@ -2897,7 +2897,7 @@ yyreduce:
     {
         if (context->lValueErrorCheck((yylsp[-1]), "assign", (yyvsp[-2].interm.intermTypedNode)))
             context->recover();
-        (yyval.interm.intermTypedNode) = context->intermediate.addAssign((yyvsp[-1].interm).op, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode), (yylsp[-1]));
+        (yyval.interm.intermTypedNode) = context->addAssign((yyvsp[-1].interm).op, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode), (yylsp[-1]));
         if ((yyval.interm.intermTypedNode) == 0) {
             context->assignError((yylsp[-1]), "assign", (yyvsp[-2].interm.intermTypedNode)->getCompleteString(), (yyvsp[0].interm.intermTypedNode)->getCompleteString());
             context->recover();
