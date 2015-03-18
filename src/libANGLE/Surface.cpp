@@ -17,8 +17,9 @@
 namespace egl
 {
 
-Surface::Surface(rx::SurfaceImpl *impl)
+Surface::Surface(rx::SurfaceImpl *impl, EGLint surfaceType, const AttributeMap &attributes)
     : mImplementation(impl),
+      mType(surfaceType),
       // FIXME: Determine actual pixel aspect ratio
       mPixelAspectRatio(static_cast<EGLint>(1.0 * EGL_DISPLAY_SCALING)),
       mRenderBuffer(EGL_BACK_BUFFER),
@@ -40,6 +41,11 @@ Surface::~Surface()
     }
 
     SafeDelete(mImplementation);
+}
+
+EGLint Surface::getType() const
+{
+    return mType;
 }
 
 EGLNativeWindowType Surface::getWindowHandle() const
