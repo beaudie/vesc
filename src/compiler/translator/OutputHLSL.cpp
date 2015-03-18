@@ -170,6 +170,7 @@ void OutputHLSL::output(TIntermNode *treeRoot, TInfoSinkBase &objSink)
 {
     mContainsLoopDiscontinuity = mShaderType == GL_FRAGMENT_SHADER && containsLoopDiscontinuity(treeRoot);
     mContainsAnyLoop = containsAnyLoop(treeRoot);
+
     const std::vector<TIntermTyped*> &flaggedStructs = FlagStd140ValueStructs(treeRoot);
     makeFlaggedStructMaps(flaggedStructs);
 
@@ -183,6 +184,14 @@ void OutputHLSL::output(TIntermNode *treeRoot, TInfoSinkBase &objSink)
     BuiltInFunctionEmulator builtInFunctionEmulator;
     InitBuiltInFunctionEmulatorForHLSL(&builtInFunctionEmulator);
     builtInFunctionEmulator.MarkBuiltInFunctionsForEmulation(treeRoot);
+
+    // Now that we are done changing the AST, do the analyses need for HLSL generation
+    {
+        CallDAG dag;
+        CallDAG::InitResult success = dag.init(treeRoot, &objSink);
+        ASSERT(success == CallDAG::INITDAG_SUCCESS);
+        mASTAnalyses = createHLSLAnalyses(treeRoot, dag);
+    }
 
     // Output the body and footer first to determine what has to go in the header
     mInfoSinkStack.push(&mBody);
