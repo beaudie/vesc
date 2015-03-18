@@ -141,6 +141,8 @@
         ],
         'angle_translator_lib_hlsl_sources':
         [
+            'compiler/translator/AnalysesHLSL.cpp',
+            'compiler/translator/AnalysesHLSL.h',
             'compiler/translator/blocklayoutHLSL.cpp',
             'compiler/translator/blocklayoutHLSL.h',
             'compiler/translator/BuiltInFunctionEmulatorHLSL.cpp',
