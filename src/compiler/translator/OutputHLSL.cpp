@@ -338,6 +338,15 @@ void OutputHLSL::header(const BuiltInFunctionEmulator *builtInFunctionEmulator)
         }
     }
 
+    if (!mArrayEqualityFunctions.empty())
+    {
+        out << "\n// Array equality functions\n\n";
+        for (const auto &eqFunction : mArrayEqualityFunctions)
+        {
+            out << eqFunction.functionDefinition << "\n";
+        }
+    }
+
     if (mUsesDiscardRewriting)
     {
         out << "#define ANGLE_USES_DISCARD_REWRITING\n";
@@ -1380,6 +1389,46 @@ void OutputHLSL::visitRaw(TIntermRaw *node)
     getInfoSink() << node->getRawText();
 }
 
+void OutputHLSL::outputEqual(TInfoSinkBase &out, Visit visit, const TType &type, TOperator op)
+{
+    if (type.isScalar() && !type.isArray())
+    {
+        if (op == EOpEqual)
+        {
+            outputTriplet(visit, "(", " == ", ")", out);
+        }
+        else
+        {
+            outputTriplet(visit, "(", " != ", ")", out);
+        }
+    }
+    else
+    {
+        if (visit == PreVisit && op == EOpNotEqual)
+        {
+            out << "!";
+        }
+
+        if (type.isArray())
+        {
+            ASSERT(out == getInfoSink());
+            const TString &functionName = addArrayEqualityFunction(type);
+            outputTriplet(visit, (functionName + "(").c_str(), ", ", ")", out);
+        }
+        else if (type.getBasicType() == EbtStruct)
+        {
+            const TStructure &structure = *type.getStruct();
+            const TString &functionName = addStructEqualityFunction(structure);
+            outputTriplet(visit, (functionName + "(").c_str(), ", ", ")", out);
+        }
+        else
+        {
+            ASSERT(type.isMatrix() || type.isVector());
+            outputTriplet(visit, "all(", " == ", ")", out);
+        }
+    }
+}
+
 bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
 {
     TInfoSinkBase &out = getInfoSink();
@@ -1574,40 +1623,7 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
       case EOpBitwiseOr:         outputTriplet(visit, "(", " | ", ")"); break;
       case EOpEqual:
       case EOpNotEqual:
-        if (node->getLeft()->isArray())
-        {
-            UNIMPLEMENTED();
-        }
-        else if (node->getLeft()->isScalar())
-        {
-            if (node->getOp() == EOpEqual)
-            {
-                outputTriplet(visit, "(", " == ", ")");
-            }
-            else
-            {
-                outputTriplet(visit, "(", " != ", ")");
-            }
-        }
-        else
-        {
-            if (visit == PreVisit && node->getOp() == EOpNotEqual)
-            {
-                out << "!";
-            }
-
-            if (node->getLeft()->getBasicType() == EbtStruct)
-            {
-                const TStructure &structure = *node->getLeft()->getType().getStruct();
-                const TString &functionName = addStructEqualityFunction(structure);
-                outputTriplet(visit, (functionName + "(").c_str(), ", ", ")");
-            }
-            else
-            {
-                ASSERT(node->getLeft()->isMatrix() || node->getLeft()->isVector());
-                outputTriplet(visit, "all(", " == ", ")");
-            }
-        }
+        outputEqual(out, visit, node->getLeft()->getType(), node->getOp());
         break;
       case EOpLessThan:          outputTriplet(visit, "(", " < ", ")");   break;
       case EOpGreaterThan:       outputTriplet(visit, "(", " > ", ")");   break;
@@ -2723,10 +2739,8 @@ bool OutputHLSL::handleExcessiveLoop(TIntermLoop *node)
     return false;   // Not handled as an excessive loop
 }
 
-void OutputHLSL::outputTriplet(Visit visit, const char *preString, const char *inString, const char *postString)
+void OutputHLSL::outputTriplet(Visit visit, const char *preString, const char *inString, const char *postString, TInfoSinkBase &out)
 {
-    TInfoSinkBase &out = getInfoSink();
-
     if (visit == PreVisit)
     {
         out << preString;
@@ -2739,6 +2753,11 @@ void OutputHLSL::outputTriplet(Visit visit, const char *preString, const char *i
     {
         out << postString;
     }
+}
+
+void OutputHLSL::outputTriplet(Visit visit, const char *preString, const char *inString, const char *postString)
+{
+    outputTriplet(visit, preString, inString, postString, getInfoSink());
 }
 
 void OutputHLSL::outputLineDirective(int line)
@@ -2994,6 +3013,53 @@ TString OutputHLSL::addStructEqualityFunction(const TStructure &structure)
     func = func + ";\n" + "}\n";
 
     mStructEqualityFunctions.push_back(function);
+
+    return function.functionName;
+}
+
+TString OutputHLSL::addArrayEqualityFunction(const TType& type)
+{
+    for (const auto &eqFunction : mArrayEqualityFunctions)
+    {
+        if (eqFunction.type == type)
+        {
+            return eqFunction.functionName;
+        }
+    }
+
+    const TString &typeName = TypeString(type);
+
+    ArrayEqualityFunction function;
+    function.type = &type;
+    function.functionName = "angle_eq_" + type.getArraySize() + "_" + typeName;
+
+    TType nonArrayType = type;
+    nonArrayType.clearArrayness();
+
+    TString &func = function.functionDefinition;
+
+    func = "bool " + function.functionName + "(" + typeName + " a, " + typeName + " b)\n" +
+        "{\n"
+        "    for (int i = 0; i < " + type.getArraySize() + "; ++i)"
+        "    {\n"
+        "        if (";
+
+    TInfoSinkBase eqOut;
+
+    outputEqual(eqOut, PreVisit, nonArrayType, EOpNotEqual);
+    eqOut << "a";
+    outputEqual(eqOut, InVisit, nonArrayType, EOpNotEqual);
+    eqOut << "b";
+    outputEqual(eqOut, PostVisit, nonArrayType, EOpNotEqual);
+
+    func = func + eqOut.str();
+
+    func = func + ") { return false; }\n"
+        "    }\n"
+        "    return true;\n"
+        "}\n";
+
+    mArrayEqualityFunctions.push_back(function);
 
     return function.functionName;
 }
