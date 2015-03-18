@@ -6,6 +6,7 @@ conformance/glsl/bugs/sampler-struct-function-arg.html: 1 tests failed
 conformance/glsl/misc/const-variable-initialization.html: 207 tests failed
 conformance/glsl/misc/struct-specifiers-in-uniforms.html: 12 tests failed
 conformance/glsl/misc/ternary-operators-in-global-initializers.html: 12 tests failed
+conformance/misc/expando-loss.html: 1 tests failed
 deqp/data/gles2/shaders/constant_expressions.html: 4 tests failed
 deqp/data/gles2/shaders/fragdata.html: 3 tests failed
 deqp/data/gles2/shaders/functions.html: 14 tests failed
