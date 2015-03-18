@@ -48,11 +48,6 @@ EGLint Surface::getType() const
     return mType;
 }
 
-EGLNativeWindowType Surface::getWindowHandle() const
-{
-    return mImplementation->getWindowHandle();
-}
-
 Error Surface::swap()
 {
     return mImplementation->swap();
