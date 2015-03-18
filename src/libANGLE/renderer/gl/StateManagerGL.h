@@ -39,6 +39,7 @@ class StateManagerGL
     void bindTexture(GLenum type, GLuint texture);
     void setPixelUnpackState(GLint alignment, GLint rowLength);
     void bindFramebuffer(GLenum type, GLuint framebuffer);
+    void bindRenderbuffer(GLuint renderbuffer);
 
     void setClearState(const gl::State &state, GLbitfield mask);
 
@@ -69,6 +70,7 @@ class StateManagerGL
     GLint mUnpackRowLength;
 
     std::map<GLenum, GLuint> mFramebuffers;
+    GLuint mRenderbuffer;
 
     gl::Rectangle mScissor;
     gl::Rectangle mViewport;

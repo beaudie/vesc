@@ -41,6 +41,7 @@ class Renderbuffer : public RefCountObject
     Error setStorage(GLsizei width, GLsizei height, GLenum internalformat, GLsizei samples);
 
     rx::RenderbufferImpl *getImplementation();
+    const rx::RenderbufferImpl *getImplementation() const;
 
     GLsizei getWidth() const;
     GLsizei getHeight() const;

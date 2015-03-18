@@ -57,6 +57,11 @@ rx::RenderbufferImpl *Renderbuffer::getImplementation()
     return mRenderbuffer;
 }
 
+const rx::RenderbufferImpl *Renderbuffer::getImplementation() const
+{
+    return mRenderbuffer;
+}
+
 GLsizei Renderbuffer::getWidth() const
 {
     return mWidth;
