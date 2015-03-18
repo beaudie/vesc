@@ -168,12 +168,15 @@ bool DebugAnnotationsActive();
 #define ANGLE_HAS_STATIC_ASSERT
 #elif (defined(__GNUC__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 3))
 #define ANGLE_HAS_STATIC_ASSERT
-#elif defined(__clang__) && __has_feature(cxx_static_assert)
+#elif defined(__clang__)
+#if __has_feature(cxx_static_assert)
 #define ANGLE_HAS_STATIC_ASSERT
+#endif
 #endif
 
 #if defined(ANGLE_HAS_STATIC_ASSERT)
 #define META_ASSERT_MSG(condition, msg) static_assert(condition, msg)
+#undef ANGLE_HAS_STATIC_ASSERT
 #else
 #define META_ASSERT_CONCAT(a, b) a ## b
 #define META_ASSERT_CONCAT2(a, b) META_ASSERT_CONCAT(a, b)
