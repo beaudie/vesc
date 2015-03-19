@@ -137,6 +137,203 @@ class PullGradient : public TIntermTraverser
     std::vector<TIntermNode*> mParents;
 };
 
+// Traverses the AST of a function definition, assuming it has already been used to
+// traverse the callees of that function; computes the discontinuous loops and the if
+// statements that contain a discontinuous loop in their call graph.
+class PullComputeDiscontinuousLoops : public TIntermTraverser
+{
+  public:
+    PullComputeDiscontinuousLoops(Analyses &analyses, size_t index, const CallDAG &dag)
+        : TIntermTraverser(true, false, true),
+          mAnalyses(analyses),
+          mAnalysis(analyses[index]),
+          mIndex(index),
+          mDag(dag)
+    {
+    }
+
+    void traverse(TIntermAggregate *node)
+    {
+        node->traverse(this);
+        ASSERT(mLoops.empty());
+        ASSERT(mIfs.empty());
+    }
+
+    // Called when a discontinuous loop or a call to a function with a discontinuous loop
+    // in its call graph is found.
+    void onDiscontinuousLoop()
+    {
+        mAnalysis.hasDiscontinuousLoopInCallGraph = true;
+        // Mark the latest if as using a discontinuous loop.
+        if (!mIfs.empty())
+        {
+            mAnalysis.ifsContainingDiscontinuousLoop.insert(mIfs.back());
+        }
+    }
+
+    bool visitLoop(Visit visit, TIntermLoop *loop)
+    {
+        if (visit == PreVisit)
+        {
+            mLoops.push_back(loop);
+        }
+        else if (visit == PostVisit)
+        {
+            ASSERT(mLoops.back() == loop);
+            mLoops.pop_back();
+        }
+
+        return true;
+    }
+
+    bool visitSelection(Visit visit, TIntermSelection *node)
+    {
+        if (visit == PreVisit)
+        {
+            mIfs.push_back(node);
+        }
+        else if (visit == PostVisit)
+        {
+            ASSERT(mIfs.back() == node);
+            mIfs.pop_back();
+            // An if using a discontinuous loop means its parents ifs are too.
+            if (mAnalysis.ifsContainingDiscontinuousLoop.count(node)> 0 && !mIfs.empty())
+            {
+                mAnalysis.ifsContainingDiscontinuousLoop.insert(mIfs.back());
+            }
+        }
+
+        return true;
+    }
+
+    bool visitBranch(Visit visit, TIntermBranch *node)
+    {
+        if (visit == PreVisit)
+        {
+            switch (node->getFlowOp())
+            {
+              case EOpKill:
+                break;
+              case EOpBreak:
+              case EOpContinue:
+                ASSERT(!mLoops.empty());
+                mAnalysis.discontinuousLoops.insert(mLoops.back());
+                onDiscontinuousLoop();
+                break;
+              case EOpReturn:
+                // A return jumps out of all the enclosing loops
+                if (!mLoops.empty())
+                {
+                    for (TIntermLoop* loop : mLoops)
+                    {
+                        mAnalysis.discontinuousLoops.insert(loop);
+                    }
+                    onDiscontinuousLoop();
+                }
+                break;
+              default:
+                UNREACHABLE();
+            }
+        }
+
+        return true;
+    }
+
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override
+    {
+        if (visit == PreVisit && node->getOp() == EOpFunctionCall)
+        {
+            if (node->isUserDefined())
+            {
+                size_t calleeIndex = mDag.findIndex(node);
+                ASSERT(calleeIndex != CallDAG::InvalidIndex && calleeIndex < mIndex);
+
+                if (mAnalyses[calleeIndex].hasDiscontinuousLoopInCallGraph) {
+                    onDiscontinuousLoop();
+                }
+            }
+        }
+
+        return true;
+    }
+
+  private:
+    Analyses &mAnalyses;
+    AnalysesHLSLData &mAnalysis;
+    size_t mIndex;
+    const CallDAG &mDag;
+
+    std::vector<TIntermLoop*> mLoops;
+    std::vector<TIntermSelection*> mIfs;
+};
+
+// Tags all the functions called in a discontinuous loop
+class PushDiscontinuousLoops : public TIntermTraverser
+{
+public:
+    PushDiscontinuousLoops(Analyses &analyses, size_t index, const CallDAG &dag)
+        : TIntermTraverser(true, true, true),
+          mAnalyses(analyses),
+          mAnalysis(analyses[index]),
+          mIndex(index),
+          mDag(dag),
+          mNestedDiscont(mAnalysis.calledInDiscontinuousLoop ? 1 : 0)
+    {
+    }
+
+    void traverse(TIntermAggregate *node)
+    {
+        node->traverse(this);
+        ASSERT(mNestedDiscont == (mAnalysis.calledInDiscontinuousLoop ? 1 : 0));
+    }
+
+    bool visitLoop(Visit visit, TIntermLoop *loop)
+    {
+        bool isDiscontinuous = mAnalysis.discontinuousLoops.count(loop) > 0;
+
+        if (visit == PreVisit && isDiscontinuous)
+        {
+            mNestedDiscont ++;
+        }
+        else if (visit == PostVisit && isDiscontinuous)
+        {
+            mNestedDiscont --;
+        }
+
+        return true;
+    }
+
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override
+    {
+        switch (node->getOp())
+        {
+          case EOpFunctionCall:
+            if (visit == PreVisit)
+            {
+                // Do not handle calls to builtin functions
+                if (node->isUserDefined())
+                {
+                    size_t calleeIndex = mDag.findIndex(node);
+                    ASSERT(calleeIndex != CallDAG::InvalidIndex && calleeIndex < mIndex);
+
+                    mAnalyses[calleeIndex].calledInDiscontinuousLoop = true;
+                }
+            }
+            break;
+          default:
+            break;
+        }
+        return true;
+    }
+
+private:
+    Analyses &mAnalyses;
+    AnalysesHLSLData &mAnalysis;
+    size_t mIndex;
+    const CallDAG &mDag;
+
+    int mNestedDiscont;
+};
 bool AnalysesHLSLData::hasGradientInCallGraph(TIntermSelection *node)
 {
     return controlFlowsContainingGradient.count(node) > 0;
@@ -145,6 +342,11 @@ bool AnalysesHLSLData::hasGradientInCallGraph(TIntermSelection *node)
 bool AnalysesHLSLData::hasGradientInCallGraph(TIntermLoop *node)
 {
     return controlFlowsContainingGradient.count(node) > 0;
+}
+
+bool AnalysesHLSLData::hasDiscontinuousLoop(TIntermSelection *node)
+{
+    return ifsContainingDiscontinuousLoop.count(node) > 0;
 }
 
 std::vector<AnalysesHLSLData> createHLSLAnalyses(TIntermNode *root, const CallDAG &callDag) {
@@ -171,6 +373,36 @@ std::vector<AnalysesHLSLData> createHLSLAnalyses(TIntermNode *root, const CallDA
     {
         PullGradient pull(analyses, i, callDag);
         pull.traverse(callDag.getRecordFromIndex(i).node);
+    }
+
+    // Compute which loops are discontinuous and which function are called in
+    // these loops. The same way computing gradient usage is a "pull" process,
+    // computing "bing used in a discont. loop" is a push process. However we also
+    // need to know what ifs have a discontinuous loop inside so we do the same type
+    // of callgraph analysis as for the gradient.
+
+    // First compute which loops are discontinuous (no specific order) and pull
+    // the ifs and functions using a discontinuous loop.
+    for (size_t i = 0; i < callDag.size(); i++)
+    {
+        PullComputeDiscontinuousLoops pull(analyses, i, callDag);
+        pull.traverse(callDag.getRecordFromIndex(i).node);
+    }
+
+    // Then push the information to callees, either from the a local discontinuous
+    // loop or from the caller being called in a discontinuous loop already
+    for (int i = callDag.size(); i-- > 0;)
+    {
+        PushDiscontinuousLoops push(analyses, i, callDag);
+        push.traverse(callDag.getRecordFromIndex(i).node);
+    }
+
+    // We create "Lod0" version of functions with the gradient operations replaced
+    // by non-gradient operations so that the D3D compiler is happier with discont
+    // loops.
+    for (auto &analysis : analyses)
+    {
+        analysis.needsLod0 = analysis.calledInDiscontinuousLoop && analysis.usesGradient;
     }
 
     return analyses;

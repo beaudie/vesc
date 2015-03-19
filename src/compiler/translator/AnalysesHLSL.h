@@ -20,7 +20,10 @@ class TIntermLoop;
 struct AnalysesHLSLData
 {
     AnalysesHLSLData()
-        : usesGradient(false)
+        : usesGradient(false),
+          calledInDiscontinuousLoop(false),
+          hasDiscontinuousLoopInCallGraph(false),
+          needsLod0(false)
     {
     }
 
@@ -35,6 +38,17 @@ struct AnalysesHLSLData
     bool hasGradientInCallGraph(TIntermSelection *node);
     bool hasGradientInCallGraph(TIntermLoop *node);
     std::set<TIntermNode*> controlFlowsContainingGradient;
+
+    // Remember information about the discontinuous loops and which functions
+    // are called in such loops.
+    bool calledInDiscontinuousLoop;
+    bool hasDiscontinuousLoopInCallGraph;
+    std::set<TIntermLoop*> discontinuousLoops;
+    std::set<TIntermSelection*> ifsContainingDiscontinuousLoop;
+    bool hasDiscontinuousLoop(TIntermSelection* node);
+
+    // Will we need to generate a Lod0 version of the function.
+    bool needsLod0;
 };
 
 // Return the AST analysis result, in the order defined by the call DAG
