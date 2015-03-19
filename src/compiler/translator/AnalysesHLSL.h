@@ -35,6 +35,14 @@ struct AnalysesHLSLData
     bool hasGradientInCallGraph(TIntermSelection *node);
     bool hasGradientInCallGraph(TIntermLoop *node);
     std::set<TIntermNode*> controlFlowsContainingGradient;
+
+    // Remember information about the discontinuous loops and which functions
+    // are called in such loops.
+    bool calledInDiscontinuousLoop;
+    std::set<TIntermLoop*> discontinuousLoops;
+
+    // Will we need to generate a Lod0 version of the function.
+    bool needsLod0;
 };
 
 // Return the AST analysis result, in the order defined by the call DAG
