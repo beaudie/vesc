@@ -22,11 +22,6 @@
         4702, # Unreachable code. Useful, but fires on system header xtree.
         4718, # Recursive call has no side effects. Fires on xtree too.
     ],
-    'msvs_system_include_dirs':
-    [
-        '<(windows_sdk_path)/Include/shared',
-        '<(windows_sdk_path)/Include/um',
-    ],
     'conditions':
     [
         ['component=="shared_library"',
@@ -35,6 +30,14 @@
             'msvs_disabled_warnings':
             [
                 4251, # STL objects do not have DLL interface, needed by ShaderVars.h
+            ],
+        }],
+        ['angle_build_winrt==0',
+        {
+            'msvs_system_include_dirs':
+            [
+                '<(windows_sdk_path)/Include/shared',
+                '<(windows_sdk_path)/Include/um',
             ],
         }],
     ],
@@ -91,51 +94,11 @@
     # Windows SDK library directories for the configurations
     'configurations':
     {
-        'x86_Base':
-        {
-            'msvs_settings':
-            {
-                'VCLinkerTool':
-                {
-                    'AdditionalLibraryDirectories':
-                    [
-                        '<(windows_sdk_path)/Lib/winv6.3/um/x86',
-                    ],
-                },
-                'VCLibrarianTool':
-                {
-                    'AdditionalLibraryDirectories':
-                    [
-                        '<(windows_sdk_path)/Lib/winv6.3/um/x86',
-                    ],
-                },
-            },
-        },
-        'x64_Base':
-        {
-            'msvs_settings':
-            {
-                'VCLinkerTool':
-                {
-                    'AdditionalLibraryDirectories':
-                    [
-                        '<(windows_sdk_path)/Lib/winv6.3/um/x64',
-                    ],
-                },
-                'VCLibrarianTool':
-                {
-                    'AdditionalLibraryDirectories':
-                    [
-                        '<(windows_sdk_path)/Lib/winv6.3/um/x64',
-                    ],
-                },
-            },
-        },
         'conditions':
         [
-            ['angle_build_winrt==1',
+            ['angle_build_winrt==0',
             {
-                'arm_Base':
+                'x86_Base':
                 {
                     'msvs_settings':
                     {
@@ -143,14 +106,34 @@
                         {
                             'AdditionalLibraryDirectories':
                             [
-                                '<(windows_sdk_path)/Lib/winv6.3/um/arm',
+                                '<(windows_sdk_path)/Lib/winv6.3/um/x86',
                             ],
                         },
                         'VCLibrarianTool':
                         {
                             'AdditionalLibraryDirectories':
                             [
-                                '<(windows_sdk_path)/Lib/winv6.3/um/arm',
+                                '<(windows_sdk_path)/Lib/winv6.3/um/x86',
+                            ],
+                        },
+                    },
+                },
+                'x64_Base':
+                {
+                    'msvs_settings':
+                    {
+                        'VCLinkerTool':
+                        {
+                            'AdditionalLibraryDirectories':
+                            [
+                                '<(windows_sdk_path)/Lib/winv6.3/um/x64',
+                            ],
+                        },
+                        'VCLibrarianTool':
+                        {
+                            'AdditionalLibraryDirectories':
+                            [
+                                '<(windows_sdk_path)/Lib/winv6.3/um/x64',
                             ],
                         },
                     },
