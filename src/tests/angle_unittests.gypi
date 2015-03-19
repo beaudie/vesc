@@ -32,9 +32,9 @@
             '<(angle_path)/src/tests/compiler_tests/MalformedShader_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/NV_draw_buffers_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/PruneUnusedFunctions_test.cpp',
-            '<(angle_path)/src/tests/compiler_tests/ShaderExtension_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/ShaderVariable_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/TypeTracking_test.cpp',
+            '<(angle_path)/src/tests/compiler_tests/UnrollFlatten_test.cpp',
             '<(angle_path)/src/tests/preprocessor_tests/char_test.cpp',
             '<(angle_path)/src/tests/preprocessor_tests/comment_test.cpp',
             '<(angle_path)/src/tests/preprocessor_tests/define_test.cpp',
@@ -97,6 +97,14 @@
                     ],
                 },
             },
+        }],
+        ['OS=="win"',
+        {
+            # TODO(cwallez): make this angle_enable_hlsl instead (requires gyp file refactoring)
+            'sources':
+            [
+                '<(angle_path)/src/tests/compiler_tests/ShaderExtension_test.cpp',
+            ],
         }],
     ],
 }
