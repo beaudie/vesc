@@ -14,7 +14,6 @@
 #include "common/utilities.h"
 #include "compiler/translator/BuiltInFunctionEmulator.h"
 #include "compiler/translator/BuiltInFunctionEmulatorHLSL.h"
-#include "compiler/translator/DetectDiscontinuity.h"
 #include "compiler/translator/FlagStd140Structs.h"
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/NodeSearch.h"
@@ -130,8 +129,7 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType, int shaderVersion,
 
     mUniqueIndex = 0;
 
-    mContainsLoopDiscontinuity = false;
-    mContainsAnyLoop = false;
+    mCurrentFunctionAnalyses = nullptr;
     mOutputLod0Function = false;
     mInsideDiscontinuousLoop = false;
     mNestedLoopDepth = 0;
@@ -162,9 +160,6 @@ OutputHLSL::~OutputHLSL()
 
 void OutputHLSL::output(TIntermNode *treeRoot, TInfoSinkBase &objSink)
 {
-    mContainsLoopDiscontinuity = mShaderType == GL_FRAGMENT_SHADER && containsLoopDiscontinuity(treeRoot);
-    mContainsAnyLoop = containsAnyLoop(treeRoot);
-
     const std::vector<TIntermTyped*> &flaggedStructs = FlagStd140ValueStructs(treeRoot);
     makeFlaggedStructMaps(flaggedStructs);
 
@@ -180,12 +175,9 @@ void OutputHLSL::output(TIntermNode *treeRoot, TInfoSinkBase &objSink)
     builtInFunctionEmulator.MarkBuiltInFunctionsForEmulation(treeRoot);
 
     // Now that we are done changing the AST, do the analyses need for HLSL generation
-    {
-        CallDAG dag;
-        CallDAG::InitResult success = dag.init(treeRoot, &objSink);
-        ASSERT(success == CallDAG::INITDAG_SUCCESS);
-        mASTAnalyses = createHLSLAnalyses(treeRoot, dag);
-    }
+    CallDAG::InitResult success = mCallDag.init(treeRoot, &objSink);
+    ASSERT(success == CallDAG::INITDAG_SUCCESS);
+    mASTAnalyses = createHLSLAnalyses(treeRoot, mCallDag);
 
     // Output the body and footer first to determine what has to go in the header
     mInfoSinkStack.push(&mBody);
@@ -1924,7 +1916,8 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
             out << ");\n";
 
             // Also prototype the Lod0 variant if needed
-            if (mContainsLoopDiscontinuity && !mOutputLod0Function)
+            bool needsLod0 = mASTAnalyses[mCallDag.getIndex(node)].needsLod0;
+            if (needsLod0 && !mOutputLod0Function && mShaderType == GL_FRAGMENT_SHADER)
             {
                 mOutputLod0Function = true;
                 node->traverse(this);
@@ -1937,6 +1930,8 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
       case EOpComma:            outputTriplet(visit, "(", ", ", ")");                break;
       case EOpFunction:
         {
+            ASSERT(mCurrentFunctionAnalyses == nullptr);
+            mCurrentFunctionAnalyses = &mASTAnalyses[mCallDag.getIndex(node)];
             TString name = TFunction::unmangleName(node->getName());
 
             out << TypeString(node->getType()) << " ";
@@ -1988,14 +1983,15 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
 
             out << "}\n";
 
-            if (mContainsLoopDiscontinuity && !mOutputLod0Function)
+            mCurrentFunctionAnalyses = nullptr;
+
+            bool needsLod0 = mASTAnalyses[mCallDag.getIndex(node)].needsLod0;
+            if (needsLod0 && !mOutputLod0Function && mShaderType == GL_FRAGMENT_SHADER)
             {
-                if (name != "main")
-                {
-                    mOutputLod0Function = true;
-                    node->traverse(this);
-                    mOutputLod0Function = false;
-                }
+                ASSERT(name != "main");
+                mOutputLod0Function = true;
+                node->traverse(this);
+                mOutputLod0Function = false;
             }
 
             return false;
@@ -2004,8 +2000,10 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
       case EOpFunctionCall:
         {
             TString name = TFunction::unmangleName(node->getName());
-            bool lod0 = mInsideDiscontinuousLoop || mOutputLod0Function;
             TIntermSequence *arguments = node->getSequence();
+
+            bool lod0 = mInsideDiscontinuousLoop || mOutputLod0Function;
+            ASSERT(mASTAnalyses[mCallDag.getIndex(node)].needsLod0 || !lod0);
 
             if (node->isUserDefined())
             {
@@ -2239,7 +2237,7 @@ bool OutputHLSL::visitSelection(Visit visit, TIntermSelection *node)
         // however flattening all the ifs in branch heavy shaders made D3D error too.
         // As a temporary workaround we flatten the ifs only if there is at least a loop
         // present somewhere in the shader.
-        if (mShaderType == GL_FRAGMENT_SHADER && mContainsAnyLoop)
+        if (mShaderType == GL_FRAGMENT_SHADER && mCurrentFunctionAnalyses->hasGradientInCallGraph(node))
         {
             out << "FLATTEN ";
         }
@@ -2334,11 +2332,7 @@ bool OutputHLSL::visitLoop(Visit visit, TIntermLoop *node)
     mNestedLoopDepth++;
 
     bool wasDiscontinuous = mInsideDiscontinuousLoop;
-
-    if (mContainsLoopDiscontinuity && !mInsideDiscontinuousLoop)
-    {
-        mInsideDiscontinuousLoop = containsLoopDiscontinuity(node);
-    }
+    mInsideDiscontinuousLoop |= mCurrentFunctionAnalyses->discontinuousLoops.count(node) >= 0;
 
     if (mOutputType == SH_HLSL9_OUTPUT)
     {
@@ -2353,16 +2347,17 @@ bool OutputHLSL::visitLoop(Visit visit, TIntermLoop *node)
 
     TInfoSinkBase &out = getInfoSink();
 
+    const char* unroll = mCurrentFunctionAnalyses->hasGradientInCallGraph(node) ? "LOOP" : "";
     if (node->getType() == ELoopDoWhile)
     {
-        out << "{LOOP do\n";
+        out << "{" << unroll << " do\n";
 
         outputLineDirective(node->getLine().first_line);
         out << "{\n";
     }
     else
     {
-        out << "{LOOP for(";
+        out << "{" << unroll << " for(";
 
         if (node->getInit())
         {
@@ -2668,8 +2663,9 @@ bool OutputHLSL::handleExcessiveLoop(TIntermLoop *node)
                 }
 
                 // for(int index = initial; index < clampedLimit; index += increment)
+                const char* unroll = mCurrentFunctionAnalyses->hasGradientInCallGraph(node) ? "LOOP" : "";
 
-                out << "LOOP for(";
+                out << unroll << " for(";
                 index->traverse(this);
                 out << " = ";
                 out << initial;
