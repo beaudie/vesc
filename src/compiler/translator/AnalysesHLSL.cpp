@@ -138,6 +138,139 @@ class PullGradient : public TIntermTraverser
     std::vector<TIntermNode*> mParents;
 };
 
+// Computes the set of discontinuous loops of a function
+class ComputeDiscontinuousLoops : public TIntermTraverser
+{
+  public:
+    ComputeDiscontinuousLoops(AnalysesHLSLData &analysis)
+        : TIntermTraverser(true, false, true),
+          mAnalysis(analysis)
+    {
+    }
+
+    void traverse(TIntermAggregate *node)
+    {
+        node->traverse(this);
+        ASSERT(mLoops.empty());
+    }
+
+    bool visitLoop(Visit visit, TIntermLoop *loop)
+    {
+        if (visit == PreVisit)
+        {
+            mLoops.push_back(loop);
+        }
+        else if (visit == PostVisit)
+        {
+            ASSERT(mLoops.back() == loop);
+            mLoops.pop_back();
+        }
+
+        return true;
+    }
+
+    bool visitBranch(Visit visit, TIntermBranch *node)
+    {
+        if (visit == PreVisit)
+        {
+            switch (node->getFlowOp())
+            {
+              case EOpKill:
+                break;
+              case EOpBreak:
+              case EOpContinue:
+                ASSERT(!mLoops.empty());
+                mAnalysis.discontinuousLoops.insert(mLoops.back());
+                break;
+              case EOpReturn:
+                // A return jumps out of all the enclosing loops
+                for (TIntermLoop* loop : mLoops)
+                {
+                    mAnalysis.discontinuousLoops.insert(loop);
+                }
+                break;
+              default:
+                UNREACHABLE();
+            }
+        }
+
+        return true;
+    }
+
+  private:
+    AnalysesHLSLData &mAnalysis;
+
+    std::vector<TIntermLoop*> mLoops;
+};
+
+// Tags all the functions called in a discontinuous loop
+class PushDiscontinuousLoops : public TIntermTraverser
+{
+public:
+    PushDiscontinuousLoops(Analyses &analyses, size_t index, const CallDAG &dag)
+        : TIntermTraverser(true, true, true),
+        mAnalyses(analyses),
+        mAnalysis(analyses[index]),
+        mIndex(index),
+        mDag(dag),
+        mNestedDiscont(mAnalysis.calledInDiscontinuousLoop ? 1 : 0)
+    {
+    }
+
+    void traverse(TIntermAggregate *node)
+    {
+        node->traverse(this);
+        ASSERT(mNestedDiscont == (mAnalysis.calledInDiscontinuousLoop ? 1 : 0));
+    }
+
+    bool visitLoop(Visit visit, TIntermLoop *loop)
+    {
+        bool isDiscontinuous = mAnalysis.discontinuousLoops.count(loop) > 0;
+
+        if (visit == PreVisit && isDiscontinuous)
+        {
+            mNestedDiscont ++;
+        }
+        else if (visit == PostVisit && isDiscontinuous)
+        {
+            mNestedDiscont --;
+        }
+
+        return true;
+    }
+
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override
+    {
+        switch (node->getOp())
+        {
+          case EOpFunctionCall:
+            if (visit == PreVisit)
+            {
+                // Do not handle calls to builtin functions
+                if (node->isUserDefined())
+                {
+                    int calleeIndex = mDag.mangledNameToIndex(node->getName());
+                    ASSERT(calleeIndex >= 0);
+                    ASSERT(calleeIndex < mIndex);
+
+                    mAnalyses[calleeIndex].calledInDiscontinuousLoop = true;
+                }
+            }
+            break;
+          default:
+            break;
+        }
+        return true;
+    }
+
+private:
+    Analyses &mAnalyses;
+    AnalysesHLSLData &mAnalysis;
+    int mIndex;
+    const CallDAG &mDag;
+
+    int mNestedDiscont;
+};
 bool AnalysesHLSLData::hasGradientInCallGraph(TIntermSelection *node)
 {
     return controlFlowsContainingGradient.count(node) > 0;
@@ -172,6 +305,33 @@ std::vector<AnalysesHLSLData> createHLSLAnalyses(TIntermNode *root, const CallDA
     {
         PullGradient pull(analyses, i, callDag);
         pull.traverse(callDag.getRecord(i).node);
+    }
+
+    // Compute which loops are discontinuous and which function are called in
+    // these loops. THe same way computing gradient usage is a "pull" process,
+    // computing "bing used in a discont. loop" is a push process.
+
+    // First compute which loops are discontinuous (no specific order)
+    for (size_t i = 0; i < callDag.size(); i++)
+    {
+        ComputeDiscontinuousLoops compute(analyses[i]);
+        compute.traverse(callDag.getRecord(i).node);
+    }
+
+    // Then push the information to callees, either from the a local discontinuous
+    // loop or from the caller being called in a discont. loop already
+    for (int i = callDag.size(); i-- > 0;)
+    {
+        PushDiscontinuousLoops push(analyses, i, callDag);
+        push.traverse(callDag.getRecord(i).node);
+    }
+
+    // We create "Lod0" version of functions with the gradient operations replaced
+    // by non-gradient operations so that the D3D compiler is happier with discont
+    // loops.
+    for (auto &analysis : analyses)
+    {
+        analysis.needsLod0 = analysis.calledInDiscontinuousLoop && analysis.usesGradient;
     }
 
     return analyses;
