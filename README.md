@@ -10,6 +10,8 @@ Portions of the ANGLE shader compiler are used as a shader validator and transla
 ##Building
 For building instructions, visit the [dev setup wiki](https://code.google.com/p/angleproject/wiki/DevSetup).
 
+[Dirk was here](https://github.com/dpranke/)
+
 ##Contributing
 * Join our [Google group](https://groups.google.com/group/angleproject) to keep up to date.
 * Join us on IRC in the #ANGLEproject channel on FreeNode.
