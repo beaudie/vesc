@@ -20,6 +20,8 @@ class SurfaceGL : public SurfaceImpl
     SurfaceGL();
     ~SurfaceGL() override;
 
+    virtual egl::Error makeCurrent() = 0;
+
   private:
     DISALLOW_COPY_AND_ASSIGN(SurfaceGL);
 };
