@@ -20,7 +20,10 @@ class TIntermLoop;
 struct ASTMetadataHLSL
 {
     ASTMetadataHLSL()
-        : mUsesGradient(false)
+        : mUsesGradient(false),
+          mCalledInDiscontinuousLoop(false),
+          mHasDiscontinuousLoopInCallGraph(false),
+          mNeedsLod0(false)
     {
     }
 
@@ -29,6 +32,7 @@ struct ASTMetadataHLSL
 
     bool hasGradientInCallGraph(TIntermSelection *node);
     bool hasGradientInCallGraph(TIntermLoop *node);
+    bool hasDiscontinuousLoop(TIntermSelection* node);
 
     // Does the function use a gradient.
     bool mUsesGradient;
@@ -36,6 +40,16 @@ struct ASTMetadataHLSL
     // Even if usesGradient is true, some control flow might not use a gradient
     // so we store the set of all gradient-using control flows.
     std::set<TIntermNode*> mControlFlowsContainingGradient;
+
+    // Remember information about the discontinuous loops and which functions
+    // are called in such loops.
+    bool mCalledInDiscontinuousLoop;
+    bool mHasDiscontinuousLoopInCallGraph;
+    std::set<TIntermLoop*> mDiscontinuousLoops;
+    std::set<TIntermSelection*> mIfsContainingDiscontinuousLoop;
+
+    // Will we need to generate a Lod0 version of the function.
+    bool mNeedsLod0;
 };
 
 // Return the AST analysis result, in the order defined by the call DAG
