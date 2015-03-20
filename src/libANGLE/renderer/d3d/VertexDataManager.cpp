@@ -222,7 +222,7 @@ void VertexDataManager::invalidateMatchingStaticData(const gl::VertexAttribute &
             !staticBuffer->lookupAttribute(attrib, NULL) &&
             !staticBuffer->directStoragePossible(attrib, currentValue))
         {
-            bufferImpl->invalidateStaticData();
+            bufferImpl->invalidateStaticData(0, bufferImpl->getSize());
         }
     }
 }
