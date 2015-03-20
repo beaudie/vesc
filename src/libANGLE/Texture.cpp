@@ -366,7 +366,14 @@ void Texture::bindTexImage(egl::Surface *surface)
     // Set the image info to the size and format of the surface
     ASSERT(mTarget == GL_TEXTURE_2D);
     Extents size(surface->getWidth(), surface->getHeight(), 1);
-    ImageDesc desc(size, surface->getConfig()->renderTargetFormat);
+
+    const egl::Config *surfaceConfig = surface->getConfig();
+    GLenum surfaceFormat = GetExactSizedColorInternalFormat(GL_UNSIGNED_NORMALIZED, surfaceConfig->redSize,
+                                                            surfaceConfig->greenSize, surfaceConfig->blueSize,
+                                                            surfaceConfig->luminanceSize, surfaceConfig->alphaSize);
+    ASSERT(surfaceFormat != GL_NONE);
+
+    ImageDesc desc(size, surfaceFormat);
     setImageDesc(mTarget, 0, desc);
 }
 
