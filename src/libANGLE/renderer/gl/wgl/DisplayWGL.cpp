@@ -13,6 +13,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/gl/wgl/FunctionsWGL.h"
+#include "libANGLE/renderer/gl/wgl/PbufferSurfaceWGL.h"
 #include "libANGLE/renderer/gl/wgl/WindowSurfaceWGL.h"
 #include "libANGLE/renderer/gl/wgl/wgl_utils.h"
 
@@ -352,8 +353,21 @@ egl::Error DisplayWGL::createWindowSurface(const egl::Config *configuration, EGL
 egl::Error DisplayWGL::createPbufferSurface(const egl::Config *configuration, const egl::AttributeMap &attribs,
                                             SurfaceImpl **outSurface)
 {
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_DISPLAY);
+    EGLint width = attribs.get(EGL_WIDTH, 0);
+    EGLint height = attribs.get(EGL_HEIGHT, 0);
+    bool largest = (attribs.get(EGL_LARGEST_PBUFFER, EGL_FALSE) == EGL_TRUE);
+
+    PbufferSurfaceWGL *surface = new PbufferSurfaceWGL(width, height, largest, mPixelFormat, mDeviceContext,
+                                                       mWGLContext, mFunctionsWGL);
+    egl::Error error = surface->initialize();
+    if (error.isError())
+    {
+        SafeDelete(surface);
+        return error;
+    }
+
+    *outSurface = surface;
+    return egl::Error(EGL_SUCCESS);
 }
 
 egl::Error DisplayWGL::createPbufferFromClientBuffer(const egl::Config *configuration, EGLClientBuffer shareHandle,
@@ -368,6 +382,17 @@ egl::Error DisplayWGL::createPixmapSurface(const egl::Config *configuration, Nat
 {
     UNIMPLEMENTED();
     return egl::Error(EGL_BAD_DISPLAY);
+}
+
+static int QueryWGLFormatAttrib(HDC dc, int format, int attribName, const FunctionsWGL *functions)
+{
+    int result = 0;
+    if (functions->getPixelFormatAttribivARB == nullptr ||
+        !functions->getPixelFormatAttribivARB(dc, format, 0, 1, &attribName, &result))
+    {
+        return 0;
+    }
+    return result;
 }
 
 egl::ConfigSet DisplayWGL::generateConfigs() const
@@ -396,8 +421,8 @@ egl::ConfigSet DisplayWGL::generateConfigs() const
     config.luminanceSize = 0;
     config.alphaSize = pixelFormatDescriptor.cAlphaBits;
     config.alphaMaskSize = 0;
-    config.bindToTextureRGB = EGL_FALSE;
-    config.bindToTextureRGBA = EGL_FALSE;
+    config.bindToTextureRGB = (QueryWGLFormatAttrib(mDeviceContext, mPixelFormat, WGL_BIND_TO_TEXTURE_RGB_ARB, mFunctionsWGL) == TRUE);
+    config.bindToTextureRGBA = (QueryWGLFormatAttrib(mDeviceContext, mPixelFormat, WGL_BIND_TO_TEXTURE_RGBA_ARB, mFunctionsWGL) == TRUE);
     config.colorBufferType = EGL_RGB_BUFFER;
     config.configCaveat = EGL_NONE;
     config.configID = mPixelFormat;
@@ -405,9 +430,9 @@ egl::ConfigSet DisplayWGL::generateConfigs() const
     config.depthSize = pixelFormatDescriptor.cDepthBits;
     config.level = 0;
     config.matchNativePixmap = EGL_NONE;
-    config.maxPBufferWidth = 0; // TODO
-    config.maxPBufferHeight = 0; // TODO
-    config.maxPBufferPixels = 0; // TODO
+    config.maxPBufferWidth = QueryWGLFormatAttrib(mDeviceContext, mPixelFormat, WGL_MAX_PBUFFER_WIDTH_ARB, mFunctionsWGL);
+    config.maxPBufferHeight = QueryWGLFormatAttrib(mDeviceContext, mPixelFormat, WGL_MAX_PBUFFER_HEIGHT_ARB, mFunctionsWGL);
+    config.maxPBufferPixels = QueryWGLFormatAttrib(mDeviceContext, mPixelFormat, WGL_MAX_PBUFFER_PIXELS_ARB, mFunctionsWGL);
     config.maxSwapInterval = maxSwapInterval;
     config.minSwapInterval = minSwapInterval;
     config.nativeRenderable = EGL_TRUE; // Direct rendering
@@ -417,8 +442,8 @@ egl::ConfigSet DisplayWGL::generateConfigs() const
     config.sampleBuffers = 0; // FIXME: enumerate multi-sampling
     config.samples = 0;
     config.stencilSize = pixelFormatDescriptor.cStencilBits;
-    config.surfaceType = ((pixelFormatDescriptor.dwFlags & PFD_DRAW_TO_WINDOW) ? EGL_WINDOW_BIT  : 0) |
-                         ((pixelFormatDescriptor.dwFlags & PFD_DRAW_TO_BITMAP) ? EGL_PBUFFER_BIT : 0) |
+    config.surfaceType = ((pixelFormatDescriptor.dwFlags & PFD_DRAW_TO_WINDOW) ? EGL_WINDOW_BIT : 0) |
+                         ((QueryWGLFormatAttrib(mDeviceContext, mPixelFormat, WGL_DRAW_TO_PBUFFER_ARB, mFunctionsWGL) == TRUE) ? EGL_PBUFFER_BIT : 0) |
                          EGL_SWAP_BEHAVIOR_PRESERVED_BIT;
     config.transparentType = EGL_NONE;
     config.transparentRedValue = 0;

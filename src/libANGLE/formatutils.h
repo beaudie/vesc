@@ -72,6 +72,10 @@ const InternalFormat &GetInternalFormatInfo(GLenum internalFormat);
 
 GLenum GetSizedInternalFormat(GLenum internalFormat, GLenum type);
 
+GLenum GetExactSizedColorInternalFormat(GLenum componentType, size_t redBits, size_t greenBits, size_t blueBits,
+                                        size_t luminanceBits, size_t alphaBits);
+GLenum GetExactSizedDepthStencilInternalFormat(size_t depthBits, size_t stencilBits);
+
 typedef std::set<GLenum> FormatSet;
 const FormatSet &GetAllSizedInternalFormats();
 
