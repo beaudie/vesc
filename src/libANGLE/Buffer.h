@@ -11,9 +11,10 @@
 #ifndef LIBANGLE_BUFFER_H_
 #define LIBANGLE_BUFFER_H_
 
+#include "common/mathutil.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/IndexRangeCache.h"
 #include "libANGLE/RefCountObject.h"
-#include "libANGLE/renderer/IndexRangeCache.h"
 
 #include "common/angleutils.h"
 
@@ -39,6 +40,11 @@ class Buffer : public RefCountObject
     Error mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access);
     Error unmap(GLboolean *result);
 
+    void onTransformFeedback();
+    void onPixelUnpack();
+
+    Error getIndexRange(GLenum type, size_t offset, size_t count, RangeUI *outRange) const;
+
     GLenum getUsage() const { return mUsage; }
     GLbitfield getAccessFlags() const { return mAccessFlags; }
     GLenum getAccess() const { return mAccess; }
@@ -49,9 +55,6 @@ class Buffer : public RefCountObject
     GLint64 getSize() const { return mSize; }
 
     rx::BufferImpl *getImplementation() const { return mBuffer; }
-
-    rx::IndexRangeCache *getIndexRangeCache() { return &mIndexRangeCache; }
-    const rx::IndexRangeCache *getIndexRangeCache() const { return &mIndexRangeCache; }
 
   private:
     rx::BufferImpl *mBuffer;
@@ -65,7 +68,7 @@ class Buffer : public RefCountObject
     GLint64 mMapOffset;
     GLint64 mMapLength;
 
-    rx::IndexRangeCache mIndexRangeCache;
+    mutable IndexRangeCache mIndexRangeCache;
 };
 
 }

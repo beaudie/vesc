@@ -42,9 +42,10 @@ Error Buffer::bufferData(const void *data, GLsizeiptr size, GLenum usage)
         return error;
     }
 
-    mIndexRangeCache.clear();
     mUsage = usage;
     mSize = size;
+
+    mIndexRangeCache.clear();
 
     return error;
 }
@@ -87,14 +88,16 @@ Error Buffer::map(GLenum access)
     }
 
     ASSERT(access == GL_WRITE_ONLY_OES);
+    if (access == GL_WRITE_ONLY_OES)
+    {
+        mIndexRangeCache.clear();
+    }
 
     mMapped = GL_TRUE;
     mMapOffset = 0;
     mMapLength = mSize;
     mAccess = access;
     mAccessFlags = GL_MAP_WRITE_BIT;
-
-    mIndexRangeCache.invalidateRange(0, static_cast<unsigned int>(mMapLength));
 
     return error;
 }
@@ -111,6 +114,11 @@ Error Buffer::mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access)
         return error;
     }
 
+    if ((access & GL_MAP_WRITE_BIT) != 0)
+    {
+        mIndexRangeCache.invalidateRange(static_cast<unsigned int>(offset), static_cast<unsigned int>(length));
+    }
+
     mMapped = GL_TRUE;
     mMapOffset = static_cast<GLint64>(offset);
     mMapLength = static_cast<GLint64>(length);
@@ -121,11 +129,6 @@ Error Buffer::mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access)
     // value for GL_BUFFER_ACCESS_OES because it was written against ES2.  Since there is
     // no update for ES3 and the GL_READ_ONLY and GL_READ_WRITE enums don't exist for ES,
     // we cannot properly set GL_BUFFER_ACCESS_OES when glMapBufferRange is called.
-
-    if ((access & GL_MAP_WRITE_BIT) > 0)
-    {
-        mIndexRangeCache.invalidateRange(static_cast<unsigned int>(offset), static_cast<unsigned int>(length));
-    }
 
     return error;
 }
@@ -149,6 +152,34 @@ Error Buffer::unmap(GLboolean *result)
     mAccessFlags = 0;
 
     return error;
+}
+
+void Buffer::onTransformFeedback()
+{
+    mIndexRangeCache.clear();
+}
+
+void Buffer::onPixelUnpack()
+{
+    mIndexRangeCache.clear();
+}
+
+Error Buffer::getIndexRange(GLenum type, size_t offset, size_t count, gl::RangeUI *outRange) const
+{
+    if (mIndexRangeCache.findRange(type, offset, count, outRange))
+    {
+        return gl::Error(GL_NO_ERROR);
+    }
+
+    Error error = mBuffer->getIndexRange(type, offset, count, outRange);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mIndexRangeCache.addRange(type, offset, count, *outRange);
+
+    return Error(GL_NO_ERROR);
 }
 
 }

@@ -385,6 +385,34 @@ bool IsTriangleMode(GLenum drawMode)
     return false;
 }
 
+template <class IndexType>
+static void ComputeTypedIndexRange(const IndexType *indices, GLsizei count, unsigned int *minElement, unsigned int *maxElement)
+{
+    ASSERT(count > 0);
+    IndexType minIndex = indices[0];
+    IndexType maxIndex = indices[0];
+
+    for (GLsizei i = 1; i < count; i++)
+    {
+        if (minIndex > indices[i]) minIndex = indices[i];
+        if (maxIndex < indices[i]) maxIndex = indices[i];
+    }
+
+    *minElement = static_cast<unsigned int>(minIndex);
+    *maxElement = static_cast<unsigned int>(maxIndex);
+}
+
+void ComputeIndexRange(GLenum type, const GLvoid *indices, GLsizei count, unsigned int *minElement, unsigned int *maxElement)
+{
+    switch (type)
+    {
+      case GL_UNSIGNED_BYTE:  ComputeTypedIndexRange(static_cast<const GLubyte*>(indices),  count, minElement, maxElement); break;
+      case GL_UNSIGNED_SHORT: ComputeTypedIndexRange(static_cast<const GLushort*>(indices), count, minElement, maxElement); break;
+      case GL_UNSIGNED_INT:   ComputeTypedIndexRange(static_cast<const GLuint*>(indices),   count, minElement, maxElement); break;
+      default: UNREACHABLE();
+    }
+}
+
 // [OpenGL ES SL 3.00.4] Section 11 p. 120
 // Vertex Outs/Fragment Ins packing priorities
 int VariableSortOrder(GLenum type)

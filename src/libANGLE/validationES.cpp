@@ -19,7 +19,6 @@
 #include "libANGLE/Uniform.h"
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/VertexArray.h"
-#include "libANGLE/renderer/BufferImpl.h"
 
 #include "common/mathutil.h"
 #include "common/utilities.h"
@@ -1564,7 +1563,7 @@ bool ValidateDrawArraysInstancedANGLE(Context *context, GLenum mode, GLint first
 }
 
 bool ValidateDrawElements(Context *context, GLenum mode, GLsizei count, GLenum type,
-                          const GLvoid* indices, GLsizei primcount, rx::RangeUI *indexRangeOut)
+                          const GLvoid* indices, GLsizei primcount, RangeUI *indexRangeOut)
 {
     switch (type)
     {
@@ -1644,25 +1643,16 @@ bool ValidateDrawElements(Context *context, GLenum mode, GLsizei count, GLenum t
     if (elementArrayBuffer)
     {
         uintptr_t offset = reinterpret_cast<uintptr_t>(indices);
-        if (!elementArrayBuffer->getIndexRangeCache()->findRange(type, static_cast<unsigned int>(offset), count, indexRangeOut))
+        Error error = elementArrayBuffer->getIndexRange(type, static_cast<unsigned int>(offset), count, indexRangeOut);
+        if (error.isError())
         {
-            rx::BufferImpl *bufferImpl = elementArrayBuffer->getImplementation();
-            const uint8_t *dataPointer = NULL;
-            Error error = bufferImpl->getData(&dataPointer);
-            if (error.isError())
-            {
-                context->recordError(error);
-                return false;
-            }
-
-            const uint8_t *offsetPointer = dataPointer + offset;
-            *indexRangeOut = rx::IndexRangeCache::ComputeRange(type, offsetPointer, count);
-            elementArrayBuffer->getIndexRangeCache()->addRange(type, static_cast<unsigned int>(offset), count, *indexRangeOut);
+            context->recordError(error);
+            return false;
         }
     }
     else
     {
-        *indexRangeOut = rx::IndexRangeCache::ComputeRange(type, indices, count);
+        ComputeIndexRange(type, indices, count, &indexRangeOut->start, &indexRangeOut->end);
     }
 
     if (!ValidateDrawBase(context, mode, count, static_cast<GLsizei>(indexRangeOut->end), primcount))
@@ -1676,7 +1666,7 @@ bool ValidateDrawElements(Context *context, GLenum mode, GLsizei count, GLenum t
 bool ValidateDrawElementsInstanced(Context *context,
                                    GLenum mode, GLsizei count, GLenum type,
                                    const GLvoid *indices, GLsizei primcount,
-                                   rx::RangeUI *indexRangeOut)
+                                   RangeUI *indexRangeOut)
 {
     if (primcount < 0)
     {
@@ -1694,7 +1684,7 @@ bool ValidateDrawElementsInstanced(Context *context,
 }
 
 bool ValidateDrawElementsInstancedANGLE(Context *context, GLenum mode, GLsizei count, GLenum type,
-                                        const GLvoid *indices, GLsizei primcount, rx::RangeUI *indexRangeOut)
+                                        const GLvoid *indices, GLsizei primcount, RangeUI *indexRangeOut)
 {
     if (!ValidateDrawInstancedANGLE(context))
     {
