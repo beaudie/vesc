@@ -214,9 +214,9 @@ Buffer11 *Buffer11::makeBuffer11(BufferImpl *buffer)
     return static_cast<Buffer11*>(buffer);
 }
 
-gl::Error Buffer11::setData(const void *data, size_t size, GLenum usage)
+gl::Error Buffer11::setData(size_t size, const uint8_t *data, GLenum usage)
 {
-    gl::Error error = setSubData(data, size, 0);
+    gl::Error error = setSubData(0, size, data);
     if (error.isError())
     {
         return error;
@@ -263,7 +263,7 @@ gl::Error Buffer11::getSystemMemoryStorage(SystemMemoryStorage **storageOut)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Buffer11::setSubData(const void *data, size_t size, size_t offset)
+gl::Error Buffer11::setSubData(size_t offset, size_t size, const uint8_t *data)
 {
     size_t requiredSize = size + offset;
 
@@ -317,9 +317,9 @@ gl::Error Buffer11::setSubData(const void *data, size_t size, size_t offset)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Buffer11::copySubData(BufferImpl* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size)
+gl::Error Buffer11::copySubData(const gl::Buffer *source, size_t sourceOffset, size_t destOffset, size_t size)
 {
-    Buffer11 *sourceBuffer = makeBuffer11(source);
+    Buffer11 *sourceBuffer = makeBuffer11(source->getImplementation());
     ASSERT(sourceBuffer != NULL);
 
     BufferStorage *copyDest = getLatestBufferStorage();

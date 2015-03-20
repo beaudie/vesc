@@ -33,9 +33,9 @@ Buffer::~Buffer()
     SafeDelete(mBuffer);
 }
 
-Error Buffer::bufferData(const void *data, GLsizeiptr size, GLenum usage)
+Error Buffer::setData(size_t size, const uint8_t *data, GLenum usage)
 {
-    gl::Error error = mBuffer->setData(data, size, usage);
+    gl::Error error = mBuffer->setData(size, data, usage);
     if (error.isError())
     {
         return error;
@@ -48,9 +48,9 @@ Error Buffer::bufferData(const void *data, GLsizeiptr size, GLenum usage)
     return error;
 }
 
-Error Buffer::bufferSubData(const void *data, GLsizeiptr size, GLintptr offset)
+Error Buffer::setSubData(size_t offset, size_t size, const uint8_t *data)
 {
-    gl::Error error = mBuffer->setSubData(data, size, offset);
+    gl::Error error = mBuffer->setSubData(offset, size, data);
     if (error.isError())
     {
         return error;
@@ -61,9 +61,9 @@ Error Buffer::bufferSubData(const void *data, GLsizeiptr size, GLintptr offset)
     return error;
 }
 
-Error Buffer::copyBufferSubData(Buffer* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size)
+Error Buffer::copySubData(const Buffer *source, size_t sourceOffset, size_t destOffset, size_t size)
 {
-    gl::Error error = mBuffer->copySubData(source->getImplementation(), sourceOffset, destOffset, size);
+    gl::Error error = mBuffer->copySubData(source, sourceOffset, destOffset, size);
     if (error.isError())
     {
         return error;
@@ -98,10 +98,10 @@ Error Buffer::map(GLbitfield access)
     return error;
 }
 
-Error Buffer::mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access)
+Error Buffer::mapRange(size_t offset, size_t length, GLbitfield access)
 {
     ASSERT(!mMapped);
-    ASSERT(offset + length <= mSize);
+    ASSERT(offset + length <= static_cast<size_t>(mSize));
 
     Error error = mBuffer->mapRange(offset, length, access, &mMapPointer);
     if (error.isError())

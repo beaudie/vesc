@@ -1948,7 +1948,7 @@ void GL_APIENTRY CopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintp
         // if size is zero, the copy is a successful no-op
         if (size > 0)
         {
-            Error error = writeBuffer->copyBufferSubData(readBuffer, readOffset, writeOffset, size);
+            Error error = writeBuffer->copySubData(readBuffer, readOffset, writeOffset, size);
             if (error.isError())
             {
                 context->recordError(error);

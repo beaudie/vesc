@@ -514,7 +514,7 @@ void GL_APIENTRY BufferData(GLenum target, GLsizeiptr size, const GLvoid* data, 
             return;
         }
 
-        Error error = buffer->bufferData(data, size, usage);
+        Error error = buffer->setData(size, reinterpret_cast<const uint8_t*>(data), usage);
         if (error.isError())
         {
             context->recordError(error);
@@ -575,7 +575,7 @@ void GL_APIENTRY BufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, 
             return;
         }
 
-        Error error = buffer->bufferSubData(data, size, offset);
+        Error error = buffer->setSubData(offset, size, reinterpret_cast<const uint8_t*>(data));
         if (error.isError())
         {
             context->recordError(error);

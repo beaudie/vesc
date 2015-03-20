@@ -31,10 +31,10 @@ class Buffer9 : public BufferD3D
     RendererD3D *getRenderer() override;
 
     // BufferImpl implementation
-    virtual gl::Error setData(const void* data, size_t size, GLenum usage);
+    virtual gl::Error setData(size_t size, const uint8_t *data, GLenum usage);
     gl::Error getData(const uint8_t **outData) override;
-    virtual gl::Error setSubData(const void* data, size_t size, size_t offset);
-    virtual gl::Error copySubData(BufferImpl* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size);
+    virtual gl::Error setSubData(size_t offset, size_t size, const uint8_t *data);
+    virtual gl::Error copySubData(const gl::Buffer *source, size_t sourceOffset, size_t destOffset, size_t size);
     virtual gl::Error map(GLbitfield access, GLvoid **mapPtr);
     virtual gl::Error mapRange(size_t offset, size_t length, GLbitfield access, GLvoid **mapPtr);
     virtual gl::Error unmap(GLboolean *result);

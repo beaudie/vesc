@@ -29,7 +29,7 @@ Buffer9 *Buffer9::makeBuffer9(BufferImpl *buffer)
     return static_cast<Buffer9*>(buffer);
 }
 
-gl::Error Buffer9::setData(const void* data, size_t size, GLenum usage)
+gl::Error Buffer9::setData(size_t size, const uint8_t *data, GLenum usage)
 {
     if (size > mMemory.size())
     {
@@ -61,7 +61,7 @@ gl::Error Buffer9::getData(const uint8_t **outData)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Buffer9::setSubData(const void* data, size_t size, size_t offset)
+gl::Error Buffer9::setSubData(size_t offset, size_t size, const uint8_t *data)
 {
     if (offset + size > mMemory.size())
     {
@@ -82,10 +82,10 @@ gl::Error Buffer9::setSubData(const void* data, size_t size, size_t offset)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Buffer9::copySubData(BufferImpl* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size)
+gl::Error Buffer9::copySubData(const gl::Buffer *source, size_t sourceOffset, size_t destOffset, size_t size)
 {
     // Note: this method is currently unreachable
-    Buffer9* sourceBuffer = makeBuffer9(source);
+    Buffer9* sourceBuffer = makeBuffer9(source->getImplementation());
     ASSERT(sourceBuffer);
 
     memcpy(mMemory.data() + destOffset, sourceBuffer->mMemory.data() + sourceOffset, size);

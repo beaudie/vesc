@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/gl/BufferGL.h"
 
 #include "common/debug.h"
+#include "libANGLE/Buffer.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
@@ -47,23 +48,23 @@ BufferGL::~BufferGL()
     }
 }
 
-gl::Error BufferGL::setData(const void* data, size_t size, GLenum usage)
+gl::Error BufferGL::setData(size_t size, const uint8_t *data, GLenum usage)
 {
     mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
     mFunctions->bufferData(DestBufferOperationTarget, size, data, usage);
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error BufferGL::setSubData(const void* data, size_t size, size_t offset)
+gl::Error BufferGL::setSubData(size_t offset, size_t size, const uint8_t *data)
 {
     mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
     mFunctions->bufferSubData(DestBufferOperationTarget, offset, size, data);
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error BufferGL::copySubData(BufferImpl* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size)
+gl::Error BufferGL::copySubData(const gl::Buffer *source, size_t sourceOffset, size_t destOffset, size_t size)
 {
-    BufferGL *sourceGL = GetAs<BufferGL>(source);
+    const BufferGL *sourceGL = GetImplAs<BufferGL>(source);
 
     mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
     mStateManager->bindBuffer(SourceBufferOperationTarget, sourceGL->getBufferID());
