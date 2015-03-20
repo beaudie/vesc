@@ -40,6 +40,7 @@ gl::Error Buffer9::setData(const void* data, size_t size, GLenum usage)
     }
 
     invalidateStaticData();
+    mIndexRangeCache.clear();
 
     if (usage == GL_STATIC_DRAW)
     {
@@ -72,6 +73,7 @@ gl::Error Buffer9::setSubData(const void* data, size_t size, size_t offset)
     }
 
     invalidateStaticData();
+    mIndexRangeCache.invalidateRange(offset, size);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -85,6 +87,7 @@ gl::Error Buffer9::copySubData(BufferImpl* source, GLintptr sourceOffset, GLintp
     memcpy(mMemory.data() + destOffset, sourceBuffer->mMemory.data() + sourceOffset, size);
 
     invalidateStaticData();
+    mIndexRangeCache.invalidateRange(static_cast<unsigned int>(destOffset), static_cast<unsigned int>(size));
 
     return gl::Error(GL_NO_ERROR);
 }
