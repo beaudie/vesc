@@ -1217,16 +1217,48 @@ bool Context::getIndexedQueryParameterInfo(GLenum target, GLenum *type, unsigned
     return false;
 }
 
+static void markTransfromFeedbackUsage(const State &state)
+{
+    gl::TransformFeedback *tf = state.getCurrentTransformFeedback();
+    if (tf->isActive() && !tf->isPaused())
+    {
+        for (size_t i = 0; i < tf->getIndexedBufferCount(); i++)
+        {
+            const OffsetBindingPointer<Buffer>& buffer = tf->getIndexedBuffer(i);
+            if (buffer.get() != nullptr)
+            {
+                buffer->onTransformFeedback();
+            }
+        }
+    }
+}
+
 Error Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instances)
 {
-    return mRenderer->drawArrays(getData(), mode, first, count, instances);
+    Error error = mRenderer->drawArrays(getData(), mode, first, count, instances);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    markTransfromFeedbackUsage(mState);
+
+    return Error(GL_NO_ERROR);
 }
 
 Error Context::drawElements(GLenum mode, GLsizei count, GLenum type,
                             const GLvoid *indices, GLsizei instances,
-                            const rx::RangeUI &indexRange)
+                            const RangeUI &indexRange)
 {
-    return mRenderer->drawElements(getData(), mode, count, type, indices, instances, indexRange);
+    Error error = mRenderer->drawElements(getData(), mode, count, type, indices, instances, indexRange);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    markTransfromFeedbackUsage(mState);
+
+    return Error(GL_NO_ERROR);
 }
 
 Error Context::flush()
