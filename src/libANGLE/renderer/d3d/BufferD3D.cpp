@@ -7,6 +7,8 @@
 // BufferD3D.cpp Defines common functionality between the Buffer9 and Buffer11 classes.
 
 #include "libANGLE/renderer/d3d/BufferD3D.h"
+
+#include "common/utilities.h"
 #include "libANGLE/renderer/d3d/VertexBuffer.h"
 #include "libANGLE/renderer/d3d/IndexBuffer.h"
 
@@ -72,6 +74,32 @@ void BufferD3D::promoteStaticUsage(int dataSize)
             initializeStaticData();
         }
     }
+}
+
+gl::Error BufferD3D::getIndexRange(GLenum type, size_t offset, size_t count, RangeUI *outRange) const
+{
+    unsigned int streamOffset;
+    if (mIndexRangeCache.findRange(type, offset, count, outRange, &streamOffset))
+    {
+        return gl::Error(GL_NO_ERROR);
+    }
+
+    const uint8_t *data = nullptr;
+    gl::Error error = getData(&data);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    gl::ComputeIndexRange(type, data, count, &outRange->start, &outRange->end);
+    mIndexRangeCache.addRange(type, offset, count, *outRange, 0);
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+IndexRangeCache *BufferD3D::getIndexRangeCache()
+{
+    return &mIndexRangeCache;
 }
 
 }

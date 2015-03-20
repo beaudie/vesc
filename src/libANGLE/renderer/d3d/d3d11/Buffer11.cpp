@@ -184,6 +184,7 @@ class Buffer11::SystemMemoryStorage : public Buffer11::BufferStorage
     void unmap() override;
 
     MemoryBuffer *getSystemCopy() { return &mSystemCopy; }
+    const MemoryBuffer *getSystemCopy() const { return &mSystemCopy; }
 
   protected:
     DISALLOW_COPY_AND_ASSIGN(SystemMemoryStorage);
@@ -230,10 +231,14 @@ gl::Error Buffer11::setData(size_t size, const uint8_t *data, GLenum usage)
     return error;
 }
 
-gl::Error Buffer11::getData(const uint8_t **outData)
+gl::Error Buffer11::getData(const uint8_t **outData) const
 {
+    // TODO: remove const casts from this function, getData should be a const operation but
+    // Buffer11 does a lot of caching.  Either const_cast can be used in just this function
+    // or mBufferStorages, mReadUsageCount and mHasSystemMemoryStorage can be made mutable.
+
     SystemMemoryStorage *systemMemoryStorage = nullptr;
-    gl::Error error = getSystemMemoryStorage(&systemMemoryStorage);
+    gl::Error error = const_cast<Buffer11*>(this)->getSystemMemoryStorage(&systemMemoryStorage);
 
     if (error.isError())
     {
@@ -241,7 +246,7 @@ gl::Error Buffer11::getData(const uint8_t **outData)
         return error;
     }
 
-    mReadUsageCount = 0;
+    const_cast<Buffer11*>(this)->mReadUsageCount = 0;
 
     ASSERT(systemMemoryStorage->getSize() >= mSize);
 
@@ -313,6 +318,7 @@ gl::Error Buffer11::setSubData(size_t offset, size_t size, const uint8_t *data)
 
     mSize = std::max(mSize, requiredSize);
     invalidateStaticData();
+    mIndexRangeCache.invalidateRange(offset, size);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -366,6 +372,7 @@ gl::Error Buffer11::copySubData(const gl::Buffer *source, size_t sourceOffset, s
 
     mSize = std::max<size_t>(mSize, destOffset + size);
     invalidateStaticData();
+    mIndexRangeCache.invalidateRange(destOffset, size);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -403,6 +410,7 @@ gl::Error Buffer11::mapRange(size_t offset, size_t length, GLbitfield access, GL
     {
         // Update the data revision immediately, since the data might be changed at any time
         mMappedStorage->setDataRevision(mMappedStorage->getDataRevision() + 1);
+        mIndexRangeCache.invalidateRange(offset, length);
     }
 
     uint8_t *mappedBuffer = mMappedStorage->map(offset, length, access);
@@ -437,6 +445,7 @@ void Buffer11::markTransformFeedbackUsage()
     }
 
     invalidateStaticData();
+    mIndexRangeCache.clear();
 }
 
 void Buffer11::markBufferUsage()

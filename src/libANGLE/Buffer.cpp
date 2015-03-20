@@ -41,7 +41,6 @@ Error Buffer::setData(size_t size, const uint8_t *data, GLenum usage)
         return error;
     }
 
-    mIndexRangeCache.clear();
     mUsage = usage;
     mSize = size;
 
@@ -56,8 +55,6 @@ Error Buffer::setSubData(size_t offset, size_t size, const uint8_t *data)
         return error;
     }
 
-    mIndexRangeCache.invalidateRange(offset, size);
-
     return error;
 }
 
@@ -68,8 +65,6 @@ Error Buffer::copySubData(const Buffer *source, size_t sourceOffset, size_t dest
     {
         return error;
     }
-
-    mIndexRangeCache.invalidateRange(destOffset, size);
 
     return error;
 }
@@ -90,11 +85,6 @@ Error Buffer::map(GLbitfield access)
     mMapLength = mSize;
     mAccessFlags = static_cast<GLint>(access);
 
-    if ((access & GL_MAP_WRITE_BIT) > 0)
-    {
-        mIndexRangeCache.invalidateRange(0, mMapLength);
-    }
-
     return error;
 }
 
@@ -114,11 +104,6 @@ Error Buffer::mapRange(size_t offset, size_t length, GLbitfield access)
     mMapOffset = static_cast<GLint64>(offset);
     mMapLength = static_cast<GLint64>(length);
     mAccessFlags = static_cast<GLint>(access);
-
-    if ((access & GL_MAP_WRITE_BIT) > 0)
-    {
-        mIndexRangeCache.invalidateRange(offset, length);
-    }
 
     return error;
 }
@@ -141,6 +126,11 @@ Error Buffer::unmap(GLboolean *result)
     mAccessFlags = 0;
 
     return error;
+}
+
+Error Buffer::getIndexRange(GLenum type, size_t offset, size_t count, rx::RangeUI *outRange) const
+{
+    return mBuffer->getIndexRange(type, offset, count, outRange);
 }
 
 }

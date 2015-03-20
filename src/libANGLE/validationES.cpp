@@ -19,7 +19,6 @@
 #include "libANGLE/Uniform.h"
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/VertexArray.h"
-#include "libANGLE/renderer/BufferImpl.h"
 
 #include "common/mathutil.h"
 #include "common/utilities.h"
@@ -1598,25 +1597,16 @@ bool ValidateDrawElements(Context *context, GLenum mode, GLsizei count, GLenum t
     // TODO: also disable index checking on back-ends that are robust to out-of-range accesses.
     if (elementArrayBuffer)
     {
-        uintptr_t offset = reinterpret_cast<uintptr_t>(indices);
-        if (!elementArrayBuffer->getIndexRangeCache()->findRange(type, offset, count, indexRangeOut, NULL))
+        Error error = elementArrayBuffer->getIndexRange(type, reinterpret_cast<size_t>(indices), count, indexRangeOut);
+        if (error.isError())
         {
-            rx::BufferImpl *bufferImpl = elementArrayBuffer->getImplementation();
-            const uint8_t *dataPointer = NULL;
-            Error error = bufferImpl->getData(&dataPointer);
-            if (error.isError())
-            {
-                context->recordError(error);
-                return false;
-            }
-
-            const uint8_t *offsetPointer = dataPointer + offset;
-            *indexRangeOut = rx::IndexRangeCache::ComputeRange(type, offsetPointer, count);
+            context->recordError(error);
+            return false;
         }
     }
     else
     {
-        *indexRangeOut = rx::IndexRangeCache::ComputeRange(type, indices, count);
+        gl::ComputeIndexRange(type, indices, count, &indexRangeOut->start, &indexRangeOut->end);
     }
 
     if (!ValidateDrawBase(context, mode, count, static_cast<GLsizei>(indexRangeOut->end), primcount))

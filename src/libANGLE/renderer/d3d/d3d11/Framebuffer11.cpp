@@ -159,7 +159,7 @@ gl::Error Framebuffer11::readPixels(const gl::Rectangle &area, GLenum format, GL
             return error;
         }
 
-        packBuffer->getIndexRangeCache()->clear();
+        packBufferStorage->getIndexRangeCache()->clear();
     }
     else
     {

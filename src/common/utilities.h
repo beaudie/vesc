@@ -42,6 +42,8 @@ GLenum LayerIndexToCubeMapTextureTarget(size_t index);
 
 bool IsTriangleMode(GLenum drawMode);
 
+void ComputeIndexRange(GLenum type, const GLvoid *indices, GLsizei count, unsigned int *minElement, unsigned int *maxElement);
+
 // [OpenGL ES 3.0.2] Section 2.3.1 page 14
 // Data Conversion For State-Setting Commands
 // Floating-point values are rounded to the nearest integer, instead of truncated, as done by static_cast.

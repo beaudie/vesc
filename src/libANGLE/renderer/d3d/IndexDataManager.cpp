@@ -116,9 +116,9 @@ gl::Error IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buf
     {
         streamOffset = offset;
 
-        if (!buffer->getIndexRangeCache()->findRange(type, offset, count, NULL, NULL))
+        if (!storage->getIndexRangeCache()->findRange(type, offset, count, NULL, NULL))
         {
-            buffer->getIndexRangeCache()->addRange(type, offset, count, translated->indexRange, offset);
+            storage->getIndexRangeCache()->addRange(type, offset, count, translated->indexRange, offset);
         }
     }
     else if (staticBuffer && staticBuffer->getBufferSize() != 0 && staticBuffer->getIndexType() == type && alignedOffset)

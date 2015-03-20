@@ -10,6 +10,7 @@
 #define LIBANGLE_RENDERER_GL_BUFFERGL_H_
 
 #include "libANGLE/renderer/BufferImpl.h"
+#include "libANGLE/renderer/IndexRangeCache.h"
 
 namespace rx
 {
@@ -30,14 +31,14 @@ class BufferGL : public BufferImpl
     gl::Error mapRange(size_t offset, size_t length, GLbitfield access, GLvoid **mapPtr) override;
     gl::Error unmap(GLboolean *result) override;
 
-    // This method may not have a corresponding GL-backed function. It is necessary
-    // for validation, for certain indexed draw calls.
-    gl::Error getData(const uint8_t **outData) override;
+    gl::Error getIndexRange(GLenum type, size_t offset, size_t count, RangeUI *outRange) const override;
 
     GLuint getBufferID() const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(BufferGL);
+
+    mutable IndexRangeCache mIndexRangeCache;
 
     const FunctionsGL *mFunctions;
     StateManagerGL *mStateManager;
