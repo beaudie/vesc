@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/d3d/BufferD3D.h"
 
+#include "common/utilities.h"
 #include "libANGLE/renderer/d3d/IndexBuffer.h"
 #include "libANGLE/renderer/d3d/VertexBuffer.h"
 
@@ -49,7 +50,7 @@ void BufferD3D::initializeStaticData()
     }
 }
 
-void BufferD3D::invalidateStaticData()
+void BufferD3D::invalidateStaticData(size_t offset, size_t size)
 {
     if ((mStaticVertexBuffer && mStaticVertexBuffer->getBufferSize() != 0) || (mStaticIndexBuffer && mStaticIndexBuffer->getBufferSize() != 0))
     {
@@ -61,6 +62,8 @@ void BufferD3D::invalidateStaticData()
     }
 
     mUnmodifiedDataUse = 0;
+
+    mIndexRangeCache.invalidateRange(offset, size);
 }
 
 // Creates static buffers if sufficient used data has been left unmodified
@@ -75,6 +78,31 @@ void BufferD3D::promoteStaticUsage(int dataSize)
             initializeStaticData();
         }
     }
+}
+
+gl::Error BufferD3D::getIndexRange(GLenum type, size_t offset, size_t count, RangeUI *outRange)
+{
+    if (mIndexRangeCache.findRange(type, offset, count, outRange))
+    {
+        return gl::Error(GL_NO_ERROR);
+    }
+
+    const uint8_t *data = nullptr;
+    gl::Error error = getData(&data);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    gl::ComputeIndexRange(type, data + offset, count, &outRange->start, &outRange->end);
+    mIndexRangeCache.addRange(type, offset, count, *outRange);
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+bool BufferD3D::hasStaticBuffers() const
+{
+    return (mStaticVertexBuffer && mStaticIndexBuffer);
 }
 
 }

@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/gl/BufferGL.h"
 
 #include "common/debug.h"
+#include "common/utilities.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
@@ -51,6 +52,9 @@ gl::Error BufferGL::setData(const void* data, size_t size, GLenum usage)
 {
     mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
     mFunctions->bufferData(DestBufferOperationTarget, size, data, usage);
+
+    mIndexRangeCache.clear();
+
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -58,6 +62,9 @@ gl::Error BufferGL::setSubData(const void* data, size_t size, size_t offset)
 {
     mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
     mFunctions->bufferSubData(DestBufferOperationTarget, offset, size, data);
+
+    mIndexRangeCache.invalidateRange(offset, size);
+
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -70,6 +77,8 @@ gl::Error BufferGL::copySubData(BufferImpl* source, GLintptr sourceOffset, GLint
 
     mFunctions->copyBufferSubData(SourceBufferOperationTarget, DestBufferOperationTarget, sourceOffset, destOffset, size);
 
+    mIndexRangeCache.invalidateRange(static_cast<unsigned int>(destOffset), static_cast<unsigned int>(size));
+
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -77,6 +86,12 @@ gl::Error BufferGL::map(GLenum access, GLvoid **mapPtr)
 {
     mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
     *mapPtr = mFunctions->mapBuffer(DestBufferOperationTarget, access);
+
+    if ((access & GL_MAP_WRITE_BIT) != 0)
+    {
+        mIndexRangeCache.clear();
+    }
+
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -84,6 +99,12 @@ gl::Error BufferGL::mapRange(size_t offset, size_t length, GLbitfield access, GL
 {
     mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
     *mapPtr = mFunctions->mapBufferRange(DestBufferOperationTarget, offset, length, access);
+
+    if ((access & GL_MAP_WRITE_BIT) != 0)
+    {
+        mIndexRangeCache.invalidateRange(offset, length);
+    }
+
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -96,10 +117,21 @@ gl::Error BufferGL::unmap(GLboolean *result)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error BufferGL::getData(const uint8_t **outData)
+gl::Error BufferGL::getIndexRange(GLenum type, size_t offset, size_t count, RangeUI *outRange)
 {
-    UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    if (mIndexRangeCache.findRange(type, offset, count, outRange))
+    {
+        return gl::Error(GL_NO_ERROR);
+    }
+
+    mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
+    const uint8_t *bufferData = reinterpret_cast<uint8_t*>(mFunctions->mapBuffer(DestBufferOperationTarget, GL_READ_ONLY));
+    gl::ComputeIndexRange(type, bufferData + offset, count, &outRange->start, &outRange->end);
+    mFunctions->unmapBuffer(DestBufferOperationTarget);
+
+    mIndexRangeCache.addRange(type, offset, count, *outRange);
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 GLuint BufferGL::getBufferID() const
