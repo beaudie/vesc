@@ -42,7 +42,6 @@ Error Buffer::bufferData(const void *data, GLsizeiptr size, GLenum usage)
         return error;
     }
 
-    mIndexRangeCache.clear();
     mUsage = usage;
     mSize = size;
 
@@ -57,8 +56,6 @@ Error Buffer::bufferSubData(const void *data, GLsizeiptr size, GLintptr offset)
         return error;
     }
 
-    mIndexRangeCache.invalidateRange(static_cast<unsigned int>(offset), static_cast<unsigned int>(size));
-
     return error;
 }
 
@@ -69,8 +66,6 @@ Error Buffer::copyBufferSubData(Buffer* source, GLintptr sourceOffset, GLintptr 
     {
         return error;
     }
-
-    mIndexRangeCache.invalidateRange(static_cast<unsigned int>(destOffset), static_cast<unsigned int>(size));
 
     return error;
 }
@@ -93,8 +88,6 @@ Error Buffer::map(GLenum access)
     mMapLength = mSize;
     mAccess = access;
     mAccessFlags = GL_MAP_WRITE_BIT;
-
-    mIndexRangeCache.invalidateRange(0, static_cast<unsigned int>(mMapLength));
 
     return error;
 }
@@ -122,11 +115,6 @@ Error Buffer::mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access)
     // no update for ES3 and the GL_READ_ONLY and GL_READ_WRITE enums don't exist for ES,
     // we cannot properly set GL_BUFFER_ACCESS_OES when glMapBufferRange is called.
 
-    if ((access & GL_MAP_WRITE_BIT) > 0)
-    {
-        mIndexRangeCache.invalidateRange(static_cast<unsigned int>(offset), static_cast<unsigned int>(length));
-    }
-
     return error;
 }
 
@@ -149,6 +137,11 @@ Error Buffer::unmap(GLboolean *result)
     mAccessFlags = 0;
 
     return error;
+}
+
+Error Buffer::getIndexRange(GLenum type, size_t offset, size_t count, rx::RangeUI *outRange) const
+{
+    return mBuffer->getIndexRange(type, offset, count, outRange);
 }
 
 }

@@ -307,6 +307,7 @@ gl::Error Buffer11::setSubData(const void *data, size_t size, size_t offset)
 
     mSize = std::max(mSize, requiredSize);
     invalidateStaticData();
+    mIndexRangeCache.invalidateRange(offset, size);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -360,6 +361,7 @@ gl::Error Buffer11::copySubData(BufferImpl* source, GLintptr sourceOffset, GLint
 
     mSize = std::max<size_t>(mSize, destOffset + size);
     invalidateStaticData();
+    mIndexRangeCache.invalidateRange(static_cast<unsigned int>(destOffset), static_cast<unsigned int>(size));
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -400,6 +402,7 @@ gl::Error Buffer11::mapRange(size_t offset, size_t length, GLbitfield access, GL
     {
         // Update the data revision immediately, since the data might be changed at any time
         mMappedStorage->setDataRevision(mMappedStorage->getDataRevision() + 1);
+        mIndexRangeCache.invalidateRange(offset, length);
     }
 
     uint8_t *mappedBuffer = mMappedStorage->map(offset, length, access);
@@ -434,6 +437,7 @@ void Buffer11::markTransformFeedbackUsage()
     }
 
     invalidateStaticData();
+    mIndexRangeCache.clear();
 }
 
 void Buffer11::markBufferUsage()
@@ -557,6 +561,9 @@ gl::Error Buffer11::packPixels(ID3D11Texture2D *srcTexture, UINT srcSubresource,
         }
         packStorage->setDataRevision(latestStorage ? latestStorage->getDataRevision() + 1 : 1);
     }
+
+    invalidateStaticData();
+    mIndexRangeCache.clear();
 
     return gl::Error(GL_NO_ERROR);
 }

@@ -158,8 +158,6 @@ gl::Error Framebuffer11::readPixels(const gl::Rectangle &area, GLenum format, GL
             SafeRelease(colorBufferTexture);
             return error;
         }
-
-        packBuffer->getIndexRangeCache()->clear();
     }
     else
     {
