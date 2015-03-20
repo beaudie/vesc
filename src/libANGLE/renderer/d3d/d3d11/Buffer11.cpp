@@ -370,7 +370,12 @@ gl::Error Buffer11::copySubData(BufferImpl* source, GLintptr sourceOffset, GLint
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Buffer11::map(size_t offset, size_t length, GLbitfield access, GLvoid **mapPtr)
+gl::Error Buffer11::map(GLbitfield access, GLvoid **mapPtr)
+{
+    return mapRange(0, mSize, access, mapPtr);
+}
+
+gl::Error Buffer11::mapRange(size_t offset, size_t length, GLbitfield access, GLvoid **mapPtr)
 {
     ASSERT(!mMappedStorage);
 
@@ -410,11 +415,15 @@ gl::Error Buffer11::map(size_t offset, size_t length, GLbitfield access, GLvoid 
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Buffer11::unmap()
+gl::Error Buffer11::unmap(GLboolean *result)
 {
     ASSERT(mMappedStorage);
     mMappedStorage->unmap();
     mMappedStorage = NULL;
+
+    // TODO: detect if we had corruption. if so, return false.
+    *result = GL_TRUE;
+
     return gl::Error(GL_NO_ERROR);
 }
 

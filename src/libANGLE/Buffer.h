@@ -35,8 +35,9 @@ class Buffer : public RefCountObject
     Error bufferData(const void *data, GLsizeiptr size, GLenum usage);
     Error bufferSubData(const void *data, GLsizeiptr size, GLintptr offset);
     Error copyBufferSubData(Buffer* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size);
+    Error map(GLbitfield access);
     Error mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access);
-    Error unmap();
+    Error unmap(GLboolean *result);
 
     GLenum getUsage() const { return mUsage; }
     GLint getAccessFlags() const {  return mAccessFlags; }
