@@ -3205,7 +3205,7 @@ void GL_APIENTRY InvalidateFramebuffer(GLenum target, GLsizei numAttachments, co
 
         if (framebuffer->checkStatus(context->getData()) == GL_FRAMEBUFFER_COMPLETE)
         {
-            Error error = framebuffer->invalidate(numAttachments, attachments);
+            Error error = framebuffer->invalidate(numAttachments, attachments, false);
             if (error.isError())
             {
                 context->recordError(error);

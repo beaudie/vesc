@@ -132,6 +132,146 @@ static gl::Error getRenderTargetResource(const gl::FramebufferAttachment *colorb
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error Framebuffer11::invalidate(size_t count, const GLenum *attachments, bool useEXTBehavior)
+{
+    ID3D11DeviceContext1 *deviceContext1 = mRenderer->getDeviceContext1IfSupported();
+
+    if (deviceContext1)
+    {
+        bool foundDepth = false;
+        bool foundStencil = false;
+
+        for (size_t i = 0; i < count; ++i)
+        {
+            // Handle color attachments
+            if ((attachments[i] >= GL_COLOR_ATTACHMENT0 && attachments[i] <= GL_COLOR_ATTACHMENT15)
+                || (attachments[i] == GL_COLOR_EXT))
+            {
+                RenderTarget11 *renderTarget = NULL;
+                ID3D11View *colorView = NULL;
+                gl::Error error(GL_NO_ERROR);
+                size_t colorAttachmentID = 0;
+
+                if (attachments[i] == GL_COLOR_EXT)
+                {
+                    colorAttachmentID = 0;
+                }
+                else
+                {
+                    colorAttachmentID = attachments[i] - GL_COLOR_ATTACHMENT0;
+                }
+
+                if (mData.mColorAttachments[colorAttachmentID])
+                {
+                    error = d3d11::GetAttachmentRenderTarget(mData.mColorAttachments[colorAttachmentID], &renderTarget);
+                    if (error.isError())
+                    {
+                        return error;
+                    }
+
+                    colorView = renderTarget->getRenderTargetView();
+
+                    if (colorView != NULL)
+                    {
+                        deviceContext1->DiscardView(colorView);
+                    }
+                }
+            }
+
+            // Handle depth and stencil attachments. Defer discarding until later.
+            switch (attachments[i])
+            {
+              case GL_DEPTH_STENCIL_ATTACHMENT:
+                foundDepth = true;
+                foundStencil = true;
+                break;
+              case GL_DEPTH_EXT:
+              case GL_DEPTH_ATTACHMENT:
+                foundDepth = true;
+                break;
+              case GL_STENCIL_EXT:
+              case GL_STENCIL_ATTACHMENT:
+                foundStencil = true;
+                break;
+              default:
+                // We shouldn't error in this case. The validation should have caught this.
+                break;
+            }
+        }
+
+        bool discardDepth = false;
+        bool discardStencil = false;
+
+        // The D3D11 renderer uses the same view for depth and stencil buffers, so we must be careful.
+        if (useEXTBehavior)
+        {
+            // In the extension, if the app discards only one of the depth and stencil attachments, but 
+            // those are backed by the same packed_depth_stencil buffer, then both images become undefined.
+            discardDepth = foundDepth;
+
+            // Don't bother discarding the stencil buffer if the depth buffer will already do it
+            discardStencil = foundStencil && (!discardDepth || mData.mDepthAttachment == NULL);
+        }
+        else
+        {
+            // In ES 3.0.4, if a specified attachment has base internal format DEPTH_STENCIL but the 
+            // attachments list does not include DEPTH_STENCIL_ATTACHMENT or both DEPTH_ATTACHMENT and 
+            // STENCIL_ATTACHMENT, then only the specified portion of every pixel in the subregion of pixels 
+            // of the DEPTH_STENCIL buffer may be invalidated, and the other portion must be preserved.
+            discardDepth = (foundDepth && foundStencil) || (foundDepth && (mData.mStencilAttachment == NULL));
+            discardStencil = (foundStencil && (mData.mDepthAttachment == NULL));
+        }
+
+        if (discardDepth && mData.mDepthAttachment)
+        {
+            RenderTarget11 *renderTarget = NULL;
+            ID3D11View *depthView = NULL;
+            gl::Error error(GL_NO_ERROR);
+
+            error = d3d11::GetAttachmentRenderTarget(mData.mDepthAttachment, &renderTarget);
+            if (error.isError())
+            {
+                return error;
+            }
+
+            depthView = renderTarget->getDepthStencilView();
+
+            if (depthView != NULL)
+            {
+                deviceContext1->DiscardView(depthView);
+            }
+        }
+
+        if (discardStencil && mData.mStencilAttachment)
+        {
+            RenderTarget11 *renderTarget = NULL;
+            ID3D11View *stencilView = NULL;
+            gl::Error error(GL_NO_ERROR);
+
+            error = d3d11::GetAttachmentRenderTarget(mData.mStencilAttachment, &renderTarget);
+            if (error.isError())
+            {
+                return error;
+            }
+
+            stencilView = renderTarget->getDepthStencilView();
+
+            if (stencilView != NULL)
+            {
+                deviceContext1->DiscardView(stencilView);
+            }
+        }
+    }
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error Framebuffer11::invalidateSub(size_t, const GLenum *, const gl::Rectangle &)
+{
+    // No-implemented yet
+    return gl::Error(GL_NO_ERROR);
+}
+
 gl::Error Framebuffer11::readPixels(const gl::Rectangle &area, GLenum format, GLenum type, size_t outputPitch, const gl::PixelPackState &pack, uint8_t *pixels) const
 {
     ID3D11Texture2D *colorBufferTexture = NULL;
