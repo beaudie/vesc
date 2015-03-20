@@ -400,6 +400,7 @@ gl::Error Buffer11::mapRange(size_t offset, size_t length, GLbitfield access, GL
     {
         // Update the data revision immediately, since the data might be changed at any time
         mMappedStorage->setDataRevision(mMappedStorage->getDataRevision() + 1);
+        invalidateStaticData();
     }
 
     uint8_t *mappedBuffer = mMappedStorage->map(offset, length, access);
@@ -557,6 +558,8 @@ gl::Error Buffer11::packPixels(ID3D11Texture2D *srcTexture, UINT srcSubresource,
         }
         packStorage->setDataRevision(latestStorage ? latestStorage->getDataRevision() + 1 : 1);
     }
+
+    invalidateStaticData();
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -753,7 +756,7 @@ bool Buffer11::supportsDirectBinding() const
     // Do not support direct buffers for dynamic data. The streaming buffer
     // offers better performance for data which changes every frame.
     // Check for absence of static buffer interfaces to detect dynamic data.
-    return (mStaticVertexBuffer && mStaticIndexBuffer);
+    return hasStaticBuffers();
 }
 
 Buffer11::BufferStorage::BufferStorage(Renderer11 *renderer, BufferUsage usage)
