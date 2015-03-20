@@ -461,9 +461,9 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
     return mImpl->checkStatus();
 }
 
-Error Framebuffer::invalidate(size_t count, const GLenum *attachments)
+Error Framebuffer::invalidate(size_t count, const GLenum *attachments, bool useEXTBehavior)
 {
-    return mImpl->invalidate(count, attachments);
+    return mImpl->invalidate(count, attachments, useEXTBehavior);
 }
 
 Error Framebuffer::invalidateSub(size_t count, const GLenum *attachments, const gl::Rectangle &area)
