@@ -307,12 +307,23 @@ gl::Error TextureGL::generateMipmaps()
 
 void TextureGL::bindTexImage(egl::Surface *surface)
 {
-    UNIMPLEMENTED();
+    // Nothing to do, all work should be done by the Surface.
 }
 
 void TextureGL::releaseTexImage()
 {
-    UNIMPLEMENTED();
+    // Not all Surface implementations reset the size of mip 0 when releasing, do it manually
+    ASSERT(mTextureType == GL_TEXTURE_2D);
+
+    mStateManager->bindTexture(mTextureType, mTextureID);
+    if (UseTexImage2D(mTextureType))
+    {
+        mFunctions->texImage2D(mTextureType, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    }
+    else
+    {
+        UNREACHABLE();
+    }
 }
 
 template <typename T>
