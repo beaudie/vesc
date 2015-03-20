@@ -163,7 +163,7 @@ gl::Error IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buf
             }
             else
             {
-                storage->invalidateStaticData();
+                storage->invalidateStaticData(0, storage->getSize());
                 staticBuffer = NULL;
             }
         }
