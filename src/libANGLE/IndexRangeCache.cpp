@@ -29,7 +29,7 @@ void IndexRangeCache::invalidateRange(unsigned int offset, unsigned int size)
     while (i != mIndexRangeCache.end())
     {
         unsigned int rangeStart = i->first.offset;
-        unsigned int rangeEnd = i->first.offset + (gl::GetTypeInfo(i->first.type).bytes * i->first.count);
+        unsigned int rangeEnd = i->first.offset + (GetTypeInfo(i->first.type).bytes * i->first.count);
 
         if (invalidateEnd < rangeStart || invalidateStart > rangeEnd)
         {
@@ -48,12 +48,18 @@ bool IndexRangeCache::findRange(GLenum type, unsigned int offset, GLsizei count,
     IndexRangeMap::const_iterator i = mIndexRangeCache.find(IndexRange(type, offset, count));
     if (i != mIndexRangeCache.end())
     {
-        if (outRange)        *outRange = i->second;
+        if (outRange)
+        {
+            *outRange = i->second;
+        }
         return true;
     }
     else
     {
-        if (outRange)        *outRange = RangeUI(0, 0);
+        if (outRange)
+        {
+            *outRange = RangeUI(0, 0);
+        }
         return false;
     }
 }
@@ -64,12 +70,14 @@ void IndexRangeCache::clear()
 }
 
 IndexRangeCache::IndexRange::IndexRange()
-    : type(GL_NONE), offset(0), count(0)
+    : IndexRangeCache::IndexRange(GL_NONE, 0, 0)
 {
 }
 
 IndexRangeCache::IndexRange::IndexRange(GLenum typ, intptr_t off, GLsizei c)
-    : type(typ), offset(static_cast<unsigned int>(off)), count(c)
+    : type(typ),
+      offset(static_cast<unsigned int>(off)),
+      count(c)
 {
 }
 
