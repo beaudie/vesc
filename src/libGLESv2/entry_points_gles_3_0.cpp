@@ -3189,13 +3189,7 @@ void GL_APIENTRY InvalidateFramebuffer(GLenum target, GLsizei numAttachments, co
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (context->getClientVersion() < 3)
-        {
-            context->recordError(Error(GL_INVALID_OPERATION));
-            return;
-        }
-
-        if (!ValidateInvalidateFramebufferParameters(context, target, numAttachments, attachments))
+        if (!ValidateInvalidateFramebuffer(context, target, numAttachments, attachments))
         {
             return;
         }
@@ -3205,7 +3199,7 @@ void GL_APIENTRY InvalidateFramebuffer(GLenum target, GLsizei numAttachments, co
 
         if (framebuffer->checkStatus(context->getData()) == GL_FRAMEBUFFER_COMPLETE)
         {
-            Error error = framebuffer->invalidate(numAttachments, attachments);
+            Error error = framebuffer->invalidate(numAttachments, attachments, false);
             if (error.isError())
             {
                 context->recordError(error);
@@ -3224,13 +3218,7 @@ void GL_APIENTRY InvalidateSubFramebuffer(GLenum target, GLsizei numAttachments,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (context->getClientVersion() < 3)
-        {
-            context->recordError(Error(GL_INVALID_OPERATION));
-            return;
-        }
-
-        if (!ValidateInvalidateFramebufferParameters(context, target, numAttachments, attachments))
+        if (!ValidateInvalidateFramebuffer(context, target, numAttachments, attachments))
         {
             return;
         }

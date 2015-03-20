@@ -112,7 +112,7 @@ class Framebuffer
     GLenum checkStatus(const gl::Data &data) const;
     bool hasValidDepthStencil() const;
 
-    Error invalidate(size_t count, const GLenum *attachments);
+    Error invalidate(size_t count, const GLenum *attachments, bool useEXTBehavior);
     Error invalidateSub(size_t count, const GLenum *attachments, const gl::Rectangle &area);
 
     Error clear(const State &state, GLbitfield mask);
