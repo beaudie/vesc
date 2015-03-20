@@ -74,12 +74,34 @@ Error Buffer::copyBufferSubData(Buffer* source, GLintptr sourceOffset, GLintptr 
     return error;
 }
 
+Error Buffer::map(GLenum access)
+{
+    ASSERT(!mMapped);
+
+    Error error = mBuffer->map(access, &mMapPointer);
+    if (error.isError())
+    {
+        mMapPointer = NULL;
+        return error;
+    }
+
+    mMapped = GL_TRUE;
+    mMapOffset = 0;
+    mMapLength = mSize;
+    mAccessFlags = static_cast<GLint>(access);
+
+    ASSERT(access == GL_WRITE_ONLY_OES);
+    mIndexRangeCache.invalidateRange(0, mMapLength);
+
+    return error;
+}
+
 Error Buffer::mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access)
 {
     ASSERT(!mMapped);
     ASSERT(offset + length <= mSize);
 
-    Error error = mBuffer->map(offset, length, access, &mMapPointer);
+    Error error = mBuffer->mapRange(offset, length, access, &mMapPointer);
     if (error.isError())
     {
         mMapPointer = NULL;
@@ -99,13 +121,14 @@ Error Buffer::mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access)
     return error;
 }
 
-Error Buffer::unmap()
+Error Buffer::unmap(GLboolean *result)
 {
     ASSERT(mMapped);
 
-    Error error = mBuffer->unmap();
+    Error error = mBuffer->unmap(result);
     if (error.isError())
     {
+        *result = GL_FALSE;
         return error;
     }
 
