@@ -34,4 +34,26 @@ void InitBuiltInFunctionEmulatorForGLSL(BuiltInFunctionEmulator *emu, sh::GLenum
     emu->addEmulatedFunction(EOpLength, float1, "#define webgl_length_emu(x) ((x) >= 0.0 ? (x) : -(x))");
     emu->addEmulatedFunction(EOpNormalize, float1, "#define webgl_normalize_emu(x) ((x) == 0.0 ? 0.0 : ((x) > 0.0 ? 1.0 : -1.0))");
     emu->addEmulatedFunction(EOpReflect, float1, float1, "#define webgl_reflect_emu(I, N) ((I) - 2.0 * (N) * (I) * (N))");
+
+	//test
+
+    TType uint1(EbtUInt);
+
+    emu->addEmulatedFunction(EOpPackSnorm2x16, float2,
+        "uint webgl_packSnorm2x16_emu(vec2 v){\n"
+        "    int x = int(round(clamp(v.x, -1.0, 1.0) * 32767.0));\n"
+        "    int y = int(round(clamp(v.y, -1.0, 1.0) * 32767.0));\n"
+        "    return uint((y << 16) | (x & 0xffff));\n"
+        "}\n");
+
+	 emu->addEmulatedFunction(EOpUnpackSnorm2x16, uint1,
+        "float webgl_fromSnorm(uint x){\n"
+        "    int xi = int((x & 0x7fff) - (x & 0x8000));\n"
+        "    return clamp(float(xi) / 32767.0, -1.0, 1.0);\n"
+        "}\n"
+        "vec2 webgl_unpackSnorm2x16_emu(uint u){\n"
+        "    uint y = (u >> 16);\n"
+        "    uint x = u;\n"
+        "    return vec2(webgl_fromSnorm(x), webgl_fromSnorm(y));\n"
+        "}\n");
 }
