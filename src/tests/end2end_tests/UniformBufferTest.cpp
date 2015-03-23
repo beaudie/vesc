@@ -1,7 +1,7 @@
 #include "ANGLETest.h"
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-ANGLE_TYPED_TEST_CASE(UniformBufferTest, ES3_D3D11_FL11_1, ES3_D3D11_FL11_1_REFERENCE);
+ANGLE_TYPED_TEST_CASE(UniformBufferTest, ES3_D3D11, ES3_D3D11_FL11_1, ES3_D3D11_FL11_1_REFERENCE);
 
 template<typename T>
 class UniformBufferTest : public ANGLETest
