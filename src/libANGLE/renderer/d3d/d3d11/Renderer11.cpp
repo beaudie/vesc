@@ -828,7 +828,16 @@ gl::Error Renderer11::setUniformBuffers(const NonOwningOffsetBindingPointer<gl::
         if (uniformBuffer)
         {
             Buffer11 *bufferStorage = Buffer11::makeBuffer11(uniformBuffer->getImplementation());
-            ID3D11Buffer *constantBuffer = bufferStorage->getBuffer(BUFFER_USAGE_UNIFORM);
+            ID3D11Buffer *constantBuffer;
+
+            if (mSupportsConstantBufferOffsets)
+            {
+                constantBuffer = bufferStorage->getBuffer(BUFFER_USAGE_UNIFORM);
+            }
+            else
+            {
+                constantBuffer = bufferStorage->getConstantBufferRange(uniformBuffer.getOffset(), uniformBuffer.getSize());
+            }
 
             if (!constantBuffer)
             {
@@ -865,7 +874,16 @@ gl::Error Renderer11::setUniformBuffers(const NonOwningOffsetBindingPointer<gl::
         if (uniformBuffer)
         {
             Buffer11 *bufferStorage = Buffer11::makeBuffer11(uniformBuffer->getImplementation());
-            ID3D11Buffer *constantBuffer = bufferStorage->getBuffer(BUFFER_USAGE_UNIFORM);
+            ID3D11Buffer *constantBuffer;
+
+            if (mSupportsConstantBufferOffsets)
+            {
+                constantBuffer = bufferStorage->getBuffer(BUFFER_USAGE_UNIFORM);
+            }
+            else
+            {
+                constantBuffer = bufferStorage->getConstantBufferRange(uniformBuffer.getOffset(), uniformBuffer.getSize());
+            }
 
             if (!constantBuffer)
             {
