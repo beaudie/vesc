@@ -107,4 +107,83 @@ class OffsetBindingPointer : public BindingPointer<ObjectType>
     GLsizeiptr mSize;
 };
 
+template <class ObjectType>
+class NonOwningBindingPointer
+{
+public:
+    NonOwningBindingPointer()
+        : mObject(nullptr)
+    {
+    }
+
+    NonOwningBindingPointer(const NonOwningBindingPointer<ObjectType> &other)
+        : mObject(nullptr)
+    {
+        set(other.mObject);
+    }
+
+    NonOwningBindingPointer(const BindingPointer<ObjectType> &other)
+        : mObject(nullptr)
+    {
+        set(other.get());
+    }
+
+    void operator=(const NonOwningBindingPointer<ObjectType> &other)
+    {
+        set(other.mObject);
+    }
+
+    void operator=(const BindingPointer<ObjectType> &other)
+    {
+        set(other.get());
+    }
+
+    virtual ~NonOwningBindingPointer()
+    {
+    }
+
+    virtual void set(ObjectType *newObject)
+    {
+        mObject = newObject;
+    }
+
+    ObjectType *get() const { return mObject; }
+    ObjectType *operator->() const { return mObject; }
+
+    GLuint id() const { return (mObject != nullptr) ? mObject->id() : 0; }
+    bool operator!() const { return (mObject == nullptr); }
+    operator bool () const { return (mObject != nullptr); }
+
+  private:
+    ObjectType *mObject;
+};
+
+template <class ObjectType>
+class NonOwningOffsetBindingPointer : public NonOwningBindingPointer<ObjectType>
+{
+  public:
+    NonOwningOffsetBindingPointer() : mOffset(0), mSize(0) { }
+
+    NonOwningOffsetBindingPointer(const OffsetBindingPointer<ObjectType> &other)
+        : NonOwningBindingPointer(other),
+          mOffset(other.getOffset()),
+          mSize(other.getSize())
+    {
+    }
+
+    void operator=(const OffsetBindingPointer<ObjectType> &other)
+    {
+        set(other.mObject);
+        mOffset = other.getOffset();
+        mSize = other.getSize();
+    }
+
+    GLintptr getOffset() const { return mOffset; }
+    GLsizeiptr getSize() const { return mSize; }
+
+  private:
+    GLintptr mOffset;
+    GLsizeiptr mSize;
+};
+
 #endif   // LIBANGLE_REFCOUNTOBJECT_H_
