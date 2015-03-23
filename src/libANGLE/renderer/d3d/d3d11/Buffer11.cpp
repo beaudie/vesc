@@ -188,6 +188,8 @@ Buffer11::Buffer11(Renderer11 *renderer)
       mRenderer(renderer),
       mSize(0),
       mMappedStorage(NULL),
+      mConstantBufferStorageAdditionalSize(0),
+      mMaxConstantBufferLruCount(0),
       mReadUsageCount(0),
       mHasSystemMemoryStorage(false)
 {}
@@ -197,6 +199,11 @@ Buffer11::~Buffer11()
     for (auto it = mBufferStorages.begin(); it != mBufferStorages.end(); it++)
     {
         SafeDelete(it->second);
+    }
+
+    for (auto it = mConstantBufferRangeStoragesCache.begin(); it != mConstantBufferRangeStoragesCache.end(); it++)
+    {
+        SafeDelete(it->second.storage);
     }
 }
 
@@ -457,6 +464,32 @@ ID3D11Buffer *Buffer11::getBuffer(BufferUsage usage)
     return static_cast<NativeStorage*>(bufferStorage)->getNativeStorage();
 }
 
+ID3D11Buffer *Buffer11::getConstantBufferRange(GLintptr offset, GLsizeiptr size)
+{
+    markBufferUsage();
+
+    BufferStorage *bufferStorage;
+
+    if (offset == 0)
+    {
+        bufferStorage = getBufferStorage(BUFFER_USAGE_UNIFORM);
+    }
+    else
+    {
+        bufferStorage = getContantBufferRangeStorage(offset, size);
+    }
+
+    if (!bufferStorage)
+    {
+        // Storage out-of-memory
+        return NULL;
+    }
+
+    ASSERT(HAS_DYNAMIC_TYPE(NativeStorage*, bufferStorage));
+
+    return static_cast<NativeStorage*>(bufferStorage)->getNativeStorage();
+}
+
 ID3D11ShaderResourceView *Buffer11::getSRV(DXGI_FORMAT srvFormat)
 {
     BufferStorage *storage = getBufferStorage(BUFFER_USAGE_PIXEL_UNPACK);
@@ -592,6 +625,83 @@ Buffer11::BufferStorage *Buffer11::getBufferStorage(BufferUsage usage)
     return newStorage;
 }
 
+Buffer11::BufferStorage *Buffer11::getContantBufferRangeStorage(GLintptr offset, GLsizeiptr size)
+{
+    BufferStorage *newStorage;
+
+    {
+        // Keep the cacheEntry in a limited scope because it may be invalidated later in the code if we need to reclaim some space.
+        ConstantBufferCacheEntry &cacheEntry = mConstantBufferRangeStoragesCache[offset];
+
+        if (!cacheEntry.storage)
+        {
+            cacheEntry.storage = new NativeStorage(mRenderer, BUFFER_USAGE_UNIFORM);
+            cacheEntry.lruCount = ++mMaxConstantBufferLruCount;
+        }
+
+        cacheEntry.lruCount = ++mMaxConstantBufferLruCount;
+        newStorage = cacheEntry.storage;
+    }
+
+    if (newStorage->getSize() < static_cast<size_t>(size))
+    {
+        size_t maximumAllowedAdditionalSize = 2 * getSize();
+
+        size_t sizeDelta = size - newStorage->getSize();
+
+        while (mConstantBufferStorageAdditionalSize + sizeDelta > maximumAllowedAdditionalSize)
+        {
+            auto iter = min_element(begin(mConstantBufferRangeStoragesCache), end(mConstantBufferRangeStoragesCache),
+                [](const ConstantBufferCache::value_type &a, const ConstantBufferCache::value_type &b) { return a.second.lruCount < b.second.lruCount; });
+
+            ASSERT(iter->second.storage != newStorage);
+
+            mConstantBufferStorageAdditionalSize -= iter->second.storage->getSize();
+            SafeDelete(iter->second.storage);
+            mConstantBufferRangeStoragesCache.erase(iter);
+        }
+
+        if (newStorage->resize(size, false).isError())
+        {
+            // Out of memory error
+            return NULL;
+        }
+
+        mConstantBufferStorageAdditionalSize += sizeDelta;
+
+        newStorage->setDataRevision(0);
+    }
+
+    BufferStorage *latestBuffer = getLatestBufferStorage();
+    if (latestBuffer && latestBuffer->getDataRevision() > newStorage->getDataRevision())
+    {
+        // Copy through a staging buffer if we're copying from or to a non-staging, mappable
+        // buffer storage. This is because we can't map a GPU buffer, and copy CPU
+        // data directly. If we're already using a staging buffer we're fine.
+        if (latestBuffer->getUsage() != BUFFER_USAGE_STAGING &&
+            newStorage->getUsage() != BUFFER_USAGE_STAGING &&
+            (!latestBuffer->isMappable() || !newStorage->isMappable()))
+        {
+            NativeStorage *stagingBuffer = getStagingStorage();
+
+            stagingBuffer->copyFromStorage(latestBuffer, 0, latestBuffer->getSize(), 0);
+            stagingBuffer->setDataRevision(latestBuffer->getDataRevision());
+
+            latestBuffer = stagingBuffer;
+        }
+
+        // if copyFromStorage returns true, the D3D buffer has been recreated
+        // and we should update our serial
+        if (newStorage->copyFromStorage(latestBuffer, offset, size, 0))
+        {
+            updateSerial();
+        }
+        newStorage->setDataRevision(latestBuffer->getDataRevision());
+    }
+
+    return newStorage;
+}
+
 Buffer11::BufferStorage *Buffer11::getLatestBufferStorage() const
 {
     // Even though we iterate over all the direct buffers, it is expected that only
@@ -699,14 +809,14 @@ bool Buffer11::NativeStorage::copyFromStorage(BufferStorage *source, size_t sour
 {
     ID3D11DeviceContext *context = mRenderer->getDeviceContext();
 
-    size_t requiredSize = sourceOffset + size;
+    size_t requiredSize = destOffset + size;
     bool createBuffer = !mNativeStorage || mBufferSize < requiredSize;
 
     // (Re)initialize D3D buffer if needed
     if (createBuffer)
     {
         bool preserveData = (destOffset > 0);
-        resize(source->getSize(), preserveData);
+        resize(requiredSize, preserveData);
     }
 
     if (source->getUsage() == BUFFER_USAGE_PIXEL_PACK ||
