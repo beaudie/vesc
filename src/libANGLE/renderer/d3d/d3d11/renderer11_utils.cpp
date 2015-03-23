@@ -1053,7 +1053,7 @@ void GenerateCaps(ID3D11Device *device, gl::Caps *caps, gl::TextureCapsMap *text
     caps->maxUniformBlockSize = GetMaximumConstantBufferSize(featureLevel);
 
     // Setting a large alignment forces uniform buffers to bind with zero offset
-    caps->uniformBufferOffsetAlignment = static_cast<GLuint>(std::numeric_limits<GLint>::max());
+    caps->uniformBufferOffsetAlignment = 256;
 
     caps->maxCombinedUniformBlocks = caps->maxVertexUniformBlocks + caps->maxFragmentUniformBlocks;
     caps->maxCombinedVertexUniformComponents = (static_cast<GLint64>(caps->maxVertexUniformBlocks) * static_cast<GLint64>(caps->maxUniformBlockSize / 4)) +

@@ -933,11 +933,11 @@ GLuint State::getIndexedUniformBufferId(GLuint index) const
     return mUniformBuffers[index].id();
 }
 
-Buffer *State::getIndexedUniformBuffer(GLuint index) const
+NonOwningOffsetBindingPointer<Buffer> State::getIndexedUniformBuffer(GLuint index) const
 {
     ASSERT(static_cast<size_t>(index) < mUniformBuffers.size());
 
-    return mUniformBuffers[index].get();
+    return mUniformBuffers[index];
 }
 
 void State::setGenericTransformFeedbackBufferBinding(Buffer *buffer)

@@ -1001,7 +1001,7 @@ Error Program::applyUniforms()
     return mProgram->applyUniforms();
 }
 
-Error Program::applyUniformBuffers(const std::vector<gl::Buffer*> boundBuffers, const Caps &caps)
+Error Program::applyUniformBuffers(const std::vector<NonOwningOffsetBindingPointer<gl::Buffer>> boundBuffers, const Caps &caps)
 {
     return mProgram->applyUniformBuffers(boundBuffers, caps);
 }
