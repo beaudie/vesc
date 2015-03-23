@@ -477,7 +477,7 @@ gl::Error RendererD3D::applyUniformBuffers(const gl::Data &data)
 {
     gl::Program *program = data.state->getProgram();
 
-    std::vector<gl::Buffer*> boundBuffers;
+    std::vector<NonOwningOffsetBindingPointer<gl::Buffer>> boundBuffers;
 
     for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
     {
@@ -490,7 +490,7 @@ gl::Error RendererD3D::applyUniformBuffers(const gl::Data &data)
         }
         else
         {
-            gl::Buffer *uniformBuffer = data.state->getIndexedUniformBuffer(blockBinding);
+            NonOwningOffsetBindingPointer<gl::Buffer> uniformBuffer = data.state->getIndexedUniformBuffer(blockBinding);
             ASSERT(uniformBuffer);
             boundBuffers.push_back(uniformBuffer);
         }

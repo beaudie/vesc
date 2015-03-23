@@ -199,7 +199,7 @@ class State
     void setGenericUniformBufferBinding(Buffer *buffer);
     void setIndexedUniformBufferBinding(GLuint index, Buffer *buffer, GLintptr offset, GLsizeiptr size);
     GLuint getIndexedUniformBufferId(GLuint index) const;
-    Buffer *getIndexedUniformBuffer(GLuint index) const;
+    NonOwningOffsetBindingPointer<Buffer> getIndexedUniformBuffer(GLuint index) const;
 
     // GL_TRANSFORM_FEEDBACK_BUFFER - Both indexed and generic targets
     void setGenericTransformFeedbackBufferBinding(Buffer *buffer);
