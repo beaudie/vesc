@@ -53,6 +53,7 @@ class Buffer11 : public BufferD3D
     static Buffer11 *makeBuffer11(BufferImpl *buffer);
 
     ID3D11Buffer *getBuffer(BufferUsage usage);
+    ID3D11Buffer *getConstantBufferRange(GLintptr offset, GLsizeiptr size);
     ID3D11ShaderResourceView *getSRV(DXGI_FORMAT srvFormat);
     bool isMapped() const { return mMappedStorage != NULL; }
     gl::Error packPixels(ID3D11Texture2D *srcTexure, UINT srcSubresource, const PackPixelsParams &params);
@@ -84,6 +85,7 @@ class Buffer11 : public BufferD3D
     BufferStorage *mMappedStorage;
 
     std::map<BufferUsage, BufferStorage*> mBufferStorages;
+    std::map<std::tuple<GLintptr,GLsizeiptr>, BufferStorage*> mConstantBufferRangeStorages;
 
     typedef std::pair<ID3D11Buffer *, ID3D11ShaderResourceView *> BufferSRVPair;
     std::map<DXGI_FORMAT, BufferSRVPair> mBufferResourceViews;
@@ -98,6 +100,8 @@ class Buffer11 : public BufferD3D
 
     BufferStorage *getBufferStorage(BufferUsage usage);
     BufferStorage *getLatestBufferStorage() const;
+
+    BufferStorage *getContantBufferRangeStorage(GLintptr offset, GLsizeiptr size);
 };
 
 }

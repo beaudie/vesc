@@ -206,6 +206,11 @@ Buffer11::~Buffer11()
     {
         SafeDelete(it->second);
     }
+    
+    for (auto it = mConstantBufferRangeStorages.begin(); it != mConstantBufferRangeStorages.end(); it++)
+    {
+        SafeDelete(it->second);
+    }
 }
 
 Buffer11 *Buffer11::makeBuffer11(BufferImpl *buffer)
@@ -465,6 +470,32 @@ ID3D11Buffer *Buffer11::getBuffer(BufferUsage usage)
     return static_cast<NativeStorage*>(bufferStorage)->getNativeStorage();
 }
 
+ID3D11Buffer *Buffer11::getConstantBufferRange(GLintptr offset, GLsizeiptr size)
+{
+    markBufferUsage();
+
+    BufferStorage *bufferStorage;
+
+    if (offset == 0 && size == 0)
+    {
+        bufferStorage = getBufferStorage(BUFFER_USAGE_UNIFORM);
+    }
+    else
+    {
+        bufferStorage = getContantBufferRangeStorage(offset, size);
+    }
+
+    if (!bufferStorage)
+    {
+        // Storage out-of-memory
+        return NULL;
+    }
+
+    ASSERT(HAS_DYNAMIC_TYPE(NativeStorage*, bufferStorage));
+
+    return static_cast<NativeStorage*>(bufferStorage)->getNativeStorage();
+}
+
 ID3D11ShaderResourceView *Buffer11::getSRV(DXGI_FORMAT srvFormat)
 {
     BufferStorage *storage = getBufferStorage(BUFFER_USAGE_PIXEL_UNPACK);
@@ -591,6 +622,50 @@ Buffer11::BufferStorage *Buffer11::getBufferStorage(BufferUsage usage)
         // if copyFromStorage returns true, the D3D buffer has been recreated
         // and we should update our serial
         if (newStorage->copyFromStorage(latestBuffer, 0, latestBuffer->getSize(), 0))
+        {
+            updateSerial();
+        }
+        newStorage->setDataRevision(latestBuffer->getDataRevision());
+    }
+
+    return newStorage;
+}
+
+Buffer11::BufferStorage *Buffer11::getContantBufferRangeStorage(GLintptr offset, GLsizeiptr size)
+{
+    BufferStorage *&newStorage = mConstantBufferRangeStorages[std::make_tuple(offset, size)];
+
+    if (!newStorage)
+    {
+        newStorage = new NativeStorage(mRenderer, BUFFER_USAGE_UNIFORM);
+        if (newStorage->resize(size, false).isError())
+        {
+            // Out of memory error
+            return NULL;
+        }
+    }
+
+    BufferStorage *latestBuffer = getLatestBufferStorage();
+    if (latestBuffer && latestBuffer->getDataRevision() > newStorage->getDataRevision())
+    {
+        // Copy through a staging buffer if we're copying from or to a non-staging, mappable
+        // buffer storage. This is because we can't map a GPU buffer, and copy CPU
+        // data directly. If we're already using a staging buffer we're fine.
+        if (latestBuffer->getUsage() != BUFFER_USAGE_STAGING &&
+            newStorage->getUsage() != BUFFER_USAGE_STAGING &&
+            (!latestBuffer->isMappable() || !newStorage->isMappable()))
+        {
+            NativeStorage *stagingBuffer = getStagingStorage();
+
+            stagingBuffer->copyFromStorage(latestBuffer, 0, latestBuffer->getSize(), 0);
+            stagingBuffer->setDataRevision(latestBuffer->getDataRevision());
+
+            latestBuffer = stagingBuffer;
+        }
+
+        // if copyFromStorage returns true, the D3D buffer has been recreated
+        // and we should update our serial
+        if (newStorage->copyFromStorage(latestBuffer, offset, size, 0))
         {
             updateSerial();
         }
