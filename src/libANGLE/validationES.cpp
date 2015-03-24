@@ -1436,6 +1436,19 @@ static bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count, GLsiz
         }
     }
 
+    // Uniform buffer validation
+    for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
+    {
+        GLuint blockBinding = program->getUniformBlockBinding(uniformBlockIndex);
+
+        if (!state.getIndexedUniformBuffer(blockBinding))
+        {
+            // undefined behaviour
+            context->recordError(Error(GL_INVALID_OPERATION, "It is undefined behaviour to have a used but unbound uniform buffer."));
+            return false;
+        }
+    }
+
     // No-op if zero count
     return (count > 0);
 }
