@@ -88,9 +88,18 @@ gl::Error IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buf
 
         switch (type)
         {
-          case GL_UNSIGNED_BYTE:  alignedOffset = (offset % sizeof(GLubyte) == 0);  break;
-          case GL_UNSIGNED_SHORT: alignedOffset = (offset % sizeof(GLushort) == 0); break;
-          case GL_UNSIGNED_INT:   alignedOffset = (offset % sizeof(GLuint) == 0);   break;
+          case GL_UNSIGNED_BYTE:
+            ASSERT(sizeof(GLubyte) == 1);
+            alignedOffset = true;
+            break;
+          case GL_UNSIGNED_SHORT:
+            ASSERT(sizeof(GLushort) == 2);
+            alignedOffset = ((offset & (sizeof(GLushort) - 1)) == 0);
+            break;
+          case GL_UNSIGNED_INT:
+            ASSERT(sizeof(GLuint) == 4);
+            alignedOffset = ((offset & (sizeof(GLuint) - 1)) == 0);
+            break;
           default: UNREACHABLE(); alignedOffset = false;
         }
 
@@ -127,7 +136,7 @@ gl::Error IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buf
 
         if (!staticBuffer->getIndexRangeCache()->findRange(type, offset, count, NULL, &streamOffset))
         {
-            streamOffset = (offset / typeInfo.bytes) * gl::GetTypeInfo(destinationIndexType).bytes;
+            streamOffset = (offset >> typeInfo.bytesShift) << gl::GetTypeInfo(destinationIndexType).bytesShift;
             staticBuffer->getIndexRangeCache()->addRange(type, offset, count, translated->indexRange, streamOffset);
         }
         if (!buffer->getIndexRangeCache()->findRange(type, offset, count, NULL, NULL))
@@ -162,7 +171,7 @@ gl::Error IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buf
             if (staticBuffer->getBufferSize() == 0 && alignedOffset)
             {
                 indexBuffer = staticBuffer;
-                convertCount = storage->getSize() / typeInfo.bytes;
+                convertCount = storage->getSize() >> typeInfo.bytesShift;
             }
             else
             {
@@ -173,13 +182,13 @@ gl::Error IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buf
 
         ASSERT(indexBuffer);
 
-        if (convertCount > std::numeric_limits<unsigned int>::max() / destTypeInfo.bytes)
+        if (convertCount > (std::numeric_limits<unsigned int>::max() >> destTypeInfo.bytesShift))
         {
             return gl::Error(GL_OUT_OF_MEMORY, "Reserving %u indices of %u bytes each exceeds the maximum buffer size.",
                              convertCount, destTypeInfo.bytes);
         }
 
-        unsigned int bufferSizeRequired = convertCount * destTypeInfo.bytes;
+        unsigned int bufferSizeRequired = convertCount << destTypeInfo.bytesShift;
         error = indexBuffer->reserveBufferSpace(bufferSizeRequired, type);
         if (error.isError())
         {
@@ -212,7 +221,7 @@ gl::Error IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buf
 
         if (staticBuffer)
         {
-            streamOffset = (offset / typeInfo.bytes) * destTypeInfo.bytes;
+            streamOffset = (offset >> typeInfo.bytesShift) << destTypeInfo.bytesShift;
             staticBuffer->getIndexRangeCache()->addRange(type, offset, count, translated->indexRange, streamOffset);
         }
     }
@@ -220,13 +229,13 @@ gl::Error IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buf
     translated->storage = directStorage ? storage : NULL;
     translated->indexBuffer = indexBuffer ? indexBuffer->getIndexBuffer() : NULL;
     translated->serial = directStorage ? storage->getSerial() : indexBuffer->getSerial();
-    translated->startIndex = streamOffset / destTypeInfo.bytes;
+    translated->startIndex = (streamOffset >> destTypeInfo.bytesShift);
     translated->startOffset = streamOffset;
     translated->indexType = destinationIndexType;
 
     if (storage)
     {
-        storage->promoteStaticUsage(count * typeInfo.bytes);
+        storage->promoteStaticUsage(count << typeInfo.bytesShift);
     }
 
     return gl::Error(GL_NO_ERROR);

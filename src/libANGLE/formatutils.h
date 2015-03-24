@@ -25,6 +25,7 @@ struct Type
     Type();
 
     GLuint bytes;
+    GLuint bytesShift;
     bool specialInterpretation;
 };
 const Type &GetTypeInfo(GLenum type);

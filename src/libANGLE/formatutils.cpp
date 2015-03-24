@@ -144,6 +144,12 @@ static inline void InsertTypeInfo(TypeInfoMap *map, GLenum type, GLuint bytes, b
 {
     Type info;
     info.bytes = bytes;
+    GLuint i = 0;
+    while ((1u << i) < bytes) {
+        ++i;
+    }
+    info.bytesShift = i;
+    ASSERT((1u << info.bytesShift) == bytes);
     info.specialInterpretation = specialInterpretation;
 
     map->insert(std::make_pair(type, info));
