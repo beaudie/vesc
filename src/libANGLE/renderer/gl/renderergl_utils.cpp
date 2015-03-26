@@ -7,6 +7,8 @@
 // renderer11_utils.cpp: Conversion functions and other utility routines
 // specific to the OpenGL renderer.
 
+#include <limits>
+
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
 #include "libANGLE/Caps.h"

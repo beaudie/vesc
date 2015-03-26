@@ -17,6 +17,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef ANGLE_PLATFORM_WINDOWS
+#include <intrin.h>
+#endif
+
 namespace gl
 {
 
