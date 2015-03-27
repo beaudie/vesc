@@ -73,7 +73,7 @@ public:
     ObjectType *operator->() const { return mObject; }
 
     GLuint id() const { return (mObject != nullptr) ? mObject->id() : 0; }
-    bool operator!() const { return (mObject == nullptr); }
+    operator bool() const { return (mObject != nullptr); }
 
   private:
     ObjectType *mObject;

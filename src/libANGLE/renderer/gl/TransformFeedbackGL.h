@@ -25,6 +25,9 @@ class TransformFeedbackGL : public TransformFeedbackImpl
     void pause() override;
     void resume() override;
 
+    void bindGenericBuffer(const BindingPointer<gl::Buffer> &binding) override;
+    void bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer> &binding) override;
+
   private:
     DISALLOW_COPY_AND_ASSIGN(TransformFeedbackGL);
 };
