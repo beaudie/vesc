@@ -13,7 +13,7 @@ namespace gl
 TransformFeedback::TransformFeedback(rx::TransformFeedbackImpl* impl, GLuint id)
     : RefCountObject(id),
       mTransformFeedback(impl),
-      mStarted(GL_FALSE),
+      mActive(GL_FALSE),
       mPrimitiveMode(GL_NONE),
       mPaused(GL_FALSE)
 {
@@ -25,28 +25,28 @@ TransformFeedback::~TransformFeedback()
     SafeDelete(mTransformFeedback);
 }
 
-void TransformFeedback::start(GLenum primitiveMode)
+void TransformFeedback::begin(GLenum primitiveMode)
 {
-    mStarted = GL_TRUE;
+    mActive = GL_TRUE;
     mPrimitiveMode = primitiveMode;
     mPaused = GL_FALSE;
     mTransformFeedback->begin(primitiveMode);
 }
 
-void TransformFeedback::stop()
+void TransformFeedback::end()
 {
-    mStarted = GL_FALSE;
+    mActive = GL_FALSE;
     mPrimitiveMode = GL_NONE;
     mPaused = GL_FALSE;
     mTransformFeedback->end();
 }
 
-GLboolean TransformFeedback::isStarted() const
+bool TransformFeedback::isActive() const
 {
-    return mStarted;
+    return mActive;
 }
 
-GLenum TransformFeedback::getDrawMode() const
+GLenum TransformFeedback::getPrimitiveMode() const
 {
     return mPrimitiveMode;
 }
@@ -63,7 +63,7 @@ void TransformFeedback::resume()
     mTransformFeedback->resume();
 }
 
-GLboolean TransformFeedback::isPaused() const
+bool TransformFeedback::isPaused() const
 {
     return mPaused;
 }
