@@ -5,23 +5,34 @@
 //
 
 #include "libANGLE/TransformFeedback.h"
+
+#include "libANGLE/Buffer.h"
+#include "libANGLE/Caps.h"
 #include "libANGLE/renderer/TransformFeedbackImpl.h"
 
 namespace gl
 {
 
-TransformFeedback::TransformFeedback(rx::TransformFeedbackImpl* impl, GLuint id)
+TransformFeedback::TransformFeedback(rx::TransformFeedbackImpl* impl, GLuint id, const Caps &caps)
     : RefCountObject(id),
       mTransformFeedback(impl),
       mActive(false),
       mPrimitiveMode(GL_NONE),
-      mPaused(false)
+      mPaused(false),
+      mGenericBuffer(),
+      mIndexedBuffers(caps.maxTransformFeedbackSeparateAttributes)
 {
     ASSERT(impl != NULL);
 }
 
 TransformFeedback::~TransformFeedback()
 {
+    mGenericBuffer.set(nullptr);
+    for (size_t i = 0; i < mIndexedBuffers.size(); i++)
+    {
+        mIndexedBuffers[i].set(nullptr);
+    }
+
     SafeDelete(mTransformFeedback);
 }
 
@@ -66,6 +77,35 @@ void TransformFeedback::resume()
 bool TransformFeedback::isPaused() const
 {
     return mPaused;
+}
+
+void TransformFeedback::bindGenericBuffer(Buffer *buffer)
+{
+    mGenericBuffer.set(buffer);
+    mTransformFeedback->bindGenericBuffer(mGenericBuffer);
+}
+
+const BindingPointer<Buffer> &TransformFeedback::getGenericBuffer() const
+{
+    return mGenericBuffer;
+}
+
+void TransformFeedback::bindIndexedBuffer(size_t index, Buffer *buffer, size_t offset, size_t size)
+{
+    assert(index < mIndexedBuffers.size());
+    mIndexedBuffers[index].set(buffer, offset, size);
+    mTransformFeedback->bindIndexedBuffer(index, mIndexedBuffers[index]);
+}
+
+const OffsetBindingPointer<Buffer> &TransformFeedback::getIndexedBuffer(size_t index) const
+{
+    assert(index < mIndexedBuffers.size());
+    return mIndexedBuffers[index];
+}
+
+size_t TransformFeedback::getIndexedBufferCount() const
+{
+    return mIndexedBuffers.size();
 }
 
 }
