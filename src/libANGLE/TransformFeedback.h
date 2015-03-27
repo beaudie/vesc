@@ -27,24 +27,23 @@ class TransformFeedback : public RefCountObject
     TransformFeedback(rx::TransformFeedbackImpl* impl, GLuint id);
     virtual ~TransformFeedback();
 
-    void start(GLenum primitiveMode);
-    void stop();
-    GLboolean isStarted() const;
-
-    GLenum getDrawMode() const;
-
+    void begin(GLenum primitiveMode);
+    void end();
     void pause();
     void resume();
-    GLboolean isPaused() const;
+
+    bool isActive() const;
+    bool isPaused() const;
+    GLenum getPrimitiveMode() const;
 
   private:
     DISALLOW_COPY_AND_ASSIGN(TransformFeedback);
 
     rx::TransformFeedbackImpl* mTransformFeedback;
 
-    GLboolean mStarted;
+    bool mActive;
     GLenum mPrimitiveMode;
-    GLboolean mPaused;
+    bool mPaused;
 };
 
 }
