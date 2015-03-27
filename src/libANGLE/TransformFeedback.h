@@ -20,11 +20,13 @@ class TransformFeedbackImpl;
 
 namespace gl
 {
+class Buffer;
+struct Caps;
 
 class TransformFeedback : public RefCountObject
 {
   public:
-    TransformFeedback(rx::TransformFeedbackImpl* impl, GLuint id);
+    TransformFeedback(rx::TransformFeedbackImpl* impl, GLuint id, const Caps &caps);
     virtual ~TransformFeedback();
 
     void begin(GLenum primitiveMode);
@@ -36,12 +38,22 @@ class TransformFeedback : public RefCountObject
     bool isPaused() const;
     GLenum getPrimitiveMode() const;
 
+    void bindGenericBuffer(Buffer *buffer);
+    const BindingPointer<Buffer> &getGenericBuffer() const;
+
+    void bindIndexedBuffer(size_t index, Buffer *buffer, size_t offset, size_t size);
+    const OffsetBindingPointer<Buffer> &getIndexedBuffer(size_t index) const;
+    size_t getIndexedBufferCount() const;
+
   private:
-    rx::TransformFeedbackImpl* mTransformFeedback;
+    rx::TransformFeedbackImpl *mTransformFeedback;
 
     bool mActive;
     GLenum mPrimitiveMode;
     bool mPaused;
+
+    BindingPointer<Buffer> mGenericBuffer;
+    std::vector<OffsetBindingPointer<Buffer>> mIndexedBuffers;
 };
 
 }
