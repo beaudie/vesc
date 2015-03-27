@@ -8,13 +8,14 @@
 // runs the Buffer translation process.
 
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
-#include "libANGLE/renderer/d3d/BufferD3D.h"
-#include "libANGLE/renderer/d3d/VertexBuffer.h"
-#include "libANGLE/renderer/Renderer.h"
+
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Program.h"
-#include "libANGLE/VertexAttribute.h"
 #include "libANGLE/State.h"
+#include "libANGLE/VertexAttribute.h"
+#include "libANGLE/renderer/d3d/BufferD3D.h"
+#include "libANGLE/renderer/d3d/RendererD3D.h"
+#include "libANGLE/renderer/d3d/VertexBuffer.h"
 
 namespace
 {
