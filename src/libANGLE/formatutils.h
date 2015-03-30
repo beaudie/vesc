@@ -22,12 +22,16 @@ namespace gl
 
 struct Type
 {
-    Type();
+    Type(GLuint bytes, GLuint bytesShift, bool specialInterpretation);
 
-    GLuint bytes;
-    GLuint bytesShift; // Bit shift by this value to effectively divide/multiply by "bytes" in a more optimal way
-    bool specialInterpretation;
+    const GLuint bytes;
+    const GLuint bytesShift; // Bit shift by this value to effectively divide/multiply by "bytes" in a more optimal way
+    const bool specialInterpretation;
+
+  private:
+    Type &operator=(const Type &other) = delete; // MSVS generates a warning if assignment is not explicitly handled
 };
+
 const Type &GetTypeInfo(GLenum type);
 
 struct InternalFormat

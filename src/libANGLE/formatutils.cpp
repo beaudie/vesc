@@ -130,25 +130,22 @@ FormatMap BuildFormatMap()
     return map;
 }
 
-Type::Type()
-    : bytes(0),
-      bytesShift(0),
-      specialInterpretation(false)
+Type::Type(GLuint bytes, GLuint bytesShift, bool specialInterpretation)
+    : bytes(bytes),
+      bytesShift(bytesShift),
+      specialInterpretation(specialInterpretation)
 {
+    ASSERT((1u << bytesShift) == bytes);
 }
 
 static Type GenTypeInfo(GLuint bytes, bool specialInterpretation)
 {
-    Type info;
-    info.bytes = bytes;
     GLuint i = 0;
     while ((1u << i) < bytes)
     {
         ++i;
     }
-    info.bytesShift = i;
-    ASSERT((1u << info.bytesShift) == bytes);
-    info.specialInterpretation = specialInterpretation;
+    Type info(bytes, i, specialInterpretation);
     return info;
 }
 
@@ -555,7 +552,8 @@ const Type &GetTypeInfo(GLenum type)
         }
       default:
         {
-            static const Type defaultInfo;
+            UNREACHABLE();
+            static const Type defaultInfo = GenTypeInfo(1, false);
             return defaultInfo;
         }
     }
