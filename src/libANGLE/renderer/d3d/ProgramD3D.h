@@ -225,12 +225,6 @@ class ProgramD3D : public ProgramImpl
     GLuint mUsedPixelSamplerRange;
     bool mDirtySamplerMapping;
 
-    // Cache for validateSamplers
-    std::vector<GLenum> mTextureUnitTypesCache;
-
-    // Cache for getPixelExecutableForFramebuffer
-    std::vector<GLenum> mPixelShaderOutputFormatCache;
-
     int mShaderVersion;
 
     int mAttributesByLayout[gl::MAX_VERTEX_ATTRIBS];
