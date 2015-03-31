@@ -39,7 +39,7 @@ SurfaceD3D::SurfaceD3D(RendererD3D *renderer, egl::Display *display, const egl::
                        EGLenum textureType, EGLClientBuffer shareHandle, EGLNativeWindowType window)
     : SurfaceImpl(display, config, fixedSize, postSubBufferSupported, textureFormat, textureType),
       mRenderer(renderer),
-      mSwapChain(NULL),
+      mSwapChain(nullptr),
       mSwapIntervalDirty(true),
       mWindowSubclassed(false),
       mNativeWindow(window),
