@@ -848,7 +848,7 @@ gl::Error ProgramD3D::getPixelExecutableForFramebuffer(const gl::Framebuffer *fb
     {
         const gl::FramebufferAttachment *colorbuffer = colorbuffers[colorAttachment];
 
-        if (colorbuffer)
+        if (colorbuffer && colorbuffer->valid())
         {
             mPixelShaderOutputFormatCache.push_back(colorbuffer->getBinding() == GL_BACK ? GL_COLOR_ATTACHMENT0 : colorbuffer->getBinding());
         }

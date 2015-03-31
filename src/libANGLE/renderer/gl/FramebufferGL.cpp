@@ -46,7 +46,7 @@ FramebufferGL::~FramebufferGL()
 static void BindFramebufferAttachment(const FunctionsGL *functions, GLenum attachmentPoint,
                                       const gl::FramebufferAttachment *attachment)
 {
-    if (attachment)
+    if (attachment && attachment->valid())
     {
         if (attachment->type() == GL_TEXTURE)
         {
@@ -220,16 +220,16 @@ gl::Error FramebufferGL::clearBufferfi(const gl::State &state, GLenum buffer, GL
 
 GLenum FramebufferGL::getImplementationColorReadFormat() const
 {
-    const gl::FramebufferAttachment *readAttachment = getData().getReadAttachment();
-    GLenum internalFormat = readAttachment->getInternalFormat();
+    const gl::FramebufferAttachment &readAttachment = getData().getReadAttachment();
+    GLenum internalFormat = readAttachment.getInternalFormat();
     const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(internalFormat);
     return internalFormatInfo.format;
 }
 
 GLenum FramebufferGL::getImplementationColorReadType() const
 {
-    const gl::FramebufferAttachment *readAttachment = getData().getReadAttachment();
-    GLenum internalFormat = readAttachment->getInternalFormat();
+    const gl::FramebufferAttachment &readAttachment = getData().getReadAttachment();
+    GLenum internalFormat = readAttachment.getInternalFormat();
     const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(internalFormat);
     return internalFormatInfo.type;
 }

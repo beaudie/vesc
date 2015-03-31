@@ -1214,9 +1214,9 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
 
     for (size_t colorAttachment = 0; colorAttachment < colorbuffers.size(); ++colorAttachment)
     {
-        gl::FramebufferAttachment *colorbuffer = colorbuffers[colorAttachment];
+        const gl::FramebufferAttachment *colorbuffer = colorbuffers[colorAttachment];
 
-        if (colorbuffer)
+        if (colorbuffer && colorbuffer->valid())
         {
             // the draw buffer must be either "none", "back" for the default buffer or the same index as this color (in order)
 
@@ -1264,11 +1264,11 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
 
     // Get the depth stencil buffers
     ID3D11DepthStencilView* framebufferDSV = NULL;
-    gl::FramebufferAttachment *depthStencil = framebuffer->getDepthOrStencilbuffer();
-    if (depthStencil)
+    const gl::FramebufferAttachment &depthStencil = framebuffer->getDepthOrStencilbuffer();
+    if (depthStencil.valid())
     {
         RenderTarget11 *depthStencilRenderTarget = NULL;
-        gl::Error error = d3d11::GetAttachmentRenderTarget(depthStencil, &depthStencilRenderTarget);
+        gl::Error error = d3d11::GetAttachmentRenderTarget(&depthStencil, &depthStencilRenderTarget);
         if (error.isError())
         {
             SafeRelease(framebufferRTVs);
@@ -1289,10 +1289,10 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
         }
 
         // Unbind render target SRVs from the shader here to prevent D3D11 warnings.
-        if (depthStencil->type() == GL_TEXTURE)
+        if (depthStencil.type() == GL_TEXTURE)
         {
             uintptr_t depthStencilResource = reinterpret_cast<uintptr_t>(GetViewResource(framebufferDSV));
-            const gl::ImageIndex *index = depthStencil->getTextureImageIndex();
+            const gl::ImageIndex *index = depthStencil.getTextureImageIndex();
             ASSERT(index);
             // The index doesn't need to be corrected for the small compressed texture workaround
             // because a rendertarget is never compressed.
@@ -2338,11 +2338,11 @@ std::string Renderer11::getShaderModelSuffix() const
 gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                   const gl::Offset &destOffset, TextureStorage *storage, GLint level)
 {
-    gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
-    ASSERT(colorbuffer);
+    const gl::FramebufferAttachment &colorbuffer = framebuffer->getReadColorbuffer();
+    ASSERT(colorbuffer.valid());
 
     RenderTarget11 *sourceRenderTarget = NULL;
-    gl::Error error = d3d11::GetAttachmentRenderTarget(colorbuffer, &sourceRenderTarget);
+    gl::Error error = d3d11::GetAttachmentRenderTarget(&colorbuffer, &sourceRenderTarget);
     if (error.isError())
     {
         return error;
@@ -2389,11 +2389,11 @@ gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::
 gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                     const gl::Offset &destOffset, TextureStorage *storage, GLenum target, GLint level)
 {
-    gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
-    ASSERT(colorbuffer);
+    const gl::FramebufferAttachment &colorbuffer = framebuffer->getReadColorbuffer();
+    ASSERT(colorbuffer.valid());
 
     RenderTarget11 *sourceRenderTarget = NULL;
-    gl::Error error = d3d11::GetAttachmentRenderTarget(colorbuffer, &sourceRenderTarget);
+    gl::Error error = d3d11::GetAttachmentRenderTarget(&colorbuffer, &sourceRenderTarget);
     if (error.isError())
     {
         return error;
@@ -2440,11 +2440,11 @@ gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl
 gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                   const gl::Offset &destOffset, TextureStorage *storage, GLint level)
 {
-    gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
-    ASSERT(colorbuffer);
+    const gl::FramebufferAttachment &colorbuffer = framebuffer->getReadColorbuffer();
+    ASSERT(colorbuffer.valid());
 
     RenderTarget11 *sourceRenderTarget = NULL;
-    gl::Error error = d3d11::GetAttachmentRenderTarget(colorbuffer, &sourceRenderTarget);
+    gl::Error error = d3d11::GetAttachmentRenderTarget(&colorbuffer, &sourceRenderTarget);
     if (error.isError())
     {
         return error;
@@ -2491,11 +2491,11 @@ gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::
 gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                        const gl::Offset &destOffset, TextureStorage *storage, GLint level)
 {
-    gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
-    ASSERT(colorbuffer);
+    const gl::FramebufferAttachment &colorbuffer = framebuffer->getReadColorbuffer();
+    ASSERT(colorbuffer.valid());
 
     RenderTarget11 *sourceRenderTarget = NULL;
-    gl::Error error = d3d11::GetAttachmentRenderTarget(colorbuffer, &sourceRenderTarget);
+    gl::Error error = d3d11::GetAttachmentRenderTarget(&colorbuffer, &sourceRenderTarget);
     if (error.isError())
     {
         return error;
