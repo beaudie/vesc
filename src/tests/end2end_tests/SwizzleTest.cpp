@@ -3,7 +3,7 @@
 #include <vector>
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-ANGLE_TYPED_TEST_CASE(SwizzleTest, ES3_D3D11);
+ANGLE_TYPED_TEST_CASE(SwizzleTest, ES3_D3D11, ES3_OPENGL);
 
 template<typename T>
 class SwizzleTest : public ANGLETest
