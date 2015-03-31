@@ -30,11 +30,11 @@ ImageD3D::ImageD3D()
 
 gl::Error ImageD3D::copy(const gl::Offset &destOffset, const gl::Rectangle &sourceArea, const gl::Framebuffer *source)
 {
-    gl::FramebufferAttachment *colorbuffer = source->getReadColorbuffer();
-    ASSERT(colorbuffer);
+    const gl::FramebufferAttachment &attachment = source->getReadColorbuffer();
+    ASSERT(attachment.valid());
 
     RenderTargetD3D *renderTarget = NULL;
-    gl::Error error = GetAttachmentRenderTarget(colorbuffer, &renderTarget);
+    gl::Error error = GetAttachmentRenderTarget(&attachment, &renderTarget);
     if (error.isError())
     {
         return error;
