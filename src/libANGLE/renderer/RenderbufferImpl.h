@@ -12,11 +12,12 @@
 #include "angle_gl.h"
 #include "common/angleutils.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/renderer/AttachmentImpl.h"
 
 namespace rx
 {
 
-class RenderbufferImpl : angle::NonCopyable
+class RenderbufferImpl : public AttachmentImpl
 {
   public:
     RenderbufferImpl();

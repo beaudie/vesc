@@ -15,11 +15,7 @@
 #include "common/angleutils.h"
 #include "libANGLE/AttachableObject.h"
 #include "libANGLE/Error.h"
-
-namespace rx
-{
-class RenderbufferImpl;
-}
+#include "libANGLE/renderer/RenderbufferImpl.h"
 
 namespace gl
 {
@@ -58,6 +54,8 @@ class Renderbuffer : public AttachableObject
     GLsizei getAttachmentSamples(const gl::AttachmentSubResource &subResource) const override { return getSamples(); }
 
   private:
+    rx::AttachmentImpl *getAttachmentImpl() const override { return mRenderbuffer; }
+
     rx::RenderbufferImpl *mRenderbuffer;
 
     GLsizei mWidth;

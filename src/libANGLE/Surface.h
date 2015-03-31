@@ -16,15 +16,11 @@
 #include "common/angleutils.h"
 #include "libANGLE/AttachableObject.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/renderer/SurfaceImpl.h"
 
 namespace gl
 {
 class Texture;
-}
-
-namespace rx
-{
-class SurfaceImpl;
 }
 
 namespace egl
@@ -76,6 +72,7 @@ class Surface final : public gl::AttachableObject
 
   private:
     virtual ~Surface();
+    rx::AttachmentImpl *getAttachmentImpl() const override { return mImplementation; }
 
     rx::SurfaceImpl *mImplementation;
 

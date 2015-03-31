@@ -115,6 +115,7 @@
             'libANGLE/formatutils.h',
             'libANGLE/queryconversions.cpp',
             'libANGLE/queryconversions.h',
+            'libANGLE/renderer/AttachmentImpl.h',
             'libANGLE/renderer/BufferImpl.h',
             'libANGLE/renderer/CompilerImpl.h',
             'libANGLE/renderer/DisplayImpl.cpp',
