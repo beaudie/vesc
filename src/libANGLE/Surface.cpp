@@ -12,7 +12,6 @@
 
 #include "libANGLE/Config.h"
 #include "libANGLE/Texture.h"
-#include "libANGLE/renderer/SurfaceImpl.h"
 
 namespace egl
 {

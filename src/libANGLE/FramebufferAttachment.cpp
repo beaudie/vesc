@@ -160,4 +160,9 @@ GLsizei FramebufferAttachment::getSamples() const
     return mResource->getAttachmentSamples(mSubResource);
 }
 
+gl::Error FramebufferAttachment::getRenderTarget(rx::AttachmentRenderTarget *rtOut) const
+{
+    return mResource->getAttachmentRenderTarget(mSubResource, rtOut);
+}
+
 }

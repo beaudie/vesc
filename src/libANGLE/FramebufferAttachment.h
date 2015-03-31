@@ -87,7 +87,15 @@ class FramebufferAttachment final : angle::NonCopyable
         return rx::GetAs<egl::Surface>(mResource.get());
     }
 
+    template <typename T>
+    gl::Error getRenderTarget(T **rtOut) const
+    {
+        return getRenderTarget(reinterpret_cast<rx::AttachmentRenderTarget *>(rtOut));
+    }
+
   private:
+    gl::Error getRenderTarget(rx::AttachmentRenderTarget *rtOut) const;
+
     GLenum mType;
     AttachmentSubResource mSubResource;
     BindingPointer<AttachableObject> mResource;
