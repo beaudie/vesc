@@ -14,8 +14,8 @@
 #include <EGL/egl.h>
 
 #include "common/angleutils.h"
+#include "libANGLE/AttachableObject.h"
 #include "libANGLE/Error.h"
-#include "libANGLE/RefCountObject.h"
 
 namespace gl
 {
@@ -33,7 +33,7 @@ class AttributeMap;
 class Display;
 struct Config;
 
-class Surface final : public RefCountObject
+class Surface final : public gl::AttachableObject
 {
   public:
     Surface(rx::SurfaceImpl *impl, EGLint surfaceType, const egl::Config *config, const AttributeMap &attributes);
@@ -69,6 +69,12 @@ class Surface final : public RefCountObject
     gl::Texture *getBoundTexture() const { return mTexture; }
 
     EGLint isFixedSize() const;
+
+    // AttachableObject implementation
+    GLsizei getAttachmentWidth(const gl::AttachmentSubResource &subResource) const override { return getWidth(); }
+    GLsizei getAttachmentHeight(const gl::AttachmentSubResource &subResource) const override { return getHeight(); }
+    GLenum getAttachmentInternalFormat(const gl::AttachmentSubResource &subResource) const override;
+    GLsizei getAttachmentSamples(const gl::AttachmentSubResource &subResource) const override;
 
   private:
     rx::SurfaceImpl *mImplementation;

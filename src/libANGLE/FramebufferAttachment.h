@@ -31,7 +31,7 @@ class FramebufferAttachment : angle::NonCopyable
   public:
     FramebufferAttachment(GLenum binding,
                           const ImageIndex &textureIndex,
-                          RefCountObject *resource);
+                          AttachableObject *resource);
     virtual ~FramebufferAttachment();
 
     // Helper methods
@@ -47,7 +47,7 @@ class FramebufferAttachment : angle::NonCopyable
     bool isTextureWithId(GLuint textureId) const { return type() == GL_TEXTURE && id() == textureId; }
     bool isRenderbufferWithId(GLuint renderbufferId) const { return type() == GL_RENDERBUFFER && id() == renderbufferId; }
 
-    GLenum getBinding() const { return mBinding; }
+    GLenum getBinding() const { return mSubResource.binding(); }
 
     GLuint id() const;
     const ImageIndex *getTextureImageIndex() const;
@@ -55,21 +55,20 @@ class FramebufferAttachment : angle::NonCopyable
     GLint mipLevel() const;
     GLint layer() const;
 
-    // Child class interface
-    virtual GLsizei getWidth() const = 0;
-    virtual GLsizei getHeight() const = 0;
-    virtual GLenum getInternalFormat() const = 0;
-    virtual GLsizei getSamples() const = 0;
+    GLsizei getWidth() const;
+    GLsizei getHeight() const;
+    GLenum getInternalFormat() const;
+    GLsizei getSamples() const;
 
+    // Child class interface
     virtual GLenum type() const = 0;
 
     virtual Texture *getTexture() const = 0;
     virtual Renderbuffer *getRenderbuffer() const = 0;
 
   protected:
-    GLenum mBinding;
-    ImageIndex mTextureIndex;
-    BindingPointer<RefCountObject> mResource;
+    AttachmentSubResource mSubResource;
+    BindingPointer<AttachableObject> mResource;
 };
 
 class TextureAttachment : public FramebufferAttachment
@@ -77,12 +76,6 @@ class TextureAttachment : public FramebufferAttachment
   public:
     TextureAttachment(GLenum binding, Texture *texture, const ImageIndex &index);
     virtual ~TextureAttachment();
-
-    virtual GLsizei getSamples() const;
-
-    virtual GLsizei getWidth() const;
-    virtual GLsizei getHeight() const;
-    virtual GLenum getInternalFormat() const;
 
     virtual GLenum type() const;
 
@@ -101,11 +94,6 @@ class RenderbufferAttachment : public FramebufferAttachment
 
     virtual ~RenderbufferAttachment();
 
-    virtual GLsizei getWidth() const;
-    virtual GLsizei getHeight() const;
-    virtual GLenum getInternalFormat() const;
-    virtual GLsizei getSamples() const;
-
     virtual GLenum type() const;
 
     virtual Texture *getTexture() const;
@@ -122,11 +110,6 @@ class DefaultAttachment : public FramebufferAttachment
     DefaultAttachment(GLenum binding, egl::Surface *surface);
 
     virtual ~DefaultAttachment();
-
-    virtual GLsizei getWidth() const;
-    virtual GLsizei getHeight() const;
-    virtual GLenum getInternalFormat() const;
-    virtual GLsizei getSamples() const;
 
     virtual GLenum type() const;
 

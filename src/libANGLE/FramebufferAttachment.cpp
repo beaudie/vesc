@@ -24,9 +24,8 @@ namespace gl
 
 FramebufferAttachment::FramebufferAttachment(GLenum binding,
                                              const ImageIndex &textureIndex,
-                                             RefCountObject *resource)
-    : mBinding(binding),
-      mTextureIndex(textureIndex)
+                                             AttachableObject *resource)
+    : mSubResource(binding, textureIndex)
 {
     mResource.set(resource);
 }
@@ -84,29 +83,54 @@ GLuint FramebufferAttachment::id() const
 const ImageIndex *FramebufferAttachment::getTextureImageIndex() const
 {
     ASSERT(type() == GL_TEXTURE);
-    return &mTextureIndex;
+    return &mSubResource.textureIndex();
 }
 
 GLenum FramebufferAttachment::cubeMapFace() const
 {
     ASSERT(type() == GL_TEXTURE);
-    return IsCubeMapTextureTarget(mTextureIndex.type) ? mTextureIndex.type : GL_NONE;
+
+    const auto &index = mSubResource.textureIndex();
+    return IsCubeMapTextureTarget(index.type) ? index.type : GL_NONE;
 }
 
 GLint FramebufferAttachment::mipLevel() const
 {
     ASSERT(type() == GL_TEXTURE);
-    return mTextureIndex.mipIndex;
+    return mSubResource.textureIndex().mipIndex;
 }
 
 GLint FramebufferAttachment::layer() const
 {
     ASSERT(type() == GL_TEXTURE);
-    if (mTextureIndex.type == GL_TEXTURE_2D_ARRAY || mTextureIndex.type == GL_TEXTURE_3D)
+
+    const auto &index = mSubResource.textureIndex();
+
+    if (index.type == GL_TEXTURE_2D_ARRAY || index.type == GL_TEXTURE_3D)
     {
-        return mTextureIndex.layerIndex;
+        return index.layerIndex;
     }
     return 0;
+}
+
+GLsizei FramebufferAttachment::getWidth() const
+{
+    return mResource->getAttachmentWidth(mSubResource);
+}
+
+GLsizei FramebufferAttachment::getHeight() const
+{
+    return mResource->getAttachmentHeight(mSubResource);
+}
+
+GLenum FramebufferAttachment::getInternalFormat() const
+{
+    return mResource->getAttachmentInternalFormat(mSubResource);
+}
+
+GLsizei FramebufferAttachment::getSamples() const
+{
+    return mResource->getAttachmentSamples(mSubResource);
 }
 
 ///// TextureAttachment Implementation ////////
@@ -118,26 +142,6 @@ TextureAttachment::TextureAttachment(GLenum binding, Texture *texture, const Ima
 
 TextureAttachment::~TextureAttachment()
 {
-}
-
-GLsizei TextureAttachment::getSamples() const
-{
-    return 0;
-}
-
-GLsizei TextureAttachment::getWidth() const
-{
-    return getTexture()->getWidth(mTextureIndex.type, mTextureIndex.mipIndex);
-}
-
-GLsizei TextureAttachment::getHeight() const
-{
-    return getTexture()->getHeight(mTextureIndex.type, mTextureIndex.mipIndex);
-}
-
-GLenum TextureAttachment::getInternalFormat() const
-{
-    return getTexture()->getInternalFormat(mTextureIndex.type, mTextureIndex.mipIndex);
 }
 
 GLenum TextureAttachment::type() const
@@ -163,26 +167,6 @@ RenderbufferAttachment::~RenderbufferAttachment()
 {
 }
 
-GLsizei RenderbufferAttachment::getWidth() const
-{
-    return getRenderbuffer()->getWidth();
-}
-
-GLsizei RenderbufferAttachment::getHeight() const
-{
-    return getRenderbuffer()->getHeight();
-}
-
-GLenum RenderbufferAttachment::getInternalFormat() const
-{
-    return getRenderbuffer()->getInternalFormat();
-}
-
-GLsizei RenderbufferAttachment::getSamples() const
-{
-    return getRenderbuffer()->getSamples();
-}
-
 GLenum RenderbufferAttachment::type() const
 {
     return GL_RENDERBUFFER;
@@ -201,28 +185,6 @@ DefaultAttachment::DefaultAttachment(GLenum binding, egl::Surface *surface)
 
 DefaultAttachment::~DefaultAttachment()
 {
-}
-
-GLsizei DefaultAttachment::getWidth() const
-{
-    return getSurface()->getWidth();
-}
-
-GLsizei DefaultAttachment::getHeight() const
-{
-    return getSurface()->getHeight();
-}
-
-GLenum DefaultAttachment::getInternalFormat() const
-{
-    const egl::Config *config = getSurface()->getConfig();
-    return (getBinding() == GL_BACK ? config->renderTargetFormat : config->depthStencilFormat);
-}
-
-GLsizei DefaultAttachment::getSamples() const
-{
-    const egl::Config *config = getSurface()->getConfig();
-    return config->samples;
 }
 
 GLenum DefaultAttachment::type() const

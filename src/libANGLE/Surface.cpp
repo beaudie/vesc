@@ -18,7 +18,7 @@ namespace egl
 {
 
 Surface::Surface(rx::SurfaceImpl *impl, EGLint surfaceType, const egl::Config *config, const AttributeMap &attributes)
-    : RefCountObject(0), // id unused
+    : AttachableObject(0), // id unused
       mImplementation(impl),
       mType(surfaceType),
       mConfig(config),
@@ -143,6 +143,17 @@ Error Surface::releaseTexImage(EGLint buffer)
 
     boundTexture->releaseTexImage();
     return mImplementation->releaseTexImage(buffer);
+}
+
+GLenum Surface::getAttachmentInternalFormat(const gl::AttachmentSubResource &subResource) const
+{
+    const egl::Config *config = getConfig();
+    return (subResource.binding() == GL_BACK ? config->renderTargetFormat : config->depthStencilFormat);
+}
+
+GLsizei Surface::getAttachmentSamples(const gl::AttachmentSubResource &subResource) const
+{
+    return getConfig()->samples;
 }
 
 }
