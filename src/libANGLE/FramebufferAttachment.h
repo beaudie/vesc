@@ -18,21 +18,20 @@
 
 namespace gl
 {
-class Renderbuffer;
-
 // FramebufferAttachment implements a GL framebuffer attachment.
 // Attachments are "light" containers, which store pointers to ref-counted GL objects.
 // We support GL texture (2D/3D/Cube/2D array) and renderbuffer object attachments.
 // Note: Our old naming scheme used the term "Renderbuffer" for both GL renderbuffers and for
 // framebuffer attachments, which confused their usage.
 
-class FramebufferAttachment : angle::NonCopyable
+class FramebufferAttachment final : angle::NonCopyable
 {
   public:
-    FramebufferAttachment(GLenum binding,
+    FramebufferAttachment(GLenum type,
+                          GLenum binding,
                           const ImageIndex &textureIndex,
                           AttachableObject *resource);
-    virtual ~FramebufferAttachment();
+    ~FramebufferAttachment();
 
     // Helper methods
     GLuint getRedSize() const;
@@ -44,8 +43,8 @@ class FramebufferAttachment : angle::NonCopyable
     GLenum getComponentType() const;
     GLenum getColorEncoding() const;
 
-    bool isTextureWithId(GLuint textureId) const { return type() == GL_TEXTURE && id() == textureId; }
-    bool isRenderbufferWithId(GLuint renderbufferId) const { return type() == GL_RENDERBUFFER && id() == renderbufferId; }
+    bool isTextureWithId(GLuint textureId) const { return mType == GL_TEXTURE && id() == textureId; }
+    bool isRenderbufferWithId(GLuint renderbufferId) const { return mType == GL_RENDERBUFFER && id() == renderbufferId; }
 
     GLenum getBinding() const { return mSubResource.binding(); }
 
@@ -59,67 +58,30 @@ class FramebufferAttachment : angle::NonCopyable
     GLsizei getHeight() const;
     GLenum getInternalFormat() const;
     GLsizei getSamples() const;
+    GLenum type() const { return mType; }
 
-    // Child class interface
-    virtual GLenum type() const = 0;
-
-    virtual Texture *getTexture() const = 0;
-    virtual Renderbuffer *getRenderbuffer() const = 0;
-
-  protected:
-    AttachmentSubResource mSubResource;
-    BindingPointer<AttachableObject> mResource;
-};
-
-class TextureAttachment : public FramebufferAttachment
-{
-  public:
-    TextureAttachment(GLenum binding, Texture *texture, const ImageIndex &index);
-    virtual ~TextureAttachment();
-
-    virtual GLenum type() const;
-
-    virtual Renderbuffer *getRenderbuffer() const;
-
-    Texture *getTexture() const override
+    Renderbuffer *getRenderbuffer() const
     {
-        return rx::GetAs<Texture>(mResource.get());
-    }
-};
-
-class RenderbufferAttachment : public FramebufferAttachment
-{
-  public:
-    RenderbufferAttachment(GLenum binding, Renderbuffer *renderbuffer);
-
-    virtual ~RenderbufferAttachment();
-
-    virtual GLenum type() const;
-
-    virtual Texture *getTexture() const;
-
-    Renderbuffer *getRenderbuffer() const override
-    {
+        ASSERT(mType == GL_RENDERBUFFER);
         return rx::GetAs<Renderbuffer>(mResource.get());
     }
-};
 
-class DefaultAttachment : public FramebufferAttachment
-{
-  public:
-    DefaultAttachment(GLenum binding, egl::Surface *surface);
-
-    virtual ~DefaultAttachment();
-
-    virtual GLenum type() const;
-
-    virtual Texture *getTexture() const;
-    virtual Renderbuffer *getRenderbuffer() const;
+    Texture *getTexture() const
+    {
+        ASSERT(mType == GL_TEXTURE);
+        return rx::GetAs<Texture>(mResource.get());
+    }
 
     const egl::Surface *getSurface() const
     {
+        ASSERT(mType == GL_FRAMEBUFFER_DEFAULT);
         return rx::GetAs<egl::Surface>(mResource.get());
     }
+
+  private:
+    GLenum mType;
+    AttachmentSubResource mSubResource;
+    BindingPointer<AttachableObject> mResource;
 };
 
 }

@@ -22,10 +22,12 @@ namespace gl
 
 ////// FramebufferAttachment Implementation //////
 
-FramebufferAttachment::FramebufferAttachment(GLenum binding,
+FramebufferAttachment::FramebufferAttachment(GLenum type,
+                                             GLenum binding,
                                              const ImageIndex &textureIndex,
                                              AttachableObject *resource)
-    : mSubResource(binding, textureIndex)
+    : mSubResource(binding, textureIndex),
+      mType(type)
 {
     mResource.set(resource);
 }
@@ -82,13 +84,13 @@ GLuint FramebufferAttachment::id() const
 
 const ImageIndex *FramebufferAttachment::getTextureImageIndex() const
 {
-    ASSERT(type() == GL_TEXTURE);
+    ASSERT(mType == GL_TEXTURE);
     return &mSubResource.textureIndex();
 }
 
 GLenum FramebufferAttachment::cubeMapFace() const
 {
-    ASSERT(type() == GL_TEXTURE);
+    ASSERT(mType == GL_TEXTURE);
 
     const auto &index = mSubResource.textureIndex();
     return IsCubeMapTextureTarget(index.type) ? index.type : GL_NONE;
@@ -96,13 +98,13 @@ GLenum FramebufferAttachment::cubeMapFace() const
 
 GLint FramebufferAttachment::mipLevel() const
 {
-    ASSERT(type() == GL_TEXTURE);
+    ASSERT(mType == GL_TEXTURE);
     return mSubResource.textureIndex().mipIndex;
 }
 
 GLint FramebufferAttachment::layer() const
 {
-    ASSERT(type() == GL_TEXTURE);
+    ASSERT(mType == GL_TEXTURE);
 
     const auto &index = mSubResource.textureIndex();
 
@@ -131,77 +133,6 @@ GLenum FramebufferAttachment::getInternalFormat() const
 GLsizei FramebufferAttachment::getSamples() const
 {
     return mResource->getAttachmentSamples(mSubResource);
-}
-
-///// TextureAttachment Implementation ////////
-
-TextureAttachment::TextureAttachment(GLenum binding, Texture *texture, const ImageIndex &index)
-    : FramebufferAttachment(binding, index, texture)
-{
-}
-
-TextureAttachment::~TextureAttachment()
-{
-}
-
-GLenum TextureAttachment::type() const
-{
-    return GL_TEXTURE;
-}
-
-Renderbuffer *TextureAttachment::getRenderbuffer() const
-{
-    UNREACHABLE();
-    return nullptr;
-}
-
-////// RenderbufferAttachment Implementation //////
-
-RenderbufferAttachment::RenderbufferAttachment(GLenum binding, Renderbuffer *renderbuffer)
-    : FramebufferAttachment(binding, ImageIndex::MakeInvalid(), renderbuffer)
-{
-    ASSERT(renderbuffer);
-}
-
-RenderbufferAttachment::~RenderbufferAttachment()
-{
-}
-
-GLenum RenderbufferAttachment::type() const
-{
-    return GL_RENDERBUFFER;
-}
-
-Texture *RenderbufferAttachment::getTexture() const
-{
-    UNREACHABLE();
-    return nullptr;
-}
-
-DefaultAttachment::DefaultAttachment(GLenum binding, egl::Surface *surface)
-    : FramebufferAttachment(binding, ImageIndex::MakeInvalid(), surface)
-{
-}
-
-DefaultAttachment::~DefaultAttachment()
-{
-}
-
-GLenum DefaultAttachment::type() const
-{
-    return GL_FRAMEBUFFER_DEFAULT;
-}
-
-Texture *DefaultAttachment::getTexture() const
-{
-    UNREACHABLE();
-    return nullptr;
-}
-
-Renderbuffer *DefaultAttachment::getRenderbuffer() const
-{
-    UNREACHABLE();
-    return nullptr;
 }
 
 }
