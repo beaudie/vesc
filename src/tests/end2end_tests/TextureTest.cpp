@@ -1,7 +1,7 @@
 #include "ANGLETest.h"
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-ANGLE_TYPED_TEST_CASE(TextureTest, ES2_D3D9, ES2_D3D11, ES2_D3D11_FL9_3);
+ANGLE_TYPED_TEST_CASE(TextureTest, ES2_D3D9, ES2_D3D11, ES2_D3D11_FL9_3, ES2_OPENGL);
 
 template<typename T>
 class TextureTest : public ANGLETest
@@ -388,8 +388,12 @@ TYPED_TEST(TextureTest, TexStorage)
     drawQuad(m2DProgram, "position", 0.5f);
     glDeleteTextures(1, &tex2D);
     EXPECT_GL_NO_ERROR();
-    EXPECT_PIXEL_EQ(3*width/4, 3*height/4, 0, 0, 0, 255);
     EXPECT_PIXEL_EQ(width / 4, height / 4, 255, 0, 0, 255);
+
+    // Validate that the region of the texture without data has an alpha of 1.0
+    GLubyte pixel[4];
+    glReadPixels(3 * width / 4, 3 * height / 4, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+    EXPECT_EQ(pixel[3], 255);
 }
 
 // Test that glTexSubImage2D combined with a PBO works properly when glTexStorage2DEXT has initialized the image with a default color.
@@ -447,30 +451,60 @@ TYPED_TEST(TextureTest, TexStorageWithPBO)
 // TODO(jmadill): Fix sampling from unused channels on D3D9
 TYPED_TEST(TextureTest, DISABLED_CopySubImageFloat_R_R)
 {
+    if (getClientVersion() < 3 && !extensionEnabled("GL_OES_texture_float") &&
+        !extensionEnabled("GL_EXT_texture_rg"))
+    {
+        return;
+    }
+
     testFloatCopySubImage(1, 1);
 }
 
 // TODO(jmadill): Fix sampling from unused channels on D3D9
 TYPED_TEST(TextureTest, DISABLED_CopySubImageFloat_RG_R)
 {
+    if (getClientVersion() < 3 &&
+        !(extensionEnabled("GL_OES_texture_float") || extensionEnabled("GL_EXT_texture_rg")))
+    {
+        return;
+    }
+
     testFloatCopySubImage(2, 1);
 }
 
 // TODO(jmadill): Fix sampling from unused channels on D3D9
 TYPED_TEST(TextureTest, DISABLED_CopySubImageFloat_RG_RG)
 {
+    if (getClientVersion() < 3 &&
+        !(extensionEnabled("GL_OES_texture_float") || extensionEnabled("GL_EXT_texture_rg")))
+    {
+        return;
+    }
+
     testFloatCopySubImage(2, 2);
 }
 
 // TODO(jmadill): Fix sampling from unused channels on D3D9
 TYPED_TEST(TextureTest, DISABLED_CopySubImageFloat_RGB_R)
 {
+    if (getClientVersion() < 3 &&
+        !(extensionEnabled("GL_OES_texture_float") || extensionEnabled("GL_EXT_texture_rg")))
+    {
+        return;
+    }
+
     testFloatCopySubImage(3, 1);
 }
 
 // TODO(jmadill): Fix sampling from unused channels on D3D9
 TYPED_TEST(TextureTest, DISABLED_CopySubImageFloat_RGB_RG)
 {
+    if (getClientVersion() < 3 &&
+        !(extensionEnabled("GL_OES_texture_float") || extensionEnabled("GL_EXT_texture_rg")))
+    {
+        return;
+    }
+
     testFloatCopySubImage(3, 2);
 }
 
@@ -483,18 +517,35 @@ TYPED_TEST(TextureTest, CopySubImageFloat_RGB_RGB)
         return;
     }
 
+    if (getClientVersion() < 3 && !extensionEnabled("GL_OES_texture_float"))
+    {
+        return;
+    }
+
     testFloatCopySubImage(3, 3);
 }
 
 // TODO(jmadill): Fix sampling from unused channels on D3D9
 TYPED_TEST(TextureTest, DISABLED_CopySubImageFloat_RGBA_R)
 {
+    if (getClientVersion() < 3 &&
+        !(extensionEnabled("GL_OES_texture_float") || extensionEnabled("GL_EXT_texture_rg")))
+    {
+        return;
+    }
+
     testFloatCopySubImage(4, 1);
 }
 
 // TODO(jmadill): Fix sampling from unused channels on D3D9
 TYPED_TEST(TextureTest, DISABLED_CopySubImageFloat_RGBA_RG)
 {
+    if (getClientVersion() < 3 &&
+        !(extensionEnabled("GL_OES_texture_float") || extensionEnabled("GL_EXT_texture_rg")))
+    {
+        return;
+    }
+
     testFloatCopySubImage(4, 2);
 }
 
@@ -507,6 +558,11 @@ TYPED_TEST(TextureTest, CopySubImageFloat_RGBA_RGB)
         return;
     }
 
+    if (getClientVersion() < 3 && !extensionEnabled("GL_OES_texture_float"))
+    {
+        return;
+    }
+
     testFloatCopySubImage(4, 3);
 }
 
@@ -516,6 +572,11 @@ TYPED_TEST(TextureTest, CopySubImageFloat_RGBA_RGBA)
     if (isIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
     {
         std::cout << "Test skipped on Intel D3D11." << std::endl;
+        return;
+    }
+
+    if (getClientVersion() < 3 && !extensionEnabled("GL_OES_texture_float"))
+    {
         return;
     }
 
