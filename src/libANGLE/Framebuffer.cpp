@@ -658,26 +658,4 @@ const FramebufferAttachment &Framebuffer::getInvalidAttachment()
     return invalidAttachment;
 }
 
-DefaultFramebuffer::DefaultFramebuffer(const Caps &caps, rx::ImplFactory *factory, egl::Surface *surface)
-    : Framebuffer(caps, factory, 0)
-{
-    const egl::Config *config = surface->getConfig();
-
-    setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_BACK, ImageIndex::MakeInvalid(), surface);
-
-    if (config->depthSize > 0)
-    {
-        setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_DEPTH, ImageIndex::MakeInvalid(), surface);
-    }
-    if (config->stencilSize > 0)
-    {
-        setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_STENCIL, ImageIndex::MakeInvalid(), surface);
-    }
-
-    GLenum drawBufferState = GL_BACK;
-    setDrawBuffers(1, &drawBufferState);
-
-    setReadBuffer(GL_BACK);
-}
-
 }
