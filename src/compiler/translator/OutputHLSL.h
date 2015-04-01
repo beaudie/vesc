@@ -90,6 +90,7 @@ class OutputHLSL : public TIntermTraverser
     TString addStructEqualityFunction(const TStructure &structure);
     TString addArrayEqualityFunction(const TType &type);
     TString addArrayAssignmentFunction(const TType &type);
+    TString addArrayConstructIntoFunction(const TType &type);
 
     sh::GLenum mShaderType;
     int mShaderVersion;
@@ -214,6 +215,8 @@ class OutputHLSL : public TIntermTraverser
     std::vector<ArrayHelperFunction*> mArrayEqualityFunctions;
 
     std::vector<ArrayHelperFunction> mArrayAssignmentFunctions;
+
+    std::vector<ArrayHelperFunction> mArrayConstructIntoFunctions;
 };
 
 }
