@@ -139,3 +139,14 @@ TYPED_TEST(UniformBufferTest, UniformBufferRange)
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(px, py, 110, 120, 130, 140);
 }
+
+// Test that ANGLE handles used but unbound UBO.
+TYPED_TEST(UniformBufferTest, UnboundUniformBuffer)
+{
+    glUniformBlockBinding(mProgram, mUniformBufferIndex, 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, 0);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}

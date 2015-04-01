@@ -1140,9 +1140,9 @@ gl::Error ProgramD3D::applyUniformBuffers(const gl::Data &data)
         gl::UniformBlock *uniformBlock = mUniformBlocks[uniformBlockIndex];
         gl::Buffer *uniformBuffer = data.state->getIndexedUniformBuffer(uniformBlockIndex);
 
-        ASSERT(uniformBlock && uniformBuffer);
+        ASSERT(uniformBlock);
 
-        if (uniformBuffer->id() == 0)
+        if (!uniformBuffer)
         {
             // undefined behaviour
             return gl::Error(GL_INVALID_OPERATION, "It is undefined behaviour to have a used but unbound uniform buffer.");
