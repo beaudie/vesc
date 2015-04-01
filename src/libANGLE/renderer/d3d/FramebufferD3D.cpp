@@ -91,12 +91,6 @@ DefaultAttachmentD3D::~DefaultAttachmentD3D()
     SafeDelete(mRenderTarget);
 }
 
-DefaultAttachmentD3D *DefaultAttachmentD3D::makeDefaultAttachmentD3D(DefaultAttachmentImpl* impl)
-{
-    ASSERT(HAS_DYNAMIC_TYPE(DefaultAttachmentD3D*, impl));
-    return static_cast<DefaultAttachmentD3D*>(impl);
-}
-
 GLsizei DefaultAttachmentD3D::getWidth() const
 {
     return mRenderTarget->getWidth();
@@ -426,14 +420,14 @@ gl::Error GetAttachmentRenderTarget(const gl::FramebufferAttachment *attachment,
     {
         gl::Renderbuffer *renderbuffer = attachment->getRenderbuffer();
         ASSERT(renderbuffer);
-        RenderbufferD3D *renderbufferD3D = RenderbufferD3D::makeRenderbufferD3D(renderbuffer->getImplementation());
+        RenderbufferD3D *renderbufferD3D = GetImplAs<RenderbufferD3D>(renderbuffer);
         *outRT = renderbufferD3D->getRenderTarget();
         return gl::Error(GL_NO_ERROR);
     }
     else if (attachment->type() == GL_FRAMEBUFFER_DEFAULT)
     {
         const gl::DefaultAttachment *defaultAttachment = static_cast<const gl::DefaultAttachment *>(attachment);
-        DefaultAttachmentD3D *defaultAttachmentD3D = DefaultAttachmentD3D::makeDefaultAttachmentD3D(defaultAttachment->getImplementation());
+        const DefaultAttachmentD3D *defaultAttachmentD3D = GetImplAs<DefaultAttachmentD3D>(defaultAttachment);
         ASSERT(defaultAttachmentD3D);
 
         *outRT = defaultAttachmentD3D->getRenderTarget();
@@ -462,13 +456,13 @@ unsigned int GetAttachmentSerial(const gl::FramebufferAttachment *attachment)
     {
         gl::Renderbuffer *renderbuffer = attachment->getRenderbuffer();
         ASSERT(renderbuffer);
-        RenderbufferD3D *renderbufferD3D = RenderbufferD3D::makeRenderbufferD3D(renderbuffer->getImplementation());
+        RenderbufferD3D *renderbufferD3D = GetImplAs<RenderbufferD3D>(renderbuffer);
         return renderbufferD3D->getRenderTargetSerial();
     }
     else if (attachment->type() == GL_FRAMEBUFFER_DEFAULT)
     {
         const gl::DefaultAttachment *defaultAttachment = static_cast<const gl::DefaultAttachment *>(attachment);
-        DefaultAttachmentD3D *defaultAttachmentD3D = DefaultAttachmentD3D::makeDefaultAttachmentD3D(defaultAttachment->getImplementation());
+        const DefaultAttachmentD3D *defaultAttachmentD3D = GetImplAs<DefaultAttachmentD3D>(defaultAttachment);
         ASSERT(defaultAttachmentD3D);
         return defaultAttachmentD3D->getRenderTarget()->getSerial();
     }

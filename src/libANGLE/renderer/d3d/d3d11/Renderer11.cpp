@@ -267,12 +267,6 @@ Renderer11::~Renderer11()
     gl::UninitializeDebugAnnotations();
 }
 
-Renderer11 *Renderer11::makeRenderer11(Renderer *renderer)
-{
-    ASSERT(HAS_DYNAMIC_TYPE(Renderer11*, renderer));
-    return static_cast<Renderer11*>(renderer);
-}
-
 #ifndef __d3d11_1_h__
 #define D3D11_MESSAGE_ID_DEVICE_DRAW_RENDERTARGETVIEW_NOT_SET ((D3D11_MESSAGE_ID)3146081)
 #endif
@@ -693,7 +687,7 @@ gl::Error Renderer11::generateSwizzle(gl::Texture *texture)
 
         if (texStorage)
         {
-            TextureStorage11 *storage11 = TextureStorage11::makeTextureStorage11(texStorage);
+            TextureStorage11 *storage11 = GetAs<TextureStorage11>(texStorage);
             error = storage11->generateSwizzles(texture->getSamplerState().swizzleRed,
                                                 texture->getSamplerState().swizzleGreen,
                                                 texture->getSamplerState().swizzleBlue,
@@ -791,7 +785,7 @@ gl::Error Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *t
         // Texture should be complete and have a storage
         ASSERT(texStorage);
 
-        TextureStorage11 *storage11 = TextureStorage11::makeTextureStorage11(texStorage);
+        TextureStorage11 *storage11 = GetAs<TextureStorage11>(texStorage);
 
         // Make sure to add the level offset for our tiny compressed texture workaround
         gl::SamplerState samplerState = texture->getSamplerState();
@@ -837,7 +831,7 @@ gl::Error Renderer11::setUniformBuffers(const gl::Data &data,
 
         if (uniformBuffer)
         {
-            Buffer11 *bufferStorage = Buffer11::makeBuffer11(uniformBuffer->getImplementation());
+            Buffer11 *bufferStorage = GetImplAs<Buffer11>(uniformBuffer);
             ID3D11Buffer *constantBuffer = bufferStorage->getBuffer(BUFFER_USAGE_UNIFORM);
 
             if (!constantBuffer)
@@ -885,7 +879,7 @@ gl::Error Renderer11::setUniformBuffers(const gl::Data &data,
 
         if (uniformBuffer)
         {
-            Buffer11 *bufferStorage = Buffer11::makeBuffer11(uniformBuffer->getImplementation());
+            Buffer11 *bufferStorage = GetImplAs<Buffer11>(uniformBuffer);
             ID3D11Buffer *constantBuffer = bufferStorage->getBuffer(BUFFER_USAGE_UNIFORM);
 
             if (!constantBuffer)
@@ -1364,12 +1358,12 @@ gl::Error Renderer11::applyIndexBuffer(const GLvoid *indices, gl::Buffer *elemen
 
     if (indexInfo->storage)
     {
-        Buffer11 *storage = Buffer11::makeBuffer11(indexInfo->storage);
+        Buffer11 *storage = GetAs<Buffer11>(indexInfo->storage);
         buffer = storage->getBuffer(BUFFER_USAGE_INDEX);
     }
     else
     {
-        IndexBuffer11* indexBuffer = IndexBuffer11::makeIndexBuffer11(indexInfo->indexBuffer);
+        IndexBuffer11* indexBuffer = GetAs<IndexBuffer11>(indexInfo->indexBuffer);
         buffer = indexBuffer->getBuffer();
     }
 
@@ -1402,7 +1396,7 @@ void Renderer11::applyTransformFeedbackBuffers(const gl::State &state)
             ID3D11Buffer *d3dBuffer = NULL;
             if (curXFBBuffer)
             {
-                Buffer11 *storage = Buffer11::makeBuffer11(curXFBBuffer->getImplementation());
+                Buffer11 *storage = GetImplAs<Buffer11>(curXFBBuffer);
                 d3dBuffer = storage->getBuffer(BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK);
             }
 
@@ -1423,7 +1417,7 @@ void Renderer11::applyTransformFeedbackBuffers(const gl::State &state)
 
             if (curXFBBuffer)
             {
-                Buffer11 *storage = Buffer11::makeBuffer11(curXFBBuffer->getImplementation());
+                Buffer11 *storage = GetImplAs<Buffer11>(curXFBBuffer);
                 ID3D11Buffer *d3dBuffer = storage->getBuffer(BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK);
 
                 mCurrentD3DOffsets[i] = (mAppliedTFBuffers[i] != d3dBuffer || mAppliedTFOffsets[i] != curXFBOffset) ?
@@ -1477,13 +1471,13 @@ gl::Error Renderer11::drawArrays(const gl::Data &data, GLenum mode, GLsizei coun
         // Skip this step if we're doing rasterizer discard.
         if (pixelExe && !data.state->getRasterizerState().rasterizerDiscard && usesPointSize)
         {
-            ID3D11PixelShader *pixelShader = ShaderExecutable11::makeShaderExecutable11(pixelExe)->getPixelShader();
+            ID3D11PixelShader *pixelShader = GetAs<ShaderExecutable11>(pixelExe)->getPixelShader();
             ASSERT(reinterpret_cast<uintptr_t>(pixelShader) == mAppliedPixelShader);
             mDeviceContext->PSSetShader(pixelShader, NULL, 0);
 
             // Retrieve the point sprite geometry shader
             rx::ShaderExecutableD3D *geometryExe = programD3D->getGeometryExecutable();
-            ID3D11GeometryShader *geometryShader = (geometryExe ? ShaderExecutable11::makeShaderExecutable11(geometryExe)->getGeometryShader() : NULL);
+            ID3D11GeometryShader *geometryShader = (geometryExe ? GetAs<ShaderExecutable11>(geometryExe)->getGeometryShader() : NULL);
             mAppliedGeometryShader = reinterpret_cast<uintptr_t>(geometryShader);
             ASSERT(geometryShader);
             mDeviceContext->GSSetShader(geometryShader, NULL, 0);
@@ -1649,7 +1643,7 @@ gl::Error Renderer11::drawLineLoop(GLsizei count, GLenum type, const GLvoid *ind
         return error;
     }
 
-    IndexBuffer11 *indexBuffer = IndexBuffer11::makeIndexBuffer11(mLineLoopIB->getIndexBuffer());
+    IndexBuffer11 *indexBuffer = GetAs<IndexBuffer11>(mLineLoopIB->getIndexBuffer());
     ID3D11Buffer *d3dIndexBuffer = indexBuffer->getBuffer();
     DXGI_FORMAT indexFormat = indexBuffer->getIndexFormat();
 
@@ -1766,7 +1760,7 @@ gl::Error Renderer11::drawTriangleFan(GLsizei count, GLenum type, const GLvoid *
         return error;
     }
 
-    IndexBuffer11 *indexBuffer = IndexBuffer11::makeIndexBuffer11(mTriangleFanIB->getIndexBuffer());
+    IndexBuffer11 *indexBuffer = GetAs<IndexBuffer11>(mTriangleFanIB->getIndexBuffer());
     ID3D11Buffer *d3dIndexBuffer = indexBuffer->getBuffer();
     DXGI_FORMAT indexFormat = indexBuffer->getIndexFormat();
 
@@ -1811,23 +1805,23 @@ gl::Error Renderer11::applyShaders(gl::Program *program, const gl::VertexFormat 
 
     ShaderExecutableD3D *geometryExe = programD3D->getGeometryExecutable();
 
-    ID3D11VertexShader *vertexShader = (vertexExe ? ShaderExecutable11::makeShaderExecutable11(vertexExe)->getVertexShader() : NULL);
+    ID3D11VertexShader *vertexShader = (vertexExe ? GetAs<ShaderExecutable11>(vertexExe)->getVertexShader() : NULL);
 
     ID3D11PixelShader *pixelShader = NULL;
     // Skip pixel shader if we're doing rasterizer discard.
     if (!rasterizerDiscard)
     {
-        pixelShader = (pixelExe ? ShaderExecutable11::makeShaderExecutable11(pixelExe)->getPixelShader() : NULL);
+        pixelShader = (pixelExe ? GetAs<ShaderExecutable11>(pixelExe)->getPixelShader() : NULL);
     }
 
     ID3D11GeometryShader *geometryShader = NULL;
     if (transformFeedbackActive)
     {
-        geometryShader = (vertexExe ? ShaderExecutable11::makeShaderExecutable11(vertexExe)->getStreamOutShader() : NULL);
+        geometryShader = (vertexExe ? GetAs<ShaderExecutable11>(vertexExe)->getStreamOutShader() : NULL);
     }
     else if (mCurRasterState.pointDrawMode)
     {
-        geometryShader = (geometryExe ? ShaderExecutable11::makeShaderExecutable11(geometryExe)->getGeometryShader() : NULL);
+        geometryShader = (geometryExe ? GetAs<ShaderExecutable11>(geometryExe)->getGeometryShader() : NULL);
     }
 
     bool dirtyUniforms = false;
@@ -1887,8 +1881,8 @@ gl::Error Renderer11::applyUniforms(const ProgramImpl &program, const std::vecto
     }
 
     const ProgramD3D *programD3D = GetAs<ProgramD3D>(&program);
-    const UniformStorage11 *vertexUniformStorage = UniformStorage11::makeUniformStorage11(&programD3D->getVertexUniformStorage());
-    const UniformStorage11 *fragmentUniformStorage = UniformStorage11::makeUniformStorage11(&programD3D->getFragmentUniformStorage());
+    const UniformStorage11 *vertexUniformStorage = GetAs<UniformStorage11>(&programD3D->getVertexUniformStorage());
+    const UniformStorage11 *fragmentUniformStorage = GetAs<UniformStorage11>(&programD3D->getFragmentUniformStorage());
     ASSERT(vertexUniformStorage);
     ASSERT(fragmentUniformStorage);
 
@@ -2352,7 +2346,7 @@ gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::
     ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
     ASSERT(source);
 
-    TextureStorage11_2D *storage11 = TextureStorage11_2D::makeTextureStorage11_2D(storage);
+    TextureStorage11_2D *storage11 = GetAs<TextureStorage11_2D>(storage);
     ASSERT(storage11);
 
     gl::ImageIndex index = gl::ImageIndex::Make2D(level);
@@ -2364,7 +2358,7 @@ gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::
     }
     ASSERT(destRenderTarget);
 
-    ID3D11RenderTargetView *dest = RenderTarget11::makeRenderTarget11(destRenderTarget)->getRenderTargetView();
+    ID3D11RenderTargetView *dest = GetAs<RenderTarget11>(destRenderTarget)->getRenderTargetView();
     ASSERT(dest);
 
     gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
@@ -2403,7 +2397,7 @@ gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl
     ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
     ASSERT(source);
 
-    TextureStorage11_Cube *storage11 = TextureStorage11_Cube::makeTextureStorage11_Cube(storage);
+    TextureStorage11_Cube *storage11 = GetAs<TextureStorage11_Cube>(storage);
     ASSERT(storage11);
 
     gl::ImageIndex index = gl::ImageIndex::MakeCube(target, level);
@@ -2415,7 +2409,7 @@ gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl
     }
     ASSERT(destRenderTarget);
 
-    ID3D11RenderTargetView *dest = RenderTarget11::makeRenderTarget11(destRenderTarget)->getRenderTargetView();
+    ID3D11RenderTargetView *dest = GetAs<RenderTarget11>(destRenderTarget)->getRenderTargetView();
     ASSERT(dest);
 
     gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
@@ -2454,7 +2448,7 @@ gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::
     ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
     ASSERT(source);
 
-    TextureStorage11_3D *storage11 = TextureStorage11_3D::makeTextureStorage11_3D(storage);
+    TextureStorage11_3D *storage11 = GetAs<TextureStorage11_3D>(storage);
     ASSERT(storage11);
 
     gl::ImageIndex index = gl::ImageIndex::Make3D(level, destOffset.z);
@@ -2466,7 +2460,7 @@ gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::
     }
     ASSERT(destRenderTarget);
 
-    ID3D11RenderTargetView *dest = RenderTarget11::makeRenderTarget11(destRenderTarget)->getRenderTargetView();
+    ID3D11RenderTargetView *dest = GetAs<RenderTarget11>(destRenderTarget)->getRenderTargetView();
     ASSERT(dest);
 
     gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
@@ -2505,7 +2499,7 @@ gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer, const
     ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
     ASSERT(source);
 
-    TextureStorage11_2DArray *storage11 = TextureStorage11_2DArray::makeTextureStorage11_2DArray(storage);
+    TextureStorage11_2DArray *storage11 = GetAs<TextureStorage11_2DArray>(storage);
     ASSERT(storage11);
 
     gl::ImageIndex index = gl::ImageIndex::Make2DArray(level, destOffset.z);
@@ -2517,7 +2511,7 @@ gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer, const
     }
     ASSERT(destRenderTarget);
 
-    ID3D11RenderTargetView *dest = RenderTarget11::makeRenderTarget11(destRenderTarget)->getRenderTargetView();
+    ID3D11RenderTargetView *dest = GetAs<RenderTarget11>(destRenderTarget)->getRenderTargetView();
     ASSERT(dest);
 
     gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
@@ -2698,7 +2692,7 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
 DefaultAttachmentImpl *Renderer11::createDefaultAttachment(GLenum type, egl::Surface *surface)
 {
     SurfaceD3D *surfaceD3D = GetImplAs<SurfaceD3D>(surface);
-    SwapChain11 *swapChain = SwapChain11::makeSwapChain11(surfaceD3D->getSwapChain());
+    SwapChain11 *swapChain = GetAs<SwapChain11>(surfaceD3D->getSwapChain());
 
     switch (type)
     {
@@ -3017,14 +3011,14 @@ ImageD3D *Renderer11::createImage()
 
 gl::Error Renderer11::generateMipmap(ImageD3D *dest, ImageD3D *src)
 {
-    Image11 *dest11 = Image11::makeImage11(dest);
-    Image11 *src11 = Image11::makeImage11(src);
+    Image11 *dest11 = GetAs<Image11>(dest);
+    Image11 *src11 = GetAs<Image11>(src);
     return Image11::generateMipmap(dest11, src11);
 }
 
 TextureStorage *Renderer11::createTextureStorage2D(SwapChainD3D *swapChain)
 {
-    SwapChain11 *swapChain11 = SwapChain11::makeSwapChain11(swapChain);
+    SwapChain11 *swapChain11 = GetAs<SwapChain11>(swapChain);
     return new TextureStorage11_2D(this, swapChain11);
 }
 
@@ -3269,7 +3263,7 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRect, const 
     // at the same time.
     ASSERT(colorBlit != (depthBlit || stencilBlit));
 
-    RenderTarget11 *drawRenderTarget11 = RenderTarget11::makeRenderTarget11(drawRenderTarget);
+    RenderTarget11 *drawRenderTarget11 = GetAs<RenderTarget11>(drawRenderTarget);
     if (!drawRenderTarget)
     {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the internal draw render target from the draw framebuffer.");
@@ -3280,7 +3274,7 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRect, const 
     ID3D11RenderTargetView *drawRTV = drawRenderTarget11->getRenderTargetView();
     ID3D11DepthStencilView *drawDSV = drawRenderTarget11->getDepthStencilView();
 
-    RenderTarget11 *readRenderTarget11 = RenderTarget11::makeRenderTarget11(readRenderTarget);
+    RenderTarget11 *readRenderTarget11 = GetAs<RenderTarget11>(readRenderTarget);
     if (!readRenderTarget)
     {
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to retrieve the internal read render target from the read framebuffer.");

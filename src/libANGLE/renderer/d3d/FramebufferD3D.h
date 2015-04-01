@@ -56,8 +56,6 @@ class DefaultAttachmentD3D : public DefaultAttachmentImpl
     DefaultAttachmentD3D(RenderTargetD3D *renderTarget);
     virtual ~DefaultAttachmentD3D();
 
-    static DefaultAttachmentD3D *makeDefaultAttachmentD3D(DefaultAttachmentImpl* impl);
-
     virtual GLsizei getWidth() const override;
     virtual GLsizei getHeight() const override;
     virtual GLenum getInternalFormat() const override;
