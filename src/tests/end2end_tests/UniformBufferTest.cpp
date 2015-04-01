@@ -139,3 +139,46 @@ TYPED_TEST(UniformBufferTest, UniformBufferRange)
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(px, py, 110, 120, 130, 140);
 }
+
+// Test uniform block bindings.
+TYPED_TEST(UniformBufferTest, UniformBufferBindings)
+{
+    int px = getWindowWidth() / 2;
+    int py = getWindowHeight() / 2;
+
+    ASSERT_GL_NO_ERROR();
+
+    // Let's create a buffer which contains one vec4.
+    GLuint vec4Size = 4 * sizeof(float);
+    std::vector<char> v(vec4Size);
+    float *first = reinterpret_cast<float*>(v.data());
+
+    first[0] = 10.f / 255.f;
+    first[1] = 20.f / 255.f;
+    first[2] = 30.f / 255.f;
+    first[3] = 40.f / 255.f;
+
+    glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, vec4Size, v.data(), GL_STATIC_DRAW);
+
+    EXPECT_GL_NO_ERROR();
+
+    // Try to bind the buffer to binding point 2
+    glUniformBlockBinding(mProgram, mUniformBufferIndex, 2);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 2, mUniformBuffer);
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_EQ(px, py, 10, 20, 30, 40);
+
+    // Clear the framebuffer
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_EQ(px, py, 0, 0, 0, 0);
+
+    // Try to bind the buffer to another binding point
+    glUniformBlockBinding(mProgram, mUniformBufferIndex, 5);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 5, mUniformBuffer);
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_EQ(px, py, 10, 20, 30, 40);
+}

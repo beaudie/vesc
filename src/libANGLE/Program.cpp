@@ -1003,7 +1003,7 @@ Error Program::applyUniforms()
 
 Error Program::applyUniformBuffers(const gl::Data &data)
 {
-    return mProgram->applyUniformBuffers(data);
+    return mProgram->applyUniformBuffers(data, mUniformBlockBindings);
 }
 
 void Program::flagForDeletion()
