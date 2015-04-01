@@ -11,10 +11,11 @@
 #ifndef LIBANGLE_SURFACE_H_
 #define LIBANGLE_SURFACE_H_
 
+#include <EGL/egl.h>
+
 #include "common/angleutils.h"
 #include "libANGLE/Error.h"
-
-#include <EGL/egl.h>
+#include "libANGLE/RefCountObject.h"
 
 namespace gl
 {
@@ -32,7 +33,7 @@ class AttributeMap;
 class Display;
 struct Config;
 
-class Surface final : angle::NonCopyable
+class Surface final : public RefCountObject
 {
   public:
     Surface(rx::SurfaceImpl *impl, EGLint surfaceType, const egl::Config *config, const AttributeMap &attributes);

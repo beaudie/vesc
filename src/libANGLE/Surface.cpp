@@ -18,7 +18,8 @@ namespace egl
 {
 
 Surface::Surface(rx::SurfaceImpl *impl, EGLint surfaceType, const egl::Config *config, const AttributeMap &attributes)
-    : mImplementation(impl),
+    : RefCountObject(0), // id unused
+      mImplementation(impl),
       mType(surfaceType),
       mConfig(config),
       // FIXME: Determine actual pixel aspect ratio
@@ -27,6 +28,7 @@ Surface::Surface(rx::SurfaceImpl *impl, EGLint surfaceType, const egl::Config *c
       mSwapBehavior(EGL_BUFFER_PRESERVED),
       mTexture(NULL)
 {
+    addRef();
 }
 
 Surface::~Surface()
