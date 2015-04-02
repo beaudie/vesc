@@ -48,11 +48,21 @@ class FramebufferAttachment : angle::NonCopyable
     bool isRenderbufferWithId(GLuint renderbufferId) const { return type() == GL_RENDERBUFFER && id() == renderbufferId; }
 
     GLenum getBinding() const { return mBinding; }
+    GLuint id() const { return mResource->id(); }
 
-    GLuint id() const;
-    const ImageIndex *getTextureImageIndex() const;
+    const ImageIndex &getTextureImageIndex() const
+    {
+        ASSERT(type() == GL_TEXTURE);
+        return mTextureIndex;
+    }
+
+    GLint mipLevel() const
+    {
+        ASSERT(type() == GL_TEXTURE);
+        return mTextureIndex.mipIndex;
+    }
+
     GLenum cubeMapFace() const;
-    GLint mipLevel() const;
     GLint layer() const;
 
     // Child class interface

@@ -76,27 +76,10 @@ GLenum FramebufferAttachment::getColorEncoding() const
     return GetInternalFormatInfo(getInternalFormat()).colorEncoding;
 }
 
-GLuint FramebufferAttachment::id() const
-{
-    return mResource->id();
-}
-
-const ImageIndex *FramebufferAttachment::getTextureImageIndex() const
-{
-    ASSERT(type() == GL_TEXTURE);
-    return &mTextureIndex;
-}
-
 GLenum FramebufferAttachment::cubeMapFace() const
 {
     ASSERT(type() == GL_TEXTURE);
     return IsCubeMapTextureTarget(mTextureIndex.type) ? mTextureIndex.type : GL_NONE;
-}
-
-GLint FramebufferAttachment::mipLevel() const
-{
-    ASSERT(type() == GL_TEXTURE);
-    return mTextureIndex.mipIndex;
 }
 
 GLint FramebufferAttachment::layer() const
