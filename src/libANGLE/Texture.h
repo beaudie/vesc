@@ -75,10 +75,6 @@ class Texture final : public RefCountObject
 
     virtual Error generateMipmaps();
 
-    // Texture serials provide a unique way of identifying a Texture that isn't a raw pointer.
-    // "id" is not good enough, as Textures can be deleted, then re-allocated with the same id.
-    unsigned int getTextureSerial() const;
-
     bool isImmutable() const;
     GLsizei immutableLevelCount();
 
@@ -88,11 +84,7 @@ class Texture final : public RefCountObject
     rx::TextureImpl *getImplementation() { return mTexture; }
     const rx::TextureImpl *getImplementation() const { return mTexture; }
 
-    static const GLuint INCOMPLETE_TEXTURE_ID = static_cast<GLuint>(-1);   // Every texture takes an id at creation time. The value is arbitrary because it is never registered with the resource manager.
-
   private:
-    static unsigned int issueTextureSerial();
-
     rx::TextureImpl *mTexture;
 
     SamplerState mSamplerState;
@@ -102,7 +94,6 @@ class Texture final : public RefCountObject
 
     GLenum mTarget;
 
-
     struct ImageDesc
     {
         Extents size;
@@ -111,9 +102,6 @@ class Texture final : public RefCountObject
         ImageDesc();
         ImageDesc(const Extents &size, GLenum internalFormat);
     };
-
-    const unsigned int mTextureSerial;
-    static unsigned int mCurrentTextureSerial;
 
     GLenum getBaseImageTarget() const;
     size_t getExpectedMipLevels() const;
