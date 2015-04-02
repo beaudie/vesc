@@ -40,7 +40,7 @@ class FenceSync11 : public FenceSyncImpl
     explicit FenceSync11(Renderer11 *renderer);
     virtual ~FenceSync11();
 
-    gl::Error set();
+    gl::Error set(GLenum condition, GLbitfield flags);
     gl::Error clientWait(GLbitfield flags, GLuint64 timeout, GLenum *outResult);
     gl::Error serverWait(GLbitfield flags, GLuint64 timeout);
     gl::Error getStatus(GLint *outResult);
