@@ -10,6 +10,7 @@
 
 #include <float.h>
 #include <limits.h>
+#include <math.h>
 #include <algorithm>
 
 #include "compiler/translator/HashNames.h"
@@ -18,6 +19,9 @@
 
 namespace
 {
+
+static const double kDegreesToRadiansMultiplier = 0.0174532925199433; // (pi / 180)
+static const double kRadiansToDegreesMultiplier = 57.29577951308233;  // (180 / pi)
 
 TPrecision GetHigherPrecision(TPrecision left, TPrecision right)
 {
@@ -1185,6 +1189,88 @@ TIntermTyped *TIntermConstantUnion::fold(
                 }
                 break;
 
+              case EOpRadians:
+                if (getType().getBasicType() == EbtFloat)
+                {
+                    tempConstArray[i].setFConst(kDegreesToRadiansMultiplier * unionArray[i].getFConst());
+                    break;
+                }
+                infoSink.info.message(
+                    EPrefixInternalError, getLine(),
+                    "Unary operation not folded into constant");
+                return nullptr;
+
+              case EOpDegrees:
+                if (getType().getBasicType() == EbtFloat)
+                {
+                    tempConstArray[i].setFConst(kRadiansToDegreesMultiplier * unionArray[i].getFConst());
+                    break;
+                }
+                infoSink.info.message(
+                    EPrefixInternalError, getLine(),
+                    "Unary operation not folded into constant");
+                return nullptr;
+
+              case EOpSin:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&sin), infoSink))
+                   return nullptr;
+                break;
+
+              case EOpCos:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&cos), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpTan:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&tan), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpAsin:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&asin), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpAcos:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&acos), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpAtan:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&atan), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpSinh:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&sinh), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpCosh:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&cosh), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpTanh:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&tanh), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpAsinh:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&asinh), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpAcosh:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&acosh), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpAtanh:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&atanh), infoSink))
+                    return nullptr;
+                break;
+
               default:
                 return NULL;
             }
@@ -1193,6 +1279,23 @@ TIntermTyped *TIntermConstantUnion::fold(
         newNode->setLine(getLine());
         return newNode;
     }
+}
+
+bool TIntermConstantUnion::foldFloatTypeUnary(ConstantUnion &result, const ConstantUnion &constUnion,
+                                              FloatTypeUnaryFunc builtinFunc, TInfoSink &infoSink) const
+{
+    ASSERT(builtinFunc);
+
+    if (getType().getBasicType() == EbtFloat)
+    {
+        result.setFConst(builtinFunc(constUnion.getFConst()));
+        return true;
+    }
+
+    infoSink.info.message(
+        EPrefixInternalError, getLine(),
+        "Unary operation not folded into constant");
+    return false;
 }
 
 // static
