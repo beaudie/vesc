@@ -256,6 +256,8 @@ class TIntermRaw : public TIntermTyped
     TString mRawText;
 };
 
+typedef float (*BuiltinFunc) (float);
+
 class TIntermConstantUnion : public TIntermTyped
 {
   public:
@@ -292,6 +294,9 @@ class TIntermConstantUnion : public TIntermTyped
 
   protected:
     ConstantUnion *mUnionArrayPointer;
+
+  private:
+      bool foldUnary(ConstantUnion &, const ConstantUnion &, BuiltinFunc, TInfoSink &) const;
 };
 
 //
