@@ -10,6 +10,7 @@
 
 #include <float.h>
 #include <limits.h>
+#include <math.h>
 #include <algorithm>
 
 #include "compiler/translator/HashNames.h"
@@ -18,6 +19,10 @@
 
 namespace
 {
+
+const double kPi = 3.14159265358979323846;
+const double kDegreesToRadiansMultiplier = kPi / 180.0;
+const double kRadiansToDegreesMultiplier = 180.0 / kPi;
 
 TPrecision GetHigherPrecision(TPrecision left, TPrecision right)
 {
@@ -639,6 +644,24 @@ bool TIntermBinary::promote(TInfoSink &infoSink)
     return true;
 }
 
+template <typename T>
+bool TIntermConstantUnion::foldUnary(const ConstantUnion &parameter, T (*builtinFunc)(T),
+                                     TInfoSink &infoSink, ConstantUnion *result) const
+{
+    ASSERT(builtinFunc);
+
+    if (getType().getBasicType() == EbtFloat)
+    {
+        result->setFConst(builtinFunc(parameter.getFConst()));
+        return true;
+    }
+
+    infoSink.info.message(
+        EPrefixInternalError, getLine(),
+        "Unary operation not folded into constant");
+    return false;
+}
+
 //
 // The fold functions see if an operation on a constant can be done in place,
 // without generating run-time code.
@@ -1183,6 +1206,96 @@ TIntermTyped *TIntermConstantUnion::fold(
                         "Unary operation not folded into constant");
                     return NULL;
                 }
+                break;
+
+              case EOpRadians:
+                if (getType().getBasicType() == EbtFloat)
+                {
+                    tempConstArray[i].setFConst(kDegreesToRadiansMultiplier * unionArray[i].getFConst());
+                    break;
+                }
+                infoSink.info.message(
+                    EPrefixInternalError, getLine(),
+                    "Unary operation not folded into constant");
+                return nullptr;
+
+              case EOpDegrees:
+                if (getType().getBasicType() == EbtFloat)
+                {
+                    tempConstArray[i].setFConst(kRadiansToDegreesMultiplier * unionArray[i].getFConst());
+                    break;
+                }
+                infoSink.info.message(
+                    EPrefixInternalError, getLine(),
+                    "Unary operation not folded into constant");
+                return nullptr;
+
+              case EOpSin:
+                if (!foldUnary<float>(unionArray[i], &sin, infoSink, &tempConstArray[i]))
+                   return nullptr;
+                break;
+
+              case EOpCos:
+                if (!foldUnary<float>(unionArray[i], &cos, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpTan:
+                if (!foldUnary<float>(unionArray[i], &tan, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpAsin:
+                if (getType().getBasicType() == EbtFloat && abs(unionArray[i].getFConst()) > 1.0)
+                    tempConstArray[i].setFConst(0.0);
+                else if (!foldUnary<float>(unionArray[i], &asin, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpAcos:
+                if (getType().getBasicType() == EbtFloat && abs(unionArray[i].getFConst()) > 1.0)
+                    tempConstArray[i].setFConst(0.0);
+                else if (!foldUnary<float>(unionArray[i], &acos, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpAtan:
+                if (!foldUnary<float>(unionArray[i], &atan, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpSinh:
+                if (!foldUnary<float>(unionArray[i], &sinh, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpCosh:
+                if (!foldUnary<float>(unionArray[i], &cosh, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpTanh:
+                if (!foldUnary<float>(unionArray[i], &tanh, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpAsinh:
+                if (!foldUnary<float>(unionArray[i], &asinh, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpAcosh:
+                if (getType().getBasicType() == EbtFloat && unionArray[i].getFConst() < 1.0)
+                    tempConstArray[i].setFConst(0.0);
+                else if (!foldUnary<float>(unionArray[i], &acosh, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpAtanh:
+                if (getType().getBasicType() == EbtFloat && abs(unionArray[i].getFConst()) >= 1.0)
+                    tempConstArray[i].setFConst(0.0);
+                else if (!foldUnary<float>(unionArray[i], &atanh, infoSink, &tempConstArray[i]))
+                    return nullptr;
                 break;
 
               default:

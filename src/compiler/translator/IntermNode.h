@@ -292,6 +292,10 @@ class TIntermConstantUnion : public TIntermTyped
 
   protected:
     ConstantUnion *mUnionArrayPointer;
+
+  private:
+    template <typename T>
+    bool foldUnary(const ConstantUnion &parameter, T (*builtinFunc)(T), TInfoSink &infoSink, ConstantUnion *result) const;
 };
 
 //
