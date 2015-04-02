@@ -10,6 +10,7 @@
 
 #include <float.h>
 #include <limits.h>
+#include <math.h>
 #include <algorithm>
 
 #include "compiler/translator/HashNames.h"
@@ -1116,6 +1117,22 @@ TIntermTyped *TIntermConstantUnion::fold(
         //
         // Do unary operations
         //
+#define FOLD_FOR_UNARY_TRIG_BUILTINS(result, constUnion, builtinFunction) \
+    switch (getType().getBasicType()) \
+    { \
+      case EbtFloat: \
+        result.setFConst(builtinFunction(constUnion.getFConst())); \
+        break; \
+      default: \
+        infoSink.info.message( \
+            EPrefixInternalError, getLine(), \
+            "Unary operation not folded into constant"); \
+        return nullptr; \
+    }
+
+#define RADIANS_TO_DEGREES_MULTIPLIER  0.0174532925199433 // (pi / 180)
+#define DEGREES_TO_RADIANS_MULTIPLIER  57.29577951308233  // (180 / pi)
+
         TIntermConstantUnion *newNode = 0;
         ConstantUnion* tempConstArray = new ConstantUnion[objectSize];
         for (size_t i = 0; i < objectSize; i++)
@@ -1195,6 +1212,82 @@ TIntermTyped *TIntermConstantUnion::fold(
                         "Unary operation not folded into constant");
                     return NULL;
                 }
+                break;
+
+              case EOpRadians:
+                switch (getType().getBasicType())
+                {
+                  case EbtFloat:
+                    tempConstArray[i].setFConst(RADIANS_TO_DEGREES_MULTIPLIER * unionArray[i].getFConst());
+                    break;
+                  default:
+                    infoSink.info.message(
+                        EPrefixInternalError, getLine(),
+                        "Unary operation not folded into constant");
+                    return nullptr;
+                }
+                break;
+
+              case EOpDegrees:
+                switch (getType().getBasicType())
+                {
+                  case EbtFloat:
+                    tempConstArray[i].setFConst(DEGREES_TO_RADIANS_MULTIPLIER * unionArray[i].getFConst());
+                    break;
+                  default:
+                    infoSink.info.message(
+                        EPrefixInternalError, getLine(),
+                        "Unary operation not folded into constant");
+                    return nullptr;
+                }
+                break;
+
+              case EOpSin:
+                FOLD_FOR_UNARY_TRIG_BUILTINS(tempConstArray[i], unionArray[i], sin);
+                break;
+
+              case EOpCos:
+                FOLD_FOR_UNARY_TRIG_BUILTINS(tempConstArray[i], unionArray[i], cos);
+                break;
+
+              case EOpTan:
+                FOLD_FOR_UNARY_TRIG_BUILTINS(tempConstArray[i], unionArray[i], tan);
+                break;
+
+              case EOpAsin:
+                FOLD_FOR_UNARY_TRIG_BUILTINS(tempConstArray[i], unionArray[i], asin);
+                break;
+
+              case EOpAcos:
+                FOLD_FOR_UNARY_TRIG_BUILTINS(tempConstArray[i], unionArray[i], acos);
+                break;
+
+              case EOpAtan:
+                FOLD_FOR_UNARY_TRIG_BUILTINS(tempConstArray[i], unionArray[i], atan);
+                break;
+
+              case EOpSinh:
+                FOLD_FOR_UNARY_TRIG_BUILTINS(tempConstArray[i], unionArray[i], sinh);
+                break;
+
+              case EOpCosh:
+                FOLD_FOR_UNARY_TRIG_BUILTINS(tempConstArray[i], unionArray[i], cosh);
+                break;
+
+              case EOpTanh:
+                FOLD_FOR_UNARY_TRIG_BUILTINS(tempConstArray[i], unionArray[i], tanh);
+                break;
+
+              case EOpAsinh:
+                FOLD_FOR_UNARY_TRIG_BUILTINS(tempConstArray[i], unionArray[i], asinh);
+                break;
+
+              case EOpAcosh:
+                FOLD_FOR_UNARY_TRIG_BUILTINS(tempConstArray[i], unionArray[i], acosh);
+                break;
+
+              case EOpAtanh:
+                FOLD_FOR_UNARY_TRIG_BUILTINS(tempConstArray[i], unionArray[i], atanh);
                 break;
 
               default:

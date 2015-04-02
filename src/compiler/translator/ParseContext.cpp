@@ -1164,7 +1164,7 @@ bool TParseContext::executeInitializer(const TSourceLoc& line, const TString& id
     //
 
     if (qualifier == EvqConst) {
-        if (qualifier != initializer->getType().getQualifier()) {
+        if ((qualifier != initializer->getType().getQualifier()) && !initializer->getAsConstantUnion()) {
             std::stringstream extraInfoStream;
             extraInfoStream << "'" << variable->getType().getCompleteString() << "'";
             std::string extraInfo = extraInfoStream.str();
@@ -2224,7 +2224,7 @@ TIntermTyped* TParseContext::addFieldSelectionExpression(TIntermTyped *baseExpre
             recover();
         }
 
-        if (baseExpression->getType().getQualifier() == EvqConst)
+        if (baseExpression->getType().getQualifier() == EvqConst || baseExpression->getAsConstantUnion())
         {
             // constant folding for vector fields
             indexedExpression = addConstVectorNode(fields, baseExpression, fieldLocation);
