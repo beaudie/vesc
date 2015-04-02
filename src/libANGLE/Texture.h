@@ -19,15 +19,11 @@
 #include "libANGLE/Constants.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/renderer/TextureImpl.h"
 
 namespace egl
 {
 class Surface;
-}
-
-namespace rx
-{
-class TextureImpl;
 }
 
 namespace gl
@@ -101,6 +97,7 @@ class Texture final : public AttachableObject
     GLsizei getAttachmentSamples(const gl::AttachmentSubResource &subResource) const override;
 
   private:
+    rx::AttachmentImpl *getAttachmentImpl() const override { return mTexture; }
     static unsigned int issueTextureSerial();
 
     rx::TextureImpl *mTexture;

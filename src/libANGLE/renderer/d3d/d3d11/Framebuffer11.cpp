@@ -60,8 +60,8 @@ gl::Error GetRenderTargetResource(const gl::FramebufferAttachment &colorbuffer, 
 {
     ASSERT(colorbuffer.valid());
 
-    RenderTarget11 *renderTarget = NULL;
-    gl::Error error = d3d11::GetAttachmentRenderTarget(&colorbuffer, &renderTarget);
+    RenderTarget11 *renderTarget = nullptr;
+    gl::Error error = colorbuffer.getRenderTarget(&renderTarget);
     if (error.isError())
     {
         return error;
@@ -192,7 +192,7 @@ gl::Error Framebuffer11::blit(const gl::Rectangle &sourceArea, const gl::Rectang
         ASSERT(readBuffer.valid());
 
         RenderTargetD3D *readRenderTarget = NULL;
-        gl::Error error = GetAttachmentRenderTarget(&readBuffer, &readRenderTarget);
+        gl::Error error = readBuffer.getRenderTarget(&readRenderTarget);
         if (error.isError())
         {
             return error;
@@ -207,7 +207,7 @@ gl::Error Framebuffer11::blit(const gl::Rectangle &sourceArea, const gl::Rectang
                 const gl::FramebufferAttachment &drawBuffer = mData.mColorAttachments[colorAttachment];
 
                 RenderTargetD3D *drawRenderTarget = NULL;
-                error = GetAttachmentRenderTarget(&drawBuffer, &drawRenderTarget);
+                error = drawBuffer.getRenderTarget(&drawRenderTarget);
                 if (error.isError())
                 {
                     return error;
@@ -230,7 +230,7 @@ gl::Error Framebuffer11::blit(const gl::Rectangle &sourceArea, const gl::Rectang
         ASSERT(readBuffer.valid());
 
         RenderTargetD3D *readRenderTarget = NULL;
-        gl::Error error = GetAttachmentRenderTarget(&readBuffer, &readRenderTarget);
+        gl::Error error = readBuffer.getRenderTarget(&readRenderTarget);
         if (error.isError())
         {
             return error;
@@ -241,7 +241,7 @@ gl::Error Framebuffer11::blit(const gl::Rectangle &sourceArea, const gl::Rectang
         ASSERT(drawBuffer.valid());
 
         RenderTargetD3D *drawRenderTarget = NULL;
-        error = GetAttachmentRenderTarget(&drawBuffer, &drawRenderTarget);
+        error = drawBuffer.getRenderTarget(&drawRenderTarget);
         if (error.isError())
         {
             return error;

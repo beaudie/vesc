@@ -64,6 +64,9 @@ class TextureD3D : public TextureImpl
     TextureStorage *getStorage();
     ImageD3D *getBaseLevelImage() const;
 
+    gl::Error getAttachmentRenderTarget(const gl::AttachmentSubResource &subResource,
+                                        AttachmentRenderTarget *rtOut) override;
+
   protected:
     gl::Error setImage(const gl::ImageIndex &index, GLenum type,
                        const gl::PixelUnpackState &unpack, const uint8_t *pixels,
