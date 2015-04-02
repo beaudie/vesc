@@ -15,6 +15,7 @@
 #include "common/angleutils.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/RefCountObject.h"
 
 namespace rx
@@ -32,7 +33,6 @@ class Surface;
 
 namespace gl
 {
-class FramebufferAttachment;
 class Renderbuffer;
 class State;
 class Texture;
@@ -43,7 +43,7 @@ struct Extensions;
 struct ImageIndex;
 struct Rectangle;
 
-typedef std::vector<FramebufferAttachment *> AttachmentList;
+typedef std::vector<const FramebufferAttachment*> AttachmentList;
 
 class Framebuffer
 {
@@ -55,13 +55,13 @@ class Framebuffer
         explicit Data(const Caps &caps);
         ~Data();
 
-        FramebufferAttachment *getReadAttachment() const;
-        FramebufferAttachment *getFirstColorAttachment() const;
-        FramebufferAttachment *getDepthOrStencilAttachment() const;
+        const FramebufferAttachment &getReadAttachment() const;
+        const FramebufferAttachment *getFirstColorAttachment() const;
+        const FramebufferAttachment &getDepthOrStencilAttachment() const;
 
-        AttachmentList mColorAttachments;
-        FramebufferAttachment *mDepthAttachment;
-        FramebufferAttachment *mStencilAttachment;
+        std::vector<FramebufferAttachment> mColorAttachments;
+        FramebufferAttachment mDepthAttachment;
+        FramebufferAttachment mStencilAttachment;
 
         std::vector<GLenum> mDrawBufferStates;
         GLenum mReadBufferState;
@@ -75,23 +75,29 @@ class Framebuffer
 
     GLuint id() const { return mId; }
 
-    void setTextureAttachment(GLenum attachment, Texture *texture, const ImageIndex &imageIndex);
-    void setRenderbufferAttachment(GLenum attachment, Renderbuffer *renderbuffer);
-    void setNULLAttachment(GLenum attachment);
+    void setAttachment(GLenum type,
+                       GLenum binding,
+                       const ImageIndex &textureIndex,
+                       FBOAttachmentObject *resource);
+    void setInvalidAttachment(GLenum binding);
 
     void detachTexture(GLuint texture);
     void detachRenderbuffer(GLuint renderbuffer);
 
-    FramebufferAttachment *getColorbuffer(unsigned int colorAttachment) const;
-    FramebufferAttachment *getDepthbuffer() const;
-    FramebufferAttachment *getStencilbuffer() const;
-    FramebufferAttachment *getDepthStencilBuffer() const;
-    FramebufferAttachment *getDepthOrStencilbuffer() const;
-    FramebufferAttachment *getReadColorbuffer() const;
+    FramebufferAttachment &getColorbuffer(unsigned int colorAttachment);
+    const FramebufferAttachment &getColorbuffer(unsigned int colorAttachment) const;
+    FramebufferAttachment &getDepthbuffer();
+    const FramebufferAttachment &getDepthbuffer() const;
+    FramebufferAttachment &getStencilbuffer();
+    const FramebufferAttachment &getStencilbuffer() const;
+    const FramebufferAttachment &getDepthStencilBuffer() const;
+    const FramebufferAttachment &getDepthOrStencilbuffer() const;
+    const FramebufferAttachment &getReadColorbuffer() const;
     GLenum getReadColorbufferType() const;
-    FramebufferAttachment *getFirstColorbuffer() const;
+    const FramebufferAttachment *getFirstColorbuffer() const;
 
-    FramebufferAttachment *getAttachment(GLenum attachment) const;
+    FramebufferAttachment &getAttachment(GLenum attachment);
+    const FramebufferAttachment &getAttachment(GLenum attachment) const;
 
     GLenum getDrawBufferState(unsigned int colorAttachment) const;
     void setDrawBuffers(size_t count, const GLenum *buffers);
@@ -125,8 +131,8 @@ class Framebuffer
                GLbitfield mask, GLenum filter, const gl::Framebuffer *sourceFramebuffer);
 
   protected:
-    void setAttachment(GLenum attachment, FramebufferAttachment *attachmentObj);
     void detachResourceById(GLenum resourceType, GLuint resourceId);
+    static const FramebufferAttachment &getInvalidAttachment();
 
     Data mData;
     rx::FramebufferImpl *mImpl;

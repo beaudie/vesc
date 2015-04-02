@@ -1342,11 +1342,11 @@ void GL_APIENTRY FramebufferRenderbuffer(GLenum target, GLenum attachment, GLenu
         if (renderbuffer != 0)
         {
             Renderbuffer *renderbufferObject = context->getRenderbuffer(renderbuffer);
-            framebuffer->setRenderbufferAttachment(attachment, renderbufferObject);
+            framebuffer->setAttachment(GL_RENDERBUFFER, attachment, gl::ImageIndex::MakeInvalid(), renderbufferObject);
         }
         else
         {
-            framebuffer->setNULLAttachment(attachment);
+            framebuffer->setInvalidAttachment(attachment);
         }
     }
 }
@@ -1383,11 +1383,11 @@ void GL_APIENTRY FramebufferTexture2D(GLenum target, GLenum attachment, GLenum t
                 index = ImageIndex::MakeCube(textarget, level);
             }
 
-            framebuffer->setTextureAttachment(attachment, textureObj, index);
+            framebuffer->setAttachment(GL_TEXTURE, attachment, index, textureObj);
         }
         else
         {
-            framebuffer->setNULLAttachment(attachment);
+            framebuffer->setInvalidAttachment(attachment);
         }
     }
 }
@@ -1974,68 +1974,68 @@ void GL_APIENTRY GetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
             }
         }
 
-        const FramebufferAttachment *attachmentObject = framebuffer->getAttachment(attachment);
-        if (attachmentObject)
+        const FramebufferAttachment &attachmentObject = framebuffer->getAttachment(attachment);
+        if (attachmentObject.valid())
         {
-            ASSERT(attachmentObject->type() == GL_RENDERBUFFER ||
-                   attachmentObject->type() == GL_TEXTURE ||
-                   attachmentObject->type() == GL_FRAMEBUFFER_DEFAULT);
+            ASSERT(attachmentObject.type() == GL_RENDERBUFFER ||
+                   attachmentObject.type() == GL_TEXTURE ||
+                   attachmentObject.type() == GL_FRAMEBUFFER_DEFAULT);
 
             switch (pname)
             {
               case GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE:
-                *params = attachmentObject->type();
+                *params = attachmentObject.type();
                 break;
 
               case GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME:
-                if (attachmentObject->type() != GL_RENDERBUFFER && attachmentObject->type() != GL_TEXTURE)
+                if (attachmentObject.type() != GL_RENDERBUFFER && attachmentObject.type() != GL_TEXTURE)
                 {
                     context->recordError(Error(GL_INVALID_ENUM));
                     return;
                 }
-                *params = attachmentObject->id();
+                *params = attachmentObject.id();
                 break;
 
               case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL:
-                if (attachmentObject->type() != GL_TEXTURE)
+                if (attachmentObject.type() != GL_TEXTURE)
                 {
                     context->recordError(Error(GL_INVALID_ENUM));
                     return;
                 }
-                *params = attachmentObject->mipLevel();
+                *params = attachmentObject.mipLevel();
                 break;
 
               case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE:
-                if (attachmentObject->type() != GL_TEXTURE)
+                if (attachmentObject.type() != GL_TEXTURE)
                 {
                     context->recordError(Error(GL_INVALID_ENUM));
                     return;
                 }
-                *params = attachmentObject->cubeMapFace();
+                *params = attachmentObject.cubeMapFace();
                 break;
 
               case GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE:
-                *params = attachmentObject->getRedSize();
+                *params = attachmentObject.getRedSize();
                 break;
 
               case GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE:
-                *params = attachmentObject->getGreenSize();
+                *params = attachmentObject.getGreenSize();
                 break;
 
               case GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE:
-                *params = attachmentObject->getBlueSize();
+                *params = attachmentObject.getBlueSize();
                 break;
 
               case GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE:
-                *params = attachmentObject->getAlphaSize();
+                *params = attachmentObject.getAlphaSize();
                 break;
 
               case GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE:
-                *params = attachmentObject->getDepthSize();
+                *params = attachmentObject.getDepthSize();
                 break;
 
               case GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE:
-                *params = attachmentObject->getStencilSize();
+                *params = attachmentObject.getStencilSize();
                 break;
 
               case GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE:
@@ -2044,20 +2044,20 @@ void GL_APIENTRY GetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
                     context->recordError(Error(GL_INVALID_OPERATION));
                     return;
                 }
-                *params = attachmentObject->getComponentType();
+                *params = attachmentObject.getComponentType();
                 break;
 
               case GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING:
-                *params = attachmentObject->getColorEncoding();
+                *params = attachmentObject.getColorEncoding();
                 break;
 
               case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER:
-                if (attachmentObject->type() != GL_TEXTURE)
+                if (attachmentObject.type() != GL_TEXTURE)
                 {
                     context->recordError(Error(GL_INVALID_ENUM));
                     return;
                 }
-                *params = attachmentObject->layer();
+                *params = attachmentObject.layer();
                 break;
 
               default:

@@ -64,7 +64,7 @@ ClearParameters GetClearParameters(const gl::State &state, GLbitfield mask)
 
     if (mask & GL_DEPTH_BUFFER_BIT)
     {
-        if (state.getDepthStencilState().depthMask && framebufferObject->getDepthbuffer() != NULL)
+        if (state.getDepthStencilState().depthMask && framebufferObject->getDepthbuffer().valid())
         {
             clearParams.clearDepth = true;
         }
@@ -72,8 +72,8 @@ ClearParameters GetClearParameters(const gl::State &state, GLbitfield mask)
 
     if (mask & GL_STENCIL_BUFFER_BIT)
     {
-        if (framebufferObject->getStencilbuffer() != NULL &&
-            framebufferObject->getStencilbuffer()->getStencilSize() > 0)
+        if (framebufferObject->getStencilbuffer().valid() &&
+            framebufferObject->getStencilbuffer().getStencilSize() > 0)
         {
             clearParams.clearStencil = true;
         }
@@ -218,15 +218,15 @@ gl::Error FramebufferD3D::clearBufferfi(const gl::State &state, GLenum buffer, G
 
 GLenum FramebufferD3D::getImplementationColorReadFormat() const
 {
-    const gl::FramebufferAttachment *readAttachment = mData.getReadAttachment();
+    const gl::FramebufferAttachment &readAttachment = mData.getReadAttachment();
 
-    if (readAttachment == nullptr)
+    if (!readAttachment.valid())
     {
         return GL_NONE;
     }
 
     RenderTargetD3D *attachmentRenderTarget = NULL;
-    gl::Error error = GetAttachmentRenderTarget(readAttachment, &attachmentRenderTarget);
+    gl::Error error = GetAttachmentRenderTarget(&readAttachment, &attachmentRenderTarget);
     if (error.isError())
     {
         return GL_NONE;
@@ -240,15 +240,15 @@ GLenum FramebufferD3D::getImplementationColorReadFormat() const
 
 GLenum FramebufferD3D::getImplementationColorReadType() const
 {
-    const gl::FramebufferAttachment *readAttachment = mData.getReadAttachment();
+    const gl::FramebufferAttachment &readAttachment = mData.getReadAttachment();
 
-    if (readAttachment == nullptr)
+    if (!readAttachment.valid())
     {
         return GL_NONE;
     }
 
     RenderTargetD3D *attachmentRenderTarget = NULL;
-    gl::Error error = GetAttachmentRenderTarget(readAttachment, &attachmentRenderTarget);
+    gl::Error error = GetAttachmentRenderTarget(&readAttachment, &attachmentRenderTarget);
     if (error.isError())
     {
         return GL_NONE;
@@ -282,7 +282,7 @@ gl::Error FramebufferD3D::blit(const gl::State &state, const gl::Rectangle &sour
 {
     bool blitRenderTarget = false;
     if ((mask & GL_COLOR_BUFFER_BIT) &&
-        sourceFramebuffer->getReadColorbuffer() != nullptr &&
+        sourceFramebuffer->getReadColorbuffer().valid() &&
         mData.getFirstColorAttachment() != nullptr)
     {
         blitRenderTarget = true;
@@ -290,16 +290,16 @@ gl::Error FramebufferD3D::blit(const gl::State &state, const gl::Rectangle &sour
 
     bool blitStencil = false;
     if ((mask & GL_STENCIL_BUFFER_BIT) &&
-        sourceFramebuffer->getStencilbuffer() != nullptr &&
-        mData.mStencilAttachment != nullptr)
+        sourceFramebuffer->getStencilbuffer().valid() &&
+        mData.mStencilAttachment.valid())
     {
         blitStencil = true;
     }
 
     bool blitDepth = false;
     if ((mask & GL_DEPTH_BUFFER_BIT) &&
-        sourceFramebuffer->getDepthbuffer() != nullptr &&
-        mData.mDepthAttachment != nullptr)
+        sourceFramebuffer->getDepthbuffer().valid() &&
+        mData.mDepthAttachment.valid())
     {
         blitDepth = true;
     }
@@ -323,15 +323,15 @@ GLenum FramebufferD3D::checkStatus() const
     // D3D11 does not allow for overlapping RenderTargetViews, so ensure uniqueness
     for (size_t colorAttachment = 0; colorAttachment < mData.mColorAttachments.size(); colorAttachment++)
     {
-        const gl::FramebufferAttachment *attachment = mData.mColorAttachments[colorAttachment];
-        if (attachment != nullptr)
+        const gl::FramebufferAttachment &attachment = mData.mColorAttachments[colorAttachment];
+        if (attachment.valid())
         {
             for (size_t prevColorAttachment = 0; prevColorAttachment < colorAttachment; prevColorAttachment++)
             {
-                const gl::FramebufferAttachment *prevAttachment = mData.mColorAttachments[prevColorAttachment];
-                if (prevAttachment != nullptr &&
-                    (attachment->id() == prevAttachment->id() &&
-                     attachment->type() == prevAttachment->type()))
+                const gl::FramebufferAttachment &prevAttachment = mData.mColorAttachments[prevColorAttachment];
+                if (prevAttachment.valid() &&
+                    (attachment.id() == prevAttachment.id() &&
+                     attachment.type() == prevAttachment.type()))
                 {
                     return GL_FRAMEBUFFER_UNSUPPORTED;
                 }
@@ -344,11 +344,6 @@ GLenum FramebufferD3D::checkStatus() const
 
 const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const Workarounds &workarounds) const
 {
-    if (!workarounds.mrtPerfWorkaround)
-    {
-        return mData.mColorAttachments;
-    }
-
     if (!mInvalidateColorAttachmentCache)
     {
         return mColorAttachmentsForRender;
@@ -360,12 +355,16 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const Wor
     for (size_t attachmentIndex = 0; attachmentIndex < mData.mColorAttachments.size(); ++attachmentIndex)
     {
         GLenum drawBufferState = mData.mDrawBufferStates[attachmentIndex];
-        gl::FramebufferAttachment *colorAttachment = mData.mColorAttachments[attachmentIndex];
+        const gl::FramebufferAttachment &colorAttachment = mData.mColorAttachments[attachmentIndex];
 
-        if (colorAttachment != nullptr && drawBufferState != GL_NONE)
+        if (colorAttachment.valid() && drawBufferState != GL_NONE)
         {
             ASSERT(drawBufferState == GL_BACK || drawBufferState == (GL_COLOR_ATTACHMENT0_EXT + attachmentIndex));
-            mColorAttachmentsForRender.push_back(colorAttachment);
+            mColorAttachmentsForRender.push_back(&colorAttachment);
+        }
+        else if (!workarounds.mrtPerfWorkaround)
+        {
+            mColorAttachmentsForRender.push_back(nullptr);
         }
     }
 
