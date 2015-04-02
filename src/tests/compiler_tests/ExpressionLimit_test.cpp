@@ -170,7 +170,7 @@ protected:
 const char* ExpressionLimitTest::kExpressionTooComplex =
     "Expression too complex";
 const char* ExpressionLimitTest::kCallStackTooDeep =
-    "call stack too deep";
+    "Call stack too deep";
 const char* ExpressionLimitTest::kHasRecursion =
     "Function recursion detected";
 
@@ -275,12 +275,12 @@ TEST_F(ExpressionLimitTest, UnusedCallStackDepth)
         GenerateShaderWithUnusedDeepFunctionStack(
             kMaxCallStackDepth - 10).c_str(),
         compileOptions, NULL));
-    // Test call stack over the limit fails.
+    // Test call stack over the limit does not fail.
     EXPECT_TRUE(CheckShaderCompilation(
         vertexCompiler,
         GenerateShaderWithUnusedDeepFunctionStack(
             kMaxCallStackDepth + 10).c_str(),
-        compileOptions, kCallStackTooDeep));
+        compileOptions, NULL));
     // Test call stack over the limit without limit does not fail.
     EXPECT_TRUE(CheckShaderCompilation(
         vertexCompiler,
@@ -481,10 +481,11 @@ TEST_F(ExpressionLimitTest, Recursion)
     EXPECT_TRUE(CheckShaderCompilation(
         vertexCompiler, shaderWithRecursion5,
         compileOptions, kHasRecursion));
-    // Check unused recursions passes.
+
+    // Check some more forms of recursion
     EXPECT_TRUE(CheckShaderCompilation(
         vertexCompiler, shaderWithRecursion6,
-        compileOptions, NULL));
+        compileOptions, kHasRecursion));
     EXPECT_TRUE(CheckShaderCompilation(
         vertexCompiler, shaderWithRecursion7,
         compileOptions, kHasRecursion));
