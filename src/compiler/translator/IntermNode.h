@@ -292,6 +292,10 @@ class TIntermConstantUnion : public TIntermTyped
 
   protected:
     ConstantUnion *mUnionArrayPointer;
+
+  private:
+      typedef float(*FloatTypeUnaryFunc) (float);
+      bool foldFloatTypeUnary(ConstantUnion &result, const ConstantUnion &constUnion, FloatTypeUnaryFunc builtinFunc, TInfoSink &infoSink) const;
 };
 
 //
