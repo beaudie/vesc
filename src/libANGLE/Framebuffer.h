@@ -85,11 +85,8 @@ class Framebuffer
     void detachTexture(GLuint texture);
     void detachRenderbuffer(GLuint renderbuffer);
 
-    FramebufferAttachment &getColorbuffer(unsigned int colorAttachment);
     const FramebufferAttachment &getColorbuffer(unsigned int colorAttachment) const;
-    FramebufferAttachment &getDepthbuffer();
     const FramebufferAttachment &getDepthbuffer() const;
-    FramebufferAttachment &getStencilbuffer();
     const FramebufferAttachment &getStencilbuffer() const;
     const FramebufferAttachment &getDepthStencilBuffer() const;
     const FramebufferAttachment &getDepthOrStencilbuffer() const;
@@ -97,7 +94,6 @@ class Framebuffer
     GLenum getReadColorbufferType() const;
     const FramebufferAttachment *getFirstColorbuffer() const;
 
-    FramebufferAttachment &getAttachment(GLenum attachment);
     const FramebufferAttachment &getAttachment(GLenum attachment) const;
 
     GLenum getDrawBufferState(unsigned int colorAttachment) const;
@@ -134,6 +130,11 @@ class Framebuffer
   protected:
     void detachResourceById(GLenum resourceType, GLuint resourceId);
     static const FramebufferAttachment &getInvalidAttachment();
+
+    FramebufferAttachment &getAttachment(GLenum attachment);
+    FramebufferAttachment &getColorbuffer(unsigned int colorAttachment);
+    FramebufferAttachment &getDepthbuffer();
+    FramebufferAttachment &getStencilbuffer();
 
     Data mData;
     rx::FramebufferImpl *mImpl;
