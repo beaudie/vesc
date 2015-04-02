@@ -11,6 +11,7 @@
 
 #include "common/angleutils.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/renderer/AttachmentImpl.h"
 
 namespace egl
 {
@@ -21,7 +22,7 @@ struct Config;
 namespace rx
 {
 
-class SurfaceImpl : angle::NonCopyable
+class SurfaceImpl : public AttachmentImpl
 {
   public:
     SurfaceImpl();

@@ -12,6 +12,7 @@
 
 #include "libANGLE/ImageIndex.h"
 #include "libANGLE/RefCountObject.h"
+#include "libANGLE/renderer/AttachmentImpl.h"
 
 namespace gl
 {
@@ -59,6 +60,15 @@ class AttachableObject : public RefCountObject
     virtual GLsizei getAttachmentHeight(const AttachmentSubResource &subResource) const = 0;
     virtual GLenum getAttachmentInternalFormat(const AttachmentSubResource &subResource) const = 0;
     virtual GLsizei getAttachmentSamples(const AttachmentSubResource &subResource) const = 0;
+
+    gl::Error getAttachmentRenderTarget(const AttachmentSubResource &subResource,
+                                        rx::AttachmentRenderTarget *rtOut)
+    {
+        return getAttachmentImpl()->getAttachmentRenderTarget(subResource, rtOut);
+    }
+
+  protected:
+    virtual rx::AttachmentImpl *getAttachmentImpl() const = 0;
 };
 
 }
