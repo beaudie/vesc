@@ -22,6 +22,12 @@ namespace gl
 
 ////// FramebufferAttachment Implementation //////
 
+FramebufferAttachment::FramebufferAttachment()
+    : mType(GL_NONE),
+      mSubResource(GL_NONE, ImageIndex::MakeInvalid())
+{
+}
+
 FramebufferAttachment::FramebufferAttachment(GLenum type,
                                              GLenum binding,
                                              const ImageIndex &textureIndex,
@@ -29,6 +35,25 @@ FramebufferAttachment::FramebufferAttachment(GLenum type,
     : mSubResource(binding, textureIndex),
       mType(type)
 {
+    mResource.set(resource);
+}
+
+void FramebufferAttachment::reset()
+{
+    mType = GL_NONE;
+    mResource.set(nullptr);
+
+    // not technically necessary, could omit for performance
+    mSubResource = AttachmentSubResource(GL_NONE, ImageIndex::MakeInvalid());
+}
+
+void FramebufferAttachment::setResource(GLenum type,
+                                        GLenum binding,
+                                        const ImageIndex &textureIndex,
+                                        AttachableObject *resource)
+{
+    mType = type;
+    mSubResource = AttachmentSubResource(binding, textureIndex);
     mResource.set(resource);
 }
 

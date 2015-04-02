@@ -27,11 +27,19 @@ namespace gl
 class FramebufferAttachment final : angle::NonCopyable
 {
   public:
+    FramebufferAttachment();
+
     FramebufferAttachment(GLenum type,
                           GLenum binding,
                           const ImageIndex &textureIndex,
                           AttachableObject *resource);
     ~FramebufferAttachment();
+
+    void reset();
+    void setResource(GLenum type,
+                     GLenum binding,
+                     const ImageIndex &textureIndex,
+                     AttachableObject *resource);
 
     // Helper methods
     GLuint getRedSize() const;
@@ -68,6 +76,7 @@ class FramebufferAttachment final : angle::NonCopyable
     GLsizei getHeight() const { return mResource->getAttachmentHeight(mSubResource); }
     GLenum getInternalFormat() const { return mResource->getAttachmentInternalFormat(mSubResource); }
     GLsizei getSamples() const { return mResource->getAttachmentSamples(mSubResource); }
+    bool valid() const { return mType != GL_NONE; }
     GLenum type() const { return mType; }
 
     Renderbuffer *getRenderbuffer() const

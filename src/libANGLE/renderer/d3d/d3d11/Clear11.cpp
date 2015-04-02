@@ -178,8 +178,8 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams, const gl
 {
     const auto &colorAttachments = fboData.mColorAttachments;
     const auto &drawBufferStates = fboData.mDrawBufferStates;
-    const auto *depthAttachment = fboData.mDepthAttachment;
-    const auto *stencilAttachment = fboData.mStencilAttachment;
+    const auto &depthAttachment = fboData.mDepthAttachment;
+    const auto &stencilAttachment = fboData.mStencilAttachment;
 
     ASSERT(colorAttachments.size() == drawBufferStates.size());
 
@@ -204,23 +204,23 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams, const gl
 
     gl::Extents framebufferSize;
 
-    auto iter = std::find_if(colorAttachments.begin(), colorAttachments.end(), [](const gl::FramebufferAttachment *attachment) { return attachment != nullptr; });
-    if (iter != colorAttachments.end())
+    const gl::FramebufferAttachment *colorAttachment = fboData.getFirstColorAttachment();
+    if (colorAttachment != nullptr && colorAttachment->valid())
     {
-        framebufferSize.width = (*iter)->getWidth();
-        framebufferSize.height = (*iter)->getHeight();
+        framebufferSize.width = colorAttachment->getWidth();
+        framebufferSize.height = colorAttachment->getHeight();
         framebufferSize.depth = 1;
     }
-    else if (depthAttachment != nullptr)
+    else if (depthAttachment.valid())
     {
-        framebufferSize.width = depthAttachment->getWidth();
-        framebufferSize.height = depthAttachment->getHeight();
+        framebufferSize.width = depthAttachment.getWidth();
+        framebufferSize.height = depthAttachment.getHeight();
         framebufferSize.depth = 1;
     }
-    else if (stencilAttachment != nullptr)
+    else if (stencilAttachment.valid())
     {
-        framebufferSize.width = stencilAttachment->getWidth();
-        framebufferSize.height = stencilAttachment->getHeight();
+        framebufferSize.width = stencilAttachment.getWidth();
+        framebufferSize.height = stencilAttachment.getHeight();
         framebufferSize.depth = 1;
     }
     else
@@ -251,26 +251,26 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams, const gl
     for (size_t colorAttachment = 0; colorAttachment < colorAttachments.size(); colorAttachment++)
     {
         if (clearParams.clearColor[colorAttachment] &&
-            colorAttachments[colorAttachment] != nullptr &&
+            colorAttachments[colorAttachment].valid() &&
             drawBufferStates[colorAttachment] != GL_NONE)
         {
-            const gl::FramebufferAttachment *attachment = colorAttachments[colorAttachment];
+            const gl::FramebufferAttachment &attachment = colorAttachments[colorAttachment];
 
             RenderTarget11 *renderTarget = NULL;
-            gl::Error error = d3d11::GetAttachmentRenderTarget(attachment, &renderTarget);
+            gl::Error error = d3d11::GetAttachmentRenderTarget(&attachment, &renderTarget);
             if (error.isError())
             {
                 return error;
             }
 
-            const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(attachment->getInternalFormat());
+            const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(attachment.getInternalFormat());
 
             if (clearParams.colorClearType == GL_FLOAT &&
                 !(formatInfo.componentType == GL_FLOAT || formatInfo.componentType == GL_UNSIGNED_NORMALIZED || formatInfo.componentType == GL_SIGNED_NORMALIZED))
             {
                 ERR("It is undefined behaviour to clear a render buffer which is not normalized fixed point or floating-"
                     "point to floating point values (color attachment %u has internal format 0x%X).", colorAttachment,
-                    attachment->getInternalFormat());
+                    attachment.getInternalFormat());
             }
 
             if ((formatInfo.redBits == 0 || !clearParams.colorMaskRed) &&
@@ -342,11 +342,11 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams, const gl
 
     if (clearParams.clearDepth || clearParams.clearStencil)
     {
-        const gl::FramebufferAttachment *attachment = (depthAttachment != nullptr) ? depthAttachment : stencilAttachment;
-        ASSERT(attachment != nullptr);
+        const gl::FramebufferAttachment &attachment = (depthAttachment.valid()) ? depthAttachment : stencilAttachment;
+        ASSERT(attachment.valid());
 
         RenderTarget11 *renderTarget = NULL;
-        gl::Error error = d3d11::GetAttachmentRenderTarget(attachment, &renderTarget);
+        gl::Error error = d3d11::GetAttachmentRenderTarget(&attachment, &renderTarget);
         if (error.isError())
         {
             return error;
@@ -354,7 +354,7 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams, const gl
 
         const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(renderTarget->getDXGIFormat());
 
-        unsigned int stencilUnmasked = (stencilAttachment != nullptr) ? (1 << dxgiFormatInfo.stencilBits) - 1 : 0;
+        unsigned int stencilUnmasked = (stencilAttachment.valid()) ? (1 << dxgiFormatInfo.stencilBits) - 1 : 0;
         bool needMaskedStencilClear = clearParams.clearStencil && (clearParams.stencilWriteMask & stencilUnmasked) != stencilUnmasked;
 
         if (needScissoredClear || needMaskedStencilClear)

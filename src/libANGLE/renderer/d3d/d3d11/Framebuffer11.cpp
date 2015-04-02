@@ -24,22 +24,14 @@
 namespace rx
 {
 
-Framebuffer11::Framebuffer11(const gl::Framebuffer::Data &data, Renderer11 *renderer)
-    : FramebufferD3D(data, renderer),
-      mRenderer(renderer)
+namespace
 {
-    ASSERT(mRenderer != nullptr);
-}
 
-Framebuffer11::~Framebuffer11()
+gl::Error InvalidateAttachmentSwizzles(const gl::FramebufferAttachment &attachment)
 {
-}
-
-static gl::Error InvalidateAttachmentSwizzles(const gl::FramebufferAttachment *attachment)
-{
-    if (attachment && attachment->type() == GL_TEXTURE)
+    if (attachment.valid() && attachment.type() == GL_TEXTURE)
     {
-        gl::Texture *texture = attachment->getTexture();
+        gl::Texture *texture = attachment.getTexture();
 
         TextureD3D *textureD3D = GetImplAs<TextureD3D>(texture);
 
@@ -55,16 +47,56 @@ static gl::Error InvalidateAttachmentSwizzles(const gl::FramebufferAttachment *a
             TextureStorage11 *texStorage11 = TextureStorage11::makeTextureStorage11(texStorage);
             ASSERT(texStorage11);
 
-            texStorage11->invalidateSwizzleCacheLevel(attachment->mipLevel());
+            texStorage11->invalidateSwizzleCacheLevel(attachment.mipLevel());
         }
     }
 
     return gl::Error(GL_NO_ERROR);
 }
 
+
+gl::Error GetRenderTargetResource(const gl::FramebufferAttachment &colorbuffer, unsigned int *subresourceIndexOut,
+                                  ID3D11Texture2D **texture2DOut)
+{
+    ASSERT(colorbuffer.valid());
+
+    RenderTarget11 *renderTarget = NULL;
+    gl::Error error = d3d11::GetAttachmentRenderTarget(&colorbuffer, &renderTarget);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ID3D11Resource *renderTargetResource = renderTarget->getTexture();
+    ASSERT(renderTargetResource);
+
+    *subresourceIndexOut = renderTarget->getSubresourceIndex();
+    *texture2DOut = d3d11::DynamicCastComObject<ID3D11Texture2D>(renderTargetResource);
+
+    if (!(*texture2DOut))
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to query the ID3D11Texture2D from a RenderTarget");
+    }
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+}
+
+Framebuffer11::Framebuffer11(const gl::Framebuffer::Data &data, Renderer11 *renderer)
+    : FramebufferD3D(data, renderer),
+      mRenderer(renderer)
+{
+    ASSERT(mRenderer != nullptr);
+}
+
+Framebuffer11::~Framebuffer11()
+{
+}
+
 gl::Error Framebuffer11::invalidateSwizzles() const
 {
-    for (gl::FramebufferAttachment *colorAttachment : mData.mColorAttachments)
+    for (const auto &colorAttachment : mData.mColorAttachments)
     {
         gl::Error error = InvalidateAttachmentSwizzles(colorAttachment);
         if (error.isError())
@@ -106,41 +138,15 @@ gl::Error Framebuffer11::clear(const gl::State &state, const ClearParameters &cl
     return gl::Error(GL_NO_ERROR);
 }
 
-static gl::Error getRenderTargetResource(const gl::FramebufferAttachment *colorbuffer, unsigned int *subresourceIndexOut,
-                                         ID3D11Texture2D **texture2DOut)
-{
-    ASSERT(colorbuffer);
-
-    RenderTarget11 *renderTarget = NULL;
-    gl::Error error = d3d11::GetAttachmentRenderTarget(colorbuffer, &renderTarget);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    ID3D11Resource *renderTargetResource = renderTarget->getTexture();
-    ASSERT(renderTargetResource);
-
-    *subresourceIndexOut = renderTarget->getSubresourceIndex();
-    *texture2DOut = d3d11::DynamicCastComObject<ID3D11Texture2D>(renderTargetResource);
-
-    if (!(*texture2DOut))
-    {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to query the ID3D11Texture2D from a RenderTarget");
-    }
-
-    return gl::Error(GL_NO_ERROR);
-}
-
 gl::Error Framebuffer11::readPixels(const gl::Rectangle &area, GLenum format, GLenum type, size_t outputPitch, const gl::PixelPackState &pack, uint8_t *pixels) const
 {
     ID3D11Texture2D *colorBufferTexture = NULL;
     unsigned int subresourceIndex = 0;
 
-    const gl::FramebufferAttachment *colorbuffer = mData.getReadAttachment();
-    ASSERT(colorbuffer);
+    const gl::FramebufferAttachment &colorbuffer = mData.getReadAttachment();
+    ASSERT(colorbuffer.valid());
 
-    gl::Error error = getRenderTargetResource(colorbuffer, &subresourceIndex, &colorBufferTexture);
+    gl::Error error = GetRenderTargetResource(colorbuffer, &subresourceIndex, &colorBufferTexture);
     if (error.isError())
     {
         return error;
@@ -182,11 +188,11 @@ gl::Error Framebuffer11::blit(const gl::Rectangle &sourceArea, const gl::Rectang
 {
     if (blitRenderTarget)
     {
-        const gl::FramebufferAttachment *readBuffer = sourceFramebuffer->getReadColorbuffer();
-        ASSERT(readBuffer);
+        const gl::FramebufferAttachment &readBuffer = sourceFramebuffer->getReadColorbuffer();
+        ASSERT(readBuffer.valid());
 
         RenderTargetD3D *readRenderTarget = NULL;
-        gl::Error error = GetAttachmentRenderTarget(readBuffer, &readRenderTarget);
+        gl::Error error = GetAttachmentRenderTarget(&readBuffer, &readRenderTarget);
         if (error.isError())
         {
             return error;
@@ -195,13 +201,13 @@ gl::Error Framebuffer11::blit(const gl::Rectangle &sourceArea, const gl::Rectang
 
         for (size_t colorAttachment = 0; colorAttachment < mData.mColorAttachments.size(); colorAttachment++)
         {
-            if (mData.mColorAttachments[colorAttachment] != nullptr &&
+            if (mData.mColorAttachments[colorAttachment].valid() &&
                 mData.mDrawBufferStates[colorAttachment] != GL_NONE)
             {
-                const gl::FramebufferAttachment *drawBuffer = mData.mColorAttachments[colorAttachment];
+                const gl::FramebufferAttachment &drawBuffer = mData.mColorAttachments[colorAttachment];
 
                 RenderTargetD3D *drawRenderTarget = NULL;
-                error = GetAttachmentRenderTarget(drawBuffer, &drawRenderTarget);
+                error = GetAttachmentRenderTarget(&drawBuffer, &drawRenderTarget);
                 if (error.isError())
                 {
                     return error;
@@ -220,22 +226,22 @@ gl::Error Framebuffer11::blit(const gl::Rectangle &sourceArea, const gl::Rectang
 
     if (blitDepth || blitStencil)
     {
-        gl::FramebufferAttachment *readBuffer = sourceFramebuffer->getDepthOrStencilbuffer();
-        ASSERT(readBuffer);
+        const gl::FramebufferAttachment &readBuffer = sourceFramebuffer->getDepthOrStencilbuffer();
+        ASSERT(readBuffer.valid());
 
         RenderTargetD3D *readRenderTarget = NULL;
-        gl::Error error = GetAttachmentRenderTarget(readBuffer, &readRenderTarget);
+        gl::Error error = GetAttachmentRenderTarget(&readBuffer, &readRenderTarget);
         if (error.isError())
         {
             return error;
         }
         ASSERT(readRenderTarget);
 
-        const gl::FramebufferAttachment *drawBuffer = mData.getDepthOrStencilAttachment();
-        ASSERT(drawBuffer);
+        const gl::FramebufferAttachment &drawBuffer = mData.getDepthOrStencilAttachment();
+        ASSERT(drawBuffer.valid());
 
         RenderTargetD3D *drawRenderTarget = NULL;
-        error = GetAttachmentRenderTarget(drawBuffer, &drawRenderTarget);
+        error = GetAttachmentRenderTarget(&drawBuffer, &drawRenderTarget);
         if (error.isError())
         {
             return error;
