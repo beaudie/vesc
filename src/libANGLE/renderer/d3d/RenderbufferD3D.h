@@ -32,6 +32,9 @@ class RenderbufferD3D : public RenderbufferImpl
     RenderTargetD3D *getRenderTarget();
     unsigned int getRenderTargetSerial() const;
 
+    gl::Error getAttachmentRenderTarget(const gl::FramebufferAttachment::Target &target,
+                                        FBOAttachmentRenderTarget *rtOut) override;
+
   private:
     RendererD3D *mRenderer;
     RenderTargetD3D *mRenderTarget;

@@ -12,12 +12,20 @@
 
 #include "angle_gl.h"
 #include "common/angleutils.h"
+#include "libANGLE/Error.h"
 #include "libANGLE/ImageIndex.h"
 #include "libANGLE/RefCountObject.h"
 
 namespace egl
 {
 class Surface;
+}
+
+namespace rx
+{
+// And implementation-specific object associated with an attachment.
+typedef void *FBOAttachmentRenderTarget;
+class FBOAttachmentObjectImpl;
 }
 
 namespace gl
@@ -103,7 +111,15 @@ class FramebufferAttachment final : angle::NonCopyable
     Texture *getTexture() const;
     const egl::Surface *getSurface() const;
 
+    template <typename T>
+    gl::Error getRenderTarget(T **rtOut) const
+    {
+        return getRenderTarget(reinterpret_cast<rx::FBOAttachmentRenderTarget *>(rtOut));
+    }
+
   private:
+    gl::Error getRenderTarget(rx::FBOAttachmentRenderTarget *rtOut) const;
+
     GLenum mType;
     Target mTarget;
     BindingPointer<FBOAttachmentObject> mResource;
@@ -119,6 +135,12 @@ class FBOAttachmentObject : public RefCountObject
     virtual GLsizei getAttachmentHeight(const FramebufferAttachment::Target &target) const = 0;
     virtual GLenum getAttachmentInternalFormat(const FramebufferAttachment::Target &target) const = 0;
     virtual GLsizei getAttachmentSamples(const FramebufferAttachment::Target &target) const = 0;
+
+    Error getAttachmentRenderTarget(const FramebufferAttachment::Target &target,
+                                    rx::FBOAttachmentRenderTarget *rtOut) const;
+
+  protected:
+    virtual rx::FBOAttachmentObjectImpl *getAttachmentImpl() const = 0;
 };
 
 inline GLsizei FramebufferAttachment::getWidth() const
@@ -139,6 +161,41 @@ inline GLenum FramebufferAttachment::getInternalFormat() const
 inline GLsizei FramebufferAttachment::getSamples() const
 {
     return mResource->getAttachmentSamples(mTarget);
+}
+
+inline gl::Error FramebufferAttachment::getRenderTarget(rx::FBOAttachmentRenderTarget *rtOut) const
+{
+    return mResource->getAttachmentRenderTarget(mTarget, rtOut);
+}
+
+} // namespace gl
+
+namespace rx
+{
+
+class FBOAttachmentObjectImpl : angle::NonCopyable
+{
+  public:
+    FBOAttachmentObjectImpl() {}
+    virtual ~FBOAttachmentObjectImpl() {}
+
+    virtual gl::Error getAttachmentRenderTarget(const gl::FramebufferAttachment::Target &target,
+                                                FBOAttachmentRenderTarget *rtOut)
+    {
+        // Default: unsupported
+        return gl::Error(GL_INVALID_OPERATION, "Internal RenderTarget not supported");
+    }
+};
+
+} // namespace rx
+
+namespace gl
+{
+
+inline Error FBOAttachmentObject::getAttachmentRenderTarget(const FramebufferAttachment::Target &target,
+                                                            rx::FBOAttachmentRenderTarget *rtOut) const
+{
+    return getAttachmentImpl()->getAttachmentRenderTarget(target, rtOut);
 }
 
 }
