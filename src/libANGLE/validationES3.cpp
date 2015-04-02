@@ -822,8 +822,8 @@ bool ValidateES3CopyTexImageParameters(Context *context, GLenum target, GLint le
         return false;
     }
 
-    gl::FramebufferAttachment *source = framebuffer->getReadColorbuffer();
-    GLenum colorbufferInternalFormat = source->getInternalFormat();
+    const gl::FramebufferAttachment &source = framebuffer->getReadColorbuffer();
+    GLenum colorbufferInternalFormat = source.getInternalFormat();
 
     if (isSubImage)
     {
