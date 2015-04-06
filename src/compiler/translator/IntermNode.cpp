@@ -1298,6 +1298,48 @@ TIntermTyped *TIntermConstantUnion::fold(
                     return nullptr;
                 break;
 
+              case EOpExp:
+                if (!foldUnary<float>(unionArray[i], &exp, infoSink, &tempConstArray[i]))
+                  return nullptr;
+                break;
+
+              case EOpLog:
+                if (getType().getBasicType() == EbtFloat && unionArray[i].getFConst() <= 0.0)
+                    tempConstArray[i].setFConst(0.0);
+                else if (!foldUnary<float>(unionArray[i], &log, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpExp2:
+                if (!foldUnary<float>(unionArray[i], &exp2, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpLog2:
+                if (getType().getBasicType() == EbtFloat && unionArray[i].getFConst() <= 0.0)
+                    tempConstArray[i].setFConst(0.0);
+                else if (!foldUnary<float>(unionArray[i], &log2, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpSqrt:
+                if (getType().getBasicType() == EbtFloat && unionArray[i].getFConst() < 0.0)
+                    tempConstArray[i].setFConst(0.0);
+                else if (!foldUnary<float>(unionArray[i], &sqrt, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpInverseSqrt:
+                // There is no stdlib built-in function equavalent for GLES built-in inversesqrt(),
+                // so getting the square root first using builtin function sqrt() and then taking its inverse.
+                if (getType().getBasicType() == EbtFloat && unionArray[i].getFConst() <= 0.0)
+                    tempConstArray[i].setFConst(0.0);
+                else if (!foldUnary<float>(unionArray[i], &sqrt, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                else
+                    tempConstArray[i].setFConst(1 / tempConstArray[i].getFConst());
+                break;
+
               default:
                 return NULL;
             }
