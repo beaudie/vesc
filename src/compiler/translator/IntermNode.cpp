@@ -1272,6 +1272,40 @@ TIntermTyped *TIntermConstantUnion::fold(
                     return nullptr;
                 break;
 
+              case EOpExp:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&exp), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpLog:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&log), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpExp2:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&exp2), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpLog2:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&log2), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpSqrt:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&sqrt), infoSink))
+                      return nullptr;
+                break;
+
+              case EOpInverseSqrt:
+                // There is no stdlib built-in function equavalent for GLES built-in inversesqrt(),
+                // so getting the square root first using builtin function sqrt() and then taking its inverse.
+                // Also, inversesqrt(x) where x <= 0 is undefined, so just setting it to max float value.
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&sqrt), infoSink))
+                    return nullptr;
+                tempConstArray[i].setFConst(tempConstArray[i].getFConst() <= 0 ? std::numeric_limits<float>::max() : 1 / tempConstArray[i].getFConst());
+                break;
+
               default:
                 return NULL;
             }
