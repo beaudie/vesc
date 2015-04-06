@@ -1305,6 +1305,102 @@ TIntermTyped *TIntermConstantUnion::fold(
                 tempConstArray[i].setFConst(tempConstArray[i].getFConst() <= 0 ? std::numeric_limits<float>::max() : 1 / tempConstArray[i].getFConst());
                 break;
 
+              case EOpAbs:
+                switch (getType().getBasicType())
+                {
+                  case EbtFloat:
+                    tempConstArray[i].setFConst(abs(unionArray[i].getFConst()));
+                    break;
+                  case EbtInt:
+                    tempConstArray[i].setIConst(abs(unionArray[i].getIConst()));
+                    break;
+                  default:
+                    infoSink.info.message(
+                        EPrefixInternalError, getLine(),
+                        "Unary operation not folded into constant");
+                    return nullptr;
+                }
+                break;
+
+              case EOpSign:
+                switch (getType().getBasicType())
+                {
+                case EbtFloat:
+                  {
+                      float fConst = unionArray[i].getFConst();
+                      float fResult = 0.0;
+                      if (fConst > 0.0)
+                          fResult = 1.0;
+                      else if (fConst < 0.0)
+                          fResult = -1.0;
+                      tempConstArray[i].setFConst(fResult);
+                  }
+                  break;
+                case EbtInt:
+                  {
+                      int iConst = unionArray[i].getIConst();
+                      int iResult = 0;
+                      if (iConst > 0)
+                          iResult = 1;
+                      else if (iConst < 0)
+                          iResult = -1;
+                      tempConstArray[i].setIConst(iResult);
+                  }
+                  break;
+                default:
+                  infoSink.info.message(
+                      EPrefixInternalError, getLine(),
+                      "Unary operation not folded into constant");
+                  return nullptr;
+                }
+                break;
+
+              case EOpFloor:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&floor), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpTrunc:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&trunc), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpRound:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&round), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpRoundEven:
+                if (getType().getBasicType() == EbtFloat)
+                {
+                    float result = round(unionArray[i].getFConst());
+                    if (static_cast<int>(result) % 2 != 0)
+                        result += 1.0;
+                    tempConstArray[i].setFConst(result);
+                    break;
+                }
+                infoSink.info.message(
+                    EPrefixInternalError, getLine(),
+                    "Unary operation not folded into constant");
+                return nullptr;
+
+              case EOpCeil:
+                if (!foldFloatTypeUnary(tempConstArray[i], unionArray[i], static_cast<FloatTypeUnaryFunc>(&ceil), infoSink))
+                    return nullptr;
+                break;
+
+              case EOpFract:
+                if (getType().getBasicType() == EbtFloat)
+                {
+                    float intPart = 0.0;
+                    tempConstArray[i].setFConst(modf(unionArray[i].getFConst(), &intPart));
+                    break;
+                }
+                infoSink.info.message(
+                    EPrefixInternalError, getLine(),
+                    "Unary operation not folded into constant");
+                return nullptr;
+
               default:
                 return NULL;
             }
