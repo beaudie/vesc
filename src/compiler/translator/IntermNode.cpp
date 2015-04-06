@@ -1280,6 +1280,48 @@ TIntermTyped *TIntermConstantUnion::fold(
                     return nullptr;
                 break;
 
+              case EOpExp:
+                if (!foldFloatTypeUnary(unionArray[i], static_cast<FloatTypeUnaryFunc>(&exp), infoSink, &tempConstArray[i]))
+                  return nullptr;
+                break;
+
+              case EOpLog:
+                if (getType().getBasicType() == EbtFloat && unionArray[i].getFConst() <= 0.0)
+                    tempConstArray[i].setFConst(0.0);
+                else if (!foldFloatTypeUnary(unionArray[i], static_cast<FloatTypeUnaryFunc>(&log), infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpExp2:
+                if (!foldFloatTypeUnary(unionArray[i], static_cast<FloatTypeUnaryFunc>(&exp2), infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpLog2:
+                if (getType().getBasicType() == EbtFloat && unionArray[i].getFConst() <= 0.0)
+                    tempConstArray[i].setFConst(0.0);
+                else if (!foldFloatTypeUnary(unionArray[i], static_cast<FloatTypeUnaryFunc>(&log2), infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpSqrt:
+                if (getType().getBasicType() == EbtFloat && unionArray[i].getFConst() < 0.0)
+                    tempConstArray[i].setFConst(0.0);
+                else if (!foldFloatTypeUnary(unionArray[i], static_cast<FloatTypeUnaryFunc>(&sqrt), infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpInverseSqrt:
+                // There is no stdlib built-in function equavalent for GLES built-in inversesqrt(),
+                // so getting the square root first using builtin function sqrt() and then taking its inverse.
+                if (getType().getBasicType() == EbtFloat && unionArray[i].getFConst() <= 0.0)
+                    tempConstArray[i].setFConst(0.0);
+                else if (!foldFloatTypeUnary(unionArray[i], static_cast<FloatTypeUnaryFunc>(&sqrt), infoSink, &tempConstArray[i]))
+                    return nullptr;
+                else
+                    tempConstArray[i].setFConst(1 / tempConstArray[i].getFConst());
+                break;
+
               default:
                 return NULL;
             }
