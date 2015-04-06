@@ -11,6 +11,7 @@
 #include <float.h>
 #include <limits.h>
 #include <math.h>
+#include <stdlib.h>
 #include <algorithm>
 
 #include "compiler/translator/HashNames.h"
@@ -1283,6 +1284,152 @@ TIntermTyped *TIntermConstantUnion::fold(
                 else if (!foldFloatTypeUnary(unionArray[i], &atanhf, infoSink, &tempConstArray[i]))
                     return nullptr;
                 break;
+
+              case EOpExp:
+                if (!foldFloatTypeUnary(unionArray[i], &expf, infoSink, &tempConstArray[i]))
+                  return nullptr;
+                break;
+
+              case EOpLog:
+                // For log(x), results are undefined if x <= 0, we are choosing to set result to 0.
+                if (getType().getBasicType() == EbtFloat && unionArray[i].getFConst() <= 0.0f)
+                    tempConstArray[i].setFConst(0.0f);
+                else if (!foldFloatTypeUnary(unionArray[i], &logf, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpExp2:
+                if (!foldFloatTypeUnary(unionArray[i], &exp2f, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpLog2:
+                // For log2(x), results are undefined if x <= 0, we are choosing to set result to 0.
+                if (getType().getBasicType() == EbtFloat && unionArray[i].getFConst() <= 0.0f)
+                    tempConstArray[i].setFConst(0.0f);
+                else if (!foldFloatTypeUnary(unionArray[i], &log2f, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpSqrt:
+                // For sqrt(x), results are undefined if x < 0, we are choosing to set result to 0.
+                if (getType().getBasicType() == EbtFloat && unionArray[i].getFConst() < 0.0f)
+                    tempConstArray[i].setFConst(0.0f);
+                else if (!foldFloatTypeUnary(unionArray[i], &sqrtf, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpInverseSqrt:
+                // There is no stdlib built-in function equavalent for GLES built-in inversesqrt(),
+                // so getting the square root first using builtin function sqrt() and then taking its inverse.
+                // Also, for inversesqrt(x), results are undefined if x <= 0, we are choosing to set result to 0.
+                if (getType().getBasicType() == EbtFloat && unionArray[i].getFConst() <= 0.0f)
+                    tempConstArray[i].setFConst(0.0f);
+                else if (!foldFloatTypeUnary(unionArray[i], &sqrtf, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                else
+                    tempConstArray[i].setFConst(1.0f / tempConstArray[i].getFConst());
+                break;
+
+              case EOpAbs:
+                switch (getType().getBasicType())
+                {
+                  case EbtFloat:
+                    tempConstArray[i].setFConst(fabsf(unionArray[i].getFConst()));
+                    break;
+                  case EbtInt:
+                    tempConstArray[i].setIConst(abs(unionArray[i].getIConst()));
+                    break;
+                  default:
+                    infoSink.info.message(
+                        EPrefixInternalError, getLine(),
+                        "Unary operation not folded into constant");
+                    return nullptr;
+                }
+                break;
+
+              case EOpSign:
+                switch (getType().getBasicType())
+                {
+                  case EbtFloat:
+                    {
+                        float fConst = unionArray[i].getFConst();
+                        float fResult = 0.0f;
+                        if (fConst > 0.0f)
+                            fResult = 1.0f;
+                        else if (fConst < 0.0f)
+                            fResult = -1.0f;
+                        tempConstArray[i].setFConst(fResult);
+                    }
+                    break;
+                  case EbtInt:
+                    {
+                        int iConst = unionArray[i].getIConst();
+                        int iResult = 0;
+                        if (iConst > 0)
+                            iResult = 1;
+                        else if (iConst < 0)
+                            iResult = -1;
+                        tempConstArray[i].setIConst(iResult);
+                    }
+                    break;
+                  default:
+                    infoSink.info.message(
+                        EPrefixInternalError, getLine(),
+                        "Unary operation not folded into constant");
+                    return nullptr;
+                }
+                break;
+
+              case EOpFloor:
+                if (!foldFloatTypeUnary(unionArray[i], &floorf, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpTrunc:
+                if (!foldFloatTypeUnary(unionArray[i], &truncf, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpRound:
+                if (!foldFloatTypeUnary(unionArray[i], &roundf, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpRoundEven:
+                if (getType().getBasicType() == EbtFloat)
+                {
+                    float x = unionArray[i].getFConst();
+                    float result;
+                    float fractPart = modff(x, &result);
+                    if (fabsf(fractPart) == 0.5f)
+                        result = 2.0f * roundf(x / 2.0f);
+                    else
+                        result = roundf(x);
+                    tempConstArray[i].setFConst(result);
+                    break;
+                }
+                infoSink.info.message(
+                    EPrefixInternalError, getLine(),
+                    "Unary operation not folded into constant");
+                return nullptr;
+
+              case EOpCeil:
+                if (!foldFloatTypeUnary(unionArray[i], &ceilf, infoSink, &tempConstArray[i]))
+                    return nullptr;
+                break;
+
+              case EOpFract:
+                if (getType().getBasicType() == EbtFloat)
+                {
+                    float x = unionArray[i].getFConst();
+                    tempConstArray[i].setFConst(x - floorf(x));
+                    break;
+                }
+                infoSink.info.message(
+                    EPrefixInternalError, getLine(),
+                    "Unary operation not folded into constant");
+                return nullptr;
 
               default:
                 return NULL;
