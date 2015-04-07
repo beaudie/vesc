@@ -177,6 +177,11 @@ typedef enum {
   // It is intended as a workaround for drivers that do not handle
   // struct scopes correctly, including all Mac drivers and Linux AMD.
   SH_REGENERATE_STRUCT_NAMES = 0x80000,
+
+  // This flag makes the compiler prune unused function early in the
+  // compilation process, coupled with SH_LIMIT_CALL_STACK_DEPTH it
+  // helps avoid bad shaders causing stack overflows.
+  SH_PRUNE_UNUSED_FUNCTIONS = 0x100000,
 } ShCompileOptions;
 
 // Defines alternate strategies for implementing array index clamping.
