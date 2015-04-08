@@ -90,7 +90,11 @@ typedef enum {
   // HLSL output only supported in some configurations.
   SH_HLSL_OUTPUT   = 0x8B48,
   SH_HLSL9_OUTPUT  = 0x8B48,
-  SH_HLSL11_OUTPUT = 0x8B49
+  SH_HLSL11_OUTPUT = 0x8B49,
+
+  //GLSL output Extension.
+  SH_GLSL_410_CORE_OUTPUT      = 0x8B80,
+  SH_GLSL_420_CORE_OUTPUT      = 0x8B81
 } ShShaderOutput;
 
 // Compile options.
