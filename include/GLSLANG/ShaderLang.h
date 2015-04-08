@@ -86,6 +86,9 @@ typedef enum {
   SH_GLSL_OUTPUT               = 0x8B46,
   SH_GLSL_COMPATIBILITY_OUTPUT = 0x8B46,
   SH_GLSL_CORE_OUTPUT          = 0x8B47,
+  SH_GLSL_150_CORE_OUTPUT      = 0x8B47,
+  SH_GLSL_410_CORE_OUTPUT      = 0x8B80,
+  SH_GLSL_420_CORE_OUTPUT      = 0x8B81,
 
   // HLSL output only supported in some configurations.
   SH_HLSL_OUTPUT   = 0x8B48,

@@ -94,7 +94,7 @@ void TOutputGLSLBase::writeVariableType(const TType &type)
     TQualifier qualifier = type.getQualifier();
     if (qualifier != EvqTemporary && qualifier != EvqGlobal)
     {
-        if (mOutput == SH_GLSL_CORE_OUTPUT)
+		if (isCoreGLSLOutput(mOutput))
         {
             switch (qualifier)
             {
@@ -1169,6 +1169,12 @@ TString TOutputGLSLBase::getTypeName(const TType &type)
             out << type.getBasicString();
     }
     return TString(out.c_str());
+}
+
+bool TOutputGLSLBase::isCoreGLSLOutput(ShShaderOutput output)
+{
+	return (output == SH_GLSL_CORE_OUTPUT || SH_GLSL_410_CORE_OUTPUT || SH_GLSL_420_CORE_OUTPUT);
+       
 }
 
 TString TOutputGLSLBase::hashName(const TString &name)
