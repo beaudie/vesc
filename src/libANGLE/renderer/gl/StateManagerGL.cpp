@@ -194,43 +194,29 @@ gl::Error StateManagerGL::setDrawElementsState(const gl::Data &data, GLsizei cou
 gl::Error StateManagerGL::setGenericDrawState(const gl::Data &data)
 {
     const gl::State &state = *data.state;
-    const gl::Caps &caps = *data.caps;
 
     const gl::Program *program = state.getProgram();
     const ProgramGL *programGL = GetImplAs<ProgramGL>(program);
     useProgram(programGL->getProgramID());
 
-    // TODO: Only apply textures referenced by the program.
-    for (auto textureTypeIter = mTextures.begin(); textureTypeIter != mTextures.end(); textureTypeIter++)
+    const std::vector<SamplerBindingGL> &appliedSamplerUniforms = programGL->getAppliedSamplerUniforms();
+    for (const SamplerBindingGL& samplerUniform : appliedSamplerUniforms)
     {
-        GLenum textureType = textureTypeIter->first;
-
-        // Determine if this texture type can exist in the source context
-        bool validTextureType = (textureType == GL_TEXTURE_2D || textureType == GL_TEXTURE_CUBE_MAP ||
-                                 (textureType == GL_TEXTURE_2D_ARRAY && data.clientVersion >= 3) ||
-                                 (textureType == GL_TEXTURE_3D && data.clientVersion >= 3));
-
-        const std::vector<GLuint> &textureVector = textureTypeIter->second;
-        for (size_t textureUnitIndex = 0; textureUnitIndex < textureVector.size(); textureUnitIndex++)
+        GLenum textureType = samplerUniform.textureType;
+        for (GLuint textureUnitIndex : samplerUniform.boundTextureUnits)
         {
-            const gl::Texture *texture = nullptr;
-
-            bool validTextureUnit = textureUnitIndex < caps.maxCombinedTextureImageUnits;
-            if (validTextureType && validTextureUnit)
-            {
-                texture = state.getSamplerTexture(textureUnitIndex, textureType);
-            }
-
+            const gl::Texture *texture = state.getSamplerTexture(textureUnitIndex, textureType);
             if (texture != nullptr)
             {
                 const TextureGL *textureGL = GetImplAs<TextureGL>(texture);
-                textureGL->syncSamplerState(texture->getSamplerState());
 
                 if (mTextures[textureType][textureUnitIndex] != textureGL->getTextureID())
                 {
                     activeTexture(textureUnitIndex);
                     bindTexture(textureType, textureGL->getTextureID());
                 }
+
+                textureGL->syncSamplerState(texture->getSamplerState());
 
                 // TODO: apply sampler object if one is bound
             }
@@ -258,6 +244,48 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Data &data)
     const gl::DepthStencilState &depthStencilState = state.getDepthStencilState();
     setDepthMask(depthStencilState.depthMask);
     setStencilMask(depthStencilState.stencilMask);
+
+    ///////
+    const gl::RasterizerState &rasterizerState = state.getRasterizerState();
+    if (rasterizerState.cullFace)
+    {
+        GLCall(mFunctions, enable, GL_CULL_FACE);
+    }
+    else
+    {
+        GLCall(mFunctions, disable, GL_CULL_FACE);
+    }
+    GLCall(mFunctions, frontFace, rasterizerState.frontFace);
+    GLCall(mFunctions, cullFace, rasterizerState.cullMode);
+    ///////
+
+    ///////
+    if (blendState.blend)
+    {
+        GLCall(mFunctions, enable, GL_BLEND);
+    }
+    else
+    {
+        GLCall(mFunctions, disable, GL_BLEND);
+    }
+    GLCall(mFunctions, blendFuncSeparate, blendState.sourceBlendRGB, blendState.destBlendRGB, blendState.sourceBlendAlpha, blendState.destBlendAlpha);
+    GLCall(mFunctions, blendEquationSeparate, blendState.blendEquationRGB, blendState.blendEquationAlpha);
+    GLCall(mFunctions, colorMask, blendState.colorMaskRed, blendState.colorMaskGreen, blendState.colorMaskBlue, blendState.colorMaskAlpha);
+    ///////
+
+    ///////
+    if (depthStencilState.depthTest)
+    {
+        GLCall(mFunctions, enable, GL_DEPTH_TEST);
+    }
+    else
+    {
+        GLCall(mFunctions, disable, GL_DEPTH_TEST);
+    }
+    GLCall(mFunctions, depthFunc, depthStencilState.depthFunc);
+
+
+    ///////
 
     return gl::Error(GL_NO_ERROR);
 }

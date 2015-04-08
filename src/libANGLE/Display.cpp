@@ -104,7 +104,7 @@ rx::DisplayImpl *CreateDisplayImpl(const AttributeMap &attribMap)
       case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
         // Default to D3D displays
-        impl = new rx::DisplayD3D();
+        impl = new rx::DisplayWGL();
 #else
         // No display available
         UNREACHABLE();

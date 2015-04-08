@@ -1388,7 +1388,7 @@ static bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count, GLsiz
         context->recordError(Error(GL_INVALID_OPERATION));
         return false;
     }
-
+    /*
     // Buffer validations
     const VertexArray *vao = state.getVertexArray();
     for (int attributeIndex = 0; attributeIndex < MAX_VERTEX_ATTRIBS; attributeIndex++)
@@ -1433,7 +1433,7 @@ static bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count, GLsiz
             }
         }
     }
-
+    */
     // Uniform buffer validation
     for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
     {
@@ -1620,7 +1620,7 @@ bool ValidateDrawElements(Context *context, GLenum mode, GLsizei count, GLenum t
         context->recordError(Error(GL_INVALID_OPERATION));
         return false;
     }
-
+    /*
     // Use max index to validate if our vertex buffers are large enough for the pull.
     // TODO: offer fast path, with disabled index validation.
     // TODO: also disable index checking on back-ends that are robust to out-of-range accesses.
@@ -1647,7 +1647,7 @@ bool ValidateDrawElements(Context *context, GLenum mode, GLsizei count, GLenum t
     {
         *indexRangeOut = rx::IndexRangeCache::ComputeRange(type, indices, count);
     }
-
+    */
     if (!ValidateDrawBase(context, mode, count, static_cast<GLsizei>(indexRangeOut->end), primcount))
     {
         return false;
