@@ -2188,7 +2188,8 @@ TIntermTyped* TParseContext::addIndexExpression(TIntermTyped *baseExpression, co
         }
         else
         {
-            indexedExpression->setType(TType(baseExpression->getBasicType(), baseExpression->getPrecision(), EvqTemporary, baseExpression->getNominalSize(), baseExpression->getSecondarySize()));
+            indexedExpression->setType(TType(baseExpression->getBasicType(), baseExpression->getPrecision(), EvqTemporary,
+                                       static_cast<unsigned char>(baseExpression->getNominalSize()), static_cast<unsigned char>(baseExpression->getSecondarySize())));
         }
 
         if (baseExpression->getType().getQualifier() == EvqConst)
@@ -2199,7 +2200,7 @@ TIntermTyped* TParseContext::addIndexExpression(TIntermTyped *baseExpression, co
     else if (baseExpression->isMatrix())
     {
         TQualifier qualifier = baseExpression->getType().getQualifier() == EvqConst ? EvqConst : EvqTemporary;
-        indexedExpression->setType(TType(baseExpression->getBasicType(), baseExpression->getPrecision(), qualifier, baseExpression->getRows()));
+        indexedExpression->setType(TType(baseExpression->getBasicType(), baseExpression->getPrecision(), qualifier, static_cast<unsigned char>(baseExpression->getRows())));
     }
     else if (baseExpression->isVector())
     {
@@ -2245,7 +2246,7 @@ TIntermTyped* TParseContext::addFieldSelectionExpression(TIntermTyped *baseExpre
             }
             else
             {
-                indexedExpression->setType(TType(baseExpression->getBasicType(), baseExpression->getPrecision(), EvqConst, (int) (fieldString).size()));
+                indexedExpression->setType(TType(baseExpression->getBasicType(), baseExpression->getPrecision(), EvqConst, (unsigned char) (fieldString).size()));
             }
         }
         else
@@ -2253,7 +2254,7 @@ TIntermTyped* TParseContext::addFieldSelectionExpression(TIntermTyped *baseExpre
             TString vectorString = fieldString;
             TIntermTyped* index = intermediate.addSwizzle(fields, fieldLocation);
             indexedExpression = intermediate.addIndex(EOpVectorSwizzle, baseExpression, index, dotLocation);
-            indexedExpression->setType(TType(baseExpression->getBasicType(), baseExpression->getPrecision(), EvqTemporary, (int) vectorString.size()));
+            indexedExpression->setType(TType(baseExpression->getBasicType(), baseExpression->getPrecision(), EvqTemporary, (unsigned char) vectorString.size()));
         }
     }
     else if (baseExpression->isMatrix())
@@ -2276,7 +2277,8 @@ TIntermTyped* TParseContext::addFieldSelectionExpression(TIntermTyped *baseExpre
             unionArray->setIConst(0);
             TIntermTyped* index = intermediate.addConstantUnion(unionArray, TType(EbtInt, EbpUndefined, EvqConst), fieldLocation);
             indexedExpression = intermediate.addIndex(EOpIndexDirect, baseExpression, index, dotLocation);
-            indexedExpression->setType(TType(baseExpression->getBasicType(), baseExpression->getPrecision(),EvqTemporary, baseExpression->getCols(), baseExpression->getRows()));
+            indexedExpression->setType(TType(baseExpression->getBasicType(), baseExpression->getPrecision(),EvqTemporary,
+                                       static_cast<unsigned char>(baseExpression->getCols()), static_cast<unsigned char>(baseExpression->getRows())));
         }
         else
         {
