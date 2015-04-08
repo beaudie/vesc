@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/gl/ProgramGL.h"
 
 #include "common/debug.h"
+#include "common/utilities.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/ShaderGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
@@ -140,6 +141,17 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog,
         // TODO: determine uniform precision
         mUniforms.push_back(new gl::LinkedUniform(uniformType, GL_NONE, uniformName, uniformSize, -1, sh::BlockMemberInfo::getDefaultBlockInfo()));
         mUniformIndex.push_back(gl::VariableLocation(uniformName, 0, i));
+
+        // If the uniform is a sampler, track it in the sampler bindings array
+        if (gl::IsSamplerType(uniformType))
+        {
+            SamplerBindingGL samplerBinding;
+            samplerBinding.textureType = gl::SamplerTypeToTextureType(uniformType);
+            samplerBinding.boundTextureUnits.resize(uniformSize, 0);
+
+            mSamplerUniformMap[i] = mSamplerBindings.size();
+            mSamplerBindings.push_back(samplerBinding);
+        }
     }
 
     // Query the attribute information
@@ -198,6 +210,13 @@ void ProgramGL::setUniform1iv(GLint location, GLsizei count, const GLint *v)
 {
     mStateManager->useProgram(mProgramID);
     mFunctions->uniform1iv(location, count, v);
+
+    auto iter = mSamplerUniformMap.find(location);
+    if (iter != mSamplerUniformMap.end())
+    {
+        SamplerBindingGL &binding = mSamplerBindings[iter->second];
+        std::copy(v, v + std::min<size_t>(count, binding.boundTextureUnits.size()), binding.boundTextureUnits.begin());
+    }
 }
 
 void ProgramGL::setUniform2iv(GLint location, GLsizei count, const GLint *v)
@@ -389,11 +408,19 @@ void ProgramGL::reset()
         mFunctions->deleteProgram(mProgramID);
         mProgramID = 0;
     }
+
+    mSamplerUniformMap.clear();
+    mSamplerBindings.clear();
 }
 
 GLuint ProgramGL::getProgramID() const
 {
     return mProgramID;
+}
+
+const std::vector<SamplerBindingGL> &ProgramGL::getAppliedSamplerUniforms() const
+{
+    return mSamplerBindings;
 }
 
 }
