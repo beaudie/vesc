@@ -11,6 +11,7 @@
 #include "compiler/translator/InfoSink.h"
 #include "compiler/translator/IntermNode.h"
 #include "GLSLANG/ShaderLang.h"
+#include "compiler/translator/Compiler.h"
 
 // This class gathers all compound assignments from the AST and can then write
 // the functions required for their precision emulation. This way there is no
@@ -27,7 +28,7 @@ class EmulatePrecision : public TIntermTraverser
     virtual bool visitUnary(Visit visit, TIntermUnary *node);
     virtual bool visitAggregate(Visit visit, TIntermAggregate *node);
 
-    void writeEmulationHelpers(TInfoSinkBase& sink, ShShaderOutput outputLanguage);
+	void writeEmulationHelpers(TInfoSinkBase& sink, ShShaderOutput outputLanguage);
 
   private:
     struct TypePair
