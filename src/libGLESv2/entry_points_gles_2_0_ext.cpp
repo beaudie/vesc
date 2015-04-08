@@ -863,7 +863,7 @@ void *GL_APIENTRY MapBufferOES(GLenum target, GLenum access)
             return NULL;
         }
 
-        Error error = buffer->mapRange(0, buffer->getSize(), GL_MAP_WRITE_BIT);
+        Error error = buffer->mapRange(0, static_cast<GLsizeiptr>(buffer->getSize()), GL_MAP_WRITE_BIT);
         if (error.isError())
         {
             context->recordError(error);

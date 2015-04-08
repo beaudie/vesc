@@ -164,6 +164,13 @@
                     ],
                     'msvs_settings':
                     {
+                        'VCCLCompilerTool':
+                        {
+                            'AdditionalOptions':
+                            [
+                                '/wd4244', # Conversion from 'type1' to 'type2', possible loss of data
+                            ],
+                        },
                         'VCLinkerTool':
                         {
                             'conditions':
