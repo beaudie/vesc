@@ -17,6 +17,12 @@ namespace rx
 class FunctionsGL;
 class StateManagerGL;
 
+struct SamplerBindingGL
+{
+    GLenum textureType;
+    GLuint boundTextureUnit;
+};
+
 class ProgramGL : public ProgramImpl
 {
   public:
@@ -86,10 +92,17 @@ class ProgramGL : public ProgramImpl
     void reset() override;
 
     GLuint getProgramID() const;
+    const std::vector<SamplerBindingGL> &getAppliedSamplerUniforms() const;
 
   private:
     const FunctionsGL *mFunctions;
     StateManagerGL *mStateManager;
+
+    // A map from uniform location to index of mSamplerBindings
+    std::map<GLint, size_t> mSamplerUniformMap;
+
+    // An array of the samplers that are used by the program
+    std::vector<SamplerBindingGL> mSamplerBindings;
 
     GLuint mProgramID;
 };
