@@ -626,30 +626,6 @@ bool TParseContext::samplerErrorCheck(const TSourceLoc& line, const TPublicType&
     return false;
 }
 
-bool TParseContext::structQualifierErrorCheck(const TSourceLoc& line, const TPublicType& pType)
-{
-    switch (pType.qualifier)
-    {
-      case EvqVaryingIn:
-      case EvqVaryingOut:
-      case EvqAttribute:
-      case EvqVertexIn:
-      case EvqFragmentOut:
-        if (pType.type == EbtStruct)
-        {
-            error(line, "cannot be used with a structure", getQualifierString(pType.qualifier));
-            return true;
-        }
-
-      default: break;
-    }
-
-    if (pType.qualifier != EvqUniform && samplerErrorCheck(line, pType, "samplers must be uniform"))
-        return true;
-
-    return false;
-}
-
 bool TParseContext::locationDeclaratorListCheck(const TSourceLoc& line, const TPublicType &pType)
 {
     if (pType.layoutQualifier.location != -1)
@@ -899,27 +875,53 @@ bool TParseContext::extensionErrorCheck(const TSourceLoc& line, const TString& e
     return false;
 }
 
-bool TParseContext::singleDeclarationErrorCheck(TPublicType &publicType, const TSourceLoc& identifierLocation, const TString &identifier)
+// These checks are common for all declarations starting a declarator list, including empty declarations.
+// In case of an empty declaration, the source location is the location of the type.
+//
+bool TParseContext::singleDeclarationErrorCheck(TPublicType &publicType, const TSourceLoc &identifierOrTypeLocation)
 {
-    if (structQualifierErrorCheck(identifierLocation, publicType))
+    switch (publicType.qualifier)
+    {
+      case EvqVaryingIn:
+      case EvqVaryingOut:
+      case EvqAttribute:
+      case EvqVertexIn:
+      case EvqFragmentOut:
+        if (publicType.type == EbtStruct)
+        {
+            error(identifierOrTypeLocation, "cannot be used with a structure",
+                getQualifierString(publicType.qualifier));
+            return true;
+        }
+
+      default: break;
+    }
+
+    if (publicType.qualifier != EvqUniform && samplerErrorCheck(identifierOrTypeLocation, publicType,
+            "samplers must be uniform"))
+    {
         return true;
+    }
 
     // check for layout qualifier issues
     const TLayoutQualifier layoutQualifier = publicType.layoutQualifier;
 
     if (layoutQualifier.matrixPacking != EmpUnspecified)
     {
-        error(identifierLocation, "layout qualifier", getMatrixPackingString(layoutQualifier.matrixPacking), "only valid for interface blocks");
+        error(identifierOrTypeLocation, "layout qualifier", getMatrixPackingString(layoutQualifier.matrixPacking),
+            "only valid for interface blocks");
         return true;
     }
 
     if (layoutQualifier.blockStorage != EbsUnspecified)
     {
-        error(identifierLocation, "layout qualifier", getBlockStorageString(layoutQualifier.blockStorage), "only valid for interface blocks");
+        error(identifierOrTypeLocation, "layout qualifier", getBlockStorageString(layoutQualifier.blockStorage),
+            "only valid for interface blocks");
         return true;
     }
 
-    if (publicType.qualifier != EvqVertexIn && publicType.qualifier != EvqFragmentOut && layoutLocationErrorCheck(identifierLocation, publicType.layoutQualifier))
+    if (publicType.qualifier != EvqVertexIn && publicType.qualifier != EvqFragmentOut &&
+        layoutLocationErrorCheck(identifierOrTypeLocation, publicType.layoutQualifier))
     {
         return true;
     }
@@ -1229,21 +1231,21 @@ TPublicType TParseContext::addFullySpecifiedType(TQualifier qualifier, TLayoutQu
     return returnType;
 }
 
-TIntermAggregate* TParseContext::parseSingleDeclaration(TPublicType &publicType, const TSourceLoc& identifierLocation, const TString &identifier)
+TIntermAggregate* TParseContext::parseSingleDeclaration(TPublicType &publicType, const TSourceLoc& identifierOrTypeLocation, const TString &identifier)
 {
-    TIntermSymbol* symbol = intermediate.addSymbol(0, identifier, TType(publicType), identifierLocation);
-    TIntermAggregate* aggregate = intermediate.makeAggregate(symbol, identifierLocation);
+    TIntermSymbol* symbol = intermediate.addSymbol(0, identifier, TType(publicType), identifierOrTypeLocation);
+    TIntermAggregate* aggregate = intermediate.makeAggregate(symbol, identifierOrTypeLocation);
+
+    if (singleDeclarationErrorCheck(publicType, identifierOrTypeLocation))
+        recover();
 
     if (identifier != "")
     {
-        if (singleDeclarationErrorCheck(publicType, identifierLocation, identifier))
-            recover();
-
-        if (nonInitConstErrorCheck(identifierLocation, identifier, &publicType))
+        if (nonInitConstErrorCheck(identifierOrTypeLocation, identifier, &publicType))
             recover();
 
         TVariable *variable = nullptr;
-        if (!declareVariable(identifierLocation, identifier, TType(publicType), &variable))
+        if (!declareVariable(identifierOrTypeLocation, identifier, TType(publicType), &variable))
             recover();
 
         if (variable && symbol)
@@ -1257,7 +1259,7 @@ TIntermAggregate* TParseContext::parseSingleDeclaration(TPublicType &publicType,
 
 TIntermAggregate* TParseContext::parseSingleArrayDeclaration(TPublicType &publicType, const TSourceLoc& identifierLocation, const TString &identifier, const TSourceLoc& indexLocation, TIntermTyped *indexExpression)
 {
-    if (singleDeclarationErrorCheck(publicType, identifierLocation, identifier))
+    if (singleDeclarationErrorCheck(publicType, identifierLocation))
         recover();
 
     if (nonInitConstErrorCheck(identifierLocation, identifier, &publicType))
@@ -1297,7 +1299,7 @@ TIntermAggregate* TParseContext::parseSingleArrayDeclaration(TPublicType &public
 
 TIntermAggregate* TParseContext::parseSingleInitDeclaration(TPublicType &publicType, const TSourceLoc& identifierLocation, const TString &identifier, const TSourceLoc& initLocation, TIntermTyped *initializer)
 {
-    if (singleDeclarationErrorCheck(publicType, identifierLocation, identifier))
+    if (singleDeclarationErrorCheck(publicType, identifierLocation))
         recover();
 
     TIntermNode* intermNode;
@@ -1359,9 +1361,6 @@ TIntermAggregate* TParseContext::parseDeclarator(TPublicType &publicType, TInter
     TIntermSymbol* symbol = intermediate.addSymbol(0, identifier, TType(publicType), identifierLocation);
     TIntermAggregate* intermAggregate = intermediate.growAggregate(aggregateDeclaration, symbol, identifierLocation);
 
-    if (structQualifierErrorCheck(identifierLocation, publicType))
-        recover();
-
     if (locationDeclaratorListCheck(identifierLocation, publicType))
         recover();
 
@@ -1379,9 +1378,6 @@ TIntermAggregate* TParseContext::parseDeclarator(TPublicType &publicType, TInter
 
 TIntermAggregate* TParseContext::parseArrayDeclarator(TPublicType &publicType, const TSourceLoc& identifierLocation, const TString &identifier, const TSourceLoc& arrayLocation, TIntermNode *declaratorList, TIntermTyped *indexExpression)
 {
-    if (structQualifierErrorCheck(identifierLocation, publicType))
-        recover();
-
     if (locationDeclaratorListCheck(identifierLocation, publicType))
         recover();
 
@@ -1416,9 +1412,6 @@ TIntermAggregate* TParseContext::parseArrayDeclarator(TPublicType &publicType, c
 
 TIntermAggregate* TParseContext::parseInitDeclarator(TPublicType &publicType, TIntermAggregate *declaratorList, const TSourceLoc& identifierLocation, const TString &identifier, const TSourceLoc& initLocation, TIntermTyped *initializer)
 {
-    if (structQualifierErrorCheck(identifierLocation, publicType))
-        recover();
-
     if (locationDeclaratorListCheck(identifierLocation, publicType))
         recover();
 

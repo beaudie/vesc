@@ -101,13 +101,12 @@ struct TParseContext {
     bool boolErrorCheck(const TSourceLoc&, const TIntermTyped*);
     bool boolErrorCheck(const TSourceLoc&, const TPublicType&);
     bool samplerErrorCheck(const TSourceLoc& line, const TPublicType& pType, const char* reason);
-    bool structQualifierErrorCheck(const TSourceLoc& line, const TPublicType& pType);
     bool locationDeclaratorListCheck(const TSourceLoc& line, const TPublicType &pType);
     bool parameterSamplerErrorCheck(const TSourceLoc& line, TQualifier qualifier, const TType& type);
     bool nonInitConstErrorCheck(const TSourceLoc &line, const TString &identifier, TPublicType *type);
     bool paramErrorCheck(const TSourceLoc& line, TQualifier qualifier, TQualifier paramQualifier, TType* type);
     bool extensionErrorCheck(const TSourceLoc& line, const TString&);
-    bool singleDeclarationErrorCheck(TPublicType &publicType, const TSourceLoc& identifierLocation, const TString &identifier);
+    bool singleDeclarationErrorCheck(TPublicType &publicType, const TSourceLoc &identifierOrTypeLocation);
     bool layoutLocationErrorCheck(const TSourceLoc& location, const TLayoutQualifier &layoutQualifier);
     bool functionCallLValueErrorCheck(const TFunction *fnCandidate, TIntermAggregate *);
 
