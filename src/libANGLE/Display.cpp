@@ -25,6 +25,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/DisplayImpl.h"
+#include "third_party/trace_event/trace_event.h"
 
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
 #   include "libANGLE/renderer/d3d/DisplayD3D.h"
@@ -221,6 +222,8 @@ void Display::setAttributes(rx::DisplayImpl *impl, const AttributeMap &attribMap
 
 Error Display::initialize()
 {
+    TRACE_EVENT0("gpu.angle", "egl::Display::initialize");
+
     ASSERT(mImplementation != nullptr);
 
     if (isInitialized())
