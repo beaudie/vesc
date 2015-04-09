@@ -45,7 +45,10 @@ struct TParseContext {
             shaderVersion(100),
             directiveHandler(ext, diagnostics, shaderVersion, debugShaderPrecisionSupported),
             preprocessor(&diagnostics, &directiveHandler),
-            scanner(NULL) {  }
+            scanner(NULL),
+            declarationWasEmpty(false)
+    {
+    }
     TIntermediate& intermediate; // to hold and build a parse tree
     TSymbolTable& symbolTable;   // symbol table that goes with the language currently being parsed
     sh::GLenum shaderType;              // vertex or fragment language (future: pack or unpack)
@@ -101,13 +104,12 @@ struct TParseContext {
     bool boolErrorCheck(const TSourceLoc&, const TIntermTyped*);
     bool boolErrorCheck(const TSourceLoc&, const TPublicType&);
     bool samplerErrorCheck(const TSourceLoc& line, const TPublicType& pType, const char* reason);
-    bool structQualifierErrorCheck(const TSourceLoc& line, const TPublicType& pType);
     bool locationDeclaratorListCheck(const TSourceLoc& line, const TPublicType &pType);
     bool parameterSamplerErrorCheck(const TSourceLoc& line, TQualifier qualifier, const TType& type);
     bool nonInitConstErrorCheck(const TSourceLoc &line, const TString &identifier, TPublicType *type);
     bool paramErrorCheck(const TSourceLoc& line, TQualifier qualifier, TQualifier paramQualifier, TType* type);
     bool extensionErrorCheck(const TSourceLoc& line, const TString&);
-    bool singleDeclarationErrorCheck(TPublicType &publicType, const TSourceLoc& identifierLocation, const TString &identifier);
+    bool singleDeclarationErrorCheck(TPublicType &publicType, const TSourceLoc &identifierLocation);
     bool layoutLocationErrorCheck(const TSourceLoc& location, const TLayoutQualifier &layoutQualifier);
     bool functionCallLValueErrorCheck(const TFunction *fnCandidate, TIntermAggregate *);
 
@@ -199,6 +201,9 @@ struct TParseContext {
     // Return true if the checks pass
     bool binaryOpCommonCheck(TOperator op, TIntermTyped *left, TIntermTyped *right,
         const TSourceLoc &loc);
+
+    // Set to true when the last/current declarator list was started with an empty declaration.
+    bool declarationWasEmpty;
 };
 
 int PaParseStrings(size_t count, const char* const string[], const int length[],
