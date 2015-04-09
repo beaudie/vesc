@@ -32,16 +32,16 @@ FenceNV::~FenceNV()
     SafeDelete(mFence);
 }
 
-GLboolean FenceNV::isFence() const
+GLboolean FenceNV::isSet() const
 {
     // GL_NV_fence spec:
     // A name returned by GenFencesNV, but not yet set via SetFenceNV, is not the name of an existing fence.
     return (mIsSet ? GL_TRUE : GL_FALSE);
 }
 
-Error FenceNV::setFence(GLenum condition)
+Error FenceNV::set(GLenum condition)
 {
-    Error error = mFence->set();
+    Error error = mFence->set(condition);
     if (error.isError())
     {
         return error;
@@ -54,10 +54,10 @@ Error FenceNV::setFence(GLenum condition)
     return Error(GL_NO_ERROR);
 }
 
-Error FenceNV::testFence(GLboolean *outResult)
+Error FenceNV::test(GLboolean *outResult)
 {
     // Flush the command buffer by default
-    Error error = mFence->test(true, &mStatus);
+    Error error = mFence->test(&mStatus);
     if (error.isError())
     {
         return error;
@@ -67,11 +67,19 @@ Error FenceNV::testFence(GLboolean *outResult)
     return Error(GL_NO_ERROR);
 }
 
-Error FenceNV::finishFence()
+Error FenceNV::finish()
 {
     ASSERT(mIsSet);
 
-    return mFence->finishFence(&mStatus);
+    gl::Error error = mFence->finish();
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mStatus = GL_TRUE;
+
+    return Error(GL_NO_ERROR);
 }
 
 FenceSync::FenceSync(rx::FenceSyncImpl *impl, GLuint id)
