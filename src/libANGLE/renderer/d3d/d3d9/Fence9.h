@@ -22,11 +22,13 @@ class FenceNV9 : public FenceNVImpl
     explicit FenceNV9(Renderer9 *renderer);
     virtual ~FenceNV9();
 
-    gl::Error set();
-    gl::Error test(bool flushCommandBuffer, GLboolean *outFinished);
-    gl::Error finishFence(GLboolean *outFinished);
+    gl::Error set(GLenum condition);
+    gl::Error test(GLboolean *outFinished);
+    gl::Error finish();
 
   private:
+    gl::Error testHelper(bool flush, GLboolean *outFinished);
+
     Renderer9 *mRenderer;
     IDirect3DQuery9 *mQuery;
 };
