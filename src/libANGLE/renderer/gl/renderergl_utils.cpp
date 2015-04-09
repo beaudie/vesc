@@ -237,6 +237,7 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
     extensions->textureStorage = true;
     extensions->fboRenderMipmap = true;
     extensions->framebufferMultisample = caps->maxSamples > 0;
+    extensions->fence = std::find(nativeExtensions.begin(), nativeExtensions.end(), "GL_NV_fence") != nativeExtensions.end();
 }
 
 }
