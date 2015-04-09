@@ -641,6 +641,45 @@ GLenum GetSizedInternalFormat(GLenum internalFormat, GLenum type)
     }
 }
 
+GLenum GetExactSizedColorInternalFormat(GLenum componentType, size_t redBits, size_t greenBits, size_t blueBits, size_t luminanceBits, size_t alphaBits)
+{
+    const InternalFormatInfoMap &formats = GetInternalFormatMap();
+    for (InternalFormatInfoMap::const_iterator i = formats.begin(); i != formats.end(); i++)
+    {
+        GLenum internalFormat = i->first;
+        const InternalFormat &formatInfo = i->second;
+        if (formatInfo.componentType == componentType &&
+            formatInfo.redBits == redBits &&
+            formatInfo.greenBits == greenBits &&
+            formatInfo.blueBits == blueBits &&
+            formatInfo.luminanceBits == luminanceBits &&
+            formatInfo.alphaBits == alphaBits)
+        {
+            return internalFormat;
+        }
+    }
+
+    return GL_NONE;
+}
+
+GLenum GetExactSizedDepthStencilInternalFormat(GLenum componentType, size_t depthBits, size_t stencilBits)
+{
+    const InternalFormatInfoMap &formats = GetInternalFormatMap();
+    for (InternalFormatInfoMap::const_iterator i = formats.begin(); i != formats.end(); i++)
+    {
+        GLenum internalFormat = i->first;
+        const InternalFormat &formatInfo = i->second;
+        if (formatInfo.componentType == componentType &&
+            formatInfo.depthBits == depthBits &&
+            formatInfo.stencilBits == stencilBits)
+        {
+            return internalFormat;
+        }
+    }
+
+    return GL_NONE;
+}
+
 const FormatSet &GetAllSizedInternalFormats()
 {
     static FormatSet formatSet = BuildAllSizedInternalFormatSet();
