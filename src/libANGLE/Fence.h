@@ -30,11 +30,11 @@ class FenceNV final : angle::NonCopyable
     explicit FenceNV(rx::FenceNVImpl *impl);
     virtual ~FenceNV();
 
-    GLboolean isFence() const;
-    Error setFence(GLenum condition);
-    Error testFence(GLboolean *outResult);
-    Error finishFence();
+    Error set(GLenum condition);
+    Error test(GLboolean *outResult);
+    Error finish();
 
+    GLboolean isSet() const;
     GLboolean getStatus() const { return mStatus; }
     GLenum getCondition() const { return mCondition; }
 

@@ -22,9 +22,9 @@ class FenceNV11 : public FenceNVImpl
     explicit FenceNV11(Renderer11 *renderer);
     virtual ~FenceNV11();
 
-    gl::Error set();
-    gl::Error test(bool flushCommandBuffer, GLboolean *outFinished);
-    gl::Error finishFence(GLboolean *outFinished);
+    gl::Error set(GLenum condition);
+    gl::Error test(GLboolean *outFinished);
+    gl::Error finish();
 
   private:
     template<class T> friend gl::Error FenceSetHelper(T *fence);
