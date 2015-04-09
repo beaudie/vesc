@@ -19,8 +19,9 @@
 
 namespace gl
 {
+
 Renderbuffer::Renderbuffer(rx::RenderbufferImpl *impl, GLuint id)
-  : RefCountObject(id),
+  : FBOAttachmentObject(id),
     mRenderbuffer(impl),
     mWidth(0),
     mHeight(0),
