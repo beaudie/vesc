@@ -1087,6 +1087,8 @@ __eglMustCastToProperFunctionPointerType EGLAPIENTRY GetProcAddress(const char *
         { "eglQuerySurfacePointerANGLE", (__eglMustCastToProperFunctionPointerType)QuerySurfacePointerANGLE },
         { "eglPostSubBufferNV", (__eglMustCastToProperFunctionPointerType)PostSubBufferNV },
         { "eglGetPlatformDisplayEXT", (__eglMustCastToProperFunctionPointerType)GetPlatformDisplayEXT },
+        { "eglCreateImageKHR", (__eglMustCastToProperFunctionPointerType)CreateImageKHR },
+        { "eglDestroyImageKHR", (__eglMustCastToProperFunctionPointerType)DestroyImageKHR },
         { "glBlitFramebufferANGLE", (__eglMustCastToProperFunctionPointerType)gl::BlitFramebufferANGLE },
         { "glRenderbufferStorageMultisampleANGLE", (__eglMustCastToProperFunctionPointerType)gl::RenderbufferStorageMultisampleANGLE },
         { "glDeleteFencesNV", (__eglMustCastToProperFunctionPointerType)gl::DeleteFencesNV },
@@ -1120,6 +1122,8 @@ __eglMustCastToProperFunctionPointerType EGLAPIENTRY GetProcAddress(const char *
         { "glUnmapBufferOES", (__eglMustCastToProperFunctionPointerType)gl::UnmapBufferOES },
         { "glMapBufferRangeEXT", (__eglMustCastToProperFunctionPointerType)gl::MapBufferRangeEXT },
         { "glFlushMappedBufferRangeEXT", (__eglMustCastToProperFunctionPointerType)gl::FlushMappedBufferRangeEXT },
+        { "glEGLImageTargetTexture2DOES", (__eglMustCastToProperFunctionPointerType)gl::EGLImageTargetTexture2DOES },
+        { "glEGLImageTargetRenderbufferStorageOES", (__eglMustCastToProperFunctionPointerType)gl::EGLImageTargetRenderbufferStorageOES },
         { "", NULL },
     };
 

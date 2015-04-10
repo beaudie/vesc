@@ -23,8 +23,10 @@
 #include "common/mathutil.h"
 #include "common/platform.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Image.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/DisplayImpl.h"
+#include "libANGLE/renderer/ImageImpl.h"
 
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
 #   include "libANGLE/renderer/d3d/DisplayD3D.h"
@@ -437,6 +439,37 @@ Error Display::createPixmapSurface(const Config *configuration, NativePixmapType
     return Error(EGL_SUCCESS);
 }
 
+Error Display::createImage(gl::Context *context, EGLenum target, EGLClientBuffer buffer, const AttributeMap &attribs,
+                           Image **outImage)
+{
+    ASSERT(isInitialized());
+
+    if (mImplementation->testDeviceLost())
+    {
+        Error error = restoreLostDevice();
+        if (error.isError())
+        {
+            return error;
+        }
+    }
+
+    rx::ImageImpl *imageImpl = nullptr;
+    Error error = mImplementation->createImage(context, target, buffer, attribs, &imageImpl);
+    if (error.isError())
+    {
+        return error;
+    }
+
+
+    ASSERT(imageImpl != nullptr);
+    Image *image = new Image(imageImpl);
+    // TODO: store all images in some place
+
+    ASSERT(outImage != nullptr);
+    *outImage = image;
+    return Error(EGL_SUCCESS);
+}
+
 Error Display::createContext(const Config *configuration, gl::Context *shareContext, const AttributeMap &attribs,
                              gl::Context **outContext)
 {
@@ -518,6 +551,11 @@ void Display::destroySurface(Surface *surface)
     }
 
     mImplementation->destroySurface(surface);
+}
+
+void Display::destroyImage(egl::Image *image)
+{
+    SafeDelete(image);
 }
 
 void Display::destroyContext(gl::Context *context)
