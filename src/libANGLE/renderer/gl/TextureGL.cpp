@@ -86,6 +86,12 @@ void TextureGL::setUsage(GLenum usage)
     UNREACHABLE();
 }
 
+gl::Error TextureGL::setEGLImage(GLenum target, egl::Image *image)
+{
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 gl::Error TextureGL::setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
                               const gl::PixelUnpackState &unpack, const uint8_t *pixels)
 {

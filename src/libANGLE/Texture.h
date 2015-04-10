@@ -24,6 +24,7 @@
 namespace egl
 {
 class Surface;
+class Image;
 }
 
 namespace gl
@@ -54,7 +55,10 @@ class Texture final : public FramebufferAttachmentObject
     GLenum getInternalFormat(GLenum target, size_t level) const;
 
     bool isSamplerComplete(const SamplerState &samplerState, const Data &data) const;
+    bool isMipmapComplete() const;
     bool isCubeComplete() const;
+
+    Error setEGLImage(GLenum target, egl::Image *image);
 
     virtual Error setImage(GLenum target, size_t level, GLenum internalFormat, const Extents &size, GLenum format, GLenum type,
                            const PixelUnpackState &unpack, const uint8_t *pixels);

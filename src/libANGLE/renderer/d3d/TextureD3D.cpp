@@ -689,6 +689,12 @@ bool TextureD3D_2D::isDepth(GLint level) const
     return gl::GetInternalFormatInfo(getInternalFormat(level)).depthBits > 0;
 }
 
+gl::Error TextureD3D_2D::setEGLImage(GLenum target, egl::Image *image)
+{
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 gl::Error TextureD3D_2D::setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
                                   const gl::PixelUnpackState &unpack, const uint8_t *pixels)
 {
@@ -1302,6 +1308,12 @@ bool TextureD3D_Cube::isDepth(GLint level, GLint layer) const
     return gl::GetInternalFormatInfo(getInternalFormat(level, layer)).depthBits > 0;
 }
 
+gl::Error TextureD3D_Cube::setEGLImage(GLenum target, egl::Image *image)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 gl::Error TextureD3D_Cube::setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
                                     const gl::PixelUnpackState &unpack, const uint8_t *pixels)
 {
@@ -1892,6 +1904,12 @@ bool TextureD3D_3D::isDepth(GLint level) const
     return gl::GetInternalFormatInfo(getInternalFormat(level)).depthBits > 0;
 }
 
+gl::Error TextureD3D_3D::setEGLImage(GLenum target, egl::Image *image)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 gl::Error TextureD3D_3D::setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
                                   const gl::PixelUnpackState &unpack, const uint8_t *pixels)
 {
@@ -2423,6 +2441,12 @@ GLenum TextureD3D_2DArray::getInternalFormat(GLint level) const
 bool TextureD3D_2DArray::isDepth(GLint level) const
 {
     return gl::GetInternalFormatInfo(getInternalFormat(level)).depthBits > 0;
+}
+
+gl::Error TextureD3D_2DArray::setEGLImage(GLenum target, egl::Image *image)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
 }
 
 gl::Error TextureD3D_2DArray::setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,

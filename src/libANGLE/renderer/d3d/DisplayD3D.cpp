@@ -228,6 +228,13 @@ SurfaceImpl *DisplayD3D::createPixmapSurface(const egl::Config *configuration,
     return nullptr;
 }
 
+ImageImpl *DisplayD3D::createImage(gl::Context *context, EGLenum target, EGLClientBuffer buffer,
+                                   const egl::AttributeMap &attribs)
+{
+    UNIMPLEMENTED();
+    return nullptr;
+}
+
 egl::Error DisplayD3D::getDevice(DeviceImpl **device)
 {
     *device = reinterpret_cast<DeviceImpl*>(mDevice);

@@ -128,6 +128,8 @@ class TextureD3D_2D : public TextureD3D
     GLenum getInternalFormat(GLint level) const;
     bool isDepth(GLint level) const;
 
+    gl::Error setEGLImage(GLenum target, egl::Image *image) override;
+
     gl::Error setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
                        const gl::PixelUnpackState &unpack, const uint8_t *pixels) override;
     gl::Error setSubImage(GLenum target, size_t level, const gl::Box &area, GLenum format, GLenum type,
@@ -191,6 +193,8 @@ class TextureD3D_Cube : public TextureD3D
     GLenum getInternalFormat(GLint level, GLint layer) const;
     bool isDepth(GLint level, GLint layer) const;
 
+    gl::Error setEGLImage(GLenum target, egl::Image *image) override;
+
     gl::Error setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
                        const gl::PixelUnpackState &unpack, const uint8_t *pixels) override;
     gl::Error setSubImage(GLenum target, size_t level, const gl::Box &area, GLenum format, GLenum type,
@@ -253,6 +257,8 @@ class TextureD3D_3D : public TextureD3D
     GLenum getInternalFormat(GLint level) const;
     bool isDepth(GLint level) const;
 
+    gl::Error setEGLImage(GLenum target, egl::Image *image) override;
+
     gl::Error setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
                        const gl::PixelUnpackState &unpack, const uint8_t *pixels) override;
     gl::Error setSubImage(GLenum target, size_t level, const gl::Box &area, GLenum format, GLenum type,
@@ -312,6 +318,8 @@ class TextureD3D_2DArray : public TextureD3D
     GLsizei getHeight(GLint level) const;
     GLenum getInternalFormat(GLint level) const;
     bool isDepth(GLint level) const;
+
+    gl::Error setEGLImage(GLenum target, egl::Image *image) override;
 
     gl::Error setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
                        const gl::PixelUnpackState &unpack, const uint8_t *pixels) override;
