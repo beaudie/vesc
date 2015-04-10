@@ -130,6 +130,11 @@ bool Texture::isSamplerComplete(const SamplerState &samplerState, const Data &da
     return mCompletenessCache.samplerComplete;
 }
 
+bool Texture::isMipmapComplete() const
+{
+    return computeMipmapCompleteness(mSamplerState);
+}
+
 // Tests for cube texture completeness. [OpenGL ES 2.0.24] section 3.7.10 page 81.
 bool Texture::isCubeComplete() const
 {
@@ -192,6 +197,7 @@ Error Texture::setImage(GLenum target, size_t level, GLenum internalFormat, cons
 
     return Error(GL_NO_ERROR);
 }
+
 
 Error Texture::setSubImage(GLenum target, size_t level, const Box &area, GLenum format, GLenum type,
                            const PixelUnpackState &unpack, const uint8_t *pixels)
@@ -380,6 +386,47 @@ void Texture::releaseTexImage()
         ASSERT(mTarget == GL_TEXTURE_2D);
         clearImageDesc(mTarget, 0);
     }
+}
+
+Error Texture::setEGLImageTarget(GLenum target, egl::Image *imageTarget)
+{
+    ASSERT(target == mTarget);
+    ASSERT(target == GL_TEXTURE_2D);
+
+    Error error = mTexture->setEGLImageTarget(target, imageTarget);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    releaseTexImage();
+
+    // TODO: use image to get size, format and type
+    Extents size(1, 1, 1);
+    GLenum internalFormat = GL_RGBA8;
+    GLenum type = GL_UNSIGNED_BYTE;
+
+    setImageDesc(target, 0, ImageDesc(size, GetSizedInternalFormat(internalFormat, type)));
+
+    return Error(GL_NO_ERROR);
+}
+
+Error Texture::setEGLImageSource(GLenum target, size_t level, size_t layer, egl::Image *imageSource)
+{
+    ASSERT(imageSource != nullptr);
+
+    Error error = mTexture->setEGLImageSource(target, level, layer, imageSource);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    return Error(GL_NO_ERROR);
+}
+
+void Texture::orphanEGLImage()
+{
+
 }
 
 GLenum Texture::getBaseImageTarget() const

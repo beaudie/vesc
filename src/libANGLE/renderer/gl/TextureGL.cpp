@@ -364,6 +364,18 @@ void TextureGL::releaseTexImage()
     }
 }
 
+gl::Error TextureGL::setEGLImageTarget(GLenum target, egl::Image *image)
+{
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
+gl::Error TextureGL::setEGLImageSource(GLenum target, size_t level, size_t layer, egl::Image *image)
+{
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 template <typename T>
 static inline void SyncSamplerStateMember(const FunctionsGL *functions, const gl::SamplerState &newState,
                                           gl::SamplerState &curState, GLenum textureType, GLenum name,

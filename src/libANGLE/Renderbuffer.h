@@ -17,6 +17,11 @@
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/renderer/RenderbufferImpl.h"
 
+namespace egl
+{
+class Image;
+}
+
 namespace gl
 {
 // A GL renderbuffer object is usually used as a depth or stencil buffer attachment
@@ -32,6 +37,7 @@ class Renderbuffer : public FramebufferAttachmentObject
 
     Error setStorage(GLenum internalformat, size_t width, size_t height);
     Error setStorageMultisample(size_t samples, GLenum internalformat, size_t width, size_t height);
+    Error setStorageEGLImage(egl::Image *image);
 
     rx::RenderbufferImpl *getImplementation();
     const rx::RenderbufferImpl *getImplementation() const;

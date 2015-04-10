@@ -148,6 +148,9 @@ class TextureD3D_2D : public TextureD3D
     virtual void bindTexImage(egl::Surface *surface);
     virtual void releaseTexImage();
 
+    gl::Error setEGLImageTarget(GLenum target, egl::Image *image) override;
+    gl::Error setEGLImageSource(GLenum target, size_t level, size_t layer, egl::Image *image) override;
+
     virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT);
     virtual unsigned int getRenderTargetSerial(const gl::ImageIndex &index);
 
@@ -211,6 +214,9 @@ class TextureD3D_Cube : public TextureD3D
     virtual void bindTexImage(egl::Surface *surface);
     virtual void releaseTexImage();
 
+    gl::Error setEGLImageTarget(GLenum target, egl::Image *image) override;
+    gl::Error setEGLImageSource(GLenum target, size_t level, size_t layer, egl::Image *image) override;
+
     virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT);
     virtual unsigned int getRenderTargetSerial(const gl::ImageIndex &index);
 
@@ -273,6 +279,9 @@ class TextureD3D_3D : public TextureD3D
     virtual void bindTexImage(egl::Surface *surface);
     virtual void releaseTexImage();
 
+    gl::Error setEGLImageTarget(GLenum target, egl::Image *image) override;
+    gl::Error setEGLImageSource(GLenum target, size_t level, size_t layer, egl::Image *image) override;
+
     virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT);
     virtual unsigned int getRenderTargetSerial(const gl::ImageIndex &index);
 
@@ -332,6 +341,9 @@ class TextureD3D_2DArray : public TextureD3D
 
     virtual void bindTexImage(egl::Surface *surface);
     virtual void releaseTexImage();
+
+    gl::Error setEGLImageTarget(GLenum target, egl::Image *image) override;
+    gl::Error setEGLImageSource(GLenum target, size_t level, size_t layer, egl::Image *image) override;
 
     virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT);
     virtual unsigned int getRenderTargetSerial(const gl::ImageIndex &index);

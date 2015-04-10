@@ -24,6 +24,7 @@
 namespace egl
 {
 class Surface;
+class Image;
 }
 
 namespace gl
@@ -54,6 +55,7 @@ class Texture final : public FramebufferAttachmentObject
     GLenum getInternalFormat(GLenum target, size_t level) const;
 
     bool isSamplerComplete(const SamplerState &samplerState, const Data &data) const;
+    bool isMipmapComplete() const;
     bool isCubeComplete() const;
 
     virtual Error setImage(GLenum target, size_t level, GLenum internalFormat, const Extents &size, GLenum format, GLenum type,
@@ -84,6 +86,9 @@ class Texture final : public FramebufferAttachmentObject
 
     void bindTexImage(egl::Surface *surface);
     void releaseTexImage();
+
+    Error setEGLImageTarget(GLenum target, egl::Image *imageTarget);
+    Error setEGLImageSource(GLenum target, size_t level, size_t layer, egl::Image *imageSource);
 
     rx::TextureImpl *getImplementation() { return mTexture; }
     const rx::TextureImpl *getImplementation() const { return mTexture; }
@@ -137,6 +142,8 @@ class Texture final : public FramebufferAttachmentObject
 
     std::vector<ImageDesc> mImageDescs;
 
+    void orphanEGLImage();
+
     struct SamplerCompletenessCache
     {
         SamplerCompletenessCache();
@@ -156,6 +163,8 @@ class Texture final : public FramebufferAttachmentObject
     mutable SamplerCompletenessCache mCompletenessCache;
 
     egl::Surface *mBoundSurface;
+    egl::Image *mEGLImageSource;
+    egl::Image *mEGLImageTarget;
 };
 
 }
