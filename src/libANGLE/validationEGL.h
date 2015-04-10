@@ -24,6 +24,7 @@ namespace egl
 class AttributeMap;
 struct Config;
 class Display;
+class Image;
 class Surface;
 
 // Object validation
@@ -43,6 +44,9 @@ Error ValidateCreatePbufferSurface(Display *display, Config *config, const Attri
 Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, EGLClientBuffer buffer,
                                             Config *config, const AttributeMap& attributes);
 
+Error ValidateCreateImageKHR(Display *display, gl::Context *context, EGLenum target, EGLClientBuffer buffer,
+                             const AttributeMap& attributes);
+Error ValidateDestroyImageKHR(Display *display, Image *image);
 
 }
 

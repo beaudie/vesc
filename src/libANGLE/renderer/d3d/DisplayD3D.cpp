@@ -227,6 +227,16 @@ egl::Error DisplayD3D::createPixmapSurface(const egl::Config *configuration, Nat
     return egl::Error(EGL_BAD_DISPLAY);
 }
 
+egl::Error DisplayD3D::createImage(gl::Context *context, EGLenum target, EGLClientBuffer buffer,
+                                   const egl::AttributeMap &attribs, ImageImpl **outImage)
+{
+    ASSERT(mRenderer != nullptr);
+
+    UNIMPLEMENTED();
+    *outImage = nullptr;
+    return egl::Error(EGL_BAD_DISPLAY);
+}
+
 egl::Error DisplayD3D::getDevice(DeviceImpl **device)
 {
     *device = reinterpret_cast<DeviceImpl*>(mDevice);

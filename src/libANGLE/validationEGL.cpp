@@ -11,6 +11,7 @@
 #include "libANGLE/Config.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/Image.h"
 #include "libANGLE/Surface.h"
 
 #include <EGL/eglext.h>
@@ -495,6 +496,165 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
         }
     }
 
+    return Error(EGL_SUCCESS);
+}
+
+Error ValidateCreateImageKHR(Display *display, gl::Context *context, EGLenum target, EGLClientBuffer buffer,
+                             const AttributeMap& attributes)
+{
+    Error error = ValidateContext(display, context);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    const DisplayExtensions &displayExtensions = display->getExtensions();
+
+    if (!displayExtensions.imageBase && !displayExtensions.image)
+    {
+        // It is out of spec what happens when calling an extension function when the extension is not available.
+        // EGL_BAD_DISPLAY seems like a reasonable error.
+        return Error(EGL_BAD_DISPLAY, "EGL_KHR_image not supported.");
+    }
+
+    for (AttributeMap::const_iterator attributeIter = attributes.begin(); attributeIter != attributes.end(); attributeIter++)
+    {
+        EGLint attribute = attributeIter->first;
+        EGLint value = attributeIter->second;
+
+        switch (attribute)
+        {
+          case EGL_IMAGE_PRESERVED_KHR:
+            switch (value)
+            {
+              case EGL_TRUE:
+              case EGL_FALSE:
+                break;
+
+              default:
+                return Error(EGL_BAD_PARAMETER, "EGL_IMAGE_PRESERVED_KHR must be EGL_TRUE or EGL_FALSE.");
+            }
+            break;
+
+          case EGL_GL_TEXTURE_LEVEL_KHR:
+            if (!displayExtensions.glTexture2DImage &&
+                !displayExtensions.glTextureCubemapImage &&
+                !displayExtensions.glTexture3DImage)
+            {
+                return Error(EGL_BAD_PARAMETER, "EGL_GL_TEXTURE_LEVEL_KHR cannot be used without "
+                                                 "KHR_gl_texture_*_image support.");
+            }
+            break;
+
+          case EGL_GL_TEXTURE_ZOFFSET_KHR:
+            if (!displayExtensions.glTexture3DImage)
+            {
+                return Error(EGL_BAD_PARAMETER, "EGL_GL_TEXTURE_ZOFFSET_KHR cannot be used without "
+                                                 "KHR_gl_texture_3D_image support.");
+            }
+            break;
+
+          default:
+            return Error(EGL_BAD_PARAMETER);
+        }
+    }
+
+    switch (target)
+    {
+      case EGL_GL_TEXTURE_2D_KHR:
+        {
+            if (!displayExtensions.glTexture2DImage)
+            {
+                return Error(EGL_BAD_PARAMETER, "KHR_gl_texture_2D_image not supported.");
+            }
+
+            if (buffer == 0)
+            {
+                return Error(EGL_BAD_PARAMETER, "buffer cannot reference a 2D texture with the name 0.");
+            }
+
+            gl::Texture *texture = context->getTexture(reinterpret_cast<GLuint>(buffer));
+            if (texture->getTarget() != GL_TEXTURE_2D)
+            {
+                return Error(EGL_BAD_PARAMETER, "target is not a 2D texture.");
+            }
+
+            EGLint level = attributes.get(EGL_GL_TEXTURE_LEVEL_KHR, 0);
+            if (texture->getWidth(GL_TEXTURE_2D, level) == 0 ||
+                texture->getHeight(GL_TEXTURE_2D, level) == 0)
+            {
+                return Error(EGL_BAD_PARAMETER, "target 2D texture does not have a valid size at specified level.");
+            }
+        }
+        break;
+
+      case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X_KHR:
+      case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_X_KHR:
+      case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Y_KHR:
+      case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Y_KHR:
+      case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Z_KHR:
+      case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_KHR:
+        {
+            if (!displayExtensions.glTextureCubemapImage)
+            {
+                return Error(EGL_BAD_PARAMETER, "KHR_gl_texture_cubemap_image not supported.");
+            }
+
+            //EGLint level = attributes.get(EGL_GL_TEXTURE_LEVEL_KHR, 0);
+        }
+        break;
+
+      case EGL_GL_TEXTURE_3D_KHR:
+        {
+            if (!displayExtensions.glTexture3DImage)
+            {
+                return Error(EGL_BAD_PARAMETER, "KHR_gl_texture_3D_image not supported.");
+            }
+
+            //EGLint level = attributes.get(EGL_GL_TEXTURE_LEVEL_KHR, 0);
+            //EGLint zOffset = attributes.get(EGL_GL_TEXTURE_ZOFFSET_KHR, 0);
+        }
+        break;
+
+      case EGL_GL_RENDERBUFFER_KHR:
+        {
+            if (!displayExtensions.glRenderbufferImage)
+            {
+                return Error(EGL_BAD_PARAMETER, "KHR_gl_renderbuffer_image not supported.");
+            }
+
+            if (attributes.contains(EGL_GL_TEXTURE_LEVEL_KHR))
+            {
+                return Error(EGL_BAD_PARAMETER, "EGL_GL_TEXTURE_LEVEL_KHR cannot be used in conjunction with a "
+                                                "renderbuffer target.");
+            }
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    UNIMPLEMENTED();
+    return Error(EGL_SUCCESS);
+}
+
+Error ValidateDestroyImageKHR(Display *display, Image *image)
+{
+    Error error = ValidateDisplay(display);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    if (!display->getExtensions().imageBase && !display->getExtensions().image)
+    {
+        // It is out of spec what happens when calling an extension function when the extension is not available.
+        // EGL_BAD_DISPLAY seems like a reasonable error.
+        return Error(EGL_BAD_DISPLAY);
+    }
+
+    UNIMPLEMENTED();
     return Error(EGL_SUCCESS);
 }
 
