@@ -137,6 +137,10 @@ struct TParseContext {
     TIntermAggregate *parseSingleInitDeclaration(TPublicType &publicType,
                                                  const TSourceLoc &identifierLocation, const TString &identifier,
                                                  const TSourceLoc &initLocation, TIntermTyped *initializer);
+    TIntermAggregate *parseSingleArrayInitDeclaration(TPublicType &publicType,
+                                                      const TSourceLoc &identifierLocation, const TString &identifier,
+                                                      const TSourceLoc &indexLocation, TIntermTyped *indexExpression,
+                                                      const TSourceLoc &initLocation, TIntermTyped *initializer);
 
     TIntermAggregate *parseInvariantDeclaration(const TSourceLoc &invariantLoc, const TSourceLoc &identifierLoc,
                                                 const TString *identifier, const TSymbol *symbol);
@@ -149,6 +153,10 @@ struct TParseContext {
     TIntermAggregate *parseInitDeclarator(TPublicType &publicType, TIntermAggregate *aggregateDeclaration,
                                           const TSourceLoc &identifierLocation, const TString &identifier,
                                           const TSourceLoc &initLocation, TIntermTyped *initializer);
+    TIntermAggregate *parseArrayInitDeclarator(TPublicType &publicType, TIntermAggregate *aggregateDeclaration,
+                                               const TSourceLoc& identifierLocation, const TString &identifier,
+                                               const TSourceLoc& indexLocation, TIntermTyped *indexExpression,
+                                               const TSourceLoc &initLocation, TIntermTyped *initializer);
 
     void parseGlobalLayoutQualifier(const TPublicType &typeQualifier);
     TFunction *addConstructorFunc(TPublicType publicType);
