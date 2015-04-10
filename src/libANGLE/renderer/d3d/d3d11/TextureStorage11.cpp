@@ -17,6 +17,7 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/d3d/TextureD3D.h"
 #include "libANGLE/renderer/d3d/d3d11/Blit11.h"
+#include "libANGLE/renderer/d3d/d3d11/EGLImage11.h"
 #include "libANGLE/renderer/d3d/d3d11/Image11.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
@@ -691,7 +692,7 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer, SwapChain11 *swap
     }
 
     D3D11_TEXTURE2D_DESC texDesc;
-    mTexture->GetDesc(&texDesc);
+    swapchain->getOffscreenTexture()->GetDesc(&texDesc);
     mMipLevels = texDesc.MipLevels;
     mTextureFormat = texDesc.Format;
     mTextureWidth = texDesc.Width;
@@ -717,6 +718,71 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer, SwapChain11 *swap
     mSwizzleRenderTargetFormat = formatInfo.swizzleRTVFormat;
 
     mDepthStencilFormat = DXGI_FORMAT_UNKNOWN;
+
+    initializeSerials(1, 1);
+}
+
+TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer, EGLImage11 *eglImage)
+    : TextureStorage11(renderer, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE, 0),
+      mTexture(nullptr),
+      mSwizzleTexture(nullptr),
+      mLevelZeroTexture(nullptr),
+      mLevelZeroRenderTarget(nullptr),
+      mUseLevelZeroTexture(false)
+{
+    for (unsigned int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; i++)
+    {
+        mAssociatedImages[i] = nullptr;
+        mRenderTarget[i] = nullptr;
+        mSwizzleRenderTargets[i] = nullptr;
+    }
+
+    RenderTarget11 *renderTarget11 = GetAs<RenderTarget11>(eglImage->getRenderTarget());
+
+    mTexture = renderTarget11->getTexture();
+    mTexture->AddRef();
+
+    mMipLevels = 1;
+    mTextureFormat = renderTarget11->getDXGIFormat();
+    mTextureWidth = renderTarget11->getWidth();
+    mTextureHeight = renderTarget11->getHeight();
+    mTextureDepth = 1;
+    mInternalFormat = renderTarget11->getInternalFormat();
+
+    ID3D11ShaderResourceView *srv = renderTarget11->getShaderResourceView();
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+    srv->GetDesc(&srvDesc);
+    mShaderResourceFormat = srvDesc.Format;
+
+    ID3D11RenderTargetView *rtv = renderTarget11->getRenderTargetView();
+    if (rtv != nullptr)
+    {
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtv->GetDesc(&rtvDesc);
+        mRenderTargetFormat = rtvDesc.Format;
+    }
+    else
+    {
+        mRenderTargetFormat = DXGI_FORMAT_UNKNOWN;
+    }
+
+    ID3D11DepthStencilView *dsv = renderTarget11->getDepthStencilView();
+    if (dsv != nullptr)
+    {
+        D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+        dsv->GetDesc(&dsvDesc);
+        mDepthStencilFormat = dsvDesc.Format;
+    }
+    else
+    {
+        mDepthStencilFormat = DXGI_FORMAT_UNKNOWN;
+    }
+
+    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mTextureFormat);
+    const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(dxgiFormatInfo.internalFormat, mRenderer->getRenderer11DeviceCaps());
+    mSwizzleTextureFormat = formatInfo.swizzleTexFormat;
+    mSwizzleShaderResourceFormat = formatInfo.swizzleSRVFormat;
+    mSwizzleRenderTargetFormat = formatInfo.swizzleRTVFormat;
 
     initializeSerials(1, 1);
 }
@@ -1035,7 +1101,7 @@ gl::Error TextureStorage11_2D::ensureTextureExists(int mipLevels)
 {
     // If mMipLevels = 1 then always use mTexture rather than mLevelZeroTexture.
     bool useLevelZeroTexture = mRenderer->getWorkarounds().zeroMaxLodWorkaround ? (mipLevels == 1) && (mMipLevels > 1) : false;
-    ID3D11Texture2D **outputTexture = useLevelZeroTexture ? &mLevelZeroTexture : &mTexture;
+    ID3D11Resource **outputTexture = useLevelZeroTexture ? &mLevelZeroTexture : &mTexture;
 
     // if the width or height is not positive this should be treated as an incomplete texture
     // we handle that here by skipping the d3d texture creation
@@ -1058,7 +1124,9 @@ gl::Error TextureStorage11_2D::ensureTextureExists(int mipLevels)
         desc.CPUAccessFlags = 0;
         desc.MiscFlags = getMiscFlags();
 
-        HRESULT result = device->CreateTexture2D(&desc, NULL, outputTexture);
+        ID3D11Texture2D *newTexture = nullptr;
+        HRESULT result = device->CreateTexture2D(&desc, NULL, &newTexture);
+        *outputTexture = newTexture;
 
         // this can happen from windows TDR
         if (d3d11::isDeviceLostError(result))

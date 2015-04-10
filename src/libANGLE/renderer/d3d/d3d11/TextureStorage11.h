@@ -23,6 +23,7 @@ struct ImageIndex;
 
 namespace rx
 {
+class EGLImage11;
 class RenderTargetD3D;
 class RenderTarget11;
 class Renderer11;
@@ -148,6 +149,7 @@ class TextureStorage11_2D : public TextureStorage11
 {
   public:
     TextureStorage11_2D(Renderer11 *renderer, SwapChain11 *swapchain);
+    TextureStorage11_2D(Renderer11 *renderer, EGLImage11 *eglImage);
     TextureStorage11_2D(Renderer11 *renderer, GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly = false);
     virtual ~TextureStorage11_2D();
 
@@ -174,7 +176,7 @@ class TextureStorage11_2D : public TextureStorage11
     virtual gl::Error createSRV(int baseLevel, int mipLevels, DXGI_FORMAT format, ID3D11Resource *texture,
                                 ID3D11ShaderResourceView **outSRV) const;
 
-    ID3D11Texture2D *mTexture;
+    ID3D11Resource *mTexture;
     RenderTarget11 *mRenderTarget[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 
     // These are members related to the zero max-LOD workaround.
@@ -186,7 +188,7 @@ class TextureStorage11_2D : public TextureStorage11
     // One example of this is an application that creates a texture, calls glGenerateMipmap, and then disables mipmaps on the texture.
     // A more likely example is an app that creates an empty texture, renders to it, and then calls glGenerateMipmap
     // TODO: In this rendering scenario, release the mLevelZeroTexture after mTexture has been created to save memory.
-    ID3D11Texture2D *mLevelZeroTexture;
+    ID3D11Resource *mLevelZeroTexture;
     RenderTarget11 *mLevelZeroRenderTarget;
     bool mUseLevelZeroTexture;
 
