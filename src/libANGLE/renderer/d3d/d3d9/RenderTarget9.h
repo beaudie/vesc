@@ -23,6 +23,9 @@ class RenderTarget9 : public RenderTargetD3D
     RenderTarget9() { }
     virtual ~RenderTarget9() { }
 
+    // Retrieve the texture that backs this render target, may be null for swap chain render targets.
+    virtual IDirect3DBaseTexture9 *getTexture() = 0;
+
     virtual IDirect3DSurface9 *getSurface() = 0;
 
     virtual D3DFORMAT getD3DFormat() const = 0;
@@ -31,8 +34,8 @@ class RenderTarget9 : public RenderTargetD3D
 class TextureRenderTarget9 : public RenderTarget9
 {
   public:
-    TextureRenderTarget9(IDirect3DSurface9 *surface, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth,
-                         GLsizei samples);
+    TextureRenderTarget9(IDirect3DBaseTexture9 *texture, IDirect3DSurface9 *surface, GLenum internalFormat,
+                         GLsizei width, GLsizei height, GLsizei depth, GLsizei samples);
     virtual ~TextureRenderTarget9();
 
     GLsizei getWidth() const override;
@@ -41,6 +44,7 @@ class TextureRenderTarget9 : public RenderTarget9
     GLenum getInternalFormat() const override;
     GLsizei getSamples() const override;
 
+    IDirect3DBaseTexture9 *getTexture() override;
     IDirect3DSurface9 *getSurface() override;
 
     D3DFORMAT getD3DFormat() const override;
@@ -53,6 +57,7 @@ class TextureRenderTarget9 : public RenderTarget9
     D3DFORMAT mD3DFormat;
     GLsizei mSamples;
 
+    IDirect3DBaseTexture9 *mTexture;
     IDirect3DSurface9 *mRenderTarget;
 };
 
@@ -68,6 +73,7 @@ class SurfaceRenderTarget9 : public RenderTarget9
     GLenum getInternalFormat() const override;
     GLsizei getSamples() const override;
 
+    IDirect3DBaseTexture9 *getTexture() override;
     IDirect3DSurface9 *getSurface() override;
 
     D3DFORMAT getD3DFormat() const override;
