@@ -37,6 +37,8 @@ class OSWindow
     virtual bool resize(int width, int height) = 0;
     virtual void setVisible(bool isVisible) = 0;
 
+    virtual bool didTestEventFire() const = 0;
+
   protected:
     int mWidth;
     int mHeight;
