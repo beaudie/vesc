@@ -44,6 +44,12 @@ public:
     {
     }
 
+    explicit BindingPointer(ObjectType *newObject)
+        : BindingPointer()
+    {
+        set(newObject);
+    }
+
     BindingPointer(const BindingPointer<ObjectType> &other)
         : mObject(nullptr)
     {

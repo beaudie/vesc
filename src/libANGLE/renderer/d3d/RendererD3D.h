@@ -35,6 +35,7 @@ class DebugAnnotator;
 namespace rx
 {
 class ImageD3D;
+class ImageImpl;
 class IndexBuffer;
 class RenderTargetD3D;
 class ShaderExecutableD3D;
@@ -171,6 +172,9 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     virtual TextureStorage *createTextureStorageCube(GLenum internalformat, bool renderTarget, int size, int levels, bool hintLevelZeroOnly) = 0;
     virtual TextureStorage *createTextureStorage3D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels) = 0;
     virtual TextureStorage *createTextureStorage2DArray(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels) = 0;
+
+    // EGL image creation
+    virtual ImageImpl *createEGLImage(EGLenum target, gl::Texture *buffer, const egl::AttributeMap &attribs) = 0;
 
     // Buffer-to-texture and Texture-to-buffer copies
     virtual bool supportsFastCopyBufferToTexture(GLenum internalFormat) const = 0;

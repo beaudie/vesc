@@ -2885,6 +2885,12 @@ TextureStorage *Renderer9::createTextureStorage2DArray(GLenum internalformat, bo
     return NULL;
 }
 
+ImageImpl *Renderer9::createEGLImage(EGLenum target, gl::Texture *buffer, const egl::AttributeMap &attribs)
+{
+    UNIMPLEMENTED();
+    return nullptr;
+}
+
 TextureImpl *Renderer9::createTexture(GLenum target)
 {
     switch(target)

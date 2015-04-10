@@ -10,6 +10,7 @@
 #include "libANGLE/validationES2.h"
 #include "libANGLE/validationES3.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
@@ -1970,6 +1971,60 @@ bool ValidatePushGroupMarkerEXT(Context *context, GLsizei length, const char *ma
 
     if (length > 0 && marker == nullptr)
     {
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateEGLImageTargetTexture2DOES(Context *context, egl::Display *display, GLenum target, egl::Image *image)
+{
+    if (!context->getExtensions().eglImage && !context->getExtensions().eglImageExternal)
+    {
+        context->recordError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    switch (target)
+    {
+      case GL_TEXTURE_2D:
+        break;
+
+      default:
+        context->recordError(Error(GL_INVALID_ENUM, "invalid texture target."));
+        return false;
+    }
+
+    if (!display->isValidImage(image))
+    {
+        context->recordError(Error(GL_INVALID_VALUE, "EGL image is not valid."));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateEGLImageTargetRenderbufferStorageOES(Context *context, egl::Display *display, GLenum target, egl::Image *image)
+{
+    if (!context->getExtensions().eglImage)
+    {
+        context->recordError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    switch (target)
+    {
+      case GL_RENDERBUFFER:
+        break;
+
+      default:
+        context->recordError(Error(GL_INVALID_ENUM, "invalid renderbuffer target."));
+        return false;
+    }
+
+    if (!display->isValidImage(image))
+    {
+        context->recordError(Error(GL_INVALID_VALUE, "EGL image is not valid."));
         return false;
     }
 

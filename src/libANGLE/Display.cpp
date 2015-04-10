@@ -25,8 +25,10 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Device.h"
 #include "libANGLE/histogram_macros.h"
+#include "libANGLE/Image.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/DisplayImpl.h"
+#include "libANGLE/renderer/ImageImpl.h"
 #include "third_party/trace_event/trace_event.h"
 
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
@@ -485,6 +487,37 @@ Error Display::createPixmapSurface(const Config *configuration, NativePixmapType
     return Error(EGL_SUCCESS);
 }
 
+Error Display::createImage(gl::Context *context, EGLenum target, EGLClientBuffer buffer, const AttributeMap &attribs,
+                           Image **outImage)
+{
+    ASSERT(isInitialized());
+
+    if (mImplementation->testDeviceLost())
+    {
+        Error error = restoreLostDevice();
+        if (error.isError())
+        {
+            return error;
+        }
+    }
+
+    rx::ImageImpl *imageImpl = mImplementation->createImage(context, target, context->getTexture(reinterpret_cast<GLuint>(buffer)), attribs);
+    ASSERT(imageImpl != nullptr);
+
+    Error error = imageImpl->initialize();
+    if (error.isError())
+    {
+        return error;
+    }
+
+    Image *image = new Image(imageImpl, target, context->getTexture(reinterpret_cast<GLuint>(buffer)), attribs);
+    // TODO: handle renderbuffers
+
+    ASSERT(outImage != nullptr);
+    *outImage = image;
+    return Error(EGL_SUCCESS);
+}
+
 Error Display::createContext(const Config *configuration, gl::Context *shareContext, const AttributeMap &attribs,
                              gl::Context **outContext)
 {
@@ -569,6 +602,11 @@ void Display::destroySurface(Surface *surface)
     mImplementation->destroySurface(surface);
 }
 
+void Display::destroyImage(egl::Image *image)
+{
+    SafeDelete(image);
+}
+
 void Display::destroyContext(gl::Context *context)
 {
     mContextSet.erase(context);
@@ -618,6 +656,12 @@ bool Display::isValidContext(gl::Context *context) const
 bool Display::isValidSurface(Surface *surface) const
 {
     return mImplementation->getSurfaceSet().find(surface) != mImplementation->getSurfaceSet().end();
+}
+
+bool Display::isValidImage(const Image *image) const
+{
+    UNIMPLEMENTED();
+    return true;
 }
 
 bool Display::hasExistingWindowSurface(EGLNativeWindowType window)

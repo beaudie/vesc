@@ -35,6 +35,7 @@
 #include "libANGLE/renderer/d3d/d3d11/Blit11.h"
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Clear11.h"
+#include "libANGLE/renderer/d3d/d3d11/EGLImage11.h"
 #include "libANGLE/renderer/d3d/d3d11/Fence11.h"
 #include "libANGLE/renderer/d3d/d3d11/Framebuffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Image11.h"
@@ -3184,6 +3185,11 @@ gl::Error Renderer11::fastCopyBufferToTexture(const gl::PixelUnpackState &unpack
 {
     ASSERT(supportsFastCopyBufferToTexture(destinationFormat));
     return mPixelTransfer->copyBufferToTexture(unpack, offset, destRenderTarget, destinationFormat, sourcePixelsType, destArea);
+}
+
+ImageImpl *Renderer11::createEGLImage(EGLenum target, gl::Texture *buffer, const egl::AttributeMap &attribs)
+{
+    return new EGLImage11(target, buffer, attribs);
 }
 
 ImageD3D *Renderer11::createImage()

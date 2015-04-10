@@ -191,6 +191,9 @@ class Renderer9 : public RendererD3D
     virtual TextureStorage *createTextureStorage3D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels);
     virtual TextureStorage *createTextureStorage2DArray(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels);
 
+    // EGL image creation
+    ImageImpl *createEGLImage(EGLenum target, gl::Texture *buffer, const egl::AttributeMap &attribs) override;
+
     // Texture creation
     virtual TextureImpl *createTexture(GLenum target);
 
