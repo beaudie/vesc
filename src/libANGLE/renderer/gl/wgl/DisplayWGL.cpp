@@ -340,6 +340,13 @@ SurfaceImpl *DisplayWGL::createPixmapSurface(const egl::Config *configuration,
     return nullptr;
 }
 
+ImageImpl *DisplayWGL::createImage(gl::Context *context, EGLenum target, gl::Texture *buffer,
+                                   const egl::AttributeMap &attribs)
+{
+    UNIMPLEMENTED();
+    return nullptr;
+}
+
 static int QueryWGLFormatAttrib(HDC dc, int format, int attribName, const FunctionsWGL *functions)
 {
     int result = 0;
