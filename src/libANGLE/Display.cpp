@@ -474,7 +474,7 @@ Error Display::makeCurrent(egl::Surface *drawSurface, egl::Surface *readSurface,
         return error;
     }
 
-    if (context && drawSurface)
+    if (context != nullptr && drawSurface != nullptr)
     {
         context->makeCurrent(drawSurface);
     }

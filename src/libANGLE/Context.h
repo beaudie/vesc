@@ -67,7 +67,7 @@ class Context final : angle::NonCopyable
     virtual void markContextLost();
     bool isContextLost();
 
-    // These create  and destroy methods are merely pass-throughs to 
+    // These create  and destroy methods are merely pass-throughs to
     // ResourceManager, which owns these object types
     GLuint createBuffer();
     GLuint createShader(GLenum type);
@@ -94,7 +94,7 @@ class Context final : angle::NonCopyable
     // NV Fences are owned by the Context.
     GLuint createFenceNV();
     void deleteFenceNV(GLuint fence);
-    
+
     // Queries are owned by the Context;
     GLuint createQuery();
     void deleteQuery(GLuint query);

@@ -564,14 +564,18 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
         UNIMPLEMENTED();   // FIXME
     }
 
+    gl::Context *previousContext = GetGlobalContext();
+
     SetGlobalDisplay(display);
     SetGlobalDrawSurface(drawSurface);
     SetGlobalReadSurface(readSurface);
     SetGlobalContext(context);
 
-    if (context != nullptr && display != nullptr && drawSurface != nullptr)
+    display->makeCurrent(drawSurface, readSurface, context);
+
+    if (context == nullptr && readSurface == nullptr)
     {
-        display->makeCurrent(drawSurface, readSurface, context);
+        previousContext->makeCurrent(nullptr);
     }
 
     SetGlobalError(Error(EGL_SUCCESS));
