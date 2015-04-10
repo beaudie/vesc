@@ -136,6 +136,9 @@ Extensions::Extensions()
       fboRenderMipmap(false),
       discardFramebuffer(false),
       debugMarker(false),
+      eglImage(false),
+      eglImageExternal(false),
+      eglImageExternalEssl3(false),
       colorBufferFloat(false)
 {
 }
@@ -188,6 +191,9 @@ std::vector<std::string> Extensions::getStrings() const
     InsertExtensionString("GL_OES_fbo_render_mipmap",          fboRenderMipmap,          &extensionStrings);
     InsertExtensionString("GL_EXT_discard_framebuffer",        discardFramebuffer,       &extensionStrings);
     InsertExtensionString("GL_EXT_debug_marker",               debugMarker,              &extensionStrings);
+    InsertExtensionString("GL_OES_EGL_image",                  eglImage,                 &extensionStrings);
+    InsertExtensionString("GL_OES_EGL_image_external",         eglImageExternal,         &extensionStrings);
+    InsertExtensionString("GL_OES_EGL_image_external_essl3",   eglImageExternalEssl3,    &extensionStrings);
     InsertExtensionString("GL_EXT_color_buffer_float",         colorBufferFloat,         &extensionStrings);
 
     return extensionStrings;
@@ -499,7 +505,14 @@ DisplayExtensions::DisplayExtensions()
       windowFixedSize(false),
       postSubBuffer(false),
       createContext(false),
-      deviceQuery(false)
+      deviceQuery(false),
+      image(false),
+      imageBase(false),
+      imagePixmap(false),
+      glTexture2DImage(false),
+      glTextureCubemapImage(false),
+      glTexture3DImage(false),
+      glRenderbufferImage(false)
 {
 }
 
@@ -516,6 +529,13 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_NV_post_sub_buffer",                        postSubBuffer,                  &extensionStrings);
     InsertExtensionString("EGL_KHR_create_context",                        createContext,                  &extensionStrings);
     InsertExtensionString("EGL_EXT_device_query",                          deviceQuery,                    &extensionStrings);
+    InsertExtensionString("EGL_KHR_image",                                 image,                          &extensionStrings);
+    InsertExtensionString("EGL_KHR_image_base",                            imageBase,                      &extensionStrings);
+    InsertExtensionString("EGL_KHR_image_pixmap",                          imagePixmap,                    &extensionStrings);
+    InsertExtensionString("EGL_KHR_gl_texture_2D_image",                   glTexture2DImage,               &extensionStrings);
+    InsertExtensionString("EGL_KHR_gl_texture_cubemap_image",              glTextureCubemapImage,          &extensionStrings);
+    InsertExtensionString("EGL_KHR_gl_texture_3D_image",                   glTexture3DImage,               &extensionStrings);
+    InsertExtensionString("EGL_KHR_gl_renderbuffer_image",                 glRenderbufferImage,            &extensionStrings);
 
     return extensionStrings;
 }
