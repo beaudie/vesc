@@ -13,6 +13,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/histogram_macros.h"
+#include "libANGLE/renderer/d3d/EGLImageD3D.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/SurfaceD3D.h"
 #include "libANGLE/renderer/d3d/SwapChainD3D.h"
@@ -199,6 +200,12 @@ SurfaceImpl *DisplayD3D::createPixmapSurface(const egl::Config *configuration,
     return nullptr;
 }
 
+ImageImpl *DisplayD3D::createImage(gl::Context *context, EGLenum target, gl::Texture *buffer,
+                                   const egl::AttributeMap &attribs)
+{
+    return new EGLImageD3D(mRenderer, target, buffer, attribs);
+}
+
 egl::Error DisplayD3D::getDevice(DeviceImpl **device)
 {
     *device = reinterpret_cast<DeviceImpl*>(mDevice);
@@ -304,26 +311,7 @@ bool DisplayD3D::isValidNativeWindow(EGLNativeWindowType window) const
 
 void DisplayD3D::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
-    outExtensions->createContextRobustness = true;
-
-    // ANGLE-specific extensions
-    if (mRenderer->getShareHandleSupport())
-    {
-        outExtensions->d3dShareHandleClientBuffer = true;
-        outExtensions->surfaceD3DTexture2DShareHandle = true;
-    }
-
-    outExtensions->querySurfacePointer = true;
-    outExtensions->windowFixedSize = true;
-
-    if (mRenderer->getPostSubBufferSupport())
-    {
-        outExtensions->postSubBuffer = true;
-    }
-
-    outExtensions->createContext = true;
-
-    outExtensions->deviceQuery = true;
+    *outExtensions = mRenderer->generateDisplayExtensions();
 }
 
 std::string DisplayD3D::getVendorString() const
