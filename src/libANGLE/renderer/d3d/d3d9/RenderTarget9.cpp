@@ -17,7 +17,8 @@ namespace rx
 {
 
 // TODO: AddRef the incoming surface to take ownership instead of expecting that its ref is being given.
-TextureRenderTarget9::TextureRenderTarget9(IDirect3DSurface9 *surface, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth,
+TextureRenderTarget9::TextureRenderTarget9(IDirect3DBaseTexture9 *texture, IDirect3DSurface9 *surface,
+                                           GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth,
                                            GLsizei samples)
     : mWidth(width),
       mHeight(height),
@@ -25,6 +26,7 @@ TextureRenderTarget9::TextureRenderTarget9(IDirect3DSurface9 *surface, GLenum in
       mInternalFormat(internalFormat),
       mD3DFormat(D3DFMT_UNKNOWN),
       mSamples(samples),
+      mTexture(texture),
       mRenderTarget(surface)
 {
     ASSERT(mDepth == 1);
@@ -39,6 +41,7 @@ TextureRenderTarget9::TextureRenderTarget9(IDirect3DSurface9 *surface, GLenum in
 
 TextureRenderTarget9::~TextureRenderTarget9()
 {
+    SafeRelease(mTexture);
     SafeRelease(mRenderTarget);
 }
 
@@ -65,6 +68,11 @@ GLenum TextureRenderTarget9::getInternalFormat() const
 GLsizei TextureRenderTarget9::getSamples() const
 {
     return mSamples;
+}
+
+IDirect3DBaseTexture9 *TextureRenderTarget9::getTexture()
+{
+    return mTexture;
 }
 
 IDirect3DSurface9 *TextureRenderTarget9::getSurface()
@@ -123,6 +131,11 @@ GLsizei SurfaceRenderTarget9::getSamples() const
 IDirect3DSurface9 *SurfaceRenderTarget9::getSurface()
 {
     return (mDepth ? mSwapChain->getDepthStencil() : mSwapChain->getRenderTarget());
+}
+
+IDirect3DBaseTexture9 *SurfaceRenderTarget9::getTexture()
+{
+    return (mDepth ? nullptr : mSwapChain->getOffscreenTexture());
 }
 
 D3DFORMAT SurfaceRenderTarget9::getD3DFormat() const
