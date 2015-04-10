@@ -8,9 +8,11 @@
 
 #include "libANGLE/validationEGL.h"
 
+#include "common/utilities.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/Image.h"
 #include "libANGLE/Surface.h"
 
 #include <EGL/eglext.h>
@@ -76,6 +78,22 @@ Error ValidateContext(const Display *display, gl::Context *context)
     if (!display->isValidContext(context))
     {
         return Error(EGL_BAD_CONTEXT);
+    }
+
+    return Error(EGL_SUCCESS);
+}
+
+Error ValidateImage(const Display *display, const Image *image)
+{
+    Error error = ValidateDisplay(display);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    if (!display->isValidImage(image))
+    {
+        return Error(EGL_BAD_PARAMETER, "image is not valid.");
     }
 
     return Error(EGL_SUCCESS);
@@ -493,6 +511,301 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
         {
             return Error(EGL_BAD_MATCH);
         }
+    }
+
+    return Error(EGL_SUCCESS);
+}
+
+static size_t GetMaximumMipLevel(const gl::Context *context, GLenum target)
+{
+    const gl::Caps &caps = context->getCaps();
+
+    size_t maxDimension = 0;
+    switch (target)
+    {
+      case GL_TEXTURE_2D:                  maxDimension = caps.max2DTextureSize;       break;
+      case GL_TEXTURE_CUBE_MAP:            maxDimension = caps.maxCubeMapTextureSize;  break;
+      case GL_TEXTURE_3D:                  maxDimension = caps.max3DTextureSize;       break;
+      case GL_TEXTURE_2D_ARRAY:            maxDimension = caps.max2DTextureSize;       break;
+      default: UNREACHABLE();
+    }
+
+    return gl::log2(maxDimension);
+}
+
+static bool TextureHasNonZeroMipLevelsSpecified(const gl::Context *context, const gl::Texture *texture)
+{
+    size_t maxMip = GetMaximumMipLevel(context, texture->getTarget());
+    for (size_t level = 1; level < maxMip; level++)
+    {
+        if (texture->getTarget() == GL_TEXTURE_CUBE_MAP)
+        {
+            for (GLenum face = gl::FirstCubeMapTextureTarget; face <= gl::LastCubeMapTextureTarget; face++)
+            {
+                if (texture->getInternalFormat(face, level) != GL_NONE)
+                {
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            if (texture->getInternalFormat(texture->getTarget(), level) != GL_NONE)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+Error ValidateCreateImageKHR(const Display *display, gl::Context *context, EGLenum target, EGLClientBuffer buffer,
+                             const AttributeMap& attributes)
+{
+    Error error = ValidateContext(display, context);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    const DisplayExtensions &displayExtensions = display->getExtensions();
+
+    if (!displayExtensions.imageBase && !displayExtensions.image)
+    {
+        // It is out of spec what happens when calling an extension function when the extension is not available.
+        // EGL_BAD_DISPLAY seems like a reasonable error.
+        return Error(EGL_BAD_DISPLAY, "EGL_KHR_image not supported.");
+    }
+
+    for (AttributeMap::const_iterator attributeIter = attributes.begin(); attributeIter != attributes.end(); attributeIter++)
+    {
+        EGLint attribute = attributeIter->first;
+        EGLint value = attributeIter->second;
+
+        switch (attribute)
+        {
+          case EGL_IMAGE_PRESERVED_KHR:
+            switch (value)
+            {
+              case EGL_TRUE:
+              case EGL_FALSE:
+                break;
+
+              default:
+                return Error(EGL_BAD_PARAMETER, "EGL_IMAGE_PRESERVED_KHR must be EGL_TRUE or EGL_FALSE.");
+            }
+            break;
+
+          case EGL_GL_TEXTURE_LEVEL_KHR:
+            if (!displayExtensions.glTexture2DImage &&
+                !displayExtensions.glTextureCubemapImage &&
+                !displayExtensions.glTexture3DImage)
+            {
+                return Error(EGL_BAD_PARAMETER, "EGL_GL_TEXTURE_LEVEL_KHR cannot be used without "
+                                                 "KHR_gl_texture_*_image support.");
+            }
+
+            if (value < 0)
+            {
+                return Error(EGL_BAD_PARAMETER, "EGL_GL_TEXTURE_LEVEL_KHR cannot be negative.");
+            }
+            break;
+
+          case EGL_GL_TEXTURE_ZOFFSET_KHR:
+            if (!displayExtensions.glTexture3DImage)
+            {
+                return Error(EGL_BAD_PARAMETER, "EGL_GL_TEXTURE_ZOFFSET_KHR cannot be used without "
+                                                 "KHR_gl_texture_3D_image support.");
+            }
+            break;
+
+          default:
+            return Error(EGL_BAD_PARAMETER, "invalid attribute: 0x%X", attribute);
+        }
+    }
+
+    switch (target)
+    {
+      case EGL_GL_TEXTURE_2D_KHR:
+        {
+            if (!displayExtensions.glTexture2DImage)
+            {
+                return Error(EGL_BAD_PARAMETER, "KHR_gl_texture_2D_image not supported.");
+            }
+
+            if (buffer == 0)
+            {
+                return Error(EGL_BAD_PARAMETER, "buffer cannot reference a 2D texture with the name 0.");
+            }
+
+            const gl::Texture *texture = context->getTexture(reinterpret_cast<GLuint>(buffer));
+            if (texture == nullptr || texture->getTarget() != GL_TEXTURE_2D)
+            {
+                return Error(EGL_BAD_PARAMETER, "target is not a 2D texture.");
+            }
+
+            EGLint level = attributes.get(EGL_GL_TEXTURE_LEVEL_KHR, 0);
+            if (texture->getWidth(GL_TEXTURE_2D, level) == 0 ||
+                texture->getHeight(GL_TEXTURE_2D, level) == 0)
+            {
+                return Error(EGL_BAD_PARAMETER, "target 2D texture does not have a valid size at specified level.");
+            }
+
+            if (level > 0 && !texture->isMipmapComplete())
+            {
+                return Error(EGL_BAD_PARAMETER, "texture must be complete if level is non-zero.");
+            }
+
+            if (level == 0 && !texture->isMipmapComplete() && TextureHasNonZeroMipLevelsSpecified(context, texture))
+            {
+                return Error(EGL_BAD_PARAMETER, "if level is zero and the texture is incomplete, it must have no mip "
+                                                "levels specified except zero.");
+            }
+        }
+        break;
+
+      case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X_KHR:
+      case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_X_KHR:
+      case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Y_KHR:
+      case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Y_KHR:
+      case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Z_KHR:
+      case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_KHR:
+        {
+            if (!displayExtensions.glTextureCubemapImage)
+            {
+                return Error(EGL_BAD_PARAMETER, "KHR_gl_texture_cubemap_image not supported.");
+            }
+
+            if (buffer == 0)
+            {
+                return Error(EGL_BAD_PARAMETER, "buffer cannot reference a cubemap texture with the name 0.");
+            }
+
+            const gl::Texture *texture = context->getTexture(reinterpret_cast<GLuint>(buffer));
+            if (texture == nullptr || texture->getTarget() != GL_TEXTURE_CUBE_MAP)
+            {
+                return Error(EGL_BAD_PARAMETER, "target is not a cubemap texture.");
+            }
+
+            EGLint level = attributes.get(EGL_GL_TEXTURE_LEVEL_KHR, 0);
+            GLenum cubeMapFace = egl_gl::EGLCubeMapTargetToGLCubeMapTarget(target);
+            if (texture->getWidth(cubeMapFace, level) == 0 ||
+                texture->getHeight(cubeMapFace, level) == 0)
+            {
+                return Error(EGL_BAD_PARAMETER, "target cubemap texture does not have a valid size at specified level and face.");
+            }
+
+            if (level > 0 && !texture->isMipmapComplete())
+            {
+                return Error(EGL_BAD_PARAMETER, "texture must be complete if level is non-zero.");
+            }
+
+            if (level == 0 && !texture->isMipmapComplete() && TextureHasNonZeroMipLevelsSpecified(context, texture))
+            {
+                return Error(EGL_BAD_PARAMETER, "if level is zero and the texture is incomplete, it must have no mip "
+                                                "levels specified except zero.");
+            }
+        }
+        break;
+
+      case EGL_GL_TEXTURE_3D_KHR:
+        {
+            if (!displayExtensions.glTexture3DImage)
+            {
+                return Error(EGL_BAD_PARAMETER, "KHR_gl_texture_3D_image not supported.");
+            }
+
+            if (buffer == 0)
+            {
+                return Error(EGL_BAD_PARAMETER, "buffer cannot reference a 3D texture with the name 0.");
+            }
+
+            const gl::Texture *texture = context->getTexture(reinterpret_cast<GLuint>(buffer));
+            if (texture == nullptr || texture->getTarget() != GL_TEXTURE_3D)
+            {
+                return Error(EGL_BAD_PARAMETER, "target is not a 3D texture.");
+            }
+
+            EGLint level = attributes.get(EGL_GL_TEXTURE_LEVEL_KHR, 0);
+            EGLint zOffset = attributes.get(EGL_GL_TEXTURE_ZOFFSET_KHR, 0);
+            if (texture->getWidth(GL_TEXTURE_3D, level) == 0 ||
+                texture->getHeight(GL_TEXTURE_3D, level) == 0 ||
+                texture->getDepth(GL_TEXTURE_3D, level) == 0)
+            {
+                return Error(EGL_BAD_PARAMETER, "target 3D texture does not have a valid size at specified level.");
+            }
+
+            if (zOffset >= texture->getDepth(GL_TEXTURE_3D, level))
+            {
+                return Error(EGL_BAD_PARAMETER, "target 3D texture does not have enough layers for the specified Z "
+                                                "offset at the specified level.");
+            }
+
+            if (level > 0 && !texture->isMipmapComplete())
+            {
+                return Error(EGL_BAD_PARAMETER, "texture must be complete if level is non-zero.");
+            }
+
+            if (level == 0 && !texture->isMipmapComplete() && TextureHasNonZeroMipLevelsSpecified(context, texture))
+            {
+                return Error(EGL_BAD_PARAMETER, "if level is zero and the texture is incomplete, it must have no mip "
+                                                "levels specified except zero.");
+            }
+        }
+        break;
+
+      case EGL_GL_RENDERBUFFER_KHR:
+        {
+            if (!displayExtensions.glRenderbufferImage)
+            {
+                return Error(EGL_BAD_PARAMETER, "KHR_gl_renderbuffer_image not supported.");
+            }
+
+            if (attributes.contains(EGL_GL_TEXTURE_LEVEL_KHR))
+            {
+                return Error(EGL_BAD_PARAMETER, "EGL_GL_TEXTURE_LEVEL_KHR cannot be used in conjunction with a "
+                                                "renderbuffer target.");
+            }
+
+            if (buffer == 0)
+            {
+                return Error(EGL_BAD_PARAMETER, "buffer cannot reference a renderbuffer with the name 0.");
+            }
+
+            const gl::Renderbuffer *renderbuffer = context->getRenderbuffer(reinterpret_cast<GLuint>(buffer));
+            if (renderbuffer == nullptr)
+            {
+                return Error(EGL_BAD_PARAMETER, "target is not a renderbuffer.");
+            }
+
+            if (renderbuffer->getSamples() > 0)
+            {
+                return Error(EGL_BAD_PARAMETER, "target renderbuffer cannot be multisampled.");
+            }
+        }
+        break;
+
+      default:
+        return Error(EGL_BAD_PARAMETER, "invalid target: 0x%X", target);
+    }
+
+    return Error(EGL_SUCCESS);
+}
+
+Error ValidateDestroyImageKHR(const Display *display, const Image *image)
+{
+    Error error = ValidateImage(display, image);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    if (!display->getExtensions().imageBase && !display->getExtensions().image)
+    {
+        // It is out of spec what happens when calling an extension function when the extension is not available.
+        // EGL_BAD_DISPLAY seems like a reasonable error.
+        return Error(EGL_BAD_DISPLAY);
     }
 
     return Error(EGL_SUCCESS);
