@@ -516,6 +516,33 @@ egl::ConfigSet Renderer9::generateConfigs() const
     return configs;
 }
 
+egl::DisplayExtensions Renderer9::generateDisplayExtensions() const
+{
+    egl::DisplayExtensions extensions;
+
+    extensions.createContextRobustness = true;
+
+    // PIX doesn't seem to support using share handles, so disable them.
+    if ((mD3d9Ex != NULL) && !gl::DebugAnnotationsActive())
+    {
+        extensions.d3dShareHandleClientBuffer = true;
+        extensions.surfaceD3DTexture2DShareHandle = true;
+    }
+
+    extensions.querySurfacePointer = true;
+    extensions.windowFixedSize = true;
+    extensions.postSubBuffer = true;
+    extensions.createContext = true;
+    extensions.deviceQuery = true;
+
+    extensions.image = true;
+    extensions.imageBase = true;
+    extensions.glTexture2DImage = true;
+    extensions.glRenderbufferImage = true;
+
+    return extensions;
+}
+
 void Renderer9::startScene()
 {
     if (!mSceneStarted)
@@ -767,7 +794,7 @@ gl::Error Renderer9::setSamplerState(gl::SamplerType type, int index, gl::Textur
     std::vector<bool> &forceSetSamplers = (type == gl::SAMPLER_PIXEL) ? mForceSetPixelSamplerStates : mForceSetVertexSamplerStates;
     std::vector<gl::SamplerState> &appliedSamplers = (type == gl::SAMPLER_PIXEL) ? mCurPixelSamplerStates: mCurVertexSamplerStates;
 
-    if (forceSetSamplers[index] || memcmp(&samplerState, &appliedSamplers[index], sizeof(gl::SamplerState)) != 0)
+    if (true)//forceSetSamplers[index] || memcmp(&samplerState, &appliedSamplers[index], sizeof(gl::SamplerState)) != 0)
     {
         int d3dSamplerOffset = (type == gl::SAMPLER_PIXEL) ? 0 : D3DVERTEXTEXTURESAMPLER0;
         int d3dSampler = index + d3dSamplerOffset;
@@ -791,11 +818,15 @@ gl::Error Renderer9::setSamplerState(gl::SamplerType type, int index, gl::Textur
         mDevice->SetSamplerState(d3dSampler, D3DSAMP_ADDRESSV, gl_d3d9::ConvertTextureWrap(samplerState.wrapT));
 
         mDevice->SetSamplerState(d3dSampler, D3DSAMP_MAGFILTER, gl_d3d9::ConvertMagFilter(samplerState.magFilter, samplerState.maxAnisotropy));
+
         D3DTEXTUREFILTERTYPE d3dMinFilter, d3dMipFilter;
-        gl_d3d9::ConvertMinFilter(samplerState.minFilter, &d3dMinFilter, &d3dMipFilter, samplerState.maxAnisotropy);
+        float lodBias;
+        gl_d3d9::ConvertMinFilter(samplerState.minFilter, &d3dMinFilter, &d3dMipFilter, &lodBias,
+                                  samplerState.maxAnisotropy, baseLevel);
         mDevice->SetSamplerState(d3dSampler, D3DSAMP_MINFILTER, d3dMinFilter);
         mDevice->SetSamplerState(d3dSampler, D3DSAMP_MIPFILTER, d3dMipFilter);
         mDevice->SetSamplerState(d3dSampler, D3DSAMP_MAXMIPLEVEL, baseLevel);
+        mDevice->SetSamplerState(d3dSampler, D3DSAMP_MIPMAPLODBIAS, static_cast<DWORD>(lodBias));
         if (getRendererExtensions().textureFilterAnisotropic)
         {
             mDevice->SetSamplerState(d3dSampler, D3DSAMP_MAXANISOTROPY, (DWORD)samplerState.maxAnisotropy);
@@ -1321,19 +1352,19 @@ gl::Error Renderer9::applyRenderTarget(const gl::FramebufferAttachment *colorAtt
     size_t renderTargetHeight = 0;
     D3DFORMAT renderTargetFormat = D3DFMT_UNKNOWN;
 
+    RenderTarget9 *renderTarget = nullptr;
+    gl::Error error = renderAttachment->getRenderTarget(&renderTarget);
+    if (error.isError())
+    {
+        return error;
+    }
+    ASSERT(renderTarget);
+
     bool renderTargetChanged = false;
-    unsigned int renderTargetSerial = GetAttachmentSerial(renderAttachment);
+    unsigned int renderTargetSerial = renderTarget->getSerial();
     if (renderTargetSerial != mAppliedRenderTargetSerial)
     {
         // Apply the render target on the device
-        RenderTarget9 *renderTarget = nullptr;
-        gl::Error error = renderAttachment->getRenderTarget(&renderTarget);
-        if (error.isError())
-        {
-            return error;
-        }
-        ASSERT(renderTarget);
-
         IDirect3DSurface9 *renderTargetSurface = renderTarget->getSurface();
         ASSERT(renderTargetSurface);
 
@@ -1348,24 +1379,29 @@ gl::Error Renderer9::applyRenderTarget(const gl::FramebufferAttachment *colorAtt
         renderTargetChanged = true;
     }
 
-    unsigned int depthStencilSerial = (depthStencilAttachment != nullptr) ?
-                                       GetAttachmentSerial(depthStencilAttachment) : 0;
+    RenderTarget9 *depthStencilRenderTarget = nullptr;
+    unsigned int depthStencilSerial = 0;
+
+    if (depthStencilAttachment != nullptr)
+    {
+        gl::Error error = depthStencilAttachment->getRenderTarget(&depthStencilRenderTarget);
+        if (error.isError())
+        {
+            return error;
+        }
+        ASSERT(depthStencilRenderTarget);
+
+        depthStencilSerial = depthStencilRenderTarget->getSerial();
+    }
+
     if (depthStencilSerial != mAppliedDepthStencilSerial || !mDepthStencilInitialized)
     {
         unsigned int depthSize = 0;
         unsigned int stencilSize = 0;
 
         // Apply the depth stencil on the device
-        if (depthStencilAttachment)
+        if (depthStencilRenderTarget)
         {
-            RenderTarget9 *depthStencilRenderTarget = nullptr;
-            gl::Error error = depthStencilAttachment->getRenderTarget(&depthStencilRenderTarget);
-            if (error.isError())
-            {
-                return error;
-            }
-            ASSERT(depthStencilRenderTarget);
-
             IDirect3DSurface9 *depthStencilSurface = depthStencilRenderTarget->getSurface();
             ASSERT(depthStencilSurface);
 
@@ -2500,11 +2536,6 @@ bool Renderer9::getShareHandleSupport() const
     return (mD3d9Ex != NULL) && !gl::DebugAnnotationsActive();
 }
 
-bool Renderer9::getPostSubBufferSupport() const
-{
-    return true;
-}
-
 int Renderer9::getMajorShaderModel() const
 {
     return D3DSHADER_VERSION_MAJOR(mDeviceCaps.PixelShaderVersion);
@@ -2589,6 +2620,7 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
     const gl::TextureCaps &textureCaps = getRendererTextureCaps().get(format);
     GLuint supportedSamples = textureCaps.getNearestSamples(samples);
 
+    IDirect3DTexture9 *texture = nullptr;
     IDirect3DSurface9 *renderTarget = NULL;
     if (width > 0 && height > 0)
     {
@@ -2604,10 +2636,23 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
         }
         else
         {
-            requiresInitialization = (d3d9FormatInfo.dataInitializerFunction != NULL);
-            result = mDevice->CreateRenderTarget(width, height, d3d9FormatInfo.renderFormat,
-                                                 gl_d3d9::GetMultisampleType(supportedSamples),
-                                                 0, FALSE, &renderTarget, NULL);
+            requiresInitialization = (d3d9FormatInfo.dataInitializerFunction != nullptr);
+            if (supportedSamples > 0)
+            {
+                result = mDevice->CreateRenderTarget(width, height, d3d9FormatInfo.renderFormat,
+                                                     gl_d3d9::GetMultisampleType(supportedSamples),
+                                                     0, FALSE, &renderTarget, nullptr);
+            }
+            else
+            {
+                result = mDevice->CreateTexture(width, height, 1, D3DUSAGE_RENDERTARGET,
+                                                d3d9FormatInfo.texFormat, D3DPOOL_DEFAULT,
+                                                &texture, nullptr);
+                if (!FAILED(result))
+                {
+                    result = texture->GetSurfaceLevel(0, &renderTarget);
+                }
+            }
         }
 
         if (FAILED(result))
@@ -2629,7 +2674,34 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
         }
     }
 
-    *outRT = new TextureRenderTarget9(renderTarget, format, width, height, 1, supportedSamples);
+    *outRT = new TextureRenderTarget9(texture, 0, renderTarget, format, width, height, 1, supportedSamples);
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error Renderer9::createRenderTargetCopy(RenderTargetD3D *source, RenderTargetD3D **outRT)
+{
+    ASSERT(source != nullptr);
+
+    RenderTargetD3D *newRT = nullptr;
+    gl::Error error = createRenderTarget(source->getWidth(), source->getHeight(),
+                                         source->getInternalFormat(), source->getSamples(),
+                                         &newRT);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    RenderTarget9 *source9 = GetAs<RenderTarget9>(source);
+    RenderTarget9 *dest9 = GetAs<RenderTarget9>(newRT);
+
+    HRESULT result = mDevice->StretchRect(source9->getSurface(), nullptr, dest9->getSurface(), nullptr, D3DTEXF_NONE);
+    if (FAILED(result))
+    {
+        ASSERT(result == D3DERR_OUTOFVIDEOMEMORY || result == E_OUTOFMEMORY);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to copy render target, result: 0x%X.", result);
+    }
+
+    *outRT = newRT;
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -2867,6 +2939,11 @@ TextureStorage *Renderer9::createTextureStorage2D(SwapChainD3D *swapChain)
 {
     SwapChain9 *swapChain9 = GetAs<SwapChain9>(swapChain);
     return new TextureStorage9_2D(this, swapChain9);
+}
+
+TextureStorage * Renderer9::createTextureStorage2D(EGLImageD3D *eglImage)
+{
+    return new TextureStorage9_EGLImage(this, eglImage);
 }
 
 TextureStorage *Renderer9::createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly)

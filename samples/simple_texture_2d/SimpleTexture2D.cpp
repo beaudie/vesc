@@ -64,8 +64,21 @@ class SimpleTexture2DSample : public SampleApplication
         mSamplerLoc = glGetUniformLocation(mProgram, "s_texture");
 
         // Load the texture
-        mTexture = CreateSimpleTexture2D();
+        mTextureSource = CreateSimpleTexture2D();
 
+        EGLImageKHR image = eglCreateImageKHR(getDisplay(), getContext(),
+                                              EGL_GL_TEXTURE_2D_KHR, reinterpret_cast<EGLClientBuffer>(mTextureSource),
+                                              nullptr);
+
+        glGenTextures(1, &mTextureTarget);
+        glBindTexture(GL_TEXTURE_2D, mTextureTarget);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, image);
+
+        GLubyte purple[4] = { 255, 0, 255 };
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 1, 1, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, purple);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         return true;
@@ -74,11 +87,13 @@ class SimpleTexture2DSample : public SampleApplication
     virtual void destroy()
     {
         glDeleteProgram(mProgram);
-        glDeleteTextures(1, &mTexture);
+        glDeleteTextures(1, &mTextureSource);
+        glDeleteTextures(1, &mTextureTarget);
     }
 
     virtual void draw()
     {
+
         GLfloat vertices[] =
         {
             -0.5f,  0.5f, 0.0f,  // Position 0
@@ -109,12 +124,17 @@ class SimpleTexture2DSample : public SampleApplication
         glEnableVertexAttribArray(mPositionLoc);
         glEnableVertexAttribArray(mTexCoordLoc);
 
-        // Bind the texture
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mTexture);
-
         // Set the texture sampler to texture unit to 0
         glUniform1i(mSamplerLoc, 0);
+        // Bind the texture
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, mTextureSource);
+
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
+
+        // Bind the texture
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, mTextureTarget);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
     }
@@ -131,7 +151,8 @@ class SimpleTexture2DSample : public SampleApplication
     GLint mSamplerLoc;
 
     // Texture handle
-    GLuint mTexture;
+    GLuint mTextureSource;
+    GLuint mTextureTarget;
 };
 
 int main(int argc, char **argv)
