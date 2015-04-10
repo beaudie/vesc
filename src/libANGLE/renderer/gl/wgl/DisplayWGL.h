@@ -40,6 +40,9 @@ class DisplayWGL : public DisplayGL
                                      NativePixmapType nativePixmap,
                                      const egl::AttributeMap &attribs) override;
 
+    ImageImpl *createImage(gl::Context *context, EGLenum target, EGLClientBuffer buffer,
+                           const egl::AttributeMap &attribs) override;
+
     egl::ConfigSet generateConfigs() const override;
 
     bool isDeviceLost() const override;
