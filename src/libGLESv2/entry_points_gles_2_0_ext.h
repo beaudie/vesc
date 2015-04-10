@@ -73,6 +73,9 @@ ANGLE_EXPORT void GL_APIENTRY GetBufferPointervOES(GLenum target, GLenum pname, 
 ANGLE_EXPORT void *GL_APIENTRY MapBufferRangeEXT(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access);
 ANGLE_EXPORT void GL_APIENTRY FlushMappedBufferRangeEXT(GLenum target, GLintptr offset, GLsizeiptr length);
 
+// GL_OES_EGL_image
+ANGLE_EXPORT void GL_APIENTRY EGLImageTargetTexture2DOES(GLenum target, GLeglImageOES image);
+ANGLE_EXPORT void GL_APIENTRY EGLImageTargetRenderbufferStorageOES(GLenum target, GLeglImageOES image);
 }
 
 #endif // LIBGLESV2_ENTRYPOINTGLES20EXT_H_

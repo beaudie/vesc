@@ -11,6 +11,7 @@
 #include "libANGLE/Config.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/Image.h"
 #include "libANGLE/Surface.h"
 
 #include <EGL/eglext.h>
@@ -495,6 +496,45 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
         }
     }
 
+    return Error(EGL_SUCCESS);
+}
+
+Error ValidateCreateImageKHR(Display *display, gl::Context *context, EGLenum target, EGLClientBuffer buffer,
+                             const AttributeMap& attributes)
+{
+    Error error = ValidateContext(display, context);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    if (!display->getExtensions().imageBase && !display->getExtensions().image)
+    {
+        // It is out of spec what happens when calling an extension function when the extension is not available.
+        // EGL_BAD_DISPLAY seems like a reasonable error.
+        return Error(EGL_BAD_DISPLAY);
+    }
+
+    UNIMPLEMENTED();
+    return Error(EGL_SUCCESS);
+}
+
+Error ValidateDestroyImageKHR(Display *display, Image *image)
+{
+    Error error = ValidateDisplay(display);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    if (!display->getExtensions().imageBase && !display->getExtensions().image)
+    {
+        // It is out of spec what happens when calling an extension function when the extension is not available.
+        // EGL_BAD_DISPLAY seems like a reasonable error.
+        return Error(EGL_BAD_DISPLAY);
+    }
+
+    UNIMPLEMENTED();
     return Error(EGL_SUCCESS);
 }
 
