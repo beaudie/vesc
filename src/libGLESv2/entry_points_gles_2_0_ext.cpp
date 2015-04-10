@@ -1054,4 +1054,38 @@ void GL_APIENTRY FlushMappedBufferRangeEXT(GLenum target, GLintptr offset, GLsiz
     }
 }
 
+ANGLE_EXPORT void GL_APIENTRY EGLImageTargetTexture2DOES(GLenum target, GLeglImageOES image)
+{
+    EVENT("(GLenum target = 0x%X, GLeglImageOES image = 0x%0.8p)", target, image);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!context->getExtensions().eglImage && !context->getExtensions().eglImageExternal)
+        {
+            context->recordError(Error(GL_INVALID_OPERATION));
+            return;
+        }
+
+        UNIMPLEMENTED();
+    }
+}
+
+ANGLE_EXPORT void GL_APIENTRY EGLImageTargetRenderbufferStorageOES(GLenum target, GLeglImageOES image)
+{
+    EVENT("(GLenum target = 0x%X, GLeglImageOES image = 0x%0.8p)", target, image);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!context->getExtensions().eglImage)
+        {
+            context->recordError(Error(GL_INVALID_OPERATION));
+            return;
+        }
+
+        UNIMPLEMENTED();
+    }
+}
+
 }

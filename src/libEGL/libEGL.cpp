@@ -242,6 +242,16 @@ EGLDisplay EGLAPIENTRY eglGetPlatformDisplayEXT(EGLenum platform, void *native_d
     return egl::GetPlatformDisplayEXT(platform, native_display, attrib_list);
 }
 
+EGLImageKHR EGLAPIENTRY eglCreateImageKHR(EGLDisplay dpy, EGLContext ctx, EGLenum target, EGLClientBuffer buffer, const EGLint *attrib_list)
+{
+    return egl::CreateImageKHR(dpy, ctx, target, buffer, attrib_list);
+}
+
+EGLBoolean EGLAPIENTRY eglDestroyImageKHR(EGLDisplay dpy, EGLImageKHR image)
+{
+    return egl::DestroyImageKHR(dpy, image);
+}
+
 __eglMustCastToProperFunctionPointerType EGLAPIENTRY eglGetProcAddress(const char *procname)
 {
     return egl::GetProcAddress(procname);
