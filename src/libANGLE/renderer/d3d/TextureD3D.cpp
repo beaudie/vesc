@@ -13,11 +13,13 @@
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/Framebuffer.h"
+#include "libANGLE/Image.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/BufferImpl.h"
 #include "libANGLE/renderer/d3d/BufferD3D.h"
+#include "libANGLE/renderer/d3d/EGLImageD3D.h"
 #include "libANGLE/renderer/d3d/ImageD3D.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/RenderTargetD3D.h"
@@ -967,6 +969,32 @@ void TextureD3D_2D::releaseTexImage()
     }
 }
 
+gl::Error TextureD3D_2D::setEGLImageTarget(GLenum target, egl::Image *image)
+{
+    EGLImageD3D *eglImaged3d = GetImplAs<EGLImageD3D>(image);
+
+    // Set the properties of the base mip level from the EGL image
+    GLenum internalformat = image->getInternalFormat();
+    gl::Extents size(image->getWidth(), image->getHeight(), 1);
+    mImageArray[0]->redefine(GL_TEXTURE_2D, internalformat, size, true);
+    mImageArray[0]->markClean();
+
+    // Clear all other images.
+    for (size_t level = 1; level < ArraySize(mImageArray); level++)
+    {
+        mImageArray[level]->redefine(GL_TEXTURE_2D, GL_NONE, gl::Extents(0, 0, 0), true);
+    }
+
+    if (mTexStorage)
+    {
+        SafeDelete(mTexStorage);
+    }
+
+    mTexStorage = mRenderer->createTextureStorage2D(eglImaged3d);
+
+    return gl::Error(GL_NO_ERROR);
+}
+
 void TextureD3D_2D::initMipmapsImages()
 {
     // Purge array levels 1 through q and reset them to represent the generated mipmap levels.
@@ -1300,6 +1328,12 @@ GLenum TextureD3D_Cube::getInternalFormat(GLint level, GLint layer) const
 bool TextureD3D_Cube::isDepth(GLint level, GLint layer) const
 {
     return gl::GetInternalFormatInfo(getInternalFormat(level, layer)).depthBits > 0;
+}
+
+gl::Error TextureD3D_Cube::setEGLImageTarget(GLenum target, egl::Image *image)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
 }
 
 gl::Error TextureD3D_Cube::setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
@@ -1892,6 +1926,12 @@ bool TextureD3D_3D::isDepth(GLint level) const
     return gl::GetInternalFormatInfo(getInternalFormat(level)).depthBits > 0;
 }
 
+gl::Error TextureD3D_3D::setEGLImageTarget(GLenum target, egl::Image *image)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 gl::Error TextureD3D_3D::setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
                                   const gl::PixelUnpackState &unpack, const uint8_t *pixels)
 {
@@ -2423,6 +2463,12 @@ GLenum TextureD3D_2DArray::getInternalFormat(GLint level) const
 bool TextureD3D_2DArray::isDepth(GLint level) const
 {
     return gl::GetInternalFormatInfo(getInternalFormat(level)).depthBits > 0;
+}
+
+gl::Error TextureD3D_2DArray::setEGLImageTarget(GLenum target, egl::Image *image)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
 }
 
 gl::Error TextureD3D_2DArray::setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,

@@ -29,6 +29,8 @@ class RefCountObject : angle::NonCopyable
 
     GLuint id() const { return mId; }
 
+    size_t getRefCount() const { return mRefCount; }
+
   private:
     GLuint mId;
 
@@ -44,6 +46,12 @@ public:
     {
     }
 
+    explicit BindingPointer(ObjectType *newObject)
+        : BindingPointer()
+    {
+        set(newObject);
+    }
+
     BindingPointer(const BindingPointer<ObjectType> &other)
         : mObject(nullptr)
     {
@@ -57,8 +65,7 @@ public:
 
     virtual ~BindingPointer()
     {
-        // Objects have to be released before the resource manager is destroyed, so they must be explicitly cleaned up.
-        ASSERT(mObject == nullptr);
+        set(nullptr);
     }
 
     virtual void set(ObjectType *newObject)

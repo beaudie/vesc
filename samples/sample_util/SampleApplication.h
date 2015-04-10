@@ -7,6 +7,7 @@
 #ifndef SAMPLE_UTIL_SAMPLE_APPLICATION_H
 #define SAMPLE_UTIL_SAMPLE_APPLICATION_H
 
+#define EGL_EGLEXT_PROTOTYPES
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
