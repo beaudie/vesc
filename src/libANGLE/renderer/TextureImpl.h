@@ -19,6 +19,7 @@
 namespace egl
 {
 class Surface;
+class Image;
 }
 
 namespace gl
@@ -42,6 +43,8 @@ class TextureImpl : angle::NonCopyable
     virtual ~TextureImpl() {}
 
     virtual void setUsage(GLenum usage) = 0;
+
+    virtual gl::Error setEGLImage(GLenum target, egl::Image *image) = 0;
 
     virtual gl::Error setImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type,
                                const gl::PixelUnpackState &unpack, const uint8_t *pixels) = 0;

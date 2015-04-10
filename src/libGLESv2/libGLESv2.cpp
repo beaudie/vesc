@@ -1411,4 +1411,14 @@ void GL_APIENTRY glFlushMappedBufferRangeEXT(GLenum target, GLintptr offset, GLs
     return gl::FlushMappedBufferRangeEXT(target, offset, length);
 }
 
+void GL_APIENTRY glEGLImageTargetTexture2DOES(GLenum target, GLeglImageOES image)
+{
+    return gl::EGLImageTargetTexture2DOES(target, image);
+}
+
+void GL_APIENTRY glEGLImageTargetRenderbufferStorageOES(GLenum target, GLeglImageOES image)
+{
+    return gl::EGLImageTargetRenderbufferStorageOES(target, image);
+}
+
 }
