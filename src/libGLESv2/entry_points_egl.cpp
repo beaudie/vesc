@@ -564,14 +564,24 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
         UNIMPLEMENTED();   // FIXME
     }
 
+    gl::Context *previousContext = GetGlobalContext();
+
     SetGlobalDisplay(display);
     SetGlobalDrawSurface(drawSurface);
     SetGlobalReadSurface(readSurface);
     SetGlobalContext(context);
 
-    if (context != nullptr && display != nullptr && drawSurface != nullptr)
+    if (display != EGL_NO_DISPLAY)
     {
         display->makeCurrent(drawSurface, readSurface, context);
+    }
+
+    // Release the surface from the previously-current context, to allow
+    // destroyed surfaces to delete themselves.
+    if (previousContext != EGL_NO_CONTEXT && context == EGL_NO_CONTEXT)
+    {
+        ASSERT(drawSurface == EGL_NO_SURFACE && readSurface == EGL_NO_SURFACE);
+        previousContext->releaseSurface();
     }
 
     SetGlobalError(Error(EGL_SUCCESS));
