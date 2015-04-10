@@ -12,6 +12,7 @@
 #include "common/utilities.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/Data.h"
+#include "libANGLE/Image.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/formatutils.h"
 
@@ -64,6 +65,11 @@ Texture::~Texture()
         mBoundSurface->releaseTexImage(EGL_BACK_BUFFER);
         mBoundSurface = NULL;
     }
+
+    // EGL images should hold a ref to their targets and siblings, a Texture should not be deletable
+    // while it is attached to an EGL image.
+    ASSERT(mEGLImages.empty());
+
     SafeDelete(mTexture);
 }
 
@@ -127,6 +133,11 @@ bool Texture::isSamplerComplete(const SamplerState &samplerState, const Data &da
     return mCompletenessCache.samplerComplete;
 }
 
+bool Texture::isMipmapComplete() const
+{
+    return computeMipmapCompleteness(mSamplerState);
+}
+
 // Tests for cube texture completeness. [OpenGL ES 2.0.24] section 3.7.10 page 81.
 bool Texture::isCubeComplete() const
 {
@@ -169,6 +180,7 @@ Error Texture::setImage(GLenum target, size_t level, GLenum internalFormat, cons
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
     releaseTexImageInternal();
+    orphanEGLImages();
 
     Error error = mTexture->setImage(target, level, internalFormat, size, format, type, unpack, pixels);
     if (error.isError())
@@ -180,6 +192,7 @@ Error Texture::setImage(GLenum target, size_t level, GLenum internalFormat, cons
 
     return Error(GL_NO_ERROR);
 }
+
 
 Error Texture::setSubImage(GLenum target, size_t level, const Box &area, GLenum format, GLenum type,
                            const PixelUnpackState &unpack, const uint8_t *pixels)
@@ -196,6 +209,7 @@ Error Texture::setCompressedImage(GLenum target, size_t level, GLenum internalFo
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
     releaseTexImageInternal();
+    orphanEGLImages();
 
     Error error = mTexture->setCompressedImage(target, level, internalFormat, size, unpack, imageSize, pixels);
     if (error.isError())
@@ -223,6 +237,7 @@ Error Texture::copyImage(GLenum target, size_t level, const Rectangle &sourceAre
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
     releaseTexImageInternal();
+    orphanEGLImages();
 
     Error error = mTexture->copyImage(target, level, sourceArea, internalFormat, source);
     if (error.isError())
@@ -250,6 +265,7 @@ Error Texture::setStorage(GLenum target, size_t levels, GLenum internalFormat, c
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
     releaseTexImageInternal();
+    orphanEGLImages();
 
     Error error = mTexture->setStorage(target, levels, internalFormat, size);
     if (error.isError())
@@ -269,6 +285,7 @@ Error Texture::generateMipmaps()
 {
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
     releaseTexImageInternal();
+    orphanEGLImages();
 
     Error error = mTexture->generateMipmaps(getSamplerState());
     if (error.isError())
@@ -386,6 +403,49 @@ void Texture::releaseTexImageInternal()
         // Then, call the same method as from the surface
         releaseTexImageFromSurface();
     }
+}
+
+Error Texture::setEGLImageTarget(GLenum target, egl::Image *imageTarget)
+{
+    ASSERT(target == mTarget);
+    ASSERT(target == GL_TEXTURE_2D);
+
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    releaseTexImageInternal();
+    orphanEGLImages();
+
+    Error error = mTexture->setEGLImageTarget(target, imageTarget);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    imageTarget->reference(this);
+
+    Extents size(imageTarget->getWidth(), imageTarget->getHeight(), 1);
+    GLenum internalFormat = imageTarget->getInternalFormat();
+    GLenum type = GetInternalFormatInfo(internalFormat).type;
+
+    setImageDesc(target, 0, ImageDesc(size, GetSizedInternalFormat(internalFormat, type)));
+
+    return Error(GL_NO_ERROR);
+}
+
+void Texture::setEGLImageSource(GLenum target, size_t level, size_t layer, egl::Image *imageSource)
+{
+    ASSERT(imageSource != nullptr);
+    mEGLImages.push_back(BindingPointer<egl::Image>(imageSource));
+}
+
+void Texture::orphanEGLImages()
+{
+    for (auto &image : mEGLImages)
+    {
+        image->orphan(this);
+        image.set(nullptr);
+    }
+
+    mEGLImages.clear();
 }
 
 GLenum Texture::getBaseImageTarget() const
