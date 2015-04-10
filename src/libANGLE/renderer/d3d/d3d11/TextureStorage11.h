@@ -23,6 +23,7 @@ struct ImageIndex;
 
 namespace rx
 {
+class EGLImage11;
 class RenderTargetD3D;
 class RenderTarget11;
 class Renderer11;
@@ -174,7 +175,7 @@ class TextureStorage11_2D : public TextureStorage11
     virtual gl::Error createSRV(int baseLevel, int mipLevels, DXGI_FORMAT format, ID3D11Resource *texture,
                                 ID3D11ShaderResourceView **outSRV) const;
 
-    ID3D11Texture2D *mTexture;
+    ID3D11Resource *mTexture;
     RenderTarget11 *mRenderTarget[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 
     // These are members related to the zero max-LOD workaround.
@@ -186,7 +187,7 @@ class TextureStorage11_2D : public TextureStorage11
     // One example of this is an application that creates a texture, calls glGenerateMipmap, and then disables mipmaps on the texture.
     // A more likely example is an app that creates an empty texture, renders to it, and then calls glGenerateMipmap
     // TODO: In this rendering scenario, release the mLevelZeroTexture after mTexture has been created to save memory.
-    ID3D11Texture2D *mLevelZeroTexture;
+    ID3D11Resource *mLevelZeroTexture;
     RenderTarget11 *mLevelZeroRenderTarget;
     bool mUseLevelZeroTexture;
 
@@ -195,6 +196,42 @@ class TextureStorage11_2D : public TextureStorage11
     ID3D11RenderTargetView *mSwizzleRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 
     Image11 *mAssociatedImages[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
+};
+
+class TextureStorage11_EGLImage : public TextureStorage11
+{
+  public:
+    TextureStorage11_EGLImage(Renderer11 *renderer, EGLImage11 *eglImage);
+    virtual ~TextureStorage11_EGLImage();
+
+    gl::Error getResource(ID3D11Resource **outResource) override;
+    gl::Error getMippedResource(ID3D11Resource **outResource) override;
+    gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT) override;
+
+    gl::Error copyToStorage(TextureStorage *destStorage) override;
+
+    void associateImage(Image11* image, const gl::ImageIndex &index) override;
+    void disassociateImage(const gl::ImageIndex &index, Image11* expectedImage) override;
+    bool isAssociatedImageValid(const gl::ImageIndex &index, Image11* expectedImage) override;
+    gl::Error releaseAssociatedImage(const gl::ImageIndex &index, Image11* incomingImage) override;
+
+    gl::Error useLevelZeroWorkaroundTexture(bool useLevelZeroTexture) override;
+
+  protected:
+    gl::Error getSwizzleTexture(ID3D11Resource **outTexture) override;
+    gl::Error getSwizzleRenderTarget(int mipLevel, ID3D11RenderTargetView **outRTV) override;
+
+  private:
+    gl::Error createSRV(int baseLevel, int mipLevels, DXGI_FORMAT format, ID3D11Resource *texture,
+                        ID3D11ShaderResourceView **outSRV) const override;
+
+    gl::Error getImageRenderTarget(RenderTarget11 **outRT) const;
+
+    EGLImage11 *mImage;
+
+    // Swizzle-related variables
+    ID3D11Texture2D *mSwizzleTexture;
+    std::vector<ID3D11RenderTargetView*> mSwizzleRenderTargets;
 };
 
 class TextureStorage11_Cube : public TextureStorage11

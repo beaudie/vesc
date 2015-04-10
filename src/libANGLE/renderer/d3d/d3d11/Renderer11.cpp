@@ -35,6 +35,7 @@
 #include "libANGLE/renderer/d3d/d3d11/Blit11.h"
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Clear11.h"
+#include "libANGLE/renderer/d3d/d3d11/EGLImage11.h"
 #include "libANGLE/renderer/d3d/d3d11/Fence11.h"
 #include "libANGLE/renderer/d3d/d3d11/Framebuffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Image11.h"
@@ -778,6 +779,35 @@ egl::ConfigSet Renderer11::generateConfigs() const
 
     ASSERT(configs.size() > 0);
     return configs;
+}
+
+egl::DisplayExtensions Renderer11::generateDisplayExtensions() const
+{
+    egl::DisplayExtensions extensions;
+
+    extensions.createContextRobustness = true;
+
+    if (getShareHandleSupport())
+    {
+        extensions.d3dShareHandleClientBuffer = true;
+        extensions.surfaceD3DTexture2DShareHandle = true;
+    }
+
+    extensions.querySurfacePointer = true;
+    extensions.windowFixedSize = true;
+
+    // D3D11 does not support present with dirty rectangles until DXGI 1.2.
+    extensions.postSubBuffer = mRenderer11DeviceCaps.supportsDXGI1_2;
+
+    extensions.createContext = true;
+
+    extensions.deviceQuery = true;
+
+    extensions.image = true;
+    extensions.imageBase = true;
+    extensions.glTexture2DImage = true;
+
+    return extensions;
 }
 
 gl::Error Renderer11::flush()
@@ -2510,12 +2540,6 @@ bool Renderer11::getShareHandleSupport() const
     return true;
 }
 
-bool Renderer11::getPostSubBufferSupport() const
-{
-    // D3D11 does not support present with dirty rectangles until DXGI 1.2.
-    return mRenderer11DeviceCaps.supportsDXGI1_2;
-}
-
 int Renderer11::getMajorShaderModel() const
 {
     switch (mRenderer11DeviceCaps.featureLevel)
@@ -3191,6 +3215,11 @@ gl::Error Renderer11::fastCopyBufferToTexture(const gl::PixelUnpackState &unpack
     return mPixelTransfer->copyBufferToTexture(unpack, offset, destRenderTarget, destinationFormat, sourcePixelsType, destArea);
 }
 
+EGLImageD3D *Renderer11::createEGLImage(EGLenum target, gl::Texture *buffer, const egl::AttributeMap &attribs)
+{
+    return new EGLImage11(target, buffer, attribs);
+}
+
 ImageD3D *Renderer11::createImage()
 {
     return new Image11(this);
@@ -3226,6 +3255,12 @@ TextureStorage *Renderer11::createTextureStorage2D(SwapChainD3D *swapChain)
 {
     SwapChain11 *swapChain11 = GetAs<SwapChain11>(swapChain);
     return new TextureStorage11_2D(this, swapChain11);
+}
+
+TextureStorage *Renderer11::createTextureStorage2D(EGLImageD3D *eglImage)
+{
+    EGLImage11 *eglImage11 = GetAs<EGLImage11>(eglImage);
+    return new TextureStorage11_EGLImage(this, eglImage11);
 }
 
 TextureStorage *Renderer11::createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly)

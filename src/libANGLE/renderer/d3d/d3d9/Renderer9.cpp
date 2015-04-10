@@ -516,6 +516,31 @@ egl::ConfigSet Renderer9::generateConfigs() const
     return configs;
 }
 
+egl::DisplayExtensions Renderer9::generateDisplayExtensions() const
+{
+    egl::DisplayExtensions extensions;
+
+    extensions.createContextRobustness = true;
+
+    // PIX doesn't seem to support using share handles, so disable them.
+    if ((mD3d9Ex != NULL) && !gl::DebugAnnotationsActive())
+    {
+        extensions.d3dShareHandleClientBuffer = true;
+        extensions.surfaceD3DTexture2DShareHandle = true;
+    }
+
+    extensions.querySurfacePointer = true;
+    extensions.windowFixedSize = true;
+    extensions.postSubBuffer = true;
+    extensions.createContext = true;
+    extensions.deviceQuery = true;
+    extensions.image = true;
+    extensions.imageBase = true;
+    extensions.glTexture2DImage = true;
+
+    return extensions;
+}
+
 void Renderer9::startScene()
 {
     if (!mSceneStarted)
@@ -2499,11 +2524,6 @@ bool Renderer9::getShareHandleSupport() const
     return (mD3d9Ex != NULL) && !gl::DebugAnnotationsActive();
 }
 
-bool Renderer9::getPostSubBufferSupport() const
-{
-    return true;
-}
-
 int Renderer9::getMajorShaderModel() const
 {
     return D3DSHADER_VERSION_MAJOR(mDeviceCaps.PixelShaderVersion);
@@ -2868,6 +2888,12 @@ TextureStorage *Renderer9::createTextureStorage2D(SwapChainD3D *swapChain)
     return new TextureStorage9_2D(this, swapChain9);
 }
 
+TextureStorage * Renderer9::createTextureStorage2D(EGLImageD3D *eglImage)
+{
+    UNIMPLEMENTED();
+    return nullptr;
+}
+
 TextureStorage *Renderer9::createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly)
 {
     return new TextureStorage9_2D(this, internalformat, renderTarget, width, height, levels);
@@ -2892,6 +2918,12 @@ TextureStorage *Renderer9::createTextureStorage2DArray(GLenum internalformat, bo
     UNREACHABLE();
 
     return NULL;
+}
+
+EGLImageD3D *Renderer9::createEGLImage(EGLenum target, gl::Texture *buffer, const egl::AttributeMap &attribs)
+{
+    UNIMPLEMENTED();
+    return nullptr;
 }
 
 TextureImpl *Renderer9::createTexture(GLenum target)
