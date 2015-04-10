@@ -35,6 +35,7 @@ class DebugAnnotator;
 
 namespace rx
 {
+class EGLImageD3D;
 class ImageD3D;
 class IndexBuffer;
 class RenderTargetD3D;
@@ -90,6 +91,7 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     virtual egl::Error initialize() = 0;
 
     virtual egl::ConfigSet generateConfigs() const = 0;
+    virtual egl::DisplayExtensions generateDisplayExtensions() const = 0;
 
     gl::Error drawArrays(const gl::Data &data,
                          GLenum mode, GLint first,
@@ -144,8 +146,6 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     virtual unsigned int getReservedFragmentUniformVectors() const = 0;
     virtual unsigned int getReservedVertexUniformBuffers() const = 0;
     virtual unsigned int getReservedFragmentUniformBuffers() const = 0;
-    virtual bool getShareHandleSupport() const = 0;
-    virtual bool getPostSubBufferSupport() const = 0;
 
     virtual int getMajorShaderModel() const = 0;
 
@@ -161,6 +161,7 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
 
     // RenderTarget creation
     virtual gl::Error createRenderTarget(int width, int height, GLenum format, GLsizei samples, RenderTargetD3D **outRT) = 0;
+    virtual gl::Error createRenderTargetCopy(RenderTargetD3D *source, RenderTargetD3D **outRT) = 0;
 
     // Shader operations
     virtual gl::Error loadExecutable(const void *function, size_t length, ShaderType type,
@@ -177,6 +178,7 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     virtual gl::Error generateMipmap(ImageD3D *dest, ImageD3D *source) = 0;
     virtual gl::Error generateMipmapsUsingD3D(TextureStorage *storage, const gl::SamplerState &samplerState) = 0;
     virtual TextureStorage *createTextureStorage2D(SwapChainD3D *swapChain) = 0;
+    virtual TextureStorage *createTextureStorage2D(EGLImageD3D *eglImage) = 0;
     virtual TextureStorage *createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly) = 0;
     virtual TextureStorage *createTextureStorageCube(GLenum internalformat, bool renderTarget, int size, int levels, bool hintLevelZeroOnly) = 0;
     virtual TextureStorage *createTextureStorage3D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels) = 0;

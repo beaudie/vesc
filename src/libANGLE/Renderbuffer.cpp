@@ -12,6 +12,7 @@
 
 #include "common/utilities.h"
 #include "libANGLE/FramebufferAttachment.h"
+#include "libANGLE/Image.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/d3d/RenderTargetD3D.h"
@@ -64,6 +65,28 @@ Error Renderbuffer::setStorageMultisample(size_t samples, GLenum internalformat,
     mSamples = samples;
 
     return Error(GL_NO_ERROR);
+}
+
+Error Renderbuffer::setStorageEGLImage(egl::Image *image)
+{
+    Error error = mRenderbuffer->setStorageEGLImage(image);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mWidth = image->getWidth();
+    mHeight = image->getHeight();
+    mInternalFormat = image->getInternalFormat();
+    mSamples = 0;
+
+    return Error(GL_NO_ERROR);
+}
+
+void Renderbuffer::setEGLImageSource(egl::Image *imageSource)
+{
+    ASSERT(imageSource != nullptr);
+    mEGLImages.push_back(BindingPointer<egl::Image>(imageSource));
 }
 
 rx::RenderbufferImpl *Renderbuffer::getImplementation()
@@ -125,6 +148,17 @@ GLuint Renderbuffer::getDepthSize() const
 GLuint Renderbuffer::getStencilSize() const
 {
     return GetInternalFormatInfo(mInternalFormat).stencilBits;
+}
+
+void Renderbuffer::orphanEGLImages()
+{
+    for (auto &image : mEGLImages)
+    {
+        //image->orphan(this);
+        image.set(nullptr);
+    }
+
+    mEGLImages.clear();
 }
 
 }
