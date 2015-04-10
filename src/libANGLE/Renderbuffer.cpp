@@ -67,6 +67,23 @@ Error Renderbuffer::setStorageMultisample(size_t samples, GLenum internalformat,
     return Error(GL_NO_ERROR);
 }
 
+Error Renderbuffer::setEGLImage(egl::Image *image)
+{
+    Error error = mRenderbuffer->setEGLImage(image);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    // TODO: use image to get size and format
+    mWidth = 1;
+    mHeight = 1;
+    mInternalFormat = GL_RGBA8;
+    mSamples = 0;
+
+    return Error(GL_NO_ERROR);
+}
+
 rx::RenderbufferImpl *Renderbuffer::getImplementation()
 {
     ASSERT(mRenderbuffer);

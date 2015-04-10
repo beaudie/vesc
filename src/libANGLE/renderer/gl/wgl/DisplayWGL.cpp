@@ -383,6 +383,13 @@ egl::Error DisplayWGL::createPixmapSurface(const egl::Config *configuration, Nat
     return egl::Error(EGL_BAD_DISPLAY);
 }
 
+egl::Error DisplayWGL::createImage(gl::Context *context, EGLenum target, EGLClientBuffer buffer,
+                                   const egl::AttributeMap &attribs, ImageImpl **outImage)
+{
+    UNIMPLEMENTED();
+    return egl::Error(EGL_BAD_DISPLAY);
+}
+
 static int QueryWGLFormatAttrib(HDC dc, int format, int attribName, const FunctionsWGL *functions)
 {
     int result = 0;

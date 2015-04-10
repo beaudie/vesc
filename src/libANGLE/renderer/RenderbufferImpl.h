@@ -13,6 +13,11 @@
 #include "common/angleutils.h"
 #include "libANGLE/Error.h"
 
+namespace egl
+{
+class Image;
+}
+
 namespace rx
 {
 
@@ -24,6 +29,7 @@ class RenderbufferImpl : angle::NonCopyable
 
     virtual gl::Error setStorage(GLenum internalformat, size_t width, size_t height) = 0;
     virtual gl::Error setStorageMultisample(size_t samples, GLenum internalformat, size_t width, size_t height) = 0;
+    virtual gl::Error setEGLImage(egl::Image *image) = 0;
 };
 
 }

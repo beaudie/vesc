@@ -495,6 +495,45 @@ std::string ParseUniformName(const std::string &name, size_t *outSubscript)
 
 }
 
+namespace egl
+{
+
+static_assert(EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_X_KHR - EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X_KHR == 1, "Unexpected EGL cube map enum value.");
+static_assert(EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Y_KHR - EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X_KHR == 2, "Unexpected EGL cube map enum value.");
+static_assert(EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Y_KHR - EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X_KHR == 3, "Unexpected EGL cube map enum value.");
+static_assert(EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Z_KHR - EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X_KHR == 4, "Unexpected EGL cube map enum value.");
+static_assert(EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_KHR - EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X_KHR == 5, "Unexpected EGL cube map enum value.");
+
+bool IsCubeMapTextureTarget(EGLenum target)
+{
+    return (target >= FirstCubeMapTextureTarget && target <= LastCubeMapTextureTarget);
+}
+
+size_t CubeMapTextureTargetToLayerIndex(EGLenum target)
+{
+    ASSERT(IsCubeMapTextureTarget(target));
+    return target - static_cast<size_t>(FirstCubeMapTextureTarget);
+}
+
+EGLenum LayerIndexToCubeMapTextureTarget(size_t index)
+{
+    ASSERT(index <= (LastCubeMapTextureTarget - FirstCubeMapTextureTarget));
+    return FirstCubeMapTextureTarget + static_cast<GLenum>(index);
+}
+
+}
+
+namespace egl_gl
+{
+
+GLenum EGLCubeMapTargetToGLCubeMapTarget(EGLenum eglTarget)
+{
+    ASSERT(egl::IsCubeMapTextureTarget(eglTarget));
+    return gl::LayerIndexToCubeMapTextureTarget(egl::CubeMapTextureTargetToLayerIndex(eglTarget));
+}
+
+}
+
 #if !defined(ANGLE_ENABLE_WINDOWS_STORE)
 std::string getTempPath()
 {
