@@ -14,6 +14,12 @@
 #include <GLES2/gl2.h>
 #include <GLES3/gl3.h>
 
+namespace egl
+{
+class Display;
+class Image;
+}
+
 namespace gl
 {
 
@@ -88,6 +94,9 @@ bool ValidateGetUniformfv(Context *context, GLuint program, GLint location, GLfl
 bool ValidateGetUniformiv(Context *context, GLuint program, GLint location, GLint* params);
 bool ValidateGetnUniformfvEXT(Context *context, GLuint program, GLint location, GLsizei bufSize, GLfloat* params);
 bool ValidateGetnUniformivEXT(Context *context, GLuint program, GLint location, GLsizei bufSize, GLint* params);
+
+bool ValidateEGLImageTargetTexture2DOES(Context *context, egl::Display *display, GLenum target, egl::Image *image);
+bool ValidateEGLImageTargetRenderbufferStorageOES(Context *context, egl::Display *display, GLenum target, egl::Image *image);
 
 }
 

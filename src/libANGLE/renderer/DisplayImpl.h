@@ -34,6 +34,7 @@ class Context;
 namespace rx
 {
 class SurfaceImpl;
+class ImageImpl;
 struct ConfigDesc;
 class DeviceImpl;
 
@@ -54,6 +55,10 @@ class DisplayImpl : angle::NonCopyable
                                                      const egl::AttributeMap &attribs, SurfaceImpl **outSurface) = 0;
     virtual egl::Error createPixmapSurface(const egl::Config *configuration, NativePixmapType nativePixmap,
                                            const egl::AttributeMap &attribs, SurfaceImpl **outSurface) = 0;
+
+    virtual egl::Error createImage(gl::Context *context, EGLenum target, EGLClientBuffer buffer, const egl::AttributeMap &attribs,
+                                   ImageImpl **outImage) = 0;
+
     virtual egl::Error createContext(const egl::Config *config, const gl::Context *shareContext, const egl::AttributeMap &attribs,
                                      gl::Context **outContext) = 0;
 

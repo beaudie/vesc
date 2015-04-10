@@ -177,6 +177,8 @@ EXPORTS
     glGetBufferPointervOES          @287
     glMapBufferRangeEXT             @288
     glFlushMappedBufferRangeEXT     @289
+    glEGLImageTargetTexture2DOES    @293
+    glEGLImageTargetRenderbufferStorageOES @294
 
     ; GLES 3.0 Functions
     glReadBuffer                    @180

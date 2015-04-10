@@ -131,6 +131,11 @@ bool Texture::isSamplerComplete(const SamplerState &samplerState, const Data &da
     return mCompletenessCache.samplerComplete;
 }
 
+bool Texture::isMipmapComplete() const
+{
+    return computeMipmapCompleteness(mSamplerState);
+}
+
 // Tests for cube texture completeness. [OpenGL ES 2.0.24] section 3.7.10 page 81.
 bool Texture::isCubeComplete() const
 {
@@ -174,6 +179,29 @@ bool Texture::isImmutable() const
 int Texture::immutableLevelCount()
 {
     return mImmutableLevelCount;
+}
+
+Error Texture::setEGLImage(GLenum target, egl::Image *image)
+{
+    ASSERT(target == mTarget);
+    ASSERT(target == GL_TEXTURE_2D);
+
+    Error error = mTexture->setEGLImage(target, image);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    releaseTexImage();
+
+    // TODO: use image to get size, format and type
+    Extents size(1, 1, 1);
+    GLenum internalFormat = GL_RGBA8;
+    GLenum type = GL_UNSIGNED_BYTE;
+
+    setImageDesc(target, 0, ImageDesc(size, GetSizedInternalFormat(internalFormat, type)));
+
+    return Error(GL_NO_ERROR);
 }
 
 Error Texture::setImage(GLenum target, size_t level, GLenum internalFormat, const Extents &size, GLenum format, GLenum type,

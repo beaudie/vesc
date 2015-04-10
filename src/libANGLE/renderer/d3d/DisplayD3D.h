@@ -33,6 +33,9 @@ class DisplayD3D : public DisplayImpl
     egl::Error createPixmapSurface(const egl::Config *configuration, NativePixmapType nativePixmap,
                                    const egl::AttributeMap &attribs, SurfaceImpl **outSurface) override;
 
+    egl::Error createImage(gl::Context *context, EGLenum target, EGLClientBuffer buffer, const egl::AttributeMap &attribs,
+                           ImageImpl **outImage) override;
+
     egl::Error createContext(const egl::Config *config, const gl::Context *shareContext, const egl::AttributeMap &attribs,
                              gl::Context **outContext) override;
 
