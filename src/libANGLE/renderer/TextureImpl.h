@@ -20,6 +20,7 @@
 namespace egl
 {
 class Surface;
+class Image;
 }
 
 namespace gl
@@ -65,6 +66,9 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
 
     virtual void bindTexImage(egl::Surface *surface) = 0;
     virtual void releaseTexImage() = 0;
+
+    virtual gl::Error setEGLImageTarget(GLenum target, egl::Image *image) = 0;
+    virtual gl::Error setEGLImageSource(GLenum target, size_t level, size_t layer, egl::Image *image) = 0;
 };
 
 }
