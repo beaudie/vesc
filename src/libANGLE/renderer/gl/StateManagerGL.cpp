@@ -59,7 +59,7 @@ void StateManagerGL::useProgram(GLuint program)
     if (mProgram != program)
     {
         mProgram = program;
-        mFunctions->useProgram(mProgram);
+        GLCall(mFunctions, useProgram, mProgram);
     }
 }
 
@@ -68,7 +68,7 @@ void StateManagerGL::bindVertexArray(GLuint vao)
     if (mVAO != vao)
     {
         mVAO = vao;
-        mFunctions->bindVertexArray(vao);
+        GLCall(mFunctions, bindVertexArray, vao);
     }
 }
 
@@ -77,7 +77,7 @@ void StateManagerGL::bindBuffer(GLenum type, GLuint buffer)
     if (mBuffers[type] != buffer)
     {
         mBuffers[type] = buffer;
-        mFunctions->bindBuffer(type, buffer);
+        GLCall(mFunctions, bindBuffer, type, buffer);
     }
 }
 
@@ -86,7 +86,7 @@ void StateManagerGL::activeTexture(size_t unit)
     if (mTextureUnitIndex != unit)
     {
         mTextureUnitIndex = unit;
-        mFunctions->activeTexture(GL_TEXTURE0 + mTextureUnitIndex);
+        GLCall(mFunctions, activeTexture, GL_TEXTURE0 + mTextureUnitIndex);
     }
 }
 
@@ -95,7 +95,7 @@ void StateManagerGL::bindTexture(GLenum type, GLuint texture)
     if (mTextures[type][mTextureUnitIndex] != texture)
     {
         mTextures[type][mTextureUnitIndex] = texture;
-        mFunctions->bindTexture(type, texture);
+        GLCall(mFunctions, bindTexture, type, texture);
     }
 }
 
@@ -104,13 +104,13 @@ void StateManagerGL::setPixelUnpackState(GLint alignment, GLint rowLength)
     if (mUnpackAlignment != alignment)
     {
         mUnpackAlignment = alignment;
-        mFunctions->pixelStorei(GL_UNPACK_ALIGNMENT, mUnpackAlignment);
+        GLCall(mFunctions, pixelStorei, GL_UNPACK_ALIGNMENT, mUnpackAlignment);
     }
 
     if (mUnpackRowLength != rowLength)
     {
         mUnpackRowLength = rowLength;
-        mFunctions->pixelStorei(GL_UNPACK_ROW_LENGTH, mUnpackRowLength);
+        GLCall(mFunctions, pixelStorei, GL_UNPACK_ROW_LENGTH, mUnpackRowLength);
     }
 }
 
@@ -119,7 +119,7 @@ void StateManagerGL::bindFramebuffer(GLenum type, GLuint framebuffer)
     if (mFramebuffers[type] != framebuffer)
     {
         mFramebuffers[type] = framebuffer;
-        mFunctions->bindFramebuffer(type, framebuffer);
+        GLCall(mFunctions, bindFramebuffer, type, framebuffer);
     }
 }
 
@@ -129,7 +129,7 @@ void StateManagerGL::bindRenderbuffer(GLenum type, GLuint renderbuffer)
     if (mRenderbuffer != renderbuffer)
     {
         mRenderbuffer = renderbuffer;
-        mFunctions->bindRenderbuffer(type, mRenderbuffer);
+        GLCall(mFunctions, bindRenderbuffer, type, mRenderbuffer);
     }
 }
 
@@ -267,7 +267,7 @@ void StateManagerGL::setScissor(const gl::Rectangle &scissor)
     if (scissor != mScissor)
     {
         mScissor = scissor;
-        mFunctions->scissor(mScissor.x, mScissor.y, mScissor.width, mScissor.height);
+        GLCall(mFunctions, scissor, mScissor.x, mScissor.y, mScissor.width, mScissor.height);
     }
 }
 
@@ -276,7 +276,7 @@ void StateManagerGL::setViewport(const gl::Rectangle &viewport)
     if (viewport != mViewport)
     {
         mViewport = viewport;
-        mFunctions->viewport(mViewport.x, mViewport.y, mViewport.width, mViewport.height);
+        GLCall(mFunctions, viewport, mViewport.x, mViewport.y, mViewport.width, mViewport.height);
     }
 }
 
@@ -285,7 +285,7 @@ void StateManagerGL::setClearColor(const gl::ColorF &clearColor)
     if (mClearColor != clearColor)
     {
         mClearColor = clearColor;
-        mFunctions->clearColor(mClearColor.red, mClearColor.green, mClearColor.blue, mClearColor.alpha);
+        GLCall(mFunctions, clearColor, mClearColor.red, mClearColor.green, mClearColor.blue, mClearColor.alpha);
     }
 }
 
@@ -297,7 +297,7 @@ void StateManagerGL::setColorMask(bool red, bool green, bool blue, bool alpha)
         mColorMaskGreen = green;
         mColorMaskBlue = blue;
         mColorMaskAlpha = alpha;
-        mFunctions->colorMask(mColorMaskRed, mColorMaskGreen, mColorMaskBlue, mColorMaskAlpha);
+        GLCall(mFunctions, colorMask, mColorMaskRed, mColorMaskGreen, mColorMaskBlue, mColorMaskAlpha);
     }
 }
 
@@ -306,7 +306,7 @@ void StateManagerGL::setClearDepth(float clearDepth)
     if (mClearDepth != clearDepth)
     {
         mClearDepth = clearDepth;
-        mFunctions->clearDepth(mClearDepth);
+        GLCall(mFunctions, clearDepth, mClearDepth);
     }
 }
 
@@ -315,7 +315,7 @@ void StateManagerGL::setDepthMask(bool mask)
     if (mDepthMask != mask)
     {
         mDepthMask = mask;
-        mFunctions->depthMask(mDepthMask);
+        GLCall(mFunctions, depthMask, mDepthMask);
     }
 }
 
@@ -324,7 +324,7 @@ void StateManagerGL::setClearStencil(GLint clearStencil)
     if (mClearStencil != clearStencil)
     {
         mClearStencil = clearStencil;
-        mFunctions->clearStencil(mClearStencil);
+        GLCall(mFunctions, clearStencil, mClearStencil);
     }
 }
 
@@ -333,7 +333,7 @@ void StateManagerGL::setStencilMask(GLuint mask)
     if (mStencilMask != mask)
     {
         mStencilMask = mask;
-        mFunctions->stencilMask(mStencilMask);
+        GLCall(mFunctions, stencilMask, mStencilMask);
     }
 }
 

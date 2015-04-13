@@ -410,6 +410,7 @@
             'libANGLE/renderer/gl/functionsgl_typedefs.h',
             'libANGLE/renderer/gl/renderergl_utils.cpp',
             'libANGLE/renderer/gl/renderergl_utils.h',
+            'libANGLE/renderer/gl/renderergl_utils.inl',
         ],
         'libangle_gl_wgl_sources':
         [
