@@ -30,7 +30,7 @@ ProgramGL::~ProgramGL()
 {
     if (mProgramID != 0)
     {
-        mFunctions->deleteProgram(mProgramID);
+        GLCall(mFunctions, deleteProgram, mProgramID);
         mProgramID = 0;
     }
 }
@@ -86,30 +86,30 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog,
 
     // Generate a new program, make sure one doesn't already exist
     ASSERT(mProgramID == 0);
-    mProgramID = mFunctions->createProgram();
+    mProgramID = GLCall(mFunctions, createProgram, );
 
     // Attach the shaders
-    mFunctions->attachShader(mProgramID, vertexShaderGL->getShaderID());
-    mFunctions->attachShader(mProgramID, fragmentShaderGL->getShaderID());
+    GLCall(mFunctions, attachShader, mProgramID, vertexShaderGL->getShaderID());
+    GLCall(mFunctions, attachShader, mProgramID, fragmentShaderGL->getShaderID());
 
     // TODO: bind attribute locations?
 
     // Link and verify
-    mFunctions->linkProgram(mProgramID);
+    GLCall(mFunctions, linkProgram, mProgramID);
 
     GLint linkStatus = GL_FALSE;
-    mFunctions->getProgramiv(mProgramID, GL_LINK_STATUS, &linkStatus);
+    GLCall(mFunctions, getProgramiv, mProgramID, GL_LINK_STATUS, &linkStatus);
     ASSERT(linkStatus == GL_TRUE);
     if (linkStatus == GL_FALSE)
     {
         // Linking failed, put the error into the info log
         GLint infoLogLength = 0;
-        mFunctions->getProgramiv(mProgramID, GL_INFO_LOG_LENGTH, &infoLogLength);
+        GLCall(mFunctions, getProgramiv, mProgramID, GL_INFO_LOG_LENGTH, &infoLogLength);
 
         std::vector<char> buf(infoLogLength);
-        mFunctions->getProgramInfoLog(mProgramID, infoLogLength, nullptr, &buf[0]);
+        GLCall(mFunctions, getProgramInfoLog, mProgramID, infoLogLength, nullptr, &buf[0]);
 
-        mFunctions->deleteProgram(mProgramID);
+        GLCall(mFunctions, deleteProgram, mProgramID);
         mProgramID = 0;
 
         infoLog.append(&buf[0]);
@@ -122,18 +122,18 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog,
     // Query the uniform information
     // TODO: A lot of this logic should be done at the gl::Program level
     GLint activeUniformMaxLength = 0;
-    mFunctions->getProgramiv(mProgramID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &activeUniformMaxLength);
+    GLCall(mFunctions, getProgramiv, mProgramID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &activeUniformMaxLength);
 
     std::vector<GLchar> uniformNameBuffer(activeUniformMaxLength);
 
     GLint uniformCount = 0;
-    mFunctions->getProgramiv(mProgramID, GL_ACTIVE_UNIFORMS, &uniformCount);
+    GLCall(mFunctions, getProgramiv, mProgramID, GL_ACTIVE_UNIFORMS, &uniformCount);
     for (GLint i = 0; i < uniformCount; i++)
     {
         GLsizei uniformNameLength = 0;
         GLint uniformSize = 0;
         GLenum uniformType = GL_NONE;
-        mFunctions->getActiveUniform(mProgramID, i, uniformNameBuffer.size(), &uniformNameLength, &uniformSize, &uniformType, &uniformNameBuffer[0]);
+        GLCall(mFunctions, getActiveUniform, mProgramID, i, uniformNameBuffer.size(), &uniformNameLength, &uniformSize, &uniformType, &uniformNameBuffer[0]);
 
         std::string uniformName(&uniformNameBuffer[0], uniformNameLength);
 
@@ -144,18 +144,18 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog,
 
     // Query the attribute information
     GLint activeAttributeMaxLength = 0;
-    mFunctions->getProgramiv(mProgramID, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &activeAttributeMaxLength);
+    GLCall(mFunctions, getProgramiv, mProgramID, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &activeAttributeMaxLength);
 
     std::vector<GLchar> attributeNameBuffer(activeAttributeMaxLength);
 
     GLint attributeCount = 0;
-    mFunctions->getProgramiv(mProgramID, GL_ACTIVE_ATTRIBUTES, &attributeCount);
+    GLCall(mFunctions, getProgramiv, mProgramID, GL_ACTIVE_ATTRIBUTES, &attributeCount);
     for (GLint i = 0; i < attributeCount; i++)
     {
         GLsizei attributeNameLength = 0;
         GLint attributeSize = 0;
         GLenum attributeType = GL_NONE;
-        mFunctions->getActiveAttrib(mProgramID, i, attributeNameBuffer.size(), &attributeNameLength, &attributeSize, &attributeType, &attributeNameBuffer[0]);
+        GLCall(mFunctions, getActiveAttrib, mProgramID, i, attributeNameBuffer.size(), &attributeNameLength, &attributeSize, &attributeType, &attributeNameBuffer[0]);
 
         std::string attributeName(&attributeNameBuffer[0], attributeNameLength);
 
@@ -173,142 +173,142 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog,
 void ProgramGL::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniform1fv(location, count, v);
+    GLCall(mFunctions, uniform1fv, location, count, v);
 }
 
 void ProgramGL::setUniform2fv(GLint location, GLsizei count, const GLfloat *v)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniform2fv(location, count, v);
+    GLCall(mFunctions, uniform2fv, location, count, v);
 }
 
 void ProgramGL::setUniform3fv(GLint location, GLsizei count, const GLfloat *v)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniform3fv(location, count, v);
+    GLCall(mFunctions, uniform3fv, location, count, v);
 }
 
 void ProgramGL::setUniform4fv(GLint location, GLsizei count, const GLfloat *v)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniform4fv(location, count, v);
+    GLCall(mFunctions, uniform4fv, location, count, v);
 }
 
 void ProgramGL::setUniform1iv(GLint location, GLsizei count, const GLint *v)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniform1iv(location, count, v);
+    GLCall(mFunctions, uniform1iv, location, count, v);
 }
 
 void ProgramGL::setUniform2iv(GLint location, GLsizei count, const GLint *v)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniform2iv(location, count, v);
+    GLCall(mFunctions, uniform2iv, location, count, v);
 }
 
 void ProgramGL::setUniform3iv(GLint location, GLsizei count, const GLint *v)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniform3iv(location, count, v);
+    GLCall(mFunctions, uniform3iv, location, count, v);
 }
 
 void ProgramGL::setUniform4iv(GLint location, GLsizei count, const GLint *v)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniform4iv(location, count, v);
+    GLCall(mFunctions, uniform4iv, location, count, v);
 }
 
 void ProgramGL::setUniform1uiv(GLint location, GLsizei count, const GLuint *v)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniform1uiv(location, count, v);
+    GLCall(mFunctions, uniform1uiv, location, count, v);
 }
 
 void ProgramGL::setUniform2uiv(GLint location, GLsizei count, const GLuint *v)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniform2uiv(location, count, v);
+    GLCall(mFunctions, uniform2uiv, location, count, v);
 }
 
 void ProgramGL::setUniform3uiv(GLint location, GLsizei count, const GLuint *v)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniform3uiv(location, count, v);
+    GLCall(mFunctions, uniform3uiv, location, count, v);
 }
 
 void ProgramGL::setUniform4uiv(GLint location, GLsizei count, const GLuint *v)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniform4uiv(location, count, v);
+    GLCall(mFunctions, uniform4uiv, location, count, v);
 }
 
 void ProgramGL::setUniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniformMatrix2fv(location, count, transpose, value);
+    GLCall(mFunctions, uniformMatrix2fv, location, count, transpose, value);
 }
 
 void ProgramGL::setUniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniformMatrix3fv(location, count, transpose, value);
+    GLCall(mFunctions, uniformMatrix3fv, location, count, transpose, value);
 }
 
 void ProgramGL::setUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniformMatrix4fv(location, count, transpose, value);
+    GLCall(mFunctions, uniformMatrix4fv, location, count, transpose, value);
 }
 
 void ProgramGL::setUniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniformMatrix2x3fv(location, count, transpose, value);
+    GLCall(mFunctions, uniformMatrix2x3fv, location, count, transpose, value);
 }
 
 void ProgramGL::setUniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniformMatrix3x2fv(location, count, transpose, value);
+    GLCall(mFunctions, uniformMatrix3x2fv, location, count, transpose, value);
 }
 
 void ProgramGL::setUniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniformMatrix2x4fv(location, count, transpose, value);
+    GLCall(mFunctions, uniformMatrix2x4fv, location, count, transpose, value);
 }
 
 void ProgramGL::setUniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniformMatrix4x2fv(location, count, transpose, value);
+    GLCall(mFunctions, uniformMatrix4x2fv, location, count, transpose, value);
 }
 
 void ProgramGL::setUniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniformMatrix3x4fv(location, count, transpose, value);
+    GLCall(mFunctions, uniformMatrix3x4fv, location, count, transpose, value);
 }
 
 void ProgramGL::setUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     mStateManager->useProgram(mProgramID);
-    mFunctions->uniformMatrix4x3fv(location, count, transpose, value);
+    GLCall(mFunctions, uniformMatrix4x3fv, location, count, transpose, value);
 }
 
 void ProgramGL::getUniformfv(GLint location, GLfloat *params)
 {
-    mFunctions->getUniformfv(mProgramID, location, params);
+    GLCall(mFunctions, getUniformfv, mProgramID, location, params);
 }
 
 void ProgramGL::getUniformiv(GLint location, GLint *params)
 {
-    mFunctions->getUniformiv(mProgramID, location, params);
+    GLCall(mFunctions, getUniformiv, mProgramID, location, params);
 }
 
 void ProgramGL::getUniformuiv(GLint location, GLuint *params)
 {
-    mFunctions->getUniformuiv(mProgramID, location, params);
+    GLCall(mFunctions, getUniformuiv, mProgramID, location, params);
 }
 
 GLint ProgramGL::getSamplerMapping(gl::SamplerType type, unsigned int samplerIndex, const gl::Caps &caps) const
@@ -386,7 +386,7 @@ void ProgramGL::reset()
 
     if (mProgramID)
     {
-        mFunctions->deleteProgram(mProgramID);
+        GLCall(mFunctions, deleteProgram, mProgramID);
         mProgramID = 0;
     }
 }

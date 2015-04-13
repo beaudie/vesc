@@ -84,7 +84,7 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions, G
 static GLint QuerySingleGLInt(const FunctionsGL *functions, GLenum name)
 {
     GLint result;
-    functions->getIntegerv(name, &result);
+    GLCall(functions, getIntegerv, name, &result);
     return result;
 }
 

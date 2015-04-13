@@ -19,6 +19,7 @@ namespace gl
 struct Caps;
 class TextureCapsMap;
 struct Extensions;
+class Error;
 }
 
 namespace rx
@@ -31,6 +32,9 @@ namespace nativegl
 void GetGLVersion(PFNGLGETSTRINGPROC getStringFunction, GLuint *outMajorVersion, GLuint *outMinorVersion, bool *outIsES);
 std::vector<std::string> GetGLExtensions(PFNGLGETSTRINGPROC getStringFunction);
 
+// Check for GL_OUT_OF_MEMORY errors only, should be called after GL functions that may allocate memory
+inline gl::Error CheckForGLOutOfMemoryError(const FunctionsGL *functions);
+
 }
 
 namespace nativegl_gl
@@ -42,5 +46,7 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
 }
 
 }
+
+#include "renderergl_utils.inl"
 
 #endif // LIBANGLE_RENDERER_GL_RENDERERGLUTILS_H_

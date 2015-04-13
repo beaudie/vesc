@@ -52,7 +52,7 @@ ShaderGL::~ShaderGL()
 {
     if (mShaderID != 0)
     {
-        mFunctions->deleteShader(mShaderID);
+        GLCall(mFunctions, deleteShader, mShaderID);
         mShaderID = 0;
     }
 }
@@ -67,7 +67,7 @@ bool ShaderGL::compile(gl::Compiler *compiler, const std::string &source)
     mActiveOutputVariables.clear();
     if (mShaderID != 0)
     {
-        mFunctions->deleteShader(mShaderID);
+        GLCall(mFunctions, deleteShader, mShaderID);
         mShaderID = 0;
     }
 
@@ -88,24 +88,24 @@ bool ShaderGL::compile(gl::Compiler *compiler, const std::string &source)
     const char* translatedSourceCString = mTranslatedSource.c_str();
 
     // Generate a shader object and set the source
-    mShaderID = mFunctions->createShader(mType);
-    mFunctions->shaderSource(mShaderID, 1, &translatedSourceCString, nullptr);
-    mFunctions->compileShader(mShaderID);
+    mShaderID = GLCall(mFunctions, createShader, mType);
+    GLCall(mFunctions, shaderSource, mShaderID, 1, &translatedSourceCString, nullptr);
+    GLCall(mFunctions, compileShader, mShaderID);
 
     // Check for compile errors from the native driver
     GLint compileStatus = GL_FALSE;
-    mFunctions->getShaderiv(mShaderID, GL_COMPILE_STATUS, &compileStatus);
+    GLCall(mFunctions, getShaderiv, mShaderID, GL_COMPILE_STATUS, &compileStatus);
     ASSERT(compileStatus == GL_TRUE);
     if (compileStatus == GL_FALSE)
     {
         // Compilation failed, put the error into the info log
         GLint infoLogLength = 0;
-        mFunctions->getShaderiv(mShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
+        GLCall(mFunctions, getShaderiv, mShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
 
         std::vector<char> buf(infoLogLength);
-        mFunctions->getShaderInfoLog(mShaderID, infoLogLength, nullptr, &buf[0]);
+        GLCall(mFunctions, getShaderInfoLog, mShaderID, infoLogLength, nullptr, &buf[0]);
 
-        mFunctions->deleteShader(mShaderID);
+        GLCall(mFunctions, deleteShader, mShaderID);
         mShaderID = 0;
 
         mInfoLog = &buf[0];

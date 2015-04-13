@@ -16,6 +16,15 @@
 namespace rx
 {
 
+#define GLCallNoCheck(functionsObject, functionName, ...)  (functionsObject)->functionName(__VA_ARGS__)
+#define GLCallAlwaysCheck(functionsObject, functionName, ...) GLCallNoCheck(functionsObject, functionName, __VA_ARGS__); ASSERT(functionsObject->getError() == GL_NO_ERROR)
+
+#ifdef NDEBUG
+#   define GLCall GLCallNoCheck
+#else
+#   define GLCall GLCallAlwaysCheck
+#endif
+
 class FunctionsGL
 {
   public:
