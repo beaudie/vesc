@@ -496,8 +496,8 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
         return false;
     }
 
-    gl::Framebuffer *readFramebuffer = context->getState().getReadFramebuffer();
-    gl::Framebuffer *drawFramebuffer = context->getState().getDrawFramebuffer();
+    const gl::Framebuffer *readFramebuffer = context->getState().getReadFramebuffer();
+    const gl::Framebuffer *drawFramebuffer = context->getState().getDrawFramebuffer();
 
     if (!readFramebuffer || !drawFramebuffer)
     {
