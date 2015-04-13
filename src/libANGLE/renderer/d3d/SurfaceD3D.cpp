@@ -390,4 +390,18 @@ egl::Error SurfaceD3D::querySurfacePointerANGLE(EGLint attribute, void **value)
     return egl::Error(EGL_SUCCESS);
 }
 
+gl::Error SurfaceD3D::getAttachmentRenderTarget(const gl::FramebufferAttachment::Target &target,
+                                                FramebufferAttachmentRenderTarget *rtOut)
+{
+    if (target.binding() == GL_BACK)
+    {
+        *rtOut = mSwapChain->getColorRenderTarget();
+    }
+    else
+    {
+        *rtOut = mSwapChain->getDepthStencilRenderTarget();
+    }
+    return gl::Error(GL_NO_ERROR);
+}
+
 }

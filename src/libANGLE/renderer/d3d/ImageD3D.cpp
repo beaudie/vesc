@@ -34,7 +34,7 @@ gl::Error ImageD3D::copy(const gl::Offset &destOffset, const gl::Rectangle &sour
     ASSERT(attachment.valid());
 
     RenderTargetD3D *renderTarget = NULL;
-    gl::Error error = GetAttachmentRenderTarget(&attachment, &renderTarget);
+    gl::Error error = attachment.getRenderTarget(&renderTarget);
     if (error.isError())
     {
         return error;

@@ -1323,8 +1323,8 @@ gl::Error Renderer9::applyRenderTarget(const gl::FramebufferAttachment &colorBuf
     if (renderTargetSerial != mAppliedRenderTargetSerial)
     {
         // Apply the render target on the device
-        RenderTarget9 *renderTarget = NULL;
-        gl::Error error = d3d9::GetAttachmentRenderTarget(renderAttachment, &renderTarget);
+        RenderTarget9 *renderTarget = nullptr;
+        gl::Error error = renderAttachment->getRenderTarget(&renderTarget);
         if (error.isError())
         {
             return error;
@@ -1354,8 +1354,8 @@ gl::Error Renderer9::applyRenderTarget(const gl::FramebufferAttachment &colorBuf
         // Apply the depth stencil on the device
         if (depthStencilBuffer.valid())
         {
-            RenderTarget9 *depthStencilRenderTarget = NULL;
-            gl::Error error = d3d9::GetAttachmentRenderTarget(&depthStencilBuffer, &depthStencilRenderTarget);
+            RenderTarget9 *depthStencilRenderTarget = nullptr;
+            gl::Error error = depthStencilBuffer.getRenderTarget(&depthStencilRenderTarget);
             if (error.isError())
             {
                 return error;
@@ -2000,8 +2000,8 @@ gl::Error Renderer9::clear(const ClearParameters &clearParams,
     unsigned int stencilUnmasked = 0x0;
     if (clearParams.clearStencil && depthStencilBuffer.getStencilSize() > 0)
     {
-        RenderTargetD3D *stencilRenderTarget = NULL;
-        gl::Error error = GetAttachmentRenderTarget(&depthStencilBuffer, &stencilRenderTarget);
+        RenderTargetD3D *stencilRenderTarget = nullptr;
+        gl::Error error = depthStencilBuffer.getRenderTarget(&stencilRenderTarget);
         if (error.isError())
         {
             return error;
@@ -2022,7 +2022,7 @@ gl::Error Renderer9::clear(const ClearParameters &clearParams,
     if (clearColor)
     {
         RenderTargetD3D *colorRenderTarget = NULL;
-        gl::Error error = GetAttachmentRenderTarget(&colorBuffer, &colorRenderTarget);
+        gl::Error error = colorBuffer.getRenderTarget(&colorRenderTarget);
         if (error.isError())
         {
             return error;
