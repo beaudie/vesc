@@ -410,7 +410,7 @@ bool ValidateES2CopyTexImageParameters(Context* context, GLenum target, GLint le
     }
 
     gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
-    GLenum colorbufferFormat = framebuffer->getReadColorbuffer()->getInternalFormat();
+    GLenum colorbufferFormat = framebuffer->getReadColorbuffer().getInternalFormat();
     const auto &internalFormatInfo = gl::GetInternalFormatInfo(textureInternalFormat);
     GLenum textureFormat = internalFormatInfo.format;
 

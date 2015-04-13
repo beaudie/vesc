@@ -411,13 +411,15 @@ bool ValidateFramebufferRenderbufferParameters(gl::Context *context, GLenum targ
     return true;
 }
 
-static bool IsPartialBlit(gl::Context *context, gl::FramebufferAttachment *readBuffer, gl::FramebufferAttachment *writeBuffer,
+static bool IsPartialBlit(gl::Context *context,
+                          const gl::FramebufferAttachment &readAttachment,
+                          const gl::FramebufferAttachment &writeAttachment,
                           GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1,
                           GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1)
 {
     if (srcX0 != 0 || srcY0 != 0 || dstX0 != 0 || dstY0 != 0 ||
-        dstX1 != writeBuffer->getWidth() || dstY1 != writeBuffer->getHeight() ||
-        srcX1 != readBuffer->getWidth() || srcY1 != readBuffer->getHeight())
+        dstX1 != writeAttachment.getWidth() || dstY1 != writeAttachment.getHeight() ||
+        srcX1 != readAttachment.getWidth() || srcY1 != readAttachment.getHeight())
     {
         return true;
     }
@@ -426,8 +428,8 @@ static bool IsPartialBlit(gl::Context *context, gl::FramebufferAttachment *readB
         const Rectangle &scissor = context->getState().getScissor();
 
         return scissor.x > 0 || scissor.y > 0 ||
-               scissor.width < writeBuffer->getWidth() ||
-               scissor.height < writeBuffer->getHeight();
+               scissor.width < writeAttachment.getWidth() ||
+               scissor.height < writeAttachment.getHeight();
     }
     else
     {
@@ -525,19 +527,19 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
 
     if (mask & GL_COLOR_BUFFER_BIT)
     {
-        gl::FramebufferAttachment *readColorBuffer = readFramebuffer->getReadColorbuffer();
-        gl::FramebufferAttachment *drawColorBuffer = drawFramebuffer->getFirstColorbuffer();
+        const gl::FramebufferAttachment &readColorBuffer = readFramebuffer->getReadColorbuffer();
+        const gl::FramebufferAttachment *drawColorBuffer = drawFramebuffer->getFirstColorbuffer();
 
-        if (readColorBuffer && drawColorBuffer)
+        if (readColorBuffer.valid() && drawColorBuffer && drawColorBuffer->valid())
         {
-            GLenum readInternalFormat = readColorBuffer->getInternalFormat();
+            GLenum readInternalFormat = readColorBuffer.getInternalFormat();
             const InternalFormat &readFormatInfo = GetInternalFormatInfo(readInternalFormat);
 
             for (GLuint i = 0; i < context->getCaps().maxColorAttachments; i++)
             {
                 if (drawFramebuffer->isEnabledColorAttachment(i))
                 {
-                    GLenum drawInternalFormat = drawFramebuffer->getColorbuffer(i)->getInternalFormat();
+                    GLenum drawInternalFormat = drawFramebuffer->getColorbuffer(i).getInternalFormat();
                     const InternalFormat &drawFormatInfo = GetInternalFormatInfo(drawInternalFormat);
 
                     // The GL ES 3.0.2 spec (pg 193) states that:
@@ -563,7 +565,7 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
                         return false;
                     }
 
-                    if (readColorBuffer->getSamples() > 0 && (readInternalFormat != drawInternalFormat || !sameBounds))
+                    if (readColorBuffer.getSamples() > 0 && (readInternalFormat != drawInternalFormat || !sameBounds))
                     {
                         context->recordError(Error(GL_INVALID_OPERATION));
                         return false;
@@ -579,11 +581,11 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
 
             if (fromAngleExtension)
             {
-                FramebufferAttachment *readColorAttachment = readFramebuffer->getReadColorbuffer();
-                if (!readColorAttachment ||
-                    (!(readColorAttachment->type() == GL_TEXTURE && readColorAttachment->getTextureImageIndex().type == GL_TEXTURE_2D) &&
-                    readColorAttachment->type() != GL_RENDERBUFFER &&
-                    readColorAttachment->type() != GL_FRAMEBUFFER_DEFAULT))
+                const FramebufferAttachment &readColorAttachment = readFramebuffer->getReadColorbuffer();
+                if (!readColorAttachment.valid() ||
+                    (!(readColorAttachment.type() == GL_TEXTURE && readColorAttachment.getTextureImageIndex().type == GL_TEXTURE_2D) &&
+                    readColorAttachment.type() != GL_RENDERBUFFER &&
+                    readColorAttachment.type() != GL_FRAMEBUFFER_DEFAULT))
                 {
                     context->recordError(Error(GL_INVALID_OPERATION));
                     return false;
@@ -593,19 +595,19 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
                 {
                     if (drawFramebuffer->isEnabledColorAttachment(colorAttachment))
                     {
-                        FramebufferAttachment *attachment = drawFramebuffer->getColorbuffer(colorAttachment);
-                        ASSERT(attachment);
+                        const FramebufferAttachment &attachment = drawFramebuffer->getColorbuffer(colorAttachment);
+                        ASSERT(attachment.valid());
 
-                        if (!(attachment->type() == GL_TEXTURE && attachment->getTextureImageIndex().type == GL_TEXTURE_2D) &&
-                            attachment->type() != GL_RENDERBUFFER &&
-                            attachment->type() != GL_FRAMEBUFFER_DEFAULT)
+                        if (!(attachment.type() == GL_TEXTURE && attachment.getTextureImageIndex().type == GL_TEXTURE_2D) &&
+                            attachment.type() != GL_RENDERBUFFER &&
+                            attachment.type() != GL_FRAMEBUFFER_DEFAULT)
                         {
                             context->recordError(Error(GL_INVALID_OPERATION));
                             return false;
                         }
 
                         // Return an error if the destination formats do not match
-                        if (attachment->getInternalFormat() != readColorBuffer->getInternalFormat())
+                        if (attachment.getInternalFormat() != readColorBuffer.getInternalFormat())
                         {
                             context->recordError(Error(GL_INVALID_OPERATION));
                             return false;
@@ -615,7 +617,7 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
 
                 int readSamples = readFramebuffer->getSamples(context->getData());
 
-                if (readSamples != 0 && IsPartialBlit(context, readColorBuffer, drawColorBuffer,
+                if (readSamples != 0 && IsPartialBlit(context, readColorBuffer, *drawColorBuffer,
                                                       srcX0, srcY0, srcX1, srcY1,
                                                       dstX0, dstY0, dstX1, dstY1))
                 {
@@ -632,18 +634,18 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
     {
         if (mask & masks[i])
         {
-            gl::FramebufferAttachment *readBuffer = readFramebuffer->getAttachment(attachments[i]);
-            gl::FramebufferAttachment *drawBuffer = drawFramebuffer->getAttachment(attachments[i]);
+            const gl::FramebufferAttachment &readAttachment = readFramebuffer->getAttachment(attachments[i]);
+            const gl::FramebufferAttachment &drawAttachment = drawFramebuffer->getAttachment(attachments[i]);
 
-            if (readBuffer && drawBuffer)
+            if (readAttachment.valid() && drawAttachment.valid())
             {
-                if (readBuffer->getInternalFormat() != drawBuffer->getInternalFormat())
+                if (readAttachment.getInternalFormat() != drawAttachment.getInternalFormat())
                 {
                     context->recordError(Error(GL_INVALID_OPERATION));
                     return false;
                 }
 
-                if (readBuffer->getSamples() > 0 && !sameBounds)
+                if (readAttachment.getSamples() > 0 && !sameBounds)
                 {
                     context->recordError(Error(GL_INVALID_OPERATION));
                     return false;
@@ -651,7 +653,7 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
 
                 if (fromAngleExtension)
                 {
-                    if (IsPartialBlit(context, readBuffer, drawBuffer,
+                    if (IsPartialBlit(context, readAttachment, drawAttachment,
                                       srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1))
                     {
                         ERR("Only whole-buffer depth and stencil blits are supported by this implementation.");
@@ -659,7 +661,7 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
                         return false;
                     }
 
-                    if (readBuffer->getSamples() != 0 || drawBuffer->getSamples() != 0)
+                    if (readAttachment.getSamples() != 0 || drawAttachment.getSamples() != 0)
                     {
                         context->recordError(Error(GL_INVALID_OPERATION));
                         return false;
@@ -913,8 +915,8 @@ bool ValidateReadPixelsParameters(gl::Context *context, GLint x, GLint y, GLsize
         return false;
     }
 
-    const FramebufferAttachment *readBuffer = framebuffer->getReadColorbuffer();
-    if (!readBuffer)
+    const FramebufferAttachment &readAttachment = framebuffer->getReadColorbuffer();
+    if (!readAttachment.valid())
     {
         context->recordError(Error(GL_INVALID_OPERATION));
         return false;
@@ -922,7 +924,7 @@ bool ValidateReadPixelsParameters(gl::Context *context, GLint x, GLint y, GLsize
 
     GLenum currentFormat = framebuffer->getImplementationColorReadFormat();
     GLenum currentType = framebuffer->getImplementationColorReadType();
-    GLenum currentInternalFormat = readBuffer->getInternalFormat();
+    GLenum currentInternalFormat = readAttachment.getInternalFormat();
     GLuint clientVersion = context->getClientVersion();
 
     bool validReadFormat = (clientVersion < 3) ? ValidES2ReadFormatType(context, format, type) :
@@ -1170,8 +1172,8 @@ bool ValidateStateQuery(gl::Context *context, GLenum pname, GLenum *nativeType, 
                 return false;
             }
 
-            FramebufferAttachment *attachment = framebuffer->getReadColorbuffer();
-            if (!attachment)
+            const FramebufferAttachment &attachment = framebuffer->getReadColorbuffer();
+            if (!attachment.valid())
             {
                 context->recordError(Error(GL_INVALID_OPERATION));
                 return false;
