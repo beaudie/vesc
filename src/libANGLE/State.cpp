@@ -1298,16 +1298,16 @@ void State::getIntegerv(const gl::Data &data, GLenum pname, GLint *params)
       case GL_ALPHA_BITS:
         {
             gl::Framebuffer *framebuffer = getDrawFramebuffer();
-            gl::FramebufferAttachment *colorbuffer = framebuffer->getFirstColorbuffer();
+            const gl::FramebufferAttachment *colorbuffer = framebuffer->getFirstColorbuffer();
 
-            if (colorbuffer)
+            if (colorbuffer && colorbuffer->valid())
             {
                 switch (pname)
                 {
-                case GL_RED_BITS:   *params = colorbuffer->getRedSize();      break;
-                case GL_GREEN_BITS: *params = colorbuffer->getGreenSize();    break;
-                case GL_BLUE_BITS:  *params = colorbuffer->getBlueSize();     break;
-                case GL_ALPHA_BITS: *params = colorbuffer->getAlphaSize();    break;
+                  case GL_RED_BITS:   *params = colorbuffer->getRedSize();      break;
+                  case GL_GREEN_BITS: *params = colorbuffer->getGreenSize();    break;
+                  case GL_BLUE_BITS:  *params = colorbuffer->getBlueSize();     break;
+                  case GL_ALPHA_BITS: *params = colorbuffer->getAlphaSize();    break;
                 }
             }
             else
@@ -1319,11 +1319,11 @@ void State::getIntegerv(const gl::Data &data, GLenum pname, GLint *params)
       case GL_DEPTH_BITS:
         {
             gl::Framebuffer *framebuffer = getDrawFramebuffer();
-            gl::FramebufferAttachment *depthbuffer = framebuffer->getDepthbuffer();
+            const gl::FramebufferAttachment &depthbuffer = framebuffer->getDepthbuffer();
 
-            if (depthbuffer)
+            if (depthbuffer.valid())
             {
-                *params = depthbuffer->getDepthSize();
+                *params = depthbuffer.getDepthSize();
             }
             else
             {
@@ -1334,11 +1334,11 @@ void State::getIntegerv(const gl::Data &data, GLenum pname, GLint *params)
       case GL_STENCIL_BITS:
         {
             gl::Framebuffer *framebuffer = getDrawFramebuffer();
-            gl::FramebufferAttachment *stencilbuffer = framebuffer->getStencilbuffer();
+            const gl::FramebufferAttachment &stencilbuffer = framebuffer->getStencilbuffer();
 
-            if (stencilbuffer)
+            if (stencilbuffer.valid())
             {
-                *params = stencilbuffer->getStencilSize();
+                *params = stencilbuffer.getStencilSize();
             }
             else
             {

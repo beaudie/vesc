@@ -105,7 +105,7 @@ gl::Error RenderStateCache::getBlendState(const gl::Framebuffer *framebuffer, co
 
         auto rtChannels = key.rtChannels[colorAttachment];
 
-        if (attachment)
+        if (attachment && attachment->valid())
         {
             if (colorAttachment > 0)
             {
