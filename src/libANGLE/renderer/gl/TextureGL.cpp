@@ -17,6 +17,7 @@
 #include "libANGLE/renderer/gl/FramebufferGL.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
+#include "libANGLE/renderer/gl/renderergl_utils.h"
 
 namespace rx
 {
@@ -68,14 +69,14 @@ TextureGL::TextureGL(GLenum type, const FunctionsGL *functions, StateManagerGL *
     ASSERT(mFunctions);
     ASSERT(mStateManager);
 
-    mFunctions->genTextures(1, &mTextureID);
+    GLCall(mFunctions, genTextures, 1, &mTextureID);
 }
 
 TextureGL::~TextureGL()
 {
     if (mTextureID)
     {
-        mFunctions->deleteTextures(1, &mTextureID);
+        GLCall(mFunctions, deleteTextures, 1, &mTextureID);
         mTextureID = 0;
     }
 }
@@ -98,15 +99,22 @@ gl::Error TextureGL::setImage(GLenum target, size_t level, GLenum internalFormat
     if (UseTexImage2D(mTextureType))
     {
         ASSERT(size.depth == 1);
-        mFunctions->texImage2D(target, level, internalFormat, size.width, size.height, 0, format, type, pixels);
+        GLCallNoCheck(mFunctions, texImage2D, target, level, internalFormat, size.width, size.height, 0, format, type, pixels);
     }
     else if (UseTexImage3D(mTextureType))
     {
-        mFunctions->texImage3D(target, level, internalFormat, size.width, size.height, size.depth, 0, format, type, pixels);
+        GLCallNoCheck(mFunctions, texImage3D, target, level, internalFormat, size.width, size.height, size.depth, 0, format, type, pixels);
     }
     else
     {
         UNREACHABLE();
+    }
+
+    // Call probably allocates, check for OOM explicitly
+    gl::Error error = nativegl::CheckForGLOutOfMemoryError(mFunctions);
+    if (error.isError())
+    {
+        return error;
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -123,12 +131,12 @@ gl::Error TextureGL::setSubImage(GLenum target, size_t level, const gl::Box &are
     if (UseTexImage2D(mTextureType))
     {
         ASSERT(area.z == 0 && area.depth == 1);
-        mFunctions->texSubImage2D(target, level, area.x, area.y, area.width, area.height, format, type, pixels);
+        GLCall(mFunctions, texSubImage2D, target, level, area.x, area.y, area.width, area.height, format, type, pixels);
     }
     else if (UseTexImage3D(mTextureType))
     {
-        mFunctions->texSubImage3D(target, level, area.x, area.y, area.z, area.width, area.height, area.depth,
-                                  format, type, pixels);
+        GLCall(mFunctions, texSubImage3D, target, level, area.x, area.y, area.z, area.width, area.height, area.depth,
+                                          format, type, pixels);
     }
     else
     {
@@ -154,16 +162,24 @@ gl::Error TextureGL::setCompressedImage(GLenum target, size_t level, GLenum inte
     if (UseTexImage2D(mTextureType))
     {
         ASSERT(size.depth == 1);
-        mFunctions->compressedTexImage2D(target, level, internalFormat, size.width, size.height, 0, dataSize, pixels);
+        GLCallNoCheck(mFunctions, compressedTexImage2D, target, level, internalFormat, size.width, size.height,
+                                                        0, dataSize, pixels);
     }
     else if (UseTexImage3D(mTextureType))
     {
-        mFunctions->compressedTexImage3D(target, level, internalFormat, size.width, size.height, size.depth, 0,
-                                         dataSize, pixels);
+        GLCallNoCheck(mFunctions, compressedTexImage3D, target, level, internalFormat, size.width, size.height, size.depth, 0,
+                                                        dataSize, pixels);
     }
     else
     {
         UNREACHABLE();
+    }
+
+    // Call probably allocates, check for OOM explicitly
+    gl::Error error = nativegl::CheckForGLOutOfMemoryError(mFunctions);
+    if (error.isError())
+    {
+        return error;
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -185,13 +201,13 @@ gl::Error TextureGL::setCompressedSubImage(GLenum target, size_t level, const gl
     if (UseTexImage2D(mTextureType))
     {
         ASSERT(area.z == 0 && area.depth == 1);
-        mFunctions->compressedTexSubImage2D(target, level, area.x, area.y, area.width, area.height, format, dataSize,
-                                            pixels);
+        GLCall(mFunctions, compressedTexSubImage2D, target, level, area.x, area.y, area.width, area.height,
+                                                    format, dataSize, pixels);
     }
     else if (UseTexImage3D(mTextureType))
     {
-        mFunctions->compressedTexSubImage3D(target, level, area.x, area.y, area.z, area.width, area.height, area.depth,
-                                            format, dataSize, pixels);
+        GLCall(mFunctions, compressedTexSubImage3D, target, level, area.x, area.y, area.z, area.width, area.height, area.depth,
+                                                    format, dataSize, pixels);
     }
     else
     {
@@ -211,12 +227,19 @@ gl::Error TextureGL::copyImage(GLenum target, size_t level, const gl::Rectangle 
 
     if (UseTexImage2D(mTextureType))
     {
-        mFunctions->copyTexImage2D(target, level, internalFormat, sourceArea.x, sourceArea.y,
-                                   sourceArea.width, sourceArea.height, 0);
+        GLCallNoCheck(mFunctions, copyTexImage2D, target, level, internalFormat, sourceArea.x, sourceArea.y,
+                                                  sourceArea.width, sourceArea.height, 0);
     }
     else
     {
         UNREACHABLE();
+    }
+
+    // Call probably allocates, check for OOM explicitly
+    gl::Error error = nativegl::CheckForGLOutOfMemoryError(mFunctions);
+    if (error.isError())
+    {
+        return error;
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -233,13 +256,13 @@ gl::Error TextureGL::copySubImage(GLenum target, size_t level, const gl::Offset 
     if (UseTexImage2D(mTextureType))
     {
         ASSERT(destOffset.z == 0);
-        mFunctions->copyTexSubImage2D(target, level, destOffset.x, destOffset.y,
-                                      sourceArea.x, sourceArea.y, sourceArea.width, sourceArea.height);
+        GLCallNoCheck(mFunctions, copyTexSubImage2D, target, level, destOffset.x, destOffset.y,
+                                                     sourceArea.x, sourceArea.y, sourceArea.width, sourceArea.height);
     }
     else if (UseTexImage3D(mTextureType))
     {
-        mFunctions->copyTexSubImage3D(target, level, destOffset.x, destOffset.y, destOffset.z,
-                                      sourceArea.x, sourceArea.y, sourceArea.width, sourceArea.height);
+        GLCallNoCheck(mFunctions, copyTexSubImage3D, target, level, destOffset.x, destOffset.y, destOffset.z,
+                                                     sourceArea.x, sourceArea.y, sourceArea.width, sourceArea.height);
     }
     else
     {
@@ -260,7 +283,7 @@ gl::Error TextureGL::setStorage(GLenum target, size_t levels, GLenum internalFor
         ASSERT(size.depth == 1);
         if (mFunctions->texStorage2D)
         {
-            mFunctions->texStorage2D(target, levels, internalFormat, size.width, size.height);
+            GLCallNoCheck(mFunctions, texStorage2D, target, levels, internalFormat, size.width, size.height);
         }
         else
         {
@@ -280,15 +303,15 @@ gl::Error TextureGL::setStorage(GLenum target, size_t levels, GLenum internalFor
 
                 if (mTextureType == GL_TEXTURE_2D)
                 {
-                    mFunctions->texImage2D(target, level, internalFormat, levelSize.width, levelSize.height,
-                                           0, internalFormatInfo.format, internalFormatInfo.type, nullptr);
+                    GLCallNoCheck(mFunctions, texImage2D, target, level, internalFormat, levelSize.width, levelSize.height,
+                                                          0, internalFormatInfo.format, internalFormatInfo.type, nullptr);
                 }
                 else if (mTextureType == GL_TEXTURE_CUBE_MAP)
                 {
                     for (GLenum face = gl::FirstCubeMapTextureTarget; face <= gl::LastCubeMapTextureTarget; face++)
                     {
-                        mFunctions->texImage2D(face, level, internalFormat, levelSize.width, levelSize.height,
-                                               0, internalFormatInfo.format, internalFormatInfo.type, nullptr);
+                        GLCallNoCheck(mFunctions, texImage2D, face, level, internalFormat, levelSize.width, levelSize.height,
+                                                              0, internalFormatInfo.format, internalFormatInfo.type, nullptr);
                     }
                 }
                 else
@@ -302,7 +325,7 @@ gl::Error TextureGL::setStorage(GLenum target, size_t levels, GLenum internalFor
     {
         if (mFunctions->texStorage3D)
         {
-            mFunctions->texStorage3D(target, levels, internalFormat, size.width, size.height, size.depth);
+            GLCallNoCheck(mFunctions, texStorage3D, target, levels, internalFormat, size.width, size.height, size.depth);
         }
         else
         {
@@ -320,8 +343,8 @@ gl::Error TextureGL::setStorage(GLenum target, size_t levels, GLenum internalFor
                                       std::max(size.height >> i, 1),
                                       mTextureType == GL_TEXTURE_3D ? std::max(size.depth >> i, 1) : size.depth);
 
-                mFunctions->texImage3D(target, i, internalFormat, levelSize.width, levelSize.height, levelSize.depth,
-                                       0, internalFormatInfo.format, internalFormatInfo.type, nullptr);
+                GLCallNoCheck(mFunctions, texImage3D, target, i, internalFormat, levelSize.width, levelSize.height, levelSize.depth,
+                                                      0, internalFormatInfo.format, internalFormatInfo.type, nullptr);
             }
         }
     }
@@ -330,13 +353,20 @@ gl::Error TextureGL::setStorage(GLenum target, size_t levels, GLenum internalFor
         UNREACHABLE();
     }
 
+    // Call probably allocates, check for OOM explicitly
+    gl::Error error = nativegl::CheckForGLOutOfMemoryError(mFunctions);
+    if (error.isError())
+    {
+        return error;
+    }
+
     return gl::Error(GL_NO_ERROR);
 }
 
 gl::Error TextureGL::generateMipmaps()
 {
     mStateManager->bindTexture(mTextureType, mTextureID);
-    mFunctions->generateMipmap(mTextureType);
+    GLCall(mFunctions, generateMipmap, mTextureType);
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -356,7 +386,7 @@ void TextureGL::releaseTexImage()
     mStateManager->bindTexture(mTextureType, mTextureID);
     if (UseTexImage2D(mTextureType))
     {
-        mFunctions->texImage2D(mTextureType, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        GLCall(mFunctions, texImage2D, mTextureType, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     }
     else
     {

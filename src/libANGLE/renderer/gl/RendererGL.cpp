@@ -47,13 +47,13 @@ RendererGL::~RendererGL()
 
 gl::Error RendererGL::flush()
 {
-    mFunctions->flush();
+    GLCall(mFunctions, flush);
     return gl::Error(GL_NO_ERROR);
 }
 
 gl::Error RendererGL::finish()
 {
-    mFunctions->finish();
+    GLCall(mFunctions, finish);
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -66,7 +66,7 @@ gl::Error RendererGL::drawArrays(const gl::Data &data, GLenum mode,
         return error;
     }
 
-    mFunctions->drawArrays(mode, first, count);
+    GLCall(mFunctions, drawArrays, mode, first, count);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -87,7 +87,7 @@ gl::Error RendererGL::drawElements(const gl::Data &data, GLenum mode, GLsizei co
         return error;
     }
 
-    mFunctions->drawElements(mode, count, type, drawIndexPointer);
+    GLCall(mFunctions, drawElements, mode, count, type, drawIndexPointer);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -188,13 +188,14 @@ VendorID RendererGL::getVendorId() const
 
 std::string RendererGL::getVendorString() const
 {
-    return std::string(reinterpret_cast<const char*>(mFunctions->getString(GL_VENDOR)));
+    std::string nativeVendorString = (const char*)GLCall(mFunctions, getString, GL_VENDOR);
+    return nativeVendorString;
 }
 
 std::string RendererGL::getRendererDescription() const
 {
-    std::string nativeVendorString(reinterpret_cast<const char*>(mFunctions->getString(GL_VENDOR)));
-    std::string nativeRendererString(reinterpret_cast<const char*>(mFunctions->getString(GL_RENDERER)));
+    std::string nativeVendorString = (const char*)GLCall(mFunctions, getString, GL_VENDOR);
+    std::string nativeRendererString = (const char*)GLCall(mFunctions, getString, GL_RENDERER);
 
     GLuint major;
     GLuint minor;

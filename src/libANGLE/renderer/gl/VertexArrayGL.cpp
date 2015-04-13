@@ -16,6 +16,7 @@
 #include "libANGLE/renderer/gl/BufferGL.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
+#include "libANGLE/renderer/gl/renderergl_utils.h"
 
 namespace rx
 {
@@ -36,11 +37,11 @@ VertexArrayGL::VertexArrayGL(const FunctionsGL *functions, StateManagerGL *state
 {
     ASSERT(mFunctions);
     ASSERT(mStateManager);
-    mFunctions->genVertexArrays(1, &mVertexArrayID);
+    GLCall(mFunctions, genVertexArrays, 1, &mVertexArrayID);
 
     // Set the cached vertex attribute array size
     GLint maxVertexAttribs;
-    mFunctions->getIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttribs);
+    GLCall(mFunctions, getIntegerv, GL_MAX_VERTEX_ATTRIBS, &maxVertexAttribs);
     mAttributes.resize(maxVertexAttribs);
     mAppliedAttributes.resize(maxVertexAttribs);
 }
@@ -49,20 +50,20 @@ VertexArrayGL::~VertexArrayGL()
 {
     if (mVertexArrayID != 0)
     {
-        mFunctions->deleteVertexArrays(1, &mVertexArrayID);
+        GLCall(mFunctions, deleteVertexArrays, 1, &mVertexArrayID);
         mVertexArrayID = 0;
     }
 
     if (mStreamingElementArrayBuffer != 0)
     {
-        mFunctions->deleteBuffers(1, &mStreamingElementArrayBuffer);
+        GLCall(mFunctions, deleteBuffers, 1, &mStreamingElementArrayBuffer);
         mStreamingElementArrayBufferSize = 0;
         mStreamingElementArrayBuffer = 0;
     }
 
     if (mStreamingArrayBuffer != 0)
     {
-        mFunctions->deleteBuffers(1, &mStreamingArrayBuffer);
+        GLCall(mFunctions, deleteBuffers, 1, &mStreamingArrayBuffer);
         mStreamingArrayBufferSize = 0;
         mStreamingArrayBuffer = 0;
     }
@@ -184,17 +185,17 @@ gl::Error VertexArrayGL::syncAttributeState(bool attributesNeedStreaming, const 
         {
             if (mAttributes[idx].enabled)
             {
-                mFunctions->enableVertexAttribArray(idx);
+                GLCall(mFunctions, enableVertexAttribArray, idx);
             }
             else
             {
-                mFunctions->disableVertexAttribArray(idx);
+                GLCall(mFunctions, disableVertexAttribArray, idx);
             }
             mAppliedAttributes[idx].enabled = mAttributes[idx].enabled;
         }
         if (mAppliedAttributes[idx].divisor != mAttributes[idx].divisor)
         {
-            mFunctions->vertexAttribDivisor(idx, mAttributes[idx].divisor);
+            GLCall(mFunctions, vertexAttribDivisor, idx, mAttributes[idx].divisor);
             mAppliedAttributes[idx].divisor = mAttributes[idx].divisor;
         }
 
@@ -222,14 +223,14 @@ gl::Error VertexArrayGL::syncAttributeState(bool attributesNeedStreaming, const 
 
                 if (mAttributes[idx].pureInteger)
                 {
-                    mFunctions->vertexAttribIPointer(idx, mAttributes[idx].size, mAttributes[idx].type,
-                                                     mAttributes[idx].stride, mAttributes[idx].pointer);
+                    GLCall(mFunctions, vertexAttribIPointer, idx, mAttributes[idx].size, mAttributes[idx].type,
+                                                             mAttributes[idx].stride, mAttributes[idx].pointer);
                 }
                 else
                 {
-                    mFunctions->vertexAttribPointer(idx, mAttributes[idx].size, mAttributes[idx].type,
-                                                    mAttributes[idx].normalized, mAttributes[idx].stride,
-                                                    mAttributes[idx].pointer);
+                    GLCall(mFunctions, vertexAttribPointer, idx, mAttributes[idx].size, mAttributes[idx].type,
+                                                            mAttributes[idx].normalized, mAttributes[idx].stride,
+                                                            mAttributes[idx].pointer);
                 }
 
                 mAppliedAttributes[idx] = mAttributes[idx];
@@ -268,17 +269,14 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
             {
                 // Need to compute the index range.
                 mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferID);
-                uint8_t *elementArrayBufferPointer = reinterpret_cast<uint8_t*>(mFunctions->mapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_READ_ONLY));
+                uint8_t *elementArrayBufferPointer = (uint8_t*)GLCall(mFunctions, mapBuffer, GL_ELEMENT_ARRAY_BUFFER, GL_READ_ONLY);
 
                 *outIndexRange = IndexRangeCache::ComputeRange(type, elementArrayBufferPointer + elementArrayBufferOffset, count);
 
                 // TODO: Store the range cache at the impl level since the gl::Buffer object is supposed to remain constant
                 const_cast<IndexRangeCache*>(rangeCache)->addRange(type, static_cast<unsigned int>(elementArrayBufferOffset), count, *outIndexRange);
 
-                if (!mFunctions->unmapBuffer(GL_ELEMENT_ARRAY_BUFFER))
-                {
-                    return gl::Error(GL_OUT_OF_MEMORY);
-                }
+                GLCall(mFunctions, unmapBuffer, GL_ELEMENT_ARRAY_BUFFER);
             }
         }
 
@@ -299,7 +297,7 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
         // Allocate the streaming element array buffer
         if (mStreamingElementArrayBuffer == 0)
         {
-            mFunctions->genBuffers(1, &mStreamingElementArrayBuffer);
+            GLCall(mFunctions, genBuffers, 1, &mStreamingElementArrayBuffer);
             mStreamingElementArrayBufferSize = 0;
         }
 
@@ -312,13 +310,20 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
         if (requiredStreamingBufferSize > mStreamingElementArrayBufferSize)
         {
             // Copy the indices in while resizing the buffer
-            mFunctions->bufferData(GL_ELEMENT_ARRAY_BUFFER, requiredStreamingBufferSize, indices, GL_DYNAMIC_DRAW);
+            GLCallNoCheck(mFunctions, bufferData, GL_ELEMENT_ARRAY_BUFFER, requiredStreamingBufferSize, indices, GL_DYNAMIC_DRAW);
+
+            gl::Error error = nativegl::CheckForGLOutOfMemoryError(mFunctions);
+            if (error.isError())
+            {
+                return error;
+            }
+
             mStreamingElementArrayBufferSize = requiredStreamingBufferSize;
         }
         else
         {
             // Put the indices at the beginning of the buffer
-            mFunctions->bufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, requiredStreamingBufferSize, indices);
+            GLCall(mFunctions, bufferSubData, GL_ELEMENT_ARRAY_BUFFER, 0, requiredStreamingBufferSize, indices);
         }
 
         // Set the index offset for the draw call to zero since the supplied index pointer is to client data
@@ -332,7 +337,7 @@ gl::Error VertexArrayGL::streamAttributes(size_t streamingDataSize, size_t maxAt
 {
     if (mStreamingArrayBuffer == 0)
     {
-        mFunctions->genBuffers(1, &mStreamingArrayBuffer);
+        GLCall(mFunctions, genBuffers, 1, &mStreamingArrayBuffer);
         mStreamingArrayBufferSize = 0;
     }
 
@@ -344,7 +349,14 @@ gl::Error VertexArrayGL::streamAttributes(size_t streamingDataSize, size_t maxAt
     mStateManager->bindBuffer(GL_ARRAY_BUFFER, mStreamingArrayBuffer);
     if (requiredBufferSize > mStreamingArrayBufferSize)
     {
-        mFunctions->bufferData(GL_ARRAY_BUFFER, requiredBufferSize, nullptr, GL_DYNAMIC_DRAW);
+        GLCallNoCheck(mFunctions, bufferData, GL_ARRAY_BUFFER, requiredBufferSize, nullptr, GL_DYNAMIC_DRAW);
+
+        gl::Error error = nativegl::CheckForGLOutOfMemoryError(mFunctions);
+        if (error.isError())
+        {
+            return error;
+        }
+
         mStreamingArrayBufferSize = requiredBufferSize;
     }
 
@@ -355,7 +367,7 @@ gl::Error VertexArrayGL::streamAttributes(size_t streamingDataSize, size_t maxAt
     size_t unmapRetryAttempts = 5;
     while (unmapResult != GL_TRUE && --unmapRetryAttempts > 0)
     {
-        uint8_t *bufferPointer = reinterpret_cast<uint8_t*>(mFunctions->mapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+        uint8_t *bufferPointer = (uint8_t*)GLCall(mFunctions, mapBuffer, GL_ARRAY_BUFFER, GL_WRITE_ONLY);
         size_t curBufferOffset = bufferEmptySpace;
 
         const size_t streamedVertexCount = indexRange.end - indexRange.start + 1;
@@ -392,9 +404,9 @@ gl::Error VertexArrayGL::streamAttributes(size_t streamingDataSize, size_t maxAt
                 // Compute where the 0-index vertex would be.
                 const size_t vertexStartOffset = curBufferOffset - (indexRange.start * destStride);
 
-                mFunctions->vertexAttribPointer(idx, mAttributes[idx].size, mAttributes[idx].type,
-                                                mAttributes[idx].normalized, destStride,
-                                                reinterpret_cast<const GLvoid*>(vertexStartOffset));
+                GLCall(mFunctions, vertexAttribPointer, idx, mAttributes[idx].size, mAttributes[idx].type,
+                                                        mAttributes[idx].normalized, destStride,
+                                                        reinterpret_cast<const GLvoid*>(vertexStartOffset));
 
                 curBufferOffset += destStride * streamedVertexCount;
 
@@ -404,7 +416,7 @@ gl::Error VertexArrayGL::streamAttributes(size_t streamingDataSize, size_t maxAt
             }
         }
 
-        unmapResult = mFunctions->unmapBuffer(GL_ARRAY_BUFFER);
+        unmapResult = GLCall(mFunctions, unmapBuffer, GL_ARRAY_BUFFER);
     }
 
     if (unmapResult != GL_TRUE)

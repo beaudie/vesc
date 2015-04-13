@@ -30,7 +30,7 @@ FramebufferGL::FramebufferGL(const gl::Framebuffer::Data &data, const FunctionsG
 {
     if (!isDefault)
     {
-        mFunctions->genFramebuffers(1, &mFramebufferID);
+        GLCall(mFunctions, genFramebuffers, 1, &mFramebufferID);
     }
 }
 
@@ -38,7 +38,7 @@ FramebufferGL::~FramebufferGL()
 {
     if (mFramebufferID != 0)
     {
-        mFunctions->deleteFramebuffers(1, &mFramebufferID);
+        GLCall(mFunctions, deleteFramebuffers, 1, &mFramebufferID);
         mFramebufferID = 0;
     }
 }
@@ -134,7 +134,7 @@ void FramebufferGL::setDrawBuffers(size_t count, const GLenum *buffers)
     if (mFramebufferID != 0)
     {
         mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-        mFunctions->drawBuffers(count, buffers);
+        GLCall(mFunctions, drawBuffers, count, buffers);
     }
 }
 
@@ -143,7 +143,7 @@ void FramebufferGL::setReadBuffer(GLenum buffer)
     if (mFramebufferID != 0)
     {
         mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-        mFunctions->readBuffer(buffer);
+        GLCall(mFunctions, readBuffer, buffer);
     }
 }
 
@@ -153,7 +153,7 @@ gl::Error FramebufferGL::invalidate(size_t count, const GLenum *attachments)
     if (mFunctions->invalidateFramebuffer)
     {
         mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-        mFunctions->invalidateFramebuffer(GL_FRAMEBUFFER, count, attachments);
+        GLCall(mFunctions, invalidateFramebuffer, GL_FRAMEBUFFER, count, attachments);
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -165,7 +165,7 @@ gl::Error FramebufferGL::invalidateSub(size_t count, const GLenum *attachments, 
     if (mFunctions->invalidateSubFramebuffer)
     {
         mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-        mFunctions->invalidateSubFramebuffer(GL_FRAMEBUFFER, count, attachments, area.x, area.y, area.width, area.height);
+        GLCall(mFunctions, invalidateSubFramebuffer, GL_FRAMEBUFFER, count, attachments, area.x, area.y, area.width, area.height);
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -175,7 +175,7 @@ gl::Error FramebufferGL::clear(const gl::Data &data, GLbitfield mask)
 {
     mStateManager->setClearState(*data.state, mask);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-    mFunctions->clear(mask);
+    GLCall(mFunctions, clear, mask);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -196,7 +196,7 @@ gl::Error FramebufferGL::clearBufferfv(const gl::State &state, GLenum buffer, GL
 {
     mStateManager->setClearState(state, GetClearBufferMask(buffer));
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-    mFunctions->clearBufferfv(buffer, drawbuffer, values);
+    GLCall(mFunctions, clearBufferfv, buffer, drawbuffer, values);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -205,7 +205,7 @@ gl::Error FramebufferGL::clearBufferuiv(const gl::State &state, GLenum buffer, G
 {
     mStateManager->setClearState(state, GetClearBufferMask(buffer));
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-    mFunctions->clearBufferuiv(buffer, drawbuffer, values);
+    GLCall(mFunctions, clearBufferuiv, buffer, drawbuffer, values);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -214,7 +214,7 @@ gl::Error FramebufferGL::clearBufferiv(const gl::State &state, GLenum buffer, GL
 {
     mStateManager->setClearState(state, GetClearBufferMask(buffer));
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-    mFunctions->clearBufferiv(buffer, drawbuffer, values);
+    GLCall(mFunctions, clearBufferiv, buffer, drawbuffer, values);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -223,7 +223,7 @@ gl::Error FramebufferGL::clearBufferfi(const gl::State &state, GLenum buffer, GL
 {
     mStateManager->setClearState(state, GetClearBufferMask(buffer));
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-    mFunctions->clearBufferfi(buffer, drawbuffer, depth, stencil);
+    GLCall(mFunctions, clearBufferfi, buffer, drawbuffer, depth, stencil);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -256,7 +256,7 @@ gl::Error FramebufferGL::readPixels(const gl::State &state, const gl::Rectangle 
     }
 
     mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, mFramebufferID);
-    mFunctions->readPixels(area.x, area.y, area.width, area.height, format, type, pixels);
+    GLCall(mFunctions, readPixels, area.x, area.y, area.width, area.height, format, type, pixels);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -269,9 +269,9 @@ gl::Error FramebufferGL::blit(const gl::State &state, const gl::Rectangle &sourc
     mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, sourceFramebufferGL->getFramebufferID());
     mStateManager->bindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebufferID);
 
-    mFunctions->blitFramebuffer(sourceArea.x, sourceArea.y, sourceArea.x + sourceArea.width, sourceArea.y + sourceArea.height,
-                                destArea.x, destArea.y, destArea.x + destArea.width, destArea.y + destArea.height,
-                                mask, filter);
+    GLCall(mFunctions, blitFramebuffer, sourceArea.x, sourceArea.y, sourceArea.x + sourceArea.width, sourceArea.y + sourceArea.height,
+                                        destArea.x, destArea.y, destArea.x + destArea.width, destArea.y + destArea.height,
+                                        mask, filter);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -279,7 +279,7 @@ gl::Error FramebufferGL::blit(const gl::State &state, const gl::Rectangle &sourc
 GLenum FramebufferGL::checkStatus() const
 {
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-    return mFunctions->checkFramebufferStatus(GL_FRAMEBUFFER);
+    return GLCall(mFunctions, checkFramebufferStatus, GL_FRAMEBUFFER);
 }
 
 GLuint FramebufferGL::getFramebufferID() const
