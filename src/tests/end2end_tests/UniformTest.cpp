@@ -1,7 +1,7 @@
 #include "ANGLETest.h"
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-ANGLE_TYPED_TEST_CASE(UniformTest, ES2_D3D9, ES2_D3D11);
+ANGLE_TYPED_TEST_CASE(UniformTest, ES2_D3D9, ES2_D3D11, ES2_OPENGL);
 
 template<typename T>
 class UniformTest : public ANGLETest
@@ -75,4 +75,44 @@ TYPED_TEST(UniformTest, GetUniformNoCurrentProgram)
     glGetUniformiv(mProgram, mUniformILocation, &i);
     ASSERT_GL_NO_ERROR();
     EXPECT_EQ(1, i);
+}
+
+TYPED_TEST(UniformTest, UniformArrayLocations)
+{
+    const std::string vertexShader = SHADER_SOURCE
+    (
+        precision mediump float;
+        uniform float uPosition[4];
+        void main(void)
+        {
+            gl_Position = vec4(uPosition[0], uPosition[1], uPosition[2], uPosition[3]);
+        }
+    );
+
+    const std::string fragShader = SHADER_SOURCE
+    (
+        precision mediump float;
+        uniform float uColor[4];
+        void main(void)
+        {
+            gl_FragColor = vec4(uColor[0], uColor[1], uColor[2], uColor[3]);
+        }
+    );
+
+    GLuint program = CompileProgram(vertexShader, fragShader);
+    ASSERT_NE(program, 0u);
+
+    EXPECT_NE(-1, glGetUniformLocation(program, "uPosition"));
+    EXPECT_NE(-1, glGetUniformLocation(program, "uPosition[0]"));
+    EXPECT_NE(-1, glGetUniformLocation(program, "uPosition[1]"));
+    EXPECT_NE(-1, glGetUniformLocation(program, "uPosition[2]"));
+    EXPECT_NE(-1, glGetUniformLocation(program, "uPosition[3]"));
+
+    EXPECT_NE(-1, glGetUniformLocation(program, "uColor"));
+    EXPECT_NE(-1, glGetUniformLocation(program, "uColor[0]"));
+    EXPECT_NE(-1, glGetUniformLocation(program, "uColor[1]"));
+    EXPECT_NE(-1, glGetUniformLocation(program, "uColor[2]"));
+    EXPECT_NE(-1, glGetUniformLocation(program, "uColor[3]"));
+
+    glDeleteProgram(program);
 }
