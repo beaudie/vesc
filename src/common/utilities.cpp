@@ -462,6 +462,35 @@ int VariableSortOrder(GLenum type)
     }
 }
 
+std::string ParseUniformName(const std::string &name, size_t *outSubscript)
+{
+    if (outSubscript)
+    {
+        *outSubscript = GL_INVALID_INDEX;
+    }
+
+    // Strip any trailing array operator and retrieve the subscript
+    size_t open = name.find_last_of('[');
+    size_t close = name.find_last_of(']');
+    if (open != std::string::npos && close == name.length() - 1)
+    {
+        if (outSubscript)
+        {
+            int index = atoi(name.substr(open + 1).c_str());
+            if (index >= 0)
+            {
+                *outSubscript = index;
+            }
+        }
+
+        return name.substr(0, open);
+    }
+    else
+    {
+        return name;
+    }
+}
+
 }
 
 #if !defined(ANGLE_ENABLE_WINDOWS_STORE)
