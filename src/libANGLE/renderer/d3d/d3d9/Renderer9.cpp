@@ -2840,6 +2840,12 @@ gl::Error Renderer9::generateMipmap(ImageD3D *dest, ImageD3D *src)
     return Image9::generateMipmap(dst9, src9);
 }
 
+gl::Error Renderer9::generateDXMipmaps(TextureStorage *storage, const gl::SamplerState &samplerState)
+{
+    UNREACHABLE();
+    return gl::Error(GL_NO_ERROR);
+}
+
 TextureStorage *Renderer9::createTextureStorage2D(SwapChainD3D *swapChain)
 {
     SwapChain9 *swapChain9 = GetAs<SwapChain9>(swapChain);

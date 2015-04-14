@@ -2994,6 +2994,28 @@ gl::Error Renderer11::generateMipmap(ImageD3D *dest, ImageD3D *src)
     return Image11::generateMipmap(dest11, src11);
 }
 
+gl::Error Renderer11::generateDXMipmaps(TextureStorage *storage, const gl::SamplerState &samplerState)
+{
+    TextureStorage11 *storage11 = GetAs<TextureStorage11>(storage);
+
+    ASSERT(storage11->isRenderTarget());
+    ASSERT(storage11->supportsD3DMipgenFunction());
+
+    gl::SamplerState mipmappingSamplerState = samplerState;
+    mipmappingSamplerState.minFilter = GL_NEAREST_MIPMAP_NEAREST;
+
+    ID3D11ShaderResourceView *srv;
+    gl::Error error = storage11->getSRV(mipmappingSamplerState, &srv);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mDeviceContext->GenerateMips(srv);
+
+    return gl::Error(GL_NO_ERROR);
+}
+
 TextureStorage *Renderer11::createTextureStorage2D(SwapChainD3D *swapChain)
 {
     SwapChain11 *swapChain11 = GetAs<SwapChain11>(swapChain);
