@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/gl/ProgramGL.h"
 
 #include "common/debug.h"
+#include "common/utilities.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/ShaderGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
@@ -135,11 +136,32 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog,
         GLenum uniformType = GL_NONE;
         mFunctions->getActiveUniform(mProgramID, i, uniformNameBuffer.size(), &uniformNameLength, &uniformSize, &uniformType, &uniformNameBuffer[0]);
 
-        std::string uniformName(&uniformNameBuffer[0], uniformNameLength);
+        std::string uniformName = gl::ParseUniformName(std::string(&uniformNameBuffer[0], uniformNameLength), nullptr);
+
+        for (size_t arrayIndex = 0; arrayIndex < static_cast<size_t>(uniformSize); arrayIndex++)
+        {
+            std::string locationName = uniformName;
+            if (uniformSize > 1)
+            {
+                locationName += "[" + Str(arrayIndex) + "]";
+            }
+
+            GLint location = mFunctions->getUniformLocation(mProgramID, locationName.c_str());
+            if (location >= 0)
+            {
+                // Make sure the uniform index array is large enough
+                if (static_cast<size_t>(location) >= mUniformIndex.size())
+                {
+                    mUniformIndex.resize(location + 1);
+                }
+
+                mUniformIndex[location] = gl::VariableLocation(uniformName, static_cast<unsigned int>(arrayIndex),
+                                                               static_cast<unsigned int>(mUniforms.size()));
+            }
+        }
 
         // TODO: determine uniform precision
         mUniforms.push_back(new gl::LinkedUniform(uniformType, GL_NONE, uniformName, uniformSize, -1, sh::BlockMemberInfo::getDefaultBlockInfo()));
-        mUniformIndex.push_back(gl::VariableLocation(uniformName, 0, i));
     }
 
     // Query the attribute information
