@@ -60,7 +60,7 @@ class TextureD3D : public TextureImpl
     virtual gl::ImageIndex getImageIndex(GLint mip, GLint layer) const = 0;
     virtual bool isValidIndex(const gl::ImageIndex &index) const = 0;
 
-    virtual gl::Error generateMipmaps();
+    virtual gl::Error generateMipmaps(const gl::SamplerState &samplerState);
     TextureStorage *getStorage();
     ImageD3D *getBaseLevelImage() const;
 

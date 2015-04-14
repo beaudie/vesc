@@ -60,9 +60,10 @@ bool TextureStorage11::SRVKey::operator<(const SRVKey &rhs) const
     return std::tie(baseLevel, mipLevels, swizzle) < std::tie(rhs.baseLevel, rhs.mipLevels, rhs.swizzle);
 }
 
-TextureStorage11::TextureStorage11(Renderer11 *renderer, UINT bindFlags)
+TextureStorage11::TextureStorage11(Renderer11 *renderer, UINT bindFlags, UINT miscFlags)
     : mRenderer(renderer),
       mBindFlags(bindFlags),
+      mMiscFlags(miscFlags),
       mTopLevel(0),
       mMipLevels(0),
       mInternalFormat(GL_NONE),
@@ -115,9 +116,95 @@ DWORD TextureStorage11::GetTextureBindFlags(GLenum internalFormat, D3D_FEATURE_L
     return bindFlags;
 }
 
+DWORD TextureStorage11::GetTextureMiscFlags(GLenum internalFormat, D3D_FEATURE_LEVEL featureLevel, bool renderTarget)
+{
+    UINT miscFlags = 0;
+
+    const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalFormat, featureLevel);
+    if (renderTarget)
+    {
+        bool genmipsSupported = false;
+
+        switch (featureLevel)
+        {
+          case D3D_FEATURE_LEVEL_11_1:
+          case D3D_FEATURE_LEVEL_11_0:
+          case D3D_FEATURE_LEVEL_10_1:
+          case D3D_FEATURE_LEVEL_10_0:
+            switch (formatInfo.srvFormat)
+            {
+              case DXGI_FORMAT_R16G16B16A16_SNORM:
+              case DXGI_FORMAT_R32G32_FLOAT:
+              case DXGI_FORMAT_R10G10B10A2_UNORM:
+              case DXGI_FORMAT_R11G11B10_FLOAT:
+              case DXGI_FORMAT_R8G8B8A8_SNORM:
+              case DXGI_FORMAT_R16G16_SNORM:
+              case DXGI_FORMAT_R8G8_UNORM:
+              case DXGI_FORMAT_R8G8_SNORM:
+              case DXGI_FORMAT_R16_FLOAT:
+              case DXGI_FORMAT_R16_UNORM:
+              case DXGI_FORMAT_R16_SNORM:
+              case DXGI_FORMAT_R8_UNORM:
+              case DXGI_FORMAT_R8_SNORM:
+              case DXGI_FORMAT_A8_UNORM:
+              // DXGI_FORMAT_R32G32B32_FLOAT and DXGI_FORMAT_B5G5R5A1_UNORM are optional, we need to check to explictly check for their support.
+                  genmipsSupported = true;
+                  break;
+            }
+          case D3D_FEATURE_LEVEL_9_3:
+            switch (formatInfo.srvFormat)
+            {
+              case DXGI_FORMAT_R32G32B32A32_FLOAT:
+              // DXGI_FORMAT_B4G4R4A4 is optional, we need to check to explictly check for its support.
+                genmipsSupported = true;
+                break;
+            }
+          case D3D_FEATURE_LEVEL_9_2:
+            switch (formatInfo.srvFormat)
+            {
+              case DXGI_FORMAT_R16G16B16A16_FLOAT:
+              case DXGI_FORMAT_R16G16B16A16_UNORM:
+              case DXGI_FORMAT_R16G16_FLOAT:
+              case DXGI_FORMAT_R16G16_UNORM:
+              case DXGI_FORMAT_R32_FLOAT:
+                genmipsSupported = true;
+                break;
+            }
+          case D3D_FEATURE_LEVEL_9_1:
+            switch (formatInfo.srvFormat)
+            {
+              case DXGI_FORMAT_R8G8B8A8_UNORM:
+              case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+              case DXGI_FORMAT_B5G6R5_UNORM:
+              case DXGI_FORMAT_B8G8R8A8_UNORM:
+              case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
+              case DXGI_FORMAT_B8G8R8X8_UNORM:
+              case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB:
+                genmipsSupported = true;
+                break;
+            }
+            break;
+        default:
+            UNREACHABLE();
+        }
+
+        if (genmipsSupported)
+        {
+            miscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
+        }
+    }
+
+    return miscFlags;
+}
+
 UINT TextureStorage11::getBindFlags() const
 {
     return mBindFlags;
+}
+
+UINT TextureStorage11::getMiscFlags() const
+{
+    return mMiscFlags;
 }
 
 int TextureStorage11::getTopLevel() const
@@ -596,7 +683,7 @@ gl::Error TextureStorage11::setData(const gl::ImageIndex &index, ImageD3D *image
 }
 
 TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer, SwapChain11 *swapchain)
-    : TextureStorage11(renderer, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE),
+    : TextureStorage11(renderer, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE, 0),
       mTexture(swapchain->getOffscreenTexture()),
       mSwizzleTexture(NULL),
       mLevelZeroTexture(NULL),
@@ -644,7 +731,9 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer, SwapChain11 *swap
 }
 
 TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer, GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly)
-    : TextureStorage11(renderer, GetTextureBindFlags(internalformat, renderer->getFeatureLevel(), renderTarget)),
+    : TextureStorage11(renderer,
+                       GetTextureBindFlags(internalformat, renderer->getFeatureLevel(), renderTarget),
+                       GetTextureMiscFlags(internalformat, renderer->getFeatureLevel(), renderTarget)),
       mTexture(NULL),
       mSwizzleTexture(NULL),
       mLevelZeroTexture(NULL),
@@ -976,7 +1065,7 @@ gl::Error TextureStorage11_2D::ensureTextureExists(int mipLevels)
         desc.Usage = D3D11_USAGE_DEFAULT;
         desc.BindFlags = getBindFlags();
         desc.CPUAccessFlags = 0;
-        desc.MiscFlags = 0;
+        desc.MiscFlags = getMiscFlags();
 
         HRESULT result = device->CreateTexture2D(&desc, NULL, outputTexture);
 
@@ -1229,7 +1318,9 @@ gl::Error TextureStorage11_2D::getSwizzleRenderTarget(int mipLevel, ID3D11Render
 }
 
 TextureStorage11_Cube::TextureStorage11_Cube(Renderer11 *renderer, GLenum internalformat, bool renderTarget, int size, int levels, bool hintLevelZeroOnly)
-    : TextureStorage11(renderer, GetTextureBindFlags(internalformat, renderer->getFeatureLevel(), renderTarget))
+    : TextureStorage11(renderer,
+                       GetTextureBindFlags(internalformat, renderer->getFeatureLevel(), renderTarget),
+                       GetTextureMiscFlags(internalformat, renderer->getFeatureLevel(), renderTarget))
 {
     mTexture = NULL;
     mSwizzleTexture = NULL;
@@ -1913,7 +2004,9 @@ gl::Error TextureStorage11_Cube::getSwizzleRenderTarget(int mipLevel, ID3D11Rend
 
 TextureStorage11_3D::TextureStorage11_3D(Renderer11 *renderer, GLenum internalformat, bool renderTarget,
                                          GLsizei width, GLsizei height, GLsizei depth, int levels)
-    : TextureStorage11(renderer, GetTextureBindFlags(internalformat, renderer->getFeatureLevel(), renderTarget))
+    : TextureStorage11(renderer,
+                       GetTextureBindFlags(internalformat, renderer->getFeatureLevel(), renderTarget),
+                       GetTextureMiscFlags(internalformat, renderer->getFeatureLevel(), renderTarget))
 {
     mTexture = NULL;
     mSwizzleTexture = NULL;
@@ -2293,7 +2386,9 @@ gl::Error TextureStorage11_3D::getSwizzleRenderTarget(int mipLevel, ID3D11Render
 
 TextureStorage11_2DArray::TextureStorage11_2DArray(Renderer11 *renderer, GLenum internalformat, bool renderTarget,
                                                    GLsizei width, GLsizei height, GLsizei depth, int levels)
-    : TextureStorage11(renderer, GetTextureBindFlags(internalformat, renderer->getFeatureLevel(), renderTarget))
+    : TextureStorage11(renderer,
+                       GetTextureBindFlags(internalformat, renderer->getFeatureLevel(), renderTarget),
+                       GetTextureMiscFlags(internalformat, renderer->getFeatureLevel(), renderTarget))
 {
     mTexture = NULL;
     mSwizzleTexture = NULL;
