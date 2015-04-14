@@ -114,8 +114,8 @@ static gl::Error getRenderTargetResource(const gl::FramebufferAttachment *colorb
 {
     ASSERT(colorbuffer);
 
-    RenderTarget11 *renderTarget = NULL;
-    gl::Error error = d3d11::GetAttachmentRenderTarget(colorbuffer, &renderTarget);
+    RenderTarget11 *renderTarget = nullptr;
+    gl::Error error = colorbuffer->getRenderTarget(&renderTarget);
     if (error.isError())
     {
         return error;
@@ -188,8 +188,8 @@ gl::Error Framebuffer11::blit(const gl::Rectangle &sourceArea, const gl::Rectang
         const gl::FramebufferAttachment *readBuffer = sourceFramebuffer->getReadColorbuffer();
         ASSERT(readBuffer);
 
-        RenderTargetD3D *readRenderTarget = nullptr;
-        gl::Error error = GetAttachmentRenderTarget(readBuffer, &readRenderTarget);
+        RenderTargetD3D *readRenderTarget = NULL;
+        gl::Error error = readBuffer->getRenderTarget(&readRenderTarget);
         if (error.isError())
         {
             return error;
@@ -201,13 +201,13 @@ gl::Error Framebuffer11::blit(const gl::Rectangle &sourceArea, const gl::Rectang
 
         for (size_t colorAttachment = 0; colorAttachment < colorAttachments.size(); colorAttachment++)
         {
-            if (colorAttachments[colorAttachment].valid() &&
+            const gl::FramebufferAttachment &drawBuffer = colorAttachments[colorAttachment];
+
+            if (drawBuffer.valid() &&
                 drawBufferStates[colorAttachment] != GL_NONE)
             {
-                const gl::FramebufferAttachment &drawBuffer = colorAttachments[colorAttachment];
-
-                RenderTargetD3D *drawRenderTarget = nullptr;
-                error = GetAttachmentRenderTarget(&drawBuffer, &drawRenderTarget);
+                RenderTargetD3D *drawRenderTarget = NULL;
+                error = drawBuffer.getRenderTarget(&drawRenderTarget);
                 if (error.isError())
                 {
                     return error;
@@ -230,7 +230,7 @@ gl::Error Framebuffer11::blit(const gl::Rectangle &sourceArea, const gl::Rectang
         ASSERT(readBuffer);
 
         RenderTargetD3D *readRenderTarget = NULL;
-        gl::Error error = GetAttachmentRenderTarget(readBuffer, &readRenderTarget);
+        gl::Error error = readBuffer->getRenderTarget(&readRenderTarget);
         if (error.isError())
         {
             return error;
@@ -241,7 +241,7 @@ gl::Error Framebuffer11::blit(const gl::Rectangle &sourceArea, const gl::Rectang
         ASSERT(drawBuffer);
 
         RenderTargetD3D *drawRenderTarget = NULL;
-        error = GetAttachmentRenderTarget(drawBuffer, &drawRenderTarget);
+        error = drawBuffer->getRenderTarget(&drawRenderTarget);
         if (error.isError())
         {
             return error;
