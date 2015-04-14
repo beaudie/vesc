@@ -376,7 +376,7 @@ ImageD3D *TextureD3D::getBaseLevelImage() const
     return getImage(getImageIndex(0, 0));
 }
 
-gl::Error TextureD3D::generateMipmaps()
+gl::Error TextureD3D::generateMipmaps(const gl::SamplerState &samplerState)
 {
     GLint mipCount = mipLevels();
 
@@ -407,6 +407,18 @@ gl::Error TextureD3D::generateMipmaps()
 
     // We know that all layers have the same dimension, for the texture to be complete
     GLint layerCount = static_cast<GLint>(getLayerCount(0));
+
+    if (mTexStorage && mTexStorage->supportsNativeMipmapFunction())
+    {
+        gl::Error error = updateStorage();
+        if (error.isError())
+        {
+            return error;
+        }
+
+        // Generate the mipmap chain using the ad-hoc DirectX function.
+        return mRenderer->generateNativeMipmaps(mTexStorage, samplerState);
+    }
 
     // When making mipmaps with the setData workaround enabled, the texture storage has
     // the image data already. For non-render-target storage, we have to pull it out into
