@@ -2296,9 +2296,30 @@ bool Renderer11::getShareHandleSupport() const
 {
     // We only currently support share handles with BGRA surfaces, because
     // chrome needs BGRA. Once chrome fixes this, we should always support them.
+    if (!getRendererExtensions().textureFormatBGRA8888)
+    {
+        return false;
+    }
+
     // PIX doesn't seem to support using share handles, so disable them.
+    if (gl::DebugAnnotationsActive())
+    {
+        return false;
+    }
+
     // Also disable share handles on Feature Level 9_3, since it doesn't support share handles on RGBA8 textures/swapchains.
-    return getRendererExtensions().textureFormatBGRA8888 && !gl::DebugAnnotationsActive() && !(mFeatureLevel <= D3D_FEATURE_LEVEL_9_3);
+    if (mFeatureLevel <= D3D_FEATURE_LEVEL_9_3)
+    {
+        return false;
+    }
+
+    // Also disable on WARP/software devices, since it doesn't support them.
+    if (mDriverType == D3D_DRIVER_TYPE_WARP || mDriverType == D3D_DRIVER_TYPE_SOFTWARE)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 bool Renderer11::getPostSubBufferSupport() const
