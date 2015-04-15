@@ -2814,34 +2814,15 @@ GLint GL_APIENTRY GetUniformLocation(GLuint program, const GLchar* name)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (strstr(name, "gl_") == name)
+        std::string stringName = name;
+
+        if (!ValidateGetUniformLocation(context, program, stringName))
         {
             return -1;
         }
 
         Program *programObject = context->getProgram(program);
-
-        if (!programObject)
-        {
-            if (context->getShader(program))
-            {
-                context->recordError(Error(GL_INVALID_OPERATION));
-                return -1;
-            }
-            else
-            {
-                context->recordError(Error(GL_INVALID_VALUE));
-                return -1;
-            }
-        }
-
-        if (!programObject->isLinked())
-        {
-            context->recordError(Error(GL_INVALID_OPERATION));
-            return -1;
-        }
-
-        return programObject->getUniformLocation(name);
+        return programObject->getUniformLocation(stringName);
     }
 
     return -1;

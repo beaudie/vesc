@@ -1815,6 +1815,107 @@ bool ValidateFramebufferTexture2D(Context *context, GLenum target, GLenum attach
     return true;
 }
 
+bool ValidateGetUniformLocation(Context *context, GLuint program, const std::string &name)
+{
+    Program *programObject = context->getProgram(program);
+
+    if (!programObject)
+    {
+        if (context->getShader(program))
+        {
+            context->recordError(Error(GL_INVALID_OPERATION));
+            return false;
+        }
+        else
+        {
+            context->recordError(Error(GL_INVALID_VALUE));
+            return false;
+        }
+    }
+
+    if (!programObject->isLinked())
+    {
+        context->recordError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    // Validate the uniform name
+    if (name.compare("gl_") == 0)
+    {
+        return false;
+    }
+
+    // Identifiers cannot start with a digit
+    if (name.length() > 0 && isdigit(name[0]))
+    {
+        return false;
+    }
+
+    size_t lastOpen = std::string::npos;
+    size_t lastClose = std::string::npos;
+    for (size_t i = 0; i < name.length(); i++)
+    {
+        switch (name[i])
+        {
+          case '[':
+            lastOpen = i;
+            break;
+
+          case ']':
+            {
+                lastClose = i;
+                if (lastOpen == std::string::npos || lastClose - lastOpen <= 1)
+                {
+                    return false;
+                }
+
+                // Validate that only digits are between the open and closing braces and the number
+                // will not overflow
+                GLuint64 value = 0;
+                for (size_t numberIdx = lastOpen + 1; numberIdx < lastClose; numberIdx++)
+                {
+                    if (!isdigit(name[numberIdx]))
+                    {
+                        return false;
+                    }
+
+                    int digit = name[numberIdx] - '0';
+                    if (!rx::IsUnsignedMultiplicationSafe<GLuint64>(value, 10) ||
+                        !rx::IsUnsignedAdditionSafe<GLuint64>(value * 10, digit))
+                    {
+                        // Overflow
+                        return false;
+                    }
+
+                    value = (value * 10) + digit;
+                }
+            }
+            break;
+
+          default:
+            // Check for a valid identifier
+            if (!isalpha(name[i]) && !isdigit(name[i]) && name[i] != '_' && name[i] != '.')
+            {
+                return false;
+            }
+
+            break;
+        }
+    }
+
+    if (lastOpen != std::string::npos && lastClose == std::string::npos)
+    {
+        return false;
+    }
+
+    if (lastOpen != std::string::npos && lastClose != std::string::npos && lastOpen > lastClose)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 bool ValidateGetUniformBase(Context *context, GLuint program, GLint location)
 {
     if (program == 0)

@@ -140,3 +140,70 @@ TYPED_TEST(UniformTest, UniformArrayLocations)
 
     glDeleteProgram(program);
 }
+
+// Test edge cases of getting uniform locations
+TYPED_TEST(UniformTest, GetUniformLocation)
+{
+    const std::string vertexShader = SHADER_SOURCE
+    (
+        precision mediump float;
+        uniform float uPosition[4];
+        uniform float uFloat;
+        void main(void)
+        {
+            gl_Position = vec4(uPosition[0] + uFloat, uPosition[1], uPosition[2], uPosition[3]);
+        }
+    );
+
+    const std::string fragShader = SHADER_SOURCE
+    (
+        precision mediump float;
+        uniform float uColor[4];
+        void main(void)
+        {
+            gl_FragColor = vec4(uColor[0], uColor[1], uColor[2], uColor[3]);
+        }
+    );
+
+    GLuint program = CompileProgram(vertexShader, fragShader);
+    ASSERT_NE(program, 0u);
+
+    // Single float edge cases
+    EXPECT_NE(-1, glGetUniformLocation(program, "uFloat"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uFloat[0]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uFloat[-1]"));
+
+    // Array edge cases
+    EXPECT_NE(-1, glGetUniformLocation(program, "uPosition"));
+    EXPECT_NE(-1, glGetUniformLocation(program, "uPosition[0]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[-1]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[5]"));
+
+    // Whitespace should not be allowed
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition "));
+    EXPECT_EQ(-1, glGetUniformLocation(program, " uPosition"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uFloat "));
+    EXPECT_EQ(-1, glGetUniformLocation(program, " uFloat"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[ 1]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[1 ]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[ 1 ]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition [1]"));
+
+    // Try to overflow the index
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[1000000000000000000000000000000000000000000]"));
+
+    // Invalid array declarations
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition["));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[ ]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[[0]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[0]]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[[0]]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "[0]uPosition"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPo[0]sition"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPo[0]sition[0]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[abc]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[0x01]"));
+    EXPECT_EQ(-1, glGetUniformLocation(program, "uPosition[1+1]"));
+}

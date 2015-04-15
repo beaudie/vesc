@@ -83,6 +83,8 @@ bool ValidateFramebufferTextureBase(Context *context, GLenum target, GLenum atta
 bool ValidateFramebufferTexture2D(Context *context, GLenum target, GLenum attachment,
                                    GLenum textarget, GLuint texture, GLint level);
 
+bool ValidateGetUniformLocation(Context *context, GLuint program, const std::string& name);
+
 bool ValidateGetUniformBase(Context *context, GLuint program, GLint location);
 bool ValidateGetUniformfv(Context *context, GLuint program, GLint location, GLfloat* params);
 bool ValidateGetUniformiv(Context *context, GLuint program, GLint location, GLint* params);
