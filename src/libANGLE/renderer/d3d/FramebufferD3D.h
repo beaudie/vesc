@@ -58,10 +58,10 @@ class FramebufferD3D : public FramebufferImpl
     FramebufferD3D(const gl::Framebuffer::Data &data, RendererD3D *renderer);
     virtual ~FramebufferD3D();
 
-    void setColorAttachment(size_t index, const gl::FramebufferAttachment *attachment) override;
-    void setDepthAttachment(const gl::FramebufferAttachment *attachment) override;
-    void setStencilAttachment(const gl::FramebufferAttachment *attachment) override;
-    void setDepthStencilAttachment(const gl::FramebufferAttachment *attachment) override;
+    void updateColorAttachment(size_t index) override;
+    void updateDepthAttachment() override;
+    void updateStencilAttachment() override;
+    void updateDepthStencilAttachment() override;
 
     void setDrawBuffers(size_t count, const GLenum *buffers) override;
     void setReadBuffer(GLenum buffer) override;
