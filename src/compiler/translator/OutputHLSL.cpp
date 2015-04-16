@@ -1475,6 +1475,11 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                 out << ")";
                 return false;
             }
+            if (rightAgg != nullptr && rightAgg->getOp() == EOpFunctionCall)
+            {
+                // ArrayReturnValueToOutParameter should have eliminated this kind of assignments
+                UNREACHABLE();
+            }
             else
             {
                 const TString &functionName = addArrayAssignmentFunction(node->getType());
@@ -2077,6 +2082,10 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
             bool lod0 = mInsideDiscontinuousLoop || mOutputLod0Function;
             if (node->isUserDefined())
             {
+                if (node->isArray())
+                {
+                    UNIMPLEMENTED();
+                }
                 size_t index = mCallDag.findIndex(node);
                 ASSERT(index != CallDAG::InvalidIndex);
                 lod0 &= mASTMetadataList[index].mNeedsLod0;
@@ -2842,7 +2851,7 @@ TString OutputHLSL::argumentString(const TIntermSymbol *symbol)
     {
         name = "x" + str(mUniqueIndex++);
     }
-    else
+    else if (!symbol->isInternal())
     {
         name = Decorate(name);
     }
