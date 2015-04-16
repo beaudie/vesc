@@ -189,6 +189,20 @@ bool TIntermAggregate::replaceChildNode(
     return false;
 }
 
+bool TIntermAggregate::replaceChildNodeWithMultiple(TIntermNode *original, TIntermSequence replacements)
+{
+    for (auto it = mSequence.begin(); it < mSequence.end(); ++it)
+    {
+        if (*it == original)
+        {
+            it = mSequence.erase(it);
+            it = mSequence.insert(it, replacements.begin(), replacements.end());
+            return true;
+        }
+    }
+    return false;
+}
+
 void TIntermAggregate::setPrecisionFromChildren()
 {
     if (getBasicType() == EbtBool)
@@ -1230,5 +1244,13 @@ void TIntermTraverser::updateTree()
                     entry2.parent = entry.replacement;
             }
         }
+    }
+    for (size_t ii = 0; ii < mMultiReplacements.size(); ++ii)
+    {
+        const NodeReplaceWithMultipleEntry& entry = mMultiReplacements[ii];
+        ASSERT(entry.parent);
+        bool replaced = entry.parent->replaceChildNodeWithMultiple(
+            entry.original, entry.replacements);
+        ASSERT(replaced);
     }
 }
