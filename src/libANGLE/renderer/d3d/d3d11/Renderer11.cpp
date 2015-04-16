@@ -344,20 +344,49 @@ egl::Error Renderer11::initialize()
                                    &mFeatureLevel,
                                    &mDeviceContext);
 
-        if (result == E_INVALIDARG)
+        // Cleanup done by destructor
+        const char *errorMsg = "Could not create D3D11 device.";
+
+        // Most likely error codes, see
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/ff476082%28v=vs.85%29.aspx
+        // And https://msdn.microsoft.com/en-us/library/windows/desktop/ff476174(v=vs.85).aspx
+        switch (result)
         {
-            // Cleanup done by destructor through glDestroyRenderer
+          case E_INVALIDARG:
             return egl::Error(EGL_NOT_INITIALIZED,
                               D3D11_INIT_CREATEDEVICE_INVALIDARG,
-                              "Could not create D3D11 device.");
-        }
-
-        if (!mDevice || FAILED(result))
-        {
-            // Cleanup done by destructor through glDestroyRenderer
+                              errorMsg);
+          case E_FAIL:
             return egl::Error(EGL_NOT_INITIALIZED,
-                              D3D11_INIT_CREATEDEVICE_ERROR,
-                              "Could not create D3D11 device.");
+                              D3D11_INIT_CREATEDEVICE_FAIL,
+                              errorMsg);
+          case E_NOTIMPL:
+            return egl::Error(EGL_NOT_INITIALIZED,
+                              D3D11_INIT_CREATEDEVICE_NOTIMPL,
+                              errorMsg);
+          case E_OUTOFMEMORY:
+            return egl::Error(EGL_NOT_INITIALIZED,
+                              D3D11_INIT_CREATEDEVICE_OUTOFMEMORY,
+                              errorMsg);
+          case DXGI_ERROR_INVALID_CALL:
+            return egl::Error(EGL_NOT_INITIALIZED,
+                              D3D11_INIT_CREATEDEVICE_INVALIDCALL,
+                              errorMsg);
+          case DXGI_ERROR_SDK_COMPONENT_MISSING:
+            return egl::Error(EGL_NOT_INITIALIZED,
+                              D3D11_INIT_CREATEDEVICE_COMPONENTMISSING,
+                              errorMsg);
+          case DXGI_ERROR_WAS_STILL_DRAWING:
+            return egl::Error(EGL_NOT_INITIALIZED,
+                              D3D11_INIT_CREATEDEVICE_WASSTILLDRAWING,
+                              errorMsg);
+          default:
+            if (!mDevice || FAILED(result))
+            {
+                return egl::Error(EGL_NOT_INITIALIZED,
+                                  D3D11_INIT_CREATEDEVICE_ERROR,
+                                  errorMsg);
+            }
         }
     }
 
