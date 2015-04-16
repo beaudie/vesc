@@ -14,7 +14,6 @@
     'dependencies':
     [
         '<(angle_path)/src/angle.gyp:angle_common',
-        '<(angle_path)/src/angle.gyp:libANGLE', # for unit testing
         '<(angle_path)/src/angle.gyp:libGLESv2',
         '<(angle_path)/src/angle.gyp:libEGL',
         '<(angle_path)/src/tests/tests.gyp:angle_test_support',
@@ -31,7 +30,6 @@
         'perf_tests/BufferSubData.cpp',
         'perf_tests/DrawCallPerf.cpp',
         'perf_tests/IndexConversionPerf.cpp',
-        'perf_tests/IndexDataManagerTest.cpp',
         'perf_tests/PointSprites.cpp',
         'perf_tests/TexSubImage.cpp',
         'perf_tests/third_party/perf/perf_test.cc',
