@@ -1475,6 +1475,23 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                 out << ")";
                 return false;
             }
+            if (rightAgg != nullptr && rightAgg->getOp() == EOpFunctionCall)
+            {
+                // ArrayReturnValueToOutParameter has changed the function so that instead of returning an array,
+                // the array is an out parameter.
+                ASSERT(rightAgg->isUserDefined());
+                TString name = TFunction::unmangleName(rightAgg->getName());
+                out << Decorate(name) << "(";
+                TIntermSequence *seq = rightAgg->getSequence();
+                for (auto &param : *seq)
+                {
+                    param->traverse(this);
+                    out << ", ";
+                }
+                node->getLeft()->traverse(this);
+                out << ")";
+                return false;
+            }
             else
             {
                 const TString &functionName = addArrayAssignmentFunction(node->getType());
@@ -2077,6 +2094,10 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
             bool lod0 = mInsideDiscontinuousLoop || mOutputLod0Function;
             if (node->isUserDefined())
             {
+                if (node->isArray())
+                {
+                    UNIMPLEMENTED();
+                }
                 size_t index = mCallDag.findIndex(node);
                 ASSERT(index != CallDAG::InvalidIndex);
                 lod0 &= mASTMetadataList[index].mNeedsLod0;

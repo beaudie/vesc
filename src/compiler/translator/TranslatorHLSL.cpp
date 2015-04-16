@@ -6,6 +6,7 @@
 
 #include "compiler/translator/TranslatorHLSL.h"
 
+#include "compiler/translator/ArrayReturnValueToOutParameter.h"
 #include "compiler/translator/OutputHLSL.h"
 #include "compiler/translator/SeparateArrayInitialization.h"
 #include "compiler/translator/SeparateDeclarations.h"
@@ -31,6 +32,10 @@ void TranslatorHLSL::translate(TIntermNode *root, int compileOptions)
 
     SimplifyArrayAssignment simplify;
     root->traverse(&simplify);
+
+    ArrayReturnValueToOutParameter arrayReturnValueToOutParam;
+    root->traverse(&arrayReturnValueToOutParam);
+    arrayReturnValueToOutParam.updateTree();
 
     sh::OutputHLSL outputHLSL(getShaderType(), getShaderVersion(), getExtensionBehavior(),
         getSourcePath(), getOutputType(), numRenderTargets, getUniforms(), compileOptions);
