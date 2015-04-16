@@ -7,6 +7,7 @@
 #include "compiler/translator/TranslatorHLSL.h"
 
 #include "compiler/translator/OutputHLSL.h"
+#include "compiler/translator/SeparateArrayInitialization.h"
 #include "compiler/translator/SeparateDeclarations.h"
 #include "compiler/translator/SimplifyArrayAssignment.h"
 
@@ -23,6 +24,10 @@ void TranslatorHLSL::translate(TIntermNode *root, int compileOptions)
     SeparateDeclarations separateDecl;
     root->traverse(&separateDecl);
     separateDecl.updateTree();
+
+    SeparateArrayInitialization separateInit;
+    root->traverse(&separateInit);
+    separateInit.updateTree();
 
     SimplifyArrayAssignment simplify;
     root->traverse(&simplify);
