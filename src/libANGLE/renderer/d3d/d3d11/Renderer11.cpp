@@ -1265,7 +1265,7 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
 
             // Extract the render target dimensions and view
             RenderTarget11 *renderTarget = NULL;
-            gl::Error error = d3d11::GetAttachmentRenderTarget(colorbuffer, &renderTarget);
+            gl::Error error = colorbuffer->getRenderTarget(&renderTarget);
             if (error.isError())
             {
                 return error;
@@ -1302,7 +1302,7 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
     if (depthStencil)
     {
         RenderTarget11 *depthStencilRenderTarget = NULL;
-        gl::Error error = d3d11::GetAttachmentRenderTarget(depthStencil, &depthStencilRenderTarget);
+        gl::Error error = depthStencil->getRenderTarget(&depthStencilRenderTarget);
         if (error.isError())
         {
             SafeRelease(framebufferRTVs);
@@ -2398,7 +2398,7 @@ gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::
     ASSERT(colorbuffer);
 
     RenderTarget11 *sourceRenderTarget = NULL;
-    gl::Error error = d3d11::GetAttachmentRenderTarget(colorbuffer, &sourceRenderTarget);
+    gl::Error error = colorbuffer->getRenderTarget(&sourceRenderTarget);
     if (error.isError())
     {
         return error;
@@ -2449,7 +2449,7 @@ gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl
     ASSERT(colorbuffer);
 
     RenderTarget11 *sourceRenderTarget = NULL;
-    gl::Error error = d3d11::GetAttachmentRenderTarget(colorbuffer, &sourceRenderTarget);
+    gl::Error error = colorbuffer->getRenderTarget(&sourceRenderTarget);
     if (error.isError())
     {
         return error;
@@ -2500,7 +2500,7 @@ gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::
     ASSERT(colorbuffer);
 
     RenderTarget11 *sourceRenderTarget = NULL;
-    gl::Error error = d3d11::GetAttachmentRenderTarget(colorbuffer, &sourceRenderTarget);
+    gl::Error error = colorbuffer->getRenderTarget(&sourceRenderTarget);
     if (error.isError())
     {
         return error;
@@ -2551,7 +2551,7 @@ gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer, const
     ASSERT(colorbuffer);
 
     RenderTarget11 *sourceRenderTarget = NULL;
-    gl::Error error = d3d11::GetAttachmentRenderTarget(colorbuffer, &sourceRenderTarget);
+    gl::Error error = colorbuffer->getRenderTarget(&sourceRenderTarget);
     if (error.isError())
     {
         return error;
