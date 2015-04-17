@@ -181,15 +181,49 @@ void Context::makeCurrent(egl::Surface *surface)
         mHasBeenCurrent = true;
     }
 
-    // TODO(jmadill): do not allocate new pointers here
-    Framebuffer *framebufferZero = new DefaultFramebuffer(mCaps, mRenderer, surface);
-    setFramebufferZero(framebufferZero);
+    if (mFramebufferMap[0] == nullptr)
+    {
+        mFramebufferMap[0] = new Framebuffer(mCaps, mRenderer, 0);
+    }
+
+    // Update default framebuffer
+    Framebuffer *defaultFBO = mFramebufferMap[0];
+
+    const egl::Config *config = surface->getConfig();
+
+    defaultFBO->setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_BACK, ImageIndex::MakeInvalid(), surface);
+
+    if (config->depthSize > 0)
+    {
+        defaultFBO->setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_DEPTH, ImageIndex::MakeInvalid(), surface);
+    }
+    else
+    {
+        defaultFBO->resetAttachment(GL_DEPTH);
+    }
+
+    if (config->stencilSize > 0)
+    {
+        defaultFBO->setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_STENCIL, ImageIndex::MakeInvalid(), surface);
+    }
+    else
+    {
+        defaultFBO->resetAttachment(GL_STENCIL);
+    }
+
+    GLenum drawBufferState = GL_BACK;
+    defaultFBO->setDrawBuffers(1, &drawBufferState);
+
+    defaultFBO->setReadBuffer(GL_BACK);
+
     mRenderBuffer = surface->getRenderBuffer();
 }
 
 void Context::releaseSurface()
 {
-    setFramebufferZero(nullptr);
+    mFramebufferMap[0]->resetAttachment(GL_BACK);
+    mFramebufferMap[0]->resetAttachment(GL_DEPTH);
+    mFramebufferMap[0]->resetAttachment(GL_STENCIL);
     mRenderBuffer = EGL_NONE;
 }
 
@@ -659,27 +693,6 @@ Error Context::endQuery(GLenum target)
     mState.setActiveQuery(target, NULL);
 
     return error;
-}
-
-void Context::setFramebufferZero(Framebuffer *buffer)
-{
-    // First, check to see if the old default framebuffer
-    // was set for draw or read framebuffer, and change
-    // the bindings to point to the new one before deleting it.
-    if (mState.getDrawFramebuffer() == nullptr ||
-        mState.getDrawFramebuffer()->id() == 0)
-    {
-        mState.setDrawFramebufferBinding(buffer);
-    }
-
-    if (mState.getReadFramebuffer() == nullptr ||
-        mState.getReadFramebuffer()->id() == 0)
-    {
-        mState.setReadFramebufferBinding(buffer);
-    }
-
-    SafeDelete(mFramebufferMap[0]);
-    mFramebufferMap[0] = buffer;
 }
 
 Framebuffer *Context::getFramebuffer(unsigned int handle) const
