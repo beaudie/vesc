@@ -31,10 +31,10 @@ class FramebufferImpl : angle::NonCopyable
     explicit FramebufferImpl(const gl::Framebuffer::Data &data) : mData(data) { }
     virtual ~FramebufferImpl() { }
 
-    virtual void setColorAttachment(size_t index, const gl::FramebufferAttachment *attachment) = 0;
-    virtual void setDepthAttachment(const gl::FramebufferAttachment *attachment) = 0;
-    virtual void setStencilAttachment(const gl::FramebufferAttachment *attachment) = 0;
-    virtual void setDepthStencilAttachment(const gl::FramebufferAttachment *attachment) = 0;
+    virtual void updateColorAttachment(size_t index) = 0;
+    virtual void updateDepthAttachment() = 0;
+    virtual void updateStencilAttachment() = 0;
+    virtual void updateDepthStencilAttachment() = 0;
 
     virtual void setDrawBuffers(size_t count, const GLenum *buffers) = 0;
     virtual void setReadBuffer(GLenum buffer) = 0;
