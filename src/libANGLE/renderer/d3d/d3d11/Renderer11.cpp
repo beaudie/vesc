@@ -1249,7 +1249,7 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
 
     for (size_t colorAttachment = 0; colorAttachment < colorbuffers.size(); ++colorAttachment)
     {
-        gl::FramebufferAttachment *colorbuffer = colorbuffers[colorAttachment];
+        const gl::FramebufferAttachment *colorbuffer = colorbuffers[colorAttachment];
 
         if (colorbuffer)
         {
@@ -1298,7 +1298,7 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
 
     // Get the depth stencil buffers
     ID3D11DepthStencilView* framebufferDSV = NULL;
-    gl::FramebufferAttachment *depthStencil = framebuffer->getDepthOrStencilbuffer();
+    const gl::FramebufferAttachment *depthStencil = framebuffer->getDepthOrStencilbuffer();
     if (depthStencil)
     {
         RenderTarget11 *depthStencilRenderTarget = NULL;
@@ -2394,7 +2394,7 @@ std::string Renderer11::getShaderModelSuffix() const
 gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                   const gl::Offset &destOffset, TextureStorage *storage, GLint level)
 {
-    gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
+    const gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
     ASSERT(colorbuffer);
 
     RenderTarget11 *sourceRenderTarget = NULL;
@@ -2445,7 +2445,7 @@ gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::
 gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                     const gl::Offset &destOffset, TextureStorage *storage, GLenum target, GLint level)
 {
-    gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
+    const gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
     ASSERT(colorbuffer);
 
     RenderTarget11 *sourceRenderTarget = NULL;
@@ -2496,7 +2496,7 @@ gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl
 gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                   const gl::Offset &destOffset, TextureStorage *storage, GLint level)
 {
-    gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
+    const gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
     ASSERT(colorbuffer);
 
     RenderTarget11 *sourceRenderTarget = NULL;
@@ -2547,7 +2547,7 @@ gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::
 gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                        const gl::Offset &destOffset, TextureStorage *storage, GLint level)
 {
-    gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
+    const gl::FramebufferAttachment *colorbuffer = framebuffer->getReadColorbuffer();
     ASSERT(colorbuffer);
 
     RenderTarget11 *sourceRenderTarget = NULL;
