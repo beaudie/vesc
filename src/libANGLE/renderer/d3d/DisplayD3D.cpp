@@ -162,7 +162,7 @@ egl::Error DisplayD3D::createWindowSurface(const egl::Config *configuration, EGL
     }
 
     SurfaceD3D *surface = SurfaceD3D::createFromWindow(mRenderer, mDisplay, configuration, window, fixedSize,
-                                                       width, height);
+                                                       width, height, mRenderer->shouldCreateChildWindowForSurface(window));
     egl::Error error = surface->initialize();
     if (error.isError())
     {
