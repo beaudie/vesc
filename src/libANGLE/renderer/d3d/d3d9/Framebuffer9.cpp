@@ -60,7 +60,7 @@ gl::Error Framebuffer9::readPixels(const gl::Rectangle &area, GLenum format, GLe
     ASSERT(colorbuffer);
 
     RenderTarget9 *renderTarget = NULL;
-    gl::Error error = d3d9::GetAttachmentRenderTarget(colorbuffer, &renderTarget);
+    gl::Error error = colorbuffer->getRenderTarget(&renderTarget);
     if (error.isError())
     {
         return error;
@@ -247,7 +247,7 @@ gl::Error Framebuffer9::blit(const gl::Rectangle &sourceArea, const gl::Rectangl
         ASSERT(readBuffer);
 
         RenderTarget9 *readRenderTarget = NULL;
-        gl::Error error = d3d9::GetAttachmentRenderTarget(readBuffer, &readRenderTarget);
+        gl::Error error = readBuffer->getRenderTarget(&readRenderTarget);
         if (error.isError())
         {
             return error;
@@ -258,7 +258,7 @@ gl::Error Framebuffer9::blit(const gl::Rectangle &sourceArea, const gl::Rectangl
         ASSERT(drawBuffer);
 
         RenderTarget9 *drawRenderTarget = NULL;
-        error = d3d9::GetAttachmentRenderTarget(drawBuffer, &drawRenderTarget);
+        error = drawBuffer->getRenderTarget(&drawRenderTarget);
         if (error.isError())
         {
             return error;
@@ -372,8 +372,8 @@ gl::Error Framebuffer9::blit(const gl::Rectangle &sourceArea, const gl::Rectangl
         const gl::FramebufferAttachment *readBuffer = sourceFramebuffer->getDepthOrStencilbuffer();
         ASSERT(readBuffer);
 
-        RenderTarget9 *readDepthStencil = NULL;
-        gl::Error error = d3d9::GetAttachmentRenderTarget(readBuffer, &readDepthStencil);
+        RenderTarget9 *readDepthStencil = nullptr;
+        gl::Error error = readBuffer->getRenderTarget(&readDepthStencil);
         if (error.isError())
         {
             return error;
@@ -383,8 +383,8 @@ gl::Error Framebuffer9::blit(const gl::Rectangle &sourceArea, const gl::Rectangl
         const gl::FramebufferAttachment *drawBuffer = mData.getDepthOrStencilAttachment();
         ASSERT(drawBuffer);
 
-        RenderTarget9 *drawDepthStencil = NULL;
-        error = d3d9::GetAttachmentRenderTarget(drawBuffer, &drawDepthStencil);
+        RenderTarget9 *drawDepthStencil = nullptr;
+        error = drawBuffer->getRenderTarget(&drawDepthStencil);
         if (error.isError())
         {
             return error;
