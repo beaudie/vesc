@@ -97,20 +97,20 @@ FramebufferD3D::~FramebufferD3D()
 {
 }
 
-void FramebufferD3D::setColorAttachment(size_t, const gl::FramebufferAttachment *)
+void FramebufferD3D::updateColorAttachment(size_t /*index*/)
 {
     mInvalidateColorAttachmentCache = true;
 }
 
-void FramebufferD3D::setDepthAttachment(const gl::FramebufferAttachment *)
+void FramebufferD3D::updateDepthAttachment()
 {
 }
 
-void FramebufferD3D::setStencilAttachment(const gl::FramebufferAttachment *)
+void FramebufferD3D::updateStencilAttachment()
 {
 }
 
-void FramebufferD3D::setDepthStencilAttachment(const gl::FramebufferAttachment *)
+void FramebufferD3D::updateDepthStencilAttachment()
 {
 }
 
