@@ -12,12 +12,20 @@
 
 #include "angle_gl.h"
 #include "common/angleutils.h"
+#include "libANGLE/Error.h"
 #include "libANGLE/ImageIndex.h"
 #include "libANGLE/RefCountObject.h"
 
 namespace egl
 {
 class Surface;
+}
+
+namespace rx
+{
+// And implementation-specific object associated with an attachment.
+typedef void *FramebufferAttachmentRenderTarget;
+class FramebufferAttachmentObjectImpl;
 }
 
 namespace gl
@@ -103,7 +111,15 @@ class FramebufferAttachment final : angle::NonCopyable
     Texture *getTexture() const;
     const egl::Surface *getSurface() const;
 
+    template <typename T>
+    gl::Error getRenderTarget(T **rtOut) const
+    {
+        return getRenderTarget(reinterpret_cast<rx::FramebufferAttachmentRenderTarget *>(rtOut));
+    }
+
   private:
+    gl::Error getRenderTarget(rx::FramebufferAttachmentRenderTarget *rtOut) const;
+
     GLenum mType;
     Target mTarget;
     BindingPointer<FramebufferAttachmentObject> mResource;
@@ -119,6 +135,12 @@ class FramebufferAttachmentObject : public RefCountObject
     virtual GLsizei getAttachmentHeight(const FramebufferAttachment::Target &target) const = 0;
     virtual GLenum getAttachmentInternalFormat(const FramebufferAttachment::Target &target) const = 0;
     virtual GLsizei getAttachmentSamples(const FramebufferAttachment::Target &target) const = 0;
+
+    Error getAttachmentRenderTarget(const FramebufferAttachment::Target &target,
+                                    rx::FramebufferAttachmentRenderTarget *rtOut) const;
+
+  protected:
+    virtual rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const = 0;
 };
 
 inline GLsizei FramebufferAttachment::getWidth() const
@@ -139,6 +161,42 @@ inline GLenum FramebufferAttachment::getInternalFormat() const
 inline GLsizei FramebufferAttachment::getSamples() const
 {
     return mResource->getAttachmentSamples(mTarget);
+}
+
+inline gl::Error FramebufferAttachment::getRenderTarget(rx::FramebufferAttachmentRenderTarget *rtOut) const
+{
+    return mResource->getAttachmentRenderTarget(mTarget, rtOut);
+}
+
+} // namespace gl
+
+namespace rx
+{
+
+class FramebufferAttachmentObjectImpl : angle::NonCopyable
+{
+  public:
+    FramebufferAttachmentObjectImpl() {}
+    virtual ~FramebufferAttachmentObjectImpl() {}
+
+    virtual gl::Error getAttachmentRenderTarget(const gl::FramebufferAttachment::Target &target,
+                                                FramebufferAttachmentRenderTarget *rtOut)
+    {
+        // Default: unsupported
+        return gl::Error(GL_INVALID_OPERATION, "Internal RenderTarget not supported");
+    }
+};
+
+} // namespace rx
+
+namespace gl
+{
+
+inline Error FramebufferAttachmentObject::getAttachmentRenderTarget(
+    const FramebufferAttachment::Target &target,
+    rx::FramebufferAttachmentRenderTarget *rtOut) const
+{
+    return getAttachmentImpl()->getAttachmentRenderTarget(target, rtOut);
 }
 
 }
