@@ -23,17 +23,18 @@ namespace rx
 SurfaceD3D *SurfaceD3D::createOffscreen(RendererD3D *renderer, egl::Display *display, const egl::Config *config, EGLClientBuffer shareHandle,
                                         EGLint width, EGLint height)
 {
-    return new SurfaceD3D(renderer, display, config, width, height, EGL_TRUE, shareHandle, NULL);
+    return new SurfaceD3D(renderer, display, config, width, height, EGL_TRUE, shareHandle, NULL, false);
 }
 
 SurfaceD3D *SurfaceD3D::createFromWindow(RendererD3D *renderer, egl::Display *display, const egl::Config *config, EGLNativeWindowType window,
                                          EGLint fixedSize, EGLint width, EGLint height)
 {
-    return new SurfaceD3D(renderer, display, config, width, height, fixedSize, static_cast<EGLClientBuffer>(0), window);
+    return new SurfaceD3D(renderer, display, config, width, height, fixedSize, static_cast<EGLClientBuffer>(0), window,
+                          renderer->shouldCreateChildWindowForSurface(window));
 }
 
 SurfaceD3D::SurfaceD3D(RendererD3D *renderer, egl::Display *display, const egl::Config *config, EGLint width, EGLint height, EGLint fixedSize,
-                       EGLClientBuffer shareHandle, EGLNativeWindowType window)
+                       EGLClientBuffer shareHandle, EGLNativeWindowType window, bool createChildWindow)
     : SurfaceImpl(),
       mRenderer(renderer),
       mDisplay(display),
@@ -46,9 +47,16 @@ SurfaceD3D::SurfaceD3D(RendererD3D *renderer, egl::Display *display, const egl::
       mNativeWindow(window),
       mWidth(width),
       mHeight(height),
+      mCreateChildWindow(createChildWindow),
+      mChildWindow(nullptr),
+      mChildWindowClass(0),
       mSwapInterval(1),
       mShareHandle(reinterpret_cast<HANDLE*>(shareHandle))
 {
+#if defined(ANGLE_ENABLE_WINDOWS_STORE)
+    ASSERT(!mCreateChildWindow);
+#endif
+
     subclassWindow();
 }
 
@@ -56,6 +64,14 @@ SurfaceD3D::~SurfaceD3D()
 {
     unsubclassWindow();
     releaseSwapChain();
+
+#if !defined(ANGLE_ENABLE_WINDOWS_STORE)
+    if (mCreateChildWindow)
+    {
+        DestroyWindow(mChildWindow.getNativeWindow());
+        UnregisterClassA(reinterpret_cast<const char*>(mChildWindowClass), NULL);
+    }
+#endif
 }
 
 void SurfaceD3D::releaseSwapChain()
@@ -63,10 +79,88 @@ void SurfaceD3D::releaseSwapChain()
     SafeDelete(mSwapChain);
 }
 
+#if !defined(ANGLE_ENABLE_WINDOWS_STORE)
+static LRESULT CALLBACK IntermediateWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message)
+    {
+      case WM_ERASEBKGND:
+        // Prevent windows from erasing the background.
+        return 1;
+      case WM_PAINT:
+        // Do not paint anything.
+        PAINTSTRUCT paint;
+        if (BeginPaint(window, &paint))
+        {
+            EndPaint(window, &paint);
+        }
+        return 0;
+    }
+
+    return DefWindowProc(window, message, wParam, lParam);
+}
+#endif
+
 egl::Error SurfaceD3D::initialize()
 {
     if (mNativeWindow.getNativeWindow())
     {
+#if !defined(ANGLE_ENABLE_WINDOWS_STORE)
+        if (mCreateChildWindow)
+        {
+            RECT rect;
+            if (!mNativeWindow.getClientRect(&rect))
+            {
+                return egl::Error(EGL_BAD_NATIVE_WINDOW, "Failed to get the size of the native window.");
+            }
+
+            // Work around compile error from not defining "UNICODE" while Chromium does
+            const LPSTR idcArrow = MAKEINTRESOURCEA(32512);
+
+            WNDCLASSA childWindowClassDesc = { 0 };
+            childWindowClassDesc.style = CS_OWNDC;
+            childWindowClassDesc.lpfnWndProc = IntermediateWindowProc;
+            childWindowClassDesc.cbClsExtra = 0;
+            childWindowClassDesc.cbWndExtra = 0;
+            childWindowClassDesc.hInstance = GetModuleHandle(NULL);
+            childWindowClassDesc.hIcon = LoadIconA(NULL, IDI_APPLICATION);
+            childWindowClassDesc.hCursor = LoadCursorA(NULL, idcArrow);
+            childWindowClassDesc.hbrBackground = NULL;
+            childWindowClassDesc.lpszMenuName = NULL;
+            childWindowClassDesc.lpszClassName = "ANGLE Child Window";
+
+            mChildWindowClass = RegisterClassA(&childWindowClassDesc);
+            if (!mChildWindowClass)
+            {
+                return egl::Error(EGL_NOT_INITIALIZED, "Failed to register child window class.");
+            }
+
+            HWND childWindow = CreateWindowExA(WS_EX_NOPARENTNOTIFY,
+                                               reinterpret_cast<const char*>(mChildWindowClass),
+                                               "ANGLE Intermediate Surface Window",
+                                               WS_CHILDWINDOW | WS_DISABLED | WS_VISIBLE,
+                                               0,
+                                               0,
+                                               rect.right - rect.left,
+                                               rect.bottom - rect.top,
+                                               mNativeWindow.getNativeWindow(),
+                                               NULL,
+                                               NULL,
+                                               NULL);
+            if (!childWindow)
+            {
+                return egl::Error(EGL_NOT_INITIALIZED, "Failed to create child window.");
+            }
+
+            mChildWindow = NativeWindow(childWindow);
+
+            if (!mChildWindow.initialize())
+            {
+                return egl::Error(EGL_BAD_SURFACE);
+            }
+        }
+#endif
+
         if (!mNativeWindow.initialize())
         {
             return egl::Error(EGL_BAD_SURFACE);
@@ -119,7 +213,15 @@ egl::Error SurfaceD3D::resetSwapChain()
         height = mHeight;
     }
 
-    mSwapChain = mRenderer->createSwapChain(mNativeWindow, mShareHandle, mRenderTargetFormat, mDepthStencilFormat);
+    if (mCreateChildWindow)
+    {
+        mSwapChain = mRenderer->createSwapChain(mChildWindow, mShareHandle, mRenderTargetFormat, mDepthStencilFormat);
+    }
+    else
+    {
+        mSwapChain = mRenderer->createSwapChain(mNativeWindow, mShareHandle, mRenderTargetFormat, mDepthStencilFormat);
+    }
+
     if (!mSwapChain)
     {
         return egl::Error(EGL_BAD_ALLOC);
@@ -154,6 +256,17 @@ egl::Error SurfaceD3D::resizeSwapChain(int backbufferWidth, int backbufferHeight
 
     mWidth = backbufferWidth;
     mHeight = backbufferHeight;
+
+#if !defined(ANGLE_ENABLE_WINDOWS_STORE)
+    if (mCreateChildWindow)
+    {
+        // Resize the child window
+        if (!MoveWindow(mChildWindow.getNativeWindow(), 0, 0, mWidth, mHeight, FALSE))
+        {
+            return egl::Error(EGL_BAD_SURFACE, "Failed to move the child window.");
+        }
+    }
+#endif
 
     return egl::Error(EGL_SUCCESS);
 }
