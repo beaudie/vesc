@@ -56,7 +56,7 @@ class SurfaceD3D : public SurfaceImpl
 
   private:
     SurfaceD3D(RendererD3D *renderer, egl::Display *display, const egl::Config *config, EGLint width, EGLint height,
-               EGLint fixedSize, EGLClientBuffer shareHandle, EGLNativeWindowType window);
+               EGLint fixedSize, EGLClientBuffer shareHandle, EGLNativeWindowType window, bool createChildWindow);
 
     egl::Error swapRect(EGLint x, EGLint y, EGLint width, EGLint height);
     egl::Error resetSwapChain(int backbufferWidth, int backbufferHeight);
@@ -80,6 +80,10 @@ class SurfaceD3D : public SurfaceImpl
     NativeWindow mNativeWindow;   // Handler for the Window that the surface is created for.
     EGLint mWidth;
     EGLint mHeight;
+
+    bool mCreateChildWindow;
+    NativeWindow mChildWindow;
+    ATOM mChildWindowClass;
 
     EGLint mSwapInterval;
 
