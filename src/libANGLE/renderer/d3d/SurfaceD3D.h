@@ -81,6 +81,9 @@ class SurfaceD3D : public SurfaceImpl
     EGLint mWidth;
     EGLint mHeight;
 
+    NativeWindow mChildWindow;
+    ATOM mChildWindowClass;
+
     EGLint mSwapInterval;
 
     HANDLE mShareHandle;
