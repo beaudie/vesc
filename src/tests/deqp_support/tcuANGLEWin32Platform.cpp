@@ -22,6 +22,9 @@
 #include "tcuANGLEWin32NativeDisplayFactory.h"
 #include "egluGLContextFactory.hpp"
 
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+
 namespace tcu
 {
 
@@ -31,7 +34,30 @@ ANGLEWin32Platform::ANGLEWin32Platform()
     // Set process priority to lower.
     SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);
 
-    m_nativeDisplayFactoryRegistry.registerFactory(new ANGLEWin32NativeDisplayFactory(mInstance));
+    std::vector<eglw::EGLAttrib> d3d11Attribs;
+    d3d11Attribs.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
+    d3d11Attribs.push_back(EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE);
+    d3d11Attribs.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
+    d3d11Attribs.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE);
+    d3d11Attribs.push_back(EGL_NONE);
+    d3d11Attribs.push_back(EGL_NONE);
+
+    auto *d3d11Factory = new ANGLEWin32NativeDisplayFactory(
+        "angle-d3d11", "ANGLE D3D11 Display", d3d11Attribs, mInstance);
+    m_nativeDisplayFactoryRegistry.registerFactory(d3d11Factory);
+
+    std::vector<eglw::EGLAttrib> d3d9Attribs;
+    d3d9Attribs.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
+    d3d9Attribs.push_back(EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE);
+    d3d9Attribs.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
+    d3d9Attribs.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE);
+    d3d9Attribs.push_back(EGL_NONE);
+    d3d9Attribs.push_back(EGL_NONE);
+
+    auto *d3d9Factory = new ANGLEWin32NativeDisplayFactory(
+        "angle-d3d9", "ANGLE D3D9 Display", d3d9Attribs, mInstance);
+    m_nativeDisplayFactoryRegistry.registerFactory(d3d9Factory);
+
     m_contextFactoryRegistry.registerFactory(new eglu::GLContextFactory(m_nativeDisplayFactoryRegistry));
 }
 
