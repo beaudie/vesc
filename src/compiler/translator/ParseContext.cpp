@@ -3176,8 +3176,8 @@ TIntermTyped *TParseContext::addFunctionCallOrMethod(TFunction *fnCall, TIntermN
                 UNIMPLEMENTED();
             }
         }
-        unionArray->setUConst(arraySize);
-        callNode = intermediate.addConstantUnion(unionArray, TType(EbtUInt, EbpUndefined, EvqConst), loc);
+        unionArray->setIConst(arraySize);
+        callNode = intermediate.addConstantUnion(unionArray, TType(EbtInt, EbpUndefined, EvqConst), loc);
     }
     else if (op != EOpNull)
     {
