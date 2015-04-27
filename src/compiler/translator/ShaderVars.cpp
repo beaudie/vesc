@@ -35,14 +35,16 @@ ShaderVariable::ShaderVariable()
     : type(0),
       precision(0),
       arraySize(0),
-      staticUse(false)
+      staticUse(false),
+      spec(SH_GLES2_SPEC)
 {}
 
 ShaderVariable::ShaderVariable(GLenum typeIn, unsigned int arraySizeIn)
     : type(typeIn),
       precision(0),
       arraySize(arraySizeIn),
-      staticUse(false)
+      staticUse(false),
+      spec(SH_GLES2_SPEC)
 {}
 
 ShaderVariable::~ShaderVariable()
@@ -56,7 +58,8 @@ ShaderVariable::ShaderVariable(const ShaderVariable &other)
       arraySize(other.arraySize),
       staticUse(other.staticUse),
       fields(other.fields),
-      structName(other.structName)
+      structName(other.structName),
+      spec(other.spec)
 {}
 
 ShaderVariable &ShaderVariable::operator=(const ShaderVariable &other)
@@ -69,6 +72,7 @@ ShaderVariable &ShaderVariable::operator=(const ShaderVariable &other)
     staticUse = other.staticUse;
     fields = other.fields;
     structName = other.structName;
+    spec = other.spec;
     return *this;
 }
 
@@ -81,7 +85,8 @@ bool ShaderVariable::operator==(const ShaderVariable &other) const
         arraySize != other.arraySize ||
         staticUse != other.staticUse ||
         fields.size() != other.fields.size() ||
-        structName != other.structName)
+        structName != other.structName ||
+        spec != other.spec)
     {
         return false;
     }
@@ -305,9 +310,11 @@ bool Varying::operator==(const Varying &other) const
 
 bool Varying::isSameVaryingAtLinkTime(const Varying &other) const
 {
+    // ESSL 3.00 section 4.6.1: Inputs can't be declared as invariant, so
+    // invariance doesn't need to match between output and input in ESSL3.
     return (ShaderVariable::isSameVariableAtLinkTime(other, false) &&
             interpolation == other.interpolation &&
-            isInvariant == other.isInvariant);
+            (spec == SH_GLES3_SPEC || spec == SH_WEBGL2_SPEC || isInvariant == other.isInvariant));
 }
 
 InterfaceBlock::InterfaceBlock()

@@ -26,7 +26,8 @@ class CollectVariables : public TIntermTraverser
                      std::vector<Varying> *varyings,
                      std::vector<InterfaceBlock> *interfaceBlocks,
                      ShHashFunction64 hashFunction,
-                     const TSymbolTable &symbolTable);
+                     const TSymbolTable &symbolTable,
+                     ShShaderSpec spec);
 
     virtual void visitSymbol(TIntermSymbol *symbol);
     virtual bool visitAggregate(Visit, TIntermAggregate *node);
@@ -57,6 +58,8 @@ class CollectVariables : public TIntermTraverser
     bool mLastFragDataAdded;
 
     ShHashFunction64 mHashFunction;
+
+    ShShaderSpec mSpec;
 
     const TSymbolTable &mSymbolTable;
 };

@@ -133,7 +133,8 @@ CollectVariables::CollectVariables(std::vector<sh::Attribute> *attribs,
                                    std::vector<sh::Varying> *varyings,
                                    std::vector<sh::InterfaceBlock> *interfaceBlocks,
                                    ShHashFunction64 hashFunction,
-                                   const TSymbolTable &symbolTable)
+                                   const TSymbolTable &symbolTable,
+                                   ShShaderSpec spec)
     : mAttribs(attribs),
       mOutputVariables(outputVariables),
       mUniforms(uniforms),
@@ -147,7 +148,8 @@ CollectVariables::CollectVariables(std::vector<sh::Attribute> *attribs,
       mPointSizeAdded(false),
       mLastFragDataAdded(false),
       mHashFunction(hashFunction),
-      mSymbolTable(symbolTable)
+      mSymbolTable(symbolTable),
+      mSpec(spec)
 {
 }
 
@@ -361,6 +363,7 @@ void CollectVariables::visitVariable(const TIntermSymbol *variable,
     attribute.arraySize = static_cast<unsigned int>(type.getArraySize());
     attribute.mappedName = TIntermTraverser::hash(variable->getSymbol(), mHashFunction).c_str();
     attribute.location = variable->getType().getLayoutQualifier().location;
+    attribute.spec = mSpec;
 
     infoList->push_back(attribute);
 }
@@ -390,7 +393,7 @@ void CollectVariables::visitVariable(const TIntermSymbol *variable,
         const TType &fieldType = *field.type();
 
         GetVariableTraverser traverser(mSymbolTable);
-        traverser.traverse(fieldType, fullFieldName, &interfaceBlock.fields);
+        traverser.traverse(fieldType, fullFieldName, &interfaceBlock.fields, mSpec);
 
         interfaceBlock.fields.back().isRowMajorLayout = (fieldType.getLayoutQualifier().matrixPacking == EmpRowMajor);
     }
@@ -403,7 +406,7 @@ void CollectVariables::visitVariable(const TIntermSymbol *variable,
                                      std::vector<VarT> *infoList) const
 {
     NameHashingTraverser traverser(mHashFunction, mSymbolTable);
-    traverser.traverse(variable->getType(), variable->getSymbol(), infoList);
+    traverser.traverse(variable->getType(), variable->getSymbol(), infoList, mSpec);
 }
 
 template <typename VarT>

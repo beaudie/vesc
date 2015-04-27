@@ -78,6 +78,7 @@ struct COMPILER_EXPORT ShaderVariable
     bool staticUse;
     std::vector<ShaderVariable> fields;
     std::string structName;
+    ShShaderSpec spec;
 
   protected:
     bool isSameVariableAtLinkTime(const ShaderVariable &other,
@@ -159,7 +160,10 @@ struct COMPILER_EXPORT Varying : public ShaderVariable
 
     // Decide whether two varyings are the same at shader link time,
     // assuming one from vertex shader and the other from fragment shader.
-    // See GLSL ES Spec 3.00.3, sec 4.3.9.
+    // See GLSL ES Spec 3.00.4, sections 4.6.1 and 4.3.9. These sections
+    // contradict each other to an extent, based on history of the spec it is
+    // thought that section 4.6.1 is the correct one. Behavior differs between
+    // ESSL1.00 and ESSL3.00.
     bool isSameVaryingAtLinkTime(const Varying &other) const;
 
     InterpolationType interpolation;

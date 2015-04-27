@@ -299,6 +299,10 @@ void GetVariableTraverser::setTypeSpecificInfo(
     {
       case EvqVaryingIn:
       case EvqVaryingOut:
+      case EvqVertexOut:
+      case EvqSmoothOut:
+      case EvqFlatOut:
+      case EvqCentroidOut:
         if (mSymbolTable.isVaryingInvariant(std::string(name.c_str())) || type.isInvariant())
         {
             variable->isInvariant = true;
@@ -314,13 +318,15 @@ void GetVariableTraverser::setTypeSpecificInfo(
 template <typename VarT>
 void GetVariableTraverser::traverse(const TType &type,
                                     const TString &name,
-                                    std::vector<VarT> *output)
+                                    std::vector<VarT> *output,
+                                    ShShaderSpec spec)
 {
     const TStructure *structure = type.getStruct();
 
     VarT variable;
     variable.name = name.c_str();
     variable.arraySize = static_cast<unsigned int>(type.getArraySize());
+    variable.spec = spec;
 
     if (!structure)
     {
@@ -338,7 +344,7 @@ void GetVariableTraverser::traverse(const TType &type,
         for (size_t fieldIndex = 0; fieldIndex < fields.size(); fieldIndex++)
         {
             TField *field = fields[fieldIndex];
-            traverse(*field->type(), field->name(), &variable.fields);
+            traverse(*field->type(), field->name(), &variable.fields, spec);
         }
     }
     setTypeSpecificInfo(type, name, &variable);
@@ -348,9 +354,9 @@ void GetVariableTraverser::traverse(const TType &type,
     output->push_back(variable);
 }
 
-template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<InterfaceBlockField> *);
-template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<ShaderVariable> *);
-template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<Uniform> *);
-template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<Varying> *);
+template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<InterfaceBlockField> *, ShShaderSpec);
+template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<ShaderVariable> *, ShShaderSpec);
+template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<Uniform> *, ShShaderSpec);
+template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<Varying> *, ShShaderSpec);
 
 }

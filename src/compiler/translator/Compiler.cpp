@@ -730,7 +730,8 @@ void TCompiler::collectVariables(TIntermNode* root)
                                  &varyings,
                                  &interfaceBlocks,
                                  hashFunction,
-                                 symbolTable);
+                                 symbolTable,
+                                 shaderSpec);
     root->traverse(&collect);
 
     // This is for enforcePackingRestriction().

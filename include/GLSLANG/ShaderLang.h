@@ -42,13 +42,9 @@ namespace sh
 typedef unsigned int GLenum;
 }
 
-// Must be included after GLenum proxy typedef
-// Note: make sure to increment ANGLE_SH_VERSION when changing ShaderVars.h
-#include "ShaderVars.h"
-
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 134
+#define ANGLE_SH_VERSION 135
 
 typedef enum {
   SH_GLES2_SPEC = 0x8B40,
@@ -79,6 +75,10 @@ typedef enum {
   //
   SH_CSS_SHADERS_SPEC = 0x8B42
 } ShShaderSpec;
+
+// Must be included after GLenum proxy typedef and ShShaderSpec enum
+// Note: make sure to increment ANGLE_SH_VERSION when changing ShaderVars.h
+#include "ShaderVars.h"
 
 typedef enum {
   SH_ESSL_OUTPUT               = 0x8B45,
