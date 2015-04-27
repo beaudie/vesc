@@ -186,3 +186,85 @@ TYPED_TEST(FramebufferRenderMipmapTest, RenderToMipmap)
 
     EXPECT_GL_NO_ERROR();
 }
+
+// Test for a bug where TextureStorage fails assertions when the texture is not mip complete in D3D9 and D3D11.
+TYPED_TEST(FramebufferRenderMipmapTest, RenderToIncompleteTextureBug)
+{
+    bool renderToMipmapSupported = extensionEnabled("GL_OES_fbo_render_mipmap") || getClientVersion() > 2;
+    if (!renderToMipmapSupported)
+    {
+        return;
+    }
+
+    GLuint fbo = 0;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    EXPECT_GL_NO_ERROR();
+
+    GLuint tex = 0;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+
+    const size_t levels = 5;
+    for (size_t i = 0; i < levels; i++)
+    {
+        glTexImage2D(GL_TEXTURE_2D, i, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    }
+    EXPECT_GL_NO_ERROR();
+
+    for (size_t i = 0; i < levels; i++)
+    {
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, i);
+        EXPECT_GL_NO_ERROR();
+
+        // The GL renderer does not always support this type of framebuffer
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_UNSUPPORTED)
+        {
+            glClear(GL_COLOR_BUFFER_BIT);
+            EXPECT_GL_NO_ERROR();
+        }
+    }
+
+    glDeleteFramebuffers(1, &fbo);
+    glDeleteTextures(1, &tex);
+}
+
+// Try resizing a cube map between renders and verify that it renders correctly.
+TYPED_TEST(FramebufferRenderMipmapTest, MissmatchedCubeFaceSizesBug)
+{
+    GLuint fbo = 0;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    EXPECT_GL_NO_ERROR();
+
+    GLuint tex = 0;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
+
+    for (GLenum face = GL_TEXTURE_CUBE_MAP_POSITIVE_X; face <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z; face++)
+    {
+        glTexImage2D(face, 0, GL_RGBA, 256, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    }
+    EXPECT_GL_NO_ERROR();
+
+    // Ensure a texture storage is created
+    glClearColor(0, 0, 1.0f, 1.0f);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X, tex, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 255, 255);
+
+    // Resize a face
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    EXPECT_GL_NO_ERROR();
+
+    // The GL renderer does not always support this type of framebuffer
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_UNSUPPORTED)
+    {
+        // Clear again
+        glClearColor(0, 1.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        EXPECT_GL_NO_ERROR();
+        EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+    }
+}
