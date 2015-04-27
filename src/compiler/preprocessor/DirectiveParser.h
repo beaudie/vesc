@@ -70,6 +70,7 @@ class DirectiveParser : public Lexer
         }
     };
     bool mPastFirstStatement;
+    bool mSeenNonPreprocessorToken;
     std::vector<ConditionalBlock> mConditionalStack;
     Tokenizer *mTokenizer;
     MacroSet *mMacroSet;
