@@ -92,6 +92,10 @@ void TOutputGLSLBase::writeBuiltInFunctionTriplet(
 void TOutputGLSLBase::writeVariableType(const TType &type)
 {
     TInfoSinkBase &out = objSink();
+    if (type.isInvariant())
+    {
+        out << "invariant" << " ";
+    }
     TQualifier qualifier = type.getQualifier();
     if (qualifier != EvqTemporary && qualifier != EvqGlobal)
     {
@@ -107,12 +111,6 @@ void TOutputGLSLBase::writeVariableType(const TType &type)
                 break;
               case EvqVaryingOut:
                 out << "out" << " ";
-                break;
-              case EvqInvariantVaryingIn:
-                out << "invariant in" << " ";
-                break;
-              case EvqInvariantVaryingOut:
-                out << "invariant out" << " ";
                 break;
               default:
                 out << type.getQualifierString() << " ";
