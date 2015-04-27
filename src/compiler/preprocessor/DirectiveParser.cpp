@@ -445,6 +445,13 @@ void DirectiveParser::parseUndef(Token *token)
     }
 
     mTokenizer->lex(token);
+
+    if (token->type != '\n')
+    {
+        mDiagnostics->report(Diagnostics::PP_UNEXPECTED_TOKEN,
+                             token->location, token->text);
+        return;
+    }
 }
 
 void DirectiveParser::parseIf(Token *token)
