@@ -59,6 +59,12 @@ gl::Error RendererD3D::drawElements(const gl::Data &data,
                                     const GLvoid *indices, GLsizei instances,
                                     const RangeUI &indexRange)
 {
+    gl::Error error = validateDrawState(data);
+    if (error.isError())
+    {
+        return error;
+    }
+
     if (data.state->isPrimitiveRestartEnabled())
     {
         UNIMPLEMENTED();
@@ -70,7 +76,7 @@ gl::Error RendererD3D::drawElements(const gl::Data &data,
 
     program->updateSamplerMapping();
 
-    gl::Error error = generateSwizzles(data);
+    error = generateSwizzles(data);
     if (error.isError())
     {
         return error;
@@ -148,12 +154,18 @@ gl::Error RendererD3D::drawArrays(const gl::Data &data,
                                   GLenum mode, GLint first,
                                   GLsizei count, GLsizei instances)
 {
+    gl::Error error = validateDrawState(data);
+    if (error.isError())
+    {
+        return error;
+    }
+
     gl::Program *program = data.state->getProgram();
     ASSERT(program != NULL);
 
     program->updateSamplerMapping();
 
-    gl::Error error = generateSwizzles(data);
+    error = generateSwizzles(data);
     if (error.isError())
     {
         return error;
@@ -461,6 +473,24 @@ gl::Error RendererD3D::applyTextures(const gl::Data &data)
     if (error.isError())
     {
         return error;
+    }
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error RendererD3D::validateDrawState(const gl::Data &data)
+{
+    const gl::State &state = *data.state;
+    const gl::DepthStencilState &depthStencilState = state.getDepthStencilState();
+    if (depthStencilState.stencilWritemask != depthStencilState.stencilBackWritemask ||
+        state.getStencilRef() != state.getStencilBackRef() ||
+        depthStencilState.stencilMask != depthStencilState.stencilBackMask)
+    {
+        // Note: these separate values are not supported in WebGL, due to D3D's limitations.
+        // See Section 6.10 of the WebGL 1.0 spec
+        return gl::Error(GL_INVALID_OPERATION, "This ANGLE implementation does not support "
+                         "separate front/back stencil writemasks, reference values, or stencil "
+                         "mask values.");
     }
 
     return gl::Error(GL_NO_ERROR);

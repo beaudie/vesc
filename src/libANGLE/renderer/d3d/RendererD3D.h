@@ -210,6 +210,8 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
                             const FramebufferTextureSerialArray &framebufferSerials, size_t framebufferSerialCount);
     gl::Error applyTextures(const gl::Data &data);
 
+    gl::Error validateDrawState(const gl::Data &data);
+
     bool skipDraw(const gl::Data &data, GLenum drawMode);
     void markTransformFeedbackUsage(const gl::Data &data);
 
