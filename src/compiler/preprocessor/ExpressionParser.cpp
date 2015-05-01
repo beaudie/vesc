@@ -1768,6 +1768,8 @@ int yylex(YYSTYPE *lvalp, Context *context)
     int type = 0;
 
     pp::Token *token = context->token;
+    context->lexer->lex(token);
+
     switch (token->type)
     {
       case pp::Token::CONST_INT: {
@@ -1827,8 +1829,8 @@ int yylex(YYSTYPE *lvalp, Context *context)
     }
 
     // Advance to the next token if the current one is valid.
-    if (type != 0)
-        context->lexer->lex(token);
+    //if (type != 0)
+    //    context->lexer->lex(token);
 
     return type;
 }

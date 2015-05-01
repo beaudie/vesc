@@ -838,39 +838,38 @@ void DirectiveParser::parseLine(Token *token)
     int state = LINE_NUMBER;
 
     MacroExpander macroExpander(mTokenizer, mMacroSet, mDiagnostics);
+    ExpressionParser expressionParser(&macroExpander, mDiagnostics);
+
     macroExpander.lex(token);
-    while ((token->type != '\n') && (token->type != Token::LAST))
+    while (valid && !isEOD(token))
     {
         switch (state++)
         {
           case LINE_NUMBER:
-            if (valid && (token->type != Token::CONST_INT))
+            if (valid)
             {
-                mDiagnostics->report(Diagnostics::PP_INVALID_LINE_NUMBER,
-                                     token->location, token->text);
-                valid = false;
-            }
-            if (valid && !token->iValue(&line))
-            {
-                mDiagnostics->report(Diagnostics::PP_INTEGER_OVERFLOW,
-                                     token->location, token->text);
-                valid = false;
+
+                DefinedParser definedParser(mTokenizer, mMacroSet, mDiagnostics);
+                MacroExpander macroExpander(&definedParser, mMacroSet, mDiagnostics);
+                ExpressionParser expressionParser(&macroExpander, mDiagnostics);
+                if (!expressionParser.parse(token, &line))
+                {
+                    mDiagnostics->report(Diagnostics::PP_INVALID_LINE_NUMBER,
+                        token->location, token->text);
+                    valid = false;
+                }
             }
             break;
+
           case FILE_NUMBER:
-            if (valid && (token->type != Token::CONST_INT))
+            if (valid && !expressionParser.parse(token, &file))
             {
                 mDiagnostics->report(Diagnostics::PP_INVALID_FILE_NUMBER,
                                      token->location, token->text);
                 valid = false;
             }
-            if (valid && !token->iValue(&file))
-            {
-                mDiagnostics->report(Diagnostics::PP_INTEGER_OVERFLOW,
-                                     token->location, token->text);
-                valid = false;
-            }
             break;
+
           default:
             if (valid)
             {
@@ -880,7 +879,11 @@ void DirectiveParser::parseLine(Token *token)
             }
             break;
         }
-        macroExpander.lex(token);
+    }
+
+    if (!valid)
+    {
+        skipUntilEOD(mTokenizer, token);
     }
 
     if (valid && (state != FILE_NUMBER) && (state != FILE_NUMBER + 1))

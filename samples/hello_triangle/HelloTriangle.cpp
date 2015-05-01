@@ -28,6 +28,8 @@ class HelloTriangleSample : public SampleApplication
     {
         const std::string vs = SHADER_SOURCE
         (
+            \n#if 1+2+3 34 44 54
+            \n#endif
             attribute vec4 vPosition;
             void main()
             {
