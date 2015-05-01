@@ -55,15 +55,14 @@ AttributeBindings::~AttributeBindings()
 {
 }
 
-InfoLog::InfoLog() : mInfoLog(NULL)
+InfoLog::InfoLog() : mInfoLog(nullptr)
 {
 }
 
 InfoLog::~InfoLog()
 {
-    delete[] mInfoLog;
+    SafeDeleteArray(mInfoLog);
 }
-
 
 int InfoLog::getLength() const
 {
@@ -128,10 +127,10 @@ void InfoLog::append(const char *format, ...)
 
     va_list vararg;
     va_start(vararg, format);
-    size_t infoLength = vsnprintf(NULL, 0, format, vararg);
+    size_t infoLength = vsnprintf(nullptr, 0, format, vararg);
     va_end(vararg);
 
-    char *logPointer = NULL;
+    char *logPointer = nullptr;
 
     if (!mInfoLog)
     {
@@ -141,10 +140,11 @@ void InfoLog::append(const char *format, ...)
     else
     {
         size_t currentlogLength = strlen(mInfoLog);
-        char *newLog = new char[currentlogLength + infoLength + 2];
-        strcpy(newLog, mInfoLog);
+        size_t newSize = currentlogLength + infoLength + 2;
+        char *newLog = new char[newSize];
+        strncpy(newLog, mInfoLog, newSize);
 
-        delete[] mInfoLog;
+        SafeDeleteArray(mInfoLog);
         mInfoLog = newLog;
 
         logPointer = mInfoLog + currentlogLength;
@@ -155,25 +155,25 @@ void InfoLog::append(const char *format, ...)
     va_end(vararg);
 
     logPointer[infoLength] = 0;
-    strcpy(logPointer + infoLength, "\n");
+    strncpy(&logPointer[infoLength], "\n", strlen("\n"));
 }
 
 void InfoLog::reset()
 {
-    if (mInfoLog)
-    {
-        delete [] mInfoLog;
-        mInfoLog = NULL;
-    }
+    SafeDeleteArray(mInfoLog);
 }
 
 VariableLocation::VariableLocation()
-    : name(), element(0), index(0)
+    : name(),
+      element(0),
+      index(0)
 {
 }
 
 VariableLocation::VariableLocation(const std::string &name, unsigned int element, unsigned int index)
-    : name(name), element(element), index(index)
+    : name(name),
+      element(element),
+      index(index)
 {
 }
 
@@ -192,8 +192,8 @@ Program::Program(rx::ProgramImpl *impl, ResourceManager *manager, GLuint handle)
       mValidated(false),
       mTransformFeedbackVaryings(),
       mTransformFeedbackBufferMode(GL_NONE),
-      mFragmentShader(NULL),
-      mVertexShader(NULL),
+      mFragmentShader(nullptr),
+      mVertexShader(nullptr),
       mLinked(false),
       mDeleteStatus(false),
       mRefCount(0),
@@ -210,12 +210,12 @@ Program::~Program()
 {
     unlink(true);
 
-    if (mVertexShader != NULL)
+    if (mVertexShader != nullptr)
     {
         mVertexShader->release();
     }
 
-    if (mFragmentShader != NULL)
+    if (mFragmentShader != nullptr)
     {
         mFragmentShader->release();
     }
@@ -260,7 +260,7 @@ bool Program::detachShader(Shader *shader)
         }
 
         mVertexShader->release();
-        mVertexShader = NULL;
+        mVertexShader = nullptr;
     }
     else if (shader->getType() == GL_FRAGMENT_SHADER)
     {
@@ -270,7 +270,7 @@ bool Program::detachShader(Shader *shader)
         }
 
         mFragmentShader->release();
-        mFragmentShader = NULL;
+        mFragmentShader = nullptr;
     }
     else UNREACHABLE();
 
@@ -387,13 +387,13 @@ void Program::unlink(bool destroy)
         if (mFragmentShader)
         {
             mFragmentShader->release();
-            mFragmentShader = NULL;
+            mFragmentShader = nullptr;
         }
 
         if (mVertexShader)
         {
             mVertexShader->release();
-            mVertexShader = NULL;
+            mVertexShader = nullptr;
         }
     }
 
@@ -552,7 +552,7 @@ Error Program::saveBinary(GLenum *binaryFormat, void *binary, GLsizei bufSize, G
 GLint Program::getBinaryLength() const
 {
     GLint length;
-    Error error = saveBinary(NULL, NULL, std::numeric_limits<GLint>::max(), &length);
+    Error error = saveBinary(nullptr, nullptr, std::numeric_limits<GLint>::max(), &length);
     if (error.isError())
     {
         return 0;
