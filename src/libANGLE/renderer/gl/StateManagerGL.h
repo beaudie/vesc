@@ -51,6 +51,8 @@ class StateManagerGL : angle::NonCopyable
   private:
     gl::Error setGenericDrawState(const gl::Data &data);
 
+    void setAttributeCurrentData(size_t index, const gl::VertexAttribCurrentValueData &data);
+
     void setScissorTestEnabled(bool enabled);
     void setScissor(const gl::Rectangle &scissor);
 
@@ -95,7 +97,10 @@ class StateManagerGL : angle::NonCopyable
     const FunctionsGL *mFunctions;
 
     GLuint mProgram;
+
     GLuint mVAO;
+    std::vector<gl::VertexAttribCurrentValueData> mVertexAttribCurrentValues;
+
     std::map<GLenum, GLuint> mBuffers;
 
     size_t mTextureUnitIndex;
