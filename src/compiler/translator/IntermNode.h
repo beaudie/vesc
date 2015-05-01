@@ -270,7 +270,8 @@ class TIntermConstantUnion : public TIntermTyped
 
     virtual bool hasSideEffects() const { return false; }
 
-    ConstantUnion *getUnionArrayPointer() const { return mUnionArrayPointer; }
+    const ConstantUnion *getUnionArrayPointer() const { return mUnionArrayPointer; }
+    ConstantUnion *getUnionArrayPointer() { return mUnionArrayPointer; }
 
     int getIConst(size_t index) const
     {
@@ -287,6 +288,11 @@ class TIntermConstantUnion : public TIntermTyped
     bool getBConst(size_t index) const
     {
         return mUnionArrayPointer ? mUnionArrayPointer[index].getBConst() : false;
+    }
+
+    void replaceConstantUnion(ConstantUnion *safeConstantUnion)
+    {
+        mUnionArrayPointer = safeConstantUnion;
     }
 
     virtual TIntermConstantUnion *getAsConstantUnion()  { return this; }

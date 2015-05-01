@@ -49,7 +49,8 @@ class TIntermediate
         TIntermTyped *condition, const TSourceLoc &line);
     TIntermTyped *addComma(
         TIntermTyped *left, TIntermTyped *right, const TSourceLoc &);
-    TIntermConstantUnion *addConstantUnion(ConstantUnion *, const TType &, const TSourceLoc &);
+    TIntermConstantUnion *addConstantUnion(
+        ConstantUnion *constantUnion, const TType &type, const TSourceLoc &line);
     // TODO(zmo): Get rid of default value.
     bool parseConstTree(const TSourceLoc &, TIntermNode *, ConstantUnion *,
                         TOperator, TType, bool singleConstantParam = false);
