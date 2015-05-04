@@ -10,6 +10,7 @@
 #include <GLES2/gl2.h>
 
 #include "Vector.h"
+#include <cstddef>
 #include <vector>
 
 struct SphereGeometry
