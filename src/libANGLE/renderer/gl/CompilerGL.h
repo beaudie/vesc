@@ -33,7 +33,6 @@ class CompilerGL : public CompilerImpl
 
   private:
     ShShaderSpec mSpec;
-    ShShaderOutput mOutputType;
     ShBuiltInResources mResources;
 
     ShHandle mFragmentCompiler;
