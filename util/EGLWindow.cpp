@@ -169,7 +169,7 @@ bool EGLWindow::initializeGL(OSWindow *osWindow)
     if (mSurface == EGL_NO_SURFACE)
     {
         eglGetError(); // Clear error and try again
-        mSurface = eglCreateWindowSurface(mDisplay, mConfig, NULL, NULL);
+        mSurface = eglCreateWindowSurface(mDisplay, mConfig, 0, NULL);
     }
 
     if (eglGetError() != EGL_SUCCESS)
