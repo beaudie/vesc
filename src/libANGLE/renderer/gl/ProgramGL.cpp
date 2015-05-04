@@ -156,6 +156,17 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog,
                 }
 
                 mUniformIndex[location] = gl::VariableLocation(uniformName, arrayIndex, static_cast<unsigned int>(mUniforms.size()));
+
+                // If the uniform is a sampler, track it in the sampler bindings array
+                if (gl::IsSamplerType(uniformType))
+                {
+                    SamplerBindingGL samplerBinding;
+                    samplerBinding.textureType = gl::SamplerTypeToTextureType(uniformType);
+                    samplerBinding.boundTextureUnit = 0;
+
+                    mSamplerUniformMap[i] = mSamplerBindings.size();
+                    mSamplerBindings.push_back(samplerBinding);
+                }
             }
         }
 
@@ -218,6 +229,14 @@ void ProgramGL::setUniform1iv(GLint location, GLsizei count, const GLint *v)
 {
     mStateManager->useProgram(mProgramID);
     mFunctions->uniform1iv(location, count, v);
+
+    auto iter = mSamplerUniformMap.find(location);
+    if (iter != mSamplerUniformMap.end())
+    {
+        // TODO: array setting
+        SamplerBindingGL &binding = mSamplerBindings[iter->second];
+        binding.boundTextureUnit = v[0];
+    }
 }
 
 void ProgramGL::setUniform2iv(GLint location, GLsizei count, const GLint *v)
@@ -409,11 +428,19 @@ void ProgramGL::reset()
         mFunctions->deleteProgram(mProgramID);
         mProgramID = 0;
     }
+
+    mSamplerUniformMap.clear();
+    mSamplerBindings.clear();
 }
 
 GLuint ProgramGL::getProgramID() const
 {
     return mProgramID;
+}
+
+const std::vector<SamplerBindingGL> &ProgramGL::getAppliedSamplerUniforms() const
+{
+    return mSamplerBindings;
 }
 
 }
