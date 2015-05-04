@@ -94,6 +94,40 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
     mFramebuffers[GL_DRAW_FRAMEBUFFER] = 0;
 }
 
+void StateManagerGL::deleteTexture(GLuint texture)
+{
+    if (texture != 0)
+    {
+        for (auto textureTypeIter = mTextures.begin(); textureTypeIter != mTextures.end(); textureTypeIter++)
+        {
+            const std::vector<GLuint> &textureVector = textureTypeIter->second;
+            for (size_t textureUnitIndex = 0; textureUnitIndex < textureVector.size(); textureUnitIndex++)
+            {
+                if (textureVector[textureUnitIndex] == texture)
+                {
+                    bindTexture(textureTypeIter->first, 0);
+                }
+            }
+        }
+
+        mFunctions->deleteTextures(1, &texture);
+    }
+}
+
+void StateManagerGL::deleteBuffer(GLuint buffer)
+{
+    if (buffer != 0)
+    {
+        for (auto bufferTypeIter = mBuffers.begin(); bufferTypeIter != mBuffers.end(); bufferTypeIter++)
+        {
+            if (bufferTypeIter->second == buffer)
+            {
+                bindBuffer(bufferTypeIter->first, 0);
+            }
+        }
+    }
+}
+
 void StateManagerGL::useProgram(GLuint program)
 {
     if (mProgram != program)

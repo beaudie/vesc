@@ -33,6 +33,9 @@ class StateManagerGL : angle::NonCopyable
   public:
     StateManagerGL(const FunctionsGL *functions, const gl::Caps &rendererCaps);
 
+    void deleteTexture(GLuint texture);
+    void deleteBuffer(GLuint buffer);
+
     void useProgram(GLuint program);
     void bindVertexArray(GLuint vao);
     void bindBuffer(GLenum type, GLuint buffer);
