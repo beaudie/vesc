@@ -211,8 +211,15 @@ gl::Error VertexArrayGL::syncAttributeState(bool attributesNeedStreaming, const 
             if (mAppliedAttributes[idx] != mAttributes[idx])
             {
                 const gl::Buffer *arrayBuffer = mAttributes[idx].buffer.get();
-                const BufferGL *arrayBufferGL = GetImplAs<BufferGL>(arrayBuffer);
-                mStateManager->bindBuffer(GL_ARRAY_BUFFER, arrayBufferGL->getBufferID());
+                if (arrayBuffer != nullptr)
+                {
+                    const BufferGL *arrayBufferGL = GetImplAs<BufferGL>(arrayBuffer);
+                    mStateManager->bindBuffer(GL_ARRAY_BUFFER, arrayBufferGL->getBufferID());
+                }
+                else
+                {
+                    mStateManager->bindBuffer(GL_ARRAY_BUFFER, 0);
+                }
 
                 if (mAttributes[idx].pureInteger)
                 {
@@ -244,11 +251,8 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
     {
         const BufferGL *bufferGL = GetImplAs<BufferGL>(mElementArrayBuffer.get());
         GLuint elementArrayBufferID = bufferGL->getBufferID();
-        if (elementArrayBufferID != mAppliedElementArrayBuffer)
-        {
-            mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferID);
-            mAppliedElementArrayBuffer = elementArrayBufferID;
-        }
+        mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferID);
+        mAppliedElementArrayBuffer = elementArrayBufferID;
 
         // Only compute the index range if the attributes also need to be streamed
         if (attributesNeedStreaming)
