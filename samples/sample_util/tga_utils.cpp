@@ -6,6 +6,7 @@
 
 #include "tga_utils.h"
 
+#include <limits.h>
 #include <iostream>
 #include <fstream>
 #include <string>
