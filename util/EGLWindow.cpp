@@ -6,6 +6,7 @@
 
 #include <cassert>
 #include <vector>
+#include <string.h>
 
 #include "EGLWindow.h"
 #include "OSWindow.h"
