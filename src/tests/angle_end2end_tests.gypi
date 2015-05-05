@@ -23,6 +23,7 @@
             '<(angle_path)/src/tests/end2end_tests/CompressedTextureTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/CubeMapTextureTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/DepthStencilFormatsTest.cpp',
+            '<(angle_path)/src/tests/end2end_tests/DiscardFramebufferEXTTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/DrawBuffersTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/FenceSyncTests.cpp',
             '<(angle_path)/src/tests/end2end_tests/FramebufferFormatsTest.cpp',
