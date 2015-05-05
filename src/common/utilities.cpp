@@ -366,6 +366,34 @@ GLenum LayerIndexToCubeMapTextureTarget(size_t index)
     return FirstCubeMapTextureTarget + static_cast<GLenum>(index);
 }
 
+template <class IndexType>
+static void ComputeTypedIndexRange(const IndexType *indices, GLsizei count, GLuint *minElement, GLuint *maxElement)
+{
+    ASSERT(count > 0);
+    IndexType minIndex = indices[0];
+    IndexType maxIndex = indices[0];
+
+    for (GLsizei i = 1; i < count; i++)
+    {
+        if (minIndex > indices[i]) minIndex = indices[i];
+        if (maxIndex < indices[i]) maxIndex = indices[i];
+    }
+
+    *minElement = static_cast<GLuint>(minIndex);
+    *maxElement = static_cast<GLuint>(maxIndex);
+}
+
+void ComputeIndexRange(GLenum indexType, const GLvoid *indices, GLsizei count, GLuint *minElement, GLuint *maxElement)
+{
+    switch (indexType)
+    {
+      case GL_UNSIGNED_BYTE:  ComputeTypedIndexRange(static_cast<const GLubyte*>(indices),  count, minElement, maxElement); break;
+      case GL_UNSIGNED_SHORT: ComputeTypedIndexRange(static_cast<const GLushort*>(indices), count, minElement, maxElement); break;
+      case GL_UNSIGNED_INT:   ComputeTypedIndexRange(static_cast<const GLuint*>(indices),   count, minElement, maxElement); break;
+      default: UNREACHABLE();
+    }
+}
+
 bool IsTriangleMode(GLenum drawMode)
 {
     switch (drawMode)
