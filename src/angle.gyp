@@ -25,6 +25,9 @@
                 'angle_enable_d3d9%': 1,
                 'angle_enable_d3d11%': 1,
                 'angle_enable_hlsl%': 1,
+            },
+            { # OS != win
+                'angle_enable_gl%': 1,
             }],
         ],
     },
