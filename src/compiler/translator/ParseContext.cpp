@@ -3253,6 +3253,31 @@ TIntermTyped *TParseContext::addFunctionCallOrMethod(TFunction *fnCall, TIntermN
                         return nullptr;
                     }
                 }
+                else if (fnCandidate->getParamCount() == 2)
+                {
+                    //
+                    // Treat it like a built-in binary operator.
+                    //
+                    TIntermAggregate *aggregate = intermediate.setAggregateOperator(paramNode, op, loc);
+                    aggregate->setType(fnCandidate->getReturnType());
+                    aggregate->setPrecisionFromChildren();
+                    callNode = aggregate;
+                    functionCallLValueErrorCheck(fnCandidate, aggregate);
+
+                    // See if we can constant fold a binary built-in.
+                    TIntermConstantUnion *leftTempConstant = (*(aggregate->getSequence()))[0]->getAsConstantUnion();
+                    TIntermConstantUnion *rightTempConstant = (*(aggregate->getSequence()))[1]->getAsConstantUnion();
+                    if (leftTempConstant && rightTempConstant)
+                    {
+                        TIntermTyped *node = intermediate.foldBinary(op, leftTempConstant, rightTempConstant);
+                        if (node)
+                        {
+                            node->setType(callNode->getType());
+                            node->getTypePointer()->setQualifier(EvqConst);
+                            callNode = node;
+                        }
+                    }
+                }
                 else
                 {
                     TIntermAggregate *aggregate = intermediate.setAggregateOperator(paramNode, op, loc);

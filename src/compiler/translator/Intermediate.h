@@ -63,6 +63,8 @@ class TIntermediate
 
     static void outputTree(TIntermNode *, TInfoSinkBase &);
 
+    TIntermTyped *TIntermediate::foldBinary(TOperator op, TIntermConstantUnion *left, TIntermConstantUnion *right);
+
   private:
     void operator=(TIntermediate &); // prevent assignments
 

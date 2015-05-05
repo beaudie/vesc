@@ -441,3 +441,17 @@ bool TIntermediate::postProcess(TIntermNode *root)
 
     return true;
 }
+
+TIntermTyped *TIntermediate::foldBinary(TOperator op, TIntermConstantUnion *left, TIntermConstantUnion *right)
+{
+    switch (op)
+    {
+      case EOpMin:
+      case EOpMax:
+        return left->fold(op, right, mInfoSink);
+      default:
+        break;
+    }
+
+    return nullptr;
+}

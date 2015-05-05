@@ -1107,6 +1107,73 @@ TIntermTyped *TIntermConstantUnion::fold(
 
             return tempNode;
 
+          case EOpMin:
+            {
+                tempConstArray = new TConstantUnion[objectSize];
+                size_t rightNodeObjectSize = rightNode->getType().getObjectSize();
+                for (size_t i = 0; i < objectSize; i++)
+                {
+                    switch (getType().getBasicType())
+                    {
+                      case EbtFloat:
+                        if (rightNodeObjectSize == objectSize)
+                            tempConstArray[i].setFConst(unionArray[i].getFConst() < rightUnionArray[i].getFConst() ? unionArray[i].getFConst() : rightUnionArray[i].getFConst());
+                        else
+                            tempConstArray[i].setFConst(unionArray[i].getFConst() < rightUnionArray[0].getFConst() ? unionArray[i].getFConst() : rightUnionArray[0].getFConst());
+                         break;
+                      case EbtInt:
+                        if (rightNodeObjectSize == objectSize)
+                            tempConstArray[i].setIConst(unionArray[i].getIConst() < rightUnionArray[i].getIConst() ? unionArray[i].getIConst() : rightUnionArray[i].getIConst());
+                        else
+                            tempConstArray[i].setIConst(unionArray[i].getIConst() < rightUnionArray[0].getIConst() ? unionArray[i].getIConst() : rightUnionArray[0].getIConst());
+                        break;
+                      case EbtUInt:
+                        if (rightNodeObjectSize == objectSize)
+                            tempConstArray[i].setUConst(unionArray[i].getUConst() < rightUnionArray[i].getUConst() ? unionArray[i].getUConst() : rightUnionArray[i].getUConst());
+                        else
+                            tempConstArray[i].setUConst(unionArray[i].getUConst() < rightUnionArray[0].getUConst() ? unionArray[i].getUConst() : rightUnionArray[0].getUConst());
+                        break;
+                      default:
+                        UNREACHABLE();
+                        break;
+                    }
+                }
+            }
+            break;
+
+          case EOpMax:
+          {
+              tempConstArray = new TConstantUnion[objectSize];
+              size_t rightNodeObjectSize = rightNode->getType().getObjectSize();
+              for (size_t i = 0; i < objectSize; i++)
+              {
+                  switch (getType().getBasicType())
+                  {
+                    case EbtFloat:
+                      if (rightNodeObjectSize == objectSize)
+                          tempConstArray[i].setFConst(unionArray[i].getFConst() > rightUnionArray[i].getFConst() ? unionArray[i].getFConst() : rightUnionArray[i].getFConst());
+                      else
+                          tempConstArray[i].setFConst(unionArray[i].getFConst() > rightUnionArray[0].getFConst() ? unionArray[i].getFConst() : rightUnionArray[0].getFConst());
+                      break;
+                    case EbtInt:
+                      if (rightNodeObjectSize == objectSize)
+                          tempConstArray[i].setIConst(unionArray[i].getIConst() > rightUnionArray[i].getIConst() ? unionArray[i].getIConst() : rightUnionArray[i].getIConst());
+                      else
+                          tempConstArray[i].setIConst(unionArray[i].getIConst() > rightUnionArray[0].getIConst() ? unionArray[i].getIConst() : rightUnionArray[0].getIConst());
+                      break;
+                    case EbtUInt:
+                      if (rightNodeObjectSize == objectSize)
+                          tempConstArray[i].setUConst(unionArray[i].getUConst() > rightUnionArray[i].getUConst() ? unionArray[i].getUConst() : rightUnionArray[i].getUConst());
+                      else
+                          tempConstArray[i].setUConst(unionArray[i].getUConst() > rightUnionArray[0].getUConst() ? unionArray[i].getUConst() : rightUnionArray[0].getUConst());
+                      break;
+                    default:
+                      UNREACHABLE();
+                      break;
+                    }
+                }
+            }
+            break;
           default:
             infoSink.info.message(
                 EPrefixInternalError, getLine(),
