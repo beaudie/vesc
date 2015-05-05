@@ -12,8 +12,7 @@
 #include "OSWindow.h"
 
 #ifdef _WIN32
-#include "win32/Win32Timer.h"
-#include "win32/Win32Window.h"
+#elif __linux__
 #else
 #error unsupported OS.
 #endif
@@ -105,7 +104,7 @@ bool EGLWindow::initializeGL(OSWindow *osWindow)
         EGL_PLATFORM_ANGLE_TYPE_ANGLE,              mPlatform.renderer,
         EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE, mPlatform.majorVersion,
         EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE, mPlatform.minorVersion,
-        EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE,       mPlatform.deviceType,
+//        EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE,       mPlatform.deviceType,
         EGL_NONE,
     };
 
