@@ -3285,6 +3285,15 @@ TIntermTyped *TParseContext::addFunctionCallOrMethod(TFunction *fnCall, TIntermN
 
                     // Some built-in functions have out parameters too.
                     functionCallLValueErrorCheck(fnCandidate, aggregate);
+
+                    // See if we can constant fold a built-in.
+                    TIntermTyped *node = intermediate.foldAggregateBuiltIn(op, aggregate);
+                    if (node)
+                    {
+                        node->setType(callNode->getType());
+                        node->getTypePointer()->setQualifier(EvqConst);
+                        callNode = node;
+                    }
                 }
             }
             else

@@ -301,6 +301,8 @@ class TIntermConstantUnion : public TIntermTyped
 
     TIntermTyped *fold(TOperator op, TIntermConstantUnion *rightNode, TInfoSink &infoSink);
 
+    static TIntermTyped *foldAggregateBuiltIn(TOperator op, TIntermAggregate *aggregate, TInfoSink &infoSink);
+
   protected:
     TConstantUnion *mUnionArrayPointer;
 
