@@ -63,6 +63,8 @@ class TIntermediate
 
     static void outputTree(TIntermNode *, TInfoSinkBase &);
 
+    TIntermTyped *TIntermediate::foldAggregateBuiltIn(TOperator op, TIntermAggregate *aggregate);
+
   private:
     void operator=(TIntermediate &); // prevent assignments
 

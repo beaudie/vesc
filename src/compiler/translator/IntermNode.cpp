@@ -130,6 +130,15 @@ bool CompareStructure(const TType &leftNodeType,
     return true;
 }
 
+TConstantUnion *vectorize(TConstantUnion constant, size_t size)
+{
+    TConstantUnion *constUnion = new TConstantUnion[size];
+    for (unsigned int i = 0; i < size; ++i)
+        constUnion[i] = constant;
+
+    return constUnion;
+}
+
 }  // namespace anonymous
 
 
@@ -687,21 +696,13 @@ TIntermTyped *TIntermConstantUnion::fold(
         // for a case like float f = vec4(2, 3, 4, 5) + 1.2;
         if (rightNode->getType().getObjectSize() == 1 && objectSize > 1)
         {
-            rightUnionArray = new TConstantUnion[objectSize];
-            for (size_t i = 0; i < objectSize; ++i)
-            {
-                rightUnionArray[i] = *rightNode->getUnionArrayPointer();
-            }
+            rightUnionArray = vectorize(*rightNode->getUnionArrayPointer(), objectSize);
             returnType = getType();
         }
         else if (rightNode->getType().getObjectSize() > 1 && objectSize == 1)
         {
             // for a case like float f = 1.2 + vec4(2, 3, 4, 5);
-            unionArray = new TConstantUnion[rightNode->getType().getObjectSize()];
-            for (size_t i = 0; i < rightNode->getType().getObjectSize(); ++i)
-            {
-                unionArray[i] = *getUnionArrayPointer();
-            }
+            unionArray = vectorize(*getUnionArrayPointer(), rightNode->getType().getObjectSize());
             returnType = rightNode->getType();
             objectSize = rightNode->getType().getObjectSize();
         }
@@ -1472,6 +1473,204 @@ bool TIntermConstantUnion::foldFloatTypeUnary(const TConstantUnion &parameter, F
         EPrefixInternalError, getLine(),
         "Unary operation not folded into constant");
     return false;
+}
+
+// static
+TIntermTyped *TIntermConstantUnion::foldAggregateBuiltIn(TOperator op, TIntermAggregate *aggregate, TInfoSink &infoSink)
+{
+    TIntermSequence *sequence = aggregate->getSequence();
+    size_t maxObjectSize = 0;
+    TIntermConstantUnion *maxSizeObject = nullptr;
+
+    for (auto p = sequence->begin(); p != sequence->end(); ++p) {
+        TIntermConstantUnion *paramConstant = (*p)->getAsConstantUnion();
+        // Make sure that all params are constant before actual constant folding.
+        if (!paramConstant)
+            return nullptr;
+
+        if (paramConstant->getType().getObjectSize() >= maxObjectSize)
+        {
+            maxSizeObject = paramConstant;
+            maxObjectSize = paramConstant->getType().getObjectSize();
+        }
+    }
+
+    unsigned int paramsCount = sequence->size();
+    TType returnType = maxSizeObject->getType();
+
+    if (paramsCount == 2)
+    {
+        //
+        // Binary built-in
+        //
+        TIntermConstantUnion *firstParam = (*sequence)[0]->getAsConstantUnion();
+        TIntermConstantUnion *secondParam = (*sequence)[1]->getAsConstantUnion();
+
+        TConstantUnion *firstParamUnionArray = firstParam->getUnionArrayPointer();
+        TConstantUnion *secondParamUnionArray = secondParam->getUnionArrayPointer();
+
+        if (firstParam->getType().getObjectSize() != maxObjectSize)
+            firstParamUnionArray = vectorize(*firstParamUnionArray, maxObjectSize);
+
+        if (secondParam->getType().getObjectSize() != maxObjectSize)
+            secondParamUnionArray = vectorize(*secondParamUnionArray, maxObjectSize);
+
+        TConstantUnion *tempConstArray = nullptr;
+        TIntermConstantUnion *tempNode;
+
+        switch (op)
+        {
+          case EOpMin:
+            {
+                tempConstArray = new TConstantUnion[maxObjectSize];
+                for (size_t i = 0; i < maxObjectSize; i++)
+                {
+                    switch (firstParam->getType().getBasicType())
+                    {
+                      case EbtFloat:
+                          tempConstArray[i].setFConst(firstParamUnionArray[i].getFConst() < secondParamUnionArray[i].getFConst() ? firstParamUnionArray[i].getFConst() : secondParamUnionArray[i].getFConst());
+                        break;
+                      case EbtInt:
+                          tempConstArray[i].setIConst(firstParamUnionArray[i].getIConst() < secondParamUnionArray[i].getIConst() ? firstParamUnionArray[i].getIConst() : secondParamUnionArray[i].getIConst());
+                        break;
+                      case EbtUInt:
+                          tempConstArray[i].setUConst(firstParamUnionArray[i].getUConst() < secondParamUnionArray[i].getUConst() ? firstParamUnionArray[i].getUConst() : secondParamUnionArray[i].getUConst());
+                        break;
+                      default:
+                        UNREACHABLE();
+                        break;
+                    }
+                }
+            }
+            break;
+
+          case EOpMax:
+            {
+              tempConstArray = new TConstantUnion[maxObjectSize];
+              for (size_t i = 0; i < maxObjectSize; i++)
+              {
+                  switch (firstParam->getType().getBasicType())
+                  {
+                  case EbtFloat:
+                      tempConstArray[i].setFConst(firstParamUnionArray[i].getFConst() > secondParamUnionArray[i].getFConst() ? firstParamUnionArray[i].getFConst() : secondParamUnionArray[i].getFConst());
+                      break;
+                  case EbtInt:
+                      tempConstArray[i].setIConst(firstParamUnionArray[i].getIConst() > secondParamUnionArray[i].getIConst() ? firstParamUnionArray[i].getIConst() : secondParamUnionArray[i].getIConst());
+                      break;
+                  case EbtUInt:
+                      tempConstArray[i].setUConst(firstParamUnionArray[i].getUConst() > secondParamUnionArray[i].getUConst() ? firstParamUnionArray[i].getUConst() : secondParamUnionArray[i].getUConst());
+                      break;
+                  default:
+                      UNREACHABLE();
+                      break;
+                  }
+              }
+            }
+            break;
+
+          default:
+            infoSink.info.message(
+                EPrefixInternalError, firstParam->getLine(),
+                "Invalid built-in for constant folding");
+            return nullptr;
+        }
+
+        tempNode = new TIntermConstantUnion(tempConstArray, returnType);
+        tempNode->setLine(firstParam->getLine());
+        return tempNode;
+    }
+    else if (paramsCount == 3)
+    {
+        //
+        // Ternary built-in
+        //
+        TIntermConstantUnion *firstParam = (*sequence)[0]->getAsConstantUnion();
+        TIntermConstantUnion *secondParam = (*sequence)[1]->getAsConstantUnion();
+        TIntermConstantUnion *thirdParam = (*sequence)[2]->getAsConstantUnion();
+
+        TConstantUnion *firstParamUnionArray = firstParam->getUnionArrayPointer();
+        TConstantUnion *secondParamUnionArray = secondParam->getUnionArrayPointer();
+        TConstantUnion *thirdParamUnionArray = thirdParam->getUnionArrayPointer();
+        TType returnType;
+
+        if (firstParam->getType().getObjectSize() != maxObjectSize)
+            firstParamUnionArray = vectorize(*firstParamUnionArray, maxObjectSize);
+
+        if (secondParam->getType().getObjectSize() != maxObjectSize)
+            secondParamUnionArray = vectorize(*secondParamUnionArray, maxObjectSize);
+
+        if (thirdParam->getType().getObjectSize() != maxObjectSize)
+            thirdParamUnionArray = vectorize(*thirdParamUnionArray, maxObjectSize);
+
+        TConstantUnion *tempConstArray = nullptr;
+        TIntermConstantUnion *tempNode;
+
+        switch (op)
+        {
+          case EOpClamp:
+            {
+                tempConstArray = new TConstantUnion[maxObjectSize];
+                for (size_t i = 0; i < maxObjectSize; i++)
+                {
+                    switch (firstParam->getType().getBasicType())
+                    {
+                      case EbtFloat:
+                        {
+                            float x = firstParamUnionArray[i].getFConst();
+                            float min = secondParamUnionArray[i].getFConst();
+                            float max = thirdParamUnionArray[i].getFConst();
+                            // Results are undefined if min > max.
+                            if (min > max)
+                                tempConstArray[i].setFConst(0.0f);
+                            else
+                                tempConstArray[i].setFConst(x > min ? (x > max ? max : x) : min);
+                        }
+                        break;
+                      case EbtInt:
+                        {
+                            int x = firstParamUnionArray[i].getIConst();
+                            int min = secondParamUnionArray[i].getIConst();
+                            int max = thirdParamUnionArray[i].getIConst();
+                            // Results are undefined if min > max.
+                            if (min > max)
+                                tempConstArray[i].setIConst(0);
+                            else
+                                tempConstArray[i].setIConst(x > min ? (x > max ? max : x) : min);
+                        }
+                        break;
+                      case EbtUInt:
+                        {
+                            unsigned int x = firstParamUnionArray[i].getUConst();
+                            unsigned int min = secondParamUnionArray[i].getUConst();
+                            unsigned int max = thirdParamUnionArray[i].getUConst();
+                            // Results are undefined if min > max.
+                            if (min > max)
+                                tempConstArray[i].setUConst(0u);
+                            else
+                                tempConstArray[i].setUConst(x > min ? (x > max ? max : x) : min);
+                        }
+                        break;
+                      default:
+                        UNREACHABLE();
+                        break;
+                    }
+                }
+            }
+            break;
+
+          default:
+            infoSink.info.message(
+                EPrefixInternalError, firstParam->getLine(),
+                "Invalid built-in for constant folding");
+            return nullptr;
+        }
+
+        tempNode = new TIntermConstantUnion(tempConstArray, returnType);
+        tempNode->setLine(firstParam->getLine());
+        return tempNode;
+    }
+
+    return nullptr;
 }
 
 // static
