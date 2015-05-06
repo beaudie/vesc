@@ -13,30 +13,91 @@
 namespace rx
 {
 
-WindowSurfaceGLX::WindowSurfaceGLX()
-    : SurfaceGL()
+WindowSurfaceGLX::WindowSurfaceGLX(EGLNativeWindowType window, Display* display, GLXContext context, GLXFBConfig fbConfig)
+    : SurfaceGL(),
+      mParent(window),
+      mDisplay(display),
+      mContext(context),
+      mFBConfig(fbConfig),
+      mWindow(0),
+      mGLXWindow(0)
 {
 }
 
 WindowSurfaceGLX::~WindowSurfaceGLX()
 {
+    if (mWindow)
+    {
+        XDestroyWindow(mDisplay, mWindow);
+    }
+
+    if (mGLXWindow)
+    {
+        glXDestroyWindow(mDisplay, mGLXWindow);
+    }
 }
 
 egl::Error WindowSurfaceGLX::initialize()
 {
-    UNIMPLEMENTED();
+    // The visual of the X window, GLX window and GLX context must match,
+    // however we received a user-created window that can have any visual
+    // and wouldn't work with our GLX context. To work in all cases, we
+    // create a child window with the right visual that covers all of its
+    // parent.
+
+    XVisualInfo* visualInfo = glXGetVisualFromFBConfig(mDisplay, mFBConfig);
+    if (!visualInfo)
+    {
+        return egl::Error(EGL_BAD_NATIVE_WINDOW, "Failed to get the XVisualInfo for the child window.");
+    }
+    Visual* visual = visualInfo->visual;
+
+    XWindowAttributes parentAttribs;
+    XGetWindowAttributes(mDisplay, mParent, &parentAttribs);
+
+    // The depth, colormap and visual must match otherwise we get a X error
+    // so we specify the colormap attribute. Also we do not want the window
+    // to be taken into account for input so we specify the event and
+    // do-not-propagate masks to 0 (the defaults).
+    XSetWindowAttributes attributes;
+    unsigned long attributeMask = CWColormap;
+
+    Colormap colormap = XCreateColormap(mDisplay, mParent, visual, AllocNone);
+    if(!colormap)
+    {
+        XFree(visualInfo);
+        return egl::Error(EGL_BAD_NATIVE_WINDOW, "Failed to create the Colormap for the child window.");
+    }
+    attributes.colormap = colormap;
+
+    //TODO(cwallez) set up our own error handler to see if the call failed
+    mWindow = XCreateWindow(mDisplay, mParent, 0, 0, parentAttribs.width, parentAttribs.height,
+                            0, visualInfo->depth, InputOutput, visual, attributeMask, &attributes);
+    mGLXWindow = glXCreateWindow(mDisplay, mFBConfig, mWindow, nullptr);
+
+    XMapWindow(mDisplay, mWindow);
+    XFlush(mDisplay);
+
+    XFree(visualInfo);
+    XFreeColormap(mDisplay, colormap);
+
     return egl::Error(EGL_SUCCESS);
 }
 
 egl::Error WindowSurfaceGLX::makeCurrent()
 {
-    UNIMPLEMENTED();
+    if (glXMakeCurrent(mDisplay, mGLXWindow, mContext) != True)
+    {
+        return egl::Error(EGL_BAD_DISPLAY);
+    }
     return egl::Error(EGL_SUCCESS);
 }
 
 egl::Error WindowSurfaceGLX::swap()
 {
-    UNIMPLEMENTED();
+    //TODO(cwallez) resize support
+    //TODO(cwallez) set up our own error handler to see if the call failed
+    glXSwapBuffers(mDisplay, mGLXWindow);
     return egl::Error(EGL_SUCCESS);
 }
 
@@ -66,19 +127,31 @@ egl::Error WindowSurfaceGLX::releaseTexImage(EGLint buffer)
 
 void WindowSurfaceGLX::setSwapInterval(EGLint interval)
 {
-    UNIMPLEMENTED();
+    // TODO(cwallez) WGL has this, implement it
 }
 
 EGLint WindowSurfaceGLX::getWidth() const
 {
-    UNIMPLEMENTED();
-    return 0;
+    Window root;
+    int x, y;
+    unsigned width, height, border, depth;
+    if (!XGetGeometry(mDisplay, mParent, &root, &x, &y, &width, &height, &border, &depth))
+    {
+        return 0;
+    }
+    return width;
 }
 
 EGLint WindowSurfaceGLX::getHeight() const
 {
-    UNIMPLEMENTED();
-    return 0;
+    Window root;
+    int x, y;
+    unsigned width, height, border, depth;
+    if (!XGetGeometry(mDisplay, mParent, &root, &x, &y, &width, &height, &border, &depth))
+    {
+        return 0;
+    }
+    return height;
 }
 
 EGLint WindowSurfaceGLX::isPostSubBufferSupported() const
