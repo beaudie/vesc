@@ -33,7 +33,11 @@ TEST_P(RendererTest, RequestedRendererCreated)
     std::string versionString = std::string(reinterpret_cast<const char*>(glGetString(GL_VERSION)));
     std::transform(versionString.begin(), versionString.end(), versionString.begin(), ::tolower);
 
+<<<<<<< HEAD
     const EGLPlatformParameters &platform = GetParam().mEGLPlatformParameters;
+=======
+    EGLPlatformParameters platform = this->fixtureType.GetPlatform();
+>>>>>>> 963840f... DO NOT MERGE: hack to get RendererTest running to test DisplayGLX stubs
 
     // Ensure that the renderer string contains D3D11, if we requested a D3D11 renderer.
     if (platform.renderer == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
