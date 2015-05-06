@@ -738,6 +738,13 @@
                 {
                     'msvs_enable_winphone' : '1',
                 }],
+                ['OS=="linux"',
+                {
+                    'ldflags':
+                    [
+                        '-lX11 -lGL'
+                    ],
+                }],
             ],
         },
     ],
