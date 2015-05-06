@@ -27,7 +27,7 @@
             '<(angle_path)/src/tests/end2end_tests/FenceSyncTests.cpp',
             '<(angle_path)/src/tests/end2end_tests/FramebufferFormatsTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/FramebufferRenderMipmapTest.cpp',
-            '<(angle_path)/src/tests/end2end_tests/GLSLTest.cpp',
+#            '<(angle_path)/src/tests/end2end_tests/GLSLTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/IncompleteTextureTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/IndexedPointsTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/InstancingTest.cpp',
@@ -35,12 +35,12 @@
             '<(angle_path)/src/tests/end2end_tests/MaxTextureSizeTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/MipmapTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/media/pixel.inl',
-            '<(angle_path)/src/tests/end2end_tests/OcclusionQueriesTest.cpp',
+#            '<(angle_path)/src/tests/end2end_tests/OcclusionQueriesTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/PBOExtensionTest.cpp',
-            '<(angle_path)/src/tests/end2end_tests/PbufferTest.cpp',
-            '<(angle_path)/src/tests/end2end_tests/PointSpritesTest.cpp',
+#            '<(angle_path)/src/tests/end2end_tests/PbufferTest.cpp',
+#            '<(angle_path)/src/tests/end2end_tests/PointSpritesTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/ProgramBinaryTest.cpp',
-            '<(angle_path)/src/tests/end2end_tests/QueryDisplayAttribTest.cpp',
+#            '<(angle_path)/src/tests/end2end_tests/QueryDisplayAttribTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/ReadPixelsTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/RendererTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/SimpleOperationTest.cpp',
@@ -56,8 +56,8 @@
             '<(angle_path)/src/tests/end2end_tests/ViewportTest.cpp',
             '<(angle_path)/src/tests/end2end_tests/angle_test_configs.h',
             '<(angle_path)/src/tests/standalone_tests/EGLQueryContextTest.cpp',
-            '<(angle_path)/src/tests/standalone_tests/EGLSurfaceTest.cpp',
-            '<(angle_path)/src/tests/standalone_tests/EGLThreadTest.cpp',
+#            '<(angle_path)/src/tests/standalone_tests/EGLSurfaceTest.cpp',
+#            '<(angle_path)/src/tests/standalone_tests/EGLThreadTest.cpp',
         ],
     },
     'dependencies':
@@ -77,4 +77,14 @@
     [
         '<@(angle_end2end_tests_sources)',
     ],
+    'conditions':
+    [
+        ['OS=="linux"',
+        {
+            'ldflags':
+             [
+                '-lX11'
+            ],
+        }]
+    ]
 }
