@@ -4,6 +4,8 @@
 // found in the LICENSE file.
 //
 
+// Implementation of OSWindow for Windows
+
 #include "win32/Win32Window.h"
 
 #include <sstream>
