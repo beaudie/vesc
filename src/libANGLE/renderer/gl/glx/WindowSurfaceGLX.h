@@ -14,10 +14,12 @@
 namespace rx
 {
 
+class GLXLoader;
+
 class WindowSurfaceGLX : public SurfaceGL
 {
   public:
-    WindowSurfaceGLX();
+    WindowSurfaceGLX(const GLXLoader &glx, Window window, Display* display, GLXContext context, GLXFBConfig fbConfig);
     ~WindowSurfaceGLX() override;
 
     egl::Error initialize();
@@ -34,6 +36,14 @@ class WindowSurfaceGLX : public SurfaceGL
     EGLint getHeight() const override;
 
     EGLint isPostSubBufferSupported() const override;
+  private:
+    const GLXLoader &mGLX;
+    Window mParent;
+    Display *mDisplay;
+    GLXContext mContext;
+    GLXFBConfig mFBConfig;
+    Window mWindow;
+    GLXWindow mGLXWindow;
 };
 
 }

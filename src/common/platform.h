@@ -26,6 +26,9 @@
 #   define __glext_h_ 1
 #   include <GL/glx.h>
 #   undef __glext_h_
+#   include <X11/Xlib.h>
+#   include <X11/Xresource.h>
+#   include <X11/Xutil.h>
 #elif defined(__FreeBSD__) || \
       defined(__OpenBSD__) || \
       defined(__NetBSD__) || \
