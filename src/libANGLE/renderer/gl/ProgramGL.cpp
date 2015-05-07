@@ -25,15 +25,14 @@ ProgramGL::ProgramGL(const FunctionsGL *functions, StateManagerGL *stateManager)
 {
     ASSERT(mFunctions);
     ASSERT(mStateManager);
+
+    mProgramID = mFunctions->createProgram();
 }
 
 ProgramGL::~ProgramGL()
 {
-    if (mProgramID != 0)
-    {
-        mFunctions->deleteProgram(mProgramID);
-        mProgramID = 0;
-    }
+    mFunctions->deleteProgram(mProgramID);
+    mProgramID = 0;
 }
 
 bool ProgramGL::usesPointSize() const
@@ -84,10 +83,6 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog,
 
     ShaderGL *vertexShaderGL = GetImplAs<ShaderGL>(vertexShader);
     ShaderGL *fragmentShaderGL = GetImplAs<ShaderGL>(fragmentShader);
-
-    // Generate a new program, make sure one doesn't already exist
-    ASSERT(mProgramID == 0);
-    mProgramID = mFunctions->createProgram();
 
     // Attach the shaders
     mFunctions->attachShader(mProgramID, vertexShaderGL->getShaderID());
@@ -403,9 +398,6 @@ bool ProgramGL::assignUniformBlockRegister(gl::InfoLog &infoLog, gl::UniformBloc
 void ProgramGL::reset()
 {
     ProgramImpl::reset();
-
-    mStateManager->deleteProgram(mProgramID);
-    mProgramID = 0;
 }
 
 GLuint ProgramGL::getProgramID() const
