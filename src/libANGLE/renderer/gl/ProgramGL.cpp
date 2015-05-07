@@ -185,6 +185,11 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog,
     return LinkResult(true, gl::Error(GL_NO_ERROR));
 }
 
+void ProgramGL::bindAttributeLocation(GLuint index, const std::string &name)
+{
+    mFunctions->bindAttribLocation(mProgramID, index, name.c_str());
+}
+
 void ProgramGL::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
 {
     mStateManager->useProgram(mProgramID);
