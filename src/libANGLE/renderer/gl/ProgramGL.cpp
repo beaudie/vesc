@@ -183,8 +183,10 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog,
 
         std::string attributeName(&attributeNameBuffer[0], attributeNameLength);
 
+        GLint location = mFunctions->getAttribLocation(mProgramID, attributeName.c_str());
+
         // TODO: determine attribute precision
-        setShaderAttribute(static_cast<size_t>(i), attributeType, GL_NONE, attributeName, attributeSize, i);
+        setShaderAttribute(static_cast<size_t>(i), attributeType, GL_NONE, attributeName, attributeSize, location);
     }
 
     return LinkResult(true, gl::Error(GL_NO_ERROR));
