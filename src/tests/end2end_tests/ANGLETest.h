@@ -56,7 +56,7 @@
 class EGLWindow;
 class OSWindow;
 
-class ANGLETest : public testing::Test
+class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
 {
   protected:
     ANGLETest(EGLint glesMajorVersion, const EGLPlatformParameters &platform);
