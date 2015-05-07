@@ -6,14 +6,15 @@
 
 // ShaderD3D.cpp: Defines the rx::ShaderD3D class which implements rx::ShaderImpl.
 
-#include "libANGLE/Shader.h"
-#include "libANGLE/Compiler.h"
-#include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/ShaderD3D.h"
-#include "libANGLE/renderer/d3d/CompilerD3D.h"
-#include "libANGLE/features.h"
 
 #include "common/utilities.h"
+#include "libANGLE/Compiler.h"
+#include "libANGLE/Shader.h"
+#include "libANGLE/features.h"
+#include "libANGLE/histogram_macros.h"
+#include "libANGLE/renderer/d3d/CompilerD3D.h"
+#include "libANGLE/renderer/d3d/RendererD3D.h"
 
 // Definitions local to the translation unit
 namespace
@@ -107,6 +108,8 @@ void ShaderD3D::parseVaryings(ShHandle compiler)
         mUsesNestedBreak             = mTranslatedSource.find("ANGLE_USES_NESTED_BREAK")              != std::string::npos;
         mUsesDeferredInit            = mTranslatedSource.find("ANGLE_USES_DEFERRED_INIT")             != std::string::npos;
         mRequiresIEEEStrictCompiling = mTranslatedSource.find("ANGLE_REQUIRES_IEEE_STRICT_COMPILING") != std::string::npos;
+
+        ANGLE_HISTOGRAM_BOOLEAN("GPU.ANGLE.ShaderUsesDeferredInit", mUsesDeferredInit);
     }
 }
 
