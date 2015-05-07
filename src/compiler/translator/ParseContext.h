@@ -46,7 +46,9 @@ struct TParseContext {
             directiveHandler(ext, diagnostics, shaderVersion, debugShaderPrecisionSupported),
             preprocessor(&diagnostics, &directiveHandler),
             scanner(NULL),
-            mDeferredSingleDeclarationErrorCheck(false)
+            mDeferredSingleDeclarationErrorCheck(false),
+            mAssignedFragData(false),
+            mAssignedFragColor(false)
     {
     }
     TIntermediate& intermediate; // to hold and build a parse tree
@@ -229,12 +231,21 @@ struct TParseContext {
     TIntermTyped *createUnaryMath(TOperator op, TIntermTyped *child, const TSourceLoc &loc,
         const TType *funcReturnType);
 
+    // Call to check whether gl_FragData or gl_FragColor is illegally statically assigned.
+    // left is the node that's the target of an assignment.
+    // Return true if check fails.
+    bool checkAssignFragDataOrColor(TIntermTyped *left, const TSourceLoc &loc, const char *token);
+
     // Return true if the checks pass
     bool binaryOpCommonCheck(TOperator op, TIntermTyped *left, TIntermTyped *right,
         const TSourceLoc &loc);
 
     // Set to true when the last/current declarator list was started with an empty declaration.
     bool mDeferredSingleDeclarationErrorCheck;
+
+    // Set to true if fragData/fragColor have been statically assigned.
+    bool mAssignedFragData;
+    bool mAssignedFragColor;
 };
 
 int PaParseStrings(size_t count, const char* const string[], const int length[],

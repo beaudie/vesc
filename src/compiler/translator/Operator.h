@@ -223,4 +223,7 @@ enum TOperator
 // Returns the string corresponding to the operator in GLSL
 const char* GetOperatorString(TOperator op);
 
+// Returns true if the operator is a binary or unary operator that assigns to one of its operands.
+bool IsAssignment(TOperator op);
+
 #endif  // COMPILER_TRANSLATOR_OPERATOR_H_

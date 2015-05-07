@@ -284,31 +284,7 @@ bool TIntermCase::replaceChildNode(
 //
 bool TIntermOperator::isAssignment() const
 {
-    switch (mOp)
-    {
-      case EOpPostIncrement:
-      case EOpPostDecrement:
-      case EOpPreIncrement:
-      case EOpPreDecrement:
-      case EOpAssign:
-      case EOpAddAssign:
-      case EOpSubAssign:
-      case EOpMulAssign:
-      case EOpVectorTimesMatrixAssign:
-      case EOpVectorTimesScalarAssign:
-      case EOpMatrixTimesScalarAssign:
-      case EOpMatrixTimesMatrixAssign:
-      case EOpDivAssign:
-      case EOpIModAssign:
-      case EOpBitShiftLeftAssign:
-      case EOpBitShiftRightAssign:
-      case EOpBitwiseAndAssign:
-      case EOpBitwiseXorAssign:
-      case EOpBitwiseOrAssign:
-        return true;
-      default:
-        return false;
-    }
+    return IsAssignment(mOp);
 }
 
 //

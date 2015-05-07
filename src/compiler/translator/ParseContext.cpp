@@ -2885,9 +2885,42 @@ TIntermTyped *TParseContext::addUnaryMath(TOperator op, TIntermTyped *child, con
     return node;
 }
 
+bool TParseContext::checkAssignFragDataOrColor(TIntermTyped *left, const TSourceLoc &loc, const char *token)
+{
+    if (mAssignedFragData && mAssignedFragColor)
+    {
+        // Error has already been reported, don't report it twice.
+        return false;
+    }
+    TIntermBinary *leftBinary = left->getAsBinaryNode();
+    if (leftBinary != nullptr && (leftBinary->getOp() == EOpIndexDirect || leftBinary->getOp() == EOpVectorSwizzle))
+    {
+        return checkAssignFragDataOrColor(leftBinary->getLeft(), loc, token);
+    }
+    else
+    {
+        if (left->getQualifier() == EvqFragData)
+        {
+            mAssignedFragData = true;
+        }
+        else if (left->getQualifier() == EvqFragColor)
+        {
+            mAssignedFragColor = true;
+        }
+        if (mAssignedFragData && mAssignedFragColor)
+        {
+            error(loc, "cannot statically assign both gl_FragColor and gl_FragData", token);
+            return true;
+        }
+    }
+    return false;
+}
+
 TIntermTyped *TParseContext::addUnaryMathLValue(TOperator op, TIntermTyped *child, const TSourceLoc &loc)
 {
     if (lValueErrorCheck(loc, GetOperatorString(op), child))
+        recover();
+    if (checkAssignFragDataOrColor(child, loc, GetOperatorString(op)))
         recover();
     return addUnaryMath(op, child, loc);
 }
@@ -2926,6 +2959,12 @@ bool TParseContext::binaryOpCommonCheck(TOperator op, TIntermTyped *left, TInter
             error(loc, "array size mismatch", GetOperatorString(op));
             return false;
         }
+    }
+
+    // Check assignment to gl_FragData and gl_FragColor.
+    if (IsAssignment(op) && checkAssignFragDataOrColor(left, loc, GetOperatorString(op)))
+    {
+        return false;
     }
 
     // Check ops which require integer / ivec parameters
