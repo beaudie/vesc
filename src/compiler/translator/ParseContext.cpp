@@ -1047,6 +1047,23 @@ const TVariable *TParseContext::getNamedVariable(const TSourceLoc &location,
         {
             recover();
         }
+
+        // Reject shaders using both gl_FragData and gl_FragColor
+        TQualifier qualifier = variable->getType().getQualifier();
+        if (qualifier == EvqFragData)
+        {
+            mUsesFragData = true;
+        }
+        else if (qualifier == EvqFragColor)
+        {
+            mUsesFragColor = true;
+        }
+
+        if (mUsesFragData && mUsesFragColor)
+        {
+            error(location, "cannot use both gl_FragData and gl_FragColor", name->c_str());
+            recover();
+        }
     }
 
     if (!variable)

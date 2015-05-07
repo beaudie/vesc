@@ -46,7 +46,9 @@ struct TParseContext {
             directiveHandler(ext, diagnostics, shaderVersion, debugShaderPrecisionSupported),
             preprocessor(&diagnostics, &directiveHandler),
             scanner(NULL),
-            mDeferredSingleDeclarationErrorCheck(false)
+            mDeferredSingleDeclarationErrorCheck(false),
+            mUsesFragData(false),
+            mUsesFragColor(false)
     {
     }
     TIntermediate& intermediate; // to hold and build a parse tree
@@ -70,6 +72,8 @@ struct TParseContext {
     TDirectiveHandler directiveHandler;
     pp::Preprocessor preprocessor;
     void* scanner;
+    bool mUsesFragData; // track if we are using both gl_FragData and gl_FragColor
+    bool mUsesFragColor;
 
     int getShaderVersion() const { return shaderVersion; }
     int numErrors() const { return diagnostics.numErrors(); }
