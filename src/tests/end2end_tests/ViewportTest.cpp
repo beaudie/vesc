@@ -1,10 +1,16 @@
+//
+// Copyright 2015 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
 #include "ANGLETest.h"
 
-// Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-// D3D11 Feature Level 9 and D3D9 emulate large and negative viewports in the vertex shader. We should test both of these as well as D3D11 Feature Level 10_0+.
-ANGLE_TYPED_TEST_CASE(ViewportTest, ES2_D3D9, ES2_D3D11, ES2_D3D11_FL9_3);
+using namespace angle;
 
-template<typename T>
+namespace
+{
+
 class ViewportTest : public ANGLETest
 {
   protected:
@@ -251,3 +257,9 @@ TYPED_TEST(ViewportTest, TripleWindowOffCenter)
 
     runScissoredTest();
 }
+
+// Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
+// D3D11 Feature Level 9 and D3D9 emulate large and negative viewports in the vertex shader. We should test both of these as well as D3D11 Feature Level 10_0+.
+INSTANTIATE_TEST_CASE_P(ANGLE, ViewportTest, ::testing::Values(ES2_D3D9(), ES2_D3D11(), ES2_D3D11_FL9_3()));
+
+} // namespace
