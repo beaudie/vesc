@@ -598,7 +598,16 @@ EGLint SwapChain11::swapRect(EGLint x, EGLint y, EGLint width, EGLint height)
 #if ANGLE_VSYNC == ANGLE_DISABLED
     result = mSwapChain->Present(0, 0);
 #else
-    result = mSwapChain->Present(mSwapInterval, 0);
+    // Use IDXGISwapChain1::Present1 with a dirty rect if DXGI 1.2 is available.
+    IDXGISwapChain1 *swapChain1 = d3d11::DynamicCastComObject<IDXGISwapChain1>(mSwapChain);
+    if (swapChain1 != nullptr) {
+        RECT dirtyRect = { x, mHeight - y - height, x + width, mHeight - y };
+        DXGI_PRESENT_PARAMETERS params = { 1, &dirtyRect, nullptr, nullptr };
+        result = swapChain1->Present1(mSwapInterval, 0, &params);
+        SafeRelease(swapChain1);
+    } else {
+        result = mSwapChain->Present(mSwapInterval, 0);
+    }
 #endif
 
     if (result == DXGI_ERROR_DEVICE_REMOVED)
