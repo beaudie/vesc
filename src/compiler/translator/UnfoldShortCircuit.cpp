@@ -3,7 +3,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// UnfoldShortCircuit is an AST traverser to output short-circuiting operators as if-else statements.
+// UnfoldShortCircuit is an AST traverser to convert short-circuiting operators to if-else statements.
 // The results are assigned to s# temporaries, which are used by the main translator instead of
 // the original expression.
 //
@@ -11,27 +11,91 @@
 #include "compiler/translator/UnfoldShortCircuit.h"
 
 #include "compiler/translator/InfoSink.h"
-#include "compiler/translator/OutputHLSL.h"
-#include "compiler/translator/UtilsHLSL.h"
+#include "compiler/translator/IntermNode.h"
 
-namespace sh
+namespace
 {
-UnfoldShortCircuit::UnfoldShortCircuit(OutputHLSL *outputHLSL) : mOutputHLSL(outputHLSL)
+
+// Traverser that unfolds one short-circuiting operation at a time.
+class UnfoldShortCircuitTraverser : public TIntermTraverser
 {
-    mTemporaryIndex = 0;
+  public:
+    UnfoldShortCircuitTraverser();
+
+    void traverse(TIntermNode *node);
+    bool visitBinary(Visit visit, TIntermBinary *node) override;
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override;
+    bool visitSelection(Visit visit, TIntermSelection *node) override;
+
+    void nextIteration();
+    bool foundShortCircuit() const { return mFoundShortCircuit; }
+
+  protected:
+    int mTemporaryIndex;
+    bool mFoundShortCircuit;
+    struct ParentBlock {
+        ParentBlock(TIntermAggregate *_node, TIntermSequence::size_type _pos)
+            : node(_node),
+              pos(_pos)
+        {
+        }
+
+        TIntermAggregate *node;
+        TIntermSequence::size_type pos;
+    };
+    std::vector<ParentBlock> mParentBlockStack;
+
+    TIntermSymbol *createTempSymbol(const TType &type);
+    TIntermAggregate *createTempInitDeclaration(const TType &type, TIntermTyped *initializer);
+    TIntermBinary *createTempAssignment(const TType &type, TIntermTyped *rightNode);
+};
+
+UnfoldShortCircuitTraverser::UnfoldShortCircuitTraverser()
+    : TIntermTraverser(true, true, true),
+      mTemporaryIndex(0),
+      mFoundShortCircuit(false)
+{
 }
 
-void UnfoldShortCircuit::traverse(TIntermNode *node)
+TIntermSymbol *UnfoldShortCircuitTraverser::createTempSymbol(const TType &type)
 {
-    int rewindIndex = mTemporaryIndex;
-    node->traverse(this);
-    mTemporaryIndex = rewindIndex;
+    TInfoSinkBase symbolNameOut;
+    symbolNameOut << "s" << mTemporaryIndex;
+    TString symbolName = symbolNameOut.c_str();
+
+    TIntermSymbol *node = new TIntermSymbol(0, symbolName, type);
+    node->setInternal(true);
+    return node;
 }
 
-bool UnfoldShortCircuit::visitBinary(Visit visit, TIntermBinary *node)
+TIntermAggregate *UnfoldShortCircuitTraverser::createTempInitDeclaration(const TType &type, TIntermTyped *initializer)
 {
-    TInfoSinkBase &out = mOutputHLSL->getInfoSink();
+    ASSERT(initializer != nullptr);
+    TIntermSymbol *tempSymbol = createTempSymbol(type);
+    TIntermAggregate *tempDeclaration = new TIntermAggregate(EOpDeclaration);
+    TIntermBinary *tempInit = new TIntermBinary(EOpInitialize);
+    tempInit->setLeft(tempSymbol);
+    tempInit->setRight(initializer);
+    tempInit->setType(type);
+    tempDeclaration->getSequence()->push_back(tempInit);
+    return tempDeclaration;
+}
 
+TIntermBinary *UnfoldShortCircuitTraverser::createTempAssignment(const TType &type, TIntermTyped *rightNode)
+{
+    ASSERT(rightNode != nullptr);
+    TIntermSymbol *tempSymbol = createTempSymbol(type);
+    TIntermBinary *assignment = new TIntermBinary(EOpAssign);
+    assignment->setLeft(tempSymbol);
+    assignment->setRight(rightNode);
+    assignment->setType(type);
+    return assignment;
+}
+
+bool UnfoldShortCircuitTraverser::visitBinary(Visit visit, TIntermBinary *node)
+{
+    if (mFoundShortCircuit)
+        return false;
     // If our right node doesn't have side effects, we know we don't need to unfold this
     // expression: there will be no short-circuiting side effects to avoid
     // (note: unfolding doesn't depend on the left node -- it will always be evaluated)
@@ -43,65 +107,53 @@ bool UnfoldShortCircuit::visitBinary(Visit visit, TIntermBinary *node)
     switch (node->getOp())
     {
       case EOpLogicalOr:
+        mFoundShortCircuit = true;
+
         // "x || y" is equivalent to "x ? true : y", which unfolds to "bool s; if(x) s = true; else s = y;",
         // and then further simplifies down to "bool s = x; if(!s) s = y;".
         {
-            int i = mTemporaryIndex;
+            TIntermSequence insertions;
+            TType boolType(EbtBool, EbpUndefined, EvqTemporary);
 
-            out << "bool s" << i << ";\n";
+            insertions.push_back(createTempInitDeclaration(boolType, node->getLeft()));
 
-            out << "{\n";
+            TIntermAggregate *assignRightBlock = new TIntermAggregate(EOpSequence);
+            assignRightBlock->getSequence()->push_back(createTempAssignment(boolType, node->getRight()));
 
-            mTemporaryIndex = i + 1;
-            node->getLeft()->traverse(this);
-            out << "s" << i << " = ";
-            mTemporaryIndex = i + 1;
-            node->getLeft()->traverse(mOutputHLSL);
-            out << ";\n";
-            out << "if (!s" << i << ")\n"
-                   "{\n";
-            mTemporaryIndex = i + 1;
-            node->getRight()->traverse(this);
-            out << "    s" << i << " = ";
-            mTemporaryIndex = i + 1;
-            node->getRight()->traverse(mOutputHLSL);
-            out << ";\n"
-                   "}\n";
+            TIntermUnary *notTempSymbol = new TIntermUnary(EOpLogicalNot, boolType);
+            notTempSymbol->setOperand(createTempSymbol(boolType));
+            TIntermSelection *ifNode = new TIntermSelection(notTempSymbol, assignRightBlock, nullptr);
+            insertions.push_back(ifNode);
 
-            out << "}\n";
+            NodeInsertMultipleEntry insert(mParentBlockStack.back().node, mParentBlockStack.back().pos, insertions);
+            mInsertions.push_back(insert);
 
-            mTemporaryIndex = i + 1;
+            NodeUpdateEntry replaceVariable(getParentNode(), node, createTempSymbol(boolType), false);
+            mReplacements.push_back(replaceVariable);
         }
         return false;
       case EOpLogicalAnd:
+        mFoundShortCircuit = true;
+
         // "x && y" is equivalent to "x ? y : false", which unfolds to "bool s; if(x) s = y; else s = false;",
         // and then further simplifies down to "bool s = x; if(s) s = y;".
         {
-            int i = mTemporaryIndex;
+            TIntermSequence insertions;
+            TType boolType(EbtBool, EbpUndefined, EvqTemporary);
 
-            out << "bool s" << i << ";\n";
+            insertions.push_back(createTempInitDeclaration(boolType, node->getLeft()));
 
-            out << "{\n";
+            TIntermAggregate *assignRightBlock = new TIntermAggregate(EOpSequence);
+            assignRightBlock->getSequence()->push_back(createTempAssignment(boolType, node->getRight()));
 
-            mTemporaryIndex = i + 1;
-            node->getLeft()->traverse(this);
-            out << "s" << i << " = ";
-            mTemporaryIndex = i + 1;
-            node->getLeft()->traverse(mOutputHLSL);
-            out << ";\n";
-            out << "if (s" << i << ")\n"
-                   "{\n";
-            mTemporaryIndex = i + 1;
-            node->getRight()->traverse(this);
-            out << "    s" << i << " = ";
-            mTemporaryIndex = i + 1;
-            node->getRight()->traverse(mOutputHLSL);
-            out << ";\n"
-                   "}\n";
+            TIntermSelection *ifNode = new TIntermSelection(createTempSymbol(boolType), assignRightBlock, nullptr);
+            insertions.push_back(ifNode);
 
-            out << "}\n";
+            NodeInsertMultipleEntry insert(mParentBlockStack.back().node, mParentBlockStack.back().pos, insertions);
+            mInsertions.push_back(insert);
 
-            mTemporaryIndex = i + 1;
+            NodeUpdateEntry replaceVariable(getParentNode(), node, createTempSymbol(boolType), false);
+            mReplacements.push_back(replaceVariable);
         }
         return false;
       default:
@@ -109,77 +161,84 @@ bool UnfoldShortCircuit::visitBinary(Visit visit, TIntermBinary *node)
     }
 }
 
-bool UnfoldShortCircuit::visitSelection(Visit visit, TIntermSelection *node)
+bool UnfoldShortCircuitTraverser::visitSelection(Visit visit, TIntermSelection *node)
 {
-    TInfoSinkBase &out = mOutputHLSL->getInfoSink();
+    if (mFoundShortCircuit)
+        return false;
 
     // Unfold "b ? x : y" into "type s; if(b) s = x; else s = y;"
-    if (node->usesTernaryOperator())
+    if (visit == PreVisit && node->usesTernaryOperator())
     {
-        int i = mTemporaryIndex;
+        mFoundShortCircuit = true;
+        TIntermSequence insertions;
 
-        out << TypeString(node->getType()) << " s" << i << ";\n";
+        TIntermSymbol *tempSymbol = createTempSymbol(node->getType());
+        TIntermAggregate *tempDeclaration = new TIntermAggregate(EOpDeclaration);
+        tempDeclaration->getSequence()->push_back(tempSymbol);
+        insertions.push_back(tempDeclaration);
 
-        out << "{\n";
+        TIntermAggregate *trueBlock = new TIntermAggregate(EOpSequence);
+        TIntermBinary *trueAssignment = createTempAssignment(node->getType(), node->getTrueBlock()->getAsTyped());
+        trueBlock->getSequence()->push_back(trueAssignment);
 
-        mTemporaryIndex = i + 1;
-        node->getCondition()->traverse(this);
-        out << "if (";
-        mTemporaryIndex = i + 1;
-        node->getCondition()->traverse(mOutputHLSL);
-        out << ")\n"
-               "{\n";
-        mTemporaryIndex = i + 1;
-        node->getTrueBlock()->traverse(this);
-        out << "    s" << i << " = ";
-        mTemporaryIndex = i + 1;
-        node->getTrueBlock()->traverse(mOutputHLSL);
-        out << ";\n"
-               "}\n"
-               "else\n"
-               "{\n";
-        mTemporaryIndex = i + 1;
-        node->getFalseBlock()->traverse(this);
-        out << "    s" << i << " = ";
-        mTemporaryIndex = i + 1;
-        node->getFalseBlock()->traverse(mOutputHLSL);
-        out << ";\n"
-               "}\n";
+        TIntermAggregate *falseBlock = new TIntermAggregate(EOpSequence);
+        TIntermBinary *falseAssignment = createTempAssignment(node->getType(), node->getFalseBlock()->getAsTyped());
+        falseBlock->getSequence()->push_back(falseAssignment);
 
-        out << "}\n";
+        TIntermSelection *ifNode = new TIntermSelection(node->getCondition()->getAsTyped(), trueBlock, falseBlock);
+        insertions.push_back(ifNode);
 
-        mTemporaryIndex = i + 1;
+        NodeInsertMultipleEntry insert(mParentBlockStack.back().node, mParentBlockStack.back().pos, insertions);
+        mInsertions.push_back(insert);
+
+        TIntermSymbol *ternaryResult = createTempSymbol(node->getType());
+        NodeUpdateEntry replaceVariable(getParentNode(), node, ternaryResult, false);
+        mReplacements.push_back(replaceVariable);
+        return false;
     }
 
-    return false;
+    return true;
 }
 
-bool UnfoldShortCircuit::visitLoop(Visit visit, TIntermLoop *node)
+bool UnfoldShortCircuitTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
 {
-    int rewindIndex = mTemporaryIndex;
-
-    if (node->getInit())
+    if (node->getOp() == EOpSequence)
     {
-        node->getInit()->traverse(this);
+        if (visit == PreVisit)
+        {
+            mParentBlockStack.push_back(ParentBlock(node, 0));
+        }
+        else if (visit == InVisit)
+        {
+            ++mParentBlockStack.back().pos;
+        }
+        else
+        {
+            ASSERT(visit == PostVisit);
+            mParentBlockStack.pop_back();
+        }
     }
-    
-    if (node->getCondition())
-    {
-        node->getCondition()->traverse(this);
-    }
-
-    if (node->getExpression())
-    {
-        node->getExpression()->traverse(this);
-    }
-
-    mTemporaryIndex = rewindIndex;
-
-    return false;
+    return true;
 }
 
-int UnfoldShortCircuit::getNextTemporaryIndex()
+void UnfoldShortCircuitTraverser::nextIteration()
 {
-    return mTemporaryIndex++;
+    mFoundShortCircuit = false;
+    mTemporaryIndex++;
+    mReplacements.clear();
+    mMultiReplacements.clear();
+    mInsertions.clear();
 }
+
+} // namespace
+
+void UnfoldShortCircuit(TIntermNode *root)
+{
+    UnfoldShortCircuitTraverser traverser;
+    do {
+        traverser.nextIteration();
+        root->traverse(&traverser);
+        traverser.updateTree();
+    }
+    while (traverser.foundShortCircuit());
 }

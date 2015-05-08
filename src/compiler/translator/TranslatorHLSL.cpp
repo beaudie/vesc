@@ -11,6 +11,7 @@
 #include "compiler/translator/SeparateArrayInitialization.h"
 #include "compiler/translator/SeparateDeclarations.h"
 #include "compiler/translator/SimplifyArrayAssignment.h"
+#include "compiler/translator/UnfoldShortCircuit.h"
 
 TranslatorHLSL::TranslatorHLSL(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
     : TCompiler(type, spec, output)
@@ -22,7 +23,10 @@ void TranslatorHLSL::translate(TIntermNode *root, int compileOptions)
     const ShBuiltInResources &resources = getResources();
     int numRenderTargets = resources.EXT_draw_buffers ? resources.MaxDrawBuffers : 1;
 
-    SeparateArrayDeclarations(root);
+    SeparateDeclarations(root);
+
+    // Note that SeparateDeclarations needs to be run before UnfoldShortCircuit.
+    UnfoldShortCircuit(root);
 
     // Note that SeparateDeclarations needs to be run before SeparateArrayInitialization.
     SeparateArrayInitialization(root);
