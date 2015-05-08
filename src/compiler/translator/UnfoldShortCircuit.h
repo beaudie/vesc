@@ -3,36 +3,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// UnfoldShortCircuit is an AST traverser to output short-circuiting operators as if-else statements
+// UnfoldShortCircuit is an AST traverser to convert short-circuiting operators to if-else statements.
+// The results are assigned to s# temporaries, which are used by the main translator instead of
+// the original expression.
 //
 
 #ifndef COMPILER_TRANSLATOR_UNFOLDSHORTCIRCUIT_H_
 #define COMPILER_TRANSLATOR_UNFOLDSHORTCIRCUIT_H_
 
-#include "compiler/translator/IntermNode.h"
-#include "compiler/translator/ParseContext.h"
+class TIntermNode;
 
-namespace sh
-{
-class OutputHLSL;
-
-class UnfoldShortCircuit : public TIntermTraverser
-{
-  public:
-    UnfoldShortCircuit(OutputHLSL *outputHLSL);
-
-    void traverse(TIntermNode *node);
-    bool visitBinary(Visit visit, TIntermBinary*);
-    bool visitSelection(Visit visit, TIntermSelection *node);
-    bool visitLoop(Visit visit, TIntermLoop *node);
-
-    int getNextTemporaryIndex();
-
-  protected:
-    OutputHLSL *const mOutputHLSL;
-
-    int mTemporaryIndex;
-};
-}
+void UnfoldShortCircuit(TIntermNode *root);
 
 #endif   // COMPILER_TRANSLATOR_UNFOLDSHORTCIRCUIT_H_
