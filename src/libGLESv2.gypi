@@ -437,6 +437,8 @@
         [
             'libANGLE/renderer/gl/glx/DisplayGLX.cpp',
             'libANGLE/renderer/gl/glx/DisplayGLX.h',
+            'libANGLE/renderer/gl/glx/GLXLoader.cpp',
+            'libANGLE/renderer/gl/glx/GLXLoader.h',
             'libANGLE/renderer/gl/glx/WindowSurfaceGLX.cpp',
             'libANGLE/renderer/gl/glx/WindowSurfaceGLX.h',
         ],

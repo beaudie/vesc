@@ -20,6 +20,12 @@
 #elif defined(__linux__) || defined(EMSCRIPTEN)
 #   define ANGLE_PLATFORM_LINUX 1
 #   define ANGLE_PLATFORM_POSIX 1
+    // TODO(cwallez) this is a horrible hack to prevent glx from including GL/glext.h
+    // as it causes a bunch of conflicts (macro redefinition, etc) with GLES2/gl2ext.h
+    // It could be because our version of GLES2/gl2ext.h is out of date.
+#   define __glext_h_ 1
+#   include <GL/glx.h>
+#   undef __glext_h_
 #elif defined(__FreeBSD__) || \
       defined(__OpenBSD__) || \
       defined(__NetBSD__) || \
