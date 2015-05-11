@@ -87,6 +87,33 @@ inline std::ostream &operator<<(std::ostream& stream,
     return stream;
 }
 
+inline std::vector<PlatformParameters> FilterPlatforms(const PlatformParameters* platforms, size_t nPlatforms)
+{
+    std::vector<PlatformParameters> filtered;
+
+    for (size_t i = 0; i < nPlatforms; i++)
+    {
+        EGLint renderer = platforms[i].mEGLPlatformParameters.renderer;
+        if (false
+#if defined(ANGLE_ENABLE_D3D9)
+            || renderer == EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE
+#endif
+#if defined(ANGLE_ENABLE_D3D11)
+            || renderer == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE
+#endif
+#if defined(ANGLE_ENABLE_OPENGL)
+            || renderer == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE
+            || renderer == EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE
+#endif
+           )
+        {
+            filtered.push_back(platforms[i]);
+        }
+    }
+
+    return filtered;
+}
+
 inline PlatformParameters ES2_D3D9()
 {
     EGLPlatformParameters eglParams(
@@ -400,7 +427,8 @@ inline PlatformParameters ES3_OPENGLES()
 }
 
 #define ANGLE_INSTANTIATE_TEST(testName, ...) \
-    INSTANTIATE_TEST_CASE_P(, testName, testing::Values(__VA_ARGS__));
+    const PlatformParameters testName##params[] = {__VA_ARGS__}; \
+    INSTANTIATE_TEST_CASE_P(, testName, testing::ValuesIn(FilterPlatforms(testName##params, ArraySize(testName##params))));
 
 } // namespace angle
 
