@@ -225,6 +225,8 @@ class GLSLTest : public ANGLETest
             currentVSVarying += 1;
         }
 
+        vertexShader->append("gl_Position = vec4(0.0, 0.0, 0.0, 1.0);\n");
+
         if (usePointSize)
         {
             vertexShader->append("gl_PointSize = 1.0;\n");
@@ -497,7 +499,6 @@ TEST_P(GLSLTest, ElseIfRewriting)
     ASSERT_NE(0u, program);
 
     drawQuad(program, "a_position", 0.5f);
-    swapBuffers();
 
     EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 255);
     EXPECT_PIXEL_EQ(getWindowWidth()-1, 0, 0, 255, 0, 255);

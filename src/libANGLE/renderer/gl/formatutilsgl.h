@@ -21,15 +21,32 @@ namespace rx
 namespace nativegl
 {
 
+struct SupportRequirement
+{
+    SupportRequirement();
+
+    GLuint majorVersion;
+    GLuint minorVersion;
+    std::vector<std::string> extensions;
+};
+
+struct InternalFormatRequirements
+{
+    InternalFormatRequirements();
+
+    SupportRequirement texture;
+    SupportRequirement filter;
+    SupportRequirement renderbuffer;
+    SupportRequirement framebufferAttachment;
+};
+
 struct InternalFormat
 {
     InternalFormat();
 
-    typedef bool(*SupportCheckFunction)(GLuint majorVersion, GLuint minorVersion,
-                                        const std::vector<std::string> &extensions);
-    SupportCheckFunction textureSupport;
-    SupportCheckFunction renderSupport;
-    SupportCheckFunction filterSupport;
+    InternalFormatRequirements glSupport;
+    InternalFormatRequirements glesSupport;
+
 };
 const InternalFormat &GetInternalFormatInfo(GLenum internalFormat);
 
