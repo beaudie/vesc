@@ -6,22 +6,25 @@
 
 #include <gtest/gtest.h>
 
+#include <test_utils/angle_test_configs.h>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
-class EGLQueryContextTest : public testing::TestWithParam<int>
+using namespace angle;
+
+class EGLQueryContextTest : public testing::TestWithParam<PlatformParameters>
 {
   public:
     void SetUp() override
     {
-        int clientVersion = GetParam();
+        int clientVersion = GetParam().mClientVersion;
 
         PFNEGLGETPLATFORMDISPLAYEXTPROC eglGetPlatformDisplayEXT = reinterpret_cast<PFNEGLGETPLATFORMDISPLAYEXTPROC>(eglGetProcAddress("eglGetPlatformDisplayEXT"));
         EXPECT_TRUE(eglGetPlatformDisplayEXT != NULL);
 
         EGLint dispattrs[] =
         {
-            EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE,
+            EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().mEGLPlatformParameters.renderer,
             EGL_NONE
         };
         mDisplay = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE, EGL_DEFAULT_DISPLAY, dispattrs);
@@ -92,7 +95,7 @@ TEST_P(EGLQueryContextTest, GetClientVersion)
 {
     EGLint clientVersion;
     EXPECT_TRUE(eglQueryContext(mDisplay, mContext, EGL_CONTEXT_CLIENT_VERSION, &clientVersion) != EGL_FALSE);
-    EXPECT_TRUE(clientVersion == GetParam());
+    EXPECT_TRUE(clientVersion == GetParam().mClientVersion);
 }
 
 TEST_P(EGLQueryContextTest, GetRenderBufferNoSurface)
@@ -144,4 +147,5 @@ TEST_P(EGLQueryContextTest, BadAttribute)
     EXPECT_TRUE(eglGetError() == EGL_BAD_ATTRIBUTE);
 }
 
-INSTANTIATE_TEST_CASE_P(, EGLQueryContextTest, testing::Values(2, 3));
+ANGLE_INSTANTIATE_TEST(EGLQueryContextTest, ES2_D3D9(), ES2_D3D11(), ES2_D3D11_FL9_3(), ES2_OPENGL(),
+                       ES3_D3D11(), ES3_OPENGL());
