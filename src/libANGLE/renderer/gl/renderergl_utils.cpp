@@ -30,9 +30,9 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions, G
     gl::TextureCaps textureCaps;
 
     const nativegl::InternalFormat &formatInfo = nativegl::GetInternalFormatInfo(internalFormat);
-    textureCaps.texturable = formatInfo.textureSupport(functions->majorVersion, functions->minorVersion, functions->extensions);
-    textureCaps.renderable = formatInfo.renderSupport(functions->majorVersion, functions->minorVersion, functions->extensions);
-    textureCaps.filterable = formatInfo.filterSupport(functions->majorVersion, functions->minorVersion, functions->extensions);
+    textureCaps.texturable = formatInfo.textureSupport(functions->majorVersion, functions->minorVersion, functions->openGLES, functions->extensions);
+    textureCaps.renderable = formatInfo.renderSupport(functions->majorVersion, functions->minorVersion, functions->openGLES, functions->extensions);
+    textureCaps.filterable = formatInfo.filterSupport(functions->majorVersion, functions->minorVersion, functions->openGLES, functions->extensions);
 
     // glGetInternalformativ is not available until version 4.2 but may be available through the 3.0
     // extension GL_ARB_internalformat_query

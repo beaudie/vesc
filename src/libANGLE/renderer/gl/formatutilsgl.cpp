@@ -18,23 +18,23 @@ namespace nativegl
 {
 
 // Information about internal formats
-static bool AlwaysSupported(GLuint, GLuint, const std::vector<std::string> &)
+static bool AlwaysSupported(GLuint, GLuint, bool, const std::vector<std::string> &)
 {
     return true;
 }
 
-static bool UnimplementedSupport(GLuint, GLuint, const std::vector<std::string> &)
+static bool UnimplementedSupport(GLuint, GLuint, bool, const std::vector<std::string> &)
 {
     return false;
 }
 
-static bool NeverSupported(GLuint, GLuint, const std::vector<std::string> &)
+static bool NeverSupported(GLuint, GLuint, bool, const std::vector<std::string> &)
 {
     return false;
 }
 
 template <GLuint minMajorVersion, GLuint minMinorVersion>
-static bool RequireGL(GLuint major, GLuint minor, const std::vector<std::string> &)
+static bool RequireGL(GLuint major, GLuint minor, bool, const std::vector<std::string> &)
 {
     return major > minMajorVersion || (major == minMajorVersion && minor >= minMinorVersion);
 }
@@ -57,9 +57,7 @@ static inline void InsertFormatMapping(InternalFormatInfoMap *map, GLenum intern
                                        InternalFormat::SupportCheckFunction filterSupport)
 {
     InternalFormat formatInfo;
-    formatInfo.textureSupport = textureSupport;
-    formatInfo.renderSupport = renderSupport;
-    formatInfo.filterSupport = filterSupport;
+    // TODO
     map->insert(std::make_pair(internalFormat, formatInfo));
 }
 
