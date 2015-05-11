@@ -33,12 +33,9 @@
             'gl_tests/MaxTextureSizeTest.cpp',
             'gl_tests/MipmapTest.cpp',
             'gl_tests/media/pixel.inl',
-            'gl_tests/OcclusionQueriesTest.cpp',
             'gl_tests/PBOExtensionTest.cpp',
-            'gl_tests/PbufferTest.cpp',
             'gl_tests/PointSpritesTest.cpp',
             'gl_tests/ProgramBinaryTest.cpp',
-            'gl_tests/QueryDisplayAttribTest.cpp',
             'gl_tests/ReadPixelsTest.cpp',
             'gl_tests/RendererTest.cpp',
             'gl_tests/SimpleOperationTest.cpp',
@@ -52,12 +49,23 @@
             'gl_tests/UnpackRowLength.cpp',
             'gl_tests/VertexAttributeTest.cpp',
             'gl_tests/ViewportTest.cpp',
-            'egl_tests/EGLQueryContextTest.cpp',
-            'egl_tests/EGLSurfaceTest.cpp',
-            'egl_tests/EGLThreadTest.cpp',
             'test_utils/ANGLETest.cpp',
             'test_utils/ANGLETest.h',
             'test_utils/angle_test_configs.h',
+        ],
+        'angle_end2end_tests_win_sources':
+        [
+            # TODO(cwallez) for Linux, requires only trying the OpenGL ANGLE platform
+            'egl_tests/EGLQueryContextTest.cpp',
+            # TODO(cwallez) for Linux, requires a portable implementation of sleep
+            'gl_tests/OcclusionQueriesTest.cpp',
+            # TODO(cwallez) for Linux, requires implementation of eglBindTexImage for pbuffers
+            'gl_tests/PbufferTest.cpp',
+            'gl_tests/QueryDisplayAttribTest.cpp',
+            # TODO(cwallez) for Linux, remove the reliance on the ANGLE_platform_angle_d3d extension
+            'egl_tests/EGLSurfaceTest.cpp',
+            # TODO(cwallez) for Linux, requires a portable implementation of threads
+            'egl_tests/EGLThreadTest.cpp',
         ],
     },
     'dependencies':
@@ -77,4 +85,14 @@
     [
         '<@(angle_end2end_tests_sources)',
     ],
+    'conditions':
+    [
+        ['OS=="win"',
+        {
+            'sources':
+            [
+                '<@(angle_end2end_tests_win_sources)',
+            ],
+        }],
+    ]
 }
