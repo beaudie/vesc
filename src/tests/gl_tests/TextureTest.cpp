@@ -16,8 +16,8 @@ class TextureTest : public ANGLETest
   protected:
     TextureTest()
     {
-        setWindowWidth(128);
-        setWindowHeight(128);
+        setWindowWidth(512);
+        setWindowHeight(512);
         setConfigRedBits(8);
         setConfigGreenBits(8);
         setConfigBlueBits(8);
@@ -219,7 +219,6 @@ class TextureTest : public ANGLETest
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         drawQuad(m2DProgram, "position", 0.5f);
-        swapBuffers();
 
         int testImageChannels = std::min(sourceImageChannels, destImageChannels);
 
@@ -611,6 +610,6 @@ TEST_P(TextureTest, TextureNPOT_GL_ALPHA_UBYTE)
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-ANGLE_INSTANTIATE_TEST(TextureTest, ES2_D3D9(), ES2_D3D11(), ES2_D3D11_FL9_3());
+ANGLE_INSTANTIATE_TEST(TextureTest, ES2_D3D9(), ES2_D3D11(), ES2_D3D11_FL9_3(), ES2_OPENGL());
 
 } // namespace
