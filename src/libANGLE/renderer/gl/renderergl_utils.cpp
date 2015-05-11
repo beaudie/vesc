@@ -25,14 +25,34 @@ namespace rx
 namespace nativegl_gl
 {
 
+static bool MeetsRequirements(const FunctionsGL *functions, const nativegl::SupportRequirement& requirements)
+{
+    if (requirements.majorVersion > functions->majorVersion ||
+        (requirements.majorVersion == functions->majorVersion && requirements.minorVersion >= functions->minorVersion))
+    {
+        return true;
+    }
+
+    for (const std::string &extension : requirements.extensions)
+    {
+        if (!functions->hasExtension(extension))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions, GLenum internalFormat)
 {
     gl::TextureCaps textureCaps;
 
     const nativegl::InternalFormat &formatInfo = nativegl::GetInternalFormatInfo(internalFormat);
-    textureCaps.texturable = formatInfo.textureSupport(functions->majorVersion, functions->minorVersion, functions->extensions);
-    textureCaps.renderable = formatInfo.renderSupport(functions->majorVersion, functions->minorVersion, functions->extensions);
-    textureCaps.filterable = formatInfo.filterSupport(functions->majorVersion, functions->minorVersion, functions->extensions);
+    const nativegl::InternalFormatRequirements &formatRequirements = functions->openGLES ? formatInfo.glesSupport : formatInfo.glSupport;
+    textureCaps.texturable = MeetsRequirements(functions, formatRequirements.texture);
+    textureCaps.filterable = MeetsRequirements(functions, formatRequirements.filter);
+    textureCaps.renderable = MeetsRequirements(functions, formatRequirements.framebufferAttachment);
 
     // glGetInternalformativ is not available until version 4.2 but may be available through the 3.0
     // extension GL_ARB_internalformat_query
