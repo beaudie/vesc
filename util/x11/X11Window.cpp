@@ -8,8 +8,11 @@
 
 #include "x11/X11Window.h"
 
+#include <iostream>
+
 X11Window::X11Window()
-    : mDisplay(nullptr),
+    : WM_DELETE_WINDOW(None),
+      mDisplay(nullptr),
       mWindow(0)
 {
 }
@@ -29,26 +32,45 @@ bool X11Window::initialize(const std::string &name, size_t width, size_t height)
         return false;
     }
 
-    int screen = DefaultScreen(mDisplay);
-    Window root = RootWindow(mDisplay, screen);
-    Colormap colormap = XCreateColormap(mDisplay, root, DefaultVisual(mDisplay, screen), AllocNone);
-    int depth = DefaultDepth(mDisplay, screen);
-    Visual *visual = DefaultVisual(mDisplay, screen);
+    {
+        int screen = DefaultScreen(mDisplay);
+        Window root = RootWindow(mDisplay, screen);
 
-    XSetWindowAttributes attributes;
-    unsigned long attributeMask = CWBorderPixel | CWColormap | CWEventMask;
+        Colormap colormap = XCreateColormap(mDisplay, root, DefaultVisual(mDisplay, screen), AllocNone);
+        int depth = DefaultDepth(mDisplay, screen);
+        Visual *visual = DefaultVisual(mDisplay, screen);
 
-    // TODO(cwallez) change when input is implemented
-    attributes.event_mask = 0;
-    attributes.border_pixel = 0;
-    attributes.colormap = colormap;
+        XSetWindowAttributes attributes;
+        unsigned long attributeMask = CWBorderPixel | CWColormap | CWEventMask;
 
-    mWindow = XCreateWindow(mDisplay, root, 0, 0, width, height, 0, depth, InputOutput,
-                            visual, attributeMask, &attributes);
+        attributes.event_mask = StructureNotifyMask;
+        attributes.border_pixel = 0;
+        attributes.colormap = colormap;
+
+        mWindow = XCreateWindow(mDisplay, root, 0, 0, width, height, 0, depth, InputOutput,
+                                visual, attributeMask, &attributes);
+        XFreeColormap(mDisplay, colormap);
+    }
 
     if (!mWindow)
     {
-        XFreeColormap(mDisplay, colormap);
+        destroy();
+        return false;
+    }
+
+    // Tell the window manager to notify us when the user wants to close the
+    // window so we can do it ourselves.
+    WM_DELETE_WINDOW = XInternAtom(mDisplay, "WM_DELETE_WINDOW", False);
+    WM_PROTOCOLS = XInternAtom(mDisplay, "WM_PROTOCOLS", False);
+    if (WM_DELETE_WINDOW == None || WM_PROTOCOLS == None)
+    {
+        destroy();
+        return false;
+    }
+
+    if(XSetWMProtocols(mDisplay, mWindow, &WM_DELETE_WINDOW, 1) == 0)
+    {
+        destroy();
         return false;
     }
 
@@ -74,6 +96,8 @@ void X11Window::destroy()
         XCloseDisplay(mDisplay);
         mDisplay = nullptr;
     }
+    WM_DELETE_WINDOW = None;
+    WM_PROTOCOLS = None;
 }
 
 EGLNativeWindowType X11Window::getNativeWindow() const
@@ -88,7 +112,13 @@ EGLNativeDisplayType X11Window::getNativeDisplay() const
 
 void X11Window::messageLoop()
 {
-    //TODO
+    int eventCount = XPending(mDisplay);
+    while (eventCount--)
+    {
+        XEvent event;
+        XNextEvent(mDisplay, &event);
+        processEvent(event);
+    }
 }
 
 void X11Window::setMousePosition(int x, int y)
@@ -126,12 +156,26 @@ void X11Window::setVisible(bool isVisible)
     XFlush(mDisplay);
 }
 
-void X11Window::pushEvent(Event event)
+void X11Window::signalTestEvent()
 {
     //TODO
 }
 
-void X11Window::signalTestEvent()
+void X11Window::processEvent(const XEvent &event)
 {
-    //TODO
+    switch (event.type)
+    {
+      case DestroyNotify:
+        // We already received WM_DELETE_WINDOW
+        break;
+      case ClientMessage:
+        if (event.xclient.message_type == WM_PROTOCOLS &&
+            (Atom) event.xclient.data.l[0] == WM_DELETE_WINDOW)
+        {
+            Event event;
+            event.Type = Event::EVENT_CLOSED;
+            pushEvent(event);
+        }
+        break;
+    }
 }
