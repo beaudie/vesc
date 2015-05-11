@@ -11,55 +11,57 @@
 
 #include <map>
 
+#include "libANGLE/renderer/gl/renderergl_utils.h"
+
 namespace rx
 {
 
 namespace nativegl
 {
 
-// Information about internal formats
-static bool AlwaysSupported(GLuint, GLuint, const std::vector<std::string> &)
+SupportRequirement::SupportRequirement()
+    : majorVersion(std::numeric_limits<GLuint>::max()),
+      minorVersion(std::numeric_limits<GLuint>::max()),
+      extensions()
 {
-    return true;
 }
 
-static bool UnimplementedSupport(GLuint, GLuint, const std::vector<std::string> &)
-{
-    return false;
-}
 
-static bool NeverSupported(GLuint, GLuint, const std::vector<std::string> &)
+InternalFormatRequirements::InternalFormatRequirements()
+    : texture(),
+      filter(),
+      renderbuffer(),
+      framebufferAttachment()
 {
-    return false;
 }
-
-template <GLuint minMajorVersion, GLuint minMinorVersion>
-static bool RequireGL(GLuint major, GLuint minor, const std::vector<std::string> &)
-{
-    return major > minMajorVersion || (major == minMajorVersion && minor >= minMinorVersion);
-}
-
 
 InternalFormat::InternalFormat()
-    : textureSupport(NeverSupported),
-      renderSupport(NeverSupported),
-      filterSupport(NeverSupported)
+    : glSupport(),
+      glesSupport()
 {
 }
+
+static inline SupportRequirement Req(GLuint major, GLuint minor, const std::string &ext = "")
+{
+    SupportRequirement requirement;
+    requirement.majorVersion = major;
+    requirement.minorVersion = minor;
+    requirement.extensions = TokenizeExtensionsString(ext.c_str());
+    return requirement;
+}
+
 
 typedef std::pair<GLenum, InternalFormat> InternalFormatInfoPair;
 typedef std::map<GLenum, InternalFormat> InternalFormatInfoMap;
 
 // A helper function to insert data into the format map with fewer characters.
 static inline void InsertFormatMapping(InternalFormatInfoMap *map, GLenum internalFormat,
-                                       InternalFormat::SupportCheckFunction textureSupport,
-                                       InternalFormat::SupportCheckFunction renderSupport,
-                                       InternalFormat::SupportCheckFunction filterSupport)
+                                       InternalFormatRequirements glSupport,
+                                       InternalFormatRequirements esSupport)
 {
     InternalFormat formatInfo;
-    formatInfo.textureSupport = textureSupport;
-    formatInfo.renderSupport = renderSupport;
-    formatInfo.filterSupport = filterSupport;
+    formatInfo.glSupport = glSupport;
+    formatInfo.glesSupport = esSupport;
     map->insert(std::make_pair(internalFormat, formatInfo));
 }
 
@@ -67,6 +69,11 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
 {
     InternalFormatInfoMap map;
 
+    InsertFormatMapping(&map, GL_RGB8,  { Req(1, 0) }, { Req(3, 0, "GL_OES_rgb8_rgba8") });
+    InsertFormatMapping(&map, GL_RGBA8, { Req(1, 0) }, { Req(3, 0, "GL_OES_rgb8_rgba8") });
+
+
+    /*
     // From ES 3.0.1 spec, table 3.12
     InsertFormatMapping(&map, GL_NONE,              NeverSupported,       NeverSupported,       NeverSupported);
 
@@ -190,7 +197,7 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
 
     // From GL_ANGLE_texture_compression_dxt5
     InsertFormatMapping(&map, GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE, UnimplementedSupport, UnimplementedSupport, UnimplementedSupport);
-
+    */
     return map;
 }
 
