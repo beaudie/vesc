@@ -7,7 +7,7 @@
 //   Tests pertaining to egl::Surface.
 //
 
-#include <test_utils/ANGLETest.h>
+#include <end2end_tests/ANGLETest.h>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 #include <GLES2/gl2.h>
