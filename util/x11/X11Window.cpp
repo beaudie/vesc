@@ -9,7 +9,8 @@
 #include "x11/X11Window.h"
 
 X11Window::X11Window()
-    : mDisplay(nullptr),
+    : WM_DELETE_WINDOW(None),
+      mDisplay(nullptr),
       mWindow(0)
 {
 }
@@ -29,26 +30,55 @@ bool X11Window::initialize(const std::string &name, size_t width, size_t height)
         return false;
     }
 
-    int screen = DefaultScreen(mDisplay);
-    Window root = RootWindow(mDisplay, screen);
-    Colormap colormap = XCreateColormap(mDisplay, root, DefaultVisual(mDisplay, screen), AllocNone);
-    int depth = DefaultDepth(mDisplay, screen);
-    Visual *visual = DefaultVisual(mDisplay, screen);
+    {
+        int screen = DefaultScreen(mDisplay);
+        Window root = RootWindow(mDisplay, screen);
 
-    XSetWindowAttributes attributes;
-    unsigned long attributeMask = CWBorderPixel | CWColormap | CWEventMask;
+        Colormap colormap = XCreateColormap(mDisplay, root, DefaultVisual(mDisplay, screen), AllocNone);
+        int depth = DefaultDepth(mDisplay, screen);
+        Visual *visual = DefaultVisual(mDisplay, screen);
 
-    // TODO(cwallez) change when input is implemented
-    attributes.event_mask = 0;
-    attributes.border_pixel = 0;
-    attributes.colormap = colormap;
+        XSetWindowAttributes attributes;
+        unsigned long attributeMask = CWBorderPixel | CWColormap | CWEventMask;
 
-    mWindow = XCreateWindow(mDisplay, root, 0, 0, width, height, 0, depth, InputOutput,
-                            visual, attributeMask, &attributes);
+        attributes.event_mask = StructureNotifyMask | PointerMotionMask | ButtonPressMask |
+                                ButtonReleaseMask | FocusChangeMask | EnterWindowMask |
+                                LeaveWindowMask;
+        attributes.border_pixel = 0;
+        attributes.colormap = colormap;
+
+        mWindow = XCreateWindow(mDisplay, root, 0, 0, width, height, 0, depth, InputOutput,
+                                visual, attributeMask, &attributes);
+        XFreeColormap(mDisplay, colormap);
+    }
 
     if (!mWindow)
     {
-        XFreeColormap(mDisplay, colormap);
+        destroy();
+        return false;
+    }
+
+    // Tell the window manager to notify us when the user wants to close the
+    // window so we can do it ourselves.
+    WM_DELETE_WINDOW = XInternAtom(mDisplay, "WM_DELETE_WINDOW", False);
+    WM_PROTOCOLS = XInternAtom(mDisplay, "WM_PROTOCOLS", False);
+    if (WM_DELETE_WINDOW == None || WM_PROTOCOLS == None)
+    {
+        destroy();
+        return false;
+    }
+
+    if(XSetWMProtocols(mDisplay, mWindow, &WM_DELETE_WINDOW, 1) == 0)
+    {
+        destroy();
+        return false;
+    }
+
+    // Create an atom to identify our test event
+    TEST_EVENT = XInternAtom(mDisplay, "ANGLE_TEST_EVENT", False);
+    if (TEST_EVENT == None)
+    {
+        destroy();
         return false;
     }
 
@@ -59,6 +89,7 @@ bool X11Window::initialize(const std::string &name, size_t width, size_t height)
     mWidth = width;
     mHeight = height;
 
+    signalTestEvent();
     return true;
 }
 
@@ -74,6 +105,8 @@ void X11Window::destroy()
         XCloseDisplay(mDisplay);
         mDisplay = nullptr;
     }
+    WM_DELETE_WINDOW = None;
+    WM_PROTOCOLS = None;
 }
 
 EGLNativeWindowType X11Window::getNativeWindow() const
@@ -88,12 +121,18 @@ EGLNativeDisplayType X11Window::getNativeDisplay() const
 
 void X11Window::messageLoop()
 {
-    //TODO
+    int eventCount = XPending(mDisplay);
+    while (eventCount--)
+    {
+        XEvent event;
+        XNextEvent(mDisplay, &event);
+        processEvent(event);
+    }
 }
 
 void X11Window::setMousePosition(int x, int y)
 {
-    //TODO
+    XWarpPointer(mDisplay, None, mWindow, 0, 0, 0, 0, x, y);
 }
 
 OSWindow *CreateOSWindow()
@@ -103,13 +142,15 @@ OSWindow *CreateOSWindow()
 
 bool X11Window::setPosition(int x, int y)
 {
-    //TODO
+    XMoveWindow(mDisplay, mWindow, x, y);
+    XFlush(mDisplay);
     return true;
 }
 
 bool X11Window::resize(int width, int height)
 {
-    //TODO
+    XResizeWindow(mDisplay, mWindow, width, height);
+    XFlush(mDisplay);
     return true;
 }
 
@@ -126,12 +167,184 @@ void X11Window::setVisible(bool isVisible)
     XFlush(mDisplay);
 }
 
-void X11Window::pushEvent(Event event)
-{
-    //TODO
-}
-
 void X11Window::signalTestEvent()
 {
-    //TODO
+    XEvent event;
+    event.type = ClientMessage;
+    event.xclient.message_type = TEST_EVENT;
+    // Format needs to be valid or a BadValue is generated
+    event.xclient.format = 32;
+
+    // Hijack StructureNotifyMask as we know we will be listening for it.
+    XSendEvent(mDisplay, mWindow, False, StructureNotifyMask, &event);
+}
+
+void X11Window::processEvent(const XEvent &xEvent)
+{
+    // TODO(cwallez) handle key presses
+    switch (xEvent.type)
+    {
+      case ButtonPress:
+        {
+            Event event;
+
+            MouseButton button = MOUSEBUTTON_UNKNOWN;
+            int wheelX = 0;
+            int wheelY = 0;
+            // The mouse wheel updates are sent via button events.
+            switch(xEvent.xbutton.button)
+            {
+              case Button4:
+                if (wheelY == 0) wheelY = 1;
+              case Button5:
+                if (wheelY == 0) wheelY = -1;
+              case 6:
+                if (wheelX == 0) wheelX = 1;
+              case 7:
+                if (wheelX == 0) wheelX = -1;
+                if (wheelY != 0)
+                {
+                    event.Type = Event::EVENT_MOUSE_WHEEL_MOVED;
+                    event.MouseWheel.Delta = wheelY;
+                    pushEvent(event);
+                }
+                break;
+
+              case Button1:
+                if (button == MOUSEBUTTON_UNKNOWN) button = MOUSEBUTTON_LEFT;
+              case Button2:
+                if (button == MOUSEBUTTON_UNKNOWN) button = MOUSEBUTTON_MIDDLE;
+              case Button3:
+                if (button == MOUSEBUTTON_UNKNOWN) button = MOUSEBUTTON_RIGHT;
+              case 8:
+                if (button == MOUSEBUTTON_UNKNOWN) button = MOUSEBUTTON_BUTTON4;
+              case 9:
+                if (button == MOUSEBUTTON_UNKNOWN) button = MOUSEBUTTON_BUTTON5;
+                event.Type = Event::EVENT_MOUSE_BUTTON_PRESSED;
+                event.MouseButton.Button = button;
+                event.MouseButton.X = xEvent.xbutton.x;
+                event.MouseButton.Y = xEvent.xbutton.y;
+                pushEvent(event);
+                break;
+
+              default:
+                break;
+            }
+        }
+        break;
+
+      case ButtonRelease:
+        {
+            Event event;
+            MouseButton button = MOUSEBUTTON_UNKNOWN;
+            switch(xEvent.xbutton.button)
+            {
+              case Button1:
+                if (button == MOUSEBUTTON_UNKNOWN) button = MOUSEBUTTON_LEFT;
+              case Button2:
+                if (button == MOUSEBUTTON_UNKNOWN) button = MOUSEBUTTON_MIDDLE;
+              case Button3:
+                if (button == MOUSEBUTTON_UNKNOWN) button = MOUSEBUTTON_RIGHT;
+              case 8:
+                if (button == MOUSEBUTTON_UNKNOWN) button = MOUSEBUTTON_BUTTON4;
+              case 9:
+                if (button == MOUSEBUTTON_UNKNOWN) button = MOUSEBUTTON_BUTTON5;
+                event.Type = Event::EVENT_MOUSE_BUTTON_RELEASED;
+                event.MouseButton.Button = button;
+                event.MouseButton.X = xEvent.xbutton.x;
+                event.MouseButton.Y = xEvent.xbutton.y;
+                pushEvent(event);
+                break;
+
+              default:
+                break;
+            }
+        }
+        break;
+
+      case EnterNotify:
+        {
+            Event event;
+            event.Type = Event::EVENT_MOUSE_ENTERED;
+            pushEvent(event);
+        }
+        break;
+
+      case LeaveNotify:
+        {
+            Event event;
+            event.Type = Event::EVENT_MOUSE_LEFT;
+            pushEvent(event);
+        }
+        break;
+
+      case MotionNotify:
+        {
+            Event event;
+            event.Type = Event::EVENT_MOUSE_MOVED;
+            event.MouseMove.X = xEvent.xmotion.x;
+            event.MouseMove.Y = xEvent.xmotion.y;
+            pushEvent(event);
+        }
+        break;
+
+      case ConfigureNotify:
+        {
+            if (xEvent.xconfigure.width != mWidth || xEvent.xconfigure.height != mHeight)
+            {
+                Event event;
+                event.Type = Event::EVENT_RESIZED;
+                event.Size.Width = xEvent.xconfigure.width;
+                event.Size.Height = xEvent.xconfigure.height;
+                pushEvent(event);
+            }
+            if (xEvent.xconfigure.x != mX || xEvent.xconfigure.y != mY)
+            {
+                Event event;
+                event.Type = Event::EVENT_MOVED;
+                event.Move.X = xEvent.xconfigure.x;
+                event.Move.Y = xEvent.xconfigure.y;
+                pushEvent(event);
+            }
+        }
+        break;
+
+      case FocusIn:
+        if (xEvent.xfocus.mode == NotifyNormal || xEvent.xfocus.mode == NotifyWhileGrabbed)
+        {
+            Event event;
+            event.Type = Event::EVENT_GAINED_FOCUS;
+            pushEvent(event);
+        }
+        break;
+
+      case FocusOut:
+        if (xEvent.xfocus.mode == NotifyNormal || xEvent.xfocus.mode == NotifyWhileGrabbed)
+        {
+            Event event;
+            event.Type = Event::EVENT_LOST_FOCUS;
+            pushEvent(event);
+        }
+        break;
+
+      case DestroyNotify:
+        // We already received WM_DELETE_WINDOW
+        break;
+
+      case ClientMessage:
+        if (xEvent.xclient.message_type == WM_PROTOCOLS &&
+            (Atom) xEvent.xclient.data.l[0] == WM_DELETE_WINDOW)
+        {
+            Event event;
+            event.Type = Event::EVENT_CLOSED;
+            pushEvent(event);
+        }
+        else if(xEvent.xclient.message_type == TEST_EVENT)
+        {
+            Event event;
+            event.Type = Event::EVENT_TEST;
+            pushEvent(event);
+        }
+        break;
+    }
 }
