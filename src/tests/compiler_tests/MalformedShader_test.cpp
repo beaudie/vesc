@@ -441,3 +441,58 @@ TEST_F(MalformedShaderTest, AssignArrayLengthToUnsigned)
         FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
     }
 }
+
+// Global variable initializers need to be constant expressions (ESSL 1.00 section 4.3)
+// Initializing with a varying should be an error.
+TEST_F(MalformedShaderTest, AssignVaryingToGlobal)
+{
+    const std::string &shaderString =
+        "precision mediump float;\n"
+        "varying float a;\n"
+        "float b = a * 2.0;\n"
+        "void main() {\n"
+        "   gl_FragColor = vec4(b);\n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// Global variable initializers need to be constant expressions (ESSL 3.00 section 4.3)
+// Initializing with an uniform should be an error.
+TEST_F(MalformedShaderTest, AssignUniformToGlobal)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "uniform float a;\n"
+        "float b = a * 2.0;\n"
+        "out vec4 my_FragColor;\n"
+        "void main() {\n"
+        "   my_FragColor = vec4(b);\n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// Global variable initializers need to be constant expressions (ESSL 3.00 section 4.3)
+// Initializing with a non-constant global should be an error.
+TEST_F(MalformedShaderTest, AssignNonConstGlobalToGlobal)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "float a = 1.0;\n"
+        "float b = a * 2.0;\n"
+        "out vec4 my_FragColor;\n"
+        "void main() {\n"
+        "   my_FragColor = vec4(b);\n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
