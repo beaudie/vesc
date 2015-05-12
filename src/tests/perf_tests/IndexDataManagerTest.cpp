@@ -11,6 +11,7 @@
 
 #include <gmock/gmock.h>
 
+#include "common/utilities.h"
 #include "libANGLE/renderer/d3d/BufferD3D.h"
 #include "libANGLE/renderer/d3d/IndexBuffer.h"
 #include "libANGLE/renderer/d3d/IndexDataManager.h"
@@ -140,10 +141,10 @@ IndexDataManagerPerfTest::IndexDataManagerPerfTest()
 void IndexDataManagerPerfTest::step(float dt, double totalTime)
 {
     rx::TranslatedIndexData translatedIndexData;
+    translatedIndexData.indexRange = gl::ComputeIndexRange(GL_UNSIGNED_SHORT, &mIndexData[0], mIndexCount);
 
     for (unsigned int iteration = 0; iteration < 100; ++iteration)
     {
-        mIndexBuffer.getIndexRange(GL_UNSIGNED_SHORT, 0, mIndexCount, &translatedIndexData.indexRange);
         mIndexDataManager.prepareIndexData(GL_UNSIGNED_SHORT, mIndexCount, &mIndexBuffer, nullptr, &translatedIndexData);
     }
 
