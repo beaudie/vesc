@@ -59,7 +59,6 @@ class Event
         EVENT_RESIZED,               // The window was resized
         EVENT_LOST_FOCUS,            // The window lost the focus
         EVENT_GAINED_FOCUS,          // The window gained the focus
-        EVENT_TEXT_ENTERED,          // A character was entered
         EVENT_KEY_PRESSED,           // A key was pressed
         EVENT_KEY_RELEASED,          // A key was released
         EVENT_MOUSE_WHEEL_MOVED,     // The mouse wheel was scrolled
