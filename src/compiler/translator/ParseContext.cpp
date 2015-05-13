@@ -652,7 +652,7 @@ bool TParseContext::parameterSamplerErrorCheck(const TSourceLoc& line, TQualifie
     return false;
 }
 
-bool TParseContext::containsSampler(TType& type)
+bool TParseContext::containsSampler(const TType& type)
 {
     if (IsSampler(type.getBasicType()))
         return true;
@@ -749,12 +749,13 @@ bool TParseContext::arrayQualifierErrorCheck(const TSourceLoc &line, const TPubl
 //
 // Returns true if there is an error.
 //
-bool TParseContext::arrayTypeErrorCheck(const TSourceLoc& line, TPublicType type)
+bool TParseContext::arrayTypeErrorCheck(const TSourceLoc& line, const TPublicType &type)
 {
     //
     // Can the type be an array?
     //
-    if (type.array) {
+    if (type.array)
+    {
         error(line, "cannot declare arrays of arrays", TType(type).getCompleteString().c_str());
         return true;
     }
@@ -888,7 +889,7 @@ bool TParseContext::extensionErrorCheck(const TSourceLoc& line, const TString& e
 // These checks are common for all declarations starting a declarator list, and declarators that follow an empty
 // declaration.
 //
-bool TParseContext::singleDeclarationErrorCheck(TPublicType &publicType, const TSourceLoc &identifierLocation)
+bool TParseContext::singleDeclarationErrorCheck(const TPublicType &publicType, const TSourceLoc &identifierLocation)
 {
     switch (publicType.qualifier)
     {
@@ -1094,7 +1095,7 @@ const TFunction* TParseContext::findFunction(const TSourceLoc& line, TFunction* 
 //
 // Returns true on error, false if no error
 //
-bool TParseContext::executeInitializer(const TSourceLoc &line, const TString &identifier, TPublicType &pType,
+bool TParseContext::executeInitializer(const TSourceLoc &line, const TString &identifier, const TPublicType &pType,
                                        TIntermTyped *initializer, TIntermNode **intermNode)
 {
     ASSERT(intermNode != nullptr);
@@ -1342,7 +1343,7 @@ TIntermAggregate *TParseContext::parseSingleArrayDeclaration(TPublicType &public
     return intermediate.makeAggregate(symbol, identifierLocation);
 }
 
-TIntermAggregate *TParseContext::parseSingleInitDeclaration(TPublicType &publicType,
+TIntermAggregate *TParseContext::parseSingleInitDeclaration(const TPublicType &publicType,
                                                             const TSourceLoc &identifierLocation,
                                                             const TString &identifier,
                                                             const TSourceLoc &initLocation,
@@ -1524,7 +1525,7 @@ TIntermAggregate *TParseContext::parseArrayDeclarator(TPublicType &publicType, T
     return nullptr;
 }
 
-TIntermAggregate *TParseContext::parseInitDeclarator(TPublicType &publicType, TIntermAggregate *aggregateDeclaration,
+TIntermAggregate *TParseContext::parseInitDeclarator(const TPublicType &publicType, TIntermAggregate *aggregateDeclaration,
                                                      const TSourceLoc &identifierLocation, const TString &identifier,
                                                      const TSourceLoc &initLocation, TIntermTyped *initializer)
 {
@@ -1561,7 +1562,7 @@ TIntermAggregate *TParseContext::parseInitDeclarator(TPublicType &publicType, TI
     }
 }
 
-TIntermAggregate *TParseContext::parseArrayInitDeclarator(TPublicType &publicType,
+TIntermAggregate *TParseContext::parseArrayInitDeclarator(const TPublicType &publicType,
                                                           TIntermAggregate *aggregateDeclaration,
                                                           const TSourceLoc& identifierLocation,
                                                           const TString &identifier,
@@ -1653,8 +1654,9 @@ void TParseContext::parseGlobalLayoutQualifier(const TPublicType &typeQualifier)
     }
 }
 
-TFunction *TParseContext::addConstructorFunc(TPublicType publicType)
+TFunction *TParseContext::addConstructorFunc(const TPublicType &publicTypeIn)
 {
+    TPublicType publicType = publicTypeIn;
     TOperator op = EOpNull;
     if (publicType.userDef)
     {
