@@ -26,6 +26,7 @@ namespace d3d11
 
 typedef std::map<std::pair<GLenum, GLenum>, ColorCopyFunction> FastCopyFunctionMap;
 typedef bool (*NativeMipmapGenerationSupportFunction)(D3D_FEATURE_LEVEL);
+typedef bool (*FormatSupportFunction)(const Renderer11DeviceCaps*);
 
 struct DXGIFormat
 {
