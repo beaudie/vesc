@@ -152,7 +152,7 @@ gl::Error VertexBuffer11::storeVertexAttributes(const gl::VertexAttribute &attri
     }
 
     gl::VertexFormat vertexFormat(attrib, currentValue.Type);
-    const d3d11::VertexFormat &vertexFormatInfo = d3d11::GetVertexFormatInfo(vertexFormat, mRenderer->getFeatureLevel());
+    const d3d11::VertexFormat &vertexFormatInfo = d3d11::GetVertexFormatInfo(vertexFormat, mRenderer->getRenderer11DeviceCaps()->featureLevel);
     ASSERT(vertexFormatInfo.copyFunction != NULL);
     vertexFormatInfo.copyFunction(input, inputStride, count, output);
 
@@ -176,7 +176,7 @@ gl::Error VertexBuffer11::getSpaceRequired(const gl::VertexAttribute &attrib, GL
         }
 
         gl::VertexFormat vertexFormat(attrib);
-        const d3d11::VertexFormat &vertexFormatInfo = d3d11::GetVertexFormatInfo(vertexFormat, mRenderer->getFeatureLevel());
+        const d3d11::VertexFormat &vertexFormatInfo = d3d11::GetVertexFormatInfo(vertexFormat, mRenderer->getRenderer11DeviceCaps()->featureLevel);
         const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(vertexFormatInfo.nativeFormat);
         unsigned int elementSize = dxgiFormatInfo.pixelBytes;
         if (elementSize <= std::numeric_limits<unsigned int>::max() / elementCount)

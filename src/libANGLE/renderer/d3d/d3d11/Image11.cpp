@@ -34,7 +34,7 @@ Image11::Image11(Renderer11 *renderer)
 {
     // mRenderer should remain unchanged during the lifetime of the Image11 object.
     // This lets us safely use mRenderer (and its Feature Level) in Image11's methods.
-    mFeatureLevel = renderer->getFeatureLevel();
+    mFeatureLevel = mRenderer->getRenderer11DeviceCaps()->featureLevel;
 }
 
 Image11::~Image11()
@@ -88,7 +88,7 @@ bool Image11::isDirty() const
     // AND mStagingTexture doesn't exist AND mStagingTexture doesn't need to be recovered from TextureStorage
     // AND the texture doesn't require init data (i.e. a blank new texture will suffice)
     // then isDirty should still return false.
-    if (mDirty && !mStagingTexture && !mRecoverFromStorage && !(d3d11::GetTextureFormatInfo(mInternalFormat, mFeatureLevel).dataInitializerFunction != NULL))
+    if (mDirty && !mStagingTexture && !mRecoverFromStorage && !(d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer->getRenderer11DeviceCaps()).dataInitializerFunction != NULL))
     {
         return false;
     }
@@ -216,7 +216,7 @@ bool Image11::redefine(GLenum target, GLenum internalformat, const gl::Extents &
         mTarget = target;
 
         // compute the d3d format that will be used
-        const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalformat, mFeatureLevel);
+        const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalformat, mRenderer->getRenderer11DeviceCaps());
         mDXGIFormat = formatInfo.texFormat;
         mRenderable = (formatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN);
 
@@ -249,7 +249,7 @@ gl::Error Image11::loadData(const gl::Box &area, const gl::PixelUnpackState &unp
     const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mDXGIFormat);
     GLuint outputPixelSize = dxgiFormatInfo.pixelBytes;
 
-    const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(mInternalFormat, mFeatureLevel);
+    const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer->getRenderer11DeviceCaps());
     LoadImageFunction loadFunction = d3dFormatInfo.loadFunctions.at(type);
 
     D3D11_MAPPED_SUBRESOURCE mappedImage;
@@ -283,7 +283,7 @@ gl::Error Image11::loadCompressedData(const gl::Box &area, const void *input)
     ASSERT(area.x % outputBlockWidth == 0);
     ASSERT(area.y % outputBlockHeight == 0);
 
-    const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(mInternalFormat, mFeatureLevel);
+    const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer->getRenderer11DeviceCaps());
     LoadImageFunction loadFunction = d3dFormatInfo.loadFunctions.at(GL_UNSIGNED_BYTE);
 
     D3D11_MAPPED_SUBRESOURCE mappedImage;
@@ -537,11 +537,11 @@ gl::Error Image11::createStagingTexture()
         desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
         desc.MiscFlags = 0;
 
-        if (d3d11::GetTextureFormatInfo(mInternalFormat, mFeatureLevel).dataInitializerFunction != NULL)
+        if (d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer->getRenderer11DeviceCaps()).dataInitializerFunction != NULL)
         {
             std::vector<D3D11_SUBRESOURCE_DATA> initialData;
             std::vector< std::vector<BYTE> > textureData;
-            d3d11::GenerateInitialTextureData(mInternalFormat, mFeatureLevel, width, height, mDepth,
+            d3d11::GenerateInitialTextureData(mInternalFormat, mRenderer->getRenderer11DeviceCaps(), width, height, mDepth,
                                               lodOffset + 1, &initialData, &textureData);
 
             result = device->CreateTexture3D(&desc, initialData.data(), &newTexture);
@@ -577,11 +577,11 @@ gl::Error Image11::createStagingTexture()
         desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
         desc.MiscFlags = 0;
 
-        if (d3d11::GetTextureFormatInfo(mInternalFormat, mFeatureLevel).dataInitializerFunction != NULL)
+        if (d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer->getRenderer11DeviceCaps()).dataInitializerFunction != NULL)
         {
             std::vector<D3D11_SUBRESOURCE_DATA> initialData;
             std::vector< std::vector<BYTE> > textureData;
-            d3d11::GenerateInitialTextureData(mInternalFormat, mFeatureLevel, width, height, 1,
+            d3d11::GenerateInitialTextureData(mInternalFormat, mRenderer->getRenderer11DeviceCaps(), width, height, 1,
                                               lodOffset + 1, &initialData, &textureData);
 
             result = device->CreateTexture2D(&desc, initialData.data(), &newTexture);
