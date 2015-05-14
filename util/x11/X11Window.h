@@ -46,6 +46,7 @@ class X11Window : public OSWindow
 
     Display *mDisplay;
     Window mWindow;
+    bool mMapped;
 };
 
 #endif // UTIL_X11_WINDOW_H
