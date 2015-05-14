@@ -11,7 +11,8 @@
 X11Window::X11Window()
     : WM_DELETE_WINDOW(None),
       mDisplay(nullptr),
-      mWindow(0)
+      mWindow(0),
+      mMapped(false)
 {
 }
 
@@ -157,13 +158,29 @@ void X11Window::setVisible(bool isVisible)
 {
     if (isVisible)
     {
-        XMapWindow(mDisplay, mWindow);
+        if (!mMapped)
+        {
+            XMapWindow(mDisplay, mWindow);
+
+            // Run a message loop until we get the event saying this window is mapped
+            // so that the code calling setVisible can assume the window is visible.
+            // This is important when creating a framebuffer as the framebuffer content
+            // is undefined when the window is not visible.
+            XEvent event;
+            while (!mMapped)
+            {
+                XNextEvent(mDisplay, &event);
+                processEvent(event);
+            }
+        }
     }
     else
     {
         XUnmapWindow(mDisplay, mWindow);
+        mMapped = false;
     }
     XFlush(mDisplay);
+    XSync(mDisplay, True);
 }
 
 void X11Window::signalTestEvent()
@@ -364,6 +381,13 @@ void X11Window::processEvent(const XEvent &xEvent)
             Event event;
             event.Type = Event::EVENT_TEST;
             pushEvent(event);
+        }
+        break;
+
+      case MapNotify:
+        if (xEvent.xmap.window == mWindow)
+        {
+            mMapped = true;
         }
         break;
     }
