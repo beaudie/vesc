@@ -30,6 +30,7 @@ FunctionsGLX::FunctionsGLX()
     mLibHandle(nullptr),
     mXDisplay(nullptr),
     mXScreen(-1),
+    mIsNewDisplay(false),
     mDestroyContextPtr(nullptr),
     mMakeCurrentPtr(nullptr),
     mSwapBuffersPtr(nullptr),
@@ -56,11 +57,12 @@ FunctionsGLX::~FunctionsGLX()
     terminate();
 }
 
-egl::Error FunctionsGLX::initialize(Display *xDisplay, int screen)
+egl::Error FunctionsGLX::initialize(Display *xDisplay, int screen, bool isNewDisplay)
 {
     terminate();
     mXDisplay = xDisplay;
     mXScreen = screen;
+    mIsNewDisplay = isNewDisplay;
 
     mLibHandle = dlopen("libGL.so.1", RTLD_NOW);
     if (!mLibHandle)
@@ -155,6 +157,14 @@ void FunctionsGLX::terminate()
     {
         dlclose(mLibHandle);
         mLibHandle = nullptr;
+    }
+}
+
+void FunctionsGLX::didXCommands() const
+{
+    if (mIsNewDisplay)
+    {
+        XSync(mXDisplay, False);
     }
 }
 
