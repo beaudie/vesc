@@ -38,6 +38,8 @@ WindowSurfaceGLX::~WindowSurfaceGLX()
     {
         XDestroyWindow(mDisplay, mWindow);
     }
+
+    mGLX.didXCommands();
 }
 
 egl::Error WindowSurfaceGLX::initialize()
@@ -83,6 +85,8 @@ egl::Error WindowSurfaceGLX::initialize()
 
     XFree(visualInfo);
     XFreeColormap(mDisplay, colormap);
+
+    mGLX.didXCommands();
 
     return egl::Error(EGL_SUCCESS);
 }

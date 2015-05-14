@@ -61,12 +61,14 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
 {
     mEGLDisplay = display;
     Display *xDisplay = display->getNativeDisplayId();
+    bool isNewDisplay = false;
 
     // ANGLE_platform_angle allows the creation of a default display
     // using EGL_DEFAULT_DISPLAY (= nullptr). In this case just open
     // the display specified by the DISPLAY environment variable.
     if (xDisplay == EGL_DEFAULT_DISPLAY)
     {
+        isNewDisplay = true;
         xDisplay = XOpenDisplay(NULL);
         if (!xDisplay)
         {
@@ -74,7 +76,7 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
         }
     }
 
-    egl::Error glxInitResult = mGLX.initialize(xDisplay, DefaultScreen(xDisplay));
+    egl::Error glxInitResult = mGLX.initialize(xDisplay, DefaultScreen(xDisplay), isNewDisplay);
     if (glxInitResult.isError())
     {
         return glxInitResult;
@@ -154,6 +156,8 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
 
     mFunctionsGL = new FunctionsGLGLX(mGLX.getProc);
     mFunctionsGL->initialize();
+
+    mGLX.didXCommands();
 
     return DisplayGL::initialize(display);
 }
