@@ -26,11 +26,16 @@ class FunctionsGLX : angle::NonCopyable
     ~FunctionsGLX();
 
     // Load data from GLX, can be called multiple times
-    egl::Error initialize(Display *xDisplay, int screen);
+    egl::Error initialize(Display *xDisplay, int screen, bool isNewDisplay);
     void terminate();
 
-    bool hasExtension(const char *extension) const;
+    // Synchronizes with the X server, if the display has been opened by ANGLE.
+    // Calling this is required at the end of every functions that does buffered
+    // X calls (not for glX calls) otherwise there might be race conditions
+    // between the application's display and ANGLE's one.
+    void didXCommands() const;
 
+    bool hasExtension(const char *extension) const;
     int majorVersion;
     int minorVersion;
 
@@ -69,6 +74,7 @@ class FunctionsGLX : angle::NonCopyable
     void *mLibHandle;
     Display *mXDisplay;
     int mXScreen;
+    bool mIsNewDisplay;
 
     std::vector<std::string> mExtensions;
 
