@@ -69,16 +69,18 @@ class IndexedPointsTest : public ANGLETest
 
         std::array<GLfloat, mPointCount * 2> vertices =
         {
-            getIndexPositionX(0), getIndexPositionY(0),
-            getIndexPositionX(1), getIndexPositionY(1),
-            getIndexPositionX(2), getIndexPositionY(2),
-            getIndexPositionX(3), getIndexPositionY(3),
+            {
+                getIndexPositionX(0), getIndexPositionY(0),
+                getIndexPositionX(1), getIndexPositionY(1),
+                getIndexPositionX(2), getIndexPositionY(2),
+                getIndexPositionX(3), getIndexPositionY(3),
+            }
         };
         glGenBuffers(1, &mVertexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
 
-        std::array<IndexType, mPointCount> indices = { 0, 1, 2, 3 };
+        std::array<IndexType, mPointCount> indices = { { 0, 1, 2, 3 } };
         glGenBuffers(1, &mIndexBuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(IndexType), &indices[0], GL_STATIC_DRAW);
