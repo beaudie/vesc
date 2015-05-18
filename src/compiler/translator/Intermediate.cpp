@@ -446,9 +446,15 @@ TIntermTyped *TIntermediate::foldAggregateBuiltIn(TOperator op, TIntermAggregate
 {
     switch (op)
     {
+      case EOpAtan:
+      case EOpPow:
+      case EOpMod:
       case EOpMin:
       case EOpMax:
       case EOpClamp:
+      case EOpMix:
+      case EOpStep:
+      case EOpSmoothStep:
         return TIntermConstantUnion::FoldAggregateBuiltIn(op, aggregate);
       default:
         // Constant folding not supported for the built-in.
