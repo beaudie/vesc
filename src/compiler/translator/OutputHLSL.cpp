@@ -1848,10 +1848,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 // Don't output ; after case labels, they're terminated by :
                 // This is needed especially since outputting a ; after a case statement would turn empty
                 // case statements into non-empty case statements, disallowing fall-through from them.
-                // Also no need to output ; after selection (if) statements. This is done just for code clarity.
-                TIntermSelection *asSelection = (*sit)->getAsSelectionNode();
-                ASSERT(asSelection == nullptr || !asSelection->usesTernaryOperator());
-                if ((*sit)->getAsCaseNode() == nullptr && asSelection == nullptr)
+                if ((*sit)->getAsCaseNode() == nullptr)
                     out << ";\n";
             }
 
