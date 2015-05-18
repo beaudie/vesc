@@ -629,6 +629,22 @@ class TIntermTraverser : angle::NonCopyable
         return mPath.size() == 0 ? NULL : mPath.back();
     }
 
+    struct ParentBlock
+    {
+        ParentBlock(TIntermAggregate *_node, TIntermSequence::size_type _pos)
+            : node(_node),
+            pos(_pos)
+        {
+        }
+
+        TIntermAggregate *node;
+        TIntermSequence::size_type pos;
+    };
+
+    void pushParentBlock(TIntermAggregate *node);
+    void incrementParentBlockPos();
+    void popParentBlock();
+
     // Return the original name if hash function pointer is NULL;
     // otherwise return the hashed name.
     static TString hash(const TString& name, ShHashFunction64 hashFunction);
@@ -704,6 +720,14 @@ class TIntermTraverser : angle::NonCopyable
     std::vector<NodeUpdateEntry> mReplacements;
     std::vector<NodeReplaceWithMultipleEntry> mMultiReplacements;
     std::vector<NodeInsertMultipleEntry> mInsertions;
+
+    // Helper to insert statements before the node currently being traversed.
+    // Should only be called during PreVisit or PostVisit for sequence nodes.
+    void insertStatementsBeforeThisNode(const TIntermSequence &insertions);
+
+  private:
+    // All the code blocks from the root to the current node's parent during traversal.
+    std::vector<ParentBlock> mParentBlockStack;
 };
 
 //
