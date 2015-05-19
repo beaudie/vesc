@@ -264,6 +264,8 @@ class Renderer11 : public RendererD3D
 
     RendererClass getRendererClass() const override { return RENDERER_D3D11; }
 
+    bool usesAlternateRenderableFormat(GLenum internalFormat) override;
+
   protected:
     void createAnnotator() override;
     gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) override;
