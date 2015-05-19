@@ -2991,4 +2991,10 @@ Renderer9::CurSamplerState::CurSamplerState()
 {
 }
 
+bool Renderer9::usesAlternateRenderableFormat(GLenum /* internalFormat */)
+{
+    // The D3D9 renderer uses the same D3D texture format for renderable and non-renderable textures
+    return false;
+}
+
 }

@@ -11,9 +11,10 @@
 #include <float.h>
 
 #include "libANGLE/formatutils.h"
+#include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
-#include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
+#include "libANGLE/renderer/d3d/d3d11/TextureStorage11.h"
 #include "third_party/trace_event/trace_event.h"
 
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough2d11vs.h"
@@ -83,7 +84,7 @@ DXGI_FORMAT GetTextureFormat(ID3D11Resource *resource)
 }
 
 ID3D11Resource *CreateStagingTexture(ID3D11Device *device, ID3D11DeviceContext *context,
-                                     ID3D11Resource *source, unsigned int subresource,
+                                     DXGI_FORMAT format, unsigned int subresource,
                                      const gl::Extents &size, unsigned int cpuAccessFlags)
 {
     D3D11_TEXTURE2D_DESC stagingDesc;
@@ -91,7 +92,7 @@ ID3D11Resource *CreateStagingTexture(ID3D11Device *device, ID3D11DeviceContext *
     stagingDesc.Height = size.height;
     stagingDesc.MipLevels = 1;
     stagingDesc.ArraySize = 1;
-    stagingDesc.Format = GetTextureFormat(source);
+    stagingDesc.Format = format;
     stagingDesc.SampleDesc.Count = 1;
     stagingDesc.SampleDesc.Quality = 0;
     stagingDesc.Usage = D3D11_USAGE_STAGING;
@@ -106,8 +107,6 @@ ID3D11Resource *CreateStagingTexture(ID3D11Device *device, ID3D11DeviceContext *
         ERR("Failed to create staging texture for depth stencil blit. HRESULT: 0x%X.", result);
         return nullptr;
     }
-
-    context->CopySubresourceRegion(stagingTexture, 0, 0, 0, 0, source, subresource, nullptr);
 
     return stagingTexture;
 }
@@ -901,10 +900,12 @@ gl::Error Blit11::copyDepthStencil(ID3D11Resource *source, unsigned int sourceSu
     ID3D11Device *device = mRenderer->getDevice();
     ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
 
-    ID3D11Resource *sourceStaging = CreateStagingTexture(device, deviceContext, source, sourceSubresource, sourceSize, D3D11_CPU_ACCESS_READ);
+    ID3D11Resource *sourceStaging = CreateStagingTexture(device, deviceContext, GetTextureFormat(source), sourceSubresource, sourceSize, D3D11_CPU_ACCESS_READ);
+    deviceContext->CopySubresourceRegion(sourceStaging, 0, 0, 0, 0, source, sourceSubresource, nullptr);
     // HACK: Create the destination staging buffer as a read/write texture so ID3D11DevicContext::UpdateSubresource can be called
     //       using it's mapped data as a source
-    ID3D11Resource *destStaging = CreateStagingTexture(device, deviceContext, dest, destSubresource, destSize, D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE);
+    ID3D11Resource *destStaging = CreateStagingTexture(device, deviceContext, GetTextureFormat(source), destSubresource, destSize, D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE);
+    deviceContext->CopySubresourceRegion(destStaging, 0, 0, 0, 0, source, destSubresource, nullptr);
 
     if (!sourceStaging || !destStaging)
     {
@@ -1025,6 +1026,160 @@ gl::Error Blit11::copyDepthStencil(ID3D11Resource *source, unsigned int sourceSu
 
     SafeRelease(sourceStaging);
     SafeRelease(destStaging);
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error Blit11::copyTextureFromStorageUsingCPU(TextureStorage11 *sourceStorage, const gl::Box &sourceArea,
+                                                 ID3D11Resource *dest, const gl::Box &destArea,
+                                                 bool destUsesRenderableFormat, GLenum destInternalFormat,
+                                                 unsigned int subresourceIndex)
+{
+    ID3D11Device *device = mRenderer->getDevice();
+    ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+
+    ID3D11Resource *storageResource = nullptr;
+    gl::Error error = sourceStorage->getResource(&storageResource);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    // When copying from Storage, we need to copy the Storage's data into an intermediary mappable texture, then copy that onto the dest
+    ID3D11Resource *cpuSource = CreateStagingTexture(device, deviceContext, GetTextureFormat(storageResource), 0 /*todo*/, gl::Extents(destArea.width, destArea.height, destArea.depth), D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE);
+    if (cpuSource == nullptr)
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to create staging texture in Blit11");
+    }
+
+    error = sourceStorage->copySubresourceLevel(cpuSource, 0, gl::ImageIndex::Make2D(subresourceIndex), destArea);
+    if (error.isError())
+    {
+        SafeRelease(cpuSource);
+        return error;
+    }
+
+    error = copyTextureUsingCPU(cpuSource, destArea, dest, destArea, destUsesRenderableFormat, destInternalFormat, 0);
+    if (error.isError())
+    {
+        SafeRelease(cpuSource);
+        return error;
+    }
+
+    SafeRelease(cpuSource);
+    return error;
+}
+
+gl::Error Blit11::copyTextureIntoStorageUsingCPU(ID3D11Resource *source, const gl::Box &sourceArea,
+                                                 TextureStorage11 *destStorage, const gl::Box &destArea,
+                                                 bool destUsesRenderableFormat, GLenum destInternalFormat,
+                                                 unsigned int subresourceIndex)
+{
+    ID3D11Device *device = mRenderer->getDevice();
+    ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+
+    ID3D11Resource *storageResource = nullptr;
+    gl::Error error = destStorage->getResource(&storageResource);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ID3D11Resource *cpuDest = CreateStagingTexture(device, deviceContext, GetTextureFormat(storageResource), 0 /*todo*/, gl::Extents(sourceArea.width, sourceArea.height, sourceArea.depth), D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE);
+    if (cpuDest == nullptr)
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to create staging texture in Blit11");
+    }
+
+    error = copyTextureUsingCPU(source, sourceArea, cpuDest, destArea, destUsesRenderableFormat, destInternalFormat, subresourceIndex);
+    if (error.isError())
+    {
+        SafeRelease(cpuDest);
+        return error;
+    }
+
+    error = destStorage->updateSubresourceLevel(cpuDest, 0 /*todo*/, gl::ImageIndex::Make2D(subresourceIndex), destArea);
+    if (error.isError())
+    {
+        SafeRelease(cpuDest);
+        return error;
+    }
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error Blit11::copyTextureUsingCPU(ID3D11Resource *source, const gl::Box &sourceArea,
+                                      ID3D11Resource *dest, const gl::Box &destArea,
+                                      bool destUsesRenderableFormat, GLenum destInternalFormat,
+                                      unsigned int subresourceIndex)
+{
+    ASSERT(source);
+    ASSERT(dest);
+    ASSERT(sourceArea.width == destArea.width);
+    ASSERT(sourceArea.height == destArea.height);
+    ASSERT(sourceArea.depth == destArea.depth);
+
+    DXGI_FORMAT inputFormat = GetTextureFormat(source);
+
+    const d3d11::TextureFormat &destD3DFormatInfo = d3d11::GetTextureFormatInfo(destInternalFormat, mRenderer->getRenderer11DeviceCaps(), destUsesRenderableFormat);
+    const d3d11::DXGIFormat &destDXGIFormatInfo = d3d11::GetDXGIFormatInfo(destD3DFormatInfo.texFormat);
+    const d3d11::DXGIFormat &sourceDXGIFormatInfo = d3d11::GetDXGIFormatInfo(inputFormat);
+    const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(destInternalFormat);
+
+    ColorReadFunction colorReadFunction = sourceDXGIFormatInfo.colorReadFunction;
+    ColorWriteFunction colorWriteFunction = GetColorWriteFunction(internalFormatInfo.format, internalFormatInfo.type);
+    LoadImageFunction loadImageFunc = destD3DFormatInfo.loadFunctions.at(internalFormatInfo.type);
+
+    ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+
+    D3D11_MAPPED_SUBRESOURCE inputMap;
+    D3D11_MAPPED_SUBRESOURCE outputMap;
+    HRESULT hr = S_OK;
+
+    //const d3d11::DXGIFormat &inputDXGIFormatInfo = d3d11::GetDXGIFormatInfo(inputFormat);
+    //const d3d11::DXGIFormat &outputDXGIFormatInfo = d3d11::GetDXGIFormatInfo(outputFormat);
+
+    hr = deviceContext->Map(source, subresourceIndex, D3D11_MAP_WRITE, 0, &inputMap);
+    if (FAILED(hr))
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to map inputted texture, result: 0x%X.", hr);
+    }
+
+    hr = deviceContext->Map(dest, subresourceIndex, D3D11_MAP_WRITE, 0, &outputMap);
+    if (FAILED(hr))
+    {
+        deviceContext->Unmap(source, subresourceIndex);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to map output texture, result: 0x%X.", hr);
+    }
+
+    GLsizei rowOffset = destDXGIFormatInfo.pixelBytes * destArea.x;
+    uint8_t *dataOffset = static_cast<uint8_t*>(outputMap.pData) + outputMap.RowPitch * destArea.y + rowOffset + destArea.z * outputMap.DepthPitch;
+
+    // We convert the format using a two-step process. First we read the data into Color<T>, then we output into a GL format,
+    // then we load it into a DXGI format.
+
+    uint8_t temp[16]; // Maximum size of any Color<T> type used.
+    uint8_t temp2[16];
+    static_assert(sizeof(temp) >= sizeof(gl::ColorF) &&
+                  sizeof(temp) >= sizeof(gl::ColorUI) &&
+                  sizeof(temp) >= sizeof(gl::ColorI),
+                  "Unexpected size of gl::Color struct.");
+
+    for (int y = 0; y < sourceArea.height; y++)
+    {
+        for (int x = 0; x < sourceArea.width; x++)
+        {
+            uint8_t *destPtr = static_cast<uint8_t*>(dataOffset)+y * outputMap.RowPitch + x * destDXGIFormatInfo.pixelBytes;
+            const uint8_t *src = static_cast<uint8_t*>(inputMap.pData) + y * inputMap.RowPitch + x * sourceDXGIFormatInfo.pixelBytes;
+
+            colorReadFunction(src, temp);
+            colorWriteFunction(temp, temp2);
+            loadImageFunc(1, 1, 1, temp2, internalFormatInfo.pixelBytes, 1, destPtr, destDXGIFormatInfo.pixelBytes, 1);
+        }
+    }
+
+    deviceContext->Unmap(source, subresourceIndex);
+    deviceContext->Unmap(dest, subresourceIndex);
 
     return gl::Error(GL_NO_ERROR);
 }

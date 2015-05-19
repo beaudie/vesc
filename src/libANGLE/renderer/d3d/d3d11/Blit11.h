@@ -19,6 +19,7 @@
 namespace rx
 {
 class Renderer11;
+class TextureStorage11;
 
 class Blit11 : angle::NonCopyable
 {
@@ -33,6 +34,10 @@ class Blit11 : angle::NonCopyable
                           ID3D11RenderTargetView *dest, const gl::Box &destArea, const gl::Extents &destSize,
                           const gl::Rectangle *scissor, GLenum destFormat, GLenum filter);
 
+    gl::Error copyTextureUsingCPU(ID3D11Resource *source, const gl::Box &sourceArea,
+                                  ID3D11Resource *dest, const gl::Box &destArea, /*, gl::InternalFormat &outputInternalFormatInfo,*/
+                                  bool destUsesRenderableFormat, GLenum destInternalFormat, unsigned int subresourceIndex);
+
     gl::Error copyStencil(ID3D11Resource *source, unsigned int sourceSubresource, const gl::Box &sourceArea, const gl::Extents &sourceSize,
                           ID3D11Resource *dest, unsigned int destSubresource, const gl::Box &destArea, const gl::Extents &destSize,
                           const gl::Rectangle *scissor);
@@ -44,6 +49,16 @@ class Blit11 : angle::NonCopyable
     gl::Error copyDepthStencil(ID3D11Resource *source, unsigned int sourceSubresource, const gl::Box &sourceArea, const gl::Extents &sourceSize,
                                ID3D11Resource *dest, unsigned int destSubresource, const gl::Box &destArea, const gl::Extents &destSize,
                                const gl::Rectangle *scissor);
+
+    gl::Error copyTextureFromStorageUsingCPU(TextureStorage11 *sourceStorage, const gl::Box &sourceArea,
+                                             ID3D11Resource *dest, const gl::Box &destArea,
+                                             bool destUsesRenderableFormat, GLenum destInternalFormat,
+                                             unsigned int subresourceIndex);
+
+    gl::Error copyTextureIntoStorageUsingCPU(ID3D11Resource *source, const gl::Box &sourceArea,
+                                             TextureStorage11 *destStorage, const gl::Box &destArea,
+                                             bool destUsesRenderableFormat, GLenum destInternalFormat,
+                                             unsigned int subresourceIndex);
 
   private:
     enum BlitShaderType
