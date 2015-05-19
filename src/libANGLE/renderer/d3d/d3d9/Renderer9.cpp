@@ -2970,4 +2970,10 @@ gl::Error Renderer9::clearTextures(gl::SamplerType samplerType, size_t rangeStar
     return gl::Error(GL_NO_ERROR);
 }
 
+bool Renderer9::usesAlternateRenderableFormat(GLenum /* internalFormat */)
+{
+    // The D3D9 renderer uses the same D3D texture format for renderable and non-renderable textures
+    return false;
+}
+
 }
