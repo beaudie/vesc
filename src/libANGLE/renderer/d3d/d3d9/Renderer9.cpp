@@ -2942,4 +2942,10 @@ void Renderer9::createAnnotator()
     mAnnotator = new DebugAnnotator9();
 }
 
+bool Renderer9::usesAlternateRenderableFormat(GLenum /* internalFormat */)
+{
+    // The D3D9 renderer uses the same D3D texture format for renderable and non-renderable textures
+    return false;
+}
+
 }

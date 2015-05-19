@@ -233,6 +233,8 @@ class Renderer9 : public RendererD3D
 
     D3DDEVTYPE getD3D9DeviceType() const { return mDeviceType; }
 
+    bool usesAlternateRenderableFormat(GLenum internalFormat) override;
+
   protected:
     void createAnnotator() override;
 
