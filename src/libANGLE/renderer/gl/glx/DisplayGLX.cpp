@@ -47,6 +47,7 @@ DisplayGLX::DisplayGLX()
       mFunctionsGL(nullptr),
       mContext(nullptr),
       mDummyPbuffer(0),
+      mUsesNewXDisplay(false),
       mEGLDisplay(nullptr)
 {
 }
@@ -65,6 +66,7 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
     // the display specified by the DISPLAY environment variable.
     if (xDisplay == EGL_DEFAULT_DISPLAY)
     {
+        mUsesNewXDisplay = true;
         xDisplay = XOpenDisplay(NULL);
         if (!xDisplay)
         {
@@ -153,6 +155,8 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
     mFunctionsGL = new FunctionsGLGLX(mGLX.getProc);
     mFunctionsGL->initialize();
 
+    syncXCommands();
+
     return DisplayGL::initialize(display);
 }
 
@@ -184,7 +188,7 @@ SurfaceImpl *DisplayGLX::createWindowSurface(const egl::Config *configuration,
     ASSERT(configIdToGLXConfig.count(configuration->configID) > 0);
     glx::FBConfig fbConfig = configIdToGLXConfig[configuration->configID];
 
-    return new WindowSurfaceGLX(mGLX, window, mGLX.getDisplay(), mContext, fbConfig);
+    return new WindowSurfaceGLX(mGLX, *this, window, mGLX.getDisplay(), mContext, fbConfig);
 }
 
 SurfaceImpl *DisplayGLX::createPbufferSurface(const egl::Config *configuration,
@@ -387,6 +391,14 @@ std::string DisplayGLX::getVendorString() const
 {
     // UNIMPLEMENTED();
     return "";
+}
+
+void DisplayGLX::syncXCommands() const
+{
+    if (mUsesNewXDisplay)
+    {
+        XSync(mGLX.getDisplay(), False);
+    }
 }
 
 const FunctionsGL *DisplayGLX::getFunctionsGL() const
