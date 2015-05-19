@@ -2942,4 +2942,9 @@ Workarounds Renderer9::generateWorkarounds() const
     return d3d9::GenerateWorkarounds();
 }
 
+bool Renderer9::usesAlternateRenderableFormat(GLenum internalFormat)
+{ 
+    return false;
+};
+
 }
