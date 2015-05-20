@@ -60,7 +60,7 @@ class Surface final : public gl::FramebufferAttachmentObject
     EGLenum getTextureFormat() const;
     EGLenum getTextureTarget() const;
 
-    gl::Texture *getBoundTexture() const { return mTexture; }
+    gl::Texture *getBoundTexture() const { return mTexture.get(); }
 
     EGLint isFixedSize() const;
 
@@ -69,6 +69,9 @@ class Surface final : public gl::FramebufferAttachmentObject
     GLsizei getAttachmentHeight(const gl::FramebufferAttachment::Target &/*target*/) const override { return getHeight(); }
     GLenum getAttachmentInternalFormat(const gl::FramebufferAttachment::Target &target) const override;
     GLsizei getAttachmentSamples(const gl::FramebufferAttachment::Target &target) const override;
+
+    // ANGLE-only method, used internally
+    void releaseTexImageFromTexture();
 
   private:
     virtual ~Surface();
@@ -93,7 +96,7 @@ class Surface final : public gl::FramebufferAttachmentObject
     EGLenum mRenderBuffer;         // Render buffer
     EGLenum mSwapBehavior;         // Buffer swap behavior
 
-    gl::Texture *mTexture;
+    BindingPointer<gl::Texture> mTexture;
 };
 
 }
