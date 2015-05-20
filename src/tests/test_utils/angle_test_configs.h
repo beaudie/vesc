@@ -19,15 +19,25 @@ namespace angle
 struct PlatformParameters
 {
     PlatformParameters(EGLint clientVersion,
-                       const EGLPlatformParameters &eglPlatformParameters)
+                       const EGLPlatformParameters &eglPlatformParameters,
+                       EGLBoolean useRenderToBackbuffer)
         : mClientVersion(clientVersion),
-          mEGLPlatformParameters(eglPlatformParameters)
+          mEGLPlatformParameters(eglPlatformParameters),
+          mUseRenderToBackbuffer(useRenderToBackbuffer)
+    {
+    }
+
+    PlatformParameters(EGLint clientVersion,
+                    const EGLPlatformParameters &eglPlatformParameters)
+        : mClientVersion(clientVersion),
+          mEGLPlatformParameters(eglPlatformParameters),
+          mUseRenderToBackbuffer(EGL_FALSE)
     {
     }
 
     EGLint mClientVersion;
     EGLPlatformParameters mEGLPlatformParameters;
-
+    EGLBoolean mUseRenderToBackbuffer;
 };
 
 inline std::ostream &operator<<(std::ostream& stream,
@@ -81,6 +91,13 @@ inline std::ostream &operator<<(std::ostream& stream,
 
       default:
         UNREACHABLE();
+        break;
+    }
+
+    switch (pp.mUseRenderToBackbuffer)
+    {
+      case EGL_TRUE:
+        stream << "_RTBB";
         break;
     }
 
@@ -184,6 +201,24 @@ inline PlatformParameters ES2_D3D11_FL9_3()
         9, 3,
         EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE);
     return PlatformParameters(2, eglParams);
+}
+
+inline PlatformParameters ES2_D3D11_RTBB()
+{
+    EGLPlatformParameters eglParams(
+        EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE,
+        EGL_DONT_CARE, EGL_DONT_CARE,
+        EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE);
+    return PlatformParameters(2, eglParams, EGL_TRUE);
+}
+
+inline PlatformParameters ES2_D3D11_FL9_3_RTBB()
+{
+    EGLPlatformParameters eglParams(
+        EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE,
+        9, 3,
+        EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE);
+    return PlatformParameters(2, eglParams, EGL_TRUE);
 }
 
 inline PlatformParameters ES2_D3D11_WARP()

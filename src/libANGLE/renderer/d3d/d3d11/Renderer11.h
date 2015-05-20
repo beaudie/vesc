@@ -155,6 +155,7 @@ class Renderer11 : public RendererD3D
     virtual unsigned int getReservedFragmentUniformBuffers() const;
     virtual bool getShareHandleSupport() const;
     virtual bool getPostSubBufferSupport() const;
+    virtual bool getRenderToBackbufferSupport() const { return true; }
 
     virtual int getMajorShaderModel() const;
     int getMinorShaderModel() const override;

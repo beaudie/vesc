@@ -35,6 +35,9 @@ TEST_P(RendererTest, RequestedRendererCreated)
 
     const EGLPlatformParameters &platform = GetParam().mEGLPlatformParameters;
 
+    bool expectES2Conformance = true;
+    bool expectES3Conformance = true;
+
     // Ensure that the renderer string contains D3D11, if we requested a D3D11 renderer.
     if (platform.renderer == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
     {
@@ -45,6 +48,7 @@ TEST_P(RendererTest, RequestedRendererCreated)
     if (platform.renderer == EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE)
     {
         ASSERT_NE(rendererString.find(std::string("direct3d9")), std::string::npos);
+        expectES3Conformance = false;
     }
 
     // Ensure that the major and minor versions trigger expected behavior in D3D11
@@ -87,6 +91,8 @@ TEST_P(RendererTest, RequestedRendererCreated)
         if (platform.majorVersion == 9 && platform.minorVersion == 3)
         {
             acceptableShaderModels.push_back("ps_4_0_level_9_3");
+            expectES2Conformance = false;
+            expectES3Conformance = false;
         }
 
         bool found = false;
@@ -100,6 +106,17 @@ TEST_P(RendererTest, RequestedRendererCreated)
 
         ASSERT_TRUE(found);
     }
+
+    if (GetParam().mUseRenderToBackbuffer == EGL_TRUE)
+    {
+        // Render to backbuffer extension breaks conformance
+        expectES2Conformance = false;
+        expectES3Conformance = false;
+    }
+
+    // Check conformance flags
+    ASSERT_EQ(getEGLWindow()->getConformance() & EGL_OPENGL_ES2_BIT, expectES2Conformance ? EGL_OPENGL_ES2_BIT : 0);
+    ASSERT_EQ(getEGLWindow()->getConformance() & EGL_OPENGL_ES3_BIT, expectES3Conformance ? EGL_OPENGL_ES3_BIT : 0);
 
     EGLint glesMajorVersion = GetParam().mClientVersion;
 
@@ -127,13 +144,21 @@ TEST_P(RendererTest, SimpleOperation)
 // Select configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 
 ANGLE_INSTANTIATE_TEST(RendererTest,
-    ES2_D3D9(),            ES2_D3D9_REFERENCE(),
+    // D3D9 ES2
+    ES2_D3D9(),            ES2_D3D9_REFERENCE(), 
+
+    // D3D11 ES2
     ES2_D3D11(),           ES2_D3D11_FL11_0(),           ES2_D3D11_FL10_1(),           ES2_D3D11_FL10_0(),           ES2_D3D11_FL9_3(),
     ES2_D3D11_WARP(),      ES2_D3D11_FL11_0_WARP(),      ES2_D3D11_FL10_1_WARP(),      ES2_D3D11_FL10_0_WARP(),      ES2_D3D11_FL9_3_WARP(),
     ES2_D3D11_REFERENCE(), ES2_D3D11_FL11_0_REFERENCE(), ES2_D3D11_FL10_1_REFERENCE(), ES2_D3D11_FL10_0_REFERENCE(), ES2_D3D11_FL9_3_REFERENCE(),
+    ES2_D3D11_RTBB(),                                                                                                ES2_D3D11_FL9_3_RTBB(),
+
+    // D3D11 ES3
     ES3_D3D11(),           ES3_D3D11_FL11_0(),           ES3_D3D11_FL10_1(),           ES3_D3D11_FL10_0(),
     ES3_D3D11_WARP(),      ES3_D3D11_FL11_0_WARP(),      ES3_D3D11_FL10_1_WARP(),      ES3_D3D11_FL10_0_WARP(),
     ES3_D3D11_REFERENCE(), ES3_D3D11_FL11_0_REFERENCE(), ES3_D3D11_FL10_1_REFERENCE(), ES3_D3D11_FL10_0_REFERENCE(),
+
+    // OpenGL
     ES2_OPENGL(),          ES3_OPENGL());
 
 }

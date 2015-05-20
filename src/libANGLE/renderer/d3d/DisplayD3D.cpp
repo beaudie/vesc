@@ -313,6 +313,11 @@ void DisplayD3D::generateExtensions(egl::DisplayExtensions *outExtensions) const
         outExtensions->surfaceD3DTexture2DShareHandle = true;
     }
 
+    if (mRenderer->getRenderToBackbufferSupport())
+    {
+        outExtensions->renderToBackbuffer = true;
+    }
+
     outExtensions->querySurfacePointer = true;
     outExtensions->windowFixedSize = true;
 

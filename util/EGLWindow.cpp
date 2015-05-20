@@ -57,8 +57,31 @@ EGLWindow::EGLWindow(size_t width, size_t height, EGLint glesMajorVersion, const
       mAlphaBits(-1),
       mDepthBits(-1),
       mStencilBits(-1),
+      mConformance(-1),
       mMultisample(false),
-      mSwapInterval(-1)
+      mSwapInterval(-1),
+      mUseRenderToBackbuffer(EGL_FALSE)
+{
+}
+
+EGLWindow::EGLWindow(size_t width, size_t height, EGLint glesMajorVersion, const EGLPlatformParameters &platform, EGLBoolean useRenderToBackbuffer)
+    : mDisplay(EGL_NO_DISPLAY),
+      mSurface(EGL_NO_SURFACE),
+      mContext(EGL_NO_CONTEXT),
+      mClientVersion(glesMajorVersion),
+      mPlatform(platform),
+      mWidth(width),
+      mHeight(height),
+      mRedBits(-1),
+      mGreenBits(-1),
+      mBlueBits(-1),
+      mAlphaBits(-1),
+      mDepthBits(-1),
+      mStencilBits(-1),
+      mConformance(-1),
+      mMultisample(false),
+      mSwapInterval(-1),
+      mUseRenderToBackbuffer(useRenderToBackbuffer)
 {
 }
 
@@ -136,20 +159,32 @@ bool EGLWindow::initializeGL(OSWindow *osWindow)
         return false;
     }
 
-    const EGLint configAttributes[] =
+    std::vector<EGLint> configAttributes;
+    configAttributes.push_back(EGL_RED_SIZE);
+    configAttributes.push_back((mRedBits >= 0) ? mRedBits : EGL_DONT_CARE);
+    configAttributes.push_back(EGL_GREEN_SIZE); 
+    configAttributes.push_back((mGreenBits >= 0) ? mGreenBits : EGL_DONT_CARE);
+    configAttributes.push_back(EGL_BLUE_SIZE);
+    configAttributes.push_back((mBlueBits >= 0) ? mBlueBits : EGL_DONT_CARE);
+    configAttributes.push_back(EGL_ALPHA_SIZE);
+    configAttributes.push_back((mAlphaBits >= 0) ? mAlphaBits : EGL_DONT_CARE);
+    configAttributes.push_back(EGL_DEPTH_SIZE); 
+    configAttributes.push_back((mDepthBits >= 0) ? mDepthBits : EGL_DONT_CARE);
+    configAttributes.push_back(EGL_STENCIL_SIZE); 
+    configAttributes.push_back((mStencilBits >= 0) ? mStencilBits : EGL_DONT_CARE);
+    configAttributes.push_back(EGL_SAMPLE_BUFFERS); 
+    configAttributes.push_back(mMultisample ? 1 : 0);
+    
+    if (mUseRenderToBackbuffer)
     {
-        EGL_RED_SIZE,       (mRedBits >= 0)     ? mRedBits     : EGL_DONT_CARE,
-        EGL_GREEN_SIZE,     (mGreenBits >= 0)   ? mGreenBits   : EGL_DONT_CARE,
-        EGL_BLUE_SIZE,      (mBlueBits >= 0)    ? mBlueBits    : EGL_DONT_CARE,
-        EGL_ALPHA_SIZE,     (mAlphaBits >= 0)   ? mAlphaBits   : EGL_DONT_CARE,
-        EGL_DEPTH_SIZE,     (mDepthBits >= 0)   ? mDepthBits   : EGL_DONT_CARE,
-        EGL_STENCIL_SIZE,   (mStencilBits >= 0) ? mStencilBits : EGL_DONT_CARE,
-        EGL_SAMPLE_BUFFERS, mMultisample ? 1 : 0,
-        EGL_NONE
-    };
+        configAttributes.push_back(EGL_ANGLE_CONFIG_RENDER_TO_BACK_BUFFER);
+        configAttributes.push_back(EGL_TRUE);
+    }
+
+    configAttributes.push_back(EGL_NONE);
 
     EGLint configCount;
-    if (!eglChooseConfig(mDisplay, configAttributes, &mConfig, 1, &configCount) || (configCount != 1))
+    if (!eglChooseConfig(mDisplay, &(configAttributes[0]), &mConfig, 1, &configCount) || (configCount != 1))
     {
         destroyGL();
         return false;
@@ -161,12 +196,20 @@ bool EGLWindow::initializeGL(OSWindow *osWindow)
     eglGetConfigAttrib(mDisplay, mConfig, EGL_ALPHA_SIZE, &mBlueBits);
     eglGetConfigAttrib(mDisplay, mConfig, EGL_DEPTH_SIZE, &mDepthBits);
     eglGetConfigAttrib(mDisplay, mConfig, EGL_STENCIL_SIZE, &mStencilBits);
+    eglGetConfigAttrib(mDisplay, mConfig, EGL_CONFORMANT, &mConformance);
+
 
     std::vector<EGLint> surfaceAttributes;
     if (strstr(eglQueryString(mDisplay, EGL_EXTENSIONS), "EGL_NV_post_sub_buffer") != nullptr)
     {
         surfaceAttributes.push_back(EGL_POST_SUB_BUFFER_SUPPORTED_NV);
         surfaceAttributes.push_back(EGL_TRUE);
+    }
+
+    if (mUseRenderToBackbuffer)
+    {
+        configAttributes.push_back(EGL_ANGLE_SURFACE_RENDER_TO_BACK_BUFFER);
+        configAttributes.push_back(EGL_TRUE);
     }
 
     surfaceAttributes.push_back(EGL_NONE);

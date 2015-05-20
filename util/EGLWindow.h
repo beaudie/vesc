@@ -47,7 +47,7 @@ class EGLWindow : angle::NonCopyable
 {
   public:
     EGLWindow(size_t width, size_t height, EGLint glesMajorVersion, const EGLPlatformParameters &platform);
-
+    EGLWindow(size_t width, size_t height, EGLint glesMajorVersion, const EGLPlatformParameters &platform, EGLBoolean useRenderToBackbuffer);
     ~EGLWindow();
 
     void setClientVersion(EGLint glesMajorVersion) { mClientVersion = glesMajorVersion; }
@@ -78,6 +78,7 @@ class EGLWindow : angle::NonCopyable
     int getConfigAlphaBits() const { return mAlphaBits; }
     int getConfigDepthBits() const { return mDepthBits; }
     int getConfigStencilBits() const { return mStencilBits; }
+    int getConformance() const { return mConformance; }
     bool isMultisample() const { return mMultisample; }
     EGLint getSwapInterval() const { return mSwapInterval; }
 
@@ -101,8 +102,10 @@ class EGLWindow : angle::NonCopyable
     int mAlphaBits;
     int mDepthBits;
     int mStencilBits;
+    int mConformance;
     bool mMultisample;
     EGLint mSwapInterval;
+    EGLBoolean mUseRenderToBackbuffer;
 };
 
 #endif // UTIL_EGLWINDOW_H_

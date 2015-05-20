@@ -495,7 +495,8 @@ DisplayExtensions::DisplayExtensions()
       windowFixedSize(false),
       postSubBuffer(false),
       createContext(false),
-      deviceQuery(false)
+      deviceQuery(false),
+      renderToBackbuffer(false)
 {
 }
 
@@ -512,6 +513,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_NV_post_sub_buffer",                        postSubBuffer,                  &extensionStrings);
     InsertExtensionString("EGL_KHR_create_context",                        createContext,                  &extensionStrings);
     InsertExtensionString("EGL_EXT_device_query",                          deviceQuery,                    &extensionStrings);
+    InsertExtensionString("EGL_ANGLE_direct3d_render_to_backbuffer",       renderToBackbuffer,             &extensionStrings);
 
     return extensionStrings;
 }

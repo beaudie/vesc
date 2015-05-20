@@ -39,6 +39,7 @@ Config::Config()
       configID(0),
       conformant(0),
       depthSize(0),
+      enableRenderToBackbuffer(EGL_FALSE),
       level(0),
       matchNativePixmap(EGL_FALSE),
       maxPBufferWidth(0),
@@ -251,6 +252,7 @@ std::vector<const Config*> ConfigSet::filter(const AttributeMap &attributeMap) c
               case EGL_MAX_PBUFFER_WIDTH:         match = config.maxPBufferWidth >= attributeValue;                   break;
               case EGL_MAX_PBUFFER_HEIGHT:        match = config.maxPBufferHeight >= attributeValue;                  break;
               case EGL_MAX_PBUFFER_PIXELS:        match = config.maxPBufferPixels >= attributeValue;                  break;
+              case EGL_ANGLE_CONFIG_RENDER_TO_BACK_BUFFER: match = /* false; break; // */ config.enableRenderToBackbuffer == (EGLBoolean)attributeValue; break;
               default: UNREACHABLE();
             }
 

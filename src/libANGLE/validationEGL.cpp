@@ -273,6 +273,18 @@ Error ValidateCreateWindowSurface(Display *display, Config *config, EGLNativeWin
           case EGL_VG_ALPHA_FORMAT:
             return Error(EGL_BAD_MATCH);
 
+          case EGL_ANGLE_SURFACE_RENDER_TO_BACK_BUFFER:
+            if (!displayExtensions.renderToBackbuffer)
+            {
+                return Error(EGL_BAD_ATTRIBUTE, "Window surface cannot use render-to-back-buffer unless"
+                                                "the render-to-back-buffer extension is active");
+            }
+            if (config->enableRenderToBackbuffer == EGL_FALSE)
+            {
+                return Error(EGL_BAD_PARAMETER, "Window surface cannot have render-to-back-buffer enabled"
+                                                "unless the config does too");
+            }
+
           default:
             return Error(EGL_BAD_ATTRIBUTE);
         }

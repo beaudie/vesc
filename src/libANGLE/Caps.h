@@ -354,6 +354,9 @@ struct DisplayExtensions
 
     // EGL_EXT_device_query
     bool deviceQuery;
+
+    // EGL_ANGLE_direct3d_render_to_backbuffer
+    bool renderToBackbuffer;
 };
 
 struct DeviceExtensions

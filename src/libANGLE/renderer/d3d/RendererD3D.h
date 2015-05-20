@@ -134,6 +134,7 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     virtual unsigned int getReservedFragmentUniformBuffers() const = 0;
     virtual bool getShareHandleSupport() const = 0;
     virtual bool getPostSubBufferSupport() const = 0;
+    virtual bool getRenderToBackbufferSupport() const = 0;
 
     virtual int getMajorShaderModel() const = 0;
 
