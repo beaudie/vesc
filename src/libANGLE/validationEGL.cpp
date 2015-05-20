@@ -498,4 +498,19 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
     return Error(EGL_SUCCESS);
 }
 
+Error ValidateConfigAreCompatible(const Config *config1, const Config *config2, EGLint surfaceType)
+{
+    bool colorBufferCompat = config1->colorBufferType == config2->colorBufferType;
+    bool colorCompat = config1->redSize == config2->redSize && config1->greenSize == config2->greenSize &&
+                       config1->blueSize == config2->blueSize && config1->alphaSize == config2->alphaSize;
+    bool dsCompat = config1->depthSize == config2->depthSize && config1->stencilSize == config2->stencilSize;
+    bool surfaceTypeCompat = config1->surfaceType & config2->surfaceType & surfaceType;
+
+    if (colorBufferCompat && colorCompat && dsCompat && surfaceTypeCompat)
+    {
+        return Error(EGL_SUCCESS);
+    }
+    return Error(EGL_BAD_MATCH);
+}
+
 }
