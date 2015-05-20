@@ -1136,6 +1136,57 @@ TIntermTyped *TIntermConstantUnion::fold(
 
         return tempNode;
     }
+    else if (op == EOpAny || op == EOpAll || op == EOpVectorLogicalNot)
+    {
+        // Do vector relational operations
+
+        ASSERT(isVector());
+        if (getType().getBasicType() != EbtBool)
+        {
+            infoSink.info.message(
+                EPrefixInternalError, getLine(),
+                "Unary operation not folded into constant");
+            return nullptr;
+        }
+
+        TType returnType(EbtBool, EbpUndefined, EvqConst);
+        TConstantUnion* tempConstArray = nullptr;
+        if (op == EOpAny)
+        {
+            tempConstArray = new TConstantUnion();
+            for (size_t i = 0; i < objectSize; i++)
+            {
+                if (unionArray[i].getBConst())
+                {
+                    tempConstArray->setBConst(true);
+                    break;
+                }
+            }
+        }
+        else if (op == EOpAll)
+        {
+            tempConstArray = new TConstantUnion();
+            tempConstArray->setBConst(true);
+            for (size_t i = 0; i < objectSize; i++)
+            {
+                if (!unionArray[i].getBConst())
+                {
+                    tempConstArray->setBConst(false);
+                    break;
+                }
+            }
+        }
+        else
+        {   // EOpVectorLogicalNot
+            tempConstArray = new TConstantUnion[objectSize];
+            for (size_t i = 0; i < objectSize; i++)
+                tempConstArray[i].setBConst(!unionArray[i].getBConst());
+            returnType.setPrimarySize(static_cast<unsigned char>(objectSize));
+        }
+        TIntermConstantUnion *tempNode = new TIntermConstantUnion(tempConstArray, returnType);
+        tempNode->setLine(getLine());
+        return tempNode;
+    }
     else
     {
         //
@@ -1667,6 +1718,156 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
                 }
                 else
                     UNREACHABLE();
+            }
+            break;
+
+          case EOpLessThan:
+            {
+                tempConstArray = new TConstantUnion[maxObjectSize];
+                for (size_t i = 0; i < maxObjectSize; i++)
+                {
+                    switch (basicType)
+                    {
+                      case EbtFloat:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getFConst() < unionArrays[1][i].getFConst());
+                        break;
+                      case EbtInt:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getIConst() < unionArrays[1][i].getIConst());
+                        break;
+                      case EbtUInt:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getUConst() < unionArrays[1][i].getUConst());
+                        break;
+                      default:
+                        UNREACHABLE();
+                        break;
+                    }
+                }
+            }
+            break;
+
+          case EOpLessThanEqual:
+            {
+                tempConstArray = new TConstantUnion[maxObjectSize];
+                for (size_t i = 0; i < maxObjectSize; i++)
+                {
+                    switch (basicType)
+                    {
+                      case EbtFloat:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getFConst() <= unionArrays[1][i].getFConst());
+                        break;
+                      case EbtInt:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getIConst() <= unionArrays[1][i].getIConst());
+                        break;
+                      case EbtUInt:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getUConst() <= unionArrays[1][i].getUConst());
+                        break;
+                      default:
+                        UNREACHABLE();
+                        break;
+                    }
+                }
+            }
+            break;
+
+          case EOpGreaterThan:
+            {
+                tempConstArray = new TConstantUnion[maxObjectSize];
+                for (size_t i = 0; i < maxObjectSize; i++)
+                {
+                    switch (basicType)
+                    {
+                      case EbtFloat:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getFConst() > unionArrays[1][i].getFConst());
+                        break;
+                      case EbtInt:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getIConst() > unionArrays[1][i].getIConst());
+                        break;
+                      case EbtUInt:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getUConst() > unionArrays[1][i].getUConst());
+                        break;
+                      default:
+                        UNREACHABLE();
+                        break;
+                  }
+              }
+            }
+            break;
+
+          case EOpGreaterThanEqual:
+            {
+                tempConstArray = new TConstantUnion[maxObjectSize];
+                for (size_t i = 0; i < maxObjectSize; i++)
+                {
+                    switch (basicType)
+                    {
+                      case EbtFloat:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getFConst() >= unionArrays[1][i].getFConst());
+                        break;
+                      case EbtInt:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getIConst() >= unionArrays[1][i].getIConst());
+                        break;
+                      case EbtUInt:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getUConst() >= unionArrays[1][i].getUConst());
+                        break;
+                      default:
+                        UNREACHABLE();
+                        break;
+                    }
+                }
+            }
+            break;
+
+          case EOpVectorEqual:
+            {
+                tempConstArray = new TConstantUnion[maxObjectSize];
+                for (size_t i = 0; i < maxObjectSize; i++)
+                {
+                    switch (basicType)
+                    {
+                      case EbtFloat:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getFConst() == unionArrays[1][i].getFConst());
+                        break;
+                      case EbtInt:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getIConst() == unionArrays[1][i].getIConst());
+                        break;
+                      case EbtUInt:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getUConst() == unionArrays[1][i].getUConst());
+                        break;
+                      case EbtBool:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getBConst() == unionArrays[1][i].getBConst());
+                        break;
+                      default:
+                        UNREACHABLE();
+                        break;
+                    }
+                }
+            }
+            break;
+
+          case EOpVectorNotEqual:
+            {
+                tempConstArray = new TConstantUnion[maxObjectSize];
+                for (size_t i = 0; i < maxObjectSize; i++)
+                {
+                    switch (basicType)
+                    {
+                      case EbtFloat:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getFConst() != unionArrays[1][i].getFConst());
+                        break;
+                      case EbtInt:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getIConst() != unionArrays[1][i].getIConst());
+                        break;
+                      case EbtUInt:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getUConst() != unionArrays[1][i].getUConst());
+                        break;
+                      case EbtBool:
+                        tempConstArray[i].setBConst(unionArrays[0][i].getBConst() != unionArrays[1][i].getBConst());
+                        break;
+                      default:
+                        UNREACHABLE();
+                        break;
+                    }
+                }
             }
             break;
 
