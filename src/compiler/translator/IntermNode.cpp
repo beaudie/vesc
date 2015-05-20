@@ -1716,4 +1716,8 @@ void TIntermTraverser::updateTree()
         ASSERT(replaced);
         UNUSED_ASSERTION_VARIABLE(replaced);
     }
+
+    mInsertions.clear();
+    mReplacements.clear();
+    mMultiReplacements.clear();
 }
