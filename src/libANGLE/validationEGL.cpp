@@ -367,6 +367,21 @@ Error ValidateCreateWindowSurface(Display *display, Config *config, EGLNativeWin
           case EGL_VG_ALPHA_FORMAT:
             return Error(EGL_BAD_MATCH);
 
+          case EGL_ANGLE_SURFACE_VFLIP_RENDERING:
+            if (!displayExtensions.d3dSurfaceVFlipRendering)
+            {
+                return Error(EGL_BAD_ATTRIBUTE,
+                             "Surface cannot use EGL_ANGLE_SURFACE_VFLIP_RENDERING unless"
+                             "the EGL_ANGLE_d3d_surface_vflip_rendering extension is active");
+            }
+            if (config->allowSurfaceVFlip == EGL_FALSE)
+            {
+                return Error(
+                    EGL_BAD_PARAMETER,
+                    "Surface cannot enable EGL_ANGLE_SURFACE_VFLIP_RENDERING"
+                    "unless the config has enabled EGL_ANGLE_ALLOW_SURFACE_VFLIP_RENDERING too");
+            }
+
           default:
             return Error(EGL_BAD_ATTRIBUTE);
         }
@@ -387,7 +402,9 @@ Error ValidateCreatePbufferSurface(Display *display, Config *config, const Attri
     {
         return error;
     }
-    
+
+    const DisplayExtensions &displayExtensions = display->getExtensions();
+
     for (AttributeMap::const_iterator attributeIter = attributes.begin(); attributeIter != attributes.end(); attributeIter++)
     {
         EGLint attribute = attributeIter->first;
@@ -437,6 +454,21 @@ Error ValidateCreatePbufferSurface(Display *display, Config *config, const Attri
 
           case EGL_VG_ALPHA_FORMAT:
             break;
+
+          case EGL_ANGLE_SURFACE_VFLIP_RENDERING:
+            if (!displayExtensions.d3dSurfaceVFlipRendering)
+            {
+                return Error(EGL_BAD_ATTRIBUTE,
+                             "Surface cannot use EGL_ANGLE_SURFACE_VFLIP_RENDERING unless"
+                             "the EGL_ANGLE_d3d_surface_vflip_rendering extension is active");
+            }
+            if (config->allowSurfaceVFlip == EGL_FALSE)
+            {
+                return Error(
+                    EGL_BAD_PARAMETER,
+                    "Surface cannot enable EGL_ANGLE_SURFACE_VFLIP_RENDERING"
+                    "unless the config has enabled EGL_ANGLE_ALLOW_SURFACE_VFLIP_RENDERING too");
+            }
 
           default:
             return Error(EGL_BAD_ATTRIBUTE);
@@ -547,6 +579,21 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
 
           case EGL_MIPMAP_TEXTURE:
             break;
+
+          case EGL_ANGLE_SURFACE_VFLIP_RENDERING:
+            if (!displayExtensions.d3dSurfaceVFlipRendering)
+            {
+                return Error(EGL_BAD_ATTRIBUTE,
+                             "Surface cannot use EGL_ANGLE_SURFACE_VFLIP_RENDERING unless"
+                             "the EGL_ANGLE_d3d_surface_vflip_rendering extension is active");
+            }
+            if (config->allowSurfaceVFlip == EGL_FALSE)
+            {
+                return Error(
+                    EGL_BAD_PARAMETER,
+                    "Surface cannot enable EGL_ANGLE_SURFACE_VFLIP_RENDERING"
+                    "unless the config has enabled EGL_ANGLE_ALLOW_SURFACE_VFLIP_RENDERING too");
+            }
 
           default:
             return Error(EGL_BAD_ATTRIBUTE);

@@ -426,6 +426,9 @@ struct DisplayExtensions
 
     // EGL_KHR_get_all_proc_addresses
     bool getAllProcAddresses;
+
+    // EGL_ANGLE_d3d_surface_vflip_rendering
+    bool d3dSurfaceVFlipRendering;
 };
 
 struct DeviceExtensions
