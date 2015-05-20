@@ -68,7 +68,7 @@
                 {
                     'VCCLCompilerTool':
                     {
-                        'AdditionalOptions': ['/MP'],
+                        'AdditionalOptions': ['/MP', '/d2guard4'],
                         'BufferSecurityCheck': 'true',
                         'DebugInformationFormat': '3',
                         'ExceptionHandling': '0',
@@ -79,6 +79,7 @@
                     },
                     'VCLinkerTool':
                     {
+                        'AdditionalOptions': ['/guard:cf'],
                         'FixedBaseAddress': '1',
                         'ImportLibrary': '$(OutDir)\\lib\\$(TargetName).lib',
                         'MapFileName': '$(OutDir)\\$(TargetName).map',
