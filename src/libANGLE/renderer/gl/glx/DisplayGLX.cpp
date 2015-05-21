@@ -333,8 +333,8 @@ egl::ConfigSet DisplayGLX::generateConfigs() const
             (glxDrawable & GLX_PIXMAP_BIT ? EGL_PIXMAP_BIT : 0);
 
         // In GLX_EXT_swap_control querying these is done on a GLXWindow so we just set a default value.
+        config.minSwapInterval = 0;
         config.maxSwapInterval = 1;
-        config.minSwapInterval = 1;
         // TODO(cwallez) wildly guessing these formats, another TODO says they should be removed anyway
         config.renderTargetFormat = GL_RGBA8;
         config.depthStencilFormat = GL_DEPTH24_STENCIL8;
