@@ -127,6 +127,7 @@ void ANGLERenderTest::SetUp()
         FAIL() << "Failed initializing EGLWindow";
         return;
     }
+    mOSWindow->setVisible(true);
 
     initializeBenchmark();
 
