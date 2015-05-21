@@ -86,6 +86,7 @@ egl::Error WindowSurfaceGLX::initialize()
     mWindow = XCreateWindow(mDisplay, mParent, 0, 0, parentAttribs.width, parentAttribs.height,
                             0, visualInfo->depth, InputOutput, visual, attributeMask, &attributes);
     mGLXWindow = mGLX.createWindow(mFBConfig, mWindow, nullptr);
+    mGLX.queryDrawable(mWindow, GLX_MAX_SWAP_INTERVAL_EXT, &mMaxSwapInterval);
 
     XMapWindow(mDisplay, mWindow);
     XFlush(mDisplay);
@@ -141,7 +142,9 @@ egl::Error WindowSurfaceGLX::releaseTexImage(EGLint buffer)
 
 void WindowSurfaceGLX::setSwapInterval(EGLint interval)
 {
-    // TODO(cwallez) WGL has this, implement it
+    // TODO(cwallez) error checking?
+    const int realInterval = std::min(interval, static_cast<int>(mMaxSwapInterval));
+    mGLX.swapIntervalEXT(mGLXWindow, realInterval);
 }
 
 EGLint WindowSurfaceGLX::getWidth() const
