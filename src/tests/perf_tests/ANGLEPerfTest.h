@@ -20,6 +20,8 @@
 #include "OSWindow.h"
 #include "Timer.h"
 #include "common/angleutils.h"
+#include "common/debug.h"
+#include "test_utils/angle_test_instantiate.h"
 
 class Event;
 
@@ -60,6 +62,11 @@ struct RenderTestParams
     EGLint widowWidth;
     EGLint windowHeight;
 };
+
+inline EGLint GetTestParamRenderer(const RenderTestParams& params)
+{
+    return params.requestedRenderer;
+}
 
 class ANGLERenderTest : public ANGLEPerfTest
 {
