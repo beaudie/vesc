@@ -111,6 +111,7 @@ class MultiWindowSample : public SampleApplication
         for (size_t i = 1; i < mWindows.size(); i++)
         {
             OSWindow* window = mWindows[i].osWindow;
+            window->messageLoop();
             left = std::min(left, window->getX());
             right = std::max(right, window->getX() + window->getWidth());
             top = std::min(top, window->getY());
