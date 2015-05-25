@@ -13,6 +13,8 @@
 #include "compiler/translator/PoolAlloc.h"
 #include "compiler/translator/TranslatorESSL.h"
 
+#include <vector>
+
 class ConstantFinder : public TIntermTraverser
 {
   public:
@@ -33,6 +35,38 @@ class ConstantFinder : public TIntermTraverser
 
   private:
     TConstantUnion mConstToFind;
+    bool mFound;
+};
+
+template <typename T>
+class ConstantVectorFinder : public TIntermTraverser
+{
+  public:
+    ConstantVectorFinder(const std::vector<T> &constantVector)
+        : mConstantVector(constantVector),
+          mFound(false)
+    {}
+
+    virtual void visitConstantUnion(TIntermConstantUnion *node)
+    {
+        if (static_cast<unsigned int>(node->getType().getNominalSize()) == mConstantVector.size())
+        {
+            mFound = true;
+            for (size_t i = 0; i < mConstantVector.size(); i++)
+            {
+                if (node->getUnionArrayPointer()[i] != mConstantVector[i])
+                {
+                    mFound = false;
+                    break;
+                }
+            }
+        }
+    }
+
+    bool found() const { return mFound; }
+
+  private:
+    std::vector<T> mConstantVector;
     bool mFound;
 };
 
@@ -84,6 +118,14 @@ class ConstantFoldingTest : public testing::Test
         TConstantUnion c;
         c.setIConst(i);
         return constantFoundInAST(c);
+    }
+
+    template <typename T>
+    bool constantVectorFoundInAST(const std::vector<T> &constantVector)
+    {
+        ConstantVectorFinder<T> finder(constantVector);
+        mASTRoot->traverse(&finder);
+        return finder.found();
     }
 
   private:
@@ -172,4 +214,20 @@ TEST_F(ConstantFoldingTest, FoldIntegerModulus)
     ASSERT_FALSE(constantFoundInAST(1124));
     ASSERT_FALSE(constantFoundInAST(5));
     ASSERT_TRUE(constantFoundInAST(4));
+}
+
+TEST_F(ConstantFoldingTest, FoldVectorCrossProduct)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec3 my_Vec3;"
+        "void main() {\n"
+        "   const vec3 v3 = cross(vec3(1.0f, 1.0f, 1.0f), vec3(1.0f, -1.0f, 1.0f));\n"
+        "   my_Vec3 = v3;\n"
+        "}\n";
+    compile(shaderString);
+    ASSERT_FALSE(constantFoundInAST(1.0f));
+    ASSERT_FALSE(constantFoundInAST(-1.0f));
+    ASSERT_TRUE(constantVectorFoundInAST<float>(std::vector<float>{2.0f, 0.0f, -2.0f}));
 }
