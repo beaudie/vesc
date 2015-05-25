@@ -64,7 +64,6 @@
             # TODO(cwallez) for Linux, requires implementation of eglBindTexImage for pbuffers
             '<(angle_path)/src/tests/gl_tests/PbufferTest.cpp',
             '<(angle_path)/src/tests/gl_tests/QueryDisplayAttribTest.cpp',
-            # TODO(cwallez) for Linux, remove the reliance on the ANGLE_platform_angle_d3d extension
             # TODO(cwallez) for Linux, requires a portable implementation of threads
             '<(angle_path)/src/tests/egl_tests/EGLThreadTest.cpp',
         ],
