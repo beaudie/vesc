@@ -16,7 +16,7 @@
 #include "SampleApplication.h"
 #include "shader_utils.h"
 #include "tga_utils.h"
-#include "path_utils.h"
+#include "system_utils.h"
 
 class MultiTextureSample : public SampleApplication
 {
@@ -83,8 +83,8 @@ class MultiTextureSample : public SampleApplication
         mLightMapLoc = glGetUniformLocation(mProgram, "s_lightMap");
 
         // Load the textures
-        mBaseMapTexID = loadTexture(GetExecutableDirectory() + "/basemap.tga");
-        mLightMapTexID = loadTexture(GetExecutableDirectory() + "/lightmap.tga");
+        mBaseMapTexID = loadTexture(angle::GetExecutableDirectory() + "/basemap.tga");
+        mLightMapTexID = loadTexture(angle::GetExecutableDirectory() + "/lightmap.tga");
         if (mBaseMapTexID == 0 || mLightMapTexID == 0)
         {
             return false;
