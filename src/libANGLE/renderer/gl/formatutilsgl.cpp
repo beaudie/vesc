@@ -9,6 +9,7 @@
 
 #include "libANGLE/renderer/gl/formatutilsgl.h"
 
+#include <limits>
 #include <map>
 
 #include "common/string_utils.h"
