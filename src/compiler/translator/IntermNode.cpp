@@ -168,6 +168,25 @@ void UndefinedConstantFoldingError(const TSourceLoc &loc, TOperator op, TBasicTy
     }
 }
 
+float VectorLength(TConstantUnion *unirArray, size_t objectSize)
+{
+    float result = 0.0f;
+    for (size_t i = 0; i < objectSize; i++)
+    {
+        float f = unirArray[i].getFConst();
+        result += f * f;
+    }
+    return sqrtf(result);
+}
+
+float VectorDotProduct(TConstantUnion *unirArray1, TConstantUnion *unirArray2, size_t objectSize)
+{
+    float result = 0.0f;
+    for (size_t i = 0; i < objectSize; i++)
+        result += unirArray1[i].getFConst() * unirArray2[i].getFConst();
+    return result;
+}
+
 }  // namespace anonymous
 
 
@@ -1163,11 +1182,11 @@ TIntermTyped *TIntermConstantUnion::fold(
 
         return tempNode;
     }
-    else if (op == EOpAny || op == EOpAll)
+    else if (op == EOpAny || op == EOpAll || op == EOpLength)
     {
         // Do operations where the return type is different from the operand type.
 
-        TType returnType(EbtBool, EbpUndefined, EvqConst);
+        TType returnType;
         TConstantUnion *tempConstArray = nullptr;
         if (op == EOpAny)
         {
@@ -1183,6 +1202,7 @@ TIntermTyped *TIntermConstantUnion::fold(
                         break;
                     }
                 }
+                returnType = TType(EbtBool, EbpUndefined, EvqConst);
             }
             else
             {
@@ -1206,6 +1226,7 @@ TIntermTyped *TIntermConstantUnion::fold(
                         break;
                     }
                 }
+                returnType = TType(EbtBool, EbpUndefined, EvqConst);
             }
             else
             {
@@ -1215,6 +1236,23 @@ TIntermTyped *TIntermConstantUnion::fold(
                 return nullptr;
             }
         }
+        else if (op == EOpLength)
+        {
+            if (getType().getBasicType() == EbtFloat)
+            {
+                tempConstArray = new TConstantUnion();
+                tempConstArray->setFConst(VectorLength(unionArray, objectSize));
+                returnType = TType(EbtFloat, getType().getPrecision(), EvqConst);
+            }
+            else
+            {
+                infoSink.info.message(
+                    EPrefixInternalError, getLine(),
+                    "Unary operation not folded into constant");
+                return nullptr;
+            }
+        }
+
         TIntermConstantUnion *tempNode = new TIntermConstantUnion(tempConstArray, returnType);
         tempNode->setLine(getLine());
         return tempNode;
@@ -1554,6 +1592,18 @@ TIntermTyped *TIntermConstantUnion::fold(
                     tempConstArray[i].setBConst(!unionArray[i].getBConst());
                     break;
                 }
+                infoSink.info.message(
+                    EPrefixInternalError, getLine(),
+                    "Unary operation not folded into constant");
+                return nullptr;
+
+              case EOpNormalize:
+                if (getType().getBasicType() == EbtFloat)
+                    {
+                        float x = unionArray[i].getFConst();
+                        tempConstArray[i].setFConst(x / VectorLength(unionArray, objectSize));
+                        break;
+                    }
                 infoSink.info.message(
                     EPrefixInternalError, getLine(),
                     "Unary operation not folded into constant");
@@ -1902,6 +1952,84 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
             }
             break;
 
+          case EOpDistance:
+            {
+                if (basicType == EbtFloat)
+                {
+                    TConstantUnion *distanceArray = new TConstantUnion[maxObjectSize];
+                    tempConstArray = new TConstantUnion();
+                    for (size_t i = 0; i < maxObjectSize; i++)
+                    {
+                        float x = unionArrays[0][i].getFConst();
+                        float y = unionArrays[1][i].getFConst();
+                        distanceArray[i].setFConst(x - y);
+                    }
+                    tempConstArray->setFConst(VectorLength(distanceArray, maxObjectSize));
+                    TPrecision higherPrecision = GetHigherPrecision((*sequence)[0]->getAsTyped()->getPrecision(),
+                                                                    (*sequence)[1]->getAsTyped()->getPrecision());
+                    returnType = TType(EbtFloat, higherPrecision, EvqConst);
+                }
+                else
+                    UNREACHABLE();
+            }
+            break;
+
+          case EOpDot:
+            {
+                if (basicType == EbtFloat)
+                {
+                    tempConstArray = new TConstantUnion();
+                    tempConstArray->setFConst(VectorDotProduct(unionArrays[0], unionArrays[1], maxObjectSize));
+                    TPrecision higherPrecision = GetHigherPrecision((*sequence)[0]->getAsTyped()->getPrecision(),
+                                                                    (*sequence)[1]->getAsTyped()->getPrecision());
+                    returnType = TType(EbtFloat, higherPrecision, EvqConst);
+                }
+                else
+                    UNREACHABLE();
+            }
+            break;
+
+          case EOpCross:
+            {
+                if (basicType == EbtFloat && maxObjectSize == 3)
+                {
+                    tempConstArray = new TConstantUnion[maxObjectSize];
+                    float x0 = unionArrays[0][0].getFConst();
+                    float x1 = unionArrays[0][1].getFConst();
+                    float x2 = unionArrays[0][2].getFConst();
+                    float y0 = unionArrays[1][0].getFConst();
+                    float y1 = unionArrays[1][1].getFConst();
+                    float y2 = unionArrays[1][2].getFConst();
+                    tempConstArray[0].setFConst(x1 * y2 - y1 * x2);
+                    tempConstArray[1].setFConst(x2 * y0 - y2 * x0);
+                    tempConstArray[2].setFConst(x0 * y1 - y0 * x1);
+                }
+                else
+                    UNREACHABLE();
+            }
+            break;
+
+          case EOpReflect:
+            {
+                if (basicType == EbtFloat)
+                {
+                    // genType reflect (genType I, genType N) :
+                    //     For the incident vector I and surface orientation N, returns the reflection direction:
+                    //     I - 2 * dot(N, I) * N.
+                    tempConstArray = new TConstantUnion[maxObjectSize];
+                    float dotProduct = VectorDotProduct(unionArrays[1], unionArrays[0], maxObjectSize);
+                    for (size_t i = 0; i < maxObjectSize; i++)
+                    {
+                        float result = unionArrays[0][i].getFConst() -
+                                       2.0f * dotProduct * unionArrays[1][i].getFConst();
+                        tempConstArray[i].setFConst(result);
+                    }
+                }
+                else
+                    UNREACHABLE();
+            }
+            break;
+
           default:
             UNREACHABLE();
             // TODO: Add constant folding support for other built-in operations that take 2 parameters and not handled above.
@@ -2020,6 +2148,57 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
                             float t = gl::clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
                             tempConstArray[i].setFConst(t * t * (3.0f - 2.0f * t));
                         }
+                    }
+                }
+                else
+                    UNREACHABLE();
+            }
+            break;
+
+          case EOpFaceForward:
+            {
+                if (basicType == EbtFloat)
+                {
+                    // genType faceforward(genType N, genType I, genType Nref) :
+                    //     If dot(Nref, I) < 0 return N, otherwise return -N.
+                    tempConstArray = new TConstantUnion[maxObjectSize];
+                    float dorProduct = VectorDotProduct(unionArrays[2], unionArrays[1], maxObjectSize);
+                    for (size_t i = 0; i < maxObjectSize; i++)
+                    {
+                        if (dorProduct < 0)
+                            tempConstArray[i].setFConst(unionArrays[0][i].getFConst());
+                        else
+                            tempConstArray[i].setFConst(-unionArrays[0][i].getFConst());
+                    }
+                }
+                else
+                    UNREACHABLE();
+            }
+            break;
+
+          case EOpRefract:
+            {
+                if (basicType == EbtFloat)
+                {
+                    // genType refract(genType I, genType N, float eta) :
+                    //     For the incident vector I and surface normal N, and the ratio of indices of refraction eta,
+                    //     return the refraction vector. The result is computed by
+                    //         k = 1.0 - eta * eta * (1.0 - dot(N, I) * dot(N, I))
+                    //         if (k < 0.0)
+                    //             return genType(0.0)
+                    //         else
+                    //             return eta * I - (eta * dot(N, I) + sqrt(k)) * N
+                    tempConstArray = new TConstantUnion[maxObjectSize];
+                    float dorProduct = VectorDotProduct(unionArrays[1], unionArrays[0], maxObjectSize);
+                    for (size_t i = 0; i < maxObjectSize; i++)
+                    {
+                        float eta = unionArrays[2][i].getFConst();
+                        float k = 1.0f - eta * eta * (1.0f - dorProduct * dorProduct);
+                        if (k < 0.0f)
+                            tempConstArray[i].setFConst(0.0f);
+                        else
+                            tempConstArray[i].setFConst(eta * unionArrays[0][i].getFConst() -
+                                                        (eta * dorProduct + sqrtf(k)) * unionArrays[1][i].getFConst());
                     }
                 }
                 else
