@@ -31,6 +31,13 @@ DisplayGL::~DisplayGL()
 egl::Error DisplayGL::initialize(egl::Display *display)
 {
     mRenderer = new RendererGL(getFunctionsGL());
+
+    const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
+    if (maxVersion < gl::Version(2, 0))
+    {
+        return egl::Error(EGL_NOT_INITIALIZED, "OpenGL ES 2.0 is not supportable.");
+    }
+
     return egl::Error(EGL_SUCCESS);
 }
 
@@ -60,6 +67,12 @@ egl::Error DisplayGL::makeCurrent(egl::Surface *drawSurface, egl::Surface *readS
 
     SurfaceGL *glDrawSurface = GetImplAs<SurfaceGL>(drawSurface);
     return glDrawSurface->makeCurrent();
+}
+
+const gl::Version & DisplayGL::getMaxSupportedESVersion() const
+{
+    ASSERT(mRenderer != nullptr);
+    return mRenderer->getMaxSupportedESVersion();
 }
 
 }
