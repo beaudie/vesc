@@ -9,7 +9,6 @@
 
 #include "libANGLE/renderer/gl/formatutilsgl.h"
 
-#include <map>
 #include <limits>
 
 #include "common/string_utils.h"
@@ -19,6 +18,52 @@ namespace rx
 
 namespace nativegl
 {
+
+typedef std::map<GLenum, GLenum> InternalFormatConversionMap;
+
+static InternalFormatConversionMap BuildGLInternalFormatConversionMap()
+{
+    InternalFormatConversionMap map;
+
+    map[GL_BGRA8_EXT] = GL_RGBA8;
+    map[GL_BGRA_EXT] = GL_RGBA;
+
+    return map;
+}
+
+static InternalFormatConversionMap BuildGLESInternalFormatConversionMap()
+{
+    InternalFormatConversionMap map;
+
+    return map;
+}
+
+static const InternalFormatConversionMap &GetInternalFormatConversionMap(StandardGL standard)
+{
+    if (standard == Standard_OpenGL)
+    {
+        static const InternalFormatConversionMap map = BuildGLInternalFormatConversionMap();
+        return map;
+    }
+    else if (standard == Standard_OpenGLES)
+    {
+        static const InternalFormatConversionMap map = BuildGLESInternalFormatConversionMap();
+        return map;
+    }
+    else
+    {
+        UNREACHABLE();
+        static const InternalFormatConversionMap map;
+        return map;
+    }
+}
+
+static GLenum GetConvertedInternalFormat(GLenum format, StandardGL standard)
+{
+    const InternalFormatConversionMap &map = GetInternalFormatConversionMap(standard);
+    auto iter = map.find(format);
+    return iter != map.end() ? iter->second : format;
+}
 
 SupportRequirement::SupportRequirement()
     : version(std::numeric_limits<GLuint>::max(), std::numeric_limits<GLuint>::max()),
@@ -109,10 +154,12 @@ static inline void InsertFormatMapping(InternalFormatInfoMap *map, GLenum intern
                                        const SupportRequirement &esTexture, const SupportRequirement &esFilter, const SupportRequirement &esRender)
 {
     InternalFormatInfo formatInfo;
+    formatInfo.glInfo.internalFormat = GetConvertedInternalFormat(internalFormat, Standard_OpenGL);
     formatInfo.glInfo.texture = desktopTexture;
     formatInfo.glInfo.filter = desktopFilter;
     formatInfo.glInfo.renderbuffer = desktopRender;
     formatInfo.glInfo.framebufferAttachment = desktopRender;
+    formatInfo.glesInfo.internalFormat = GetConvertedInternalFormat(internalFormat, Standard_OpenGLES);
     formatInfo.glesInfo.texture = esTexture;
     formatInfo.glesInfo.filter = esTexture;
     formatInfo.glesInfo.renderbuffer = esFilter;
@@ -165,8 +212,26 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     InsertFormatMapping(&map, GL_RGBA32I,           VersionOrExts(3, 0, "GL_EXT_texture_integer"),    Never(),  VersionOrExts(3, 0, "GL_EXT_texture_integer"), VersionOnly(3, 0),                          Never(),  VersionOnly(3, 0)                         );
     InsertFormatMapping(&map, GL_RGBA32UI,          VersionOrExts(3, 0, "GL_EXT_texture_integer"),    Never(),  VersionOrExts(3, 0, "GL_EXT_texture_integer"), VersionOnly(3, 0),                          Never(),  VersionOnly(3, 0)                         );
 
-    // From GL_EXT_texture_compression_dxt1
-    InsertFormatMapping(&map, GL_BGRA8_EXT,         Never(),                                          Never(),  Never(),                                       ExtsOnly("GL_EXT_texture_format_BGRA8888"), Always(), ExtsOnly("GL_EXT_texture_format_BGRA8888"));
+    // Unsized formats
+    InsertFormatMapping(&map, GL_ALPHA,             Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_LUMINANCE,         Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_LUMINANCE_ALPHA,   Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_RED,               Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_RG,                Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_RGB,               Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_RGBA,              Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_RED_INTEGER,       Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_RG_INTEGER,        Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_RGB_INTEGER,       Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_RGBA_INTEGER,      Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_DEPTH_COMPONENT,   Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_DEPTH_STENCIL,     Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_SRGB,              Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+    InsertFormatMapping(&map, GL_SRGB_ALPHA,        Always(),                                         Always(), Always(),                                      Always(),                                   Always(), Always()                                  );
+
+    // From GL_EXT_texture_format_BGRA8888
+    InsertFormatMapping(&map, GL_BGRA8_EXT,         VersionOrExts(1, 2, "GL_EXT_bgra"),               Always(), VersionOrExts(1, 2, "GL_EXT_bgra"),            ExtsOnly("GL_EXT_texture_format_BGRA8888"), Always(), ExtsOnly("GL_EXT_texture_format_BGRA8888"));
+    InsertFormatMapping(&map, GL_BGRA_EXT,          VersionOrExts(1, 2, "GL_EXT_bgra"),               Always(), VersionOrExts(1, 2, "GL_EXT_bgra"),            ExtsOnly("GL_EXT_texture_format_BGRA8888"), Always(), ExtsOnly("GL_EXT_texture_format_BGRA8888"));
 
     // Floating point formats
     //                       | Format              | OpenGL texture support                                       | Filter  | OpenGL render support                                                                            | OpenGL ES texture support                                         | Filter                                                 | OpenGL ES render support                                         |
