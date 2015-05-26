@@ -607,7 +607,7 @@ gl::Error Renderer9::finish()
     while (result == S_FALSE)
     {
         // Keep polling, but allow other threads to do something useful first
-        Sleep(0);
+        ScheduleYield();
 
         result = query->GetData(NULL, 0, D3DGETDATA_FLUSH);
 

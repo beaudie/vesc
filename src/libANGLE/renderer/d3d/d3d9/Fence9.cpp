@@ -7,6 +7,8 @@
 // Fence9.cpp: Defines the rx::FenceNV9 class.
 
 #include "libANGLE/renderer/d3d/d3d9/Fence9.h"
+
+#include "common/utilities.h"
 #include "libANGLE/renderer/d3d/d3d9/renderer9_utils.h"
 #include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
 
@@ -63,7 +65,7 @@ gl::Error FenceNV9::finish()
             return error;
         }
 
-        Sleep(0);
+        ScheduleYield();
     }
 
     return gl::Error(GL_NO_ERROR);

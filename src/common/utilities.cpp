@@ -626,7 +626,7 @@ void ScheduleYield()
     // Emulate sleep by waiting with timeout on an event that is never signalled.
     WaitForSingleObjectEx(sleepEvent, 0, false);
 #else
-    Sleep(0);
+    Sleep(1);
 #endif
 }
 

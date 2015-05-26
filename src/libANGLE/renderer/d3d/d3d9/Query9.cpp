@@ -7,10 +7,12 @@
 // Query9.cpp: Defines the rx::Query9 class which implements rx::QueryImpl.
 
 #include "libANGLE/renderer/d3d/d3d9/Query9.h"
-#include "libANGLE/renderer/d3d/d3d9/renderer9_utils.h"
-#include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
 
 #include <GLES2/gl2ext.h>
+
+#include "common/utilities.h"
+#include "libANGLE/renderer/d3d/d3d9/renderer9_utils.h"
+#include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
 
 namespace rx
 {
@@ -78,7 +80,7 @@ gl::Error Query9::getResult(GLuint *params)
 
         if (!mQueryFinished)
         {
-            Sleep(0);
+            ScheduleYield();
         }
     }
 
