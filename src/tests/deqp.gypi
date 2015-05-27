@@ -1042,6 +1042,7 @@
                             'dependencies':
                             [
                                 'angle_deqp_libtester',
+                                '<(angle_path)/util/util.gyp:angle_util',
                             ],
                             'defines':
                             [
@@ -1061,6 +1062,7 @@
                             'dependencies':
                             [
                                 'angle_deqp_libtester',
+                                '<(angle_path)/util/util.gyp:angle_util',
                             ],
                             'defines':
                             [
