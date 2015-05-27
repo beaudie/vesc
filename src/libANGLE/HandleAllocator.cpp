@@ -58,7 +58,7 @@ GLuint HandleAllocator::allocate()
     }
 
     // Allocate from unallocated list, constant time.
-    auto listIt = mUnallocatedList.begin();
+    auto listIt = mUnallocatedList.end() - 1;
 
     GLuint freeListHandle = listIt->begin;
     ASSERT(freeListHandle > 0);
