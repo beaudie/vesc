@@ -29,9 +29,9 @@ namespace tcu
 {
 
 ANGLEWin32Platform::ANGLEWin32Platform()
-    : mInstance(GetModuleHandle(nullptr))
 {
     // Set process priority to lower.
+    // TODO(cwallez): add this to utils
     SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);
 
 #if defined(ANGLE_DEQP_GLES2_TESTS) || defined(ANGLE_DEQP_GLES3_TESTS)
@@ -41,10 +41,9 @@ ANGLEWin32Platform::ANGLEWin32Platform()
     d3d11Attribs.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
     d3d11Attribs.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE);
     d3d11Attribs.push_back(EGL_NONE);
-    d3d11Attribs.push_back(EGL_NONE);
 
     auto *d3d11Factory = new ANGLEWin32NativeDisplayFactory(
-        "angle-d3d11", "ANGLE D3D11 Display", d3d11Attribs, mInstance);
+        "angle-d3d11", "ANGLE D3D11 Display", d3d11Attribs, &mEvents);
     m_nativeDisplayFactoryRegistry.registerFactory(d3d11Factory);
 #endif
 
@@ -55,10 +54,9 @@ ANGLEWin32Platform::ANGLEWin32Platform()
     d3d9Attribs.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
     d3d9Attribs.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE);
     d3d9Attribs.push_back(EGL_NONE);
-    d3d9Attribs.push_back(EGL_NONE);
 
     auto *d3d9Factory = new ANGLEWin32NativeDisplayFactory(
-        "angle-d3d9", "ANGLE D3D9 Display", d3d9Attribs, mInstance);
+        "angle-d3d9", "ANGLE D3D9 Display", d3d9Attribs, &mEvents);
     m_nativeDisplayFactoryRegistry.registerFactory(d3d9Factory);
 
     std::vector<eglw::EGLAttrib> d3d1193Attribs;
@@ -71,22 +69,18 @@ ANGLEWin32Platform::ANGLEWin32Platform()
     d3d1193Attribs.push_back(EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE);
     d3d1193Attribs.push_back(3);
     d3d1193Attribs.push_back(EGL_NONE);
-    d3d1193Attribs.push_back(EGL_NONE);
 
     auto *d3d1193Factory = new ANGLEWin32NativeDisplayFactory(
-        "angle-d3d11-fl93", "ANGLE D3D11 FL9_3 Display", d3d1193Attribs, mInstance);
+        "angle-d3d11-fl93", "ANGLE D3D11 FL9_3 Display", d3d1193Attribs, &mEvents);
     m_nativeDisplayFactoryRegistry.registerFactory(d3d1193Factory);
 
     std::vector<eglw::EGLAttrib> glAttribs;
     glAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
     glAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE);
-    glAttribs.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
-    glAttribs.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE);
-    glAttribs.push_back(EGL_NONE);
     glAttribs.push_back(EGL_NONE);
 
     auto *glFactory = new ANGLEWin32NativeDisplayFactory(
-        "angle-gl", "ANGLE OpenGL Display", glAttribs, mInstance);
+        "angle-gl", "ANGLE OpenGL Display", glAttribs, &mEvents);
     m_nativeDisplayFactoryRegistry.registerFactory(glFactory);
 #endif
 
@@ -99,14 +93,7 @@ ANGLEWin32Platform::~ANGLEWin32Platform()
 
 bool ANGLEWin32Platform::processEvents()
 {
-    MSG msg;
-    while (PeekMessage(&msg, reinterpret_cast<HWND>(-1), 0, 0, PM_REMOVE))
-    {
-        DispatchMessage(&msg);
-        if (msg.message == WM_QUIT)
-            return false;
-    }
-    return true;
+    return !mEvents.hasQuitEvent();
 }
 
 } // tcu

@@ -769,6 +769,7 @@
                                 'angle_deqp_decpp',
                                 'angle_libpng',
                                 '<(angle_path)/src/angle.gyp:libEGL',
+                                '<(angle_path)/util/util.gyp:angle_util',
                             ],
                             'include_dirs':
                             [
@@ -957,8 +958,6 @@
                                 '<(deqp_dir)/framework/opengl/wrapper/glwInitFunctions.cpp',
                                 '<(deqp_dir)/framework/opengl/wrapper/glwWrapper.cpp',
                                 '<(deqp_dir)/framework/platform/tcuMain.cpp',
-                                # TODO(jmadill): other platforms
-                                '<(deqp_dir)/framework/platform/win32/tcuWin32Window.cpp',
                                 '<(deqp_dir)/framework/qphelper/qpCrashHandler.c',
                                 '<(deqp_dir)/framework/qphelper/qpDebugOut.c',
                                 '<(deqp_dir)/framework/qphelper/qpInfo.c',
