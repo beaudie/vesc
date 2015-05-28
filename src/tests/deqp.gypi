@@ -5,6 +5,7 @@
 {
     'variables':
     {
+        'angle_gen_path%': '<(SHARED_INTERMEDIATE_DIR)/angle',
         'deqp_dir': 'third_party/deqp',
         'delibs_dir': 'third_party/deqp/framework/delibs',
         'libpng_dir': 'third_party/libpng',
@@ -47,6 +48,7 @@
             '<(delibs_dir)/destream',
             '<(deqp_dir)/framework/common',
             '<(deqp_dir)/framework/qphelper',
+            '<(deqp_dir)/framework/platform/null',
             # TODO(jmadill): other platforms
             '<(deqp_dir)/framework/platform/win32',
             '<(deqp_dir)/framework/egl',
@@ -956,6 +958,9 @@
                                 '<(deqp_dir)/framework/opengl/wrapper/glwInitES30Direct.cpp',
                                 '<(deqp_dir)/framework/opengl/wrapper/glwInitFunctions.cpp',
                                 '<(deqp_dir)/framework/opengl/wrapper/glwWrapper.cpp',
+                                '<(deqp_dir)/framework/platform/null/tcuNullContextFactory.cpp',
+                                '<(deqp_dir)/framework/platform/null/tcuNullContextFactory.hpp',
+                                '<(deqp_dir)/framework/platform/null/tcuNullRenderContext.cpp',
                                 '<(deqp_dir)/framework/platform/tcuMain.cpp',
                                 # TODO(jmadill): other platforms
                                 '<(deqp_dir)/framework/platform/win32/tcuWin32Window.cpp',
@@ -1034,6 +1039,7 @@
                                 '<(deqp_dir)/modules/glshared/glsVertexArrayTests.cpp',
                                 # TODO(jmadill): other platforms
                                 'deqp_support/tcuANGLEWin32NativeDisplayFactory.cpp',
+                                'deqp_support/tcuANGLEWin32NativeDisplayFactory.h',
                             ],
                         },
 
@@ -1115,6 +1121,65 @@
                             [
                                 'deqp_support/angle_deqp_tests_main.cpp',
                             ],
+                        },
+
+                        {
+                            'target_name': 'angle_deqp_googletest',
+                            'type': 'none',
+                            'msvs_cygwin_shell': 0,
+                            'variables':
+                            {
+                                'gles2_tests_exe': '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)angle_deqp_gles2_tests<(EXECUTABLE_SUFFIX)',
+                                'gles3_tests_exe': '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)angle_deqp_gles3_tests<(EXECUTABLE_SUFFIX)',
+                                'deqp_args': [ '--deqp-runmode=txt-caselist', '--deqp-gl-context-type=null' ],
+                                'gles2_caselist_file': '<(deqp_dir)/data/dEQP-GLES2-cases.txt',
+                                'gles3_caselist_file': '<(deqp_dir)/data/dEQP-GLES3-cases.txt',
+                            },
+                            'dependencies':
+                            [
+                                'angle_deqp_gles2_tests',
+                                'angle_deqp_gles3_tests',
+                                'angle_deqp_libgles2',
+                                'angle_test_support',
+                            ],
+                            'includes':
+                            [
+                                '../../build/common_defines.gypi',
+                            ],
+                            'actions':
+                            [
+                                {
+                                    'action_name': 'generate_gles2_cases',
+                                    'message': 'Generating dEQP GLES2 case list..',
+                                    'inputs': [ '<(gles2_tests_exe)', ],
+                                    'outputs': [ '<(gles2_caselist_file)', ],
+                                    'action': [ '<(gles2_tests_exe)', '<@(deqp_args)', ],
+                                },
+
+                                {
+                                    'action_name': 'generate_gles3_cases',
+                                    'message': 'Generating dEQP GLES3 case list..',
+                                    'inputs': [ '<(gles3_tests_exe)', ],
+                                    'outputs': [ '<(gles3_caselist_file)', ],
+                                    'action': [ '<(gles3_tests_exe)', '<@(deqp_args)', ],
+                                },
+
+                            ], # actions
+
+                            'defines':
+                            [
+                                # Hard-code the path to dEQP. This lets the
+                                # app locate the data folder without need
+                                # for a copy. gyp recursive copies are not
+                                # implemented properly on Windows.
+                                'ANGLE_DEQP_DIR="<(DEPTH)/src/tests/<(deqp_dir)"',
+                            ],
+
+                            'include_dirs':
+                            [
+                                'deqp_support',
+                            ],
+
                         },
                     ], # targets
                 }], # OS == "win"
