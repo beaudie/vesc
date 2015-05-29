@@ -58,7 +58,11 @@ TEST(StringUtilsTest, HexStringToUIntBasic)
     EXPECT_FALSE(HexStringToUInt(testStringB, &uintValue));
 
     std::string testStringC("BADF00D");
-    EXPECT_FALSE(HexStringToUInt(testStringC, &uintValue));
+    EXPECT_TRUE(HexStringToUInt(testStringC, &uintValue));
+    EXPECT_EQ(0xBADF00Du, uintValue);
+
+    std::string testStringD("0x BADF00D");
+    EXPECT_FALSE(HexStringToUInt(testStringD, &uintValue));
 }
 
 // Note: ReadFileToString is harder to test
