@@ -80,9 +80,6 @@ enum
 Renderer9::Renderer9(egl::Display *display)
     : RendererD3D(display)
 {
-    // Initialize global annotator
-    gl::InitializeDebugAnnotations(&mAnnotator);
-
     mD3d9Module = NULL;
 
     mD3d9 = NULL;
@@ -148,8 +145,6 @@ Renderer9::~Renderer9()
     }
 
     release();
-
-    gl::UninitializeDebugAnnotations();
 }
 
 void Renderer9::release()
@@ -172,10 +167,17 @@ void Renderer9::release()
     }
 
     mD3d9Module = NULL;
+
+    gl::UninitializeDebugAnnotations();
+    SafeDelete(mAnnotator);
 }
 
 egl::Error Renderer9::initialize()
 {
+    // Initialize global annotator
+    mAnnotator = new DebugAnnotator9();
+    gl::InitializeDebugAnnotations(mAnnotator);
+
     if (!mCompiler.initialize())
     {
         return egl::Error(EGL_NOT_INITIALIZED,

@@ -37,7 +37,8 @@ const uintptr_t RendererD3D::DirtyPointer = std::numeric_limits<uintptr_t>::max(
 RendererD3D::RendererD3D(egl::Display *display)
     : mDisplay(display),
       mDeviceLost(false),
-      mScratchMemoryBufferResetCounter(0)
+      mScratchMemoryBufferResetCounter(0),
+      mAnnotator(nullptr)
 {
 }
 
@@ -615,6 +616,47 @@ gl::Error RendererD3D::getScratchMemoryBuffer(size_t requestedSize, MemoryBuffer
 
     *bufferOut = &mScratchMemoryBuffer;
     return gl::Error(GL_NO_ERROR);
+}
+
+void RendererD3D::insertEventMarker(GLsizei length, const char *marker)
+{
+    ASSERT(mAnnotator);
+    if (mAnnotator)
+    {
+        wchar_t *wcstring = new wchar_t[length + 1];
+        size_t convertedChars = 0;
+        errno_t err = mbstowcs_s(&convertedChars, wcstring, length + 1, marker, _TRUNCATE);
+        if (err != 0)
+        {
+            mAnnotator->setMarker(wcstring);
+        }
+        SafeDeleteArray(wcstring);
+    }
+}
+
+void RendererD3D::pushGroupMarker(GLsizei length, const char *marker)
+{
+    ASSERT(mAnnotator);
+    if (mAnnotator)
+    {
+        wchar_t *wcstring = new wchar_t[length + 1];
+        size_t convertedChars = 0;
+        errno_t err = mbstowcs_s(&convertedChars, wcstring, length + 1, marker, _TRUNCATE);
+        if (err != 0)
+        {
+            mAnnotator->beginEvent(wcstring);
+        }
+        SafeDeleteArray(wcstring);
+    }
+}
+
+void RendererD3D::popGroupMarker()
+{
+    ASSERT(mAnnotator);
+    if (mAnnotator)
+    {
+        mAnnotator->endEvent();
+    }
 }
 
 }

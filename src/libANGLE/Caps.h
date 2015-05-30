@@ -213,6 +213,9 @@ struct Extensions
     // GL_OES_fbo_render_mipmap
     bool fboRenderMipmap;
 
+    // EXT_debug_marker
+    bool debugMarker;
+
     // ES3 Extension support
 
     // GL_EXT_color_buffer_float
