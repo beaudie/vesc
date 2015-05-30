@@ -370,8 +370,6 @@ class Renderer9 : public RendererD3D
         gl::FramebufferAttachment *buffer;
     } mNullColorbufferCache[NUM_NULL_COLORBUFFER_CACHE_ENTRIES];
     UINT mMaxNullColorbufferLRU;
-
-    DebugAnnotator9 mAnnotator;
 };
 
 }

@@ -414,8 +414,6 @@ class Renderer11 : public RendererD3D
     char mDescription[128];
     DXGIFactory *mDxgiFactory;
     ID3D11Debug *mDebug;
-
-    DebugAnnotator11 mAnnotator;
 };
 
 }
