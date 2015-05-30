@@ -80,9 +80,6 @@ enum
 Renderer9::Renderer9(egl::Display *display)
     : RendererD3D(display)
 {
-    // Initialize global annotator
-    gl::InitializeDebugAnnotations(&mAnnotator);
-
     mD3d9Module = NULL;
 
     mD3d9 = NULL;
@@ -148,8 +145,6 @@ Renderer9::~Renderer9()
     }
 
     release();
-
-    gl::UninitializeDebugAnnotations();
 }
 
 void Renderer9::release()
@@ -2940,6 +2935,12 @@ void Renderer9::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureCa
 Workarounds Renderer9::generateWorkarounds() const
 {
     return d3d9::GenerateWorkarounds();
+}
+
+void Renderer9::createAndInitAnnotator()
+{
+    mAnnotator = new DebugAnnotator9();
+    gl::InitializeDebugAnnotations(mAnnotator);
 }
 
 }

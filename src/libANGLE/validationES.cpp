@@ -1942,4 +1942,38 @@ bool ValidateDiscardFramebufferBase(Context *context, GLenum target, GLsizei num
     return true;
 }
 
+bool ValidateInsertEventMarkerEXT(Context *context, GLsizei length, const char *marker)
+{
+    if (length < 0)
+    {
+        context->recordError(Error(GL_INVALID_VALUE, "Length should be non-negative"));
+        return false;
+    }
+
+    if (marker == nullptr)
+    {
+        context->recordError(Error(GL_INVALID_VALUE, "Marker should be non-NULL"));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidatePushGroupMarkerEXT(Context *context, GLsizei length, const char *marker)
+{
+    if (length < 0)
+    {
+        context->recordError(Error(GL_INVALID_VALUE, "Length should be non-negative"));
+        return false;
+    }
+
+    if (length > 0 && marker == nullptr)
+    {
+        context->recordError(Error(GL_INVALID_VALUE, "Marker should be non-NULL if length > 0"));
+        return false;
+    }
+
+    return true;
+}
+
 }

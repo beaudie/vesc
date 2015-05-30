@@ -261,6 +261,9 @@ class Renderer11 : public RendererD3D
 
     RendererClass getRendererClass() const override { return RENDERER_D3D11; }
 
+  protected:
+    void createAndInitAnnotator() override;
+
   private:
     void generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureCaps, gl::Extensions *outExtensions) const override;
     Workarounds generateWorkarounds() const override;
@@ -414,8 +417,6 @@ class Renderer11 : public RendererD3D
     char mDescription[128];
     DXGIFactory *mDxgiFactory;
     ID3D11Debug *mDebug;
-
-    DebugAnnotator11 mAnnotator;
 };
 
 }
