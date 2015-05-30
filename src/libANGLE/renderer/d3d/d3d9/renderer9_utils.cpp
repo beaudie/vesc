@@ -539,6 +539,7 @@ void GenerateCaps(IDirect3D9 *d3d9, IDirect3DDevice9 *device, D3DDEVTYPE deviceT
     extensions->translatedShaderSource = true;
     extensions->fboRenderMipmap = false;
     extensions->colorBufferFloat = false;
+    extensions->debugMarker = true;
 }
 
 }

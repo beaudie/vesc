@@ -213,6 +213,21 @@ TransformFeedbackImpl *RendererGL::createTransformFeedback()
     return new TransformFeedbackGL();
 }
 
+void RendererGL::insertEventMarker(GLsizei, const char *)
+{
+    UNIMPLEMENTED();
+}
+
+void RendererGL::pushGroupMarker(GLsizei, const char *)
+{
+    UNIMPLEMENTED();
+}
+
+void RendererGL::popGroupMarker()
+{
+    UNIMPLEMENTED();
+}
+
 void RendererGL::notifyDeviceLost()
 {
     UNIMPLEMENTED();
