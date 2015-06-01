@@ -14,6 +14,7 @@
 #include "angle_deqp_libtester.h"
 #include "common/angleutils.h"
 #include "common/debug.h"
+#include "gpu_test_expectations_parser.h"
 
 namespace
 {
@@ -21,19 +22,22 @@ namespace
 class dEQPCaseList
 {
   public:
-    dEQPCaseList(const char *caseListPath);
+    dEQPCaseList(const char *caseListPath, const char *testExpectationsPath);
 
     struct CaseInfo
     {
         CaseInfo(const std::string &dEQPName,
-                 const std::string &gTestName)
+                 const std::string &gTestName,
+                 int expectation)
             : mDEQPName(dEQPName),
-              mGTestName(gTestName)
+              mGTestName(gTestName),
+              mExpectation(expectation)
         {
         }
 
         std::string mDEQPName;
         std::string mGTestName;
+        int mExpectation;
     };
 
     const CaseInfo &getCaseInfo(size_t caseIndex) const
@@ -52,6 +56,8 @@ class dEQPCaseList
 
   private:
     std::vector<CaseInfo> mCaseInfoList;
+    gpu::GPUTestExpectationsParser mTestExpectationsParser;
+    gpu::GPUTestBotConfig mTestConfig;
 
     static dEQPCaseList *mInstance;
 };
@@ -64,7 +70,8 @@ dEQPCaseList *dEQPCaseList::GetInstance()
 {
     if (mInstance == nullptr)
     {
-        mInstance = new dEQPCaseList("deqp_support/dEQP-GLES2-cases.txt.gz");
+        mInstance = new dEQPCaseList("deqp_support/dEQP-GLES2-cases.txt.gz",
+                                     "deqp_support/deqp_test_expectations.txt");
     }
     return mInstance;
 }
@@ -75,8 +82,24 @@ void dEQPCaseList::FreeInstance()
     SafeDelete(mInstance);
 }
 
-dEQPCaseList::dEQPCaseList(const char *caseListPath)
+dEQPCaseList::dEQPCaseList(const char *caseListPath, const char *testExpectationsPath)
 {
+    if (!mTestExpectationsParser.LoadTestExpectationsFromFile(std::string(testExpectationsPath)))
+    {
+        std::cerr << "Failed to load test expectations." << std::endl;
+        for (const auto &message : mTestExpectationsParser.GetErrorMessages())
+        {
+            std::cerr << " " << message << std::endl;
+        }
+        return;
+    }
+
+    if (!mTestConfig.LoadCurrentConfig(nullptr))
+    {
+        std::cerr << "Failed to load test configuration." << std::endl;
+        return;
+    }
+
     std::stringstream strstr;
 
     char *buf = new char[1024 * 1024 * 16];
@@ -110,7 +133,11 @@ dEQPCaseList::dEQPCaseList(const char *caseListPath)
             // Occurs in some luminance tests
             gTestName.erase(std::remove(gTestName.begin(), gTestName.end(), '-'), gTestName.end());
 
-            mCaseInfoList.push_back(CaseInfo(dEQPName, gTestName));
+            int expectation = mTestExpectationsParser.GetTestExpectation(dEQPName, mTestConfig);
+            if (expectation != gpu::GPUTestExpectationsParser::kGpuTestSkip)
+            {
+                mCaseInfoList.push_back(CaseInfo(dEQPName, gTestName, expectation));
+            }
         }
     }
 }
@@ -129,7 +156,15 @@ class dEQP_GLES2 : public testing::TestWithParam<size_t>
     {
         const auto &caseInfo = dEQPCaseList::GetInstance()->getCaseInfo(GetParam());
 
-        ASSERT_TRUE(deqp_libtester_run(caseInfo.mDEQPName.c_str()));
+        bool result = deqp_libtester_run(caseInfo.mDEQPName.c_str());
+        if (caseInfo.mExpectation == gpu::GPUTestExpectationsParser::kGpuTestPass)
+        {
+            ASSERT_TRUE(result);
+        }
+        else if (result)
+        {
+            std::cout << "Test exepected to fail but passed!" << std::endl;
+        }
     }
 };
 
