@@ -188,6 +188,10 @@ typedef enum {
   // compilation process. Pruning coupled with SH_LIMIT_CALL_STACK_DEPTH
   // helps avoid bad shaders causing stack overflows.
   SH_DONT_PRUNE_UNUSED_FUNCTIONS = 0x100000,
+
+  // This flag works around a bug in NVIDIA 331 series drivers related
+  // to pow(x, y) where y is a constant vector.
+  SH_WORKAROUND_NV_331_DRIVER_POW_BUG = 0x200000,
 } ShCompileOptions;
 
 // Defines alternate strategies for implementing array index clamping.
