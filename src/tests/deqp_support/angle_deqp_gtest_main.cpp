@@ -19,6 +19,16 @@
 namespace
 {
 
+std::string dEQPToGTestName(const std::string &dEQPName)
+{
+    std::string gTestName = dEQPName.substr(11);
+    std::replace(gTestName.begin(), gTestName.end(), '.', '_');
+
+    // Occurs in some luminance tests
+    gTestName.erase(std::remove(gTestName.begin(), gTestName.end(), '-'), gTestName.end());
+    return gTestName;
+}
+
 class dEQPCaseList
 {
   public:
@@ -127,12 +137,7 @@ dEQPCaseList::dEQPCaseList(const char *caseListPath, const char *testExpectation
         if (inString.substr(0, 4) == "TEST")
         {
             std::string dEQPName = inString.substr(6);
-            std::string gTestName = dEQPName.substr(11);
-            std::replace(gTestName.begin(), gTestName.end(), '.', '_');
-
-            // Occurs in some luminance tests
-            gTestName.erase(std::remove(gTestName.begin(), gTestName.end(), '-'), gTestName.end());
-
+            std::string gTestName = dEQPToGTestName(dEQPName);
             int expectation = mTestExpectationsParser.GetTestExpectation(dEQPName, mTestConfig);
             if (expectation != gpu::GPUTestExpectationsParser::kGpuTestSkip)
             {
@@ -189,8 +194,26 @@ INSTANTIATE_TEST_CASE_P(, dEQP_GLES2, GetTestingRange(), GetTestName);
 
 int main(int argc, char **argv)
 {
-    deqp_libtester_init_platform(argc, argv, ANGLE_DEQP_DIR "/data");
-    testing::InitGoogleTest(&argc, argv);
+    std::vector<std::string> args;
+    std::vector<char *> argVector;
+    for (int argIndex = 0; argIndex < argc; argIndex++)
+    {
+        size_t maxCount = std::min(strlen("--deqp_filter="), strlen(argv[argIndex]));
+        if (strncmp(argv[argIndex], "--deqp_filter=", maxCount) == 0)
+        {
+            std::string baseString(argv[argIndex] + strlen("--deqp_filter="));
+            args.push_back(std::string("--gtest_filter=*") + dEQPToGTestName(baseString));
+        }
+        else
+        {
+            args.push_back(argv[argIndex]);
+        }
+        argVector.push_back(const_cast<char *>(args[argIndex].c_str()));
+    }
+
+    int argCount = static_cast<int>(argVector.size());
+    testing::InitGoogleTest(&argCount, &argVector[0]);
+    deqp_libtester_init_platform(argCount, &argVector[0], ANGLE_DEQP_DIR "/data");
     int rt = RUN_ALL_TESTS();
     dEQPCaseList::FreeInstance();
     deqp_libtester_shutdown_platform();
