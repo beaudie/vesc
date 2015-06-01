@@ -494,12 +494,25 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
 
     // Extension support
     extensions->setTextureExtensionSupport(*textureCapsMap);
+    extensions->elementIndexUint = functions->standard == STANDARD_GL_DESKTOP ||
+                                   functions->isAtLeastGLES(gl::Version(3, 0)) || functions->hasGLESExtension("GL_OES_element_index_uint");
+    extensions->readFormatBGRA = functions->isAtLeastGL(gl::Version(1, 2)) || functions->hasGLExtension("GL_EXT_bgra") ||
+                                 functions->hasGLESExtension("GL_EXT_read_format_bgra");
     extensions->textureNPOT = true;
     extensions->textureStorage = true;
+    extensions->textureFilterAnisotropic = functions->hasGLExtension("GL_EXT_texture_filter_anisotropic") || functions->hasGLESExtension("GL_EXT_texture_filter_anisotropic");
+    extensions->maxTextureAnisotropy = extensions->textureFilterAnisotropic ? QuerySingleGLFloat(functions, GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 0.0f;
     extensions->fboRenderMipmap = true;
     extensions->framebufferBlit = (functions->blitFramebuffer != nullptr);
     extensions->framebufferMultisample = caps->maxSamples > 0;
     extensions->fence = functions->hasGLExtension("GL_NV_fence") || functions->hasGLESExtension("GL_NV_fence");
+    extensions->standardDerivatives = functions->isAtLeastGL(gl::Version(2, 0)) || functions->hasGLExtension("GL_ARB_fragment_shader") ||
+                                      functions->isAtLeastGLES(gl::Version(3, 0)) || functions->hasGLESExtension("GL_OES_standard_derivatives");
+    extensions->shaderTextureLOD = functions->isAtLeastGL(gl::Version(3, 0)) || functions->hasGLExtension("GL_ARB_shader_texture_lod") ||
+                                   functions->isAtLeastGLES(gl::Version(3, 0)) || functions->hasGLESExtension("GL_EXT_shader_texture_lod");
+    extensions->fragDepth = functions->standard == STANDARD_GL_DESKTOP ||
+                            functions->isAtLeastGLES(gl::Version(3, 0)) || functions->hasGLESExtension("GL_EXT_frag_depth");
+
 }
 
 }
