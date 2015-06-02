@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
+#include "libANGLE/renderer/d3d/IndexDataManager.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/VertexAttribute.h"
 
@@ -97,7 +98,7 @@ void InputLayoutCache::markDirty()
 }
 
 gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute unsortedAttributes[gl::MAX_VERTEX_ATTRIBS],
-                                               GLenum mode, gl::Program *program)
+                                               GLenum mode, gl::Program *program, SourceIndexData *sourceInfo)
 {
     ProgramD3D *programD3D = GetImplAs<ProgramD3D>(program);
 
@@ -106,6 +107,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute unsortedAttri
     programD3D->sortAttributesByLayout(unsortedAttributes, sortedSemanticIndices, sortedAttributes);
     bool programUsesInstancedPointSprites = programD3D->usesPointSize() && programD3D->usesInstancedPointSpriteEmulation();
     bool instancedPointSpritesActive = programUsesInstancedPointSprites && (mode == GL_POINTS);
+    bool indexedPointSpriteEmulationActive = instancedPointSpritesActive && (sourceInfo != nullptr);
 
     if (!mDevice || !mDeviceContext)
     {
@@ -290,8 +292,22 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute unsortedAttri
             VertexBuffer11 *vertexBuffer = GetAs<VertexBuffer11>(sortedAttributes[i]->vertexBuffer);
             Buffer11 *bufferStorage = sortedAttributes[i]->storage ? GetAs<Buffer11>(sortedAttributes[i]->storage) : NULL;
 
-            buffer = bufferStorage ? bufferStorage->getBuffer(BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK)
-                                   : vertexBuffer->getBuffer();
+            // If indexed pointsprite emulation is active, then we need to take a less efficent code path.
+            // Emulated indexed pointsprite rendering requires that the vertex buffers match exactly to
+            // the indices passed by the caller.  This could expand or shrink the vertex buffer depending
+            // on the number of points indicated by the index list or how many duplicates are found on the index list.
+            if (bufferStorage == nullptr)
+            {
+                buffer = vertexBuffer->getBuffer();
+            }
+            else if (indexedPointSpriteEmulationActive)
+            {
+                buffer = bufferStorage->getEmulatedIndexedBuffer(sourceInfo, sortedAttributes[i]);
+            }
+            else
+            {
+                buffer = bufferStorage->getBuffer(BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK);
+            }
         }
 
         UINT vertexStride = sortedAttributes[i]->stride;
@@ -319,7 +335,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute unsortedAttri
     }
 
     // Instanced PointSprite emulation requires two additional ID3D11Buffers.
-    // A vertex buffer needs to be created and added to the list of current buffers, 
+    // A vertex buffer needs to be created and added to the list of current buffers,
     // strides and offsets collections.  This buffer contains the vertices for a single
     // PointSprite quad.
     // An index buffer also needs to be created and applied because rendering instanced
