@@ -9,6 +9,8 @@
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
 
 #include "common/MemoryBuffer.h"
+#include "libANGLE/renderer/d3d/IndexDataManager.h"
+#include "libANGLE/renderer/d3d/VertexDataManager.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
@@ -129,6 +131,40 @@ class Buffer11::NativeStorage : public Buffer11::BufferStorage
     ID3D11Buffer *mNativeStorage;
 };
 
+// A emulated indexed buffer storage represents an underlying D3D11 buffer for data
+// that has been expanded to match the indices list used.  This storage is only
+// used for FL9_3 pointsprite rendering emulation.
+class Buffer11::EmulatedIndexedStorage : public Buffer11::BufferStorage
+{
+  public:
+    EmulatedIndexedStorage(Renderer11 *renderer);
+    ~EmulatedIndexedStorage() override;
+
+    bool isMappable() const override { return true; }
+
+    ID3D11Buffer *getNativeStorage();
+
+    bool copyFromStorage(BufferStorage *source, size_t sourceOffset,
+                         size_t size, size_t destOffset) override;
+
+    gl::Error resize(size_t size, bool preserveData) override;
+
+    uint8_t *map(size_t offset, size_t length, GLbitfield access) override;
+    void unmap() override;
+
+    bool update(SourceIndexData *indexInfo, TranslatedAttribute *attribute);
+
+  private:
+
+    ID3D11Buffer *mNativeStorage;       // contains expanded data for use by D3D
+
+    MemoryBuffer mMemoryBuffer;         // original data (not expanded)
+    MemoryBuffer mIndicesMemoryBuffer;  // indices data
+    SourceIndexData mIndexInfo;         // indices information
+    size_t mAttributeStride;            // per element stride in bytes
+    size_t mAttributeOffset;            // starting offset
+};
+
 // Pack storage represents internal storage for pack buffers. We implement pack buffers
 // as CPU memory, tied to a staging texture, for asynchronous texture readback.
 class Buffer11::PackStorage : public Buffer11::BufferStorage
@@ -215,6 +251,8 @@ gl::Error Buffer11::setData(const void *data, size_t size, GLenum usage)
     {
         return error;
     }
+
+    mUsage = usage;
 
     if (usage == GL_STATIC_DRAW)
     {
@@ -472,6 +510,30 @@ ID3D11Buffer *Buffer11::getBuffer(BufferUsage usage)
     return GetAs<NativeStorage>(bufferStorage)->getNativeStorage();
 }
 
+ID3D11Buffer *Buffer11::getEmulatedIndexedBuffer(BufferUsage usage, SourceIndexData *indexInfo, TranslatedAttribute *attribute)
+{
+    markBufferUsage();
+
+    assert(indexInfo != nullptr);
+    assert(attribute != nullptr);
+
+    BufferStorage *bufferStorage = getBufferStorage(usage);
+    if (!bufferStorage)
+    {
+        // Storage out-of-memory
+        return NULL;
+    }
+
+    EmulatedIndexedStorage *emulatedStorage = GetAs<EmulatedIndexedStorage>(bufferStorage);
+    if (!emulatedStorage->update(indexInfo, attribute))
+    {
+        // Storage out-of-memory
+        return NULL;
+    }
+
+    return emulatedStorage->getNativeStorage();
+}
+
 ID3D11Buffer *Buffer11::getConstantBufferRange(GLintptr offset, GLsizeiptr size)
 {
     markBufferUsage();
@@ -580,6 +642,10 @@ Buffer11::BufferStorage *Buffer11::getBufferStorage(BufferUsage usage)
         {
             newStorage = new SystemMemoryStorage(mRenderer);
             mHasSystemMemoryStorage = true;
+        }
+        else if (usage == BUFFER_USAGE_EMULATED_INDEXED_VERTEX)
+        {
+            newStorage = new EmulatedIndexedStorage(mRenderer);
         }
         else
         {
@@ -972,6 +1038,157 @@ void Buffer11::NativeStorage::unmap()
     ASSERT(mUsage == BUFFER_USAGE_STAGING);
     ID3D11DeviceContext *context = mRenderer->getDeviceContext();
     context->Unmap(mNativeStorage, 0);
+}
+
+Buffer11::EmulatedIndexedStorage::EmulatedIndexedStorage(Renderer11 *renderer)
+    : BufferStorage(renderer, BUFFER_USAGE_EMULATED_INDEXED_VERTEX),
+      mNativeStorage(NULL)
+{
+}
+
+Buffer11::EmulatedIndexedStorage::~EmulatedIndexedStorage()
+{
+    SafeRelease(mNativeStorage);
+}
+
+ID3D11Buffer *Buffer11::EmulatedIndexedStorage::getNativeStorage()
+{
+    if (!mNativeStorage)
+    {
+        // Expand the memory storage upon request and cache the results.
+        unsigned int expandedDataSize = (mIndexInfo.srcCount * mAttributeStride) + mAttributeOffset;
+        MemoryBuffer expandedData;
+        if (!expandedData.resize(expandedDataSize))
+        {
+            return nullptr;
+        }
+
+        // Clear the contents of the allocated buffer
+        ZeroMemory(expandedData.data(), expandedDataSize);
+
+        uint8_t *curr = expandedData.data();
+        uint8_t *ptr = (uint8_t*)mIndexInfo.srcIndices;
+
+        // Ensure that we start in the correct place for the emulated data copy operation to maintain
+        // offset behaviors.
+        curr += mAttributeOffset;
+
+        // Iterate over the cached index data and copy entries indicated into the emulated buffer.
+        for (unsigned int i = 0; i < mIndexInfo.srcCount; i++)
+        {
+            unsigned int idx = 0;
+            switch (mIndexInfo.srcIndexType)
+            {
+              case GL_UNSIGNED_INT: idx = ((GLuint*)ptr)[i]; break;
+              case GL_UNSIGNED_SHORT: idx = ((GLushort*)ptr)[i]; break;
+              case GL_UNSIGNED_BYTE: idx = ((GLubyte*)ptr)[i]; break;
+              default: idx = ((GLushort*)ptr)[i]; break;
+            }
+
+            memcpy(curr, mMemoryBuffer.data() + (mAttributeStride * idx), mAttributeStride);
+            curr += mAttributeStride;
+        }
+
+        // Finally, initialize the emulated indexed native storage object with the newly copied data and free
+        // the temporary buffers used.
+        ID3D11Device *device = mRenderer->getDevice();
+
+        D3D11_BUFFER_DESC bufferDesc;
+        bufferDesc.ByteWidth = expandedDataSize;
+        bufferDesc.MiscFlags = 0;
+        bufferDesc.StructureByteStride = 0;
+        bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+        bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+        bufferDesc.CPUAccessFlags = 0;
+
+        D3D11_SUBRESOURCE_DATA subResourceData = { expandedData.data(), 0, 0 };
+
+        HRESULT result = device->CreateBuffer(&bufferDesc, &subResourceData, &mNativeStorage);
+        if (FAILED(result))
+        {
+            return nullptr;
+        }
+        d3d11::SetDebugName(mNativeStorage, "Buffer11::EmulatedIndexedStorage");
+    }
+
+    return mNativeStorage;
+}
+
+bool Buffer11::EmulatedIndexedStorage::update(SourceIndexData *indexInfo, TranslatedAttribute *attribute)
+{
+    // If a change in the indices applied from the last draw call is detected, then the emulated
+    // indexed buffer needs to be invalidated.  After invalidation, the change detected flag should
+    // be cleared to avoid unnecessary recreation of the buffer.
+    if (indexInfo->srcIndicesChanged)
+    {
+        SafeRelease(mNativeStorage);
+
+        // Copy attribute offset and stride information
+        mAttributeStride = attribute->stride;
+        mAttributeOffset = attribute->offset;
+
+        // Copy the source index data. This ensures that the lifetime of the indices pointer
+        // stays with this storage until the next time we invalidate.
+        size_t indicesDataSize = 0;
+        switch (indexInfo->srcIndexType)
+        {
+          case GL_UNSIGNED_INT: indicesDataSize = sizeof(GLuint) * indexInfo->srcCount; break;
+          case GL_UNSIGNED_SHORT: indicesDataSize = sizeof(GLushort) * indexInfo->srcCount; break;
+          case GL_UNSIGNED_BYTE: indicesDataSize = sizeof(GLubyte) * indexInfo->srcCount; break;
+          default: indicesDataSize = sizeof(GLushort) * indexInfo->srcCount; break;
+        }
+
+        if (!mIndicesMemoryBuffer.resize(indicesDataSize))
+        {
+            return false;
+        }
+
+        memcpy(mIndicesMemoryBuffer.data(), indexInfo->srcIndices, indicesDataSize);
+
+        // Copy the source index data description and update the srcIndices pointer to point
+        // to our cached index data.
+        mIndexInfo = *indexInfo;
+        mIndexInfo.srcIndices = mIndicesMemoryBuffer.data();
+
+        indexInfo->srcIndicesChanged = false;
+    }
+    return true;
+}
+
+bool Buffer11::EmulatedIndexedStorage::copyFromStorage(BufferStorage *source, size_t sourceOffset,
+                                                       size_t size, size_t destOffset)
+{
+    ASSERT(source->isMappable());
+    const uint8_t *sourceData = source->map(sourceOffset, size, GL_MAP_READ_BIT);
+    ASSERT(destOffset + size <= mMemoryBuffer.size());
+    memcpy(mMemoryBuffer.data() + destOffset, sourceData, size);
+    source->unmap();
+    return true;
+}
+
+gl::Error Buffer11::EmulatedIndexedStorage::resize(size_t size, bool preserveData)
+{
+    if (mMemoryBuffer.size() < size)
+    {
+        if (!mMemoryBuffer.resize(size))
+        {
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to resize EmulatedIndexedStorage");
+        }
+        mBufferSize = size;
+    }
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+uint8_t *Buffer11::EmulatedIndexedStorage::map(size_t offset, size_t length, GLbitfield access)
+{
+    ASSERT(!mMemoryBuffer.empty() && offset + length <= mMemoryBuffer.size());
+    return mMemoryBuffer.data() + offset;
+}
+
+void Buffer11::EmulatedIndexedStorage::unmap()
+{
+    // No-op
 }
 
 Buffer11::PackStorage::PackStorage(Renderer11 *renderer)
