@@ -3518,11 +3518,9 @@ TIntermTyped *TParseContext::addFunctionCallOrMethod(TFunction *fnCall, TIntermN
                     functionCallLValueErrorCheck(fnCandidate, aggregate);
 
                     // See if we can constant fold a built-in.
-                    TIntermTyped *foldedNode = intermediate.foldAggregateBuiltIn(op, aggregate);
+                    TIntermTyped *foldedNode = intermediate.foldAggregateBuiltIn(aggregate);
                     if (foldedNode)
                     {
-                        foldedNode->setType(callNode->getType());
-                        foldedNode->getTypePointer()->setQualifier(EvqConst);
                         callNode = foldedNode;
                     }
                 }
