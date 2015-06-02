@@ -46,6 +46,13 @@ struct TranslatedIndexData
     BufferD3D *storage;
     GLenum indexType;
     unsigned int serial;
+
+    // Pretranslated index data for direct
+    // access outside of IndexBuffer or BufferD3D
+    const GLvoid *srcIndices;
+    unsigned int srcCount;
+    GLenum srcIndexType;
+    bool srcIndicesChanged;
 };
 
 class IndexDataManager : angle::NonCopyable

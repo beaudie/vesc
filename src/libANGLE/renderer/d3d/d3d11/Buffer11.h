@@ -17,6 +17,8 @@
 namespace rx
 {
 class Renderer11;
+struct TranslatedIndexData;
+struct TranslatedAttribute;
 
 enum BufferUsage
 {
@@ -53,6 +55,7 @@ class Buffer11 : public BufferD3D
     virtual ~Buffer11();
 
     ID3D11Buffer *getBuffer(BufferUsage usage);
+    ID3D11Buffer *getEmulatedIndexedBuffer(BufferUsage usage, TranslatedIndexData *indexInfo, TranslatedAttribute *attribute);
     ID3D11Buffer *getConstantBufferRange(GLintptr offset, GLsizeiptr size);
     ID3D11ShaderResourceView *getSRV(DXGI_FORMAT srvFormat);
     bool isMapped() const { return mMappedStorage != NULL; }
@@ -82,6 +85,8 @@ class Buffer11 : public BufferD3D
     size_t mSize;
 
     BufferStorage *mMappedStorage;
+
+    Buffer11 *mEmulatedIndexedBuffer;
 
     std::map<BufferUsage, BufferStorage*> mBufferStorages;
 
@@ -117,6 +122,8 @@ class Buffer11 : public BufferD3D
     BufferStorage *getLatestBufferStorage() const;
 
     BufferStorage *getContantBufferRangeStorage(GLintptr offset, GLsizeiptr size);
+
+    void invalidateEmulatedIndexedBuffer();
 };
 
 }
