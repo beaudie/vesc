@@ -839,7 +839,7 @@ void FunctionsGL::initialize()
         AssignGLEntryPoint(loadProcAddress("glTexParameteri"), &texParameteri);
         AssignGLEntryPoint(loadProcAddress("glTexParameteriv"), &texParameteriv);
         AssignGLEntryPoint(loadProcAddress("glViewport"), &viewport);
-    }
+	}
 
     // 1.1
     if (isAtLeastGL(gl::Version(1, 1)))
