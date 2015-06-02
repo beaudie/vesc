@@ -222,6 +222,10 @@ gl::Error IndexDataManager::prepareIndexData(GLenum type, GLsizei count, gl::Buf
     translated->startIndex = (streamOffset >> destTypeInfo.bytesShift);
     translated->startOffset = streamOffset;
     translated->indexType = destinationIndexType;
+    // Update pretranslated source index data
+    translated->srcIndices = indices;
+    translated->srcIndexType = type;
+    translated->srcCount = count;
 
     if (storage)
     {

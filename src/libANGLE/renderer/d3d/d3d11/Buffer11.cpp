@@ -9,6 +9,8 @@
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
 
 #include "common/MemoryBuffer.h"
+#include "libANGLE/renderer/d3d/IndexDataManager.h"
+#include "libANGLE/renderer/d3d/VertexDataManager.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
@@ -192,7 +194,8 @@ Buffer11::Buffer11(Renderer11 *renderer)
       mConstantBufferStorageAdditionalSize(0),
       mMaxConstantBufferLruCount(0),
       mReadUsageCount(0),
-      mHasSystemMemoryStorage(false)
+      mHasSystemMemoryStorage(false),
+      mEmulatedIndexedBuffer(nullptr)
 {}
 
 Buffer11::~Buffer11()
@@ -206,6 +209,8 @@ Buffer11::~Buffer11()
     {
         SafeDelete(p.second.storage);
     }
+
+    SafeDelete(mEmulatedIndexedBuffer);
 }
 
 gl::Error Buffer11::setData(const void *data, size_t size, GLenum usage)
@@ -215,6 +220,8 @@ gl::Error Buffer11::setData(const void *data, size_t size, GLenum usage)
     {
         return error;
     }
+
+    mUsage = usage;
 
     if (usage == GL_STATIC_DRAW)
     {
@@ -307,6 +314,7 @@ gl::Error Buffer11::setSubData(const void *data, size_t size, size_t offset)
 
     mSize = std::max(mSize, requiredSize);
     invalidateStaticData();
+    invalidateEmulatedIndexedBuffer();
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -360,6 +368,7 @@ gl::Error Buffer11::copySubData(BufferImpl* source, GLintptr sourceOffset, GLint
 
     mSize = std::max<size_t>(mSize, destOffset + size);
     invalidateStaticData();
+    invalidateEmulatedIndexedBuffer();
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -470,6 +479,120 @@ ID3D11Buffer *Buffer11::getBuffer(BufferUsage usage)
     }
 
     return GetAs<NativeStorage>(bufferStorage)->getNativeStorage();
+}
+
+void Buffer11::invalidateEmulatedIndexedBuffer()
+{
+    SafeDelete(mEmulatedIndexedBuffer);
+}
+
+ID3D11Buffer *Buffer11::getEmulatedIndexedBuffer(BufferUsage usage, TranslatedIndexData *indexInfo, TranslatedAttribute *attribute)
+{
+    markBufferUsage();
+
+    assert(indexInfo != nullptr);
+    assert(attribute != nullptr);
+
+    // If a change in the indices applied from the last draw call is detected, then the emulated
+    // indexed buffer needs to be invalidated.  After invalidation, the change detected flag should
+    // be cleared to avoid unnecessary recreation of the buffer.
+    if (indexInfo->srcIndicesChanged)
+    {
+        indexInfo->srcIndicesChanged = false;
+        invalidateEmulatedIndexedBuffer();
+    }
+
+    // An emulated indexed buffer is a ID3D11Buffer that has an alternate layout of data that matches 1 to 1 with the caller
+    // supplied index buffer. Duplicate index values will result in duplicate data being written to the emulated buffer.
+    // This new buffer will only contain enough information to store what is being represented by the index buffer.
+
+    // An emulated indexed buffer is created only when requested by code that renders using GL_POINTS with glDrawElements( )
+    // in combination with a renderer that does not support geometry shaders.
+
+    // The emulated indexed buffer Buffer11 instance is stored with this original Buffer11 object which is already tracked by ANGLE internally.
+    // This Buffer11 parent is associated with enabled attributes. By containing the emulated buffer we can keep the lifetime tracked with
+    // the original data being emulated.  This also allows us to invalidate the emulated buffer when the original data is changed.
+
+    // IMPORTANT: The data from the original caller supplied buffer will remain unchanged.
+
+    if (!mEmulatedIndexedBuffer)
+    {
+        mEmulatedIndexedBuffer = new Buffer11(mRenderer);
+        if (!mEmulatedIndexedBuffer)
+        {
+            // Storage out-of-memory
+            return nullptr;
+        }
+
+        // Obtain a pointer to the original source data to copy from.
+        const uint8_t* data = nullptr;
+        gl::Error error = getData(&data);
+        if (error.isError())
+        {
+            SafeDelete(mEmulatedIndexedBuffer);
+            // Storage out-of-memory
+            return nullptr;
+        }
+
+        // The attribute value passed to this method for initialization is assumed to be the first one in a list
+        // of enabled attributes.  The InputLayoutCache class constructs an array of D3D vertex buffers with descriptions
+        // which rely on the offset information stored with each attribute. To maintain the existing offset usage behavior
+        // for the vertex buffers in ANGLE, a new buffer must be created with enough space to include a valid start offset position.
+        // This padded data will not be accessed and is only there to keep the calling code for rendering the same and removes
+        // the need to maintain alternate data offsets for emulation.
+
+        // ANGLE can map one or more attributes to a single Buffer11 instance. Because of this, we can safely use the stride
+        // member for one of these attributes to create a complete emulated buffer for all instances.
+        // Since all attributes point to the same parent Buffer11 object, this emulated Buffer11 object and assocated ID3D11Buffer
+        // will be correctly mapped to all associated attribute values.
+        unsigned int expandedDataSize = (indexInfo->srcCount * attribute->stride) + attribute->offset;
+        MemoryBuffer expandedData;
+        expandedData.resize(expandedDataSize);
+        if (!expandedData.resize(expandedDataSize))
+        {
+            // Storage out-of-memory
+            SafeDelete(mEmulatedIndexedBuffer);
+            return nullptr;
+        }
+
+        // Clear the contents of the allocated buffer
+        ZeroMemory(expandedData.data(), expandedDataSize);
+
+        uint8_t *curr = expandedData.data();
+        uint8_t *ptr = (uint8_t*)indexInfo->srcIndices;
+
+        // Ensure that we start in the correct place for the emulated data copy operation to maintain
+        // offset behaviors.
+        curr += attribute->offset;
+
+        // Iterate over the pretranslated index data and copy entries indicated into the emulated buffer.
+        for (unsigned int i = 0; i < indexInfo->srcCount; i++)
+        {
+            unsigned int idx = 0;
+            switch (indexInfo->srcIndexType)
+            {
+              case GL_UNSIGNED_INT: idx = ((GLuint*)ptr)[i]; break;
+              case GL_UNSIGNED_SHORT: idx = ((GLushort*)ptr)[i]; break;
+              case GL_UNSIGNED_BYTE: idx = ((GLubyte*)ptr)[i]; break;
+              default: idx = ((GLushort*)ptr)[i]; break;
+            }
+
+            memcpy(curr, data + (attribute->stride * idx), attribute->stride);
+            curr += attribute->stride;
+        }
+
+        // Finally, initialize the emulated indexed Buffer11 object with the newly copied data and free
+        // the temporary buffers used.
+        error = mEmulatedIndexedBuffer->setData(expandedData.data(), expandedDataSize, mUsage);
+        if (error.isError())
+        {
+            // Storage out-of-memory
+            SafeDelete(mEmulatedIndexedBuffer);
+            return nullptr;
+        }
+    }
+
+    return mEmulatedIndexedBuffer->getBuffer(usage);
 }
 
 ID3D11Buffer *Buffer11::getConstantBufferRange(GLintptr offset, GLsizeiptr size)
@@ -690,6 +813,7 @@ void Buffer11::updateBufferStorage(BufferStorage *storage, size_t sourceOffset, 
             updateSerial();
         }
         storage->setDataRevision(latestBuffer->getDataRevision());
+        invalidateEmulatedIndexedBuffer();
     }
 }
 
