@@ -187,6 +187,18 @@ float VectorDotProduct(TConstantUnion *paramArray1, TConstantUnion *paramArray2,
     return result;
 }
 
+TIntermTyped *CreateFoldedNode(TConstantUnion *constArray, const TIntermTyped *originalNode)
+{
+    if (constArray == nullptr)
+    {
+        return nullptr;
+    }
+    TIntermTyped *folded = new TIntermConstantUnion(constArray, originalNode->getType());
+    folded->getTypePointer()->setQualifier(EvqConst);
+    folded->setLine(originalNode->getLine());
+    return folded;
+}
+
 }  // namespace anonymous
 
 
@@ -756,14 +768,7 @@ TIntermTyped *TIntermBinary::fold(TInfoSink &infoSink)
         return nullptr;
     }
     TConstantUnion *constArray = leftConstant->foldBinary(mOp, rightConstant, infoSink);
-    if (constArray == nullptr)
-    {
-        return nullptr;
-    }
-    TIntermTyped *folded = new TIntermConstantUnion(constArray, getType());
-    folded->getTypePointer()->setQualifier(EvqConst);
-    folded->setLine(getLine());
-    return folded;
+    return CreateFoldedNode(constArray, this);
 }
 
 TIntermTyped *TIntermUnary::fold(TInfoSink &infoSink)
@@ -774,14 +779,21 @@ TIntermTyped *TIntermUnary::fold(TInfoSink &infoSink)
         return nullptr;
     }
     TConstantUnion *constArray = operandConstant->foldUnary(mOp, infoSink);
-    if (constArray == nullptr)
+    return CreateFoldedNode(constArray, this);
+}
+
+TIntermTyped *TIntermAggregate::fold(TInfoSink &infoSink)
+{
+    // Make sure that all params are constant before actual constant folding.
+    for (auto *param : *getSequence())
     {
-        return nullptr;
+        if (param->getAsConstantUnion() == nullptr)
+        {
+            return nullptr;
+        }
     }
-    TIntermTyped *folded = new TIntermConstantUnion(constArray, getType());
-    folded->getTypePointer()->setQualifier(EvqConst);
-    folded->setLine(getLine());
-    return folded;
+    TConstantUnion *constArray = TIntermConstantUnion::FoldAggregateBuiltIn(this, infoSink);
+    return CreateFoldedNode(constArray, this);
 }
 
 //
@@ -1590,21 +1602,20 @@ bool TIntermConstantUnion::foldFloatTypeUnary(const TConstantUnion &parameter, F
 }
 
 // static
-TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAggregate *aggregate, TInfoSink &infoSink)
+TConstantUnion *TIntermConstantUnion::FoldAggregateBuiltIn(TIntermAggregate *aggregate, TInfoSink &infoSink)
 {
+    TOperator op = aggregate->getOp();
     TIntermSequence *sequence = aggregate->getSequence();
     unsigned int paramsCount = sequence->size();
     std::vector<TConstantUnion *> unionArrays(paramsCount);
     std::vector<size_t> objectSizes(paramsCount);
-    TType *maxSizeType = nullptr;
+    size_t maxObjectSize = 0;
     TBasicType basicType = EbtVoid;
     TSourceLoc loc;
     for (unsigned int i = 0; i < paramsCount; i++)
     {
         TIntermConstantUnion *paramConstant = (*sequence)[i]->getAsConstantUnion();
-        // Make sure that all params are constant before actual constant folding.
-        if (!paramConstant)
-            return nullptr;
+        ASSERT(paramConstant != nullptr); // Should be checked already.
 
         if (i == 0)
         {
@@ -1613,18 +1624,15 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
         }
         unionArrays[i] = paramConstant->getUnionArrayPointer();
         objectSizes[i] = paramConstant->getType().getObjectSize();
-        if (maxSizeType == nullptr || (objectSizes[i] >= maxSizeType->getObjectSize()))
-            maxSizeType = paramConstant->getTypePointer();
+        if (objectSizes[i] > maxObjectSize)
+            maxObjectSize = objectSizes[i];
     }
 
-    size_t maxObjectSize = maxSizeType->getObjectSize();
     for (unsigned int i = 0; i < paramsCount; i++)
         if (objectSizes[i] != maxObjectSize)
             unionArrays[i] = Vectorize(*unionArrays[i], maxObjectSize);
 
-    TConstantUnion *tempConstArray = nullptr;
-    TIntermConstantUnion *tempNode = nullptr;
-    TType returnType = *maxSizeType;
+    TConstantUnion *resultArray = nullptr;
     if (paramsCount == 2)
     {
         //
@@ -1636,16 +1644,16 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
             {
                 if (basicType == EbtFloat)
                 {
-                    tempConstArray = new TConstantUnion[maxObjectSize];
+                    resultArray = new TConstantUnion[maxObjectSize];
                     for (size_t i = 0; i < maxObjectSize; i++)
                     {
                         float y = unionArrays[0][i].getFConst();
                         float x = unionArrays[1][i].getFConst();
                         // Results are undefined if x and y are both 0.
                         if (x == 0.0f && y == 0.0f)
-                            UndefinedConstantFoldingError(loc, op, basicType, infoSink, &tempConstArray[i]);
+                            UndefinedConstantFoldingError(loc, op, basicType, infoSink, &resultArray[i]);
                         else
-                            tempConstArray[i].setFConst(atan2f(y, x));
+                            resultArray[i].setFConst(atan2f(y, x));
                     }
                 }
                 else
@@ -1657,7 +1665,7 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
             {
                 if (basicType == EbtFloat)
                 {
-                    tempConstArray = new TConstantUnion[maxObjectSize];
+                    resultArray = new TConstantUnion[maxObjectSize];
                     for (size_t i = 0; i < maxObjectSize; i++)
                     {
                         float x = unionArrays[0][i].getFConst();
@@ -1665,11 +1673,11 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
                         // Results are undefined if x < 0.
                         // Results are undefined if x = 0 and y <= 0.
                         if (x < 0.0f)
-                            UndefinedConstantFoldingError(loc, op, basicType, infoSink, &tempConstArray[i]);
+                            UndefinedConstantFoldingError(loc, op, basicType, infoSink, &resultArray[i]);
                         else if (x == 0.0f && y <= 0.0f)
-                            UndefinedConstantFoldingError(loc, op, basicType, infoSink, &tempConstArray[i]);
+                            UndefinedConstantFoldingError(loc, op, basicType, infoSink, &resultArray[i]);
                         else
-                            tempConstArray[i].setFConst(powf(x, y));
+                            resultArray[i].setFConst(powf(x, y));
                     }
                 }
                 else
@@ -1681,12 +1689,12 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
             {
                 if (basicType == EbtFloat)
                 {
-                    tempConstArray = new TConstantUnion[maxObjectSize];
+                    resultArray = new TConstantUnion[maxObjectSize];
                     for (size_t i = 0; i < maxObjectSize; i++)
                     {
                         float x = unionArrays[0][i].getFConst();
                         float y = unionArrays[1][i].getFConst();
-                        tempConstArray[i].setFConst(x - y * floorf(x / y));
+                        resultArray[i].setFConst(x - y * floorf(x / y));
                     }
                 }
                 else
@@ -1696,19 +1704,19 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
 
           case EOpMin:
             {
-                tempConstArray = new TConstantUnion[maxObjectSize];
+                resultArray = new TConstantUnion[maxObjectSize];
                 for (size_t i = 0; i < maxObjectSize; i++)
                 {
                     switch (basicType)
                     {
                       case EbtFloat:
-                        tempConstArray[i].setFConst(std::min(unionArrays[0][i].getFConst(), unionArrays[1][i].getFConst()));
+                        resultArray[i].setFConst(std::min(unionArrays[0][i].getFConst(), unionArrays[1][i].getFConst()));
                         break;
                       case EbtInt:
-                        tempConstArray[i].setIConst(std::min(unionArrays[0][i].getIConst(), unionArrays[1][i].getIConst()));
+                        resultArray[i].setIConst(std::min(unionArrays[0][i].getIConst(), unionArrays[1][i].getIConst()));
                         break;
                       case EbtUInt:
-                        tempConstArray[i].setUConst(std::min(unionArrays[0][i].getUConst(), unionArrays[1][i].getUConst()));
+                        resultArray[i].setUConst(std::min(unionArrays[0][i].getUConst(), unionArrays[1][i].getUConst()));
                         break;
                       default:
                         UNREACHABLE();
@@ -1720,19 +1728,19 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
 
           case EOpMax:
             {
-                tempConstArray = new TConstantUnion[maxObjectSize];
+                resultArray = new TConstantUnion[maxObjectSize];
                 for (size_t i = 0; i < maxObjectSize; i++)
                 {
                     switch (basicType)
                     {
                       case EbtFloat:
-                        tempConstArray[i].setFConst(std::max(unionArrays[0][i].getFConst(), unionArrays[1][i].getFConst()));
+                        resultArray[i].setFConst(std::max(unionArrays[0][i].getFConst(), unionArrays[1][i].getFConst()));
                         break;
                       case EbtInt:
-                        tempConstArray[i].setIConst(std::max(unionArrays[0][i].getIConst(), unionArrays[1][i].getIConst()));
+                        resultArray[i].setIConst(std::max(unionArrays[0][i].getIConst(), unionArrays[1][i].getIConst()));
                         break;
                       case EbtUInt:
-                        tempConstArray[i].setUConst(std::max(unionArrays[0][i].getUConst(), unionArrays[1][i].getUConst()));
+                        resultArray[i].setUConst(std::max(unionArrays[0][i].getUConst(), unionArrays[1][i].getUConst()));
                         break;
                       default:
                         UNREACHABLE();
@@ -1746,9 +1754,9 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
             {
                 if (basicType == EbtFloat)
                 {
-                    tempConstArray = new TConstantUnion[maxObjectSize];
+                    resultArray = new TConstantUnion[maxObjectSize];
                     for (size_t i = 0; i < maxObjectSize; i++)
-                        tempConstArray[i].setFConst(unionArrays[1][i].getFConst() < unionArrays[0][i].getFConst() ? 0.0f : 1.0f);
+                        resultArray[i].setFConst(unionArrays[1][i].getFConst() < unionArrays[0][i].getFConst() ? 0.0f : 1.0f);
                 }
                 else
                     UNREACHABLE();
@@ -1757,19 +1765,19 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
 
           case EOpLessThan:
             {
-                tempConstArray = new TConstantUnion[maxObjectSize];
+                resultArray = new TConstantUnion[maxObjectSize];
                 for (size_t i = 0; i < maxObjectSize; i++)
                 {
                     switch (basicType)
                     {
                       case EbtFloat:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getFConst() < unionArrays[1][i].getFConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getFConst() < unionArrays[1][i].getFConst());
                         break;
                       case EbtInt:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getIConst() < unionArrays[1][i].getIConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getIConst() < unionArrays[1][i].getIConst());
                         break;
                       case EbtUInt:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getUConst() < unionArrays[1][i].getUConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getUConst() < unionArrays[1][i].getUConst());
                         break;
                       default:
                         UNREACHABLE();
@@ -1781,19 +1789,19 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
 
           case EOpLessThanEqual:
             {
-                tempConstArray = new TConstantUnion[maxObjectSize];
+                resultArray = new TConstantUnion[maxObjectSize];
                 for (size_t i = 0; i < maxObjectSize; i++)
                 {
                     switch (basicType)
                     {
                       case EbtFloat:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getFConst() <= unionArrays[1][i].getFConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getFConst() <= unionArrays[1][i].getFConst());
                         break;
                       case EbtInt:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getIConst() <= unionArrays[1][i].getIConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getIConst() <= unionArrays[1][i].getIConst());
                         break;
                       case EbtUInt:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getUConst() <= unionArrays[1][i].getUConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getUConst() <= unionArrays[1][i].getUConst());
                         break;
                       default:
                         UNREACHABLE();
@@ -1805,43 +1813,43 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
 
           case EOpGreaterThan:
             {
-                tempConstArray = new TConstantUnion[maxObjectSize];
+                resultArray = new TConstantUnion[maxObjectSize];
                 for (size_t i = 0; i < maxObjectSize; i++)
                 {
                     switch (basicType)
                     {
                       case EbtFloat:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getFConst() > unionArrays[1][i].getFConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getFConst() > unionArrays[1][i].getFConst());
                         break;
                       case EbtInt:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getIConst() > unionArrays[1][i].getIConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getIConst() > unionArrays[1][i].getIConst());
                         break;
                       case EbtUInt:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getUConst() > unionArrays[1][i].getUConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getUConst() > unionArrays[1][i].getUConst());
                         break;
                       default:
                         UNREACHABLE();
                         break;
-                  }
-              }
+                    }
+                }
             }
             break;
 
           case EOpGreaterThanEqual:
             {
-                tempConstArray = new TConstantUnion[maxObjectSize];
+                resultArray = new TConstantUnion[maxObjectSize];
                 for (size_t i = 0; i < maxObjectSize; i++)
                 {
                     switch (basicType)
                     {
                       case EbtFloat:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getFConst() >= unionArrays[1][i].getFConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getFConst() >= unionArrays[1][i].getFConst());
                         break;
                       case EbtInt:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getIConst() >= unionArrays[1][i].getIConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getIConst() >= unionArrays[1][i].getIConst());
                         break;
                       case EbtUInt:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getUConst() >= unionArrays[1][i].getUConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getUConst() >= unionArrays[1][i].getUConst());
                         break;
                       default:
                         UNREACHABLE();
@@ -1853,22 +1861,22 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
 
           case EOpVectorEqual:
             {
-                tempConstArray = new TConstantUnion[maxObjectSize];
+                resultArray = new TConstantUnion[maxObjectSize];
                 for (size_t i = 0; i < maxObjectSize; i++)
                 {
                     switch (basicType)
                     {
                       case EbtFloat:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getFConst() == unionArrays[1][i].getFConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getFConst() == unionArrays[1][i].getFConst());
                         break;
                       case EbtInt:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getIConst() == unionArrays[1][i].getIConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getIConst() == unionArrays[1][i].getIConst());
                         break;
                       case EbtUInt:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getUConst() == unionArrays[1][i].getUConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getUConst() == unionArrays[1][i].getUConst());
                         break;
                       case EbtBool:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getBConst() == unionArrays[1][i].getBConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getBConst() == unionArrays[1][i].getBConst());
                         break;
                       default:
                         UNREACHABLE();
@@ -1880,22 +1888,22 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
 
           case EOpVectorNotEqual:
             {
-                tempConstArray = new TConstantUnion[maxObjectSize];
+                resultArray = new TConstantUnion[maxObjectSize];
                 for (size_t i = 0; i < maxObjectSize; i++)
                 {
                     switch (basicType)
                     {
                       case EbtFloat:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getFConst() != unionArrays[1][i].getFConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getFConst() != unionArrays[1][i].getFConst());
                         break;
                       case EbtInt:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getIConst() != unionArrays[1][i].getIConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getIConst() != unionArrays[1][i].getIConst());
                         break;
                       case EbtUInt:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getUConst() != unionArrays[1][i].getUConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getUConst() != unionArrays[1][i].getUConst());
                         break;
                       case EbtBool:
-                        tempConstArray[i].setBConst(unionArrays[0][i].getBConst() != unionArrays[1][i].getBConst());
+                        resultArray[i].setBConst(unionArrays[0][i].getBConst() != unionArrays[1][i].getBConst());
                         break;
                       default:
                         UNREACHABLE();
@@ -1909,24 +1917,25 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
             if (basicType == EbtFloat)
             {
                 TConstantUnion *distanceArray = new TConstantUnion[maxObjectSize];
-                tempConstArray = new TConstantUnion();
+                resultArray = new TConstantUnion();
                 for (size_t i = 0; i < maxObjectSize; i++)
                 {
                     float x = unionArrays[0][i].getFConst();
                     float y = unionArrays[1][i].getFConst();
                     distanceArray[i].setFConst(x - y);
                 }
-                tempConstArray->setFConst(VectorLength(distanceArray, maxObjectSize));
+                resultArray->setFConst(VectorLength(distanceArray, maxObjectSize));
             }
             else
                 UNREACHABLE();
             break;
 
           case EOpDot:
+
             if (basicType == EbtFloat)
             {
-                tempConstArray = new TConstantUnion();
-                tempConstArray->setFConst(VectorDotProduct(unionArrays[0], unionArrays[1], maxObjectSize));
+                resultArray = new TConstantUnion();
+                resultArray->setFConst(VectorDotProduct(unionArrays[0], unionArrays[1], maxObjectSize));
             }
             else
                 UNREACHABLE();
@@ -1935,16 +1944,16 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
           case EOpCross:
             if (basicType == EbtFloat && maxObjectSize == 3)
             {
-                tempConstArray = new TConstantUnion[maxObjectSize];
+                resultArray = new TConstantUnion[maxObjectSize];
                 float x0 = unionArrays[0][0].getFConst();
                 float x1 = unionArrays[0][1].getFConst();
                 float x2 = unionArrays[0][2].getFConst();
                 float y0 = unionArrays[1][0].getFConst();
                 float y1 = unionArrays[1][1].getFConst();
                 float y2 = unionArrays[1][2].getFConst();
-                tempConstArray[0].setFConst(x1 * y2 - y1 * x2);
-                tempConstArray[1].setFConst(x2 * y0 - y2 * x0);
-                tempConstArray[2].setFConst(x0 * y1 - y0 * x1);
+                resultArray[0].setFConst(x1 * y2 - y1 * x2);
+                resultArray[1].setFConst(x2 * y0 - y2 * x0);
+                resultArray[2].setFConst(x0 * y1 - y0 * x1);
             }
             else
                 UNREACHABLE();
@@ -1956,13 +1965,13 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
                 // genType reflect (genType I, genType N) :
                 //     For the incident vector I and surface orientation N, returns the reflection direction:
                 //     I - 2 * dot(N, I) * N.
-                tempConstArray = new TConstantUnion[maxObjectSize];
+                resultArray = new TConstantUnion[maxObjectSize];
                 float dotProduct = VectorDotProduct(unionArrays[1], unionArrays[0], maxObjectSize);
                 for (size_t i = 0; i < maxObjectSize; i++)
                 {
                     float result = unionArrays[0][i].getFConst() -
                                    2.0f * dotProduct * unionArrays[1][i].getFConst();
-                    tempConstArray[i].setFConst(result);
+                    resultArray[i].setFConst(result);
                 }
             }
             else
@@ -1984,7 +1993,7 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
         {
           case EOpClamp:
             {
-                tempConstArray = new TConstantUnion[maxObjectSize];
+                resultArray = new TConstantUnion[maxObjectSize];
                 for (size_t i = 0; i < maxObjectSize; i++)
                 {
                     switch (basicType)
@@ -1996,9 +2005,9 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
                             float max = unionArrays[2][i].getFConst();
                             // Results are undefined if min > max.
                             if (min > max)
-                                UndefinedConstantFoldingError(loc, op, basicType, infoSink, &tempConstArray[i]);
+                                UndefinedConstantFoldingError(loc, op, basicType, infoSink, &resultArray[i]);
                             else
-                                tempConstArray[i].setFConst(gl::clamp(x, min, max));
+                                resultArray[i].setFConst(gl::clamp(x, min, max));
                         }
                         break;
                       case EbtInt:
@@ -2008,9 +2017,9 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
                             int max = unionArrays[2][i].getIConst();
                             // Results are undefined if min > max.
                             if (min > max)
-                                UndefinedConstantFoldingError(loc, op, basicType, infoSink, &tempConstArray[i]);
+                                UndefinedConstantFoldingError(loc, op, basicType, infoSink, &resultArray[i]);
                             else
-                                tempConstArray[i].setIConst(gl::clamp(x, min, max));
+                                resultArray[i].setIConst(gl::clamp(x, min, max));
                         }
                         break;
                       case EbtUInt:
@@ -2020,9 +2029,9 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
                             unsigned int max = unionArrays[2][i].getUConst();
                             // Results are undefined if min > max.
                             if (min > max)
-                                UndefinedConstantFoldingError(loc, op, basicType, infoSink, &tempConstArray[i]);
+                                UndefinedConstantFoldingError(loc, op, basicType, infoSink, &resultArray[i]);
                             else
-                                tempConstArray[i].setUConst(gl::clamp(x, min, max));
+                                resultArray[i].setUConst(gl::clamp(x, min, max));
                         }
                         break;
                       default:
@@ -2037,7 +2046,7 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
             {
                 if (basicType == EbtFloat)
                 {
-                    tempConstArray = new TConstantUnion[maxObjectSize];
+                    resultArray = new TConstantUnion[maxObjectSize];
                     for (size_t i = 0; i < maxObjectSize; i++)
                     {
                         float x = unionArrays[0][i].getFConst();
@@ -2047,7 +2056,7 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
                         {
                             // Returns the linear blend of x and y, i.e., x * (1 - a) + y * a.
                             float a = unionArrays[2][i].getFConst();
-                            tempConstArray[i].setFConst(x * (1.0f - a) + y * a);
+                            resultArray[i].setFConst(x * (1.0f - a) + y * a);
                         }
                         else // 3rd parameter is EbtBool
                         {
@@ -2056,7 +2065,7 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
                             // For a component of a that is false, the corresponding component of x is returned.
                             // For a component of a that is true, the corresponding component of y is returned.
                             bool a = unionArrays[2][i].getBConst();
-                            tempConstArray[i].setFConst(a ? y : x);
+                            resultArray[i].setFConst(a ? y : x);
                         }
                     }
                 }
@@ -2069,7 +2078,7 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
             {
                 if (basicType == EbtFloat)
                 {
-                    tempConstArray = new TConstantUnion[maxObjectSize];
+                    resultArray = new TConstantUnion[maxObjectSize];
                     for (size_t i = 0; i < maxObjectSize; i++)
                     {
                         float edge0 = unionArrays[0][i].getFConst();
@@ -2078,14 +2087,14 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
                         // Results are undefined if edge0 >= edge1.
                         if (edge0 >= edge1)
                         {
-                            UndefinedConstantFoldingError(loc, op, basicType, infoSink, &tempConstArray[i]);
+                            UndefinedConstantFoldingError(loc, op, basicType, infoSink, &resultArray[i]);
                         }
                         else
                         {
                             // Returns 0.0 if x <= edge0 and 1.0 if x >= edge1 and performs smooth
                             // Hermite interpolation between 0 and 1 when edge0 < x < edge1.
                             float t = gl::clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
-                            tempConstArray[i].setFConst(t * t * (3.0f - 2.0f * t));
+                            resultArray[i].setFConst(t * t * (3.0f - 2.0f * t));
                         }
                     }
                 }
@@ -2099,14 +2108,14 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
             {
                 // genType faceforward(genType N, genType I, genType Nref) :
                 //     If dot(Nref, I) < 0 return N, otherwise return -N.
-                tempConstArray = new TConstantUnion[maxObjectSize];
+                resultArray = new TConstantUnion[maxObjectSize];
                 float dotProduct = VectorDotProduct(unionArrays[2], unionArrays[1], maxObjectSize);
                 for (size_t i = 0; i < maxObjectSize; i++)
                 {
                     if (dotProduct < 0)
-                        tempConstArray[i].setFConst(unionArrays[0][i].getFConst());
+                        resultArray[i].setFConst(unionArrays[0][i].getFConst());
                     else
-                        tempConstArray[i].setFConst(-unionArrays[0][i].getFConst());
+                        resultArray[i].setFConst(-unionArrays[0][i].getFConst());
                 }
             }
             else
@@ -2124,16 +2133,16 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
                 //             return genType(0.0)
                 //         else
                 //             return eta * I - (eta * dot(N, I) + sqrt(k)) * N
-                tempConstArray = new TConstantUnion[maxObjectSize];
+                resultArray = new TConstantUnion[maxObjectSize];
                 float dotProduct = VectorDotProduct(unionArrays[1], unionArrays[0], maxObjectSize);
                 for (size_t i = 0; i < maxObjectSize; i++)
                 {
                     float eta = unionArrays[2][i].getFConst();
                     float k = 1.0f - eta * eta * (1.0f - dotProduct * dotProduct);
                     if (k < 0.0f)
-                        tempConstArray[i].setFConst(0.0f);
+                        resultArray[i].setFConst(0.0f);
                     else
-                        tempConstArray[i].setFConst(eta * unionArrays[0][i].getFConst() -
+                        resultArray[i].setFConst(eta * unionArrays[0][i].getFConst() -
                                                     (eta * dotProduct + sqrtf(k)) * unionArrays[1][i].getFConst());
                 }
             }
@@ -2147,13 +2156,7 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
             return nullptr;
         }
     }
-
-    if (tempConstArray)
-    {
-        tempNode = new TIntermConstantUnion(tempConstArray, returnType);
-        tempNode->setLine(loc);
-    }
-    return tempNode;
+    return resultArray;
 }
 
 // static
