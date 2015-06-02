@@ -17,6 +17,9 @@
 namespace rx
 {
 class Renderer11;
+struct TranslatedIndexData;
+struct TranslatedAttribute;
+struct SourceIndexData;
 
 enum BufferUsage
 {
@@ -27,6 +30,7 @@ enum BufferUsage
     BUFFER_USAGE_PIXEL_PACK,
     BUFFER_USAGE_UNIFORM,
     BUFFER_USAGE_SYSTEM_MEMORY,
+    BUFFER_USAGE_EMULATED_INDEXED_VERTEX,
 };
 
 struct PackPixelsParams
@@ -53,6 +57,7 @@ class Buffer11 : public BufferD3D
     virtual ~Buffer11();
 
     ID3D11Buffer *getBuffer(BufferUsage usage);
+    ID3D11Buffer *getEmulatedIndexedBuffer(BufferUsage usage, SourceIndexData *indexInfo, TranslatedAttribute *attribute);
     ID3D11Buffer *getConstantBufferRange(GLintptr offset, GLsizeiptr size);
     ID3D11ShaderResourceView *getSRV(DXGI_FORMAT srvFormat);
     bool isMapped() const { return mMappedStorage != NULL; }
@@ -77,9 +82,11 @@ class Buffer11 : public BufferD3D
     class NativeStorage;
     class PackStorage;
     class SystemMemoryStorage;
+    class EmulatedIndexedStorage;
 
     Renderer11 *mRenderer;
     size_t mSize;
+    GLenum mUsage;
 
     BufferStorage *mMappedStorage;
 
@@ -117,6 +124,8 @@ class Buffer11 : public BufferD3D
     BufferStorage *getLatestBufferStorage() const;
 
     BufferStorage *getContantBufferRangeStorage(GLintptr offset, GLsizeiptr size);
+
+    void invalidateEmulatedIndexedBuffer();
 };
 
 }
