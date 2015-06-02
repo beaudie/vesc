@@ -98,7 +98,10 @@ gl::Error RendererD3D::drawElements(const gl::Data &data,
     gl::VertexArray *vao = data.state->getVertexArray();
     TranslatedIndexData indexInfo;
     indexInfo.indexRange = indexRange;
-    error = applyIndexBuffer(indices, vao->getElementArrayBuffer(), count, mode, type, &indexInfo);
+
+    SourceIndexData sourceIndexInfo;
+
+    error = applyIndexBuffer(indices, vao->getElementArrayBuffer(), count, mode, type, &indexInfo, &sourceIndexInfo);
     if (error.isError())
     {
         return error;
@@ -110,7 +113,7 @@ gl::Error RendererD3D::drawElements(const gl::Data &data,
     ASSERT(!data.state->isTransformFeedbackActiveUnpaused());
 
     GLsizei vertexCount = indexInfo.indexRange.length() + 1;
-    error = applyVertexBuffer(*data.state, mode, indexInfo.indexRange.start, vertexCount, instances);
+    error = applyVertexBuffer(*data.state, mode, indexInfo.indexRange.start, vertexCount, instances, &sourceIndexInfo);
     if (error.isError())
     {
         return error;
@@ -136,7 +139,7 @@ gl::Error RendererD3D::drawElements(const gl::Data &data,
 
     if (!skipDraw(data, mode))
     {
-        error = drawElements(mode, count, type, indices, vao->getElementArrayBuffer(), indexInfo, instances);
+        error = drawElements(mode, count, type, indices, vao->getElementArrayBuffer(), indexInfo, instances, program->usesPointSize());
         if (error.isError())
         {
             return error;
@@ -180,7 +183,7 @@ gl::Error RendererD3D::drawArrays(const gl::Data &data,
 
     applyTransformFeedbackBuffers(*data.state);
 
-    error = applyVertexBuffer(*data.state, mode, first, count, instances);
+    error = applyVertexBuffer(*data.state, mode, first, count, instances, nullptr);
     if (error.isError())
     {
         return error;
