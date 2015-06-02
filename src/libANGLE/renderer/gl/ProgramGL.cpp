@@ -148,11 +148,6 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog,
             if (location >= 0)
             {
                 // Make sure the uniform index array is large enough
-                if (static_cast<size_t>(location) >= mUniformIndex.size())
-                {
-                    mUniformIndex.resize(location + 1);
-                }
-
                 mUniformIndex[location] = gl::VariableLocation(uniformName, arrayIndex, static_cast<unsigned int>(mUniforms.size()));
 
                 // If the uniform is a sampler, track it in the sampler bindings array
