@@ -572,7 +572,7 @@
 
     'conditions':
     [
-        ['angle_standalone==1',
+        ['angle_standalone==1 and angle_build_winrt==0',
         {
             'conditions':
             [

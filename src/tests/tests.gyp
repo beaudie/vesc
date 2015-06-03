@@ -183,6 +183,13 @@
                         4244, # Conversion from 'type1' to 'type2', possible loss of data
                     ],
                 },
+            ]
+        }],
+
+        ['angle_standalone==1 and angle_build_winrt==0',
+        {
+            'targets':
+            [
                 {
                     'target_name': 'angle_end2end_tests',
                     'type': 'executable',

@@ -75,12 +75,23 @@
         '<(angle_path)/src/compiler/preprocessor',
         '<(angle_path)/src/tests',
     ],
-    'sources':
-    [
-        '<@(angle_unittests_sources)',
-    ],
     'conditions':
     [
+        ['angle_build_winrt==0',
+        {
+            'sources':
+            [
+                '<@(angle_unittests_sources)',
+            ],
+        }],
+        ['angle_build_winrt==0 and OS=="win"',
+        {
+            # TODO(cwallez): make this angle_enable_hlsl instead (requires gyp file refactoring)
+            'sources':
+            [
+                '<(angle_path)/src/tests/compiler_tests/UnrollFlatten_test.cpp',
+            ],
+        }],
         ['angle_build_winrt==1',
         {
             'sources':
@@ -102,14 +113,6 @@
                     ],
                 },
             },
-        }],
-        ['OS=="win"',
-        {
-            # TODO(cwallez): make this angle_enable_hlsl instead (requires gyp file refactoring)
-            'sources':
-            [
-                '<(angle_path)/src/tests/compiler_tests/UnrollFlatten_test.cpp',
-            ],
         }],
     ],
 }
