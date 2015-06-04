@@ -74,8 +74,8 @@ component("translator") {
 
   configs -= [ "//build/config/compiler:chromium_code" ]
   configs += [
-    ":internal_config",
     "//build/config/compiler:no_chromium_code",
+    ":internal_config",
   ]
 
   public_deps = [
@@ -105,8 +105,8 @@ static_library("preprocessor") {
 
   configs -= [ "//build/config/compiler:chromium_code" ]
   configs += [
-    ":internal_config",
     "//build/config/compiler:no_chromium_code",
+    ":internal_config",
   ]
 }
 
@@ -118,6 +118,7 @@ static_library("angle_common") {
   sources = rebase_path(gles_gypi.libangle_common_sources, ".", "src")
   configs -= [ "//build/config/compiler:chromium_code" ]
   configs += [
+    "//build/config/compiler:no_chromium_code",
     ":internal_config",
   ]
 }
@@ -131,9 +132,9 @@ static_library("translator_lib") {
   }
   configs -= [ "//build/config/compiler:chromium_code" ]
   configs += [
+    "//build/config/compiler:no_chromium_code",
     ":internal_config",
     ":translator_static_config",
-    "//build/config/compiler:no_chromium_code",
   ]
   public_configs = [ ":external_config" ]
 
@@ -159,8 +160,8 @@ static_library("translator_static") {
 
   configs -= [ "//build/config/compiler:chromium_code" ]
   configs += [
-    ":internal_config",
     "//build/config/compiler:no_chromium_code",
+    ":internal_config",
   ]
   public_configs = [ ":translator_static_config" ]
 
@@ -265,10 +266,10 @@ static_library("libANGLE") {
 
   configs -= [ "//build/config/compiler:chromium_code" ]
   configs += [
+    "//build/config/compiler:no_chromium_code",
     ":commit_id_config",
     ":libANGLE_config",
     ":internal_config",
-    "//build/config/compiler:no_chromium_code",
   ]
 
   deps = [
@@ -293,10 +294,10 @@ shared_library("libGLESv2") {
 
   configs -= [ "//build/config/compiler:chromium_code" ]
   configs += [
+    "//build/config/compiler:no_chromium_code",
     ":internal_config",
     ":commit_id_config",
     ":libANGLE_config",
-    "//build/config/compiler:no_chromium_code",
   ]
 
   defines = [
@@ -319,10 +320,10 @@ shared_library("libEGL") {
 
   configs -= [ "//build/config/compiler:chromium_code" ]
   configs += [
+    "//build/config/compiler:no_chromium_code",
     ":internal_config",
     ":commit_id_config",
     ":libANGLE_config",
-    "//build/config/compiler:no_chromium_code",
   ]
 
   defines = [
