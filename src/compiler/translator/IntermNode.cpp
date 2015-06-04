@@ -1660,7 +1660,7 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
     unsigned int paramsCount = sequence->size();
     std::vector<TConstantUnion *> unionArrays(paramsCount);
     std::vector<size_t> objectSizes(paramsCount);
-    TType *maxSizeType = nullptr;
+    size_t maxObjectSize = 0;
     TBasicType basicType = EbtVoid;
     TSourceLoc loc;
     for (unsigned int i = 0; i < paramsCount; i++)
@@ -1675,20 +1675,19 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
             basicType = paramConstant->getType().getBasicType();
             loc = paramConstant->getLine();
         }
+
         unionArrays[i] = paramConstant->getUnionArrayPointer();
         objectSizes[i] = paramConstant->getType().getObjectSize();
-        if (maxSizeType == nullptr || (objectSizes[i] >= maxSizeType->getObjectSize()))
-            maxSizeType = paramConstant->getTypePointer();
+        if (objectSizes[i] > maxObjectSize)
+            maxObjectSize = objectSizes[i];
     }
 
-    size_t maxObjectSize = maxSizeType->getObjectSize();
     for (unsigned int i = 0; i < paramsCount; i++)
         if (objectSizes[i] != maxObjectSize)
             unionArrays[i] = Vectorize(*unionArrays[i], maxObjectSize);
 
     TConstantUnion *tempConstArray = nullptr;
     TIntermConstantUnion *tempNode = nullptr;
-    TType returnType = *maxSizeType;
     if (paramsCount == 2)
     {
         //
@@ -2214,6 +2213,8 @@ TIntermTyped *TIntermConstantUnion::FoldAggregateBuiltIn(TOperator op, TIntermAg
 
     if (tempConstArray)
     {
+        TType returnType = aggregate->getType();
+        returnType.setQualifier(EvqConst);
         tempNode = new TIntermConstantUnion(tempConstArray, returnType);
         tempNode->setLine(loc);
     }
