@@ -63,8 +63,6 @@ class DisplayWGL : public DisplayGL
     FunctionsWGL *mFunctionsWGL;
     FunctionsGL *mFunctionsGL;
 
-    ATOM mWindowClass;
-    HWND mWindow;
     HDC mDeviceContext;
     int mPixelFormat;
     HGLRC mWGLContext;

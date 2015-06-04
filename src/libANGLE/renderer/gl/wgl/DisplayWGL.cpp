@@ -60,8 +60,6 @@ DisplayWGL::DisplayWGL()
       mOpenGLModule(nullptr),
       mFunctionsWGL(nullptr),
       mFunctionsGL(nullptr),
-      mWindowClass(0),
-      mWindow(nullptr),
       mDeviceContext(nullptr),
       mPixelFormat(0),
       mWGLContext(nullptr),
@@ -71,26 +69,6 @@ DisplayWGL::DisplayWGL()
 
 DisplayWGL::~DisplayWGL()
 {
-}
-
-static LRESULT CALLBACK IntermediateWindowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    switch (message)
-    {
-      case WM_ERASEBKGND:
-        // Prevent windows from erasing the background.
-        return 1;
-      case WM_PAINT:
-        // Do not paint anything.
-        PAINTSTRUCT paint;
-        if (BeginPaint(window, &paint))
-        {
-            EndPaint(window, &paint);
-        }
-        return 0;
-    }
-
-    return DefWindowProc(window, message, wParam, lParam);
 }
 
 egl::Error DisplayWGL::initialize(egl::Display *display)
@@ -103,134 +81,56 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
         return egl::Error(EGL_NOT_INITIALIZED, "Failed to load OpenGL library.");
     }
 
+    mDeviceContext = display->getNativeDisplayId();
+    if (!mDeviceContext)
+    {
+        return egl::Error(EGL_NOT_INITIALIZED);
+    }
+
+    // Check if the HDC has a pixel format set already.  If not, set one.
+    mPixelFormat = GetPixelFormat(mDeviceContext);
+    if (mPixelFormat == 0)
+    {
+        HRESULT error = HRESULT_FROM_WIN32(GetLastError());
+        if (FAILED(error))
+        {
+            return egl::Error(EGL_BAD_NATIVE_WINDOW, "Failed to get the pixel format from the device context, HRESULT: 0x%X.", error);
+        }
+
+        const PIXELFORMATDESCRIPTOR pixelFormatDescriptor = wgl::GetDefaultPixelFormatDescriptor();
+
+        mPixelFormat = ChoosePixelFormat(mDeviceContext, &pixelFormatDescriptor);
+        if (mPixelFormat == 0)
+        {
+            error = HRESULT_FROM_WIN32(GetLastError());
+            return egl::Error(EGL_NOT_INITIALIZED, "Could not find a compatible pixel format for the Device Context, HRESULT: 0x%X.", error);
+        }
+
+        if (!SetPixelFormat(mDeviceContext, mPixelFormat, &pixelFormatDescriptor))
+        {
+            error = HRESULT_FROM_WIN32(GetLastError());
+            return egl::Error(EGL_NOT_INITIALIZED, "Failed to set the pixel format on the Device Context, HRESULT: 0x%X.", error);
+        }
+    }
+
     mFunctionsWGL = new FunctionsWGL();
-    mFunctionsWGL->initialize(mOpenGLModule, nullptr);
+    mFunctionsWGL->initialize(mOpenGLModule, mDeviceContext);
 
-    // WGL can't grab extensions until it creates a context because it needs to load the driver's DLLs first.
-    // Create a dummy context to load the driver and determine which GL versions are available.
-
-    // Work around compile error from not defining "UNICODE" while Chromium does
-    const LPSTR idcArrow = MAKEINTRESOURCEA(32512);
-
-    WNDCLASSA intermediateClassDesc = { 0 };
-    intermediateClassDesc.style = CS_OWNDC;
-    intermediateClassDesc.lpfnWndProc = IntermediateWindowProc;
-    intermediateClassDesc.cbClsExtra = 0;
-    intermediateClassDesc.cbWndExtra = 0;
-    intermediateClassDesc.hInstance = GetModuleHandle(NULL);
-    intermediateClassDesc.hIcon = NULL;
-    intermediateClassDesc.hCursor = LoadCursorA(NULL, idcArrow);
-    intermediateClassDesc.hbrBackground = 0;
-    intermediateClassDesc.lpszMenuName = NULL;
-    intermediateClassDesc.lpszClassName = "ANGLE Intermediate Window";
-    mWindowClass = RegisterClassA(&intermediateClassDesc);
-    if (!mWindowClass)
+    HGLRC dummyWGLContext = mFunctionsWGL->createContext(mDeviceContext);
+    if (!dummyWGLContext)
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to register intermediate OpenGL window class.");
-    }
-
-    HWND dummyWindow = CreateWindowExA(WS_EX_NOPARENTNOTIFY,
-                                       reinterpret_cast<const char *>(mWindowClass),
-                                       "ANGLE Dummy Window",
-                                       WS_OVERLAPPEDWINDOW,
-                                       CW_USEDEFAULT,
-                                       CW_USEDEFAULT,
-                                       CW_USEDEFAULT,
-                                       CW_USEDEFAULT,
-                                       NULL,
-                                       NULL,
-                                       NULL,
-                                       NULL);
-    if (!dummyWindow)
-    {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to create dummy OpenGL window.");
-    }
-
-    HDC dummyDeviceContext = GetDC(dummyWindow);
-    if (!dummyDeviceContext)
-    {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to get the device context of the dummy OpenGL window.");
-    }
-
-    const PIXELFORMATDESCRIPTOR pixelFormatDescriptor = wgl::GetDefaultPixelFormatDescriptor();
-
-    int dummyPixelFormat = ChoosePixelFormat(dummyDeviceContext, &pixelFormatDescriptor);
-    if (dummyPixelFormat == 0)
-    {
-        return egl::Error(EGL_NOT_INITIALIZED, "Could not find a compatible pixel format for the dummy OpenGL window.");
-    }
-
-    if (!SetPixelFormat(dummyDeviceContext, dummyPixelFormat, &pixelFormatDescriptor))
-    {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to set the pixel format on the intermediate OpenGL window.");
-    }
-
-    HGLRC dummyWGLContext = mFunctionsWGL->createContext(dummyDeviceContext);
-    if (!dummyDeviceContext)
-    {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to create a WGL context for the dummy OpenGL window.");
-    }
-
-    if (!mFunctionsWGL->makeCurrent(dummyDeviceContext, dummyWGLContext))
-    {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to make the dummy WGL context current.");
-    }
-
-    // Grab the GL version from this context and use it as the maximum version available.
-    typedef const GLubyte* (GL_APIENTRYP PFNGLGETSTRINGPROC) (GLenum name);
-    PFNGLGETSTRINGPROC getString = reinterpret_cast<PFNGLGETSTRINGPROC>(GetProcAddress(mOpenGLModule, "glGetString"));
-    if (!getString)
-    {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to get glGetString pointer.");
+        HRESULT error = HRESULT_FROM_WIN32(GetLastError());
+        return egl::Error(EGL_NOT_INITIALIZED, "Failed to create a dummy WGL context, HRESULT: 0x%X.", error);
     }
 
     // Reinitialize the wgl functions to grab the extensions
-    mFunctionsWGL->initialize(mOpenGLModule, dummyDeviceContext);
+    mFunctionsWGL->initialize(mOpenGLModule, mDeviceContext);
 
     // Destroy the dummy window and context
-    mFunctionsWGL->makeCurrent(dummyDeviceContext, NULL);
+    mFunctionsWGL->makeCurrent(mDeviceContext, nullptr);
     mFunctionsWGL->deleteContext(dummyWGLContext);
-    ReleaseDC(dummyWindow, dummyDeviceContext);
-    DestroyWindow(dummyWindow);
 
-    // Create the real intermediate context and windows
-    HDC parentHDC = display->getNativeDisplayId();
-    HWND parentWindow = WindowFromDC(parentHDC);
-
-    mWindow = CreateWindowExA(WS_EX_NOPARENTNOTIFY,
-                              reinterpret_cast<const char *>(mWindowClass),
-                              "ANGLE Intermediate Window",
-                              WS_OVERLAPPEDWINDOW,
-                              CW_USEDEFAULT,
-                              CW_USEDEFAULT,
-                              CW_USEDEFAULT,
-                              CW_USEDEFAULT,
-                              parentWindow,
-                              NULL,
-                              NULL,
-                              NULL);
-    if (!mWindow)
-    {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to create intermediate OpenGL window.");
-    }
-
-    mDeviceContext = GetDC(mWindow);
-    if (!mDeviceContext)
-    {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to get the device context of the intermediate OpenGL window.");
-    }
-
-    mPixelFormat = ChoosePixelFormat(mDeviceContext, &pixelFormatDescriptor);
-    if (mPixelFormat == 0)
-    {
-        return egl::Error(EGL_NOT_INITIALIZED, "Could not find a compatible pixel format for the intermediate OpenGL window.");
-    }
-
-    if (!SetPixelFormat(mDeviceContext, mPixelFormat, &pixelFormatDescriptor))
-    {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to set the pixel format on the intermediate OpenGL window.");
-    }
-
+    // Create the real context
     if (mFunctionsWGL->createContextAttribsARB)
     {
         int flags = 0;
@@ -285,7 +185,8 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
 
     if (!mFunctionsWGL->makeCurrent(mDeviceContext, mWGLContext))
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Failed to make the intermediate WGL context current.");
+        HRESULT error = HRESULT_FROM_WIN32(GetLastError());
+        return egl::Error(EGL_NOT_INITIALIZED, "Failed to make the intermediate WGL context current, HRESULT: 0x%X.", error);
     }
 
     mFunctionsGL = new FunctionsGLWindows(mOpenGLModule, mFunctionsWGL->getProcAddress);
@@ -302,15 +203,6 @@ void DisplayWGL::terminate()
     mFunctionsWGL->deleteContext(mWGLContext);
     mWGLContext = NULL;
 
-    ReleaseDC(mWindow, mDeviceContext);
-    mDeviceContext = NULL;
-
-    DestroyWindow(mWindow);
-    mWindow = NULL;
-
-    UnregisterClassA(reinterpret_cast<const char*>(mWindowClass), NULL);
-    mWindowClass = NULL;
-
     SafeDelete(mFunctionsWGL);
     SafeDelete(mFunctionsGL);
 
@@ -322,7 +214,7 @@ SurfaceImpl *DisplayWGL::createWindowSurface(const egl::Config *configuration,
                                              EGLNativeWindowType window,
                                              const egl::AttributeMap &attribs)
 {
-    return new WindowSurfaceWGL(window, mWindowClass, mPixelFormat, mWGLContext, mFunctionsWGL);
+    return new WindowSurfaceWGL(window, mPixelFormat, mWGLContext, mFunctionsWGL);
 }
 
 SurfaceImpl *DisplayWGL::createPbufferSurface(const egl::Config *configuration,
