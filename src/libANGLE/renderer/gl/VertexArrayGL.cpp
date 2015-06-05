@@ -91,22 +91,23 @@ void VertexArrayGL::enableAttribute(size_t idx, bool enabledState)
     mAttributes[idx].enabled = enabledState;
 }
 
-gl::Error VertexArrayGL::syncDrawArraysState(GLint first, GLsizei count) const
+gl::Error VertexArrayGL::syncDrawArraysState(const std::vector<GLuint> &activeAttribLoations, GLint first, GLsizei count) const
 {
-    return syncDrawState(first, count, GL_NONE, nullptr, nullptr);
+    return syncDrawState(activeAttribLoations, first, count, GL_NONE, nullptr, nullptr);
 }
 
-gl::Error VertexArrayGL::syncDrawElementsState(GLsizei count, GLenum type, const GLvoid *indices, const GLvoid **outIndices) const
+gl::Error VertexArrayGL::syncDrawElementsState(const std::vector<GLuint> &activeAttribLoations, GLsizei count,
+                                               GLenum type, const GLvoid *indices, const GLvoid **outIndices) const
 {
-    return syncDrawState(0, count, type, indices, outIndices);
+    return syncDrawState(activeAttribLoations, 0, count, type, indices, outIndices);
 }
 
-gl::Error VertexArrayGL::syncDrawState(GLint first, GLsizei count, GLenum type, const GLvoid *indices, const GLvoid **outIndices) const
+gl::Error VertexArrayGL::syncDrawState(const std::vector<GLuint> &activeAttribLoations, GLint first, GLsizei count, GLenum type, const GLvoid *indices, const GLvoid **outIndices) const
 {
     mStateManager->bindVertexArray(mVertexArrayID, mAppliedElementArrayBuffer);
 
     // Check if any attributes need to be streamed, determines if the index range needs to be computed
-    bool attributesNeedStreaming = doAttributesNeedStreaming();
+    bool attributesNeedStreaming = doAttributesNeedStreaming(activeAttribLoations);
 
     // Determine if an index buffer needs to be streamed and the range of vertices that need to be copied
     gl::RangeUI indexRange(0, 0);
@@ -128,7 +129,8 @@ gl::Error VertexArrayGL::syncDrawState(GLint first, GLsizei count, GLenum type, 
     // Sync the vertex attribute state and track what data needs to be streamed
     size_t streamingDataSize = 0;
     size_t maxAttributeDataSize = 0;
-    gl::Error error = syncAttributeState(attributesNeedStreaming, indexRange, &streamingDataSize, &maxAttributeDataSize);
+    gl::Error error = syncAttributeState(activeAttribLoations, attributesNeedStreaming, indexRange,
+                                         &streamingDataSize, &maxAttributeDataSize);
     if (error.isError())
     {
         return error;
@@ -138,7 +140,8 @@ gl::Error VertexArrayGL::syncDrawState(GLint first, GLsizei count, GLenum type, 
     {
         ASSERT(attributesNeedStreaming);
 
-        gl::Error error = streamAttributes(streamingDataSize, maxAttributeDataSize, indexRange);
+        gl::Error error = streamAttributes(activeAttribLoations, streamingDataSize, maxAttributeDataSize,
+                                           indexRange);
         if (error.isError())
         {
             return error;
@@ -148,11 +151,12 @@ gl::Error VertexArrayGL::syncDrawState(GLint first, GLsizei count, GLenum type, 
     return gl::Error(GL_NO_ERROR);
 }
 
-bool VertexArrayGL::doAttributesNeedStreaming() const
+bool VertexArrayGL::doAttributesNeedStreaming(const std::vector<GLuint> &activeAttribLoations) const
 {
     // TODO: if GLES, nothing needs to be streamed
-    for (size_t idx = 0; idx < mAttributes.size(); idx++)
+    for (size_t activeAttrib = 0; activeAttrib < activeAttribLoations.size(); activeAttrib++)
     {
+        GLuint idx = activeAttribLoations[activeAttrib];
         if (mAttributes[idx].enabled && mAttributes[idx].buffer.get() == nullptr)
         {
             return true;
@@ -162,14 +166,15 @@ bool VertexArrayGL::doAttributesNeedStreaming() const
     return false;
 }
 
-gl::Error VertexArrayGL::syncAttributeState(bool attributesNeedStreaming, const gl::RangeUI &indexRange,
-                                            size_t *outStreamingDataSize, size_t *outMaxAttributeDataSize) const
+gl::Error VertexArrayGL::syncAttributeState(const std::vector<GLuint> &activeAttribLoations, bool attributesNeedStreaming,
+                                            const gl::RangeUI &indexRange,  size_t *outStreamingDataSize, size_t *outMaxAttributeDataSize) const
 {
     *outStreamingDataSize = 0;
     *outMaxAttributeDataSize = 0;
 
-    for (size_t idx = 0; idx < mAttributes.size(); idx++)
+    for (size_t activeAttrib = 0; activeAttrib < activeAttribLoations.size(); activeAttrib++)
     {
+        GLuint idx = activeAttribLoations[activeAttrib];
         // Always sync the enabled and divisor state, they are required for both streaming and buffered
         // attributes
         if (mAppliedAttributes[idx].enabled != mAttributes[idx].enabled)
@@ -312,7 +317,8 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error VertexArrayGL::streamAttributes(size_t streamingDataSize, size_t maxAttributeDataSize, const gl::RangeUI &indexRange) const
+gl::Error VertexArrayGL::streamAttributes(const std::vector<GLuint> &activeAttribLoations, size_t streamingDataSize,
+                                          size_t maxAttributeDataSize, const gl::RangeUI &indexRange) const
 {
     if (mStreamingArrayBuffer == 0)
     {
@@ -344,8 +350,9 @@ gl::Error VertexArrayGL::streamAttributes(size_t streamingDataSize, size_t maxAt
 
         const size_t streamedVertexCount = indexRange.end - indexRange.start + 1;
 
-        for (size_t idx = 0; idx < mAttributes.size(); idx++)
+        for (size_t activeAttrib = 0; activeAttrib < activeAttribLoations.size(); activeAttrib++)
         {
+            GLuint idx = activeAttribLoations[activeAttrib];
             if (mAttributes[idx].enabled && mAttributes[idx].buffer.get() == nullptr)
             {
                 const size_t sourceStride = ComputeVertexAttributeStride(mAttributes[idx]);
