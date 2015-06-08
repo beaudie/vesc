@@ -45,11 +45,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_B8G8R8A8_UNORM] =
         DXGISupport(0, F_DS, F_CUBE | F_MS | F_3D | F_2D);
     g_DXGISupportTable10_0[DXGI_FORMAT_R24_UNORM_X8_TYPELESS] =
-        DXGISupport(F_CUBE | F_2D, F_3D | F_DS | F_RT, F_MS | F_SAMPLE);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_3D | F_DS | F_RT, F_SAMPLE);
     g_DXGISupportTable10_1[DXGI_FORMAT_R24_UNORM_X8_TYPELESS] =
-        DXGISupport(F_CUBE | F_2D | F_SAMPLE, F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_SAMPLE, F_MS | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R24_UNORM_X8_TYPELESS] =
-        DXGISupport(F_CUBE | F_2D | F_SAMPLE, F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_SAMPLE, F_MS | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R16G16B16A16_SINT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_2D, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R16G16B16A16_SINT] =
@@ -63,23 +63,23 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_B4G4R4A4_UNORM] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS, F_MS | F_RT);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC4_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC4_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC4_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC1_UNORM_SRGB] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC1_UNORM_SRGB] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC1_UNORM_SRGB] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R8G8_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R8G8_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R8G8_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R16_SINT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_2D, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R16_SINT] =
@@ -87,11 +87,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R16_SINT] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_RT, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_IA44] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_IA44] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_IA44] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R8_UINT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_2D, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R8_UINT] =
@@ -111,17 +111,17 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_B8G8R8A8_UNORM_SRGB] =
         DXGISupport(F_RT, F_DS, F_CUBE | F_MS | F_3D | F_2D);
     g_DXGISupportTable10_0[DXGI_FORMAT_Y216] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_Y216] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_Y216] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_X24_TYPELESS_G8_UINT] =
-        DXGISupport(F_CUBE | F_2D, F_SAMPLE | F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_SAMPLE | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_X24_TYPELESS_G8_UINT] =
-        DXGISupport(F_CUBE | F_2D, F_SAMPLE | F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_SAMPLE | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_X24_TYPELESS_G8_UINT] =
-        DXGISupport(F_CUBE | F_2D, F_SAMPLE | F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_SAMPLE | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R16_UINT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_2D, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R16_UINT] =
@@ -147,11 +147,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_NV12] =
         DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_A8P8] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_A8P8] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_A8P8] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_NV11] =
         DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_NV11] =
@@ -165,11 +165,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_P010] =
         DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_R16_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R16_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R16_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R16G16_SINT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_2D, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R16G16_SINT] =
@@ -189,17 +189,17 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_D32_FLOAT] =
         DXGISupport(F_CUBE | F_DS | F_2D, F_SAMPLE | F_3D | F_RT, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC6H_UF16] =
-        DXGISupport(0, F_DS | F_RT, F_MS);
+        DXGISupport(0, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC6H_UF16] =
-        DXGISupport(0, F_DS | F_RT, F_MS);
+        DXGISupport(0, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC6H_UF16] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_Y410] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_Y410] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_Y410] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_D16_UNORM] =
         DXGISupport(F_CUBE | F_DS | F_2D, F_SAMPLE | F_3D | F_RT, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_D16_UNORM] =
@@ -207,11 +207,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_D16_UNORM] =
         DXGISupport(F_CUBE | F_DS | F_2D, F_SAMPLE | F_3D | F_RT, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC4_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC4_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC4_UNORM] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R32G32_FLOAT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_2D, F_DS, F_MS | F_SAMPLE);
     g_DXGISupportTable10_1[DXGI_FORMAT_R32G32_FLOAT] =
@@ -231,11 +231,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R32G32B32_FLOAT] =
         DXGISupport(F_CUBE | F_3D | F_2D, F_DS, F_MS | F_RT);
     g_DXGISupportTable10_0[DXGI_FORMAT_R32G32B32A32_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R32G32B32A32_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R32G32B32A32_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_B8G8R8X8_UNORM_SRGB] =
         DXGISupport(0, F_DS, F_CUBE | F_MS | F_2D | F_3D | F_SAMPLE);
     g_DXGISupportTable10_1[DXGI_FORMAT_B8G8R8X8_UNORM_SRGB] =
@@ -243,23 +243,23 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_B8G8R8X8_UNORM_SRGB] =
         DXGISupport(F_RT, F_DS, F_CUBE | F_MS | F_3D | F_2D);
     g_DXGISupportTable10_0[DXGI_FORMAT_X32_TYPELESS_G8X24_UINT] =
-        DXGISupport(F_CUBE | F_2D, F_SAMPLE | F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_SAMPLE | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_X32_TYPELESS_G8X24_UINT] =
-        DXGISupport(F_CUBE | F_2D, F_SAMPLE | F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_SAMPLE | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_X32_TYPELESS_G8X24_UINT] =
-        DXGISupport(F_CUBE | F_2D, F_SAMPLE | F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_SAMPLE | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC6H_SF16] =
-        DXGISupport(0, F_DS | F_RT, F_MS);
+        DXGISupport(0, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC6H_SF16] =
-        DXGISupport(0, F_DS | F_RT, F_MS);
+        DXGISupport(0, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC6H_SF16] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R8_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R8_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R8_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R8G8B8A8_UINT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_2D, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R8G8B8A8_UINT] =
@@ -267,11 +267,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R8G8B8A8_UINT] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_RT, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC3_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC3_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC3_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R32_UINT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_2D, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R32_UINT] =
@@ -279,17 +279,17 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R32_UINT] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_RT, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_Y416] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_Y416] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_Y416] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R8G8B8A8_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R8G8B8A8_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R8G8B8A8_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R32G32_UINT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_2D, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R32G32_UINT] =
@@ -297,11 +297,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R32G32_UINT] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_RT, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_R32G32_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R32G32_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R32G32_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R16G16_FLOAT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_SAMPLE | F_2D, F_DS, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R16G16_FLOAT] =
@@ -315,23 +315,23 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R8G8B8A8_UNORM] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE | F_RT, F_DS, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_R9G9B9E5_SHAREDEXP] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R9G9B9E5_SHAREDEXP] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R9G9B9E5_SHAREDEXP] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC7_UNORM_SRGB] =
-        DXGISupport(0, F_DS | F_RT, F_MS);
+        DXGISupport(0, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC7_UNORM_SRGB] =
-        DXGISupport(0, F_DS | F_RT, F_MS);
+        DXGISupport(0, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC7_UNORM_SRGB] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC2_UNORM_SRGB] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC2_UNORM_SRGB] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC2_UNORM_SRGB] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R32G32_SINT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_2D, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R32G32_SINT] =
@@ -345,11 +345,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R16G16B16A16_UINT] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_RT, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_R1_UNORM] =
-        DXGISupport(F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R1_UNORM] =
-        DXGISupport(F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R1_UNORM] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R8G8_SNORM] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_SAMPLE | F_2D, F_DS, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R8G8_SNORM] =
@@ -369,11 +369,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R10G10B10A2_UNORM] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE | F_RT, F_DS, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_R8G8_B8G8_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R8G8_B8G8_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R8G8_B8G8_UNORM] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R8_UNORM] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_SAMPLE | F_2D, F_DS, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R8_UNORM] =
@@ -393,17 +393,17 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R32G32B32A32_SINT] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_RT, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_P8] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_P8] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_P8] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC5_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC5_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC5_UNORM] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R10G10B10A2_UINT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_2D, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R10G10B10A2_UINT] =
@@ -423,17 +423,17 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R16G16_UINT] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_RT, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC3_UNORM_SRGB] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC3_UNORM_SRGB] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC3_UNORM_SRGB] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC7_TYPELESS] =
-        DXGISupport(0, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(0, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC7_TYPELESS] =
-        DXGISupport(0, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(0, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC7_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R8G8B8A8_SINT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_2D, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R8G8B8A8_SINT] =
@@ -447,11 +447,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R16_UNORM] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE | F_RT, F_DS, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC5_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC5_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC5_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R16G16B16A16_SNORM] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_SAMPLE | F_2D, F_DS, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R16G16B16A16_SNORM] =
@@ -459,23 +459,23 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R16G16B16A16_SNORM] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE | F_RT, F_DS, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_R16G16B16A16_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R16G16B16A16_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R16G16B16A16_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC6H_TYPELESS] =
-        DXGISupport(0, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(0, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC6H_TYPELESS] =
-        DXGISupport(0, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(0, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC6H_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R32G8X24_TYPELESS] =
-        DXGISupport(F_CUBE | F_2D, F_SAMPLE | F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_SAMPLE | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R32G8X24_TYPELESS] =
-        DXGISupport(F_CUBE | F_2D, F_SAMPLE | F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_SAMPLE | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R32G8X24_TYPELESS] =
-        DXGISupport(F_CUBE | F_2D, F_SAMPLE | F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_SAMPLE | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R8_SNORM] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_SAMPLE | F_2D, F_DS, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R8_SNORM] =
@@ -483,35 +483,35 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R8_SNORM] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE | F_RT, F_DS, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC3_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC3_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC3_UNORM] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM] =
-        DXGISupport(0, F_CUBE | F_SAMPLE | F_DS | F_RT, F_MS | F_3D | F_2D);
+        DXGISupport(0, F_CUBE | F_MS | F_SAMPLE | F_DS | F_RT, F_3D | F_2D);
     g_DXGISupportTable10_1[DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM] =
-        DXGISupport(0, F_CUBE | F_SAMPLE | F_DS | F_RT, F_MS | F_3D | F_2D);
+        DXGISupport(0, F_CUBE | F_MS | F_SAMPLE | F_DS | F_RT, F_3D | F_2D);
     g_DXGISupportTable11_0[DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM] =
-        DXGISupport(0, F_CUBE | F_SAMPLE | F_DS | F_RT, F_MS | F_3D | F_2D);
+        DXGISupport(0, F_CUBE | F_MS | F_SAMPLE | F_DS | F_RT, F_3D | F_2D);
     g_DXGISupportTable10_0[DXGI_FORMAT_R24G8_TYPELESS] =
-        DXGISupport(F_CUBE | F_2D, F_SAMPLE | F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_SAMPLE | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R24G8_TYPELESS] =
-        DXGISupport(F_CUBE | F_2D, F_SAMPLE | F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_SAMPLE | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R24G8_TYPELESS] =
-        DXGISupport(F_CUBE | F_2D, F_SAMPLE | F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_SAMPLE | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC4_SNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC4_SNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC4_SNORM] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_Y210] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_Y210] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_Y210] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_AYUV] =
         DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_AYUV] =
@@ -543,17 +543,17 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R16_SNORM] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE | F_RT, F_DS, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC2_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC2_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC2_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R10G10B10A2_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R10G10B10A2_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R10G10B10A2_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_D32_FLOAT_S8X24_UINT] =
         DXGISupport(F_CUBE | F_DS | F_2D, F_SAMPLE | F_3D | F_RT, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_D32_FLOAT_S8X24_UINT] =
@@ -561,17 +561,17 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_D32_FLOAT_S8X24_UINT] =
         DXGISupport(F_CUBE | F_DS | F_2D, F_SAMPLE | F_3D | F_RT, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC1_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC1_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC1_UNORM] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_B8G8R8X8_TYPELESS] =
-        DXGISupport(0, F_SAMPLE | F_DS | F_RT, F_CUBE | F_MS | F_3D | F_2D);
+        DXGISupport(0, F_MS | F_SAMPLE | F_DS | F_RT, F_CUBE | F_3D | F_2D);
     g_DXGISupportTable10_1[DXGI_FORMAT_B8G8R8X8_TYPELESS] =
-        DXGISupport(0, F_SAMPLE | F_DS | F_RT, F_CUBE | F_MS | F_3D | F_2D);
+        DXGISupport(0, F_MS | F_SAMPLE | F_DS | F_RT, F_CUBE | F_3D | F_2D);
     g_DXGISupportTable11_0[DXGI_FORMAT_B8G8R8X8_TYPELESS] =
-        DXGISupport(0, F_SAMPLE | F_DS | F_RT, F_CUBE | F_MS | F_3D | F_2D);
+        DXGISupport(0, F_MS | F_SAMPLE | F_DS | F_RT, F_CUBE | F_3D | F_2D);
     g_DXGISupportTable10_0[DXGI_FORMAT_R16G16_UNORM] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_SAMPLE | F_2D, F_DS, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R16G16_UNORM] =
@@ -579,11 +579,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R16G16_UNORM] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE | F_RT, F_DS, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_YUY2] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_YUY2] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_YUY2] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_A8_UNORM] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_SAMPLE | F_2D, F_DS, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_A8_UNORM] =
@@ -591,11 +591,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_A8_UNORM] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE | F_RT, F_DS, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS] =
-        DXGISupport(F_CUBE | F_2D, F_3D | F_DS | F_RT, F_MS | F_SAMPLE);
+        DXGISupport(F_CUBE | F_2D, F_MS | F_3D | F_DS | F_RT, F_SAMPLE);
     g_DXGISupportTable10_1[DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS] =
-        DXGISupport(F_CUBE | F_2D | F_SAMPLE, F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_SAMPLE, F_MS | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS] =
-        DXGISupport(F_CUBE | F_2D | F_SAMPLE, F_3D | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_SAMPLE, F_MS | F_3D | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R32G32B32A32_FLOAT] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_2D, F_DS, F_MS | F_SAMPLE);
     g_DXGISupportTable10_1[DXGI_FORMAT_R32G32B32A32_FLOAT] =
@@ -609,11 +609,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R8_SINT] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_RT, F_DS | F_SAMPLE, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_B8G8R8A8_TYPELESS] =
-        DXGISupport(0, F_SAMPLE | F_DS | F_RT, F_CUBE | F_MS | F_3D | F_2D);
+        DXGISupport(0, F_MS | F_SAMPLE | F_DS | F_RT, F_CUBE | F_3D | F_2D);
     g_DXGISupportTable10_1[DXGI_FORMAT_B8G8R8A8_TYPELESS] =
-        DXGISupport(0, F_SAMPLE | F_DS | F_RT, F_CUBE | F_MS | F_3D | F_2D);
+        DXGISupport(0, F_MS | F_SAMPLE | F_DS | F_RT, F_CUBE | F_3D | F_2D);
     g_DXGISupportTable11_0[DXGI_FORMAT_B8G8R8A8_TYPELESS] =
-        DXGISupport(0, F_SAMPLE | F_DS | F_RT, F_CUBE | F_MS | F_3D | F_2D);
+        DXGISupport(0, F_MS | F_SAMPLE | F_DS | F_RT, F_CUBE | F_3D | F_2D);
     g_DXGISupportTable10_0[DXGI_FORMAT_B5G5R5A1_UNORM] =
         DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS, F_MS | F_RT);
     g_DXGISupportTable10_1[DXGI_FORMAT_B5G5R5A1_UNORM] =
@@ -621,17 +621,17 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_B5G5R5A1_UNORM] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS, F_MS | F_RT);
     g_DXGISupportTable10_0[DXGI_FORMAT_420_OPAQUE] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_420_OPAQUE] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_420_OPAQUE] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R16G16_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R16G16_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R16G16_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R8G8_UNORM] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_SAMPLE | F_2D, F_DS, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R8G8_UNORM] =
@@ -645,11 +645,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R32G32B32_UINT] =
         DXGISupport(F_CUBE | F_3D | F_2D, F_DS | F_SAMPLE, F_MS | F_RT);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC7_UNORM] =
-        DXGISupport(0, F_DS | F_RT, F_MS);
+        DXGISupport(0, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC7_UNORM] =
-        DXGISupport(0, F_DS | F_RT, F_MS);
+        DXGISupport(0, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC7_UNORM] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_UNKNOWN] =
         DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_UNKNOWN] =
@@ -669,11 +669,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R16G16B16A16_FLOAT] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE | F_RT, F_DS, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_R32G32B32_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R32G32B32_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R32G32B32_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_B8G8R8X8_UNORM] =
         DXGISupport(0, F_DS, F_CUBE | F_MS | F_2D | F_3D | F_SAMPLE);
     g_DXGISupportTable10_1[DXGI_FORMAT_B8G8R8X8_UNORM] =
@@ -681,11 +681,11 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_B8G8R8X8_UNORM] =
         DXGISupport(F_RT, F_DS, F_CUBE | F_MS | F_3D | F_2D);
     g_DXGISupportTable10_0[DXGI_FORMAT_G8R8_G8B8_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_G8R8_G8B8_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_G8R8_G8B8_UNORM] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R16G16_SNORM] =
         DXGISupport(F_CUBE | F_RT | F_3D | F_SAMPLE | F_2D, F_DS, F_MS);
     g_DXGISupportTable10_1[DXGI_FORMAT_R16G16_SNORM] =
@@ -705,35 +705,35 @@ void InitializeDXGISupportTables()
     g_DXGISupportTable11_0[DXGI_FORMAT_R16_FLOAT] =
         DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE | F_RT, F_DS, F_MS);
     g_DXGISupportTable10_0[DXGI_FORMAT_AI44] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_AI44] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_AI44] =
-        DXGISupport(0, F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, F_MS);
+        DXGISupport(0, F_MS | F_RT | F_CUBE | F_SAMPLE | F_3D | F_DS | F_2D, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_R32_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_R32_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_R32_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC5_SNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC5_SNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC5_SNORM] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC1_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC1_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC1_TYPELESS] =
-        DXGISupport(F_CUBE | F_3D | F_2D, F_SAMPLE | F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_3D | F_2D, F_MS | F_SAMPLE | F_DS | F_RT, 0);
     g_DXGISupportTable10_0[DXGI_FORMAT_BC2_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable10_1[DXGI_FORMAT_BC2_UNORM] =
-        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_SAMPLE | F_3D | F_2D, F_MS | F_DS | F_RT, 0);
     g_DXGISupportTable11_0[DXGI_FORMAT_BC2_UNORM] =
-        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_DS | F_RT, F_MS);
+        DXGISupport(F_CUBE | F_2D | F_3D | F_SAMPLE, F_MS | F_DS | F_RT, 0);
 
 }
 

@@ -86,6 +86,26 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
             renderable = (rtSupport & D3D11_FORMAT_SUPPORT_RENDER_TARGET) != 0;
         }
         EXPECT_EQ(renderable, textureInfo.renderable);
+
+        // Multisample counts
+        UINT renderSupport = false;
+        ASSERT_TRUE(SUCCEEDED(device->CheckFormatSupport(formatInfo.renderFormat, &renderSupport)));
+
+        if ((renderSupport & D3D11_FORMAT_SUPPORT_MULTISAMPLE_RENDERTARGET) != 0)
+        {
+            EXPECT_TRUE(!textureInfo.sampleCounts.empty());
+            for (size_t sampleCount = 1; sampleCount <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; sampleCount *= 2)
+            {
+                UINT qualityCount = 0;
+                ASSERT(SUCCEEDED(device->CheckMultisampleQualityLevels(formatInfo.renderFormat, sampleCount, &qualityCount)));
+                GLuint expectedCount = qualityCount == 0 ? 0 : 1;
+                EXPECT_EQ(expectedCount, textureInfo.sampleCounts.count(sampleCount));
+            }
+        }
+        else
+        {
+            EXPECT_TRUE(textureInfo.sampleCounts.empty());
+        }
     }
 }
 
