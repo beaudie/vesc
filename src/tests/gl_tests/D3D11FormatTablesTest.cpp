@@ -89,6 +89,6 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
     }
 }
 
-ANGLE_INSTANTIATE_TEST(D3D11FormatTablesTest, ES2_D3D11());
+ANGLE_INSTANTIATE_TEST(D3D11FormatTablesTest, ES2_D3D11_FL10_0(), ES2_D3D11_FL10_1(), ES2_D3D11_FL11_0());
 
 } // anonymous namespace
