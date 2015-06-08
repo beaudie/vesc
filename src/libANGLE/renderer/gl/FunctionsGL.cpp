@@ -788,6 +788,17 @@ void FunctionsGL::initialize()
         angle::SplitStringAlongWhitespace(std::string(exts), &extensions);
     }
 
+    // Check the context profile
+    if (isAtLeastGL(gl::Version(3, 2)))
+    {
+        AssignGLEntryPoint(loadProcAddress("glGetIntegerv"), &getIntegerv);
+        getIntegerv(GL_CONTEXT_PROFILE_MASK, &profile);
+    }
+    else
+    {
+        profile = 0;
+    }
+
     // 1.0
     if (isAtLeastGL(gl::Version(1, 0)))
     {
