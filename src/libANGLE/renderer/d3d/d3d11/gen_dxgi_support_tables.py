@@ -125,7 +125,11 @@ def do_format(format_data):
         always_supported = set()
         never_supported = set()
         optionally_supported = set()
+        fl_10_1_supported = set()
         fl_11_0_supported = set()
+        fl_11_0_check = set()
+        fl_10_0_check_10_1_supported = set()
+        fl_10_0_check_11_0_supported = set()
 
         for json_flag, support in format_support.iteritems():
 
@@ -137,6 +141,11 @@ def do_format(format_data):
                 always_supported.update(d3d_flag)
             elif support == 'never':
                 never_supported.update(d3d_flag)
+            elif support == '10_0':
+                # TODO(jmadill): FL 9_3 handling
+                always_supported.update(d3d_flag)
+            elif support == '10_1':
+                fl_10_1_supported.update(d3d_flag)
             elif support == '11_0':
                 fl_11_0_supported.update(d3d_flag)
             elif support == '11_1':
@@ -145,6 +154,12 @@ def do_format(format_data):
             elif support == 'dxgi1_2':
                 # TODO(jmadill): DXGI 1.2 handling.
                 always_supported.update(d3d_flag)
+            elif support == '10_0check10_1always':
+                fl_10_0_check_10_1_supported.update(d3d_flag)
+            elif support == '10_0check11_0always':
+                fl_10_0_check_11_0_supported.update(d3d_flag)
+            elif support == '11_0check':
+                fl_11_0_check.update(d3d_flag)
             else:
                 print("Data specification error: " + support)
                 sys.exit(1)
@@ -153,12 +168,22 @@ def do_format(format_data):
             table_name = 'g_DXGISupportTable' + feature_level
 
             always_for_fl = always_supported
-            if feature_level == '11_0':
+            optional_for_fl = optionally_supported
+            if feature_level == '10_0':
+                optional_for_fl = fl_10_0_check_10_1_supported.union(optional_for_fl)
+                optional_for_fl = fl_10_0_check_11_0_supported.union(optional_for_fl)
+            if feature_level == '10_1':
+                always_for_fl = fl_10_1_supported.union(always_for_fl)
+                always_for_fl = fl_10_0_check_10_1_supported.union(always_for_fl)
+                optional_for_fl = fl_10_0_check_11_0_supported.union(optional_for_fl)
+            elif feature_level == '11_0':
+                always_for_fl = fl_10_0_check_10_1_supported.union(always_for_fl)
+                always_for_fl = fl_10_1_supported.union(always_for_fl)
                 always_for_fl = fl_11_0_supported.union(always_for_fl)
 
             always = ' | '.join(always_for_fl)
             never = ' | '.join(never_supported)
-            optional = ' | '.join(optionally_supported)
+            optional = ' | '.join(optional_for_fl)
 
             if not always: always = '0'
             if not never: never = '0'
