@@ -19,8 +19,9 @@
 #include "tcuResource.hpp"
 #include "tcuTestLog.hpp"
 
-// Located in tcuMain.cc in dEQP's sources.
-int main(int argc, const char* argv[]);
+// Located in tcuMainProxy.cpp.
+int deqp_main(int argc, const char* argv[]);
+
 tcu::Platform *createPlatform();
 
 namespace
@@ -39,7 +40,7 @@ tcu::RandomOrderExecutor *g_executor = nullptr;
 // Exported to the tester app.
 ANGLE_LIBTESTER_EXPORT int deqp_libtester_main(int argc, const char *argv[])
 {
-    return main(argc, argv);
+    return deqp_main(argc, argv);
 }
 
 ANGLE_LIBTESTER_EXPORT void deqp_libtester_init_platform(int argc, char **argv, const char *deqpDataDir)
