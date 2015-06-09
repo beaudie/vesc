@@ -47,9 +47,8 @@
             '<(delibs_dir)/destream',
             '<(deqp_dir)/framework/common',
             '<(deqp_dir)/framework/qphelper',
+            '<(deqp_dir)/framework/platform',
             '<(deqp_dir)/framework/platform/null',
-            # TODO(jmadill): other platforms
-            '<(deqp_dir)/framework/platform/win32',
             '<(deqp_dir)/framework/egl',
             '<(deqp_dir)/framework/egl/wrapper',
             '<(deqp_dir)/framework/opengl',
@@ -571,567 +570,655 @@
             '<(deqp_dir)/modules/gles3/tes3TestPackage.hpp',
             '<(deqp_dir)/modules/gles3/tes3TestPackageEntry.cpp',
         ],
+
+        'conditions':
+        [
+            ['OS=="win"',
+            {
+                'deqp_include_dirs':
+                [
+                    '<(deqp_dir)/framework/platform/win32',
+                ]
+            }],
+            ['OS=="linux" and (angle_standalone==1 or use_x11==1)',
+            {
+                'deqp_include_dirs':
+                [
+                    '<(deqp_dir)/framework/platform/x11',
+                ],
+                'deqp_defines':
+                [
+                    # Ask the system headers to expose all the regular function otherwise
+                    # dEQP doesn't compile and produces warnings about implicitely defined
+                    # functions.
+                    '_GNU_SOURCE',
+                ],
+            }],
+        ]
     },
 
     'conditions':
     [
         ['angle_standalone==1',
         {
+            'targets':
+            [
+                {
+                    'target_name': 'angle_zlib',
+                    'type': 'static_library',
+                    'includes': [ '../../build/common_defines.gypi', ],
+                    'include_dirs':
+                    [
+                        '<(zlib_dir)',
+                    ],
+                    'direct_dependent_settings':
+                    {
+                        'include_dirs':
+                        [
+                            '<(zlib_dir)',
+                        ],
+                    },
+                    'msvs_settings':
+                    {
+                        'VCCLCompilerTool':
+                        {
+                            'AdditionalOptions':
+                            [
+                                '/wd4131', # old-style declarator
+                                '/wd4244', # Conversion from 'type1' to 'type2', possible loss of data
+                                '/wd4324', # structure was padded
+                                '/wd4701', # potentially uninit used
+                                '/wd4996', # deprecated
+                            ],
+                        },
+                    },
+                    'cflags!':
+                    [
+                        # Remove this C++ specific flag otherwise the compiler errors
+                        '-std=c++0x',
+                    ],
+                    'sources':
+                    [
+                        '<(zlib_dir)/adler32.c',
+                        '<(zlib_dir)/compress.c',
+                        '<(zlib_dir)/crc32.c',
+                        '<(zlib_dir)/crc32.h',
+                        '<(zlib_dir)/deflate.c',
+                        '<(zlib_dir)/deflate.h',
+                        '<(zlib_dir)/gzclose.c',
+                        '<(zlib_dir)/gzguts.h',
+                        '<(zlib_dir)/gzlib.c',
+                        '<(zlib_dir)/gzread.c',
+                        '<(zlib_dir)/gzwrite.c',
+                        '<(zlib_dir)/infback.c',
+                        '<(zlib_dir)/inffast.c',
+                        '<(zlib_dir)/inffast.h',
+                        '<(zlib_dir)/inffixed.h',
+                        '<(zlib_dir)/inflate.c',
+                        '<(zlib_dir)/inflate.h',
+                        '<(zlib_dir)/inftrees.c',
+                        '<(zlib_dir)/inftrees.h',
+                        '<(zlib_dir)/mozzconf.h',
+                        '<(zlib_dir)/trees.c',
+                        '<(zlib_dir)/trees.h',
+                        '<(zlib_dir)/uncompr.c',
+                        '<(zlib_dir)/x86.h',
+                        '<(zlib_dir)/zconf.h',
+                        '<(zlib_dir)/zlib.h',
+                        '<(zlib_dir)/zutil.c',
+                        '<(zlib_dir)/zutil.h',
+                        '<(zlib_dir)/simd_stub.c',
+                    ],
+                },
+
+                {
+                    'target_name': 'angle_libpng',
+                    'type': 'static_library',
+                    'includes': [ '../../build/common_defines.gypi', ],
+                    'dependencies':
+                    [
+                        'angle_zlib'
+                    ],
+                    'msvs_settings':
+                    {
+                        'VCCLCompilerTool':
+                        {
+                            'AdditionalOptions':
+                            [
+                                '/wd4018', # signed/unsigned mismatch
+                                '/wd4028', # parameter differs from decl
+                                '/wd4101', # unreferenced local
+                                '/wd4189', # unreferenced but initted
+                                '/wd4244', # Conversion from 'type1' to 'type2', possible loss of data
+                            ],
+                        },
+                    },
+                    'cflags!':
+                    [
+                        # Remove this C++ specific flag otherwise the compiler errors
+                        '-std=c++0x',
+                    ],
+                    'sources':
+                    [
+                        '<(libpng_dir)/png.c',
+                        '<(libpng_dir)/pngerror.c',
+                        '<(libpng_dir)/pngget.c',
+                        '<(libpng_dir)/pngmem.c',
+                        '<(libpng_dir)/pngpread.c',
+                        '<(libpng_dir)/pngread.c',
+                        '<(libpng_dir)/pngrio.c',
+                        '<(libpng_dir)/pngrtran.c',
+                        '<(libpng_dir)/pngrutil.c',
+                        '<(libpng_dir)/pngset.c',
+                        '<(libpng_dir)/pngtrans.c',
+                        '<(libpng_dir)/pngwio.c',
+                        '<(libpng_dir)/pngwrite.c',
+                        '<(libpng_dir)/pngwtran.c',
+                        '<(libpng_dir)/pngwutil.c',
+                    ],
+                },
+
+                # Compile decpp separately because MSVC ignores the extension of the files when
+                # outputting the obj file, and later things that a decpp obj and another obj are the
+                # same, ignoring one and eventually producing a link error.
+                {
+                    'target_name': 'angle_deqp_decpp',
+                    'type': 'static_library',
+                    'msvs_disabled_warnings':
+                    [
+                        '<@(deqp_msvs_disabled_warnings)',
+                    ],
+                    'msvs_settings':
+                    {
+                        'VCCLCompilerTool':
+                        {
+                            'AdditionalOptions':
+                            [
+                                '/EHsc',   # dEQP requires exceptions
+                            ],
+                        },
+                    },
+                    'cflags!':
+                    [
+                        '-fno-exceptions', # dEQP requires exceptions
+                    ],
+                    'defines': ['<@(deqp_defines)'],
+                    'include_dirs': ['<@(deqp_include_dirs)'],
+                    'sources':
+                    [
+                        '<(deqp_dir)/framework/delibs/decpp/deArrayBuffer.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deBlockBuffer.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deCommandLine.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deDefs.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deDirectoryIterator.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deDynamicLibrary.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deFilePath.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deMemPool.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deMutex.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/dePoolArray.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/dePoolString.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deProcess.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deRandom.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deRingBuffer.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deSemaphore.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deSharedPtr.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deSocket.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deSTLUtil.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deStringUtil.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deThread.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deThreadLocal.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deThreadSafeRingBuffer.cpp',
+                        '<(deqp_dir)/framework/delibs/decpp/deUniquePtr.cpp',
+                    ],
+                },
+
+                {
+                    'target_name': 'angle_deqp_libbase',
+                    'type': 'static_library',
+                    'dependencies':
+                    [
+                        'angle_deqp_decpp',
+                        'angle_libpng',
+                        '<(angle_path)/src/angle.gyp:libEGL',
+                    ],
+                    'msvs_disabled_warnings':
+                    [
+                        '<@(deqp_msvs_disabled_warnings)',
+                    ],
+                    'msvs_settings':
+                    {
+                        'VCCLCompilerTool':
+                        {
+                            'AdditionalOptions':
+                            [
+                                '/EHsc', # dEQP requires exceptions
+                                '/bigobj', # needed for glsBuiltinPrecisionTests.cpp
+                            ],
+                        },
+                    },
+                    'cflags!':
+                    [
+                        # Remove this C++ specific flag otherwise the compiler errors on C files
+                        # dEQP's C++ files don't use C++11 anyway
+                        '-std=c++0x',
+                        '-fno-exceptions', # dEQP requires exceptions
+                    ],
+                    'include_dirs':
+                    [
+                        '<@(deqp_include_dirs)',
+                        '<(angle_path)/include',
+                    ],
+                    'defines':
+                    [
+                        '<@(deqp_defines)',
+                    ],
+                    'direct_dependent_settings':
+                    {
+                        'include_dirs':
+                        [
+                            '<@(deqp_include_dirs)',
+                            '<(angle_path)/include',
+                        ],
+                        'defines':
+                        [
+                            '<@(deqp_defines)',
+                        ],
+                        'msvs_disabled_warnings':
+                        [
+                            '<@(deqp_msvs_disabled_warnings)',
+                        ],
+                        'msvs_settings':
+                        {
+                            'VCCLCompilerTool':
+                            {
+                                'AdditionalOptions':
+                                [
+                                    '/EHsc', # dEQP requires exceptions
+                                ],
+                            },
+                            'VCLinkerTool':
+                            {
+                                'AdditionalDependencies':
+                                [
+                                    'dbghelp.lib',
+                                    'gdi32.lib',
+                                    'user32.lib',
+                                    'ws2_32.lib',
+                                ],
+                            },
+                        },
+                        'cflags!':
+                        [
+                            '-fno-exceptions', # dEQP requires exceptions
+                        ],
+                    },
+                    'sources':
+                    [
+                        '<(deqp_dir)/execserver/xsDefs.cpp',
+                        '<(deqp_dir)/execserver/xsExecutionServer.cpp',
+                        '<(deqp_dir)/execserver/xsPosixFileReader.cpp',
+                        '<(deqp_dir)/execserver/xsPosixTestProcess.cpp',
+                        '<(deqp_dir)/execserver/xsProtocol.cpp',
+                        '<(deqp_dir)/execserver/xsTcpServer.cpp',
+                        '<(deqp_dir)/execserver/xsTestDriver.cpp',
+                        '<(deqp_dir)/execserver/xsTestProcess.cpp',
+                        '<(deqp_dir)/executor/xeBatchExecutor.cpp',
+                        '<(deqp_dir)/executor/xeBatchResult.cpp',
+                        '<(deqp_dir)/executor/xeCallQueue.cpp',
+                        '<(deqp_dir)/executor/xeCommLink.cpp',
+                        '<(deqp_dir)/executor/xeContainerFormatParser.cpp',
+                        '<(deqp_dir)/executor/xeDefs.cpp',
+                        '<(deqp_dir)/executor/xeLocalTcpIpLink.cpp',
+                        '<(deqp_dir)/executor/xeTcpIpLink.cpp',
+                        '<(deqp_dir)/executor/xeTestCase.cpp',
+                        '<(deqp_dir)/executor/xeTestCaseListParser.cpp',
+                        '<(deqp_dir)/executor/xeTestCaseResult.cpp',
+                        '<(deqp_dir)/executor/xeTestLogParser.cpp',
+                        '<(deqp_dir)/executor/xeTestLogWriter.cpp',
+                        '<(deqp_dir)/executor/xeTestResultParser.cpp',
+                        '<(deqp_dir)/executor/xeXMLParser.cpp',
+                        '<(deqp_dir)/executor/xeXMLWriter.cpp',
+                        '<(deqp_dir)/framework/common/tcuApp.cpp',
+                        '<(deqp_dir)/framework/common/tcuBilinearImageCompare.cpp',
+                        '<(deqp_dir)/framework/common/tcuCommandLine.cpp',
+                        '<(deqp_dir)/framework/common/tcuCompressedTexture.cpp',
+                        '<(deqp_dir)/framework/common/tcuCPUWarmup.cpp',
+                        '<(deqp_dir)/framework/common/tcuDefs.cpp',
+                        '<(deqp_dir)/framework/common/tcuEither.cpp',
+                        '<(deqp_dir)/framework/common/tcuFactoryRegistry.cpp',
+                        '<(deqp_dir)/framework/common/tcuFloatFormat.cpp',
+                        '<(deqp_dir)/framework/common/tcuFunctionLibrary.cpp',
+                        '<(deqp_dir)/framework/common/tcuFuzzyImageCompare.cpp',
+                        '<(deqp_dir)/framework/common/tcuImageCompare.cpp',
+                        '<(deqp_dir)/framework/common/tcuImageIO.cpp',
+                        '<(deqp_dir)/framework/common/tcuInterval.cpp',
+                        '<(deqp_dir)/framework/common/tcuPlatform.cpp',
+                        '<(deqp_dir)/framework/common/tcuRandomValueIterator.cpp',
+                        '<(deqp_dir)/framework/common/tcuRenderTarget.cpp',
+                        '<(deqp_dir)/framework/common/tcuResource.cpp',
+                        '<(deqp_dir)/framework/common/tcuResultCollector.cpp',
+                        '<(deqp_dir)/framework/common/tcuRGBA.cpp',
+                        '<(deqp_dir)/framework/common/tcuStringTemplate.cpp',
+                        '<(deqp_dir)/framework/common/tcuSurface.cpp',
+                        '<(deqp_dir)/framework/common/tcuTestCase.cpp',
+                        '<(deqp_dir)/framework/common/tcuTestContext.cpp',
+                        '<(deqp_dir)/framework/common/tcuTestHierarchyIterator.cpp',
+                        '<(deqp_dir)/framework/common/tcuTestHierarchyUtil.cpp',
+                        '<(deqp_dir)/framework/common/tcuTestLog.cpp',
+                        '<(deqp_dir)/framework/common/tcuTestPackage.cpp',
+                        '<(deqp_dir)/framework/common/tcuTestSessionExecutor.cpp',
+                        '<(deqp_dir)/framework/common/tcuTexCompareVerifier.cpp',
+                        '<(deqp_dir)/framework/common/tcuTexLookupVerifier.cpp',
+                        '<(deqp_dir)/framework/common/tcuTexture.cpp',
+                        '<(deqp_dir)/framework/common/tcuTextureUtil.cpp',
+                        '<(deqp_dir)/framework/common/tcuTexVerifierUtil.cpp',
+                        '<(deqp_dir)/framework/common/tcuThreadUtil.cpp',
+                        '<(deqp_dir)/framework/common/tcuSeedBuilder.cpp',
+                        '<(deqp_dir)/framework/delibs/debase/deDefs.c',
+                        '<(deqp_dir)/framework/delibs/debase/deFloat16.c',
+                        '<(deqp_dir)/framework/delibs/debase/deInt32.c',
+                        '<(deqp_dir)/framework/delibs/debase/deInt32Test.c',
+                        '<(deqp_dir)/framework/delibs/debase/deMath.c',
+                        '<(deqp_dir)/framework/delibs/debase/deMemory.c',
+                        '<(deqp_dir)/framework/delibs/debase/deRandom.c',
+                        '<(deqp_dir)/framework/delibs/debase/deString.c',
+                        '<(deqp_dir)/framework/delibs/deimage/deImage.c',
+                        '<(deqp_dir)/framework/delibs/deimage/deTarga.c',
+                        '<(deqp_dir)/framework/delibs/depool/deMemPool.c',
+                        '<(deqp_dir)/framework/delibs/depool/dePoolArray.c',
+                        '<(deqp_dir)/framework/delibs/depool/dePoolHashArray.c',
+                        '<(deqp_dir)/framework/delibs/depool/dePoolHash.c',
+                        '<(deqp_dir)/framework/delibs/depool/dePoolHashSet.c',
+                        '<(deqp_dir)/framework/delibs/depool/dePoolHeap.c',
+                        '<(deqp_dir)/framework/delibs/depool/dePoolMultiSet.c',
+                        '<(deqp_dir)/framework/delibs/depool/dePoolSet.c',
+                        '<(deqp_dir)/framework/delibs/depool/dePoolStringBuilder.c',
+                        '<(deqp_dir)/framework/delibs/depool/dePoolTest.c',
+                        '<(deqp_dir)/framework/delibs/destream/deFileStream.c',
+                        '<(deqp_dir)/framework/delibs/destream/deRingbuffer.c',
+                        '<(deqp_dir)/framework/delibs/destream/deStreamCpyThread.c',
+                        '<(deqp_dir)/framework/delibs/destream/deThreadStream.c',
+                        '<(deqp_dir)/framework/delibs/dethread/deAtomic.c',
+                        '<(deqp_dir)/framework/delibs/dethread/deSingleton.c',
+                        '<(deqp_dir)/framework/delibs/dethread/deThreadTest.c',
+                        '<(deqp_dir)/framework/delibs/deutil/deClock.c',
+                        '<(deqp_dir)/framework/delibs/deutil/deCommandLine.c',
+                        '<(deqp_dir)/framework/delibs/deutil/deDynamicLibrary.c',
+                        '<(deqp_dir)/framework/delibs/deutil/deFile.c',
+                        '<(deqp_dir)/framework/delibs/deutil/deProcess.c',
+                        '<(deqp_dir)/framework/delibs/deutil/deSocket.c',
+                        '<(deqp_dir)/framework/delibs/deutil/deTimer.c',
+                        '<(deqp_dir)/framework/delibs/deutil/deTimerTest.c',
+                        '<(deqp_dir)/framework/egl/egluCallLogWrapper.cpp',
+                        '<(deqp_dir)/framework/egl/egluConfigFilter.cpp',
+                        '<(deqp_dir)/framework/egl/egluConfigInfo.cpp',
+                        '<(deqp_dir)/framework/egl/egluDefs.cpp',
+                        '<(deqp_dir)/framework/egl/egluGLContextFactory.cpp',
+                        '<(deqp_dir)/framework/egl/egluGLFunctionLoader.cpp',
+                        '<(deqp_dir)/framework/egl/egluGLFunctionLoader.cpp',
+                        '<(deqp_dir)/framework/egl/egluGLUtil.cpp',
+                        '<(deqp_dir)/framework/egl/egluNativeDisplay.cpp',
+                        '<(deqp_dir)/framework/egl/egluNativePixmap.cpp',
+                        '<(deqp_dir)/framework/egl/egluNativeWindow.cpp',
+                        '<(deqp_dir)/framework/egl/egluPlatform.cpp',
+                        '<(deqp_dir)/framework/egl/egluStaticESLibrary.cpp',
+                        '<(deqp_dir)/framework/egl/egluStrUtil.cpp',
+                        '<(deqp_dir)/framework/egl/egluUnique.cpp',
+                        '<(deqp_dir)/framework/egl/egluUtil.cpp',
+                        '<(deqp_dir)/framework/egl/wrapper/eglwDefs.cpp',
+                        '<(deqp_dir)/framework/egl/wrapper/eglwFunctions.cpp',
+                        '<(deqp_dir)/framework/egl/wrapper/eglwLibrary.cpp',
+                        '<(deqp_dir)/framework/opengl/gluCallLogWrapper.cpp',
+                        '<(deqp_dir)/framework/opengl/gluContextFactory.cpp',
+                        '<(deqp_dir)/framework/opengl/gluContextInfo.cpp',
+                        '<(deqp_dir)/framework/opengl/gluDefs.cpp',
+                        '<(deqp_dir)/framework/opengl/gluDrawUtil.cpp',
+                        '<(deqp_dir)/framework/opengl/gluDummyRenderContext.cpp',
+                        '<(deqp_dir)/framework/opengl/gluES3PlusWrapperContext.cpp',
+                        '<(deqp_dir)/framework/opengl/gluFboRenderContext.cpp',
+                        '<(deqp_dir)/framework/opengl/gluObjectWrapper.cpp',
+                        '<(deqp_dir)/framework/opengl/gluPixelTransfer.cpp',
+                        '<(deqp_dir)/framework/opengl/gluPlatform.cpp',
+                        '<(deqp_dir)/framework/opengl/gluProgramInterfaceQuery.cpp',
+                        '<(deqp_dir)/framework/opengl/gluRenderConfig.cpp',
+                        '<(deqp_dir)/framework/opengl/gluRenderContext.cpp',
+                        '<(deqp_dir)/framework/opengl/gluShaderProgram.cpp',
+                        '<(deqp_dir)/framework/opengl/gluShaderUtil.cpp',
+                        '<(deqp_dir)/framework/opengl/gluStateReset.cpp',
+                        '<(deqp_dir)/framework/opengl/gluStrUtil.cpp',
+                        '<(deqp_dir)/framework/opengl/gluTexture.cpp',
+                        '<(deqp_dir)/framework/opengl/gluTextureUtil.cpp',
+                        '<(deqp_dir)/framework/opengl/gluVarType.cpp',
+                        '<(deqp_dir)/framework/opengl/gluVarTypeUtil.cpp',
+                        '<(deqp_dir)/framework/opengl/simplereference/sglrContext.cpp',
+                        '<(deqp_dir)/framework/opengl/simplereference/sglrContextUtil.cpp',
+                        '<(deqp_dir)/framework/opengl/simplereference/sglrContextWrapper.cpp',
+                        '<(deqp_dir)/framework/opengl/simplereference/sglrGLContext.cpp',
+                        '<(deqp_dir)/framework/opengl/simplereference/sglrReferenceContext.cpp',
+                        '<(deqp_dir)/framework/opengl/simplereference/sglrReferenceUtils.cpp',
+                        '<(deqp_dir)/framework/opengl/simplereference/sglrShaderProgram.cpp',
+                        '<(deqp_dir)/framework/opengl/wrapper/glwDefs.cpp',
+                        '<(deqp_dir)/framework/opengl/wrapper/glwFunctions.cpp',
+                        '<(deqp_dir)/framework/opengl/wrapper/glwInitES20Direct.cpp',
+                        '<(deqp_dir)/framework/opengl/wrapper/glwInitES30Direct.cpp',
+                        '<(deqp_dir)/framework/opengl/wrapper/glwInitFunctions.cpp',
+                        '<(deqp_dir)/framework/opengl/wrapper/glwWrapper.cpp',
+                        '<(deqp_dir)/framework/platform/null/tcuNullContextFactory.cpp',
+                        '<(deqp_dir)/framework/platform/null/tcuNullContextFactory.hpp',
+                        '<(deqp_dir)/framework/platform/null/tcuNullRenderContext.cpp',
+                        '<(deqp_dir)/framework/qphelper/qpCrashHandler.c',
+                        '<(deqp_dir)/framework/qphelper/qpDebugOut.c',
+                        '<(deqp_dir)/framework/qphelper/qpInfo.c',
+                        '<(deqp_dir)/framework/qphelper/qpTestLog.c',
+                        '<(deqp_dir)/framework/qphelper/qpWatchDog.c',
+                        '<(deqp_dir)/framework/qphelper/qpXmlWriter.c',
+                        '<(deqp_dir)/framework/randomshaders/rsgBinaryOps.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgBuiltinFunctions.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgDefs.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgExecutionContext.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgExpression.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgExpressionGenerator.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgFunctionGenerator.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgGeneratorState.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgNameAllocator.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgParameters.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgPrettyPrinter.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgProgramExecutor.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgProgramGenerator.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgSamplers.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgShader.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgShaderGenerator.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgStatement.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgToken.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgUtils.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgVariable.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgVariableManager.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgVariableType.cpp',
+                        '<(deqp_dir)/framework/randomshaders/rsgVariableValue.cpp',
+                        '<(deqp_dir)/framework/referencerenderer/rrDefs.cpp',
+                        '<(deqp_dir)/framework/referencerenderer/rrFragmentOperations.cpp',
+                        '<(deqp_dir)/framework/referencerenderer/rrMultisamplePixelBufferAccess.cpp',
+                        '<(deqp_dir)/framework/referencerenderer/rrPrimitivePacket.cpp',
+                        '<(deqp_dir)/framework/referencerenderer/rrRasterizer.cpp',
+                        '<(deqp_dir)/framework/referencerenderer/rrRenderer.cpp',
+                        '<(deqp_dir)/framework/referencerenderer/rrShaders.cpp',
+                        '<(deqp_dir)/framework/referencerenderer/rrShadingContext.cpp',
+                        '<(deqp_dir)/framework/referencerenderer/rrVertexAttrib.cpp',
+                        '<(deqp_dir)/framework/referencerenderer/rrVertexPacket.cpp',
+                        '<(deqp_dir)/modules/glshared/glsAttributeLocationTests.cpp',
+                        '<(deqp_dir)/modules/glshared/glsBufferTestUtil.cpp',
+                        '<(deqp_dir)/modules/glshared/glsBuiltinPrecisionTests.cpp',
+                        '<(deqp_dir)/modules/glshared/glsCalibration.cpp',
+                        '<(deqp_dir)/modules/glshared/glsDrawTest.cpp',
+                        '<(deqp_dir)/modules/glshared/glsFboCompletenessTests.cpp',
+                        '<(deqp_dir)/modules/glshared/glsFboUtil.cpp',
+                        '<(deqp_dir)/modules/glshared/glsFragmentOpUtil.cpp',
+                        '<(deqp_dir)/modules/glshared/glsFragOpInteractionCase.cpp',
+                        '<(deqp_dir)/modules/glshared/glsInteractionTestUtil.cpp',
+                        '<(deqp_dir)/modules/glshared/glsLifetimeTests.cpp',
+                        '<(deqp_dir)/modules/glshared/glsLongStressCase.cpp',
+                        '<(deqp_dir)/modules/glshared/glsLongStressTestUtil.cpp',
+                        '<(deqp_dir)/modules/glshared/glsMemoryStressCase.cpp',
+                        '<(deqp_dir)/modules/glshared/glsRandomShaderCase.cpp',
+                        '<(deqp_dir)/modules/glshared/glsRandomShaderProgram.cpp',
+                        '<(deqp_dir)/modules/glshared/glsRandomUniformBlockCase.cpp',
+                        '<(deqp_dir)/modules/glshared/glsRasterizationTestUtil.cpp',
+                        '<(deqp_dir)/modules/glshared/glsSamplerObjectTest.cpp',
+                        '<(deqp_dir)/modules/glshared/glsScissorTests.cpp',
+                        '<(deqp_dir)/modules/glshared/glsShaderConstExprTests.cpp',
+                        '<(deqp_dir)/modules/glshared/glsShaderExecUtil.cpp',
+                        '<(deqp_dir)/modules/glshared/glsShaderLibraryCase.cpp',
+                        '<(deqp_dir)/modules/glshared/glsShaderLibrary.cpp',
+                        '<(deqp_dir)/modules/glshared/glsShaderPerformanceCase.cpp',
+                        '<(deqp_dir)/modules/glshared/glsShaderPerformanceMeasurer.cpp',
+                        '<(deqp_dir)/modules/glshared/glsShaderRenderCase.cpp',
+                        '<(deqp_dir)/modules/glshared/glsStateQueryUtil.cpp',
+                        '<(deqp_dir)/modules/glshared/glsStateChangePerfTestCases.cpp',
+                        '<(deqp_dir)/modules/glshared/glsTextureBufferCase.cpp',
+                        '<(deqp_dir)/modules/glshared/glsTextureStateQueryTests.cpp',
+                        '<(deqp_dir)/modules/glshared/glsTextureTestUtil.cpp',
+                        '<(deqp_dir)/modules/glshared/glsUniformBlockCase.cpp',
+                        '<(deqp_dir)/modules/glshared/glsVertexArrayTests.cpp',
+                    ],
+                    'conditions':
+                    [
+                        ['OS=="win"',
+                        {
+                            'sources':
+                            [
+                                '<(deqp_dir)/framework/delibs/dethread/win32/deMutexWin32.c',
+                                '<(deqp_dir)/framework/delibs/dethread/win32/deSemaphoreWin32.c',
+                                '<(deqp_dir)/framework/delibs/dethread/win32/deThreadLocalWin32.c',
+                                '<(deqp_dir)/framework/delibs/dethread/win32/deThreadWin32.c',
+                            ]
+                        }],
+                        ['use_x11==1',
+                        {
+                            'sources':
+                            [
+                                '<(deqp_dir)/framework/delibs/dethread/unix/deMutexUnix.c',
+                                '<(deqp_dir)/framework/delibs/dethread/unix/deNamedSemaphoreUnix.c',
+                                '<(deqp_dir)/framework/delibs/dethread/unix/deSemaphoreUnix.c',
+                                '<(deqp_dir)/framework/delibs/dethread/unix/deThreadLocalUnix.c',
+                                '<(deqp_dir)/framework/delibs/dethread/unix/deThreadUnix.c',
+                            ]
+                        }],
+                    ]
+                },
+
+                {
+                    'target_name': 'angle_deqp_libtester',
+                    'type': 'static_library',
+                    'dependencies':
+                    [
+                        'angle_deqp_libbase',
+                        '<(angle_path)/util/util.gyp:angle_util',
+                    ],
+                    'export_dependent_settings':
+                    [
+                        'angle_deqp_libbase',
+                    ],
+                    'sources':
+                    [
+                        'deqp_support/tcuANGLENativeDisplayFactory.cpp',
+                        'deqp_support/tcuANGLENativeDisplayFactory.h',
+                        # TODO(jmadill): integrate with dEQP
+                        'deqp_support/tcuRandomOrderExecutor.cpp',
+                        'deqp_support/tcuRandomOrderExecutor.h',
+                        'deqp_support/tcuMainProxy.cpp'
+                    ],
+                },
+
+                {
+                    'target_name': 'angle_deqp_libgles2',
+                    'type': 'shared_library',
+                    'dependencies':
+                    [
+                        'angle_deqp_libtester',
+                        '<(angle_path)/util/util.gyp:angle_util',
+                    ],
+                    'defines':
+                    [
+                        'ANGLE_DEQP_GLES2_TESTS',
+                        'ANGLE_DEQP_LIBTESTER_IMPLEMENTATION',
+                    ],
+                    'sources':
+                    [
+                        '<@(deqp_gles2_sources)',
+                        'deqp_support/angle_deqp_libtester_main.cpp',
+                        'deqp_support/tcuANGLEPlatform.cpp',
+                    ],
+                },
+
+                {
+                    'target_name': 'angle_deqp_libgles3',
+                    'type': 'shared_library',
+                    'dependencies':
+                    [
+                        'angle_deqp_libtester',
+                        '<(angle_path)/util/util.gyp:angle_util',
+                    ],
+                    'defines':
+                    [
+                        'ANGLE_DEQP_GLES3_TESTS',
+                        'ANGLE_DEQP_LIBTESTER_IMPLEMENTATION',
+                    ],
+                    'sources':
+                    [
+                        '<@(deqp_gles3_sources)',
+                        'deqp_support/angle_deqp_libtester_main.cpp',
+                        'deqp_support/tcuANGLEPlatform.cpp',
+                    ],
+                },
+
+                {
+                    'target_name': 'angle_deqp_gles2_tests',
+                    'type': 'executable',
+                    'defines':
+                    [
+                        # Hard-code the path to dEQP. This lets the
+                        # app locate the data folder without need
+                        # for a copy. gyp recursive copies are not
+                        # implemented properly on Windows.
+                        'ANGLE_DEQP_DIR="<(DEPTH)/src/tests/<(deqp_dir)"',
+                    ],
+                    'dependencies':
+                    [
+                        'angle_deqp_libgles2',
+                    ],
+                    'sources':
+                    [
+                        'deqp_support/angle_deqp_tests_main.cpp',
+                    ],
+                },
+
+                {
+                    'target_name': 'angle_deqp_gles3_tests',
+                    'type': 'executable',
+                    'defines':
+                    [
+                        # Hard-code the path to dEQP. This lets the
+                        # app locate the data folder without need
+                        # for a copy. gyp recursive copies are not
+                        # implemented properly on Windows.
+                        'ANGLE_DEQP_DIR="<(DEPTH)/src/tests/<(deqp_dir)"',
+                    ],
+                    'dependencies':
+                    [
+                        'angle_deqp_libgles3',
+                    ],
+                    'sources':
+                    [
+                        'deqp_support/angle_deqp_tests_main.cpp',
+                    ],
+                },
+            ], # targets
             'conditions':
             [
                 ['OS=="win"',
                 {
                     'targets':
                     [
-                        {
-                            'target_name': 'angle_zlib',
-                            'type': 'static_library',
-                            'includes': [ '../../build/common_defines.gypi', ],
-                            'include_dirs':
-                            [
-                                '<(zlib_dir)',
-                            ],
-                            'direct_dependent_settings':
-                            {
-                                'include_dirs':
-                                [
-                                    '<(zlib_dir)',
-                                ],
-                            },
-                            'msvs_settings':
-                            {
-                                'VCCLCompilerTool':
-                                {
-                                    'AdditionalOptions':
-                                    [
-                                        '/wd4131', # old-style declarator
-                                        '/wd4244', # Conversion from 'type1' to 'type2', possible loss of data
-                                        '/wd4324', # structure was padded
-                                        '/wd4701', # potentially uninit used
-                                        '/wd4996', # deprecated
-                                    ],
-                                },
-                            },
-                            'sources':
-                            [
-                                '<(zlib_dir)/adler32.c',
-                                '<(zlib_dir)/compress.c',
-                                '<(zlib_dir)/crc32.c',
-                                '<(zlib_dir)/crc32.h',
-                                '<(zlib_dir)/deflate.c',
-                                '<(zlib_dir)/deflate.h',
-                                '<(zlib_dir)/gzclose.c',
-                                '<(zlib_dir)/gzguts.h',
-                                '<(zlib_dir)/gzlib.c',
-                                '<(zlib_dir)/gzread.c',
-                                '<(zlib_dir)/gzwrite.c',
-                                '<(zlib_dir)/infback.c',
-                                '<(zlib_dir)/inffast.c',
-                                '<(zlib_dir)/inffast.h',
-                                '<(zlib_dir)/inffixed.h',
-                                '<(zlib_dir)/inflate.c',
-                                '<(zlib_dir)/inflate.h',
-                                '<(zlib_dir)/inftrees.c',
-                                '<(zlib_dir)/inftrees.h',
-                                '<(zlib_dir)/mozzconf.h',
-                                '<(zlib_dir)/trees.c',
-                                '<(zlib_dir)/trees.h',
-                                '<(zlib_dir)/uncompr.c',
-                                '<(zlib_dir)/x86.h',
-                                '<(zlib_dir)/zconf.h',
-                                '<(zlib_dir)/zlib.h',
-                                '<(zlib_dir)/zutil.c',
-                                '<(zlib_dir)/zutil.h',
-                                '<(zlib_dir)/simd_stub.c',
-                            ],
-                        },
-
-                        {
-                            'target_name': 'angle_libpng',
-                            'type': 'static_library',
-                            'includes': [ '../../build/common_defines.gypi', ],
-                            'dependencies':
-                            [
-                                'angle_zlib'
-                            ],
-                            'msvs_settings':
-                            {
-                                'VCCLCompilerTool':
-                                {
-                                    'AdditionalOptions':
-                                    [
-                                        '/wd4018', # signed/unsigned mismatch
-                                        '/wd4028', # parameter differs from decl
-                                        '/wd4101', # unreferenced local
-                                        '/wd4189', # unreferenced but initted
-                                        '/wd4244', # Conversion from 'type1' to 'type2', possible loss of data
-                                    ],
-                                },
-                            },
-                            'sources':
-                            [
-                                '<(libpng_dir)/png.c',
-                                '<(libpng_dir)/pngerror.c',
-                                '<(libpng_dir)/pngget.c',
-                                '<(libpng_dir)/pngmem.c',
-                                '<(libpng_dir)/pngpread.c',
-                                '<(libpng_dir)/pngread.c',
-                                '<(libpng_dir)/pngrio.c',
-                                '<(libpng_dir)/pngrtran.c',
-                                '<(libpng_dir)/pngrutil.c',
-                                '<(libpng_dir)/pngset.c',
-                                '<(libpng_dir)/pngtrans.c',
-                                '<(libpng_dir)/pngwio.c',
-                                '<(libpng_dir)/pngwrite.c',
-                                '<(libpng_dir)/pngwtran.c',
-                                '<(libpng_dir)/pngwutil.c',
-                            ],
-                        },
-
-                        {
-                            'target_name': 'angle_deqp_decpp',
-                            'type': 'static_library',
-                            'msvs_disabled_warnings':
-                            [
-                                '<@(deqp_msvs_disabled_warnings)',
-                            ],
-                            'msvs_settings':
-                            {
-                                'VCCLCompilerTool':
-                                {
-                                    'AdditionalOptions':
-                                    [
-                                        '/EHsc',   # dEQP requires exceptions
-                                    ],
-                                },
-                            },
-                            'defines': ['<@(deqp_defines)'],
-                            'include_dirs': ['<@(deqp_include_dirs)'],
-                            'direct_dependent_settings':
-                            {
-                                'msvs_disabled_warnings':
-                                [
-                                    '<@(deqp_msvs_disabled_warnings)',
-                                ],
-                                'msvs_settings':
-                                {
-                                    'VCCLCompilerTool':
-                                    {
-                                        'AdditionalOptions':
-                                        [
-                                            '/EHsc',   # dEQP requires exceptions
-                                        ],
-                                    },
-                                    'VCLinkerTool':
-                                    {
-                                        'AdditionalDependencies':
-                                        [
-                                            'dbghelp.lib',
-                                            'gdi32.lib',
-                                            'user32.lib',
-                                            'ws2_32.lib',
-                                        ],
-                                    },
-                                },
-                                'include_dirs': ['<@(deqp_include_dirs)'],
-                                'defines': ['<@(deqp_defines)'],
-                            },
-                            'sources':
-                            [
-                                '<(deqp_dir)/framework/delibs/decpp/deArrayBuffer.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deBlockBuffer.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deCommandLine.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deDefs.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deDirectoryIterator.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deDynamicLibrary.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deFilePath.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deMemPool.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deMutex.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/dePoolArray.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/dePoolString.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deProcess.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deRandom.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deRingBuffer.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deSemaphore.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deSharedPtr.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deSocket.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deSTLUtil.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deStringUtil.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deThread.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deThreadLocal.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deThreadSafeRingBuffer.cpp',
-                                '<(deqp_dir)/framework/delibs/decpp/deUniquePtr.cpp',
-                            ],
-                        },
-
-                        {
-                            'target_name': 'angle_deqp_libtester',
-                            'type': 'static_library',
-                            'dependencies':
-                            [
-                                'angle_deqp_decpp',
-                                'angle_libpng',
-                                '<(angle_path)/src/angle.gyp:libEGL',
-                                '<(angle_path)/util/util.gyp:angle_util',
-                            ],
-                            'include_dirs':
-                            [
-                                '<(angle_path)/include',
-                            ],
-                            'direct_dependent_settings':
-                            {
-                                'include_dirs':
-                                [
-                                    '<(angle_path)/include',
-                                ],
-                                'defines':
-                                [
-                                    'ANGLE_DEQP_LIBTESTER_IMPLEMENTATION',
-                                ],
-                            },
-                            'msvs_settings':
-                            {
-                                'VCCLCompilerTool':
-                                {
-                                    'AdditionalOptions':
-                                    [
-                                        '/bigobj', # needed for glsBuiltinPrecisionTests.cpp
-                                    ],
-                                },
-                            },
-                            'export_dependent_settings':
-                            [
-                                'angle_deqp_decpp',
-                            ],
-                            'sources':
-                            [
-                                '<(deqp_dir)/execserver/xsDefs.cpp',
-                                '<(deqp_dir)/execserver/xsExecutionServer.cpp',
-                                '<(deqp_dir)/execserver/xsPosixFileReader.cpp',
-                                '<(deqp_dir)/execserver/xsPosixTestProcess.cpp',
-                                '<(deqp_dir)/execserver/xsProtocol.cpp',
-                                '<(deqp_dir)/execserver/xsTcpServer.cpp',
-                                '<(deqp_dir)/execserver/xsTestDriver.cpp',
-                                '<(deqp_dir)/execserver/xsTestProcess.cpp',
-                                '<(deqp_dir)/executor/xeBatchExecutor.cpp',
-                                '<(deqp_dir)/executor/xeBatchResult.cpp',
-                                '<(deqp_dir)/executor/xeCallQueue.cpp',
-                                '<(deqp_dir)/executor/xeCommLink.cpp',
-                                '<(deqp_dir)/executor/xeContainerFormatParser.cpp',
-                                '<(deqp_dir)/executor/xeDefs.cpp',
-                                '<(deqp_dir)/executor/xeLocalTcpIpLink.cpp',
-                                '<(deqp_dir)/executor/xeTcpIpLink.cpp',
-                                '<(deqp_dir)/executor/xeTestCase.cpp',
-                                '<(deqp_dir)/executor/xeTestCaseListParser.cpp',
-                                '<(deqp_dir)/executor/xeTestCaseResult.cpp',
-                                '<(deqp_dir)/executor/xeTestLogParser.cpp',
-                                '<(deqp_dir)/executor/xeTestLogWriter.cpp',
-                                '<(deqp_dir)/executor/xeTestResultParser.cpp',
-                                '<(deqp_dir)/executor/xeXMLParser.cpp',
-                                '<(deqp_dir)/executor/xeXMLWriter.cpp',
-                                '<(deqp_dir)/framework/common/tcuApp.cpp',
-                                '<(deqp_dir)/framework/common/tcuBilinearImageCompare.cpp',
-                                '<(deqp_dir)/framework/common/tcuCommandLine.cpp',
-                                '<(deqp_dir)/framework/common/tcuCompressedTexture.cpp',
-                                '<(deqp_dir)/framework/common/tcuCPUWarmup.cpp',
-                                '<(deqp_dir)/framework/common/tcuDefs.cpp',
-                                '<(deqp_dir)/framework/common/tcuEither.cpp',
-                                '<(deqp_dir)/framework/common/tcuFactoryRegistry.cpp',
-                                '<(deqp_dir)/framework/common/tcuFloatFormat.cpp',
-                                '<(deqp_dir)/framework/common/tcuFunctionLibrary.cpp',
-                                '<(deqp_dir)/framework/common/tcuFuzzyImageCompare.cpp',
-                                '<(deqp_dir)/framework/common/tcuImageCompare.cpp',
-                                '<(deqp_dir)/framework/common/tcuImageIO.cpp',
-                                '<(deqp_dir)/framework/common/tcuInterval.cpp',
-                                '<(deqp_dir)/framework/common/tcuPlatform.cpp',
-                                '<(deqp_dir)/framework/common/tcuRandomValueIterator.cpp',
-                                '<(deqp_dir)/framework/common/tcuRenderTarget.cpp',
-                                '<(deqp_dir)/framework/common/tcuResource.cpp',
-                                '<(deqp_dir)/framework/common/tcuResultCollector.cpp',
-                                '<(deqp_dir)/framework/common/tcuRGBA.cpp',
-                                '<(deqp_dir)/framework/common/tcuStringTemplate.cpp',
-                                '<(deqp_dir)/framework/common/tcuSurface.cpp',
-                                '<(deqp_dir)/framework/common/tcuTestCase.cpp',
-                                '<(deqp_dir)/framework/common/tcuTestContext.cpp',
-                                '<(deqp_dir)/framework/common/tcuTestHierarchyIterator.cpp',
-                                '<(deqp_dir)/framework/common/tcuTestHierarchyUtil.cpp',
-                                '<(deqp_dir)/framework/common/tcuTestLog.cpp',
-                                '<(deqp_dir)/framework/common/tcuTestPackage.cpp',
-                                '<(deqp_dir)/framework/common/tcuTestSessionExecutor.cpp',
-                                '<(deqp_dir)/framework/common/tcuTexCompareVerifier.cpp',
-                                '<(deqp_dir)/framework/common/tcuTexLookupVerifier.cpp',
-                                '<(deqp_dir)/framework/common/tcuTexture.cpp',
-                                '<(deqp_dir)/framework/common/tcuTextureUtil.cpp',
-                                '<(deqp_dir)/framework/common/tcuTexVerifierUtil.cpp',
-                                '<(deqp_dir)/framework/common/tcuThreadUtil.cpp',
-                                '<(deqp_dir)/framework/common/tcuSeedBuilder.cpp',
-                                '<(deqp_dir)/framework/delibs/debase/deDefs.c',
-                                '<(deqp_dir)/framework/delibs/debase/deFloat16.c',
-                                '<(deqp_dir)/framework/delibs/debase/deInt32.c',
-                                '<(deqp_dir)/framework/delibs/debase/deInt32Test.c',
-                                '<(deqp_dir)/framework/delibs/debase/deMath.c',
-                                '<(deqp_dir)/framework/delibs/debase/deMemory.c',
-                                '<(deqp_dir)/framework/delibs/debase/deRandom.c',
-                                '<(deqp_dir)/framework/delibs/debase/deString.c',
-                                '<(deqp_dir)/framework/delibs/deimage/deImage.c',
-                                '<(deqp_dir)/framework/delibs/deimage/deTarga.c',
-                                '<(deqp_dir)/framework/delibs/depool/deMemPool.c',
-                                '<(deqp_dir)/framework/delibs/depool/dePoolArray.c',
-                                '<(deqp_dir)/framework/delibs/depool/dePoolHashArray.c',
-                                '<(deqp_dir)/framework/delibs/depool/dePoolHash.c',
-                                '<(deqp_dir)/framework/delibs/depool/dePoolHashSet.c',
-                                '<(deqp_dir)/framework/delibs/depool/dePoolHeap.c',
-                                '<(deqp_dir)/framework/delibs/depool/dePoolMultiSet.c',
-                                '<(deqp_dir)/framework/delibs/depool/dePoolSet.c',
-                                '<(deqp_dir)/framework/delibs/depool/dePoolStringBuilder.c',
-                                '<(deqp_dir)/framework/delibs/depool/dePoolTest.c',
-                                '<(deqp_dir)/framework/delibs/destream/deFileStream.c',
-                                '<(deqp_dir)/framework/delibs/destream/deRingbuffer.c',
-                                '<(deqp_dir)/framework/delibs/destream/deStreamCpyThread.c',
-                                '<(deqp_dir)/framework/delibs/destream/deThreadStream.c',
-                                '<(deqp_dir)/framework/delibs/dethread/deAtomic.c',
-                                '<(deqp_dir)/framework/delibs/dethread/deSingleton.c',
-                                '<(deqp_dir)/framework/delibs/dethread/deThreadTest.c',
-                                # TODO(jmadill): other platforms
-                                '<(deqp_dir)/framework/delibs/dethread/win32/deMutexWin32.c',
-                                '<(deqp_dir)/framework/delibs/dethread/win32/deSemaphoreWin32.c',
-                                '<(deqp_dir)/framework/delibs/dethread/win32/deThreadLocalWin32.c',
-                                '<(deqp_dir)/framework/delibs/dethread/win32/deThreadWin32.c',
-                                #'<(deqp_dir)/framework/delibs/dethread/unix/deMutexUnix.c',
-                                #'<(deqp_dir)/framework/delibs/dethread/unix/deNamedSemaphoreUnix.c',
-                                #'<(deqp_dir)/framework/delibs/dethread/unix/deSemaphoreUnix.c',
-                                #'<(deqp_dir)/framework/delibs/dethread/unix/deThreadLocalUnix.c',
-                                #'<(deqp_dir)/framework/delibs/dethread/unix/deThreadUnix.c',
-                                '<(deqp_dir)/framework/delibs/deutil/deClock.c',
-                                '<(deqp_dir)/framework/delibs/deutil/deCommandLine.c',
-                                '<(deqp_dir)/framework/delibs/deutil/deDynamicLibrary.c',
-                                '<(deqp_dir)/framework/delibs/deutil/deFile.c',
-                                '<(deqp_dir)/framework/delibs/deutil/deProcess.c',
-                                '<(deqp_dir)/framework/delibs/deutil/deSocket.c',
-                                '<(deqp_dir)/framework/delibs/deutil/deTimer.c',
-                                '<(deqp_dir)/framework/delibs/deutil/deTimerTest.c',
-                                '<(deqp_dir)/framework/egl/egluCallLogWrapper.cpp',
-                                '<(deqp_dir)/framework/egl/egluConfigFilter.cpp',
-                                '<(deqp_dir)/framework/egl/egluConfigInfo.cpp',
-                                '<(deqp_dir)/framework/egl/egluDefs.cpp',
-                                '<(deqp_dir)/framework/egl/egluGLContextFactory.cpp',
-                                '<(deqp_dir)/framework/egl/egluGLFunctionLoader.cpp',
-                                '<(deqp_dir)/framework/egl/egluGLFunctionLoader.cpp',
-                                '<(deqp_dir)/framework/egl/egluGLUtil.cpp',
-                                '<(deqp_dir)/framework/egl/egluNativeDisplay.cpp',
-                                '<(deqp_dir)/framework/egl/egluNativePixmap.cpp',
-                                '<(deqp_dir)/framework/egl/egluNativeWindow.cpp',
-                                '<(deqp_dir)/framework/egl/egluPlatform.cpp',
-                                '<(deqp_dir)/framework/egl/egluStaticESLibrary.cpp',
-                                '<(deqp_dir)/framework/egl/egluStrUtil.cpp',
-                                '<(deqp_dir)/framework/egl/egluUnique.cpp',
-                                '<(deqp_dir)/framework/egl/egluUtil.cpp',
-                                '<(deqp_dir)/framework/egl/wrapper/eglwDefs.cpp',
-                                '<(deqp_dir)/framework/egl/wrapper/eglwFunctions.cpp',
-                                '<(deqp_dir)/framework/egl/wrapper/eglwLibrary.cpp',
-                                '<(deqp_dir)/framework/opengl/gluCallLogWrapper.cpp',
-                                '<(deqp_dir)/framework/opengl/gluContextFactory.cpp',
-                                '<(deqp_dir)/framework/opengl/gluContextInfo.cpp',
-                                '<(deqp_dir)/framework/opengl/gluDefs.cpp',
-                                '<(deqp_dir)/framework/opengl/gluDrawUtil.cpp',
-                                '<(deqp_dir)/framework/opengl/gluDummyRenderContext.cpp',
-                                '<(deqp_dir)/framework/opengl/gluES3PlusWrapperContext.cpp',
-                                '<(deqp_dir)/framework/opengl/gluFboRenderContext.cpp',
-                                '<(deqp_dir)/framework/opengl/gluObjectWrapper.cpp',
-                                '<(deqp_dir)/framework/opengl/gluPixelTransfer.cpp',
-                                '<(deqp_dir)/framework/opengl/gluPlatform.cpp',
-                                '<(deqp_dir)/framework/opengl/gluProgramInterfaceQuery.cpp',
-                                '<(deqp_dir)/framework/opengl/gluRenderConfig.cpp',
-                                '<(deqp_dir)/framework/opengl/gluRenderContext.cpp',
-                                '<(deqp_dir)/framework/opengl/gluShaderProgram.cpp',
-                                '<(deqp_dir)/framework/opengl/gluShaderUtil.cpp',
-                                '<(deqp_dir)/framework/opengl/gluStateReset.cpp',
-                                '<(deqp_dir)/framework/opengl/gluStrUtil.cpp',
-                                '<(deqp_dir)/framework/opengl/gluTexture.cpp',
-                                '<(deqp_dir)/framework/opengl/gluTextureUtil.cpp',
-                                '<(deqp_dir)/framework/opengl/gluVarType.cpp',
-                                '<(deqp_dir)/framework/opengl/gluVarTypeUtil.cpp',
-                                '<(deqp_dir)/framework/opengl/simplereference/sglrContext.cpp',
-                                '<(deqp_dir)/framework/opengl/simplereference/sglrContextUtil.cpp',
-                                '<(deqp_dir)/framework/opengl/simplereference/sglrContextWrapper.cpp',
-                                '<(deqp_dir)/framework/opengl/simplereference/sglrGLContext.cpp',
-                                '<(deqp_dir)/framework/opengl/simplereference/sglrReferenceContext.cpp',
-                                '<(deqp_dir)/framework/opengl/simplereference/sglrReferenceUtils.cpp',
-                                '<(deqp_dir)/framework/opengl/simplereference/sglrShaderProgram.cpp',
-                                '<(deqp_dir)/framework/opengl/wrapper/glwDefs.cpp',
-                                '<(deqp_dir)/framework/opengl/wrapper/glwFunctions.cpp',
-                                '<(deqp_dir)/framework/opengl/wrapper/glwInitES20Direct.cpp',
-                                '<(deqp_dir)/framework/opengl/wrapper/glwInitES30Direct.cpp',
-                                '<(deqp_dir)/framework/opengl/wrapper/glwInitFunctions.cpp',
-                                '<(deqp_dir)/framework/opengl/wrapper/glwWrapper.cpp',
-                                '<(deqp_dir)/framework/platform/null/tcuNullContextFactory.cpp',
-                                '<(deqp_dir)/framework/platform/null/tcuNullContextFactory.hpp',
-                                '<(deqp_dir)/framework/platform/null/tcuNullRenderContext.cpp',
-                                '<(deqp_dir)/framework/platform/tcuMain.cpp',
-                                '<(deqp_dir)/framework/qphelper/qpCrashHandler.c',
-                                '<(deqp_dir)/framework/qphelper/qpDebugOut.c',
-                                '<(deqp_dir)/framework/qphelper/qpInfo.c',
-                                '<(deqp_dir)/framework/qphelper/qpTestLog.c',
-                                '<(deqp_dir)/framework/qphelper/qpWatchDog.c',
-                                '<(deqp_dir)/framework/qphelper/qpXmlWriter.c',
-                                '<(deqp_dir)/framework/randomshaders/rsgBinaryOps.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgBuiltinFunctions.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgDefs.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgExecutionContext.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgExpression.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgExpressionGenerator.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgFunctionGenerator.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgGeneratorState.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgNameAllocator.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgParameters.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgPrettyPrinter.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgProgramExecutor.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgProgramGenerator.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgSamplers.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgShader.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgShaderGenerator.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgStatement.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgToken.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgUtils.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgVariable.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgVariableManager.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgVariableType.cpp',
-                                '<(deqp_dir)/framework/randomshaders/rsgVariableValue.cpp',
-                                '<(deqp_dir)/framework/referencerenderer/rrDefs.cpp',
-                                '<(deqp_dir)/framework/referencerenderer/rrFragmentOperations.cpp',
-                                '<(deqp_dir)/framework/referencerenderer/rrMultisamplePixelBufferAccess.cpp',
-                                '<(deqp_dir)/framework/referencerenderer/rrPrimitivePacket.cpp',
-                                '<(deqp_dir)/framework/referencerenderer/rrRasterizer.cpp',
-                                '<(deqp_dir)/framework/referencerenderer/rrRenderer.cpp',
-                                '<(deqp_dir)/framework/referencerenderer/rrShaders.cpp',
-                                '<(deqp_dir)/framework/referencerenderer/rrShadingContext.cpp',
-                                '<(deqp_dir)/framework/referencerenderer/rrVertexAttrib.cpp',
-                                '<(deqp_dir)/framework/referencerenderer/rrVertexPacket.cpp',
-                                '<(deqp_dir)/modules/glshared/glsAttributeLocationTests.cpp',
-                                '<(deqp_dir)/modules/glshared/glsBufferTestUtil.cpp',
-                                '<(deqp_dir)/modules/glshared/glsBuiltinPrecisionTests.cpp',
-                                '<(deqp_dir)/modules/glshared/glsCalibration.cpp',
-                                '<(deqp_dir)/modules/glshared/glsDrawTest.cpp',
-                                '<(deqp_dir)/modules/glshared/glsFboCompletenessTests.cpp',
-                                '<(deqp_dir)/modules/glshared/glsFboUtil.cpp',
-                                '<(deqp_dir)/modules/glshared/glsFragmentOpUtil.cpp',
-                                '<(deqp_dir)/modules/glshared/glsFragOpInteractionCase.cpp',
-                                '<(deqp_dir)/modules/glshared/glsInteractionTestUtil.cpp',
-                                '<(deqp_dir)/modules/glshared/glsLifetimeTests.cpp',
-                                '<(deqp_dir)/modules/glshared/glsLongStressCase.cpp',
-                                '<(deqp_dir)/modules/glshared/glsLongStressTestUtil.cpp',
-                                '<(deqp_dir)/modules/glshared/glsMemoryStressCase.cpp',
-                                '<(deqp_dir)/modules/glshared/glsRandomShaderCase.cpp',
-                                '<(deqp_dir)/modules/glshared/glsRandomShaderProgram.cpp',
-                                '<(deqp_dir)/modules/glshared/glsRandomUniformBlockCase.cpp',
-                                '<(deqp_dir)/modules/glshared/glsRasterizationTestUtil.cpp',
-                                '<(deqp_dir)/modules/glshared/glsSamplerObjectTest.cpp',
-                                '<(deqp_dir)/modules/glshared/glsScissorTests.cpp',
-                                '<(deqp_dir)/modules/glshared/glsShaderConstExprTests.cpp',
-                                '<(deqp_dir)/modules/glshared/glsShaderExecUtil.cpp',
-                                '<(deqp_dir)/modules/glshared/glsShaderLibraryCase.cpp',
-                                '<(deqp_dir)/modules/glshared/glsShaderLibrary.cpp',
-                                '<(deqp_dir)/modules/glshared/glsShaderPerformanceCase.cpp',
-                                '<(deqp_dir)/modules/glshared/glsShaderPerformanceMeasurer.cpp',
-                                '<(deqp_dir)/modules/glshared/glsShaderRenderCase.cpp',
-                                '<(deqp_dir)/modules/glshared/glsStateQueryUtil.cpp',
-                                '<(deqp_dir)/modules/glshared/glsStateChangePerfTestCases.cpp',
-                                '<(deqp_dir)/modules/glshared/glsTextureBufferCase.cpp',
-                                '<(deqp_dir)/modules/glshared/glsTextureStateQueryTests.cpp',
-                                '<(deqp_dir)/modules/glshared/glsTextureTestUtil.cpp',
-                                '<(deqp_dir)/modules/glshared/glsUniformBlockCase.cpp',
-                                '<(deqp_dir)/modules/glshared/glsVertexArrayTests.cpp',
-                                # TODO(jmadill): other platforms
-                                'deqp_support/tcuANGLEWin32NativeDisplayFactory.cpp',
-                                'deqp_support/tcuANGLEWin32NativeDisplayFactory.h',
-                                # TODO(jmadill): integrate with dEQP
-                                'deqp_support/tcuRandomOrderExecutor.cpp',
-                                'deqp_support/tcuRandomOrderExecutor.h',
-                            ],
-                        },
-
-                        {
-                            'target_name': 'angle_deqp_libgles2',
-                            'type': 'shared_library',
-                            'dependencies':
-                            [
-                                'angle_deqp_libtester',
-                                '<(angle_path)/util/util.gyp:angle_util',
-                            ],
-                            'defines':
-                            [
-                                'ANGLE_DEQP_GLES2_TESTS',
-                            ],
-                            'sources':
-                            [
-                                '<@(deqp_gles2_sources)',
-                                'deqp_support/angle_deqp_libtester_main.cpp',
-                                'deqp_support/tcuANGLEWin32Platform.cpp',
-                            ],
-                        },
-
-                        {
-                            'target_name': 'angle_deqp_libgles3',
-                            'type': 'shared_library',
-                            'dependencies':
-                            [
-                                'angle_deqp_libtester',
-                                '<(angle_path)/util/util.gyp:angle_util',
-                            ],
-                            'defines':
-                            [
-                                'ANGLE_DEQP_GLES3_TESTS',
-                            ],
-                            'sources':
-                            [
-                                '<@(deqp_gles3_sources)',
-                                'deqp_support/angle_deqp_libtester_main.cpp',
-                                'deqp_support/tcuANGLEWin32Platform.cpp',
-                            ],
-                        },
-
-                        {
-                            'target_name': 'angle_deqp_gles2_tests',
-                            'type': 'executable',
-                            'defines':
-                            [
-                                # Hard-code the path to dEQP. This lets the
-                                # app locate the data folder without need
-                                # for a copy. gyp recursive copies are not
-                                # implemented properly on Windows.
-                                'ANGLE_DEQP_DIR="<(DEPTH)/src/tests/<(deqp_dir)"',
-                            ],
-                            'dependencies':
-                            [
-                                'angle_deqp_libgles2',
-                            ],
-                            'sources':
-                            [
-                                'deqp_support/angle_deqp_tests_main.cpp',
-                            ],
-                        },
-
-                        {
-                            'target_name': 'angle_deqp_gles3_tests',
-                            'type': 'executable',
-                            'defines':
-                            [
-                                # Hard-code the path to dEQP. This lets the
-                                # app locate the data folder without need
-                                # for a copy. gyp recursive copies are not
-                                # implemented properly on Windows.
-                                'ANGLE_DEQP_DIR="<(DEPTH)/src/tests/<(deqp_dir)"',
-                            ],
-                            'dependencies':
-                            [
-                                'angle_deqp_libgles3',
-                            ],
-                            'sources':
-                            [
-                                'deqp_support/angle_deqp_tests_main.cpp',
-                            ],
-                        },
-
                         # Helper target for synching our implementation with chrome's
                         {
                             'target_name': 'angle_deqp_gtest_support',
@@ -1176,6 +1263,10 @@
                         {
                             'target_name': 'angle_deqp_googletest',
                             'type': 'executable',
+                            'includes':
+                            [
+                                '../../build/common_defines.gypi',
+                            ],
                             'dependencies':
                             [
                                 'angle_deqp_gtest_support',
@@ -1195,9 +1286,9 @@
                                 'third_party/gpu_test_expectations/gpu_test_expectations_parser.h',
                             ],
                         },
-                    ], # targets
-                }], # OS == "win"
-            ], # conditions
+                    ],
+                }],
+            ],
         }], # angle_standalone
     ],
 }
