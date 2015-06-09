@@ -22,10 +22,15 @@
 
 #if (DE_OS == DE_OS_WIN32)
 #include <Windows.h>
+#elif (DE_OS == DE_OS_UNIX)
+#include <sys/unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #endif
 
-// Located in tcuMain.cc in dEQP's sources.
-int main(int argc, const char* argv[]);
+// Located in tcuMainProxy.cpp.
+int deqp_main(int argc, const char* argv[]);
+
 tcu::Platform *createPlatform();
 
 namespace
@@ -57,14 +62,15 @@ deBool deIsDir(const char *filename)
     return (attribs != INVALID_FILE_ATTRIBUTES) &&
            ((attribs & FILE_ATTRIBUTE_DIRECTORY) > 0);
 }
+#elif (DE_OS == DE_OS_UNIX)
+deBool deIsDir(const char *filename)
+{
+    struct stat st;
+    int result = stat(filename, &st);
+    return result == 0 && ((st.st_mode & S_IFDIR) == S_IFDIR);
+}
 #else
 #error TODO(jmadill): support other platforms
-//deBool deIsDir(const char *filename)
-//{
-//    struct stat st;
-//    int result = stat(filename, &st);
-//    return result == 0 && ((st.st_mode & S_IFDIR) == S_IFDIR);
-//}
 #endif
 
 const char *FindDataDir()
@@ -127,7 +133,7 @@ bool InitPlatform()
 // Exported to the tester app.
 ANGLE_LIBTESTER_EXPORT int deqp_libtester_main(int argc, const char *argv[])
 {
-    return main(argc, argv);
+    return deqp_main(argc, argv);
 }
 
 ANGLE_LIBTESTER_EXPORT void deqp_libtester_shutdown_platform()

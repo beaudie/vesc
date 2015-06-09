@@ -52,8 +52,6 @@
             '<(deqp_path)/framework/common',
             '<(deqp_path)/framework/qphelper',
             '<(deqp_path)/framework/platform/null',
-            # TODO(jmadill): other platforms
-            '<(deqp_path)/framework/platform/win32',
             '<(deqp_path)/framework/egl',
             '<(deqp_path)/framework/egl/wrapper',
             '<(deqp_path)/framework/opengl',
@@ -575,6 +573,50 @@
             '<(deqp_path)/modules/gles3/tes3TestPackage.hpp',
             '<(deqp_path)/modules/gles3/tes3TestPackageEntry.cpp',
         ],
+        'deqp_libtester_c_sources':
+        [
+            '<(deqp_path)/framework/delibs/debase/deDefs.c',
+            '<(deqp_path)/framework/delibs/debase/deFloat16.c',
+            '<(deqp_path)/framework/delibs/debase/deInt32.c',
+            '<(deqp_path)/framework/delibs/debase/deInt32Test.c',
+            '<(deqp_path)/framework/delibs/debase/deMath.c',
+            '<(deqp_path)/framework/delibs/debase/deMemory.c',
+            '<(deqp_path)/framework/delibs/debase/deRandom.c',
+            '<(deqp_path)/framework/delibs/debase/deString.c',
+            '<(deqp_path)/framework/delibs/deimage/deImage.c',
+            '<(deqp_path)/framework/delibs/deimage/deTarga.c',
+            '<(deqp_path)/framework/delibs/depool/deMemPool.c',
+            '<(deqp_path)/framework/delibs/depool/dePoolArray.c',
+            '<(deqp_path)/framework/delibs/depool/dePoolHashArray.c',
+            '<(deqp_path)/framework/delibs/depool/dePoolHash.c',
+            '<(deqp_path)/framework/delibs/depool/dePoolHashSet.c',
+            '<(deqp_path)/framework/delibs/depool/dePoolHeap.c',
+            '<(deqp_path)/framework/delibs/depool/dePoolMultiSet.c',
+            '<(deqp_path)/framework/delibs/depool/dePoolSet.c',
+            '<(deqp_path)/framework/delibs/depool/dePoolStringBuilder.c',
+            '<(deqp_path)/framework/delibs/depool/dePoolTest.c',
+            '<(deqp_path)/framework/delibs/destream/deFileStream.c',
+            '<(deqp_path)/framework/delibs/destream/deRingbuffer.c',
+            '<(deqp_path)/framework/delibs/destream/deStreamCpyThread.c',
+            '<(deqp_path)/framework/delibs/destream/deThreadStream.c',
+            '<(deqp_path)/framework/delibs/dethread/deAtomic.c',
+            '<(deqp_path)/framework/delibs/dethread/deSingleton.c',
+            '<(deqp_path)/framework/delibs/dethread/deThreadTest.c',
+            '<(deqp_path)/framework/delibs/deutil/deClock.c',
+            '<(deqp_path)/framework/delibs/deutil/deCommandLine.c',
+            '<(deqp_path)/framework/delibs/deutil/deDynamicLibrary.c',
+            '<(deqp_path)/framework/delibs/deutil/deFile.c',
+            '<(deqp_path)/framework/delibs/deutil/deProcess.c',
+            '<(deqp_path)/framework/delibs/deutil/deSocket.c',
+            '<(deqp_path)/framework/delibs/deutil/deTimer.c',
+            '<(deqp_path)/framework/delibs/deutil/deTimerTest.c',
+            '<(deqp_path)/framework/qphelper/qpCrashHandler.c',
+            '<(deqp_path)/framework/qphelper/qpDebugOut.c',
+            '<(deqp_path)/framework/qphelper/qpInfo.c',
+            '<(deqp_path)/framework/qphelper/qpTestLog.c',
+            '<(deqp_path)/framework/qphelper/qpWatchDog.c',
+            '<(deqp_path)/framework/qphelper/qpXmlWriter.c',
+        ],
         'deqp_libtester_sources':
         [
             '<(deqp_path)/execserver/xsDefs.cpp',
@@ -637,51 +679,6 @@
             '<(deqp_path)/framework/common/tcuTexVerifierUtil.cpp',
             '<(deqp_path)/framework/common/tcuThreadUtil.cpp',
             '<(deqp_path)/framework/common/tcuSeedBuilder.cpp',
-            '<(deqp_path)/framework/delibs/debase/deDefs.c',
-            '<(deqp_path)/framework/delibs/debase/deFloat16.c',
-            '<(deqp_path)/framework/delibs/debase/deInt32.c',
-            '<(deqp_path)/framework/delibs/debase/deInt32Test.c',
-            '<(deqp_path)/framework/delibs/debase/deMath.c',
-            '<(deqp_path)/framework/delibs/debase/deMemory.c',
-            '<(deqp_path)/framework/delibs/debase/deRandom.c',
-            '<(deqp_path)/framework/delibs/debase/deString.c',
-            '<(deqp_path)/framework/delibs/deimage/deImage.c',
-            '<(deqp_path)/framework/delibs/deimage/deTarga.c',
-            '<(deqp_path)/framework/delibs/depool/deMemPool.c',
-            '<(deqp_path)/framework/delibs/depool/dePoolArray.c',
-            '<(deqp_path)/framework/delibs/depool/dePoolHashArray.c',
-            '<(deqp_path)/framework/delibs/depool/dePoolHash.c',
-            '<(deqp_path)/framework/delibs/depool/dePoolHashSet.c',
-            '<(deqp_path)/framework/delibs/depool/dePoolHeap.c',
-            '<(deqp_path)/framework/delibs/depool/dePoolMultiSet.c',
-            '<(deqp_path)/framework/delibs/depool/dePoolSet.c',
-            '<(deqp_path)/framework/delibs/depool/dePoolStringBuilder.c',
-            '<(deqp_path)/framework/delibs/depool/dePoolTest.c',
-            '<(deqp_path)/framework/delibs/destream/deFileStream.c',
-            '<(deqp_path)/framework/delibs/destream/deRingbuffer.c',
-            '<(deqp_path)/framework/delibs/destream/deStreamCpyThread.c',
-            '<(deqp_path)/framework/delibs/destream/deThreadStream.c',
-            '<(deqp_path)/framework/delibs/dethread/deAtomic.c',
-            '<(deqp_path)/framework/delibs/dethread/deSingleton.c',
-            '<(deqp_path)/framework/delibs/dethread/deThreadTest.c',
-            # TODO(jmadill): other platforms
-            '<(deqp_path)/framework/delibs/dethread/win32/deMutexWin32.c',
-            '<(deqp_path)/framework/delibs/dethread/win32/deSemaphoreWin32.c',
-            '<(deqp_path)/framework/delibs/dethread/win32/deThreadLocalWin32.c',
-            '<(deqp_path)/framework/delibs/dethread/win32/deThreadWin32.c',
-            #'<(deqp_path)/framework/delibs/dethread/unix/deMutexUnix.c',
-            #'<(deqp_path)/framework/delibs/dethread/unix/deNamedSemaphoreUnix.c',
-            #'<(deqp_path)/framework/delibs/dethread/unix/deSemaphoreUnix.c',
-            #'<(deqp_path)/framework/delibs/dethread/unix/deThreadLocalUnix.c',
-            #'<(deqp_path)/framework/delibs/dethread/unix/deThreadUnix.c',
-            '<(deqp_path)/framework/delibs/deutil/deClock.c',
-            '<(deqp_path)/framework/delibs/deutil/deCommandLine.c',
-            '<(deqp_path)/framework/delibs/deutil/deDynamicLibrary.c',
-            '<(deqp_path)/framework/delibs/deutil/deFile.c',
-            '<(deqp_path)/framework/delibs/deutil/deProcess.c',
-            '<(deqp_path)/framework/delibs/deutil/deSocket.c',
-            '<(deqp_path)/framework/delibs/deutil/deTimer.c',
-            '<(deqp_path)/framework/delibs/deutil/deTimerTest.c',
             '<(deqp_path)/framework/egl/egluCallLogWrapper.cpp',
             '<(deqp_path)/framework/egl/egluConfigFilter.cpp',
             '<(deqp_path)/framework/egl/egluConfigInfo.cpp',
@@ -740,12 +737,6 @@
             '<(deqp_path)/framework/platform/null/tcuNullContextFactory.hpp',
             '<(deqp_path)/framework/platform/null/tcuNullRenderContext.cpp',
             '<(deqp_path)/framework/platform/tcuMain.cpp',
-            '<(deqp_path)/framework/qphelper/qpCrashHandler.c',
-            '<(deqp_path)/framework/qphelper/qpDebugOut.c',
-            '<(deqp_path)/framework/qphelper/qpInfo.c',
-            '<(deqp_path)/framework/qphelper/qpTestLog.c',
-            '<(deqp_path)/framework/qphelper/qpWatchDog.c',
-            '<(deqp_path)/framework/qphelper/qpXmlWriter.c',
             '<(deqp_path)/framework/randomshaders/rsgBinaryOps.cpp',
             '<(deqp_path)/framework/randomshaders/rsgBuiltinFunctions.cpp',
             '<(deqp_path)/framework/randomshaders/rsgDefs.cpp',
@@ -813,18 +804,56 @@
             '<(deqp_path)/modules/glshared/glsTextureTestUtil.cpp',
             '<(deqp_path)/modules/glshared/glsUniformBlockCase.cpp',
             '<(deqp_path)/modules/glshared/glsVertexArrayTests.cpp',
-            # TODO(jmadill): other platforms
-            '<(angle_path)/src/tests/deqp_support/tcuANGLEWin32NativeDisplayFactory.cpp',
-            '<(angle_path)/src/tests/deqp_support/tcuANGLEWin32NativeDisplayFactory.h',
+            '<(angle_path)/src/tests/deqp_support/tcuANGLENativeDisplayFactory.cpp',
+            '<(angle_path)/src/tests/deqp_support/tcuANGLENativeDisplayFactory.h',
             # TODO(jmadill): integrate with dEQP
             '<(angle_path)/src/tests/deqp_support/tcuRandomOrderExecutor.cpp',
             '<(angle_path)/src/tests/deqp_support/tcuRandomOrderExecutor.h',
         ],
+        'conditions':
+        [
+            ['OS=="win"',
+            {
+                'deqp_include_dirs':
+                [
+                    '<(deqp_path)/framework/platform/win32',
+                ],
+                'deqp_libtester_c_sources':
+                [
+                    '<(deqp_path)/framework/delibs/dethread/win32/deMutexWin32.c',
+                    '<(deqp_path)/framework/delibs/dethread/win32/deSemaphoreWin32.c',
+                    '<(deqp_path)/framework/delibs/dethread/win32/deThreadLocalWin32.c',
+                    '<(deqp_path)/framework/delibs/dethread/win32/deThreadWin32.c',
+                ],
+            }],
+            ['OS=="linux" and use_x11==1',
+            {
+                'deqp_include_dirs':
+                [
+                    '<(deqp_path)/framework/platform/x11',
+                ],
+                'deqp_libtester_c_sources':
+                [
+                    '<(deqp_path)/framework/delibs/dethread/unix/deMutexUnix.c',
+                    '<(deqp_path)/framework/delibs/dethread/unix/deNamedSemaphoreUnix.c',
+                    '<(deqp_path)/framework/delibs/dethread/unix/deSemaphoreUnix.c',
+                    '<(deqp_path)/framework/delibs/dethread/unix/deThreadLocalUnix.c',
+                    '<(deqp_path)/framework/delibs/dethread/unix/deThreadUnix.c',
+                ],
+                'deqp_defines':
+                [
+                    # Ask the system headers to expose all the regular function otherwise
+                    # dEQP doesn't compile and produces warnings about implicitely defined
+                    # functions.
+                    '_GNU_SOURCE',
+                ],
+            }],
+        ]
     },
 
     'conditions':
     [
-        ['OS=="win" and angle_standalone==1',
+        ['(OS=="win" or OS=="linux") and angle_standalone==1',
         {
             'targets':
             [
@@ -857,6 +886,11 @@
                             ],
                         },
                     },
+                    'cflags!':
+                    [
+                        # Remove this C++ specific flag otherwise the compiler errors
+                        '-std=c++0x',
+                    ],
                     'sources':
                     [
                         '<(zlib_path)/adler32.c',
@@ -913,6 +947,11 @@
                             ],
                         },
                     },
+                    'cflags!':
+                    [
+                        # Remove this C++ specific flag otherwise the compiler errors
+                        '-std=c++0x',
+                    ],
                     'sources':
                     [
                         '<(libpng_path)/png.c',
@@ -934,7 +973,7 @@
                 },
             ],
         }],
-        ['OS=="win"',
+        ['OS=="win" or OS=="linux"',
         {
             'targets':
             [
@@ -973,6 +1012,10 @@
                                 },
                             },
                         },
+                        'cflags!':
+                        [
+                            '-fno-exceptions', # dEQP requires exceptions
+                        ],
                         'msvs_disabled_warnings':
                         [
                             '<@(deqp_msvs_disabled_warnings)',
@@ -983,11 +1026,14 @@
                     },
                 },
 
+                # Compile decpp separately because MSVC ignores the extension of the files when
+                # outputting the obj file, and later thinks that a decpp obj and another obj are the
+                # same, ignoring one and eventually producing a link error. The problem occurs for
+                # example between decpp/deRandom.cpp and debase/deRandom.c
                 {
                     'target_name': 'angle_deqp_decpp',
                     'type': 'static_library',
                     'dependencies': [ 'angle_deqp_support' ],
-                    'export_dependent_settings': [ 'angle_deqp_support' ],
                     'sources':
                     [
                         '<(deqp_path)/framework/delibs/decpp/deArrayBuffer.cpp',
@@ -1017,17 +1063,38 @@
                 },
 
                 {
+                    'target_name': 'angle_deqp_libtester_c',
+                    'type': 'static_library',
+                    'dependencies':
+                    [
+                        'angle_deqp_support',
+                    ],
+                    'cflags!':
+                    [
+                        # Remove C++ specific flags otherwise the compiler errors
+                        '-std=c++0x',
+                        '-fno-exceptions',
+                    ],
+                    'sources':
+                    [
+                        '<@(deqp_libtester_c_sources)',
+                    ],
+                },
+                {
                     'target_name': 'angle_deqp_libtester',
                     'type': 'static_library',
                     'dependencies':
                     [
                         'angle_deqp_decpp',
+                        'angle_deqp_support',
+                        'angle_deqp_libtester_c',
                         '<(angle_path)/src/angle.gyp:libEGL',
                         '<(angle_path)/util/util.gyp:angle_util',
                     ],
                     'export_dependent_settings':
                     [
                         'angle_deqp_decpp',
+                        'angle_deqp_support',
                         '<(angle_path)/util/util.gyp:angle_util',
                     ],
                     'include_dirs':
@@ -1045,6 +1112,10 @@
                             'ANGLE_DEQP_LIBTESTER_IMPLEMENTATION',
                         ],
                     },
+                    'cflags!':
+                    [
+                        '-fno-exceptions', # dEQP requires exceptions
+                    ],
                     'msvs_settings':
                     {
                         'VCCLCompilerTool':
@@ -1086,7 +1157,8 @@
                     [
                         '<@(deqp_gles2_sources)',
                         'deqp_support/angle_deqp_libtester_main.cpp',
-                        'deqp_support/tcuANGLEWin32Platform.cpp',
+                        'deqp_support/tcuANGLEPlatform.cpp',
+                        'deqp_support/tcuANGLEPlatform.h',
                     ],
                 },
 
@@ -1105,7 +1177,8 @@
                     [
                         '<@(deqp_gles3_sources)',
                         'deqp_support/angle_deqp_libtester_main.cpp',
-                        'deqp_support/tcuANGLEWin32Platform.cpp',
+                        'deqp_support/tcuANGLEPlatform.cpp',
+                        'deqp_support/tcuANGLEPlatform.h',
                     ],
                 },
 
