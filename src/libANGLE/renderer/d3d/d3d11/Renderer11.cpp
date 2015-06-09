@@ -540,7 +540,7 @@ void Renderer11::initializeDevice()
     TRACE_EVENT0("gpu.angle", "Renderer11::initializeDevice");
 
     mStateCache.initialize(mDevice);
-    mInputLayoutCache.initialize(mDevice, mDeviceContext);
+    mInputLayoutCache.initialize(this);
 
     ASSERT(!mVertexDataManager && !mIndexDataManager);
     mVertexDataManager = new VertexDataManager(this);
@@ -3598,12 +3598,12 @@ bool Renderer11::getLUID(LUID *adapterLuid) const
 
 VertexConversionType Renderer11::getVertexConversionType(const gl::VertexFormat &vertexFormat) const
 {
-    return d3d11::GetVertexFormatInfo(vertexFormat, mRenderer11DeviceCaps.featureLevel).conversionType;
+    return d3d11::GetVertexFormatInfo(vertexFormat, mRenderer11DeviceCaps).conversionType;
 }
 
 GLenum Renderer11::getVertexComponentType(const gl::VertexFormat &vertexFormat) const
 {
-    return d3d11::GetDXGIFormatInfo(d3d11::GetVertexFormatInfo(vertexFormat, mRenderer11DeviceCaps.featureLevel).nativeFormat).componentType;
+    return d3d11::GetDXGIFormatInfo(d3d11::GetVertexFormatInfo(vertexFormat, mRenderer11DeviceCaps).nativeFormat).componentType;
 }
 
 void Renderer11::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureCaps, gl::Extensions *outExtensions) const

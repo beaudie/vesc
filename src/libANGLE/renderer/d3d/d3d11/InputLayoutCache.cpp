@@ -8,15 +8,16 @@
 // D3D11 input layouts.
 
 #include "libANGLE/renderer/d3d/d3d11/InputLayoutCache.h"
-#include "libANGLE/renderer/d3d/d3d11/VertexBuffer11.h"
-#include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
-#include "libANGLE/renderer/d3d/d3d11/ShaderExecutable11.h"
-#include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
-#include "libANGLE/renderer/d3d/ProgramD3D.h"
-#include "libANGLE/renderer/d3d/VertexDataManager.h"
+
 #include "libANGLE/Program.h"
 #include "libANGLE/VertexAttribute.h"
-
+#include "libANGLE/renderer/d3d/ProgramD3D.h"
+#include "libANGLE/renderer/d3d/VertexDataManager.h"
+#include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
+#include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
+#include "libANGLE/renderer/d3d/d3d11/ShaderExecutable11.h"
+#include "libANGLE/renderer/d3d/d3d11/VertexBuffer11.h"
+#include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
 #include "third_party/murmurhash/MurmurHash3.h"
 
 namespace rx
@@ -42,17 +43,15 @@ const unsigned int InputLayoutCache::kMaxInputLayouts = 1024;
 InputLayoutCache::InputLayoutCache() : mInputLayoutMap(kMaxInputLayouts, hashInputLayout, compareInputLayouts)
 {
     mCounter = 0;
-    mDevice = NULL;
-    mDeviceContext = NULL;
-    mCurrentIL = NULL;
+    mRenderer = nullptr;
     for (unsigned int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
     {
-        mCurrentBuffers[i] = NULL;
+        mCurrentBuffers[i] = nullptr;
         mCurrentVertexStrides[i] = static_cast<UINT>(-1);
         mCurrentVertexOffsets[i] = static_cast<UINT>(-1);
     }
-    mPointSpriteVertexBuffer = NULL;
-    mPointSpriteIndexBuffer = NULL;
+    mPointSpriteVertexBuffer = nullptr;
+    mPointSpriteIndexBuffer = nullptr;
 }
 
 InputLayoutCache::~InputLayoutCache()
@@ -60,12 +59,10 @@ InputLayoutCache::~InputLayoutCache()
     clear();
 }
 
-void InputLayoutCache::initialize(ID3D11Device *device, ID3D11DeviceContext *context)
+void InputLayoutCache::initialize(Renderer11 *renderer)
 {
     clear();
-    mDevice = device;
-    mDeviceContext = context;
-    mFeatureLevel = device->GetFeatureLevel();
+    mRenderer = renderer;
 }
 
 void InputLayoutCache::clear()
@@ -82,10 +79,10 @@ void InputLayoutCache::clear()
 
 void InputLayoutCache::markDirty()
 {
-    mCurrentIL = NULL;
+    mCurrentIL = nullptr;
     for (unsigned int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
     {
-        mCurrentBuffers[i] = NULL;
+        mCurrentBuffers[i] = nullptr;
         mCurrentVertexStrides[i] = static_cast<UINT>(-1);
         mCurrentVertexOffsets[i] = static_cast<UINT>(-1);
     }
@@ -100,11 +97,22 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
     programD3D->sortAttributesByLayout(attributes, sortedSemanticIndices);
     bool programUsesInstancedPointSprites = programD3D->usesPointSize() && programD3D->usesInstancedPointSpriteEmulation();
     bool instancedPointSpritesActive = programUsesInstancedPointSprites && (mode == GL_POINTS);
+    ID3D11Device *device = nullptr;
+    ID3D11DeviceContext *context = nullptr;
 
-    if (!mDevice || !mDeviceContext)
+    ASSERT(mRenderer);
+    if (mRenderer)
+    {
+        device = mRenderer->getDevice();
+        context = mRenderer->getDeviceContext();
+    }
+
+    if (!mRenderer || !device || !context)
     {
         return gl::Error(GL_OUT_OF_MEMORY, "Internal input layout cache is not initialized.");
     }
+
+    D3D_FEATURE_LEVEL featureLevel = mRenderer->getRenderer11DeviceCaps().featureLevel;
 
     InputLayoutKey ilKey = { 0 };
 
@@ -123,12 +131,12 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
             inputClass = instancedPointSpritesActive ? D3D11_INPUT_PER_INSTANCE_DATA : inputClass;
 
             gl::VertexFormat vertexFormat(*attributes[i].attribute, attributes[i].currentValueType);
-            const d3d11::VertexFormat &vertexFormatInfo = d3d11::GetVertexFormatInfo(vertexFormat, mFeatureLevel);
+            const d3d11::VertexFormat &vertexFormatInfo = d3d11::GetVertexFormatInfo(vertexFormat, mRenderer->getRenderer11DeviceCaps());
 
             // Record the type of the associated vertex shader vector in our key
             // This will prevent mismatched vertex shaders from using the same input layout
             GLint attributeSize;
-            program->getActiveAttribute(ilKey.elementCount, 0, NULL, &attributeSize, &ilKey.elements[ilKey.elementCount].glslElementType, NULL);
+            program->getActiveAttribute(ilKey.elementCount, 0, nullptr, &attributeSize, &ilKey.elements[ilKey.elementCount].glslElementType, nullptr);
 
             ilKey.elements[ilKey.elementCount].desc.SemanticName = semanticName;
             ilKey.elements[ilKey.elementCount].desc.SemanticIndex = sortedSemanticIndices[i];
@@ -190,8 +198,8 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
     // If slot 0 currently contains instanced data then we swap it with a non-instanced element.
     // Note that instancing is only available on 9_3 via ANGLE_instanced_arrays, since 9_3 doesn't support OpenGL ES 3.0.
     // As per the spec for ANGLE_instanced_arrays, not all attributes can be instanced simultaneously, so a non-instanced element must exist.
-    ASSERT(!(mFeatureLevel <= D3D_FEATURE_LEVEL_9_3 && firstIndexedElement == gl::MAX_VERTEX_ATTRIBS));
-    bool moveFirstIndexedIntoSlotZero = mFeatureLevel <= D3D_FEATURE_LEVEL_9_3 && firstInstancedElement == 0 && firstIndexedElement != gl::MAX_VERTEX_ATTRIBS;
+    ASSERT(!(featureLevel <= D3D_FEATURE_LEVEL_9_3 && firstIndexedElement == gl::MAX_VERTEX_ATTRIBS));
+    bool moveFirstIndexedIntoSlotZero = featureLevel <= D3D_FEATURE_LEVEL_9_3 && firstInstancedElement == 0 && firstIndexedElement != gl::MAX_VERTEX_ATTRIBS;
 
     if (moveFirstIndexedIntoSlotZero)
     {
@@ -206,7 +214,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
         }
     }
 
-    ID3D11InputLayout *inputLayout = NULL;
+    ID3D11InputLayout *inputLayout = nullptr;
 
     InputLayoutMap::iterator keyIter = mInputLayoutMap.find(ilKey);
     if (keyIter != mInputLayoutMap.end())
@@ -219,7 +227,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
         gl::VertexFormat shaderInputLayout[gl::MAX_VERTEX_ATTRIBS];
         GetInputLayout(attributes, shaderInputLayout);
 
-        ShaderExecutableD3D *shader = NULL;
+        ShaderExecutableD3D *shader = nullptr;
         gl::Error error = programD3D->getVertexExecutableForInputLayout(shaderInputLayout, &shader, nullptr);
         if (error.isError())
         {
@@ -234,7 +242,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
             descs[j] = ilKey.elements[j].desc;
         }
 
-        HRESULT result = mDevice->CreateInputLayout(descs, ilKey.elementCount, shader11->getFunction(), shader11->getLength(), &inputLayout);
+        HRESULT result = device->CreateInputLayout(descs, ilKey.elementCount, shader11->getFunction(), shader11->getLength(), &inputLayout);
         if (FAILED(result))
         {
             return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal input layout, HRESULT: 0x%08x", result);
@@ -266,7 +274,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
 
     if (inputLayout != mCurrentIL)
     {
-        mDeviceContext->IASetInputLayout(inputLayout);
+        context->IASetInputLayout(inputLayout);
         mCurrentIL = inputLayout;
     }
 
@@ -277,12 +285,12 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
 
     for (unsigned int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
     {
-        ID3D11Buffer *buffer = NULL;
+        ID3D11Buffer *buffer = nullptr;
 
         if (attributes[i].active)
         {
             VertexBuffer11 *vertexBuffer = GetAs<VertexBuffer11>(attributes[i].vertexBuffer);
-            Buffer11 *bufferStorage = attributes[i].storage ? GetAs<Buffer11>(attributes[i].storage) : NULL;
+            Buffer11 *bufferStorage = attributes[i].storage ? GetAs<Buffer11>(attributes[i].storage) : nullptr;
 
             buffer = bufferStorage ? bufferStorage->getBuffer(BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK)
                                    : vertexBuffer->getBuffer();
@@ -345,7 +353,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
             vertexBufferDesc.MiscFlags = 0;
             vertexBufferDesc.StructureByteStride = 0;
 
-            result = mDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &mPointSpriteVertexBuffer);
+            result = device->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &mPointSpriteVertexBuffer);
             if (FAILED(result))
             {
                 return gl::Error(GL_OUT_OF_MEMORY, "Failed to create instanced pointsprite emulation vertex buffer, HRESULT: 0x%08x", result);
@@ -373,7 +381,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
             indexBufferDesc.MiscFlags = 0;
             indexBufferDesc.StructureByteStride = 0;
 
-            result = mDevice->CreateBuffer(&indexBufferDesc, &indexBufferData, &mPointSpriteIndexBuffer);
+            result = device->CreateBuffer(&indexBufferDesc, &indexBufferData, &mPointSpriteIndexBuffer);
             if (FAILED(result))
             {
                 SafeRelease(mPointSpriteVertexBuffer);
@@ -385,7 +393,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
         // the a non-indexed rendering path in ANGLE (DrawArrays).  This means that applyIndexBuffer()
         // on the renderer will not be called and setting this buffer here ensures that the rendering
         // path will contain the correct index buffers.
-        mDeviceContext->IASetIndexBuffer(mPointSpriteIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+        context->IASetIndexBuffer(mPointSpriteIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
     }
 
     if (moveFirstIndexedIntoSlotZero)
@@ -401,7 +409,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(TranslatedAttribute attributes[gl
     if (dirtyBuffers)
     {
         ASSERT(minDiff <= maxDiff && maxDiff < gl::MAX_VERTEX_ATTRIBS);
-        mDeviceContext->IASetVertexBuffers(minDiff, maxDiff - minDiff + 1, mCurrentBuffers + minDiff,
+        context->IASetVertexBuffers(minDiff, maxDiff - minDiff + 1, mCurrentBuffers + minDiff,
                                            mCurrentVertexStrides + minDiff, mCurrentVertexOffsets + minDiff);
     }
 

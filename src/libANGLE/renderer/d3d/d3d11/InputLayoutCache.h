@@ -26,6 +26,7 @@ class Program;
 
 namespace rx
 {
+class Renderer11;
 struct TranslatedAttribute;
 
 class InputLayoutCache : angle::NonCopyable
@@ -34,7 +35,7 @@ class InputLayoutCache : angle::NonCopyable
     InputLayoutCache();
     virtual ~InputLayoutCache();
 
-    void initialize(ID3D11Device *device, ID3D11DeviceContext *context);
+    void initialize(Renderer11 *renderer);
     void clear();
     void markDirty();
 
@@ -93,9 +94,7 @@ class InputLayoutCache : angle::NonCopyable
 
     unsigned long long mCounter;
 
-    ID3D11Device *mDevice;
-    ID3D11DeviceContext *mDeviceContext;
-    D3D_FEATURE_LEVEL mFeatureLevel;
+    Renderer11 *mRenderer;
 };
 
 }
