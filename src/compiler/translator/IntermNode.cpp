@@ -199,6 +199,304 @@ TIntermTyped *CreateFoldedNode(TConstantUnion *constArray, const TIntermTyped *o
     return folded;
 }
 
+// Utility class used for constant folding matrix built-ins.
+template<typename T>
+class Matrix
+{
+  public:
+    Matrix(const std::vector<T> &elements, const unsigned int &rows, const unsigned int &columns)
+        : mElements(elements),
+          mRows(rows),
+          mCols(columns)
+    {}
+
+    Matrix(const std::vector<T> &elements, const unsigned int &size)
+        : mElements(elements),
+          mRows(size),
+          mCols(size)
+    {}
+
+    Matrix(const T *elements, const unsigned int &size)
+        : mRows(size),
+          mCols(size)
+    {
+        for (size_t i = 0; i < size * size; i++)
+            mElements.push_back(elements[i]);
+    }
+
+    const T &operator()(const unsigned int &rowIndex, const unsigned int &columnIndex) const
+    {
+        return mElements[rowIndex * columns() + columnIndex];
+    }
+
+    T &operator()(const unsigned int &rowIndex, const unsigned int &columnIndex)
+    {
+        return mElements[rowIndex * columns() + columnIndex];
+    }
+
+    const T &at(const unsigned int &rowIndex, const unsigned int &columnIndex) const
+    {
+        return operator()(rowIndex, columnIndex);
+    }
+
+    unsigned int size() const
+    {
+        ASSERT(rows() == columns());
+        return rows();
+    }
+
+    unsigned int rows() const
+    {
+        return mRows;
+    }
+
+    unsigned int columns() const
+    {
+        return mCols;
+    }
+
+    std::vector<T> getElements() const
+    {
+        return mElements;
+    }
+
+    std::vector<T> compMult(const Matrix<T> &mat1) const
+    {
+        Matrix result(std::vector<T>(mElements.size()), size());
+        for (size_t i = 0; i < columns(); i++)
+            for (size_t j = 0; j < rows(); j++)
+                result(i, j) = at(i, j) * mat1(i, j);
+
+        return result.getElements();
+    }
+
+    std::vector<T> outerProduct(const Matrix<T> &mat1) const
+    {
+        unsigned int cols = mat1.columns();
+        Matrix result(std::vector<T>(rows() * cols), rows(), cols);
+        for (size_t i = 0; i < rows(); i++)
+            for (size_t j = 0; j < cols; j++)
+                result(i, j) = at(i, 0) * mat1(0, j);
+
+        return result.getElements();
+    }
+
+    std::vector<T> transpose() const
+    {
+        Matrix result(std::vector<T>(mElements.size()), columns(), rows());
+        for (size_t i = 0; i < columns(); i++)
+            for (size_t j = 0; j < rows(); j++)
+                result(i, j) = at(j, i);
+
+        return result.getElements();
+    }
+
+    T determinant() const
+    {
+        switch(size())
+        {
+          case 2:
+            return at(0, 0) * at(1, 1) - at(0, 1) * at(1, 0);
+
+          case 3:
+            return at(0, 0) * at(1, 1) * at(2, 2) +
+                   at(0, 1) * at(1, 2) * at(2, 0) +
+                   at(0, 2) * at(1, 0) * at(2, 1) -
+                   at(0, 2) * at(1, 1) * at(2, 0) -
+                   at(0, 1) * at(1, 0) * at(2, 2) -
+                   at(0, 0) * at(1, 2) * at(2, 1);
+
+          case 4:
+            {
+                const float minorMatrices[4][3 * 3] =
+                {
+                    {
+                        at(1, 1), at(2, 1), at(3, 1),
+                        at(1, 2), at(2, 2), at(3, 2),
+                        at(1, 3), at(2, 3), at(3, 3),
+                    },
+                    {
+                        at(1, 0), at(2, 0), at(3, 0),
+                        at(1, 2), at(2, 2), at(3, 2),
+                        at(1, 3), at(2, 3), at(3, 3),
+                    },
+                    {
+                        at(1, 0), at(2, 0), at(3, 0),
+                        at(1, 1), at(2, 1), at(3, 1),
+                        at(1, 3), at(2, 3), at(3, 3),
+                    },
+                    {
+                        at(1, 0), at(2, 0), at(3, 0),
+                        at(1, 1), at(2, 1), at(3, 1),
+                        at(1, 2), at(2, 2), at(3, 2),
+                    }
+                };
+                return at(0, 0) * Matrix<float>(minorMatrices[0], 3).determinant() -
+                       at(0, 1) * Matrix<float>(minorMatrices[1], 3).determinant() +
+                       at(0, 2) * Matrix<float>(minorMatrices[2], 3).determinant() -
+                       at(0, 3) * Matrix<float>(minorMatrices[3], 3).determinant();
+            }
+            break;
+
+          default:
+            UNREACHABLE();
+            break;
+        }
+
+        return 0.0f;
+    }
+
+    const std::vector<T> inverse() const
+    {
+        std::vector<T> cof(mElements.size());
+        switch (size())
+        {
+          case 2:
+            cof[0] = at(1, 1);
+            cof[1] = -at(0, 1);
+            cof[2] = -at(1, 0);
+            cof[3] = at(0, 0);
+            break;
+
+          case 3:
+            cof[0] = at(1, 1) * at(2, 2) -
+                     at(2, 1) * at(1, 2);
+            cof[1] = -(at(1, 0) * at(2, 2) -
+                     at(2, 0) * at(1, 2));
+            cof[2] = at(1, 0) * at(2, 1) -
+                     at(2, 0) * at(1, 1);
+            cof[3] = -(at(0, 1) * at(2, 2) -
+                     at(2, 1) * at(0, 2));
+            cof[4] = at(0, 0) * at(2, 2) -
+                     at(2, 0) * at(0, 2);
+            cof[5] = -(at(0, 0) * at(2, 1) -
+                     at(2, 0) * at(0, 1));
+            cof[6] = at(0, 1) * at(1, 2) -
+                     at(1, 1) * at(0, 2);
+            cof[7] = -(at(0, 0) * at(1, 2) -
+                     at(1, 0) * at(0, 2));
+            cof[8] = at(0, 0) * at(1, 1) -
+                     at(1, 0) * at(0, 1);
+            break;
+
+          case 4:
+            cof[0] = at(1, 1) * at(2, 2) * at(3, 3) +
+                     at(2, 1) * at(3, 2) * at(1, 3) +
+                     at(3, 1) * at(1, 2) * at(2, 3) -
+                     at(1, 1) * at(3, 2) * at(2, 3) -
+                     at(2, 1) * at(1, 2) * at(3, 3) -
+                     at(3, 1) * at(2, 2) * at(1, 3);
+            cof[1] = -(at(1, 0) * at(2, 2) * at(3, 3) +
+                     at(2, 0) * at(3, 2) * at(1, 3) +
+                     at(3, 0) * at(1, 2) * at(2, 3) -
+                     at(1, 0) * at(3, 2) * at(2, 3) -
+                     at(2, 0) * at(1, 2) * at(3, 3) -
+                     at(3, 0) * at(2, 2) * at(1, 3));
+            cof[2] = at(1, 0) * at(2, 1) * at(3, 3) +
+                     at(2, 0) * at(3, 1) * at(1, 3) +
+                     at(3, 0) * at(1, 1) * at(2, 3) -
+                     at(1, 0) * at(3, 1) * at(2, 3) -
+                     at(2, 0) * at(1, 1) * at(3, 3) -
+                     at(3, 0) * at(2, 1) * at(1, 3);
+            cof[3] = -(at(1, 0) * at(2, 1) * at(3, 2) +
+                     at(2, 0) * at(3, 1) * at(1, 2) +
+                     at(3, 0) * at(1, 1) * at(2, 2) -
+                     at(1, 0) * at(3, 1) * at(2, 2) -
+                     at(2, 0) * at(1, 1) * at(3, 2) -
+                     at(3, 0) * at(2, 1) * at(1, 2));
+            cof[4] = -(at(0, 1) * at(2, 2) * at(3, 3) +
+                     at(2, 1) * at(3, 2) * at(0, 3) +
+                     at(3, 1) * at(0, 2) * at(2, 3) -
+                     at(0, 1) * at(3, 2) * at(2, 3) -
+                     at(2, 1) * at(0, 2) * at(3, 3) -
+                     at(3, 1) * at(2, 2) * at(0, 3));
+            cof[5] = at(0, 0) * at(2, 2) * at(3, 3) +
+                     at(2, 0) * at(3, 2) * at(0, 3) +
+                     at(3, 0) * at(0, 2) * at(2, 3) -
+                     at(0, 0) * at(3, 2) * at(2, 3) -
+                     at(2, 0) * at(0, 2) * at(3, 3) -
+                     at(3, 0) * at(2, 2) * at(0, 3);
+            cof[6] = -(at(0, 0) * at(2, 1) * at(3, 3) +
+                     at(2, 0) * at(3, 1) * at(0, 3) +
+                     at(3, 0) * at(0, 1) * at(2, 3) -
+                     at(0, 0) * at(3, 1) * at(2, 3) -
+                     at(2, 0) * at(0, 1) * at(3, 3) -
+                     at(3, 0) * at(2, 1) * at(0, 3));
+            cof[7] = at(0, 0) * at(2, 1) * at(3, 2) +
+                     at(2, 0) * at(3, 1) * at(0, 2) +
+                     at(3, 0) * at(0, 1) * at(2, 2) -
+                     at(0, 0) * at(3, 1) * at(2, 2) -
+                     at(2, 0) * at(0, 1) * at(3, 2) -
+                     at(3, 0) * at(2, 1) * at(0, 2);
+            cof[8] = at(0, 1) * at(1, 2) * at(3, 3) +
+                     at(1, 1) * at(3, 2) * at(0, 3) +
+                     at(3, 1) * at(0, 2) * at(1, 3) -
+                     at(0, 1) * at(3, 2) * at(1, 3) -
+                     at(1, 1) * at(0, 2) * at(3, 3) -
+                     at(3, 1) * at(1, 2) * at(0, 3);
+            cof[9] = -(at(0, 0) * at(1, 2) * at(3, 3) +
+                     at(1, 0) * at(3, 2) * at(0, 3) +
+                     at(3, 0) * at(0, 2) * at(1, 3) -
+                     at(0, 0) * at(3, 2) * at(1, 3) -
+                     at(1, 0) * at(0, 2) * at(3, 3) -
+                     at(3, 0) * at(1, 2) * at(0, 3));
+            cof[10] = at(0, 0) * at(1, 1) * at(3, 3) +
+                      at(1, 0) * at(3, 1) * at(0, 3) +
+                      at(3, 0) * at(0, 1) * at(1, 3) -
+                      at(0, 0) * at(3, 1) * at(1, 3) -
+                      at(1, 0) * at(0, 1) * at(3, 3) -
+                      at(3, 0) * at(1, 1) * at(0, 3);
+            cof[11] = -(at(0, 0) * at(1, 1) * at(3, 2) +
+                      at(1, 0) * at(3, 1) * at(0, 2) +
+                      at(3, 0) * at(0, 1) * at(1, 2) -
+                      at(0, 0) * at(3, 1) * at(1, 2) -
+                      at(1, 0) * at(0, 1) * at(3, 2) -
+                      at(3, 0) * at(1, 1) * at(0, 2));
+            cof[12] = -(at(0, 1) * at(1, 2) * at(2, 3) +
+                      at(1, 1) * at(2, 2) * at(0, 3) +
+                      at(2, 1) * at(0, 2) * at(1, 3) -
+                      at(0, 1) * at(2, 2) * at(1, 3) -
+                      at(1, 1) * at(0, 2) * at(2, 3) -
+                      at(2, 1) * at(1, 2) * at(0, 3));
+            cof[13] = at(0, 0) * at(1, 2) * at(2, 3) +
+                      at(1, 0) * at(2, 2) * at(0, 3) +
+                      at(2, 0) * at(0, 2) * at(1, 3) -
+                      at(0, 0) * at(2, 2) * at(1, 3) -
+                      at(1, 0) * at(0, 2) * at(2, 3) -
+                      at(2, 0) * at(1, 2) * at(0, 3);
+            cof[14] = -(at(0, 0) * at(1, 1) * at(2, 3) +
+                      at(1, 0) * at(2, 1) * at(0, 3) +
+                      at(2, 0) * at(0, 1) * at(1, 3) -
+                      at(0, 0) * at(2, 1) * at(1, 3) -
+                      at(1, 0) * at(0, 1) * at(2, 3) -
+                      at(2, 0) * at(1, 1) * at(0, 3));
+            cof[15] = at(0, 0) * at(1, 1) * at(2, 2) +
+                      at(1, 0) * at(2, 1) * at(0, 2) +
+                      at(2, 0) * at(0, 1) * at(1, 2) -
+                      at(0, 0) * at(2, 1) * at(1, 2) -
+                      at(1, 0) * at(0, 1) * at(2, 2) -
+                      at(2, 0) * at(1, 1) * at(0, 2);
+            break;
+
+          default:
+            UNREACHABLE();
+            break;
+        }
+
+        T det = determinant();
+        std::vector<T> result(mElements.size());
+        for (size_t i = 0; i < mElements.size(); i++)
+            result[i] = det ? cof[i] / det : 0.0f;
+
+        return result;
+    }
+
+ private:
+   std::vector<T> mElements;
+   unsigned int mRows;
+   unsigned int mCols;
+};
+
 }  // namespace anonymous
 
 
@@ -1156,7 +1454,8 @@ TConstantUnion *TIntermConstantUnion::foldUnary(TOperator op, TInfoSink &infoSin
 
     size_t objectSize = getType().getObjectSize();
 
-    if (op == EOpAny || op == EOpAll || op == EOpLength)
+    if (op == EOpAny || op == EOpAll || op == EOpLength || op == EOpTranspose || op == EOpDeterminant ||
+        op == EOpInverse)
     {
         // Do operations where the return type has a different number of components compared to the operand type.
         TConstantUnion *resultArray = nullptr;
@@ -1210,6 +1509,68 @@ TConstantUnion *TIntermConstantUnion::foldUnary(TOperator op, TInfoSink &infoSin
             {
                 resultArray = new TConstantUnion();
                 resultArray->setFConst(VectorLength(operandArray, objectSize));
+                break;
+            }
+            else
+            {
+                infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+                return nullptr;
+            }
+
+          case EOpTranspose:
+            if (getType().getBasicType() == EbtFloat)
+            {
+                resultArray = new TConstantUnion[objectSize];
+                std::vector<float> elements;
+                for (size_t i = 0; i < objectSize; i++)
+                    elements.push_back(operandArray[i].getFConst());
+
+                Matrix<float> mat(elements, getType().getNominalSize(), getType().getSecondarySize());
+                std::vector<float> result = mat.transpose();
+                for (size_t i = 0; i < objectSize; i++)
+                    resultArray[i].setFConst(result[i]);
+                break;
+            }
+            else
+            {
+                infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+                return nullptr;
+            }
+
+          case EOpDeterminant:
+            if (getType().getBasicType() == EbtFloat)
+            {
+                unsigned int size = getType().getNominalSize();
+                ASSERT(size >= 2 && size <= 4);
+                resultArray = new TConstantUnion();
+                std::vector<float> elements;
+                for (size_t i = 0; i < objectSize; i++)
+                    elements.push_back(operandArray[i].getFConst());
+
+                Matrix<float> mat(elements, size);
+                resultArray->setFConst(mat.determinant());
+                break;
+            }
+            else
+            {
+                infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+                return nullptr;
+            }
+
+          case EOpInverse:
+            if (getType().getBasicType() == EbtFloat)
+            {
+                unsigned int size = getType().getNominalSize();
+                ASSERT(size >= 2 && size <= 4);
+                resultArray = new TConstantUnion[objectSize];
+                std::vector<float> elements;
+                for (size_t i = 0; i < objectSize; i++)
+                    elements.push_back(operandArray[i].getFConst());
+
+                Matrix<float> mat(elements, size);
+                std::vector<float> result = mat.inverse();
+                for (size_t i = 0; i < objectSize; i++)
+                    resultArray[i].setFConst(result[i]);
                 break;
             }
             else
@@ -1630,9 +1991,12 @@ TConstantUnion *TIntermConstantUnion::FoldAggregateBuiltIn(TIntermAggregate *agg
             maxObjectSize = objectSizes[i];
     }
 
-    for (unsigned int i = 0; i < paramsCount; i++)
-        if (objectSizes[i] != maxObjectSize)
-            unionArrays[i] = Vectorize(*unionArrays[i], maxObjectSize);
+    if (!(*sequence)[0]->getAsTyped()->isMatrix())
+    {
+        for (unsigned int i = 0; i < paramsCount; i++)
+            if (objectSizes[i] != maxObjectSize)
+                unionArrays[i] = Vectorize(*unionArrays[i], maxObjectSize);
+    }
 
     TConstantUnion *resultArray = nullptr;
     if (paramsCount == 2)
@@ -1975,6 +2339,54 @@ TConstantUnion *TIntermConstantUnion::FoldAggregateBuiltIn(TIntermAggregate *agg
                                    2.0f * dotProduct * unionArrays[1][i].getFConst();
                     resultArray[i].setFConst(result);
                 }
+            }
+            else
+                UNREACHABLE();
+            break;
+
+          case EOpMul:
+            if (basicType == EbtFloat && (*sequence)[0]->getAsTyped()->isMatrix() &&
+                (*sequence)[1]->getAsTyped()->isMatrix())
+            {
+                // Perform component-wise matrix multiplication.
+                resultArray = new TConstantUnion[maxObjectSize];
+                std::vector<float> mat1Elements;
+                std::vector<float> mat2Elements;
+                for (size_t i = 0; i < maxObjectSize; i++)
+                {
+                    mat1Elements.push_back(unionArrays[0][i].getFConst());
+                    mat2Elements.push_back(unionArrays[1][i].getFConst());
+                }
+
+                size_t size = (*sequence)[0]->getAsTyped()->getNominalSize();
+                Matrix<float> mat1(mat1Elements, size);
+                Matrix<float> mat2(mat2Elements, size);
+                std::vector<float> result = mat1.compMult(mat2);
+                for (size_t i = 0; i < maxObjectSize; i++)
+                    resultArray[i].setFConst(result[i]);
+            }
+            else
+                UNREACHABLE();
+            break;
+
+          case EOpOuterProduct:
+            if (basicType == EbtFloat)
+            {
+                size_t numRows = (*sequence)[0]->getAsTyped()->getType().getObjectSize();
+                size_t numCols = (*sequence)[1]->getAsTyped()->getType().getObjectSize();
+                resultArray = new TConstantUnion[numRows * numCols];
+                std::vector<float> mat1Elements;
+                for (size_t i = 0; i < numRows; i++)
+                    mat1Elements.push_back(unionArrays[0][i].getFConst());
+                std::vector<float> mat2Elements;
+                for (size_t i = 0; i < numCols; i++)
+                    mat2Elements.push_back(unionArrays[1][i].getFConst());
+
+                Matrix<float> mat1(mat1Elements, numRows, 1);
+                Matrix<float> mat2(mat2Elements, 1, numCols);
+                std::vector<float> result = mat1.outerProduct(mat2);
+                for (size_t i = 0; i < numRows * numCols; i++)
+                    resultArray[i].setFConst(result[i]);
             }
             else
                 UNREACHABLE();
