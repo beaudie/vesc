@@ -223,3 +223,174 @@ TEST_F(ConstantFoldingTest, FoldVectorCrossProduct)
     result.push_back(-2.0f);
     ASSERT_TRUE(constantVectorFoundInAST(result));
 }
+
+// FoldMxNMatrixInverse tests check if the matris 'inverse' operation
+// on MxN matrix is constant folded when argument is constant expression and also
+// checkes the correctes of the result returned by the  constant folding operation.
+TEST_F(ConstantFoldingTest, Fold2x2MatrixInverse)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out mat2 my_Matrix;"
+        "void main() {\n"
+        "   const mat2 m2 = inverse(mat2(2.0f, 3.0f,\n"
+        "                                5.0f, 7.0f));\n"
+        "   my_Matrix = m2;\n"
+        "}\n";
+    compile(shaderString);
+    float inputElements[] =
+    {
+        2.0f, 3.0f,
+        5.0f, 7.0f
+    };
+    std::vector<float> input(inputElements, inputElements + 4);
+    ASSERT_FALSE(constantVectorFoundInAST(input));
+    float outputElements[] =
+    {
+        -7.0f, 3.0f,
+        5.0f, -2.0f
+    };
+    std::vector<float> result(outputElements, outputElements + 4);
+    ASSERT_TRUE(constantVectorFoundInAST(result));
+}
+
+TEST_F(ConstantFoldingTest, Fold3x3MatrixInverse)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out mat3 my_Matrix;"
+        "void main() {\n"
+        "   const mat3 m3 = inverse(mat3(11.0f, 13.0f, 19.0f,\n"
+        "                                23.0f, 29.0f, 31.0f,\n"
+        "                                37.0f, 41.0f, 43.0f));\n"
+        "   my_Matrix = m3;\n"
+        "}\n";
+    compile(shaderString);
+    float inputElements[] =
+    {
+        11.0f, 13.0f, 19.0f,
+        23.0f, 29.0f, 31.0f,
+        37.0f, 41.0f, 43.0f
+    };
+    std::vector<float> input(inputElements, inputElements + 9);
+    ASSERT_FALSE(constantVectorFoundInAST(input));
+    float outputElements[] =
+    {
+        3.0f / 85.0f, -11.0f / 34.0f, 37.0f / 170.0f,
+        -79.0f / 340.0f, 23.0f / 68.0f, -12.0f / 85.0f,
+        13.0f / 68.0f, -3.0f / 68.0f, -1.0f / 34.0f
+    };
+    std::vector<float> result(outputElements, outputElements + 9);
+    ASSERT_TRUE(constantVectorFoundInAST(result));
+}
+
+TEST_F(ConstantFoldingTest, Fold4x4MatrixInverse)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out mat4 my_Matrix;"
+        "void main() {\n"
+        "   const mat4 m4 = inverse(mat4(29.0f, 31.0f, 37.0f, 41.0f,\n"
+        "                                43.0f, 47.0f, 53.0f, 59.0f,\n"
+        "                                61.0f, 67.0f, 71.0f, 73.0f,\n"
+        "                                79.0f, 83.0f, 89.0f, 97.0f));\n"
+        "   my_Matrix = m4;\n"
+        "}\n";
+    compile(shaderString);
+    float inputElements[] =
+    {
+        29.0f, 43.0f, 61.0f, 79.0f,
+        31.0f, 47.0f, 67.0f, 83.0f,
+        37.0f, 53.0f, 71.0f, 89.0f,
+        41.0f, 59.0f, 73.0f, 97.0f
+    };
+    std::vector<float> input(inputElements, inputElements + 16);
+    ASSERT_FALSE(constantVectorFoundInAST(input));
+    float outputElements[] =
+    {
+        43.0f / 126.0f, -11.0f / 21.0f, -2.0f / 21.0f, 31.0f / 126.0f,
+        -5.0f / 7.0f, 9.0f / 14.0f, 1.0f / 14.0f, -1.0f / 7.0f,
+        85.0f / 126.0f, -11.0f / 21.0f, 43.0f / 210.0f, -38.0f / 315.0f,
+        -2.0f / 7.0f, 5.0f / 14.0f, -6.0f / 35.0f, 3.0f / 70.0f
+    };
+    std::vector<float> result(outputElements, outputElements + 16);
+    ASSERT_TRUE(constantVectorFoundInAST(result));
+}
+
+// FoldMxNMatrixDeterminant tests check if the matris 'determinant' operation
+// on MxN matrix is constant folded when argument is constant expression and also
+// checkes the correctes of the result returned by the  constant folding operation.
+TEST_F(ConstantFoldingTest, Fold2x2MatrixDeterminant)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out float my_Float;"
+        "void main() {\n"
+        "   const float f = determinant(mat2(2.0f, 3.0f,\n"
+        "                                    5.0f, 7.0f));\n"
+        "   my_Float = f;\n"
+        "}\n";
+    compile(shaderString);
+    float inputElements[] =
+    {
+        2.0f, 5.0f,
+        3.0f, 7.0f
+    };
+    std::vector<float> input(inputElements, inputElements + 4);
+    ASSERT_FALSE(constantVectorFoundInAST(input));
+    ASSERT_TRUE(constantFoundInAST(-1.0f));
+}
+
+TEST_F(ConstantFoldingTest, Fold3x3MatrixDeterminant)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out float my_Float;"
+        "void main() {\n"
+        "   const float f = determinant(mat3(11.0f, 13.0f, 19.0f,\n"
+             "                               23.0f, 29.0f, 31.0f,\n"
+        "                                    37.0f, 41.0f, 43.0f));\n"
+        "   my_Float = f;\n"
+        "}\n";
+    compile(shaderString);
+    float inputElements[] =
+    {
+        11.0f, 23.0f, 37.0f,
+        13.0f, 29.0f, 41.0f,
+        19.0f, 31.0f, 43.0f
+    };
+    std::vector<float> input(inputElements, inputElements + 9);
+    ASSERT_FALSE(constantVectorFoundInAST(input));
+    ASSERT_TRUE(constantFoundInAST(-680.0f));
+}
+
+TEST_F(ConstantFoldingTest, Fold4x4MatrixDeterminant)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out float my_Float;"
+        "void main() {\n"
+        "   const float f = determinant(mat4(29.0f, 31.0f, 37.0f, 41.0f,\n"
+        "                                    43.0f, 47.0f, 53.0f, 59.0f,\n"
+        "                                    61.0f, 67.0f, 71.0f, 73.0f,\n"
+        "                                    79.0f, 83.0f, 89.0f, 97.0f));\n"
+        "   my_Float = f;\n"
+        "}\n";
+    compile(shaderString);
+    float inputElements[] =
+    {
+        29.0f, 43.0f, 61.0f, 79.0f,
+        31.0f, 47.0f, 67.0f, 83.0f,
+        37.0f, 53.0f, 71.0f, 89.0f,
+        41.0f, 59.0f, 73.0f, 97.0f
+    };
+    std::vector<float> input(inputElements, inputElements + 16);
+    ASSERT_FALSE(constantVectorFoundInAST(input));
+    ASSERT_TRUE(constantFoundInAST(-2520.0f));
+}
