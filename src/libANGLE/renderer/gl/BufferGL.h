@@ -17,7 +17,7 @@ namespace rx
 class FunctionsGL;
 class StateManagerGL;
 
-class BufferGL : public BufferImpl
+class BufferGL : public BufferImpl, public angle::UniqueID<BufferGL>
 {
   public:
     BufferGL(const FunctionsGL *functions, StateManagerGL *stateManager);
