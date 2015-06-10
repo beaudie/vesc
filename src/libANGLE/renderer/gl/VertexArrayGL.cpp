@@ -29,9 +29,11 @@ VertexArrayGL::VertexArrayGL(const FunctionsGL *functions, StateManagerGL *state
       mElementArrayBuffer(),
       mAttributes(),
       mAppliedElementArrayBuffer(0),
+      mAppliedElementArrayBufferID(0),
       mAppliedAttributes(),
       mStreamingElementArrayBufferSize(0),
       mStreamingElementArrayBuffer(0),
+      mStreamingElementArrayBufferID(BufferGL::GenerateID()),
       mStreamingArrayBufferSize(0),
       mStreamingArrayBuffer(0)
 {
@@ -54,6 +56,7 @@ VertexArrayGL::~VertexArrayGL()
     mStateManager->deleteBuffer(mStreamingElementArrayBuffer);
     mStreamingElementArrayBufferSize = 0;
     mStreamingElementArrayBuffer = 0;
+    mStreamingElementArrayBufferID = 0;
 
     mStateManager->deleteBuffer(mStreamingArrayBuffer);
     mStreamingArrayBufferSize = 0;
@@ -248,11 +251,13 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
     if (mElementArrayBuffer.get() != nullptr)
     {
         const BufferGL *bufferGL = GetImplAs<BufferGL>(mElementArrayBuffer.get());
-        GLuint elementArrayBufferID = bufferGL->getBufferID();
-        if (elementArrayBufferID != mAppliedElementArrayBuffer)
+        angle::ID<BufferGL> elementArrayBufferID = bufferGL->getUniqueID();
+        if (elementArrayBufferID != mAppliedElementArrayBufferID)
         {
-            mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferID);
-            mAppliedElementArrayBuffer = elementArrayBufferID;
+            GLuint elementArrayBuffer = bufferGL->getBufferID();
+            mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBuffer);
+            mAppliedElementArrayBuffer = elementArrayBuffer;
+            mAppliedElementArrayBufferID = elementArrayBufferID;
         }
 
         // Only compute the index range if the attributes also need to be streamed
@@ -288,6 +293,7 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
         }
 
         mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, mStreamingElementArrayBuffer);
+        mAppliedElementArrayBufferID = mStreamingElementArrayBufferID;
         mAppliedElementArrayBuffer = mStreamingElementArrayBuffer;
 
         // Make sure the element array buffer is large enough

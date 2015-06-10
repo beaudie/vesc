@@ -14,15 +14,16 @@
 #include <climits>
 #include <cstdarg>
 #include <cstddef>
+#include <cstdint>
 #include <string>
 #include <set>
 #include <sstream>
 #include <vector>
 
-// A helper class to disallow copy and assignment operators
 namespace angle
 {
 
+// A helper class to disallow copy and assignment operators
 class NonCopyable
 {
   public:
@@ -32,6 +33,25 @@ class NonCopyable
     NonCopyable(const NonCopyable&) = delete;
     void operator=(const NonCopyable&) = delete;
 };
+
+// A helper class to generate unique IDs for all instances of a class
+template<typename T>
+using ID = uint64_t;
+
+template<typename T>
+class UniqueID
+{
+  public:
+    UniqueID() : mID(GenerateID()) {}
+    ID<T> getUniqueID() const { return mID; };
+    static ID<T> GenerateID() { return Counter ++; };
+  private:
+    ID<T> mID;
+    static ID<T> Counter;
+};
+
+template<typename T>
+ID<T> UniqueID<T>::Counter = 1;
 
 }
 
