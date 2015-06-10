@@ -223,3 +223,154 @@ TEST_F(ConstantFoldingTest, FoldVectorCrossProduct)
     result.push_back(-2.0f);
     ASSERT_TRUE(constantVectorFoundInAST(result));
 }
+
+TEST_F(ConstantFoldingTest, FoldMatrixInverse)
+{
+    const std::string &shaderString1 =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out mat2 my_Matrix;"
+        "void main() {\n"
+        "   const mat2 m2 = inverse(mat2(2.0f, 3.0f, 5.0f, 7.0f));\n"
+        "   my_Matrix = m2;\n"
+        "}\n";
+    compile(shaderString1);
+    float inputElements1[] =
+    {
+        2.0f, 5.0f,
+        3.0f, 7.0f
+    };
+    std::vector<float> input1(inputElements1, inputElements1 + 4);
+    ASSERT_FALSE(constantVectorFoundInAST(input1));
+    float outputElements1[] =
+    {
+        -7.0f, 3.0f,
+        5.0f, -2.0f
+    };
+    std::vector<float> result1(outputElements1, outputElements1+ 4);
+    ASSERT_TRUE(constantVectorFoundInAST(result1));
+
+    const std::string &shaderString2 =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out mat3 my_Matrix;"
+        "void main() {\n"
+        "   const mat3 m3 = inverse(mat3(11.0f, 13.0f, 19.0f,\n"
+        "                                23.0f, 29.0f, 31.0f,\n"
+        "                                37.0f, 41.0f, 43.0f));\n"
+        "   my_Matrix = m3;\n"
+        "}\n";
+    compile(shaderString2);
+    float inputElements2[] =
+    {
+        11.0f, 23.0f, 37.0f,
+        13.0f, 29.0f, 41.0f,
+        19.0f, 31.0f, 43.0f
+    };
+    std::vector<float> input2(inputElements2, inputElements2 + 9);
+    ASSERT_FALSE(constantVectorFoundInAST(input2));
+    float outputElements2[] =
+    {
+        3.0f / 85.0f, -79.0f / 340.0f, 13.0f / 68.0f,
+        -11.0f / 34.0f, 23.0f / 68.0f, -3.0f / 68.0f,
+        37.0f / 170.0f, -12.0f / 85.0f, -1.0f / 34.0f
+    };
+    std::vector<float> result2(outputElements2, outputElements2 + 9);
+    ASSERT_TRUE(constantVectorFoundInAST(result2));
+
+    const std::string &shaderString3 =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out mat4 my_Matrix;"
+        "void main() {\n"
+        "   const mat4 m4 = inverse(mat4(29.0f, 31.0f, 37.0f, 41.0f,\n"
+        "                                43.0f, 47.0f, 53.0f, 59.0f,\n"
+        "                                61.0f, 67.0f, 71.0f, 73.0f,\n"
+        "                                79.0f, 83.0f, 89.0f, 97.0f));\n"
+        "   my_Matrix = m4;\n"
+        "}\n";
+    compile(shaderString3);
+    float inputElements3[] =
+    {
+        29.0f, 43.0f, 61.0f, 79.0f,
+        31.0f, 47.0f, 67.0f, 83.0f,
+        37.0f, 53.0f, 71.0f, 89.0f,
+        41.0f, 59.0f, 73.0f, 97.0f
+    };
+    std::vector<float> input3(inputElements3, inputElements3 + 16);
+    ASSERT_FALSE(constantVectorFoundInAST(input3));
+    float outputElements3[] =
+    {
+        43.0f / 126.0f, -5.0f / 7.0f, 85.0f / 126.0f, -2.0f / 7.0f,
+        -11.0f / 21.0f, 9.0f / 14.0f, -11.0f / 21.0f, 5.0f / 14.0f,
+        -2.0f / 21.0f, 1.0f / 14.0f, 43.0f / 210.0f, -6.0f / 35.0f,
+        31.0f / 126.0f, -1.0f / 7.0f, -38.0f / 315.0f, 3.0f / 70.0f
+    };
+    std::vector<float> result3(outputElements3, outputElements3 + 16);
+    ASSERT_TRUE(constantVectorFoundInAST(result3));
+}
+
+TEST_F(ConstantFoldingTest, FoldMatrixDeterminant)
+{
+    const std::string &shaderString1 =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out float my_Float;"
+        "void main() {\n"
+        "   const float f = determinant(mat2(2.0f, 3.0f, 5.0f, 7.0f));\n"
+        "   my_Float = f;\n"
+        "}\n";
+    compile(shaderString1);
+    float inputElements1[] =
+    {
+        2.0f, 5.0f,
+        3.0f, 7.0f
+    };
+    std::vector<float> input1(inputElements1, inputElements1 + 4);
+    ASSERT_FALSE(constantVectorFoundInAST(input1));
+    ASSERT_TRUE(constantFoundInAST(-1.0f));
+
+    const std::string &shaderString2 =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out float my_Float;"
+        "void main() {\n"
+        "   const float f = determinant(mat3(11.0f, 13.0f, 19.0f,\n"
+        "                               23.0f, 29.0f, 31.0f,\n"
+        "                               37.0f, 41.0f, 43.0f));\n"
+        "   my_Float = f;\n"
+        "}\n";
+    compile(shaderString2);
+    float inputElements2[] =
+    {
+        11.0f, 23.0f, 37.0f,
+        13.0f, 29.0f, 41.0f,
+        19.0f, 31.0f, 43.0f
+    };
+    std::vector<float> input2(inputElements2, inputElements2 + 9);
+    ASSERT_FALSE(constantVectorFoundInAST(input2));
+    ASSERT_TRUE(constantFoundInAST(-680.0f));
+
+    const std::string &shaderString3 =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out float my_Float;"
+        "void main() {\n"
+        "   const float f = determinant(mat4(29.0f, 31.0f, 37.0f, 41.0f,\n"
+        "                               43.0f, 47.0f, 53.0f, 59.0f,\n"
+        "                               61.0f, 67.0f, 71.0f, 73.0f,\n"
+        "                               79.0f, 83.0f, 89.0f, 97.0f));\n"
+        "   my_Float = f;\n"
+        "}\n";
+    compile(shaderString3);
+    float inputElements3[] =
+    {
+        29.0f, 43.0f, 61.0f, 79.0f,
+        31.0f, 47.0f, 67.0f, 83.0f,
+        37.0f, 53.0f, 71.0f, 89.0f,
+        41.0f, 59.0f, 73.0f, 97.0f
+    };
+    std::vector<float> input3(inputElements3, inputElements3 + 16);
+    ASSERT_FALSE(constantVectorFoundInAST(input3));
+    ASSERT_TRUE(constantFoundInAST(-2520.0f));
+}
