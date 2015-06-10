@@ -199,6 +199,55 @@ TIntermTyped *CreateFoldedNode(TConstantUnion *constArray, const TIntermTyped *o
     return folded;
 }
 
+float MatrixDeterminant(const float *m, const unsigned int size)
+{
+    if (size == 2)
+    {
+        return m[0] * m[3] - m[1] * m[2];
+    }
+    else if (size == 3)
+    {
+        return m[0] * m[4] * m[8] +
+               m[1] * m[5] * m[6] +
+               m[2] * m[3] * m[7] -
+               m[2] * m[4] * m[6] -
+               m[1] * m[3] * m[8] -
+               m[0] * m[5] * m[7];
+    }
+    else if (size == 4)
+    {
+        const float minorMatrices[4][3 * 3] =
+        {
+            {
+                m[5], m[6], m[7],
+                m[9], m[10], m[11],
+                m[13], m[11], m[15]
+            },
+            {
+                m[4], m[6], m[7],
+                m[8], m[10], m[11],
+                m[12], m[14], m[15]
+            },
+            {
+                m[4], m[6], m[7],
+                m[8], m[9], m[11],
+                m[12], m[13], m[15]
+            },
+            {
+                m[4], m[5], m[6],
+                m[8], m[9], m[10],
+                m[12], m[13], m[14]
+            }
+        };
+
+        return m[0] * MatrixDeterminant(minorMatrices[0], 3) -
+               m[1] * MatrixDeterminant(minorMatrices[1], 3) +
+               m[2] * MatrixDeterminant(minorMatrices[2], 3) -
+               m[3] * MatrixDeterminant(minorMatrices[3], 3);
+    }
+    return 0.0f;
+}
+
 }  // namespace anonymous
 
 
@@ -1155,7 +1204,8 @@ TConstantUnion *TIntermConstantUnion::foldUnary(TOperator op, TInfoSink &infoSin
 
     size_t objectSize = getType().getObjectSize();
 
-    if (op == EOpAny || op == EOpAll || op == EOpLength)
+    if (op == EOpAny || op == EOpAll || op == EOpLength || op == EOpTranspose || op == EOpDeterminant ||
+        op == EOpInverse)
     {
         // Do operations where the return type has a different number of components compared to the operand type.
         TConstantUnion *resultArray = nullptr;
@@ -1209,6 +1259,129 @@ TConstantUnion *TIntermConstantUnion::foldUnary(TOperator op, TInfoSink &infoSin
             {
                 resultArray = new TConstantUnion();
                 resultArray->setFConst(VectorLength(operandArray, objectSize));
+                break;
+            }
+            else
+            {
+                infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+                return nullptr;
+            }
+
+          case EOpTranspose:
+            if (getType().getBasicType() == EbtFloat)
+            {
+                resultArray = new TConstantUnion[objectSize];
+                size_t resultNumRows = getType().getSecondarySize();
+                size_t resultNumCols = getType().getNominalSize();
+                for (size_t i = 0; i < resultNumRows; i++)
+                {
+                    for (size_t j = 0; j < resultNumCols; j++)
+                    {
+                        resultArray[i * resultNumCols + j].setFConst(operandArray[j * resultNumRows + i].getFConst());
+                    }
+                }
+                break;
+            }
+            else
+            {
+                infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+                return nullptr;
+            }
+
+          case EOpDeterminant:
+            if (getType().getBasicType() == EbtFloat)
+            {
+                resultArray = new TConstantUnion();
+                size_t numRowsAndCols = getType().getNominalSize();
+                float *matrix = new float[objectSize];
+                for (size_t i = 0; i < objectSize; i++)
+                    matrix[i] = operandArray[i].getFConst();
+
+                resultArray->setFConst(MatrixDeterminant(matrix, numRowsAndCols));
+                SafeDeleteArray(matrix);
+                break;
+            }
+            else
+            {
+                infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+                return nullptr;
+            }
+
+          case EOpInverse:
+            if (getType().getBasicType() == EbtFloat)
+            {
+                resultArray = new TConstantUnion[objectSize];
+                size_t numRowsAndCols = getType().getNominalSize();
+                float *m = new float[objectSize];
+                for (size_t i = 0; i < objectSize; i++)
+                    m[i] = operandArray[i].getFConst();
+
+                float *cof = new float[objectSize];
+                switch (numRowsAndCols)
+                {
+                  case 2:
+                    cof[0] = m[3];
+                    cof[1] = -m[1];
+                    cof[2] = -m[2];
+                    cof[3] = m[0];
+                    break;
+                  case 3:
+                    cof[0] = m[4] * m[8] - m[7] * m[5];
+                    cof[1] = -(m[3] * m[8] - m[6] * m[5]);
+                    cof[2] = m[3] * m[7] - m[6] * m[4];
+                    cof[3] = -(m[1] * m[8] - m[7] * m[2]);
+                    cof[4] = m[0] * m[8] - m[6] * m[2];
+                    cof[5] = -(m[0] * m[7] - m[6] * m[1]);
+                    cof[6] = m[1] * m[5] - m[4] * m[2];
+                    cof[7] = -(m[0] * m[5] - m[3] * m[2]);
+                    cof[8] = m[0] * m[4] - m[3] * m[1];
+                    break;
+                  case 4:
+                    cof[0] = m[5] * m[10] * m[15] + m[9] * m[14] * m[7] + m[13] * m[6] * m[11]
+                             -m[5] * m[14] * m[11] - m[9] * m[6] * m[15] - m[13] * m[10] * m[7];
+                    cof[1] = -(m[4] * m[10] * m[15] + m[8] * m[14] * m[7] + m[12] * m[6] * m[11]
+                             -m[8] * m[6] * m[15] - m[12] * m[10] * m[7]);
+                    cof[2] = m[4] * m[9] * m[15] + m[8] * m[13] * m[7] + m[12] * m[5] * m[11]
+                             -m[4] * m[13] * m[11] - m[8] * m[5] * m[15] - m[12] * m[9] * m[7];
+                    cof[3] = -(m[4] * m[9] * m[14] + m[8] * m[13] * m[6] + m[12] * m[5] * m[10]
+                             -m[4] * m[13] * m[10] - m[8] * m[5] * m[14] - m[12] * m[9] * m[6]);
+                    cof[4] = -(m[1] * m[10] * m[15] + m[9] * m[14] * m[3] + m[13] * m[2] * m[11]
+                             -m[1] * m[14] * m[11] - m[9] * m[2] * m[15] - m[13] * m[10] * m[3]);
+                    cof[5] = m[0] * m[10] * m[15] + m[8] * m[14] * m[3] + m[12] * m[2] * m[11]
+                             -m[0] * m[14] * m[11] - m[8] * m[2] * m[15] - m[12] * m[10] * m[3];
+                    cof[6] = -(m[0] * m[9] * m[15] + m[8] * m[13] * m[3] + m[12] * m[1] * m[11]
+                             -m[0] * m[13] * m[11] - m[8] * m[1] * m[15] - m[12] * m[9] * m[3]);
+                    cof[7] = m[0] * m[9] * m[14] + m[8] * m[13] * m[2] + m[12] * m[1] * m[10]
+                             -m[0] * m[13] * m[10] - m[8] * m[1] * m[14] - m[12] * m[9] * m[2];
+                    cof[8] = m[1] * m[6] * m[15] + m[5] * m[14] * m[3] + m[13] * m[2] * m[7]
+                             -m[1] * m[14] * m[7] - m[5] * m[2] * m[15] - m[13] * m[6] * m[3];
+                    cof[9] = -(m[0] * m[6] * m[15] + m[4] * m[14] * m[3] + m[12] * m[2] * m[7]
+                             -m[0] * m[14] * m[7] - m[4] * m[2] * m[15] - m[12] * m[6] * m[3]);
+                    cof[10] = m[0] * m[5] * m[15] + m[4] * m[13] * m[3] + m[12] * m[1] * m[7]
+                              -m[0] * m[13] * m[7] - m[4] * m[1] * m[15] - m[12] * m[5] * m[3];
+                    cof[11] = -(m[0] * m[5] * m[14] + m[4] * m[13] * m[2] + m[12] * m[1] * m[6]
+                              -m[0] * m[13] * m[6] - m[4] * m[1] * m[14] - m[12] * m[5] * m[2]);
+                    cof[12] = -(m[1] * m[6] * m[11] + m[5] * m[10] * m[3] + m[9] * m[2] * m[7]
+                              -m[1] * m[10] * m[7] - m[5] * m[2] * m[11] - m[9] * m[6] * m[3]);
+                    cof[13] = m[0] * m[6] * m[11] + m[4] * m[10] * m[3] + m[8] * m[2] * m[7]
+                              -m[0] * m[10] * m[7] - m[4] * m[2] * m[11] - m[8] * m[6] * m[3];
+                    cof[14] = -(m[0] * m[5] * m[11] + m[4] * m[9] * m[3] + m[8] * m[1] * m[7]
+                              -m[0] * m[9] * m[7] - m[4] * m[1] * m[11] - m[8] * m[5] * m[3]);
+                    cof[15] = m[0] * m[5] * m[10] + m[4] * m[9] * m[2] + m[8] * m[1] * m[6]
+                              -m[0] * m[9] * m[6] - m[4] * m[1] * m[10] - m[8] * m[5] * m[2];
+                    break;
+                  default:
+                    UNREACHABLE();
+                    break;
+                }
+
+                float det = MatrixDeterminant(m, numRowsAndCols);
+                ASSERT(det != 0.0f);
+                for (size_t i = 0; i < objectSize; i++)
+                    resultArray[i].setFConst(cof[i] / det);
+
+                SafeDeleteArray(m);
+                SafeDeleteArray(cof);
                 break;
             }
             else
@@ -1629,9 +1802,12 @@ TConstantUnion *TIntermConstantUnion::FoldAggregateBuiltIn(TIntermAggregate *agg
             maxObjectSize = objectSizes[i];
     }
 
-    for (unsigned int i = 0; i < paramsCount; i++)
-        if (objectSizes[i] != maxObjectSize)
-            unionArrays[i] = Vectorize(*unionArrays[i], maxObjectSize);
+    if (!(*sequence)[0]->getAsTyped()->isMatrix())
+    {
+        for (unsigned int i = 0; i < paramsCount; i++)
+            if (objectSizes[i] != maxObjectSize)
+                unionArrays[i] = Vectorize(*unionArrays[i], maxObjectSize);
+    }
 
     TConstantUnion *resultArray = nullptr;
     if (paramsCount == 2)
@@ -1973,6 +2149,46 @@ TConstantUnion *TIntermConstantUnion::FoldAggregateBuiltIn(TIntermAggregate *agg
                     float result = unionArrays[0][i].getFConst() -
                                    2.0f * dotProduct * unionArrays[1][i].getFConst();
                     resultArray[i].setFConst(result);
+                }
+            }
+            else
+                UNREACHABLE();
+            break;
+
+          case EOpMul:
+            if (basicType == EbtFloat && (*sequence)[0]->getAsTyped()->isMatrix() &&
+                (*sequence)[1]->getAsTyped()->isMatrix())
+            {
+                // Perform component-wise matrix multiplication.
+                resultArray = new TConstantUnion[maxObjectSize];
+                size_t numRowsAndCols = (*sequence)[0]->getAsTyped()->getNominalSize();
+                for (size_t i = 0; i < numRowsAndCols; i++)
+                {
+                    for (size_t j = 0; j < numRowsAndCols; j++)
+                    {
+                        unsigned int index = i * numRowsAndCols + j;
+                        resultArray[index].setFConst(unionArrays[0][index].getFConst() *
+                                                     unionArrays[1][index].getFConst());
+                    }
+                }
+            }
+            else
+                UNREACHABLE();
+            break;
+
+          case EOpOuterProduct:
+            if (basicType == EbtFloat)
+            {
+                size_t numRows = (*sequence)[0]->getAsTyped()->getType().getObjectSize();
+                size_t numCols = (*sequence)[1]->getAsTyped()->getType().getObjectSize();
+                resultArray = new TConstantUnion[numRows * numCols];
+                for (size_t i = 0; i < numRows; i++)
+                {
+                    for (size_t j = 0; j < numCols; j++)
+                    {
+                        resultArray[i * numCols + j].setFConst(unionArrays[0][i].getFConst() *
+                                                               unionArrays[1][j].getFConst());
+                    }
                 }
             }
             else
