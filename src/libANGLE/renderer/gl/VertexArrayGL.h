@@ -14,6 +14,7 @@
 namespace rx
 {
 
+class BufferGL;
 class FunctionsGL;
 class StateManagerGL;
 
@@ -61,10 +62,12 @@ class VertexArrayGL : public VertexArrayImpl
     std::vector<gl::VertexAttribute> mAttributes;
 
     mutable GLuint mAppliedElementArrayBuffer;
+    mutable angle::ID<BufferGL> mAppliedElementArrayBufferID;
     mutable std::vector<gl::VertexAttribute> mAppliedAttributes;
 
     mutable size_t mStreamingElementArrayBufferSize;
     mutable GLuint mStreamingElementArrayBuffer;
+    mutable angle::ID<BufferGL> mStreamingElementArrayBufferID;
 
     mutable size_t mStreamingArrayBufferSize;
     mutable GLuint mStreamingArrayBuffer;
