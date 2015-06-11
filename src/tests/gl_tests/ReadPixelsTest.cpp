@@ -8,17 +8,21 @@
 
 using namespace angle;
 
-class ReadPixelsTest : public ANGLETest
+template <EGLint r, EGLint g, EGLint b, EGLint a, EGLint d, EGLint s, bool matchConfig>
+class ReadPixelsTestBase : public ANGLETest
 {
   protected:
-    ReadPixelsTest()
+    ReadPixelsTestBase()
     {
         setWindowWidth(32);
         setWindowHeight(32);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
+        setConfigRedBits(r);
+        setConfigGreenBits(g);
+        setConfigBlueBits(b);
+        setConfigAlphaBits(a);
+        setConfigDepthBits(d);
+        setConfigStencilBits(s);
+        setUseMatchingConfigIfPresent(matchConfig);
     }
 
     virtual void SetUp()
@@ -84,12 +88,67 @@ class ReadPixelsTest : public ANGLETest
         glDeleteFramebuffers(1, &mFBO);
     }
 
+    void runDrawWithPBOTest()
+    {
+        unsigned char data[4] = { 1, 2, 3, 4 };
+
+        glBindTexture(GL_TEXTURE_2D, mTexture);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        EXPECT_GL_NO_ERROR();
+
+        // glReadBuffer(GL_COLOR_ATTACHMENT0); // FIXME: currently UNIMPLEMENTED
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, mFBO);
+        EXPECT_GL_NO_ERROR();
+
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, mPBO);
+        glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+        glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+        EXPECT_GL_NO_ERROR();
+
+        float positionData[] = { 0.5f, 0.5f };
+
+        glUseProgram(mProgram);
+        glViewport(0, 0, 1, 1);
+        glBindBuffer(GL_ARRAY_BUFFER, mPositionVBO);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, 1 * 2 * 4, positionData);
+        EXPECT_GL_NO_ERROR();
+
+        GLint positionLocation = glGetAttribLocation(mProgram, "aPosition");
+        EXPECT_NE(-1, positionLocation);
+
+        GLint testLocation = glGetAttribLocation(mProgram, "aTest");
+        EXPECT_NE(-1, testLocation);
+
+        glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(positionLocation);
+        EXPECT_GL_NO_ERROR();
+
+        glBindBuffer(GL_ARRAY_BUFFER, mPBO);
+        glVertexAttribPointer(testLocation, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(testLocation);
+        EXPECT_GL_NO_ERROR();
+
+        glDrawArrays(GL_POINTS, 0, 1);
+        EXPECT_GL_NO_ERROR();
+
+        memset(data, 0, 4);
+        glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        EXPECT_GL_NO_ERROR();
+
+        EXPECT_EQ(1, data[0]);
+        EXPECT_EQ(2, data[1]);
+        EXPECT_EQ(3, data[2]);
+        EXPECT_EQ(4, data[3]);
+    }
+
     GLuint mPBO;
     GLuint mProgram;
     GLuint mTexture;
     GLuint mFBO;
     GLuint mPositionVBO;
 };
+
+typedef ReadPixelsTestBase<8, 8, 8, 8, EGL_DONT_CARE, EGL_DONT_CARE, false> ReadPixelsTest;
 
 TEST_P(ReadPixelsTest, OutOfBounds)
 {
@@ -250,55 +309,7 @@ TEST_P(ReadPixelsTest, PBOAndSubDataOffset)
 
 TEST_P(ReadPixelsTest, DrawWithPBO)
 {
-    unsigned char data[4] = { 1, 2, 3, 4 };
-
-    glBindTexture(GL_TEXTURE_2D, mTexture);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    EXPECT_GL_NO_ERROR();
-
-    // glReadBuffer(GL_COLOR_ATTACHMENT0); // FIXME: currently UNIMPLEMENTED
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, mFBO);
-    EXPECT_GL_NO_ERROR();
-
-    glBindBuffer(GL_PIXEL_PACK_BUFFER, mPBO);
-    glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-    EXPECT_GL_NO_ERROR();
-
-    float positionData[] = { 0.5f, 0.5f };
-
-    glUseProgram(mProgram);
-    glViewport(0, 0, 1, 1);
-    glBindBuffer(GL_ARRAY_BUFFER, mPositionVBO);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, 1 * 2 * 4, positionData);
-    EXPECT_GL_NO_ERROR();
-
-    GLint positionLocation = glGetAttribLocation(mProgram, "aPosition");
-    EXPECT_NE(-1, positionLocation);
-
-    GLint testLocation = glGetAttribLocation(mProgram, "aTest");
-    EXPECT_NE(-1, testLocation);
-
-    glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(positionLocation);
-    EXPECT_GL_NO_ERROR();
-
-    glBindBuffer(GL_ARRAY_BUFFER, mPBO);
-    glVertexAttribPointer(testLocation, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(testLocation);
-    EXPECT_GL_NO_ERROR();
-
-    glDrawArrays(GL_POINTS, 0, 1);
-    EXPECT_GL_NO_ERROR();
-
-    memset(data, 0, 4);
-    glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    EXPECT_GL_NO_ERROR();
-
-    EXPECT_EQ(1, data[0]);
-    EXPECT_EQ(2, data[1]);
-    EXPECT_EQ(3, data[2]);
-    EXPECT_EQ(4, data[3]);
+    runDrawWithPBOTest();
 }
 
 TEST_P(ReadPixelsTest, MultisampledPBO)
@@ -345,5 +356,26 @@ TEST_P(ReadPixelsTest, MultisampledPBO)
     glDeleteFramebuffers(1, &fbo);
 }
 
+typedef ReadPixelsTestBase<5, 6, 5, 0, 0, 0, true> ReadPixelsTest16bit_565Config;
+TEST_P(ReadPixelsTest16bit_565Config, DrawWithPBO)
+{
+    runDrawWithPBOTest();
+}
+
+typedef ReadPixelsTestBase<4, 4, 4, 4, 0, 0, true> ReadPixelsTest16bit_4444Config;
+TEST_P(ReadPixelsTest16bit_4444Config, DrawWithPBO)
+{
+    runDrawWithPBOTest();
+}
+
+typedef ReadPixelsTestBase<5, 5, 5, 1, 0, 0, true> ReadPixelsTest16bit_5551Config;
+TEST_P(ReadPixelsTest16bit_5551Config, DrawWithPBO)
+{
+    runDrawWithPBOTest();
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(ReadPixelsTest, ES3_D3D11());
+ANGLE_INSTANTIATE_TEST(ReadPixelsTest16bit_565Config, ES3_D3D11());
+ANGLE_INSTANTIATE_TEST(ReadPixelsTest16bit_4444Config, ES3_D3D11());
+ANGLE_INSTANTIATE_TEST(ReadPixelsTest16bit_5551Config, ES3_D3D11());

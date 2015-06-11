@@ -619,6 +619,11 @@ egl::ConfigSet Renderer11::generateConfigs() const
 {
     static const GLenum colorBufferFormats[] =
     {
+        // 16-bit supported formats
+        GL_RGBA4,
+        GL_RGB5_A1,
+        GL_RGB565,
+        // 32-bit supported formats
         GL_BGRA8_EXT,
         GL_RGBA8_OES,
     };

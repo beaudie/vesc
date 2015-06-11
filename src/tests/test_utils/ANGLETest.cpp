@@ -162,6 +162,11 @@ void ANGLETest::setMultisampleEnabled(bool enabled)
     mEGLWindow->setMultisample(enabled);
 }
 
+void ANGLETest::setUseMatchingConfigIfPresent(bool useMatching)
+{
+    mEGLWindow->setUseMatchingConfigIfPresent(useMatching);
+}
+
 int ANGLETest::getClientVersion() const
 {
     return mEGLWindow->getClientVersion();

@@ -112,7 +112,7 @@ EGLint SwapChain11::resetOffscreenTexture(int backbufferWidth, int backbufferHei
 
     releaseOffscreenTexture();
 
-    const d3d11::TextureFormat &backbufferFormatInfo = d3d11::GetTextureFormatInfo(mBackBufferFormat, mRenderer->getRenderer11DeviceCaps());
+    const d3d11::TextureFormat &backbufferFormatInfo = d3d11::GetTextureFormatInfo(mOffscreenRenderTargetFormat, mRenderer->getRenderer11DeviceCaps());
 
     // If the app passed in a share handle, open the resource
     // See EGL_ANGLE_d3d_share_handle_client_buffer
@@ -351,8 +351,7 @@ EGLint SwapChain11::resize(EGLint backbufferWidth, EGLint backbufferHeight)
     // Resize swap chain
     DXGI_SWAP_CHAIN_DESC desc;
     mSwapChain->GetDesc(&desc);
-    const d3d11::TextureFormat &backbufferFormatInfo = d3d11::GetTextureFormatInfo(mBackBufferFormat, mRenderer->getRenderer11DeviceCaps());
-    HRESULT result = mSwapChain->ResizeBuffers(desc.BufferCount, backbufferWidth, backbufferHeight, backbufferFormatInfo.texFormat, 0);
+    HRESULT result = mSwapChain->ResizeBuffers(desc.BufferCount, backbufferWidth, backbufferHeight, getValidSwapChainFormat(), 0);
 
     if (FAILED(result))
     {
@@ -384,6 +383,13 @@ EGLint SwapChain11::resize(EGLint backbufferWidth, EGLint backbufferHeight)
     }
 
     return resetOffscreenTexture(backbufferWidth, backbufferHeight);
+}
+
+DXGI_FORMAT SwapChain11::getValidSwapChainFormat()
+{
+    // The render target format used for offscreen rendering may not be compatible to use for swapchain creation.
+    // A compatible 32-bit format must be chosen.
+    return (mOffscreenRenderTargetFormat == GL_BGRA8_EXT) ? DXGI_FORMAT_B8G8R8A8_UNORM : DXGI_FORMAT_R8G8B8A8_UNORM;
 }
 
 EGLint SwapChain11::reset(int backbufferWidth, int backbufferHeight, EGLint swapInterval)
@@ -419,11 +425,7 @@ EGLint SwapChain11::reset(int backbufferWidth, int backbufferHeight, EGLint swap
 
     if (mNativeWindow.getNativeWindow())
     {
-        const d3d11::TextureFormat &backbufferFormatInfo = d3d11::GetTextureFormatInfo(mBackBufferFormat, mRenderer->getRenderer11DeviceCaps());
-
-        HRESULT result = mNativeWindow.createSwapChain(device, mRenderer->getDxgiFactory(),
-                                               backbufferFormatInfo.texFormat,
-                                               backbufferWidth, backbufferHeight, &mSwapChain);
+        HRESULT result = mNativeWindow.createSwapChain(device, mRenderer->getDxgiFactory(), getValidSwapChainFormat(), backbufferWidth, backbufferHeight, &mSwapChain);
 
         if (FAILED(result))
         {

@@ -17,6 +17,7 @@
 namespace
 {
 
+template <EGLint r, EGLint g, EGLint b, EGLint a, EGLint d, EGLint s, bool matchConfig>
 class EGLSurfaceTest : public testing::Test
 {
   protected:
@@ -106,20 +107,35 @@ class EGLSurfaceTest : public testing::Test
         eglBindAPI(EGL_OPENGL_ES_API);
         ASSERT_TRUE(eglGetError() == EGL_SUCCESS);
 
+        EGLint configCount = 0;
         const EGLint configAttributes[] =
         {
-            EGL_RED_SIZE, EGL_DONT_CARE,
-            EGL_GREEN_SIZE, EGL_DONT_CARE,
-            EGL_BLUE_SIZE, EGL_DONT_CARE,
-            EGL_ALPHA_SIZE, EGL_DONT_CARE,
-            EGL_DEPTH_SIZE, EGL_DONT_CARE,
-            EGL_STENCIL_SIZE, EGL_DONT_CARE,
+            EGL_RED_SIZE, r,
+            EGL_GREEN_SIZE, g,
+            EGL_BLUE_SIZE, b,
+            EGL_ALPHA_SIZE, a,
+            EGL_DEPTH_SIZE, d,
+            EGL_STENCIL_SIZE, s,
             EGL_SAMPLE_BUFFERS, 0,
             EGL_NONE
         };
 
-        EGLint configCount;
-        ASSERT_TRUE(eglChooseConfig(mDisplay, configAttributes, &mConfig, 1, &configCount) || (configCount != 1) == EGL_TRUE);
+        if (matchConfig)
+        {
+            if (EGLWindow::ChooseExactConfig(mDisplay, configAttributes, &mConfig, 1, &configCount) == EGL_TRUE && (configCount == 1))
+            {
+                std::cout << "Exact matching config for RED=" << r << " BLUE=" << b << " GREEN=" << g << " ALPHA=" << a << " is being used for surface creation" << std::endl;
+            }
+            else
+            {
+                std::cout << "Exact matching config for RED=" << r << " BLUE=" << b << " GREEN=" << g << " ALPHA=" << a << " was not found and is assumed to be not supported. Defaulting to eglChooseConfig behavior with same attributes." << std::endl;
+                ASSERT_TRUE(eglChooseConfig(mDisplay, configAttributes, &mConfig, 1, &configCount) || (configCount != 1) == EGL_TRUE);
+            }
+        }
+        else
+        {
+            ASSERT_TRUE(eglChooseConfig(mDisplay, configAttributes, &mConfig, 1, &configCount) || (configCount != 1) == EGL_TRUE);
+        }
 
         std::vector<EGLint> surfaceAttributes;
         surfaceAttributes.push_back(EGL_NONE);
@@ -178,12 +194,16 @@ class EGLSurfaceTest : public testing::Test
     EGLContext mContext;
     EGLContext mSecondContext;
     EGLConfig mConfig;
+    GLuint m2DProgram;
+    GLint mTexture2DUniformLocation;
     OSWindow *mOSWindow;
 };
 
+typedef EGLSurfaceTest<EGL_DONT_CARE, EGL_DONT_CARE, EGL_DONT_CARE, EGL_DONT_CARE, EGL_DONT_CARE, EGL_DONT_CARE, false> EGLSurfaceTestDefault;
+
 // Test a surface bug where we could have two Window surfaces active
 // at one time, blocking message loops. See http://crbug.com/475085
-TEST_F(EGLSurfaceTest, MessageLoopBug)
+TEST_F(EGLSurfaceTestDefault, MessageLoopBug)
 {
     const char *extensionsString = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
     if (strstr(extensionsString, "EGL_ANGLE_platform_angle_d3d") == nullptr)
@@ -199,7 +219,7 @@ TEST_F(EGLSurfaceTest, MessageLoopBug)
 
 // Tests the message loop bug, but with setting a second context
 // instead of null.
-TEST_F(EGLSurfaceTest, MessageLoopBugContext)
+TEST_F(EGLSurfaceTestDefault, MessageLoopBugContext)
 {
     const char *extensionsString = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
     if (strstr(extensionsString, "EGL_ANGLE_platform_angle_d3d") == nullptr)
@@ -214,7 +234,7 @@ TEST_F(EGLSurfaceTest, MessageLoopBugContext)
 }
 
 // Test a bug where calling makeCurrent twice would release the surface
-TEST_F(EGLSurfaceTest, MakeCurrentTwice)
+TEST_F(EGLSurfaceTestDefault, MakeCurrentTwice)
 {
     initializeSurface(EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
 
@@ -229,7 +249,7 @@ TEST_F(EGLSurfaceTest, MakeCurrentTwice)
 }
 
 // Test that the D3D window surface is correctly resized after calling swapBuffers
-TEST_F(EGLSurfaceTest, ResizeD3DWindow)
+TEST_F(EGLSurfaceTestDefault, ResizeD3DWindow)
 {
     const char *extensionsString = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
     if (strstr(extensionsString, "EGL_ANGLE_platform_angle_d3d") == nullptr)
@@ -267,6 +287,54 @@ TEST_F(EGLSurfaceTest, ResizeD3DWindow)
     eglQuerySurface(mDisplay, mWindowSurface, EGL_HEIGHT, &height);
     ASSERT_EGL_SUCCESS();
     ASSERT_EQ(64, height);
+}
+
+typedef EGLSurfaceTest<5, 6, 5, 0, 0, 0, true> EGLSurfaceTest_GL_RGB565;
+TEST_F(EGLSurfaceTest_GL_RGB565, CreateSurface)
+{
+    const char *extensionsString = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
+    if (strstr(extensionsString, "EGL_ANGLE_platform_angle_d3d") == nullptr)
+    {
+        std::cout << "D3D Platform not supported in ANGLE" << std::endl;
+        return;
+    }
+
+    initializeSurface(EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE);
+
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
+}
+
+typedef EGLSurfaceTest<4, 4, 4, 4, 0, 0,true> EGLSurfaceTest_GL_RGBA4;
+TEST_F(EGLSurfaceTest_GL_RGBA4, CreateSurface)
+{
+    const char *extensionsString = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
+    if (strstr(extensionsString, "EGL_ANGLE_platform_angle_d3d") == nullptr)
+    {
+        std::cout << "D3D Platform not supported in ANGLE" << std::endl;
+        return;
+    }
+
+    initializeSurface(EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE);
+
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
+}
+
+typedef EGLSurfaceTest<5, 5, 5, 1, 0, 0, true> EGLSurfaceTest_GL_RGB5_A1;
+TEST_F(EGLSurfaceTest_GL_RGB5_A1, CreateSurface)
+{
+    const char *extensionsString = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
+    if (strstr(extensionsString, "EGL_ANGLE_platform_angle_d3d") == nullptr)
+    {
+        std::cout << "D3D Platform not supported in ANGLE" << std::endl;
+        return;
+    }
+
+    initializeSurface(EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE);
+
+    eglSwapBuffers(mDisplay, mWindowSurface);
+    ASSERT_EGL_SUCCESS();
 }
 
 }

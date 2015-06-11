@@ -63,6 +63,9 @@ class EGLWindow : angle::NonCopyable
     void setConfigStencilBits(int bits) { mStencilBits = bits; }
     void setMultisample(bool multisample) { mMultisample = multisample; }
     void setSwapInterval(EGLint swapInterval) { mSwapInterval = swapInterval; }
+    void setUseMatchingConfigIfPresent(bool useMatching) { mUseMatchingConfigIfPresent = useMatching; }
+
+    static EGLBoolean ChooseExactConfig(EGLDisplay dpy, const EGLint *attrib_list, EGLConfig *configs, EGLint config_size, EGLint *num_config);
 
     void swap();
 
@@ -88,6 +91,9 @@ class EGLWindow : angle::NonCopyable
     bool isGLInitialized() const;
 
   private:
+    EGLBoolean chooseConfig(EGLDisplay dpy, const EGLint *attrib_list, EGLConfig *configs, EGLint config_size, EGLint *num_config);
+
+  private:
     EGLConfig mConfig;
     EGLDisplay mDisplay;
     EGLSurface mSurface;
@@ -105,6 +111,7 @@ class EGLWindow : angle::NonCopyable
     int mStencilBits;
     bool mMultisample;
     EGLint mSwapInterval;
+    bool mUseMatchingConfigIfPresent;
 };
 
 #endif // UTIL_EGLWINDOW_H_
