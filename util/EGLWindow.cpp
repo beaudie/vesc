@@ -84,7 +84,8 @@ EGLWindow::EGLWindow(size_t width, size_t height, EGLint glesMajorVersion, const
       mDepthBits(-1),
       mStencilBits(-1),
       mMultisample(false),
-      mSwapInterval(-1)
+      mSwapInterval(-1),
+      mUseMatchingConfigIfPresent(false)
 {
 }
 
@@ -175,7 +176,7 @@ bool EGLWindow::initializeGL(OSWindow *osWindow)
     };
 
     EGLint configCount;
-    if (!eglChooseConfig(mDisplay, configAttributes, &mConfig, 1, &configCount) || (configCount != 1))
+    if (!chooseConfig(mDisplay, configAttributes, &mConfig, 1, &configCount) || (configCount != 1))
     {
         destroyGL();
         return false;
@@ -262,4 +263,55 @@ bool EGLWindow::isGLInitialized() const
     return mSurface != EGL_NO_SURFACE &&
            mContext != EGL_NO_CONTEXT &&
            mDisplay != EGL_NO_DISPLAY;
+}
+
+// This helper function is used as a replacement for eglChooseConfig to find and
+// return EGLConfigs that match exactly the specified attributes. eglChooseConfig
+// will return EGLConfigs with bit counts greater than or equal to the
+// requested count.
+EGLBoolean EGLWindow::ChooseExactConfig(EGLDisplay dpy, const EGLint *attrib_list, EGLConfig *configs, EGLint config_size, EGLint *num_config)
+{
+    // Attempt to find an exact EGLConfig match for the specified attributes list.
+    // If one is not found EGL_FALSE is returned.
+    EGLint numConfigs = 0;
+    eglGetConfigs(dpy, nullptr, 0, &numConfigs);
+    std::vector<EGLConfig> allConfigs(numConfigs);
+    eglGetConfigs(dpy, allConfigs.data(), allConfigs.size(), &numConfigs);
+
+    for (size_t i = 0; i < allConfigs.size(); i++)
+    {
+        bool matchFound = true;
+        for (const EGLint *curAttrib = attrib_list; curAttrib[0] != EGL_NONE; curAttrib += 2)
+        {
+            EGLint actualValue = EGL_DONT_CARE;
+            eglGetConfigAttrib(dpy, allConfigs[i], curAttrib[0], &actualValue);
+            if (curAttrib[1] != actualValue)
+            {
+                matchFound = false;
+                break;
+            }
+        }
+
+        if (matchFound)
+        {
+            *num_config = 1;
+            *configs = allConfigs[i];
+            return EGL_TRUE;
+        }
+    }
+
+    return EGL_FALSE;
+}
+
+EGLBoolean EGLWindow::chooseConfig(EGLDisplay dpy, const EGLint *attrib_list, EGLConfig *configs, EGLint config_size, EGLint *num_config)
+{
+    if (mUseMatchingConfigIfPresent)
+    {
+        if (ChooseExactConfig(dpy, attrib_list, configs, config_size, num_config) == EGL_TRUE)
+        {
+            return EGL_TRUE;
+        }
+    }
+
+    return eglChooseConfig(dpy, attrib_list, configs, config_size, num_config);
 }
