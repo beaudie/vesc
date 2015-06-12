@@ -2942,4 +2942,15 @@ Workarounds Renderer9::generateWorkarounds() const
     return d3d9::GenerateWorkarounds();
 }
 
+void Renderer9::clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd)
+{
+    // TODO(jmadill): faster way?
+    for (size_t samplerIndex = rangeStart; samplerIndex < rangeEnd; samplerIndex++)
+    {
+        gl::Error error = setTexture(samplerType, samplerIndex, nullptr);
+        UNUSED_ASSERTION_VARIABLE(error);
+        ASSERT(!error.isError());
+    }
+}
+
 }

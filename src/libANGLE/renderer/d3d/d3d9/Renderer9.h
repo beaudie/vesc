@@ -233,6 +233,8 @@ class Renderer9 : public RendererD3D
 
     D3DDEVTYPE getD3D9DeviceType() const { return mDeviceType; }
 
+    void clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) override;
+
   private:
     void generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureCaps, gl::Extensions *outExtensions) const override;
     Workarounds generateWorkarounds() const override;

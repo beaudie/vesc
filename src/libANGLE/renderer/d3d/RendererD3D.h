@@ -183,6 +183,9 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
 
     gl::Error getScratchMemoryBuffer(size_t requestedSize, MemoryBuffer **bufferOut);
 
+    // In D3D11, faster than calling setTexture a jillion times
+    virtual void clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) = 0;
+
   protected:
     virtual gl::Error drawArrays(const gl::Data &data, GLenum mode, GLsizei count, GLsizei instances, bool usesPointSize) = 0;
     virtual gl::Error drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,

@@ -264,6 +264,8 @@ class Renderer11 : public RendererD3D
 
     RendererClass getRendererClass() const override { return RENDERER_D3D11; }
 
+    void clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) override;
+
   private:
     void generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureCaps, gl::Extensions *outExtensions) const override;
     Workarounds generateWorkarounds() const override;
@@ -317,8 +319,34 @@ class Renderer11 : public RendererD3D
         uintptr_t resource;
         D3D11_SHADER_RESOURCE_VIEW_DESC desc;
     };
-    std::vector<SRVRecord> mCurVertexSRVs;
-    std::vector<SRVRecord> mCurPixelSRVs;
+
+    class SRVCache : angle::NonCopyable
+    {
+      public:
+        SRVCache()
+            : mHighestUsedSRV(0)
+        {
+        }
+
+        void initialize(size_t size)
+        {
+            mCurrentSRVs.resize(size);
+        }
+
+        size_t size() const { return mCurrentSRVs.size(); }
+        size_t highestUsed() const { return mHighestUsedSRV; }
+
+        const SRVRecord &operator[](size_t index) const { return mCurrentSRVs[index]; }
+        void clear();
+        void update(size_t resourceIndex, ID3D11ShaderResourceView *srv);
+
+      private:
+        std::vector<SRVRecord> mCurrentSRVs;
+        size_t mHighestUsedSRV;
+    };
+
+    SRVCache mCurVertexSRVs;
+    SRVCache mCurPixelSRVs;
 
     // Currently applied blend state
     bool mForceSetBlendState;
