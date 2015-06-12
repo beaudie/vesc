@@ -40,16 +40,20 @@ VertexDeclarationCache::~VertexDeclarationCache()
     }
 }
 
-gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9 *device, TranslatedAttribute attributes[], gl::Program *program, GLsizei instances, GLsizei *repeatDraw)
+gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9 *device,
+                                                   const std::vector<TranslatedAttribute> &attributes,
+                                                   gl::Program *program,
+                                                   GLsizei instances,
+                                                   GLsizei *repeatDraw)
 {
     *repeatDraw = 1;
 
-    int indexedAttribute = gl::MAX_VERTEX_ATTRIBS;
-    int instancedAttribute = gl::MAX_VERTEX_ATTRIBS;
+    size_t indexedAttribute = gl::MAX_VERTEX_ATTRIBS;
+    size_t instancedAttribute = gl::MAX_VERTEX_ATTRIBS;
 
     if (instances == 0)
     {
-        for (int i = 0; i < gl::MAX_VERTEX_ATTRIBS; ++i)
+        for (size_t i = 0; i < attributes.size(); ++i)
         {
             if (attributes[i].divisor != 0)
             {
@@ -64,7 +68,7 @@ gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9 *device, Tra
     if (instances > 0)
     {
         // Find an indexed attribute to be mapped to D3D stream 0
-        for (int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
+        for (size_t i = 0; i < attributes.size(); i++)
         {
             if (attributes[i].active)
             {
@@ -92,7 +96,7 @@ gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9 *device, Tra
     D3DVERTEXELEMENT9 elements[gl::MAX_VERTEX_ATTRIBS + 1];
     D3DVERTEXELEMENT9 *element = &elements[0];
 
-    for (int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
+    for (size_t i = 0; i < attributes.size(); i++)
     {
         if (attributes[i].active)
         {
