@@ -247,10 +247,22 @@ TEST_P(FenceSyncTest, BasicOperations)
 
     GLsizei length = 0;
     GLint value = 0;
-    while (value != GL_SIGNALED)
+    unsigned int loopCount = 0;
+
+    glFlush();
+
+    // Use 'loopCount' to make sure the test doesn't get stuck in an infinite loop
+    while (value != GL_SIGNALED && loopCount <= 1000000)
     {
+        loopCount++;
+
         glGetSynciv(sync, GL_SYNC_STATUS, 1, &length, &value);
         ASSERT_GL_NO_ERROR();
+    }
+
+    if (value != GL_SIGNALED)
+    {
+        FAIL() << "Timed out while waiting for GL_SIGNALED";
     }
 
     for (size_t i = 0; i < 20; i++)
