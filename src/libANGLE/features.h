@@ -37,4 +37,11 @@
 #define ANGLE_SHADER_DEBUG_INFO ANGLE_DISABLED
 #endif
 
+// Program link validation of precisions for uniforms
+// ENABLED validate that precision for uniforms match between vertex and fragment shaders
+// DISABLED allow precision for uniforms to differ between vertex and fragment shaders
+#if !defined(ANGLE_PROGRAM_LINK_VALIDATE_UNIFORM_PRECISION)
+#define ANGLE_PROGRAM_LINK_VALIDATE_UNIFORM_PRECISION ANGLE_ENABLED
+#endif
+
 #endif // LIBANGLE_FEATURES_H_
