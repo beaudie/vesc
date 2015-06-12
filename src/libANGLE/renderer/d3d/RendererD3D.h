@@ -12,6 +12,7 @@
 #include "common/MemoryBuffer.h"
 #include "libANGLE/Data.h"
 #include "libANGLE/renderer/Renderer.h"
+#include "libANGLE/renderer/d3d/VertexDataManager.h"
 #include "libANGLE/renderer/d3d/formatutilsD3D.h"
 #include "libANGLE/renderer/d3d/d3d11/NativeWindow.h"
 
@@ -200,6 +201,8 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
 
     egl::Display *mDisplay;
     bool mDeviceLost;
+
+    std::vector<TranslatedAttribute> mTranslatedAttribCache;
 
   private:
     //FIXME(jmadill): std::array is currently prohibited by Chromium style guide
