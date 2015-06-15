@@ -41,7 +41,9 @@ void InitBuiltInFunctionEmulatorForGLSL(BuiltInFunctionEmulator *emu, sh::GLenum
 void InitBuiltInFunctionEmulatorForGLSL(BuiltInFunctionEmulator *emu, sh::GLenum shaderType,
                                         int targetGLSLVersion)
 {
-    if (targetGLSLVersion == GLSL_VERSION_410)
+    // Emulate packSnorm2x16, packHalf2x16, unpackSnorm2x16, and unpackHalf2x16 (GLSL 4.20)
+    // by using floatBitsToInt, floatBitsToUint, intBitsToFloat, and uintBitsToFloat (GLSL 3.30).
+    if (targetGLSLVersion >= GLSL_VERSION_330 && targetGLSLVersion <= GLSL_VERSION_410)
     {
         TType *float2 = new TType(EbtFloat, 2);
         TType *uint1 = new TType(EbtUInt);
