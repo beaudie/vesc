@@ -6,11 +6,17 @@
 
 #include "compiler/translator/VersionGLSL.h"
 
-static const int GLSL_VERSION_110 = 110;
-static const int GLSL_VERSION_120 = 120;
-static const int GLSL_VERSION_130 = 130;
-static const int GLSL_VERSION_410 = 410;
-static const int GLSL_VERSION_420 = 420;
+int ShaderOutputTypeToGLSLVersion(ShShaderOutput output)
+{
+    switch (output)
+    {
+      case SH_GLSL_130_OUTPUT:           return GLSL_VERSION_130;
+      case SH_GLSL_410_CORE_OUTPUT:      return GLSL_VERSION_410;
+      case SH_GLSL_420_CORE_OUTPUT:      return GLSL_VERSION_420;
+      case SH_GLSL_COMPATIBILITY_OUTPUT: return GLSL_VERSION_110;
+      default: UNREACHABLE();            return 0;
+    }
+}
 
 // We need to scan for the following:
 // 1. "invariant" keyword: This can occur in both - vertex and fragment shaders
@@ -34,25 +40,10 @@ TVersionGLSL::TVersionGLSL(sh::GLenum type,
                            ShShaderOutput output)
     : TIntermTraverser(true, false, false)
 {
-    if (output == SH_GLSL_130_OUTPUT)
+    mVersion = ShaderOutputTypeToGLSLVersion(output);
+    if (pragma.stdgl.invariantAll)
     {
-        mVersion = GLSL_VERSION_130;
-    }
-    else if (output == SH_GLSL_410_CORE_OUTPUT)
-    {
-        mVersion = GLSL_VERSION_410;
-    }
-    else if (output == SH_GLSL_420_CORE_OUTPUT)
-    {
-        mVersion = GLSL_VERSION_420;
-    }
-    else
-    {
-      ASSERT(output == SH_GLSL_COMPATIBILITY_OUTPUT);
-      if (pragma.stdgl.invariantAll)
-          mVersion = GLSL_VERSION_120;
-      else
-          mVersion = GLSL_VERSION_110;
+        updateVersion(GLSL_VERSION_120);
     }
 }
 
