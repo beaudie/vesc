@@ -19,6 +19,7 @@ void InitBuiltInFunctionEmulatorForGLSL(BuiltInFunctionEmulator *emu, sh::GLenum
 //
 // This function is emulating built-in functions missing from OpenGL 4.1.
 //
-void InitBuiltInFunctionEmulatorForGLSL4_1(BuiltInFunctionEmulator *emu, sh::GLenum shaderType);
+void InitBuiltInFunctionEmulatorForGLSL(BuiltInFunctionEmulator *emu, sh::GLenum shaderType,
+                                        int targetGLSLVersion);
 
 #endif  // COMPILER_TRANSLATOR_BUILTINFUNCTIONEMULATORGLSL_H_
