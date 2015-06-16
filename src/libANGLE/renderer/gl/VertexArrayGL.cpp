@@ -28,7 +28,6 @@ VertexArrayGL::VertexArrayGL(const FunctionsGL *functions, StateManagerGL *state
       mVertexArrayID(0),
       mElementArrayBuffer(),
       mAttributes(),
-      mAppliedElementArrayBuffer(0),
       mAppliedAttributes(),
       mStreamingElementArrayBufferSize(0),
       mStreamingElementArrayBuffer(0),
@@ -103,7 +102,7 @@ gl::Error VertexArrayGL::syncDrawElementsState(GLsizei count, GLenum type, const
 
 gl::Error VertexArrayGL::syncDrawState(GLint first, GLsizei count, GLenum type, const GLvoid *indices, const GLvoid **outIndices) const
 {
-    mStateManager->bindVertexArray(mVertexArrayID, mAppliedElementArrayBuffer);
+    mStateManager->bindVertexArray(mVertexArrayID);
 
     // Check if any attributes need to be streamed, determines if the index range needs to be computed
     bool attributesNeedStreaming = doAttributesNeedStreaming();
@@ -248,12 +247,7 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
     if (mElementArrayBuffer.get() != nullptr)
     {
         const BufferGL *bufferGL = GetImplAs<BufferGL>(mElementArrayBuffer.get());
-        GLuint elementArrayBufferID = bufferGL->getBufferID();
-        if (elementArrayBufferID != mAppliedElementArrayBuffer)
-        {
-            mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferID);
-            mAppliedElementArrayBuffer = elementArrayBufferID;
-        }
+        mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferGL->getBufferID());
 
         // Only compute the index range if the attributes also need to be streamed
         if (attributesNeedStreaming)
@@ -288,7 +282,6 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
         }
 
         mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, mStreamingElementArrayBuffer);
-        mAppliedElementArrayBuffer = mStreamingElementArrayBuffer;
 
         // Make sure the element array buffer is large enough
         const gl::Type &indexTypeInfo = gl::GetTypeInfo(type);
@@ -402,11 +395,6 @@ gl::Error VertexArrayGL::streamAttributes(size_t streamingDataSize, size_t maxAt
 GLuint VertexArrayGL::getVertexArrayID() const
 {
     return mVertexArrayID;
-}
-
-GLuint VertexArrayGL::getAppliedElementArrayBufferID() const
-{
-    return mAppliedElementArrayBuffer;
 }
 
 }

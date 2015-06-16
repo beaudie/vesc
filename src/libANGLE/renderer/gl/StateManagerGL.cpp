@@ -25,6 +25,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mProgram(0),
       mVAO(0),
       mVertexAttribCurrentValues(rendererCaps.maxVertexAttributes),
+      mVAOElementArrayBuffers(),
       mBuffers(),
       mTextureUnitIndex(0),
       mTextures(),
@@ -113,8 +114,10 @@ void StateManagerGL::deleteVertexArray(GLuint vao)
     {
         if (mVAO == vao)
         {
-            bindVertexArray(0, 0);
+            bindVertexArray(0);
         }
+
+        mVAOElementArrayBuffers.erase(vao);
 
         mFunctions->deleteVertexArrays(1, &vao);
     }
@@ -149,6 +152,15 @@ void StateManagerGL::deleteBuffer(GLuint buffer)
             if (bufferTypeIter.second == buffer)
             {
                 bindBuffer(bufferTypeIter.first, 0);
+            }
+        }
+
+        // If this buffer is bound as an index buffer of a VAO, update the tracking
+        for (auto &vaoIter : mVAOElementArrayBuffers)
+        {
+            if (vaoIter.second == buffer)
+            {
+                vaoIter.second = 0;
             }
         }
 
@@ -194,13 +206,25 @@ void StateManagerGL::useProgram(GLuint program)
     }
 }
 
-void StateManagerGL::bindVertexArray(GLuint vao, GLuint elementArrayBuffer)
+void StateManagerGL::bindVertexArray(GLuint vao)
 {
     if (mVAO != vao)
     {
         mVAO = vao;
-        mBuffers[GL_ELEMENT_ARRAY_BUFFER] = elementArrayBuffer;
         mFunctions->bindVertexArray(vao);
+
+        auto ibIter = mVAOElementArrayBuffers.find(mVAO);
+        if (ibIter != mVAOElementArrayBuffers.end())
+        {
+            // Update the currently bound element array buffer binding
+            mBuffers[GL_ELEMENT_ARRAY_BUFFER] = ibIter->second;
+        }
+        else
+        {
+            // The first time this VAO is bound, it captures the currently bound
+            // element array buffer binding.
+            mVAOElementArrayBuffers[mVAO] = mBuffers[GL_ELEMENT_ARRAY_BUFFER];
+        }
     }
 }
 
@@ -210,6 +234,11 @@ void StateManagerGL::bindBuffer(GLenum type, GLuint buffer)
     {
         mBuffers[type] = buffer;
         mFunctions->bindBuffer(type, buffer);
+
+        if (type == GL_ELEMENT_ARRAY_BUFFER)
+        {
+            mVAOElementArrayBuffers[mVAO] = buffer;
+        }
     }
 }
 
@@ -323,7 +352,7 @@ gl::Error StateManagerGL::setDrawArraysState(const gl::Data &data, GLint first, 
     const gl::VertexArray *vao = state.getVertexArray();
     const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
     vaoGL->syncDrawArraysState(first, count);
-    bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getAppliedElementArrayBufferID());
+    bindVertexArray(vaoGL->getVertexArrayID());
 
     return setGenericDrawState(data);
 }
@@ -342,7 +371,7 @@ gl::Error StateManagerGL::setDrawElementsState(const gl::Data &data, GLsizei cou
         return error;
     }
 
-    bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getAppliedElementArrayBufferID());
+    bindVertexArray(vaoGL->getVertexArrayID());
 
     return setGenericDrawState(data);
 }
