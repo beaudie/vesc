@@ -10,7 +10,6 @@
 
 #include <sys/stat.h>
 #include <unistd.h>
-#include <array>
 
 namespace angle
 {
