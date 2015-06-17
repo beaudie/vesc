@@ -48,7 +48,12 @@ bool numeric_lex_int(const std::string &str, IntType *value)
 template<typename FloatType>
 bool numeric_lex_float(const std::string &str, FloatType *value)
 {
-    std::istringstream stream(str);
+    // Some STLs don't parse floats with suffixes so we remove it if it exists.
+    char lastChar = str[str.size() - 1];
+    bool hasSuffix = lastChar == 'f' || lastChar == 'F';
+    std::string sanitized = hasSuffix ? str.substr(0, str.size() - 1) : str;
+
+    std::istringstream stream(sanitized);
     // Force "C" locale so that decimal character is always '.', and
     // not dependent on the current locale.
     stream.imbue(std::locale::classic());
