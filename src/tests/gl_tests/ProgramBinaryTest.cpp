@@ -9,6 +9,10 @@
 #include <memory>
 #include <stdint.h>
 
+#include "EGLWindow.h"
+#include "OSWindow.h"
+#include "test_utils/angle_test_configs.h"
+
 using namespace angle;
 
 class ProgramBinaryTest : public ANGLETest
@@ -160,3 +164,265 @@ TEST_P(ProgramBinaryTest, SaveAndLoadBinary)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(ProgramBinaryTest, ES2_D3D9(), ES2_D3D11());
+
+// Used to configure parameters given to ProgramBinariesAcrossRenderers
+typedef std::tuple<angle::PlatformParameters, angle::PlatformParameters, bool> RenderersResultTuple;
+
+class ProgramBinariesAcrossRenderers : public testing::TestWithParam<RenderersResultTuple>
+{
+  public:
+    void SetUp() override
+    {
+        mOSWindow = CreateOSWindow();
+        bool result = mOSWindow->initialize("ProgramBinariesAcrossRenderersTests", 100, 100);
+
+        if (result == false)
+        {
+            FAIL() << "Failed to create OS window";
+        }
+    }
+
+    EGLWindow *CreateAndInitEGLWindow(angle::PlatformParameters &param)
+    {
+        EGLWindow *eglWindow = new EGLWindow(1, 1, param.majorVersion, param.eglParameters);
+        bool result = eglWindow->initializeGL(mOSWindow);
+        if (result == false)
+        {
+            SafeDelete(eglWindow);
+            eglWindow = nullptr;
+        }
+
+        return eglWindow;
+    }
+
+    void DestroyEGLWindow(EGLWindow **eglWindow)
+    {
+        ASSERT(*eglWindow != nullptr);
+        (*eglWindow)->destroyGL();
+        SafeDelete(*eglWindow);
+        *eglWindow = nullptr;
+    }
+
+    GLuint CreateES2ProgramFromSource()
+    {
+        const std::string testVertexShaderSource = SHADER_SOURCE
+        (
+            attribute highp vec4 position;
+
+            void main(void)
+            {
+                gl_Position = position;
+            }
+        );
+
+        const std::string testFragmentShaderSource = SHADER_SOURCE
+        (
+            void main(void)
+            {
+                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            }
+        );
+
+        return CompileProgram(testVertexShaderSource, testFragmentShaderSource);
+    }
+
+    GLuint CreateES3ProgramFromSource()
+    {
+        const std::string testVertexShaderSource = SHADER_SOURCE
+        (   #version 300 es\n
+            precision highp float;
+            in highp vec4 position;
+
+            void main(void)
+            {
+                gl_Position = position;
+            }
+        );
+
+        const std::string testFragmentShaderSource = SHADER_SOURCE
+        (   #version 300 es \n
+            precision highp float;
+            out vec4 out_FragColor;
+
+            void main(void)
+            {
+                out_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            }
+        );
+
+        return CompileProgram(testVertexShaderSource, testFragmentShaderSource);
+    }
+
+    void DrawWithProgram(GLuint program)
+    {
+        glClearColor(0, 0, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        GLint positionLocation = glGetAttribLocation(program, "position");
+
+        glUseProgram(program);
+
+        const GLfloat vertices[] =
+        {
+            -1.0f,  1.0f, 0.5f,
+            -1.0f, -1.0f, 0.5f,
+             1.0f, -1.0f, 0.5f,
+
+            -1.0f,  1.0f, 0.5f,
+             1.0f, -1.0f, 0.5f,
+             1.0f,  1.0f, 0.5f,
+        };
+
+        glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, vertices);
+        glEnableVertexAttribArray(positionLocation);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glDisableVertexAttribArray(positionLocation);
+        glVertexAttribPointer(positionLocation, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+
+        EXPECT_PIXEL_EQ(mOSWindow->getWidth() / 2, mOSWindow->getHeight() / 2, 255, 0, 0, 255);
+    }
+
+    void TearDown() override
+    {
+        mOSWindow->destroy();
+        SafeDelete(mOSWindow);
+    }
+
+    OSWindow *mOSWindow;
+};
+
+// Tries to create a program binary using one set of platform params, then load it using a different sent of params
+TEST_P(ProgramBinariesAcrossRenderers, CreateAndReloadBinary)
+{
+    angle::PlatformParameters firstRenderer  = std::get<0>(GetParam());
+    angle::PlatformParameters secondRenderer = std::get<1>(GetParam());
+    bool expectedLinkResult                  = std::get<2>(GetParam());
+
+    if (!(IsPlatformAvailable(firstRenderer)))
+    {
+        std::cout << "First renderer not supported, skipping test";
+        return;
+    }
+
+    if (!(IsPlatformAvailable(secondRenderer)))
+    {
+        std::cout << "Second renderer not supported, skipping test";
+        return;
+    }
+
+    EGLWindow *eglWindow = nullptr;
+    std::vector<uint8_t> binary(0);
+    GLuint program = 0;
+
+    GLint programLength = 0;
+    GLint writtenLength = 0;
+    GLenum binaryFormat = 0;
+
+    // Create a EGL window with the first renderer
+    eglWindow = CreateAndInitEGLWindow(firstRenderer);
+    if (eglWindow == nullptr)
+    {
+        FAIL() << "Failed to create EGL window";
+        return;
+    }
+
+    // If the test is trying to use both the default GPU and WARP, but the default GPU *IS* WARP,
+    // then our expectations for the test results will be invalid.
+    if (firstRenderer.eglParameters.deviceType != EGL_PLATFORM_ANGLE_DEVICE_TYPE_WARP_ANGLE &&
+        secondRenderer.eglParameters.deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_WARP_ANGLE)
+    {
+        std::string rendererString = std::string(reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
+        std::transform(rendererString.begin(), rendererString.end(), rendererString.begin(), ::tolower);
+
+        auto basicRenderPos = rendererString.find(std::string("microsoft basic render"));
+        auto softwareAdapterPos = rendererString.find(std::string("software adapter"));
+
+        if (basicRenderPos != std::string::npos || softwareAdapterPos != std::string::npos)
+        {
+            // The first renderer is using WARP, even though we didn't explictly request it
+            // We should skip this test
+            std::cout << "Test skipped on when default GPU is WARP." << std::endl;
+            return;
+        }
+    }
+
+    // Create a program
+    if (firstRenderer.majorVersion == 3)
+    {
+        program = CreateES3ProgramFromSource();
+    }
+    else
+    {
+        program = CreateES2ProgramFromSource();
+    }
+
+    if (program == 0)
+    {
+        FAIL() << "Failed to create program from source";
+        DestroyEGLWindow(&eglWindow);
+        return;
+    }
+
+    // Draw using the program to ensure it works as expected
+    DrawWithProgram(program);
+    EXPECT_GL_NO_ERROR();
+
+    // Save the program binary out from this renderer
+    glGetProgramiv(program, GL_PROGRAM_BINARY_LENGTH_OES, &programLength);
+    EXPECT_GL_NO_ERROR();
+    binary.resize(programLength);
+    glGetProgramBinaryOES(program, programLength, &writtenLength, &binaryFormat, binary.data());
+    EXPECT_GL_NO_ERROR();
+
+    // Destroy the first renderer
+    glDeleteProgram(program);
+    DestroyEGLWindow(&eglWindow);
+
+    // Create an EGL window with the second renderer
+    eglWindow = CreateAndInitEGLWindow(secondRenderer);
+    if (eglWindow == nullptr)
+    {
+        FAIL() << "Failed to create EGL window";
+        return;
+    }
+
+    program = glCreateProgram();
+    glProgramBinaryOES(program, binaryFormat, binary.data(), writtenLength);
+
+    GLint linkStatus;
+    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+    EXPECT_EQ(expectedLinkResult, (linkStatus != 0));
+
+    if (linkStatus != 0)
+    {
+        // If the link was successful, then we should try to draw using the program to ensure it works as expected
+        DrawWithProgram(program);
+        EXPECT_GL_NO_ERROR();
+    }
+
+    // Destroy the second renderer
+    glDeleteProgram(program);
+    DestroyEGLWindow(&eglWindow);
+}
+
+INSTANTIATE_TEST_CASE_P(InstantiationName, ProgramBinariesAcrossRenderers,
+                                          //                 | Create the program | Save the binary and     | Expected
+                                          //                 | using these params | load using these params | link result
+                        ::testing::Values(RenderersResultTuple(ES2_D3D11(),         ES2_D3D11(),              true         ), // Loading + reloading binary should work
+                                          RenderersResultTuple(ES3_D3D11(),         ES3_D3D11(),              true         ), // Loading + reloading binary should work
+                                          RenderersResultTuple(ES2_D3D11_FL11_0(),  ES2_D3D11_FL9_3(),        false        ), // Switching feature level shouldn't work
+                                          RenderersResultTuple(ES2_D3D11(),         ES2_D3D11_WARP(),         false        ), // Switching from hardware to software shouldn't work
+                                          RenderersResultTuple(ES2_D3D11_FL9_3(),   ES2_D3D11_FL9_3_WARP(),   false        ), // Switching from hardware to software shouldn't work for FL9 either
+                                          RenderersResultTuple(ES2_D3D11(),         ES2_D3D9(),               false        ), // Switching from D3D11 to D3D9 shouldn't work
+                                          RenderersResultTuple(ES2_D3D9(),          ES2_D3D11(),              false        ), // Switching from D3D9 to D3D11 shouldn't work
+
+                                          // TODO: Should switching to newer client version should work?
+                                          // i.e. compile an program with client version 2, save the binary, then load/use it with client version 3
+                                          RenderersResultTuple(ES2_D3D11(),         ES3_D3D11(),              true         )
+
+                                          // TODO: crbug(tbd)
+                                          // compiling a program with client version 3, saving the binary, then loading it with client version 2 should not work
+                                          // RenderersResultTuple(ES3_D3D11(),         ES2_D3D11(),              false       )
+                                          ));
