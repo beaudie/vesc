@@ -14,7 +14,7 @@
 
 bool atof_clamp(const char *str, float *value)
 {
-    bool success = pp::numeric_lex_float(str, value);
+    bool success = pp::numeric_lex_float_suffix(str, value);
     if (!success)
         *value = std::numeric_limits<float>::max();
     return success;

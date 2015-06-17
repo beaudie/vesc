@@ -11,6 +11,8 @@
 
 #include <sstream>
 
+#include <cassert>
+
 namespace pp {
 
 inline std::ios::fmtflags numeric_base_int(const std::string &str)
@@ -55,6 +57,18 @@ bool numeric_lex_float(const std::string &str, FloatType *value)
 
     stream >> (*value);
     return !stream.fail();
+}
+
+// Some STLs don't parse floats with suffixes so we remove it if it exists.
+template<typename FloatType>
+bool numeric_lex_float_suffix(const std::string &str, FloatType *value)
+{
+    assert(!str.empty());
+    char lastChar = str[str.size() - 1];
+    bool hasSuffix = lastChar == 'f' || lastChar == 'F';
+    std::string sanitized = hasSuffix ? str.substr(0, str.size() - 1) : str;
+
+    return numeric_lex_float(sanitized, value);
 }
 
 } // namespace pp.
