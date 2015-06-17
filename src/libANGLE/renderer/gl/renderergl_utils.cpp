@@ -528,6 +528,15 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
         }
     }
 
+    if (!functions->isAtLeastGL(gl::Version(3, 3)) &&
+        !functions->hasGLExtension("GL_ARB_shader_bit_encoding") &&
+        !functions->isAtLeastGLES(gl::Version(3, 0)))
+    {
+        // OpenGL version 3.3 or GL_ARB_shader_bit_encoding are required to support the ESSL 3
+        // *bitsTo* builtin functions and to emulate the [Un]pack*2x16 builtin functions
+        LimitVersion(maxSupportedESVersion, gl::Version(2, 0));
+    }
+
     // Extension support
     extensions->setTextureExtensionSupport(*textureCapsMap);
     extensions->elementIndexUint = functions->standard == STANDARD_GL_DESKTOP ||
