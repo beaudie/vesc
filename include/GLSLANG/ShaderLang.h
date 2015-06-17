@@ -354,6 +354,9 @@ COMPILER_EXPORT bool ShCompile(
     size_t numStrings,
     int compileOptions);
 
+// Clears the results from the previous compilation.
+COMPILER_EXPORT void ShClearResults(const ShHandle handle);
+
 // Return the version of the shader language.
 COMPILER_EXPORT int ShGetShaderVersion(const ShHandle handle);
 
