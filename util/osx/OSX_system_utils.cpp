@@ -4,30 +4,43 @@
 // found in the LICENSE file.
 //
 
-// Linux_system_utils.cpp: Implementation of OS-specific functions for Linux
+// OSX_system_utils.cpp: Implementation of OS-specific functions for OSX
 
 #include "system_utils.h"
 
-#include <sys/stat.h>
-#include <unistd.h>
+#include <cstdlib>
+#include <mach-o/dyld.h>
 
 namespace angle
 {
 
 std::string GetExecutablePath()
 {
-    // We cannot use lstat to get the size of /proc/self/exe as it always returns 0
-    // so we just use a big buffer and hope the path fits in it.
-    char path[4096];
+    std::string result;
 
-    ssize_t result = readlink("/proc/self/exe", path, sizeof(path) - 1);
-    if (result < 0 || static_cast<size_t>(result) >= sizeof(path) - 1)
+    uint32_t size = 0;
+    _NSGetExecutablePath(nullptr, &size);
+
+    char* buffer = new char[size + 1];
+    if (!buffer)
     {
         return "";
     }
 
-    path[result] = '\0';
-    return path;
+    _NSGetExecutablePath(buffer, &size);
+    buffer[size] = '\0';
+
+    if (!strrchr(buffer, '/'))
+    {
+        result = "";
+    }
+    else
+    {
+        result = buffer;
+    }
+
+    delete[] buffer;
+    return result;
 }
 
 std::string GetExecutableDirectory()
