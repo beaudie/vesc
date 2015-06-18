@@ -21,6 +21,10 @@
             [
                 '<@(libegl_sources)',
             ],
+            'defines':
+            [
+                'GL_GLEXT_PROTOTYPES=',
+            ],
             'conditions':
             [
                 ['angle_build_winrt==1',
