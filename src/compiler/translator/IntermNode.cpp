@@ -321,6 +321,12 @@ bool TIntermAggregate::insertChildNodes(TIntermSequence::size_type position, TIn
         }
         ++itPosition;
     }
+    // Above loop doesn't handle inserting to the very end of the vector.
+    if (itPosition == position)
+    {
+        mSequence.insert(mSequence.end(), insertions.begin(), insertions.end());
+        return true;
+    }
     return false;
 }
 
@@ -2550,9 +2556,20 @@ void TIntermTraverser::updateTree()
     {
         const NodeInsertMultipleEntry &insertion = mInsertions[ii];
         ASSERT(insertion.parent);
-        bool inserted = insertion.parent->insertChildNodes(insertion.position, insertion.insertions);
-        ASSERT(inserted);
-        UNUSED_ASSERTION_VARIABLE(inserted);
+        if (!insertion.insertionsAfter.empty())
+        {
+            bool inserted = insertion.parent->insertChildNodes(insertion.position + 1,
+                                                               insertion.insertionsAfter);
+            ASSERT(inserted);
+            UNUSED_ASSERTION_VARIABLE(inserted);
+        }
+        if (!insertion.insertionsBefore.empty())
+        {
+            bool inserted =
+                insertion.parent->insertChildNodes(insertion.position, insertion.insertionsBefore);
+            ASSERT(inserted);
+            UNUSED_ASSERTION_VARIABLE(inserted);
+        }
     }
     for (size_t ii = 0; ii < mReplacements.size(); ++ii)
     {
