@@ -61,6 +61,21 @@ class PackUnpackTest : public ANGLETest
         );
 
         // Fragment Shader source
+        const std::string uNormFS = SHADER_SOURCE
+        (   #version 300 es\n
+            precision mediump float;
+            uniform mediump vec2 v;
+            layout(location = 0) out mediump vec4 fragColor;
+
+            void main()
+            {
+                uint u = packUnorm2x16(v);
+                vec2 r = unpackUnorm2x16(u);
+                fragColor = vec4(r, 0.0, 1.0);
+            }
+        );
+
+        // Fragment Shader source
         const std::string halfFS = SHADER_SOURCE
         (   #version 300 es\n
             precision mediump float;

@@ -41,6 +41,29 @@ void InitBuiltInFunctionEmulatorForGLSL(BuiltInFunctionEmulator *emu, sh::GLenum
 void InitBuiltInFunctionEmulatorForGLSLCore(BuiltInFunctionEmulator *emu, sh::GLenum shaderType,
                                             int targetGLSLVersion)
 {
+    // Emulate packUnorm2x16 and unpackUnorm2x16 (GLSL 4.20)
+    if (targetGLSLVersion < GLSL_VERSION_410)
+    {
+        TType *float2 = new TType(EbtFloat, 2);
+        TType *uint1 = new TType(EbtUInt);
+
+        emu->addEmulatedFunction(EOpPackUnorm2x16, float2,
+            "uint webgl_packUnorm2x16_emu(vec2 v)\n"
+            "{\n"
+            "    int x = int(round(clamp(v.x, 0.0, 1.0) * 65535.0));\n"
+            "    int y = int(round(clamp(v.y, 0.0, 1.0) * 65535.0));\n"
+            "    return uint((y << 16) | (x & 0xFFFF));\n"
+            "}\n");
+
+        emu->addEmulatedFunction(EOpUnpackSnorm2x16, uint1,
+            "vec2 webgl_unpackUnorm2x16_emu(uint u)\n"
+            "{\n"
+            "    float x = float(u & 0xFFFFu) / 65535.0;\n"
+            "    float y = float(u >> 16) / 65535.0;\n"
+            "    return vec2(x, y);\n"
+            "}\n");
+    }
+
     // Emulate packSnorm2x16, packHalf2x16, unpackSnorm2x16, and unpackHalf2x16 (GLSL 4.20)
     // by using floatBitsToInt, floatBitsToUint, intBitsToFloat, and uintBitsToFloat (GLSL 3.30).
     if (targetGLSLVersion >= GLSL_VERSION_330 && targetGLSLVersion < GLSL_VERSION_420)
@@ -159,6 +182,41 @@ void InitBuiltInFunctionEmulatorForGLSLCore(BuiltInFunctionEmulator *emu, sh::GL
             "    uint y = (u >> 16);\n"
             "    uint x = u & 0xFFFFu;\n"
             "    return vec2(webgl_f16tof32(x), webgl_f16tof32(y));\n"
+            "}\n");
+    }
+
+    // Emulate mix (genBType) (GLSL 4.50)
+    if (targetGLSLVersion < GLSL_VERSION_450)
+    {
+        TType *float1 = new TType(EbtFloat);
+        TType *float2 = new TType(EbtFloat, 2);
+        TType *float3 = new TType(EbtFloat, 3);
+        TType *float4 = new TType(EbtFloat, 4);
+
+        TType *bool1 = new TType(EbtBool);
+        TType *bool2 = new TType(EbtBool, 2);
+        TType *bool3 = new TType(EbtBool, 3);
+        TType *bool4 = new TType(EbtBool, 4);
+
+        emu->addEmulatedFunction(EOpMix, float1, float1, bool1,
+            "float webgl_mix_emu(float x, float y, bool a)\n"
+            "{\n"
+            "    return a ? y : x;\n"
+            "}\n");
+        emu->addEmulatedFunction(EOpMix, float2, float2, bool2,
+            "vec2 webgl_mix_emu(vec2 x, vec2 y, bvec2 a)\n"
+            "{\n"
+            "    return vec2(a.x ? y.x : x.x, a.y ? y.y : x.y);\n"
+            "}\n");
+        emu->addEmulatedFunction(EOpMix, float3, float3, bool3,
+            "vec3 webgl_mix_emu(vec3 x, vec3 y, bvec3 a)\n"
+            "{\n"
+            "    return vec3(a.x ? y.x : x.x, a.y ? y.y : x.y, a.z ? y.z : x.z);\n"
+            "}\n");
+        emu->addEmulatedFunction(EOpMix, float4, float4, bool4,
+            "vec4 webgl_mix_emu(vec4 x, vec4 y, bvec4 a)\n"
+            "{\n"
+            "    return vec4(a.x ? y.x : x.x, a.y ? y.y : x.y, a.z ? y.z : x.z, a.w ? y.w : x.w);\n"
             "}\n");
     }
 }
