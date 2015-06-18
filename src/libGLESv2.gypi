@@ -521,7 +521,6 @@
                 ],
                 'defines':
                 [
-                    'GL_GLEXT_PROTOTYPES=',
                     'ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES={ "d3dcompiler_47.dll", "d3dcompiler_46.dll", "d3dcompiler_43.dll" }',
                 ],
                 'conditions':
@@ -754,6 +753,7 @@
             'defines':
             [
                 'LIBGLESV2_IMPLEMENTATION',
+                'GL_GLEXT_PROTOTYPES=',
             ],
             'conditions':
             [
