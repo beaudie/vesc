@@ -2050,6 +2050,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
         }
         break;
       case EOpFunctionCall:
+      case EOpInternalFunctionCall:
         {
             TString name = TFunction::unmangleName(node->getName());
             TIntermSequence *arguments = node->getSequence();

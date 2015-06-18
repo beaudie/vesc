@@ -236,7 +236,8 @@ const size_t CallDAG::InvalidIndex = std::numeric_limits<size_t>::max();
 size_t CallDAG::findIndex(const TIntermAggregate *function) const
 {
     TOperator op = function->getOp();
-    ASSERT(op == EOpPrototype || op == EOpFunction || op == EOpFunctionCall);
+    ASSERT(op == EOpPrototype || op == EOpFunction || op == EOpFunctionCall ||
+           op == EOpInternalFunctionCall);
     UNUSED_ASSERTION_VARIABLE(op);
 
     auto it = mFunctionIdToIndex.find(function->getFunctionId());

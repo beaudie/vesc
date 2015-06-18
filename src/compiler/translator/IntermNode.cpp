@@ -2478,7 +2478,10 @@ void TIntermTraverser::updateTree()
     {
         const NodeInsertMultipleEntry &insertion = mInsertions[ii];
         ASSERT(insertion.parent);
-        bool inserted = insertion.parent->insertChildNodes(insertion.position, insertion.insertions);
+        if (!insertion.insertionsAfter.empty())
+            insertion.parent->insertChildNodes(insertion.position + 1, insertion.insertionsAfter);
+        bool inserted =
+            insertion.parent->insertChildNodes(insertion.position, insertion.insertionsBefore);
         ASSERT(inserted);
         UNUSED_ASSERTION_VARIABLE(inserted);
     }
