@@ -18,7 +18,7 @@
 //   1. it forces C locale, i.e. forcing '.' as decimal point.
 //   2. it clamps the value to -FLT_MAX or FLT_MAX if overflow happens.
 // Return false if overflow happens.
-extern bool atof_clamp(const char *str, float *value);
+extern bool strtof_clamp(const std::string &, float *value);
 
 // If overflow happens, clamp the value to INT_MIN or INT_MAX.
 // Return false if overflow happens.
