@@ -644,6 +644,23 @@ void GL_APIENTRY VertexAttribDivisorANGLE(GLuint index, GLuint divisor)
             return;
         }
 
+#if defined(ANGLE_ENABLE_WINDOWS_STORE)
+        // Setting a non-zero divisor on attribute zero doesn't work on certain Windows Phone 8-era devices.
+        // We should prevent developers from doing this on ALL Windows Store devices. This will maintain consistency across all Windows devices.
+        // We allow non-zero divisors on attribute zero if the Client Version >= 3, since devices affected by this issue don't support ES3+.
+        if (index == 0 && divisor != 0 && context->getClientVersion() < 3)
+        {
+            std::string errorMessage = "The current context doesn't support setting a non-zero divisor on the attribute with index zero. "
+                                       "Please reorder the attributes in your vertex shader so that attribute zero can have a zero divisor.";
+            context->recordError(Error(GL_INVALID_OPERATION, errorMessage.c_str()));
+
+            // We also output an error message to the debugger window if tracing is active, so that developers can see the error message.
+            ERR("%s", errorMessage.c_str());
+
+            return;
+        }
+#endif // ANGLE_ENABLE_WINDOWS_STORE
+
         context->setVertexAttribDivisor(index, divisor);
     }
 }
