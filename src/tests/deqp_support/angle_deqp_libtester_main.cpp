@@ -34,7 +34,7 @@ tcu::TestContext *g_testCtx = nullptr;
 tcu::TestPackageRoot *g_root = nullptr;
 tcu::RandomOrderExecutor *g_executor = nullptr;
 
-}
+} // anonymous namespace
 
 // Exported to the tester app.
 ANGLE_LIBTESTER_EXPORT int deqp_libtester_main(int argc, const char *argv[])
