@@ -23,6 +23,8 @@
 namespace rx
 {
 
+void* FunctionsGLX::sLibHandle = nullptr;
+
 template<typename T>
 static bool GetProc(PFNGETPROCPROC getProc, T *member, const char *name)
 {
@@ -88,7 +90,6 @@ struct FunctionsGLX::GLXFunctionTable
 FunctionsGLX::FunctionsGLX()
   : majorVersion(0),
     minorVersion(0),
-    mLibHandle(nullptr),
     mXDisplay(nullptr),
     mXScreen(-1),
     mFnPtrs(new GLXFunctionTable())
@@ -107,17 +108,20 @@ bool FunctionsGLX::initialize(Display *xDisplay, int screen, std::string *errorS
     mXDisplay = xDisplay;
     mXScreen = screen;
 
-    mLibHandle = dlopen("libGL.so.1", RTLD_NOW);
-    if (!mLibHandle)
-    {
-        *errorString = std::string("Could not dlopen libGL.so.1: ") + dlerror();
-        return false;
+    // Some OpenGL implementations can't handle having this library handle closed at run time.
+    if (!sLibHandle) {
+        sLibHandle = dlopen("libGL.so.1", RTLD_NOW);
+        if (!sLibHandle)
+        {
+            *errorString = std::string("Could not dlopen libGL.so.1: ") + dlerror();
+            return false;
+        }
     }
 
-    getProc = reinterpret_cast<PFNGETPROCPROC>(dlsym(mLibHandle, "glXGetProcAddress"));
+    getProc = reinterpret_cast<PFNGETPROCPROC>(dlsym(sLibHandle, "glXGetProcAddress"));
     if (!getProc)
     {
-        getProc = reinterpret_cast<PFNGETPROCPROC>(dlsym(mLibHandle, "glXGetProcAddressARB"));
+        getProc = reinterpret_cast<PFNGETPROCPROC>(dlsym(sLibHandle, "glXGetProcAddressARB"));
     }
     if (!getProc)
     {
@@ -212,11 +216,6 @@ bool FunctionsGLX::initialize(Display *xDisplay, int screen, std::string *errorS
 
 void FunctionsGLX::terminate()
 {
-    if (mLibHandle)
-    {
-        dlclose(mLibHandle);
-        mLibHandle = nullptr;
-    }
 }
 
 bool FunctionsGLX::hasExtension(const char *extension) const
