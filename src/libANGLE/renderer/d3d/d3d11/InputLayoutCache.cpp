@@ -27,16 +27,22 @@ namespace
 
 void GetInputLayout(const TranslatedAttribute *translatedAttributes[gl::MAX_VERTEX_ATTRIBS],
                     size_t attributeCount,
-                    gl::VertexFormat inputLayout[gl::MAX_VERTEX_ATTRIBS])
+                    gl::InputLayout *inputLayout)
 {
     for (size_t attributeIndex = 0; attributeIndex < attributeCount; ++attributeIndex)
     {
         const TranslatedAttribute *translatedAttribute = translatedAttributes[attributeIndex];
 
-        if (translatedAttributes[attributeIndex]->active)
+        if (translatedAttribute->active)
         {
-            inputLayout[attributeIndex] = gl::VertexFormat(*translatedAttribute->attribute,
-                                                           translatedAttribute->currentValueType);
+            gl::VertexFormatType vertexFormatType =
+                gl::GetVertexFormatType(*translatedAttribute->attribute,
+                translatedAttribute->currentValueType);
+            inputLayout->push_back(vertexFormatType);
+        }
+        else
+        {
+            inputLayout->push_back(gl::VERTEX_FORMAT_INVALID);
         }
     }
 }
@@ -164,8 +170,8 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
             // If rendering points and instanced pointsprite emulation is being used, the inputClass is required to be configured as per instance data
             inputClass = instancedPointSpritesActive ? D3D11_INPUT_PER_INSTANCE_DATA : inputClass;
 
-            gl::VertexFormat vertexFormat(*sortedAttributes[i]->attribute, sortedAttributes[i]->currentValueType);
-            const d3d11::VertexFormat &vertexFormatInfo = d3d11::GetVertexFormatInfo(vertexFormat, mFeatureLevel);
+            gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(*sortedAttributes[i]->attribute, sortedAttributes[i]->currentValueType);
+            const d3d11::VertexFormat &vertexFormatInfo = d3d11::GetVertexFormatInfo(vertexFormatType, mFeatureLevel);
 
             // Record the type of the associated vertex shader vector in our key
             // This will prevent mismatched vertex shaders from using the same input layout
@@ -277,8 +283,8 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
     }
     else
     {
-        gl::VertexFormat shaderInputLayout[gl::MAX_VERTEX_ATTRIBS];
-        GetInputLayout(sortedAttributes, unsortedAttributes.size(), shaderInputLayout);
+        gl::InputLayout shaderInputLayout;
+        GetInputLayout(sortedAttributes, unsortedAttributes.size(), &shaderInputLayout);
 
         ShaderExecutableD3D *shader = nullptr;
         gl::Error error = programD3D->getVertexExecutableForInputLayout(shaderInputLayout, &shader, nullptr);
