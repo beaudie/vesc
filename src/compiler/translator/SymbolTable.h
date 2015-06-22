@@ -198,12 +198,12 @@ class TFunction : public TSymbol
   public:
     TFunction(TOperator o)
         : TSymbol(0),
-          returnType(TType(EbtVoid, EbpUndefined)),
+          returnType(new TType(EbtVoid, EbpUndefined)),
           op(o),
           defined(false)
     {
     }
-    TFunction(const TString *name, const TType &retType, TOperator tOp = EOpNull, const char *ext = "")
+    TFunction(const TString *name, const TType *retType, TOperator tOp = EOpNull, const char *ext = "")
         : TSymbol(name),
           returnType(retType),
           mangledName(TFunction::mangleName(*name)),
@@ -239,7 +239,7 @@ class TFunction : public TSymbol
     }
     const TType &getReturnType() const
     {
-        return returnType;
+        return *returnType;
     }
 
     TOperator getBuiltInOp() const
@@ -268,7 +268,7 @@ class TFunction : public TSymbol
   private:
     typedef TVector<TConstParameter> TParamList;
     TParamList parameters;
-    TType returnType;
+    const TType* returnType;
     TString mangledName;
     TOperator op;
     bool defined;
