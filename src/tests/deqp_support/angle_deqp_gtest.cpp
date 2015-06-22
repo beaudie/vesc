@@ -7,12 +7,10 @@
 //   dEQP and GoogleTest integration logic. Calls through to the random
 //   order executor.
 
-#include <gtest/gtest.h>
 #include <stdint.h>
 #include <zlib.h>
 
-#include <algorithm>
-#include <fstream>
+#include <gtest/gtest.h>
 
 #include "angle_deqp_libtester.h"
 #include "common/angleutils.h"
