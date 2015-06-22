@@ -46,7 +46,39 @@ void GetInputLayout(const TranslatedAttribute *translatedAttributes[gl::MAX_VERT
 
 const unsigned int InputLayoutCache::kMaxInputLayouts = 1024;
 
-InputLayoutCache::InputLayoutCache() : mInputLayoutMap(kMaxInputLayouts, hashInputLayout, compareInputLayouts)
+bool InputLayoutCache::PackedAttributeComparator::operator()(const PackedAttributeLayout &a,
+                                                             const PackedAttributeLayout &b) const
+{
+    if (a.numAttributes != b.numAttributes)
+    {
+        return a.numAttributes < b.numAttributes;
+    }
+
+    if (a.flags != b.flags)
+    {
+        return a.flags < b.flags;
+    }
+
+    for (size_t attribIndex = 0; attribIndex < a.numAttributes; attribIndex++)
+    {
+        const auto &attribA = a.attributeData[attribIndex];
+        const auto &attribB = b.attributeData[attribIndex];
+
+        if (attribA.glType != attribB.glType)
+            return attribA.glType < attribB.glType;
+        if (attribA.semanticIndex != attribB.semanticIndex)
+            return attribA.semanticIndex < attribB.semanticIndex;
+        if (attribA.dxgiFormat != attribB.dxgiFormat)
+            return attribA.dxgiFormat < attribB.dxgiFormat;
+        if (attribA.divisor != attribB.divisor)
+            return attribA.divisor < attribB.divisor;
+    }
+
+    // Equal
+    return false;
+}
+
+InputLayoutCache::InputLayoutCache()
 {
     mCounter = 0;
     mDevice = NULL;
@@ -77,11 +109,11 @@ void InputLayoutCache::initialize(ID3D11Device *device, ID3D11DeviceContext *con
 
 void InputLayoutCache::clear()
 {
-    for (InputLayoutMap::iterator i = mInputLayoutMap.begin(); i != mInputLayoutMap.end(); i++)
+    for (auto &layout : mLayoutMap)
     {
-        SafeRelease(i->second.inputLayout);
+        SafeRelease(layout.second);
     }
-    mInputLayoutMap.clear();
+    mLayoutMap.clear();
     SafeRelease(mPointSpriteVertexBuffer);
     SafeRelease(mPointSpriteIndexBuffer);
     markDirty();
@@ -115,7 +147,10 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
         return gl::Error(GL_OUT_OF_MEMORY, "Internal input layout cache is not initialized.");
     }
 
-    InputLayoutKey ilKey = { 0 };
+    InputLayoutKey ilKey;
+    ilKey.elementCount = 0;
+
+    PackedAttributeLayout layout;
 
     static const char* semanticName = "TEXCOORD";
 
@@ -158,6 +193,11 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
 
             ilKey.elementCount++;
             nextAvailableInputSlot = i + 1;
+
+            layout.addAttributeData(ilKey.elements[ilKey.elementCount].glslElementType,
+                                    sortedSemanticIndices[i],
+                                    vertexFormatInfo.nativeFormat,
+                                    sortedAttributes[i]->divisor);
         }
     }
 
@@ -215,20 +255,34 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
         }
     }
 
-    ID3D11InputLayout *inputLayout = NULL;
-
-    InputLayoutMap::iterator keyIter = mInputLayoutMap.find(ilKey);
-    if (keyIter != mInputLayoutMap.end())
+    if (programUsesInstancedPointSprites)
     {
-        inputLayout = keyIter->second.inputLayout;
-        keyIter->second.lastUsedTime = mCounter++;
+        layout.flags |= PackedAttributeLayout::FLAG_USES_INSTANCED_SPRITES;
+    }
+
+    if (moveFirstIndexedIntoSlotZero)
+    {
+        layout.flags |= PackedAttributeLayout::FLAG_MOVE_FIRST_INDEXED;
+    }
+
+    if (instancedPointSpritesActive)
+    {
+        layout.flags |= PackedAttributeLayout::FLAG_INSTANCED_SPRITES_ACTIVE;
+    }
+
+    ID3D11InputLayout *inputLayout = nullptr;
+
+    auto layoutMapIt = mLayoutMap.find(layout);
+    if (layoutMapIt != mLayoutMap.end())
+    {
+        inputLayout = layoutMapIt->second;
     }
     else
     {
         gl::VertexFormat shaderInputLayout[gl::MAX_VERTEX_ATTRIBS];
         GetInputLayout(sortedAttributes, unsortedAttributes.size(), shaderInputLayout);
 
-        ShaderExecutableD3D *shader = NULL;
+        ShaderExecutableD3D *shader = nullptr;
         gl::Error error = programD3D->getVertexExecutableForInputLayout(shaderInputLayout, &shader, nullptr);
         if (error.isError())
         {
@@ -249,28 +303,19 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
             return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal input layout, HRESULT: 0x%08x", result);
         }
 
-        if (mInputLayoutMap.size() >= kMaxInputLayouts)
+        if (mLayoutMap.size() >= kMaxInputLayouts)
         {
-            TRACE("Overflowed the limit of %u input layouts, removing the least recently used "
-                  "to make room.", kMaxInputLayouts);
+            TRACE("Overflowed the limit of %u input layouts, purging half the cache.", kMaxInputLayouts);
 
-            InputLayoutMap::iterator leastRecentlyUsed = mInputLayoutMap.begin();
-            for (InputLayoutMap::iterator i = mInputLayoutMap.begin(); i != mInputLayoutMap.end(); i++)
+            // Randomly release every second element
+            for (auto it = mLayoutMap.begin(); it != mLayoutMap.end(); std::advance(it, 2))
             {
-                if (i->second.lastUsedTime < leastRecentlyUsed->second.lastUsedTime)
-                {
-                    leastRecentlyUsed = i;
-                }
+                SafeRelease(it->second);
+                mLayoutMap.erase(it);
             }
-            SafeRelease(leastRecentlyUsed->second.inputLayout);
-            mInputLayoutMap.erase(leastRecentlyUsed);
         }
 
-        InputLayoutCounterPair inputCounterPair;
-        inputCounterPair.inputLayout = inputLayout;
-        inputCounterPair.lastUsedTime = mCounter++;
-
-        mInputLayoutMap.insert(std::make_pair(ilKey, inputCounterPair));
+        mLayoutMap[layout] = inputLayout;
     }
 
     if (inputLayout != mCurrentIL)
@@ -431,25 +476,6 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
     }
 
     return gl::Error(GL_NO_ERROR);
-}
-
-std::size_t InputLayoutCache::hashInputLayout(const InputLayoutKey &inputLayout)
-{
-    static const unsigned int seed = 0xDEADBEEF;
-
-    std::size_t hash = 0;
-    MurmurHash3_x86_32(inputLayout.begin(), static_cast<int>(inputLayout.end() - inputLayout.begin()), seed, &hash);
-    return hash;
-}
-
-bool InputLayoutCache::compareInputLayouts(const InputLayoutKey &a, const InputLayoutKey &b)
-{
-    if (a.elementCount != b.elementCount)
-    {
-        return false;
-    }
-
-    return std::equal(a.begin(), a.end(), b.begin());
 }
 
 }
