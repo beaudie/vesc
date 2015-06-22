@@ -101,11 +101,11 @@ bool DebugAnnotationsActive();
 
 // A macro asserting a condition and outputting failures to the debug log
 #if !defined(NDEBUG)
-#define ASSERT(expression) do { \
+#define ASSERT(expression) { \
     if(!(expression)) \
         ERR("\t! Assert failed in %s(%d): "#expression"\n", __FUNCTION__, __LINE__); \
         assert(expression); \
-    } while(0)
+    }
 #define UNUSED_ASSERTION_VARIABLE(variable)
 #else
 #define ASSERT(expression) (void(0))
@@ -131,20 +131,20 @@ bool DebugAnnotationsActive();
 #endif
 
 #if !defined(NDEBUG)
-#define UNIMPLEMENTED() do { \
+#define UNIMPLEMENTED() { \
     FIXME("\t! Unimplemented: %s(%d)\n", __FUNCTION__, __LINE__); \
     assert(NOASSERT_UNIMPLEMENTED); \
-    } while(0)
+    }
 #else
     #define UNIMPLEMENTED() FIXME("\t! Unimplemented: %s(%d)\n", __FUNCTION__, __LINE__)
 #endif
 
 // A macro for code which is not expected to be reached under valid assumptions
 #if !defined(NDEBUG)
-#define UNREACHABLE() do { \
+#define UNREACHABLE() { \
     ERR("\t! Unreachable reached: %s(%d)\n", __FUNCTION__, __LINE__); \
     assert(false); \
-    } while(0)
+    }
 #else
     #define UNREACHABLE() ERR("\t! Unreachable reached: %s(%d)\n", __FUNCTION__, __LINE__)
 #endif
