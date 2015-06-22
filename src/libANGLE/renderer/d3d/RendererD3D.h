@@ -12,6 +12,7 @@
 #include "common/debug.h"
 #include "common/MemoryBuffer.h"
 #include "libANGLE/Data.h"
+#include "libANGLe/formatutils.h"
 #include "libANGLE/renderer/Renderer.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
 #include "libANGLE/renderer/d3d/formatutilsD3D.h"
@@ -68,8 +69,8 @@ class BufferFactoryD3D
     virtual IndexBuffer *createIndexBuffer() = 0;
 
     // TODO(jmadill): add VertexFormatCaps
-    virtual VertexConversionType getVertexConversionType(const gl::VertexFormat &vertexFormat) const = 0;
-    virtual GLenum getVertexComponentType(const gl::VertexFormat &vertexFormat) const = 0;
+    virtual VertexConversionType getVertexConversionType(gl::VertexFormatType vertexFormatType) const = 0;
+    virtual GLenum getVertexComponentType(gl::VertexFormatType vertexFormatType) const = 0;
 };
 
 class RendererD3D : public Renderer, public BufferFactoryD3D
@@ -121,8 +122,10 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
                              bool ignoreViewport) = 0;
 
     virtual gl::Error applyRenderTarget(const gl::Framebuffer *frameBuffer) = 0;
-    virtual gl::Error applyShaders(gl::Program *program, const gl::VertexFormat inputLayout[], const gl::Framebuffer *framebuffer,
-                                   bool rasterizerDiscard, bool transformFeedbackActive) = 0;
+    virtual gl::Error applyShaders(gl::Program *program,
+                                   const gl::Framebuffer *framebuffer,
+                                   bool rasterizerDiscard,
+                                   bool transformFeedbackActive) = 0;
     virtual gl::Error applyUniforms(const ProgramImpl &program, const std::vector<gl::LinkedUniform*> &uniformArray) = 0;
     virtual bool applyPrimitiveType(GLenum primitiveType, GLsizei elementCount, bool usesPointSize) = 0;
     virtual gl::Error applyVertexBuffer(const gl::State &state, GLenum mode, GLint first, GLsizei count, GLsizei instances) = 0;
