@@ -22,7 +22,11 @@
         # test it in the same file.
         'variables':
         {
-            'chromeos%': 0,
+            'variables':
+            {
+                'chromeos%': 0,
+            },
+            'chromeos%': '<(chromeos)',
             'conditions':
             [
                 ['OS=="linux" and chromeos==0',

@@ -33,7 +33,14 @@
             '-Wno-format-nonliteral',
         ],
 
-        'chromeos%': 0,
+        # Nested dictionnary hack to allow setting a default value for
+        # a variable and test it in the same file.
+        'variables':
+        {
+            'chromeos%': 0,
+        },
+        'chromeos%': '<(chromeos)',
+
         'conditions':
         [
             ['OS=="linux" and chromeos==0',
