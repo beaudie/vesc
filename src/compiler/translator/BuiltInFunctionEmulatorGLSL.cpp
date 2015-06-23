@@ -186,4 +186,40 @@ void InitBuiltInFunctionEmulatorForGLSLMissingFunctions(BuiltInFunctionEmulator 
             "}\n");
         // clang-format on
     }
+
+    // Emulate mix (genBType) (GLSL 4.50)
+    if (targetGLSLVersion < GLSL_VERSION_450)
+    {
+        TType *float1 = new TType(EbtFloat);
+        TType *bool1 = new TType(EbtBool);
+        emu->addEmulatedFunction(EOpMix, float1, float1, bool1,
+            "float webgl_mix_emu(float x, float y, bool a)\n"
+            "{\n"
+            "    return a ? y : x;\n"
+            "}\n");
+
+        TType *float2 = new TType(EbtFloat, 2);
+        TType *bool2 = new TType(EbtBool, 2);
+        emu->addEmulatedFunction(EOpMix, float2, float2, bool2,
+            "vec2 webgl_mix_emu(vec2 x, vec2 y, bvec2 a)\n"
+            "{\n"
+            "    return vec2(a.x ? y.x : x.x, a.y ? y.y : x.y);\n"
+            "}\n");
+
+        TType *float3 = new TType(EbtFloat, 3);
+        TType *bool3 = new TType(EbtBool, 3);
+        emu->addEmulatedFunction(EOpMix, float3, float3, bool3,
+            "vec3 webgl_mix_emu(vec3 x, vec3 y, bvec3 a)\n"
+            "{\n"
+            "    return vec3(a.x ? y.x : x.x, a.y ? y.y : x.y, a.z ? y.z : x.z);\n"
+            "}\n");
+
+        TType *float4 = new TType(EbtFloat, 4);
+        TType *bool4 = new TType(EbtBool, 4);
+        emu->addEmulatedFunction(EOpMix, float4, float4, bool4,
+            "vec4 webgl_mix_emu(vec4 x, vec4 y, bvec4 a)\n"
+            "{\n"
+            "    return vec4(a.x ? y.x : x.x, a.y ? y.y : x.y, a.z ? y.z : x.z, a.w ? y.w : x.w);\n"
+            "}\n");
+    }
 }
