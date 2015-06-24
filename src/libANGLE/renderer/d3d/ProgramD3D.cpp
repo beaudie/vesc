@@ -1058,6 +1058,19 @@ LinkResult ProgramD3D::link(const gl::Data &data, gl::InfoLog &infoLog,
     vertexShaderD3D->generateWorkarounds(&mVertexWorkarounds);
     mShaderVersion = vertexShaderD3D->getShaderVersion();
 
+    // D3D11 Feature Level 9_3 doesn't support SV_IsFrontFace in HLSL, and has no equivalent.
+    // We should give a useful error message to applications that use gl_FrontFacing on 9_3.
+    // This could be done at glCompileShader() time, but it's much easier to do at glLinkProgram() time
+    // when the RendererD3D is accessible.
+    if (mRenderer->getMajorShaderModel() >= 4 && mRenderer->getShaderModelSuffix() != "")
+    {
+        if (fragmentShaderD3D->usesFrontFacing())
+        {
+            infoLog << "gl_FrontFacing isn't supported on D3D11 Feature Level 9_3";
+            return LinkResult(false, gl::Error(GL_NO_ERROR));
+        }
+    }
+
     // Map the varyings to the register file
     VaryingPacking packing = { NULL };
     *registers = mDynamicHLSL->packVaryings(infoLog, packing, fragmentShaderD3D, vertexShaderD3D, transformFeedbackVaryings);
