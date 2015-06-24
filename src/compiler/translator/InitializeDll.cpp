@@ -7,6 +7,7 @@
 #include "compiler/translator/InitializeDll.h"
 #include "compiler/translator/InitializeGlobals.h"
 #include "compiler/translator/InitializeParseContext.h"
+#include "compiler/translator/Cache.h"
 
 #include "common/platform.h"
 
@@ -24,6 +25,8 @@ bool InitProcess()
         return false;
     }
 
+    TCache::initialize();
+
     return true;
 }
 
@@ -31,4 +34,5 @@ void DetachProcess()
 {
     FreeParseContextIndex();
     FreePoolIndex();
+    TCache::destroy();
 }
