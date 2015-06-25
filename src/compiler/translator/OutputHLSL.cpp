@@ -2229,6 +2229,12 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
       case EOpConstructMat2:    outputConstructor(visit, node->getType(), "mat2", node->getSequence());  break;
       case EOpConstructMat3:    outputConstructor(visit, node->getType(), "mat3", node->getSequence());  break;
       case EOpConstructMat4:    outputConstructor(visit, node->getType(), "mat4", node->getSequence());  break;
+      case EOpConstructMat2x3:  outputConstructor(visit, node->getType(), "mat2x3", node->getSequence()); break;
+      case EOpConstructMat2x4:  outputConstructor(visit, node->getType(), "mat2x4", node->getSequence()); break;
+      case EOpConstructMat3x2:  outputConstructor(visit, node->getType(), "mat3x2", node->getSequence()); break;
+      case EOpConstructMat3x4:  outputConstructor(visit, node->getType(), "mat3x4", node->getSequence()); break;
+      case EOpConstructMat4x2:  outputConstructor(visit, node->getType(), "mat4x2", node->getSequence()); break;
+      case EOpConstructMat4x3:  outputConstructor(visit, node->getType(), "mat4x3", node->getSequence()); break;
       case EOpConstructStruct:
         {
             if (node->getType().isArray())
