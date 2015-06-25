@@ -930,6 +930,24 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
       case EOpConstructMat4:
         writeConstructorTriplet(visit, node->getType(), "mat4");
         break;
+	  case EOpConstructMat2x3:
+		writeConstructorTriplet(visit, node->getType(), "mat2x3");
+		break;
+	  case EOpConstructMat2x4:
+		writeConstructorTriplet(visit, node->getType(), "mat2x4");
+		break;
+	  case EOpConstructMat3x2:
+		writeConstructorTriplet(visit, node->getType(), "mat3x2");
+		break;
+	  case EOpConstructMat3x4:
+		writeConstructorTriplet(visit, node->getType(), "mat3x4");
+		break;
+	  case EOpConstructMat4x2:
+		writeConstructorTriplet(visit, node->getType(), "mat4x2");
+		break;
+	  case EOpConstructMat4x3:
+		writeConstructorTriplet(visit, node->getType(), "mat4x3");
+		break;
       case EOpConstructStruct:
         {
             const TType &type = node->getType();
