@@ -537,6 +537,12 @@ bool TParseContext::constructorErrorCheck(const TSourceLoc &line, TIntermNode *n
       case EOpConstructMat2:
       case EOpConstructMat3:
       case EOpConstructMat4:
+	  case EOpConstructMat2x3:
+	  case EOpConstructMat2x4:
+	  case EOpConstructMat3x2:
+	  case EOpConstructMat3x4:
+	  case EOpConstructMat4x2:
+	  case EOpConstructMat4x3:
         constructingMatrix = true;
         break;
       default:

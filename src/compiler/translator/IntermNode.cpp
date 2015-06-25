@@ -425,6 +425,12 @@ bool TIntermOperator::isConstructor() const
       case EOpConstructMat2:
       case EOpConstructMat3:
       case EOpConstructMat4:
+	  case EOpConstructMat2x3:
+	  case EOpConstructMat2x4:
+	  case EOpConstructMat3x2:
+	  case EOpConstructMat3x4:
+	  case EOpConstructMat4x2:
+	  case EOpConstructMat4x3:
       case EOpConstructFloat:
       case EOpConstructIVec2:
       case EOpConstructIVec3:

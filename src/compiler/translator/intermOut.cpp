@@ -419,6 +419,12 @@ bool TOutputTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
       case EOpConstructMat2:  out << "Construct mat2";  break;
       case EOpConstructMat3:  out << "Construct mat3";  break;
       case EOpConstructMat4:  out << "Construct mat4";  break;
+	  case EOpConstructMat2x3:  out << "Construct mat2x3";  break;
+	  case EOpConstructMat2x4:  out << "Construct mat2x4";  break;
+	  case EOpConstructMat3x2:  out << "Construct mat3x2";  break;
+	  case EOpConstructMat3x4:  out << "Construct mat3x4";  break;
+	  case EOpConstructMat4x2:  out << "Construct mat4x2";  break;
+	  case EOpConstructMat4x3:  out << "Construct mat4x3";  break;
       case EOpConstructStruct:  out << "Construct structure";  break;
 
       case EOpLessThan:         out << "Compare Less Than";             break;
