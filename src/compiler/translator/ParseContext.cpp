@@ -537,6 +537,12 @@ bool TParseContext::constructorErrorCheck(const TSourceLoc &line, TIntermNode *n
       case EOpConstructMat2:
       case EOpConstructMat3:
       case EOpConstructMat4:
+      case EOpConstructMat2x3:
+      case EOpConstructMat2x4:
+      case EOpConstructMat3x2:
+      case EOpConstructMat3x4:
+      case EOpConstructMat4x2:
+      case EOpConstructMat4x3:
         constructingMatrix = true;
         break;
       default:
@@ -1815,11 +1821,47 @@ TFunction *TParseContext::addConstructorFunc(const TPublicType &publicTypeIn)
             if (publicType.isMatrix())
             {
                 // TODO: non-square matrices
-                switch(publicType.getCols())
+                /*switch(publicType.getCols())
                 {
                   case 2: op = EOpConstructMat2;  break;
                   case 3: op = EOpConstructMat3;  break;
                   case 4: op = EOpConstructMat4;  break;
+                }*/
+                if (publicType.getRows() == 2 && publicType.getCols() == 2)
+                {
+                    op = EOpConstructMat2;
+                }
+                if (publicType.getRows() == 3 && publicType.getCols() == 3)
+                {
+                    op = EOpConstructMat3;
+                }
+                if (publicType.getRows() == 4 && publicType.getCols() == 4)
+                {
+                    op = EOpConstructMat4;
+                }
+                if (publicType.getRows() == 2 && publicType.getCols() == 3)
+                {
+                    op = EOpConstructMat2x3;
+                }
+                if (publicType.getRows() == 2 && publicType.getCols() == 4)
+                {
+                    op = EOpConstructMat2x4;
+                }
+                if (publicType.getRows() == 3 && publicType.getCols() == 2)
+                {
+                    op = EOpConstructMat3x2;
+                }
+                if (publicType.getRows() == 3 && publicType.getCols() == 4)
+                {
+                    op = EOpConstructMat3x4;
+                }
+                if (publicType.getRows() == 4 && publicType.getCols() == 2)
+                {
+                    op = EOpConstructMat4x2;
+                }
+                if (publicType.getRows() == 4 && publicType.getCols() == 3)
+                {
+                    op = EOpConstructMat4x3;
                 }
             }
             else
