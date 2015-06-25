@@ -97,24 +97,27 @@
                     [
                         '<@(util_linux_sources)',
                     ],
-                }],
-                ['use_x11==1',
-                {
-                    'sources':
+                    'conditions':
                     [
-                        '<@(util_x11_sources)',
+                        ['use_x11==1 and chromeos==0',
+                        {
+                            'sources':
+                            [
+                                '<@(util_x11_sources)',
+                            ],
+                            'link_settings':
+                            {
+                                'ldflags':
+                                [
+                                    '<!@(pkg-config --libs-only-L --libs-only-other x11 xi)',
+                                ],
+                                'libraries':
+                                [
+                                    '<!@(pkg-config --libs-only-l x11 xi) -lrt',
+                                ],
+                            },
+                        }],
                     ],
-                    'link_settings':
-                    {
-                        'ldflags':
-                        [
-                            '<!@(pkg-config --libs-only-L --libs-only-other x11 xi)',
-                        ],
-                        'libraries':
-                        [
-                            '<!@(pkg-config --libs-only-l x11 xi) -lrt',
-                        ],
-                    },
                 }],
             ],
         },
