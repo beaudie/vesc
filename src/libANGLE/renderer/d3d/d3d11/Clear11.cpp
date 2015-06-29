@@ -59,34 +59,43 @@ static void ApplyVertices(const gl::Extents &framebufferSize, const gl::Rectangl
     d3d11::SetPositionDepthColorVertex<T>(vertices + 3, right, top,    depthClear, color);
 }
 
-template <unsigned int vsSize, unsigned int psSize>
-Clear11::ClearShader Clear11::CreateClearShader(ID3D11Device *device, DXGI_FORMAT colorType, const BYTE (&vsByteCode)[vsSize], const BYTE (&psByteCode)[psSize])
+Clear11::ClearShader::ClearShader(DXGI_FORMAT colorType,
+                                  const char *inputLayoutName,
+                                  const BYTE *vsByteCode,
+                                  size_t vsSize,
+                                  const char *vsDebugName,
+                                  const BYTE *psByteCode,
+                                  size_t psSize,
+                                  const char *psDebugName)
+    : inputLayout(nullptr),
+      vertexShader(vsByteCode, vsSize, vsDebugName),
+      pixelShader(psByteCode, psSize, psDebugName)
 {
-    HRESULT result;
-
-    ClearShader shader = { 0 };
-
     D3D11_INPUT_ELEMENT_DESC quadLayout[] =
     {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "COLOR",    0, colorType,                   0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
 
-    result = device->CreateInputLayout(quadLayout, ArraySize(quadLayout), vsByteCode, vsSize, &shader.inputLayout);
-    ASSERT(SUCCEEDED(result));
+    inputLayout = new d3d11::LazyInputLayout<2>(quadLayout, vsByteCode, vsSize, inputLayoutName);
+}
 
-    result = device->CreateVertexShader(vsByteCode, vsSize, NULL, &shader.vertexShader);
-    ASSERT(SUCCEEDED(result));
-
-    result = device->CreatePixelShader(psByteCode, psSize, NULL, &shader.pixelShader);
-    ASSERT(SUCCEEDED(result));
-
-    return shader;
+Clear11::ClearShader::~ClearShader()
+{
+    SafeDelete(inputLayout);
+    vertexShader.release();
+    pixelShader.release();
 }
 
 Clear11::Clear11(Renderer11 *renderer)
-    : mRenderer(renderer), mClearBlendStates(StructLessThan<ClearBlendInfo>), mClearDepthStencilStates(StructLessThan<ClearDepthStencilInfo>),
-      mVertexBuffer(NULL), mRasterizerState(NULL)
+    : mRenderer(renderer),
+      mClearBlendStates(StructLessThan<ClearBlendInfo>),
+      mFloatClearShader(nullptr),
+      mUintClearShader(nullptr),
+      mIntClearShader(nullptr),
+      mClearDepthStencilStates(StructLessThan<ClearDepthStencilInfo>),
+      mVertexBuffer(nullptr),
+      mRasterizerState(nullptr)
 {
     TRACE_EVENT0("gpu.angle", "Clear11::Clear11");
 
@@ -123,17 +132,45 @@ Clear11::Clear11(Renderer11 *renderer)
 
     if (mRenderer->getRenderer11DeviceCaps().featureLevel <= D3D_FEATURE_LEVEL_9_3)
     {
-        mFloatClearShader = CreateClearShader(device, DXGI_FORMAT_R32G32B32A32_FLOAT, g_VS_ClearFloat, g_PS_ClearFloat_FL9);
+        mFloatClearShader = new ClearShader(DXGI_FORMAT_R32G32B32A32_FLOAT,
+                                            "Clear11 Float IL",
+                                            g_VS_ClearFloat,
+                                            ArraySize(g_VS_ClearFloat),
+                                            "Clear11 Float VS",
+                                            g_PS_ClearFloat_FL9,
+                                            ArraySize(g_PS_ClearFloat_FL9),
+                                            "Clear11 Float PS");
     }
     else
     {
-        mFloatClearShader = CreateClearShader(device, DXGI_FORMAT_R32G32B32A32_FLOAT, g_VS_ClearFloat, g_PS_ClearFloat);
+        mFloatClearShader = new ClearShader(DXGI_FORMAT_R32G32B32A32_FLOAT,
+                                            "Clear11 Float IL",
+                                            g_VS_ClearFloat,
+                                            ArraySize(g_VS_ClearFloat),
+                                            "Clear11 Float VS",
+                                            g_PS_ClearFloat,
+                                            ArraySize(g_PS_ClearFloat),
+                                            "Clear11 Float PS");
     }
 
     if (renderer->isES3Capable())
     {
-        mUintClearShader  = CreateClearShader(device, DXGI_FORMAT_R32G32B32A32_UINT,  g_VS_ClearUint,  g_PS_ClearUint );
-        mIntClearShader   = CreateClearShader(device, DXGI_FORMAT_R32G32B32A32_SINT,  g_VS_ClearSint,  g_PS_ClearSint );
+        mUintClearShader = new ClearShader(DXGI_FORMAT_R32G32B32A32_UINT,
+                                           "Clear11 UINT IL",
+                                           g_VS_ClearUint,
+                                           ArraySize(g_VS_ClearUint),
+                                           "Clear11 UINT VS",
+                                           g_PS_ClearUint,
+                                           ArraySize(g_PS_ClearUint),
+                                           "Clear11 UINT PS");
+        mIntClearShader = new ClearShader(DXGI_FORMAT_R32G32B32A32_UINT,
+                                          "Clear11 SINT IL",
+                                          g_VS_ClearSint,
+                                          ArraySize(g_VS_ClearSint),
+                                          "Clear11 SINT VS",
+                                          g_PS_ClearSint,
+                                          ArraySize(g_PS_ClearSint),
+                                          "Clear11 SINT PS");
     }
 }
 
@@ -145,20 +182,9 @@ Clear11::~Clear11()
     }
     mClearBlendStates.clear();
 
-    SafeRelease(mFloatClearShader.inputLayout);
-    SafeRelease(mFloatClearShader.vertexShader);
-    SafeRelease(mFloatClearShader.pixelShader);
-
-    if (mRenderer->isES3Capable())
-    {
-        SafeRelease(mUintClearShader.inputLayout);
-        SafeRelease(mUintClearShader.vertexShader);
-        SafeRelease(mUintClearShader.pixelShader);
-
-        SafeRelease(mIntClearShader.inputLayout);
-        SafeRelease(mIntClearShader.vertexShader);
-        SafeRelease(mIntClearShader.pixelShader);
-    }
+    SafeDelete(mFloatClearShader);
+    SafeDelete(mUintClearShader);
+    SafeDelete(mIntClearShader);
 
     for (ClearDepthStencilStateMap::iterator i = mClearDepthStencilStates.begin(); i != mClearDepthStencilStates.end(); i++)
     {
@@ -243,6 +269,7 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams, const gl
 
     ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
     ID3D11DeviceContext1 *deviceContext1 = mRenderer->getDeviceContext1IfSupported();
+    ID3D11Device *device = mRenderer->getDevice();
 
     for (size_t colorAttachment = 0; colorAttachment < colorAttachments.size(); colorAttachment++)
     {
@@ -433,7 +460,7 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams, const gl
         // Set the vertices
         UINT vertexStride = 0;
         const UINT startIdx = 0;
-        const ClearShader* shader = NULL;
+        ClearShader *shader = NULL;
         D3D11_MAPPED_SUBRESOURCE mappedResource;
         HRESULT result = deviceContext->Map(mVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
         if (FAILED(result))
@@ -447,19 +474,19 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams, const gl
           case GL_FLOAT:
             ApplyVertices(framebufferSize, scissorPtr, clearParams.colorFClearValue, clearParams.depthClearValue, mappedResource.pData);
             vertexStride = sizeof(d3d11::PositionDepthColorVertex<float>);
-            shader = &mFloatClearShader;
+            shader = mFloatClearShader;
             break;
 
           case GL_UNSIGNED_INT:
             ApplyVertices(framebufferSize, scissorPtr, clearParams.colorUIClearValue, clearParams.depthClearValue, mappedResource.pData);
             vertexStride = sizeof(d3d11::PositionDepthColorVertex<unsigned int>);
-            shader = &mUintClearShader;
+            shader = mUintClearShader;
             break;
 
           case GL_INT:
             ApplyVertices(framebufferSize, scissorPtr, clearParams.colorIClearValue, clearParams.depthClearValue, mappedResource.pData);
             vertexStride = sizeof(d3d11::PositionDepthColorVertex<int>);
-            shader = &mIntClearShader;
+            shader = mIntClearShader;
             break;
 
           default:
@@ -485,9 +512,9 @@ gl::Error Clear11::clearFramebuffer(const ClearParameters &clearParams, const gl
         deviceContext->RSSetState(mRasterizerState);
 
         // Apply shaders
-        deviceContext->IASetInputLayout(shader->inputLayout);
-        deviceContext->VSSetShader(shader->vertexShader, NULL, 0);
-        deviceContext->PSSetShader(shader->pixelShader, NULL, 0);
+        deviceContext->IASetInputLayout(shader->inputLayout->resolve(device));
+        deviceContext->VSSetShader(shader->vertexShader.resolve(device), NULL, 0);
+        deviceContext->PSSetShader(shader->pixelShader.resolve(device), NULL, 0);
         deviceContext->GSSetShader(NULL, NULL, 0);
 
         // Apply vertex buffer
