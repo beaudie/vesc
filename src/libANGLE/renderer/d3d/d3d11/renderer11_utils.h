@@ -283,7 +283,7 @@ class LazyInputLayout final : public LazyResource<ID3D11InputLayout>
     ID3D11InputLayout *resolve(ID3D11Device *device) override;
 
   private:
-    const D3D11_INPUT_ELEMENT_DESC *mInputDesc;
+    D3D11_INPUT_ELEMENT_DESC mInputDesc[N];
     size_t mByteCodeLen;
     const BYTE *mByteCode;
     const char *mDebugName;
@@ -295,11 +295,11 @@ LazyInputLayout<N>::LazyInputLayout(
     const BYTE *byteCode,
     size_t byteCodeLen,
     const char *debugName)
-    : mInputDesc(inputDesc),
-      mByteCodeLen(byteCodeLen),
+    : mByteCodeLen(byteCodeLen),
       mByteCode(byteCode),
       mDebugName(debugName)
 {
+    memcpy(mInputDesc, inputDesc, sizeof(D3D11_INPUT_ELEMENT_DESC) * N);
 }
 
 template <size_t N>
