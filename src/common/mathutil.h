@@ -540,6 +540,86 @@ struct Range
 typedef Range<int> RangeI;
 typedef Range<unsigned int> RangeUI;
 
+// First, both normalized floating-point values are converted into 16-bit integer values.
+// Then, the results are packed into the returned 32-bit unsigned integer.
+// The first float value will be written to the least significant bits of the output;
+// the last float value will be written to the most significant bits.
+// The conversion of each value to fixed point is done as follows :
+// packSnorm2x16 : round(clamp(c, -1, +1) * 32767.0)
+inline unsigned int packSNorm2x16(const float &f1, const float &f2)
+{
+    unsigned short leastSignificantBits = static_cast<unsigned short>(roundf(clamp(f1, -1.0f, 1.0f) * 32767.0f));
+    unsigned short mostSignificantBits = static_cast<unsigned short>(roundf(clamp(f2, -1.0f, 1.0f) * 32767.0f));
+    return static_cast<unsigned int>(mostSignificantBits) << 16 | static_cast<unsigned int>(leastSignificantBits);
+}
+
+// First, unpacks a single 32-bit unsigned integer u into a pair of 16-bit unsigned integers. Then, each
+// component is converted to a normalized floating-point value to generate the returned two float values.
+// The first float value will be extracted from the least significant bits of the input;
+// the last float value will be extracted from the most-significant bits.
+// The conversion for unpacked fixed-point value to floating point is done as follows:
+// unpackSnorm2x16 : clamp(f / 32767.0, -1, +1)
+inline void unpackSNorm2x16(const unsigned int &u, float *f1, float *f2)
+{
+    short leastSignificantBits = static_cast<short>(u & 0xFFFF);
+    short mostSignificantBits = static_cast<short>(u >> 16);
+    *f1 = clamp(static_cast<float>(leastSignificantBits) / 32767.0f, -1.0f, 1.0f);
+    *f2 = clamp(static_cast<float>(mostSignificantBits) / 32767.0f, -1.0f, 1.0f);
+}
+
+// First, both normalized floating-point values are converted into 16-bit integer values.
+// Then, the results are packed into the returned 32-bit unsigned integer.
+// The first float value will be written to the least significant bits of the output;
+// the last float value will be written to the most significant bits.
+// The conversion of each value to fixed point is done as follows:
+// packUnorm2x16 : round(clamp(c, 0, +1) * 65535.0)
+inline unsigned int packUNorm2x16(const float &f1, const float &f2)
+{
+    unsigned short leastSignificantBits = static_cast<unsigned short>(roundf(clamp(f1, 0.0f, 1.0f) * 65535.0f));
+    unsigned short mostSignificantBits = static_cast<unsigned short>(roundf(clamp(f2, 0.0f, 1.0f) * 65535.0f));
+    return static_cast<unsigned int>(mostSignificantBits) << 16 | static_cast<unsigned int>(leastSignificantBits);
+}
+
+// First, unpacks a single 32-bit unsigned integer u into a pair of 16-bit unsigned integers. Then, each
+// component is converted to a normalized floating-point value to generate the returned two float values.
+// The first float value will be extracted from the least significant bits of the input;
+// the last float value will be extracted from the most-significant bits.
+// The conversion for unpacked fixed-point value to floating point is done as follows:
+// unpackUnorm2x16 : f / 65535.0
+inline void unpackUNorm2x16(const unsigned int &u, float *f1, float *f2)
+{
+    unsigned short leastSignificantBits = static_cast<unsigned short>(u & 0xFFFF);
+    unsigned short mostSignificantBits = static_cast<unsigned short>(u >> 16);
+    *f1 = static_cast<float>(leastSignificantBits) / 65535.0f;
+    *f2 = static_cast<float>(mostSignificantBits) / 65535.0f;
+}
+
+// Returns an unsigned integer obtained by converting the two floating-point values to the 16-bit
+// floating-point representation found in the OpenGL ES Specification, and then packing these
+// two 16-bit integers into a 32-bit unsigned integer.
+// f1: The 16 least-significant bits of the result;
+// f2: The 16 most-significant bits.
+inline unsigned int packHalf2x16(const float &f1, const float &f2)
+{
+    unsigned int leastSignificantBits = static_cast<unsigned int>(float32ToFloat16(f1));
+    unsigned int mostSignificantBits = static_cast<unsigned int>(float32ToFloat16(f2));
+    return static_cast<unsigned int>(mostSignificantBits) << 16 | static_cast<unsigned int>(leastSignificantBits);
+}
+
+// Returns two floating-point values obtained by unpacking a 32-bit unsigned integer into a pair of 16-bit values,
+// interpreting those values as 16-bit floating-point numbers according to the OpenGL ES Specification,
+// and converting them to 32-bit floating-point values.
+// The first float value is obtained from the 16 least-significant bits of u;
+// the second component is obtained from the 16 most-significant bits of u.
+inline void unpackHalf2x16(const unsigned int &u, float *f1, float *f2)
+{
+    unsigned short leastSignificantBits = static_cast<unsigned short>(u & 0xFFFF);
+    unsigned short mostSignificantBits = static_cast<unsigned short>(u >> 16);
+
+    *f1 = float16ToFloat32(leastSignificantBits);
+    *f2 = float16ToFloat32(mostSignificantBits);
+}
+
 }
 
 namespace rx
