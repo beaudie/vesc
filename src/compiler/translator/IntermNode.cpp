@@ -1188,7 +1188,8 @@ TConstantUnion *TIntermConstantUnion::foldUnary(TOperator op, TInfoSink &infoSin
     size_t objectSize = getType().getObjectSize();
 
     if (op == EOpAny || op == EOpAll || op == EOpLength || op == EOpTranspose || op == EOpDeterminant ||
-        op == EOpInverse)
+        op == EOpInverse || op == EOpPackSnorm2x16 || op == EOpUnpackSnorm2x16 || op == EOpPackUnorm2x16 ||
+        op == EOpUnpackUnorm2x16 || op == EOpPackHalf2x16 || op == EOpUnpackHalf2x16)
     {
         // Do operations where the return type has a different number of components compared to the operand type.
         TConstantUnion *resultArray = nullptr;
@@ -1295,6 +1296,147 @@ TConstantUnion *TIntermConstantUnion::foldUnary(TOperator op, TInfoSink &infoSin
                 infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
                 return nullptr;
             }
+
+          case EOpPackSnorm2x16:
+            if (getType().getBasicType() == EbtFloat)
+            {
+                ASSERT(getType().getNominalSize() == 2);
+                // First, converts each component of the normalized floating-point value v into 16-bit integer values.
+                // Then, the results are packed into the returned 32-bit unsigned integer.
+                resultArray = new TConstantUnion();
+                const float firstComp = operandArray[0].getFConst();
+                const float secondComp = operandArray[1].getFConst();
+                // The conversion for each component c of v to fixed point is done as follows:
+                // packSnorm2x16: round(clamp(c, -1, +1) * 32767.0)
+                unsigned short leastSignificantBits =
+                    static_cast<unsigned short>(roundf(gl::clamp(firstComp, -1.0f, 1.0f) * 32767.0f));
+                unsigned short mostSignificantBits =
+                    static_cast<unsigned short>(roundf(gl::clamp(secondComp, -1.0f, 1.0f) * 32767.0f));
+                // The first component of the vector will be written to the least significant bits of the output;
+                // the last component will be written to the most significant bits.
+                resultArray->setUConst(mostSignificantBits << 16 | leastSignificantBits);
+                break;
+            }
+            else
+            {
+                infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+                return nullptr;
+            }
+
+          case EOpUnpackSnorm2x16:
+            if (getType().getBasicType() == EbtUInt)
+            {
+                // First, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers.
+                // Then, each component is converted to a normalized floating-point value to generate the returned
+                // two-component vector.
+                resultArray = new TConstantUnion[2];
+                unsigned short leastSignificantBits = operandArray[0].getUConst() & 0xFFFF;
+                unsigned short mostSignificantBits = operandArray[0].getUConst() >> 16;
+                // The conversion for unpacked fixed-point value f to floating point is done as follows:
+                // unpackSnorm2x16: clamp(f / 32767.0, -1, +1)
+                // The first component of the returned vector will be extracted from the least significant bits of the
+                // input; the last component will be extracted from the most significant bits.
+                resultArray[0].setFConst(gl::clamp(static_cast<float>(leastSignificantBits) / 32767.0f, -1.0f, 1.0f));
+                resultArray[1].setFConst(gl::clamp(static_cast<float>(mostSignificantBits) / 32767.0f, -1.0f, 1.0f));
+                break;
+            }
+            else
+            {
+                infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+                return nullptr;
+            }
+
+          case EOpPackUnorm2x16:
+            if (getType().getBasicType() == EbtFloat)
+            {
+                ASSERT(getType().getNominalSize() == 2);
+                resultArray = new TConstantUnion();
+                // First, converts each component of the normalized floating-point value v into 16-bit integer values.
+                // Then, the results are packed into the returned 32-bit unsigned integer.
+                const float firstComp = operandArray[0].getFConst();
+                const float secondComp = operandArray[1].getFConst();
+                // The conversion for each component c of v to fixed point is done as follows:
+                // packUnorm2x16: round(clamp(c, 0, +1) * 65535.0)
+                unsigned short leastSignificantBits =
+                    static_cast<unsigned short>(roundf(gl::clamp(firstComp, 0.0f, 1.0f) * 65535.0f));
+                unsigned short mostSignificantBits =
+                    static_cast<unsigned short>(roundf(gl::clamp(secondComp, 0.0f, 1.0f) * 65535.0f));
+                // The first component of the vector will be written to the least significant bits of the output;
+                // the last component will be written to the most significant bits.
+                resultArray->setUConst(mostSignificantBits << 16 | leastSignificantBits);
+                break;
+            }
+            else
+            {
+                infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+                return nullptr;
+            }
+
+          case EOpUnpackUnorm2x16:
+            if (getType().getBasicType() == EbtUInt)
+            {
+                resultArray = new TConstantUnion[2];
+                // First, unpacks a single 32-bit unsigned integer p into a pair of 16-bit unsigned integers.
+                // Then, each component is converted to a normalized floating-point value to generate the returned
+                // two-component vector.
+                unsigned short leastSignificantBits = operandArray[0].getUConst() & 0xFFFF;
+                unsigned short mostSignificantBits = operandArray[0].getUConst() >> 16;
+                // The conversion for unpacked fixed - point value f to floating point is done as follows:
+                // unpackUnorm2x16: f / 65535.0
+                // The first component of the returned vector will be extracted from the least significant bits of the
+                // input; the last component will be extracted from the most-significant bits.
+                resultArray[0].setFConst(static_cast<float>(leastSignificantBits) / 65535.0f);
+                resultArray[1].setFConst(static_cast<float>(mostSignificantBits) / 65535.0f);
+                break;
+            }
+            else
+            {
+                infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+                return nullptr;
+            }
+
+          case EOpPackHalf2x16:
+            if (getType().getBasicType() == EbtFloat)
+            {
+                ASSERT(getType().getNominalSize() == 2);
+                resultArray = new TConstantUnion();
+                // Returns an unsigned integer obtained by converting the components of a two-component floating-point
+                // vector to the 16-bit floating-point representation found in the OpenGL ES Specification, and then
+                // packing these two 16-bit integers into a 32-bit unsigned integer.
+                unsigned short leastSignificantBits = gl::float32ToFloat16(operandArray[0].getFConst());
+                unsigned short mostSignificantBits = gl::float32ToFloat16(operandArray[1].getFConst());
+                // The first vector component specifies the 16 least-significant bits of the result; the second
+                // component specifies the 16 most-significant bits.
+                resultArray->setUConst(mostSignificantBits << 16 | leastSignificantBits);
+                break;
+            }
+            else
+            {
+                infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+                return nullptr;
+            }
+
+          case EOpUnpackHalf2x16:
+            if (getType().getBasicType() == EbtUInt)
+            {
+                resultArray = new TConstantUnion[2];
+                // Returns a two-component floating-point vector with components obtained by unpacking a 32-bit
+                // unsigned integer into a pair of 16-bit values, interpreting those values as 16-bit floating-point
+                // numbers according to the OpenGL ES Specification, and converting them to 32-bit floating-point values.
+                unsigned short leastSignificantBits = operandArray[0].getUConst() & 0xFFFF;
+                unsigned short mostSignificantBits = operandArray[0].getUConst() >> 16;
+                // The first component of the vector is obtained from the 16 least-significant bits of input;
+                // the second component is obtained from the 16 most-significant bits of input.
+                resultArray[0].setFConst(gl::float16ToFloat32(leastSignificantBits));
+                resultArray[1].setFConst(gl::float16ToFloat32(mostSignificantBits));
+                break;
+            }
+            else
+            {
+                infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+                return nullptr;
+            }
+            break;
 
           default:
             break;
