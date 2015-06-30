@@ -28,9 +28,6 @@
 #include <sys/types.h>
 #endif
 
-// Located in tcuMainProxy.cpp.
-int deqp_main(int argc, const char* argv[]);
-
 tcu::Platform *createPlatform();
 
 namespace
