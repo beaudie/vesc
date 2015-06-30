@@ -295,8 +295,8 @@
 1034 WIN : dEQP-GLES2.functional.flush_finish.finish_wait = FAIL
 
 // Don't run these tests for faster turnover
-998 WIN : dEQP-GLES2.performance.* = SKIP
-998 WIN : dEQP-GLES2.stress.* = SKIP
+998 WIN LINUX : dEQP-GLES2.performance.* = SKIP
+998 WIN LINUX : dEQP-GLES2.stress.* = SKIP
 
 ////////////////////////////////////////////////////////////////////////////////
 //
