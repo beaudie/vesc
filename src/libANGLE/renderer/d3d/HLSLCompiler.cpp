@@ -106,9 +106,10 @@ CompileConfig::CompileConfig(UINT flags, const std::string &name)
 }
 
 HLSLCompiler::HLSLCompiler()
-    : mD3DCompilerModule(NULL),
-      mD3DCompileFunc(NULL),
-      mD3DDisassembleFunc(NULL)
+    : mInitialized(false),
+      mD3DCompilerModule(nullptr),
+      mD3DCompileFunc(nullptr),
+      mD3DDisassembleFunc(nullptr)
 {
 }
 
@@ -119,6 +120,11 @@ HLSLCompiler::~HLSLCompiler()
 
 bool HLSLCompiler::initialize()
 {
+    if (mInitialized)
+    {
+        return true;
+    }
+
     TRACE_EVENT0("gpu.angle", "HLSLCompiler::initialize");
 #if !defined(ANGLE_ENABLE_WINDOWS_STORE)
 #if defined(ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES)
@@ -160,7 +166,8 @@ bool HLSLCompiler::initialize()
     mD3DDisassembleFunc = reinterpret_cast<pD3DDisassemble>(D3DDisassemble);
 #endif
 
-    return mD3DCompileFunc != NULL;
+    mInitialized = (mD3DCompileFunc != NULL);
+    return mInitialized;
 }
 
 void HLSLCompiler::release()
@@ -176,8 +183,13 @@ void HLSLCompiler::release()
 
 gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string &hlsl, const std::string &profile,
                                         const std::vector<CompileConfig> &configs, const D3D_SHADER_MACRO *overrideMacros,
-                                        ID3DBlob **outCompiledBlob, std::string *outDebugInfo) const
+                                        ID3DBlob **outCompiledBlob, std::string *outDebugInfo)
 {
+    if (!initialize())
+    {
+        // Crash?
+    }
+
 #if !defined(ANGLE_ENABLE_WINDOWS_STORE)
     ASSERT(mD3DCompilerModule);
 #endif
@@ -282,8 +294,13 @@ gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string 
     return gl::Error(GL_NO_ERROR);
 }
 
-std::string HLSLCompiler::disassembleBinary(ID3DBlob *shaderBinary) const
+std::string HLSLCompiler::disassembleBinary(ID3DBlob *shaderBinary)
 {
+    if (!initialize())
+    {
+        // Crash?
+    }
+
     // Retrieve disassembly
     UINT flags = D3D_DISASM_ENABLE_DEFAULT_VALUE_PRINTS | D3D_DISASM_ENABLE_INSTRUCTION_NUMBERING;
     ID3DBlob *disassembly = NULL;
