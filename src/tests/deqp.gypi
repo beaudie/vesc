@@ -1277,12 +1277,7 @@
                         'deqp_support/angle_deqp_tests_main.cpp',
                     ],
                 },
-            ], # targets
-        }], # (OS=="win" or OS=="linux") and angle_standalone==1
-        ['OS=="win" and angle_standalone==1',
-        {
-            "targets":
-            [
+
                 {
                     'target_name': 'angle_deqp_googletest',
                     'type': 'executable',
@@ -1295,8 +1290,22 @@
                     [
                         'deqp_support/angle_deqp_gtest_main.cpp',
                     ],
+                    'conditions':
+                    [
+                        ['OS=="linux"',
+                        {
+                            'ldflags':
+                            [
+                                '<!@(pkg-config --libs-only-L --libs-only-other libpci)',
+                            ],
+                            'libraries':
+                            [
+                                '<!@(pkg-config --libs-only-l libpci)',
+                            ],
+                        }],
+                    ],
                 },
             ], # targets
-        }], # OS=="win" and angle_standalone==1
+        }], # (OS=="win" or OS=="linux") and angle_standalone==1
     ], # conditions
 }
