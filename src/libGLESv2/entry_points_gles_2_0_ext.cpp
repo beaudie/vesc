@@ -644,6 +644,21 @@ void GL_APIENTRY VertexAttribDivisorANGLE(GLuint index, GLuint divisor)
             return;
         }
 
+        if (context->getLimitations().attributeZeroRequiresZeroDivisorInEXT)
+        {
+            if (index == 0 && divisor != 0)
+            {
+                const std::string errorMessage = "The current context doesn't support setting a non-zero divisor on the attribute with index zero. "
+                                                 "Please reorder the attributes in your vertex shader so that attribute zero can have a zero divisor.";
+                context->recordError(Error(GL_INVALID_OPERATION, errorMessage.c_str()));
+
+                // We also output an error message to the debugger window if tracing is active, so that developers can see the error message.
+                ERR("%s", errorMessage.c_str());
+
+                return;
+            }
+        }
+
         context->setVertexAttribDivisor(index, divisor);
     }
 }
@@ -657,6 +672,7 @@ void GL_APIENTRY BlitFramebufferANGLE(GLint srcX0, GLint srcY0, GLint srcX1, GLi
           srcX0, srcY0, srcX1, srcX1, dstX0, dstY0, dstX1, dstY1, mask, filter);
 
     Context *context = GetValidGlobalContext();
+
     if (context)
     {
         if (!ValidateBlitFramebufferParameters(context, srcX0, srcY0, srcX1, srcY1,
