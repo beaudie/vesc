@@ -31,7 +31,6 @@ class Trim11 : angle::NonCopyable
 
   private:
     Renderer11 *mRenderer;
-    EventRegistrationToken mApplicationSuspendedEventToken;
 
     void trim();
     bool registerForRendererTrimRequest();
