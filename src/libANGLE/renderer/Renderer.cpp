@@ -29,7 +29,7 @@ const gl::Caps &Renderer::getRendererCaps() const
 {
     if (!mCapsInitialized)
     {
-        generateCaps(&mCaps, &mTextureCaps, &mExtensions);
+        generateCaps(&mCaps, &mTextureCaps, &mExtensions, &mLimitations);
         mCapsInitialized = true;
     }
 
@@ -40,7 +40,7 @@ const gl::TextureCapsMap &Renderer::getRendererTextureCaps() const
 {
     if (!mCapsInitialized)
     {
-        generateCaps(&mCaps, &mTextureCaps, &mExtensions);
+        generateCaps(&mCaps, &mTextureCaps, &mExtensions, &mLimitations);
         mCapsInitialized = true;
     }
 
@@ -51,11 +51,22 @@ const gl::Extensions &Renderer::getRendererExtensions() const
 {
     if (!mCapsInitialized)
     {
-        generateCaps(&mCaps, &mTextureCaps, &mExtensions);
+        generateCaps(&mCaps, &mTextureCaps, &mExtensions, &mLimitations);
         mCapsInitialized = true;
     }
 
     return mExtensions;
+}
+
+const gl::Limitations &Renderer::getRendererLimitations() const
+{
+    if (!mCapsInitialized)
+    {
+        generateCaps(&mCaps, &mTextureCaps, &mExtensions, &mLimitations);
+        mCapsInitialized = true;
+    }
+
+    return mLimitations;
 }
 
 const Workarounds &Renderer::getWorkarounds() const

@@ -225,6 +225,20 @@ struct Extensions
     bool colorBufferFloat;
 };
 
+struct Limitations
+{
+    Limitations();
+
+    // Renderer doesn't support gl_FrontFacing in fragment shaders
+    bool noFrontFacingSupport;
+
+    // Renderer doesn't support GL_SAMPLE_ALPHA_TO_COVERAGE
+    bool noSampleAlphaToCoverageSupport;
+
+    // In glVertexAttribDivisorANGLE, attribute zero must have a zero divisor
+    bool attributeZeroRequiresZeroDivisorInEXT;
+};
+
 struct TypePrecision
 {
     TypePrecision();
