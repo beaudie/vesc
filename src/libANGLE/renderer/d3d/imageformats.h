@@ -36,7 +36,8 @@ struct L8
 
     static void writeColor(L8 *dst, const gl::ColorF *src)
     {
-        dst->L = gl::floatToNormalized<unsigned char>((src->red + src->green + src->blue) / 3.0f);
+        // To convert RGB to L, we should just use the R channel (Table 3.8 in OpenGL ES 2.0.25 specification)
+        dst->L = gl::floatToNormalized<unsigned char>(src->red);
     }
 
     static void average(L8 *dst, const L8 *src1, const L8 *src2)
@@ -120,7 +121,8 @@ struct L8A8
 
     static void writeColor(L8A8 *dst, const gl::ColorF *src)
     {
-        dst->L = gl::floatToNormalized<unsigned char>((src->red + src->green + src->blue) / 3.0f);
+        // To convert RGB to L, we should just use the R channel (Table 3.8 in OpenGL ES 2.0.25 specification)
+        dst->L = gl::floatToNormalized<unsigned char>(src->red);
         dst->A = gl::floatToNormalized<unsigned char>(src->alpha);
     }
 
