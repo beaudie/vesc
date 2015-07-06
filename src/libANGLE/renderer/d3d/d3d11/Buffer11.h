@@ -23,12 +23,12 @@ struct TranslatedAttribute;
 enum BufferUsage
 {
     BUFFER_USAGE_STAGING,
+    BUFFER_USAGE_SYSTEM_MEMORY,
     BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK,
     BUFFER_USAGE_INDEX,
     BUFFER_USAGE_PIXEL_UNPACK,
     BUFFER_USAGE_PIXEL_PACK,
     BUFFER_USAGE_UNIFORM,
-    BUFFER_USAGE_SYSTEM_MEMORY,
     BUFFER_USAGE_EMULATED_INDEXED_VERTEX,
 
     BUFFER_USAGE_COUNT,
@@ -63,6 +63,7 @@ class Buffer11 : public BufferD3D
     ID3D11ShaderResourceView *getSRV(DXGI_FORMAT srvFormat);
     bool isMapped() const { return mMappedStorage != NULL; }
     gl::Error packPixels(ID3D11Texture2D *srcTexure, UINT srcSubresource, const PackPixelsParams &params);
+    void runGC();
 
     // BufferD3D implementation
     virtual size_t getSize() const { return mSize; }
@@ -111,9 +112,10 @@ class Buffer11 : public BufferD3D
     typedef std::pair<ID3D11Buffer *, ID3D11ShaderResourceView *> BufferSRVPair;
     std::map<DXGI_FORMAT, BufferSRVPair> mBufferResourceViews;
 
-    unsigned int mReadUsageCount;
+    uint64_t mUsageCount;
+    uint64_t mLastUsage[BUFFER_USAGE_COUNT];
 
-    void markBufferUsage();
+    void markBufferUsage(BufferUsage usage);
     NativeStorage *getStagingStorage();
     PackStorage *getPackStorage();
     gl::Error getSystemMemoryStorage(SystemMemoryStorage **storageOut);
