@@ -236,11 +236,12 @@ Buffer11::Buffer11(Renderer11 *renderer)
       mMappedStorage(nullptr),
       mConstantBufferStorageAdditionalSize(0),
       mMaxConstantBufferLruCount(0),
-      mReadUsageCount(0)
+      mUsageCount(0)
 {
     for (int usage = 0; usage < BUFFER_USAGE_COUNT; usage++)
     {
         mBufferStorages[usage] = nullptr;
+        mLastUsage[usage] = 0;
     }
 }
 
@@ -284,7 +285,7 @@ gl::Error Buffer11::getData(const uint8_t **outData)
         return error;
     }
 
-    mReadUsageCount = 0;
+    markBufferUsage(BUFFER_USAGE_SYSTEM_MEMORY);
 
     ASSERT(systemMemoryStorage->getSize() >= mSize);
 
@@ -485,26 +486,66 @@ void Buffer11::markTransformFeedbackUsage()
     invalidateStaticData();
 }
 
-void Buffer11::markBufferUsage()
+void Buffer11::markBufferUsage(BufferUsage usage)
 {
-    mReadUsageCount++;
+    mUsageCount ++;
+    mLastUsage[usage] = mUsageCount;
 
-    // Free the system memory storage if we decide it isn't being used very often.
-    const unsigned int usageLimit = 5;
-
-    BufferStorage *&sysMemUsage = mBufferStorages[BUFFER_USAGE_SYSTEM_MEMORY];
-    if (mReadUsageCount > usageLimit && sysMemUsage != nullptr)
+    if (mUsageCount % 64 == 0)
     {
-        if (getLatestBufferStorage() != sysMemUsage)
+        runGC();
+    }
+}
+
+void Buffer11::runGC()
+{
+    // Our buffer GC simply removes buffer copies that haven't been used recently.
+    // However we want to make extra sure that we do not accidently remove the latest
+    // revision of the data. That's why we find a storage with the latest revision,
+    // giving priority to GPU allocated storages.
+    BufferStorage *latestStorage = nullptr;
+    unsigned int latestRevision = 0;
+    for (int usage = BUFFER_USAGE_COUNT; usage-- > 0;)
+    {
+        BufferStorage *storage = mBufferStorages[usage];
+        if (storage != nullptr)
         {
-            SafeDelete(sysMemUsage);
+            unsigned int revision = storage->getDataRevision();
+            if (revision > latestRevision)
+            {
+                latestStorage = storage;
+                latestRevision = revision;
+            }
+        }
+    }
+    ASSERT(latestStorage);
+
+    const unsigned int usageLimit = 20;
+    for (int usage = 0; usage < BUFFER_USAGE_COUNT; usage++)
+    {
+        if (mLastUsage[usage] + usageLimit < mUsageCount)
+        {
+            BufferStorage *&storage = mBufferStorages[usage];
+            if (storage != nullptr && storage != latestStorage)
+            {
+                SafeDelete(storage);
+
+                if (usage == BUFFER_USAGE_UNIFORM)
+                {
+                    for (auto cacheEntryIt : mConstantBufferRangeStoragesCache)
+                    {
+                        SafeDelete(cacheEntryIt.second.storage);
+                    }
+                    mConstantBufferRangeStoragesCache.clear();
+                }
+            }
         }
     }
 }
 
 ID3D11Buffer *Buffer11::getBuffer(BufferUsage usage)
 {
-    markBufferUsage();
+    markBufferUsage(usage);
 
     BufferStorage *bufferStorage = getBufferStorage(usage);
 
@@ -519,7 +560,7 @@ ID3D11Buffer *Buffer11::getBuffer(BufferUsage usage)
 
 ID3D11Buffer *Buffer11::getEmulatedIndexedBuffer(SourceIndexData *indexInfo, const TranslatedAttribute *attribute)
 {
-    markBufferUsage();
+    markBufferUsage(BUFFER_USAGE_EMULATED_INDEXED_VERTEX);
 
     assert(indexInfo != nullptr);
     assert(attribute != nullptr);
@@ -543,7 +584,7 @@ ID3D11Buffer *Buffer11::getEmulatedIndexedBuffer(SourceIndexData *indexInfo, con
 
 ID3D11Buffer *Buffer11::getConstantBufferRange(GLintptr offset, GLsizeiptr size)
 {
-    markBufferUsage();
+    markBufferUsage(BUFFER_USAGE_UNIFORM);
 
     BufferStorage *bufferStorage;
 
