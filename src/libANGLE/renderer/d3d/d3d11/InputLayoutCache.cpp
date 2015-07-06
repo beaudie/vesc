@@ -70,14 +70,8 @@ bool InputLayoutCache::PackedAttributeComparator::operator()(const PackedAttribu
         const auto &attribA = a.attributeData[attribIndex];
         const auto &attribB = b.attributeData[attribIndex];
 
-        if (attribA.glType != attribB.glType)
-            return attribA.glType < attribB.glType;
-        if (attribA.semanticIndex != attribB.semanticIndex)
-            return attribA.semanticIndex < attribB.semanticIndex;
-        if (attribA.dxgiFormat != attribB.dxgiFormat)
-            return attribA.dxgiFormat < attribB.dxgiFormat;
-        if (attribA.divisor != attribB.divisor)
-            return attribA.divisor < attribB.divisor;
+        if (attribA.pack != attribB.pack)
+            return attribA.pack < attribB.pack;
     }
 
     // Equal
@@ -203,7 +197,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
 
             layout.addAttributeData(ilKey.elements[ilKey.elementCount].glslElementType,
                                     sortedSemanticIndices[i],
-                                    vertexFormatInfo.nativeFormat,
+                                    vertexFormatType,
                                     sortedAttributes[i]->divisor);
         }
     }

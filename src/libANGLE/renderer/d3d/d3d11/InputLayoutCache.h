@@ -10,15 +10,16 @@
 #ifndef LIBANGLE_RENDERER_D3D_D3D11_INPUTLAYOUTCACHE_H_
 #define LIBANGLE_RENDERER_D3D_D3D11_INPUTLAYOUTCACHE_H_
 
-#include "libANGLE/Constants.h"
-#include "libANGLE/Error.h"
-#include "common/angleutils.h"
-
 #include <GLES2/gl2.h>
 
 #include <cstddef>
 #include <map>
 #include <unordered_map>
+
+#include "common/angleutils.h"
+#include "libANGLE/Constants.h"
+#include "libANGLE/Error.h"
+#include "libANGLE/formatutils.h"
 
 namespace gl
 {
@@ -80,22 +81,29 @@ class InputLayoutCache : angle::NonCopyable
 
         void addAttributeData(GLenum glType,
                               UINT semanticIndex,
-                              DXGI_FORMAT dxgiFormat,
+                              gl::VertexFormatType vertexFormatType,
                               unsigned int divisor)
         {
-            attributeData[numAttributes].glType = glType;
-            attributeData[numAttributes].semanticIndex = semanticIndex;
-            attributeData[numAttributes].dxgiFormat = dxgiFormat;
-            attributeData[numAttributes].divisor = divisor;
+            attributeData[numAttributes].values.glType = static_cast<uint32_t>(glType);
+            attributeData[numAttributes].values.semanticIndex = static_cast<uint8_t>(semanticIndex);
+            attributeData[numAttributes].values.vertexFormatType = static_cast<uint8_t>(vertexFormatType);
+            attributeData[numAttributes].values.divisor = static_cast<uint8_t>(divisor);
+            attributeData[numAttributes].values.pad = 0u;
             ++numAttributes;
         }
 
-        struct PackedAttribute
+        union PackedAttribute
         {
-            GLenum glType;
-            UINT semanticIndex;
-            DXGI_FORMAT dxgiFormat;
-            unsigned int divisor;
+            struct
+            {
+                // TODO(jmadill): pack this into 8 bits?
+                uint32_t glType;
+                uint8_t semanticIndex;
+                uint8_t vertexFormatType;
+                uint8_t divisor;
+                uint8_t pad;
+            } values;
+            uint64_t pack;
         };
 
         enum Flags
