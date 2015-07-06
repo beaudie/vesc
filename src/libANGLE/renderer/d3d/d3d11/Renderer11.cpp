@@ -3156,7 +3156,9 @@ IndexBuffer *Renderer11::createIndexBuffer()
 
 BufferImpl *Renderer11::createBuffer()
 {
-    return new Buffer11(this);
+    Buffer11 *buffer = new Buffer11(this);
+    mAliveBuffers.insert(buffer);
+    return buffer;
 }
 
 VertexArrayImpl *Renderer11::createVertexArray()
@@ -3674,6 +3676,11 @@ bool Renderer11::isES3Capable() const
     return (d3d11_gl::GetMaximumClientVersion(mRenderer11DeviceCaps.featureLevel) > 2);
 };
 
+void Renderer11::onBufferDelete(const Buffer11 *deleted)
+{
+    mAliveBuffers.erase(deleted);
+}
+
 ID3D11Texture2D *Renderer11::resolveMultisampledTexture(ID3D11Texture2D *source, unsigned int subresource)
 {
     D3D11_TEXTURE2D_DESC textureDesc;
@@ -3811,6 +3818,27 @@ gl::Error Renderer11::clearTextures(gl::SamplerType samplerType, size_t rangeSta
     }
 
     return gl::Error(GL_NO_ERROR);
+}
+
+void Renderer11::onSwap()
+{
+    // GC the buffers
+    const size_t maxBuffersPerGC = 1000;
+    size_t buffersToGC = std::min((mBufferGCQueue.size() + 15) / 16, maxBuffersPerGC);
+
+    while (buffersToGC -- > 0)
+    {
+        ASSERT(!mAliveBuffers.empty());
+
+        Buffer11 *toGC = mBufferGCQueue.front();
+        mBufferGCQueue.pop();
+
+        if (mAliveBuffers.count(toGC) > 0)
+        {
+            toGC->runGC();
+            mBufferGCQueue.push(toGC);
+        }
+    }
 }
 
 }
