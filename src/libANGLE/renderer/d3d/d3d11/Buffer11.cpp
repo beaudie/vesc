@@ -236,15 +236,19 @@ Buffer11::Buffer11(Renderer11 *renderer)
       mMappedStorage(nullptr),
       mConstantBufferStorageAdditionalSize(0),
       mMaxConstantBufferLruCount(0),
-      mReadUsageCount(0),
-      mHasSystemMemoryStorage(false)
-{}
+      mReadUsageCount(0)
+{
+    for (int usage = 0; usage < BUFFER_USAGE_COUNT; usage++)
+    {
+        mBufferStorages[usage] = nullptr;
+    }
+}
 
 Buffer11::~Buffer11()
 {
-    for (auto &p : mBufferStorages)
+    for (int usage = 0; usage < BUFFER_USAGE_COUNT; usage++)
     {
-        SafeDelete(p.second);
+        SafeDelete(mBufferStorages[usage]);
     }
 
     for (auto &p : mConstantBufferRangeStoragesCache)
@@ -488,16 +492,12 @@ void Buffer11::markBufferUsage()
     // Free the system memory storage if we decide it isn't being used very often.
     const unsigned int usageLimit = 5;
 
-    if (mReadUsageCount > usageLimit && mHasSystemMemoryStorage)
+    BufferStorage *&sysMemUsage = mBufferStorages[BUFFER_USAGE_SYSTEM_MEMORY];
+    if (mReadUsageCount > usageLimit && sysMemUsage != nullptr)
     {
-        auto systemMemoryStorageIt = mBufferStorages.find(BUFFER_USAGE_SYSTEM_MEMORY);
-        ASSERT(systemMemoryStorageIt != mBufferStorages.end());
-
-        if (getLatestBufferStorage() != systemMemoryStorageIt->second)
+        if (getLatestBufferStorage() != sysMemUsage)
         {
-            SafeDelete(systemMemoryStorageIt->second);
-            mBufferStorages.erase(systemMemoryStorageIt);
-            mHasSystemMemoryStorage = false;
+            SafeDelete(sysMemUsage);
         }
     }
 }
@@ -632,12 +632,8 @@ gl::Error Buffer11::packPixels(ID3D11Texture2D *srcTexture, UINT srcSubresource,
 
 Buffer11::BufferStorage *Buffer11::getBufferStorage(BufferUsage usage)
 {
-    BufferStorage *newStorage = nullptr;
-    auto directBufferIt = mBufferStorages.find(usage);
-    if (directBufferIt != mBufferStorages.end())
-    {
-        newStorage = directBufferIt->second;
-    }
+    ASSERT(0 <= usage && usage < BUFFER_USAGE_COUNT);
+    BufferStorage *newStorage = mBufferStorages[usage];
 
     if (!newStorage)
     {
@@ -648,7 +644,6 @@ Buffer11::BufferStorage *Buffer11::getBufferStorage(BufferUsage usage)
         else if (usage == BUFFER_USAGE_SYSTEM_MEMORY)
         {
             newStorage = new SystemMemoryStorage(mRenderer);
-            mHasSystemMemoryStorage = true;
         }
         else if (usage == BUFFER_USAGE_EMULATED_INDEXED_VERTEX)
         {
@@ -660,7 +655,7 @@ Buffer11::BufferStorage *Buffer11::getBufferStorage(BufferUsage usage)
             newStorage = new NativeStorage(mRenderer, usage);
         }
 
-        mBufferStorages.insert(std::make_pair(usage, newStorage));
+        mBufferStorages[usage] = newStorage;
     }
 
     // resize buffer
@@ -772,10 +767,10 @@ Buffer11::BufferStorage *Buffer11::getLatestBufferStorage() const
     // 1 or 2 will be present.
     BufferStorage *latestStorage = nullptr;
     DataRevision latestRevision = 0;
-    for (auto it = mBufferStorages.begin(); it != mBufferStorages.end(); it++)
+    for (int usage = 0; usage < BUFFER_USAGE_COUNT; usage++)
     {
-        BufferStorage *storage = it->second;
-        if (!latestStorage || storage->getDataRevision() > latestRevision)
+        BufferStorage *storage = mBufferStorages[usage];
+        if (storage && (!latestStorage || storage->getDataRevision() > latestRevision))
         {
             latestStorage = storage;
             latestRevision = storage->getDataRevision();
