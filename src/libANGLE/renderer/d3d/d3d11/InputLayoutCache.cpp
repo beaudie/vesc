@@ -364,6 +364,20 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
             }
             else if (indexedPointSpriteEmulationActive)
             {
+                if (sourceInfo->srcBuffer != nullptr)
+                {
+                    const uint8_t *bufferData = nullptr;
+                    gl::Error error = sourceInfo->srcBuffer->getData(&bufferData);
+                    if (error.isError())
+                    {
+                        return error;
+                    }
+                    ASSERT(bufferData != nullptr);
+
+                    sourceInfo->srcBuffer = nullptr;
+                    sourceInfo->srcIndices = bufferData + reinterpret_cast<uintptr_t>(sourceInfo->srcIndices);
+                }
+
                 buffer = bufferStorage->getEmulatedIndexedBuffer(sourceInfo, sortedAttributes[i]);
             }
             else
