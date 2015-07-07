@@ -91,7 +91,7 @@ class Buffer11 : public BufferD3D
 
     BufferStorage *mMappedStorage;
 
-    BufferStorage *mBufferStorages[BUFFER_USAGE_COUNT];
+    std::vector<BufferStorage*> mBufferStorages;
 
     struct ConstantBufferCacheEntry
     {
@@ -113,7 +113,7 @@ class Buffer11 : public BufferD3D
     std::map<DXGI_FORMAT, BufferSRVPair> mBufferResourceViews;
 
     uint64_t mUsageCount;
-    uint64_t mLastUsage[BUFFER_USAGE_COUNT];
+    std::vector<uint64_t> mLastUsage;
 
     void markBufferUsage(BufferUsage usage);
     NativeStorage *getStagingStorage();

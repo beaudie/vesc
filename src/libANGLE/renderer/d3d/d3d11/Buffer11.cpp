@@ -234,22 +234,19 @@ Buffer11::Buffer11(Renderer11 *renderer)
       mRenderer(renderer),
       mSize(0),
       mMappedStorage(nullptr),
+      mBufferStorages(BUFFER_USAGE_COUNT, nullptr),
       mConstantBufferStorageAdditionalSize(0),
       mMaxConstantBufferLruCount(0),
-      mUsageCount(0)
+      mUsageCount(0),
+      mLastUsage(BUFFER_USAGE_COUNT, 0)
 {
-    for (int usage = 0; usage < BUFFER_USAGE_COUNT; usage++)
-    {
-        mBufferStorages[usage] = nullptr;
-        mLastUsage[usage] = 0;
-    }
 }
 
 Buffer11::~Buffer11()
 {
-    for (int usage = 0; usage < BUFFER_USAGE_COUNT; usage++)
+    for (auto storage: mBufferStorages)
     {
-        SafeDelete(mBufferStorages[usage]);
+        SafeDelete(storage);
     }
 
     for (auto &p : mConstantBufferRangeStoragesCache)
@@ -807,9 +804,8 @@ Buffer11::BufferStorage *Buffer11::getLatestBufferStorage() const
     // 1 or 2 will be present.
     BufferStorage *latestStorage = nullptr;
     DataRevision latestRevision = 0;
-    for (int usage = 0; usage < BUFFER_USAGE_COUNT; usage++)
+    for (auto storage: mBufferStorages)
     {
-        BufferStorage *storage = mBufferStorages[usage];
         if (storage && (!latestStorage || storage->getDataRevision() > latestRevision))
         {
             latestStorage = storage;
