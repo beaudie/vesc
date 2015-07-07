@@ -814,6 +814,12 @@ TIntermTyped *TIntermUnary::fold(TInfoSink &infoSink)
     TConstantUnion *constArray = nullptr;
     switch (mOp)
     {
+      case EOpIsNan:
+      case EOpIsInf:
+      case EOpFloatBitsToInt:
+      case EOpFloatBitsToUint:
+      case EOpIntBitsToFloat:
+      case EOpUintBitsToFloat:
       case EOpAny:
       case EOpAll:
       case EOpLength:
@@ -1213,6 +1219,103 @@ TConstantUnion *TIntermConstantUnion::foldUnaryWithDifferentReturnType(TOperator
     TConstantUnion *resultArray = nullptr;
     switch (op)
     {
+      case EOpIsNan:
+        if (getType().getBasicType() == EbtFloat)
+        {
+            resultArray = new TConstantUnion[objectSize];
+            for (size_t i = 0; i < objectSize; i++)
+            {
+                resultArray[i].setBConst(gl::isNaN(operandArray[0].getFConst()));
+            }
+        }
+        else
+        {
+            infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+            return nullptr;
+        }
+        break;
+
+      case EOpIsInf:
+        if (getType().getBasicType() == EbtFloat)
+        {
+            resultArray = new TConstantUnion[objectSize];
+            for (size_t i = 0; i < objectSize; i++)
+            {
+                resultArray[i].setBConst(gl::isInf(operandArray[0].getFConst()));
+            }
+        }
+        else
+        {
+            infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+            return nullptr;
+        }
+        break;
+
+
+      case EOpFloatBitsToInt:
+        if (getType().getBasicType() == EbtFloat)
+        {
+            resultArray = new TConstantUnion[objectSize];
+            for (size_t i = 0; i < objectSize; i++)
+            {
+                resultArray[i].setIConst(gl::bitCast<int32_t>(operandArray[0].getFConst()));
+            }
+        }
+        else
+        {
+            infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+            return nullptr;
+        }
+        break;
+
+      case EOpFloatBitsToUint:
+        if (getType().getBasicType() == EbtFloat)
+        {
+            resultArray = new TConstantUnion[objectSize];
+            for (size_t i = 0; i < objectSize; i++)
+            {
+                resultArray[i].setUConst(gl::bitCast<uint32_t>(operandArray[0].getFConst()));
+            }
+        }
+        else
+        {
+            infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+            return nullptr;
+        }
+        break;
+
+      case EOpIntBitsToFloat:
+        if (getType().getBasicType() == EbtInt)
+        {
+            resultArray = new TConstantUnion[objectSize];
+            for (size_t i = 0; i < objectSize; i++)
+            {
+                resultArray[i].setFConst(gl::bitCast<float>(operandArray[0].getIConst()));
+            }
+        }
+        else
+        {
+            infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+            return nullptr;
+        }
+        break;
+
+      case EOpUintBitsToFloat:
+        if (getType().getBasicType() == EbtUInt)
+        {
+            resultArray = new TConstantUnion[objectSize];
+            for (size_t i = 0; i < objectSize; i++)
+            {
+                resultArray[i].setFConst(gl::bitCast<float>(operandArray[0].getUConst()));
+            }
+        }
+        else
+        {
+            infoSink.info.message(EPrefixInternalError, getLine(), "Unary operation not folded into constant");
+            return nullptr;
+        }
+        break;
+
       case EOpAny:
         if (getType().getBasicType() == EbtBool)
         {
