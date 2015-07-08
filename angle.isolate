@@ -12,7 +12,7 @@
         ],
       },
     }],
-    ['OS=="linux"', {
+    ['OS=="linux" and chromeos==0', {
       'variables': {
         'files': [
           '<(PRODUCT_DIR)/lib/libEGL.so',
