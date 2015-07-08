@@ -9,6 +9,8 @@
 #ifndef LIBANGLE_RENDERER_D3D_D3D11_RENDERER11_H_
 #define LIBANGLE_RENDERER_D3D_D3D11_RENDERER11_H_
 
+#include <queue>
+
 #include "common/angleutils.h"
 #include "common/mathutil.h"
 #include "libANGLE/AttributeMap.h"
@@ -33,6 +35,7 @@ class VertexDataManager;
 class IndexDataManager;
 class StreamingIndexBufferInterface;
 class Blit11;
+class Buffer11;
 class Clear11;
 class PixelTransfer11;
 class RenderTarget11;
@@ -266,6 +269,9 @@ class Renderer11 : public RendererD3D
     RendererClass getRendererClass() const override { return RENDERER_D3D11; }
     InputLayoutCache *getInputLayoutCache() { return &mInputLayoutCache; }
 
+    void onSwap();
+    void onBufferDelete(const Buffer11 *deleted);
+
   protected:
     void createAnnotator() override;
     gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) override;
@@ -449,6 +455,10 @@ class Renderer11 : public RendererD3D
 
     // Sync query
     ID3D11Query *mSyncQuery;
+
+    // Buffer GC state tracking
+    std::queue<Buffer11*> mBufferGCQueue;
+    std::set<const Buffer11*> mAliveBuffers;
 
     ID3D11Device *mDevice;
     Renderer11DeviceCaps mRenderer11DeviceCaps;
