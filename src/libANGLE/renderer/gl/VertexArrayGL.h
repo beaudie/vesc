@@ -20,13 +20,8 @@ class StateManagerGL;
 class VertexArrayGL : public VertexArrayImpl
 {
   public:
-    VertexArrayGL(const FunctionsGL *functions, StateManagerGL *stateManager);
+    VertexArrayGL(const gl::VertexArray::Data &data, const FunctionsGL *functions, StateManagerGL *stateManager);
     ~VertexArrayGL() override;
-
-    void setElementArrayBuffer(const gl::Buffer *buffer) override;
-    void setAttribute(size_t idx, const gl::VertexAttribute &attr) override;
-    void setAttributeDivisor(size_t idx, GLuint divisor) override;
-    void enableAttribute(size_t idx, bool enabledState) override;
 
     gl::Error syncDrawArraysState(GLint first, GLsizei count) const;
     gl::Error syncDrawElementsState(GLsizei count, GLenum type, const GLvoid *indices, const GLvoid **outIndices) const;
@@ -57,10 +52,7 @@ class VertexArrayGL : public VertexArrayImpl
 
     GLuint mVertexArrayID;
 
-    BindingPointer<const gl::Buffer> mElementArrayBuffer;
-    std::vector<gl::VertexAttribute> mAttributes;
-
-    mutable GLuint mAppliedElementArrayBuffer;
+    mutable BindingPointer<gl::Buffer> mAppliedElementArrayBuffer;
     mutable std::vector<gl::VertexAttribute> mAppliedAttributes;
 
     mutable size_t mStreamingElementArrayBufferSize;
