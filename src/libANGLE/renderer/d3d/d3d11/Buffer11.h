@@ -22,14 +22,17 @@ struct TranslatedAttribute;
 
 enum BufferUsage
 {
-    BUFFER_USAGE_STAGING,
     BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK,
     BUFFER_USAGE_INDEX,
     BUFFER_USAGE_PIXEL_UNPACK,
     BUFFER_USAGE_PIXEL_PACK,
     BUFFER_USAGE_UNIFORM,
-    BUFFER_USAGE_SYSTEM_MEMORY,
     BUFFER_USAGE_EMULATED_INDEXED_VERTEX,
+
+    // CPU allocated storages should be kept last so that the GPU storages
+    // can be given priority when iterating through the list of usages.
+    BUFFER_USAGE_STAGING,
+    BUFFER_USAGE_SYSTEM_MEMORY,
 
     BUFFER_USAGE_COUNT,
 };
@@ -64,6 +67,7 @@ class Buffer11 : public BufferD3D
     bool isMapped() const { return mMappedStorage != NULL; }
     gl::Error packPixels(ID3D11Texture2D *srcTexure, UINT srcSubresource, const PackPixelsParams &params);
     size_t getTotalCPUBufferMemoryBytes() const;
+    void discardStaleCopies();
 
     // BufferD3D implementation
     virtual size_t getSize() const { return mSize; }
@@ -112,9 +116,10 @@ class Buffer11 : public BufferD3D
     typedef std::pair<ID3D11Buffer *, ID3D11ShaderResourceView *> BufferSRVPair;
     std::map<DXGI_FORMAT, BufferSRVPair> mBufferResourceViews;
 
-    unsigned int mReadUsageCount;
+    uint64_t mUsageCount;
+    std::vector<uint64_t> mLastUsage;
 
-    void markBufferUsage();
+    void markBufferUsage(BufferUsage usage);
     NativeStorage *getStagingStorage();
     PackStorage *getPackStorage();
     gl::Error getSystemMemoryStorage(SystemMemoryStorage **storageOut);

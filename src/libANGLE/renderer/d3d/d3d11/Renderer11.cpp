@@ -3701,6 +3701,30 @@ void Renderer11::onSwap()
         updateHistograms();
         mLastHistogramUpdateTime = currentTime;
     }
+
+    // Only do a fraction of the buffers each frame to avoid checking all of the
+    // buffers each frame.
+    const size_t kMaxFractionPerSwap = 16;
+    size_t fraction = (mBufferGCQueue.size() + kMaxFractionPerSwap - 1) / kMaxFractionPerSwap;
+
+    // In addition to that, limit the number of buffers checked so that we don't cause
+    // stalls.
+    const size_t kMaxBuffersPerSwap = 1000;
+    size_t buffersToGC = std::min(fraction, kMaxBuffersPerSwap);
+
+    while (buffersToGC-- > 0)
+    {
+        ASSERT(!mAliveBuffers.empty());
+
+        Buffer11 *toGC = mBufferGCQueue.front();
+        mBufferGCQueue.pop();
+
+        if (mAliveBuffers.count(toGC) > 0)
+        {
+            toGC->discardStaleCopies();
+            mBufferGCQueue.push(toGC);
+        }
+    }
 }
 
 void Renderer11::updateHistograms()

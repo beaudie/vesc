@@ -9,6 +9,8 @@
 #ifndef LIBANGLE_RENDERER_D3D_D3D11_RENDERER11_H_
 #define LIBANGLE_RENDERER_D3D_D3D11_RENDERER11_H_
 
+#include <queue>
+
 #include "common/angleutils.h"
 #include "common/mathutil.h"
 #include "libANGLE/AttributeMap.h"
@@ -462,6 +464,7 @@ class Renderer11 : public RendererD3D
     ID3D11Query *mSyncQuery;
 
     // Created objects state tracking
+    std::queue<Buffer11*> mBufferGCQueue;
     std::set<const Buffer11*> mAliveBuffers;
 
     double mLastHistogramUpdateTime;

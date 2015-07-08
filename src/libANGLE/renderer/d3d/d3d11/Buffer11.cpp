@@ -248,7 +248,8 @@ Buffer11::Buffer11(Renderer11 *renderer)
       mBufferStorages(BUFFER_USAGE_COUNT, nullptr),
       mConstantBufferStorageAdditionalSize(0),
       mMaxConstantBufferLruCount(0),
-      mReadUsageCount(0)
+      mUsageCount(0),
+      mLastUsage(BUFFER_USAGE_COUNT, 0)
 {
 }
 
@@ -290,7 +291,7 @@ gl::Error Buffer11::getData(const uint8_t **outData)
         return error;
     }
 
-    mReadUsageCount = 0;
+    markBufferUsage(BUFFER_USAGE_SYSTEM_MEMORY);
 
     ASSERT(systemMemoryStorage->getSize() >= mSize);
 
@@ -495,26 +496,78 @@ void Buffer11::markTransformFeedbackUsage()
     invalidateStaticData();
 }
 
-void Buffer11::markBufferUsage()
+void Buffer11::markBufferUsage(BufferUsage usage)
 {
-    mReadUsageCount++;
+    const int kDiscardRunFrequency = 64;
 
-    // Free the system memory storage if we decide it isn't being used very often.
-    const unsigned int usageLimit = 5;
+    mUsageCount++;
+    mLastUsage[usage] = mUsageCount;
 
-    BufferStorage *&sysMemUsage = mBufferStorages[BUFFER_USAGE_SYSTEM_MEMORY];
-    if (mReadUsageCount > usageLimit && sysMemUsage != nullptr)
+    if (mUsageCount % kDiscardRunFrequency == 0)
     {
-        if (getLatestBufferStorage() != sysMemUsage)
+        discardStaleCopies();
+    }
+}
+
+void Buffer11::discardStaleCopies()
+{
+    const int kDiscardUsageLimit = 20;
+
+    // Our buffer GC simply removes buffer copies that haven't been used recently.
+    // However we want to make extra sure that we do not accidently remove the latest
+    // revision of the data. That's why we find a storage with the latest revision,
+    // giving priority to GPU allocated storages.
+    BufferStorage *latestStorage = nullptr;
+    size_t latestRevision = 0;
+
+    // Here we use the fact that the CPU allocated storages are at the end of the enum
+    // so that we test them last.
+    for (int usage = 0; usage < BUFFER_USAGE_COUNT; usage++)
+    {
+        BufferStorage *storage = mBufferStorages[usage];
+        if (storage != nullptr)
         {
-            SafeDelete(sysMemUsage);
+            size_t revision = storage->getDataRevision();
+            if (revision > latestRevision)
+            {
+                latestStorage = storage;
+                latestRevision = revision;
+            }
         }
     }
+    ASSERT(latestStorage);
+
+    for (int usage = 0; usage < BUFFER_USAGE_COUNT; usage++)
+    {
+        ASSERT(mUsageCount >= mLastUsage[usage]);
+        if (mUsageCount - mLastUsage[usage] > kDiscardUsageLimit)
+        {
+            BufferStorage *&storage = mBufferStorages[usage];
+            if (storage != nullptr && storage != latestStorage)
+            {
+                SafeDelete(storage);
+
+                if (usage == BUFFER_USAGE_UNIFORM)
+                {
+                    for (auto cacheEntryIt : mConstantBufferRangeStoragesCache)
+                    {
+                        SafeDelete(cacheEntryIt.second.storage);
+                    }
+                    mConstantBufferRangeStoragesCache.clear();
+                }
+            }
+        }
+    }
+
+    // Count a GC pass as a usage so that the periodic GC will eventually evict all
+    // but one of the buffer copies.
+    mUsageCount++;
+    mLastUsage[latestStorage->getUsage()] = mUsageCount;
 }
 
 ID3D11Buffer *Buffer11::getBuffer(BufferUsage usage)
 {
-    markBufferUsage();
+    markBufferUsage(usage);
 
     BufferStorage *bufferStorage = getBufferStorage(usage);
 
@@ -530,7 +583,7 @@ ID3D11Buffer *Buffer11::getBuffer(BufferUsage usage)
 ID3D11Buffer *Buffer11::getEmulatedIndexedBuffer(SourceIndexData *indexInfo,
                                                  const TranslatedAttribute *attribute)
 {
-    markBufferUsage();
+    markBufferUsage(BUFFER_USAGE_EMULATED_INDEXED_VERTEX);
 
     assert(indexInfo != nullptr);
     assert(attribute != nullptr);
@@ -554,7 +607,7 @@ ID3D11Buffer *Buffer11::getEmulatedIndexedBuffer(SourceIndexData *indexInfo,
 
 ID3D11Buffer *Buffer11::getConstantBufferRange(GLintptr offset, GLsizeiptr size)
 {
-    markBufferUsage();
+    markBufferUsage(BUFFER_USAGE_UNIFORM);
 
     BufferStorage *bufferStorage;
 
