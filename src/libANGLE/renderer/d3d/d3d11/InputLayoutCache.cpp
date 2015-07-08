@@ -374,8 +374,9 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
                     }
                     ASSERT(bufferData != nullptr);
 
+                    ptrdiff_t offset = reinterpret_cast<ptrdiff_t>(sourceInfo->srcIndices);
                     sourceInfo->srcBuffer = nullptr;
-                    sourceInfo->srcIndices = bufferData + reinterpret_cast<uintptr_t>(sourceInfo->srcIndices);
+                    sourceInfo->srcIndices = bufferData + offset;
                 }
 
                 buffer = bufferStorage->getEmulatedIndexedBuffer(sourceInfo, sortedAttributes[i]);
