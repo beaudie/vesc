@@ -26,7 +26,6 @@ VertexArrayGL::VertexArrayGL(const gl::VertexArray::Data &data, const FunctionsG
       mFunctions(functions),
       mStateManager(stateManager),
       mVertexArrayID(0),
-      mAppliedElementArrayBuffer(0),
       mStreamingElementArrayBufferSize(0),
       mStreamingElementArrayBuffer(0),
       mStreamingArrayBufferSize(0),
@@ -55,32 +54,11 @@ VertexArrayGL::~VertexArrayGL()
     mStreamingArrayBufferSize = 0;
     mStreamingArrayBuffer = 0;
 
+    mAppliedElementArrayBuffer.set(nullptr);
     for (size_t idx = 0; idx < mAppliedAttributes.size(); idx++)
     {
         mAppliedAttributes[idx].buffer.set(nullptr);
     }
-}
-
-void VertexArrayGL::setElementArrayBuffer(const gl::Buffer *buffer)
-{
-    // If the buffer is being unbound/deleted, reset the currently applied buffer ID
-    // so that even if a new buffer is generated with the same ID, it will be re-bound.
-    if (buffer == nullptr && mAppliedElementArrayBuffer != mStreamingElementArrayBuffer)
-    {
-        mAppliedElementArrayBuffer = 0;
-    }
-}
-
-void VertexArrayGL::setAttribute(size_t idx, const gl::VertexAttribute &attr)
-{
-}
-
-void VertexArrayGL::setAttributeDivisor(size_t idx, GLuint divisor)
-{
-}
-
-void VertexArrayGL::enableAttribute(size_t idx, bool enabledState)
-{
 }
 
 gl::Error VertexArrayGL::syncDrawArraysState(GLint first, GLsizei count) const
@@ -95,7 +73,7 @@ gl::Error VertexArrayGL::syncDrawElementsState(GLsizei count, GLenum type, const
 
 gl::Error VertexArrayGL::syncDrawState(GLint first, GLsizei count, GLenum type, const GLvoid *indices, const GLvoid **outIndices) const
 {
-    mStateManager->bindVertexArray(mVertexArrayID, mAppliedElementArrayBuffer);
+    mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
 
     // Check if any attributes need to be streamed, determines if the index range needs to be computed
     bool attributesNeedStreaming = doAttributesNeedStreaming();
@@ -245,12 +223,11 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
     // Need to check the range of indices if attributes need to be streamed
     if (elementArrayBuffer != nullptr)
     {
-        const BufferGL *bufferGL = GetImplAs<BufferGL>(elementArrayBuffer);
-        GLuint elementArrayBufferID = bufferGL->getBufferID();
-        if (elementArrayBufferID != mAppliedElementArrayBuffer)
+        if (elementArrayBuffer != mAppliedElementArrayBuffer.get())
         {
-            mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferID);
-            mAppliedElementArrayBuffer = elementArrayBufferID;
+            const BufferGL *bufferGL = GetImplAs<BufferGL>(elementArrayBuffer);
+            mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferGL->getBufferID());
+            mAppliedElementArrayBuffer.set(elementArrayBuffer);
         }
 
         // Only compute the index range if the attributes also need to be streamed
@@ -286,7 +263,7 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
         }
 
         mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, mStreamingElementArrayBuffer);
-        mAppliedElementArrayBuffer = mStreamingElementArrayBuffer;
+        mAppliedElementArrayBuffer.set(nullptr);
 
         // Make sure the element array buffer is large enough
         const gl::Type &indexTypeInfo = gl::GetTypeInfo(type);
@@ -407,7 +384,9 @@ GLuint VertexArrayGL::getVertexArrayID() const
 
 GLuint VertexArrayGL::getAppliedElementArrayBufferID() const
 {
-    return mAppliedElementArrayBuffer;
+    return mAppliedElementArrayBuffer.get() == nullptr ?
+           mStreamingElementArrayBuffer :
+           mAppliedElementArrayBuffer.id();
 }
 
 }
