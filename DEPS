@@ -26,4 +26,9 @@ hooks = [
     "pattern": ".",
     "action": ["python", "build/gyp_angle"],
   },
+  {
+    # Generate winrt projects
+    "pattern": ".",
+    "action": ["python", "generate_winrt_projects.py"],
+  },
 ]
