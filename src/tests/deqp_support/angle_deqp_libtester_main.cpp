@@ -43,6 +43,7 @@ tcu::RandomOrderExecutor *g_executor = nullptr;
 
 const char *g_dEQPDataSearchDirs[] =
 {
+    ".",
     "data",
     "third_party/deqp/data",
     "../third_party/deqp/src/data",
