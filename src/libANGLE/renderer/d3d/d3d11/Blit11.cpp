@@ -1070,6 +1070,38 @@ gl::Error Blit11::copyTextureFromStorageUsingCPU(TextureStorage11 *sourceStorage
     return error;
 }
 
+gl::Error Blit11::copyTextureFromGPUusingCPU(ID3D11Resource *source, const gl::Box &sourceArea,
+                                             ID3D11Resource *dest, const gl::Box &destArea,
+                                             bool destUsesRenderableFormat, GLenum destInternalFormat,
+                                             unsigned int subresourceIndex)
+{
+    ID3D11Device *device = mRenderer->getDevice();
+    ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+
+    // When copying from Storage, we need to copy the Storage's data into an intermediary mappable texture, then copy that onto the dest
+    ID3D11Resource *cpuSource = CreateStagingTexture(device, deviceContext, GetTextureFormat(source), 0 /*todo*/, gl::Extents(sourceArea.width, sourceArea.height, sourceArea.depth), D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE);
+    if (cpuSource == nullptr)
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to create staging texture in Blit11");
+    }
+
+    D3D11_BOX srcBox;
+    srcBox.left = sourceArea.x;
+    srcBox.right = sourceArea.x + sourceArea.width;
+    srcBox.top = sourceArea.y;
+    srcBox.bottom = sourceArea.y + sourceArea.height;
+    srcBox.front = sourceArea.z;
+    srcBox.back = sourceArea.z + sourceArea.depth;
+
+    deviceContext->CopySubresourceRegion(cpuSource, subresourceIndex, 0, 0, 0, source, 0 /*todo*/, &srcBox);
+
+    gl::Error error = copyTextureUsingCPU(cpuSource, destArea, dest, destArea, destUsesRenderableFormat, destInternalFormat, 0);
+
+    SafeRelease(cpuSource);
+
+    return error;
+}
+
 gl::Error Blit11::copyTextureIntoStorageUsingCPU(ID3D11Resource *source, const gl::Box &sourceArea,
                                                  TextureStorage11 *destStorage, const gl::Box &destArea,
                                                  bool destUsesRenderableFormat, GLenum destInternalFormat,
