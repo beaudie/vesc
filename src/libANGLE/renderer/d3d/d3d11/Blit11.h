@@ -55,6 +55,11 @@ class Blit11 : angle::NonCopyable
                                              bool destUsesRenderableFormat, GLenum destInternalFormat,
                                              unsigned int subresourceIndex);
 
+    gl::Error copyTextureFromGPUusingCPU(ID3D11Resource *source, const gl::Box &sourceArea,
+                                         ID3D11Resource *dest, const gl::Box &destArea,
+                                         bool destUsesRenderableFormat, GLenum destInternalFormat,
+                                         unsigned int subresourceIndex);
+
     gl::Error copyTextureIntoStorageUsingCPU(ID3D11Resource *source, const gl::Box &sourceArea,
                                              TextureStorage11 *destStorage, const gl::Box &destArea,
                                              bool destUsesRenderableFormat, GLenum destInternalFormat,
