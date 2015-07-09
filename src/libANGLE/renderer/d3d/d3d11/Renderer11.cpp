@@ -238,7 +238,9 @@ void Renderer11::SRVCache::clear()
 Renderer11::Renderer11(egl::Display *display)
     : RendererD3D(display),
       mStateCache(this),
-      mDebug(nullptr)
+      mDebug(nullptr),
+      mRendererCreationTime(ANGLEPlatformCurrent()->monotonicallyIncreasingTime()),
+      mDidReportCPUMemoryUsage(false)
 {
     mVertexDataManager = NULL;
     mIndexDataManager = NULL;
@@ -3162,7 +3164,9 @@ IndexBuffer *Renderer11::createIndexBuffer()
 
 BufferImpl *Renderer11::createBuffer()
 {
-    return new Buffer11(this);
+    Buffer11 *buffer = new Buffer11(this);
+    mAliveBuffers.insert(buffer);
+    return buffer;
 }
 
 VertexArrayImpl *Renderer11::createVertexArray(const gl::VertexArray::Data &data)
@@ -3679,6 +3683,32 @@ bool Renderer11::isES3Capable() const
 {
     return (d3d11_gl::GetMaximumClientVersion(mRenderer11DeviceCaps.featureLevel) > 2);
 };
+
+void Renderer11::onSwap()
+{
+    const double currentTime = ANGLEPlatformCurrent()->monotonicallyIncreasingTime();
+    const double timeSinceCreation = currentTime - mRendererCreationTime;
+
+    static const double kReportMemoryUsageTime = 2 * 60; // Two minutes
+    if (!mDidReportCPUMemoryUsage && timeSinceCreation > kReportMemoryUsageTime)
+    {
+        mDidReportCPUMemoryUsage = true;
+
+        size_t sizeSum = 0;
+        for (auto &buffer : mAliveBuffers)
+        {
+            sizeSum += buffer->getTotalCPUBufferMemoryBytes();
+        }
+        const int kOneMegaBit = 1024 * 1024;
+        ANGLE_HISTOGRAM_MEMORY_MB("GPU.ANGLE.Buffer11CPUCopiesSize", sizeSum / kOneMegaBit);
+    }
+
+}
+
+void Renderer11::onBufferDelete(const Buffer11 *deleted)
+{
+    mAliveBuffers.erase(deleted);
+}
 
 ID3D11Texture2D *Renderer11::resolveMultisampledTexture(ID3D11Texture2D *source, unsigned int subresource)
 {
