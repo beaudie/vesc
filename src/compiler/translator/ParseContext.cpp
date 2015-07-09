@@ -2235,12 +2235,6 @@ TIntermAggregate *TParseContext::addInterfaceBlock(const TPublicType &typeQualif
         {
             fieldLayoutQualifier.matrixPacking = blockLayoutQualifier.matrixPacking;
         }
-        else if (!fieldType->isMatrix())
-        {
-            error(field->line(), "invalid layout qualifier:",
-                  getMatrixPackingString(fieldLayoutQualifier.matrixPacking), "can only be used on matrix types");
-            recover();
-        }
 
         fieldType->setLayoutQualifier(fieldLayoutQualifier);
     }
