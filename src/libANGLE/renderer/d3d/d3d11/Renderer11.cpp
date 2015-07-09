@@ -230,7 +230,8 @@ void Renderer11::SRVCache::clear()
 Renderer11::Renderer11(egl::Display *display)
     : RendererD3D(display),
       mStateCache(this),
-      mDebug(nullptr)
+      mDebug(nullptr),
+      mSwapCount(0)
 {
     mVertexDataManager = NULL;
     mIndexDataManager = NULL;
@@ -3159,7 +3160,9 @@ IndexBuffer *Renderer11::createIndexBuffer()
 
 BufferImpl *Renderer11::createBuffer()
 {
-    return new Buffer11(this);
+    Buffer11 *buffer = new Buffer11(this);
+    mAliveBuffers.insert(buffer);
+    return buffer;
 }
 
 VertexArrayImpl *Renderer11::createVertexArray()
@@ -3676,6 +3679,29 @@ bool Renderer11::isES3Capable() const
 {
     return (d3d11_gl::GetMaximumClientVersion(mRenderer11DeviceCaps.featureLevel) > 2);
 };
+
+void Renderer11::onSwap()
+{
+    mSwapCount++;
+
+    const int kBufferCopiesSizeReportSwapCount = 60 * 60 * 5; // 5 minutes at 60 fps
+    if (mSwapCount == kBufferCopiesSizeReportSwapCount)
+    {
+        size_t sizeSum = 0;
+        for (auto &buffer : mAliveBuffers)
+        {
+            sizeSum += buffer->getCopiesCPUAllocationsSize();
+        }
+        const int kOneMegaBit = 1024 * 1024;
+        ANGLE_HISTOGRAM_MEMORY_MB("GPU.ANGLE.Buffer11CPUCopiesSize", sizeSum / kOneMegaBit);
+    }
+
+}
+
+void Renderer11::onBufferDelete(const Buffer11 *deleted)
+{
+    mAliveBuffers.erase(deleted);
+}
 
 ID3D11Texture2D *Renderer11::resolveMultisampledTexture(ID3D11Texture2D *source, unsigned int subresource)
 {
