@@ -82,9 +82,6 @@
 1020 WIN : dEQP-GLES2.functional.texture.mipmap.cube.projected.linear_nearest = FAIL
 1020 WIN : dEQP-GLES2.functional.texture.mipmap.cube.bias.linear_nearest = FAIL
 1020 WIN : dEQP-GLES2.functional.texture.mipmap.cube.bias.linear_linear = FAIL
-1021 WIN : dEQP-GLES2.functional.texture.specification.basic_copyteximage2d.cube_luminance = FAIL
-1021 WIN : dEQP-GLES2.functional.texture.specification.basic_copyteximage2d.cube_luminance_alpha = FAIL
-1021 WIN : dEQP-GLES2.functional.texture.specification.basic_copyteximage2d.cube_rgb = FAIL
 1021 WIN : dEQP-GLES2.functional.texture.specification.basic_copytexsubimage2d.2d_alpha = FAIL
 1021 WIN : dEQP-GLES2.functional.texture.specification.basic_copytexsubimage2d.2d_luminance = FAIL
 1021 WIN : dEQP-GLES2.functional.texture.specification.basic_copytexsubimage2d.2d_luminance_alpha = FAIL
