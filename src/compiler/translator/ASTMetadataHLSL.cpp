@@ -25,7 +25,9 @@ class PullGradient : public TIntermTraverser
         : TIntermTraverser(true, false, true),
           mMetadataList(metadataList),
           mMetadata(&(*metadataList)[index]),
+#if !defined(NDEBUG)
           mIndex(index),
+#endif
           mDag(dag)
     {
         ASSERT(index < metadataList->size());
@@ -130,7 +132,9 @@ class PullGradient : public TIntermTraverser
   private:
     MetadataList *mMetadataList;
     ASTMetadataHLSL *mMetadata;
+#if !defined(NDEBUG)
     size_t mIndex;
+#endif
     const CallDAG &mDag;
 
     // Contains a stack of the control flow nodes that are parents of the node being
@@ -148,7 +152,9 @@ class PullComputeDiscontinuousLoops : public TIntermTraverser
         : TIntermTraverser(true, false, true),
           mMetadataList(metadataList),
           mMetadata(&(*metadataList)[index]),
+#if !defined(NDEBUG)
           mIndex(index),
+#endif
           mDag(dag)
     {
     }
@@ -299,7 +305,9 @@ class PullComputeDiscontinuousLoops : public TIntermTraverser
   private:
     MetadataList *mMetadataList;
     ASTMetadataHLSL *mMetadata;
+#if !defined(NDEBUG)
     size_t mIndex;
+#endif
     const CallDAG &mDag;
 
     std::vector<TIntermNode*> mLoopsAndSwitches;
@@ -314,7 +322,9 @@ class PushDiscontinuousLoops : public TIntermTraverser
         : TIntermTraverser(true, true, true),
           mMetadataList(metadataList),
           mMetadata(&(*metadataList)[index]),
+#if !defined(NDEBUG)
           mIndex(index),
+#endif
           mDag(dag),
           mNestedDiscont(mMetadata->mCalledInDiscontinuousLoop ? 1 : 0)
     {
@@ -364,7 +374,9 @@ class PushDiscontinuousLoops : public TIntermTraverser
   private:
     MetadataList *mMetadataList;
     ASTMetadataHLSL *mMetadata;
+#if !defined(NDEBUG)
     size_t mIndex;
+#endif
     const CallDAG &mDag;
 
     int mNestedDiscont;
