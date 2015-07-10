@@ -175,15 +175,6 @@ class EGLContextCompatibilityTest : public ANGLETest
         eglMakeCurrent(mDisplay, surface, surface, context);
         ASSERT_EGL_SUCCESS();
 
-#ifdef ANGLE_PLATFORM_LINUX
-        // TODO(cwallez): figure out why this is broken on Linux/AMD.
-        if (isAMD() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
-        {
-            eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-            return;
-        }
-#endif
-
         glViewport(0, 0, 500, 500);
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -201,13 +192,16 @@ class EGLContextCompatibilityTest : public ANGLETest
     }
 };
 
+// TODO(cwallez) makeCurrent fails for some config on Linux/AMD
+#if !defined(ANGLE_PLATFORM_LINUX) || defined(ANGLE_STANDALONE_BUILD)
+
 // The test is split in several subtest so that simple cases
 // are tested separately. Also each surface types are not tested
 // together.
 
 // Basic test checking contexts and windows created with the
 // same config can render.
-TEST_P(EGLContextCompatibilityTest, WindowSameConfig)
+TEST_P(EGLContextCompatibilityTest, MAYBE_WindowSameConfig)
 {
     for (size_t i = 0; i < mConfigs.size(); i++)
     {
@@ -226,7 +220,7 @@ TEST_P(EGLContextCompatibilityTest, WindowSameConfig)
 
 // Basic test checking contexts and pbuffers created with the
 // same config can render.
-TEST_P(EGLContextCompatibilityTest, PbufferSameConfig)
+TEST_P(EGLContextCompatibilityTest, MAYBE_PbufferSameConfig)
 {
     for (size_t i = 0; i < mConfigs.size(); i++)
     {
@@ -245,7 +239,7 @@ TEST_P(EGLContextCompatibilityTest, PbufferSameConfig)
 
 // Check that a context rendering to a window with a different
 // config works or errors according to the EGL compatibility rules
-TEST_P(EGLContextCompatibilityTest, WindowDifferentConfig)
+TEST_P(EGLContextCompatibilityTest, MAYBE_WindowDifferentConfig)
 {
     for (size_t i = 0; i < mConfigs.size(); i++)
     {
@@ -269,7 +263,7 @@ TEST_P(EGLContextCompatibilityTest, WindowDifferentConfig)
 
 // Check that a context rendering to a pbuffer with a different
 // config works or errors according to the EGL compatibility rules
-TEST_P(EGLContextCompatibilityTest, PbufferDifferentConfig)
+TEST_P(EGLContextCompatibilityTest, MAYBE_PbufferDifferentConfig)
 {
     for (size_t i = 0; i < mConfigs.size(); i++)
     {
@@ -290,5 +284,7 @@ TEST_P(EGLContextCompatibilityTest, PbufferDifferentConfig)
         }
     }
 }
+
+#endif // !defined(ANGLE_PLATFORM_LINUX) || defined(ANGLE_STANDALONE_BUILD)
 
 ANGLE_INSTANTIATE_TEST(EGLContextCompatibilityTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL());
