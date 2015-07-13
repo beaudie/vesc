@@ -9,6 +9,8 @@
 #include "x11/X11Window.h"
 
 #include "system_utils.h"
+#include <unistd.h>
+#include <iostream>
 
 namespace {
 
@@ -17,6 +19,10 @@ Bool WaitForMapNotify(Display *dpy, XEvent *event, XPointer window)
     return event->type == MapNotify && event->xmap.window == reinterpret_cast<Window>(window);
 }
 
+Bool WaitForVisibilityNotify(Display *dpy, XEvent *event, XPointer window)
+{
+    return event->type == VisibilityNotify && event->xvisibility.window == reinterpret_cast<Window>(window) && event->xvisibility.state != VisibilityFullyObscured;
+}
 static Key X11CodeToKey(Display *display, unsigned int scancode)
 {
     int temp;
@@ -183,7 +189,8 @@ bool X11Window::initialize(const std::string &name, size_t width, size_t height)
 
         attributes.event_mask = StructureNotifyMask | PointerMotionMask | ButtonPressMask |
                                 ButtonReleaseMask | FocusChangeMask | EnterWindowMask |
-                                LeaveWindowMask | KeyPressMask | KeyReleaseMask;
+                                LeaveWindowMask | KeyPressMask | KeyReleaseMask |
+                                VisibilityChangeMask;
         attributes.border_pixel = 0;
         attributes.colormap = colormap;
 
@@ -298,6 +305,10 @@ void X11Window::setVisible(bool isVisible)
     if (isVisible)
     {
         XMapWindow(mDisplay, mWindow);
+        XFlush(mDisplay);
+
+        // NOT ENOUGH
+        // angle::Sleep(1000);
 
         // Wait until we get an event saying this window is mapped so that the
         // code calling setVisible can assume the window is visible.
@@ -306,10 +317,16 @@ void X11Window::setVisible(bool isVisible)
         XEvent dummyEvent;
         XIfEvent(mDisplay, &dummyEvent, WaitForMapNotify, reinterpret_cast<XPointer>(mWindow));
 
-        // The above synchronization is not enough, at least for the combo of NVIDIA Kepler Quadro,
-        // driver 331 on Cinnamon for glReadPixels. Adding all kind of synchronization here or in
-        // MakeCurrent doesn't work reliably. A sleep of 66ms is not enough but 100ms works reliably
-        // after 100 tries.
+        std::cout << "setvisible" << std::endl;
+
+        // NOT ENOUGH:
+        // XIfEvent(mDisplay, &dummyEvent, WaitForVisibilityNotify, reinterpret_cast<XPointer>(mWindow));
+        // Waiting for en Expose event
+        // XSync(mDisplay, False);
+        // signalTestEvent(); XSync(mDisplay, False); messageLoop();
+
+        //WORKS
+        //std::cout << "Sleep" << std::endl;
         angle::Sleep(100);
     }
     else

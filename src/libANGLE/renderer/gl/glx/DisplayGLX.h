@@ -67,8 +67,10 @@ class DisplayGLX : public DisplayGL
 
     int getGLXFBConfigAttrib(glx::FBConfig config, int attrib) const;
 
+  public:
     FunctionsGL *mFunctionsGL;
 
+  private:
     //TODO(cwallez) yuck, change generateConfigs to be non-const or add a userdata member to egl::Config?
     mutable std::map<int, glx::FBConfig> configIdToGLXConfig;
 

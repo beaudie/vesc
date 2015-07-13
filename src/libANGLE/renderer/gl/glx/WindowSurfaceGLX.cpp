@@ -13,6 +13,8 @@
 #include "libANGLE/renderer/gl/glx/DisplayGLX.h"
 #include "libANGLE/renderer/gl/glx/FunctionsGLX.h"
 
+#include <iostream>
+
 namespace rx
 {
 
@@ -27,7 +29,8 @@ WindowSurfaceGLX::WindowSurfaceGLX(const FunctionsGLX &glx, const DisplayGLX &gl
       mContext(context),
       mFBConfig(fbConfig),
       mGLXWindow(0),
-      mMaxSwapInterval(1)
+      mMaxSwapInterval(1),
+      mWasMadeCurrent(false)
 {
 }
 
@@ -112,7 +115,34 @@ egl::Error WindowSurfaceGLX::makeCurrent()
     {
         return egl::Error(EGL_BAD_DISPLAY);
     }
-    return egl::Error(EGL_SUCCESS);
+    // Doesn't work
+    //mGLX.waitX();
+    //mGLX.waitGL();
+    //mGLXDisplay.mFunctionsGL->finish();
+
+    std::cout << "make current" << std::endl;
+
+    if (!mWasMadeCurrent)
+    {
+        std::cout << "first one" << std::endl;
+        // DOESN'T WORK
+        // Functions reading the default framebuffer such as glReadPixels, when called before
+        // the any swap, sometimes return incorrect values. This was found on NVIDIA 331 Quadro
+        // driver on Cinnamon. To work around this problem, we make a swap directly after the first
+        // MakeCurrent.
+        // TODO(cwallez) see how much this slows down ANGLE's startup
+        mWasMadeCurrent = true;
+        return swap();
+        // DOESN'T WORK
+        //swap();
+        //mGLX.waitX();
+        //mGLX.waitGL();
+        //mGLXDisplay.mFunctionsGL->finish();
+    }
+    else
+    {
+        return egl::Error(EGL_SUCCESS);
+    }
 }
 
 egl::Error WindowSurfaceGLX::swap()

@@ -2,6 +2,8 @@
 #include "EGLWindow.h"
 #include "OSWindow.h"
 
+#include "system_utils.h"
+
 ANGLETest::ANGLETest()
     : mEGLWindow(nullptr)
 {
@@ -189,6 +191,7 @@ bool ANGLETest::isMultisampleEnabled() const
 
 bool ANGLETest::createEGLContext()
 {
+    // mEGLWindow->setSwapInterval(1);
     return mEGLWindow->initializeGL(mOSWindow);
 }
 
@@ -206,7 +209,9 @@ bool ANGLETest::InitTestWindow()
         return false;
     }
 
+    //angle::Sleep(1000);
     mOSWindow->setVisible(true);
+
 
     return true;
 }

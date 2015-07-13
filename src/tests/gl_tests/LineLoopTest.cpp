@@ -57,6 +57,13 @@ class LineLoopTest : public ANGLETest
         glEnable(GL_BLEND);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
+        // WORKS (NO LESS THAN 4 or 2 + finish with swapInterval 1)
+        //swapBuffers();
+        //swapBuffers();
+        //glFinish();
+        //swapBuffers();
+        //swapBuffers();
+
         ASSERT_GL_NO_ERROR();
     }
 
