@@ -8,6 +8,8 @@
 
 #include "x11/X11Window.h"
 
+#include "system_utils.h"
+
 namespace {
 
 Bool WaitForMapNotify(Display *dpy, XEvent *event, XPointer window)
@@ -303,6 +305,12 @@ void X11Window::setVisible(bool isVisible)
         // is undefined when the window is not visible.
         XEvent dummyEvent;
         XIfEvent(mDisplay, &dummyEvent, WaitForMapNotify, reinterpret_cast<XPointer>(mWindow));
+
+        // The above synchronization is not enough, at least for the combo of NVIDIA Kepler Quadro,
+        // driver 331 on Cinnamon for glReadPixels. Adding all kind of synchronization here or in
+        // MakeCurrent doesn't work reliably. A sleep of 66ms is not enough but 100ms works reliably
+        // after 100 tries.
+        angle::Sleep(100);
     }
     else
     {
