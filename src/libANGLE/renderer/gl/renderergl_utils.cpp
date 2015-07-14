@@ -449,8 +449,8 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
         LimitVersion(maxSupportedESVersion, gl::Version(2, 0));
     }
 
-    if (functions->isAtLeastGL(gl::Version(3, 0)) || functions->hasGLExtension("GL_ARB_ES3_compatibility") ||
-        functions->isAtLeastGLES(gl::Version(3, 0)))
+    if (functions->isAtLeastGL(gl::Version(3, 0)) || functions->hasGLExtension("GL_ARB_ES2_compatibility") ||
+        functions->isAtLeastGLES(gl::Version(2, 0)))
     {
         caps->maxVaryingComponents = QuerySingleGLInt(functions, GL_MAX_VARYING_COMPONENTS);
     }
@@ -547,6 +547,69 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
 
     workarounds->rgba4IsNotSupportedForColorRendering =
         functions->standard == STANDARD_GL_DESKTOP && vendor == VENDOR_ID_INTEL;
+}
+
+}
+
+namespace nativegl
+{
+bool AbleToReadbackBufferData(const FunctionsGL *functions)
+{
+    // DesktopGL has glMapBuffer as of version 1.5 and ES has glMapBufferRange with version 3.0 or
+    // extension.  The ES extension GL_OES_mapbuffer is unable to map buffers for reading.
+    return functions->isAtLeastGL(gl::Version(1, 5)) ||
+           functions->isAtLeastGLES(gl::Version(3, 0)) ||
+           functions->hasGLESExtension("GL_EXT_map_buffer_range");
+}
+
+bool AbleToUseVertexArrayObjects(const FunctionsGL *functions)
+{
+    return (functions->isAtLeastGL(gl::Version(3, 0)) || functions->hasGLExtension("GL_ARB_vertex_array_object") ||
+            functions->isAtLeastGLES(gl::Version(3, 0)) || functions->hasGLESExtension("GL_OES_vertex_array_object"));
+}
+
+uint8_t *MapBuffer(const FunctionsGL *functions, GLenum binding, size_t offset, size_t size, GLbitfield usageBits)
+{
+    // Always use mapBufferRange if it exists, it supports the most usages and tight range mapping
+    if (functions->mapBufferRange)
+    {
+        return reinterpret_cast<uint8_t*>(functions->mapBufferRange(binding, offset, size, usageBits));
+    }
+    else if (functions->mapBuffer &&
+             (functions->standard == STANDARD_GL_DESKTOP || usageBits == GL_MAP_WRITE_BIT))
+    {
+        GLenum mapBufferAccess = GL_NONE;
+        if (usageBits == (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT))
+        {
+            mapBufferAccess = GL_READ_WRITE;
+        }
+        else if (usageBits == GL_MAP_READ_BIT)
+        {
+            mapBufferAccess = GL_READ_ONLY;
+        }
+        else if (usageBits == GL_MAP_WRITE_BIT)
+        {
+            mapBufferAccess = GL_WRITE_ONLY;
+        }
+        else
+        {
+            UNREACHABLE();
+            return nullptr;
+        }
+
+        return reinterpret_cast<uint8_t*>(functions->mapBuffer(binding, mapBufferAccess)) + offset;
+    }
+    else
+    {
+        UNREACHABLE();
+        return nullptr;
+    }
+}
+
+bool UnmapBuffer(const FunctionsGL *functions, GLenum binding)
+{
+    ASSERT(functions->unmapBuffer);
+    return functions->unmapBuffer(binding) == GL_TRUE;
 }
 
 }

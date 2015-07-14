@@ -14,6 +14,7 @@
 #include "libANGLE/State.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/gl/functionsgl_typedefs.h"
+#include "libANGLE/renderer/gl/VertexArrayGL.h"
 
 #include <map>
 
@@ -33,6 +34,7 @@ class StateManagerGL final : angle::NonCopyable
 {
   public:
     StateManagerGL(const FunctionsGL *functions, const gl::Caps &rendererCaps);
+    ~StateManagerGL();
 
     void deleteProgram(GLuint program);
     void deleteVertexArray(GLuint vao);
@@ -48,6 +50,8 @@ class StateManagerGL final : angle::NonCopyable
     void bindTexture(GLenum type, GLuint texture);
     void bindFramebuffer(GLenum type, GLuint framebuffer);
     void bindRenderbuffer(GLenum type, GLuint renderbuffer);
+
+    VertexArrayStateGL *getDefaultVertexArrayState();
 
     gl::Error setDrawArraysState(const gl::Data &data, GLint first, GLsizei count);
     gl::Error setDrawElementsState(const gl::Data &data, GLsizei count, GLenum type, const GLvoid *indices,
@@ -117,6 +121,7 @@ class StateManagerGL final : angle::NonCopyable
 
     GLuint mVAO;
     std::vector<gl::VertexAttribCurrentValueData> mVertexAttribCurrentValues;
+    VertexArrayStateGL mDefaultVertexArrayState;
 
     std::map<GLenum, GLuint> mBuffers;
 

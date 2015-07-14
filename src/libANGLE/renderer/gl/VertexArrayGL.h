@@ -17,6 +17,15 @@ namespace rx
 class FunctionsGL;
 class StateManagerGL;
 
+struct VertexArrayStateGL : angle::NonCopyable
+{
+    GLuint elementArrayBuffer;
+    std::vector<gl::VertexAttribute> attributes;
+
+    VertexArrayStateGL(size_t maxAttributes);
+    void reset();
+};
+
 class VertexArrayGL : public VertexArrayImpl
 {
   public:
@@ -32,9 +41,6 @@ class VertexArrayGL : public VertexArrayImpl
     gl::Error syncDrawElementsState(const std::vector<GLuint> &activeAttribLoations, GLsizei count, GLenum type,
                                     const GLvoid *indices, const GLvoid **outIndices) const;
 
-    GLuint getVertexArrayID() const;
-    GLuint getAppliedElementArrayBufferID() const;
-
   private:
     gl::Error syncDrawState(const std::vector<GLuint> &activeAttribLoations, GLint first, GLsizei count,
                             GLenum type, const GLvoid *indices, const GLvoid **outIndices) const;
@@ -42,27 +48,32 @@ class VertexArrayGL : public VertexArrayImpl
     // Check if any vertex attributes need to be streamed
     bool doAttributesNeedStreaming(const std::vector<GLuint> &activeAttribLoations) const;
 
+    // Check if a buffer needs to be read back to apply vertex state
+    bool doesBufferDataNeedToBeRead(bool attributesNeedStreaming, bool indexedDrawCall) const;
+
     // Apply attribute state, returns the amount of space needed to stream all attributes that need streaming
     // and the data size of the largest attribute
-    gl::Error syncAttributeState(const std::vector<GLuint> &activeAttribLoations, bool attributesNeedStreaming,
+    gl::Error syncAttributeState(VertexArrayStateGL *appliedState, const std::vector<GLuint> &activeAttribLoations, bool attributesNeedStreaming,
                                  const gl::RangeUI &indexRange, size_t *outStreamingDataSize,
                                  size_t *outMaxAttributeDataSize) const;
 
     // Apply index data, only sets outIndexRange if attributesNeedStreaming is true
-    gl::Error syncIndexData(GLsizei count, GLenum type, const GLvoid *indices, bool attributesNeedStreaming,
+    gl::Error syncIndexData(VertexArrayStateGL *appliedState, GLsizei count, GLenum type, const GLvoid *indices, bool attributesNeedStreaming,
                             gl::RangeUI *outIndexRange, const GLvoid **outIndices) const;
 
     // Stream attributes that have client data
-    gl::Error streamAttributes(const std::vector<GLuint> &activeAttribLoations, size_t streamingDataSize,
+    gl::Error streamAttributes(VertexArrayStateGL *appliedState, const std::vector<GLuint> &activeAttribLoations, size_t streamingDataSize,
                                size_t maxAttributeDataSize, const gl::RangeUI &indexRange) const;
 
     const FunctionsGL *mFunctions;
     StateManagerGL *mStateManager;
 
+    bool mAbleToReadbackBufferData;
+    bool mAbleToUseVAOs;
+
     GLuint mVertexArrayID;
 
-    mutable GLuint mAppliedElementArrayBuffer;
-    mutable std::vector<gl::VertexAttribute> mAppliedAttributes;
+    mutable VertexArrayStateGL mLocalAppliedState;
 
     mutable size_t mStreamingElementArrayBufferSize;
     mutable GLuint mStreamingElementArrayBuffer;
