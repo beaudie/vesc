@@ -11,7 +11,9 @@
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
+#include "libANGLE/renderer/gl/renderergl_utils.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 
 namespace rx
@@ -106,9 +108,10 @@ gl::Error BufferGL::getIndexRange(GLenum type, size_t offset, size_t count, gl::
     ASSERT(!mIsMapped);
 
     mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
-    const uint8_t *bufferData = reinterpret_cast<uint8_t*>(mFunctions->mapBuffer(DestBufferOperationTarget, GL_READ_ONLY));
-    *outRange = gl::ComputeIndexRange(type, bufferData + offset, static_cast<GLsizei>(count));
-    mFunctions->unmapBuffer(DestBufferOperationTarget);
+    const gl::Type &typeInfo = gl::GetTypeInfo(type);
+    const uint8_t *bufferData = nativegl::MapBuffer(mFunctions, DestBufferOperationTarget, offset, typeInfo.bytes * count, GL_MAP_READ_BIT);
+    *outRange = gl::ComputeIndexRange(type, bufferData, static_cast<GLsizei>(count));
+    nativegl::UnmapBuffer(mFunctions, DestBufferOperationTarget);
 
     return gl::Error(GL_NO_ERROR);
 }

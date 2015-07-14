@@ -25,6 +25,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mProgram(0),
       mVAO(0),
       mVertexAttribCurrentValues(rendererCaps.maxVertexAttributes),
+      mDefaultVertexArrayState(rendererCaps.maxVertexAttributes),
       mBuffers(),
       mTextureUnitIndex(0),
       mTextures(),
@@ -111,6 +112,12 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
             mFunctions->enable(GL_POINT_SPRITE);
         }
     }
+}
+
+
+StateManagerGL::~StateManagerGL()
+{
+    mDefaultVertexArrayState.reset();
 }
 
 void StateManagerGL::deleteProgram(GLuint program)
@@ -373,6 +380,11 @@ void StateManagerGL::bindRenderbuffer(GLenum type, GLuint renderbuffer)
     }
 }
 
+VertexArrayStateGL *StateManagerGL::getDefaultVertexArrayState()
+{
+    return &mDefaultVertexArrayState;
+}
+
 gl::Error StateManagerGL::setDrawArraysState(const gl::Data &data, GLint first, GLsizei count)
 {
     const gl::State &state = *data.state;
@@ -388,8 +400,6 @@ gl::Error StateManagerGL::setDrawArraysState(const gl::Data &data, GLint first, 
     {
         return error;
     }
-
-    bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getAppliedElementArrayBufferID());
 
     return setGenericDrawState(data);
 }
@@ -410,8 +420,6 @@ gl::Error StateManagerGL::setDrawElementsState(const gl::Data &data, GLsizei cou
     {
         return error;
     }
-
-    bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getAppliedElementArrayBufferID());
 
     return setGenericDrawState(data);
 }
@@ -527,7 +535,16 @@ void StateManagerGL::setDepthRange(float near, float far)
     {
         mNear = near;
         mFar = far;
-        mFunctions->depthRange(mNear, mFar);
+
+        if (mFunctions->depthRangef)
+        {
+            mFunctions->depthRangef(mNear, mFar);
+        }
+        else
+        {
+            ASSERT(mFunctions->depthRange);
+            mFunctions->depthRange(mNear, mFar);
+        }
     }
 }
 
@@ -871,7 +888,15 @@ void StateManagerGL::setClearDepth(float clearDepth)
     if (mClearDepth != clearDepth)
     {
         mClearDepth = clearDepth;
-        mFunctions->clearDepth(mClearDepth);
+        if (mFunctions->clearDepthf)
+        {
+            mFunctions->clearDepthf(mClearDepth);
+        }
+        else
+        {
+            ASSERT(mFunctions->clearDepth);
+            mFunctions->clearDepth(mClearDepth);
+        }
     }
 }
 
