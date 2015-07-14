@@ -11,6 +11,7 @@
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 
@@ -106,9 +107,25 @@ gl::Error BufferGL::getIndexRange(GLenum type, size_t offset, size_t count, gl::
     ASSERT(!mIsMapped);
 
     mStateManager->bindBuffer(DestBufferOperationTarget, mBufferID);
-    const uint8_t *bufferData = reinterpret_cast<uint8_t*>(mFunctions->mapBuffer(DestBufferOperationTarget, GL_READ_ONLY));
-    *outRange = gl::ComputeIndexRange(type, bufferData + offset, count);
-    mFunctions->unmapBuffer(DestBufferOperationTarget);
+
+    const uint8_t *bufferData = nullptr;
+    if (mFunctions->mapBufferRange)
+    {
+        const gl::Type &typeInfo = gl::GetTypeInfo(type);
+        bufferData = reinterpret_cast<uint8_t*>(mFunctions->mapBufferRange(GL_ARRAY_BUFFER, offset, typeInfo.bytes * count, GL_MAP_READ_BIT));
+        *outRange = gl::ComputeIndexRange(type, bufferData, count);
+        mFunctions->unmapBuffer(DestBufferOperationTarget);
+    }
+    else if (mFunctions->mapBuffer)
+    {
+        const uint8_t *bufferData = reinterpret_cast<uint8_t*>(mFunctions->mapBuffer(DestBufferOperationTarget, GL_READ_ONLY));
+        *outRange = gl::ComputeIndexRange(type, bufferData + offset, count);
+        mFunctions->unmapBuffer(DestBufferOperationTarget);
+    }
+    else
+    {
+        UNIMPLEMENTED();
+    }
 
     return gl::Error(GL_NO_ERROR);
 }
