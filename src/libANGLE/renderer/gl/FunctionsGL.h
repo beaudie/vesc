@@ -743,6 +743,9 @@ class FunctionsGL
     PFNGLVERTEXARRAYVERTEXBUFFERSPROC vertexArrayVertexBuffers;
 
   private:
+    void initializeProcsDesktopGL();
+    void initializeProcsGLES();
+
     virtual void *loadProcAddress(const std::string &function) = 0;
 };
 
