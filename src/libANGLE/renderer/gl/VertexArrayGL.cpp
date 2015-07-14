@@ -145,7 +145,12 @@ gl::Error VertexArrayGL::syncDrawState(const std::vector<GLuint> &activeAttribLo
 
 bool VertexArrayGL::doAttributesNeedStreaming(const std::vector<GLuint> &activeAttribLocations) const
 {
-    // TODO: if GLES, nothing needs to be streamed
+    if (mFunctions->standard == STANDARD_GL_ES &&
+        mFunctions->version < gl::Version(3, 0))
+    {
+        return false;
+    }
+
     const auto &attribs = mData.getVertexAttributes();
     for (size_t activeAttrib = 0; activeAttrib < activeAttribLocations.size(); activeAttrib++)
     {
@@ -191,10 +196,8 @@ gl::Error VertexArrayGL::syncAttributeState(const std::vector<GLuint> &activeAtt
             mAppliedAttributes[idx].divisor = attrib.divisor;
         }
 
-        if (attribs[idx].enabled && attrib.buffer.get() == nullptr)
+        if (attribs[idx].enabled && attrib.buffer.get() == nullptr && attributesNeedStreaming)
         {
-            ASSERT(attributesNeedStreaming);
-
             const size_t streamedVertexCount = indexRange.end - indexRange.start + 1;
 
             // If streaming is going to be required, compute the size of the required buffer
@@ -274,42 +277,52 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
     }
     else
     {
-        // Need to stream the index buffer
-        // TODO: if GLES, nothing needs to be streamed
-
-        // Only compute the index range if the attributes also need to be streamed
         if (attributesNeedStreaming)
         {
-            *outIndexRange = gl::ComputeIndexRange(type, indices, count);
-        }
+            // Need to stream the index buffer
 
-        // Allocate the streaming element array buffer
-        if (mStreamingElementArrayBuffer == 0)
-        {
-            mFunctions->genBuffers(1, &mStreamingElementArrayBuffer);
-            mStreamingElementArrayBufferSize = 0;
-        }
+            // Only compute the index range if the attributes also need to be streamed
+            if (attributesNeedStreaming)
+            {
+                *outIndexRange = gl::ComputeIndexRange(type, indices, count);
+            }
 
-        mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, mStreamingElementArrayBuffer);
-        mAppliedElementArrayBuffer = mStreamingElementArrayBuffer;
+            // Allocate the streaming element array buffer
+            if (mStreamingElementArrayBuffer == 0)
+            {
+                mFunctions->genBuffers(1, &mStreamingElementArrayBuffer);
+                mStreamingElementArrayBufferSize = 0;
+            }
 
-        // Make sure the element array buffer is large enough
-        const gl::Type &indexTypeInfo = gl::GetTypeInfo(type);
-        size_t requiredStreamingBufferSize = indexTypeInfo.bytes * count;
-        if (requiredStreamingBufferSize > mStreamingElementArrayBufferSize)
-        {
-            // Copy the indices in while resizing the buffer
-            mFunctions->bufferData(GL_ELEMENT_ARRAY_BUFFER, requiredStreamingBufferSize, indices, GL_DYNAMIC_DRAW);
-            mStreamingElementArrayBufferSize = requiredStreamingBufferSize;
+            mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, mStreamingElementArrayBuffer);
+            mAppliedElementArrayBuffer = mStreamingElementArrayBuffer;
+
+            // Make sure the element array buffer is large enough
+            const gl::Type &indexTypeInfo = gl::GetTypeInfo(type);
+            size_t requiredStreamingBufferSize = indexTypeInfo.bytes * count;
+            if (requiredStreamingBufferSize > mStreamingElementArrayBufferSize)
+            {
+                // Copy the indices in while resizing the buffer
+                mFunctions->bufferData(GL_ELEMENT_ARRAY_BUFFER, requiredStreamingBufferSize, indices, GL_DYNAMIC_DRAW);
+                mStreamingElementArrayBufferSize = requiredStreamingBufferSize;
+            }
+            else
+            {
+                // Put the indices at the beginning of the buffer
+                mFunctions->bufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, requiredStreamingBufferSize, indices);
+            }
+
+            // Set the index offset for the draw call to zero since the supplied index pointer is to client data
+            *outIndices = nullptr;
         }
         else
         {
-            // Put the indices at the beginning of the buffer
-            mFunctions->bufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, requiredStreamingBufferSize, indices);
-        }
+            // Can directly apply the indicies pointer
+            mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            mAppliedElementArrayBuffer = 0;
 
-        // Set the index offset for the draw call to zero since the supplied index pointer is to client data
-        *outIndices = nullptr;
+            *outIndices = indices;
+        }
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -343,7 +356,17 @@ gl::Error VertexArrayGL::streamAttributes(const std::vector<GLuint> &activeAttri
     size_t unmapRetryAttempts = 5;
     while (unmapResult != GL_TRUE && --unmapRetryAttempts > 0)
     {
-        uint8_t *bufferPointer = reinterpret_cast<uint8_t*>(mFunctions->mapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+        uint8_t *bufferPointer = nullptr;
+        if (mFunctions->mapBufferRange)
+        {
+            bufferPointer = reinterpret_cast<uint8_t*>(mFunctions->mapBufferRange(GL_ARRAY_BUFFER, 0, requiredBufferSize, GL_MAP_WRITE_BIT));
+        }
+        else if (mFunctions->mapBuffer)
+        {
+            bufferPointer = reinterpret_cast<uint8_t*>(mFunctions->mapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+        }
+        ASSERT(bufferPointer != nullptr);
+
         size_t curBufferOffset = bufferEmptySpace;
 
         const size_t streamedVertexCount = indexRange.end - indexRange.start + 1;

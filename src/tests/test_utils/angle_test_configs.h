@@ -72,6 +72,7 @@ EGLPlatformParameters OPENGL(EGLint major, EGLint minor);
 EGLPlatformParameters OPENGL_NULL();
 
 EGLPlatformParameters OPENGLES();
+EGLPlatformParameters OPENGLES(EGLint major, EGLint minor);
 
 } // namespace egl_platform
 
@@ -121,7 +122,9 @@ PlatformParameters ES3_OPENGL();
 PlatformParameters ES3_OPENGL(EGLint major, EGLint minor);
 
 PlatformParameters ES2_OPENGLES();
+PlatformParameters ES2_OPENGLES(EGLint major, EGLint minor);
 PlatformParameters ES3_OPENGLES();
+PlatformParameters ES3_OPENGLES(EGLint major, EGLint minor);
 
 } // namespace angle
 
