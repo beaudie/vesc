@@ -37,6 +37,20 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds);
 }
 
+namespace nativegl
+{
+bool AbleToUseVertexArrayObjects(const FunctionsGL *functions);
+
+bool AbleToMapBufferForRead(const FunctionsGL *functions);
+bool AbleToMapBufferForWrite(const FunctionsGL *functions);
+
+uint8_t *MapBuffer(const FunctionsGL *functions,
+                   GLenum binding,
+                   size_t offset,
+                   size_t size,
+                   GLbitfield usageBits);
+bool UnmapBuffer(const FunctionsGL *functions, GLenum binding);
+}
 }
 
 #endif // LIBANGLE_RENDERER_GL_RENDERERGLUTILS_H_
