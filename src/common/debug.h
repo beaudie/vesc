@@ -122,6 +122,8 @@ bool DebugAnnotationsActive();
 
 // A macro to indicate unimplemented functionality
 
+#define ANGLE_TEST_CONFIG
+
 #if defined (ANGLE_TEST_CONFIG)
 #define NOASSERT_UNIMPLEMENTED 1
 #endif
