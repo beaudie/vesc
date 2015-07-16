@@ -39,6 +39,7 @@ typedef std::vector<char *> ShaderSource;
 static bool ReadShaderSource(const char *fileName, ShaderSource &source);
 static void FreeShaderSource(ShaderSource &source);
 
+static bool ParseIntValue(const char *num, int emptyDefault, int *outValue);
 //
 // Set up the per compile resources
 //
@@ -54,6 +55,7 @@ void GenerateResources(ShBuiltInResources *resources)
     resources->MaxTextureImageUnits = 8;
     resources->MaxFragmentUniformVectors = 16;
     resources->MaxDrawBuffers = 1;
+    resources->MaxDualSourceDrawBuffers     = 1;
 
     resources->OES_standard_derivatives = 0;
     resources->OES_EGL_image_external = 0;
@@ -158,6 +160,28 @@ int main(int argc, char *argv[])
                       case 'i': resources.OES_EGL_image_external = 1; break;
                       case 'd': resources.OES_standard_derivatives = 1; break;
                       case 'r': resources.ARB_texture_rectangle = 1; break;
+                      case 'b':
+                          if (ParseIntValue(&argv[0][sizeof("-x=b") - 1], 1,
+                                            &resources.MaxDualSourceDrawBuffers))
+                          {
+                              resources.EXT_blend_func_extended = 1;
+                          }
+                          else
+                          {
+                              failCode = EFailUsage;
+                          }
+                          break;
+                      case 'w':
+                          if (ParseIntValue(&argv[0][sizeof("-x=w") - 1], 1,
+                                            &resources.MaxDrawBuffers))
+                          {
+                              resources.EXT_draw_buffers = 1;
+                          }
+                          else
+                          {
+                              failCode = EFailUsage;
+                          }
+                          break;
                       case 'g':
                           resources.EXT_frag_depth = 1;
                           break;
@@ -277,6 +301,8 @@ void usage()
         "       -x=i     : enable GL_OES_EGL_image_external\n"
         "       -x=d     : enable GL_OES_EGL_standard_derivatives\n"
         "       -x=r     : enable ARB_texture_rectangle\n"
+        "       -x=b[NUM]: enable EXT_blend_func_extended (NUM default 1)\n"
+        "       -x=w[NUM]: enable EXT_draw_buffers (NUM default 1)\n"
         "       -x=g     : enable EXT_frag_depth\n"
         "       -x=l     : enable EXT_shader_texture_lod\n"
         "       -x=f     : enable EXT_shader_framebuffer_fetch\n"
@@ -462,3 +488,19 @@ static void FreeShaderSource(ShaderSource &source)
     source.clear();
 }
 
+static bool ParseIntValue(const char *num, int emptyDefault, int *outValue)
+{
+    if (*num == '\0')
+    {
+        *outValue = emptyDefault;
+        return true;
+    }
+    char *end  = NULL;
+    long value = strtol(num, &end, 10);
+    if (*end == '\0')
+    {
+        *outValue = static_cast<int>(value);
+        return true;
+    }
+    return false;
+}

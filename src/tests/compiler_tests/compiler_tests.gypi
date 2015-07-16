@@ -11,6 +11,7 @@
         'ConstantFolding_test.cpp',
         'DebugShaderPrecision_test.cpp',
         'ExpressionLimit_test.cpp',
+        'EXT_blend_func_extended_test.cpp',
         'FragDepth_test.cpp',
         'MalformedShader_test.cpp',
         'NV_draw_buffers_test.cpp',

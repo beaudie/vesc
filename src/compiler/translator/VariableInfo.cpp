@@ -152,6 +152,8 @@ CollectVariables::CollectVariables(std::vector<sh::Attribute> *attribs,
       mFragDataAdded(false),
       mFragDepthEXTAdded(false),
       mFragDepthAdded(false),
+      mSecondaryFragColorEXTAdded(false),
+      mSecondaryFragDataEXTAdded(false),
       mHashFunction(hashFunction),
       mSymbolTable(symbolTable)
 {
@@ -436,7 +438,40 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
                   mFragDepthAdded = true;
               }
               return;
-
+          case EvqSecondaryFragColorEXT:
+              if (!mSecondaryFragColorEXTAdded)
+              {
+                  Attribute info;
+                  const char kName[] = "gl_SecondaryFragColorEXT";
+                  info.name          = kName;
+                  info.mappedName    = kName;
+                  info.type          = GL_FLOAT_VEC4;
+                  info.arraySize     = 0;
+                  info.precision     = GL_MEDIUM_FLOAT;  // Defined by spec.
+                  info.staticUse = true;
+                  mOutputVariables->push_back(info);
+                  mSecondaryFragColorEXTAdded = true;
+              }
+              return;
+          case EvqSecondaryFragDataEXT:
+              if (!mSecondaryFragDataEXTAdded)
+              {
+                  Attribute info;
+                  const char kName[] = "gl_SecondaryFragDataEXT";
+                  info.name          = kName;
+                  info.mappedName    = kName;
+                  info.type = GL_FLOAT_VEC4;
+                  info.arraySize =
+                      static_cast<const TVariable *>(
+                          mSymbolTable.findBuiltIn("gl_MaxDualSourceDrawBuffersEXT", 100))
+                          ->getConstPointer()
+                          ->getIConst();
+                  info.precision = GL_MEDIUM_FLOAT;  // Defined by spec.
+                  info.staticUse = true;
+                  mOutputVariables->push_back(info);
+                  mSecondaryFragDataEXTAdded = true;
+              }
+              return;
           default:
             break;
         }
