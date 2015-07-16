@@ -325,6 +325,8 @@ enum TQualifier
     EvqFragColor,
     EvqFragData,
     EvqFragDepth,
+    EvqSecondaryFragColor, // EXT_blend_func_extended
+    EvqSecondaryFragData, // EXT_blend_func_extended
 
     // built-ins written by the shader_framebuffer_fetch extension(s)
     EvqLastFragColor,
@@ -413,6 +415,8 @@ inline const char* getQualifierString(TQualifier q)
     case EvqFragColor:      return "FragColor";      break;
     case EvqFragData:       return "FragData";       break;
     case EvqFragDepth:      return "FragDepth";      break;
+    case EvqSecondaryFragColor: return "SecondaryFragColorEXT"; break;
+    case EvqSecondaryFragData: return "SecondaryFragDataEXT"; break;
     case EvqLastFragColor:  return "LastFragColor";  break;
     case EvqLastFragData:   return "LastFragData";   break;
     case EvqSmoothOut:      return "smooth out";     break;

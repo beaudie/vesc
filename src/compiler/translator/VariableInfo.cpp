@@ -151,6 +151,8 @@ CollectVariables::CollectVariables(std::vector<sh::Attribute> *attribs,
       mFragColorAdded(false),
       mFragDataAdded(false),
       mFragDepthAdded(false),
+      mSecondaryFragColorAdded(false),
+      mSecondaryFragDataAdded(false),
       mHashFunction(hashFunction),
       mSymbolTable(symbolTable)
 {
@@ -412,6 +414,36 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
                 info.staticUse = true;
                 mOutputVariables->push_back(info);
                 mFragDepthAdded = true;
+            }
+            return;
+          case EvqSecondaryFragColor:
+            if (!mSecondaryFragColorAdded)
+            {
+                Attribute info;
+                const char kName[] = "gl_SecondaryFragColorEXT";
+                info.name = kName;
+                info.mappedName = kName;
+                info.type = GL_FLOAT_VEC4;
+                info.arraySize = 0;
+                info.precision = GL_MEDIUM_FLOAT;  // Defined by spec.
+                info.staticUse = true;
+                mOutputVariables->push_back(info);
+                mSecondaryFragColorAdded = true;
+            }
+            return;
+          case EvqSecondaryFragData:
+            if (!mSecondaryFragDataAdded)
+            {
+                Attribute info;
+                const char kName[] = "gl_SecondaryFragDataEXT";
+                info.name = kName;
+                info.mappedName = kName;
+                info.type = GL_FLOAT_VEC4;
+                info.arraySize = static_cast<const TVariable*>(mSymbolTable.findBuiltIn("gl_MaxDualSourceDrawBuffersEXT", 100))->getConstPointer()->getIConst();
+                info.precision = GL_MEDIUM_FLOAT;  // Defined by spec.
+                info.staticUse = true;
+                mOutputVariables->push_back(info);
+                mSecondaryFragDataAdded = true;
             }
             return;
           default:

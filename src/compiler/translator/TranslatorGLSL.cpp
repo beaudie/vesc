@@ -64,26 +64,47 @@ void TranslatorGLSL::translate(TIntermNode *root, int) {
 
     // Declare gl_FragColor and glFragData as webgl_FragColor and webgl_FragData
     // if it's core profile shaders and they are used.
-    if (getShaderType() == GL_FRAGMENT_SHADER && IsGLSL130OrNewer(getOutputType()))
+    if (getShaderType() == GL_FRAGMENT_SHADER)
     {
-        bool usesGLFragColor = false;
-        bool usesGLFragData = false;
+        const bool mayHaveESSL1SecondaryOutputs =
+                isExtensionEnabled(getExtensionBehavior(), "GL_EXT_blend_func_extended") &&
+                100 == getShaderVersion();
+        const bool declareGLFragmentOutputs = IsGLSL130OrNewer(getOutputType());
+
+        bool hasGLFragColor = false;
+        bool hasGLFragData = false;
+        bool hasGLSecondaryFragColor = false;
+        bool hasGLSecondaryFragData = false;
         for (auto outputVar : outputVariables) {
-            if (outputVar.name == "gl_FragColor") {
-                usesGLFragColor = true;
-            } else if (outputVar.name == "gl_FragData") {
-                usesGLFragData = true;
+            if (declareGLFragmentOutputs) {
+                if (outputVar.name == "gl_FragColor") {
+                    ASSERT(!hasGLFragColor);
+                    sink << "out vec4 webgl_FragColor;\n";
+                    hasGLFragColor = true;
+                    continue;
+                } else if (outputVar.name == "gl_FragData") {
+                    ASSERT(!hasGLFragData);
+                    sink << "out vec4 webgl_FragData[gl_MaxDrawBuffers];\n";
+                    hasGLFragData = true;
+                    continue;
+                }
+            }
+            if (mayHaveESSL1SecondaryOutputs) {
+                if (outputVar.name == "gl_SecondaryFragColorEXT") {
+                    ASSERT(!hasGLSecondaryFragColor);
+                    sink << "out vec4 angle_SecondaryFragColor;\n";
+                    hasGLSecondaryFragColor = true;
+                    continue;
+                } else if (outputVar.name == "gl_SecondaryFragDataEXT") {
+                    ASSERT(!hasGLSecondaryFragData);
+                    sink << "out vec4 angle_SecondaryFragData["
+                         << getResources().MaxDualSourceDrawBuffers <<"];\n";
+                    hasGLSecondaryFragData = true;
+                    continue;
+                }
             }
         }
-        ASSERT(!(usesGLFragColor && usesGLFragData));
-        if (usesGLFragColor)
-        {
-            sink << "out vec4 webgl_FragColor;\n";
-        }
-        if (usesGLFragData)
-        {
-            sink << "out vec4 webgl_FragData[gl_MaxDrawBuffers];\n";
-        }
+        ASSERT(!((hasGLFragColor || hasGLSecondaryFragColor) && (hasGLFragData || hasGLSecondaryFragData)));
     }
 
     // Write translated shader.

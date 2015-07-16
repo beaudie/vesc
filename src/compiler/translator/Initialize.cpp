@@ -464,6 +464,11 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     if (spec != SH_CSS_SHADERS_SPEC)
     {
         symbolTable.insertConstInt(COMMON_BUILTINS, "gl_MaxDrawBuffers", resources.MaxDrawBuffers);
+        if (resources.EXT_blend_func_extended)
+        {
+            symbolTable.insertConstInt(ESSL1_BUILTINS, "GL_EXT_blend_func_extended", "gl_MaxDualSourceDrawBuffersEXT",
+                                       resources.MaxDualSourceDrawBuffers);
+        }
     }
 
     symbolTable.insertConstInt(ESSL3_BUILTINS, "gl_MaxVertexOutputVectors", resources.MaxVertexOutputVectors);
@@ -501,6 +506,17 @@ void IdentifyBuiltIns(sh::GLenum type, ShShaderSpec spec,
             TType fragData(EbtFloat, EbpMedium, EvqFragData, 4, 1, true);
             fragData.setArraySize(resources.MaxDrawBuffers);
             symbolTable.insert(ESSL1_BUILTINS, new TVariable(NewPoolTString("gl_FragData"), fragData));
+
+            if (resources.EXT_blend_func_extended)
+            {
+                symbolTable.insert(ESSL1_BUILTINS, "GL_EXT_blend_func_extended",
+                    new TVariable(NewPoolTString("gl_SecondaryFragColorEXT"),
+                    TType(EbtFloat, EbpMedium, EvqSecondaryFragColor, 4)));
+                TType secondaryFragData(EbtFloat, EbpMedium, EvqSecondaryFragData, 4, 1, true);
+                secondaryFragData.setArraySize(resources.MaxDualSourceDrawBuffers);
+                symbolTable.insert(ESSL1_BUILTINS, "GL_EXT_blend_func_extended",
+                    new TVariable(NewPoolTString("gl_SecondaryFragDataEXT"), secondaryFragData));
+            }
 
             if (resources.EXT_frag_depth)
             {
@@ -567,6 +583,8 @@ void InitExtensionBehavior(const ShBuiltInResources& resources,
         extBehavior["GL_OES_EGL_image_external"] = EBhUndefined;
     if (resources.ARB_texture_rectangle)
         extBehavior["GL_ARB_texture_rectangle"] = EBhUndefined;
+    if (resources.EXT_blend_func_extended)
+        extBehavior["GL_EXT_blend_func_extended"] = EBhUndefined;
     if (resources.EXT_draw_buffers)
         extBehavior["GL_EXT_draw_buffers"] = EBhUndefined;
     if (resources.EXT_frag_depth)

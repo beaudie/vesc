@@ -187,23 +187,47 @@ TEST_F(CollectFragmentVariablesTest, FragColorOutputVarES2)
         "void main() {\n"
         "   gl_FragDepthEXT = 0.7;"
         "}\n";
+    const char *secondaryFragColorShader =
+        "#extension GL_EXT_blend_func_extended : require\n"
+        "precision mediump float;\n"
+        "void main() {\n"
+        "   gl_FragColor = vec4(1.0);\n"
+        "   gl_SecondaryFragColorEXT = vec4(1.0);\n"
+        "}\n";
+    const char *secondaryFragDataShader =
+        "#extension GL_EXT_blend_func_extended : require\n"
+        "#extension GL_EXT_draw_buffers : require\n"
+        "precision mediump float;\n"
+        "void main() {\n"
+        "   gl_FragData[0] = vec4(1.0);\n"
+        "   gl_FragData[1] = vec4(0.5);\n"
+        "   gl_SecondaryFragDataEXT[0] = vec4(1.0);\n"
+        "   gl_SecondaryFragDataEXT[1] = vec4(0.8);\n"
+        "}\n";
 
     const unsigned int kMaxDrawBuffers = 3u;
     ShBuiltInResources resources = mTranslator->getResources();
+    resources.EXT_blend_func_extended = 1;
     resources.EXT_draw_buffers = 1;
     resources.EXT_frag_depth = 1;
     resources.MaxDrawBuffers = kMaxDrawBuffers;
+    resources.MaxDualSourceDrawBuffers = resources.MaxDrawBuffers;
 
     struct {
         const char *shader;
+        unsigned int varIndex;
         const char *varName;
         unsigned int arraySize;
         GLenum precision;
     } testcases[] = {
-        { fragColorShader, "gl_FragColor", 0u, GL_MEDIUM_FLOAT},
-        { fragDataShader, "gl_FragData", kMaxDrawBuffers, GL_MEDIUM_FLOAT},
-        { fragDepthShader, "gl_FragDepthEXT", 0u, GL_MEDIUM_FLOAT},
-        { fragDepthHighShader, "gl_FragDepthEXT", 0u, GL_HIGH_FLOAT},
+        { fragColorShader, 0, "gl_FragColor", 0u, GL_MEDIUM_FLOAT},
+        { fragDataShader, 0, "gl_FragData", kMaxDrawBuffers, GL_MEDIUM_FLOAT},
+        { fragDepthShader, 0, "gl_FragDepthEXT", 0u, GL_MEDIUM_FLOAT},
+        { fragDepthHighShader, 0, "gl_FragDepthEXT", 0u, GL_HIGH_FLOAT},
+        { secondaryFragColorShader, 0, "gl_FragColor", 0u, GL_MEDIUM_FLOAT},
+        { secondaryFragColorShader, 1, "gl_SecondaryFragColorEXT", 0u, GL_MEDIUM_FLOAT},
+        { secondaryFragDataShader, 0, "gl_FragData", kMaxDrawBuffers, GL_MEDIUM_FLOAT},
+        { secondaryFragDataShader, 1, "gl_SecondaryFragDataEXT", kMaxDrawBuffers, GL_MEDIUM_FLOAT}
     };
 
     for (auto testcase : testcases) {
@@ -213,9 +237,9 @@ TEST_F(CollectFragmentVariablesTest, FragColorOutputVarES2)
         ASSERT_TRUE(mTranslator->compile(shaderStrings, 1, SH_VARIABLES)) << mTranslator->getInfoSink().info.str();
 
         const std::vector<sh::Attribute> &outputVariables = mTranslator->getOutputVariables();
-        ASSERT_EQ(1u, outputVariables.size());
+        ASSERT_LT(testcase.varIndex, outputVariables.size());
 
-        const sh::Attribute &outputVariable = outputVariables[0];
+        const sh::Attribute &outputVariable = outputVariables[testcase.varIndex];
         EXPECT_EQ(testcase.arraySize, outputVariable.arraySize);
         EXPECT_EQ(-1, outputVariable.location);
         EXPECT_GLENUM_EQ(testcase.precision, outputVariable.precision);
