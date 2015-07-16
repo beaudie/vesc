@@ -32,12 +32,14 @@ void ValidateOutputs::visitSymbol(TIntermSymbol *symbol)
     {
         const TType &type = symbol->getType();
         const int location = type.getLayoutQualifier().location;
+        const bool isUnspecifiedOutputLocation = location == -1;
+        const bool hasFragmentOutputs = mHasUnspecifiedOutputLocation || !mOutputMap.empty();
 
-        if (mHasUnspecifiedOutputLocation)
+        if (hasFragmentOutputs && (isUnspecifiedOutputLocation || mHasUnspecifiedOutputLocation))
         {
             error(symbol->getLine(), "must explicitly specify all locations when using multiple fragment outputs", name.c_str());
         }
-        else if (location == -1)
+        else if (isUnspecifiedOutputLocation)
         {
             mHasUnspecifiedOutputLocation = true;
         }
