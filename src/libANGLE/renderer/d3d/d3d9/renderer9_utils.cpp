@@ -208,7 +208,8 @@ D3DTEXTUREFILTERTYPE ConvertMagFilter(GLenum magFilter, float maxAnisotropy)
     return d3dMagFilter;
 }
 
-void ConvertMinFilter(GLenum minFilter, D3DTEXTUREFILTERTYPE *d3dMinFilter, D3DTEXTUREFILTERTYPE *d3dMipFilter, float maxAnisotropy)
+void ConvertMinFilter(GLenum minFilter, D3DTEXTUREFILTERTYPE *d3dMinFilter, D3DTEXTUREFILTERTYPE *d3dMipFilter,
+                      float *d3dLodBias, float maxAnisotropy, size_t baseLevel)
 {
     switch (minFilter)
     {
@@ -240,6 +241,16 @@ void ConvertMinFilter(GLenum minFilter, D3DTEXTUREFILTERTYPE *d3dMinFilter, D3DT
         *d3dMinFilter = D3DTEXF_POINT;
         *d3dMipFilter = D3DTEXF_NONE;
         UNREACHABLE();
+    }
+
+    if (baseLevel > 0 && *d3dMipFilter == D3DTEXF_NONE)
+    {
+        *d3dMipFilter = D3DTEXF_POINT;
+        *d3dLodBias = -static_cast<float>(gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS);
+    }
+    else
+    {
+        *d3dLodBias = 0.0f;
     }
 
     if (maxAnisotropy > 1.0f)

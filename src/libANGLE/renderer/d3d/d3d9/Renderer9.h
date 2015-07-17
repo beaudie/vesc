@@ -340,11 +340,14 @@ class Renderer9 : public RendererD3D
     GLuint mCurSampleMask;
 
     // Currently applied sampler states
-    std::vector<bool> mForceSetVertexSamplerStates;
-    std::vector<gl::SamplerState> mCurVertexSamplerStates;
-
-    std::vector<bool> mForceSetPixelSamplerStates;
-    std::vector<gl::SamplerState> mCurPixelSamplerStates;
+    struct CurSamplerState
+    {
+        bool forceSet;
+        size_t baseLevel;
+        gl::SamplerState samplerState;
+    };
+    std::vector<CurSamplerState> mCurVertexSamplerStates;
+    std::vector<CurSamplerState> mCurPixelSamplerStates;
 
     // Currently applied textures
     std::vector<uintptr_t> mCurVertexTextures;
