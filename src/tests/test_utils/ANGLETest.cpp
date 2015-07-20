@@ -29,6 +29,8 @@ void ANGLETest::SetUp()
     // which will allow follow-up test code to assume the framebuffer covers
     // the whole window.
     swapBuffers();
+
+    glViewport(0, 0, mEGLWindow->getWidth(), mEGLWindow->getHeight());
 }
 
 void ANGLETest::TearDown()
