@@ -21,10 +21,17 @@
 namespace
 {
 
+const char *g_CaseListFiles[] =
+{
+    "dEQP-GLES2-cases.txt.gz",
+    "dEQP-GLES3-cases.txt.gz",
+};
+
+template <size_t CaseListIndex>
 class dEQPCaseList
 {
   public:
-    dEQPCaseList(const std::string &caseListPath, const std::string &testExpectationsPath);
+    dEQPCaseList(const std::string &testExpectationsFile);
 
     struct CaseInfo
     {
@@ -53,7 +60,7 @@ class dEQPCaseList
         return mCaseInfoList.size();
     }
 
-    static dEQPCaseList *GetInstance();
+    static dEQPCaseList<CaseListIndex> *GetInstance();
     static void FreeInstance();
 
   private:
@@ -61,34 +68,43 @@ class dEQPCaseList
     gpu::GPUTestExpectationsParser mTestExpectationsParser;
     gpu::GPUTestBotConfig mTestConfig;
 
-    static dEQPCaseList *mInstance;
+    static dEQPCaseList<CaseListIndex> *mInstance;
 };
 
 // static
-dEQPCaseList *dEQPCaseList::mInstance = nullptr;
+template <size_t CaseListIndex>
+dEQPCaseList<CaseListIndex> *dEQPCaseList<CaseListIndex>::mInstance = nullptr;
 
 // static
-dEQPCaseList *dEQPCaseList::GetInstance()
+template <size_t CaseListIndex>
+dEQPCaseList<CaseListIndex> *dEQPCaseList<CaseListIndex>::GetInstance()
 {
     if (mInstance == nullptr)
     {
-        std::string exeDir = angle::GetExecutableDirectory();
-        std::string caseListPath = exeDir + "/deqp_support/dEQP-GLES2-cases.txt.gz";
-        std::string testExpectationsPath = exeDir + "/deqp_support/deqp_test_expectations.txt";
-        mInstance = new dEQPCaseList(caseListPath, testExpectationsPath);
+        mInstance = new dEQPCaseList<CaseListIndex>("deqp_test_expectations.txt");
     }
     return mInstance;
 }
 
 // Not currently called, assumed to be freed on program exit.
 // static
-void dEQPCaseList::FreeInstance()
+template <size_t CaseListIndex>
+void dEQPCaseList<CaseListIndex>::FreeInstance()
 {
     SafeDelete(mInstance);
 }
 
-dEQPCaseList::dEQPCaseList(const std::string &caseListPath, const std::string &testExpectationsPath)
+template <size_t CaseListIndex>
+dEQPCaseList<CaseListIndex>::dEQPCaseList(const std::string &testExpectationsFile)
 {
+    std::string exeDir = angle::GetExecutableDirectory();
+
+    std::stringstream caseListPathStr;
+    caseListPathStr << exeDir << "/deqp_support/" << g_CaseListFiles[CaseListIndex];
+
+    std::string caseListPath = caseListPathStr.str();
+    std::string testExpectationsPath = exeDir + "/deqp_support/" + testExpectationsFile;
+
     if (!mTestExpectationsParser.LoadTestExpectationsFromFile(testExpectationsPath))
     {
         std::cerr << "Failed to load test expectations." << std::endl;
@@ -147,17 +163,31 @@ dEQPCaseList::dEQPCaseList(const std::string &caseListPath, const std::string &t
     }
 }
 
-class dEQP_GLES2 : public testing::TestWithParam<size_t>
+template <size_t CaseListIndex>
+class dEQPTest : public testing::TestWithParam<size_t>
 {
-  protected:
-    dEQP_GLES2() {}
+  public:
+    static testing::internal::ParamGenerator<size_t> GetTestingRange()
+    {
+        return testing::Range<size_t>(0, dEQPCaseList<CaseListIndex>::GetInstance()->numCases());
+    }
 
+  protected:
     void runTest()
     {
-        const auto &caseInfo = dEQPCaseList::GetInstance()->getCaseInfo(GetParam());
+        const auto &caseInfo = dEQPCaseList<CaseListIndex>::GetInstance()->getCaseInfo(GetParam());
         std::cout << caseInfo.mDEQPName << std::endl;
 
         bool result = deqp_libtester_run(caseInfo.mDEQPName.c_str());
+
+        if (!result)
+        {
+            FILE *fp = fopen("fails.txt", "at+");
+            fprintf(fp, caseInfo.mDEQPName.c_str());
+            fprintf(fp, "\n");
+            fclose(fp);
+        }
+
         if (caseInfo.mExpectation == gpu::GPUTestExpectationsParser::kGpuTestPass)
         {
             EXPECT_TRUE(result);
@@ -169,17 +199,26 @@ class dEQP_GLES2 : public testing::TestWithParam<size_t>
     }
 };
 
+class dEQP_GLES2 : public dEQPTest<0> {};
+class dEQP_GLES3 : public dEQPTest<1> {};
+
+#ifdef ANGLE_DEQP_GLES2_TESTS
 // TODO(jmadill): add different platform configs, or ability to choose platform
 TEST_P(dEQP_GLES2, Default)
 {
     runTest();
 }
 
-testing::internal::ParamGenerator<size_t> GetTestingRange()
+INSTANTIATE_TEST_CASE_P(, dEQP_GLES2, dEQP_GLES2::GetTestingRange());
+#endif
+
+#ifdef ANGLE_DEQP_GLES3_TESTS
+TEST_P(dEQP_GLES3, Default)
 {
-    return testing::Range<size_t>(0, dEQPCaseList::GetInstance()->numCases());
+    runTest();
 }
 
-INSTANTIATE_TEST_CASE_P(, dEQP_GLES2, GetTestingRange());
+INSTANTIATE_TEST_CASE_P(, dEQP_GLES3, dEQP_GLES3::GetTestingRange());
+#endif
 
 } // anonymous namespace
