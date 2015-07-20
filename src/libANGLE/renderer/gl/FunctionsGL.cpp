@@ -773,12 +773,12 @@ void FunctionsGL::initialize()
 {
     // Grab the version number
     AssignGLEntryPoint(loadProcAddress("glGetString"), &getString);
+    AssignGLEntryPoint(loadProcAddress("glGetIntegerv"), &getIntegerv);
     GetGLVersion(getString, &version, &standard);
 
     // Grab the GL extensions
     if (isAtLeastGL(gl::Version(3, 0)))
     {
-        AssignGLEntryPoint(loadProcAddress("glGetIntegerv"), &getIntegerv);
         AssignGLEntryPoint(loadProcAddress("glGetStringi"), &getStringi);
         extensions = GetIndexedExtensions(getIntegerv, getStringi);
     }
@@ -786,6 +786,16 @@ void FunctionsGL::initialize()
     {
         const char *exts = reinterpret_cast<const char*>(getString(GL_EXTENSIONS));
         angle::SplitStringAlongWhitespace(std::string(exts), &extensions);
+    }
+
+    // Check the context profile
+    if (isAtLeastGL(gl::Version(3, 2)))
+    {
+        getIntegerv(GL_CONTEXT_PROFILE_MASK, &profile);
+    }
+    else
+    {
+        profile = 0;
     }
 
     // 1.0
@@ -811,8 +821,6 @@ void FunctionsGL::initialize()
         AssignGLEntryPoint(loadProcAddress("glGetDoublev"), &getDoublev);
         AssignGLEntryPoint(loadProcAddress("glGetError"), &getError);
         AssignGLEntryPoint(loadProcAddress("glGetFloatv"), &getFloatv);
-        AssignGLEntryPoint(loadProcAddress("glGetIntegerv"), &getIntegerv);
-        AssignGLEntryPoint(loadProcAddress("glGetString"), &getString);
         AssignGLEntryPoint(loadProcAddress("glGetTexImage"), &getTexImage);
         AssignGLEntryPoint(loadProcAddress("glGetTexLevelParameterfv"), &getTexLevelParameterfv);
         AssignGLEntryPoint(loadProcAddress("glGetTexLevelParameteriv"), &getTexLevelParameteriv);
@@ -1609,6 +1617,11 @@ void FunctionsGL::initialize()
 bool FunctionsGL::isAtLeastGL(const gl::Version &glVersion) const
 {
     return standard == STANDARD_GL_DESKTOP && version >= glVersion;
+}
+
+bool FunctionsGL::isCoreProfile() const
+{
+    return standard == STANDARD_GL_DESKTOP && (profile & GL_CONTEXT_CORE_PROFILE_BIT) != 0;
 }
 
 bool FunctionsGL::isAtLeastGLES(const gl::Version &glesVersion) const
