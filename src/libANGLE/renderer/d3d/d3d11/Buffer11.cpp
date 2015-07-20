@@ -461,6 +461,7 @@ gl::Error Buffer11::mapRange(size_t offset, size_t length, GLbitfield access, GL
     {
         // Update the data revision immediately, since the data might be changed at any time
         mMappedStorage->setDataRevision(mMappedStorage->getDataRevision() + 1);
+        invalidateStaticData();
     }
 
     uint8_t *mappedBuffer = mMappedStorage->map(offset, length, access);
