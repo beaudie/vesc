@@ -199,6 +199,12 @@ gl::Error FramebufferD3D::clearBufferfi(const gl::State &state, GLenum buffer, G
     clearParams.clearStencil = true;
     clearParams.stencilClearValue = stencil;
 
+    // If a buffer is not present, the clear has no effect
+    if (mData.getDepthAttachment() == nullptr && mData.getStencilAttachment() == nullptr)
+    {
+        return gl::Error(GL_NO_ERROR);
+    }
+
     return clear(state, clearParams);
 }
 
