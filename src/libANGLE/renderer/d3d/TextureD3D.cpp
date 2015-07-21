@@ -13,11 +13,13 @@
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/Framebuffer.h"
+#include "libANGLE/Image.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/BufferImpl.h"
 #include "libANGLE/renderer/d3d/BufferD3D.h"
+#include "libANGLE/renderer/d3d/EGLImageD3D.h"
 #include "libANGLE/renderer/d3d/ImageD3D.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/RenderTargetD3D.h"
@@ -622,6 +624,7 @@ gl::Error TextureD3D::getAttachmentRenderTarget(const gl::FramebufferAttachment:
 TextureD3D_2D::TextureD3D_2D(RendererD3D *renderer)
     : TextureD3D(renderer)
 {
+    mEGLImageTarget = false;
     for (int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; ++i)
     {
         mImageArray[i] = renderer->createImage();
@@ -700,7 +703,7 @@ gl::Error TextureD3D_2D::setImage(GLenum target, size_t level, GLenum internalFo
 
     bool fastUnpacked = false;
 
-    redefineImage(level, sizedInternalFormat, size);
+    redefineImage(level, sizedInternalFormat, size, false);
 
     gl::ImageIndex index = gl::ImageIndex::Make2D(level);
 
@@ -779,7 +782,7 @@ gl::Error TextureD3D_2D::setCompressedImage(GLenum target, size_t level, GLenum 
     ASSERT(target == GL_TEXTURE_2D && size.depth == 1);
 
     // compressed formats don't have separate sized internal formats-- we can just use the compressed format directly
-    redefineImage(level, internalFormat, size);
+    redefineImage(level, internalFormat, size, false);
 
     return TextureD3D::setCompressedImage(gl::ImageIndex::Make2D(level), unpack, pixels, 0);
 }
@@ -805,7 +808,8 @@ gl::Error TextureD3D_2D::copyImage(GLenum target, size_t level, const gl::Rectan
     ASSERT(target == GL_TEXTURE_2D);
 
     GLenum sizedInternalFormat = gl::GetSizedInternalFormat(internalFormat, GL_UNSIGNED_BYTE);
-    redefineImage(level, sizedInternalFormat, gl::Extents(sourceArea.width, sourceArea.height, 1));
+    redefineImage(level, sizedInternalFormat, gl::Extents(sourceArea.width, sourceArea.height, 1),
+                  false);
 
     gl::ImageIndex index = gl::ImageIndex::Make2D(level);
     gl::Offset destOffset(0, 0, 0);
@@ -905,12 +909,12 @@ gl::Error TextureD3D_2D::setStorage(GLenum target, size_t levels, GLenum interna
         gl::Extents levelSize(std::max(1, size.width >> level),
                               std::max(1, size.height >> level),
                               1);
-        mImageArray[level]->redefine(GL_TEXTURE_2D, internalFormat, levelSize, true);
+        redefineImage(level, internalFormat, levelSize, true);
     }
 
     for (int level = levels; level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; level++)
     {
-        mImageArray[level]->redefine(GL_TEXTURE_2D, GL_NONE, gl::Extents(0, 0, 0), true);
+        redefineImage(level, GL_NONE, gl::Extents(0, 0, 1), true);
     }
 
     // TODO(geofflang): Verify storage creation had no errors
@@ -941,7 +945,7 @@ void TextureD3D_2D::bindTexImage(egl::Surface *surface)
     GLenum internalformat = surface->getConfig()->renderTargetFormat;
 
     gl::Extents size(surface->getWidth(), surface->getHeight(), 1);
-    mImageArray[0]->redefine(GL_TEXTURE_2D, internalformat, size, true);
+    redefineImage(0, internalformat, size, true);
 
     if (mTexStorage)
     {
@@ -952,6 +956,7 @@ void TextureD3D_2D::bindTexImage(egl::Surface *surface)
     ASSERT(surfaceD3D);
 
     mTexStorage = mRenderer->createTextureStorage2D(surfaceD3D->getSwapChain());
+    mEGLImageTarget = false;
 
     mDirtyImages = true;
 }
@@ -965,13 +970,34 @@ void TextureD3D_2D::releaseTexImage()
 
     for (int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; i++)
     {
-        mImageArray[i]->redefine(GL_TEXTURE_2D, GL_NONE, gl::Extents(0, 0, 0), true);
+        redefineImage(i, GL_NONE, gl::Extents(0, 0, 1), true);
     }
 }
 
 gl::Error TextureD3D_2D::setEGLImageTarget(GLenum target, egl::Image *image)
 {
-    UNIMPLEMENTED();
+    EGLImageD3D *eglImaged3d = GetImplAs<EGLImageD3D>(image);
+
+    // Set the properties of the base mip level from the EGL image
+    GLenum internalformat = image->getInternalFormat();
+    gl::Extents size(image->getWidth(), image->getHeight(), 1);
+    redefineImage(0, internalformat, size, true);
+
+    // Clear all other images.
+    for (size_t level = 1; level < ArraySize(mImageArray); level++)
+    {
+        redefineImage(level, GL_NONE, gl::Extents(0, 0, 1), true);
+    }
+
+    if (mTexStorage)
+    {
+        SafeDelete(mTexStorage);
+    }
+    mImageArray[0]->markClean();
+
+    mTexStorage     = mRenderer->createTextureStorageEGLImage(eglImaged3d);
+    mEGLImageTarget = true;
+
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -985,7 +1011,7 @@ void TextureD3D_2D::initMipmapsImages()
                               std::max(getBaseLevelHeight() >> level, 1),
                               1);
 
-        redefineImage(level, getBaseLevelInternalFormat(), levelSize);
+        redefineImage(level, getBaseLevelInternalFormat(), levelSize, false);
     }
 }
 
@@ -1195,7 +1221,10 @@ gl::Error TextureD3D_2D::updateStorageLevel(int level)
     return gl::Error(GL_NO_ERROR);
 }
 
-void TextureD3D_2D::redefineImage(GLint level, GLenum internalformat, const gl::Extents &size)
+void TextureD3D_2D::redefineImage(GLint level,
+                                  GLenum internalformat,
+                                  const gl::Extents &size,
+                                  bool forceRelease)
 {
     ASSERT(size.depth == 1);
 
@@ -1204,11 +1233,27 @@ void TextureD3D_2D::redefineImage(GLint level, GLenum internalformat, const gl::
     const int storageHeight = std::max(1, getBaseLevelHeight() >> level);
     const GLenum storageFormat = getBaseLevelInternalFormat();
 
-    mImageArray[level]->redefine(GL_TEXTURE_2D, internalformat, size, false);
+    mImageArray[level]->redefine(GL_TEXTURE_2D, internalformat, size, forceRelease);
 
     if (mTexStorage)
     {
         const int storageLevels = mTexStorage->getLevelCount();
+
+        // If the storage was from an EGL image, copy it back into local images to preserve it
+        // while orphaning
+        if (level != 0 && mEGLImageTarget)
+        {
+            gl::Offset offset(0, 0, 0);
+            gl::Rectangle sourceArea(0, 0, mImageArray[0]->getWidth(), mImageArray[0]->getHeight());
+
+            RenderTargetD3D *storageRendertarget = nullptr;
+            gl::Error error =
+                mTexStorage->getRenderTarget(gl::ImageIndex::Make2D(0), &storageRendertarget);
+            if (!error.isError())
+            {
+                mImageArray[0]->copy(offset, sourceArea, storageRendertarget);
+            }
+        }
 
         if ((level >= storageLevels && storageLevels != 0) ||
             size.width != storageWidth ||
@@ -1224,6 +1269,9 @@ void TextureD3D_2D::redefineImage(GLint level, GLenum internalformat, const gl::
             mDirtyImages = true;
         }
     }
+
+    // Can't be an EGL image target after being redefined
+    mEGLImageTarget = false;
 }
 
 gl::ImageIndexIterator TextureD3D_2D::imageIterator() const

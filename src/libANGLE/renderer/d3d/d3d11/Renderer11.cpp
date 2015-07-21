@@ -790,6 +790,37 @@ egl::ConfigSet Renderer11::generateConfigs() const
     return configs;
 }
 
+egl::DisplayExtensions Renderer11::generateDisplayExtensions() const
+{
+    egl::DisplayExtensions extensions;
+
+    extensions.createContextRobustness = true;
+
+    if (getShareHandleSupport())
+    {
+        extensions.d3dShareHandleClientBuffer     = true;
+        extensions.surfaceD3DTexture2DShareHandle = true;
+    }
+
+    extensions.querySurfacePointer = true;
+    extensions.windowFixedSize     = true;
+
+    // D3D11 does not support present with dirty rectangles until DXGI 1.2.
+    extensions.postSubBuffer = mRenderer11DeviceCaps.supportsDXGI1_2;
+
+    extensions.createContext = true;
+
+    extensions.deviceQuery = true;
+
+    extensions.image                 = true;
+    extensions.imageBase             = true;
+    extensions.glTexture2DImage      = true;
+    extensions.glTextureCubemapImage = true;
+    extensions.glRenderbufferImage   = true;
+
+    return extensions;
+}
+
 gl::Error Renderer11::flush()
 {
     mDeviceContext->Flush();
@@ -2552,12 +2583,6 @@ bool Renderer11::getShareHandleSupport() const
     return true;
 }
 
-bool Renderer11::getPostSubBufferSupport() const
-{
-    // D3D11 does not support present with dirty rectangles until DXGI 1.2.
-    return mRenderer11DeviceCaps.supportsDXGI1_2;
-}
-
 int Renderer11::getMajorShaderModel() const
 {
     switch (mRenderer11DeviceCaps.featureLevel)
@@ -2965,6 +2990,28 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error Renderer11::createRenderTargetCopy(RenderTargetD3D *source, RenderTargetD3D **outRT)
+{
+    ASSERT(source != nullptr);
+
+    RenderTargetD3D *newRT = nullptr;
+    gl::Error error = createRenderTarget(source->getWidth(), source->getHeight(),
+                                         source->getInternalFormat(), source->getSamples(), &newRT);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    RenderTarget11 *source11 = GetAs<RenderTarget11>(source);
+    RenderTarget11 *dest11   = GetAs<RenderTarget11>(newRT);
+
+    mDeviceContext->CopySubresourceRegion(dest11->getTexture(), dest11->getSubresourceIndex(), 0, 0,
+                                          0, source11->getTexture(),
+                                          source11->getSubresourceIndex(), nullptr);
+    *outRT = newRT;
+    return gl::Error(GL_NO_ERROR);
+}
+
 FramebufferImpl *Renderer11::createDefaultFramebuffer(const gl::Framebuffer::Data &data)
 {
     return createFramebuffer(data);
@@ -3281,6 +3328,11 @@ TextureStorage *Renderer11::createTextureStorage2D(SwapChainD3D *swapChain)
 {
     SwapChain11 *swapChain11 = GetAs<SwapChain11>(swapChain);
     return new TextureStorage11_2D(this, swapChain11);
+}
+
+TextureStorage *Renderer11::createTextureStorageEGLImage(EGLImageD3D *eglImage)
+{
+    return new TextureStorage11_EGLImage(this, eglImage);
 }
 
 TextureStorage *Renderer11::createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly)
