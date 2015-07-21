@@ -388,7 +388,8 @@ static void PrintActiveVariables(ShHandle compiler)
     const std::vector<sh::Uniform> *uniforms = ShGetUniforms(compiler);
     const std::vector<sh::Varying> *varyings = ShGetVaryings(compiler);
     const std::vector<sh::Attribute> *attributes = ShGetAttributes(compiler);
-    for (size_t varCategory = 0; varCategory < 3; ++varCategory)
+    const std::vector<sh::Attribute> *outputs = ShGetOutputVariables(compiler);
+    for (size_t varCategory = 0; varCategory < 4; ++varCategory)
     {
         size_t numVars = 0;
         std::string varCategoryName;
@@ -402,11 +403,17 @@ static void PrintActiveVariables(ShHandle compiler)
             numVars = varyings->size();
             varCategoryName = "varying";
         }
-        else
+        else if (varCategory == 2)
         {
             numVars = attributes->size();
             varCategoryName = "attribute";
         }
+        else
+        {
+            numVars = outputs->size();
+            varCategoryName = "output";
+        }
+
         for (size_t i = 0; i < numVars; ++i)
         {
             const sh::ShaderVariable *var;
@@ -414,8 +421,11 @@ static void PrintActiveVariables(ShHandle compiler)
                 var = &((*uniforms)[i]);
             else if (varCategory == 1)
                 var = &((*varyings)[i]);
-            else
+            else if (varCategory == 2)
                 var = &((*attributes)[i]);
+            else
+                var = &((*outputs)[i]);
+
             PrintVariable(varCategoryName, i, *var);
         }
         printf("\n");
