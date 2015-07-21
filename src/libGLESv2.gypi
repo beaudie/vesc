@@ -747,7 +747,6 @@
         },
         {
             'target_name': 'libGLESv2',
-            'type': 'shared_library',
             'dependencies': [ 'libANGLE', 'angle_common' ],
             'includes': [ '../build/common_defines.gypi', ],
             'sources':
@@ -760,6 +759,13 @@
             ],
             'conditions':
             [
+                ['angle_make_static_libraries',
+                {
+                    'type': 'static_library',
+                },
+                {
+                    'type': 'shared_library',
+                }],
                 ['angle_build_winrt==1',
                 {
                     'msvs_enable_winrt' : '1',

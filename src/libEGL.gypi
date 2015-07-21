@@ -9,7 +9,6 @@
     [
         {
             'target_name': 'libEGL',
-            'type': 'shared_library',
             'dependencies':
             [
                 'libANGLE',
@@ -30,6 +29,13 @@
             ],
             'conditions':
             [
+                ['angle_make_static_libraries',
+                {
+                    'type': 'static_library',
+                },
+                {
+                    'type': 'shared_library',
+                }],
                 ['angle_build_winrt==1',
                 {
                     'msvs_enable_winrt' : '1',

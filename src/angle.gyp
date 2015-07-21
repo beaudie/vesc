@@ -18,6 +18,7 @@
         'angle_enable_gl%': 0,
         'angle_enable_hlsl%': 0,
         'angle_link_glx%': 0,
+        'angle_make_static_libraries%': 0,
         'conditions':
         [
             ['OS=="win"',
