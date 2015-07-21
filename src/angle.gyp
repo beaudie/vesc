@@ -30,6 +30,10 @@
             {
                 'angle_enable_gl%': 1,
             }],
+            ['OS=="mac"',
+            {
+                'angle_enable_gl%': 1,
+            }],
         ],
     },
     'includes':
