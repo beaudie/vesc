@@ -34,6 +34,7 @@ namespace egl
 {
 class Surface;
 class Device;
+class Image;
 
 class Display final : angle::NonCopyable
 {
@@ -59,12 +60,16 @@ class Display final : angle::NonCopyable
     Error createPixmapSurface(const Config *configuration, NativePixmapType nativePixmap, const AttributeMap &attribs,
                               Surface **outSurface);
 
+    Error createImage(gl::Context *context, EGLenum target, EGLClientBuffer buffer, const AttributeMap &attribs,
+                      Image **outImage);
+
     Error createContext(const Config *configuration, gl::Context *shareContext, const AttributeMap &attribs,
                         gl::Context **outContext);
 
     Error makeCurrent(egl::Surface *drawSurface, egl::Surface *readSurface, gl::Context *context);
 
     void destroySurface(egl::Surface *surface);
+    void destroyImage(egl::Image *image);
     void destroyContext(gl::Context *context);
 
     bool isInitialized() const;
