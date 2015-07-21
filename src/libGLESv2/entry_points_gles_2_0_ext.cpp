@@ -1196,7 +1196,13 @@ ANGLE_EXPORT void GL_APIENTRY EGLImageTargetTexture2DOES(GLenum target, GLeglIma
             return;
         }
 
-        UNIMPLEMENTED();
+        Texture *texture = context->getTargetTexture(target);
+        Error error = texture->setEGLImageTarget(target, imageObject);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
@@ -1214,7 +1220,13 @@ ANGLE_EXPORT void GL_APIENTRY EGLImageTargetRenderbufferStorageOES(GLenum target
             return;
         }
 
-        UNIMPLEMENTED();
+        Renderbuffer *renderbuffer = context->getState().getCurrentRenderbuffer();
+        Error error = renderbuffer->setStorageEGLImage(imageObject);
+        if (error.isError())
+        {
+            context->recordError(error);
+            return;
+        }
     }
 }
 
