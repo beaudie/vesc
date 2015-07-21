@@ -22,11 +22,14 @@
 #include "common/debug.h"
 #include "common/mathutil.h"
 #include "common/platform.h"
+#include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Device.h"
 #include "libANGLE/histogram_macros.h"
+#include "libANGLE/Image.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/DisplayImpl.h"
+#include "libANGLE/renderer/ImageImpl.h"
 #include "third_party/trace_event/trace_event.h"
 
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
@@ -308,6 +311,11 @@ void Display::terminate()
         destroyContext(*mContextSet.begin());
     }
 
+    while (!mImageSet.empty())
+    {
+        destroyImage(*mImageSet.begin());
+    }
+
     mConfigSet.clear();
 
     mImplementation->terminate();
@@ -513,7 +521,39 @@ Error Display::createImage(gl::Context *context,
         }
     }
 
-    UNIMPLEMENTED();
+    egl::ImageSibling *sibling = nullptr;
+    if (IsTextureTarget(target))
+    {
+        sibling = context->getTexture(reinterpret_cast<uintptr_t>(buffer));
+    }
+    else if (IsRenderbufferTarget(target))
+    {
+        sibling = context->getRenderbuffer(reinterpret_cast<uintptr_t>(buffer));
+    }
+    else
+    {
+        UNREACHABLE();
+    }
+    ASSERT(sibling != nullptr);
+
+    rx::ImageImpl *imageImpl = mImplementation->createImage(target, sibling, attribs);
+    ASSERT(imageImpl != nullptr);
+
+    Error error = imageImpl->initialize();
+    if (error.isError())
+    {
+        return error;
+    }
+
+    Image *image = new Image(imageImpl, target, sibling, attribs);
+
+    ASSERT(outImage != nullptr);
+    *outImage = image;
+
+    // Add this image to the list of all images and hold a ref to it.
+    image->addRef();
+    mImageSet.insert(image);
+
     return Error(EGL_SUCCESS);
 }
 
@@ -604,7 +644,10 @@ void Display::destroySurface(Surface *surface)
 
 void Display::destroyImage(egl::Image *image)
 {
-    UNIMPLEMENTED();
+    auto iter = mImageSet.find(image);
+    ASSERT(iter != mImageSet.end());
+    (*iter)->release();
+    mImageSet.erase(iter);
 }
 
 void Display::destroyContext(gl::Context *context)
@@ -656,6 +699,11 @@ bool Display::isValidContext(gl::Context *context) const
 bool Display::isValidSurface(Surface *surface) const
 {
     return mImplementation->getSurfaceSet().find(surface) != mImplementation->getSurfaceSet().end();
+}
+
+bool Display::isValidImage(const Image *image) const
+{
+    return mImageSet.find(const_cast<Image *>(image)) != mImageSet.end();
 }
 
 bool Display::hasExistingWindowSurface(EGLNativeWindowType window)
