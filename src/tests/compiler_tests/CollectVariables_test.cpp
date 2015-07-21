@@ -162,6 +162,69 @@ TEST_F(CollectFragmentVariablesTest, LocationOutputVar)
     EXPECT_EQ("out_fragColor", outputVariable.name);
 }
 
+TEST_F(CollectFragmentVariablesTest, FragColorOutputVarES2)
+{
+    const char *fragColorShader =
+        "precision mediump float;\n"
+        "void main() {\n"
+        "   gl_FragColor = vec4(1.0);\n"
+        "}\n";
+    const char *fragDataShader =
+        "#extension GL_EXT_draw_buffers : require\n"
+        "precision mediump float;\n"
+        "void main() {\n"
+        "   gl_FragData[0] = vec4(1.0);\n"
+        "   gl_FragData[1] = vec4(0.5);\n"
+        "}\n";
+    const char *fragDepthShader =
+        "#extension GL_EXT_frag_depth : require\n"
+        "precision mediump float;\n"
+        "void main() {\n"
+        "   gl_FragDepthEXT = 0.7;"
+        "}\n";
+    const char *fragDepthHighShader =
+        "#extension GL_EXT_frag_depth : require\n"
+        "void main() {\n"
+        "   gl_FragDepthEXT = 0.7;"
+        "}\n";
+
+    const unsigned int kMaxDrawBuffers = 3u;
+    ShBuiltInResources resources = mTranslator->getResources();
+    resources.EXT_draw_buffers = 1;
+    resources.EXT_frag_depth = 1;
+    resources.MaxDrawBuffers = kMaxDrawBuffers;
+
+    struct {
+        const char *shader;
+        const char *varName;
+        unsigned int arraySize;
+        GLenum precision;
+    } testcases[] = {
+        { fragColorShader, "gl_FragColor", 0u, GL_MEDIUM_FLOAT},
+        { fragDataShader, "gl_FragData", kMaxDrawBuffers, GL_MEDIUM_FLOAT},
+        { fragDepthShader, "gl_FragDepthEXT", 0u, GL_MEDIUM_FLOAT},
+        { fragDepthHighShader, "gl_FragDepthEXT", 0u, GL_HIGH_FLOAT},
+    };
+
+    for (auto testcase : testcases) {
+        resources.FragmentPrecisionHigh = testcase.precision == GL_HIGH_FLOAT ? 1 : 0;
+        initTranslator(resources);
+        const char *shaderStrings[] = { testcase.shader };
+        ASSERT_TRUE(mTranslator->compile(shaderStrings, 1, SH_VARIABLES)) << mTranslator->getInfoSink().info.str();
+
+        const std::vector<sh::Attribute> &outputVariables = mTranslator->getOutputVariables();
+        ASSERT_EQ(1u, outputVariables.size());
+
+        const sh::Attribute &outputVariable = outputVariables[0];
+        EXPECT_EQ(testcase.arraySize, outputVariable.arraySize);
+        EXPECT_EQ(-1, outputVariable.location);
+        EXPECT_GLENUM_EQ(testcase.precision, outputVariable.precision);
+        EXPECT_TRUE(outputVariable.staticUse);
+        EXPECT_GLENUM_EQ(GL_FLOAT_VEC4, outputVariable.type);
+        EXPECT_EQ(testcase.varName, outputVariable.name);
+    }
+}
+
 TEST_F(CollectVertexVariablesTest, LocationAttribute)
 {
     const std::string &shaderString =
