@@ -79,8 +79,10 @@ class Display final : angle::NonCopyable
     bool isValidConfig(const Config *config) const;
     bool isValidContext(gl::Context *context) const;
     bool isValidSurface(egl::Surface *surface) const;
+    bool isValidImage(const Image *image) const;
     bool isValidNativeWindow(EGLNativeWindowType window) const;
 
+    static bool isValidDisplay(const egl::Display *display);
     static bool isValidNativeDisplay(EGLNativeDisplayType display);
     static bool hasExistingWindowSurface(EGLNativeWindowType window);
 
@@ -119,6 +121,9 @@ class Display final : angle::NonCopyable
 
     typedef std::set<gl::Context*> ContextSet;
     ContextSet mContextSet;
+
+    typedef std::set<Image *> ImageSet;
+    ImageSet mImageSet;
 
     bool mInitialized;
 
