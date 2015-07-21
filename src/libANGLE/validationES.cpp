@@ -25,6 +25,69 @@
 
 namespace gl
 {
+namespace
+{
+bool ValidateDrawAttribs(gl::Context *context, GLint primcount, GLint maxVertex)
+{
+    const gl::State &state     = context->getState();
+    const gl::Program *program = state.getProgram();
+
+    const VertexArray *vao     = state.getVertexArray();
+    const auto &vertexAttribs  = vao->getVertexAttributes();
+    const int *semanticIndexes = program->getSemanticIndexes();
+    size_t maxEnabledAttrib = vao->getMaxEnabledAttribute();
+    for (size_t attributeIndex = 0; attributeIndex < maxEnabledAttrib; ++attributeIndex)
+    {
+        const VertexAttribute &attrib = vertexAttribs[attributeIndex];
+        bool attribActive = (semanticIndexes[attributeIndex] != -1);
+        if (attribActive && attrib.enabled)
+        {
+            gl::Buffer *buffer = attrib.buffer.get();
+
+            if (buffer)
+            {
+                GLint64 attribStride     = static_cast<GLint64>(ComputeVertexAttributeStride(attrib));
+                GLint64 maxVertexElement = 0;
+
+                if (attrib.divisor > 0)
+                {
+                    maxVertexElement =
+                        static_cast<GLint64>(primcount) / static_cast<GLint64>(attrib.divisor);
+                }
+                else
+                {
+                    maxVertexElement = static_cast<GLint64>(maxVertex);
+                }
+
+                // Note: Last vertex element does not take the full stride!
+                ASSERT(maxVertexElement > 0);
+                GLint64 attribSize     = static_cast<GLint64>(ComputeVertexAttributeTypeSize(attrib));
+                GLint64 attribDataSize = (maxVertexElement - 1) * attribStride + attribSize;
+
+                // [OpenGL ES 3.0.2] section 2.9.4 page 40:
+                // We can return INVALID_OPERATION if our vertex attribute does not have
+                // enough backing data.
+                if (attribDataSize > buffer->getSize())
+                {
+                    context->recordError(Error(GL_INVALID_OPERATION));
+                    return false;
+                }
+            }
+            else if (attrib.pointer == NULL)
+            {
+                // This is an application error that would normally result in a crash,
+                // but we catch it and return an error
+                context->recordError(Error(
+                    GL_INVALID_OPERATION, "An enabled vertex array has no buffer and no pointer."));
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+}  // anonymous namespace
 
 bool ValidCap(const Context *context, GLenum cap)
 {
@@ -1403,50 +1466,11 @@ static bool ValidateDrawBase(Context *context, GLenum mode, GLsizei count, GLsiz
     }
 
     // Buffer validations
-    const VertexArray *vao = state.getVertexArray();
-    const auto &vertexAttribs = vao->getVertexAttributes();
-    const int *semanticIndexes = program->getSemanticIndexes();
-    size_t maxEnabledAttrib = vao->getMaxEnabledAttribute();
-    for (size_t attributeIndex = 0; attributeIndex < maxEnabledAttrib; ++attributeIndex)
+    if (primcount > 0 || maxVertex > 0)
     {
-        const VertexAttribute &attrib = vertexAttribs[attributeIndex];
-        bool attribActive = (semanticIndexes[attributeIndex] != -1);
-        if (attribActive && attrib.enabled)
+        if (!ValidateDrawAttribs(context, primcount, maxVertex))
         {
-            gl::Buffer *buffer = attrib.buffer.get();
-
-            if (buffer)
-            {
-                GLint64 attribStride = static_cast<GLint64>(ComputeVertexAttributeStride(attrib));
-                GLint64 maxVertexElement = 0;
-
-                if (attrib.divisor > 0)
-                {
-                    maxVertexElement = static_cast<GLint64>(primcount) / static_cast<GLint64>(attrib.divisor);
-                }
-                else
-                {
-                    maxVertexElement = static_cast<GLint64>(maxVertex);
-                }
-
-                GLint64 attribDataSize = maxVertexElement * attribStride;
-
-                // [OpenGL ES 3.0.2] section 2.9.4 page 40:
-                // We can return INVALID_OPERATION if our vertex attribute does not have
-                // enough backing data.
-                if (attribDataSize > buffer->getSize())
-                {
-                    context->recordError(Error(GL_INVALID_OPERATION));
-                    return false;
-                }
-            }
-            else if (attrib.pointer == NULL)
-            {
-                // This is an application error that would normally result in a crash,
-                // but we catch it and return an error
-                context->recordError(Error(GL_INVALID_OPERATION, "An enabled vertex array has no buffer and no pointer."));
-                return false;
-            }
+            return false;
         }
     }
 
