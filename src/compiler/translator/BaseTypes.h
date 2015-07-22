@@ -324,7 +324,8 @@ enum TQualifier
     // built-ins written by fragment shader
     EvqFragColor,
     EvqFragData,
-    EvqFragDepth,
+    EvqFragDepthEXT,  // gl_FragDepthEXT for ESSL100, EXT_frag_depth.
+    EvqFragDepth,     // gl_FragDepth for ESSL300.
 
     // built-ins written by the shader_framebuffer_fetch extension(s)
     EvqLastFragColor,
@@ -412,6 +413,7 @@ inline const char* getQualifierString(TQualifier q)
     case EvqPointCoord:     return "PointCoord";     break;
     case EvqFragColor:      return "FragColor";      break;
     case EvqFragData:       return "FragData";       break;
+    case EvqFragDepthEXT:   return "FragDepth";      break;
     case EvqFragDepth:      return "FragDepth";      break;
     case EvqLastFragColor:  return "LastFragColor";  break;
     case EvqLastFragData:   return "LastFragData";   break;
