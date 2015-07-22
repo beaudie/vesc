@@ -290,18 +290,18 @@ inline bool SupportsPrecision(TBasicType type)
 //
 enum TQualifier
 {
-    EvqTemporary,     // For temporaries (within a function), read/write
-    EvqGlobal,        // For globals read/write
-    EvqConst,         // User defined constants and non-output parameters in functions
-    EvqAttribute,     // Readonly
-    EvqVaryingIn,     // readonly, fragment shaders only
-    EvqVaryingOut,    // vertex shaders only  read/write
-    EvqUniform,       // Readonly, vertex and fragment
+    EvqTemporary,   // For temporaries (within a function), read/write
+    EvqGlobal,      // For globals read/write
+    EvqConst,       // User defined constants and non-output parameters in functions
+    EvqAttribute,   // Readonly
+    EvqVaryingIn,   // readonly, fragment shaders only
+    EvqVaryingOut,  // vertex shaders only  read/write
+    EvqUniform,     // Readonly, vertex and fragment
 
-    EvqVertexIn,      // Vertex shader input
-    EvqFragmentOut,   // Fragment shader output
-    EvqVertexOut,     // Vertex shader output
-    EvqFragmentIn,    // Fragment shader input
+    EvqVertexIn,     // Vertex shader input
+    EvqFragmentOut,  // Fragment shader output
+    EvqVertexOut,    // Vertex shader output
+    EvqFragmentIn,   // Fragment shader input
 
     // parameters
     EvqIn,
@@ -324,21 +324,22 @@ enum TQualifier
     // built-ins written by fragment shader
     EvqFragColor,
     EvqFragData,
-    EvqFragDepth,
+    EvqFragDepthEXT,  // gl_FragDepthEXT for ESSL100, EXT_frag_depth.
+    EvqFragDepth,     // gl_FragDepth for ESSL300.
 
     // built-ins written by the shader_framebuffer_fetch extension(s)
     EvqLastFragColor,
     EvqLastFragData,
 
     // GLSL ES 3.0 vertex output and fragment input
-    EvqSmooth,        // Incomplete qualifier, smooth is the default
-    EvqFlat,          // Incomplete qualifier
+    EvqSmooth,  // Incomplete qualifier, smooth is the default
+    EvqFlat,    // Incomplete qualifier
     EvqSmoothOut = EvqSmooth,
-    EvqFlatOut = EvqFlat,
-    EvqCentroidOut,   // Implies smooth
+    EvqFlatOut   = EvqFlat,
+    EvqCentroidOut,  // Implies smooth
     EvqSmoothIn,
     EvqFlatIn,
-    EvqCentroidIn,    // Implies smooth
+    EvqCentroidIn,  // Implies smooth
 
     // end of list
     EvqLast
@@ -412,6 +413,9 @@ inline const char* getQualifierString(TQualifier q)
     case EvqPointCoord:     return "PointCoord";     break;
     case EvqFragColor:      return "FragColor";      break;
     case EvqFragData:       return "FragData";       break;
+    case EvqFragDepthEXT:
+        return "FragDepth";
+        break;
     case EvqFragDepth:      return "FragDepth";      break;
     case EvqLastFragColor:  return "LastFragColor";  break;
     case EvqLastFragData:   return "LastFragData";   break;
