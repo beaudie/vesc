@@ -158,6 +158,9 @@ int main(int argc, char *argv[])
                       case 'i': resources.OES_EGL_image_external = 1; break;
                       case 'd': resources.OES_standard_derivatives = 1; break;
                       case 'r': resources.ARB_texture_rectangle = 1; break;
+                      case 'g':
+                          resources.EXT_frag_depth = 1;
+                          break;
                       case 'l': resources.EXT_shader_texture_lod = 1; break;
                       case 'f': resources.EXT_shader_framebuffer_fetch = 1; break;
                       case 'n': resources.NV_shader_framebuffer_fetch = 1; break;
@@ -251,7 +254,8 @@ int main(int argc, char *argv[])
 //
 void usage()
 {
-    printf("Usage: translate [-i -o -u -l -e -t -d -p -b=e -b=g -b=h9 -x=i -x=d] file1 file2 ...\n"
+    printf(
+        "Usage: translate [-i -o -u -l -e -t -d -p -b=e -b=g -b=h9 -x=i -x=d] file1 file2 ...\n"
         "Where: filename : filename ending in .frag or .vert\n"
         "       -i       : print intermediate tree\n"
         "       -o       : print translated code\n"
@@ -273,6 +277,7 @@ void usage()
         "       -x=i     : enable GL_OES_EGL_image_external\n"
         "       -x=d     : enable GL_OES_EGL_standard_derivatives\n"
         "       -x=r     : enable ARB_texture_rectangle\n"
+        "       -x=g     : enable EXT_frag_depth\n"
         "       -x=l     : enable EXT_shader_texture_lod\n"
         "       -x=f     : enable EXT_shader_framebuffer_fetch\n"
         "       -x=n     : enable NV_shader_framebuffer_fetch\n"
