@@ -14,6 +14,7 @@
         'MalformedShader_test.cpp',
         'NV_draw_buffers_test.cpp',
         'Pack_Unpack_test.cpp',
+        'ParseESSLFunctions_test.cpp',
         'PruneUnusedFunctions_test.cpp',
         'RecordConstantPrecision_test.cpp',
         'RemovePow_test.cpp',
