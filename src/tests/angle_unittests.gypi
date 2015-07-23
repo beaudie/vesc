@@ -38,6 +38,7 @@
             '<(angle_path)/src/tests/compiler_tests/CollectVariables_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/ConstantFolding_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/DebugShaderPrecision_test.cpp',
+            '<(angle_path)/src/tests/compiler_tests/ParseESSLFunctions_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/ExpressionLimit_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/MalformedShader_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/NV_draw_buffers_test.cpp',

@@ -436,7 +436,7 @@ class TSymbolTable : angle::NonCopyable
     TSymbol *find(const TString &name, int shaderVersion,
                   bool *builtIn = NULL, bool *sameScope = NULL) const;
     TSymbol *findBuiltIn(const TString &name, int shaderVersion) const;
-    
+
     TSymbolTableLevel *getOuterLevel()
     {
         assert(currentLevel() >= 1);
