@@ -491,6 +491,12 @@ class TSymbolTable : angle::NonCopyable
         return static_cast<ESymbolLevel>(table.size() - 1);
     }
 
+    // Used to insert unmangled functions to check redeclaration of built-ins later for ESSL 3.00.
+    bool insertUnmangled(ESymbolLevel level, const char *name)
+    {
+        return table[level]->insertUnmangled(new TFunction(NewPoolTString(name), new TType()));
+    }
+
     std::vector<TSymbolTableLevel *> table;
     typedef TMap<TBasicType, TPrecision> PrecisionStackLevel;
     std::vector< PrecisionStackLevel *> precisionStack;
