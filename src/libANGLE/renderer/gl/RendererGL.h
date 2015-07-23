@@ -77,8 +77,6 @@ class RendererGL : public Renderer
     std::string getVendorString() const override;
     std::string getRendererDescription() const override;
 
-    const WorkaroundsGL &getWorkarounds() const;
-
     const gl::Version &getMaxSupportedESVersion() const;
 
   private:
