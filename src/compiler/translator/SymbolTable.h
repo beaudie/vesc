@@ -436,6 +436,8 @@ class TSymbolTable : angle::NonCopyable
     TSymbol *find(const TString &name, int shaderVersion,
                   bool *builtIn = NULL, bool *sameScope = NULL) const;
     TSymbol *findBuiltIn(const TString &name, int shaderVersion) const;
+
+    bool findBuiltInFunctionName(const TString &unmangledName) const;
     
     TSymbolTableLevel *getOuterLevel()
     {
@@ -491,6 +493,11 @@ class TSymbolTable : angle::NonCopyable
         return static_cast<ESymbolLevel>(table.size() - 1);
     }
 
+    void recordBuiltInFunctionName(const TString &unmangledName)
+    {
+        mBuiltInFunctionNames.insert(unmangledName);
+    }
+
     std::vector<TSymbolTableLevel *> table;
     typedef TMap<TBasicType, TPrecision> PrecisionStackLevel;
     std::vector< PrecisionStackLevel *> precisionStack;
@@ -499,6 +506,8 @@ class TSymbolTable : angle::NonCopyable
     bool mGlobalInvariant;
 
     static int uniqueIdCounter;
+
+    std::set<TString> mBuiltInFunctionNames;
 };
 
 #endif // COMPILER_TRANSLATOR_SYMBOLTABLE_H_

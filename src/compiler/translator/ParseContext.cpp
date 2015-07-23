@@ -1912,6 +1912,14 @@ void TParseContext::parseFunctionPrototype(const TSourceLoc &location,
 TFunction *TParseContext::parseFunctionDeclarator(const TSourceLoc &location,
                                                   TFunction *function)
 {
+    // With ESSL 3.00, names of built-in functions cannot be redeclared as functions.
+    // Therefore overloading or redefining builtin functions is an error.
+    if (getShaderVersion() >= 300 && symbolTable.findBuiltInFunctionName(function->getName()))
+    {
+        error(location, "Name of a built-in function cannot be redeclared as function", function->getName().c_str());
+        recover();
+    }
+
     //
     // Multiple declarations of the same function are allowed.
     //
