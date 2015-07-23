@@ -279,7 +279,7 @@ void StateManagerGL::setPixelUnpackState(GLint alignment, GLint rowLength, GLint
 
     if (mUnpackSkipRows != skipRows)
     {
-        mUnpackSkipRows = rowLength;
+        mUnpackSkipRows = skipRows;
         mFunctions->pixelStorei(GL_UNPACK_SKIP_ROWS, mUnpackSkipRows);
     }
 
@@ -328,7 +328,7 @@ void StateManagerGL::setPixelPackState(GLint alignment, GLint rowLength, GLint s
 
     if (mPackSkipRows != skipRows)
     {
-        mPackSkipRows = rowLength;
+        mPackSkipRows = skipRows;
         mFunctions->pixelStorei(GL_PACK_SKIP_ROWS, mPackSkipRows);
     }
 
