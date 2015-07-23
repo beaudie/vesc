@@ -10,6 +10,7 @@
         'CollectVariables_test.cpp',
         'ConstantFolding_test.cpp',
         'DebugShaderPrecision_test.cpp',
+        'ParseESSLFunctions_test.cpp',
         'ExpressionLimit_test.cpp',
         'MalformedShader_test.cpp',
         'NV_draw_buffers_test.cpp',

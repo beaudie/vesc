@@ -267,6 +267,13 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level, TOperator op, const char *e
         }
 
         insert(level, function);
+
+        // Insert unmangled functions to check redeclaration of built-ins later for ESSL 3.00.
+        if (!table[level]->find(name))
+        {
+            TFunction *newFunction = new TFunction(NewPoolTString(name), rvalue);
+            table[level]->insertUnmangled(newFunction);
+        }
     }
 }
 
