@@ -40,11 +40,7 @@ gl::Error Buffer9::setData(const void* data, size_t size, GLenum usage)
 
     invalidateStaticData();
 
-    if (usage == GL_STATIC_DRAW)
-    {
-        initializeStaticData();
-    }
-
+    BufferD3D::setGLUsage(usage);
     return gl::Error(GL_NO_ERROR);
 }
 
