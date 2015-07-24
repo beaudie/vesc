@@ -44,6 +44,7 @@ class BufferD3D : public BufferImpl
 
   protected:
     void updateSerial();
+    void setGLUsage(GLenum usage);
 
     BufferFactoryD3D *mFactory;
     unsigned int mSerial;
@@ -52,6 +53,7 @@ class BufferD3D : public BufferImpl
     StaticVertexBufferInterface *mStaticVertexBuffer;
     StaticIndexBufferInterface *mStaticIndexBuffer;
     unsigned int mUnmodifiedDataUse;
+    bool mHasStaticUsage;
 };
 
 }
