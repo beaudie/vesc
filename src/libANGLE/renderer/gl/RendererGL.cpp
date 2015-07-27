@@ -87,6 +87,7 @@ RendererGL::RendererGL(const FunctionsGL *functions, const egl::AttributeMap &at
 {
     ASSERT(mFunctions);
     mStateManager = new StateManagerGL(mFunctions, getRendererCaps());
+    nativegl_gl::GenerateWorkarounds(mFunctions, &mWorkarounds);
 
 #ifndef NDEBUG
     if (mFunctions->debugMessageControl && mFunctions->debugMessageCallback)
@@ -306,6 +307,11 @@ std::string RendererGL::getRendererDescription() const
     }
 
     return rendererString.str();
+}
+
+const WorkaroundsGL &RendererGL::getWorkarounds() const
+{
+    return mWorkarounds;
 }
 
 const gl::Version &RendererGL::getMaxSupportedESVersion() const
