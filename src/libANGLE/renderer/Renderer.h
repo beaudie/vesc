@@ -13,6 +13,7 @@
 #include "libANGLE/Caps.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Framebuffer.h"
+#include "libANGLE/State.h"
 #include "libANGLE/Uniform.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/ImplFactory.h"
