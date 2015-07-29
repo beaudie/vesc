@@ -18,10 +18,22 @@
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 
+using namespace gl;
+
 namespace rx
 {
+namespace
+{
+bool AttributeNeedsStreaming(const VertexAttribute &attribute)
+{
+    return (attribute.enabled && attribute.buffer.get() == nullptr);
+}
 
-VertexArrayGL::VertexArrayGL(const gl::VertexArray::Data &data, const FunctionsGL *functions, StateManagerGL *stateManager)
+}  // anonymous namespace
+
+VertexArrayGL::VertexArrayGL(const VertexArray::Data &data,
+                             const FunctionsGL *functions,
+                             StateManagerGL *stateManager)
     : VertexArrayImpl(data),
       mFunctions(functions),
       mStateManager(stateManager),
@@ -77,13 +89,14 @@ gl::Error VertexArrayGL::syncDrawState(const std::vector<GLuint> &activeAttribLo
     mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
 
     // Check if any attributes need to be streamed, determines if the index range needs to be computed
-    bool attributesNeedStreaming = doAttributesNeedStreaming(activeAttribLocations);
+    bool attributesNeedStreaming = mAttributesNeedStreaming.any();
 
     // Determine if an index buffer needs to be streamed and the range of vertices that need to be copied
-    gl::RangeUI indexRange(0, 0);
+    RangeUI indexRange(0, 0);
     if (type != GL_NONE)
     {
-        gl::Error error = syncIndexData(count, type, indices, attributesNeedStreaming, &indexRange, outIndices);
+        Error error =
+            syncIndexData(count, type, indices, attributesNeedStreaming, &indexRange, outIndices);
         if (error.isError())
         {
             return error;
@@ -118,7 +131,7 @@ gl::Error VertexArrayGL::syncDrawState(const std::vector<GLuint> &activeAttribLo
         }
     }
 
-    return gl::Error(GL_NO_ERROR);
+    return Error(GL_NO_ERROR);
 }
 
 bool VertexArrayGL::doAttributesNeedStreaming(const std::vector<GLuint> &activeAttribLocations) const
@@ -128,7 +141,7 @@ bool VertexArrayGL::doAttributesNeedStreaming(const std::vector<GLuint> &activeA
     for (size_t activeAttrib = 0; activeAttrib < activeAttribLocations.size(); activeAttrib++)
     {
         GLuint idx = activeAttribLocations[activeAttrib];
-        if (attribs[idx].enabled && attribs[idx].buffer.get() == nullptr)
+        if (AttributeNeedsStreaming(attribs[idx]))
         {
             return true;
         }
@@ -149,27 +162,10 @@ gl::Error VertexArrayGL::syncAttributeState(const std::vector<GLuint> &activeAtt
         GLuint idx = activeAttribLocations[activeAttrib];
         const auto &attrib = attribs[idx];
 
-        // Always sync the enabled and divisor state, they are required for both streaming and buffered
-        // attributes
-        if (mAppliedAttributes[idx].enabled != attrib.enabled)
-        {
-            if (attrib.enabled)
-            {
-                mFunctions->enableVertexAttribArray(idx);
-            }
-            else
-            {
-                mFunctions->disableVertexAttribArray(idx);
-            }
-            mAppliedAttributes[idx].enabled = attrib.enabled;
-        }
-        if (mAppliedAttributes[idx].divisor != attrib.divisor)
-        {
-            mFunctions->vertexAttribDivisor(idx, attrib.divisor);
-            mAppliedAttributes[idx].divisor = attrib.divisor;
-        }
+        if (!attrib.enabled)
+            continue;
 
-        if (attribs[idx].enabled && attrib.buffer.get() == nullptr)
+        if (attrib.buffer.get() == nullptr)
         {
             ASSERT(attributesNeedStreaming);
 
@@ -182,44 +178,17 @@ gl::Error VertexArrayGL::syncAttributeState(const std::vector<GLuint> &activeAtt
             *outStreamingDataSize += typeSize * streamedVertexCount;
             *outMaxAttributeDataSize = std::max(*outMaxAttributeDataSize, typeSize);
         }
-        else
-        {
-            // Sync the attribute with no translation
-            if (mAppliedAttributes[idx] != attrib)
-            {
-                const gl::Buffer *arrayBuffer = attrib.buffer.get();
-                if (arrayBuffer != nullptr)
-                {
-                    const BufferGL *arrayBufferGL = GetImplAs<BufferGL>(arrayBuffer);
-                    mStateManager->bindBuffer(GL_ARRAY_BUFFER, arrayBufferGL->getBufferID());
-                }
-                else
-                {
-                    mStateManager->bindBuffer(GL_ARRAY_BUFFER, 0);
-                }
-
-                if (attrib.pureInteger)
-                {
-                    mFunctions->vertexAttribIPointer(idx, attrib.size, attrib.type,
-                                                     attrib.stride, attrib.pointer);
-                }
-                else
-                {
-                    mFunctions->vertexAttribPointer(idx, attrib.size, attrib.type,
-                                                    attrib.normalized, attrib.stride,
-                                                    attrib.pointer);
-                }
-
-                mAppliedAttributes[idx] = attrib;
-            }
-        }
     }
 
-    return gl::Error(GL_NO_ERROR);
+    return Error(GL_NO_ERROR);
 }
 
-gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid *indices, bool attributesNeedStreaming,
-                                       gl::RangeUI *outIndexRange, const GLvoid **outIndices) const
+Error VertexArrayGL::syncIndexData(GLsizei count,
+                                   GLenum type,
+                                   const GLvoid *indices,
+                                   bool attributesNeedStreaming,
+                                   RangeUI *outIndexRange,
+                                   const GLvoid **outIndices) const
 {
     ASSERT(outIndices);
 
@@ -239,7 +208,8 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
         if (attributesNeedStreaming)
         {
             ptrdiff_t elementArrayBufferOffset = reinterpret_cast<ptrdiff_t>(indices);
-            gl::Error error = mData.getElementArrayBuffer()->getIndexRange(type, static_cast<size_t>(elementArrayBufferOffset), count, outIndexRange);
+            Error error = mData.getElementArrayBuffer()->getIndexRange(
+                type, static_cast<size_t>(elementArrayBufferOffset), count, outIndexRange);
             if (error.isError())
             {
                 return error;
@@ -257,7 +227,7 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
         // Only compute the index range if the attributes also need to be streamed
         if (attributesNeedStreaming)
         {
-            *outIndexRange = gl::ComputeIndexRange(type, indices, count);
+            *outIndexRange = ComputeIndexRange(type, indices, count);
         }
 
         // Allocate the streaming element array buffer
@@ -271,7 +241,7 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
         mAppliedElementArrayBuffer.set(nullptr);
 
         // Make sure the element array buffer is large enough
-        const gl::Type &indexTypeInfo = gl::GetTypeInfo(type);
+        const Type &indexTypeInfo          = GetTypeInfo(type);
         size_t requiredStreamingBufferSize = indexTypeInfo.bytes * count;
         if (requiredStreamingBufferSize > mStreamingElementArrayBufferSize)
         {
@@ -289,7 +259,7 @@ gl::Error VertexArrayGL::syncIndexData(GLsizei count, GLenum type, const GLvoid 
         *outIndices = nullptr;
     }
 
-    return gl::Error(GL_NO_ERROR);
+    return Error(GL_NO_ERROR);
 }
 
 gl::Error VertexArrayGL::streamAttributes(const std::vector<GLuint> &activeAttribLocations, size_t streamingDataSize,
@@ -378,10 +348,10 @@ gl::Error VertexArrayGL::streamAttributes(const std::vector<GLuint> &activeAttri
 
     if (unmapResult != GL_TRUE)
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to unmap the client data streaming buffer.");
+        return Error(GL_OUT_OF_MEMORY, "Failed to unmap the client data streaming buffer.");
     }
 
-    return gl::Error(GL_NO_ERROR);
+    return Error(GL_NO_ERROR);
 }
 
 GLuint VertexArrayGL::getVertexArrayID() const
@@ -395,4 +365,103 @@ GLuint VertexArrayGL::getAppliedElementArrayBufferID() const
                                                        : mAppliedElementArrayBuffer.id();
 }
 
+void VertexArrayGL::updateNeedsStreaming(size_t attribIndex)
+{
+    const VertexAttribute &attrib = mData.getVertexAttribute(attribIndex);
+    mAttributesNeedStreaming.set(attribIndex, AttributeNeedsStreaming(attrib));
 }
+
+void VertexArrayGL::updateAttribEnabled(size_t attribIndex)
+{
+    const VertexAttribute &attrib = mData.getVertexAttribute(attribIndex);
+    if (mAppliedAttributes[attribIndex].enabled == attrib.enabled)
+    {
+        return;
+    }
+
+    updateNeedsStreaming(attribIndex);
+
+    mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
+    if (attrib.enabled)
+    {
+        mFunctions->enableVertexAttribArray(attribIndex);
+    }
+    else
+    {
+        mFunctions->disableVertexAttribArray(attribIndex);
+    }
+    mAppliedAttributes[attribIndex].enabled = attrib.enabled;
+}
+
+void VertexArrayGL::updateAttribPointer(size_t attribIndex)
+{
+    const VertexAttribute &attrib = mData.getVertexAttribute(attribIndex);
+    if (mAppliedAttributes[attribIndex] == attrib)
+    {
+        return;
+    }
+
+    updateNeedsStreaming(attribIndex);
+
+    mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
+    const Buffer *arrayBuffer = attrib.buffer.get();
+    if (arrayBuffer != nullptr)
+    {
+        const BufferGL *arrayBufferGL = GetImplAs<BufferGL>(arrayBuffer);
+        mStateManager->bindBuffer(GL_ARRAY_BUFFER, arrayBufferGL->getBufferID());
+    }
+    else
+    {
+        mStateManager->bindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
+    if (attrib.pureInteger)
+    {
+        mFunctions->vertexAttribIPointer(attribIndex, attrib.size, attrib.type, attrib.stride,
+                                         attrib.pointer);
+    }
+    else
+    {
+        mFunctions->vertexAttribPointer(attribIndex, attrib.size, attrib.type, attrib.normalized,
+                                        attrib.stride, attrib.pointer);
+    }
+
+    mAppliedAttributes[attribIndex] = attrib;
+}
+
+void VertexArrayGL::syncState(const gl::VertexArray::DirtyBits &dirtyBits)
+{
+    for (size_t dirtyBit : dirtyBits)
+    {
+        if (dirtyBit == VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
+        {
+            // TODO?
+        }
+        else if (dirtyBit <= VertexArray::DIRTY_BIT_ATTRIB_15_ENABLED)
+        {
+            size_t attribIndex = (dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0_ENABLED);
+            updateAttribEnabled(attribIndex);
+        }
+        else if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_POINTER &&
+                 dirtyBit <= VertexArray::DIRTY_BIT_ATTRIB_15_POINTER)
+        {
+            size_t attribIndex = (dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0_POINTER);
+            updateAttribPointer(attribIndex);
+        }
+        else if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_DIVISOR &&
+                 dirtyBit <= VertexArray::DIRTY_BIT_ATTRIB_15_DIVISOR)
+        {
+            size_t attribIndex            = (dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0_DIVISOR);
+            const VertexAttribute &attrib = mData.getVertexAttribute(attribIndex);
+
+            if (mAppliedAttributes[attribIndex].divisor != attrib.divisor)
+            {
+                mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
+                mFunctions->vertexAttribDivisor(attribIndex, attrib.divisor);
+                mAppliedAttributes[attribIndex].divisor = attrib.divisor;
+            }
+        }
+    }
+}
+
+}  // rx
