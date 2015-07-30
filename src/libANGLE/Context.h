@@ -204,6 +204,7 @@ class Context final : angle::NonCopyable
     const State &getState() const { return mState; }
 
     const Data &getData() const { return mData; }
+    void syncRendererState();
 
   private:
     void detachBuffer(GLuint buffer);

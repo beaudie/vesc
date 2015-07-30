@@ -186,6 +186,9 @@ void Context::makeCurrent(egl::Surface *surface)
         mHasBeenCurrent = true;
     }
 
+    // TODO(jmadill): Rework this when we support ContextImpl
+    mState.setAllDirtyBits();
+
     // Update default framebuffer
     Framebuffer *defaultFBO = mFramebufferMap[0];
 
@@ -1237,6 +1240,7 @@ bool Context::getIndexedQueryParameterInfo(GLenum target, GLenum *type, unsigned
 
 Error Context::drawArrays(GLenum mode, GLint first, GLsizei count, GLsizei instances)
 {
+    syncRendererState();
     Error error = mRenderer->drawArrays(getData(), mode, first, count, instances);
     if (error.isError())
     {
@@ -1263,6 +1267,7 @@ Error Context::drawElements(GLenum mode, GLsizei count, GLenum type,
                             const GLvoid *indices, GLsizei instances,
                             const RangeUI &indexRange)
 {
+    syncRendererState();
     return mRenderer->drawElements(getData(), mode, count, type, indices, instances, indexRange);
 }
 
@@ -1661,4 +1666,12 @@ void Context::initCaps(GLuint clientVersion)
     }
 }
 
+void Context::syncRendererState()
+{
+    if (mState.getDirtyBits().any())
+    {
+        mRenderer->syncState(mState);
+        mState.clearDirtyBits();
+    }
+}
 }

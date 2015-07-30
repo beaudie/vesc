@@ -19,6 +19,17 @@
 
 namespace rx
 {
+void SetUnpackState(StateManagerGL *stateManager, const gl::PixelUnpackState &unpack)
+{
+    const gl::Buffer *unpackBuffer = unpack.pixelBuffer.get();
+    if (unpackBuffer != nullptr)
+    {
+        UNIMPLEMENTED();
+    }
+    stateManager->setPixelUnpackState(unpack.alignment, unpack.rowLength, unpack.skipRows,
+                                      unpack.skipPixels, unpack.imageHeight, unpack.skipImages);
+}
+
 StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &rendererCaps)
     : mFunctions(functions),
       mProgram(0),
@@ -489,67 +500,6 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Data &data)
     const FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
     bindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferGL->getFramebufferID());
 
-    setScissorTestEnabled(state.isScissorTestEnabled());
-    if (state.isScissorTestEnabled())
-    {
-        setScissor(state.getScissor());
-    }
-
-    setViewport(state.getViewport());
-    setDepthRange(state.getNearPlane(), state.getFarPlane());
-
-    const gl::BlendState &blendState = state.getBlendState();
-    setBlendEnabled(blendState.blend);
-    if (blendState.blend)
-    {
-        setBlendColor(state.getBlendColor());
-        setBlendFuncs(blendState.sourceBlendRGB, blendState.destBlendRGB, blendState.sourceBlendAlpha, blendState.destBlendAlpha);
-        setBlendEquations(blendState.blendEquationRGB, blendState.blendEquationAlpha);
-    }
-    setColorMask(blendState.colorMaskRed, blendState.colorMaskGreen, blendState.colorMaskBlue, blendState.colorMaskAlpha);
-    setSampleAlphaToCoverageEnabled(blendState.sampleAlphaToCoverage);
-    setSampleCoverageEnabled(state.isSampleCoverageEnabled());
-    setSampleCoverage(state.getSampleCoverageValue(), state.getSampleCoverageInvert());
-
-    const gl::DepthStencilState &depthStencilState = state.getDepthStencilState();
-    setDepthTestEnabled(depthStencilState.depthTest);
-    if (depthStencilState.depthTest)
-    {
-        setDepthFunc(depthStencilState.depthFunc);
-    }
-    setDepthMask(depthStencilState.depthMask);
-
-    setStencilTestEnabled(depthStencilState.stencilTest);
-    if (depthStencilState.stencilTest)
-    {
-        setStencilFrontFuncs(depthStencilState.stencilFunc, state.getStencilRef(), depthStencilState.stencilMask);
-        setStencilBackFuncs(depthStencilState.stencilBackFunc, state.getStencilBackRef(), depthStencilState.stencilBackMask);
-        setStencilFrontOps(depthStencilState.stencilFail, depthStencilState.stencilPassDepthFail, depthStencilState.stencilPassDepthPass);
-        setStencilBackOps(depthStencilState.stencilBackFail, depthStencilState.stencilBackPassDepthFail, depthStencilState.stencilBackPassDepthPass);
-    }
-    setStencilFrontWritemask(state.getDepthStencilState().stencilWritemask);
-    setStencilBackWritemask(state.getDepthStencilState().stencilBackWritemask);
-
-    const gl::RasterizerState &rasterizerState = state.getRasterizerState();
-    setCullFaceEnabled(rasterizerState.cullFace);
-    if (rasterizerState.cullFace)
-    {
-        setCullFace(rasterizerState.cullMode);
-    }
-    setFrontFace(rasterizerState.frontFace);
-
-    setPolygonOffsetFillEnabled(rasterizerState.polygonOffsetFill);
-    if (rasterizerState.polygonOffsetFill)
-    {
-        setPolygonOffset(rasterizerState.polygonOffsetFactor, rasterizerState.polygonOffsetUnits);
-    }
-
-    setMultisampleEnabled(rasterizerState.multiSample);
-    setRasterizerDiscardEnabled(rasterizerState.rasterizerDiscard);
-    setLineWidth(state.getLineWidth());
-
-    setPrimitiveRestartEnabled(state.isPrimitiveRestartEnabled());
-
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -974,4 +924,171 @@ void StateManagerGL::setClearStencil(GLint clearStencil)
     }
 }
 
+void StateManagerGL::syncState(const gl::State &state)
+{
+    for (size_t dirtyBit : state.getDirtyBits())
+    {
+        switch (dirtyBit)
+        {
+            case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
+                setScissorTestEnabled(state.isScissorTestEnabled());
+                break;
+            case gl::State::DIRTY_BIT_SCISSOR:
+                setScissor(state.getScissor());
+                break;
+            case gl::State::DIRTY_BIT_VIEWPORT:
+                setViewport(state.getViewport());
+                break;
+            case gl::State::DIRTY_BIT_DEPTH_RANGE:
+                setDepthRange(state.getNearPlane(), state.getFarPlane());
+                break;
+            case gl::State::DIRTY_BIT_BLEND_ENABLED:
+                setBlendEnabled(state.isBlendEnabled());
+                break;
+            case gl::State::DIRTY_BIT_BLEND_COLOR:
+                setBlendColor(state.getBlendColor());
+                break;
+            case gl::State::DIRTY_BIT_BLEND_FUNCS:
+            {
+                const auto &blendState = state.getBlendState();
+                setBlendFuncs(blendState.sourceBlendRGB, blendState.destBlendRGB,
+                              blendState.sourceBlendAlpha, blendState.destBlendAlpha);
+                break;
+            }
+            case gl::State::DIRTY_BIT_BLEND_EQUATIONS:
+            {
+                const auto &blendState = state.getBlendState();
+                setBlendEquations(blendState.blendEquationRGB, blendState.blendEquationAlpha);
+                break;
+            }
+            case gl::State::DIRTY_BIT_COLOR_MASK:
+            {
+                const auto &blendState = state.getBlendState();
+                setColorMask(blendState.colorMaskRed, blendState.colorMaskGreen,
+                             blendState.colorMaskBlue, blendState.colorMaskAlpha);
+                break;
+            }
+            case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:
+                setSampleAlphaToCoverageEnabled(state.isSampleAlphaToCoverageEnabled());
+                break;
+            case gl::State::DIRTY_BIT_SAMPLE_COVERAGE_ENABLED:
+                setSampleCoverageEnabled(state.isSampleCoverageEnabled());
+                break;
+            case gl::State::DIRTY_BIT_SAMPLE_COVERAGE:
+                setSampleCoverage(state.getSampleCoverageValue(), state.getSampleCoverageInvert());
+                break;
+            case gl::State::DIRTY_BIT_DEPTH_TEST_ENABLED:
+                setDepthTestEnabled(state.isDepthTestEnabled());
+                break;
+            case gl::State::DIRTY_BIT_DEPTH_FUNC:
+                setDepthFunc(state.getDepthStencilState().depthFunc);
+                break;
+            case gl::State::DIRTY_BIT_DEPTH_MASK:
+                setDepthMask(state.getDepthStencilState().depthMask);
+                break;
+            case gl::State::DIRTY_BIT_STENCIL_TEST_ENABLED:
+                setStencilTestEnabled(state.isStencilTestEnabled());
+                break;
+            case gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT:
+            {
+                const auto &depthStencilState = state.getDepthStencilState();
+                setStencilFrontFuncs(depthStencilState.stencilFunc, state.getStencilRef(),
+                                     depthStencilState.stencilMask);
+                break;
+            }
+            case gl::State::DIRTY_BIT_STENCIL_FUNCS_BACK:
+            {
+                const auto &depthStencilState = state.getDepthStencilState();
+                setStencilBackFuncs(depthStencilState.stencilBackFunc, state.getStencilBackRef(),
+                                    depthStencilState.stencilBackMask);
+                break;
+            }
+            case gl::State::DIRTY_BIT_STENCIL_OPS_FRONT:
+            {
+                const auto &depthStencilState = state.getDepthStencilState();
+                setStencilFrontOps(depthStencilState.stencilFail,
+                                   depthStencilState.stencilPassDepthFail,
+                                   depthStencilState.stencilPassDepthPass);
+                break;
+            }
+            case gl::State::DIRTY_BIT_STENCIL_OPS_BACK:
+            {
+                const auto &depthStencilState = state.getDepthStencilState();
+                setStencilBackOps(depthStencilState.stencilBackFail,
+                                  depthStencilState.stencilBackPassDepthFail,
+                                  depthStencilState.stencilBackPassDepthPass);
+                break;
+            }
+            case gl::State::DIRTY_BIT_STENCIL_WRITEMASK_FRONT:
+                setStencilFrontWritemask(state.getDepthStencilState().stencilWritemask);
+                break;
+            case gl::State::DIRTY_BIT_STENCIL_WRITEMASK_BACK:
+                setStencilBackWritemask(state.getDepthStencilState().stencilBackWritemask);
+                break;
+            case gl::State::DIRTY_BIT_CULL_FACE_ENABLED:
+                setCullFaceEnabled(state.isCullFaceEnabled());
+                break;
+            case gl::State::DIRTY_BIT_CULL_FACE:
+                setCullFace(state.getRasterizerState().cullMode);
+                break;
+            case gl::State::DIRTY_BIT_FRONT_FACE:
+                setFrontFace(state.getRasterizerState().frontFace);
+                break;
+            case gl::State::DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED:
+                setPolygonOffsetFillEnabled(state.isPolygonOffsetFillEnabled());
+                break;
+            case gl::State::DIRTY_BIT_POLYGON_OFFSET:
+            {
+                const auto &rasterizerState = state.getRasterizerState();
+                setPolygonOffset(rasterizerState.polygonOffsetFactor,
+                                 rasterizerState.polygonOffsetUnits);
+                break;
+            }
+            case gl::State::DIRTY_BIT_MULTISAMPLE_ENABLED:
+                setMultisampleEnabled(state.getRasterizerState().multiSample);
+                break;
+            case gl::State::DIRTY_BIT_RASTERIZER_DISCARD_ENABLED:
+                setRasterizerDiscardEnabled(state.isRasterizerDiscardEnabled());
+                break;
+            case gl::State::DIRTY_BIT_LINE_WIDTH:
+                setLineWidth(state.getLineWidth());
+                break;
+            case gl::State::DIRTY_BIT_PRIMITIVE_RESTART_ENABLED:
+                setPrimitiveRestartEnabled(state.isPrimitiveRestartEnabled());
+                break;
+            case gl::State::DIRTY_BIT_CLEAR_COLOR:
+                setClearColor(state.getColorClearValue());
+                break;
+            case gl::State::DIRTY_BIT_CLEAR_DEPTH:
+                setClearDepth(state.getDepthClearValue());
+                break;
+            case gl::State::DIRTY_BIT_CLEAR_STENCIL:
+                setClearStencil(state.getStencilClearValue());
+                break;
+            case gl::State::DIRTY_BIT_UNPACK_ALIGNMENT:
+                // TODO(jmadill): split this
+                SetUnpackState(this, state.getUnpackState());
+                break;
+            case gl::State::DIRTY_BIT_UNPACK_ROW_LENGTH:
+                // TODO(jmadill): split this
+                SetUnpackState(this, state.getUnpackState());
+                break;
+            case gl::State::DIRTY_BIT_PACK_ALIGNMENT:
+                // TODO(jmadill): implement this
+                break;
+            case gl::State::DIRTY_BIT_PACK_REVERSE_ROW_ORDER:
+                // TODO(jmadill): implement this
+                break;
+            case gl::State::DIRTY_BIT_DITHER_ENABLED:
+                // TODO(jmadill): implement this
+                break;
+            case gl::State::DIRTY_BIT_GENERATE_MIPMAP_HINT:
+                // TODO(jmadill): implement this
+                break;
+            case gl::State::DIRTY_BIT_SHADER_DERIVATIVE_HINT:
+                // TODO(jmadill): implement this
+                break;
+        }
+    }
+}
 }

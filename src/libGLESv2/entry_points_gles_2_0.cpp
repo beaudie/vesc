@@ -628,6 +628,7 @@ void GL_APIENTRY Clear(GLbitfield mask)
             return;
         }
 
+        context->syncRendererState();
         Error error = framebufferObject->clear(context->getData(), mask);
         if (error.isError())
         {
