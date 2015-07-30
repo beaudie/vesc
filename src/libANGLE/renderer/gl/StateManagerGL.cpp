@@ -424,19 +424,6 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Data &data)
     const ProgramGL *programGL = GetImplAs<ProgramGL>(program);
     useProgram(programGL->getProgramID());
 
-    const gl::VertexArray *vao = state.getVertexArray();
-    const std::vector<gl::VertexAttribute> &attribs = vao->getVertexAttributes();
-    const std::vector<GLuint> &activeAttribs = programGL->getActiveAttributeLocations();
-
-    for (size_t activeAttribIndex = 0; activeAttribIndex < activeAttribs.size(); activeAttribIndex++)
-    {
-        GLuint location = activeAttribs[activeAttribIndex];
-        if (!attribs[location].enabled)
-        {
-            setAttributeCurrentData(location, state.getVertexAttribCurrentValue(location));
-        }
-    }
-
     const std::vector<SamplerBindingGL> &appliedSamplerUniforms = programGL->getAppliedSamplerUniforms();
     for (const SamplerBindingGL &samplerUniform : appliedSamplerUniforms)
     {
@@ -1091,8 +1078,15 @@ void StateManagerGL::syncState(const gl::State &state, const gl::State::DirtyBit
                 // TODO(jmadill): implement this
                 break;
             default:
-                UNREACHABLE();
+            {
+                ASSERT(dirtyBit >= gl::State::DIRTY_BIT_CURRENT_VALUE_0 &&
+                       dirtyBit < gl::State::DIRTY_BIT_CURRENT_VALUE_MAX);
+                size_t attribIndex =
+                    static_cast<size_t>(dirtyBit) - gl::State::DIRTY_BIT_CURRENT_VALUE_0;
+                setAttributeCurrentData(attribIndex, state.getVertexAttribCurrentValue(
+                                                         static_cast<unsigned int>(attribIndex)));
                 break;
+            }
         }
     }
 }
