@@ -16,12 +16,13 @@
 namespace rx
 {
 
+class DisplayWGL;
 class FunctionsWGL;
 
 class PbufferSurfaceWGL : public SurfaceGL
 {
   public:
-    PbufferSurfaceWGL(EGLint width, EGLint height, EGLenum textureFormat, EGLenum textureTarget,
+    PbufferSurfaceWGL(DisplayWGL *display, EGLint width, EGLint height, EGLenum textureFormat, EGLenum textureTarget,
                       bool largest, int pixelFormat, HDC deviceContext, HGLRC wglContext,
                       const FunctionsWGL *functions);
     ~PbufferSurfaceWGL() override;
