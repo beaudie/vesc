@@ -14,10 +14,12 @@
 namespace rx
 {
 
+class DisplayCGL;
+
 class WindowSurfaceCGL : public SurfaceGL
 {
   public:
-    WindowSurfaceCGL();
+    WindowSurfaceCGL(DisplayCGL *display);
     ~WindowSurfaceCGL() override;
 
     egl::Error initialize() override;

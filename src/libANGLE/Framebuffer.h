@@ -23,6 +23,7 @@ namespace rx
 class ImplFactory;
 class FramebufferImpl;
 class RenderbufferImpl;
+class SurfaceImpl;
 }
 
 namespace egl
@@ -49,6 +50,7 @@ class Framebuffer
     class Data final : angle::NonCopyable
     {
       public:
+        explicit Data();
         explicit Data(const Caps &caps);
         ~Data();
 
@@ -75,6 +77,7 @@ class Framebuffer
     };
 
     Framebuffer(const Caps &caps, rx::ImplFactory *factory, GLuint id);
+    Framebuffer(rx::SurfaceImpl *surface);
     virtual ~Framebuffer();
 
     const rx::FramebufferImpl *getImplementation() const { return mImpl; }
