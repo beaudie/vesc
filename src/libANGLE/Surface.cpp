@@ -11,6 +11,7 @@
 #include "libANGLE/Surface.h"
 
 #include "libANGLE/Config.h"
+#include "libANGLE/Framebuffer.h"
 #include "libANGLE/Texture.h"
 
 #include <EGL/eglext.h>
@@ -21,6 +22,9 @@ namespace egl
 Surface::Surface(rx::SurfaceImpl *impl, EGLint surfaceType, const egl::Config *config, const AttributeMap &attributes)
     : FramebufferAttachmentObject(0), // id unused
       mImplementation(impl),
+      mDefaultFramebuffer(nullptr),
+      mIsCurrent(false),
+      mDestroyed(false),
       mType(surfaceType),
       mConfig(config),
       mPostSubBufferRequested(false),
@@ -50,6 +54,9 @@ Surface::Surface(rx::SurfaceImpl *impl, EGLint surfaceType, const egl::Config *c
         mTextureFormat = attributes.get(EGL_TEXTURE_FORMAT, EGL_NO_TEXTURE);
         mTextureTarget = attributes.get(EGL_TEXTURE_TARGET, EGL_NO_TEXTURE);
     }
+
+    mDefaultFramebuffer = createDefaultFramebuffer();
+    ASSERT(mDefaultFramebuffer != nullptr);
 }
 
 Surface::~Surface()
@@ -95,6 +102,25 @@ EGLint Surface::isPostSubBufferSupported() const
 void Surface::setSwapInterval(EGLint interval)
 {
     mImplementation->setSwapInterval(interval);
+}
+
+void Surface::setIsCurrent(bool isCurrent)
+{
+    mIsCurrent = isCurrent;
+    if (mDestroyed)
+    {
+        ASSERT(!mIsCurrent);
+        SafeDelete(mDefaultFramebuffer);
+    }
+}
+
+void Surface::onDestroy()
+{
+    mDestroyed = true;
+    if (!mIsCurrent)
+    {
+        SafeDelete(mDefaultFramebuffer);
+    }
 }
 
 const Config *Surface::getConfig() const
@@ -175,6 +201,30 @@ GLenum Surface::getAttachmentInternalFormat(const gl::FramebufferAttachment::Tar
 GLsizei Surface::getAttachmentSamples(const gl::FramebufferAttachment::Target &target) const
 {
     return getConfig()->samples;
+}
+
+gl::Framebuffer *Surface::createDefaultFramebuffer()
+{
+    gl::Framebuffer *framebuffer = new gl::Framebuffer(mImplementation);
+    ASSERT(framebuffer != nullptr);
+
+    GLenum drawBufferState = GL_BACK;
+    framebuffer->setDrawBuffers(1, &drawBufferState);
+    framebuffer->setReadBuffer(GL_BACK);
+
+    framebuffer->setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_BACK, gl::ImageIndex::MakeInvalid(), this);
+
+    if (mConfig->depthSize > 0)
+    {
+        framebuffer->setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_DEPTH, gl::ImageIndex::MakeInvalid(), this);
+    }
+
+    if (mConfig->stencilSize > 0)
+    {
+        framebuffer->setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_STENCIL, gl::ImageIndex::MakeInvalid(), this);
+    }
+
+    return framebuffer;
 }
 
 }

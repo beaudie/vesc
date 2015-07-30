@@ -731,6 +731,18 @@ void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
     mDrawFramebuffer = framebuffer;
 }
 
+void State::replaceFramebuffer(Framebuffer *original, Framebuffer *replacement)
+{
+    if (mReadFramebuffer == original)
+    {
+        mReadFramebuffer = replacement;
+    }
+    if (mDrawFramebuffer == original)
+    {
+        mDrawFramebuffer = replacement;
+    }
+}
+
 Framebuffer *State::getTargetFramebuffer(GLenum target) const
 {
     switch (target)
