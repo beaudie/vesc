@@ -1058,7 +1058,7 @@ void StateManagerGL::syncState(const gl::State &state)
                 // TODO(jmadill): implement this
                 break;
             case gl::State::DIRTY_BIT_VERTEX_ARRAY_OBJECT:
-                // TODO(jmadill): implement this
+                state.getVertexArray()->syncImplState();
                 break;
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
                 // TODO(jmadill): implement this
