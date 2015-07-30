@@ -184,28 +184,14 @@ gl::Error FramebufferGL::invalidateSub(size_t count, const GLenum *attachments, 
 
 gl::Error FramebufferGL::clear(const gl::Data &data, GLbitfield mask)
 {
-    mStateManager->setClearState(*data.state, mask);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clear(mask);
 
     return gl::Error(GL_NO_ERROR);
 }
 
-static GLbitfield GetClearBufferMask(GLenum buffer)
-{
-    switch (buffer)
-    {
-      case GL_COLOR:          return GL_COLOR_BUFFER_BIT;
-      case GL_DEPTH:          return GL_DEPTH_BUFFER_BIT;
-      case GL_STENCIL:        return GL_STENCIL_BUFFER_BIT;
-      case GL_DEPTH_STENCIL:  return GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
-      default: UNREACHABLE(); return 0;
-    }
-}
-
 gl::Error FramebufferGL::clearBufferfv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLfloat *values)
 {
-    mStateManager->setClearState(state, GetClearBufferMask(buffer));
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clearBufferfv(buffer, drawbuffer, values);
 
@@ -214,7 +200,6 @@ gl::Error FramebufferGL::clearBufferfv(const gl::State &state, GLenum buffer, GL
 
 gl::Error FramebufferGL::clearBufferuiv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLuint *values)
 {
-    mStateManager->setClearState(state, GetClearBufferMask(buffer));
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clearBufferuiv(buffer, drawbuffer, values);
 
@@ -223,7 +208,6 @@ gl::Error FramebufferGL::clearBufferuiv(const gl::State &state, GLenum buffer, G
 
 gl::Error FramebufferGL::clearBufferiv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLint *values)
 {
-    mStateManager->setClearState(state, GetClearBufferMask(buffer));
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clearBufferiv(buffer, drawbuffer, values);
 
@@ -232,7 +216,6 @@ gl::Error FramebufferGL::clearBufferiv(const gl::State &state, GLenum buffer, GL
 
 gl::Error FramebufferGL::clearBufferfi(const gl::State &state, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil)
 {
-    mStateManager->setClearState(state, GetClearBufferMask(buffer));
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clearBufferfi(buffer, drawbuffer, depth, stencil);
 
@@ -262,7 +245,6 @@ gl::Error FramebufferGL::readPixels(const gl::State &state, const gl::Rectangle 
     {
         UNIMPLEMENTED();
     }
-    mStateManager->setPixelPackState(packState.alignment, packState.rowLength, packState.skipRows, packState.skipPixels);
 
     mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, mFramebufferID);
     mFunctions->readPixels(area.x, area.y, area.width, area.height, format, type, pixels);

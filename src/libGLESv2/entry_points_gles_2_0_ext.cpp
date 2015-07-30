@@ -495,6 +495,7 @@ void GL_APIENTRY ReadnPixelsEXT(GLint x, GLint y, GLsizei width, GLsizei height,
         Framebuffer *framebufferObject = context->getState().getReadFramebuffer();
         ASSERT(framebufferObject);
 
+        context->syncRendererState();
         Rectangle area(x, y, width, height);
         Error error = framebufferObject->readPixels(context->getState(), area, format, type, data);
         if (error.isError())

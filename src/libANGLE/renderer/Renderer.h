@@ -72,6 +72,8 @@ class Renderer : public ImplFactory
     virtual void pushGroupMarker(GLsizei length, const char *marker) = 0;
     virtual void popGroupMarker() = 0;
 
+    virtual void syncState(const gl::State &state) = 0;
+
     // Renderer capabilities
     const gl::Caps &getRendererCaps() const;
     const gl::TextureCapsMap &getRendererTextureCaps() const;
