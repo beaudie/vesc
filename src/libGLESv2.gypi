@@ -9,6 +9,7 @@
         'libangle_common_sources':
         [
             'common/Float16ToFloat32.cpp',
+            'common/IterableBitSet.h',
             'common/MemoryBuffer.cpp',
             'common/MemoryBuffer.h',
             'common/Optional.h',
