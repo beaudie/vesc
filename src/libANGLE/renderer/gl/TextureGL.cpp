@@ -23,17 +23,6 @@
 namespace rx
 {
 
-static void SetUnpackStateForTexImage(StateManagerGL *stateManager, const gl::PixelUnpackState &unpack)
-{
-    const gl::Buffer *unpackBuffer = unpack.pixelBuffer.get();
-    if (unpackBuffer != nullptr)
-    {
-        UNIMPLEMENTED();
-    }
-    stateManager->setPixelUnpackState(unpack.alignment, unpack.rowLength, unpack.skipRows,
-                                      unpack.skipPixels, unpack.imageHeight, unpack.skipImages);
-}
-
 static bool UseTexImage2D(GLenum textureType)
 {
     return textureType == GL_TEXTURE_2D || textureType == GL_TEXTURE_CUBE_MAP;
@@ -93,7 +82,7 @@ gl::Error TextureGL::setImage(GLenum target, size_t level, GLenum internalFormat
     UNUSED_ASSERTION_VARIABLE(&CompatibleTextureTarget); // Reference this function to avoid warnings.
     ASSERT(CompatibleTextureTarget(mTextureType, target));
 
-    SetUnpackStateForTexImage(mStateManager, unpack);
+    SetUnpackState(mStateManager, unpack);
 
     nativegl::TexImageFormat texImageFormat =
         nativegl::GetTexImageFormat(mFunctions, mWorkarounds, internalFormat, format, type);
@@ -124,7 +113,7 @@ gl::Error TextureGL::setSubImage(GLenum target, size_t level, const gl::Box &are
 {
     ASSERT(CompatibleTextureTarget(mTextureType, target));
 
-    SetUnpackStateForTexImage(mStateManager, unpack);
+    SetUnpackState(mStateManager, unpack);
 
     nativegl::TexSubImageFormat texSubImageFormat =
         nativegl::GetTexSubImageFormat(mFunctions, mWorkarounds, format, type);
@@ -155,7 +144,7 @@ gl::Error TextureGL::setCompressedImage(GLenum target, size_t level, GLenum inte
 {
     ASSERT(CompatibleTextureTarget(mTextureType, target));
 
-    SetUnpackStateForTexImage(mStateManager, unpack);
+    SetUnpackState(mStateManager, unpack);
 
     nativegl::CompressedTexImageFormat compressedTexImageFormat =
         nativegl::GetCompressedTexImageFormat(mFunctions, mWorkarounds, internalFormat);
@@ -185,7 +174,7 @@ gl::Error TextureGL::setCompressedSubImage(GLenum target, size_t level, const gl
 {
     ASSERT(CompatibleTextureTarget(mTextureType, target));
 
-    SetUnpackStateForTexImage(mStateManager, unpack);
+    SetUnpackState(mStateManager, unpack);
 
     nativegl::CompressedTexSubImageFormat compressedTexSubImageFormat =
         nativegl::GetCompressedSubTexImageFormat(mFunctions, mWorkarounds, format);
