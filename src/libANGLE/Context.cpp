@@ -1668,7 +1668,7 @@ void Context::initCaps(GLuint clientVersion)
 
 void Context::syncRendererState()
 {
-    if (mState.getDirtyBits().any())
+    if (mState.getStateDirtyBits().any() || mState.getCurrentValueDirtyBits().any())
     {
         mRenderer->syncState(mState);
         mState.clearDirtyBits();
