@@ -628,6 +628,7 @@ void GL_APIENTRY Clear(GLbitfield mask)
             return;
         }
 
+        context->syncRendererState();
         Error error = framebufferObject->clear(context->getData(), mask);
         if (error.isError())
         {
@@ -741,6 +742,7 @@ void GL_APIENTRY CompressedTexImage2D(GLenum target, GLint level, GLenum interna
             return;
         }
 
+        context->syncRendererState();
         Extents size(width, height, 1);
         Texture *texture = context->getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
         Error error = texture->setCompressedImage(target, level, internalformat, size, context->getState().getUnpackState(), 
@@ -785,7 +787,7 @@ void GL_APIENTRY CompressedTexSubImage2D(GLenum target, GLint level, GLint xoffs
             return;
         }
 
-
+        context->syncRendererState();
         Box area(xoffset, yoffset, 0, width, height, 1);
         Texture *texture = context->getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
         Error error = texture->setCompressedSubImage(target, level, area, format, context->getState().getUnpackState(),
@@ -3318,6 +3320,7 @@ void GL_APIENTRY ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height,
         Framebuffer *framebufferObject = context->getState().getReadFramebuffer();
         ASSERT(framebufferObject);
 
+        context->syncRendererState();
         Rectangle area(x, y, width, height);
         Error error = framebufferObject->readPixels(context->getState(), area, format, type, pixels);
         if (error.isError())
@@ -3655,6 +3658,7 @@ void GL_APIENTRY TexImage2D(GLenum target, GLint level, GLint internalformat, GL
             return;
         }
 
+        context->syncRendererState();
         Extents size(width, height, 1);
         Texture *texture = context->getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
         Error error = texture->setImage(target, level, internalformat, size, format, type, context->getState().getUnpackState(),
@@ -3808,6 +3812,7 @@ void GL_APIENTRY TexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint 
             return;
         }
 
+        context->syncRendererState();
         Box area(xoffset, yoffset, 0, width, height, 1);
         Texture *texture = context->getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
         Error error = texture->setSubImage(target, level, area, format, type, context->getState().getUnpackState(),
