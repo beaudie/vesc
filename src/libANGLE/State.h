@@ -307,13 +307,26 @@ class State : angle::NonCopyable
         DIRTY_BIT_PROGRAM_BINDING,
         DIRTY_BIT_PROGRAM_OBJECT,
         DIRTY_BIT_INVALID,
-        DIRTY_BIT_MAX = DIRTY_BIT_INVALID,
+        DIRTY_BIT_STATE_MAX = DIRTY_BIT_INVALID,
     };
 
-    typedef std::bitset<DIRTY_BIT_MAX> DirtyBits;
-    const DirtyBits &getDirtyBits() const { return mDirtyBits; }
-    void clearDirtyBits() { mDirtyBits.reset(); }
-    void setAllDirtyBits() { mDirtyBits.set(); }
+    typedef std::bitset<DIRTY_BIT_STATE_MAX> StateDirtyBits;
+    const StateDirtyBits &getStateDirtyBits() const { return mStateDirtyBits; }
+
+    typedef std::bitset<MAX_VERTEX_ATTRIBS> CurrentValueDirtyBits;
+    const CurrentValueDirtyBits &getCurrentValueDirtyBits() const { return mCurrentValueDirtyBits; }
+
+    void clearDirtyBits()
+    {
+        mStateDirtyBits.reset();
+        mCurrentValueDirtyBits.reset();
+    }
+
+    void setAllDirtyBits()
+    {
+        mStateDirtyBits.set();
+        mCurrentValueDirtyBits.set();
+    }
 
   private:
     // Cached values from Context's caps
@@ -384,7 +397,8 @@ class State : angle::NonCopyable
 
     bool mPrimitiveRestart;
 
-    DirtyBits mDirtyBits;
+    StateDirtyBits mStateDirtyBits;
+    CurrentValueDirtyBits mCurrentValueDirtyBits;
 };
 
 }
