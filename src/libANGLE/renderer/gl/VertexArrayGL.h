@@ -30,6 +30,8 @@ class VertexArrayGL : public VertexArrayImpl
     GLuint getVertexArrayID() const;
     GLuint getAppliedElementArrayBufferID() const;
 
+    void syncState(const gl::VertexArray::DirtyBits &dirtyBits) override;
+
   private:
     gl::Error syncDrawState(const std::vector<GLuint> &activeAttribLoations, GLint first, GLsizei count,
                             GLenum type, const GLvoid *indices, const GLvoid **outIndices) const;
@@ -51,6 +53,10 @@ class VertexArrayGL : public VertexArrayImpl
     gl::Error streamAttributes(const std::vector<GLuint> &activeAttribLoations, size_t streamingDataSize,
                                size_t maxAttributeDataSize, const gl::RangeUI &indexRange) const;
 
+    void updateNeedsStreaming(size_t attribIndex);
+    void updateAttribEnabled(size_t attribIndex);
+    void updateAttribPointer(size_t attribIndex);
+
     const FunctionsGL *mFunctions;
     StateManagerGL *mStateManager;
 
@@ -64,6 +70,8 @@ class VertexArrayGL : public VertexArrayImpl
 
     mutable size_t mStreamingArrayBufferSize;
     mutable GLuint mStreamingArrayBuffer;
+
+    std::bitset<gl::MAX_VERTEX_ATTRIBS> mAttributesNeedStreaming;
 };
 
 }
