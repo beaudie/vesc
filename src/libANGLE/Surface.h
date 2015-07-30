@@ -20,6 +20,7 @@
 
 namespace gl
 {
+class Framebuffer;
 class Texture;
 }
 
@@ -48,6 +49,8 @@ class Surface final : public gl::FramebufferAttachmentObject
     EGLint isPostSubBufferSupported() const;
 
     void setSwapInterval(EGLint interval);
+    void setIsCurrent(bool isCurrent);
+    void onDestroy();
 
     const Config *getConfig() const;
 
@@ -61,6 +64,7 @@ class Surface final : public gl::FramebufferAttachmentObject
     EGLenum getTextureTarget() const;
 
     gl::Texture *getBoundTexture() const { return mTexture.get(); }
+    gl::Framebuffer *getDefaultFramebuffer() { return mDefaultFramebuffer; }
 
     EGLint isFixedSize() const;
 
@@ -74,11 +78,16 @@ class Surface final : public gl::FramebufferAttachmentObject
     virtual ~Surface();
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override { return mImplementation; }
 
+    gl::Framebuffer *createDefaultFramebuffer();
+
     // ANGLE-only method, used internally
     friend class gl::Texture;
     void releaseTexImageFromTexture();
 
     rx::SurfaceImpl *mImplementation;
+    gl::Framebuffer *mDefaultFramebuffer;
+    bool mIsCurrent;
+    bool mDestroyed;
 
     EGLint mType;
 

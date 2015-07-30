@@ -603,7 +603,7 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
             GLenum readInternalFormat = readColorBuffer->getInternalFormat();
             const InternalFormat &readFormatInfo = GetInternalFormatInfo(readInternalFormat);
 
-            for (GLuint i = 0; i < context->getCaps().maxColorAttachments; i++)
+            for (int i = 0; i < drawFramebuffer->getNumColorBuffers(); i++)
             {
                 if (drawFramebuffer->isEnabledColorAttachment(i))
                 {
@@ -659,7 +659,7 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
                     return false;
                 }
 
-                for (GLuint colorAttachment = 0; colorAttachment < context->getCaps().maxColorAttachments; ++colorAttachment)
+                for (int colorAttachment = 0; colorAttachment < drawFramebuffer->getNumColorBuffers(); ++colorAttachment)
                 {
                     if (drawFramebuffer->isEnabledColorAttachment(colorAttachment))
                     {

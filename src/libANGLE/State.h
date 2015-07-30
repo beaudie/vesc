@@ -162,6 +162,7 @@ class State : angle::NonCopyable
     // Framebuffer binding manipulation
     void setReadFramebufferBinding(Framebuffer *framebuffer);
     void setDrawFramebufferBinding(Framebuffer *framebuffer);
+    void replaceFramebuffer(Framebuffer *original, Framebuffer *replacement);
     Framebuffer *getTargetFramebuffer(GLenum target) const;
     Framebuffer *getReadFramebuffer();
     Framebuffer *getDrawFramebuffer();
