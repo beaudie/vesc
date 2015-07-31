@@ -66,6 +66,8 @@ class TOutputGLSLBase : public TIntermTraverser
     bool structDeclared(const TStructure *structure) const;
     void declareStruct(const TStructure *structure);
 
+    void declareInterfaceBlock(const TInterfaceBlock *interface_block);
+
     void writeBuiltInFunctionTriplet(Visit visit, const char *preStr, bool useEmulatedFunction);
 
     TInfoSinkBase &mObjSink;
