@@ -1209,6 +1209,8 @@ TString TOutputGLSLBase::getTypeName(const TType &type)
     {
         if (type.getBasicType() == EbtStruct)
             out << hashName(type.getStruct()->name());
+        else if (type.getBasicType() == EbtInterfaceBlock)
+            declareInterfaceBlock(type.getInterfaceBlock());
         else
             out << type.getBasicString();
     }
@@ -1259,6 +1261,25 @@ void TOutputGLSLBase::declareStruct(const TStructure *structure)
 
     out << "struct " << hashName(structure->name()) << "{\n";
     const TFieldList &fields = structure->fields();
+    for (size_t i = 0; i < fields.size(); ++i)
+    {
+        const TField *field = fields[i];
+        if (writeVariablePrecision(field->type()->getPrecision()))
+            out << " ";
+        out << getTypeName(*field->type()) << " " << hashName(field->name());
+        if (field->type()->isArray())
+            out << arrayBrackets(*field->type());
+        out << ";\n";
+    }
+    out << "}";
+}
+
+void TOutputGLSLBase::declareInterfaceBlock(const TInterfaceBlock *interface_block)
+{
+    TInfoSinkBase &out = objSink();
+
+    out << interface_block->name() << " {\n";
+    const TFieldList &fields = interface_block->fields();
     for (size_t i = 0; i < fields.size(); ++i)
     {
         const TField *field = fields[i];
