@@ -2,3 +2,5 @@
 GERRIT_HOST: chromium-review.googlesource.com
 GERRIT_PORT: 29418
 CODE_REVIEW_SERVER: chromium-review.googlesource.com
+TRYSERVER_GERRIT_URL: chromium-review.googlesource.com
+TRYSERVER_REVISION: auto
