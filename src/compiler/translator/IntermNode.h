@@ -609,7 +609,9 @@ class TIntermTraverser : angle::NonCopyable
           postVisit(postVisit),
           mDepth(0),
           mMaxDepth(0),
-          mTemporaryIndex(nullptr)
+          mTemporaryIndex(nullptr),
+          mInLHS(false),
+          mInFunctionCallOutParameter(false)
     {
     }
     virtual ~TIntermTraverser() {}
@@ -670,6 +672,36 @@ class TIntermTraverser : angle::NonCopyable
 
     // Start creating temporary symbols from the given temporary symbol index + 1.
     void useTemporaryIndex(unsigned int *temporaryIndex);
+
+    void setInLHS(bool inLHS)
+    {
+        mInLHS = inLHS;
+    }
+    bool isInLHS() const
+    {
+        return mInLHS;
+    }
+    void addToFunctionMap(const TString &name, TIntermSequence *sequence)
+    {
+        mFunctionMap[name] = sequence;
+    }
+    bool isInFunctionMap(const TIntermAggregate *node) const
+    {
+        return (mFunctionMap.find(node->getName()) != mFunctionMap.end());
+    }
+    TIntermSequence *getFunctionParameters(const TIntermAggregate *callNode)
+    {
+        ASSERT(isInFunctionMap(callNode));
+        return mFunctionMap[callNode->getName()];
+    }
+    void setInFunctionCallOutParameter(bool inOutParameter)
+    {
+        mInFunctionCallOutParameter = inOutParameter;
+    }
+    bool isInAssignmentTarget() const
+    {
+        return mInLHS || mInFunctionCallOutParameter;
+    }
 
   protected:
     int mDepth;
@@ -771,6 +803,17 @@ class TIntermTraverser : angle::NonCopyable
     std::vector<ParentBlock> mParentBlockStack;
 
     unsigned int *mTemporaryIndex;
+
+    bool mInLHS;
+    bool mInFunctionCallOutParameter;
+
+    struct TStringComparator
+    {
+        bool operator() (const TString &a, const TString &b) const { return a.compare(b) < 0; }
+    };
+
+    // Map from mangled function names to their parameter sequences
+    std::map<TString, TIntermSequence *, TStringComparator> mFunctionMap;
 };
 
 //
