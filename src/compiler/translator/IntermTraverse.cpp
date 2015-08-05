@@ -322,12 +322,20 @@ void TIntermAggregate::traverse(TIntermTraverser *it)
 
             for (auto *child : mSequence)
             {
+                // Hard-coded modf since it is the only ESSL3 built-in with an out parameter.
+                // TODO(oetuaho@nvidia.com): Clean this up by introducing a more generic mechanism
+                // for accessing built-in function signatures.
+                if (mOp == EOpModf && child != mSequence.front())
+                    it->setInFunctionCallOutParameter(true);
                 child->traverse(it);
+
                 if (visit && it->inVisit)
                 {
                     if (child != mSequence.back())
                         visit = it->visitAggregate(InVisit, this);
                 }
+                if (mOp == EOpModf)
+                    it->setInFunctionCallOutParameter(false);
 
                 if (mOp == EOpSequence)
                     it->incrementParentBlockPos();
