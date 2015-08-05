@@ -10,8 +10,13 @@
             'type': 'executable',
             'includes': [ '../build/common_defines.gypi', ],
             'dependencies': [ '../src/angle.gyp:translator_static', ],
-            'include_dirs': [ '../include', ],
-            'sources': [ 'shader_translator/shader_translator.cpp' ],
+            'include_dirs': [ '../include', '../src/' ],
+
+            'sources': [
+              'shader_translator/shader_translator.cpp',
+              '../src/third_party/murmurhash/MurmurHash3.cpp',
+              '../src/third_party/murmurhash/MurmurHash3.h',
+            ],
         },
         {
             'target_name': 'sample_util',
