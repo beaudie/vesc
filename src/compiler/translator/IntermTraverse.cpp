@@ -161,15 +161,10 @@ void TIntermBinary::traverse(TIntermTraverser *it)
     {
         it->incrementDepth(this);
 
+        // Some binary operations like indexing can be inside an expression which must be an l-value.
+        bool parentOperatorRequiresLValue = it->operatorRequiresLValue();
         if (isAssignment())
-        {
-            // Assert needs to be inside the if, since some binary operations like indexing can
-            // be inside an l-value.
-            // TODO(oetuaho@nvidia.com): Now the code doesn't unset operatorRequiresLValue for the
-            // index, fix this.
-            ASSERT(!it->operatorRequiresLValue());
             it->setOperatorRequiresLValue(true);
-        }
 
         if (mLeft)
             mLeft->traverse(it);
@@ -180,8 +175,18 @@ void TIntermBinary::traverse(TIntermTraverser *it)
         if (isAssignment())
             it->setOperatorRequiresLValue(false);
 
+        // Index is not required to be an l-value even when the surrounding expression is required
+        // to be an l-value.
+        if (mOp == EOpIndexDirect || mOp == EOpIndexDirectInterfaceBlock ||
+            mOp == EOpIndexDirectStruct || mOp == EOpIndexIndirect)
+        {
+            it->setOperatorRequiresLValue(false);
+        }
+
         if (visit && mRight)
             mRight->traverse(it);
+
+        it->setOperatorRequiresLValue(parentOperatorRequiresLValue);
 
         it->decrementDepth();
     }
