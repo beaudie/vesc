@@ -807,6 +807,13 @@
                 }],
                 ['OS == "mac"',
                 {
+                    'libraries':
+                    [
+                        'OpenGL.framework',
+                        'IOSurface.framework',
+                        'Cocoa.framework',
+                        'QuartzCore.framework',
+                    ],
                     'all_dependent_settings':
                     {
                         'xcode_settings': {
