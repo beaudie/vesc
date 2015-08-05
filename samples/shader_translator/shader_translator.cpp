@@ -14,6 +14,7 @@
 #include <sstream>
 #include <vector>
 #include "angle_gl.h"
+#include "third_party/murmurhash/MurmurHash3.h"
 
 //
 // Return codes from main.
@@ -42,6 +43,13 @@ static void FreeShaderSource(ShaderSource &source);
 
 static bool ParseGLSLOutputVersion(const std::string &, ShShaderOutput *outResult);
 static bool ParseIntValue(const std::string &, int emptyDefault, int *outValue);
+
+khronos_uint64_t Hash(const char* key, size_t len) {
+    static const unsigned int kSeed = 0xABCDEF98;
+    khronos_uint64_t result = 0;
+    MurmurHash3_x86_32(key, len, kSeed, &result);
+    return result;
+}
 
 //
 // Set up the per compile resources
@@ -96,6 +104,7 @@ int main(int argc, char *argv[])
               case 'd': compileOptions |= SH_DEPENDENCY_GRAPH; break;
               case 't': compileOptions |= SH_TIMING_RESTRICTIONS; break;
               case 'p': resources.WEBGL_debug_shader_precision = 1; break;
+              case 'n': resources.HashFunction = Hash; break;
               case 's':
                 if (argv[0][2] == '=')
                 {
@@ -297,6 +306,7 @@ void usage()
         "       -t       : enforce experimental timing restrictions\n"
         "       -d       : print dependency graph used to enforce timing restrictions\n"
         "       -p       : use precision emulation\n"
+        "       -n       : use name hashing\n"
         "       -s=e2    : use GLES2 spec (this is by default)\n"
         "       -s=e3    : use GLES3 spec (in development)\n"
         "       -s=w     : use WebGL spec\n"
