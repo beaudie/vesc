@@ -2059,16 +2059,21 @@ void ProgramD3D::sortAttributesByLayout(const std::vector<TranslatedAttribute> &
 
 void ProgramD3D::updateCachedInputLayout(const gl::Program *program, const gl::State &state)
 {
-    mCachedInputLayout.resize(gl::MAX_VERTEX_ATTRIBS, gl::VERTEX_FORMAT_INVALID);
     const int *semanticIndexes = program->getSemanticIndexes();
 
     const auto &vertexAttributes = state.getVertexArray()->getVertexAttributes();
+    mCachedInputLayout.clear();
+
     for (unsigned int attributeIndex = 0; attributeIndex < vertexAttributes.size(); attributeIndex++)
     {
         int semanticIndex = semanticIndexes[attributeIndex];
 
         if (semanticIndex != -1)
         {
+            if (mCachedInputLayout.size() < semanticIndex + 1)
+            {
+                mCachedInputLayout.resize(semanticIndex + 1, gl::VERTEX_FORMAT_INVALID);
+            }
             mCachedInputLayout[semanticIndex] =
                 GetVertexFormatType(vertexAttributes[attributeIndex],
                                     state.getVertexAttribCurrentValue(attributeIndex).Type);
