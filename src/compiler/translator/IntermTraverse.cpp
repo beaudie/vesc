@@ -103,7 +103,7 @@ void TIntermTraverser::addToFunctionMap(const TString &name, TIntermSequence *pa
 
 bool TIntermTraverser::isInFunctionMap(const TIntermAggregate *callNode) const
 {
-    ASSERT(callNode->getOp() == EOpFunctionCall || callNode->getOp() == EOpInternalFunctionCall);
+    ASSERT(callNode->getOp() == EOpFunctionCall);
     return (mFunctionMap.find(callNode->getName()) != mFunctionMap.end());
 }
 
@@ -264,11 +264,11 @@ void TIntermAggregate::traverse(TIntermTraverser *it)
             TIntermAggregate *params = mSequence.front()->getAsAggregate();
             ASSERT(params != nullptr);
             ASSERT(params->getOp() == EOpParameters);
-            it->addToFunctionMap(mName, params->getSequence());
+            it->addToFunctionMap(mName.getString(), params->getSequence());
             break;
         }
         case EOpPrototype:
-            it->addToFunctionMap(mName, &mSequence);
+            it->addToFunctionMap(mName.getString(), &mSequence);
             break;
         default:
             break;
