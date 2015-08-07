@@ -34,7 +34,7 @@ struct Data;
 
 bool IsMipmapFiltered(const gl::SamplerState &samplerState);
 
-class Texture final : public egl::ImageSibling
+class Texture final : public egl::ImageSibling, public gl::FramebufferAttachmentObject
 {
   public:
     Texture(rx::TextureImpl *impl, GLuint id, GLenum target);
@@ -93,6 +93,10 @@ class Texture final : public egl::ImageSibling
     GLsizei getAttachmentHeight(const FramebufferAttachment::Target &target) const override;
     GLenum getAttachmentInternalFormat(const FramebufferAttachment::Target &target) const override;
     GLsizei getAttachmentSamples(const FramebufferAttachment::Target &target) const override;
+
+    void onAttach() override;
+    void onDetach() override;
+    GLuint getId() const override;
 
   private:
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override { return mTexture; }
