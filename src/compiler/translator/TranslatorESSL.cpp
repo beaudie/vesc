@@ -28,10 +28,10 @@ void TranslatorESSL::initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu, i
 void TranslatorESSL::translate(TIntermNode *root, int) {
     TInfoSinkBase& sink = getInfoSink().obj;
 
-    int shaderVersion = getShaderVersion();
-    if (shaderVersion > 100)
+    int shaderVer = getShaderVersion();
+    if (shaderVer > 100)
     {
-        sink << "#version " << shaderVersion << " es\n";
+        sink << "#version " << shaderVer << " es\n";
     }
 
     writePragma();
@@ -83,7 +83,7 @@ void TranslatorESSL::translate(TIntermNode *root, int) {
                            getHashFunction(),
                            getNameMap(),
                            getSymbolTable(),
-                           shaderVersion,
+                           shaderVer,
                            precisionEmulation);
     root->traverse(&outputESSL);
 }
