@@ -782,7 +782,8 @@ DisplayExtensions::DisplayExtensions()
       streamConsumerGLTextureYUV(false),
       streamProducerD3DTextureNV12(false),
       createContextWebGLCompatibility(false),
-      createContextBindGeneratesResource(false)
+      createContextBindGeneratesResource(false),
+      swapBuffersWithDamage(false)
 {
 }
 
@@ -818,6 +819,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_ANGLE_stream_producer_d3d_texture_nv12",          streamProducerD3DTextureNV12,       &extensionStrings);
     InsertExtensionString("EGL_ANGLE_create_context_webgl_compatibility",        createContextWebGLCompatibility,    &extensionStrings);
     InsertExtensionString("EGL_CHROMIUM_create_context_bind_generates_resource", createContextBindGeneratesResource, &extensionStrings);
+    InsertExtensionString("EGL_EXT_swap_buffers_with_damage",                    swapBuffersWithDamage,              &extensionStrings);
     // TODO(jmadill): Enable this when complete.
     //InsertExtensionString("KHR_create_context_no_error",                       createContextNoError,               &extensionStrings);
     // clang-format on
