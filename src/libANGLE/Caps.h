@@ -409,6 +409,9 @@ struct DisplayExtensions
 
     // EGL_KHR_gl_renderbuffer_image
     bool glRenderbufferImage;
+
+    // EGL_EXT_swap_buffers_with_damage
+    bool swapBuffersWithDamage;
 };
 
 struct DeviceExtensions

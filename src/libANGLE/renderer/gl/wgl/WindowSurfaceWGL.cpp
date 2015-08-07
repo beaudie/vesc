@@ -105,6 +105,12 @@ egl::Error WindowSurfaceWGL::swap()
     return egl::Error(EGL_SUCCESS);
 }
 
+egl::Error WindowSurfaceWGL::swapWithDamage(EGLint *rects, EGLint n_rects)
+{
+    UNIMPLEMENTED();
+    return egl::Error(EGL_SUCCESS);
+}
+
 egl::Error WindowSurfaceWGL::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
 {
     UNIMPLEMENTED();

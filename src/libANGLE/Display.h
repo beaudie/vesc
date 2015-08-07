@@ -77,8 +77,8 @@ class Display final : angle::NonCopyable
 
     bool isInitialized() const;
     bool isValidConfig(const Config *config) const;
-    bool isValidContext(gl::Context *context) const;
-    bool isValidSurface(egl::Surface *surface) const;
+    bool isValidContext(const gl::Context *context) const;
+    bool isValidSurface(const egl::Surface *surface) const;
     bool isValidImage(const Image *image) const;
     bool isValidNativeWindow(EGLNativeWindowType window) const;
 

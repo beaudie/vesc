@@ -258,6 +258,12 @@ egl::Error SurfaceD3D::swap()
     return swapRect(0, 0, mWidth, mHeight);
 }
 
+egl::Error SurfaceD3D::swapWithDamage(EGLint *rects, EGLint n_rects)
+{
+    UNIMPLEMENTED();
+    return egl::Error(EGL_SUCCESS);
+}
+
 egl::Error SurfaceD3D::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
 {
     return swapRect(x, y, width, height);

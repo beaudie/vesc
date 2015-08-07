@@ -30,6 +30,7 @@ class SurfaceImpl : public FramebufferAttachmentObjectImpl
 
     virtual egl::Error initialize() = 0;
     virtual egl::Error swap() = 0;
+    virtual egl::Error swapWithDamage(EGLint *rects, EGLint n_rects) = 0;
     virtual egl::Error postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height) = 0;
     virtual egl::Error querySurfacePointerANGLE(EGLint attribute, void **value) = 0;
     virtual egl::Error bindTexImage(EGLint buffer) = 0;

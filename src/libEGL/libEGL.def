@@ -44,6 +44,7 @@ EXPORTS
     eglQueryDeviceStringEXT          @50
     eglCreateImageKHR                @51
     eglDestroyImageKHR               @52
+    eglSwapBuffersWithDamageEXT      @53
 
     ; 1.5 entry points
     eglCreateSync                    @38

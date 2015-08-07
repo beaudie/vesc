@@ -21,6 +21,7 @@ class MockSurfaceImpl : public rx::SurfaceImpl
 
     MOCK_METHOD0(initialize, egl::Error());
     MOCK_METHOD0(swap, egl::Error());
+    MOCK_METHOD2(swapWithDamage, egl::Error(EGLint *, EGLint));
     MOCK_METHOD4(postSubBuffer, egl::Error(EGLint, EGLint, EGLint, EGLint));
     MOCK_METHOD2(querySurfacePointerANGLE, egl::Error(EGLint, void**));
     MOCK_METHOD1(bindTexImage, egl::Error(EGLint));
