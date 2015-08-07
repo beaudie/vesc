@@ -522,7 +522,8 @@ DisplayExtensions::DisplayExtensions()
       glTexture2DImage(false),
       glTextureCubemapImage(false),
       glTexture3DImage(false),
-      glRenderbufferImage(false)
+      glRenderbufferImage(false),
+      swapBuffersWithDamage(false)
 {
 }
 
@@ -548,6 +549,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_KHR_gl_texture_cubemap_image",              glTextureCubemapImage,          &extensionStrings);
     InsertExtensionString("EGL_KHR_gl_texture_3D_image",                   glTexture3DImage,               &extensionStrings);
     InsertExtensionString("EGL_KHR_gl_renderbuffer_image",                 glRenderbufferImage,            &extensionStrings);
+    InsertExtensionString("EGL_EXT_swap_buffers_with_damage",              swapBuffersWithDamage,          &extensionStrings);
     // clang-format on
 
     return extensionStrings;

@@ -37,6 +37,12 @@ ANGLE_EXPORT EGLImageKHR EGLAPIENTRY CreateImageKHR(EGLDisplay dpy,
                                                     EGLClientBuffer buffer,
                                                     const EGLint *attrib_list);
 ANGLE_EXPORT EGLBoolean EGLAPIENTRY DestroyImageKHR(EGLDisplay dpy, EGLImageKHR image);
+
+// EGL_EXT_swap_buffers_with_damage
+ANGLE_EXPORT EGLBoolean SwapBuffersWithDamageEXT(EGLDisplay dpy,
+                                                 EGLSurface surface,
+                                                 EGLint *rects,
+                                                 EGLint n_rects);
 }
 
 #endif // LIBGLESV2_ENTRYPOINTSEGLEXT_H_

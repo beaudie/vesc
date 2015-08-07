@@ -140,6 +140,12 @@ egl::Error WindowSurfaceGLX::swap()
     return egl::Error(EGL_SUCCESS);
 }
 
+egl::Error WindowSurfaceGLX::swapWithDamage(EGLint *rects, EGLint n_rects)
+{
+    UNIMPLEMENTED();
+    return egl::Error(EGL_SUCCESS);
+}
+
 egl::Error WindowSurfaceGLX::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
 {
     UNIMPLEMENTED();

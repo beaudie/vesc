@@ -271,6 +271,13 @@ EGLBoolean EGLAPIENTRY eglDestroyImageKHR(EGLDisplay dpy, EGLImageKHR image)
     return egl::DestroyImageKHR(dpy, image);
 }
 
+EGLBoolean eglSwapBuffersWithDamageEXT(EGLDisplay dpy,
+                                       EGLSurface surface,
+                                       EGLint *rects,
+                                       EGLint n_rects)
+{
+    return egl::SwapBuffersWithDamageEXT(dpy, surface, rects, n_rects);
+}
 __eglMustCastToProperFunctionPointerType EGLAPIENTRY eglGetProcAddress(const char *procname)
 {
     return egl::GetProcAddress(procname);

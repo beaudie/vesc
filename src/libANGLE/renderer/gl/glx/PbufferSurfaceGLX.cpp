@@ -74,6 +74,11 @@ egl::Error PbufferSurfaceGLX::swap()
     return egl::Error(EGL_SUCCESS);
 }
 
+egl::Error PbufferSurfaceWGL::swapWithDamage(EGLint *rects, EGLint n_rects)
+{
+    return egl::Error(EGL_SUCCESS);
+}
+
 egl::Error PbufferSurfaceGLX::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
 {
     return egl::Error(EGL_SUCCESS);

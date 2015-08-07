@@ -1137,6 +1137,7 @@ __eglMustCastToProperFunctionPointerType EGLAPIENTRY GetProcAddress(const char *
         { "eglGetPlatformDisplayEXT", (__eglMustCastToProperFunctionPointerType)GetPlatformDisplayEXT },
         { "eglCreateImageKHR", (__eglMustCastToProperFunctionPointerType)CreateImageKHR },
         { "eglDestroyImageKHR", (__eglMustCastToProperFunctionPointerType)DestroyImageKHR },
+        { "eglSwapBuffersWithDamageEXT", (__eglMustCastToProperFunctionPointerType)SwapBuffersWithDamageEXT },
         { "glBlitFramebufferANGLE", (__eglMustCastToProperFunctionPointerType)gl::BlitFramebufferANGLE },
         { "glRenderbufferStorageMultisampleANGLE", (__eglMustCastToProperFunctionPointerType)gl::RenderbufferStorageMultisampleANGLE },
         { "glDeleteFencesNV", (__eglMustCastToProperFunctionPointerType)gl::DeleteFencesNV },
