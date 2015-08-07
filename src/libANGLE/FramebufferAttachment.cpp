@@ -44,8 +44,7 @@ FramebufferAttachment::Target &FramebufferAttachment::Target::operator=(const Ta
 ////// FramebufferAttachment Implementation //////
 
 FramebufferAttachment::FramebufferAttachment()
-    : mType(GL_NONE),
-      mTarget(GL_NONE, ImageIndex::MakeInvalid())
+    : mType(GL_NONE), mTarget(GL_NONE, ImageIndex::MakeInvalid()), mResource(nullptr)
 {
 }
 
@@ -56,13 +55,52 @@ FramebufferAttachment::FramebufferAttachment(GLenum type,
     : mType(type),
       mTarget(binding, textureIndex)
 {
-    mResource.set(resource);
+    mResource = resource;
+    if (mResource != nullptr)
+    {
+        mResource->onAttach();
+    }
+}
+
+FramebufferAttachment::FramebufferAttachment(const FramebufferAttachment &other)
+    : mType(other.mType), mTarget(other.mTarget)
+{
+    mResource = other.mResource;
+    if (mResource != nullptr)
+    {
+        mResource->onAttach();
+    }
+}
+
+FramebufferAttachment &FramebufferAttachment::operator=(const FramebufferAttachment &other)
+{
+    mType     = other.mType;
+    mTarget   = other.mTarget;
+    mResource = other.mResource;
+    if (mResource != nullptr)
+    {
+        mResource->onAttach();
+    }
+    return *this;
+}
+
+FramebufferAttachment::~FramebufferAttachment()
+{
+    if (mResource != nullptr)
+    {
+        mResource->onDetach();
+        mResource = nullptr;
+    }
 }
 
 void FramebufferAttachment::detach()
 {
     mType = GL_NONE;
-    mResource.set(nullptr);
+    if (mResource != nullptr)
+    {
+        mResource->onDetach();
+        mResource = nullptr;
+    }
 
     // not technically necessary, could omit for performance
     mTarget = Target(GL_NONE, ImageIndex::MakeInvalid());
@@ -75,12 +113,12 @@ void FramebufferAttachment::attach(GLenum type,
 {
     mType = type;
     mTarget = Target(binding, textureIndex);
-    mResource.set(resource);
-}
 
-FramebufferAttachment::~FramebufferAttachment()
-{
-    mResource.set(nullptr);
+    mResource = resource;
+    if (mResource != nullptr)
+    {
+        mResource->onAttach();
+    }
 }
 
 GLuint FramebufferAttachment::getRedSize() const
@@ -123,6 +161,11 @@ GLenum FramebufferAttachment::getColorEncoding() const
     return GetInternalFormatInfo(getInternalFormat()).colorEncoding;
 }
 
+GLuint FramebufferAttachment::id() const
+{
+    return mResource->getId();
+}
+
 const ImageIndex &FramebufferAttachment::getTextureImageIndex() const
 {
     ASSERT(type() == GL_TEXTURE);
@@ -158,17 +201,17 @@ GLint FramebufferAttachment::layer() const
 
 Texture *FramebufferAttachment::getTexture() const
 {
-    return rx::GetAs<Texture>(mResource.get());
+    return rx::GetAs<Texture>(mResource);
 }
 
 Renderbuffer *FramebufferAttachment::getRenderbuffer() const
 {
-    return rx::GetAs<Renderbuffer>(mResource.get());
+    return rx::GetAs<Renderbuffer>(mResource);
 }
 
 const egl::Surface *FramebufferAttachment::getSurface() const
 {
-    return rx::GetAs<egl::Surface>(mResource.get());
+    return rx::GetAs<egl::Surface>(mResource);
 }
 
 }
