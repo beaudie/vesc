@@ -601,6 +601,9 @@ struct DisplayExtensions
 
     // EGL_CHROMIUM_create_context_bind_generates_resource
     bool createContextBindGeneratesResource;
+
+    // EGL_EXT_swap_buffers_with_damage
+    bool swapBuffersWithDamage;
 };
 
 struct DeviceExtensions
