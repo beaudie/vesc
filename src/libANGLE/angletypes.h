@@ -260,19 +260,21 @@ enum VendorID : uint32_t
 };
 
 // A macro that determines whether an object has a given runtime type.
-#if defined(__clang__)
-#if __has_feature(cxx_rtti)
-#define ANGLE_HAS_DYNAMIC_CAST 1
-#endif
-#elif !defined(NDEBUG) && (!defined(_MSC_VER) || defined(_CPPRTTI)) && (!defined(__GNUC__) || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3) || defined(__GXX_RTTI))
-#define ANGLE_HAS_DYNAMIC_CAST 1
+#if !defined(NDEBUG)
+#    if defined(__clang__)
+#        if __has_feature(cxx_rtti) && !defined(_WIN32)
+#            define ANGLE_HAS_DYNAMIC_CAST 1
+#        endif
+#    elif (!defined(_MSC_VER) || defined(_CPPRTTI)) && (!defined(__GNUC__) || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3) || defined(__GXX_RTTI))
+#        define ANGLE_HAS_DYNAMIC_CAST 1
+#    endif
 #endif
 
 #ifdef ANGLE_HAS_DYNAMIC_CAST
-#define ANGLE_HAS_DYNAMIC_TYPE(type, obj) (dynamic_cast<type >(obj) != nullptr)
+#    define ANGLE_HAS_DYNAMIC_TYPE(type, obj) (dynamic_cast<type >(obj) != nullptr)
 #undef ANGLE_HAS_DYNAMIC_CAST
 #else
-#define ANGLE_HAS_DYNAMIC_TYPE(type, obj) (obj != nullptr)
+#    define ANGLE_HAS_DYNAMIC_TYPE(type, obj) (obj != nullptr)
 #endif
 
 // Downcast a base implementation object (EG TextureImpl to TextureD3D)
