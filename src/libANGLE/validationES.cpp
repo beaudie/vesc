@@ -1679,6 +1679,11 @@ bool ValidateDrawElements(Context *context, GLenum mode, GLsizei count, GLenum t
     }
     else
     {
+        if (count < 0)
+        {
+            context->recordError(Error(GL_INVALID_VALUE));
+            return false;
+        }
         *indexRangeOut = ComputeIndexRange(type, indices, count);
     }
 
