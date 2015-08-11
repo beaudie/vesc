@@ -94,15 +94,10 @@ Context::Context(const egl::Config *config,
 
     mState.initializeZeroTextures(mZeroTextures);
 
-    // Allocate default FBO
-    mFramebufferMap[0] = new Framebuffer(mCaps, mRenderer, 0);
-
     bindVertexArray(0);
     bindArrayBuffer(0);
     bindElementArrayBuffer(0);
 
-    bindReadFramebuffer(0);
-    bindDrawFramebuffer(0);
     bindRenderbuffer(0);
 
     bindGenericUniformBuffer(0);
@@ -136,10 +131,13 @@ Context::~Context()
 {
     mState.reset();
 
-    while (!mFramebufferMap.empty())
+    for (auto framebuffer : mFramebufferMap)
     {
-        // Delete the framebuffer in reverse order to destroy the framebuffer zero last.
-        deleteFramebuffer(mFramebufferMap.rbegin()->first);
+        // Default framebuffer are owned by their respective Surface
+        if (framebuffer.second->id() != 0)
+        {
+            SafeDelete(framebuffer.second);
+        }
     }
 
     while (!mFenceNVMap.empty())
@@ -193,73 +191,57 @@ void Context::makeCurrent(egl::Surface *surface)
 
         mState.setViewportParams(0, 0, surface->getWidth(), surface->getHeight());
         mState.setScissorParams(0, 0, surface->getWidth(), surface->getHeight());
-
-        mHasBeenCurrent = true;
     }
 
     // TODO(jmadill): Rework this when we support ContextImpl
     mState.setAllDirtyBits();
 
+    // Update default framebuffer
+    {
+        Framebuffer *previousDefault = nullptr;
+        auto previousDefaultIt = mFramebufferMap.find(0);
+        if (previousDefaultIt != mFramebufferMap.end())
+        {
+            previousDefault = previousDefaultIt->second;
+        }
+
+        Framebuffer *newDefault = surface->getDefaultFramebuffer();
+
+        if (mState.getReadFramebuffer() == previousDefault)
+        {
+            mState.setReadFramebufferBinding(newDefault);
+        }
+        if (mState.getDrawFramebuffer() == previousDefault)
+        {
+            mState.setDrawFramebufferBinding(newDefault);
+        }
+
+        mFramebufferMap[0] = newDefault;
+    }
+
     if (mCurrentSurface)
     {
-        releaseSurface();
+        mCurrentSurface->setIsCurrent(false);
     }
-
-    ASSERT(mCurrentSurface == nullptr);
-    mCurrentSurface = surface;
     surface->setIsCurrent(true);
+    mCurrentSurface = surface;
 
-    // Update default framebuffer
-    Framebuffer *defaultFBO = mFramebufferMap[0];
-
-    GLenum drawBufferState = GL_BACK;
-    defaultFBO->setDrawBuffers(1, &drawBufferState);
-    defaultFBO->setReadBuffer(GL_BACK);
-
-    const FramebufferAttachment *backAttachment = defaultFBO->getAttachment(GL_BACK);
-
-    if (backAttachment && backAttachment->getSurface() == surface)
+    if (!mHasBeenCurrent)
     {
-        // FBO already initialized to the surface.
-        return;
-    }
+        bindReadFramebuffer(0);
+        bindDrawFramebuffer(0);
 
-    const egl::Config *config = surface->getConfig();
-
-    defaultFBO->setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_BACK, ImageIndex::MakeInvalid(), surface);
-
-    if (config->depthSize > 0)
-    {
-        defaultFBO->setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_DEPTH, ImageIndex::MakeInvalid(), surface);
-    }
-    else
-    {
-        defaultFBO->resetAttachment(GL_DEPTH);
-    }
-
-    if (config->stencilSize > 0)
-    {
-        defaultFBO->setAttachment(GL_FRAMEBUFFER_DEFAULT, GL_STENCIL, ImageIndex::MakeInvalid(), surface);
-    }
-    else
-    {
-        defaultFBO->resetAttachment(GL_STENCIL);
+        mHasBeenCurrent = true;
     }
 }
 
 void Context::releaseSurface()
 {
-    Framebuffer *defaultFBO = mFramebufferMap[0];
-    if (defaultFBO)
-    {
-        defaultFBO->resetAttachment(GL_BACK);
-        defaultFBO->resetAttachment(GL_DEPTH);
-        defaultFBO->resetAttachment(GL_STENCIL);
-    }
-
     ASSERT(mCurrentSurface != nullptr);
     mCurrentSurface->setIsCurrent(false);
     mCurrentSurface = nullptr;
+
+    mFramebufferMap.erase(0);
 }
 
 // NOTE: this function should not assume that this context is current!
@@ -1400,10 +1382,19 @@ EGLenum Context::getClientType() const
 
 EGLenum Context::getRenderBuffer() const
 {
-    ASSERT(mFramebufferMap.count(0) > 0);
-    const Framebuffer *framebuffer = mFramebufferMap.find(0)->second;
-    const FramebufferAttachment *backAttachment = framebuffer->getAttachment(GL_BACK);
-    return backAttachment ? backAttachment->getSurface()->getRenderBuffer() : EGL_NONE;
+    auto framebufferIt = mFramebufferMap.find(0);
+    if (framebufferIt != mFramebufferMap.end())
+    {
+        const Framebuffer *framebuffer = framebufferIt->second;
+        const FramebufferAttachment *backAttachment = framebuffer->getAttachment(GL_BACK);
+
+        ASSERT(backAttachment != nullptr);
+        return backAttachment->getSurface()->getRenderBuffer();
+    }
+    else
+    {
+        return EGL_NONE;
+    }
 }
 
 const Caps &Context::getCaps() const
