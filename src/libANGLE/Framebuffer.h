@@ -103,13 +103,13 @@ class Framebuffer
 
     const FramebufferAttachment *getAttachment(GLenum attachment) const;
 
-    GLenum getDrawBufferState(unsigned int colorAttachment) const;
+    GLenum getDrawBufferState(size_t drawBuffer) const;
     void setDrawBuffers(size_t count, const GLenum *buffers);
+    const FramebufferAttachment *getDrawBuffer(size_t drawBuffer) const;
 
     GLenum getReadBufferState() const;
     void setReadBuffer(GLenum buffer);
 
-    bool isEnabledColorAttachment(unsigned int colorAttachment) const;
     bool hasEnabledColorAttachment() const;
     bool hasStencil() const;
     int getSamples(const gl::Data &data) const;
