@@ -218,6 +218,10 @@ void StateManagerGL::bindVertexArray(GLuint vao, GLuint elementArrayBuffer)
 {
     if (mVAO != vao)
     {
+        std::stringstream strstr;
+        strstr << "VAO: " << vao << ", EAB: " << elementArrayBuffer << std::endl;
+        OutputDebugStringA(strstr.str().c_str());
+
         mVAO = vao;
         mBuffers[GL_ELEMENT_ARRAY_BUFFER] = elementArrayBuffer;
         mFunctions->bindVertexArray(vao);
@@ -228,6 +232,13 @@ void StateManagerGL::bindBuffer(GLenum type, GLuint buffer)
 {
     if (mBuffers[type] != buffer)
     {
+        if (type == GL_ELEMENT_ARRAY_BUFFER)
+        {
+            std::stringstream strstr;
+            strstr << "Element array buffer: " << buffer << std::endl;
+            OutputDebugStringA(strstr.str().c_str());
+        }
+
         mBuffers[type] = buffer;
         mFunctions->bindBuffer(type, buffer);
     }
