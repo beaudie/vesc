@@ -605,11 +605,12 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
             GLenum readInternalFormat = readColorBuffer->getInternalFormat();
             const InternalFormat &readFormatInfo = GetInternalFormatInfo(readInternalFormat);
 
-            for (GLuint i = 0; i < context->getCaps().maxColorAttachments; i++)
+            for (size_t drawbufferIdx = 0; drawbufferIdx < context->getCaps().maxDrawBuffers; ++drawbufferIdx)
             {
-                if (drawFramebuffer->isEnabledColorAttachment(i))
+                const FramebufferAttachment *attachment = drawFramebuffer->getDrawBuffer(drawbufferIdx);
+                if (attachment)
                 {
-                    GLenum drawInternalFormat = drawFramebuffer->getColorbuffer(i)->getInternalFormat();
+                    GLenum drawInternalFormat = attachment->getInternalFormat();
                     const InternalFormat &drawFormatInfo = GetInternalFormatInfo(drawInternalFormat);
 
                     // The GL ES 3.0.2 spec (pg 193) states that:
@@ -661,13 +662,11 @@ bool ValidateBlitFramebufferParameters(gl::Context *context, GLint srcX0, GLint 
                     return false;
                 }
 
-                for (GLuint colorAttachment = 0; colorAttachment < context->getCaps().maxColorAttachments; ++colorAttachment)
+                for (size_t drawbufferIdx = 0; drawbufferIdx < context->getCaps().maxDrawBuffers; ++drawbufferIdx)
                 {
-                    if (drawFramebuffer->isEnabledColorAttachment(colorAttachment))
+                    const FramebufferAttachment *attachment = drawFramebuffer->getDrawBuffer(drawbufferIdx);
+                    if (attachment)
                     {
-                        const FramebufferAttachment *attachment = drawFramebuffer->getColorbuffer(colorAttachment);
-                        ASSERT(attachment);
-
                         if (!(attachment->type() == GL_TEXTURE && attachment->getTextureImageIndex().type == GL_TEXTURE_2D) &&
                             attachment->type() != GL_RENDERBUFFER &&
                             attachment->type() != GL_FRAMEBUFFER_DEFAULT)
