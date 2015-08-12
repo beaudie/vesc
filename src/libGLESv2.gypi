@@ -740,6 +740,22 @@
                             [
                                 '<@(libangle_gl_cgl_sources)',
                             ],
+                            'link_settings':
+                            {
+                                'libraries':
+                                [
+                                    'OpenGL.framework',
+                                    'IOSurface.framework',
+                                    'Cocoa.framework',
+                                    'QuartzCore.framework',
+                                ],
+                            },
+                            'all_dependent_settings':
+                            {
+                                'xcode_settings': {
+                                    'LD_RUNPATH_SEARCH_PATHS': ['@executable_path/.'],
+                                },
+                            }
                         }],
                     ],
                 }],
@@ -795,15 +811,10 @@
                         }
                     },
                 }],
-                ['OS == "mac"',
+                ['angle_build_winphone==1',
                 {
-                    'all_dependent_settings':
-                    {
-                        'xcode_settings': {
-                            'LD_RUNPATH_SEARCH_PATHS': ['@executable_path/.'],
-                        },
-                    }
-                }]
+                    'msvs_enable_winphone' : '1',
+                }],
             ],
         },
     ],
