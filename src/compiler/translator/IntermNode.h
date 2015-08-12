@@ -156,8 +156,7 @@ class TIntermLoop : public TIntermNode
 
     TIntermLoop *getAsLoopNode() override { return this; }
     void traverse(TIntermTraverser *it) override;
-    bool replaceChildNode(
-        TIntermNode *original, TIntermNode *replacement) override;
+    bool replaceChildNode(TIntermNode *original, TIntermNode *replacement) override;
 
     TLoopType getType() const { return mType; }
     TIntermNode *getInit() { return mInit; }
@@ -189,8 +188,7 @@ class TIntermBranch : public TIntermNode
           mExpression(e) { }
 
     void traverse(TIntermTraverser *it) override;
-    bool replaceChildNode(
-        TIntermNode *original, TIntermNode *replacement) override;
+    bool replaceChildNode(TIntermNode *original, TIntermNode *replacement) override;
 
     TOperator getFlowOp() { return mFlowOp; }
     TIntermTyped* getExpression() { return mExpression; }
@@ -351,8 +349,7 @@ class TIntermBinary : public TIntermOperator
 
     TIntermBinary *getAsBinaryNode() override { return this; };
     void traverse(TIntermTraverser *it) override;
-    bool replaceChildNode(
-        TIntermNode *original, TIntermNode *replacement) override;
+    bool replaceChildNode(TIntermNode *original, TIntermNode *replacement) override;
 
     bool hasSideEffects() const override
     {
@@ -394,13 +391,9 @@ class TIntermUnary : public TIntermOperator
 
     void traverse(TIntermTraverser *it) override;
     TIntermUnary *getAsUnaryNode() override { return this; }
-    bool replaceChildNode(
-        TIntermNode *original, TIntermNode *replacement) override;
+    bool replaceChildNode(TIntermNode *original, TIntermNode *replacement) override;
 
-    bool hasSideEffects() const override
-    {
-        return isAssignment() || mOperand->hasSideEffects();
-    }
+    bool hasSideEffects() const override { return isAssignment() || mOperand->hasSideEffects(); }
 
     void setOperand(TIntermTyped *operand) { mOperand = operand; }
     TIntermTyped *getOperand() { return mOperand; }
@@ -444,8 +437,7 @@ class TIntermAggregate : public TIntermOperator
 
     TIntermAggregate *getAsAggregate() override { return this; }
     void traverse(TIntermTraverser *it) override;
-    bool replaceChildNode(
-        TIntermNode *original, TIntermNode *replacement) override;
+    bool replaceChildNode(TIntermNode *original, TIntermNode *replacement) override;
     bool replaceChildNodeWithMultiple(TIntermNode *original, TIntermSequence replacements);
     bool insertChildNodes(TIntermSequence::size_type position, TIntermSequence insertions);
     // Conservatively assume function calls and other aggregate operators have side-effects
@@ -514,8 +506,7 @@ class TIntermSelection : public TIntermTyped
           mFalseBlock(falseB) {}
 
     void traverse(TIntermTraverser *it) override;
-    bool replaceChildNode(
-        TIntermNode *original, TIntermNode *replacement) override;
+    bool replaceChildNode(TIntermNode *original, TIntermNode *replacement) override;
 
     // Conservatively assume selections have side-effects
     bool hasSideEffects() const override { return true; }
