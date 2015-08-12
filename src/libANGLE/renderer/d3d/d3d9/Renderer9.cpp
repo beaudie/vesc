@@ -527,6 +527,11 @@ egl::DisplayExtensions Renderer9::generateDisplayExtensions() const
     extensions.createContext       = true;
     extensions.deviceQuery         = true;
 
+    extensions.image               = true;
+    extensions.imageBase           = true;
+    extensions.glTexture2DImage    = true;
+    extensions.glRenderbufferImage = true;
+
     return extensions;
 }
 
@@ -2613,6 +2618,7 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
     const gl::TextureCaps &textureCaps = getRendererTextureCaps().get(format);
     GLuint supportedSamples = textureCaps.getNearestSamples(samples);
 
+    IDirect3DTexture9 *texture      = nullptr;
     IDirect3DSurface9 *renderTarget = NULL;
     if (width > 0 && height > 0)
     {
@@ -2628,10 +2634,23 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
         }
         else
         {
-            requiresInitialization = (d3d9FormatInfo.dataInitializerFunction != NULL);
-            result = mDevice->CreateRenderTarget(width, height, d3d9FormatInfo.renderFormat,
-                                                 gl_d3d9::GetMultisampleType(supportedSamples),
-                                                 0, FALSE, &renderTarget, NULL);
+            requiresInitialization = (d3d9FormatInfo.dataInitializerFunction != nullptr);
+            if (supportedSamples > 0)
+            {
+                result = mDevice->CreateRenderTarget(width, height, d3d9FormatInfo.renderFormat,
+                                                     gl_d3d9::GetMultisampleType(supportedSamples),
+                                                     0, FALSE, &renderTarget, nullptr);
+            }
+            else
+            {
+                result = mDevice->CreateTexture(width, height, 1, D3DUSAGE_RENDERTARGET,
+                                                d3d9FormatInfo.texFormat, D3DPOOL_DEFAULT, &texture,
+                                                nullptr);
+                if (!FAILED(result))
+                {
+                    result = texture->GetSurfaceLevel(0, &renderTarget);
+                }
+            }
         }
 
         if (FAILED(result))
@@ -2653,7 +2672,35 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
         }
     }
 
-    *outRT = new TextureRenderTarget9(renderTarget, format, width, height, 1, supportedSamples);
+    *outRT = new TextureRenderTarget9(texture, 0, renderTarget, format, width, height, 1,
+                                      supportedSamples);
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error Renderer9::createRenderTargetCopy(RenderTargetD3D *source, RenderTargetD3D **outRT)
+{
+    ASSERT(source != nullptr);
+
+    RenderTargetD3D *newRT = nullptr;
+    gl::Error error = createRenderTarget(source->getWidth(), source->getHeight(),
+                                         source->getInternalFormat(), source->getSamples(), &newRT);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    RenderTarget9 *source9 = GetAs<RenderTarget9>(source);
+    RenderTarget9 *dest9   = GetAs<RenderTarget9>(newRT);
+
+    HRESULT result = mDevice->StretchRect(source9->getSurface(), nullptr, dest9->getSurface(),
+                                          nullptr, D3DTEXF_NONE);
+    if (FAILED(result))
+    {
+        ASSERT(result == D3DERR_OUTOFVIDEOMEMORY || result == E_OUTOFMEMORY);
+        return gl::Error(GL_OUT_OF_MEMORY, "Failed to copy render target, result: 0x%X.", result);
+    }
+
+    *outRT = newRT;
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -2891,6 +2938,11 @@ TextureStorage *Renderer9::createTextureStorage2D(SwapChainD3D *swapChain)
 {
     SwapChain9 *swapChain9 = GetAs<SwapChain9>(swapChain);
     return new TextureStorage9_2D(this, swapChain9);
+}
+
+TextureStorage *Renderer9::createTextureStorageEGLImage(EGLImageD3D *eglImage)
+{
+    return new TextureStorage9_EGLImage(this, eglImage);
 }
 
 TextureStorage *Renderer9::createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly)
