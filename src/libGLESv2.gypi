@@ -45,6 +45,9 @@
             '../include/GLSLANG/ShaderLang.h',
             '../include/GLSLANG/ShaderVars.h',
             '../include/KHR/khrplatform.h',
+            '../include/platform/GLThread.h',
+            '../include/platform/GLTraceLocation.h',
+            '../include/platform/GLWaitableEvent.h',
             '../include/platform/Platform.h',
         ],
         'libangle_sources':

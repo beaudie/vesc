@@ -22,6 +22,11 @@
 //FIXME(jmadill): std::array is currently prohibited by Chromium style guide
 #include <array>
 
+namespace angle
+{
+class GLThread;
+}
+
 namespace egl
 {
 class ConfigSet;
@@ -48,9 +53,9 @@ class VertexBuffer;
 
 enum ShaderType
 {
-    SHADER_VERTEX,
-    SHADER_PIXEL,
-    SHADER_GEOMETRY
+    SHADER_VERTEX   = 0,
+    SHADER_PIXEL    = 1,
+    SHADER_GEOMETRY = 2
 };
 
 struct DeviceIdentifier
@@ -213,6 +218,8 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     // In D3D11, faster than calling setTexture a jillion times
     virtual gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) = 0;
 
+    angle::GLThread *getShaderCompileThread(ShaderType shaderType);
+
   protected:
     virtual gl::Error drawArrays(const gl::Data &data, GLenum mode, GLsizei count, GLsizei instances, bool usesPointSize) = 0;
     virtual gl::Error drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
@@ -263,6 +270,8 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     gl::TextureMap mIncompleteTextures;
     MemoryBuffer mScratchMemoryBuffer;
     unsigned int mScratchMemoryBufferResetCounter;
+
+    std::vector<angle::GLThread *> mShaderCompileThreads;
 
     mutable bool mWorkaroundsInitialized;
     mutable WorkaroundsD3D mWorkarounds;

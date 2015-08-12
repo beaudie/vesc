@@ -132,6 +132,9 @@ class ProgramD3D : public ProgramImpl
     void updateCachedInputLayout(const gl::Program *program, const gl::State &state);
     const gl::InputLayout &getCachedInputLayout() const { return mCachedInputLayout; }
 
+    RendererD3D *getRenderer() { return mRenderer; }
+    DynamicHLSL *getDynamicHLSL() { return mDynamicHLSL; }
+
   private:
     class VertexExecutable
     {

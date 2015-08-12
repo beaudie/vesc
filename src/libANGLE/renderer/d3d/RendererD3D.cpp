@@ -22,6 +22,8 @@
 #include "libANGLE/renderer/d3d/DisplayD3D.h"
 #include "libANGLE/renderer/d3d/IndexDataManager.h"
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
+#include "platform/GLThread.h"
+#include "platform/Platform.h"
 
 namespace rx
 {
@@ -44,10 +46,20 @@ RendererD3D::RendererD3D(egl::Display *display)
       mScratchMemoryBufferResetCounter(0),
       mWorkaroundsInitialized(false)
 {
+    // Initialize shader compile threads - will add nullptrs if the platform is default.
+    angle::Platform *platform = ANGLEPlatformCurrent();
+    mShaderCompileThreads.push_back(platform->createThread("Vertex shader compile thread"));
+    mShaderCompileThreads.push_back(platform->createThread("Pixel shader compile thread"));
+    mShaderCompileThreads.push_back(platform->createThread("Geometry shader compile thread"));
 }
 
 RendererD3D::~RendererD3D()
 {
+    for (angle::GLThread *&thread : mShaderCompileThreads)
+    {
+        SafeDelete(thread);
+    }
+
     cleanup();
 }
 
@@ -668,4 +680,14 @@ gl::DebugAnnotator *RendererD3D::getAnnotator()
     return mAnnotator;
 }
 
+angle::GLThread *RendererD3D::getShaderCompileThread(ShaderType shaderType)
+{
+    size_t shaderIndex = static_cast<size_t>(shaderType);
+    if (shaderIndex < mShaderCompileThreads.size())
+    {
+        return mShaderCompileThreads[shaderIndex];
+    }
+
+    return nullptr;
+}
 }

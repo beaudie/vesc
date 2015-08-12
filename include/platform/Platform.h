@@ -11,14 +11,55 @@
 
 #include <stdint.h>
 
+#include <vector>
+
 #include "../export.h"
+
+#include "GLWaitableEvent.h"
 
 namespace angle
 {
 
+class GLThread;
+
 class Platform
 {
   public:
+    // Threads -------------------------------------------------------
+
+    // Creates an embedder-defined thread.
+    virtual GLThread *createThread(const char *name) { return nullptr; }
+
+    // Returns an interface to the current thread. This is owned by the
+    // embedder.
+    virtual GLThread *currentThread() { return nullptr; }
+
+    // Yield the current thread so another thread can be scheduled.
+    virtual void yieldCurrentThread() {}
+
+    // WaitableEvent -------------------------------------------------------
+
+    // Creates an embedder-defined waitable event object.
+    GLWaitableEvent *createWaitableEvent()
+    {
+        return createWaitableEvent(GLWaitableEvent::ResetPolicy::Auto,
+                                   GLWaitableEvent::InitialState::NonSignaled);
+    }
+    virtual GLWaitableEvent *createWaitableEvent(GLWaitableEvent::ResetPolicy,
+                                                 GLWaitableEvent::InitialState)
+    {
+        return nullptr;
+    }
+
+    // Waits on multiple events and returns the event object that has been
+    // signaled. This may return nullptr if it fails to wait events.
+    // Any event objects given to this method must not deleted while this
+    // wait is happening.
+    // TODO(jmadill): is std::vector acceptable?
+    virtual GLWaitableEvent *waitMultipleEvents(const std::vector<GLWaitableEvent *> &events)
+    {
+        return nullptr;
+    }
 
     // System --------------------------------------------------------------
 

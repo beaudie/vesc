@@ -20,6 +20,9 @@
 #include "libANGLE/renderer/d3d/ShaderD3D.h"
 #include "libANGLE/renderer/d3d/ShaderExecutableD3D.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
+#include "platform/GLThread.h"
+#include "platform/GLTraceLocation.h"
+#include "platform/Platform.h"
 
 namespace rx
 {
@@ -127,7 +130,199 @@ struct AttributeSorter
     const ProgramImpl::SemanticIndexArray *originalIndices;
 };
 
+struct AllCompileResults
+{
+    AllCompileResults()
+        : shaderCompileErrors(3, gl::Error(GL_NO_ERROR)), infoLog(nullptr), geometryShader(nullptr)
+    {
+    }
+
+    std::vector<gl::Error> shaderCompileErrors;
+    gl::InfoLog *infoLog;
+    ShaderExecutableD3D *geometryShader;
+};
+
+class ShaderCompileResultTask : public angle::GLThread::Task
+{
+  public:
+    ShaderCompileResultTask(ShaderType shaderType,
+                            const gl::Error &error,
+                            const std::string &infoLogMessage,
+                            AllCompileResults *compileResults,
+                            angle::GLWaitableEvent *waitableEvent);
+
+    void run() override;
+
+  private:
+    ShaderType mShaderType;
+    gl::Error mError;
+    std::string mInfoLogMessage;
+    AllCompileResults *mCompileResults;
+    angle::GLWaitableEvent *mWaitableEvent;
+};
+
+ShaderCompileResultTask::ShaderCompileResultTask(ShaderType shaderType,
+                                                 const gl::Error &error,
+                                                 const std::string &infoLogMessage,
+                                                 AllCompileResults *compileResults,
+                                                 angle::GLWaitableEvent *waitableEvent)
+    : mShaderType(shaderType),
+      mError(error),
+      mInfoLogMessage(infoLogMessage),
+      mCompileResults(compileResults),
+      mWaitableEvent(waitableEvent)
+{
 }
+
+void ShaderCompileResultTask::run()
+{
+    mCompileResults->shaderCompileErrors[mShaderType] = mError;
+    (*mCompileResults->infoLog) << mInfoLogMessage;
+
+    // Handle the null case where we aren't using a threading platform.
+    if (mWaitableEvent)
+    {
+        mWaitableEvent->signal();
+    }
+}
+
+class VertexCompileTask : public angle::GLThread::Task
+{
+  public:
+    VertexCompileTask(const gl::Shader *vertexShader,
+                      ProgramD3D *program,
+                      AllCompileResults *compileResults,
+                      angle::GLWaitableEvent *waitableEvent);
+
+    void run() override;
+
+  private:
+    angle::GLThread *mCallingThread;
+    const gl::Shader *mVertexShader;
+    ProgramD3D *mProgram;
+    gl::InfoLog mInfoLog;
+    AllCompileResults *mCompileResults;
+    angle::GLWaitableEvent *mWaitableEvent;
+};
+
+VertexCompileTask::VertexCompileTask(const gl::Shader *vertexShader,
+                                     ProgramD3D *program,
+                                     AllCompileResults *compileResults,
+                                     angle::GLWaitableEvent *waitableEvent)
+    : mCallingThread(ANGLEPlatformCurrent()->currentThread()),
+      mVertexShader(vertexShader),
+      mProgram(program),
+      mCompileResults(compileResults),
+      mWaitableEvent(waitableEvent)
+{
+}
+
+void VertexCompileTask::run()
+{
+    const gl::InputLayout &defaultInputLayout    = GetDefaultInputLayoutFromShader(mVertexShader);
+    ShaderExecutableD3D *defaultVertexExecutable = nullptr;
+    gl::Error error = mProgram->getVertexExecutableForInputLayout(
+        defaultInputLayout, &defaultVertexExecutable, &mInfoLog);
+
+    ShaderCompileResultTask *resultTask = new ShaderCompileResultTask(
+        SHADER_VERTEX, error, mInfoLog.str(), mCompileResults, mWaitableEvent);
+
+    angle::PostTaskOrRun(mCallingThread, FROM_HERE, resultTask);
+}
+
+class PixelCompileTask : public angle::GLThread::Task
+{
+  public:
+    PixelCompileTask(ProgramD3D *program,
+                     AllCompileResults *compileResults,
+                     angle::GLWaitableEvent *waitableEvent);
+
+    void run() override;
+
+  private:
+    angle::GLThread *mCallingThread;
+    ProgramD3D *mProgram;
+    gl::InfoLog mInfoLog;
+    AllCompileResults *mCompileResults;
+    angle::GLWaitableEvent *mWaitableEvent;
+};
+
+PixelCompileTask::PixelCompileTask(ProgramD3D *program,
+                                   AllCompileResults *compileResults,
+                                   angle::GLWaitableEvent *waitableEvent)
+    : mCallingThread(ANGLEPlatformCurrent()->currentThread()),
+      mProgram(program),
+      mCompileResults(compileResults),
+      mWaitableEvent(waitableEvent)
+{
+}
+
+void PixelCompileTask::run()
+{
+    std::vector<GLenum> defaultPixelOutput =
+        GetDefaultOutputLayoutFromShader(mProgram->getPixelShaderKey());
+    ShaderExecutableD3D *defaultPixelExecutable = nullptr;
+    gl::Error error = mProgram->getPixelExecutableForOutputLayout(
+        defaultPixelOutput, &defaultPixelExecutable, &mInfoLog);
+
+    ShaderCompileResultTask *resultTask = new ShaderCompileResultTask(
+        SHADER_PIXEL, error, mInfoLog.str(), mCompileResults, mWaitableEvent);
+
+    angle::PostTaskOrRun(mCallingThread, FROM_HERE, resultTask);
+}
+
+class GeometryCompileTask : public angle::GLThread::Task
+{
+  public:
+    GeometryCompileTask(int registers,
+                        ProgramD3D *program,
+                        AllCompileResults *compileResults,
+                        angle::GLWaitableEvent *waitableEvent);
+
+    void run() override;
+
+  private:
+    int mRegisters;
+    angle::GLThread *mCallingThread;
+    ProgramD3D *mProgram;
+    gl::InfoLog mInfoLog;
+    AllCompileResults *mCompileResults;
+    angle::GLWaitableEvent *mWaitableEvent;
+};
+
+GeometryCompileTask::GeometryCompileTask(int registers,
+                                         ProgramD3D *program,
+                                         AllCompileResults *compileResults,
+                                         angle::GLWaitableEvent *waitableEvent)
+    : mRegisters(registers),
+      mCallingThread(ANGLEPlatformCurrent()->currentThread()),
+      mProgram(program),
+      mCompileResults(compileResults),
+      mWaitableEvent(waitableEvent)
+{
+}
+
+void GeometryCompileTask::run()
+{
+    const gl::Program::Data &data      = mProgram->getData();
+    const ShaderD3D *vertexShaderD3D   = GetImplAs<ShaderD3D>(data.getAttachedVertexShader());
+    const ShaderD3D *fragmentShaderD3D = GetImplAs<ShaderD3D>(data.getAttachedFragmentShader());
+
+    std::string geometryHLSL = mProgram->getDynamicHLSL()->generateGeometryShaderHLSL(
+        mRegisters, fragmentShaderD3D, vertexShaderD3D);
+
+    gl::Error error = mProgram->getRenderer()->compileToExecutable(
+        mInfoLog, geometryHLSL, SHADER_GEOMETRY, mProgram->getTransformFeedbackLinkedVaryings(),
+        (mProgram->getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS),
+        D3DCompilerWorkarounds(), &mCompileResults->geometryShader);
+
+    ShaderCompileResultTask *resultTask = new ShaderCompileResultTask(
+        SHADER_GEOMETRY, error, mInfoLog.str(), mCompileResults, mWaitableEvent);
+
+    angle::PostTaskOrRun(mCallingThread, FROM_HERE, resultTask);
+}
+
+}  // anonymous namespace
 
 ProgramD3D::VertexExecutable::VertexExecutable(const gl::InputLayout &inputLayout,
                                                const Signature &signature,
@@ -1007,39 +1202,55 @@ gl::Error ProgramD3D::getVertexExecutableForInputLayout(const gl::InputLayout &i
 
 LinkResult ProgramD3D::compileProgramExecutables(gl::InfoLog &infoLog, int registers)
 {
-    const ShaderD3D *vertexShaderD3D   = GetImplAs<ShaderD3D>(mData.getAttachedVertexShader());
-    const ShaderD3D *fragmentShaderD3D = GetImplAs<ShaderD3D>(mData.getAttachedFragmentShader());
+    AllCompileResults compileResults;
+    compileResults.infoLog = &infoLog;
 
-    const gl::InputLayout &defaultInputLayout =
-        GetDefaultInputLayoutFromShader(mData.getAttachedVertexShader());
-    ShaderExecutableD3D *defaultVertexExecutable = NULL;
-    gl::Error error = getVertexExecutableForInputLayout(defaultInputLayout, &defaultVertexExecutable, &infoLog);
-    if (error.isError())
-    {
-        return LinkResult(false, error);
-    }
+    angle::Platform *platform = ANGLEPlatformCurrent();
 
-    std::vector<GLenum> defaultPixelOutput = GetDefaultOutputLayoutFromShader(getPixelShaderKey());
-    ShaderExecutableD3D *defaultPixelExecutable = NULL;
-    error = getPixelExecutableForOutputLayout(defaultPixelOutput, &defaultPixelExecutable, &infoLog);
-    if (error.isError())
-    {
-        return LinkResult(false, error);
-    }
+    std::vector<angle::GLWaitableEvent *> waitableEvents;
+
+    waitableEvents.push_back(platform->createWaitableEvent());
+    VertexCompileTask *vertexTask = new VertexCompileTask(mData.getAttachedVertexShader(), this,
+                                                          &compileResults, waitableEvents.back());
+    angle::PostTaskOrRun(mRenderer->getShaderCompileThread(SHADER_VERTEX), FROM_HERE, vertexTask);
+
+    waitableEvents.push_back(platform->createWaitableEvent());
+    PixelCompileTask *pixelTask =
+        new PixelCompileTask(this, &compileResults, waitableEvents.back());
+    angle::PostTaskOrRun(mRenderer->getShaderCompileThread(SHADER_PIXEL), FROM_HERE, pixelTask);
 
     if (usesGeometryShader())
     {
-        std::string geometryHLSL = mDynamicHLSL->generateGeometryShaderHLSL(registers, fragmentShaderD3D, vertexShaderD3D);
+        waitableEvents.push_back(platform->createWaitableEvent());
+        GeometryCompileTask *geometryTask =
+            new GeometryCompileTask(registers, this, &compileResults, waitableEvents.back());
+        angle::PostTaskOrRun(mRenderer->getShaderCompileThread(SHADER_GEOMETRY), FROM_HERE,
+                             geometryTask);
+    }
 
+    // Wait for the threads to finish
+    for (auto &waitableEvent : waitableEvents)
+    {
+        if (waitableEvent != nullptr)
+        {
+            waitableEvent->wait();
+            SafeDelete(waitableEvent);
+        }
+    }
 
-        error = mRenderer->compileToExecutable(infoLog, geometryHLSL, SHADER_GEOMETRY, mTransformFeedbackLinkedVaryings,
-                                               (mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS),
-                                               D3DCompilerWorkarounds(), &mGeometryExecutable);
+    for (const gl::Error &error : compileResults.shaderCompileErrors)
+    {
         if (error.isError())
         {
             return LinkResult(false, error);
         }
     }
+
+    // Copy geometry executable if successsful.
+    mGeometryExecutable = compileResults.geometryShader;
+
+    ASSERT(!mVertexExecutables.empty() && !mPixelExecutables.empty() &&
+           (!usesGeometryShader() || mGeometryExecutable));
 
 #if ANGLE_SHADER_DEBUG_INFO == ANGLE_ENABLED
     if (usesGeometryShader() && mGeometryExecutable)
@@ -1051,19 +1262,14 @@ LinkResult ProgramD3D::compileProgramExecutables(gl::InfoLog &infoLog, int regis
         vertexShaderD3D->appendDebugInfo("\nGEOMETRY SHADER END\n\n\n");
     }
 
-    if (defaultVertexExecutable)
-    {
-        vertexShaderD3D->appendDebugInfo(defaultVertexExecutable->getDebugInfo());
-    }
+    ShaderExecutableD3D *defaultVertexExecutable = mVertexExecutables[0]->shaderExecutable();
+    vertexShaderD3D->appendDebugInfo(defaultVertexExecutable->getDebugInfo());
 
-    if (defaultPixelExecutable)
-    {
-        fragmentShaderD3D->appendDebugInfo(defaultPixelExecutable->getDebugInfo());
-    }
+    ShaderExecutableD3D *defaultPixelExecutable = mPixelExecutables[0]->shaderExecutable();
+    fragmentShaderD3D->appendDebugInfo(defaultPixelExecutable->getDebugInfo());
 #endif
 
-    bool linkSuccess = (defaultVertexExecutable && defaultPixelExecutable && (!usesGeometryShader() || mGeometryExecutable));
-    return LinkResult(linkSuccess, gl::Error(GL_NO_ERROR));
+    return LinkResult(true, gl::Error(GL_NO_ERROR));
 }
 
 LinkResult ProgramD3D::link(const gl::Data &data, gl::InfoLog &infoLog,

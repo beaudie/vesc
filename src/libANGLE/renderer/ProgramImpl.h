@@ -125,6 +125,8 @@ class ProgramImpl : angle::NonCopyable
 
     virtual void reset();
 
+    const gl::Program::Data &getData() const { return mData; }
+
   protected:
     const gl::Program::Data &mData;
 
