@@ -13,11 +13,13 @@
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/Framebuffer.h"
+#include "libANGLE/Image.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/BufferImpl.h"
 #include "libANGLE/renderer/d3d/BufferD3D.h"
+#include "libANGLE/renderer/d3d/EGLImageD3D.h"
 #include "libANGLE/renderer/d3d/ImageD3D.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/RenderTargetD3D.h"
@@ -622,6 +624,7 @@ gl::Error TextureD3D::getAttachmentRenderTarget(const gl::FramebufferAttachment:
 TextureD3D_2D::TextureD3D_2D(RendererD3D *renderer)
     : TextureD3D(renderer)
 {
+    mEGLImageTarget = false;
     for (int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; ++i)
     {
         mImageArray[i] = renderer->createImage();
@@ -980,6 +983,7 @@ void TextureD3D_2D::bindTexImage(egl::Surface *surface)
     ASSERT(surfaceD3D);
 
     mTexStorage = mRenderer->createTextureStorage2D(surfaceD3D->getSwapChain());
+    mEGLImageTarget = false;
 
     mDirtyImages = true;
 }
@@ -993,13 +997,31 @@ void TextureD3D_2D::releaseTexImage()
 
     for (int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; i++)
     {
-        mImageArray[i]->redefine(GL_TEXTURE_2D, GL_NONE, gl::Extents(0, 0, 0), true);
+        redefineImage(i, GL_NONE, gl::Extents(0, 0, 1), true);
     }
 }
 
 gl::Error TextureD3D_2D::setEGLImageTarget(GLenum target, egl::Image *image)
 {
-    UNIMPLEMENTED();
+    EGLImageD3D *eglImaged3d = GetImplAs<EGLImageD3D>(image);
+
+    // Set the properties of the base mip level from the EGL image
+    GLenum internalformat = image->getInternalFormat();
+    gl::Extents size(image->getWidth(), image->getHeight(), 1);
+    redefineImage(0, internalformat, size, true);
+
+    // Clear all other images.
+    for (size_t level = 1; level < ArraySize(mImageArray); level++)
+    {
+        redefineImage(level, GL_NONE, gl::Extents(0, 0, 1), true);
+    }
+
+    SafeDelete(mTexStorage);
+    mImageArray[0]->markClean();
+
+    mTexStorage     = mRenderer->createTextureStorageEGLImage(eglImaged3d);
+    mEGLImageTarget = true;
+
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -1241,6 +1263,22 @@ void TextureD3D_2D::redefineImage(GLint level,
     {
         const int storageLevels = mTexStorage->getLevelCount();
 
+        // If the storage was from an EGL image, copy it back into local images to preserve it
+        // while orphaning
+        if (level != 0 && mEGLImageTarget)
+        {
+            gl::Offset offset(0, 0, 0);
+            gl::Rectangle sourceArea(0, 0, mImageArray[0]->getWidth(), mImageArray[0]->getHeight());
+
+            RenderTargetD3D *storageRendertarget = nullptr;
+            gl::Error error =
+                mTexStorage->getRenderTarget(gl::ImageIndex::Make2D(0), &storageRendertarget);
+            if (!error.isError())
+            {
+                mImageArray[0]->copy(offset, sourceArea, storageRendertarget);
+            }
+        }
+
         if ((level >= storageLevels && storageLevels != 0) ||
             size.width != storageWidth ||
             size.height != storageHeight ||
@@ -1255,6 +1293,9 @@ void TextureD3D_2D::redefineImage(GLint level,
             mDirtyImages = true;
         }
     }
+
+    // Can't be an EGL image target after being redefined
+    mEGLImageTarget = false;
 }
 
 gl::ImageIndexIterator TextureD3D_2D::imageIterator() const
