@@ -268,6 +268,48 @@ TEST_P(SwizzleTest, D24_2D)
     runTest2D();
 }
 
+TEST_P(SwizzleTest, L8_2D)
+{
+    GLubyte data[] = { 0x77 };
+    init2DTexture(GL_LUMINANCE8_EXT, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
+    runTest2D();
+}
+
+TEST_P(SwizzleTest, A8_2D)
+{
+    GLubyte data[] = { 0x55 };
+    init2DTexture(GL_ALPHA8_EXT, GL_ALPHA, GL_UNSIGNED_BYTE, data);
+    runTest2D();
+}
+
+TEST_P(SwizzleTest, LA8_2D)
+{
+    GLubyte data[] = { 0x77, 0x66 };
+    init2DTexture(GL_LUMINANCE8_ALPHA8_EXT, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, data);
+    runTest2D();
+}
+
+TEST_P(SwizzleTest, L32F_2D)
+{
+    GLfloat data[] = { 0.7f };
+    init2DTexture(GL_LUMINANCE32F_EXT, GL_LUMINANCE, GL_FLOAT, data);
+    runTest2D();
+}
+
+TEST_P(SwizzleTest, A32F_2D)
+{
+    GLfloat data[] = { 0.4f, };
+    init2DTexture(GL_ALPHA32F_EXT, GL_ALPHA, GL_FLOAT, data);
+    runTest2D();
+}
+
+TEST_P(SwizzleTest, LA32F_2D)
+{
+    GLfloat data[] = { 0.5f, 0.6f, };
+    init2DTexture(GL_LUMINANCE_ALPHA32F_EXT, GL_LUMINANCE_ALPHA, GL_FLOAT, data);
+    runTest2D();
+}
+
 #include "media/pixel.inl"
 
 TEST_P(SwizzleTest, CompressedDXT_2D)
