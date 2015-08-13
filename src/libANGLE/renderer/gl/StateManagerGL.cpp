@@ -16,7 +16,6 @@
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/ProgramGL.h"
 #include "libANGLE/renderer/gl/TextureGL.h"
-#include "libANGLE/renderer/gl/VertexArrayGL.h"
 
 namespace rx
 {
@@ -25,6 +24,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mProgram(0),
       mVAO(0),
       mVertexAttribCurrentValues(rendererCaps.maxVertexAttributes),
+      mDefaultVertexArrayState(rendererCaps.maxVertexAttributes),
       mBuffers(),
       mTextureUnitIndex(0),
       mTextures(),
@@ -111,6 +111,11 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
             mFunctions->enable(GL_POINT_SPRITE);
         }
     }
+}
+
+StateManagerGL::~StateManagerGL()
+{
+    mDefaultVertexArrayState.reset();
 }
 
 void StateManagerGL::deleteProgram(GLuint program)
@@ -373,6 +378,11 @@ void StateManagerGL::bindRenderbuffer(GLenum type, GLuint renderbuffer)
     }
 }
 
+VertexArrayStateGL *StateManagerGL::getDefaultVertexArrayState()
+{
+    return &mDefaultVertexArrayState;
+}
+
 gl::Error StateManagerGL::setDrawArraysState(const gl::Data &data, GLint first, GLsizei count)
 {
     const gl::State &state = *data.state;
@@ -388,8 +398,6 @@ gl::Error StateManagerGL::setDrawArraysState(const gl::Data &data, GLint first, 
     {
         return error;
     }
-
-    bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getAppliedElementArrayBufferID());
 
     return setGenericDrawState(data);
 }
@@ -410,8 +418,6 @@ gl::Error StateManagerGL::setDrawElementsState(const gl::Data &data, GLsizei cou
     {
         return error;
     }
-
-    bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getAppliedElementArrayBufferID());
 
     return setGenericDrawState(data);
 }
