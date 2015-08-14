@@ -1105,7 +1105,6 @@ LinkResult ProgramD3D::link(const gl::Data &data,
                             gl::InfoLog &infoLog,
                             gl::Shader *fragmentShader,
                             gl::Shader *vertexShader,
-                            int *registers,
                             std::map<int, gl::VariableLocation> *outputVariables)
 {
     ShaderD3D *vertexShaderD3D = GetImplAs<ShaderD3D>(vertexShader);
@@ -1132,10 +1131,10 @@ LinkResult ProgramD3D::link(const gl::Data &data,
 
     // Map the varyings to the register file
     VaryingPacking packing = {};
-    *registers = mDynamicHLSL->packVaryings(infoLog, packing, fragmentShaderD3D, vertexShaderD3D,
-                                            mData.getTransformFeedbackVaryingNames());
+    int registers = mDynamicHLSL->packVaryings(infoLog, packing, fragmentShaderD3D, vertexShaderD3D,
+                                               mData.getTransformFeedbackVaryingNames());
 
-    if (*registers < 0)
+    if (registers < 0)
     {
         return LinkResult(false, gl::Error(GL_NO_ERROR));
     }
@@ -1144,7 +1143,7 @@ LinkResult ProgramD3D::link(const gl::Data &data,
 
     std::vector<gl::LinkedVarying> linkedVaryings;
     if (!mDynamicHLSL->generateShaderLinkHLSL(
-            data, infoLog, *registers, packing, mPixelHLSL, mVertexHLSL, fragmentShaderD3D,
+            data, infoLog, registers, packing, mPixelHLSL, mVertexHLSL, fragmentShaderD3D,
             vertexShaderD3D, mData.getTransformFeedbackVaryingNames(), &linkedVaryings,
             outputVariables, &mPixelShaderKey, &mUsesFragDepth))
     {
@@ -1163,6 +1162,13 @@ LinkResult ProgramD3D::link(const gl::Data &data,
     defineUniformBlocks(*data.caps);
 
     gatherTransformFeedbackVaryings(linkedVaryings);
+
+    LinkResult result = compileProgramExecutables(infoLog, registers);
+    if (result.error.isError() || !result.linkSuccess)
+    {
+        infoLog << "Failed to create D3D shaders.";
+        return result;
+    }
 
     return LinkResult(true, gl::Error(GL_NO_ERROR));
 }
