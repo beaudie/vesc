@@ -38,9 +38,11 @@ class ProgramGL : public ProgramImpl
     LinkResult load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream) override;
     gl::Error save(gl::BinaryOutputStream *stream) override;
 
-    LinkResult link(const gl::Data &data, gl::InfoLog &infoLog,
-                    gl::Shader *fragmentShader, gl::Shader *vertexShader,
-                    int *registers, std::vector<gl::LinkedVarying> *linkedVaryings,
+    LinkResult link(const gl::Data &data,
+                    gl::InfoLog &infoLog,
+                    gl::Shader *fragmentShader,
+                    gl::Shader *vertexShader,
+                    int *registers,
                     std::map<int, gl::VariableLocation> *outputVariables) override;
 
     void bindAttributeLocation(GLuint index, const std::string &name) override;
@@ -79,7 +81,9 @@ class ProgramGL : public ProgramImpl
 
     LinkResult compileProgramExecutables(gl::InfoLog &infoLog, int registers) override;
 
-    void defineUniformBlock(gl::InfoLog &infoLog, const gl::Shader &shader, const sh::InterfaceBlock &interfaceBlock,
+    void defineUniformBlock(gl::InfoLog &infoLog,
+                            const gl::Shader &shader,
+                            const sh::InterfaceBlock &interfaceBlock,
                             const gl::Caps &caps);
 
     gl::Error applyUniforms() override;
