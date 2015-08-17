@@ -130,6 +130,19 @@ gl::Error VertexArrayGL::syncDrawState(const gl::AttributesMask &activeAttribute
         }
     }
 
+    gl::AttributesMask activeAttributes = activeAttributesMask & mAttributesAskedEnabled;
+    gl::AttributesMask toEnable = activeAttributes & ~mAttributesCurrentlyEnabled;
+    gl::AttributesMask toDisable = ~activeAttributes & mAttributesCurrentlyEnabled;
+
+    for (unsigned int index : angle::IterateBitSet(toEnable))
+    {
+        mFunctions->enableVertexAttribArray(static_cast<GLuint>(index));
+    }
+    for (unsigned int index : angle::IterateBitSet(toDisable))
+    {
+        mFunctions->disableVertexAttribArray(static_cast<GLuint>(index));
+    }
+
     return Error(GL_NO_ERROR);
 }
 
@@ -363,30 +376,16 @@ void VertexArrayGL::updateNeedsStreaming(size_t attribIndex)
 
 void VertexArrayGL::updateAttribEnabled(size_t attribIndex)
 {
-    const VertexAttribute &attrib = mData.getVertexAttribute(attribIndex);
-    if (mAppliedAttributes[attribIndex].enabled == attrib.enabled)
-    {
-        return;
-    }
-
     updateNeedsStreaming(attribIndex);
 
-    mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
-    if (attrib.enabled)
-    {
-        mFunctions->enableVertexAttribArray(static_cast<GLuint>(attribIndex));
-    }
-    else
-    {
-        mFunctions->disableVertexAttribArray(static_cast<GLuint>(attribIndex));
-    }
-    mAppliedAttributes[attribIndex].enabled = attrib.enabled;
+    const VertexAttribute &attrib = mData.getVertexAttribute(attribIndex);
+    mAttributesAskedEnabled.set(attribIndex, attrib.enabled);
 }
 
 void VertexArrayGL::updateAttribPointer(size_t attribIndex)
 {
     const VertexAttribute &attrib = mData.getVertexAttribute(attribIndex);
-    if (mAppliedAttributes[attribIndex] == attrib)
+    if (VertexAttributesEqualUpToEnabled(mAppliedAttributes[attribIndex], attrib))
     {
         return;
     }

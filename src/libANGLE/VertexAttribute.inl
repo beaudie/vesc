@@ -9,10 +9,9 @@
 namespace gl
 {
 
-inline bool operator==(const VertexAttribute &a, const VertexAttribute &b)
+inline bool VertexAttributesEqualUpToEnabled(const VertexAttribute &a, const VertexAttribute &b)
 {
-    return a.enabled == b.enabled &&
-           a.type == b.type &&
+    return a.type == b.type &&
            a.size == b.size &&
            a.normalized == b.normalized &&
            a.pureInteger == b.pureInteger &&
@@ -20,6 +19,11 @@ inline bool operator==(const VertexAttribute &a, const VertexAttribute &b)
            a.pointer == b.pointer &&
            a.buffer.get() == b.buffer.get() &&
            a.divisor == b.divisor;
+}
+
+inline bool operator==(const VertexAttribute &a, const VertexAttribute &b)
+{
+    return a.enabled == b.enabled && VertexAttributesEqualUpToEnabled(a, b);
 }
 
 inline bool operator!=(const VertexAttribute &a, const VertexAttribute &b)

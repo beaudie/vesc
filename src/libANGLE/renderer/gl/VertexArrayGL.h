@@ -79,6 +79,8 @@ class VertexArrayGL : public VertexArrayImpl
     mutable GLuint mStreamingArrayBuffer;
 
     gl::AttributesMask mAttributesNeedStreaming;
+    gl::AttributesMask mAttributesCurrentlyEnabled;
+    gl::AttributesMask mAttributesAskedEnabled;
 };
 
 }

@@ -36,6 +36,7 @@ struct VertexAttribute
     VertexAttribute();
 };
 
+bool VertexAttributesEqualUpToEnabled(const VertexAttribute &a, const VertexAttribute &b);
 bool operator==(const VertexAttribute &a, const VertexAttribute &b);
 bool operator!=(const VertexAttribute &a, const VertexAttribute &b);
 
