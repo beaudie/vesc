@@ -70,9 +70,11 @@ class ProgramD3D : public ProgramImpl
 
     LinkResult compileProgramExecutables(gl::InfoLog &infoLog, int registers);
 
-    LinkResult link(const gl::Data &data, gl::InfoLog &infoLog,
-                    gl::Shader *fragmentShader, gl::Shader *vertexShader,
-                    int *registers, std::vector<gl::LinkedVarying> *linkedVaryings,
+    LinkResult link(const gl::Data &data,
+                    gl::InfoLog &infoLog,
+                    gl::Shader *fragmentShader,
+                    gl::Shader *vertexShader,
+                    int *registers,
                     std::map<int, gl::VariableLocation> *outputVariables);
 
     void bindAttributeLocation(GLuint index, const std::string &name) override;
@@ -80,8 +82,10 @@ class ProgramD3D : public ProgramImpl
     void initializeUniformStorage();
     gl::Error applyUniforms();
     gl::Error applyUniformBuffers(const gl::Data &data, GLuint uniformBlockBindings[]) override;
-    void assignUniformBlockRegister(gl::UniformBlock *uniformBlock, GLenum shader,
-                                    unsigned int registerIndex, const gl::Caps &caps);
+    void assignUniformBlockRegister(gl::UniformBlock *uniformBlock,
+                                    GLenum shader,
+                                    unsigned int registerIndex,
+                                    const gl::Caps &caps);
     void dirtyAllUniforms();
 
     void setUniform1fv(GLint location, GLsizei count, const GLfloat *v);
@@ -115,7 +119,9 @@ class ProgramD3D : public ProgramImpl
 
     bool defineUniforms(gl::InfoLog &infoLog, const gl::Caps &caps);
     void defineUniformBlocks(const gl::Caps &caps);
-    void defineUniformBlock(const gl::Shader &shader, const sh::InterfaceBlock &interfaceBlock, const gl::Caps &caps);
+    void defineUniformBlock(const gl::Shader &shader,
+                            const sh::InterfaceBlock &interfaceBlock,
+                            const gl::Caps &caps);
 
     void reset();
 
@@ -202,6 +208,8 @@ class ProgramD3D : public ProgramImpl
                                    sh::BlockLayoutEncoder *encoder, std::vector<unsigned int> *blockUniformIndexes,
                                    bool inRowMajorLayout);
 
+    void gatherTransformFeedbackVaryings(const std::vector<gl::LinkedVarying> &varyings);
+
     RendererD3D *mRenderer;
     DynamicHLSL *mDynamicHLSL;
 
@@ -246,6 +254,8 @@ class ProgramD3D : public ProgramImpl
     std::vector<GLint> mFragmentUBOCache;
     VertexExecutable::Signature mCachedVertexSignature;
     gl::InputLayout mCachedInputLayout;
+
+    std::vector<gl::LinkedVarying> mTransformFeedbackLinkedVaryings;
 
     static unsigned int issueSerial();
     static unsigned int mCurrentSerial;
