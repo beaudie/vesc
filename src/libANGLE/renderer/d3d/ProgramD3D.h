@@ -113,8 +113,7 @@ class ProgramD3D : public ProgramImpl
     const UniformStorageD3D &getVertexUniformStorage() const { return *mVertexUniformStorage; }
     const UniformStorageD3D &getFragmentUniformStorage() const { return *mFragmentUniformStorage; }
 
-    bool linkUniforms(gl::InfoLog &infoLog, const gl::Shader &vertexShader, const gl::Shader &fragmentShader,
-                      const gl::Caps &caps);
+    bool defineUniforms(gl::InfoLog &infoLog, const gl::Caps &caps);
     bool defineUniformBlock(gl::InfoLog &infoLog, const gl::Shader &shader, const sh::InterfaceBlock &interfaceBlock, const gl::Caps &caps);
 
     void reset();
