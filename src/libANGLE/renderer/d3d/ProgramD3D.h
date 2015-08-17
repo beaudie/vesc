@@ -80,8 +80,10 @@ class ProgramD3D : public ProgramImpl
     void initializeUniformStorage();
     gl::Error applyUniforms();
     gl::Error applyUniformBuffers(const gl::Data &data, GLuint uniformBlockBindings[]) override;
-    bool assignUniformBlockRegister(gl::InfoLog &infoLog, gl::UniformBlock *uniformBlock, GLenum shader,
-                                    unsigned int registerIndex, const gl::Caps &caps);
+    void assignUniformBlockRegister(gl::UniformBlock *uniformBlock,
+                                    GLenum shader,
+                                    unsigned int registerIndex,
+                                    const gl::Caps &caps);
     void dirtyAllUniforms();
 
     void setUniform1fv(GLint location, GLsizei count, const GLfloat *v);
@@ -114,7 +116,10 @@ class ProgramD3D : public ProgramImpl
     const UniformStorageD3D &getFragmentUniformStorage() const { return *mFragmentUniformStorage; }
 
     bool defineUniforms(gl::InfoLog &infoLog, const gl::Caps &caps);
-    bool defineUniformBlock(gl::InfoLog &infoLog, const gl::Shader &shader, const sh::InterfaceBlock &interfaceBlock, const gl::Caps &caps);
+    void defineUniformBlocks(const gl::Caps &caps);
+    void defineUniformBlock(const gl::Shader &shader,
+                            const sh::InterfaceBlock &interfaceBlock,
+                            const gl::Caps &caps);
 
     void reset();
 
