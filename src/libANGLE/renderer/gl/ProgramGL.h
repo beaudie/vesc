@@ -101,6 +101,10 @@ class ProgramGL : public ProgramImpl
     // An array of the samplers that are used by the program
     std::vector<SamplerBindingGL> mSamplerBindings;
 
+    // Map from GL-layer attribute location to native location.
+    // TODO(jmadill): replace with unordered/hash map when available.
+    std::map<int, GLint> mAttributeRealLocationMap;
+
     // Array of attribute locations used by this program
     gl::AttributesMask mActiveAttributesMask;
 
