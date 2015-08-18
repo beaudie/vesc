@@ -198,7 +198,11 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog,
         // TODO: determine attribute precision
         setShaderAttribute(static_cast<size_t>(i), attributeType, GL_NONE, attributeName, attributeSize, location);
 
-        mActiveAttributesMask.set(location);
+        size_t attributeUsage = gl::IsMatrixType(attributeType) ? gl::VariableColumnCount(attributeType) : 1;
+        for (size_t offset = 0; offset < attributeUsage; offset++)
+        {
+            mActiveAttributesMask.set(location + offset);
+        }
     }
 
     return LinkResult(true, gl::Error(GL_NO_ERROR));
