@@ -169,34 +169,28 @@ LinkResult ProgramGL::link(const gl::Data &data,
         }
     }
 
-    // Query the attribute information
-    GLint activeAttributeMaxLength = 0;
-    mFunctions->getProgramiv(mProgramID, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &activeAttributeMaxLength);
-
-    std::vector<GLchar> attributeNameBuffer(activeAttributeMaxLength);
-
-    GLint attributeCount = 0;
-    mFunctions->getProgramiv(mProgramID, GL_ACTIVE_ATTRIBUTES, &attributeCount);
-    for (GLint i = 0; i < attributeCount; i++)
+    for (const sh::Attribute &attribute : mData.getAttributes())
     {
-        GLsizei attributeNameLength = 0;
-        GLint attributeSize = 0;
-        GLenum attributeType = GL_NONE;
-        mFunctions->getActiveAttrib(mProgramID, i, static_cast<GLsizei>(attributeNameBuffer.size()),
-                                    &attributeNameLength, &attributeSize, &attributeType,
-                                    &attributeNameBuffer[0]);
+        if (!attribute.staticUse)
+            continue;
 
-        std::string attributeName(&attributeNameBuffer[0], attributeNameLength);
+        GLint realLocation = mFunctions->getAttribLocation(mProgramID, attribute.name.c_str());
 
-        GLint location = mFunctions->getAttribLocation(mProgramID, attributeName.c_str());
+        // Some drivers optimize attributes more aggressively.
+        if (realLocation == -1)
+        {
+            continue;
+        }
 
-        // TODO: determine attribute precision
-        setShaderAttribute(static_cast<size_t>(i), attributeType, GL_NONE, attributeName, attributeSize, location);
+        mAttributeRealLocationMap[attribute.location] = realLocation;
 
-        int attributeRegisterCount = gl::VariableRegisterCount(attributeType);
+        // TODO(jmadill): Fix this
+        ASSERT(attribute.location == realLocation);
+
+        int attributeRegisterCount = gl::VariableRegisterCount(attribute.type);
         for (int offset = 0; offset < attributeRegisterCount; offset++)
         {
-            mActiveAttributesMask.set(location + offset);
+            mActiveAttributesMask.set(attribute.location + offset);
         }
     }
 
