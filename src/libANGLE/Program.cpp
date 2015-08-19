@@ -355,6 +355,7 @@ void Program::unlink(bool destroy)
     }
 
     mData.mAttributes.clear();
+    mData.mActiveAttribLocationsMask.reset();
     mData.mTransformFeedbackVaryingVars.clear();
 
     mProgram->reset();
@@ -403,11 +404,10 @@ Error Program::loadBinary(GLenum binaryFormat, const void *binary, GLsizei lengt
         return Error(GL_NO_ERROR);
     }
 
-    // TODO(jmadill): replace MAX_VERTEX_ATTRIBS
-    for (int i = 0; i < MAX_VERTEX_ATTRIBS; ++i)
-    {
-        stream.readInt(&mProgram->getSemanticIndexes()[i]);
-    }
+    static_assert(MAX_VERTEX_ATTRIBS <= sizeof(unsigned long) * 8,
+                  "Too many vertex attribs for mask");
+    unsigned long attribMask = stream.readInt<unsigned long>();
+    mData.mActiveAttribLocationsMask |= std::bitset<MAX_VERTEX_ATTRIBS>(attribMask);
 
     unsigned int attribCount = stream.readInt<unsigned int>();
     ASSERT(mData.mAttributes.empty());
@@ -450,11 +450,7 @@ Error Program::saveBinary(GLenum *binaryFormat, void *binary, GLsizei bufSize, G
     stream.writeInt(ANGLE_MINOR_VERSION);
     stream.writeBytes(reinterpret_cast<const unsigned char*>(ANGLE_COMMIT_HASH), ANGLE_COMMIT_HASH_SIZE);
 
-    // TODO(jmadill): replace MAX_VERTEX_ATTRIBS
-    for (unsigned int i = 0; i < MAX_VERTEX_ATTRIBS; ++i)
-    {
-        stream.writeInt(mProgram->getSemanticIndexes()[i]);
-    }
+    stream.writeInt(mData.mActiveAttribLocationsMask.to_ulong());
 
     stream.writeInt(mData.mAttributes.size());
     for (const sh::Attribute &attrib : mData.mAttributes)
@@ -594,16 +590,11 @@ GLuint Program::getAttributeLocation(const std::string &name)
     return static_cast<GLuint>(-1);
 }
 
-const int *Program::getSemanticIndexes() const
+bool Program::isAttribLocationActive(size_t attribLocation) const
 {
-    return mProgram->getSemanticIndexes();
-}
-
-int Program::getSemanticIndex(int attributeIndex) const
-{
-    ASSERT(attributeIndex >= 0 && attributeIndex < MAX_VERTEX_ATTRIBS);
-
-    return mProgram->getSemanticIndexes()[attributeIndex];
+    ASSERT(attribLocation >= 0 &&
+           static_cast<size_t>(attribLocation) < mData.mActiveAttribLocationsMask.size());
+    return mData.mActiveAttribLocationsMask[attribLocation];
 }
 
 void Program::getActiveAttribute(GLuint index, GLsizei bufsize, GLsizei *length, GLint *size, GLenum *type, GLchar *name)
@@ -1371,18 +1362,15 @@ bool Program::linkAttributes(const gl::Data &data,
         }
     }
 
-    // TODO(jmadill): make semantic index D3D-only
     for (const sh::Attribute &attribute : mData.mAttributes)
     {
         ASSERT(attribute.staticUse);
-
-        unsigned int attributeIndex = attribute.location;
-        int index                   = vertexShader->getSemanticIndex(attribute.name);
-        int rows                    = VariableRegisterCount(attribute.type);
+        ASSERT(attribute.location != -1);
+        int rows = VariableRegisterCount(attribute.type);
 
         for (int r = 0; r < rows; r++)
         {
-            mProgram->getSemanticIndexes()[attributeIndex++] = index++;
+            mData.mActiveAttribLocationsMask.set(attribute.location + r);
         }
     }
 
