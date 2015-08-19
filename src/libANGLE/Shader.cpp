@@ -169,7 +169,7 @@ void Shader::flagForDeletion()
     mDeleteStatus = true;
 }
 
-const std::vector<gl::PackedVarying> &Shader::getVaryings() const
+const std::vector<sh::Varying> &Shader::getVaryings() const
 {
     return mShader->getVaryings();
 }
@@ -194,7 +194,7 @@ const std::vector<sh::Attribute> &Shader::getActiveOutputVariables() const
     return mShader->getActiveOutputVariables();
 }
 
-std::vector<gl::PackedVarying> &Shader::getVaryings()
+std::vector<sh::Varying> &Shader::getVaryings()
 {
     return mShader->getVaryings();
 }
