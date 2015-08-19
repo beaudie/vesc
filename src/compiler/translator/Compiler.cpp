@@ -193,10 +193,6 @@ TIntermNode *TCompiler::compileTreeImpl(const char* const shaderStrings[],
     // Reset the extension behavior for each compilation unit.
     ResetExtensionBehavior(extensionBehavior);
 
-    // If compiling for WebGL, validate loop and indexing as well.
-    if (IsWebGLBasedSpec(shaderSpec))
-        compileOptions |= SH_VALIDATE_LOOP_INDEXING;
-
     // First string is path of source file if flag is set. The actual source follows.
     size_t firstSource = 0;
     if (compileOptions & SH_SOURCE_PATH)
@@ -230,6 +226,10 @@ TIntermNode *TCompiler::compileTreeImpl(const char* const shaderStrings[],
         infoSink.info << "unsupported shader version";
         success = false;
     }
+
+    // If compiling an ESSL 1.00 shader for WebGL, validate loop and indexing as well.
+    if (IsWebGLBasedSpec(shaderSpec) && shaderVersion == 100)
+        compileOptions |= SH_VALIDATE_LOOP_INDEXING;
 
     TIntermNode *root = nullptr;
 
