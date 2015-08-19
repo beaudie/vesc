@@ -42,6 +42,8 @@ class ShaderExecutableD3D;
 class ProgramD3D : public ProgramImpl
 {
   public:
+    typedef int SemanticIndexArray[gl::MAX_VERTEX_ATTRIBS];
+
     ProgramD3D(const gl::Program::Data &data, RendererD3D *renderer);
     virtual ~ProgramD3D();
 
@@ -124,9 +126,10 @@ class ProgramD3D : public ProgramImpl
     void sortAttributesByLayout(const std::vector<TranslatedAttribute> &unsortedAttributes,
                                 int sortedSemanticIndicesOut[gl::MAX_VERTEX_ATTRIBS],
                                 const rx::TranslatedAttribute *sortedAttributesOut[gl::MAX_VERTEX_ATTRIBS]) const;
+    const SemanticIndexArray &getSemanticIndexes() const { return mSemanticIndex; }
     const SemanticIndexArray &getAttributesByLayout() const { return mAttributesByLayout; }
 
-    void updateCachedInputLayout(const gl::Program *program, const gl::State &state);
+    void updateCachedInputLayout(const gl::State &state);
     const gl::InputLayout &getCachedInputLayout() const { return mCachedInputLayout; }
 
   private:
@@ -246,6 +249,7 @@ class ProgramD3D : public ProgramImpl
 
     int mShaderVersion;
 
+    SemanticIndexArray mSemanticIndex;
     SemanticIndexArray mAttributesByLayout;
 
     unsigned int mSerial;
