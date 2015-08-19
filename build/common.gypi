@@ -219,6 +219,10 @@
                         'LinkIncremental': '1',
                     },
                 },
+                'xcode_settings':
+                {
+                    'CLANG_CXX_LANGUAGE_STANDARD': 'c++11',
+                },
             },    # Release_Base
 
             'x86_Base':
