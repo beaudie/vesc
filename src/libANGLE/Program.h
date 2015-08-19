@@ -20,10 +20,11 @@
 #include <GLES2/gl2.h>
 #include <GLSLANG/ShaderLang.h>
 
-#include <vector>
+#include <bitset>
+#include <set>
 #include <sstream>
 #include <string>
-#include <set>
+#include <vector>
 
 namespace rx
 {
@@ -195,6 +196,7 @@ class Program : angle::NonCopyable
         GLuint mUniformBlockBindings[IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS];
 
         std::vector<sh::Attribute> mAttributes;
+        std::bitset<MAX_VERTEX_ATTRIBS> mActiveAttribLocationsMask;
 
         // TODO(jmadill): move more state into Data.
     };
@@ -225,8 +227,7 @@ class Program : angle::NonCopyable
     void getAttachedShaders(GLsizei maxCount, GLsizei *count, GLuint *shaders);
 
     GLuint getAttributeLocation(const std::string &name);
-    int getSemanticIndex(int attributeIndex) const;
-    const int *getSemanticIndexes() const;
+    bool isAttribLocationActive(size_t attribLocation) const;
 
     void getActiveAttribute(GLuint index, GLsizei bufsize, GLsizei *length, GLint *size, GLenum *type, GLchar *name);
     GLint getActiveAttributeCount();
