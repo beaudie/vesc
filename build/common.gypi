@@ -358,7 +358,7 @@
         {
             'target_defaults':
             {
-                'cflags':
+                'cflags_cc':
                 [
                     '-pthread',
                     '-fno-exceptions',
