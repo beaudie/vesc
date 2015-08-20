@@ -1032,9 +1032,17 @@
                                 },
                             },
                         },
+                        # Enable exceptions and RTTI as they are required by dEQP:
+                        #  - In ANGLE cflags have -fno-exceptions by default, remove it
                         'cflags!':
                         [
-                            '-fno-exceptions', # dEQP requires exceptions
+                            '-fno-exceptions',
+                        ],
+                        #  - In Chromium cflags_cc has both -fno-exceptions and -fno-rtti, remove them
+                        'cflags_cc!':
+                        [
+                            '-fno-exceptions',
+                            '-fno-rtti',
                         ],
                         'msvs_disabled_warnings':
                         [
@@ -1057,6 +1065,17 @@
                     'sources':
                     [
                         '<@(deqp_libtester_decpp_sources)',
+                    ],
+                    # In a chromium build dl is required for deDynamicLibrary
+                    'conditions':
+                    [
+                        ['OS=="linux"',
+                        {
+                            'link_settings':
+                            {
+                                'libraries': ['-ldl']
+                            },
+                        }],
                     ],
                 },
 
