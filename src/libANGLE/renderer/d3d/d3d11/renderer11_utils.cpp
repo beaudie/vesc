@@ -1081,11 +1081,12 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
     caps->maxServerWaitTimeout = 0;
 
     // Vertex shader limits
+    const size_t reservedVertexUniformVectors = 3; // dx_ViewCoords, dx_ViewAdjust and dx_DepthRange.
     caps->maxVertexAttributes = static_cast<GLuint>(GetMaximumVertexInputSlots(featureLevel));
-    caps->maxVertexUniformComponents =
-        static_cast<GLuint>(GetMaximumVertexUniformVectors(featureLevel)) * 4;
     caps->maxVertexUniformVectors =
-        static_cast<GLuint>(GetMaximumVertexUniformVectors(featureLevel));
+        static_cast<GLuint>(GetMaximumVertexUniformVectors(featureLevel)) -
+        reservedVertexUniformVectors;
+    caps->maxVertexUniformComponents = caps->maxVertexUniformVectors * 4;
     caps->maxVertexUniformBlocks = static_cast<GLuint>(GetMaximumVertexUniformBlocks(featureLevel));
     caps->maxVertexOutputComponents =
         static_cast<GLuint>(GetMaximumVertexOutputVectors(featureLevel)) * 4;

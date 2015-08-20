@@ -1057,8 +1057,46 @@ TEST_P(GLSLTest, DISABLED_PowOfSmallConstant)
     EXPECT_GL_NO_ERROR();
 }
 
+// Tests that the maximum uniforms count returned from querying GL_MAX_VERTEX_UNIFORM_VECTORS
+// can actually be used.
+TEST_P(GLSLTest, VerifyMaxUniformVectors)
+{
+    const std::string &fragmentShaderSource = SHADER_SOURCE
+    (
+        precision mediump float;
+        void main()
+        {
+            gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+        }
+    );
+
+    int maxUniforms = 10000;
+    glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &maxUniforms);
+    EXPECT_GL_NO_ERROR();
+
+    std::string vshaderSource;
+    vshaderSource.append("precision mediump float;\n");
+
+    for (int i = 0; i < maxUniforms; i++)
+    {
+        vshaderSource.append("uniform vec4 v" + std::to_string(i) + ";\n");
+    }
+
+    vshaderSource.append("void main()\n{\n");
+
+    for (int i = 0; i < maxUniforms; i++)
+    {
+        vshaderSource.append("    gl_Position +=  v" + std::to_string(i) + ";\n");
+    }
+
+    vshaderSource.append("}\n");
+
+    GLuint program = CompileProgram(vshaderSource, fragmentShaderSource);
+    EXPECT_NE(0u, program);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-ANGLE_INSTANTIATE_TEST(GLSLTest, ES2_D3D9(), ES2_D3D11());
+ANGLE_INSTANTIATE_TEST(GLSLTest, ES2_D3D9(), ES2_D3D11(), ES2_D3D11_FL9_3());
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest_ES3, ES3_D3D11());
