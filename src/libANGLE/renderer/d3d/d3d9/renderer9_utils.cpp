@@ -429,7 +429,7 @@ void GenerateCaps(IDirect3D9 *d3d9, IDirect3DDevice9 *device, D3DDEVTYPE deviceT
     // Vertex shader limits
     caps->maxVertexAttributes = 16;
 
-    const size_t reservedVertexUniformVectors = 2; // dx_ViewAdjust and dx_DepthRange.
+    const size_t reservedVertexUniformVectors = 3; // dx_ViewCoords, dx_ViewAdjust and dx_DepthRange.
     const size_t MAX_VERTEX_CONSTANT_VECTORS_D3D9 = 256;
     caps->maxVertexUniformVectors = MAX_VERTEX_CONSTANT_VECTORS_D3D9 - reservedVertexUniformVectors;
     caps->maxVertexUniformComponents = caps->maxVertexUniformVectors * 4;

@@ -694,7 +694,7 @@ static size_t GetMaximumVertexUniformVectors(D3D_FEATURE_LEVEL featureLevel)
     switch (featureLevel)
     {
       case D3D_FEATURE_LEVEL_11_1:
-      case D3D_FEATURE_LEVEL_11_0: return 1024; // D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT;
+      case D3D_FEATURE_LEVEL_11_0: return 4096; // D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT;
 
       case D3D_FEATURE_LEVEL_10_1:
       case D3D_FEATURE_LEVEL_10_0: return 1024; // D3D10_REQ_CONSTANT_BUFFER_ELEMENT_COUNT;
@@ -702,7 +702,7 @@ static size_t GetMaximumVertexUniformVectors(D3D_FEATURE_LEVEL featureLevel)
       // From http://msdn.microsoft.com/en-us/library/windows/desktop/ff476149.aspx ID3D11DeviceContext::VSSetConstantBuffers
       case D3D_FEATURE_LEVEL_9_3:
       case D3D_FEATURE_LEVEL_9_2:
-      case D3D_FEATURE_LEVEL_9_1:  return 255;
+      case D3D_FEATURE_LEVEL_9_1:  return 253;
 
       default: UNREACHABLE();      return 0;
     }
