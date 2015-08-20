@@ -702,7 +702,8 @@ static size_t GetMaximumVertexUniformVectors(D3D_FEATURE_LEVEL featureLevel)
       // From http://msdn.microsoft.com/en-us/library/windows/desktop/ff476149.aspx ID3D11DeviceContext::VSSetConstantBuffers
       case D3D_FEATURE_LEVEL_9_3:
       case D3D_FEATURE_LEVEL_9_2:
-      case D3D_FEATURE_LEVEL_9_1:  return 255;
+      case D3D_FEATURE_LEVEL_9_1:
+          return 253;  // 255 - 2 reserved (dx_ViewAdjust and dx_ViewCoords)
 
       default: UNREACHABLE();      return 0;
     }

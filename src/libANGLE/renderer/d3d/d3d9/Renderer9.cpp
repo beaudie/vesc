@@ -2500,7 +2500,7 @@ DeviceIdentifier Renderer9::getAdapterIdentifier() const
 
 unsigned int Renderer9::getReservedVertexUniformVectors() const
 {
-    return 2;   // dx_ViewAdjust and dx_DepthRange.
+    return d3d9_gl::GetReservedVertexUniformVectors();
 }
 
 unsigned int Renderer9::getReservedFragmentUniformVectors() const

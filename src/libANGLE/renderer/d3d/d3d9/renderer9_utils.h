@@ -47,6 +47,8 @@ D3DMULTISAMPLE_TYPE GetMultisampleType(GLuint samples);
 namespace d3d9_gl
 {
 
+unsigned int GetReservedVertexUniformVectors();
+
 GLsizei GetSamplesCount(D3DMULTISAMPLE_TYPE type);
 
 bool IsFormatChannelEquivalent(D3DFORMAT d3dformat, GLenum format);
