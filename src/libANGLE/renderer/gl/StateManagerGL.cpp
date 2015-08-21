@@ -406,6 +406,66 @@ void StateManagerGL::bindRenderbuffer(GLenum type, GLuint renderbuffer)
     }
 }
 
+void StateManagerGL::setScissorTestEnabled(bool enabled)
+{
+    setScissorTestEnabled(enabled, true);
+}
+
+void StateManagerGL::setViewport(const gl::Rectangle &viewport)
+{
+    setViewport(viewport, true);
+}
+
+void StateManagerGL::setDepthRange(float near, float far)
+{
+    setDepthRange(near, far, true);
+}
+
+void StateManagerGL::setBlendEnabled(bool enabled)
+{
+    setBlendEnabled(enabled, true);
+}
+
+void StateManagerGL::setColorMask(bool red, bool green, bool blue, bool alpha)
+{
+    setColorMask(red, green, blue, alpha, true);
+}
+
+void StateManagerGL::setSampleAlphaToCoverageEnabled(bool enabled)
+{
+    setSampleAlphaToCoverageEnabled(enabled, true);
+}
+
+void StateManagerGL::setSampleCoverageEnabled(bool enabled)
+{
+    setSampleCoverageEnabled(enabled, true);
+}
+
+void StateManagerGL::setDepthTestEnabled(bool enabled)
+{
+    setDepthTestEnabled(enabled, true);
+}
+
+void StateManagerGL::setStencilTestEnabled(bool enabled)
+{
+    setStencilTestEnabled(enabled, true);
+}
+
+void StateManagerGL::setCullFaceEnabled(bool enabled)
+{
+    setCullFaceEnabled(enabled, true);
+}
+
+void StateManagerGL::setPolygonOffsetFillEnabled(bool enabled)
+{
+    setPolygonOffsetFillEnabled(enabled, true);
+}
+
+void StateManagerGL::setRasterizerDiscardEnabled(bool enabled)
+{
+    setRasterizerDiscardEnabled(enabled, true);
+}
+
 gl::Error StateManagerGL::setDrawArraysState(const gl::Data &data, GLint first, GLsizei count)
 {
     const gl::State &state = *data.state;
