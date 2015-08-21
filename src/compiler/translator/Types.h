@@ -161,7 +161,7 @@ class TStructure : public TFieldListCollection
         *mutableName = name;
     }
 
-    virtual TString mangledNamePrefix() const
+    TString mangledNamePrefix() const override
     {
         return "struct-";
     }
@@ -212,7 +212,7 @@ class TInterfaceBlock : public TFieldListCollection
     }
 
   private:
-    virtual TString mangledNamePrefix() const
+    TString mangledNamePrefix() const override
     {
         return "iblock-";
     }

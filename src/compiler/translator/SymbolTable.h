@@ -109,10 +109,10 @@ class TVariable : public TSymbol
           unionArray(0)
     {
     }
-    virtual ~TVariable()
+    ~TVariable() override
     {
     }
-    virtual bool isVariable() const
+    bool isVariable() const override
     {
         return true;
     }
@@ -229,8 +229,8 @@ class TFunction : public TSymbol
     {
         relateToExtension(ext);
     }
-    virtual ~TFunction();
-    virtual bool isFunction() const
+    ~TFunction() override;
+    bool isFunction() const override
     {
         return true;
     }
@@ -250,7 +250,7 @@ class TFunction : public TSymbol
         mangledName = nullptr;
     }
 
-    const TString &getMangledName() const
+    const TString &getMangledName() const override
     {
         if (mangledName == nullptr)
         {
