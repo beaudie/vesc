@@ -58,58 +58,69 @@ class StateManagerGL final : angle::NonCopyable
   private:
     gl::Error setGenericDrawState(const gl::Data &data);
 
-    void setAttributeCurrentData(size_t index, const gl::VertexAttribCurrentValueData &data);
+    void setAttributeCurrentData(size_t index,
+                                 const gl::VertexAttribCurrentValueData &data,
+                                 bool setDirty);
 
-    void setScissorTestEnabled(bool enabled);
-    void setScissor(const gl::Rectangle &scissor);
+    void setScissorTestEnabled(bool enabled, bool setDirty);
+    void setScissor(const gl::Rectangle &scissor, bool setDirty);
 
-    void setViewport(const gl::Rectangle &viewport);
-    void setDepthRange(float near, float far);
+    void setViewport(const gl::Rectangle &viewport, bool setDirty);
+    void setDepthRange(float near, float far, bool setDirty);
 
-    void setBlendEnabled(bool enabled);
-    void setBlendColor(const gl::ColorF &blendColor);
-    void setBlendFuncs(GLenum sourceBlendRGB, GLenum destBlendRGB, GLenum sourceBlendAlpha, GLenum destBlendAlpha);
-    void setBlendEquations(GLenum blendEquationRGB, GLenum blendEquationAlpha);
-    void setColorMask(bool red, bool green, bool blue, bool alpha);
-    void setSampleAlphaToCoverageEnabled(bool enabled);
-    void setSampleCoverageEnabled(bool enabled);
-    void setSampleCoverage(float value, bool invert);
+    void setBlendEnabled(bool enabled, bool setDirty);
+    void setBlendColor(const gl::ColorF &blendColor, bool setDirty);
+    void setBlendFuncs(GLenum sourceBlendRGB,
+                       GLenum destBlendRGB,
+                       GLenum sourceBlendAlpha,
+                       GLenum destBlendAlpha,
+                       bool setDirty);
+    void setBlendEquations(GLenum blendEquationRGB, GLenum blendEquationAlpha, bool setDirty);
+    void setColorMask(bool red, bool green, bool blue, bool alpha, bool setDirty);
+    void setSampleAlphaToCoverageEnabled(bool enabled, bool setDirty);
+    void setSampleCoverageEnabled(bool enabled, bool setDirty);
+    void setSampleCoverage(float value, bool invert, bool setDirty);
 
-    void setDepthTestEnabled(bool enabled);
-    void setDepthFunc(GLenum depthFunc);
-    void setDepthMask(bool mask);
-    void setStencilTestEnabled(bool enabled);
-    void setStencilFrontWritemask(GLuint mask);
-    void setStencilBackWritemask(GLuint mask);
-    void setStencilFrontFuncs(GLenum func, GLint ref, GLuint mask);
-    void setStencilBackFuncs(GLenum func, GLint ref, GLuint mask);
-    void setStencilFrontOps(GLenum sfail, GLenum dpfail, GLenum dppass);
-    void setStencilBackOps(GLenum sfail, GLenum dpfail, GLenum dppass);
+    void setDepthTestEnabled(bool enabled, bool setDirty);
+    void setDepthFunc(GLenum depthFunc, bool setDirty);
+    void setDepthMask(bool mask, bool setDirty);
+    void setStencilTestEnabled(bool enabled, bool setDirty);
+    void setStencilFrontWritemask(GLuint mask, bool setDirty);
+    void setStencilBackWritemask(GLuint mask, bool setDirty);
+    void setStencilFrontFuncs(GLenum func, GLint ref, GLuint mask, bool setDirty);
+    void setStencilBackFuncs(GLenum func, GLint ref, GLuint mask, bool setDirty);
+    void setStencilFrontOps(GLenum sfail, GLenum dpfail, GLenum dppass, bool setDirty);
+    void setStencilBackOps(GLenum sfail, GLenum dpfail, GLenum dppass, bool setDirty);
 
-    void setCullFaceEnabled(bool enabled);
-    void setCullFace(GLenum cullFace);
-    void setFrontFace(GLenum frontFace);
-    void setPolygonOffsetFillEnabled(bool enabled);
-    void setPolygonOffset(float factor, float units);
-    void setMultisampleEnabled(bool enabled);
-    void setRasterizerDiscardEnabled(bool enabled);
-    void setLineWidth(float width);
+    void setCullFaceEnabled(bool enabled, bool setDirty);
+    void setCullFace(GLenum cullFace, bool setDirty);
+    void setFrontFace(GLenum frontFace, bool setDirty);
+    void setPolygonOffsetFillEnabled(bool enabled, bool setDirty);
+    void setPolygonOffset(float factor, float units, bool setDirty);
+    void setMultisampleEnabled(bool enabled, bool setDirty);
+    void setRasterizerDiscardEnabled(bool enabled, bool setDirty);
+    void setLineWidth(float width, bool setDirty);
 
-    void setPrimitiveRestartEnabled(bool enabled);
+    void setPrimitiveRestartEnabled(bool enabled, bool setDirty);
 
-    void setClearColor(const gl::ColorF &clearColor);
-    void setClearDepth(float clearDepth);
-    void setClearStencil(GLint clearStencil);
+    void setClearColor(const gl::ColorF &clearColor, bool setDirty);
+    void setClearDepth(float clearDepth, bool setDirty);
+    void setClearStencil(GLint clearStencil, bool setDirty);
 
-    void setPixelUnpackState(const gl::PixelUnpackState &unpack);
+    void setPixelUnpackState(const gl::PixelUnpackState &unpack, bool setDirty);
     void setPixelUnpackState(GLint alignment,
                              GLint rowLength,
                              GLint skipRows,
                              GLint skipPixels,
                              GLint imageHeight,
-                             GLint skipImages);
-    void setPixelPackState(const gl::PixelPackState &pack);
-    void setPixelPackState(GLint alignment, GLint rowLength, GLint skipRows, GLint skipPixels);
+                             GLint skipImages,
+                             bool setDirty);
+    void setPixelPackState(const gl::PixelPackState &pack, bool setDirty);
+    void setPixelPackState(GLint alignment,
+                           GLint rowLength,
+                           GLint skipRows,
+                           GLint skipPixels,
+                           bool setDirty);
 
     const FunctionsGL *mFunctions;
 
@@ -197,6 +208,8 @@ class StateManagerGL final : angle::NonCopyable
     gl::ColorF mClearColor;
     float mClearDepth;
     GLint mClearStencil;
+
+    gl::State::DirtyBits mLocalDirtyBits;
 };
 
 }

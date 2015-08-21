@@ -89,7 +89,8 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mPrimitiveRestartEnabled(false),
       mClearColor(0.0f, 0.0f, 0.0f, 0.0f),
       mClearDepth(1.0f),
-      mClearStencil(0)
+      mClearStencil(0),
+      mLocalDirtyBits()
 {
     ASSERT(mFunctions);
 
@@ -251,7 +252,7 @@ void StateManagerGL::bindTexture(GLenum type, GLuint texture)
     }
 }
 
-void StateManagerGL::setPixelUnpackState(const gl::PixelUnpackState &unpack)
+void StateManagerGL::setPixelUnpackState(const gl::PixelUnpackState &unpack, bool setDirty)
 {
     const gl::Buffer *unpackBuffer = unpack.pixelBuffer.get();
     if (unpackBuffer != nullptr)
@@ -259,83 +260,124 @@ void StateManagerGL::setPixelUnpackState(const gl::PixelUnpackState &unpack)
         UNIMPLEMENTED();
     }
     setPixelUnpackState(unpack.alignment, unpack.rowLength, unpack.skipRows, unpack.skipPixels,
-                        unpack.imageHeight, unpack.skipImages);
+                        unpack.imageHeight, unpack.skipImages, setDirty);
 }
 
-void StateManagerGL::setPixelUnpackState(GLint alignment, GLint rowLength, GLint skipRows, GLint skipPixels,
-                                         GLint imageHeight, GLint skipImages)
+void StateManagerGL::setPixelUnpackState(GLint alignment,
+                                         GLint rowLength,
+                                         GLint skipRows,
+                                         GLint skipPixels,
+                                         GLint imageHeight,
+                                         GLint skipImages,
+                                         bool setDirty)
 {
     if (mUnpackAlignment != alignment)
     {
         mUnpackAlignment = alignment;
         mFunctions->pixelStorei(GL_UNPACK_ALIGNMENT, mUnpackAlignment);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_UNPACK_ALIGNMENT);
+        }
     }
 
     if (mUnpackRowLength != rowLength)
     {
         mUnpackRowLength = rowLength;
         mFunctions->pixelStorei(GL_UNPACK_ROW_LENGTH, mUnpackRowLength);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_UNPACK_ROW_LENGTH);
+        }
     }
 
     if (mUnpackSkipRows != skipRows)
     {
         mUnpackSkipRows = rowLength;
         mFunctions->pixelStorei(GL_UNPACK_SKIP_ROWS, mUnpackSkipRows);
+
+        // TODO: set dirty bit once one exists
     }
 
     if (mUnpackSkipPixels != skipPixels)
     {
         mUnpackSkipPixels = skipPixels;
         mFunctions->pixelStorei(GL_UNPACK_SKIP_PIXELS, mUnpackSkipPixels);
+
+        // TODO: set dirty bit once one exists
     }
 
     if (mUnpackImageHeight != imageHeight)
     {
         mUnpackImageHeight = imageHeight;
         mFunctions->pixelStorei(GL_UNPACK_IMAGE_HEIGHT, mUnpackImageHeight);
+
+        // TODO: set dirty bit once one exists
     }
 
     if (mUnpackSkipImages != skipImages)
     {
         mUnpackSkipImages = skipImages;
         mFunctions->pixelStorei(GL_UNPACK_SKIP_IMAGES, mUnpackSkipImages);
+
+        // TODO: set dirty bit once one exists
     }
 }
 
-void StateManagerGL::setPixelPackState(const gl::PixelPackState &pack)
+void StateManagerGL::setPixelPackState(const gl::PixelPackState &pack, bool setDirty)
 {
     const gl::Buffer *packBuffer = pack.pixelBuffer.get();
     if (packBuffer != nullptr)
     {
         UNIMPLEMENTED();
     }
-    setPixelPackState(pack.alignment, pack.rowLength, pack.skipRows, pack.skipPixels);
+    setPixelPackState(pack.alignment, pack.rowLength, pack.skipRows, pack.skipPixels, setDirty);
 }
 
-void StateManagerGL::setPixelPackState(GLint alignment, GLint rowLength, GLint skipRows, GLint skipPixels)
+void StateManagerGL::setPixelPackState(GLint alignment,
+                                       GLint rowLength,
+                                       GLint skipRows,
+                                       GLint skipPixels,
+                                       bool setDirty)
 {
     if (mPackAlignment != alignment)
     {
         mPackAlignment = alignment;
         mFunctions->pixelStorei(GL_PACK_ALIGNMENT, mPackAlignment);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_PACK_ALIGNMENT);
+        }
     }
 
     if (mPackRowLength != rowLength)
     {
         mPackRowLength = rowLength;
         mFunctions->pixelStorei(GL_PACK_ROW_LENGTH, mPackRowLength);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_UNPACK_ROW_LENGTH);
+        }
     }
 
     if (mPackSkipRows != skipRows)
     {
         mPackSkipRows = rowLength;
         mFunctions->pixelStorei(GL_PACK_SKIP_ROWS, mPackSkipRows);
+
+        // TODO: set dirty bit once one exists
     }
 
     if (mPackSkipPixels != skipPixels)
     {
         mPackSkipPixels = skipPixels;
         mFunctions->pixelStorei(GL_PACK_SKIP_PIXELS, mPackSkipPixels);
+
+        // TODO: set dirty bit once one exists
     }
 }
 
@@ -465,7 +507,9 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Data &data)
     return gl::Error(GL_NO_ERROR);
 }
 
-void StateManagerGL::setAttributeCurrentData(size_t index, const gl::VertexAttribCurrentValueData &data)
+void StateManagerGL::setAttributeCurrentData(size_t index,
+                                             const gl::VertexAttribCurrentValueData &data,
+                                             bool setDirty)
 {
     if (mVertexAttribCurrentValues[index] != data)
     {
@@ -486,10 +530,15 @@ void StateManagerGL::setAttributeCurrentData(size_t index, const gl::VertexAttri
                 break;
           default: UNREACHABLE();
         }
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_CURRENT_VALUE_0 + index);
+        }
     }
 }
 
-void StateManagerGL::setScissorTestEnabled(bool enabled)
+void StateManagerGL::setScissorTestEnabled(bool enabled, bool setDirty)
 {
     if (mScissorTestEnabled != enabled)
     {
@@ -502,38 +551,58 @@ void StateManagerGL::setScissorTestEnabled(bool enabled)
         {
             mFunctions->disable(GL_SCISSOR_TEST);
         }
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED);
+        }
     }
 }
 
-void StateManagerGL::setScissor(const gl::Rectangle &scissor)
+void StateManagerGL::setScissor(const gl::Rectangle &scissor, bool setDirty)
 {
     if (scissor != mScissor)
     {
         mScissor = scissor;
         mFunctions->scissor(mScissor.x, mScissor.y, mScissor.width, mScissor.height);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_SCISSOR);
+        }
     }
 }
 
-void StateManagerGL::setViewport(const gl::Rectangle &viewport)
+void StateManagerGL::setViewport(const gl::Rectangle &viewport, bool setDirty)
 {
     if (viewport != mViewport)
     {
         mViewport = viewport;
         mFunctions->viewport(mViewport.x, mViewport.y, mViewport.width, mViewport.height);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_VIEWPORT);
+        }
     }
 }
 
-void StateManagerGL::setDepthRange(float near, float far)
+void StateManagerGL::setDepthRange(float near, float far, bool setDirty)
 {
     if (mNear != near || mFar != far)
     {
         mNear = near;
         mFar = far;
         mFunctions->depthRange(mNear, mFar);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_DEPTH_RANGE);
+        }
     }
 }
 
-void StateManagerGL::setBlendEnabled(bool enabled)
+void StateManagerGL::setBlendEnabled(bool enabled, bool setDirty)
 {
     if (mBlendEnabled != enabled)
     {
@@ -546,20 +615,33 @@ void StateManagerGL::setBlendEnabled(bool enabled)
         {
             mFunctions->disable(GL_BLEND);
         }
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_BLEND_ENABLED);
+        }
     }
 }
 
-void StateManagerGL::setBlendColor(const gl::ColorF &blendColor)
+void StateManagerGL::setBlendColor(const gl::ColorF &blendColor, bool setDirty)
 {
     if (mBlendColor != blendColor)
     {
         mBlendColor = blendColor;
         mFunctions->blendColor(mBlendColor.red, mBlendColor.green, mBlendColor.blue, mBlendColor.alpha);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_BLEND_COLOR);
+        }
     }
 }
 
-void StateManagerGL::setBlendFuncs(GLenum sourceBlendRGB, GLenum destBlendRGB, GLenum sourceBlendAlpha,
-                                   GLenum destBlendAlpha)
+void StateManagerGL::setBlendFuncs(GLenum sourceBlendRGB,
+                                   GLenum destBlendRGB,
+                                   GLenum sourceBlendAlpha,
+                                   GLenum destBlendAlpha,
+                                   bool setDirty)
 {
     if (mSourceBlendRGB != sourceBlendRGB || mDestBlendRGB != destBlendRGB ||
         mSourceBlendAlpha != sourceBlendAlpha || mDestBlendAlpha != destBlendAlpha)
@@ -570,10 +652,17 @@ void StateManagerGL::setBlendFuncs(GLenum sourceBlendRGB, GLenum destBlendRGB, G
         mDestBlendAlpha = destBlendAlpha;
 
         mFunctions->blendFuncSeparate(mSourceBlendRGB, mDestBlendRGB, mSourceBlendAlpha, mDestBlendAlpha);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_BLEND_FUNCS);
+        }
     }
 }
 
-void StateManagerGL::setBlendEquations(GLenum blendEquationRGB, GLenum blendEquationAlpha)
+void StateManagerGL::setBlendEquations(GLenum blendEquationRGB,
+                                       GLenum blendEquationAlpha,
+                                       bool setDirty)
 {
     if (mBlendEquationRGB != blendEquationRGB || mBlendEquationAlpha != blendEquationAlpha)
     {
@@ -581,10 +670,15 @@ void StateManagerGL::setBlendEquations(GLenum blendEquationRGB, GLenum blendEqua
         mBlendEquationAlpha = blendEquationAlpha;
 
         mFunctions->blendEquationSeparate(mBlendEquationRGB, mBlendEquationAlpha);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_BLEND_EQUATIONS);
+        }
     }
 }
 
-void StateManagerGL::setColorMask(bool red, bool green, bool blue, bool alpha)
+void StateManagerGL::setColorMask(bool red, bool green, bool blue, bool alpha, bool setDirty)
 {
     if (mColorMaskRed != red || mColorMaskGreen != green || mColorMaskBlue != blue || mColorMaskAlpha != alpha)
     {
@@ -593,10 +687,15 @@ void StateManagerGL::setColorMask(bool red, bool green, bool blue, bool alpha)
         mColorMaskBlue = blue;
         mColorMaskAlpha = alpha;
         mFunctions->colorMask(mColorMaskRed, mColorMaskGreen, mColorMaskBlue, mColorMaskAlpha);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_COLOR_MASK);
+        }
     }
 }
 
-void StateManagerGL::setSampleAlphaToCoverageEnabled(bool enabled)
+void StateManagerGL::setSampleAlphaToCoverageEnabled(bool enabled, bool setDirty)
 {
     if (mSampleAlphaToCoverageEnabled != enabled)
     {
@@ -609,10 +708,15 @@ void StateManagerGL::setSampleAlphaToCoverageEnabled(bool enabled)
         {
             mFunctions->disable(GL_SAMPLE_ALPHA_TO_COVERAGE);
         }
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED);
+        }
     }
 }
 
-void StateManagerGL::setSampleCoverageEnabled(bool enabled)
+void StateManagerGL::setSampleCoverageEnabled(bool enabled, bool setDirty)
 {
     if (mSampleCoverageEnabled != enabled)
     {
@@ -625,20 +729,30 @@ void StateManagerGL::setSampleCoverageEnabled(bool enabled)
         {
             mFunctions->disable(GL_SAMPLE_COVERAGE);
         }
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_SAMPLE_COVERAGE_ENABLED);
+        }
     }
 }
 
-void StateManagerGL::setSampleCoverage(float value, bool invert)
+void StateManagerGL::setSampleCoverage(float value, bool invert, bool setDirty)
 {
     if (mSampleCoverageValue != value || mSampleCoverageInvert != invert)
     {
         mSampleCoverageValue = value;
         mSampleCoverageInvert = invert;
         mFunctions->sampleCoverage(mSampleCoverageValue, mSampleCoverageInvert);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_SAMPLE_COVERAGE);
+        }
     }
 }
 
-void StateManagerGL::setDepthTestEnabled(bool enabled)
+void StateManagerGL::setDepthTestEnabled(bool enabled, bool setDirty)
 {
     if (mDepthTestEnabled != enabled)
     {
@@ -651,28 +765,43 @@ void StateManagerGL::setDepthTestEnabled(bool enabled)
         {
             mFunctions->disable(GL_DEPTH_TEST);
         }
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_DEPTH_TEST_ENABLED);
+        }
     }
 }
 
-void StateManagerGL::setDepthFunc(GLenum depthFunc)
+void StateManagerGL::setDepthFunc(GLenum depthFunc, bool setDirty)
 {
     if (mDepthFunc != depthFunc)
     {
         mDepthFunc = depthFunc;
         mFunctions->depthFunc(mDepthFunc);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_DEPTH_FUNC);
+        }
     }
 }
 
-void StateManagerGL::setDepthMask(bool mask)
+void StateManagerGL::setDepthMask(bool mask, bool setDirty)
 {
     if (mDepthMask != mask)
     {
         mDepthMask = mask;
         mFunctions->depthMask(mDepthMask);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_DEPTH_MASK);
+        }
     }
 }
 
-void StateManagerGL::setStencilTestEnabled(bool enabled)
+void StateManagerGL::setStencilTestEnabled(bool enabled, bool setDirty)
 {
     if (mStencilTestEnabled != enabled)
     {
@@ -685,28 +814,43 @@ void StateManagerGL::setStencilTestEnabled(bool enabled)
         {
             mFunctions->disable(GL_STENCIL_TEST);
         }
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_STENCIL_TEST_ENABLED);
+        }
     }
 }
 
-void StateManagerGL::setStencilFrontWritemask(GLuint mask)
+void StateManagerGL::setStencilFrontWritemask(GLuint mask, bool setDirty)
 {
     if (mStencilFrontWritemask != mask)
     {
         mStencilFrontWritemask = mask;
         mFunctions->stencilMaskSeparate(GL_FRONT, mStencilFrontWritemask);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_STENCIL_WRITEMASK_FRONT);
+        }
     }
 }
 
-void StateManagerGL::setStencilBackWritemask(GLuint mask)
+void StateManagerGL::setStencilBackWritemask(GLuint mask, bool setDirty)
 {
     if (mStencilBackWritemask != mask)
     {
         mStencilBackWritemask = mask;
         mFunctions->stencilMaskSeparate(GL_BACK, mStencilBackWritemask);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_STENCIL_WRITEMASK_BACK);
+        }
     }
 }
 
-void StateManagerGL::setStencilFrontFuncs(GLenum func, GLint ref, GLuint mask)
+void StateManagerGL::setStencilFrontFuncs(GLenum func, GLint ref, GLuint mask, bool setDirty)
 {
     if (mStencilFrontFunc != func || mStencilFrontRef != ref || mStencilFrontValueMask != mask)
     {
@@ -714,10 +858,15 @@ void StateManagerGL::setStencilFrontFuncs(GLenum func, GLint ref, GLuint mask)
         mStencilFrontRef = ref;
         mStencilFrontValueMask = mask;
         mFunctions->stencilFuncSeparate(GL_FRONT, mStencilFrontFunc, mStencilFrontRef, mStencilFrontValueMask);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT);
+        }
     }
 }
 
-void StateManagerGL::setStencilBackFuncs(GLenum func, GLint ref, GLuint mask)
+void StateManagerGL::setStencilBackFuncs(GLenum func, GLint ref, GLuint mask, bool setDirty)
 {
     if (mStencilBackFunc != func || mStencilBackRef != ref || mStencilBackValueMask != mask)
     {
@@ -725,10 +874,15 @@ void StateManagerGL::setStencilBackFuncs(GLenum func, GLint ref, GLuint mask)
         mStencilBackRef = ref;
         mStencilBackValueMask = mask;
         mFunctions->stencilFuncSeparate(GL_BACK, mStencilBackFunc, mStencilBackRef, mStencilBackValueMask);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_STENCIL_FUNCS_BACK);
+        }
     }
 }
 
-void StateManagerGL::setStencilFrontOps(GLenum sfail, GLenum dpfail, GLenum dppass)
+void StateManagerGL::setStencilFrontOps(GLenum sfail, GLenum dpfail, GLenum dppass, bool setDirty)
 {
     if (mStencilFrontStencilFailOp != sfail || mStencilFrontStencilPassDepthFailOp != dpfail || mStencilFrontStencilPassDepthPassOp != dppass)
     {
@@ -736,10 +890,15 @@ void StateManagerGL::setStencilFrontOps(GLenum sfail, GLenum dpfail, GLenum dppa
         mStencilFrontStencilPassDepthFailOp = dpfail;
         mStencilFrontStencilPassDepthPassOp = dppass;
         mFunctions->stencilOpSeparate(GL_FRONT, mStencilFrontStencilFailOp, mStencilFrontStencilPassDepthFailOp, mStencilFrontStencilPassDepthPassOp);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_STENCIL_OPS_FRONT);
+        }
     }
 }
 
-void StateManagerGL::setStencilBackOps(GLenum sfail, GLenum dpfail, GLenum dppass)
+void StateManagerGL::setStencilBackOps(GLenum sfail, GLenum dpfail, GLenum dppass, bool setDirty)
 {
     if (mStencilBackStencilFailOp != sfail || mStencilBackStencilPassDepthFailOp != dpfail || mStencilBackStencilPassDepthPassOp != dppass)
     {
@@ -747,10 +906,15 @@ void StateManagerGL::setStencilBackOps(GLenum sfail, GLenum dpfail, GLenum dppas
         mStencilBackStencilPassDepthFailOp = dpfail;
         mStencilBackStencilPassDepthPassOp = dppass;
         mFunctions->stencilOpSeparate(GL_BACK, mStencilBackStencilFailOp, mStencilBackStencilPassDepthFailOp, mStencilBackStencilPassDepthPassOp);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_STENCIL_OPS_BACK);
+        }
     }
 }
 
-void StateManagerGL::setCullFaceEnabled(bool enabled)
+void StateManagerGL::setCullFaceEnabled(bool enabled, bool setDirty)
 {
     if (mCullFaceEnabled != enabled)
     {
@@ -763,28 +927,43 @@ void StateManagerGL::setCullFaceEnabled(bool enabled)
         {
             mFunctions->disable(GL_CULL_FACE);
         }
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_CULL_FACE_ENABLED);
+        }
     }
 }
 
-void StateManagerGL::setCullFace(GLenum cullFace)
+void StateManagerGL::setCullFace(GLenum cullFace, bool setDirty)
 {
     if (mCullFace != cullFace)
     {
         mCullFace = cullFace;
         mFunctions->cullFace(mCullFace);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_CULL_FACE);
+        }
     }
 }
 
-void StateManagerGL::setFrontFace(GLenum frontFace)
+void StateManagerGL::setFrontFace(GLenum frontFace, bool setDirty)
 {
     if (mFrontFace != frontFace)
     {
         mFrontFace = frontFace;
         mFunctions->frontFace(mFrontFace);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_FRONT_FACE);
+        }
     }
 }
 
-void StateManagerGL::setPolygonOffsetFillEnabled(bool enabled)
+void StateManagerGL::setPolygonOffsetFillEnabled(bool enabled, bool setDirty)
 {
     if (mPolygonOffsetFillEnabled != enabled)
     {
@@ -797,20 +976,30 @@ void StateManagerGL::setPolygonOffsetFillEnabled(bool enabled)
         {
             mFunctions->disable(GL_POLYGON_OFFSET_FILL);
         }
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED);
+        }
     }
 }
 
-void StateManagerGL::setPolygonOffset(float factor, float units)
+void StateManagerGL::setPolygonOffset(float factor, float units, bool setDirty)
 {
     if (mPolygonOffsetFactor != factor || mPolygonOffsetUnits != units)
     {
         mPolygonOffsetFactor = factor;
         mPolygonOffsetUnits = units;
         mFunctions->polygonOffset(mPolygonOffsetFactor, mPolygonOffsetUnits);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_POLYGON_OFFSET);
+        }
     }
 }
 
-void StateManagerGL::setMultisampleEnabled(bool enabled)
+void StateManagerGL::setMultisampleEnabled(bool enabled, bool setDirty)
 {
     if (mMultisampleEnabled != enabled)
     {
@@ -823,10 +1012,15 @@ void StateManagerGL::setMultisampleEnabled(bool enabled)
         {
             mFunctions->disable(GL_MULTISAMPLE);
         }
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_MULTISAMPLE_ENABLED);
+        }
     }
 }
 
-void StateManagerGL::setRasterizerDiscardEnabled(bool enabled)
+void StateManagerGL::setRasterizerDiscardEnabled(bool enabled, bool setDirty)
 {
     if (mRasterizerDiscardEnabled != enabled)
     {
@@ -839,19 +1033,29 @@ void StateManagerGL::setRasterizerDiscardEnabled(bool enabled)
         {
             mFunctions->disable(GL_RASTERIZER_DISCARD);
         }
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_RASTERIZER_DISCARD_ENABLED);
+        }
     }
 }
 
-void StateManagerGL::setLineWidth(float width)
+void StateManagerGL::setLineWidth(float width, bool setDirty)
 {
     if (mLineWidth != width)
     {
         mLineWidth = width;
         mFunctions->lineWidth(mLineWidth);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_LINE_WIDTH);
+        }
     }
 }
 
-void StateManagerGL::setPrimitiveRestartEnabled(bool enabled)
+void StateManagerGL::setPrimitiveRestartEnabled(bool enabled, bool setDirty)
 {
     if (mPrimitiveRestartEnabled != enabled)
     {
@@ -865,114 +1069,136 @@ void StateManagerGL::setPrimitiveRestartEnabled(bool enabled)
         {
             mFunctions->disable(GL_PRIMITIVE_RESTART_FIXED_INDEX);
         }
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_PRIMITIVE_RESTART_ENABLED);
+        }
     }
 }
 
-void StateManagerGL::setClearDepth(float clearDepth)
+void StateManagerGL::setClearDepth(float clearDepth, bool setDirty)
 {
     if (mClearDepth != clearDepth)
     {
         mClearDepth = clearDepth;
         mFunctions->clearDepth(mClearDepth);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_CLEAR_DEPTH);
+        }
     }
 }
 
-void StateManagerGL::setClearColor(const gl::ColorF &clearColor)
+void StateManagerGL::setClearColor(const gl::ColorF &clearColor, bool setDirty)
 {
     if (mClearColor != clearColor)
     {
         mClearColor = clearColor;
         mFunctions->clearColor(mClearColor.red, mClearColor.green, mClearColor.blue, mClearColor.alpha);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_CLEAR_COLOR);
+        }
     }
 }
 
-void StateManagerGL::setClearStencil(GLint clearStencil)
+void StateManagerGL::setClearStencil(GLint clearStencil, bool setDirty)
 {
     if (mClearStencil != clearStencil)
     {
         mClearStencil = clearStencil;
         mFunctions->clearStencil(mClearStencil);
+
+        if (setDirty)
+        {
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_CLEAR_STENCIL);
+        }
     }
 }
 
 void StateManagerGL::syncState(const gl::State &state, const gl::State::DirtyBits &dirtyBits)
 {
     // TODO(jmadill): Investigate only syncing vertex state for active attributes
-    for (unsigned int dirtyBit : angle::IterateBitSet(dirtyBits))
+    for (unsigned int dirtyBit : angle::IterateBitSet(dirtyBits | mLocalDirtyBits))
     {
         switch (dirtyBit)
         {
             case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
-                setScissorTestEnabled(state.isScissorTestEnabled());
+                setScissorTestEnabled(state.isScissorTestEnabled(), false);
                 break;
             case gl::State::DIRTY_BIT_SCISSOR:
-                setScissor(state.getScissor());
+                setScissor(state.getScissor(), false);
                 break;
             case gl::State::DIRTY_BIT_VIEWPORT:
-                setViewport(state.getViewport());
+                setViewport(state.getViewport(), false);
                 break;
             case gl::State::DIRTY_BIT_DEPTH_RANGE:
-                setDepthRange(state.getNearPlane(), state.getFarPlane());
+                setDepthRange(state.getNearPlane(), state.getFarPlane(), false);
                 break;
             case gl::State::DIRTY_BIT_BLEND_ENABLED:
-                setBlendEnabled(state.isBlendEnabled());
+                setBlendEnabled(state.isBlendEnabled(), false);
                 break;
             case gl::State::DIRTY_BIT_BLEND_COLOR:
-                setBlendColor(state.getBlendColor());
+                setBlendColor(state.getBlendColor(), false);
                 break;
             case gl::State::DIRTY_BIT_BLEND_FUNCS:
             {
                 const auto &blendState = state.getBlendState();
                 setBlendFuncs(blendState.sourceBlendRGB, blendState.destBlendRGB,
-                              blendState.sourceBlendAlpha, blendState.destBlendAlpha);
+                              blendState.sourceBlendAlpha, blendState.destBlendAlpha, false);
                 break;
             }
             case gl::State::DIRTY_BIT_BLEND_EQUATIONS:
             {
                 const auto &blendState = state.getBlendState();
-                setBlendEquations(blendState.blendEquationRGB, blendState.blendEquationAlpha);
+                setBlendEquations(blendState.blendEquationRGB, blendState.blendEquationAlpha,
+                                  false);
                 break;
             }
             case gl::State::DIRTY_BIT_COLOR_MASK:
             {
                 const auto &blendState = state.getBlendState();
                 setColorMask(blendState.colorMaskRed, blendState.colorMaskGreen,
-                             blendState.colorMaskBlue, blendState.colorMaskAlpha);
+                             blendState.colorMaskBlue, blendState.colorMaskAlpha, false);
                 break;
             }
             case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:
-                setSampleAlphaToCoverageEnabled(state.isSampleAlphaToCoverageEnabled());
+                setSampleAlphaToCoverageEnabled(state.isSampleAlphaToCoverageEnabled(), false);
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_COVERAGE_ENABLED:
-                setSampleCoverageEnabled(state.isSampleCoverageEnabled());
+                setSampleCoverageEnabled(state.isSampleCoverageEnabled(), false);
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_COVERAGE:
-                setSampleCoverage(state.getSampleCoverageValue(), state.getSampleCoverageInvert());
+                setSampleCoverage(state.getSampleCoverageValue(), state.getSampleCoverageInvert(),
+                                  false);
                 break;
             case gl::State::DIRTY_BIT_DEPTH_TEST_ENABLED:
-                setDepthTestEnabled(state.isDepthTestEnabled());
+                setDepthTestEnabled(state.isDepthTestEnabled(), false);
                 break;
             case gl::State::DIRTY_BIT_DEPTH_FUNC:
-                setDepthFunc(state.getDepthStencilState().depthFunc);
+                setDepthFunc(state.getDepthStencilState().depthFunc, false);
                 break;
             case gl::State::DIRTY_BIT_DEPTH_MASK:
-                setDepthMask(state.getDepthStencilState().depthMask);
+                setDepthMask(state.getDepthStencilState().depthMask, false);
                 break;
             case gl::State::DIRTY_BIT_STENCIL_TEST_ENABLED:
-                setStencilTestEnabled(state.isStencilTestEnabled());
+                setStencilTestEnabled(state.isStencilTestEnabled(), false);
                 break;
             case gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT:
             {
                 const auto &depthStencilState = state.getDepthStencilState();
                 setStencilFrontFuncs(depthStencilState.stencilFunc, state.getStencilRef(),
-                                     depthStencilState.stencilMask);
+                                     depthStencilState.stencilMask, false);
                 break;
             }
             case gl::State::DIRTY_BIT_STENCIL_FUNCS_BACK:
             {
                 const auto &depthStencilState = state.getDepthStencilState();
                 setStencilBackFuncs(depthStencilState.stencilBackFunc, state.getStencilBackRef(),
-                                    depthStencilState.stencilBackMask);
+                                    depthStencilState.stencilBackMask, false);
                 break;
             }
             case gl::State::DIRTY_BIT_STENCIL_OPS_FRONT:
@@ -980,7 +1206,7 @@ void StateManagerGL::syncState(const gl::State &state, const gl::State::DirtyBit
                 const auto &depthStencilState = state.getDepthStencilState();
                 setStencilFrontOps(depthStencilState.stencilFail,
                                    depthStencilState.stencilPassDepthFail,
-                                   depthStencilState.stencilPassDepthPass);
+                                   depthStencilState.stencilPassDepthPass, false);
                 break;
             }
             case gl::State::DIRTY_BIT_STENCIL_OPS_BACK:
@@ -988,70 +1214,70 @@ void StateManagerGL::syncState(const gl::State &state, const gl::State::DirtyBit
                 const auto &depthStencilState = state.getDepthStencilState();
                 setStencilBackOps(depthStencilState.stencilBackFail,
                                   depthStencilState.stencilBackPassDepthFail,
-                                  depthStencilState.stencilBackPassDepthPass);
+                                  depthStencilState.stencilBackPassDepthPass, false);
                 break;
             }
             case gl::State::DIRTY_BIT_STENCIL_WRITEMASK_FRONT:
-                setStencilFrontWritemask(state.getDepthStencilState().stencilWritemask);
+                setStencilFrontWritemask(state.getDepthStencilState().stencilWritemask, false);
                 break;
             case gl::State::DIRTY_BIT_STENCIL_WRITEMASK_BACK:
-                setStencilBackWritemask(state.getDepthStencilState().stencilBackWritemask);
+                setStencilBackWritemask(state.getDepthStencilState().stencilBackWritemask, false);
                 break;
             case gl::State::DIRTY_BIT_CULL_FACE_ENABLED:
-                setCullFaceEnabled(state.isCullFaceEnabled());
+                setCullFaceEnabled(state.isCullFaceEnabled(), false);
                 break;
             case gl::State::DIRTY_BIT_CULL_FACE:
-                setCullFace(state.getRasterizerState().cullMode);
+                setCullFace(state.getRasterizerState().cullMode, false);
                 break;
             case gl::State::DIRTY_BIT_FRONT_FACE:
-                setFrontFace(state.getRasterizerState().frontFace);
+                setFrontFace(state.getRasterizerState().frontFace, false);
                 break;
             case gl::State::DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED:
-                setPolygonOffsetFillEnabled(state.isPolygonOffsetFillEnabled());
+                setPolygonOffsetFillEnabled(state.isPolygonOffsetFillEnabled(), false);
                 break;
             case gl::State::DIRTY_BIT_POLYGON_OFFSET:
             {
                 const auto &rasterizerState = state.getRasterizerState();
                 setPolygonOffset(rasterizerState.polygonOffsetFactor,
-                                 rasterizerState.polygonOffsetUnits);
+                                 rasterizerState.polygonOffsetUnits, false);
                 break;
             }
             case gl::State::DIRTY_BIT_MULTISAMPLE_ENABLED:
-                setMultisampleEnabled(state.getRasterizerState().multiSample);
+                setMultisampleEnabled(state.getRasterizerState().multiSample, false);
                 break;
             case gl::State::DIRTY_BIT_RASTERIZER_DISCARD_ENABLED:
-                setRasterizerDiscardEnabled(state.isRasterizerDiscardEnabled());
+                setRasterizerDiscardEnabled(state.isRasterizerDiscardEnabled(), false);
                 break;
             case gl::State::DIRTY_BIT_LINE_WIDTH:
-                setLineWidth(state.getLineWidth());
+                setLineWidth(state.getLineWidth(), false);
                 break;
             case gl::State::DIRTY_BIT_PRIMITIVE_RESTART_ENABLED:
-                setPrimitiveRestartEnabled(state.isPrimitiveRestartEnabled());
+                setPrimitiveRestartEnabled(state.isPrimitiveRestartEnabled(), false);
                 break;
             case gl::State::DIRTY_BIT_CLEAR_COLOR:
-                setClearColor(state.getColorClearValue());
+                setClearColor(state.getColorClearValue(), false);
                 break;
             case gl::State::DIRTY_BIT_CLEAR_DEPTH:
-                setClearDepth(state.getDepthClearValue());
+                setClearDepth(state.getDepthClearValue(), false);
                 break;
             case gl::State::DIRTY_BIT_CLEAR_STENCIL:
-                setClearStencil(state.getStencilClearValue());
+                setClearStencil(state.getStencilClearValue(), false);
                 break;
             case gl::State::DIRTY_BIT_UNPACK_ALIGNMENT:
                 // TODO(jmadill): split this
-                setPixelUnpackState(state.getUnpackState());
+                setPixelUnpackState(state.getUnpackState(), false);
                 break;
             case gl::State::DIRTY_BIT_UNPACK_ROW_LENGTH:
                 // TODO(jmadill): split this
-                setPixelUnpackState(state.getUnpackState());
+                setPixelUnpackState(state.getUnpackState(), false);
                 break;
             case gl::State::DIRTY_BIT_PACK_ALIGNMENT:
                 // TODO(jmadill): split this
-                setPixelPackState(state.getPackState());
+                setPixelPackState(state.getPackState(), false);
                 break;
             case gl::State::DIRTY_BIT_PACK_REVERSE_ROW_ORDER:
                 // TODO(jmadill): split this
-                setPixelPackState(state.getPackState());
+                setPixelPackState(state.getPackState(), false);
                 break;
             case gl::State::DIRTY_BIT_DITHER_ENABLED:
                 // TODO(jmadill): implement this
@@ -1096,10 +1322,13 @@ void StateManagerGL::syncState(const gl::State &state, const gl::State::DirtyBit
                 size_t attribIndex =
                     static_cast<size_t>(dirtyBit) - gl::State::DIRTY_BIT_CURRENT_VALUE_0;
                 setAttributeCurrentData(attribIndex, state.getVertexAttribCurrentValue(
-                                                         static_cast<unsigned int>(attribIndex)));
+                                                         static_cast<unsigned int>(attribIndex)),
+                                        false);
                 break;
             }
         }
+
+        mLocalDirtyBits.reset();
     }
 }
 }
