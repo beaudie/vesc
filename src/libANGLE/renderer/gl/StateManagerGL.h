@@ -49,8 +49,28 @@ class StateManagerGL final : angle::NonCopyable
     void bindFramebuffer(GLenum type, GLuint framebuffer);
     void bindRenderbuffer(GLenum type, GLuint renderbuffer);
 
+    void setScissorTestEnabled(bool enabled);
+
+    void setViewport(const gl::Rectangle &viewport);
+    void setDepthRange(float near, float far);
+
+    void setBlendEnabled(bool enabled);
+    void setColorMask(bool red, bool green, bool blue, bool alpha);
+    void setSampleAlphaToCoverageEnabled(bool enabled);
+    void setSampleCoverageEnabled(bool enabled);
+
+    void setDepthTestEnabled(bool enabled);
+    void setStencilTestEnabled(bool enabled);
+
+    void setCullFaceEnabled(bool enabled);
+    void setPolygonOffsetFillEnabled(bool enabled);
+    void setRasterizerDiscardEnabled(bool enabled);
+
     gl::Error setDrawArraysState(const gl::Data &data, GLint first, GLsizei count);
-    gl::Error setDrawElementsState(const gl::Data &data, GLsizei count, GLenum type, const GLvoid *indices,
+    gl::Error setDrawElementsState(const gl::Data &data,
+                                   GLsizei count,
+                                   GLenum type,
+                                   const GLvoid *indices,
                                    const GLvoid **outIndices);
 
     void syncState(const gl::State &state, const gl::State::DirtyBits &dirtyBits);
