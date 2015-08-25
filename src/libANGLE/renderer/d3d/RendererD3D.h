@@ -94,14 +94,34 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     virtual egl::ConfigSet generateConfigs() const = 0;
     virtual void generateDisplayExtensions(egl::DisplayExtensions *outExtensions) const = 0;
 
-    gl::Error drawArrays(const gl::Data &data,
-                         GLenum mode, GLint first,
-                         GLsizei count, GLsizei instances) override;
+    gl::Error drawArrays(const gl::Data &data, GLenum mode, GLint first, GLsizei count) override;
+    gl::Error drawArraysInstanced(const gl::Data &data,
+                                  GLenum mode,
+                                  GLint first,
+                                  GLsizei count,
+                                  GLsizei instanceCount) override;
 
     gl::Error drawElements(const gl::Data &data,
-                           GLenum mode, GLsizei count, GLenum type,
-                           const GLvoid *indices, GLsizei instances,
+                           GLenum mode,
+                           GLsizei count,
+                           GLenum type,
+                           const GLvoid *indices,
                            const gl::RangeUI &indexRange) override;
+    gl::Error drawElementsInstanced(const gl::Data &data,
+                                    GLenum mode,
+                                    GLsizei count,
+                                    GLenum type,
+                                    const GLvoid *indices,
+                                    GLsizei instances,
+                                    const gl::RangeUI &indexRange) override;
+    gl::Error drawRangeElements(const gl::Data &data,
+                                GLenum mode,
+                                GLuint start,
+                                GLuint end,
+                                GLsizei count,
+                                GLenum type,
+                                const GLvoid *indices,
+                                const gl::RangeUI &indexRange) override;
 
     bool isDeviceLost() const override;
     std::string getVendorString() const override;
@@ -214,6 +234,20 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     virtual gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) = 0;
 
   protected:
+    gl::Error prepareDrawArrays(const gl::Data &data,
+                                GLenum mode,
+                                GLint first,
+                                GLsizei count,
+                                GLsizei instances);
+
+    gl::Error prepareDrawElements(const gl::Data &data,
+                                  GLenum mode,
+                                  GLsizei count,
+                                  GLenum type,
+                                  const GLvoid *indices,
+                                  GLsizei instances,
+                                  const gl::RangeUI &indexRange);
+
     virtual gl::Error drawArrays(const gl::Data &data, GLenum mode, GLsizei count, GLsizei instances, bool usesPointSize) = 0;
     virtual gl::Error drawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices,
                                    gl::Buffer *elementArrayBuffer, const TranslatedIndexData &indexInfo, GLsizei instances,
