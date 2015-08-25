@@ -401,7 +401,7 @@ void StateManagerGL::bindRenderbuffer(GLenum type, GLuint renderbuffer)
     }
 }
 
-gl::Error StateManagerGL::setDrawArraysState(const gl::Data &data, GLint first, GLsizei count)
+gl::Error StateManagerGL::setDrawArraysState(const gl::Data &data, GLint first, GLsizei count, GLsizei instanceCount)
 {
     const gl::State &state = *data.state;
 
@@ -412,7 +412,7 @@ gl::Error StateManagerGL::setDrawArraysState(const gl::Data &data, GLint first, 
     const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
 
     gl::Error error =
-        vaoGL->syncDrawArraysState(programGL->getActiveAttributesMask(), first, count);
+        vaoGL->syncDrawArraysState(programGL->getActiveAttributesMask(), first, count, instanceCount);
     if (error.isError())
     {
         return error;
@@ -424,7 +424,7 @@ gl::Error StateManagerGL::setDrawArraysState(const gl::Data &data, GLint first, 
 }
 
 gl::Error StateManagerGL::setDrawElementsState(const gl::Data &data, GLsizei count, GLenum type, const GLvoid *indices,
-                                               const GLvoid **outIndices)
+                                               GLsizei instanceCount, const GLvoid **outIndices)
 {
     const gl::State &state = *data.state;
 
@@ -435,7 +435,7 @@ gl::Error StateManagerGL::setDrawElementsState(const gl::Data &data, GLsizei cou
     const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
 
     gl::Error error = vaoGL->syncDrawElementsState(programGL->getActiveAttributesMask(), count,
-                                                   type, indices, outIndices);
+                                                   type, indices, instanceCount, outIndices);
     if (error.isError())
     {
         return error;
