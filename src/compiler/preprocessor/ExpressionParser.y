@@ -47,11 +47,57 @@ WHICH GENERATES THE GLSL ES preprocessor expression parser.
 #include "Token.h"
 
 #if defined(_MSC_VER)
-typedef __int64 YYSTYPE;
+typedef __int64 inttype;
 #else
 #include <stdint.h>
-typedef intmax_t YYSTYPE;
+typedef intmax_t inttype;
 #endif  // _MSC_VER
+
+
+#define TAGGED_INT_OP(OP)                                             \
+    TaggedInt operator OP(const TaggedInt &other)                     \
+    {                                                                 \
+        return TaggedInt(value OP other.value, valid && other.valid); \
+    }
+#define TAGGED_INT_UNARY_OP(OP) \
+    TaggedInt operator OP() { return TaggedInt(OP(value), valid); }
+
+// The expressions may contain undefined values, which are okay as long as they're
+// in a part of the expression that isn't evaluated due to short-circuiting.
+// Undefined values are distinguished from valid ones with the valid flag.
+struct TaggedInt
+{
+    TaggedInt() : value(0), valid(false) {}
+    TaggedInt(inttype aValue, bool aValid) : value(aValue), valid(aValid) {}
+
+    inttype value;
+    bool valid;
+
+    TAGGED_INT_OP(||)
+    TAGGED_INT_OP(&&)
+    TAGGED_INT_OP(|)
+    TAGGED_INT_OP(^)
+    TAGGED_INT_OP(&)
+    TAGGED_INT_OP(!=)
+    TAGGED_INT_OP(==)
+    TAGGED_INT_OP(>=)
+    TAGGED_INT_OP(<=)
+    TAGGED_INT_OP(>)
+    TAGGED_INT_OP(<)
+    TAGGED_INT_OP(>>)
+    TAGGED_INT_OP(<<)
+    TAGGED_INT_OP(-)
+    TAGGED_INT_OP(+)
+    TAGGED_INT_OP(%)
+    TAGGED_INT_OP(/)
+    TAGGED_INT_OP(*)
+    TAGGED_INT_UNARY_OP(!)
+    TAGGED_INT_UNARY_OP(~)
+    TAGGED_INT_UNARY_OP(-)
+    TAGGED_INT_UNARY_OP(+)
+};
+typedef TaggedInt YYSTYPE;
+
 #define YYENABLE_NLS 0
 #define YYLTYPE_IS_TRIVIAL 1
 #define YYSTYPE_IS_TRIVIAL 1
@@ -79,6 +125,7 @@ static void yyerror(Context* context, const char* reason);
 %}
 
 %token TOK_CONST_INT
+%token TOK_IDENTIFIER
 %left TOK_OP_OR
 %left TOK_OP_AND
 %left '|'
@@ -95,18 +142,50 @@ static void yyerror(Context* context, const char* reason);
 
 input
     : expression {
-        *(context->result) = static_cast<int>($1);
-        YYACCEPT;
+        if ($1.valid)
+        {
+            *(context->result) = static_cast<int>($1.value);
+            YYACCEPT;
+        }
+        else
+        {
+            *(context->result) = 0;
+            context->diagnostics->report(pp::Diagnostics::PP_INVALID_EXPRESSION,
+                                         context->token->location,
+                                         "undefined identifier was evaluated in preprocessor expression");
+            YYABORT;
+        }
     }
 ;
 
 expression
     : TOK_CONST_INT
+    | TOK_IDENTIFIER
     | expression TOK_OP_OR expression {
-        $$ = $1 || $3;
+        // ESSL3.00 section 3.4:
+        // If an operand is not evaluated, the presence of undefined identifiers in the operand
+        // will not cause an error.
+        if ($1.value != 0)
+        {
+            $$ = $1 || TaggedInt(0, true);
+        }
+        else
+        {
+            $$ = $1 || $3;
+        }
     }
     | expression TOK_OP_AND expression {
-        $$ = $1 && $3;
+        // ESSL3.00 section 3.4:
+        // If an operand is not evaluated, the presence of undefined identifiers in the operand
+        // will not cause an error.
+        if ($1.value == 0)
+        {
+            $$ = $1 && TaggedInt(0, true);
+        }
+        else
+        {
+            $$ = $1 && $3;
+        }
     }
     | expression '|' expression {
         $$ = $1 | $3;
@@ -148,9 +227,9 @@ expression
         $$ = $1 + $3;
     }
     | expression '%' expression {
-        if ($3 == 0) {
+        if ($3.value == 0 && $3.valid) {
             std::ostringstream stream;
-            stream << $1 << " % " << $3;
+            stream << $1.value << " % " << $3.value;
             std::string text = stream.str();
             context->diagnostics->report(pp::Diagnostics::PP_DIVISION_BY_ZERO,
                                          context->token->location,
@@ -161,9 +240,9 @@ expression
         }
     }
     | expression '/' expression {
-        if ($3 == 0) {
+        if ($3.value == 0 && $3.valid) {
             std::ostringstream stream;
-            stream << $1 << " / " << $3;
+            stream << $1.value << " / " << $3.value;
             std::string text = stream.str();
             context->diagnostics->report(pp::Diagnostics::PP_DIVISION_BY_ZERO,
                                          context->token->location,
@@ -209,10 +288,16 @@ int yylex(YYSTYPE *lvalp, Context *context)
             context->diagnostics->report(pp::Diagnostics::PP_INTEGER_OVERFLOW,
                                          token->location, token->text);
         }
-        *lvalp = static_cast<YYSTYPE>(val);
+        lvalp->value = static_cast<inttype>(val);
+        lvalp->valid = true;
         type = TOK_CONST_INT;
         break;
       }
+      case pp::Token::IDENTIFIER:
+        lvalp->value = -1;
+        lvalp->valid = false;
+        type = TOK_IDENTIFIER;
+        break;
       case pp::Token::OP_OR:
         type = TOK_OP_OR;
         break;
