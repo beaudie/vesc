@@ -697,13 +697,8 @@ TEST_F(IfTest, UndefinedMacro)
     ASSERT_TRUE(mPreprocessor.init(1, &str, 0));
 
     EXPECT_CALL(mDiagnostics,
-                print(pp::Diagnostics::PP_INVALID_EXPRESSION,
-                      pp::SourceLocation(0, 1),
-                      "syntax error"));
-    EXPECT_CALL(mDiagnostics,
-                print(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
-                      pp::SourceLocation(0, 1),
-                      "UNDEFINED"));
+                print(pp::Diagnostics::PP_INVALID_EXPRESSION, pp::SourceLocation(0, 1),
+                      "undefined identifier was evaluated in preprocessor expression"));
 
     pp::Token token;
     mPreprocessor.lex(&token);
@@ -833,3 +828,31 @@ TEST_F(IfTest, UnterminatedIfdef)
     mPreprocessor.lex(&token);
 }
 
+TEST_F(IfTest, ExtraIntExpression)
+{
+    const char *str =
+        "#if 1 1\n"
+        "#endif\n";
+    ASSERT_TRUE(mPreprocessor.init(1, &str, 0));
+
+    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_INVALID_EXPRESSION,
+                                    pp::SourceLocation(0, 1), "syntax error"));
+
+    pp::Token token;
+    mPreprocessor.lex(&token);
+}
+
+TEST_F(IfTest, ExtraIdentifierExpression)
+{
+    const char *str =
+        "#define one 1\n"
+        "#if 1 one\n"
+        "#endif\n";
+    ASSERT_TRUE(mPreprocessor.init(1, &str, 0));
+
+    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_INVALID_EXPRESSION,
+                                    pp::SourceLocation(0, 2), "syntax error"));
+
+    pp::Token token;
+    mPreprocessor.lex(&token);
+}
