@@ -699,11 +699,7 @@ TEST_F(IfTest, UndefinedMacro)
     EXPECT_CALL(mDiagnostics,
                 print(pp::Diagnostics::PP_INVALID_EXPRESSION,
                       pp::SourceLocation(0, 1),
-                      "syntax error"));
-    EXPECT_CALL(mDiagnostics,
-                print(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
-                      pp::SourceLocation(0, 1),
-                      "UNDEFINED"));
+                      "undefined identifier was evaluated in preprocessor expression"));
 
     pp::Token token;
     mPreprocessor.lex(&token);
