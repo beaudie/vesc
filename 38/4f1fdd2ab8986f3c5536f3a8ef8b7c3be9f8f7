@@ -1,0 +1,8 @@
+Code-Review+2: Geoff Lang <geofflang@chromium.org>
+Tryjob-Request+1: Geoff Lang <geofflang@chromium.org>
+Verified+1: Corentin Wallez <cwallez@chromium.org>
+Submitted-by: Corentin Wallez <cwallez@chromium.org>
+Submitted-at: Wed, 26 Aug 2015 20:48:52 +0000
+Reviewed-on: https://chromium-review.googlesource.com/295721
+Project: angle/angle
+Branch: refs/heads/master
