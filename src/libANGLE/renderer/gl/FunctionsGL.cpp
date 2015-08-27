@@ -71,7 +71,6 @@ static void AssignGLExtensionEntryPoint(const std::vector<std::string> &extensio
     {
         if (std::find(extensions.begin(), extensions.end(), requiredExtension) == extensions.end())
         {
-            *outFunction = nullptr;
             return;
         }
     }
@@ -879,6 +878,24 @@ void FunctionsGL::initialize()
     AssignGLExtensionEntryPoint(extensions, "GL_ARB_ES2_compatibility", loadProcAddress("glGetShaderPrecisionFormat"), &getShaderPrecisionFormat);
     AssignGLExtensionEntryPoint(extensions, "GL_ARB_ES2_compatibility", loadProcAddress("glDepthRangef"), &depthRangef);
     AssignGLExtensionEntryPoint(extensions, "GL_ARB_ES2_compatibility", loadProcAddress("glClearDepthf"), &clearDepthf);
+
+    // GL_ARB_instanced_arrays
+    AssignGLExtensionEntryPoint(extensions, "GL_ARB_instanced_arrays",
+                                loadProcAddress("glVertexAttribDivisorARB"), &vertexAttribDivisor);
+
+    // GL_ARB_draw_instanced
+    AssignGLExtensionEntryPoint(extensions, "GL_ARB_draw_instanced",
+                                loadProcAddress("glDrawArraysInstancedARB"), &drawArraysInstanced);
+    AssignGLExtensionEntryPoint(extensions, "GL_ARB_draw_instanced",
+                                loadProcAddress("glDrawElementsInstancedARB"),
+                                &drawElementsInstanced);
+
+    // GL_EXT_draw_instanced
+    AssignGLExtensionEntryPoint(extensions, "GL_EXT_draw_instanced",
+                                loadProcAddress("glDrawArraysInstancedEXT"), &drawArraysInstanced);
+    AssignGLExtensionEntryPoint(extensions, "GL_EXT_draw_instanced",
+                                loadProcAddress("glDrawElementsInstancedEXT"),
+                                &drawElementsInstanced);
 
     // 1.0
     if (isAtLeastGL(gl::Version(1, 0)))
