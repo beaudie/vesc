@@ -463,4 +463,47 @@ TEST_F(EGLSurfaceTest, CreateWithEGLConfig5551Support)
     EXPECT_GL_NO_ERROR();
     glDeleteProgram(program);
 }
+
+// Test creating a surface that supports a EGLConfig with 24bit
+// support GL_RGB8_OES
+TEST_F(EGLSurfaceTest, CreateWithEGLConfig8880Support)
+{
+    const char *extensionsString = eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS);
+    if (strstr(extensionsString, "EGL_ANGLE_platform_angle_d3d") == nullptr)
+    {
+        std::cout << "D3D Platform not supported in ANGLE" << std::endl;
+        return;
+    }
+
+    const EGLint configAttributes[] =
+    {
+        EGL_RED_SIZE, 8,
+        EGL_GREEN_SIZE, 8,
+        EGL_BLUE_SIZE, 8,
+        EGL_ALPHA_SIZE, 0,
+        EGL_DEPTH_SIZE, 0,
+        EGL_STENCIL_SIZE, 0,
+        EGL_SAMPLE_BUFFERS, 0,
+        EGL_NONE
+    };
+
+    initializeDisplay(EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE);
+    EGLConfig config;
+    if (EGLWindow::FindEGLConfig(mDisplay, configAttributes, &config) == EGL_FALSE)
+    {
+        std::cout << "EGLConfig for a GL_RGB8_OES surface is not supported, skipping test"
+                  << std::endl;
+        return;
+    }
+
+    initializeSurface(config);
+
+    eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    ASSERT_TRUE(eglGetError() == EGL_SUCCESS);
+
+    GLuint program = createProgram();
+    drawWithProgram(program);
+    EXPECT_GL_NO_ERROR();
+    glDeleteProgram(program);
+}
 }
