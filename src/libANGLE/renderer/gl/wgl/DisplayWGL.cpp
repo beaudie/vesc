@@ -13,6 +13,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
+#include "libANGLE/renderer/gl/wgl/D3DTextureSurfaceWGL.h"
 #include "libANGLE/renderer/gl/wgl/FunctionsWGL.h"
 #include "libANGLE/renderer/gl/wgl/PbufferSurfaceWGL.h"
 #include "libANGLE/renderer/gl/wgl/WindowSurfaceWGL.h"
@@ -315,6 +316,8 @@ void DisplayWGL::terminate()
 
     FreeLibrary(mOpenGLModule);
     mOpenGLModule = nullptr;
+
+    ASSERT(mRegisteredD3DDevices.empty());
 }
 
 SurfaceImpl *DisplayWGL::createWindowSurface(const egl::Config *configuration,
@@ -339,11 +342,10 @@ SurfaceImpl *DisplayWGL::createPbufferSurface(const egl::Config *configuration,
 }
 
 SurfaceImpl *DisplayWGL::createPbufferFromClientBuffer(const egl::Config *configuration,
-                                                       EGLClientBuffer shareHandle,
+                                                       EGLClientBuffer clientBuffer,
                                                        const egl::AttributeMap &attribs)
 {
-    UNIMPLEMENTED();
-    return nullptr;
+    return new D3DTextureSurfaceWGL(getRenderer(), clientBuffer, this, mWGLContext, mDeviceContext, mFunctionsGL, mFunctionsWGL);
 }
 
 SurfaceImpl *DisplayWGL::createPixmapSurface(const egl::Config *configuration,
@@ -467,11 +469,57 @@ const FunctionsGL *DisplayWGL::getFunctionsGL() const
 void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     outExtensions->createContext = true;
+    outExtensions->d3dTextureClientBuffer = mFunctionsWGL->hasExtension("WGL_NV_DX_interop2");
 }
 
 void DisplayWGL::generateCaps(egl::Caps *outCaps) const
 {
     outCaps->textureNPOT = true;
+}
+
+egl::Error DisplayWGL::registerD3DDevice(IUnknown *device, HANDLE *outHandle)
+{
+    ASSERT(device != nullptr);
+    ASSERT(outHandle != nullptr);
+
+    auto iter = mRegisteredD3DDevices.find(device);
+    if (iter != mRegisteredD3DDevices.end())
+    {
+        iter->second.refCount++;
+        *outHandle = iter->second.handle;
+        return egl::Error(EGL_SUCCESS);
+    }
+
+    HANDLE handle = mFunctionsWGL->dxOpenDeviceNV(device);
+    if (!handle)
+    {
+        return egl::Error(EGL_BAD_PARAMETER, "Failed to open D3D device.");
+    }
+
+    device->AddRef();
+
+    D3DObjectHandle newDeviceInfo;
+    newDeviceInfo.handle = handle;
+    newDeviceInfo.refCount = 1;
+    mRegisteredD3DDevices[device] = newDeviceInfo;
+
+    *outHandle = handle;
+    return egl::Error(EGL_SUCCESS);
+}
+
+void DisplayWGL::releaseD3DDevice(HANDLE deviceHandle)
+{
+    for (auto iter = mRegisteredD3DDevices.begin(); iter != mRegisteredD3DDevices.end(); iter++)
+    {
+        iter->second.refCount--;
+        if (iter->second.refCount == 0)
+        {
+            mFunctionsWGL->dxCloseDeviceNV(iter->second.handle);
+            iter->first->Release();
+            mRegisteredD3DDevices.erase(iter);
+            break;
+        }
+    }
 }
 
 }
