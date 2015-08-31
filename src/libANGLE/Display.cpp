@@ -176,6 +176,14 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap)
 #endif
         break;
 
+#if defined(ANGLE_ENABLE_OPENGL)
+#if defined(ANGLE_PLATFORM_WINDOWS)
+      case EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE:
+          impl = new rx::DisplayWGL();
+          break;
+#endif
+#endif
+
       default:
         UNREACHABLE();
         break;
