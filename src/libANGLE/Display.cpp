@@ -303,6 +303,11 @@ void Display::terminate()
         destroyImage(*mImageSet.begin());
     }
 
+    while (!mImplementation->getSurfaceSet().empty())
+    {
+        destroySurface(*mImplementation->getSurfaceSet().begin());
+    }
+
     mConfigSet.clear();
 
     SafeDelete(mDevice);
