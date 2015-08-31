@@ -300,6 +300,6 @@ TEST_P(ProvokingVertexTest, FlatTriStripPrimitiveRestart)
     }
 }
 
-ANGLE_INSTANTIATE_TEST(ProvokingVertexTest, ES3_D3D11(), ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(ProvokingVertexTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 
 }  // anonymous namespace
