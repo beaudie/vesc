@@ -342,6 +342,8 @@ SurfaceImpl *DisplayWGL::createPbufferFromClientBuffer(const egl::Config *config
                                                        EGLClientBuffer shareHandle,
                                                        const egl::AttributeMap &attribs)
 {
+
+
     UNIMPLEMENTED();
     return nullptr;
 }
@@ -466,7 +468,7 @@ const FunctionsGL *DisplayWGL::getFunctionsGL() const
 
 void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
-    //UNIMPLEMENTED();
+    //outExtensions->d3dTextureClientBuffer = mFunctionsWGL->;
 }
 
 void DisplayWGL::generateCaps(egl::Caps *outCaps) const
