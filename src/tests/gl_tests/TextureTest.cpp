@@ -1117,7 +1117,7 @@ TEST_P(TextureLimitsTest, DrawWithTexturePastMaximum)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(TextureTest, ES2_D3D9(), ES2_D3D11(), ES2_D3D11_FL9_3()); // TODO(geofflang): Figure out why this test fails on Intel OpenGL
-ANGLE_INSTANTIATE_TEST(TextureTestES3, ES3_D3D11(), ES3_OPENGL());
-ANGLE_INSTANTIATE_TEST(TextureLimitsTest, ES2_D3D11(), ES2_OPENGL());
+ANGLE_INSTANTIATE_TEST(TextureTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+ANGLE_INSTANTIATE_TEST(TextureLimitsTest, ES2_D3D11(), ES2_OPENGL(), ES2_OPENGLES());
 
 } // namespace
