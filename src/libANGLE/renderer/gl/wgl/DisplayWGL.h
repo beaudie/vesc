@@ -34,7 +34,7 @@ class DisplayWGL : public DisplayGL
     SurfaceImpl *createPbufferSurface(const egl::Config *configuration,
                                       const egl::AttributeMap &attribs) override;
     SurfaceImpl *createPbufferFromClientBuffer(const egl::Config *configuration,
-                                               EGLClientBuffer shareHandle,
+                                               EGLClientBuffer clientBuffer,
                                                const egl::AttributeMap &attribs) override;
     SurfaceImpl *createPixmapSurface(const egl::Config *configuration,
                                      NativePixmapType nativePixmap,
@@ -68,6 +68,8 @@ class DisplayWGL : public DisplayGL
     HDC mDeviceContext;
     int mPixelFormat;
     HGLRC mWGLContext;
+
+    std::map<IUnknown*, HANDLE> mRegisteredD3DDevices;
 
     egl::Display *mDisplay;
 };
