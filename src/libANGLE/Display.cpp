@@ -138,6 +138,18 @@ rx::DisplayImpl *CreateDisplayImpl(const AttributeMap &attribMap)
 #endif
         break;
 
+      case EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE:
+#if defined(ANGLE_ENABLE_OPENGL)
+#if defined(ANGLE_PLATFORM_WINDOWS)
+        impl = new rx::DisplayWGL();
+#else
+#error Unsupported OpenGL ES platform.
+#endif
+#else
+        UNREACHABLE();
+#endif
+        break;
+
       default:
         UNREACHABLE();
         break;
