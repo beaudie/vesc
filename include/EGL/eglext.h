@@ -410,6 +410,11 @@ EGLAPI EGLint EGLAPIENTRY eglDupNativeFenceFDANDROID (EGLDisplay dpy, EGLSyncKHR
 #define EGL_D3D_TEXTURE_2D_SHARE_HANDLE_ANGLE 0x3200
 #endif /* EGL_ANGLE_d3d_share_handle_client_buffer */
 
+#ifndef EGL_ANGLE_d3d_texture_client_buffer
+#define EGL_ANGLE_d3d_texture_client_buffer 1
+#define EGL_D3D_TEXTURE_ANGLE       0x33A3
+#endif /* EGL_ANGLE_d3d_texture_client_buffer */
+
 #ifndef EGL_ANGLE_window_fixed_size
 #define EGL_ANGLE_window_fixed_size 1
 #define EGL_FIXED_SIZE_ANGLE        0x3201
