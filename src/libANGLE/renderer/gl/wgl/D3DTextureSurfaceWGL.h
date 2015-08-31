@@ -4,10 +4,10 @@
 // found in the LICENSE file.
 //
 
-// WindowSurfaceWGL.h: WGL implementation of egl::Surface for windows
+// D3DTextureSurfaceWGL.h: WGL implementation of egl::Surface for D3D texture interop.
 
-#ifndef LIBANGLE_RENDERER_GL_WGL_WINDOWSURFACEWGL_H_
-#define LIBANGLE_RENDERER_GL_WGL_WINDOWSURFACEWGL_H_
+#ifndef LIBANGLE_RENDERER_GL_WGL_D3DTEXTIRESURFACEWGL_H_
+#define LIBANGLE_RENDERER_GL_WGL_D3DTEXTIRESURFACEWGL_H_
 
 #include "libANGLE/renderer/gl/SurfaceGL.h"
 
@@ -17,16 +17,16 @@ namespace rx
 {
 
 class FunctionsWGL;
+class DisplayWGL;
 
-class WindowSurfaceWGL : public SurfaceGL
+class D3DTextureSurfaceWGL : public SurfaceGL
 {
   public:
-    WindowSurfaceWGL(RendererGL *renderer,
-                     EGLNativeWindowType window,
-                     int pixelFormat,
-                     HGLRC wglContext,
-                     const FunctionsWGL *functions);
-    ~WindowSurfaceWGL() override;
+    D3DTextureSurfaceWGL(RendererGL *renderer,
+                         EGLClientBuffer clientBuffer,
+                         DisplayWGL *display,
+                         const FunctionsWGL *functions);
+    ~D3DTextureSurfaceWGL() override;
 
     egl::Error initialize() override;
     egl::Error makeCurrent() override;
@@ -45,18 +45,19 @@ class WindowSurfaceWGL : public SurfaceGL
     EGLint getSwapBehavior() const override;
 
   private:
-    int mPixelFormat;
+    EGLClientBuffer mClientBuffer;
 
-    HGLRC mWGLContext;
-
-    HWND mWindow;
-    HDC mDeviceContext;
-
+    DisplayWGL *mDisplay;
     const FunctionsWGL *mFunctionsWGL;
 
-    EGLint mSwapBehavior;
+    size_t mWidth;
+    size_t mHeight;
+
+    HANDLE mDeviceHandle;
+    IUnknown *mObject;
+    HANDLE mBoundObjectHandle;
 };
 
 }
 
-#endif // LIBANGLE_RENDERER_GL_WGL_WINDOWSURFACEWGL_H_
+#endif // LIBANGLE_RENDERER_GL_WGL_D3DTEXTIRESURFACEWGL_H_

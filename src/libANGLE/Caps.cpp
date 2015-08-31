@@ -572,6 +572,7 @@ DisplayExtensions::DisplayExtensions()
     : createContextRobustness(false),
       d3dShareHandleClientBuffer(false),
       surfaceD3DTexture2DShareHandle(false),
+      d3dTextureClientBuffer(false),
       querySurfacePointer(false),
       windowFixedSize(false),
       keyedMutex(false),
@@ -598,6 +599,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_EXT_create_context_robustness",             createContextRobustness,        &extensionStrings);
     InsertExtensionString("EGL_ANGLE_d3d_share_handle_client_buffer",      d3dShareHandleClientBuffer,     &extensionStrings);
     InsertExtensionString("EGL_ANGLE_surface_d3d_texture_2d_share_handle", surfaceD3DTexture2DShareHandle, &extensionStrings);
+    InsertExtensionString("EGL_ANGLE_d3d_texture_client_buffer",           d3dTextureClientBuffer,         &extensionStrings);
     InsertExtensionString("EGL_ANGLE_query_surface_pointer",               querySurfacePointer,            &extensionStrings);
     InsertExtensionString("EGL_ANGLE_window_fixed_size",                   windowFixedSize,                &extensionStrings);
     InsertExtensionString("EGL_ANGLE_keyed_mutex",                         keyedMutex,                     &extensionStrings);
@@ -638,7 +640,8 @@ ClientExtensions::ClientExtensions()
       platformANGLE(false),
       platformANGLED3D(false),
       platformANGLEOpenGL(false),
-      clientGetAllProcAddresses(false)
+      clientGetAllProcAddresses(false),
+      lockSurface3(false)
 {
 }
 
@@ -654,6 +657,7 @@ std::vector<std::string> ClientExtensions::getStrings() const
     InsertExtensionString("EGL_ANGLE_platform_angle_d3d",          platformANGLED3D,          &extensionStrings);
     InsertExtensionString("EGL_ANGLE_platform_angle_opengl",       platformANGLEOpenGL,       &extensionStrings);
     InsertExtensionString("EGL_KHR_client_get_all_proc_addresses", clientGetAllProcAddresses, &extensionStrings);
+    InsertExtensionString("EGL_KHR_lock_surface3",                 lockSurface3,              &extensionStrings);
     // clang-format on
 
     return extensionStrings;

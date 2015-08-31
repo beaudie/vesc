@@ -34,7 +34,7 @@ class DisplayWGL : public DisplayGL
     SurfaceImpl *createPbufferSurface(const egl::Config *configuration,
                                       const egl::AttributeMap &attribs) override;
     SurfaceImpl *createPbufferFromClientBuffer(const egl::Config *configuration,
-                                               EGLClientBuffer shareHandle,
+                                               EGLClientBuffer clientBuffer,
                                                const egl::AttributeMap &attribs) override;
     SurfaceImpl *createPixmapSurface(const egl::Config *configuration,
                                      NativePixmapType nativePixmap,
@@ -52,6 +52,9 @@ class DisplayWGL : public DisplayGL
 
     std::string getVendorString() const override;
 
+    egl::Error registerD3DDevice(IUnknown *device, HANDLE *outHandle);
+    void releaseD3DDevice(HANDLE handle);
+
   private:
     const FunctionsGL *getFunctionsGL() const override;
 
@@ -68,6 +71,13 @@ class DisplayWGL : public DisplayGL
     HDC mDeviceContext;
     int mPixelFormat;
     HGLRC mWGLContext;
+
+    struct D3DObjectHandle
+    {
+        HANDLE handle;
+        size_t refCount;
+    };
+    std::map<IUnknown*, D3DObjectHandle> mRegisteredD3DDevices;
 
     egl::Display *mDisplay;
 };
