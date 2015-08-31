@@ -23,7 +23,8 @@ BufferD3D::BufferD3D(BufferFactoryD3D *factory)
       mStaticVertexBuffer(nullptr),
       mStaticIndexBuffer(nullptr),
       mUnmodifiedDataUse(0),
-      mUsage(D3D_BUFFER_USAGE_STATIC)
+      mUsage(D3D_BUFFER_USAGE_STATIC),
+      mUseStaticBuffers(true)
 {
     updateSerial();
 }
@@ -32,6 +33,12 @@ BufferD3D::~BufferD3D()
 {
     SafeDelete(mStaticVertexBuffer);
     SafeDelete(mStaticIndexBuffer);
+
+    // Empty the cache of static vertex buffers too
+    for (StaticVertexBufferInterface *staticBuffer : mStaticBufferCache)
+    {
+        SafeDelete(staticBuffer);
+    }
 }
 
 void BufferD3D::updateSerial()
@@ -65,20 +72,78 @@ void BufferD3D::updateD3DBufferUsage(GLenum usage)
 
 void BufferD3D::initializeStaticData()
 {
-    if (!mStaticVertexBuffer)
-    {
-        mStaticVertexBuffer = new StaticVertexBufferInterface(mFactory);
-    }
+    mUseStaticBuffers = true;
+
     if (!mStaticIndexBuffer)
     {
         mStaticIndexBuffer = new StaticIndexBufferInterface(mFactory);
     }
 }
 
+StaticIndexBufferInterface *BufferD3D::getStaticIndexBuffer()
+{
+    return mStaticIndexBuffer;
+}
+
+StaticVertexBufferInterface *BufferD3D::getStaticVertexBuffer(const gl::VertexAttribute &attribute)
+{
+    if (mUseStaticBuffers)
+    {
+        // If the default static vertex buffer contains the attribute, then return it
+        if (mStaticVertexBuffer && mStaticVertexBuffer->lookupAttribute(attribute, nullptr))
+        {
+            return mStaticVertexBuffer;
+        }
+
+        // If there is a cached static buffer that already contains the attribute, then return it
+        for (StaticVertexBufferInterface *staticBuffer : mStaticBufferCache)
+        {
+            if (staticBuffer->lookupAttribute(attribute, nullptr))
+            {
+                return staticBuffer;
+            }
+        }
+
+        if (mStaticVertexBuffer)
+        {
+            // If the default static vertex buffer is empty or hasn't been committed, then we can
+            // still use it
+            if (mStaticVertexBuffer->getBufferSize() == 0 || !mStaticVertexBuffer->isCommitted())
+            {
+                return mStaticVertexBuffer;
+            }
+            else
+            {
+                // We can't reuse the default static vertex buffer, so we add it to the cache
+                // and create a new one below
+                mStaticBufferCache.push_back(mStaticVertexBuffer);
+                mStaticVertexBuffer = nullptr;
+            }
+        }
+
+        // If a static vertex buffer doesn't exist, then create a new one
+        if (mUseStaticBuffers && !mStaticVertexBuffer)
+        {
+            mStaticVertexBuffer = new StaticVertexBufferInterface(mFactory);
+        }
+    }
+
+    // Return the default static vertex buffer
+    return mStaticVertexBuffer;
+}
+
 void BufferD3D::invalidateStaticData()
 {
+    // Empty the cache of static vertex buffers too
+    for (StaticVertexBufferInterface *staticBuffer : mStaticBufferCache)
+    {
+        SafeDelete(staticBuffer);
+    }
+    mStaticBufferCache.clear();
+
     if ((mStaticVertexBuffer && mStaticVertexBuffer->getBufferSize() != 0) || (mStaticIndexBuffer && mStaticIndexBuffer->getBufferSize() != 0))
     {
+        mUseStaticBuffers = false;
         SafeDelete(mStaticVertexBuffer);
         SafeDelete(mStaticIndexBuffer);
 
@@ -98,6 +163,10 @@ void BufferD3D::promoteStaticUsage(int dataSize)
 {
     if (!mStaticVertexBuffer && !mStaticIndexBuffer)
     {
+        // There isn't any scenario that involves promoting static usage and the static buffer cache
+        // being non-empty
+        ASSERT(mStaticBufferCache.empty());
+
         mUnmodifiedDataUse += dataSize;
 
         if (mUnmodifiedDataUse > 3 * getSize())

@@ -243,7 +243,7 @@ gl::Error StreamingVertexBufferInterface::reserveSpace(unsigned int size)
 }
 
 StaticVertexBufferInterface::StaticVertexBufferInterface(BufferFactoryD3D *factory)
-    : VertexBufferInterface(factory, false)
+    : VertexBufferInterface(factory, false), mIsCommitted(false)
 {
 }
 
