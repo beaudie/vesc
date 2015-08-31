@@ -412,6 +412,11 @@ TEST_P(UniformBufferTest, ActiveUniformNames)
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-ANGLE_INSTANTIATE_TEST(UniformBufferTest, ES3_D3D11(), ES3_D3D11_FL11_1(), ES3_D3D11_FL11_1_REFERENCE());
+ANGLE_INSTANTIATE_TEST(UniformBufferTest,
+                       ES3_D3D11(),
+                       ES3_D3D11_FL11_1(),
+                       ES3_D3D11_FL11_1_REFERENCE(),
+                       ES3_OPENGL(),
+                       ES3_OPENGLES());
 
 } // namespace
