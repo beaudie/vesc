@@ -176,6 +176,17 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap)
 #endif
         break;
 
+#if defined(ANGLE_ENABLE_OPENGL)
+      case EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE:
+#if defined(ANGLE_PLATFORM_WINDOWS)
+          impl = new rx::DisplayWGL();
+#else
+          // No GLES support on this platform, fail display creation.
+          impl = nullptr;
+#endif
+          break;
+#endif
+
       default:
         UNREACHABLE();
         break;
@@ -203,9 +214,9 @@ Display *Display::GetDisplayFromAttribs(void *native_display, const AttributeMap
         display = iter->second;
     }
 
-    if (display == nullptr)
+    // Validate the native display
+    if (display == nullptr && !Display::isValidNativeDisplay(displayId))
     {
-        // Validate the native display
         if (!Display::isValidNativeDisplay(displayId))
         {
             return NULL;
@@ -219,6 +230,12 @@ Display *Display::GetDisplayFromAttribs(void *native_display, const AttributeMap
     if (!display->isInitialized())
     {
         rx::DisplayImpl *impl = CreateDisplayFromAttribs(attribMap);
+        if (impl == nullptr)
+        {
+            // No valid display implementation for these attributes
+            return nullptr;
+        }
+
         display->setAttributes(impl, attribMap);
     }
 
