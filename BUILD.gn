@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 # import the use_x11 variable
+import("//testing/test.gni")
 import("//build/config/ui.gni")
 
 angle_git_is_present = exec_script("src/commit_id.py",
@@ -25,6 +26,12 @@ compiler_gypi = exec_script(
   [ rebase_path("src/compiler.gypi") ],
   "scope",
   [ "src/compiler.gypi" ])
+
+unittests_gypi = exec_script(
+  "//build/gypi_to_gn.py",
+  [ rebase_path("src/tests/angle_unittests.gypi"), "--replace=<(angle_path)=." ],
+  "scope",
+  [ "src/tests/angle_unittests.gypi" ])
 
 # This config is exported to dependent targets (and also applied to internal
 # ones).
@@ -366,5 +373,32 @@ shared_library("libEGL") {
   deps = [
     ":includes",
     ":libGLESv2",
+  ]
+}
+
+test("angle_unittests") {
+  include_dirs = [
+    "testing/gtest/include",
+    "src",
+  ]
+
+  sources = rebase_path(unittests_gypi.angle_unittests_sources, ".", ".")
+
+  if (angle_enable_d3d9 || angle_enable_d3d11) {
+    sources += rebase_path(unittests_gypi.angle_unittests_hlsl_sources, ".", ".")
+  }
+
+  sources += [
+    "//gpu/angle_unittest_main.cc",
+  ]
+
+  deps = [
+    "//base",
+    "//base/test:test_support",
+    "//testing/gmock",
+    "//testing/gtest",
+    ":libANGLE",
+    ":preprocessor",
+    ":translator_static",
   ]
 }
