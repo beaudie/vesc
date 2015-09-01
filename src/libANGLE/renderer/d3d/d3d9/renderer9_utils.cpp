@@ -567,6 +567,9 @@ void GenerateCaps(IDirect3D9 *d3d9,
     // D3D9 has no concept of separate masks and refs for front and back faces in the depth stencil
     // state.
     limitations->noSeparateStencilRefsAndMasks = true;
+
+    // D3D9 cannot support constant color and alpha blend funcs together
+    limitations->noContstantColorAndAlphaBlendFunc = true;
 }
 
 }
