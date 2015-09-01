@@ -49,11 +49,15 @@ TEST_F(BitSetIteratorTest, Iterator)
 // Test an empty iterator.
 TEST_F(BitSetIteratorTest, EmptySet)
 {
+    // We don't use the FAIL gtest macro here as it returns from the
+    // functions, and used inside the for loop causes a warning in MSVC
+    bool sawBit = false;
     for (unsigned long bit : IterateBitSet(mStateBits))
     {
+        sawBit = true;
         UNUSED_TRACE_VARIABLE(bit);
-        FAIL() << "Should not be reached";
     }
+    EXPECT_EQ(false, sawBit);
 }
 
 // Test iterating a result of combining two bitsets.
