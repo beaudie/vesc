@@ -22,32 +22,32 @@ TransformFeedbackGL::~TransformFeedbackGL()
 
 void TransformFeedbackGL::begin(GLenum primitiveMode)
 {
-    UNIMPLEMENTED();
+    // UNIMPLEMENTED();
 }
 
 void TransformFeedbackGL::end()
 {
-    UNIMPLEMENTED();
+    // UNIMPLEMENTED();
 }
 
 void TransformFeedbackGL::pause()
 {
-    UNIMPLEMENTED();
+    // UNIMPLEMENTED();
 }
 
 void TransformFeedbackGL::resume()
 {
-    UNIMPLEMENTED();
+    // UNIMPLEMENTED();
 }
 
 void TransformFeedbackGL::bindGenericBuffer(const BindingPointer<gl::Buffer> &binding)
 {
-    UNIMPLEMENTED();
+    // UNIMPLEMENTED();
 }
 
 void TransformFeedbackGL::bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer> &binding)
 {
-    UNIMPLEMENTED();
+    // UNIMPLEMENTED();
 }
 
 }
