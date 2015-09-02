@@ -2841,6 +2841,7 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
 {
     const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(format, mRenderer11DeviceCaps);
 
+
     const gl::TextureCaps &textureCaps = getRendererTextureCaps().get(format);
     GLuint supportedSamples = textureCaps.getNearestSamples(samples);
 
