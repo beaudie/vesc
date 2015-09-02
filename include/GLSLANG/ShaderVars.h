@@ -125,6 +125,18 @@ struct COMPILER_EXPORT Attribute : public ShaderVariable
     int location;
 };
 
+struct COMPILER_EXPORT OutputVariable : public ShaderVariable
+{
+    OutputVariable();
+    ~OutputVariable();
+    OutputVariable(const OutputVariable &other);
+    OutputVariable &operator=(const OutputVariable &other);
+    bool operator==(const OutputVariable &other) const;
+    bool operator!=(const OutputVariable &other) const { return !operator==(other); }
+
+    int location;
+};
+
 struct COMPILER_EXPORT InterfaceBlockField : public ShaderVariable
 {
     InterfaceBlockField();

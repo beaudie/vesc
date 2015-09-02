@@ -242,6 +242,31 @@ bool Attribute::operator==(const Attribute &other) const
             location == other.location);
 }
 
+OutputVariable::OutputVariable() : location(-1)
+{
+}
+
+OutputVariable::~OutputVariable()
+{
+}
+
+OutputVariable::OutputVariable(const OutputVariable &other)
+    : ShaderVariable(other), location(other.location)
+{
+}
+
+OutputVariable &OutputVariable::operator=(const OutputVariable &other)
+{
+    ShaderVariable::operator=(other);
+    location                = other.location;
+    return *this;
+}
+
+bool OutputVariable::operator==(const OutputVariable &other) const
+{
+    return (ShaderVariable::operator==(other) && location == other.location);
+}
+
 InterfaceBlockField::InterfaceBlockField()
     : isRowMajorLayout(false)
 {}
