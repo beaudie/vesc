@@ -9,7 +9,10 @@
         'windows_sdk_path%': 'C:/Program Files (x86)/Windows Kits/8.1',
         # build/gyp_angle sets this to 1.
         'angle_standalone%': '0',
-
+        # build/gyp_angle configures these as appropriate
+        'angle_build_googletests%': 0,
+        'angle_build_deqp_executables%': 0,
+        'angle_build_deqp_libraries%': 0,
         'angle_build_winrt%': '0',
         'angle_build_winphone%': '0',
         'conditions':

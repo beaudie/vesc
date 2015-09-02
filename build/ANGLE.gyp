@@ -11,6 +11,7 @@
             'dependencies':
             [
                 '../src/angle.gyp:*',
+                '../src/tests/tests.gyp:*',
             ],
             'conditions':
             [
@@ -21,7 +22,6 @@
                     'dependencies':
                     [
                         '../samples/samples.gyp:*',
-                        '../src/tests/tests.gyp:*',
                     ],
                 }],
             ],
