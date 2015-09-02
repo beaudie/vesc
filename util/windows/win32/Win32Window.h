@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 
-// Win32Window.h: Definition of the implementation of OSWindow for Windows
+// Win32Window.h: Definition of the implementation of OSWindow for Win32 (Windows)
 
 #ifndef UTIL_WIN32_WINDOW_H
 #define UTIL_WIN32_WINDOW_H
@@ -52,4 +52,4 @@ class Win32Window : public OSWindow
     EGLNativeDisplayType mNativeDisplay;
 };
 
-#endif // UTIL_WIN32_WINDOW_H
+#endif  // UTIL_WIN32_WINDOW_H
