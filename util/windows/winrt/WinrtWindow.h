@@ -1,37 +1,34 @@
 //
-// Copyright (c) 2014 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2015 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
 
-// Win32Window.h: Definition of the implementation of OSWindow for Windows
+// WinrtWindow.h: Definition of the implementation of OSWindow for WinRT (Windows)
 
-#ifndef UTIL_WIN32_WINDOW_H
-#define UTIL_WIN32_WINDOW_H
+#ifndef UTIL_WINRT_WINDOW_H
+#define UTIL_WINRT_WINDOW_H
 
-#include <windows.h>
 #include <string>
+#include <windows.h>
+#include <windows.applicationmodel.core.h>
+#include <wrl.h>
 
 #include "OSWindow.h"
-#include "Timer.h"
 
-class Win32Window : public OSWindow
+class WinrtWindow : public OSWindow
 {
   public:
-    Win32Window();
-    ~Win32Window();
+    WinrtWindow();
+    ~WinrtWindow();
 
     bool initialize(const std::string &name, size_t width, size_t height) override;
     void destroy() override;
-
-    bool takeScreenshot(uint8_t *pixelData) override;
 
     EGLNativeWindowType getNativeWindow() const override;
     EGLNativeDisplayType getNativeDisplay() const override;
 
     void messageLoop() override;
-
-    void pushEvent(Event event) override;
 
     void setMousePosition(int x, int y) override;
     bool setPosition(int x, int y) override;
@@ -41,15 +38,8 @@ class Win32Window : public OSWindow
     void signalTestEvent() override;
 
   private:
-    std::string mParentClassName;
-    std::string mChildClassName;
-
-    bool mIsVisible;
-    Timer *mSetVisibleTimer;
-
     EGLNativeWindowType mNativeWindow;
-    EGLNativeWindowType mParentWindow;
-    EGLNativeDisplayType mNativeDisplay;
+    Microsoft::WRL::ComPtr<ABI::Windows::UI::Core::ICoreDispatcher> mCoreDispatcher;
 };
 
-#endif // UTIL_WIN32_WINDOW_H
+#endif  // UTIL_WINRT_WINDOW_H
