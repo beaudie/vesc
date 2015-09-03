@@ -172,6 +172,12 @@ class dEQPTest : public testing::TestWithParam<size_t>
         return testing::Range<size_t>(0, GetCaseList().numCases());
     }
 
+    static std::string GetGtestParamName(size_t param)
+    {
+        const auto &caseInfo = GetCaseList().getCaseInfo(param);
+        return caseInfo.mGTestName;
+    }
+
     static const dEQPCaseList &GetCaseList()
     {
         static dEQPCaseList sCaseList(TestModuleIndex);
@@ -183,7 +189,6 @@ class dEQPTest : public testing::TestWithParam<size_t>
     void runTest()
     {
         const auto &caseInfo = GetCaseList().getCaseInfo(GetParam());
-        std::cout << caseInfo.mDEQPName << std::endl;
 
         bool result = deqp_libtester_run(caseInfo.mDEQPName.c_str());
 
@@ -210,32 +215,28 @@ class dEQP_EGL : public dEQPTest<2>
 {
 };
 
-#ifdef ANGLE_DEQP_GLES2_TESTS
 // TODO(jmadill): add different platform configs, or ability to choose platform
-TEST_P(dEQP_GLES2, Default)
-{
-    runTest();
-}
+#define INSTANTIATE_DEQP_CASES(DEQP_TEST) \
+    TEST_P(DEQP_TEST, Default) \
+    { \
+        runTest(); \
+    } \
+    \
+    INSTANTIATE_TEST_CASE_P(, DEQP_TEST, DEQP_TEST::GetTestingRange(), \
+                              [](const testing::TestParamInfo<size_t>& info){ \
+                                  return DEQP_TEST::GetGtestParamName(info.param); \
+                              })
 
-INSTANTIATE_TEST_CASE_P(, dEQP_GLES2, dEQP_GLES2::GetTestingRange());
+#ifdef ANGLE_DEQP_GLES2_TESTS
+INSTANTIATE_DEQP_CASES(dEQP_GLES2);
 #endif
 
 #ifdef ANGLE_DEQP_GLES3_TESTS
-TEST_P(dEQP_GLES3, Default)
-{
-    runTest();
-}
-
-INSTANTIATE_TEST_CASE_P(, dEQP_GLES3, dEQP_GLES3::GetTestingRange());
+INSTANTIATE_DEQP_CASES(dEQP_GLES3);
 #endif
 
 #ifdef ANGLE_DEQP_EGL_TESTS
-TEST_P(dEQP_EGL, Default)
-{
-    runTest();
-}
-
-INSTANTIATE_TEST_CASE_P(, dEQP_EGL, dEQP_EGL::GetTestingRange());
+INSTANTIATE_DEQP_CASES(dEQP_EGL);
 #endif
 
 } // anonymous namespace
