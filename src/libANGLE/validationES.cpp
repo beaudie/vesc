@@ -1617,8 +1617,13 @@ bool ValidateDrawArraysInstancedANGLE(Context *context, GLenum mode, GLint first
     return ValidateDrawArraysInstanced(context, mode, first, count, primcount);
 }
 
-bool ValidateDrawElements(Context *context, GLenum mode, GLsizei count, GLenum type,
-                          const GLvoid *indices, GLsizei primcount, RangeUI *indexRangeOut)
+bool ValidateDrawElements(Context *context,
+                          GLenum mode,
+                          GLsizei count,
+                          GLenum type,
+                          const GLvoid *indices,
+                          GLsizei primcount,
+                          IndexRange *indexRangeOut)
 {
     switch (type)
     {
@@ -1703,7 +1708,9 @@ bool ValidateDrawElements(Context *context, GLenum mode, GLsizei count, GLenum t
     if (elementArrayBuffer)
     {
         uintptr_t offset = reinterpret_cast<uintptr_t>(indices);
-        Error error = elementArrayBuffer->getIndexRange(type, static_cast<size_t>(offset), count, indexRangeOut);
+        Error error =
+            elementArrayBuffer->getIndexRange(type, static_cast<size_t>(offset), count,
+                                              state.isPrimitiveRestartEnabled(), indexRangeOut);
         if (error.isError())
         {
             context->recordError(error);
@@ -1712,7 +1719,7 @@ bool ValidateDrawElements(Context *context, GLenum mode, GLsizei count, GLenum t
     }
     else
     {
-        *indexRangeOut = ComputeIndexRange(type, indices, count);
+        *indexRangeOut = ComputeIndexRange(type, indices, count, state.isPrimitiveRestartEnabled());
     }
 
     if (!ValidateDrawAttribs(context, primcount, static_cast<GLsizei>(indexRangeOut->end)))
@@ -1720,13 +1727,17 @@ bool ValidateDrawElements(Context *context, GLenum mode, GLsizei count, GLenum t
         return false;
     }
 
-    return true;
+    // No op if there are no real indices in the index data (all are primitive restart).
+    return (indexRangeOut->vertexIndexCount > 0);
 }
 
 bool ValidateDrawElementsInstanced(Context *context,
-                                   GLenum mode, GLsizei count, GLenum type,
-                                   const GLvoid *indices, GLsizei primcount,
-                                   RangeUI *indexRangeOut)
+                                   GLenum mode,
+                                   GLsizei count,
+                                   GLenum type,
+                                   const GLvoid *indices,
+                                   GLsizei primcount,
+                                   IndexRange *indexRangeOut)
 {
     if (primcount < 0)
     {
@@ -1743,8 +1754,13 @@ bool ValidateDrawElementsInstanced(Context *context,
     return (primcount > 0);
 }
 
-bool ValidateDrawElementsInstancedANGLE(Context *context, GLenum mode, GLsizei count, GLenum type,
-                                        const GLvoid *indices, GLsizei primcount, RangeUI *indexRangeOut)
+bool ValidateDrawElementsInstancedANGLE(Context *context,
+                                        GLenum mode,
+                                        GLsizei count,
+                                        GLenum type,
+                                        const GLvoid *indices,
+                                        GLsizei primcount,
+                                        IndexRange *indexRangeOut)
 {
     if (!ValidateDrawInstancedANGLE(context))
     {

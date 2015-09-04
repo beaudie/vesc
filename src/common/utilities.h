@@ -50,7 +50,10 @@ GLenum LayerIndexToCubeMapTextureTarget(size_t index);
 // set to GL_INVALID_INDEX if the provided name is not an array or the array index is invalid.
 std::string ParseUniformName(const std::string &name, size_t *outSubscript);
 
-RangeUI ComputeIndexRange(GLenum indexType, const GLvoid *indices, GLsizei count);
+IndexRange ComputeIndexRange(GLenum indexType,
+                             const GLvoid *indices,
+                             size_t count,
+                             bool primitiveRestartEnabled);
 
 bool IsTriangleMode(GLenum drawMode);
 
