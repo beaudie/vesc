@@ -1369,7 +1369,7 @@ yyreduce:
             context->endIgnoreErrors();
             // Make sure that short-circuited version of || works consistently
             // with the normal version even for values other than 0 and 1.
-            (yyval) = (yyvsp[-3]) || 0;
+            (yyval) = (yyvsp[-3]);
         }
         else
         {
@@ -1403,7 +1403,7 @@ yyreduce:
             context->endIgnoreErrors();
             // Make sure that short-circuited version of && works consistently
             // with the normal version even for values other than 0 and 1.
-            (yyval) = (yyvsp[-3]) && 0;
+            (yyval) = 0;
         }
         else
         {

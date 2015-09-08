@@ -131,7 +131,7 @@ expression
             context->endIgnoreErrors();
             // Make sure that short-circuited version of || works consistently
             // with the normal version even for values other than 0 and 1.
-            $$ = $1 || 0;
+            $$ = $1;
         }
         else
         {
@@ -154,7 +154,7 @@ expression
             context->endIgnoreErrors();
             // Make sure that short-circuited version of && works consistently
             // with the normal version even for values other than 0 and 1.
-            $$ = $1 && 0;
+            $$ = 0;
         }
         else
         {
