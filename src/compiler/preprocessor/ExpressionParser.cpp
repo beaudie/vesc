@@ -493,11 +493,11 @@ static const yytype_uint8 yytranslate[] =
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint16 yyrline[] =
+static const yytype_uint8 yyrline[] =
 {
-       0,   105,   105,   111,   112,   118,   118,   139,   139,   160,
-     163,   166,   169,   172,   175,   178,   181,   184,   187,   190,
-     193,   196,   199,   222,   245,   248,   251,   254,   257,   260
+       0,   105,   105,   112,   113,   114,   114,   135,   135,   156,
+     159,   162,   165,   168,   171,   174,   177,   180,   183,   186,
+     189,   192,   195,   214,   233,   236,   239,   242,   245,   248
 };
 #endif
 
@@ -1330,17 +1330,7 @@ yyreduce:
 
     {
         *(context->result) = static_cast<int>((yyvsp[0]));
-    }
-
-    break;
-
-  case 4:
-
-    {
-        if (!context->isIgnoringErrors())
-        {
-            YYABORT;
-        }
+        YYACCEPT;
     }
 
     break;
@@ -1518,11 +1508,7 @@ yyreduce:
     {
         if ((yyvsp[0]) == 0)
         {
-            if (context->isIgnoringErrors())
-            {
-                (yyval) = static_cast<YYSTYPE>(0);
-            }
-            else
+            if (!context->isIgnoringErrors())
             {
                 std::ostringstream stream;
                 stream << (yyvsp[-2]) << " % " << (yyvsp[0]);
@@ -1530,8 +1516,8 @@ yyreduce:
                 context->diagnostics->report(pp::Diagnostics::PP_DIVISION_BY_ZERO,
                                              context->token->location,
                                              text.c_str());
-                YYABORT;
             }
+            (yyval) = static_cast<YYSTYPE>(0);
         }
         else
         {
@@ -1546,11 +1532,7 @@ yyreduce:
     {
         if ((yyvsp[0]) == 0)
         {
-            if (context->isIgnoringErrors())
-            {
-                (yyval) = static_cast<YYSTYPE>(0);
-            }
-            else
+            if (!context->isIgnoringErrors())
             {
                 std::ostringstream stream;
                 stream << (yyvsp[-2]) << " / " << (yyvsp[0]);
@@ -1558,8 +1540,8 @@ yyreduce:
                 context->diagnostics->report(pp::Diagnostics::PP_DIVISION_BY_ZERO,
                                             context->token->location,
                                             text.c_str());
-                YYABORT;
             }
+            (yyval) = static_cast<YYSTYPE>(0);
         }
         else
         {
@@ -1851,9 +1833,11 @@ yyreturn:
 
 int yylex(YYSTYPE *lvalp, Context *context)
 {
+    pp::Token *token = context->token;
+    context->lexer->lex(token);
+
     int type = 0;
 
-    pp::Token *token = context->token;
     switch (token->type)
     {
       case pp::Token::CONST_INT: {
@@ -1920,10 +1904,6 @@ int yylex(YYSTYPE *lvalp, Context *context)
       default:
         break;
     }
-
-    // Advance to the next token if the current one is valid.
-    if (type != 0)
-        context->lexer->lex(token);
 
     return type;
 }
