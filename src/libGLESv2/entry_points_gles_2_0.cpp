@@ -2376,7 +2376,17 @@ void GL_APIENTRY GetShaderInfoLog(GLuint shader, GLsizei bufsize, GLsizei* lengt
 
         if (!shaderObject)
         {
-            context->recordError(Error(GL_INVALID_VALUE));
+            Program *programObject = context->getProgram(shader);
+
+            if (programObject)
+            {
+                context->recordError(Error(GL_INVALID_OPERATION,
+                                           "Expected a shader name, but found a program name"));
+            }
+            else
+            {
+                context->recordError(Error(GL_INVALID_VALUE, "Shader name is invalid"));
+            }
             return;
         }
 
@@ -2476,7 +2486,17 @@ void GL_APIENTRY GetShaderSource(GLuint shader, GLsizei bufsize, GLsizei* length
 
         if (!shaderObject)
         {
-            context->recordError(Error(GL_INVALID_OPERATION));
+            Program *programObject = context->getProgram(shader);
+
+            if (programObject)
+            {
+                context->recordError(Error(GL_INVALID_OPERATION,
+                                           "Expected a shader name, but found a program name"));
+            }
+            else
+            {
+                context->recordError(Error(GL_INVALID_VALUE, "Shader name is invalid"));
+            }
             return;
         }
 
