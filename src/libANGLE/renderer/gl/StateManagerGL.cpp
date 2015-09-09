@@ -90,6 +90,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mClearColor(0.0f, 0.0f, 0.0f, 0.0f),
       mClearDepth(1.0f),
       mClearStencil(0),
+      mFramebufferSRGBEnabled(false),
       mTextureCubemapSeamlessEnabled(false),
       mLocalDirtyBits()
 {
@@ -503,6 +504,29 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Data &data)
     const gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
     const FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
     bindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferGL->getFramebufferID());
+
+    // Enable SRGB blending for framebuffers that have an SRGB attachment on desktop OpenGL.
+    // Desktop OpenGL and OpenGL ES have different semantics for SRGB blending, ES will
+    // automatically enable it when writing to an attachment with an SRGB format while Desktop GL
+    // will only do SRGB blending when GL_FRAMEBUFFER_SRGB is enabled and the attachment is
+    // SRGB-capable.  This has the possibility of causing SRGB blending on non-SRGB attachments if
+    // there is a mix of actual SRGB attachments and non-SRGB but SRGB-capable attachments.  In this
+    // case, we currently just accept that the blending will be slightly wrong.
+    if (mFunctions->standard == STANDARD_GL_DESKTOP)
+    {
+        bool srgbFramebuffer = false;
+        for (size_t attachmentIdx = 0; attachmentIdx < framebuffer->getNumColorBuffers();
+             attachmentIdx++)
+        {
+            if (framebuffer->isEnabledColorAttachment(attachmentIdx) &&
+                framebuffer->getColorbuffer(attachmentIdx)->getColorEncoding() == GL_SRGB)
+            {
+                srgbFramebuffer = true;
+                break;
+            }
+        }
+        setFramebufferSRGBEnabled(srgbFramebuffer);
+    }
 
     // Seamless cubemaps are required for ES3 and higher contexts.
     setTextureCubemapSeamlessEnabled(data.clientVersion >= 3);
@@ -1221,6 +1245,22 @@ void StateManagerGL::syncState(const gl::State &state, const gl::State::DirtyBit
         }
 
         mLocalDirtyBits.reset();
+    }
+}
+
+void StateManagerGL::setFramebufferSRGBEnabled(bool enabled)
+{
+    if (mFramebufferSRGBEnabled != enabled)
+    {
+        mFramebufferSRGBEnabled = enabled;
+        if (mFramebufferSRGBEnabled)
+        {
+            mFunctions->enable(GL_FRAMEBUFFER_SRGB);
+        }
+        else
+        {
+            mFunctions->disable(GL_FRAMEBUFFER_SRGB);
+        }
     }
 }
 
