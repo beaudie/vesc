@@ -91,6 +91,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mClearColor(0.0f, 0.0f, 0.0f, 0.0f),
       mClearDepth(1.0f),
       mClearStencil(0),
+      mFramebufferSRGBEnabled(false),
       mTextureCubemapSeamlessEnabled(false),
       mLocalDirtyBits()
 {
@@ -113,6 +114,11 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
         {
             mFunctions->enable(GL_POINT_SPRITE);
         }
+
+        // GLES expects that if the framebuffer's format is sRGB then sRGB blending will be used but
+        // desktop GL defaults this state to GL_FALSE.  Enable sRGB blending all them time and the
+        // driver will only use it when an attachment has an sRGB format.
+        setFramebufferSRGBEnabled(true);
     }
 }
 
@@ -1243,6 +1249,22 @@ void StateManagerGL::syncState(const gl::State &state, const gl::State::DirtyBit
         }
 
         mLocalDirtyBits.reset();
+    }
+}
+
+void StateManagerGL::setFramebufferSRGBEnabled(bool enabled)
+{
+    if (mFramebufferSRGBEnabled != enabled)
+    {
+        mFramebufferSRGBEnabled = enabled;
+        if (mFramebufferSRGBEnabled)
+        {
+            mFunctions->enable(GL_FRAMEBUFFER_SRGB);
+        }
+        else
+        {
+            mFunctions->disable(GL_FRAMEBUFFER_SRGB);
+        }
     }
 }
 
