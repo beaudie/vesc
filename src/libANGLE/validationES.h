@@ -36,6 +36,7 @@ bool ValidImageSize(const Context *context, GLenum target, GLint level, GLsizei 
 bool ValidCompressedImageSize(const Context *context, GLenum internalFormat, GLsizei width, GLsizei height);
 bool ValidQueryType(const Context *context, GLenum queryType);
 bool ValidProgram(Context *context, GLuint id);
+bool ValidShader(Context *context, GLuint id);
 
 bool ValidateAttachmentTarget(Context *context, GLenum attachment);
 bool ValidateRenderbufferStorageParametersBase(Context *context, GLenum target, GLsizei samples,

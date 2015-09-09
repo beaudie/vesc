@@ -59,36 +59,20 @@ void GL_APIENTRY AttachShader(GLuint program, GLuint shader)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        if (!ValidProgram(context, program))
+        {
+            return;
+        }
+
+        if (!ValidShader(context, shader))
+        {
+            return;
+        }
+
         Program *programObject = context->getProgram(program);
         Shader *shaderObject = context->getShader(shader);
-
-        if (!programObject)
-        {
-            if (context->getShader(program))
-            {
-                context->recordError(Error(GL_INVALID_OPERATION));
-                return;
-            }
-            else
-            {
-                context->recordError(Error(GL_INVALID_VALUE));
-                return;
-            }
-        }
-
-        if (!shaderObject)
-        {
-            if (context->getProgram(shader))
-            {
-                context->recordError(Error(GL_INVALID_OPERATION));
-                return;
-            }
-            else
-            {
-                context->recordError(Error(GL_INVALID_VALUE));
-                return;
-            }
-        }
+        ASSERT(programObject);
+        ASSERT(shaderObject);
 
         if (!programObject->attachShader(shaderObject))
         {
@@ -698,22 +682,13 @@ void GL_APIENTRY CompileShader(GLuint shader)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        Shader *shaderObject = context->getShader(shader);
-
-        if (!shaderObject)
+        if (!ValidShader(context, shader))
         {
-            if (context->getProgram(shader))
-            {
-                context->recordError(Error(GL_INVALID_OPERATION));
-                return;
-            }
-            else
-            {
-                context->recordError(Error(GL_INVALID_VALUE));
-                return;
-            }
+            return;
         }
 
+        Shader *shaderObject = context->getShader(shader);
+        ASSERT(shaderObject);
         shaderObject->compile(context->getCompiler());
     }
 }
@@ -1140,39 +1115,20 @@ void GL_APIENTRY DetachShader(GLuint program, GLuint shader)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        if (!ValidProgram(context, program))
+        {
+            return;
+        }
+
+        if (!ValidShader(context, shader))
+        {
+            return;
+        }
+
         Program *programObject = context->getProgram(program);
         Shader *shaderObject = context->getShader(shader);
-
-        if (!programObject)
-        {
-            Shader *shaderByProgramHandle;
-            shaderByProgramHandle = context->getShader(program);
-            if (!shaderByProgramHandle)
-            {
-                context->recordError(Error(GL_INVALID_VALUE));
-                return;
-            }
-            else
-            {
-                context->recordError(Error(GL_INVALID_OPERATION));
-                return;
-            }
-        }
-
-        if (!shaderObject)
-        {
-            Program *programByShaderHandle = context->getProgram(shader);
-            if (!programByShaderHandle)
-            {
-                context->recordError(Error(GL_INVALID_VALUE));
-                return;
-            }
-            else
-            {
-                context->recordError(Error(GL_INVALID_OPERATION));
-                return;
-            }
-        }
+        ASSERT(programObject);
+        ASSERT(shaderObject);
 
         if (!programObject->detachShader(shaderObject))
         {
@@ -2322,23 +2278,12 @@ void GL_APIENTRY GetShaderiv(GLuint shader, GLenum pname, GLint* params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        Shader *shaderObject = context->getShader(shader);
-
-        if (!shaderObject)
+        if (!ValidShader(context, shader))
         {
-            Program *programObject = context->getProgram(shader);
-
-            if (programObject)
-            {
-                context->recordError(Error(GL_INVALID_OPERATION,
-                                           "Expected a shader name, but found a program name"));
-            }
-            else
-            {
-                context->recordError(Error(GL_INVALID_VALUE, "Shader name is invalid"));
-            }
             return;
         }
+        Shader *shaderObject = context->getShader(shader);
+        ASSERT(shaderObject);
 
         switch (pname)
         {
@@ -2382,14 +2327,13 @@ void GL_APIENTRY GetShaderInfoLog(GLuint shader, GLsizei bufsize, GLsizei* lengt
             return;
         }
 
-        Shader *shaderObject = context->getShader(shader);
-
-        if (!shaderObject)
+        if (!ValidShader(context, shader))
         {
-            context->recordError(Error(GL_INVALID_VALUE));
             return;
         }
 
+        Shader *shaderObject = context->getShader(shader);
+        ASSERT(shaderObject);
         shaderObject->getInfoLog(bufsize, length, infolog);
     }
 }
@@ -2482,14 +2426,13 @@ void GL_APIENTRY GetShaderSource(GLuint shader, GLsizei bufsize, GLsizei* length
             return;
         }
 
-        Shader *shaderObject = context->getShader(shader);
-
-        if (!shaderObject)
+        if (!ValidShader(context, shader))
         {
-            context->recordError(Error(GL_INVALID_OPERATION));
             return;
         }
 
+        Shader *shaderObject = context->getShader(shader);
+        ASSERT(shaderObject);
         shaderObject->getSource(bufsize, length, source);
     }
 }
@@ -3461,22 +3404,13 @@ void GL_APIENTRY ShaderSource(GLuint shader, GLsizei count, const GLchar* const*
             return;
         }
 
-        Shader *shaderObject = context->getShader(shader);
-
-        if (!shaderObject)
+        if (!ValidShader(context, shader))
         {
-            if (context->getProgram(shader))
-            {
-                context->recordError(Error(GL_INVALID_OPERATION));
-                return;
-            }
-            else
-            {
-                context->recordError(Error(GL_INVALID_VALUE));
-                return;
-            }
+            return;
         }
 
+        Shader *shaderObject = context->getShader(shader);
+        ASSERT(shaderObject);
         shaderObject->setSource(count, string, length);
     }
 }

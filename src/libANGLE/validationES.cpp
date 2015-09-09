@@ -350,6 +350,27 @@ bool ValidProgram(Context *context, GLuint id)
     }
 }
 
+bool ValidShader(Context *context, GLuint id)
+{
+    // See ValidProgram for spec details.
+
+    if (!context->getShader(id))
+    {
+        if (context->getProgram(id))
+        {
+            context->recordError(
+                Error(GL_INVALID_OPERATION, "Expected a shader name, but found a program name"));
+        }
+        else
+        {
+            context->recordError(Error(GL_INVALID_VALUE, "Shader name is invalid"));
+        }
+        return false;
+    }
+
+    return true;
+}
+
 bool ValidateAttachmentTarget(gl::Context *context, GLenum attachment)
 {
     if (attachment >= GL_COLOR_ATTACHMENT0_EXT && attachment <= GL_COLOR_ATTACHMENT15_EXT)
