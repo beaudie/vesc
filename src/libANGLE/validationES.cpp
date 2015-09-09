@@ -265,6 +265,20 @@ bool ValidImageSize(const Context *context, GLenum target, GLint level,
     return true;
 }
 
+bool CompressedTextureFormatRequiresExactSize(GLenum internalFormat)
+{
+    // List of compressed format that require that the texture size is smaller than or a multiple of
+    // the compressed block size.
+    static const GLenum exactSizeCompressedFormats[] = {
+        GL_COMPRESSED_RGB_S3TC_DXT1_EXT, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
+        GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE, GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE,
+    };
+    static const GLenum *begin = exactSizeCompressedFormats;
+    static const GLenum *end   = exactSizeCompressedFormats + ArraySize(exactSizeCompressedFormats);
+
+    return (std::find(begin, end, internalFormat) != end);
+}
+
 bool ValidCompressedImageSize(const Context *context, GLenum internalFormat, GLsizei width, GLsizei height)
 {
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat);
@@ -273,10 +287,20 @@ bool ValidCompressedImageSize(const Context *context, GLenum internalFormat, GLs
         return false;
     }
 
-    if (width  < 0 || (static_cast<GLuint>(width)  > formatInfo.compressedBlockWidth  && width  % formatInfo.compressedBlockWidth != 0) ||
-        height < 0 || (static_cast<GLuint>(height) > formatInfo.compressedBlockHeight && height % formatInfo.compressedBlockHeight != 0))
+    if (width < 0 || height < 0)
     {
         return false;
+    }
+
+    if (CompressedTextureFormatRequiresExactSize(internalFormat))
+    {
+        if ((static_cast<GLuint>(width) > formatInfo.compressedBlockWidth &&
+             width % formatInfo.compressedBlockWidth != 0) ||
+            (static_cast<GLuint>(height) > formatInfo.compressedBlockHeight &&
+             height % formatInfo.compressedBlockHeight != 0))
+        {
+            return false;
+        }
     }
 
     return true;
