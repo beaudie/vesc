@@ -297,7 +297,75 @@ static const LineTestParam kParams[] = {
     {"#line 10 foo\n", pp::Diagnostics::PP_INVALID_FILE_NUMBER},
     {"#line 10 20 foo\n", pp::Diagnostics::PP_UNEXPECTED_TOKEN},
     {"#line 0xffffffff\n", pp::Diagnostics::PP_INTEGER_OVERFLOW},
-    {"#line 10 0xffffffff\n", pp::Diagnostics::PP_INTEGER_OVERFLOW}
-};
+    {"#line 10 0xffffffff\n", pp::Diagnostics::PP_INTEGER_OVERFLOW},
+
+    // The following are invalid in ESSL1, but not in ESSL3.
+    {"#line 10 % 5\n", pp::Diagnostics::PP_UNEXPECTED_TOKEN},
+    {"#line 10 | 0\n", pp::Diagnostics::PP_UNEXPECTED_TOKEN},
+    {"#line 10 ^ 0\n", pp::Diagnostics::PP_UNEXPECTED_TOKEN},
+    {"#line 10 & 10\n", pp::Diagnostics::PP_UNEXPECTED_TOKEN},
+    {"#line ~10\n", pp::Diagnostics::PP_UNEXPECTED_TOKEN},
+    {"#line 10 << 1\n", pp::Diagnostics::PP_UNEXPECTED_TOKEN},
+    {"#line 10 >> 1\n", pp::Diagnostics::PP_UNEXPECTED_TOKEN}};
 
 INSTANTIATE_TEST_CASE_P(All, InvalidLineTest, testing::ValuesIn(kParams));
+
+struct LineExpressionTestParam
+{
+    const char *expression;
+    int expectedLine;
+    int shaderVersion;
+};
+
+class LineExpressionTest : public LocationTest,
+                           public testing::WithParamInterface<LineExpressionTestParam>
+{
+};
+
+TEST_P(LineExpressionTest, ExpressionEvaluation)
+{
+    LineExpressionTestParam param = GetParam();
+    const char *strs[3] = {"#line ", param.expression, "\nfoo"};
+    EXPECT_TRUE(param.shaderVersion == 100 || param.shaderVersion == 300);
+    if (param.shaderVersion == 300)
+    {
+        strs[0] =
+            "#version 300 es\n"
+            "#line ";
+        EXPECT_CALL(mDirectiveHandler, handleVersion(pp::SourceLocation(0, 1), 300));
+    }
+
+    pp::SourceLocation loc(2, param.expectedLine);
+
+    expectLocation(3, strs, NULL, loc);
+}
+
+static const LineExpressionTestParam kParamsLineExpressionTest[] = {
+    // ESSL1 line expressions
+    {"1 + 2", 3, 100},
+    {"5 - 3", 2, 100},
+    {"7 * 11", 77, 100},
+    {"20 / 10", 2, 100},
+    {"7 && 3", 1, 100},
+    {"7 || 0", 1, 100},
+    {"11 == 11", 1, 100},
+    {"11 != 11", 0, 100},
+    {"11 > 7", 1, 100},
+    {"11 < 7", 0, 100},
+    {"11 >= 7", 1, 100},
+    {"11 <= 7", 0, 100},
+    {"!11", 0, 100},
+    {"-1", -1, 100},
+    {"+9", 9, 100},
+    {"(1 + 2) * 4", 12, 100},
+
+    // ESSL3 line expressions
+    {"10 % 5", 0, 300},
+    {"3 | 5", 7, 300},
+    {"3 ^ 5", 6, 300},
+    {"3 & 5", 1, 300},
+    {"~5", ~5, 300},
+    {"2 << 3", 16, 300},
+    {"16 >> 2", 4, 300}};
+
+INSTANTIATE_TEST_CASE_P(All, LineExpressionTest, testing::ValuesIn(kParamsLineExpressionTest));
