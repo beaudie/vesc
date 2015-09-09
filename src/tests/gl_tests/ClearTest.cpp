@@ -208,6 +208,58 @@ TEST_P(ClearTestES3, BadFBOSerialBug)
     glDeleteFramebuffers(1, &fbo2);
 }
 
+// Test that SRGB framebuffers clear to the linearized clear color
+TEST_P(ClearTestES3, SRGBClear)
+{
+    // First make a simple framebuffer, and clear it
+    glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+
+    GLuint texture;
+    glGenTextures(1, &texture);
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_SRGB8_ALPHA8, getWindowWidth(), getWindowHeight());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+    glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    EXPECT_PIXEL_NEAR(0, 0, 188, 188, 188, 128, 1.0);
+}
+
+// Test that framebuffers with mixed SRGB/Linear attachments clear to the correct color for each
+// attachment
+TEST_P(ClearTestES3, MixedSRGBClear)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+
+    GLuint textures[2];
+    glGenTextures(2, &textures[0]);
+
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_SRGB8_ALPHA8, getWindowWidth(), getWindowHeight());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[0], 0);
+
+    glBindTexture(GL_TEXTURE_2D, textures[1]);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, getWindowWidth(), getWindowHeight());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, textures[1], 0);
+
+    GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+    glDrawBuffers(2, drawBuffers);
+
+    // Clear both textures
+    glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Check value of texture0
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    EXPECT_PIXEL_NEAR(0, 0, 188, 188, 188, 128, 1.0);
+
+    // Check value of texture1
+    glReadBuffer(GL_COLOR_ATTACHMENT1);
+    EXPECT_PIXEL_NEAR(0, 0, 128, 128, 128, 128, 1.0);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(ClearTest, ES2_D3D9(), ES2_D3D11(), ES3_D3D11(), ES2_OPENGL(), ES3_OPENGL());
-ANGLE_INSTANTIATE_TEST(ClearTestES3, ES3_D3D11());
+ANGLE_INSTANTIATE_TEST(ClearTestES3, ES3_D3D11(), ES3_OPENGL());
