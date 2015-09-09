@@ -167,6 +167,10 @@ struct Context
     pp::Lexer* lexer;
     pp::Token* token;
     int* result;
+    bool parsePresetToken;
+
+    pp::ExpressionParser::ErrorSettings errorSettings;
+    bool *valid;
 
     void startIgnoreErrors() { ++ignoreErrors; }
     void endIgnoreErrors() { --ignoreErrors; }
@@ -540,9 +544,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   150,   150,   157,   158,   166,   166,   187,   187,   208,
-     211,   214,   217,   220,   223,   226,   229,   232,   235,   238,
-     241,   244,   247,   266,   285,   288,   291,   294,   297,   300
+       0,   154,   154,   161,   162,   171,   171,   192,   192,   213,
+     216,   219,   222,   225,   228,   231,   234,   237,   240,   243,
+     246,   249,   252,   272,   292,   295,   298,   301,   304,   307
 };
 #endif
 
@@ -1385,8 +1389,9 @@ yyreduce:
     {
         if (!context->isIgnoringErrors())
         {
-            context->diagnostics->report(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
+            context->diagnostics->report(context->errorSettings.unexpectedIdentifier,
                                          (yyvsp[0]).location, (yyvsp[0]).text);
+            *(context->valid) = false;
         }
         (yyval) = (yyvsp[0]);
     }
@@ -1574,6 +1579,7 @@ yyreduce:
                 context->diagnostics->report(pp::Diagnostics::PP_DIVISION_BY_ZERO,
                                              context->token->location,
                                              text.c_str());
+                *(context->valid) = false;
             }
             (yyval) = TaggedInt(static_cast<inttype>(0));
         }
@@ -1598,6 +1604,7 @@ yyreduce:
                 context->diagnostics->report(pp::Diagnostics::PP_DIVISION_BY_ZERO,
                                             context->token->location,
                                             text.c_str());
+                *(context->valid) = false;
             }
             (yyval) = TaggedInt(static_cast<inttype>(0));
         }
@@ -1892,7 +1899,10 @@ yyreturn:
 int yylex(YYSTYPE *lvalp, Context *context)
 {
     pp::Token *token = context->token;
-    context->lexer->lex(token);
+    if (!context->parsePresetToken) {
+        context->lexer->lex(token);
+    }
+    context->parsePresetToken = false;
 
     int type = 0;
 
@@ -1904,6 +1914,7 @@ int yylex(YYSTYPE *lvalp, Context *context)
         {
             context->diagnostics->report(pp::Diagnostics::PP_INTEGER_OVERFLOW,
                                          token->location, token->text);
+            *(context->valid) = false;
         }
         lvalp->value = static_cast<inttype>(val);
         lvalp->location = token->location;
@@ -1980,7 +1991,7 @@ ExpressionParser::ExpressionParser(Lexer *lexer, Diagnostics *diagnostics)
 {
 }
 
-bool ExpressionParser::parse(Token *token, int *result)
+bool ExpressionParser::parse(Token *token, int *result, bool parsePresetToken, const ErrorSettings &errorSettings, bool *valid)
 {
     Context context;
     context.diagnostics = mDiagnostics;
@@ -1988,6 +1999,9 @@ bool ExpressionParser::parse(Token *token, int *result)
     context.token = token;
     context.result = result;
     context.ignoreErrors = 0;
+    context.parsePresetToken = parsePresetToken;
+    context.errorSettings = errorSettings;
+    context.valid = valid;
     int ret = yyparse(&context);
     switch (ret)
     {
