@@ -65,6 +65,10 @@ struct Context
     pp::Lexer* lexer;
     pp::Token* token;
     int* result;
+    bool parsePresetToken;
+
+    pp::ExpressionParser::ErrorSettings errorSettings;
+    bool *valid;
 
     void startIgnoreErrors() { ++ignoreErrors; }
     void endIgnoreErrors() { --ignoreErrors; }
@@ -116,8 +120,9 @@ expression
         {
             // This rule should be applied right after the token is lexed, so we can
             // refer to context->token in the error message.
-            context->diagnostics->report(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
+            context->diagnostics->report(context->errorSettings.unexpectedIdentifier,
                                          context->token->location, context->token->text);
+            *(context->valid) = false;
         }
         $$ = $1;
     }
@@ -164,12 +169,27 @@ expression
         }
     }
     | expression '|' expression {
+        if (!context->errorSettings.allowOperatorsNotInESSL1)
+        {
+            context->diagnostics->report(pp::Diagnostics::PP_UNEXPECTED_TOKEN,
+                                         context->token->location, "|");
+        }
         $$ = $1 | $3;
     }
     | expression '^' expression {
+        if (!context->errorSettings.allowOperatorsNotInESSL1)
+        {
+            context->diagnostics->report(pp::Diagnostics::PP_UNEXPECTED_TOKEN,
+                                         context->token->location, "^");
+        }
         $$ = $1 ^ $3;
     }
     | expression '&' expression {
+        if (!context->errorSettings.allowOperatorsNotInESSL1)
+        {
+            context->diagnostics->report(pp::Diagnostics::PP_UNEXPECTED_TOKEN,
+                                         context->token->location, "&");
+        }
         $$ = $1 & $3;
     }
     | expression TOK_OP_NE expression {
@@ -191,9 +211,19 @@ expression
         $$ = $1 < $3;
     }
     | expression TOK_OP_RIGHT expression {
+        if (!context->errorSettings.allowOperatorsNotInESSL1)
+        {
+            context->diagnostics->report(pp::Diagnostics::PP_UNEXPECTED_TOKEN,
+                                         context->token->location, ">>");
+        }
         $$ = $1 >> $3;
     }
     | expression TOK_OP_LEFT expression {
+        if (!context->errorSettings.allowOperatorsNotInESSL1)
+        {
+            context->diagnostics->report(pp::Diagnostics::PP_UNEXPECTED_TOKEN,
+                                         context->token->location, "<<");
+        }
         $$ = $1 << $3;
     }
     | expression '-' expression {
@@ -203,6 +233,11 @@ expression
         $$ = $1 + $3;
     }
     | expression '%' expression {
+        if (!context->errorSettings.allowOperatorsNotInESSL1)
+        {
+            context->diagnostics->report(pp::Diagnostics::PP_UNEXPECTED_TOKEN,
+                                         context->token->location, "%");
+        }
         if ($3 == 0)
         {
             if (!context->isIgnoringErrors())
@@ -213,6 +248,7 @@ expression
                 context->diagnostics->report(pp::Diagnostics::PP_DIVISION_BY_ZERO,
                                              context->token->location,
                                              text.c_str());
+                *(context->valid) = false;
             }
             $$ = static_cast<YYSTYPE>(0);
         }
@@ -232,6 +268,7 @@ expression
                 context->diagnostics->report(pp::Diagnostics::PP_DIVISION_BY_ZERO,
                                             context->token->location,
                                             text.c_str());
+                *(context->valid) = false;
             }
             $$ = static_cast<YYSTYPE>(0);
         }
@@ -247,6 +284,11 @@ expression
         $$ = ! $2;
     }
     | '~' expression %prec TOK_UNARY {
+        if (!context->errorSettings.allowOperatorsNotInESSL1)
+        {
+            context->diagnostics->report(pp::Diagnostics::PP_UNEXPECTED_TOKEN,
+                                         context->token->location, "~");
+        }
         $$ = ~ $2;
     }
     | '-' expression %prec TOK_UNARY {
@@ -265,7 +307,11 @@ expression
 int yylex(YYSTYPE *lvalp, Context *context)
 {
     pp::Token *token = context->token;
-    context->lexer->lex(token);
+    if (!context->parsePresetToken)
+    {
+        context->lexer->lex(token);
+    }
+    context->parsePresetToken = false;
 
     int type = 0;
 
@@ -273,10 +319,13 @@ int yylex(YYSTYPE *lvalp, Context *context)
     {
       case pp::Token::CONST_INT: {
         unsigned int val = 0;
-        if (!token->uValue(&val))
+        int testVal = 0;
+        if (!token->uValue(&val) || (!token->iValue(&testVal) &&
+                                     context->errorSettings.integerLiteralsMustFit32BitSignedRange))
         {
             context->diagnostics->report(pp::Diagnostics::PP_INTEGER_OVERFLOW,
                                          token->location, token->text);
+            *(context->valid) = false;
         }
         *lvalp = static_cast<YYSTYPE>(val);
         type = TOK_CONST_INT;
@@ -349,7 +398,11 @@ ExpressionParser::ExpressionParser(Lexer *lexer, Diagnostics *diagnostics)
 {
 }
 
-bool ExpressionParser::parse(Token *token, int *result)
+bool ExpressionParser::parse(Token *token,
+                             int *result,
+                             bool parsePresetToken,
+                             const ErrorSettings &errorSettings,
+                             bool *valid)
 {
     Context context;
     context.diagnostics = mDiagnostics;
@@ -357,6 +410,9 @@ bool ExpressionParser::parse(Token *token, int *result)
     context.token = token;
     context.result = result;
     context.ignoreErrors = 0;
+    context.parsePresetToken = parsePresetToken;
+    context.errorSettings    = errorSettings;
+    context.valid            = valid;
     int ret = yyparse(&context);
     switch (ret)
     {
