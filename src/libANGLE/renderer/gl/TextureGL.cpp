@@ -687,7 +687,7 @@ static inline void SyncSamplerStateSwizzle(const FunctionsGL *functions,
     }
 }
 
-void TextureGL::syncSamplerState(const gl::SamplerState &samplerState) const
+void TextureGL::syncSamplerState(size_t textureUnit, const gl::SamplerState &samplerState) const
 {
     // Callback lamdba to bind this texture only if needed.
     bool textureApplied   = false;
@@ -695,6 +695,7 @@ void TextureGL::syncSamplerState(const gl::SamplerState &samplerState) const
     {
         if (!textureApplied)
         {
+            mStateManager->activeTexture(textureUnit);
             mStateManager->bindTexture(mTextureType, mTextureID);
             textureApplied = true;
         }
