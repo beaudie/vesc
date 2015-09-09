@@ -16,17 +16,23 @@ namespace rx
 
 class FunctionsGL;
 class StateManagerGL;
+struct WorkaroundsGL;
 
 class FramebufferGL : public FramebufferImpl
 {
   public:
-    FramebufferGL(const gl::Framebuffer::Data &data, const FunctionsGL *functions, StateManagerGL *stateManager, bool isDefault);
+    FramebufferGL(const gl::Framebuffer::Data &data,
+                  const FunctionsGL *functions,
+                  StateManagerGL *stateManager,
+                  const WorkaroundsGL &workarounds,
+                  bool isDefault);
     // Constructor called when we need to create a FramebufferGL from an
     // existing framebuffer name, for example for the default framebuffer
     // on the Mac EGL CGL backend.
     FramebufferGL(GLuint id,
                   const gl::Framebuffer::Data &data,
                   const FunctionsGL *functions,
+                  const WorkaroundsGL &workarounds,
                   StateManagerGL *stateManager);
     ~FramebufferGL() override;
 
@@ -60,8 +66,12 @@ class FramebufferGL : public FramebufferImpl
     GLuint getFramebufferID() const;
 
   private:
+    void syncClearState(GLbitfield mask);
+    void syncClearBufferState(GLenum buffer, GLint drawBuffer);
+
     const FunctionsGL *mFunctions;
     StateManagerGL *mStateManager;
+    const WorkaroundsGL &mWorkarounds;
 
     GLuint mFramebufferID;
     bool mIsDefault;
