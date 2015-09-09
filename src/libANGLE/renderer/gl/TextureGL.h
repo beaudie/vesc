@@ -23,11 +23,22 @@ struct WorkaroundsGL;
 struct LUMAWorkaround
 {
     bool enabled;
-    GLenum sourceFormat;
     GLenum workaroundFormat;
 
     LUMAWorkaround();
-    LUMAWorkaround(bool enabled, GLenum sourceFormat, GLenum workaroundFormat);
+    LUMAWorkaround(bool enabled, GLenum workaroundFormat);
+};
+
+struct LevelInfo
+{
+    GLenum sourceFormat;
+    bool depthStencilWorkaround;
+    LUMAWorkaround lumaWorkaround;
+
+    LevelInfo();
+    LevelInfo(GLenum sourceFormat,
+              bool depthStencilWorkaround,
+              const LUMAWorkaround &lumaWorkaround);
 };
 
 class TextureGL : public TextureImpl
@@ -83,7 +94,7 @@ class TextureGL : public TextureImpl
     StateManagerGL *mStateManager;
     BlitGL *mBlitter;
 
-    std::vector<LUMAWorkaround> mLUMAWorkaroundLevels;
+    std::vector<LevelInfo> mLevelInfo;
 
     mutable gl::SamplerState mAppliedSamplerState;
     GLuint mTextureID;
