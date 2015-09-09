@@ -18,14 +18,20 @@
 #include "libANGLE/renderer/gl/RenderbufferGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 #include "libANGLE/renderer/gl/TextureGL.h"
+#include "libANGLE/renderer/gl/WorkaroundsGL.h"
 
 namespace rx
 {
 
-FramebufferGL::FramebufferGL(const gl::Framebuffer::Data &data, const FunctionsGL *functions, StateManagerGL *stateManager, bool isDefault)
+FramebufferGL::FramebufferGL(const gl::Framebuffer::Data &data,
+                             const FunctionsGL *functions,
+                             StateManagerGL *stateManager,
+                             const WorkaroundsGL &workarounds,
+                             bool isDefault)
     : FramebufferImpl(data),
       mFunctions(functions),
       mStateManager(stateManager),
+      mWorkarounds(workarounds),
       mFramebufferID(0),
       mIsDefault(isDefault)
 {
@@ -38,10 +44,12 @@ FramebufferGL::FramebufferGL(const gl::Framebuffer::Data &data, const FunctionsG
 FramebufferGL::FramebufferGL(GLuint id,
                              const gl::Framebuffer::Data &data,
                              const FunctionsGL *functions,
+                             const WorkaroundsGL &workarounds,
                              StateManagerGL *stateManager)
     : FramebufferImpl(data),
       mFunctions(functions),
       mStateManager(stateManager),
+      mWorkarounds(workarounds),
       mFramebufferID(id),
       mIsDefault(true)
 {
@@ -197,6 +205,7 @@ gl::Error FramebufferGL::invalidateSub(size_t count, const GLenum *attachments, 
 
 gl::Error FramebufferGL::clear(const gl::Data &data, GLbitfield mask)
 {
+    syncClearState(mask);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clear(mask);
 
@@ -205,6 +214,7 @@ gl::Error FramebufferGL::clear(const gl::Data &data, GLbitfield mask)
 
 gl::Error FramebufferGL::clearBufferfv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLfloat *values)
 {
+    syncClearBufferState(buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clearBufferfv(buffer, drawbuffer, values);
 
@@ -213,6 +223,7 @@ gl::Error FramebufferGL::clearBufferfv(const gl::State &state, GLenum buffer, GL
 
 gl::Error FramebufferGL::clearBufferuiv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLuint *values)
 {
+    syncClearBufferState(buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clearBufferuiv(buffer, drawbuffer, values);
 
@@ -221,6 +232,7 @@ gl::Error FramebufferGL::clearBufferuiv(const gl::State &state, GLenum buffer, G
 
 gl::Error FramebufferGL::clearBufferiv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLint *values)
 {
+    syncClearBufferState(buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clearBufferiv(buffer, drawbuffer, values);
 
@@ -229,6 +241,7 @@ gl::Error FramebufferGL::clearBufferiv(const gl::State &state, GLenum buffer, GL
 
 gl::Error FramebufferGL::clearBufferfi(const gl::State &state, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil)
 {
+    syncClearBufferState(buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clearBufferfi(buffer, drawbuffer, depth, stencil);
 
@@ -290,4 +303,83 @@ GLuint FramebufferGL::getFramebufferID() const
     return mFramebufferID;
 }
 
+void FramebufferGL::syncClearState(GLbitfield mask)
+{
+    if (mWorkarounds.doesSRGBClearsOnLinearFramebufferAttachments &&
+        (mask & GL_COLOR_BUFFER_BIT) != 0 && mFramebufferID != 0)
+    {
+        bool hasSRBAttachment = false;
+        for (const auto &attachment : mData.getColorAttachments())
+        {
+            if (attachment.isAttached() && attachment.getColorEncoding() == GL_SRGB)
+            {
+                hasSRBAttachment = true;
+                break;
+            }
+        }
+
+        mStateManager->setFramebufferSRGBEnabled(hasSRBAttachment);
+    }
+    else
+    {
+        mStateManager->setFramebufferSRGBEnabled(mFramebufferID != 0);
+    }
+}
+
+void FramebufferGL::syncClearBufferState(GLenum buffer, GLint drawBuffer)
+{
+    if (mFunctions->standard == STANDARD_GL_DESKTOP)
+    {
+        if (mWorkarounds.doesSRGBClearsOnLinearFramebufferAttachments && buffer == GL_COLOR &&
+            mFramebufferID != 0)
+        {
+            // If doing a clear on a color buffer, set SRGB blend enabled only if the color buffer
+            // is an SRGB format.
+            const auto &drawbufferState  = mData.getDrawBufferStates();
+            const auto &colorAttachments = mData.getColorAttachments();
+
+            const gl::FramebufferAttachment *attachment = nullptr;
+            if (drawbufferState[drawBuffer] >= GL_COLOR_ATTACHMENT0 &&
+                drawbufferState[drawBuffer] < GL_COLOR_ATTACHMENT0 + colorAttachments.size())
+            {
+                attachment = &colorAttachments[drawbufferState[drawBuffer] - GL_COLOR_ATTACHMENT0];
+            }
+
+            if (attachment != nullptr)
+            {
+                mStateManager->setFramebufferSRGBEnabled(attachment->getColorEncoding() == GL_SRGB);
+            }
+        }
+        else
+        {
+            // TODO(geofflang): Update this when the framebuffer binding dirty changes, when it
+            // exists
+            // (see StateManagerGL.cpp)
+            mStateManager->setFramebufferSRGBEnabled(mFramebufferID != 0);
+        }
+    }
+}
+
+void FramebufferGL::getColorAttachmentTypes(bool *hasLinearAttachment,
+                                            bool *hasSRGBAttachment) const
+{
+    *hasLinearAttachment = false;
+    *hasSRGBAttachment   = false;
+
+    for (const auto &attachment : mData.getColorAttachments())
+    {
+        if (attachment.isAttached())
+        {
+            GLenum encoding = attachment.getColorEncoding();
+            if (encoding == GL_LINEAR)
+            {
+                *hasLinearAttachment = true;
+            }
+            else if (encoding == GL_SRGB)
+            {
+                *hasSRGBAttachment = true;
+            }
+        }
+    }
+}
 }
