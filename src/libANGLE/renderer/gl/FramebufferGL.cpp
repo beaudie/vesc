@@ -18,14 +18,20 @@
 #include "libANGLE/renderer/gl/RenderbufferGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 #include "libANGLE/renderer/gl/TextureGL.h"
+#include "libANGLE/renderer/gl/WorkaroundsGL.h"
 
 namespace rx
 {
 
-FramebufferGL::FramebufferGL(const gl::Framebuffer::Data &data, const FunctionsGL *functions, StateManagerGL *stateManager, bool isDefault)
+FramebufferGL::FramebufferGL(const gl::Framebuffer::Data &data,
+                             const FunctionsGL *functions,
+                             StateManagerGL *stateManager,
+                             const WorkaroundsGL &workarounds,
+                             bool isDefault)
     : FramebufferImpl(data),
       mFunctions(functions),
       mStateManager(stateManager),
+      mWorkarounds(workarounds),
       mFramebufferID(0),
       mIsDefault(isDefault)
 {
@@ -38,10 +44,12 @@ FramebufferGL::FramebufferGL(const gl::Framebuffer::Data &data, const FunctionsG
 FramebufferGL::FramebufferGL(GLuint id,
                              const gl::Framebuffer::Data &data,
                              const FunctionsGL *functions,
+                             const WorkaroundsGL &workarounds,
                              StateManagerGL *stateManager)
     : FramebufferImpl(data),
       mFunctions(functions),
       mStateManager(stateManager),
+      mWorkarounds(workarounds),
       mFramebufferID(id),
       mIsDefault(true)
 {
@@ -198,13 +206,94 @@ gl::Error FramebufferGL::invalidateSub(size_t count, const GLenum *attachments, 
 gl::Error FramebufferGL::clear(const gl::Data &data, GLbitfield mask)
 {
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
-    mFunctions->clear(mask);
+
+    if (mWorkarounds.alwaysDoesSRGBClearsWhenSRGBIsEnabled && (mask & GL_COLOR_BUFFER_BIT) != 0)
+    {
+        ASSERT(mFunctions->standard == STANDARD_GL_DESKTOP);
+
+        bool linear = false;
+        bool srgb = false;
+        getColorAttachmentTypes(&linear, &srgb);
+        if (linear && srgb)
+        {
+            ASSERT(mFramebufferID != 0);
+
+            // Need to unbind some attachments and only clear the SRGB ones then only clear the
+            // linear ones
+            for (const auto &attachment : mData.getColorAttachments())
+            {
+                // Remove linear attachments
+                if (attachment.isAttached() && attachment.getColorEncoding() == GL_LINEAR)
+                {
+                    BindFramebufferAttachment(mFunctions, attachment.getBinding(), nullptr);
+                }
+            }
+
+            // Clear with SRGB enabled
+            mStateManager->setFramebufferSRGBEnabled(true);
+            mFunctions->clear(GL_COLOR_BUFFER_BIT);
+
+            for (const auto &attachment : mData.getColorAttachments())
+            {
+                // Remove SRGB attachments and add linear attachments back
+                if (attachment.isAttached())
+                {
+                    GLenum encoding = attachment.getColorEncoding();
+                    if (encoding == GL_LINEAR)
+                    {
+                        BindFramebufferAttachment(mFunctions, attachment.getBinding(), &attachment);
+                    }
+                    else if (encoding == GL_SRGB)
+                    {
+                        BindFramebufferAttachment(mFunctions, attachment.getBinding(), nullptr);
+                    }
+                }
+            }
+
+            // Clear with SRGB disabled
+            mStateManager->setFramebufferSRGBEnabled(false);
+            mFunctions->clear(GL_COLOR_BUFFER_BIT);
+
+            for (const auto &attachment : mData.getColorAttachments())
+            {
+                // Add SRGB attachments back
+                if (attachment.isAttached() && attachment.getColorEncoding() == GL_SRGB)
+                {
+                    BindFramebufferAttachment(mFunctions, attachment.getBinding(), &attachment);
+                }
+            }
+
+            // Clear the depth and stencil buffers if needed
+            GLbitfield remainingClearBits = mask & ~GL_COLOR_BUFFER_BIT;
+            if (remainingClearBits != 0)
+            {
+                mFunctions->clear(remainingClearBits);
+            }
+        }
+        else if (linear)
+        {
+            mStateManager->setFramebufferSRGBEnabled(false);
+            mFunctions->clear(mask);
+        }
+        else if (srgb)
+        {
+            mStateManager->setFramebufferSRGBEnabled(true);
+            mFunctions->clear(mask);
+        }
+    }
+    else
+    {
+        // Enable SRGB writes except for when the default framebuffer is bound.
+        mStateManager->setFramebufferSRGBEnabled(mFramebufferID != 0);
+        mFunctions->clear(mask);
+    }
 
     return gl::Error(GL_NO_ERROR);
 }
 
 gl::Error FramebufferGL::clearBufferfv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLfloat *values)
 {
+    syncClearBufferState(buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clearBufferfv(buffer, drawbuffer, values);
 
@@ -213,6 +302,7 @@ gl::Error FramebufferGL::clearBufferfv(const gl::State &state, GLenum buffer, GL
 
 gl::Error FramebufferGL::clearBufferuiv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLuint *values)
 {
+    syncClearBufferState(buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clearBufferuiv(buffer, drawbuffer, values);
 
@@ -221,6 +311,7 @@ gl::Error FramebufferGL::clearBufferuiv(const gl::State &state, GLenum buffer, G
 
 gl::Error FramebufferGL::clearBufferiv(const gl::State &state, GLenum buffer, GLint drawbuffer, const GLint *values)
 {
+    syncClearBufferState(buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clearBufferiv(buffer, drawbuffer, values);
 
@@ -229,6 +320,7 @@ gl::Error FramebufferGL::clearBufferiv(const gl::State &state, GLenum buffer, GL
 
 gl::Error FramebufferGL::clearBufferfi(const gl::State &state, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil)
 {
+    syncClearBufferState(buffer, drawbuffer);
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
     mFunctions->clearBufferfi(buffer, drawbuffer, depth, stencil);
 
@@ -290,4 +382,59 @@ GLuint FramebufferGL::getFramebufferID() const
     return mFramebufferID;
 }
 
+void FramebufferGL::syncClearBufferState(GLenum buffer, GLint drawBuffer)
+{
+    if (mFunctions->standard == STANDARD_GL_DESKTOP)
+    {
+        if (buffer == GL_COLOR && mWorkarounds.alwaysDoesSRGBClearsWhenSRGBIsEnabled)
+        {
+            // If doing a clear on a color buffer, set SRGB blend enabled only if the color buffer
+            // is an SRGB format.
+            const auto &drawbufferState  = mData.getDrawBufferStates();
+            const auto &colorAttachments = mData.getColorAttachments();
+
+            const gl::FramebufferAttachment *attachment = nullptr;
+            if (drawbufferState[drawBuffer] >= GL_COLOR_ATTACHMENT0 &&
+                drawbufferState[drawBuffer] < GL_COLOR_ATTACHMENT0 + colorAttachments.size())
+            {
+                attachment = &colorAttachments[drawbufferState[drawBuffer] - GL_COLOR_ATTACHMENT0];
+            }
+
+            if (attachment != nullptr)
+            {
+                mStateManager->setFramebufferSRGBEnabled(attachment->getColorEncoding() == GL_SRGB);
+            }
+        }
+        else
+        {
+            // TODO(geofflang): Update this when the framebuffer binding dirty changes, when it
+            // exists
+            // (see StateManagerGL.cpp)
+            mStateManager->setFramebufferSRGBEnabled(mFramebufferID != 0);
+        }
+    }
+}
+
+void FramebufferGL::getColorAttachmentTypes(bool *hasLinearAttachment,
+                                            bool *hasSRGBAttachment) const
+{
+    *hasLinearAttachment = false;
+    *hasSRGBAttachment   = false;
+
+    for (const auto &attachment : mData.getColorAttachments())
+    {
+        if (attachment.isAttached())
+        {
+            GLenum encoding = attachment.getColorEncoding();
+            if (encoding == GL_LINEAR)
+            {
+                *hasLinearAttachment = true;
+            }
+            else if (encoding == GL_SRGB)
+            {
+                *hasSRGBAttachment = true;
+            }
+        }
+    }
+}
 }

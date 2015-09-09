@@ -15,7 +15,9 @@ namespace rx
 struct WorkaroundsGL
 {
     WorkaroundsGL()
-        : avoid1BitAlphaTextureFormats(false), rgba4IsNotSupportedForColorRendering(false)
+        : avoid1BitAlphaTextureFormats(false),
+          rgba4IsNotSupportedForColorRendering(false),
+          alwaysDoesSRGBClearsWhenSRGBIsEnabled(false)
     {
     }
 
@@ -32,6 +34,11 @@ struct WorkaroundsGL
     // returns GL_FRAMEBUFFER_UNSUPPORTED. Work around this by using a known color-renderable
     // format.
     bool rgba4IsNotSupportedForColorRendering;
+
+    // When clearing a framebuffer on Intel or AMD drivers, when GL_FRAMEBUFFER_SRGB is enabled, the
+    // driver clears to the linearized clear color despite the framebuffer not supporting SRGB
+    // blending.
+    bool alwaysDoesSRGBClearsWhenSRGBIsEnabled;
 };
 }
 
