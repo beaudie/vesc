@@ -10,13 +10,6 @@
 #ifndef LIBANGLE_PROGRAM_H_
 #define LIBANGLE_PROGRAM_H_
 
-#include "libANGLE/angletypes.h"
-#include "libANGLE/Constants.h"
-#include "libANGLE/Error.h"
-#include "libANGLE/RefCountObject.h"
-
-#include "common/angleutils.h"
-
 #include <GLES2/gl2.h>
 #include <GLSLANG/ShaderLang.h>
 
@@ -24,6 +17,15 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include "common/angleutils.h"
+#include "common/mathutil.h"
+#include "common/Optional.h"
+
+#include "libANGLE/angletypes.h"
+#include "libANGLE/Constants.h"
+#include "libANGLE/Error.h"
+#include "libANGLE/RefCountObject.h"
 
 namespace rx
 {
@@ -414,6 +416,11 @@ class Program : angle::NonCopyable
     const GLuint mHandle;
 
     InfoLog mInfoLog;
+
+    // Cache for sampler validation
+    Optional<bool> mCachedValidateSamplersResult;
+    std::vector<GLenum> mTextureUnitTypesCache;
+    RangeUI mSamplerUniformRange;
 };
 }
 
