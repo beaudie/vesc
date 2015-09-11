@@ -47,7 +47,7 @@ struct Optional
         mValid = false;
     }
 
-    static Optional None()
+    static Optional Invalid()
     {
         return Optional();
     }
