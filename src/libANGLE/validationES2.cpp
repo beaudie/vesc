@@ -897,4 +897,62 @@ bool ValidateDiscardFramebufferEXT(Context *context, GLenum target, GLsizei numA
     return ValidateDiscardFramebufferBase(context, target, numAttachments, attachments, defaultFramebuffer);
 }
 
+bool ValidateDrawBuffers(Context *context, GLsizei n, const GLenum *bufs)
+{
+    // INVALID_VALUE is generated if n is negative or greater than value of MAX_DRAW_BUFFERS
+    if (n < 0 || static_cast<GLuint>(n) > context->getCaps().maxDrawBuffers)
+    {
+        context->recordError(
+            Error(GL_INVALID_VALUE, "n must be positive and less than value of MAX_DRAW_BUFFERS"));
+        return false;
+    }
+
+    // INVALID_OPERATION is generated if GL is bound to default and n is not 1
+    // or bufs is bound to value other than BACK and NONE
+    ASSERT(context->getState().getDrawFramebuffer());
+    if (context->getState().getDrawFramebuffer()->id() == 0)
+    {
+        if (n != 1)
+        {
+            context->recordError(
+                Error(GL_INVALID_OPERATION, "n must be 1 when GL is bound to default buffer"));
+            return false;
+        }
+
+        if (bufs[0] != GL_NONE && bufs[0] != GL_BACK)
+        {
+            context->recordError(Error(
+                GL_INVALID_OPERATION,
+                "Value in bufs must be GL_NONE or GL_BACK when drawing to default framebuffer"));
+            return false;
+        }
+    }
+
+    // INVALID_ENUM - value in bufs is not NONE, BACK, or GL_COLOR_ATTACHMENTi
+    // INVALID_OPERATION - GL is bound to buffer and ith argument is not COLOR_ATTACHMENTi or NONE
+    GLuint frameBufferId      = context->getState().getDrawFramebuffer()->id();
+    GLuint maxColorAttachment = GL_COLOR_ATTACHMENT0_EXT + context->getCaps().maxColorAttachments;
+
+    for (int colorAttachment = 0; colorAttachment < n; colorAttachment++)
+    {
+        const GLenum attachment = GL_COLOR_ATTACHMENT0_EXT + colorAttachment;
+
+        if (bufs[colorAttachment] != GL_NONE && bufs[colorAttachment] != GL_BACK &&
+            (bufs[colorAttachment] < GL_COLOR_ATTACHMENT0_EXT ||
+             bufs[colorAttachment] >= maxColorAttachment))
+        {
+            context->recordError(Error(GL_INVALID_ENUM, "Invalid buffer value"));
+            return false;
+        }
+        else if (bufs[colorAttachment] != GL_NONE && bufs[colorAttachment] != attachment &&
+                 frameBufferId != 0)
+        {
+            context->recordError(
+                Error(GL_INVALID_OPERATION, "Ith value does not match COLOR_ATTACHMENTi or NONE"));
+            return false;
+        }
+    }
+
+    return true;
+}
 }
