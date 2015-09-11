@@ -538,6 +538,8 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
                                     functions->hasGLExtension("GL_EXT_draw_instanced"))) ||
                                   functions->isAtLeastGLES(gl::Version(3, 0)) ||
                                   functions->hasGLESExtension("GL_EXT_instanced_arrays");
+    extensions->unpackSubimage = true;
+    extensions->packSubimage   = true;
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)
