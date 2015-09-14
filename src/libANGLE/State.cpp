@@ -1190,10 +1190,10 @@ void State::getIntegerv(const gl::Data &data, GLenum pname, GLint *params)
       case GL_ACTIVE_TEXTURE:                           *params = (mActiveSampler + GL_TEXTURE0);                 break;
       case GL_STENCIL_FUNC:                             *params = mDepthStencil.stencilFunc;                      break;
       case GL_STENCIL_REF:                              *params = mStencilRef;                                    break;
-      case GL_STENCIL_VALUE_MASK:                       *params = clampToInt(mDepthStencil.stencilMask);          break;
+      case GL_STENCIL_VALUE_MASK:                       *params = mDepthStencil.stencilMask;                      break;
       case GL_STENCIL_BACK_FUNC:                        *params = mDepthStencil.stencilBackFunc;                  break;
       case GL_STENCIL_BACK_REF:                         *params = mStencilBackRef;                                break;
-      case GL_STENCIL_BACK_VALUE_MASK:                  *params = clampToInt(mDepthStencil.stencilBackMask);      break;
+      case GL_STENCIL_BACK_VALUE_MASK:                  *params = mDepthStencil.stencilBackMask;                  break;
       case GL_STENCIL_FAIL:                             *params = mDepthStencil.stencilFail;                      break;
       case GL_STENCIL_PASS_DEPTH_FAIL:                  *params = mDepthStencil.stencilPassDepthFail;             break;
       case GL_STENCIL_PASS_DEPTH_PASS:                  *params = mDepthStencil.stencilPassDepthPass;             break;
@@ -1207,8 +1207,8 @@ void State::getIntegerv(const gl::Data &data, GLenum pname, GLint *params)
       case GL_BLEND_DST_ALPHA:                          *params = mBlend.destBlendAlpha;                          break;
       case GL_BLEND_EQUATION_RGB:                       *params = mBlend.blendEquationRGB;                        break;
       case GL_BLEND_EQUATION_ALPHA:                     *params = mBlend.blendEquationAlpha;                      break;
-      case GL_STENCIL_WRITEMASK:                        *params = clampToInt(mDepthStencil.stencilWritemask);     break;
-      case GL_STENCIL_BACK_WRITEMASK:                   *params = clampToInt(mDepthStencil.stencilBackWritemask); break;
+      case GL_STENCIL_WRITEMASK:                        *params = mDepthStencil.stencilWritemask;                 break;
+      case GL_STENCIL_BACK_WRITEMASK:                   *params = mDepthStencil.stencilBackWritemask;             break;
       case GL_STENCIL_CLEAR_VALUE:                      *params = mStencilClearValue;                             break;
       case GL_IMPLEMENTATION_COLOR_READ_TYPE:           *params = mReadFramebuffer->getImplementationColorReadType();   break;
       case GL_IMPLEMENTATION_COLOR_READ_FORMAT:         *params = mReadFramebuffer->getImplementationColorReadFormat(); break;
