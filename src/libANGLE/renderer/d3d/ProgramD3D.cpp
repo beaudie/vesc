@@ -1969,9 +1969,14 @@ void ProgramD3D::updateCachedInputLayout(const gl::State &state)
 {
     mCachedInputLayout.clear();
     const auto &vertexAttributes = state.getVertexArray()->getVertexAttributes();
+    const auto &activeAttribLocations = mData.getActiveAttribLocationsMask();
+    size_t vAttribSize                = vertexAttributes.size();
 
-    for (unsigned int attributeIndex = 0; attributeIndex < vertexAttributes.size(); attributeIndex++)
+    for (unsigned int attributeIndex = 0; attributeIndex < vAttribSize; attributeIndex++)
     {
+        if (!activeAttribLocations.test(attributeIndex))
+            continue;
+
         int semanticIndex = mSemanticIndexes[attributeIndex];
 
         if (semanticIndex != -1)
