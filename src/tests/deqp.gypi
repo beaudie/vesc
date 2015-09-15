@@ -947,6 +947,16 @@
                 [
                     '<(deqp_path)/framework/platform/x11',
                 ],
+            }],
+            ['OS=="mac"',
+            {
+                'deqp_include_dirs':
+                [
+                    '<(deqp_path)/framework/platform/osx',
+                ],
+            }],
+            ['(OS=="linux" and use_x11==1) or OS=="mac"',
+            {
                 'deqp_libtester_sources':
                 [
                     '<(deqp_path)/framework/delibs/dethread/unix/deMutexUnix.c',
@@ -960,7 +970,7 @@
                     # Ask the system headers to expose all the regular function otherwise
                     # dEQP doesn't compile and produces warnings about implicitly defined
                     # functions.
-                    '_GNU_SOURCE',
+                    '_XOPEN_SOURCE=600',
                 ],
             }],
         ]
@@ -968,7 +978,7 @@
 
     'conditions':
     [
-        ['(OS=="win" or OS=="linux") and angle_standalone==1',
+        ['(OS=="win" or OS=="linux" or OS=="mac") and angle_standalone==1',
         {
             'targets':
             [
@@ -1079,7 +1089,7 @@
                 },
             ],
         }],
-        ['OS=="win" or OS=="linux"',
+        ['OS=="win" or OS=="linux" or OS=="mac"',
         {
             'targets':
             [
@@ -1211,6 +1221,16 @@
                         },
                         { # angle_standalone!=1
                             'dependencies': [ '<(DEPTH)/third_party/libpng/libpng.gyp:libpng' ],
+                        }],
+                        ['OS=="mac"',
+                        {
+                            'direct_dependent_settings':
+                            {
+                                'xcode_settings':
+                                {
+                                    'DYLIB_INSTALL_NAME_BASE': '@rpath',
+                                },
+                            },
                         }],
                     ],
                 },
@@ -1407,7 +1427,7 @@
                 },
             ], # targets
         }], # OS=="win" or OS=="linux"
-        ['(OS=="win" or OS=="linux") and angle_standalone==1',
+        ['(OS=="win" or OS=="linux" or OS=="mac") and angle_standalone==1',
         {
             "targets":
             [
