@@ -66,6 +66,8 @@ class ProgramImpl : angle::NonCopyable
     virtual void setUniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) = 0;
     virtual void setUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) = 0;
 
+    virtual void setUniformBlockBinding(GLuint uniformBlockIndex, GLuint uniformBlockBinding) = 0;
+
     // Gather uniform block active uniform indices, and uniform block offset info.
     virtual void gatherUniformBlockInfo(std::vector<gl::UniformBlock> *uniformBlocks,
                                         std::vector<gl::LinkedUniform> *uniforms) = 0;

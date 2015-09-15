@@ -22,12 +22,18 @@
 
 namespace rx
 {
+
+StateManagerGL::IndexedBufferBinding::IndexedBufferBinding() : offset(0), size(0), buffer(0)
+{
+}
+
 StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &rendererCaps)
     : mFunctions(functions),
       mProgram(0),
       mVAO(0),
       mVertexAttribCurrentValues(rendererCaps.maxVertexAttributes),
       mBuffers(),
+      mIndexedBuffers(),
       mTextureUnitIndex(0),
       mTextures(),
       mSamplers(rendererCaps.maxCombinedTextureImageUnits, 0),
@@ -101,6 +107,8 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
     mTextures[GL_TEXTURE_CUBE_MAP].resize(rendererCaps.maxCombinedTextureImageUnits);
     mTextures[GL_TEXTURE_2D_ARRAY].resize(rendererCaps.maxCombinedTextureImageUnits);
     mTextures[GL_TEXTURE_3D].resize(rendererCaps.maxCombinedTextureImageUnits);
+
+    mIndexedBuffers[GL_UNIFORM_BUFFER].resize(rendererCaps.maxCombinedUniformBlocks);
 
     // Initialize point sprite state for desktop GL
     if (mFunctions->standard == STANDARD_GL_DESKTOP)
@@ -192,6 +200,17 @@ void StateManagerGL::deleteBuffer(GLuint buffer)
             }
         }
 
+        for (const auto &bufferTypeIter : mIndexedBuffers)
+        {
+            for (size_t bindIndex = 0; bindIndex < bufferTypeIter.second.size(); bindIndex++)
+            {
+                if (bufferTypeIter.second[bindIndex].buffer == buffer)
+                {
+                    bindIndexedBuffer(bufferTypeIter.first, bindIndex, 0);
+                }
+            }
+        }
+
         mFunctions->deleteBuffers(1, &buffer);
     }
 }
@@ -251,6 +270,35 @@ void StateManagerGL::bindBuffer(GLenum type, GLuint buffer)
     {
         mBuffers[type] = buffer;
         mFunctions->bindBuffer(type, buffer);
+    }
+}
+
+void StateManagerGL::bindIndexedBuffer(GLenum type, size_t index, GLuint buffer)
+{
+    auto &binding = mIndexedBuffers[type][index];
+    if (binding.buffer != buffer || binding.offset != static_cast<size_t>(-1) ||
+        binding.size != static_cast<size_t>(-1))
+    {
+        binding.buffer = buffer;
+        binding.offset = static_cast<size_t>(-1);
+        binding.size = static_cast<size_t>(-1);
+        mFunctions->bindBufferBase(type, static_cast<GLuint>(index), buffer);
+    }
+}
+
+void StateManagerGL::bindIndexedBuffer(GLenum type,
+                                       size_t index,
+                                       GLuint buffer,
+                                       size_t offset,
+                                       size_t size)
+{
+    auto &binding = mIndexedBuffers[type][index];
+    if (binding.buffer != buffer || binding.offset != offset || binding.size != size)
+    {
+        binding.buffer = buffer;
+        binding.offset = offset;
+        binding.size = size;
+        mFunctions->bindBufferRange(type, static_cast<GLuint>(index), buffer, offset, size);
     }
 }
 
@@ -496,6 +544,30 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Data &data)
     const gl::Program *program = state.getProgram();
     const ProgramGL *programGL = GetImplAs<ProgramGL>(program);
     useProgram(programGL->getProgramID());
+
+    for (size_t uniformBlockIndex = 0;
+         uniformBlockIndex < gl::IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS;
+         uniformBlockIndex++)
+    {
+        GLuint binding = program->getUniformBlockBinding(static_cast<GLuint>(uniformBlockIndex));
+        const OffsetBindingPointer<gl::Buffer> &uniformBuffer =
+            data.state->getIndexedUniformBuffer(binding);
+
+        if (uniformBuffer.get() != nullptr)
+        {
+            BufferGL *bufferGL = GetImplAs<BufferGL>(uniformBuffer.get());
+
+            if (uniformBuffer.getSize() == 0)
+            {
+                bindIndexedBuffer(GL_UNIFORM_BUFFER, binding, bufferGL->getBufferID());
+            }
+            else
+            {
+                bindIndexedBuffer(GL_UNIFORM_BUFFER, binding, bufferGL->getBufferID(),
+                                  uniformBuffer.getOffset(), uniformBuffer.getSize());
+            }
+        }
+    }
 
     const std::vector<SamplerBindingGL> &appliedSamplerUniforms = programGL->getAppliedSamplerUniforms();
     for (const SamplerBindingGL &samplerUniform : appliedSamplerUniforms)
