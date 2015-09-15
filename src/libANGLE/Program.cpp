@@ -1444,6 +1444,7 @@ void Program::resetUniformBlockBindings()
     {
         mData.mUniformBlockBindings[blockId] = 0;
     }
+    mData.mActiveUniformBlockBindings.reset();
 }
 
 void Program::setTransformFeedbackVaryings(GLsizei count, const GLchar *const *varyings, GLenum bufferMode)
@@ -2254,6 +2255,7 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
             }
 
             mData.mUniformBlocks.push_back(block);
+
         }
     }
     else

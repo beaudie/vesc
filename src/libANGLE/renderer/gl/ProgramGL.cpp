@@ -322,9 +322,61 @@ const std::vector<SamplerBindingGL> &ProgramGL::getAppliedSamplerUniforms() cons
     return mSamplerBindings;
 }
 
-void ProgramGL::gatherUniformBlockInfo(std::vector<gl::UniformBlock> * /*uniformBlocks*/,
-                                       std::vector<gl::LinkedUniform> * /*uniforms*/)
+void ProgramGL::gatherUniformBlockInfo(std::vector<gl::UniformBlock> *uniformBlocks,
+                                       std::vector<gl::LinkedUniform> *uniforms)
 {
     // TODO(jmadill): Gather uniform block layout info, and data sizes.
+
+    for (auto& uniformBlock : *uniformBlocks)
+    {
+        std::stringstream fullNameStr;
+        fullNameStr << uniformBlock.name;
+        if (uniformBlock.isArray)
+        {
+            fullNameStr << "[" << uniformBlock.arrayElement << "]";
+        }
+
+        GLuint blockIndex = mFunctions->getUniformBlockIndex(mProgramID, fullNameStr.str().c_str());
+
+        GLint dataSize = 0;
+        mFunctions->getActiveUniformBlockiv(mProgramID, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &dataSize);
+        uniformBlock.dataSize = dataSize;
+
+        GLint referencedByVS = 0;
+        mFunctions->getActiveUniformBlockiv(mProgramID, blockIndex, GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER, &referencedByVS);
+        uniformBlock.vertexStaticUse = referencedByVS != GL_FALSE;
+
+        GLint referencedByFS = 0;
+        mFunctions->getActiveUniformBlockiv(mProgramID, blockIndex, GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER, &referencedByFS);
+        uniformBlock.fragmentStaticUse = referencedByFS != GL_FALSE;
+    }
+
+    for (auto& uniform : *uniforms)
+    {
+        const GLchar *uniformName = uniform.name.c_str();
+        GLuint uniformIndex = 0;
+        mFunctions->getUniformIndices(mProgramID, 1, &uniformName, &uniformIndex);
+
+        /*
+        GLint blockIndex = 0;
+        mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_BLOCK_INDEX, &blockIndex);
+        uniform.blockIndex = blockIndex;
+        */
+        GLint offset = 0;
+        mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_OFFSET, &offset);
+        uniform.blockInfo.offset = offset;
+
+        GLint arrayStride = 0;
+        mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_ARRAY_STRIDE, &arrayStride);
+        uniform.blockInfo.arrayStride = arrayStride;
+
+        GLint matrixStride = 0;
+        mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_MATRIX_STRIDE, &matrixStride);
+        uniform.blockInfo.matrixStride = matrixStride;
+
+        GLint isRowMajorMatrix = 0;
+        mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_IS_ROW_MAJOR, &isRowMajorMatrix);
+        uniform.blockInfo.isRowMajorMatrix = isRowMajorMatrix != GL_FALSE;
+    }
 }
 }
