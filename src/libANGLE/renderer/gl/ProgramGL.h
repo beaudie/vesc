@@ -62,6 +62,8 @@ class ProgramGL : public ProgramImpl
     void setUniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) override;
     void setUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) override;
 
+    void setUniformBlockBinding(GLuint uniformBlockIndex, GLuint uniformBlockBinding) override;
+
     bool validateSamplers(gl::InfoLog *infoLog, const gl::Caps &caps) override;
 
     void gatherUniformBlockInfo(std::vector<gl::UniformBlock> *uniformBlocks,
@@ -80,6 +82,7 @@ class ProgramGL : public ProgramImpl
     StateManagerGL *mStateManager;
 
     std::vector<GLint> mUniformRealLocationMap;
+    std::vector<GLuint> mUniformBlockRealLocationMap;
 
     // An array of the samplers that are used by the program
     std::vector<SamplerBindingGL> mSamplerBindings;
