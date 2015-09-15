@@ -66,6 +66,8 @@ class ProgramImpl : angle::NonCopyable
     virtual void setUniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) = 0;
     virtual void setUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) = 0;
 
+    virtual void setUniformBlockBinding(GLuint uniformBlockIndex, GLuint uniformBlockBinding) = 0;
+
     // TODO: The following functions are possibly only applicable to D3D backends. The should be carefully evaluated to
     // determine if they can be removed from this interface.
     virtual bool validateSamplers(gl::InfoLog *infoLog, const gl::Caps &caps) = 0;
