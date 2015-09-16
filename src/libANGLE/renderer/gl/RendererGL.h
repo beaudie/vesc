@@ -58,7 +58,7 @@ class RendererGL : public Renderer
                                 const gl::RangeUI &indexRange) override;
 
     // Shader creation
-    ShaderImpl *createShader(GLenum type) override;
+    ShaderImpl *createShader(gl::Shader::Data *data) override;
     ProgramImpl *createProgram(const gl::Program::Data &data) override;
 
     // Framebuffer creation
