@@ -21,7 +21,6 @@ class NullFactory : public ImplFactory
     NullFactory() {}
 
     // Shader creation
-    CompilerImpl *createCompiler(const gl::Data &data) override { return nullptr; }
     ShaderImpl *createShader(GLenum type) override { return nullptr; }
     ProgramImpl *createProgram(const gl::Program::Data &data) override { return nullptr; }
 

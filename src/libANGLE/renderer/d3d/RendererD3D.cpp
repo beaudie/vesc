@@ -33,7 +33,20 @@ namespace
 // degenerate case where we are stuck hogging memory.
 const int ScratchMemoryBufferLifetime = 1000;
 
+ShShaderOutput GetShaderOutputType(RendererClass rendererClass)
+{
+    if (rendererClass == RENDERER_D3D11)
+    {
+        return SH_HLSL11_OUTPUT;
+    }
+    else
+    {
+        ASSERT(rendererClass == RENDERER_D3D9);
+        return SH_HLSL9_OUTPUT;
+    }
 }
+
+}  // anonymous namespace
 
 const uintptr_t RendererD3D::DirtyPointer = std::numeric_limits<uintptr_t>::max();
 
@@ -65,6 +78,11 @@ void RendererD3D::cleanup()
         gl::UninitializeDebugAnnotations();
         SafeDelete(mAnnotator);
     }
+}
+
+ShShaderOutput RendererD3D::getShaderTranslatorOutputType() const
+{
+    return GetShaderOutputType(getRendererClass());
 }
 
 gl::Error RendererD3D::drawArrays(const gl::Data &data, GLenum mode, GLint first, GLsizei count)

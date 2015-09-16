@@ -92,6 +92,9 @@ class Renderer : public ImplFactory
 
     virtual void syncState(const gl::State &state, const gl::State::DirtyBits &dirtyBits) = 0;
 
+    // TODO(jmadill): Expose a general translator init structure.
+    virtual ShShaderOutput getShaderTranslatorOutputType() const = 0;
+
     // Renderer capabilities
     const gl::Caps &getRendererCaps() const;
     const gl::TextureCapsMap &getRendererTextureCaps() const;

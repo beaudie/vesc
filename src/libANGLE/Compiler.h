@@ -11,29 +11,32 @@
 #define LIBANGLE_COMPILER_H_
 
 #include "libANGLE/Error.h"
-
-namespace rx
-{
-class CompilerImpl;
-}
+#include "GLSLANG/ShaderLang.h"
 
 namespace gl
 {
+struct Data;
 
-class Compiler final
+class Compiler final : angle::NonCopyable
 {
   public:
-    explicit Compiler(rx::CompilerImpl *impl);
+    Compiler(const Data &data, ShShaderOutput outputType);
     ~Compiler();
 
     Error release();
 
-    rx::CompilerImpl *getImplementation();
+    ShHandle getCompilerHandle(GLenum type);
+    ShShaderOutput getShaderOutputType() const { return mOutputType; }
 
   private:
-    rx::CompilerImpl *mCompiler;
+    ShShaderSpec mSpec;
+    ShShaderOutput mOutputType;
+    ShBuiltInResources mResources;
+
+    ShHandle mFragmentCompiler;
+    ShHandle mVertexCompiler;
 };
 
-}
+}  // namespace gl
 
 #endif // LIBANGLE_COMPILER_H_

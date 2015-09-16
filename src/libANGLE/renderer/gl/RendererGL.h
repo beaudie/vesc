@@ -58,7 +58,6 @@ class RendererGL : public Renderer
                                 const gl::RangeUI &indexRange) override;
 
     // Shader creation
-    CompilerImpl *createCompiler(const gl::Data &data) override;
     ShaderImpl *createShader(GLenum type) override;
     ProgramImpl *createProgram(const gl::Program::Data &data) override;
 
@@ -101,6 +100,8 @@ class RendererGL : public Renderer
     std::string getRendererDescription() const override;
 
     void syncState(const gl::State &state, const gl::State::DirtyBits &dirtyBits) override;
+
+    ShShaderOutput getShaderTranslatorOutputType() const override;
 
     const gl::Version &getMaxSupportedESVersion() const;
     const FunctionsGL *getFunctions() const { return mFunctions; }
