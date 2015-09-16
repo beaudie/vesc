@@ -36,8 +36,7 @@ class ImplFactory : angle::NonCopyable
     virtual ~ImplFactory() {}
 
     // Shader creation
-    // TODO(jmadill): Make const.
-    virtual ShaderImpl *createShader(gl::Shader::Data *data) = 0;
+    virtual ShaderImpl *createShader(const gl::Shader::Data &data) = 0;
     virtual ProgramImpl *createProgram(const gl::Program::Data &data) = 0;
 
     // Framebuffer creation

@@ -310,9 +310,9 @@ ShShaderOutput RendererGL::getShaderTranslatorOutputType() const
     return GetShaderOutputType(mFunctions);
 }
 
-ShaderImpl *RendererGL::createShader(gl::Shader::Data *data)
+ShaderImpl *RendererGL::createShader(const gl::Shader::Data &data)
 {
-    return new ShaderGL(data, *this);
+    return new ShaderGL(data, mFunctions);
 }
 
 ProgramImpl *RendererGL::createProgram(const gl::Program::Data &data)
