@@ -3,16 +3,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// texture_format_util:
-//   Contains helper functions for texture_format_table
+// load_functions_table:
+//   Contains load functions table depending on internal format and dxgi format
 //
 
-#ifndef LIBANGLE_RENDERER_D3D_D3D11_TEXTUREFORMATUTIL_H_
-#define LIBANGLE_RENDERER_D3D_D3D11_TEXTUREFORMATUTIL_H_
-
-#include <map>
+#ifndef LIBANGLE_RENDERER_D3D_D3D11_LOADFUNCTIONSTABLE_H_
+#define LIBANGLE_RENDERER_D3D_D3D11_LOADFUNCTIONSTABLE_H_
 
 #include "libANGLE/renderer/d3d/d3d11/renderer11.h"
+
+#include <map>
 
 namespace rx
 {
@@ -26,12 +26,6 @@ typedef std::pair<DXGI_FORMAT, LoadImageFunctionInfo> DxgiFormatLoadFunctionPair
 typedef std::pair<GLenum, DxgiFormatLoadFunctionPair> GLTypeDXGIFunctionPair;
 typedef std::map<GLenum, std::vector<GLTypeDXGIFunctionPair>> D3D11LoadFunctionMap;
 
-// internal format with vectors of function pairs
-const D3D11LoadFunctionMap &BuildD3D11LoadFunctionMap();
-
-const InitializeTextureDataFunction GetInternalFormatInitializer(GLenum internalFormat,
-                                                                 DXGI_FORMAT dxgiFormat);
-
 const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum internalFormat,
                                                                    DXGI_FORMAT dxgiFormat);
 
@@ -39,4 +33,4 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
 
 }  // namespace rx
 
-#endif  // LIBANGLE_RENDERER_D3D_D3D11_TEXTUREFORMATUTIL_H_
+#endif  // LIBANGLE_RENDERER_D3D_D3D11_LOADFUNCTIONSTABLE_H_
