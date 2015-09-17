@@ -1,0 +1,1059 @@
+{
+  "GL_RG8_SNORM": {
+    "DXGI_FORMAT_R8G8_SNORM": [
+      {
+        "loadFunction": "LoadToNative<GLbyte,2>",
+        "type": "GL_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_SRGB8": {
+    "DXGI_FORMAT_R8G8B8A8_UNORM_SRGB": [
+      {
+        "loadFunction": "LoadToNative3To4<GLubyte,0xFF>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGBA8I": {
+    "DXGI_FORMAT_R8G8B8A8_SINT": [
+      {
+        "loadFunction": "LoadToNative<GLbyte,4>",
+        "type": "GL_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_R8_SNORM": {
+    "DXGI_FORMAT_R8_SNORM": [
+      {
+        "loadFunction": "LoadToNative<GLbyte,1>",
+        "type": "GL_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_RGBA8_SNORM": {
+    "DXGI_FORMAT_R8G8B8A8_SNORM": [
+      {
+        "loadFunction": "LoadToNative<GLbyte,4>",
+        "type": "GL_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_R16I": {
+    "DXGI_FORMAT_R16_SINT": [
+      {
+        "loadFunction": "LoadToNative<GLshort,1>",
+        "type": "GL_SHORT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGB32UI": {
+    "DXGI_FORMAT_R32G32B32A32_UINT": [
+      {
+        "loadFunction": "LoadToNative3To4<GLuint,0x00000001>",
+        "type": "GL_UNSIGNED_INT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_ALPHA32F_EXT": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadA32FToRGBA32F",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_R16UI": {
+    "DXGI_FORMAT_R16_UINT": [
+      {
+        "loadFunction": "LoadToNative<GLushort,1>",
+        "type": "GL_UNSIGNED_SHORT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_RGB9_E5": {
+    "DXGI_FORMAT_R9G9B9E5_SHAREDEXP": [
+      {
+        "loadFunction": "LoadToNative<GLuint,1>",
+        "type": "GL_UNSIGNED_INT_5_9_9_9_REV",
+        "requiresConversion": "false"
+      },
+      {
+        "loadFunction": "LoadRGB16FToRGB9E5",
+        "type": "GL_HALF_FLOAT",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadRGB16FToRGB9E5",
+        "type": "GL_HALF_FLOAT_OES",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadRGB32FToRGB9E5",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_COMPRESSED_R11_EAC": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGBA32UI": {
+    "DXGI_FORMAT_R32G32B32A32_UINT": [
+      {
+        "loadFunction": "LoadToNative<GLuint,4>",
+        "type": "GL_UNSIGNED_INT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_RG8UI": {
+    "DXGI_FORMAT_R8G8_UINT": [
+      {
+        "loadFunction": "LoadToNative<GLubyte,2>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_LUMINANCE32F_EXT": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadL32FToRGBA32F",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_R16F": {
+    "DXGI_FORMAT_R16_FLOAT": [
+      {
+        "loadFunction": "LoadToNative<GLhalf,1>",
+        "type": "GL_HALF_FLOAT",
+        "requiresConversion": "false"
+      },
+      {
+        "loadFunction": "LoadToNative<GLhalf,1>",
+        "type": "GL_HALF_FLOAT_OES",
+        "requiresConversion": "false"
+      },
+      {
+        "loadFunction": "Load32FTo16F<1>",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGBA8UI": {
+    "DXGI_FORMAT_R8G8B8A8_UINT": [
+      {
+        "loadFunction": "LoadToNative<GLubyte,4>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_BGRA4_ANGLEX": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadRGBA4ToRGBA8",
+        "type": "GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadToNative<GLubyte,4>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_RGBA16F": {
+    "DXGI_FORMAT_R16G16B16A16_FLOAT": [
+      {
+        "loadFunction": "LoadToNative<GLhalf,4>",
+        "type": "GL_HALF_FLOAT",
+        "requiresConversion": "false"
+      },
+      {
+        "loadFunction": "LoadToNative<GLhalf,4>",
+        "type": "GL_HALF_FLOAT_OES",
+        "requiresConversion": "false"
+      },
+      {
+        "loadFunction": "Load32FTo16F<4>",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_LUMINANCE8_EXT": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadL8ToRGBA8",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadCompressedToNative<4,4,16>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGB": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnreachableLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "UnreachableLoadFunction",
+        "type": "GL_UNSIGNED_SHORT_5_6_5",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGB5_A1": {
+    "DXGI_FORMAT_B5G5R5A1_UNORM": [
+      {
+        "loadFunction": "LoadRGB5A1ToA1RGB5",
+        "type": "GL_UNSIGNED_SHORT_5_5_5_1",
+        "requiresConversion": "true"
+      }
+    ],
+    "DXGI_FORMAT_R8G8B8A8_UNORM": [
+      {
+        "loadFunction": "LoadToNative<GLubyte,4>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "false"
+      },
+      {
+        "loadFunction": "LoadRGB5A1ToRGBA8",
+        "type": "GL_UNSIGNED_SHORT_5_5_5_1",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadRGB10A2ToRGBA8",
+        "type": "GL_UNSIGNED_INT_2_10_10_10_REV",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGB16UI": {
+    "DXGI_FORMAT_R16G16B16A16_UINT": [
+      {
+        "loadFunction": "LoadToNative3To4<GLushort,0x0001>",
+        "type": "GL_UNSIGNED_SHORT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_BGRA_EXT": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnreachableLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_COMPRESSED_RGB8_ETC2": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGBA32F": {
+    "DXGI_FORMAT_R32G32B32A32_FLOAT": [
+      {
+        "loadFunction": "LoadToNative<GLfloat,4>",
+        "type": "GL_FLOAT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_RGBA32I": {
+    "DXGI_FORMAT_R32G32B32A32_SINT": [
+      {
+        "loadFunction": "LoadToNative<GLint,4>",
+        "type": "GL_INT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_LUMINANCE8_ALPHA8_EXT": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadLA8ToRGBA8",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RG8": {
+    "DXGI_FORMAT_R8G8_UNORM": [
+      {
+        "loadFunction": "LoadToNative<GLubyte,2>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_RGB10_A2": {
+    "DXGI_FORMAT_R10G10B10A2_UNORM": [
+      {
+        "loadFunction": "LoadToNative<GLuint,1>",
+        "type": "GL_UNSIGNED_INT_2_10_10_10_REV",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_COMPRESSED_SIGNED_RG11_EAC": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_DEPTH_COMPONENT16": {
+    "DXGI_FORMAT_R16_TYPELESS": [
+      {
+        "loadFunction": "LoadToNative<GLushort,1>",
+        "type": "GL_UNSIGNED_SHORT",
+        "requiresConversion": "false"
+      },
+      {
+        "loadFunction": "LoadR32ToR16",
+        "type": "GL_UNSIGNED_INT",
+        "requiresConversion": "true"
+      }
+    ],
+    "DXGI_FORMAT_D16_UNORM": [
+      {
+        "loadFunction": "LoadToNative<GLushort,1>",
+        "type": "GL_UNSIGNED_SHORT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_RGB32I": {
+    "DXGI_FORMAT_R32G32B32A32_SINT": [
+      {
+        "loadFunction": "LoadToNative3To4<GLint,0x00000001>",
+        "type": "GL_INT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_R8": {
+    "DXGI_FORMAT_R8_UNORM": [
+      {
+        "loadFunction": "LoadToNative<GLubyte,1>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_RGB32F": {
+    "DXGI_FORMAT_R32G32B32A32_FLOAT": [
+      {
+        "loadFunction": "LoadToNative3To4<GLfloat,gl::Float32One>",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_R11F_G11F_B10F": {
+    "DXGI_FORMAT_R11G11B10_FLOAT": [
+      {
+        "loadFunction": "LoadToNative<GLuint,1>",
+        "type": "GL_UNSIGNED_INT_10F_11F_11F_REV",
+        "requiresConversion": "false"
+      },
+      {
+        "loadFunction": "LoadRGB16FToRG11B10F",
+        "type": "GL_HALF_FLOAT",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadRGB16FToRG11B10F",
+        "type": "GL_HALF_FLOAT_OES",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadRGB32FToRG11B10F",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGB8": {
+    "DXGI_FORMAT_R8G8B8A8_UNORM": [
+      {
+        "loadFunction": "LoadToNative3To4<GLubyte,0xFF>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_LUMINANCE_ALPHA": {
+    "DXGI_FORMAT_R16G16B16A16_FLOAT": [
+      {
+        "loadFunction": "LoadLA16FToRGBA16F",
+        "type": "GL_HALF_FLOAT",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadLA16FToRGBA16F",
+        "type": "GL_HALF_FLOAT_OES",
+        "requiresConversion": "true"
+      }
+    ],
+    "DXGI_FORMAT_R32G32B32A32_FLOAT": [
+      {
+        "loadFunction": "LoadLA32FToRGBA32F",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ],
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnreachableLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGBA16I": {
+    "DXGI_FORMAT_R16G16B16A16_SINT": [
+      {
+        "loadFunction": "LoadToNative<GLshort,4>",
+        "type": "GL_SHORT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_R8I": {
+    "DXGI_FORMAT_R8_SINT": [
+      {
+        "loadFunction": "LoadToNative<GLbyte,1>",
+        "type": "GL_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_RGB8_SNORM": {
+    "DXGI_FORMAT_R8G8B8A8_SNORM": [
+      {
+        "loadFunction": "LoadToNative3To4<GLbyte,0x7F>",
+        "type": "GL_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RG32F": {
+    "DXGI_FORMAT_R32G32_FLOAT": [
+      {
+        "loadFunction": "LoadToNative<GLfloat,2>",
+        "type": "GL_FLOAT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_DEPTH_COMPONENT32F": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ],
+    "DXGI_FORMAT_R32_TYPELESS": [
+      {
+        "loadFunction": "LoadToNative<GLfloat,1>",
+        "type": "GL_FLOAT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_RG32I": {
+    "DXGI_FORMAT_R32G32_SINT": [
+      {
+        "loadFunction": "LoadToNative<GLint,2>",
+        "type": "GL_INT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_ALPHA8_EXT": {
+    "DXGI_FORMAT_A8_UNORM": [
+      {
+        "loadFunction": "LoadToNative<GLubyte,1>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "false"
+      }
+    ],
+    "DXGI_FORMAT_R8G8B8A8_UNORM": [
+      {
+        "loadFunction": "LoadA8ToRGBA8",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RG32UI": {
+    "DXGI_FORMAT_R32G32_UINT": [
+      {
+        "loadFunction": "LoadToNative<GLuint,2>",
+        "type": "GL_UNSIGNED_INT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_RGBA16UI": {
+    "DXGI_FORMAT_R16G16B16A16_UINT": [
+      {
+        "loadFunction": "LoadToNative<GLushort,4>",
+        "type": "GL_UNSIGNED_SHORT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_COMPRESSED_RGBA8_ETC2_EAC": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGB8I": {
+    "DXGI_FORMAT_R8G8B8A8_SINT": [
+      {
+        "loadFunction": "LoadToNative3To4<GLbyte,0x01>",
+        "type": "GL_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_COMPRESSED_SRGB8_ETC2": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_DEPTH32F_STENCIL8": {
+    "DXGI_FORMAT_R32G8X24_TYPELESS": [
+      {
+        "loadFunction": "LoadToNative<GLuint,2>",
+        "type": "GL_FLOAT_32_UNSIGNED_INT_24_8_REV",
+        "requiresConversion": "false"
+      }
+    ],
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "GL_FLOAT_32_UNSIGNED_INT_24_8_REV",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RG8I": {
+    "DXGI_FORMAT_R8G8_SINT": [
+      {
+        "loadFunction": "LoadToNative<GLbyte,2>",
+        "type": "GL_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_R32UI": {
+    "DXGI_FORMAT_R32_UINT": [
+      {
+        "loadFunction": "LoadToNative<GLuint,1>",
+        "type": "GL_UNSIGNED_INT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_BGR5_A1_ANGLEX": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadRGB5A1ToRGBA8",
+        "type": "GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadToNative<GLubyte,4>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_COMPRESSED_RG11_EAC": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_SRGB8_ALPHA8": {
+    "DXGI_FORMAT_R8G8B8A8_UNORM_SRGB": [
+      {
+        "loadFunction": "LoadToNative<GLubyte,4>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_LUMINANCE_ALPHA16F_EXT": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadLA16FToRGBA16F",
+        "type": "GL_HALF_FLOAT",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadLA16FToRGBA16F",
+        "type": "GL_HALF_FLOAT_OES",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGBA": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnreachableLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "UnreachableLoadFunction",
+        "type": "GL_UNSIGNED_SHORT_4_4_4_4",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "UnreachableLoadFunction",
+        "type": "GL_UNSIGNED_SHORT_5_5_5_1",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_DEPTH24_STENCIL8": {
+    "DXGI_FORMAT_R24G8_TYPELESS": [
+      {
+        "loadFunction": "LoadR32ToR24G8",
+        "type": "GL_UNSIGNED_INT_24_8",
+        "requiresConversion": "true"
+      }
+    ],
+    "DXGI_FORMAT_D24_UNORM_S8_UINT": [
+      {
+        "loadFunction": "LoadR32ToR24G8",
+        "type": "GL_UNSIGNED_INT_24_8",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGB16I": {
+    "DXGI_FORMAT_R16G16B16A16_SINT": [
+      {
+        "loadFunction": "LoadToNative3To4<GLshort,0x0001>",
+        "type": "GL_SHORT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_R8UI": {
+    "DXGI_FORMAT_R8_UINT": [
+      {
+        "loadFunction": "LoadToNative<GLubyte,1>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_ALPHA": {
+    "DXGI_FORMAT_R16G16B16A16_FLOAT": [
+      {
+        "loadFunction": "LoadA16FToRGBA16F",
+        "type": "GL_HALF_FLOAT",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadA16FToRGBA16F",
+        "type": "GL_HALF_FLOAT_OES",
+        "requiresConversion": "true"
+      }
+    ],
+    "DXGI_FORMAT_R32G32B32A32_FLOAT": [
+      {
+        "loadFunction": "LoadA32FToRGBA32F",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ],
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnreachableLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGB16F": {
+    "DXGI_FORMAT_R16G16B16A16_FLOAT": [
+      {
+        "loadFunction": "LoadToNative3To4<GLhalf,gl::Float16One>",
+        "type": "GL_HALF_FLOAT",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadToNative3To4<GLhalf,gl::Float16One>",
+        "type": "GL_HALF_FLOAT_OES",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadRGB32FToRGBA16F",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_COMPRESSED_SIGNED_R11_EAC": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_COMPRESSED_RGB_S3TC_DXT1_EXT": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadCompressedToNative<4,4,8>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_COMPRESSED_RGBA_S3TC_DXT1_EXT": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadCompressedToNative<4,4,8>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_STENCIL_INDEX8": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "DXGI_FORMAT_R24G8_TYPELESS",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "UnimplementedLoadFunction",
+        "type": "DXGI_FORMAT_D24_UNORM_S8_UINT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_LUMINANCE_ALPHA32F_EXT": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadLA32FToRGBA32F",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGB8UI": {
+    "DXGI_FORMAT_R8G8B8A8_UINT": [
+      {
+        "loadFunction": "LoadToNative3To4<GLubyte,0x01>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_DEPTH_COMPONENT24": {
+    "DXGI_FORMAT_R24G8_TYPELESS": [
+      {
+        "loadFunction": "LoadR32ToR24G8",
+        "type": "GL_UNSIGNED_INT",
+        "requiresConversion": "true"
+      }
+    ],
+    "DXGI_FORMAT_D24_UNORM_S8_UINT": [
+      {
+        "loadFunction": "LoadR32ToR24G8",
+        "type": "GL_UNSIGNED_INT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_R32I": {
+    "DXGI_FORMAT_R32_SINT": [
+      {
+        "loadFunction": "LoadToNative<GLint,1>",
+        "type": "GL_INT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_DEPTH_COMPONENT32_OES": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadR32ToR24G8",
+        "type": "GL_UNSIGNED_INT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_R32F": {
+    "DXGI_FORMAT_R32_FLOAT": [
+      {
+        "loadFunction": "LoadToNative<GLfloat,1>",
+        "type": "GL_FLOAT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_RG16F": {
+    "DXGI_FORMAT_R16G16_FLOAT": [
+      {
+        "loadFunction": "LoadToNative<GLhalf,2>",
+        "type": "GL_HALF_FLOAT",
+        "requiresConversion": "false"
+      },
+      {
+        "loadFunction": "LoadToNative<GLhalf,2>",
+        "type": "GL_HALF_FLOAT_OES",
+        "requiresConversion": "false"
+      },
+      {
+        "loadFunction": "Load32FTo16F<2>",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGB565": {
+    "DXGI_FORMAT_B5G6R5_UNORM": [
+      {
+        "loadFunction": "LoadToNative<GLushort,1>",
+        "type": "GL_UNSIGNED_SHORT_5_6_5",
+        "requiresConversion": "false"
+      }
+    ],
+    "DXGI_FORMAT_R8G8B8A8_UNORM": [
+      {
+        "loadFunction": "LoadToNative3To4<GLubyte,0xFF>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadR5G6B5ToRGBA8",
+        "type": "GL_UNSIGNED_SHORT_5_6_5",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_LUMINANCE16F_EXT": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadL16FToRGBA16F",
+        "type": "GL_HALF_FLOAT",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadL16FToRGBA16F",
+        "type": "GL_HALF_FLOAT_OES",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RG16UI": {
+    "DXGI_FORMAT_R16G16_UINT": [
+      {
+        "loadFunction": "LoadToNative<GLushort,2>",
+        "type": "GL_UNSIGNED_SHORT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadCompressedToNative<4,4,16>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RG16I": {
+    "DXGI_FORMAT_R16G16_SINT": [
+      {
+        "loadFunction": "LoadToNative<GLshort,2>",
+        "type": "GL_SHORT",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_BGRA8_EXT": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadToNative<GLubyte,4>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_ALPHA16F_EXT": {
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "LoadA16FToRGBA16F",
+        "type": "GL_HALF_FLOAT",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadA16FToRGBA16F",
+        "type": "GL_HALF_FLOAT_OES",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGBA4": {
+    "DXGI_FORMAT_B4G4R4A4_UNORM": [
+      {
+        "loadFunction": "LoadRGBA4ToARGB4",
+        "type": "GL_UNSIGNED_SHORT_4_4_4_4",
+        "requiresConversion": "true"
+      }
+    ],
+    "DXGI_FORMAT_R8G8B8A8_UNORM": [
+      {
+        "loadFunction": "LoadToNative<GLubyte,4>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "false"
+      },
+      {
+        "loadFunction": "LoadRGBA4ToRGBA8",
+        "type": "GL_UNSIGNED_SHORT_4_4_4_4",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGBA8": {
+    "DXGI_FORMAT_R8G8B8A8_UNORM": [
+      {
+        "loadFunction": "LoadToNative<GLubyte,4>",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "false"
+      }
+    ]
+  },
+  "GL_LUMINANCE": {
+    "DXGI_FORMAT_R16G16B16A16_FLOAT": [
+      {
+        "loadFunction": "LoadL16FToRGBA16F",
+        "type": "GL_HALF_FLOAT",
+        "requiresConversion": "true"
+      },
+      {
+        "loadFunction": "LoadL16FToRGBA16F",
+        "type": "GL_HALF_FLOAT_OES",
+        "requiresConversion": "true"
+      }
+    ],
+    "DXGI_FORMAT_R32G32B32A32_FLOAT": [
+      {
+        "loadFunction": "LoadL32FToRGBA32F",
+        "type": "GL_FLOAT",
+        "requiresConversion": "true"
+      }
+    ],
+    "DXGI_FORMAT_UNKNOWN": [
+      {
+        "loadFunction": "UnreachableLoadFunction",
+        "type": "GL_UNSIGNED_BYTE",
+        "requiresConversion": "true"
+      }
+    ]
+  },
+  "GL_RGB10_A2UI": {
+    "DXGI_FORMAT_R10G10B10A2_UINT": [
+      {
+        "loadFunction": "LoadToNative<GLuint,1>",
+        "type": "GL_UNSIGNED_INT_2_10_10_10_REV",
+        "requiresConversion": "false"
+      }
+    ]
+  }
+}
