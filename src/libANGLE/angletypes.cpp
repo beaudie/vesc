@@ -22,19 +22,26 @@ SamplerState::SamplerState()
       wrapT(GL_REPEAT),
       wrapR(GL_REPEAT),
       maxAnisotropy(1.0f),
-      baseLevel(0),
-      maxLevel(1000),
       minLod(-1000.0f),
       maxLod(1000.0f),
       compareMode(GL_NONE),
-      compareFunc(GL_LEQUAL),
-      swizzleRed(GL_RED),
-      swizzleGreen(GL_GREEN),
-      swizzleBlue(GL_BLUE),
-      swizzleAlpha(GL_ALPHA)
+      compareFunc(GL_LEQUAL)
 {}
 
-bool SamplerState::swizzleRequired() const
+TextureState::TextureState()
+    : swizzleRed(GL_RED),
+      swizzleGreen(GL_GREEN),
+      swizzleBlue(GL_BLUE),
+      swizzleAlpha(GL_ALPHA),
+      samplerState(),
+      baseLevel(0),
+      maxLevel(1000),
+      immutableFormat(false),
+      immutableLevels(0)
+{
+}
+
+bool TextureState::swizzleRequired() const
 {
     return swizzleRed != GL_RED || swizzleGreen != GL_GREEN ||
            swizzleBlue != GL_BLUE || swizzleAlpha != GL_ALPHA;
