@@ -24,13 +24,11 @@ typedef std::pair<DXGI_FORMAT, LoadImageFunction> DxgiFormatLoadFunctionPair;
 typedef std::pair<GLenum, DxgiFormatLoadFunctionPair> GLTypeDXGIFunctionPair;
 typedef std::map<GLenum, std::vector<GLTypeDXGIFunctionPair>> D3D11LoadFunctionMap;
 
+// internal format with vectors of function pairs
 const D3D11LoadFunctionMap &BuildD3D11LoadFunctionMap();
 
-typedef std::pair<GLint, DXGI_FORMAT> InitializeTextureFormatPair;
-typedef std::map<InitializeTextureFormatPair, InitializeTextureDataFunction>
-    InternalFormatInitializerMap;
-
-const InternalFormatInitializerMap &BuildInternalFormatInitializerMap();
+const InitializeTextureDataFunction GetInternalFormatInitializer(GLenum internalFormat,
+                                                                 DXGI_FORMAT dxgiFormat);
 
 }  // namespace d3d11
 
