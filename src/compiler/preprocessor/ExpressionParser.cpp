@@ -105,11 +105,56 @@
 #include "Token.h"
 
 #if defined(_MSC_VER)
-typedef __int64 YYSTYPE;
+typedef __int64 inttype;
 #else
 #include <stdint.h>
-typedef intmax_t YYSTYPE;
+typedef intmax_t inttype;
 #endif  // _MSC_VER
+
+#define TAGGED_INT_OP(OP)                         \
+    TaggedInt operator OP(const TaggedInt &other) \
+    {                                             \
+        return TaggedInt(value OP other.value);   \
+    }
+#define TAGGED_INT_UNARY_OP(OP) \
+    TaggedInt operator OP() { return TaggedInt(OP(value)); }
+
+// Integer tagged with source location and token text so that error messages
+// can be generated during parsing instead of lexing.
+struct TaggedInt
+{
+    TaggedInt() = default;
+    explicit TaggedInt(inttype aValue) : value(aValue) {}
+
+    inttype value;
+    pp::SourceLocation location;
+    std::string text;
+
+    TAGGED_INT_OP(||)
+    TAGGED_INT_OP(&&)
+    TAGGED_INT_OP(|)
+    TAGGED_INT_OP(^)
+    TAGGED_INT_OP(&)
+    TAGGED_INT_OP(!=)
+    TAGGED_INT_OP(==)
+    TAGGED_INT_OP(>=)
+    TAGGED_INT_OP(<=)
+    TAGGED_INT_OP(>)
+    TAGGED_INT_OP(<)
+    TAGGED_INT_OP(>>)
+    TAGGED_INT_OP(<<)
+    TAGGED_INT_OP(-)
+    TAGGED_INT_OP(+)
+    TAGGED_INT_OP(%)
+    TAGGED_INT_OP(/)
+    TAGGED_INT_OP(*)
+    TAGGED_INT_UNARY_OP(!)
+    TAGGED_INT_UNARY_OP(~)
+    TAGGED_INT_UNARY_OP(-)
+    TAGGED_INT_UNARY_OP(+)
+};
+typedef TaggedInt YYSTYPE;
+
 #define YYENABLE_NLS 0
 #define YYLTYPE_IS_TRIVIAL 1
 #define YYSTYPE_IS_TRIVIAL 1
@@ -493,11 +538,11 @@ static const yytype_uint8 yytranslate[] =
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_uint16 yyrline[] =
 {
-       0,   105,   105,   112,   113,   114,   114,   135,   135,   156,
-     159,   162,   165,   168,   171,   174,   177,   180,   183,   186,
-     189,   192,   195,   214,   233,   236,   239,   242,   245,   248
+       0,   150,   150,   157,   158,   166,   166,   187,   187,   208,
+     211,   214,   217,   220,   223,   226,   229,   232,   235,   238,
+     241,   244,   247,   266,   285,   288,   291,   294,   297,   300
 };
 #endif
 
@@ -1329,8 +1374,21 @@ yyreduce:
         case 2:
 
     {
-        *(context->result) = static_cast<int>((yyvsp[0]));
+        *(context->result) = static_cast<int>((yyvsp[0]).value);
         YYACCEPT;
+    }
+
+    break;
+
+  case 4:
+
+    {
+        if (!context->isIgnoringErrors())
+        {
+            context->diagnostics->report(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
+                                         (yyvsp[0]).location, (yyvsp[0]).text);
+        }
+        (yyval) = (yyvsp[0]);
     }
 
     break;
@@ -1338,7 +1396,7 @@ yyreduce:
   case 5:
 
     {
-        if ((yyvsp[-1]) != 0)
+        if ((yyvsp[-1]).value != 0)
         {
             // Ignore errors in the short-circuited part of the expression.
             // ESSL3.00 section 3.4:
@@ -1354,10 +1412,10 @@ yyreduce:
   case 6:
 
     {
-        if ((yyvsp[-3]) != 0)
+        if ((yyvsp[-3]).value != 0)
         {
             context->endIgnoreErrors();
-            (yyval) = static_cast<YYSTYPE>(1);
+            (yyval) = TaggedInt(static_cast<inttype>(1));
         }
         else
         {
@@ -1370,7 +1428,7 @@ yyreduce:
   case 7:
 
     {
-        if ((yyvsp[-1]) == 0)
+        if ((yyvsp[-1]).value == 0)
         {
             // Ignore errors in the short-circuited part of the expression.
             // ESSL3.00 section 3.4:
@@ -1386,10 +1444,10 @@ yyreduce:
   case 8:
 
     {
-        if ((yyvsp[-3]) == 0)
+        if ((yyvsp[-3]).value == 0)
         {
             context->endIgnoreErrors();
-            (yyval) = static_cast<YYSTYPE>(0);
+            (yyval) = TaggedInt(static_cast<inttype>(0));
         }
         else
         {
@@ -1506,18 +1564,18 @@ yyreduce:
   case 22:
 
     {
-        if ((yyvsp[0]) == 0)
+        if ((yyvsp[0]).value == 0)
         {
             if (!context->isIgnoringErrors())
             {
                 std::ostringstream stream;
-                stream << (yyvsp[-2]) << " % " << (yyvsp[0]);
+                stream << (yyvsp[-2]).value << " % " << (yyvsp[0]).value;
                 std::string text = stream.str();
                 context->diagnostics->report(pp::Diagnostics::PP_DIVISION_BY_ZERO,
                                              context->token->location,
                                              text.c_str());
             }
-            (yyval) = static_cast<YYSTYPE>(0);
+            (yyval) = TaggedInt(static_cast<inttype>(0));
         }
         else
         {
@@ -1530,18 +1588,18 @@ yyreduce:
   case 23:
 
     {
-        if ((yyvsp[0]) == 0)
+        if ((yyvsp[0]).value == 0)
         {
             if (!context->isIgnoringErrors())
             {
                 std::ostringstream stream;
-                stream << (yyvsp[-2]) << " / " << (yyvsp[0]);
+                stream << (yyvsp[-2]).value << " / " << (yyvsp[0]).value;
                 std::string text = stream.str();
                 context->diagnostics->report(pp::Diagnostics::PP_DIVISION_BY_ZERO,
                                             context->token->location,
                                             text.c_str());
             }
-            (yyval) = static_cast<YYSTYPE>(0);
+            (yyval) = TaggedInt(static_cast<inttype>(0));
         }
         else
         {
@@ -1847,17 +1905,16 @@ int yylex(YYSTYPE *lvalp, Context *context)
             context->diagnostics->report(pp::Diagnostics::PP_INTEGER_OVERFLOW,
                                          token->location, token->text);
         }
-        *lvalp = static_cast<YYSTYPE>(val);
+        lvalp->value = static_cast<inttype>(val);
+        lvalp->location = token->location;
+        lvalp->text = token->text;
         type = TOK_CONST_INT;
         break;
       }
       case pp::Token::IDENTIFIER:
-        if (!context->isIgnoringErrors())
-        {
-            context->diagnostics->report(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
-                                         token->location, token->text);
-        }
-        *lvalp = static_cast<YYSTYPE>(-1);
+        lvalp->value = static_cast<inttype>(-1);
+        lvalp->location = token->location;
+        lvalp->text = token->text;
         type = TOK_IDENTIFIER;
         break;
       case pp::Token::OP_OR:

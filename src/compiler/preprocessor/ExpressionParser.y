@@ -47,11 +47,56 @@ WHICH GENERATES THE GLSL ES preprocessor expression parser.
 #include "Token.h"
 
 #if defined(_MSC_VER)
-typedef __int64 YYSTYPE;
+typedef __int64 inttype;
 #else
 #include <stdint.h>
-typedef intmax_t YYSTYPE;
+typedef intmax_t inttype;
 #endif  // _MSC_VER
+
+#define TAGGED_INT_OP(OP)                         \
+    TaggedInt operator OP(const TaggedInt &other) \
+    {                                             \
+        return TaggedInt(value OP other.value);   \
+    }
+#define TAGGED_INT_UNARY_OP(OP) \
+    TaggedInt operator OP() { return TaggedInt(OP(value)); }
+
+// Integer tagged with source location and token text so that error messages
+// can be generated during parsing instead of lexing.
+struct TaggedInt
+{
+    TaggedInt() = default;
+    explicit TaggedInt(inttype aValue) : value(aValue) {}
+
+    inttype value;
+    pp::SourceLocation location;
+    std::string text;
+
+    TAGGED_INT_OP(||)
+    TAGGED_INT_OP(&&)
+    TAGGED_INT_OP(|)
+    TAGGED_INT_OP(^)
+    TAGGED_INT_OP(&)
+    TAGGED_INT_OP(!=)
+    TAGGED_INT_OP(==)
+    TAGGED_INT_OP(>=)
+    TAGGED_INT_OP(<=)
+    TAGGED_INT_OP(>)
+    TAGGED_INT_OP(<)
+    TAGGED_INT_OP(>>)
+    TAGGED_INT_OP(<<)
+    TAGGED_INT_OP(-)
+    TAGGED_INT_OP(+)
+    TAGGED_INT_OP(%)
+    TAGGED_INT_OP(/)
+    TAGGED_INT_OP(*)
+    TAGGED_INT_UNARY_OP(!)
+    TAGGED_INT_UNARY_OP(~)
+    TAGGED_INT_UNARY_OP(-)
+    TAGGED_INT_UNARY_OP(+)
+};
+typedef TaggedInt YYSTYPE;
+
 #define YYENABLE_NLS 0
 #define YYLTYPE_IS_TRIVIAL 1
 #define YYSTYPE_IS_TRIVIAL 1
@@ -103,16 +148,23 @@ static void yyerror(Context* context, const char* reason);
 
 input
     : expression {
-        *(context->result) = static_cast<int>($1);
+        *(context->result) = static_cast<int>($1.value);
         YYACCEPT;
     }
 ;
 
 expression
     : TOK_CONST_INT
-    | TOK_IDENTIFIER
+    | TOK_IDENTIFIER {
+        if (!context->isIgnoringErrors())
+        {
+            context->diagnostics->report(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
+                                         $1.location, $1.text);
+        }
+        $$ = $1;
+    }
     | expression TOK_OP_OR {
-        if ($1 != 0)
+        if ($1.value != 0)
         {
             // Ignore errors in the short-circuited part of the expression.
             // ESSL3.00 section 3.4:
@@ -122,10 +174,10 @@ expression
             context->startIgnoreErrors();
         }
     } expression {
-        if ($1 != 0)
+        if ($1.value != 0)
         {
             context->endIgnoreErrors();
-            $$ = static_cast<YYSTYPE>(1);
+            $$ = TaggedInt(static_cast<inttype>(1));
         }
         else
         {
@@ -133,7 +185,7 @@ expression
         }
     }
     | expression TOK_OP_AND {
-        if ($1 == 0)
+        if ($1.value == 0)
         {
             // Ignore errors in the short-circuited part of the expression.
             // ESSL3.00 section 3.4:
@@ -143,10 +195,10 @@ expression
             context->startIgnoreErrors();
         }
     } expression {
-        if ($1 == 0)
+        if ($1.value == 0)
         {
             context->endIgnoreErrors();
-            $$ = static_cast<YYSTYPE>(0);
+            $$ = TaggedInt(static_cast<inttype>(0));
         }
         else
         {
@@ -193,18 +245,18 @@ expression
         $$ = $1 + $3;
     }
     | expression '%' expression {
-        if ($3 == 0)
+        if ($3.value == 0)
         {
             if (!context->isIgnoringErrors())
             {
                 std::ostringstream stream;
-                stream << $1 << " % " << $3;
+                stream << $1.value << " % " << $3.value;
                 std::string text = stream.str();
                 context->diagnostics->report(pp::Diagnostics::PP_DIVISION_BY_ZERO,
                                              context->token->location,
                                              text.c_str());
             }
-            $$ = static_cast<YYSTYPE>(0);
+            $$ = TaggedInt(static_cast<inttype>(0));
         }
         else
         {
@@ -212,18 +264,18 @@ expression
         }
     }
     | expression '/' expression {
-        if ($3 == 0)
+        if ($3.value == 0)
         {
             if (!context->isIgnoringErrors())
             {
                 std::ostringstream stream;
-                stream << $1 << " / " << $3;
+                stream << $1.value << " / " << $3.value;
                 std::string text = stream.str();
                 context->diagnostics->report(pp::Diagnostics::PP_DIVISION_BY_ZERO,
                                             context->token->location,
                                             text.c_str());
             }
-            $$ = static_cast<YYSTYPE>(0);
+            $$ = TaggedInt(static_cast<inttype>(0));
         }
         else
         {
@@ -268,17 +320,16 @@ int yylex(YYSTYPE *lvalp, Context *context)
             context->diagnostics->report(pp::Diagnostics::PP_INTEGER_OVERFLOW,
                                          token->location, token->text);
         }
-        *lvalp = static_cast<YYSTYPE>(val);
+        lvalp->value = static_cast<inttype>(val);
+        lvalp->location = token->location;
+        lvalp->text = token->text;
         type = TOK_CONST_INT;
         break;
       }
       case pp::Token::IDENTIFIER:
-        if (!context->isIgnoringErrors())
-        {
-            context->diagnostics->report(pp::Diagnostics::PP_CONDITIONAL_UNEXPECTED_TOKEN,
-                                         token->location, token->text);
-        }
-        *lvalp = static_cast<YYSTYPE>(-1);
+        lvalp->value = static_cast<inttype>(-1);
+        lvalp->location = token->location;
+        lvalp->text = token->text;
         type = TOK_IDENTIFIER;
         break;
       case pp::Token::OP_OR:
