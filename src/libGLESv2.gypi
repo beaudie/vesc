@@ -167,7 +167,6 @@
         [
             'libANGLE/renderer/d3d/BufferD3D.cpp',
             'libANGLE/renderer/d3d/BufferD3D.h',
-            'libANGLE/renderer/d3d/CompilerD3D.cpp',
             'libANGLE/renderer/d3d/CompilerD3D.h',
             'libANGLE/renderer/d3d/copyimage.cpp',
             'libANGLE/renderer/d3d/copyimage.h',
@@ -394,7 +393,6 @@
             'libANGLE/renderer/gl/BlitGL.h',
             'libANGLE/renderer/gl/BufferGL.cpp',
             'libANGLE/renderer/gl/BufferGL.h',
-            'libANGLE/renderer/gl/CompilerGL.cpp',
             'libANGLE/renderer/gl/CompilerGL.h',
             'libANGLE/renderer/gl/DisplayGL.cpp',
             'libANGLE/renderer/gl/DisplayGL.h',
