@@ -116,14 +116,20 @@ void skipUntilEOD(pp::Lexer *lexer, pp::Token *token)
     }
 }
 
-bool isMacroNameReserved(const std::string &name)
+bool hasDoubleUnderscores(const std::string &name)
 {
-    // Names prefixed with "GL_" are reserved.
+    return (name.find("__") != std::string::npos);
+}
+
+bool isMacroNameReserved(const std::string &name, int shaderVersion)
+{
+    // Names prefixed with "GL_" are reserved and result in a compile-time error.
     if (name.substr(0, 3) == "GL_")
         return true;
 
-    // Names containing two consecutive underscores are reserved.
-    if (name.find("__") != std::string::npos)
+    // Names containing two consecutive underscores are reserved and result in an error in
+    // GLSL ES versions prior to 3.00. In GLSL ES >= 3.00, double underscores are allowed.
+    if (shaderVersion < 300 && hasDoubleUnderscores(name))
         return true;
 
     return false;
@@ -285,11 +291,18 @@ void DirectiveParser::parseDefine(Token *token)
                              token->location, token->text);
         return;
     }
-    if (isMacroNameReserved(token->text))
+    if (isMacroNameReserved(token->text, mShaderVersion))
     {
         mDiagnostics->report(Diagnostics::PP_MACRO_NAME_RESERVED,
                              token->location, token->text);
         return;
+    }
+    // On ESSL 3.00 and above, using double underscores is allowed,
+    // but may result in unintended behavior, so a warning is issued.
+    if (hasDoubleUnderscores(token->text))
+    {
+        mDiagnostics->report(Diagnostics::PP_WARNING_MACRO_NAME_RESERVED, token->location,
+                             token->text);
     }
 
     Macro macro;
