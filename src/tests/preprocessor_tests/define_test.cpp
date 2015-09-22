@@ -95,6 +95,30 @@ TEST_F(DefineTest, ReservedUnderScore2)
     preprocess(input, expected);
 }
 
+// Defining a macro name with a double underscore should not result in an error in GLSL ES 3.00.
+TEST_F(DefineTest, ReservedUnderscoreESSL3)
+{
+    const char *input =
+        "#version 300 es\n"
+        "#define foo__bar baz\n"
+        "foo__bar\n";
+    const char *expected =
+        "\n"
+        "\n"
+        "baz\n";
+
+    EXPECT_CALL(mDirectiveHandler,
+                handleVersion(pp::SourceLocation(0, 1), 300));
+
+    EXPECT_CALL(mDiagnostics,
+                print(pp::Diagnostics::PP_WARNING_MACRO_NAME_RESERVED,
+                      pp::SourceLocation(0, 2),
+                      "foo__bar"));
+
+    preprocess(input, expected);
+}
+
+
 TEST_F(DefineTest, ReservedGL)
 {
     const char* input = "#define GL_foo bar\n"
