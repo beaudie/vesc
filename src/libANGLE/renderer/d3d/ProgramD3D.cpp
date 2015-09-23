@@ -1133,11 +1133,11 @@ LinkResult ProgramD3D::link(const gl::Data &data, gl::InfoLog &infoLog)
     mSamplersVS.resize(data.caps->maxVertexTextureImageUnits);
     mSamplersPS.resize(data.caps->maxTextureImageUnits);
 
-    mVertexHLSL = vertexShaderD3D->getTranslatedSource();
+    mVertexHLSL = vertexShader->getTranslatedSource();
     vertexShaderD3D->generateWorkarounds(&mVertexWorkarounds);
-    mShaderVersion = vertexShaderD3D->getShaderVersion();
+    mShaderVersion = vertexShader->getShaderVersion();
 
-    mPixelHLSL = fragmentShaderD3D->getTranslatedSource();
+    mPixelHLSL = fragmentShader->getTranslatedSource();
     fragmentShaderD3D->generateWorkarounds(&mPixelWorkarounds);
 
     if (mRenderer->getRendererLimitations().noFrontFacingSupport)
