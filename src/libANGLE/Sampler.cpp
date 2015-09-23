@@ -9,12 +9,20 @@
 
 #include "libANGLE/Sampler.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/renderer/ImplFactory.h"
+#include "libANGLE/renderer/SamplerImpl.h"
 
 namespace gl
 {
 
-Sampler::Sampler(GLuint id) : RefCountObject(id), mSamplerState()
+Sampler::Sampler(rx::ImplFactory *factory, GLuint id)
+    : mImpl(factory->createSampler()), RefCountObject(id), mSamplerState()
 {
+}
+
+Sampler::~Sampler()
+{
+    SafeDelete(mImpl);
 }
 
 void Sampler::setMinFilter(GLenum minFilter)
@@ -120,6 +128,16 @@ GLenum Sampler::getCompareFunc() const
 const SamplerState &Sampler::getSamplerState() const
 {
     return mSamplerState;
+}
+
+const rx::SamplerImpl *Sampler::getImplementation() const
+{
+    return mImpl;
+}
+
+rx::SamplerImpl *Sampler::getImplementation()
+{
+    return mImpl;
 }
 
 }
