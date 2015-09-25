@@ -151,7 +151,8 @@ destType bitCast(const sourceType &source)
 
 inline unsigned short float32ToFloat16(float fp32)
 {
-    unsigned int fp32i = (unsigned int&)fp32;
+    unsigned int fp32i;
+    memcpy(&fp32i, &fp32, sizeof(float));
     unsigned int sign = (fp32i & 0x80000000) >> 16;
     unsigned int abs = fp32i & 0x7FFFFFFF;
 

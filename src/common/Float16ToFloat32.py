@@ -71,8 +71,13 @@ print "};\n"
 
 print """float float16ToFloat32(unsigned short h)
 {
-    unsigned i32 = g_mantissa[g_offset[h >> 10] + (h & 0x3ff)] + g_exponent[h >> 10];
-    return *(float*) &i32;
+    union
+    {
+        unsigned i32;
+        float f32;
+    } result;
+    result.i32 = g_mantissa[g_offset[h >> 10] + (h & 0x3ff)] + g_exponent[h >> 10];
+    return result.f32;
 }
 }
 """
