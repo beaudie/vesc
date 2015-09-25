@@ -207,6 +207,19 @@ void StateManagerGL::deleteRenderbuffer(GLuint rbo)
     }
 }
 
+void StateManagerGL::deleteTransformFeedback(GLuint transformFeedback)
+{
+    if (transformFeedback != 0)
+    {
+        if (mTransformFeedback == transformFeedback)
+        {
+            bindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
+        }
+
+        mFunctions->deleteTransformFeedbacks(1, &transformFeedback);
+    }
+}
+
 void StateManagerGL::useProgram(GLuint program)
 {
     if (mProgram != program)
@@ -407,6 +420,16 @@ void StateManagerGL::bindRenderbuffer(GLenum type, GLuint renderbuffer)
     {
         mRenderbuffer = renderbuffer;
         mFunctions->bindRenderbuffer(type, mRenderbuffer);
+    }
+}
+
+void StateManagerGL::bindTransformFeedback(GLenum type, GLuint transformFeedback)
+{
+    ASSERT(type == GL_TRANSFORM_FEEDBACK);
+    if (mTransformFeedback != transformFeedback)
+    {
+        mTransformFeedback = transformFeedback;
+        mFunctions->bindTransformFeedback(type, mTransformFeedback);
     }
 }
 

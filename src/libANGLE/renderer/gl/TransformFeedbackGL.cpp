@@ -9,16 +9,28 @@
 #include "libANGLE/renderer/gl/TransformFeedbackGL.h"
 
 #include "common/debug.h"
+#include "libANGLE/renderer/gl/FunctionsGL.h"
+#include "libANGLE/renderer/gl/StateManagerGL.h"
 
 namespace rx
 {
 
-TransformFeedbackGL::TransformFeedbackGL()
-    : TransformFeedbackImpl()
-{}
+TransformFeedbackGL::TransformFeedbackGL(const FunctionsGL *functions, StateManagerGL *stateManager, size_t maxTransformFeedbackBufferBindings)
+    : TransformFeedbackImpl(),
+      mFunctions(functions),
+      mStateManager(stateManager),
+      mTransformFeedbackID(0),
+      mCurrentGenericBufferID(0),
+      mCurrentIndexedBufferIDs(maxTransformFeedbackBufferBindings, 0)
+{
+    mFunctions->genTransformFeedbacks(1, &mTransformFeedbackID);
+}
 
 TransformFeedbackGL::~TransformFeedbackGL()
-{}
+{
+    mStateManager->deleteTransformFeedback(mTransformFeedbackID);
+    mTransformFeedbackID = 0;
+}
 
 void TransformFeedbackGL::begin(GLenum primitiveMode)
 {

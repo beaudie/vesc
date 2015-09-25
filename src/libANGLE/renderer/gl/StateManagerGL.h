@@ -40,6 +40,7 @@ class StateManagerGL final : angle::NonCopyable
     void deleteBuffer(GLuint buffer);
     void deleteFramebuffer(GLuint fbo);
     void deleteRenderbuffer(GLuint rbo);
+    void deleteTransformFeedback(GLuint transformFeedback);
 
     void useProgram(GLuint program);
     void bindVertexArray(GLuint vao, GLuint elementArrayBuffer);
@@ -48,6 +49,7 @@ class StateManagerGL final : angle::NonCopyable
     void bindTexture(GLenum type, GLuint texture);
     void bindFramebuffer(GLenum type, GLuint framebuffer);
     void bindRenderbuffer(GLenum type, GLuint renderbuffer);
+    void bindTransformFeedback(GLenum type, GLuint transformFeedback);
 
     void setAttributeCurrentData(size_t index, const gl::VertexAttribCurrentValueData &data);
 
@@ -138,6 +140,8 @@ class StateManagerGL final : angle::NonCopyable
 
     size_t mTextureUnitIndex;
     std::map<GLenum, std::vector<GLuint>> mTextures;
+
+    GLuint mTransformFeedback;
 
     GLint mUnpackAlignment;
     GLint mUnpackRowLength;

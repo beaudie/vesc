@@ -294,7 +294,7 @@ FenceSyncImpl *RendererGL::createFenceSync()
 
 TransformFeedbackImpl *RendererGL::createTransformFeedback()
 {
-    return new TransformFeedbackGL();
+    return new TransformFeedbackGL(mFunctions, mStateManager, getRendererCaps().maxTransformFeedbackSeparateComponents);
 }
 
 void RendererGL::insertEventMarker(GLsizei, const char *)
