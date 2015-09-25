@@ -9,21 +9,41 @@
 #ifndef LIBANGLE_RENDERER_GL_QUERYGL_H_
 #define LIBANGLE_RENDERER_GL_QUERYGL_H_
 
+#include <deque>
+
 #include "libANGLE/renderer/QueryImpl.h"
 
 namespace rx
 {
 
+class FunctionsGL;
+class StateManagerGL;
+
 class QueryGL : public QueryImpl
 {
   public:
-    QueryGL(GLenum type);
+    QueryGL(GLenum type, const FunctionsGL *functions, StateManagerGL *stateManager);
     ~QueryGL() override;
 
     gl::Error begin() override;
     gl::Error end() override;
     gl::Error getResult(GLuint *params) override;
     gl::Error isResultAvailable(GLuint *available) override;
+
+    gl::Error pause();
+    gl::Error resume();
+
+  private:
+    gl::Error flush(bool force);
+
+    GLenum mType;
+
+    const FunctionsGL *mFunctions;
+    StateManagerGL *mStateManager;
+
+    GLuint mActiveQuery;
+    std::deque<GLuint> mPendingQueries;
+    GLuint mResultSum;
 };
 
 }
