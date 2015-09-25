@@ -66,7 +66,13 @@ Context::Context(const egl::Config *config,
     : mRenderer(renderer),
       mConfig(config),
       mCurrentSurface(nullptr),
-      mData(clientVersion, mState, mCaps, mTextureCaps, mExtensions, nullptr)
+      mData(reinterpret_cast<uintptr_t>(this),
+            clientVersion,
+            mState,
+            mCaps,
+            mTextureCaps,
+            mExtensions,
+            nullptr)
 {
     ASSERT(robustAccess == false);   // Unimplemented
 

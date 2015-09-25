@@ -2049,6 +2049,12 @@ bool Program::linkValidateTransformFeedback(InfoLog &infoLog,
                 }
                 uniqueNames.insert(tfVaryingName);
 
+                if (varying->isArray())
+                {
+                    infoLog << "Capture of arrays not currently supported.";
+                    return false;
+                }
+
                 // TODO(jmadill): Investigate implementation limits on D3D11
                 size_t componentCount = gl::VariableComponentCount(varying->type);
                 if (mData.mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS &&
