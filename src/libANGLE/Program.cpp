@@ -2049,6 +2049,11 @@ bool Program::linkValidateTransformFeedback(InfoLog &infoLog,
 
                 // TODO(jmadill): Investigate implementation limits on D3D11
                 size_t componentCount = gl::VariableComponentCount(varying->type);
+                if (varying->isArray())
+                {
+                    componentCount *= varying->arraySize;
+                }
+
                 if (mData.mTransformFeedbackBufferMode == GL_SEPARATE_ATTRIBS &&
                     componentCount > caps.maxTransformFeedbackSeparateComponents)
                 {
