@@ -16,10 +16,15 @@ namespace gl
 
 struct RGB9E5Data
 {
-    unsigned int R : 9;
-    unsigned int G : 9;
-    unsigned int B : 9;
-    unsigned int E : 5;
+    union {
+        struct {
+            unsigned int R : 9;
+            unsigned int G : 9;
+            unsigned int B : 9;
+            unsigned int E : 5;
+        } component;
+        unsigned int RGBE;
+    };
 };
 
 // B is the exponent bias (15)
@@ -47,21 +52,21 @@ unsigned int convertRGBFloatsTo999E5(float red, float green, float blue)
     const int exp_s = static_cast<int>((max_s < pow(2.0f, g_sharedexp_mantissabits)) ? exp_p : exp_p + 1);
 
     RGB9E5Data output;
-    output.R = static_cast<unsigned int>(floor((red_c / (pow(2.0f, exp_s - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
-    output.G = static_cast<unsigned int>(floor((green_c / (pow(2.0f, exp_s - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
-    output.B = static_cast<unsigned int>(floor((blue_c / (pow(2.0f, exp_s - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
-    output.E = exp_s;
+    output.component.R = static_cast<unsigned int>(floor((red_c / (pow(2.0f, exp_s - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
+    output.component.G = static_cast<unsigned int>(floor((green_c / (pow(2.0f, exp_s - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
+    output.component.B = static_cast<unsigned int>(floor((blue_c / (pow(2.0f, exp_s - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
+    output.component.E = exp_s;
 
-    return *reinterpret_cast<unsigned int*>(&output);
+    return output.RGBE;
 }
 
 void convert999E5toRGBFloats(unsigned int input, float *red, float *green, float *blue)
 {
     const RGB9E5Data *inputData = reinterpret_cast<const RGB9E5Data*>(&input);
 
-    *red = inputData->R * pow(2.0f, (int)inputData->E - g_sharedexp_bias - g_sharedexp_mantissabits);
-    *green = inputData->G * pow(2.0f, (int)inputData->E - g_sharedexp_bias - g_sharedexp_mantissabits);
-    *blue = inputData->B * pow(2.0f, (int)inputData->E - g_sharedexp_bias - g_sharedexp_mantissabits);
+    *red = inputData->component.R * pow(2.0f, (int)inputData->component.E - g_sharedexp_bias - g_sharedexp_mantissabits);
+    *green = inputData->component.G * pow(2.0f, (int)inputData->component.E - g_sharedexp_bias - g_sharedexp_mantissabits);
+    *blue = inputData->component.B * pow(2.0f, (int)inputData->component.E - g_sharedexp_bias - g_sharedexp_mantissabits);
 }
 
 }
