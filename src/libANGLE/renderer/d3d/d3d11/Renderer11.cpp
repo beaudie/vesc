@@ -1196,9 +1196,20 @@ gl::Error Renderer11::setDepthStencilState(const gl::DepthStencilState &depthSte
         memcmp(&depthStencilState, &mCurDepthStencilState, sizeof(gl::DepthStencilState)) != 0 ||
         stencilRef != mCurStencilRef || stencilBackRef != mCurStencilBackRef)
     {
-        ASSERT(depthStencilState.stencilWritemask == depthStencilState.stencilBackWritemask);
+        // Max D3D11 stencil reference value is 0xFF, corresponding to the max 8 bits in a stencil
+        // buffer
+        // GL specifies we should clamp the ref value to the nearest bit depth when doing stencil
+        // ops
+        static_assert(D3D11_DEFAULT_STENCIL_READ_MASK == 0xFF,
+                      "Unexpected value of D3D11_DEFAULT_STENCIL_READ_MASK");
+        static_assert(D3D11_DEFAULT_STENCIL_WRITE_MASK == 0xFF,
+                      "Unexpected value of D3D11_DEFAULT_STENCIL_WRITE_MASK");
+
+        ASSERT((depthStencilState.stencilWritemask & D3D11_DEFAULT_STENCIL_WRITE_MASK) ==
+               (depthStencilState.stencilBackWritemask & D3D11_DEFAULT_STENCIL_WRITE_MASK));
         ASSERT(stencilRef == stencilBackRef);
-        ASSERT(depthStencilState.stencilMask == depthStencilState.stencilBackMask);
+        ASSERT((depthStencilState.stencilMask & 0xFF) ==
+               (depthStencilState.stencilBackMask & 0xFF));
 
         ID3D11DepthStencilState *dxDepthStencilState = NULL;
         gl::Error error = mStateCache.getDepthStencilState(depthStencilState, &dxDepthStencilState);
@@ -1209,10 +1220,6 @@ gl::Error Renderer11::setDepthStencilState(const gl::DepthStencilState &depthSte
 
         ASSERT(dxDepthStencilState);
 
-        // Max D3D11 stencil reference value is 0xFF, corresponding to the max 8 bits in a stencil buffer
-        // GL specifies we should clamp the ref value to the nearest bit depth when doing stencil ops
-        static_assert(D3D11_DEFAULT_STENCIL_READ_MASK == 0xFF, "Unexpected value of D3D11_DEFAULT_STENCIL_READ_MASK");
-        static_assert(D3D11_DEFAULT_STENCIL_WRITE_MASK == 0xFF, "Unexpected value of D3D11_DEFAULT_STENCIL_WRITE_MASK");
         UINT dxStencilRef = std::min<UINT>(stencilRef, 0xFFu);
 
         mDeviceContext->OMSetDepthStencilState(dxDepthStencilState, dxStencilRef);
