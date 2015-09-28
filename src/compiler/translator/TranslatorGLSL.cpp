@@ -10,6 +10,7 @@
 #include "compiler/translator/BuiltInFunctionEmulatorGLSL.h"
 #include "compiler/translator/EmulatePrecision.h"
 #include "compiler/translator/OutputGLSL.h"
+#include "compiler/translator/RewriteDoWhile.h"
 #include "compiler/translator/VersionGLSL.h"
 
 TranslatorGLSL::TranslatorGLSL(sh::GLenum type,
@@ -29,8 +30,16 @@ void TranslatorGLSL::initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu, i
     InitBuiltInFunctionEmulatorForGLSLMissingFunctions(emu, getShaderType(), targetGLSLVersion);
 }
 
-void TranslatorGLSL::translate(TIntermNode *root, int) {
+void TranslatorGLSL::translate(TIntermNode *root, int compileOptions)
+{
     TInfoSinkBase& sink = getInfoSink().obj;
+
+    unsigned int temporaryIndex = 0;
+
+    if (compileOptions & SH_REWRITE_DO_WHILE_LOOPS)
+    {
+        RewriteDoWhile(root, &temporaryIndex);
+    }
 
     // Write GLSL version.
     writeVersion(root);
