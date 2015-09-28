@@ -15,7 +15,9 @@ namespace rx
 struct WorkaroundsGL
 {
     WorkaroundsGL()
-        : avoid1BitAlphaTextureFormats(false), rgba4IsNotSupportedForColorRendering(false)
+        : avoid1BitAlphaTextureFormats(false),
+          rgba4IsNotSupportedForColorRendering(false),
+          doWhileGLSLCausesGPUHang(false)
     {
     }
 
@@ -32,6 +34,15 @@ struct WorkaroundsGL
     // returns GL_FRAMEBUFFER_UNSUPPORTED. Work around this by using a known color-renderable
     // format.
     bool rgba4IsNotSupportedForColorRendering;
+
+    // On Mac some GLSL constructs involving do-while loops cause GPU hangs, such as the following:
+    //  int i = 1;
+    //  do {
+    //      i --;
+    //      continue;
+    //  } while (i > 0)
+    // Work around this by rewriting the do-while to use another GLSL construct (block + while)
+    bool doWhileGLSLCausesGPUHang;
 };
 }
 
