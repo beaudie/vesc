@@ -207,6 +207,9 @@ egl::Error WindowSurfaceCGL::initialize()
     mDisplayLink = new DisplayLink;
     mDisplayLink->start();
 
+    [mLayer setOpaque : YES];
+    [mLayer setAffineTransform : CGAffineTransformMakeScale(1.0, -1.0)];
+
     return egl::Error(EGL_SUCCESS);
 }
 
