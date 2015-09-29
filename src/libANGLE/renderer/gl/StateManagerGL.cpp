@@ -11,6 +11,7 @@
 #include "common/BitSetIterator.h"
 #include "libANGLE/Data.h"
 #include "libANGLE/Framebuffer.h"
+#include "libANGLE/TransformFeedback.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/Query.h"
 #include "libANGLE/renderer/gl/BufferGL.h"
@@ -19,6 +20,7 @@
 #include "libANGLE/renderer/gl/ProgramGL.h"
 #include "libANGLE/renderer/gl/SamplerGL.h"
 #include "libANGLE/renderer/gl/TextureGL.h"
+#include "libANGLE/renderer/gl/TransformFeedbackGL.h"
 #include "libANGLE/renderer/gl/VertexArrayGL.h"
 #include "libANGLE/renderer/gl/QueryGL.h"
 
@@ -34,6 +36,8 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mVAO(0),
       mVertexAttribCurrentValues(rendererCaps.maxVertexAttributes),
       mBuffers(),
+      mTransformFeedback(0),
+      mContextTransformFeedbacks(),
       mQueries(),
       mContextQueries(),
       mPrevDrawContext(0),
@@ -238,6 +242,19 @@ void StateManagerGL::deleteRenderbuffer(GLuint rbo)
         }
 
         mFunctions->deleteRenderbuffers(1, &rbo);
+    }
+}
+
+void StateManagerGL::deleteTransformFeedback(GLuint transformFeedback)
+{
+    if (transformFeedback != 0)
+    {
+        if (mTransformFeedback == transformFeedback)
+        {
+            bindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
+        }
+
+        mFunctions->deleteTransformFeedbacks(1, &transformFeedback);
     }
 }
 
@@ -469,6 +486,16 @@ void StateManagerGL::bindRenderbuffer(GLenum type, GLuint renderbuffer)
     }
 }
 
+void StateManagerGL::bindTransformFeedback(GLenum type, GLuint transformFeedback)
+{
+    ASSERT(type == GL_TRANSFORM_FEEDBACK);
+    if (mTransformFeedback != transformFeedback)
+    {
+        mTransformFeedback = transformFeedback;
+        mFunctions->bindTransformFeedback(type, mTransformFeedback);
+    }
+}
+
 void StateManagerGL::beginQuery(GLenum type, GLuint query)
 {
     // Make sure this is a valid query type and there is no current active query of this type
@@ -596,9 +623,15 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Data &data)
     // Seamless cubemaps are required for ES3 and higher contexts.
     setTextureCubemapSeamlessEnabled(data.clientVersion >= 3);
 
-    // If the context has changed, pause the previous context's queries
+    // If the context has changed, pause the previous context's transform feedback and queries
     if (data.context != mPrevDrawContext)
     {
+        const TransformFeedbackGL *prevTF = mContextTransformFeedbacks[mPrevDrawContext];
+        if (prevTF != nullptr)
+        {
+            prevTF->syncPausedState(true);
+        }
+
         auto &prevQueries = mContextQueries[mPrevDrawContext];
         for (QueryGL *prevQuery : prevQueries)
         {
@@ -607,6 +640,16 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Data &data)
     }
 
     mPrevDrawContext = data.context;
+
+    // Set the current transform feedback state
+    gl::TransformFeedback *transformFeedback = state.getCurrentTransformFeedback();
+    TransformFeedbackGL *transformFeedbackGL = GetImplAs<TransformFeedbackGL>(transformFeedback);
+    bindTransformFeedback(GL_TRANSFORM_FEEDBACK, transformFeedbackGL->getTransformFeedbackID());
+    transformFeedbackGL->syncActiveState(transformFeedback->isActive(),
+                                         transformFeedback->getPrimitiveMode());
+    transformFeedbackGL->syncPausedState(transformFeedback->isPaused());
+
+    mContextTransformFeedbacks[mPrevDrawContext] = transformFeedbackGL;
 
     // Set the current query state
     auto &activeQueries = mContextQueries[mPrevDrawContext];
