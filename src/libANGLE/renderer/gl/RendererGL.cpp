@@ -126,7 +126,22 @@ gl::Error RendererGL::flush()
 
 gl::Error RendererGL::finish()
 {
+#ifdef NDEBUG
+    if (mWorkarounds.finishDoesNotCauseQueriesToBeAvailable && mFunctions->debugMessageControl)
+    {
+        mFunctions->enable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    }
+#endif
+
     mFunctions->finish();
+
+#ifdef NDEBUG
+    if (mWorkarounds.finishDoesNotCauseQueriesToBeAvailable && mFunctions->debugMessageControl)
+    {
+        mFunctions->disable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    }
+#endif
+
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -280,7 +295,7 @@ VertexArrayImpl *RendererGL::createVertexArray(const gl::VertexArray::Data &data
 
 QueryImpl *RendererGL::createQuery(GLenum type)
 {
-    return new QueryGL(type);
+    return new QueryGL(type, mFunctions, mStateManager);
 }
 
 FenceNVImpl *RendererGL::createFenceNV()

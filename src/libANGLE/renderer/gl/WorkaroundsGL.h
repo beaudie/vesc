@@ -17,7 +17,8 @@ struct WorkaroundsGL
     WorkaroundsGL()
         : avoid1BitAlphaTextureFormats(false),
           rgba4IsNotSupportedForColorRendering(false),
-          doesSRGBClearsOnLinearFramebufferAttachments(false)
+          doesSRGBClearsOnLinearFramebufferAttachments(false),
+          finishDoesNotCauseQueriesToBeAvailable(false)
     {
     }
 
@@ -40,6 +41,9 @@ struct WorkaroundsGL
     // blending.  It only seems to do this when the framebuffer has only linear attachments, mixed
     // attachments appear to get the correct clear color.
     bool doesSRGBClearsOnLinearFramebufferAttachments;
+
+    // Calling glFinish doesn't cause all queries to report that the result is available on some (NVIDIA) drivers.  It was found that enabling GL_DEBUG_OUTPUT_SYNCHRONOUS before the finish causes it to fully finish.
+    bool finishDoesNotCauseQueriesToBeAvailable;
 };
 }
 
