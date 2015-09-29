@@ -66,6 +66,13 @@ class OcclusionQueriesTest : public ANGLETest
 
 TEST_P(OcclusionQueriesTest, IsOccluded)
 {
+    if (getClientVersion() < 3 && !extensionEnabled("GL_EXT_occlusion_query_boolean"))
+    {
+        std::cout << "Test skipped because ES3 or GL_EXT_occlusion_query_boolean are not available."
+                  << std::endl;
+        return;
+    }
+
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -106,6 +113,13 @@ TEST_P(OcclusionQueriesTest, IsOccluded)
 
 TEST_P(OcclusionQueriesTest, IsNotOccluded)
 {
+    if (getClientVersion() < 3 && !extensionEnabled("GL_EXT_occlusion_query_boolean"))
+    {
+        std::cout << "Test skipped because ES3 or GL_EXT_occlusion_query_boolean are not available."
+                  << std::endl;
+        return;
+    }
+
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -133,6 +147,13 @@ TEST_P(OcclusionQueriesTest, IsNotOccluded)
 
 TEST_P(OcclusionQueriesTest, Errors)
 {
+    if (getClientVersion() < 3 && !extensionEnabled("GL_EXT_occlusion_query_boolean"))
+    {
+        std::cout << "Test skipped because ES3 or GL_EXT_occlusion_query_boolean are not available."
+                  << std::endl;
+        return;
+    }
+
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -187,4 +208,9 @@ TEST_P(OcclusionQueriesTest, Errors)
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-ANGLE_INSTANTIATE_TEST(OcclusionQueriesTest, ES2_D3D9(), ES2_D3D11());
+ANGLE_INSTANTIATE_TEST(OcclusionQueriesTest,
+                       ES2_D3D9(),
+                       ES2_D3D11(),
+                       ES3_D3D11(),
+                       ES2_OPENGL(),
+                       ES3_OPENGL());
