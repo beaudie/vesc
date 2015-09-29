@@ -284,7 +284,7 @@ LinkedVarying::LinkedVarying(const std::string &name, GLenum type, GLsizei size,
 Program::Data::Data()
     : mAttachedFragmentShader(nullptr),
       mAttachedVertexShader(nullptr),
-      mTransformFeedbackBufferMode(GL_NONE)
+      mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS)
 {
 }
 
@@ -2050,6 +2050,12 @@ bool Program::linkValidateTransformFeedback(InfoLog &infoLog,
                     return false;
                 }
                 uniqueNames.insert(tfVaryingName);
+
+                if (varying->isArray())
+                {
+                    infoLog << "Capture of arrays not currently supported.";
+                    return false;
+                }
 
                 // TODO(jmadill): Investigate implementation limits on D3D11
                 size_t componentCount = gl::VariableComponentCount(varying->type);
