@@ -280,7 +280,7 @@ VertexArrayImpl *RendererGL::createVertexArray(const gl::VertexArray::Data &data
 
 QueryImpl *RendererGL::createQuery(GLenum type)
 {
-    return new QueryGL(type);
+    return new QueryGL(type, mFunctions, mStateManager);
 }
 
 FenceNVImpl *RendererGL::createFenceNV()
