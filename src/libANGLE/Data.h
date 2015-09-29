@@ -17,14 +17,19 @@ namespace gl
 struct Data final
 {
   public:
-    Data(GLint clientVersion, const State &state, const Caps &caps,
-         const TextureCapsMap &textureCaps, const Extensions &extensions,
+    Data(uintptr_t context,
+         GLint clientVersion,
+         const State &state,
+         const Caps &caps,
+         const TextureCapsMap &textureCaps,
+         const Extensions &extensions,
          const ResourceManager *resourceManager);
     ~Data();
 
     Data(const Data &other);
     Data &operator=(const Data &other);
 
+    uintptr_t context;
     GLint clientVersion;
     const State *state;
     const Caps *caps;

@@ -12,6 +12,7 @@
 #include "libANGLE/Data.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/VertexArray.h"
+#include "libANGLE/Query.h"
 #include "libANGLE/renderer/gl/BufferGL.h"
 #include "libANGLE/renderer/gl/FramebufferGL.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
@@ -19,15 +20,23 @@
 #include "libANGLE/renderer/gl/SamplerGL.h"
 #include "libANGLE/renderer/gl/TextureGL.h"
 #include "libANGLE/renderer/gl/VertexArrayGL.h"
+#include "libANGLE/renderer/gl/QueryGL.h"
 
 namespace rx
 {
+
+static const GLenum QueryTypes[] = { GL_ANY_SAMPLES_PASSED, GL_ANY_SAMPLES_PASSED_CONSERVATIVE,
+    GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN };
+
 StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &rendererCaps)
     : mFunctions(functions),
       mProgram(0),
       mVAO(0),
       mVertexAttribCurrentValues(rendererCaps.maxVertexAttributes),
       mBuffers(),
+      mQueries(),
+      mContextQueries(),
+      mPrevDrawContext(0),
       mTextureUnitIndex(0),
       mTextures(),
       mSamplers(rendererCaps.maxCombinedTextureImageUnits, 0),
@@ -102,6 +111,11 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
     mTextures[GL_TEXTURE_CUBE_MAP].resize(rendererCaps.maxCombinedTextureImageUnits);
     mTextures[GL_TEXTURE_2D_ARRAY].resize(rendererCaps.maxCombinedTextureImageUnits);
     mTextures[GL_TEXTURE_3D].resize(rendererCaps.maxCombinedTextureImageUnits);
+
+    for (GLenum queryType : QueryTypes)
+    {
+        mQueries[queryType] = 0;
+    }
 
     // Initialize point sprite state for desktop GL
     if (mFunctions->standard == STANDARD_GL_DESKTOP)
@@ -224,6 +238,22 @@ void StateManagerGL::deleteRenderbuffer(GLuint rbo)
         }
 
         mFunctions->deleteRenderbuffers(1, &rbo);
+    }
+}
+
+void StateManagerGL::deleteQuery(GLuint query)
+{
+    if (query != 0)
+    {
+        for (auto &activeQuery : mQueries)
+        {
+            GLuint activeQueryID = activeQuery.second;
+            if (activeQueryID == query)
+            {
+                GLenum type = activeQuery.first;
+                endQuery(type, query);
+            }
+        }
     }
 }
 
@@ -439,6 +469,24 @@ void StateManagerGL::bindRenderbuffer(GLenum type, GLuint renderbuffer)
     }
 }
 
+void StateManagerGL::beginQuery(GLenum type, GLuint query)
+{
+    // Make sure this is a valid query type and there is no current active query of this type
+    ASSERT(mQueries.find(type) != mQueries.end());
+    ASSERT(mQueries[type] == 0);
+    ASSERT(query != 0);
+
+    mQueries[type] = query;
+    mFunctions->beginQuery(type, query);
+}
+
+void StateManagerGL::endQuery(GLenum type, GLuint query)
+{
+    ASSERT(mQueries[type] == query);
+    mQueries[type] = 0;
+    mFunctions->endQuery(type);
+}
+
 gl::Error StateManagerGL::setDrawArraysState(const gl::Data &data,
                                              GLint first,
                                              GLsizei count,
@@ -547,6 +595,34 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Data &data)
 
     // Seamless cubemaps are required for ES3 and higher contexts.
     setTextureCubemapSeamlessEnabled(data.clientVersion >= 3);
+
+    // If the context has changed, pause the previous context's queries
+    if (data.context != mPrevDrawContext)
+    {
+        auto &prevQueries = mContextQueries[mPrevDrawContext];
+        for (QueryGL *prevQuery : prevQueries)
+        {
+            prevQuery->pause();
+        }
+    }
+
+    mPrevDrawContext = data.context;
+
+    // Set the current query state
+    auto &activeQueries = mContextQueries[mPrevDrawContext];
+    activeQueries.clear();
+
+    for (GLenum queryType : QueryTypes)
+    {
+        gl::Query *query = state.getActiveQuery(queryType);
+        if (query != nullptr)
+        {
+            QueryGL *queryGL = GetImplAs<QueryGL>(query);
+            queryGL->resume();
+
+            activeQueries.push_back(queryGL);
+        }
+    }
 
     return gl::Error(GL_NO_ERROR);
 }
