@@ -16,11 +16,13 @@
 #include "SampleApplication.h"
 #include "shader_utils.h"
 
+#include <iostream>
+
 class HelloTriangleSample : public SampleApplication
 {
   public:
     HelloTriangleSample()
-        : SampleApplication("HelloTriangle", 1280, 720)
+        : SampleApplication("HelloTriangle", 1280, 720, 2, 0, EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
     {
     }
 
@@ -62,6 +64,13 @@ class HelloTriangleSample : public SampleApplication
 
     virtual void draw()
     {
+        static size_t frame = 0;
+        frame++;
+
+        GLuint query = 0;
+        glGenQueriesEXT(1, &query);
+        glBeginQueryEXT(GL_ANY_SAMPLES_PASSED_EXT, query);
+
         GLfloat vertices[] =
         {
              0.0f,  0.5f, 0.0f,
@@ -83,6 +92,23 @@ class HelloTriangleSample : public SampleApplication
         glEnableVertexAttribArray(0);
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        glEndQueryEXT(GL_ANY_SAMPLES_PASSED_EXT);
+
+        glFinish();
+
+        GLuint queryFinished = 0;
+        glGetQueryObjectuivEXT(query, GL_QUERY_RESULT_AVAILABLE_EXT, &queryFinished);
+        if (queryFinished == GL_FALSE)
+        {
+            std::cout << "Query not finished on frame " << frame << std::endl;
+        }
+        else
+        {
+            std::cout << "Query finished on frame " << frame << std::endl;
+        }
+
+        glDeleteQueriesEXT(1, &query);
     }
 
   private:
