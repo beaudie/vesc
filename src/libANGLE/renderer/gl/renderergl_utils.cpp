@@ -511,6 +511,15 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
         LimitVersion(maxSupportedESVersion, gl::Version(2, 0));
     }
 
+    // Can't support ES3 without texture swizzling
+    if (!functions->isAtLeastGL(gl::Version(3, 3)) &&
+        !functions->hasGLExtension("GL_ARB_texture_swizzle") &&
+        !functions->hasGLExtension("GL_EXT_texture_swizzle") &&
+        !functions->isAtLeastGLES(gl::Version(3, 0)))
+    {
+        LimitVersion(maxSupportedESVersion, gl::Version(2, 0));
+    }
+
     // Extension support
     extensions->setTextureExtensionSupport(*textureCapsMap);
     extensions->elementIndexUint = functions->standard == STANDARD_GL_DESKTOP ||
