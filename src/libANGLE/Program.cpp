@@ -583,16 +583,9 @@ Error Program::loadBinary(GLenum binaryFormat, const void *binary, GLsizei lengt
 #if ANGLE_PROGRAM_BINARY_LOAD != ANGLE_ENABLED
     return Error(GL_NO_ERROR);
 #else
-    ASSERT(binaryFormat == mProgram->getBinaryFormat());
+    ASSERT(binaryFormat == GL_PROGRAM_BINARY_ANGLE);
 
     BinaryInputStream stream(binary, length);
-
-    GLenum format = stream.readInt<GLenum>();
-    if (format != mProgram->getBinaryFormat())
-    {
-        mInfoLog << "Invalid program binary format.";
-        return Error(GL_NO_ERROR);
-    }
 
     int majorVersion = stream.readInt<int>();
     int minorVersion = stream.readInt<int>();
@@ -710,12 +703,11 @@ Error Program::saveBinary(GLenum *binaryFormat, void *binary, GLsizei bufSize, G
 {
     if (binaryFormat)
     {
-        *binaryFormat = mProgram->getBinaryFormat();
+        *binaryFormat = GL_PROGRAM_BINARY_ANGLE;
     }
 
     BinaryOutputStream stream;
 
-    stream.writeInt(mProgram->getBinaryFormat());
     stream.writeInt(ANGLE_MAJOR_VERSION);
     stream.writeInt(ANGLE_MINOR_VERSION);
     stream.writeBytes(reinterpret_cast<const unsigned char*>(ANGLE_COMMIT_HASH), ANGLE_COMMIT_HASH_SIZE);
