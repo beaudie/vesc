@@ -129,7 +129,8 @@ bool ValidateES2TexImageParameters(Context *context, GLenum target, GLint level,
 
     if (isCompressed != actualFormatInfo.compressed)
     {
-        context->recordError(Error(GL_INVALID_OPERATION));
+        context->recordError(Error(GL_INVALID_ENUM,
+          "internalformat is not a supported compressed internal format"));
         return false;
     }
 
