@@ -552,6 +552,7 @@ void GL_APIENTRY BufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, 
 
         if (data == NULL)
         {
+            context->recordError(Error(GL_INVALID_VALUE));
             return;
         }
 
