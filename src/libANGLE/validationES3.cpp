@@ -393,16 +393,16 @@ bool ValidateES3TexImageParameters(Context *context, GLenum target, GLint level,
     const gl::InternalFormat &actualFormatInfo = gl::GetInternalFormatInfo(actualInternalFormat);
     if (isCompressed)
     {
-        if (!ValidCompressedImageSize(context, actualInternalFormat, width, height))
-        {
-            context->recordError(Error(GL_INVALID_OPERATION));
-            return false;
-        }
-
         if (!actualFormatInfo.compressed)
         {
             context->recordError(Error(GL_INVALID_ENUM));
             return false;
+        }
+
+        if (!ValidCompressedImageSize(context, actualInternalFormat, width, height))
+        {
+          context->recordError(Error(GL_INVALID_OPERATION));
+          return false;
         }
 
         if (target == GL_TEXTURE_3D)
