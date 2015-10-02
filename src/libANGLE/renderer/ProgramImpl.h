@@ -66,9 +66,23 @@ class ProgramImpl : angle::NonCopyable
     // TODO: synchronize in syncState when dirty bits exist.
     virtual void setUniformBlockBinding(GLuint uniformBlockIndex, GLuint uniformBlockBinding) = 0;
 
-    // Gather uniform block active uniform indices, and uniform block offset info.
-    virtual void gatherUniformBlockInfo(std::vector<gl::UniformBlock> *uniformBlocks,
-                                        std::vector<gl::LinkedUniform> *uniforms) = 0;
+    // Helper class to query information from packed and shared UBOs.
+    class UniformBlockInfoGatherer : angle::NonCopyable
+    {
+      public:
+        UniformBlockInfoGatherer() {}
+        virtual ~UniformBlockInfoGatherer() {}
+
+        // Return false for inactive blocks.
+        virtual bool getBlockSize(const std::string &blockName, size_t *sizeOut) const = 0;
+
+        // Returns false for inactive members.
+        virtual bool getBlockMemberInfo(const std::string &memberUniformName,
+                                        sh::BlockMemberInfo *memberInfoOut) const = 0;
+    };
+
+    // May only be called after a successful link operation.
+    virtual const UniformBlockInfoGatherer &getUniformBlockInfoGatherer() = 0;
 
   protected:
     const gl::Program::Data &mData;
