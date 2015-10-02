@@ -13,6 +13,8 @@
 #include "common/string_utils.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
+#include <iostream>
+
 namespace rx
 {
 
@@ -795,6 +797,12 @@ void FunctionsGL::initialize()
     else
     {
         profile = 0;
+    }
+
+    std::cout << ( (const char*) getString(GL_VERSION) ) << std::endl;
+    std::cout << ( (const char*) getString(GL_RENDERER) ) << std::endl;
+    for (auto &extension : extensions) {
+        std::cout << extension << std::endl;
     }
 
     // clang-format off
