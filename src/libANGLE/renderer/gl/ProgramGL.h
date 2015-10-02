@@ -61,13 +61,29 @@ class ProgramGL : public ProgramImpl
 
     void setUniformBlockBinding(GLuint uniformBlockIndex, GLuint uniformBlockBinding) override;
 
-    void gatherUniformBlockInfo(std::vector<gl::UniformBlock> *uniformBlocks,
-                                std::vector<gl::LinkedUniform> *uniforms) override;
+    const UniformBlockInfoGatherer &getUniformBlockInfoGatherer() override;
 
     GLuint getProgramID() const;
     const std::vector<SamplerBindingGL> &getAppliedSamplerUniforms() const;
 
   private:
+    class UniformBlockInfoGathererGL : public UniformBlockInfoGatherer
+    {
+      public:
+        UniformBlockInfoGathererGL(const FunctionsGL *mFunctions);
+        ~UniformBlockInfoGathererGL() override;
+
+        bool getBlockSize(const std::string &blockName, size_t *sizeOut) const override;
+        bool getBlockMemberInfo(const std::string &memberUniformName,
+                                sh::BlockMemberInfo *memberInfoOut) const override;
+
+        void setProgramID(GLuint programID) { mProgramID = programID; }
+
+      private:
+        const FunctionsGL *mFunctions;
+        GLuint mProgramID;
+    };
+
     void preLink();
     bool checkLinkStatus(gl::InfoLog &infoLog);
     void postLink();
@@ -88,6 +104,7 @@ class ProgramGL : public ProgramImpl
     std::vector<size_t> mUniformIndexToSamplerIndex;
 
     GLuint mProgramID;
+    UniformBlockInfoGathererGL mUniformBlockInfoGatherer;
 };
 
 }

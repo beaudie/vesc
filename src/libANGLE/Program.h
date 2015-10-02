@@ -433,6 +433,8 @@ class Program : angle::NonCopyable
     std::vector<GLenum> mTextureUnitTypesCache;
     RangeUI mSamplerUniformRange;
 };
+
+unsigned int ParseAndStripArrayIndex(std::string *name);
 }
 
 #endif   // LIBANGLE_PROGRAM_H_

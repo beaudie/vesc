@@ -26,26 +26,9 @@
 
 namespace gl
 {
-const char * const g_fakepath = "C:\\fakepath";
 
 namespace
 {
-
-unsigned int ParseAndStripArrayIndex(std::string* name)
-{
-    unsigned int subscript = GL_INVALID_INDEX;
-
-    // Strip any trailing array operator and retrieve the subscript
-    size_t open = name->find_last_of('[');
-    size_t close = name->find_last_of(']');
-    if (open != std::string::npos && close == name->length() - 1)
-    {
-        subscript = atoi(name->substr(open + 1).c_str());
-        name->erase(open);
-    }
-
-    return subscript;
-}
 
 void WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
 {
@@ -74,28 +57,34 @@ template <typename VarT>
 void DefineUniformBlockMembers(const std::vector<VarT> &fields,
                                const std::string &prefix,
                                int blockIndex,
+                               const rx::ProgramImpl::UniformBlockInfoGatherer &infoGather,
                                std::vector<LinkedUniform> *uniformsOut)
 {
     for (const VarT &field : fields)
     {
-        const std::string &fieldName = (prefix.empty() ? field.name : prefix + "." + field.name);
+        const std::string &fullName = (prefix.empty() ? field.name : prefix + "." + field.name);
 
         if (field.isStruct())
         {
             for (unsigned int arrayElement = 0; arrayElement < field.elementCount(); arrayElement++)
             {
                 const std::string uniformElementName =
-                    fieldName + (field.isArray() ? ArrayString(arrayElement) : "");
-                DefineUniformBlockMembers(field.fields, uniformElementName, blockIndex,
+                    fullName + (field.isArray() ? ArrayString(arrayElement) : "");
+                DefineUniformBlockMembers(field.fields, uniformElementName, blockIndex, infoGather,
                                           uniformsOut);
             }
         }
         else
         {
-            // TODO(jmadill): record row-majorness?
-            // Block layout is recorded in the Impl.
-            LinkedUniform newUniform(field.type, field.precision, fieldName, field.arraySize,
-                                     blockIndex, sh::BlockMemberInfo::getDefaultBlockInfo());
+            // If getBlockMemberInfo returns false, the uniform is optimized out.
+            sh::BlockMemberInfo memberInfo;
+            if (!infoGather.getBlockMemberInfo(fullName, &memberInfo))
+            {
+                continue;
+            }
+
+            LinkedUniform newUniform(field.type, field.precision, fullName, field.arraySize,
+                                     blockIndex, memberInfo);
 
             // Since block uniforms have no location, we don't need to store them in the uniform
             // locations list.
@@ -186,6 +175,24 @@ bool UniformInList(const std::vector<LinkedUniform> &list, const std::string &na
 }
 
 }  // anonymous namespace
+
+const char *const g_fakepath = "C:\\fakepath";
+
+unsigned int ParseAndStripArrayIndex(std::string *name)
+{
+    unsigned int subscript = GL_INVALID_INDEX;
+
+    // Strip any trailing array operator and retrieve the subscript
+    size_t open  = name->find_last_of('[');
+    size_t close = name->find_last_of(']');
+    if (open != std::string::npos && close == name->length() - 1)
+    {
+        subscript = atoi(name->substr(open + 1).c_str());
+        name->erase(open);
+    }
+
+    return subscript;
+}
 
 AttributeBindings::AttributeBindings()
 {
@@ -521,7 +528,7 @@ Error Program::link(const gl::Data &data)
     }
 
     gatherTransformFeedbackVaryings(mergedVaryings);
-    mProgram->gatherUniformBlockInfo(&mData.mUniformBlocks, &mData.mUniforms);
+    gatherInterfaceBlockInfo();
 
     mLinked = true;
     return gl::Error(GL_NO_ERROR);
@@ -670,10 +677,6 @@ Error Program::loadBinary(GLenum binaryFormat, const void *binary, GLsizei lengt
             uniformBlock.memberUniformIndexes.push_back(stream.readInt<unsigned int>());
         }
 
-        // TODO(jmadill): Make D3D-only
-        stream.readInt(&uniformBlock.psRegisterIndex);
-        stream.readInt(&uniformBlock.vsRegisterIndex);
-
         mData.mUniformBlocks.push_back(uniformBlock);
     }
 
@@ -764,10 +767,6 @@ Error Program::saveBinary(GLenum *binaryFormat, void *binary, GLsizei bufSize, G
         {
             stream.writeInt(memberUniformIndex);
         }
-
-        // TODO(jmadill): make D3D-only
-        stream.writeInt(uniformBlock.psRegisterIndex);
-        stream.writeInt(uniformBlock.vsRegisterIndex);
     }
 
     stream.writeInt(mData.mTransformFeedbackBufferMode);
@@ -1889,8 +1888,6 @@ bool Program::linkUniformBlocks(InfoLog &infoLog, const Caps &caps)
         }
     }
 
-    gatherInterfaceBlockInfo();
-
     return true;
 }
 
@@ -2331,9 +2328,21 @@ void Program::gatherInterfaceBlockInfo()
 
 void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenum shaderType)
 {
-    int blockIndex                = static_cast<int>(mData.mUniformBlocks.size());
+    const auto &implInfoGatherer = mProgram->getUniformBlockInfoGatherer();
+    int blockIndex               = static_cast<int>(mData.mUniformBlocks.size());
+    size_t blockSize             = 0;
+
+    // Don't define this block at all if it's not active in the implementation.
+    if (!implInfoGatherer.getBlockSize(interfaceBlock.name, &blockSize))
+    {
+        return;
+    }
+
+    // Track the first and last uniform index to determine the range of active uniforms in the
+    // block.
     size_t firstBlockUniformIndex = mData.mUniforms.size();
-    DefineUniformBlockMembers(interfaceBlock.fields, "", blockIndex, &mData.mUniforms);
+    DefineUniformBlockMembers(interfaceBlock.fields, "", blockIndex, implInfoGatherer,
+                              &mData.mUniforms);
     size_t lastBlockUniformIndex = mData.mUniforms.size();
 
     std::vector<unsigned int> blockUniformIndexes;
@@ -2360,6 +2369,15 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
                 block.fragmentStaticUse = interfaceBlock.staticUse;
             }
 
+            // TODO(jmadill): Determine if we can ever have an inactive array element block.
+            size_t blockElementSize = 0;
+            if (!implInfoGatherer.getBlockSize(block.nameWithArrayIndex(), &blockElementSize))
+            {
+                continue;
+            }
+
+            ASSERT(blockElementSize == blockSize);
+            block.dataSize = static_cast<unsigned int>(blockElementSize);
             mData.mUniformBlocks.push_back(block);
         }
     }
@@ -2378,6 +2396,7 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
             block.fragmentStaticUse = interfaceBlock.staticUse;
         }
 
+        block.dataSize = static_cast<unsigned int>(blockSize);
         mData.mUniformBlocks.push_back(block);
     }
 }

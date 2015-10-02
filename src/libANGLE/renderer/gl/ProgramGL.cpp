@@ -17,15 +17,77 @@
 namespace rx
 {
 
+ProgramGL::UniformBlockInfoGathererGL::UniformBlockInfoGathererGL(const FunctionsGL *functions)
+    : mFunctions(functions), mProgramID(0)
+{
+}
+
+ProgramGL::UniformBlockInfoGathererGL::~UniformBlockInfoGathererGL()
+{
+}
+
+bool ProgramGL::UniformBlockInfoGathererGL::getBlockSize(const std::string &blockName,
+                                                         size_t *sizeOut) const
+{
+    ASSERT(mProgramID != 0u);
+
+    GLuint blockIndex = mFunctions->getUniformBlockIndex(mProgramID, blockName.c_str());
+    if (blockIndex == GL_INVALID_INDEX)
+    {
+        *sizeOut = 0;
+        return false;
+    }
+
+    GLint dataSize = 0;
+    mFunctions->getActiveUniformBlockiv(mProgramID, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE,
+                                        &dataSize);
+    *sizeOut = static_cast<size_t>(dataSize);
+    return true;
+}
+
+bool ProgramGL::UniformBlockInfoGathererGL::getBlockMemberInfo(
+    const std::string &memberUniformName,
+    sh::BlockMemberInfo *memberInfoOut) const
+{
+    GLuint uniformIndex;
+    const GLchar *memberNameGLStr = memberUniformName.c_str();
+    mFunctions->getUniformIndices(mProgramID, 1, &memberNameGLStr, &uniformIndex);
+
+    if (uniformIndex == GL_INVALID_INDEX)
+    {
+        *memberInfoOut = sh::BlockMemberInfo::getDefaultBlockInfo();
+        return false;
+    }
+
+    mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_OFFSET,
+                                    &memberInfoOut->offset);
+    mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_ARRAY_STRIDE,
+                                    &memberInfoOut->arrayStride);
+    mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_MATRIX_STRIDE,
+                                    &memberInfoOut->matrixStride);
+
+    // TODO(jmadill): possibly determine this at the gl::Program level.
+    GLint isRowMajorMatrix = 0;
+    mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_IS_ROW_MAJOR,
+                                    &isRowMajorMatrix);
+    memberInfoOut->isRowMajorMatrix = isRowMajorMatrix != GL_FALSE;
+    return true;
+}
+
 ProgramGL::ProgramGL(const gl::Program::Data &data,
                      const FunctionsGL *functions,
                      StateManagerGL *stateManager)
-    : ProgramImpl(data), mFunctions(functions), mStateManager(stateManager), mProgramID(0)
+    : ProgramImpl(data),
+      mFunctions(functions),
+      mStateManager(stateManager),
+      mProgramID(0),
+      mUniformBlockInfoGatherer(functions)
 {
     ASSERT(mFunctions);
     ASSERT(mStateManager);
 
     mProgramID = mFunctions->createProgram();
+    mUniformBlockInfoGatherer.setProgramID(mProgramID);
 }
 
 ProgramGL::~ProgramGL()
@@ -261,8 +323,23 @@ void ProgramGL::setUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean t
 
 void ProgramGL::setUniformBlockBinding(GLuint uniformBlockIndex, GLuint uniformBlockBinding)
 {
-    mFunctions->uniformBlockBinding(mProgramID, mUniformBlockRealLocationMap[uniformBlockIndex],
-                                    uniformBlockBinding);
+    // Lazy init
+    if (mUniformBlockRealLocationMap.empty())
+    {
+        mUniformBlockRealLocationMap.reserve(mData.getUniformBlocks().size());
+        for (const gl::UniformBlock &uniformBlock : mData.getUniformBlocks())
+        {
+            const std::string &nameWithIndex = uniformBlock.nameWithArrayIndex();
+            GLuint blockIndex = mFunctions->getUniformBlockIndex(mProgramID, nameWithIndex.c_str());
+            mUniformBlockRealLocationMap.push_back(blockIndex);
+        }
+    }
+
+    GLuint realBlockIndex = mUniformBlockRealLocationMap[uniformBlockIndex];
+    if (realBlockIndex != GL_INVALID_INDEX)
+    {
+        mFunctions->uniformBlockBinding(mProgramID, realBlockIndex, uniformBlockBinding);
+    }
 }
 
 GLuint ProgramGL::getProgramID() const
@@ -275,112 +352,16 @@ const std::vector<SamplerBindingGL> &ProgramGL::getAppliedSamplerUniforms() cons
     return mSamplerBindings;
 }
 
-void ProgramGL::gatherUniformBlockInfo(std::vector<gl::UniformBlock> *uniformBlocks,
-                                       std::vector<gl::LinkedUniform> *uniforms)
+const ProgramImpl::UniformBlockInfoGatherer &ProgramGL::getUniformBlockInfoGatherer()
 {
-    mUniformBlockRealLocationMap.resize(uniformBlocks->size(), 0);
-
-    for (int i = 0; i < static_cast<int>(uniformBlocks->size()); i++)
-    {
-        auto &uniformBlock = uniformBlocks->at(i);
-
-        std::stringstream fullNameStr;
-        fullNameStr << uniformBlock.name;
-        if (uniformBlock.isArray)
-        {
-            fullNameStr << "[" << uniformBlock.arrayElement << "]";
-        }
-
-        GLuint blockIndex = mFunctions->getUniformBlockIndex(mProgramID, fullNameStr.str().c_str());
-        if (blockIndex != GL_INVALID_INDEX)
-        {
-            mUniformBlockRealLocationMap[i] = blockIndex;
-
-            GLint dataSize = 0;
-            mFunctions->getActiveUniformBlockiv(mProgramID, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE,
-                                                &dataSize);
-            uniformBlock.dataSize = dataSize;
-        }
-        else
-        {
-            // Remove this uniform block
-            uniformBlocks->erase(uniformBlocks->begin() + i);
-            i--;
-        }
-    }
-
-    for (int uniformIdx = 0; uniformIdx < static_cast<int>(uniforms->size()); uniformIdx++)
-    {
-        auto &uniform = uniforms->at(uniformIdx);
-        if (uniform.isInDefaultBlock())
-        {
-            continue;
-        }
-
-        const GLchar *uniformName = uniform.name.c_str();
-        GLuint uniformIndex = 0;
-        mFunctions->getUniformIndices(mProgramID, 1, &uniformName, &uniformIndex);
-
-        if (uniformIndex == GL_INVALID_INDEX)
-        {
-            // Uniform member has been optimized out, remove it from the list
-            // TODO: Clean this up by using a class to wrap around the uniforms so manual removal is
-            // not needed.
-            for (size_t uniformBlockIdx = 0; uniformBlockIdx < uniformBlocks->size();
-                 uniformBlockIdx++)
-            {
-                auto &uniformBlock = uniformBlocks->at(uniformBlockIdx);
-                for (int memberIndex = 0;
-                     memberIndex < static_cast<int>(uniformBlock.memberUniformIndexes.size());
-                     memberIndex++)
-                {
-                    if (uniformBlock.memberUniformIndexes[memberIndex] ==
-                        static_cast<unsigned int>(uniformIdx))
-                    {
-                        uniformBlock.memberUniformIndexes.erase(
-                            uniformBlock.memberUniformIndexes.begin() + memberIndex);
-                        memberIndex--;
-                    }
-                    else if (uniformBlock.memberUniformIndexes[memberIndex] >
-                             static_cast<unsigned int>(uniformIdx))
-                    {
-                        uniformBlock.memberUniformIndexes[memberIndex]--;
-                    }
-                }
-            }
-            uniforms->erase(uniforms->begin() + uniformIdx);
-            uniformIdx--;
-        }
-        else
-        {
-            GLint offset = 0;
-            mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_OFFSET,
-                                            &offset);
-            uniform.blockInfo.offset = offset;
-
-            GLint arrayStride = 0;
-            mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_ARRAY_STRIDE,
-                                            &arrayStride);
-            uniform.blockInfo.arrayStride = arrayStride;
-
-            GLint matrixStride = 0;
-            mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_MATRIX_STRIDE,
-                                            &matrixStride);
-            uniform.blockInfo.matrixStride = matrixStride;
-
-            // TODO: determine this at the gl::Program level.
-            GLint isRowMajorMatrix = 0;
-            mFunctions->getActiveUniformsiv(mProgramID, 1, &uniformIndex, GL_UNIFORM_IS_ROW_MAJOR,
-                                            &isRowMajorMatrix);
-            uniform.blockInfo.isRowMajorMatrix = isRowMajorMatrix != GL_FALSE;
-        }
-    }
+    return mUniformBlockInfoGatherer;
 }
 
 void ProgramGL::preLink()
 {
     // Reset the program state
     mUniformRealLocationMap.clear();
+    mUniformBlockRealLocationMap.clear();
     mSamplerBindings.clear();
     mUniformIndexToSamplerIndex.clear();
 }

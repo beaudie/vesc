@@ -68,6 +68,18 @@ struct D3DUniform : angle::NonCopyable
     unsigned int registerElement;
 };
 
+struct D3DUniformBlock
+{
+    D3DUniformBlock() : vsRegisterIndex(GL_INVALID_INDEX), psRegisterIndex(GL_INVALID_INDEX) {}
+
+    bool vertexStaticUse() const { return vsRegisterIndex != GL_INVALID_INDEX; }
+
+    bool fragmentStaticUse() const { return psRegisterIndex != GL_INVALID_INDEX; }
+
+    unsigned int vsRegisterIndex;
+    unsigned int psRegisterIndex;
+};
+
 class ProgramD3D : public ProgramImpl
 {
   public:
@@ -99,8 +111,7 @@ class ProgramD3D : public ProgramImpl
     LinkResult link(const gl::Data &data, gl::InfoLog &infoLog) override;
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
 
-    void gatherUniformBlockInfo(std::vector<gl::UniformBlock> *uniformBlocks,
-                                std::vector<gl::LinkedUniform> *uniforms) override;
+    const UniformBlockInfoGatherer &getUniformBlockInfoGatherer() override;
 
     void initializeUniformStorage();
     gl::Error applyUniforms();
@@ -197,7 +208,25 @@ class ProgramD3D : public ProgramImpl
     };
 
     typedef std::map<std::string, D3DUniform *> D3DUniformMap;
-    typedef std::map<std::string, sh::BlockMemberInfo> BlockInfoMap;
+
+    class UniformBlockInfoGathererD3D : public UniformBlockInfoGatherer
+    {
+      public:
+        UniformBlockInfoGathererD3D();
+        ~UniformBlockInfoGathererD3D() override;
+
+        bool getBlockSize(const std::string &blockName, size_t *sizeOut) const override;
+        bool getBlockMemberInfo(const std::string &memberUniformName,
+                                sh::BlockMemberInfo *memberInfoOut) const override;
+
+        void initFromData(const gl::Program::Data &data);
+
+      private:
+        size_t getBlockInfo(const sh::InterfaceBlock &interfaceBlock);
+
+        std::map<std::string, sh::BlockMemberInfo> mBlockInfo;
+        std::map<std::string, size_t> mBlockDataSizes;
+    };
 
     void defineUniformsAndAssignRegisters();
     void defineUniformBase(const gl::Shader *shader,
@@ -217,8 +246,6 @@ class ProgramD3D : public ProgramImpl
                                std::vector<Sampler> &outSamplers,
                                GLuint *outUsedRange);
 
-    size_t defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, BlockInfoMap *blockInfoOut);
-
     template <typename T>
     void setUniform(GLint location, GLsizei count, const T* v, GLenum targetUniformType);
 
@@ -237,6 +264,7 @@ class ProgramD3D : public ProgramImpl
     void initAttributesByLayout();
 
     void reset();
+    void assignUniformBlockRegisters();
 
     RendererD3D *mRenderer;
     DynamicHLSL *mDynamicHLSL;
@@ -279,6 +307,9 @@ class ProgramD3D : public ProgramImpl
 
     std::vector<gl::LinkedVarying> mTransformFeedbackLinkedVaryings;
     std::vector<D3DUniform *> mD3DUniforms;
+    std::vector<D3DUniformBlock> mD3DUniformBlocks;
+
+    UniformBlockInfoGathererD3D mUniformBlockInfoGatherer;
 
     static unsigned int issueSerial();
     static unsigned int mCurrentSerial;
