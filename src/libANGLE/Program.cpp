@@ -1517,6 +1517,9 @@ const UniformBlock &Program::getUniformBlockByIndex(GLuint index) const
 void Program::bindUniformBlock(GLuint uniformBlockIndex, GLuint uniformBlockBinding)
 {
     mData.mUniformBlockBindings[uniformBlockIndex] = uniformBlockBinding;
+
+    updateActiveUniformBlockBindings();
+
     mProgram->setUniformBlockBinding(uniformBlockIndex, uniformBlockBinding);
 }
 
@@ -2230,6 +2233,15 @@ bool Program::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
     mData.mUniforms.insert(mData.mUniforms.end(), samplerUniforms.begin(), samplerUniforms.end());
 
     return true;
+}
+
+void Program::updateActiveUniformBlockBindings()
+{
+    mData.mActiveUniformBlockBindings.reset();
+    for (const auto &uniformBlockBinding : mData.mUniformBlockBindings)
+    {
+        mData.mActiveUniformBlockBindings[uniformBlockBinding] = true;
+    }
 }
 
 Program::VectorAndSamplerCount Program::flattenUniform(const sh::ShaderVariable &uniform,

@@ -340,6 +340,10 @@ class Program : angle::NonCopyable
     {
         return mData.mActiveAttribLocationsMask;
     }
+    const UniformBlockBindingMask &getActiveUniformBlockBindingMask() const
+    {
+        return mData.getActiveUniformBlockBindingsMask();
+    }
 
   private:
     void unlink(bool destroy = false);
@@ -377,6 +381,8 @@ class Program : angle::NonCopyable
     void linkOutputVariables();
 
     bool flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog);
+
+    void updateActiveUniformBlockBindings();
 
     struct VectorAndSamplerCount
     {
