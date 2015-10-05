@@ -379,60 +379,12 @@ gl::Error RendererD3D::applyState(const gl::Data &data, GLenum drawMode)
     const gl::Framebuffer *framebufferObject = data.state->getDrawFramebuffer();
     int samples = framebufferObject->getSamples(data);
 
+    // TODO(dianx) move this into sync state once we figure out how to apply drawModes
     gl::RasterizerState rasterizer = data.state->getRasterizerState();
     rasterizer.pointDrawMode = (drawMode == GL_POINTS);
     rasterizer.multiSample = (samples != 0);
 
-    gl::Error error = setRasterizerState(rasterizer);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    unsigned int mask = 0;
-    if (data.state->isSampleCoverageEnabled())
-    {
-        GLclampf coverageValue = data.state->getSampleCoverageValue();
-        if (coverageValue != 0)
-        {
-            float threshold = 0.5f;
-
-            for (int i = 0; i < samples; ++i)
-            {
-                mask <<= 1;
-
-                if ((i + 1) * coverageValue >= threshold)
-                {
-                    threshold += 1.0f;
-                    mask |= 1;
-                }
-            }
-        }
-
-        bool coverageInvert = data.state->getSampleCoverageInvert();
-        if (coverageInvert)
-        {
-            mask = ~mask;
-        }
-    }
-    else
-    {
-        mask = 0xFFFFFFFF;
-    }
-    error = setBlendState(framebufferObject, data.state->getBlendState(), data.state->getBlendColor(), mask);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    error = setDepthStencilState(data.state->getDepthStencilState(), data.state->getStencilRef(),
-                                 data.state->getStencilBackRef(), rasterizer.frontFace == GL_CCW);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    return gl::Error(GL_NO_ERROR);
+    return setRasterizerState(rasterizer, data.state->getDirtyBits());
 }
 
 // Applies the shaders and shader constants to the Direct3D device
