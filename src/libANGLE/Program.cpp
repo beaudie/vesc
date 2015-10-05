@@ -522,6 +522,7 @@ Error Program::link(const gl::Data &data)
 
     gatherTransformFeedbackVaryings(mergedVaryings);
     mProgram->gatherUniformBlockInfo(&mData.mUniformBlocks, &mData.mUniforms);
+    updateActiveUniformBlockBindings();
 
     mLinked = true;
     return gl::Error(GL_NO_ERROR);
@@ -1517,6 +1518,9 @@ const UniformBlock &Program::getUniformBlockByIndex(GLuint index) const
 void Program::bindUniformBlock(GLuint uniformBlockIndex, GLuint uniformBlockBinding)
 {
     mData.mUniformBlockBindings[uniformBlockIndex] = uniformBlockBinding;
+
+    updateActiveUniformBlockBindings();
+
     mProgram->setUniformBlockBinding(uniformBlockIndex, uniformBlockBinding);
 }
 
@@ -2230,6 +2234,15 @@ bool Program::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
     mData.mUniforms.insert(mData.mUniforms.end(), samplerUniforms.begin(), samplerUniforms.end());
 
     return true;
+}
+
+void Program::updateActiveUniformBlockBindings()
+{
+    mData.mActiveUniformBlockBindings.reset();
+    for (size_t blockIdx = 0; blockIdx < mData.mUniformBlocks.size(); blockIdx++)
+    {
+        mData.mActiveUniformBlockBindings[mData.mUniformBlockBindings[blockIdx]] = true;
+    }
 }
 
 Program::VectorAndSamplerCount Program::flattenUniform(const sh::ShaderVariable &uniform,

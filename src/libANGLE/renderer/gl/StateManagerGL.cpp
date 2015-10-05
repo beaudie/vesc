@@ -546,11 +546,10 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::Data &data)
     const ProgramGL *programGL = GetImplAs<ProgramGL>(program);
     useProgram(programGL->getProgramID());
 
-    for (size_t uniformBlockIndex = 0;
-         uniformBlockIndex < gl::IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS;
-         uniformBlockIndex++)
+    for (unsigned int uniformBlockBinding :
+         angle::IterateBitSet(program->getActiveUniformBlockBindingMask()))
     {
-        GLuint binding = program->getUniformBlockBinding(static_cast<GLuint>(uniformBlockIndex));
+        GLuint binding = program->getUniformBlockBinding(uniformBlockBinding);
         const OffsetBindingPointer<gl::Buffer> &uniformBuffer =
             data.state->getIndexedUniformBuffer(binding);
 
