@@ -68,7 +68,8 @@ gl::Error Framebuffer9::clear(const gl::State &state, const ClearParameters &cle
     float farZ = state.getFarPlane();
     mRenderer->setViewport(state.getViewport(), nearZ, farZ, GL_TRIANGLES, state.getRasterizerState().frontFace, true);
 
-    mRenderer->setScissorRectangle(state.getScissor(), state.isScissorTestEnabled());
+    mRenderer->setScissorRectangle(state.getScissor(), state.isScissorTestEnabled(),
+                                   state.getDirtyBits());
 
     return mRenderer->clear(clearParams, colorAttachment, depthStencilAttachment);
 }
