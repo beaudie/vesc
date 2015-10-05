@@ -1325,6 +1325,10 @@ Error Context::drawArrays(GLenum mode, GLint first, GLsizei count)
     {
         return error;
     }
+    if (!mRenderer->shouldClearDirtyBitsAfterSync())
+    {
+        mState.clearDirtyBits();
+    }
 
     MarkTransformFeedbackBufferUsage(mState.getCurrentTransformFeedback());
 
@@ -1339,6 +1343,10 @@ Error Context::drawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsi
     {
         return error;
     }
+    if (!mRenderer->shouldClearDirtyBitsAfterSync())
+    {
+        mState.clearDirtyBits();
+    }
 
     MarkTransformFeedbackBufferUsage(mState.getCurrentTransformFeedback());
 
@@ -1352,7 +1360,13 @@ Error Context::drawElements(GLenum mode,
                             const IndexRange &indexRange)
 {
     syncRendererState();
-    return mRenderer->drawElements(getData(), mode, count, type, indices, indexRange);
+    Error error = mRenderer->drawElements(getData(), mode, count, type, indices, indexRange);
+    if (!mRenderer->shouldClearDirtyBitsAfterSync())
+    {
+        mState.clearDirtyBits();
+    }
+
+    return error;
 }
 
 Error Context::drawElementsInstanced(GLenum mode,
@@ -1363,8 +1377,14 @@ Error Context::drawElementsInstanced(GLenum mode,
                                      const IndexRange &indexRange)
 {
     syncRendererState();
-    return mRenderer->drawElementsInstanced(getData(), mode, count, type, indices, instances,
-                                            indexRange);
+    Error error = mRenderer->drawElementsInstanced(getData(), mode, count, type, indices, instances,
+                                                   indexRange);
+    if (!mRenderer->shouldClearDirtyBitsAfterSync())
+    {
+        mState.clearDirtyBits();
+    }
+
+    return error;
 }
 
 Error Context::drawRangeElements(GLenum mode,
@@ -1376,8 +1396,14 @@ Error Context::drawRangeElements(GLenum mode,
                                  const IndexRange &indexRange)
 {
     syncRendererState();
-    return mRenderer->drawRangeElements(getData(), mode, start, end, count, type, indices,
-                                        indexRange);
+    Error error =
+        mRenderer->drawRangeElements(getData(), mode, start, end, count, type, indices, indexRange);
+    if (!mRenderer->shouldClearDirtyBitsAfterSync())
+    {
+        mState.clearDirtyBits();
+    }
+
+    return error;
 }
 
 Error Context::flush()
@@ -1806,8 +1832,11 @@ void Context::syncRendererState()
     const State::DirtyBits &dirtyBits = mState.getDirtyBits();
     if (dirtyBits.any())
     {
-        mRenderer->syncState(mState, dirtyBits);
-        mState.clearDirtyBits();
+        mRenderer->syncState(getData(), dirtyBits);
+        if (mRenderer->shouldClearDirtyBitsAfterSync())
+        {
+            mState.clearDirtyBits();
+        }
     }
 }
 
@@ -1816,8 +1845,11 @@ void Context::syncRendererState(const State::DirtyBits &bitMask)
     const State::DirtyBits &dirtyBits = (mState.getDirtyBits() & bitMask);
     if (dirtyBits.any())
     {
-        mRenderer->syncState(mState, dirtyBits);
-        mState.clearDirtyBits(dirtyBits);
+        mRenderer->syncState(getData(), dirtyBits);
+        if (mRenderer->shouldClearDirtyBitsAfterSync())
+        {
+            mState.clearDirtyBits(dirtyBits);
+        }
     }
 }
 }
