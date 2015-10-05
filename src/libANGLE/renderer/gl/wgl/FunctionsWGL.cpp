@@ -6,6 +6,8 @@
 
 // FunctionsWGL.h: Implements the FuntionsWGL class.
 
+#include <algorithm>
+
 #include "libANGLE/renderer/gl/wgl/FunctionsWGL.h"
 
 #include "common/string_utils.h"
