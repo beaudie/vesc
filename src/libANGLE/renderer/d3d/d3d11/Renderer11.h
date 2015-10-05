@@ -20,6 +20,8 @@
 #include "libANGLE/renderer/d3d/d3d11/InputLayoutCache.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderStateCache.h"
 
+#include "libANGLE/renderer/d3d/d3d11/StateManagerD3D11.h"
+
 namespace gl
 {
 class FramebufferAttachment;
@@ -121,10 +123,6 @@ class Renderer11 : public RendererD3D
                                 const std::vector<GLint> &fragmentUniformBuffers) override;
 
     virtual gl::Error setRasterizerState(const gl::RasterizerState &rasterState);
-    gl::Error setBlendState(const gl::Framebuffer *framebuffer, const gl::BlendState &blendState, const gl::ColorF &blendColor,
-                            unsigned int sampleMask) override;
-    virtual gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
-                                           int stencilBackRef, bool frontFaceCCW);
 
     virtual void setScissorRectangle(const gl::Rectangle &scissor, bool enabled);
     virtual void setViewport(const gl::Rectangle &viewport, float zNear, float zFar, GLenum drawMode, GLenum frontFace,
@@ -270,6 +268,8 @@ class Renderer11 : public RendererD3D
     void onSwap();
     void onBufferDelete(const Buffer11 *deleted);
 
+    void syncState(const gl::Data &data, const gl::State::DirtyBits &dirtyBits) override;
+
   protected:
     void createAnnotator() override;
     gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) override;
@@ -304,6 +304,8 @@ class Renderer11 : public RendererD3D
     void populateRenderer11DeviceCaps();
 
     void updateHistograms();
+
+    StateManagerD3D11 *mStateManager;
 
     HMODULE mD3d11Module;
     HMODULE mDxgiModule;
@@ -382,21 +384,9 @@ class Renderer11 : public RendererD3D
     // A block of NULL pointers, cached so we don't re-allocate every draw call
     std::vector<ID3D11ShaderResourceView*> mNullSRVs;
 
-    // Currently applied blend state
-    bool mForceSetBlendState;
-    gl::BlendState mCurBlendState;
-    gl::ColorF mCurBlendColor;
-    unsigned int mCurSampleMask;
-
     // Currently applied rasterizer state
     bool mForceSetRasterState;
     gl::RasterizerState mCurRasterState;
-
-    // Currently applied depth stencil state
-    bool mForceSetDepthStencilState;
-    gl::DepthStencilState mCurDepthStencilState;
-    int mCurStencilRef;
-    int mCurStencilBackRef;
 
     // Currently applied scissor rectangle
     bool mForceSetScissor;

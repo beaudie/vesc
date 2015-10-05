@@ -1793,7 +1793,7 @@ void Context::syncRendererState()
     const State::DirtyBits &dirtyBits = mState.getDirtyBits();
     if (dirtyBits.any())
     {
-        mRenderer->syncState(mState, dirtyBits);
+        mRenderer->syncState(getData(), dirtyBits);
         mState.clearDirtyBits();
     }
 }
@@ -1803,7 +1803,7 @@ void Context::syncRendererState(const State::DirtyBits &bitMask)
     const State::DirtyBits &dirtyBits = (mState.getDirtyBits() & bitMask);
     if (dirtyBits.any())
     {
-        mRenderer->syncState(mState, dirtyBits);
+        mRenderer->syncState(getData(), dirtyBits);
         mState.clearDirtyBits(dirtyBits);
     }
 }

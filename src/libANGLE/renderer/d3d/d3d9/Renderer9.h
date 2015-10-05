@@ -18,6 +18,8 @@
 #include "libANGLE/renderer/d3d/d3d9/ShaderCache.h"
 #include "libANGLE/renderer/d3d/d3d9/VertexDeclarationCache.h"
 
+#include "libANGLE/renderer/d3d/d3d9/StateManagerD3D9.h"
+
 namespace gl
 {
 class FramebufferAttachment;
@@ -97,10 +99,6 @@ class Renderer9 : public RendererD3D
                                 const std::vector<GLint> &fragmentUniformBuffers) override;
 
     virtual gl::Error setRasterizerState(const gl::RasterizerState &rasterState);
-    gl::Error setBlendState(const gl::Framebuffer *framebuffer, const gl::BlendState &blendState, const gl::ColorF &blendColor,
-                            unsigned int sampleMask) override;
-    virtual gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
-                                           int stencilBackRef, bool frontFaceCCW);
 
     virtual void setScissorRectangle(const gl::Rectangle &scissor, bool enabled);
     virtual void setViewport(const gl::Rectangle &viewport, float zNear, float zFar, GLenum drawMode, GLenum frontFace,
@@ -236,6 +234,8 @@ class Renderer9 : public RendererD3D
 
     D3DDEVTYPE getD3D9DeviceType() const { return mDeviceType; }
 
+    void syncState(const gl::Data &data, const gl::State::DirtyBits &dirtyBits) override;
+
   protected:
     void createAnnotator() override;
     gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) override;
@@ -328,13 +328,6 @@ class Renderer9 : public RendererD3D
 
     IDirect3DStateBlock9 *mMaskedClearSavedState;
 
-    // previously set render states
-    bool mForceSetDepthStencilState;
-    gl::DepthStencilState mCurDepthStencilState;
-    int mCurStencilRef;
-    int mCurStencilBackRef;
-    bool mCurFrontFaceCCW;
-
     bool mForceSetRasterState;
     gl::RasterizerState mCurRasterState;
 
@@ -348,10 +341,7 @@ class Renderer9 : public RendererD3D
     float mCurFar;
     float mCurDepthFront;
 
-    bool mForceSetBlendState;
-    gl::BlendState mCurBlendState;
-    gl::ColorF mCurBlendColor;
-    GLuint mCurSampleMask;
+    StateManagerD3D9 *mStateManager;
 
     // Currently applied sampler states
     struct CurSamplerState

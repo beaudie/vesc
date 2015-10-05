@@ -150,10 +150,6 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
                                         const std::vector<GLint> &fragmentUniformBuffers) = 0;
 
     virtual gl::Error setRasterizerState(const gl::RasterizerState &rasterState) = 0;
-    virtual gl::Error setBlendState(const gl::Framebuffer *framebuffer, const gl::BlendState &blendState, const gl::ColorF &blendColor,
-                                    unsigned int sampleMask) = 0;
-    virtual gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
-                                           int stencilBackRef, bool frontFaceCCW) = 0;
 
     virtual void setScissorRectangle(const gl::Rectangle &scissor, bool enabled) = 0;
     virtual void setViewport(const gl::Rectangle &viewport, float zNear, float zFar, GLenum drawMode, GLenum frontFace,
@@ -223,10 +219,7 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     virtual gl::Error fastCopyBufferToTexture(const gl::PixelUnpackState &unpack, unsigned int offset, RenderTargetD3D *destRenderTarget,
                                               GLenum destinationFormat, GLenum sourcePixelsType, const gl::Box &destArea) = 0;
 
-    void syncState(const gl::State & /*state*/, const gl::State::DirtyBits &bitmask) override
-    {
-        // TODO(jmadill): implement state sync for D3D renderers;
-    }
+    virtual void syncState(const gl::Data &data, const gl::State::DirtyBits &dirtyBits) = 0;
 
     // Device lost
     void notifyDeviceLost() override;
