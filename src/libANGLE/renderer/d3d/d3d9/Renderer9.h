@@ -11,12 +11,12 @@
 
 #include "common/angleutils.h"
 #include "common/mathutil.h"
-#include "libANGLE/renderer/d3d/HLSLCompiler.h"
-#include "libANGLE/renderer/d3d/RendererD3D.h"
-#include "libANGLE/renderer/d3d/RenderTargetD3D.h"
 #include "libANGLE/renderer/d3d/d3d9/DebugAnnotator9.h"
 #include "libANGLE/renderer/d3d/d3d9/ShaderCache.h"
 #include "libANGLE/renderer/d3d/d3d9/VertexDeclarationCache.h"
+#include "libANGLE/renderer/d3d/HLSLCompiler.h"
+#include "libANGLE/renderer/d3d/RendererD3D.h"
+#include "libANGLE/renderer/d3d/RenderTargetD3D.h"
 
 namespace gl
 {
@@ -96,13 +96,11 @@ class Renderer9 : public RendererD3D
                                 const std::vector<GLint> &vertexUniformBuffers,
                                 const std::vector<GLint> &fragmentUniformBuffers) override;
 
-    virtual gl::Error setRasterizerState(const gl::RasterizerState &rasterState);
-    gl::Error setBlendState(const gl::Framebuffer *framebuffer, const gl::BlendState &blendState, const gl::ColorF &blendColor,
-                            unsigned int sampleMask) override;
-    virtual gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
-                                           int stencilBackRef, bool frontFaceCCW);
+    virtual gl::Error setRasterizerState(const gl::RasterizerState &rasterState,
+                                         const gl::State::DirtyBits &dirtyBits);
 
     virtual void setScissorRectangle(const gl::Rectangle &scissor, bool enabled);
+
     virtual void setViewport(const gl::Rectangle &viewport, float zNear, float zFar, GLenum drawMode, GLenum frontFace,
                              bool ignoreViewport);
 
@@ -315,8 +313,6 @@ class Renderer9 : public RendererD3D
     unsigned int mAppliedDepthStencilSerial;
     bool mDepthStencilInitialized;
     bool mRenderTargetDescInitialized;
-    unsigned int mCurStencilSize;
-    unsigned int mCurDepthSize;
 
     struct RenderTargetDesc
     {
@@ -328,30 +324,11 @@ class Renderer9 : public RendererD3D
 
     IDirect3DStateBlock9 *mMaskedClearSavedState;
 
-    // previously set render states
-    bool mForceSetDepthStencilState;
-    gl::DepthStencilState mCurDepthStencilState;
-    int mCurStencilRef;
-    int mCurStencilBackRef;
-    bool mCurFrontFaceCCW;
-
-    bool mForceSetRasterState;
-    gl::RasterizerState mCurRasterState;
-
-    bool mForceSetScissor;
-    gl::Rectangle mCurScissor;
-    bool mScissorEnabled;
-
     bool mForceSetViewport;
     gl::Rectangle mCurViewport;
     float mCurNear;
     float mCurFar;
     float mCurDepthFront;
-
-    bool mForceSetBlendState;
-    gl::BlendState mCurBlendState;
-    gl::ColorF mCurBlendColor;
-    GLuint mCurSampleMask;
 
     // Currently applied sampler states
     struct CurSamplerState
@@ -401,5 +378,5 @@ class Renderer9 : public RendererD3D
     UINT mMaxNullColorbufferLRU;
 };
 
-}
+}  // namespace rx
 #endif // LIBANGLE_RENDERER_D3D_D3D9_RENDERER9_H_
