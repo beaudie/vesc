@@ -677,6 +677,20 @@ Error Program::loadBinary(GLenum binaryFormat, const void *binary, GLsizei lengt
         mData.mUniformBlocks.push_back(uniformBlock);
     }
 
+    unsigned int transformFeedbackVaryingCount = stream.readInt<unsigned int>();
+    ASSERT(mData.mTransformFeedbackVaryingVars.empty());
+    for (unsigned int transformFeedbackVaryingIndex = 0;
+        transformFeedbackVaryingIndex < transformFeedbackVaryingCount;
+        ++transformFeedbackVaryingIndex)
+    {
+        sh::Varying varying;
+        stream.readInt(&varying.arraySize);
+        stream.readInt(&varying.type);
+        stream.readString(&varying.name);
+
+        mData.mTransformFeedbackVaryingVars.push_back(varying);
+    }
+
     stream.readInt(&mData.mTransformFeedbackBufferMode);
 
     unsigned int outputVarCount = stream.readInt<unsigned int>();
@@ -768,6 +782,16 @@ Error Program::saveBinary(GLenum *binaryFormat, void *binary, GLsizei bufSize, G
         // TODO(jmadill): make D3D-only
         stream.writeInt(uniformBlock.psRegisterIndex);
         stream.writeInt(uniformBlock.vsRegisterIndex);
+    }
+
+    stream.writeInt(mData.mTransformFeedbackVaryingVars.size());
+    for (size_t i = 0; i < mData.mTransformFeedbackVaryingVars.size(); i++)
+    {
+        const sh::Varying &varying = mData.mTransformFeedbackVaryingVars[i];
+
+        stream.writeInt(varying.elementCount());
+        stream.writeInt(varying.type);
+        stream.writeString(varying.name);
     }
 
     stream.writeInt(mData.mTransformFeedbackBufferMode);
