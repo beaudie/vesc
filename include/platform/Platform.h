@@ -138,13 +138,13 @@ extern "C"
 {
 
 typedef void(*ANGLEPlatformInitializeFunc)(angle::Platform*);
-ANGLE_EXPORT void ANGLEPlatformInitialize(angle::Platform*);
+void ANGLEPlatformInitialize(angle::Platform*);
 
 typedef void (*ANGLEPlatformShutdownFunc)();
-ANGLE_EXPORT void ANGLEPlatformShutdown();
+void ANGLEPlatformShutdown();
 
 typedef angle::Platform *(*ANGLEPlatformCurrentFunc)();
-ANGLE_EXPORT angle::Platform *ANGLEPlatformCurrent();
+angle::Platform *ANGLEPlatformCurrent();
 
 }
 
