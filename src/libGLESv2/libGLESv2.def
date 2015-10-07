@@ -289,8 +289,3 @@ EXPORTS
     glTexStorage2D                  @281
     glTexStorage3D                  @282
     glGetInternalformativ           @283
-
-    ; ANGLE Platform Implementation
-    ANGLEPlatformCurrent            @290
-    ANGLEPlatformInitialize         @291
-    ANGLEPlatformShutdown           @292
