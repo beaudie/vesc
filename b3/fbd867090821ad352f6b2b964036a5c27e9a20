@@ -1,0 +1,8 @@
+Code-Review+1: Jamie Madill <jmadill@chromium.org>
+Verified+1: Olli Etuaho <oetuaho@nvidia.com>
+Code-Review+2: Zhenyao Mo <zmo@chromium.org>
+Submitted-by: Olli Etuaho <oetuaho@nvidia.com>
+Submitted-at: Wed, 07 Oct 2015 07:11:25 +0000
+Reviewed-on: https://chromium-review.googlesource.com/303601
+Project: angle/angle
+Branch: refs/heads/master
