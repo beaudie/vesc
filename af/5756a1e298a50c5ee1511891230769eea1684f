@@ -1,0 +1,9 @@
+Code-Review+1: Jamie Madill <jmadill@chromium.org>
+Tryjob-Request+1: Corentin Wallez <cwallez@chromium.org>
+Code-Review+2: Geoff Lang <geofflang@chromium.org>
+Verified+1: Corentin Wallez <cwallez@chromium.org>
+Submitted-by: Corentin Wallez <cwallez@chromium.org>
+Submitted-at: Thu, 08 Oct 2015 14:59:38 +0000
+Reviewed-on: https://chromium-review.googlesource.com/303392
+Project: angle/angle
+Branch: refs/heads/master
