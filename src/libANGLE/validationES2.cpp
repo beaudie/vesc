@@ -343,13 +343,20 @@ bool ValidateES2TexImageParameters(Context *context, GLenum target, GLint level,
                 return false;
             }
             break;
-          case GL_DEPTH_COMPONENT:
           case GL_DEPTH_STENCIL_OES:
-            if (!context->getExtensions().depthTextures)
+            if (!context->getExtensions().packedDepthStencil)
             {
                 context->recordError(Error(GL_INVALID_VALUE));
                 return false;
             }
+            break;
+        }
+
+        // Depth textures have additional restrictions
+        switch (format)
+        {
+          case GL_DEPTH_COMPONENT:
+          case GL_DEPTH_STENCIL_OES:
             if (target != GL_TEXTURE_2D)
             {
                 context->recordError(Error(GL_INVALID_OPERATION));
