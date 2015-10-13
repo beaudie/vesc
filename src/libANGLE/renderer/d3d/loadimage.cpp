@@ -7,6 +7,7 @@
 // loadimage.cpp: Defines image loading functions.
 
 #include "libANGLE/renderer/d3d/loadimage.h"
+#include "libANGLE/renderer/d3d/ETCDecoder.h"
 
 namespace rx
 {
@@ -692,6 +693,19 @@ void LoadR32ToR24G8(size_t width, size_t height, size_t depth,
             }
         }
     }
+}
+
+void LoadETCRGB(size_t width, size_t height, size_t depth,
+                const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,
+                uint8_t *output, size_t outputRowPitch, size_t outputDepthPitch)
+{
+  for (size_t z = 0; z < depth; z++)
+  {
+      const uint8_t* source = input + (z * inputDepthPitch);
+      uint8_t* dest = output + (z * outputDepthPitch);
+      ETCDecoder::Decode(source, dest, static_cast<int>(width), static_cast<int>(height), static_cast<int>(width), static_cast<int>(height), static_cast<int>(outputRowPitch), 4,
+        ETCDecoder::InputType::ETC_RGB);
+  }
 }
 
 }
