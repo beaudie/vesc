@@ -205,18 +205,28 @@ const D3D11LoadFunctionMap &BuildD3D11LoadFunctionMap()
     InsertLoadFunction(&map, GL_BGR5_A1_ANGLEX,         GL_UNSIGNED_BYTE,                  DXGI_FORMAT_UNKNOWN,          LoadToNative<GLubyte, 4>             );
     // Compressed formats
     // From ES 3.0.1 spec, table 3.16
-    //                      | Internal format                             | Type            | Load function                |
-    InsertLoadFunction(&map, GL_COMPRESSED_R11_EAC,                        GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,        UnimplementedLoadFunction            );
-    InsertLoadFunction(&map, GL_COMPRESSED_R11_EAC,                        GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,        UnimplementedLoadFunction            );
-    InsertLoadFunction(&map, GL_COMPRESSED_SIGNED_R11_EAC,                 GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,        UnimplementedLoadFunction            );
-    InsertLoadFunction(&map, GL_COMPRESSED_RG11_EAC,                       GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,        UnimplementedLoadFunction            );
-    InsertLoadFunction(&map, GL_COMPRESSED_SIGNED_RG11_EAC,                GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,        UnimplementedLoadFunction            );
-    InsertLoadFunction(&map, GL_COMPRESSED_RGB8_ETC2,                      GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,        UnimplementedLoadFunction            );
-    InsertLoadFunction(&map, GL_COMPRESSED_SRGB8_ETC2,                     GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,        UnimplementedLoadFunction            );
-    InsertLoadFunction(&map, GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,  GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,        UnimplementedLoadFunction            );
-    InsertLoadFunction(&map, GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2, GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,        UnimplementedLoadFunction            );
-    InsertLoadFunction(&map, GL_COMPRESSED_RGBA8_ETC2_EAC,                 GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,        UnimplementedLoadFunction            );
-    InsertLoadFunction(&map, GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC,          GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,        UnimplementedLoadFunction            );
+    //                      | Internal format                             | Type            | Target
+    //                      DXGI Format             | Load function
+    InsertLoadFunction(&map, GL_COMPRESSED_R11_EAC, GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,
+                       UnimplementedLoadFunction);
+    InsertLoadFunction(&map, GL_COMPRESSED_SIGNED_R11_EAC, GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,
+                       UnimplementedLoadFunction);
+    InsertLoadFunction(&map, GL_COMPRESSED_RG11_EAC, GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,
+                       UnimplementedLoadFunction);
+    InsertLoadFunction(&map, GL_COMPRESSED_SIGNED_RG11_EAC, GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,
+                       UnimplementedLoadFunction);
+    InsertLoadFunction(&map, GL_COMPRESSED_RGB8_ETC2, GL_UNSIGNED_BYTE, DXGI_FORMAT_B8G8R8A8_UNORM,
+                       LoadETCRGB);
+    InsertLoadFunction(&map, GL_COMPRESSED_SRGB8_ETC2, GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,
+                       UnimplementedLoadFunction);
+    InsertLoadFunction(&map, GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2, GL_UNSIGNED_BYTE,
+                       DXGI_FORMAT_UNKNOWN, UnimplementedLoadFunction);
+    InsertLoadFunction(&map, GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2, GL_UNSIGNED_BYTE,
+                       DXGI_FORMAT_UNKNOWN, UnimplementedLoadFunction);
+    InsertLoadFunction(&map, GL_COMPRESSED_RGBA8_ETC2_EAC, GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,
+                       UnimplementedLoadFunction);
+    InsertLoadFunction(&map, GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC, GL_UNSIGNED_BYTE,
+                       DXGI_FORMAT_UNKNOWN, UnimplementedLoadFunction);
 
     // From GL_EXT_texture_compression_dxt1
     InsertLoadFunction(&map, GL_COMPRESSED_RGB_S3TC_DXT1_EXT,              GL_UNSIGNED_BYTE, DXGI_FORMAT_UNKNOWN,        LoadCompressedToNative<4, 4,  8>     );
