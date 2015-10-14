@@ -7,6 +7,8 @@
 // renderergl_utils.cpp: Conversion functions and other utility routines
 // specific to the OpenGL renderer.
 
+#include <iostream>
+
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
 #include <limits>
@@ -233,6 +235,7 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
     }
     else
     {
+        std::cout << "FBO" << std::endl; 
         // Can't support ES2 without framebuffers and renderbuffers
         LimitVersion(maxSupportedESVersion, gl::Version(0, 0));
     }
@@ -333,6 +336,7 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
     }
     else
     {
+        std::cout << "dependent vertex shader limits" << std::endl; 
         // Can't support ES2 version without these caps
         LimitVersion(maxSupportedESVersion, gl::Version(0, 0));
     }
@@ -380,6 +384,7 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
     }
     else
     {
+        std::cout << "dependent fragment shader limits" << std::endl;
         // Can't support ES2 version without these caps
         LimitVersion(maxSupportedESVersion, gl::Version(0, 0));
     }
@@ -459,6 +464,7 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
     }
     else
     {
+        std::cout << "max varying" << std::endl;
         LimitVersion(maxSupportedESVersion, gl::Version(0, 0));
     }
 
@@ -521,8 +527,10 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
 
         // Texture swizzling is required to work around the luminance texture format not being
         // present in the core profile
+        std::cout << "in swizzle condition " << functions->profile << " " << functions->version.major << " " << functions->version.major << std::endl;
         if (functions->profile & GL_CONTEXT_CORE_PROFILE_BIT)
         {
+            std::cout << "  in second swizzle condition" <<std::endl;
             LimitVersion(maxSupportedESVersion, gl::Version(0, 0));
         }
     }
