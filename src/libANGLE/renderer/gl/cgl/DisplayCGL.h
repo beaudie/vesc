@@ -13,6 +13,8 @@
 
 struct _CGLContextObject;
 typedef _CGLContextObject *CGLContextObj;
+struct _CGLPixelFormatObject;
+typedef _CGLPixelFormatObject *CGLPixelFormatObj;
 
 namespace rx
 {
@@ -57,6 +59,9 @@ class DisplayCGL : public DisplayGL
     void generateCaps(egl::Caps *outCaps) const override;
 
     egl::Display *mEGLDisplay;
+    void *mGLLibHandle;
+    std::vector<CGLPixelFormatObj> mContextPixelFormats;
+
     FunctionsGL *mFunctions;
     CGLContextObj mContext;
 };
