@@ -15,6 +15,7 @@
 #include "common/debug.h"
 #include "libANGLE/renderer/gl/CGL/PbufferSurfaceCGL.h"
 #include "libANGLE/renderer/gl/CGL/WindowSurfaceCGL.h"
+#include "libANGLE/renderer/gl/renderergl_utils.h"
 
 namespace
 {
@@ -44,7 +45,7 @@ class FunctionsGLCGL : public FunctionsGL
     void *mDylibHandle;
 };
 
-DisplayCGL::DisplayCGL() : DisplayGL(), mEGLDisplay(nullptr), mFunctions(nullptr), mContext(nullptr)
+DisplayCGL::DisplayCGL() : DisplayGL(), mEGLDisplay(nullptr), mGLLibHandle(nullptr), mFunctions(nullptr), mContext(nullptr)
 {
 }
 
@@ -56,41 +57,85 @@ egl::Error DisplayCGL::initialize(egl::Display *display)
 {
     mEGLDisplay = display;
 
+    // TODO(cwallez) investigate which pixel formats we want
     CGLPixelFormatObj pixelFormat;
     {
-        // TODO(cwallez) investigate which pixel format we want
         CGLPixelFormatAttribute attribs[] = {
             kCGLPFAOpenGLProfile, static_cast<CGLPixelFormatAttribute>(kCGLOGLPVersion_3_2_Core),
             static_cast<CGLPixelFormatAttribute>(0)};
         GLint nVirtualScreens = 0;
         CGLChoosePixelFormat(attribs, &pixelFormat, &nVirtualScreens);
-
-        if (pixelFormat == nullptr)
+        if (pixelFormat != nullptr)
         {
-            return egl::Error(EGL_NOT_INITIALIZED, "Could not create the context's pixel format.");
+            mContextPixelFormats.push_back(pixelFormat);
+        }
+    }
+    {
+        CGLPixelFormatAttribute attribs[] = {
+            kCGLPFAOpenGLProfile, static_cast<CGLPixelFormatAttribute>(kCGLOGLPVersion_3_2_Core),
+            static_cast<CGLPixelFormatAttribute>(0)};
+        GLint nVirtualScreens = 0;
+        CGLChoosePixelFormat(attribs, &pixelFormat, &nVirtualScreens);
+        if (pixelFormat != nullptr)
+        {
+            mContextPixelFormats.push_back(pixelFormat);
         }
     }
 
-    CGLCreateContext(pixelFormat, nullptr, &mContext);
-    if (mContext == nullptr)
+    if (mContextPixelFormats.empty())
     {
-        return egl::Error(EGL_NOT_INITIALIZED, "Could not create the CGL context.");
+        egl::Error(EGL_NOT_INITIALIZED, "Could not create a context pixel format.");
     }
-    CGLSetCurrentContext(mContext);
 
     // There is no equivalent getProcAddress in CGL so we open the dylib directly
-    void *handle = dlopen(kDefaultOpenGLDylibName, RTLD_NOW);
-    if (!handle)
+    void *mGLLibHandle = dlopen(kDefaultOpenGLDylibName, RTLD_NOW);
+    if (!mGLLibHandle)
     {
-        handle = dlopen(kFallbackOpenGLDylibName, RTLD_NOW);
+        mGLLibHandle = dlopen(kFallbackOpenGLDylibName, RTLD_NOW);
     }
-    if (!handle)
+    if (!mGLLibHandle)
     {
         return egl::Error(EGL_NOT_INITIALIZED, "Could not open the OpenGL Framework.");
     }
 
-    mFunctions = new FunctionsGLCGL(handle);
-    mFunctions->initialize();
+    for (auto pixelFormat : mContextPixelFormats)
+    {
+        CGLContextObj context = nullptr;
+        CGLCreateContext(pixelFormat, nullptr, &context);
+
+        if (context == nullptr)
+        {
+            continue;
+        }
+
+        CGLSetCurrentContext(context);
+
+        FunctionsGL *functions = new FunctionsGLCGL(mGLLibHandle);
+        functions->initialize();
+
+        gl::Caps caps;
+        gl::TextureCapsMap textureCaps;
+        gl::Extensions extensions;
+        gl::Version supportedVersion;
+        rx::nativegl_gl::GenerateCaps(functions, &caps, &textureCaps, &extensions, &supportedVersion);
+
+        if (supportedVersion >= gl::Version(2, 0))
+        {
+            mContext = context;
+            mFunctions = functions;
+            break;
+        }
+
+        CGLSetCurrentContext(nullptr);
+        CGLReleaseContext(context);
+        context = nullptr;
+
+        SafeDelete(functions);
+    }
+    if (mContext == nullptr || mFunctions == nullptr)
+    {
+        return egl::Error(EGL_NOT_INITIALIZED, "Could not create the CGL context.");
+    }
 
     return DisplayGL::initialize(display);
 }
@@ -105,6 +150,19 @@ void DisplayCGL::terminate()
         CGLReleaseContext(mContext);
         mContext = nullptr;
     }
+
+    if (mGLLibHandle != nullptr)
+    {
+        dlclose(mGLLibHandle);
+        mGLLibHandle = nullptr;
+    }
+
+    for (auto& pixelFormat : mContextPixelFormats)
+    {
+        CGLReleasePixelFormat(pixelFormat);
+        pixelFormat = nullptr;
+    }
+    mContextPixelFormats.clear();
 
     SafeDelete(mFunctions);
 }
