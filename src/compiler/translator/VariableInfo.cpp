@@ -570,6 +570,11 @@ void CollectVariables::visitVariable(const TIntermSymbol *variable,
         traverser.traverse(fieldType, fullFieldName, &interfaceBlock.fields);
 
         interfaceBlock.fields.back().isRowMajorLayout = (fieldType.getLayoutQualifier().matrixPacking == EmpRowMajor);
+        if (variable->getQualifier() == EvqUniform)
+        {
+            NameHashingTraverser traverser(mHashFunction, mSymbolTable);
+            traverser.traverse(fieldType, field.name(), mUniforms);
+        }
     }
 
     infoList->push_back(interfaceBlock);
