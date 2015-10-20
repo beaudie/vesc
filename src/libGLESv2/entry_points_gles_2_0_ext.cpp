@@ -1202,4 +1202,113 @@ ANGLE_EXPORT void GL_APIENTRY EGLImageTargetRenderbufferStorageOES(GLenum target
         }
     }
 }
+
+void GL_APIENTRY BindVertexArrayOES(GLuint array)
+{
+    EVENT("(GLuint array = %u)", array);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!context->getExtensions().vertexArrayObject)
+        {
+            context->recordError(Error(GL_INVALID_OPERATION, "Extension not enabled"));
+            return;
+        }
+
+        VertexArray *vao = context->getVertexArray(array);
+
+        if (!vao)
+        {
+            // The default VAO should always exist
+            ASSERT(array != 0);
+            context->recordError(Error(GL_INVALID_OPERATION));
+            return;
+        }
+
+        context->bindVertexArray(array);
+    }
+}
+
+void GL_APIENTRY DeleteVertexArraysOES(GLsizei n, const GLuint* arrays)
+{
+    EVENT("(GLsizei n = %d, const GLuint* arrays = 0x%0.8p)", n, arrays);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!context->getExtensions().vertexArrayObject)
+        {
+            context->recordError(Error(GL_INVALID_OPERATION, "Extension not enabled"));
+            return;
+        }
+
+        if (n < 0)
+        {
+            context->recordError(Error(GL_INVALID_VALUE));
+            return;
+        }
+
+        for (int arrayIndex = 0; arrayIndex < n; arrayIndex++)
+        {
+            if (arrays[arrayIndex] != 0)
+            {
+                context->deleteVertexArray(arrays[arrayIndex]);
+            }
+        }
+    }
+}
+
+void GL_APIENTRY GenVertexArraysOES(GLsizei n, GLuint* arrays)
+{
+    EVENT("(GLsizei n = %d, GLuint* arrays = 0x%0.8p)", n, arrays);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!context->getExtensions().vertexArrayObject)
+        {
+            context->recordError(Error(GL_INVALID_OPERATION, "Extension not enabled"));
+            return;
+        }
+
+        if (n < 0)
+        {
+            context->recordError(Error(GL_INVALID_VALUE));
+            return;
+        }
+
+        for (int arrayIndex = 0; arrayIndex < n; arrayIndex++)
+        {
+            arrays[arrayIndex] = context->createVertexArray();
+        }
+    }
+}
+
+GLboolean GL_APIENTRY IsVertexArrayOES(GLuint array)
+{
+    EVENT("(GLuint array = %u)", array);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!context->getExtensions().vertexArrayObject)
+        {
+            context->recordError(Error(GL_INVALID_OPERATION, "Extension not enabled"));
+            return GL_FALSE;
+        }
+
+        if (array == 0)
+        {
+            return GL_FALSE;
+        }
+
+        VertexArray *vao = context->getVertexArray(array);
+
+        return (vao != NULL ? GL_TRUE : GL_FALSE);
+    }
+
+    return GL_FALSE;
+}
+
 }
