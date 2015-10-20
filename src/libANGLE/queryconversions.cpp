@@ -103,6 +103,7 @@ void CastStateValues(Context *context, GLenum nativeType, GLenum pname,
     {
         GLint *intParams = NULL;
         intParams = new GLint[numParams];
+        memset(intParams, 0, sizeof(GLint) * numParams);
 
         context->getIntegerv(pname, intParams);
 
