@@ -111,14 +111,14 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions, G
 
 static GLint QuerySingleGLInt(const FunctionsGL *functions, GLenum name)
 {
-    GLint result;
+    GLint result = 0;
     functions->getIntegerv(name, &result);
     return result;
 }
 
 static GLint QueryGLIntRange(const FunctionsGL *functions, GLenum name, size_t index)
 {
-    GLint result[2];
+    GLint result[2] = {};
     functions->getIntegerv(name, result);
     return result[index];
 }
