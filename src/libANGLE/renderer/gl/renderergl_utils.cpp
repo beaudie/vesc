@@ -310,6 +310,7 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
         caps->vertexLowpInt.setTwosComplementInt(32);
         caps->fragmentHighpInt.setTwosComplementInt(32);
         caps->fragmentMediumpInt.setTwosComplementInt(32);
+        caps->fragmentMediumpInt.setTwosComplementInt(32);
         caps->fragmentLowpInt.setTwosComplementInt(32);
     }
 
