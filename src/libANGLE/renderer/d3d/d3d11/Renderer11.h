@@ -132,10 +132,7 @@ class Renderer11 : public RendererD3D
 
     virtual bool applyPrimitiveType(GLenum mode, GLsizei count, bool usesPointSize);
     gl::Error applyRenderTarget(const gl::Framebuffer *frameBuffer) override;
-    gl::Error applyShaders(gl::Program *program,
-                           const gl::Framebuffer *framebuffer,
-                           bool rasterizerDiscard,
-                           bool transformFeedbackActive) override;
+    gl::Error applyShadersImpl(const gl::Data &data) override;
 
     gl::Error applyUniforms(const ProgramD3D &programD3D,
                             const std::vector<D3DUniform *> &uniformArray) override;
