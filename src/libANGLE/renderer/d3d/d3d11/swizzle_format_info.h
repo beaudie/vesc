@@ -42,7 +42,9 @@ struct SwizzleFormatInfo
     SwizzleFormatInfo(DXGI_FORMAT texFormat, DXGI_FORMAT srvFormat, DXGI_FORMAT rtvFormat);
 };
 
-const SwizzleFormatInfo &GetSwizzleFormatInfo(GLuint maxBits, GLenum componentType);
+typedef std::map<SwizzleSizeType, SwizzleFormatInfo> SwizzleInfoMap;
+
+const SwizzleInfoMap &BuildSwizzleInfoMap();
 
 }  // namespace d3d11
 
