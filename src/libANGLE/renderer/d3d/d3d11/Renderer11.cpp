@@ -2134,6 +2134,7 @@ gl::Error Renderer11::applyShadersImpl(const gl::Data &data, GLenum drawMode)
 }
 
 gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
+                                    GLenum drawMode,
                                     const std::vector<D3DUniform *> &uniformArray)
 {
     unsigned int totalRegisterCountVS = 0;
@@ -2293,7 +2294,7 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
     }
 
     // GSSetConstantBuffers triggers device removal on 9_3, so we should only call it if necessary
-    if (programD3D.usesGeometryShader())
+    if (programD3D.usesGeometryShader(drawMode))
     {
         // needed for the point sprite geometry shader
         if (mCurrentGeometryConstantBuffer != mDriverConstantBufferPS)
