@@ -113,7 +113,10 @@ class ProgramD3D : public ProgramImpl
     gl::Error getVertexExecutableForInputLayout(const gl::InputLayout &inputLayout,
                                                 ShaderExecutableD3D **outExectuable,
                                                 gl::InfoLog *infoLog);
-    ShaderExecutableD3D *getGeometryExecutable() const { return mGeometryExecutable; }
+    gl::Error getGeometryExecutableForPrimitiveType(const gl::Data &data,
+                                                    GLenum drawMode,
+                                                    ShaderExecutableD3D **outExecutable,
+                                                    gl::InfoLog *infoLog);
 
     LinkResult link(const gl::Data &data, gl::InfoLog &infoLog) override;
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
@@ -301,7 +304,7 @@ class ProgramD3D : public ProgramImpl
 
     std::vector<VertexExecutable *> mVertexExecutables;
     std::vector<PixelExecutable *> mPixelExecutables;
-    ShaderExecutableD3D *mGeometryExecutable;
+    std::vector<ShaderExecutableD3D *> mGeometryExecutables;
 
     std::string mVertexHLSL;
     D3DCompilerWorkarounds mVertexWorkarounds;
@@ -310,6 +313,9 @@ class ProgramD3D : public ProgramImpl
     D3DCompilerWorkarounds mPixelWorkarounds;
     bool mUsesFragDepth;
     std::vector<PixelShaderOutputVariable> mPixelShaderKey;
+
+    // Necessary for dynamic Geometry Shaders
+    std::string mGeometryShaderPreamble;
 
     bool mUsesPointSize;
 
