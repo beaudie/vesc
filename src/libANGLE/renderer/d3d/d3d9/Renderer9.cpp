@@ -1914,6 +1914,7 @@ gl::Error Renderer9::applyShadersImpl(const gl::Data &data, GLenum /*drawMode*/)
 }
 
 gl::Error Renderer9::applyUniforms(const ProgramD3D &programD3D,
+                                   GLenum /*drawMode*/,
                                    const std::vector<D3DUniform *> &uniformArray)
 {
     for (const D3DUniform *targetUniform : uniformArray)
