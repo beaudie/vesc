@@ -229,16 +229,6 @@ VertexFormatType GetVertexFormatType(const VertexAttribute &attrib);
 VertexFormatType GetVertexFormatType(const VertexAttribute &attrib, GLenum currentValueType);
 const VertexFormat &GetVertexFormatFromType(VertexFormatType vertexFormatType);
 
-enum PrimitiveType
-{
-    PRIMITIVE_POINTS,
-    PRIMITIVE_LINES,
-    PRIMITIVE_LINE_STRIP,
-    PRIMITIVE_TRIANGLES,
-    PRIMITIVE_TRIANGLE_STRIP,
-    PRIMITIVE_TRIANGLE_FAN,
-};
-
 }  // namespace gl
 
 #endif // LIBANGLE_FORMATUTILS_H_
