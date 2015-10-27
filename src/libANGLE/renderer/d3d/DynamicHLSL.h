@@ -98,9 +98,10 @@ class DynamicHLSL : angle::NonCopyable
                                 std::vector<PixelShaderOutputVariable> *outPixelShaderKey,
                                 bool *outUsesFragDepth) const;
 
-    std::string generateGeometryShaderHLSL(const gl::Data &data,
+    std::string generateGeometryShaderHLSL(gl::PrimitiveType primitiveType,
+                                           const gl::Data &data,
+                                           const gl::Program::Data &programData,
                                            int registers,
-                                           const ShaderD3D *fragmentShader,
                                            const std::vector<PackedVarying> &packedVaryings) const;
 
   private:
