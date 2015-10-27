@@ -448,7 +448,7 @@ gl::Error RendererD3D::applyShaders(const gl::Data &data, GLenum drawMode)
         return error;
     }
 
-    return programD3D->applyUniforms();
+    return programD3D->applyUniforms(drawMode);
 }
 
 // For each Direct3D sampler of either the pixel or vertex stage,

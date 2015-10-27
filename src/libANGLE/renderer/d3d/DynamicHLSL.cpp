@@ -245,9 +245,24 @@ bool PackVarying(PackedVarying *packedVarying, const int maxVaryingVectors, Vary
     return false;
 }
 
+unsigned int VaryingRegisterIndex(const gl::Caps &caps,
+                                  const PackedVarying &packedVarying,
+                                  unsigned int elementIndex,
+                                  unsigned int row)
+{
+    const sh::Varying &varying = *packedVarying.varying;
+
+    GLenum transposedType = TransposeMatrixType(varying.type);
+    unsigned int variableRows =
+        static_cast<unsigned int>(varying.isStruct() ? 1 : VariableRowCount(transposedType));
+
+    return elementIndex * variableRows + packedVarying.columnIndex * caps.maxVaryingVectors +
+           packedVarying.registerIndex + row;
+}
+
 const std::string VERTEX_ATTRIBUTE_STUB_STRING = "@@ VERTEX ATTRIBUTES @@";
 const std::string PIXEL_OUTPUT_STUB_STRING     = "@@ PIXEL OUTPUT @@";
-}
+}  // anonymous namespace
 
 DynamicHLSL::DynamicHLSL(RendererD3D *const renderer) : mRenderer(renderer)
 {
@@ -344,7 +359,8 @@ std::string DynamicHLSL::generateVaryingHLSL(const gl::Caps &caps,
                                              bool shaderUsesPointSize) const
 {
     std::string varyingSemantic = getVaryingSemantic(shaderUsesPointSize);
-    std::string varyingHLSL;
+
+    std::stringstream hlslStream;
 
     for (const PackedVarying &packedVarying : varyings)
     {
@@ -357,11 +373,12 @@ std::string DynamicHLSL::generateVaryingHLSL(const gl::Caps &caps,
 
         ASSERT(!varying.isBuiltIn());
         GLenum transposedType = TransposeMatrixType(varying.type);
-        int variableRows      = (varying.isStruct() ? 1 : VariableRowCount(transposedType));
+        unsigned int variableRows =
+            static_cast<unsigned int>(varying.isStruct() ? 1 : VariableRowCount(transposedType));
 
         for (unsigned int elementIndex = 0; elementIndex < varying.elementCount(); elementIndex++)
         {
-            for (int row = 0; row < variableRows; row++)
+            for (unsigned int row = 0; row < variableRows; row++)
             {
                 // TODO: Add checks to ensure D3D interpolation modifiers don't result in too many
                 // registers being used.
@@ -373,42 +390,39 @@ std::string DynamicHLSL::generateVaryingHLSL(const gl::Caps &caps,
                 switch (varying.interpolation)
                 {
                     case sh::INTERPOLATION_SMOOTH:
-                        varyingHLSL += "    ";
+                        hlslStream << "    ";
                         break;
                     case sh::INTERPOLATION_FLAT:
-                        varyingHLSL += "    nointerpolation ";
+                        hlslStream << "    nointerpolation ";
                         break;
                     case sh::INTERPOLATION_CENTROID:
-                        varyingHLSL += "    centroid ";
+                        hlslStream << "    centroid ";
                         break;
                     default:
                         UNREACHABLE();
                 }
 
-                unsigned int semanticIndex = elementIndex * variableRows +
-                                             packedVarying.columnIndex * caps.maxVaryingVectors +
-                                             packedVarying.registerIndex + row;
-                std::string n = Str(semanticIndex);
-
-                std::string typeString;
-
                 if (varying.isStruct())
                 {
                     // TODO(jmadill): pass back translated name from the shader translator
-                    typeString = decorateVariable(varying.structName);
+                    hlslStream << decorateVariable(varying.structName);
                 }
                 else
                 {
                     GLenum componentType = VariableComponentType(transposedType);
                     int columnCount      = VariableColumnCount(transposedType);
-                    typeString           = HLSLComponentTypeString(componentType, columnCount);
+                    hlslStream << HLSLComponentTypeString(componentType, columnCount);
                 }
-                varyingHLSL += typeString + " v" + n + " : " + varyingSemantic + n + ";\n";
+
+                unsigned int registerIndex =
+                    VaryingRegisterIndex(caps, packedVarying, elementIndex, row);
+                hlslStream << " v" << registerIndex << " : " << varyingSemantic << registerIndex
+                           << ";\n";
             }
         }
     }
 
-    return varyingHLSL;
+    return hlslStream.str();
 }
 
 std::string DynamicHLSL::generateVertexShaderForInputLayout(
@@ -1208,20 +1222,47 @@ std::string DynamicHLSL::generateGeometryShaderPreamble(
 
     std::stringstream preambleStream;
 
-    preambleStream << "struct GS_INPUT\n" << inLinkHLSL << "\n"
-                   << "struct GS_OUTPUT\n" << outLinkHLSL << "\n"
-                   << "void copyVertex(inout GS_OUTPUT output, GS_INPUT input)\n"
-                   << "{\n"
-                   << "    output.gl_Position = input.gl_Position;\n";
+    preambleStream
+        << "struct GS_INPUT\n" << inLinkHLSL << "\n"
+        << "struct GS_OUTPUT\n" << outLinkHLSL << "\n"
+        << "void copyVertex(inout GS_OUTPUT output, GS_INPUT input, GS_INPUT flatinput)\n"
+        << "{\n"
+        << "    output.gl_Position = input.gl_Position;\n";
 
     if (usesPointSize)
     {
         preambleStream << "    output.gl_PointSize = input.gl_PointSize;\n";
     }
 
-    for (unsigned int r = 0; r < registers; ++r)
+    for (const PackedVarying &packedVarying : packedVaryings)
     {
-        preambleStream << "    output.v" << r << " = input.v" << r << ";\n";
+        if (!packedVarying.registerAssigned())
+        {
+            continue;
+        }
+
+        const sh::Varying &varying = *packedVarying.varying;
+
+        ASSERT(!varying.isBuiltIn());
+        GLenum transposedType = TransposeMatrixType(varying.type);
+        unsigned int variableRows =
+            static_cast<unsigned int>(varying.isStruct() ? 1 : VariableRowCount(transposedType));
+
+        for (unsigned int elementIndex = 0; elementIndex < varying.elementCount(); elementIndex++)
+        {
+            for (unsigned int row = 0; row < variableRows; row++)
+            {
+                unsigned int registerIndex =
+                    VaryingRegisterIndex(*data.caps, packedVarying, elementIndex, row);
+
+                preambleStream << "    output.v" << registerIndex << " = ";
+                if (varying.interpolation == sh::INTERPOLATION_FLAT)
+                {
+                    preambleStream << "flat";
+                }
+                preambleStream << "input.v" << registerIndex << "; \n";
+            }
+        }
     }
 
     if (usesFragCoord)
@@ -1321,9 +1362,11 @@ std::string DynamicHLSL::generateGeometryShaderHLSL(gl::PrimitiveType primitiveT
                  << "{\n"
                  << "    GS_OUTPUT output = (GS_OUTPUT)0;\n";
 
+    int flatVertexIndex = inputSize - 1;
     for (int vertexIndex = 0; vertexIndex < inputSize; ++vertexIndex)
     {
-        shaderStream << "    copyVertex(output, input[" << vertexIndex << "]);\n";
+        shaderStream << "    copyVertex(output, input[" << vertexIndex << "], input["
+                     << flatVertexIndex << "]);\n";
 
         if (!pointSprites)
         {
