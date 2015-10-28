@@ -31,9 +31,7 @@ static std::string GenerateExtensionsString(const T &extensions)
     return stream.str();
 }
 
-Device::Device(Display *display, rx::DeviceImpl *impl)
-    : mDisplay(display),
-      mImplementation(impl)
+Device::Device(rx::DeviceImpl *impl) : mImplementation(impl)
 {
     initDeviceExtensions();
 }

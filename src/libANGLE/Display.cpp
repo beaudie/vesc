@@ -272,7 +272,7 @@ Error Display::initialize()
         {
             return error;
         }
-        mDevice = new Device(this, impl);
+        mDevice = new Device(impl);
     }
     else
     {

@@ -21,6 +21,7 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/features.h"
 #include "libANGLE/formatutils.h"
+#include "libANGLE/renderer/d3d/DeviceD3D.h"
 #include "libANGLE/renderer/d3d/FramebufferD3D.h"
 #include "libANGLE/renderer/d3d/IndexDataManager.h"
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
@@ -3037,6 +3038,21 @@ gl::Error Renderer9::clearTextures(gl::SamplerType samplerType, size_t rangeStar
     }
 
     return gl::Error(GL_NO_ERROR);
+}
+
+egl::Error Renderer9::initializeEGLDevice()
+{
+    if (mEGLDevice == nullptr)
+    {
+        if (mDevice == nullptr)
+        {
+            return egl::Error(EGL_BAD_DEVICE_EXT, "D3D9 device hasn't been initialized yet.");
+        }
+
+        mEGLDevice = new DeviceD3D(reinterpret_cast<EGLAttrib>(mDevice), EGL_D3D9_DEVICE_ANGLE);
+    }
+
+    return egl::Error(EGL_SUCCESS);
 }
 
 Renderer9::CurSamplerState::CurSamplerState()
