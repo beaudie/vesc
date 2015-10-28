@@ -232,6 +232,8 @@ class Renderer9 : public RendererD3D
 
     D3DDEVTYPE getD3D9DeviceType() const { return mDeviceType; }
 
+    egl::Error initializeEGLDevice(DeviceD3D **outDevice) override;
+
   protected:
     void createAnnotator() override;
     gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) override;
