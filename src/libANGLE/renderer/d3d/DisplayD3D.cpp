@@ -205,7 +205,7 @@ ImageImpl *DisplayD3D::createImage(EGLenum target,
     return new EGLImageD3D(mRenderer, target, buffer, attribs);
 }
 
-egl::Error DisplayD3D::getDevice(DeviceImpl **device)
+egl::Error DisplayD3D::getDeviceImpl(DeviceImpl **device)
 {
     return mRenderer->getEGLDevice(device);
 }

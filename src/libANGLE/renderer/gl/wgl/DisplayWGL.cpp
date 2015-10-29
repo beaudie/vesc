@@ -354,7 +354,7 @@ SurfaceImpl *DisplayWGL::createPixmapSurface(const egl::Config *configuration,
     return nullptr;
 }
 
-egl::Error DisplayWGL::getDevice(DeviceImpl **device)
+egl::Error DisplayWGL::getDeviceImpl(DeviceImpl **device)
 {
     UNIMPLEMENTED();
     return egl::Error(EGL_BAD_DISPLAY);

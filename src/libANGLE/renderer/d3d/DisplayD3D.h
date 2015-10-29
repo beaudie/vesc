@@ -54,7 +54,7 @@ class DisplayD3D : public DisplayImpl
 
     bool isValidNativeWindow(EGLNativeWindowType window) const override;
 
-    egl::Error getDevice(DeviceImpl **device) override;
+    egl::Error getDeviceImpl(DeviceImpl **device) override;
 
     std::string getVendorString() const override;
 
