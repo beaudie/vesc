@@ -37,6 +37,10 @@ ANGLE_EXPORT EGLImageKHR EGLAPIENTRY CreateImageKHR(EGLDisplay dpy,
                                                     EGLClientBuffer buffer,
                                                     const EGLint *attrib_list);
 ANGLE_EXPORT EGLBoolean EGLAPIENTRY DestroyImageKHR(EGLDisplay dpy, EGLImageKHR image);
+
+// EGL_EXT_device_creation
+ANGLE_EXPORT EGLDeviceEXT EGLAPIENTRY CreateDeviceANGLE(const EGLAttrib *attrib_list);
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY DestroyDeviceANGLE(EGLDeviceEXT device);
 }
 
 #endif // LIBGLESV2_ENTRYPOINTSEGLEXT_H_

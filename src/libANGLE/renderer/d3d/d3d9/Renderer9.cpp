@@ -3049,7 +3049,17 @@ egl::Error Renderer9::initializeEGLDevice(DeviceD3D **outDevice)
             return egl::Error(EGL_BAD_DEVICE_EXT, "D3D9 device hasn't been initialized yet.");
         }
 
-        *outDevice = new DeviceD3D(reinterpret_cast<EGLAttrib>(mDevice), EGL_D3D9_DEVICE_ANGLE);
+        DeviceD3D *device = new DeviceD3D();
+        egl::Error error = device->initialize(reinterpret_cast<EGLAttrib>(mDevice),
+                                              EGL_D3D9_DEVICE_ANGLE, EGL_FALSE);
+
+        if (error.isError())
+        {
+            SafeDelete(device);
+            return error;
+        }
+
+        *outDevice = device;
     }
 
     return egl::Error(EGL_SUCCESS);

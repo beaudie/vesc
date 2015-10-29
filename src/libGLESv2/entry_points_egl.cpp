@@ -1526,6 +1526,10 @@ __eglMustCastToProperFunctionPointerType EGLAPIENTRY GetProcAddress(const char *
         INSERT_PROC_ADDRESS(egl, CreateImageKHR);
         INSERT_PROC_ADDRESS(egl, DestroyImageKHR);
 
+        // EGL_EXT_device_creation
+        INSERT_PROC_ADDRESS(egl, CreateDeviceANGLE);
+        INSERT_PROC_ADDRESS(egl, DestroyDeviceANGLE);
+
 #undef INSERT_PROC_ADDRESS
         return map;
     };
