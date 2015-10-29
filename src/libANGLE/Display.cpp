@@ -267,7 +267,7 @@ Error Display::initialize()
     if (mDisplayExtensions.deviceQuery)
     {
         rx::DeviceImpl *impl = nullptr;
-        error = mImplementation->getDevice(&impl);
+        error = mImplementation->getDeviceImpl(&impl);
         if (error.isError())
         {
             return error;
@@ -709,6 +709,10 @@ static ClientExtensions GenerateClientExtensions()
 
 #if defined(ANGLE_ENABLE_OPENGL)
     extensions.platformANGLEOpenGL = true;
+#endif
+
+#if defined(ANGLE_ENABLE_D3D11)
+    extensions.deviceCreation = true;
 #endif
 
     extensions.clientGetAllProcAddresses = true;

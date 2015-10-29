@@ -296,14 +296,16 @@ EGLBoolean EGLAPIENTRY QueryDeviceAttribEXT(EGLDeviceEXT device, EGLint attribut
         return EGL_FALSE;
     }
 
-    Display *display = dev->getDisplay();
-    Error error(EGL_SUCCESS);
-
-    if (!display->getExtensions().deviceQuery)
+    // If the device was created by (and is owned by) a display, and that display doesn't support
+    // device querying, then this call should fail
+    Display *owningDisplay = dev->getOwningDisplay();
+    if (owningDisplay != nullptr && !owningDisplay->getExtensions().deviceQuery)
     {
         SetGlobalError(Error(EGL_BAD_ACCESS));
         return EGL_FALSE;
     }
+
+    Error error(EGL_SUCCESS);
 
     // validate the attribute parameter
     switch (attribute)
@@ -433,6 +435,86 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY DestroyImageKHR(EGLDisplay dpy, EGLImageKHR 
     }
 
     display->destroyImage(img);
+
+    return EGL_TRUE;
+}
+
+ANGLE_EXPORT EGLDeviceEXT EGLAPIENTRY CreateDeviceANGLE(const EGLAttrib *attrib_list)
+{
+    EVENT("(EGLAttrib* attrib_list = 0x%0.8p)", attrib_list);
+
+    const ClientExtensions &clientExtensions = Display::getClientExtensions();
+    if (!clientExtensions.deviceCreation)
+    {
+        SetGlobalError(Error(EGL_BAD_ACCESS, "Extension not active."));
+        return EGL_NO_DISPLAY;
+    }
+
+    if (!attrib_list)
+    {
+        SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+        return EGL_NO_DISPLAY;
+    }
+
+    EGLAttrib deviceType    = 0;
+    EGLAttrib devicePointer = 0;
+    size_t deviceCount      = 0;
+
+    for (const EGLAttrib *curAttrib = attrib_list; curAttrib[0] != EGL_NONE; curAttrib += 2)
+    {
+        switch (curAttrib[0])
+        {
+            case EGL_D3D11_DEVICE_ANGLE:
+                deviceCount += 1;
+                deviceType    = curAttrib[0];
+                devicePointer = curAttrib[1];
+                break;
+
+            case EGL_D3D9_DEVICE_ANGLE:
+            default:
+                SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+                return EGL_NO_DEVICE_EXT;
+        }
+    }
+
+    if (deviceCount != 1)
+    {
+        // Only one device should be specified in attrib_list
+        SetGlobalError(Error(EGL_BAD_ATTRIBUTE));
+        return EGL_NO_DEVICE_EXT;
+    }
+
+    Device *device = nullptr;
+    egl::Error error =
+        Device::CreateDevice(devicePointer, static_cast<EGLint>(deviceType), &device);
+    if (error.isError())
+    {
+        SetGlobalError(error);
+        return EGL_NO_DEVICE_EXT;
+    }
+
+    return device;
+}
+
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY DestroyDeviceANGLE(EGLDeviceEXT device)
+{
+    EVENT("(EGLDeviceEXT device = 0x%0.8p)", device);
+
+    const ClientExtensions &clientExtensions = Display::getClientExtensions();
+    if (!clientExtensions.deviceCreation)
+    {
+        SetGlobalError(Error(EGL_BAD_ACCESS, "Extension not active."));
+        return EGL_FALSE;
+    }
+
+    if (device == EGL_NO_DEVICE_EXT)
+    {
+        SetGlobalError(Error(EGL_BAD_ACCESS));
+        return EGL_FALSE;
+    }
+
+    Device *dev = static_cast<Device *>(device);
+    SafeDelete(dev);
 
     return EGL_TRUE;
 }
