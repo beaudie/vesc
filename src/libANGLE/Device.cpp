@@ -18,6 +18,10 @@
 #include "common/platform.h"
 #include "libANGLE/renderer/DeviceImpl.h"
 
+#if defined(ANGLE_ENABLE_D3D11)
+#include "libANGLE/renderer/D3D/DeviceD3D.h"
+#endif
+
 namespace egl
 {
 
@@ -31,8 +35,39 @@ static std::string GenerateExtensionsString(const T &extensions)
     return stream.str();
 }
 
-Device::Device(Display *display, rx::DeviceImpl *impl)
-    : mDisplay(display),
+// Static factory method
+egl::Error Device::CreateDevice(EGLAttrib devicePointer, EGLint deviceType, Device **outDevice)
+{
+#if defined(ANGLE_ENABLE_D3D11)
+    if (deviceType == EGL_D3D11_DEVICE_ANGLE)
+    {
+        rx::DeviceD3D *deviceD3D = new rx::DeviceD3D();
+        egl::Error error = deviceD3D->initialize(devicePointer, deviceType, EGL_TRUE);
+        if (error.isError())
+        {
+            *outDevice = nullptr;
+            return error;
+        }
+
+        *outDevice = new Device(deviceD3D);
+        return egl::Error(EGL_SUCCESS);
+    }
+#endif
+
+    // Note that creating an EGL device from inputted D3D9 parameters isn't currently supported
+    *outDevice = nullptr;
+    return egl::Error(EGL_BAD_ATTRIBUTE);
+}
+
+Device::Device(Display *owningDisplay, rx::DeviceImpl *impl)
+    : mOwningDisplay(owningDisplay),
+      mImplementation(impl)
+{
+    initDeviceExtensions();
+}
+
+Device::Device(rx::DeviceImpl *impl)
+    : mOwningDisplay(nullptr),
       mImplementation(impl)
 {
     initDeviceExtensions();
@@ -40,7 +75,11 @@ Device::Device(Display *display, rx::DeviceImpl *impl)
 
 Device::~Device()
 {
-
+    if (mImplementation != nullptr)
+    {
+        SafeDelete(mImplementation);
+        mImplementation = nullptr;
+    }
 }
 
 Error Device::getDevice(EGLAttrib *value)

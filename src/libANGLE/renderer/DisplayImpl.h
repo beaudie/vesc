@@ -79,7 +79,7 @@ class DisplayImpl : angle::NonCopyable
 
     virtual std::string getVendorString() const = 0;
 
-    virtual egl::Error getDevice(DeviceImpl **device) = 0;
+    virtual egl::Error getDeviceImpl(DeviceImpl **device) = 0;
 
     const egl::Caps &getCaps() const;
 
