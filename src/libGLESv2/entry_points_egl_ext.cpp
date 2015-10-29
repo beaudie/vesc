@@ -296,14 +296,16 @@ EGLBoolean EGLAPIENTRY QueryDeviceAttribEXT(EGLDeviceEXT device, EGLint attribut
         return EGL_FALSE;
     }
 
-    Display *display = dev->getDisplay();
-    Error error(EGL_SUCCESS);
-
-    if (!display->getExtensions().deviceQuery)
+    // If the device was created by (and is owned by) a display, and that display doesn't support
+    // device querying, then this call should fail
+    Display *owningDisplay = dev->getOwningDisplay();
+    if (owningDisplay != nullptr && !owningDisplay->getExtensions().deviceQuery)
     {
         SetGlobalError(Error(EGL_BAD_ACCESS));
         return EGL_FALSE;
     }
+
+    Error error(EGL_SUCCESS);
 
     // validate the attribute parameter
     switch (attribute)
@@ -433,6 +435,87 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY DestroyImageKHR(EGLDisplay dpy, EGLImageKHR 
     }
 
     display->destroyImage(img);
+
+    return EGL_TRUE;
+}
+
+ANGLE_EXPORT EGLDeviceEXT EGLAPIENTRY CreateDeviceANGLE(EGLint device_type,
+                                                        void *native_device,
+                                                        const EGLAttrib *attrib_list)
+{
+    EVENT(
+        "(EGLint device_type = %d, void* native_device = 0x%0.8p, const EGLAttrib* attrib_list = "
+        "0x%0.8p)",
+        device_type, native_device, attrib_list);
+
+    const ClientExtensions &clientExtensions = Display::getClientExtensions();
+    if (!clientExtensions.deviceCreation)
+    {
+        SetGlobalError(Error(EGL_BAD_ACCESS, "Device creation extension not active"));
+        return EGL_NO_DEVICE_EXT;
+    }
+
+    if (attrib_list != nullptr && attrib_list[0] != EGL_NONE)
+    {
+        SetGlobalError(Error(EGL_BAD_ATTRIBUTE, "Invalid attrib_list parameter"));
+        return EGL_NO_DEVICE_EXT;
+    }
+
+    switch (device_type)
+    {
+        case EGL_D3D11_DEVICE_ANGLE:
+            if (!clientExtensions.deviceCreationD3D11)
+            {
+                SetGlobalError(
+                    Error(EGL_BAD_ATTRIBUTE, "D3D11 device creation extension not active"));
+                return EGL_NO_DEVICE_EXT;
+            }
+            break;
+        case EGL_D3D9_DEVICE_ANGLE:
+        default:
+            SetGlobalError(Error(EGL_BAD_ATTRIBUTE, "Invalid device_type parameter"));
+            return EGL_NO_DEVICE_EXT;
+    }
+
+    Device *device   = nullptr;
+    egl::Error error = Device::CreateDevice(native_device, device_type, &device);
+    if (error.isError())
+    {
+        ASSERT(device == nullptr);
+        SetGlobalError(error);
+        return EGL_NO_DEVICE_EXT;
+    }
+
+    return device;
+}
+
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY ReleaseDeviceANGLE(EGLDeviceEXT device)
+{
+    EVENT("(EGLDeviceEXT device = 0x%0.8p)", device);
+
+    const ClientExtensions &clientExtensions = Display::getClientExtensions();
+    if (!clientExtensions.deviceCreation)
+    {
+        SetGlobalError(Error(EGL_BAD_ACCESS, "Device creation extension not active"));
+        return EGL_FALSE;
+    }
+
+    if (device == EGL_NO_DEVICE_EXT)
+    {
+        SetGlobalError(Error(EGL_BAD_DEVICE_EXT, "Invalid device parameter"));
+        return EGL_FALSE;
+    }
+
+    Device *dev            = static_cast<Device *>(device);
+    Display *owningDisplay = dev->getOwningDisplay();
+    if (owningDisplay != nullptr)
+    {
+        SetGlobalError(
+            Error(EGL_BAD_DEVICE_EXT, "Device must have been created using eglCreateDevice"));
+        return EGL_FALSE;
+    }
+
+    SafeDelete(dev);
 
     return EGL_TRUE;
 }

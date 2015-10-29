@@ -4175,7 +4175,17 @@ egl::Error Renderer11::initializeEGLDevice(DeviceD3D **outDevice)
     if (*outDevice == nullptr)
     {
         ASSERT(mDevice != nullptr);
-        *outDevice = new DeviceD3D(reinterpret_cast<void *>(mDevice), EGL_D3D11_DEVICE_ANGLE);
+        DeviceD3D *device = new DeviceD3D();
+        egl::Error error = device->initialize(reinterpret_cast<void *>(mDevice),
+                                              EGL_D3D11_DEVICE_ANGLE, EGL_FALSE);
+
+        if (error.isError())
+        {
+            SafeDelete(device);
+            return error;
+        }
+
+        *outDevice = device;
     }
 
     return egl::Error(EGL_SUCCESS);
