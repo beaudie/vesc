@@ -1,0 +1,136 @@
+Name
+
+    ANGLE_device_creation_d3d11
+
+Name Strings
+
+    EGL_ANGLE_device_creation_d3d11
+
+Contributors
+
+    Austin Kinross  (aukinros 'at' microsoft.com)
+
+Contact
+
+    Austin Kinross  (aukinros 'at' microsoft.com)
+
+Status
+
+    Draft
+
+Version
+
+    Version 1, Nov 02, 2015
+
+Number
+
+    EGL Extension #XXX
+
+Extension Type
+
+    EGL client extension
+
+Dependencies
+
+    Requires EGL_ANGLE_device_d3d and EGL_EXT_device_query.
+
+    Written against the wording of EGL 1.5 as modified by
+    EGL_ANGLE_device_d3d and EGL_EXT_device_query.
+
+Overview
+
+    ANGLE has the ability to run GPU commands on a native D3D device. This
+    extension defines a way to create a EGL device which maps to an inputted
+    Direct3D 11 device.
+
+    This extension is intended to be used with EGL_EXT_platform_device to
+    initialize a Display using an existing Direct3D 11 device, but this
+    extension is not required.
+
+IP Status
+
+    No known claims.
+
+New Types
+
+    None.
+
+New Procedures and Functions
+
+    EGLDeviceEXT eglCreateDeviceANGLE(
+                            const EGLAttrib *attrib_list)
+
+    EGLBoolean eglDestroyDeviceANGLE(
+                            EGLDeviceEXT device)
+
+New Tokens
+
+    None.
+
+Changes to section 3.2 (Devices)
+
+    Add the following after the final paragraph to section 3.2 (Devices):
+
+    To create a new device, use:
+
+        EGLDeviceEXT eglCreateDeviceANGLE(const EGLAttrib *attrib_list);
+
+    On success, a valid EGLDeviceEXT is returned. On failure, EGL_NO_DEVICE_EXT
+    is returned.
+
+    All attribute names in <attrib_list> are immediately followed by the
+    corresponding desired value. The list is terminated with EGL_NONE. The
+    <attrib_list> is considered empty if either <attrib_list> is NULL or if its
+    first element is EGL_NONE.
+
+    This specification defines one valid attribute name for inclusion in
+    <attrib_list>: EGL_D3D11_DEVICE_ANGLE. The desired value for this attribute
+    must correspond to valid a valid Direct3D 11 device. If it does not
+    correspond to a valid Direct3D 11 device then an EGL_BAD_ATTRIBUTE error is
+    generated.
+
+    If <attrib_list> is empty or an invalid attribute name is specified then an
+    EGL_BAD_ATTRIBUTE error is generated. If <attrib_list> contains more than
+    one EGL_D3D11_DEVICE_ANGLE entry then a EGL_BAD_ATTRIBUTE error is
+    generated.
+
+    If a Direct3D 11 device used to create a device experiences a "lost device"
+    then all resulting behavior of the device (and any dependent EGL objects) is
+    undefined. It is the caller's responsibility to monitor for "lost device"
+    and to create a new device (and dependent EGL objects) as appropriate. For
+    more information on "lost device", see the Direct3D documentation.
+
+    To destroy a device, use:
+
+        EGLBoolean eglDestroyDeviceANGLE(EGLDeviceEXT device);
+
+    On success, EGL_TRUE is returned. On failure, EGL_FALSE is returned.
+
+    If <device> equals EGL_NO_DEVICE_EXT or <device> is not a valid device,
+    then an EGL_BAD_DEVICE_EXT error is generated.
+
+    <device> must have been created using eglCreateDeviceANGLE. If <device> was
+    obtained by other means, such as through eglQueryDisplayAttribEXT, then an
+    EGL_BAD_DEVICE_EXT error is generated.
+
+    If eglDestroyDeviceANGLE is called on a device that is still in use by other
+    EGL objects, then the resulting behavior of those objects is undefined.
+
+Issues
+
+    1) Should this extension also enable creation of an EGL device which
+       corresponds to a Direct3D 9 device?
+
+       RESOLVED: No. Implementations such as ANGLE typically require a Direct3D
+       9 device (which implements IDirect3DDevice9) and a Direct3D 9 object
+       (which implements IDirect3D9 or IDirect3D9Ex) to successfully initialize
+       a Display. The EGL_ANGLE_device_d3d extension provides a mapping between
+       EGL devices and Direct3D 9 devices, but there is no such mapping for
+       Direct3D 9[Ex] objects. The specification of such a mapping is beyond the
+       scope of this extension, but it could be specified in an additional
+       extension.
+
+Revision History
+
+    Version 1, Nov 2, 2015 (Austin Kinross)
+        - Initial Draft

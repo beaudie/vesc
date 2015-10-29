@@ -539,6 +539,16 @@ EGLAPI EGLBoolean EGLAPIENTRY eglQueryDisplayAttribEXT (EGLDisplay dpy, EGLint a
 #endif
 #endif /* EGL_EXT_device_base */
 
+#ifndef EGL_ANGLE_device_creation
+#define EGL_ANGLE_device_creation 1
+typedef EGLDeviceEXT (EGLAPIENTRYP PFNEGLCREATEDEVICEANGLEPROC) (const EGLAttrib *attrib_list);
+typedef EGLBoolean (EGLAPIENTRYP PFNEGLDESTROYDEVICEANGLEPROC) (EGLDeviceEXT device);
+#ifdef EGL_EGLEXT_PROTOTYPES
+EGLAPI EGLDeviceEXT EGLAPIENTRY eglCreateDeviceANGLE (const EGLAttrib *attrib_list);
+EGLAPI EGLBoolean EGLAPIENTRY eglDestroyDeviceANGLE (EGLDeviceEXT device);
+#endif
+#endif /* EGL_ANGLE_device_creation */
+
 #ifndef EGL_EXT_device_drm
 #define EGL_EXT_device_drm 1
 #define EGL_DRM_DEVICE_FILE_EXT           0x3233
