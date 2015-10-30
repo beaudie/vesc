@@ -81,6 +81,7 @@ class DisplayGLX : public DisplayGL
     glx::Pbuffer mDummyPbuffer;
 
     bool mUsesNewXDisplay;
+    bool mIsMesa;
 
     FunctionsGLX mGLX;
     egl::Display *mEGLDisplay;
