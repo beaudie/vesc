@@ -267,10 +267,10 @@ gl::Error StateManagerD3D::syncState(const gl::Data &data, const gl::State::Dirt
 
     resetBlendForceBits();
 
-    error = setDepthStencilState(data.state->getDepthStencilState(), data.state->getStencilRef(),
-                                 data.state->getStencilBackRef(),
-                                 data.state->getRasterizerState().frontFace == GL_CCW,
-                                 data.state->getDirtyBits());
+    error =
+        setDepthStencilState(data.state->getDepthStencilState(), data.state->getStencilRef(),
+                             data.state->getStencilBackRef(),
+                             data.state->getRasterizerState().frontFace == GL_CCW, allDirtyBits);
 
     if (error.isError())
     {

@@ -247,8 +247,10 @@ gl::Error StateManager9::setDepthStencilState(const gl::DepthStencilState &depth
                                               bool frontFaceCCW,
                                               const gl::State::DirtyBits &dirtyBits)
 {
-    // TODO(dianx) we should use dirty bits here
     unsigned int maxStencil = (1 << mCurStencilSize) - 1;
+
+    // TODO(dianx) our D3D dirty bits should update when this changes
+    bool frontFaceCCWChanged = (frontFaceCCW != mCurFrontFaceCCW);
 
     ASSERT((depthStencilState.stencilWritemask & maxStencil) ==
            (depthStencilState.stencilBackWritemask & maxStencil));
@@ -256,85 +258,51 @@ gl::Error StateManager9::setDepthStencilState(const gl::DepthStencilState &depth
     ASSERT((depthStencilState.stencilMask & maxStencil) ==
            (depthStencilState.stencilBackMask & maxStencil));
 
-    bool forceSetDepthStencilState = isForceSetDepthStencilState();
-
-    // DIRTY_BIT_DEPTH_MASK
-    if (forceSetDepthStencilState || depthStencilState.depthMask != mCurDepthStencilState.depthMask)
+    if (dirtyBits.test(gl::State::DIRTY_BIT_DEPTH_MASK))
     {
         setDepthMask(depthStencilState.depthMask);
     }
 
-    // DIRTY_BIT_DEPTH_TEST_ENABLED
-    // DIRTY_BIT_DEPTH_FUNC
-    if (forceSetDepthStencilState ||
-        depthStencilState.depthTest != mCurDepthStencilState.depthTest ||
-        depthStencilState.depthFunc != mCurDepthStencilState.depthFunc)
+    if (dirtyBits.test(gl::State::DIRTY_BIT_DEPTH_TEST_ENABLED) ||
+        dirtyBits.test(gl::State::DIRTY_BIT_DEPTH_FUNC))
     {
         setDepthTestAndFunc(depthStencilState.depthTest, depthStencilState.depthFunc);
     }
 
-    // DIRTY_BIT_STENCIL_TEST_ENABLED
-    if (forceSetDepthStencilState ||
-        depthStencilState.stencilTest != mCurDepthStencilState.stencilTest)
+    if (dirtyBits.test(gl::State::DIRTY_BIT_STENCIL_TEST_ENABLED))
     {
         setStencilTestEnabled(depthStencilState.stencilTest);
     }
 
-    // DIRTY_BIT_STENCIL_FUNCS_FRONT
-    if (forceSetDepthStencilState ||
-        depthStencilState.stencilFunc != mCurDepthStencilState.stencilFunc ||
-        depthStencilState.stencilMask != mCurDepthStencilState.stencilMask ||
-        stencilRef != mCurStencilRef || frontFaceCCW != mCurFrontFaceCCW)
+    if (dirtyBits.test(gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT) || frontFaceCCWChanged)
     {
         setStencilFuncsFront(depthStencilState.stencilFunc, depthStencilState.stencilMask,
                              stencilRef, maxStencil, frontFaceCCW);
     }
 
-    // DIRTY_BIT_STENCIL_FUNCS_BACK
-    if (forceSetDepthStencilState ||
-        depthStencilState.stencilBackFunc != mCurDepthStencilState.stencilBackFunc ||
-        depthStencilState.stencilBackMask != mCurDepthStencilState.stencilMask ||
-        stencilBackRef != mCurStencilBackRef || frontFaceCCW != mCurFrontFaceCCW)
+    if (dirtyBits.test(gl::State::DIRTY_BIT_STENCIL_FUNCS_BACK) || frontFaceCCWChanged)
     {
         setStencilFuncsBack(depthStencilState.stencilBackFunc, depthStencilState.stencilBackMask,
                             stencilBackRef, maxStencil, frontFaceCCW);
     }
 
-    // DIRTY_BIT_STENCIL_WRITEMASK_FRONT
-    if (forceSetDepthStencilState ||
-        depthStencilState.stencilWritemask != mCurDepthStencilState.stencilWritemask ||
-        frontFaceCCW != mCurFrontFaceCCW)
+    if (dirtyBits.test(gl::State::DIRTY_BIT_STENCIL_WRITEMASK_FRONT) || frontFaceCCWChanged)
     {
         setStencilWriteMaskFront(depthStencilState.stencilWritemask, frontFaceCCW);
     }
 
-    // DIRTY_BIT_STENCIL_WRITEMASK_BACK
-    if (forceSetDepthStencilState ||
-        depthStencilState.stencilBackWritemask != mCurDepthStencilState.stencilBackWritemask ||
-        frontFaceCCW != mCurFrontFaceCCW)
+    if (dirtyBits.test(gl::State::DIRTY_BIT_STENCIL_WRITEMASK_BACK) || frontFaceCCWChanged)
     {
         setStencilWriteMaskBack(depthStencilState.stencilBackWritemask, frontFaceCCW);
     }
 
-    // DIRTY_BIT_STENCIL_OPS_FRONT
-    if (forceSetDepthStencilState ||
-        depthStencilState.stencilFail != mCurDepthStencilState.stencilFail ||
-        depthStencilState.stencilPassDepthFail != mCurDepthStencilState.stencilPassDepthFail ||
-        depthStencilState.stencilPassDepthPass != mCurDepthStencilState.stencilPassDepthPass ||
-        frontFaceCCW != mCurFrontFaceCCW)
+    if (dirtyBits.test(gl::State::DIRTY_BIT_STENCIL_OPS_FRONT) || frontFaceCCWChanged)
     {
         setStencilOpsFront(depthStencilState.stencilFail, depthStencilState.stencilPassDepthFail,
                            depthStencilState.stencilPassDepthPass, frontFaceCCW);
     }
 
-    // DIRTY_BIT_STENCIL_OPS_BACK
-    if (forceSetDepthStencilState ||
-        depthStencilState.stencilBackFail != mCurDepthStencilState.stencilBackFail ||
-        depthStencilState.stencilBackPassDepthFail !=
-            mCurDepthStencilState.stencilBackPassDepthFail ||
-        depthStencilState.stencilBackPassDepthPass !=
-            mCurDepthStencilState.stencilBackPassDepthPass ||
-        frontFaceCCW != mCurFrontFaceCCW)
+    if (dirtyBits.test(gl::State::DIRTY_BIT_STENCIL_OPS_BACK) || frontFaceCCWChanged)
     {
         setStencilOpsBack(depthStencilState.stencilBackFail,
                           depthStencilState.stencilBackPassDepthFail,
