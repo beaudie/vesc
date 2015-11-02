@@ -24,19 +24,32 @@ class UnfoldShortCircuitTraverser : public TIntermTraverser
     bool visitBinary(Visit visit, TIntermBinary *node) override;
     bool visitAggregate(Visit visit, TIntermAggregate *node) override;
     bool visitSelection(Visit visit, TIntermSelection *node) override;
+    bool visitLoop(Visit visit, TIntermLoop *node) override;
 
     void nextIteration();
     bool foundShortCircuit() const { return mFoundShortCircuit; }
 
   protected:
+    // If the traversal is inside a loop condition or expression, the unfolded expression
+    // needs to be copied inside the loop. Returns true if the copying is done, in which
+    // case no further unfolding should be done on the same traversal.
+    bool copyLoopConditionOrExpression();
+
     // Marked to true once an operation that needs to be unfolded has been found.
     // After that, no more unfolding is performed on that traversal.
     bool mFoundShortCircuit;
+
+    // Set to the loop node while a loop condition is being traversed.
+    TIntermLoop *mInLoopCondition;
+    // Set to the loop node while a loop expression is being traversed.
+    TIntermLoop *mInLoopExpression;
 };
 
 UnfoldShortCircuitTraverser::UnfoldShortCircuitTraverser()
-    : TIntermTraverser(true, false, true),
-      mFoundShortCircuit(false)
+    : TIntermTraverser(true, true, true),
+      mFoundShortCircuit(false),
+      mInLoopCondition(nullptr),
+      mInLoopExpression(nullptr)
 {
 }
 
@@ -56,10 +69,12 @@ bool UnfoldShortCircuitTraverser::visitBinary(Visit visit, TIntermBinary *node)
     {
       case EOpLogicalOr:
         mFoundShortCircuit = true;
-
-        // "x || y" is equivalent to "x ? true : y", which unfolds to "bool s; if(x) s = true; else s = y;",
-        // and then further simplifies down to "bool s = x; if(!s) s = y;".
+        if (!copyLoopConditionOrExpression())
         {
+            // "x || y" is equivalent to "x ? true : y", which unfolds to "bool s; if(x) s = true;
+            // else s = y;",
+            // and then further simplifies down to "bool s = x; if(!s) s = y;".
+
             TIntermSequence insertions;
             TType boolType(EbtBool, EbpUndefined, EvqTemporary);
 
@@ -83,10 +98,11 @@ bool UnfoldShortCircuitTraverser::visitBinary(Visit visit, TIntermBinary *node)
         return false;
       case EOpLogicalAnd:
         mFoundShortCircuit = true;
-
-        // "x && y" is equivalent to "x ? y : false", which unfolds to "bool s; if(x) s = y; else s = false;",
-        // and then further simplifies down to "bool s = x; if(s) s = y;".
+        if (!copyLoopConditionOrExpression())
         {
+            // "x && y" is equivalent to "x ? y : false", which unfolds to "bool s; if(x) s = y;
+            // else s = false;",
+            // and then further simplifies down to "bool s = x; if(s) s = y;".
             TIntermSequence insertions;
             TType boolType(EbtBool, EbpUndefined, EvqTemporary);
 
@@ -120,29 +136,35 @@ bool UnfoldShortCircuitTraverser::visitSelection(Visit visit, TIntermSelection *
     if (visit == PreVisit && node->usesTernaryOperator())
     {
         mFoundShortCircuit = true;
-        TIntermSequence insertions;
+        if (!copyLoopConditionOrExpression())
+        {
+            TIntermSequence insertions;
 
-        TIntermSymbol *tempSymbol = createTempSymbol(node->getType());
-        TIntermAggregate *tempDeclaration = new TIntermAggregate(EOpDeclaration);
-        tempDeclaration->getSequence()->push_back(tempSymbol);
-        insertions.push_back(tempDeclaration);
+            TIntermSymbol *tempSymbol         = createTempSymbol(node->getType());
+            TIntermAggregate *tempDeclaration = new TIntermAggregate(EOpDeclaration);
+            tempDeclaration->getSequence()->push_back(tempSymbol);
+            insertions.push_back(tempDeclaration);
 
-        TIntermAggregate *trueBlock = new TIntermAggregate(EOpSequence);
-        TIntermBinary *trueAssignment = createTempAssignment(node->getTrueBlock()->getAsTyped());
-        trueBlock->getSequence()->push_back(trueAssignment);
+            TIntermAggregate *trueBlock = new TIntermAggregate(EOpSequence);
+            TIntermBinary *trueAssignment =
+                createTempAssignment(node->getTrueBlock()->getAsTyped());
+            trueBlock->getSequence()->push_back(trueAssignment);
 
-        TIntermAggregate *falseBlock = new TIntermAggregate(EOpSequence);
-        TIntermBinary *falseAssignment = createTempAssignment(node->getFalseBlock()->getAsTyped());
-        falseBlock->getSequence()->push_back(falseAssignment);
+            TIntermAggregate *falseBlock = new TIntermAggregate(EOpSequence);
+            TIntermBinary *falseAssignment =
+                createTempAssignment(node->getFalseBlock()->getAsTyped());
+            falseBlock->getSequence()->push_back(falseAssignment);
 
-        TIntermSelection *ifNode = new TIntermSelection(node->getCondition()->getAsTyped(), trueBlock, falseBlock);
-        insertions.push_back(ifNode);
+            TIntermSelection *ifNode =
+                new TIntermSelection(node->getCondition()->getAsTyped(), trueBlock, falseBlock);
+            insertions.push_back(ifNode);
 
-        insertStatementsInParentBlock(insertions);
+            insertStatementsInParentBlock(insertions);
 
-        TIntermSymbol *ternaryResult = createTempSymbol(node->getType());
-        NodeUpdateEntry replaceVariable(getParentNode(), node, ternaryResult, false);
-        mReplacements.push_back(replaceVariable);
+            TIntermSymbol *ternaryResult = createTempSymbol(node->getType());
+            NodeUpdateEntry replaceVariable(getParentNode(), node, ternaryResult, false);
+            mReplacements.push_back(replaceVariable);
+        }
         return false;
     }
 
@@ -170,25 +192,122 @@ bool UnfoldShortCircuitTraverser::visitAggregate(Visit visit, TIntermAggregate *
             mMultiReplacements.clear();
             mInsertions.clear();
 
-            TIntermSequence insertions;
-            TIntermSequence *seq = node->getSequence();
-
-            TIntermSequence::size_type i = 0;
-            ASSERT(!seq->empty());
-            while (i < seq->size() - 1)
+            if (!copyLoopConditionOrExpression())
             {
-                TIntermTyped *child = (*seq)[i]->getAsTyped();
-                insertions.push_back(child);
-                ++i;
+                TIntermSequence insertions;
+                TIntermSequence *seq = node->getSequence();
+
+                TIntermSequence::size_type i = 0;
+                ASSERT(!seq->empty());
+                while (i < seq->size() - 1)
+                {
+                    TIntermTyped *child = (*seq)[i]->getAsTyped();
+                    insertions.push_back(child);
+                    ++i;
+                }
+
+                insertStatementsInParentBlock(insertions);
+
+                NodeUpdateEntry replaceVariable(getParentNode(), node, (*seq)[i], false);
+                mReplacements.push_back(replaceVariable);
             }
-
-            insertStatementsInParentBlock(insertions);
-
-            NodeUpdateEntry replaceVariable(getParentNode(), node, (*seq)[i], false);
-            mReplacements.push_back(replaceVariable);
         }
     }
     return true;
+}
+
+bool UnfoldShortCircuitTraverser::visitLoop(Visit visit, TIntermLoop *node)
+{
+    if (visit == PreVisit)
+    {
+        if (mFoundShortCircuit)
+            return false;  // No need to traverse further
+
+        if (node->getInit())
+        {
+            node->getInit()->traverse(this);
+            if (mFoundShortCircuit)
+                return false;
+        }
+
+        if (node->getCondition())
+        {
+            mInLoopCondition = node;
+            node->getCondition()->traverse(this);
+            mInLoopCondition = nullptr;
+
+            if (mFoundShortCircuit)
+                return false;
+        }
+
+        if (node->getExpression())
+        {
+            mInLoopExpression = node;
+            node->getExpression()->traverse(this);
+            mInLoopExpression = nullptr;
+
+            if (mFoundShortCircuit)
+                return false;
+        }
+
+        if (node->getBody())
+            node->getBody()->traverse(this);
+    }
+    return false;
+}
+
+bool UnfoldShortCircuitTraverser::copyLoopConditionOrExpression()
+{
+    if (mInLoopCondition)
+    {
+        TIntermTyped *condition = mInLoopCondition->getCondition();
+        mReplacements.push_back(NodeUpdateEntry(mInLoopCondition, condition,
+                                                createTempSymbol(condition->getType()), false));
+        TIntermAggregate *body = mInLoopCondition->getBody();
+        TIntermSequence empty;
+        if (mInLoopCondition->getType() == ELoopDoWhile)
+        {
+            // Declare the temporary variable before the loop.
+            TIntermSequence insertionsBeforeLoop;
+            insertionsBeforeLoop.push_back(createTempDeclaration(condition->getType()));
+            insertStatementsInParentBlock(insertionsBeforeLoop);
+
+            // Move do-while loop condition to inside the loop.
+            TIntermSequence insertionsInLoop;
+            insertionsInLoop.push_back(createTempAssignment(condition));
+            mInsertions.push_back(NodeInsertMultipleEntry(body, body->getSequence()->size() - 1,
+                                                          empty, insertionsInLoop));
+        }
+        else
+        {
+            // One copy of the loop condition is executed before the loop.
+            TIntermSequence insertionsBeforeLoop;
+            insertionsBeforeLoop.push_back(createTempInitDeclaration(condition));
+            insertStatementsInParentBlock(insertionsBeforeLoop);
+
+            // The second copy of the loop condition is executed inside the loop.
+            TIntermSequence insertionsInLoop;
+            insertionsInLoop.push_back(createTempAssignment(condition->deepCopy()));
+            mInsertions.push_back(NodeInsertMultipleEntry(body, body->getSequence()->size() - 1,
+                                                          empty, insertionsInLoop));
+        }
+        return true;
+    }
+
+    if (mInLoopExpression)
+    {
+        TIntermTyped *movedExpression = mInLoopExpression->getExpression();
+        mReplacements.push_back(
+            NodeUpdateEntry(mInLoopExpression, movedExpression, nullptr, false));
+        TIntermAggregate *body = mInLoopExpression->getBody();
+        TIntermSequence empty;
+        TIntermSequence insertions;
+        insertions.push_back(movedExpression);
+        mInsertions.push_back(
+            NodeInsertMultipleEntry(body, body->getSequence()->size() - 1, empty, insertions));
+        return true;
+    }
+    return false;
 }
 
 void UnfoldShortCircuitTraverser::nextIteration()
