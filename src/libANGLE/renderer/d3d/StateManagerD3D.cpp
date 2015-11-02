@@ -59,6 +59,7 @@ StateManagerD3D::StateManagerD3D()
       mCurStencilRef(0),
       mCurStencilBackRef(0),
       mCurStencilSize(0),
+      mCurMaxStencil(0),
       mCurScissorTestEnabled(false),
       mLocalDirtyBits(),
       mExternalDirtyBits()
@@ -267,10 +268,10 @@ gl::Error StateManagerD3D::syncState(const gl::Data &data, const gl::State::Dirt
 
     resetBlendForceBits();
 
-    error = setDepthStencilState(data.state->getDepthStencilState(), data.state->getStencilRef(),
-                                 data.state->getStencilBackRef(),
-                                 data.state->getRasterizerState().frontFace == GL_CCW,
-                                 data.state->getDirtyBits());
+    error =
+        setDepthStencilState(data.state->getDepthStencilState(), data.state->getStencilRef(),
+                             data.state->getStencilBackRef(),
+                             data.state->getRasterizerState().frontFace == GL_CCW, allDirtyBits);
 
     if (error.isError())
     {

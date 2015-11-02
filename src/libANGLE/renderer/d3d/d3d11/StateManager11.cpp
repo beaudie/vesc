@@ -86,8 +86,10 @@ gl::Error StateManager11::setDepthStencilState(const gl::DepthStencilState &dept
 {
     // TODO(dianx) We are currently not using dirty bits for this, but should in a future patch.
     if (isForceSetDepthStencilState() ||
-        memcmp(&depthStencilState, &mCurDepthStencilState, sizeof(gl::DepthStencilState)) != 0 ||
-        stencilRef != mCurStencilRef || stencilBackRef != mCurStencilBackRef)
+        (IsDepthStencilStateDirty(dirtyBits) &&
+             memcmp(&depthStencilState, &mCurDepthStencilState, sizeof(gl::DepthStencilState)) !=
+                 0 ||
+         stencilRef != mCurStencilRef || stencilBackRef != mCurStencilBackRef))
     {
         // get the maximum size of the stencil ref
         unsigned int maxStencil = 0;
@@ -95,6 +97,7 @@ gl::Error StateManager11::setDepthStencilState(const gl::DepthStencilState &dept
         {
             maxStencil = (1 << mCurStencilSize) - 1;
         }
+
         ASSERT((depthStencilState.stencilWritemask & maxStencil) ==
                (depthStencilState.stencilBackWritemask & maxStencil));
         ASSERT(stencilRef == stencilBackRef);
