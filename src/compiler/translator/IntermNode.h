@@ -517,6 +517,7 @@ class TIntermAggregate : public TIntermOperator
     bool getUseEmulatedFunction() { return mUseEmulatedFunction; }
 
     void setPrecisionFromChildren();
+    void setConstIfChildrenConst();
     void setBuiltInFunctionPrecision();
 
     // Returns true if changing parameter precision may affect the return value.
