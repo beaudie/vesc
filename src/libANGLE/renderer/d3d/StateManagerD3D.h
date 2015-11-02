@@ -76,6 +76,7 @@ class StateManagerD3D : angle::NonCopyable
     int mCurStencilRef;
     int mCurStencilBackRef;
     unsigned int mCurStencilSize;
+    unsigned int mCurMaxStencil;
 
     // Rasterizer State
     gl::RasterizerState mCurRasterizerState;
