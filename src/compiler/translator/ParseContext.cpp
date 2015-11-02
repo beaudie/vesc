@@ -1291,9 +1291,17 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
             variable->getType().setQualifier(EvqTemporary);
             return true;
         }
+
+        // Save the constant folded value to the variable if possible. For example array
+        // initializers are not folded, since that way copying the array literal to multiple places
+        // in the shader is avoided.
+        // TODO(oetuaho@nvidia.com): Consider constant folding array initialization in cases where
+        // it would be beneficial.
         if (initializer->getAsConstantUnion())
         {
             variable->shareConstPointer(initializer->getAsConstantUnion()->getUnionArrayPointer());
+            *intermNode = nullptr;
+            return false;
         }
         else if (initializer->getAsSymbolNode())
         {
@@ -1303,33 +1311,18 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
 
             TConstantUnion *constArray = tVar->getConstPointer();
             variable->shareConstPointer(constArray);
-        }
-        else
-        {
-            std::stringstream extraInfoStream;
-            extraInfoStream << "'" << variable->getType().getCompleteString() << "'";
-            std::string extraInfo = extraInfoStream.str();
-            error(line, " cannot assign to", "=", extraInfo.c_str());
-            variable->getType().setQualifier(EvqTemporary);
-            return true;
+            *intermNode = nullptr;
+            return false;
         }
     }
 
-    if (qualifier != EvqConst)
+    TIntermSymbol *intermSymbol = intermediate.addSymbol(
+        variable->getUniqueId(), variable->getName(), variable->getType(), line);
+    *intermNode = createAssign(EOpInitialize, intermSymbol, initializer, line);
+    if (*intermNode == nullptr)
     {
-        TIntermSymbol *intermSymbol = intermediate.addSymbol(
-            variable->getUniqueId(), variable->getName(), variable->getType(), line);
-        *intermNode = createAssign(EOpInitialize, intermSymbol, initializer, line);
-        if (*intermNode == nullptr)
-        {
-            assignError(line, "=", intermSymbol->getCompleteString(),
-                        initializer->getCompleteString());
-            return true;
-        }
-    }
-    else
-    {
-        *intermNode = nullptr;
+        assignError(line, "=", intermSymbol->getCompleteString(), initializer->getCompleteString());
+        return true;
     }
 
     return false;
@@ -2772,16 +2765,16 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
             recover();
             index = 0;
         }
-        if (baseExpression->getType().getQualifier() == EvqConst)
+        if (baseExpression->getType().getQualifier() == EvqConst && baseExpression->getAsConstantUnion())
         {
             if (baseExpression->isArray())
             {
-                // constant folding for arrays
+                // constant folding for array indexing
                 indexedExpression = addConstArrayNode(index, baseExpression, location);
             }
             else if (baseExpression->isVector())
             {
-                // constant folding for vectors
+                // constant folding for vector indexing
                 TVectorFields fields;
                 fields.num = 1;
                 fields.offsets[0] =
@@ -2790,7 +2783,7 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
             }
             else if (baseExpression->isMatrix())
             {
-                // constant folding for matrices
+                // constant folding for matrix indexing
                 indexedExpression = addConstMatrixNode(index, baseExpression, location);
             }
         }
@@ -2931,6 +2924,7 @@ TIntermTyped *TParseContext::addFieldSelectionExpression(TIntermTyped *baseExpre
 
         if (baseExpression->getType().getQualifier() == EvqConst)
         {
+            // TODO: Here is code that assumes that all constants are folded
             // constant folding for vector fields
             indexedExpression = addConstVectorNode(fields, baseExpression, fieldLocation);
             if (indexedExpression == 0)
@@ -2981,6 +2975,7 @@ TIntermTyped *TParseContext::addFieldSelectionExpression(TIntermTyped *baseExpre
             {
                 if (baseExpression->getType().getQualifier() == EvqConst)
                 {
+                    // TODO: Here is code that assumes that all constants are folded
                     indexedExpression = addConstStruct(fieldString, baseExpression, dotLocation);
                     if (indexedExpression == 0)
                     {

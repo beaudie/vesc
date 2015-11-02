@@ -217,6 +217,7 @@ variable_identifier
         // The symbol table search was done in the lexical phase
         const TVariable *variable = context->getNamedVariable(@1, $1.string, $1.symbol);
 
+        // TODO: Fix this.
         if (variable->getType().getQualifier() == EvqConst)
         {
             TConstantUnion* constArray = variable->getConstPointer();
