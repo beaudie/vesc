@@ -1,0 +1,91 @@
+Name
+
+    ANGLE_experimental_direct_rendering
+
+Name Strings
+
+    EGL_ANGLE_experimental_direct_rendering
+
+Contributors
+
+    Austin Kinross
+
+Contacts
+
+    Austin Kinross (aukinros 'at' microsoft 'dot' com)
+
+Status
+
+    Experimental
+
+Version
+
+    Version 1, Dec 10 2015
+
+Number
+
+    EGL Extension #XXX
+
+Extension Type
+
+    EGL display extension
+
+Dependencies
+
+    Requires ANGLE_platform_angle_d3d.
+
+    Written against the wording of EGL 1.4 as modified by
+    ANGLE_platform_angle_d3d.
+
+Overview
+
+    This extension exposes an optimized, but potentially non-conformant,
+    rendering path for ANGLE's D3D11 renderer on Windows.
+
+New Types
+
+    None
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    Accepted as an attribute name in the <attrib_list> argument of
+    eglGetPlatformDisplayEXT:
+
+        EGL_PLATFORM_ANGLE_EXPERIMENTAL_DIRECT_RENDERING      0x33A4
+
+Additions to the EGL Specification
+
+    None.
+
+New Behavior
+
+    To request a display that enables this optimized rendering path,
+    the value of EGL_PLATFORM_ANGLE_EXPERIMENTAL_DIRECT_RENDERING should be
+    EGL_TRUE.
+
+    If the attribute EGL_PLATFORM_ANGLE_EXPERIMENTAL_DIRECT_RENDERING
+    is unspecified then it is implicitly set to EGL_FALSE.
+
+    If EGL_PLATFORM_ANGLE_EXPERIMENTAL_DIRECT_RENDERING is set to EGL_TRUE and
+    EGL_PLATFORM_ANGLE_TYPE_ANGLE is not set to
+    EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE then an EGL_BAD_ATTRIBUTE error is
+    generated and EGL_NO_DISPLAY is returned.
+
+Issues
+
+    1) Does enabling EGL_PLATFORM_ANGLE_EXPERIMENTAL_DIRECT_RENDERING
+       maintain OpenGL ES conformance?
+
+       RESOLVED: Not necessarily, that is implementation-specific. Check then
+       EGL_CONFORMANT attribute to see if the implementation supports any
+       conformant EGL configs when
+       EGL_PLATFORM_ANGLE_EXPERIMENTAL_DIRECT_RENDERING is enabled.
+
+Revision History
+
+    Version 1, Dec 10 2015 (Austin Kinross)
+      - Initial draft
