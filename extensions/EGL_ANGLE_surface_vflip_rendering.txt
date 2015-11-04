@@ -1,0 +1,160 @@
+Name
+
+    ANGLE_surface_vflip_rendering
+
+Name Strings
+
+    EGL_ANGLE_surface_vflip_rendering
+
+Contributors
+
+    Austin Kinross
+
+Contacts
+
+    Austin Kinross (aukinros 'at' microsoft 'dot' com)
+
+Status
+
+    Draft
+
+Version
+
+    Version 1, Nov 03 2015
+
+Number
+
+    EGL Extension #XXX
+
+Extension Type
+
+    EGL display extension
+
+Dependencies
+
+    Written against the wording of EGL 1.4.
+
+Overview
+
+    Increasingly, EGL and its client APIs are being used in place of "native"
+    rendering APIs to implement the basic graphics functionality of native
+    windowing systems. Some of these underlying "native" rendering APIs use
+    different coordinate systems to EGL and its client APIs. Implementations may
+    have to translate between these coordinate systems.
+
+    If the coordinate system translation requires vertical inversion ("vflip"),
+    then two possible approaches to implement it include:
+        1) Performing all rendering directly onto the "native" surface which
+           corresponds to the EGL surface, and vertically inverting rendering as
+           it is performed.
+        2) Performing all rendering onto an intermediate "native" surface
+           without any vertical inversion. The implementation can then copy (and 
+           vertically invert) the intermediate surface onto "native" surface
+           which corresponds to the EGL surface at an appropriate time.
+
+    This extension provides a way to specifically configure an EGL
+    implementation to use the first approach listed above. This may have
+    significant performance advantages on some devices compared to the second
+    approach.
+
+New Types
+
+    None
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    Accepted as an attribute name in the <attrib_list> argument of
+    eglChooseConfig:
+
+        EGL_ANGLE_ALLOW_SURFACE_VFLIP_RENDERING      0x33A3
+
+    Accepted as an attribute name in the <attrib_list> argument of
+    eglCreateWindowSurface, eglCreatePbufferSurface and
+    eglCreatePbufferFromClientBuffer:
+
+        EGL_ANGLE_SURFACE_VFLIP_RENDERING            0x33A4
+
+Additions to the EGL Specification
+
+    None.
+
+New Behavior
+
+    Append the following to Section 3.4.1.1 (Selection of EGLConfigs):
+
+    "If EGL_ALLOW_SURFACE_VFLIP_RENDERING is specified in <attrib_list>, it must
+    be followed by an attribute value equal to EGL_TRUE or EGL_FALSE."
+
+    Add an entry to Table 3.4:
+
+    "EGL_ALLOW_SURFACE_VFLIP_RENDERING / EGL_FALSE / EXACT / None / [empty] "
+
+    Update Section 3.5.1 (Creating On-Screen Rendering Surfaces) as follows:
+
+    The final sentence of the third paragraph (which is regarding the
+    attrib_list parameter to eglCreateWindowSurface) should be updated to the
+    following:
+
+    "Attributes that can be specified in attrib list include EGL_RENDER_BUFFER,
+    EGL_VG_COLORSPACE, EGL_VG_ALPHA_FORMAT, and
+    EGL_ANGLE_SURFACE_VFLIP_RENDERING."
+
+    Directly before the final paragraph (which is regarding the failure of
+    eglCreateWindowSurface), add the following paragraph:
+
+    "EGL_ANGLE_SURFACE_VFLIP_RENDERING specifies that the implementation should
+    perform all rendering directly onto the underlying native surface that
+    corresponds to the EGL surface, and that all rendering should be vertically
+    inverted as it is performed. The default value for
+    EGL_ANGLE_SURFACE_VFLIP_RENDERING is EGL_FALSE. The only accepted values for
+    EGL_ANGLE_SURFACE_VFLIP_RENDERING are EGL_FALSE and EGL_TRUE."
+
+    Update Section 3.5.2 (Creating Off-Screen Rendering Surfaces) as follows:
+
+    Update the final sentence of the second paragraph to the following:
+
+    "Attributes that can be specified in attrib list include EGL_WIDTH,
+    EGL_HEIGHT, EGL_LARGEST_PBUFFER, EGL_TEXTURE_FORMAT, EGL_TEXTURE_TARGET,
+    EGL_MIPMAP_TEXTURE, EGL_VG_COLORSPACE, EGL_VG_ALPHA_FORMAT and
+    EGL_ANGLE_SURFACE_VFLIP_RENDERING."
+
+    After the fourth paragraph, add the following:
+
+    "EGL_ANGLE_SURFACE_VFLIP_RENDERING specifies that the implementation should
+    perform all rendering directly onto the underlying native surface that
+    corresponds to the EGL surface, and that all rendering should be vertically
+    inverted as it is performed. The default value for
+    EGL_ANGLE_SURFACE_VFLIP_RENDERING is EGL_FALSE. The only accepted values for
+    EGL_ANGLE_SURFACE_VFLIP_RENDERING are EGL_FALSE and EGL_TRUE."
+
+    Update the second sentence of the fourth paragraph of Section 3.5.3 (Binding
+    Off-Screen Rendering Surfaces to Client Buffers) to the following:
+
+    "Attributes that can be specified in attrib list include EGL_TEXTURE_FORMAT,
+    EGL_TEXTURE_TARGET, EGL_MIPMAP_TEXTURE and
+    EGL_ANGLE_SURFACE_VFLIP_RENDERING."
+
+    Update the list of errors in the sixth paragraph of 3.7.3 (Binding Contexts
+    and Drawables) to include both of the following:
+
+    "If the value of EGL_ANGLE_SURFACE_VFLIP_RENDERING in the configs used to
+    create <draw> and <read> are not equal then an EGL_BAD_MATCH error is
+    generated."
+
+    "If the value of EGL_ANGLE_SURFACE_VFLIP_RENDERING in the configs used to
+    create <draw> and <read> equals EGL_TRUE, and the value of 
+    EGL_ALLOW_SURFACE_VFLIP_RENDERING in the config used to create <ctx> equals
+    EGL_FALSE then an EGL_BAD_MATCH error is generated."
+
+Issues
+
+    None.
+
+Revision History
+
+    Version 1, Nov 3 2015 (Austin Kinross)
+      - Initial draft
