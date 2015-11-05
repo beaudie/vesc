@@ -35,6 +35,7 @@ struct Data;
 
 namespace rx
 {
+struct PackedVarying;
 class ShaderD3D;
 
 struct PixelShaderOutputVariable
@@ -45,39 +46,11 @@ struct PixelShaderOutputVariable
     size_t outputIndex;
 };
 
-struct PackedVarying
-{
-    PackedVarying(const sh::Varying &varyingIn)
-        : varying(&varyingIn), registerIndex(GL_INVALID_INDEX), columnIndex(0), vertexOnly(false)
-    {
-    }
-
-    bool registerAssigned() const { return registerIndex != GL_INVALID_INDEX; }
-
-    void resetRegisterAssignment() { registerIndex = GL_INVALID_INDEX; }
-
-    const sh::Varying *varying;
-
-    // Assigned during link
-    unsigned int registerIndex;
-
-    // Assigned during link, Defaults to 0
-    unsigned int columnIndex;
-
-    // Transform feedback varyings can be only referenced in the VS.
-    bool vertexOnly;
-};
-
 class DynamicHLSL : angle::NonCopyable
 {
   public:
     explicit DynamicHLSL(RendererD3D *const renderer);
 
-    bool packVaryings(const gl::Caps &caps,
-                      gl::InfoLog &infoLog,
-                      std::vector<PackedVarying> *packedVaryings,
-                      const std::vector<std::string> &transformFeedbackVaryings,
-                      unsigned int *registerCountOut);
     std::string generateVertexShaderForInputLayout(
         const std::string &sourceShader,
         const gl::InputLayout &inputLayout,
