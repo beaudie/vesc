@@ -19,7 +19,7 @@ namespace
 TEST(PackedVarying, DefaultInitialization)
 {
     sh::Varying defaultVarying;
-    PackedVarying pv(defaultVarying);
+    PackedVarying pv(defaultVarying, sh::INTERPOLATION_SMOOTH);
 
     EXPECT_EQ(&defaultVarying, pv.varying);
     EXPECT_FALSE(pv.vertexOnly);
