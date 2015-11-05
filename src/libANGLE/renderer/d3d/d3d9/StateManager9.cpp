@@ -318,25 +318,16 @@ gl::Error StateManager9::setDepthStencilState(const gl::DepthStencilState &depth
 gl::Error StateManager9::setRasterizerState(const gl::RasterizerState &rasterizerState,
                                             const gl::State::DirtyBits &dirtyBits)
 {
-    // TODO(dianx) setRasterizerState is being called after syncRendererState in Context.cpp
-    // which means the force bits are being cleared before this call is reached. The current
-    // fix only resets the necessary dirty force bits. But we really want to be using dirty bits
-    // instead of memcmping to check for changes
-
-    bool forceSetRasterizerState = isForceSetRasterizerState();
-
-    if (forceSetRasterizerState || mCurRasterizerState.cullFace != rasterizerState.cullFace ||
-        mCurRasterizerState.cullMode != rasterizerState.cullMode ||
-        mCurRasterizerState.frontFace != rasterizerState.frontFace)
+    if (dirtyBits.test(gl::State::DIRTY_BIT_CULL_FACE_ENABLED) ||
+        dirtyBits.test(gl::State::DIRTY_BIT_CULL_FACE) ||
+        dirtyBits.test(gl::State::DIRTY_BIT_FRONT_FACE))
     {
         setRasterizerMode(rasterizerState.cullFace, rasterizerState.cullMode,
                           rasterizerState.frontFace);
     }
 
-    if (forceSetRasterizerState ||
-        mCurRasterizerState.polygonOffsetFill != rasterizerState.polygonOffsetFill ||
-        mCurRasterizerState.polygonOffsetFactor != rasterizerState.polygonOffsetFactor ||
-        mCurRasterizerState.polygonOffsetUnits != rasterizerState.polygonOffsetUnits)
+    if (dirtyBits.test(gl::State::DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED) ||
+        dirtyBits.test(gl::State::DIRTY_BIT_POLYGON_OFFSET))
     {
         setRasterizerPolygonOffset(rasterizerState.polygonOffsetFill,
                                    rasterizerState.polygonOffsetFactor,
@@ -348,37 +339,47 @@ gl::Error StateManager9::setRasterizerState(const gl::RasterizerState &rasterize
 
 void StateManager9::setRasterizerMode(bool cullFace, GLenum cullMode, GLenum frontFace)
 {
-    mDevice->SetRenderState(
-        D3DRS_CULLMODE, cullFace ? gl_d3d9::ConvertCullMode(cullMode, frontFace) : D3DCULL_NONE);
+    if (mCurRasterizerState.cullFace != cullFace || mCurRasterizerState.cullMode != cullMode ||
+        mCurRasterizerState.frontFace != frontFace)
+    {
+        mDevice->SetRenderState(D3DRS_CULLMODE, cullFace
+                                                    ? gl_d3d9::ConvertCullMode(cullMode, frontFace)
+                                                    : D3DCULL_NONE);
 
-    mCurRasterizerState.cullFace  = cullFace;
-    mCurRasterizerState.cullMode  = cullMode;
-    mCurRasterizerState.frontFace = frontFace;
+        mCurRasterizerState.cullFace  = cullFace;
+        mCurRasterizerState.cullMode  = cullMode;
+        mCurRasterizerState.frontFace = frontFace;
+    }
 }
 
 void StateManager9::setRasterizerPolygonOffset(bool polygonOffsetFill,
                                                GLfloat polygonOffsetFactor,
                                                GLfloat polygonOffsetUnits)
 {
-    if (polygonOffsetFill)
+    if (mCurRasterizerState.polygonOffsetFill != polygonOffsetFill ||
+        mCurRasterizerState.polygonOffsetFactor != polygonOffsetFactor ||
+        mCurRasterizerState.polygonOffsetUnits != polygonOffsetUnits)
     {
-        if (mCurDepthSize > 0)
+        if (polygonOffsetFill)
         {
-            mDevice->SetRenderState(D3DRS_SLOPESCALEDEPTHBIAS, *(DWORD *)&polygonOffsetFactor);
+            if (mCurDepthSize > 0)
+            {
+                mDevice->SetRenderState(D3DRS_SLOPESCALEDEPTHBIAS, *(DWORD *)&polygonOffsetFactor);
 
-            float depthBias = ldexp(polygonOffsetUnits, -static_cast<int>(mCurDepthSize));
-            mDevice->SetRenderState(D3DRS_DEPTHBIAS, *(DWORD *)&depthBias);
+                float depthBias = ldexp(polygonOffsetUnits, -static_cast<int>(mCurDepthSize));
+                mDevice->SetRenderState(D3DRS_DEPTHBIAS, *(DWORD *)&depthBias);
+            }
         }
-    }
-    else
-    {
-        mDevice->SetRenderState(D3DRS_SLOPESCALEDEPTHBIAS, 0);
-        mDevice->SetRenderState(D3DRS_DEPTHBIAS, 0);
-    }
+        else
+        {
+            mDevice->SetRenderState(D3DRS_SLOPESCALEDEPTHBIAS, 0);
+            mDevice->SetRenderState(D3DRS_DEPTHBIAS, 0);
+        }
 
-    mCurRasterizerState.polygonOffsetFill   = polygonOffsetFill;
-    mCurRasterizerState.polygonOffsetFactor = polygonOffsetFactor;
-    mCurRasterizerState.polygonOffsetUnits  = polygonOffsetUnits;
+        mCurRasterizerState.polygonOffsetFill   = polygonOffsetFill;
+        mCurRasterizerState.polygonOffsetFactor = polygonOffsetFactor;
+        mCurRasterizerState.polygonOffsetUnits  = polygonOffsetUnits;
+    }
 }
 
 void StateManager9::setDepthMask(bool depthMask)

@@ -140,7 +140,8 @@ gl::Error StateManager11::setRasterizerState(const gl::RasterizerState &rasteriz
     // We should move the dirtybits back when this is moved to syncState
 
     if (isForceSetRasterizerState() ||
-        (memcmp(&rasterizerState, &mCurRasterizerState, sizeof(gl::RasterizerState)) != 0))
+        (IsRasterizerStateDirty(dirtyBits) &&
+         (memcmp(&rasterizerState, &mCurRasterizerState, sizeof(gl::RasterizerState)) != 0)))
     {
         ID3D11RasterizerState *dxRasterState = NULL;
         gl::Error error = mStateCache->getRasterizerState(rasterizerState, mCurScissorTestEnabled,

@@ -257,9 +257,20 @@ gl::Error StateManagerD3D::syncState(const gl::Data &data, const gl::State::Dirt
 
     gl::State::DirtyBits allDirtyBits = mExternalDirtyBits | mLocalDirtyBits;
 
+    gl::RasterizerState rasterizer = data.state->getRasterizerState();
+    rasterizer.multiSample         = (samples != 0);
+    gl::Error error                = setRasterizerState(rasterizer, allDirtyBits);
+
+    if (error.isError())
+    {
+        return error;
+    }
+
+    resetRasterizerForceBits();
+
     unsigned int sampleMask = getBlendStateMask(framebufferObject, samples, *(data.state));
-    gl::Error error = setBlendState(framebufferObject, data.state->getBlendState(),
-                                    data.state->getBlendColor(), sampleMask, allDirtyBits);
+    error = setBlendState(framebufferObject, data.state->getBlendState(),
+                          data.state->getBlendColor(), sampleMask, allDirtyBits);
 
     if (error.isError())
     {

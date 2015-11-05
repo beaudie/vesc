@@ -386,25 +386,13 @@ gl::Error RendererD3D::applyRenderTarget(const gl::Data &data, GLenum drawMode, 
 // Applies the fixed-function state (culling, depth test, alpha blending, stenciling, etc) to the Direct3D device
 gl::Error RendererD3D::applyState(const gl::Data &data, GLenum drawMode)
 {
-    const gl::Framebuffer *framebufferObject = data.state->getDrawFramebuffer();
-    int samples = framebufferObject->getSamples(data);
-
     // TODO(dianx) drawMode shouldn't be a part of rasterizer state. We should remove it
     // from RasterizerState and set a local state only when drawing point sprites in the draw call
     gl::RasterizerState rasterizer = data.state->getRasterizerState();
     rasterizer.pointDrawMode = (drawMode == GL_POINTS);
-    rasterizer.multiSample = (samples != 0);
 
-    gl::Error error = setRasterizerState(rasterizer, data.state->getDirtyBits());
-
-    if (error.isError())
-    {
-        return error;
-    }
-
-    error = mStateManager->syncState(data, data.state->getDirtyBits());
-
-    return error;
+    mStateManager->setRasterizerScissorEnabled(mScissorEnabled);
+    return mStateManager->syncState(data, data.state->getDirtyBits());
 }
 
 // Applies the shaders and shader constants to the Direct3D device

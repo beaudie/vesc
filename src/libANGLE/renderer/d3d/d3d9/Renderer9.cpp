@@ -886,12 +886,6 @@ gl::Error Renderer9::setUniformBuffers(const gl::Data &/*data*/,
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer9::setRasterizerState(const gl::RasterizerState &rasterState,
-                                        const gl::State::DirtyBits &dirtyBits)
-{
-    return mStateManager->setRasterizerState(rasterState, dirtyBits);
-}
-
 void Renderer9::setScissorRectangle(const gl::Rectangle &scissor, bool enabled)
 {
     bool scissorChanged = mForceSetScissor ||

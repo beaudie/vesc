@@ -120,9 +120,6 @@ class Renderer11 : public RendererD3D
                                 const std::vector<GLint> &vertexUniformBuffers,
                                 const std::vector<GLint> &fragmentUniformBuffers) override;
 
-    gl::Error setRasterizerState(const gl::RasterizerState &rasterState,
-                                 const gl::State::DirtyBits &dirtyBits) override;
-
     void setScissorRectangle(const gl::Rectangle &scissor, bool enabled) override;
 
     virtual void setViewport(const gl::Rectangle &viewport, float zNear, float zFar, GLenum drawMode, GLenum frontFace,
