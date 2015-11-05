@@ -9,7 +9,7 @@
 
 #include <gtest/gtest.h>
 
-#include "libANGLE/renderer/d3d/DynamicHLSL.h"
+#include "libANGLE/renderer/d3d/VaryingPacking.h"
 
 using namespace rx;
 
