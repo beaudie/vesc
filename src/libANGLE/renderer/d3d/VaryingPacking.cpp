@@ -53,19 +53,12 @@ bool VaryingPacking::packVarying(const PackedVarying &packedVarying)
     unsigned int varyingRows    = 0;
     unsigned int varyingColumns = 0;
 
-    const sh::Varying &varying = *packedVarying.varying;
+    const auto &varying = *packedVarying.varying;
 
-    if (varying.isStruct())
-    {
-        varyingRows    = HLSLVariableRegisterCount(varying, true) * varying.elementCount();
-        varyingColumns = 4;
-    }
-    else
-    {
-        GLenum transposedType = gl::TransposeMatrixType(varying.type);
-        varyingRows           = gl::VariableRowCount(transposedType) * varying.elementCount();
-        varyingColumns        = gl::VariableColumnCount(transposedType);
-    }
+    ASSERT(!varying.isStruct());
+    GLenum transposedType = gl::TransposeMatrixType(varying.type);
+    varyingRows           = gl::VariableRowCount(transposedType) * varying.elementCount();
+    varyingColumns        = gl::VariableColumnCount(transposedType);
 
     unsigned int maxVaryingVectors = static_cast<unsigned int>(mRegisterMap.size());
 
@@ -187,18 +180,11 @@ void VaryingPacking::insert(unsigned int registerRow,
     unsigned int varyingRows    = 0;
     unsigned int varyingColumns = 0;
 
-    const sh::Varying &varying = *packedVarying.varying;
-    if (varying.isStruct())
-    {
-        varyingRows    = HLSLVariableRegisterCount(varying, true);
-        varyingColumns = 4;
-    }
-    else
-    {
-        GLenum transposedType = gl::TransposeMatrixType(varying.type);
-        varyingRows           = gl::VariableRowCount(transposedType);
-        varyingColumns        = gl::VariableColumnCount(transposedType);
-    }
+    const auto &varying = *packedVarying.varying;
+    ASSERT(!varying.isStruct());
+    GLenum transposedType = gl::TransposeMatrixType(varying.type);
+    varyingRows           = gl::VariableRowCount(transposedType);
+    varyingColumns        = gl::VariableColumnCount(transposedType);
 
     PackedVaryingRegister registerInfo;
     registerInfo.packedVarying  = &packedVarying;
@@ -232,14 +218,15 @@ bool VaryingPacking::packVaryings(gl::InfoLog &infoLog,
 
     for (const PackedVarying &packedVarying : packedVaryings)
     {
-        const sh::Varying &varying = *packedVarying.varying;
+        const auto &varying = *packedVarying.varying;
 
         // Do not assign registers to built-in or unreferenced varyings
-        if (varying.isBuiltIn() || !varying.staticUse)
+        if (varying.isBuiltIn() || (!varying.staticUse && !packedVarying.isStructField()))
         {
             continue;
         }
 
+        ASSERT(!varying.isStruct());
         ASSERT(uniqueVaryingNames.count(varying.name) == 0);
 
         if (packVarying(packedVarying))
@@ -263,7 +250,7 @@ bool VaryingPacking::packVaryings(gl::InfoLog &infoLog,
 
         for (const PackedVarying &packedVarying : packedVaryings)
         {
-            const sh::Varying &varying = *packedVarying.varying;
+            const auto &varying = *packedVarying.varying;
 
             // Make sure transform feedback varyings aren't optimized out.
             if (uniqueVaryingNames.count(transformFeedbackVaryingName) == 0)
