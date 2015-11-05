@@ -47,6 +47,8 @@ class OutputHLSL : public TIntermTraverser
 
     TInfoSinkBase &getInfoSink() { ASSERT(!mInfoSinkStack.empty()); return *mInfoSinkStack.top(); }
 
+    static bool canWriteAsHLSLLiteral(TIntermTyped *expression);
+
   protected:
     void header(const BuiltInFunctionEmulator *builtInFunctionEmulator);
 
@@ -75,6 +77,7 @@ class OutputHLSL : public TIntermTraverser
 
     // Emit constructor. Called with literal names so using const char* instead of TString.
     void outputConstructor(Visit visit, const TType &type, const char *name, const TIntermSequence *parameters);
+    void writeSingleConstant(TInfoSinkBase &out, const TConstantUnion *constUnion);
     const TConstantUnion *writeConstantUnion(const TType &type, const TConstantUnion *constUnion);
 
     void outputEqual(Visit visit, const TType &type, TOperator op, TInfoSinkBase &out);
@@ -84,6 +87,11 @@ class OutputHLSL : public TIntermTraverser
 
     // Returns true if it found a 'same symbol' initializer (initializer that references the variable it's initting)
     bool writeSameSymbolInitializer(TInfoSinkBase &out, TIntermSymbol *symbolNode, TIntermTyped *expression);
+    // Returns true if variable initializer could be written using literal {} notation.
+    bool writeConstantInitialization(TInfoSinkBase &out,
+                                     TIntermSymbol *symbolNode,
+                                     TIntermTyped *expression);
+
     void writeDeferredGlobalInitializers(TInfoSinkBase &out);
     void writeSelection(TIntermSelection *node);
 
