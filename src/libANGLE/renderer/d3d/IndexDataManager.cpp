@@ -231,7 +231,7 @@ gl::Error IndexDataManager::prepareIndexData(GLenum srcType,
 
     if (staticBufferInitialized && !staticBufferUsable)
     {
-        buffer->invalidateStaticData();
+        buffer->invalidateStaticData(true);
         staticBuffer = nullptr;
     }
 
