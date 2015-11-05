@@ -11,8 +11,8 @@
 
 #include "common/debug.h"
 #include "common/MemoryBuffer.h"
+#include "libANGLE/formatutils.h"
 #include "libANGLE/Data.h"
-#include "libANGLe/formatutils.h"
 #include "libANGLE/renderer/d3d/d3d11/NativeWindow.h"
 #include "libANGLE/renderer/d3d/formatutilsD3D.h"
 #include "libANGLE/renderer/d3d/StateManagerD3D.h"
@@ -30,15 +30,17 @@ class ConfigSet;
 
 namespace gl
 {
-class InfoLog;
-struct LinkedVarying;
-class Texture;
 class DebugAnnotator;
+class InfoLog;
+class Texture;
+struct LinkedVarying;
 }
 
 namespace rx
 {
 struct D3DUniform;
+class DeviceD3D;
+class DeviceImpl;
 class EGLImageD3D;
 class ImageD3D;
 class IndexBuffer;
@@ -238,6 +240,8 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     // In D3D11, faster than calling setTexture a jillion times
     virtual gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) = 0;
 
+    egl::Error getEGLDevice(DeviceImpl **device);
+
   protected:
     virtual bool getLUID(LUID *adapterLuid) const = 0;
     virtual gl::Error applyShadersImpl(const gl::Data &data, GLenum drawMode) = 0;
@@ -245,6 +249,8 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     void cleanup();
 
     virtual void createAnnotator() = 0;
+
+    virtual egl::Error initializeEGLDevice(DeviceD3D **outDevice) = 0;
 
     StateManagerD3D *mStateManager;
 
@@ -320,6 +326,8 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
 
     mutable bool mWorkaroundsInitialized;
     mutable WorkaroundsD3D mWorkarounds;
+
+    DeviceD3D *mEGLDevice;
 };
 
 struct dx_VertexConstants

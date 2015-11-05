@@ -37,6 +37,7 @@
 #include "libANGLE/renderer/d3d/d3d9/TextureStorage9.h"
 #include "libANGLE/renderer/d3d/d3d9/VertexArray9.h"
 #include "libANGLE/renderer/d3d/d3d9/VertexBuffer9.h"
+#include "libANGLE/renderer/d3d/DeviceD3D.h"
 #include "libANGLE/renderer/d3d/FramebufferD3D.h"
 #include "libANGLE/renderer/d3d/IndexDataManager.h"
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
@@ -2808,6 +2809,17 @@ gl::Error Renderer9::clearTextures(gl::SamplerType samplerType, size_t rangeStar
     }
 
     return gl::Error(GL_NO_ERROR);
+}
+
+egl::Error Renderer9::initializeEGLDevice(DeviceD3D **outDevice)
+{
+    if (*outDevice == nullptr)
+    {
+        ASSERT(mDevice != nullptr);
+        *outDevice = new DeviceD3D(reinterpret_cast<void *>(mDevice), EGL_D3D9_DEVICE_ANGLE);
+    }
+
+    return egl::Error(EGL_SUCCESS);
 }
 
 Renderer9::CurSamplerState::CurSamplerState()
