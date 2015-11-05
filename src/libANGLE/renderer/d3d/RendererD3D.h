@@ -31,7 +31,6 @@ class ConfigSet;
 namespace gl
 {
 class InfoLog;
-struct LinkedVarying;
 class Texture;
 class DebugAnnotator;
 }
@@ -39,6 +38,7 @@ class DebugAnnotator;
 namespace rx
 {
 struct D3DUniform;
+struct D3DVarying;
 class EGLImageD3D;
 class ImageD3D;
 class IndexBuffer;
@@ -194,12 +194,18 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     virtual gl::Error createRenderTargetCopy(RenderTargetD3D *source, RenderTargetD3D **outRT) = 0;
 
     // Shader operations
-    virtual gl::Error loadExecutable(const void *function, size_t length, ShaderType type,
-                                     const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
-                                     bool separatedOutputBuffers, ShaderExecutableD3D **outExecutable) = 0;
-    virtual gl::Error compileToExecutable(gl::InfoLog &infoLog, const std::string &shaderHLSL, ShaderType type,
-                                          const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
-                                          bool separatedOutputBuffers, const D3DCompilerWorkarounds &workarounds,
+    virtual gl::Error loadExecutable(const void *function,
+                                     size_t length,
+                                     ShaderType type,
+                                     const std::vector<D3DVarying> &transformFeedbackVaryings,
+                                     bool separatedOutputBuffers,
+                                     ShaderExecutableD3D **outExecutable) = 0;
+    virtual gl::Error compileToExecutable(gl::InfoLog &infoLog,
+                                          const std::string &shaderHLSL,
+                                          ShaderType type,
+                                          const std::vector<D3DVarying> &transformFeedbackVaryings,
+                                          bool separatedOutputBuffers,
+                                          const D3DCompilerWorkarounds &workarounds,
                                           ShaderExecutableD3D **outExectuable) = 0;
     virtual UniformStorageD3D *createUniformStorage(size_t storageSize) = 0;
 
