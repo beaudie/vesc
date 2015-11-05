@@ -17,135 +17,141 @@
 namespace rx
 {
 
-bool PackVarying(PackedVarying *packedVarying, const int maxVaryingVectors, VaryingPacking &packing)
+// Implementation of VaryingPacking::BuiltinVarying
+VaryingPacking::BuiltinVarying::BuiltinVarying() : enabled(false), index(0), systemValue(false)
+{
+}
+
+std::string VaryingPacking::BuiltinVarying::str() const
+{
+    return (systemValue ? semantic : (semantic + Str(index)));
+}
+
+void VaryingPacking::BuiltinVarying::enableSystem(const std::string &systemValueSemantic)
+{
+    enabled     = true;
+    semantic    = systemValueSemantic;
+    systemValue = true;
+}
+
+void VaryingPacking::BuiltinVarying::enable(const std::string &semanticVal, unsigned int indexVal)
+{
+    enabled  = true;
+    semantic = semanticVal;
+    index    = indexVal;
+}
+
+// Implementation of VaryingPacking
+VaryingPacking::VaryingPacking(GLuint maxVaryingVectors)
+    : mRegisterMap(maxVaryingVectors), mBuiltinInfo(SHADER_TYPE_MAX)
+{
+}
+
+bool VaryingPacking::packVarying(const PackedVarying &packedVarying)
 {
     // Make sure we use transposed matrix types to count registers correctly.
-    int registers = 0;
-    int elements  = 0;
+    unsigned int varyingRows    = 0;
+    unsigned int varyingColumns = 0;
 
-    const sh::Varying &varying = *packedVarying->varying;
+    const sh::Varying &varying = *packedVarying.varying;
 
     if (varying.isStruct())
     {
-        registers = HLSLVariableRegisterCount(varying, true) * varying.elementCount();
-        elements  = 4;
+        varyingRows    = HLSLVariableRegisterCount(varying, true) * varying.elementCount();
+        varyingColumns = 4;
     }
     else
     {
         GLenum transposedType = gl::TransposeMatrixType(varying.type);
-        registers             = gl::VariableRowCount(transposedType) * varying.elementCount();
-        elements              = gl::VariableColumnCount(transposedType);
+        varyingRows           = gl::VariableRowCount(transposedType) * varying.elementCount();
+        varyingColumns        = gl::VariableColumnCount(transposedType);
     }
 
-    if (elements >= 2 && elements <= 4)
+    unsigned int maxVaryingVectors = static_cast<unsigned int>(mRegisterMap.size());
+
+    if (varyingColumns >= 2 && varyingColumns <= 4)
     {
-        for (int r = 0; r <= maxVaryingVectors - registers; r++)
+        for (unsigned int row = 0; row <= maxVaryingVectors - varyingRows; ++row)
         {
-            bool available = true;
-
-            for (int y = 0; y < registers && available; y++)
+            if (isFree(row, 0, varyingRows, varyingColumns))
             {
-                for (int x = 0; x < elements && available; x++)
-                {
-                    if (packing[r + y][x])
-                    {
-                        available = false;
-                    }
-                }
-            }
-
-            if (available)
-            {
-                packedVarying->registerIndex = r;
-                packedVarying->columnIndex   = 0;
-
-                for (int y = 0; y < registers; y++)
-                {
-                    for (int x = 0; x < elements; x++)
-                    {
-                        packing[r + y][x] = packedVarying;
-                    }
-                }
-
+                insert(row, 0, packedVarying);
                 return true;
             }
         }
 
-        if (elements == 2)
+        // Check if we can pack a 2-element vector into an occupied register.
+        if (varyingColumns == 2)
         {
-            for (int r = maxVaryingVectors - registers; r >= 0; r--)
+            for (unsigned int r = maxVaryingVectors - varyingRows + 1; r-- >= 1;)
             {
-                bool available = true;
-
-                for (int y = 0; y < registers && available; y++)
+                if (isFree(r, 2, varyingRows, 2))
                 {
-                    for (int x = 2; x < 4 && available; x++)
-                    {
-                        if (packing[r + y][x])
-                        {
-                            available = false;
-                        }
-                    }
-                }
-
-                if (available)
-                {
-                    packedVarying->registerIndex = r;
-                    packedVarying->columnIndex   = 2;
-
-                    for (int y = 0; y < registers; y++)
-                    {
-                        for (int x = 2; x < 4; x++)
-                        {
-                            packing[r + y][x] = packedVarying;
-                        }
-                    }
-
+                    insert(r, 2, packedVarying);
                     return true;
                 }
             }
         }
     }
-    else if (elements == 1)
+    else if (varyingColumns == 1)
     {
-        int space[4] = {0};
+        unsigned int contiguousSpace[4]     = {0};
+        unsigned int bestContiguousSpace[4] = {0};
+        unsigned int totalSpace[4]          = {0};
 
-        for (int y = 0; y < maxVaryingVectors; y++)
+        for (unsigned int row = 0; row < maxVaryingVectors; ++row)
         {
-            for (int x = 0; x < 4; x++)
+            for (unsigned int column = 0; column < 4; ++column)
             {
-                space[x] += packing[y][x] ? 0 : 1;
-            }
-        }
-
-        int column = 0;
-
-        for (int x = 0; x < 4; x++)
-        {
-            if (space[x] >= registers && (space[column] < registers || space[x] < space[column]))
-            {
-                column = x;
-            }
-        }
-
-        if (space[column] >= registers)
-        {
-            for (int r = 0; r < maxVaryingVectors; r++)
-            {
-                if (!packing[r][column])
+                if (mRegisterMap[row][column])
                 {
-                    packedVarying->registerIndex = r;
-                    packedVarying->columnIndex   = column;
+                    contiguousSpace[column] = 0;
+                }
+                else
+                {
+                    contiguousSpace[column]++;
+                    totalSpace[column]++;
 
-                    for (int y = r; y < r + registers; y++)
+                    if (contiguousSpace[column] > bestContiguousSpace[column])
                     {
-                        packing[y][column] = packedVarying;
+                        bestContiguousSpace[column] = contiguousSpace[column];
                     }
+                }
+            }
+        }
 
+        unsigned int bestColumn = 0;
+        for (unsigned int column = 1; column < 4; ++column)
+        {
+            if (bestContiguousSpace[column] >= varyingRows &&
+                (bestContiguousSpace[bestColumn] < varyingRows ||
+                 totalSpace[column] < totalSpace[bestColumn]))
+            {
+                bestColumn = column;
+            }
+        }
+
+        if (bestContiguousSpace[bestColumn] >= varyingRows)
+        {
+            for (unsigned int row = 0; row < maxVaryingVectors; row++)
+            {
+                if (!mRegisterMap[row][bestColumn])
+                {
+                    for (unsigned int arrayIndex = 0; arrayIndex < varyingRows; ++arrayIndex)
+                    {
+                        // If varyingRows > 1, it must be an array.
+                        PackedVaryingRegister registerInfo;
+                        registerInfo.packedVarying     = &packedVarying;
+                        registerInfo.registerRow       = row + arrayIndex;
+                        registerInfo.registerColumn    = bestColumn;
+                        registerInfo.varyingArrayIndex = arrayIndex;
+                        registerInfo.varyingRowIndex = 0;
+                        mRegisterList.push_back(registerInfo);
+                        mRegisterMap[row + arrayIndex][bestColumn] = true;
+                    }
                     break;
                 }
             }
-
             return true;
         }
     }
@@ -155,108 +161,76 @@ bool PackVarying(PackedVarying *packedVarying, const int maxVaryingVectors, Vary
     return false;
 }
 
-unsigned int PackedVaryingRegister::registerIndex(
-    const gl::Caps &caps,
-    const std::vector<PackedVarying> &packedVaryings) const
+bool VaryingPacking::isFree(unsigned int registerRow,
+                            unsigned int registerColumn,
+                            unsigned int varyingRows,
+                            unsigned int varyingColumns) const
 {
-    const PackedVarying &packedVarying = packedVaryings[varyingIndex];
-    const sh::Varying &varying         = *packedVarying.varying;
-
-    GLenum transposedType = gl::TransposeMatrixType(varying.type);
-    unsigned int variableRows =
-        static_cast<unsigned int>(varying.isStruct() ? 1 : gl::VariableRowCount(transposedType));
-
-    return (elementIndex * variableRows + (packedVarying.columnIndex * caps.maxVaryingVectors) +
-            (packedVarying.registerIndex + rowIndex));
-}
-
-PackedVaryingIterator::PackedVaryingIterator(const std::vector<PackedVarying> &packedVaryings)
-    : mPackedVaryings(packedVaryings), mEnd(*this)
-{
-    mEnd.setEnd();
-}
-
-PackedVaryingIterator::Iterator PackedVaryingIterator::begin() const
-{
-    return Iterator(*this);
-}
-
-const PackedVaryingIterator::Iterator &PackedVaryingIterator::end() const
-{
-    return mEnd;
-}
-
-PackedVaryingIterator::Iterator::Iterator(const PackedVaryingIterator &parent) : mParent(parent)
-{
-    while (mRegister.varyingIndex < mParent.mPackedVaryings.size() &&
-           !mParent.mPackedVaryings[mRegister.varyingIndex].registerAssigned())
+    for (unsigned int row = 0; row < varyingRows; ++row)
     {
-        ++mRegister.varyingIndex;
-    }
-}
-
-PackedVaryingIterator::Iterator &PackedVaryingIterator::Iterator::operator++()
-{
-    const sh::Varying *varying = mParent.mPackedVaryings[mRegister.varyingIndex].varying;
-    GLenum transposedType = gl::TransposeMatrixType(varying->type);
-    unsigned int variableRows =
-        static_cast<unsigned int>(varying->isStruct() ? 1 : gl::VariableRowCount(transposedType));
-
-    // Innermost iteration: row count
-    if (mRegister.rowIndex + 1 < variableRows)
-    {
-        ++mRegister.rowIndex;
-        return *this;
+        for (unsigned int column = 0; column < varyingColumns; ++column)
+        {
+            if (mRegisterMap[registerRow + row][registerColumn + column])
+            {
+                return false;
+            }
+        }
     }
 
-    mRegister.rowIndex = 0;
+    return true;
+}
 
-    // Middle iteration: element count
-    if (mRegister.elementIndex + 1 < varying->elementCount())
+void VaryingPacking::insert(unsigned int registerRow,
+                            unsigned int registerColumn,
+                            const PackedVarying &packedVarying)
+{
+    unsigned int varyingRows    = 0;
+    unsigned int varyingColumns = 0;
+
+    const sh::Varying &varying = *packedVarying.varying;
+    if (varying.isStruct())
     {
-        ++mRegister.elementIndex;
-        return *this;
+        varyingRows    = HLSLVariableRegisterCount(varying, true);
+        varyingColumns = 4;
+    }
+    else
+    {
+        GLenum transposedType = gl::TransposeMatrixType(varying.type);
+        varyingRows           = gl::VariableRowCount(transposedType);
+        varyingColumns        = gl::VariableColumnCount(transposedType);
     }
 
-    mRegister.elementIndex = 0;
+    PackedVaryingRegister registerInfo;
+    registerInfo.packedVarying  = &packedVarying;
+    registerInfo.registerColumn = registerColumn;
 
-    // Outer iteration: the varying itself. Once we pass the last varying, this Iterator will
-    // equal the end Iterator.
-    do
+    for (unsigned int arrayElement = 0; arrayElement < varying.elementCount(); ++arrayElement)
     {
-        ++mRegister.varyingIndex;
-    } while (mRegister.varyingIndex < mParent.mPackedVaryings.size() &&
-             !mParent.mPackedVaryings[mRegister.varyingIndex].registerAssigned());
-    return *this;
-}
+        for (unsigned int varyingRow = 0; varyingRow < varyingRows; ++varyingRow)
+        {
+            registerInfo.registerRow       = registerRow + (arrayElement * varyingRows) + varyingRow;
+            registerInfo.varyingRowIndex   = varyingRow;
+            registerInfo.varyingArrayIndex = arrayElement;
+            mRegisterList.push_back(registerInfo);
 
-bool PackedVaryingIterator::Iterator::operator==(const Iterator &other) const
-{
-    return mRegister.elementIndex == other.mRegister.elementIndex &&
-           mRegister.rowIndex == other.mRegister.rowIndex &&
-           mRegister.varyingIndex == other.mRegister.varyingIndex;
-}
-
-bool PackedVaryingIterator::Iterator::operator!=(const Iterator &other) const
-{
-    return !(*this == other);
+            for (unsigned int columnIndex = 0; columnIndex < varyingColumns; ++columnIndex)
+            {
+                mRegisterMap[registerInfo.registerRow][registerColumn + columnIndex] = true;
+            }
+        }
+    }
 }
 
 // Packs varyings into generic varying registers, using the algorithm from [OpenGL ES Shading
 // Language 1.00 rev. 17] appendix A section 7 page 111
 // Returns the number of used varying registers, or -1 if unsuccesful
-bool PackVaryings(const gl::Caps &caps,
-                  gl::InfoLog &infoLog,
-                  std::vector<PackedVarying> *packedVaryings,
-                  const std::vector<std::string> &transformFeedbackVaryings,
-                  unsigned int *registerCountOut)
+bool VaryingPacking::packVaryings(gl::InfoLog &infoLog,
+                                  const std::vector<PackedVarying> &packedVaryings,
+                                  const std::vector<std::string> &transformFeedbackVaryings)
 {
-    VaryingPacking packing = {};
-    *registerCountOut      = 0;
-
     std::set<std::string> uniqueVaryingNames;
 
-    for (PackedVarying &packedVarying : *packedVaryings)
+    for (const PackedVarying &packedVarying : packedVaryings)
     {
         const sh::Varying &varying = *packedVarying.varying;
 
@@ -268,7 +242,7 @@ bool PackVaryings(const gl::Caps &caps,
 
         ASSERT(uniqueVaryingNames.count(varying.name) == 0);
 
-        if (PackVarying(&packedVarying, caps.maxVaryingVectors, packing))
+        if (packVarying(packedVarying))
         {
             uniqueVaryingNames.insert(varying.name);
         }
@@ -287,7 +261,7 @@ bool PackVaryings(const gl::Caps &caps,
             continue;
         }
 
-        for (PackedVarying &packedVarying : *packedVaryings)
+        for (const PackedVarying &packedVarying : packedVaryings)
         {
             const sh::Varying &varying = *packedVarying.varying;
 
@@ -297,7 +271,7 @@ bool PackVaryings(const gl::Caps &caps,
                 bool found = false;
                 if (transformFeedbackVaryingName == varying.name)
                 {
-                    if (!PackVarying(&packedVarying, caps.maxVaryingVectors, packing))
+                    if (!packVarying(packedVarying))
                     {
                         infoLog << "Could not pack varying " << varying.name;
                         return false;
@@ -313,28 +287,103 @@ bool PackVaryings(const gl::Caps &caps,
                     return false;
                 }
             }
-
-            // Add duplicate transform feedback varyings for 'flat' shaded attributes. This is
-            // necessary because we write out modified vertex data to correct for the provoking
-            // vertex in D3D11. This extra transform feedback varying is the unmodified stream.
-            if (varying.interpolation == sh::INTERPOLATION_FLAT)
-            {
-                sh::Varying duplicateVarying(varying);
-                duplicateVarying.name = "StreamOut_" + duplicateVarying.name;
-            }
         }
     }
 
-    // Return the number of used registers
-    for (GLuint r = 0; r < caps.maxVaryingVectors; r++)
+    // Sort the packed register list
+    std::sort(mRegisterList.begin(), mRegisterList.end());
+
+    // Assign semantic indices
+    for (unsigned int semanticIndex = 0;
+         semanticIndex < static_cast<unsigned int>(mRegisterList.size()); ++semanticIndex)
     {
-        if (packing[r][0] || packing[r][1] || packing[r][2] || packing[r][3])
-        {
-            (*registerCountOut)++;
-        }
+        mRegisterList[semanticIndex].semanticIndex = semanticIndex;
     }
 
     return true;
+}
+
+unsigned int VaryingPacking::getRegisterCount() const
+{
+    unsigned int count = 0;
+
+    for (const Register &reg : mRegisterMap)
+    {
+        if (reg.data[0] || reg.data[1] || reg.data[2] || reg.data[3])
+        {
+            ++count;
+        }
+    }
+
+    if (mBuiltinInfo[SHADER_PIXEL].glFragCoord.enabled)
+    {
+        ++count;
+    }
+
+    if (mBuiltinInfo[SHADER_PIXEL].glPointCoord.enabled)
+    {
+        ++count;
+    }
+
+    return count;
+}
+
+void VaryingPacking::enableBuiltins(ShaderType shaderType,
+                                    int majorShaderModel,
+                                    bool position,
+                                    bool fragCoord,
+                                    bool pointCoord,
+                                    bool pointSize)
+{
+    bool hlsl4                         = (majorShaderModel >= 4);
+    const std::string &varyingSemantic = GetVaryingSemantic(majorShaderModel, pointSize);
+
+    unsigned int reservedSemanticIndex = getMaxSemanticIndex();
+
+    BuiltinInfo *builtins = &mBuiltinInfo[shaderType];
+
+    if (hlsl4)
+    {
+        builtins->dxPosition.enableSystem("SV_Position");
+    }
+    else if (shaderType == SHADER_PIXEL)
+    {
+        builtins->dxPosition.enableSystem("VPOS");
+    }
+    else
+    {
+        builtins->dxPosition.enableSystem("POSITION");
+    }
+
+    if (position)
+    {
+        builtins->glPosition.enable(varyingSemantic, reservedSemanticIndex++);
+    }
+
+    if (fragCoord)
+    {
+        builtins->glFragCoord.enable(varyingSemantic, reservedSemanticIndex++);
+    }
+
+    if (pointCoord)
+    {
+        // SM3 reserves the TEXCOORD semantic for point sprite texcoords (gl_PointCoord)
+        // In D3D11 we manually compute gl_PointCoord in the GS.
+        if (hlsl4)
+        {
+            builtins->glPointCoord.enable(varyingSemantic, reservedSemanticIndex++);
+        }
+        else
+        {
+            builtins->glPointCoord.enable("TEXCOORD", 0);
+        }
+    }
+
+    // Special case: do not include PSIZE semantic in HLSL 3 pixel shaders
+    if (pointSize && (shaderType != SHADER_PIXEL || hlsl4))
+    {
+        builtins->glPointSize.enableSystem("PSIZE");
+    }
 }
 
 }  // namespace rx

@@ -22,8 +22,6 @@ TEST(PackedVarying, DefaultInitialization)
     PackedVarying pv(defaultVarying);
 
     EXPECT_EQ(&defaultVarying, pv.varying);
-    EXPECT_EQ(GL_INVALID_INDEX, pv.registerIndex);
-    EXPECT_EQ(0, pv.columnIndex);
     EXPECT_FALSE(pv.vertexOnly);
 }
 
