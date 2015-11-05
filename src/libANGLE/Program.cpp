@@ -304,6 +304,32 @@ GLuint Program::Data::getUniformIndex(const std::string &name) const
     return GL_INVALID_INDEX;
 }
 
+std::vector<const sh::Varying *> Program::Data::getMergedVaryings() const
+{
+    std::set<std::string> uniqueNames;
+    std::vector<const sh::Varying *> varyings;
+
+    for (const sh::Varying &varying : mAttachedVertexShader->getVaryings())
+    {
+        if (uniqueNames.count(varying.name) == 0)
+        {
+            uniqueNames.insert(varying.name);
+            varyings.push_back(&varying);
+        }
+    }
+
+    for (const sh::Varying &varying : mAttachedFragmentShader->getVaryings())
+    {
+        if (uniqueNames.count(varying.name) == 0)
+        {
+            uniqueNames.insert(varying.name);
+            varyings.push_back(&varying);
+        }
+    }
+
+    return varyings;
+}
+
 Program::Program(rx::ImplFactory *factory, ResourceManager *manager, GLuint handle)
     : mProgram(factory->createProgram(mData)),
       mValidated(false),
@@ -446,7 +472,7 @@ Error Program::link(const gl::Data &data)
         return Error(GL_NO_ERROR);
     }
 
-    const auto &mergedVaryings = getMergedVaryings();
+    const auto &mergedVaryings = mData.getMergedVaryings();
 
     if (!linkValidateTransformFeedback(mInfoLog, mergedVaryings, *data.caps))
     {
@@ -2065,32 +2091,6 @@ void Program::gatherTransformFeedbackVaryings(const std::vector<const sh::Varyin
             }
         }
     }
-}
-
-std::vector<const sh::Varying *> Program::getMergedVaryings() const
-{
-    std::set<std::string> uniqueNames;
-    std::vector<const sh::Varying *> varyings;
-
-    for (const sh::Varying &varying : mData.mAttachedVertexShader->getVaryings())
-    {
-        if (uniqueNames.count(varying.name) == 0)
-        {
-            uniqueNames.insert(varying.name);
-            varyings.push_back(&varying);
-        }
-    }
-
-    for (const sh::Varying &varying : mData.mAttachedFragmentShader->getVaryings())
-    {
-        if (uniqueNames.count(varying.name) == 0)
-        {
-            uniqueNames.insert(varying.name);
-            varyings.push_back(&varying);
-        }
-    }
-
-    return varyings;
 }
 
 void Program::linkOutputVariables()

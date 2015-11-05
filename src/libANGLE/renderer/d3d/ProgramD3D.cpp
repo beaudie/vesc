@@ -20,6 +20,7 @@
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/ShaderD3D.h"
 #include "libANGLE/renderer/d3d/ShaderExecutableD3D.h"
+#include "libANGLE/renderer/d3d/VaryingPacking.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
 
 namespace rx
@@ -100,6 +101,12 @@ struct AttributeSorter
     const ProgramD3D::SemanticIndexArray *originalIndices;
 };
 
+// true if varying x has a higher priority in packing than y
+bool ComparePackedVarying(const PackedVarying &x, const PackedVarying &y)
+{
+    return gl::CompareVarying(*x.varying, *y.varying);
+}
+
 std::vector<PackedVarying> MergeVaryings(const gl::Shader &vertexShader,
                                          const gl::Shader &fragmentShader,
                                          const std::vector<std::string> &tfVaryings)
@@ -140,6 +147,8 @@ std::vector<PackedVarying> MergeVaryings(const gl::Shader &vertexShader,
             }
         }
     }
+
+    std::sort(packedVaryings.begin(), packedVaryings.end(), ComparePackedVarying);
 
     return packedVaryings;
 }
@@ -343,22 +352,18 @@ bool D3DUniform::isReferencedByFragmentShader() const
 
 // D3DVarying Implementation
 
-D3DVarying::D3DVarying()
+D3DVarying::D3DVarying() : semanticIndex(0), componentCount(0), outputSlot(0)
 {
 }
 
-D3DVarying::D3DVarying(const std::string &name,
-                       GLenum type,
-                       GLsizei size,
-                       const std::string &semanticName,
-                       unsigned int semanticIndex,
-                       unsigned int semanticIndexCount)
-    : name(name),
-      type(type),
-      size(size),
-      semanticName(semanticName),
-      semanticIndex(semanticIndex),
-      semanticIndexCount(semanticIndexCount)
+D3DVarying::D3DVarying(const std::string &semanticNameIn,
+                       unsigned int semanticIndexIn,
+                       unsigned int componentCountIn,
+                       unsigned int outputSlotIn)
+    : semanticName(semanticNameIn),
+      semanticIndex(semanticIndexIn),
+      componentCount(componentCountIn),
+      outputSlot(outputSlotIn)
 {
 }
 
@@ -688,19 +693,16 @@ LinkResult ProgramD3D::load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream)
         mD3DUniformBlocks.push_back(uniformBlock);
     }
 
-    const unsigned int transformFeedbackVaryingCount = stream->readInt<unsigned int>();
-    mTransformFeedbackD3DVaryings.resize(transformFeedbackVaryingCount);
-    for (unsigned int varyingIndex = 0; varyingIndex < transformFeedbackVaryingCount;
-         varyingIndex++)
+    const unsigned int streamOutVaryingCount = stream->readInt<unsigned int>();
+    mStreamOutVaryings.resize(streamOutVaryingCount);
+    for (unsigned int varyingIndex = 0; varyingIndex < streamOutVaryingCount; ++varyingIndex)
     {
-        D3DVarying *varying = &mTransformFeedbackD3DVaryings[varyingIndex];
+        D3DVarying *varying = &mStreamOutVaryings[varyingIndex];
 
-        stream->readString(&varying->name);
-        stream->readInt(&varying->type);
-        stream->readInt(&varying->size);
         stream->readString(&varying->semanticName);
         stream->readInt(&varying->semanticIndex);
-        stream->readInt(&varying->semanticIndexCount);
+        stream->readInt(&varying->componentCount);
+        stream->readInt(&varying->outputSlot);
     }
 
     stream->readString(&mVertexHLSL);
@@ -746,7 +748,7 @@ LinkResult ProgramD3D::load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream)
         ShaderExecutableD3D *shaderExecutable = nullptr;
 
         gl::Error error = mRenderer->loadExecutable(
-            vertexShaderFunction, vertexShaderSize, SHADER_VERTEX, mTransformFeedbackD3DVaryings,
+            vertexShaderFunction, vertexShaderSize, SHADER_VERTEX, mStreamOutVaryings,
             (mData.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS), &shaderExecutable);
         if (error.isError())
         {
@@ -785,7 +787,7 @@ LinkResult ProgramD3D::load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream)
         ShaderExecutableD3D *shaderExecutable    = nullptr;
 
         gl::Error error = mRenderer->loadExecutable(
-            pixelShaderFunction, pixelShaderSize, SHADER_PIXEL, mTransformFeedbackD3DVaryings,
+            pixelShaderFunction, pixelShaderSize, SHADER_PIXEL, mStreamOutVaryings,
             (mData.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS), &shaderExecutable);
         if (error.isError())
         {
@@ -818,8 +820,8 @@ LinkResult ProgramD3D::load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream)
         bool splitAttribs                           = (mData.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS);
 
         gl::Error error = mRenderer->loadExecutable(
-            geometryShaderFunction, geometryShaderSize, SHADER_GEOMETRY,
-            mTransformFeedbackD3DVaryings, splitAttribs, &mGeometryExecutables[geometryExeIndex]);
+            geometryShaderFunction, geometryShaderSize, SHADER_GEOMETRY, mStreamOutVaryings,
+            splitAttribs, &mGeometryExecutables[geometryExeIndex]);
         if (error.isError())
         {
             return LinkResult(false, error);
@@ -892,17 +894,13 @@ gl::Error ProgramD3D::save(gl::BinaryOutputStream *stream)
         stream->writeInt(uniformBlock.vsRegisterIndex);
     }
 
-    stream->writeInt(mTransformFeedbackD3DVaryings.size());
-    for (size_t i = 0; i < mTransformFeedbackD3DVaryings.size(); i++)
+    stream->writeInt(mStreamOutVaryings.size());
+    for (const auto &varying : mStreamOutVaryings)
     {
-        const D3DVarying &varying = mTransformFeedbackD3DVaryings[i];
-
-        stream->writeString(varying.name);
-        stream->writeInt(varying.type);
-        stream->writeInt(varying.size);
         stream->writeString(varying.semanticName);
         stream->writeInt(varying.semanticIndex);
-        stream->writeInt(varying.semanticIndexCount);
+        stream->writeInt(varying.componentCount);
+        stream->writeInt(varying.outputSlot);
     }
 
     stream->writeString(mVertexHLSL);
@@ -1037,7 +1035,7 @@ gl::Error ProgramD3D::getPixelExecutableForOutputLayout(const std::vector<GLenum
     gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
 
     gl::Error error = mRenderer->compileToExecutable(
-        *currentInfoLog, finalPixelHLSL, SHADER_PIXEL, mTransformFeedbackD3DVaryings,
+        *currentInfoLog, finalPixelHLSL, SHADER_PIXEL, mStreamOutVaryings,
         (mData.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS), mPixelWorkarounds,
         &pixelExecutable);
     if (error.isError())
@@ -1086,7 +1084,7 @@ gl::Error ProgramD3D::getVertexExecutableForInputLayout(const gl::InputLayout &i
     gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
 
     gl::Error error = mRenderer->compileToExecutable(
-        *currentInfoLog, finalVertexHLSL, SHADER_VERTEX, mTransformFeedbackD3DVaryings,
+        *currentInfoLog, finalVertexHLSL, SHADER_VERTEX, mStreamOutVaryings,
         (mData.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS), mVertexWorkarounds,
         &vertexExecutable);
     if (error.isError())
@@ -1145,7 +1143,7 @@ gl::Error ProgramD3D::getGeometryExecutableForPrimitiveType(const gl::Data &data
     gl::InfoLog *currentInfoLog = infoLog ? infoLog : &tempInfoLog;
 
     gl::Error error = mRenderer->compileToExecutable(
-        *currentInfoLog, geometryHLSL, SHADER_GEOMETRY, mTransformFeedbackD3DVaryings,
+        *currentInfoLog, geometryHLSL, SHADER_GEOMETRY, mStreamOutVaryings,
         (mData.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS), D3DCompilerWorkarounds(),
         &mGeometryExecutables[geometryShaderType]);
 
@@ -1260,22 +1258,65 @@ LinkResult ProgramD3D::link(const gl::Data &data, gl::InfoLog &infoLog)
         MergeVaryings(*vertexShader, *fragmentShader, mData.getTransformFeedbackVaryingNames());
 
     // Map the varyings to the register file
-    unsigned int registerCount = 0;
-    if (!mDynamicHLSL->packVaryings(*data.caps, infoLog, &packedVaryings,
-                                    mData.getTransformFeedbackVaryingNames(), &registerCount))
-    {
-        return LinkResult(false, gl::Error(GL_NO_ERROR));
-    }
-
-    std::vector<D3DVarying> d3dVaryings;
-    if (!mDynamicHLSL->generateShaderLinkHLSL(data, mData, infoLog, registerCount, &mPixelHLSL,
-                                              &mVertexHLSL, packedVaryings, &d3dVaryings,
-                                              &mPixelShaderKey, &mUsesFragDepth))
+    VaryingPacking varyingPacking(data.caps->maxVaryingVectors);
+    if (!varyingPacking.packVaryings(infoLog, packedVaryings,
+                                     mData.getTransformFeedbackVaryingNames()))
     {
         return LinkResult(false, gl::Error(GL_NO_ERROR));
     }
 
     mUsesPointSize = vertexShaderD3D->usesPointSize();
+
+    // TODO(jmadill): clean this up, since it's duplicated in DynamicHLSL.
+    int majorShaderModel            = mRenderer->getMajorShaderModel();
+    bool usesFragCoord              = fragmentShaderD3D->usesFragCoord();
+    bool usesPointCoord             = fragmentShaderD3D->usesPointCoord();
+    bool insertDummyPointCoordValue = !usesPointSize() && usesPointCoord && majorShaderModel >= 4;
+    bool addPointCoord =
+        usesPointCoord && (usesInstancedPointSpriteEmulation() && usesPointCoord) ||
+        insertDummyPointCoordValue;
+
+    // gl_Position only needs to be outputted from the vertex shader if transform feedback is
+    // active. This isn't supported on D3D11 Feature Level 9_3, so we don't output gl_Position from
+    // the vertex shader in this case. This saves us 1 output vector.
+    bool outputPositionFromVS = !(majorShaderModel >= 4 && mRenderer->getShaderModelSuffix() != "");
+
+    // Instanced PointSprite emulation requires that gl_PointCoord is present in the vertex shader
+    // VS_OUTPUT structure to ensure compatibility with the generated PS_INPUT of the pixel shader.
+    // GeometryShader PointSprite emulation does not require this additional entry because the
+    // GS_OUTPUT of the Geometry shader contains the pointCoord value and already matches the
+    // PS_INPUT of the generated pixel shader. The Geometry Shader point sprite implementation needs
+    // gl_PointSize to be in VS_OUTPUT and GS_INPUT. Instanced point sprites doesn't need
+    // gl_PointSize in VS_OUTPUT.
+    varyingPacking.enableBuiltins(SHADER_VERTEX, majorShaderModel, outputPositionFromVS,
+                                  usesFragCoord, addPointCoord,
+                                  !usesInstancedPointSpriteEmulation() && usesPointSize());
+
+    varyingPacking.enableBuiltins(SHADER_PIXEL, majorShaderModel, outputPositionFromVS,
+                                  usesFragCoord, usesPointCoord,
+                                  !usesInstancedPointSpriteEmulation() && usesPointSize());
+
+    if (static_cast<GLuint>(varyingPacking.getRegisterCount()) > data.caps->maxVaryingVectors)
+    {
+        infoLog << "No varying registers left to support gl_FragCoord/gl_PointCoord";
+        return LinkResult(false, gl::Error(GL_NO_ERROR));
+    }
+
+    // TODO(jmadll): Implement more sophisticated component packing in D3D9.
+    // We can fail here because we use one semantic per GLSL varying. D3D11 can pack varyings
+    // intelligently, but D3D9 assumes one semantic per register.
+    if (mRenderer->getRendererClass() == RENDERER_D3D9 &&
+        varyingPacking.getMaxSemanticIndex() > data.caps->maxVaryingVectors)
+    {
+        infoLog << "Cannot pack these varyings on D3D9.";
+        return LinkResult(false, gl::Error(GL_NO_ERROR));
+    }
+
+    if (!mDynamicHLSL->generateShaderLinkHLSL(data, mData, &mPixelHLSL, &mVertexHLSL,
+                                              varyingPacking, &mPixelShaderKey, &mUsesFragDepth))
+    {
+        return LinkResult(false, gl::Error(GL_NO_ERROR));
+    }
 
     // Cache if we use flat shading
     for (const auto &varying : packedVaryings)
@@ -1289,15 +1330,16 @@ LinkResult ProgramD3D::link(const gl::Data &data, gl::InfoLog &infoLog)
 
     if (mRenderer->getMajorShaderModel() >= 4)
     {
-        mGeometryShaderPreamble = mDynamicHLSL->generateGeometryShaderPreamble(
-            data, mData, registerCount, packedVaryings);
+        varyingPacking.enableBuiltins(SHADER_GEOMETRY, majorShaderModel, true, usesFragCoord,
+                                      usesPointCoord, usesPointSize());
+        mGeometryShaderPreamble = mDynamicHLSL->generateGeometryShaderPreamble(varyingPacking);
     }
 
     initSemanticIndex();
 
     defineUniformsAndAssignRegisters();
 
-    gatherTransformFeedbackVaryings(d3dVaryings);
+    gatherTransformFeedbackVaryings(varyingPacking);
 
     LinkResult result = compileProgramExecutables(data, infoLog);
     if (result.error.isError() || !result.linkSuccess)
@@ -2014,7 +2056,7 @@ void ProgramD3D::reset()
     std::fill(mSemanticIndexes, mSemanticIndexes + ArraySize(mSemanticIndexes), -1);
     std::fill(mAttributesByLayout, mAttributesByLayout + ArraySize(mAttributesByLayout), -1);
 
-    mTransformFeedbackD3DVaryings.clear();
+    mStreamOutVaryings.clear();
 
     mGeometryShaderPreamble.clear();
 }
@@ -2096,18 +2138,60 @@ void ProgramD3D::updateCachedInputLayout(const gl::State &state)
     }
 }
 
-void ProgramD3D::gatherTransformFeedbackVaryings(const std::vector<D3DVarying> &d3dVaryings)
+void ProgramD3D::gatherTransformFeedbackVaryings(const VaryingPacking &varyingPacking)
 {
+    const auto &builtins = varyingPacking.builtins(SHADER_VERTEX);
+
+    const std::string &varyingSemantic =
+        GetVaryingSemantic(mRenderer->getMajorShaderModel(), usesPointSize());
+
     // Gather the linked varyings that are used for transform feedback, they should all exist.
-    mTransformFeedbackD3DVaryings.clear();
-    for (const std::string &tfVaryingName : mData.getTransformFeedbackVaryingNames())
+    mStreamOutVaryings.clear();
+
+    const auto &tfVaryingNames = mData.getTransformFeedbackVaryingNames();
+    for (unsigned int outputSlot = 0; outputSlot < static_cast<unsigned int>(tfVaryingNames.size());
+         ++outputSlot)
     {
-        for (const D3DVarying &d3dVarying : d3dVaryings)
+        const auto &tfVaryingName = tfVaryingNames[outputSlot];
+        if (tfVaryingName == "gl_Position")
         {
-            if (tfVaryingName == d3dVarying.name)
+            if (builtins.glPosition.enabled)
             {
-                mTransformFeedbackD3DVaryings.push_back(d3dVarying);
-                break;
+                mStreamOutVaryings.push_back(D3DVarying(builtins.glPosition.semantic,
+                                                        builtins.glPosition.index, 4, outputSlot));
+            }
+        }
+        else if (tfVaryingName == "gl_FragCoord")
+        {
+            if (builtins.glFragCoord.enabled)
+            {
+                mStreamOutVaryings.push_back(D3DVarying(builtins.glFragCoord.semantic,
+                                                        builtins.glFragCoord.index, 4, outputSlot));
+            }
+        }
+        else if (tfVaryingName == "gl_PointSize")
+        {
+            if (builtins.glPointSize.enabled)
+            {
+                mStreamOutVaryings.push_back(D3DVarying("PSIZE", 0, 1, outputSlot));
+            }
+        }
+        else
+        {
+            for (const PackedVaryingRegister &registerInfo : varyingPacking.getRegisterList())
+            {
+                const sh::Varying &varying = *registerInfo.packedVarying->varying;
+                GLenum transposedType      = gl::TransposeMatrixType(varying.type);
+                int componentCount = gl::VariableColumnCount(transposedType);
+                ASSERT(!varying.isBuiltIn());
+
+                // There can be more than one register assigned to a particular varying, and each
+                // register needs its own stream out entry.
+                if (tfVaryingName == varying.name)
+                {
+                    mStreamOutVaryings.push_back(D3DVarying(
+                        varyingSemantic, registerInfo.semanticIndex, componentCount, outputSlot));
+                }
             }
         }
     }

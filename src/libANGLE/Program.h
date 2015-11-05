@@ -187,6 +187,7 @@ class Program : angle::NonCopyable
         const LinkedUniform *getUniformByName(const std::string &name) const;
         GLint getUniformLocation(const std::string &name) const;
         GLuint getUniformIndex(const std::string &name) const;
+        std::vector<const sh::Varying *> getMergedVaryings() const;
 
       private:
         friend class Program;
@@ -360,7 +361,6 @@ class Program : angle::NonCopyable
     bool assignUniformBlockRegister(InfoLog &infoLog, UniformBlock *uniformBlock, GLenum shader, unsigned int registerIndex, const Caps &caps);
     void defineOutputVariables(Shader *fragmentShader);
 
-    std::vector<const sh::Varying *> getMergedVaryings() const;
     void linkOutputVariables();
 
     bool flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog);
