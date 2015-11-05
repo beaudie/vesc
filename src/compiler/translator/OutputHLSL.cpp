@@ -35,6 +35,40 @@ bool IsSequence(TIntermNode *node)
     return node->getAsAggregate() != nullptr && node->getAsAggregate()->getOp() == EOpSequence;
 }
 
+void WriteSingleConstant(TInfoSinkBase &out, const TConstantUnion *constUnion)
+{
+    switch (constUnion->getType())
+    {
+        case EbtFloat:
+            out << std::min(FLT_MAX, std::max(-FLT_MAX, constUnion->getFConst()));
+            break;
+        case EbtInt:
+            out << constUnion->getIConst();
+            break;
+        case EbtUInt:
+            out << constUnion->getUConst();
+            break;
+        case EbtBool:
+            out << constUnion->getBConst();
+            break;
+        default:
+            UNREACHABLE();
+    }
+}
+
+void WriteConstantUnionArray(TInfoSinkBase &out, const TConstantUnion *constUnion, size_t size)
+{
+    for (size_t i = 0; i < size; i++, constUnion++)
+    {
+        WriteSingleConstant(out, constUnion);
+
+        if (i != size - 1)
+        {
+            out << ", ";
+        }
+    }
+}
+
 } // namespace
 
 namespace sh
@@ -1514,6 +1548,10 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                 // Skip initializing the rest of the expression
                 return false;
             }
+            else if (writeConstantInitialization(out, symbolNode, expression))
+            {
+                return false;
+            }
         }
         else if (visit == InVisit)
         {
@@ -2946,24 +2984,7 @@ const TConstantUnion *OutputHLSL::writeConstantUnion(const TType &type, const TC
         {
             out << TypeString(type) << "(";
         }
-
-        for (size_t i = 0; i < size; i++, constUnion++)
-        {
-            switch (constUnion->getType())
-            {
-              case EbtFloat: out << std::min(FLT_MAX, std::max(-FLT_MAX, constUnion->getFConst())); break;
-              case EbtInt:   out << constUnion->getIConst(); break;
-              case EbtUInt:  out << constUnion->getUConst(); break;
-              case EbtBool:  out << constUnion->getBConst(); break;
-              default: UNREACHABLE();
-            }
-
-            if (i != size - 1)
-            {
-                out << ", ";
-            }
-        }
-
+        WriteConstantUnionArray(out, constUnion, size);
         if (writeType)
         {
             out << ")";
@@ -2997,6 +3018,68 @@ bool OutputHLSL::writeSameSymbolInitializer(TInfoSinkBase &out, TIntermSymbol *s
         return true;
     }
 
+    return false;
+}
+
+bool OutputHLSL::canWriteAsHLSLLiteral(TIntermTyped *expression)
+{
+    // We support writing constant unions and constructors that only take constant unions as
+    // parameters as HLSL literals.
+    if (expression->getAsConstantUnion())
+    {
+        return true;
+    }
+    if (expression->getQualifier() != EvqConst || !expression->getAsAggregate() ||
+        !expression->getAsAggregate()->isConstructor())
+    {
+        return false;
+    }
+    TIntermAggregate *constructor = expression->getAsAggregate();
+    for (TIntermNode *&node : *constructor->getSequence())
+    {
+        if (!node->getAsConstantUnion())
+            return false;
+    }
+    return true;
+}
+
+bool OutputHLSL::writeConstantInitialization(TInfoSinkBase &out,
+                                             TIntermSymbol *symbolNode,
+                                             TIntermTyped *expression)
+{
+    if (canWriteAsHLSLLiteral(expression))
+    {
+        symbolNode->traverse(this);
+        if (expression->getType().isArray())
+        {
+            out << "[" << expression->getType().getArraySize() << "]";
+        }
+        out << " = {";
+        if (expression->getAsConstantUnion())
+        {
+            TIntermConstantUnion *nodeConst  = expression->getAsConstantUnion();
+            const TConstantUnion *constUnion = nodeConst->getUnionArrayPointer();
+            WriteConstantUnionArray(out, constUnion, nodeConst->getType().getObjectSize());
+        }
+        else
+        {
+            TIntermAggregate *constructor = expression->getAsAggregate();
+            ASSERT(constructor != nullptr);
+            for (TIntermNode *&node : *constructor->getSequence())
+            {
+                TIntermConstantUnion *nodeConst = node->getAsConstantUnion();
+                ASSERT(nodeConst);
+                const TConstantUnion *constUnion = nodeConst->getUnionArrayPointer();
+                WriteConstantUnionArray(out, constUnion, nodeConst->getType().getObjectSize());
+                if (node != constructor->getSequence()->back())
+                {
+                    out << ", ";
+                }
+            }
+        }
+        out << "}";
+        return true;
+    }
     return false;
 }
 
