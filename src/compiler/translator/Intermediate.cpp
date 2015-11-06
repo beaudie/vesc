@@ -494,6 +494,11 @@ TIntermTyped *TIntermediate::foldAggregateBuiltIn(TIntermAggregate *aggregate)
       case EOpRefract:
         return aggregate->fold(mInfoSink);
       default:
+        // TODO: Add support for folding array constructors
+        if (aggregate->isConstructor() && !aggregate->isArray())
+        {
+            return aggregate->fold(mInfoSink);
+        }
         // Constant folding not supported for the built-in.
         return nullptr;
     }
