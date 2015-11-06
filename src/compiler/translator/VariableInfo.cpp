@@ -551,7 +551,8 @@ void CollectVariables::visitVariable(const TIntermSymbol *variable,
     ASSERT(blockType);
 
     interfaceBlock.name = blockType->name().c_str();
-    interfaceBlock.mappedName = TIntermTraverser::hash(variable->getSymbol(), mHashFunction).c_str();
+    TString stringName = TString(blockType->name().c_str());
+    interfaceBlock.mappedName = TIntermTraverser::hash(stringName, mHashFunction).c_str();
     interfaceBlock.instanceName = (blockType->hasInstanceName() ? blockType->instanceName().c_str() : "");
     interfaceBlock.arraySize = variable->getArraySize();
     interfaceBlock.isRowMajorLayout = (blockType->matrixPacking() == EmpRowMajor);
