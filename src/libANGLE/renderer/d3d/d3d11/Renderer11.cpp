@@ -3176,9 +3176,12 @@ ProgramImpl *Renderer11::createProgram(const gl::Program::Data &data)
     return new ProgramD3D(data, this);
 }
 
-gl::Error Renderer11::loadExecutable(const void *function, size_t length, ShaderType type,
-                                     const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
-                                     bool separatedOutputBuffers, ShaderExecutableD3D **outExecutable)
+gl::Error Renderer11::loadExecutable(const void *function,
+                                     size_t length,
+                                     ShaderType type,
+                                     const std::vector<D3DVarying> &transformFeedbackVaryings,
+                                     bool separatedOutputBuffers,
+                                     ShaderExecutableD3D **outExecutable)
 {
     switch (type)
     {
@@ -3199,7 +3202,7 @@ gl::Error Renderer11::loadExecutable(const void *function, size_t length, Shader
                 std::vector<D3D11_SO_DECLARATION_ENTRY> soDeclaration;
                 for (size_t i = 0; i < transformFeedbackVaryings.size(); i++)
                 {
-                    const gl::LinkedVarying &varying = transformFeedbackVaryings[i];
+                    const D3DVarying &varying = transformFeedbackVaryings[i];
                     GLenum transposedType = gl::TransposeMatrixType(varying.type);
 
                     for (unsigned int j = 0; j < varying.semanticIndexCount; j++)
@@ -3265,9 +3268,12 @@ gl::Error Renderer11::loadExecutable(const void *function, size_t length, Shader
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog, const std::string &shaderHLSL, ShaderType type,
-                                          const std::vector<gl::LinkedVarying> &transformFeedbackVaryings,
-                                          bool separatedOutputBuffers, const D3DCompilerWorkarounds &workarounds,
+gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog,
+                                          const std::string &shaderHLSL,
+                                          ShaderType type,
+                                          const std::vector<D3DVarying> &transformFeedbackVaryings,
+                                          bool separatedOutputBuffers,
+                                          const D3DCompilerWorkarounds &workarounds,
                                           ShaderExecutableD3D **outExectuable)
 {
     const char *profileType = NULL;
