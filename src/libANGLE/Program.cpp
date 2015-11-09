@@ -304,6 +304,13 @@ GLuint Program::Data::getUniformIndex(const std::string &name) const
     return GL_INVALID_INDEX;
 }
 
+GLint Program::Data::getShaderVersion() const
+{
+    // TODO(jmadill): Validate shader version on link.
+    ASSERT(mAttachedVertexShader);
+    return mAttachedVertexShader->getShaderVersion();
+}
+
 Program::Program(rx::ImplFactory *factory, ResourceManager *manager, GLuint handle)
     : mProgram(factory->createProgram(mData)),
       mValidated(false),
