@@ -22,8 +22,9 @@
 namespace rx
 {
 class RendererD3D;
-class UniformStorageD3D;
+class ShaderD3D;
 class ShaderExecutableD3D;
+class UniformStorageD3D;
 
 #if !defined(ANGLE_COMPILE_OPTIMIZATION_LEVEL)
 // WARNING: D3DCOMPILE_OPTIMIZATION_LEVEL3 may lead to a DX9 shader compiler hang.
@@ -95,6 +96,37 @@ struct D3DVarying final
     unsigned int semanticIndex;
     unsigned int componentCount;
     unsigned int outputSlot;
+};
+
+class ProgramD3DMetadata : angle::NonCopyable
+{
+  public:
+    ProgramD3DMetadata(int rendererMajorShaderModel,
+                       const std::string &shaderModelSuffix,
+                       bool usesInstancedPointSpriteEmulation,
+                       const ShaderD3D *vertexShader,
+                       const ShaderD3D *fragmentShader);
+
+    int getRendererMajorShaderModel() const;
+    bool usesBroadcast(const gl::Data &data) const;
+    bool usesFragDepth(const gl::Program::Data &programData) const;
+    bool usesPointCoord() const;
+    bool usesFragCoord() const;
+    bool usesPointSize() const;
+    bool usesInsertedPointCoordValue() const;
+    bool addPointCoordToVertexShader() const;
+    bool usesTransformFeedbackGLPosition() const;
+    bool usesSystemValuePointSize() const;
+    bool usesMultipleFragmentOuts() const;
+    GLint getMajorShaderVersion() const;
+    const ShaderD3D *getFragmentShader() const;
+
+  private:
+    const int mRendererMajorShaderModel;
+    const std::string mShaderModelSuffix;
+    const bool mUsesInstancedPointSpriteEmulation;
+    const ShaderD3D *mVertexShader;
+    const ShaderD3D *mFragmentShader;
 };
 
 class ProgramD3D : public ProgramImpl
