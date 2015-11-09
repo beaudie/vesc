@@ -111,6 +111,8 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
         return egl::Error(EGL_NOT_INITIALIZED, "Failed to register intermediate OpenGL window class.");
     }
 
+    HWND parentWindow = WindowFromDC(display->getNativeDisplayId());
+
     HWND dummyWindow = CreateWindowExA(0,
                                        reinterpret_cast<const char *>(mWindowClass),
                                        "ANGLE Dummy Window",
@@ -119,7 +121,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
                                        CW_USEDEFAULT,
                                        CW_USEDEFAULT,
                                        CW_USEDEFAULT,
-                                       nullptr,
+                                       parentWindow,
                                        nullptr,
                                        nullptr,
                                        nullptr);
@@ -184,7 +186,7 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
                               CW_USEDEFAULT,
                               CW_USEDEFAULT,
                               CW_USEDEFAULT,
-                              nullptr,
+                              parentWindow,
                               nullptr,
                               nullptr,
                               nullptr);
