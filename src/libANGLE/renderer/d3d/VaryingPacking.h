@@ -15,6 +15,7 @@
 
 namespace rx
 {
+class ProgramD3DMetadata;
 
 struct PackedVarying
 {
@@ -99,12 +100,7 @@ class VaryingPacking final : angle::NonCopyable
     }
     unsigned int getRegisterCount() const;
 
-    void enableBuiltins(ShaderType shaderType,
-                        int majorShaderModel,
-                        bool position,
-                        bool fragCoord,
-                        bool pointCoord,
-                        bool pointSize);
+    void enableBuiltins(ShaderType shaderType, const ProgramD3DMetadata &programMetadata);
 
     struct BuiltinVarying final : angle::NonCopyable
     {
