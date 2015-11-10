@@ -904,6 +904,14 @@ void OutputHLSL::header(const BuiltInFunctionEmulator *builtInFunctionEmulator)
 
                 out << "    t.x = (u * 0.5f / m) + 0.5f;\n";
                 out << "    t.y = (v * 0.5f / m) + 0.5f;\n";
+
+                // Mip level computation.
+                out << "    float2 scaledTexCoord = t.xy * float2(width, height);\n";
+                out << "    float2 dx = ddx(scaledTexCoord);\n";
+                out << "    float2 dy = ddy(scaledTexCoord);\n";
+                out << "    float delta_max_sqr = max(dot(dx, dx), dot(dy, dy));\n";
+                out << "    mip = (uint)max(0.5f * log2(delta_max_sqr), 0.0f);\n";
+                out << "    x.GetDimensions(mip, width, height, layers, levels);\n";
             }
             else if (IsIntegerSampler(textureFunction->sampler) &&
                      textureFunction->method != TextureFunction::FETCH)
