@@ -923,8 +923,11 @@ gl::Error Renderer9::setRasterizerState(const gl::RasterizerState &rasterState)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer9::setBlendState(const gl::Framebuffer *framebuffer, const gl::BlendState &blendState, const gl::ColorF &blendColor,
-                                   unsigned int sampleMask)
+gl::Error Renderer9::setBlendState(const gl::Framebuffer *framebuffer,
+                                   const gl::BlendState &blendState,
+                                   const gl::ColorF &blendColor,
+                                   unsigned int sampleMask,
+                                   const gl::State::DirtyBits &dirtyBits)
 {
     bool blendStateChanged = mForceSetBlendState || memcmp(&blendState, &mCurBlendState, sizeof(gl::BlendState)) != 0;
     bool blendColorChanged = mForceSetBlendState || memcmp(&blendColor, &mCurBlendColor, sizeof(gl::ColorF)) != 0;

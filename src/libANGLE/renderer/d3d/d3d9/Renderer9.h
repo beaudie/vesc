@@ -97,8 +97,11 @@ class Renderer9 : public RendererD3D
                                 const std::vector<GLint> &fragmentUniformBuffers) override;
 
     virtual gl::Error setRasterizerState(const gl::RasterizerState &rasterState);
-    gl::Error setBlendState(const gl::Framebuffer *framebuffer, const gl::BlendState &blendState, const gl::ColorF &blendColor,
-                            unsigned int sampleMask) override;
+    gl::Error setBlendState(const gl::Framebuffer *framebuffer,
+                            const gl::BlendState &blendState,
+                            const gl::ColorF &blendColor,
+                            unsigned int sampleMask,
+                            const gl::State::DirtyBits &dirtyBits) override;
     virtual gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
                                            int stencilBackRef, bool frontFaceCCW);
 

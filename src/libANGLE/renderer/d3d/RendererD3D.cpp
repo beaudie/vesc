@@ -411,7 +411,8 @@ gl::Error RendererD3D::applyState(const gl::Data &data, GLenum drawMode)
     {
         mask = 0xFFFFFFFF;
     }
-    error = setBlendState(framebufferObject, data.state->getBlendState(), data.state->getBlendColor(), mask);
+    error = setBlendState(framebufferObject, data.state->getBlendState(),
+                          data.state->getBlendColor(), mask, data.state->getDirtyBits());
     if (error.isError())
     {
         return error;

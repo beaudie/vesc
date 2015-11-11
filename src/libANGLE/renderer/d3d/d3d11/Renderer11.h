@@ -121,8 +121,11 @@ class Renderer11 : public RendererD3D
                                 const std::vector<GLint> &fragmentUniformBuffers) override;
 
     virtual gl::Error setRasterizerState(const gl::RasterizerState &rasterState);
-    gl::Error setBlendState(const gl::Framebuffer *framebuffer, const gl::BlendState &blendState, const gl::ColorF &blendColor,
-                            unsigned int sampleMask) override;
+    gl::Error setBlendState(const gl::Framebuffer *framebuffer,
+                            const gl::BlendState &blendState,
+                            const gl::ColorF &blendColor,
+                            unsigned int sampleMask,
+                            const gl::State::DirtyBits &dirtyBits) override;
     virtual gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
                                            int stencilBackRef, bool frontFaceCCW);
 
@@ -146,6 +149,8 @@ class Renderer11 : public RendererD3D
     void applyTransformFeedbackBuffers(const gl::State &state) override;
 
     virtual void markAllStateDirty();
+
+    void syncState(const gl::State & /*state*/, const gl::State::DirtyBits &bitmask) override;
 
     // lost device
     bool testDeviceLost() override;
@@ -393,11 +398,8 @@ class Renderer11 : public RendererD3D
     // A block of NULL pointers, cached so we don't re-allocate every draw call
     std::vector<ID3D11ShaderResourceView*> mNullSRVs;
 
-    // Currently applied blend state
-    bool mForceSetBlendState;
-    gl::BlendState mCurBlendState;
-    gl::ColorF mCurBlendColor;
-    unsigned int mCurSampleMask;
+    // TODO(dianx) Move this into RendererD3D when D3D9 states are implemented
+    StateManagerD3D *mStateManager;
 
     // Currently applied rasterizer state
     bool mForceSetRasterState;
