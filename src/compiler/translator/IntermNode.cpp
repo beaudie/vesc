@@ -1986,7 +1986,7 @@ TConstantUnion *TIntermConstantUnion::FoldAggregateConstructor(TIntermAggregate 
 
     size_t resultIndex = 0u;
 
-    if (aggregate->getSequence()->size() == 1u)
+    if (aggregate->getSequence()->size() == 1u && !aggregate->isArray())
     {
         TIntermNode *argument                    = aggregate->getSequence()->front();
         TIntermConstantUnion *argumentConstant   = argument->getAsConstantUnion();

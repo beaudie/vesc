@@ -697,3 +697,72 @@ TEST_F(ConstantFoldingTest, FoldMat2ConstructorTakingVec4)
     std::vector<float> result(outputElements, outputElements + 4);
     ASSERT_TRUE(constantVectorFoundInAST(result));
 }
+
+// Test that array indexing can be constant folded
+TEST_F(ConstantFoldingTest, FoldArrayIndexing)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform float mult;\n"
+        "void main() {\n"
+        "   const vec2[2] c = vec2[2](vec2(0.0, 1.0), vec2(2.0, 3.0));\n"
+        "   vec2 m = c[1] * 2.0 * mult;\n"
+        "   my_FragColor = vec4(m, 0.0, 0.0);\n"
+        "}\n";
+    compile(shaderString);
+    float outputElements[] =
+    {
+        4.0f, 6.0f,
+    };
+    std::vector<float> result(outputElements, outputElements + 2);
+    ASSERT_TRUE(constantVectorFoundInAST(result));
+}
+
+// Test that structure array indexing can be constant folded
+TEST_F(ConstantFoldingTest, FoldStructArrayIndexing)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform float mult;\n"
+        "struct S { int i; vec2 v; };\n"
+        "void main() {\n"
+        "   const S[2] c = S[2](S(1, vec2(2.0, 3.0)), S(4, vec2(5.0, 6.0)));\n"
+        "   vec2 m = c[1].v * 2.0 * mult;\n"
+        "   my_FragColor = vec4(m, 0.0, 0.0);\n"
+        "}\n";
+    compile(shaderString);
+    float outputElements[] =
+    {
+        10.0f, 12.0f,
+    };
+    std::vector<float> result(outputElements, outputElements + 2);
+    ASSERT_TRUE(constantVectorFoundInAST(result));
+}
+
+// Test that indexing arrays in structures in an array can be constant folded
+TEST_F(ConstantFoldingTest, FoldArrayInStructIndexing)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform float mult;\n"
+        "struct S { int i; vec2[2] v; };\n"
+        "void main() {\n"
+        "   const S[2] c = S[2](S(1, vec2[2](vec2(2.0), vec2(3.0))), S(4, vec2[2](vec2(5.0), vec2(6.0))));\n"
+        "   const vec2[2] v = c[1].v;\n"
+        "   vec2 m = v[1] * 2.0 * mult;\n"
+        "   my_FragColor = vec4(m, 0.0, 0.0);\n"
+        "}\n";
+    compile(shaderString);
+    float outputElements[] =
+    {
+        12.0f, 12.0f,
+    };
+    std::vector<float> result(outputElements, outputElements + 2);
+    ASSERT_TRUE(constantVectorFoundInAST(result));
+}

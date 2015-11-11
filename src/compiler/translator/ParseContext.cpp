@@ -1214,7 +1214,7 @@ TIntermTyped *TParseContext::parseVariableIdentifier(const TSourceLoc &location,
 {
     const TVariable *variable = getNamedVariable(location, name, symbol);
 
-    if (variable->getConstPointer())
+    if (variable->getConstPointer() && !variable->getType().isArray())
     {
         const TConstantUnion *constArray = variable->getConstPointer();
         return intermediate.addConstantUnion(constArray, variable->getType(), location);
@@ -1336,16 +1336,21 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
             return true;
         }
 
-        // Save the constant folded value to the variable if possible. For example array
-        // initializers are not folded, since that way copying the array literal to multiple places
-        // in the shader is avoided.
-        // TODO(oetuaho@nvidia.com): Consider constant folding array initialization in cases where
-        // it would be beneficial.
+        // Save the constant folded value to the variable if possible.
         if (initializer->getAsConstantUnion())
         {
             variable->shareConstPointer(initializer->getAsConstantUnion()->getUnionArrayPointer());
-            *intermNode = nullptr;
-            return false;
+            // Array initializers are saved to the variable, but are also added to the AST as such.
+            // This way when the array is used in the shader, it can be chosen whether to refer to
+            // the array symbol or to use the saved constant.
+            // If the array is dynamically indexed in multiple locations, it would be wasteful to
+            // copy the constant array to each of them, but on the other hand if the array is
+            // indexed with a constant, it makes sense to constant fold the result.
+            if (!initializer->isArray())
+            {
+                *intermNode = nullptr;
+                return false;
+            }
         }
         else if (initializer->getAsSymbolNode())
         {
@@ -1357,8 +1362,11 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
             if (constArray)
             {
                 variable->shareConstPointer(constArray);
-                *intermNode = nullptr;
-                return false;
+                if (!initializer->isArray())
+                {
+                    *intermNode = nullptr;
+                    return false;
+                }
             }
         }
     }
@@ -2379,11 +2387,10 @@ TIntermTyped *TParseContext::addConstMatrixNode(int index,
 }
 
 //
-// This function returns an element of an array accessed from a constant array. The values are
-// retrieved from the symbol table and parse-tree is built for the type of the element. The input
-// to the function could either be a symbol node (a[0] where a is a constant array)that represents a
-// constant array or it could be the tree representation of the constant array (s.a1[0] where s is a
-// constant structure)
+// This function returns an element of an array accessed from a constant array. The input node
+// to the function could correspond either to a symbol (a[0] where a is a constant array)
+// representing a constant array or it could correspond to a more complex expression returning a
+// constant array (s.a1[0] where s is a constant structure).
 //
 TIntermTyped *TParseContext::addConstArrayNode(int index,
                                                TIntermConstantUnion *node,
@@ -2403,16 +2410,12 @@ TIntermTyped *TParseContext::addConstArrayNode(int index,
     }
     size_t arrayElementSize          = arrayElementType.getObjectSize();
     const TConstantUnion *unionArray = node->getUnionArrayPointer();
-    return intermediate.addConstantUnion(&unionArray[arrayElementSize * index], node->getType(),
+    return intermediate.addConstantUnion(&unionArray[arrayElementSize * index], arrayElementType,
                                          line);
 }
 
 //
-// This function returns the value of a particular field inside a constant structure from the symbol
-// table.
-// If there is an embedded/nested struct, it appropriately calls addConstStructNested or
-// addConstStructFromAggr function and returns the parse-tree with the values of the embedded/nested
-// struct.
+// This function returns the value of a particular field inside a constant structure.
 //
 TIntermTyped *TParseContext::addConstStruct(const TString &identifier,
                                             TIntermTyped *node,
@@ -2737,6 +2740,24 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
             index = 0;
         }
         TIntermConstantUnion *baseConstantUnion = baseExpression->getAsConstantUnion();
+
+        // When array symbols are parsed, they are not automatically replaced with a constant
+        // union node to avoid multiple copies of the same array within a shader. The symbol
+        // table entry may still store a constant value for the array.
+        TIntermSymbol *baseSymbol = baseExpression->getAsSymbolNode();
+        if (!baseConstantUnion && baseExpression->isArray() && baseSymbol != nullptr)
+        {
+            const TSymbol *symbol = symbolTable.find(baseSymbol->getSymbol(), mShaderVersion);
+            ASSERT(symbol->isVariable());
+            const TVariable *variable = static_cast<const TVariable *>(symbol);
+
+            if (variable->getConstPointer())
+            {
+                const TConstantUnion *constArray = variable->getConstPointer();
+                baseConstantUnion =
+                    intermediate.addConstantUnion(constArray, variable->getType(), location);
+            }
+        }
         if (baseConstantUnion)
         {
             if (baseExpression->isArray())
