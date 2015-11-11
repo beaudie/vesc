@@ -36,6 +36,7 @@
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
 #include "libANGLE/renderer/d3d/d3d11/ShaderExecutable11.h"
+//#include "libANGLE/renderer/d3d/d3d11/StateManager11.h"
 #include "libANGLE/renderer/d3d/d3d11/SwapChain11.h"
 #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
 #include "libANGLE/renderer/d3d/d3d11/TextureStorage11.h"
@@ -54,6 +55,7 @@
 #include "libANGLE/State.h"
 #include "libANGLE/Surface.h"
 #include "third_party/trace_event/trace_event.h"
+#include "common/BitSetIterator.h"
 
 // Include the D3D9 debug annotator header for use by the desktop D3D11 renderer
 // because the D3D11 interface method ID3DUserDefinedAnnotation::GetStatus
@@ -515,6 +517,16 @@ Renderer11::Renderer11(egl::Display *display)
 
     mAppliedNumXFBBindings = static_cast<size_t>(-1);
 
+    mBlendDirtyBits.set(gl::State::DIRTY_BIT_BLEND_EQUATIONS);
+    mBlendDirtyBits.set(gl::State::DIRTY_BIT_BLEND_FUNCS);
+    mBlendDirtyBits.set(gl::State::DIRTY_BIT_BLEND_ENABLED);
+    mBlendDirtyBits.set(gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED);
+    mBlendDirtyBits.set(gl::State::DIRTY_BIT_DITHER_ENABLED);
+    mBlendDirtyBits.set(gl::State::DIRTY_BIT_COLOR_MASK);
+    mBlendDirtyBits.set(gl::State::DIRTY_BIT_BLEND_COLOR);
+
+    // mStateManager = nullptr;
+
     ZeroMemory(&mAdapterDescription, sizeof(mAdapterDescription));
 
     const auto &attributes = mDisplay->getAttributeMap();
@@ -832,6 +844,9 @@ void Renderer11::initializeDevice()
 
     ASSERT(!mPixelTransfer);
     mPixelTransfer = new PixelTransfer11(this);
+
+    /*ASSERT(!mStateManager);
+    mStateManager = new StateManager11(mDeviceContext, &mStateCache);*/
 
     const gl::Caps &rendererCaps = getRendererCaps();
 
@@ -1378,13 +1393,58 @@ gl::Error Renderer11::setRasterizerState(const gl::RasterizerState &rasterState)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::setBlendState(const gl::Framebuffer *framebuffer, const gl::BlendState &blendState, const gl::ColorF &blendColor,
-                                    unsigned int sampleMask)
+// void Renderer11::syncState(const gl::State & /*state*/, const gl::State::DirtyBits &bitmask)
+//{
+//    mStateManager->syncExternalDirtyBits(bitmask);
+//}
+
+// void Renderer11::applyStateCleanup()
+//{
+//    mStateManager->resetExternalDirtyBits();
+//}
+
+void Renderer11::syncState(const gl::State & /*state*/, const gl::State::DirtyBits &bitmask)
 {
-    if (mForceSetBlendState ||
-        memcmp(&blendState, &mCurBlendState, sizeof(gl::BlendState)) != 0 ||
-        memcmp(&blendColor, &mCurBlendColor, sizeof(gl::ColorF)) != 0 ||
-        sampleMask != mCurSampleMask)
+    for (unsigned int dirtyBit : angle::IterateBitSet(bitmask))
+    {
+        switch (dirtyBit)
+        {
+            case gl::State::DIRTY_BIT_BLEND_EQUATIONS:
+            case gl::State::DIRTY_BIT_BLEND_FUNCS:
+            case gl::State::DIRTY_BIT_BLEND_ENABLED:
+            case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:
+            case gl::State::DIRTY_BIT_DITHER_ENABLED:
+            case gl::State::DIRTY_BIT_COLOR_MASK:
+            case gl::State::DIRTY_BIT_BLEND_COLOR:
+                mBlendStateDirty = true;
+                return;
+        }
+    }
+    // mExternalDirtyBits = bitmask;
+}
+
+//
+// const gl::State::DirtyBits mBlendDirtyBits = []()
+//{
+//    gl::State::DirtyBits blendDirtyBits;
+//    SetGivenBitsDirty(blendDirtyBits, kBlendStateDirtyBits, ArraySize(kBlendStateDirtyBits));
+//    return blendDirtyBits;
+//}();
+//
+// bool IsBlendStateDirty(const gl::State::DirtyBits &dirtyBits)
+//{
+//    return (dirtyBits & mBlendDirtyBits).any();
+//}
+
+gl::Error Renderer11::setBlendState(const gl::Framebuffer *framebuffer,
+                                    const gl::BlendState &blendState,
+                                    const gl::ColorF &blendColor,
+                                    unsigned int sampleMask,
+                                    const gl::State::DirtyBits &dirtyBits)
+{
+    if (mForceSetBlendState || sampleMask != mCurSampleMask ||
+        (mBlendStateDirty && memcmp(&blendState, &mCurBlendState, sizeof(gl::BlendState)) != 0 ||
+         memcmp(&blendColor, &mCurBlendColor, sizeof(gl::ColorF)) != 0))
     {
         ID3D11BlendState *dxBlendState = NULL;
         gl::Error error = mStateCache.getBlendState(framebuffer, blendState, &dxBlendState);
@@ -1396,8 +1456,10 @@ gl::Error Renderer11::setBlendState(const gl::Framebuffer *framebuffer, const gl
         ASSERT(dxBlendState != NULL);
 
         float blendColors[4] = {0.0f};
-        if (blendState.sourceBlendRGB != GL_CONSTANT_ALPHA && blendState.sourceBlendRGB != GL_ONE_MINUS_CONSTANT_ALPHA &&
-            blendState.destBlendRGB != GL_CONSTANT_ALPHA && blendState.destBlendRGB != GL_ONE_MINUS_CONSTANT_ALPHA)
+        if (blendState.sourceBlendRGB != GL_CONSTANT_ALPHA &&
+            blendState.sourceBlendRGB != GL_ONE_MINUS_CONSTANT_ALPHA &&
+            blendState.destBlendRGB != GL_CONSTANT_ALPHA &&
+            blendState.destBlendRGB != GL_ONE_MINUS_CONSTANT_ALPHA)
         {
             blendColors[0] = blendColor.red;
             blendColors[1] = blendColor.green;
@@ -1417,9 +1479,10 @@ gl::Error Renderer11::setBlendState(const gl::Framebuffer *framebuffer, const gl
         mCurBlendState = blendState;
         mCurBlendColor = blendColor;
         mCurSampleMask = sampleMask;
-    }
 
-    mForceSetBlendState = false;
+        mForceSetBlendState = false;
+        mBlendStateDirty    = false;
+    }
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -1763,6 +1826,7 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
         mForceSetViewport = true;
         mForceSetScissor = true;
         mForceSetBlendState = true;
+        // mStateManager->forceSetBlendState();
 
         if (!mDepthStencilInitialized)
         {
@@ -2546,6 +2610,7 @@ void Renderer11::markAllStateDirty()
         mForceSetPixelSamplerStates[fsamplerId] = true;
     }
 
+    // mStateManager->forceSetBlendState();
     mForceSetBlendState = true;
     mForceSetRasterState = true;
     mForceSetDepthStencilState = true;
@@ -2603,6 +2668,7 @@ void Renderer11::releaseDeviceResources()
     SafeDelete(mClear);
     SafeDelete(mTrim);
     SafeDelete(mPixelTransfer);
+    // SafeDelete(mStateManager);
 
     SafeRelease(mDriverConstantBufferVS);
     SafeRelease(mDriverConstantBufferPS);
