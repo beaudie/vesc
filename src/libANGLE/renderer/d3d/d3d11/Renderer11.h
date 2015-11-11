@@ -38,6 +38,7 @@ class Clear11;
 class PixelTransfer11;
 class RenderTarget11;
 class Trim11;
+class StateManager11;
 struct PackPixelsParams;
 
 struct Renderer11DeviceCaps
@@ -121,8 +122,11 @@ class Renderer11 : public RendererD3D
                                 const std::vector<GLint> &fragmentUniformBuffers) override;
 
     virtual gl::Error setRasterizerState(const gl::RasterizerState &rasterState);
-    gl::Error setBlendState(const gl::Framebuffer *framebuffer, const gl::BlendState &blendState, const gl::ColorF &blendColor,
-                            unsigned int sampleMask) override;
+    gl::Error setBlendState(const gl::Framebuffer *framebuffer,
+                            const gl::BlendState &blendState,
+                            const gl::ColorF &blendColor,
+                            unsigned int sampleMask,
+                            const gl::State::DirtyBits &dirtyBits) override;
     virtual gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
                                            int stencilBackRef, bool frontFaceCCW);
 
@@ -285,6 +289,8 @@ class Renderer11 : public RendererD3D
 
     egl::Error initializeEGLDevice(DeviceD3D **outDevice) override;
 
+    void syncState(const gl::State &state, const gl::State::DirtyBits &bitmask) override;
+
   private:
     gl::Error drawArraysImpl(const gl::Data &data,
                              GLenum mode,
@@ -401,11 +407,10 @@ class Renderer11 : public RendererD3D
     // A block of NULL pointers, cached so we don't re-allocate every draw call
     std::vector<ID3D11ShaderResourceView*> mNullSRVs;
 
-    // Currently applied blend state
-    bool mForceSetBlendState;
-    gl::BlendState mCurBlendState;
-    gl::ColorF mCurBlendColor;
-    unsigned int mCurSampleMask;
+    StateManager11 *mStateManager;
+
+    gl::State::DirtyBits mExternalDirtyBits;
+    gl::State::DirtyBits mBlendDirtyBits;
 
     // Currently applied rasterizer state
     bool mForceSetRasterState;

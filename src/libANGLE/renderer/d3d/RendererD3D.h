@@ -153,8 +153,11 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
                                         const std::vector<GLint> &fragmentUniformBuffers) = 0;
 
     virtual gl::Error setRasterizerState(const gl::RasterizerState &rasterState) = 0;
-    virtual gl::Error setBlendState(const gl::Framebuffer *framebuffer, const gl::BlendState &blendState, const gl::ColorF &blendColor,
-                                    unsigned int sampleMask) = 0;
+    virtual gl::Error setBlendState(const gl::Framebuffer *framebuffer,
+                                    const gl::BlendState &blendState,
+                                    const gl::ColorF &blendColor,
+                                    unsigned int sampleMask,
+                                    const gl::State::DirtyBits &dirtyBits) = 0;
     virtual gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
                                            int stencilBackRef, bool frontFaceCCW) = 0;
 
@@ -237,7 +240,7 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
 
     void syncState(const gl::State & /*state*/, const gl::State::DirtyBits &bitmask) override
     {
-        // TODO(jmadill): implement state sync for D3D renderers;
+        // TODO(dianx) put the state manager's sync state here when all has been moved in
     }
 
     // Device lost
