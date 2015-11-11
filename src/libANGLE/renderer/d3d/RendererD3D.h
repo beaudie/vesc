@@ -18,6 +18,7 @@
 #include "libANGLE/renderer/d3d/formatutilsD3D.h"
 #include "libANGLE/renderer/d3d/WorkaroundsD3D.h"
 #include "libANGLE/renderer/d3d/d3d11/NativeWindow.h"
+#include "libANGLE/renderer/d3d/StateManagerD3D.h"
 
 //FIXME(jmadill): std::array is currently prohibited by Chromium style guide
 #include <array>
@@ -254,6 +255,8 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     void cleanup();
 
     virtual void createAnnotator() = 0;
+
+    StateManagerD3D *mStateManager;
 
     // dirtyPointer is a special value that will make the comparison with any valid pointer fail and force the renderer to re-apply the state.
     static const uintptr_t DirtyPointer;

@@ -53,6 +53,7 @@
 #include "libANGLE/State.h"
 #include "libANGLE/Surface.h"
 #include "third_party/trace_event/trace_event.h"
+#include "libANGLE/renderer/d3d/d3d11/StateManager11.h"
 
 // Include the D3D9 debug annotator header for use by the desktop D3D11 renderer
 // because the D3D11 interface method ID3DUserDefinedAnnotation::GetStatus
@@ -418,6 +419,8 @@ Renderer11::Renderer11(egl::Display *display)
 
     mAppliedNumXFBBindings = static_cast<size_t>(-1);
 
+    mStateManager = nullptr;
+
     ZeroMemory(&mAdapterDescription, sizeof(mAdapterDescription));
 
     const auto &attributes = mDisplay->getAttributeMap();
@@ -735,6 +738,9 @@ void Renderer11::initializeDevice()
 
     ASSERT(!mPixelTransfer);
     mPixelTransfer = new PixelTransfer11(this);
+
+    ASSERT(!mStateManager);
+    mStateManager = new StateManager11(mDeviceContext, &mStateCache);
 
     const gl::Caps &rendererCaps = getRendererCaps();
 
@@ -2525,6 +2531,7 @@ void Renderer11::releaseDeviceResources()
     SafeDelete(mClear);
     SafeDelete(mTrim);
     SafeDelete(mPixelTransfer);
+    SafeDelete(mStateManager);
 
     SafeRelease(mDriverConstantBufferVS);
     SafeRelease(mDriverConstantBufferPS);
