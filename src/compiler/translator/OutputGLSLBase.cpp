@@ -194,7 +194,31 @@ const TConstantUnion *TOutputGLSLBase::writeConstantUnion(
 {
     TInfoSinkBase &out = objSink();
 
-    if (type.getBasicType() == EbtStruct)
+    if (type.isArray())
+    {
+        if (type.getBasicType() == EbtStruct)
+        {
+            const TStructure *structure = type.getStruct();
+            out << hashName(structure->name());
+        }
+        else
+        {
+            out << getTypeName(type);
+        }
+        out << "[" << type.getArraySize() << "](";
+
+        TType elementType(type);
+        elementType.clearArrayness();
+        int arraySize = type.getArraySize();
+        for (int i = 0; i < arraySize; ++i)
+        {
+            pConstUnion = writeConstantUnion(elementType, pConstUnion);
+            if (i != arraySize - 1)
+                out << ", ";
+        }
+        out << ")";
+    }
+    else if (type.getBasicType() == EbtStruct)
     {
         const TStructure *structure = type.getStruct();
         out << hashName(structure->name()) << "(";
