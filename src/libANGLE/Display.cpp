@@ -231,6 +231,8 @@ Error Display::initialize()
     // Re-initialize default platform if it's needed
     InitDefaultPlatformImpl();
 
+    return Error(EGL_NOT_INITIALIZED);
+
     SCOPED_ANGLE_HISTOGRAM_TIMER("GPU.ANGLE.DisplayInitializeMS");
     TRACE_EVENT0("gpu.angle", "egl::Display::initialize");
 
