@@ -76,7 +76,7 @@ By default, ANGLE will use a D3D11 renderer. To change the default:
      * Right-click your project in the _Solution Explorer_, and select _Properties_.
      * Under the _Configuration Properties_ branch, open the _Linker_ branch and click _Input_.
      * Add the relative paths to both the `libEGL.lib` file and `libGLESv2.lib` file to _Additional Dependencies_, separated by a semicolon.
- 3. Copy `libEGL.dll` and `libGLESv2.dll` from the build output directory (see [Building ANGLE](DevSteup.md#Building-ANGLE)) into your application folder.
+ 3. Copy `libEGL.dll` and `libGLESv2.dll` from the build output directory (see [Building ANGLE](DevSetup.md#Building-ANGLE)) into your application folder.
  4. Code your application to the Khronos [OpenGL ES 2.0](http://www.khronos.org/registry/gles/) and [EGL 1.4](http://www.khronos.org/registry/egl/) APIs.
 
 ## GLSL ES to GLSL Translator
