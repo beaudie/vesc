@@ -33,10 +33,28 @@ const gl::State::DirtyBitType kBlendStateDirtyBits[] = {
     gl::State::DIRTY_BIT_DITHER_ENABLED,  gl::State::DIRTY_BIT_COLOR_MASK,
     gl::State::DIRTY_BIT_BLEND_COLOR};
 
+const gl::State::DirtyBitType kDepthStencilDirtyBits[] = {
+    gl::State::DIRTY_BIT_DEPTH_MASK,
+    gl::State::DIRTY_BIT_DEPTH_TEST_ENABLED,
+    gl::State::DIRTY_BIT_DEPTH_FUNC,
+    gl::State::DIRTY_BIT_STENCIL_TEST_ENABLED,
+    gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT,
+    gl::State::DIRTY_BIT_STENCIL_FUNCS_BACK,
+    gl::State::DIRTY_BIT_STENCIL_WRITEMASK_FRONT,
+    gl::State::DIRTY_BIT_STENCIL_WRITEMASK_BACK,
+    gl::State::DIRTY_BIT_STENCIL_OPS_FRONT,
+    gl::State::DIRTY_BIT_STENCIL_OPS_BACK,
+};
+
 }  // anonymous namespace
 
 StateManagerD3D::StateManagerD3D()
-    : mCurBlendColor(0, 0, 0, 0), mCurSampleMask(0), mExternalDirtyBits()
+    : mCurBlendColor(0, 0, 0, 0),
+      mCurSampleMask(0),
+      mCurStencilRef(0),
+      mCurStencilBackRef(0),
+      mCurStencilSize(0),
+      mExternalDirtyBits()
 {
     mCurBlendState.blend                 = false;
     mCurBlendState.sourceBlendRGB        = GL_ONE;
@@ -51,6 +69,22 @@ StateManagerD3D::StateManagerD3D()
     mCurBlendState.colorMaskAlpha        = true;
     mCurBlendState.sampleAlphaToCoverage = false;
     mCurBlendState.dither                = false;
+
+    mCurDepthStencilState.depthTest                = false;
+    mCurDepthStencilState.depthFunc                = GL_LESS;
+    mCurDepthStencilState.depthMask                = true;
+    mCurDepthStencilState.stencilTest              = false;
+    mCurDepthStencilState.stencilMask              = true;
+    mCurDepthStencilState.stencilFail              = GL_KEEP;
+    mCurDepthStencilState.stencilPassDepthFail     = GL_KEEP;
+    mCurDepthStencilState.stencilPassDepthPass     = GL_KEEP;
+    mCurDepthStencilState.stencilWritemask         = static_cast<GLuint>(-1);
+    mCurDepthStencilState.stencilBackFunc          = GL_ALWAYS;
+    mCurDepthStencilState.stencilBackMask          = static_cast<GLuint>(-1);
+    mCurDepthStencilState.stencilBackFail          = GL_KEEP;
+    mCurDepthStencilState.stencilBackPassDepthFail = GL_KEEP;
+    mCurDepthStencilState.stencilBackPassDepthPass = GL_KEEP;
+    mCurDepthStencilState.stencilBackWritemask     = static_cast<GLuint>(-1);
 }
 
 StateManagerD3D::~StateManagerD3D()
@@ -64,14 +98,42 @@ const gl::State::DirtyBits StateManagerD3D::mBlendDirtyBits = []()
     return blendDirtyBits;
 }();
 
+const gl::State::DirtyBits StateManagerD3D::mDepthStencilDirtyBits = []()
+{
+    gl::State::DirtyBits depthStencilDirtyBits;
+    SetGivenBitsDirty(depthStencilDirtyBits, kDepthStencilDirtyBits,
+                      ArraySize(kDepthStencilDirtyBits));
+    return depthStencilDirtyBits;
+}();
+
 bool StateManagerD3D::IsBlendStateDirty(const gl::State::DirtyBits &dirtyBits)
 {
     return (dirtyBits & mBlendDirtyBits).any();
 }
 
+bool StateManagerD3D::IsDepthStencilStateDirty(const gl::State::DirtyBits &dirtyBits)
+{
+    return (dirtyBits & mDepthStencilDirtyBits).any();
+}
+
 void StateManagerD3D::forceSetBlendState()
 {
     mForceSetBlendState = true;
+}
+
+void StateManagerD3D::forceSetDepthStencilState()
+{
+    mForceSetDepthStencilState = true;
+}
+
+void StateManagerD3D::setCurStencilSize(unsigned int size)
+{
+    mCurStencilSize = size;
+}
+
+unsigned int StateManagerD3D::getCurStencilSize() const
+{
+    return mCurStencilSize;
 }
 
 void StateManagerD3D::syncExternalDirtyBits(const gl::State::DirtyBits &dirtyBits)

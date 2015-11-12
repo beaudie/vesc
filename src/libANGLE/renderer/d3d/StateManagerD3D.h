@@ -36,10 +36,21 @@ class StateManagerD3D : angle::NonCopyable
                                     unsigned int sampleMask,
                                     const gl::State::DirtyBits &dirtyBits) = 0;
 
+    virtual gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState,
+                                           int stencilRef,
+                                           int stencilBackRef,
+                                           bool frontFaceCCW,
+                                           const gl::State::DirtyBits &dirtyBits) = 0;
+
     void forceSetBlendState();
+    void forceSetDepthStencilState();
+
+    unsigned int getCurStencilSize() const;
+    void setCurStencilSize(unsigned int size);
 
   protected:
     static bool IsBlendStateDirty(const gl::State::DirtyBits &dirtyBits);
+    static bool IsDepthStencilStateDirty(const gl::State::DirtyBits &dirtyBits);
 
     // Blend State
     bool mForceSetBlendState;
@@ -47,12 +58,19 @@ class StateManagerD3D : angle::NonCopyable
     gl::ColorF mCurBlendColor;
     unsigned int mCurSampleMask;
 
+    // Depth Stencil State
+    bool mForceSetDepthStencilState;
+    gl::DepthStencilState mCurDepthStencilState;
+    int mCurStencilRef;
+    int mCurStencilBackRef;
+    unsigned int mCurStencilSize;
+
     // Copy of dirty bits in state. Synced on syncState.
     // Should be removed after all states are moved in
     gl::State::DirtyBits mExternalDirtyBits;
-    static const gl::State::DirtyBits mBlendDirtyBits;
 
-  private:
+    static const gl::State::DirtyBits mBlendDirtyBits;
+    static const gl::State::DirtyBits mDepthStencilDirtyBits;
 };
 }  // namespace rx
 #endif

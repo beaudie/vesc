@@ -102,8 +102,11 @@ class Renderer9 : public RendererD3D
                             const gl::ColorF &blendColor,
                             unsigned int sampleMask,
                             const gl::State::DirtyBits &dirtyBits) override;
-    virtual gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
-                                           int stencilBackRef, bool frontFaceCCW);
+    virtual gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState,
+                                           int stencilRef,
+                                           int stencilBackRef,
+                                           bool frontFaceCCW,
+                                           const gl::State::DirtyBits &dirtyBits);
 
     virtual void setScissorRectangle(const gl::Rectangle &scissor, bool enabled);
     virtual void setViewport(const gl::Rectangle &viewport, float zNear, float zFar, GLenum drawMode, GLenum frontFace,

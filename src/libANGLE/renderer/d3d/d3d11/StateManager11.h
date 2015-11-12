@@ -29,6 +29,12 @@ class StateManager11 final : public StateManagerD3D
                             unsigned int sampleMask,
                             const gl::State::DirtyBits &dirtyBits) override;
 
+    gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState,
+                                   int stencilRef,
+                                   int stencilBackRef,
+                                   bool frontFaceCCW,
+                                   const gl::State::DirtyBits &dirtyBits) override;
+
   private:
     ID3D11DeviceContext *mDeviceContext;
     RenderStateCache *mStateCache;

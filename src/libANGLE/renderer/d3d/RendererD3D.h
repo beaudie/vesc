@@ -159,8 +159,11 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
                                     const gl::ColorF &blendColor,
                                     unsigned int sampleMask,
                                     const gl::State::DirtyBits &dirtyBits) = 0;
-    virtual gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
-                                           int stencilBackRef, bool frontFaceCCW) = 0;
+    virtual gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState,
+                                           int stencilRef,
+                                           int stencilBackRef,
+                                           bool frontFaceCCW,
+                                           const gl::State::DirtyBits &dirtyBits) = 0;
 
     virtual void setScissorRectangle(const gl::Rectangle &scissor, bool enabled) = 0;
     virtual void setViewport(const gl::Rectangle &viewport, float zNear, float zFar, GLenum drawMode, GLenum frontFace,
