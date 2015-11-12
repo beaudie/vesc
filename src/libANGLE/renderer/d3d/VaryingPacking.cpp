@@ -13,6 +13,7 @@
 #include "common/utilities.h"
 #include "compiler/translator/blocklayoutHLSL.h"
 #include "libANGLE/renderer/d3d/DynamicHLSL.h"
+#include "libANGLE/renderer/d3d/ProgramD3D.h"
 
 namespace rx
 {
@@ -329,15 +330,17 @@ unsigned int VaryingPacking::getRegisterCount() const
 }
 
 void VaryingPacking::enableBuiltins(ShaderType shaderType,
-                                    int majorShaderModel,
-                                    bool position,
-                                    bool fragCoord,
-                                    bool pointCoord,
-                                    bool pointSize)
+                                    const ProgramD3DMetadata &programMetadata)
 {
-    bool hlsl4                         = (majorShaderModel >= 4);
-    const std::string &varyingSemantic = GetVaryingSemantic(majorShaderModel, pointSize);
+    int majorShaderModel = programMetadata.getRendererMajorShaderModel();
+    bool position        = programMetadata.usesTransformFeedbackGLPosition();
+    bool fragCoord       = programMetadata.usesFragCoord();
+    bool pointCoord = shaderType == SHADER_VERTEX ? programMetadata.addPointCoordToVertexShader()
+                                                  : programMetadata.usesPointCoord();
+    bool pointSize = programMetadata.usesSystemValuePointSize();
+    bool hlsl4     = (majorShaderModel >= 4);
 
+    const std::string &userSemantic    = GetVaryingSemantic(majorShaderModel, pointSize);
     unsigned int reservedSemanticIndex = getMaxSemanticIndex();
 
     BuiltinInfo *builtins = &mBuiltinInfo[shaderType];
@@ -357,12 +360,12 @@ void VaryingPacking::enableBuiltins(ShaderType shaderType,
 
     if (position)
     {
-        builtins->glPosition.enable(varyingSemantic, reservedSemanticIndex++);
+        builtins->glPosition.enable(userSemantic, reservedSemanticIndex++);
     }
 
     if (fragCoord)
     {
-        builtins->glFragCoord.enable(varyingSemantic, reservedSemanticIndex++);
+        builtins->glFragCoord.enable(userSemantic, reservedSemanticIndex++);
     }
 
     if (pointCoord)
@@ -371,7 +374,7 @@ void VaryingPacking::enableBuiltins(ShaderType shaderType,
         // In D3D11 we manually compute gl_PointCoord in the GS.
         if (hlsl4)
         {
-            builtins->glPointCoord.enable(varyingSemantic, reservedSemanticIndex++);
+            builtins->glPointCoord.enable(userSemantic, reservedSemanticIndex++);
         }
         else
         {

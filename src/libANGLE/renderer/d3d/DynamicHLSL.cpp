@@ -397,11 +397,10 @@ void DynamicHLSL::generateVaryingLinkHLSL(ShaderType shaderType,
 
 bool DynamicHLSL::generateShaderLinkHLSL(const gl::Data &data,
                                          const gl::Program::Data &programData,
-                                         std::string *pixelHLSL,
-                                         std::string *vertexHLSL,
+                                         const ProgramD3DMetadata &programMetadata,
                                          const VaryingPacking &varyingPacking,
-                                         std::vector<PixelShaderOutputVariable> *outPixelShaderKey,
-                                         bool *outUsesFragDepth) const
+                                         std::string *pixelHLSL,
+                                         std::string *vertexHLSL) const
 {
     ASSERT(pixelHLSL->empty() && vertexHLSL->empty());
 
@@ -411,23 +410,12 @@ bool DynamicHLSL::generateShaderLinkHLSL(const gl::Data &data,
     const ShaderD3D *fragmentShader    = GetImplAs<ShaderD3D>(fragmentShaderGL);
     const int shaderModel              = mRenderer->getMajorShaderModel();
 
-    bool usesMRT        = fragmentShader->usesMultipleRenderTargets();
-    bool usesPointCoord = fragmentShader->usesPointCoord();
-    bool usesPointSize = vertexShader->usesPointSize();
     bool useInstancedPointSpriteEmulation =
-        usesPointSize && mRenderer->getWorkarounds().useInstancedPointSpriteEmulation;
-    bool insertDummyPointCoordValue = !usesPointSize && usesPointCoord && shaderModel >= 4;
+        programMetadata.usesPointSize() &&
+        mRenderer->getWorkarounds().useInstancedPointSpriteEmulation;
 
     // Validation done in the compiler
     ASSERT(!fragmentShader->usesFragColor() || !fragmentShader->usesFragData());
-
-    // Two cases when writing to gl_FragColor and using ESSL 1.0:
-    // - with a 3.0 context, the output color is copied to channel 0
-    // - with a 2.0 context, the output color is broadcast to all channels
-    const bool broadcast                = (fragmentShader->usesFragColor() && data.clientVersion < 3);
-    const unsigned int numRenderTargets = (broadcast || usesMRT ? data.caps->maxDrawBuffers : 1);
-
-    int shaderVersion = vertexShaderGL->getShaderVersion();
 
     std::stringstream vertexStream;
     vertexStream << vertexShaderGL->getTranslatedSource();
@@ -533,7 +521,7 @@ bool DynamicHLSL::generateShaderLinkHLSL(const gl::Data &data,
                         "gl_PointSize / (dx_ViewCoords.y*2), input.spriteVertexPos.z) * "
                         "output.dx_Position.w;\n";
 
-        if (usesPointCoord)
+        if (programMetadata.usesPointCoord())
         {
             vertexStream << "\n"
                          << "    output.gl_PointCoord = input.spriteTexCoord;\n";
@@ -543,7 +531,7 @@ bool DynamicHLSL::generateShaderLinkHLSL(const gl::Data &data,
     // Renderers that enable instanced pointsprite emulation require the vertex shader output member
     // gl_PointCoord to be set to a default value if used without gl_PointSize. 0.5,0.5 is the same
     // default value used in the generated pixel shader.
-    if (insertDummyPointCoordValue)
+    if (programMetadata.usesInsertedPointCoordValue())
     {
         ASSERT(!useInstancedPointSpriteEmulation);
         vertexStream << "\n"
@@ -559,51 +547,7 @@ bool DynamicHLSL::generateShaderLinkHLSL(const gl::Data &data,
     pixelStream << "struct PS_INPUT\n";
     generateVaryingLinkHLSL(SHADER_PIXEL, varyingPacking, pixelStream);
     pixelStream << "\n";
-
-    if (shaderVersion < 300)
-    {
-        for (unsigned int renderTargetIndex = 0; renderTargetIndex < numRenderTargets;
-             renderTargetIndex++)
-        {
-            PixelShaderOutputVariable outputKeyVariable;
-            outputKeyVariable.type = GL_FLOAT_VEC4;
-            outputKeyVariable.name = "gl_Color" + Str(renderTargetIndex);
-            outputKeyVariable.source =
-                broadcast ? "gl_Color[0]" : "gl_Color[" + Str(renderTargetIndex) + "]";
-            outputKeyVariable.outputIndex = renderTargetIndex;
-
-            outPixelShaderKey->push_back(outputKeyVariable);
-        }
-
-        *outUsesFragDepth = fragmentShader->usesFragDepth();
-    }
-    else
-    {
-        const auto &shaderOutputVars = fragmentShaderGL->getActiveOutputVariables();
-
-        for (auto outputPair : programData.getOutputVariables())
-        {
-            const VariableLocation &outputLocation   = outputPair.second;
-            const sh::ShaderVariable &outputVariable = shaderOutputVars[outputLocation.index];
-            const std::string &variableName = "out_" + outputLocation.name;
-            const std::string &elementString =
-                (outputLocation.element == GL_INVALID_INDEX ? "" : Str(outputLocation.element));
-
-            ASSERT(outputVariable.staticUse);
-
-            PixelShaderOutputVariable outputKeyVariable;
-            outputKeyVariable.type        = outputVariable.type;
-            outputKeyVariable.name        = variableName + elementString;
-            outputKeyVariable.source      = variableName + ArrayString(outputLocation.element);
-            outputKeyVariable.outputIndex = outputPair.first;
-
-            outPixelShaderKey->push_back(outputKeyVariable);
-        }
-
-        *outUsesFragDepth = false;
-    }
-
-    pixelStream << PIXEL_OUTPUT_STUB_STRING + "\n";
+    pixelStream << PIXEL_OUTPUT_STUB_STRING << "\n";
 
     if (fragmentShader->usesFrontFacing())
     {
@@ -977,4 +921,58 @@ std::string DynamicHLSL::generateAttributeConversionHLSL(
     // No conversion necessary
     return attribString;
 }
+
+void DynamicHLSL::getPixelShaderOutputKey(const gl::Data &data,
+                                          const gl::Program::Data &programData,
+                                          const ProgramD3DMetadata &metadata,
+                                          std::vector<PixelShaderOutputVariable> *outPixelShaderKey)
+{
+    // Two cases when writing to gl_FragColor and using ESSL 1.0:
+    // - with a 3.0 context, the output color is copied to channel 0
+    // - with a 2.0 context, the output color is broadcast to all channels
+    bool broadcast = metadata.usesBroadcast(data);
+    const unsigned int numRenderTargets =
+        (broadcast || metadata.usesMultipleFragmentOuts() ? data.caps->maxDrawBuffers : 1);
+
+    if (metadata.getMajorShaderVersion() < 300)
+    {
+        for (unsigned int renderTargetIndex = 0; renderTargetIndex < numRenderTargets;
+             renderTargetIndex++)
+        {
+            PixelShaderOutputVariable outputKeyVariable;
+            outputKeyVariable.type = GL_FLOAT_VEC4;
+            outputKeyVariable.name = "gl_Color" + Str(renderTargetIndex);
+            outputKeyVariable.source =
+                broadcast ? "gl_Color[0]" : "gl_Color[" + Str(renderTargetIndex) + "]";
+            outputKeyVariable.outputIndex = renderTargetIndex;
+
+            outPixelShaderKey->push_back(outputKeyVariable);
+        }
+    }
+    else
+    {
+        const auto &shaderOutputVars =
+            metadata.getFragmentShader()->getData().getActiveOutputVariables();
+
+        for (auto outputPair : programData.getOutputVariables())
+        {
+            const VariableLocation &outputLocation   = outputPair.second;
+            const sh::ShaderVariable &outputVariable = shaderOutputVars[outputLocation.index];
+            const std::string &variableName = "out_" + outputLocation.name;
+            const std::string &elementString =
+                (outputLocation.element == GL_INVALID_INDEX ? "" : Str(outputLocation.element));
+
+            ASSERT(outputVariable.staticUse);
+
+            PixelShaderOutputVariable outputKeyVariable;
+            outputKeyVariable.type        = outputVariable.type;
+            outputKeyVariable.name        = variableName + elementString;
+            outputKeyVariable.source      = variableName + ArrayString(outputLocation.element);
+            outputKeyVariable.outputIndex = outputPair.first;
+
+            outPixelShaderKey->push_back(outputKeyVariable);
+        }
+    }
+}
+
 }  // namespace rx
