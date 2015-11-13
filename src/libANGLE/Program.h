@@ -188,6 +188,8 @@ class Program : angle::NonCopyable
         GLint getUniformLocation(const std::string &name) const;
         GLuint getUniformIndex(const std::string &name) const;
 
+        GLint getShaderVersion() const;
+
       private:
         friend class Program;
 
