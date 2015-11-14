@@ -471,7 +471,6 @@ void Renderer11::SRVCache::clear()
 Renderer11::Renderer11(egl::Display *display)
     : RendererD3D(display),
       mStateCache(this),
-      mCurStencilSize(0),
       mStateManager(this),
       mLastHistogramUpdateTime(ANGLEPlatformCurrent()->monotonicallyIncreasingTime()),
       mDebug(nullptr)
@@ -1394,7 +1393,21 @@ void Renderer11::syncState(const gl::State &state, const gl::State::DirtyBits &b
             case gl::State::DIRTY_BIT_COLOR_MASK:
             case gl::State::DIRTY_BIT_BLEND_COLOR:
                 mStateManager.setBlendStateIsDirty();
-                return;
+                break;
+            case gl::State::DIRTY_BIT_DEPTH_MASK:
+            case gl::State::DIRTY_BIT_DEPTH_TEST_ENABLED:
+            case gl::State::DIRTY_BIT_DEPTH_FUNC:
+            case gl::State::DIRTY_BIT_STENCIL_TEST_ENABLED:
+            case gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT:
+            case gl::State::DIRTY_BIT_STENCIL_FUNCS_BACK:
+            case gl::State::DIRTY_BIT_STENCIL_WRITEMASK_FRONT:
+            case gl::State::DIRTY_BIT_STENCIL_WRITEMASK_BACK:
+            case gl::State::DIRTY_BIT_STENCIL_OPS_FRONT:
+            case gl::State::DIRTY_BIT_STENCIL_OPS_BACK:
+                mStateManager.setDepthStencilStateIsDirty();
+                break;
+            default:
+                break;
         }
     }
 }
@@ -1410,47 +1423,8 @@ gl::Error Renderer11::setBlendState(const gl::Framebuffer *framebuffer,
 gl::Error Renderer11::setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
                                            int stencilBackRef, bool frontFaceCCW)
 {
-    if (mForceSetDepthStencilState ||
-        memcmp(&depthStencilState, &mCurDepthStencilState, sizeof(gl::DepthStencilState)) != 0 ||
-        stencilRef != mCurStencilRef || stencilBackRef != mCurStencilBackRef)
-    {
-        // get the maximum size of the stencil ref
-        unsigned int maxStencil = 0;
-        if (depthStencilState.stencilTest && mCurStencilSize > 0)
-        {
-            maxStencil = (1 << mCurStencilSize) - 1;
-        }
-        ASSERT((depthStencilState.stencilWritemask & maxStencil) ==
-               (depthStencilState.stencilBackWritemask & maxStencil));
-        ASSERT(stencilRef == stencilBackRef);
-        ASSERT((depthStencilState.stencilMask & maxStencil) ==
-               (depthStencilState.stencilBackMask & maxStencil));
-
-        ID3D11DepthStencilState *dxDepthStencilState = NULL;
-        gl::Error error = mStateCache.getDepthStencilState(depthStencilState, &dxDepthStencilState);
-        if (error.isError())
-        {
-            return error;
-        }
-
-        ASSERT(dxDepthStencilState);
-
-        // Max D3D11 stencil reference value is 0xFF, corresponding to the max 8 bits in a stencil buffer
-        // GL specifies we should clamp the ref value to the nearest bit depth when doing stencil ops
-        static_assert(D3D11_DEFAULT_STENCIL_READ_MASK == 0xFF, "Unexpected value of D3D11_DEFAULT_STENCIL_READ_MASK");
-        static_assert(D3D11_DEFAULT_STENCIL_WRITE_MASK == 0xFF, "Unexpected value of D3D11_DEFAULT_STENCIL_WRITE_MASK");
-        UINT dxStencilRef = std::min<UINT>(stencilRef, 0xFFu);
-
-        mDeviceContext->OMSetDepthStencilState(dxDepthStencilState, dxStencilRef);
-
-        mCurDepthStencilState = depthStencilState;
-        mCurStencilRef = stencilRef;
-        mCurStencilBackRef = stencilBackRef;
-    }
-
-    mForceSetDepthStencilState = false;
-
-    return gl::Error(GL_NO_ERROR);
+    return mStateManager.setDepthStencilState(depthStencilState, stencilRef, stencilBackRef,
+                                              frontFaceCCW);
 }
 
 void Renderer11::setScissorRectangle(const gl::Rectangle &scissor, bool enabled)
@@ -1726,10 +1700,10 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
         }
 
         unsigned int stencilSize = depthStencil->getStencilSize();
-        if (!mDepthStencilInitialized || stencilSize != mCurStencilSize)
+        if (!mDepthStencilInitialized || mStateManager.stencilSizeChanged(stencilSize))
         {
-            mCurStencilSize            = stencilSize;
-            mForceSetDepthStencilState = true;
+            mStateManager.setCurDepthStencilSize(stencilSize);
+            mStateManager.forceSetDepthStencilState();
         }
     }
 
@@ -2530,8 +2504,8 @@ void Renderer11::markAllStateDirty()
     }
 
     mStateManager.forceSetBlendState();
+    mStateManager.forceSetDepthStencilState();
     mForceSetRasterState = true;
-    mForceSetDepthStencilState = true;
     mForceSetScissor = true;
     mForceSetViewport = true;
 
