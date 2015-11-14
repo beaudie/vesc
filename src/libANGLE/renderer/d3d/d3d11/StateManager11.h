@@ -31,18 +31,37 @@ class StateManager11 final : angle::NonCopyable
                             const gl::ColorF &blendColor,
                             unsigned int sampleMask);
 
+    gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState,
+                                   int stencilRef,
+                                   int stencilBackRef,
+                                   bool frontFaceCCW);
+
     void forceSetBlendState() { mForceSetBlendState = true; }
     void setBlendStateIsDirty() { mBlendStateIsDirty = true; }
 
+    void forceSetDepthStencilState() { mForceSetDepthStencilState = true; }
+    void setDepthStencilStateIsDirty() { mDepthStencilStateIsDirty = true; }
+
+    void setCurDepthStencilSize(unsigned int curStencilSize) { mCurStencilSize = curStencilSize; }
+    bool stencilSizeChanged(unsigned int size) { return (mCurStencilSize != size); }
+
   private:
     // Blend State
-    bool mBlendStateIsDirty;
+    bool mForceSetBlendState;
     // TODO(dianx) temporary representation of a dirty bit. once we move enough states in,
     // try experimenting with dirty bit instead of a bool
-    bool mForceSetBlendState;
+    bool mBlendStateIsDirty;
     gl::BlendState mCurBlendState;
     gl::ColorF mCurBlendColor;
     unsigned int mCurSampleMask;
+
+    // Currently applied depth stencil state
+    bool mForceSetDepthStencilState;
+    bool mDepthStencilStateIsDirty;
+    gl::DepthStencilState mCurDepthStencilState;
+    int mCurStencilRef;
+    int mCurStencilBackRef;
+    unsigned int mCurStencilSize;
 
     Renderer11 *mRenderer11;
 };
