@@ -324,6 +324,7 @@ class TParseContext : angle::NonCopyable
     TIntermBranch *addBranch(TOperator op, const TSourceLoc &loc);
     TIntermBranch *addBranch(TOperator op, TIntermTyped *returnValue, const TSourceLoc &loc);
 
+    void checkTextureOffsetConst(TIntermAggregate *functionCall);
     TIntermTyped *addFunctionCallOrMethod(TFunction *fnCall,
                                           TIntermNode *paramNode,
                                           TIntermNode *thisNode,

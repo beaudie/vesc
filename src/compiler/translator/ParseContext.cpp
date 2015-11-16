@@ -3733,6 +3733,37 @@ TIntermBranch *TParseContext::addBranch(TOperator op,
     return intermediate.addBranch(op, returnValue, loc);
 }
 
+void TParseContext::checkTextureOffsetConst(TIntermAggregate *functionCall)
+{
+    ASSERT(!functionCall->isUserDefined());
+    const TString &name = functionCall->getName();
+    if (name.find("Offset") != TString::npos)
+    {
+        TIntermNode *offset        = nullptr;
+        TIntermSequence *arguments = functionCall->getSequence();
+        if (name.find("texelFetchOffset") == 0 || name.find("textureLodOffset") == 0 ||
+            name.find("textureProjLodOffset") == 0 || name.find("textureGradOffset") == 0 ||
+            name.find("textureProjGradOffset") == 0)
+        {
+            offset = arguments->back();
+        }
+        else if (name.find("textureOffset") == 0 || name.find("textureProjOffset") == 0)
+        {
+            // A bias parameter might follow the offset parameter.
+            ASSERT(arguments->size() >= 3);
+            offset = (*arguments)[2];
+        }
+        if (offset != nullptr &&
+            (offset->getAsTyped()->getQualifier() != EvqConst || !offset->getAsConstantUnion()))
+        {
+            TString unmangledName = TFunction::unmangleName(name);
+            error(functionCall->getLine(), "Texture offset must be a constant expression",
+                  unmangledName.c_str());
+            recover();
+        }
+    }
+}
+
 TIntermTyped *TParseContext::addFunctionCallOrMethod(TFunction *fnCall,
                                                      TIntermNode *paramNode,
                                                      TIntermNode *thisNode,
@@ -3901,7 +3932,11 @@ TIntermTyped *TParseContext::addFunctionCallOrMethod(TFunction *fnCall,
 
                 // This needs to happen after the name is set
                 if (builtIn)
+                {
                     aggregate->setBuiltInFunctionPrecision();
+
+                    checkTextureOffsetConst(aggregate);
+                }
 
                 callNode = aggregate;
 
