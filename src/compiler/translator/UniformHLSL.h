@@ -37,6 +37,10 @@ class UniformHLSL : angle::NonCopyable
     {
         return mUniformRegisterMap;
     }
+    const std::map<std::string, unsigned int> &getBaseLevelUniformRegisterMap() const
+    {
+        return mBaseLevelUniformRegisterMap;
+    }
 
   private:
     TString interfaceBlockString(const TInterfaceBlock &interfaceBlock, unsigned int registerIndex, unsigned int arrayIndex);
@@ -45,7 +49,9 @@ class UniformHLSL : angle::NonCopyable
     const Uniform *findUniformByName(const TString &name) const;
 
     // Returns the uniform's register index
-    unsigned int declareUniformAndAssignRegister(const TType &type, const TString &name);
+    unsigned int declareUniformAndAssignRegister(const TType &type,
+                                                 const TString &name,
+                                                 bool baseLevel);
 
     unsigned int mUniformRegister;
     unsigned int mInterfaceBlockRegister;
@@ -55,7 +61,12 @@ class UniformHLSL : angle::NonCopyable
 
     const std::vector<Uniform> &mUniforms;
     std::map<std::string, unsigned int> mInterfaceBlockRegisterMap;
+
+    // Regular uniforms, including samplers.
     std::map<std::string, unsigned int> mUniformRegisterMap;
+
+    // Uniforms that store texture base levels.
+    std::map<std::string, unsigned int> mBaseLevelUniformRegisterMap;
 };
 
 }

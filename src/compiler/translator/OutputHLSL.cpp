@@ -285,6 +285,11 @@ const std::map<std::string, unsigned int> &OutputHLSL::getUniformRegisterMap() c
     return mUniformHLSL->getUniformRegisterMap();
 }
 
+const std::map<std::string, unsigned int> &OutputHLSL::getBaseLevelUniformRegisterMap() const
+{
+    return mUniformHLSL->getBaseLevelUniformRegisterMap();
+}
+
 int OutputHLSL::vectorSize(const TType &type) const
 {
     int elementSize = type.isMatrix() ? type.getCols() : 1;

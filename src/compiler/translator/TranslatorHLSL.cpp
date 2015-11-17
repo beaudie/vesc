@@ -59,6 +59,7 @@ void TranslatorHLSL::translate(TIntermNode *root, int compileOptions)
 
     mInterfaceBlockRegisterMap = outputHLSL.getInterfaceBlockRegisterMap();
     mUniformRegisterMap = outputHLSL.getUniformRegisterMap();
+    mBaseLevelUniformRegisterMap = outputHLSL.getBaseLevelUniformRegisterMap();
 }
 
 bool TranslatorHLSL::hasInterfaceBlock(const std::string &interfaceBlockName) const
@@ -81,4 +82,15 @@ unsigned int TranslatorHLSL::getUniformRegister(const std::string &uniformName) 
 {
     ASSERT(hasUniform(uniformName));
     return mUniformRegisterMap.find(uniformName)->second;
+}
+
+bool TranslatorHLSL::hasBaseLevelUniform(const std::string &uniformName) const
+{
+    return (mBaseLevelUniformRegisterMap.count(uniformName) > 0);
+}
+
+unsigned int TranslatorHLSL::getBaseLevelUniformRegister(const std::string &uniformName) const
+{
+    ASSERT(hasBaseLevelUniform(uniformName));
+    return mBaseLevelUniformRegisterMap.find(uniformName)->second;
 }

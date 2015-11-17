@@ -66,6 +66,8 @@ struct D3DUniform : angle::NonCopyable
     // uniforms
     // inside aggregate types, which are packed according C-like structure rules.
     unsigned int registerElement;
+
+    std::vector<D3DUniform *>::size_type baseLevelD3DUniformIndex;
 };
 
 struct D3DUniformBlock
@@ -116,6 +118,9 @@ class ProgramD3D : public ProgramImpl
                             unsigned int samplerIndex,
                             const gl::Caps &caps) const;
     GLenum getSamplerTextureType(gl::SamplerType type, unsigned int samplerIndex) const;
+    void setTextureBaseLevel(gl::SamplerType type,
+                             unsigned int samplerIndex,
+                             unsigned int baseLevel);
     GLint getUsedSamplerRange(gl::SamplerType type) const;
     void updateSamplerMapping();
 
@@ -273,6 +278,7 @@ class ProgramD3D : public ProgramImpl
         bool active;
         GLint logicalTextureUnit;
         GLenum textureType;
+        std::vector<D3DUniform *>::size_type baseLevelD3DUniformIndex;
     };
 
     typedef std::map<std::string, D3DUniform *> D3DUniformMap;

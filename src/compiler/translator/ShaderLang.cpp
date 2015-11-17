@@ -375,3 +375,24 @@ bool ShGetUniformRegister(const ShHandle handle,
     return false;
 #endif // ANGLE_ENABLE_HLSL
 }
+
+bool ShGetBaseLevelUniformRegister(const ShHandle handle,
+                                   const std::string &uniformName,
+                                   unsigned int *indexOut)
+{
+#ifdef ANGLE_ENABLE_HLSL
+    ASSERT(indexOut);
+    TranslatorHLSL *translator = GetTranslatorHLSLFromHandle(handle);
+    ASSERT(translator);
+
+    if (!translator->hasBaseLevelUniform(uniformName))
+    {
+        return false;
+    }
+
+    *indexOut = translator->getBaseLevelUniformRegister(uniformName);
+    return true;
+#else
+    return false;
+#endif  // ANGLE_ENABLE_HLSL
+}

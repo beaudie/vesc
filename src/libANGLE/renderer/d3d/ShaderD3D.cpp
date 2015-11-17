@@ -106,6 +106,12 @@ unsigned int ShaderD3D::getUniformRegister(const std::string &uniformName) const
     return mUniformRegisterMap.find(uniformName)->second;
 }
 
+unsigned int ShaderD3D::getBaseLevelUniformRegister(const std::string &uniformName) const
+{
+    ASSERT(mBaseLevelUniformRegisterMap.count(uniformName) > 0);
+    return mBaseLevelUniformRegisterMap.find(uniformName)->second;
+}
+
 unsigned int ShaderD3D::getInterfaceBlockRegister(const std::string &blockName) const
 {
     ASSERT(mInterfaceBlockRegisterMap.count(blockName) > 0);
@@ -169,6 +175,15 @@ bool ShaderD3D::postTranslateCompile(gl::Compiler *compiler, std::string *infoLo
         if (uniform.staticUse && !uniform.isBuiltIn())
         {
             unsigned int index = static_cast<unsigned int>(-1);
+            if (gl::IsSamplerType(uniform.type))
+            {
+                bool getBaseLevelUniformRegisterResult =
+                    ShGetBaseLevelUniformRegister(compilerHandle, uniform.name, &index);
+                UNUSED_ASSERTION_VARIABLE(getBaseLevelUniformRegisterResult);
+                ASSERT(getBaseLevelUniformRegisterResult);
+
+                mBaseLevelUniformRegisterMap[uniform.name] = index;
+            }
             bool getUniformRegisterResult =
                 ShGetUniformRegister(compilerHandle, uniform.name, &index);
             UNUSED_ASSERTION_VARIABLE(getUniformRegisterResult);

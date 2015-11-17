@@ -93,18 +93,28 @@ const Uniform *UniformHLSL::findUniformByName(const TString &name) const
     return NULL;
 }
 
-unsigned int UniformHLSL::declareUniformAndAssignRegister(const TType &type, const TString &name)
+unsigned int UniformHLSL::declareUniformAndAssignRegister(const TType &type,
+                                                          const TString &name,
+                                                          bool baseLevel)
 {
-    unsigned int registerIndex = (IsSampler(type.getBasicType()) ? mSamplerRegister : mUniformRegister);
+    bool useSamplerRegister    = IsSampler(type.getBasicType()) && !baseLevel;
+    unsigned int registerIndex = (useSamplerRegister ? mSamplerRegister : mUniformRegister);
 
     const Uniform *uniform = findUniformByName(name);
     ASSERT(uniform);
 
-    mUniformRegisterMap[uniform->name] = registerIndex;
+    if (baseLevel)
+    {
+        mBaseLevelUniformRegisterMap[uniform->name] = registerIndex;
+    }
+    else
+    {
+        mUniformRegisterMap[uniform->name] = registerIndex;
+    }
 
     unsigned int registerCount = HLSLVariableRegisterCount(*uniform, mOutputType);
 
-    if (gl::IsSamplerType(uniform->type))
+    if (useSamplerRegister)
     {
         mSamplerRegister += registerCount;
     }
@@ -127,7 +137,25 @@ TString UniformHLSL::uniformsHeader(ShShaderOutput outputType, const ReferencedS
         const TType &type = uniform.getType();
         const TString &name = uniform.getSymbol();
 
-        unsigned int registerIndex = declareUniformAndAssignRegister(type, name);
+        unsigned int registerIndex = declareUniformAndAssignRegister(type, name, false);
+
+        if (IsSampler(type.getBasicType()))
+        {
+            // TODO: Consider leaving the base level out on D3D9.
+            TType baseLevelType = type;
+            baseLevelType.setBasicType(EbtUInt);
+            baseLevelType.setPrecision(EbpHigh);
+            baseLevelType.setPrimarySize(1);
+            baseLevelType.setSecondarySize(1);
+            if (type.isArray())
+            {
+                baseLevelType.setArraySize(type.getArraySize());
+            }
+            unsigned int baseLevelRegisterIndex =
+                declareUniformAndAssignRegister(baseLevelType, name, true);
+            uniforms += "uniform int baseLevel_" + DecorateUniform(name, type) + ArrayString(type) +
+                        " : register(c" + str(baseLevelRegisterIndex) + ");\n";
+        }
 
         if (outputType == SH_HLSL11_OUTPUT && IsSampler(type.getBasicType()))   // Also declare the texture
         {

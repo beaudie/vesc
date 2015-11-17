@@ -20,6 +20,8 @@ class TranslatorHLSL : public TCompiler
 
     bool hasUniform(const std::string &uniformName) const;
     unsigned int getUniformRegister(const std::string &uniformName) const;
+    bool hasBaseLevelUniform(const std::string &uniformName) const;
+    unsigned int getBaseLevelUniformRegister(const std::string &uniformName) const;
 
   protected:
     void translate(TIntermNode *root, int compileOptions) override;
@@ -28,7 +30,12 @@ class TranslatorHLSL : public TCompiler
     bool shouldCollectVariables(int compileOptions) override { return true; }
 
     std::map<std::string, unsigned int> mInterfaceBlockRegisterMap;
+
+    // Regular uniforms, including samplers.
     std::map<std::string, unsigned int> mUniformRegisterMap;
+
+    // Uniforms that store texture base levels.
+    std::map<std::string, unsigned int> mBaseLevelUniformRegisterMap;
 };
 
 #endif  // COMPILER_TRANSLATOR_TRANSLATORHLSL_H_

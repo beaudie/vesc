@@ -306,7 +306,8 @@ D3DUniform::D3DUniform(GLenum typeIn,
       vsRegisterIndex(GL_INVALID_INDEX),
       psRegisterIndex(GL_INVALID_INDEX),
       registerCount(0),
-      registerElement(0)
+      registerElement(0),
+      baseLevelD3DUniformIndex(0)
 {
     // We use data storage for default block uniforms to cache values that are sent to D3D during
     // rendering
@@ -530,6 +531,36 @@ GLenum ProgramD3D::getSamplerTextureType(gl::SamplerType type, unsigned int samp
     return GL_TEXTURE_2D;
 }
 
+void ProgramD3D::setTextureBaseLevel(gl::SamplerType type,
+                                     unsigned int samplerIndex,
+                                     unsigned int baseLevel)
+{
+    std::vector<D3DUniform *>::size_type uniformIndex = 0;
+    switch (type)
+    {
+        case gl::SAMPLER_PIXEL:
+            ASSERT(samplerIndex < mSamplersPS.size());
+            ASSERT(mSamplersPS[samplerIndex].active);
+            uniformIndex = mSamplersPS[samplerIndex].baseLevelD3DUniformIndex;
+            break;
+        case gl::SAMPLER_VERTEX:
+            ASSERT(samplerIndex < mSamplersVS.size());
+            ASSERT(mSamplersVS[samplerIndex].active);
+            uniformIndex = mSamplersVS[samplerIndex].baseLevelD3DUniformIndex;
+            break;
+        default:
+            UNREACHABLE();
+    }
+    ASSERT(uniformIndex > 0);
+    int *baseLevelUniform =
+        reinterpret_cast<int *>(mD3DUniforms[uniformIndex]->data);
+    if (*baseLevelUniform != static_cast<int>(baseLevel))
+    {
+        *baseLevelUniform                 = static_cast<int>(baseLevel);
+        mD3DUniforms[uniformIndex]->dirty = true;
+    }
+}
+
 GLint ProgramD3D::getUsedSamplerRange(gl::SamplerType type) const
 {
     switch (type)
@@ -577,6 +608,9 @@ void ProgramD3D::updateSamplerMapping()
                 {
                     ASSERT(mSamplersPS[samplerIndex].active);
                     mSamplersPS[samplerIndex].logicalTextureUnit = v[i][0];
+                    // TODO: This could be initialized at link time
+                    mSamplersPS[samplerIndex].baseLevelD3DUniformIndex =
+                        d3dUniform->baseLevelD3DUniformIndex;
                 }
             }
         }
@@ -593,6 +627,9 @@ void ProgramD3D::updateSamplerMapping()
                 {
                     ASSERT(mSamplersVS[samplerIndex].active);
                     mSamplersVS[samplerIndex].logicalTextureUnit = v[i][0];
+                    // TODO: This could be initialized at link time
+                    mSamplersVS[samplerIndex].baseLevelD3DUniformIndex =
+                        d3dUniform->baseLevelD3DUniformIndex;
                 }
             }
         }
@@ -634,6 +671,7 @@ LinkResult ProgramD3D::load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream)
         stream->readBool(&sampler.active);
         stream->readInt(&sampler.logicalTextureUnit);
         stream->readInt(&sampler.textureType);
+        stream->readInt(&sampler.baseLevelD3DUniformIndex);
         mSamplersPS.push_back(sampler);
     }
     const unsigned int vsSamplerCount = stream->readInt<unsigned int>();
@@ -643,6 +681,7 @@ LinkResult ProgramD3D::load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream)
         stream->readBool(&sampler.active);
         stream->readInt(&sampler.logicalTextureUnit);
         stream->readInt(&sampler.textureType);
+        stream->readInt(&sampler.baseLevelD3DUniformIndex);
         mSamplersVS.push_back(sampler);
     }
 
@@ -669,6 +708,7 @@ LinkResult ProgramD3D::load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream)
         stream->readInt(&d3dUniform->vsRegisterIndex);
         stream->readInt(&d3dUniform->registerCount);
         stream->readInt(&d3dUniform->registerElement);
+        stream->readInt(&d3dUniform->baseLevelD3DUniformIndex);
 
         mD3DUniforms.push_back(d3dUniform);
     }
@@ -863,6 +903,7 @@ gl::Error ProgramD3D::save(gl::BinaryOutputStream *stream)
         stream->writeInt(mSamplersPS[i].active);
         stream->writeInt(mSamplersPS[i].logicalTextureUnit);
         stream->writeInt(mSamplersPS[i].textureType);
+        stream->writeInt(mSamplersPS[i].baseLevelD3DUniformIndex);
     }
 
     stream->writeInt(mSamplersVS.size());
@@ -871,6 +912,7 @@ gl::Error ProgramD3D::save(gl::BinaryOutputStream *stream)
         stream->writeInt(mSamplersVS[i].active);
         stream->writeInt(mSamplersVS[i].logicalTextureUnit);
         stream->writeInt(mSamplersVS[i].textureType);
+        stream->writeInt(mSamplersVS[i].baseLevelD3DUniformIndex);
     }
 
     stream->writeInt(mUsedVertexSamplerRange);
@@ -884,6 +926,7 @@ gl::Error ProgramD3D::save(gl::BinaryOutputStream *stream)
         stream->writeInt(uniform->vsRegisterIndex);
         stream->writeInt(uniform->registerCount);
         stream->writeInt(uniform->registerElement);
+        stream->writeInt(uniform->baseLevelD3DUniformIndex);
     }
 
     stream->writeInt(mD3DUniformBlocks.size());
@@ -1638,7 +1681,6 @@ void ProgramD3D::defineUniformsAndAssignRegisters()
     D3DUniformMap uniformMap;
     const gl::Shader *vertexShader = mData.getAttachedVertexShader();
     for (const sh::Uniform &vertexUniform : vertexShader->getUniforms())
-
     {
         if (vertexUniform.staticUse)
         {
@@ -1666,6 +1708,19 @@ void ProgramD3D::defineUniformsAndAssignRegisters()
         mD3DUniforms.push_back(mapEntry->second);
     }
 
+    // Add texture base level uniforms (these are not exposed to the GL layer)
+    std::vector<D3DUniform *>::size_type originalSize = mD3DUniforms.size();
+    for (std::vector<D3DUniform *>::size_type i = 0; i < originalSize; ++i)
+    {
+        D3DUniform *&d3dUniform = mD3DUniforms.at(i);
+        if (d3dUniform->isSampler())
+        {
+            d3dUniform->baseLevelD3DUniformIndex = mD3DUniforms.size();
+            auto mapEntry = uniformMap.find(std::string("gl_baselevel_") + d3dUniform->name);
+            mD3DUniforms.push_back(mapEntry->second);
+        }
+    }
+
     assignAllSamplerRegisters();
     initializeUniformStorage();
 }
@@ -1688,6 +1743,21 @@ void ProgramD3D::defineUniformBase(const gl::Shader *shader,
     encoder.skipRegisters(startRegister);
 
     defineUniform(shader->getType(), uniform, uniform.name, &encoder, uniformMap);
+
+    // Define base level uniform if the original uniform is a sampler.
+    if (gl::IsSamplerType(uniform.type))
+    {
+        sh::HLSLBlockEncoder encoder(sh::HLSLBlockEncoder::GetStrategyFor(outputType));
+        unsigned int startRegister = shaderD3D->getBaseLevelUniformRegister(uniform.name);
+        encoder.skipRegisters(startRegister);
+        sh::Uniform baseLevelUniform;
+        baseLevelUniform.type      = GL_INT;
+        baseLevelUniform.arraySize = 0;
+        baseLevelUniform.staticUse = true;
+        baseLevelUniform.name = std::string("gl_baselevel_") + uniform.name;
+        defineUniform(shader->getType(), baseLevelUniform, baseLevelUniform.name, &encoder,
+                      uniformMap);
+    }
 }
 
 D3DUniform *ProgramD3D::getD3DUniformByName(const std::string &name)
