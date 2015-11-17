@@ -1362,7 +1362,24 @@ gl::Error Renderer11::setUniformBuffers(const gl::Data &data,
 
 gl::Error Renderer11::setRasterizerState(const gl::RasterizerState &rasterState)
 {
-    return mStateManager.setRasterizerState(rasterState);
+    if (mForceSetRasterState ||
+        memcmp(&rasterState, &mCurRasterState, sizeof(gl::RasterizerState)) != 0)
+    {
+        ID3D11RasterizerState *dxRasterState = NULL;
+        gl::Error error =
+            mStateCache.getRasterizerState(rasterState, mScissorEnabled, &dxRasterState);
+        if (error.isError())
+        {
+            return error;
+        }
+
+        mDeviceContext->RSSetState(dxRasterState);
+
+        mCurRasterState = rasterState;
+        mForceSetRasterState = false;
+    }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void Renderer11::syncState(const gl::State &state, const gl::State::DirtyBits &bitmask)
@@ -1402,6 +1419,7 @@ void Renderer11::setScissorRectangle(const gl::Rectangle &scissor, bool enabled)
 
         if (enabled != mScissorEnabled)
         {
+            mForceSetRasterState = true;
             mStateManager.forceSetRasterState();
         }
 
@@ -1677,6 +1695,7 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
 
         if (!mDepthStencilInitialized)
         {
+            mForceSetRasterState = true;
             mStateManager.forceSetRasterState();
         }
 
@@ -2460,6 +2479,7 @@ void Renderer11::markAllStateDirty()
     mStateManager.forceSetBlendState();
     mStateManager.forceSetDepthStencilState();
     mStateManager.forceSetRasterState();
+    mForceSetRasterState = true;
     mForceSetScissor = true;
     mForceSetViewport = true;
 
