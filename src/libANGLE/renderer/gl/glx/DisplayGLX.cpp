@@ -383,8 +383,6 @@ egl::ConfigSet DisplayGLX::generateConfigs() const
     egl::ConfigSet configs;
     configIdToGLXConfig.clear();
 
-    bool hasSwapControl = mGLX.hasExtension("GLX_EXT_swap_control");
-
     const gl::Version &maxVersion = getMaxSupportedESVersion();
     ASSERT(maxVersion >= gl::Version(2, 0));
     bool supportsES3 = maxVersion >= gl::Version(3, 0);
