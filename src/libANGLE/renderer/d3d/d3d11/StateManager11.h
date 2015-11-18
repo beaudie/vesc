@@ -40,9 +40,12 @@ class StateManager11 final : angle::NonCopyable
 
     gl::Error setRasterizerState(const gl::RasterizerState &rasterState);
 
+    void setScissorRectangle(const gl::Rectangle &scissor, bool enabled);
+
     void forceSetBlendState() { mForceSetBlendState = true; }
     void forceSetDepthStencilState() { mForceSetDepthStencilState = true; }
     void forceSetRasterState() { mForceSetRasterState = true; }
+    void forceSetScissorState() { mForceSetScissorState = true; }
 
     void setCurScissorEnabled(bool enabled) { mCurScissorEnabled = enabled; }
 
@@ -71,7 +74,11 @@ class StateManager11 final : angle::NonCopyable
     bool mRasterStateIsDirty;
     gl::RasterizerState mCurRasterState;
 
+    // Currently applied scissor rectangle state
+    bool mForceSetScissorState;
+    bool mScissorStateIsDirty;
     bool mCurScissorEnabled;
+    gl::Rectangle mCurScissorRect;
 
     ID3D11DeviceContext *mDeviceContext;
     RenderStateCache *mStateCache;
