@@ -16,8 +16,6 @@
 namespace
 {
 
-#if ANGLE_SHADER_DEBUG_INFO == ANGLE_ENABLED
-
 #ifdef CREATE_COMPILER_FLAG_INFO
     #undef CREATE_COMPILER_FLAG_INFO
 #endif
@@ -79,9 +77,7 @@ bool IsCompilerFlagSet(UINT mask, UINT flag)
     }
 }
 
-#endif
-
-}
+}  // anonymous namespace
 
 namespace rx
 {
@@ -247,7 +243,6 @@ gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string 
         {
             *outCompiledBlob = binary;
 
-#if ANGLE_SHADER_DEBUG_INFO == ANGLE_ENABLED
             (*outDebugInfo) += "// COMPILER INPUT HLSL BEGIN\n\n" + hlsl + "\n// COMPILER INPUT HLSL END\n";
             (*outDebugInfo) += "\n\n// ASSEMBLY BEGIN\n\n";
             (*outDebugInfo) += "// Compiler configuration: " + configs[i].name + "\n// Flags:\n";
@@ -279,7 +274,6 @@ gl::Error HLSLCompiler::compileToBinary(gl::InfoLog &infoLog, const std::string 
                 return error;
             }
             (*outDebugInfo) += "\n" + disassembly + "\n// ASSEMBLY END\n";
-#endif
             return gl::Error(GL_NO_ERROR);
         }
 
@@ -333,4 +327,4 @@ gl::Error HLSLCompiler::disassembleBinary(ID3DBlob *shaderBinary, std::string *d
     return gl::Error(GL_NO_ERROR);
 }
 
-}
+}  // namespace rx

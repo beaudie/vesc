@@ -32,11 +32,6 @@
 #define ANGLE_PROGRAM_BINARY_LOAD ANGLE_ENABLED
 #endif
 
-// Shader debug info
-#if !defined(ANGLE_SHADER_DEBUG_INFO)
-#define ANGLE_SHADER_DEBUG_INFO ANGLE_DISABLED
-#endif
-
 // Program link validation of precisions for uniforms. This feature was
 // requested by developers to allow non-conformant shaders to be used which
 // contain mismatched precisions.
