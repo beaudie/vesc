@@ -1409,7 +1409,7 @@ void ProgramD3D::initializeUniformStorage()
 
 gl::Error ProgramD3D::applyUniforms(GLenum drawMode)
 {
-    updateSamplerMapping();
+    ASSERT(!mDirtySamplerMapping);
 
     gl::Error error = mRenderer->applyUniforms(*this, drawMode, mD3DUniforms);
     if (error.isError())
