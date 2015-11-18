@@ -23,6 +23,7 @@ StateManager11::StateManager11()
       mCurStencilBackRef(0),
       mCurStencilSize(0),
       mRasterizerStateIsDirty(false),
+      mScissorStateIsDirty(false),
       mCurScissorEnabled(false),
       mDeviceContext(nullptr),
       mStateCache(nullptr)
@@ -280,6 +281,18 @@ void StateManager11::syncState(const gl::State &state, const gl::State::DirtyBit
                     mRasterizerStateIsDirty = true;
                 }
                 break;
+            case gl::State::DIRTY_BIT_SCISSOR:
+                if (state.getScissor() != mCurScissorRect)
+                {
+                    mScissorStateIsDirty = true;
+                }
+                break;
+            case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
+                if (state.isScissorTestEnabled() != mCurScissorEnabled)
+                {
+                    mScissorStateIsDirty = true;
+                }
+                break;
             default:
                 break;
         }
@@ -402,6 +415,32 @@ gl::Error StateManager11::setRasterizerState(const gl::RasterizerState &rasterSt
     }
 
     return gl::Error(GL_NO_ERROR);
+}
+
+void StateManager11::setScissorRectangle(const gl::Rectangle &scissor, bool enabled)
+{
+    if (mScissorStateIsDirty)
+    {
+        if (enabled)
+        {
+            D3D11_RECT rect;
+            rect.left   = std::max(0, scissor.x);
+            rect.top    = std::max(0, scissor.y);
+            rect.right  = scissor.x + std::max(0, scissor.width);
+            rect.bottom = scissor.y + std::max(0, scissor.height);
+
+            mDeviceContext->RSSetScissorRects(1, &rect);
+        }
+
+        if (enabled != mCurScissorEnabled)
+        {
+            mRasterizerStateIsDirty = true;
+        }
+
+        mCurScissorRect      = scissor;
+        mCurScissorEnabled   = enabled;
+        mScissorStateIsDirty = false;
+    }
 }
 
 }  // namespace rx
