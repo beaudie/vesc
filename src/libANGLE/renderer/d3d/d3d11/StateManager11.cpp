@@ -23,7 +23,9 @@ StateManager11::StateManager11()
       mCurStencilBackRef(0),
       mCurStencilSize(0),
       mRasterizerStateIsDirty(false),
+      mScissorStateIsDirty(false),
       mCurScissorEnabled(false),
+      mCurScissorRect(),
       mDeviceContext(nullptr),
       mStateCache(nullptr)
 {
@@ -280,6 +282,20 @@ void StateManager11::syncState(const gl::State &state, const gl::State::DirtyBit
                     mRasterizerStateIsDirty = true;
                 }
                 break;
+            case gl::State::DIRTY_BIT_SCISSOR:
+                if (state.getScissor() != mCurScissorRect)
+                {
+                    mScissorStateIsDirty = true;
+                }
+                break;
+            case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
+                if (state.isScissorTestEnabled() != mCurScissorEnabled)
+                {
+                    mScissorStateIsDirty = true;
+                    // Rasterizer state update needs mCurScissorsEnabled and updates when it changes
+                    mRasterizerStateIsDirty = true;
+                }
+                break;
             default:
                 break;
         }
@@ -291,46 +307,48 @@ gl::Error StateManager11::setBlendState(const gl::Framebuffer *framebuffer,
                                         const gl::ColorF &blendColor,
                                         unsigned int sampleMask)
 {
-    if (mBlendStateIsDirty || sampleMask != mCurSampleMask)
+    if (!mBlendStateIsDirty && sampleMask == mCurSampleMask)
     {
-        ID3D11BlendState *dxBlendState = nullptr;
-        gl::Error error = mStateCache->getBlendState(framebuffer, blendState, &dxBlendState);
-        if (error.isError())
-        {
-            return error;
-        }
-
-        ASSERT(dxBlendState != nullptr);
-
-        float blendColors[4] = {0.0f};
-        if (blendState.sourceBlendRGB != GL_CONSTANT_ALPHA &&
-            blendState.sourceBlendRGB != GL_ONE_MINUS_CONSTANT_ALPHA &&
-            blendState.destBlendRGB != GL_CONSTANT_ALPHA &&
-            blendState.destBlendRGB != GL_ONE_MINUS_CONSTANT_ALPHA)
-        {
-            blendColors[0] = blendColor.red;
-            blendColors[1] = blendColor.green;
-            blendColors[2] = blendColor.blue;
-            blendColors[3] = blendColor.alpha;
-        }
-        else
-        {
-            blendColors[0] = blendColor.alpha;
-            blendColors[1] = blendColor.alpha;
-            blendColors[2] = blendColor.alpha;
-            blendColors[3] = blendColor.alpha;
-        }
-
-        mDeviceContext->OMSetBlendState(dxBlendState, blendColors, sampleMask);
-
-        mCurBlendState = blendState;
-        mCurBlendColor = blendColor;
-        mCurSampleMask = sampleMask;
-
-        mBlendStateIsDirty = false;
+        return gl::Error(GL_NO_ERROR);
     }
 
-    return gl::Error(GL_NO_ERROR);
+    ID3D11BlendState *dxBlendState = nullptr;
+    gl::Error error = mStateCache->getBlendState(framebuffer, blendState, &dxBlendState);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ASSERT(dxBlendState != nullptr);
+
+    float blendColors[4] = {0.0f};
+    if (blendState.sourceBlendRGB != GL_CONSTANT_ALPHA &&
+        blendState.sourceBlendRGB != GL_ONE_MINUS_CONSTANT_ALPHA &&
+        blendState.destBlendRGB != GL_CONSTANT_ALPHA &&
+        blendState.destBlendRGB != GL_ONE_MINUS_CONSTANT_ALPHA)
+    {
+        blendColors[0] = blendColor.red;
+        blendColors[1] = blendColor.green;
+        blendColors[2] = blendColor.blue;
+        blendColors[3] = blendColor.alpha;
+    }
+    else
+    {
+        blendColors[0] = blendColor.alpha;
+        blendColors[1] = blendColor.alpha;
+        blendColors[2] = blendColor.alpha;
+        blendColors[3] = blendColor.alpha;
+    }
+
+    mDeviceContext->OMSetBlendState(dxBlendState, blendColors, sampleMask);
+
+    mCurBlendState = blendState;
+    mCurBlendColor = blendColor;
+    mCurSampleMask = sampleMask;
+
+    mBlendStateIsDirty = false;
+
+    return error;
 }
 
 gl::Error StateManager11::setDepthStencilState(const gl::State &glState)
@@ -402,23 +420,46 @@ gl::Error StateManager11::setDepthStencilState(const gl::State &glState)
 
 gl::Error StateManager11::setRasterizerState(const gl::RasterizerState &rasterState)
 {
-    if (mRasterizerStateIsDirty)
+    if (!mRasterizerStateIsDirty)
     {
-        ID3D11RasterizerState *dxRasterState = nullptr;
-        gl::Error error =
-            mStateCache->getRasterizerState(rasterState, mCurScissorEnabled, &dxRasterState);
-        if (error.isError())
-        {
-            return error;
-        }
-
-        mDeviceContext->RSSetState(dxRasterState);
-
-        mCurRasterState         = rasterState;
-        mRasterizerStateIsDirty = false;
+        return gl::Error(GL_NO_ERROR);
     }
 
-    return gl::Error(GL_NO_ERROR);
+    ID3D11RasterizerState *dxRasterState = nullptr;
+    gl::Error error =
+        mStateCache->getRasterizerState(rasterState, mCurScissorEnabled, &dxRasterState);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mDeviceContext->RSSetState(dxRasterState);
+
+    mCurRasterState         = rasterState;
+    mRasterizerStateIsDirty = false;
+
+    return error;
+}
+
+void StateManager11::setScissorRectangle(const gl::Rectangle &scissor, bool enabled)
+{
+    if (!mScissorStateIsDirty)
+        return;
+
+    if (enabled)
+    {
+        D3D11_RECT rect;
+        rect.left   = std::max(0, scissor.x);
+        rect.top    = std::max(0, scissor.y);
+        rect.right  = scissor.x + std::max(0, scissor.width);
+        rect.bottom = scissor.y + std::max(0, scissor.height);
+
+        mDeviceContext->RSSetScissorRects(1, &rect);
+    }
+
+    mCurScissorRect      = scissor;
+    mCurScissorEnabled   = enabled;
+    mScissorStateIsDirty = false;
 }
 
 }  // namespace rx
