@@ -762,7 +762,7 @@ void OutputHLSL::header(const BuiltInFunctionEmulator *builtInFunctionEmulator)
         {
             switch(textureFunction->coords)
             {
-              case 1: out << ", int lod";  break;   // textureSize()
+              case 1: out << ", int baseLevel, int lod";  break;   // textureSize()
               case 2: out << ", float2 t"; break;
               case 3: out << ", float3 t"; break;
               case 4: out << ", float4 t"; break;
@@ -845,18 +845,18 @@ void OutputHLSL::header(const BuiltInFunctionEmulator *builtInFunctionEmulator)
                 if (IsSamplerArray(textureFunction->sampler))
                 {
                     out << "    uint width; uint height; uint layers; uint numberOfLevels;\n"
-                           "    x.GetDimensions(lod, width, height, layers, numberOfLevels);\n";
+                           "    x.GetDimensions(baseLevel + lod, width, height, layers, numberOfLevels);\n";
                 }
                 else
                 {
                     out << "    uint width; uint height; uint numberOfLevels;\n"
-                           "    x.GetDimensions(lod, width, height, numberOfLevels);\n";
+                           "    x.GetDimensions(baseLevel + lod, width, height, numberOfLevels);\n";
                 }
             }
             else if (IsSampler3D(textureFunction->sampler))
             {
                 out << "    uint width; uint height; uint depth; uint numberOfLevels;\n"
-                       "    x.GetDimensions(lod, width, height, depth, numberOfLevels);\n";
+                       "    x.GetDimensions(baseLevel + lod, width, height, depth, numberOfLevels);\n";
             }
             else UNREACHABLE();
 
@@ -2102,6 +2102,8 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
         {
             TIntermSequence *arguments = node->getSequence();
 
+            bool passBaseLevel = false;
+
             bool lod0 = mInsideDiscontinuousLoop || mOutputLod0Function;
             if (node->isUserDefined())
             {
@@ -2114,6 +2116,8 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 lod0 &= mASTMetadataList[index].mNeedsLod0;
 
                 out << DecorateFunctionIfNeeded(node->getNameObj()) << (lod0 ? "Lod0(" : "(");
+
+                passBaseLevel = true;
             }
             else
             {
@@ -2149,6 +2153,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 else if (name == "textureSize")
                 {
                     textureFunction.method = TextureFunction::SIZE;
+                    passBaseLevel = true;
                 }
                 else if (name == "textureOffset")
                 {
@@ -2243,6 +2248,11 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                     out << "texture_";
                     (*arg)->traverse(this);
                     out << ", sampler_";
+                    if (passBaseLevel)
+                    {
+                        (*arg)->traverse(this);
+                        out << ", baseLevel_";
+                    }
                 }
 
                 (*arg)->traverse(this);
@@ -2913,7 +2923,8 @@ TString OutputHLSL::argumentString(const TIntermSymbol *symbol)
     {
         return QualifierString(qualifier) + " " + TextureString(type) + " texture_" + nameStr +
                ArrayString(type) + ", " + QualifierString(qualifier) + " " + SamplerString(type) +
-               " sampler_" + nameStr + ArrayString(type);
+               " sampler_" + nameStr + ArrayString(type) + ", " + QualifierString(qualifier) +
+               " int baseLevel_" + nameStr + ArrayString(type);
     }
 
     return QualifierString(qualifier) + " " + TypeString(type) + " " + nameStr + ArrayString(type);
