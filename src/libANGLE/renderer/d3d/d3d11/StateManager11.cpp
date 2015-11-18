@@ -123,6 +123,9 @@ void StateManager11::syncState(const gl::State &state, const gl::State::DirtyBit
             case gl::State::DIRTY_BIT_POLYGON_OFFSET:
             case gl::State::DIRTY_BIT_RASTERIZER_DISCARD_ENABLED:
                 mRasterStateIsDirty = true;
+            case gl::State::DIRTY_BIT_SCISSOR:
+            case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
+                mScissorStateIsDirty = true;
                 break;
             default:
                 break;
@@ -256,6 +259,35 @@ gl::Error StateManager11::setRasterizerState(const gl::RasterizerState &rasterSt
     }
 
     return gl::Error(GL_NO_ERROR);
+}
+
+void StateManager11::setScissorRectangle(const gl::Rectangle &scissor, bool enabled)
+{
+    if (mForceSetScissorState || (mScissorStateIsDirty && (memcmp(&scissor, &mCurScissorEnabled,
+                                                                  sizeof(gl::Rectangle)) != 0 ||
+                                                           enabled != mCurScissorEnabled)))
+    {
+        if (enabled)
+        {
+            D3D11_RECT rect;
+            rect.left   = std::max(0, scissor.x);
+            rect.top    = std::max(0, scissor.y);
+            rect.right  = scissor.x + std::max(0, scissor.width);
+            rect.bottom = scissor.y + std::max(0, scissor.height);
+
+            mDeviceContext->RSSetScissorRects(1, &rect);
+        }
+
+        if (enabled != mCurScissorEnabled)
+        {
+            mForceSetRasterState = true;
+        }
+
+        mCurScissorRect       = scissor;
+        mCurScissorEnabled    = enabled;
+        mForceSetScissorState = false;
+        mScissorStateIsDirty  = false;
+    }
 }
 
 }  // namespace rx
