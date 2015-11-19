@@ -41,6 +41,7 @@ BufferD3D::~BufferD3D()
     if (mStaticBufferCache != nullptr)
     {
         SafeDeleteContainer(*mStaticBufferCache);
+        SafeDelete(mStaticBufferCache);
     }
 
     mStaticBufferCacheTotalSize = 0;
@@ -203,11 +204,11 @@ void BufferD3D::invalidateStaticData(D3DBufferInvalidationType invalidationType)
     if (invalidationType == D3D_BUFFER_INVALIDATE_WHOLE_CACHE && mStaticBufferCache != nullptr)
     {
         // Empty the cache of static vertex buffers too
-        for (StaticVertexBufferInterface *staticBuffer : *mStaticBufferCache)
+        if (mStaticBufferCache != nullptr)
         {
-            SafeDelete(staticBuffer);
+            SafeDeleteContainer(*mStaticBufferCache);
+            SafeDelete(mStaticBufferCache);
         }
-        mStaticBufferCache->clear();
         mStaticBufferCacheTotalSize = 0;
     }
 
