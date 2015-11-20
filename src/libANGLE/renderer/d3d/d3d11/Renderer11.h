@@ -351,15 +351,6 @@ class Renderer11 : public RendererD3D
     uintptr_t mAppliedRTVs[gl::IMPLEMENTATION_MAX_DRAW_BUFFERS];
     uintptr_t mAppliedDSV;
     bool mDepthStencilInitialized;
-    bool mRenderTargetDescInitialized;
-
-    struct RenderTargetDesc
-    {
-        size_t width;
-        size_t height;
-        DXGI_FORMAT format;
-    };
-    RenderTargetDesc mRenderTargetDesc;
 
     // Currently applied sampler states
     std::vector<bool> mForceSetVertexSamplerStates;
@@ -413,12 +404,6 @@ class Renderer11 : public RendererD3D
 
     StateManager11 mStateManager;
 
-    // Currently applied viewport
-    bool mForceSetViewport;
-    gl::Rectangle mCurViewport;
-    float mCurNear;
-    float mCurFar;
-
     // Currently applied primitive topology
     D3D11_PRIMITIVE_TOPOLOGY mCurrentPrimitiveTopology;
 
@@ -444,7 +429,6 @@ class Renderer11 : public RendererD3D
     uintptr_t mAppliedGeometryShader;
     uintptr_t mAppliedPixelShader;
 
-    dx_VertexConstants mVertexConstants;
     dx_VertexConstants mAppliedVertexConstants;
     ID3D11Buffer *mDriverConstantBufferVS;
     ID3D11Buffer *mCurrentVertexConstantBuffer;
@@ -452,7 +436,6 @@ class Renderer11 : public RendererD3D
     GLintptr mCurrentConstantBufferVSOffset[gl::IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS];
     GLsizeiptr mCurrentConstantBufferVSSize[gl::IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS];
 
-    dx_PixelConstants mPixelConstants;
     dx_PixelConstants mAppliedPixelConstants;
     ID3D11Buffer *mDriverConstantBufferPS;
     ID3D11Buffer *mCurrentPixelConstantBuffer;
