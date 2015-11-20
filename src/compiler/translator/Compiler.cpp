@@ -445,8 +445,15 @@ bool TCompiler::InitBuiltInSymbolTable(const ShBuiltInResources &resources)
     for (int samplerType = EbtGuardSamplerBegin + 1;
          samplerType < EbtGuardSamplerEnd; ++samplerType)
     {
-        sampler.type = static_cast<TBasicType>(samplerType);
-        symbolTable.setDefaultPrecision(sampler, EbpLow);
+        // New sampler types in ESSL3 don't have default precision.
+        // SamplerExternalOES is specified in the extension to have default precision.
+        // It isn't specified whether Sampler2DRect has default precision.
+        if (samplerType == EbtSampler2D || samplerType == EbtSamplerCube ||
+            samplerType == EbtSamplerExternalOES || samplerType == EbtSampler2DRect)
+        {
+            sampler.type = static_cast<TBasicType>(samplerType);
+            symbolTable.setDefaultPrecision(sampler, EbpLow);
+        }
     }
 
     InsertBuiltInFunctions(shaderType, shaderSpec, resources, symbolTable);
