@@ -9,6 +9,7 @@
 
 #include "libANGLE/Framebuffer.h"
 
+#include "common/Optional.h"
 #include "common/utilities.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/Context.h"
@@ -122,6 +123,54 @@ const FramebufferAttachment *Framebuffer::Data::getDepthStencilAttachment() cons
     }
 
     return nullptr;
+}
+
+bool Framebuffer::Data::attachmentsHaveSameDimensions() const
+{
+    Optional<Extents> attachmentSize;
+
+    for (const auto &attachment : mColorAttachments)
+    {
+        if (attachment.isAttached())
+        {
+            if (!attachmentSize.valid())
+            {
+                attachmentSize = attachment.getSize();
+            }
+            else
+            {
+                if (attachment.getSize() != attachmentSize.value())
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    if (mDepthAttachment.isAttached())
+    {
+        if (!attachmentSize.valid())
+        {
+            attachmentSize = mDepthAttachment.getSize();
+        }
+        else
+        {
+            if (mDepthAttachment.getSize() != attachmentSize.value())
+            {
+                return false;
+            }
+        }
+    }
+
+    if (mStencilAttachment.isAttached() && attachmentSize.valid())
+    {
+        if (mStencilAttachment.getSize() != attachmentSize.value())
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 Framebuffer::Framebuffer(const Caps &caps, rx::ImplFactory *factory, GLuint id)
@@ -315,8 +364,6 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
         return GL_FRAMEBUFFER_COMPLETE;
     }
 
-    int width = 0;
-    int height = 0;
     unsigned int colorbufferSize = 0;
     int samples = -1;
     bool missingAttachment = true;
@@ -355,12 +402,6 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
 
             if (!missingAttachment)
             {
-                // all color attachments must have the same width and height
-                if (colorAttachment.getWidth() != width || colorAttachment.getHeight() != height)
-                {
-                    return GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS;
-                }
-
                 // APPLE_framebuffer_multisample, which EXT_draw_buffers refers to, requires that
                 // all color attachments have the same number of samples for the FBO to be complete.
                 if (colorAttachment.getSamples() != samples)
@@ -380,8 +421,6 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
             }
             else
             {
-                width = colorAttachment.getWidth();
-                height = colorAttachment.getHeight();
                 samples = colorAttachment.getSamples();
                 colorbufferSize = formatInfo.pixelBytes;
                 missingAttachment = false;
@@ -428,14 +467,8 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
 
         if (missingAttachment)
         {
-            width = depthAttachment.getWidth();
-            height = depthAttachment.getHeight();
             samples = depthAttachment.getSamples();
             missingAttachment = false;
-        }
-        else if (width != depthAttachment.getWidth() || height != depthAttachment.getHeight())
-        {
-            return GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS;
         }
         else if (samples != depthAttachment.getSamples())
         {
@@ -483,14 +516,8 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
 
         if (missingAttachment)
         {
-            width = stencilAttachment.getWidth();
-            height = stencilAttachment.getHeight();
             samples = stencilAttachment.getSamples();
             missingAttachment = false;
-        }
-        else if (width != stencilAttachment.getWidth() || height != stencilAttachment.getHeight())
-        {
-            return GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS;
         }
         else if (samples != stencilAttachment.getSamples())
         {
@@ -504,7 +531,19 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
         return GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT;
     }
 
-    return mImpl->checkStatus();
+    // In ES 2.0, all color attachments must have the same width and height.
+    // In ES 3.0, there is no such restriction.
+    if (data.clientVersion < 3 && !mData.attachmentsHaveSameDimensions())
+    {
+        return GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS;
+    }
+
+    if (!mImpl->checkStatus())
+    {
+        return GL_FRAMEBUFFER_UNSUPPORTED;
+    }
+
+    return GL_FRAMEBUFFER_COMPLETE;
 }
 
 Error Framebuffer::discard(size_t count, const GLenum *attachments)
