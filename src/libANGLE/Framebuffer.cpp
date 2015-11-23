@@ -372,7 +372,8 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
     {
         if (colorAttachment.isAttached())
         {
-            if (colorAttachment.getWidth() == 0 || colorAttachment.getHeight() == 0)
+            const Extents &size = colorAttachment.getSize();
+            if (size.width == 0 || size.height == 0)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
@@ -388,6 +389,11 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
                 }
 
                 if (formatInfo.depthBits > 0 || formatInfo.stencilBits > 0)
+                {
+                    return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
+                }
+
+                if (colorAttachment.layer() >= size.depth)
                 {
                     return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
                 }
@@ -431,7 +437,8 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
     const FramebufferAttachment &depthAttachment = mData.mDepthAttachment;
     if (depthAttachment.isAttached())
     {
-        if (depthAttachment.getWidth() == 0 || depthAttachment.getHeight() == 0)
+        const Extents &size = depthAttachment.getSize();
+        if (size.width == 0 || size.height == 0)
         {
             return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
         }
@@ -479,7 +486,8 @@ GLenum Framebuffer::checkStatus(const gl::Data &data) const
     const FramebufferAttachment &stencilAttachment = mData.mStencilAttachment;
     if (stencilAttachment.isAttached())
     {
-        if (stencilAttachment.getWidth() == 0 || stencilAttachment.getHeight() == 0)
+        const Extents &size = stencilAttachment.getSize();
+        if (size.width == 0 || size.height == 0)
         {
             return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
         }
