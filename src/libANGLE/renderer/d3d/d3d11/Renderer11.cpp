@@ -1392,12 +1392,23 @@ gl::Error Renderer11::setBlendState(const gl::Framebuffer *framebuffer,
     return mStateManager.setBlendState(framebuffer, blendState, blendColor, sampleMask);
 }
 
-gl::Error Renderer11::setDepthStencilState(const gl::DepthStencilState &depthStencilState, int stencilRef,
-                                           int stencilBackRef, bool frontFaceCCW)
+gl::Error Renderer11::setDepthStencilState(const gl::State &glState)
 {
+    const auto &depthStencilState = glState.getDepthStencilState();
+    int stencilRef                = glState.getStencilRef();
+    int stencilBackRef            = glState.getStencilBackRef();
+
+    const auto &fbo = *glState.getDrawFramebuffer();
+
+    // Disable the depth test/depth write if we are using a stencil-only attachment.
+    // This is because ANGLE emulates stencil-only with D24S8 on D3D11 - we should neither read
+    // nor write to the unused depth part of this emulated texture.
+    bool disableDepth = (!fbo.hasDepth() && fbo.hasStencil());
+
     if (mForceSetDepthStencilState ||
         memcmp(&depthStencilState, &mCurDepthStencilState, sizeof(gl::DepthStencilState)) != 0 ||
-        stencilRef != mCurStencilRef || stencilBackRef != mCurStencilBackRef)
+        stencilRef != mCurStencilRef || stencilBackRef != mCurStencilBackRef ||
+        !mCurDisableDepth.valid() || disableDepth != mCurDisableDepth.value())
     {
         // get the maximum size of the stencil ref
         unsigned int maxStencil = 0;
@@ -1412,7 +1423,8 @@ gl::Error Renderer11::setDepthStencilState(const gl::DepthStencilState &depthSte
                (depthStencilState.stencilBackMask & maxStencil));
 
         ID3D11DepthStencilState *dxDepthStencilState = NULL;
-        gl::Error error = mStateCache.getDepthStencilState(depthStencilState, &dxDepthStencilState);
+        gl::Error error =
+            mStateCache.getDepthStencilState(depthStencilState, disableDepth, &dxDepthStencilState);
         if (error.isError())
         {
             return error;
@@ -1431,6 +1443,7 @@ gl::Error Renderer11::setDepthStencilState(const gl::DepthStencilState &depthSte
         mCurDepthStencilState = depthStencilState;
         mCurStencilRef = stencilRef;
         mCurStencilBackRef = stencilBackRef;
+        mCurDisableDepth      = disableDepth;
     }
 
     mForceSetDepthStencilState = false;
@@ -2566,6 +2579,7 @@ void Renderer11::markAllStateDirty()
     mCurrentGeometryConstantBuffer = NULL;
 
     mCurrentPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
+    mCurDisableDepth.reset();
 }
 
 void Renderer11::releaseDeviceResources()
