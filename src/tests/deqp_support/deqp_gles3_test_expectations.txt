@@ -36,6 +36,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+// TODO(jmadill): Confirm with dEQP if test is valid - should accept UNSUPPORTED
+1097 WIN : dEQP-GLES3.functional.fbo.completeness.size.distinct = FAIL
+
 // TODO(jmadill): triage these into permanent and temporary failures
 
 1089 WIN : dEQP-GLES3.functional.shaders.functions.invalid.local_function_prototype_vertex = FAIL
@@ -535,7 +538,6 @@
 1097 WIN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.rg8_snorm = FAIL
 1097 WIN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.rgb8_snorm = FAIL
 1097 WIN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.rgba8_snorm = FAIL
-1097 WIN : dEQP-GLES3.functional.fbo.completeness.size.distinct = FAIL
 1097 WIN : dEQP-GLES3.functional.fbo.completeness.layer.2darr_1_3 = FAIL
 1097 WIN : dEQP-GLES3.functional.fbo.completeness.layer.2darr_4_15 = FAIL
 1097 WIN : dEQP-GLES3.functional.fbo.completeness.layer.3d_1_15 = FAIL
