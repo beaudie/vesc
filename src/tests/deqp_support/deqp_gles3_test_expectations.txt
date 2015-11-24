@@ -42,6 +42,19 @@
 // TODO(jmadill): Find why this fails when run in a certain sequence, but not singly.
 1098 WIN : dEQP-GLES3.functional.uniform_api.random.50 = FAIL
 
+// TODO(jmadill): Figure out how to handle texture wrap modes with 3D integer textures.
+1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.rgba32i = FAIL
+1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.rgba16ui = FAIL
+1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.rgba8i = FAIL
+1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.rgb10_a2ui = FAIL
+1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.rg32ui = FAIL
+1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.rg8i = FAIL
+1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.r32i = FAIL
+1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.r16i = FAIL
+1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.r16ui = FAIL
+1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.r8i = FAIL
+1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.r8ui = FAIL
+
 // TODO(jmadill): triage these into permanent and temporary failures
 
 1089 WIN : dEQP-GLES3.functional.shaders.functions.invalid.local_function_prototype_vertex = FAIL
@@ -380,17 +393,6 @@
 1096 WIN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.equation_src_func_dst_func.reverse_subtract_one_minus_constant_alpha_one_minus_constant_color = FAIL
 1096 WIN : dEQP-GLES3.functional.fragment_ops.random.* = FAIL
 1096 WIN : dEQP-GLES3.functional.fragment_ops.interaction.basic_shader.* = FAIL
-1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.rgba32i = FAIL
-1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.rgba16ui = FAIL
-1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.rgba8i = FAIL
-1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.rgb10_a2ui = FAIL
-1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.rg32ui = FAIL
-1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.rg8i = FAIL
-1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.r32i = FAIL
-1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.r16i = FAIL
-1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.r16ui = FAIL
-1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.r8i = FAIL
-1097 WIN : dEQP-GLES3.functional.fbo.color.tex3d.r8ui = FAIL
 1097 WIN : dEQP-GLES3.functional.fbo.color.repeated_clear.sample.tex2d.rgba8 = FAIL
 1097 WIN : dEQP-GLES3.functional.fbo.color.repeated_clear.sample.tex2d.srgb8_alpha8 = FAIL
 1097 WIN : dEQP-GLES3.functional.fbo.color.repeated_clear.sample.tex2d.rgb10_a2 = FAIL

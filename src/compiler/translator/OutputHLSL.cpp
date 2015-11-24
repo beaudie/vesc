@@ -1133,6 +1133,7 @@ void OutputHLSL::header(const BuiltInFunctionEmulator *builtInFunctionEmulator)
                 // Convert from normalized floating-point to integer
                 if (textureFunction->method != TextureFunction::FETCH)
                 {
+                    // TODO(jmadill): Figure out how to handle wrap modes here.
                     addressx = "int(floor(width * frac((";
                     addressy = "int(floor(height * frac((";
 
