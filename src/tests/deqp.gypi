@@ -1529,7 +1529,7 @@
 
                         'conditions':
                         [
-                            ['OS=="linux"',
+                            ['OS=="linux" and use_libpci==1',
                             {
                                 'ldflags':
                                 [
