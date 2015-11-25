@@ -589,7 +589,8 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
 
     if (readSurface)
     {
-        Error readCompatError = ValidateCompatibleConfigs(readSurface->getConfig(), context->getConfig(), readSurface->getType());
+        Error readCompatError = ValidateCompatibleConfigs(
+            display, readSurface->getConfig(), context->getConfig(), readSurface->getType());
         if (readCompatError.isError())
         {
             SetGlobalError(readCompatError);
@@ -603,7 +604,8 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
 
         if (drawSurface)
         {
-            Error drawCompatError = ValidateCompatibleConfigs(drawSurface->getConfig(), context->getConfig(), drawSurface->getType());
+            Error drawCompatError = ValidateCompatibleConfigs(
+                display, drawSurface->getConfig(), context->getConfig(), drawSurface->getType());
             if (drawCompatError.isError())
             {
                 SetGlobalError(drawCompatError);

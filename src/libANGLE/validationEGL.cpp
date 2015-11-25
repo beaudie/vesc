@@ -592,8 +592,17 @@ Error ValidateCreatePbufferFromClientBuffer(Display *display, EGLenum buftype, E
     return Error(EGL_SUCCESS);
 }
 
-Error ValidateCompatibleConfigs(const Config *config1, const Config *config2, EGLint surfaceType)
+Error ValidateCompatibleConfigs(const Display *display,
+                                const Config *config1,
+                                const Config *config2,
+                                EGLint surfaceType)
 {
+
+    if (display->getExtensions().flexibleSurfaceCompatibility)
+    {
+        return Error(EGL_SUCCESS);
+    }
+
     // Config compatibility is defined in section 2.2 of the EGL 1.5 spec
 
     bool colorBufferCompat = config1->colorBufferType == config2->colorBufferType;
