@@ -53,8 +53,10 @@ Error ValidateCreateImageKHR(const Display *display,
 Error ValidateDestroyImageKHR(const Display *display, const Image *image);
 
 // Other validation
-Error ValidateCompatibleConfigs(const Config *config1, const Config *config2, EGLint surfaceType);
-
+Error ValidateCompatibleConfigs(const Display *display,
+                                const Config *config1,
+                                const Config *config2,
+                                EGLint surfaceType);
 }
 
 #endif // LIBANGLE_VALIDATIONEGL_H_

@@ -1,0 +1,70 @@
+Name
+
+    ANGLE_flexible_surface_compatibility
+
+Name Strings
+
+    EGL_ANGLE_flexible_surface_compatibility
+
+Contributors
+
+    John Bauman   (jbauman 'at' google.com)
+
+Contact
+
+    John Bauman   (jbauman 'at' google.com)
+
+Status
+
+    Draft
+
+Version
+
+    Version 1, Nov 24, 2015
+
+Number
+
+    EGL Extension #XXX
+
+Extension Type
+
+    EGL display extension
+
+Dependencies
+
+    This extension is written against the language of EGL 1.5.
+
+Overview
+
+    Some EGL implementations may allow any surface to be made current with any
+    context from the same display, without restrictions due to bit depth.
+
+IP Status
+
+    No known claims.
+
+New Types
+
+    None.
+
+New Procedures and Functions
+
+    None.
+
+New Tokens
+
+    None.
+
+Change to section 2.2 (Rendering Contexts and Drawing Surfaces)
+
+    Remove the first two items in the bulleted list after "A surface and
+    context are compatible if:".
+
+Issues
+
+    None
+
+Revision History
+
+    Version 1, Nov 24, 2015 (John Bauman)
+        - Initial Draft
