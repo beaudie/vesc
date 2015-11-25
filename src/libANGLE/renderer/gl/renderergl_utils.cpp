@@ -548,6 +548,7 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
         LimitVersion(maxSupportedESVersion, gl::Version(2, 0));
     }
 
+
     // TODO(geofflang): The gl-uniform-arrays WebGL conformance test struggles to complete on time
     // if the max uniform vectors is too large.  Artificially limit the maximum until the test is
     // updated.
