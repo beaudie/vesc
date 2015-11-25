@@ -445,6 +445,9 @@ struct DisplayExtensions
 
     // EGL_KHR_get_all_proc_addresses
     bool getAllProcAddresses;
+
+    // EGL_ANGLE_flexible_surface_compatibility
+    bool flexibleSurfaceCompatibility;
 };
 
 struct DeviceExtensions
