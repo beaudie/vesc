@@ -1404,11 +1404,14 @@ gl::Error Renderer11::setDepthStencilState(const gl::State &glState)
     // This is because ANGLE emulates stencil-only with D24S8 on D3D11 - we should neither read
     // nor write to the unused depth part of this emulated texture.
     bool disableDepth = (!fbo.hasDepth() && fbo.hasStencil());
+    // Similarly we disable the stencil portion of the DS attachment if the app only binds depth.
+    bool disableStencil = (fbo.hasDepth() && !fbo.hasStencil());
 
     if (mForceSetDepthStencilState ||
         memcmp(&depthStencilState, &mCurDepthStencilState, sizeof(gl::DepthStencilState)) != 0 ||
         stencilRef != mCurStencilRef || stencilBackRef != mCurStencilBackRef ||
-        !mCurDisableDepth.valid() || disableDepth != mCurDisableDepth.value())
+        !mCurDisableDepth.valid() || disableDepth != mCurDisableDepth.value() ||
+        (!mCurDisableStencil.valid() || disableStencil != mCurDisableStencil.value()))
     {
         // get the maximum size of the stencil ref
         unsigned int maxStencil = 0;
@@ -1423,8 +1426,8 @@ gl::Error Renderer11::setDepthStencilState(const gl::State &glState)
                (depthStencilState.stencilBackMask & maxStencil));
 
         ID3D11DepthStencilState *dxDepthStencilState = NULL;
-        gl::Error error =
-            mStateCache.getDepthStencilState(depthStencilState, disableDepth, &dxDepthStencilState);
+        gl::Error error = mStateCache.getDepthStencilState(depthStencilState, disableDepth,
+                                                           disableStencil, &dxDepthStencilState);
         if (error.isError())
         {
             return error;
@@ -1444,6 +1447,7 @@ gl::Error Renderer11::setDepthStencilState(const gl::State &glState)
         mCurStencilRef = stencilRef;
         mCurStencilBackRef = stencilBackRef;
         mCurDisableDepth      = disableDepth;
+        mCurDisableStencil    = disableStencil;
     }
 
     mForceSetDepthStencilState = false;
@@ -2580,6 +2584,7 @@ void Renderer11::markAllStateDirty()
 
     mCurrentPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
     mCurDisableDepth.reset();
+    mCurDisableStencil.reset();
 }
 
 void Renderer11::releaseDeviceResources()

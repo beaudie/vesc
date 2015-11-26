@@ -421,6 +421,7 @@ class Renderer11 : public RendererD3D
     int mCurStencilRef;
     int mCurStencilBackRef;
     Optional<bool> mCurDisableDepth;
+    Optional<bool> mCurDisableStencil;
 
     // Currently applied scissor rectangle
     bool mForceSetScissor;
