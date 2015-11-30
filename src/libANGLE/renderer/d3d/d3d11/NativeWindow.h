@@ -66,8 +66,8 @@ class NativeWindow
   private:
     EGLNativeWindowType mWindow;
 
-#if defined(ANGLE_ENABLE_WINDOWS_STORE)
     const egl::Config *mConfig;
+#if defined(ANGLE_ENABLE_WINDOWS_STORE)
     std::shared_ptr<InspectableNativeWindow> mImpl;
 #endif
 

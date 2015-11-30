@@ -14,8 +14,8 @@
 namespace rx
 {
 
-NativeWindow::NativeWindow(EGLNativeWindowType window, const egl::Config *)
-    : mWindow(window)
+NativeWindow::NativeWindow(EGLNativeWindowType window, const egl::Config *config)
+    : mWindow(window), mConfig(config)
 {
 }
 
@@ -52,6 +52,17 @@ HRESULT NativeWindow::createSwapChain(ID3D11Device* device, DXGIFactory* factory
     IDXGIFactory2 *factory2 = d3d11::DynamicCastComObject<IDXGIFactory2>(factory);
     if (factory2 != nullptr)
     {
+        OSVERSIONINFO versionInfo;
+        versionInfo.dwOSVersionInfoSize = sizeof(versionInfo);
+        ::GetVersionEx(&versionInfo);
+        bool windows8OrLater =
+            (versionInfo.dwMajorVersion > 6) ||
+            ((versionInfo.dwMajorVersion == 6) && (versionInfo.dwMinorVersion >= 2));
+
+        // DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL is only properly supported on Windows 8 and later. It
+        // always treats the swapchain contents as opaque, so it only works on swapchains with no
+        // alpha.
+        bool useFlip                        = windows8OrLater && mConfig->alphaSize == 0;
         DXGI_SWAP_CHAIN_DESC1 swapChainDesc = { 0 };
         swapChainDesc.Width = width;
         swapChainDesc.Height = height;
@@ -60,9 +71,12 @@ HRESULT NativeWindow::createSwapChain(ID3D11Device* device, DXGIFactory* factory
         swapChainDesc.SampleDesc.Count = 1;
         swapChainDesc.SampleDesc.Quality = 0;
         swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_BACK_BUFFER;
-        swapChainDesc.BufferCount = 1;
-        swapChainDesc.Scaling = DXGI_SCALING_STRETCH;
-        swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_SEQUENTIAL;
+        swapChainDesc.BufferCount           = useFlip ? 2 : 1;
+        // Window resize is ugly with FLIP_SEQUENTIAL in stretch mode, so use DXGI_SCALING_NONE with
+        // that. DXGI_SCALING_NONE is only supported with FLIP_SEQUENTIAL on Win8+.
+        swapChainDesc.Scaling = useFlip ? DXGI_SCALING_NONE : DXGI_SCALING_STRETCH;
+        swapChainDesc.SwapEffect =
+            useFlip ? DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL : DXGI_SWAP_EFFECT_SEQUENTIAL;
         swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
         swapChainDesc.Flags = 0;
         IDXGISwapChain1 *swapChain1 = nullptr;
