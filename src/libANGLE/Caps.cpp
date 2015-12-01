@@ -152,6 +152,7 @@ Extensions::Extensions()
       maxDebugLoggedMessages(0),
       maxDebugGroupStackDepth(0),
       maxLabelLength(0),
+      lossyETCDecode(false),
       colorBufferFloat(false)
 {
 }
@@ -218,6 +219,7 @@ std::vector<std::string> Extensions::getStrings() const
     InsertExtensionString("GL_EXT_color_buffer_float",           colorBufferFloat,          &extensionStrings);
     InsertExtensionString("GL_OES_vertex_array_object",          vertexArrayObject,         &extensionStrings);
     InsertExtensionString("GL_KHR_debug",                        debug,                     &extensionStrings);
+    InsertExtensionString("GL_ANGLE_lossy_etc_decode",           lossyETCDecode,            &extensionStrings);
     // clang-format on
 
     return extensionStrings;
