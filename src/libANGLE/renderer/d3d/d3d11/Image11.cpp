@@ -88,8 +88,7 @@ bool Image11::isDirty() const
     // then isDirty should still return false.
     if (mDirty && !mStagingTexture && !mRecoverFromStorage)
     {
-        const Renderer11DeviceCaps &deviceCaps = mRenderer->getRenderer11DeviceCaps();
-        const d3d11::TextureFormat formatInfo = d3d11::GetTextureFormatInfo(mInternalFormat, deviceCaps);
+        const d3d11::TextureFormat formatInfo = d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer);
         if (formatInfo.dataInitializerFunction == nullptr)
         {
             return false;
@@ -219,7 +218,7 @@ bool Image11::redefine(GLenum target, GLenum internalformat, const gl::Extents &
         mTarget = target;
 
         // compute the d3d format that will be used
-        const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalformat, mRenderer->getRenderer11DeviceCaps());
+        const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalformat, mRenderer);
         mDXGIFormat = formatInfo.texFormat;
         mRenderable = (formatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN);
 
@@ -255,7 +254,7 @@ gl::Error Image11::loadData(const gl::Box &area, const gl::PixelUnpackState &unp
     const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mDXGIFormat);
     GLuint outputPixelSize = dxgiFormatInfo.pixelBytes;
 
-    const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer->getRenderer11DeviceCaps());
+    const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer);
     LoadImageFunction loadFunction = d3dFormatInfo.loadFunctions.at(type);
 
     D3D11_MAPPED_SUBRESOURCE mappedImage;
@@ -290,7 +289,7 @@ gl::Error Image11::loadCompressedData(const gl::Box &area, const void *input)
     ASSERT(area.x % outputBlockWidth == 0);
     ASSERT(area.y % outputBlockHeight == 0);
 
-    const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer->getRenderer11DeviceCaps());
+    const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer);
     LoadImageFunction loadFunction = d3dFormatInfo.loadFunctions.at(GL_UNSIGNED_BYTE);
 
     D3D11_MAPPED_SUBRESOURCE mappedImage;
@@ -544,11 +543,11 @@ gl::Error Image11::createStagingTexture()
         desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
         desc.MiscFlags = 0;
 
-        if (d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer->getRenderer11DeviceCaps()).dataInitializerFunction != NULL)
+        if (d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer).dataInitializerFunction != NULL)
         {
             std::vector<D3D11_SUBRESOURCE_DATA> initialData;
             std::vector< std::vector<BYTE> > textureData;
-            d3d11::GenerateInitialTextureData(mInternalFormat, mRenderer->getRenderer11DeviceCaps(), width, height, mDepth,
+            d3d11::GenerateInitialTextureData(mInternalFormat, mRenderer, width, height, mDepth,
                                               lodOffset + 1, &initialData, &textureData);
 
             result = device->CreateTexture3D(&desc, initialData.data(), &newTexture);
@@ -584,11 +583,11 @@ gl::Error Image11::createStagingTexture()
         desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
         desc.MiscFlags = 0;
 
-        if (d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer->getRenderer11DeviceCaps()).dataInitializerFunction != NULL)
+        if (d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer).dataInitializerFunction != NULL)
         {
             std::vector<D3D11_SUBRESOURCE_DATA> initialData;
             std::vector< std::vector<BYTE> > textureData;
-            d3d11::GenerateInitialTextureData(mInternalFormat, mRenderer->getRenderer11DeviceCaps(), width, height, 1,
+            d3d11::GenerateInitialTextureData(mInternalFormat, mRenderer, width, height, 1,
                                               lodOffset + 1, &initialData, &textureData);
 
             result = device->CreateTexture2D(&desc, initialData.data(), &newTexture);

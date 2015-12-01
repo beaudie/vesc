@@ -216,8 +216,10 @@ TextureFormat::TextureFormat()
 }
 
 const TextureFormat &GetTextureFormatInfo(GLenum internalFormat,
-                                          const Renderer11DeviceCaps &renderer11DeviceCaps)
+                                          const Renderer11 *renderer)
 {
+    const Renderer11DeviceCaps &renderer11DeviceCaps = renderer->getRenderer11DeviceCaps();
+
     // clang-format off
     switch (internalFormat)
     {
@@ -734,7 +736,16 @@ const TextureFormat &GetTextureFormatInfo(GLenum internalFormat,
         }
         case GL_ETC1_RGB8_OES:
         {
-            if (AnyDevice(renderer11DeviceCaps))
+            if (renderer->isLossyETCDecodeEnabled() && AnyDevice(renderer11DeviceCaps))
+            {
+                static const TextureFormat textureFormat = GetD3D11FormatInfo(internalFormat,
+                                                                              DXGI_FORMAT_BC1_UNORM,
+                                                                              DXGI_FORMAT_BC1_UNORM,
+                                                                              DXGI_FORMAT_UNKNOWN,
+                                                                              DXGI_FORMAT_UNKNOWN);
+                return textureFormat;
+            }
+            else if (AnyDevice(renderer11DeviceCaps))
             {
                 static const TextureFormat textureFormat = GetD3D11FormatInfo(internalFormat,
                                                                               DXGI_FORMAT_R8G8B8A8_UNORM,

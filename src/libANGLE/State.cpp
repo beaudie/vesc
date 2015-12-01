@@ -40,7 +40,8 @@ State::State()
       mProgram(nullptr),
       mVertexArray(nullptr),
       mActiveSampler(0),
-      mPrimitiveRestart(false)
+      mPrimitiveRestart(false),
+      mLossyETCDecode(false)
 {
     // Initialize dirty bit masks
     // TODO(jmadill): additional ES3 state
@@ -185,6 +186,8 @@ void State::initialize(const Caps &caps, GLuint clientVersion)
     mDrawFramebuffer = NULL;
 
     mPrimitiveRestart = false;
+
+    mLossyETCDecode = false;
 }
 
 void State::reset()
@@ -581,6 +584,7 @@ void State::setEnableFeature(GLenum feature, bool enabled)
       case GL_DITHER:                        setDither(enabled);                break;
       case GL_PRIMITIVE_RESTART_FIXED_INDEX: setPrimitiveRestart(enabled);      break;
       case GL_RASTERIZER_DISCARD:            setRasterizerDiscard(enabled);     break;
+      case GL_LOSSY_ETC_DECODE_ANGLE:        setLossyETCDecode(enabled);        break;
       default:                               UNREACHABLE();
     }
 }
@@ -600,6 +604,7 @@ bool State::getEnableFeature(GLenum feature)
       case GL_DITHER:                        return isDitherEnabled();
       case GL_PRIMITIVE_RESTART_FIXED_INDEX: return isPrimitiveRestartEnabled();
       case GL_RASTERIZER_DISCARD:            return isRasterizerDiscardEnabled();
+      case GL_LOSSY_ETC_DECODE_ANGLE:        return isLossyETCDecodeEnabled();
       default:                               UNREACHABLE(); return false;
     }
 }
@@ -1628,6 +1633,17 @@ bool State::hasMappedBuffer(GLenum target) const
         Buffer *buffer = getTargetBuffer(target);
         return (buffer && buffer->isMapped());
     }
+}
+
+bool State::isLossyETCDecodeEnabled() const
+{
+    return mLossyETCDecode;
+}
+
+void State::setLossyETCDecode(bool enabled)
+{
+    mLossyETCDecode = enabled;
+    mDirtyBits.set(DIRTY_BIT_LOSSY_ETC_DECODE_ENABLED);
 }
 
 }

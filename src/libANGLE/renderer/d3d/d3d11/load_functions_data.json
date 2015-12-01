@@ -1098,6 +1098,11 @@
   "GL_ETC1_RGB8_OES": {
     "GL_UNSIGNED_BYTE": [
       {
+        "loadFunction": "LoadETC1RGB8ToBC1",
+        "dxgiFormat": "DXGI_FORMAT_BC1_UNORM",
+        "requiresConversion": "true"
+      },
+      {
         "loadFunction": "LoadETC1RGB8ToRGBA8",
         "dxgiFormat": "DXGI_FORMAT_R8G8B8A8_UNORM",
         "requiresConversion": "true"

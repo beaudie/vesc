@@ -43,7 +43,7 @@ struct TextureFormat
 };
 
 const TextureFormat &GetTextureFormatInfo(GLenum internalformat,
-                                          const Renderer11DeviceCaps &renderer11DeviceCaps);
+                                          const Renderer11 *renderer);
 
 }  // namespace d3d11
 

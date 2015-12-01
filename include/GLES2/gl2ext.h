@@ -2920,6 +2920,11 @@ GL_APICALL void GL_APIENTRY glEndTilingQCOM (GLbitfield preserveMask);
 #define GL_SHADER_BINARY_VIV              0x8FC4
 #endif /* GL_VIV_shader_binary */
 
+#ifndef GL_ANGLE_lossy_etc_decode
+#define GL_ANGLE_lossy_etc_decode 1
+#define GL_LOSSY_ETC_DECODE_ANGLE         0x9700
+#endif /* GL_ANGLE_lossy_etc_decode */
+
 #ifdef __cplusplus
 }
 #endif

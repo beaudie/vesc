@@ -112,6 +112,8 @@ bool ValidCap(const Context *context, GLenum cap)
       case GL_PRIMITIVE_RESTART_FIXED_INDEX:
       case GL_RASTERIZER_DISCARD:
         return (context->getClientVersion() >= 3);
+      case GL_LOSSY_ETC_DECODE_ANGLE:
+        return context->getExtensions().lossyETCDecode;
       default:
         return false;
     }

@@ -472,7 +472,8 @@ Renderer11::Renderer11(egl::Display *display)
       mStateCache(this),
       mCurStencilSize(0),
       mLastHistogramUpdateTime(ANGLEPlatformCurrent()->monotonicallyIncreasingTime()),
-      mDebug(nullptr)
+      mDebug(nullptr),
+      mIsLossyETCDecodeEnabled(false)
 {
     mVertexDataManager = NULL;
     mIndexDataManager = NULL;
@@ -3085,7 +3086,7 @@ void Renderer11::setOneTimeRenderTarget(ID3D11RenderTargetView *renderTargetView
 
 gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, GLsizei samples, RenderTargetD3D **outRT)
 {
-    const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(format, mRenderer11DeviceCaps);
+    const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(format, this);
 
     const gl::TextureCaps &textureCaps = getRendererTextureCaps().get(format);
     GLuint supportedSamples = textureCaps.getNearestSamples(samples);
@@ -3490,7 +3491,7 @@ bool Renderer11::supportsFastCopyBufferToTexture(GLenum internalFormat) const
     ASSERT(getRendererExtensions().pixelBufferObject);
 
     const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(internalFormat);
-    const d3d11::TextureFormat &d3d11FormatInfo = d3d11::GetTextureFormatInfo(internalFormat, mRenderer11DeviceCaps);
+    const d3d11::TextureFormat &d3d11FormatInfo = d3d11::GetTextureFormatInfo(internalFormat, this);
     const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(d3d11FormatInfo.texFormat);
 
     // sRGB formats do not work with D3D11 buffer SRVs
@@ -3525,6 +3526,16 @@ gl::Error Renderer11::fastCopyBufferToTexture(const gl::PixelUnpackState &unpack
 {
     ASSERT(supportsFastCopyBufferToTexture(destinationFormat));
     return mPixelTransfer->copyBufferToTexture(unpack, offset, destRenderTarget, destinationFormat, sourcePixelsType, destArea);
+}
+
+void Renderer11::syncState(const gl::State & state, const gl::State::DirtyBits &bitmask)
+{
+    // TODO(jmadill): implement state sync for D3D renderers;
+
+    if (bitmask[gl::State::DIRTY_BIT_LOSSY_ETC_DECODE_ENABLED])
+    {
+        mIsLossyETCDecodeEnabled = state.isLossyETCDecodeEnabled();
+    }
 }
 
 ImageD3D *Renderer11::createImage()
@@ -4087,7 +4098,7 @@ GLenum Renderer11::getVertexComponentType(gl::VertexFormatType vertexFormatType)
 void Renderer11::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureCaps,
                               gl::Extensions *outExtensions, gl::Limitations *outLimitations) const
 {
-    d3d11_gl::GenerateCaps(mDevice, mDeviceContext, mRenderer11DeviceCaps, outCaps, outTextureCaps,
+    d3d11_gl::GenerateCaps(mDevice, mDeviceContext, this, outCaps, outTextureCaps,
                            outExtensions, outLimitations);
 }
 

@@ -252,6 +252,8 @@ class Renderer11 : public RendererD3D
     virtual gl::Error fastCopyBufferToTexture(const gl::PixelUnpackState &unpack, unsigned int offset, RenderTargetD3D *destRenderTarget,
                                               GLenum destinationFormat, GLenum sourcePixelsType, const gl::Box &destArea);
 
+    void syncState(const gl::State & state, const gl::State::DirtyBits &bitmask) override;
+
     void unapplyRenderTargets();
     void setOneTimeRenderTarget(ID3D11RenderTargetView *renderTargetView);
     gl::Error packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams &params, uint8_t *pixelsOut);
@@ -270,13 +272,15 @@ class Renderer11 : public RendererD3D
                                    bool colorBlit, bool depthBlit, bool stencilBlit);
 
     bool isES3Capable() const;
-    const Renderer11DeviceCaps &getRenderer11DeviceCaps() { return mRenderer11DeviceCaps; };
+    const Renderer11DeviceCaps &getRenderer11DeviceCaps() const { return mRenderer11DeviceCaps; };
 
     RendererClass getRendererClass() const override { return RENDERER_D3D11; }
     InputLayoutCache *getInputLayoutCache() { return &mInputLayoutCache; }
 
     void onSwap();
     void onBufferDelete(const Buffer11 *deleted);
+
+    bool isLossyETCDecodeEnabled() const { return mIsLossyETCDecodeEnabled; }
 
   protected:
     void createAnnotator() override;
@@ -508,6 +512,8 @@ class Renderer11 : public RendererD3D
     ID3D11Debug *mDebug;
 
     std::vector<GLuint> mScratchIndexDataBuffer;
+
+    bool mIsLossyETCDecodeEnabled;
 };
 
 }

@@ -249,6 +249,9 @@ struct Extensions
     // GL_OES_vertex_array_object
     bool vertexArrayObject;
 
+    // GL_ANGLE_lossy_etc_decode
+    bool lossyETCDecode;
+
     // ES3 Extension support
 
     // GL_EXT_color_buffer_float

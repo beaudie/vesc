@@ -228,8 +228,10 @@ TextureFormat::TextureFormat()
 }}
 
 const TextureFormat &GetTextureFormatInfo(GLenum internalFormat,
-                                          const Renderer11DeviceCaps &renderer11DeviceCaps)
+                                          const Renderer11 *renderer)
 {{
+    const Renderer11DeviceCaps &renderer11DeviceCaps = renderer->getRenderer11DeviceCaps();
+
     // clang-format off
     switch (internalFormat)
     {{
@@ -256,10 +258,16 @@ dsv_format = "dsvFormat"
 def get_texture_format_item(idx, texture_format):
     table_data = '';
 
+    requirementsStateStr = ''
+    if "requirementsState" in texture_format.keys():
+        requirementsState = texture_format["requirementsState"]
+        if len(requirementsState) > 0:
+            requirementsStateStr = 'renderer->' + requirementsState + '() && '
+
     if idx == 0:
-        table_data += '            if (' + texture_format["requirementsFcn"] + '(renderer11DeviceCaps))\n'
+        table_data += '            if (' + requirementsStateStr + texture_format["requirementsFcn"] + '(renderer11DeviceCaps))\n'
     else:
-        table_data += '            else if (' + texture_format["requirementsFcn"] + '(renderer11DeviceCaps))\n'
+        table_data += '            else if (' + requirementsStateStr + texture_format["requirementsFcn"] + '(renderer11DeviceCaps))\n'
     table_data += '            {\n'
     table_data += '                static const TextureFormat textureFormat = GetD3D11FormatInfo(internalFormat,\n'
     table_data += '                                                                              ' + texture_format[tex_format] + ',\n'
@@ -278,7 +286,7 @@ def parse_json_into_switch_string(json_data):
         table_data += '        case ' + internal_format + ':\n'
         table_data += '        {\n'
 
-        for idx, texture_format in enumerate(sorted(json_data[internal_format])):
+        for idx, texture_format in enumerate(json_data[internal_format]):
             table_data += get_texture_format_item(idx, texture_format)
 
         table_data += '            else\n'

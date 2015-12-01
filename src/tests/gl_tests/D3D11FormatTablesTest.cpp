@@ -46,7 +46,7 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
     for (GLenum internalFormat : allFormats)
     {
         const rx::d3d11::TextureFormat &formatInfo =
-            rx::d3d11::GetTextureFormatInfo(internalFormat, renderer->getRenderer11DeviceCaps());
+            rx::d3d11::GetTextureFormatInfo(internalFormat, renderer);
         const auto &textureInfo = textureCaps.get(internalFormat);
 
         // Bits for texturing

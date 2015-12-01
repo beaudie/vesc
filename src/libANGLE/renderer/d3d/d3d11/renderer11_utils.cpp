@@ -336,13 +336,13 @@ GLint GetMaximumClientVersion(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
-static gl::TextureCaps GenerateTextureFormatCaps(GLint maxClientVersion, GLenum internalFormat, ID3D11Device *device, const Renderer11DeviceCaps &renderer11DeviceCaps)
+static gl::TextureCaps GenerateTextureFormatCaps(GLint maxClientVersion, GLenum internalFormat, ID3D11Device *device, const Renderer11 *renderer)
 {
     gl::TextureCaps textureCaps;
 
-    DXGISupportHelper support(device, renderer11DeviceCaps.featureLevel);
+    DXGISupportHelper support(device, renderer->getRenderer11DeviceCaps().featureLevel);
     const d3d11::TextureFormat &formatInfo =
-        d3d11::GetTextureFormatInfo(internalFormat, renderer11DeviceCaps);
+        d3d11::GetTextureFormatInfo(internalFormat, renderer);
 
     const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(internalFormat);
 
@@ -1050,15 +1050,17 @@ static size_t GetMaximumStreamOutputSeparateComponents(D3D_FEATURE_LEVEL feature
     }
 }
 
-void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, const Renderer11DeviceCaps &renderer11DeviceCaps, gl::Caps *caps,
+void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, const Renderer11 *renderer, gl::Caps *caps,
                   gl::TextureCapsMap *textureCapsMap, gl::Extensions *extensions, gl::Limitations *limitations)
 {
+    const Renderer11DeviceCaps &renderer11DeviceCaps = renderer->getRenderer11DeviceCaps();
+
     GLuint maxSamples = 0;
     D3D_FEATURE_LEVEL featureLevel = renderer11DeviceCaps.featureLevel;
     const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
     for (gl::FormatSet::const_iterator internalFormat = allFormats.begin(); internalFormat != allFormats.end(); ++internalFormat)
     {
-        gl::TextureCaps textureCaps = GenerateTextureFormatCaps(GetMaximumClientVersion(featureLevel), *internalFormat, device, renderer11DeviceCaps);
+        gl::TextureCaps textureCaps = GenerateTextureFormatCaps(GetMaximumClientVersion(featureLevel), *internalFormat, device, renderer);
         textureCapsMap->insert(*internalFormat, textureCaps);
 
         maxSamples = std::max(maxSamples, textureCaps.getMaxSamples());
@@ -1217,6 +1219,7 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
     extensions->unpackSubimage           = true;
     extensions->packSubimage             = true;
     extensions->vertexArrayObject        = true;
+    extensions->lossyETCDecode           = true;
 
     // D3D11 Feature Level 10_0+ uses SV_IsFrontFace in HLSL to emulate gl_FrontFacing.
     // D3D11 Feature Level 9_3 doesn't support SV_IsFrontFace, and has no equivalent, so can't support gl_FrontFacing.
@@ -1270,11 +1273,11 @@ void MakeValidSize(bool isImage, DXGI_FORMAT format, GLsizei *requestWidth, GLsi
     *levelOffset = upsampleCount;
 }
 
-void GenerateInitialTextureData(GLint internalFormat, const Renderer11DeviceCaps &renderer11DeviceCaps, GLuint width, GLuint height, GLuint depth,
+void GenerateInitialTextureData(GLint internalFormat, const Renderer11 *renderer, GLuint width, GLuint height, GLuint depth,
                                 GLuint mipLevels, std::vector<D3D11_SUBRESOURCE_DATA> *outSubresourceData,
                                 std::vector< std::vector<BYTE> > *outData)
 {
-    const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(internalFormat, renderer11DeviceCaps);
+    const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(internalFormat, renderer);
     ASSERT(d3dFormatInfo.dataInitializerFunction != NULL);
 
     const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(d3dFormatInfo.texFormat);

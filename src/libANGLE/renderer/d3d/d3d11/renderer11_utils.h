@@ -24,6 +24,7 @@ class FramebufferAttachment;
 
 namespace rx
 {
+class Renderer11;
 class RenderTarget11;
 struct WorkaroundsD3D;
 struct Renderer11DeviceCaps;
@@ -57,7 +58,7 @@ unsigned int GetReservedVertexUniformVectors(D3D_FEATURE_LEVEL featureLevel);
 unsigned int GetReservedFragmentUniformVectors(D3D_FEATURE_LEVEL featureLevel);
 
 GLint GetMaximumClientVersion(D3D_FEATURE_LEVEL featureLevel);
-void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, const Renderer11DeviceCaps &renderer11DeviceCaps, gl::Caps *caps,
+void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, const Renderer11 *renderer, gl::Caps *caps,
                   gl::TextureCapsMap *textureCapsMap, gl::Extensions *extensions, gl::Limitations *limitations);
 
 }
@@ -67,7 +68,7 @@ namespace d3d11
 
 void MakeValidSize(bool isImage, DXGI_FORMAT format, GLsizei *requestWidth, GLsizei *requestHeight, int *levelOffset);
 
-void GenerateInitialTextureData(GLint internalFormat, const Renderer11DeviceCaps &renderer11DeviceCaps, GLuint width, GLuint height, GLuint depth,
+void GenerateInitialTextureData(GLint internalFormat, const Renderer11 *renderer, GLuint width, GLuint height, GLuint depth,
                                 GLuint mipLevels, std::vector<D3D11_SUBRESOURCE_DATA> *outSubresourceData,
                                 std::vector< std::vector<BYTE> > *outData);
 

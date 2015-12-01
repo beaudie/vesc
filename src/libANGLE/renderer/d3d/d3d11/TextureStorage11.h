@@ -36,8 +36,8 @@ class TextureStorage11 : public TextureStorage
   public:
     virtual ~TextureStorage11();
 
-    static DWORD GetTextureBindFlags(GLenum internalFormat, const Renderer11DeviceCaps &renderer11DeviceCaps, bool renderTarget);
-    static DWORD GetTextureMiscFlags(GLenum internalFormat, const Renderer11DeviceCaps &renderer11DeviceCaps, bool renderTarget, int levels);
+    static DWORD GetTextureBindFlags(GLenum internalFormat, const Renderer11 *renderer, bool renderTarget);
+    static DWORD GetTextureMiscFlags(GLenum internalFormat, const Renderer11 *renderer, bool renderTarget, int levels);
 
     UINT getBindFlags() const;
     UINT getMiscFlags() const;

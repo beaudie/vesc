@@ -266,6 +266,10 @@ class State : angle::NonCopyable
 
     bool hasMappedBuffer(GLenum target) const;
 
+    // ETC decoding
+    bool isLossyETCDecodeEnabled() const;
+    void setLossyETCDecode(bool enabled);
+
     enum DirtyBitType
     {
         DIRTY_BIT_SCISSOR_TEST_ENABLED,
@@ -324,6 +328,7 @@ class State : angle::NonCopyable
         DIRTY_BIT_VERTEX_ARRAY_OBJECT,
         DIRTY_BIT_PROGRAM_BINDING,
         DIRTY_BIT_PROGRAM_OBJECT,
+        DIRTY_BIT_LOSSY_ETC_DECODE_ENABLED,
         DIRTY_BIT_CURRENT_VALUE_0,
         DIRTY_BIT_CURRENT_VALUE_MAX = DIRTY_BIT_CURRENT_VALUE_0 + MAX_VERTEX_ATTRIBS,
         DIRTY_BIT_INVALID           = DIRTY_BIT_CURRENT_VALUE_MAX,
@@ -410,6 +415,8 @@ class State : angle::NonCopyable
     PixelPackState mPack;
 
     bool mPrimitiveRestart;
+
+    bool mLossyETCDecode;
 
     DirtyBits mDirtyBits;
     DirtyBits mUnpackStateBitMask;
