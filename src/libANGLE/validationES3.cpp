@@ -124,8 +124,10 @@ ES3FormatCombinationSet BuildES3FormatSet()
     InsertES3FormatCombo(&set, GL_RGBA,               GL_RGBA,            GL_UNSIGNED_BYTE                 );
     InsertES3FormatCombo(&set, GL_RGBA,               GL_RGBA,            GL_UNSIGNED_SHORT_4_4_4_4        );
     InsertES3FormatCombo(&set, GL_RGBA,               GL_RGBA,            GL_UNSIGNED_SHORT_5_5_5_1        );
+    InsertES3FormatCombo(&set, GL_RGBA,               GL_RGBA,            GL_FLOAT                         );
     InsertES3FormatCombo(&set, GL_RGB,                GL_RGB,             GL_UNSIGNED_BYTE                 );
     InsertES3FormatCombo(&set, GL_RGB,                GL_RGB,             GL_UNSIGNED_SHORT_5_6_5          );
+    InsertES3FormatCombo(&set, GL_RGB,                GL_RGB,             GL_FLOAT                         );
     InsertES3FormatCombo(&set, GL_LUMINANCE_ALPHA,    GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE                 );
     InsertES3FormatCombo(&set, GL_LUMINANCE,          GL_LUMINANCE,       GL_UNSIGNED_BYTE                 );
     InsertES3FormatCombo(&set, GL_ALPHA,              GL_ALPHA,           GL_UNSIGNED_BYTE                 );
