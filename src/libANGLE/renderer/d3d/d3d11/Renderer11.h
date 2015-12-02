@@ -133,7 +133,12 @@ class Renderer11 : public RendererD3D
                                    bool frontFaceCCW) override;
 
     virtual void setScissorRectangle(const gl::Rectangle &scissor, bool enabled);
-    virtual void setViewport(const gl::Rectangle &viewport, float zNear, float zFar, GLenum drawMode, GLenum frontFace,
+    virtual void setViewport(const gl::Data &data,
+                             const gl::Rectangle &viewport,
+                             float zNear,
+                             float zFar,
+                             GLenum drawMode,
+                             GLenum frontFace,
                              bool ignoreViewport);
 
     virtual bool applyPrimitiveType(GLenum mode, GLsizei count, bool usesPointSize);

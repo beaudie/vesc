@@ -14,7 +14,7 @@
 namespace rx
 {
 
-StateManager11::StateManager11(Renderer11 *renderer11)
+StateManager11::StateManager11()
     : mBlendStateIsDirty(false),
       mCurBlendColor(0, 0, 0, 0),
       mCurSampleMask(0),
@@ -30,11 +30,10 @@ StateManager11::StateManager11(Renderer11 *renderer11)
       mCurViewport(),
       mCurNear(0.0f),
       mCurFar(0.0f),
-      mRenderTargetDescInitialized(false),
+      mViewportBounds(),
       mRenderer11DeviceCaps(nullptr),
       mDeviceContext(nullptr),
-      mStateCache(nullptr),
-      mRenderer11(renderer11)
+      mStateCache(nullptr)
 {
     mCurBlendState.blend                 = false;
     mCurBlendState.sourceBlendRGB        = GL_ONE;
@@ -100,15 +99,14 @@ void StateManager11::updateStencilSizeIfChanged(bool depthStencilInitialized,
     }
 }
 
-void StateManager11::setRenderTargetDesc(size_t width, size_t height)
+void StateManager11::setViewportBounds(const gl::Extents &viewportBounds)
 {
     if (mRenderer11DeviceCaps->featureLevel <= D3D_FEATURE_LEVEL_9_3 &&
-        (!mRenderTargetDescWidth.valid() || !mRenderTargetDescHeight.valid() ||
-         mRenderTargetDescWidth.value() != width || mRenderTargetDescHeight.value() != height))
+        (!mViewportBounds.valid() || mViewportBounds.value().width != viewportBounds.width ||
+         mViewportBounds.value().height != viewportBounds.height))
     {
-        mRenderTargetDescWidth  = width;
-        mRenderTargetDescHeight = height;
-        mViewportStateIsDirty   = true;
+        mViewportBounds       = viewportBounds;
+        mViewportStateIsDirty = true;
     }
 }
 
@@ -480,7 +478,10 @@ void StateManager11::setScissorRectangle(const gl::Rectangle &scissor, bool enab
     mScissorStateIsDirty = false;
 }
 
-void StateManager11::setViewport(const gl::Rectangle &viewport, float zNear, float zFar)
+void StateManager11::setViewport(const gl::Data &data,
+                                 const gl::Rectangle &viewport,
+                                 float zNear,
+                                 float zFar)
 {
     if (!mViewportStateIsDirty)
         return;
@@ -488,19 +489,16 @@ void StateManager11::setViewport(const gl::Rectangle &viewport, float zNear, flo
     float actualZNear = gl::clamp01(zNear);
     float actualZFar  = gl::clamp01(zFar);
 
-    // TODO(dianx) need to not use renderer11
-    const gl::Caps &caps = mRenderer11->getRendererCaps();
-
-    int dxMaxViewportBoundsX = static_cast<int>(caps.maxViewportWidth);
-    int dxMaxViewportBoundsY = static_cast<int>(caps.maxViewportHeight);
+    int dxMaxViewportBoundsX = static_cast<int>(data.caps->maxViewportWidth);
+    int dxMaxViewportBoundsY = static_cast<int>(data.caps->maxViewportHeight);
     int dxMinViewportBoundsX = -dxMaxViewportBoundsX;
     int dxMinViewportBoundsY = -dxMaxViewportBoundsY;
 
     if (mRenderer11DeviceCaps->featureLevel <= D3D_FEATURE_LEVEL_9_3)
     {
         // Feature Level 9 viewports shouldn't exceed the dimensions of the rendertarget.
-        dxMaxViewportBoundsX = static_cast<int>(mRenderTargetDescWidth.value());
-        dxMaxViewportBoundsY = static_cast<int>(mRenderTargetDescHeight.value());
+        dxMaxViewportBoundsX = static_cast<int>(mViewportBounds.value().width);
+        dxMaxViewportBoundsY = static_cast<int>(mViewportBounds.value().height);
         dxMinViewportBoundsX = 0;
         dxMinViewportBoundsY = 0;
     }

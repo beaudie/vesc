@@ -18,14 +18,13 @@
 namespace rx
 {
 
-class Renderer11;
 struct RenderTargetDesc;
 struct Renderer11DeviceCaps;
 
 class StateManager11 final : angle::NonCopyable
 {
   public:
-    StateManager11(Renderer11 *renderer11);
+    StateManager11();
     ~StateManager11();
 
     void initialize(ID3D11DeviceContext *deviceContext,
@@ -47,7 +46,7 @@ class StateManager11 final : angle::NonCopyable
 
     void setScissorRectangle(const gl::Rectangle &scissor, bool enabled);
 
-    void setViewport(const gl::Rectangle &viewport, float zNear, float zFar);
+    void setViewport(const gl::Data &data, const gl::Rectangle &viewport, float zNear, float zFar);
 
     void forceSetBlendState() { mBlendStateIsDirty = true; }
     void forceSetDepthStencilState() { mDepthStencilStateIsDirty = true; }
@@ -55,12 +54,10 @@ class StateManager11 final : angle::NonCopyable
     void forceSetScissorState() { mScissorStateIsDirty = true; }
     void forceSetViewportState() { mViewportStateIsDirty = true; }
 
-    void setRenderTargetDescInitialized(bool initialized)
-    {
-        mRenderTargetDescInitialized = initialized;
-    }
-    bool isRenderTargetDescInitialized() const { return mRenderTargetDescInitialized; }
-    void setRenderTargetDesc(size_t width, size_t height);
+    void invalidateViewportBounds() { mViewportBounds.reset(); }
+
+    bool areViewportBoundsValid() const { return mViewportBounds.valid(); }
+    void setViewportBounds(const gl::Extents &viewportBounds);
 
     const dx_VertexConstants &getVertexConstants() const { return mVertexConstants; }
     const dx_PixelConstants &getPixelConstants() const { return mPixelConstants; }
@@ -103,14 +100,11 @@ class StateManager11 final : angle::NonCopyable
     dx_PixelConstants mPixelConstants;
 
     // Render target variables
-    bool mRenderTargetDescInitialized;
-    Optional<size_t> mRenderTargetDescWidth;
-    Optional<size_t> mRenderTargetDescHeight;
+    Optional<gl::Extents> mViewportBounds;
 
     Renderer11DeviceCaps *mRenderer11DeviceCaps;
     ID3D11DeviceContext *mDeviceContext;
     RenderStateCache *mStateCache;
-    Renderer11 *mRenderer11;
 };
 
 }  // namespace rx

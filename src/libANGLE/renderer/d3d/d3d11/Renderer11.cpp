@@ -470,7 +470,7 @@ void Renderer11::SRVCache::clear()
 Renderer11::Renderer11(egl::Display *display)
     : RendererD3D(display),
       mStateCache(this),
-      mStateManager(this),
+      mStateManager(),
       mLastHistogramUpdateTime(ANGLEPlatformCurrent()->monotonicallyIncreasingTime()),
       mDebug(nullptr)
 {
@@ -1388,10 +1388,15 @@ void Renderer11::setScissorRectangle(const gl::Rectangle &scissor, bool enabled)
     mStateManager.setScissorRectangle(scissor, enabled);
 }
 
-void Renderer11::setViewport(const gl::Rectangle &viewport, float zNear, float zFar, GLenum drawMode, GLenum frontFace,
+void Renderer11::setViewport(const gl::Data &data,
+                             const gl::Rectangle &viewport,
+                             float zNear,
+                             float zFar,
+                             GLenum drawMode,
+                             GLenum frontFace,
                              bool ignoreViewport)
 {
-    mStateManager.setViewport(viewport, zNear, zFar);
+    mStateManager.setViewport(data, viewport, zNear, zFar);
 }
 
 bool Renderer11::applyPrimitiveType(GLenum mode, GLsizei count, bool usesPointSize)
@@ -1551,14 +1556,12 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
     }
 
     // Apply the render target and depth stencil
-    if (!mStateManager.isRenderTargetDescInitialized() || !mDepthStencilInitialized ||
+    if (!mStateManager.areViewportBoundsValid() || !mDepthStencilInitialized ||
         memcmp(framebufferRTVs, mAppliedRTVs, sizeof(framebufferRTVs)) != 0 ||
         reinterpret_cast<uintptr_t>(framebufferDSV) != mAppliedDSV)
     {
         mDeviceContext->OMSetRenderTargets(getRendererCaps().maxDrawBuffers, framebufferRTVs, framebufferDSV);
-        mStateManager.setRenderTargetDesc(renderTargetWidth, renderTargetHeight);
-        mStateManager.forceSetViewportState();
-        mStateManager.forceSetScissorState();
+        mStateManager.setViewportBounds(gl::Extents(renderTargetWidth, renderTargetHeight, 1));
         mStateManager.forceSetBlendState();
 
         if (!mDepthStencilInitialized)
@@ -1571,7 +1574,6 @@ gl::Error Renderer11::applyRenderTarget(const gl::Framebuffer *framebuffer)
             mAppliedRTVs[rtIndex] = reinterpret_cast<uintptr_t>(framebufferRTVs[rtIndex]);
         }
         mAppliedDSV = reinterpret_cast<uintptr_t>(framebufferDSV);
-        mStateManager.setRenderTargetDescInitialized(true);
         mDepthStencilInitialized = true;
     }
 
@@ -2336,7 +2338,7 @@ void Renderer11::markAllStateDirty()
     }
     mAppliedDSV = DirtyPointer;
     mDepthStencilInitialized = false;
-    mStateManager.setRenderTargetDescInitialized(false);
+    mStateManager.invalidateViewportBounds();
 
     // We reset the current SRV data because it might not be in sync with D3D's state
     // anymore. For example when a currently used SRV is used as an RTV, D3D silently
