@@ -66,6 +66,10 @@ void TransformFeedbackGL::bindGenericBuffer(const BindingPointer<gl::Buffer> &bi
 {
 }
 
+void TransformFeedbackGL::removeGenericBufferBinding(const BindingPointer<gl::Buffer> &binding)
+{
+}
+
 void TransformFeedbackGL::bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer> &binding)
 {
     // Directly bind buffer (not through the StateManager methods) because the buffer bindings are
@@ -95,6 +99,15 @@ void TransformFeedbackGL::bindIndexedBuffer(size_t index, const OffsetBindingPoi
 
         mCurrentIndexedBuffers[index] = binding;
     }
+}
+
+void TransformFeedbackGL::removeIndexedBufferBinding(size_t index, const OffsetBindingPointer<gl::Buffer> &binding)
+{
+    if (binding != mCurrentIndexedBuffers[index])
+        return;
+
+    mFunctions->bindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, static_cast<GLuint>(index), 0);
+    mCurrentIndexedBuffers[index] = OffsetBindingPointer<gl::Buffer>();
 }
 
 GLuint TransformFeedbackGL::getTransformFeedbackID() const

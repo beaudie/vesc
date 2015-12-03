@@ -1512,6 +1512,14 @@ void Context::detachBuffer(GLuint buffer)
     // (i.e. in the thread that called Delete-Buffers) are reset to zero.
 
     mState.removeArrayBufferBinding(buffer);
+    mState.removeCopyReadBufferBinding(buffer);
+    mState.removeCopyWriteBufferBinding(buffer);
+    mState.removePixelPackBufferBinding(buffer);
+    mState.removePixelUnpackBufferBinding(buffer);
+    mState.getCurrentTransformFeedback()->removeGenericBufferBinding(buffer);
+    mState.getCurrentTransformFeedback()->removeIndexedBufferBinding(buffer);
+    mState.removeGenericUniformBufferBinding(buffer);
+    mState.getVertexArray()->detachBuffer(buffer);
 
     // mark as freed among the vertex array objects
     for (auto &vaoPair : mVertexArrayMap)
