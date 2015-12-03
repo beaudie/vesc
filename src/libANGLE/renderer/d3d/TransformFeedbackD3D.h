@@ -27,7 +27,9 @@ class TransformFeedbackD3D : public TransformFeedbackImpl
     void resume() override;
 
     void bindGenericBuffer(const BindingPointer<gl::Buffer> &binding) override;
+    void removeGenericBufferBinding(const BindingPointer<gl::Buffer> &binding) override;
     void bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer> &binding) override;
+    void removeIndexedBufferBinding(size_t index, const OffsetBindingPointer<gl::Buffer> &binding) override;
 };
 
 }

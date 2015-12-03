@@ -202,16 +202,21 @@ class State : angle::NonCopyable
 
     // GL_UNIFORM_BUFFER - Both indexed and generic targets
     void setGenericUniformBufferBinding(Buffer *buffer);
+    bool removeGenericUniformBufferBinding(GLuint buffer);
     void setIndexedUniformBufferBinding(GLuint index, Buffer *buffer, GLintptr offset, GLsizeiptr size);
     const OffsetBindingPointer<Buffer> &getIndexedUniformBuffer(size_t index) const;
 
     // GL_COPY_[READ/WRITE]_BUFFER
     void setCopyReadBufferBinding(Buffer *buffer);
+    bool removeCopyReadBufferBinding(GLuint buffer);
     void setCopyWriteBufferBinding(Buffer *buffer);
+    bool removeCopyWriteBufferBinding(GLuint buffer);
 
     // GL_PIXEL[PACK/UNPACK]_BUFFER
     void setPixelPackBufferBinding(Buffer *buffer);
+    bool removePixelPackBufferBinding(GLuint buffer);
     void setPixelUnpackBufferBinding(Buffer *buffer);
+    bool removePixelUnpackBufferBinding(GLuint buffer);
 
     // Retrieve typed buffer by target (non-indexed)
     Buffer *getTargetBuffer(GLenum target) const;

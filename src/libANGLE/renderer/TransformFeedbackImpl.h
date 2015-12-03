@@ -26,7 +26,9 @@ class TransformFeedbackImpl : angle::NonCopyable
     virtual void resume() = 0;
 
     virtual void bindGenericBuffer(const BindingPointer<gl::Buffer> &binding) = 0;
+    virtual void removeGenericBufferBinding(const BindingPointer<gl::Buffer> &binding) = 0;
     virtual void bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer> &binding) = 0;
+    virtual void removeIndexedBufferBinding(size_t index, const OffsetBindingPointer<gl::Buffer> &binding) = 0;
 };
 
 }
