@@ -85,6 +85,18 @@ void TransformFeedback::bindGenericBuffer(Buffer *buffer)
     mImplementation->bindGenericBuffer(mGenericBuffer);
 }
 
+bool TransformFeedback::removeGenericBufferBinding(GLuint buffer)
+{
+    if (mGenericBuffer.id() == buffer)
+    {
+        mGenericBuffer.set(nullptr);
+        mImplementation->bindGenericBuffer(mGenericBuffer);
+        return true;
+    }
+
+    return false;
+}
+
 const BindingPointer<Buffer> &TransformFeedback::getGenericBuffer() const
 {
     return mGenericBuffer;
@@ -95,6 +107,23 @@ void TransformFeedback::bindIndexedBuffer(size_t index, Buffer *buffer, size_t o
     ASSERT(index < mIndexedBuffers.size());
     mIndexedBuffers[index].set(buffer, offset, size);
     mImplementation->bindIndexedBuffer(index, mIndexedBuffers[index]);
+}
+
+bool TransformFeedback::removeIndexedBufferBinding(GLuint buffer)
+{
+    size_t index;
+    for (index = 0; index < mIndexedBuffers.size(); index++)
+    {
+        OffsetBindingPointer<Buffer> &indexedBuffer = mIndexedBuffers[index];
+        if (indexedBuffer.id() == buffer)
+        {
+            indexedBuffer.set(nullptr);
+            mImplementation->bindIndexedBuffer(index, indexedBuffer);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 const OffsetBindingPointer<Buffer> &TransformFeedback::getIndexedBuffer(size_t index) const

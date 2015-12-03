@@ -42,5 +42,4 @@ void TransformFeedbackD3D::bindGenericBuffer(const BindingPointer<gl::Buffer> &b
 void TransformFeedbackD3D::bindIndexedBuffer(size_t index, const OffsetBindingPointer<gl::Buffer> &binding)
 {
 }
-
 }

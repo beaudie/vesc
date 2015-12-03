@@ -1015,6 +1015,17 @@ void State::setGenericUniformBufferBinding(Buffer *buffer)
     mGenericUniformBuffer.set(buffer);
 }
 
+bool State::removeGenericUniformBufferBinding(GLuint buffer)
+{
+    if (mGenericUniformBuffer.id() == buffer)
+    {
+        mGenericUniformBuffer.set(nullptr);
+        return true;
+    }
+
+    return false;
+}
+
 void State::setIndexedUniformBufferBinding(GLuint index, Buffer *buffer, GLintptr offset, GLsizeiptr size)
 {
     mUniformBuffers[index].set(buffer, offset, size);
@@ -1031,9 +1042,31 @@ void State::setCopyReadBufferBinding(Buffer *buffer)
     mCopyReadBuffer.set(buffer);
 }
 
+bool State::removeCopyReadBufferBinding(GLuint buffer)
+{
+    if (mCopyReadBuffer.id() == buffer)
+    {
+        mCopyReadBuffer.set(nullptr);
+        return true;
+    }
+
+    return false;
+}
+
 void State::setCopyWriteBufferBinding(Buffer *buffer)
 {
     mCopyWriteBuffer.set(buffer);
+}
+
+bool State::removeCopyWriteBufferBinding(GLuint buffer)
+{
+    if (mCopyWriteBuffer.id() == buffer)
+    {
+        mCopyWriteBuffer.set(nullptr);
+        return true;
+    }
+
+    return false;
 }
 
 void State::setPixelPackBufferBinding(Buffer *buffer)
@@ -1041,9 +1074,31 @@ void State::setPixelPackBufferBinding(Buffer *buffer)
     mPack.pixelBuffer.set(buffer);
 }
 
+bool State::removePixelPackBufferBinding(GLuint buffer)
+{
+    if (mPack.pixelBuffer.id() == buffer)
+    {
+        mPack.pixelBuffer.set(nullptr);
+        return true;
+    }
+
+    return false;
+}
+
 void State::setPixelUnpackBufferBinding(Buffer *buffer)
 {
     mUnpack.pixelBuffer.set(buffer);
+}
+
+bool State::removePixelUnpackBufferBinding(GLuint buffer)
+{
+    if (mUnpack.pixelBuffer.id() == buffer)
+    {
+        mUnpack.pixelBuffer.set(nullptr);
+        return true;
+    }
+
+    return false;
 }
 
 Buffer *State::getTargetBuffer(GLenum target) const

@@ -1093,20 +1093,6 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
             }
         }
         return true;
-      case GL_PIXEL_PACK_BUFFER_BINDING:
-      case GL_PIXEL_UNPACK_BUFFER_BINDING:
-        {
-            if (mExtensions.pixelBufferObject)
-            {
-                *type = GL_INT;
-                *numParams = 1;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        return true;
       case GL_MAX_VIEWPORT_DIMS:
         {
             *type = GL_INT;
@@ -1204,6 +1190,15 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
             return true;
         case GL_VERTEX_ARRAY_BINDING:
             if ((mClientVersion < 3) && !mExtensions.vertexArrayObject)
+            {
+                return false;
+            }
+            *type      = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_PIXEL_PACK_BUFFER_BINDING:
+        case GL_PIXEL_UNPACK_BUFFER_BINDING:
+            if ((mClientVersion < 3) && !mExtensions.pixelBufferObject)
             {
                 return false;
             }
@@ -1503,20 +1498,19 @@ void Context::detachTexture(GLuint texture)
 
 void Context::detachBuffer(GLuint buffer)
 {
-    // Buffer detachment is handled by Context, because the buffer must also be
-    // attached from any VAOs in existence, and Context holds the VAO map.
-
-    // [OpenGL ES 2.0.24] section 2.9 page 22:
-    // If a buffer object is deleted while it is bound, all bindings to that object in the current context
-    // (i.e. in the thread that called Delete-Buffers) are reset to zero.
-
     mState.removeArrayBufferBinding(buffer);
-
-    // mark as freed among the vertex array objects
-    for (auto &vaoPair : mVertexArrayMap)
+    mState.removeCopyReadBufferBinding(buffer);
+    mState.removeCopyWriteBufferBinding(buffer);
+    mState.removePixelPackBufferBinding(buffer);
+    mState.removePixelUnpackBufferBinding(buffer);
+    TransformFeedback *currentTransformFeedback = mState.getCurrentTransformFeedback();
+    if (currentTransformFeedback)
     {
-        vaoPair.second->detachBuffer(buffer);
+        mState.getCurrentTransformFeedback()->removeGenericBufferBinding(buffer);
+        mState.getCurrentTransformFeedback()->removeIndexedBufferBinding(buffer);
     }
+    mState.removeGenericUniformBufferBinding(buffer);
+    mState.getVertexArray()->detachBuffer(buffer);
 }
 
 void Context::detachFramebuffer(GLuint framebuffer)
