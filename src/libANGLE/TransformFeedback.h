@@ -39,9 +39,11 @@ class TransformFeedback : public RefCountObject
     GLenum getPrimitiveMode() const;
 
     void bindGenericBuffer(Buffer *buffer);
+    bool removeGenericBufferBinding(GLuint buffer);
     const BindingPointer<Buffer> &getGenericBuffer() const;
 
     void bindIndexedBuffer(size_t index, Buffer *buffer, size_t offset, size_t size);
+    bool removeIndexedBufferBinding(GLuint buffer);
     const OffsetBindingPointer<Buffer> &getIndexedBuffer(size_t index) const;
     size_t getIndexedBufferCount() const;
 
