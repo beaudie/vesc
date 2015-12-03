@@ -883,6 +883,47 @@ gl::Error Renderer9::setUniformBuffers(const gl::Data &/*data*/,
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error Renderer9::updateState(const gl::Data &data, GLenum drawMode, bool ignoreViewport)
+{
+    float nearZ = data.state->getNearPlane();
+    float farZ = data.state->getFarPlane();
+    setViewport(data.caps, data.state->getViewport(), nearZ, farZ, drawMode,
+                data.state->getRasterizerState().frontFace, ignoreViewport);
+
+    setScissorRectangle(data.state->getScissor(), data.state->isScissorTestEnabled());
+
+    const gl::Framebuffer *framebufferObject = data.state->getDrawFramebuffer();
+    int samples                              = framebufferObject->getSamples(data);
+
+    gl::RasterizerState rasterizer = data.state->getRasterizerState();
+    rasterizer.pointDrawMode       = (drawMode == GL_POINTS);
+    rasterizer.multiSample         = (samples != 0);
+
+    gl::Error error = setRasterizerState(rasterizer);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    unsigned int mask = getBlendSampleMask(data, samples);
+
+    error = setBlendState(framebufferObject, data.state->getBlendState(),
+                          data.state->getBlendColor(), mask);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    error = setDepthStencilState(data.state->getDepthStencilState(), data.state->getStencilRef(),
+                                 data.state->getStencilBackRef(), rasterizer.frontFace == GL_CCW);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    return gl::Error(GL_NO_ERROR);
+}
+
 gl::Error Renderer9::setRasterizerState(const gl::RasterizerState &rasterState)
 {
     bool rasterStateChanged = mForceSetRasterState || memcmp(&rasterState, &mCurRasterState, sizeof(gl::RasterizerState)) != 0;
