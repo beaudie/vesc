@@ -121,25 +121,27 @@ class Renderer11 : public RendererD3D
                                 const std::vector<GLint> &vertexUniformBuffers,
                                 const std::vector<GLint> &fragmentUniformBuffers) override;
 
+    gl::Error updateState(const gl::Data &data, GLenum drawMode, bool ignoreViewport) override;
+
     virtual gl::Error setRasterizerState(const gl::RasterizerState &rasterState);
     gl::Error setBlendState(const gl::Framebuffer *framebuffer,
                             const gl::BlendState &blendState,
                             const gl::ColorF &blendColor,
-                            unsigned int sampleMask) override;
+                            unsigned int sampleMask);
 
     gl::Error setDepthStencilState(const gl::DepthStencilState &depthStencilState,
                                    int stencilRef,
                                    int stencilBackRef,
-                                   bool frontFaceCCW) override;
+                                   bool frontFaceCCW);
 
-    virtual void setScissorRectangle(const gl::Rectangle &scissor, bool enabled);
-    virtual void setViewport(const gl::Caps *caps,
-                             const gl::Rectangle &viewport,
-                             float zNear,
-                             float zFar,
-                             GLenum drawMode,
-                             GLenum frontFace,
-                             bool ignoreViewport);
+    void setScissorRectangle(const gl::Rectangle &scissor, bool enabled);
+    void setViewport(const gl::Caps *caps,
+                     const gl::Rectangle &viewport,
+                     float zNear,
+                     float zFar,
+                     GLenum drawMode,
+                     GLenum frontFace,
+                     bool ignoreViewport);
 
     virtual bool applyPrimitiveType(GLenum mode, GLsizei count, bool usesPointSize);
     gl::Error applyRenderTarget(const gl::Framebuffer *frameBuffer) override;

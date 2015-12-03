@@ -1359,6 +1359,42 @@ gl::Error Renderer11::setUniformBuffers(const gl::Data &data,
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error Renderer11::updateState(const gl::Data &data, GLenum drawMode, bool ignoreViewport)
+{
+    float nearZ = data.state->getNearPlane();
+    float farZ = data.state->getFarPlane();
+    mStateManager.setViewport(data.caps, data.state->getViewport(), nearZ, farZ);
+    mStateManager.setScissorRectangle(data.state->getScissor(), data.state->isScissorTestEnabled());
+
+    // Applies the fixed-function state (culling, depth test, alpha blending, stenciling, etc) to
+    // the Direct3D device
+    const gl::Framebuffer *framebufferObject = data.state->getDrawFramebuffer();
+    int samples                              = framebufferObject->getSamples(data);
+
+    gl::RasterizerState rasterizer = data.state->getRasterizerState();
+    rasterizer.pointDrawMode       = (drawMode == GL_POINTS);
+    rasterizer.multiSample         = (samples != 0);
+
+    gl::Error error = mStateManager.setRasterizerState(rasterizer);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    unsigned int mask = getBlendSampleMask(data, samples);
+    error = mStateManager.setBlendState(framebufferObject, data.state->getBlendState(),
+                                        data.state->getBlendColor(), mask);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    error = mStateManager.setDepthStencilState(data.state->getDepthStencilState(),
+                                               data.state->getStencilRef(),
+                                               data.state->getStencilBackRef());
+    return error;
+}
+
 gl::Error Renderer11::setRasterizerState(const gl::RasterizerState &rasterState)
 {
     return mStateManager.setRasterizerState(rasterState);
