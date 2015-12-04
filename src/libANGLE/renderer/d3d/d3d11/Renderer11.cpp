@@ -2880,7 +2880,8 @@ gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL, destFormat, GL_NEAREST);
+    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
+                               destFormat, GL_NEAREST, false);
     if (error.isError())
     {
         return error;
@@ -2931,7 +2932,8 @@ gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL, destFormat, GL_NEAREST);
+    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
+                               destFormat, GL_NEAREST, false);
     if (error.isError())
     {
         return error;
@@ -2982,7 +2984,8 @@ gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL, destFormat, GL_NEAREST);
+    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
+                               destFormat, GL_NEAREST, false);
     if (error.isError())
     {
         return error;
@@ -3033,7 +3036,8 @@ gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer, const
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL, destFormat, GL_NEAREST);
+    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
+                               destFormat, GL_NEAREST, false);
     if (error.isError())
     {
         return error;
@@ -3918,11 +3922,32 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
 
     bool scissorNeeded = scissor && gl::ClipRectangle(drawRect, *scissor, NULL);
 
-    bool wholeBufferCopy = !scissorNeeded &&
-                           readRect.x == 0 && readRect.width == readSize.width &&
-                           readRect.y == 0 && readRect.height == readSize.height &&
-                           drawRect.x == 0 && drawRect.width == drawSize.width &&
-                           drawRect.y == 0 && drawRect.height == drawSize.height;
+    const auto &destFormatInfo = gl::GetInternalFormatInfo(drawRenderTarget->getInternalFormat());
+    const auto &srcFormatInfo  = gl::GetInternalFormatInfo(readRenderTarget->getInternalFormat());
+    const auto &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(drawRenderTarget11->getDXGIFormat());
+
+    // Some blits require masking off emulated texture channels. eg: from RGBA8 to RGB8, we
+    // emulate RGB8 with RGBA8, so we need to mask off the alpha channel when we copy.
+
+    gl::Color<bool> colorMask;
+    colorMask.red = (srcFormatInfo.redBits > 0) && (destFormatInfo.redBits == 0) &&
+                    (dxgiFormatInfo.redBits > 0);
+    colorMask.green = (srcFormatInfo.greenBits > 0) && (destFormatInfo.greenBits == 0) &&
+                      (dxgiFormatInfo.greenBits > 0);
+    colorMask.blue = (srcFormatInfo.blueBits > 0) && (destFormatInfo.blueBits == 0) &&
+                     (dxgiFormatInfo.blueBits > 0);
+    colorMask.alpha = (srcFormatInfo.alphaBits > 0) && (destFormatInfo.alphaBits == 0) &&
+                      (dxgiFormatInfo.alphaBits > 0);
+
+    // We only currently support masking off the alpha channel.
+    bool colorMaskingNeeded = colorMask.alpha;
+    ASSERT(!colorMask.red && !colorMask.green && !colorMask.blue);
+
+    bool wholeBufferCopy = !scissorNeeded && !colorMaskingNeeded && readRect.x == 0 &&
+                           readRect.width == readSize.width && readRect.y == 0 &&
+                           readRect.height == readSize.height && drawRect.x == 0 &&
+                           drawRect.width == drawSize.width && drawRect.y == 0 &&
+                           drawRect.height == drawSize.height;
 
     bool stretchRequired = readRect.width != drawRect.width || readRect.height != drawRect.height;
 
@@ -3933,14 +3958,13 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
                        drawRect.x < 0 || drawRect.x + drawRect.width > drawSize.width ||
                        drawRect.y < 0 || drawRect.y + drawRect.height > drawSize.height;
 
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(drawRenderTarget11->getDXGIFormat());
     bool partialDSBlit = (dxgiFormatInfo.depthBits > 0 && depthBlit) != (dxgiFormatInfo.stencilBits > 0 && stencilBlit);
 
     gl::Error result(GL_NO_ERROR);
 
     if (readRenderTarget11->getDXGIFormat() == drawRenderTarget11->getDXGIFormat() &&
         !stretchRequired && !outOfBounds && !flipRequired && !partialDSBlit &&
-        (!(depthBlit || stencilBlit) || wholeBufferCopy))
+        !colorMaskingNeeded && (!(depthBlit || stencilBlit) || wholeBufferCopy))
     {
         UINT dstX = drawRect.x;
         UINT dstY = drawRect.y;
@@ -4010,9 +4034,10 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
         }
         else
         {
-            GLenum format = gl::GetInternalFormatInfo(drawRenderTarget->getInternalFormat()).format;
+            // We don't currently support masking off any other channel than alpha
+            bool maskOffAlpha = colorMaskingNeeded && colorMask.alpha;
             result = mBlit->copyTexture(readSRV, readArea, readSize, drawRTV, drawArea, drawSize,
-                                        scissor, format, filter);
+                                        scissor, destFormatInfo.format, filter, maskOffAlpha);
         }
     }
 
