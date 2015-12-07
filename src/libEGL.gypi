@@ -45,4 +45,21 @@
             ],
         },
     ],
+    'conditions':
+    [
+        ['angle_standalone==1',
+        {
+            'targets':
+            [
+                {
+                    'target_name': 'libEGL_ANGLE',
+                    'type': 'loadable_module',
+                    'dependencies':
+                    [
+                        'libEGL',
+                    ],
+                },
+            ],
+        }],
+    ],
 }
