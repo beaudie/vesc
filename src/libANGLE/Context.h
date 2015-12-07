@@ -217,6 +217,9 @@ class Context final : public ValidationContext
     void syncRendererState(const State::DirtyBits &bitMask);
 
   private:
+    void checkVertexArrayAllocation(GLuint vertexArray);
+    void checkTransformFeedbackAllocation(GLuint transformFeedback);
+
     void detachBuffer(GLuint buffer);
     void detachTexture(GLuint texture);
     void detachFramebuffer(GLuint framebuffer);

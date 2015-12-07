@@ -324,14 +324,7 @@ GLsync Context::createFenceSync()
 
 GLuint Context::createVertexArray()
 {
-    GLuint handle = mVertexArrayHandleAllocator.allocate();
-
-    // Although the spec states VAO state is not initialized until the object is bound,
-    // we create it immediately. The resulting behaviour is transparent to the application,
-    // since it's not currently possible to access the state until the object is bound.
-    VertexArray *vertexArray = new VertexArray(mRenderer, handle, MAX_VERTEX_ATTRIBS);
-    mVertexArrayMap[handle] = vertexArray;
-    return handle;
+    return mVertexArrayHandleAllocator.allocate();
 }
 
 GLuint Context::createSampler()
@@ -341,11 +334,7 @@ GLuint Context::createSampler()
 
 GLuint Context::createTransformFeedback()
 {
-    GLuint handle = mTransformFeedbackAllocator.allocate();
-    TransformFeedback *transformFeedback = new TransformFeedback(mRenderer->createTransformFeedback(), handle, mCaps);
-    transformFeedback->addRef();
-    mTransformFeedbackMap[handle] = transformFeedback;
-    return handle;
+    return mTransformFeedbackAllocator.allocate();
 }
 
 // Returns an unused framebuffer name
@@ -631,11 +620,7 @@ void Context::bindRenderbuffer(GLuint renderbuffer)
 
 void Context::bindVertexArray(GLuint vertexArray)
 {
-    if (!getVertexArray(vertexArray))
-    {
-        VertexArray *vertexArrayObject = new VertexArray(mRenderer, vertexArray, MAX_VERTEX_ATTRIBS);
-        mVertexArrayMap[vertexArray] = vertexArrayObject;
-    }
+    checkVertexArrayAllocation(vertexArray);
 
     mState.setVertexArrayBinding(getVertexArray(vertexArray));
 }
@@ -711,6 +696,8 @@ void Context::useProgram(GLuint program)
 
 void Context::bindTransformFeedback(GLuint transformFeedback)
 {
+    checkTransformFeedbackAllocation(transformFeedback);
+
     mState.setTransformFeedbackBinding(getTransformFeedback(transformFeedback));
 }
 
@@ -1490,6 +1477,25 @@ EGLenum Context::getRenderBuffer() const
     else
     {
         return EGL_NONE;
+    }
+}
+
+void Context::checkVertexArrayAllocation(GLuint vertexArray)
+{
+    if (!getVertexArray(vertexArray))
+    {
+        VertexArray *vertexArrayObject = new VertexArray(mRenderer, vertexArray, MAX_VERTEX_ATTRIBS);
+        mVertexArrayMap[vertexArray] = vertexArrayObject;
+    }
+}
+
+void Context::checkTransformFeedbackAllocation(GLuint transformFeedback)
+{
+    if (!getTransformFeedback(transformFeedback))
+    {
+        TransformFeedback *transformFeedbackObject = new TransformFeedback(mRenderer->createTransformFeedback(), transformFeedback, mCaps);
+        transformFeedbackObject->addRef();
+        mTransformFeedbackMap[transformFeedback] = transformFeedbackObject;
     }
 }
 
