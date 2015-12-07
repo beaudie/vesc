@@ -833,5 +833,13 @@
                 }],
             ],
         },
+        {
+            'target_name': 'libGLESv2_ANGLE',
+            'type': 'loadable_module',
+            'dependencies':
+            [
+                'libGLESv2',
+            ],
+        },
     ],
 }

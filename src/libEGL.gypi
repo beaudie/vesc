@@ -44,5 +44,13 @@
                 }],
             ],
         },
+        {
+            'target_name': 'libEGL_ANGLE',
+            'type': 'loadable_module',
+            'dependencies':
+            [
+                'libEGL',
+            ],
+        },
     ],
 }
