@@ -14,6 +14,8 @@
 #include "libANGLE/renderer/d3d/generatemip.h"
 #include "libANGLE/renderer/d3d/loadimage.h"
 
+#include <unordered_map>
+
 namespace rx
 {
 
@@ -39,7 +41,7 @@ struct D3D9FastCopyFormat
     }
 };
 
-typedef std::multimap<D3DFORMAT, D3D9FastCopyFormat> D3D9FastCopyMap;
+typedef std::unordered_multimap<D3DFORMAT, D3D9FastCopyFormat> D3D9FastCopyMap;
 
 static D3D9FastCopyMap BuildFastCopyMap()
 {
@@ -51,7 +53,7 @@ static D3D9FastCopyMap BuildFastCopyMap()
 }
 
 // A map to determine the pixel size and mip generation function of a given D3D format
-typedef std::map<D3DFORMAT, D3DFormat> D3D9FormatInfoMap;
+typedef std::unordered_map<D3DFORMAT, D3DFormat> D3D9FormatInfoMap;
 
 D3DFormat::D3DFormat()
     : pixelBytes(0),
@@ -163,7 +165,7 @@ const D3DFormat &GetD3DFormatInfo(D3DFORMAT format)
 
 
 typedef std::pair<GLint, InitializeTextureDataFunction> InternalFormatInitialzerPair;
-typedef std::map<GLint, InitializeTextureDataFunction> InternalFormatInitialzerMap;
+typedef std::unordered_map<GLint, InitializeTextureDataFunction> InternalFormatInitialzerMap;
 
 static InternalFormatInitialzerMap BuildInternalFormatInitialzerMap()
 {
@@ -205,7 +207,7 @@ static void UnreachableLoad(size_t width, size_t height, size_t depth,
 }
 
 typedef std::pair<GLenum, TextureFormat> D3D9FormatPair;
-typedef std::map<GLenum, TextureFormat> D3D9FormatMap;
+typedef std::unordered_map<GLenum, TextureFormat> D3D9FormatMap;
 
 TextureFormat::TextureFormat()
     : texFormat(D3DFMT_UNKNOWN),

@@ -14,6 +14,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 namespace gl
 {
@@ -47,7 +48,7 @@ struct TextureCaps
 class TextureCapsMap
 {
   public:
-    typedef std::map<GLenum, TextureCaps>::const_iterator const_iterator;
+    typedef std::unordered_map<GLenum, TextureCaps>::const_iterator const_iterator;
 
     void insert(GLenum internalFormat, const TextureCaps &caps);
     void remove(GLenum internalFormat);
@@ -60,7 +61,7 @@ class TextureCapsMap
     size_t size() const;
 
   private:
-    typedef std::map<GLenum, TextureCaps> InternalFormatToCapsMap;
+    typedef std::unordered_map<GLenum, TextureCaps> InternalFormatToCapsMap;
     InternalFormatToCapsMap mCapsMap;
 };
 

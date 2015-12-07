@@ -36,7 +36,7 @@ bool AttributeMap::contains(EGLint key) const
 
 EGLint AttributeMap::get(EGLint key, EGLint defaultValue) const
 {
-    std::map<EGLint, EGLint>::const_iterator iter = mAttributes.find(key);
+    auto iter = mAttributes.find(key);
     return (mAttributes.find(key) != mAttributes.end()) ? iter->second : defaultValue;
 }
 

@@ -16,6 +16,7 @@
 #include <set>
 #include <sstream>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "common/angleutils.h"
@@ -173,7 +174,7 @@ class Program : angle::NonCopyable
         {
             return mActiveAttribLocationsMask;
         }
-        const std::map<int, VariableLocation> &getOutputVariables() const
+        const std::unordered_map<int, VariableLocation> &getOutputVariables() const
         {
             return mOutputVariables;
         }
@@ -214,7 +215,7 @@ class Program : angle::NonCopyable
         std::vector<UniformBlock> mUniformBlocks;
 
         // TODO(jmadill): use unordered/hash map when available
-        std::map<int, VariableLocation> mOutputVariables;
+        std::unordered_map<int, VariableLocation> mOutputVariables;
     };
 
     Program(rx::ImplFactory *factory, ResourceManager *manager, GLuint handle);

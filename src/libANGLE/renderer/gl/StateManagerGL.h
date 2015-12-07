@@ -15,7 +15,7 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/gl/functionsgl_typedefs.h"
 
-#include <map>
+#include <unordered_map>
 
 namespace gl
 {
@@ -149,7 +149,7 @@ class StateManagerGL final : angle::NonCopyable
     GLuint mVAO;
     std::vector<gl::VertexAttribCurrentValueData> mVertexAttribCurrentValues;
 
-    std::map<GLenum, GLuint> mBuffers;
+    std::unordered_map<GLenum, GLuint> mBuffers;
 
     struct IndexedBufferBinding
     {
@@ -159,15 +159,15 @@ class StateManagerGL final : angle::NonCopyable
         size_t size;
         GLuint buffer;
     };
-    std::map<GLenum, std::vector<IndexedBufferBinding>> mIndexedBuffers;
+    std::unordered_map<GLenum, std::vector<IndexedBufferBinding>> mIndexedBuffers;
 
     size_t mTextureUnitIndex;
-    std::map<GLenum, std::vector<GLuint>> mTextures;
+    std::unordered_map<GLenum, std::vector<GLuint>> mTextures;
     std::vector<GLuint> mSamplers;
 
     GLuint mTransformFeedback;
 
-    std::map<GLenum, GLuint> mQueries;
+    std::unordered_map<GLenum, GLuint> mQueries;
 
     TransformFeedbackGL *mPrevDrawTransformFeedback;
     std::set<QueryGL *> mPrevDrawQueries;

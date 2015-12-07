@@ -1619,7 +1619,7 @@ bool Program::linkUniforms(gl::InfoLog &infoLog, const gl::Caps &caps)
     const std::vector<sh::Uniform> &fragmentUniforms = mData.mAttachedFragmentShader->getUniforms();
 
     // Check that uniforms defined in the vertex and fragment shaders are identical
-    std::map<std::string, LinkedUniform> linkedUniforms;
+    std::unordered_map<std::string, LinkedUniform> linkedUniforms;
 
     for (const sh::Uniform &vertexUniform : vertexUniforms)
     {
@@ -1803,7 +1803,7 @@ bool Program::linkUniformBlocks(InfoLog &infoLog, const Caps &caps)
     const std::vector<sh::InterfaceBlock> &fragmentInterfaceBlocks = fragmentShader.getInterfaceBlocks();
 
     // Check that interface blocks defined in the vertex and fragment shaders are identical
-    typedef std::map<std::string, const sh::InterfaceBlock*> UniformBlockMap;
+    typedef std::unordered_map<std::string, const sh::InterfaceBlock*> UniformBlockMap;
     UniformBlockMap linkedUniformBlocks;
 
     GLuint vertexBlockCount = 0;

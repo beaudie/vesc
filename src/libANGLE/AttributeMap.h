@@ -10,7 +10,7 @@
 
 #include <EGL/egl.h>
 
-#include <map>
+#include <unordered_map>
 
 namespace egl
 {
@@ -25,13 +25,13 @@ class AttributeMap final
     bool contains(EGLint key) const;
     EGLint get(EGLint key, EGLint defaultValue) const;
 
-    typedef std::map<EGLint, EGLint>::const_iterator const_iterator;
+    typedef std::unordered_map<EGLint, EGLint>::const_iterator const_iterator;
 
     const_iterator begin() const;
     const_iterator end() const;
 
   private:
-    std::map<EGLint, EGLint> mAttributes;
+    std::unordered_map<EGLint, EGLint> mAttributes;
 };
 
 }

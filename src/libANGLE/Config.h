@@ -18,8 +18,8 @@
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
 
-#include <map>
 #include <vector>
+#include <unordered_map>
 
 namespace egl
 {
@@ -82,7 +82,7 @@ class ConfigSet
     std::vector<const Config*> filter(const AttributeMap &attributeMap) const;
 
   private:
-    typedef std::map<EGLint, const Config> ConfigMap;
+    typedef std::unordered_map<EGLint, const Config> ConfigMap;
     ConfigMap mConfigs;
 };
 

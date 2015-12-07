@@ -342,7 +342,7 @@ static InternalFormat CompressedFormat(GLuint compressedBlockWidth, GLuint compr
 }
 
 typedef std::pair<GLenum, InternalFormat> InternalFormatInfoPair;
-typedef std::map<GLenum, InternalFormat> InternalFormatInfoMap;
+typedef std::unordered_map<GLenum, InternalFormat> InternalFormatInfoMap;
 
 static InternalFormatInfoMap BuildInternalFormatInfoMap()
 {

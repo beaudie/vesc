@@ -21,6 +21,8 @@
 #include "libANGLE/VertexAttribute.h"
 #include "libANGLE/angletypes.h"
 
+#include <unordered_map>
+
 namespace gl
 {
 class Query;
@@ -29,7 +31,7 @@ class Context;
 struct Caps;
 struct Data;
 
-typedef std::map< GLenum, BindingPointer<Texture> > TextureMap;
+typedef std::unordered_map< GLenum, BindingPointer<Texture> > TextureMap;
 
 class State : angle::NonCopyable
 {
@@ -388,13 +390,13 @@ class State : angle::NonCopyable
     size_t mActiveSampler;   // Active texture unit selector - GL_TEXTURE0
 
     typedef std::vector< BindingPointer<Texture> > TextureBindingVector;
-    typedef std::map<GLenum, TextureBindingVector> TextureBindingMap;
+    typedef std::unordered_map<GLenum, TextureBindingVector> TextureBindingMap;
     TextureBindingMap mSamplerTextures;
 
     typedef std::vector< BindingPointer<Sampler> > SamplerBindingVector;
     SamplerBindingVector mSamplers;
 
-    typedef std::map< GLenum, BindingPointer<Query> > ActiveQueryMap;
+    typedef std::unordered_map< GLenum, BindingPointer<Query> > ActiveQueryMap;
     ActiveQueryMap mActiveQueries;
 
     BindingPointer<Buffer> mGenericUniformBuffer;

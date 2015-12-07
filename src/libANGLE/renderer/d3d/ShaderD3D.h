@@ -11,7 +11,7 @@
 
 #include "libANGLE/renderer/ShaderImpl.h"
 
-#include <map>
+#include <unordered_map>
 
 namespace rx
 {
@@ -69,8 +69,8 @@ class ShaderD3D : public ShaderImpl
 
     ShShaderOutput mCompilerOutputType;
     mutable std::string mDebugInfo;
-    std::map<std::string, unsigned int> mUniformRegisterMap;
-    std::map<std::string, unsigned int> mInterfaceBlockRegisterMap;
+    std::unordered_map<std::string, unsigned int> mUniformRegisterMap;
+    std::unordered_map<std::string, unsigned int> mInterfaceBlockRegisterMap;
 };
 }
 

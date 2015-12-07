@@ -11,6 +11,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include "compiler/translator/blocklayoutHLSL.h"
 #include "libANGLE/Constants.h"
@@ -299,7 +300,7 @@ class ProgramD3D : public ProgramImpl
         GLenum textureType;
     };
 
-    typedef std::map<std::string, D3DUniform *> D3DUniformMap;
+    typedef std::unordered_map<std::string, D3DUniform *> D3DUniformMap;
 
     void defineUniformsAndAssignRegisters();
     void defineUniformBase(const gl::Shader *shader,
@@ -393,8 +394,8 @@ class ProgramD3D : public ProgramImpl
     std::vector<D3DUniform *> mD3DUniforms;
     std::vector<D3DUniformBlock> mD3DUniformBlocks;
 
-    std::map<std::string, sh::BlockMemberInfo> mBlockInfo;
-    std::map<std::string, size_t> mBlockDataSizes;
+    std::unordered_map<std::string, sh::BlockMemberInfo> mBlockInfo;
+    std::unordered_map<std::string, size_t> mBlockDataSizes;
 
     static unsigned int issueSerial();
     static unsigned int mCurrentSerial;

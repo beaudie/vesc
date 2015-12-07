@@ -177,7 +177,7 @@ void GetUniformBlockInfo(const std::vector<VarT> &fields,
                          const std::string &prefix,
                          sh::BlockLayoutEncoder *encoder,
                          bool inRowMajorLayout,
-                         std::map<std::string, sh::BlockMemberInfo> *blockInfoOut)
+                         std::unordered_map<std::string, sh::BlockMemberInfo> *blockInfoOut)
 {
     for (const VarT &field : fields)
     {

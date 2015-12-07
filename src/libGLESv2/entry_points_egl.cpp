@@ -24,6 +24,8 @@
 
 #include <EGL/eglext.h>
 
+#include <unordered_map>
+
 namespace egl
 {
 
@@ -1135,7 +1137,7 @@ __eglMustCastToProperFunctionPointerType EGLAPIENTRY GetProcAddress(const char *
 {
     EVENT("(const char *procname = \"%s\")", procname);
 
-    typedef std::map<std::string, __eglMustCastToProperFunctionPointerType> ProcAddressMap;
+    typedef std::unordered_map<std::string, __eglMustCastToProperFunctionPointerType> ProcAddressMap;
     auto generateProcAddressMap = []()
     {
         ProcAddressMap map;

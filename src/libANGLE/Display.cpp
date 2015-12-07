@@ -76,7 +76,7 @@ void InitDefaultPlatformImpl()
     }
 }
 
-typedef std::map<EGLNativeWindowType, Surface*> WindowSurfaceMap;
+typedef std::unordered_map<EGLNativeWindowType, Surface*> WindowSurfaceMap;
 // Get a map of all EGL window surfaces to validate that no window has more than one EGL surface
 // associated with it.
 static WindowSurfaceMap *GetWindowSurfaces()
@@ -85,14 +85,14 @@ static WindowSurfaceMap *GetWindowSurfaces()
     return &windowSurfaces;
 }
 
-typedef std::map<EGLNativeDisplayType, Display *> ANGLEPlatformDisplayMap;
+typedef std::unordered_map<EGLNativeDisplayType, Display *> ANGLEPlatformDisplayMap;
 static ANGLEPlatformDisplayMap *GetANGLEPlatformDisplayMap()
 {
     static ANGLEPlatformDisplayMap displays;
     return &displays;
 }
 
-typedef std::map<Device *, Display *> DevicePlatformDisplayMap;
+typedef std::unordered_map<Device *, Display *> DevicePlatformDisplayMap;
 static DevicePlatformDisplayMap *GetDevicePlatformDisplayMap()
 {
     static DevicePlatformDisplayMap displays;
