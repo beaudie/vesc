@@ -16,6 +16,7 @@
 #include "libANGLE/renderer/d3d/RenderTargetD3D.h"
 #include "libANGLE/renderer/d3d/d3d9/DebugAnnotator9.h"
 #include "libANGLE/renderer/d3d/d3d9/ShaderCache.h"
+#include "libANGLE/renderer/d3d/d3d9/StateManager9.h"
 #include "libANGLE/renderer/d3d/d3d9/VertexDeclarationCache.h"
 
 namespace gl
@@ -135,7 +136,7 @@ class Renderer9 : public RendererD3D
     bool testDeviceLost() override;
     bool testDeviceResettable() override;
 
-    VendorID getVendorId() const override;
+    VendorID getVendorId() const;
     std::string getRendererDescription() const override;
     DeviceIdentifier getAdapterIdentifier() const override;
 
@@ -351,6 +352,8 @@ class Renderer9 : public RendererD3D
 
     IDirect3DStateBlock9 *mMaskedClearSavedState;
 
+    StateManager9 mStateManager;
+
     // previously set render states
     bool mForceSetDepthStencilState;
     gl::DepthStencilState mCurDepthStencilState;
@@ -370,11 +373,6 @@ class Renderer9 : public RendererD3D
     float mCurNear;
     float mCurFar;
     float mCurDepthFront;
-
-    bool mForceSetBlendState;
-    gl::BlendState mCurBlendState;
-    gl::ColorF mCurBlendColor;
-    GLuint mCurSampleMask;
 
     // Currently applied sampler states
     struct CurSamplerState
