@@ -495,7 +495,7 @@ inline unsigned int average(unsigned int a, unsigned int b)
 
 inline signed int average(signed int a, signed int b)
 {
-    return ((long long)a + (long long)b) / 2;
+    return static_cast<signed int>(((long long)a + (long long)b) / 2);
 }
 
 inline float average(float a, float b)
