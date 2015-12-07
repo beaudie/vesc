@@ -225,7 +225,8 @@ VariableLocation::VariableLocation(const std::string &name, unsigned int element
 Program::Data::Data()
     : mAttachedFragmentShader(nullptr),
       mAttachedVertexShader(nullptr),
-      mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS)
+      mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS),
+      mBinaryRetrieveableHint(false)
 {
 }
 
@@ -789,6 +790,17 @@ GLint Program::getBinaryLength() const
     }
 
     return length;
+}
+
+void Program::setBinaryRetrievableHint(bool retrievable)
+{
+    mProgram->setBinaryRetrievableHint(retrievable);
+    mData.mBinaryRetrieveableHint = retrievable;
+}
+
+bool Program::getBinaryRetrievableHint() const
+{
+    return mData.mBinaryRetrieveableHint;
 }
 
 void Program::release()
