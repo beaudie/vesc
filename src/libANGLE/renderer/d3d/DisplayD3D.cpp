@@ -176,16 +176,18 @@ SurfaceImpl *DisplayD3D::createPbufferSurface(const egl::SurfaceState &state,
                                               const egl::AttributeMap &attribs)
 {
     ASSERT(mRenderer != nullptr);
-    return new PbufferSurfaceD3D(state, mRenderer, mDisplay, configuration, nullptr, attribs);
+    return new PbufferSurfaceD3D(state, mRenderer, mDisplay, configuration, 0, nullptr, attribs);
 }
 
 SurfaceImpl *DisplayD3D::createPbufferFromClientBuffer(const egl::SurfaceState &state,
                                                        const egl::Config *configuration,
-                                                       EGLClientBuffer shareHandle,
+                                                       EGLenum buftype,
+                                                       EGLClientBuffer clientBuffer,
                                                        const egl::AttributeMap &attribs)
 {
     ASSERT(mRenderer != nullptr);
-    return new PbufferSurfaceD3D(state, mRenderer, mDisplay, configuration, shareHandle, attribs);
+    return new PbufferSurfaceD3D(state, mRenderer, mDisplay, configuration, buftype, clientBuffer,
+                                 attribs);
 }
 
 SurfaceImpl *DisplayD3D::createPixmapSurface(const egl::SurfaceState &state,

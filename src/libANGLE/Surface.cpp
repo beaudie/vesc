@@ -206,19 +206,23 @@ EGLint Surface::getHeight() const
 Error Surface::bindTexImage(gl::Texture *texture, EGLint buffer)
 {
     ASSERT(!mTexture.get());
+    ANGLE_TRY(mImplementation->bindTexImage(texture, buffer));
 
     texture->bindTexImageFromSurface(this);
     mTexture.set(texture);
-    return mImplementation->bindTexImage(texture, buffer);
+
+    return Error(EGL_SUCCESS);
 }
 
 Error Surface::releaseTexImage(EGLint buffer)
 {
+    ANGLE_TRY(mImplementation->releaseTexImage(buffer));
+
     ASSERT(mTexture.get());
     mTexture->releaseTexImageFromSurface();
     mTexture.set(nullptr);
 
-    return mImplementation->releaseTexImage(buffer);
+    return Error(EGL_SUCCESS);
 }
 
 void Surface::releaseTexImageFromTexture()
@@ -298,12 +302,13 @@ PbufferSurface::PbufferSurface(rx::EGLImplFactory *implFactory,
 
 PbufferSurface::PbufferSurface(rx::EGLImplFactory *implFactory,
                                const Config *config,
-                               EGLClientBuffer shareHandle,
+                               EGLenum buftype,
+                               EGLClientBuffer clientBuffer,
                                const AttributeMap &attribs)
     : Surface(EGL_PBUFFER_BIT, config, attribs)
 {
     mImplementation =
-        implFactory->createPbufferFromClientBuffer(mState, config, shareHandle, attribs);
+        implFactory->createPbufferFromClientBuffer(mState, config, buftype, clientBuffer, attribs);
 }
 
 PbufferSurface::~PbufferSurface()
