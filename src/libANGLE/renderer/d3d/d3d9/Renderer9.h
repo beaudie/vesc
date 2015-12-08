@@ -336,7 +336,6 @@ class Renderer9 : public RendererD3D
     unsigned int mAppliedDepthStencilSerial;
     bool mDepthStencilInitialized;
     bool mRenderTargetDescInitialized;
-    unsigned int mCurStencilSize;
     unsigned int mCurDepthSize;
 
     struct RenderTargetDesc
@@ -350,13 +349,6 @@ class Renderer9 : public RendererD3D
     IDirect3DStateBlock9 *mMaskedClearSavedState;
 
     StateManager9 mStateManager;
-
-    // previously set render states
-    bool mForceSetDepthStencilState;
-    gl::DepthStencilState mCurDepthStencilState;
-    int mCurStencilRef;
-    int mCurStencilBackRef;
-    bool mCurFrontFaceCCW;
 
     bool mForceSetRasterState;
     gl::RasterizerState mCurRasterState;
