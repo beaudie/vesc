@@ -123,9 +123,14 @@ class Renderer11 : public RendererD3D
 
     SwapChainD3D *createSwapChain(NativeWindowD3D *nativeWindow,
                                   HANDLE shareHandle,
+                                  IUnknown *d3dTexture,
                                   GLenum backBufferFormat,
                                   GLenum depthBufferFormat,
                                   EGLint orientation) override;
+    void getD3DTextureInfo(IUnknown *d3dTexture,
+                           EGLint *width,
+                           EGLint *height,
+                           GLenum *format) const override;
 
     gl::Error setSamplerState(gl::SamplerType type,
                               int index,

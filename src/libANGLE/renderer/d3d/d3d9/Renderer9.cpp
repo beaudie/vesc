@@ -525,6 +525,7 @@ void Renderer9::generateDisplayExtensions(egl::DisplayExtensions *outExtensions)
         outExtensions->d3dShareHandleClientBuffer     = true;
         outExtensions->surfaceD3DTexture2DShareHandle = true;
     }
+    outExtensions->d3dTextureClientBuffer = true;
 
     outExtensions->querySurfacePointer = true;
     outExtensions->windowFixedSize     = true;
@@ -672,12 +673,38 @@ NativeWindowD3D *Renderer9::createNativeWindow(EGLNativeWindowType window,
 
 SwapChainD3D *Renderer9::createSwapChain(NativeWindowD3D *nativeWindow,
                                          HANDLE shareHandle,
+                                         IUnknown *d3dTexture,
                                          GLenum backBufferFormat,
                                          GLenum depthBufferFormat,
                                          EGLint orientation)
 {
-    return new SwapChain9(this, GetAs<NativeWindow9>(nativeWindow), shareHandle, backBufferFormat,
-                          depthBufferFormat, orientation);
+    return new SwapChain9(this, GetAs<NativeWindow9>(nativeWindow), shareHandle, d3dTexture,
+                          backBufferFormat, depthBufferFormat, orientation);
+}
+
+void Renderer9::getD3DTextureInfo(IUnknown *d3dTexture,
+                                  EGLint *width,
+                                  EGLint *height,
+                                  GLenum *format) const
+{
+    *width  = 0;
+    *height = 0;
+    *format = GL_NONE;
+
+    IDirect3DTexture9 *texture = nullptr;
+    if (FAILED(d3dTexture->QueryInterface(&texture)))
+    {
+        return;
+    }
+
+    D3DSURFACE_DESC desc;
+    texture->GetLevelDesc(0, &desc);
+
+    *width  = static_cast<EGLint>(desc.Width);
+    *height = static_cast<EGLint>(desc.Height);
+
+    const auto &d3dFormatInfo = d3d9::GetD3DFormatInfo(desc.Format);
+    *format                   = d3dFormatInfo.info->glInternalFormat;
 }
 
 ContextImpl *Renderer9::createContext(const gl::ContextState &state)
