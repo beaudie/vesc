@@ -13,6 +13,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
+#include "libANGLE/renderer/gl/wgl/DXGISwapChainWindowSurfaceWGL.h"
 #include "libANGLE/renderer/gl/wgl/FunctionsWGL.h"
 #include "libANGLE/renderer/gl/wgl/PbufferSurfaceWGL.h"
 #include "libANGLE/renderer/gl/wgl/WindowSurfaceWGL.h"
@@ -315,14 +316,32 @@ void DisplayWGL::terminate()
 
     FreeLibrary(mOpenGLModule);
     mOpenGLModule = nullptr;
+
+    releaseD3DDevice(mD3D11DeviceHandle);
+    SafeRelease(mD3D11Device);
+
+    FreeLibrary(mDxgiModule);
+    FreeLibrary(mD3d11Module);
+    mD3d11Module = nullptr;
+
+    ASSERT(mRegisteredD3DDevices.empty());
 }
 
 SurfaceImpl *DisplayWGL::createWindowSurface(const egl::Config *configuration,
                                              EGLNativeWindowType window,
                                              const egl::AttributeMap &attribs)
 {
-    return new WindowSurfaceWGL(this->getRenderer(), window, mPixelFormat, mWGLContext,
-                                mFunctionsWGL);
+    egl::Error error = initializeD3DDevice();
+    if (error.isError())
+    {
+        return nullptr;
+    }
+
+    return new DXGISwapChainWindowSurfaceWGL(this->getRenderer(), window, mD3D11Device,
+                                             mD3D11DeviceHandle, mWGLContext, mDeviceContext,
+                                             mFunctionsGL, mFunctionsWGL);
+    // return new WindowSurfaceWGL(this->getRenderer(), window, mPixelFormat, mWGLContext,
+    //                            mFunctionsWGL);
 }
 
 SurfaceImpl *DisplayWGL::createPbufferSurface(const egl::Config *configuration,
@@ -464,9 +483,49 @@ const FunctionsGL *DisplayWGL::getFunctionsGL() const
     return mFunctionsGL;
 }
 
+egl::Error DisplayWGL::initializeD3DDevice()
+{
+    mDxgiModule = LoadLibrary(TEXT("dxgi.dll"));
+    mD3d11Module = LoadLibrary(TEXT("d3d11.dll"));
+    if (!mD3d11Module)
+    {
+        return egl::Error(EGL_NOT_INITIALIZED, "Failed to load d3d11 library.");
+    }
+
+    if (mD3D11Device != nullptr)
+    {
+        return egl::Error(EGL_SUCCESS);
+    }
+
+    PFN_D3D11_CREATE_DEVICE d3d11CreateDevice = nullptr;
+    d3d11CreateDevice = reinterpret_cast<PFN_D3D11_CREATE_DEVICE>(
+        GetProcAddress(mD3d11Module, "D3D11CreateDevice"));
+    if (d3d11CreateDevice == nullptr)
+    {
+        return egl::Error(EGL_NOT_INITIALIZED, "Could not retrieve D3D11CreateDevice address.");
+    }
+
+    HRESULT result = d3d11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0,
+                                       D3D11_SDK_VERSION, &mD3D11Device, nullptr, nullptr);
+    if (FAILED(result))
+    {
+        return egl::Error(EGL_NOT_INITIALIZED, "Could not create D3D11 device, error: 0x%X",
+                          result);
+    }
+
+    egl::Error error = registerD3DDevice(mD3D11Device, &mD3D11DeviceHandle);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    return egl::Error(EGL_SUCCESS);
+}
+
 void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     outExtensions->createContext = true;
+    outExtensions->postSubBuffer = true;
 }
 
 void DisplayWGL::generateCaps(egl::Caps *outCaps) const
@@ -474,4 +533,48 @@ void DisplayWGL::generateCaps(egl::Caps *outCaps) const
     outCaps->textureNPOT = true;
 }
 
+egl::Error DisplayWGL::registerD3DDevice(IUnknown *device, HANDLE *outHandle)
+{
+    ASSERT(device != nullptr);
+    ASSERT(outHandle != nullptr);
+
+    auto iter = mRegisteredD3DDevices.find(device);
+    if (iter != mRegisteredD3DDevices.end())
+    {
+        iter->second.refCount++;
+        *outHandle = iter->second.handle;
+        return egl::Error(EGL_SUCCESS);
+    }
+
+    HANDLE handle = mFunctionsWGL->dxOpenDeviceNV(device);
+    if (!handle)
+    {
+        return egl::Error(EGL_BAD_PARAMETER, "Failed to open D3D device.");
+    }
+
+    device->AddRef();
+
+    D3DObjectHandle newDeviceInfo;
+    newDeviceInfo.handle          = handle;
+    newDeviceInfo.refCount        = 1;
+    mRegisteredD3DDevices[device] = newDeviceInfo;
+
+    *outHandle = handle;
+    return egl::Error(EGL_SUCCESS);
+}
+
+void DisplayWGL::releaseD3DDevice(HANDLE deviceHandle)
+{
+    for (auto iter = mRegisteredD3DDevices.begin(); iter != mRegisteredD3DDevices.end(); iter++)
+    {
+        iter->second.refCount--;
+        if (iter->second.refCount == 0)
+        {
+            mFunctionsWGL->dxCloseDeviceNV(iter->second.handle);
+            iter->first->Release();
+            mRegisteredD3DDevices.erase(iter);
+            break;
+        }
+    }
+}
 }
