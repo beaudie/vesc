@@ -23,12 +23,15 @@ class StateManager9 final : angle::NonCopyable
 
     void syncState(const gl::State &state, const gl::State::DirtyBits &dirtyBits);
 
-    gl::Error setBlendState(const gl::Framebuffer *framebuffer,
-                            const gl::BlendState &blendState,
-                            const gl::ColorF &blendColor,
-                            unsigned int sampleMask);
-
+    gl::Error setBlendAndRasterizerState(const gl::Framebuffer *framebuffer,
+                                         const gl::BlendState &blendState,
+                                         const gl::ColorF &blendColor,
+                                         unsigned int sampleMask,
+                                         const gl::RasterizerState &rasterState);
     void forceSetBlendState();
+    void forceSetRasterState();
+
+    void updateDepthSizeIfChanged(bool depthStencilInitialized, unsigned int depthSize);
     void resetDirtyBits() { mDirtyBits.reset(); }
     VendorID getVendorId() const;
 
@@ -50,6 +53,12 @@ class StateManager9 final : angle::NonCopyable
 
     void setSampleMask(unsigned int sampleMask);
 
+    // Current raster state functions
+    void setCullMode(bool cullFace, GLenum cullMode, GLenum frontFace);
+    void setPolygonOffsetFill(bool polygonOffsetFill,
+                              GLfloat polygonOffsetFactor,
+                              GLfloat polygonOffsetUnits);
+
     enum DirtyBitType
     {
         DIRTY_BIT_BLEND_ENABLED,
@@ -60,6 +69,9 @@ class StateManager9 final : angle::NonCopyable
         DIRTY_BIT_DITHER,
         DIRTY_BIT_SAMPLE_MASK,
 
+        DIRTY_BIT_RASTER_CULL_MODE,
+        DIRTY_BIT_RASTER_POLYGON_OFFSET,
+
         DIRTY_BIT_MAX
     };
 
@@ -69,6 +81,9 @@ class StateManager9 final : angle::NonCopyable
     gl::BlendState mCurBlendState;
     gl::ColorF mCurBlendColor;
     unsigned int mCurSampleMask;
+
+    gl::RasterizerState mCurRasterState;
+    unsigned int mCurDepthSize;
 
     IDirect3DDevice9 *mDevice;
     D3DADAPTER_IDENTIFIER9 *mAdapterIdentifier;

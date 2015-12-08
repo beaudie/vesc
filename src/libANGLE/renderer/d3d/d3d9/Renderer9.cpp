@@ -918,16 +918,10 @@ gl::Error Renderer9::updateState(const gl::Data &data, GLenum drawMode)
     rasterizer.pointDrawMode       = (drawMode == GL_POINTS);
     rasterizer.multiSample         = (samples != 0);
 
-    error = setRasterizerState(rasterizer);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    // Setting blend state
     unsigned int mask = GetBlendSampleMask(data, samples);
-    error = setBlendState(framebufferObject, data.state->getBlendState(),
-                          data.state->getBlendColor(), mask);
+    error = setBlendAndRasterizerState(framebufferObject, data.state->getBlendState(),
+                                       data.state->getBlendColor(), mask, rasterizer);
+
     if (error.isError())
     {
         return error;
@@ -941,52 +935,14 @@ gl::Error Renderer9::updateState(const gl::Data &data, GLenum drawMode)
     return error;
 }
 
-gl::Error Renderer9::setRasterizerState(const gl::RasterizerState &rasterState)
+gl::Error Renderer9::setBlendAndRasterizerState(const gl::Framebuffer *framebuffer,
+                                                const gl::BlendState &blendState,
+                                                const gl::ColorF &blendColor,
+                                                unsigned int sampleMask,
+                                                const gl::RasterizerState &rasterState)
 {
-    bool rasterStateChanged = mForceSetRasterState || memcmp(&rasterState, &mCurRasterState, sizeof(gl::RasterizerState)) != 0;
-
-    if (rasterStateChanged)
-    {
-        // Set the cull mode
-        if (rasterState.cullFace)
-        {
-            mDevice->SetRenderState(D3DRS_CULLMODE, gl_d3d9::ConvertCullMode(rasterState.cullMode, rasterState.frontFace));
-        }
-        else
-        {
-            mDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-        }
-
-        if (rasterState.polygonOffsetFill)
-        {
-            if (mCurDepthSize > 0)
-            {
-                mDevice->SetRenderState(D3DRS_SLOPESCALEDEPTHBIAS, *(DWORD*)&rasterState.polygonOffsetFactor);
-
-                float depthBias = ldexp(rasterState.polygonOffsetUnits, -static_cast<int>(mCurDepthSize));
-                mDevice->SetRenderState(D3DRS_DEPTHBIAS, *(DWORD*)&depthBias);
-            }
-        }
-        else
-        {
-            mDevice->SetRenderState(D3DRS_SLOPESCALEDEPTHBIAS, 0);
-            mDevice->SetRenderState(D3DRS_DEPTHBIAS, 0);
-        }
-
-        mCurRasterState = rasterState;
-    }
-
-    mForceSetRasterState = false;
-
-    return gl::Error(GL_NO_ERROR);
-}
-
-gl::Error Renderer9::setBlendState(const gl::Framebuffer *framebuffer,
-                                   const gl::BlendState &blendState,
-                                   const gl::ColorF &blendColor,
-                                   unsigned int sampleMask)
-{
-    return mStateManager.setBlendState(framebuffer, blendState, blendColor, sampleMask);
+    return mStateManager.setBlendAndRasterizerState(framebuffer, blendState, blendColor, sampleMask,
+                                                    rasterState);
 }
 
 gl::Error Renderer9::setDepthStencilState(const gl::State &glState)
@@ -1375,11 +1331,7 @@ gl::Error Renderer9::applyRenderTarget(const gl::FramebufferAttachment *colorAtt
             mDevice->SetDepthStencilSurface(NULL);
         }
 
-        if (!mDepthStencilInitialized || depthSize != mCurDepthSize)
-        {
-            mCurDepthSize = depthSize;
-            mForceSetRasterState = true;
-        }
+        mStateManager.updateDepthSizeIfChanged(mDepthStencilInitialized, mCurDepthSize);
 
         if (!mDepthStencilInitialized || stencilSize != mCurStencilSize)
         {
@@ -2240,9 +2192,9 @@ void Renderer9::markAllStateDirty()
     mRenderTargetDescInitialized = false;
 
     mForceSetDepthStencilState = true;
-    mForceSetRasterState = true;
     mForceSetScissor = true;
     mForceSetViewport = true;
+    mStateManager.forceSetRasterState();
     mStateManager.forceSetBlendState();
 
     ASSERT(mCurVertexSamplerStates.size() == mCurVertexTextures.size());
