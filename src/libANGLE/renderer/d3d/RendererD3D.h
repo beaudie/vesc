@@ -127,9 +127,14 @@ class RendererD3D : public BufferFactoryD3D
 
     virtual SwapChainD3D *createSwapChain(NativeWindowD3D *nativeWindow,
                                           HANDLE shareHandle,
+                                          IUnknown *d3dTexture,
                                           GLenum backBufferFormat,
                                           GLenum depthBufferFormat,
                                           EGLint orientation) = 0;
+    virtual void getD3DTextureInfo(IUnknown *d3dTexture,
+                                   EGLint *width,
+                                   EGLint *height,
+                                   GLenum *format) const = 0;
 
     virtual gl::Error setSamplerState(gl::SamplerType type, int index, gl::Texture *texture, const gl::SamplerState &sampler) = 0;
     virtual gl::Error setTexture(gl::SamplerType type, int index, gl::Texture *texture) = 0;
