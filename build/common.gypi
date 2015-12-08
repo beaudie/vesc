@@ -177,6 +177,8 @@
                                 [
                                     'dxgi.lib',
                                 ]
+                                'EnableCOMDATFolding': '1',
+                                'OptimizeReferences': '1',
                             }],
                         ],
                     },
