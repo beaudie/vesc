@@ -1078,6 +1078,7 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
         outExtensions->d3dShareHandleClientBuffer     = true;
         outExtensions->surfaceD3DTexture2DShareHandle = true;
     }
+    outExtensions->d3dTextureClientBuffer = true;
 
     outExtensions->keyedMutex = true;
     outExtensions->querySurfacePointer = true;
@@ -1186,14 +1187,40 @@ NativeWindowD3D *Renderer11::createNativeWindow(EGLNativeWindowType window,
 #endif
 }
 
+void Renderer11::getD3DTextureInfo(IUnknown *d3dTexture,
+                                   EGLint *width,
+                                   EGLint *height,
+                                   GLenum *format) const
+{
+    *width  = 0;
+    *height = 0;
+    *format = GL_NONE;
+
+    ID3D11Texture2D *texture = d3d11::DynamicCastComObject<ID3D11Texture2D>(d3dTexture);
+    if (texture == nullptr)
+    {
+        return;
+    }
+
+    D3D11_TEXTURE2D_DESC desc = {0};
+    texture->GetDesc(&desc);
+
+    *width  = static_cast<EGLint>(desc.Width);
+    *height = static_cast<EGLint>(desc.Height);
+
+    // TODO: convert directly
+    *format = GL_RGBA8;
+}
+
 SwapChainD3D *Renderer11::createSwapChain(NativeWindowD3D *nativeWindow,
                                           HANDLE shareHandle,
+                                          IUnknown *d3dTexture,
                                           GLenum backBufferFormat,
                                           GLenum depthBufferFormat,
                                           EGLint orientation)
 {
-    return new SwapChain11(this, GetAs<NativeWindow11>(nativeWindow), shareHandle, backBufferFormat,
-                           depthBufferFormat, orientation);
+    return new SwapChain11(this, GetAs<NativeWindow11>(nativeWindow), shareHandle, d3dTexture,
+                           backBufferFormat, depthBufferFormat, orientation);
 }
 
 void *Renderer11::getD3DDevice()
