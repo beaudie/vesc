@@ -253,6 +253,7 @@
             'libANGLE/renderer/d3d/ShaderExecutableD3D.h',
             'libANGLE/renderer/d3d/SurfaceD3D.cpp',
             'libANGLE/renderer/d3d/SurfaceD3D.h',
+            'libANGLE/renderer/d3d/SwapChainD3D.cpp',
             'libANGLE/renderer/d3d/SwapChainD3D.h',
             'libANGLE/renderer/d3d/TextureD3D.cpp',
             'libANGLE/renderer/d3d/TextureD3D.h',
@@ -509,6 +510,8 @@
         ],
         'libangle_gl_wgl_sources':
         [
+            'libANGLE/renderer/gl/wgl/D3DTextureSurfaceWGL.cpp',
+            'libANGLE/renderer/gl/wgl/D3DTextureSurfaceWGL.h',
             'libANGLE/renderer/gl/wgl/DisplayWGL.cpp',
             'libANGLE/renderer/gl/wgl/DisplayWGL.h',
             'libANGLE/renderer/gl/wgl/DXGISwapChainWindowSurfaceWGL.cpp',
