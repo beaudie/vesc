@@ -507,6 +507,8 @@
         ],
         'libangle_gl_wgl_sources':
         [
+            'libANGLE/renderer/gl/wgl/D3DTextureSurfaceWGL.cpp',
+            'libANGLE/renderer/gl/wgl/D3DTextureSurfaceWGL.h',
             'libANGLE/renderer/gl/wgl/DisplayWGL.cpp',
             'libANGLE/renderer/gl/wgl/DisplayWGL.h',
             'libANGLE/renderer/gl/wgl/DXGISwapChainWindowSurfaceWGL.cpp',
