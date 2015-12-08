@@ -17,7 +17,6 @@
 #include "libANGLE/renderer/d3d/d3d9/DebugAnnotator9.h"
 #include "libANGLE/renderer/d3d/d3d9/ShaderCache.h"
 #include "libANGLE/renderer/d3d/d3d9/VertexDeclarationCache.h"
-#include "libANGLE/renderer/d3d/d3d9/StateManager9.h"
 
 namespace gl
 {
@@ -275,11 +274,7 @@ class Renderer9 : public RendererD3D
 
     WorkaroundsD3D generateWorkarounds() const override;
 
-    gl::Error setRasterizerState(const gl::RasterizerState &rasterState);
-    gl::Error setBlendState(const gl::Framebuffer *framebuffer,
-                            const gl::BlendState &blendState,
-                            const gl::ColorF &blendColor,
-                            unsigned int sampleMask);
+    gl::Error setBlendAndRasterizerState(const gl::Data &glData, GLenum drawMode);
     gl::Error setDepthStencilState(const gl::State &glState);
 
     void release();
@@ -357,9 +352,6 @@ class Renderer9 : public RendererD3D
     int mCurStencilRef;
     int mCurStencilBackRef;
     bool mCurFrontFaceCCW;
-
-    bool mForceSetRasterState;
-    gl::RasterizerState mCurRasterState;
 
     bool mForceSetScissor;
     gl::Rectangle mCurScissor;
