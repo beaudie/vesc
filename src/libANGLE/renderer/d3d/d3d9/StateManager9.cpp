@@ -27,6 +27,8 @@ StateManager9::StateManager9()
       mCurStencilBackRef(0),
       mCurFrontFaceCCW(0),
       mCurStencilSize(0),
+      mCurScissorRect(),
+      mCurScissorEnabled(false),
       mDevice(nullptr),
       mAdapterIdentifier(nullptr),
       mDirtyBits()
@@ -71,6 +73,12 @@ void StateManager9::forceSetDepthStencilState()
     mDirtyBits.set(DIRTY_BIT_STENCIL_WRITEMASK_BACK);
     mDirtyBits.set(DIRTY_BIT_STENCIL_OPS_FRONT);
     mDirtyBits.set(DIRTY_BIT_STENCIL_OPS_BACK);
+}
+
+void StateManager9::forceSetScissorState()
+{
+    mDirtyBits.set(DIRTY_BIT_SCISSOR_ENABLED);
+    mDirtyBits.set(DIRTY_BIT_SCISSOR_RECT);
 }
 
 void StateManager9::updateStencilSizeIfChanged(bool depthStencilInitialized,
@@ -280,6 +288,20 @@ void StateManager9::syncState(const gl::State &state, const gl::State::DirtyBits
                 }
                 break;
             }
+            case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
+                if (state.isScissorTestEnabled() != mCurScissorEnabled)
+                {
+                    mDirtyBits.set(DIRTY_BIT_SCISSOR_ENABLED);
+                    // If scissor is enabled, we have to set the scissor rect
+                    mDirtyBits.set(DIRTY_BIT_SCISSOR_RECT);
+                }
+                break;
+            case gl::State::DIRTY_BIT_SCISSOR:
+                if (state.getScissor() != mCurScissorRect)
+                {
+                    mDirtyBits.set(DIRTY_BIT_SCISSOR_RECT);
+                }
+                break;
             default:
                 break;
         }
@@ -381,6 +403,44 @@ gl::Error StateManager9::setBlendDepthRasterStates(const gl::State &glState,
     }
 
     return gl::Error(GL_NO_ERROR);
+}
+
+// This is separate from the main state lopo because other functions
+// outside call only setScissorState to update scissor state
+void StateManager9::setScissorState(const gl::Rectangle &scissor, bool enabled)
+{
+    if (mDirtyBits.test(DIRTY_BIT_SCISSOR_ENABLED))
+        setScissorEnabled(enabled);
+
+    if (mDirtyBits.test(DIRTY_BIT_SCISSOR_RECT))
+        setScissorRect(scissor, enabled);
+}
+
+void StateManager9::setRenderTargetBounds(size_t width, size_t height)
+{
+    mRenderTargetBounds.width  = (int)width;
+    mRenderTargetBounds.height = (int)height;
+}
+
+void StateManager9::setScissorEnabled(bool scissorEnabled)
+{
+    mDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, scissorEnabled ? TRUE : FALSE);
+    mCurScissorEnabled = scissorEnabled;
+}
+
+void StateManager9::setScissorRect(const gl::Rectangle &scissor, bool enabled)
+{
+    if (enabled)
+    {
+        RECT rect;
+        rect.left = gl::clamp(scissor.x, 0, static_cast<int>(mRenderTargetBounds.width));
+        rect.top = gl::clamp(scissor.y, 0, static_cast<int>(mRenderTargetBounds.height));
+        rect.right =
+            gl::clamp(scissor.x + scissor.width, 0, static_cast<int>(mRenderTargetBounds.width));
+        rect.bottom =
+            gl::clamp(scissor.y + scissor.height, 0, static_cast<int>(mRenderTargetBounds.height));
+        mDevice->SetScissorRect(&rect);
+    }
 }
 
 void StateManager9::setDepthFunc(bool depthTest, GLenum depthFunc)
