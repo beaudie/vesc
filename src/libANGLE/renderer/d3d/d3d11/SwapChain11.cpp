@@ -677,6 +677,8 @@ EGLint SwapChain11::swapRect(EGLint x, EGLint y, EGLint width, EGLint height)
         ERR("Present failed with error code 0x%08X", result);
     }
 
+    mNativeWindow.commitChange();
+
     mRenderer->onSwap();
 
     return EGL_SUCCESS;

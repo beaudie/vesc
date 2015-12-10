@@ -616,7 +616,8 @@ DisplayExtensions::DisplayExtensions()
       glTexture3DImage(false),
       glRenderbufferImage(false),
       getAllProcAddresses(false),
-      flexibleSurfaceCompatibility(false)
+      flexibleSurfaceCompatibility(false),
+      directComposition(false)
 {
 }
 
@@ -632,6 +633,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_ANGLE_query_surface_pointer",               querySurfacePointer,            &extensionStrings);
     InsertExtensionString("EGL_ANGLE_window_fixed_size",                   windowFixedSize,                &extensionStrings);
     InsertExtensionString("EGL_ANGLE_keyed_mutex",                         keyedMutex,                     &extensionStrings);
+    InsertExtensionString("EGL_ANGLE_direct_composition",                  directComposition,              &extensionStrings);
     InsertExtensionString("EGL_NV_post_sub_buffer",                        postSubBuffer,                  &extensionStrings);
     InsertExtensionString("EGL_KHR_create_context",                        createContext,                  &extensionStrings);
     InsertExtensionString("EGL_EXT_device_query",                          deviceQuery,                    &extensionStrings);
