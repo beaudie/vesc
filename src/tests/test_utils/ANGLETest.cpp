@@ -223,6 +223,11 @@ void ANGLETest::setMultisampleEnabled(bool enabled)
     mEGLWindow->setMultisample(enabled);
 }
 
+void ANGLETest::setDebugEnabled(bool enabled)
+{
+    mEGLWindow->setDebug(enabled);
+}
+
 int ANGLETest::getClientVersion() const
 {
     return mEGLWindow->getClientMajorVersion();
