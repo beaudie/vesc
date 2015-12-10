@@ -53,13 +53,16 @@ class ValidateConstIndexExpr : public TIntermTraverser
 
 }  // namespace anonymous
 
-ValidateLimitations::ValidateLimitations(sh::GLenum shaderType,
-                                         TInfoSinkBase &sink)
-    : TIntermTraverser(true, false, false),
-      mShaderType(shaderType),
-      mSink(sink),
-      mNumErrors(0)
+ValidateLimitations::ValidateLimitations(sh::GLenum shaderType, TInfoSinkBase *sink)
+    : TIntermTraverser(true, false, false), mShaderType(shaderType), mSink(sink), mNumErrors(0)
 {
+}
+
+bool ValidateLimitations::isLimitedForLoop(TIntermLoop *loop)
+{
+    // The shader type doesn't matter in this case.
+    ValidateLimitations validate(GL_FRAGMENT_SHADER, nullptr);
+    return (validate.validateLoopType(loop) && validate.validateForLoopHeader(loop));
 }
 
 bool ValidateLimitations::visitBinary(Visit, TIntermBinary *node)
@@ -123,9 +126,12 @@ bool ValidateLimitations::visitLoop(Visit, TIntermLoop *node)
 void ValidateLimitations::error(TSourceLoc loc,
                                 const char *reason, const char *token)
 {
-    mSink.prefix(EPrefixError);
-    mSink.location(loc);
-    mSink << "'" << token << "' : " << reason << "\n";
+    if (mSink)
+    {
+        mSink->prefix(EPrefixError);
+        mSink->location(loc);
+        (*mSink) << "'" << token << "' : " << reason << "\n";
+    }
     ++mNumErrors;
 }
 
