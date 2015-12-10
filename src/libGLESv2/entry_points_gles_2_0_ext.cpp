@@ -1298,7 +1298,8 @@ void GL_APIENTRY DebugMessageControlKHR(GLenum source,
             return;
         }
 
-        UNIMPLEMENTED();
+        context->getState().getDebug().setMessageControl(source, type, severity, count, ids,
+                                                         enabled);
     }
 }
 
@@ -1322,7 +1323,8 @@ void GL_APIENTRY DebugMessageInsertKHR(GLenum source,
             return;
         }
 
-        UNIMPLEMENTED();
+        std::string message(buf, (length > 0) ? length : strlen(buf));
+        context->getState().getDebug().insertMessage(source, type, id, severity, message);
     }
 }
 
@@ -1339,7 +1341,7 @@ void GL_APIENTRY DebugMessageCallbackKHR(GLDEBUGPROCKHR callback, const void *us
             return;
         }
 
-        UNIMPLEMENTED();
+        context->getState().getDebug().setCallback(callback, userParam);
     }
 }
 
@@ -1367,7 +1369,8 @@ GLuint GL_APIENTRY GetDebugMessageLogKHR(GLuint count,
             return 0;
         }
 
-        UNIMPLEMENTED();
+        return context->getState().getDebug().getMessages(count, bufSize, sources, types, ids,
+                                                          severities, lengths, messageLog);
     }
 
     return 0;
@@ -1388,7 +1391,8 @@ void GL_APIENTRY PushDebugGroupKHR(GLenum source, GLuint id, GLsizei length, con
             return;
         }
 
-        UNIMPLEMENTED();
+        std::string message(message, (length > 0) ? length : strlen(message));
+        context->getState().getDebug().pushGroup(source, id, message);
     }
 }
 
@@ -1404,7 +1408,7 @@ void GL_APIENTRY PopDebugGroupKHR(void)
             return;
         }
 
-        UNIMPLEMENTED();
+        context->getState().getDebug().popGroup();
     }
 }
 
@@ -1423,7 +1427,11 @@ void GL_APIENTRY ObjectLabelKHR(GLenum identifier, GLuint name, GLsizei length, 
             return;
         }
 
-        UNIMPLEMENTED();
+        LabeledObject *object = context->getLabeledObject(identifier, name);
+        ASSERT(object != nullptr);
+
+        std::string label(label, (length > 0) ? length : strlen(label));
+        object->setLabel(label);
     }
 }
 
@@ -1443,7 +1451,14 @@ GetObjectLabelKHR(GLenum identifier, GLuint name, GLsizei bufSize, GLsizei *leng
             return;
         }
 
-        UNIMPLEMENTED();
+        LabeledObject *object = context->getLabeledObject(identifier, name);
+        ASSERT(object != nullptr);
+
+        const std::string &objectLabel = object->getLabel();
+        size_t writeLength = std::min(static_cast<size_t>(bufSize) - 1, objectLabel.length());
+        std::copy(objectLabel.begin(), objectLabel.begin() + writeLength, label);
+        label[writeLength] = '\0';
+        *length            = static_cast<GLsizei>(writeLength);
     }
 }
 
@@ -1460,7 +1475,11 @@ void GL_APIENTRY ObjectPtrLabelKHR(const void *ptr, GLsizei length, const GLchar
             return;
         }
 
-        UNIMPLEMENTED();
+        LabeledObject *object = context->getLabeledPtrObject(ptr);
+        ASSERT(object != nullptr);
+
+        std::string label(label, (length > 0) ? length : strlen(label));
+        object->setLabel(label);
     }
 }
 
@@ -1482,7 +1501,14 @@ void GL_APIENTRY GetObjectPtrLabelKHR(const void *ptr,
             return;
         }
 
-        UNIMPLEMENTED();
+        LabeledObject *object = context->getLabeledPtrObject(ptr);
+        ASSERT(object != nullptr);
+
+        const std::string &objectLabel = object->getLabel();
+        size_t writeLength = std::min(static_cast<size_t>(bufSize) - 1, objectLabel.length());
+        std::copy(objectLabel.begin(), objectLabel.begin() + writeLength, label);
+        label[writeLength] = '\0';
+        *length            = static_cast<GLsizei>(writeLength);
     }
 }
 
@@ -1498,7 +1524,7 @@ void GL_APIENTRY GetPointervKHR(GLenum pname, void **params)
             return;
         }
 
-        UNIMPLEMENTED();
+        context->getPointerv(pname, params);
     }
 }
 }
