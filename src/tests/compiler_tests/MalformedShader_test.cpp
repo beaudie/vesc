@@ -1436,3 +1436,20 @@ TEST_F(UnrollForLoopsTest, UnlimitedForLoop)
         FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
     }
 }
+
+// Check that indices that are not integers are rejected.
+TEST_F(MalformedShaderTest, NonIntegerIndex)
+{
+    const std::string &shaderString =
+        "precision mediump float;\n"
+        "void main()\n"
+        "{\n"
+        "    float f[3];\n"
+        "    const float i = 2.0;\n"
+        "    gl_fragColor = vec4(f[i]);\n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
