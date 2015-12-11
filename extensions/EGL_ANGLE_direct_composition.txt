@@ -1,0 +1,93 @@
+Name
+
+    ANGLE_direct_composition
+
+Name Strings
+
+    EGL_ANGLE_direct_composition
+
+Contributors
+
+    John Bauman
+
+Contacts
+
+    John Bauman (jbauman 'at' google.com)
+
+Status
+
+    Draft
+
+Version
+
+    Version 1, Dec 12, 2015
+
+Number
+
+    EGL Extension #??
+
+Dependencies
+
+    This extension is written against the wording of the EGL 1.5 Specification.
+
+Overview
+
+    This extension allows specifying that the contents of a window surface be
+    posted to the screen using the DirectComposition API.
+
+New Types
+
+    None
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+    A new EGLConfig attribute is available.
+
+    EGL_DIRECT_COMPOSITION_ANGLE                         0x33A5
+
+Additions to Chapter 3 of the EGL 1.5 Specification (EGL Functions and Errors)
+
+    Add to table 3.1 (EGLConfig Attributes)
+
+    Attribute                       Type      Notes
+    -----------------------------   ----      ---------------------------------
+    EGL_DIRECT_COMPOSITION_ANGLE    boolean   True if DirectComposition is
+                                              used to swap this buffer
+
+
+    Add a paragraph to section 3.4, section Other EGLConfig Attribute
+    Descriptions.
+
+    "EGL_DIRECT_COMPOSITION_ANGLE is an EGLBoolean indicating whether
+    eglSwapBuffers on a Surface will use DirectComposition to draw to the screen.
+    For each native window, only one window surface with
+    EGL_DIRECT_COMPOSITION_ANGLE of EGL_TRUE may exist at a time. When
+    swapped, the contents of the window surface will appear above contents of
+    the window rendered through other native APIs."
+
+    Add to table 3.4 (Default values and match criteria for EGLConfig
+    attributes):
+
+    Attribute                       Default                           Selection  Sort     Sort
+                                                                      Criteria   Order    Priority
+    -------------------------       --------------------------------  ---------  -------  --------
+    EGL_DIRECT_COMPOSITION_ANGLE    EGL_FALSE                         Exact      None
+
+    Modify the last paragraph of in section 3.4.1.2 (Sorting of EGLConfigs)
+
+    EGLConfigs are not sorted with respect to the parameters
+    EGL_BIND_TO_TEXTURE_RGB, EGL_BIND_TO_TEXTURE_RGBA,
+    EGL_DIRECT_COMPOSITION_ANGLE, EGL_CONFORMANT, EGL_LEVEL,
+    EGL_NATIVE_RENDERABLE, EGL_MAX_SWAP_INTERVAL, EGL_MIN_SWAP_INTERVAL,
+    EGL_RENDERABLE_TYPE, EGL_SURFACE_TYPE, EGL_TRANSPARENT_TYPE,
+    EGL_TRANSPARENT_RED_VALUE, EGL_TRANSPARENT_GREEN_VALUE, and
+    EGL_TRANSPARENT_BLUE_VALUE.
+Issues
+
+Revision History
+
+    Version 1, 2015/12/12
+      - Initial draft.
