@@ -26,6 +26,7 @@ class QueryImpl : angle::NonCopyable
 
     virtual gl::Error begin() = 0;
     virtual gl::Error end() = 0;
+    virtual gl::Error queryCounter() = 0;
     virtual gl::Error getResult(GLuint *params) = 0;
     virtual gl::Error isResultAvailable(GLuint *available) = 0;
 

@@ -33,6 +33,8 @@ class Query : public RefCountObject
     Error begin();
     Error end();
 
+    Error queryCounter();
+
     Error getResult(GLuint *params);
     Error isResultAvailable(GLuint *available);
 

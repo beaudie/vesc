@@ -125,6 +125,7 @@ class Context final : public ValidationContext
 
     Error beginQuery(GLenum target, GLuint query);
     Error endQuery(GLenum target);
+    Error queryCounter(GLuint queryId, GLenum target);
 
     void setVertexAttribDivisor(GLuint index, GLuint divisor);
 

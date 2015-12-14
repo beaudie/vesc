@@ -70,6 +70,12 @@ gl::Error QueryGL::end()
     return pause();
 }
 
+gl::Error QueryGL::queryCounter()
+{
+    // TODO(dianx) implement this
+    return gl::Error(GL_NO_ERROR);
+}
+
 gl::Error QueryGL::getResult(GLuint *params)
 {
     ASSERT(mActiveQuery == 0);

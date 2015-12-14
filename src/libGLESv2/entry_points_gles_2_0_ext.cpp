@@ -48,6 +48,42 @@ void GL_APIENTRY BeginQueryEXT(GLenum target, GLuint id)
     }
 }
 
+void GL_APIENTRY QueryCounterEXT(GLuint id, GLenum target)
+{
+    EVENT("(GLuint id = %d, GLenum target = 0x%X)", id, target);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        // The error INVALID_ENUM is generated if QueryCounterEXT is called where
+        // <target> is not TIMESTAMP_EXT.
+        if (target != GL_TIMESTAMP_EXT)
+        {
+            context->recordError(Error(GL_INVALID_ENUM));
+            return;
+        }
+
+        // Make sure the query object exists
+        Query *queryObject = context->getQuery(id, false, target);
+
+        if (!queryObject)
+        {
+            context->recordError(Error(GL_INVALID_OPERATION));
+            return;
+        }
+
+        // The error INVALID_OPERATION is generated if QueryCounterEXT is called
+        // on a query object that is already in use inside a BeginQueryEXT / EndQueryEXT.
+        if (context->getState().getActiveQueryId(queryObject->getType()) == id)
+        {
+            context->recordError(Error(GL_INVALID_OPERATION));
+            return;
+        }
+
+        // context->queryCounter(id, target)
+    }
+}
+
 void GL_APIENTRY DeleteFencesNV(GLsizei n, const GLuint* fences)
 {
     EVENT("(GLsizei n = %d, const GLuint* fences = 0x%0.8p)", n, fences);

@@ -66,6 +66,12 @@ gl::Error Query9::end()
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error Query9::queryCounter()
+{
+    // TODO(dianx) implement this
+    return gl::Error(GL_NO_ERROR);
+}
+
 gl::Error Query9::getResult(GLuint *params)
 {
     while (!mQueryFinished)

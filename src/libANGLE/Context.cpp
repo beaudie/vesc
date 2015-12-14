@@ -729,6 +729,23 @@ Error Context::endQuery(GLenum target)
     return error;
 }
 
+Error Context::queryCounter(GLuint queryId, GLenum target)
+{
+    Query *queryObject = getQuery(queryId, true, target);
+    ASSERT(queryObject);
+
+    Error error = queryObject->queryCounter();
+    if (error.isError())
+    {
+        return error;
+    }
+
+    // set query as active / not available if succeeded
+    // setQueryNotActive
+
+    return Error(GL_NO_ERROR);
+}
+
 Framebuffer *Context::getFramebuffer(unsigned int handle) const
 {
     FramebufferMap::const_iterator framebuffer = mFramebufferMap.find(handle);

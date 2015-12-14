@@ -52,6 +52,7 @@ ANGLE_EXPORT void GL_APIENTRY DeleteQueriesEXT(GLsizei n, const GLuint *ids);
 ANGLE_EXPORT GLboolean GL_APIENTRY IsQueryEXT(GLuint id);
 ANGLE_EXPORT void GL_APIENTRY BeginQueryEXT(GLenum target, GLuint id);
 ANGLE_EXPORT void GL_APIENTRY EndQueryEXT(GLenum target);
+ANGLE_EXPORT void GL_APIENTRY QueryCounterEXT(GLuint id, GLenum target);
 ANGLE_EXPORT void GL_APIENTRY GetQueryivEXT(GLenum target, GLenum pname, GLint *params);
 ANGLE_EXPORT void GL_APIENTRY GetQueryObjectuivEXT(GLuint id, GLenum pname, GLuint *params);
 

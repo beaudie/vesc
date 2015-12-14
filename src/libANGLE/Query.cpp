@@ -32,6 +32,11 @@ Error Query::end()
     return mQuery->end();
 }
 
+Error Query::queryCounter()
+{
+    return mQuery->queryCounter();
+}
+
 Error Query::getResult(GLuint *params)
 {
     return mQuery->getResult(params);

@@ -60,6 +60,26 @@ gl::Error Query11::end()
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error Query11::queryCounter()
+{
+    if (mQuery == NULL)
+    {
+        D3D11_QUERY_DESC queryDesc;
+        queryDesc.Query     = gl_d3d11::ConvertQueryType(getType());
+        queryDesc.MiscFlags = 0;
+
+        HRESULT result = mRenderer->getDevice()->CreateQuery(&queryDesc, &mQuery);
+        if (FAILED(result))
+        {
+            return gl::Error(GL_OUT_OF_MEMORY, "Internal query creation failed, result: 0x%X.",
+                             result);
+        }
+    }
+
+    mRenderer->getDeviceContext()->End(mQuery);
+    return gl::Error(GL_NO_ERROR);
+}
+
 gl::Error Query11::getResult(GLuint *params)
 {
     while (!mQueryFinished)
@@ -106,6 +126,7 @@ gl::Error Query11::testQuery()
         {
           case GL_ANY_SAMPLES_PASSED_EXT:
           case GL_ANY_SAMPLES_PASSED_CONSERVATIVE_EXT:
+          case GL_TIMESTAMP_EXT:
             {
                 UINT64 numPixels = 0;
                 HRESULT result = context->GetData(mQuery, &numPixels, sizeof(numPixels), 0);

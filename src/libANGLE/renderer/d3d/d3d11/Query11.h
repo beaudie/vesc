@@ -23,6 +23,7 @@ class Query11 : public QueryImpl
 
     virtual gl::Error begin();
     virtual gl::Error end();
+    virtual gl::Error queryCounter();
     virtual gl::Error getResult(GLuint *params);
     virtual gl::Error isResultAvailable(GLuint *available);
 

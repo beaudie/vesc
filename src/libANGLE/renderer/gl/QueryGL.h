@@ -27,6 +27,7 @@ class QueryGL : public QueryImpl
 
     gl::Error begin() override;
     gl::Error end() override;
+    gl::Error queryCounter() override;
     gl::Error getResult(GLuint *params) override;
     gl::Error isResultAvailable(GLuint *available) override;
 
