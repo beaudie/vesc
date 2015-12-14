@@ -24,6 +24,7 @@
             '<(angle_path)/src/tests/gl_tests/CubeMapTextureTest.cpp',
             '<(angle_path)/src/tests/gl_tests/DebugMarkerTest.cpp',
             '<(angle_path)/src/tests/gl_tests/DepthStencilFormatsTest.cpp',
+            '<(angle_path)/src/tests/gl_tests/DifferentStencilMasksTest.cpp',
             '<(angle_path)/src/tests/gl_tests/DiscardFramebufferEXTTest.cpp',
             '<(angle_path)/src/tests/gl_tests/DrawBuffersTest.cpp',
             '<(angle_path)/src/tests/gl_tests/DrawElementsTest.cpp',
