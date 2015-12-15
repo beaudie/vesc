@@ -112,6 +112,7 @@
         if ([self frame].size.width != texture.width || [self frame].size.height != texture.height)
         {
             [self setFrame:CGRectMake(0, 0, texture.width, texture.height)];
+            [self setNeedsDisplay];
         }
 
         // TODO(cwallez) support 2.1 contexts too that don't have blitFramebuffer nor the
