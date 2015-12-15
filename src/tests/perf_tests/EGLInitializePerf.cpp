@@ -77,7 +77,7 @@ class EGLInitializePerfTest : public ANGLEPerfTest,
     EGLInitializePerfTest();
     ~EGLInitializePerfTest();
 
-    void step(float dt, double totalTime) override;
+    void step() override;
     void TearDown() override;
 
   private:
@@ -132,18 +132,13 @@ EGLInitializePerfTest::~EGLInitializePerfTest()
     SafeDelete(mOSWindow);
 }
 
-void EGLInitializePerfTest::step(float dt, double totalTime)
+void EGLInitializePerfTest::step()
 {
     ASSERT_TRUE(mDisplay != EGL_NO_DISPLAY);
 
     EGLint majorVersion, minorVersion;
     ASSERT_TRUE(eglInitialize(mDisplay, &majorVersion, &minorVersion) == EGL_TRUE);
     ASSERT_TRUE(eglTerminate(mDisplay) == EGL_TRUE);
-
-    if (mTimer->getElapsedTime() >= 5.0)
-    {
-        mRunning = false;
-    }
 }
 
 void EGLInitializePerfTest::TearDown()
