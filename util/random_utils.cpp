@@ -10,6 +10,7 @@
 #include "random_utils.h"
 #include <time.h>
 #include <cstdlib>
+#include <cstdint>
 
 namespace angle
 {
@@ -32,6 +33,11 @@ float RandomBetween(float min, float max)
 float RandomNegativeOneToOne()
 {
     return RandomBetween(0.0f, 1.0f);
+}
+
+unsigned int RandomUIntBetween(unsigned int min, unsigned int max)
+{
+    return min + static_cast<unsigned int>(RandomFloat() * (max - min));
 }
 
 }  // namespace angle

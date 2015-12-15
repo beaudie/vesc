@@ -18,6 +18,7 @@ void RandomInitFromTime();
 float RandomFloat();
 float RandomBetween(float min, float max);
 float RandomNegativeOneToOne();
+unsigned int RandomUIntBetween(unsigned int min, unsigned int max);
 
 }  // namespace angle
 
