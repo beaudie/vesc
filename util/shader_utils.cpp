@@ -49,7 +49,7 @@ GLuint CompileShader(GLenum type, const std::string &source)
         std::vector<GLchar> infoLog(infoLogLength);
         glGetShaderInfoLog(shader, static_cast<GLsizei>(infoLog.size()), NULL, &infoLog[0]);
 
-        std::cerr << "shader compilation failed: " << &infoLog[0];
+        std::cerr << "shader compilation failed: " << &infoLog[0] << "\n";
 
         glDeleteShader(shader);
         shader = 0;
@@ -120,7 +120,7 @@ GLuint CompileProgramWithTransformFeedback(
         std::vector<GLchar> infoLog(infoLogLength);
         glGetProgramInfoLog(program, static_cast<GLsizei>(infoLog.size()), NULL, &infoLog[0]);
 
-        std::cerr << "program link failed: " << &infoLog[0];
+        std::cerr << "program link failed: " << &infoLog[0] << "\n";
 
         glDeleteProgram(program);
         return 0;
