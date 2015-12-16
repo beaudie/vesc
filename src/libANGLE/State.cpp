@@ -8,6 +8,7 @@
 
 #include "libANGLE/State.h"
 
+#include "common/BitSetIterator.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Framebuffer.h"
@@ -879,7 +880,12 @@ void State::setVertexArrayBinding(VertexArray *vertexArray)
 {
     mVertexArray = vertexArray;
     mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
-    mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_OBJECT);
+
+    // TODO(jmadill): Determine if this check if safe
+    if (mVertexArray->hasAnyDirtyBit())
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+    }
 }
 
 GLuint State::getVertexArrayId() const
@@ -900,7 +906,7 @@ bool State::removeVertexArrayBinding(GLuint vertexArray)
     {
         mVertexArray = NULL;
         mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
-        mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_OBJECT);
+        mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
         return true;
     }
 
@@ -1076,7 +1082,7 @@ void State::detachBuffer(GLuint bufferName)
 void State::setEnableVertexAttribArray(unsigned int attribNum, bool enabled)
 {
     getVertexArray()->enableAttribute(attribNum, enabled);
-    mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_OBJECT);
+    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 void State::setVertexAttribf(GLuint index, const GLfloat values[4])
@@ -1110,13 +1116,13 @@ void State::setVertexAttribState(unsigned int attribNum,
                                  const void *pointer)
 {
     getVertexArray()->setAttributeState(attribNum, boundBuffer, size, type, normalized, pureInteger, stride, pointer);
-    mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_OBJECT);
+    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 void State::setVertexAttribDivisor(GLuint index, GLuint divisor)
 {
     getVertexArray()->setVertexAttribDivisor(index, divisor);
-    mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_OBJECT);
+    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 const VertexAttribCurrentValueData &State::getVertexAttribCurrentValue(unsigned int attribNum) const
@@ -1647,4 +1653,34 @@ bool State::hasMappedBuffer(GLenum target) const
     }
 }
 
+void State::syncDirtyObjects()
+{
+    if (!mDirtyObjects.any())
+        return;
+
+    for (auto dirtyObject : angle::IterateBitSet(mDirtyObjects))
+    {
+        switch (dirtyObject)
+        {
+            case DIRTY_OBJECT_READ_FRAMEBUFFER:
+                // TODO(jmadill): implement this
+                break;
+            case DIRTY_OBJECT_DRAW_FRAMEBUFFER:
+                // TODO(jmadill): implement this
+                break;
+            case DIRTY_OBJECT_VERTEX_ARRAY:
+                mVertexArray->syncImplState();
+                break;
+            case DIRTY_OBJECT_PROGRAM:
+                // TODO(jmadill): implement this
+                break;
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
+
+    mDirtyObjects.reset();
 }
+
+}  // namespace gl
