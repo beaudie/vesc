@@ -58,14 +58,6 @@ class FramebufferD3D : public FramebufferImpl
     FramebufferD3D(const gl::Framebuffer::Data &data);
     virtual ~FramebufferD3D();
 
-    void onUpdateColorAttachment(size_t index) override;
-    void onUpdateDepthAttachment() override;
-    void onUpdateStencilAttachment() override;
-    void onUpdateDepthStencilAttachment() override;
-
-    void setDrawBuffers(size_t count, const GLenum *buffers) override;
-    void setReadBuffer(GLenum buffer) override;
-
     gl::Error clear(const gl::Data &data, GLbitfield mask) override;
     gl::Error clearBufferfv(const gl::Data &data,
                             GLenum buffer,
@@ -93,6 +85,8 @@ class FramebufferD3D : public FramebufferImpl
                    GLbitfield mask, GLenum filter, const gl::Framebuffer *sourceFramebuffer) override;
 
     bool checkStatus() const override;
+
+    void syncState(const gl::Framebuffer::DirtyBits &dirtyBits) override;
 
     const gl::AttachmentList &getColorAttachmentsForRender(const WorkaroundsD3D &workarounds) const;
 

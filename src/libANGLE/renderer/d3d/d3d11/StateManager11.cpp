@@ -327,6 +327,14 @@ void StateManager11::syncState(const gl::State &state, const gl::State::DirtyBit
                     mViewportStateIsDirty = true;
                 }
                 break;
+            case gl::State::DIRTY_BIT_READ_FRAMEBUFFER_OBJECT:
+                // TODO(jmadill): Move object syncing to GL layer
+                state.getReadFramebuffer()->syncState();
+                break;
+            case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_OBJECT:
+                // TODO(jmadill): Move object syncing to GL layer
+                state.getDrawFramebuffer()->syncState();
+                break;
             default:
                 break;
         }

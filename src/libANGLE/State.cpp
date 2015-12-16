@@ -813,21 +813,29 @@ void State::detachRenderbuffer(GLuint renderbuffer)
 void State::setReadFramebufferBinding(Framebuffer *framebuffer)
 {
     mReadFramebuffer = framebuffer;
+    mDirtyBits.set(DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
+    mDirtyBits.set(DIRTY_BIT_READ_FRAMEBUFFER_OBJECT);
 }
 
 void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
 {
     mDrawFramebuffer = framebuffer;
+    mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
+    mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_OBJECT);
 }
 
 Framebuffer *State::getTargetFramebuffer(GLenum target) const
 {
     switch (target)
     {
-    case GL_READ_FRAMEBUFFER_ANGLE:  return mReadFramebuffer;
-    case GL_DRAW_FRAMEBUFFER_ANGLE:
-    case GL_FRAMEBUFFER:             return mDrawFramebuffer;
-    default:                         UNREACHABLE(); return NULL;
+        case GL_READ_FRAMEBUFFER_ANGLE:
+            return mReadFramebuffer;
+        case GL_DRAW_FRAMEBUFFER_ANGLE:
+        case GL_FRAMEBUFFER:
+            return mDrawFramebuffer;
+        default:
+            UNREACHABLE();
+            return NULL;
     }
 }
 
@@ -857,6 +865,7 @@ bool State::removeReadFramebufferBinding(GLuint framebuffer)
         mReadFramebuffer->id() == framebuffer)
     {
         mReadFramebuffer = NULL;
+        mDirtyBits.set(DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
         return true;
     }
 
@@ -869,6 +878,7 @@ bool State::removeDrawFramebufferBinding(GLuint framebuffer)
         mDrawFramebuffer->id() == framebuffer)
     {
         mDrawFramebuffer = NULL;
+        mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
         return true;
     }
 
@@ -1647,4 +1657,21 @@ bool State::hasMappedBuffer(GLenum target) const
     }
 }
 
+void State::setObjectDirtyBit(GLenum target)
+{
+    switch (target)
+    {
+        case GL_READ_FRAMEBUFFER:
+            mDirtyBits.set(DIRTY_BIT_READ_FRAMEBUFFER_OBJECT);
+            break;
+        case GL_DRAW_FRAMEBUFFER:
+            mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_OBJECT);
+            break;
+        case GL_FRAMEBUFFER:
+            mDirtyBits.set(DIRTY_BIT_READ_FRAMEBUFFER_OBJECT);
+            mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_OBJECT);
+            break;
+    }
 }
+
+}  // namespace gl

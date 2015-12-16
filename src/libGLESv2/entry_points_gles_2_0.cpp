@@ -1351,6 +1351,7 @@ void GL_APIENTRY FramebufferTexture2D(GLenum target, GLenum attachment, GLenum t
         {
             framebuffer->resetAttachment(attachment);
         }
+        context->getState().setObjectDirtyBit(target);
     }
 }
 
