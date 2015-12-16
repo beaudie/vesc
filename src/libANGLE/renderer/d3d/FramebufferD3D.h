@@ -26,6 +26,7 @@ typedef std::vector<const FramebufferAttachment *> AttachmentList;
 
 namespace rx
 {
+class RendererD3D;
 class RenderTargetD3D;
 struct WorkaroundsD3D;
 
@@ -55,16 +56,8 @@ struct ClearParameters
 class FramebufferD3D : public FramebufferImpl
 {
   public:
-    FramebufferD3D(const gl::Framebuffer::Data &data);
+    FramebufferD3D(const gl::Framebuffer::Data &data, RendererD3D *renderer);
     virtual ~FramebufferD3D();
-
-    void onUpdateColorAttachment(size_t index) override;
-    void onUpdateDepthAttachment() override;
-    void onUpdateStencilAttachment() override;
-    void onUpdateDepthStencilAttachment() override;
-
-    void setDrawBuffers(size_t count, const GLenum *buffers) override;
-    void setReadBuffer(GLenum buffer) override;
 
     gl::Error clear(const gl::Data &data, GLbitfield mask) override;
     gl::Error clearBufferfv(const gl::Data &data,
@@ -94,12 +87,9 @@ class FramebufferD3D : public FramebufferImpl
 
     bool checkStatus() const override;
 
-    const gl::AttachmentList &getColorAttachmentsForRender(const WorkaroundsD3D &workarounds) const;
+    void syncState(const gl::Framebuffer::DirtyBits &dirtyBits) override;
 
-  protected:
-    // Cache variable
-    mutable gl::AttachmentList mColorAttachmentsForRender;
-    mutable bool mInvalidateColorAttachmentCache;
+    const gl::AttachmentList &getColorAttachmentsForRender() const;
 
   private:
     virtual gl::Error clear(const gl::Data &data, const ClearParameters &clearParams) = 0;
@@ -116,6 +106,10 @@ class FramebufferD3D : public FramebufferImpl
                            const gl::Framebuffer *sourceFramebuffer) = 0;
 
     virtual GLenum getRenderTargetImplementationFormat(RenderTargetD3D *renderTarget) const = 0;
+
+    RendererD3D *mRenderer;
+    gl::AttachmentList mColorAttachmentsForRender;
+    bool mInvalidateColorAttachmentCache;
 };
 
 }
