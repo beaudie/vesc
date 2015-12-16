@@ -989,6 +989,8 @@ egl::ConfigSet Renderer11::generateConfigs() const
     const gl::Caps &rendererCaps = getRendererCaps();
     const gl::TextureCapsMap &rendererTextureCaps = getRendererTextureCaps();
 
+    const EGLint optimalSurfaceOrientation = EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE;
+
     egl::ConfigSet configs;
     for (size_t formatIndex = 0; formatIndex < ArraySize(colorBufferFormats); formatIndex++)
     {
@@ -1043,6 +1045,7 @@ egl::ConfigSet Renderer11::generateConfigs() const
                     config.transparentRedValue = 0;
                     config.transparentGreenValue = 0;
                     config.transparentBlueValue = 0;
+                    config.optimialOrientation   = optimalSurfaceOrientation;
 
                     configs.add(config);
                 }
@@ -1070,6 +1073,7 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
 
     outExtensions->querySurfacePointer = true;
     outExtensions->windowFixedSize     = true;
+    outExtensions->surfaceOrientation  = true;
 
     // D3D11 does not support present with dirty rectangles until DXGI 1.2.
     outExtensions->postSubBuffer = mRenderer11DeviceCaps.supportsDXGI1_2;
@@ -1134,9 +1138,14 @@ gl::Error Renderer11::finish()
     return gl::Error(GL_NO_ERROR);
 }
 
-SwapChainD3D *Renderer11::createSwapChain(NativeWindow nativeWindow, HANDLE shareHandle, GLenum backBufferFormat, GLenum depthBufferFormat)
+SwapChainD3D *Renderer11::createSwapChain(NativeWindow nativeWindow,
+                                          HANDLE shareHandle,
+                                          GLenum backBufferFormat,
+                                          GLenum depthBufferFormat,
+                                          EGLint orientation)
 {
-    return new SwapChain11(this, nativeWindow, shareHandle, backBufferFormat, depthBufferFormat);
+    return new SwapChain11(this, nativeWindow, shareHandle, backBufferFormat, depthBufferFormat,
+                           orientation);
 }
 
 void *Renderer11::getD3DDevice()
