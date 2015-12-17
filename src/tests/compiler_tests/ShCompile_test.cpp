@@ -21,7 +21,7 @@ class ShCompileTest : public testing::Test
     {
         ShInitBuiltInResources(&mResources);
         mCompiler =
-            ShConstructCompiler(GL_FRAGMENT_SHADER, SH_WEBGL_SPEC, SH_GLSL_OUTPUT, &mResources);
+            ShConstructCompiler(GL_FRAGMENT_SHADER, SH_WEBGL_SPEC, SH_GLSL_COMPATIBILITY_OUTPUT, &mResources);
         ASSERT_TRUE(mCompiler != nullptr) << "Compiler could not be constructed.";
     }
 

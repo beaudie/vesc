@@ -42,7 +42,7 @@ class FragDepthTest : public testing::TestWithParam<bool>
     {
         DestroyCompiler();
         mCompiler =
-            ShConstructCompiler(GL_FRAGMENT_SHADER, SH_GLES3_SPEC, SH_GLSL_OUTPUT, &mResources);
+            ShConstructCompiler(GL_FRAGMENT_SHADER, SH_GLES3_SPEC, SH_GLSL_COMPATIBILITY_OUTPUT, &mResources);
         ASSERT_TRUE(mCompiler != nullptr) << "Compiler could not be constructed.";
     }
 
