@@ -13,6 +13,9 @@
 import subprocess
 import sys
 import os
+import re
+
+base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 
 # You might have to re-order these to find the specific version you want.
 perftests_paths = ['out/Release', 'build/Release_x64', 'build/Release_Win32']
@@ -59,7 +62,7 @@ perftests_path = ""
 
 # TODO(jmadill): Linux binaries
 for path in perftests_paths:
-    perftests_path = os.path.join(path, 'angle_perftests.exe')
+    perftests_path = os.path.join(base_path, path, 'angle_perftests.exe')
     if os.path.exists(perftests_path):
         break
 
@@ -78,15 +81,23 @@ while True:
 
     start_index = output.find(metric + "=")
     if start_index == -1:
-        print("Did not find test output")
+        print("Did not find the score of the specified test in output:")
+        print(output)
         sys.exit(1)
 
     start_index += len(metric) + 2
 
     end_index = output[start_index:].find(" ")
     if end_index == -1:
-        print("Error parsing output")
+        print("Error parsing output:")
+        print(output)
         sys.exit(2)
+
+    m = re.search('Running (\d+) tests', output)
+    if m and int(m.group(1)) > 1:
+        print("Found more than one test result in output:")
+        print(output)
+        sys.exit(3)
 
     end_index += start_index
 
