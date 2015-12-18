@@ -52,7 +52,11 @@ SwapChain11::SwapChain11(Renderer11 *renderer,
       mBackBufferTexture(nullptr),
       mBackBufferRTView(nullptr),
       mBackBufferSRView(nullptr),
-      mNeedsOffscreenTexture(orientation != EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE),
+      // We don't need an offscreen texture if either orientation = INVERT_Y,
+      // or direct rendering is enabled and we're not rendering onto an offscreen surface.
+      mNeedsOffscreenTexture(
+          orientation != EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE &&
+          !(mRenderer->directRenderingEnabled() && nativeWindow.getNativeWindow())),
       mOffscreenTexture(nullptr),
       mOffscreenRTView(nullptr),
       mOffscreenSRView(nullptr),
@@ -68,6 +72,8 @@ SwapChain11::SwapChain11(Renderer11 *renderer,
       mColorRenderTarget(this, renderer, false),
       mDepthStencilRenderTarget(this, renderer, true)
 {
+    // Sanity check that if direct rendering is active then we're using the default orientation
+    ASSERT(!mRenderer->directRenderingEnabled() || orientation == 0);
 }
 
 SwapChain11::~SwapChain11()

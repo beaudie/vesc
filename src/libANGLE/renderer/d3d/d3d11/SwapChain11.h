@@ -70,6 +70,7 @@ class SwapChain11 : public SwapChainD3D
     bool mAppCreatedShareHandle;
     unsigned int mSwapInterval;
     bool mPassThroughResourcesInit;
+    bool mDirectRenderingEnabled;
 
     bool mFirstSwap;
     DXGISwapChain *mSwapChain;
@@ -80,7 +81,7 @@ class SwapChain11 : public SwapChainD3D
     ID3D11RenderTargetView *mBackBufferRTView;
     ID3D11ShaderResourceView *mBackBufferSRView;
 
-    const bool mNeedsOffscreenTexture;
+    bool mNeedsOffscreenTexture;
     ID3D11Texture2D *mOffscreenTexture;
     ID3D11RenderTargetView *mOffscreenRTView;
     ID3D11ShaderResourceView *mOffscreenSRView;
