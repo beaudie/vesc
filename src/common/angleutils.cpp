@@ -10,6 +10,11 @@
 #include <stdio.h>
 #include <vector>
 
+namespace angle
+{
+const uintptr_t DirtyPointer = std::numeric_limits<uintptr_t>::max();
+}
+
 size_t FormatStringIntoVector(const char *fmt, va_list vararg, std::vector<char>& outBuffer)
 {
     // Attempt to just print to the current buffer
