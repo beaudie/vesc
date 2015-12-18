@@ -5,17 +5,13 @@
 {
     'variables':
     {
-        # Assume for the time being that we're never compiling
-        # standalone ANGLE on Chrome OS.
-        'chromeos': 0,
-
         # Use a nested variable trick to get use_x11 evaluated more
         # eagerly than other conditional variables.
         'variables':
         {
             'conditions':
             [
-                ['OS=="linux"',
+                ['OS=="linux" and chromeos==0',
                 {
                     'use_x11': 1,
                 },
