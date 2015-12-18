@@ -66,6 +66,13 @@
             'x11/X11Window.cpp',
             'x11/X11Window.h',
         ],
+        'util_drm_sources':
+        [
+            'drm/DRMPixmap.cpp',
+            'drm/DRMPixmap.h',
+            'drm/DRMWindow.cpp',
+            'drm/DRMWindow.h',
+        ],
         'util_osx_sources':
         [
             'osx/OSX_system_utils.cpp',
@@ -159,6 +166,29 @@
                         'libraries':
                         [
                             '<!@(<(pkg-config) --libs-only-l x11 xi) -lrt',
+                        ],
+                    },
+                }],
+                ['chromeos==1',
+                {
+                    'sources':
+                    [
+                        '<@(util_drm_sources)',
+                    ],
+                    'cflags':
+                    [
+                        '<!@(<(pkg-config) --cflags libdrm gbm)',
+                    ],
+                    'link_settings':
+                    {
+                        'ldflags':
+                        [
+                            '<!@(<(pkg-config) --libs-only-L --libs-only-other libdrm gbm)',
+
+                        ],
+                        'libraries':
+                        [
+                            '<!@(<(pkg-config) --libs-only-l libdrm gbm) -lrt',
                         ],
                     },
                 }],
