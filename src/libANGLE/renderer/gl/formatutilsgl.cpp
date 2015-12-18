@@ -277,14 +277,14 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
 {
     GLenum result = internalFormat;
 
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(sizedInternalFormat);
+
     if (functions->standard == STANDARD_GL_DESKTOP)
     {
         // Use sized internal formats whenever possible to guarantee the requested precision.
         // On Desktop GL, passing an internal format of GL_RGBA will generate a GL_RGBA8 texture
         // even if the provided type is GL_FLOAT.
         result = sizedInternalFormat;
-
-        const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(sizedInternalFormat);
 
         if (workarounds.avoid1BitAlphaTextureFormats && formatInfo.alphaBits == 1)
         {
@@ -332,6 +332,12 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
     else if (functions->isAtLeastGLES(gl::Version(3, 0)))
     {
         result = sizedInternalFormat;
+
+        if (formatInfo.format == GL_LUMINANCE || formatInfo.format == GL_LUMINANCE_ALPHA || formatInfo.format == GL_ALPHA)
+        {
+            // Luminance alpha formats don't have sized versions without extensions.  Just use the unsized formats.
+            result = internalFormat;
+        }
     }
 
     return result;
