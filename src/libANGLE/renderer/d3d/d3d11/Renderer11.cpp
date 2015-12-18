@@ -577,12 +577,17 @@ Renderer11::Renderer11(egl::Display *display)
             default:
                 UNREACHABLE();
         }
+
+        mDirectRenderingEnabled =
+            !!(attributes.get(EGL_PLATFORM_ANGLE_EXPERIMENTAL_DIRECT_RENDERING, EGL_TRUE));
     }
     else if (display->getPlatform() == EGL_PLATFORM_DEVICE_EXT)
     {
         mEGLDevice = GetImplAs<DeviceD3D>(display->getDevice());
         ASSERT(mEGLDevice != nullptr);
         mCreatedWithDeviceEXT = true;
+
+        mDirectRenderingEnabled = false;
     }
 
     initializeDebugAnnotator();
@@ -972,14 +977,22 @@ void Renderer11::populateRenderer11DeviceCaps()
 
 egl::ConfigSet Renderer11::generateConfigs() const
 {
-    static const GLenum colorBufferFormats[] = {
+    std::vector<GLenum> colorBufferFormats = {
         // 32-bit supported formats
         GL_BGRA8_EXT, GL_RGBA8_OES,
         // 24-bit supported formats
         GL_RGB8_OES,
-        // 16-bit supported formats
-        GL_RGBA4, GL_RGB5_A1, GL_RGB565,
     };
+
+    if (!mDirectRenderingEnabled)
+    {
+        // 16-bit supported formats
+        // These aren't valid D3D11 swapchain formats, so don't expose them as configs
+        // if direct rendering to the swapchain is active
+        colorBufferFormats.push_back(GL_RGBA4);
+        colorBufferFormats.push_back(GL_RGB5_A1);
+        colorBufferFormats.push_back(GL_RGB565);
+    }
 
     static const GLenum depthStencilBufferFormats[] =
     {
@@ -991,10 +1004,11 @@ egl::ConfigSet Renderer11::generateConfigs() const
     const gl::Caps &rendererCaps = getRendererCaps();
     const gl::TextureCapsMap &rendererTextureCaps = getRendererTextureCaps();
 
-    const EGLint optimalSurfaceOrientation = EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE;
+    const EGLint optimalSurfaceOrientation =
+        mDirectRenderingEnabled ? 0 : EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE;
 
     egl::ConfigSet configs;
-    for (size_t formatIndex = 0; formatIndex < ArraySize(colorBufferFormats); formatIndex++)
+    for (size_t formatIndex = 0; formatIndex < colorBufferFormats.size(); formatIndex++)
     {
         GLenum colorBufferInternalFormat = colorBufferFormats[formatIndex];
         const gl::TextureCaps &colorBufferFormatCaps = rendererTextureCaps.get(colorBufferInternalFormat);
@@ -1025,7 +1039,11 @@ egl::ConfigSet Renderer11::generateConfigs() const
                     config.configCaveat = EGL_NONE;
                     config.configID = static_cast<EGLint>(configs.size() + 1);
                     // Can only support a conformant ES2 with feature level greater than 10.0.
-                    config.conformant = (mRenderer11DeviceCaps.featureLevel >= D3D_FEATURE_LEVEL_10_0) ? (EGL_OPENGL_ES2_BIT | EGL_OPENGL_ES3_BIT_KHR) : 0;
+                    config.conformant =
+                        (!mDirectRenderingEnabled &&
+                         mRenderer11DeviceCaps.featureLevel >= D3D_FEATURE_LEVEL_10_0)
+                            ? (EGL_OPENGL_ES2_BIT | EGL_OPENGL_ES3_BIT_KHR)
+                            : 0;
                     config.depthSize = depthStencilBufferFormatInfo.depthBits;
                     config.level = 0;
                     config.matchNativePixmap = EGL_NONE;
@@ -1075,7 +1093,9 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
 
     outExtensions->querySurfacePointer = true;
     outExtensions->windowFixedSize     = true;
-    outExtensions->surfaceOrientation  = true;
+
+    // If direct rendering is active then the surface orientation extension isn't supported
+    outExtensions->surfaceOrientation = !mDirectRenderingEnabled;
 
     // D3D11 does not support present with dirty rectangles until DXGI 1.2.
     outExtensions->postSubBuffer = mRenderer11DeviceCaps.supportsDXGI1_2;
@@ -1441,6 +1461,13 @@ gl::Error Renderer11::updateState(const gl::Data &data, GLenum drawMode)
     {
         return error;
     }
+
+    // Set the direct rendering state
+    const bool usingDefaultFramebuffer =
+        (mDirectRenderingEnabled && data.state->getDrawFramebuffer()->id() == 0);
+    mStateManager.setDirectRendering(
+        usingDefaultFramebuffer,
+        usingDefaultFramebuffer ? framebufferObject->getColorbuffer(0)->getSize().height : 0);
 
     // Setting viewport state
     mStateManager.setViewport(data.caps, data.state->getViewport(), data.state->getNearPlane(),
@@ -2795,6 +2822,13 @@ gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::
     gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
     gl::Extents sourceSize(sourceRenderTarget->getWidth(), sourceRenderTarget->getHeight(), 1);
 
+    const bool invertSource = framebuffer->id() == 0 && mDirectRenderingEnabled;
+    if (invertSource)
+    {
+        sourceArea.y      = sourceSize.height - sourceRect.y;
+        sourceArea.height = -sourceArea.height;
+    }
+
     gl::Box destArea(destOffset.x, destOffset.y, 0, sourceRect.width, sourceRect.height, 1);
     gl::Extents destSize(destRenderTarget->getWidth(), destRenderTarget->getHeight(), 1);
 
@@ -2846,6 +2880,13 @@ gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl
 
     gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
     gl::Extents sourceSize(sourceRenderTarget->getWidth(), sourceRenderTarget->getHeight(), 1);
+
+    const bool invertSource = framebuffer->id() == 0 && mDirectRenderingEnabled;
+    if (invertSource)
+    {
+        sourceArea.y      = sourceSize.height - sourceRect.y;
+        sourceArea.height = -sourceArea.height;
+    }
 
     gl::Box destArea(destOffset.x, destOffset.y, 0, sourceRect.width, sourceRect.height, 1);
     gl::Extents destSize(destRenderTarget->getWidth(), destRenderTarget->getHeight(), 1);
@@ -3515,8 +3556,15 @@ RenderbufferImpl *Renderer11::createRenderbuffer()
     return renderbuffer;
 }
 
-gl::Error Renderer11::readTextureData(ID3D11Texture2D *texture, unsigned int subResource, const gl::Rectangle &area, GLenum format,
-                                      GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, uint8_t *pixels)
+gl::Error Renderer11::readTextureData(ID3D11Texture2D *texture,
+                                      unsigned int subResource,
+                                      const gl::Rectangle &area,
+                                      GLenum format,
+                                      GLenum type,
+                                      GLuint outputPitch,
+                                      const gl::PixelPackState &pack,
+                                      bool invertTexture,
+                                      uint8_t *pixels)
 {
     ASSERT(area.width >= 0);
     ASSERT(area.height >= 0);
@@ -3524,14 +3572,20 @@ gl::Error Renderer11::readTextureData(ID3D11Texture2D *texture, unsigned int sub
     D3D11_TEXTURE2D_DESC textureDesc;
     texture->GetDesc(&textureDesc);
 
+    gl::Rectangle actualArea = area;
+    if (invertTexture)
+    {
+        actualArea.y = textureDesc.Height - actualArea.y - actualArea.height;
+    }
+
     // Clamp read region to the defined texture boundaries, preventing out of bounds reads
     // and reads of uninitialized data.
     gl::Rectangle safeArea;
-    safeArea.x      = gl::clamp(area.x, 0, static_cast<int>(textureDesc.Width));
-    safeArea.y      = gl::clamp(area.y, 0, static_cast<int>(textureDesc.Height));
-    safeArea.width  = gl::clamp(area.width + std::min(area.x, 0), 0,
-                                static_cast<int>(textureDesc.Width) - safeArea.x);
-    safeArea.height = gl::clamp(area.height + std::min(area.y, 0), 0,
+    safeArea.x     = gl::clamp(actualArea.x, 0, static_cast<int>(textureDesc.Width));
+    safeArea.y     = gl::clamp(actualArea.y, 0, static_cast<int>(textureDesc.Height));
+    safeArea.width = gl::clamp(actualArea.width + std::min(actualArea.x, 0), 0,
+                               static_cast<int>(textureDesc.Width) - safeArea.x);
+    safeArea.height = gl::clamp(actualArea.height + std::min(actualArea.y, 0), 0,
                                 static_cast<int>(textureDesc.Height) - safeArea.y);
 
     ASSERT(safeArea.x >= 0 && safeArea.y >= 0);
@@ -3608,8 +3662,30 @@ gl::Error Renderer11::readTextureData(ID3D11Texture2D *texture, unsigned int sub
 
     SafeRelease(srcTex);
 
-    PackPixelsParams packParams(safeArea, format, type, outputPitch, pack, 0);
-    gl::Error error = packPixels(stagingTex, packParams, pixels);
+    gl::Error error(GL_NO_ERROR);
+
+    if (invertTexture)
+    {
+        gl::PixelPackState actualPack;
+
+        // Create a new PixelPackState with reversed row order.
+        // Note that we can't just assign 'actualPack' to be 'pack' (or memcpy) since that breaks
+        // the ref counting/object tracking in the 'pixelBuffer' members, causing leaks.
+        // Instead we must use pixelBuffer.set() twice, which performs the addRef/release correctly
+        actualPack.alignment = pack.alignment;
+        actualPack.pixelBuffer.set(pack.pixelBuffer.get());
+        actualPack.reverseRowOrder = !pack.reverseRowOrder;
+
+        PackPixelsParams packParams(safeArea, format, type, outputPitch, actualPack, 0);
+        error = packPixels(stagingTex, packParams, pixels);
+
+        actualPack.pixelBuffer.set(NULL);
+    }
+    else
+    {
+        PackPixelsParams packParams(safeArea, format, type, outputPitch, pack, 0);
+        error = packPixels(stagingTex, packParams, pixels);
+    }
 
     SafeRelease(stagingTex);
 
