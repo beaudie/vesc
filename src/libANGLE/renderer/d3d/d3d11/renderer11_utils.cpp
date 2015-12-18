@@ -289,7 +289,7 @@ unsigned int GetReservedVertexUniformVectors(D3D_FEATURE_LEVEL featureLevel)
         case D3D_FEATURE_LEVEL_9_3:
         case D3D_FEATURE_LEVEL_9_2:
         case D3D_FEATURE_LEVEL_9_1:
-            return 2;  // dx_ViewAdjust and dx_ViewCoords
+            return 3;  // dx_ViewAdjust, dx_ViewCoords and dx_ViewScale
 
         default:
             UNREACHABLE();
@@ -310,7 +310,7 @@ unsigned int GetReservedFragmentUniformVectors(D3D_FEATURE_LEVEL featureLevel)
         case D3D_FEATURE_LEVEL_9_3:
         case D3D_FEATURE_LEVEL_9_2:
         case D3D_FEATURE_LEVEL_9_1:
-            return 2;
+            return 3;
 
         default:
             UNREACHABLE();
@@ -1585,6 +1585,13 @@ void TextureHelper11::reset()
     mSampleCount = 0;
     mTexture2D   = nullptr;
     mTexture3D   = nullptr;
+}
+
+bool UsePresentPathFast(const Renderer11 *renderer,
+                        const gl::FramebufferAttachment *framebufferAttachment)
+{
+    return (framebufferAttachment->type() == GL_FRAMEBUFFER_DEFAULT &&
+            renderer->presentPathFastEnabled());
 }
 
 }  // namespace rx

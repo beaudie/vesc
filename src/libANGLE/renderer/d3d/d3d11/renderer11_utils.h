@@ -24,6 +24,7 @@ class FramebufferAttachment;
 
 namespace rx
 {
+class Renderer11;
 class RenderTarget11;
 struct WorkaroundsD3D;
 struct Renderer11DeviceCaps;
@@ -364,6 +365,8 @@ class TextureHelper11 : angle::NonCopyable
     ID3D11Texture2D *mTexture2D;
     ID3D11Texture3D *mTexture3D;
 };
+
+bool UsePresentPathFast(const Renderer11 *renderer, const gl::FramebufferAttachment *colorbuffer);
 
 }  // namespace rx
 

@@ -478,7 +478,7 @@ gl::Error Image11::copy(const gl::Offset &destOffset, const gl::Box &sourceArea,
         TextureHelper11 sourceHelper(source2D);
         error = mRenderer->readTextureData(sourceHelper, sourceSubResource, sourceRect,
                                            formatInfo.format, formatInfo.type, mappedImage.RowPitch,
-                                           gl::PixelPackState(), dataOffset);
+                                           gl::PixelPackState(), false, dataOffset);
 
         unmap();
 
