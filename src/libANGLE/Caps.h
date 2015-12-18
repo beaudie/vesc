@@ -526,6 +526,9 @@ struct ClientExtensions
     // EGL_ANGLE_x11_visual
     bool x11Visual;
 
+    // EGL_experimental_present_path_angle
+    bool presentPathANGLE;
+
     // EGL_KHR_client_get_all_proc_addresses
     bool clientGetAllProcAddresses;
 };
