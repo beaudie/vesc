@@ -35,6 +35,9 @@ static void GetGLVersion(PFNGLGETSTRINGPROC getStringFunction, gl::Version *outV
         // "OpenGL ES N.M vendor-specific information"
         *outStandard = STANDARD_GL_ES;
         *outVersion = gl::Version(version[10] - '0', version[12] - '0');
+        //XXX pretend to be desktop GL because angle seems to need that
+        *outStandard = STANDARD_GL_DESKTOP;
+        *outVersion = gl::Version(3,0);
     }
 }
 
@@ -786,6 +789,7 @@ void FunctionsGL::initialize()
         const char *exts = reinterpret_cast<const char*>(getString(GL_EXTENSIONS));
         angle::SplitStringAlongWhitespace(std::string(exts), &extensions);
     }
+    extensions.push_back("GL_ARB_ES2_compatibility"); //XXX
 
     // Check the context profile
     profile = 0;
@@ -1691,6 +1695,8 @@ bool FunctionsGL::isAtLeastGL(const gl::Version &glVersion) const
 
 bool FunctionsGL::isAtLeastGLES(const gl::Version &glesVersion) const
 {
+    //XXX
+    return gl::Version(2, 0) >= glesVersion;
     return standard == STANDARD_GL_ES && version >= glesVersion;
 }
 

@@ -30,7 +30,8 @@
                 'angle_enable_d3d11%': 1,
                 'angle_enable_hlsl%': 1,
             }],
-            ['OS=="linux" and use_x11==1 and chromeos==0',
+            #['OS=="linux" and use_x11==1 and chromeos==0', <<< geoff sez "we had trouble on the bots Since some of the chromeos linux bots don't have glx libs installed"
+            ['OS=="linux"',
             {
                 'angle_enable_gl%': 1,
             }],

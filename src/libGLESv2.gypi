@@ -486,6 +486,19 @@
             'libANGLE/renderer/gl/glx/functionsglx_typedefs.h',
             'libANGLE/renderer/gl/glx/platform_glx.h',
         ],
+        'libangle_gl_drm_sources':
+        [
+            'libANGLE/renderer/gl/drm/DisplayDRM.cpp',
+            'libANGLE/renderer/gl/drm/DisplayDRM.h',
+            'libANGLE/renderer/gl/drm/FunctionsDRM.cpp',
+            'libANGLE/renderer/gl/drm/FunctionsDRM.h',
+            'libANGLE/renderer/gl/drm/PbufferSurfaceDRM.cpp',
+            'libANGLE/renderer/gl/drm/PbufferSurfaceDRM.h',
+            'libANGLE/renderer/gl/drm/WindowSurfaceDRM.cpp',
+            'libANGLE/renderer/gl/drm/WindowSurfaceDRM.h',
+            #'libANGLE/renderer/gl/drm/functionsglx_typedefs.h',
+            'libANGLE/renderer/gl/drm/platform_drm.h',
+        ],
         'libangle_gl_cgl_sources':
         [
             'libANGLE/renderer/gl/cgl/DisplayCGL.mm',
@@ -743,6 +756,26 @@
                                 ],
                                 'libraries': [
                                     '<!@(<(pkg-config) --libs-only-l x11 xi) -ldl',
+                                ],
+                            },
+                        }],
+                        ['angle_use_drm==1',
+                        {
+                            'defines':
+                            [
+                                'ANGLE_USE_DRM',
+                            ],
+                            'sources':
+                            [
+                                '<@(libangle_gl_drm_sources)',
+                            ],
+                            'link_settings': {
+                                'ldflags': [
+                                    #'<!@(pkg-config --libs-only-L --libs-only-other x11 xi)',
+                                ],
+                                'libraries': [
+                                    '-ldl',
+                                    #'<!@(pkg-config --libs-only-l x11 xi) -ldl',
                                 ],
                             },
                         }],
