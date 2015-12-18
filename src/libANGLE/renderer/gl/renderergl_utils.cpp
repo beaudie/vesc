@@ -9,6 +9,7 @@
 
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
+#include <iostream>
 #include <limits>
 
 #include "libANGLE/Caps.h"

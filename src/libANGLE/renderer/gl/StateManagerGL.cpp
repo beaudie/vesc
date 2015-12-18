@@ -1522,11 +1522,11 @@ void StateManagerGL::setFramebufferSRGBEnabled(bool enabled)
         mFramebufferSRGBEnabled = enabled;
         if (mFramebufferSRGBEnabled)
         {
-            mFunctions->enable(GL_FRAMEBUFFER_SRGB);
+            //XXX mFunctions->enable(GL_FRAMEBUFFER_SRGB);
         }
         else
         {
-            mFunctions->disable(GL_FRAMEBUFFER_SRGB);
+            //XXX mFunctions->disable(GL_FRAMEBUFFER_SRGB);
         }
     }
 }

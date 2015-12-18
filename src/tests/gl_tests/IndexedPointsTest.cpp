@@ -8,6 +8,27 @@
 
 using namespace angle;
 
+/*
+ANGLETest::SetUp calls rx::DisplayDRM::initialize
+b rx::DisplayDRM::terminate
+DisplayDRM::initialize 0x555555e7d5d0
+p *(rx::DisplayDRM*)0x555555e7d5d0
+
+ANGLETest::TearDown 
+calls
+ANGLETest::destroyEGLContext
+calls
+display terminate
+
+$91 = (rx::DisplayDRM * const) 0x555555f6ed20
+$95 = (rx::DisplayDRM *) 0x555555ec6660
+$103 = (rx::DisplayDRM * const) 0x555556031760
+(gdb) p mDrawing
+$111 = (rx::DisplayDRM::Buffer *) 0x55555622f680
+(gdb) p mUnused
+$112 = (rx::DisplayDRM::Buffer *) 0x55555622f680
+*/
+
 template <typename IndexType, GLenum IndexTypeName>
 class IndexedPointsTest : public ANGLETest
 {

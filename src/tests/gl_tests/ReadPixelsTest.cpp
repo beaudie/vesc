@@ -15,6 +15,7 @@
 
 using namespace angle;
 
+static void br(){}
 namespace
 {
 
@@ -35,21 +36,41 @@ class ReadPixelsTest : public ANGLETest
 // Test out of bounds reads.
 TEST_P(ReadPixelsTest, OutOfBounds)
 {
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.5f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_GL_NO_ERROR();
 
     GLsizei pixelsWidth = 32;
     GLsizei pixelsHeight = 32;
     GLint offset = 16;
-    std::vector<GLubyte> pixels((pixelsWidth + offset) * (pixelsHeight + offset) * 4);
+    std::vector<GLubyte> pixels(48 * 48 * 4);
 
-    glReadPixels(-offset, -offset, pixelsWidth + offset, pixelsHeight + offset, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]);
+    br();
+    glReadPixels(-1, -1, 48, 48, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]);
+    for (int y = 0; y < pixelsHeight; y++) {
+        for (int x = 0; x < pixelsWidth; x++) {
+            const GLubyte* pixel = &pixels[0] + (y * 48 + x) * 4;
+            GLubyte r = pixel[0];
+            GLubyte g = pixel[1];
+            GLubyte b = pixel[2];
+            GLubyte a = pixel[3];
+            char c='.';
+            if (r==0) c='0';
+            else if (r==128) c='1';
+            std::cout << c;
+        }
+        std::cout << std::endl;
+    }
     EXPECT_GL_NO_ERROR();
 
-    for (int y = pixelsHeight / 2; y < pixelsHeight; y++)
+/*
+    std::vector<GLubyte> pixels((pixelsWidth + offset) * (pixelsHeight + offset) * 4);
+    glReadPixels(-offset, -offset, pixelsWidth + offset, pixelsHeight + offset, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]);
+    //for (int y = pixelsHeight / 2; y < pixelsHeight; y++)
+    for (int y = 0; y < pixelsHeight; y++)
     {
-        for (int x = pixelsWidth / 2; x < pixelsWidth; x++)
+        //for (int x = pixelsWidth / 2; x < pixelsWidth; x++)
+        for (int x = 0; x < pixelsWidth; x++)
         {
             const GLubyte* pixel = &pixels[0] + ((y * (pixelsWidth + offset) + x) * 4);
             unsigned int r = static_cast<unsigned int>(pixel[0]);
@@ -64,6 +85,9 @@ TEST_P(ReadPixelsTest, OutOfBounds)
             EXPECT_EQ(255u, a);
         }
     }
+*/
+    swapBuffers();
+    sleep(5);
 }
 
 class ReadPixelsPBOTest : public ReadPixelsTest
