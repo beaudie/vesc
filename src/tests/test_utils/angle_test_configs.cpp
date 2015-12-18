@@ -113,6 +113,25 @@ std::ostream &operator<<(std::ostream& stream, const PlatformParameters &pp)
         break;
     }
 
+    switch (pp.eglParameters.directRendering)
+    {
+        case EGL_FALSE:
+            stream << "_DISABLE_DIRECT_RENDERING";
+            break;
+
+        case EGL_TRUE:
+            stream << "_ENABLE_DIRECT_RENDERING";
+            break;
+
+        case EGL_DONT_CARE:
+            // default
+            break;
+
+        default:
+            UNREACHABLE();
+            break;
+    }
+
     return stream;
 }
 
@@ -163,6 +182,14 @@ EGLPlatformParameters D3D11()
         EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE,
         EGL_DONT_CARE, EGL_DONT_CARE,
         EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE);
+}
+
+EGLPlatformParameters D3D11(DirectRenderingParameters directRenderingParameters)
+{
+    return EGLPlatformParameters(
+        EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE, EGL_DONT_CARE, EGL_DONT_CARE,
+        EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE,
+        directRenderingParameters == ENABLE_DIRECT_RENDERING ? EGL_TRUE : EGL_FALSE);
 }
 
 EGLPlatformParameters D3D11_FL11_1()
@@ -352,6 +379,11 @@ PlatformParameters ES2_D3D9_REFERENCE()
 PlatformParameters ES2_D3D11()
 {
     return PlatformParameters(2, 0, egl_platform::D3D11());
+}
+
+PlatformParameters ES2_D3D11(DirectRenderingParameters directRenderingParameters)
+{
+    return PlatformParameters(2, 0, egl_platform::D3D11(directRenderingParameters));
 }
 
 PlatformParameters ES2_D3D11_FL11_0()

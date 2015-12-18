@@ -889,4 +889,7 @@ TEST_P(BlitFramebufferANGLETest, Errors)
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
-ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest, ES2_D3D9(), ES2_D3D11());
+ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,
+                       ES2_D3D9(),
+                       ES2_D3D11(DISABLE_DIRECT_RENDERING),
+                       ES2_D3D11(ENABLE_DIRECT_RENDERING));

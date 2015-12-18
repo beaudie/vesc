@@ -40,6 +40,12 @@ bool operator<(const PlatformParameters &a, const PlatformParameters &b);
 bool operator==(const PlatformParameters &a, const PlatformParameters &b);
 std::ostream &operator<<(std::ostream& stream, const PlatformParameters &pp);
 
+enum DirectRenderingParameters
+{
+    ENABLE_DIRECT_RENDERING,
+    DISABLE_DIRECT_RENDERING
+};
+
 // EGL platforms
 namespace egl_platform
 {
@@ -52,6 +58,7 @@ EGLPlatformParameters D3D9_NULL();
 EGLPlatformParameters D3D9_REFERENCE();
 
 EGLPlatformParameters D3D11();
+EGLPlatformParameters D3D11(DirectRenderingParameters directRenderingParameters);
 EGLPlatformParameters D3D11_FL11_1();
 EGLPlatformParameters D3D11_FL11_0();
 EGLPlatformParameters D3D11_FL10_1();
@@ -87,6 +94,7 @@ PlatformParameters ES2_D3D9();
 PlatformParameters ES2_D3D9_REFERENCE();
 
 PlatformParameters ES2_D3D11();
+PlatformParameters ES2_D3D11(DirectRenderingParameters directRenderingParameters);
 PlatformParameters ES2_D3D11_FL11_0();
 PlatformParameters ES2_D3D11_FL10_1();
 PlatformParameters ES2_D3D11_FL10_0();
