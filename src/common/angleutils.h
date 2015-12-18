@@ -150,9 +150,10 @@ inline std::string Str(int i)
     return strstr.str();
 }
 
-size_t FormatStringIntoVector(const char *fmt, va_list vararg, std::vector<char>& buffer);
+size_t FormatStringIntoVectorVarArg(std::vector<char>& buffer, const char *fmt, va_list vararg);
+size_t FormatStringIntoVector(std::vector<char>& buffer, const char *fmt, ...);
 
-std::string FormatString(const char *fmt, va_list vararg);
+std::string FormatStringVarArg(const char *fmt, va_list vararg);
 std::string FormatString(const char *fmt, ...);
 
 // snprintf is not defined with MSVC prior to to msvc14
