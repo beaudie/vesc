@@ -10,28 +10,42 @@
 #include <stdio.h>
 #include <vector>
 
-size_t FormatStringIntoVector(const char *fmt, va_list vararg, std::vector<char>& outBuffer)
+size_t FormatStringIntoVectorVarArg(std::vector<char> &outBuffer, const char *fmt, va_list vararg)
 {
+    va_list varargCopy;
+
     // Attempt to just print to the current buffer
-    int len = vsnprintf(&(outBuffer.front()), outBuffer.size(), fmt, vararg);
+    va_copy(varargCopy, vararg);
+    int len = vsnprintf(&(outBuffer.front()), outBuffer.size(), fmt, varargCopy);
     if (len < 0 || static_cast<size_t>(len) >= outBuffer.size())
     {
         // Buffer was not large enough, calculate the required size and resize the buffer
-        len = vsnprintf(NULL, 0, fmt, vararg);
+        va_copy(varargCopy, vararg);
+        len = vsnprintf(NULL, 0, fmt, varargCopy);
         outBuffer.resize(len + 1);
 
         // Print again
-        len = vsnprintf(&(outBuffer.front()), outBuffer.size(), fmt, vararg);
+        va_copy(varargCopy, vararg);
+        len = vsnprintf(&(outBuffer.front()), outBuffer.size(), fmt, varargCopy);
     }
     ASSERT(len >= 0);
     return static_cast<size_t>(len);
 }
 
-std::string FormatString(const char *fmt, va_list vararg)
+size_t FormatStringIntoVector(std::vector<char> &buffer, const char *fmt, ...)
+{
+    va_list vararg;
+    va_start(vararg, fmt);
+    size_t length = FormatStringIntoVectorVarArg(buffer, fmt, vararg);
+    va_end(vararg);
+    return length;
+}
+
+std::string FormatStringVarArg(const char *fmt, va_list vararg)
 {
     static std::vector<char> buffer(512);
 
-    size_t len = FormatStringIntoVector(fmt, vararg, buffer);
+    size_t len = FormatStringIntoVectorVarArg(buffer, fmt, vararg);
     return std::string(&buffer[0], len);
 }
 
@@ -39,7 +53,7 @@ std::string FormatString(const char *fmt, ...)
 {
     va_list vararg;
     va_start(vararg, fmt);
-    std::string result = FormatString(fmt, vararg);
+    std::string result = FormatStringVarArg(fmt, vararg);
     va_end(vararg);
     return result;
 }

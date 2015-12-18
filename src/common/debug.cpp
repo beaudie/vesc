@@ -35,7 +35,7 @@ void output(bool traceInDebugOnly, MessageType messageType, DebugTraceOutputType
     if (DebugAnnotationsActive())
     {
         static std::vector<char> buffer(512);
-        size_t len = FormatStringIntoVector(format, vararg, buffer);
+        size_t len = FormatStringIntoVectorVarArg(buffer, format, vararg);
         std::wstring formattedWideMessage(buffer.begin(), buffer.begin() + len);
 
         ASSERT(g_debugAnnotator != nullptr);
@@ -60,7 +60,7 @@ void output(bool traceInDebugOnly, MessageType messageType, DebugTraceOutputType
     {
         if (formattedMessage.empty())
         {
-            formattedMessage = FormatString(format, vararg);
+            formattedMessage = FormatStringVarArg(format, vararg);
         }
         OutputDebugStringA(formattedMessage.c_str());
     }
@@ -75,7 +75,7 @@ void output(bool traceInDebugOnly, MessageType messageType, DebugTraceOutputType
 #endif // NDEBUG
     if (formattedMessage.empty())
     {
-        formattedMessage = FormatString(format, vararg);
+        formattedMessage = FormatStringVarArg(format, vararg);
     }
 
     static std::ofstream file(TRACE_OUTPUT_FILE, std::ofstream::app);
