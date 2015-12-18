@@ -20,7 +20,8 @@ class HelloTriangleSample : public SampleApplication
 {
   public:
     HelloTriangleSample()
-        : SampleApplication("HelloTriangle", 1280, 720)
+        //: SampleApplication("HelloTriangle", 1280, 720)
+        : SampleApplication("HelloTriangle", 2560, 1700)
     {
     }
 
