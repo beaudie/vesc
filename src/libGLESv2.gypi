@@ -491,6 +491,17 @@
             'libANGLE/renderer/gl/glx/functionsglx_typedefs.h',
             'libANGLE/renderer/gl/glx/platform_glx.h',
         ],
+        'libangle_gl_ozone_sources':
+        [
+            'libANGLE/renderer/gl/egl/FunctionsEGL.cpp',
+            'libANGLE/renderer/gl/egl/FunctionsEGL.h',
+            'libANGLE/renderer/gl/egl/ozone/DisplayOzone.cpp',
+            'libANGLE/renderer/gl/egl/ozone/DisplayOzone.h',
+            'libANGLE/renderer/gl/egl/ozone/PbufferSurfaceOzone.cpp',
+            'libANGLE/renderer/gl/egl/ozone/PbufferSurfaceOzone.h',
+            'libANGLE/renderer/gl/egl/ozone/WindowSurfaceOzone.cpp',
+            'libANGLE/renderer/gl/egl/ozone/WindowSurfaceOzone.h',
+        ],
         'libangle_gl_cgl_sources':
         [
             'libANGLE/renderer/gl/cgl/DisplayCGL.mm',
@@ -752,6 +763,29 @@
                                 ],
                                 'libraries': [
                                     '<!@(<(pkg-config) --libs-only-l x11 xi xext) -ldl',
+                                ],
+                            },
+                        }],
+                        ['use_ozone==1',
+                        {
+                            'defines':
+                            [
+                                'ANGLE_USE_OZONE',
+                            ],
+                            'sources':
+                            [
+                                '<@(libangle_gl_ozone_sources)',
+                            ],
+                            'cflags':
+                            [
+                                '<!@(<(pkg-config) --cflags libdrm gbm)',
+                            ],
+                            'link_settings': {
+                                'ldflags': [
+                                    '<!@(<(pkg-config) --libs-only-L --libs-only-other libdrm gbm)',
+                                ],
+                                'libraries': [
+                                    '<!@(<(pkg-config) --libs-only-l libdrm gbm) -ldl',
                                 ],
                             },
                         }],
