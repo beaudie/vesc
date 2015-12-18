@@ -66,7 +66,7 @@ Surface::Surface(rx::SurfaceImpl *impl,
 
     mOrientation = attributes.get(EGL_SURFACE_ORIENTATION_ANGLE, 0);
 
-    mDefaultFramebuffer = createDefaultFramebuffer();
+    mDefaultFramebuffer = createDefaultFramebuffer(); //XXX what is this for?
     ASSERT(mDefaultFramebuffer != nullptr);
 }
 
