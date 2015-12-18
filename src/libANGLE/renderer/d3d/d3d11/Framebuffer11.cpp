@@ -93,7 +93,26 @@ gl::Error Framebuffer11::invalidateSwizzles() const
 gl::Error Framebuffer11::clear(const gl::Data &data, const ClearParameters &clearParams)
 {
     Clear11 *clearer = mRenderer->getClearer();
-    gl::Error error = clearer->clearFramebuffer(clearParams, mData);
+    gl::Error error(GL_NO_ERROR);
+
+    // If the current framebuffer is using the default colorbuffer then we should invert
+    // the scissor rect vertically, if the scissor rect is enabled
+    const gl::FramebufferAttachment *colorAttachment = mData.getFirstColorAttachment();
+    if (clearParams.scissorEnabled == true && mRenderer->presentPathFastEnabled() &&
+        colorAttachment != nullptr && colorAttachment->type() == GL_FRAMEBUFFER_DEFAULT)
+    {
+        ClearParameters presentPathFastClearParams = clearParams;
+        gl::Extents framebufferSize                = colorAttachment->getSize();
+        presentPathFastClearParams.scissor.y       = framebufferSize.height -
+                                               presentPathFastClearParams.scissor.y -
+                                               presentPathFastClearParams.scissor.height;
+        error = clearer->clearFramebuffer(presentPathFastClearParams, mData);
+    }
+    else
+    {
+        error = clearer->clearFramebuffer(clearParams, mData);
+    }
+
     if (error.isError())
     {
         return error;
@@ -307,8 +326,14 @@ gl::Error Framebuffer11::readPixelsImpl(const gl::Rectangle &area,
     }
     else
     {
+        // If the framebuffer is using the default color buffer then we must invert its data
+        // if we're rendering to the default FBO directly
+        const bool invertSourceTexture =
+            (colorbuffer->type() == GL_FRAMEBUFFER_DEFAULT && mRenderer->presentPathFastEnabled());
         error = mRenderer->readTextureData(textureHelper, subresourceIndex, area, format, type,
-                                           static_cast<GLuint>(outputPitch), pack, pixels);
+                                           static_cast<GLuint>(outputPitch), pack,
+                                           invertSourceTexture, pixels);
+
         if (error.isError())
         {
             return error;
@@ -353,8 +378,29 @@ gl::Error Framebuffer11::blit(const gl::Rectangle &sourceArea, const gl::Rectang
                 }
                 ASSERT(drawRenderTarget);
 
-                error = mRenderer->blitRenderbufferRect(sourceArea, destArea, readRenderTarget, drawRenderTarget,
-                                                        filter, scissor, blitRenderTarget, false, false);
+                const bool invertColorSource = (readBuffer->type() == GL_FRAMEBUFFER_DEFAULT &&
+                                                mRenderer->presentPathFastEnabled());
+                gl::Rectangle actualSourceArea = sourceArea;
+                if (invertColorSource)
+                {
+                    RenderTarget11 *readRenderTarget11 = GetAs<RenderTarget11>(readRenderTarget);
+                    actualSourceArea.y                 = readRenderTarget11->getHeight() - sourceArea.y;
+                    actualSourceArea.height            = -sourceArea.height;
+                }
+
+                const bool invertColorDest = (drawBuffer.type() == GL_FRAMEBUFFER_DEFAULT &&
+                                              mRenderer->presentPathFastEnabled());
+                gl::Rectangle actualDestArea = destArea;
+                if (invertColorDest)
+                {
+                    RenderTarget11 *drawRenderTarget11 = GetAs<RenderTarget11>(drawRenderTarget);
+                    actualDestArea.y                   = drawRenderTarget11->getHeight() - destArea.y;
+                    actualDestArea.height              = -destArea.height;
+                }
+
+                error = mRenderer->blitRenderbufferRect(actualSourceArea, actualDestArea,
+                                                        readRenderTarget, drawRenderTarget, filter,
+                                                        scissor, blitRenderTarget, false, false);
                 if (error.isError())
                 {
                     return error;
