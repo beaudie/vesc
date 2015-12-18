@@ -9,6 +9,7 @@
 
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
+#include <iostream>
 #include <limits>
 
 #include "libANGLE/Caps.h"
@@ -19,6 +20,8 @@
 
 #include <algorithm>
 #include <sstream>
+
+static void br0(){}
 
 namespace rx
 {
@@ -80,6 +83,7 @@ static bool MeetsRequirements(const FunctionsGL *functions, const nativegl::Supp
 
 static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions, GLenum internalFormat)
 {
+    if (internalFormat==GL_SRGB8) br0();
     gl::TextureCaps textureCaps;
 
     const nativegl::InternalFormat &formatInfo = nativegl::GetInternalFormatInfo(internalFormat, functions->standard);
