@@ -16,7 +16,8 @@ EGLPlatformParameters::EGLPlatformParameters()
     : renderer(EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE),
       majorVersion(EGL_DONT_CARE),
       minorVersion(EGL_DONT_CARE),
-      deviceType(EGL_DONT_CARE)
+      deviceType(EGL_DONT_CARE),
+      directRendering(EGL_DONT_CARE)
 {
 }
 
@@ -24,7 +25,8 @@ EGLPlatformParameters::EGLPlatformParameters(EGLint renderer)
     : renderer(renderer),
       majorVersion(EGL_DONT_CARE),
       minorVersion(EGL_DONT_CARE),
-      deviceType(EGL_DONT_CARE)
+      deviceType(EGL_DONT_CARE),
+      directRendering(EGL_DONT_CARE)
 {
     if (renderer == EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE ||
         renderer == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
@@ -33,11 +35,28 @@ EGLPlatformParameters::EGLPlatformParameters(EGLint renderer)
     }
 }
 
-EGLPlatformParameters::EGLPlatformParameters(EGLint renderer, EGLint majorVersion, EGLint minorVersion, EGLint useWarp)
+EGLPlatformParameters::EGLPlatformParameters(EGLint renderer,
+                                             EGLint majorVersion,
+                                             EGLint minorVersion,
+                                             EGLint useWarp)
     : renderer(renderer),
       majorVersion(majorVersion),
       minorVersion(minorVersion),
-      deviceType(useWarp)
+      deviceType(useWarp),
+      directRendering(EGL_DONT_CARE)
+{
+}
+
+EGLPlatformParameters::EGLPlatformParameters(EGLint renderer,
+                                             EGLint majorVersion,
+                                             EGLint minorVersion,
+                                             EGLint useWarp,
+                                             EGLint directRendering)
+    : renderer(renderer),
+      majorVersion(majorVersion),
+      minorVersion(minorVersion),
+      deviceType(useWarp),
+      directRendering(directRendering)
 {
 }
 
@@ -58,15 +77,19 @@ bool operator<(const EGLPlatformParameters &a, const EGLPlatformParameters &b)
         return a.minorVersion < b.minorVersion;
     }
 
-    return a.deviceType < b.deviceType;
+    if (a.deviceType != b.deviceType)
+    {
+        return a.deviceType < b.deviceType;
+    }
+
+    return a.directRendering < b.directRendering;
 }
 
 bool operator==(const EGLPlatformParameters &a, const EGLPlatformParameters &b)
 {
-    return (a.renderer == b.renderer) &&
-           (a.majorVersion == b.majorVersion) &&
-           (a.minorVersion == b.minorVersion) &&
-           (a.deviceType == b.deviceType);
+    return (a.renderer == b.renderer) && (a.majorVersion == b.majorVersion) &&
+           (a.minorVersion == b.minorVersion) && (a.deviceType == b.deviceType) &&
+           (a.directRendering == b.directRendering);
 }
 
 EGLWindow::EGLWindow(EGLint glesMajorVersion,
@@ -140,6 +163,12 @@ bool EGLWindow::initializeGL(OSWindow *osWindow)
     {
         displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
         displayAttributes.push_back(mPlatform.deviceType);
+    }
+
+    if (mPlatform.directRendering != EGL_DONT_CARE)
+    {
+        displayAttributes.push_back(EGL_EXPERIMENTAL_DIRECT_RENDERING_ANGLE);
+        displayAttributes.push_back(mPlatform.directRendering);
     }
     displayAttributes.push_back(EGL_NONE);
 
