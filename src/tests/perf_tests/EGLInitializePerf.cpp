@@ -121,7 +121,7 @@ EGLInitializePerfTest::EGLInitializePerfTest()
     }
 
     mDisplay = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE,
-                                        mOSWindow->getNativeDisplay(),
+                                        (void*)mOSWindow->getNativeDisplay(),
                                         &displayAttributes[0]);
 
     ANGLEPlatformInitialize(&mCapturePlatform);

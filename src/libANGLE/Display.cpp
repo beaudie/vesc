@@ -43,6 +43,8 @@
 #       include "libANGLE/renderer/gl/glx/DisplayGLX.h"
 #   elif defined(ANGLE_PLATFORM_APPLE)
 #       include "libANGLE/renderer/gl/cgl/DisplayCGL.h"
+#   elif defined(ANGLE_USE_DRM)
+#       include "libANGLE/renderer/gl/cros/DisplayDRM.h"
 #   else
 #       error Unsupported OpenGL platform.
 #   endif
@@ -142,6 +144,8 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap)
         impl = new rx::DisplayD3D();
 #elif defined(ANGLE_USE_X11)
         impl = new rx::DisplayGLX();
+#elif defined(ANGLE_USE_DRM)
+        impl = new rx::DisplayDRM();
 #elif defined(ANGLE_PLATFORM_APPLE)
         impl = new rx::DisplayCGL();
 #else
@@ -168,6 +172,8 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap)
         impl = new rx::DisplayGLX();
 #elif defined(ANGLE_PLATFORM_APPLE)
         impl = new rx::DisplayCGL();
+#elif defined(ANGLE_USE_DRM)
+        impl = new rx::DisplayDRM();
 #else
 #error Unsupported OpenGL platform.
 #endif

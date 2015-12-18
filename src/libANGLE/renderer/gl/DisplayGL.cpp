@@ -36,6 +36,7 @@ egl::Error DisplayGL::initialize(egl::Display *display)
     const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
     if (maxVersion < gl::Version(2, 0))
     {
+        //XXX shouldn't this say < 2.0 is not supportables?
         return egl::Error(EGL_NOT_INITIALIZED, "OpenGL ES 2.0 is not supportable.");
     }
 
