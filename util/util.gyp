@@ -66,6 +66,13 @@
             'x11/X11Window.cpp',
             'x11/X11Window.h',
         ],
+        'util_cros_sources':
+        [
+            'cros/CrosPixmap.cpp',
+            'cros/CrosPixmap.h',
+            'cros/CrosWindow.cpp',
+            'cros/CrosWindow.h',
+        ],
         'util_osx_sources':
         [
             'osx/OSX_system_utils.cpp',
@@ -159,6 +166,26 @@
                         'libraries':
                         [
                             '<!@(<(pkg-config) --libs-only-l x11 xi) -lrt',
+                        ],
+                    },
+                }],
+                ['chromeos==1',
+                {
+                    'sources':
+                    [
+                        '<@(util_cros_sources)',
+                    ],
+                    'cflags':
+                    [
+                    ],
+                    'link_settings':
+                    {
+                        'ldflags':
+                        [
+                        ],
+                        'libraries':
+                        [
+                            #'-lrt',
                         ],
                     },
                 }],

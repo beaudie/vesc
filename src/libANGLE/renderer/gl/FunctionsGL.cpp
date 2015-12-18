@@ -9,6 +9,8 @@
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 
 #include <algorithm>
+#include <iostream>
+#include <iterator>
 
 #include "common/string_utils.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
@@ -790,6 +792,7 @@ void FunctionsGL::initialize()
         const char *exts = reinterpret_cast<const char*>(getString(GL_EXTENSIONS));
         angle::SplitStringAlongWhitespace(std::string(exts), &extensions);
     }
+    //std::copy(extensions.begin(), extensions.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
 
     // Load the entry points
     switch (standard)
