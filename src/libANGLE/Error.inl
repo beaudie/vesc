@@ -62,6 +62,7 @@ Error &Error::operator=(const Error &other)
 Error &Error::operator=(Error &&other)
 {
     mCode = other.mCode;
+    delete mMessage;
     mMessage = other.mMessage;
 
     other.mMessage = nullptr;
@@ -138,6 +139,7 @@ Error &Error::operator=(Error &&other)
 {
     mCode = other.mCode;
     mID = other.mID;
+    delete mMessage;
     mMessage = other.mMessage;
 
     other.mMessage = nullptr;
