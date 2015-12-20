@@ -14,16 +14,14 @@ namespace gl
 {
 
 Error::Error(GLenum errorCode)
-    : mCode(errorCode),
-      mMessage(nullptr)
+    : mCode(errorCode)
 {
 }
 
 Error::Error(const Error &other)
-    : mCode(other.mCode),
-      mMessage(nullptr)
+    : mCode(other.mCode)
 {
-    if (other.mMessage != nullptr)
+    if (other.mMessage.get() != nullptr)
     {
         createMessageString();
         *mMessage = *(other.mMessage);
@@ -32,28 +30,22 @@ Error::Error(const Error &other)
 
 Error::Error(Error &&other)
     : mCode(other.mCode),
-      mMessage(other.mMessage)
+      mMessage(std::move(other.mMessage))
 {
-    other.mMessage = nullptr;
-}
-
-Error::~Error()
-{
-    SafeDelete(mMessage);
 }
 
 Error &Error::operator=(const Error &other)
 {
     mCode = other.mCode;
 
-    if (other.mMessage != nullptr)
+    if (other.mMessage.get() != nullptr)
     {
         createMessageString();
         *mMessage = *(other.mMessage);
     }
     else
     {
-        SafeDelete(mMessage);
+        mMessage.release();
     }
 
     return *this;
@@ -61,10 +53,11 @@ Error &Error::operator=(const Error &other)
 
 Error &Error::operator=(Error &&other)
 {
-    mCode = other.mCode;
-    mMessage = other.mMessage;
-
-    other.mMessage = nullptr;
+    if (this != &other)
+    {
+        mCode = other.mCode;
+        mMessage = std::move(other.mMessage);
+    }
 
     return *this;
 }
@@ -86,17 +79,15 @@ namespace egl
 
 Error::Error(EGLint errorCode)
     : mCode(errorCode),
-      mID(0),
-      mMessage(nullptr)
+      mID(0)
 {
 }
 
 Error::Error(const Error &other)
     : mCode(other.mCode),
-      mID(other.mID),
-      mMessage(nullptr)
+      mID(other.mID)
 {
-    if (other.mMessage != nullptr)
+    if (other.mMessage.get() != nullptr)
     {
         createMessageString();
         *mMessage = *(other.mMessage);
@@ -106,14 +97,9 @@ Error::Error(const Error &other)
 Error::Error(Error &&other)
     : mCode(other.mCode),
       mID(other.mID),
-      mMessage(other.mMessage)
+      mMessage(std::move(other.mMessage))
 {
-    other.mMessage = nullptr;
-}
 
-Error::~Error()
-{
-    SafeDelete(mMessage);
 }
 
 Error &Error::operator=(const Error &other)
@@ -128,7 +114,7 @@ Error &Error::operator=(const Error &other)
     }
     else
     {
-        SafeDelete(mMessage);
+        mMessage.release();
     }
 
     return *this;
@@ -136,11 +122,12 @@ Error &Error::operator=(const Error &other)
 
 Error &Error::operator=(Error &&other)
 {
-    mCode = other.mCode;
-    mID = other.mID;
-    mMessage = other.mMessage;
-
-    other.mMessage = nullptr;
+    if (this != &other)
+    {
+        mCode = other.mCode;
+        mID = other.mID;
+        mMessage = std::move(other.mMessage);
+    }
 
     return *this;
 }
