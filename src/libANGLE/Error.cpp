@@ -17,8 +17,7 @@ namespace gl
 {
 
 Error::Error(GLenum errorCode, const char *msg, ...)
-    : mCode(errorCode),
-      mMessage(nullptr)
+    : mCode(errorCode)
 {
     va_list vararg;
     va_start(vararg, msg);
@@ -29,9 +28,9 @@ Error::Error(GLenum errorCode, const char *msg, ...)
 
 void Error::createMessageString() const
 {
-    if (mMessage == nullptr)
+    if (!mMessage)
     {
-        mMessage = new std::string();
+        mMessage = std::make_unique<std::string>();
     }
 }
 
@@ -47,8 +46,8 @@ bool Error::operator==(const Error &other) const
         return false;
 
     // TODO(jmadill): Compare extended error codes instead of strings.
-    if ((mMessage == nullptr || other.mMessage == nullptr) &&
-        ((mMessage == nullptr) != (other.mMessage == nullptr)))
+    if ((!mMessage || !other.mMessage) &&
+        (!mMessage != !other.mMessage))
         return false;
 
     return (*mMessage == *other.mMessage);
@@ -65,8 +64,7 @@ namespace egl
 
 Error::Error(EGLint errorCode, const char *msg, ...)
     : mCode(errorCode),
-      mID(0),
-      mMessage(nullptr)
+      mID(0)
 {
     va_list vararg;
     va_start(vararg, msg);
@@ -77,8 +75,7 @@ Error::Error(EGLint errorCode, const char *msg, ...)
 
 Error::Error(EGLint errorCode, EGLint id, const char *msg, ...)
     : mCode(errorCode),
-      mID(id),
-      mMessage(nullptr)
+      mID(id)
 {
     va_list vararg;
     va_start(vararg, msg);
@@ -86,11 +83,12 @@ Error::Error(EGLint errorCode, EGLint id, const char *msg, ...)
     *mMessage = FormatString(msg, vararg);
     va_end(vararg);
 }
+
 void Error::createMessageString() const
 {
-    if (mMessage == nullptr)
+    if (!mMessage)
     {
-        mMessage = new std::string();
+        mMessage = std::make_unique<std::string>();
     }
 }
 
