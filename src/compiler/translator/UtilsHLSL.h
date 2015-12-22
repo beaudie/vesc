@@ -20,7 +20,39 @@ class TName;
 namespace sh
 {
 
+// Unique combinations of HLSL Texture type and HLSL Sampler type.
+enum HLSLTextureSamplerGroup
+{
+    // Regular samplers
+    EHLSLTexture2D,
+    EHLSLTextureCube,
+    EHLSLTexture2DArray,
+    EHLSLTexture3D,
+    EHLSLTexture2DInt4,
+    EHLSLTexture3DInt4,
+    EHLSLTexture2DArrayInt4,
+    EHLSLTexture2DUint4,
+    EHLSLTexture3DUint4,
+    EHLSLTexture2DArrayUint4,
+
+    // Comparison samplers
+    EHLSLComparisonSamplerGroupBegin,
+
+    EHLSLTexture2DComparison,
+    EHLSLTextureCubeComparison,
+    EHLSLTexture2DArrayComparison,
+
+    EHLSLComparisonSamplerGroupEnd,
+
+    EHLSLTextureUnknown
+};
+
+HLSLTextureSamplerGroup TextureGroup(const TType &type);
+bool IsComparisonSampler(HLSLTextureSamplerGroup type);
+TString TextureString(const HLSLTextureSamplerGroup type);
 TString TextureString(const TType &type);
+TString TextureGroupSuffix(const HLSLTextureSamplerGroup type);
+TString TextureGroupSuffix(const TType &type);
 TString SamplerString(const TType &type);
 // Prepends an underscore to avoid naming clashes
 TString Decorate(const TString &string);
