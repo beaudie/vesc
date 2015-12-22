@@ -27,30 +27,134 @@ TString SamplerString(const TType &type)
     }
 }
 
-TString TextureString(const TType &type)
+HLSLTextureSamplerGroup TextureGroup(const TType &type)
 {
     switch (type.getBasicType())
     {
-      case EbtSampler2D:            return "Texture2D";
-      case EbtSamplerCube:          return "TextureCube";
-      case EbtSamplerExternalOES:   return "Texture2D";
-      case EbtSampler2DArray:       return "Texture2DArray";
-      case EbtSampler3D:            return "Texture3D";
-      case EbtISampler2D:           return "Texture2D<int4>";
-      case EbtISampler3D:           return "Texture3D<int4>";
-      case EbtISamplerCube:         return "Texture2DArray<int4>";
-      case EbtISampler2DArray:      return "Texture2DArray<int4>";
-      case EbtUSampler2D:           return "Texture2D<uint4>";
-      case EbtUSampler3D:           return "Texture3D<uint4>";
-      case EbtUSamplerCube:         return "Texture2DArray<uint4>";
-      case EbtUSampler2DArray:      return "Texture2DArray<uint4>";
-      case EbtSampler2DShadow:      return "Texture2D";
-      case EbtSamplerCubeShadow:    return "TextureCube";
-      case EbtSampler2DArrayShadow: return "Texture2DArray";
+        case EbtSampler2D:
+            return EHLSLTexture2D;
+        case EbtSamplerCube:
+            return EHLSLTextureCube;
+        case EbtSamplerExternalOES:
+            return EHLSLTexture2D;
+        case EbtSampler2DArray:
+            return EHLSLTexture2DArray;
+        case EbtSampler3D:
+            return EHLSLTexture3D;
+        case EbtISampler2D:
+            return EHLSLTexture2DInt4;
+        case EbtISampler3D:
+            return EHLSLTexture3DInt4;
+        case EbtISamplerCube:
+            return EHLSLTexture2DArrayInt4;
+        case EbtISampler2DArray:
+            return EHLSLTexture2DArrayInt4;
+        case EbtUSampler2D:
+            return EHLSLTexture2DUint4;
+        case EbtUSampler3D:
+            return EHLSLTexture3DUint4;
+        case EbtUSamplerCube:
+            return EHLSLTexture2DArrayUint4;
+        case EbtUSampler2DArray:
+            return EHLSLTexture2DArrayUint4;
+        case EbtSampler2DShadow:
+            return EHLSLTexture2DComparison;
+        case EbtSamplerCubeShadow:
+            return EHLSLTextureCubeComparison;
+        case EbtSampler2DArrayShadow:
+            return EHLSLTexture2DArrayComparison;
+        default:
+            UNREACHABLE();
+    }
+    return EHLSLTextureUnknown;
+}
+
+bool IsComparisonSampler(HLSLTextureSamplerGroup type)
+{
+    return type > EHLSLComparisonSamplerGroupBegin && type < EHLSLComparisonSamplerGroupEnd;
+}
+
+TString TextureString(const HLSLTextureSamplerGroup type)
+{
+    switch (type)
+    {
+        case EHLSLTexture2D:
+            return "Texture2D";
+        case EHLSLTextureCube:
+            return "TextureCube";
+        case EHLSLTexture2DArray:
+            return "Texture2DArray";
+        case EHLSLTexture3D:
+            return "Texture3D";
+        case EHLSLTexture2DInt4:
+            return "Texture2D<int4>";
+        case EHLSLTexture3DInt4:
+            return "Texture3D<int4>";
+        case EHLSLTexture2DArrayInt4:
+            return "Texture2DArray<int4>";
+        case EHLSLTexture2DUint4:
+            return "Texture2D<uint4>";
+        case EHLSLTexture3DUint4:
+            return "Texture3D<uint4>";
+        case EHLSLTexture2DArrayUint4:
+            return "Texture2DArray<uint4>";
+        case EHLSLTexture2DComparison:
+            return "Texture2D";
+        case EHLSLTextureCubeComparison:
+            return "TextureCube";
+        case EHLSLTexture2DArrayComparison:
+            return "Texture2DArray";
       default: UNREACHABLE();
     }
 
     return "<unknown texture type>";
+}
+
+TString TextureString(const TType &type)
+{
+    return TextureString(TextureGroup(type));
+}
+
+TString TextureGroupSuffix(const HLSLTextureSamplerGroup type)
+{
+    switch (type)
+    {
+        case EHLSLTexture2D:
+            return "2D";
+        case EHLSLTextureCube:
+            return "Cube";
+        case EHLSLTexture2DArray:
+            return "2DArray";
+        case EHLSLTexture3D:
+            return "3D";
+        case EHLSLTexture2DInt4:
+            return "2D_int4_";
+        case EHLSLTexture3DInt4:
+            return "3D_int4_";
+        case EHLSLTexture2DArrayInt4:
+            return "2DArray_int4_";
+        case EHLSLTexture2DUint4:
+            return "2D_uint4_";
+        case EHLSLTexture3DUint4:
+            return "3D_uint4_";
+        case EHLSLTexture2DArrayUint4:
+            return "2DArray_uint4_";
+        case EHLSLTexture2DComparison:
+            return "2D_comparison";
+        case EHLSLTextureCubeComparison:
+            return "Cube_comparison";
+        case EHLSLTexture2DArrayComparison:
+            return "2DArray_comparison";
+        default:
+            UNREACHABLE();
+    }
+
+    return "<unknown texture type>";
+}
+
+TString TextureGroupSuffix(const TType &type)
+{
+    return TextureGroupSuffix(TextureGroup(type));
 }
 
 TString DecorateUniform(const TString &string, const TType &type)
