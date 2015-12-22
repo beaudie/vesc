@@ -372,7 +372,7 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
 
     out << mStructureHLSL->structsHeader();
 
-    out << mUniformHLSL->uniformsHeader(mOutputType, mReferencedUniforms);
+    mUniformHLSL->uniformsHeader(out, mOutputType, mReferencedUniforms);
     out << mUniformHLSL->interfaceBlocksHeader(mReferencedInterfaceBlocks);
 
     if (!mEqualityFunctions.empty())
@@ -720,25 +720,8 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
         }
         else if (mOutputType == SH_HLSL11_OUTPUT)
         {
-            switch(textureFunction->sampler)
-            {
-              case EbtSampler2D:            out << "Texture2D x, SamplerState s";                hlslCoords = 2; break;
-              case EbtSampler3D:            out << "Texture3D x, SamplerState s";                hlslCoords = 3; break;
-              case EbtSamplerCube:          out << "TextureCube x, SamplerState s";              hlslCoords = 3; break;
-              case EbtSampler2DArray:       out << "Texture2DArray x, SamplerState s";           hlslCoords = 3; break;
-              case EbtISampler2D:           out << "Texture2D<int4> x, SamplerState s";          hlslCoords = 2; break;
-              case EbtISampler3D:           out << "Texture3D<int4> x, SamplerState s";          hlslCoords = 3; break;
-              case EbtISamplerCube:         out << "Texture2DArray<int4> x, SamplerState s";     hlslCoords = 3; break;
-              case EbtISampler2DArray:      out << "Texture2DArray<int4> x, SamplerState s";     hlslCoords = 3; break;
-              case EbtUSampler2D:           out << "Texture2D<uint4> x, SamplerState s";         hlslCoords = 2; break;
-              case EbtUSampler3D:           out << "Texture3D<uint4> x, SamplerState s";         hlslCoords = 3; break;
-              case EbtUSamplerCube:         out << "Texture2DArray<uint4> x, SamplerState s";    hlslCoords = 3; break;
-              case EbtUSampler2DArray:      out << "Texture2DArray<uint4> x, SamplerState s";    hlslCoords = 3; break;
-              case EbtSampler2DShadow:      out << "Texture2D x, SamplerComparisonState s";      hlslCoords = 2; break;
-              case EbtSamplerCubeShadow:    out << "TextureCube x, SamplerComparisonState s";    hlslCoords = 3; break;
-              case EbtSampler2DArrayShadow: out << "Texture2DArray x, SamplerComparisonState s"; hlslCoords = 3; break;
-              default: UNREACHABLE();
-            }
+            out << "const uint samplerIndex";
+            hlslCoords = HLSL11TextureCoordsCount(textureFunction->sampler);
         }
         else UNREACHABLE();
 
@@ -830,6 +813,29 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
 
         out << ")\n"
                "{\n";
+
+        if (mOutputType == SH_HLSL11_OUTPUT)
+        {
+            TString suffix = TextureGroupSuffix(textureFunction->sampler);
+            if (TextureGroup(textureFunction->sampler) == HLSL_TEXTURE_2D)
+            {
+                out << "    " << TextureString(textureFunction->sampler) << " x = textures"
+                    << suffix << "[samplerIndex];\n";
+                out << "    " << SamplerString(textureFunction->sampler) << " s = samplers"
+                    << suffix << "[samplerIndex];\n";
+            }
+            else
+            {
+                out << "    const uint textureIndex = samplerIndex - textureIndexOffset" << suffix
+                    << ";\n";
+                out << "    " << TextureString(textureFunction->sampler) << " x = textures"
+                    << suffix << "[textureIndex];\n";
+                out << "    const uint samplerArrayIndex = samplerIndex - samplerIndexOffset"
+                    << suffix << ";\n";
+                out << "    " << SamplerString(textureFunction->sampler) << " s = samplers"
+                    << suffix << "[samplerArrayIndex];\n";
+            }
+        }
 
         if (textureFunction->method == TextureFunction::SIZE)
         {
@@ -2393,13 +2399,6 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
 
             for (TIntermSequence::iterator arg = arguments->begin(); arg != arguments->end(); arg++)
             {
-                if (mOutputType == SH_HLSL11_OUTPUT && IsSampler((*arg)->getAsTyped()->getBasicType()))
-                {
-                    out << "texture_";
-                    (*arg)->traverse(this);
-                    out << ", sampler_";
-                }
-
                 (*arg)->traverse(this);
 
                 if (arg < arguments->end() - 1)
@@ -3156,9 +3155,9 @@ TString OutputHLSL::argumentString(const TIntermSymbol *symbol)
 
     if (mOutputType == SH_HLSL11_OUTPUT && IsSampler(type.getBasicType()))
     {
-        return QualifierString(qualifier) + " " + TextureString(type) + " texture_" + nameStr +
-               ArrayString(type) + ", " + QualifierString(qualifier) + " " + SamplerString(type) +
-               " sampler_" + nameStr + ArrayString(type);
+        // Samplers are passed as indices to the sampler array.
+        ASSERT(qualifier != EvqOut && qualifier != EvqInOut);
+        return "const uint " + nameStr + ArrayString(type);
     }
 
     return QualifierString(qualifier) + " " + TypeString(type) + " " + nameStr + ArrayString(type);
