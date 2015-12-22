@@ -53,6 +53,7 @@ TCompiler* ConstructCompiler(
 #endif // ANGLE_ENABLE_GLSL
       case SH_HLSL9_OUTPUT:
       case SH_HLSL11_OUTPUT:
+      case SH_SM4_FL9_3_OUTPUT:
 #ifdef ANGLE_ENABLE_HLSL
         return new TranslatorHLSL(type, spec, output);
 #else

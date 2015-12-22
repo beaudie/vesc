@@ -48,7 +48,7 @@ typedef unsigned int GLenum;
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 141
+#define ANGLE_SH_VERSION 142
 
 typedef enum {
   SH_GLES2_SPEC = 0x8B40,
@@ -80,28 +80,30 @@ typedef enum {
   SH_CSS_SHADERS_SPEC = 0x8B42
 } ShShaderSpec;
 
-typedef enum {
-  // ESSL output only supported in some configurations.
-  SH_ESSL_OUTPUT               = 0x8B45,
+typedef enum
+{
+    // ESSL output only supported in some configurations.
+    SH_ESSL_OUTPUT = 0x8B45,
 
-  // GLSL output only supported in some configurations.
-  SH_GLSL_COMPATIBILITY_OUTPUT = 0x8B46,
-  //Note: GL introduced core profiles in 1.5.
-  SH_GLSL_130_OUTPUT           = 0x8B47,
-  SH_GLSL_140_OUTPUT           = 0x8B80,
-  SH_GLSL_150_CORE_OUTPUT      = 0x8B81,
-  SH_GLSL_330_CORE_OUTPUT      = 0x8B82,
-  SH_GLSL_400_CORE_OUTPUT      = 0x8B83,
-  SH_GLSL_410_CORE_OUTPUT      = 0x8B84,
-  SH_GLSL_420_CORE_OUTPUT      = 0x8B85,
-  SH_GLSL_430_CORE_OUTPUT      = 0x8B86,
-  SH_GLSL_440_CORE_OUTPUT      = 0x8B87,
-  SH_GLSL_450_CORE_OUTPUT      = 0x8B88,
+    // GLSL output only supported in some configurations.
+    SH_GLSL_COMPATIBILITY_OUTPUT = 0x8B46,
+    // Note: GL introduced core profiles in 1.5.
+    SH_GLSL_130_OUTPUT      = 0x8B47,
+    SH_GLSL_140_OUTPUT      = 0x8B80,
+    SH_GLSL_150_CORE_OUTPUT = 0x8B81,
+    SH_GLSL_330_CORE_OUTPUT = 0x8B82,
+    SH_GLSL_400_CORE_OUTPUT = 0x8B83,
+    SH_GLSL_410_CORE_OUTPUT = 0x8B84,
+    SH_GLSL_420_CORE_OUTPUT = 0x8B85,
+    SH_GLSL_430_CORE_OUTPUT = 0x8B86,
+    SH_GLSL_440_CORE_OUTPUT = 0x8B87,
+    SH_GLSL_450_CORE_OUTPUT = 0x8B88,
 
-  // HLSL output only supported in some configurations.
-  SH_HLSL_OUTPUT   = 0x8B48,
-  SH_HLSL9_OUTPUT  = 0x8B48,
-  SH_HLSL11_OUTPUT = 0x8B49
+    // HLSL output only supported in some configurations.
+    SH_HLSL_OUTPUT      = 0x8B48,
+    SH_HLSL9_OUTPUT     = 0x8B48,
+    SH_HLSL11_OUTPUT    = 0x8B49,
+    SH_SM4_FL9_3_OUTPUT = 0x8B4A
 } ShShaderOutput;
 
 // Compile options.
