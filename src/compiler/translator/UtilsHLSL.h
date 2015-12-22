@@ -20,7 +20,26 @@ class TName;
 namespace sh
 {
 
+enum HLSLTextureType
+{
+    EHLSLTexture2D,
+    EHLSLTextureCube,
+    EHLSLTexture2DArray,
+    EHLSLTexture3D,
+    EHLSLTexture2DInt4,
+    EHLSLTexture3DInt4,
+    EHLSLTexture2DArrayInt4,
+    EHLSLTexture2DUint4,
+    EHLSLTexture3DUint4,
+    EHLSLTexture2DArrayUint4,
+    EHLSLTextureUnknown
+};
+
+HLSLTextureType TextureType(const TType &type);
+TString TextureString(const HLSLTextureType type);
 TString TextureString(const TType &type);
+TString TextureSuffix(const HLSLTextureType type);
+TString TextureSuffix(const TType &type);
 TString SamplerString(const TType &type);
 // Prepends an underscore to avoid naming clashes
 TString Decorate(const TString &string);

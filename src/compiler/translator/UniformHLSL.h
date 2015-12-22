@@ -11,6 +11,7 @@
 #define COMPILER_TRANSLATOR_UNIFORMHLSL_H_
 
 #include "compiler/translator/OutputHLSL.h"
+#include "compiler/translator/UtilsHLSL.h"
 
 namespace sh
 {
@@ -23,6 +24,7 @@ class UniformHLSL : angle::NonCopyable
 
     void reserveUniformRegisters(unsigned int registerCount);
     void reserveInterfaceBlockRegisters(unsigned int registerCount);
+    TString outputHLSL11SamplerUniformGroup(const HLSLTextureType textureType, const TVector<const TIntermSymbol *> &group, unsigned int *groupTextureRegisterIndex, unsigned int *regularSamplerCount, unsigned int *comparisonSamplerCount);
     TString uniformsHeader(ShShaderOutput outputType, const ReferencedSymbols &referencedUniforms);
     TString interfaceBlocksHeader(const ReferencedSymbols &referencedInterfaceBlocks);
 
@@ -45,7 +47,7 @@ class UniformHLSL : angle::NonCopyable
     const Uniform *findUniformByName(const TString &name) const;
 
     // Returns the uniform's register index
-    unsigned int declareUniformAndAssignRegister(const TType &type, const TString &name);
+    unsigned int declareUniformAndAssignRegister(const TType &type, const TString &name, unsigned int *registerCount);
 
     unsigned int mUniformRegister;
     unsigned int mInterfaceBlockRegister;
