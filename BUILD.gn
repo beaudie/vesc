@@ -285,6 +285,12 @@ static_library("libANGLE") {
     }
   }
 
+  if (angle_enable_keyedmutex) {
+    defines += [
+      "ANGLE_ENABLE_KEYEDMUTEX",
+    ]
+  }
+
   if (is_debug) {
     defines += [ "ANGLE_GENERATE_SHADER_DEBUG_INFO" ]
   }
