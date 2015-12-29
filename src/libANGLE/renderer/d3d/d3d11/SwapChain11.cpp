@@ -203,6 +203,10 @@ EGLint SwapChain11::resetOffscreenColorBuffer(int backbufferWidth, int backbuffe
             release();
             return EGL_BAD_PARAMETER;
         }
+
+        // This may return null if the original texture was created without a
+        // keyed mutex.
+        mKeyedMutex = d3d11::DynamicCastComObject<IDXGIKeyedMutex>(mOffscreenTexture);
     }
     else
     {
