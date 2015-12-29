@@ -6,6 +6,8 @@ angle_enable_d3d9 = false
 angle_enable_d3d11 = false
 angle_enable_gl = false
 
+angle_enable_keyedmutex = true
+
 if (is_win) {
   angle_enable_d3d9 = true
   angle_enable_d3d11 = true

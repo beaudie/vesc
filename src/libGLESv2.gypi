@@ -795,6 +795,13 @@
                 {
                     'msvs_requires_importlibrary' : 'true',
                 }],
+                ['angle_enable_keyedmutex==1',
+                {
+                    'defines':
+                    [
+                        'ANGLE_ENABLE_KEYEDMUTEX',
+                    ],
+                }],
             ],
         },
         {
