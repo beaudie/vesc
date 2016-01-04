@@ -1244,6 +1244,11 @@
                             '-fno-exceptions',
                             '-fno-rtti',
                         ],
+                        # TODO(jmadill): Remove this once we fix dEQP.
+                        'cflags_cc':
+                        [
+                            '-Wno-delete-non-virtual-dtor',
+                        ],
                         'msvs_disabled_warnings':
                         [
                             '<@(deqp_msvs_disabled_warnings)',
