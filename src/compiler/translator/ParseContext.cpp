@@ -1928,6 +1928,12 @@ void TParseContext::parseGlobalLayoutQualifier(const TPublicType &typeQualifier)
 TIntermAggregate *TParseContext::addFunctionPrototypeDeclaration(const TFunction &function,
                                                                  const TSourceLoc &location)
 {
+    if (function.hasPreviousDeclaration() && mShaderVersion == 100)
+    {
+        // ESSL 1.00.17 section 4.2.7.
+        error(location, "duplicate function prototype declarations are not allowed", "function");
+        recover();
+    }
     TIntermAggregate *prototype = new TIntermAggregate;
     prototype->setType(function.getReturnType());
     prototype->setName(function.getMangledName());
@@ -2086,12 +2092,13 @@ void TParseContext::parseFunctionPrototype(const TSourceLoc &location,
 TFunction *TParseContext::parseFunctionDeclarator(const TSourceLoc &location, TFunction *function)
 {
     //
-    // Multiple declarations of the same function are allowed.
-    //
     // If this is a definition, the definition production code will check for redefinitions
     // (we don't know at this point if it's a definition or not).
     //
-    // Redeclarations are allowed.  But, return types and parameter qualifiers must match.
+    // Multiple declarations of the same function are allowed in ESSL3 but disallowed in ESSL1.
+    // Here we flag the function as having a previous declaration, and that information can be
+    // later used to detect duplicate declarations when the parser knows if this is a declaration.
+    // Return types and parameter qualifiers must match in redeclarations in ESSL3.
     //
     TFunction *prevDec =
         static_cast<TFunction *>(symbolTable.find(function->getMangledName(), getShaderVersion()));
@@ -2113,6 +2120,7 @@ TFunction *TParseContext::parseFunctionDeclarator(const TSourceLoc &location, TF
                 recover();
             }
         }
+        function->setHasPreviousDeclaration();
     }
 
     //

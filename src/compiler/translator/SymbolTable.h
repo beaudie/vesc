@@ -202,7 +202,8 @@ class TFunction : public TSymbol
           returnType(retType),
           mangledName(nullptr),
           op(tOp),
-          defined(false)
+          defined(false),
+          mHasPreviousDeclaration(false)
     {
         relateToExtension(ext);
     }
@@ -260,6 +261,15 @@ class TFunction : public TSymbol
         return parameters[i];
     }
 
+    void setHasPreviousDeclaration()
+    {
+        mHasPreviousDeclaration = true;
+    }
+    bool hasPreviousDeclaration() const
+    {
+        return mHasPreviousDeclaration;
+    }
+
   private:
     const TString *buildMangledName() const;
 
@@ -269,6 +279,7 @@ class TFunction : public TSymbol
     mutable const TString *mangledName;
     TOperator op;
     bool defined;
+    bool mHasPreviousDeclaration;
 };
 
 // Interface block name sub-symbol
