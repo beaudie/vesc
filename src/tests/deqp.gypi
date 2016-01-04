@@ -1244,6 +1244,10 @@
                             '-fno-exceptions',
                             '-fno-rtti',
                         ],
+                        'cflags_cc':
+                        [
+                            '-Wno-delete-non-virtual-dtor',
+                        ],
                         'msvs_disabled_warnings':
                         [
                             '<@(deqp_msvs_disabled_warnings)',
