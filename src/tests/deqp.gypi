@@ -1258,6 +1258,14 @@
                         {
                             'type' : 'shared_library',
                         }],
+                        ['clang==1',
+                        {
+                            # TODO(jmadill): Remove this once we fix dEQP.
+                            'cflags_cc':
+                            [
+                                '-Wno-delete-non-virtual-dtor',
+                            ],
+                        }],
                     ],
                 },
 
