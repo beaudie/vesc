@@ -28,6 +28,9 @@
 #include <sys/types.h>
 #endif
 
+// TODO(jmadill): Remove this once we fix dEQP
+#pragma clang diagnostic ignored "-Wdelete-non-virtual-dtor"
+
 tcu::Platform *createPlatform();
 
 namespace
