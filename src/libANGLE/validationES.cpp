@@ -144,7 +144,7 @@ bool ValidTextureTarget(const Context *context, GLenum target)
 // usable as the destination of a 2D operation-- so a cube face is valid, but
 // GL_TEXTURE_CUBE_MAP is not.
 // Note: duplicate of IsInternalTextureTarget
-bool ValidTexture2DDestinationTarget(const Context *context, GLenum target)
+bool ValidTexture2DDestinationTarget(const ValidationContext *context, GLenum target)
 {
     switch (target)
     {
@@ -230,21 +230,30 @@ bool ValidBufferParameter(const Context *context, GLenum pname)
     }
 }
 
-bool ValidMipLevel(const Context *context, GLenum target, GLint level)
+bool ValidMipLevel(const ValidationContext *context, GLenum target, GLint level)
 {
+    const auto &caps    = context->getCaps();
     size_t maxDimension = 0;
     switch (target)
     {
-      case GL_TEXTURE_2D:                  maxDimension = context->getCaps().max2DTextureSize;       break;
+        case GL_TEXTURE_2D:
+            maxDimension = caps.max2DTextureSize;
+            break;
       case GL_TEXTURE_CUBE_MAP:
       case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
       case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
       case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
       case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
       case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z: maxDimension = context->getCaps().maxCubeMapTextureSize;  break;
-      case GL_TEXTURE_3D:                  maxDimension = context->getCaps().max3DTextureSize;       break;
-      case GL_TEXTURE_2D_ARRAY:            maxDimension = context->getCaps().max2DTextureSize;       break;
+      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
+          maxDimension = caps.maxCubeMapTextureSize;
+          break;
+      case GL_TEXTURE_3D:
+          maxDimension = caps.max3DTextureSize;
+          break;
+      case GL_TEXTURE_2D_ARRAY:
+          maxDimension = caps.max2DTextureSize;
+          break;
       default: UNREACHABLE();
     }
 
@@ -297,7 +306,10 @@ bool CompressedTextureFormatRequiresExactSize(GLenum internalFormat)
     }
 }
 
-bool ValidCompressedImageSize(const Context *context, GLenum internalFormat, GLsizei width, GLsizei height)
+bool ValidCompressedImageSize(const ValidationContext *context,
+                              GLenum internalFormat,
+                              GLsizei width,
+                              GLsizei height)
 {
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat);
     if (!formatInfo.compressed)
@@ -1359,9 +1371,20 @@ bool ValidateStateQuery(gl::Context *context, GLenum pname, GLenum *nativeType, 
     return true;
 }
 
-bool ValidateCopyTexImageParametersBase(gl::Context *context, GLenum target, GLint level, GLenum internalformat, bool isSubImage,
-                                        GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height,
-                                        GLint border, GLenum *textureFormatOut)
+bool ValidateCopyTexImageParametersBase(ValidationContext *context,
+                                        GLenum target,
+                                        GLint level,
+                                        GLenum internalformat,
+                                        bool isSubImage,
+                                        GLint xoffset,
+                                        GLint yoffset,
+                                        GLint zoffset,
+                                        GLint x,
+                                        GLint y,
+                                        GLsizei width,
+                                        GLsizei height,
+                                        GLint border,
+                                        GLenum *textureFormatOut)
 {
 
     if (!ValidTexture2DDestinationTarget(context, target))
@@ -1394,14 +1417,15 @@ bool ValidateCopyTexImageParametersBase(gl::Context *context, GLenum target, GLi
         return false;
     }
 
-    gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
+    const gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
     if (framebuffer->checkStatus(context->getData()) != GL_FRAMEBUFFER_COMPLETE)
     {
         context->recordError(Error(GL_INVALID_FRAMEBUFFER_OPERATION));
         return false;
     }
 
-    if (context->getState().getReadFramebuffer()->id() != 0 && framebuffer->getSamples(context->getData()) != 0)
+    const auto &state = context->getState();
+    if (state.getReadFramebuffer()->id() != 0 && framebuffer->getSamples(context->getData()) != 0)
     {
         context->recordError(Error(GL_INVALID_OPERATION));
         return false;
@@ -1438,7 +1462,8 @@ bool ValidateCopyTexImageParametersBase(gl::Context *context, GLenum target, GLi
         return false;
     }
 
-    gl::Texture *texture = context->getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
+    gl::Texture *texture =
+        state.getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
     if (!texture)
     {
         context->recordError(Error(GL_INVALID_OPERATION));
@@ -2300,4 +2325,26 @@ bool ValidateGetProgramBinaryBase(Context *context,
 
     return true;
 }
+
+bool ValidateCopyTexImage2D(ValidationContext *context,
+                            GLenum target,
+                            GLint level,
+                            GLenum internalformat,
+                            GLint x,
+                            GLint y,
+                            GLsizei width,
+                            GLsizei height,
+                            GLint border)
+{
+    if (context->getClientVersion() < 3)
+    {
+        return ValidateES2CopyTexImageParameters(context, target, level, internalformat, false, 0,
+                                                 0, x, y, width, height, border);
+    }
+
+    ASSERT(context->getClientVersion() == 3);
+    return ValidateES3CopyTexImageParameters(context, target, level, internalformat, false, 0, 0, 0,
+                                             x, y, width, height, border);
 }
+
+}  // namespace gl
