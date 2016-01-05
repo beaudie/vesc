@@ -28,12 +28,6 @@
         'angle_build_deqp_executables%' : 0,
         'angle_build_deqp_gtest_executables%' :0,
 
-        'clang_warning_flags':
-        [
-             # tcu::CommandLine has virtual functions but no virtual destructor
-            '-Wno-no-delete-non-virtual-dtor',
-        ],
-
         'conditions':
         [
             ['(OS=="win" or OS=="linux" or OS=="mac")',
@@ -1320,6 +1314,12 @@
                         'defines':
                         [
                             'ANGLE_DEQP_LIBTESTER_IMPLEMENTATION',
+                        ],
+                        'clang_warning_flags':
+                        [
+                             # tcu::CommandLine has virtual functions but no virtual destructor
+                             # TODO(cwallez) fix this warning on the dEQP side instead.
+                            '-Wno-no-delete-non-virtual-dtor',
                         ],
                     },
                     'msvs_settings':
