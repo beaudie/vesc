@@ -28,6 +28,8 @@
         'angle_build_deqp_executables%' : 0,
         'angle_build_deqp_gtest_executables%' :0,
 
+        'clang%': 0,
+
         'conditions':
         [
             ['(OS=="win" or OS=="linux" or OS=="mac")',
