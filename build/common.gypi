@@ -35,6 +35,8 @@
             '-Wundef',
             '-Wwrite-strings',
         ],
+
+        'clang%': 0,
     },
     'target_defaults':
     {
