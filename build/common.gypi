@@ -35,6 +35,18 @@
             '-Wundef',
             '-Wwrite-strings',
         ],
+
+        'clang%': 0,
+        'conditions':
+        [
+            ['OS=="linux" or OS=="mac"',
+            {
+                'clang%': 1,
+            },
+            {
+                'clang%': 0,
+            }],
+        ],
     },
     'target_defaults':
     {
