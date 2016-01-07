@@ -199,6 +199,15 @@ class Context final : public ValidationContext
                             const GLvoid *indices,
                             const IndexRange &indexRange);
 
+    void copyTexImage2D(GLenum target,
+                        GLint level,
+                        GLenum internalformat,
+                        GLint x,
+                        GLint y,
+                        GLsizei width,
+                        GLsizei height,
+                        GLint border);
+
     Error flush();
     Error finish();
 
