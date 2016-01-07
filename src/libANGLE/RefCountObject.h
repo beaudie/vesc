@@ -21,11 +21,21 @@
 class RefCountObject : angle::NonCopyable
 {
   public:
-    explicit RefCountObject(GLuint id);
-    virtual ~RefCountObject();
+    explicit RefCountObject(GLuint id) : mId(id), mRefCount(0) {}
 
-    virtual void addRef() const;
-    virtual void release() const;
+    virtual ~RefCountObject() { ASSERT(mRefCount == 0); }
+
+    void addRef() const { ++mRefCount; }
+
+    void release() const
+    {
+        ASSERT(mRefCount > 0);
+
+        if (--mRefCount == 0)
+        {
+            delete this;
+        }
+    }
 
     GLuint id() const { return mId; }
 
