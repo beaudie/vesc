@@ -1,0 +1,10 @@
+Commit-Queue+1: Byungseon Shin <xingri@gmail.com>
+Verified+1: Byungseon Shin <xingri@gmail.com>
+Code-Review+1: Kenneth Russell <kbr@chromium.org>
+Code-Review+2: Corentin Wallez <cwallez@chromium.org>
+Tryjob-Request+1: Corentin Wallez <cwallez@chromium.org>
+Submitted-by: Corentin Wallez <cwallez@chromium.org>
+Submitted-at: Fri, 08 Jan 2016 17:46:40 +0000
+Reviewed-on: https://chromium-review.googlesource.com/320635
+Project: angle/angle
+Branch: refs/heads/master
