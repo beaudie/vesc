@@ -168,6 +168,7 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType, int shaderVersion,
     mUsesFrontFacing = false;
     mUsesPointSize = false;
     mUsesInstanceID = false;
+    mUsesVertexID                = false;
     mUsesFragDepth = false;
     mUsesXor = false;
     mUsesDiscardRewriting = false;
@@ -581,6 +582,11 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
         if (mUsesInstanceID)
         {
             out << "static int gl_InstanceID;";
+        }
+
+        if (mUsesVertexID)
+        {
+            out << "static int gl_VertexID;";
         }
 
         out << "\n"
@@ -1429,6 +1435,11 @@ void OutputHLSL::visitSymbol(TIntermSymbol *node)
         else if (qualifier == EvqInstanceID)
         {
             mUsesInstanceID = true;
+            out << name;
+        }
+        else if (qualifier == EvqVertexID)
+        {
+            mUsesVertexID = true;
             out << name;
         }
         else if (name == "gl_FragDepthEXT" || name == "gl_FragDepth")
