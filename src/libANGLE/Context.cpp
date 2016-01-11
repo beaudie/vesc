@@ -821,8 +821,7 @@ Query *Context::getQuery(GLuint handle) const
 Texture *Context::getTargetTexture(GLenum target) const
 {
     ASSERT(ValidTextureTarget(this, target));
-
-    return getSamplerTexture(mState.getActiveSampler(), target);
+    return mState.getTargetTexture(target);
 }
 
 Texture *Context::getSamplerTexture(unsigned int sampler, GLenum type) const
@@ -1900,4 +1899,26 @@ void Context::syncRendererState(const State::DirtyBits &bitMask)
         mState.clearDirtyBits(dirtyBits);
     }
 }
+
+void Context::copyTexImage2D(GLenum target,
+                             GLint level,
+                             GLenum internalformat,
+                             GLint x,
+                             GLint y,
+                             GLsizei width,
+                             GLsizei height,
+                             GLint border)
+{
+    Rectangle sourceArea(x, y, width, height);
+
+    const Framebuffer *framebuffer = mState.getReadFramebuffer();
+    Texture *texture =
+        getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
+    Error error = texture->copyImage(target, level, sourceArea, internalformat, framebuffer);
+    if (error.isError())
+    {
+        recordError(error);
+    }
 }
+
+}  // namespace gl

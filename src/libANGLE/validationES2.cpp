@@ -407,10 +407,17 @@ bool ValidateES2TexImageParameters(Context *context, GLenum target, GLint level,
     return true;
 }
 
-
-
-bool ValidateES2CopyTexImageParameters(Context* context, GLenum target, GLint level, GLenum internalformat, bool isSubImage,
-                                       GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height,
+bool ValidateES2CopyTexImageParameters(ValidationContext *context,
+                                       GLenum target,
+                                       GLint level,
+                                       GLenum internalformat,
+                                       bool isSubImage,
+                                       GLint xoffset,
+                                       GLint yoffset,
+                                       GLint x,
+                                       GLint y,
+                                       GLsizei width,
+                                       GLsizei height,
                                        GLint border)
 {
     GLenum textureInternalFormat = GL_NONE;
@@ -421,7 +428,7 @@ bool ValidateES2CopyTexImageParameters(Context* context, GLenum target, GLint le
         return false;
     }
 
-    gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
+    const gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
     GLenum colorbufferFormat = framebuffer->getReadColorbuffer()->getInternalFormat();
     const auto &internalFormatInfo = gl::GetInternalFormatInfo(textureInternalFormat);
     GLenum textureFormat = internalFormatInfo.format;
