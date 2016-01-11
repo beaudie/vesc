@@ -777,30 +777,12 @@ void GL_APIENTRY CopyTexImage2D(GLenum target, GLint level, GLenum internalforma
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (context->getClientVersion() < 3 &&
-            !ValidateES2CopyTexImageParameters(context, target, level, internalformat, false,
-                                               0, 0, x, y, width, height, border))
+        if (!ValidateCopyTexImage2D(context, target, level, internalformat, x, y, width, height,
+                                    border))
         {
             return;
         }
-
-        if (context->getClientVersion() >= 3 &&
-            !ValidateES3CopyTexImageParameters(context, target, level, internalformat, false,
-                                               0, 0, 0, x, y, width, height, border))
-        {
-            return;
-        }
-
-        Rectangle sourceArea(x, y, width, height);
-
-        const Framebuffer *framebuffer = context->getState().getReadFramebuffer();
-        Texture *texture = context->getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
-        Error error = texture->copyImage(target, level, sourceArea, internalformat, framebuffer);
-        if (error.isError())
-        {
-            context->recordError(error);
-            return;
-        }
+        context->copyTexImage2D(target, level, internalformat, x, y, width, height, border);
     }
 }
 

@@ -22,7 +22,6 @@ class Image;
 
 namespace gl
 {
-
 class Context;
 class Program;
 class Shader;
@@ -30,11 +29,11 @@ class ValidationContext;
 
 bool ValidCap(const Context *context, GLenum cap);
 bool ValidTextureTarget(const Context *context, GLenum target);
-bool ValidTexture2DDestinationTarget(const Context *context, GLenum target);
+bool ValidTexture2DDestinationTarget(const ValidationContext *context, GLenum target);
 bool ValidFramebufferTarget(GLenum target);
 bool ValidBufferTarget(const Context *context, GLenum target);
 bool ValidBufferParameter(const Context *context, GLenum pname);
-bool ValidMipLevel(const Context *context, GLenum target, GLint level);
+bool ValidMipLevel(const ValidationContext *context, GLenum target, GLint level);
 bool ValidImageSizeParameters(const Context *context,
                               GLenum target,
                               GLint level,
@@ -42,7 +41,10 @@ bool ValidImageSizeParameters(const Context *context,
                               GLsizei height,
                               GLsizei depth,
                               bool isSubImage);
-bool ValidCompressedImageSize(const Context *context, GLenum internalFormat, GLsizei width, GLsizei height);
+bool ValidCompressedImageSize(const ValidationContext *context,
+                              GLenum internalFormat,
+                              GLsizei width,
+                              GLsizei height);
 bool ValidQueryType(const Context *context, GLenum queryType);
 
 // Returns valid program if id is a valid program name
@@ -86,9 +88,20 @@ bool ValidateUniformMatrix(Context *context, GLenum matrixType, GLint location, 
 
 bool ValidateStateQuery(Context *context, GLenum pname, GLenum *nativeType, unsigned int *numParams);
 
-bool ValidateCopyTexImageParametersBase(Context *context, GLenum target, GLint level, GLenum internalformat, bool isSubImage,
-                                        GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height,
-                                        GLint border, GLenum *textureInternalFormatOut);
+bool ValidateCopyTexImageParametersBase(ValidationContext *context,
+                                        GLenum target,
+                                        GLint level,
+                                        GLenum internalformat,
+                                        bool isSubImage,
+                                        GLint xoffset,
+                                        GLint yoffset,
+                                        GLint zoffset,
+                                        GLint x,
+                                        GLint y,
+                                        GLsizei width,
+                                        GLsizei height,
+                                        GLint border,
+                                        GLenum *textureInternalFormatOut);
 
 bool ValidateDrawArrays(Context *context, GLenum mode, GLint first, GLsizei count, GLsizei primcount);
 bool ValidateDrawArraysInstanced(Context *context, GLenum mode, GLint first, GLsizei count, GLsizei primcount);
@@ -159,8 +172,18 @@ bool ValidateGetProgramBinaryBase(Context *context,
                                   GLenum *binaryFormat,
                                   void *binary);
 
+bool ValidateCopyTexImage2D(ValidationContext *context,
+                            GLenum target,
+                            GLint level,
+                            GLenum internalformat,
+                            GLint x,
+                            GLint y,
+                            GLsizei width,
+                            GLsizei height,
+                            GLint border);
+
 // Error messages shared here for use in testing.
 extern const char *g_ExceedsMaxElementErrorMessage;
-}
+}  // namespace gl
 
 #endif // LIBANGLE_VALIDATION_ES_H_
