@@ -64,6 +64,72 @@ void ANGLETest::SetUp()
 
 void ANGLETest::TearDown()
 {
+#ifndef NDEBUG
+    // In debug D3D11 mode, check ID3D11InfoQueue to see if any D3D11 SDK Layers messages
+    // were outputted by the test
+    if (mEGLWindow->getPlatform().renderer == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE &&
+        mEGLWindow->getDisplay() != EGL_NO_DISPLAY)
+    {
+        EGLAttrib device      = 0;
+        EGLAttrib angleDevice = 0;
+
+        PFNEGLQUERYDISPLAYATTRIBEXTPROC queryDisplayAttribEXT;
+        PFNEGLQUERYDEVICEATTRIBEXTPROC queryDeviceAttribEXT;
+
+        const char *extensionString =
+            static_cast<const char *>(eglQueryString(mEGLWindow->getDisplay(), EGL_EXTENSIONS));
+        if (strstr(extensionString, "EGL_EXT_device_query"))
+        {
+            queryDisplayAttribEXT =
+                (PFNEGLQUERYDISPLAYATTRIBEXTPROC)eglGetProcAddress("eglQueryDisplayAttribEXT");
+            queryDeviceAttribEXT =
+                (PFNEGLQUERYDEVICEATTRIBEXTPROC)eglGetProcAddress("eglQueryDeviceAttribEXT");
+            ASSERT_NE(nullptr, queryDisplayAttribEXT);
+            ASSERT_NE(nullptr, queryDeviceAttribEXT);
+
+            ASSERT_EGL_TRUE(
+                queryDisplayAttribEXT(mEGLWindow->getDisplay(), EGL_DEVICE_EXT, &angleDevice));
+            ASSERT_EGL_TRUE(queryDeviceAttribEXT(reinterpret_cast<EGLDeviceEXT>(angleDevice),
+                                                 EGL_D3D11_DEVICE_ANGLE, &device));
+            ID3D11Device *d3d11Device = reinterpret_cast<ID3D11Device *>(device);
+
+            ID3D11InfoQueue *infoQueue = nullptr;
+            HRESULT hr = d3d11Device->QueryInterface(__uuidof(infoQueue),
+                                                     reinterpret_cast<void **>(&infoQueue));
+            if (SUCCEEDED(hr))
+            {
+                UINT64 numStoredD3DDebugMessages =
+                    infoQueue->GetNumStoredMessagesAllowedByRetrievalFilter();
+
+                if (numStoredD3DDebugMessages > 0)
+                {
+                    for (UINT64 i = 0; i < numStoredD3DDebugMessages; i++)
+                    {
+                        size_t messageLength = 0;
+                        hr                   = infoQueue->GetMessage(i, nullptr, &messageLength);
+
+                        if (SUCCEEDED(hr))
+                        {
+                            D3D11_MESSAGE *pMessage =
+                                reinterpret_cast<D3D11_MESSAGE *>(malloc(messageLength));
+                            infoQueue->GetMessage(i, pMessage, &messageLength);
+
+                            std::cout << "Message " << i << ":"
+                                      << " " << pMessage->pDescription << "\n";
+                            free(pMessage);
+                        }
+                    }
+
+                    FAIL() << numStoredD3DDebugMessages
+                           << " D3D11 SDK Layers message(s) detected! Test Failed.\n";
+                }
+            }
+
+            SafeRelease(infoQueue);
+        }
+    }
+#endif
+
     const auto &info = testing::UnitTest::GetInstance()->current_test_info();
     angle::WriteDebugMessage("Exiting %s.%s\n", info->test_case_name(), info->name());
 

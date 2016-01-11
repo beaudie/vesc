@@ -1327,8 +1327,44 @@ void SetPositionLayerTexCoord3DVertex(PositionLayerTexCoord3DVertex* vertex, flo
 HRESULT SetDebugName(ID3D11DeviceChild *resource, const char *name)
 {
 #if defined(_DEBUG)
-    return resource->SetPrivateData(WKPDID_D3DDebugObjectName,
-                                    static_cast<unsigned int>(strlen(name)), name);
+    UINT existingDataSize = 0;
+    resource->GetPrivateData(WKPDID_D3DDebugObjectName, &existingDataSize, nullptr);
+    // Don't check the HRESULT- if it failed then that probably just means that no private data
+    // exists yet
+
+    if (existingDataSize > 0)
+    {
+        // Get the existing name
+        std::string existingData;
+        existingData.resize(existingDataSize);
+        HRESULT hr = resource->GetPrivateData(WKPDID_D3DDebugObjectName, &existingDataSize,
+                                              static_cast<void *>(&existingData[0]));
+        if (FAILED(hr))
+        {
+            return hr;
+        }
+
+        // Combine the new name with the existing name
+        existingData.push_back('/');
+        existingData.append(name);
+
+        // Remove the existing name
+        hr = resource->SetPrivateData(WKPDID_D3DDebugObjectName, 0, nullptr);
+        if (FAILED(hr))
+        {
+            return hr;
+        }
+
+        // Apply the new combined name
+        return resource->SetPrivateData(WKPDID_D3DDebugObjectName,
+                                        static_cast<unsigned int>(existingData.length()),
+                                        static_cast<void *>(&existingData[0]));
+    }
+    else
+    {
+        return resource->SetPrivateData(WKPDID_D3DDebugObjectName,
+                                        static_cast<unsigned int>(strlen(name)), name);
+    }
 #else
     return S_OK;
 #endif
