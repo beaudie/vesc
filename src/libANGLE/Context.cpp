@@ -1888,6 +1888,8 @@ void Context::syncRendererState()
         mRenderer->syncState(mState, dirtyBits);
         mState.clearDirtyBits();
     }
+
+    mState.syncDirtyObjects();
 }
 
 void Context::syncRendererState(const State::DirtyBits &bitMask)
@@ -1898,6 +1900,9 @@ void Context::syncRendererState(const State::DirtyBits &bitMask)
         mRenderer->syncState(mState, dirtyBits);
         mState.clearDirtyBits(dirtyBits);
     }
+
+    // TODO(jmadill): Filter objects by bitMask somehow?
+    mState.syncDirtyObjects();
 }
 
 void Context::copyTexImage2D(GLenum target,
