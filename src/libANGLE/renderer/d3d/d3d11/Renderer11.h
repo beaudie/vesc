@@ -293,6 +293,7 @@ class Renderer11 : public RendererD3D
                              GLsizei instances) override;
     gl::Error drawElementsImpl(const gl::Data &data,
                                const TranslatedIndexData &indexInfo,
+                               SourceIndexData *sourceInfo,
                                GLenum mode,
                                GLsizei count,
                                GLenum type,

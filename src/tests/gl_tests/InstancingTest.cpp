@@ -125,6 +125,53 @@ class InstancingTest : public ANGLETest
         return program;
     }
 
+    GLuint setupInstancedPointsTest()
+    {
+        mIndices.clear();
+        mIndices.push_back(0);
+        mIndices.push_back(1);
+        mIndices.push_back(2);
+        mIndices.push_back(3);
+
+        const std::string vs = SHADER_SOURCE
+        (
+            attribute vec3 a_position;
+            attribute vec3 a_instancePos;
+            void main()
+            {
+                gl_Position = vec4(a_position.xyz, 1.0);
+                gl_Position = vec4(a_instancePos.xyz, 1.0);
+                gl_PointSize = 6.0;
+            }
+        );
+
+        const std::string fs = SHADER_SOURCE
+        (
+            precision mediump float;
+            void main()
+            {
+                gl_FragColor = vec4(1.0, 0, 0, 1.0);
+            }
+        );
+
+        GLuint program = CompileProgram(vs, fs);
+        if (program == 0)
+        {
+            return 0;
+        }
+
+        // Set the viewport
+        glViewport(0, 0, getWindowWidth(), getWindowHeight());
+
+        // Clear the color buffer
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Use the program object
+        glUseProgram(program);
+
+        return program;
+    }
+
     void runDrawArraysTest(GLuint program, GLint first, GLsizei count, GLsizei instanceCount, float *offset)
     {
         GLuint vertexBuffer;
@@ -254,6 +301,12 @@ class InstancingTestNo9_3 : public InstancingTest
     InstancingTestNo9_3() {}
 };
 
+class InstancingTestPoints : public InstancingTest
+{
+  protected:
+    InstancingTestPoints() {}
+};
+
 // This test uses a vertex shader with the first attribute (attribute zero) instanced.
 // On D3D9 and D3D11 FL9_3, this triggers a special codepath that rearranges the input layout sent to D3D,
 // to ensure that slot/stream zero of the input layout doesn't contain per-instance data.
@@ -318,9 +371,100 @@ TEST_P(InstancingTestNo9_3, DrawArraysWithOffset)
     glDeleteProgram(program);
 }
 
+// This test verifies instancing with GL_POINTS with glDrawArraysInstanced works.
+// On D3D11 FL9_3, this triggers a special codepath that emulates instanced points
+// rendering.
+TEST_P(InstancingTestPoints, DrawArrays)
+{
+    GLuint program = setupInstancedPointsTest();
+    ASSERT_NE(program, 0u);
+
+    GLuint vertexBuffer;
+    glGenBuffers(1, &vertexBuffer);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, mInstances.size() * sizeof(mInstances[0]), &mInstances[0],
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // Get the attribute locations
+    GLint positionLoc    = glGetAttribLocation(program, "a_position");
+    GLint instancePosLoc = glGetAttribLocation(program, "a_instancePos");
+
+    // Load the vertex position
+    GLfloat pos[3] = {0, 0, 0};
+    glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, pos);
+    glEnableVertexAttribArray(positionLoc);
+
+    // Load the instance position
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glVertexAttribPointer(instancePosLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glEnableVertexAttribArray(instancePosLoc);
+
+    // Enable instancing
+    mVertexAttribDivisorANGLE(instancePosLoc, 1);
+
+    // Do the instanced draw
+    mDrawArraysInstancedANGLE(GL_POINTS, 0, 1, static_cast<GLsizei>(mInstances.size()) / 3);
+
+    ASSERT_GL_NO_ERROR();
+
+    checkQuads();
+
+    glDeleteProgram(program);
+}
+
+// This test verifies instancing with GL_POINTS with glDrawElementsInstanced works.
+// On D3D11 FL9_3, this triggers a special codepath that emulates instanced points
+// rendering.
+TEST_P(InstancingTestPoints, DrawElements)
+{
+    GLuint program = setupInstancedPointsTest();
+    ASSERT_NE(program, 0u);
+
+    GLuint vertexBuffer;
+    glGenBuffers(1, &vertexBuffer);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, mInstances.size() * sizeof(mInstances[0]), &mInstances[0],
+                 GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // Get the attribute locations
+    GLint positionLoc    = glGetAttribLocation(program, "a_position");
+    GLint instancePosLoc = glGetAttribLocation(program, "a_instancePos");
+
+    // Load the vertex position
+    GLfloat pos[3] = {0, 0, 0};
+    glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 0, pos);
+    glEnableVertexAttribArray(positionLoc);
+
+    // Load the instance position
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glVertexAttribPointer(instancePosLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glEnableVertexAttribArray(instancePosLoc);
+
+    // Enable instancing
+    mVertexAttribDivisorANGLE(instancePosLoc, 1);
+
+    // Do the instanced draw
+    mDrawElementsInstancedANGLE(GL_POINTS, static_cast<GLsizei>(mIndices.size()), GL_UNSIGNED_SHORT,
+                                mIndices.data(), static_cast<GLsizei>(mInstances.size()) / 3);
+
+    ASSERT_GL_NO_ERROR();
+
+    checkQuads();
+
+    glDeleteProgram(program);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 // We test on D3D9 and D3D11 9_3 because they use special codepaths when attribute zero is instanced, unlike D3D11.
 ANGLE_INSTANTIATE_TEST(InstancingTestAllConfigs, ES2_D3D9(), ES2_D3D11(), ES2_D3D11_FL9_3());
 
 // TODO(jmadill): Figure out the situation with DrawInstanced on FL 9_3
 ANGLE_INSTANTIATE_TEST(InstancingTestNo9_3, ES2_D3D9(), ES2_D3D11());
+
+ANGLE_INSTANTIATE_TEST(InstancingTestPoints, ES2_D3D11(), ES2_D3D11_FL9_3());
