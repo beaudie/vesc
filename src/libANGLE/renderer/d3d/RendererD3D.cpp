@@ -197,7 +197,8 @@ gl::Error RendererD3D::genericDrawElements(const gl::Data &data,
 
     if (!skipDraw(data, mode))
     {
-        error = drawElementsImpl(data, indexInfo, mode, count, type, indices, instances);
+        error = drawElementsImpl(data, indexInfo, &sourceIndexInfo, mode, count, type, indices,
+                                 instances);
         if (error.isError())
         {
             return error;
