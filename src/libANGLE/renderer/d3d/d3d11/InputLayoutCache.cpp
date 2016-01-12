@@ -173,8 +173,13 @@ void InputLayoutCache::markDirty()
     }
 }
 
-gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttribute> &unsortedAttributes,
-                                               GLenum mode, gl::Program *program, SourceIndexData *sourceInfo)
+gl::Error InputLayoutCache::applyVertexBuffers(
+    const std::vector<TranslatedAttribute> &unsortedAttributes,
+    GLenum mode,
+    gl::Program *program,
+    SourceIndexData *sourceInfo,
+    GLsizei emulatedInstanceId,
+    GLsizei numIndicesPerInstance)
 {
     ProgramD3D *programD3D = GetImplAs<ProgramD3D>(program);
 
@@ -222,6 +227,15 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
             inputElements[inputElementCount].AlignedByteOffset = 0;
             inputElements[inputElementCount].InputSlotClass = inputClass;
             inputElements[inputElementCount].InstanceDataStepRate = instancedPointSpritesActive ? 1 : sortedAttributes[i]->divisor;
+
+            // If instanced PointSprite emulation is active and instanced data is used, the data
+            // step rate is changed to match the element count per instance.
+            if (instancedPointSpritesActive && sortedAttributes[i]->divisor > 0 &&
+                numIndicesPerInstance > 0)
+            {
+                inputElements[inputElementCount].InstanceDataStepRate =
+                    static_cast<unsigned int>(numIndicesPerInstance);
+            }
 
             if (inputClass == D3D11_INPUT_PER_VERTEX_DATA && firstIndexedElement == gl::MAX_VERTEX_ATTRIBS)
             {
@@ -380,6 +394,16 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
 
             vertexStride = sortedAttributes[i]->stride;
             vertexOffset = sortedAttributes[i]->offset;
+
+            // If instanced PointSprite emulation is active and instanced data is used, the offset
+            // into the instanced data must be moved each on iteration. PointSprite emulation is
+            // implemented using a for-loop which renders the nth instance with DrawIndexedInstanced
+            // on each iteration.
+            if (instancedPointSpritesActive && sortedAttributes[i]->divisor > 0)
+            {
+                vertexOffset += sortedAttributes[i]->stride *
+                                (emulatedInstanceId / sortedAttributes[i]->divisor);
+            }
         }
 
         if (buffer != mCurrentBuffers[i] || vertexStride != mCurrentVertexStrides[i] ||
