@@ -1165,7 +1165,12 @@ gl::Error Renderer9::applyRenderTarget(const gl::Framebuffer *framebuffer)
     return applyRenderTarget(framebuffer->getColorbuffer(0), framebuffer->getDepthOrStencilbuffer());
 }
 
-gl::Error Renderer9::applyVertexBuffer(const gl::State &state, GLenum mode, GLint first, GLsizei count, GLsizei instances, SourceIndexData * /*sourceInfo*/)
+gl::Error Renderer9::applyVertexBuffer(const gl::State &state,
+                                       GLenum mode,
+                                       GLint first,
+                                       GLsizei count,
+                                       GLsizei instances,
+                                       SourceIndexData * /*sourceInfo*/)
 {
     gl::Error error = mVertexDataManager->prepareVertexData(state, first, count, &mTranslatedAttribCache, instances);
     if (error.isError())
@@ -1259,6 +1264,7 @@ gl::Error Renderer9::drawArraysImpl(const gl::Data &data,
 
 gl::Error Renderer9::drawElementsImpl(const gl::Data &data,
                                       const TranslatedIndexData &indexInfo,
+                                      SourceIndexData * /*sourceInfo*/,
                                       GLenum mode,
                                       GLsizei count,
                                       GLenum type,
