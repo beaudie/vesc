@@ -1164,7 +1164,13 @@ gl::Error Renderer9::applyRenderTarget(const gl::Framebuffer *framebuffer)
     return applyRenderTarget(framebuffer->getColorbuffer(0), framebuffer->getDepthOrStencilbuffer());
 }
 
-gl::Error Renderer9::applyVertexBuffer(const gl::State &state, GLenum mode, GLint first, GLsizei count, GLsizei instances, SourceIndexData * /*sourceInfo*/)
+gl::Error Renderer9::applyVertexBuffer(const gl::State &state,
+                                       GLenum mode,
+                                       GLint first,
+                                       GLsizei count,
+                                       GLsizei instances,
+                                       SourceIndexData * /*sourceInfo*/,
+                                       bool /*instancedRenderingUsed */)
 {
     gl::Error error = mVertexDataManager->prepareVertexData(state, first, count, &mTranslatedAttribCache, instances);
     if (error.isError())
@@ -1215,7 +1221,8 @@ void Renderer9::applyTransformFeedbackBuffers(const gl::State& state)
 gl::Error Renderer9::drawArraysImpl(const gl::Data &data,
                                     GLenum mode,
                                     GLsizei count,
-                                    GLsizei instances)
+                                    GLsizei instances,
+                                    bool /*instancedRenderingUsed*/)
 {
     ASSERT(!data.state->isTransformFeedbackActiveUnpaused());
 
@@ -1258,11 +1265,13 @@ gl::Error Renderer9::drawArraysImpl(const gl::Data &data,
 
 gl::Error Renderer9::drawElementsImpl(const gl::Data &data,
                                       const TranslatedIndexData &indexInfo,
+                                      SourceIndexData * /*sourceInfo*/,
                                       GLenum mode,
                                       GLsizei count,
                                       GLenum type,
                                       const GLvoid *indices,
-                                      GLsizei /*instances*/)
+                                      GLsizei /*instances*/,
+                                      bool /*instancedRenderingUsed*/)
 {
     startScene();
 

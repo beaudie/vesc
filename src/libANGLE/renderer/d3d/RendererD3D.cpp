@@ -82,7 +82,7 @@ SamplerImpl *RendererD3D::createSampler()
 
 gl::Error RendererD3D::drawArrays(const gl::Data &data, GLenum mode, GLint first, GLsizei count)
 {
-    return genericDrawArrays(data, mode, first, count, 0);
+    return genericDrawArrays(data, mode, first, count, 0, false);
 }
 
 gl::Error RendererD3D::drawArraysInstanced(const gl::Data &data,
@@ -91,7 +91,7 @@ gl::Error RendererD3D::drawArraysInstanced(const gl::Data &data,
                                            GLsizei count,
                                            GLsizei instanceCount)
 {
-    return genericDrawArrays(data, mode, first, count, instanceCount);
+    return genericDrawArrays(data, mode, first, count, instanceCount, true);
 }
 
 gl::Error RendererD3D::drawElements(const gl::Data &data,
@@ -101,7 +101,7 @@ gl::Error RendererD3D::drawElements(const gl::Data &data,
                                     const GLvoid *indices,
                                     const gl::IndexRange &indexRange)
 {
-    return genericDrawElements(data, mode, count, type, indices, 0, indexRange);
+    return genericDrawElements(data, mode, count, type, indices, 0, indexRange, false);
 }
 
 gl::Error RendererD3D::drawElementsInstanced(const gl::Data &data,
@@ -112,7 +112,7 @@ gl::Error RendererD3D::drawElementsInstanced(const gl::Data &data,
                                              GLsizei instances,
                                              const gl::IndexRange &indexRange)
 {
-    return genericDrawElements(data, mode, count, type, indices, instances, indexRange);
+    return genericDrawElements(data, mode, count, type, indices, instances, indexRange, true);
 }
 
 gl::Error RendererD3D::drawRangeElements(const gl::Data &data,
@@ -124,7 +124,7 @@ gl::Error RendererD3D::drawRangeElements(const gl::Data &data,
                                          const GLvoid *indices,
                                          const gl::IndexRange &indexRange)
 {
-    return genericDrawElements(data, mode, count, type, indices, 0, indexRange);
+    return genericDrawElements(data, mode, count, type, indices, 0, indexRange, false);
 }
 
 gl::Error RendererD3D::genericDrawElements(const gl::Data &data,
@@ -133,7 +133,8 @@ gl::Error RendererD3D::genericDrawElements(const gl::Data &data,
                                            GLenum type,
                                            const GLvoid *indices,
                                            GLsizei instances,
-                                           const gl::IndexRange &indexRange)
+                                           const gl::IndexRange &indexRange,
+                                           bool instancedRenderingUsed)
 {
     gl::Program *program = data.state->getProgram();
     ASSERT(program != nullptr);
@@ -177,7 +178,8 @@ gl::Error RendererD3D::genericDrawElements(const gl::Data &data,
 
     size_t vertexCount = indexInfo.indexRange.vertexCount();
     error = applyVertexBuffer(*data.state, mode, static_cast<GLsizei>(indexInfo.indexRange.start),
-                              static_cast<GLsizei>(vertexCount), instances, &sourceIndexInfo);
+                              static_cast<GLsizei>(vertexCount), instances, &sourceIndexInfo,
+                              instancedRenderingUsed);
     if (error.isError())
     {
         return error;
@@ -203,7 +205,8 @@ gl::Error RendererD3D::genericDrawElements(const gl::Data &data,
 
     if (!skipDraw(data, mode))
     {
-        error = drawElementsImpl(data, indexInfo, mode, count, type, indices, instances);
+        error = drawElementsImpl(data, indexInfo, &sourceIndexInfo, mode, count, type, indices,
+                                 instances, instancedRenderingUsed);
         if (error.isError())
         {
             return error;
@@ -217,7 +220,8 @@ gl::Error RendererD3D::genericDrawArrays(const gl::Data &data,
                                          GLenum mode,
                                          GLint first,
                                          GLsizei count,
-                                         GLsizei instances)
+                                         GLsizei instances,
+                                         bool instancedRenderingUsed)
 {
     gl::Program *program = data.state->getProgram();
     ASSERT(program != nullptr);
@@ -245,7 +249,8 @@ gl::Error RendererD3D::genericDrawArrays(const gl::Data &data,
 
     applyTransformFeedbackBuffers(*data.state);
 
-    error = applyVertexBuffer(*data.state, mode, first, count, instances, nullptr);
+    error = applyVertexBuffer(*data.state, mode, first, count, instances, nullptr,
+                              instancedRenderingUsed);
     if (error.isError())
     {
         return error;
@@ -271,7 +276,7 @@ gl::Error RendererD3D::genericDrawArrays(const gl::Data &data,
 
     if (!skipDraw(data, mode))
     {
-        error = drawArraysImpl(data, mode, count, instances);
+        error = drawArraysImpl(data, mode, count, instances, instancedRenderingUsed);
         if (error.isError())
         {
             return error;

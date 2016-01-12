@@ -164,7 +164,13 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
                                     GLenum drawMode,
                                     const std::vector<D3DUniform *> &uniformArray) = 0;
     virtual bool applyPrimitiveType(GLenum primitiveType, GLsizei elementCount, bool usesPointSize) = 0;
-    virtual gl::Error applyVertexBuffer(const gl::State &state, GLenum mode, GLint first, GLsizei count, GLsizei instances, SourceIndexData *sourceIndexInfo) = 0;
+    virtual gl::Error applyVertexBuffer(const gl::State &state,
+                                        GLenum mode,
+                                        GLint first,
+                                        GLsizei count,
+                                        GLsizei instances,
+                                        SourceIndexData *sourceIndexInfo,
+                                        bool instancedRenderingUsed) = 0;
     virtual gl::Error applyIndexBuffer(const gl::Data &data,
                                        const GLvoid *indices,
                                        GLsizei count,
@@ -275,7 +281,8 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
                                 GLenum mode,
                                 GLint first,
                                 GLsizei count,
-                                GLsizei instances);
+                                GLsizei instances,
+                                bool instancedRenderingUsed);
 
     gl::Error genericDrawElements(const gl::Data &data,
                                   GLenum mode,
@@ -283,19 +290,23 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
                                   GLenum type,
                                   const GLvoid *indices,
                                   GLsizei instances,
-                                  const gl::IndexRange &indexRange);
+                                  const gl::IndexRange &indexRange,
+                                  bool instancedRenderingUsed);
 
     virtual gl::Error drawArraysImpl(const gl::Data &data,
                                      GLenum mode,
                                      GLsizei count,
-                                     GLsizei instances) = 0;
+                                     GLsizei instances,
+                                     bool instancedRenderingUsed) = 0;
     virtual gl::Error drawElementsImpl(const gl::Data &data,
                                        const TranslatedIndexData &indexInfo,
+                                       SourceIndexData *sourceInfo,
                                        GLenum mode,
                                        GLsizei count,
                                        GLenum type,
                                        const GLvoid *indices,
-                                       GLsizei instances) = 0;
+                                       GLsizei instances,
+                                       bool instancedRenderingUsed) = 0;
 
     //FIXME(jmadill): std::array is currently prohibited by Chromium style guide
     typedef std::array<gl::Texture*, gl::IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS> FramebufferTextureArray;
