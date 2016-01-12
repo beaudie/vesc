@@ -1258,6 +1258,7 @@ gl::Error Renderer9::drawArraysImpl(const gl::Data &data,
 
 gl::Error Renderer9::drawElementsImpl(const gl::Data &data,
                                       const TranslatedIndexData &indexInfo,
+                                      SourceIndexData * /*sourceInfo*/,
                                       GLenum mode,
                                       GLsizei count,
                                       GLenum type,

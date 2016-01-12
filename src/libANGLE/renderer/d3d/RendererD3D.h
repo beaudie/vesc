@@ -291,6 +291,7 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
                                      GLsizei instances) = 0;
     virtual gl::Error drawElementsImpl(const gl::Data &data,
                                        const TranslatedIndexData &indexInfo,
+                                       SourceIndexData *sourceInfo,
                                        GLenum mode,
                                        GLsizei count,
                                        GLenum type,
