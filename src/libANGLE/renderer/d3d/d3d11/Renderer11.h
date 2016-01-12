@@ -132,7 +132,13 @@ class Renderer11 : public RendererD3D
     gl::Error applyUniforms(const ProgramD3D &programD3D,
                             GLenum drawMode,
                             const std::vector<D3DUniform *> &uniformArray) override;
-    virtual gl::Error applyVertexBuffer(const gl::State &state, GLenum mode, GLint first, GLsizei count, GLsizei instances, SourceIndexData *sourceIndexInfo);
+    virtual gl::Error applyVertexBuffer(const gl::State &state,
+                                        GLenum mode,
+                                        GLint first,
+                                        GLsizei count,
+                                        GLsizei instances,
+                                        SourceIndexData *sourceIndexInfo,
+                                        bool instancedRenderingUsed);
     gl::Error applyIndexBuffer(const gl::Data &data,
                                const GLvoid *indices,
                                GLsizei count,
@@ -290,14 +296,17 @@ class Renderer11 : public RendererD3D
     gl::Error drawArraysImpl(const gl::Data &data,
                              GLenum mode,
                              GLsizei count,
-                             GLsizei instances) override;
+                             GLsizei instances,
+                             bool instancedRenderingUsed) override;
     gl::Error drawElementsImpl(const gl::Data &data,
                                const TranslatedIndexData &indexInfo,
+                               SourceIndexData *sourceInfo,
                                GLenum mode,
                                GLsizei count,
                                GLenum type,
                                const GLvoid *indices,
-                               GLsizei instances) override;
+                               GLsizei instances,
+                               bool instancedRenderingUsed) override;
 
     void generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureCaps,
                       gl::Extensions *outExtensions,

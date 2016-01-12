@@ -119,7 +119,13 @@ class Renderer9 : public RendererD3D
                             GLenum drawMode,
                             const std::vector<D3DUniform *> &uniformArray) override;
     virtual bool applyPrimitiveType(GLenum primitiveType, GLsizei elementCount, bool usesPointSize);
-    virtual gl::Error applyVertexBuffer(const gl::State &state, GLenum mode, GLint first, GLsizei count, GLsizei instances, SourceIndexData *sourceInfo);
+    virtual gl::Error applyVertexBuffer(const gl::State &state,
+                                        GLenum mode,
+                                        GLint first,
+                                        GLsizei count,
+                                        GLsizei instances,
+                                        SourceIndexData *sourceInfo,
+                                        bool instancedRenderingUsed);
     gl::Error applyIndexBuffer(const gl::Data &data,
                                const GLvoid *indices,
                                GLsizei count,
@@ -264,14 +270,17 @@ class Renderer9 : public RendererD3D
     gl::Error drawArraysImpl(const gl::Data &data,
                              GLenum mode,
                              GLsizei count,
-                             GLsizei instances) override;
+                             GLsizei instances,
+                             bool instancedRenderingUsed) override;
     gl::Error drawElementsImpl(const gl::Data &data,
                                const TranslatedIndexData &indexInfo,
+                               SourceIndexData *sourceInfo,
                                GLenum mode,
                                GLsizei count,
                                GLenum type,
                                const GLvoid *indices,
-                               GLsizei instances) override;
+                               GLsizei instances,
+                               bool instancedRenderingUsed) override;
 
     void generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureCaps,
                       gl::Extensions *outExtensions,
