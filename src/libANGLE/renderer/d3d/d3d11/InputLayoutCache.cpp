@@ -173,8 +173,13 @@ void InputLayoutCache::markDirty()
     }
 }
 
-gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttribute> &unsortedAttributes,
-                                               GLenum mode, gl::Program *program, SourceIndexData *sourceInfo)
+gl::Error InputLayoutCache::applyVertexBuffers(
+    const std::vector<TranslatedAttribute> &unsortedAttributes,
+    GLenum mode,
+    gl::Program *program,
+    SourceIndexData *sourceInfo,
+    GLsizei emulatedInstanceId,
+    GLsizei numIndicesPerInstance)
 {
     ProgramD3D *programD3D = GetImplAs<ProgramD3D>(program);
 
@@ -222,6 +227,17 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
             inputElements[inputElementCount].AlignedByteOffset = 0;
             inputElements[inputElementCount].InputSlotClass = inputClass;
             inputElements[inputElementCount].InstanceDataStepRate = instancedPointSpritesActive ? 1 : sortedAttributes[i]->divisor;
+
+            // If instanced PointSprite emulation is active and a non-zero divisor is detected,
+            // then it is assumed the caller is performing a GL instanced rendering call.
+            // PointSprite emulation requires the data step rate to match the element count
+            // per instance.
+            if (instancedPointSpritesActive && sortedAttributes[i]->divisor > 0 &&
+                numIndicesPerInstance > 0)
+            {
+                inputElements[inputElementCount].InstanceDataStepRate =
+                    static_cast<unsigned int>(numIndicesPerInstance);
+            }
 
             if (inputClass == D3D11_INPUT_PER_VERTEX_DATA && firstIndexedElement == gl::MAX_VERTEX_ATTRIBS)
             {
@@ -380,6 +396,17 @@ gl::Error InputLayoutCache::applyVertexBuffers(const std::vector<TranslatedAttri
 
             vertexStride = sortedAttributes[i]->stride;
             vertexOffset = sortedAttributes[i]->offset;
+
+            // If instanced PointSprite emulation is active and a non-zero divisor is detected, then
+            // it is assumed the caller is performing a GL instanced rendering call.
+            // PointSprite emulation is implemented using a for-loop which renders the nth instance
+            // with DrawIndexInstanced on each iteration.  The offset into the instance data must
+            // be moved each iteration.
+            if (instancedPointSpritesActive && sortedAttributes[i]->divisor > 0)
+            {
+                vertexOffset +=
+                    sortedAttributes[i]->stride * (emulatedInstanceId / sortedAttributes[i]->divisor);
+            }
         }
 
         if (buffer != mCurrentBuffers[i] || vertexStride != mCurrentVertexStrides[i] ||
