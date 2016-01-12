@@ -135,7 +135,12 @@ class Renderer11 : public RendererD3D
     gl::Error applyUniforms(const ProgramD3D &programD3D,
                             GLenum drawMode,
                             const std::vector<D3DUniform *> &uniformArray) override;
-    virtual gl::Error applyVertexBuffer(const gl::State &state, GLenum mode, GLint first, GLsizei count, GLsizei instances, SourceIndexData *sourceIndexInfo);
+    virtual gl::Error applyVertexBuffer(const gl::State &state,
+                                        GLenum mode,
+                                        GLint first,
+                                        GLsizei count,
+                                        GLsizei instances,
+                                        SourceIndexData *sourceIndexInfo);
     gl::Error applyIndexBuffer(const gl::Data &data,
                                const GLvoid *indices,
                                GLsizei count,
@@ -304,6 +309,7 @@ class Renderer11 : public RendererD3D
                              GLsizei instances) override;
     gl::Error drawElementsImpl(const gl::Data &data,
                                const TranslatedIndexData &indexInfo,
+                               SourceIndexData *sourceInfo,
                                GLenum mode,
                                GLsizei count,
                                GLenum type,
