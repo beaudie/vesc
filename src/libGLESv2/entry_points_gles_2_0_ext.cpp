@@ -480,28 +480,13 @@ void GL_APIENTRY ReadnPixelsEXT(GLint x, GLint y, GLsizei width, GLsizei height,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (width < 0 || height < 0 || bufSize < 0)
-        {
-            context->recordError(Error(GL_INVALID_VALUE));
-            return;
-        }
-
-        if (!ValidateReadPixelsParameters(context, x, y, width, height,
-                                              format, type, &bufSize, data))
+        if (!context->skipValidation() &&
+            !ValidateReadnPixelsEXT(context, x, y, width, height, format, type, bufSize, data))
         {
             return;
         }
 
-        Framebuffer *framebufferObject = context->getState().getReadFramebuffer();
-        ASSERT(framebufferObject);
-
-        Rectangle area(x, y, width, height);
-        Error error = framebufferObject->readPixels(context, area, format, type, data);
-        if (error.isError())
-        {
-            context->recordError(error);
-            return;
-        }
+        context->readPixels(x, y, width, height, format, type, data);
     }
 }
 
@@ -674,29 +659,15 @@ void GL_APIENTRY BlitFramebufferANGLE(GLint srcX0, GLint srcY0, GLint srcX1, GLi
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateBlitFramebufferParameters(context, srcX0, srcY0, srcX1, srcY1,
-                                               dstX0, dstY0, dstX1, dstY1, mask, filter,
-                                               true))
+        if (!context->skipValidation() &&
+            !ValidateBlitFramebufferANGLE(context, srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1,
+                                          dstY1, mask, filter))
         {
             return;
         }
 
-        Framebuffer *readFramebuffer = context->getState().getReadFramebuffer();
-        ASSERT(readFramebuffer);
-
-        Framebuffer *drawFramebuffer = context->getState().getDrawFramebuffer();
-        ASSERT(drawFramebuffer);
-
-        Rectangle srcArea(srcX0, srcY0, srcX1 - srcX0, srcY1 - srcY0);
-        Rectangle dstArea(dstX0, dstY0, dstX1 - dstX0, dstY1 - dstY0);
-
-        Error error =
-            drawFramebuffer->blit(context, srcArea, dstArea, mask, filter, readFramebuffer);
-        if (error.isError())
-        {
-            context->recordError(error);
-            return;
-        }
+        context->blitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask,
+                                 filter);
     }
 }
 

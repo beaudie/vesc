@@ -664,35 +664,15 @@ void GL_APIENTRY BlitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint sr
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (context->getClientVersion() < 3)
-        {
-            context->recordError(Error(GL_INVALID_OPERATION));
-            return;
-        }
-
-        if (!ValidateBlitFramebufferParameters(context, srcX0, srcY0, srcX1, srcY1,
-                                               dstX0, dstY0, dstX1, dstY1, mask, filter,
-                                               false))
+        if (!context->skipValidation() &&
+            !ValidateBlitFramebuffer(context, srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1,
+                                     dstY1, mask, filter))
         {
             return;
         }
 
-        Framebuffer *readFramebuffer = context->getState().getReadFramebuffer();
-        ASSERT(readFramebuffer);
-
-        Framebuffer *drawFramebuffer = context->getState().getDrawFramebuffer();
-        ASSERT(drawFramebuffer);
-
-        Rectangle srcArea(srcX0, srcY0, srcX1 - srcX0, srcY1 - srcY0);
-        Rectangle dstArea(dstX0, dstY0, dstX1 - dstX0, dstY1 - dstY0);
-
-        Error error =
-            drawFramebuffer->blit(context, srcArea, dstArea, mask, filter, readFramebuffer);
-        if (error.isError())
-        {
-            context->recordError(error);
-            return;
-        }
+        context->blitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask,
+                                 filter);
     }
 }
 
@@ -728,37 +708,13 @@ void GL_APIENTRY FramebufferTextureLayer(GLenum target, GLenum attachment, GLuin
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateFramebufferTextureLayer(context, target, attachment, texture,
-                                             level, layer))
+        if (!context->skipValidation() &&
+            !ValidateFramebufferTextureLayer(context, target, attachment, texture, level, layer))
         {
             return;
         }
 
-        Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
-        ASSERT(framebuffer);
-
-        if (texture != 0)
-        {
-            Texture *textureObject = context->getTexture(texture);
-
-            ImageIndex index = ImageIndex::MakeInvalid();
-
-            if (textureObject->getTarget() == GL_TEXTURE_3D)
-            {
-                index = ImageIndex::Make3D(level, layer);
-            }
-            else
-            {
-                ASSERT(textureObject->getTarget() == GL_TEXTURE_2D_ARRAY);
-                index = ImageIndex::Make2DArray(level, layer);
-            }
-
-            framebuffer->setAttachment(GL_TEXTURE, attachment, index, textureObject);
-        }
-        else
-        {
-            framebuffer->resetAttachment(attachment);
-        }
+        context->framebufferTextureLayer(target, attachment, texture, level, layer);
     }
 }
 
