@@ -786,9 +786,19 @@ static bool IsValidES3CopyTexImageCombination(GLenum textureInternalFormat, GLen
     return false;
 }
 
-bool ValidateES3CopyTexImageParameters(Context *context, GLenum target, GLint level, GLenum internalformat,
-                                       bool isSubImage, GLint xoffset, GLint yoffset, GLint zoffset,
-                                       GLint x, GLint y, GLsizei width, GLsizei height, GLint border)
+bool ValidateES3CopyTexImageParameters(ValidationContext *context,
+                                       GLenum target,
+                                       GLint level,
+                                       GLenum internalformat,
+                                       bool isSubImage,
+                                       GLint xoffset,
+                                       GLint yoffset,
+                                       GLint zoffset,
+                                       GLint x,
+                                       GLint y,
+                                       GLsizei width,
+                                       GLsizei height,
+                                       GLint border)
 {
     GLenum textureInternalFormat;
     if (!ValidateCopyTexImageParametersBase(context, target, level, internalformat, isSubImage,
@@ -798,7 +808,9 @@ bool ValidateES3CopyTexImageParameters(Context *context, GLenum target, GLint le
         return false;
     }
 
-    gl::Framebuffer *framebuffer = context->getState().getReadFramebuffer();
+    const auto &state                  = context->getState();
+    const gl::Framebuffer *framebuffer = state.getReadFramebuffer();
+    GLuint readFramebufferID           = framebuffer->id();
 
     if (framebuffer->checkStatus(context->getData()) != GL_FRAMEBUFFER_COMPLETE)
     {
@@ -806,8 +818,7 @@ bool ValidateES3CopyTexImageParameters(Context *context, GLenum target, GLint le
         return false;
     }
 
-    if (context->getState().getReadFramebuffer()->id() != 0 &&
-        framebuffer->getSamples(context->getData()) != 0)
+    if (readFramebufferID != 0 && framebuffer->getSamples(context->getData()) != 0)
     {
         context->recordError(Error(GL_INVALID_OPERATION));
         return false;
@@ -819,7 +830,7 @@ bool ValidateES3CopyTexImageParameters(Context *context, GLenum target, GLint le
     if (isSubImage)
     {
         if (!IsValidES3CopyTexImageCombination(textureInternalFormat, colorbufferInternalFormat,
-                                               context->getState().getReadFramebuffer()->id()))
+                                               readFramebufferID))
         {
             context->recordError(Error(GL_INVALID_OPERATION));
             return false;
@@ -828,7 +839,7 @@ bool ValidateES3CopyTexImageParameters(Context *context, GLenum target, GLint le
     else
     {
         if (!gl::IsValidES3CopyTexImageCombination(internalformat, colorbufferInternalFormat,
-                                                context->getState().getReadFramebuffer()->id()))
+                                                   readFramebufferID))
         {
             context->recordError(Error(GL_INVALID_OPERATION));
             return false;
@@ -1381,4 +1392,27 @@ bool ValidateProgramParameter(Context *context, GLuint program, GLenum pname, GL
 
     return true;
 }
+
+bool ValidateBlitFramebuffer(Context *context,
+                             GLint srcX0,
+                             GLint srcY0,
+                             GLint srcX1,
+                             GLint srcY1,
+                             GLint dstX0,
+                             GLint dstY0,
+                             GLint dstX1,
+                             GLint dstY1,
+                             GLbitfield mask,
+                             GLenum filter)
+{
+    if (context->getClientVersion() < 3)
+    {
+        context->recordError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    return ValidateBlitFramebufferParameters(context, srcX0, srcY0, srcX1, srcY1, dstX0, dstY0,
+                                             dstX1, dstY1, mask, filter);
 }
+
+}  // namespace gl

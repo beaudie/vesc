@@ -149,18 +149,18 @@ class Framebuffer final : public LabeledObject
 
     GLenum getImplementationColorReadFormat() const;
     GLenum getImplementationColorReadType() const;
-    Error readPixels(Context *context,
+    Error readPixels(const gl::State &state,
                      const gl::Rectangle &area,
                      GLenum format,
                      GLenum type,
                      GLvoid *pixels) const;
 
-    Error blit(Context *context,
-               const gl::Rectangle &sourceArea,
-               const gl::Rectangle &destArea,
+    Error blit(const State &state,
+               const Rectangle &sourceArea,
+               const Rectangle &destArea,
                GLbitfield mask,
                GLenum filter,
-               const gl::Framebuffer *sourceFramebuffer);
+               const Framebuffer *sourceFramebuffer);
 
   protected:
     void detachResourceById(GLenum resourceType, GLuint resourceId);
