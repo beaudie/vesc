@@ -677,17 +677,12 @@ GLenum Framebuffer::getImplementationColorReadType() const
     return mImpl->getImplementationColorReadType();
 }
 
-Error Framebuffer::readPixels(Context *context,
-                              const gl::Rectangle &area,
+Error Framebuffer::readPixels(const State &state,
+                              const Rectangle &area,
                               GLenum format,
                               GLenum type,
                               GLvoid *pixels) const
 {
-    const State &state = context->getState();
-
-    // Sync pack state
-    context->syncRendererState(state.packStateBitMask());
-
     Error error = mImpl->readPixels(state, area, format, type, pixels);
     if (error.isError())
     {
@@ -703,17 +698,13 @@ Error Framebuffer::readPixels(Context *context,
     return Error(GL_NO_ERROR);
 }
 
-Error Framebuffer::blit(Context *context,
-                        const gl::Rectangle &sourceArea,
-                        const gl::Rectangle &destArea,
+Error Framebuffer::blit(const State &state,
+                        const Rectangle &sourceArea,
+                        const Rectangle &destArea,
                         GLbitfield mask,
                         GLenum filter,
-                        const gl::Framebuffer *sourceFramebuffer)
+                        const Framebuffer *sourceFramebuffer)
 {
-    // Sync blit state
-    const State &state = context->getState();
-    context->syncRendererState(state.blitStateBitMask());
-
     return mImpl->blit(state, sourceArea, destArea, mask, filter, sourceFramebuffer);
 }
 
