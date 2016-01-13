@@ -1986,6 +1986,9 @@ void Context::copyTexImage2D(GLenum target,
                              GLsizei height,
                              GLint border)
 {
+    // TODO(jmadill): Only sync the read FBO?
+    mState.syncDirtyObjects();
+
     Rectangle sourceArea(x, y, width, height);
 
     const Framebuffer *framebuffer = mState.getReadFramebuffer();
@@ -2029,6 +2032,8 @@ void Context::framebufferTexture2D(GLenum target,
     {
         framebuffer->resetAttachment(attachment);
     }
+
+    mState.setObjectDirty(target);
 }
 
 void Context::framebufferRenderbuffer(GLenum target,
@@ -2049,6 +2054,8 @@ void Context::framebufferRenderbuffer(GLenum target,
     {
         framebuffer->resetAttachment(attachment);
     }
+
+    mState.setObjectDirty(target);
 }
 
 void Context::framebufferTextureLayer(GLenum target,
@@ -2082,6 +2089,8 @@ void Context::framebufferTextureLayer(GLenum target,
     {
         framebuffer->resetAttachment(attachment);
     }
+
+    mState.setObjectDirty(target);
 }
 
 }  // namespace gl
