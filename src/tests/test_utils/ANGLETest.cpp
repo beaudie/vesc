@@ -237,6 +237,11 @@ void ANGLETest::setDebugEnabled(bool enabled)
     mEGLWindow->setDebugEnabled(enabled);
 }
 
+void ANGLETest::setNoErrorEnabled(bool enabled)
+{
+    mEGLWindow->setNoErrorEnabled(enabled);
+}
+
 int ANGLETest::getClientVersion() const
 {
     return mEGLWindow->getClientMajorVersion();
