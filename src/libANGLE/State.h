@@ -359,6 +359,7 @@ class State : angle::NonCopyable
     void clearDirtyObjects() { mDirtyObjects.reset(); }
     void setAllDirtyObjects() { mDirtyObjects.set(); }
     void syncDirtyObjects();
+    void setObjectDirty(GLenum target);
 
     // Dirty bit masks
     const DirtyBits &unpackStateBitMask() const { return mUnpackStateBitMask; }
