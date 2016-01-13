@@ -197,6 +197,51 @@ class Context final : public ValidationContext
                             const GLvoid *indices,
                             const IndexRange &indexRange);
 
+    void blitFramebuffer(GLint srcX0,
+                         GLint srcY0,
+                         GLint srcX1,
+                         GLint srcY1,
+                         GLint dstX0,
+                         GLint dstY0,
+                         GLint dstX1,
+                         GLint dstY1,
+                         GLbitfield mask,
+                         GLenum filter);
+
+    void readPixels(GLint x,
+                    GLint y,
+                    GLsizei width,
+                    GLsizei height,
+                    GLenum format,
+                    GLenum type,
+                    GLvoid *pixels);
+
+    void copyTexImage2D(GLenum target,
+                        GLint level,
+                        GLenum internalformat,
+                        GLint x,
+                        GLint y,
+                        GLsizei width,
+                        GLsizei height,
+                        GLint border);
+
+    void framebufferTexture2D(GLenum target,
+                              GLenum attachment,
+                              GLenum textarget,
+                              GLuint texture,
+                              GLint level);
+
+    void framebufferRenderbuffer(GLenum target,
+                                 GLenum attachment,
+                                 GLenum renderbuffertarget,
+                                 GLuint renderbuffer);
+
+    void framebufferTextureLayer(GLenum target,
+                                 GLenum attachment,
+                                 GLuint texture,
+                                 GLint level,
+                                 GLint layer);
+
     Error flush();
     Error finish();
 
