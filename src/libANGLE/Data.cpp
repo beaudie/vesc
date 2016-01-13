@@ -40,7 +40,8 @@ ValidationContext::ValidationContext(GLint clientVersion,
                                      const TextureCapsMap &textureCaps,
                                      const Extensions &extensions,
                                      const ResourceManager *resourceManager,
-                                     const Limitations &limitations)
+                                     const Limitations &limitations,
+                                     bool skipValidation)
     : mData(reinterpret_cast<uintptr_t>(this),
             clientVersion,
             state,
