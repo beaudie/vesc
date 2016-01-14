@@ -800,6 +800,16 @@ void Display::notifyDeviceLost()
     }
 }
 
+Error Display::waitClient() const
+{
+    return mImplementation->waitClient();
+}
+
+Error Display::waitNative() const
+{
+    return mImplementation->waitNative();
+}
+
 const Caps &Display::getCaps() const
 {
     return mCaps;

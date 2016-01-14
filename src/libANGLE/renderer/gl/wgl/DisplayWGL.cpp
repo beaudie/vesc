@@ -474,4 +474,14 @@ void DisplayWGL::generateCaps(egl::Caps *outCaps) const
     outCaps->textureNPOT = true;
 }
 
+egl::Error DisplayWGL::waitClient() const override
+{
+    return egl::Error(EGL_SUCCESS);
+}
+
+egl::Error DisplayWGL::waitNative() const override
+{
+    return egl::Error(EGL_SUCCESS);
+}
+
 }
