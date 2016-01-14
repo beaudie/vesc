@@ -255,4 +255,13 @@ void DisplayCGL::generateCaps(egl::Caps *outCaps) const
     outCaps->textureNPOT = true;
 }
 
+egl::Error DisplayCGL::waitClient() const
+{
+    return egl::Error(EGL_SUCCESS);
+}
+
+egl::Error DisplayCGL::waitNative() const
+{
+    return egl::Error(EGL_SUCCESS);
+}
 }

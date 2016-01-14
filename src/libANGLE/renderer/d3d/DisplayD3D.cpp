@@ -347,4 +347,13 @@ void DisplayD3D::generateCaps(egl::Caps *outCaps) const
     outCaps->textureNPOT = mRenderer->getRendererExtensions().textureNPOT;
 }
 
+egl::Error DisplayD3D::waitClient() const
+{
+    return egl::Error(EGL_SUCCESS);
+}
+
+egl::Error DisplayD3D::waitNative() const
+{
+    return egl::Error(EGL_SUCCESS);
+}
 }

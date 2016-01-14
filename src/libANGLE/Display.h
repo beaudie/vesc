@@ -91,6 +91,9 @@ class Display final : angle::NonCopyable
     bool testDeviceLost();
     void notifyDeviceLost();
 
+    Error waitClient() const;
+    Error waitNative() const;
+
     const Caps &getCaps() const;
 
     const DisplayExtensions &getExtensions() const;
