@@ -22,6 +22,7 @@
 #include "libANGLE/renderer/d3d/ShaderExecutableD3D.h"
 #include "libANGLE/renderer/d3d/VaryingPacking.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
+#include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 
 namespace rx
 {
@@ -494,6 +495,64 @@ const ShaderD3D *ProgramD3DMetadata::getFragmentShader() const
     return mFragmentShader;
 }
 
+// SamplerMetadataD3D11 implementation
+
+SamplerMetadataD3D11::SamplerMetadataD3D11() : mSamplerCount(0), mMaxSamplerCount(0)
+{
+}
+
+SamplerMetadataD3D11::~SamplerMetadataD3D11()
+{
+}
+
+void SamplerMetadataD3D11::initData(unsigned int samplerCount, unsigned int maxSamplerCount)
+{
+    mSamplerMetadata.resize(samplerCount);
+    mSamplerCount    = samplerCount;
+    mMaxSamplerCount = maxSamplerCount;
+}
+
+void SamplerMetadataD3D11::update(unsigned int samplerIndex, unsigned int baseLevel)
+{
+    mSamplerMetadata[samplerIndex].baseLevel[0] = static_cast<int>(baseLevel);
+}
+
+void SamplerMetadataD3D11::apply(ID3D11DeviceContext *deviceContext,
+                                 ID3D11Buffer *driverConstantBuffer,
+                                 dx_SamplerMetadata *appliedSamplerMetadata,
+                                 bool needApplyExtraConstants,
+                                 const dx_ShaderConstants11 &extraConstants)
+{
+    // Sampler metadata and driver constants need to coexist in the same constant buffer to conserve
+    // constant buffer slots. We update both in the constant buffer if needed.
+    ASSERT(driverConstantBuffer != nullptr);
+    if (!driverConstantBuffer)
+    {
+        return;
+    }
+    if (needApplyExtraConstants ||
+        memcmp(appliedSamplerMetadata, mSamplerMetadata.data(),
+               sizeof(dx_SamplerMetadata) * mSamplerCount) != 0)
+    {
+        D3D11_MAPPED_SUBRESOURCE mapping = {0};
+        HRESULT result =
+            deviceContext->Map(driverConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapping);
+        ASSERT(SUCCEEDED(result));
+        UNUSED_ASSERTION_VARIABLE(result);
+        memcpy(mapping.pData, &extraConstants, sizeof(dx_ShaderConstants11));
+        if (mSamplerCount > 0)
+        {
+            memcpy(appliedSamplerMetadata, mSamplerMetadata.data(),
+                   sizeof(dx_SamplerMetadata) * mSamplerCount);
+        }
+        // Previous buffer contents were discarded, so we need to refresh also the area of the
+        // buffer that isn't used by this program.
+        memcpy(&reinterpret_cast<uint8_t *>(mapping.pData)[sizeof(dx_ShaderConstants11)],
+               appliedSamplerMetadata, sizeof(dx_SamplerMetadata) * mMaxSamplerCount);
+        deviceContext->Unmap(driverConstantBuffer, 0);
+    }
+}
+
 // ProgramD3D Implementation
 
 ProgramD3D::VertexExecutable::VertexExecutable(const gl::InputLayout &inputLayout,
@@ -661,7 +720,29 @@ GLenum ProgramD3D::getSamplerTextureType(gl::SamplerType type, unsigned int samp
     return GL_TEXTURE_2D;
 }
 
-GLint ProgramD3D::getUsedSamplerRange(gl::SamplerType type) const
+void ProgramD3D::setSamplerMetadata(gl::SamplerType type,
+                                    unsigned int samplerIndex,
+                                    unsigned int baseLevel)
+{
+    SamplerMetadataD3D11 *metadata = nullptr;
+    switch (type)
+    {
+        case gl::SAMPLER_PIXEL:
+            metadata = &mSamplerMetadataPS;
+            break;
+        case gl::SAMPLER_VERTEX:
+            metadata = &mSamplerMetadataVS;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+    ASSERT(metadata != nullptr);
+    ASSERT(samplerIndex < getUsedSamplerRange(type));
+    metadata->update(samplerIndex, baseLevel);
+}
+
+GLuint ProgramD3D::getUsedSamplerRange(gl::SamplerType type) const
 {
     switch (type)
     {
@@ -671,7 +752,7 @@ GLint ProgramD3D::getUsedSamplerRange(gl::SamplerType type) const
             return mUsedVertexSamplerRange;
         default:
             UNREACHABLE();
-            return 0;
+            return 0u;
     }
 }
 
@@ -964,6 +1045,9 @@ LinkResult ProgramD3D::load(gl::InfoLog &infoLog, gl::BinaryInputStream *stream)
 
     initializeUniformStorage();
     initAttributesByLayout();
+
+    mSamplerMetadataVS.initData(getUsedSamplerRange(gl::SAMPLER_VERTEX), gl::SAMPLER_VERTEX);
+    mSamplerMetadataPS.initData(getUsedSamplerRange(gl::SAMPLER_PIXEL), gl::SAMPLER_PIXEL);
 
     return LinkResult(true, gl::Error(GL_NO_ERROR));
 }
@@ -1449,6 +1533,11 @@ LinkResult ProgramD3D::link(const gl::Data &data, gl::InfoLog &infoLog)
 
     defineUniformsAndAssignRegisters();
 
+    mSamplerMetadataVS.initData(getUsedSamplerRange(gl::SAMPLER_VERTEX),
+                                data.caps->maxVertexTextureImageUnits);
+    mSamplerMetadataPS.initData(getUsedSamplerRange(gl::SAMPLER_PIXEL),
+                                data.caps->maxTextureImageUnits);
+
     gatherTransformFeedbackVaryings(varyingPacking);
 
     LinkResult result = compileProgramExecutables(data, infoLog);
@@ -1562,7 +1651,8 @@ gl::Error ProgramD3D::applyUniforms(GLenum drawMode)
 {
     ASSERT(!mDirtySamplerMapping);
 
-    gl::Error error = mRenderer->applyUniforms(*this, drawMode, mD3DUniforms);
+    gl::Error error = mRenderer->applyUniforms(*this, drawMode, mD3DUniforms, &mSamplerMetadataVS,
+                                               &mSamplerMetadataPS);
     if (error.isError())
     {
         return error;

@@ -812,6 +812,9 @@ void Renderer11::initializeDevice()
 
     mStateManager.initialize(rendererCaps);
 
+    mAppliedSamplerMetadataVS.resize(rendererCaps.maxVertexTextureImageUnits);
+    mAppliedSamplerMetadataPS.resize(rendererCaps.maxTextureImageUnits);
+
     markAllStateDirty();
 
     // Gather stats on DXGI and D3D feature level
@@ -2037,7 +2040,9 @@ gl::Error Renderer11::applyShadersImpl(const gl::Data &data, GLenum drawMode)
 
 gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
                                     GLenum drawMode,
-                                    const std::vector<D3DUniform *> &uniformArray)
+                                    const std::vector<D3DUniform *> &uniformArray,
+                                    SamplerMetadataD3D11 *samplerMetadataVS,
+                                    SamplerMetadataD3D11 *samplerMetadataPS)
 {
     unsigned int totalRegisterCountVS = 0;
     unsigned int totalRegisterCountPS = 0;
@@ -2126,90 +2131,87 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
 
     if (mCurrentVertexConstantBuffer != vertexConstantBuffer)
     {
-        mDeviceContext->VSSetConstantBuffers(0, 1, &vertexConstantBuffer);
+        mDeviceContext->VSSetConstantBuffers(
+            d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DEFAULT_UNIFORM_BLOCK, 1, &vertexConstantBuffer);
         mCurrentVertexConstantBuffer = vertexConstantBuffer;
     }
 
     if (mCurrentPixelConstantBuffer != pixelConstantBuffer)
     {
-        mDeviceContext->PSSetConstantBuffers(0, 1, &pixelConstantBuffer);
+        mDeviceContext->PSSetConstantBuffers(
+            d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DEFAULT_UNIFORM_BLOCK, 1, &pixelConstantBuffer);
         mCurrentPixelConstantBuffer = pixelConstantBuffer;
     }
 
-    // Driver uniforms
     if (!mDriverConstantBufferVS)
     {
         D3D11_BUFFER_DESC constantBufferDescription = {0};
-        constantBufferDescription.ByteWidth           = sizeof(dx_VertexConstants11);
-        constantBufferDescription.Usage = D3D11_USAGE_DEFAULT;
-        constantBufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        constantBufferDescription.CPUAccessFlags = 0;
-        constantBufferDescription.MiscFlags = 0;
-        constantBufferDescription.StructureByteStride = 0;
-
-        HRESULT result = mDevice->CreateBuffer(&constantBufferDescription, NULL, &mDriverConstantBufferVS);
+        d3d11::InitConstantBufferDesc(
+            &constantBufferDescription,
+            sizeof(SamplerMetadataD3D11::dx_SamplerMetadata) * mAppliedSamplerMetadataVS.size() +
+                sizeof(dx_ShaderConstants11));
+        HRESULT result =
+            mDevice->CreateBuffer(&constantBufferDescription, nullptr, &mDriverConstantBufferVS);
         ASSERT(SUCCEEDED(result));
         if (FAILED(result))
         {
             return gl::Error(GL_OUT_OF_MEMORY, "Failed to create vertex shader constant buffer, result: 0x%X.", result);
         }
-        mDeviceContext->VSSetConstantBuffers(1, 1, &mDriverConstantBufferVS);
+        mDeviceContext->VSSetConstantBuffers(d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DRIVER, 1,
+                                             &mDriverConstantBufferVS);
     }
-
     if (!mDriverConstantBufferPS)
     {
         D3D11_BUFFER_DESC constantBufferDescription = {0};
-        constantBufferDescription.ByteWidth           = sizeof(dx_PixelConstants11);
-        constantBufferDescription.Usage = D3D11_USAGE_DEFAULT;
-        constantBufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        constantBufferDescription.CPUAccessFlags = 0;
-        constantBufferDescription.MiscFlags = 0;
-        constantBufferDescription.StructureByteStride = 0;
-
-        HRESULT result = mDevice->CreateBuffer(&constantBufferDescription, NULL, &mDriverConstantBufferPS);
+        d3d11::InitConstantBufferDesc(
+            &constantBufferDescription,
+            sizeof(SamplerMetadataD3D11::dx_SamplerMetadata) * mAppliedSamplerMetadataPS.size() +
+                sizeof(dx_ShaderConstants11));
+        HRESULT result =
+            mDevice->CreateBuffer(&constantBufferDescription, nullptr, &mDriverConstantBufferPS);
         ASSERT(SUCCEEDED(result));
         if (FAILED(result))
         {
             return gl::Error(GL_OUT_OF_MEMORY, "Failed to create pixel shader constant buffer, result: 0x%X.", result);
         }
-        mDeviceContext->PSSetConstantBuffers(1, 1, &mDriverConstantBufferPS);
+        mDeviceContext->PSSetConstantBuffers(d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DRIVER, 1,
+                                             &mDriverConstantBufferPS);
     }
 
-    const dx_VertexConstants11 &vertexConstants = mStateManager.getVertexConstants();
-    if (memcmp(&vertexConstants, &mAppliedVertexConstants, sizeof(dx_VertexConstants11)) != 0)
+    const dx_ShaderConstants11 &vertexConstants = mStateManager.getVertexConstants();
+    bool needApplyVertexConstants = false;
+    if (memcmp(&mAppliedVertexConstants, &vertexConstants, sizeof(dx_ShaderConstants11)) != 0)
     {
-        ASSERT(mDriverConstantBufferVS != nullptr);
-        if (mDriverConstantBufferVS)
-        {
-            mDeviceContext->UpdateSubresource(mDriverConstantBufferVS, 0, NULL, &vertexConstants,
-                                              16, 0);
-            memcpy(&mAppliedVertexConstants, &vertexConstants, sizeof(dx_VertexConstants11));
-        }
+        needApplyVertexConstants = true;
+        memcpy(&mAppliedVertexConstants, &vertexConstants, sizeof(dx_ShaderConstants11));
     }
+    samplerMetadataVS->apply(mDeviceContext, mDriverConstantBufferVS,
+                             mAppliedSamplerMetadataVS.data(), needApplyVertexConstants,
+                             vertexConstants);
 
-    const dx_PixelConstants11 &pixelConstants = mStateManager.getPixelConstants();
-    if (memcmp(&pixelConstants, &mAppliedPixelConstants, sizeof(dx_PixelConstants11)) != 0)
+    const dx_ShaderConstants11 &pixelConstants = mStateManager.getPixelConstants();
+    bool needApplyPixelConstants = false;
+    if (memcmp(&mAppliedPixelConstants, &pixelConstants, sizeof(dx_ShaderConstants11)) != 0)
     {
-        ASSERT(mDriverConstantBufferPS != nullptr);
-        if (mDriverConstantBufferPS)
-        {
-            mDeviceContext->UpdateSubresource(mDriverConstantBufferPS, 0, NULL, &pixelConstants, 16,
-                                              0);
-            memcpy(&mAppliedPixelConstants, &pixelConstants, sizeof(dx_PixelConstants11));
-        }
+        needApplyPixelConstants = true;
+        memcpy(&mAppliedPixelConstants, &pixelConstants, sizeof(dx_ShaderConstants11));
     }
+    samplerMetadataPS->apply(mDeviceContext, mDriverConstantBufferPS,
+                             mAppliedSamplerMetadataPS.data(), needApplyPixelConstants,
+                             pixelConstants);
 
     // GSSetConstantBuffers triggers device removal on 9_3, so we should only call it if necessary
     if (programD3D.usesGeometryShader(drawMode))
     {
         // needed for the point sprite geometry shader
-        if (mCurrentGeometryConstantBuffer != mDriverConstantBufferPS)
+        ID3D11Buffer *currentPSConstantBuffer = mDriverConstantBufferPS;
+        if (mCurrentGeometryConstantBuffer != currentPSConstantBuffer)
         {
-            ASSERT(mDriverConstantBufferPS != nullptr);
-            if (mDriverConstantBufferPS)
+            ASSERT(currentPSConstantBuffer != nullptr);
+            if (currentPSConstantBuffer)
             {
-                mDeviceContext->GSSetConstantBuffers(0, 1, &mDriverConstantBufferPS);
-                mCurrentGeometryConstantBuffer = mDriverConstantBufferPS;
+                mDeviceContext->GSSetConstantBuffers(0, 1, &currentPSConstantBuffer);
+                mCurrentGeometryConstantBuffer = currentPSConstantBuffer;
             }
         }
     }
@@ -2249,8 +2251,8 @@ void Renderer11::markAllStateDirty()
         mAppliedTFOffsets[i] = 0;
     }
 
-    memset(&mAppliedVertexConstants, 0, sizeof(dx_VertexConstants11));
-    memset(&mAppliedPixelConstants, 0, sizeof(dx_PixelConstants11));
+    memset(&mAppliedVertexConstants, 0, sizeof(dx_ShaderConstants11));
+    memset(&mAppliedPixelConstants, 0, sizeof(dx_ShaderConstants11));
 
     mInputLayoutCache.markDirty();
 

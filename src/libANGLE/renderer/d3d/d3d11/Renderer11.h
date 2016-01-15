@@ -14,6 +14,7 @@
 #include "libANGLE/AttributeMap.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/d3d/HLSLCompiler.h"
+#include "libANGLE/renderer/d3d/ProgramD3D.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/RenderTargetD3D.h"
 #include "libANGLE/renderer/d3d/d3d11/DebugAnnotator11.h"
@@ -134,7 +135,9 @@ class Renderer11 : public RendererD3D
     gl::Error applyRenderTarget(const gl::Framebuffer *frameBuffer) override;
     gl::Error applyUniforms(const ProgramD3D &programD3D,
                             GLenum drawMode,
-                            const std::vector<D3DUniform *> &uniformArray) override;
+                            const std::vector<D3DUniform *> &uniformArray,
+                            SamplerMetadataD3D11 *samplerMetadataVS,
+                            SamplerMetadataD3D11 *samplerMetadataPS) override;
     virtual gl::Error applyVertexBuffer(const gl::State &state, GLenum mode, GLint first, GLsizei count, GLsizei instances, SourceIndexData *sourceIndexInfo);
     gl::Error applyIndexBuffer(const gl::Data &data,
                                const GLvoid *indices,
@@ -388,15 +391,17 @@ class Renderer11 : public RendererD3D
     uintptr_t mAppliedGeometryShader;
     uintptr_t mAppliedPixelShader;
 
-    dx_VertexConstants11 mAppliedVertexConstants;
+    dx_ShaderConstants11 mAppliedVertexConstants;
     ID3D11Buffer *mDriverConstantBufferVS;
+    std::vector<SamplerMetadataD3D11::dx_SamplerMetadata> mAppliedSamplerMetadataVS;
     ID3D11Buffer *mCurrentVertexConstantBuffer;
     unsigned int mCurrentConstantBufferVS[gl::IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS];
     GLintptr mCurrentConstantBufferVSOffset[gl::IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS];
     GLsizeiptr mCurrentConstantBufferVSSize[gl::IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS];
 
-    dx_PixelConstants11 mAppliedPixelConstants;
+    dx_ShaderConstants11 mAppliedPixelConstants;
     ID3D11Buffer *mDriverConstantBufferPS;
+    std::vector<SamplerMetadataD3D11::dx_SamplerMetadata> mAppliedSamplerMetadataPS;
     ID3D11Buffer *mCurrentPixelConstantBuffer;
     unsigned int mCurrentConstantBufferPS[gl::IMPLEMENTATION_MAX_FRAGMENT_SHADER_UNIFORM_BUFFERS];
     GLintptr mCurrentConstantBufferPSOffset[gl::IMPLEMENTATION_MAX_FRAGMENT_SHADER_UNIFORM_BUFFERS];
