@@ -99,7 +99,7 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     virtual egl::Error initialize() = 0;
 
     virtual egl::ConfigSet generateConfigs() const = 0;
-    virtual void generateDisplayExtensions(egl::DisplayExtensions *outExtensions) const = 0;
+    virtual void generateDisplayExtensions(egl::DisplayExtensions *outExtensions) = 0;
 
     gl::Error drawArrays(const gl::Data &data, GLenum mode, GLint first, GLsizei count) override;
     gl::Error drawArraysInstanced(const gl::Data &data,

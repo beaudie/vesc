@@ -106,7 +106,7 @@ class Renderer11 : public RendererD3D
     virtual bool resetDevice();
 
     egl::ConfigSet generateConfigs() const override;
-    void generateDisplayExtensions(egl::DisplayExtensions *outExtensions) const override;
+    void generateDisplayExtensions(egl::DisplayExtensions *outExtensions) override;
 
     gl::Error flush() override;
     gl::Error finish() override;
@@ -157,7 +157,7 @@ class Renderer11 : public RendererD3D
     virtual unsigned int getReservedVertexUniformBuffers() const;
     virtual unsigned int getReservedFragmentUniformBuffers() const;
 
-    bool getShareHandleSupport() const;
+    bool getShareHandleSupport();
 
     virtual int getMajorShaderModel() const;
     int getMinorShaderModel() const override;
@@ -329,7 +329,7 @@ class Renderer11 : public RendererD3D
     HMODULE mDxgiModule;
     HMODULE mDCompModule;
     std::vector<D3D_FEATURE_LEVEL> mAvailableFeatureLevels;
-    D3D_DRIVER_TYPE mDriverType;
+    D3D_DRIVER_TYPE mRequestedDriverType;
     bool mCreatedWithDeviceEXT;
     DeviceD3D *mEGLDevice;
 
@@ -477,6 +477,8 @@ class Renderer11 : public RendererD3D
     ID3D11Debug *mDebug;
 
     std::vector<GLuint> mScratchIndexDataBuffer;
+
+    Optional<bool> mSupportsShareHandles;
 };
 
 }

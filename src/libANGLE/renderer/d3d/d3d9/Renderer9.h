@@ -71,7 +71,7 @@ class Renderer9 : public RendererD3D
     virtual bool resetDevice();
 
     egl::ConfigSet generateConfigs() const override;
-    void generateDisplayExtensions(egl::DisplayExtensions *outExtensions) const override;
+    void generateDisplayExtensions(egl::DisplayExtensions *outExtensions) override;
 
     void startScene();
     void endScene();

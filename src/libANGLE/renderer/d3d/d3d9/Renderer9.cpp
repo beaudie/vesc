@@ -509,7 +509,7 @@ egl::ConfigSet Renderer9::generateConfigs() const
     return configs;
 }
 
-void Renderer9::generateDisplayExtensions(egl::DisplayExtensions *outExtensions) const
+void Renderer9::generateDisplayExtensions(egl::DisplayExtensions *outExtensions)
 {
     outExtensions->createContextRobustness = true;
 
