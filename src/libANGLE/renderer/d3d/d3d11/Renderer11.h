@@ -329,7 +329,7 @@ class Renderer11 : public RendererD3D
     HMODULE mDxgiModule;
     HMODULE mDCompModule;
     std::vector<D3D_FEATURE_LEVEL> mAvailableFeatureLevels;
-    D3D_DRIVER_TYPE mDriverType;
+    D3D_DRIVER_TYPE mRequestedDriverType;
     bool mCreatedWithDeviceEXT;
     DeviceD3D *mEGLDevice;
 
