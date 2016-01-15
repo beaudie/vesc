@@ -128,6 +128,31 @@ class ProgramD3DMetadata : angle::NonCopyable
     const ShaderD3D *mFragmentShader;
 };
 
+struct dx_SamplerMetadata
+{
+    int baseLevel[4];
+};
+
+class SamplerMetadataD3D11 : angle::NonCopyable
+{
+  public:
+    SamplerMetadataD3D11()
+        : mSamplerMetadata(nullptr), mDirty(false), mSamplerMetadataBuffer(nullptr)
+    {
+    }
+
+    void reset()
+    {
+        SafeDeleteArray(mSamplerMetadata);
+        mDirty = false;
+        SafeRelease(mSamplerMetadataBuffer);
+    }
+
+    dx_SamplerMetadata *mSamplerMetadata;
+    bool mDirty;
+    ID3D11Buffer *mSamplerMetadataBuffer;
+};
+
 class ProgramD3D : public ProgramImpl
 {
   public:
@@ -142,7 +167,7 @@ class ProgramD3D : public ProgramImpl
                             unsigned int samplerIndex,
                             const gl::Caps &caps) const;
     GLenum getSamplerTextureType(gl::SamplerType type, unsigned int samplerIndex) const;
-    GLint getUsedSamplerRange(gl::SamplerType type) const;
+    GLuint getUsedSamplerRange(gl::SamplerType type) const;
     void updateSamplerMapping();
 
     bool usesPointSize() const { return mUsesPointSize; }
@@ -173,6 +198,11 @@ class ProgramD3D : public ProgramImpl
     bool getUniformBlockSize(const std::string &blockName, size_t *sizeOut) const override;
     bool getUniformBlockMemberInfo(const std::string &memberUniformName,
                                    sh::BlockMemberInfo *memberInfoOut) const override;
+
+    // D3D11 needs sampler metadata to implement ESSL3 texture functions.
+    void setSamplerMetadata(gl::SamplerType type,
+                            unsigned int samplerIndex,
+                            unsigned int baseLevel);
 
     void initializeUniformStorage();
     gl::Error applyUniforms(GLenum drawMode);
@@ -401,6 +431,9 @@ class ProgramD3D : public ProgramImpl
 
     static unsigned int issueSerial();
     static unsigned int mCurrentSerial;
+
+    SamplerMetadataD3D11 mSamplerMetadataPS;
+    SamplerMetadataD3D11 mSamplerMetadataVS;
 };
 }
 

@@ -101,7 +101,6 @@ unsigned int UniformHLSL::declareUniformAndAssignRegister(const TType &type,
 
     const Uniform *uniform = findUniformByName(name);
     ASSERT(uniform);
-
     mUniformRegisterMap[uniform->name] = registerIndex;
 
     *registerCount = HLSLVariableRegisterCount(*uniform, mOutputType);
@@ -137,6 +136,7 @@ void UniformHLSL::outputHLSLSamplerUniformGroup(TInfoSinkBase &out,
         unsigned int registerCount;
         unsigned int samplerArrayIndex =
             declareUniformAndAssignRegister(type, name, &registerCount);
+
         groupRegisterCount += registerCount;
         if (type.isArray())
         {
@@ -256,6 +256,20 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
             }
         }
     }
+}
+
+TString UniformHLSL::samplerMetadataUniforms()
+{
+    if (mSamplerRegister > 0)
+    {
+        TString uniforms = TString(
+            "cbuffer SamplerMetadata : register(b2)\n"
+            "{\n");
+        uniforms += "    int samplerMetadata[" + str(mSamplerRegister) + "] : packoffset(c0);\n";
+        uniforms += "};\n";
+        return uniforms;
+    }
+    return TString("");
 }
 
 TString UniformHLSL::interfaceBlocksHeader(const ReferencedSymbols &referencedInterfaceBlocks)

@@ -31,6 +31,10 @@ class UniformHLSL : angle::NonCopyable
     void uniformsHeader(TInfoSinkBase &out,
                         ShShaderOutput outputType,
                         const ReferencedSymbols &referencedUniforms);
+
+    // Needs to be called after uniformsHeader
+    TString samplerMetadataUniforms();
+
     TString interfaceBlocksHeader(const ReferencedSymbols &referencedInterfaceBlocks);
 
     // Used for direct index references

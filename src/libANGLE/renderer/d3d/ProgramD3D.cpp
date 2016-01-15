@@ -654,7 +654,32 @@ GLenum ProgramD3D::getSamplerTextureType(gl::SamplerType type, unsigned int samp
     return GL_TEXTURE_2D;
 }
 
-GLint ProgramD3D::getUsedSamplerRange(gl::SamplerType type) const
+void ProgramD3D::setSamplerMetadata(gl::SamplerType type,
+                                    unsigned int samplerIndex,
+                                    unsigned int baseLevel)
+{
+    SamplerMetadataD3D11 *metadata = nullptr;
+    switch (type)
+    {
+        case gl::SAMPLER_PIXEL:
+            metadata = &mSamplerMetadataPS;
+            break;
+        case gl::SAMPLER_VERTEX:
+            metadata = &mSamplerMetadataVS;
+            break;
+        default:
+            UNREACHABLE();
+    }
+    ASSERT(metadata != nullptr);
+    ASSERT(samplerIndex < getUsedSamplerRange(type));
+    if (metadata->mSamplerMetadata[samplerIndex].baseLevel[0] != static_cast<int>(baseLevel))
+    {
+        metadata->mSamplerMetadata[samplerIndex].baseLevel[0] = static_cast<int>(baseLevel);
+        metadata->mDirty                                      = true;
+    }
+}
+
+GLuint ProgramD3D::getUsedSamplerRange(gl::SamplerType type) const
 {
     switch (type)
     {
@@ -664,7 +689,7 @@ GLint ProgramD3D::getUsedSamplerRange(gl::SamplerType type) const
             return mUsedVertexSamplerRange;
         default:
             UNREACHABLE();
-            return 0;
+            return 0u;
     }
 }
 
@@ -1441,6 +1466,17 @@ LinkResult ProgramD3D::link(const gl::Data &data, gl::InfoLog &infoLog)
 
     defineUniformsAndAssignRegisters();
 
+    GLuint samplerCountPS = getUsedSamplerRange(gl::SAMPLER_PIXEL);
+    if (samplerCountPS > 0)
+    {
+        mSamplerMetadataPS.mSamplerMetadata = new dx_SamplerMetadata[samplerCountPS];
+    }
+    GLuint samplerCountVS = getUsedSamplerRange(gl::SAMPLER_VERTEX);
+    if (samplerCountVS > 0)
+    {
+        mSamplerMetadataVS.mSamplerMetadata = new dx_SamplerMetadata[samplerCountVS];
+    }
+
     gatherTransformFeedbackVaryings(varyingPacking);
 
     LinkResult result = compileProgramExecutables(data, infoLog);
@@ -1564,6 +1600,11 @@ gl::Error ProgramD3D::applyUniforms(GLenum drawMode)
     {
         d3dUniform->dirty = false;
     }
+
+    error = mRenderer->applySamplerMetadata(&mSamplerMetadataVS, mUsedVertexSamplerRange,
+                                            gl::SAMPLER_VERTEX);
+    error = mRenderer->applySamplerMetadata(&mSamplerMetadataPS, mUsedPixelSamplerRange,
+                                            gl::SAMPLER_PIXEL);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -2140,6 +2181,9 @@ void ProgramD3D::reset()
 
     mSamplersPS.clear();
     mSamplersVS.clear();
+
+    mSamplerMetadataPS.reset();
+    mSamplerMetadataVS.reset();
 
     mUsedVertexSamplerRange = 0;
     mUsedPixelSamplerRange  = 0;
