@@ -41,6 +41,10 @@ class UniformHLSL : angle::NonCopyable
     {
         return mUniformRegisterMap;
     }
+    unsigned int getSamplerMetadataUniformRegister() const
+    {
+        return mSamplerMetadataUniformRegister;
+    }
 
   private:
     TString interfaceBlockString(const TInterfaceBlock &interfaceBlock, unsigned int registerIndex, unsigned int arrayIndex);
@@ -61,7 +65,12 @@ class UniformHLSL : angle::NonCopyable
 
     const std::vector<Uniform> &mUniforms;
     std::map<std::string, unsigned int> mInterfaceBlockRegisterMap;
+
+    // Regular uniforms, including samplers.
     std::map<std::string, unsigned int> mUniformRegisterMap;
+
+    // Index of the first register that stores sampler metadata.
+    unsigned int mSamplerMetadataUniformRegister;
 };
 
 }

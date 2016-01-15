@@ -101,7 +101,6 @@ unsigned int UniformHLSL::declareUniformAndAssignRegister(const TType &type,
 
     const Uniform *uniform = findUniformByName(name);
     ASSERT(uniform);
-
     mUniformRegisterMap[uniform->name] = registerIndex;
 
     *registerCount = HLSLVariableRegisterCount(*uniform, mOutputType);
@@ -131,6 +130,7 @@ TString UniformHLSL::outputHLSL11SamplerUniformGroup(const HLSLTextureSamplerGro
         unsigned int registerCount;
         unsigned int samplerArrayIndex =
             declareUniformAndAssignRegister(type, name, &registerCount);
+
         groupRegisterCount += registerCount;
         if (type.isArray())
         {
@@ -235,6 +235,13 @@ TString UniformHLSL::uniformsHeader(ShShaderOutput outputType, const ReferencedS
                 uniforms += outputHLSL11SamplerUniformGroup(group.first, group.second,
                                                             &groupTextureRegisterIndex);
             }
+        }
+        if (mSamplerRegister > 0)
+        {
+            mSamplerMetadataUniformRegister = mUniformRegister;
+            uniforms += "uniform int samplerMetadata[" + str(mSamplerRegister) + "] : register(c" +
+                        str(mSamplerMetadataUniformRegister) + ");\n";
+            mUniformRegister += mSamplerRegister;
         }
     }
 

@@ -106,6 +106,12 @@ unsigned int ShaderD3D::getUniformRegister(const std::string &uniformName) const
     return mUniformRegisterMap.find(uniformName)->second;
 }
 
+unsigned int ShaderD3D::getSamplerMetadataUniformRegister(const std::string &uniformName) const
+{
+    ASSERT(mUniformRegisterMap.count(uniformName) > 0);
+    return mSamplerMetadataUniformRegister + mUniformRegisterMap.find(uniformName)->second;
+}
+
 unsigned int ShaderD3D::getInterfaceBlockRegister(const std::string &blockName) const
 {
     ASSERT(mInterfaceBlockRegisterMap.count(blockName) > 0);
@@ -164,11 +170,17 @@ bool ShaderD3D::postTranslateCompile(gl::Compiler *compiler, std::string *infoLo
 
     ShHandle compilerHandle = compiler->getCompilerHandle(mData.getShaderType());
 
+    bool hasSamplers = false;
+
     for (const sh::Uniform &uniform : mData.getUniforms())
     {
         if (uniform.staticUse && !uniform.isBuiltIn())
         {
             unsigned int index = static_cast<unsigned int>(-1);
+            if (gl::IsSamplerType(uniform.type))
+            {
+                hasSamplers = true;
+            }
             bool getUniformRegisterResult =
                 ShGetUniformRegister(compilerHandle, uniform.name, &index);
             UNUSED_ASSERTION_VARIABLE(getUniformRegisterResult);
@@ -176,6 +188,10 @@ bool ShaderD3D::postTranslateCompile(gl::Compiler *compiler, std::string *infoLo
 
             mUniformRegisterMap[uniform.name] = index;
         }
+    }
+
+    if (hasSamplers) {
+        mSamplerMetadataUniformRegister = ShGetSamplerMetadataUniformRegister(compilerHandle);
     }
 
     for (const sh::InterfaceBlock &interfaceBlock : mData.getInterfaceBlocks())

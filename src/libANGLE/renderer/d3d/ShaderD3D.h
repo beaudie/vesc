@@ -34,6 +34,7 @@ class ShaderD3D : public ShaderImpl
     // D3D-specific methods
     void uncompile();
     unsigned int getUniformRegister(const std::string &uniformName) const;
+    unsigned int getSamplerMetadataUniformRegister(const std::string &uniformName) const;
     unsigned int getInterfaceBlockRegister(const std::string &blockName) const;
     void appendDebugInfo(const std::string &info) const { mDebugInfo += info; }
 
@@ -70,6 +71,7 @@ class ShaderD3D : public ShaderImpl
     ShShaderOutput mCompilerOutputType;
     mutable std::string mDebugInfo;
     std::map<std::string, unsigned int> mUniformRegisterMap;
+    unsigned int mSamplerMetadataUniformRegister;
     std::map<std::string, unsigned int> mInterfaceBlockRegisterMap;
 };
 }

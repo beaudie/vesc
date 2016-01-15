@@ -382,3 +382,14 @@ bool ShGetUniformRegister(const ShHandle handle,
     return false;
 #endif // ANGLE_ENABLE_HLSL
 }
+
+unsigned int ShGetSamplerMetadataUniformRegister(const ShHandle handle)
+{
+#ifdef ANGLE_ENABLE_HLSL
+    TranslatorHLSL *translator = GetTranslatorHLSLFromHandle(handle);
+    ASSERT(translator);
+    return translator->getSamplerMetadataUniformRegister();
+#else
+    return 0u;
+#endif  // ANGLE_ENABLE_HLSL
+}
