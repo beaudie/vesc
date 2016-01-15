@@ -334,8 +334,11 @@ void SetBufferData(ID3D11DeviceContext *context, ID3D11Buffer *constantBuffer, c
 }
 
 WorkaroundsD3D GenerateWorkarounds(D3D_FEATURE_LEVEL featureLevel);
-}
 
-}
+void InitConstantBufferDesc(D3D11_BUFFER_DESC *constantBufferDescription, size_t byteWidth);
+
+}  // namespace d3d11
+
+}  // namespace rx
 
 #endif // LIBANGLE_RENDERER_D3D_D3D11_RENDERER11_UTILS_H_
