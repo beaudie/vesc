@@ -753,8 +753,9 @@ static size_t GetMaximumVertexUniformVectors(D3D_FEATURE_LEVEL featureLevel)
 
 static size_t GetReservedVertexUniformBuffers()
 {
-    // Reserve one buffer for the application uniforms, and one for driver uniforms
-    return 2;
+    // Reserve one buffer for the application uniforms, one for driver uniforms, and one for sampler
+    // metadata
+    return 3;
 }
 
 static size_t GetMaximumVertexUniformBlocks(D3D_FEATURE_LEVEL featureLevel)
@@ -870,8 +871,9 @@ static size_t GetMaximumPixelUniformVectors(D3D_FEATURE_LEVEL featureLevel)
 
 static size_t GetReservedPixelUniformBuffers()
 {
-    // Reserve one buffer for the application uniforms, and one for driver uniforms
-    return 2;
+    // Reserve one buffer for the application uniforms, one for driver uniforms, and one for sampler
+    // metadata
+    return 3;
 }
 
 static size_t GetMaximumPixelUniformBlocks(D3D_FEATURE_LEVEL featureLevel)
@@ -1487,6 +1489,16 @@ WorkaroundsD3D GenerateWorkarounds(D3D_FEATURE_LEVEL featureLevel)
     workarounds.zeroMaxLodWorkaround = (featureLevel <= D3D_FEATURE_LEVEL_9_3);
     workarounds.useInstancedPointSpriteEmulation = (featureLevel <= D3D_FEATURE_LEVEL_9_3);
     return workarounds;
+}
+
+void InitConstantBufferDesc(D3D11_BUFFER_DESC *constantBufferDescription, size_t byteWidth)
+{
+    constantBufferDescription->ByteWidth = byteWidth;
+    constantBufferDescription->Usage = D3D11_USAGE_DEFAULT;
+    constantBufferDescription->BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    constantBufferDescription->CPUAccessFlags = 0;
+    constantBufferDescription->MiscFlags = 0;
+    constantBufferDescription->StructureByteStride = 0;
 }
 
 }  // namespace d3d11
