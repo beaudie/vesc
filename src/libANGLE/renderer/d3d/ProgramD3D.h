@@ -18,6 +18,7 @@
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/d3d/DynamicHLSL.h"
 #include "libANGLE/renderer/d3d/WorkaroundsD3D.h"
+#include "libANGLE/renderer/d3d/d3d11/StateManager11.h"
 
 namespace rx
 {
@@ -131,6 +132,37 @@ class ProgramD3DMetadata : angle::NonCopyable
     const ShaderD3D *mFragmentShader;
 };
 
+class SamplerMetadataD3D11 final : angle::NonCopyable
+{
+  public:
+    SamplerMetadataD3D11();
+    ~SamplerMetadataD3D11();
+    void reset();
+
+    void initData(unsigned int samplerCount, gl::SamplerType type);
+    void update(unsigned int samplerIndex, unsigned int baseLevel);
+    gl::Error apply(ID3D11Device *device,
+                    ID3D11DeviceContext *deviceContext,
+                    const dx_ShaderConstants11 &extraConstants);
+
+    ID3D11Buffer *getConstantBuffer() { return mSamplerMetadataBuffer; }
+
+  private:
+    bool initBuffer(ID3D11Device *device, ID3D11DeviceContext *deviceContext);
+
+    struct dx_SamplerMetadata
+    {
+        int baseLevel[4];
+    };
+
+    std::vector<dx_SamplerMetadata> mSamplerMetadata;
+    unsigned int mSamplerCount;
+    gl::SamplerType mType;
+    bool mDirty;
+    ID3D11Buffer *mSamplerMetadataBuffer;
+    MemoryBuffer mAppliedConstants;
+};
+
 class ProgramD3D : public ProgramImpl
 {
   public:
@@ -145,7 +177,7 @@ class ProgramD3D : public ProgramImpl
                             unsigned int samplerIndex,
                             const gl::Caps &caps) const;
     GLenum getSamplerTextureType(gl::SamplerType type, unsigned int samplerIndex) const;
-    GLint getUsedSamplerRange(gl::SamplerType type) const;
+    GLuint getUsedSamplerRange(gl::SamplerType type) const;
     void updateSamplerMapping();
 
     bool usesPointSize() const { return mUsesPointSize; }
@@ -176,6 +208,11 @@ class ProgramD3D : public ProgramImpl
     bool getUniformBlockSize(const std::string &blockName, size_t *sizeOut) const override;
     bool getUniformBlockMemberInfo(const std::string &memberUniformName,
                                    sh::BlockMemberInfo *memberInfoOut) const override;
+
+    // D3D11 needs sampler metadata to implement ESSL3 texture functions.
+    void setSamplerMetadata(gl::SamplerType type,
+                            unsigned int samplerIndex,
+                            unsigned int baseLevel);
 
     void initializeUniformStorage();
     gl::Error applyUniforms(GLenum drawMode);
@@ -404,6 +441,9 @@ class ProgramD3D : public ProgramImpl
 
     static unsigned int issueSerial();
     static unsigned int mCurrentSerial;
+
+    SamplerMetadataD3D11 mSamplerMetadataPS;
+    SamplerMetadataD3D11 mSamplerMetadataVS;
 };
 }
 

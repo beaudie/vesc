@@ -44,6 +44,7 @@ class DeviceD3D;
 class EGLImageD3D;
 class ImageD3D;
 class IndexBuffer;
+class SamplerMetadataD3D11;
 class ProgramD3D;
 class RenderTargetD3D;
 class ShaderExecutableD3D;
@@ -160,7 +161,9 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
     virtual gl::Error applyRenderTarget(const gl::Framebuffer *frameBuffer) = 0;
     virtual gl::Error applyUniforms(const ProgramD3D &programD3D,
                                     GLenum drawMode,
-                                    const std::vector<D3DUniform *> &uniformArray) = 0;
+                                    const std::vector<D3DUniform *> &uniformArray,
+                                    SamplerMetadataD3D11 *samplerMetadataVS,
+                                    SamplerMetadataD3D11 *samplerMetadataPS) = 0;
     virtual bool applyPrimitiveType(GLenum primitiveType, GLsizei elementCount, bool usesPointSize) = 0;
     virtual gl::Error applyVertexBuffer(const gl::State &state, GLenum mode, GLint first, GLsizei count, GLsizei instances, SourceIndexData *sourceIndexInfo) = 0;
     virtual gl::Error applyIndexBuffer(const gl::Data &data,
