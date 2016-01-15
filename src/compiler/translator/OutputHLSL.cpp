@@ -843,23 +843,24 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
 
         if (textureFunction->method == TextureFunction::SIZE)
         {
+            out << "int baseLevel = samplerMetadata[samplerIndex];\n";
             if (IsSampler2D(textureFunction->sampler) || IsSamplerCube(textureFunction->sampler))
             {
-                if (IsSamplerArray(textureFunction->sampler))
+                if (IsSamplerArray(textureFunction->sampler) || (IsIntegerSampler(textureFunction->sampler) && IsSamplerCube(textureFunction->sampler)))
                 {
                     out << "    uint width; uint height; uint layers; uint numberOfLevels;\n"
-                           "    x.GetDimensions(lod, width, height, layers, numberOfLevels);\n";
+                           "    x.GetDimensions(baseLevel + lod, width, height, layers, numberOfLevels);\n";
                 }
                 else
                 {
                     out << "    uint width; uint height; uint numberOfLevels;\n"
-                           "    x.GetDimensions(lod, width, height, numberOfLevels);\n";
+                           "    x.GetDimensions(baseLevel + lod, width, height, numberOfLevels);\n";
                 }
             }
             else if (IsSampler3D(textureFunction->sampler))
             {
                 out << "    uint width; uint height; uint depth; uint numberOfLevels;\n"
-                       "    x.GetDimensions(lod, width, height, depth, numberOfLevels);\n";
+                       "    x.GetDimensions(baseLevel + lod, width, height, depth, numberOfLevels);\n";
             }
             else UNREACHABLE();
 
