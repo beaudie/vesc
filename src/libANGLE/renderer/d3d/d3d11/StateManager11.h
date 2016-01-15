@@ -40,6 +40,15 @@ struct dx_PixelConstants11
     float viewScale[4];
 };
 
+struct dx_ShaderConstants11
+{
+    union
+    {
+        dx_VertexConstants11 vertex;
+        dx_PixelConstants11 pixel;
+    };
+};
+
 class StateManager11 final : angle::NonCopyable
 {
   public:
@@ -65,8 +74,8 @@ class StateManager11 final : angle::NonCopyable
     void updatePresentPath(bool presentPathFastActive,
                            const gl::FramebufferAttachment *framebufferAttachment);
 
-    const dx_VertexConstants11 &getVertexConstants() const { return mVertexConstants; }
-    const dx_PixelConstants11 &getPixelConstants() const { return mPixelConstants; }
+    const dx_ShaderConstants11 &getVertexConstants() const { return mVertexConstants; }
+    const dx_ShaderConstants11 &getPixelConstants() const { return mPixelConstants; }
 
     void updateStencilSizeIfChanged(bool depthStencilInitialized, unsigned int stencilSize);
 
@@ -125,8 +134,8 @@ class StateManager11 final : angle::NonCopyable
     float mCurFar;
 
     // Things needed in viewport state
-    dx_VertexConstants11 mVertexConstants;
-    dx_PixelConstants11 mPixelConstants;
+    dx_ShaderConstants11 mVertexConstants;
+    dx_ShaderConstants11 mPixelConstants;
 
     // Render target variables
     gl::Extents mViewportBounds;

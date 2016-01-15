@@ -1653,7 +1653,9 @@ gl::Error Renderer9::applyShadersImpl(const gl::Data &data, GLenum /*drawMode*/)
 
 gl::Error Renderer9::applyUniforms(const ProgramD3D &programD3D,
                                    GLenum /*drawMode*/,
-                                   const std::vector<D3DUniform *> &uniformArray)
+                                   const std::vector<D3DUniform *> &uniformArray,
+                                   SamplerMetadataD3D11 * /*samplerMetadataVS*/,
+                                   SamplerMetadataD3D11 * /*samplerMetadataPS*/)
 {
     for (const D3DUniform *targetUniform : uniformArray)
     {

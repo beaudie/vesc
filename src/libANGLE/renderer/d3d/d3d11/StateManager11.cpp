@@ -715,52 +715,55 @@ void StateManager11::setViewport(const gl::Caps *caps,
     mCurNear     = actualZNear;
     mCurFar      = actualZFar;
 
+    dx_PixelConstants11 &pixelConstants   = mPixelConstants.pixel;
+    dx_VertexConstants11 &vertexConstants = mVertexConstants.vertex;
+
     // On Feature Level 9_*, we must emulate large and/or negative viewports in the shaders
     // using viewAdjust (like the D3D9 renderer).
     if (mRenderer->getRenderer11DeviceCaps().featureLevel <= D3D_FEATURE_LEVEL_9_3)
     {
-        mVertexConstants.viewAdjust[0] = static_cast<float>((viewport.width - dxViewportWidth) +
-                                                            2 * (viewport.x - dxViewportTopLeftX)) /
-                                         dxViewport.Width;
-        mVertexConstants.viewAdjust[1] = static_cast<float>((viewport.height - dxViewportHeight) +
-                                                            2 * (viewport.y - dxViewportTopLeftY)) /
-                                         dxViewport.Height;
-        mVertexConstants.viewAdjust[2] = static_cast<float>(viewport.width) / dxViewport.Width;
-        mVertexConstants.viewAdjust[3] = static_cast<float>(viewport.height) / dxViewport.Height;
+        vertexConstants.viewAdjust[0] = static_cast<float>((viewport.width - dxViewportWidth) +
+                                                           2 * (viewport.x - dxViewportTopLeftX)) /
+                                        dxViewport.Width;
+        vertexConstants.viewAdjust[1] = static_cast<float>((viewport.height - dxViewportHeight) +
+                                                           2 * (viewport.y - dxViewportTopLeftY)) /
+                                        dxViewport.Height;
+        vertexConstants.viewAdjust[2] = static_cast<float>(viewport.width) / dxViewport.Width;
+        vertexConstants.viewAdjust[3] = static_cast<float>(viewport.height) / dxViewport.Height;
     }
 
-    mPixelConstants.viewCoords[0] = viewport.width * 0.5f;
-    mPixelConstants.viewCoords[1] = viewport.height * 0.5f;
-    mPixelConstants.viewCoords[2] = viewport.x + (viewport.width * 0.5f);
-    mPixelConstants.viewCoords[3] = viewport.y + (viewport.height * 0.5f);
+    pixelConstants.viewCoords[0] = viewport.width * 0.5f;
+    pixelConstants.viewCoords[1] = viewport.height * 0.5f;
+    pixelConstants.viewCoords[2] = viewport.x + (viewport.width * 0.5f);
+    pixelConstants.viewCoords[3] = viewport.y + (viewport.height * 0.5f);
 
     // Instanced pointsprite emulation requires ViewCoords to be defined in the
     // the vertex shader.
-    mVertexConstants.viewCoords[0] = mPixelConstants.viewCoords[0];
-    mVertexConstants.viewCoords[1] = mPixelConstants.viewCoords[1];
-    mVertexConstants.viewCoords[2] = mPixelConstants.viewCoords[2];
-    mVertexConstants.viewCoords[3] = mPixelConstants.viewCoords[3];
+    vertexConstants.viewCoords[0] = pixelConstants.viewCoords[0];
+    vertexConstants.viewCoords[1] = pixelConstants.viewCoords[1];
+    vertexConstants.viewCoords[2] = pixelConstants.viewCoords[2];
+    vertexConstants.viewCoords[3] = pixelConstants.viewCoords[3];
 
-    mPixelConstants.depthFront[0] = (actualZFar - actualZNear) * 0.5f;
-    mPixelConstants.depthFront[1] = (actualZNear + actualZFar) * 0.5f;
+    pixelConstants.depthFront[0] = (actualZFar - actualZNear) * 0.5f;
+    pixelConstants.depthFront[1] = (actualZNear + actualZFar) * 0.5f;
 
-    mVertexConstants.depthRange[0] = actualZNear;
-    mVertexConstants.depthRange[1] = actualZFar;
-    mVertexConstants.depthRange[2] = actualZFar - actualZNear;
+    vertexConstants.depthRange[0] = actualZNear;
+    vertexConstants.depthRange[1] = actualZFar;
+    vertexConstants.depthRange[2] = actualZFar - actualZNear;
 
-    mPixelConstants.depthRange[0] = actualZNear;
-    mPixelConstants.depthRange[1] = actualZFar;
-    mPixelConstants.depthRange[2] = actualZFar - actualZNear;
+    pixelConstants.depthRange[0] = actualZNear;
+    pixelConstants.depthRange[1] = actualZFar;
+    pixelConstants.depthRange[2] = actualZFar - actualZNear;
 
-    mPixelConstants.viewScale[0] = 1.0f;
-    mPixelConstants.viewScale[1] = mCurPresentPathFastEnabled ? 1.0f : -1.0f;
-    mPixelConstants.viewScale[2] = 1.0f;
-    mPixelConstants.viewScale[3] = 1.0f;
+    pixelConstants.viewScale[0] = 1.0f;
+    pixelConstants.viewScale[1] = mCurPresentPathFastEnabled ? 1.0f : -1.0f;
+    pixelConstants.viewScale[2] = 1.0f;
+    pixelConstants.viewScale[3] = 1.0f;
 
-    mVertexConstants.viewScale[0] = mPixelConstants.viewScale[0];
-    mVertexConstants.viewScale[1] = mPixelConstants.viewScale[1];
-    mVertexConstants.viewScale[2] = mPixelConstants.viewScale[2];
-    mVertexConstants.viewScale[3] = mPixelConstants.viewScale[3];
+    vertexConstants.viewScale[0] = pixelConstants.viewScale[0];
+    vertexConstants.viewScale[1] = pixelConstants.viewScale[1];
+    vertexConstants.viewScale[2] = pixelConstants.viewScale[2];
+    vertexConstants.viewScale[3] = pixelConstants.viewScale[3];
 
     mViewportStateIsDirty = false;
 }
