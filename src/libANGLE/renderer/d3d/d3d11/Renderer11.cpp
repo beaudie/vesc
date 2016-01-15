@@ -85,6 +85,16 @@ enum
     MAX_TEXTURE_IMAGE_UNITS_VTF_SM4 = 16
 };
 
+void InitD3D11BufferDesc(D3D11_BUFFER_DESC *constantBufferDescription, size_t byteWidth)
+{
+    constantBufferDescription->ByteWidth           = byteWidth;
+    constantBufferDescription->Usage               = D3D11_USAGE_DEFAULT;
+    constantBufferDescription->BindFlags           = D3D11_BIND_CONSTANT_BUFFER;
+    constantBufferDescription->CPUAccessFlags      = 0;
+    constantBufferDescription->MiscFlags           = 0;
+    constantBufferDescription->StructureByteStride = 0;
+}
+
 bool ImageIndexConflictsWithSRV(const gl::ImageIndex &index, D3D11_SHADER_RESOURCE_VIEW_DESC desc)
 {
     unsigned mipLevel = index.mipIndex;
@@ -2330,12 +2340,7 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
     if (!mDriverConstantBufferVS)
     {
         D3D11_BUFFER_DESC constantBufferDescription = {0};
-        constantBufferDescription.ByteWidth = sizeof(dx_VertexConstants);
-        constantBufferDescription.Usage = D3D11_USAGE_DEFAULT;
-        constantBufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        constantBufferDescription.CPUAccessFlags = 0;
-        constantBufferDescription.MiscFlags = 0;
-        constantBufferDescription.StructureByteStride = 0;
+        InitD3D11BufferDesc(&constantBufferDescription, sizeof(dx_VertexConstants));
 
         HRESULT result = mDevice->CreateBuffer(&constantBufferDescription, NULL, &mDriverConstantBufferVS);
         ASSERT(SUCCEEDED(result));
@@ -2349,12 +2354,7 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
     if (!mDriverConstantBufferPS)
     {
         D3D11_BUFFER_DESC constantBufferDescription = {0};
-        constantBufferDescription.ByteWidth = sizeof(dx_PixelConstants);
-        constantBufferDescription.Usage = D3D11_USAGE_DEFAULT;
-        constantBufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        constantBufferDescription.CPUAccessFlags = 0;
-        constantBufferDescription.MiscFlags = 0;
-        constantBufferDescription.StructureByteStride = 0;
+        InitD3D11BufferDesc(&constantBufferDescription, sizeof(dx_PixelConstants));
 
         HRESULT result = mDevice->CreateBuffer(&constantBufferDescription, NULL, &mDriverConstantBufferPS);
         ASSERT(SUCCEEDED(result));
@@ -2404,6 +2404,46 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
         }
     }
 
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error Renderer11::applySamplerMetadata(SamplerMetadataD3D11 *samplerMetadata,
+                                           unsigned int samplerCount,
+                                           gl::SamplerType type)
+{
+    if (!samplerMetadata->mSamplerMetadataBuffer && samplerCount > 0)
+    {
+        D3D11_BUFFER_DESC constantBufferDescription = {0};
+        InitD3D11BufferDesc(&constantBufferDescription, sizeof(dx_SamplerMetadata) * samplerCount);
+        HRESULT result = mDevice->CreateBuffer(&constantBufferDescription, NULL,
+                                               &samplerMetadata->mSamplerMetadataBuffer);
+        ASSERT(SUCCEEDED(result));
+        if (FAILED(result))
+        {
+            return gl::Error(GL_OUT_OF_MEMORY,
+                             "Failed to create shader constant buffer, result: 0x%X.", result);
+        }
+        if (type == gl::SAMPLER_VERTEX)
+        {
+            mDeviceContext->VSSetConstantBuffers(2, 1, &samplerMetadata->mSamplerMetadataBuffer);
+        }
+        else
+        {
+            mDeviceContext->PSSetConstantBuffers(2, 1, &samplerMetadata->mSamplerMetadataBuffer);
+        }
+        samplerMetadata->mDirty = true;
+    }
+
+    if (samplerMetadata->mDirty)
+    {
+        ASSERT(samplerMetadata->mSamplerMetadataBuffer != nullptr);
+        if (samplerMetadata->mSamplerMetadataBuffer)
+        {
+            mDeviceContext->UpdateSubresource(samplerMetadata->mSamplerMetadataBuffer, 0, NULL,
+                                              samplerMetadata->mSamplerMetadata, 16, 0);
+            samplerMetadata->mDirty = false;
+        }
+    }
     return gl::Error(GL_NO_ERROR);
 }
 

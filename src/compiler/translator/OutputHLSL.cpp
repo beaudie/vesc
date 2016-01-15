@@ -193,8 +193,8 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType, int shaderVersion,
         mUniformHLSL->reserveUniformRegisters(3);
     }
 
-    // Reserve registers for the default uniform block and driver constants
-    mUniformHLSL->reserveInterfaceBlockRegisters(2);
+    // Reserve registers for the default uniform block, driver constants and sampler metadata
+    mUniformHLSL->reserveInterfaceBlockRegisters(3);
 }
 
 OutputHLSL::~OutputHLSL()
@@ -516,6 +516,8 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
             }
 
             out << "};\n";
+
+            out << mUniformHLSL->samplerMetadataConstants();
         }
         else
         {
@@ -617,6 +619,8 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
 
             out << "};\n"
                    "\n";
+
+            out << mUniformHLSL->samplerMetadataConstants();
         }
         else
         {
