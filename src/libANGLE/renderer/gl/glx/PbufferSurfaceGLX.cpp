@@ -15,7 +15,8 @@
 namespace rx
 {
 
-PbufferSurfaceGLX::PbufferSurfaceGLX(RendererGL *renderer,
+PbufferSurfaceGLX::PbufferSurfaceGLX(DisplayGLX *glxDisplay,
+                                     RendererGL *renderer,
                                      EGLint width,
                                      EGLint height,
                                      bool largest,
@@ -26,6 +27,7 @@ PbufferSurfaceGLX::PbufferSurfaceGLX(RendererGL *renderer,
       mWidth(width),
       mHeight(height),
       mLargest(largest),
+      mGLXDisplay(glxDisplay),
       mGLX(glx),
       mContext(context),
       mFBConfig(fbConfig),
@@ -76,6 +78,7 @@ egl::Error PbufferSurfaceGLX::makeCurrent()
 {
     if (mGLX.makeCurrent(mPbuffer, mContext) != True)
     {
+        mGLXDisplay->setCurrentWindow(nullptr);
         return egl::Error(EGL_BAD_DISPLAY);
     }
     return egl::Error(EGL_SUCCESS);

@@ -47,6 +47,8 @@ class WindowSurfaceGLX : public SurfaceGL
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
 
+    egl::Error checkForResize();
+
   private:
     bool getWindowDimensions(Window window, unsigned int *width, unsigned int *height) const;
 
