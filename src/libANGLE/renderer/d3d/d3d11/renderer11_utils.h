@@ -65,6 +65,8 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
 namespace d3d11
 {
 
+HRESULT GetDeviceType(ID3D11Device *device, bool *isSoftwareOrRefOrNull, bool *isWARP);
+
 void MakeValidSize(bool isImage, DXGI_FORMAT format, GLsizei *requestWidth, GLsizei *requestHeight, int *levelOffset);
 
 void GenerateInitialTextureData(GLint internalFormat, const Renderer11DeviceCaps &renderer11DeviceCaps, GLuint width, GLuint height, GLuint depth,
