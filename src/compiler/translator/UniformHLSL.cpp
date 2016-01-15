@@ -101,7 +101,6 @@ unsigned int UniformHLSL::declareUniformAndAssignRegister(const TType &type,
 
     const Uniform *uniform = findUniformByName(name);
     ASSERT(uniform);
-
     mUniformRegisterMap[uniform->name] = registerIndex;
 
     *registerCount = HLSLVariableRegisterCount(*uniform, mOutputType);
@@ -137,6 +136,7 @@ void UniformHLSL::outputHLSLSamplerUniformGroup(TInfoSinkBase &out,
         unsigned int registerCount;
         unsigned int samplerArrayIndex =
             declareUniformAndAssignRegister(type, name, &registerCount);
+
         groupRegisterCount += registerCount;
         if (type.isArray())
         {
@@ -190,7 +190,7 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
     {
         out << "// Uniforms\n\n";
     }
-    // In the case of HLSL11, sampler uniforms need to be grouped by type before the code is
+    // In the case of HLSL 4, sampler uniforms need to be grouped by type before the code is
     // written. They are grouped based on the combination of the HLSL texture type and
     // HLSL sampler type, enumerated in HLSLTextureSamplerGroup.
     TMap<HLSLTextureSamplerGroup, TVector<const TIntermSymbol *>> groupedSamplerUniforms;
@@ -255,6 +255,17 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
                                               &groupTextureRegisterIndex);
             }
         }
+    }
+}
+
+void UniformHLSL::samplerMetadataUniforms(TInfoSinkBase &out)
+{
+    if (mSamplerRegister > 0)
+    {
+        out << "cbuffer SamplerMetadata : register(b2)\n"
+            << "{\n"
+            << "    int samplerMetadata[" << mSamplerRegister << "] : packoffset(c0);\n"
+            << "};\n";
     }
 }
 
