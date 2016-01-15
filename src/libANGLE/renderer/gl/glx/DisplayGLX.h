@@ -19,6 +19,7 @@ namespace rx
 {
 
 class FunctionsGLX;
+class WindowSurfaceGLX;
 
 // State-tracking data for the swap control to allow DisplayGLX to remember per
 // drawable information for swap control.
@@ -84,6 +85,9 @@ class DisplayGLX : public DisplayGL
 
     bool isValidWindowVisualId(unsigned long visualId) const;
 
+    WindowSurfaceGLX *getCurrentWindow() const;
+    void setCurrentWindow(WindowSurfaceGLX *window);
+
   private:
     const FunctionsGL *getFunctionsGL() const override;
 
@@ -125,6 +129,8 @@ class DisplayGLX : public DisplayGL
 
     FunctionsGLX mGLX;
     egl::Display *mEGLDisplay;
+
+    WindowSurfaceGLX *mCurrentWindow;
 };
 
 }
