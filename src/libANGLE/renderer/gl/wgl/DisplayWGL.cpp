@@ -481,7 +481,9 @@ egl::Error DisplayWGL::waitClient() const
     return egl::Error(EGL_SUCCESS);
 }
 
-egl::Error DisplayWGL::waitNative(EGLint engine) const
+egl::Error DisplayWGL::waitNative(EGLint engine,
+                                  egl::Surface *drawSurface,
+                                  egl::Surface *readSurface) const
 {
     // Unimplemented as this is not needed for WGL
     return egl::Error(EGL_SUCCESS);
