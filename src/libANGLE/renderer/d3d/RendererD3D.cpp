@@ -425,6 +425,8 @@ gl::Error RendererD3D::applyTextures(const gl::Data &data, gl::SamplerType shade
                 {
                     return error;
                 }
+
+                programD3D->setSamplerMetadata(shaderType, samplerIndex, texture->getBaseLevel());
             }
             else
             {

@@ -654,6 +654,31 @@ GLenum ProgramD3D::getSamplerTextureType(gl::SamplerType type, unsigned int samp
     return GL_TEXTURE_2D;
 }
 
+void ProgramD3D::setSamplerMetadata(gl::SamplerType type,
+                                    unsigned int samplerIndex,
+                                    unsigned int baseLevel)
+{
+    std::vector<D3DUniform *>::size_type uniformIndex = 0;
+    switch (type)
+    {
+        case gl::SAMPLER_PIXEL:
+            uniformIndex = mPSMetadataD3DUniformIndex;
+            break;
+        case gl::SAMPLER_VERTEX:
+            uniformIndex = mVSMetadataD3DUniformIndex;
+            break;
+        default:
+            UNREACHABLE();
+    }
+    ASSERT(uniformIndex > 0);
+    GLint(*metadataValues)[4] = reinterpret_cast<GLint(*)[4]>(mD3DUniforms[uniformIndex]->data);
+    if (metadataValues[samplerIndex][0] != static_cast<int>(baseLevel))
+    {
+        metadataValues[samplerIndex][0]   = static_cast<int>(baseLevel);
+        mD3DUniforms[uniformIndex]->dirty = true;
+    }
+}
+
 GLint ProgramD3D::getUsedSamplerRange(gl::SamplerType type) const
 {
     switch (type)
@@ -1810,8 +1835,50 @@ void ProgramD3D::defineUniformsAndAssignRegisters()
         mD3DUniforms.push_back(mapEntry->second);
     }
 
+    // Add sampler metadata uniforms (they are not exposed to the GL layer).
+    if (defineSamplerMetadataUniform(vertexShader, &uniformMap))
+    {
+        mVSMetadataD3DUniformIndex = mD3DUniforms.size();
+        auto mapEntry = uniformMap.find(std::string("samplerMetadataVertex"));
+        mD3DUniforms.push_back(mapEntry->second);
+    }
+    if (defineSamplerMetadataUniform(fragmentShader, &uniformMap))
+    {
+        mPSMetadataD3DUniformIndex = mD3DUniforms.size();
+        auto mapEntry = uniformMap.find(std::string("samplerMetadataFragment"));
+        mD3DUniforms.push_back(mapEntry->second);
+    }
+
     assignAllSamplerRegisters();
     initializeUniformStorage();
+}
+
+bool ProgramD3D::defineSamplerMetadataUniform(const gl::Shader *shader, D3DUniformMap *uniformMap)
+{
+    const ShaderD3D *shaderD3D = GetImplAs<ShaderD3D>(shader);
+    if (shaderD3D->getSamplerMetadataCount() > 0)
+    {
+        ShShaderOutput outputType = shaderD3D->getCompilerOutputType();
+        sh::HLSLBlockEncoder encoder(sh::HLSLBlockEncoder::GetStrategyFor(outputType));
+        unsigned int startRegister = shaderD3D->getSamplerMetadataUniformRegister();
+        encoder.skipRegisters(startRegister);
+        sh::Uniform samplerMetadataUniform;
+        samplerMetadataUniform.type      = GL_INT;
+        samplerMetadataUniform.arraySize = shaderD3D->getSamplerMetadataCount();
+        samplerMetadataUniform.staticUse = true;
+        if (shader->getType() == GL_FRAGMENT_SHADER)
+        {
+            samplerMetadataUniform.name = std::string("samplerMetadataFragment");
+        }
+        else
+        {
+            samplerMetadataUniform.name = std::string("samplerMetadataVertex");
+        }
+        defineUniform(shader->getType(), samplerMetadataUniform, samplerMetadataUniform.name,
+                      &encoder, uniformMap);
+        return true;
+    }
+    return false;
 }
 
 void ProgramD3D::defineUniformBase(const gl::Shader *shader,

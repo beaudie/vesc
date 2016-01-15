@@ -59,6 +59,7 @@ void TranslatorHLSL::translate(TIntermNode *root, int compileOptions)
 
     mInterfaceBlockRegisterMap = outputHLSL.getInterfaceBlockRegisterMap();
     mUniformRegisterMap = outputHLSL.getUniformRegisterMap();
+    mSamplerMetadataUniformRegister = outputHLSL.getSamplerMetadataUniformRegister();
 }
 
 bool TranslatorHLSL::hasInterfaceBlock(const std::string &interfaceBlockName) const

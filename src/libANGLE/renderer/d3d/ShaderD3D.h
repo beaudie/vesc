@@ -50,6 +50,12 @@ class ShaderD3D : public ShaderImpl
     bool usesFragDepth() const { return mUsesFragDepth; }
     bool usesDeferredInit() const { return mUsesDeferredInit; }
 
+    unsigned int getSamplerMetadataUniformRegister() const
+    {
+        return mSamplerMetadataUniformRegister;
+    }
+    unsigned int getSamplerMetadataCount() const { return mSamplerMetadataCount; }
+
     ShShaderOutput getCompilerOutputType() const;
 
   private:
@@ -71,6 +77,9 @@ class ShaderD3D : public ShaderImpl
     mutable std::string mDebugInfo;
     std::map<std::string, unsigned int> mUniformRegisterMap;
     std::map<std::string, unsigned int> mInterfaceBlockRegisterMap;
+
+    unsigned int mSamplerMetadataUniformRegister;
+    unsigned int mSamplerMetadataCount;
 };
 }
 

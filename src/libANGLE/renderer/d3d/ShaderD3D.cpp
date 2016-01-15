@@ -74,6 +74,9 @@ void ShaderD3D::uncompile()
     mUsesDeferredInit = false;
     mRequiresIEEEStrictCompiling = false;
 
+    mSamplerMetadataCount           = 0;
+    mSamplerMetadataUniformRegister = 0;
+
     mDebugInfo.clear();
 }
 
@@ -169,6 +172,10 @@ bool ShaderD3D::postTranslateCompile(gl::Compiler *compiler, std::string *infoLo
         if (uniform.staticUse && !uniform.isBuiltIn())
         {
             unsigned int index = static_cast<unsigned int>(-1);
+            if (gl::IsSamplerType(uniform.type))
+            {
+                mSamplerMetadataCount += std::max(uniform.arraySize, 1u);
+            }
             bool getUniformRegisterResult =
                 ShGetUniformRegister(compilerHandle, uniform.name, &index);
             UNUSED_ASSERTION_VARIABLE(getUniformRegisterResult);
@@ -176,6 +183,11 @@ bool ShaderD3D::postTranslateCompile(gl::Compiler *compiler, std::string *infoLo
 
             mUniformRegisterMap[uniform.name] = index;
         }
+    }
+
+    if (mSamplerMetadataCount > 0)
+    {
+        mSamplerMetadataUniformRegister = ShGetSamplerMetadataUniformRegister(compilerHandle);
     }
 
     for (const sh::InterfaceBlock &interfaceBlock : mData.getInterfaceBlocks())

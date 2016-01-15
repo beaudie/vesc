@@ -142,6 +142,9 @@ class ProgramD3D : public ProgramImpl
                             unsigned int samplerIndex,
                             const gl::Caps &caps) const;
     GLenum getSamplerTextureType(gl::SamplerType type, unsigned int samplerIndex) const;
+    void setSamplerMetadata(gl::SamplerType type,
+                            unsigned int samplerIndex,
+                            unsigned int baseLevel);
     GLint getUsedSamplerRange(gl::SamplerType type) const;
     void updateSamplerMapping();
 
@@ -305,6 +308,7 @@ class ProgramD3D : public ProgramImpl
     typedef std::map<std::string, D3DUniform *> D3DUniformMap;
 
     void defineUniformsAndAssignRegisters();
+    bool defineSamplerMetadataUniform(const gl::Shader *shader, D3DUniformMap *uniformMap);
     void defineUniformBase(const gl::Shader *shader,
                            const sh::Uniform &uniform,
                            D3DUniformMap *uniformMap);
@@ -398,6 +402,9 @@ class ProgramD3D : public ProgramImpl
 
     std::map<std::string, sh::BlockMemberInfo> mBlockInfo;
     std::map<std::string, size_t> mBlockDataSizes;
+
+    std::vector<D3DUniform *>::size_type mVSMetadataD3DUniformIndex;
+    std::vector<D3DUniform *>::size_type mPSMetadataD3DUniformIndex;
 
     static unsigned int issueSerial();
     static unsigned int mCurrentSerial;
