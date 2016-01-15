@@ -2351,12 +2351,7 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
     if (!mDriverConstantBufferVS)
     {
         D3D11_BUFFER_DESC constantBufferDescription = {0};
-        constantBufferDescription.ByteWidth = sizeof(dx_VertexConstants);
-        constantBufferDescription.Usage = D3D11_USAGE_DEFAULT;
-        constantBufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        constantBufferDescription.CPUAccessFlags = 0;
-        constantBufferDescription.MiscFlags = 0;
-        constantBufferDescription.StructureByteStride = 0;
+        d3d11::InitConstantBufferDesc(&constantBufferDescription, sizeof(dx_VertexConstants));
 
         HRESULT result = mDevice->CreateBuffer(&constantBufferDescription, NULL, &mDriverConstantBufferVS);
         ASSERT(SUCCEEDED(result));
@@ -2370,12 +2365,7 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
     if (!mDriverConstantBufferPS)
     {
         D3D11_BUFFER_DESC constantBufferDescription = {0};
-        constantBufferDescription.ByteWidth = sizeof(dx_PixelConstants);
-        constantBufferDescription.Usage = D3D11_USAGE_DEFAULT;
-        constantBufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        constantBufferDescription.CPUAccessFlags = 0;
-        constantBufferDescription.MiscFlags = 0;
-        constantBufferDescription.StructureByteStride = 0;
+        d3d11::InitConstantBufferDesc(&constantBufferDescription, sizeof(dx_PixelConstants));
 
         HRESULT result = mDevice->CreateBuffer(&constantBufferDescription, NULL, &mDriverConstantBufferPS);
         ASSERT(SUCCEEDED(result));
@@ -2426,6 +2416,18 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
     }
 
     return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error Renderer11::applySamplerMetadata(SamplerMetadataD3D11 *samplerMetadata,
+                                           unsigned int samplerCount,
+                                           gl::SamplerType type)
+{
+    if (mRenderer11DeviceCaps.featureLevel <= D3D_FEATURE_LEVEL_9_3)
+    {
+        return gl::Error(GL_NO_ERROR);
+    }
+
+    return samplerMetadata->apply(mDevice, mDeviceContext);
 }
 
 void Renderer11::markAllStateDirty()
