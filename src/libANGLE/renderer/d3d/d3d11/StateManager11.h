@@ -53,8 +53,8 @@ class StateManager11 final : angle::NonCopyable
     void forceSetViewportState() { mViewportStateIsDirty = true; }
     void setViewportBounds(const int width, const int height);
 
-    const dx_VertexConstants &getVertexConstants() const { return mVertexConstants; }
-    const dx_PixelConstants &getPixelConstants() const { return mPixelConstants; }
+    const dx_ShaderConstants &getVertexConstants() const { return mVertexConstants; }
+    const dx_ShaderConstants &getPixelConstants() const { return mPixelConstants; }
 
     void updateStencilSizeIfChanged(bool depthStencilInitialized, unsigned int stencilSize);
 
@@ -92,8 +92,8 @@ class StateManager11 final : angle::NonCopyable
     float mCurFar;
 
     // Things needed in viewport state
-    dx_VertexConstants mVertexConstants;
-    dx_PixelConstants mPixelConstants;
+    dx_ShaderConstants mVertexConstants;
+    dx_ShaderConstants mPixelConstants;
 
     // Render target variables
     gl::Extents mViewportBounds;

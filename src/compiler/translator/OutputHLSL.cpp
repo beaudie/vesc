@@ -505,6 +505,11 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                 out << "    float3 dx_DepthFront : packoffset(c2);\n";
             }
 
+            if (mOutputType == SH_HLSL_4_1_OUTPUT)
+            {
+                mUniformHLSL->samplerMetadataUniforms(out);
+            }
+
             out << "};\n";
         }
         else
@@ -604,6 +609,11 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
             // The bytecode is the same whether we declare it or not, since D3DCompiler removes it if it's unused.
             out << "    float4 dx_ViewAdjust : packoffset(c1);\n";
             out << "    float2 dx_ViewCoords : packoffset(c2);\n";
+
+            if (mOutputType == SH_HLSL_4_1_OUTPUT)
+            {
+                mUniformHLSL->samplerMetadataUniforms(out);
+            }
 
             out << "};\n"
                    "\n";

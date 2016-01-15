@@ -246,6 +246,14 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
     }
 }
 
+void UniformHLSL::samplerMetadataUniforms(TInfoSinkBase &out)
+{
+    if (mSamplerRegister > 0)
+    {
+        out << "    int samplerMetadata[" << mSamplerRegister << "] : packoffset(c3);\n";
+    }
+}
+
 TString UniformHLSL::interfaceBlocksHeader(const ReferencedSymbols &referencedInterfaceBlocks)
 {
     TString interfaceBlocks;
