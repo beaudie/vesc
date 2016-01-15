@@ -329,7 +329,7 @@ class Renderer11 : public RendererD3D
     HMODULE mDxgiModule;
     HMODULE mDCompModule;
     std::vector<D3D_FEATURE_LEVEL> mAvailableFeatureLevels;
-    D3D_DRIVER_TYPE mDriverType;
+    D3D_DRIVER_TYPE mRequestedDriverType;
     bool mCreatedWithDeviceEXT;
     DeviceD3D *mEGLDevice;
 
@@ -339,6 +339,8 @@ class Renderer11 : public RendererD3D
     void initializeDevice();
     void releaseDeviceResources();
     void release();
+
+    d3d11::ANGLED3D11DeviceType getDeviceType() const;
 
     RenderStateCache mStateCache;
 
@@ -477,6 +479,8 @@ class Renderer11 : public RendererD3D
     ID3D11Debug *mDebug;
 
     std::vector<GLuint> mScratchIndexDataBuffer;
+
+    mutable Optional<bool> mSupportsShareHandles;
 };
 
 }
