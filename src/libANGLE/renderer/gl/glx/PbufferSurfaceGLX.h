@@ -21,7 +21,8 @@ class FunctionsGLX;
 class PbufferSurfaceGLX : public SurfaceGL
 {
   public:
-    PbufferSurfaceGLX(RendererGL *renderer,
+    PbufferSurfaceGLX(DisplayGLX *glxDisplay,
+                      RendererGL *renderer,
                       EGLint width,
                       EGLint height,
                       bool largest,
@@ -51,6 +52,7 @@ class PbufferSurfaceGLX : public SurfaceGL
     unsigned mHeight;
     bool mLargest;
 
+    DisplayGLX *mGLXDisplay;
     const FunctionsGLX &mGLX;
     glx::Context mContext;
     glx::FBConfig mFBConfig;

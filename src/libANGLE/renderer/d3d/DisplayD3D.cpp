@@ -358,5 +358,4 @@ egl::Error DisplayD3D::waitNative(EGLint engine) const
     // Unimplemented as it is a noop on D3D
     return egl::Error(EGL_SUCCESS);
 }
-
 }

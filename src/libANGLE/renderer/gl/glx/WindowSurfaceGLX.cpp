@@ -47,6 +47,10 @@ WindowSurfaceGLX::~WindowSurfaceGLX()
         XDestroyWindow(mDisplay, mWindow);
     }
 
+    if (mGLXDisplay->getCurrentWindow() == this)
+    {
+        mGLXDisplay->setCurrentWindow(nullptr);
+    }
     mGLXDisplay->syncXCommands();
 }
 
@@ -125,31 +129,22 @@ egl::Error WindowSurfaceGLX::makeCurrent()
     {
         return egl::Error(EGL_BAD_DISPLAY);
     }
+    mGLXDisplay->setCurrentWindow(this);
     return egl::Error(EGL_SUCCESS);
 }
 
 egl::Error WindowSurfaceGLX::swap()
 {
-    //TODO(cwallez) set up our own error handler to see if the call failed
-    unsigned int newParentWidth, newParentHeight;
-    if (!getWindowDimensions(mParent, &newParentWidth, &newParentHeight))
-    {
-        // TODO(cwallez) What error type here?
-        return egl::Error(EGL_BAD_CURRENT_SURFACE, "Failed to retrieve the size of the parent window.");
-    }
-
-    if (mParentWidth != newParentWidth || mParentHeight != newParentHeight)
-    {
-        mParentWidth = newParentWidth;
-        mParentHeight = newParentHeight;
-
-        mGLX.waitGL();
-        XResizeWindow(mDisplay, mWindow, mParentWidth, mParentHeight);
-        mGLX.waitX();
-    }
-
+    // We need to swap before resizing as some drivers clobber the back buffer
+    // when the window is resized.
     mGLXDisplay->setSwapInterval(mGLXWindow, &mSwapControl);
     mGLX.swapBuffers(mGLXWindow);
+
+    egl::Error error = checkForResize();
+    if (error.isError())
+    {
+        return error;
+    }
 
     return egl::Error(EGL_SUCCESS);
 }
@@ -204,6 +199,30 @@ EGLint WindowSurfaceGLX::isPostSubBufferSupported() const
 EGLint WindowSurfaceGLX::getSwapBehavior() const
 {
     return EGL_BUFFER_PRESERVED;
+}
+
+egl::Error WindowSurfaceGLX::checkForResize()
+{
+    // TODO(cwallez) set up our own error handler to see if the call failed
+    unsigned int newParentWidth, newParentHeight;
+    if (!getWindowDimensions(mParent, &newParentWidth, &newParentHeight))
+    {
+        return egl::Error(EGL_BAD_CURRENT_SURFACE,
+                          "Failed to retrieve the size of the parent window.");
+    }
+
+    if (mParentWidth != newParentWidth || mParentHeight != newParentHeight)
+    {
+        mParentWidth  = newParentWidth;
+        mParentHeight = newParentHeight;
+
+        mGLX.waitGL();
+        XResizeWindow(mDisplay, mWindow, mParentWidth, mParentHeight);
+        mGLX.waitX();
+        XSync(mDisplay, False);
+    }
+
+    return egl::Error(EGL_SUCCESS);
 }
 
 bool WindowSurfaceGLX::getWindowDimensions(Window window, unsigned int *width, unsigned int *height) const

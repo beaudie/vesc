@@ -69,7 +69,8 @@ DisplayGLX::DisplayGLX()
       mMinSwapInterval(0),
       mMaxSwapInterval(0),
       mCurrentSwapInterval(-1),
-      mEGLDisplay(nullptr)
+      mEGLDisplay(nullptr),
+      mCurrentWindow(nullptr)
 {
 }
 
@@ -315,7 +316,7 @@ SurfaceImpl *DisplayGLX::createPbufferSurface(const egl::Config *configuration,
     EGLint height = attribs.get(EGL_HEIGHT, 0);
     bool largest = (attribs.get(EGL_LARGEST_PBUFFER, EGL_FALSE) == EGL_TRUE);
 
-    return new PbufferSurfaceGLX(this->getRenderer(), width, height, largest, mGLX, mContext,
+    return new PbufferSurfaceGLX(this, this->getRenderer(), width, height, largest, mGLX, mContext,
                                  fbConfig);
 }
 
@@ -647,6 +648,22 @@ egl::Error DisplayGLX::waitClient() const
 
 egl::Error DisplayGLX::waitNative(EGLint engine) const
 {
+    // eglWaitNative is used to notice the driver of changes in X11 for the current surface, such as
+    // changes of the window size. We use this event to update the child window of WindowSurfaceGLX
+    // to match its parent window's size.
+    // Handling eglWaitNative this way helps the application control when resize happens. This is
+    // important because drivers have a tendency to clobber the back buffer when the windows are
+    // resized. See http://crbug.com/326995
+    if (mCurrentWindow != nullptr)
+    {
+        egl::Error error = mCurrentWindow->checkForResize();
+        if (error.isError())
+        {
+            return error;
+        }
+    }
+
+    // We still need to forward the resizing of the child window to the driver.
     mGLX.waitX();
     return egl::Error(EGL_SUCCESS);
 }
@@ -705,6 +722,16 @@ void DisplayGLX::setSwapInterval(glx::Drawable drawable, SwapControlData *data)
 bool DisplayGLX::isValidWindowVisualId(unsigned long visualId) const
 {
     return mRequestedVisual == -1 || static_cast<unsigned long>(mRequestedVisual) == visualId;
+}
+
+WindowSurfaceGLX *DisplayGLX::getCurrentWindow() const
+{
+    return mCurrentWindow;
+}
+
+void DisplayGLX::setCurrentWindow(WindowSurfaceGLX *window)
+{
+    mCurrentWindow = window;
 }
 
 const FunctionsGL *DisplayGLX::getFunctionsGL() const
