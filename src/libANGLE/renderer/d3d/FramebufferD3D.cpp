@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/d3d/FramebufferD3D.h"
 
+#include "common/BitSetIterator.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
@@ -84,40 +85,15 @@ ClearParameters GetClearParameters(const gl::State &state, GLbitfield mask)
 
 }
 
-FramebufferD3D::FramebufferD3D(const gl::Framebuffer::Data &data)
+FramebufferD3D::FramebufferD3D(const gl::Framebuffer::Data &data, RendererD3D *renderer)
     : FramebufferImpl(data),
+      mRenderer(renderer),
       mColorAttachmentsForRender(mData.getColorAttachments().size(), nullptr),
       mInvalidateColorAttachmentCache(true)
 {
 }
 
 FramebufferD3D::~FramebufferD3D()
-{
-}
-
-void FramebufferD3D::onUpdateColorAttachment(size_t /*index*/)
-{
-    mInvalidateColorAttachmentCache = true;
-}
-
-void FramebufferD3D::onUpdateDepthAttachment()
-{
-}
-
-void FramebufferD3D::onUpdateStencilAttachment()
-{
-}
-
-void FramebufferD3D::onUpdateDepthStencilAttachment()
-{
-}
-
-void FramebufferD3D::setDrawBuffers(size_t, const GLenum *)
-{
-    mInvalidateColorAttachmentCache = true;
-}
-
-void FramebufferD3D::setReadBuffer(GLenum)
 {
 }
 
@@ -354,12 +330,21 @@ bool FramebufferD3D::checkStatus() const
     return true;
 }
 
-const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(
-    const WorkaroundsD3D &workarounds) const
+void FramebufferD3D::syncState(const gl::Framebuffer::DirtyBits &dirtyBits)
 {
+    for (auto dirtyBit : angle::IterateBitSet(dirtyBits))
+    {
+        if ((dirtyBit >= gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0 &&
+             dirtyBit < gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX) ||
+            dirtyBit == gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS)
+        {
+            mInvalidateColorAttachmentCache = true;
+        }
+    }
+
     if (!mInvalidateColorAttachmentCache)
     {
-        return mColorAttachmentsForRender;
+        return;
     }
 
     // Does not actually free memory
@@ -367,6 +352,7 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(
 
     const auto &colorAttachments = mData.getColorAttachments();
     const auto &drawBufferStates = mData.getDrawBufferStates();
+    const auto &workarounds      = mRenderer->getWorkarounds();
 
     for (size_t attachmentIndex = 0; attachmentIndex < colorAttachments.size(); ++attachmentIndex)
     {
@@ -385,6 +371,10 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(
     }
 
     mInvalidateColorAttachmentCache = false;
+}
+
+const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender() const
+{
     return mColorAttachmentsForRender;
 }
 
