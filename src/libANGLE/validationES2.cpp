@@ -960,7 +960,7 @@ bool ValidateDiscardFramebufferEXT(Context *context, GLenum target, GLsizei numA
     if (!context->getExtensions().discardFramebuffer)
     {
         context->recordError(Error(GL_INVALID_OPERATION, "Extension not enabled"));
-        return;
+        return false;
     }
 
     bool defaultFramebuffer = false;

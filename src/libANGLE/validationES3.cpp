@@ -1552,11 +1552,11 @@ bool ValidateCopyTexSubImage3D(Context *context,
     if (context->getClientVersion() < 3)
     {
         context->recordError(Error(GL_INVALID_OPERATION));
-        return;
+        return false;
     }
 
-    return ValidateES3CopyTexImageParameters(context, target, level, GL_NONE, true, xoffset, yoffset, zoffset,
-                                             x, y, width, height, 0));
+    return ValidateES3CopyTexImageParameters(context, target, level, GL_NONE, true, xoffset,
+                                             yoffset, zoffset, x, y, width, height, 0);
 }
 
 }  // namespace gl
