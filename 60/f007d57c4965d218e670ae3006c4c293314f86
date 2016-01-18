@@ -1,0 +1,8 @@
+Code-Review+2: Geoff Lang <geofflang@chromium.org>
+Tryjob-Request+1: Andrii Shyshkalov <tandrii@chromium.org>
+Verified+1: Andrii Shyshkalov <tandrii@chromium.org>
+Submitted-by: Andrii Shyshkalov <tandrii@chromium.org>
+Submitted-at: Mon, 18 Jan 2016 19:52:02 +0000
+Reviewed-on: https://chromium-review.googlesource.com/322133
+Project: angle/angle
+Branch: refs/heads/master
