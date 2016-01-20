@@ -140,6 +140,19 @@ bool ValidTextureTarget(const Context *context, GLenum target)
     }
 }
 
+bool ValidTexture3DTarget(const Context *context, GLenum target)
+{
+    switch (target)
+    {
+        case GL_TEXTURE_3D:
+        case GL_TEXTURE_2D_ARRAY:
+            return (context->getClientVersion() >= 3);
+
+        default:
+            return false;
+    }
+}
+
 // This function differs from ValidTextureTarget in that the target must be
 // usable as the destination of a 2D operation-- so a cube face is valid, but
 // GL_TEXTURE_CUBE_MAP is not.
@@ -156,9 +169,18 @@ bool ValidTexture2DDestinationTarget(const Context *context, GLenum target)
       case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
       case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
         return true;
-      case GL_TEXTURE_2D_ARRAY:
+      default:
+          return false;
+    }
+}
+
+bool ValidTexture3DDestinationTarget(const Context *context, GLenum target)
+{
+    switch (target)
+    {
       case GL_TEXTURE_3D:
-        return (context->getClientVersion() >= 3);
+      case GL_TEXTURE_2D_ARRAY:
+          return true;
       default:
         return false;
     }
@@ -1363,13 +1385,6 @@ bool ValidateCopyTexImageParametersBase(gl::Context *context, GLenum target, GLi
                                         GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height,
                                         GLint border, GLenum *textureFormatOut)
 {
-
-    if (!ValidTexture2DDestinationTarget(context, target))
-    {
-        context->recordError(Error(GL_INVALID_ENUM));
-        return false;
-    }
-
     if (level < 0 || xoffset < 0 || yoffset < 0 || zoffset < 0 || width < 0 || height < 0)
     {
         context->recordError(Error(GL_INVALID_VALUE));
