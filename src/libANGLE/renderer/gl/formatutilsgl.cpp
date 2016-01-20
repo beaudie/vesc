@@ -333,10 +333,6 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
             }
         }
     }
-    else if (functions->isAtLeastGLES(gl::Version(3, 0)))
-    {
-        result = sizedInternalFormat;
-    }
 
     return result;
 }
