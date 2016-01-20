@@ -697,8 +697,9 @@ void GL_APIENTRY CompressedTexImage2D(GLenum target, GLint level, GLenum interna
         }
 
         if (context->getClientVersion() >= 3 &&
-            !ValidateES3TexImageParameters(context, target, level, internalformat, true, false,
-                                           0, 0, 0, width, height, 1, border, GL_NONE, GL_NONE, data))
+            !ValidateES3TexImage2DParameters(context, target, level, internalformat, true, false, 0,
+                                             0, 0, width, height, 1, border, GL_NONE, GL_NONE,
+                                             data))
         {
             return;
         }
@@ -742,8 +743,9 @@ void GL_APIENTRY CompressedTexSubImage2D(GLenum target, GLint level, GLint xoffs
         }
 
         if (context->getClientVersion() >= 3 &&
-            !ValidateES3TexImageParameters(context, target, level, GL_NONE, true, true,
-                                           xoffset, yoffset, 0, width, height, 1, 0, GL_NONE, GL_NONE, data))
+            !ValidateES3TexImage2DParameters(context, target, level, GL_NONE, true, true, xoffset,
+                                             yoffset, 0, width, height, 1, 0, GL_NONE, GL_NONE,
+                                             data))
         {
             return;
         }
@@ -785,8 +787,8 @@ void GL_APIENTRY CopyTexImage2D(GLenum target, GLint level, GLenum internalforma
         }
 
         if (context->getClientVersion() >= 3 &&
-            !ValidateES3CopyTexImageParameters(context, target, level, internalformat, false,
-                                               0, 0, 0, x, y, width, height, border))
+            !ValidateES3CopyTexImage2DParameters(context, target, level, internalformat, false, 0,
+                                                 0, 0, x, y, width, height, border))
         {
             return;
         }
@@ -821,8 +823,8 @@ void GL_APIENTRY CopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GL
         }
 
         if (context->getClientVersion() >= 3 &&
-            !ValidateES3CopyTexImageParameters(context, target, level, GL_NONE, true,
-                                               xoffset, yoffset, 0, x, y, width, height, 0))
+            !ValidateES3CopyTexImage2DParameters(context, target, level, GL_NONE, true, xoffset,
+                                                 yoffset, 0, x, y, width, height, 0))
         {
             return;
         }
@@ -3548,8 +3550,9 @@ void GL_APIENTRY TexImage2D(GLenum target, GLint level, GLint internalformat, GL
         }
 
         if (context->getClientVersion() >= 3 &&
-            !ValidateES3TexImageParameters(context, target, level, internalformat, false, false,
-                                           0, 0, 0, width, height, 1, border, format, type, pixels))
+            !ValidateES3TexImage2DParameters(context, target, level, internalformat, false, false,
+                                             0, 0, 0, width, height, 1, border, format, type,
+                                             pixels))
         {
             return;
         }
@@ -3699,8 +3702,8 @@ void GL_APIENTRY TexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint 
         }
 
         if (context->getClientVersion() >= 3 &&
-            !ValidateES3TexImageParameters(context, target, level, GL_NONE, false, true,
-                                           xoffset, yoffset, 0, width, height, 1, 0, format, type, pixels))
+            !ValidateES3TexImage2DParameters(context, target, level, GL_NONE, false, true, xoffset,
+                                             yoffset, 0, width, height, 1, 0, format, type, pixels))
         {
             return;
         }

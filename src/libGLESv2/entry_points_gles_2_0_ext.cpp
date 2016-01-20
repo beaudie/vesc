@@ -615,7 +615,8 @@ void GL_APIENTRY TexStorage2DEXT(GLenum target, GLsizei levels, GLenum internalf
         }
 
         if (context->getClientVersion() >= 3 &&
-            !ValidateES3TexStorageParameters(context, target, levels, internalformat, width, height, 1))
+            !ValidateES3TexStorage2DParameters(context, target, levels, internalformat, width,
+                                               height, 1))
         {
             return;
         }

@@ -102,8 +102,9 @@ void GL_APIENTRY TexImage3D(GLenum target, GLint level, GLint internalformat, GL
         }
 
         // validateES3TexImageFormat sets the error code if there is an error
-        if (!ValidateES3TexImageParameters(context, target, level, internalformat, false, false,
-                                           0, 0, 0, width, height, depth, border, format, type, pixels))
+        if (!ValidateES3TexImage3DParameters(context, target, level, internalformat, false, false,
+                                             0, 0, 0, width, height, depth, border, format, type,
+                                             pixels))
         {
             return;
         }
@@ -137,9 +138,9 @@ void GL_APIENTRY TexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint 
         }
 
         // validateES3TexImageFormat sets the error code if there is an error
-        if (!ValidateES3TexImageParameters(context, target, level, GL_NONE, false, true,
-                                           xoffset, yoffset, zoffset, width, height, depth, 0,
-                                           format, type, pixels))
+        if (!ValidateES3TexImage3DParameters(context, target, level, GL_NONE, false, true, xoffset,
+                                             yoffset, zoffset, width, height, depth, 0, format,
+                                             type, pixels))
         {
             return;
         }
@@ -177,8 +178,8 @@ void GL_APIENTRY CopyTexSubImage3D(GLenum target, GLint level, GLint xoffset, GL
             return;
         }
 
-        if (!ValidateES3CopyTexImageParameters(context, target, level, GL_NONE, true, xoffset, yoffset, zoffset,
-                                               x, y, width, height, 0))
+        if (!ValidateES3CopyTexImage3DParameters(context, target, level, GL_NONE, true, xoffset,
+                                                 yoffset, zoffset, x, y, width, height, 0))
         {
             return;
         }
@@ -256,8 +257,8 @@ void GL_APIENTRY CompressedTexSubImage3D(GLenum target, GLint level, GLint xoffs
         }
 
         // validateES3TexImageFormat sets the error code if there is an error
-        if (!ValidateES3TexImageParameters(context, target, level, GL_NONE, true, true,
-                                           0, 0, 0, width, height, depth, 0, GL_NONE, GL_NONE, data))
+        if (!ValidateES3TexImage3DParameters(context, target, level, GL_NONE, true, true, 0, 0, 0,
+                                             width, height, depth, 0, GL_NONE, GL_NONE, data))
         {
             return;
         }
@@ -3214,7 +3215,8 @@ void GL_APIENTRY TexStorage2D(GLenum target, GLsizei levels, GLenum internalform
             return;
         }
 
-        if (!ValidateES3TexStorageParameters(context, target, levels, internalformat, width, height, 1))
+        if (!ValidateES3TexStorage2DParameters(context, target, levels, internalformat, width,
+                                               height, 1))
         {
             return;
         }
@@ -3245,7 +3247,8 @@ void GL_APIENTRY TexStorage3D(GLenum target, GLsizei levels, GLenum internalform
             return;
         }
 
-        if (!ValidateES3TexStorageParameters(context, target, levels, internalformat, width, height, depth))
+        if (!ValidateES3TexStorage3DParameters(context, target, levels, internalformat, width,
+                                               height, depth))
         {
             return;
         }

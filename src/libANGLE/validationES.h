@@ -31,6 +31,7 @@ class ValidationContext;
 bool ValidCap(const Context *context, GLenum cap);
 bool ValidTextureTarget(const Context *context, GLenum target);
 bool ValidTexture2DDestinationTarget(const Context *context, GLenum target);
+bool ValidTexture3DDestinationTarget(const Context *context, GLenum target);
 bool ValidFramebufferTarget(GLenum target);
 bool ValidBufferTarget(const Context *context, GLenum target);
 bool ValidBufferParameter(const Context *context, GLenum pname);

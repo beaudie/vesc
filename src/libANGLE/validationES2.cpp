@@ -415,6 +415,12 @@ bool ValidateES2CopyTexImageParameters(Context* context, GLenum target, GLint le
 {
     GLenum textureInternalFormat = GL_NONE;
 
+    if (!ValidTexture2DDestinationTarget(context, target))
+    {
+        context->recordError(Error(GL_INVALID_ENUM));
+        return false;
+    }
+
     if (!ValidateCopyTexImageParametersBase(context, target, level, internalformat, isSubImage,
                                             xoffset, yoffset, 0, x, y, width, height, border, &textureInternalFormat))
     {
