@@ -836,21 +836,39 @@ void State::detachRenderbuffer(GLuint renderbuffer)
 void State::setReadFramebufferBinding(Framebuffer *framebuffer)
 {
     mReadFramebuffer = framebuffer;
+    mDirtyBits.set(DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
+
+    // TODO(jmadill): Determine if this is safe
+    if (mReadFramebuffer && mReadFramebuffer->hasAnyDirtyBit())
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
+    }
 }
 
 void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
 {
     mDrawFramebuffer = framebuffer;
+    mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
+
+    // TODO(jmadill): Determine if this is safe
+    if (mDrawFramebuffer && mDrawFramebuffer->hasAnyDirtyBit())
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+    }
 }
 
 Framebuffer *State::getTargetFramebuffer(GLenum target) const
 {
     switch (target)
     {
-    case GL_READ_FRAMEBUFFER_ANGLE:  return mReadFramebuffer;
-    case GL_DRAW_FRAMEBUFFER_ANGLE:
-    case GL_FRAMEBUFFER:             return mDrawFramebuffer;
-    default:                         UNREACHABLE(); return NULL;
+        case GL_READ_FRAMEBUFFER_ANGLE:
+            return mReadFramebuffer;
+        case GL_DRAW_FRAMEBUFFER_ANGLE:
+        case GL_FRAMEBUFFER:
+            return mDrawFramebuffer;
+        default:
+            UNREACHABLE();
+            return NULL;
     }
 }
 
@@ -880,6 +898,7 @@ bool State::removeReadFramebufferBinding(GLuint framebuffer)
         mReadFramebuffer->id() == framebuffer)
     {
         mReadFramebuffer = NULL;
+        mDirtyBits.set(DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
         return true;
     }
 
@@ -892,6 +911,7 @@ bool State::removeDrawFramebufferBinding(GLuint framebuffer)
         mDrawFramebuffer->id() == framebuffer)
     {
         mDrawFramebuffer = NULL;
+        mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
         return true;
     }
 
@@ -1720,15 +1740,20 @@ void State::syncDirtyObjects()
     if (!mDirtyObjects.any())
         return;
 
-    for (auto dirtyObject : angle::IterateBitSet(mDirtyObjects))
+    syncDirtyObjects(mDirtyObjects);
+}
+
+void State::syncDirtyObjects(const DirtyObjects &bitset)
+{
+    for (auto dirtyObject : angle::IterateBitSet(bitset))
     {
         switch (dirtyObject)
         {
             case DIRTY_OBJECT_READ_FRAMEBUFFER:
-                // TODO(jmadill): implement this
+                mReadFramebuffer->syncState();
                 break;
             case DIRTY_OBJECT_DRAW_FRAMEBUFFER:
-                // TODO(jmadill): implement this
+                mDrawFramebuffer->syncState();
                 break;
             case DIRTY_OBJECT_VERTEX_ARRAY:
                 mVertexArray->syncImplState();
@@ -1742,7 +1767,57 @@ void State::syncDirtyObjects()
         }
     }
 
-    mDirtyObjects.reset();
+    mDirtyObjects &= ~bitset;
+}
+
+void State::syncDirtyObject(GLenum target)
+{
+    DirtyObjects localSet;
+
+    switch (target)
+    {
+        case GL_READ_FRAMEBUFFER:
+            localSet.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
+            break;
+        case GL_DRAW_FRAMEBUFFER:
+            localSet.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            break;
+        case GL_FRAMEBUFFER:
+            localSet.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
+            localSet.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            break;
+        case GL_VERTEX_ARRAY:
+            localSet.set(DIRTY_OBJECT_VERTEX_ARRAY);
+            break;
+        case GL_PROGRAM:
+            localSet.set(DIRTY_OBJECT_PROGRAM);
+            break;
+    }
+
+    syncDirtyObjects(localSet);
+}
+
+void State::setObjectDirty(GLenum target)
+{
+    switch (target)
+    {
+        case GL_READ_FRAMEBUFFER:
+            mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
+            break;
+        case GL_DRAW_FRAMEBUFFER:
+            mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            break;
+        case GL_FRAMEBUFFER:
+            mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
+            mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            break;
+        case GL_VERTEX_ARRAY:
+            mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+            break;
+        case GL_PROGRAM:
+            mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
+            break;
+    }
 }
 
 }  // namespace gl
