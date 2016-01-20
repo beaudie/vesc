@@ -97,6 +97,29 @@ enum D3D11InitError
     NUM_D3D11_INIT_ERRORS
 };
 
+// A helper class which wraps a 2D or 3D texture.
+class TextureHelper11
+{
+  public:
+    explicit TextureHelper11(ID3D11Resource *resource);
+    ~TextureHelper11();
+
+    GLenum getTextureType() const { return mTextureType; }
+    gl::Extents getExtents() const { return mExtents; }
+    DXGI_FORMAT getFormat() const { return mFormat; }
+    int getSampleCount() const { return mSampleCount; }
+    ID3D11Texture2D *getTexture2D() const { return mTexture2D; }
+    ID3D11Texture3D *getTexture3D() const { return mTexture3D; }
+
+  private:
+    GLenum mTextureType;
+    gl::Extents mExtents;
+    DXGI_FORMAT mFormat;
+    int mSampleCount;
+    ID3D11Texture2D *mTexture2D;
+    ID3D11Texture3D *mTexture3D;
+};
+
 class Renderer11 : public RendererD3D
 {
   public:
@@ -254,14 +277,22 @@ class Renderer11 : public RendererD3D
 
     void unapplyRenderTargets();
     void setOneTimeRenderTarget(ID3D11RenderTargetView *renderTargetView);
-    gl::Error packPixels(ID3D11Texture2D *readTexture, const PackPixelsParams &params, uint8_t *pixelsOut);
+    gl::Error packPixels(const TextureHelper11 &textureHelper,
+                         const PackPixelsParams &params,
+                         uint8_t *pixelsOut);
 
     bool getLUID(LUID *adapterLuid) const override;
     VertexConversionType getVertexConversionType(gl::VertexFormatType vertexFormatType) const override;
     GLenum getVertexComponentType(gl::VertexFormatType vertexFormatType) const override;
 
-    gl::Error readTextureData(ID3D11Texture2D *texture, unsigned int subResource, const gl::Rectangle &area, GLenum format,
-                              GLenum type, GLuint outputPitch, const gl::PixelPackState &pack, uint8_t *pixels);
+    gl::Error readTextureData(const TextureHelper11 &textureHelper,
+                              unsigned int subResource,
+                              const gl::Rectangle &area,
+                              GLenum format,
+                              GLenum type,
+                              GLuint outputPitch,
+                              const gl::PixelPackState &pack,
+                              uint8_t *pixels);
 
     void setShaderResource(gl::SamplerType shaderType, UINT resourceSlot, ID3D11ShaderResourceView *srv);
 
