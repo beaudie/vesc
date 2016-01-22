@@ -3,15 +3,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
+// ReadPixelsTest:
+//   Tests calls related to glReadPixels.
+//
 
 #include "test_utils/ANGLETest.h"
 
+#include <array>
+
+#include "random_utils.h"
+
 using namespace angle;
+
+// TODO(jmadill): Filter test cases into ES2+ext/ES3
+
+namespace
+{
 
 class ReadPixelsTest : public ANGLETest
 {
   protected:
-    ReadPixelsTest()
+    ReadPixelsTest() : mPBO(0), mProgram(0), mTexture(0), mFBO(0), mPositionVBO(0)
     {
         setWindowWidth(32);
         setWindowHeight(32);
@@ -21,7 +33,7 @@ class ReadPixelsTest : public ANGLETest
         setConfigAlphaBits(8);
     }
 
-    virtual void SetUp()
+    void SetUp() override
     {
         ANGLETest::SetUp();
 
@@ -56,15 +68,7 @@ class ReadPixelsTest : public ANGLETest
         );
 
         mProgram = CompileProgram(vertexShaderSrc, fragmentShaderSrc);
-
-        glGenTextures(1, &mTexture);
-        glBindTexture(GL_TEXTURE_2D, mTexture);
-        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 4, 1);
-
-        glGenFramebuffers(1, &mFBO);
-        glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture, 0);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        ASSERT_NE(0u, mProgram);
 
         glGenBuffers(1, &mPositionVBO);
         glBindBuffer(GL_ARRAY_BUFFER, mPositionVBO);
@@ -74,7 +78,7 @@ class ReadPixelsTest : public ANGLETest
         ASSERT_GL_NO_ERROR();
     }
 
-    virtual void TearDown()
+    void TearDown() override
     {
         ANGLETest::TearDown();
 
@@ -82,6 +86,21 @@ class ReadPixelsTest : public ANGLETest
         glDeleteProgram(mProgram);
         glDeleteTextures(1, &mTexture);
         glDeleteFramebuffers(1, &mFBO);
+        glDeleteBuffers(1, &mPositionVBO);
+    }
+
+    void initBasicFBO()
+    {
+        glGenTextures(1, &mTexture);
+        glBindTexture(GL_TEXTURE_2D, mTexture);
+        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 4, 1);
+
+        glGenFramebuffers(1, &mFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        ASSERT_GL_NO_ERROR();
     }
 
     GLuint mPBO;
@@ -91,8 +110,100 @@ class ReadPixelsTest : public ANGLETest
     GLuint mPositionVBO;
 };
 
+class ReadPixelsTestES3 : public ANGLETest
+{
+  public:
+    ReadPixelsTestES3() : mFBO(0), mTexture(0)
+    {
+        setWindowWidth(32);
+        setWindowHeight(32);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
+
+    void SetUp() override
+    {
+        ANGLETest::SetUp();
+
+        glGenTextures(1, &mTexture);
+        glGenFramebuffers(1, &mFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+    }
+
+    void TearDown() override
+    {
+        glDeleteFramebuffers(1, &mFBO);
+        glDeleteTextures(1, &mTexture);
+
+        ANGLETest::TearDown();
+    }
+
+    void testRead(GLenum textureTarget, GLint levels, GLint attachmentLevel, GLint attachmentLayer)
+    {
+        glBindTexture(textureTarget, mTexture);
+        glTexStorage3D(textureTarget, levels, GL_RGBA8, 4, 4, 4);
+        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTexture, attachmentLevel,
+                                  attachmentLayer);
+
+        initializeTextureData(textureTarget, levels);
+        verifyColor(attachmentLevel, attachmentLayer);
+    }
+
+    // Give each {level,layer} pair a (probably) unique color via random.
+    GLuint getColorValue(GLint level, GLint layer)
+    {
+        mRNG.reseed(level + layer * 32);
+        return mRNG.randomUInt();
+    }
+
+    void verifyColor(GLint level, GLint layer)
+    {
+        GLuint colorValue = getColorValue(level, layer);
+
+        struct RGBA8
+        {
+            GLubyte R, G, B, A;
+        } byteValue;
+        memcpy(&byteValue, &colorValue, sizeof(RGBA8));
+
+        EXPECT_PIXEL_EQ(0, 0, byteValue.R, byteValue.G, byteValue.B, byteValue.A);
+    }
+
+    void initializeTextureData(GLenum textureTarget, GLint levels)
+    {
+        for (GLint level = 0; level < levels; ++level)
+        {
+            GLint mipSize = 4 >> level;
+            GLint layers  = (textureTarget == GL_TEXTURE_3D ? mipSize : 4);
+
+            size_t layerSize = mipSize * mipSize * 4;
+            std::vector<GLuint> textureData(layers * layerSize);
+
+            for (GLint layer = 0; layer < layers; ++layer)
+            {
+                GLuint colorValue = getColorValue(level, layer);
+                std::vector<GLuint> layerData(mipSize * mipSize * 4, colorValue);
+                size_t offset = (layer * layerSize);
+                std::fill(textureData.begin() + offset, textureData.begin() + offset + layerSize,
+                          colorValue);
+            }
+
+            glTexSubImage3D(textureTarget, level, 0, 0, 0, mipSize, mipSize, layers, GL_RGBA,
+                            GL_UNSIGNED_BYTE, textureData.data());
+        }
+    }
+
+    angle::RNG mRNG;
+    GLuint mFBO;
+    GLuint mTexture;
+};
+
 TEST_P(ReadPixelsTest, OutOfBounds)
 {
+    initBasicFBO();
+
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_GL_NO_ERROR();
@@ -126,6 +237,8 @@ TEST_P(ReadPixelsTest, OutOfBounds)
 
 TEST_P(ReadPixelsTest, PBOWithOtherTarget)
 {
+    initBasicFBO();
+
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_GL_NO_ERROR();
@@ -151,6 +264,8 @@ TEST_P(ReadPixelsTest, PBOWithOtherTarget)
 
 TEST_P(ReadPixelsTest, PBOWithExistingData)
 {
+    initBasicFBO();
+
     // Clear backbuffer to red
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -189,6 +304,8 @@ TEST_P(ReadPixelsTest, PBOWithExistingData)
 
 TEST_P(ReadPixelsTest, PBOAndSubData)
 {
+    initBasicFBO();
+
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_GL_NO_ERROR();
@@ -217,6 +334,8 @@ TEST_P(ReadPixelsTest, PBOAndSubData)
 
 TEST_P(ReadPixelsTest, PBOAndSubDataOffset)
 {
+    initBasicFBO();
+
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_GL_NO_ERROR();
@@ -250,6 +369,8 @@ TEST_P(ReadPixelsTest, PBOAndSubDataOffset)
 
 TEST_P(ReadPixelsTest, DrawWithPBO)
 {
+    initBasicFBO();
+
     unsigned char data[4] = { 1, 2, 3, 4 };
 
     glBindTexture(GL_TEXTURE_2D, mTexture);
@@ -308,9 +429,8 @@ TEST_P(ReadPixelsTest, MultisampledPBO)
         return;
     }
 
-    GLuint fbo;
-    glGenFramebuffers(1, &fbo);
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glGenFramebuffers(1, &mFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
 
     GLuint rbo;
     glGenRenderbuffers(1, &rbo);
@@ -341,8 +461,58 @@ TEST_P(ReadPixelsTest, MultisampledPBO)
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 
     glDeleteRenderbuffers(1, &rbo);
-    glDeleteFramebuffers(1, &fbo);
 }
+
+// Test 3D attachment readback.
+TEST_P(ReadPixelsTestES3, BasicAttachment3D)
+{
+    testRead(GL_TEXTURE_3D, 1, 0, 0);
+}
+
+// Test 3D attachment readback, non-zero mip.
+TEST_P(ReadPixelsTestES3, MipAttachment3D)
+{
+    testRead(GL_TEXTURE_3D, 2, 1, 0);
+}
+
+// Test 3D attachment readback, non-zero layer.
+TEST_P(ReadPixelsTestES3, LayerAttachment3D)
+{
+    testRead(GL_TEXTURE_3D, 1, 0, 1);
+}
+
+// Test 3D attachment readback, non-zero mip and layer.
+TEST_P(ReadPixelsTestES3, MipLayerAttachment3D)
+{
+    testRead(GL_TEXTURE_3D, 2, 1, 1);
+}
+
+// Test 2D array attachment readback.
+TEST_P(ReadPixelsTestES3, BasicAttachment2DArray)
+{
+    testRead(GL_TEXTURE_2D_ARRAY, 1, 0, 0);
+}
+
+// Test 3D attachment readback, non-zero mip.
+TEST_P(ReadPixelsTestES3, MipAttachment2DArray)
+{
+    testRead(GL_TEXTURE_2D_ARRAY, 2, 1, 0);
+}
+
+// Test 3D attachment readback, non-zero layer.
+TEST_P(ReadPixelsTestES3, LayerAttachment2DArray)
+{
+    testRead(GL_TEXTURE_2D_ARRAY, 1, 0, 1);
+}
+
+// Test 3D attachment readback, non-zero mip and layer.
+TEST_P(ReadPixelsTestES3, MipLayerAttachment2DArray)
+{
+    testRead(GL_TEXTURE_2D_ARRAY, 2, 1, 1);
+}
+
+}  // anonymous namespace
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(ReadPixelsTest, ES3_D3D11());
+ANGLE_INSTANTIATE_TEST(ReadPixelsTestES3, ES3_D3D11());
