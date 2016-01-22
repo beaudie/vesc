@@ -179,8 +179,6 @@ GLint FramebufferAttachment::mipLevel() const
 
 GLint FramebufferAttachment::layer() const
 {
-    ASSERT(mType == GL_TEXTURE);
-
     const auto &index = mTarget.textureIndex();
 
     if (index.type == GL_TEXTURE_2D_ARRAY || index.type == GL_TEXTURE_3D)

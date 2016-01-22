@@ -470,26 +470,12 @@ TEST_P(ReadPixelsTestES3, MipAttachment3D)
 // Test 3D attachment readback, non-zero layer.
 TEST_P(ReadPixelsTestES3, LayerAttachment3D)
 {
-    if (isD3D11())
-    {
-        // TODO(jmadill): Fix ReadPixels from non-zero layer attachments.
-        std::cout << "Test disabled on D3D11." << std::endl;
-        return;
-    }
-
     testRead(GL_TEXTURE_3D, 1, 0, 1);
 }
 
 // Test 3D attachment readback, non-zero mip and layer.
 TEST_P(ReadPixelsTestES3, MipLayerAttachment3D)
 {
-    if (isD3D11())
-    {
-        // TODO(jmadill): Fix ReadPixels from non-zero layer attachments.
-        std::cout << "Test disabled on D3D11." << std::endl;
-        return;
-    }
-
     testRead(GL_TEXTURE_3D, 2, 1, 1);
 }
 
