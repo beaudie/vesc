@@ -324,6 +324,30 @@ TString OutputHLSL::structInitializerString(int indent, const TStructure &struct
     return init;
 }
 
+void OutputHLSL::outputIntTexCoordWrap(TInfoSinkBase &out,
+                                       const char *wrapMode,
+                                       const char *size,
+                                       const TString &texCoord,
+                                       const char *texCoordOutName)
+{
+    out << "int " << texCoordOutName << ";\n";
+    out << "if (" << wrapMode << " == " << GL_CLAMP_TO_EDGE << ")\n";
+    out << "{\n";
+    out << "    " << texCoordOutName << " = clamp(int(floor(" << size << " * " << texCoord
+        << ")), 0, " << size << " - 1);\n";
+    out << "}\n";
+    out << "else if (" << wrapMode << " == " << GL_MIRRORED_REPEAT << ")\n";
+    out << "{\n";
+    out << "    float coordWrapped = 1.0 - abs(frac(abs(" << texCoord << ") * 0.5) * 2.0 - 1.0);\n";
+    out << "    " << texCoordOutName << " = int(floor(" << size << " * coordWrapped));\n";
+    out << "}\n";
+    out << "else\n";
+    out << "{\n";
+    out << "    " << texCoordOutName << " = int(floor(" << size << " * frac(" << texCoord
+        << ")));\n";
+    out << "}\n";
+}
+
 void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *builtInFunctionEmulator)
 {
     TString varyings;
@@ -1098,8 +1122,12 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                 else UNREACHABLE();
 
                 // Convert from normalized floating-point to integer
-                texCoordX = "int(floor(width * frac(" + texCoordX + ")))";
-                texCoordY = "int(floor(height * frac(" + texCoordY + ")))";
+                out << "int wrapS = samplerMetadata[samplerIndex][1];\n";
+                outputIntTexCoordWrap(out, "wrapS", "width", texCoordX, "tix");
+                texCoordX = "tix";
+                out << "int wrapT = samplerMetadata[samplerIndex][2];\n";
+                outputIntTexCoordWrap(out, "wrapT", "height", texCoordY, "tiy");
+                texCoordY = "tiy";
 
                 if (IsSamplerArray(textureFunction->sampler))
                 {
@@ -1108,7 +1136,9 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                 else if (!IsSamplerCube(textureFunction->sampler) &&
                          !IsSampler2D(textureFunction->sampler))
                 {
-                    texCoordZ = "int(floor(depth * frac(" + texCoordZ + ")))";
+                    out << "int wrapR = samplerMetadata[samplerIndex][3];\n";
+                    outputIntTexCoordWrap(out, "wrapR", "depth", texCoordZ, "tiz");
+                    texCoordZ = "tiz";
                 }
             }
 

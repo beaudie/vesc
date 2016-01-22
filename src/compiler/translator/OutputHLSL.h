@@ -109,6 +109,12 @@ class OutputHLSL : public TIntermTraverser
     TString addArrayAssignmentFunction(const TType &type);
     TString addArrayConstructIntoFunction(const TType &type);
 
+    void outputIntTexCoordWrap(TInfoSinkBase &out,
+                               const char *wrapMode,
+                               const char *size,
+                               const TString &texCoord,
+                               const char *texCoordOutName);
+
     // Ensures if the type is a struct, the struct is defined
     void ensureStructDefined(const TType &type);
 
