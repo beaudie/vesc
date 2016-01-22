@@ -383,6 +383,8 @@ bool ValidQueryType(const Context *context, GLenum queryType)
         return true;
       case GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN:
         return (context->getClientVersion() >= 3);
+      case GL_TIME_ELAPSED_EXT:
+          return (context->getExtensions().disjointTimerQuery);
       default:
         return false;
     }

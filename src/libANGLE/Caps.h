@@ -191,6 +191,9 @@ struct Extensions
     // GL_ANGLE_timer_query
     bool timerQuery;
 
+    // GL_EXT_DISJOINT_TIMER_QUERY
+    bool disjointTimerQuery;
+
     // GL_EXT_robustness
     bool robustness;
 

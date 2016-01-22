@@ -25,6 +25,8 @@ GLuint MergeQueryResults(GLenum type, GLuint currentResult, GLuint newResult)
 
         case GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN:
             return currentResult + newResult;
+        case GL_TIME_ELAPSED:
+            return currentResult + newResult;
 
         default:
             UNREACHABLE();
