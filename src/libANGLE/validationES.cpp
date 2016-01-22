@@ -383,6 +383,8 @@ bool ValidQueryType(const Context *context, GLenum queryType)
         return true;
       case GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN:
         return (context->getClientVersion() >= 3);
+      case GL_TIME_ELAPSED_EXT:
+          return context->getExtensions().disjointTimerQuery;
       default:
         return false;
     }
@@ -1092,7 +1094,29 @@ bool ValidateReadnPixelsEXT(Context *context,
     return ValidateReadPixels(context, x, y, width, height, format, type, pixels);
 }
 
-bool ValidateBeginQuery(gl::Context *context, GLenum target, GLuint id)
+bool ValidateGenQueriesEXT(gl::Context *context, GLsizei n, const GLuint *ids)
+{
+    if (n < 0)
+    {
+        context->recordError(Error(GL_INVALID_VALUE));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateDeleteQueriesEXT(gl::Context *context, GLsizei n, const GLuint *ids)
+{
+    if (n < 0)
+    {
+        context->recordError(Error(GL_INVALID_VALUE));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateBeginQueryEXT(gl::Context *context, GLenum target, GLuint id)
 {
     if (!ValidQueryType(context, target))
     {
@@ -1146,7 +1170,7 @@ bool ValidateBeginQuery(gl::Context *context, GLenum target, GLuint id)
     return true;
 }
 
-bool ValidateEndQuery(gl::Context *context, GLenum target)
+bool ValidateEndQueryEXT(gl::Context *context, GLenum target)
 {
     if (!ValidQueryType(context, target))
     {
@@ -1163,6 +1187,114 @@ bool ValidateEndQuery(gl::Context *context, GLenum target)
     }
 
     return true;
+}
+
+bool ValidateQueryCounterEXT(Context *context, GLuint id, GLenum target)
+{
+    if (!context->getExtensions().disjointTimerQuery)
+    {
+        context->recordError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    if (target != GL_TIMESTAMP_EXT)
+    {
+        context->recordError(Error(GL_INVALID_ENUM));
+        return false;
+    }
+
+    Query *queryObject = context->getQuery(id, true, target);
+    if (queryObject == NULL)
+    {
+        context->recordError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    const Query *activeQueryObject = context->getState().getActiveQuery(queryObject->getType());
+    if (activeQueryObject != NULL)
+    {
+        context->recordError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateGetQueryivEXT(Context *context, GLenum target, GLenum pname, GLint *params)
+{
+    if (!context->getExtensions().occlusionQueryBoolean ||
+        !context->getExtensions().disjointTimerQuery || context->getClientVersion() < 3)
+    {
+        context->recordError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    if (!ValidQueryType(context, target))
+    {
+        context->recordError(Error(GL_INVALID_ENUM));
+        return false;
+    }
+
+    switch (pname)
+    {
+        case GL_CURRENT_QUERY_EXT:
+            break;
+        default:
+            context->recordError(Error(GL_INVALID_ENUM));
+            return false;
+    }
+
+    return true;
+}
+
+bool ValidateGetQueryObjectBase(Context *context, GLuint id, GLenum pname)
+{
+    Query *queryObject = context->getQuery(id, false, GL_NONE);
+
+    if (!queryObject)
+    {
+        context->recordError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    if (context->getState().getActiveQueryId(queryObject->getType()) == id)
+    {
+        context->recordError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    switch (pname)
+    {
+        case GL_QUERY_RESULT_EXT:
+        case GL_QUERY_RESULT_AVAILABLE_EXT:
+            break;
+
+        default:
+            context->recordError(Error(GL_INVALID_ENUM));
+            return false;
+    }
+
+    return true;
+}
+
+bool ValidateGetQueryObjectivEXT(Context *context, GLuint id, GLenum pname, GLint *params)
+{
+    return ValidateGetQueryObjectBase(context, id, pname);
+}
+
+bool ValidateGetQueryObjectuivEXT(Context *context, GLuint id, GLenum pname, GLuint *params)
+{
+    return ValidateGetQueryObjectBase(context, id, pname);
+}
+
+bool ValidateGetQueryObjecti64vEXT(Context *context, GLuint id, GLenum pname, GLint64 *params)
+{
+    return ValidateGetQueryObjectBase(context, id, pname);
+}
+
+bool ValidateGetQueryObjectui64vEXT(Context *context, GLuint id, GLenum pname, GLuint64 *params)
+{
+    return ValidateGetQueryObjectBase(context, id, pname);
 }
 
 static bool ValidateUniformCommonBase(gl::Context *context,

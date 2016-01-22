@@ -183,6 +183,8 @@ void State::initialize(const Caps &caps,
     mActiveQueries[GL_ANY_SAMPLES_PASSED].set(NULL);
     mActiveQueries[GL_ANY_SAMPLES_PASSED_CONSERVATIVE].set(NULL);
     mActiveQueries[GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN].set(NULL);
+    mActiveQueries[GL_TIME_ELAPSED_EXT].set(NULL);
+    mActiveQueries[GL_TIMESTAMP_EXT].set(NULL);
 
     mProgram = NULL;
 

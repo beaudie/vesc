@@ -23,13 +23,19 @@ class Query9 : public QueryImpl
 
     virtual gl::Error begin();
     virtual gl::Error end();
+    virtual gl::Error timestamp();
+    virtual gl::Error getResult(GLint *params);
     virtual gl::Error getResult(GLuint *params);
-    virtual gl::Error isResultAvailable(GLuint *available);
+    virtual gl::Error getResult(GLint64 *params);
+    virtual gl::Error getResult(GLuint64 *params);
+    virtual gl::Error isResultAvailable(bool *available);
 
   private:
     gl::Error testQuery();
 
-    GLuint mResult;
+    gl::Error getResultBase();
+
+    GLuint64 mResult;
     bool mQueryFinished;
 
     Renderer9 *mRenderer;

@@ -279,9 +279,10 @@ void GL_APIENTRY GenQueries(GLsizei n, GLuint* ids)
             return;
         }
 
-        if (n < 0)
+        // TODO(ewell): These should probably have their
+        // own validator functions for ES3
+        if (!ValidateGenQueriesEXT(context, n, ids))
         {
-            context->recordError(Error(GL_INVALID_VALUE));
             return;
         }
 
@@ -305,13 +306,12 @@ void GL_APIENTRY DeleteQueries(GLsizei n, const GLuint* ids)
             return;
         }
 
-        if (n < 0)
+        if (!ValidateDeleteQueriesEXT(context, n, ids))
         {
-            context->recordError(Error(GL_INVALID_VALUE));
             return;
         }
 
-        for (GLsizei i = 0; i < n; i++)
+        for (int i = 0; i < n; i++)
         {
             context->deleteQuery(ids[i]);
         }
@@ -350,7 +350,7 @@ void GL_APIENTRY BeginQuery(GLenum target, GLuint id)
             return;
         }
 
-        if (!ValidateBeginQuery(context, target, id))
+        if (!ValidateBeginQueryEXT(context, target, id))
         {
             return;
         }
@@ -377,7 +377,7 @@ void GL_APIENTRY EndQuery(GLenum target)
             return;
         }
 
-        if (!ValidateEndQuery(context, target))
+        if (!ValidateEndQueryEXT(context, target))
         {
             return;
         }
@@ -404,9 +404,8 @@ void GL_APIENTRY GetQueryiv(GLenum target, GLenum pname, GLint* params)
             return;
         }
 
-        if (!ValidQueryType(context, target))
+        if (!ValidateGetQueryivEXT(context, target, pname, params))
         {
-            context->recordError(Error(GL_INVALID_ENUM));
             return;
         }
 
@@ -436,46 +435,15 @@ void GL_APIENTRY GetQueryObjectuiv(GLuint id, GLenum pname, GLuint* params)
             return;
         }
 
-        Query *queryObject = context->getQuery(id, false, GL_NONE);
-
-        if (!queryObject)
+        if (!ValidateGetQueryObjectuivEXT(context, id, pname, params))
         {
-            context->recordError(Error(GL_INVALID_OPERATION));
             return;
         }
 
-        if (context->getState().getActiveQueryId(queryObject->getType()) == id)
+        Error error = context->getQueryObjectuiv(id, pname, params);
+        if (error.isError())
         {
-            context->recordError(Error(GL_INVALID_OPERATION));
-            return;
-        }
-
-        switch(pname)
-        {
-          case GL_QUERY_RESULT_EXT:
-            {
-                Error error = queryObject->getResult(params);
-                if (error.isError())
-                {
-                    context->recordError(error);
-                    return;
-                }
-            }
-            break;
-
-          case GL_QUERY_RESULT_AVAILABLE_EXT:
-            {
-                Error error = queryObject->isResultAvailable(params);
-                if (error.isError())
-                {
-                    context->recordError(error);
-                    return;
-                }
-            }
-            break;
-
-          default:
-            context->recordError(Error(GL_INVALID_ENUM));
+            context->recordError(error);
             return;
         }
     }
