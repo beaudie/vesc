@@ -180,14 +180,16 @@ void State::initialize(const Caps &caps,
 
     mSamplers.resize(caps.maxCombinedTextureImageUnits);
 
-    mActiveQueries[GL_ANY_SAMPLES_PASSED].set(NULL);
-    mActiveQueries[GL_ANY_SAMPLES_PASSED_CONSERVATIVE].set(NULL);
-    mActiveQueries[GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN].set(NULL);
+    mActiveQueries[GL_ANY_SAMPLES_PASSED].set(nullptr);
+    mActiveQueries[GL_ANY_SAMPLES_PASSED_CONSERVATIVE].set(nullptr);
+    mActiveQueries[GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN].set(nullptr);
+    mActiveQueries[GL_TIME_ELAPSED_EXT].set(nullptr);
+    mActiveQueries[GL_TIMESTAMP_EXT].set(nullptr);
 
-    mProgram = NULL;
+    mProgram = nullptr;
 
-    mReadFramebuffer = NULL;
-    mDrawFramebuffer = NULL;
+    mReadFramebuffer = nullptr;
+    mDrawFramebuffer = nullptr;
 
     mPrimitiveRestart = false;
 

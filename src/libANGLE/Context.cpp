@@ -36,6 +36,32 @@
 namespace
 {
 
+template <typename T>
+gl::Error GetQueryObjectParameter(gl::Context *context, GLuint id, GLenum pname, T *params)
+{
+    gl::Query *queryObject = context->getQuery(id, false, GL_NONE);
+    ASSERT(queryObject != nullptr);
+
+    switch (pname)
+    {
+        case GL_QUERY_RESULT_EXT:
+            return queryObject->getResult(params);
+        case GL_QUERY_RESULT_AVAILABLE_EXT:
+        {
+            bool available;
+            gl::Error error = queryObject->isResultAvailable(&available);
+            if (!error.isError())
+            {
+                *params = static_cast<T>(available ? GL_TRUE : GL_FALSE);
+            }
+            return error;
+        }
+        default:
+            UNREACHABLE();
+            return gl::Error(GL_INVALID_OPERATION, "Unreachable Error");
+    }
+}
+
 void MarkTransformFeedbackBufferUsage(gl::TransformFeedback *transformFeedback)
 {
     if (transformFeedback && transformFeedback->isActive() && !transformFeedback->isPaused())
@@ -799,6 +825,36 @@ Error Context::endQuery(GLenum target)
     mState.setActiveQuery(target, NULL);
 
     return error;
+}
+
+Error Context::queryCounter(GLuint id, GLenum target)
+{
+    ASSERT(target == GL_TIMESTAMP_EXT);
+
+    Query *queryObject = getQuery(id, true, target);
+    ASSERT(queryObject);
+
+    return queryObject->timestamp();
+}
+
+Error Context::getQueryObjectiv(GLuint id, GLenum pname, GLint *params)
+{
+    return GetQueryObjectParameter(this, id, pname, params);
+}
+
+Error Context::getQueryObjectuiv(GLuint id, GLenum pname, GLuint *params)
+{
+    return GetQueryObjectParameter(this, id, pname, params);
+}
+
+Error Context::getQueryObjecti64v(GLuint id, GLenum pname, GLint64 *params)
+{
+    return GetQueryObjectParameter(this, id, pname, params);
+}
+
+Error Context::getQueryObjectui64v(GLuint id, GLenum pname, GLuint64 *params)
+{
+    return GetQueryObjectParameter(this, id, pname, params);
 }
 
 Framebuffer *Context::getFramebuffer(unsigned int handle) const
