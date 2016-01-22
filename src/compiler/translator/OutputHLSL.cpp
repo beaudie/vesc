@@ -897,6 +897,29 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
         }
         else
         {
+            TString texCoordX("t.x");
+            TString texCoordY("t.y");
+            TString texCoordZ("t.z");
+            TString proj = "";
+
+            if (textureFunction->proj)
+            {
+                switch (textureFunction->coords)
+                {
+                    case 3:
+                        proj = " / t.z";
+                        break;
+                    case 4:
+                        proj = " / t.w";
+                        break;
+                    default:
+                        UNREACHABLE();
+                }
+                texCoordX += proj;
+                texCoordY += proj;
+                texCoordZ += proj;
+            }
+
             if (IsIntegerSampler(textureFunction->sampler) && IsSamplerCube(textureFunction->sampler))
             {
                 out << "    float width; float height; float layers; float levels;\n";
@@ -937,6 +960,10 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                         << "    " << textureReference
                         << ".GetDimensions(mip, width, height, layers, levels);\n";
                 }
+
+                // Convert from normalized floating-point to integer
+                texCoordX = "int(floor(width * frac(" + texCoordX + ")))";
+                texCoordY = "int(floor(height * frac(" + texCoordY + ")))";
             }
             else if (IsIntegerSampler(textureFunction->sampler) &&
                      textureFunction->method != TextureFunction::FETCH)
@@ -1069,6 +1096,20 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                         << ".GetDimensions(mip, width, height, depth, levels);\n";
                 }
                 else UNREACHABLE();
+
+                // Convert from normalized floating-point to integer
+                texCoordX = "int(floor(width * frac(" + texCoordX + ")))";
+                texCoordY = "int(floor(height * frac(" + texCoordY + ")))";
+
+                if (IsSamplerArray(textureFunction->sampler))
+                {
+                    texCoordZ = "int(max(0, min(layers - 1, floor(0.5 + t.z))))";
+                }
+                else if (!IsSamplerCube(textureFunction->sampler) &&
+                         !IsSampler2D(textureFunction->sampler))
+                {
+                    texCoordZ = "int(floor(depth * frac(" + texCoordZ + ")))";
+                }
             }
 
             out << "    return ";
@@ -1182,12 +1223,6 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
             }
             else UNREACHABLE();
 
-            // Integer sampling requires integer addresses
-            TString addressx = "";
-            TString addressy = "";
-            TString addressz = "";
-            TString close = "";
-
             if (IsIntegerSampler(textureFunction->sampler) ||
                 textureFunction->method == TextureFunction::FETCH)
             {
@@ -1196,28 +1231,6 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                   case 2: out << "int3("; break;
                   case 3: out << "int4("; break;
                   default: UNREACHABLE();
-                }
-
-                // Convert from normalized floating-point to integer
-                if (textureFunction->method != TextureFunction::FETCH)
-                {
-                    addressx = "int(floor(width * frac((";
-                    addressy = "int(floor(height * frac((";
-
-                    if (IsSamplerArray(textureFunction->sampler))
-                    {
-                        addressz = "int(max(0, min(layers - 1, floor(0.5 + ";
-                    }
-                    else if (IsSamplerCube(textureFunction->sampler))
-                    {
-                        addressz = "((((";
-                    }
-                    else
-                    {
-                        addressz = "int(floor(depth * frac((";
-                    }
-
-                    close = "))))";
                 }
             }
             else
@@ -1231,19 +1244,7 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                 }
             }
 
-            TString proj = "";   // Only used for projected textures
-
-            if (textureFunction->proj)
-            {
-                switch(textureFunction->coords)
-                {
-                  case 3: proj = " / t.z"; break;
-                  case 4: proj = " / t.w"; break;
-                  default: UNREACHABLE();
-                }
-            }
-
-            out << addressx + ("t.x" + proj) + close + ", " + addressy + ("t.y" + proj) + close;
+            out << texCoordX << ", " << texCoordY;
 
             if (mOutputType == SH_HLSL_3_0_OUTPUT)
             {
@@ -1255,7 +1256,7 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                     }
                     else
                     {
-                        out << ", t.z" + proj;
+                        out << ", t.z" << proj;
                     }
                 }
 
@@ -1283,7 +1284,7 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                     }
                     else
                     {
-                        out << ", " + addressz + ("t.z" + proj) + close;
+                        out << ", " << texCoordZ;
                     }
                 }
 
