@@ -55,6 +55,7 @@
             '<(angle_path)/src/tests/gl_tests/SRGBTextureTest.cpp',
             '<(angle_path)/src/tests/gl_tests/SwizzleTest.cpp',
             '<(angle_path)/src/tests/gl_tests/TextureTest.cpp',
+            '<(angle_path)/src/tests/gl_tests/TimerQueriesTest.cpp',
             '<(angle_path)/src/tests/gl_tests/TransformFeedbackTest.cpp',
             '<(angle_path)/src/tests/gl_tests/UniformBufferTest.cpp',
             '<(angle_path)/src/tests/gl_tests/UniformTest.cpp',

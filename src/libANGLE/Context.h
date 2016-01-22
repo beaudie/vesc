@@ -130,6 +130,11 @@ class Context final : public ValidationContext
     Error beginQuery(GLenum target, GLuint query);
     Error endQuery(GLenum target);
 
+    Error getQueryObjectiv(GLuint id, GLenum pname, GLint *params);
+    Error getQueryObjectuiv(GLuint id, GLenum pname, GLuint *params);
+    Error getQueryObjecti64v(GLuint id, GLenum pname, GLint64 *params);
+    Error getQueryObjectui64v(GLuint id, GLenum pname, GLuint64 *params);
+
     void setVertexAttribDivisor(GLuint index, GLuint divisor);
 
     void samplerParameteri(GLuint sampler, GLenum pname, GLint param);

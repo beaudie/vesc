@@ -37,8 +37,11 @@ class Query final : public RefCountObject, public LabeledObject
     Error begin();
     Error end();
 
+    Error getResult(GLint *params);
     Error getResult(GLuint *params);
-    Error isResultAvailable(GLuint *available);
+    Error getResult(GLint64 *params);
+    Error getResult(GLuint64 *params);
+    Error isResultAvailable(bool *available);
 
     GLenum getType() const;
 

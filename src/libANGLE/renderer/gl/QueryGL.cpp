@@ -15,7 +15,7 @@
 namespace
 {
 
-GLuint MergeQueryResults(GLenum type, GLuint currentResult, GLuint newResult)
+GLuint64 MergeQueryResults(GLenum type, GLuint64 currentResult, GLuint64 newResult)
 {
     switch (type)
     {
@@ -24,6 +24,8 @@ GLuint MergeQueryResults(GLenum type, GLuint currentResult, GLuint newResult)
             return (currentResult == GL_TRUE || newResult == GL_TRUE) ? GL_TRUE : GL_FALSE;
 
         case GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN:
+            return currentResult + newResult;
+        case GL_TIME_ELAPSED:
             return currentResult + newResult;
 
         default:
@@ -70,7 +72,55 @@ gl::Error QueryGL::end()
     return pause();
 }
 
+gl::Error QueryGL::getResult(GLint *params)
+{
+    ASSERT(mActiveQuery == 0);
+
+    gl::Error error = flush(true);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ASSERT(mPendingQueries.empty());
+    *params = (GLint)mResultSum;
+
+    return gl::Error(GL_NO_ERROR);
+}
+
 gl::Error QueryGL::getResult(GLuint *params)
+{
+    ASSERT(mActiveQuery == 0);
+
+    gl::Error error = flush(true);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ASSERT(mPendingQueries.empty());
+    *params = (GLuint)mResultSum;
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error QueryGL::getResult(GLint64 *params)
+{
+    ASSERT(mActiveQuery == 0);
+
+    gl::Error error = flush(true);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ASSERT(mPendingQueries.empty());
+    *params = (GLint64)mResultSum;
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error QueryGL::getResult(GLuint64 *params)
 {
     ASSERT(mActiveQuery == 0);
 
@@ -86,7 +136,7 @@ gl::Error QueryGL::getResult(GLuint *params)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error QueryGL::isResultAvailable(GLuint *available)
+gl::Error QueryGL::isResultAvailable(bool *available)
 {
     ASSERT(mActiveQuery == 0);
 
@@ -96,7 +146,7 @@ gl::Error QueryGL::isResultAvailable(GLuint *available)
         return error;
     }
 
-    *available = mPendingQueries.empty() ? GL_TRUE : GL_FALSE;
+    *available = mPendingQueries.empty();
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -153,8 +203,8 @@ gl::Error QueryGL::flush(bool force)
             }
         }
 
-        GLuint result = 0;
-        mFunctions->getQueryObjectuiv(id, GL_QUERY_RESULT, &result);
+        GLuint64 result = 0;
+        mFunctions->getQueryObjectui64v(id, GL_QUERY_RESULT, &result);
         mResultSum = MergeQueryResults(mType, mResultSum, result);
 
         mStateManager->deleteQuery(id);
