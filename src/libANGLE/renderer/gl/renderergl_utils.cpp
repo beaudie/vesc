@@ -609,6 +609,10 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
     extensions->debugMarker =
         functions->isAtLeastGL(gl::Version(4, 3)) || functions->hasGLExtension("GL_KHR_debug") ||
         functions->isAtLeastGLES(gl::Version(3, 2)) || functions->hasGLESExtension("GL_KHR_debug");
+    // extensions->disjointTimerQuery = (functions->isAtLeastGL(gl::Version(3, 3)) ||
+    //                                  functions->hasGLExtension("GL_ARB_timer_query") ||
+    //                                  functions->hasGLESExtension("GL_EXT_disjoint_timer_query"));
+    extensions->disjointTimerQuery = false;  // Disable by default
 
     // ANGLE emulates vertex array objects in its GL layer
     extensions->vertexArrayObject = true;
