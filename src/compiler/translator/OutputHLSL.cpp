@@ -849,7 +849,7 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
 
         if (textureFunction->method == TextureFunction::SIZE)
         {
-            out << "int baseLevel = samplerMetadata[samplerIndex];\n";
+            out << "int baseLevel = samplerMetadata[samplerIndex][0];\n";
             if (IsSampler2D(textureFunction->sampler) || IsSamplerCube(textureFunction->sampler))
             {
                 if (IsSamplerArray(textureFunction->sampler) ||
