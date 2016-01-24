@@ -31,6 +31,8 @@ def appendCommonArgs(args):
     # Indicate ANGLE is being built standalone (as opposed to within
     # a Chromium workspace).
     args.append('-Dangle_standalone=1')
+    args.append('-d')
+    args.append('all')
 
 def generateProjects(generate_args):
     args = generate_args
