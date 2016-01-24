@@ -15,11 +15,24 @@
         'angle_build_winphone%': '0',
         'conditions':
         [
-            ['OS=="linux" and use_x11==1 and chromeos==0', {
-                'angle_use_glx%': 1,
+            ['OS=="linux"',
+            {
+                'conditions':
+                [
+                    ['use_x11==1',
+                    {
+                        'angle_use_glx%': 1,
+                        'angle_use_drm%': 0,
+                    },
+                    {
+                        'angle_use_glx%': 0,
+                        'angle_use_drm%': 1,
+                    }],
+                ]
             },
             {
                 'angle_use_glx%': 0,
+                'angle_use_drm%': 0,
             }],
         ],
 
@@ -38,6 +51,10 @@
     ],
     'conditions':
     [
+        ['chromeos==1',
+        {
+            'defines': [ 'USE_OZONE' ],
+        }],
         ['component=="shared_library"',
         {
             'defines': [ 'COMPONENT_BUILD' ],
