@@ -1,0 +1,8 @@
+Commit-Queue+1: Andrii Shyshkalov <tandrii@chromium.org>
+Code-Review+2: Sergiy Byelozyorov <sergiyb@chromium.org>
+Verified+1: Sergiy Byelozyorov <sergiyb@chromium.org>
+Submitted-by: Andrii Shyshkalov <tandrii@chromium.org>
+Submitted-at: Mon, 25 Jan 2016 15:42:21 +0000
+Reviewed-on: https://chromium-review.googlesource.com/323690
+Project: angle/angle
+Branch: refs/heads/master
