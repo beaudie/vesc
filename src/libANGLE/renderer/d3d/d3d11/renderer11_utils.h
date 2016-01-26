@@ -365,6 +365,11 @@ class TextureHelper11 : angle::NonCopyable
     ID3D11Texture3D *mTexture3D;
 };
 
+gl::ErrorOrResult<TextureHelper11> CreateStagingTexture(GLenum textureType,
+                                                        DXGI_FORMAT dxgiFormat,
+                                                        const gl::Extents &size,
+                                                        ID3D11Device *device);
+
 }  // namespace rx
 
 #endif // LIBANGLE_RENDERER_D3D_D3D11_RENDERER11_UTILS_H_
