@@ -37,6 +37,14 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds);
 }
 
+bool CanMapBufferForRead(const FunctionsGL *functions);
+uint8_t *MapBufferRange(const FunctionsGL *functions,
+                        GLenum target,
+                        size_t offset,
+                        size_t length,
+                        GLbitfield access);
+uint8_t *MapBuffer(const FunctionsGL *functions, GLenum target, GLenum access, size_t bufferSize);
+bool UnmapBuffer(const FunctionsGL *functions, GLenum target);
 }
 
 #endif // LIBANGLE_RENDERER_GL_RENDERERGLUTILS_H_
