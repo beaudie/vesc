@@ -1587,4 +1587,58 @@ void TextureHelper11::reset()
     mTexture3D   = nullptr;
 }
 
+gl::ErrorOrResult<TextureHelper11> CreateStagingTexture(GLenum textureType,
+                                                        DXGI_FORMAT dxgiFormat,
+                                                        const gl::Extents &size,
+                                                        ID3D11Device *device)
+{
+    if (textureType == GL_TEXTURE_2D)
+    {
+        D3D11_TEXTURE2D_DESC stagingDesc;
+        stagingDesc.Width              = size.width;
+        stagingDesc.Height             = size.height;
+        stagingDesc.MipLevels          = 1;
+        stagingDesc.ArraySize          = 1;
+        stagingDesc.Format             = dxgiFormat;
+        stagingDesc.SampleDesc.Count   = 1;
+        stagingDesc.SampleDesc.Quality = 0;
+        stagingDesc.Usage              = D3D11_USAGE_STAGING;
+        stagingDesc.BindFlags          = 0;
+        stagingDesc.CPUAccessFlags     = D3D11_CPU_ACCESS_READ;
+        stagingDesc.MiscFlags          = 0;
+
+        ID3D11Texture2D *stagingTex = nullptr;
+        HRESULT result = device->CreateTexture2D(&stagingDesc, nullptr, &stagingTex);
+        if (FAILED(result))
+        {
+            return gl::Error(GL_OUT_OF_MEMORY, "CreateStagingTextureFor failed, HRESULT: 0x%X.",
+                             result);
+        }
+
+        return TextureHelper11(stagingTex);
+    }
+    ASSERT(textureType == GL_TEXTURE_3D);
+
+    D3D11_TEXTURE3D_DESC stagingDesc;
+    stagingDesc.Width          = size.width;
+    stagingDesc.Height         = size.height;
+    stagingDesc.Depth          = 1;
+    stagingDesc.MipLevels      = 1;
+    stagingDesc.Format         = dxgiFormat;
+    stagingDesc.Usage          = D3D11_USAGE_STAGING;
+    stagingDesc.BindFlags      = 0;
+    stagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+    stagingDesc.MiscFlags      = 0;
+
+    ID3D11Texture3D *stagingTex = nullptr;
+    HRESULT result = device->CreateTexture3D(&stagingDesc, nullptr, &stagingTex);
+    if (FAILED(result))
+    {
+        return gl::Error(GL_OUT_OF_MEMORY, "CreateStagingTextureFor failed, HRESULT: 0x%X.",
+                         result);
+    }
+
+    return TextureHelper11(stagingTex);
+}
+
 }  // namespace rx
