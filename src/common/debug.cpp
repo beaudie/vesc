@@ -53,8 +53,6 @@ void output(bool traceInDebugOnly, MessageType messageType, DebugTraceOutputType
     }
 
     std::string formattedMessage;
-    UNUSED_TRACE_VARIABLE(formattedMessage);
-
 #if !defined(NDEBUG) && defined(_MSC_VER)
     if (messageType == MESSAGE_ERR)
     {
