@@ -285,6 +285,23 @@ TEST_P(TimerQueriesTest, Timestamp)
     EXPECT_LT(0ul, result1);
     EXPECT_LT(0ul, result2);
     EXPECT_LT(result1, result2);
+
+    // GLES 2.0 does not support glGetInteger64v
+    if (getClientVersion() < 3)
+    {
+        return;
+    }
+
+    GLint64 result3 = 0;
+    GLint64 result4 = 0;
+    glGetInteger64v(GL_TIMESTAMP_EXT, &result3);
+    drawQuad(mProgram, "position", 0.8f);
+    glGetInteger64v(GL_TIMESTAMP_EXT, &result4);
+    ASSERT_GL_NO_ERROR();
+    std::cout << "Timestamps (getInteger64v): " << result3 << " " << result4 << std::endl;
+    EXPECT_LT(0ul, result3);
+    EXPECT_LT(0ul, result4);
+    EXPECT_LT(result3, result4);
 }
 
 ANGLE_INSTANTIATE_TEST(TimerQueriesTest,
