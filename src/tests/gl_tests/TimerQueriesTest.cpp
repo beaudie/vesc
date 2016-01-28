@@ -287,6 +287,49 @@ TEST_P(TimerQueriesTest, Timestamp)
     EXPECT_LT(result1, result2);
 }
 
+// Tests getting timestamps via glGetInteger64v
+TEST_P(TimerQueriesTest, TimestampGetInteger64)
+{
+    if (!extensionEnabled("GL_EXT_disjoint_timer_query"))
+    {
+        std::cout << "Test skipped because GL_EXT_disjoint_timer_query is not available."
+                  << std::endl;
+        return;
+    }
+
+    GLint queryTimestampBits = 0;
+    glGetQueryivEXT(GL_TIMESTAMP_EXT, GL_QUERY_COUNTER_BITS_EXT, &queryTimestampBits);
+    ASSERT_GL_NO_ERROR();
+
+    std::cout << "Timestamp counter bits: " << queryTimestampBits << std::endl;
+
+    if (queryTimestampBits == 0)
+    {
+        std::cout << "Test skipped because of 0 counter bits" << std::endl;
+        return;
+    }
+
+    // GLES 2.0 does not support glGetInteger64v
+    if (getClientVersion() < 3)
+    {
+        return;
+    }
+
+    glDepthMask(GL_TRUE);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    GLint64 result1 = 0;
+    GLint64 result2 = 0;
+    glGetInteger64v(GL_TIMESTAMP_EXT, &result1);
+    drawQuad(mProgram, "position", 0.8f);
+    glGetInteger64v(GL_TIMESTAMP_EXT, &result2);
+    ASSERT_GL_NO_ERROR();
+    std::cout << "Timestamps (getInteger64v): " << result1 << " " << result2 << std::endl;
+    EXPECT_LT(0l, result1);
+    EXPECT_LT(0l, result2);
+    EXPECT_LT(result1, result2);
+}
+
 ANGLE_INSTANTIATE_TEST(TimerQueriesTest,
                        ES2_D3D9(),
                        ES2_D3D11(),

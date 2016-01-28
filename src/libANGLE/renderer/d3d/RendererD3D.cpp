@@ -671,6 +671,17 @@ void RendererD3D::popGroupMarker()
     getAnnotator()->endEvent();
 }
 
+GLint RendererD3D::getGPUDisjoint()
+{
+    return 0;
+}
+
+GLint64 RendererD3D::getTimestamp()
+{
+    UNIMPLEMENTED();
+    return 0;
+}
+
 void RendererD3D::initializeDebugAnnotator()
 {
     createAnnotator();
