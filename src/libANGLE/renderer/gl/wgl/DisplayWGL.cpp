@@ -37,7 +37,7 @@ class FunctionsGLWindows : public FunctionsGL
         ASSERT(mGetProcAddressWGL);
     }
 
-    virtual ~FunctionsGLWindows()
+    ~FunctionsGLWindows() override
     {
     }
 

@@ -42,7 +42,7 @@ class FunctionsGLGLX : public FunctionsGL
     {
     }
 
-    virtual ~FunctionsGLGLX()
+    ~FunctionsGLGLX() override
     {
     }
 
