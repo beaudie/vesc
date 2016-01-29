@@ -319,6 +319,7 @@ class Context final : public ValidationContext
   private:
     void checkVertexArrayAllocation(GLuint vertexArray);
     void checkTransformFeedbackAllocation(GLuint transformFeedback);
+    void checkFramebufferAllocation(GLuint framebuffer);
 
     void detachBuffer(GLuint buffer);
     void detachTexture(GLuint texture);
@@ -391,6 +392,6 @@ class Context final : public ValidationContext
     ResourceManager *mResourceManager;
 };
 
-}
+}  // namespace gl
 
 #endif   // LIBANGLE_CONTEXT_H_
