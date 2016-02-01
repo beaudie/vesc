@@ -67,9 +67,8 @@ class InputLayoutCache : angle::NonCopyable
 
         enum Flags
         {
-            FLAG_USES_INSTANCED_SPRITES = 0x1,
-            FLAG_MOVE_FIRST_INDEXED = 0x2,
-            FLAG_INSTANCED_SPRITES_ACTIVE = 0x4,
+            FLAG_USES_INSTANCED_SPRITES   = 0x1,
+            FLAG_INSTANCED_SPRITES_ACTIVE = 0x2,
         };
 
         size_t numAttributes;
@@ -77,13 +76,19 @@ class InputLayoutCache : angle::NonCopyable
         uint32_t attributeData[gl::MAX_VERTEX_ATTRIBS];
     };
 
-    gl::Error findInputLayout(const PackedAttributeLayout &layout,
-                              unsigned int inputElementCount,
-                              const D3D11_INPUT_ELEMENT_DESC inputElements[gl::MAX_VERTEX_ATTRIBS],
-                              ProgramD3D *programD3D,
-                              const TranslatedAttribute *sortedAttributes[gl::MAX_VERTEX_ATTRIBS],
-                              size_t attributeCount,
-                              ID3D11InputLayout **inputLayout);
+    typedef std::array<const TranslatedAttribute *, gl::MAX_VERTEX_ATTRIBS> SortedAttribArray;
+    typedef std::array<int, gl::MAX_VERTEX_ATTRIBS> SortedIndexArray;
+    gl::Error updateInputLayout(gl::Program *program,
+                                GLenum mode,
+                                const SortedAttribArray &sortedAttributes,
+                                const SortedIndexArray &sortedSemanticIndices,
+                                size_t attribCount);
+    gl::Error createInputLayout(const SortedAttribArray &sortedAttributes,
+                                const SortedIndexArray &sortedSemanticIndices,
+                                size_t attribCount,
+                                GLenum mode,
+                                gl::Program *program,
+                                ID3D11InputLayout **inputLayoutOut);
 
     std::map<PackedAttributeLayout, ID3D11InputLayout *> mLayoutMap;
 
