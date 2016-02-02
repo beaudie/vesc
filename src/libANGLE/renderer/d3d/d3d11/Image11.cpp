@@ -25,7 +25,7 @@ namespace rx
 
 Image11::Image11(Renderer11 *renderer)
     : mRenderer(renderer),
-      mDXGIFormat(DXGI_FORMAT_UNKNOWN),
+      mSemanticDXGIFormat(DXGI_FORMAT_UNKNOWN),
       mStagingTexture(NULL),
       mStagingSubresource(0),
       mRecoverFromStorage(false),
@@ -220,7 +220,8 @@ bool Image11::redefine(GLenum target, GLenum internalformat, const gl::Extents &
 
         // compute the d3d format that will be used
         const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalformat, mRenderer->getRenderer11DeviceCaps());
-        mDXGIFormat = formatInfo.texFormat;
+        mSemanticDXGIFormat                    = formatInfo.semanticFormat;
+        mTexFormat                             = formatInfo.texFormat;
         mRenderable = (formatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN);
 
         releaseStagingTexture();
@@ -236,9 +237,9 @@ DXGI_FORMAT Image11::getDXGIFormat() const
 {
     // this should only happen if the image hasn't been redefined first
     // which would be a bug by the caller
-    ASSERT(mDXGIFormat != DXGI_FORMAT_UNKNOWN);
+    ASSERT(mSemanticDXGIFormat != DXGI_FORMAT_UNKNOWN);
 
-    return mDXGIFormat;
+    return mSemanticDXGIFormat;
 }
 
 // Store the pixel rectangle designated by xoffset,yoffset,width,height with pixels stored as format/type at input
@@ -252,7 +253,7 @@ gl::Error Image11::loadData(const gl::Box &area, const gl::PixelUnpackState &unp
     GLsizei inputSkipBytes = formatInfo.computeSkipPixels(
         inputRowPitch, inputDepthPitch, unpack.skipImages, unpack.skipRows, unpack.skipPixels);
 
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mDXGIFormat);
+    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mSemanticDXGIFormat);
     GLuint outputPixelSize = dxgiFormatInfo.pixelBytes;
 
     const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer->getRenderer11DeviceCaps());
@@ -282,7 +283,7 @@ gl::Error Image11::loadCompressedData(const gl::Box &area, const void *input)
     GLsizei inputDepthPitch =
         formatInfo.computeDepthPitch(GL_UNSIGNED_BYTE, area.width, area.height, 1, 0, 0);
 
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mDXGIFormat);
+    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mSemanticDXGIFormat);
     GLuint outputPixelSize = dxgiFormatInfo.pixelBytes;
     GLuint outputBlockWidth = dxgiFormatInfo.blockWidth;
     GLuint outputBlockHeight = dxgiFormatInfo.blockHeight;
@@ -341,7 +342,7 @@ gl::Error Image11::copyFromFramebuffer(const gl::Offset &destOffset,
     const auto &d3d11Format = d3d11::GetTextureFormatInfo(srcAttachment->getInternalFormat(),
                                                           mRenderer->getRenderer11DeviceCaps());
 
-    if (d3d11Format.texFormat == mDXGIFormat)
+    if (d3d11Format.semanticFormat == mSemanticDXGIFormat)
     {
         RenderTargetD3D *renderTarget = nullptr;
         gl::Error error = srcAttachment->getRenderTarget(&renderTarget);
@@ -370,7 +371,7 @@ gl::Error Image11::copyFromFramebuffer(const gl::Offset &destOffset,
     }
 
     // determine the offset coordinate into the destination buffer
-    const auto &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mDXGIFormat);
+    const auto &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mSemanticDXGIFormat);
     GLsizei rowOffset          = dxgiFormatInfo.pixelBytes * destOffset.x;
 
     uint8_t *dataOffset = static_cast<uint8_t *>(mappedImage.pData) +
@@ -496,8 +497,6 @@ gl::Error Image11::createStagingTexture()
 
     ASSERT(mWidth > 0 && mHeight > 0 && mDepth > 0);
 
-    const DXGI_FORMAT dxgiFormat = getDXGIFormat();
-
     ID3D11Device *device = mRenderer->getDevice();
     HRESULT result;
 
@@ -506,7 +505,7 @@ gl::Error Image11::createStagingTexture()
     GLsizei height = mHeight;
 
     // adjust size if needed for compressed textures
-    d3d11::MakeValidSize(false, dxgiFormat, &width, &height, &lodOffset);
+    d3d11::MakeValidSize(false, mSemanticDXGIFormat, &width, &height, &lodOffset);
 
     if (mTarget == GL_TEXTURE_3D)
     {
@@ -517,7 +516,7 @@ gl::Error Image11::createStagingTexture()
         desc.Height = height;
         desc.Depth = mDepth;
         desc.MipLevels = lodOffset + 1;
-        desc.Format = dxgiFormat;
+        desc.Format         = mTexFormat;
         desc.Usage = D3D11_USAGE_STAGING;
         desc.BindFlags = 0;
         desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
@@ -555,7 +554,7 @@ gl::Error Image11::createStagingTexture()
         desc.Height = height;
         desc.MipLevels = lodOffset + 1;
         desc.ArraySize = 1;
-        desc.Format = dxgiFormat;
+        desc.Format             = mTexFormat;
         desc.SampleDesc.Count = 1;
         desc.SampleDesc.Quality = 0;
         desc.Usage = D3D11_USAGE_STAGING;

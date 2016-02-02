@@ -421,7 +421,8 @@ gl::Error Framebuffer11::blit(const gl::Rectangle &sourceArea, const gl::Rectang
 GLenum Framebuffer11::getRenderTargetImplementationFormat(RenderTargetD3D *renderTarget) const
 {
     RenderTarget11 *renderTarget11 = GetAs<RenderTarget11>(renderTarget);
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(renderTarget11->getDXGIFormat());
+    const d3d11::DXGIFormat &dxgiFormatInfo =
+        d3d11::GetDXGIFormatInfo(renderTarget11->getSemanticDXGIFormat());
     return dxgiFormatInfo.internalFormat;
 }
 

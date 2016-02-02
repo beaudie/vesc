@@ -544,7 +544,7 @@
     "GL_FLOAT": [
       {
         "loadFunction": "LoadToNative<GLfloat,1>",
-        "dxgiFormat": "DXGI_FORMAT_R32_TYPELESS",
+        "dxgiFormat": "DXGI_FORMAT_D32_FLOAT",
         "requiresConversion": "false"
       },
       {
@@ -626,7 +626,7 @@
     "GL_FLOAT_32_UNSIGNED_INT_24_8_REV": [
       {
         "loadFunction": "LoadToNative<GLuint,2>",
-        "dxgiFormat": "DXGI_FORMAT_R32G8X24_TYPELESS",
+        "dxgiFormat": "DXGI_FORMAT_D32_FLOAT_S8X24_UINT",
         "requiresConversion": "false"
       },
       {
