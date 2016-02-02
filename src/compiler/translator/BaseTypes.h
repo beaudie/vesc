@@ -122,6 +122,36 @@ inline bool IsIntegerSampler(TBasicType type)
     return false;
 }
 
+inline bool IsUnsignedIntegerSampler(TBasicType type)
+{
+    switch (type)
+    {
+    case EbtUSampler2D:
+    case EbtUSampler3D:
+    case EbtUSamplerCube:
+    case EbtUSampler2DArray:
+        return true;
+    case EbtISampler2D:
+    case EbtISampler3D:
+    case EbtISamplerCube:
+    case EbtISampler2DArray:
+    case EbtSampler2D:
+    case EbtSampler3D:
+    case EbtSamplerCube:
+    case EbtSamplerExternalOES:
+    case EbtSampler2DRect:
+    case EbtSampler2DArray:
+    case EbtSampler2DShadow:
+    case EbtSamplerCubeShadow:
+    case EbtSampler2DArrayShadow:
+        return false;
+    default:
+        assert(!IsSampler(type));
+    }
+
+    return false;
+}
+
 inline bool IsSampler2D(TBasicType type)
 {
     switch (type)

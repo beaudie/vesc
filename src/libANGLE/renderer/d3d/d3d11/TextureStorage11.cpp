@@ -2238,22 +2238,9 @@ gl::Error TextureStorage11_Cube::createSRV(int baseLevel, int mipLevels, DXGI_FO
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
     srvDesc.Format = format;
 
-    // Unnormalized integer cube maps are not supported by DX11; we emulate them as an array of six 2D textures
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(format);
-    if (dxgiFormatInfo.componentType == GL_INT || dxgiFormatInfo.componentType == GL_UNSIGNED_INT)
-    {
-        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
-        srvDesc.Texture2DArray.MostDetailedMip = mTopLevel + baseLevel;
-        srvDesc.Texture2DArray.MipLevels       = mipLevels;
-        srvDesc.Texture2DArray.FirstArraySlice = 0;
-        srvDesc.Texture2DArray.ArraySize = CUBE_FACE_COUNT;
-    }
-    else
-    {
-        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
-        srvDesc.TextureCube.MipLevels = mipLevels;
-        srvDesc.TextureCube.MostDetailedMip = mTopLevel + baseLevel;
-    }
+    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+    srvDesc.TextureCube.MipLevels = mipLevels;
+    srvDesc.TextureCube.MostDetailedMip = mTopLevel + baseLevel;
 
     ID3D11Resource *srvTexture = texture;
 
