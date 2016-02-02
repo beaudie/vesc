@@ -1627,6 +1627,7 @@ gl::ErrorOrResult<TextureHelper11> CreateStagingTexture(GLenum textureType,
 {
     if (textureType == GL_TEXTURE_2D)
     {
+        // TODO: Need to change dxgiFormat of the staging textiure for integer textures (they're allocated as typeless, but the staging texture needs to be integer).
         D3D11_TEXTURE2D_DESC stagingDesc;
         stagingDesc.Width              = size.width;
         stagingDesc.Height             = size.height;

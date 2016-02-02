@@ -140,7 +140,7 @@ class SamplerMetadataD3D11 final : angle::NonCopyable
     void reset();
 
     void initData(unsigned int samplerCount, gl::SamplerType type);
-    void update(unsigned int samplerIndex, unsigned int baseLevel);
+    void update(unsigned int samplerIndex, unsigned int baseLevel, GLenum internalFormat);
     gl::Error apply(ID3D11Device *device,
                     ID3D11DeviceContext *deviceContext,
                     const dx_ShaderConstants11 &extraConstants);
@@ -152,7 +152,7 @@ class SamplerMetadataD3D11 final : angle::NonCopyable
 
     struct dx_SamplerMetadata
     {
-        int baseLevel[4];
+        int parameters[4];
     };
 
     std::vector<dx_SamplerMetadata> mSamplerMetadata;
@@ -212,7 +212,8 @@ class ProgramD3D : public ProgramImpl
     // D3D11 needs sampler metadata to implement ESSL3 texture functions.
     void setSamplerMetadata(gl::SamplerType type,
                             unsigned int samplerIndex,
-                            unsigned int baseLevel);
+                            unsigned int baseLevel,
+                            GLenum internalFormat);
 
     void initializeUniformStorage();
     gl::Error applyUniforms(GLenum drawMode);

@@ -1058,6 +1058,118 @@ gl::Error TextureStorage11_2D::getMippedResource(ID3D11Resource **outResource)
     return gl::Error(GL_NO_ERROR);
 }
 
+
+DXGI_FORMAT ConvertTextureFormat(DXGI_FORMAT format)
+{
+    return format;
+    /*switch (format)
+    {
+    case DXGI_FORMAT_R32G32B32A32_UINT:
+    case DXGI_FORMAT_R32G32B32A32_SINT:
+        return DXGI_FORMAT_R32G32B32A32_TYPELESS;
+
+    case DXGI_FORMAT_R32G32B32_UINT:
+    case DXGI_FORMAT_R32G32B32_SINT:
+        return DXGI_FORMAT_R32G32B32_TYPELESS;
+
+    case DXGI_FORMAT_R16G16B16A16_UINT:
+    case DXGI_FORMAT_R16G16B16A16_SINT:
+        return DXGI_FORMAT_R16G16B16A16_TYPELESS;
+
+    case DXGI_FORMAT_R32G32_UINT:
+    case DXGI_FORMAT_R32G32_SINT:
+        return DXGI_FORMAT_R32G32_TYPELESS;
+
+    case DXGI_FORMAT_R8G8B8A8_UINT:
+    case DXGI_FORMAT_R8G8B8A8_SINT:
+        return DXGI_FORMAT_R8G8B8A8_TYPELESS;
+
+    case DXGI_FORMAT_R16G16_UINT:
+    case DXGI_FORMAT_R16G16_SINT:
+        return DXGI_FORMAT_R16G16_TYPELESS;
+
+    case DXGI_FORMAT_R32_UINT:
+    case DXGI_FORMAT_R32_SINT:
+        return DXGI_FORMAT_R32_TYPELESS;
+
+    case DXGI_FORMAT_R16_UINT:
+    case DXGI_FORMAT_R16_SINT:
+        return DXGI_FORMAT_R16_TYPELESS;
+
+    case DXGI_FORMAT_R8G8_UINT:
+    case DXGI_FORMAT_R8G8_SINT:
+        return DXGI_FORMAT_R8G8_TYPELESS;
+
+    case DXGI_FORMAT_R8_UINT:
+    case DXGI_FORMAT_R8_SINT:
+        return DXGI_FORMAT_R8_TYPELESS;
+
+        //DXGI_FORMAT_R10G10B10A2_UNORM:
+        //DXGI_FORMAT_R10G10B10A2_UINT:
+    default:
+        return format;
+    }*/
+}
+
+DXGI_FORMAT ConvertSRVFormat(DXGI_FORMAT format)
+{
+    return format;
+    /*switch (format)
+    {
+        case DXGI_FORMAT_R32G32B32A32_UINT:
+        case DXGI_FORMAT_R32G32B32A32_SINT:
+            return DXGI_FORMAT_R32G32B32A32_FLOAT;
+
+        case DXGI_FORMAT_R32G32B32_UINT:
+        case DXGI_FORMAT_R32G32B32_SINT:
+            return DXGI_FORMAT_R32G32B32_FLOAT;
+
+        case DXGI_FORMAT_R16G16B16A16_UINT:
+            return DXGI_FORMAT_R16G16B16A16_UNORM;
+        case DXGI_FORMAT_R16G16B16A16_SINT:
+            return DXGI_FORMAT_R16G16B16A16_SNORM;
+
+        case DXGI_FORMAT_R32G32_UINT:
+        case DXGI_FORMAT_R32G32_SINT:
+            return DXGI_FORMAT_R32G32_FLOAT;
+
+        case DXGI_FORMAT_R8G8B8A8_UINT:
+            return DXGI_FORMAT_R8G8B8A8_UNORM;
+        case DXGI_FORMAT_R8G8B8A8_SINT:
+            return DXGI_FORMAT_R8G8B8A8_SNORM;
+
+        case DXGI_FORMAT_R16G16_UINT:
+            return DXGI_FORMAT_R16G16_UNORM;
+        case DXGI_FORMAT_R16G16_SINT:
+            return DXGI_FORMAT_R16G16_SNORM;
+
+        case DXGI_FORMAT_R32_UINT:
+            return DXGI_FORMAT_R32_FLOAT;
+        case DXGI_FORMAT_R32_SINT:
+            return DXGI_FORMAT_R32_FLOAT;
+
+        case DXGI_FORMAT_R16_UINT:
+            return DXGI_FORMAT_R16_UNORM;
+        case DXGI_FORMAT_R16_SINT:
+            return DXGI_FORMAT_R16_SNORM;
+
+        case DXGI_FORMAT_R8G8_UINT:
+            return DXGI_FORMAT_R8G8_UNORM;
+        case DXGI_FORMAT_R8G8_SINT:
+            return DXGI_FORMAT_R8G8_SNORM;
+
+        case DXGI_FORMAT_R8_UINT:
+            return DXGI_FORMAT_R8_UNORM;
+        case DXGI_FORMAT_R8_SINT:
+            return DXGI_FORMAT_R8_SNORM;
+
+        //DXGI_FORMAT_R10G10B10A2_UNORM:
+        //DXGI_FORMAT_R10G10B10A2_UINT:
+        default:
+            return format;
+    }*/
+}
+
 gl::Error TextureStorage11_2D::ensureTextureExists(int mipLevels)
 {
     // If mMipLevels = 1 then always use mTexture rather than mLevelZeroTexture.
@@ -1077,7 +1189,7 @@ gl::Error TextureStorage11_2D::ensureTextureExists(int mipLevels)
         desc.Height = mTextureHeight;
         desc.MipLevels = mipLevels;
         desc.ArraySize = 1;
-        desc.Format = mTextureFormat;
+        desc.Format             = ConvertTextureFormat(mTextureFormat);
         desc.SampleDesc.Count = 1;
         desc.SampleDesc.Quality = 0;
         desc.Usage = D3D11_USAGE_DEFAULT;
@@ -1230,7 +1342,7 @@ gl::Error TextureStorage11_2D::createSRV(int baseLevel, int mipLevels, DXGI_FORM
     ASSERT(outSRV);
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-    srvDesc.Format = format;
+    srvDesc.Format                    = ConvertSRVFormat(format);
     srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     srvDesc.Texture2D.MostDetailedMip = mTopLevel + baseLevel;
     srvDesc.Texture2D.MipLevels = mipLevels;
@@ -1284,7 +1396,7 @@ gl::Error TextureStorage11_2D::getSwizzleTexture(ID3D11Resource **outTexture)
         desc.Height = mTextureHeight;
         desc.MipLevels = mMipLevels;
         desc.ArraySize = 1;
-        desc.Format = mSwizzleTextureFormat;
+        desc.Format             = ConvertSRVFormat(mSwizzleTextureFormat);
         desc.SampleDesc.Count = 1;
         desc.SampleDesc.Quality = 0;
         desc.Usage = D3D11_USAGE_DEFAULT;
@@ -2058,7 +2170,7 @@ gl::Error TextureStorage11_Cube::ensureTextureExists(int mipLevels)
         desc.Height = mTextureHeight;
         desc.MipLevels = mipLevels;
         desc.ArraySize = CUBE_FACE_COUNT;
-        desc.Format = mTextureFormat;
+        desc.Format = ConvertTextureFormat(mTextureFormat);
         desc.SampleDesc.Count = 1;
         desc.SampleDesc.Quality = 0;
         desc.Usage = D3D11_USAGE_DEFAULT;
@@ -2236,24 +2348,11 @@ gl::Error TextureStorage11_Cube::createSRV(int baseLevel, int mipLevels, DXGI_FO
     ASSERT(outSRV);
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-    srvDesc.Format = format;
+    srvDesc.Format = ConvertSRVFormat(format);
 
-    // Unnormalized integer cube maps are not supported by DX11; we emulate them as an array of six 2D textures
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(format);
-    if (dxgiFormatInfo.componentType == GL_INT || dxgiFormatInfo.componentType == GL_UNSIGNED_INT)
-    {
-        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
-        srvDesc.Texture2DArray.MostDetailedMip = mTopLevel + baseLevel;
-        srvDesc.Texture2DArray.MipLevels       = mipLevels;
-        srvDesc.Texture2DArray.FirstArraySlice = 0;
-        srvDesc.Texture2DArray.ArraySize = CUBE_FACE_COUNT;
-    }
-    else
-    {
-        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
-        srvDesc.TextureCube.MipLevels = mipLevels;
-        srvDesc.TextureCube.MostDetailedMip = mTopLevel + baseLevel;
-    }
+    srvDesc.ViewDimension               = D3D11_SRV_DIMENSION_TEXTURECUBE;
+    srvDesc.TextureCube.MipLevels       = mipLevels;
+    srvDesc.TextureCube.MostDetailedMip = mTopLevel + baseLevel;
 
     ID3D11Resource *srvTexture = texture;
 
@@ -2304,7 +2403,7 @@ gl::Error TextureStorage11_Cube::getSwizzleTexture(ID3D11Resource **outTexture)
         desc.Height = mTextureHeight;
         desc.MipLevels = mMipLevels;
         desc.ArraySize = CUBE_FACE_COUNT;
-        desc.Format = mSwizzleTextureFormat;
+        desc.Format = ConvertSRVFormat(mSwizzleTextureFormat);
         desc.SampleDesc.Count = 1;
         desc.SampleDesc.Quality = 0;
         desc.Usage = D3D11_USAGE_DEFAULT;
@@ -2524,7 +2623,7 @@ gl::Error TextureStorage11_3D::getResource(ID3D11Resource **outResource)
         desc.Height = mTextureHeight;
         desc.Depth = mTextureDepth;
         desc.MipLevels = mMipLevels;
-        desc.Format = mTextureFormat;
+        desc.Format = ConvertTextureFormat(mTextureFormat);
         desc.Usage = D3D11_USAGE_DEFAULT;
         desc.BindFlags = getBindFlags();
         desc.CPUAccessFlags = 0;
@@ -2557,7 +2656,7 @@ gl::Error TextureStorage11_3D::createSRV(int baseLevel, int mipLevels, DXGI_FORM
     ASSERT(outSRV);
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-    srvDesc.Format = format;
+    srvDesc.Format = ConvertSRVFormat(format);
     srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE3D;
     srvDesc.Texture3D.MostDetailedMip = baseLevel;
     srvDesc.Texture3D.MipLevels = mipLevels;
@@ -2696,7 +2795,7 @@ gl::Error TextureStorage11_3D::getSwizzleTexture(ID3D11Resource **outTexture)
         desc.Height = mTextureHeight;
         desc.Depth = mTextureDepth;
         desc.MipLevels = mMipLevels;
-        desc.Format = mSwizzleTextureFormat;
+        desc.Format = ConvertSRVFormat(mSwizzleTextureFormat);
         desc.Usage = D3D11_USAGE_DEFAULT;
         desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
         desc.CPUAccessFlags = 0;
@@ -2913,7 +3012,7 @@ gl::Error TextureStorage11_2DArray::getResource(ID3D11Resource **outResource)
         desc.Height = mTextureHeight;
         desc.MipLevels = mMipLevels;
         desc.ArraySize = mTextureDepth;
-        desc.Format = mTextureFormat;
+        desc.Format = ConvertTextureFormat(mTextureFormat);
         desc.SampleDesc.Count = 1;
         desc.SampleDesc.Quality = 0;
         desc.Usage = D3D11_USAGE_DEFAULT;
@@ -2946,7 +3045,7 @@ gl::Error TextureStorage11_2DArray::createSRV(int baseLevel, int mipLevels, DXGI
                                               ID3D11ShaderResourceView **outSRV) const
 {
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-    srvDesc.Format = format;
+    srvDesc.Format = ConvertSRVFormat(format);
     srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
     srvDesc.Texture2DArray.MostDetailedMip = mTopLevel + baseLevel;
     srvDesc.Texture2DArray.MipLevels = mipLevels;
@@ -3057,7 +3156,7 @@ gl::Error TextureStorage11_2DArray::getSwizzleTexture(ID3D11Resource **outTextur
         desc.Height = mTextureHeight;
         desc.MipLevels = mMipLevels;
         desc.ArraySize = mTextureDepth;
-        desc.Format = mSwizzleTextureFormat;
+        desc.Format = ConvertSRVFormat(mSwizzleTextureFormat);
         desc.SampleDesc.Count = 1;
         desc.SampleDesc.Quality = 0;
         desc.Usage = D3D11_USAGE_DEFAULT;

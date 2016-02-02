@@ -418,7 +418,7 @@ static DXGIFormatInfoMap BuildDXGIFormatInfoMap()
     AddDXGIFormat(&map, DXGI_FORMAT_R9G9B9E5_SHAREDEXP,       32,  1, 1, GL_FLOAT,               GenerateMip<R9G9B9E5>,      ReadColor<R9G9B9E5, GLfloat>,      NeverSupported);
     AddDXGIFormat(&map, DXGI_FORMAT_R11G11B10_FLOAT,          32,  1, 1, GL_FLOAT,               GenerateMip<R11G11B10F>,    ReadColor<R11G11B10F, GLfloat>,    RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
 
-    AddDXGIFormat(&map, DXGI_FORMAT_R16_TYPELESS,             16,  1, 1, GL_NONE,                NULL,                       NULL,                              NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16_TYPELESS,             16,  1, 1, GL_NONE,                GenerateMip<R16>,           ReadColor<R16, GLuint>,            NeverSupported);
     AddDXGIFormat(&map, DXGI_FORMAT_R16_UNORM,                16,  1, 1, GL_UNSIGNED_NORMALIZED, NULL,                       NULL,                              NeverSupported);
     AddDXGIFormat(&map, DXGI_FORMAT_D16_UNORM,                16,  1, 1, GL_UNSIGNED_NORMALIZED, NULL,                       NULL,                              NeverSupported);
     AddDXGIFormat(&map, DXGI_FORMAT_R24G8_TYPELESS,           32,  1, 1, GL_NONE,                NULL,                       NULL,                              NeverSupported);
@@ -427,7 +427,7 @@ static DXGIFormatInfoMap BuildDXGIFormatInfoMap()
     AddDXGIFormat(&map, DXGI_FORMAT_R32G8X24_TYPELESS,        64,  1, 1, GL_NONE,                NULL,                       NULL,                              NeverSupported);
     AddDXGIFormat(&map, DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS, 64,  1, 1, GL_NONE,                NULL,                       NULL,                              NeverSupported);
     AddDXGIFormat(&map, DXGI_FORMAT_D32_FLOAT_S8X24_UINT,     64,  1, 1, GL_UNSIGNED_INT,        NULL,                       NULL,                              NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32_TYPELESS,             32,  1, 1, GL_NONE,                NULL,                       NULL,                              NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32_TYPELESS,             32,  1, 1, GL_NONE,                GenerateMip<R32>,           ReadColor<R32, GLuint>,            NeverSupported);
     AddDXGIFormat(&map, DXGI_FORMAT_D32_FLOAT,                32,  1, 1, GL_FLOAT,               NULL,                       NULL,                              NeverSupported);
 
     AddDXGIFormat(&map, DXGI_FORMAT_BC1_UNORM,                64,  4, 4, GL_UNSIGNED_NORMALIZED, NULL,                       NULL,                              NeverSupported);
@@ -447,6 +447,16 @@ static DXGIFormatInfoMap BuildDXGIFormatInfoMap()
     AddDXGIFormat(&map, DXGI_FORMAT_R16G16_SNORM,             32,  1, 1, GL_SIGNED_NORMALIZED,   NULL,                       NULL,                              NeverSupported);
     AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_UNORM,       64,  1, 1, GL_UNSIGNED_NORMALIZED, NULL,                       NULL,                              NeverSupported);
     AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_SNORM,       64,  1, 1, GL_SIGNED_NORMALIZED,   NULL,                       NULL,                              NeverSupported);
+
+    // TODO: GenerateMip functions needed?
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32A32_TYPELESS, 128, 1, 1, GL_NONE, NULL, ReadColor<R32G32B32A32, GLuint>, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32_TYPELESS, 96, 1, 1, GL_NONE, NULL, ReadColor<R32G32B32, GLuint>, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32_TYPELESS, 64, 1, 1, GL_NONE, NULL, ReadColor<R32G32, GLuint>, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_TYPELESS, 64, 1, 1, GL_NONE, NULL, ReadColor<R16G16B16A16, GLuint>, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_TYPELESS, 32, 1, 1, GL_NONE, NULL, ReadColor<R16G16, GLuint>, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8B8A8_TYPELESS, 32, 1, 1, GL_NONE, NULL, ReadColor<R8G8B8A8, GLuint>, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8_TYPELESS, 16, 1, 1, GL_NONE, NULL, ReadColor<R8G8, GLuint>, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8_TYPELESS, 8, 1, 1, GL_NONE, NULL, ReadColor<R8, GLuint>, NeverSupported);
 
     return map;
 }
