@@ -852,9 +852,7 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
             out << "int baseLevel = samplerMetadata[samplerIndex];\n";
             if (IsSampler2D(textureFunction->sampler) || IsSamplerCube(textureFunction->sampler))
             {
-                if (IsSamplerArray(textureFunction->sampler) ||
-                    (IsIntegerSampler(textureFunction->sampler) &&
-                     IsSamplerCube(textureFunction->sampler)))
+                if (IsSamplerArray(textureFunction->sampler))
                 {
                     out << "    uint width; uint height; uint layers; uint numberOfLevels;\n"
                         << "    " << textureReference << ".GetDimensions(baseLevel + lod, width, "
@@ -897,181 +895,14 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
         }
         else
         {
-            if (IsIntegerSampler(textureFunction->sampler) && IsSamplerCube(textureFunction->sampler))
+            if (IsIntegerSampler(textureFunction->sampler))
             {
-                out << "    float width; float height; float layers; float levels;\n";
-
-                out << "    uint mip = 0;\n";
-
-                out << "    " << textureReference
-                    << ".GetDimensions(mip, width, height, layers, levels);\n";
-
-                out << "    bool xMajor = abs(t.x) > abs(t.y) && abs(t.x) > abs(t.z);\n";
-                out << "    bool yMajor = abs(t.y) > abs(t.z) && abs(t.y) > abs(t.x);\n";
-                out << "    bool zMajor = abs(t.z) > abs(t.x) && abs(t.z) > abs(t.y);\n";
-                out << "    bool negative = (xMajor && t.x < 0.0f) || (yMajor && t.y < 0.0f) || (zMajor && t.z < 0.0f);\n";
-
-                // FACE_POSITIVE_X = 000b
-                // FACE_NEGATIVE_X = 001b
-                // FACE_POSITIVE_Y = 010b
-                // FACE_NEGATIVE_Y = 011b
-                // FACE_POSITIVE_Z = 100b
-                // FACE_NEGATIVE_Z = 101b
-                out << "    int face = (int)negative + (int)yMajor * 2 + (int)zMajor * 4;\n";
-
-                out << "    float u = xMajor ? -t.z : (yMajor && t.y < 0.0f ? -t.x : t.x);\n";
-                out << "    float v = yMajor ? t.z : (negative ? t.y : -t.y);\n";
-                out << "    float m = xMajor ? t.x : (yMajor ? t.y : t.z);\n";
-
-                out << "    t.x = (u * 0.5f / m) + 0.5f;\n";
-                out << "    t.y = (v * 0.5f / m) + 0.5f;\n";
-
-                // Mip level computation.
-                if (textureFunction->method == TextureFunction::IMPLICIT)
-                {
-                    out << "    float2 tSized = float2(t.x * width, t.y * height);\n"
-                           "    float2 dx = ddx(tSized);\n"
-                           "    float2 dy = ddy(tSized);\n"
-                           "    float lod = 0.5f * log2(max(dot(dx, dx), dot(dy, dy)));\n"
-                           "    mip = uint(min(max(round(lod), 0), levels - 1));\n"
-                        << "    " << textureReference
-                        << ".GetDimensions(mip, width, height, layers, levels);\n";
-                }
+                out << "    float4 floatSample = ";
             }
-            else if (IsIntegerSampler(textureFunction->sampler) &&
-                     textureFunction->method != TextureFunction::FETCH)
+            else
             {
-                if (IsSampler2D(textureFunction->sampler))
-                {
-                    if (IsSamplerArray(textureFunction->sampler))
-                    {
-                        out << "    float width; float height; float layers; float levels;\n";
-
-                        if (textureFunction->method == TextureFunction::LOD0)
-                        {
-                            out << "    uint mip = 0;\n";
-                        }
-                        else if (textureFunction->method == TextureFunction::LOD0BIAS)
-                        {
-                            out << "    uint mip = bias;\n";
-                        }
-                        else
-                        {
-
-                            out << "    " << textureReference
-                                << ".GetDimensions(0, width, height, layers, levels);\n";
-                            if (textureFunction->method == TextureFunction::IMPLICIT ||
-                                textureFunction->method == TextureFunction::BIAS)
-                            {
-                                out << "    float2 tSized = float2(t.x * width, t.y * height);\n"
-                                       "    float dx = length(ddx(tSized));\n"
-                                       "    float dy = length(ddy(tSized));\n"
-                                       "    float lod = log2(max(dx, dy));\n";
-
-                                if (textureFunction->method == TextureFunction::BIAS)
-                                {
-                                    out << "    lod += bias;\n";
-                                }
-                            }
-                            else if (textureFunction->method == TextureFunction::GRAD)
-                            {
-                                out << "    float lod = log2(max(length(ddx), length(ddy)));\n";
-                            }
-
-                            out << "    uint mip = uint(min(max(round(lod), 0), levels - 1));\n";
-                        }
-
-                        out << "    " << textureReference
-                            << ".GetDimensions(mip, width, height, layers, levels);\n";
-                    }
-                    else
-                    {
-                        out << "    float width; float height; float levels;\n";
-
-                        if (textureFunction->method == TextureFunction::LOD0)
-                        {
-                            out << "    uint mip = 0;\n";
-                        }
-                        else if (textureFunction->method == TextureFunction::LOD0BIAS)
-                        {
-                            out << "    uint mip = bias;\n";
-                        }
-                        else
-                        {
-                            out << "    " << textureReference
-                                << ".GetDimensions(0, width, height, levels);\n";
-
-                            if (textureFunction->method == TextureFunction::IMPLICIT ||
-                                textureFunction->method == TextureFunction::BIAS)
-                            {
-                                out << "    float2 tSized = float2(t.x * width, t.y * height);\n"
-                                       "    float dx = length(ddx(tSized));\n"
-                                       "    float dy = length(ddy(tSized));\n"
-                                       "    float lod = log2(max(dx, dy));\n";
-
-                                if (textureFunction->method == TextureFunction::BIAS)
-                                {
-                                    out << "    lod += bias;\n";
-                                }
-                            }
-                            else if (textureFunction->method == TextureFunction::GRAD)
-                            {
-                                out << "    float lod = log2(max(length(ddx), length(ddy)));\n";
-                            }
-
-                            out << "    uint mip = uint(min(max(round(lod), 0), levels - 1));\n";
-                        }
-
-                        out << "    " << textureReference
-                            << ".GetDimensions(mip, width, height, levels);\n";
-                    }
-                }
-                else if (IsSampler3D(textureFunction->sampler))
-                {
-                    out << "    float width; float height; float depth; float levels;\n";
-
-                    if (textureFunction->method == TextureFunction::LOD0)
-                    {
-                        out << "    uint mip = 0;\n";
-                    }
-                    else if (textureFunction->method == TextureFunction::LOD0BIAS)
-                    {
-                        out << "    uint mip = bias;\n";
-                    }
-                    else
-                    {
-                        out << "    " << textureReference
-                            << ".GetDimensions(0, width, height, depth, levels);\n";
-
-                        if (textureFunction->method == TextureFunction::IMPLICIT ||
-                            textureFunction->method == TextureFunction::BIAS)
-                        {
-                            out << "    float3 tSized = float3(t.x * width, t.y * height, t.z * "
-                                   "depth);\n"
-                                   "    float dx = length(ddx(tSized));\n"
-                                   "    float dy = length(ddy(tSized));\n"
-                                   "    float lod = log2(max(dx, dy));\n";
-
-                            if (textureFunction->method == TextureFunction::BIAS)
-                            {
-                                out << "    lod += bias;\n";
-                            }
-                        }
-                        else if (textureFunction->method == TextureFunction::GRAD)
-                        {
-                            out << "    float lod = log2(max(length(ddx), length(ddy)));\n";
-                        }
-
-                        out << "    uint mip = uint(min(max(round(lod), 0), levels - 1));\n";
-                    }
-
-                    out << "    " << textureReference
-                        << ".GetDimensions(mip, width, height, depth, levels);\n";
-                }
-                else UNREACHABLE();
+                out << "    return ";
             }
-
-            out << "    return ";
 
             // HLSL intrinsic
             if (mOutputType == SH_HLSL_3_0_OUTPUT)
@@ -1107,11 +938,7 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
             {
                 if (textureFunction->method == TextureFunction::GRAD)
                 {
-                    if (IsIntegerSampler(textureFunction->sampler))
-                    {
-                        out << "" << textureReference << ".Load(";
-                    }
-                    else if (IsShadowSampler(textureFunction->sampler))
+                    if (IsShadowSampler(textureFunction->sampler))
                     {
                         out << "" << textureReference << ".SampleCmpLevelZero(" << samplerReference
                             << ", ";
@@ -1121,8 +948,7 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                         out << "" << textureReference << ".SampleGrad(" << samplerReference << ", ";
                     }
                 }
-                else if (IsIntegerSampler(textureFunction->sampler) ||
-                         textureFunction->method == TextureFunction::FETCH)
+                else if (textureFunction->method == TextureFunction::FETCH)
                 {
                     out << "" << textureReference << ".Load(";
                 }
@@ -1188,36 +1014,13 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
             TString addressz = "";
             TString close = "";
 
-            if (IsIntegerSampler(textureFunction->sampler) ||
-                textureFunction->method == TextureFunction::FETCH)
+            if (textureFunction->method == TextureFunction::FETCH)
             {
                 switch(hlslCoords)
                 {
                   case 2: out << "int3("; break;
                   case 3: out << "int4("; break;
                   default: UNREACHABLE();
-                }
-
-                // Convert from normalized floating-point to integer
-                if (textureFunction->method != TextureFunction::FETCH)
-                {
-                    addressx = "int(floor(width * frac((";
-                    addressy = "int(floor(height * frac((";
-
-                    if (IsSamplerArray(textureFunction->sampler))
-                    {
-                        addressz = "int(max(0, min(layers - 1, floor(0.5 + ";
-                    }
-                    else if (IsSamplerCube(textureFunction->sampler))
-                    {
-                        addressz = "((((";
-                    }
-                    else
-                    {
-                        addressz = "int(floor(depth * frac((";
-                    }
-
-                    close = "))))";
                 }
             }
             else
@@ -1277,23 +1080,12 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
             {
                 if (hlslCoords >= 3)
                 {
-                    if (IsIntegerSampler(textureFunction->sampler) && IsSamplerCube(textureFunction->sampler))
-                    {
-                        out << ", face";
-                    }
-                    else
-                    {
-                        out << ", " + addressz + ("t.z" + proj) + close;
-                    }
+                    out << ", " + addressz + ("t.z" + proj) + close;
                 }
 
                 if (textureFunction->method == TextureFunction::GRAD)
                 {
-                    if (IsIntegerSampler(textureFunction->sampler))
-                    {
-                        out << ", mip)";
-                    }
-                    else if (IsShadowSampler(textureFunction->sampler))
+                    if (IsShadowSampler(textureFunction->sampler))
                     {
                         // Compare value
                         if (textureFunction->proj)
@@ -1317,8 +1109,7 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                         out << "), ddx, ddy";
                     }
                 }
-                else if (IsIntegerSampler(textureFunction->sampler) ||
-                         textureFunction->method == TextureFunction::FETCH)
+                else if (textureFunction->method == TextureFunction::FETCH)
                 {
                     out << ", mip)";
                 }
@@ -1362,6 +1153,17 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                 out << ");";
             }
             else UNREACHABLE();
+
+            if (IsUnsignedIntegerSampler(textureFunction->sampler))
+            {
+                out << "\n"
+                       "    return asuint(floatSample);\n";
+            }
+            else if (IsIntegerSampler(textureFunction->sampler))
+            {
+                out << "\n"
+                       "    return asint(floatSample);\n";
+            }
         }
 
         out << "\n"
