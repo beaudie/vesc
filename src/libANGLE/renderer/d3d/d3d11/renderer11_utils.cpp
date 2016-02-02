@@ -1352,7 +1352,8 @@ void GenerateInitialTextureData(GLint internalFormat,
     const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(internalFormat, renderer11DeviceCaps);
     ASSERT(d3dFormatInfo.dataInitializerFunction != NULL);
 
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(d3dFormatInfo.texFormat);
+    const d3d11::DXGIFormat &dxgiFormatInfo =
+        d3d11::GetDXGIFormatInfo(d3dFormatInfo.semanticFormat);
 
     outSubresourceData->resize(mipLevels);
     outData->resize(mipLevels);
