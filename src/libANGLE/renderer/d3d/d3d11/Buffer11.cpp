@@ -1325,12 +1325,20 @@ gl::Error Buffer11::PackStorage::packPixels(const gl::FramebufferAttachment &rea
 
     mQueuedPackCommand.reset(new PackPixelsParams(params));
 
+    // Texture might be allocated as TYPELESS in the case it is an integer texture. In this case the
+    // actual format can be determined from the RTV.
+    /*ID3D11RenderTargetView *rtv = renderTarget->getRenderTargetView();
+    ASSERT(rtv);
+    D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+    rtv->GetDesc(&rtvDesc);*/
+
     gl::Extents srcTextureSize(params.area.width, params.area.height, 1);
-    if (!mStagingTexture.getResource() || mStagingTexture.getFormat() != srcTexture.getFormat() ||
+    if (!mStagingTexture.getResource() ||
+        mStagingTexture.getFormat() != renderTarget->getDXGIFormat() ||
         mStagingTexture.getExtents() != srcTextureSize)
     {
         auto textureOrError =
-            CreateStagingTexture(srcTexture.getTextureType(), srcTexture.getFormat(),
+            CreateStagingTexture(srcTexture.getTextureType(), renderTarget->getDXGIFormat(),
                                  srcTextureSize, mRenderer->getDevice());
         if (textureOrError.isError())
         {

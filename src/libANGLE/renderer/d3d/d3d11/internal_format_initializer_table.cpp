@@ -88,7 +88,7 @@ InitializeTextureDataFunction GetInternalFormatInitializer(GLenum internalFormat
         {
             switch (dxgiFormat)
             {
-                case DXGI_FORMAT_R8G8B8A8_UINT:
+                case DXGI_FORMAT_R8G8B8A8_TYPELESS:
                 {
                     return Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0x01>;
                 }
@@ -100,7 +100,7 @@ InitializeTextureDataFunction GetInternalFormatInitializer(GLenum internalFormat
         {
             switch (dxgiFormat)
             {
-                case DXGI_FORMAT_R8G8B8A8_SINT:
+                case DXGI_FORMAT_R8G8B8A8_TYPELESS:
                 {
                     return Initialize4ComponentData<GLbyte, 0x00, 0x00, 0x00, 0x01>;
                 }
@@ -112,7 +112,7 @@ InitializeTextureDataFunction GetInternalFormatInitializer(GLenum internalFormat
         {
             switch (dxgiFormat)
             {
-                case DXGI_FORMAT_R16G16B16A16_UINT:
+                case DXGI_FORMAT_R16G16B16A16_TYPELESS:
                 {
                     return Initialize4ComponentData<GLushort, 0x0000, 0x0000, 0x0000, 0x0001>;
                 }
@@ -124,7 +124,7 @@ InitializeTextureDataFunction GetInternalFormatInitializer(GLenum internalFormat
         {
             switch (dxgiFormat)
             {
-                case DXGI_FORMAT_R16G16B16A16_SINT:
+                case DXGI_FORMAT_R16G16B16A16_TYPELESS:
                 {
                     return Initialize4ComponentData<GLshort, 0x0000, 0x0000, 0x0000, 0x0001>;
                 }
@@ -136,7 +136,7 @@ InitializeTextureDataFunction GetInternalFormatInitializer(GLenum internalFormat
         {
             switch (dxgiFormat)
             {
-                case DXGI_FORMAT_R32G32B32A32_UINT:
+                case DXGI_FORMAT_R32G32B32A32_TYPELESS:
                 {
                     return Initialize4ComponentData<GLuint, 0x00000000, 0x00000000, 0x00000000,
                                                     0x00000001>;
@@ -149,7 +149,7 @@ InitializeTextureDataFunction GetInternalFormatInitializer(GLenum internalFormat
         {
             switch (dxgiFormat)
             {
-                case DXGI_FORMAT_R32G32B32A32_SINT:
+                case DXGI_FORMAT_R32G32B32A32_TYPELESS:
                 {
                     return Initialize4ComponentData<GLint, 0x00000000, 0x00000000, 0x00000000,
                                                     0x00000001>;

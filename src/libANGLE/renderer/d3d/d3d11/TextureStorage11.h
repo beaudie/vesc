@@ -88,7 +88,7 @@ class TextureStorage11 : public TextureStorage
 
     virtual gl::Error getSwizzleTexture(ID3D11Resource **outTexture) = 0;
     virtual gl::Error getSwizzleRenderTarget(int mipLevel, ID3D11RenderTargetView **outRTV) = 0;
-    gl::Error getSRVLevel(int mipLevel, ID3D11ShaderResourceView **outSRV);
+    gl::Error getSRVLevel(int mipLevel, ID3D11ShaderResourceView **outSRV, bool useRTVFormat);
 
     virtual gl::Error createSRV(int baseLevel, int mipLevels, DXGI_FORMAT format, ID3D11Resource *texture,
                                 ID3D11ShaderResourceView **outSRV) const = 0;
@@ -147,6 +147,7 @@ class TextureStorage11 : public TextureStorage
 
     SRVCache mSrvCache;
     ID3D11ShaderResourceView *mLevelSRVs[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
+    ID3D11ShaderResourceView *mLevelSRVsRTVFormat[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 };
 
 class TextureStorage11_2D : public TextureStorage11
