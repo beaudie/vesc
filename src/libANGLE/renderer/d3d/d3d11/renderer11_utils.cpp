@@ -1340,7 +1340,7 @@ void MakeValidSize(bool isImage, DXGI_FORMAT format, GLsizei *requestWidth, GLsi
 
 void GenerateInitialTextureData(GLint internalFormat, const Renderer11DeviceCaps &renderer11DeviceCaps, GLuint width, GLuint height, GLuint depth,
                                 GLuint mipLevels, std::vector<D3D11_SUBRESOURCE_DATA> *outSubresourceData,
-                                std::vector< std::vector<BYTE> > *outData)
+                                std::vector<std::vector<BYTE>> *outData)
 {
     const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(internalFormat, renderer11DeviceCaps);
     ASSERT(d3dFormatInfo.dataInitializerFunction != NULL);

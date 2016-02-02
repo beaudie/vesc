@@ -476,14 +476,14 @@ template <class T> struct UseFallback { enum { type = T::fallback }; };
 template <GLenum fromType, bool normalized, int size, template <class T> class PreferenceRule>
 struct Converter
     : VertexDataConverter<typename GLToCType<fromType>::type,
-                          WidenRule<PreferenceRule< VertexTypeMapping<fromType, normalized> >::type, size>,
+                          WidenRule<PreferenceRule<VertexTypeMapping<fromType, normalized>>::type, size>,
                           ConversionRule<fromType,
                                          normalized,
-                                         PreferenceRule< VertexTypeMapping<fromType, normalized> >::type>,
-                          DefaultVertexValues<typename D3DToCType<PreferenceRule< VertexTypeMapping<fromType, normalized> >::type>::type, normalized > >
+                                         PreferenceRule<VertexTypeMapping<fromType, normalized>>::type>,
+                          DefaultVertexValues<typename D3DToCType<PreferenceRule<VertexTypeMapping<fromType, normalized>>::type>::type, normalized>>
 {
 private:
-    enum { d3dtype = PreferenceRule< VertexTypeMapping<fromType, normalized> >::type };
+    enum { d3dtype = PreferenceRule< VertexTypeMapping<fromType, normalized>>::type };
     enum { d3dsize = WidenRule<d3dtype, size>::finalWidth };
 
 public:
