@@ -250,7 +250,7 @@ void UniformHLSL::samplerMetadataUniforms(TInfoSinkBase &out)
 {
     if (mSamplerRegister > 0)
     {
-        out << "    int samplerMetadata[" << mSamplerRegister << "] : packoffset(c3);\n";
+        out << "    int4 samplerMetadata[" << mSamplerRegister << "] : packoffset(c3);\n";
     }
 }
 
