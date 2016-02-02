@@ -620,7 +620,7 @@ const std::map<GLenum, LoadImageFunction> &GetLoadFunctionsMap(GLenum internalFo
         {
             switch (dxgiFormat)
             {
-                case DXGI_FORMAT_R32G8X24_TYPELESS:
+                case DXGI_FORMAT_D32_FLOAT_S8X24_UINT:
                 {
                     static const std::map<GLenum, LoadImageFunction> loadFunctionsMap = []() {
                         std::map<GLenum, LoadImageFunction> loadMap;
@@ -713,7 +713,7 @@ const std::map<GLenum, LoadImageFunction> &GetLoadFunctionsMap(GLenum internalFo
         {
             switch (dxgiFormat)
             {
-                case DXGI_FORMAT_R32_TYPELESS:
+                case DXGI_FORMAT_D32_FLOAT:
                 {
                     static const std::map<GLenum, LoadImageFunction> loadFunctionsMap = []() {
                         std::map<GLenum, LoadImageFunction> loadMap;

@@ -461,6 +461,7 @@ const DXGIFormat &GetDXGIFormatInfo(DXGI_FORMAT format)
     }
     else
     {
+        // TODO: When is this reached? Is that ever ok or should this be UNREACHABLE()?
         static DXGIFormat defaultInfo;
         return defaultInfo;
     }

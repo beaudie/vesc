@@ -512,9 +512,38 @@ void SamplerMetadataD3D11::initData(unsigned int samplerCount, unsigned int maxS
     mMaxSamplerCount = maxSamplerCount;
 }
 
-void SamplerMetadataD3D11::update(unsigned int samplerIndex, unsigned int baseLevel)
+void SamplerMetadataD3D11::update(unsigned int samplerIndex,
+                                  unsigned int baseLevel,
+                                  GLenum internalFormat)
 {
-    mSamplerMetadata[samplerIndex].baseLevel[0] = static_cast<int>(baseLevel);
+    int internalFormatBits = 0;
+    switch (internalFormat)
+    {
+        case GL_RGBA16I:
+        case GL_RGBA16UI:
+        case GL_RGB16I:
+        case GL_RGB16UI:
+        case GL_RG16I:
+        case GL_RG16UI:
+        case GL_R16I:
+        case GL_R16UI:
+            internalFormatBits = 16;
+            break;
+        case GL_RGBA8I:
+        case GL_RGBA8UI:
+        case GL_RGB8I:
+        case GL_RGB8UI:
+        case GL_RG8I:
+        case GL_RG8UI:
+        case GL_R8I:
+        case GL_R8UI:
+            internalFormatBits = 8;
+            break;
+        default:
+            break;
+    }
+    mSamplerMetadata[samplerIndex].parameters[0] = static_cast<int>(baseLevel);
+    mSamplerMetadata[samplerIndex].parameters[1] = internalFormatBits;
 }
 
 void SamplerMetadataD3D11::apply(ID3D11DeviceContext *deviceContext,
@@ -722,7 +751,8 @@ GLenum ProgramD3D::getSamplerTextureType(gl::SamplerType type, unsigned int samp
 
 void ProgramD3D::setSamplerMetadata(gl::SamplerType type,
                                     unsigned int samplerIndex,
-                                    unsigned int baseLevel)
+                                    unsigned int baseLevel,
+                                    GLenum internalFormat)
 {
     SamplerMetadataD3D11 *metadata = nullptr;
     switch (type)
@@ -739,7 +769,7 @@ void ProgramD3D::setSamplerMetadata(gl::SamplerType type,
     }
     ASSERT(metadata != nullptr);
     ASSERT(samplerIndex < getUsedSamplerRange(type));
-    metadata->update(samplerIndex, baseLevel);
+    metadata->update(samplerIndex, baseLevel, internalFormat);
 }
 
 GLuint ProgramD3D::getUsedSamplerRange(gl::SamplerType type) const

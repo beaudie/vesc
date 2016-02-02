@@ -607,6 +607,8 @@ ID3D11ShaderResourceView *Buffer11::getSRV(DXGI_FORMAT srvFormat)
     ID3D11ShaderResourceView *bufferSRV = nullptr;
 
     const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(srvFormat);
+    // The format passed here should have DXGI format info - it should not be a typeless format.
+    ASSERT(dxgiFormatInfo.pixelBytes > 0);
 
     D3D11_SHADER_RESOURCE_VIEW_DESC bufferSRVDesc;
     bufferSRVDesc.Buffer.ElementOffset = 0;
@@ -1326,11 +1328,14 @@ gl::Error Buffer11::PackStorage::packPixels(const gl::FramebufferAttachment &rea
     mQueuedPackCommand.reset(new PackPixelsParams(params));
 
     gl::Extents srcTextureSize(params.area.width, params.area.height, 1);
-    if (!mStagingTexture.getResource() || mStagingTexture.getFormat() != srcTexture.getFormat() ||
+    if (!mStagingTexture.getResource() ||
+        mStagingTexture.getFormat() != renderTarget->getSemanticDXGIFormat() ||
         mStagingTexture.getExtents() != srcTextureSize)
     {
+        // Texture might be allocated as TYPELESS in the case it is an integer texture. In this case
+        // the actual semantic format can be determined from the renderTarget.
         auto textureOrError =
-            CreateStagingTexture(srcTexture.getTextureType(), srcTexture.getFormat(),
+            CreateStagingTexture(srcTexture.getTextureType(), renderTarget->getSemanticDXGIFormat(),
                                  srcTextureSize, mRenderer->getDevice());
         if (textureOrError.isError())
         {

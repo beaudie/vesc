@@ -27,9 +27,21 @@ struct TextureFormat
     TextureFormat();
 
     DXGI_FORMAT texFormat;
+
+    // In the case of integer textures, shaders using SRVs with srvFormat need to convert the
+    // sampling result from float to integer, since srvFormat is set to SNORM/UNORM/FLOAT to
+    // work around lack of wrap mode support on SINT/UINT SRVs.
     DXGI_FORMAT srvFormat;
+
     DXGI_FORMAT rtvFormat;
     DXGI_FORMAT dsvFormat;
+
+    // The semantic format captures the actual type and format of the data, instead of what is
+    // usually used to do draw operations on the data. It should be used when querying format info,
+    // pixel pack/unpack, and can be used as a format for SRVs when doing internal blit operations
+    // that don't need support for texture wrap modes.
+    DXGI_FORMAT semanticFormat;
+
     DXGI_FORMAT renderFormat;
 
     DXGI_FORMAT swizzleTexFormat;

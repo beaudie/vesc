@@ -420,7 +420,9 @@ gl::Error RendererD3D::applyTextures(const gl::Data &data, gl::SamplerType shade
                     return error;
                 }
 
-                programD3D->setSamplerMetadata(shaderType, samplerIndex, texture->getBaseLevel());
+                programD3D->setSamplerMetadata(
+                    shaderType, samplerIndex, texture->getBaseLevel(),
+                    texture->getInternalFormat(texture->getTarget(), texture->getBaseLevel()));
             }
             else
             {

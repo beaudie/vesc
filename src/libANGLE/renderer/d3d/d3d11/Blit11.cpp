@@ -626,6 +626,10 @@ gl::Error Blit11::swizzleTexture(ID3D11ShaderResourceView *source,
     source->GetDesc(&sourceSRVDesc);
 
     const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(sourceSRVDesc.Format);
+
+    // The source should use the semantic format.
+    ASSERT(dxgiFormatInfo.pixelBytes > 0);
+
     const gl::InternalFormat &sourceFormatInfo = gl::GetInternalFormatInfo(dxgiFormatInfo.internalFormat);
 
     GLenum shaderType = GL_NONE;
@@ -749,6 +753,7 @@ gl::Error Blit11::swizzleTexture(ID3D11ShaderResourceView *source,
 }
 
 gl::Error Blit11::copyTexture(ID3D11ShaderResourceView *source,
+                              DXGI_FORMAT sourceFormat,
                               const gl::Box &sourceArea,
                               const gl::Extents &sourceSize,
                               ID3D11RenderTargetView *dest,
@@ -773,7 +778,7 @@ gl::Error Blit11::copyTexture(ID3D11ShaderResourceView *source,
     D3D11_SHADER_RESOURCE_VIEW_DESC sourceSRVDesc;
     source->GetDesc(&sourceSRVDesc);
 
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(sourceSRVDesc.Format);
+    const d3d11::DXGIFormat &dxgiFormatInfo      = d3d11::GetDXGIFormatInfo(sourceFormat);
     const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(dxgiFormatInfo.internalFormat);
 
     bool isSigned = (internalFormatInfo.componentType == GL_INT);
