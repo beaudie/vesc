@@ -26,6 +26,7 @@ bool InitializePoolIndex()
     return PoolIndex != TLS_INVALID_INDEX;
 }
 
+
 void FreePoolIndex()
 {
     assert(PoolIndex != TLS_INVALID_INDEX);
