@@ -30,7 +30,7 @@ class RenderTarget11 : public RenderTargetD3D
 
     virtual unsigned int getSubresourceIndex() const = 0;
 
-    virtual DXGI_FORMAT getDXGIFormat() const = 0;
+    virtual DXGI_FORMAT getSemanticDXGIFormat() const = 0;
 };
 
 class TextureRenderTarget11 : public RenderTarget11
@@ -56,14 +56,14 @@ class TextureRenderTarget11 : public RenderTarget11
 
     unsigned int getSubresourceIndex() const override;
 
-    DXGI_FORMAT getDXGIFormat() const override;
+    DXGI_FORMAT getSemanticDXGIFormat() const override;
 
   private:
     GLsizei mWidth;
     GLsizei mHeight;
     GLsizei mDepth;
     GLenum mInternalFormat;
-    DXGI_FORMAT mDXGIFormat;
+    DXGI_FORMAT mSemanticDXGIFormat;
     GLsizei mSamples;
 
     unsigned int mSubresourceIndex;
@@ -92,7 +92,7 @@ class SurfaceRenderTarget11 : public RenderTarget11
 
     unsigned int getSubresourceIndex() const override;
 
-    DXGI_FORMAT getDXGIFormat() const override;
+    DXGI_FORMAT getSemanticDXGIFormat() const override;
 
   private:
     SwapChain11 *mSwapChain;

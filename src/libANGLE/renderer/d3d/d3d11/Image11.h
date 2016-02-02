@@ -40,8 +40,6 @@ class Image11 : public ImageD3D
 
     bool redefine(GLenum target, GLenum internalformat, const gl::Extents &size, bool forceRelease) override;
 
-    DXGI_FORMAT getDXGIFormat() const;
-
     virtual gl::Error loadData(const gl::Box &area, const gl::PixelUnpackState &unpack, GLenum type, const void *input);
     virtual gl::Error loadCompressedData(const gl::Box &area, const void *input);
 
@@ -59,6 +57,8 @@ class Image11 : public ImageD3D
     void unmap();
 
   private:
+    DXGI_FORMAT getDXGIFormat() const;
+
     gl::Error copyWithoutConversion(const gl::Offset &destOffset,
                                     const gl::Box &sourceArea,
                                     const TextureHelper11 &textureHelper,
@@ -70,7 +70,8 @@ class Image11 : public ImageD3D
 
     Renderer11 *mRenderer;
 
-    DXGI_FORMAT mDXGIFormat;
+    DXGI_FORMAT mSemanticDXGIFormat;
+    DXGI_FORMAT mTexFormat;
     ID3D11Resource *mStagingTexture;
     unsigned int mStagingSubresource;
 
