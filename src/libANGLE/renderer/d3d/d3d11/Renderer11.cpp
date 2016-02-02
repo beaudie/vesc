@@ -2734,6 +2734,8 @@ gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::
     ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
     ASSERT(source);
 
+    const DXGI_FORMAT sourceFormat = sourceRenderTarget->getSemanticDXGIFormat();
+
     TextureStorage11_2D *storage11 = GetAs<TextureStorage11_2D>(storage);
     ASSERT(storage11);
 
@@ -2764,8 +2766,8 @@ gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                               destFormat, GL_NEAREST, false);
+    error = mBlit->copyTexture(source, sourceFormat, sourceArea, sourceSize, dest, destArea,
+                               destSize, NULL, destFormat, GL_NEAREST, false);
     if (error.isError())
     {
         return error;
@@ -2792,6 +2794,8 @@ gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl
 
     ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
     ASSERT(source);
+
+    const DXGI_FORMAT sourceFormat = sourceRenderTarget->getSemanticDXGIFormat();
 
     TextureStorage11_Cube *storage11 = GetAs<TextureStorage11_Cube>(storage);
     ASSERT(storage11);
@@ -2823,8 +2827,8 @@ gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                               destFormat, GL_NEAREST, false);
+    error = mBlit->copyTexture(source, sourceFormat, sourceArea, sourceSize, dest, destArea,
+                               destSize, NULL, destFormat, GL_NEAREST, false);
     if (error.isError())
     {
         return error;
@@ -2852,6 +2856,8 @@ gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::
     ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
     ASSERT(source);
 
+    const DXGI_FORMAT sourceFormat = sourceRenderTarget->getSemanticDXGIFormat();
+
     TextureStorage11_3D *storage11 = GetAs<TextureStorage11_3D>(storage);
     ASSERT(storage11);
 
@@ -2875,8 +2881,8 @@ gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                               destFormat, GL_NEAREST, false);
+    error = mBlit->copyTexture(source, sourceFormat, sourceArea, sourceSize, dest, destArea,
+                               destSize, NULL, destFormat, GL_NEAREST, false);
     if (error.isError())
     {
         return error;
@@ -2904,6 +2910,8 @@ gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer, const
     ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
     ASSERT(source);
 
+    const DXGI_FORMAT sourceFormat = sourceRenderTarget->getSemanticDXGIFormat();
+
     TextureStorage11_2DArray *storage11 = GetAs<TextureStorage11_2DArray>(storage);
     ASSERT(storage11);
 
@@ -2927,8 +2935,8 @@ gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer, const
 
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                               destFormat, GL_NEAREST, false);
+    error = mBlit->copyTexture(source, sourceFormat, sourceArea, sourceSize, dest, destArea,
+                               destSize, NULL, destFormat, GL_NEAREST, false);
     if (error.isError())
     {
         return error;
@@ -3016,7 +3024,20 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
         if (bindSRV)
         {
             D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-            srvDesc.Format = formatInfo.srvFormat;
+            if (bindDSV)
+            {
+                // TODO: Make sure there aren't other cases which need to use the srvFormat.
+                srvDesc.Format = formatInfo.srvFormat;
+            }
+            else
+            {
+                // Need to use the RTV format here to support integer textures - they use a
+                // FLOAT/SNORM/UNORM SRV format
+                // for regular shaders, but ANGLE shaders for blitting from render targets require
+                // the
+                // actual integer format.
+                srvDesc.Format = formatInfo.rtvFormat;
+            }
             srvDesc.ViewDimension = (supportedSamples == 0) ? D3D11_SRV_DIMENSION_TEXTURE2D : D3D11_SRV_DIMENSION_TEXTURE2DMS;
             srvDesc.Texture2D.MostDetailedMip = 0;
             srvDesc.Texture2D.MipLevels = 1;
@@ -3541,8 +3562,13 @@ gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAtt
     }
 
     gl::Extents safeSize(safeArea.width, safeArea.height, 1);
+
+    // Texture might be allocated as TYPELESS in the case it is an integer texture. In this case the
+    // actual format can be determined from the RTV.
+    ASSERT(d3d11::GetTextureFormatInfo(srcAttachment.getInternalFormat(), mRenderer11DeviceCaps)
+               .semanticFormat == rt11->getSemanticDXGIFormat());
     auto errorOrResult = CreateStagingTexture(textureHelper.getTextureType(),
-                                              textureHelper.getFormat(), safeSize, mDevice);
+                                              rt11->getSemanticDXGIFormat(), safeSize, mDevice);
     if (errorOrResult.isError())
     {
         return errorOrResult.getError();
@@ -3859,7 +3885,8 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
 
     const auto &destFormatInfo = gl::GetInternalFormatInfo(drawRenderTarget->getInternalFormat());
     const auto &srcFormatInfo  = gl::GetInternalFormatInfo(readRenderTarget->getInternalFormat());
-    const auto &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(drawRenderTarget11->getDXGIFormat());
+    const auto &dxgiFormatInfo =
+        d3d11::GetDXGIFormatInfo(drawRenderTarget11->getSemanticDXGIFormat());
 
     // Some blits require masking off emulated texture channels. eg: from RGBA8 to RGB8, we
     // emulate RGB8 with RGBA8, so we need to mask off the alpha channel when we copy.
@@ -3897,7 +3924,8 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
 
     gl::Error result(GL_NO_ERROR);
 
-    if (readRenderTarget11->getDXGIFormat() == drawRenderTarget11->getDXGIFormat() &&
+    if (readRenderTarget11->getSemanticDXGIFormat() ==
+            drawRenderTarget11->getSemanticDXGIFormat() &&
         !stretchRequired && !outOfBounds && !flipRequired && !partialDSBlit &&
         !colorMaskingNeeded && (!(depthBlit || stencilBlit) || wholeBufferCopy))
     {
@@ -3971,8 +3999,10 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
         {
             // We don't currently support masking off any other channel than alpha
             bool maskOffAlpha = colorMaskingNeeded && colorMask.alpha;
-            result = mBlit->copyTexture(readSRV, readArea, readSize, drawRTV, drawArea, drawSize,
-                                        scissor, destFormatInfo.format, filter, maskOffAlpha);
+            const DXGI_FORMAT readFormat = readRenderTarget11->getSemanticDXGIFormat();
+            result =
+                mBlit->copyTexture(readSRV, readFormat, readArea, readSize, drawRTV, drawArea,
+                                   drawSize, scissor, destFormatInfo.format, filter, maskOffAlpha);
         }
     }
 

@@ -123,13 +123,15 @@ const TextureFormat GetD3D11FormatInfo(GLenum internalFormat,
                                        DXGI_FORMAT texFormat,
                                        DXGI_FORMAT srvFormat,
                                        DXGI_FORMAT rtvFormat,
-                                       DXGI_FORMAT dsvFormat)
+                                       DXGI_FORMAT dsvFormat,
+									   DXGI_FORMAT semanticFormat)
 {{
     TextureFormat info;
     info.texFormat = texFormat;
     info.srvFormat = srvFormat;
     info.rtvFormat = rtvFormat;
     info.dsvFormat = dsvFormat;
+    info.semanticFormat = semanticFormat;
 
     // Given a GL internal format, the renderFormat is the DSV format if it is depth- or
     // stencil-renderable,
@@ -202,9 +204,9 @@ const TextureFormat GetD3D11FormatInfo(GLenum internalFormat,
     }}
 
     // Check if there is an initialization function for this texture format
-    info.dataInitializerFunction = GetInternalFormatInitializer(internalFormat, texFormat);
+    info.dataInitializerFunction = GetInternalFormatInitializer(internalFormat, semanticFormat);
     // Gather all the load functions for this internal format
-    info.loadFunctions = GetLoadFunctionsMap(internalFormat, texFormat);
+    info.loadFunctions = GetLoadFunctionsMap(internalFormat, semanticFormat);
 
     ASSERT(info.loadFunctions.size() != 0 || internalFormat == GL_NONE);
 
@@ -218,6 +220,7 @@ TextureFormat::TextureFormat()
       srvFormat(DXGI_FORMAT_UNKNOWN),
       rtvFormat(DXGI_FORMAT_UNKNOWN),
       dsvFormat(DXGI_FORMAT_UNKNOWN),
+      semanticFormat(DXGI_FORMAT_UNKNOWN),
       renderFormat(DXGI_FORMAT_UNKNOWN),
       swizzleTexFormat(DXGI_FORMAT_UNKNOWN),
       swizzleSRVFormat(DXGI_FORMAT_UNKNOWN),
@@ -255,6 +258,15 @@ def get_texture_format_item(idx, texture_format):
     srv_format = texture_format["srvFormat"] if "srvFormat" in texture_format else "DXGI_FORMAT_UNKNOWN"
     rtv_format = texture_format["rtvFormat"] if "rtvFormat" in texture_format else "DXGI_FORMAT_UNKNOWN"
     dsv_format = texture_format["dsvFormat"] if "dsvFormat" in texture_format else "DXGI_FORMAT_UNKNOWN"
+    semantic_format = "DXGI_FORMAT_UNKNOWN"
+    if ("semanticFormat" in texture_format):
+        semantic_format = texture_format["semanticFormat"]
+    elif rtv_format != "DXGI_FORMAT_UNKNOWN":
+        semantic_format = rtv_format
+    elif dsv_format != "DXGI_FORMAT_UNKNOWN":
+        semantic_format = dsv_format
+    else:
+        semantic_format = srv_format
     requirements_fn = texture_format["requirementsFcn"] if "requirementsFcn" in texture_format else "AnyDevice"
 
     if idx == 0:
@@ -266,7 +278,8 @@ def get_texture_format_item(idx, texture_format):
     table_data += '                                                                              ' + tex_format + ',\n'
     table_data += '                                                                              ' + srv_format + ',\n'
     table_data += '                                                                              ' + rtv_format + ',\n'
-    table_data += '                                                                              ' + dsv_format + ');\n'
+    table_data += '                                                                              ' + dsv_format + ',\n'
+    table_data += '                                                                              ' + semantic_format + ');\n'
     table_data += '                return textureFormat;\n'
     table_data += '            }\n'
 
