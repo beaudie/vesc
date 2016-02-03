@@ -15,6 +15,8 @@
 #include "common/platform.h"
 #include "common/tls.h"
 
+#include "platform/Platform.h"
+
 namespace
 {
 
@@ -154,6 +156,10 @@ void SetGlobalError(const Error &error)
     Current *current = GetCurrentData();
 
     current->error = error.getCode();
+    if (error.isError() && !error.getMessage().empty())
+    {
+        ANGLEPlatformCurrent()->logError(error.getMessage.c_str());
+    }
 }
 
 EGLint GetGlobalError()
