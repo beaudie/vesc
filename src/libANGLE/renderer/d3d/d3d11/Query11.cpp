@@ -21,13 +21,19 @@ Query11::Query11(Renderer11 *renderer, GLenum type)
       mResult(0),
       mQueryFinished(false),
       mRenderer(renderer),
-      mQuery(NULL)
+      mQuery(NULL),
+      mTimestampBeginQuery(NULL),
+      mTimestampEndQuery(NULL),
+      mBeginTime(0),
+      mEndTime(0)
 {
 }
 
 Query11::~Query11()
 {
     SafeRelease(mQuery);
+    SafeRelease(mTimestampBeginQuery);
+    SafeRelease(mTimestampEndQuery);
 }
 
 gl::Error Query11::begin()
@@ -43,15 +49,49 @@ gl::Error Query11::begin()
         {
             return gl::Error(GL_OUT_OF_MEMORY, "Internal query creation failed, result: 0x%X.", result);
         }
+
+        // If we are doing time elapsed we also need a query to actually query the timestamp
+        if (getType() == GL_TIME_ELAPSED_EXT)
+        {
+            D3D11_QUERY_DESC desc;
+            desc.Query     = D3D11_QUERY_TIMESTAMP;
+            desc.MiscFlags = 0;
+            result = mRenderer->getDevice()->CreateQuery(&desc, &mTimestampBeginQuery);
+            if (FAILED(result))
+            {
+                return gl::Error(GL_OUT_OF_MEMORY, "Internal query creation failed, result: 0x%X.",
+                                 result);
+            }
+            result = mRenderer->getDevice()->CreateQuery(&desc, &mTimestampEndQuery);
+            if (FAILED(result))
+            {
+                return gl::Error(GL_OUT_OF_MEMORY, "Internal query creation failed, result: 0x%X.",
+                                 result);
+            }
+        }
     }
 
     mRenderer->getDeviceContext()->Begin(mQuery);
+
+    // If we are doing time elapsed query the begin timestamp
+    if (getType() == GL_TIME_ELAPSED_EXT)
+    {
+        mRenderer->getDeviceContext()->End(mTimestampBeginQuery);
+    }
     return gl::Error(GL_NO_ERROR);
 }
 
 gl::Error Query11::end()
 {
     ASSERT(mQuery);
+    ASSERT(mTimestampQuery);
+
+    // If we are doing time elapsed query the end timestamp
+    if (getType() == GL_TIME_ELAPSED_EXT)
+    {
+        mRenderer->getDeviceContext()->End(mTimestampEndQuery);
+    }
+
     mRenderer->getDeviceContext()->End(mQuery);
 
     mQueryFinished = false;
@@ -62,8 +102,11 @@ gl::Error Query11::end()
 
 gl::Error Query11::queryCounter()
 {
-    UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION, "Unimplemented");
+    // This doesn't do anything for D3D11 as we don't support timestamps
+    ASSERT(getType() == GL_TIMESTAMP_EXT);
+    mQueryFinished = true;
+    mResult = 0;
+    return gl::Error(GL_NO_ERROR);
 }
 
 template <typename T>
@@ -165,7 +208,36 @@ gl::Error Query11::testQuery()
                 }
             }
             break;
+            case GL_TIME_ELAPSED_EXT:
+            {
+                D3D11_QUERY_DATA_TIMESTAMP_DISJOINT timeStats = {0};
+                HRESULT result = context->GetData(mQuery, &timeStats, sizeof(timeStats), 0);
+                if (FAILED(result))
+                {
+                    return gl::Error(GL_OUT_OF_MEMORY,
+                                     "Failed to get the data of an internal query, result: 0x%X.",
+                                     result);
+                }
 
+                if (result == S_OK)
+                {
+                    mQueryFinished = true;
+                    if (timeStats.Disjoint)
+                    {
+                        mRenderer->setGPUDisjoint();
+                    }
+                    context->GetData(mTimestampBeginQuery, &mBeginTime, sizeof(UINT64), 0);
+                    context->GetData(mTimestampEndQuery, &mEndTime, sizeof(UINT64), 0);
+                    mResult = (mEndTime - mBeginTime) * 1000000000 / timeStats.Frequency;
+                }
+            }
+            break;
+            case GL_TIMESTAMP_EXT:
+            {
+                // D3D11 doesn't support timestamps
+                mResult = 0;
+            }
+            break;
         default:
             UNREACHABLE();
             break;

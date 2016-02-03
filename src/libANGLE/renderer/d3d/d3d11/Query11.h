@@ -37,11 +37,15 @@ class Query11 : public QueryImpl
     gl::Error getResultBase(T *params);
 
     GLuint64 mResult;
+    UINT64 mBeginTime;
+    UINT64 mEndTime;
 
     bool mQueryFinished;
 
     Renderer11 *mRenderer;
     ID3D11Query *mQuery;
+    ID3D11Query *mTimestampBeginQuery;
+    ID3D11Query *mTimestampEndQuery;
 };
 
 }
