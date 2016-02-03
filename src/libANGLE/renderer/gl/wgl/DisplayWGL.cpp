@@ -568,6 +568,11 @@ const FunctionsGL *DisplayWGL::getFunctionsGL() const
 
 egl::Error DisplayWGL::initializeD3DDevice()
 {
+    if (mFunctionsWGL->hasExtension("WGL_NV_DX_interop2"))
+    {
+        return egl::Error(EGL_NOT_INITIALIZED, "Missing required WGL_NV_DX_interop2 extension.");
+    }
+
     if (mD3D11Device != nullptr)
     {
         return egl::Error(EGL_SUCCESS);

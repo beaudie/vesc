@@ -82,8 +82,8 @@ class DXGISwapChainWindowSurfaceWGL : public SurfaceGL
     IDXGISwapChain *mSwapChain;
     IDXGISwapChain1 *mSwapChain1;
 
-    GLuint mColorRenderbufferID;
-    HANDLE mRenderbufferBufferHandle;
+    GLuint mColorTextureID;
+    HANDLE mColorTextureHandle;
 
     GLuint mDepthRenderbufferID;
 
