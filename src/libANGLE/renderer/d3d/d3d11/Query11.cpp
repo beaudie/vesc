@@ -84,8 +84,6 @@ gl::Error Query11::begin()
 gl::Error Query11::end()
 {
     ASSERT(mQuery);
-    ASSERT(mTimestampBeginQuery);
-    ASSERT(mTimestampEndQuery);
 
     // If we are doing time elapsed query the end timestamp
     if (getType() == GL_TIME_ELAPSED_EXT)

@@ -689,6 +689,10 @@ GLint64 RendererD3D::getTimestamp()
     return 0;
 }
 
+void RendererD3D::onMakeCurrent(const gl::Data &data)
+{
+}
+
 void RendererD3D::initializeDebugAnnotator()
 {
     createAnnotator();
