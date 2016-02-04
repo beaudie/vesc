@@ -216,6 +216,172 @@ TEST_P(TimerQueriesTest, TimeElapsedValidationTest)
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
+// Tests timer queries operating under multiple EGL contexts with mid-query switching
+TEST_P(TimerQueriesTest, TimeElapsedMulticontextTest)
+{
+    if (!extensionEnabled("GL_EXT_disjoint_timer_query"))
+    {
+        std::cout << "Test skipped because GL_EXT_disjoint_timer_query is not available."
+                  << std::endl;
+        return;
+    }
+
+    GLint queryTimeElapsedBits = 0;
+    glGetQueryivEXT(GL_TIME_ELAPSED_EXT, GL_QUERY_COUNTER_BITS_EXT, &queryTimeElapsedBits);
+    ASSERT_GL_NO_ERROR();
+
+    std::cout << "Time elapsed counter bits: " << queryTimeElapsedBits << std::endl;
+
+    // Skip test if the number of bits is 0
+    if (queryTimeElapsedBits == 0)
+    {
+        std::cout << "Test skipped because of 0 counter bits" << std::endl;
+        return;
+    }
+
+    // D3D multicontext isn't implemented yet
+    if (GetParam() == ES3_D3D11())
+    {
+        std::cout
+            << "Test skipped because the D3D backends cannot support simultaneous timer queries yet"
+            << std::endl;
+        return;
+    }
+
+    EGLint contextAttributes[] = {
+        EGL_CONTEXT_MAJOR_VERSION_KHR,
+        GetParam().majorVersion,
+        EGL_CONTEXT_MINOR_VERSION_KHR,
+        GetParam().minorVersion,
+        EGL_NONE,
+    };
+
+    EGLWindow *window = getEGLWindow();
+
+    EGLDisplay display = window->getDisplay();
+    EGLConfig config   = window->getConfig();
+    EGLSurface surface = window->getSurface();
+
+    struct ContextInfo
+    {
+        EGLContext context;
+        GLuint program;
+        GLuint query;
+
+        ContextInfo() : context(nullptr), program(0), query(0) {}
+    };
+    ContextInfo contexts[2];
+
+    // Shaders
+    const std::string cheapVS =
+        "attribute highp vec4 position; void main(void)\n"
+        "{\n"
+        "    gl_Position = position;\n"
+        "}\n";
+
+    const std::string cheapPS =
+        "precision highp float; void main(void)\n"
+        "{\n"
+        "    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
+        "}\n";
+
+    const std::string costlyVS =
+        "attribute highp vec4 position; varying highp vec4 testPos; void main(void)\n"
+        "{\n"
+        "    testPos     = position;\n"
+        "    gl_Position = position;\n"
+        "}\n";
+
+    const std::string costlyPS =
+        "precision highp float; varying highp vec4 testPos; void main(void)\n"
+        "{\n"
+        "    vec4 test = testPos;\n"
+        "    for (int i = 0; i < 500; i++)\n"
+        "    {\n"
+        "        test = sqrt(test);\n"
+        "    }\n"
+        "    gl_FragColor = test;\n"
+        "}\n";
+
+    // Setup the first context with a cheap shader
+    contexts[0].context = eglCreateContext(display, config, EGL_NO_CONTEXT, contextAttributes);
+    ASSERT_NE(contexts[0].context, EGL_NO_CONTEXT);
+    eglMakeCurrent(display, surface, surface, contexts[0].context);
+    contexts[0].program = CompileProgram(cheapVS, cheapPS);
+    glGenQueriesEXT(1, &contexts[0].query);
+    ASSERT_GL_NO_ERROR();
+
+    // Setup the second context with an expensive shader
+    contexts[1].context = eglCreateContext(display, config, EGL_NO_CONTEXT, contextAttributes);
+    ASSERT_NE(contexts[1].context, EGL_NO_CONTEXT);
+    eglMakeCurrent(display, surface, surface, contexts[1].context);
+    contexts[1].program = CompileProgram(costlyVS, costlyPS);
+    glGenQueriesEXT(1, &contexts[1].query);
+    ASSERT_GL_NO_ERROR();
+
+    // Start the query and draw a quad on the first context without ending the query
+    eglMakeCurrent(display, surface, surface, contexts[0].context);
+    glBeginQueryEXT(GL_TIME_ELAPSED_EXT, contexts[0].query);
+    drawQuad(contexts[0].program, "position", 0.8f);
+    ASSERT_GL_NO_ERROR();
+
+    // Switch contexts, draw the expensive quad and end its query
+    eglMakeCurrent(display, surface, surface, contexts[1].context);
+    glBeginQueryEXT(GL_TIME_ELAPSED_EXT, contexts[1].query);
+    drawQuad(contexts[1].program, "position", 0.8f);
+    glEndQueryEXT(GL_TIME_ELAPSED_EXT);
+    ASSERT_GL_NO_ERROR();
+
+    // Go back to the first context, end its query, and get the result
+    eglMakeCurrent(display, surface, surface, contexts[0].context);
+    glEndQueryEXT(GL_TIME_ELAPSED_EXT);
+    int timeout  = 10000;
+    GLuint ready = GL_FALSE;
+    while (ready == GL_FALSE && timeout > 0)
+    {
+        angle::Sleep(0);
+        glGetQueryObjectuivEXT(contexts[0].query, GL_QUERY_RESULT_AVAILABLE_EXT, &ready);
+        timeout--;
+    }
+    ASSERT_LT(0, timeout) << "Query result available timed out" << std::endl;
+
+    GLuint64 result1 = 0;
+    GLuint64 result2 = 0;
+    glGetQueryObjectui64vEXT(contexts[0].query, GL_QUERY_RESULT_EXT, &result1);
+    glDeleteQueriesEXT(1, &contexts[0].query);
+    glDeleteProgram(contexts[0].program);
+    ASSERT_GL_NO_ERROR();
+
+    // Get the 2nd contexts results
+    eglMakeCurrent(display, surface, surface, contexts[1].context);
+    timeout = 10000;
+    ready = GL_FALSE;
+    while (ready == GL_FALSE && timeout > 0)
+    {
+        angle::Sleep(0);
+        glGetQueryObjectuivEXT(contexts[1].query, GL_QUERY_RESULT_AVAILABLE_EXT, &ready);
+        timeout--;
+    }
+    ASSERT_LT(0, timeout) << "Query result available timed out" << std::endl;
+    glGetQueryObjectui64vEXT(contexts[1].query, GL_QUERY_RESULT_EXT, &result2);
+    glDeleteQueriesEXT(1, &contexts[1].query);
+    glDeleteProgram(contexts[1].program);
+    ASSERT_GL_NO_ERROR();
+
+    // Destroy the contexts
+    eglMakeCurrent(display, surface, surface, window->getContext());
+    eglDestroyContext(display, contexts[0].context);
+    eglDestroyContext(display, contexts[1].context);
+
+    // Compare the results. The cheap quad should be smaller than the expensive one if
+    // virtualization is working correctly
+    std::cout << "Elapsed time: " << result1 << " cheap quad" << std::endl;
+    std::cout << "Elapsed time: " << result2 << " costly quad" << std::endl;
+    EXPECT_LT(0ul, result1);
+    EXPECT_LT(0ul, result2);
+    EXPECT_LT(result1, result2);
+}
+
 // Tests GPU timestamp functionality
 TEST_P(TimerQueriesTest, Timestamp)
 {
