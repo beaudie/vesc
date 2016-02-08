@@ -24,6 +24,22 @@ namespace rx
 struct RenderTargetDesc;
 struct Renderer11DeviceCaps;
 
+struct dx_VertexConstants11
+{
+    float depthRange[4];
+    float viewAdjust[4];
+    float viewCoords[4];
+    float viewScale[4];
+};
+
+struct dx_PixelConstants11
+{
+    float depthRange[4];
+    float viewCoords[4];
+    float depthFront[4];
+    float viewScale[4];
+};
+
 class StateManager11 final : angle::NonCopyable
 {
   public:
@@ -46,8 +62,23 @@ class StateManager11 final : angle::NonCopyable
 
     void setViewport(const gl::Caps *caps, const gl::Rectangle &viewport, float zNear, float zFar);
 
+<<<<<<< HEAD
     const dx_VertexConstants &getVertexConstants() const { return mVertexConstants; }
     const dx_PixelConstants &getPixelConstants() const { return mPixelConstants; }
+=======
+    void updatePresentPath(bool presentPathFastActive,
+                           const gl::FramebufferAttachment *framebufferAttachment);
+
+    void forceSetBlendState() { mBlendStateIsDirty = true; }
+    void forceSetDepthStencilState() { mDepthStencilStateIsDirty = true; }
+    void forceSetRasterState() { mRasterizerStateIsDirty = true; }
+    void forceSetScissorState() { mScissorStateIsDirty = true; }
+    void forceSetViewportState() { mViewportStateIsDirty = true; }
+    void setViewportBounds(const int width, const int height);
+
+    const dx_VertexConstants11 &getVertexConstants() const { return mVertexConstants; }
+    const dx_PixelConstants11 &getPixelConstants() const { return mPixelConstants; }
+>>>>>>> 6b3c1db... Implement EGL_experimental_present_path_angle
 
     void updateStencilSizeIfChanged(bool depthStencilInitialized, unsigned int stencilSize);
 
@@ -90,7 +121,7 @@ class StateManager11 final : angle::NonCopyable
     Optional<bool> mCurDisableDepth;
     Optional<bool> mCurDisableStencil;
 
-    // Currenly applied rasterizer state
+    // Currently applied rasterizer state
     bool mRasterizerStateIsDirty;
     gl::RasterizerState mCurRasterState;
 
@@ -106,8 +137,8 @@ class StateManager11 final : angle::NonCopyable
     float mCurFar;
 
     // Things needed in viewport state
-    dx_VertexConstants mVertexConstants;
-    dx_PixelConstants mPixelConstants;
+    dx_VertexConstants11 mVertexConstants;
+    dx_PixelConstants11 mPixelConstants;
 
     // Render target variables
     gl::Extents mViewportBounds;
@@ -116,6 +147,7 @@ class StateManager11 final : angle::NonCopyable
     bool mCurPresentPathFastEnabled;
     int mCurPresentPathFastColorBufferHeight;
 
+<<<<<<< HEAD
     // Current RenderTarget state
     std::array<uintptr_t, gl::IMPLEMENTATION_MAX_DRAW_BUFFERS> mAppliedRTVs;
     uintptr_t mAppliedDSV;
@@ -156,6 +188,11 @@ class StateManager11 final : angle::NonCopyable
 
     // A block of NULL pointers, cached so we don't re-allocate every draw call
     std::vector<ID3D11ShaderResourceView *> mNullSRVs;
+=======
+    Renderer11DeviceCaps *mRenderer11DeviceCaps;
+    ID3D11DeviceContext *mDeviceContext;
+    RenderStateCache *mStateCache;
+>>>>>>> 6b3c1db... Implement EGL_experimental_present_path_angle
 };
 
 }  // namespace rx
