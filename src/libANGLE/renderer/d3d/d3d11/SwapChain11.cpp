@@ -746,8 +746,7 @@ EGLint SwapChain11::copyOffscreenToBackbuffer(EGLint x, EGLint y, EGLint width, 
     deviceContext->RSSetViewports(1, &viewport);
 
     // Apply textures
-    auto stateManager = mRenderer->getStateManager();
-    stateManager->setShaderResource(gl::SAMPLER_PIXEL, 0, mOffscreenSRView);
+    mRenderer->setShaderResource(gl::SAMPLER_PIXEL, 0, mOffscreenSRView);
     deviceContext->PSSetSamplers(0, 1, &mPassThroughSampler);
 
     // Draw
@@ -756,7 +755,7 @@ EGLint SwapChain11::copyOffscreenToBackbuffer(EGLint x, EGLint y, EGLint width, 
     // Rendering to the swapchain is now complete. Now we can call Present().
     // Before that, we perform any cleanup on the D3D device. We do this before Present() to make sure the
     // cleanup is caught under the current eglSwapBuffers() PIX/Graphics Diagnostics call rather than the next one.
-    stateManager->setShaderResource(gl::SAMPLER_PIXEL, 0, NULL);
+    mRenderer->setShaderResource(gl::SAMPLER_PIXEL, 0, NULL);
 
     mRenderer->unapplyRenderTargets();
     mRenderer->markAllStateDirty();
@@ -804,7 +803,7 @@ EGLint SwapChain11::present(EGLint x, EGLint y, EGLint width, EGLint height)
 
     // Some swapping mechanisms such as DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL unbind the current render
     // target.  Mark it dirty.
-    mRenderer->getStateManager()->invalidateRenderTarget();
+    mRenderer->markRenderTargetStateDirty();
 
     if (result == DXGI_ERROR_DEVICE_REMOVED)
     {
