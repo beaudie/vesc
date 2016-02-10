@@ -12,6 +12,8 @@
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 
+#include <iostream>
+
 namespace
 {
 
@@ -146,6 +148,7 @@ gl::Error QueryGL::pause()
 {
     if (mActiveQuery != 0)
     {
+        std::cout << "Query " << mActiveQuery << " paused" << std::endl;
         mStateManager->endQuery(mType, mActiveQuery);
 
         mPendingQueries.push_back(mActiveQuery);
@@ -175,6 +178,7 @@ gl::Error QueryGL::resume()
 
         mFunctions->genQueries(1, &mActiveQuery);
         mStateManager->beginQuery(mType, mActiveQuery);
+        std::cout << "Query " << mActiveQuery << " resumed" << std::endl;
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -202,13 +206,17 @@ gl::Error QueryGL::flush(bool force)
         {
             GLuint64 result = 0;
             mFunctions->getQueryObjectui64v(id, GL_QUERY_RESULT, &result);
+            std::cout << "Query " << id << " result: " << result << std::endl;
             mResultSum = MergeQueryResults(mType, mResultSum, result);
+            std::cout << "Result after merge: " << mResultSum << std::endl;
         }
         else
         {
             GLuint result = 0;
             mFunctions->getQueryObjectuiv(id, GL_QUERY_RESULT, &result);
+            std::cout << "Query " << id << " result: " << result << std::endl;
             mResultSum = MergeQueryResults(mType, mResultSum, static_cast<GLuint64>(result));
+            std::cout << "Result after merge: " << mResultSum << std::endl;
         }
 
         mStateManager->deleteQuery(id);
