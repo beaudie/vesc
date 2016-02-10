@@ -763,21 +763,31 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer, SwapChain11 *swap
     mDepthStencilFormat = DXGI_FORMAT_UNKNOWN;
 }
 
-TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer, GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly)
-    : TextureStorage11(renderer,
-                       GetTextureBindFlags(internalformat, renderer->getRenderer11DeviceCaps(), renderTarget),
-                       GetTextureMiscFlags(internalformat, renderer->getRenderer11DeviceCaps(), renderTarget, levels)),
-      mTexture(NULL),
-      mLevelZeroTexture(NULL),
-      mLevelZeroRenderTarget(NULL),
-      mUseLevelZeroTexture(false),
-      mSwizzleTexture(NULL)
+TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer,
+                                         GLenum internalformat,
+                                         bool renderTarget,
+                                         GLsizei width,
+                                         GLsizei height,
+                                         int levels,
+                                         bool hintLevelZeroOnly)
+    : TextureStorage11(
+          renderer,
+          GetTextureBindFlags(internalformat, renderer->getRenderer11DeviceCaps(), renderTarget),
+          GetTextureMiscFlags(internalformat,
+                              renderer->getRenderer11DeviceCaps(),
+                              renderTarget,
+                              levels)),
+      mTexture(nullptr),
+      mLevelZeroTexture(nullptr),
+      mLevelZeroRenderTarget(nullptr),
+      mUseLevelZeroTexture(hintLevelZeroOnly && levels > 1),
+      mSwizzleTexture(nullptr)
 {
     for (unsigned int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; i++)
     {
-        mAssociatedImages[i] = NULL;
-        mRenderTarget[i] = NULL;
-        mSwizzleRenderTargets[i] = NULL;
+        mAssociatedImages[i]     = nullptr;
+        mRenderTarget[i]         = nullptr;
+        mSwizzleRenderTargets[i] = nullptr;
     }
 
     mInternalFormat = internalformat;
@@ -797,12 +807,8 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer, GLenum internalfo
     mTextureHeight = height;
     mTextureDepth = 1;
 
-    if (hintLevelZeroOnly && levels > 1)
-    {
-        //The LevelZeroOnly hint should only be true if the zero max LOD workaround is active.
-        ASSERT(mRenderer->getWorkarounds().zeroMaxLodWorkaround);
-        mUseLevelZeroTexture = true;
-    }
+    // The LevelZeroOnly hint should only be true if the zero max LOD workaround is active.
+    ASSERT(!mUseLevelZeroTexture || mRenderer->getWorkarounds().zeroMaxLodWorkaround);
 }
 
 TextureStorage11_2D::~TextureStorage11_2D()
@@ -844,68 +850,65 @@ gl::Error TextureStorage11_2D::copyToStorage(TextureStorage *destStorage)
     ASSERT(destStorage);
 
     TextureStorage11_2D *dest11 = GetAs<TextureStorage11_2D>(destStorage);
+    ID3D11DeviceContext *immediateContext = mRenderer->getDeviceContext();
 
     if (mRenderer->getWorkarounds().zeroMaxLodWorkaround)
     {
-        ID3D11DeviceContext *immediateContext = mRenderer->getDeviceContext();
+        // If either mTexture or mLevelZeroTexture exist, then we need to copy them into the
+        // corresponding textures in destStorage.
+        ID3D11Texture2D *previousStorageTex = nullptr;
+        bool previousLevelZeroTexture       = false;
 
-        // If either mTexture or mLevelZeroTexture exist, then we need to copy them into the corresponding textures in destStorage.
         if (mTexture)
         {
-            gl::Error error = dest11->useLevelZeroWorkaroundTexture(false);
-            if (error.isError())
-            {
-                return error;
-            }
-
-            ID3D11Resource *destResource = NULL;
-            error = dest11->getResource(&destResource);
-            if (error.isError())
-            {
-                return error;
-            }
-
-            immediateContext->CopyResource(destResource, mTexture);
+            previousStorageTex       = mTexture;
+            previousLevelZeroTexture = false;
         }
 
+        // TODO(jmadill): else if?
         if (mLevelZeroTexture)
         {
-            gl::Error error = dest11->useLevelZeroWorkaroundTexture(true);
+            previousStorageTex       = mLevelZeroTexture;
+            previousLevelZeroTexture = true;
+        }
+
+        if (previousStorageTex)
+        {
+            gl::Error error = dest11->useLevelZeroWorkaroundTexture(previousLevelZeroTexture);
             if (error.isError())
             {
                 return error;
             }
 
-            ID3D11Resource *destResource = NULL;
+            ID3D11Resource *destResource = nullptr;
             error = dest11->getResource(&destResource);
             if (error.isError())
             {
                 return error;
             }
 
-            immediateContext->CopyResource(destResource, mLevelZeroTexture);
+            immediateContext->CopyResource(destResource, previousStorageTex);
+            dest11->invalidateSwizzleCache();
         }
+
+        return gl::Error(GL_NO_ERROR);
     }
-    else
+
+    ID3D11Resource *sourceResouce = nullptr;
+    gl::Error error = getResource(&sourceResouce);
+    if (error.isError())
     {
-        ID3D11Resource *sourceResouce = NULL;
-        gl::Error error = getResource(&sourceResouce);
-        if (error.isError())
-        {
-            return error;
-        }
-
-        ID3D11Resource *destResource = NULL;
-        error = dest11->getResource(&destResource);
-        if (error.isError())
-        {
-            return error;
-        }
-
-        ID3D11DeviceContext *immediateContext = mRenderer->getDeviceContext();
-        immediateContext->CopyResource(destResource, sourceResouce);
+        return error;
     }
 
+    ID3D11Resource *destResource = nullptr;
+    error = dest11->getResource(&destResource);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    immediateContext->CopyResource(destResource, sourceResouce);
     dest11->invalidateSwizzleCache();
 
     return gl::Error(GL_NO_ERROR);
@@ -1131,108 +1134,114 @@ gl::Error TextureStorage11_2D::getRenderTarget(const gl::ImageIndex &index, Rend
     // so methods like generateMipmap can't do anything useful with non-zero-level RTVs.
     // Therefore if level > 0 on 9_3 then there's almost certainly something wrong.
     ASSERT(!(mRenderer->getRenderer11DeviceCaps().featureLevel <= D3D_FEATURE_LEVEL_9_3 && level > 0));
-
-    if (!mRenderTarget[level])
+    ASSERT(outRT);
+    if (mRenderTarget[level])
     {
-        ID3D11Resource *texture = NULL;
-        gl::Error error = getResource(&texture);
-        if (error.isError())
+        *outRT = mRenderTarget[level];
+        return gl::Error(GL_NO_ERROR);
+    }
+
+    ID3D11Resource *texture = nullptr;
+    gl::Error error = getResource(&texture);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ID3D11ShaderResourceView *srv = nullptr;
+    error = getSRVLevel(level, &srv);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ID3D11Device *device = mRenderer->getDevice();
+
+    if (mUseLevelZeroTexture)
+    {
+        if (!mLevelZeroRenderTarget)
         {
-            return error;
-        }
-
-        ID3D11ShaderResourceView *srv = NULL;
-        error = getSRVLevel(level, &srv);
-        if (error.isError())
-        {
-            return error;
-        }
-
-        if (mUseLevelZeroTexture)
-        {
-            if (!mLevelZeroRenderTarget)
-            {
-                ID3D11Device *device = mRenderer->getDevice();
-
-                D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
-                rtvDesc.Format = mRenderTargetFormat;
-                rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-                rtvDesc.Texture2D.MipSlice = mTopLevel + level;
-
-                ID3D11RenderTargetView *rtv;
-                HRESULT result = device->CreateRenderTargetView(mLevelZeroTexture, &rtvDesc, &rtv);
-
-                if (result == E_OUTOFMEMORY)
-                {
-                    return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal render target view for texture storage, result: 0x%X.", result);
-                }
-                ASSERT(SUCCEEDED(result));
-
-                mLevelZeroRenderTarget = new TextureRenderTarget11(rtv, mLevelZeroTexture, NULL, mInternalFormat, getLevelWidth(level), getLevelHeight(level), 1, 0);
-
-                // RenderTarget will take ownership of these resources
-                SafeRelease(rtv);
-            }
-
-            ASSERT(outRT);
-            *outRT = mLevelZeroRenderTarget;
-            return gl::Error(GL_NO_ERROR);
-        }
-
-        if (mRenderTargetFormat != DXGI_FORMAT_UNKNOWN)
-        {
-            ID3D11Device *device = mRenderer->getDevice();
-
             D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
             rtvDesc.Format = mRenderTargetFormat;
             rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
             rtvDesc.Texture2D.MipSlice = mTopLevel + level;
 
             ID3D11RenderTargetView *rtv;
-            HRESULT result = device->CreateRenderTargetView(texture, &rtvDesc, &rtv);
+            HRESULT result = device->CreateRenderTargetView(mLevelZeroTexture, &rtvDesc, &rtv);
 
-            ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
-            if (FAILED(result))
+            if (result == E_OUTOFMEMORY)
             {
                 return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal render target view for texture storage, result: 0x%X.", result);
             }
+            ASSERT(SUCCEEDED(result));
 
-            mRenderTarget[level] = new TextureRenderTarget11(rtv, texture, srv, mInternalFormat, getLevelWidth(level), getLevelHeight(level), 1, 0);
+            mLevelZeroRenderTarget =
+                new TextureRenderTarget11(rtv, mLevelZeroTexture, NULL, mInternalFormat,
+                                          getLevelWidth(level), getLevelHeight(level), 1, 0);
 
             // RenderTarget will take ownership of these resources
             SafeRelease(rtv);
         }
-        else if (mDepthStencilFormat != DXGI_FORMAT_UNKNOWN)
-        {
-            ID3D11Device *device = mRenderer->getDevice();
 
-            D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
-            dsvDesc.Format = mDepthStencilFormat;
-            dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-            dsvDesc.Texture2D.MipSlice = mTopLevel + level;
-            dsvDesc.Flags = 0;
-
-            ID3D11DepthStencilView *dsv;
-            HRESULT result = device->CreateDepthStencilView(texture, &dsvDesc, &dsv);
-
-            ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
-            if (FAILED(result))
-            {
-                return gl::Error(GL_OUT_OF_MEMORY,"Failed to create internal depth stencil view for texture storage, result: 0x%X.", result);
-            }
-
-            mRenderTarget[level] = new TextureRenderTarget11(dsv, texture, srv, mInternalFormat, getLevelWidth(level), getLevelHeight(level), 1, 0);
-
-            // RenderTarget will take ownership of these resources
-            SafeRelease(dsv);
-        }
-        else
-        {
-            UNREACHABLE();
-        }
+        *outRT = mLevelZeroRenderTarget;
+        return gl::Error(GL_NO_ERROR);
     }
 
-    ASSERT(outRT);
+    if (mRenderTargetFormat != DXGI_FORMAT_UNKNOWN)
+    {
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format             = mRenderTargetFormat;
+        rtvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+        rtvDesc.Texture2D.MipSlice = mTopLevel + level;
+
+        ID3D11RenderTargetView *rtv;
+        HRESULT result = device->CreateRenderTargetView(texture, &rtvDesc, &rtv);
+
+        ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
+        if (FAILED(result))
+        {
+            return gl::Error(
+                GL_OUT_OF_MEMORY,
+                "Failed to create internal render target view for texture storage, result: 0x%X.",
+                result);
+        }
+
+        mRenderTarget[level] = new TextureRenderTarget11(
+            rtv, texture, srv, mInternalFormat, getLevelWidth(level), getLevelHeight(level), 1, 0);
+
+        // RenderTarget will take ownership of these resources
+        SafeRelease(rtv);
+
+        *outRT = mRenderTarget[level];
+        return gl::Error(GL_NO_ERROR);
+    }
+
+    ASSERT(mDepthStencilFormat != DXGI_FORMAT_UNKNOWN);
+
+    D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+    dsvDesc.Format             = mDepthStencilFormat;
+    dsvDesc.ViewDimension      = D3D11_DSV_DIMENSION_TEXTURE2D;
+    dsvDesc.Texture2D.MipSlice = mTopLevel + level;
+    dsvDesc.Flags              = 0;
+
+    ID3D11DepthStencilView *dsv;
+    HRESULT result = device->CreateDepthStencilView(texture, &dsvDesc, &dsv);
+
+    ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
+    if (FAILED(result))
+    {
+        return gl::Error(
+            GL_OUT_OF_MEMORY,
+            "Failed to create internal depth stencil view for texture storage, result: 0x%X.",
+            result);
+    }
+
+    mRenderTarget[level] = new TextureRenderTarget11(
+        dsv, texture, srv, mInternalFormat, getLevelWidth(level), getLevelHeight(level), 1, 0);
+
+    // RenderTarget will take ownership of these resources
+    SafeRelease(dsv);
+
     *outRT = mRenderTarget[level];
     return gl::Error(GL_NO_ERROR);
 }
@@ -1681,14 +1690,24 @@ gl::Error TextureStorage11_EGLImage::getImageRenderTarget(RenderTarget11 **outRT
     return gl::Error(GL_NO_ERROR);
 }
 
-TextureStorage11_Cube::TextureStorage11_Cube(Renderer11 *renderer, GLenum internalformat, bool renderTarget, int size, int levels, bool hintLevelZeroOnly)
-    : TextureStorage11(renderer,
-                       GetTextureBindFlags(internalformat, renderer->getRenderer11DeviceCaps(), renderTarget),
-                       GetTextureMiscFlags(internalformat, renderer->getRenderer11DeviceCaps(), renderTarget, levels))
+TextureStorage11_Cube::TextureStorage11_Cube(Renderer11 *renderer,
+                                             GLenum internalformat,
+                                             bool renderTarget,
+                                             int size,
+                                             int levels,
+                                             bool hintLevelZeroOnly)
+    : TextureStorage11(
+          renderer,
+          GetTextureBindFlags(internalformat, renderer->getRenderer11DeviceCaps(), renderTarget),
+          GetTextureMiscFlags(internalformat,
+                              renderer->getRenderer11DeviceCaps(),
+                              renderTarget,
+                              levels)),
+      mTexture(nullptr),
+      mLevelZeroTexture(nullptr),
+      mUseLevelZeroTexture(hintLevelZeroOnly && levels > 1),
+      mSwizzleTexture(nullptr)
 {
-    mTexture = NULL;
-    mSwizzleTexture = NULL;
-
     for (unsigned int level = 0; level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; level++)
     {
         mSwizzleRenderTargets[level] = NULL;
@@ -1698,9 +1717,6 @@ TextureStorage11_Cube::TextureStorage11_Cube(Renderer11 *renderer, GLenum intern
             mRenderTarget[face][level] = NULL;
         }
     }
-
-    mLevelZeroTexture = NULL;
-    mUseLevelZeroTexture = false;
 
     for (unsigned int face = 0; face < CUBE_FACE_COUNT; face++)
     {
@@ -1727,12 +1743,8 @@ TextureStorage11_Cube::TextureStorage11_Cube(Renderer11 *renderer, GLenum intern
     mTextureHeight = size;
     mTextureDepth = 1;
 
-    if (hintLevelZeroOnly && levels > 1)
-    {
-        //The LevelZeroOnly hint should only be true if the zero max LOD workaround is active.
-        ASSERT(mRenderer->getWorkarounds().zeroMaxLodWorkaround);
-        mUseLevelZeroTexture = true;
-    }
+    // The LevelZeroOnly hint should only be true if the zero max LOD workaround is active.
+    ASSERT(!mUseLevelZeroTexture || mRenderer->getWorkarounds().zeroMaxLodWorkaround);
 }
 
 TextureStorage11_Cube::~TextureStorage11_Cube()
