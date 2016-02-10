@@ -18,6 +18,7 @@
 
 TLSIndex PoolIndex = TLS_INVALID_INDEX;
 
+
 bool InitializePoolIndex()
 {
     assert(PoolIndex == TLS_INVALID_INDEX);
