@@ -308,15 +308,6 @@ TEST_P(TimerQueriesTest, TimeElapsedMulticontextTest)
         return;
     }
 
-    // D3D multicontext isn't implemented yet
-    if (GetParam() == ES3_D3D11() || GetParam() == ES2_D3D11())
-    {
-        std::cout
-            << "Test skipped because the D3D backends cannot support simultaneous timer queries yet"
-            << std::endl;
-        return;
-    }
-
     EGLint contextAttributes[] = {
         EGL_CONTEXT_MAJOR_VERSION_KHR,
         GetParam().majorVersion,
