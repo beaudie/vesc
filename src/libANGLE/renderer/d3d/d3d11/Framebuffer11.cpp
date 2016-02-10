@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/d3d/d3d11/Framebuffer11.h"
 
 #include "common/debug.h"
+#include "common/BitSetIterator.h"
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Clear11.h"
 #include "libANGLE/renderer/d3d/d3d11/TextureStorage11.h"
@@ -25,13 +26,38 @@ namespace rx
 {
 
 Framebuffer11::Framebuffer11(const gl::Framebuffer::Data &data, Renderer11 *renderer)
-    : FramebufferD3D(data, renderer), mRenderer(renderer)
+    : FramebufferD3D(data, renderer), mRenderer(renderer), mCachedDepthStencilRenderTarget(nullptr)
 {
     ASSERT(mRenderer != nullptr);
+    mCachedColorRenderTargets.fill(nullptr);
+    for (size_t colorIndex = 0; colorIndex < data.getColorAttachments().size(); ++colorIndex)
+    {
+        auto callback = [this, colorIndex]()
+        {
+            this->markColorRenderTargetDirty(colorIndex);
+        };
+        mColorRenderTargetsDirty.push_back(callback);
+    }
+    mDepthStencilRenderTargetDirty = [this]()
+    {
+        this->markDepthStencilRenderTargetDirty();
+    };
 }
 
 Framebuffer11::~Framebuffer11()
 {
+    for (size_t colorIndex = 0; colorIndex < mCachedColorRenderTargets.size(); ++colorIndex)
+    {
+        auto *colorRenderTarget = mCachedColorRenderTargets[colorIndex];
+        if (colorRenderTarget)
+        {
+            colorRenderTarget->removeDirtyCallback(colorDirtyID(colorIndex));
+        }
+    }
+    if (mCachedDepthStencilRenderTarget)
+    {
+        mCachedDepthStencilRenderTarget->removeDirtyCallback(depthStencilDirtyID());
+    }
 }
 
 static gl::Error InvalidateAttachmentSwizzles(const gl::FramebufferAttachment *attachment)
@@ -425,4 +451,117 @@ GLenum Framebuffer11::getRenderTargetImplementationFormat(RenderTargetD3D *rende
     return dxgiFormatInfo.internalFormat;
 }
 
+void Framebuffer11::updateColorRenderTarget(size_t colorIndex)
+{
+    auto callbackKey         = colorDirtyID(colorIndex);
+    auto &cachedRenderTarget = mCachedColorRenderTargets[colorIndex];
+    if (cachedRenderTarget)
+    {
+        cachedRenderTarget->removeDirtyCallback(callbackKey);
+    }
+    const auto *attachment = mData.getColorAttachment(colorIndex);
+    if (!attachment)
+    {
+        cachedRenderTarget = nullptr;
+        return;
+    }
+    attachment->getRenderTarget(&cachedRenderTarget);
+    cachedRenderTarget->addDirtyCallback(callbackKey, mColorRenderTargetsDirty[colorIndex]);
+
+    auto *rtv = cachedRenderTarget->getRenderTargetView();
+    mRenderer->getStateManager()->unsetConflictingAttachmentResources(attachment, rtv);
 }
+
+void Framebuffer11::updateDepthStencilRenderTarget()
+{
+    auto callbackKey = depthStencilDirtyID();
+    if (mCachedDepthStencilRenderTarget)
+    {
+        mCachedDepthStencilRenderTarget->removeDirtyCallback(callbackKey);
+    }
+
+    const auto *attachment = mData.getDepthOrStencilAttachment();
+    if (!attachment)
+    {
+        mCachedDepthStencilRenderTarget = nullptr;
+        return;
+    }
+    attachment->getRenderTarget(&mCachedDepthStencilRenderTarget);
+    mCachedDepthStencilRenderTarget->addDirtyCallback(callbackKey, mDepthStencilRenderTargetDirty);
+
+    auto *dsv = mCachedDepthStencilRenderTarget->getDepthStencilView();
+    mRenderer->getStateManager()->unsetConflictingAttachmentResources(attachment, dsv);
+}
+
+void Framebuffer11::syncState(const gl::Framebuffer::DirtyBits &dirtyBits)
+{
+    mRenderer->getStateManager()->invalidateRenderTarget();
+
+    const auto &mergedDirtyBits = dirtyBits | mInternalDirtyBits;
+    mInternalDirtyBits.reset();
+
+    for (auto dirtyBit : angle::IterateBitSet(mergedDirtyBits))
+    {
+        switch (dirtyBit)
+        {
+            case gl::Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT:
+            case gl::Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT:
+                updateDepthStencilRenderTarget();
+                break;
+            case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
+            case gl::Framebuffer::DIRTY_BIT_READ_BUFFER:
+                break;
+            default:
+            {
+                ASSERT(gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0 == 0 &&
+                       dirtyBit < gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX);
+                size_t colorIndex =
+                    static_cast<size_t>(dirtyBit - gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0);
+                updateColorRenderTarget(colorIndex);
+                break;
+            }
+        }
+    }
+
+    FramebufferD3D::syncState(dirtyBits);
+}
+
+void Framebuffer11::markColorRenderTargetDirty(size_t colorIndex)
+{
+    mInternalDirtyBits.set(gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0 + colorIndex);
+    mRenderer->getStateManager()->invalidateRenderTarget();
+    mCachedColorRenderTargets[colorIndex] = nullptr;
+}
+
+void Framebuffer11::markDepthStencilRenderTargetDirty()
+{
+    // Stencil is redundant in this case.
+    mInternalDirtyBits.set(gl::Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT);
+    mRenderer->getStateManager()->invalidateRenderTarget();
+    mCachedDepthStencilRenderTarget = nullptr;
+}
+
+bool Framebuffer11::hasAnyInternalDirtyBit() const
+{
+    return mInternalDirtyBits.any();
+}
+
+NotificationID Framebuffer11::colorDirtyID(size_t colorIndex) const
+{
+    // Use the address of the notification member.
+    return reinterpret_cast<NotificationID>(&mColorRenderTargetsDirty[colorIndex]);
+}
+
+NotificationID Framebuffer11::depthStencilDirtyID() const
+{
+    // Use the address of the notification member.
+    return reinterpret_cast<NotificationID>(&mDepthStencilRenderTargetDirty);
+}
+
+void Framebuffer11::syncInternalState() const
+{
+    // TODO(jmadill): Clean up this hack.
+    const_cast<Framebuffer11 *>(this)->syncState(gl::Framebuffer::DirtyBits());
+}
+
+}  // namespace rx
