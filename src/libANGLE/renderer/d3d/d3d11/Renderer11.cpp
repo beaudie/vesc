@@ -1212,7 +1212,8 @@ gl::Error Renderer11::setSamplerState(gl::SamplerType type,
     else UNREACHABLE();
 
     ASSERT(metadata != nullptr);
-    metadata->update(index, texture->getBaseLevel());
+    metadata->update(index, texture->getBaseLevel(),
+                     texture->getInternalFormat(texture->getTarget(), texture->getBaseLevel()));
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -2287,11 +2288,45 @@ void Renderer11::SamplerMetadataD3D11::initData(unsigned int samplerCount)
     mSamplerMetadata.resize(samplerCount);
 }
 
-void Renderer11::SamplerMetadataD3D11::update(unsigned int samplerIndex, unsigned int baseLevel)
+void Renderer11::SamplerMetadataD3D11::update(unsigned int samplerIndex,
+                                              unsigned int baseLevel,
+                                              GLenum internalFormat)
 {
-    if (mSamplerMetadata[samplerIndex].baseLevel[0] != static_cast<int>(baseLevel))
+    if (mSamplerMetadata[samplerIndex].parameters[0] != static_cast<int>(baseLevel))
     {
-        mSamplerMetadata[samplerIndex].baseLevel[0] = static_cast<int>(baseLevel);
+        mSamplerMetadata[samplerIndex].parameters[0] = static_cast<int>(baseLevel);
+        mDirty = true;
+    }
+
+    int internalFormatBits = 0;
+    switch (internalFormat)
+    {
+        case GL_RGBA16I:
+        case GL_RGBA16UI:
+        case GL_RGB16I:
+        case GL_RGB16UI:
+        case GL_RG16I:
+        case GL_RG16UI:
+        case GL_R16I:
+        case GL_R16UI:
+            internalFormatBits = 16;
+            break;
+        case GL_RGBA8I:
+        case GL_RGBA8UI:
+        case GL_RGB8I:
+        case GL_RGB8UI:
+        case GL_RG8I:
+        case GL_RG8UI:
+        case GL_R8I:
+        case GL_R8UI:
+            internalFormatBits = 8;
+            break;
+        default:
+            break;
+    }
+    if (mSamplerMetadata[samplerIndex].parameters[1] != internalFormatBits)
+    {
+        mSamplerMetadata[samplerIndex].parameters[1] = internalFormatBits;
         mDirty = true;
     }
 }
