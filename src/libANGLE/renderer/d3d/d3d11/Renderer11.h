@@ -331,7 +331,9 @@ class Renderer11 : public RendererD3D
                               int minIndex,
                               int instances);
 
-    ID3D11Texture2D *resolveMultisampledTexture(ID3D11Texture2D *source, unsigned int subresource);
+    ID3D11Texture2D *resolveMultisampledTexture(ID3D11Texture2D *source,
+                                                unsigned int subresource,
+                                                DXGI_FORMAT resolveFormat);
 
     void populateRenderer11DeviceCaps();
 

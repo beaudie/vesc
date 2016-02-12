@@ -3655,8 +3655,12 @@ gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAtt
     }
 
     gl::Extents safeSize(safeArea.width, safeArea.height, 1);
-    auto errorOrResult = CreateStagingTexture(textureHelper.getTextureType(),
-                                              textureHelper.getFormat(), safeSize, mDevice);
+
+    GLenum internalformat = srcAttachment.getInternalFormat();
+    const d3d11::TextureFormat &formatInfo =
+        d3d11::GetTextureFormatInfo(internalformat, getRenderer11DeviceCaps());
+    auto errorOrResult = CreateStagingTexture(textureHelper.getTextureType(), formatInfo.readFormat,
+                                              safeSize, mDevice);
     if (errorOrResult.isError())
     {
         return errorOrResult.getError();
@@ -3695,7 +3699,7 @@ gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAtt
         }
 
         mDeviceContext->ResolveSubresource(resolveTex2D, 0, textureHelper.getTexture2D(),
-                                           sourceSubResource, textureHelper.getFormat());
+                                           sourceSubResource, formatInfo.multisampleResolveFormat);
         resolvedTextureHelper = TextureHelper11::MakeAndReference(resolveTex2D);
 
         sourceSubResource = 0;
@@ -3874,14 +3878,20 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
     {
         ID3D11Resource *unresolvedResource = readRenderTarget11->getTexture();
         ID3D11Texture2D *unresolvedTexture = d3d11::DynamicCastComObject<ID3D11Texture2D>(unresolvedResource);
+        const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(
+            readRenderTarget11->getInternalFormat(), mRenderer11DeviceCaps);
 
         if (unresolvedTexture)
         {
-            readTexture = resolveMultisampledTexture(unresolvedTexture, readRenderTarget11->getSubresourceIndex());
+            readTexture = resolveMultisampledTexture(unresolvedTexture,
+                                                     readRenderTarget11->getSubresourceIndex(),
+                                                     formatInfo.multisampleResolveFormat);
             readSubresource = 0;
 
             SafeRelease(unresolvedTexture);
 
+            // TODO: Should use a different format for the SRV (the readTexture could be TYPELESS if
+            // the renderbuffer is in an integer format)?
             HRESULT hresult = mDevice->CreateShaderResourceView(readTexture, NULL, &readSRV);
             if (FAILED(hresult))
             {
@@ -4146,8 +4156,11 @@ void Renderer11::onMakeCurrent(const gl::Data &data)
     mStateManager.onMakeCurrent(data);
 }
 
-ID3D11Texture2D *Renderer11::resolveMultisampledTexture(ID3D11Texture2D *source, unsigned int subresource)
+ID3D11Texture2D *Renderer11::resolveMultisampledTexture(ID3D11Texture2D *source,
+                                                        unsigned int subresource,
+                                                        DXGI_FORMAT resolveFormat)
 {
+    // TODO: This doesn't look correct for integer textures.
     D3D11_TEXTURE2D_DESC textureDesc;
     source->GetDesc(&textureDesc);
 
@@ -4174,7 +4187,7 @@ ID3D11Texture2D *Renderer11::resolveMultisampledTexture(ID3D11Texture2D *source,
             return NULL;
         }
 
-        mDeviceContext->ResolveSubresource(resolveTexture, 0, source, subresource, textureDesc.Format);
+        mDeviceContext->ResolveSubresource(resolveTexture, 0, source, subresource, resolveFormat);
         return resolveTexture;
     }
     else

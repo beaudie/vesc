@@ -141,7 +141,9 @@ DWORD TextureStorage11::GetTextureMiscFlags(GLenum internalFormat,
         d3d11::GetTextureFormatInfo(internalFormat, renderer11DeviceCaps);
     if (renderTarget && levels > 1)
     {
-        const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(formatInfo.texFormat);
+        // TODO: Add formatInfo.genMipmapFormat?
+        const d3d11::DXGIFormat &dxgiFormatInfo =
+            d3d11::GetDXGIFormatInfo(formatInfo.blitSRVFormat);
 
         if (dxgiFormatInfo.nativeMipmapSupport(renderer11DeviceCaps.featureLevel))
         {
@@ -473,7 +475,8 @@ gl::Error TextureStorage11::updateSubresourceLevel(ID3D11Resource *srcTexture,
 
     ASSERT(dstTexture);
 
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mTextureFormat);
+    // TODO: Need to use different format to get the info here.
+    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mBlitShaderResourceFormat);
     if (!fullCopy && (dxgiFormatInfo.depthBits > 0 || dxgiFormatInfo.stencilBits > 0))
     {
         // CopySubresourceRegion cannot copy partial depth stencils, use the blitter instead
@@ -707,7 +710,8 @@ gl::Error TextureStorage11::setData(const gl::ImageIndex &index,
 
     const d3d11::TextureFormat &d3d11Format = d3d11::GetTextureFormatInfo(
         image->getInternalFormat(), mRenderer->getRenderer11DeviceCaps());
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(d3d11Format.texFormat);
+    // TODO: Use a different format field here.
+    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(d3d11Format.blitSRVFormat);
 
     const size_t outputPixelSize = dxgiFormatInfo.pixelBytes;
 
@@ -1504,6 +1508,7 @@ TextureStorage11_EGLImage::TextureStorage11_EGLImage(Renderer11 *renderer, EGLIm
         mDepthStencilFormat = DXGI_FORMAT_UNKNOWN;
     }
 
+    // TODO: Which format to use here?
     const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mTextureFormat);
     const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(
         dxgiFormatInfo.internalFormat, mRenderer->getRenderer11DeviceCaps());

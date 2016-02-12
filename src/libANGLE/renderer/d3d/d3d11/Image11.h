@@ -62,6 +62,7 @@ class Image11 : public ImageD3D
     gl::Error copyWithoutConversion(const gl::Offset &destOffset,
                                     const gl::Box &sourceArea,
                                     const TextureHelper11 &textureHelper,
+                                    const DXGI_FORMAT multisampleResolveFormat,
                                     UINT sourceSubResource);
 
     gl::Error getStagingTexture(ID3D11Resource **outStagingTexture, unsigned int *outSubresourceIndex);

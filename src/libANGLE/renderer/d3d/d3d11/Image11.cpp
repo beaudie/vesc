@@ -252,11 +252,12 @@ gl::Error Image11::loadData(const gl::Box &area, const gl::PixelUnpackState &unp
     GLsizei inputSkipBytes = formatInfo.computeSkipPixels(
         inputRowPitch, inputDepthPitch, unpack.skipImages, unpack.skipRows, unpack.skipPixels);
 
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mDXGIFormat);
-    GLuint outputPixelSize = dxgiFormatInfo.pixelBytes;
-
     const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(mInternalFormat, mRenderer->getRenderer11DeviceCaps());
     LoadImageFunction loadFunction = d3dFormatInfo.loadFunctions.at(type).loadFunction;
+
+    // TODO: Use a different format here.
+    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(d3dFormatInfo.blitSRVFormat);
+    GLuint outputPixelSize                  = dxgiFormatInfo.pixelBytes;
 
     D3D11_MAPPED_SUBRESOURCE mappedImage;
     gl::Error error = map(D3D11_MAP_WRITE, &mappedImage);
@@ -328,7 +329,8 @@ gl::Error Image11::copyFromTexStorage(const gl::ImageIndex &imageIndex, TextureS
     TextureHelper11 textureHelper = TextureHelper11::MakeAndReference(resource);
 
     gl::Box sourceBox(0, 0, 0, mWidth, mHeight, mDepth);
-    return copyWithoutConversion(gl::Offset(), sourceBox, textureHelper, subresourceIndex);
+    return copyWithoutConversion(gl::Offset(), sourceBox, textureHelper, DXGI_FORMAT_UNKNOWN,
+                                 subresourceIndex);
 }
 
 gl::Error Image11::copyFromFramebuffer(const gl::Offset &destOffset,
@@ -357,7 +359,8 @@ gl::Error Image11::copyFromFramebuffer(const gl::Offset &destOffset,
         unsigned int sourceSubResource = rt11->getSubresourceIndex();
 
         gl::Box sourceBox(sourceArea.x, sourceArea.y, 0, sourceArea.width, sourceArea.height, 1);
-        return copyWithoutConversion(destOffset, sourceBox, textureHelper, sourceSubResource);
+        return copyWithoutConversion(destOffset, sourceBox, textureHelper,
+                                     d3d11Format.multisampleResolveFormat, sourceSubResource);
     }
 
     // This format requires conversion, so we must copy the texture to staging and manually convert
@@ -370,7 +373,7 @@ gl::Error Image11::copyFromFramebuffer(const gl::Offset &destOffset,
     }
 
     // determine the offset coordinate into the destination buffer
-    const auto &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(mDXGIFormat);
+    const auto &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(d3d11Format.readFormat);
     GLsizei rowOffset          = dxgiFormatInfo.pixelBytes * destOffset.x;
 
     uint8_t *dataOffset = static_cast<uint8_t *>(mappedImage.pData) +
@@ -392,6 +395,7 @@ gl::Error Image11::copyFromFramebuffer(const gl::Offset &destOffset,
 gl::Error Image11::copyWithoutConversion(const gl::Offset &destOffset,
                                          const gl::Box &sourceArea,
                                          const TextureHelper11 &textureHelper,
+                                         const DXGI_FORMAT multisampleResolveFormat,
                                          UINT sourceSubResource)
 {
     // No conversion needed-- use copyback fastpath
@@ -416,6 +420,8 @@ gl::Error Image11::copyWithoutConversion(const gl::Offset &destOffset,
 
     if (needResolve)
     {
+        ASSERT(multisampleResolveFormat != DXGI_FORMAT_UNKNOWN);
+
         D3D11_TEXTURE2D_DESC resolveDesc;
         resolveDesc.Width              = extents.width;
         resolveDesc.Height             = extents.height;
@@ -440,7 +446,7 @@ gl::Error Image11::copyWithoutConversion(const gl::Offset &destOffset,
         srcTex = srcTex2D;
 
         deviceContext->ResolveSubresource(srcTex, 0, textureHelper.getTexture2D(),
-                                          sourceSubResource, textureHelper.getFormat());
+                                          sourceSubResource, multisampleResolveFormat);
         subresourceAfterResolve = 0;
     }
     else

@@ -1352,7 +1352,8 @@ void GenerateInitialTextureData(GLint internalFormat,
     const d3d11::TextureFormat &d3dFormatInfo = d3d11::GetTextureFormatInfo(internalFormat, renderer11DeviceCaps);
     ASSERT(d3dFormatInfo.dataInitializerFunction != NULL);
 
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(d3dFormatInfo.texFormat);
+    // TODO: Need to use a different format field here.
+    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(d3dFormatInfo.blitSRVFormat);
 
     outSubresourceData->resize(mipLevels);
     outData->resize(mipLevels);
@@ -1509,6 +1510,7 @@ void InitConstantBufferDesc(D3D11_BUFFER_DESC *constantBufferDescription, size_t
 
 }  // namespace d3d11
 
+// TODO: Using this may be a problem with integer textures.
 TextureHelper11::TextureHelper11()
     : mTextureType(GL_NONE),
       mFormat(DXGI_FORMAT_UNKNOWN),
