@@ -2813,7 +2813,7 @@ gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::
     }
     ASSERT(sourceRenderTarget);
 
-    ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
+    ID3D11ShaderResourceView *source = sourceRenderTarget->getBlitShaderResourceView();
     ASSERT(source);
 
     TextureStorage11_2D *storage11 = GetAs<TextureStorage11_2D>(storage);
@@ -2872,7 +2872,7 @@ gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl
     }
     ASSERT(sourceRenderTarget);
 
-    ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
+    ID3D11ShaderResourceView *source = sourceRenderTarget->getBlitShaderResourceView();
     ASSERT(source);
 
     TextureStorage11_Cube *storage11 = GetAs<TextureStorage11_Cube>(storage);
@@ -2931,7 +2931,7 @@ gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::
     }
     ASSERT(sourceRenderTarget);
 
-    ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
+    ID3D11ShaderResourceView *source = sourceRenderTarget->getBlitShaderResourceView();
     ASSERT(source);
 
     TextureStorage11_3D *storage11 = GetAs<TextureStorage11_3D>(storage);
@@ -2983,7 +2983,7 @@ gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer, const
     }
     ASSERT(sourceRenderTarget);
 
-    ID3D11ShaderResourceView *source = sourceRenderTarget->getShaderResourceView();
+    ID3D11ShaderResourceView *source = sourceRenderTarget->getBlitShaderResourceView();
     ASSERT(source);
 
     TextureStorage11_2DArray *storage11 = GetAs<TextureStorage11_2DArray>(storage);
@@ -3095,7 +3095,8 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
             return gl::Error(GL_OUT_OF_MEMORY, "Failed to create render target texture, result: 0x%X.", result);
         }
 
-        ID3D11ShaderResourceView *srv = NULL;
+        ID3D11ShaderResourceView *srv     = nullptr;
+        ID3D11ShaderResourceView *blitSRV = nullptr;
         if (bindSRV)
         {
             D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
@@ -3110,6 +3111,34 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
                 ASSERT(result == E_OUTOFMEMORY);
                 SafeRelease(texture);
                 return gl::Error(GL_OUT_OF_MEMORY, "Failed to create render target shader resource view, result: 0x%X.", result);
+            }
+
+            if (formatInfo.formatSet.blitSRVFormat != formatInfo.formatSet.srvFormat)
+            {
+                D3D11_SHADER_RESOURCE_VIEW_DESC blitSRVDesc;
+                blitSRVDesc.Format        = formatInfo.formatSet.blitSRVFormat;
+                blitSRVDesc.ViewDimension = (supportedSamples == 0)
+                                                ? D3D11_SRV_DIMENSION_TEXTURE2D
+                                                : D3D11_SRV_DIMENSION_TEXTURE2DMS;
+                blitSRVDesc.Texture2D.MostDetailedMip = 0;
+                blitSRVDesc.Texture2D.MipLevels       = 1;
+
+                result = mDevice->CreateShaderResourceView(texture, &blitSRVDesc, &blitSRV);
+                if (FAILED(result))
+                {
+                    ASSERT(result == E_OUTOFMEMORY);
+                    SafeRelease(texture);
+                    SafeRelease(srv);
+                    return gl::Error(GL_OUT_OF_MEMORY,
+                                     "Failed to create render target shader resource view for "
+                                     "blits, result: 0x%X.",
+                                     result);
+                }
+            }
+            else
+            {
+                blitSRV = srv;
+                srv->AddRef();
             }
         }
 
@@ -3128,6 +3157,7 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
                 ASSERT(result == E_OUTOFMEMORY);
                 SafeRelease(texture);
                 SafeRelease(srv);
+                SafeRelease(blitSRV);
                 return gl::Error(GL_OUT_OF_MEMORY, "Failed to create render target depth stencil view, result: 0x%X.", result);
             }
 
@@ -3151,6 +3181,7 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
                 ASSERT(result == E_OUTOFMEMORY);
                 SafeRelease(texture);
                 SafeRelease(srv);
+                SafeRelease(blitSRV);
                 return gl::Error(GL_OUT_OF_MEMORY, "Failed to create render target render target view, result: 0x%X.", result);
             }
 
@@ -3160,9 +3191,9 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
                 mDeviceContext->ClearRenderTargetView(rtv, clearValues);
             }
 
-            *outRT =
-                new TextureRenderTarget11(rtv, texture, srv, format, formatInfo.formatSet.format,
-                                          width, height, 1, supportedSamples);
+            *outRT = new TextureRenderTarget11(rtv, texture, srv, blitSRV, format,
+                                               formatInfo.formatSet.format, width, height, 1,
+                                               supportedSamples);
 
             SafeRelease(rtv);
         }
@@ -3173,12 +3204,13 @@ gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, G
 
         SafeRelease(texture);
         SafeRelease(srv);
+        SafeRelease(blitSRV);
     }
     else
     {
         *outRT = new TextureRenderTarget11(static_cast<ID3D11RenderTargetView *>(nullptr), nullptr,
-                                           nullptr, format, d3d11::ANGLE_FORMAT_NONE, width, height,
-                                           1, supportedSamples);
+                                           nullptr, nullptr, format, d3d11::ANGLE_FORMAT_NONE,
+                                           width, height, 1, supportedSamples);
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -3875,7 +3907,12 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
         readTexture = readRenderTarget11->getTexture();
         readTexture->AddRef();
         readSubresource = readRenderTarget11->getSubresourceIndex();
-        readSRV = readRenderTarget11->getShaderResourceView();
+        readSRV = readRenderTarget11->getBlitShaderResourceView();
+        if (readSRV == nullptr)
+        {
+            ASSERT(depthBlit || stencilBlit);
+            readSRV = readRenderTarget11->getShaderResourceView();
+        }
         readSRV->AddRef();
     }
 
