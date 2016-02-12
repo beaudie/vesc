@@ -42,6 +42,7 @@ struct TextureFormat
     DXGI_FORMAT srvFormat;
     DXGI_FORMAT rtvFormat;
     DXGI_FORMAT dsvFormat;
+    DXGI_FORMAT blitSRVFormat;
     DXGI_FORMAT renderFormat;
 
     DXGI_FORMAT swizzleTexFormat;
