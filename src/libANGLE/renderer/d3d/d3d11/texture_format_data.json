@@ -328,14 +328,16 @@
     {
       "texFormat": "DXGI_FORMAT_R16_SINT",
       "srvFormat": "DXGI_FORMAT_R16_SINT",
-      "rtvFormat": "DXGI_FORMAT_R16_SINT"
+      "rtvFormat": "DXGI_FORMAT_R16_SINT",
+      "blitSRVFormat": "DXGI_FORMAT_R16_SINT"
     }
   ],
   "GL_R16UI": [
     {
       "texFormat": "DXGI_FORMAT_R16_UINT",
       "srvFormat": "DXGI_FORMAT_R16_UINT",
-      "rtvFormat": "DXGI_FORMAT_R16_UINT"
+      "rtvFormat": "DXGI_FORMAT_R16_UINT",
+      "blitSRVFormat": "DXGI_FORMAT_R16_UINT"
     }
   ],
   "GL_R32F": [
@@ -349,14 +351,16 @@
     {
       "texFormat": "DXGI_FORMAT_R32_SINT",
       "srvFormat": "DXGI_FORMAT_R32_SINT",
-      "rtvFormat": "DXGI_FORMAT_R32_SINT"
+      "rtvFormat": "DXGI_FORMAT_R32_SINT",
+      "blitSRVFormat": "DXGI_FORMAT_R32_SINT"
     }
   ],
   "GL_R32UI": [
     {
       "texFormat": "DXGI_FORMAT_R32_UINT",
       "srvFormat": "DXGI_FORMAT_R32_UINT",
-      "rtvFormat": "DXGI_FORMAT_R32_UINT"
+      "rtvFormat": "DXGI_FORMAT_R32_UINT",
+      "blitSRVFormat": "DXGI_FORMAT_R32_UINT"
     }
   ],
   "GL_R8": [
@@ -370,14 +374,16 @@
     {
       "texFormat": "DXGI_FORMAT_R8_SINT",
       "srvFormat": "DXGI_FORMAT_R8_SINT",
-      "rtvFormat": "DXGI_FORMAT_R8_SINT"
+      "rtvFormat": "DXGI_FORMAT_R8_SINT",
+      "blitSRVFormat": "DXGI_FORMAT_R8_SINT"
     }
   ],
   "GL_R8UI": [
     {
       "texFormat": "DXGI_FORMAT_R8_UINT",
       "srvFormat": "DXGI_FORMAT_R8_UINT",
-      "rtvFormat": "DXGI_FORMAT_R8_UINT"
+      "rtvFormat": "DXGI_FORMAT_R8_UINT",
+      "blitSRVFormat": "DXGI_FORMAT_R8_UINT"
     }
   ],
   "GL_R8_SNORM": [
@@ -397,14 +403,16 @@
     {
       "texFormat": "DXGI_FORMAT_R16G16_SINT",
       "srvFormat": "DXGI_FORMAT_R16G16_SINT",
-      "rtvFormat": "DXGI_FORMAT_R16G16_SINT"
+      "rtvFormat": "DXGI_FORMAT_R16G16_SINT",
+      "blitSRVFormat": "DXGI_FORMAT_R16G16_SINT"
     }
   ],
   "GL_RG16UI": [
     {
       "texFormat": "DXGI_FORMAT_R16G16_UINT",
       "srvFormat": "DXGI_FORMAT_R16G16_UINT",
-      "rtvFormat": "DXGI_FORMAT_R16G16_UINT"
+      "rtvFormat": "DXGI_FORMAT_R16G16_UINT",
+      "blitSRVFormat": "DXGI_FORMAT_R16G16_UINT"
     }
   ],
   "GL_RG32F": [
@@ -418,14 +426,16 @@
     {
       "texFormat": "DXGI_FORMAT_R32G32_SINT",
       "srvFormat": "DXGI_FORMAT_R32G32_SINT",
-      "rtvFormat": "DXGI_FORMAT_R32G32_SINT"
+      "rtvFormat": "DXGI_FORMAT_R32G32_SINT",
+      "blitSRVFormat": "DXGI_FORMAT_R32G32_SINT"
     }
   ],
   "GL_RG32UI": [
     {
       "texFormat": "DXGI_FORMAT_R32G32_UINT",
       "srvFormat": "DXGI_FORMAT_R32G32_UINT",
-      "rtvFormat": "DXGI_FORMAT_R32G32_UINT"
+      "rtvFormat": "DXGI_FORMAT_R32G32_UINT",
+      "blitSRVFormat": "DXGI_FORMAT_R32G32_UINT"
     }
   ],
   "GL_RG8": [
@@ -439,14 +449,16 @@
     {
       "texFormat": "DXGI_FORMAT_R8G8_SINT",
       "srvFormat": "DXGI_FORMAT_R8G8_SINT",
-      "rtvFormat": "DXGI_FORMAT_R8G8_SINT"
+      "rtvFormat": "DXGI_FORMAT_R8G8_SINT",
+      "blitSRVFormat": "DXGI_FORMAT_R8G8_SINT"
     }
   ],
   "GL_RG8UI": [
     {
       "texFormat": "DXGI_FORMAT_R8G8_UINT",
       "srvFormat": "DXGI_FORMAT_R8G8_UINT",
-      "rtvFormat": "DXGI_FORMAT_R8G8_UINT"
+      "rtvFormat": "DXGI_FORMAT_R8G8_UINT",
+      "blitSRVFormat": "DXGI_FORMAT_R8G8_UINT"
     }
   ],
   "GL_RG8_SNORM": [
@@ -473,7 +485,8 @@
     {
       "texFormat": "DXGI_FORMAT_R10G10B10A2_UINT",
       "srvFormat": "DXGI_FORMAT_R10G10B10A2_UINT",
-      "rtvFormat": "DXGI_FORMAT_R10G10B10A2_UINT"
+      "rtvFormat": "DXGI_FORMAT_R10G10B10A2_UINT",
+      "blitSRVFormat": "DXGI_FORMAT_R10G10B10A2_UINT"
     }
   ],
   "GL_RGB16F": [
@@ -487,14 +500,16 @@
     {
       "texFormat": "DXGI_FORMAT_R16G16B16A16_SINT",
       "srvFormat": "DXGI_FORMAT_R16G16B16A16_SINT",
-      "rtvFormat": "DXGI_FORMAT_R16G16B16A16_SINT"
+      "rtvFormat": "DXGI_FORMAT_R16G16B16A16_SINT",
+      "blitSRVFormat": "DXGI_FORMAT_R16G16B16A16_SINT"
     }
   ],
   "GL_RGB16UI": [
     {
       "texFormat": "DXGI_FORMAT_R16G16B16A16_UINT",
       "srvFormat": "DXGI_FORMAT_R16G16B16A16_UINT",
-      "rtvFormat": "DXGI_FORMAT_R16G16B16A16_UINT"
+      "rtvFormat": "DXGI_FORMAT_R16G16B16A16_UINT",
+      "blitSRVFormat": "DXGI_FORMAT_R16G16B16A16_UINT"
     }
   ],
   "GL_RGB32F": [
@@ -508,14 +523,16 @@
     {
       "texFormat": "DXGI_FORMAT_R32G32B32A32_SINT",
       "srvFormat": "DXGI_FORMAT_R32G32B32A32_SINT",
-      "rtvFormat": "DXGI_FORMAT_R32G32B32A32_SINT"
+      "rtvFormat": "DXGI_FORMAT_R32G32B32A32_SINT",
+      "blitSRVFormat": "DXGI_FORMAT_R32G32B32A32_SINT"
     }
   ],
   "GL_RGB32UI": [
     {
       "texFormat": "DXGI_FORMAT_R32G32B32A32_UINT",
       "srvFormat": "DXGI_FORMAT_R32G32B32A32_UINT",
-      "rtvFormat": "DXGI_FORMAT_R32G32B32A32_UINT"
+      "rtvFormat": "DXGI_FORMAT_R32G32B32A32_UINT",
+      "blitSRVFormat": "DXGI_FORMAT_R32G32B32A32_UINT"
     }
   ],
   "GL_RGB565": [
@@ -557,14 +574,16 @@
     {
       "texFormat": "DXGI_FORMAT_R8G8B8A8_SINT",
       "srvFormat": "DXGI_FORMAT_R8G8B8A8_SINT",
-      "rtvFormat": "DXGI_FORMAT_R8G8B8A8_SINT"
+      "rtvFormat": "DXGI_FORMAT_R8G8B8A8_SINT",
+      "blitSRVFormat": "DXGI_FORMAT_R8G8B8A8_SINT"
     }
   ],
   "GL_RGB8UI": [
     {
       "texFormat": "DXGI_FORMAT_R8G8B8A8_UINT",
       "srvFormat": "DXGI_FORMAT_R8G8B8A8_UINT",
-      "rtvFormat": "DXGI_FORMAT_R8G8B8A8_UINT"
+      "rtvFormat": "DXGI_FORMAT_R8G8B8A8_UINT",
+      "blitSRVFormat": "DXGI_FORMAT_R8G8B8A8_UINT"
     }
   ],
   "GL_RGB8_SNORM": [
@@ -597,14 +616,16 @@
     {
       "texFormat": "DXGI_FORMAT_R16G16B16A16_SINT",
       "srvFormat": "DXGI_FORMAT_R16G16B16A16_SINT",
-      "rtvFormat": "DXGI_FORMAT_R16G16B16A16_SINT"
+      "rtvFormat": "DXGI_FORMAT_R16G16B16A16_SINT",
+      "blitSRVFormat": "DXGI_FORMAT_R16G16B16A16_SINT"
     }
   ],
   "GL_RGBA16UI": [
     {
       "texFormat": "DXGI_FORMAT_R16G16B16A16_UINT",
       "srvFormat": "DXGI_FORMAT_R16G16B16A16_UINT",
-      "rtvFormat": "DXGI_FORMAT_R16G16B16A16_UINT"
+      "rtvFormat": "DXGI_FORMAT_R16G16B16A16_UINT",
+      "blitSRVFormat": "DXGI_FORMAT_R16G16B16A16_UINT"
     }
   ],
   "GL_RGBA32F": [
@@ -618,14 +639,16 @@
     {
       "texFormat": "DXGI_FORMAT_R32G32B32A32_SINT",
       "srvFormat": "DXGI_FORMAT_R32G32B32A32_SINT",
-      "rtvFormat": "DXGI_FORMAT_R32G32B32A32_SINT"
+      "rtvFormat": "DXGI_FORMAT_R32G32B32A32_SINT",
+      "blitSRVFormat": "DXGI_FORMAT_R32G32B32A32_SINT"
     }
   ],
   "GL_RGBA32UI": [
     {
       "texFormat": "DXGI_FORMAT_R32G32B32A32_UINT",
       "srvFormat": "DXGI_FORMAT_R32G32B32A32_UINT",
-      "rtvFormat": "DXGI_FORMAT_R32G32B32A32_UINT"
+      "rtvFormat": "DXGI_FORMAT_R32G32B32A32_UINT",
+      "blitSRVFormat": "DXGI_FORMAT_R32G32B32A32_UINT"
     }
   ],
   "GL_RGBA4": [
@@ -653,14 +676,16 @@
     {
       "texFormat": "DXGI_FORMAT_R8G8B8A8_SINT",
       "srvFormat": "DXGI_FORMAT_R8G8B8A8_SINT",
-      "rtvFormat": "DXGI_FORMAT_R8G8B8A8_SINT"
+      "rtvFormat": "DXGI_FORMAT_R8G8B8A8_SINT",
+      "blitSRVFormat": "DXGI_FORMAT_R8G8B8A8_SINT"
     }
   ],
   "GL_RGBA8UI": [
     {
       "texFormat": "DXGI_FORMAT_R8G8B8A8_UINT",
       "srvFormat": "DXGI_FORMAT_R8G8B8A8_UINT",
-      "rtvFormat": "DXGI_FORMAT_R8G8B8A8_UINT"
+      "rtvFormat": "DXGI_FORMAT_R8G8B8A8_UINT",
+      "blitSRVFormat": "DXGI_FORMAT_R8G8B8A8_UINT"
     }
   ],
   "GL_RGBA8_SNORM": [
