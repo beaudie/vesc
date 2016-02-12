@@ -27,6 +27,7 @@ class RenderTarget11 : public RenderTargetD3D
     virtual ID3D11RenderTargetView *getRenderTargetView() const = 0;
     virtual ID3D11DepthStencilView *getDepthStencilView() const = 0;
     virtual ID3D11ShaderResourceView *getShaderResourceView() const = 0;
+    virtual ID3D11ShaderResourceView *getBlitShaderResourceView() const = 0;
 
     virtual unsigned int getSubresourceIndex() const = 0;
 
@@ -38,6 +39,7 @@ class TextureRenderTarget11 : public RenderTarget11
   public:
     // TextureRenderTarget11 takes ownership of any D3D11 resources it is given and will AddRef them
     TextureRenderTarget11(ID3D11RenderTargetView *rtv, ID3D11Resource *resource, ID3D11ShaderResourceView *srv,
+                          ID3D11ShaderResourceView *blitSRV,
                            GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLsizei samples);
     TextureRenderTarget11(ID3D11DepthStencilView *dsv, ID3D11Resource *resource, ID3D11ShaderResourceView *srv,
                            GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLsizei samples);
@@ -53,6 +55,7 @@ class TextureRenderTarget11 : public RenderTarget11
     ID3D11RenderTargetView *getRenderTargetView() const override;
     ID3D11DepthStencilView *getDepthStencilView() const override;
     ID3D11ShaderResourceView *getShaderResourceView() const override;
+    ID3D11ShaderResourceView *getBlitShaderResourceView() const override;
 
     unsigned int getSubresourceIndex() const override;
 
@@ -71,6 +74,9 @@ class TextureRenderTarget11 : public RenderTarget11
     ID3D11RenderTargetView *mRenderTarget;
     ID3D11DepthStencilView *mDepthStencil;
     ID3D11ShaderResourceView *mShaderResource;
+
+    // Shader resource view to use with internal blit shaders. Not set for depth/stencil render targets.
+    ID3D11ShaderResourceView *mBlitShaderResource;
 };
 
 class SurfaceRenderTarget11 : public RenderTarget11
@@ -89,6 +95,7 @@ class SurfaceRenderTarget11 : public RenderTarget11
     ID3D11RenderTargetView *getRenderTargetView() const override;
     ID3D11DepthStencilView *getDepthStencilView() const override;
     ID3D11ShaderResourceView *getShaderResourceView() const override;
+    ID3D11ShaderResourceView *getBlitShaderResourceView() const override;
 
     unsigned int getSubresourceIndex() const override;
 
