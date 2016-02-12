@@ -2399,7 +2399,9 @@ gl::Error TextureStorage11_Cube::createSRV(int baseLevel,
     srvDesc.Format = format;
 
     // Unnormalized integer cube maps are not supported by DX11; we emulate them as an array of six
-    // 2D textures
+    // 2D textures.
+    // This code path can be hit by the blit shaders, user defined shaders don't use integer SRVs
+    // for integer textures.
     const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(format);
     if (dxgiFormatInfo.componentType == GL_INT || dxgiFormatInfo.componentType == GL_UNSIGNED_INT)
     {
