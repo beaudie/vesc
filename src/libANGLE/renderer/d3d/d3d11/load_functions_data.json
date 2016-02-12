@@ -391,14 +391,14 @@
     "GL_UNSIGNED_INT": [
       {
         "loadFunction": "LoadR32ToR16",
-        "dxgiFormat": "DXGI_FORMAT_R16_TYPELESS",
+        "dxgiFormat": "DXGI_FORMAT_R16_UNORM",
         "requiresConversion": "true"
       }
     ],
     "GL_UNSIGNED_SHORT": [
       {
         "loadFunction": "LoadToNative<GLushort,1>",
-        "dxgiFormat": "DXGI_FORMAT_R16_TYPELESS",
+        "dxgiFormat": "DXGI_FORMAT_R16_UNORM",
         "requiresConversion": "false"
       },
       {
@@ -544,7 +544,7 @@
     "GL_FLOAT": [
       {
         "loadFunction": "LoadToNative<GLfloat,1>",
-        "dxgiFormat": "DXGI_FORMAT_R32_TYPELESS",
+        "dxgiFormat": "DXGI_FORMAT_R32_FLOAT",
         "requiresConversion": "false"
       },
       {
@@ -626,7 +626,7 @@
     "GL_FLOAT_32_UNSIGNED_INT_24_8_REV": [
       {
         "loadFunction": "LoadToNative<GLuint,2>",
-        "dxgiFormat": "DXGI_FORMAT_R32G8X24_TYPELESS",
+        "dxgiFormat": "DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS",
         "requiresConversion": "false"
       },
       {
@@ -731,7 +731,7 @@
     "GL_UNSIGNED_INT_24_8": [
       {
         "loadFunction": "LoadR32ToR24G8",
-        "dxgiFormat": "DXGI_FORMAT_R24G8_TYPELESS",
+        "dxgiFormat": "DXGI_FORMAT_R24_UNORM_X8_TYPELESS",
         "requiresConversion": "true"
       },
       {
@@ -877,7 +877,7 @@
     "GL_UNSIGNED_INT": [
       {
         "loadFunction": "LoadR32ToR24G8",
-        "dxgiFormat": "DXGI_FORMAT_R24G8_TYPELESS",
+        "dxgiFormat": "DXGI_FORMAT_R24_UNORM_X8_TYPELESS",
         "requiresConversion": "true"
       },
       {

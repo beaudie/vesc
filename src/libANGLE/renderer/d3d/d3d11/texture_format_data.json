@@ -173,6 +173,8 @@
     {
       "texFormat": "DXGI_FORMAT_D24_UNORM_S8_UINT",
       "dsvFormat": "DXGI_FORMAT_D24_UNORM_S8_UINT",
+      "readFormat": "DXGI_FORMAT_D24_UNORM_S8_UINT",
+      "loadFunctionKeyFormat": "DXGI_FORMAT_D24_UNORM_S8_UINT",
       "requirementsFcn": "OnlyFL9_3"
     }
   ],
@@ -197,6 +199,8 @@
     {
       "texFormat": "DXGI_FORMAT_D16_UNORM",
       "dsvFormat": "DXGI_FORMAT_D16_UNORM",
+      "readFormat": "DXGI_FORMAT_D16_UNORM",
+      "loadFunctionKeyFormat": "DXGI_FORMAT_D16_UNORM",
       "requirementsFcn": "OnlyFL9_3"
     }
   ],
@@ -210,6 +214,8 @@
     {
       "texFormat": "DXGI_FORMAT_D24_UNORM_S8_UINT",
       "dsvFormat": "DXGI_FORMAT_D24_UNORM_S8_UINT",
+      "readFormat": "DXGI_FORMAT_D24_UNORM_S8_UINT",
+      "loadFunctionKeyFormat": "DXGI_FORMAT_D24_UNORM_S8_UINT",
       "requirementsFcn": "OnlyFL9_3"
     }
   ],
@@ -686,6 +692,8 @@
     {
       "texFormat": "DXGI_FORMAT_D24_UNORM_S8_UINT",
       "dsvFormat": "DXGI_FORMAT_D24_UNORM_S8_UINT",
+      "readFormat": "DXGI_FORMAT_D24_UNORM_S8_UINT",
+      "loadFunctionKeyFormat": "DXGI_FORMAT_D24_UNORM_S8_UINT",
       "requirementsFcn": "OnlyFL9_3"
     }
   ]

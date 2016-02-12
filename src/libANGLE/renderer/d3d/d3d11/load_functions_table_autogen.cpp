@@ -603,7 +603,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
 
                     return loadFunctionsMap;
                 }
-                case DXGI_FORMAT_R24G8_TYPELESS:
+                case DXGI_FORMAT_R24_UNORM_X8_TYPELESS:
                 {
                     static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = []() {
                         std::map<GLenum, LoadImageFunctionInfo> loadMap;
@@ -621,7 +621,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
         {
             switch (dxgiFormat)
             {
-                case DXGI_FORMAT_R32G8X24_TYPELESS:
+                case DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS:
                 {
                     static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = []() {
                         std::map<GLenum, LoadImageFunctionInfo> loadMap;
@@ -667,7 +667,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
 
                     return loadFunctionsMap;
                 }
-                case DXGI_FORMAT_R16_TYPELESS:
+                case DXGI_FORMAT_R16_UNORM:
                 {
                     static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = []() {
                         std::map<GLenum, LoadImageFunctionInfo> loadMap;
@@ -696,7 +696,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
 
                     return loadFunctionsMap;
                 }
-                case DXGI_FORMAT_R24G8_TYPELESS:
+                case DXGI_FORMAT_R24_UNORM_X8_TYPELESS:
                 {
                     static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = []() {
                         std::map<GLenum, LoadImageFunctionInfo> loadMap;
@@ -714,7 +714,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
         {
             switch (dxgiFormat)
             {
-                case DXGI_FORMAT_R32_TYPELESS:
+                case DXGI_FORMAT_R32_FLOAT:
                 {
                     static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = []() {
                         std::map<GLenum, LoadImageFunctionInfo> loadMap;

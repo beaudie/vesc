@@ -123,13 +123,20 @@ const TextureFormat GetD3D11FormatInfo(GLenum internalFormat,
                                        DXGI_FORMAT texFormat,
                                        DXGI_FORMAT srvFormat,
                                        DXGI_FORMAT rtvFormat,
-                                       DXGI_FORMAT dsvFormat)
+                                       DXGI_FORMAT dsvFormat,
+                                       DXGI_FORMAT blitSRVFormat,
+                                       DXGI_FORMAT multisampleResolveFormat,
+                                       DXGI_FORMAT readFormat,
+                                       DXGI_FORMAT loadFunctionKeyFormat)
 {{
     TextureFormat info;
-    info.texFormat = texFormat;
-    info.srvFormat = srvFormat;
-    info.rtvFormat = rtvFormat;
-    info.dsvFormat = dsvFormat;
+    info.texFormat                = texFormat;
+    info.srvFormat                = srvFormat;
+    info.rtvFormat                = rtvFormat;
+    info.dsvFormat                = dsvFormat;
+    info.blitSRVFormat            = blitSRVFormat;
+    info.multisampleResolveFormat = multisampleResolveFormat;
+    info.readFormat               = readFormat;
 
     // Given a GL internal format, the renderFormat is the DSV format if it is depth- or
     // stencil-renderable,
@@ -202,9 +209,10 @@ const TextureFormat GetD3D11FormatInfo(GLenum internalFormat,
     }}
 
     // Check if there is an initialization function for this texture format
-    info.dataInitializerFunction = GetInternalFormatInitializer(internalFormat, texFormat);
+    info.dataInitializerFunction =
+        GetInternalFormatInitializer(internalFormat, loadFunctionKeyFormat);
     // Gather all the load functions for this internal format
-    info.loadFunctions = GetLoadFunctionsMap(internalFormat, texFormat);
+    info.loadFunctions = GetLoadFunctionsMap(internalFormat, loadFunctionKeyFormat);
 
     ASSERT(info.loadFunctions.size() != 0 || internalFormat == GL_NONE);
 
@@ -218,6 +226,9 @@ TextureFormat::TextureFormat()
       srvFormat(DXGI_FORMAT_UNKNOWN),
       rtvFormat(DXGI_FORMAT_UNKNOWN),
       dsvFormat(DXGI_FORMAT_UNKNOWN),
+      blitSRVFormat(DXGI_FORMAT_UNKNOWN),
+      multisampleResolveFormat(DXGI_FORMAT_UNKNOWN),
+      readFormat(DXGI_FORMAT_UNKNOWN),
       renderFormat(DXGI_FORMAT_UNKNOWN),
       swizzleTexFormat(DXGI_FORMAT_UNKNOWN),
       swizzleSRVFormat(DXGI_FORMAT_UNKNOWN),
@@ -255,6 +266,10 @@ def get_texture_format_item(idx, texture_format):
     srv_format = texture_format["srvFormat"] if "srvFormat" in texture_format else "DXGI_FORMAT_UNKNOWN"
     rtv_format = texture_format["rtvFormat"] if "rtvFormat" in texture_format else "DXGI_FORMAT_UNKNOWN"
     dsv_format = texture_format["dsvFormat"] if "dsvFormat" in texture_format else "DXGI_FORMAT_UNKNOWN"
+    blit_srv_format = texture_format["blitSRVFormat"] if "blitSRVFormat" in texture_format else srv_format
+    multisample_resolve_format = texture_format["multisampleResolveFormat"] if "multisampleResolveFormat" in texture_format else blit_srv_format
+    read_format = texture_format["readFormat"] if "readFormat" in texture_format else blit_srv_format
+    load_function_key_format = texture_format["loadFunctionKeyFormat"] if "loadFunctionKeyFormat" in texture_format else blit_srv_format
     requirements_fn = texture_format["requirementsFcn"] if "requirementsFcn" in texture_format else "AnyDevice"
 
     if idx == 0:
@@ -266,7 +281,11 @@ def get_texture_format_item(idx, texture_format):
     table_data += '                                                                              ' + tex_format + ',\n'
     table_data += '                                                                              ' + srv_format + ',\n'
     table_data += '                                                                              ' + rtv_format + ',\n'
-    table_data += '                                                                              ' + dsv_format + ');\n'
+    table_data += '                                                                              ' + dsv_format + ',\n'
+    table_data += '                                                                              ' + blit_srv_format + ',\n'
+    table_data += '                                                                              ' + multisample_resolve_format + ',\n'
+    table_data += '                                                                              ' + read_format + ',\n'
+    table_data += '                                                                              ' + load_function_key_format + ');\n'
     table_data += '                return textureFormat;\n'
     table_data += '            }\n'
 
