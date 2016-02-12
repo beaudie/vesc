@@ -3624,6 +3624,7 @@ gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAtt
     }
 
     gl::Extents safeSize(safeArea.width, safeArea.height, 1);
+    // TODO: This won't work with integer textures.
     auto errorOrResult = CreateStagingTexture(textureHelper.getTextureType(),
                                               textureHelper.getFormat(), safeSize, mDevice);
     if (errorOrResult.isError())
@@ -4112,6 +4113,7 @@ void Renderer11::onBufferDelete(const Buffer11 *deleted)
 
 ID3D11Texture2D *Renderer11::resolveMultisampledTexture(ID3D11Texture2D *source, unsigned int subresource)
 {
+    // TODO: This doesn't look correct for integer textures.
     D3D11_TEXTURE2D_DESC textureDesc;
     source->GetDesc(&textureDesc);
 
