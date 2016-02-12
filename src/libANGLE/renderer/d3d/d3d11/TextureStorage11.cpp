@@ -82,6 +82,7 @@ TextureStorage11::TextureStorage11(Renderer11 *renderer, UINT bindFlags, UINT mi
     for (unsigned int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; i++)
     {
         mLevelSRVs[i] = nullptr;
+        mLevelBlitSRVs[i] = nullptr;
     }
 }
 
@@ -90,6 +91,7 @@ TextureStorage11::~TextureStorage11()
     for (unsigned int level = 0; level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; level++)
     {
         SafeRelease(mLevelSRVs[level]);
+        SafeRelease(mLevelBlitSRVs[level]);
     }
 
     for (SRVCache::iterator i = mSrvCache.begin(); i != mSrvCache.end(); i++)
@@ -279,11 +281,17 @@ gl::Error TextureStorage11::getSRV(const gl::TextureState &textureState,
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error TextureStorage11::getSRVLevel(int mipLevel, ID3D11ShaderResourceView **outSRV)
+gl::Error TextureStorage11::getSRVLevel(int mipLevel,
+                                        bool blitSRV,
+                                        ID3D11ShaderResourceView **outSRV)
 {
     ASSERT(mipLevel >= 0 && mipLevel < getLevelCount());
 
-    if (!mLevelSRVs[mipLevel])
+    // TODO: Only create a different SRV if (mBlitShaderResourceFormat != mShaderResourceFormat)
+    // (difficult because double release must be avoided).
+    ID3D11ShaderResourceView **levelSRVs = (blitSRV) ? mLevelBlitSRVs : mLevelSRVs;
+
+    if (!levelSRVs[mipLevel])
     {
         ID3D11Resource *resource = nullptr;
         gl::Error error = getResource(&resource);
@@ -292,15 +300,16 @@ gl::Error TextureStorage11::getSRVLevel(int mipLevel, ID3D11ShaderResourceView *
             return error;
         }
 
-        error =
-            createSRV(mipLevel, 1, mTextureFormatSet.srvFormat, resource, &mLevelSRVs[mipLevel]);
+        DXGI_FORMAT resourceFormat =
+            blitSRV ? mTextureFormatSet.srvFormat : mTextureFormatSet.blitSRVFormat;
+        error = createSRV(mipLevel, 1, resourceFormat, resource, &levelSRVs[mipLevel]);
         if (error.isError())
         {
             return error;
         }
     }
 
-    *outSRV = mLevelSRVs[mipLevel];
+    *outSRV = levelSRVs[mipLevel];
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -371,7 +380,9 @@ gl::Error TextureStorage11::generateSwizzles(GLenum swizzleRed,
         {
             // Need to re-render the swizzle for this level
             ID3D11ShaderResourceView *sourceSRV = nullptr;
-            gl::Error error = getSRVLevel(level, &sourceSRV);
+            // TODO: Make sure that using the blitSRV is appropriate here.
+            gl::Error error = getSRVLevel(level, true, &sourceSRV);
+
             if (error.isError())
             {
                 return error;
@@ -587,7 +598,8 @@ gl::Error TextureStorage11::generateMipmap(const gl::ImageIndex &sourceIndex,
         return error;
     }
 
-    ID3D11ShaderResourceView *sourceSRV = GetAs<RenderTarget11>(source)->getShaderResourceView();
+    ID3D11ShaderResourceView *sourceSRV =
+        GetAs<RenderTarget11>(source)->getBlitShaderResourceView();
     ID3D11RenderTargetView *destRTV     = GetAs<RenderTarget11>(dest)->getRenderTargetView();
 
     gl::Box sourceArea(0, 0, 0, source->getWidth(), source->getHeight(), source->getDepth());
@@ -636,6 +648,7 @@ void TextureStorage11::clearSRVCache()
     for (size_t level = 0; level < ArraySize(mLevelSRVs); level++)
     {
         SafeRelease(mLevelSRVs[level]);
+        SafeRelease(mLevelBlitSRVs[level]);
     }
 }
 
@@ -1227,7 +1240,14 @@ gl::Error TextureStorage11_2D::getRenderTarget(const gl::ImageIndex &index, Rend
     }
 
     ID3D11ShaderResourceView *srv = nullptr;
-    error = getSRVLevel(level, &srv);
+    error = getSRVLevel(level, false, &srv);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ID3D11ShaderResourceView *blitSRV = nullptr;
+    error = getSRVLevel(level, true, &blitSRV);
     if (error.isError())
     {
         return error;
@@ -1257,7 +1277,7 @@ gl::Error TextureStorage11_2D::getRenderTarget(const gl::ImageIndex &index, Rend
             ASSERT(SUCCEEDED(result));
 
             mLevelZeroRenderTarget = new TextureRenderTarget11(
-                rtv, mLevelZeroTexture, nullptr, mInternalFormat, mTextureFormatSet.format,
+                rtv, mLevelZeroTexture, nullptr, nullptr, mInternalFormat, mTextureFormatSet.format,
                 getLevelWidth(level), getLevelHeight(level), 1, 0);
 
             // RenderTarget will take ownership of these resources
@@ -1287,9 +1307,9 @@ gl::Error TextureStorage11_2D::getRenderTarget(const gl::ImageIndex &index, Rend
                 result);
         }
 
-        mRenderTarget[level] =
-            new TextureRenderTarget11(rtv, texture, srv, mInternalFormat, mTextureFormatSet.format,
-                                      getLevelWidth(level), getLevelHeight(level), 1, 0);
+        mRenderTarget[level] = new TextureRenderTarget11(
+            rtv, texture, srv, blitSRV, mInternalFormat, mTextureFormatSet.format,
+            getLevelWidth(level), getLevelHeight(level), 1, 0);
 
         // RenderTarget will take ownership of these resources
         SafeRelease(rtv);
@@ -2182,6 +2202,42 @@ gl::Error TextureStorage11_Cube::ensureTextureExists(int mipLevels)
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error TextureStorage11_Cube::createRenderTargetSRV(ID3D11Resource *texture,
+                                                       const gl::ImageIndex &index,
+                                                       DXGI_FORMAT resourceFormat,
+                                                       ID3D11ShaderResourceView **srv) const
+{
+    ID3D11Device *device = mRenderer->getDevice();
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+    srvDesc.Format                         = resourceFormat;
+    srvDesc.Texture2DArray.MostDetailedMip = mTopLevel + index.mipIndex;
+    srvDesc.Texture2DArray.MipLevels       = 1;
+    srvDesc.Texture2DArray.FirstArraySlice = index.layerIndex;
+    srvDesc.Texture2DArray.ArraySize       = 1;
+
+    if (mRenderer->getRenderer11DeviceCaps().featureLevel <= D3D_FEATURE_LEVEL_9_3)
+    {
+        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+    }
+    else
+    {
+        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;  // Will be used with Texture2D
+                                                                     // sampler, not TextureCube
+    }
+
+    HRESULT result = device->CreateShaderResourceView(texture, &srvDesc, srv);
+
+    ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
+    if (FAILED(result))
+    {
+        return gl::Error(
+            GL_OUT_OF_MEMORY,
+            "Failed to create internal shader resource view for texture storage, result: 0x%X.",
+            result);
+    }
+    return gl::Error(GL_NO_ERROR);
+}
+
 gl::Error TextureStorage11_Cube::getRenderTarget(const gl::ImageIndex &index,
                                                  RenderTargetD3D **outRT)
 {
@@ -2227,8 +2283,8 @@ gl::Error TextureStorage11_Cube::getRenderTarget(const gl::ImageIndex &index,
                 ASSERT(SUCCEEDED(result));
 
                 mLevelZeroRenderTarget[faceIndex] = new TextureRenderTarget11(
-                    rtv, mLevelZeroTexture, nullptr, mInternalFormat, mTextureFormatSet.format,
-                    getLevelWidth(level), getLevelHeight(level), 1, 0);
+                    rtv, mLevelZeroTexture, nullptr, nullptr, mInternalFormat,
+                    mTextureFormatSet.format, getLevelWidth(level), getLevelHeight(level), 1, 0);
 
                 // RenderTarget will take ownership of these resources
                 SafeRelease(rtv);
@@ -2239,34 +2295,18 @@ gl::Error TextureStorage11_Cube::getRenderTarget(const gl::ImageIndex &index,
             return gl::Error(GL_NO_ERROR);
         }
 
-        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-        srvDesc.Format                         = mTextureFormatSet.srvFormat;
-        srvDesc.Texture2DArray.MostDetailedMip = mTopLevel + level;
-        srvDesc.Texture2DArray.MipLevels       = 1;
-        srvDesc.Texture2DArray.FirstArraySlice = faceIndex;
-        srvDesc.Texture2DArray.ArraySize       = 1;
-
-        if (mRenderer->getRenderer11DeviceCaps().featureLevel <= D3D_FEATURE_LEVEL_9_3)
+        ID3D11ShaderResourceView *srv = nullptr;
+        error = createRenderTargetSRV(texture, index, mTextureFormatSet.srvFormat, &srv);
+        if (error.isError())
         {
-            srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+            return error;
         }
-        else
+        ID3D11ShaderResourceView *blitSRV = nullptr;
+        error = createRenderTargetSRV(texture, index, mTextureFormatSet.blitSRVFormat, &blitSRV);
+        if (error.isError())
         {
-            srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;  // Will be used with
-                                                                         // Texture2D sampler, not
-                                                                         // TextureCube
-        }
-
-        ID3D11ShaderResourceView *srv;
-        result = device->CreateShaderResourceView(texture, &srvDesc, &srv);
-
-        ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
-        if (FAILED(result))
-        {
-            return gl::Error(
-                GL_OUT_OF_MEMORY,
-                "Failed to create internal shader resource view for texture storage, result: 0x%X.",
-                result);
+            SafeRelease(srv);
+            return error;
         }
 
         d3d11::SetDebugName(srv, "TexStorageCube.RenderTargetSRV");
@@ -2296,8 +2336,8 @@ gl::Error TextureStorage11_Cube::getRenderTarget(const gl::ImageIndex &index,
             d3d11::SetDebugName(rtv, "TexStorageCube.RenderTargetRTV");
 
             mRenderTarget[faceIndex][level] = new TextureRenderTarget11(
-                rtv, texture, srv, mInternalFormat, mTextureFormatSet.format, getLevelWidth(level),
-                getLevelHeight(level), 1, 0);
+                rtv, texture, srv, blitSRV, mInternalFormat, mTextureFormatSet.format,
+                getLevelWidth(level), getLevelHeight(level), 1, 0);
 
             // RenderTarget will take ownership of these resources
             SafeRelease(rtv);
@@ -2741,7 +2781,14 @@ gl::Error TextureStorage11_3D::getRenderTarget(const gl::ImageIndex &index, Rend
             }
 
             ID3D11ShaderResourceView *srv = nullptr;
-            error = getSRVLevel(mipLevel, &srv);
+            error = getSRVLevel(mipLevel, false, &srv);
+            if (error.isError())
+            {
+                return error;
+            }
+
+            ID3D11ShaderResourceView *blitSRV = nullptr;
+            error = getSRVLevel(mipLevel, true, &blitSRV);
             if (error.isError())
             {
                 return error;
@@ -2763,6 +2810,7 @@ gl::Error TextureStorage11_3D::getRenderTarget(const gl::ImageIndex &index, Rend
             if (FAILED(result))
             {
                 SafeRelease(srv);
+                SafeRelease(blitSRV);
                 return gl::Error(GL_OUT_OF_MEMORY,
                                  "Failed to create internal render target view for texture "
                                  "storage, result: 0x%X.",
@@ -2772,7 +2820,7 @@ gl::Error TextureStorage11_3D::getRenderTarget(const gl::ImageIndex &index, Rend
             d3d11::SetDebugName(rtv, "TexStorage3D.RTV");
 
             mLevelRenderTargets[mipLevel] = new TextureRenderTarget11(
-                rtv, texture, srv, mInternalFormat, mTextureFormatSet.format,
+                rtv, texture, srv, blitSRV, mInternalFormat, mTextureFormatSet.format,
                 getLevelWidth(mipLevel), getLevelHeight(mipLevel), getLevelDepth(mipLevel), 0);
 
             // RenderTarget will take ownership of these resources
@@ -2802,6 +2850,7 @@ gl::Error TextureStorage11_3D::getRenderTarget(const gl::ImageIndex &index, Rend
 
             // TODO, what kind of SRV is expected here?
             ID3D11ShaderResourceView *srv = nullptr;
+            ID3D11ShaderResourceView *blitSRV = nullptr;
 
             D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
             rtvDesc.Format                = mTextureFormatSet.rtvFormat;
@@ -2817,6 +2866,7 @@ gl::Error TextureStorage11_3D::getRenderTarget(const gl::ImageIndex &index, Rend
             if (FAILED(result))
             {
                 SafeRelease(srv);
+                SafeRelease(blitSRV);
                 return gl::Error(GL_OUT_OF_MEMORY,
                                  "Failed to create internal render target view for texture "
                                  "storage, result: 0x%X.",
@@ -2827,7 +2877,7 @@ gl::Error TextureStorage11_3D::getRenderTarget(const gl::ImageIndex &index, Rend
             d3d11::SetDebugName(rtv, "TexStorage3D.LayerRTV");
 
             mLevelLayerRenderTargets[key] = new TextureRenderTarget11(
-                rtv, texture, srv, mInternalFormat, mTextureFormatSet.format,
+                rtv, texture, srv, blitSRV, mInternalFormat, mTextureFormatSet.format,
                 getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1, 0);
 
             // RenderTarget will take ownership of these resources
@@ -3148,6 +3198,34 @@ gl::Error TextureStorage11_2DArray::createSRV(int baseLevel,
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error TextureStorage11_2DArray::createRenderTargetSRV(ID3D11Resource *texture,
+                                                          const gl::ImageIndex &index,
+                                                          DXGI_FORMAT resourceFormat,
+                                                          ID3D11ShaderResourceView **srv) const
+{
+    ID3D11Device *device = mRenderer->getDevice();
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+    srvDesc.Format                         = resourceFormat;
+    srvDesc.ViewDimension                  = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+    srvDesc.Texture2DArray.MostDetailedMip = mTopLevel + index.mipIndex;
+    srvDesc.Texture2DArray.MipLevels       = 1;
+    srvDesc.Texture2DArray.FirstArraySlice = index.layerIndex;
+    srvDesc.Texture2DArray.ArraySize       = 1;
+
+    HRESULT result = device->CreateShaderResourceView(texture, &srvDesc, srv);
+
+    ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
+    if (FAILED(result))
+    {
+        return gl::Error(
+            GL_OUT_OF_MEMORY,
+            "Failed to create internal shader resource view for texture storage, result: 0x%X.",
+            result);
+    }
+
+    return gl::Error(GL_NO_ERROR);
+}
+
 gl::Error TextureStorage11_2DArray::getRenderTarget(const gl::ImageIndex &index,
                                                     RenderTargetD3D **outRT)
 {
@@ -3170,25 +3248,18 @@ gl::Error TextureStorage11_2DArray::getRenderTarget(const gl::ImageIndex &index,
         {
             return error;
         }
-
-        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-        srvDesc.Format                         = mTextureFormatSet.srvFormat;
-        srvDesc.ViewDimension                  = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
-        srvDesc.Texture2DArray.MostDetailedMip = mTopLevel + mipLevel;
-        srvDesc.Texture2DArray.MipLevels       = 1;
-        srvDesc.Texture2DArray.FirstArraySlice = layer;
-        srvDesc.Texture2DArray.ArraySize       = 1;
-
         ID3D11ShaderResourceView *srv;
-        result = device->CreateShaderResourceView(texture, &srvDesc, &srv);
-
-        ASSERT(result == E_OUTOFMEMORY || SUCCEEDED(result));
-        if (FAILED(result))
+        error = createRenderTargetSRV(texture, index, mTextureFormatSet.srvFormat, &srv);
+        if (error.isError())
         {
-            return gl::Error(
-                GL_OUT_OF_MEMORY,
-                "Failed to create internal shader resource view for texture storage, result: 0x%X.",
-                result);
+            return error;
+        }
+        ID3D11ShaderResourceView *blitSRV;
+        error = createRenderTargetSRV(texture, index, mTextureFormatSet.blitSRVFormat, &blitSRV);
+        if (error.isError())
+        {
+            SafeRelease(srv);
+            return error;
         }
 
         d3d11::SetDebugName(srv, "TexStorage2DArray.RenderTargetSRV");
@@ -3218,7 +3289,7 @@ gl::Error TextureStorage11_2DArray::getRenderTarget(const gl::ImageIndex &index,
             d3d11::SetDebugName(rtv, "TexStorage2DArray.RenderTargetRTV");
 
             mRenderTargets[key] = new TextureRenderTarget11(
-                rtv, texture, srv, mInternalFormat, mTextureFormatSet.format,
+                rtv, texture, srv, blitSRV, mInternalFormat, mTextureFormatSet.format,
                 getLevelWidth(mipLevel), getLevelHeight(mipLevel), 1, 0);
 
             // RenderTarget will take ownership of these resources
