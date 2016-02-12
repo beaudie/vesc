@@ -1501,6 +1501,16 @@ WorkaroundsD3D GenerateWorkarounds(D3D_FEATURE_LEVEL featureLevel)
     return workarounds;
 }
 
+// Does *not* increment the resource ref count!!
+ID3D11Resource *GetViewResource(ID3D11View *view)
+{
+    ID3D11Resource *resource = NULL;
+    ASSERT(view);
+    view->GetResource(&resource);
+    resource->Release();
+    return resource;
+}
+
 }  // namespace d3d11
 
 TextureHelper11::TextureHelper11()
