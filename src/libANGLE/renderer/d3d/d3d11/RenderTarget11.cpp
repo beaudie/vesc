@@ -214,6 +214,7 @@ void RenderTarget11::signalDirty()
 TextureRenderTarget11::TextureRenderTarget11(ID3D11RenderTargetView *rtv,
                                              ID3D11Resource *resource,
                                              ID3D11ShaderResourceView *srv,
+                                             ID3D11ShaderResourceView *blitSRV,
                                              GLenum internalFormat,
                                              d3d11::ANGLEFormat angleFormat,
                                              GLsizei width,
@@ -230,7 +231,8 @@ TextureRenderTarget11::TextureRenderTarget11(ID3D11RenderTargetView *rtv,
       mTexture(resource),
       mRenderTarget(rtv),
       mDepthStencil(NULL),
-      mShaderResource(srv)
+      mShaderResource(srv),
+      mBlitShaderResource(blitSRV)
 {
     if (mTexture)
     {
@@ -245,6 +247,11 @@ TextureRenderTarget11::TextureRenderTarget11(ID3D11RenderTargetView *rtv,
     if (mShaderResource)
     {
         mShaderResource->AddRef();
+    }
+
+    if (mBlitShaderResource)
+    {
+        mBlitShaderResource->AddRef();
     }
 
     if (mRenderTarget && mTexture)
@@ -273,7 +280,8 @@ TextureRenderTarget11::TextureRenderTarget11(ID3D11DepthStencilView *dsv,
       mTexture(resource),
       mRenderTarget(NULL),
       mDepthStencil(dsv),
-      mShaderResource(srv)
+      mShaderResource(srv),
+      mBlitShaderResource(nullptr)
 {
     if (mTexture)
     {
@@ -303,6 +311,7 @@ TextureRenderTarget11::~TextureRenderTarget11()
     SafeRelease(mRenderTarget);
     SafeRelease(mDepthStencil);
     SafeRelease(mShaderResource);
+    SafeRelease(mBlitShaderResource);
 }
 
 ID3D11Resource *TextureRenderTarget11::getTexture() const
@@ -323,6 +332,11 @@ ID3D11DepthStencilView *TextureRenderTarget11::getDepthStencilView() const
 ID3D11ShaderResourceView *TextureRenderTarget11::getShaderResourceView() const
 {
     return mShaderResource;
+}
+
+ID3D11ShaderResourceView *TextureRenderTarget11::getBlitShaderResourceView() const
+{
+    return mBlitShaderResource;
 }
 
 GLsizei TextureRenderTarget11::getWidth() const
@@ -424,6 +438,13 @@ ID3D11ShaderResourceView *SurfaceRenderTarget11::getShaderResourceView() const
 {
     return (mDepth ? mSwapChain->getDepthStencilShaderResource()
                    : mSwapChain->getRenderTargetShaderResource());
+}
+
+ID3D11ShaderResourceView *SurfaceRenderTarget11::getBlitShaderResourceView() const
+{
+    // TODO: Can the SurfaceRenderTargetView format ever be such that the normal SRV doesn't work
+    // for blitting?
+    return getShaderResourceView();
 }
 
 unsigned int SurfaceRenderTarget11::getSubresourceIndex() const
