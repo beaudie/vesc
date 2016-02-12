@@ -11,6 +11,7 @@
 #define LIBANGLE_RENDERER_D3D_D3D11_RENDERER11_UTILS_H_
 
 #include <array>
+#include <functional>
 #include <vector>
 
 #include "libANGLE/angletypes.h"
@@ -30,7 +31,8 @@ class RenderTarget11;
 struct WorkaroundsD3D;
 struct Renderer11DeviceCaps;
 
-using RenderTargetArray = std::array<ID3D11RenderTargetView *, gl::IMPLEMENTATION_MAX_DRAW_BUFFERS>;
+using RenderTargetArray = std::array<RenderTarget11 *, gl::IMPLEMENTATION_MAX_DRAW_BUFFERS>;
+using RTVArray          = std::array<ID3D11RenderTargetView *, gl::IMPLEMENTATION_MAX_DRAW_BUFFERS>;
 
 namespace gl_d3d11
 {
@@ -343,6 +345,7 @@ void SetBufferData(ID3D11DeviceContext *context, ID3D11Buffer *constantBuffer, c
 }
 
 WorkaroundsD3D GenerateWorkarounds(D3D_FEATURE_LEVEL featureLevel);
+
 }  // namespace d3d11
 
 // A helper class which wraps a 2D or 3D texture.
@@ -384,6 +387,9 @@ gl::ErrorOrResult<TextureHelper11> CreateStagingTexture(GLenum textureType,
                                                         ID3D11Device *device);
 
 bool UsePresentPathFast(const Renderer11 *renderer, const gl::FramebufferAttachment *colorbuffer);
+
+using NotificationCallback = std::function<void()>;
+using NotificationID       = uint64_t;
 
 }  // namespace rx
 
