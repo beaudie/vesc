@@ -439,6 +439,7 @@ gl::Error Image11::copyWithoutConversion(const gl::Offset &destOffset,
         }
         srcTex = srcTex2D;
 
+        // TODO: Should use multisampleResolveFormat from formatInfo in here.
         deviceContext->ResolveSubresource(srcTex, 0, textureHelper.getTexture2D(),
                                           sourceSubResource, textureHelper.getFormat());
         subresourceAfterResolve = 0;

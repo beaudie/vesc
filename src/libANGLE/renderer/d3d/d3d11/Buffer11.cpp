@@ -17,6 +17,7 @@
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
+#include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
 
 namespace
 {
@@ -1325,12 +1326,16 @@ gl::Error Buffer11::PackStorage::packPixels(const gl::FramebufferAttachment &rea
 
     mQueuedPackCommand.reset(new PackPixelsParams(params));
 
+    GLenum internalformat = readAttachment.getInternalFormat();
+    const d3d11::TextureFormat &formatInfo =
+        d3d11::GetTextureFormatInfo(internalformat, mRenderer->getRenderer11DeviceCaps());
+
     gl::Extents srcTextureSize(params.area.width, params.area.height, 1);
-    if (!mStagingTexture.getResource() || mStagingTexture.getFormat() != srcTexture.getFormat() ||
+    if (!mStagingTexture.getResource() || mStagingTexture.getFormat() != formatInfo.readFormat ||
         mStagingTexture.getExtents() != srcTextureSize)
     {
         auto textureOrError =
-            CreateStagingTexture(srcTexture.getTextureType(), srcTexture.getFormat(),
+            CreateStagingTexture(srcTexture.getTextureType(), formatInfo.readFormat,
                                  srcTextureSize, mRenderer->getDevice());
         if (textureOrError.isError())
         {

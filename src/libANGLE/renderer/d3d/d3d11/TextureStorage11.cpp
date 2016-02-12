@@ -141,7 +141,8 @@ DWORD TextureStorage11::GetTextureMiscFlags(GLenum internalFormat,
         d3d11::GetTextureFormatInfo(internalFormat, renderer11DeviceCaps);
     if (renderTarget && levels > 1)
     {
-        const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(formatInfo.texFormat);
+        // TODO: Add formatInfo.genMipmapFormat?
+        const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(formatInfo.blitSRVFormat);
 
         if (dxgiFormatInfo.nativeMipmapSupport(renderer11DeviceCaps.featureLevel))
         {
