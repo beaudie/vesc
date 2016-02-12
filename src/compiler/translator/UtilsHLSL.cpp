@@ -44,31 +44,22 @@ HLSLTextureSamplerGroup TextureGroup(const TBasicType type)
     switch (type)
     {
         case EbtSampler2D:
-            return HLSL_TEXTURE_2D;
-        case EbtSamplerCube:
-            return HLSL_TEXTURE_CUBE;
+        case EbtISampler2D:
+        case EbtUSampler2D:
         case EbtSamplerExternalOES:
             return HLSL_TEXTURE_2D;
+        case EbtSamplerCube:
+        case EbtISamplerCube:
+        case EbtUSamplerCube:
+            return HLSL_TEXTURE_CUBE;
         case EbtSampler2DArray:
+        case EbtISampler2DArray:
+        case EbtUSampler2DArray:
             return HLSL_TEXTURE_2D_ARRAY;
         case EbtSampler3D:
-            return HLSL_TEXTURE_3D;
-        case EbtISampler2D:
-            return HLSL_TEXTURE_2D_INT4;
         case EbtISampler3D:
-            return HLSL_TEXTURE_3D_INT4;
-        case EbtISamplerCube:
-            return HLSL_TEXTURE_2D_ARRAY_INT4;
-        case EbtISampler2DArray:
-            return HLSL_TEXTURE_2D_ARRAY_INT4;
-        case EbtUSampler2D:
-            return HLSL_TEXTURE_2D_UINT4;
         case EbtUSampler3D:
-            return HLSL_TEXTURE_3D_UINT4;
-        case EbtUSamplerCube:
-            return HLSL_TEXTURE_2D_ARRAY_UINT4;
-        case EbtUSampler2DArray:
-            return HLSL_TEXTURE_2D_ARRAY_UINT4;
+            return HLSL_TEXTURE_3D;
         case EbtSampler2DShadow:
             return HLSL_TEXTURE_2D_COMPARISON;
         case EbtSamplerCubeShadow:
@@ -93,18 +84,6 @@ TString TextureString(const HLSLTextureSamplerGroup type)
             return "Texture2DArray";
         case HLSL_TEXTURE_3D:
             return "Texture3D";
-        case HLSL_TEXTURE_2D_INT4:
-            return "Texture2D<int4>";
-        case HLSL_TEXTURE_3D_INT4:
-            return "Texture3D<int4>";
-        case HLSL_TEXTURE_2D_ARRAY_INT4:
-            return "Texture2DArray<int4>";
-        case HLSL_TEXTURE_2D_UINT4:
-            return "Texture2D<uint4>";
-        case HLSL_TEXTURE_3D_UINT4:
-            return "Texture3D<uint4>";
-        case HLSL_TEXTURE_2D_ARRAY_UINT4:
-            return "Texture2DArray<uint4>";
         case HLSL_TEXTURE_2D_COMPARISON:
             return "Texture2D";
         case HLSL_TEXTURE_CUBE_COMPARISON:
@@ -135,18 +114,6 @@ TString TextureGroupSuffix(const HLSLTextureSamplerGroup type)
             return "2DArray";
         case HLSL_TEXTURE_3D:
             return "3D";
-        case HLSL_TEXTURE_2D_INT4:
-            return "2D_int4_";
-        case HLSL_TEXTURE_3D_INT4:
-            return "3D_int4_";
-        case HLSL_TEXTURE_2D_ARRAY_INT4:
-            return "2DArray_int4_";
-        case HLSL_TEXTURE_2D_UINT4:
-            return "2D_uint4_";
-        case HLSL_TEXTURE_3D_UINT4:
-            return "3D_uint4_";
-        case HLSL_TEXTURE_2D_ARRAY_UINT4:
-            return "2DArray_uint4_";
         case HLSL_TEXTURE_2D_COMPARISON:
             return "2D_comparison";
         case HLSL_TEXTURE_CUBE_COMPARISON:
@@ -169,12 +136,24 @@ TString TextureTypeSuffix(const TBasicType type)
 {
     switch (type)
     {
+        case EbtISampler2D:
+            return "2D_int4_";
+        case EbtISampler3D:
+            return "3D_int4_";
+        case EbtISampler2DArray:
+            return "2DArray_int4_";
+        case EbtUSampler2D:
+            return "2D_uint4_";
+        case EbtUSampler3D:
+            return "3D_uint4_";
+        case EbtUSampler2DArray:
+            return "2DArray_uint4_";
         case EbtISamplerCube:
             return "Cube_int4_";
         case EbtUSamplerCube:
             return "Cube_uint4_";
         default:
-            // All other types are identified by their group suffix
+            // Other types are identified by their group suffix
             return TextureGroupSuffix(type);
     }
 }
