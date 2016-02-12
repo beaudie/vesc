@@ -1509,6 +1509,7 @@ void InitConstantBufferDesc(D3D11_BUFFER_DESC *constantBufferDescription, size_t
 
 }  // namespace d3d11
 
+// TODO: Using this may be a problem with integer textures.
 TextureHelper11::TextureHelper11()
     : mTextureType(GL_NONE),
       mFormat(DXGI_FORMAT_UNKNOWN),
