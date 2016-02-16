@@ -4127,7 +4127,8 @@ void Renderer11::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureC
 
 WorkaroundsD3D Renderer11::generateWorkarounds() const
 {
-    return d3d11::GenerateWorkarounds(mRenderer11DeviceCaps.featureLevel);
+    return d3d11::GenerateWorkarounds(static_cast<VendorID>(mAdapterDescription.VendorId),
+                                      mRenderer11DeviceCaps.featureLevel);
 }
 
 void Renderer11::createAnnotator()

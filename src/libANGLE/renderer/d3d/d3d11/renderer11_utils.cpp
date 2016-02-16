@@ -1487,13 +1487,14 @@ ID3D11BlendState *LazyBlendState::resolve(ID3D11Device *device)
     return mResource;
 }
 
-WorkaroundsD3D GenerateWorkarounds(D3D_FEATURE_LEVEL featureLevel)
+WorkaroundsD3D GenerateWorkarounds(VendorID vendor, D3D_FEATURE_LEVEL featureLevel)
 {
     WorkaroundsD3D workarounds;
     workarounds.mrtPerfWorkaround = true;
     workarounds.setDataFasterThanImageUpload = true;
     workarounds.zeroMaxLodWorkaround = (featureLevel <= D3D_FEATURE_LEVEL_9_3);
     workarounds.useInstancedPointSpriteEmulation = (featureLevel <= D3D_FEATURE_LEVEL_9_3);
+    workarounds.presentWithDirtyRectsCanCrash    = (vendor == VENDOR_ID_INTEL);
     return workarounds;
 }
 
