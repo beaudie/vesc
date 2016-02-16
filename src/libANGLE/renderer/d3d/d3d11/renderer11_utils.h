@@ -342,7 +342,7 @@ void SetBufferData(ID3D11DeviceContext *context, ID3D11Buffer *constantBuffer, c
     }
 }
 
-WorkaroundsD3D GenerateWorkarounds(D3D_FEATURE_LEVEL featureLevel);
+WorkaroundsD3D GenerateWorkarounds(VendorID vendor, D3D_FEATURE_LEVEL featureLevel);
 
 enum ReservedConstantBufferSlot
 {

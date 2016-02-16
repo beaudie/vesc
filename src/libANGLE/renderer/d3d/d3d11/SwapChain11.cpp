@@ -547,7 +547,8 @@ EGLint SwapChain11::reset(int backbufferWidth, int backbufferHeight, EGLint swap
             }
         }
 
-        if (mRenderer->getRenderer11DeviceCaps().supportsDXGI1_2)
+        if (mRenderer->getRenderer11DeviceCaps().supportsDXGI1_2 &&
+            !mRenderer->getWorkarounds().presentWithDirtyRectsCanCrash)
         {
             mSwapChain1 = d3d11::DynamicCastComObject<IDXGISwapChain1>(mSwapChain);
         }

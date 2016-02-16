@@ -35,7 +35,8 @@ struct WorkaroundsD3D
         : mrtPerfWorkaround(false),
           setDataFasterThanImageUpload(false),
           zeroMaxLodWorkaround(false),
-          useInstancedPointSpriteEmulation(false)
+          useInstancedPointSpriteEmulation(false),
+          presentWithDirtyRectsCanCrash(false)
     {
     }
 
@@ -60,6 +61,10 @@ struct WorkaroundsD3D
     // emulation will not work. To work around this, D3D11 FL9_3 has to use a different pointsprite
     // emulation that is implemented using instanced quads.
     bool useInstancedPointSpriteEmulation;
+
+    // Some intel drivers tend to crash when calling IDXGISwapChain1::Present1 when passed a dirty
+    // rectangle.
+    bool presentWithDirtyRectsCanCrash;
 };
 }
 
