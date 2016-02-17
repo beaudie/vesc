@@ -41,11 +41,6 @@ namespace
 
 typedef bool (*FormatSupportFunction)(const Renderer11DeviceCaps &);
 
-bool AnyDevice(const Renderer11DeviceCaps &deviceCaps)
-{{
-    return true;
-}}
-
 bool OnlyFL10Plus(const Renderer11DeviceCaps &deviceCaps)
 {{
     return (deviceCaps.featureLevel >= D3D_FEATURE_LEVEL_10_0);
@@ -255,20 +250,26 @@ def get_texture_format_item(idx, gl_format_mapping, angle_format):
     srv_format = angle_format["srvFormat"] if "srvFormat" in angle_format else "DXGI_FORMAT_UNKNOWN"
     rtv_format = angle_format["rtvFormat"] if "rtvFormat" in angle_format else "DXGI_FORMAT_UNKNOWN"
     dsv_format = angle_format["dsvFormat"] if "dsvFormat" in angle_format else "DXGI_FORMAT_UNKNOWN"
-    requirements_fn = gl_format_mapping["requirementsFcn"] if "requirementsFcn" in gl_format_mapping else "AnyDevice"
+    requirements_fn = gl_format_mapping["requirementsFcn"] if "requirementsFcn" in gl_format_mapping else None
 
-    if idx == 0:
-        table_data += '            if (' + requirements_fn + '(renderer11DeviceCaps))\n'
-    else:
-        table_data += '            else if (' + requirements_fn + '(renderer11DeviceCaps))\n'
-    table_data += '            {\n'
-    table_data += '                static const TextureFormat textureFormat = GetD3D11FormatInfo(internalFormat,\n'
-    table_data += '                                                                              ' + tex_format + ',\n'
-    table_data += '                                                                              ' + srv_format + ',\n'
-    table_data += '                                                                              ' + rtv_format + ',\n'
-    table_data += '                                                                              ' + dsv_format + ');\n'
-    table_data += '                return textureFormat;\n'
-    table_data += '            }\n'
+    indent = '            '
+    if requirements_fn != None:
+        if idx == 0:
+            table_data += '            if (' + requirements_fn + '(renderer11DeviceCaps))\n'
+        else:
+            table_data += '            else if (' + requirements_fn + '(renderer11DeviceCaps))\n'
+        table_data += '            {\n'
+        indent += '    '
+
+    table_data += indent + 'static const TextureFormat textureFormat = GetD3D11FormatInfo(internalFormat,\n'
+    table_data += indent + '                                                              ' + tex_format + ',\n'
+    table_data += indent + '                                                              ' + srv_format + ',\n'
+    table_data += indent + '                                                              ' + rtv_format + ',\n'
+    table_data += indent + '                                                              ' + dsv_format + ');\n'
+    table_data += indent + 'return textureFormat;\n'
+
+    if requirements_fn != None:
+        table_data += '            }\n'
 
     return table_data
 
@@ -276,7 +277,7 @@ def parse_json_into_switch_string(json_map, json_data):
     table_data = ''
     angle_format_map = {}
 
-    def angle_format_key(gl_format_mapping):
+    def gl_format_key(gl_format_mapping):
         if 'requirementsFcn' in gl_format_mapping:
             return gl_format_mapping['requirementsFcn']
         else:
@@ -287,13 +288,22 @@ def parse_json_into_switch_string(json_map, json_data):
         table_data += '        case ' + internal_format + ':\n'
         table_data += '        {\n'
 
-        for idx, gl_format_mapping in enumerate(sorted(json_map[internal_format], key=angle_format_key)):
-            table_data += get_texture_format_item(idx, gl_format_mapping, json_data[gl_format_mapping['implementationFormat']])
+        had_requirements = False
 
-        table_data += '            else\n'
-        table_data += '            {\n'
-        table_data += '                break;\n'
-        table_data += '            }\n'
+        for idx, gl_format_mapping in enumerate(sorted(json_map[internal_format], key=gl_format_key)):
+            table_data += get_texture_format_item(idx, gl_format_mapping, json_data[gl_format_mapping['implementationFormat']])
+            if 'requirementsFcn' in gl_format_mapping:
+                had_requirements = True
+
+        if had_requirements:
+            for gl_format_mapping in json_map[internal_format]:
+                if 'requirementsFcn' not in gl_format_mapping:
+                    raise ValueError('missing requirementsFcn in a list of multiple formats corresponding to ' + internal_format)
+            table_data += '            else\n'
+            table_data += '            {\n'
+            table_data += '                break;\n'
+            table_data += '            }\n'
+
         table_data += '        }\n'
 
     return table_data
