@@ -15,6 +15,7 @@
 #include "common/platform.h"
 #include "libANGLE/renderer/d3d/formatutilsD3D.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
+#include "libANGLE/renderer/d3d/d3d11/texture_format_table_autogen.h"
 
 namespace rx
 {
@@ -46,6 +47,15 @@ struct DXGIFormatSet
     DXGI_FORMAT dsvFormat;
 };
 
+struct ANGLEFormatInfo
+{
+    ANGLEFormatInfo();
+    ANGLEFormatInfo(const ANGLEFormatInfo &) = default;
+    ANGLEFormatInfo &operator=(const ANGLEFormatInfo &) = default;
+
+    DXGIFormatSet dxgiFormatSet;
+};
+
 struct TextureFormat
 {
     TextureFormat();
@@ -58,6 +68,8 @@ struct TextureFormat
 
     LoadFunctionMap loadFunctions;
 };
+
+const ANGLEFormatInfo &GetANGLEFormatInfo(ANGLEFormat angleFormat);
 
 const TextureFormat &GetTextureFormatInfo(GLenum internalformat,
                                           const Renderer11DeviceCaps &renderer11DeviceCaps);
