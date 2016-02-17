@@ -693,7 +693,8 @@ gl::Error TextureStorage11::setData(const gl::ImageIndex &index,
 
     const d3d11::TextureFormat &d3d11Format = d3d11::GetTextureFormatInfo(
         image->getInternalFormat(), mRenderer->getRenderer11DeviceCaps());
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(d3d11Format.texFormat);
+    const d3d11::DXGIFormatSize &dxgiFormatInfo =
+        d3d11::GetDXGIFormatSizeInfo(d3d11Format.texFormat);
 
     const size_t outputPixelSize = dxgiFormatInfo.pixelBytes;
 
