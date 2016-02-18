@@ -775,6 +775,7 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer, SwapChain11 *swap
     mTextureWidth  = texDesc.Width;
     mTextureHeight = texDesc.Height;
     mTextureDepth  = 1;
+    mHasKeyedMutex = (texDesc.MiscFlags & D3D11_RESOURCE_MISC_SHARED_KEYEDMUTEX);
 
     mInternalFormat = swapchain->GetRenderTargetInternalFormat();
 
@@ -813,6 +814,7 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer,
                               renderTarget,
                               levels)),
       mTexture(nullptr),
+      mHasKeyedMutex(false),
       mLevelZeroTexture(nullptr),
       mLevelZeroRenderTarget(nullptr),
       mUseLevelZeroTexture(hintLevelZeroOnly && levels > 1),
@@ -879,6 +881,13 @@ TextureStorage11_2D::~TextureStorage11_2D()
     {
         SafeDelete(mRenderTarget[i]);
         SafeRelease(mSwizzleRenderTargets[i]);
+    }
+
+    if (mHasKeyedMutex)
+    {
+        // If the keyed mutex is released that will unbind it and cause the state cache to become
+        // desynchronized.
+        mRenderer->getStateManager()->invalidateBoundViews();
     }
 }
 
