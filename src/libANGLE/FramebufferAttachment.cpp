@@ -16,6 +16,7 @@
 #include "libANGLE/Texture.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/FramebufferImpl.h"
+#include "libANGLE/renderer/FramebufferAttachmentObjectImpl.h"
 
 namespace gl
 {
@@ -205,4 +206,11 @@ const egl::Surface *FramebufferAttachment::getSurface() const
     return rx::GetAs<egl::Surface>(mResource);
 }
 
+Error FramebufferAttachmentObject::getAttachmentRenderTarget(
+    const FramebufferAttachment::Target &target,
+    rx::FramebufferAttachmentRenderTarget **rtOut) const
+{
+    return getAttachmentImpl()->getAttachmentRenderTarget(target, rtOut);
 }
+
+}  // namespace gl

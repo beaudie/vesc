@@ -21,10 +21,14 @@ import re
 import string
 
 if len(sys.argv) < 3:
-    print('Usage: ' + sys.argv[0] + ' <renderer name> <renderer suffix>')
+    print('Usage: ' + sys.argv[0] + ' <renderer dir name> <renderer class suffix>')
+    sys.exit(1)
 
 renderer_name = sys.argv[1]
 renderer_suffix = sys.argv[2]
+
+# change to the renderer directory
+os.chdir(os.path.join(os.path.dirname(sys.argv[0]), "..", "src", "libANGLE", "renderer"))
 
 # ensure subdir exists
 if not os.path.isdir(renderer_name):
@@ -33,14 +37,17 @@ if not os.path.isdir(renderer_name):
 impl_classes = [
     'Buffer',
     'Compiler',
+    'Device',
     'Display',
     'FenceNV',
     'FenceSync',
     'Framebuffer',
+    'Image',
     'Program',
     'Query',
     'Renderbuffer',
     'Renderer',
+    'Sampler',
     'Shader',
     'Surface',
     'Texture',
@@ -71,9 +78,9 @@ class $TypedImpl : public $BaseImpl
     ~$TypedImpl() override;
 $ImplMethodDeclarations$PrivateImplMethodDeclarations};
 
-}
+}  // namespace rx
 
-#endif // LIBANGLE_RENDERER_${RendererNameCaps}_${TypedImplCaps}_H_
+#endif  // LIBANGLE_RENDERER_${RendererNameCaps}_${TypedImplCaps}_H_
 """
 
 cpp_file_template = """//
@@ -91,14 +98,15 @@ cpp_file_template = """//
 namespace rx
 {
 
-$TypedImpl::$TypedImpl($ConstructorParams)
-    : $BaseImpl($BaseContructorArgs)
-{}
+$TypedImpl::$TypedImpl($ConstructorParams) : $BaseImpl($BaseContructorArgs)
+{
+}
 
 $TypedImpl::~$TypedImpl()
-{}
-$ImplMethodDefinitions
+{
 }
+$ImplMethodDefinitions
+}  // namespace rx
 """
 
 def generate_impl_declaration(impl_stub):
@@ -189,6 +197,15 @@ def parse_impl_header(base_impl):
 
     return impl_stubs, private_impl_stubs, constructor
 
+def get_base_class(base_impl):
+    impl_h_file_path = base_impl + '.h'
+    with open(impl_h_file_path, 'r') as impl_h_file:
+        for line in impl_h_file:
+            match = re.search(r'^class ' + base_impl + r' : public (\w+)', line)
+            if match:
+                return match.group(1)
+    return False
+
 for impl_class in impl_classes:
 
     base_impl = impl_class
@@ -208,10 +225,10 @@ for impl_class in impl_classes:
     # extract impl stubs
     impl_stubs, private_impl_stubs, constructor = parse_impl_header(base_impl)
 
-    # more special case for Renderer
-    # TODO(jmadill): general case for base classes
-    if impl_class == 'Renderer':
-        base_impl_stubs, base_private_impl_stubs, base_constructor = parse_impl_header('ImplFactory')
+    # Handle base classes, skipping angle::NonCopyable.
+    base_class = get_base_class(base_impl)
+    if base_class and base_class != 'angle':
+        base_impl_stubs, base_private_impl_stubs, base_constructor = parse_impl_header(base_class)
         impl_stubs += base_impl_stubs
         private_impl_stubs += base_private_impl_stubs
 
@@ -256,3 +273,10 @@ for impl_class in impl_classes:
 
     h_file.close()
     cpp_file.close()
+
+# Print a block of source files to add to the GYP
+print("Generated files:")
+for impl_class in impl_classes:
+    path = "libANGLE/renderer/" + renderer_name + "/" + impl_class + renderer_suffix
+    print('\'' + path + ".cpp\',")
+    print('\'' + path + ".h\',")

@@ -16,6 +16,7 @@
         'angle_enable_d3d9%': 0,
         'angle_enable_d3d11%': 0,
         'angle_enable_gl%': 0,
+        'angle_enable_vulkan%': 0,
         'angle_enable_essl%': 1, # Enable this for all configs by default
         'angle_enable_glsl%': 1, # Enable this for all configs by default
         'angle_enable_hlsl%': 0,
