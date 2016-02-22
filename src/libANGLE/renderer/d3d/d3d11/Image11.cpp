@@ -220,8 +220,8 @@ bool Image11::redefine(GLenum target, GLenum internalformat, const gl::Extents &
 
         // compute the d3d format that will be used
         const d3d11::TextureFormat &formatInfo = d3d11::GetTextureFormatInfo(internalformat, mRenderer->getRenderer11DeviceCaps());
-        mDXGIFormat = formatInfo.texFormat;
-        mRenderable = (formatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN);
+        mDXGIFormat                            = formatInfo.formatSet.texFormat;
+        mRenderable                            = (formatInfo.formatSet.rtvFormat != DXGI_FORMAT_UNKNOWN);
 
         releaseStagingTexture();
         mDirty = (formatInfo.dataInitializerFunction != NULL);
@@ -341,7 +341,7 @@ gl::Error Image11::copyFromFramebuffer(const gl::Offset &destOffset,
     const auto &d3d11Format = d3d11::GetTextureFormatInfo(srcAttachment->getInternalFormat(),
                                                           mRenderer->getRenderer11DeviceCaps());
 
-    if (d3d11Format.texFormat == mDXGIFormat)
+    if (d3d11Format.formatSet.texFormat == mDXGIFormat)
     {
         RenderTargetD3D *renderTarget = nullptr;
         gl::Error error = srcAttachment->getRenderTarget(&renderTarget);

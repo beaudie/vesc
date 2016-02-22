@@ -34,18 +34,24 @@ struct LoadImageFunctionInfo
     bool requiresConversion;
 };
 
-struct TextureFormat
+struct DXGIFormatSet
 {
-    TextureFormat();
+    DXGIFormatSet();
+    DXGIFormatSet(const DXGIFormatSet &) = default;
+    DXGIFormatSet &operator=(const DXGIFormatSet &) = default;
 
     DXGI_FORMAT texFormat;
     DXGI_FORMAT srvFormat;
     DXGI_FORMAT rtvFormat;
     DXGI_FORMAT dsvFormat;
+};
 
-    DXGI_FORMAT swizzleTexFormat;
-    DXGI_FORMAT swizzleSRVFormat;
-    DXGI_FORMAT swizzleRTVFormat;
+struct TextureFormat
+{
+    TextureFormat();
+
+    DXGIFormatSet formatSet;
+    DXGIFormatSet swizzleFormatSet;
 
     InitializeTextureDataFunction dataInitializerFunction;
     typedef std::map<GLenum, LoadImageFunctionInfo> LoadFunctionMap;

@@ -109,10 +109,10 @@ const TextureFormat GetD3D11FormatInfo(GLenum internalFormat,
                                        InitializeTextureDataFunction internalFormatInitializer)
 {
     TextureFormat info;
-    info.texFormat = texFormat;
-    info.srvFormat = srvFormat;
-    info.rtvFormat = rtvFormat;
-    info.dsvFormat = dsvFormat;
+    info.formatSet.texFormat     = texFormat;
+    info.formatSet.srvFormat     = srvFormat;
+    info.formatSet.rtvFormat     = rtvFormat;
+    info.formatSet.dsvFormat     = dsvFormat;
     info.dataInitializerFunction = internalFormatInitializer;
 
     // Compute the swizzle formats
@@ -145,24 +145,22 @@ const TextureFormat GetD3D11FormatInfo(GLenum internalFormat,
 
             const SwizzleFormatInfo &swizzleInfo =
                 GetSwizzleFormatInfo(maxBits, formatInfo.componentType);
-            info.swizzleTexFormat = swizzleInfo.mTexFormat;
-            info.swizzleSRVFormat = swizzleInfo.mSRVFormat;
-            info.swizzleRTVFormat = swizzleInfo.mRTVFormat;
+            info.swizzleFormatSet.texFormat = swizzleInfo.mTexFormat;
+            info.swizzleFormatSet.srvFormat = swizzleInfo.mSRVFormat;
+            info.swizzleFormatSet.rtvFormat = swizzleInfo.mRTVFormat;
         }
         else
         {
             // The original texture format is suitable for swizzle operations
-            info.swizzleTexFormat = texFormat;
-            info.swizzleSRVFormat = srvFormat;
-            info.swizzleRTVFormat = rtvFormat;
+            info.swizzleFormatSet = info.formatSet;
         }
     }
     else
     {
         // Not possible to swizzle with this texture format since it is either unsized or GL_NONE
-        info.swizzleTexFormat = DXGI_FORMAT_UNKNOWN;
-        info.swizzleSRVFormat = DXGI_FORMAT_UNKNOWN;
-        info.swizzleRTVFormat = DXGI_FORMAT_UNKNOWN;
+        ASSERT(info.swizzleFormatSet.texFormat == DXGI_FORMAT_UNKNOWN);
+        ASSERT(info.swizzleFormatSet.srvFormat == DXGI_FORMAT_UNKNOWN);
+        ASSERT(info.swizzleFormatSet.rtvFormat == DXGI_FORMAT_UNKNOWN);
     }
 
     // Gather all the load functions for this internal format
@@ -175,16 +173,16 @@ const TextureFormat GetD3D11FormatInfo(GLenum internalFormat,
 
 }  // namespace
 
-TextureFormat::TextureFormat()
+DXGIFormatSet::DXGIFormatSet()
     : texFormat(DXGI_FORMAT_UNKNOWN),
       srvFormat(DXGI_FORMAT_UNKNOWN),
       rtvFormat(DXGI_FORMAT_UNKNOWN),
-      dsvFormat(DXGI_FORMAT_UNKNOWN),
-      swizzleTexFormat(DXGI_FORMAT_UNKNOWN),
-      swizzleSRVFormat(DXGI_FORMAT_UNKNOWN),
-      swizzleRTVFormat(DXGI_FORMAT_UNKNOWN),
-      dataInitializerFunction(NULL),
-      loadFunctions()
+      dsvFormat(DXGI_FORMAT_UNKNOWN)
+{
+}
+
+TextureFormat::TextureFormat()
+    : formatSet(), swizzleFormatSet(), dataInitializerFunction(nullptr), loadFunctions()
 {
 }
 
