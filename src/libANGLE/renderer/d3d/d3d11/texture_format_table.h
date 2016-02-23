@@ -54,6 +54,7 @@ struct ANGLEFormatInfo
     ANGLEFormatInfo &operator=(const ANGLEFormatInfo &) = default;
 
     DXGIFormatSet dxgiFormatSet;
+    ANGLEFormat swizzleFormat;
 };
 
 struct TextureFormat
