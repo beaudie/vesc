@@ -5,6 +5,7 @@
 # import the use_x11 variable
 import("//build/config/ui.gni")
 import("//third_party/angle/build/angle_common.gni")
+import("//ui/ozone/ozone.gni")
 
 angle_git_is_present = exec_script("src/commit_id.py",
                                    [
@@ -223,7 +224,7 @@ config("libANGLE_config") {
   if (angle_enable_gl) {
     defines += [ "ANGLE_ENABLE_OPENGL" ]
   }
-  if (use_x11) {
+  if (use_x11 || ozone_platform_x11) {
     defines += [ "ANGLE_USE_X11" ]
   }
   defines += [
@@ -387,7 +388,7 @@ static_library("angle_util") {
     sources += rebase_path(util_gypi.util_osx_sources, ".", "util")
   }
 
-  if (use_x11) {
+  if (use_x11 || ozone_platform_x11) {
     sources += rebase_path(util_gypi.util_x11_sources, ".", "util")
   }
 

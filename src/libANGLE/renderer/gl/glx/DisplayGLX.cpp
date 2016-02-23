@@ -81,13 +81,13 @@ DisplayGLX::~DisplayGLX()
 egl::Error DisplayGLX::initialize(egl::Display *display)
 {
     mEGLDisplay = display;
-    Display *xDisplay = display->getNativeDisplayId();
+    Display *xDisplay     = reinterpret_cast<Display *>(display->getNativeDisplayId());
     const auto &attribMap = display->getAttributeMap();
 
     // ANGLE_platform_angle allows the creation of a default display
     // using EGL_DEFAULT_DISPLAY (= nullptr). In this case just open
     // the display specified by the DISPLAY environment variable.
-    if (xDisplay == EGL_DEFAULT_DISPLAY)
+    if (xDisplay == reinterpret_cast<Display *>(EGL_DEFAULT_DISPLAY))
     {
         mUsesNewXDisplay = true;
         xDisplay = XOpenDisplay(NULL);
