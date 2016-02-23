@@ -11,6 +11,7 @@
 #define LIBANGLE_RENDERER_D3D_D3D11_RENDERTARGET11_H_
 
 #include "libANGLE/renderer/d3d/RenderTargetD3D.h"
+#include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
 
 namespace rx
 {
@@ -20,7 +21,7 @@ class Renderer11;
 class RenderTarget11 : public RenderTargetD3D
 {
   public:
-    RenderTarget11() { }
+    RenderTarget11() : mANGLEFormat(d3d11::ANGLE_FORMAT_NONE) {}
     virtual ~RenderTarget11() { }
 
     virtual ID3D11Resource *getTexture() const = 0;
@@ -31,16 +32,33 @@ class RenderTarget11 : public RenderTargetD3D
     virtual unsigned int getSubresourceIndex() const = 0;
 
     virtual DXGI_FORMAT getDXGIFormat() const = 0;
+    d3d11::ANGLEFormat getANGLEFormat() const { return mANGLEFormat; }
+  protected:
+    d3d11::ANGLEFormat mANGLEFormat;
 };
 
 class TextureRenderTarget11 : public RenderTarget11
 {
   public:
     // TextureRenderTarget11 takes ownership of any D3D11 resources it is given and will AddRef them
-    TextureRenderTarget11(ID3D11RenderTargetView *rtv, ID3D11Resource *resource, ID3D11ShaderResourceView *srv,
-                           GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLsizei samples);
-    TextureRenderTarget11(ID3D11DepthStencilView *dsv, ID3D11Resource *resource, ID3D11ShaderResourceView *srv,
-                           GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLsizei samples);
+    TextureRenderTarget11(ID3D11RenderTargetView *rtv,
+                          ID3D11Resource *resource,
+                          ID3D11ShaderResourceView *srv,
+                          GLenum internalFormat,
+                          d3d11::ANGLEFormat angleFormat,
+                          GLsizei width,
+                          GLsizei height,
+                          GLsizei depth,
+                          GLsizei samples);
+    TextureRenderTarget11(ID3D11DepthStencilView *dsv,
+                          ID3D11Resource *resource,
+                          ID3D11ShaderResourceView *srv,
+                          GLenum internalFormat,
+                          d3d11::ANGLEFormat angleFormat,
+                          GLsizei width,
+                          GLsizei height,
+                          GLsizei depth,
+                          GLsizei samples);
     virtual ~TextureRenderTarget11();
 
     GLsizei getWidth() const override;

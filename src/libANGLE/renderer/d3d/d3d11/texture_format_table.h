@@ -61,6 +61,7 @@ struct TextureFormat
 {
     TextureFormat();
 
+    ANGLEFormat angleFormat;
     DXGIFormatSet formatSet;
     DXGIFormatSet swizzleFormatSet;
 
@@ -69,6 +70,11 @@ struct TextureFormat
 
     LoadFunctionMap loadFunctions;
 };
+
+ANGLEFormat GetANGLEFormat(DXGI_FORMAT texFormat,
+                           DXGI_FORMAT srvFormat,
+                           DXGI_FORMAT rtvFormat,
+                           DXGI_FORMAT dsvFormat);
 
 const ANGLEFormatInfo &GetANGLEFormatInfo(ANGLEFormat angleFormat);
 

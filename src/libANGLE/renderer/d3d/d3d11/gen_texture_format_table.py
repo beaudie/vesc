@@ -137,11 +137,13 @@ bool SupportsFormat(const Renderer11DeviceCaps &deviceCaps)
 // on device capabilities.
 // This function allows querying for the DXGI texture formats to use for textures, SRVs, RTVs and
 // DSVs given a GL internal format.
-const TextureFormat CreateD3D11FormatInfo(GLenum internalFormat,
-                                          const ANGLEFormatInfo &angleFormatInfo,
+const TextureFormat CreateD3D11FormatInfo(const GLenum internalFormat,
+                                          const ANGLEFormat angleFormat,
                                           InitializeTextureDataFunction internalFormatInitializer)
 {{
     TextureFormat info;
+    info.angleFormat                         = angleFormat;
+    const ANGLEFormatInfo &angleFormatInfo   = GetANGLEFormatInfo(angleFormat);
     info.formatSet                           = angleFormatInfo.dxgiFormatSet;
     const ANGLEFormatInfo &swizzleFormatInfo = GetANGLEFormatInfo(angleFormatInfo.swizzleFormat);
     info.swizzleFormatSet                    = swizzleFormatInfo.dxgiFormatSet;
@@ -185,8 +187,30 @@ ANGLEFormatInfo::ANGLEFormatInfo() : dxgiFormatSet(), swizzleFormat(ANGLE_FORMAT
 }}
 
 TextureFormat::TextureFormat()
-    : formatSet(), swizzleFormatSet(), dataInitializerFunction(nullptr), loadFunctions()
+    : angleFormat(ANGLE_FORMAT_NONE),
+      formatSet(),
+      swizzleFormatSet(),
+      dataInitializerFunction(nullptr),
+      loadFunctions()
 {{
+}}
+
+ANGLEFormat GetANGLEFormat(DXGI_FORMAT texFormat,
+                           DXGI_FORMAT srvFormat,
+                           DXGI_FORMAT rtvFormat,
+                           DXGI_FORMAT dsvFormat)
+{{
+    // clang-format off
+    switch (texFormat)
+    {{
+{angle_format_based_on_dxgi_formats}
+            break;
+        default:
+            break;
+    }}
+    // clang-format on
+
+    return ANGLE_FORMAT_NONE;
 }}
 
 const ANGLEFormatInfo &GetANGLEFormatInfo(ANGLEFormat angleFormat)
@@ -360,7 +384,7 @@ def get_texture_format_item(idx, internal_format, requirements_fn, angle_format_
         indent += '    '
 
     table_data += indent + 'static const TextureFormat textureFormat = CreateD3D11FormatInfo(internalFormat,\n'
-    table_data += indent + '                                                                 GetANGLEFormatInfo(' + angle_format_id + '),\n'
+    table_data += indent + '                                                                 ' + angle_format_id + ',\n'
     table_data += indent + '                                                                 ' + internal_format_initializer + ');\n'
     table_data += indent + 'return textureFormat;\n'
 
@@ -414,6 +438,32 @@ def parse_json_into_switch_angle_format_string(json_data):
         table_data += '        }\n'
     return table_data
 
+def parse_json_into_angle_format_based_on_dxgi_format_string(json_data):
+    table_data = ''
+    # Sort by texFormat
+    def tex_format_key(angle_format_item):
+        if 'texFormat' in angle_format_item[1]:
+            return angle_format_item[1]['texFormat']
+        else:
+            return 'DXGI_FORMAT_NONE'
+
+    tex_format = ''
+    for angle_format_item in sorted(json_data.iteritems(), key=tex_format_key):
+        angle_format = angle_format_item[1]
+        if 'texFormat' not in angle_format:
+            continue
+        if angle_format['texFormat'] != tex_format:
+            if tex_format != '':
+                table_data += '            break;\n'
+            tex_format = angle_format['texFormat']
+            table_data += '        case ' + tex_format + ':\n'
+        srv_format = angle_format['srvFormat'] if 'srvFormat' in angle_format else 'DXGI_FORMAT_UNKNOWN'
+        rtv_format = angle_format['rtvFormat'] if 'rtvFormat' in angle_format else 'DXGI_FORMAT_UNKNOWN'
+        dsv_format = angle_format['dsvFormat'] if 'dsvFormat' in angle_format else 'DXGI_FORMAT_UNKNOWN'
+        table_data += '            if (srvFormat == ' + srv_format + ' && rtvFormat == ' + rtv_format + ' && dsvFormat == ' + dsv_format + ')\n'
+        table_data += '                return ' + angle_format_item[0] + ';\n'
+    return table_data
+
 def parse_json_into_angle_format_enum_string(json_data):
     enum_data = ''
     index = 0
@@ -444,7 +494,11 @@ with open('texture_format_map.json') as texture_format_map_file:
 
         texture_format_cases = parse_json_into_switch_texture_format_string(json_map, json_data)
         angle_format_cases = parse_json_into_switch_angle_format_string(json_data)
-        output_cpp = template_texture_format_table_autogen_cpp.format(texture_format_info_cases=texture_format_cases, angle_format_info_cases=angle_format_cases)
+        angle_format_based_on_dxgi_formats = parse_json_into_angle_format_based_on_dxgi_format_string(json_data)
+        output_cpp = template_texture_format_table_autogen_cpp.format(
+            texture_format_info_cases=texture_format_cases,
+            angle_format_info_cases=angle_format_cases,
+            angle_format_based_on_dxgi_formats=angle_format_based_on_dxgi_formats)
         with open('texture_format_table_autogen.cpp', 'wt') as out_file:
             out_file.write(output_cpp)
             out_file.close()

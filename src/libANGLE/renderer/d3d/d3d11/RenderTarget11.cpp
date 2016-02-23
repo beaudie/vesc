@@ -178,8 +178,15 @@ static unsigned int getDSVSubresourceIndex(ID3D11Resource *resource, ID3D11Depth
     return D3D11CalcSubresource(mipSlice, arraySlice, mipLevels);
 }
 
-TextureRenderTarget11::TextureRenderTarget11(ID3D11RenderTargetView *rtv, ID3D11Resource *resource, ID3D11ShaderResourceView *srv,
-                                             GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLsizei samples)
+TextureRenderTarget11::TextureRenderTarget11(ID3D11RenderTargetView *rtv,
+                                             ID3D11Resource *resource,
+                                             ID3D11ShaderResourceView *srv,
+                                             GLenum internalFormat,
+                                             d3d11::ANGLEFormat angleFormat,
+                                             GLsizei width,
+                                             GLsizei height,
+                                             GLsizei depth,
+                                             GLsizei samples)
     : mWidth(width),
       mHeight(height),
       mDepth(depth),
@@ -215,10 +222,19 @@ TextureRenderTarget11::TextureRenderTarget11(ID3D11RenderTargetView *rtv, ID3D11
         mRenderTarget->GetDesc(&desc);
         mDXGIFormat = desc.Format;
     }
+    mANGLEFormat = angleFormat;
+    ASSERT(mANGLEFormat != d3d11::ANGLE_FORMAT_NONE);
 }
 
-TextureRenderTarget11::TextureRenderTarget11(ID3D11DepthStencilView *dsv, ID3D11Resource *resource, ID3D11ShaderResourceView *srv,
-                                             GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLsizei samples)
+TextureRenderTarget11::TextureRenderTarget11(ID3D11DepthStencilView *dsv,
+                                             ID3D11Resource *resource,
+                                             ID3D11ShaderResourceView *srv,
+                                             GLenum internalFormat,
+                                             d3d11::ANGLEFormat angleFormat,
+                                             GLsizei width,
+                                             GLsizei height,
+                                             GLsizei depth,
+                                             GLsizei samples)
     : mWidth(width),
       mHeight(height),
       mDepth(depth),
@@ -254,6 +270,8 @@ TextureRenderTarget11::TextureRenderTarget11(ID3D11DepthStencilView *dsv, ID3D11
         mDepthStencil->GetDesc(&desc);
         mDXGIFormat = desc.Format;
     }
+    mANGLEFormat = angleFormat;
+    ASSERT(mANGLEFormat != d3d11::ANGLE_FORMAT_NONE);
 }
 
 TextureRenderTarget11::~TextureRenderTarget11()
@@ -325,6 +343,47 @@ SurfaceRenderTarget11::SurfaceRenderTarget11(SwapChain11 *swapChain, Renderer11 
       mDepth(depth)
 {
     ASSERT(mSwapChain);
+    // TODO: Calling virtual functions from constructor! Fix this.
+    ID3D11ShaderResourceView *srv = getShaderResourceView();
+    DXGI_FORMAT srvFormat = DXGI_FORMAT_UNKNOWN;
+    if (srv != nullptr)
+    {
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+        srv->GetDesc(&srvDesc);
+        srvFormat = srvDesc.Format;
+    }
+
+    DXGI_FORMAT texFormat = DXGI_FORMAT_UNKNOWN;
+    ID3D11Resource *texture = getTexture();
+    if (texture != nullptr)
+    {
+        TextureHelper11 helper = TextureHelper11::MakeAndReference(texture);
+        texFormat = helper.getFormat();
+    }
+    else
+    {
+        texFormat = srvFormat;
+    }
+
+    DXGI_FORMAT rtvFormat       = DXGI_FORMAT_UNKNOWN;
+    ID3D11RenderTargetView *rtv = getRenderTargetView();
+    if (rtv != nullptr)
+    {
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtv->GetDesc(&rtvDesc);
+        rtvFormat = rtvDesc.Format;
+    }
+
+    DXGI_FORMAT dsvFormat       = DXGI_FORMAT_UNKNOWN;
+    ID3D11DepthStencilView *dsv = getDepthStencilView();
+    if (dsv != nullptr)
+    {
+        D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+        dsv->GetDesc(&dsvDesc);
+        dsvFormat = dsvDesc.Format;
+    }
+
+    mANGLEFormat = d3d11::GetANGLEFormat(texFormat, srvFormat, rtvFormat, dsvFormat);
 }
 
 SurfaceRenderTarget11::~SurfaceRenderTarget11()
