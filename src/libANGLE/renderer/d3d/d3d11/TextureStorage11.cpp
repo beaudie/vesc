@@ -1444,6 +1444,8 @@ TextureStorage11_EGLImage::TextureStorage11_EGLImage(Renderer11 *renderer, EGLIm
     mCurrentRenderTarget           = reinterpret_cast<uintptr_t>(renderTarget11);
 
     mMipLevels      = 1;
+    // TODO: This doesn't make much sense - the DXGI format is the RTV or DSV format, it's not
+    // appropriate for texFormat.
     mTextureFormatSet.texFormat = renderTarget11->getDXGIFormat();
     mTextureWidth   = renderTarget11->getWidth();
     mTextureHeight  = renderTarget11->getHeight();
