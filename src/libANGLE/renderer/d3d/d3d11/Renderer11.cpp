@@ -2844,10 +2844,13 @@ gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::
     gl::Box destArea(destOffset.x, destOffset.y, 0, sourceRect.width, sourceRect.height, 1);
     gl::Extents destSize(destRenderTarget->getWidth(), destRenderTarget->getHeight(), 1);
 
+    GLenum componentType =
+        d3d11::GetANGLEFormatSet(sourceRenderTarget->getANGLEFormat()).componentType;
+
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                               destFormat, GL_NEAREST, false);
+    error = mBlit->copyTexture(source, componentType, sourceArea, sourceSize, dest, destArea,
+                               destSize, NULL, destFormat, GL_NEAREST, false);
     if (error.isError())
     {
         return error;
@@ -2903,10 +2906,13 @@ gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl
     gl::Box destArea(destOffset.x, destOffset.y, 0, sourceRect.width, sourceRect.height, 1);
     gl::Extents destSize(destRenderTarget->getWidth(), destRenderTarget->getHeight(), 1);
 
+    GLenum componentType =
+        d3d11::GetANGLEFormatSet(sourceRenderTarget->getANGLEFormat()).componentType;
+
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                               destFormat, GL_NEAREST, false);
+    error = mBlit->copyTexture(source, componentType, sourceArea, sourceSize, dest, destArea,
+                               destSize, NULL, destFormat, GL_NEAREST, false);
     if (error.isError())
     {
         return error;
@@ -2955,10 +2961,13 @@ gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::
     gl::Box destArea(destOffset.x, destOffset.y, 0, sourceRect.width, sourceRect.height, 1);
     gl::Extents destSize(destRenderTarget->getWidth(), destRenderTarget->getHeight(), 1);
 
+    GLenum componentType =
+        d3d11::GetANGLEFormatSet(sourceRenderTarget->getANGLEFormat()).componentType;
+
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                               destFormat, GL_NEAREST, false);
+    error = mBlit->copyTexture(source, componentType, sourceArea, sourceSize, dest, destArea,
+                               destSize, NULL, destFormat, GL_NEAREST, false);
     if (error.isError())
     {
         return error;
@@ -3007,10 +3016,13 @@ gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer, const
     gl::Box destArea(destOffset.x, destOffset.y, 0, sourceRect.width, sourceRect.height, 1);
     gl::Extents destSize(destRenderTarget->getWidth(), destRenderTarget->getHeight(), 1);
 
+    GLenum componentType =
+        d3d11::GetANGLEFormatSet(sourceRenderTarget->getANGLEFormat()).componentType;
+
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
-    error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                               destFormat, GL_NEAREST, false);
+    error = mBlit->copyTexture(source, componentType, sourceArea, sourceSize, dest, destArea,
+                               destSize, NULL, destFormat, GL_NEAREST, false);
     if (error.isError())
     {
         return error;
@@ -4066,10 +4078,14 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
         }
         else
         {
+            GLenum componentType =
+                d3d11::GetANGLEFormatSet(readRenderTarget11->getANGLEFormat()).componentType;
+
             // We don't currently support masking off any other channel than alpha
             bool maskOffAlpha = colorMaskingNeeded && colorMask.alpha;
-            result = mBlit->copyTexture(readSRV, readArea, readSize, drawRTV, drawArea, drawSize,
-                                        scissor, destFormatInfo.format, filter, maskOffAlpha);
+            result =
+                mBlit->copyTexture(readSRV, componentType, readArea, readSize, drawRTV, drawArea,
+                                   drawSize, scissor, destFormatInfo.format, filter, maskOffAlpha);
         }
     }
 

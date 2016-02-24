@@ -597,9 +597,10 @@ gl::Error TextureStorage11::generateMipmap(const gl::ImageIndex &sourceIndex,
     gl::Extents destSize(dest->getWidth(), dest->getHeight(), dest->getDepth());
 
     Blit11 *blitter = mRenderer->getBlitter();
-    return blitter->copyTexture(
-        sourceSRV, sourceArea, sourceSize, destRTV, destArea, destSize, nullptr,
-        gl::GetInternalFormatInfo(source->getInternalFormat()).format, GL_LINEAR, false);
+    return blitter->copyTexture(sourceSRV, mTextureFormatSet.componentType, sourceArea, sourceSize,
+                                destRTV, destArea, destSize, nullptr,
+                                gl::GetInternalFormatInfo(source->getInternalFormat()).format,
+                                GL_LINEAR, false);
 }
 
 void TextureStorage11::verifySwizzleExists(GLenum swizzleRed,
