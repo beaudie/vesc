@@ -747,6 +747,7 @@ gl::Error Blit11::swizzleTexture(ID3D11ShaderResourceView *source,
 }
 
 gl::Error Blit11::copyTexture(ID3D11ShaderResourceView *source,
+                              GLenum componentType,
                               const gl::Box &sourceArea,
                               const gl::Extents &sourceSize,
                               ID3D11RenderTargetView *dest,
@@ -771,10 +772,9 @@ gl::Error Blit11::copyTexture(ID3D11ShaderResourceView *source,
     D3D11_SHADER_RESOURCE_VIEW_DESC sourceSRVDesc;
     source->GetDesc(&sourceSRVDesc);
 
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(sourceSRVDesc.Format);
-    const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(dxgiFormatInfo.internalFormat);
+    ASSERT(componentType != GL_SIGNED_NORMALIZED);
+    bool isSigned = (componentType == GL_INT);
 
-    bool isSigned = (internalFormatInfo.componentType == GL_INT);
     ShaderDimension dimension = (sourceSRVDesc.ViewDimension == D3D11_SRV_DIMENSION_TEXTURE3D) ? SHADER_3D : SHADER_2D;
 
     const Shader *shader = nullptr;
