@@ -3947,7 +3947,16 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
 
     const auto &destFormatInfo = gl::GetInternalFormatInfo(drawRenderTarget->getInternalFormat());
     const auto &srcFormatInfo  = gl::GetInternalFormatInfo(readRenderTarget->getInternalFormat());
-    const auto &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(drawRenderTarget11->getDXGIFormat());
+    DXGI_FORMAT drawDXGIFormat = DXGI_FORMAT_UNKNOWN;
+    if (colorBlit)
+    {
+        drawDXGIFormat = d3d11::GetANGLEFormatSet(drawRenderTarget11->getANGLEFormat()).rtvFormat;
+    }
+    else
+    {
+        drawDXGIFormat = d3d11::GetANGLEFormatSet(drawRenderTarget11->getANGLEFormat()).dsvFormat;
+    }
+    const auto &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(drawDXGIFormat);
 
     // Some blits require masking off emulated texture channels. eg: from RGBA8 to RGB8, we
     // emulate RGB8 with RGBA8, so we need to mask off the alpha channel when we copy.
@@ -3985,7 +3994,7 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
 
     gl::Error result(GL_NO_ERROR);
 
-    if (readRenderTarget11->getDXGIFormat() == drawRenderTarget11->getDXGIFormat() &&
+    if (readRenderTarget11->getANGLEFormat() == drawRenderTarget11->getANGLEFormat() &&
         !stretchRequired && !outOfBounds && !flipRequired && !partialDSBlit &&
         !colorMaskingNeeded && (!(depthBlit || stencilBlit) || wholeBufferCopy))
     {
