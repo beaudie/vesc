@@ -40,6 +40,7 @@ struct ANGLEFormatSet
     ANGLEFormatSet();
     ANGLEFormatSet(ANGLEFormat format,
                    GLenum componentType,
+                   GLenum glInternalFormat,
                    DXGI_FORMAT texFormat,
                    DXGI_FORMAT srvFormat,
                    DXGI_FORMAT rtvFormat,
@@ -53,6 +54,10 @@ struct ANGLEFormatSet
     // Stores signedness and whether the type is normalized, integer or float. No information on bit
     // width. Can be GL_NONE for formats where this is not clearly defined.
     GLenum componentType;
+
+    // The closest matching GL internal format for the DXGI formats this format uses. Note that this
+    // may be a different internal format than the one this ANGLE format is used for.
+    GLenum glInternalFormat;
 
     DXGI_FORMAT texFormat;
     DXGI_FORMAT srvFormat;
