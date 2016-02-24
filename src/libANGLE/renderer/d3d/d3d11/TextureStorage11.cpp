@@ -388,8 +388,26 @@ gl::Error TextureStorage11::generateSwizzles(GLenum swizzleRed,
 
             Blit11 *blitter = mRenderer->getBlitter();
 
-            error = blitter->swizzleTexture(sourceSRV, destRTV, size, swizzleRed, swizzleGreen,
-                                            swizzleBlue, swizzleAlpha);
+            GLenum componentType = mTextureFormatSet.componentType;
+            if (componentType == GL_NONE)
+            {
+                // We're swizzling the depth component of a depth-stencil texture.
+                switch (mTextureFormatSet.dsvFormat)
+                {
+                    case DXGI_FORMAT_D24_UNORM_S8_UINT:
+                        componentType = GL_UNSIGNED_NORMALIZED;
+                        break;
+                    case DXGI_FORMAT_D32_FLOAT_S8X24_UINT:
+                        componentType = GL_FLOAT;
+                        break;
+                    default:
+                        UNREACHABLE();
+                        break;
+                }
+            }
+
+            error = blitter->swizzleTexture(sourceSRV, componentType, destRTV, size, swizzleRed,
+                                            swizzleGreen, swizzleBlue, swizzleAlpha);
             if (error.isError())
             {
                 return error;

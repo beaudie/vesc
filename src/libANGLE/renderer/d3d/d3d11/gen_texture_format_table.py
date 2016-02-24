@@ -136,6 +136,7 @@ bool SupportsFormat(const Renderer11DeviceCaps &deviceCaps)
 
 ANGLEFormatSet::ANGLEFormatSet()
     : format(ANGLE_FORMAT_NONE),
+      componentType(GL_NONE),
       texFormat(DXGI_FORMAT_UNKNOWN),
       srvFormat(DXGI_FORMAT_UNKNOWN),
       rtvFormat(DXGI_FORMAT_UNKNOWN),
@@ -163,12 +164,14 @@ TextureFormat::TextureFormat(GLenum internalFormat,
 }}
 
 ANGLEFormatSet::ANGLEFormatSet(ANGLEFormat format,
+                               GLenum componentType,
                                DXGI_FORMAT texFormat,
                                DXGI_FORMAT srvFormat,
                                DXGI_FORMAT rtvFormat,
                                DXGI_FORMAT dsvFormat,
                                ANGLEFormat swizzleFormat)
     : format(format),
+      componentType(componentType),
       texFormat(texFormat),
       srvFormat(srvFormat),
       rtvFormat(rtvFormat),
@@ -407,11 +410,22 @@ def parse_json_into_switch_texture_format_string(json_map, json_data):
 
     return table_data
 
+def to_gl_component_type(component_type):
+    gl_component_type_map = {
+        'uint': 'GL_UNSIGNED_INT',
+        'int': 'GL_INT',
+        'unorm': 'GL_UNSIGNED_NORMALIZED',
+        'snorm': 'GL_SIGNED_NORMALIZED',
+        'float': 'GL_FLOAT'
+    }
+    return gl_component_type_map[component_type];
+
 def parse_json_into_switch_angle_format_string(json_data):
     table_data = ''
     for angle_format_item in sorted(json_data.iteritems()):
         table_data += '        case ' + angle_format_item[0] + ':\n'
         angle_format = angle_format_item[1]
+        component_type = to_gl_component_type(angle_format["componentType"]) if "componentType" in angle_format else "GL_NONE"
         tex_format = angle_format["texFormat"] if "texFormat" in angle_format else "DXGI_FORMAT_UNKNOWN"
         srv_format = angle_format["srvFormat"] if "srvFormat" in angle_format else "DXGI_FORMAT_UNKNOWN"
         rtv_format = angle_format["rtvFormat"] if "rtvFormat" in angle_format else "DXGI_FORMAT_UNKNOWN"
@@ -419,6 +433,7 @@ def parse_json_into_switch_angle_format_string(json_data):
         swizzle_format = get_swizzle_format_id(angle_format_item[0], angle_format)
         table_data += '        {\n'
         table_data += '            static const ANGLEFormatSet formatInfo(' + angle_format_item[0] + ',\n'
+        table_data += '                                                   ' + component_type + ',\n'
         table_data += '                                                   ' + tex_format + ',\n'
         table_data += '                                                   ' + srv_format + ',\n'
         table_data += '                                                   ' + rtv_format + ',\n'

@@ -39,6 +39,7 @@ struct ANGLEFormatSet
 {
     ANGLEFormatSet();
     ANGLEFormatSet(ANGLEFormat format,
+                   GLenum componentType,
                    DXGI_FORMAT texFormat,
                    DXGI_FORMAT srvFormat,
                    DXGI_FORMAT rtvFormat,
@@ -48,6 +49,10 @@ struct ANGLEFormatSet
     ANGLEFormatSet &operator=(const ANGLEFormatSet &) = default;
 
     ANGLEFormat format;
+
+    // Stores signedness and whether the type is normalized, integer or float. No information on bit
+    // width. Can be GL_NONE for formats where this is not clearly defined.
+    GLenum componentType;
 
     DXGI_FORMAT texFormat;
     DXGI_FORMAT srvFormat;
