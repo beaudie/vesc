@@ -969,7 +969,6 @@ gl::Error StateManager11::syncFramebuffer(const gl::Framebuffer *framebuffer)
     // Also extract the render target dimensions and view
     unsigned int renderTargetWidth  = 0;
     unsigned int renderTargetHeight = 0;
-    DXGI_FORMAT renderTargetFormat  = DXGI_FORMAT_UNKNOWN;
     RenderTargetArray framebufferRTVs;
     bool missingColorRenderTarget = true;
 
@@ -1012,7 +1011,6 @@ gl::Error StateManager11::syncFramebuffer(const gl::Framebuffer *framebuffer)
             {
                 renderTargetWidth        = renderTarget->getWidth();
                 renderTargetHeight       = renderTarget->getHeight();
-                renderTargetFormat       = renderTarget->getDXGIFormat();
                 missingColorRenderTarget = false;
             }
 

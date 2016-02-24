@@ -191,7 +191,6 @@ TextureRenderTarget11::TextureRenderTarget11(ID3D11RenderTargetView *rtv,
       mHeight(height),
       mDepth(depth),
       mInternalFormat(internalFormat),
-      mDXGIFormat(DXGI_FORMAT_UNKNOWN),
       mSamples(samples),
       mSubresourceIndex(0),
       mTexture(resource),
@@ -217,10 +216,6 @@ TextureRenderTarget11::TextureRenderTarget11(ID3D11RenderTargetView *rtv,
     if (mRenderTarget && mTexture)
     {
         mSubresourceIndex = getRTVSubresourceIndex(mTexture, mRenderTarget);
-
-        D3D11_RENDER_TARGET_VIEW_DESC desc;
-        mRenderTarget->GetDesc(&desc);
-        mDXGIFormat = desc.Format;
     }
     mANGLEFormat = angleFormat;
     ASSERT(mANGLEFormat != d3d11::ANGLE_FORMAT_NONE);
@@ -239,7 +234,6 @@ TextureRenderTarget11::TextureRenderTarget11(ID3D11DepthStencilView *dsv,
       mHeight(height),
       mDepth(depth),
       mInternalFormat(internalFormat),
-      mDXGIFormat(DXGI_FORMAT_UNKNOWN),
       mSamples(samples),
       mSubresourceIndex(0),
       mTexture(resource),
@@ -265,10 +259,6 @@ TextureRenderTarget11::TextureRenderTarget11(ID3D11DepthStencilView *dsv,
     if (mDepthStencil && mTexture)
     {
         mSubresourceIndex = getDSVSubresourceIndex(mTexture, mDepthStencil);
-
-        D3D11_DEPTH_STENCIL_VIEW_DESC desc;
-        mDepthStencil->GetDesc(&desc);
-        mDXGIFormat = desc.Format;
     }
     mANGLEFormat = angleFormat;
     ASSERT(mANGLEFormat != d3d11::ANGLE_FORMAT_NONE);
@@ -330,11 +320,6 @@ GLsizei TextureRenderTarget11::getSamples() const
 unsigned int TextureRenderTarget11::getSubresourceIndex() const
 {
     return mSubresourceIndex;
-}
-
-DXGI_FORMAT TextureRenderTarget11::getDXGIFormat() const
-{
-    return mDXGIFormat;
 }
 
 SurfaceRenderTarget11::SurfaceRenderTarget11(SwapChain11 *swapChain, Renderer11 *renderer, bool depth)
@@ -454,18 +439,13 @@ ID3D11ShaderResourceView *SurfaceRenderTarget11::getShaderResourceView() const
 
 ID3D11ShaderResourceView *SurfaceRenderTarget11::getShaderResourceViewInternal() const
 {
-    return (mDepth ? mSwapChain->getDepthStencilShaderResource() : mSwapChain->getRenderTargetShaderResource());
+    return (mDepth ? mSwapChain->getDepthStencilShaderResource()
+                   : mSwapChain->getRenderTargetShaderResource());
 }
 
 unsigned int SurfaceRenderTarget11::getSubresourceIndex() const
 {
     return 0;
-}
-
-DXGI_FORMAT SurfaceRenderTarget11::getDXGIFormat() const
-{
-    return d3d11::GetTextureFormatInfo(getInternalFormat(), mRenderer->getRenderer11DeviceCaps())
-        .formatSet.texFormat;
 }
 
 }
