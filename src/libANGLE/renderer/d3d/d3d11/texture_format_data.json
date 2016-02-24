@@ -61,18 +61,21 @@
     "texFormat": "DXGI_FORMAT_BC1_UNORM",
     "srvFormat": "DXGI_FORMAT_BC1_UNORM",
     "channels": "rgba",
+    "componentType": "unorm",
     "swizzleFormat": "ANGLE_FORMAT_R8G8B8A8_UNORM"
   },
   "ANGLE_FORMAT_BC2_UNORM": {
     "texFormat": "DXGI_FORMAT_BC2_UNORM",
     "srvFormat": "DXGI_FORMAT_BC2_UNORM",
     "channels": "rgba",
+    "componentType": "unorm",
     "swizzleFormat": "ANGLE_FORMAT_R8G8B8A8_UNORM"
   },
   "ANGLE_FORMAT_BC3_UNORM": {
     "texFormat": "DXGI_FORMAT_BC3_UNORM",
     "srvFormat": "DXGI_FORMAT_BC3_UNORM",
     "channels": "rgba",
+    "componentType": "unorm",
     "swizzleFormat": "ANGLE_FORMAT_R8G8B8A8_UNORM"
   },
   "ANGLE_FORMAT_R8_SNORM_NONRENDERABLE": {
