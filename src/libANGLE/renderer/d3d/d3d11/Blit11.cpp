@@ -606,6 +606,7 @@ Blit11::ShaderSupport Blit11::getShaderSupport(const Shader &shader)
 }
 
 gl::Error Blit11::swizzleTexture(ID3D11ShaderResourceView *source,
+                                 GLenum componentType,
                                  ID3D11RenderTargetView *dest,
                                  const gl::Extents &size,
                                  GLenum swizzleRed,
@@ -625,11 +626,8 @@ gl::Error Blit11::swizzleTexture(ID3D11ShaderResourceView *source,
     D3D11_SHADER_RESOURCE_VIEW_DESC sourceSRVDesc;
     source->GetDesc(&sourceSRVDesc);
 
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(sourceSRVDesc.Format);
-    const gl::InternalFormat &sourceFormatInfo = gl::GetInternalFormatInfo(dxgiFormatInfo.internalFormat);
-
     GLenum shaderType = GL_NONE;
-    switch (sourceFormatInfo.componentType)
+    switch (componentType)
     {
       case GL_UNSIGNED_NORMALIZED:
       case GL_SIGNED_NORMALIZED:
