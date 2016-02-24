@@ -36,6 +36,7 @@ class Blit11 : angle::NonCopyable
                              GLenum swizzleAlpha);
 
     gl::Error copyTexture(ID3D11ShaderResourceView *source,
+                          GLenum componentType,
                           const gl::Box &sourceArea,
                           const gl::Extents &sourceSize,
                           ID3D11RenderTargetView *dest,
