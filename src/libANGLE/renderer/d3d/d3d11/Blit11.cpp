@@ -1049,20 +1049,39 @@ gl::Error Blit11::copyDepthStencil(ID3D11Resource *source, unsigned int sourceSu
     DXGI_FORMAT format = GetTextureFormat(source);
     ASSERT(format == GetTextureFormat(dest));
 
-    const d3d11::DXGIFormat &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(format);
     const d3d11::DXGIFormatSize &dxgiFormatSizeInfo = d3d11::GetDXGIFormatSizeInfo(format);
     unsigned int pixelSize                          = dxgiFormatSizeInfo.pixelBytes;
     unsigned int copyOffset = 0;
     unsigned int copySize = pixelSize;
     if (stencilOnly)
     {
-        copyOffset = dxgiFormatInfo.depthBits / 8;
-        copySize = dxgiFormatInfo.stencilBits / 8;
+        GLuint depthBits = 0;
+        switch (format)
+        {
+            case DXGI_FORMAT_R24G8_TYPELESS:
+            case DXGI_FORMAT_R24_UNORM_X8_TYPELESS:
+            case DXGI_FORMAT_D24_UNORM_S8_UINT:
+                depthBits = 24;
+                break;
+            case DXGI_FORMAT_R32G8X24_TYPELESS:
+            case DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS:
+            case DXGI_FORMAT_D32_FLOAT_S8X24_UINT:
+                depthBits = 32;
+                break;
+            default:
+                // Should only reach here with a format that contains stencil.
+                UNREACHABLE();
+                break;
+        }
+        const GLuint stencilBits = 8;
+
+        copyOffset = depthBits / 8;
+        copySize = stencilBits / 8;
 
         // It would be expensive to have non-byte sized stencil sizes since it would
         // require reading from the destination, currently there aren't any though.
-        ASSERT(dxgiFormatInfo.stencilBits % 8 == 0 &&
-               dxgiFormatInfo.depthBits   % 8 == 0);
+        ASSERT(stencilBits % 8 == 0 &&
+               depthBits   % 8 == 0);
     }
 
     D3D11_MAPPED_SUBRESOURCE sourceMapping;
