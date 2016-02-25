@@ -52,6 +52,7 @@ template_texture_format_table_autogen_cpp = """// GENERATED FILE - DO NOT EDIT.
 #include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
 #include "libANGLE/renderer/d3d/d3d11/load_functions_table.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
+#include "libANGLE/renderer/d3d/generatemip.h"
 #include "libANGLE/renderer/d3d/loadimage.h"
 
 namespace rx
@@ -143,7 +144,8 @@ ANGLEFormatSet::ANGLEFormatSet()
       srvFormat(DXGI_FORMAT_UNKNOWN),
       rtvFormat(DXGI_FORMAT_UNKNOWN),
       dsvFormat(DXGI_FORMAT_UNKNOWN),
-      swizzleFormat(ANGLE_FORMAT_NONE)
+      swizzleFormat(ANGLE_FORMAT_NONE),
+      mipGenerationFunction(nullptr)
 {{
 }}
 
@@ -172,7 +174,8 @@ ANGLEFormatSet::ANGLEFormatSet(ANGLEFormat format,
                                DXGI_FORMAT srvFormat,
                                DXGI_FORMAT rtvFormat,
                                DXGI_FORMAT dsvFormat,
-                               ANGLEFormat swizzleFormat)
+                               ANGLEFormat swizzleFormat,
+                               MipGenerationFunction mipGenerationFunction)
     : format(format),
       componentType(componentType),
       glInternalFormat(glInternalFormat),
@@ -180,7 +183,8 @@ ANGLEFormatSet::ANGLEFormatSet(ANGLEFormat format,
       srvFormat(srvFormat),
       rtvFormat(rtvFormat),
       dsvFormat(dsvFormat),
-      swizzleFormat(swizzleFormat)
+      swizzleFormat(swizzleFormat),
+      mipGenerationFunction(mipGenerationFunction)
 {{
 }}
 
@@ -421,6 +425,33 @@ def to_gl_component_type(component_type):
     }
     return gl_component_type_map[component_type];
 
+def get_mip_generation_function(angle_format_id, angle_format):
+    if 'bits' not in angle_format:
+        return 'nullptr';
+    bits = angle_format['bits']
+    if 'depth' in bits or 'stencil' in bits:
+        return 'nullptr';
+
+    if 'mipGenerationFunction' in angle_format:
+        return angle_format['mipGenerationFunction']
+
+    gen_func = 'GenerateMip<'
+    for channel in angle_format['channels']:
+        if channel == 'r':
+            gen_func += 'R{}'.format(bits['red'])
+        if channel == 'g':
+            gen_func += 'G{}'.format(bits['green'])
+        if channel == 'b':
+            gen_func += 'B{}'.format(bits['blue'])
+        if channel == 'a':
+            gen_func += 'A{}'.format(bits['alpha'])
+    if angle_format['componentType'] == 'float':
+        gen_func += 'F'
+    if angle_format['componentType'] == 'int' or angle_format['componentType'] == 'snorm':
+        gen_func += 'S'
+    gen_func += '>'
+    return gen_func
+
 def parse_json_into_switch_angle_format_string(json_data):
     table_data = ''
     for angle_format_item in sorted(json_data.iteritems()):
@@ -433,6 +464,7 @@ def parse_json_into_switch_angle_format_string(json_data):
         rtv_format = angle_format["rtvFormat"] if "rtvFormat" in angle_format else "DXGI_FORMAT_UNKNOWN"
         dsv_format = angle_format["dsvFormat"] if "dsvFormat" in angle_format else "DXGI_FORMAT_UNKNOWN"
         swizzle_format = get_swizzle_format_id(angle_format_item[0], angle_format)
+        mip_generation_function = get_mip_generation_function(angle_format_item[0], angle_format)
         table_data += '        {\n'
         table_data += '            static const ANGLEFormatSet formatInfo(' + angle_format_item[0] + ',\n'
         table_data += '                                                   ' + component_type + ',\n'
@@ -441,7 +473,8 @@ def parse_json_into_switch_angle_format_string(json_data):
         table_data += '                                                   ' + srv_format + ',\n'
         table_data += '                                                   ' + rtv_format + ',\n'
         table_data += '                                                   ' + dsv_format + ',\n'
-        table_data += '                                                   ' + swizzle_format + ');\n'
+        table_data += '                                                   ' + swizzle_format + ',\n'
+        table_data += '                                                   ' + mip_generation_function + ');\n'
         table_data += '            return formatInfo;\n'
         table_data += '        }\n'
     return table_data

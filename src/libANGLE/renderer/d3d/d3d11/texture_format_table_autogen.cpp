@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
 #include "libANGLE/renderer/d3d/d3d11/load_functions_table.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
+#include "libANGLE/renderer/d3d/generatemip.h"
 #include "libANGLE/renderer/d3d/loadimage.h"
 
 namespace rx
@@ -105,7 +106,8 @@ ANGLEFormatSet::ANGLEFormatSet()
       srvFormat(DXGI_FORMAT_UNKNOWN),
       rtvFormat(DXGI_FORMAT_UNKNOWN),
       dsvFormat(DXGI_FORMAT_UNKNOWN),
-      swizzleFormat(ANGLE_FORMAT_NONE)
+      swizzleFormat(ANGLE_FORMAT_NONE),
+      mipGenerationFunction(nullptr)
 {
 }
 
@@ -134,7 +136,8 @@ ANGLEFormatSet::ANGLEFormatSet(ANGLEFormat format,
                                DXGI_FORMAT srvFormat,
                                DXGI_FORMAT rtvFormat,
                                DXGI_FORMAT dsvFormat,
-                               ANGLEFormat swizzleFormat)
+                               ANGLEFormat swizzleFormat,
+                               MipGenerationFunction mipGenerationFunction)
     : format(format),
       componentType(componentType),
       glInternalFormat(glInternalFormat),
@@ -142,7 +145,8 @@ ANGLEFormatSet::ANGLEFormatSet(ANGLEFormat format,
       srvFormat(srvFormat),
       rtvFormat(rtvFormat),
       dsvFormat(dsvFormat),
-      swizzleFormat(swizzleFormat)
+      swizzleFormat(swizzleFormat),
+      mipGenerationFunction(mipGenerationFunction)
 {
 }
 
@@ -160,7 +164,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_A8_UNORM,
                                                    DXGI_FORMAT_A8_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   GenerateMip<A8>);
             return formatInfo;
         }
         case ANGLE_FORMAT_B4G4R4A4_UNORM:
@@ -172,7 +177,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_B4G4R4A4_UNORM,
                                                    DXGI_FORMAT_B4G4R4A4_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_B4G4R4A4_UNORM);
+                                                   ANGLE_FORMAT_B4G4R4A4_UNORM,
+                                                   GenerateMip<A4R4G4B4>);
             return formatInfo;
         }
         case ANGLE_FORMAT_B5G5R5A1_UNORM:
@@ -184,7 +190,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_B5G5R5A1_UNORM,
                                                    DXGI_FORMAT_B5G5R5A1_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   GenerateMip<A1R5G5B5>);
             return formatInfo;
         }
         case ANGLE_FORMAT_B5G6R5_UNORM:
@@ -196,7 +203,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_B5G6R5_UNORM,
                                                    DXGI_FORMAT_B5G6R5_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   GenerateMip<R5G6B5>);
             return formatInfo;
         }
         case ANGLE_FORMAT_B8G8R8A8_UNORM:
@@ -208,7 +216,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_B8G8R8A8_UNORM,
                                                    DXGI_FORMAT_B8G8R8A8_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_B8G8R8A8_UNORM);
+                                                   ANGLE_FORMAT_B8G8R8A8_UNORM,
+                                                   GenerateMip<B8G8R8A8>);
             return formatInfo;
         }
         case ANGLE_FORMAT_BC1_UNORM:
@@ -220,7 +229,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_BC1_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   nullptr);
             return formatInfo;
         }
         case ANGLE_FORMAT_BC2_UNORM:
@@ -232,7 +242,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_BC2_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   nullptr);
             return formatInfo;
         }
         case ANGLE_FORMAT_BC3_UNORM:
@@ -244,7 +255,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_BC3_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   nullptr);
             return formatInfo;
         }
         case ANGLE_FORMAT_D16_UNORM_FL10:
@@ -256,7 +268,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D16_UNORM,
-                                                   ANGLE_FORMAT_R16G16B16A16_UNORM);
+                                                   ANGLE_FORMAT_R16G16B16A16_UNORM,
+                                                   nullptr);
             return formatInfo;
         }
         case ANGLE_FORMAT_D16_UNORM_FL9_3:
@@ -268,7 +281,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D16_UNORM,
-                                                   ANGLE_FORMAT_R16G16B16A16_UNORM);
+                                                   ANGLE_FORMAT_R16G16B16A16_UNORM,
+                                                   nullptr);
             return formatInfo;
         }
         case ANGLE_FORMAT_D24_UNORM_S8_UINT_FL10:
@@ -280,7 +294,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT);
+                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT,
+                                                   nullptr);
             return formatInfo;
         }
         case ANGLE_FORMAT_D24_UNORM_S8_UINT_FL9_3:
@@ -292,7 +307,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT);
+                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT,
+                                                   nullptr);
             return formatInfo;
         }
         case ANGLE_FORMAT_D32_FLOAT:
@@ -304,7 +320,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D32_FLOAT,
-                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT);
+                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT,
+                                                   nullptr);
             return formatInfo;
         }
         case ANGLE_FORMAT_D32_FLOAT_S8X24_UINT_FL10:
@@ -316,7 +333,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D32_FLOAT_S8X24_UINT,
-                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT);
+                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT,
+                                                   nullptr);
             return formatInfo;
         }
         case ANGLE_FORMAT_NONE:
@@ -328,7 +346,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_NONE);
+                                                   ANGLE_FORMAT_NONE,
+                                                   nullptr);
             return formatInfo;
         }
         case ANGLE_FORMAT_R10G10B10A2_UINT:
@@ -340,7 +359,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R10G10B10A2_UINT,
                                                    DXGI_FORMAT_R10G10B10A2_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_UINT);
+                                                   ANGLE_FORMAT_R16G16B16A16_UINT,
+                                                   GenerateMip<R10G10B10A2>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R10G10B10A2_UNORM:
@@ -352,7 +372,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R10G10B10A2_UNORM,
                                                    DXGI_FORMAT_R10G10B10A2_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_UNORM);
+                                                   ANGLE_FORMAT_R16G16B16A16_UNORM,
+                                                   GenerateMip<R10G10B10A2>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R11G11B10_FLOAT:
@@ -364,7 +385,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R11G11B10_FLOAT,
                                                    DXGI_FORMAT_R11G11B10_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_FLOAT);
+                                                   ANGLE_FORMAT_R16G16B16A16_FLOAT,
+                                                   GenerateMip<R11G11B10F>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16B16A16_FLOAT:
@@ -376,7 +398,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16B16A16_FLOAT,
                                                    DXGI_FORMAT_R16G16B16A16_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_FLOAT);
+                                                   ANGLE_FORMAT_R16G16B16A16_FLOAT,
+                                                   GenerateMip<R16G16B16A16F>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16B16A16_SINT:
@@ -388,7 +411,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16B16A16_SINT,
                                                    DXGI_FORMAT_R16G16B16A16_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_SINT);
+                                                   ANGLE_FORMAT_R16G16B16A16_SINT,
+                                                   GenerateMip<R16G16B16A16S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16B16A16_UINT:
@@ -400,7 +424,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16B16A16_UINT,
                                                    DXGI_FORMAT_R16G16B16A16_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_UINT);
+                                                   ANGLE_FORMAT_R16G16B16A16_UINT,
+                                                   GenerateMip<R16G16B16A16>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16B16A16_UNORM:
@@ -412,7 +437,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16B16A16_UNORM,
                                                    DXGI_FORMAT_R16G16B16A16_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_UNORM);
+                                                   ANGLE_FORMAT_R16G16B16A16_UNORM,
+                                                   GenerateMip<R16G16B16A16>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16_FLOAT:
@@ -424,7 +450,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16_FLOAT,
                                                    DXGI_FORMAT_R16G16_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_FLOAT);
+                                                   ANGLE_FORMAT_R16G16B16A16_FLOAT,
+                                                   GenerateMip<R16G16F>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16_SINT:
@@ -436,7 +463,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16_SINT,
                                                    DXGI_FORMAT_R16G16_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_SINT);
+                                                   ANGLE_FORMAT_R16G16B16A16_SINT,
+                                                   GenerateMip<R16G16S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16_UINT:
@@ -448,7 +476,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16_UINT,
                                                    DXGI_FORMAT_R16G16_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_UINT);
+                                                   ANGLE_FORMAT_R16G16B16A16_UINT,
+                                                   GenerateMip<R16G16>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16_FLOAT:
@@ -460,7 +489,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16_FLOAT,
                                                    DXGI_FORMAT_R16_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_FLOAT);
+                                                   ANGLE_FORMAT_R16G16B16A16_FLOAT,
+                                                   GenerateMip<R16F>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16_SINT:
@@ -472,7 +502,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16_SINT,
                                                    DXGI_FORMAT_R16_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_SINT);
+                                                   ANGLE_FORMAT_R16G16B16A16_SINT,
+                                                   GenerateMip<R16S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16_UINT:
@@ -484,7 +515,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16_UINT,
                                                    DXGI_FORMAT_R16_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_UINT);
+                                                   ANGLE_FORMAT_R16G16B16A16_UINT,
+                                                   GenerateMip<R16>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32G32B32A32_FLOAT:
@@ -496,7 +528,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32G32B32A32_FLOAT,
                                                    DXGI_FORMAT_R32G32B32A32_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT);
+                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT,
+                                                   GenerateMip<R32G32B32A32F>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32G32B32A32_SINT:
@@ -508,7 +541,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32G32B32A32_SINT,
                                                    DXGI_FORMAT_R32G32B32A32_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R32G32B32A32_SINT);
+                                                   ANGLE_FORMAT_R32G32B32A32_SINT,
+                                                   GenerateMip<R32G32B32A32S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32G32B32A32_UINT:
@@ -520,7 +554,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32G32B32A32_UINT,
                                                    DXGI_FORMAT_R32G32B32A32_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R32G32B32A32_UINT);
+                                                   ANGLE_FORMAT_R32G32B32A32_UINT,
+                                                   GenerateMip<R32G32B32A32>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32G32_FLOAT:
@@ -532,7 +567,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32G32_FLOAT,
                                                    DXGI_FORMAT_R32G32_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT);
+                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT,
+                                                   GenerateMip<R32G32F>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32G32_SINT:
@@ -544,7 +580,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32G32_SINT,
                                                    DXGI_FORMAT_R32G32_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R32G32B32A32_SINT);
+                                                   ANGLE_FORMAT_R32G32B32A32_SINT,
+                                                   GenerateMip<R32G32S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32G32_UINT:
@@ -556,7 +593,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32G32_UINT,
                                                    DXGI_FORMAT_R32G32_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R32G32B32A32_UINT);
+                                                   ANGLE_FORMAT_R32G32B32A32_UINT,
+                                                   GenerateMip<R32G32>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32_FLOAT:
@@ -568,7 +606,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32_FLOAT,
                                                    DXGI_FORMAT_R32_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT);
+                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT,
+                                                   GenerateMip<R32F>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32_SINT:
@@ -580,7 +619,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32_SINT,
                                                    DXGI_FORMAT_R32_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R32G32B32A32_SINT);
+                                                   ANGLE_FORMAT_R32G32B32A32_SINT,
+                                                   GenerateMip<R32S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32_UINT:
@@ -592,7 +632,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32_UINT,
                                                    DXGI_FORMAT_R32_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R32G32B32A32_UINT);
+                                                   ANGLE_FORMAT_R32G32B32A32_UINT,
+                                                   GenerateMip<R32>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_SINT:
@@ -604,7 +645,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8B8A8_SINT,
                                                    DXGI_FORMAT_R8G8B8A8_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_SINT);
+                                                   ANGLE_FORMAT_R8G8B8A8_SINT,
+                                                   GenerateMip<R8G8B8A8S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_SNORM:
@@ -616,7 +658,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8B8A8_SNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_SNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_SNORM,
+                                                   GenerateMip<R8G8B8A8S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_UINT:
@@ -628,7 +671,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8B8A8_UINT,
                                                    DXGI_FORMAT_R8G8B8A8_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UINT);
+                                                   ANGLE_FORMAT_R8G8B8A8_UINT,
+                                                   GenerateMip<R8G8B8A8>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_UNORM:
@@ -640,7 +684,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8B8A8_UNORM,
                                                    DXGI_FORMAT_R8G8B8A8_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   GenerateMip<R8G8B8A8>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_UNORM_NONRENDERABLE:
@@ -652,7 +697,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8B8A8_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   GenerateMip<R8G8B8A8>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_UNORM_SRGB:
@@ -664,7 +710,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                                    DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM_SRGB);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM_SRGB,
+                                                   GenerateMip<R8G8B8A8>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_UNORM_SRGB_NONRENDERABLE:
@@ -676,7 +723,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   GenerateMip<R8G8B8A8>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8_SINT:
@@ -688,7 +736,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8_SINT,
                                                    DXGI_FORMAT_R8G8_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_SINT);
+                                                   ANGLE_FORMAT_R8G8B8A8_SINT,
+                                                   GenerateMip<R8G8S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8_SNORM:
@@ -700,7 +749,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8_SNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_SNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_SNORM,
+                                                   GenerateMip<R8G8S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8_SNORM_NONRENDERABLE:
@@ -712,7 +762,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8_SNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_SNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_SNORM,
+                                                   GenerateMip<R8G8S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8_UINT:
@@ -724,7 +775,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8_UINT,
                                                    DXGI_FORMAT_R8G8_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UINT);
+                                                   ANGLE_FORMAT_R8G8B8A8_UINT,
+                                                   GenerateMip<R8G8>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8_UNORM:
@@ -736,7 +788,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8_UNORM,
                                                    DXGI_FORMAT_R8G8_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   GenerateMip<R8G8>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8_UNORM_NONRENDERABLE:
@@ -748,7 +801,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   GenerateMip<R8G8>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8_SINT:
@@ -760,7 +814,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8_SINT,
                                                    DXGI_FORMAT_R8_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_SINT);
+                                                   ANGLE_FORMAT_R8G8B8A8_SINT,
+                                                   GenerateMip<R8S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8_SNORM:
@@ -772,7 +827,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8_SNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_SNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_SNORM,
+                                                   GenerateMip<R8S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8_SNORM_NONRENDERABLE:
@@ -784,7 +840,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8_SNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_SNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_SNORM,
+                                                   GenerateMip<R8S>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8_UINT:
@@ -796,7 +853,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8_UINT,
                                                    DXGI_FORMAT_R8_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UINT);
+                                                   ANGLE_FORMAT_R8G8B8A8_UINT,
+                                                   GenerateMip<R8>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8_UNORM:
@@ -808,7 +866,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8_UNORM,
                                                    DXGI_FORMAT_R8_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   GenerateMip<R8>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8_UNORM_NONRENDERABLE:
@@ -820,7 +879,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R8G8B8A8_UNORM);
+                                                   ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   GenerateMip<R8>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R9G9B9E5_SHAREDEXP:
@@ -832,7 +892,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R9G9B9E5_SHAREDEXP,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
-                                                   ANGLE_FORMAT_R16G16B16A16_FLOAT);
+                                                   ANGLE_FORMAT_R16G16B16A16_FLOAT,
+                                                   GenerateMip<R9G9B9E5>);
             return formatInfo;
         }
         case ANGLE_FORMAT_X24_TYPELESS_G8_UINT:
@@ -844,7 +905,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_X24_TYPELESS_G8_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT);
+                                                   ANGLE_FORMAT_R32G32B32A32_FLOAT,
+                                                   nullptr);
             return formatInfo;
         }
 
