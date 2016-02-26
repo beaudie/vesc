@@ -36,12 +36,14 @@ class Query11 : public QueryImpl
     gl::Error resume();
 
   private:
-    struct QueryState
+    struct QueryState final
     {
-        QueryState()
-            : query(nullptr), beginTimestamp(nullptr), endTimestamp(nullptr), finished(false)
-        {
-        }
+        QueryState();
+        QueryState(const QueryState &state) = default;
+        ~QueryState();
+
+        QueryState &operator=(const QueryState &state) = default;
+
         ID3D11Query *query;
         ID3D11Query *beginTimestamp;
         ID3D11Query *endTimestamp;

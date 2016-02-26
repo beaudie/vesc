@@ -44,6 +44,18 @@ GLuint64 MergeQueryResults(GLenum type, GLuint64 currentResult, GLuint64 newResu
 namespace rx
 {
 
+Query11::QueryState::QueryState()
+    : query(nullptr), beginTimestamp(nullptr), endTimestamp(nullptr), finished(false)
+{
+}
+
+Query11::QueryState::~QueryState()
+{
+    SafeRelease(beginTimestamp);
+    SafeRelease(endTimestamp);
+    SafeRelease(query);
+}
+
 Query11::Query11(Renderer11 *renderer, GLenum type)
     : QueryImpl(type), mResult(0), mResultSum(0), mRenderer(renderer)
 {
@@ -52,9 +64,6 @@ Query11::Query11(Renderer11 *renderer, GLenum type)
 Query11::~Query11()
 {
     mRenderer->getStateManager()->onDeleteQueryObject(this);
-    SafeRelease(mActiveQuery.beginTimestamp);
-    SafeRelease(mActiveQuery.endTimestamp);
-    SafeRelease(mActiveQuery.query);
 }
 
 gl::Error Query11::begin()
@@ -225,9 +234,6 @@ gl::Error Query11::flush(bool force)
         } while (!query->finished);
 
         mResultSum = MergeQueryResults(getType(), mResultSum, mResult);
-        SafeRelease(query->beginTimestamp);
-        SafeRelease(query->endTimestamp);
-        SafeRelease(query->query);
         mPendingQueries.pop_front();
     }
 
