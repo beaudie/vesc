@@ -3693,6 +3693,8 @@ gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAtt
     mDeviceContext->CopySubresourceRegion(stagingHelper.getResource(), 0, 0, 0, 0,
                                           srcTexture->getResource(), sourceSubResource, &srcBox);
 
+    d3d11::ANGLEFormat angleFormat = rt11->getANGLEFormat();
+
     if (invertTexture)
     {
         gl::PixelPackState invertTexturePack;
@@ -3705,7 +3707,8 @@ gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAtt
         invertTexturePack.pixelBuffer.set(pack.pixelBuffer.get());
         invertTexturePack.reverseRowOrder = !pack.reverseRowOrder;
 
-        PackPixelsParams packParams(safeArea, format, type, outputPitch, invertTexturePack, 0);
+        PackPixelsParams packParams(safeArea, angleFormat, format, type, outputPitch,
+                                    invertTexturePack, 0);
         error = packPixels(stagingHelper, packParams, pixelsOut);
 
         invertTexturePack.pixelBuffer.set(nullptr);
@@ -3714,7 +3717,7 @@ gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAtt
     }
     else
     {
-        PackPixelsParams packParams(safeArea, format, type, outputPitch, pack, 0);
+        PackPixelsParams packParams(safeArea, angleFormat, format, type, outputPitch, pack, 0);
         return packPixels(stagingHelper, packParams, pixelsOut);
     }
 }
@@ -3779,7 +3782,8 @@ gl::Error Renderer11::packPixels(const TextureHelper11 &textureHelper,
         }
         else
         {
-            ColorReadFunction colorReadFunction   = dxgiFormatInfo.colorReadFunction;
+            const auto &angleFormatInfo           = d3d11::GetANGLEFormatSet(params.angleFormat);
+            ColorReadFunction colorReadFunction   = angleFormatInfo.colorReadFunction;
             ColorWriteFunction colorWriteFunction = GetColorWriteFunction(params.format, params.type);
 
             uint8_t temp[16]; // Maximum size of any Color<T> type used.
