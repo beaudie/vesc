@@ -69,6 +69,7 @@
             '<(angle_path)/src/tests/egl_tests/EGLContextCompatibilityTest.cpp',
             '<(angle_path)/src/tests/egl_tests/EGLQueryContextTest.cpp',
             '<(angle_path)/src/tests/egl_tests/EGLSurfaceTest.cpp',
+            '<(angle_path)/src/tests/egl_tests/EGLTroubleshootTest.cpp',
             '<(angle_path)/src/tests/test_utils/ANGLETest.cpp',
             '<(angle_path)/src/tests/test_utils/ANGLETest.h',
             '<(angle_path)/src/tests/test_utils/angle_test_configs.cpp',
