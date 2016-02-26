@@ -42,6 +42,12 @@ class Query11 : public QueryImpl
             : query(nullptr), beginTimestamp(nullptr), endTimestamp(nullptr), finished(false)
         {
         }
+        ~QueryState()
+        {
+            SafeRelease(beginTimestamp);
+            SafeRelease(endTimestamp);
+            SafeRelease(query);
+        }
         ID3D11Query *query;
         ID3D11Query *beginTimestamp;
         ID3D11Query *endTimestamp;

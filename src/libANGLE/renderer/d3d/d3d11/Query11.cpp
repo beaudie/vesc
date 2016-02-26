@@ -225,9 +225,6 @@ gl::Error Query11::flush(bool force)
         } while (!query->finished);
 
         mResultSum = MergeQueryResults(getType(), mResultSum, mResult);
-        SafeRelease(query->beginTimestamp);
-        SafeRelease(query->endTimestamp);
-        SafeRelease(query->query);
         mPendingQueries.pop_front();
     }
 
