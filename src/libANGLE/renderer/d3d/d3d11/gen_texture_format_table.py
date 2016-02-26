@@ -145,6 +145,7 @@ ANGLEFormatSet::ANGLEFormatSet()
       srvFormat(DXGI_FORMAT_UNKNOWN),
       rtvFormat(DXGI_FORMAT_UNKNOWN),
       dsvFormat(DXGI_FORMAT_UNKNOWN),
+      blitSRVFormat(DXGI_FORMAT_UNKNOWN),
       swizzleFormat(ANGLE_FORMAT_NONE),
       mipGenerationFunction(nullptr),
       colorReadFunction(nullptr)
@@ -176,6 +177,7 @@ ANGLEFormatSet::ANGLEFormatSet(ANGLEFormat format,
                                DXGI_FORMAT srvFormat,
                                DXGI_FORMAT rtvFormat,
                                DXGI_FORMAT dsvFormat,
+                               DXGI_FORMAT blitSRVFormat,
                                ANGLEFormat swizzleFormat,
                                MipGenerationFunction mipGenerationFunction,
                                ColorReadFunction colorReadFunction)
@@ -186,6 +188,7 @@ ANGLEFormatSet::ANGLEFormatSet(ANGLEFormat format,
       srvFormat(srvFormat),
       rtvFormat(rtvFormat),
       dsvFormat(dsvFormat),
+      blitSRVFormat(blitSRVFormat),
       swizzleFormat(swizzleFormat),
       mipGenerationFunction(mipGenerationFunction),
       colorReadFunction(colorReadFunction)
@@ -454,6 +457,14 @@ def get_color_read_function(angle_format):
     }
     return 'ReadColor<' + channel_struct + ', '+ component_type_map[angle_format['componentType']] + '>'
 
+def get_blit_srv_format(angle_format):
+    if 'channels' not in angle_format:
+        return 'DXGI_FORMAT_UNKNOWN'
+    if 'r' in angle_format['channels'] and angle_format['componentType'] in ['int', 'uint']:
+        return angle_format['rtvFormat']
+
+    return angle_format["srvFormat"] if "srvFormat" in angle_format else "DXGI_FORMAT_UNKNOWN"
+
 def parse_json_into_switch_angle_format_string(json_data):
     table_data = ''
     for angle_format_item in sorted(json_data.iteritems()):
@@ -465,6 +476,7 @@ def parse_json_into_switch_angle_format_string(json_data):
         srv_format = angle_format["srvFormat"] if "srvFormat" in angle_format else "DXGI_FORMAT_UNKNOWN"
         rtv_format = angle_format["rtvFormat"] if "rtvFormat" in angle_format else "DXGI_FORMAT_UNKNOWN"
         dsv_format = angle_format["dsvFormat"] if "dsvFormat" in angle_format else "DXGI_FORMAT_UNKNOWN"
+        blit_srv_format = get_blit_srv_format(angle_format)
         swizzle_format = get_swizzle_format_id(angle_format_item[0], angle_format)
         mip_generation_function = get_mip_generation_function(angle_format)
         color_read_function = get_color_read_function(angle_format)
@@ -476,6 +488,7 @@ def parse_json_into_switch_angle_format_string(json_data):
         table_data += '                                                   ' + srv_format + ',\n'
         table_data += '                                                   ' + rtv_format + ',\n'
         table_data += '                                                   ' + dsv_format + ',\n'
+        table_data += '                                                   ' + blit_srv_format + ',\n'
         table_data += '                                                   ' + swizzle_format + ',\n'
         table_data += '                                                   ' + mip_generation_function + ',\n'
         table_data += '                                                   ' + color_read_function + ');\n'
