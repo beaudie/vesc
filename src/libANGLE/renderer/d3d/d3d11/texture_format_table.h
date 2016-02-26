@@ -47,6 +47,7 @@ struct ANGLEFormatSet
                    DXGI_FORMAT srvFormat,
                    DXGI_FORMAT rtvFormat,
                    DXGI_FORMAT dsvFormat,
+                   DXGI_FORMAT blitSRVFormat,
                    ANGLEFormat swizzleFormat,
                    MipGenerationFunction mipGenerationFunction,
                    ColorReadFunction colorReadFunction);
@@ -67,6 +68,8 @@ struct ANGLEFormatSet
     DXGI_FORMAT srvFormat;
     DXGI_FORMAT rtvFormat;
     DXGI_FORMAT dsvFormat;
+
+    DXGI_FORMAT blitSRVFormat;
 
     ANGLEFormat swizzleFormat;
 
