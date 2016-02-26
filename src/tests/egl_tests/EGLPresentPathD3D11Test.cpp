@@ -338,6 +338,12 @@ TEST_P(EGLPresentPathD3D11, WindowPresentPathFast)
 // works as expected, and is also oriented the correct way around
 TEST_P(EGLPresentPathD3D11, ClientBufferPresentPathFast)
 {
+    if (IsIntel())
+    {
+        std::cout << "Test disabled on Intel." << std::endl;
+        return;
+    }
+
     initializeEGL(true);
     createPbufferFromClientBufferSurface();
     makeCurrent();
@@ -365,6 +371,12 @@ TEST_P(EGLPresentPathD3D11, WindowPresentPathCopy)
 // fast is disabled works as expected, and is also oriented the correct way around
 TEST_P(EGLPresentPathD3D11, ClientBufferPresentPathCopy)
 {
+    if (IsIntel())
+    {
+        std::cout << "Test disabled on Intel." << std::endl;
+        return;
+    }
+
     initializeEGL(false);
     createPbufferFromClientBufferSurface();
     makeCurrent();
