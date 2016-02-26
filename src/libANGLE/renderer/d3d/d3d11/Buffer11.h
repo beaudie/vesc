@@ -13,6 +13,7 @@
 
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/d3d/BufferD3D.h"
+#include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
 
 namespace gl
 {
@@ -42,10 +43,16 @@ enum BufferUsage
 struct PackPixelsParams
 {
     PackPixelsParams();
-    PackPixelsParams(const gl::Rectangle &area, GLenum format, GLenum type, GLuint outputPitch,
-                     const gl::PixelPackState &pack, ptrdiff_t offset);
+    PackPixelsParams(const gl::Rectangle &area,
+                     d3d11::ANGLEFormat angleFormat,
+                     GLenum format,
+                     GLenum type,
+                     GLuint outputPitch,
+                     const gl::PixelPackState &pack,
+                     ptrdiff_t offset);
 
     gl::Rectangle area;
+    d3d11::ANGLEFormat angleFormat;
     GLenum format;
     GLenum type;
     GLuint outputPitch;

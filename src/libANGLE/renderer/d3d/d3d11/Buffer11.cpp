@@ -32,17 +32,24 @@ typedef GLuint (*ReadIndexValueFunction)(const uint8_t *data, size_t index);
 namespace rx
 {
 PackPixelsParams::PackPixelsParams()
-    : format(GL_NONE), type(GL_NONE), outputPitch(0), packBuffer(nullptr), offset(0)
+    : format(GL_NONE),
+      angleFormat(d3d11::ANGLE_FORMAT_NONE),
+      type(GL_NONE),
+      outputPitch(0),
+      packBuffer(nullptr),
+      offset(0)
 {
 }
 
 PackPixelsParams::PackPixelsParams(const gl::Rectangle &areaIn,
+                                   d3d11::ANGLEFormat angleFormatIn,
                                    GLenum formatIn,
                                    GLenum typeIn,
                                    GLuint outputPitchIn,
                                    const gl::PixelPackState &packIn,
                                    ptrdiff_t offsetIn)
     : area(areaIn),
+      angleFormat(angleFormatIn),
       format(formatIn),
       type(typeIn),
       outputPitch(outputPitchIn),
