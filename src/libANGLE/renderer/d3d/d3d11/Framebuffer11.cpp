@@ -356,8 +356,18 @@ gl::Error Framebuffer11::readPixelsImpl(const gl::Rectangle &area,
                              "Unimplemented pixel store parameters in readPixelsImpl");
         }
 
+        RenderTargetD3D *readRenderTarget = nullptr;
+        gl::Error error = readAttachment->getRenderTarget(&readRenderTarget);
+        if (error.isError())
+        {
+            return error;
+        }
+        RenderTarget11 *readRenderTarget11 = GetAs<RenderTarget11>(readRenderTarget);
+        d3d11::ANGLEFormat angleFormat     = readRenderTarget11->getANGLEFormat();
+
         Buffer11 *packBufferStorage = GetImplAs<Buffer11>(packBuffer);
-        PackPixelsParams packParams(area, format, type, static_cast<GLuint>(outputPitch), pack,
+        PackPixelsParams packParams(area, angleFormat, format, type,
+                                    static_cast<GLuint>(outputPitch), pack,
                                     reinterpret_cast<ptrdiff_t>(pixels));
 
         return packBufferStorage->packPixels(*readAttachment, packParams);
