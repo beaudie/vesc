@@ -30,6 +30,7 @@ class RenderTarget11 : public RenderTargetD3D
     virtual ID3D11RenderTargetView *getRenderTargetView() const = 0;
     virtual ID3D11DepthStencilView *getDepthStencilView() const = 0;
     virtual ID3D11ShaderResourceView *getShaderResourceView() const = 0;
+    virtual ID3D11ShaderResourceView *getBlitShaderResourceView() const = 0;
 
     virtual unsigned int getSubresourceIndex() const = 0;
 
@@ -52,6 +53,7 @@ class TextureRenderTarget11 : public RenderTarget11
     TextureRenderTarget11(ID3D11RenderTargetView *rtv,
                           ID3D11Resource *resource,
                           ID3D11ShaderResourceView *srv,
+                          ID3D11ShaderResourceView *blitSRV,
                           GLenum internalFormat,
                           d3d11::ANGLEFormat angleFormat,
                           GLsizei width,
@@ -79,6 +81,7 @@ class TextureRenderTarget11 : public RenderTarget11
     ID3D11RenderTargetView *getRenderTargetView() const override;
     ID3D11DepthStencilView *getDepthStencilView() const override;
     ID3D11ShaderResourceView *getShaderResourceView() const override;
+    ID3D11ShaderResourceView *getBlitShaderResourceView() const override;
 
     unsigned int getSubresourceIndex() const override;
 
@@ -94,6 +97,10 @@ class TextureRenderTarget11 : public RenderTarget11
     ID3D11RenderTargetView *mRenderTarget;
     ID3D11DepthStencilView *mDepthStencil;
     ID3D11ShaderResourceView *mShaderResource;
+
+    // Shader resource view to use with internal blit shaders. Not set for depth/stencil render
+    // targets.
+    ID3D11ShaderResourceView *mBlitShaderResource;
 };
 
 class SurfaceRenderTarget11 : public RenderTarget11
@@ -112,6 +119,7 @@ class SurfaceRenderTarget11 : public RenderTarget11
     ID3D11RenderTargetView *getRenderTargetView() const override;
     ID3D11DepthStencilView *getDepthStencilView() const override;
     ID3D11ShaderResourceView *getShaderResourceView() const override;
+    ID3D11ShaderResourceView *getBlitShaderResourceView() const override;
 
     unsigned int getSubresourceIndex() const override;
 
