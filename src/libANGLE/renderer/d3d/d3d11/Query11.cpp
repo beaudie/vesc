@@ -55,6 +55,14 @@ Query11::~Query11()
     SafeRelease(mActiveQuery.beginTimestamp);
     SafeRelease(mActiveQuery.endTimestamp);
     SafeRelease(mActiveQuery.query);
+    while (!mPendingQueries.empty())
+    {
+        QueryState *query = &mPendingQueries.front();
+        SafeRelease(query->beginTimestamp);
+        SafeRelease(query->endTimestamp);
+        SafeRelease(query->query);
+        mPendingQueries.pop_front();
+    }
 }
 
 gl::Error Query11::begin()
