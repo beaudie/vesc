@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
 #include "libANGLE/renderer/d3d/d3d11/load_functions_table.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
+#include "libANGLE/renderer/d3d/copyimage.h"
 #include "libANGLE/renderer/d3d/generatemip.h"
 #include "libANGLE/renderer/d3d/loadimage.h"
 
@@ -107,7 +108,8 @@ ANGLEFormatSet::ANGLEFormatSet()
       rtvFormat(DXGI_FORMAT_UNKNOWN),
       dsvFormat(DXGI_FORMAT_UNKNOWN),
       swizzleFormat(ANGLE_FORMAT_NONE),
-      mipGenerationFunction(nullptr)
+      mipGenerationFunction(nullptr),
+      colorReadFunction(nullptr)
 {
 }
 
@@ -137,7 +139,8 @@ ANGLEFormatSet::ANGLEFormatSet(ANGLEFormat format,
                                DXGI_FORMAT rtvFormat,
                                DXGI_FORMAT dsvFormat,
                                ANGLEFormat swizzleFormat,
-                               MipGenerationFunction mipGenerationFunction)
+                               MipGenerationFunction mipGenerationFunction,
+                               ColorReadFunction colorReadFunction)
     : format(format),
       componentType(componentType),
       glInternalFormat(glInternalFormat),
@@ -146,7 +149,8 @@ ANGLEFormatSet::ANGLEFormatSet(ANGLEFormat format,
       rtvFormat(rtvFormat),
       dsvFormat(dsvFormat),
       swizzleFormat(swizzleFormat),
-      mipGenerationFunction(mipGenerationFunction)
+      mipGenerationFunction(mipGenerationFunction),
+      colorReadFunction(colorReadFunction)
 {
 }
 
@@ -165,7 +169,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_A8_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
-                                                   GenerateMip<A8>);
+                                                   GenerateMip<A8>,
+                                                   ReadColor<A8, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_B4G4R4A4_UNORM:
@@ -178,7 +183,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_B4G4R4A4_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_B4G4R4A4_UNORM,
-                                                   GenerateMip<A4R4G4B4>);
+                                                   GenerateMip<A4R4G4B4>,
+                                                   ReadColor<A4R4G4B4, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_B5G5R5A1_UNORM:
@@ -191,7 +197,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_B5G5R5A1_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
-                                                   GenerateMip<A1R5G5B5>);
+                                                   GenerateMip<A1R5G5B5>,
+                                                   ReadColor<A1R5G5B5, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_B5G6R5_UNORM:
@@ -204,7 +211,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_B5G6R5_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
-                                                   GenerateMip<R5G6B5>);
+                                                   GenerateMip<R5G6B5>,
+                                                   ReadColor<R5G6B5, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_B8G8R8A8_UNORM:
@@ -217,7 +225,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_B8G8R8A8_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_B8G8R8A8_UNORM,
-                                                   GenerateMip<B8G8R8A8>);
+                                                   GenerateMip<B8G8R8A8>,
+                                                   ReadColor<B8G8R8A8, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_BC1_UNORM:
@@ -230,6 +239,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   nullptr,
                                                    nullptr);
             return formatInfo;
         }
@@ -243,6 +253,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   nullptr,
                                                    nullptr);
             return formatInfo;
         }
@@ -256,6 +267,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
+                                                   nullptr,
                                                    nullptr);
             return formatInfo;
         }
@@ -269,6 +281,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D16_UNORM,
                                                    ANGLE_FORMAT_R16G16B16A16_UNORM,
+                                                   nullptr,
                                                    nullptr);
             return formatInfo;
         }
@@ -282,6 +295,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D16_UNORM,
                                                    ANGLE_FORMAT_R16G16B16A16_UNORM,
+                                                   nullptr,
                                                    nullptr);
             return formatInfo;
         }
@@ -295,6 +309,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D24_UNORM_S8_UINT,
                                                    ANGLE_FORMAT_R32G32B32A32_FLOAT,
+                                                   nullptr,
                                                    nullptr);
             return formatInfo;
         }
@@ -308,6 +323,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D24_UNORM_S8_UINT,
                                                    ANGLE_FORMAT_R32G32B32A32_FLOAT,
+                                                   nullptr,
                                                    nullptr);
             return formatInfo;
         }
@@ -321,6 +337,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D32_FLOAT,
                                                    ANGLE_FORMAT_R32G32B32A32_FLOAT,
+                                                   nullptr,
                                                    nullptr);
             return formatInfo;
         }
@@ -334,6 +351,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D32_FLOAT_S8X24_UINT,
                                                    ANGLE_FORMAT_R32G32B32A32_FLOAT,
+                                                   nullptr,
                                                    nullptr);
             return formatInfo;
         }
@@ -347,6 +365,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_NONE,
+                                                   nullptr,
                                                    nullptr);
             return formatInfo;
         }
@@ -360,7 +379,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R10G10B10A2_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_UINT,
-                                                   GenerateMip<R10G10B10A2>);
+                                                   GenerateMip<R10G10B10A2>,
+                                                   ReadColor<R10G10B10A2, GLuint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R10G10B10A2_UNORM:
@@ -373,7 +393,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R10G10B10A2_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_UNORM,
-                                                   GenerateMip<R10G10B10A2>);
+                                                   GenerateMip<R10G10B10A2>,
+                                                   ReadColor<R10G10B10A2, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R11G11B10_FLOAT:
@@ -386,7 +407,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R11G11B10_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_FLOAT,
-                                                   GenerateMip<R11G11B10F>);
+                                                   GenerateMip<R11G11B10F>,
+                                                   ReadColor<R11G11B10F, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16B16A16_FLOAT:
@@ -399,7 +421,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16B16A16_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_FLOAT,
-                                                   GenerateMip<R16G16B16A16F>);
+                                                   GenerateMip<R16G16B16A16F>,
+                                                   ReadColor<R16G16B16A16F, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16B16A16_SINT:
@@ -412,7 +435,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16B16A16_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_SINT,
-                                                   GenerateMip<R16G16B16A16S>);
+                                                   GenerateMip<R16G16B16A16S>,
+                                                   ReadColor<R16G16B16A16S, GLint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16B16A16_UINT:
@@ -425,7 +449,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16B16A16_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_UINT,
-                                                   GenerateMip<R16G16B16A16>);
+                                                   GenerateMip<R16G16B16A16>,
+                                                   ReadColor<R16G16B16A16, GLuint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16B16A16_UNORM:
@@ -438,7 +463,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16B16A16_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_UNORM,
-                                                   GenerateMip<R16G16B16A16>);
+                                                   GenerateMip<R16G16B16A16>,
+                                                   ReadColor<R16G16B16A16, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16_FLOAT:
@@ -451,7 +477,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_FLOAT,
-                                                   GenerateMip<R16G16F>);
+                                                   GenerateMip<R16G16F>,
+                                                   ReadColor<R16G16F, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16_SINT:
@@ -464,7 +491,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_SINT,
-                                                   GenerateMip<R16G16S>);
+                                                   GenerateMip<R16G16S>,
+                                                   ReadColor<R16G16S, GLint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16G16_UINT:
@@ -477,7 +505,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16G16_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_UINT,
-                                                   GenerateMip<R16G16>);
+                                                   GenerateMip<R16G16>,
+                                                   ReadColor<R16G16, GLuint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16_FLOAT:
@@ -490,7 +519,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_FLOAT,
-                                                   GenerateMip<R16F>);
+                                                   GenerateMip<R16F>,
+                                                   ReadColor<R16F, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16_SINT:
@@ -503,7 +533,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_SINT,
-                                                   GenerateMip<R16S>);
+                                                   GenerateMip<R16S>,
+                                                   ReadColor<R16S, GLint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R16_UINT:
@@ -516,7 +547,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R16_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_UINT,
-                                                   GenerateMip<R16>);
+                                                   GenerateMip<R16>,
+                                                   ReadColor<R16, GLuint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32G32B32A32_FLOAT:
@@ -529,7 +561,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32G32B32A32_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R32G32B32A32_FLOAT,
-                                                   GenerateMip<R32G32B32A32F>);
+                                                   GenerateMip<R32G32B32A32F>,
+                                                   ReadColor<R32G32B32A32F, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32G32B32A32_SINT:
@@ -542,7 +575,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32G32B32A32_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R32G32B32A32_SINT,
-                                                   GenerateMip<R32G32B32A32S>);
+                                                   GenerateMip<R32G32B32A32S>,
+                                                   ReadColor<R32G32B32A32S, GLint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32G32B32A32_UINT:
@@ -555,7 +589,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32G32B32A32_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R32G32B32A32_UINT,
-                                                   GenerateMip<R32G32B32A32>);
+                                                   GenerateMip<R32G32B32A32>,
+                                                   ReadColor<R32G32B32A32, GLuint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32G32_FLOAT:
@@ -568,7 +603,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32G32_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R32G32B32A32_FLOAT,
-                                                   GenerateMip<R32G32F>);
+                                                   GenerateMip<R32G32F>,
+                                                   ReadColor<R32G32F, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32G32_SINT:
@@ -581,7 +617,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32G32_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R32G32B32A32_SINT,
-                                                   GenerateMip<R32G32S>);
+                                                   GenerateMip<R32G32S>,
+                                                   ReadColor<R32G32S, GLint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32G32_UINT:
@@ -594,7 +631,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32G32_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R32G32B32A32_UINT,
-                                                   GenerateMip<R32G32>);
+                                                   GenerateMip<R32G32>,
+                                                   ReadColor<R32G32, GLuint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32_FLOAT:
@@ -607,7 +645,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32_FLOAT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R32G32B32A32_FLOAT,
-                                                   GenerateMip<R32F>);
+                                                   GenerateMip<R32F>,
+                                                   ReadColor<R32F, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32_SINT:
@@ -620,7 +659,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R32G32B32A32_SINT,
-                                                   GenerateMip<R32S>);
+                                                   GenerateMip<R32S>,
+                                                   ReadColor<R32S, GLint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R32_UINT:
@@ -633,7 +673,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R32_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R32G32B32A32_UINT,
-                                                   GenerateMip<R32>);
+                                                   GenerateMip<R32>,
+                                                   ReadColor<R32, GLuint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_SINT:
@@ -646,7 +687,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8B8A8_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_SINT,
-                                                   GenerateMip<R8G8B8A8S>);
+                                                   GenerateMip<R8G8B8A8S>,
+                                                   ReadColor<R8G8B8A8S, GLint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_SNORM:
@@ -659,7 +701,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_SNORM,
-                                                   GenerateMip<R8G8B8A8S>);
+                                                   GenerateMip<R8G8B8A8S>,
+                                                   ReadColor<R8G8B8A8S, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_UINT:
@@ -672,7 +715,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8B8A8_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UINT,
-                                                   GenerateMip<R8G8B8A8>);
+                                                   GenerateMip<R8G8B8A8>,
+                                                   ReadColor<R8G8B8A8, GLuint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_UNORM:
@@ -685,7 +729,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8B8A8_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
-                                                   GenerateMip<R8G8B8A8>);
+                                                   GenerateMip<R8G8B8A8>,
+                                                   ReadColor<R8G8B8A8, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_UNORM_NONRENDERABLE:
@@ -698,7 +743,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
-                                                   GenerateMip<R8G8B8A8>);
+                                                   GenerateMip<R8G8B8A8>,
+                                                   ReadColor<R8G8B8A8, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_UNORM_SRGB:
@@ -711,7 +757,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM_SRGB,
-                                                   GenerateMip<R8G8B8A8>);
+                                                   GenerateMip<R8G8B8A8>,
+                                                   ReadColor<R8G8B8A8, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8B8A8_UNORM_SRGB_NONRENDERABLE:
@@ -724,7 +771,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
-                                                   GenerateMip<R8G8B8A8>);
+                                                   GenerateMip<R8G8B8A8>,
+                                                   ReadColor<R8G8B8A8, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8_SINT:
@@ -737,7 +785,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_SINT,
-                                                   GenerateMip<R8G8S>);
+                                                   GenerateMip<R8G8S>,
+                                                   ReadColor<R8G8S, GLint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8_SNORM:
@@ -750,7 +799,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_SNORM,
-                                                   GenerateMip<R8G8S>);
+                                                   GenerateMip<R8G8S>,
+                                                   ReadColor<R8G8S, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8_SNORM_NONRENDERABLE:
@@ -763,7 +813,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_SNORM,
-                                                   GenerateMip<R8G8S>);
+                                                   GenerateMip<R8G8S>,
+                                                   ReadColor<R8G8S, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8_UINT:
@@ -776,7 +827,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UINT,
-                                                   GenerateMip<R8G8>);
+                                                   GenerateMip<R8G8>,
+                                                   ReadColor<R8G8, GLuint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8_UNORM:
@@ -789,7 +841,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8G8_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
-                                                   GenerateMip<R8G8>);
+                                                   GenerateMip<R8G8>,
+                                                   ReadColor<R8G8, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8G8_UNORM_NONRENDERABLE:
@@ -802,7 +855,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
-                                                   GenerateMip<R8G8>);
+                                                   GenerateMip<R8G8>,
+                                                   ReadColor<R8G8, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8_SINT:
@@ -815,7 +869,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8_SINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_SINT,
-                                                   GenerateMip<R8S>);
+                                                   GenerateMip<R8S>,
+                                                   ReadColor<R8S, GLint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8_SNORM:
@@ -828,7 +883,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_SNORM,
-                                                   GenerateMip<R8S>);
+                                                   GenerateMip<R8S>,
+                                                   ReadColor<R8S, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8_SNORM_NONRENDERABLE:
@@ -841,7 +897,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_SNORM,
-                                                   GenerateMip<R8S>);
+                                                   GenerateMip<R8S>,
+                                                   ReadColor<R8S, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8_UINT:
@@ -854,7 +911,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UINT,
-                                                   GenerateMip<R8>);
+                                                   GenerateMip<R8>,
+                                                   ReadColor<R8, GLuint>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8_UNORM:
@@ -867,7 +925,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_R8_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
-                                                   GenerateMip<R8>);
+                                                   GenerateMip<R8>,
+                                                   ReadColor<R8, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R8_UNORM_NONRENDERABLE:
@@ -880,7 +939,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
-                                                   GenerateMip<R8>);
+                                                   GenerateMip<R8>,
+                                                   ReadColor<R8, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_R9G9B9E5_SHAREDEXP:
@@ -893,7 +953,8 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    ANGLE_FORMAT_R16G16B16A16_FLOAT,
-                                                   GenerateMip<R9G9B9E5>);
+                                                   GenerateMip<R9G9B9E5>,
+                                                   ReadColor<R9G9B9E5, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_X24_TYPELESS_G8_UINT:
@@ -906,6 +967,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_D24_UNORM_S8_UINT,
                                                    ANGLE_FORMAT_R32G32B32A32_FLOAT,
+                                                   nullptr,
                                                    nullptr);
             return formatInfo;
         }
