@@ -484,6 +484,9 @@
             'libANGLE/renderer/gl/glx/WindowSurfaceGLX.h',
             'libANGLE/renderer/gl/glx/functionsglx_typedefs.h',
             'libANGLE/renderer/gl/glx/platform_glx.h',
+            'third_party/libXNVCtrl/NVCtrl.c',
+            'third_party/libXNVCtrl/NVCtrl.h',
+            'third_party/libXNVCtrl/NVCtrlLib.h',
         ],
         'libangle_gl_cgl_sources':
         [
@@ -738,10 +741,10 @@
                             ],
                             'link_settings': {
                                 'ldflags': [
-                                    '<!@(<(pkg-config) --libs-only-L --libs-only-other x11 xi)',
+                                    '<!@(<(pkg-config) --libs-only-L --libs-only-other x11 xi xext)',
                                 ],
                                 'libraries': [
-                                    '<!@(<(pkg-config) --libs-only-l x11 xi) -ldl',
+                                    '<!@(<(pkg-config) --libs-only-l x11 xi xext) -ldl',
                                 ],
                             },
                         }],
