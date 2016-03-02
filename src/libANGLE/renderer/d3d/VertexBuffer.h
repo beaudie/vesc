@@ -68,39 +68,22 @@ class VertexBufferInterface : angle::NonCopyable
     VertexBufferInterface(BufferFactoryD3D *factory, bool dynamic);
     virtual ~VertexBufferInterface();
 
-    gl::Error reserveVertexSpace(const gl::VertexAttribute &attribute, GLsizei count, GLsizei instances);
-
     unsigned int getBufferSize() const;
+    bool empty() const { return getBufferSize() == 0; }
 
     unsigned int getSerial() const;
-
-    virtual gl::Error storeVertexAttributes(const gl::VertexAttribute &attrib,
-                                            GLenum currentValueType,
-                                            GLint start,
-                                            GLsizei count,
-                                            GLsizei instances,
-                                            unsigned int *outStreamOffset,
-                                            const uint8_t *sourceData);
 
     VertexBuffer* getVertexBuffer() const;
 
   protected:
-    virtual gl::Error reserveSpace(unsigned int size) = 0;
-
-    unsigned int getWritePosition() const;
-    void setWritePosition(unsigned int writePosition);
-
     gl::Error discard();
 
     gl::Error setBufferSize(unsigned int size);
-
-  private:
+    gl::ErrorOrResult<unsigned int> getSpaceRequired(const gl::VertexAttribute &attrib,
+                                                     GLsizei count,
+                                                     GLsizei instances) const;
     BufferFactoryD3D *const mFactory;
-
-    VertexBuffer* mVertexBuffer;
-
-    unsigned int mWritePosition;
-    unsigned int mReservedSpace;
+    std::unique_ptr<VertexBuffer> mVertexBuffer;
     bool mDynamic;
 };
 
@@ -110,8 +93,23 @@ class StreamingVertexBufferInterface : public VertexBufferInterface
     StreamingVertexBufferInterface(BufferFactoryD3D *factory, std::size_t initialSize);
     ~StreamingVertexBufferInterface();
 
-  protected:
+    gl::Error storeDynamicAttribute(const gl::VertexAttribute &attrib,
+                                    GLenum currentValueType,
+                                    GLint start,
+                                    GLsizei count,
+                                    GLsizei instances,
+                                    unsigned int *outStreamOffset,
+                                    const uint8_t *sourceData);
+
+    gl::Error reserveVertexSpace(const gl::VertexAttribute &attribute,
+                                 GLsizei count,
+                                 GLsizei instances);
+
+  private:
     gl::Error reserveSpace(unsigned int size);
+
+    unsigned int mWritePosition;
+    unsigned int mReservedSpace;
 };
 
 class StaticVertexBufferInterface : public VertexBufferInterface
@@ -120,39 +118,40 @@ class StaticVertexBufferInterface : public VertexBufferInterface
     explicit StaticVertexBufferInterface(BufferFactoryD3D *factory);
     ~StaticVertexBufferInterface();
 
-    gl::Error storeVertexAttributes(const gl::VertexAttribute &attrib,
-                                    GLenum currentValueType,
-                                    GLint start,
-                                    GLsizei count,
-                                    GLsizei instances,
-                                    unsigned int *outStreamOffset,
-                                    const uint8_t *sourceData) override;
+    gl::Error storeStaticAttribute(const gl::VertexAttribute &attrib,
+                                   GLint start,
+                                   GLsizei count,
+                                   GLsizei instances,
+                                   const uint8_t *sourceData);
 
-    bool lookupAttribute(const gl::VertexAttribute &attribute, unsigned int* outStreamFffset);
+    bool matchesAttribute(const gl::VertexAttribute &attribute) const;
+    void setAttribute(const gl::VertexAttribute &attribute);
 
-    // If a static vertex buffer is committed then no more attribute data can be added to it
-    // A new static vertex buffer should be created instead
-    void commit();
-    bool isCommitted() { return mIsCommitted; }
-
-  protected:
-    gl::Error reserveSpace(unsigned int size);
+    // For tracking if the buffer is bound to D3D, or can be garbage collected.
+    bool isBoundToD3D();
+    void bindForOneDrawCall();
+    void bindIndefinitely();
+    void releaseIndefiniteBinding();
 
   private:
-    struct VertexElement
+    class AttributeSignature final : angle::NonCopyable
     {
+      public:
+        AttributeSignature();
+        bool matchesAttribute(const gl::VertexAttribute &attrib) const;
+        void set(const gl::VertexAttribute &attrib);
+
+      private:
         GLenum type;
         GLuint size;
         GLuint stride;
         bool normalized;
         bool pureInteger;
-        size_t attributeOffset;
-
-        unsigned int streamOffset;
+        size_t offset;
     };
 
-    bool mIsCommitted;
-    std::vector<VertexElement> mCache;
+    AttributeSignature mSignature;
+    unsigned int mBindingRevision;
 };
 
 }

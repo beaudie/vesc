@@ -91,7 +91,7 @@ class VertexDataManager : angle::NonCopyable
                                 TranslatedAttribute *translated,
                                 CurrentValueState *cachedState);
 
-    void hintUnmapAllResources(const std::vector<gl::VertexAttribute> &vertexAttributes);
+    void unmapStreamingBuffer();
 
     BufferFactoryD3D *const mFactory;
 

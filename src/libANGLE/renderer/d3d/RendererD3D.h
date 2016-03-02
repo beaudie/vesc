@@ -79,7 +79,7 @@ enum RendererClass
 class BufferFactoryD3D
 {
   public:
-    BufferFactoryD3D() {}
+    BufferFactoryD3D() : mVertexBufferBindingRevision(0) {}
     virtual ~BufferFactoryD3D() {}
 
     virtual VertexBuffer *createVertexBuffer() = 0;
@@ -92,6 +92,11 @@ class BufferFactoryD3D
         const gl::VertexAttribute &attrib,
         GLsizei count,
         GLsizei instances) const = 0;
+
+    unsigned int getVertexBufferBindingRevision() const { return mVertexBufferBindingRevision; }
+
+  protected:
+    unsigned int mVertexBufferBindingRevision;
 };
 
 class RendererD3D : public Renderer, public BufferFactoryD3D

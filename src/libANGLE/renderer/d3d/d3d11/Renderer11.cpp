@@ -1504,6 +1504,9 @@ gl::Error Renderer11::applyVertexBuffer(const gl::State &state,
         return error;
     }
 
+    // Update static buffer revisioning, to allow for garbage collection.
+    mVertexBufferBindingRevision++;
+
     // If index information is passed, mark it with the current changed status.
     if (indexInfo)
     {

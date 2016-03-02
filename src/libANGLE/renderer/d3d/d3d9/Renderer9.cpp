@@ -1184,6 +1184,9 @@ gl::Error Renderer9::applyVertexBuffer(const gl::State &state,
         return error;
     }
 
+    // Update static buffer revisioning, to allow for garbage collection.
+    mVertexBufferBindingRevision++;
+
     return mVertexDeclarationCache.applyDeclaration(mDevice, mTranslatedAttribCache, state.getProgram(), instances, &mRepeatDraw);
 }
 
