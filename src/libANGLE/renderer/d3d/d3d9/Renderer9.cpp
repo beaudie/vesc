@@ -364,7 +364,6 @@ void Renderer9::initializeDevice()
     mVertexDataManager = new VertexDataManager(this);
     mIndexDataManager = new IndexDataManager(this, getRendererClass());
 
-    // TODO(jmadill): use context caps, and place in common D3D location
     mTranslatedAttribCache.resize(getRendererCaps().maxVertexAttributes);
 }
 

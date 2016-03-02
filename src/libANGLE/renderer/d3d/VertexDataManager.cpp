@@ -374,8 +374,7 @@ gl::Error VertexDataManager::storeDynamicAttribs(
     for (size_t attribIndex : dynamicAttribIndexes)
     {
         auto *dynamicAttrib = &(*translatedAttribs)[attribIndex];
-        gl::Error error     = storeDynamicAttrib(dynamicAttrib, start, count, instances);
-
+        gl::Error error = storeDynamicAttrib(dynamicAttrib, start, count, instances);
         if (error.isError())
         {
             unmapStreamingBuffer();
