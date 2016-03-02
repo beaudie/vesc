@@ -85,6 +85,11 @@ class VertexAttributeTest : public ANGLETest
             return;
         }
 
+        if (mProgram == 0)
+        {
+            initBasicProgram();
+        }
+
         GLint viewportSize[4];
         glGetIntegerv(GL_VIEWPORT, viewportSize);
 
@@ -135,42 +140,6 @@ class VertexAttributeTest : public ANGLETest
     void SetUp() override
     {
         ANGLETest::SetUp();
-
-        const std::string testVertexShaderSource = SHADER_SOURCE
-        (
-            attribute highp vec4 position;
-            attribute highp vec4 test;
-            attribute highp vec4 expected;
-
-            varying highp vec4 color;
-
-            void main(void)
-            {
-                gl_Position = position;
-                vec4 threshold = max(abs(expected) * 0.01, 1.0 / 64.0);
-                color          = vec4(lessThanEqual(abs(test - expected), threshold));
-            }
-        );
-
-        const std::string testFragmentShaderSource = SHADER_SOURCE
-        (
-            varying highp vec4 color;
-            void main(void)
-            {
-                gl_FragColor = color;
-            }
-        );
-
-        mProgram = CompileProgram(testVertexShaderSource, testFragmentShaderSource);
-        if (mProgram == 0)
-        {
-            FAIL() << "shader compilation failed.";
-        }
-
-        mTestAttrib = glGetAttribLocation(mProgram, "test");
-        mExpectedAttrib = glGetAttribLocation(mProgram, "expected");
-
-        glUseProgram(mProgram);
 
         glClearColor(0, 0, 0, 0);
         glClearDepthf(0.0);
@@ -232,6 +201,38 @@ class VertexAttributeTest : public ANGLETest
             glVertexAttrib1f(location, value);
             glDisableVertexAttribArray(location);
         }
+    }
+
+    void initBasicProgram()
+    {
+        const std::string testVertexShaderSource =
+            "attribute highp vec4 position;\n"
+            "attribute highp vec4 test;\n"
+            "attribute highp vec4 expected;\n"
+            "varying highp vec4 color;\n"
+            "void main(void)\n"
+            "{\n"
+            "gl_Position = position;\n"
+            "    vec4 threshold = max(abs(expected) * 0.01, 1.0 / 64.0);\n"
+            "    color = vec4(lessThanEqual(abs(test - expected), threshold));\n"
+            "}\n";
+
+        const std::string testFragmentShaderSource =
+            "varying highp vec4 color;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_FragColor = color;\n"
+            "}\n";
+
+        mProgram = CompileProgram(testVertexShaderSource, testFragmentShaderSource);
+        ASSERT_NE(0u, mProgram);
+
+        mTestAttrib = glGetAttribLocation(mProgram, "test");
+        ASSERT_NE(-1, mTestAttrib);
+        mExpectedAttrib = glGetAttribLocation(mProgram, "expected");
+        ASSERT_NE(-1, mExpectedAttrib);
+
+        glUseProgram(mProgram);
     }
 
     static const size_t mVertexCount = 24;
@@ -490,11 +491,71 @@ class VertexAttributeCachingTest : public VertexAttributeTest
   protected:
     VertexAttributeCachingTest() {}
 
+    void SetUp() override;
+
     template <typename DestT>
     static std::vector<GLfloat> GetExpectedData(const std::vector<GLubyte> &srcData,
                                                 GLenum attribType,
                                                 GLboolean normalized);
+
+    void initDoubleAttribProgram()
+    {
+        const std::string testVertexShaderSource =
+            "attribute highp vec4 position;\n"
+            "attribute highp vec4 test;\n"
+            "attribute highp vec4 expected;\n"
+            "attribute highp vec4 test2;\n"
+            "attribute highp vec4 expected2;\n"
+            "varying highp vec4 color;\n"
+            "void main(void)\n"
+            "{\n"
+            "gl_Position = position;\n"
+            "    vec4 threshold = max(abs(expected) * 0.01, 1.0 / 64.0);\n"
+            "    color = vec4(lessThanEqual(abs(test - expected), threshold));\n"
+            "    vec4 threshold2 = max(abs(expected2) * 0.01, 1.0 / 64.0);\n"
+            "    color += vec4(lessThanEqual(abs(test2 - expected2), threshold2));\n"
+            "}\n";
+
+        const std::string testFragmentShaderSource =
+            "varying highp vec4 color;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_FragColor = color;\n"
+            "}\n";
+
+        mProgram = CompileProgram(testVertexShaderSource, testFragmentShaderSource);
+        ASSERT_NE(0u, mProgram);
+
+        mTestAttrib = glGetAttribLocation(mProgram, "test");
+        ASSERT_NE(-1, mTestAttrib);
+        mExpectedAttrib = glGetAttribLocation(mProgram, "expected");
+        ASSERT_NE(-1, mExpectedAttrib);
+
+        glUseProgram(mProgram);
+    }
+
+    struct AttribData
+    {
+        AttribData(GLenum typeIn, GLint sizeIn, GLboolean normalizedIn, GLsizei strideIn);
+
+        GLenum type;
+        GLint size;
+        GLboolean normalized;
+        GLsizei stride;
+    };
+
+    std::vector<AttribData> mTestData;
+    std::map<GLenum, std::vector<GLfloat>> mExpectedData;
+    std::map<GLenum, std::vector<GLfloat>> mNormExpectedData;
 };
+
+VertexAttributeCachingTest::AttribData::AttribData(GLenum typeIn,
+                                                   GLint sizeIn,
+                                                   GLboolean normalizedIn,
+                                                   GLsizei strideIn)
+    : type(typeIn), size(sizeIn), normalized(normalizedIn), stride(strideIn)
+{
+}
 
 // static
 template <typename DestT>
@@ -526,17 +587,9 @@ std::vector<GLfloat> VertexAttributeCachingTest::GetExpectedData(
     return expectedData;
 }
 
-// In D3D11, we must sometimes translate buffer data into static attribute caches. We also use a
-// cache management scheme which garbage collects old attributes after we start using too much
-// cache data. This test tries to make as many attribute caches from a single buffer as possible
-// to stress-test the caching code.
-TEST_P(VertexAttributeCachingTest, BufferMulticaching)
+void VertexAttributeCachingTest::SetUp()
 {
-    if (IsAMD() && isOpenGL())
-    {
-        std::cout << "Test skipped on AMD OpenGL." << std::endl;
-        return;
-    }
+    VertexAttributeTest::SetUp();
 
     glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
 
@@ -554,19 +607,6 @@ TEST_P(VertexAttributeCachingTest, BufferMulticaching)
     GLint viewportSize[4];
     glGetIntegerv(GL_VIEWPORT, viewportSize);
 
-    struct AttribData
-    {
-        AttribData(GLenum typeIn, GLint sizeIn, GLboolean normalizedIn, GLsizei strideIn)
-            : type(typeIn), size(sizeIn), normalized(normalizedIn), stride(strideIn)
-        {
-        }
-
-        GLenum type;
-        GLint size;
-        GLboolean normalized;
-        GLsizei stride;
-    };
-
     std::vector<GLenum> attribTypes;
     attribTypes.push_back(GL_BYTE);
     attribTypes.push_back(GL_UNSIGNED_BYTE);
@@ -579,8 +619,6 @@ TEST_P(VertexAttributeCachingTest, BufferMulticaching)
         attribTypes.push_back(GL_UNSIGNED_INT);
     }
 
-    std::vector<AttribData> datas;
-
     const GLint maxSize     = 4;
     const GLsizei maxStride = 4;
 
@@ -590,44 +628,56 @@ TEST_P(VertexAttributeCachingTest, BufferMulticaching)
         {
             for (GLsizei stride = 1; stride <= maxStride; ++stride)
             {
-                datas.push_back(AttribData(attribType, attribSize, GL_FALSE, stride));
+                mTestData.push_back(AttribData(attribType, attribSize, GL_FALSE, stride));
                 if (attribType != GL_FLOAT)
                 {
-                    datas.push_back(AttribData(attribType, attribSize, GL_TRUE, stride));
+                    mTestData.push_back(AttribData(attribType, attribSize, GL_TRUE, stride));
                 }
             }
         }
     }
 
-    std::map<GLenum, std::vector<GLfloat>> expectedData;
-    std::map<GLenum, std::vector<GLfloat>> normExpectedData;
-
-    expectedData[GL_BYTE]          = GetExpectedData<GLbyte>(srcData, GL_BYTE, GL_FALSE);
-    expectedData[GL_UNSIGNED_BYTE] = GetExpectedData<GLubyte>(srcData, GL_UNSIGNED_BYTE, GL_FALSE);
-    expectedData[GL_SHORT] = GetExpectedData<GLshort>(srcData, GL_SHORT, GL_FALSE);
-    expectedData[GL_UNSIGNED_SHORT] =
+    mExpectedData[GL_BYTE]          = GetExpectedData<GLbyte>(srcData, GL_BYTE, GL_FALSE);
+    mExpectedData[GL_UNSIGNED_BYTE] = GetExpectedData<GLubyte>(srcData, GL_UNSIGNED_BYTE, GL_FALSE);
+    mExpectedData[GL_SHORT] = GetExpectedData<GLshort>(srcData, GL_SHORT, GL_FALSE);
+    mExpectedData[GL_UNSIGNED_SHORT] =
         GetExpectedData<GLushort>(srcData, GL_UNSIGNED_SHORT, GL_FALSE);
-    expectedData[GL_INT]          = GetExpectedData<GLint>(srcData, GL_INT, GL_FALSE);
-    expectedData[GL_UNSIGNED_INT] = GetExpectedData<GLuint>(srcData, GL_UNSIGNED_INT, GL_FALSE);
+    mExpectedData[GL_INT]          = GetExpectedData<GLint>(srcData, GL_INT, GL_FALSE);
+    mExpectedData[GL_UNSIGNED_INT] = GetExpectedData<GLuint>(srcData, GL_UNSIGNED_INT, GL_FALSE);
 
-    normExpectedData[GL_BYTE] = GetExpectedData<GLbyte>(srcData, GL_BYTE, GL_TRUE);
-    normExpectedData[GL_UNSIGNED_BYTE] =
+    mNormExpectedData[GL_BYTE] = GetExpectedData<GLbyte>(srcData, GL_BYTE, GL_TRUE);
+    mNormExpectedData[GL_UNSIGNED_BYTE] =
         GetExpectedData<GLubyte>(srcData, GL_UNSIGNED_BYTE, GL_TRUE);
-    normExpectedData[GL_SHORT] = GetExpectedData<GLshort>(srcData, GL_SHORT, GL_TRUE);
-    normExpectedData[GL_UNSIGNED_SHORT] =
+    mNormExpectedData[GL_SHORT] = GetExpectedData<GLshort>(srcData, GL_SHORT, GL_TRUE);
+    mNormExpectedData[GL_UNSIGNED_SHORT] =
         GetExpectedData<GLushort>(srcData, GL_UNSIGNED_SHORT, GL_TRUE);
-    normExpectedData[GL_INT]          = GetExpectedData<GLint>(srcData, GL_INT, GL_TRUE);
-    normExpectedData[GL_UNSIGNED_INT] = GetExpectedData<GLuint>(srcData, GL_UNSIGNED_INT, GL_TRUE);
+    mNormExpectedData[GL_INT]          = GetExpectedData<GLint>(srcData, GL_INT, GL_TRUE);
+    mNormExpectedData[GL_UNSIGNED_INT] = GetExpectedData<GLuint>(srcData, GL_UNSIGNED_INT, GL_TRUE);
+}
+
+// In D3D11, we must sometimes translate buffer data into static attribute caches. We also use a
+// cache management scheme which garbage collects old attributes after we start using too much
+// cache data. This test tries to make as many attribute caches from a single buffer as possible
+// to stress-test the caching code.
+TEST_P(VertexAttributeCachingTest, BufferMulticaching)
+{
+    if (IsAMD() && isOpenGL())
+    {
+        std::cout << "Test skipped on AMD OpenGL." << std::endl;
+        return;
+    }
+
+    initBasicProgram();
 
     glEnableVertexAttribArray(mTestAttrib);
     glEnableVertexAttribArray(mExpectedAttrib);
 
     ASSERT_GL_NO_ERROR();
 
-    for (const auto &data : datas)
+    for (const auto &data : mTestData)
     {
         const auto &expected =
-            (data.normalized) ? normExpectedData[data.type] : expectedData[data.type];
+            (data.normalized) ? mNormExpectedData[data.type] : mExpectedData[data.type];
 
         GLsizei baseStride = static_cast<GLsizei>(data.size) * data.stride;
         GLsizei stride     = TypeStride(data.type) * baseStride;
@@ -638,6 +688,59 @@ TEST_P(VertexAttributeCachingTest, BufferMulticaching)
         glVertexAttribPointer(mExpectedAttrib, data.size, GL_FLOAT, GL_FALSE,
                               sizeof(GLfloat) * baseStride, expected.data());
         drawQuad(mProgram, "position", 0.5f);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 255, 255, 255, 255);
+    }
+}
+
+// With D3D11 dirty bits for VertxArray11, we can leave vertex state unchanged if there aren't any
+// GL calls that affect it. This test targets leaving one vertex attribute unchanged between draw
+// calls while changing another vertex attribute enough that it clears the static buffer cache
+// after enough iterations. It validates the unchanged attributes don't get deleted incidentally.
+TEST_P(VertexAttributeCachingTest, BufferMulticachingWithOneUnchangedAttrib)
+{
+    if (IsAMD() && isOpenGL())
+    {
+        std::cout << "Test skipped on AMD OpenGL." << std::endl;
+        return;
+    }
+
+    initDoubleAttribProgram();
+
+    GLint testAttrib2Location = glGetAttribLocation(mProgram, "test2");
+    ASSERT_NE(-1, testAttrib2Location);
+    GLint expectedAttrib2Location = glGetAttribLocation(mProgram, "expected2");
+    ASSERT_NE(-1, expectedAttrib2Location);
+
+    glEnableVertexAttribArray(mTestAttrib);
+    glEnableVertexAttribArray(mExpectedAttrib);
+    glEnableVertexAttribArray(testAttrib2Location);
+    glEnableVertexAttribArray(expectedAttrib2Location);
+
+    ASSERT_GL_NO_ERROR();
+
+    // Use an attribute that we know must be converted. This is a bit sensitive.
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    glVertexAttribPointer(testAttrib2Location, 3, GL_UNSIGNED_SHORT, GL_FALSE, 6, nullptr);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(expectedAttrib2Location, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 3,
+                          mExpectedData[GL_UNSIGNED_SHORT].data());
+
+    for (const auto &data : mTestData)
+    {
+        const auto &expected =
+            (data.normalized) ? mNormExpectedData[data.type] : mExpectedData[data.type];
+
+        GLsizei baseStride = static_cast<GLsizei>(data.size) * data.stride;
+        GLsizei stride     = TypeStride(data.type) * baseStride;
+
+        glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+        glVertexAttribPointer(mTestAttrib, data.size, data.type, data.normalized, stride, nullptr);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glVertexAttribPointer(mExpectedAttrib, data.size, GL_FLOAT, GL_FALSE,
+                              sizeof(GLfloat) * baseStride, expected.data());
+        drawQuad(mProgram, "position", 0.5f);
+
         ASSERT_GL_NO_ERROR();
         EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 255, 255, 255, 255);
     }
