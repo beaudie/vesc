@@ -12,6 +12,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/Device.h"
 #include "libANGLE/Surface.h"
+#include "libANGLE/Stream.h"
 #include "libANGLE/validationEGL.h"
 
 #include "common/debug.h"
@@ -549,6 +550,109 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY ReleaseDeviceANGLE(EGLDeviceEXT device)
 
     SafeDelete(dev);
 
+    return EGL_TRUE;
+}
+
+// EGL_KHR_STREAM
+EGLStreamKHR EGLAPIENTRY CreateStreamKHR(EGLDisplay dpy, const EGLint *attrib_list)
+{
+    Display *display = static_cast<Display *>(dpy);
+    AttributeMap attributes(attrib_list);
+
+    Error error = ValidateCreateStreamKHR(display, attributes);
+    if (error.isError())
+    {
+        SetGlobalError(error);
+        return EGL_NO_STREAM_KHR;
+    }
+
+    Stream *stream;
+    error = display->createStream(attributes, &stream);
+    if (error.isError())
+    {
+        SetGlobalError(error);
+        return EGL_NO_STREAM_KHR;
+    }
+
+    return static_cast<EGLStreamKHR>(stream);
+}
+
+EGLBoolean EGLAPIENTRY DestroyStreamKHR(EGLDisplay dpy, EGLStreamKHR stream)
+{
+    Display *display     = static_cast<Display *>(dpy);
+    Stream *streamObject = static_cast<Stream *>(stream);
+
+    Error error = ValidateDestroyStreamKHR(display, streamObject);
+    if (error.isError())
+    {
+        SetGlobalError(error);
+        return EGL_FALSE;
+    }
+
+    display->destroyStream(streamObject);
+    return EGL_TRUE;
+}
+
+EGLBoolean EGLAPIENTRY StreamAttribKHR(EGLDisplay dpy,
+                                       EGLStreamKHR stream,
+                                       EGLenum attribute,
+                                       EGLint value)
+{
+    Display *display     = static_cast<Display *>(dpy);
+    Stream *streamObject = static_cast<Stream *>(stream);
+
+    Error error = ValidateStreamAttribKHR(display, streamObject, attribute, value);
+    if (error.isError())
+    {
+        SetGlobalError(error);
+        return EGL_FALSE;
+    }
+
+    error = streamObject->streamAttribute(attribute, value);
+    if (error.isError())
+    {
+        SetGlobalError(error);
+        return EGL_FALSE;
+    }
+
+    return EGL_TRUE;
+}
+
+EGLBoolean EGLAPIENTRY QueryStreamKHR(EGLDisplay dpy,
+                                      EGLStreamKHR stream,
+                                      EGLenum attribute,
+                                      EGLint *value)
+{
+    Display *display     = static_cast<Display *>(dpy);
+    Stream *streamObject = static_cast<Stream *>(stream);
+
+    Error error = ValidateQueryStreamKHR(display, streamObject, attribute, value);
+    if (error.isError())
+    {
+        SetGlobalError(error);
+        return EGL_FALSE;
+    }
+
+    *value = streamObject->queryStream(attribute);
+    return EGL_TRUE;
+}
+
+EGLBoolean EGLAPIENTRY QueryStreamu64KHR(EGLDisplay dpy,
+                                         EGLStreamKHR stream,
+                                         EGLenum attribute,
+                                         EGLuint64KHR *value)
+{
+    Display *display     = static_cast<Display *>(dpy);
+    Stream *streamObject = static_cast<Stream *>(stream);
+
+    Error error = ValidateQueryStreamu64KHR(display, streamObject, attribute, value);
+    if (error.isError())
+    {
+        SetGlobalError(error);
+        return EGL_FALSE;
+    }
+
+    *value = streamObject->queryStreamu64(attribute);
     return EGL_TRUE;
 }
 }
