@@ -30,6 +30,7 @@ class ShaderImpl;
 class TextureImpl;
 class TransformFeedbackImpl;
 class VertexArrayImpl;
+class StreamImpl;
 
 class ImplFactory : angle::NonCopyable
 {
@@ -67,6 +68,9 @@ class ImplFactory : angle::NonCopyable
 
     // Sampler object creation
     virtual SamplerImpl *createSampler() = 0;
+
+    // Stream creation
+    virtual StreamImpl *createStream() = 0;
 };
 
 }
