@@ -63,6 +63,11 @@ gl::Context *DisplayGL::createContext(const egl::Config *config,
     return new gl::Context(config, shareContext, mRenderer, attribs);
 }
 
+StreamImpl *DisplayGL::createStream(const egl::AttributeMap &attribs)
+{
+    return nullptr;
+}
+
 egl::Error DisplayGL::makeCurrent(egl::Surface *drawSurface, egl::Surface *readSurface, gl::Context *context)
 {
     if (!drawSurface)
