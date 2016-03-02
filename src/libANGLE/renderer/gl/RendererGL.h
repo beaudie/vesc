@@ -88,6 +88,9 @@ class RendererGL : public Renderer
     // Sampler object creation
     SamplerImpl *createSampler() override;
 
+    // Stream Creation
+    StreamImpl *createStream() override;
+
     // EXT_debug_marker
     void insertEventMarker(GLsizei length, const char *marker) override;
     void pushGroupMarker(GLsizei length, const char *marker) override;

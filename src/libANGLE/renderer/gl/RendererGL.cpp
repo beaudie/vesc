@@ -324,6 +324,12 @@ SamplerImpl *RendererGL::createSampler()
     return new SamplerGL(mFunctions, mStateManager);
 }
 
+StreamImpl *RendererGL::createStream()
+{
+    // Streams are not supported under OpenGL
+    return nullptr;
+}
+
 void RendererGL::insertEventMarker(GLsizei length, const char *marker)
 {
     mFunctions->debugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_MARKER, 0,
