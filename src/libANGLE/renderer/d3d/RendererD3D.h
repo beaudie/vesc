@@ -99,6 +99,8 @@ class BufferFactoryD3D
     unsigned int mVertexBufferBindingRevision;
 };
 
+using AttribIndexArray = std::array<int, gl::MAX_VERTEX_ATTRIBS>;
+
 class RendererD3D : public Renderer, public BufferFactoryD3D
 {
   public:
