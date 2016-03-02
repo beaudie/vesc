@@ -109,6 +109,8 @@
             'libANGLE/Shader.h',
             'libANGLE/State.cpp',
             'libANGLE/State.h',
+            'libANGLE/Stream.cpp',
+            'libANGLE/Stream.h',
             'libANGLE/Surface.cpp',
             'libANGLE/Surface.h',
             'libANGLE/Texture.cpp',
