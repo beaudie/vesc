@@ -117,8 +117,8 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog)
         GLint infoLogLength = 0;
         mFunctions->getProgramiv(mProgramID, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-        std::vector<char> buf(infoLogLength);
-        mFunctions->getProgramInfoLog(mProgramID, infoLogLength, nullptr, &buf[0]);
+        std::vector<char> buf(infoLogLength + 1);
+        mFunctions->getProgramInfoLog(mProgramID, infoLogLength + 1, nullptr, &buf[0]);
 
         mFunctions->deleteProgram(mProgramID);
         mProgramID = 0;
