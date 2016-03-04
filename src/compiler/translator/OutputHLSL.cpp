@@ -3285,9 +3285,9 @@ void OutputHLSL::outputConstructor(TInfoSinkBase &out,
 
     if (visit == PreVisit)
     {
-        mStructureHLSL->addConstructor(type, name, parameters);
+        TString constructorName = mStructureHLSL->addConstructor(type, name, parameters);
 
-        out << name << "(";
+        out << constructorName << "(";
     }
     else if (visit == InVisit)
     {
