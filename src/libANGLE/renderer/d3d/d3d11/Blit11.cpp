@@ -729,7 +729,7 @@ gl::Error Blit11::swizzleTexture(ID3D11ShaderResourceView *source,
     stateManager->setShaderResource(gl::SAMPLER_PIXEL, 0, nullptr);
 
     // Apply render target
-    mRenderer->setOneTimeRenderTarget(dest);
+    stateManager->setOneTimeRenderTarget(dest);
 
     // Set the viewport
     D3D11_VIEWPORT viewport;
@@ -752,8 +752,6 @@ gl::Error Blit11::swizzleTexture(ID3D11ShaderResourceView *source,
 
     // Unbind textures and render targets and vertex buffer
     stateManager->setShaderResource(gl::SAMPLER_PIXEL, 0, nullptr);
-
-    mRenderer->unapplyRenderTargets();
 
     UINT zero = 0;
     ID3D11Buffer *const nullBuffer = nullptr;
@@ -870,7 +868,7 @@ gl::Error Blit11::copyTexture(ID3D11ShaderResourceView *source,
     stateManager->setShaderResource(gl::SAMPLER_PIXEL, 0, nullptr);
 
     // Apply render target
-    mRenderer->setOneTimeRenderTarget(dest);
+    stateManager->setOneTimeRenderTarget(dest);
 
     // Set the viewport
     D3D11_VIEWPORT viewport;
@@ -903,8 +901,6 @@ gl::Error Blit11::copyTexture(ID3D11ShaderResourceView *source,
 
     // Unbind textures and render targets and vertex buffer
     stateManager->setShaderResource(gl::SAMPLER_PIXEL, 0, nullptr);
-
-    mRenderer->unapplyRenderTargets();
 
     UINT zero = 0;
     ID3D11Buffer *const nullBuffer = nullptr;
@@ -1021,8 +1017,6 @@ gl::Error Blit11::copyDepth(ID3D11ShaderResourceView *source, const gl::Box &sou
 
     // Unbind textures and render targets and vertex buffer
     stateManager->setShaderResource(gl::SAMPLER_PIXEL, 0, nullptr);
-
-    mRenderer->unapplyRenderTargets();
 
     UINT zero = 0;
     ID3D11Buffer *const nullBuffer = nullptr;

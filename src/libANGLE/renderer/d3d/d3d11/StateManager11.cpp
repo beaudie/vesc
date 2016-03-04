@@ -799,10 +799,10 @@ void StateManager11::invalidateEverything()
     invalidateBoundViews();
 }
 
-void StateManager11::setRenderTarget(ID3D11RenderTargetView *renderTarget,
-                                     ID3D11DepthStencilView *depthStencil)
+void StateManager11::setOneTimeRenderTarget(ID3D11RenderTargetView *renderTargetView)
 {
-    mRenderer->getDeviceContext()->OMSetRenderTargets(1, &renderTarget, depthStencil);
+    mRenderer->getDeviceContext()->OMSetRenderTargets(1, &renderTargetView, nullptr);
+    mRenderTargetIsDirty = true;
 }
 
 void StateManager11::onBeginQuery(Query11 *query)

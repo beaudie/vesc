@@ -81,8 +81,8 @@ class StateManager11 final : angle::NonCopyable
     void invalidateRenderTarget();
     void invalidateBoundViews();
     void invalidateEverything();
-    void setRenderTarget(ID3D11RenderTargetView *renderTarget,
-                         ID3D11DepthStencilView *depthStencil);
+
+    void setOneTimeRenderTarget(ID3D11RenderTargetView *renderTargetView);
 
     void onBeginQuery(Query11 *query);
     void onDeleteQueryObject(Query11 *query);
