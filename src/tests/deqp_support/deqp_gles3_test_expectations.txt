@@ -582,9 +582,11 @@
 
 // Linux only failures
 
+// UBO tests trigger crashes when getting the program info log, skip them until this is fixed.
+1323 LINUX : dEQP-GLES3.functional.ubo.* = SKIP
+
 1323 LINUX : dEQP-GLES3.functional.fbo.blit.conversion.* = FAIL
 1323 LINUX : dEQP-GLES3.functional.fbo.color.repeated_clear.blit.* = FAIL
-1323 LINUX : dEQP-GLES3.functional.ubo.* = FAIL
 1323 LINUX : dEQP-GLES3.functional.default_vertex_attrib.int.vertex_attribi_4i = FAIL
 1323 LINUX : dEQP-GLES3.functional.default_vertex_attrib.int.vertex_attribi_4iv = FAIL
 1323 LINUX : dEQP-GLES3.functional.default_vertex_attrib.ivec2.vertex_attribi_4i = FAIL
