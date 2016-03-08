@@ -179,6 +179,7 @@ void ShInitBuiltInResources(ShBuiltInResources* resources)
 
     resources->MaxExpressionComplexity = 256;
     resources->MaxCallStackDepth = 256;
+    resources->MaxFunctionParameters   = 1024;
 }
 
 //
