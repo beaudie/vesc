@@ -567,7 +567,7 @@ void Context::deleteTransformFeedback(GLuint transformFeedback)
 
 void Context::deleteFramebuffer(GLuint framebuffer)
 {
-    FramebufferMap::iterator framebufferObject = mFramebufferMap.find(framebuffer);
+    auto framebufferObject = mFramebufferMap.find(framebuffer);
 
     if (framebufferObject != mFramebufferMap.end())
     {
@@ -581,7 +581,7 @@ void Context::deleteFramebuffer(GLuint framebuffer)
 
 void Context::deleteFenceNV(GLuint fence)
 {
-    FenceNVMap::iterator fenceObject = mFenceNVMap.find(fence);
+    auto fenceObject = mFenceNVMap.find(fence);
 
     if (fenceObject != mFenceNVMap.end())
     {
@@ -593,7 +593,7 @@ void Context::deleteFenceNV(GLuint fence)
 
 void Context::deleteQuery(GLuint query)
 {
-    QueryMap::iterator queryObject = mQueryMap.find(query);
+    auto queryObject = mQueryMap.find(query);
     if (queryObject != mQueryMap.end())
     {
         mQueryHandleAllocator.release(queryObject->first);
@@ -924,7 +924,7 @@ Framebuffer *Context::getFramebuffer(unsigned int handle) const
 
 FenceNV *Context::getFenceNV(unsigned int handle)
 {
-    FenceNVMap::iterator fence = mFenceNVMap.find(handle);
+    auto fence = mFenceNVMap.find(handle);
 
     if (fence == mFenceNVMap.end())
     {
@@ -938,7 +938,7 @@ FenceNV *Context::getFenceNV(unsigned int handle)
 
 Query *Context::getQuery(unsigned int handle, bool create, GLenum type)
 {
-    QueryMap::iterator query = mQueryMap.find(handle);
+    auto query = mQueryMap.find(handle);
 
     if (query == mQueryMap.end())
     {
