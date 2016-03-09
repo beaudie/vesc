@@ -273,6 +273,8 @@ bool ValidateCompressedTexSubImage3D(Context *context,
                                      GLsizei imageSize,
                                      const GLvoid *data);
 
+bool ValidateBeginTransformFeedback(Context *context, GLenum primitiveMode);
+
 }  // namespace gl
 
 #endif // LIBANGLE_VALIDATION_ES3_H_

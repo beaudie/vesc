@@ -114,6 +114,9 @@ class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
                          const std::string &positionAttribName,
                          GLfloat positionAttribZ,
                          GLfloat positionAttribXYScale);
+    static void drawQuadWithCurrentProgram(GLuint program,
+                                           const std::string &positionAttribName,
+                                           GLfloat positionAttribZ);
     static GLuint compileShader(GLenum type, const std::string &source);
     static bool extensionEnabled(const std::string &extName);
     static bool eglClientExtensionEnabled(const std::string &extName);
@@ -145,6 +148,11 @@ class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
   private:
     bool createEGLContext();
     bool destroyEGLContext();
+
+    static void drawQuadWithCurrentProgram(GLuint program,
+                                           const std::string &positionAttribName,
+                                           GLfloat positionAttribZ,
+                                           GLfloat positionAttribXYScale);
 
     void checkD3D11SDKLayersMessages();
 
