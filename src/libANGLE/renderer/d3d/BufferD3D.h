@@ -44,7 +44,7 @@ class BufferD3D : public BufferImpl
     StaticIndexBufferInterface *getStaticIndexBuffer();
 
     void initializeStaticData();
-    void invalidateStaticData();
+    virtual void invalidateStaticData();
 
     void promoteStaticUsage(int dataSize);
 
