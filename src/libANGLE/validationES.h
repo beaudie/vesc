@@ -205,6 +205,7 @@ bool ValidateBindVertexArrayBase(Context *context, GLuint array);
 bool ValidateDeleteVertexArraysBase(Context *context, GLsizei n);
 bool ValidateGenVertexArraysBase(Context *context, GLsizei n);
 
+bool ValidateLinkProgram(Context *context, GLuint program);
 bool ValidateProgramBinaryBase(Context *context,
                                GLuint program,
                                GLenum binaryFormat,
@@ -216,6 +217,7 @@ bool ValidateGetProgramBinaryBase(Context *context,
                                   GLsizei *length,
                                   GLenum *binaryFormat,
                                   void *binary);
+bool ValidateUseProgram(Context *context, GLuint program);
 
 bool ValidateCopyTexImage2D(ValidationContext *context,
                             GLenum target,
