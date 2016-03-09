@@ -205,6 +205,7 @@ bool ValidateBindVertexArrayBase(Context *context, GLuint array);
 bool ValidateDeleteVertexArraysBase(Context *context, GLsizei n);
 bool ValidateGenVertexArraysBase(Context *context, GLsizei n);
 
+bool ValidateLinkProgram(Context *context, GLuint program);
 bool ValidateProgramBinaryBase(Context *context,
                                GLuint program,
                                GLenum binaryFormat,

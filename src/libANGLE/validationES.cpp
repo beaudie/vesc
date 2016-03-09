@@ -2464,6 +2464,19 @@ bool ValidateGenVertexArraysBase(Context *context, GLsizei n)
     return true;
 }
 
+bool ValidateLinkProgram(Context *context, GLuint program)
+{
+    if (context->getState().hasActiveTransformFeedback(program))
+    {
+        // ES 3.0.4 section 2.15 page 91
+        context->recordError(Error(GL_INVALID_OPERATION,
+                                   "Cannot link program while program is associated with an active "
+                                   "transform feedback object."));
+        return false;
+    }
+    return true;
+}
+
 bool ValidateProgramBinaryBase(Context *context,
                                GLuint program,
                                GLenum binaryFormat,
@@ -2481,6 +2494,15 @@ bool ValidateProgramBinaryBase(Context *context,
         programBinaryFormats.end())
     {
         context->recordError(Error(GL_INVALID_ENUM, "Program binary format is not valid."));
+        return false;
+    }
+
+    if (context->getState().hasActiveTransformFeedback(program))
+    {
+        // ES 3.0.4 section 2.15 page 91
+        context->recordError(Error(GL_INVALID_OPERATION,
+                                   "Cannot change program binary while program is associated with "
+                                   "an active transform feedback object."));
         return false;
     }
 

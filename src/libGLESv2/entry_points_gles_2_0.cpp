@@ -2971,6 +2971,11 @@ void GL_APIENTRY LinkProgram(GLuint program)
             return;
         }
 
+        if (!context->skipValidation() && !ValidateLinkProgram(context, program))
+        {
+            return;
+        }
+
         Error error = programObject->link(context->getData());
         if (error.isError())
         {
@@ -3849,6 +3854,15 @@ void GL_APIENTRY UseProgram(GLuint program)
         if (program != 0 && !programObject->isLinked())
         {
             context->recordError(Error(GL_INVALID_OPERATION));
+            return;
+        }
+
+        if (context->getState().isTransformFeedbackActiveUnpaused())
+        {
+            // ES 3.0.4 section 2.15 page 91
+            context->recordError(
+                Error(GL_INVALID_OPERATION,
+                      "Cannot change active program while transform feedback is unpaused."));
             return;
         }
 
