@@ -975,6 +975,27 @@ void State::detachTransformFeedback(GLuint transformFeedback)
     }
 }
 
+void State::addActiveTransformFeedback()
+{
+    mTransformFeedbackPrograms[mTransformFeedback.id()] = mProgram->id();
+    mActiveTransformFeedbackPrograms.insert(mProgram->id());
+}
+
+void State::removeActiveTransformFeedback()
+{
+    ASSERT(mTransformFeedbackPrograms.find(mTransformFeedback.id()) !=
+           mTransformFeedbackPrograms.end());
+    GLuint program = mTransformFeedbackPrograms[mTransformFeedback.id()];
+    mTransformFeedbackPrograms.erase(mTransformFeedback.id());
+    ASSERT(hasActiveTransformFeedback(program));
+    mActiveTransformFeedbackPrograms.erase(program);
+}
+
+bool State::hasActiveTransformFeedback(GLuint program)
+{
+    return mActiveTransformFeedbackPrograms.find(program) != mActiveTransformFeedbackPrograms.end();
+}
+
 bool State::isQueryActive() const
 {
     for (auto &iter : mActiveQueries)

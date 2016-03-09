@@ -11,6 +11,7 @@
 
 #include <bitset>
 #include <memory>
+#include <set>
 
 #include "common/angleutils.h"
 #include "libANGLE/Debug.h"
@@ -193,6 +194,11 @@ class State : angle::NonCopyable
     TransformFeedback *getCurrentTransformFeedback() const;
     bool isTransformFeedbackActiveUnpaused() const;
     void detachTransformFeedback(GLuint transformFeedback);
+
+    // Set transform feedback active/inactive
+    void addActiveTransformFeedback();
+    void removeActiveTransformFeedback();
+    bool hasActiveTransformFeedback(GLuint program);
 
     // Query binding manipulation
     bool isQueryActive() const;
@@ -418,6 +424,11 @@ class State : angle::NonCopyable
 
     typedef std::map<GLenum, BindingPointer<Query>> ActiveQueryMap;
     ActiveQueryMap mActiveQueries;
+
+    // Records which program is associated with each active transform feedback.
+    std::map<GLuint, GLuint> mTransformFeedbackPrograms;
+    // Program objects with an active transform feedback.
+    std::set<GLuint> mActiveTransformFeedbackPrograms;
 
     BindingPointer<Buffer> mGenericUniformBuffer;
     typedef std::vector<OffsetBindingPointer<Buffer>> BufferVector;

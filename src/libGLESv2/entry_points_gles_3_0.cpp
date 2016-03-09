@@ -790,6 +790,7 @@ void GL_APIENTRY BeginTransformFeedback(GLenum primitiveMode)
         else
         {
             transformFeedback->begin(primitiveMode);
+            context->getState().addActiveTransformFeedback();
         }
     }
 }
@@ -816,6 +817,7 @@ void GL_APIENTRY EndTransformFeedback(void)
             return;
         }
 
+        context->getState().removeActiveTransformFeedback();
         transformFeedback->end();
     }
 }
