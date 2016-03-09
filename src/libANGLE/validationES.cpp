@@ -2265,7 +2265,7 @@ bool ValidateDiscardFramebufferBase(Context *context, GLenum target, GLsizei num
 
     for (GLsizei i = 0; i < numAttachments; ++i)
     {
-        if (attachments[i] >= GL_COLOR_ATTACHMENT0 && attachments[i] <= GL_COLOR_ATTACHMENT15)
+        if (attachments[i] >= GL_COLOR_ATTACHMENT0 && attachments[i] <= GL_COLOR_ATTACHMENT31)
         {
             if (defaultFramebuffer)
             {
@@ -2573,9 +2573,9 @@ bool ValidateDrawBuffersBase(ValidationContext *context, GLsizei n, const GLenum
              bufs[colorAttachment] >= maxColorAttachment))
         {
             // Value in bufs is not NONE, BACK, or GL_COLOR_ATTACHMENTi
-            // In the 3.0 specs, the error should return GL_INVALID_OPERATION.
-            // When we move to 3.1 specs, we should change the error to be GL_INVALID_ENUM
-            context->recordError(Error(GL_INVALID_OPERATION, "Invalid buffer value"));
+            // The 3.0 specs say to generate GL_INVALID_OPERATION here, but this
+            // was fixed to GL_INVALID_ENUM in later specs, which dEQP also expects.
+            context->recordError(Error(GL_INVALID_ENUM, "Invalid buffer value"));
             return false;
         }
         else if (bufs[colorAttachment] != GL_NONE && bufs[colorAttachment] != attachment &&
