@@ -158,9 +158,26 @@ void ANGLETest::drawQuad(GLuint program,
                          GLfloat positionAttribZ,
                          GLfloat positionAttribXYScale)
 {
-    GLint positionLocation = glGetAttribLocation(program, positionAttribName.c_str());
-
     glUseProgram(program);
+
+    drawQuadWithCurrentProgram(program, positionAttribName, positionAttribZ, positionAttribXYScale);
+
+    glUseProgram(0);
+}
+
+void ANGLETest::drawQuadWithCurrentProgram(GLuint program,
+                                           const std::string &positionAttribName,
+                                           GLfloat positionAttribZ)
+{
+    drawQuadWithCurrentProgram(program, positionAttribName, positionAttribZ, 1.0f);
+}
+
+void ANGLETest::drawQuadWithCurrentProgram(GLuint program,
+                                           const std::string &positionAttribName,
+                                           GLfloat positionAttribZ,
+                                           GLfloat positionAttribXYScale)
+{
+    GLint positionLocation = glGetAttribLocation(program, positionAttribName.c_str());
 
     const GLfloat vertices[] = {
         -1.0f * positionAttribXYScale,  1.0f * positionAttribXYScale, positionAttribZ,
@@ -179,8 +196,6 @@ void ANGLETest::drawQuad(GLuint program,
 
     glDisableVertexAttribArray(positionLocation);
     glVertexAttribPointer(positionLocation, 4, GL_FLOAT, GL_FALSE, 0, NULL);
-
-    glUseProgram(0);
 }
 
 GLuint ANGLETest::compileShader(GLenum type, const std::string &source)
