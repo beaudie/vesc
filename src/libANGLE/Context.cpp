@@ -2000,6 +2000,28 @@ size_t Context::getExtensionStringCount() const
     return mExtensionStrings.size();
 }
 
+void Context::beginTransformFeedback(GLenum primitiveMode)
+{
+    TransformFeedback *transformFeedback = getState().getCurrentTransformFeedback();
+    ASSERT(transformFeedback != nullptr);
+    ASSERT(!transformFeedback->isPaused());
+
+    transformFeedback->begin(primitiveMode);
+    transformFeedback->bindProgram(getState().getProgram());
+}
+
+bool Context::hasActiveTransformFeedback(GLuint program) const
+{
+    for (auto pair : mTransformFeedbackMap)
+    {
+        if (pair.second != nullptr && pair.second->bindsProgram(program))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void Context::initCaps(GLuint clientVersion)
 {
     mCaps = mRenderer->getRendererCaps();
