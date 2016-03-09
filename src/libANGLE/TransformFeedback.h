@@ -24,6 +24,7 @@ namespace gl
 {
 class Buffer;
 struct Caps;
+class Program;
 
 class TransformFeedback final : public RefCountObject, public LabeledObject
 {
@@ -42,6 +43,9 @@ class TransformFeedback final : public RefCountObject, public LabeledObject
     bool isActive() const;
     bool isPaused() const;
     GLenum getPrimitiveMode() const;
+
+    void bindProgram(Program *program);
+    bool bindsProgram(GLuint program) const;
 
     void bindGenericBuffer(Buffer *buffer);
     const BindingPointer<Buffer> &getGenericBuffer() const;
@@ -63,6 +67,8 @@ class TransformFeedback final : public RefCountObject, public LabeledObject
     bool mActive;
     GLenum mPrimitiveMode;
     bool mPaused;
+
+    Program *mProgram;
 
     BindingPointer<Buffer> mGenericBuffer;
     std::vector<OffsetBindingPointer<Buffer>> mIndexedBuffers;
