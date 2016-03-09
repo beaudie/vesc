@@ -8,6 +8,7 @@
 
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Caps.h"
+#include "libANGLE/Program.h"
 #include "libANGLE/renderer/ImplFactory.h"
 #include "libANGLE/renderer/TransformFeedbackImpl.h"
 
@@ -62,6 +63,7 @@ void TransformFeedback::end()
     mPrimitiveMode = GL_NONE;
     mPaused = false;
     mImplementation->end();
+    mProgram.set(nullptr);
 }
 
 void TransformFeedback::pause()
@@ -89,6 +91,16 @@ bool TransformFeedback::isPaused() const
 GLenum TransformFeedback::getPrimitiveMode() const
 {
     return mPrimitiveMode;
+}
+
+void TransformFeedback::bindProgram(Program *program)
+{
+    mProgram.set(program);
+}
+
+bool TransformFeedback::bindsProgram(GLuint program) const
+{
+    return mProgram.get() != nullptr && mProgram->id() == program;
 }
 
 void TransformFeedback::bindGenericBuffer(Buffer *buffer)
