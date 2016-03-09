@@ -1507,7 +1507,7 @@ WorkaroundsD3D GenerateWorkarounds(D3D_FEATURE_LEVEL featureLevel)
     workarounds.mrtPerfWorkaround = true;
     workarounds.setDataFasterThanImageUpload = true;
     workarounds.zeroMaxLodWorkaround = (featureLevel <= D3D_FEATURE_LEVEL_9_3);
-    workarounds.useInstancedPointSpriteEmulation = (featureLevel <= D3D_FEATURE_LEVEL_9_3);
+    workarounds.useInstancedPointSpriteEmulation = true;
     return workarounds;
 }
 
