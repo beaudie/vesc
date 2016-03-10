@@ -38,6 +38,9 @@ class Stream final : angle::NonCopyable
     EGLuint64KHR getProducerFrame() const;
     EGLuint64KHR getConsumerFrame() const;
 
+    void setConsumerAcquireTimeout(EGLint timeout);
+    EGLint getConsumerAcquireTimeout() const;
+
   private:
     // Implementation
     rx::StreamImpl *mImplementation;
@@ -47,7 +50,10 @@ class Stream final : angle::NonCopyable
     EGLuint64KHR mProducerFrame;
     EGLuint64KHR mConsumerFrame;
     EGLint mConsumerLatency;
+
+    // EGL gltexture consumer attributes
+    EGLint mConsumerAcquireTimeout;
 };
-} // namespace egl
+}  // namespace egl
 
 #endif  // LIBANGLE_STREAM_H_
