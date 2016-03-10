@@ -815,7 +815,7 @@ void GL_APIENTRY DeleteBuffers(GLsizei n, const GLuint* buffers)
     {
         if (n < 0)
         {
-            context->recordError(Error(GL_INVALID_VALUE));
+            context->recordError(Error(GL_INVALID_VALUE, "n < 0"));
             return;
         }
 
@@ -835,7 +835,7 @@ void GL_APIENTRY DeleteFramebuffers(GLsizei n, const GLuint* framebuffers)
     {
         if (n < 0)
         {
-            context->recordError(Error(GL_INVALID_VALUE));
+            context->recordError(Error(GL_INVALID_VALUE, "n < 0"));
             return;
         }
 
@@ -888,7 +888,7 @@ void GL_APIENTRY DeleteRenderbuffers(GLsizei n, const GLuint* renderbuffers)
     {
         if (n < 0)
         {
-            context->recordError(Error(GL_INVALID_VALUE));
+            context->recordError(Error(GL_INVALID_VALUE, "n < 0"));
             return;
         }
 
@@ -938,7 +938,7 @@ void GL_APIENTRY DeleteTextures(GLsizei n, const GLuint* textures)
     {
         if (n < 0)
         {
-            context->recordError(Error(GL_INVALID_VALUE));
+            context->recordError(Error(GL_INVALID_VALUE, "n < 0"));
             return;
         }
 
@@ -1252,7 +1252,7 @@ void GL_APIENTRY GenBuffers(GLsizei n, GLuint* buffers)
     {
         if (n < 0)
         {
-            context->recordError(Error(GL_INVALID_VALUE));
+            context->recordError(Error(GL_INVALID_VALUE, "n < 0"));
             return;
         }
 
@@ -1350,7 +1350,7 @@ void GL_APIENTRY GenFramebuffers(GLsizei n, GLuint* framebuffers)
     {
         if (n < 0)
         {
-            context->recordError(Error(GL_INVALID_VALUE));
+            context->recordError(Error(GL_INVALID_VALUE, "n < 0"));
             return;
         }
 
@@ -1370,7 +1370,7 @@ void GL_APIENTRY GenRenderbuffers(GLsizei n, GLuint* renderbuffers)
     {
         if (n < 0)
         {
-            context->recordError(Error(GL_INVALID_VALUE));
+            context->recordError(Error(GL_INVALID_VALUE, "n < 0"));
             return;
         }
 
@@ -1390,7 +1390,7 @@ void GL_APIENTRY GenTextures(GLsizei n, GLuint* textures)
     {
         if (n < 0)
         {
-            context->recordError(Error(GL_INVALID_VALUE));
+            context->recordError(Error(GL_INVALID_VALUE, "n < 0"));
             return;
         }
 

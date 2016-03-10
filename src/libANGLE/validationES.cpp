@@ -2446,7 +2446,7 @@ bool ValidateDeleteVertexArraysBase(Context *context, GLsizei n)
 {
     if (n < 0)
     {
-        context->recordError(Error(GL_INVALID_VALUE));
+        context->recordError(Error(GL_INVALID_VALUE, "n < 0"));
         return false;
     }
 
@@ -2457,7 +2457,7 @@ bool ValidateGenVertexArraysBase(Context *context, GLsizei n)
 {
     if (n < 0)
     {
-        context->recordError(Error(GL_INVALID_VALUE));
+        context->recordError(Error(GL_INVALID_VALUE, "n < 0"));
         return false;
     }
 
