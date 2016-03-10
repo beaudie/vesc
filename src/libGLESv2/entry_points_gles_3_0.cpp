@@ -58,6 +58,12 @@ void GL_APIENTRY DrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsize
             return;
         }
 
+        if (end < start)
+        {
+            context->recordError(Error(GL_INVALID_VALUE, "end < start"));
+            return;
+        }
+
         IndexRange indexRange;
         if (!ValidateDrawElements(context, mode, count, type, indices, 0, &indexRange))
         {
