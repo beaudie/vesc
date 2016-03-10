@@ -1028,7 +1028,7 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
     outExtensions->glTextureCubemapImage = true;
     outExtensions->glRenderbufferImage   = true;
 
-    outExtensions->stream                = true;
+    outExtensions->stream = true;
 
     outExtensions->flexibleSurfaceCompatibility = true;
     outExtensions->directComposition            = !!mDCompModule;
