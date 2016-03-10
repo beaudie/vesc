@@ -231,7 +231,12 @@ const SamplerState &Texture::getSamplerState() const
 
 void Texture::setBaseLevel(GLuint baseLevel)
 {
-    mTextureState.baseLevel = baseLevel;
+    if (mTextureState.baseLevel != baseLevel)
+    {
+        mTextureState.baseLevel       = baseLevel;
+        mCompletenessCache.cacheValid = false;
+        mTexture->setBaseLevel(baseLevel);
+    }
 }
 
 GLuint Texture::getBaseLevel() const
@@ -241,7 +246,11 @@ GLuint Texture::getBaseLevel() const
 
 void Texture::setMaxLevel(GLuint maxLevel)
 {
-    mTextureState.maxLevel = maxLevel;
+    if (mTextureState.maxLevel != maxLevel)
+    {
+        mTextureState.maxLevel        = maxLevel;
+        mCompletenessCache.cacheValid = false;
+    }
 }
 
 GLuint Texture::getMaxLevel() const
