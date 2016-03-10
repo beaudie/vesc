@@ -1505,6 +1505,18 @@ bool ValidateStateQuery(gl::Context *context, GLenum pname, GLenum *nativeType, 
             return false;
         }
         break;
+      case GL_TEXTURE_BINDING_EXTERNAL_OES:
+          if (context->getState().getActiveSampler() >= caps.maxCombinedTextureImageUnits)
+          {
+              context->recordError(Error(GL_INVALID_OPERATION, "Out of samplers"));
+              return false;
+          }
+          if (!context->getExtensions().eglStreamConsumerExternal)
+          {
+              context->recordError(Error(GL_INVALID_ENUM, "EGL external extension not enabled"));
+              return false;
+          }
+          break;
 
       case GL_IMPLEMENTATION_COLOR_READ_TYPE:
       case GL_IMPLEMENTATION_COLOR_READ_FORMAT:

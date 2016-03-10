@@ -25,9 +25,9 @@ Stream::Stream(const AttributeMap &attribs)
     : mState(EGL_STREAM_STATE_CREATED_KHR),
       mProducerFrame(0),
       mConsumerFrame(0),
-      mConsumerLatency(attribs.get(EGL_CONSUMER_LATENCY_USEC_KHR, 0))
+      mConsumerLatency(attribs.get(EGL_CONSUMER_LATENCY_USEC_KHR, 0)),
+      mConsumerAcquireTimeout(attribs.get(EGL_CONSUMER_ACQUIRE_TIMEOUT_USEC_KHR, 0))
 {
-
 }
 
 Stream::~Stream()
@@ -59,4 +59,14 @@ EGLenum Stream::getState() const
     return mState;
 }
 
-} // namespace egl
+void Stream::setConsumerAcquireTimeout(EGLint timeout)
+{
+    mConsumerAcquireTimeout = timeout;
+}
+
+EGLint Stream::getConsumerAcquireTimeout() const
+{
+    return mConsumerAcquireTimeout;
+}
+
+}  // namespace egl
