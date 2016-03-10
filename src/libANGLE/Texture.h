@@ -99,6 +99,8 @@ class Texture final : public egl::ImageSibling,
 
     void setBaseLevel(GLuint baseLevel);
     GLuint getBaseLevel() const;
+    // Returns base level after clamping required for immutable textures.
+    GLuint getEffectiveBaseLevel() const;
 
     void setMaxLevel(GLuint maxLevel);
     GLuint getMaxLevel() const;
@@ -197,6 +199,7 @@ class Texture final : public egl::ImageSibling,
     std::string mLabel;
 
     TextureState mTextureState;
+    GLuint mEffectiveBaseLevel;
 
     GLenum mTarget;
 
@@ -221,6 +224,8 @@ class Texture final : public egl::ImageSibling,
     void clearImageDesc(GLenum target, size_t level);
     void clearImageDescs();
     void releaseTexImageInternal();
+
+    void updateEffectiveBaseLevel();
 
     std::vector<ImageDesc> mImageDescs;
 
