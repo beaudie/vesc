@@ -93,6 +93,8 @@ class TextureGL : public TextureImpl
         return gl::Error(GL_OUT_OF_MEMORY, "Not supported on OpenGL");
     }
 
+    void setBaseLevel(GLuint) override {}
+
   private:
     GLenum mTextureType;
 
