@@ -9,6 +9,7 @@
 #include "libGLESv2/entry_points_egl_ext.h"
 #include "libGLESv2/global_state.h"
 
+#include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Device.h"
 #include "libANGLE/Surface.h"
@@ -668,5 +669,53 @@ EGLBoolean EGLAPIENTRY QueryStreamu64KHR(EGLDisplay dpy,
 
     *value = streamObject->queryStreamu64(attribute);
     return EGL_TRUE;
+}
+
+EGLBoolean EGLAPIENTRY StreamConsumerGLTextureExternalKHR(EGLDisplay dpy, EGLStreamKHR stream)
+{
+    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR = 0x%0.8p)", dpy, stream);
+    Display *display     = static_cast<Display *>(dpy);
+    Stream *streamObject = static_cast<Stream *>(stream);
+    gl::Context *context = gl::GetValidGlobalContext();
+
+    Error error = ValidateStreamConsumerGLTextureExternalKHR(display, context, streamObject);
+    if (error.isError())
+    {
+        SetGlobalError(error);
+        return EGL_FALSE;
+    }
+    return EGL_FALSE;
+}
+
+EGLBoolean EGLAPIENTRY StreamConsumerAcquireKHR(EGLDisplay dpy, EGLStreamKHR stream)
+{
+    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR = 0x%0.8p)", dpy, stream);
+    Display *display     = static_cast<Display *>(dpy);
+    Stream *streamObject = static_cast<Stream *>(stream);
+    gl::Context *context = gl::GetValidGlobalContext();
+
+    Error error = ValidateStreamConsumerAcquireKHR(display, context, streamObject);
+    if (error.isError())
+    {
+        SetGlobalError(error);
+        return EGL_FALSE;
+    }
+    return EGL_FALSE;
+}
+
+EGLBoolean EGLAPIENTRY StreamConsumerReleaseKHR(EGLDisplay dpy, EGLStreamKHR stream)
+{
+    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR = 0x%0.8p)", dpy, stream);
+    Display *display     = static_cast<Display *>(dpy);
+    Stream *streamObject = static_cast<Stream *>(stream);
+    gl::Context *context = gl::GetValidGlobalContext();
+
+    Error error = ValidateStreamConsumerReleaseKHR(display, context, streamObject);
+    if (error.isError())
+    {
+        SetGlobalError(error);
+        return EGL_FALSE;
+    }
+    return EGL_FALSE;
 }
 }

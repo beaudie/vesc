@@ -1649,6 +1649,11 @@ __eglMustCastToProperFunctionPointerType EGLAPIENTRY GetProcAddress(const char *
         INSERT_PROC_ADDRESS(egl, QueryStreamKHR);
         INSERT_PROC_ADDRESS(egl, QueryStreamu64KHR);
 
+        // EGL_KHR_stream_consumer_gltexture
+        INSERT_PROC_ADDRESS(egl, StreamConsumerGLTextureExternalKHR);
+        INSERT_PROC_ADDRESS(egl, StreamConsumerAcquireKHR);
+        INSERT_PROC_ADDRESS(egl, StreamConsumerReleaseKHR);
+
 #undef INSERT_PROC_ADDRESS
         return map;
     };

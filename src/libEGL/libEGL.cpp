@@ -321,4 +321,19 @@ EGLBoolean EGLAPIENTRY eglQueryStreamu64KHR(EGLDisplay dpy,
 {
     return egl::QueryStreamu64KHR(dpy, stream, attribute, value);
 }
+
+EGLBoolean EGLAPIENTRY eglStreamConsumerGLTextureExternalKHR(EGLDisplay dpy, EGLStreamKHR stream)
+{
+    return egl::StreamConsumerGLTextureExternalKHR(dpy, stream);
+}
+
+EGLBoolean EGLAPIENTRY eglStreamConsumerAcquireKHR(EGLDisplay dpy, EGLStreamKHR stream)
+{
+    return egl::StreamConsumerAcquireKHR(dpy, stream);
+}
+
+EGLBoolean EGLAPIENTRY eglStreamConsumerReleaseKHR(EGLDisplay dpy, EGLStreamKHR stream)
+{
+    return egl::StreamConsumerReleaseKHR(dpy, stream);
+}
 }

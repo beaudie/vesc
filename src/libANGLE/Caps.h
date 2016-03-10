@@ -256,6 +256,9 @@ struct Extensions
     // GL_OES_EGL_image_external_essl3
     bool eglImageExternalEssl3;
 
+    // NV_EGL_stream_consumer_external
+    bool eglStreamConsumerExternal;
+
     // EXT_unpack_subimage
     bool unpackSubimage;
 
@@ -485,6 +488,9 @@ struct DisplayExtensions
 
     // EGL_KHR_stream
     bool stream;
+
+    // EGL_KHR_stream_consumer_gltexture
+    bool streamConsumerGLTexture;
 };
 
 struct DeviceExtensions

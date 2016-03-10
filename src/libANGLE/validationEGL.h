@@ -74,6 +74,9 @@ Error ValidateQueryStreamu64KHR(const Display *display,
                                 const Stream *stream,
                                 EGLenum attribute,
                                 EGLuint64KHR *value);
+Error ValidateStreamConsumerGLTextureExternalKHR(const Display *display, gl::Context *context, const Stream *stream);
+Error ValidateStreamConsumerAcquireKHR(const Display *display, gl::Context *context, const Stream *stream);
+Error ValidateStreamConsumerReleaseKHR(const Display *display, gl::Context *context, const Stream *stream);
 
 // Other validation
 Error ValidateCompatibleConfigs(const Display *display,

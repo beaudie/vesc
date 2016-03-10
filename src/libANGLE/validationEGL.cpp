@@ -88,7 +88,34 @@ bool CubeTextureHasUnspecifiedLevel0Face(const gl::Texture *texture)
 
     return false;
 }
+
+egl::Error ValidateStreamAttribute(const EGLint attribute, const EGLint value, const egl::DisplayExtensions &extensions)
+{
+    switch (attribute)
+    {
+        case EGL_STREAM_STATE_KHR:
+        case EGL_PRODUCER_FRAME_KHR:
+        case EGL_CONSUMER_FRAME_KHR:
+            return egl::Error(EGL_BAD_ACCESS, "Attempt to initialize readonly parameter");
+        case EGL_CONSUMER_LATENCY_USEC_KHR:
+            // Technically not in spec but a latency < 0 makes no sense so we check it
+            if (value < 0)
+            {
+                return egl::Error(EGL_BAD_PARAMETER, "Latency must be positive");
+            }
+            break;
+        case EGL_CONSUMER_ACQUIRE_TIMEOUT_USEC_KHR:
+            if (!extensions.streamConsumerGLTexture)
+            {
+                return egl::Error(EGL_BAD_ATTRIBUTE, "Consumer GL extension not enabled");
+            }
+            break;
+        default:
+            return egl::Error(EGL_BAD_ATTRIBUTE, "Invalid stream attribute");
+    }
+    return egl::Error(EGL_SUCCESS);
 }
+} // namespace
 
 namespace egl
 {
@@ -1075,21 +1102,10 @@ Error ValidateCreateStreamKHR(const Display *display, const AttributeMap &attrib
         EGLint attribute = attributeIter.first;
         EGLint value     = attributeIter.second;
 
-        switch (attribute)
+        error = ValidateStreamAttribute(attribute, value, displayExtensions);
+        if (error.isError())
         {
-            case EGL_STREAM_STATE_KHR:
-            case EGL_PRODUCER_FRAME_KHR:
-            case EGL_CONSUMER_FRAME_KHR:
-                return Error(EGL_BAD_ACCESS, "Attempt to initialize readonly parameter");
-            case EGL_CONSUMER_LATENCY_USEC_KHR:
-                // Technically not in spec but a latency < 0 makes no sense so we check it
-                if (value < 0)
-                {
-                    return Error(EGL_BAD_PARAMETER, "Latency must be positive");
-                }
-                break;
-            default:
-                return Error(EGL_BAD_ATTRIBUTE, "Invalid stream attribute");
+            return error;
         }
     }
 
@@ -1145,23 +1161,7 @@ Error ValidateStreamAttribKHR(const Display *display,
         return Error(EGL_BAD_STATE_KHR, "Bad stream state");
     }
 
-    switch (attribute)
-    {
-        case EGL_STREAM_STATE_KHR:
-        case EGL_PRODUCER_FRAME_KHR:
-        case EGL_CONSUMER_FRAME_KHR:
-            return Error(EGL_BAD_ACCESS, "Attribute is read only");
-        case EGL_CONSUMER_LATENCY_USEC_KHR:
-            if (value < 0)
-            {
-                return Error(EGL_BAD_PARAMETER, "Stream consumer latency must be positive");
-            }
-            break;
-        default:
-            return Error(EGL_BAD_ATTRIBUTE, "Invalid attribute");
-    }
-
-    return Error(EGL_SUCCESS);
+    return ValidateStreamAttribute(attribute, value, displayExtensions);
 }
 
 Error ValidateQueryStreamKHR(const Display *display,
@@ -1190,6 +1190,12 @@ Error ValidateQueryStreamKHR(const Display *display,
     {
         case EGL_STREAM_STATE_KHR:
         case EGL_CONSUMER_LATENCY_USEC_KHR:
+            break;
+        case EGL_CONSUMER_ACQUIRE_TIMEOUT_USEC_KHR:
+            if (!displayExtensions.streamConsumerGLTexture)
+            {
+                return Error(EGL_BAD_ATTRIBUTE, "Consumer GLTexture extension not active");
+            }
             break;
         default:
             return Error(EGL_BAD_ATTRIBUTE, "Invalid attribute");
@@ -1227,6 +1233,105 @@ Error ValidateQueryStreamu64KHR(const Display *display,
             break;
         default:
             return Error(EGL_BAD_ATTRIBUTE, "Invalid attribute");
+    }
+
+    return Error(EGL_SUCCESS);
+}
+
+Error ValidateStreamConsumerGLTextureExternalKHR(const Display *display, gl::Context *context, const Stream *stream)
+{
+    Error error = ValidateDisplay(display);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    error = ValidateContext(display, context);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    const DisplayExtensions &displayExtensions = display->getExtensions();
+    if (!displayExtensions.streamConsumerGLTexture)
+    {
+        return Error(EGL_BAD_ACCESS, "Stream consumer extension not active");
+    }
+
+    if (stream == EGL_NO_STREAM_KHR || !display->isValidStream(stream))
+    {
+        return Error(EGL_BAD_STREAM_KHR, "Invalid stream");
+    }
+
+    if (stream->getState() != EGL_STREAM_STATE_CREATED_KHR)
+    {
+        return Error(EGL_BAD_STATE_KHR, "Invalid stream state");
+    }
+
+    return Error(EGL_SUCCESS);
+}
+
+Error ValidateStreamConsumerAcquireKHR(const Display *display, gl::Context *context, const Stream *stream)
+{
+    Error error = ValidateDisplay(display);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    error = ValidateContext(display, context);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    const DisplayExtensions &displayExtensions = display->getExtensions();
+    if (!displayExtensions.streamConsumerGLTexture)
+    {
+        return Error(EGL_BAD_ACCESS, "Stream consumer extension not active");
+    }
+
+    if (stream == EGL_NO_STREAM_KHR || !display->isValidStream(stream))
+    {
+        return Error(EGL_BAD_STREAM_KHR, "Invalid stream");
+    }
+
+    if (stream->getState() != EGL_STREAM_STATE_NEW_FRAME_AVAILABLE_KHR && stream->getState() != EGL_STREAM_STATE_OLD_FRAME_AVAILABLE_KHR)
+    {
+        return Error(EGL_BAD_STATE_KHR, "Invalid stream state");
+    }
+
+    return Error(EGL_SUCCESS);
+}
+
+Error ValidateStreamConsumerReleaseKHR(const Display *display, gl::Context *context, const Stream *stream)
+{
+    Error error = ValidateDisplay(display);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    error = ValidateContext(display, context);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    const DisplayExtensions &displayExtensions = display->getExtensions();
+    if (!displayExtensions.streamConsumerGLTexture)
+    {
+        return Error(EGL_BAD_ACCESS, "Stream consumer extension not active");
+    }
+
+    if (stream == EGL_NO_STREAM_KHR || !display->isValidStream(stream))
+    {
+        return Error(EGL_BAD_STREAM_KHR, "Invalid stream");
+    }
+
+    if (stream->getState() != EGL_STREAM_STATE_NEW_FRAME_AVAILABLE_KHR && stream->getState() != EGL_STREAM_STATE_OLD_FRAME_AVAILABLE_KHR)
+    {
+        return Error(EGL_BAD_STATE_KHR, "Invalid stream state");
     }
 
     return Error(EGL_SUCCESS);
