@@ -2337,7 +2337,7 @@ void GL_APIENTRY GenSamplers(GLsizei count, GLuint* samplers)
 
         if (count < 0)
         {
-            context->recordError(Error(GL_INVALID_VALUE));
+            context->recordError(Error(GL_INVALID_VALUE, "count < 0"));
             return;
         }
 
@@ -2363,7 +2363,7 @@ void GL_APIENTRY DeleteSamplers(GLsizei count, const GLuint* samplers)
 
         if (count < 0)
         {
-            context->recordError(Error(GL_INVALID_VALUE));
+            context->recordError(Error(GL_INVALID_VALUE, "count < 0"));
             return;
         }
 
@@ -2635,6 +2635,12 @@ void GL_APIENTRY DeleteTransformFeedbacks(GLsizei n, const GLuint* ids)
             return;
         }
 
+        if (n < 0)
+        {
+            context->recordError(Error(GL_INVALID_VALUE, "n < 0"));
+            return;
+        }
+
         for (int i = 0; i < n; i++)
         {
             context->deleteTransformFeedback(ids[i]);
@@ -2652,6 +2658,12 @@ void GL_APIENTRY GenTransformFeedbacks(GLsizei n, GLuint* ids)
         if (context->getClientVersion() < 3)
         {
             context->recordError(Error(GL_INVALID_OPERATION));
+            return;
+        }
+
+        if (n < 0)
+        {
+            context->recordError(Error(GL_INVALID_VALUE, "n < 0"));
             return;
         }
 
