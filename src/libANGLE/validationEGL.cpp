@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2015 The ANGLE Project Authors. All rights reserved.
+// Copyright (c) 2016 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
@@ -88,7 +88,36 @@ bool CubeTextureHasUnspecifiedLevel0Face(const gl::Texture *texture)
 
     return false;
 }
+
+egl::Error ValidateStreamAttribute(const EGLint attribute,
+                                   const EGLint value,
+                                   const egl::DisplayExtensions &extensions)
+{
+    switch (attribute)
+    {
+        case EGL_STREAM_STATE_KHR:
+        case EGL_PRODUCER_FRAME_KHR:
+        case EGL_CONSUMER_FRAME_KHR:
+            return egl::Error(EGL_BAD_ACCESS, "Attempt to initialize readonly parameter");
+        case EGL_CONSUMER_LATENCY_USEC_KHR:
+            // Technically not in spec but a latency < 0 makes no sense so we check it
+            if (value < 0)
+            {
+                return egl::Error(EGL_BAD_PARAMETER, "Latency must be positive");
+            }
+            break;
+        case EGL_CONSUMER_ACQUIRE_TIMEOUT_USEC_KHR:
+            if (!extensions.streamConsumerGLTexture)
+            {
+                return egl::Error(EGL_BAD_ATTRIBUTE, "Consumer GL extension not enabled");
+            }
+            break;
+        default:
+            return egl::Error(EGL_BAD_ATTRIBUTE, "Invalid stream attribute");
+    }
+    return egl::Error(EGL_SUCCESS);
 }
+}  // namespace
 
 namespace egl
 {
@@ -1097,21 +1126,10 @@ Error ValidateCreateStreamKHR(const Display *display, const AttributeMap &attrib
         EGLint attribute = attributeIter.first;
         EGLint value     = attributeIter.second;
 
-        switch (attribute)
+        error = ValidateStreamAttribute(attribute, value, displayExtensions);
+        if (error.isError())
         {
-            case EGL_STREAM_STATE_KHR:
-            case EGL_PRODUCER_FRAME_KHR:
-            case EGL_CONSUMER_FRAME_KHR:
-                return Error(EGL_BAD_ACCESS, "Attempt to initialize readonly parameter");
-            case EGL_CONSUMER_LATENCY_USEC_KHR:
-                // Technically not in spec but a latency < 0 makes no sense so we check it
-                if (value < 0)
-                {
-                    return Error(EGL_BAD_PARAMETER, "Latency must be positive");
-                }
-                break;
-            default:
-                return Error(EGL_BAD_ATTRIBUTE, "Invalid stream attribute");
+            return error;
         }
     }
 
@@ -1145,23 +1163,7 @@ Error ValidateStreamAttribKHR(const Display *display,
         return Error(EGL_BAD_STATE_KHR, "Bad stream state");
     }
 
-    switch (attribute)
-    {
-        case EGL_STREAM_STATE_KHR:
-        case EGL_PRODUCER_FRAME_KHR:
-        case EGL_CONSUMER_FRAME_KHR:
-            return Error(EGL_BAD_ACCESS, "Attribute is read only");
-        case EGL_CONSUMER_LATENCY_USEC_KHR:
-            if (value < 0)
-            {
-                return Error(EGL_BAD_PARAMETER, "Stream consumer latency must be positive");
-            }
-            break;
-        default:
-            return Error(EGL_BAD_ATTRIBUTE, "Invalid attribute");
-    }
-
-    return Error(EGL_SUCCESS);
+    return ValidateStreamAttribute(attribute, value, display->getExtensions());
 }
 
 Error ValidateQueryStreamKHR(const Display *display,
@@ -1179,6 +1181,12 @@ Error ValidateQueryStreamKHR(const Display *display,
     {
         case EGL_STREAM_STATE_KHR:
         case EGL_CONSUMER_LATENCY_USEC_KHR:
+            break;
+        case EGL_CONSUMER_ACQUIRE_TIMEOUT_USEC_KHR:
+            if (!display->getExtensions().streamConsumerGLTexture)
+            {
+                return Error(EGL_BAD_ATTRIBUTE, "Consumer GLTexture extension not active");
+            }
             break;
         default:
             return Error(EGL_BAD_ATTRIBUTE, "Invalid attribute");
@@ -1205,6 +1213,244 @@ Error ValidateQueryStreamu64KHR(const Display *display,
             break;
         default:
             return Error(EGL_BAD_ATTRIBUTE, "Invalid attribute");
+    }
+
+    return Error(EGL_SUCCESS);
+}
+
+Error ValidateStreamConsumerGLTextureExternalKHR(const Display *display,
+                                                 gl::Context *context,
+                                                 const Stream *stream)
+{
+    Error error = ValidateDisplay(display);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    error = ValidateContext(display, context);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    const DisplayExtensions &displayExtensions = display->getExtensions();
+    if (!displayExtensions.streamConsumerGLTexture)
+    {
+        return Error(EGL_BAD_ACCESS, "Stream consumer extension not active");
+    }
+
+    if (stream == EGL_NO_STREAM_KHR || !display->isValidStream(stream))
+    {
+        return Error(EGL_BAD_STREAM_KHR, "Invalid stream");
+    }
+
+    if (stream->getState() != EGL_STREAM_STATE_CREATED_KHR)
+    {
+        return Error(EGL_BAD_STATE_KHR, "Invalid stream state");
+    }
+
+    return Error(EGL_SUCCESS);
+}
+
+Error ValidateStreamConsumerAcquireKHR(const Display *display,
+                                       gl::Context *context,
+                                       const Stream *stream)
+{
+    Error error = ValidateDisplay(display);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    error = ValidateContext(display, context);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    const DisplayExtensions &displayExtensions = display->getExtensions();
+    if (!displayExtensions.streamConsumerGLTexture)
+    {
+        return Error(EGL_BAD_ACCESS, "Stream consumer extension not active");
+    }
+
+    if (stream == EGL_NO_STREAM_KHR || !display->isValidStream(stream))
+    {
+        return Error(EGL_BAD_STREAM_KHR, "Invalid stream");
+    }
+
+    if (stream->getState() != EGL_STREAM_STATE_NEW_FRAME_AVAILABLE_KHR &&
+        stream->getState() != EGL_STREAM_STATE_OLD_FRAME_AVAILABLE_KHR)
+    {
+        return Error(EGL_BAD_STATE_KHR, "Invalid stream state");
+    }
+
+    return Error(EGL_SUCCESS);
+}
+
+Error ValidateStreamConsumerReleaseKHR(const Display *display,
+                                       gl::Context *context,
+                                       const Stream *stream)
+{
+    Error error = ValidateDisplay(display);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    error = ValidateContext(display, context);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    const DisplayExtensions &displayExtensions = display->getExtensions();
+    if (!displayExtensions.streamConsumerGLTexture)
+    {
+        return Error(EGL_BAD_ACCESS, "Stream consumer extension not active");
+    }
+
+    if (stream == EGL_NO_STREAM_KHR || !display->isValidStream(stream))
+    {
+        return Error(EGL_BAD_STREAM_KHR, "Invalid stream");
+    }
+
+    if (stream->getState() != EGL_STREAM_STATE_NEW_FRAME_AVAILABLE_KHR &&
+        stream->getState() != EGL_STREAM_STATE_OLD_FRAME_AVAILABLE_KHR)
+    {
+        return Error(EGL_BAD_STATE_KHR, "Invalid stream state");
+    }
+
+    return Error(EGL_SUCCESS);
+}
+
+Error ValidateStreamConsumerGLTextureExternalAttribsNV(const Display *display,
+                                                       gl::Context *context,
+                                                       const Stream *stream,
+                                                       const AttributeMap &attribs)
+{
+    Error error = ValidateDisplay(display);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    error = ValidateContext(display, context);
+    if (error.isError())
+    {
+        return Error(EGL_BAD_ACCESS, "Invalid context");
+    }
+
+    const DisplayExtensions &displayExtensions = display->getExtensions();
+    if (!displayExtensions.streamConsumerGLTexture)
+    {
+        return Error(EGL_BAD_ACCESS, "Stream consumer extension not active");
+    }
+
+    if (stream == EGL_NO_STREAM_KHR || !display->isValidStream(stream))
+    {
+        return Error(EGL_BAD_STREAM_KHR, "Invalid stream");
+    }
+
+    if (stream->getState() != EGL_STREAM_STATE_CREATED_KHR)
+    {
+        return Error(EGL_BAD_STATE_KHR, "Invalid stream state");
+    }
+
+    EGLenum colorBufferType = EGL_RGB_BUFFER;
+    EGLint planeCount       = -1;
+    EGLint plane[3];
+    for (int i = 0; i < 3; i++)
+    {
+        plane[i] = -1;
+    }
+    for (const auto &attributeIter : attribs)
+    {
+        EGLint attribute = attributeIter.first;
+        EGLint value     = attributeIter.second;
+
+        switch (attribute)
+        {
+            case EGL_COLOR_BUFFER_TYPE:
+                if (value != EGL_RGB_BUFFER || value != EGL_YUV_BUFFER_EXT)
+                {
+                    return Error(EGL_BAD_PARAMETER, "Invalid color buffer type");
+                }
+                colorBufferType = value;
+                break;
+            case EGL_YUV_NUMBER_OF_PLANES_EXT:
+                // Sanity check as later logic assumes value > 0
+                if (value < 0)
+                {
+                    return Error(EGL_BAD_MATCH, "Invalid plane count");
+                }
+                planeCount = value;
+                break;
+            case EGL_YUV_PLANE0_TEXTURE_UNIT_NV:
+                if (value < 0)
+                {
+                    return Error(EGL_BAD_ACCESS, "Invalid texture unit");
+                }
+                plane[0] = value;
+                break;
+            case EGL_YUV_PLANE1_TEXTURE_UNIT_NV:
+                if (value < 0)
+                {
+                    return Error(EGL_BAD_ACCESS, "Invalid texture unit");
+                }
+                plane[1] = value;
+                break;
+            case EGL_YUV_PLANE2_TEXTURE_UNIT_NV:
+                if (value < 0)
+                {
+                    return Error(EGL_BAD_ACCESS, "Invalid texture unit");
+                }
+                plane[2] = value;
+                break;
+            default:
+                return Error(EGL_BAD_ATTRIBUTE, "Invalid attribute");
+        }
+    }
+
+    if (colorBufferType == EGL_RGB_BUFFER)
+    {
+        if (planeCount > 0)
+        {
+            return Error(EGL_BAD_MATCH, "Plane count must be 0 for RGB buffer");
+        }
+        for (int i = 0; i < 3; i++)
+        {
+            if (plane[i] != -1)
+            {
+                return Error(EGL_BAD_MATCH, "Planes cannot be specified");
+            }
+        }
+    }
+    else
+    {
+        if (planeCount == -1)
+        {
+            planeCount = 2;
+        }
+        if (planeCount < 1 || planeCount > 3)
+        {
+            return Error(EGL_BAD_MATCH, "Invalid YUV plane count");
+        }
+        for (int i = 0; i < planeCount; i++)
+        {
+            if (plane[i] == -1)
+            {
+                return Error(EGL_BAD_MATCH, "Not all planes specified");
+            }
+        }
+        for (int i = planeCount; i < 3; i++)
+        {
+            if (plane[i] != -1)
+            {
+                return Error(EGL_BAD_MATCH, "Invalid plane specified");
+            }
+        }
     }
 
     return Error(EGL_SUCCESS);

@@ -247,4 +247,4 @@ TEST_P(EGLStreamTest, StreamValidationTest)
 }
 
 ANGLE_INSTANTIATE_TEST(EGLStreamTest, ES2_D3D11());
-} // namespace
+}  // namespace
