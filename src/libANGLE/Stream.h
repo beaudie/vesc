@@ -53,7 +53,10 @@ class Stream final : angle::NonCopyable
     EGLuint64KHR mProducerFrame;
     EGLuint64KHR mConsumerFrame;
     EGLint mConsumerLatency;
+
+    // EGL gltexture consumer attributes
+    EGLint mConsumerAcquireTimeout;
 };
-} // namespace egl
+}  // namespace egl
 
 #endif  // LIBANGLE_STREAM_H_

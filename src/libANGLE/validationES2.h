@@ -167,6 +167,7 @@ bool ValidateCompressedTexSubImage2D(Context *context,
                                      GLenum format,
                                      GLsizei imageSize,
                                      const GLvoid *data);
+bool ValidateBindTexture(Context *context, GLenum target, Texture *texture);
 
 }  // namespace gl
 

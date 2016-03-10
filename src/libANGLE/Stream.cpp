@@ -24,7 +24,8 @@ namespace egl
 Stream::Stream(const AttributeMap &attribs)
     : mState(EGL_STREAM_STATE_CREATED_KHR), mProducerFrame(0), mConsumerFrame(0)
 {
-    mConsumerLatency = attribs.get(EGL_CONSUMER_LATENCY_USEC_KHR, 0);
+    mConsumerLatency        = attribs.get(EGL_CONSUMER_LATENCY_USEC_KHR, 0);
+    mConsumerAcquireTimeout = attribs.get(EGL_CONSUMER_ACQUIRE_TIMEOUT_USEC_KHR, 0);
 }
 
 Stream::~Stream()
@@ -37,6 +38,9 @@ void Stream::streamAttribute(EGLint attribute, EGLint value)
     {
         case EGL_CONSUMER_LATENCY_USEC_KHR:
             mConsumerLatency = value;
+            break;
+        case EGL_CONSUMER_ACQUIRE_TIMEOUT_USEC_KHR:
+            mConsumerAcquireTimeout = value;
             break;
         default:
             UNREACHABLE();
@@ -52,6 +56,8 @@ EGLint Stream::queryStream(EGLint attribute)
             return mState;
         case EGL_CONSUMER_LATENCY_USEC_KHR:
             return mConsumerLatency;
+        case EGL_CONSUMER_ACQUIRE_TIMEOUT_USEC_KHR:
+            return mConsumerAcquireTimeout;
         default:
             UNREACHABLE();
             return 0;
@@ -77,4 +83,4 @@ EGLenum Stream::getState() const
     return mState;
 }
 
-} // namespace egl
+}  // namespace egl
