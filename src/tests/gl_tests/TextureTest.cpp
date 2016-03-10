@@ -780,6 +780,60 @@ class TextureSizeTextureArrayTest : public TexCoordDrawTest
     GLint mTexture1Location;
 };
 
+class Texture3DTestES3 : public TexCoordDrawTest
+{
+  protected:
+    Texture3DTestES3() : TexCoordDrawTest(), mTexture3D(0), mTexture3DUniformLocation(-1) {}
+
+    std::string getVertexShaderSource() override
+    {
+        return std::string(
+            "#version 300 es\n"
+            "out vec2 texcoord;\n"
+            "in vec4 position;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_Position = vec4(position.xy, 0.0, 1.0);\n"
+            "    texcoord = (position.xy * 0.5) + 0.5;\n"
+            "}\n");
+    }
+
+    std::string getFragmentShaderSource() override
+    {
+        return std::string(
+            "#version 300 es\n"
+            "precision highp float;\n"
+            "uniform highp sampler3D tex3D;\n"
+            "in vec2 texcoord;\n"
+            "out vec4 fragColor;\n"
+            "void main()\n"
+            "{\n"
+            "    fragColor = texture(tex3D, vec3(texcoord, 0.0));\n"
+            "}\n");
+    }
+
+    void SetUp() override
+    {
+        TexCoordDrawTest::SetUp();
+
+        glGenTextures(1, &mTexture3D);
+
+        setUpProgram();
+
+        mTexture3DUniformLocation = glGetUniformLocation(mProgram, "tex3D");
+        ASSERT_NE(-1, mTexture3DUniformLocation);
+    }
+
+    void TearDown() override
+    {
+        glDeleteTextures(1, &mTexture3D);
+        TexCoordDrawTest::TearDown();
+    }
+
+    GLuint mTexture3D;
+    GLint mTexture3DUniformLocation;
+};
+
 class ShadowSamplerPlusSampler3DTestES3 : public TexCoordDrawTest
 {
   protected:
@@ -1613,6 +1667,502 @@ TEST_P(Texture2DTestES3, DrawWithBaseLevel1)
 
     drawQuad(mProgram, "position", 0.5f);
 
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+}
+
+// Test that drawing works correctly when levels outside the BASE_LEVEL/MAX_LEVEL range do not
+// have images defined.
+TEST_P(Texture2DTestES3, DrawWithLevelsOutsideRangeUndefined)
+{
+    if (IsAMD() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    {
+        // Observed crashing on AMD. Oddly the crash only happens with 2D textures, not 3D or array.
+        std::cout << "Test skipped on AMD OpenGL." << std::endl;
+        return;
+    }
+    if (IsOSX())
+    {
+        // Observed incorrect rendering on OSX.
+        std::cout << "Test skipped on OSX." << std::endl;
+        return;
+    }
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLubyte texDataGreen[2u * 2u * 4u];
+    FillWithRGBA<GLubyte>(2u * 2u, 0u, 255u, 0u, 255u, texDataGreen);
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+}
+
+// Test that drawing works correctly when levels outside the BASE_LEVEL/MAX_LEVEL range have
+// dimensions that don't fit the images inside the range.
+// GLES 3.0.4 section 3.8.13 Texture completeness
+TEST_P(Texture2DTestES3, DrawWithLevelsOutsideRangeWithInconsistentDimensions)
+{
+    if (IsOSX())
+    {
+        // Observed incorrect rendering on OSX.
+        std::cout << "Test skipped on OSX." << std::endl;
+        return;
+    }
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLubyte texDataRed[8u * 8u * 4u];
+    FillWithRGBA<GLubyte>(8u * 8u, 255u, 0u, 0u, 255u, texDataRed);
+    GLubyte texDataGreen[2u * 2u * 4u];
+    FillWithRGBA<GLubyte>(2u * 2u, 0u, 255u, 0u, 255u, texDataGreen);
+    GLubyte texDataCyan[2u * 2u * 4u];
+    FillWithRGBA<GLubyte>(2u * 2u, 0u, 255u, 255u, 255u, texDataCyan);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    // Two levels that are initially unused.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataRed);
+    glTexImage2D(GL_TEXTURE_2D, 2, GL_RGBA8, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataCyan);
+
+    // One level that is used - only this level should affect completeness.
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+
+    if (IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    {
+        // Intel was observed drawing color 0,0,0,0 instead of the texture color after the base
+        // level was changed.
+        std::cout << "Test partially skipped on Intel OpenGL." << std::endl;
+        return;
+    }
+
+    // Switch the level that is being used to the cyan level 2.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 2);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 2);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 255, 255);
+}
+
+// Test that drawing works correctly when levels outside the BASE_LEVEL/MAX_LEVEL range do not
+// have images defined.
+TEST_P(Texture3DTestES3, DrawWithLevelsOutsideRangeUndefined)
+{
+    if (IsOSX())
+    {
+        // Observed incorrect rendering on OSX.
+        std::cout << "Test skipped on OSX." << std::endl;
+        return;
+    }
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_3D, mTexture3D);
+    GLubyte texDataGreen[2u * 2u * 2u * 4u];
+    FillWithRGBA<GLubyte>(2u * 2u * 2u, 0u, 255u, 0u, 255u, texDataGreen);
+    glTexImage3D(GL_TEXTURE_3D, 1, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_BASE_LEVEL, 1);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAX_LEVEL, 1);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+}
+
+// Test that drawing works correctly when levels outside the BASE_LEVEL/MAX_LEVEL range have
+// dimensions that don't fit the images inside the range.
+// GLES 3.0.4 section 3.8.13 Texture completeness
+TEST_P(Texture3DTestES3, DrawWithLevelsOutsideRangeWithInconsistentDimensions)
+{
+    if (IsOSX())
+    {
+        // Observed incorrect rendering on OSX.
+        std::cout << "Test skipped on OSX." << std::endl;
+        return;
+    }
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_3D, mTexture3D);
+    GLubyte texDataRed[8u * 8u * 8u * 4u];
+    FillWithRGBA<GLubyte>(8u * 8u * 8u, 255u, 0u, 0u, 255u, texDataRed);
+    GLubyte texDataGreen[2u * 2u * 2u * 4u];
+    FillWithRGBA<GLubyte>(2u * 2u * 2u, 0u, 255u, 0u, 255u, texDataGreen);
+    GLubyte texDataCyan[2u * 2u * 2u * 4u];
+    FillWithRGBA<GLubyte>(2u * 2u * 2u, 0u, 255u, 255u, 255u, texDataCyan);
+
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    // Two levels that are initially unused.
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, 8, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataRed);
+    glTexImage3D(GL_TEXTURE_3D, 2, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataCyan);
+
+    // One level that is used - only this level should affect completeness.
+    glTexImage3D(GL_TEXTURE_3D, 1, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_BASE_LEVEL, 1);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAX_LEVEL, 1);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+
+    if (IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    {
+        // Intel was observed drawing color 0,0,0,0 instead of the texture color after the base
+        // level was changed.
+        std::cout << "Test partially skipped on Intel OpenGL." << std::endl;
+        return;
+    }
+
+    // Switch the level that is being used to the cyan level 2.
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_BASE_LEVEL, 2);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAX_LEVEL, 2);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 255, 255);
+}
+
+// Test that drawing works correctly when levels outside the BASE_LEVEL/MAX_LEVEL range do not
+// have images defined.
+TEST_P(Texture2DArrayTestES3, DrawWithLevelsOutsideRangeUndefined)
+{
+    if (IsOSX())
+    {
+        // Observed incorrect rendering on OSX.
+        std::cout << "Test skipped on OSX." << std::endl;
+        return;
+    }
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, m2DArrayTexture);
+    GLubyte texDataGreen[2u * 2u * 2u * 4u];
+    FillWithRGBA<GLubyte>(2u * 2u * 2u, 0u, 255u, 0u, 255u, texDataGreen);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 texDataGreen);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 1);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, 1);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+}
+
+// Test that drawing works correctly when levels outside the BASE_LEVEL/MAX_LEVEL range have
+// dimensions that don't fit the images inside the range.
+// GLES 3.0.4 section 3.8.13 Texture completeness
+TEST_P(Texture2DArrayTestES3, DrawWithLevelsOutsideRangeWithInconsistentDimensions)
+{
+    if (IsOSX())
+    {
+        // Observed incorrect rendering on OSX.
+        std::cout << "Test skipped on OSX." << std::endl;
+        return;
+    }
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_3D, m2DArrayTexture);
+    GLubyte texDataRed[8u * 8u * 8u * 4u];
+    FillWithRGBA<GLubyte>(8u * 8u * 8u, 255u, 0u, 0u, 255u, texDataRed);
+    GLubyte texDataGreen[2u * 2u * 2u * 4u];
+    FillWithRGBA<GLubyte>(2u * 2u * 2u, 0u, 255u, 0u, 255u, texDataGreen);
+    GLubyte texDataCyan[2u * 2u * 2u * 4u];
+    FillWithRGBA<GLubyte>(2u * 2u * 2u, 0u, 255u, 255u, 255u, texDataCyan);
+
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    // Two levels that are initially unused.
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, 8, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 texDataRed);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 2, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 texDataCyan);
+
+    // One level that is used - only this level should affect completeness.
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 texDataGreen);
+
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 1);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, 1);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+
+    if (IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    {
+        // Intel was observed drawing color 0,0,0,0 instead of the texture color after the base
+        // level was changed.
+        std::cout << "Test partially skipped on Intel OpenGL." << std::endl;
+        return;
+    }
+    if (IsNVIDIA() && (getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE ||
+                       getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE))
+    {
+        // NVIDIA was observed drawing color 0,0,0,0 instead of the texture color after the base
+        // level was changed.
+        std::cout << "Test partially skipped on NVIDIA OpenGL." << std::endl;
+        return;
+    }
+
+    // Switch the level that is being used to the cyan level 2.
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 2);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, 2);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 255, 255);
+}
+
+// Test that texture completeness is updated if texture max level changes.
+// GLES 3.0.4 section 3.8.13 Texture completeness
+TEST_P(Texture2DTestES3, TextureCompletenessChangesWithMaxLevel)
+{
+    if (IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    {
+        // Intel was observed having wrong behavior after the texture is made incomplete by changing
+        // the base level.
+        std::cout << "Test skipped on Intel OpenGL." << std::endl;
+        return;
+    }
+    if (IsOSX())
+    {
+        // Observed incorrect rendering on OSX.
+        std::cout << "Test skipped on OSX." << std::endl;
+        return;
+    }
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLubyte texDataGreen[8u * 8u * 4u];
+    FillWithRGBA<GLubyte>(8u * 8u, 0u, 255u, 0u, 255u, texDataGreen);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    // A level that is initially unused.
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+
+    // One level that is initially used - only this level should affect completeness.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+
+    // Switch the max level to level 1. The levels within the used range now have inconsistent
+    // dimensions and the texture should be incomplete.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 255);
+}
+
+// Test that 3D texture completeness is updated if texture max level changes.
+// GLES 3.0.4 section 3.8.13 Texture completeness
+TEST_P(Texture3DTestES3, Texture3DCompletenessChangesWithMaxLevel)
+{
+    if (IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    {
+        // Intel was observed having wrong behavior after the texture is made incomplete by changing
+        // the base level.
+        std::cout << "Test skipped on Intel OpenGL." << std::endl;
+        return;
+    }
+    if (IsOSX())
+    {
+        // Observed incorrect rendering on OSX.
+        std::cout << "Test skipped on OSX." << std::endl;
+        return;
+    }
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_3D, mTexture3D);
+    GLubyte texDataGreen[2u * 2u * 2u * 4u];
+    FillWithRGBA<GLubyte>(2u * 2u * 2u, 0u, 255u, 0u, 255u, texDataGreen);
+
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    // A level that is initially unused.
+    glTexImage3D(GL_TEXTURE_3D, 1, GL_RGBA8, 1, 1, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+
+    // One level that is initially used - only this level should affect completeness.
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAX_LEVEL, 0);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+
+    // Switch the max level to level 1. The levels within the used range now have inconsistent
+    // dimensions and the texture should be incomplete.
+    glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAX_LEVEL, 1);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 255);
+}
+
+// Test that texture completeness is updated if texture base level changes.
+// GLES 3.0.4 section 3.8.13 Texture completeness
+TEST_P(Texture2DTestES3, TextureCompletenessChangesWithBaseLevel)
+{
+    if (IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    {
+        // Intel was observed having wrong behavior after the texture is made incomplete by changing
+        // the base level.
+        std::cout << "Test skipped on Intel OpenGL." << std::endl;
+        return;
+    }
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLubyte texDataGreen[8u * 8u * 4u];
+    FillWithRGBA<GLubyte>(8u * 8u, 0u, 255u, 0u, 255u, texDataGreen);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    // Two levels that are initially unused.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+
+    // One level that is initially used - only this level should affect completeness.
+    glTexImage2D(GL_TEXTURE_2D, 2, GL_RGBA8, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 2);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 2);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+
+    // Switch the base level to level 1. The levels within the used range now have inconsistent
+    // dimensions and the texture should be incomplete.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 255);
+}
+
+// Test that texture is not complete if base level is greater than max level.
+// GLES 3.0.4 section 3.8.13 Texture completeness
+TEST_P(Texture2DTestES3, TextureBaseLevelGreaterThanMaxLevel)
+{
+    if (IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    {
+        // Intel Windows OpenGL driver crashes if the base level of a non-immutable texture is out
+        // of range.
+        std::cout << "Test skipped on Intel OpenGL." << std::endl;
+        return;
+    }
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLubyte texDataGreen[1u * 1u * 4u];
+    FillWithRGBA<GLubyte>(1u * 1u, 0u, 255u, 0u, 255u, texDataGreen);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 10000);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    // Texture should be incomplete.
+    EXPECT_PIXEL_EQ(0, 0, 0, 0, 0, 255);
+}
+
+// Test that immutable texture base level and max level are clamped.
+// GLES 3.0.4 section 3.8.10 subsection Mipmapping
+TEST_P(Texture2DTestES3, ImmutableTextureBaseLevelOutOfRange)
+{
+    if (IsOSX())
+    {
+        // At least Intel OS X driver fails, it renders black instead of green.
+        // TODO(oetuaho): This should be possible to work around by clamping the base level before
+        // passing it to the GL driver.
+        std::cout << "Test skipped on OSX." << std::endl;
+        return;
+    }
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLubyte texDataGreen[1u * 1u * 4u];
+    FillWithRGBA<GLubyte>(1u * 1u, 0u, 255u, 0u, 255u, texDataGreen);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1);
+
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+
+    // For immutable-format textures, base level should be clamped to [0, levels - 1], and max level
+    // should be clamped to [base_level, levels - 1].
+    // GLES 3.0.4 section 3.8.10 subsection Mipmapping
+    // In the case of this test, those rules make the effective base level and max level 0.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 10000);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 10000);
+
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(mProgram, "position", 0.5f);
+
+    // Texture should be complete.
     EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
 }
 
@@ -2538,6 +3088,7 @@ ANGLE_INSTANTIATE_TEST(SamplerArrayAsFunctionParameterTest,
                        ES2_OPENGL(),
                        ES2_OPENGLES());
 ANGLE_INSTANTIATE_TEST(Texture2DTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+ANGLE_INSTANTIATE_TEST(Texture3DTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(Texture2DIntegerAlpha1TestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(Texture2DUnsignedIntegerAlpha1TestES3,
                        ES3_D3D11(),
