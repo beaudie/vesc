@@ -141,10 +141,6 @@ bool ValidateES3TexStorage3DParameters(Context *context,
                                        GLsizei height,
                                        GLsizei depth);
 
-bool ValidateGenQueries(Context *context, GLsizei n, const GLuint *ids);
-
-bool ValidateDeleteQueries(Context *context, GLsizei n, const GLuint *ids);
-
 bool ValidateBeginQuery(Context *context, GLenum target, GLuint id);
 
 bool ValidateEndQuery(Context *context, GLenum target);
@@ -182,8 +178,6 @@ bool ValidateCompressedTexImage3D(Context *context,
                                   const GLvoid *data);
 
 bool ValidateBindVertexArray(Context *context, GLuint array);
-bool ValidateDeleteVertexArrays(Context *context, GLsizei n);
-bool ValidateGenVertexArrays(Context *context, GLsizei n);
 bool ValidateIsVertexArray(Context *context);
 
 bool ValidateProgramBinary(Context *context,
@@ -274,6 +268,10 @@ bool ValidateCompressedTexSubImage3D(Context *context,
                                      const GLvoid *data);
 
 bool ValidateBeginTransformFeedback(Context *context, GLenum primitiveMode);
+bool ValidateDeleteTransformFeedbacks(Context *context, GLint n, const GLuint *ids);
+
+bool ValidateGenOrDeleteES3(Context *context, GLint n);
+bool ValidateGenOrDeleteCountES3(Context *context, GLint count);
 
 }  // namespace gl
 

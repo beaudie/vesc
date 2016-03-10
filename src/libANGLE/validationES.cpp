@@ -1098,18 +1098,7 @@ bool ValidateReadnPixelsEXT(Context *context,
     return ValidateReadPixels(context, x, y, width, height, format, type, pixels);
 }
 
-bool ValidateGenQueriesBase(gl::Context *context, GLsizei n, const GLuint *ids)
-{
-    if (n < 0)
-    {
-        context->recordError(Error(GL_INVALID_VALUE, "Query count < 0"));
-        return false;
-    }
-
-    return true;
-}
-
-bool ValidateGenQueriesEXT(gl::Context *context, GLsizei n, const GLuint *ids)
+bool ValidateGenQueriesEXT(gl::Context *context, GLsizei n)
 {
     if (!context->getExtensions().occlusionQueryBoolean &&
         !context->getExtensions().disjointTimerQuery)
@@ -1118,21 +1107,10 @@ bool ValidateGenQueriesEXT(gl::Context *context, GLsizei n, const GLuint *ids)
         return false;
     }
 
-    return ValidateGenQueriesBase(context, n, ids);
+    return ValidateGenOrDelete(context, n);
 }
 
-bool ValidateDeleteQueriesBase(gl::Context *context, GLsizei n, const GLuint *ids)
-{
-    if (n < 0)
-    {
-        context->recordError(Error(GL_INVALID_VALUE, "Query count < 0"));
-        return false;
-    }
-
-    return true;
-}
-
-bool ValidateDeleteQueriesEXT(gl::Context *context, GLsizei n, const GLuint *ids)
+bool ValidateDeleteQueriesEXT(gl::Context *context, GLsizei n)
 {
     if (!context->getExtensions().occlusionQueryBoolean &&
         !context->getExtensions().disjointTimerQuery)
@@ -1141,7 +1119,7 @@ bool ValidateDeleteQueriesEXT(gl::Context *context, GLsizei n, const GLuint *ids
         return false;
     }
 
-    return ValidateDeleteQueriesBase(context, n, ids);
+    return ValidateGenOrDelete(context, n);
 }
 
 bool ValidateBeginQueryBase(gl::Context *context, GLenum target, GLuint id)
@@ -2442,28 +2420,6 @@ bool ValidateBindVertexArrayBase(Context *context, GLuint array)
     return true;
 }
 
-bool ValidateDeleteVertexArraysBase(Context *context, GLsizei n)
-{
-    if (n < 0)
-    {
-        context->recordError(Error(GL_INVALID_VALUE));
-        return false;
-    }
-
-    return true;
-}
-
-bool ValidateGenVertexArraysBase(Context *context, GLsizei n)
-{
-    if (n < 0)
-    {
-        context->recordError(Error(GL_INVALID_VALUE));
-        return false;
-    }
-
-    return true;
-}
-
 bool ValidateLinkProgram(Context *context, GLuint program)
 {
     if (context->hasActiveTransformFeedback(program))
@@ -2699,6 +2655,16 @@ bool ValidateCopyTexSubImage2D(Context *context,
 
     return ValidateES3CopyTexImage2DParameters(context, target, level, GL_NONE, true, xoffset,
                                                yoffset, 0, x, y, width, height, 0);
+}
+
+bool ValidateGenOrDelete(Context *context, GLint n)
+{
+    if (n < 0)
+    {
+        context->recordError(Error(GL_INVALID_VALUE, "n < 0"));
+        return false;
+    }
+    return true;
 }
 
 }  // namespace gl
