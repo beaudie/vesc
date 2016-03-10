@@ -1216,8 +1216,9 @@ gl::Error Renderer11::setSamplerState(gl::SamplerType type,
     else UNREACHABLE();
 
     ASSERT(metadata != nullptr);
-    metadata->update(index, texture->getBaseLevel(),
-                     texture->getInternalFormat(texture->getTarget(), texture->getBaseLevel()));
+    metadata->update(
+        index, texture->getEffectiveBaseLevel(),
+        texture->getInternalFormat(texture->getTarget(), texture->getEffectiveBaseLevel()));
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -1244,7 +1245,7 @@ gl::Error Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *t
 
         // Make sure to add the level offset for our tiny compressed texture workaround
         gl::TextureState textureState = texture->getTextureState();
-        textureState.baseLevel += storage11->getTopLevel();
+        textureState.baseLevel        = texture->getEffectiveBaseLevel() + storage11->getTopLevel();
 
         error = storage11->getSRV(textureState, &textureSRV);
         if (error.isError())
