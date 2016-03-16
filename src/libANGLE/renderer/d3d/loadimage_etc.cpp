@@ -45,14 +45,6 @@ static const int intensityModifierNonOpaque[][4] =
 };
 // clang-format on
 
-// Table C.7, mapping from pixel index values to modifier value orders
-// clang-format off
-static const int valueMappingTable[] =
-{
-    2, 3, 1, 0
-};
-// clang-format on
-
 struct ETC2Block
 {
     // Decodes unsigned single or dual channel block to bytes
@@ -738,8 +730,8 @@ struct ETC2Block
 
     void packBC1(void *bc1,
                  const R8G8B8A8 *rgba,
-                 R8G8B8A8 &minColor,
-                 R8G8B8A8 &maxColor,
+                 const R8G8B8A8 &minColor,
+                 const R8G8B8A8 &maxColor,
                  bool opaque) const
     {
         uint32_t bits;
@@ -854,7 +846,6 @@ struct ETC2Block
     }
 
     void decodeSubblock(R8G8B8A8 *rgbaBlock,
-                        size_t pixelRange[2][2],
                         size_t x,
                         size_t y,
                         size_t w,
@@ -862,7 +853,9 @@ struct ETC2Block
                         const uint8_t alphaValues[4][4],
                         bool flipbit,
                         size_t subblockIdx,
-                        const R8G8B8A8 subblockColors[2][4]) const
+                        const R8G8B8A8 subblockColors[2][4],
+                        R8G8B8A8 *uniqueColors,
+                        size_t &uniqueLength) const
     {
         size_t dxBegin = 0;
         size_t dxEnd   = 4;
@@ -874,23 +867,124 @@ struct ETC2Block
             std::swap(dxEnd, dyEnd);
         }
 
+        uint8_t mask = 0;
         for (size_t j = dyBegin; j < dyEnd && (y + j) < h; j++)
         {
             R8G8B8A8 *row = &rgbaBlock[j * 4];
             for (size_t i = dxBegin; i < dxEnd && (x + i) < w; i++)
             {
                 const size_t pixelIndex = getIndex(i, j);
-                if (valueMappingTable[pixelIndex] < valueMappingTable[pixelRange[subblockIdx][0]])
-                {
-                    pixelRange[subblockIdx][0] = pixelIndex;
-                }
-                if (valueMappingTable[pixelIndex] > valueMappingTable[pixelRange[subblockIdx][1]])
-                {
-                    pixelRange[subblockIdx][1] = pixelIndex;
-                }
+                row[i]                  = subblockColors[subblockIdx][pixelIndex];
+                row[i].A                = alphaValues[j][i];
 
-                row[i]   = subblockColors[subblockIdx][pixelIndex];
-                row[i].A = alphaValues[j][i];
+                if (0 == (mask & (1U << pixelIndex)))
+                {
+                    uniqueColors[uniqueLength] = row[i];
+                    uniqueLength++;
+                    mask |= (1U << pixelIndex);
+                }
+            }
+        }
+    }
+
+    void selectEndPointPCA(const R8G8B8A8 *pixels,
+                           size_t length,
+                           R8G8B8A8 &minColor,
+                           R8G8B8A8 &maxColor) const
+    {
+        ASSERT(length > 0);
+
+        static const int ITER_POWER = 4;
+
+        // determine color distribution
+        int mu[3], min[3], max[3];
+        for (int ch = 0; ch < 3; ch++)
+        {
+            int muv, minv, maxv;
+
+            muv = minv = maxv = (&pixels[0].R)[ch];
+            for (size_t i = 1; i < length; i++)
+            {
+                muv += (&pixels[i].R)[ch];
+                minv = std::min<int>(minv, (&pixels[i].R)[ch]);
+                maxv = std::max<int>(maxv, (&pixels[i].R)[ch]);
+            }
+
+            mu[ch]  = (muv + 8) >> 4;
+            min[ch] = minv;
+            max[ch] = maxv;
+        }
+
+        // determine covariance matrix
+        int cov[6] = {0, 0, 0, 0, 0, 0};
+        for (size_t i = 0; i < length; i++)
+        {
+            int r = pixels[i].R - mu[0];
+            int g = pixels[i].G - mu[1];
+            int b = pixels[i].B - mu[2];
+
+            cov[0] += r * r;
+            cov[1] += r * g;
+            cov[2] += r * b;
+            cov[3] += g * g;
+            cov[4] += g * b;
+            cov[5] += b * b;
+        }
+
+        // convert covariance matrix to float, find principal axis via power iter
+        float covf[6];
+        for (int i = 0; i < 6; i++)
+        {
+            covf[i] = cov[i] / 255.0f;
+        }
+
+        float vfr = static_cast<float>(max[0] - min[0]);
+        float vfg = static_cast<float>(max[1] - min[1]);
+        float vfb = static_cast<float>(max[2] - min[2]);
+        for (int i = 0; i < ITER_POWER; i++)
+        {
+            float r = vfr * covf[0] + vfg * covf[1] + vfb * covf[2];
+            float g = vfr * covf[1] + vfg * covf[3] + vfb * covf[4];
+            float b = vfr * covf[2] + vfg * covf[4] + vfb * covf[5];
+
+            vfr = r;
+            vfg = g;
+            vfb = b;
+        }
+
+        float magn = std::max(std::max(std::abs(vfr), std::abs(vfg)), std::abs(vfb));
+        int vr, vg, vb;
+
+        if (magn < 4.0f)  // too small, default to luminance
+        {
+            vr = 148;
+            vg = 300;
+            vb = 58;
+        }
+        else
+        {
+            magn = 512.0f / magn;
+            vr   = static_cast<int>(vfr * magn);
+            vg   = static_cast<int>(vfg * magn);
+            vb   = static_cast<int>(vfb * magn);
+        }
+
+        // Pick colors at extreme points
+        int minD = pixels[0].R * vr + pixels[0].G * vg + pixels[0].B * vb;
+        int maxD = minD;
+        minColor = maxColor = pixels[0];
+        for (size_t i = 1; i < length; i++)
+        {
+            int dot = pixels[i].R * vr + pixels[i].G * vg + pixels[i].B * vb;
+            if (dot < minD)
+            {
+                minD     = dot;
+                minColor = pixels[i];
+            }
+            if (dot > maxD)
+            {
+                maxD     = dot;
+                maxColor = pixels[i];
             }
         }
     }
@@ -916,14 +1010,11 @@ struct ETC2Block
         // our two BC1 endpoints and then map pixels to BC1 by projecting on the
         // line between the two endpoints and choosing the right fraction.
         //
-        // In the future, we have 2 potential improvements to this algorithm.
+        // In the future, we have a potential improvements to this algorithm.
         // 1. We don't actually need to decode ETC blocks to RGBs. Instead,
         //    the subblock colors and pixel indices alreay contains enough
         //    information for transcode. A direct mapping would be more
         //    efficient here.
-        // 2. Currently the BC1 endpoints come from the max and min intensity
-        //    of ETC colors. A principal component analysis (PCA) on them might
-        //    give us better quality results, with limited costs
 
         const auto intensityModifier =
             nonOpaquePunchThroughAlpha ? intensityModifierNonOpaque : intensityModifierDefault;
@@ -940,15 +1031,15 @@ struct ETC2Block
             subblockColors[1][modifierIdx] = createRGBA(r2 + i2, g2 + i2, b2 + i2);
         }
 
-        // 1 and 3 are the argmax and argmin of valueMappingTable
-        size_t pixelRange[2][2] = {{1, 3}, {1, 3}};
         R8G8B8A8 rgbaBlock[16];
+        R8G8B8A8 uniqueColors[8];
+        size_t uniqueLength = 0;
         // Decode the block in rgbaBlock and store the inverse valueTableMapping
         // of {min(modifier index), max(modifier index)}
         for (size_t blockIdx = 0; blockIdx < 2; blockIdx++)
         {
-            decodeSubblock(rgbaBlock, pixelRange, x, y, w, h, alphaValues, u.idht.mode.idm.flipbit,
-                           blockIdx, subblockColors);
+            decodeSubblock(rgbaBlock, x, y, w, h, alphaValues, u.idht.mode.idm.flipbit, blockIdx,
+                           subblockColors, uniqueColors, uniqueLength);
         }
         if (nonOpaquePunchThroughAlpha)
         {
@@ -956,30 +1047,8 @@ struct ETC2Block
                                          sizeof(R8G8B8A8) * 4);
         }
 
-        // Get the "min" and "max" pixel colors that have been used.
-        R8G8B8A8 minColor;
-        const R8G8B8A8 &minColor0 = subblockColors[0][pixelRange[0][0]];
-        const R8G8B8A8 &minColor1 = subblockColors[1][pixelRange[1][0]];
-        if (minColor0.R + minColor0.G + minColor0.B < minColor1.R + minColor1.G + minColor1.B)
-        {
-            minColor = minColor0;
-        }
-        else
-        {
-            minColor = minColor1;
-        }
-
-        R8G8B8A8 maxColor;
-        const R8G8B8A8 &maxColor0 = subblockColors[0][pixelRange[0][1]];
-        const R8G8B8A8 &maxColor1 = subblockColors[1][pixelRange[1][1]];
-        if (maxColor0.R + maxColor0.G + maxColor0.B < maxColor1.R + maxColor1.G + maxColor1.B)
-        {
-            maxColor = maxColor1;
-        }
-        else
-        {
-            maxColor = maxColor0;
-        }
+        R8G8B8A8 minColor, maxColor;
+        selectEndPointPCA(uniqueColors, uniqueLength, minColor, maxColor);
 
         packBC1(dest, rgbaBlock, minColor, maxColor, !nonOpaquePunchThroughAlpha);
     }
