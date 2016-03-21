@@ -16,6 +16,7 @@
 struct TPublicType;
 class TType;
 class TSymbol;
+class TIntermSymbol;
 
 class TField : angle::NonCopyable
 {
@@ -119,6 +120,10 @@ class TStructure : public TFieldListCollection
     bool containsArrays() const;
     bool containsType(TBasicType t) const;
     bool containsSamplers() const;
+
+    void createSamplerSymbols(const TString &structName,
+                              const int arrayOfStructsSize,
+                              TVector<TIntermSymbol *> *outputSequence) const;
 
     bool equals(const TStructure &other) const;
 
@@ -527,6 +532,14 @@ class TType
     bool isStructureContainingSamplers() const
     {
         return structure ? structure->containsSamplers() : false;
+    }
+
+    void createSamplerSymbols(const TString &structName,
+                              const int arrayOfStructsSize,
+                              TVector<TIntermSymbol *> *outputSequence) const
+    {
+        ASSERT(structure->containsSamplers());
+        structure->createSamplerSymbols(structName, arrayOfStructsSize, outputSequence);
     }
 
     // Initializes all lazily-initialized members.
