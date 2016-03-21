@@ -55,6 +55,12 @@ class UniformHLSL : angle::NonCopyable
     TString interfaceBlockStructString(const TInterfaceBlock &interfaceBlock);
     const Uniform *findUniformByName(const TString &name) const;
 
+    void declareAndOutputHLSL4_0_FL9_3Sampler(TInfoSinkBase &out,
+                                              const TType &type,
+                                              const TString &name);
+
+    void declareAndOutputUniform(TInfoSinkBase &out, const TType &type, const TString &name);
+
     // Returns the uniform's register index
     unsigned int declareUniformAndAssignRegister(const TType &type,
                                                  const TString &name,

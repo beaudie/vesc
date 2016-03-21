@@ -139,6 +139,8 @@ class Texture2DTest : public TexCoordDrawTest
         );
     }
 
+    virtual const char *getTextureUniformName() { return "tex"; }
+
     void SetUp() override
     {
         TexCoordDrawTest::SetUp();
@@ -146,7 +148,7 @@ class Texture2DTest : public TexCoordDrawTest
 
         ASSERT_GL_NO_ERROR();
 
-        mTexture2DUniformLocation = glGetUniformLocation(mProgram, "tex");
+        mTexture2DUniformLocation = glGetUniformLocation(mProgram, getTextureUniformName());
         ASSERT_NE(-1, mTexture2DUniformLocation);
     }
 
@@ -919,6 +921,59 @@ class SamplerTypeMixTestES3 : public TexCoordDrawTest
     GLint mTexture2DShadowUniformLocation;
     GLint mTextureCubeShadowUniformLocation;
     GLint mDepthRefUniformLocation;
+};
+
+class SamplerInStructTest : public Texture2DTest
+{
+  protected:
+    SamplerInStructTest() : Texture2DTest() {}
+
+    const char *getTextureUniformName() override { return "us.tex"; }
+
+    std::string getFragmentShaderSource() override
+    {
+        return std::string(
+            "precision highp float;\n"
+            "struct S\n"
+            "{\n"
+            "    vec4 a;\n"
+            "    highp sampler2D tex;\n"
+            "};\n"
+            "uniform S us;\n"
+            "varying vec2 texcoord;\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = texture2D(us.tex, texcoord + us.a.x);\n"
+            "}\n");
+    }
+};
+
+class SamplerInStructAsFunctionParameterTest : public Texture2DTest
+{
+protected:
+    SamplerInStructAsFunctionParameterTest() : Texture2DTest() {}
+
+    const char *getTextureUniformName() override { return "us.tex"; }
+
+    std::string getFragmentShaderSource() override
+    {
+        return std::string(
+            "precision highp float;\n"
+            "struct S\n"
+            "{\n"
+            "    vec4 a;\n"
+            "    highp sampler2D tex;\n"
+            "};\n"
+            "uniform S us;\n"
+            "varying vec2 texcoord;\n"
+            "vec4 sampleFrom(S s) {\n"
+            "    return texture2D(s.tex, texcoord + s.a.x);\n"
+            "}\n"
+            "void main()\n"
+            "{\n"
+            "    gl_FragColor = sampleFrom(us);\n"
+            "}\n");
+    }
 };
 
 TEST_P(Texture2DTest, NegativeAPISubImage)
@@ -1836,6 +1891,29 @@ TEST_P(Texture2DTestES3, TextureCOMPRESSEDSRGB8ETC2ImplicitAlpha1)
     EXPECT_PIXEL_ALPHA_EQ(0, 0, 255);
 }
 
+TEST_P(SamplerInStructTest, SamplerInStruct)
+{
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLubyte texDataGreen[2u * 2u * 4u];
+    FillWithRGBA<GLubyte>(2u * 2u, 0u, 255u, 0u, 255u, texDataGreen);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+}
+
+TEST_P(SamplerInStructAsFunctionParameterTest, SamplerInStructAsFunctionParameter)
+{
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLubyte texDataGreen[2u * 2u * 4u];
+    FillWithRGBA<GLubyte>(2u * 2u, 0u, 255u, 0u, 255u, texDataGreen);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen);
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+}
+
+
 class TextureLimitsTest : public ANGLETest
 {
   protected:
@@ -2282,6 +2360,18 @@ ANGLE_INSTANTIATE_TEST(ShadowSamplerPlusSampler3DTestES3,
 ANGLE_INSTANTIATE_TEST(SamplerTypeMixTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(Texture2DArrayTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(TextureSizeTextureArrayTest, ES3_D3D11(), ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(SamplerInStructTest,
+                       ES2_D3D11(),
+                       ES2_D3D11_FL9_3(),
+                       ES2_D3D9(),
+                       ES2_OPENGL(),
+                       ES2_OPENGLES());
+ANGLE_INSTANTIATE_TEST(SamplerInStructAsFunctionParameterTest,
+    ES2_D3D11(),
+    ES2_D3D11_FL9_3(),
+    ES2_D3D9(),
+    ES2_OPENGL(),
+    ES2_OPENGLES());
 ANGLE_INSTANTIATE_TEST(TextureLimitsTest, ES2_D3D11(), ES2_OPENGL(), ES2_OPENGLES());
 
 } // namespace

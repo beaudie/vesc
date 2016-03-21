@@ -101,12 +101,6 @@
 1017 WIN : dEQP-GLES2.functional.shaders.loops.while_constant_iterations.nested_tricky_dataflow_* = FAIL
 1017 WIN : dEQP-GLES2.functional.shaders.loops.do_while_constant_iterations.nested_tricky_dataflow_* = FAIL
 989 WIN : dEQP-GLES2.functional.shaders.preprocessor.pragmas.invalid_pragma_invalid_* = FAIL
-504 WIN : dEQP-GLES2.functional.shaders.struct.uniform.sampler_vertex = FAIL
-504 WIN : dEQP-GLES2.functional.shaders.struct.uniform.sampler_fragment = FAIL
-504 WIN : dEQP-GLES2.functional.shaders.struct.uniform.sampler_nested_vertex = FAIL
-504 WIN : dEQP-GLES2.functional.shaders.struct.uniform.sampler_nested_fragment = FAIL
-504 WIN : dEQP-GLES2.functional.shaders.struct.uniform.sampler_array_vertex = FAIL
-504 WIN : dEQP-GLES2.functional.shaders.struct.uniform.sampler_array_fragment = FAIL
 1018 WIN : dEQP-GLES2.functional.shaders.texture_functions.vertex.texturecubelod = FAIL
 1020 WIN : dEQP-GLES2.functional.texture.mipmap.cube.basic.linear_nearest = FAIL
 1020 WIN : dEQP-GLES2.functional.texture.mipmap.cube.basic.linear_linear = FAIL

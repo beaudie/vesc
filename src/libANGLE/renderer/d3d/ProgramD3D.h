@@ -316,7 +316,8 @@ class ProgramD3D : public ProgramImpl
     void defineUniformBase(const gl::Shader *shader,
                            const sh::Uniform &uniform,
                            D3DUniformMap *uniformMap);
-    void defineUniform(GLenum shaderType,
+    void defineUniform(const ShaderD3D *shaderD3D,
+                       GLenum shaderType,
                        const sh::ShaderVariable &uniform,
                        const std::string &fullName,
                        sh::HLSLBlockEncoder *encoder,
