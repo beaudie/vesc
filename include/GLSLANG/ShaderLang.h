@@ -460,7 +460,12 @@ COMPILER_EXPORT bool ShGetInterfaceBlockRegister(const ShHandle handle,
 // Returns true if it found a valid default uniform, false otherwise.
 // Parameters:
 // handle: Specifies the compiler
-// interfaceBlockName: Specifies the uniform
+// uniformName: Specifies the uniform.
+// Registers of samplers that are extracted from structs can also be queried
+// using this function. Sampler members of structs are identified by an
+// uniformName prefixed with "angle" and use _ as field selection and indexing
+// operators. Example: querying "angle_s_0_c" returns the register for field
+// "c" of the first item of the struct array "s".
 // indexOut: output variable that stores the assigned register
 COMPILER_EXPORT bool ShGetUniformRegister(const ShHandle handle,
                                           const std::string &uniformName,
