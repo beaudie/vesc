@@ -157,6 +157,7 @@ Extensions::Extensions()
       maxLabelLength(0),
       noError(false),
       lossyETCDecode(false),
+      bindUniformLocation(false),
       colorBufferFloat(false)
 {
 }
@@ -228,6 +229,7 @@ std::vector<std::string> Extensions::getStrings() const
     //InsertExtensionString("GL_KHR_no_error",                     noError,                   &extensionStrings);
 
     InsertExtensionString("GL_ANGLE_lossy_etc_decode",           lossyETCDecode,            &extensionStrings);
+    InsertExtensionString("GL_CHROMIUM_bind_uniform_location",   bindUniformLocation,       &extensionStrings);
     // clang-format on
 
     return extensionStrings;

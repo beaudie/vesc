@@ -7,6 +7,7 @@
 #include "libANGLE/Uniform.h"
 
 #include "common/utilities.h"
+#include "libANGLE/Caps.h"
 
 #include <cstring>
 
@@ -145,5 +146,10 @@ std::string UniformBlock::nameWithArrayIndex() const
     }
 
     return fullNameStr.str();
+}
+
+size_t GetMaximumUniformBindingLocations(const Caps &caps)
+{
+    return (caps.maxVertexUniformVectors + caps.maxFragmentUniformVectors) * 4;
 }
 }
