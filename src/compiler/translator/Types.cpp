@@ -9,6 +9,8 @@
 #endif
 
 #include "compiler/translator/Types.h"
+#include "compiler/translator/InfoSink.h"
+#include "compiler/translator/IntermNode.h"
 
 #include <algorithm>
 #include <climits>
@@ -242,6 +244,56 @@ bool TStructure::containsSamplers() const
             return true;
     }
     return false;
+}
+
+void TStructure::createSamplerSymbols(const TString &structName,
+                                      const int arrayOfStructsSize,
+                                      TVector<TIntermSymbol *> *outputSymbols) const
+{
+    for (auto &field : *mFields)
+    {
+        const TType *fieldType = field->type();
+        if (IsSampler(fieldType->getBasicType()))
+        {
+            if (arrayOfStructsSize > 0)
+            {
+                for (int arrayIndex = 0; arrayIndex < arrayOfStructsSize; ++arrayIndex)
+                {
+                    TInfoSinkBase nameSink;
+                    nameSink << structName << "_" << arrayIndex << "_" << field->name();
+                    TString symbolName(nameSink.c_str());
+                    TIntermSymbol *symbol = new TIntermSymbol(0, symbolName, *fieldType);
+                    outputSymbols->push_back(symbol);
+                }
+            }
+            else
+            {
+                TString symbolName    = structName + "_" + field->name();
+                TIntermSymbol *symbol = new TIntermSymbol(0, symbolName, *fieldType);
+                outputSymbols->push_back(symbol);
+            }
+        }
+        else if (fieldType->isStructureContainingSamplers())
+        {
+            int nestedArrayOfStructsSize = fieldType->isArray() ? fieldType->getArraySize() : 0;
+            if (arrayOfStructsSize > 0)
+            {
+                for (int arrayIndex = 0; arrayIndex < arrayOfStructsSize; ++arrayIndex)
+                {
+                    TInfoSinkBase nameSink;
+                    nameSink << structName << "_" << arrayIndex << "_" << field->name();
+                    TString fieldName(nameSink.c_str());
+                    fieldType->createSamplerSymbols(fieldName, nestedArrayOfStructsSize,
+                                                    outputSymbols);
+                }
+            }
+            else
+            {
+                fieldType->createSamplerSymbols(structName + "_" + field->name(),
+                                                nestedArrayOfStructsSize, outputSymbols);
+            }
+        }
+    }
 }
 
 TString TFieldListCollection::buildMangledName(const TString &mangledNamePrefix) const

@@ -1347,16 +1347,6 @@ LinkResult ProgramD3D::link(const gl::Data &data, gl::InfoLog &infoLog)
 {
     reset();
 
-    // TODO(jmadill): structures containing samplers
-    for (const gl::LinkedUniform &linkedUniform : mData.getUniforms())
-    {
-        if (linkedUniform.isSampler() && linkedUniform.isField())
-        {
-            infoLog << "Structures containing samplers not currently supported in D3D.";
-            return LinkResult(false, gl::Error(GL_NO_ERROR));
-        }
-    }
-
     const gl::Shader *vertexShader   = mData.getAttachedVertexShader();
     const gl::Shader *fragmentShader = mData.getAttachedFragmentShader();
 
@@ -1822,7 +1812,7 @@ void ProgramD3D::defineUniformBase(const gl::Shader *shader,
 {
     if (uniform.isBuiltIn())
     {
-        defineUniform(shader->getType(), uniform, uniform.name, nullptr, uniformMap);
+        defineUniform(nullptr, shader->getType(), uniform, uniform.name, nullptr, uniformMap);
         return;
     }
 
@@ -1833,7 +1823,7 @@ void ProgramD3D::defineUniformBase(const gl::Shader *shader,
     sh::HLSLBlockEncoder encoder(sh::HLSLBlockEncoder::GetStrategyFor(outputType));
     encoder.skipRegisters(startRegister);
 
-    defineUniform(shader->getType(), uniform, uniform.name, &encoder, uniformMap);
+    defineUniform(shaderD3D, shader->getType(), uniform, uniform.name, &encoder, uniformMap);
 }
 
 D3DUniform *ProgramD3D::getD3DUniformByName(const std::string &name)
@@ -1849,7 +1839,8 @@ D3DUniform *ProgramD3D::getD3DUniformByName(const std::string &name)
     return nullptr;
 }
 
-void ProgramD3D::defineUniform(GLenum shaderType,
+void ProgramD3D::defineUniform(const ShaderD3D *shaderD3D,
+                               GLenum shaderType,
                                const sh::ShaderVariable &uniform,
                                const std::string &fullName,
                                sh::HLSLBlockEncoder *encoder,
@@ -1869,7 +1860,20 @@ void ProgramD3D::defineUniform(GLenum shaderType,
                 const sh::ShaderVariable &field  = uniform.fields[fieldIndex];
                 const std::string &fieldFullName = (fullName + elementString + "." + field.name);
 
-                defineUniform(shaderType, field, fieldFullName, encoder, uniformMap);
+                if (gl::IsSamplerType(field.type))
+                {
+                    unsigned int startRegister = shaderD3D->getUniformRegister(fieldFullName);
+                    ShShaderOutput outputType = shaderD3D->getCompilerOutputType();
+                    sh::HLSLBlockEncoder samplerFieldEncoder(
+                        sh::HLSLBlockEncoder::GetStrategyFor(outputType));
+                    samplerFieldEncoder.skipRegisters(startRegister);
+                    defineUniform(nullptr, shaderType, field, fieldFullName, &samplerFieldEncoder,
+                                  uniformMap);
+                }
+                else
+                {
+                    defineUniform(shaderD3D, shaderType, field, fieldFullName, encoder, uniformMap);
+                }
             }
 
             if (encoder)
