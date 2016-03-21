@@ -19,6 +19,8 @@
 namespace gl
 {
 
+struct Caps;
+
 // Helper struct representing a single shader uniform
 struct LinkedUniform : public sh::Uniform
 {
@@ -67,6 +69,9 @@ struct UniformBlock
     std::vector<unsigned int> memberUniformIndexes;
 };
 
+// Compute the maximum number of uniforms locations available for binding by
+// glBindUniformLocationCHROMIUM.
+size_t GetMaximumUniformBindingLocations(const Caps &caps);
 }
 
 #endif   // LIBANGLE_UNIFORM_H_

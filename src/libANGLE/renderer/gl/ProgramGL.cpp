@@ -10,6 +10,7 @@
 
 #include "common/debug.h"
 #include "common/utilities.h"
+#include "libANGLE/Data.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/ShaderGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
@@ -157,22 +158,26 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog)
 
     // Query the uniform information
     ASSERT(mUniformRealLocationMap.empty());
+    mUniformRealLocationMap.resize(gl::GetMaximumUniformBindingLocations(*data.caps),
+                                   GL_INVALID_INDEX);
     const auto &uniforms = mData.getUniforms();
-    for (const gl::VariableLocation &entry : mData.getUniformLocations())
+    for (const auto &entry : mData.getUniformLocations())
     {
         // From the spec:
         // "Locations for sequential array indices are not required to be sequential."
-        const gl::LinkedUniform &uniform = uniforms[entry.index];
+        const gl::VariableLocation &uniformLocation = entry.second;
+        const gl::LinkedUniform &uniform            = uniforms[uniformLocation.index];
         std::stringstream fullNameStr;
         fullNameStr << uniform.name;
         if (uniform.isArray())
         {
-            fullNameStr << "[" << entry.element << "]";
+            fullNameStr << "[" << uniformLocation.element << "]";
         }
         const std::string &fullName = fullNameStr.str();
 
         GLint realLocation = mFunctions->getUniformLocation(mProgramID, fullName.c_str());
-        mUniformRealLocationMap.push_back(realLocation);
+        ASSERT(entry.first < mUniformRealLocationMap.size());
+        mUniformRealLocationMap[entry.first] = realLocation;
     }
 
     mUniformIndexToSamplerIndex.resize(mData.getUniforms().size(), GL_INVALID_INDEX);
@@ -231,7 +236,7 @@ void ProgramGL::setUniform1iv(GLint location, GLsizei count, const GLint *v)
     mStateManager->useProgram(mProgramID);
     mFunctions->uniform1iv(uniLoc(location), count, v);
 
-    const gl::VariableLocation &locationEntry = mData.getUniformLocations()[location];
+    const gl::VariableLocation &locationEntry = mData.getUniformLocations().at(location);
 
     size_t samplerIndex = mUniformIndexToSamplerIndex[locationEntry.index];
     if (samplerIndex != GL_INVALID_INDEX)
