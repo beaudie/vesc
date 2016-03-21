@@ -139,6 +139,75 @@ int ShaderD3D::prepareSourceAndReturnOptions(std::stringstream *shaderSourceStre
     return additionalOptions;
 }
 
+void ShaderD3D::addSamplerFieldRegistersToMap(ShHandle compilerHandle,
+                                              std::string parentNameInShader,
+                                              std::string parentNameUniformAPI,
+                                              int arrayOfStructsSize,
+                                              const std::vector<sh::ShaderVariable> &fields)
+{
+    for (auto &field : fields)
+    {
+        if (field.isStruct())
+        {
+            int nestedArrayOfStructsSize = field.isArray() ? field.arraySize : 0;
+            if (arrayOfStructsSize > 0)
+            {
+                for (int i = 0; i < arrayOfStructsSize; ++i)
+                {
+                    std::stringstream fieldNameInShaderStream;
+                    fieldNameInShaderStream << parentNameInShader << "_" << i << "_" << field.name;
+                    std::string fieldNameInShader = fieldNameInShaderStream.str();
+
+                    std::stringstream fieldNameStream;
+                    fieldNameStream << parentNameUniformAPI << "[" << i << "]." << field.name;
+                    std::string fieldName = fieldNameStream.str();
+
+                    addSamplerFieldRegistersToMap(compilerHandle, fieldNameInShader, fieldName,
+                                                  nestedArrayOfStructsSize, field.fields);
+                }
+            }
+            else
+            {
+                addSamplerFieldRegistersToMap(compilerHandle, parentNameInShader + "_" + field.name,
+                                              parentNameUniformAPI + "." + field.name,
+                                              nestedArrayOfStructsSize, field.fields);
+            }
+        }
+        else if (gl::IsSamplerType(field.type))
+        {
+            unsigned int index = static_cast<unsigned int>(-1);
+            if (arrayOfStructsSize > 0)
+            {
+                for (int i = 0; i < arrayOfStructsSize; ++i)
+                {
+                    std::stringstream fieldNameInShaderStream;
+                    fieldNameInShaderStream << parentNameInShader << "_" << i << "_" << field.name;
+                    std::string fieldNameInShader = fieldNameInShaderStream.str();
+                    bool getSamplerUniformRegisterResult =
+                        ShGetUniformRegister(compilerHandle, fieldNameInShader, &index);
+                    UNUSED_ASSERTION_VARIABLE(getSamplerUniformRegisterResult);
+                    ASSERT(getSamplerUniformRegisterResult);
+
+                    std::stringstream fieldNameStream;
+                    fieldNameStream << parentNameUniformAPI << "[" << i << "]." << field.name;
+                    std::string fieldName          = fieldNameStream.str();
+                    mUniformRegisterMap[fieldName] = index;
+                }
+            }
+            else
+            {
+                std::string fieldNameInShader = parentNameInShader + "_" + field.name;
+                bool getSamplerUniformRegisterResult =
+                    ShGetUniformRegister(compilerHandle, fieldNameInShader, &index);
+                UNUSED_ASSERTION_VARIABLE(getSamplerUniformRegisterResult);
+                ASSERT(getSamplerUniformRegisterResult);
+                std::string fieldName          = parentNameUniformAPI + "." + field.name;
+                mUniformRegisterMap[fieldName] = index;
+            }
+        }
+    }
+}
+
 bool ShaderD3D::postTranslateCompile(gl::Compiler *compiler, std::string *infoLog)
 {
     // TODO(jmadill): We shouldn't need to cache this.
@@ -175,6 +244,13 @@ bool ShaderD3D::postTranslateCompile(gl::Compiler *compiler, std::string *infoLo
             ASSERT(getUniformRegisterResult);
 
             mUniformRegisterMap[uniform.name] = index;
+
+            if (uniform.isStruct())
+            {
+                addSamplerFieldRegistersToMap(compilerHandle, uniform.name, uniform.name,
+                                              uniform.isArray() ? uniform.arraySize : 0,
+                                              uniform.fields);
+            }
         }
     }
 

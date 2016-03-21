@@ -1566,6 +1566,35 @@ void OutputHLSL::outputEqual(Visit visit, const TType &type, TOperator op, TInfo
     }
 }
 
+bool OutputHLSL::ancestorReturnsSamplerInStruct(Visit visit)
+{
+    for (unsigned int n = visit == InVisit ? 2 : 1; getAncestorNode(n) != nullptr; ++n)
+    {
+        TIntermNode *ancestor         = getAncestorNode(n);
+        TIntermBinary *ancestorBinary = ancestor->getAsBinaryNode();
+        if (ancestorBinary != nullptr && ancestorBinary->getOp() == EOpIndexDirectStruct)
+        {
+            const TStructure *ancestorStructure = ancestorBinary->getLeft()->getType().getStruct();
+            const TIntermConstantUnion *ancestorIndex =
+                ancestorBinary->getRight()->getAsConstantUnion();
+            const TField *ancestorField = ancestorStructure->fields()[ancestorIndex->getIConst(0)];
+            if (IsSampler(ancestorField->type()->getBasicType()))
+            {
+                return true;
+            }
+        }
+        else if (ancestorBinary != nullptr && ancestorBinary->getOp() == EOpIndexDirect)
+        {
+            continue;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    return false;
+}
+
 bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
 {
     TInfoSinkBase &out = getInfoSink();
@@ -1730,6 +1759,10 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                     return false;
                 }
             }
+            else if (ancestorReturnsSamplerInStruct(visit))
+            {
+                outputTriplet(out, visit, "", "_", "");
+            }
             else
             {
                 outputTriplet(out, visit, "", "[", "]");
@@ -1747,7 +1780,24 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
             const TStructure* structure = node->getLeft()->getType().getStruct();
             const TIntermConstantUnion* index = node->getRight()->getAsConstantUnion();
             const TField* field = structure->fields()[index->getIConst(0)];
-            out << "." + DecorateField(field->name(), *structure);
+
+            // In cases where indexing returns a sampler, we need to access the sampler variable
+            // that has been moved out of the struct.
+            bool indexingReturnsSampler = IsSampler(field->type()->getBasicType());
+            // Handle the case where an ancestor node is a struct indexing operation that returns a
+            // sampler.
+            if (!indexingReturnsSampler)
+            {
+                indexingReturnsSampler = ancestorReturnsSamplerInStruct(visit);
+            }
+            if (indexingReturnsSampler)
+            {
+                out << "_" + field->name();
+            }
+            else
+            {
+                out << "." + DecorateField(field->name(), *structure);
+            }
 
             return false;
         }
@@ -2101,6 +2151,45 @@ bool OutputHLSL::visitUnary(Visit visit, TIntermUnary *node)
     }
 
     return true;
+}
+
+TString OutputHLSL::samplerNamePrefixFromStruct(TIntermTyped *node)
+{
+    if (node->getAsSymbolNode())
+    {
+        return node->getAsSymbolNode()->getSymbol();
+    }
+    if (node->getAsBinaryNode())
+    {
+        TIntermBinary *nodeBinary = node->getAsBinaryNode();
+        switch (nodeBinary->getOp())
+        {
+            case EOpIndexDirect:
+            {
+                int index = nodeBinary->getRight()->getAsConstantUnion()->getIConst(0);
+
+                TInfoSinkBase prefixSink;
+                prefixSink << samplerNamePrefixFromStruct(nodeBinary->getLeft()) << "_" << index;
+                return TString(prefixSink.c_str());
+            }
+            case EOpIndexDirectStruct:
+            {
+                TStructure *s       = nodeBinary->getLeft()->getAsTyped()->getType().getStruct();
+                int index           = nodeBinary->getRight()->getAsConstantUnion()->getIConst(0);
+                const TField *field = s->fields()[index];
+
+                TInfoSinkBase prefixSink;
+                prefixSink << samplerNamePrefixFromStruct(nodeBinary->getLeft()) << "_"
+                           << field->name();
+                return TString(prefixSink.c_str());
+            }
+            default:
+                UNREACHABLE();
+                return TString("");
+        }
+    }
+    UNREACHABLE();
+    return TString("");
 }
 
 bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
@@ -2474,8 +2563,8 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
 
             for (TIntermSequence::iterator arg = arguments->begin(); arg != arguments->end(); arg++)
             {
-                if (mOutputType == SH_HLSL_4_0_FL9_3_OUTPUT &&
-                    IsSampler((*arg)->getAsTyped()->getBasicType()))
+                TIntermTyped *typedArg = (*arg)->getAsTyped();
+                if (mOutputType == SH_HLSL_4_0_FL9_3_OUTPUT && IsSampler(typedArg->getBasicType()))
                 {
                     out << "texture_";
                     (*arg)->traverse(this);
@@ -2483,6 +2572,34 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 }
 
                 (*arg)->traverse(this);
+
+                if (typedArg->getType().isStructureContainingSamplers())
+                {
+                    const TType &argType = typedArg->getType();
+                    TVector<TIntermSymbol *> samplerSymbols;
+                    // TODO: Determine struct name to use here in case arg is an indexing
+                    // expression.
+                    TString structName = samplerNamePrefixFromStruct(typedArg);
+                    argType.createSamplerSymbols(Decorate(structName),
+                                                 argType.isArray() ? argType.getArraySize() : 0,
+                                                 &samplerSymbols);
+                    for (auto &sampler : samplerSymbols)
+                    {
+                        if (mOutputType == SH_HLSL_4_1_OUTPUT)
+                        {
+                            out << ", " << sampler->getSymbol();
+                        }
+                        else if (mOutputType == SH_HLSL_4_0_FL9_3_OUTPUT)
+                        {
+                            out << ", texture_" << sampler->getSymbol();
+                            out << ", sampler_" << sampler->getSymbol();
+                        }
+                        else
+                        {
+                            out << ", " + sampler->getSymbol();
+                        }
+                    }
+                }
 
                 if (arg < arguments->end() - 1)
                 {
@@ -3253,7 +3370,40 @@ TString OutputHLSL::argumentString(const TIntermSymbol *symbol)
         }
     }
 
-    return QualifierString(qualifier) + " " + TypeString(type) + " " + nameStr + ArrayString(type);
+    TString argString =
+        QualifierString(qualifier) + " " + TypeString(type) + " " + nameStr + ArrayString(type);
+
+    if (type.isStructureContainingSamplers())
+    {
+        ASSERT(qualifier != EvqOut && qualifier != EvqInOut);
+        TVector<TIntermSymbol *> samplerSymbols;
+        type.createSamplerSymbols(nameStr, 0, &samplerSymbols);
+        for (auto &sampler : samplerSymbols)
+        {
+            if (mOutputType == SH_HLSL_4_1_OUTPUT)
+            {
+                argString += ", const uint " + sampler->getSymbol() + ArrayString(type);
+            }
+            else if (mOutputType == SH_HLSL_4_0_FL9_3_OUTPUT)
+            {
+                const TType &samplerType = sampler->getType();
+                argString += ", " + QualifierString(qualifier) + " " +
+                             TextureString(samplerType.getBasicType()) + " texture_" +
+                             sampler->getSymbol() + ArrayString(type) + ", " +
+                             QualifierString(qualifier) + " " +
+                             SamplerString(samplerType.getBasicType()) + " sampler_" +
+                             sampler->getSymbol() + ArrayString(type);
+            }
+            else
+            {
+                const TType &samplerType = sampler->getType();
+                argString += ", " + QualifierString(qualifier) + " " + TypeString(samplerType) +
+                             " " + sampler->getSymbol() + ArrayString(type);
+            }
+        }
+    }
+
+    return argString;
 }
 
 TString OutputHLSL::initializer(const TType &type)
