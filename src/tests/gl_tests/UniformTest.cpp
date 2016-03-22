@@ -8,6 +8,7 @@
 
 #include <array>
 #include <cmath>
+#include <functional>
 
 using namespace angle;
 
@@ -502,7 +503,7 @@ TEST_P(UniformTest, SamplerUniformsAppearOnce)
 }
 
 template <typename T>
-void CheckOneElement(void (*getUniformv) (GLuint, int, T *),
+void CheckOneElement(std::function<void(GLuint, int, T *)> getUniformv,
                      GLuint program,
                      const std::string& name,
                      int components,
