@@ -42,11 +42,13 @@ VertexDeclarationCache::~VertexDeclarationCache()
     }
 }
 
-gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9 *device,
-                                                   const std::vector<TranslatedAttribute> &attributes,
-                                                   gl::Program *program,
-                                                   GLsizei instances,
-                                                   GLsizei *repeatDraw)
+gl::Error VertexDeclarationCache::applyDeclaration(
+    IDirect3DDevice9 *device,
+    const std::vector<TranslatedAttribute> &attributes,
+    gl::Program *program,
+    GLint start,
+    GLsizei instances,
+    GLsizei *repeatDraw)
 {
     ASSERT(gl::MAX_VERTEX_ATTRIBS >= attributes.size());
 
@@ -149,14 +151,38 @@ gl::Error VertexDeclarationCache::applyDeclaration(IDirect3DDevice9 *device,
 
             VertexBuffer9 *vertexBuffer = GetAs<VertexBuffer9>(attributes[i].vertexBuffer.get());
 
+            unsigned int offset = attributes[i].baseOffset;
+
+            if (attributes[i].usesFirstVertexOffset)
+            {
+                unsigned int ustart = static_cast<unsigned int>(start);
+
+                if (!IsUnsignedAdditionSafe(attributes[i].stride, ustart))
+                {
+                    return gl::Error(
+                        GL_INVALID_OPERATION,
+                        "Multiplication overflow in VertexDeclarationCache::applyDeclaration");
+                }
+
+                unsigned int strideOffset = attributes[i].stride * ustart;
+                if (!IsUnsignedAdditionSafe(offset, strideOffset))
+                {
+                    return gl::Error(
+                        GL_INVALID_OPERATION,
+                        "Addition overflow in VertexDeclarationCache::applyDeclaration");
+                }
+                offset += strideOffset;
+            }
+
             if (mAppliedVBs[stream].serial != attributes[i].serial ||
                 mAppliedVBs[stream].stride != attributes[i].stride ||
-                mAppliedVBs[stream].offset != attributes[i].offset)
+                mAppliedVBs[stream].offset != offset)
             {
-                device->SetStreamSource(stream, vertexBuffer->getBuffer(), attributes[i].offset, attributes[i].stride);
+                device->SetStreamSource(stream, vertexBuffer->getBuffer(), offset,
+                                        attributes[i].stride);
                 mAppliedVBs[stream].serial = attributes[i].serial;
                 mAppliedVBs[stream].stride = attributes[i].stride;
-                mAppliedVBs[stream].offset = attributes[i].offset;
+                mAppliedVBs[stream].offset = offset;
             }
 
             gl::VertexFormatType vertexformatType = gl::GetVertexFormatType(*attributes[i].attribute, GL_FLOAT);
