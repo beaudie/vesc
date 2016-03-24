@@ -38,7 +38,8 @@ class D3D11EmulatedIndexedBufferTest : public ANGLETest
         gl::Error error = mSourceBuffer->setData(testData, sizeof(testData), GL_STATIC_DRAW);
         ASSERT_FALSE(error.isError());
 
-        mTranslatedAttribute.offset = 0;
+        mTranslatedAttribute.baseOffset = 0;
+        mTranslatedAttribute.usesFirstVertexOffset = false;
         mTranslatedAttribute.stride = sizeof(GLfloat);
 
         GLubyte indices[] = {0, 0, 3, 4, 2, 1, 1};

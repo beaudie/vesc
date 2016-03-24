@@ -9,6 +9,7 @@
 
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
 
+#include "common/BitSetIterator.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/Program.h"
@@ -105,7 +106,8 @@ TranslatedAttribute::TranslatedAttribute()
     : active(false),
       attribute(nullptr),
       currentValueType(GL_NONE),
-      offset(0),
+      baseOffset(0),
+      usesFirstVertexOffset(false),
       stride(0),
       vertexBuffer(),
       storage(nullptr),
@@ -201,7 +203,7 @@ gl::Error VertexDataManager::prepareVertexData(const gl::State &state,
     const gl::VertexArray *vertexArray = state.getVertexArray();
     const auto &vertexAttributes       = vertexArray->getVertexAttributes();
 
-    mDynamicAttributeIndexesCache.clear();
+    mDynamicAttribsMaskCache.reset();
     const gl::Program *program = state.getProgram();
 
     translatedAttribs->clear();
@@ -232,7 +234,7 @@ gl::Error VertexDataManager::prepareVertexData(const gl::State &state,
             case VertexStorageType::STATIC:
             {
                 // Store static attribute.
-                gl::Error error = StoreStaticAttrib(translated, start, count, instances);
+                gl::Error error = StoreStaticAttrib(translated, count, instances);
                 if (error.isError())
                 {
                     return error;
@@ -241,11 +243,11 @@ gl::Error VertexDataManager::prepareVertexData(const gl::State &state,
             }
             case VertexStorageType::DYNAMIC:
                 // Dynamic attributes must be handled together.
-                mDynamicAttributeIndexesCache.push_back(attribIndex);
+                mDynamicAttribsMaskCache.set(attribIndex);
                 break;
             case VertexStorageType::DIRECT:
                 // Update translated data for direct attributes.
-                StoreDirectAttrib(translated, start);
+                StoreDirectAttrib(translated);
                 break;
             case VertexStorageType::CURRENT_VALUE:
             {
@@ -262,37 +264,35 @@ gl::Error VertexDataManager::prepareVertexData(const gl::State &state,
         }
     }
 
-    if (mDynamicAttributeIndexesCache.empty())
+    if (mDynamicAttribsMaskCache.none())
     {
         gl::Error(GL_NO_ERROR);
     }
 
-    return storeDynamicAttribs(translatedAttribs, mDynamicAttributeIndexesCache, start, count,
+    return storeDynamicAttribs(translatedAttribs, mDynamicAttribsMaskCache, start, count,
                                instances);
 }
 
 // static
-void VertexDataManager::StoreDirectAttrib(TranslatedAttribute *directAttrib, GLint start)
+void VertexDataManager::StoreDirectAttrib(TranslatedAttribute *directAttrib)
 {
     const auto &attrib   = *directAttrib->attribute;
     gl::Buffer *buffer   = attrib.buffer.get();
     BufferD3D *bufferD3D = buffer ? GetImplAs<BufferD3D>(buffer) : nullptr;
-
-    // Instanced vertices do not apply the 'start' offset
-    GLint firstVertexIndex = (attrib.divisor > 0 ? 0 : start);
 
     ASSERT(DirectStoragePossible(attrib));
     directAttrib->vertexBuffer.set(nullptr);
     directAttrib->storage = bufferD3D;
     directAttrib->serial  = bufferD3D->getSerial();
     directAttrib->stride = static_cast<unsigned int>(ComputeVertexAttributeStride(attrib));
-    directAttrib->offset =
-        static_cast<unsigned int>(attrib.offset + directAttrib->stride * firstVertexIndex);
+    directAttrib->baseOffset = static_cast<unsigned int>(attrib.offset);
+
+    // Instanced vertices do not apply the 'start' offset
+    directAttrib->usesFirstVertexOffset = (attrib.divisor != 0);
 }
 
 // static
 gl::Error VertexDataManager::StoreStaticAttrib(TranslatedAttribute *translated,
-                                               GLint start,
                                                GLsizei count,
                                                GLsizei instances)
 {
@@ -301,9 +301,6 @@ gl::Error VertexDataManager::StoreStaticAttrib(TranslatedAttribute *translated,
     gl::Buffer *buffer = attrib.buffer.get();
     ASSERT(buffer && attrib.enabled && !DirectStoragePossible(attrib));
     BufferD3D *bufferD3D = GetImplAs<BufferD3D>(buffer);
-
-    // Instanced vertices do not apply the 'start' offset
-    GLint firstVertexIndex = (attrib.divisor > 0 ? 0 : start);
 
     // Compute source data pointer
     const uint8_t *sourceData = nullptr;
@@ -347,31 +344,34 @@ gl::Error VertexDataManager::StoreStaticAttrib(TranslatedAttribute *translated,
         (static_cast<unsigned int>(attrib.offset) /
          static_cast<unsigned int>(ComputeVertexAttributeStride(attrib))) *
         translated->stride;
-    ASSERT(attrib.divisor == 0 || firstVertexIndex == 0);
-    unsigned int startOffset = firstVertexIndex * translated->stride;
-    if (streamOffset + firstElementOffset + startOffset < streamOffset)
-    {
-        return gl::Error(GL_OUT_OF_MEMORY);
-    }
 
     VertexBuffer *vertexBuffer = staticBuffer->getVertexBuffer();
 
+    if (!IsUnsignedAdditionSafe(streamOffset, firstElementOffset))
+    {
+        return gl::Error(GL_INVALID_OPERATION,
+                         "Integer overflow in VertexDataManager::StoreStaticAttrib");
+    }
+
     translated->vertexBuffer.set(vertexBuffer);
     translated->serial = vertexBuffer->getSerial();
-    translated->offset = streamOffset + firstElementOffset + startOffset;
+    translated->baseOffset = streamOffset + firstElementOffset;
+
+    // Instanced vertices do not apply the 'start' offset
+    translated->usesFirstVertexOffset = (attrib.divisor == 0);
 
     return gl::Error(GL_NO_ERROR);
 }
 
 gl::Error VertexDataManager::storeDynamicAttribs(
     std::vector<TranslatedAttribute> *translatedAttribs,
-    const std::vector<size_t> &dynamicAttribIndexes,
+    const gl::AttributesMask &dynamicAttribsMask,
     GLint start,
     GLsizei count,
     GLsizei instances)
 {
     // Reserve the required space for the dynamic buffers.
-    for (size_t attribIndex : dynamicAttribIndexes)
+    for (auto attribIndex : angle::IterateBitSet(dynamicAttribsMask))
     {
         const auto &dynamicAttrib = (*translatedAttribs)[attribIndex];
         gl::Error error = reserveSpaceForAttrib(dynamicAttrib, count, instances);
@@ -382,7 +382,7 @@ gl::Error VertexDataManager::storeDynamicAttribs(
     }
 
     // Store dynamic attributes
-    for (size_t attribIndex : dynamicAttribIndexes)
+    for (auto attribIndex : angle::IterateBitSet(dynamicAttribsMask))
     {
         auto *dynamicAttrib = &(*translatedAttribs)[attribIndex];
         gl::Error error = storeDynamicAttrib(dynamicAttrib, start, count, instances);
@@ -391,8 +391,14 @@ gl::Error VertexDataManager::storeDynamicAttribs(
             unmapStreamingBuffer();
             return error;
         }
+    }
 
-        // Promote static usage of dynamic buffers.
+    unmapStreamingBuffer();
+
+    // Promote static usage of dynamic buffers.
+    for (auto attribIndex : angle::IterateBitSet(dynamicAttribsMask))
+    {
+        auto *dynamicAttrib = &(*translatedAttribs)[attribIndex];
         gl::Buffer *buffer = dynamicAttrib->attribute->buffer.get();
         if (buffer)
         {
@@ -402,7 +408,6 @@ gl::Error VertexDataManager::storeDynamicAttribs(
         }
     }
 
-    unmapStreamingBuffer();
     return gl::Error(GL_NO_ERROR);
 }
 
@@ -485,7 +490,8 @@ gl::Error VertexDataManager::storeDynamicAttrib(TranslatedAttribute *translated,
 
     translated->vertexBuffer.set(vertexBuffer);
     translated->serial = vertexBuffer->getSerial();
-    translated->offset = streamOffset;
+    translated->baseOffset            = streamOffset;
+    translated->usesFirstVertexOffset = false;
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -533,7 +539,8 @@ gl::Error VertexDataManager::storeCurrentValue(const gl::VertexAttribCurrentValu
     translated->serial  = buffer->getSerial();
     translated->divisor = 0;
     translated->stride  = 0;
-    translated->offset  = static_cast<unsigned int>(cachedState->offset);
+    translated->baseOffset            = static_cast<unsigned int>(cachedState->offset);
+    translated->usesFirstVertexOffset = false;
 
     return gl::Error(GL_NO_ERROR);
 }

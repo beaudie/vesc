@@ -116,7 +116,8 @@ class VertexAttributeTest : public ANGLETest
                                   test.inputData);
         }
 
-        glVertexAttribPointer(mExpectedAttrib, typeSize, GL_FLOAT, GL_FALSE, 0, test.expectedData);
+        glVertexAttribPointer(mExpectedAttrib, typeSize, GL_FLOAT, GL_FALSE, 0,
+                              test.expectedData + (test.bufferOffset / sizeof(GLfloat)));
 
         glEnableVertexAttribArray(mTestAttrib);
         glEnableVertexAttribArray(mExpectedAttrib);
@@ -543,6 +544,27 @@ TEST_P(VertexAttributeTest, DrawElementsBufferTooSmall)
     setupTest(data, 1);
     drawIndexedQuad(mProgram, "position", 0.5f);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
+// Verify that using a different start vertex doesn't mess up the draw.
+TEST_P(VertexAttributeTest, DrawArraysWithBufferOffset)
+{
+    GLfloat inputData[mVertexCount];
+    GLfloat expectedData[mVertexCount];
+    for (size_t count = 0; count < mVertexCount; ++count)
+    {
+        inputData[count]    = static_cast<GLfloat>(count);
+        expectedData[count] = inputData[count];
+    }
+
+    TestData data(GL_FLOAT, GL_FALSE, Source::BUFFER, inputData, expectedData);
+    data.bufferOffset = 0;
+    runTest(data);
+    EXPECT_GL_NO_ERROR();
+
+    data.bufferOffset = 16;
+    runTest(data);
+    EXPECT_GL_NO_ERROR();
 }
 
 class VertexAttributeCachingTest : public VertexAttributeTest

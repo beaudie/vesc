@@ -94,7 +94,8 @@ Optional<size_t> FindFirstNonInstanced(
 }
 
 void SortAttributesByLayout(const gl::Program *program,
-                            const std::vector<TranslatedAttribute> &unsortedAttributes,
+                            const std::vector<TranslatedAttribute> &vertexArrayAttribs,
+                            const std::vector<TranslatedAttribute> &currentValueAttribs,
                             AttribIndexArray *sortedD3DSemanticsOut,
                             std::vector<const TranslatedAttribute *> *sortedAttributesOut)
 {
@@ -112,7 +113,17 @@ void SortAttributesByLayout(const gl::Program *program,
         }
 
         (*sortedD3DSemanticsOut)[d3dSemantic] = d3dSemantic;
-        (*sortedAttributesOut)[d3dSemantic] = &unsortedAttributes[locationIndex];
+
+        const auto *arrayAttrib = &vertexArrayAttribs[locationIndex];
+        if (arrayAttrib->attribute && arrayAttrib->attribute->enabled)
+        {
+            (*sortedAttributesOut)[d3dSemantic] = arrayAttrib;
+        }
+        else
+        {
+            ASSERT(currentValueAttribs[locationIndex].attribute);
+            (*sortedAttributesOut)[d3dSemantic] = &currentValueAttribs[locationIndex];
+        }
     }
 }
 
@@ -209,8 +220,10 @@ void InputLayoutCache::markDirty()
 
 gl::Error InputLayoutCache::applyVertexBuffers(
     const gl::State &state,
-    const std::vector<TranslatedAttribute> &unsortedAttributes,
+    const std::vector<TranslatedAttribute> &vertexArrayAttribs,
+    const std::vector<TranslatedAttribute> &currentValueAttribs,
     GLenum mode,
+    GLint start,
     TranslatedIndexData *indexInfo,
     GLsizei numIndicesPerInstance)
 {
@@ -223,7 +236,7 @@ gl::Error InputLayoutCache::applyVertexBuffers(
     bool instancedPointSpritesActive = programUsesInstancedPointSprites && (mode == GL_POINTS);
 
     AttribIndexArray sortedSemanticIndices;
-    SortAttributesByLayout(program, unsortedAttributes, &sortedSemanticIndices,
+    SortAttributesByLayout(program, vertexArrayAttribs, currentValueAttribs, &sortedSemanticIndices,
                            &mCurrentAttributes);
 
     // If we are using FL 9_3, make sure the first attribute is not instanced
@@ -313,7 +326,27 @@ gl::Error InputLayoutCache::applyVertexBuffers(
             }
 
             vertexStride = attrib.stride;
-            vertexOffset = attrib.offset;
+            vertexOffset = attrib.baseOffset;
+
+            if (attrib.usesFirstVertexOffset)
+            {
+                unsigned int ustart = static_cast<unsigned int>(start);
+
+                if (!IsUnsignedAdditionSafe(attrib.stride, ustart))
+                {
+                    return gl::Error(
+                        GL_INVALID_OPERATION,
+                        "Multiplication overflow in InputLayoutCache::applyVertexBuffers");
+                }
+
+                UINT offset = static_cast<UINT>(attrib.stride * ustart);
+                if (!IsUnsignedAdditionSafe(vertexOffset, offset))
+                {
+                    return gl::Error(GL_INVALID_OPERATION,
+                                     "Addition overflow in InputLayoutCache::applyVertexBuffers");
+                }
+                vertexOffset += offset;
+            }
         }
 
         size_t bufferIndex = reservedBuffers + attribIndex;

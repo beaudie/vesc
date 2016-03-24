@@ -10,9 +10,10 @@
 #ifndef LIBANGLE_RENDERER_D3D_VERTEXDATAMANAGER_H_
 #define LIBANGLE_RENDERER_D3D_VERTEXDATAMANAGER_H_
 
+#include "common/angleutils.h"
+#include "libANGLE/angletypes.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/VertexAttribute.h"
-#include "common/angleutils.h"
 
 namespace gl
 {
@@ -51,7 +52,8 @@ struct TranslatedAttribute
 
     const gl::VertexAttribute *attribute;
     GLenum currentValueType;
-    unsigned int offset;
+    unsigned int baseOffset;
+    bool usesFirstVertexOffset;
     unsigned int stride;   // 0 means not to advance the read pointer at all
 
     VertexBufferBinding vertexBuffer;
@@ -84,15 +86,14 @@ class VertexDataManager : angle::NonCopyable
                                 std::vector<TranslatedAttribute> *translatedAttribs,
                                 GLsizei instances);
 
-    static void StoreDirectAttrib(TranslatedAttribute *directAttrib, GLint start);
+    static void StoreDirectAttrib(TranslatedAttribute *directAttrib);
 
     static gl::Error StoreStaticAttrib(TranslatedAttribute *translated,
-                                       GLint start,
                                        GLsizei count,
                                        GLsizei instances);
 
     gl::Error storeDynamicAttribs(std::vector<TranslatedAttribute> *translatedAttribs,
-                                  const std::vector<size_t> &dynamicAttribIndexes,
+                                  const gl::AttributesMask &dynamicAttribsMask,
                                   GLint start,
                                   GLsizei count,
                                   GLsizei instances);
@@ -127,7 +128,7 @@ class VertexDataManager : angle::NonCopyable
 
     StreamingVertexBufferInterface *mStreamingBuffer;
     std::vector<CurrentValueState> mCurrentValueCache;
-    std::vector<size_t> mDynamicAttributeIndexesCache;
+    gl::AttributesMask mDynamicAttribsMaskCache;
 };
 
 }  // namespace rx
