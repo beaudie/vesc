@@ -162,7 +162,8 @@ class Buffer11::EmulatedIndexedStorage : public Buffer11::BufferStorage
 
     bool isMappable() const override { return true; }
 
-    ID3D11Buffer *getNativeStorage();
+    gl::ErrorOrResult<ID3D11Buffer *> getNativeStorage(SourceIndexData *indexInfo,
+                                                       const TranslatedAttribute &attribute);
 
     bool copyFromStorage(BufferStorage *source,
                          size_t sourceOffset,
@@ -173,15 +174,11 @@ class Buffer11::EmulatedIndexedStorage : public Buffer11::BufferStorage
 
     uint8_t *map(size_t offset, size_t length, GLbitfield access) override;
     void unmap() override;
-    bool update(SourceIndexData *indexInfo, const TranslatedAttribute *attribute);
 
   private:
     ID3D11Buffer *mNativeStorage;       // contains expanded data for use by D3D
     MemoryBuffer mMemoryBuffer;         // original data (not expanded)
     MemoryBuffer mIndicesMemoryBuffer;  // indices data
-    SourceIndexData mIndexInfo;         // indices information
-    size_t mAttributeStride;            // per element stride in bytes
-    size_t mAttributeOffset;            // starting offset
 };
 
 // Pack storage represents internal storage for pack buffers. We implement pack buffers
@@ -282,14 +279,14 @@ gl::Error Buffer11::setData(const void *data, size_t size, GLenum usage)
 
 gl::Error Buffer11::getData(const uint8_t **outData)
 {
-    SystemMemoryStorage *systemMemoryStorage = nullptr;
-    gl::Error error                          = getSystemMemoryStorage(&systemMemoryStorage);
-
-    if (error.isError())
+    auto systemOrError = getSystemMemoryStorage();
+    if (systemOrError.isError())
     {
         *outData = nullptr;
-        return error;
+        return systemOrError.getError();
     }
+
+    SystemMemoryStorage *systemMemoryStorage = systemOrError.getResult();
 
     mReadUsageCount = 0;
 
@@ -299,18 +296,15 @@ gl::Error Buffer11::getData(const uint8_t **outData)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Buffer11::getSystemMemoryStorage(SystemMemoryStorage **storageOut)
+gl::ErrorOrResult<Buffer11::SystemMemoryStorage *> Buffer11::getSystemMemoryStorage()
 {
-    BufferStorage *memStorageUntyped = getBufferStorage(BUFFER_USAGE_SYSTEM_MEMORY);
-
-    if (memStorageUntyped == nullptr)
+    auto systemOrError = getBufferStorage(BUFFER_USAGE_SYSTEM_MEMORY);
+    if (systemOrError.isError())
     {
-        // TODO(jmadill): convert all to errors
-        return gl::Error(GL_OUT_OF_MEMORY);
+        return systemOrError.getError();
     }
 
-    *storageOut = GetAs<SystemMemoryStorage>(memStorageUntyped);
-    return gl::Error(GL_NO_ERROR);
+    return GetAs<SystemMemoryStorage>(systemOrError.getResult());
 }
 
 gl::Error Buffer11::setSubData(const void *data, size_t size, size_t offset)
@@ -324,23 +318,23 @@ gl::Error Buffer11::setSubData(const void *data, size_t size, size_t offset)
         BufferStorage *writeBuffer = nullptr;
         if (supportsDirectBinding())
         {
-            writeBuffer = getStagingStorage();
-
-            if (!writeBuffer)
+            auto stagingOrError = getStagingStorage();
+            if (stagingOrError.isError())
             {
-                return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal buffer.");
+                return stagingOrError.getError();
             }
+
+            writeBuffer = stagingOrError.getResult();
         }
         else
         {
-            SystemMemoryStorage *systemMemoryStorage = nullptr;
-            gl::Error error = getSystemMemoryStorage(&systemMemoryStorage);
-            if (error.isError())
+            auto systemOrError = getSystemMemoryStorage();
+            if (systemOrError.isError())
             {
-                return error;
+                return systemOrError.getError();
             }
 
-            writeBuffer = systemMemoryStorage;
+            writeBuffer = systemOrError.getResult();
         }
 
         ASSERT(writeBuffer);
@@ -375,13 +369,29 @@ gl::Error Buffer11::copySubData(BufferImpl *source,
     Buffer11 *sourceBuffer = GetAs<Buffer11>(source);
     ASSERT(sourceBuffer != nullptr);
 
-    BufferStorage *copyDest = getLatestBufferStorage();
-    if (!copyDest)
+    auto latestOrError = getLatestBufferStorage();
+    if (latestOrError.isError())
     {
-        copyDest = getStagingStorage();
+        return latestOrError.getError();
     }
 
-    BufferStorage *copySource = sourceBuffer->getLatestBufferStorage();
+    BufferStorage *copyDest = latestOrError.getResult();
+    if (!copyDest)
+    {
+        auto stagingOrError = getStagingStorage();
+        if (stagingOrError.isError())
+        {
+            return stagingOrError.getError();
+        }
+        copyDest = stagingOrError.getResult();
+    }
+
+    auto sourceLatestOrError = sourceBuffer->getLatestBufferStorage();
+    if (sourceLatestOrError.isError())
+    {
+        return sourceLatestOrError.getError();
+    }
+    BufferStorage *copySource = sourceLatestOrError.getResult();
 
     if (!copySource || !copyDest)
     {
@@ -392,11 +402,21 @@ gl::Error Buffer11::copySubData(BufferImpl *source,
     // pack buffer partner, because other native buffers can't be mapped
     if (copyDest->getUsage() == BUFFER_USAGE_PIXEL_PACK && !copySource->isMappable())
     {
-        copySource = sourceBuffer->getStagingStorage();
+        auto sourceStagingOrError = sourceBuffer->getStagingStorage();
+        if (sourceStagingOrError.isError())
+        {
+            return sourceStagingOrError.getError();
+        }
+        copySource = sourceStagingOrError.getResult();
     }
     else if (copySource->getUsage() == BUFFER_USAGE_PIXEL_PACK && !copyDest->isMappable())
     {
-        copyDest = getStagingStorage();
+        auto stagingOrError = getStagingStorage();
+        if (stagingOrError.isError())
+        {
+            return stagingOrError.getError();
+        }
+        copyDest = stagingOrError.getResult();
     }
 
     // D3D11 does not allow overlapped copies until 11.1, and only if the
@@ -406,11 +426,21 @@ gl::Error Buffer11::copySubData(BufferImpl *source,
     {
         if (copySource->getUsage() == BUFFER_USAGE_STAGING)
         {
-            copySource = getBufferStorage(BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK);
+            auto vertexOrError = getBufferStorage(BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK);
+            if (vertexOrError.isError())
+            {
+                return vertexOrError.getError();
+            }
+            copySource = vertexOrError.getResult();
         }
         else
         {
-            copySource = getStagingStorage();
+            auto stagingOrError = getStagingStorage();
+            if (stagingOrError.isError())
+            {
+                return stagingOrError.getError();
+            }
+            copySource = stagingOrError.getResult();
         }
     }
 
@@ -435,7 +465,12 @@ gl::Error Buffer11::mapRange(size_t offset, size_t length, GLbitfield access, GL
 {
     ASSERT(!mMappedStorage);
 
-    BufferStorage *latestStorage = getLatestBufferStorage();
+    auto latestOrError = getLatestBufferStorage();
+    if (latestOrError.isError())
+    {
+        return latestOrError.getError();
+    }
+    BufferStorage *latestStorage = latestOrError.getResult();
     if (latestStorage && (latestStorage->getUsage() == BUFFER_USAGE_PIXEL_PACK ||
                           latestStorage->getUsage() == BUFFER_USAGE_STAGING))
     {
@@ -446,7 +481,12 @@ gl::Error Buffer11::mapRange(size_t offset, size_t length, GLbitfield access, GL
     {
         // Fall back to using the staging buffer if the latest storage does
         // not exist or is not CPU-accessible.
-        mMappedStorage = getStagingStorage();
+        auto stagingOrError = getStagingStorage();
+        if (stagingOrError.isError())
+        {
+            return stagingOrError.getError();
+        }
+        mMappedStorage = stagingOrError.getResult();
     }
 
     if (!mMappedStorage)
@@ -483,20 +523,25 @@ gl::Error Buffer11::unmap(GLboolean *result)
     return gl::Error(GL_NO_ERROR);
 }
 
-void Buffer11::markTransformFeedbackUsage()
+gl::Error Buffer11::markTransformFeedbackUsage()
 {
-    BufferStorage *transformFeedbackStorage =
-        getBufferStorage(BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK);
+    auto tfOrError = getBufferStorage(BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK);
+    if (tfOrError.isError())
+    {
+        return tfOrError.getError();
+    }
 
+    BufferStorage *transformFeedbackStorage = tfOrError.getResult();
     if (transformFeedbackStorage)
     {
         transformFeedbackStorage->setDataRevision(transformFeedbackStorage->getDataRevision() + 1);
     }
 
     invalidateStaticData();
+    return gl::Error(GL_NO_ERROR);
 }
 
-void Buffer11::markBufferUsage()
+gl::Error Buffer11::markBufferUsage()
 {
     mReadUsageCount++;
 
@@ -506,54 +551,64 @@ void Buffer11::markBufferUsage()
     BufferStorage *&sysMemUsage = mBufferStorages[BUFFER_USAGE_SYSTEM_MEMORY];
     if (mReadUsageCount > usageLimit && sysMemUsage != nullptr)
     {
-        if (getLatestBufferStorage() != sysMemUsage)
+        auto latestOrError = getLatestBufferStorage();
+        if (latestOrError.isError())
+        {
+            return latestOrError.getError();
+        }
+        if (latestOrError.getResult() != sysMemUsage)
         {
             SafeDelete(sysMemUsage);
         }
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
-ID3D11Buffer *Buffer11::getBuffer(BufferUsage usage)
+gl::ErrorOrResult<ID3D11Buffer *> Buffer11::getBuffer(BufferUsage usage)
+{
+    gl::Error error = markBufferUsage();
+    if (error.isError())
+    {
+        return error;
+    }
+
+    auto bufferOrError = getBufferStorage(usage);
+    if (bufferOrError.isError())
+    {
+        return bufferOrError.getError();
+    }
+    return GetAs<NativeStorage>(bufferOrError.getResult())->getNativeStorage();
+}
+
+gl::ErrorOrResult<ID3D11Buffer *> Buffer11::getEmulatedIndexedBuffer(
+    SourceIndexData *indexInfo,
+    const TranslatedAttribute &attribute)
 {
     markBufferUsage();
 
-    BufferStorage *bufferStorage = getBufferStorage(usage);
+    ASSERT(indexInfo);
 
-    if (!bufferStorage)
+    auto emulatedOrError = getBufferStorage(BUFFER_USAGE_EMULATED_INDEXED_VERTEX);
+    if (emulatedOrError.isError())
+    {
+        return emulatedOrError.getError();
+    }
+
+    EmulatedIndexedStorage *emulatedStorage =
+        GetAs<EmulatedIndexedStorage>(emulatedOrError.getResult());
+    auto errorOrResult = emulatedStorage->getNativeStorage(indexInfo, attribute);
+
+    if (errorOrResult.isError())
     {
         // Storage out-of-memory
         return nullptr;
     }
 
-    return GetAs<NativeStorage>(bufferStorage)->getNativeStorage();
+    return errorOrResult.getResult();
 }
 
-ID3D11Buffer *Buffer11::getEmulatedIndexedBuffer(SourceIndexData *indexInfo,
-                                                 const TranslatedAttribute *attribute)
-{
-    markBufferUsage();
-
-    assert(indexInfo != nullptr);
-    assert(attribute != nullptr);
-
-    BufferStorage *bufferStorage = getBufferStorage(BUFFER_USAGE_EMULATED_INDEXED_VERTEX);
-    if (!bufferStorage)
-    {
-        // Storage out-of-memory
-        return nullptr;
-    }
-
-    EmulatedIndexedStorage *emulatedStorage = GetAs<EmulatedIndexedStorage>(bufferStorage);
-    if (!emulatedStorage->update(indexInfo, attribute))
-    {
-        // Storage out-of-memory
-        return nullptr;
-    }
-
-    return emulatedStorage->getNativeStorage();
-}
-
-ID3D11Buffer *Buffer11::getConstantBufferRange(GLintptr offset, GLsizeiptr size)
+gl::ErrorOrResult<ID3D11Buffer *> Buffer11::getConstantBufferRange(GLintptr offset, GLsizeiptr size)
 {
     markBufferUsage();
 
@@ -561,32 +616,34 @@ ID3D11Buffer *Buffer11::getConstantBufferRange(GLintptr offset, GLsizeiptr size)
 
     if (offset == 0)
     {
-        bufferStorage = getBufferStorage(BUFFER_USAGE_UNIFORM);
+        auto uniformOrError = getBufferStorage(BUFFER_USAGE_UNIFORM);
+        if (uniformOrError.isError())
+        {
+            return uniformOrError.getError();
+        }
+        bufferStorage = uniformOrError.getResult();
     }
     else
     {
-        bufferStorage = getConstantBufferRangeStorage(offset, size);
-    }
-
-    if (!bufferStorage)
-    {
-        // Storage out-of-memory
-        return nullptr;
+        auto constantOrError = getConstantBufferRangeStorage(offset, size);
+        if (constantOrError.isError())
+        {
+            return constantOrError.getError();
+        }
+        bufferStorage = constantOrError.getResult();
     }
 
     return GetAs<NativeStorage>(bufferStorage)->getNativeStorage();
 }
 
-ID3D11ShaderResourceView *Buffer11::getSRV(DXGI_FORMAT srvFormat)
+gl::ErrorOrResult<ID3D11ShaderResourceView *> Buffer11::getSRV(DXGI_FORMAT srvFormat)
 {
-    BufferStorage *storage = getBufferStorage(BUFFER_USAGE_PIXEL_UNPACK);
-
-    if (!storage)
+    auto unpackOrError = getBufferStorage(BUFFER_USAGE_PIXEL_UNPACK);
+    if (unpackOrError.isError())
     {
-        // Storage out-of-memory
-        return nullptr;
+        return unpackOrError.getError();
     }
-
+    BufferStorage *storage = unpackOrError.getResult();
     ID3D11Buffer *buffer = GetAs<NativeStorage>(storage)->getNativeStorage();
 
     auto bufferSRVIt = mBufferResourceViews.find(srvFormat);
@@ -595,7 +652,7 @@ ID3D11ShaderResourceView *Buffer11::getSRV(DXGI_FORMAT srvFormat)
     {
         if (bufferSRVIt->second.first == buffer)
         {
-            return bufferSRVIt->second.second;
+            return std::move(bufferSRVIt->second.second);
         }
         else
         {
@@ -622,24 +679,33 @@ ID3D11ShaderResourceView *Buffer11::getSRV(DXGI_FORMAT srvFormat)
 
     mBufferResourceViews[srvFormat] = BufferSRVPair(buffer, bufferSRV);
 
-    return bufferSRV;
+    return std::move(bufferSRV);
 }
 
 gl::Error Buffer11::packPixels(const gl::FramebufferAttachment &readAttachment,
                                const PackPixelsParams &params)
 {
-    PackStorage *packStorage     = getPackStorage();
-    BufferStorage *latestStorage = getLatestBufferStorage();
-
-    if (packStorage)
+    auto packOrError = getPackStorage();
+    if (packOrError.isError())
     {
-        gl::Error error = packStorage->packPixels(readAttachment, params);
-        if (error.isError())
-        {
-            return error;
-        }
-        packStorage->setDataRevision(latestStorage ? latestStorage->getDataRevision() + 1 : 1);
+        return packOrError.getError();
     }
+    PackStorage *packStorage = packOrError.getResult();
+
+    auto latestOrError = getLatestBufferStorage();
+    if (latestOrError.isError())
+    {
+        return latestOrError.getError();
+    }
+    BufferStorage *latestStorage = latestOrError.getResult();
+
+    ASSERT(packStorage);
+    gl::Error error = packStorage->packPixels(readAttachment, params);
+    if (error.isError())
+    {
+        return error;
+    }
+    packStorage->setDataRevision(latestStorage ? latestStorage->getDataRevision() + 1 : 1);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -657,7 +723,7 @@ size_t Buffer11::getTotalCPUBufferMemoryBytes() const
     return allocationSize;
 }
 
-Buffer11::BufferStorage *Buffer11::getBufferStorage(BufferUsage usage)
+gl::ErrorOrResult<Buffer11::BufferStorage *> Buffer11::getBufferStorage(BufferUsage usage)
 {
     ASSERT(0 <= usage && usage < BUFFER_USAGE_COUNT);
     BufferStorage *&newStorage = mBufferStorages[usage];
@@ -686,19 +752,25 @@ Buffer11::BufferStorage *Buffer11::getBufferStorage(BufferUsage usage)
     // resize buffer
     if (newStorage->getSize() < mSize)
     {
-        if (newStorage->resize(mSize, true).isError())
+        auto error = newStorage->resize(mSize, true);
+        if (error.isError())
         {
-            // Out of memory error
-            return nullptr;
+            return error;
         }
     }
 
-    updateBufferStorage(newStorage, 0, mSize);
+    auto error = updateBufferStorage(newStorage, 0, mSize);
+    if (error.isError())
+    {
+        return error;
+    }
 
-    return newStorage;
+    return std::move(newStorage);
 }
 
-Buffer11::BufferStorage *Buffer11::getConstantBufferRangeStorage(GLintptr offset, GLsizeiptr size)
+gl::ErrorOrResult<Buffer11::BufferStorage *> Buffer11::getConstantBufferRangeStorage(
+    GLintptr offset,
+    GLsizeiptr size)
 {
     BufferStorage *newStorage;
 
@@ -741,10 +813,10 @@ Buffer11::BufferStorage *Buffer11::getConstantBufferRangeStorage(GLintptr offset
             mConstantBufferRangeStoragesCache.erase(iter);
         }
 
-        if (newStorage->resize(size, false).isError())
+        auto error = newStorage->resize(size, false);
+        if (error.isError())
         {
-            // Out of memory error
-            return nullptr;
+            return error;
         }
 
         mConstantBufferStorageAdditionalSize += sizeDelta;
@@ -755,14 +827,26 @@ Buffer11::BufferStorage *Buffer11::getConstantBufferRangeStorage(GLintptr offset
         newStorage->setDataRevision(0);
     }
 
-    updateBufferStorage(newStorage, offset, size);
+    auto error = updateBufferStorage(newStorage, offset, size);
+    if (error.isError())
+    {
+        return error;
+    }
 
-    return newStorage;
+    return std::move(newStorage);
 }
 
-void Buffer11::updateBufferStorage(BufferStorage *storage, size_t sourceOffset, size_t storageSize)
+gl::Error Buffer11::updateBufferStorage(BufferStorage *storage,
+                                        size_t sourceOffset,
+                                        size_t storageSize)
 {
-    BufferStorage *latestBuffer = getLatestBufferStorage();
+    auto latestOrError = getLatestBufferStorage();
+    if (latestOrError.isError())
+    {
+        return latestOrError.getError();
+    }
+
+    BufferStorage *latestBuffer = latestOrError.getResult();
     if (latestBuffer && latestBuffer->getDataRevision() > storage->getDataRevision())
     {
         // Copy through a staging buffer if we're copying from or to a non-staging, mappable
@@ -772,7 +856,12 @@ void Buffer11::updateBufferStorage(BufferStorage *storage, size_t sourceOffset, 
             storage->getUsage() != BUFFER_USAGE_STAGING &&
             (!latestBuffer->isMappable() || !storage->isMappable()))
         {
-            NativeStorage *stagingBuffer = getStagingStorage();
+            auto stagingOrError = getStagingStorage();
+            if (stagingOrError.isError())
+            {
+                return stagingOrError.getError();
+            }
+            NativeStorage *stagingBuffer = stagingOrError.getResult();
 
             stagingBuffer->copyFromStorage(latestBuffer, 0, latestBuffer->getSize(), 0);
             stagingBuffer->setDataRevision(latestBuffer->getDataRevision());
@@ -788,9 +877,11 @@ void Buffer11::updateBufferStorage(BufferStorage *storage, size_t sourceOffset, 
         }
         storage->setDataRevision(latestBuffer->getDataRevision());
     }
+
+    return gl::Error(GL_NO_ERROR);
 }
 
-Buffer11::BufferStorage *Buffer11::getLatestBufferStorage() const
+gl::ErrorOrResult<Buffer11::BufferStorage *> Buffer11::getLatestBufferStorage() const
 {
     // Even though we iterate over all the direct buffers, it is expected that only
     // 1 or 2 will be present.
@@ -808,40 +899,36 @@ Buffer11::BufferStorage *Buffer11::getLatestBufferStorage() const
     // resize buffer
     if (latestStorage && latestStorage->getSize() < mSize)
     {
-        if (latestStorage->resize(mSize, true).isError())
+        auto error = latestStorage->resize(mSize, true);
+        if (error.isError())
         {
-            // Out of memory error
-            return nullptr;
+            return error;
         }
     }
 
-    return latestStorage;
+    return std::move(latestStorage);
 }
 
-Buffer11::NativeStorage *Buffer11::getStagingStorage()
+gl::ErrorOrResult<Buffer11::NativeStorage *> Buffer11::getStagingStorage()
 {
-    BufferStorage *stagingStorage = getBufferStorage(BUFFER_USAGE_STAGING);
-
-    if (!stagingStorage)
+    auto stagingOrError = getBufferStorage(BUFFER_USAGE_STAGING);
+    if (stagingOrError.isError())
     {
-        // Out-of-memory
-        return nullptr;
+        return stagingOrError.getError();
     }
 
-    return GetAs<NativeStorage>(stagingStorage);
+    return GetAs<NativeStorage>(stagingOrError.getResult());
 }
 
-Buffer11::PackStorage *Buffer11::getPackStorage()
+gl::ErrorOrResult<Buffer11::PackStorage *> Buffer11::getPackStorage()
 {
-    BufferStorage *packStorage = getBufferStorage(BUFFER_USAGE_PIXEL_PACK);
-
-    if (!packStorage)
+    auto packOrError = getBufferStorage(BUFFER_USAGE_PIXEL_PACK);
+    if (packOrError.isError())
     {
-        // Out-of-memory
-        return nullptr;
+        return packOrError.getError();
     }
 
-    return GetAs<PackStorage>(packStorage);
+    return GetAs<PackStorage>(packOrError.getResult());
 }
 
 bool Buffer11::supportsDirectBinding() const
@@ -1084,13 +1171,53 @@ Buffer11::EmulatedIndexedStorage::~EmulatedIndexedStorage()
     SafeRelease(mNativeStorage);
 }
 
-ID3D11Buffer *Buffer11::EmulatedIndexedStorage::getNativeStorage()
+gl::ErrorOrResult<ID3D11Buffer *> Buffer11::EmulatedIndexedStorage::getNativeStorage(
+    SourceIndexData *indexInfo,
+    const TranslatedAttribute &attribute)
 {
+    // If a change in the indices applied from the last draw call is detected, then the emulated
+    // indexed buffer needs to be invalidated.  After invalidation, the change detected flag should
+    // be cleared to avoid unnecessary recreation of the buffer.
+    if (mNativeStorage == nullptr || indexInfo->srcIndicesChanged)
+    {
+        SafeRelease(mNativeStorage);
+
+        // Copy the source index data. This ensures that the lifetime of the indices pointer
+        // stays with this storage until the next time we invalidate.
+        size_t indicesDataSize = 0;
+        switch (indexInfo->srcIndexType)
+        {
+            case GL_UNSIGNED_INT:
+                indicesDataSize = sizeof(GLuint) * indexInfo->srcCount;
+                break;
+            case GL_UNSIGNED_SHORT:
+                indicesDataSize = sizeof(GLushort) * indexInfo->srcCount;
+                break;
+            case GL_UNSIGNED_BYTE:
+                indicesDataSize = sizeof(GLubyte) * indexInfo->srcCount;
+                break;
+            default:
+                indicesDataSize = sizeof(GLushort) * indexInfo->srcCount;
+                break;
+        }
+
+        if (!mIndicesMemoryBuffer.resize(indicesDataSize))
+        {
+            return gl::Error(GL_OUT_OF_MEMORY,
+                             "Error resizing index memory buffer in "
+                             "Buffer11::EmulatedIndexedStorage::getNativeStorage");
+        }
+
+        memcpy(mIndicesMemoryBuffer.data(), indexInfo->srcIndices, indicesDataSize);
+
+        indexInfo->srcIndicesChanged = false;
+    }
+
     if (!mNativeStorage)
     {
         // Expand the memory storage upon request and cache the results.
         unsigned int expandedDataSize =
-            static_cast<unsigned int>((mIndexInfo.srcCount * mAttributeStride) + mAttributeOffset);
+            static_cast<unsigned int>((indexInfo->srcCount * attribute.stride) + attribute.offset);
         MemoryBuffer expandedData;
         if (!expandedData.resize(expandedDataSize))
         {
@@ -1101,15 +1228,15 @@ ID3D11Buffer *Buffer11::EmulatedIndexedStorage::getNativeStorage()
         ZeroMemory(expandedData.data(), expandedDataSize);
 
         uint8_t *curr      = expandedData.data();
-        const uint8_t *ptr = static_cast<const uint8_t *>(mIndexInfo.srcIndices);
+        const uint8_t *ptr = static_cast<const uint8_t *>(indexInfo->srcIndices);
 
         // Ensure that we start in the correct place for the emulated data copy operation to
         // maintain offset behaviors.
-        curr += mAttributeOffset;
+        curr += attribute.offset;
 
         ReadIndexValueFunction readIndexValue = ReadIndexValueFromIndices<GLushort>;
 
-        switch (mIndexInfo.srcIndexType)
+        switch (indexInfo->srcIndexType)
         {
             case GL_UNSIGNED_INT:
                 readIndexValue = ReadIndexValueFromIndices<GLuint>;
@@ -1123,11 +1250,11 @@ ID3D11Buffer *Buffer11::EmulatedIndexedStorage::getNativeStorage()
         }
 
         // Iterate over the cached index data and copy entries indicated into the emulated buffer.
-        for (GLuint i = 0; i < mIndexInfo.srcCount; i++)
+        for (GLuint i = 0; i < indexInfo->srcCount; i++)
         {
             GLuint idx = readIndexValue(ptr, i);
-            memcpy(curr, mMemoryBuffer.data() + (mAttributeStride * idx), mAttributeStride);
-            curr += mAttributeStride;
+            memcpy(curr, mMemoryBuffer.data() + (attribute.stride * idx), attribute.stride);
+            curr += attribute.stride;
         }
 
         // Finally, initialize the emulated indexed native storage object with the newly copied data
@@ -1153,57 +1280,7 @@ ID3D11Buffer *Buffer11::EmulatedIndexedStorage::getNativeStorage()
         d3d11::SetDebugName(mNativeStorage, "Buffer11::EmulatedIndexedStorage");
     }
 
-    return mNativeStorage;
-}
-
-bool Buffer11::EmulatedIndexedStorage::update(SourceIndexData *indexInfo,
-                                              const TranslatedAttribute *attribute)
-{
-    // If a change in the indices applied from the last draw call is detected, then the emulated
-    // indexed buffer needs to be invalidated.  After invalidation, the change detected flag should
-    // be cleared to avoid unnecessary recreation of the buffer.
-    if (mNativeStorage == nullptr || indexInfo->srcIndicesChanged)
-    {
-        SafeRelease(mNativeStorage);
-
-        // Copy attribute offset and stride information
-        mAttributeStride = attribute->stride;
-        mAttributeOffset = attribute->offset;
-
-        // Copy the source index data. This ensures that the lifetime of the indices pointer
-        // stays with this storage until the next time we invalidate.
-        size_t indicesDataSize = 0;
-        switch (indexInfo->srcIndexType)
-        {
-            case GL_UNSIGNED_INT:
-                indicesDataSize = sizeof(GLuint) * indexInfo->srcCount;
-                break;
-            case GL_UNSIGNED_SHORT:
-                indicesDataSize = sizeof(GLushort) * indexInfo->srcCount;
-                break;
-            case GL_UNSIGNED_BYTE:
-                indicesDataSize = sizeof(GLubyte) * indexInfo->srcCount;
-                break;
-            default:
-                indicesDataSize = sizeof(GLushort) * indexInfo->srcCount;
-                break;
-        }
-
-        if (!mIndicesMemoryBuffer.resize(indicesDataSize))
-        {
-            return false;
-        }
-
-        memcpy(mIndicesMemoryBuffer.data(), indexInfo->srcIndices, indicesDataSize);
-
-        // Copy the source index data description and update the srcIndices pointer to point
-        // to our cached index data.
-        mIndexInfo            = *indexInfo;
-        mIndexInfo.srcIndices = mIndicesMemoryBuffer.data();
-
-        indexInfo->srcIndicesChanged = false;
-    }
-    return true;
+    return std::move(mNativeStorage);
 }
 
 bool Buffer11::EmulatedIndexedStorage::copyFromStorage(BufferStorage *source,
@@ -1426,4 +1503,4 @@ void Buffer11::SystemMemoryStorage::unmap()
 {
     // No-op
 }
-}
+}  // namespace rx
