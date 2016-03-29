@@ -70,6 +70,11 @@ class ErrorOrResult
     T mResult;
 };
 
+inline gl::Error NoError()
+{
+    return gl::Error(GL_NO_ERROR);
+}
+
 }  // namespace gl
 
 namespace egl
@@ -102,6 +107,28 @@ class Error final
 };
 
 }  // namespace egl
+
+#define ANGLE_CONCAT1(x, y) x##y
+#define ANGLE_CONCAT2(x, y) ANGLE_CONCAT1(x, y)
+#define ANGLE_LOCAL_VAR ANGLE_CONCAT2(_localVar, __LINE__)
+
+#define ANGLE_TRY(EXPR)                \
+    {                                  \
+        auto ANGLE_LOCAL_VAR = EXPR;   \
+        if (ANGLE_LOCAL_VAR.isError()) \
+            return ANGLE_LOCAL_VAR;    \
+    }
+#define ANGLE_TRY_RESULT(EXPR, RESULT)         \
+    {                                          \
+        auto ANGLE_LOCAL_VAR = EXPR;           \
+        if (ANGLE_LOCAL_VAR.isError())         \
+            return ANGLE_LOCAL_VAR.getError(); \
+        RESULT = ANGLE_LOCAL_VAR.getResult();  \
+    }
+
+#undef ANGLE_LOCAL_VAR
+#undef ANGLE_CONCAT2
+#undef ANLGE_CONCAT1
 
 #include "Error.inl"
 
