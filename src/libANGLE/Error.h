@@ -74,6 +74,11 @@ class ErrorOrResult
     T mResult;
 };
 
+inline Error NoError()
+{
+    return Error(GL_NO_ERROR);
+}
+
 }  // namespace gl
 
 namespace egl
@@ -105,7 +110,41 @@ class Error final
     mutable std::unique_ptr<std::string> mMessage;
 };
 
+inline Error Success()
+{
+    return Error(EGL_SUCCESS);
+}
+
 }  // namespace egl
+
+#define ANGLE_CONCAT1(x, y) x##y
+#define ANGLE_CONCAT2(x, y) ANGLE_CONCAT1(x, y)
+#define ANGLE_LOCAL_VAR ANGLE_CONCAT2(_localVar, __LINE__)
+
+#define ANGLE_TRY(EXPR)                \
+    {                                  \
+        auto ANGLE_LOCAL_VAR = EXPR;   \
+        if (ANGLE_LOCAL_VAR.isError()) \
+        {                              \
+            return ANGLE_LOCAL_VAR;    \
+        }                              \
+    }                                  \
+    ANGLE_EMPTY_STATEMENT
+
+#define ANGLE_TRY_RESULT(EXPR, RESULT)         \
+    {                                          \
+        auto ANGLE_LOCAL_VAR = EXPR;           \
+        if (ANGLE_LOCAL_VAR.isError())         \
+        {                                      \
+            return ANGLE_LOCAL_VAR.getError(); \
+        }                                      \
+        RESULT = ANGLE_LOCAL_VAR.getResult();  \
+    }                                          \
+    ANGLE_EMPTY_STATEMENT
+
+#undef ANGLE_LOCAL_VAR
+#undef ANGLE_CONCAT2
+#undef ANGLE_CONCAT1
 
 #include "Error.inl"
 
