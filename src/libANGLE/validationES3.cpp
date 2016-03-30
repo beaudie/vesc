@@ -1583,22 +1583,37 @@ bool ValidateGetProgramBinary(Context *context,
     return ValidateGetProgramBinaryBase(context, program, bufSize, length, binaryFormat, binary);
 }
 
-bool ValidateProgramParameter(Context *context, GLuint program, GLenum pname, GLint value)
+bool ValidateProgramParameteri(Context *context, GLuint program, GLenum pname, GLint value)
 {
     if (context->getClientVersion() < 3)
     {
-        context->recordError(Error(GL_INVALID_OPERATION));
+        context->recordError(Error(GL_INVALID_OPERATION, "Context does not support GLES3."));
         return false;
     }
 
     if (GetValidProgram(context, program) == nullptr)
     {
+        if (context->getShader(program))
+        {
+            context->recordError(
+                Error(GL_INVALID_OPERATION, "Expected a program name, but found a shader name"));
+        }
+        else
+        {
+            context->recordError(Error(GL_INVALID_VALUE, "Program name is not valid"));
+        }
         return false;
     }
 
     switch (pname)
     {
         case GL_PROGRAM_BINARY_RETRIEVABLE_HINT:
+            if (value != GL_FALSE && value != GL_TRUE)
+            {
+                context->recordError(Error(
+                    GL_INVALID_VALUE, "Invalid value, expected GL_FALSE or GL_TRUE: %i", value));
+                return false;
+            }
             break;
 
         default:
