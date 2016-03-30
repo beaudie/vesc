@@ -2684,6 +2684,22 @@ void Context::compressedTexSubImage3D(GLenum target,
     }
 }
 
+void Context::getBufferPointerv(GLenum target, GLenum pname, void **params)
+{
+    Buffer *buffer = getState().getTargetBuffer(target);
+
+    ASSERT(buffer);
+
+    if (!buffer->isMapped())
+    {
+        *params = nullptr;
+    }
+    else
+    {
+        *params = buffer->getMapPointer();
+    }
+}
+
 void Context::syncStateForReadPixels()
 {
     syncRendererState(mReadPixelsDirtyBits, mReadPixelsDirtyObjects);

@@ -344,13 +344,13 @@ void GL_APIENTRY GetBufferPointerv(GLenum target, GLenum pname, GLvoid** params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (context->getClientVersion() < 3)
+        if (!context->skipValidation() &&
+            !ValidateGetBufferPointerv(context, target, pname, params))
         {
-            context->recordError(Error(GL_INVALID_OPERATION));
             return;
         }
 
-        GetBufferPointervOES(target, pname, params);
+        context->getBufferPointerv(target, pname, params);
     }
 }
 

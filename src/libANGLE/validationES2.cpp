@@ -1882,4 +1882,9 @@ bool ValidateCompressedTexSubImage2D(Context *context,
     return true;
 }
 
+bool ValidateGetBufferPointervOES(Context *context, GLenum target, GLenum pname, void **params)
+{
+    return ValidateGetBufferPointervBase(context, target, pname, params);
+}
+
 }  // namespace gl
