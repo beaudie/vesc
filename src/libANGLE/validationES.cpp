@@ -2660,6 +2660,35 @@ bool ValidateCopyTexSubImage2D(Context *context,
                                                yoffset, 0, x, y, width, height, 0);
 }
 
+bool ValidateGetBufferPointervBase(Context *context, GLenum target, GLenum pname, void **params)
+{
+    if (!ValidBufferTarget(context, target))
+    {
+        context->recordError(Error(GL_INVALID_ENUM, "Buffer target not valid: 0x%X", target));
+        return false;
+    }
+
+    if (pname != GL_BUFFER_MAP_POINTER)
+    {
+        context->recordError(Error(GL_INVALID_ENUM, "pname not valid: 0x%X", pname));
+        return false;
+    }
+
+    Buffer *buffer = context->getState().getTargetBuffer(target);
+
+    // GLES 3.0 section 2.10.1: "Attempts to attempts to modify or query buffer object state for a
+    // target bound to zero generate an INVALID_OPERATION error."
+    // GLES 3.1 section 6.6 explicitly specifies this error.
+    if (!buffer)
+    {
+        context->recordError(
+            Error(GL_INVALID_OPERATION, "Can not get pointer for reserved buffer name zero."));
+        return false;
+    }
+
+    return true;
+}
+
 bool ValidateGenBuffers(Context *context, GLint n, GLuint *)
 {
     return ValidateGenOrDelete(context, n);

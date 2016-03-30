@@ -2018,4 +2018,15 @@ bool ValidateSamplerParameterf(Context *context, GLuint sampler, GLenum pname, G
     return ValidateSamplerParameteri(context, sampler, pname, static_cast<GLint>(param));
 }
 
+bool ValidateGetBufferPointerv(Context *context, GLenum target, GLenum pname, GLvoid **params)
+{
+    if (context->getClientVersion() < 3)
+    {
+        context->recordError(Error(GL_INVALID_OPERATION, "Context does not support GLES3."));
+        return false;
+    }
+
+    return ValidateGetBufferPointervBase(context, target, pname, params);
+}
+
 }  // namespace gl

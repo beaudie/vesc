@@ -168,6 +168,8 @@ bool ValidateCompressedTexSubImage2D(Context *context,
                                      GLsizei imageSize,
                                      const GLvoid *data);
 
+bool ValidateGetBufferPointervOES(Context *context, GLenum target, GLenum pname, void **params);
+
 }  // namespace gl
 
 #endif // LIBANGLE_VALIDATION_ES2_H_
