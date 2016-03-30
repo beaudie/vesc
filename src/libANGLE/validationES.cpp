@@ -1147,19 +1147,24 @@ bool ValidateBeginQueryBase(gl::Context *context, GLenum target, GLuint id)
     // active query object name for any query type, the error INVALID_OPERATION is
     // generated.
 
-    // Ensure no other queries are active
-    // NOTE: If other queries than occlusion are supported, we will need to check
-    // separately that:
-    //    a) The query ID passed is not the current active query for any target/type
-    //    b) There are no active queries for the requested target (and in the case
-    //       of GL_ANY_SAMPLES_PASSED_EXT and GL_ANY_SAMPLES_PASSED_CONSERVATIVE_EXT,
-    //       no query may be active for either if glBeginQuery targets either.
+    // GLES 3.0 changes this so that queries of different types can be active at the same time.
+    // All other error conditions from the extension spec are checked here.
 
-    // TODO(ewell): I think this needs to be changed for timer and occlusion queries to work at the
-    // same time
-    if (context->getState().isQueryActive())
+    Query *activeQuery = context->getState().getActiveQuery(target);
+    // ANY_SAMPLES_PASSED and ANY_SAMPLES_PASSED_CONSERVATIVE queries can not be active at the same
+    // time.
+    if (activeQuery == nullptr && target == GL_ANY_SAMPLES_PASSED)
     {
-        context->recordError(Error(GL_INVALID_OPERATION, "Other query is active"));
+        activeQuery = context->getState().getActiveQuery(GL_ANY_SAMPLES_PASSED_CONSERVATIVE);
+    }
+    if (activeQuery == nullptr && target == GL_ANY_SAMPLES_PASSED_CONSERVATIVE)
+    {
+        activeQuery = context->getState().getActiveQuery(GL_ANY_SAMPLES_PASSED);
+    }
+    if (activeQuery != nullptr)
+    {
+        context->recordError(
+            Error(GL_INVALID_OPERATION, "Query of the same type is already active."));
         return false;
     }
 
@@ -1188,6 +1193,15 @@ bool ValidateBeginQueryEXT(gl::Context *context, GLenum target, GLuint id)
         !context->getExtensions().disjointTimerQuery)
     {
         context->recordError(Error(GL_INVALID_OPERATION, "Query extension not enabled"));
+        return false;
+    }
+
+    // Ensure no other queries are active. Both EXT_occlusion_query_boolean and
+    // EXT_disjoint_timer_query specify this.
+
+    if (context->getState().isQueryActive())
+    {
+        context->recordError(Error(GL_INVALID_OPERATION, "Other query is active"));
         return false;
     }
 
