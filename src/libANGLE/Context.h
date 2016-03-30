@@ -372,6 +372,8 @@ class Context final : public ValidationContext
     Error flush();
     Error finish();
 
+    void getBufferPointerv(GLenum target, GLenum pname, void **params);
+
     void beginTransformFeedback(GLenum primitiveMode);
 
     bool hasActiveTransformFeedback(GLuint program) const;

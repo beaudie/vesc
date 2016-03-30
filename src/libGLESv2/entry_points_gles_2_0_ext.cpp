@@ -826,28 +826,13 @@ void GL_APIENTRY GetBufferPointervOES(GLenum target, GLenum pname, void** params
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidBufferTarget(context, target))
+        if (!context->skipValidation() &&
+            !ValidateGetBufferPointervOES(context, target, pname, params))
         {
-            context->recordError(Error(GL_INVALID_ENUM));
             return;
         }
 
-        if (pname != GL_BUFFER_MAP_POINTER)
-        {
-            context->recordError(Error(GL_INVALID_ENUM));
-            return;
-        }
-
-        Buffer *buffer = context->getState().getTargetBuffer(target);
-
-        if (!buffer || !buffer->isMapped())
-        {
-            *params = NULL;
-        }
-        else
-        {
-            *params = buffer->getMapPointer();
-        }
+        context->getBufferPointerv(target, pname, params);
     }
 }
 
