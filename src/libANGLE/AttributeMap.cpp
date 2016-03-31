@@ -40,6 +40,11 @@ EGLint AttributeMap::get(EGLint key, EGLint defaultValue) const
     return (mAttributes.find(key) != mAttributes.end()) ? iter->second : defaultValue;
 }
 
+bool AttributeMap::isEmpty() const
+{
+    return mAttributes.empty();
+}
+
 AttributeMap::const_iterator AttributeMap::begin() const
 {
     return mAttributes.begin();

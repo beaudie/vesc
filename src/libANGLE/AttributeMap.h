@@ -24,6 +24,7 @@ class AttributeMap final
     void insert(EGLint key, EGLint value);
     bool contains(EGLint key) const;
     EGLint get(EGLint key, EGLint defaultValue) const;
+    bool isEmpty() const;
 
     typedef std::map<EGLint, EGLint>::const_iterator const_iterator;
 
