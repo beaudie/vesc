@@ -556,6 +556,30 @@ EGLAPI EGLBoolean EGLAPIENTRY eglQuerySurfacePointerANGLE (EGLDisplay dpy, EGLSu
 #define EGL_EXPERIMENTAL_PRESENT_PATH_COPY_ANGLE 0x33AA
 #endif /* EGL_ANGLE_experimental_present_path */
 
+#ifndef EGL_ANGLE_stream_producer_d3d_texture_nv12
+#define EGL_ANGLE_stream_producer_d3d_texture_nv12
+// TODO(ewell): Get an actual enum number for this
+#define EGL_D3D_TEXTURE_SUBRESOURCE_ID_ANGLE 0xFFFF
+typedef EGLBoolean(EGLAPIENTRYP PFNEGLCREATESTREAMPRODUCERD3DTEXTURENV12ANGLEPROC)(
+    EGLDisplay dpy,
+    EGLStreamKHR stream,
+    const EGLint *attrib_list);
+typedef EGLBoolean(EGLAPIENTRYP PFNEGLSTREAMPOSTD3DTEXTURENV12ANGLEPROC)(EGLDisplay dpy,
+                                                                         EGLStreamKHR stream,
+                                                                         void *texture,
+                                                                         const EGLint *attrib_list);
+#ifdef EGL_EXT_PROTOTYPES
+EGLAPI EGLBoolean EGLAPIENTRY
+eglCreateStreamProducerD3DTextureNV12ANGLE(EGLDisplay dpy,
+                                           EGLStreamKHR stream,
+                                           const EGLint *attrib_list) EGLAPI EGLBoolean EGLAPIENTRY
+    eglStreamPostD3DTextureNV12ANGLE(EGLDisplay dpy,
+                                     EGLStreamKHR stream,
+                                     void *texture,
+                                     const EGLint *attrib_list)
+#endif
+#endif /* EGL_ANGLE_stream_producer_d3d_texture_nv12 */
+
 #ifndef EGL_ARM_pixmap_multisample_discard
 #define EGL_ARM_pixmap_multisample_discard 1
 #define EGL_DISCARD_SAMPLES_ARM           0x3286
@@ -580,7 +604,7 @@ EGLAPI EGLBoolean EGLAPIENTRY eglQuerySurfacePointerANGLE (EGLDisplay dpy, EGLSu
 
 #ifndef EGL_EXT_device_base
 #define EGL_EXT_device_base 1
-typedef void *EGLDeviceEXT;
+        typedef void *EGLDeviceEXT;
 #define EGL_NO_DEVICE_EXT                 ((EGLDeviceEXT)(0))
 #define EGL_BAD_DEVICE_EXT                0x322B
 #define EGL_DEVICE_EXT                    0x322C
