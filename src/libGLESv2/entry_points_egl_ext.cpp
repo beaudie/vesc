@@ -774,4 +774,46 @@ EGLBoolean EGLAPIENTRY StreamConsumerGLTextureExternalAttribsNV(EGLDisplay dpy,
     }
     return EGL_FALSE;
 }
+
+EGLBoolean EGLAPIENTRY CreateStreamProducerD3DTextureNV12ANGLE(EGLDisplay dpy,
+                                                               EGLStreamKHR stream,
+                                                               const EGLint *attrib_list)
+{
+    EVENT("(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR stream = 0x%0.8p, EGLenum attrib_list = 0x%0.8p",
+          dpy, stream, attrib_list);
+    Display *display     = static_cast<Display *>(dpy);
+    Stream *streamObject = static_cast<Stream *>(stream);
+    AttributeMap attributes(attrib_list);
+
+    Error error =
+        ValidateCreateStreamProducerD3DTextureNV12ANGLE(display, streamObject, attributes);
+    if (error.isError())
+    {
+        return EGL_FALSE;
+    }
+    SetGlobalError(error);
+    return EGL_FALSE;
+}
+
+EGLBoolean EGLAPIENTRY StreamPostD3DTextureNV12ANGLE(EGLDisplay dpy,
+                                                     EGLStreamKHR stream,
+                                                     void *texture,
+                                                     const EGLint *attrib_list)
+{
+    EVENT(
+        "(EGLDisplay dpy = 0x%0.8p, EGLStreamKHR stream = 0x%0.8p, void* texture = 0x%0.8p, "
+        "EGLenum attrib_list = 0x%0.8p",
+        dpy, stream, texture, attrib_list);
+    Display *display     = static_cast<Display *>(dpy);
+    Stream *streamObject = static_cast<Stream *>(stream);
+    AttributeMap attributes(attrib_list);
+
+    Error error = ValidateStreamPostD3DTextureNV12ANGLE(display, streamObject, texture, attributes);
+    if (error.isError())
+    {
+        return EGL_FALSE;
+    }
+    SetGlobalError(error);
+    return EGL_FALSE;
+}
 }
