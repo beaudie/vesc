@@ -21,35 +21,40 @@
 namespace rx
 {
 
-SurfaceD3D *SurfaceD3D::createOffscreen(RendererD3D *renderer, egl::Display *display, const egl::Config *config, EGLClientBuffer shareHandle,
-                                        EGLint width, EGLint height)
+SurfaceD3D *SurfaceD3D::createOffscreen(RendererD3D *renderer,
+                                        egl::Display *display,
+                                        const egl::Config *config,
+                                        const egl::AttributeMap &attribs,
+                                        EGLClientBuffer shareHandle,
+                                        EGLint width,
+                                        EGLint height)
 {
-    return new SurfaceD3D(renderer, display, config, width, height, EGL_TRUE, 0, EGL_FALSE,
+    return new SurfaceD3D(renderer, display, config, attribs, width, height, EGL_TRUE, 0,
                           shareHandle, NULL);
 }
 
 SurfaceD3D *SurfaceD3D::createFromWindow(RendererD3D *renderer,
                                          egl::Display *display,
                                          const egl::Config *config,
+                                         const egl::AttributeMap &attribs,
                                          EGLNativeWindowType window,
                                          EGLint fixedSize,
-                                         EGLint directComposition,
                                          EGLint width,
                                          EGLint height,
                                          EGLint orientation)
 {
-    return new SurfaceD3D(renderer, display, config, width, height, fixedSize, orientation,
-                          directComposition, static_cast<EGLClientBuffer>(0), window);
+    return new SurfaceD3D(renderer, display, config, attribs, width, height, fixedSize, orientation,
+                          static_cast<EGLClientBuffer>(0), window);
 }
 
 SurfaceD3D::SurfaceD3D(RendererD3D *renderer,
                        egl::Display *display,
                        const egl::Config *config,
+                       const egl::AttributeMap &attribs,
                        EGLint width,
                        EGLint height,
                        EGLint fixedSize,
                        EGLint orientation,
-                       EGLint directComposition,
                        EGLClientBuffer shareHandle,
                        EGLNativeWindowType window)
     : SurfaceImpl(),
@@ -61,7 +66,7 @@ SurfaceD3D::SurfaceD3D(RendererD3D *renderer,
       mDepthStencilFormat(config->depthStencilFormat),
       mSwapChain(nullptr),
       mSwapIntervalDirty(true),
-      mNativeWindow(window, config, directComposition == EGL_TRUE),
+      mNativeWindow(renderer->createNativeWindow(window, config, attribs)),
       mWidth(width),
       mHeight(height),
       mSwapInterval(1),
@@ -72,6 +77,7 @@ SurfaceD3D::SurfaceD3D(RendererD3D *renderer,
 SurfaceD3D::~SurfaceD3D()
 {
     releaseSwapChain();
+    SafeDelete(mNativeWindow);
 }
 
 void SurfaceD3D::releaseSwapChain()
@@ -81,9 +87,9 @@ void SurfaceD3D::releaseSwapChain()
 
 egl::Error SurfaceD3D::initialize()
 {
-    if (mNativeWindow.getNativeWindow())
+    if (mNativeWindow->getNativeWindow())
     {
-        if (!mNativeWindow.initialize())
+        if (!mNativeWindow->initialize())
         {
             return egl::Error(EGL_BAD_SURFACE);
         }
@@ -123,7 +129,7 @@ egl::Error SurfaceD3D::resetSwapChain()
     if (!mFixedSize)
     {
         RECT windowRect;
-        if (!mNativeWindow.getClientRect(&windowRect))
+        if (!mNativeWindow->getClientRect(&windowRect))
         {
             ASSERT(false);
 
@@ -247,11 +253,11 @@ bool SurfaceD3D::checkForOutOfDateSwapChain()
     int clientWidth = getWidth();
     int clientHeight = getHeight();
     bool sizeDirty = false;
-    if (!mFixedSize && !mNativeWindow.isIconic())
+    if (!mFixedSize && !mNativeWindow->isIconic())
     {
         // The window is automatically resized to 150x22 when it's minimized, but the swapchain shouldn't be resized
         // because that's not a useful size to render to.
-        if (!mNativeWindow.getClientRect(&client))
+        if (!mNativeWindow->getClientRect(&client))
         {
             ASSERT(false);
             return false;
