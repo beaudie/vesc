@@ -354,7 +354,12 @@ class Renderer11 : public RendererD3D
         };
 
         void initData(unsigned int samplerCount);
-        void update(unsigned int samplerIndex, unsigned int baseLevel, GLenum internalFormat);
+        void update(unsigned int samplerIndex,
+                    unsigned int baseLevel,
+                    GLenum internalFormat,
+                    GLenum wrapS,
+                    GLenum wrapT,
+                    GLenum wrapR);
 
         const dx_SamplerMetadata *getData() const;
         size_t sizeBytes() const;
