@@ -968,13 +968,44 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                 out << "    t.y = (v * 0.5f / m) + 0.5f;\n";
 
                 // Mip level computation.
-                if (textureFunction->method == TextureFunction::IMPLICIT)
+                if (textureFunction->method == TextureFunction::IMPLICIT ||
+                    textureFunction->method == TextureFunction::LOD ||
+                    textureFunction->method == TextureFunction::GRAD)
                 {
-                    out << "    float2 tSized = float2(t.x * width, t.y * height);\n"
-                           "    float2 dx = ddx(tSized);\n"
-                           "    float2 dy = ddy(tSized);\n"
-                           "    float lod = 0.5f * log2(max(dot(dx, dx), dot(dy, dy)));\n"
-                           "    mip = uint(min(max(round(lod), 0), levels - 1));\n"
+                    if (textureFunction->method == TextureFunction::IMPLICIT)
+                    {
+                        out << "    float2 tSized = float2(t.x * width, t.y * height);\n"
+                               "    float2 dx = ddx(tSized);\n"
+                               "    float2 dy = ddy(tSized);\n"
+                               "    float lod = 0.5f * log2(max(dot(dx, dx), dot(dy, dy)));\n";
+                    }
+                    else if (textureFunction->method == TextureFunction::GRAD)
+                    {
+                        // ddx[0] and ddy[0] are the derivatives of t.x passed into the function
+                        // ddx[1] and ddy[1] are the derivatives of t.y passed into the function
+                        // ddx[2] and ddy[2] are the derivatives of t.z passed into the function
+                        // Determine the derivatives of u, v and m
+                        out << "    float dudx = xMajor ? ddx[2] : ddx[0];\n"
+                               "    float dvdx = yMajor ? ddx[2] : ddx[1];\n"
+                               "    float dmdx = xMajor ? ddx[0] : (yMajor ? ddx[1] : ddx[2]);\n"
+                               "    float dudy = xMajor ? ddy[2] : ddy[0];\n"
+                               "    float dvdy = yMajor ? ddy[2] : ddy[1];\n"
+                               "    float dmdy = xMajor ? ddy[0] : (yMajor ? ddy[1] : ddy[2]);\n";
+                        // Now determine the derivatives of the face coordinates, using the
+                        // derivatives calculated above.
+                        // d / dx (u(x) * 0.5 / m(x) + 0.5)
+                        // = 0.5 * (m(x) * u'(x) - u(x) * m'(x)) / m(x)^2
+                        out << "    float dfacexdx = 0.5 * (m * dudx - u * dmdx) / (m * m);\n"
+                               "    float dfaceydx = 0.5 * (m * dvdx - v * dmdx) / (m * m);\n"
+                               "    float dfacexdy = 0.5 * (m * dudy - u * dmdy) / (m * m);\n"
+                               "    float dfaceydy = 0.5 * (m * dvdy - v * dmdy) / (m * m);\n"
+                               "    float2 faceddx = float2(dfacexdx, dfaceydx);\n"
+                               "    float2 faceddy = float2(dfacexdy, dfaceydy);\n"
+                               "    float2 sizeVec = float2(width, height);\n"
+                               "    float lod = log2(max(length(faceddx * sizeVec), length(faceddy "
+                               "* sizeVec)));\n";
+                    }
+                    out << "    mip = uint(min(max(round(lod), 0), levels - 1));\n"
                         << "    " << textureReference
                         << ".GetDimensions(mip, width, height, layers, levels);\n";
                 }
@@ -1021,7 +1052,9 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                             }
                             else if (textureFunction->method == TextureFunction::GRAD)
                             {
-                                out << "    float lod = log2(max(length(ddx), length(ddy)));\n";
+                                out << "    float2 sizeVec = float2(width, height);\n"
+                                       "    float lod = log2(max(length(ddx * sizeVec), length(ddy "
+                                       "* sizeVec)));\n";
                             }
 
                             out << "    uint mip = uint(min(max(round(lod), 0), levels - 1));\n";
@@ -1062,7 +1095,9 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                             }
                             else if (textureFunction->method == TextureFunction::GRAD)
                             {
-                                out << "    float lod = log2(max(length(ddx), length(ddy)));\n";
+                                out << "    float2 sizeVec = float2(width, height);\n"
+                                       "    float lod = log2(max(length(ddx * sizeVec), length(ddy "
+                                       "* sizeVec)));\n";
                             }
 
                             out << "    uint mip = uint(min(max(round(lod), 0), levels - 1));\n";
@@ -1105,7 +1140,9 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
                         }
                         else if (textureFunction->method == TextureFunction::GRAD)
                         {
-                            out << "    float lod = log2(max(length(ddx), length(ddy)));\n";
+                            out << "    float3 sizeVec = float3(width, height, depth);\n";
+                            out << "    float lod = log2(max(length(ddx * sizeVec), length(ddy * "
+                                   "sizeVec)));\n";
                         }
 
                         out << "    uint mip = uint(min(max(round(lod), 0), levels - 1));\n";
