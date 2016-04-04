@@ -9,6 +9,7 @@
 #ifndef LIBANGLE_VALIDATIONEGL_H_
 #define LIBANGLE_VALIDATIONEGL_H_
 
+#include "libANGLE/AttributeMap.h"
 #include "libANGLE/Error.h"
 
 #include <EGL/egl.h>
@@ -22,7 +23,6 @@ class Context;
 namespace egl
 {
 
-class AttributeMap;
 struct Config;
 class Device;
 class Display;

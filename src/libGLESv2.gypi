@@ -54,7 +54,6 @@
         [
             'common/event_tracer.cpp',
             'common/event_tracer.h',
-            'libANGLE/AttributeMap.cpp',
             'libANGLE/AttributeMap.h',
             'libANGLE/BinaryStream.h',
             'libANGLE/Buffer.cpp',

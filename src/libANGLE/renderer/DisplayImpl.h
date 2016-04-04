@@ -10,6 +10,7 @@
 #define LIBANGLE_RENDERER_DISPLAYIMPL_H_
 
 #include "common/angleutils.h"
+#include "libANGLE/AttributeMap.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/Error.h"
@@ -20,7 +21,6 @@
 
 namespace egl
 {
-class AttributeMap;
 class Display;
 struct Config;
 class Surface;

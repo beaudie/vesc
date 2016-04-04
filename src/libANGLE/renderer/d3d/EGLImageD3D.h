@@ -9,13 +9,9 @@
 #ifndef LIBANGLE_RENDERER_D3D_EGLIMAGED3D_H_
 #define LIBANGLE_RENDERER_D3D_EGLIMAGED3D_H_
 
+#include "libANGLE/AttributeMap.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/renderer/ImageImpl.h"
-
-namespace egl
-{
-class AttributeMap;
-}
 
 namespace rx
 {

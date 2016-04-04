@@ -10,6 +10,7 @@
 #ifndef LIBANGLE_RENDERER_RENDERER_H_
 #define LIBANGLE_RENDERER_RENDERER_H_
 
+#include "libANGLE/AttributeMap.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Framebuffer.h"
@@ -25,7 +26,6 @@
 
 namespace egl
 {
-class AttributeMap;
 class Display;
 class Surface;
 }

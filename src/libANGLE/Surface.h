@@ -14,6 +14,7 @@
 #include <EGL/egl.h>
 
 #include "common/angleutils.h"
+#include "libANGLE/AttributeMap.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/RefCountObject.h"
@@ -27,7 +28,6 @@ class Texture;
 
 namespace egl
 {
-class AttributeMap;
 class Display;
 struct Config;
 

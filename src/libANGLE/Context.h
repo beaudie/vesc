@@ -15,6 +15,7 @@
 
 #include "angle_gl.h"
 #include "common/angleutils.h"
+#include "libANGLE/AttributeMap.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Constants.h"
@@ -31,7 +32,6 @@ class Renderer;
 
 namespace egl
 {
-class AttributeMap;
 class Surface;
 struct Config;
 }
