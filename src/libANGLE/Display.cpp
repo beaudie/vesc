@@ -134,7 +134,8 @@ rx::DisplayImpl *CreateDisplayFromDevice(Device *eglDevice)
 rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap)
 {
     rx::DisplayImpl *impl = nullptr;
-    EGLint displayType = attribMap.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
+    EGLint displayType = static_cast<EGLint>(
+        attribMap.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE));
     switch (displayType)
     {
       case EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE:
