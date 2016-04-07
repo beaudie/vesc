@@ -19,7 +19,8 @@ struct WorkaroundsGL
           rgba4IsNotSupportedForColorRendering(false),
           doesSRGBClearsOnLinearFramebufferAttachments(false),
           doWhileGLSLCausesGPUHang(false),
-          finishDoesNotCauseQueriesToBeAvailable(false)
+          finishDoesNotCauseQueriesToBeAvailable(false),
+          alwaysCallUseProgramAfterLink(false)
     {
     }
 
@@ -56,6 +57,9 @@ struct WorkaroundsGL
     // (NVIDIA) drivers.  It was found that enabling GL_DEBUG_OUTPUT_SYNCHRONOUS before the finish
     // causes it to fully finish.
     bool finishDoesNotCauseQueriesToBeAvailable;
+
+    // Calling useProgram after a successful link avoids a bug for several drivers.
+    bool alwaysCallUseProgramAfterLink;
 };
 }
 
