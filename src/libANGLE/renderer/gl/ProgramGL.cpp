@@ -8,11 +8,13 @@
 
 #include "libANGLE/renderer/gl/ProgramGL.h"
 
+#include "angle_gl.h"
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/ShaderGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
+#include "libANGLE/renderer/gl/WorkaroundsGL.h"
 #include "platform/Platform.h"
 
 namespace rx
@@ -20,8 +22,13 @@ namespace rx
 
 ProgramGL::ProgramGL(const gl::Program::Data &data,
                      const FunctionsGL *functions,
+                     const WorkaroundsGL &workarounds,
                      StateManagerGL *stateManager)
-    : ProgramImpl(data), mFunctions(functions), mStateManager(stateManager), mProgramID(0)
+    : ProgramImpl(data),
+      mFunctions(functions),
+      mWorkarounds(workarounds),
+      mStateManager(stateManager),
+      mProgramID(0)
 {
     ASSERT(mFunctions);
     ASSERT(mStateManager);
@@ -142,6 +149,11 @@ LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog)
 
         // TODO, return GL_OUT_OF_MEMORY or just fail the link? This is an unexpected case
         return LinkResult(false, gl::Error(GL_NO_ERROR));
+    }
+
+    if (mWorkarounds.alwaysCallUseProgramAfterLink)
+    {
+        mStateManager->useProgram(mProgramID);
     }
 
     // Query the uniform information
