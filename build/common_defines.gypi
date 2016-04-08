@@ -13,6 +13,10 @@
 
         'angle_build_winrt%': '0',
         'angle_build_winphone%': '0',
+
+        # gbm/drm/kms/surfaceless
+        'use_ozone%': 0,
+
         'conditions':
         [
             ['OS=="linux" and use_x11==1 and chromeos==0', {
@@ -38,6 +42,10 @@
     ],
     'conditions':
     [
+        ['use_ozone==1',
+        {
+            'defines': [ 'USE_OZONE' ],
+        }],
         ['component=="shared_library"',
         {
             'defines': [ 'COMPONENT_BUILD' ],
