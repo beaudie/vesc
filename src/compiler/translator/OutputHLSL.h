@@ -8,7 +8,6 @@
 #define COMPILER_TRANSLATOR_OUTPUTHLSL_H_
 
 #include <list>
-#include <set>
 #include <map>
 #include <stack>
 
@@ -24,6 +23,7 @@ namespace sh
 class UnfoldShortCircuit;
 class StructureHLSL;
 class UniformHLSL;
+class TextureFunctionHLSL;
 
 typedef std::map<TString, TIntermSymbol*> ReferencedSymbols;
 
@@ -139,36 +139,9 @@ class OutputHLSL : public TIntermTraverser
 
     StructureHLSL *mStructureHLSL;
     UniformHLSL *mUniformHLSL;
-
-    struct TextureFunction
-    {
-        enum Method
-        {
-            IMPLICIT,   // Mipmap LOD determined implicitly (standard lookup)
-            BIAS,
-            LOD,
-            LOD0,
-            LOD0BIAS,
-            SIZE,   // textureSize()
-            FETCH,
-            GRAD
-        };
-
-        TBasicType sampler;
-        int coords;
-        bool proj;
-        bool offset;
-        Method method;
-
-        TString name() const;
-
-        bool operator<(const TextureFunction &rhs) const;
-    };
-
-    typedef std::set<TextureFunction> TextureFunctionSet;
+    TextureFunctionHLSL *mTextureFunctionHLSL;
 
     // Parameters determining what goes in the header output
-    TextureFunctionSet mUsesTexture;
     bool mUsesFragColor;
     bool mUsesFragData;
     bool mUsesDepthRange;
