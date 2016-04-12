@@ -451,12 +451,6 @@ bool DynamicHLSL::generateShaderLinkHLSL(const gl::Data &data,
                  << "{\n"
                  << "    initAttributes(input);\n";
 
-    if (vertexShader->usesDeferredInit())
-    {
-        vertexStream << "\n"
-                     << "    initializeDeferredGlobals();\n";
-    }
-
     vertexStream << "\n"
                  << "    gl_main();\n"
                  << "\n"
@@ -769,12 +763,6 @@ bool DynamicHLSL::generateShaderLinkHLSL(const gl::Data &data,
                 UNREACHABLE();
         }
         pixelStream << ";\n";
-    }
-
-    if (fragmentShader->usesDeferredInit())
-    {
-        pixelStream << "\n"
-                    << "    initializeDeferredGlobals();\n";
     }
 
     pixelStream << "\n"
