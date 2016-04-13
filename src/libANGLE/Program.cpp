@@ -138,14 +138,6 @@ bool UniformInList(const std::vector<LinkedUniform> &list, const std::string &na
 
 const char *const g_fakepath = "C:\\fakepath";
 
-AttributeBindings::AttributeBindings()
-{
-}
-
-AttributeBindings::~AttributeBindings()
-{
-}
-
 InfoLog::InfoLog()
 {
 }
@@ -220,6 +212,30 @@ VariableLocation::VariableLocation(const std::string &name, unsigned int element
       element(element),
       index(index)
 {
+}
+
+void Program::Bindings::bindLocation(GLuint index, const std::string &name)
+{
+    mBindings[name] = index;
+}
+
+int Program::Bindings::getBinding(const std::string &name) const
+{
+    auto iter = mBindings.find(name);
+    return (iter != mBindings.end()) ? iter->second : -1;
+}
+
+bool Program::Bindings::isLocationBound(GLuint location) const
+{
+    for (const auto &binding : mBindings)
+    {
+        if (binding.second == location)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 Program::Data::Data()
@@ -413,22 +429,15 @@ int Program::getAttachedShadersCount() const
     return (mData.mAttachedVertexShader ? 1 : 0) + (mData.mAttachedFragmentShader ? 1 : 0);
 }
 
-void AttributeBindings::bindAttributeLocation(GLuint index, const char *name)
-{
-    if (index < MAX_VERTEX_ATTRIBS)
-    {
-        for (int i = 0; i < MAX_VERTEX_ATTRIBS; i++)
-        {
-            mAttributeBinding[i].erase(name);
-        }
-
-        mAttributeBinding[index].insert(name);
-    }
-}
-
 void Program::bindAttributeLocation(GLuint index, const char *name)
 {
-    mAttributeBindings.bindAttributeLocation(index, name);
+    mAttributeBindings.bindLocation(index, name);
+}
+
+void Program::bindUniformLocation(GLuint index, const char *name)
+{
+    // Bind the base uniform name only since array indices other than 0 cannot be bound
+    mUniformBindings.bindLocation(index, ParseUniformName(name, nullptr));
 }
 
 // Links the HLSL code of the vertex and pixel shader by matching up their varyings,
@@ -463,7 +472,7 @@ Error Program::link(const gl::Data &data)
         return Error(GL_NO_ERROR);
     }
 
-    if (!linkUniforms(mInfoLog, *data.caps))
+    if (!linkUniforms(mInfoLog, *data.caps, mUniformBindings))
     {
         return Error(GL_NO_ERROR);
     }
@@ -493,19 +502,6 @@ Error Program::link(const gl::Data &data)
 
     mLinked = true;
     return gl::Error(GL_NO_ERROR);
-}
-
-int AttributeBindings::getAttributeBinding(const std::string &name) const
-{
-    for (int location = 0; location < MAX_VERTEX_ATTRIBS; location++)
-    {
-        if (mAttributeBinding[location].find(name) != mAttributeBinding[location].end())
-        {
-            return location;
-        }
-    }
-
-    return -1;
 }
 
 // Returns the program object to an unlinked state, before re-linking, or at destruction
@@ -1129,6 +1125,14 @@ bool Program::isValidUniformLocation(GLint location) const
             mData.mUniformLocations.find(location) != mData.mUniformLocations.end());
 }
 
+bool Program::isIgnoredUniformLocation(GLint location) const
+{
+    // Location is ignored if it is -1 or it was bound but non-existant in the shader or optimized
+    // out
+    return location == -1 ||
+           (!isValidUniformLocation(location) && mUniformBindings.isLocationBound(location));
+}
+
 const LinkedUniform &Program::getUniformByLocation(GLint location) const
 {
     ASSERT(location >= 0 &&
@@ -1654,7 +1658,9 @@ bool Program::linkVaryings(InfoLog &infoLog,
     return true;
 }
 
-bool Program::linkUniforms(gl::InfoLog &infoLog, const gl::Caps &caps)
+bool Program::linkUniforms(gl::InfoLog &infoLog,
+                           const gl::Caps &caps,
+                           const Bindings &uniformBindings)
 {
     const std::vector<sh::Uniform> &vertexUniforms   = mData.mAttachedVertexShader->getUniforms();
     const std::vector<sh::Uniform> &fragmentUniforms = mData.mAttachedFragmentShader->getUniforms();
@@ -1688,28 +1694,90 @@ bool Program::linkUniforms(gl::InfoLog &infoLog, const gl::Caps &caps)
         return false;
     }
 
-    indexUniforms();
+    if (!indexUniforms(infoLog, caps, uniformBindings))
+    {
+        return false;
+    }
 
     return true;
 }
 
-void Program::indexUniforms()
+bool Program::indexUniforms(gl::InfoLog &infoLog,
+                            const gl::Caps &caps,
+                            const Bindings &uniformBindings)
 {
+    // Assign uniforms that are explicitly bound first
     for (size_t uniformIndex = 0; uniformIndex < mData.mUniforms.size(); uniformIndex++)
     {
         const gl::LinkedUniform &uniform = mData.mUniforms[uniformIndex];
 
+        if (uniform.isBuiltIn())
+        {
+            continue;
+        }
+
+        int location = uniformBindings.getBinding(uniform.name);
+        if (location == -1)
+        {
+            continue;
+        }
+
+        if (mData.mUniformLocations.find(location) != mData.mUniformLocations.end())
+        {
+            infoLog << "Multiple uniforms bound to location " << location << ".";
+            return false;
+        }
+
+        mData.mUniformLocations[location] =
+            gl::VariableLocation(uniform.name, 0, static_cast<unsigned int>(uniformIndex));
+    }
+
+    // Assign remaining uniform locations
+    unsigned int nextUniformLocation = 0;
+    for (size_t uniformIndex = 0; uniformIndex < mData.mUniforms.size(); uniformIndex++)
+    {
+        const gl::LinkedUniform &uniform = mData.mUniforms[uniformIndex];
+
+        if (uniform.isBuiltIn())
+        {
+            continue;
+        }
+
+        int location = uniformBindings.getBinding(uniform.name);
+        if (location != -1 && !(uniform.isArray() && uniform.arraySize > 1))
+        {
+            continue;
+        }
+
         for (unsigned int arrayIndex = 0; arrayIndex < uniform.elementCount(); arrayIndex++)
         {
-            if (!uniform.isBuiltIn())
+            // Don't re-assign the base array if it had a fixed location
+            if (arrayIndex == 0 && location != -1)
             {
-                // Assign in-order uniform locations
-                GLuint location                   = static_cast<GLuint>(mData.mUniformLocations.size());
-                mData.mUniformLocations[location] = gl::VariableLocation(
-                    uniform.name, arrayIndex, static_cast<unsigned int>(uniformIndex));
+                continue;
             }
+
+            // Find the next available uniform location
+            while (mData.mUniformLocations.find(nextUniformLocation) !=
+                       mData.mUniformLocations.end() ||
+                   uniformBindings.isLocationBound(nextUniformLocation))
+            {
+                nextUniformLocation++;
+            }
+
+            if (nextUniformLocation >= GetMaximumUniformBindingLocations(caps))
+            {
+                infoLog << "No remaining uniform locations due to too many bindings.";
+                return false;
+            }
+
+            mData.mUniformLocations[nextUniformLocation] = gl::VariableLocation(
+                uniform.name, arrayIndex, static_cast<unsigned int>(uniformIndex));
+            nextUniformLocation++;
         }
     }
+
+    return true;
 }
 
 bool Program::linkValidateInterfaceBlockFields(InfoLog &infoLog, const std::string &uniformName, const sh::InterfaceBlockField &vertexUniform, const sh::InterfaceBlockField &fragmentUniform)
@@ -1732,7 +1800,7 @@ bool Program::linkValidateInterfaceBlockFields(InfoLog &infoLog, const std::stri
 // Determines the mapping between GL attributes and Direct3D 9 vertex stream usage indices
 bool Program::linkAttributes(const gl::Data &data,
                              InfoLog &infoLog,
-                             const AttributeBindings &attributeBindings,
+                             const Bindings &attributeBindings,
                              const Shader *vertexShader)
 {
     unsigned int usedLocations = 0;
@@ -1754,7 +1822,7 @@ bool Program::linkAttributes(const gl::Data &data,
         // TODO(jmadill): do staticUse filtering step here, or not at all
         ASSERT(attribute.staticUse);
 
-        int bindingLocation = attributeBindings.getAttributeBinding(attribute.name);
+        int bindingLocation = attributeBindings.getBinding(attribute.name);
         if (attribute.location == -1 && bindingLocation != -1)
         {
             attribute.location = bindingLocation;
