@@ -267,17 +267,27 @@ GLint Program::Data::getUniformLocation(const std::string &name) const
     size_t subscript     = GL_INVALID_INDEX;
     std::string baseName = gl::ParseUniformName(name, &subscript);
 
-    for (size_t location = 0; location < mUniformLocations.size(); ++location)
+    for (const auto &location : mUniformLocations)
     {
-        const VariableLocation &uniformLocation = mUniformLocations[location];
+        const VariableLocation &uniformLocation = location.second;
         const LinkedUniform &uniform            = mUniforms[uniformLocation.index];
 
         if (uniform.name == baseName)
         {
-            if ((uniform.isArray() && uniformLocation.element == subscript) ||
-                (subscript == GL_INVALID_INDEX))
+            if (uniform.isArray())
             {
-                return static_cast<GLint>(location);
+                if (uniformLocation.element == subscript ||
+                    (uniformLocation.element == 0 && subscript == GL_INVALID_INDEX))
+                {
+                    return static_cast<GLint>(location.first);
+                }
+            }
+            else
+            {
+                if (subscript == GL_INVALID_INDEX)
+                {
+                    return static_cast<GLint>(location.first);
+                }
             }
         }
     }
@@ -601,12 +611,14 @@ Error Program::loadBinary(GLenum binaryFormat, const void *binary, GLsizei lengt
     for (unsigned int uniformIndexIndex = 0; uniformIndexIndex < uniformIndexCount;
          uniformIndexIndex++)
     {
+        unsigned int location = stream.readInt<unsigned int>();
+
         VariableLocation variable;
         stream.readString(&variable.name);
         stream.readInt(&variable.element);
         stream.readInt(&variable.index);
 
-        mData.mUniformLocations.push_back(variable);
+        mData.mUniformLocations[location] = variable;
     }
 
     unsigned int uniformBlockCount = stream.readInt<unsigned int>();
@@ -711,9 +723,10 @@ Error Program::saveBinary(GLenum *binaryFormat, void *binary, GLsizei bufSize, G
     stream.writeInt(mData.mUniformLocations.size());
     for (const auto &variable : mData.mUniformLocations)
     {
-        stream.writeString(variable.name);
-        stream.writeInt(variable.element);
-        stream.writeInt(variable.index);
+        stream.writeInt(variable.first);
+        stream.writeString(variable.second.name);
+        stream.writeInt(variable.second.element);
+        stream.writeInt(variable.second.index);
     }
 
     stream.writeInt(mData.mUniformBlocks.size());
@@ -1112,14 +1125,15 @@ GLint Program::getActiveUniformi(GLuint index, GLenum pname) const
 
 bool Program::isValidUniformLocation(GLint location) const
 {
-    ASSERT(rx::IsIntegerCastSafe<GLint>(mData.mUniformLocations.size()));
-    return (location >= 0 && static_cast<size_t>(location) < mData.mUniformLocations.size());
+    return (location >= 0 &&
+            mData.mUniformLocations.find(location) != mData.mUniformLocations.end());
 }
 
 const LinkedUniform &Program::getUniformByLocation(GLint location) const
 {
-    ASSERT(location >= 0 && static_cast<size_t>(location) < mData.mUniformLocations.size());
-    return mData.mUniforms[mData.mUniformLocations[location].index];
+    ASSERT(location >= 0 &&
+           mData.mUniformLocations.find(location) != mData.mUniformLocations.end());
+    return mData.mUniforms[mData.mUniformLocations.at(location).index];
 }
 
 GLint Program::getUniformLocation(const std::string &name) const
@@ -1690,7 +1704,7 @@ void Program::indexUniforms()
             if (!uniform.isBuiltIn())
             {
                 // Assign in-order uniform locations
-                mData.mUniformLocations.push_back(gl::VariableLocation(
+                mData.mUniformLocations[mData.mUniformLocations.size()] = gl::VariableLocation(
                     uniform.name, arrayIndex, static_cast<unsigned int>(uniformIndex)));
             }
         }
@@ -2437,7 +2451,7 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
 template <typename T>
 void Program::setUniformInternal(GLint location, GLsizei count, const T *v)
 {
-    const VariableLocation &locationInfo = mData.mUniformLocations[location];
+    const VariableLocation &locationInfo = mData.mUniformLocations.at(location);
     LinkedUniform *linkedUniform         = &mData.mUniforms[locationInfo.index];
     uint8_t *destPointer                 = linkedUniform->getDataPtrToElement(locationInfo.element);
 
@@ -2476,7 +2490,7 @@ void Program::setMatrixUniformInternal(GLint location,
     }
 
     // Perform a transposing copy.
-    const VariableLocation &locationInfo = mData.mUniformLocations[location];
+    const VariableLocation &locationInfo = mData.mUniformLocations.at(location);
     LinkedUniform *linkedUniform         = &mData.mUniforms[locationInfo.index];
     T *destPtr = reinterpret_cast<T *>(linkedUniform->getDataPtrToElement(locationInfo.element));
     for (GLsizei element = 0; element < count; ++element)
@@ -2496,7 +2510,7 @@ void Program::setMatrixUniformInternal(GLint location,
 template <typename DestT>
 void Program::getUniformInternal(GLint location, DestT *dataOut) const
 {
-    const VariableLocation &locationInfo = mData.mUniformLocations[location];
+    const VariableLocation &locationInfo = mData.mUniformLocations.at(location);
     const LinkedUniform &uniform         = mData.mUniforms[locationInfo.index];
 
     const uint8_t *srcPointer = uniform.getDataPtrToElement(locationInfo.element);
