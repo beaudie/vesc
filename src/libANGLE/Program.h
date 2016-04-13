@@ -181,7 +181,7 @@ class Program final : angle::NonCopyable, public LabeledObject
             return mOutputVariables;
         }
         const std::vector<LinkedUniform> &getUniforms() const { return mUniforms; }
-        const std::vector<VariableLocation> &getUniformLocations() const
+        const std::unordered_map<GLuint, VariableLocation> &getUniformLocations() const
         {
             return mUniformLocations;
         }
@@ -215,7 +215,7 @@ class Program final : angle::NonCopyable, public LabeledObject
         //  3. Uniform block uniforms
         // This makes sampler validation easier, since we don't need a separate list.
         std::vector<LinkedUniform> mUniforms;
-        std::vector<VariableLocation> mUniformLocations;
+        std::unordered_map<GLuint, VariableLocation> mUniformLocations;
         std::vector<UniformBlock> mUniformBlocks;
 
         // TODO(jmadill): use unordered/hash map when available
