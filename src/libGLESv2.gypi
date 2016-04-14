@@ -491,6 +491,12 @@
             'libANGLE/renderer/gl/glx/functionsglx_typedefs.h',
             'libANGLE/renderer/gl/glx/platform_glx.h',
         ],
+        'libangle_gl_egl_sources':
+        [
+            'libANGLE/renderer/gl/egl/FunctionsEGL.cpp',
+            'libANGLE/renderer/gl/egl/FunctionsEGL.h',
+            'libANGLE/renderer/gl/egl/functionsegl_typedefs.h',
+        ],
         'libangle_gl_cgl_sources':
         [
             'libANGLE/renderer/gl/cgl/DisplayCGL.mm',
