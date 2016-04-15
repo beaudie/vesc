@@ -270,7 +270,8 @@ Buffer11::Buffer11(Renderer11 *renderer)
       mBufferStorages(BUFFER_USAGE_COUNT, nullptr),
       mConstantBufferStorageAdditionalSize(0),
       mMaxConstantBufferLruCount(0),
-      mReadUsageCount(0)
+      mReadUsageCount(0),
+      mSystemMemoryDeallocThreshold(0)
 {
 }
 
@@ -491,21 +492,38 @@ gl::Error Buffer11::markTransformFeedbackUsage()
     return gl::NoError();
 }
 
+void Buffer11::updateSystemMemoryDeallocThreshold()
+{
+    // First readback: 8 unmodified uses before we free.
+    // After that, square the threshold each time until we reach the max.
+    if (mSystemMemoryDeallocThreshold == 0)
+    {
+        mSystemMemoryDeallocThreshold = 8;
+    }
+    else if (IsUnsignedMultiplicationSafe(mSystemMemoryDeallocThreshold,
+                                          mSystemMemoryDeallocThreshold))
+    {
+        mSystemMemoryDeallocThreshold *= mSystemMemoryDeallocThreshold;
+    }
+    else
+    {
+        mSystemMemoryDeallocThreshold = std::numeric_limits<unsigned int>::max();
+    }
+}
+
 gl::Error Buffer11::markBufferUsage()
 {
     mReadUsageCount++;
 
     // Free the system memory storage if we decide it isn't being used very often.
-    const unsigned int usageLimit = 5;
-
-    BufferStorage *&sysMemUsage = mBufferStorages[BUFFER_USAGE_SYSTEM_MEMORY];
-    if (mReadUsageCount > usageLimit && sysMemUsage != nullptr)
+    BufferStorage *&sysMemStorage = mBufferStorages[BUFFER_USAGE_SYSTEM_MEMORY];
+    if (sysMemStorage != nullptr && mReadUsageCount > mSystemMemoryDeallocThreshold)
     {
         BufferStorage *latestStorage = nullptr;
         ANGLE_TRY_RESULT(getLatestBufferStorage(), latestStorage);
-        if (latestStorage != sysMemUsage)
+        if (latestStorage != sysMemStorage)
         {
-            SafeDelete(sysMemUsage);
+            SafeDelete(sysMemStorage);
         }
     }
 
@@ -652,14 +670,17 @@ gl::ErrorOrResult<Buffer11::BufferStorage *> Buffer11::getBufferStorage(BufferUs
     return newStorage;
 }
 
-Buffer11::BufferStorage *Buffer11::allocateStorage(BufferUsage usage) const
+Buffer11::BufferStorage *Buffer11::allocateStorage(BufferUsage usage)
 {
     switch (usage)
     {
         case BUFFER_USAGE_PIXEL_PACK:
             return new PackStorage(mRenderer);
         case BUFFER_USAGE_SYSTEM_MEMORY:
+        {
+            updateSystemMemoryDeallocThreshold();
             return new SystemMemoryStorage(mRenderer);
+        }
         case BUFFER_USAGE_EMULATED_INDEXED_VERTEX:
             return new EmulatedIndexedStorage(mRenderer);
         case BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK:
