@@ -54,6 +54,7 @@ TIntermAggregate *CreateFunctionCallNode(const char *name)
 {
     TIntermAggregate *functionNode = new TIntermAggregate(EOpFunctionCall);
 
+    functionNode->setUserDefined();
     SetInternalFunctionName(functionNode, name);
     TType returnType(EbtVoid);
     functionNode->setType(returnType);
@@ -86,8 +87,9 @@ bool DeferGlobalInitializersTraverser::visitBinary(Visit visit, TIntermBinary *n
         ASSERT(symbolNode);
         TIntermTyped *expression = node->getRight();
 
-        if (symbolNode->getQualifier() == EvqGlobal &&
-            (expression->getQualifier() != EvqConst || expression->getAsConstantUnion() == nullptr))
+        if (mInGlobalScope && (expression->getQualifier() != EvqConst ||
+                               (expression->getAsConstantUnion() == nullptr &&
+                                !expression->isConstructorWithOnlyConstantUnionParameters())))
         {
             // For variables which are not constant, defer their real initialization until
             // after we initialize uniforms.
@@ -95,13 +97,35 @@ bool DeferGlobalInitializersTraverser::visitBinary(Visit visit, TIntermBinary *n
             // since otherwise there's a chance that HLSL output will generate extra statements
             // from the initializer expression.
             TIntermBinary *deferredInit = new TIntermBinary(EOpAssign);
-            deferredInit->setLeft(node->getLeft()->deepCopy());
+            deferredInit->setLeft(symbolNode->deepCopy());
             deferredInit->setRight(node->getRight());
             deferredInit->setType(node->getType());
             mDeferredInitializers.push_back(deferredInit);
 
+            // Change const global to a regular global if its initialization is deferred.
+            // This can happen if ANGLE has not been able to fold the constant expression used
+            // as an initializer.
+            ASSERT(symbolNode->getQualifier() == EvqConst ||
+                   symbolNode->getQualifier() == EvqGlobal);
+            if (symbolNode->getQualifier() == EvqConst)
+            {
+                // All of the siblings in the same declaration need to have consistent qualifiers.
+                auto *siblings = getParentNode()->getAsAggregate()->getSequence();
+                for (TIntermNode *siblingNode : *siblings)
+                {
+                    TIntermBinary *siblingBinary = siblingNode->getAsBinaryNode();
+                    if (siblingBinary)
+                    {
+                        ASSERT(siblingBinary->getOp() == EOpInitialize);
+                        siblingBinary->getLeft()->getTypePointer()->setQualifier(EvqGlobal);
+                    }
+                    siblingNode->getAsTyped()->getTypePointer()->setQualifier(EvqGlobal);
+                }
+                // This node is one of the siblings.
+                ASSERT(symbolNode->getQualifier() == EvqGlobal);
+            }
             // Remove the initializer from the global scope and just declare the global instead.
-            mReplacements.push_back(NodeUpdateEntry(getParentNode(), node, node->getLeft(), false));
+            mReplacements.push_back(NodeUpdateEntry(getParentNode(), node, symbolNode, false));
         }
     }
     return false;
