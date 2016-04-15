@@ -155,6 +155,8 @@ class TIntermTyped : public TIntermNode
 
     int getArraySize() const { return mType.getArraySize(); }
 
+    bool isConstructorWithOnlyConstantUnionParameters();
+
   protected:
     TType mType;
 
@@ -673,6 +675,7 @@ class TIntermTraverser : angle::NonCopyable
           postVisit(postVisit),
           mDepth(0),
           mMaxDepth(0),
+          mInGlobalScope(true),
           mTemporaryIndex(nullptr)
     {
     }
@@ -766,6 +769,8 @@ class TIntermTraverser : angle::NonCopyable
 
     // All the nodes from root to the current node's parent during traversing.
     TVector<TIntermNode *> mPath;
+
+    bool mInGlobalScope;
 
     // To replace a single node with another on the parent node
     struct NodeUpdateEntry
