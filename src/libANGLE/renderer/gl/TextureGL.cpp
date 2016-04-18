@@ -495,6 +495,15 @@ gl::Error TextureGL::setStorage(GLenum target, size_t levels, GLenum internalFor
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error TextureGL::setImageExternal(GLenum target,
+                                      void *externalImage,
+                                      int planeIndex,
+                                      int subresourceID)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 gl::Error TextureGL::generateMipmaps(const gl::TextureState &textureState)
 {
     mStateManager->bindTexture(mTextureType, mTextureID);

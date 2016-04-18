@@ -14,6 +14,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Data.h"
 #include "libANGLE/Image.h"
+#include "libANGLE/Stream.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/formatutils.h"
 
@@ -55,7 +56,8 @@ Texture::Texture(rx::TextureImpl *impl, GLuint id, GLenum target)
       mTarget(target),
       mImageDescs(IMPLEMENTATION_MAX_TEXTURE_LEVELS * (target == GL_TEXTURE_CUBE_MAP ? 6 : 1)),
       mCompletenessCache(),
-      mBoundSurface(NULL)
+      mBoundSurface(nullptr),
+      mBoundStream(nullptr)
 {
 }
 
@@ -64,7 +66,12 @@ Texture::~Texture()
     if (mBoundSurface)
     {
         mBoundSurface->releaseTexImage(EGL_BACK_BUFFER);
-        mBoundSurface = NULL;
+        mBoundSurface = nullptr;
+    }
+    if (mBoundStream)
+    {
+        mBoundStream->releaseTextures();
+        mBoundStream = nullptr;
     }
     SafeDelete(mTexture);
 }
@@ -369,6 +376,11 @@ egl::Surface *Texture::getBoundSurface() const
     return mBoundSurface;
 }
 
+egl::Stream *Texture::getBoundStream() const
+{
+    return mBoundStream;
+}
+
 Error Texture::setImage(const PixelUnpackState &unpackState,
                         GLenum target,
                         size_t level,
@@ -616,6 +628,34 @@ void Texture::releaseTexImageFromSurface()
     // Erase the image info for level 0
     ASSERT(mTarget == GL_TEXTURE_2D);
     clearImageDesc(mTarget, 0);
+}
+
+void Texture::bindStream(egl::Stream *stream)
+{
+    ASSERT(stream);
+
+    // It should not be possible to bind a texture already bound to another stream
+    ASSERT(mBoundStream == nullptr);
+
+    mBoundStream = stream;
+
+    ASSERT(mTarget == GL_TEXTURE_EXTERNAL_OES);
+}
+
+void Texture::releaseStream()
+{
+    ASSERT(mBoundStream);
+    mBoundStream = nullptr;
+}
+
+void Texture::imageFromStream(egl::Stream *stream, void *image, int planeIndex, int subresourceID)
+{
+    ASSERT(stream == mBoundStream);
+    mTexture->setImageExternal(mTarget, image, planeIndex, subresourceID);
+
+    GLint format = (planeIndex == 0) ? GL_R8 : GL_RG8;
+    Extents size(1, 1, 1);
+    setImageDesc(mTarget, 0, ImageDesc(size, format));
 }
 
 void Texture::releaseTexImageInternal()
