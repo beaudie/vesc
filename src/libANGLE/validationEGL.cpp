@@ -1268,12 +1268,6 @@ Error ValidateStreamConsumerAcquireKHR(const Display *display,
         return error;
     }
 
-    error = ValidateContext(display, context);
-    if (error.isError())
-    {
-        return error;
-    }
-
     const DisplayExtensions &displayExtensions = display->getExtensions();
     if (!displayExtensions.streamConsumerGLTexture)
     {
@@ -1285,6 +1279,21 @@ Error ValidateStreamConsumerAcquireKHR(const Display *display,
         return Error(EGL_BAD_STREAM_KHR, "Invalid stream");
     }
 
+    error = ValidateContext(display, context);
+    if (error.isError())
+    {
+        return Error(EGL_BAD_ACCESS, "Invalid GL context");
+    }
+
+    if (stream->getConsumerType() != Stream::ConsumerType::GLTextureRGB &&
+        stream->getConsumerType() != Stream::ConsumerType::GLTextureYUV)
+    {
+        return Error(EGL_BAD_ACCESS, "Invalid stream consumer type");
+    }
+
+    // Note: technically EGL_STREAM_STATE_EMPTY_KHR is a valid state when the timeout is non-zero.
+    // However, the timeout is effectively ignored since it has no useful functionality with the
+    // current producers that are implemented, so we don't allow that state
     if (stream->getState() != EGL_STREAM_STATE_NEW_FRAME_AVAILABLE_KHR &&
         stream->getState() != EGL_STREAM_STATE_OLD_FRAME_AVAILABLE_KHR)
     {
@@ -1304,12 +1313,6 @@ Error ValidateStreamConsumerReleaseKHR(const Display *display,
         return error;
     }
 
-    error = ValidateContext(display, context);
-    if (error.isError())
-    {
-        return error;
-    }
-
     const DisplayExtensions &displayExtensions = display->getExtensions();
     if (!displayExtensions.streamConsumerGLTexture)
     {
@@ -1319,6 +1322,18 @@ Error ValidateStreamConsumerReleaseKHR(const Display *display,
     if (stream == EGL_NO_STREAM_KHR || !display->isValidStream(stream))
     {
         return Error(EGL_BAD_STREAM_KHR, "Invalid stream");
+    }
+
+    error = ValidateContext(display, context);
+    if (error.isError())
+    {
+        return Error(EGL_BAD_ACCESS, "Invalid GL context");
+    }
+
+    if (stream->getConsumerType() != Stream::ConsumerType::GLTextureRGB &&
+        stream->getConsumerType() != Stream::ConsumerType::GLTextureYUV)
+    {
+        return Error(EGL_BAD_ACCESS, "Invalid stream consumer type");
     }
 
     if (stream->getState() != EGL_STREAM_STATE_NEW_FRAME_AVAILABLE_KHR &&
@@ -1363,6 +1378,8 @@ Error ValidateStreamConsumerGLTextureExternalAttribsNV(const Display *display,
         return Error(EGL_BAD_STATE_KHR, "Invalid stream state");
     }
 
+    const gl::Caps &glCaps = context->getCaps();
+
     EGLAttrib colorBufferType = EGL_RGB_BUFFER;
     EGLAttrib planeCount      = -1;
     EGLAttrib plane[3];
@@ -1378,7 +1395,7 @@ Error ValidateStreamConsumerGLTextureExternalAttribsNV(const Display *display,
         switch (attribute)
         {
             case EGL_COLOR_BUFFER_TYPE:
-                if (value != EGL_RGB_BUFFER || value != EGL_YUV_BUFFER_EXT)
+                if (value != EGL_RGB_BUFFER && value != EGL_YUV_BUFFER_EXT)
                 {
                     return Error(EGL_BAD_PARAMETER, "Invalid color buffer type");
                 }
@@ -1398,7 +1415,9 @@ Error ValidateStreamConsumerGLTextureExternalAttribsNV(const Display *display,
                 if (attribute >= EGL_YUV_PLANE0_TEXTURE_UNIT_NV &&
                     attribute <= EGL_YUV_PLANE2_TEXTURE_UNIT_NV)
                 {
-                    if (value < 0)
+                    if ((value < 0 ||
+                         value >= static_cast<EGLAttrib>(glCaps.maxCombinedTextureImageUnits)) &&
+                        value != EGL_NONE)
                     {
                         return Error(EGL_BAD_ACCESS, "Invalid texture unit");
                     }
@@ -1480,6 +1499,12 @@ Error ValidateCreateStreamProducerD3DTextureNV12ANGLE(const Display *display,
         return Error(EGL_BAD_STATE_KHR, "Stream not in connecting state");
     }
 
+    if (stream->getConsumerType() != Stream::ConsumerType::GLTextureYUV ||
+        stream->getPlaneCount() != 2)
+    {
+        return Error(EGL_BAD_MATCH, "Incompatible stream consumer type");
+    }
+
     return Error(EGL_SUCCESS);
 }
 
@@ -1523,6 +1548,11 @@ Error ValidateStreamPostD3DTextureNV12ANGLE(const Display *display,
         stream->getState() != EGL_STREAM_STATE_OLD_FRAME_AVAILABLE_KHR)
     {
         return Error(EGL_BAD_STATE_KHR, "Stream not fully configured");
+    }
+
+    if (stream->getProducerType() != Stream::ProducerType::D3D11TextureNV12)
+    {
+        return Error(EGL_BAD_MATCH, "Incompatible stream producer");
     }
 
     if (texture == nullptr)

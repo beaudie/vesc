@@ -36,7 +36,7 @@
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
 #include "libANGLE/renderer/d3d/d3d11/ShaderExecutable11.h"
-#include "libANGLE/renderer/d3d/d3d11/Stream11.h"
+#include "libANGLE/renderer/d3d/d3d11/StreamProducerNV12.h"
 #include "libANGLE/renderer/d3d/d3d11/SwapChain11.h"
 #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
 #include "libANGLE/renderer/d3d/d3d11/TextureStorage11.h"
@@ -1048,7 +1048,10 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
     outExtensions->glTextureCubemapImage = true;
     outExtensions->glRenderbufferImage   = true;
 
-    outExtensions->stream = true;
+    outExtensions->stream                       = true;
+    outExtensions->streamConsumerGLTexture      = true;
+    outExtensions->streamConsumerGLTextureYUV   = true;
+    outExtensions->streamProducerD3DTextureNV12 = true;
 
     outExtensions->flexibleSurfaceCompatibility = true;
     outExtensions->directComposition            = !!mDCompModule;
@@ -3583,9 +3586,18 @@ TransformFeedbackImpl* Renderer11::createTransformFeedback()
     return new TransformFeedbackD3D();
 }
 
-StreamImpl *Renderer11::createStream(const egl::AttributeMap &attribs)
+StreamProducerImpl *Renderer11::createStreamProducer(egl::Stream::ProducerType producerType,
+                                                     egl::Stream::ConsumerType consumerType,
+                                                     const egl::AttributeMap &attribs)
 {
-    return new Stream11(this);
+    switch (producerType)
+    {
+        case egl::Stream::ProducerType::D3D11TextureNV12:
+            return new StreamProducerNV12(this, consumerType);
+        default:
+            UNREACHABLE();
+            return nullptr;
+    }
 }
 
 bool Renderer11::supportsFastCopyBufferToTexture(GLenum internalFormat) const
@@ -3672,6 +3684,13 @@ TextureStorage *Renderer11::createTextureStorageEGLImage(EGLImageD3D *eglImage)
     return new TextureStorage11_EGLImage(this, eglImage);
 }
 
+TextureStorage *Renderer11::createTextureStorageExternal(
+    egl::Stream *stream,
+    const egl::Stream::GLTextureDescription &desc)
+{
+    return new TextureStorage11_External(this, stream, desc);
+}
+
 TextureStorage *Renderer11::createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly)
 {
     return new TextureStorage11_2D(this, internalformat, renderTarget, width, height, levels, hintLevelZeroOnly);
@@ -3700,6 +3719,8 @@ TextureImpl *Renderer11::createTexture(GLenum target)
       case GL_TEXTURE_CUBE_MAP: return new TextureD3D_Cube(this);
       case GL_TEXTURE_3D: return new TextureD3D_3D(this);
       case GL_TEXTURE_2D_ARRAY: return new TextureD3D_2DArray(this);
+      case GL_TEXTURE_EXTERNAL_OES:
+          return new TextureD3D_External(this);
       default:
         UNREACHABLE();
     }
