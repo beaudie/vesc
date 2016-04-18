@@ -13,6 +13,7 @@
 
 #include "Lexer.h"
 #include "Macro.h"
+#include "Token.h"
 #include "pp_utils.h"
 
 namespace pp
@@ -83,7 +84,8 @@ class MacroExpander : public Lexer
     Diagnostics *mDiagnostics;
     bool mParseDefined;
 
-    std::auto_ptr<Token> mReserveToken;
+    bool mHasReserveToken = false;
+    Token mReserveToken;
     std::vector<MacroContext *> mContextStack;
 };
 

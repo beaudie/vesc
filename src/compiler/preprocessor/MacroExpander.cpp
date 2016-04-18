@@ -141,10 +141,10 @@ void MacroExpander::lex(Token *token)
 
 void MacroExpander::getToken(Token *token)
 {
-    if (mReserveToken.get())
+    if (mHasReserveToken)
     {
-        *token = *mReserveToken;
-        mReserveToken.reset();
+        *token = mReserveToken;
+        mHasReserveToken = false;
         return;
     }
 
@@ -174,8 +174,9 @@ void MacroExpander::ungetToken(const Token &token)
     }
     else
     {
-        assert(!mReserveToken.get());
-        mReserveToken.reset(new Token(token));
+        assert(mHasReserveToken == false);
+        mReserveToken = token;
+        mHasReserveToken = true;
     }
 }
 
