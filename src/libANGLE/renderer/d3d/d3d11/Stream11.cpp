@@ -23,4 +23,39 @@ Stream11::Stream11(Renderer11 *renderer) : mRenderer(renderer)
 Stream11::~Stream11()
 {
 }
+
+bool Stream11::validateD3D11NV12Texture(void *texture)
+{
+    ID3D11Texture2D *textureD3D = static_cast<ID3D11Texture2D *>(texture);
+
+    // Check that the texture originated from our device
+    ID3D11Device *device;
+    textureD3D->GetDevice(&device);
+    if (device != mRenderer->getDevice())
+    {
+        return false;
+    }
+
+    // Get the desc
+    D3D11_TEXTURE2D_DESC desc;
+    textureD3D->GetDesc(&desc);
+    if (desc.Format != DXGI_FORMAT_NV12)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void Stream11::referenceD3D11NV12Texture(void *texture)
+{
+    ID3D11Texture2D *textureD3D = static_cast<ID3D11Texture2D *>(texture);
+    textureD3D->AddRef();
+}
+
+void Stream11::releaseD3D11NV12Texture(void *texture)
+{
+    ID3D11Texture2D *textureD3D = static_cast<ID3D11Texture2D *>(texture);
+    textureD3D->Release();
+}
 }  // namespace rx

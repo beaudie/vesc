@@ -2710,6 +2710,14 @@ TextureStorage *Renderer9::createTextureStorageEGLImage(EGLImageD3D *eglImage)
     return new TextureStorage9_EGLImage(this, eglImage);
 }
 
+TextureStorage *Renderer9::createTextureStorageExternal(void *externalTexture,
+                                                        int planeIndex,
+                                                        int subresourceID)
+{
+    UNREACHABLE();
+    return nullptr;
+}
+
 TextureStorage *Renderer9::createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly)
 {
     return new TextureStorage9_2D(this, internalformat, renderTarget, width, height, levels);

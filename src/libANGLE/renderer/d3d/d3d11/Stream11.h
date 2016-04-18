@@ -21,6 +21,10 @@ class Stream11 : public StreamImpl
     Stream11(Renderer11 *renderer);
     ~Stream11() override;
 
+    bool validateD3D11NV12Texture(void *texture) override;
+    void referenceD3D11NV12Texture(void *texture) override;
+    void releaseD3D11NV12Texture(void *texture) override;
+
   private:
     Renderer11 *mRenderer;
 };
