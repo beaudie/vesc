@@ -159,6 +159,20 @@ class Texture final : public egl::ImageSibling,
                        const Rectangle &sourceArea,
                        const Framebuffer *source);
 
+    Error copyTexture(GLenum internalFormat,
+                      GLenum type,
+                      bool unpackFlipY,
+                      bool unpackPremultiplyAlpha,
+                      bool unpackUnmultiplyAlpha,
+                      const Texture *source);
+    Error copySubTexture(const Offset &destOffset,
+                         const Rectangle &sourceArea,
+                         bool unpackFlipY,
+                         bool unpackPremultiplyAlpha,
+                         bool unpackUnmultiplyAlpha,
+                         const Texture *source);
+    Error copyCompressedTexture(const Texture *source);
+
     Error setStorage(GLenum target, size_t levels, GLenum internalFormat, const Extents &size);
 
     Error setEGLImageTarget(GLenum target, egl::Image *imageTarget);

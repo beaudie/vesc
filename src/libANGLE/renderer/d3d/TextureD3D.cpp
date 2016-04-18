@@ -911,6 +911,102 @@ gl::Error TextureD3D_2D::copySubImage(GLenum target,
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error TextureD3D_2D::copyTexture(GLenum internalFormat,
+                                     GLenum type,
+                                     bool unpackFlipY,
+                                     bool unpackPremultiplyAlpha,
+                                     bool unpackUnmultiplyAlpha,
+                                     const gl::Texture *source)
+{
+    GLenum sourceTarget = source->getTarget();
+    GLint sourceLevel   = 0;
+
+    GLint destLevel = 0;
+
+    GLenum sizedInternalFormat = gl::GetSizedInternalFormat(internalFormat, type);
+    gl::Extents size(static_cast<int>(source->getWidth(sourceTarget, sourceLevel)),
+                     static_cast<int>(source->getHeight(sourceTarget, sourceLevel)), 1);
+    redefineImage(destLevel, sizedInternalFormat, size, false);
+
+    gl::ImageIndex index = gl::ImageIndex::Make2D(0);
+    UNUSED_ASSERTION_VARIABLE(index);
+    ASSERT(canCreateRenderTargetForImage(index));
+
+    gl::Error error = ensureRenderTarget();
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ASSERT(isValidLevel(destLevel));
+
+    error = updateStorageLevel(destLevel);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    gl::Rectangle sourceRect(0, 0, size.width, size.height);
+    gl::Offset destOffset(0, 0, 0);
+    error = mRenderer->copyTexture(source, sourceLevel, sourceRect,
+                                   gl::GetInternalFormatInfo(sizedInternalFormat).format,
+                                   destOffset, mTexStorage, destLevel, unpackFlipY,
+                                   unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error TextureD3D_2D::copySubTexture(const gl::Offset &destOffset,
+                                        const gl::Rectangle &sourceArea,
+                                        bool unpackFlipY,
+                                        bool unpackPremultiplyAlpha,
+                                        bool unpackUnmultiplyAlpha,
+                                        const gl::Texture *source)
+{
+    GLint sourceLevel = 0;
+    GLint destLevel   = 0;
+
+    gl::ImageIndex index = gl::ImageIndex::Make2D(0);
+    UNUSED_ASSERTION_VARIABLE(index);
+    ASSERT(canCreateRenderTargetForImage(index));
+
+    gl::Error error = ensureRenderTarget();
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ASSERT(isValidLevel(destLevel));
+
+    error = updateStorageLevel(destLevel);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    error = mRenderer->copyTexture(source, sourceLevel, sourceArea,
+                                   gl::GetInternalFormatInfo(getBaseLevelInternalFormat()).format,
+                                   destOffset, mTexStorage, destLevel, unpackFlipY,
+                                   unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
+gl::Error TextureD3D_2D::copyCompressedTexture(const gl::Texture *source)
+{
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 gl::Error TextureD3D_2D::setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size)
 {
     ASSERT(GL_TEXTURE_2D && size.depth == 1);
@@ -1516,6 +1612,34 @@ gl::Error TextureD3D_Cube::copySubImage(GLenum target,
     }
 
     return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error TextureD3D_Cube::copyTexture(GLenum internalFormat,
+                                       GLenum type,
+                                       bool unpackFlipY,
+                                       bool unpackPremultiplyAlpha,
+                                       bool unpackUnmultiplyAlpha,
+                                       const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
+gl::Error TextureD3D_Cube::copySubTexture(const gl::Offset &destOffset,
+                                          const gl::Rectangle &sourceArea,
+                                          bool unpackFlipY,
+                                          bool unpackPremultiplyAlpha,
+                                          bool unpackUnmultiplyAlpha,
+                                          const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
+gl::Error TextureD3D_Cube::copyCompressedTexture(const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
 }
 
 gl::Error TextureD3D_Cube::setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size)
@@ -2141,6 +2265,34 @@ gl::Error TextureD3D_3D::copySubImage(GLenum target,
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error TextureD3D_3D::copyTexture(GLenum internalFormat,
+                                     GLenum type,
+                                     bool unpackFlipY,
+                                     bool unpackPremultiplyAlpha,
+                                     bool unpackUnmultiplyAlpha,
+                                     const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
+gl::Error TextureD3D_3D::copySubTexture(const gl::Offset &destOffset,
+                                        const gl::Rectangle &sourceArea,
+                                        bool unpackFlipY,
+                                        bool unpackPremultiplyAlpha,
+                                        bool unpackUnmultiplyAlpha,
+                                        const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
+gl::Error TextureD3D_3D::copyCompressedTexture(const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 gl::Error TextureD3D_3D::setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size)
 {
     ASSERT(target == GL_TEXTURE_3D);
@@ -2708,6 +2860,34 @@ gl::Error TextureD3D_2DArray::copySubImage(GLenum target,
         }
     }
     return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error TextureD3D_2DArray::copyTexture(GLenum internalFormat,
+                                          GLenum type,
+                                          bool unpackFlipY,
+                                          bool unpackPremultiplyAlpha,
+                                          bool unpackUnmultiplyAlpha,
+                                          const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
+gl::Error TextureD3D_2DArray::copySubTexture(const gl::Offset &destOffset,
+                                             const gl::Rectangle &sourceArea,
+                                             bool unpackFlipY,
+                                             bool unpackPremultiplyAlpha,
+                                             bool unpackUnmultiplyAlpha,
+                                             const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
+gl::Error TextureD3D_2DArray::copyCompressedTexture(const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
 }
 
 gl::Error TextureD3D_2DArray::setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size)

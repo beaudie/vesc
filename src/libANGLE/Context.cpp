@@ -2684,6 +2684,67 @@ void Context::compressedTexSubImage3D(GLenum target,
     }
 }
 
+void Context::copyTextureCHROMIUM(GLuint sourceId,
+                                  GLuint destId,
+                                  GLint internalFormat,
+                                  GLenum destType,
+                                  GLboolean unpackFlipY,
+                                  GLboolean unpackPremultiplyAlpha,
+                                  GLboolean unpackUnmultiplyAlpha)
+{
+    gl::Texture *sourceTexture = getTexture(sourceId);
+    gl::Texture *destTexture   = getTexture(sourceId);
+    Error error                = destTexture->copyTexture(internalFormat, destType, unpackFlipY == GL_TRUE,
+                                           unpackPremultiplyAlpha == GL_TRUE,
+                                           unpackUnmultiplyAlpha == GL_TRUE, sourceTexture);
+    if (error.isError())
+    {
+        recordError(error);
+    }
+}
+
+void Context::copySubTextureCHROMIUM(GLuint sourceId,
+                                     GLuint destId,
+                                     GLint xoffset,
+                                     GLint yoffset,
+                                     GLint x,
+                                     GLint y,
+                                     GLsizei width,
+                                     GLsizei height,
+                                     GLboolean unpackFlipY,
+                                     GLboolean unpackPremultiplyAlpha,
+                                     GLboolean unpackUnmultiplyAlpha)
+{
+    // Zero sized copies are valid but no-ops
+    if (width == 0 || height == 0)
+    {
+        return;
+    }
+
+    gl::Texture *sourceTexture = getTexture(sourceId);
+    gl::Texture *destTexture = getTexture(sourceId);
+    Offset offset(xoffset, yoffset, 0);
+    Rectangle area(x, y, width, height);
+    Error error = destTexture->copySubTexture(offset, area, unpackFlipY == GL_TRUE,
+                                              unpackPremultiplyAlpha == GL_TRUE,
+                                              unpackUnmultiplyAlpha == GL_TRUE, sourceTexture);
+    if (error.isError())
+    {
+        recordError(error);
+    }
+}
+
+void Context::compressedCopyTextureCHROMIUM(GLuint sourceId, GLuint destId)
+{
+    gl::Texture *sourceTexture = getTexture(sourceId);
+    gl::Texture *destTexture   = getTexture(sourceId);
+    Error error = destTexture->copyCompressedTexture(sourceTexture);
+    if (error.isError())
+    {
+        recordError(error);
+    }
+}
+
 void Context::getBufferPointerv(GLenum target, GLenum /*pname*/, void **params)
 {
     Buffer *buffer = getState().getTargetBuffer(target);

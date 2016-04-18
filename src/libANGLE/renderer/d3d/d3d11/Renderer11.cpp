@@ -2942,7 +2942,7 @@ gl::Error Renderer11::copyImage2D(const gl::Framebuffer *framebuffer, const gl::
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
     error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                               destFormat, GL_NEAREST, false);
+                               destFormat, GL_NEAREST, false, false, false);
     if (error.isError())
     {
         return error;
@@ -3001,7 +3001,7 @@ gl::Error Renderer11::copyImageCube(const gl::Framebuffer *framebuffer, const gl
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
     error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                               destFormat, GL_NEAREST, false);
+                               destFormat, GL_NEAREST, false, false, false);
     if (error.isError())
     {
         return error;
@@ -3053,7 +3053,7 @@ gl::Error Renderer11::copyImage3D(const gl::Framebuffer *framebuffer, const gl::
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
     error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                               destFormat, GL_NEAREST, false);
+                               destFormat, GL_NEAREST, false, false, false);
     if (error.isError())
     {
         return error;
@@ -3105,7 +3105,7 @@ gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer, const
     // Use nearest filtering because source and destination are the same size for the direct
     // copy
     error = mBlit->copyTexture(source, sourceArea, sourceSize, dest, destArea, destSize, NULL,
-                               destFormat, GL_NEAREST, false);
+                               destFormat, GL_NEAREST, false, false, false);
     if (error.isError())
     {
         return error;
@@ -3114,6 +3114,71 @@ gl::Error Renderer11::copyImage2DArray(const gl::Framebuffer *framebuffer, const
     storage11->invalidateSwizzleCacheLevel(level);
 
     return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error Renderer11::copyTexture(const gl::Texture *source,
+                                  GLint sourceLevel,
+                                  const gl::Rectangle &sourceRect,
+                                  GLenum destFormat,
+                                  const gl::Offset &destOffset,
+                                  TextureStorage *storage,
+                                  GLint destLevel,
+                                  bool unpackFlipY,
+                                  bool unpackPremultiplyAlpha,
+                                  bool unpackUnmultiplyAlpha)
+{
+    const TextureD3D *sourceD3D = GetImplAs<TextureD3D>(source);
+
+    gl::ImageIndex sourceIndex                 = gl::ImageIndex::Make2D(sourceLevel);
+    rx::RenderTargetD3D *sourceRenderTargetD3D = nullptr;
+    ANGLE_TRY(
+        const_cast<TextureD3D *>(sourceD3D)->getRenderTarget(sourceIndex, &sourceRenderTargetD3D));
+    RenderTarget11 *sourceRenderTarget11 = GetAs<RenderTarget11>(sourceRenderTargetD3D);
+
+    ID3D11ShaderResourceView *sourceSRV = sourceRenderTarget11->getBlitShaderResourceView();
+    ASSERT(sourceSRV);
+
+    TextureStorage11_2D *storage11 = GetAs<TextureStorage11_2D>(storage);
+    ASSERT(storage11);
+
+    gl::ImageIndex destIndex             = gl::ImageIndex::Make2D(destLevel);
+    RenderTargetD3D *destRenderTargetD3D = nullptr;
+    ANGLE_TRY(storage11->getRenderTarget(destIndex, &destRenderTargetD3D));
+
+    RenderTarget11 *destRenderTarget11 = GetAs<RenderTarget11>(destRenderTargetD3D);
+
+    ID3D11RenderTargetView *destRTV = destRenderTarget11->getRenderTargetView();
+    ASSERT(destRTV);
+
+    gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
+    gl::Extents sourceSize(sourceRenderTarget11->getWidth(), sourceRenderTarget11->getHeight(), 1);
+    if (unpackFlipY)
+    {
+        sourceArea.y      = sourceSize.height - sourceRect.y;
+        sourceArea.height = -sourceArea.height;
+    }
+
+    gl::Box destArea(destOffset.x, destOffset.y, 0, sourceRect.width, sourceRect.height, 1);
+    gl::Extents destSize(destRenderTarget11->getWidth(), destRenderTarget11->getHeight(), 1);
+
+    // Use nearest filtering because source and destination are the same size for the direct
+    // copy
+    ANGLE_TRY(mBlit->copyTexture(sourceSRV, sourceArea, sourceSize, destRTV, destArea, destSize,
+                                 nullptr, destFormat, GL_NEAREST, false, unpackPremultiplyAlpha,
+                                 unpackUnmultiplyAlpha));
+
+    storage11->invalidateSwizzleCacheLevel(destLevel);
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error Renderer11::copyCompressedTexture(const gl::Texture *source,
+                                            GLint sourceLevel,
+                                            gl::Texture *dest,
+                                            GLint destLevel)
+{
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION);
 }
 
 gl::Error Renderer11::createRenderTarget(int width, int height, GLenum format, GLsizei samples, RenderTargetD3D **outRT)
@@ -4182,8 +4247,9 @@ gl::Error Renderer11::blitRenderbufferRect(const gl::Rectangle &readRectIn,
         {
             // We don't currently support masking off any other channel than alpha
             bool maskOffAlpha = colorMaskingNeeded && colorMask.alpha;
-            result = mBlit->copyTexture(readSRV, readArea, readSize, drawRTV, drawArea, drawSize,
-                                        scissor, destFormatInfo.format, filter, maskOffAlpha);
+            result            = mBlit->copyTexture(readSRV, readArea, readSize, drawRTV, drawArea, drawSize,
+                                        scissor, destFormatInfo.format, filter, maskOffAlpha, false,
+                                        false);
         }
     }
 
