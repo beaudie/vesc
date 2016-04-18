@@ -228,6 +228,9 @@ class RendererD3D : public Renderer, public BufferFactoryD3D
                                               const gl::TextureState &textureState) = 0;
     virtual TextureStorage *createTextureStorage2D(SwapChainD3D *swapChain) = 0;
     virtual TextureStorage *createTextureStorageEGLImage(EGLImageD3D *eglImage) = 0;
+    virtual TextureStorage *createTextureStorageExternal(void *externalTexture,
+                                                         int planeIndex,
+                                                         int subresourceID) = 0;
     virtual TextureStorage *createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly) = 0;
     virtual TextureStorage *createTextureStorageCube(GLenum internalformat, bool renderTarget, int size, int levels, bool hintLevelZeroOnly) = 0;
     virtual TextureStorage *createTextureStorage3D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels) = 0;

@@ -188,6 +188,13 @@ Context::Context(const egl::Config *config,
         mZeroTextures[GL_TEXTURE_2D_ARRAY].set(zeroTexture2DArray);
     }
 
+    if (mExtensions.eglImageExternal || mExtensions.eglStreamConsumerExternal)
+    {
+        Texture *zeroTextureExternal = new Texture(
+            mRenderer->createTexture(GL_TEXTURE_EXTERNAL_OES), 0, GL_TEXTURE_EXTERNAL_OES);
+        mZeroTextures[GL_TEXTURE_EXTERNAL_OES].set(zeroTextureExternal);
+    }
+
     mState.initializeZeroTextures(mZeroTextures);
 
     bindVertexArray(0);
