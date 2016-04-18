@@ -178,6 +178,21 @@ class Renderer11 : public RendererD3D
     virtual gl::Error copyImage2DArray(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
                                        const gl::Offset &destOffset, TextureStorage *storage, GLint level);
 
+    gl::Error copyTexture(const gl::Texture *source,
+                          GLint sourceLevel,
+                          const gl::Rectangle &sourceRect,
+                          GLenum destFormat,
+                          const gl::Offset &destOffset,
+                          TextureStorage *storage,
+                          GLint destLevel,
+                          bool unpackFlipY,
+                          bool unpackPremultiplyAlpha,
+                          bool unpackUnmultiplyAlpha) override;
+    gl::Error copyCompressedTexture(const gl::Texture *source,
+                                    GLint sourceLevel,
+                                    TextureStorage *storage,
+                                    GLint destLevel) override;
+
     // RenderTarget creation
     virtual gl::Error createRenderTarget(int width, int height, GLenum format, GLsizei samples, RenderTargetD3D **outRT);
     gl::Error createRenderTargetCopy(RenderTargetD3D *source, RenderTargetD3D **outRT) override;
