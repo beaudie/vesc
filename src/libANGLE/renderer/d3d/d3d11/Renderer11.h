@@ -212,6 +212,9 @@ class Renderer11 : public RendererD3D
                                       const gl::TextureState &textureState) override;
     virtual TextureStorage *createTextureStorage2D(SwapChainD3D *swapChain);
     TextureStorage *createTextureStorageEGLImage(EGLImageD3D *eglImage) override;
+    TextureStorage *createTextureStorageExternal(void *externalTexture,
+                                                 int subresourceID,
+                                                 int planeIndex) override;
     virtual TextureStorage *createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly);
     virtual TextureStorage *createTextureStorageCube(GLenum internalformat, bool renderTarget, int size, int levels, bool hintLevelZeroOnly);
     virtual TextureStorage *createTextureStorage3D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels);

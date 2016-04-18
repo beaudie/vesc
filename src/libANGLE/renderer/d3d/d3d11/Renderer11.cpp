@@ -1042,7 +1042,10 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
     outExtensions->glTextureCubemapImage = true;
     outExtensions->glRenderbufferImage   = true;
 
-    outExtensions->stream = true;
+    outExtensions->stream                       = true;
+    outExtensions->streamConsumerGLTexture      = true;
+    outExtensions->streamConsumerGLTextureYUV   = true;
+    outExtensions->streamProducerD3DTextureNV12 = true;
 
     outExtensions->flexibleSurfaceCompatibility = true;
     outExtensions->directComposition            = !!mDCompModule;
@@ -3643,6 +3646,13 @@ TextureStorage *Renderer11::createTextureStorageEGLImage(EGLImageD3D *eglImage)
     return new TextureStorage11_EGLImage(this, eglImage);
 }
 
+TextureStorage *Renderer11::createTextureStorageExternal(void *externalTexture,
+                                                         int planeIndex,
+                                                         int subresourceID)
+{
+    return new TextureStorage11_External(this, externalTexture, planeIndex, subresourceID);
+}
+
 TextureStorage *Renderer11::createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly)
 {
     return new TextureStorage11_2D(this, internalformat, renderTarget, width, height, levels, hintLevelZeroOnly);
@@ -3671,6 +3681,8 @@ TextureImpl *Renderer11::createTexture(GLenum target)
       case GL_TEXTURE_CUBE_MAP: return new TextureD3D_Cube(this);
       case GL_TEXTURE_3D: return new TextureD3D_3D(this);
       case GL_TEXTURE_2D_ARRAY: return new TextureD3D_2DArray(this);
+      case GL_TEXTURE_EXTERNAL_OES:
+          return new TextureD3D_External(this);
       default:
         UNREACHABLE();
     }

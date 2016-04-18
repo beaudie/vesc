@@ -440,9 +440,19 @@ gl::Texture *RendererD3D::getIncompleteTexture(GLenum type)
         const gl::Box area(0, 0, 0, 1, 1, 1);
 
         // Skip the API layer to avoid needing to pass the Context and mess with dirty bits.
-        gl::Texture *t =
-            new gl::Texture(createTexture(type), std::numeric_limits<GLuint>::max(), type);
-        t->setStorage(type, 1, GL_RGBA8, colorSize);
+        gl::Texture *t;
+        if (type == GL_TEXTURE_EXTERNAL_OES)
+        {
+            // If a texture is external use a 2D texture for the incomplete texture
+            t = new gl::Texture(createTexture(GL_TEXTURE_2D), std::numeric_limits<GLuint>::max(),
+                                GL_TEXTURE_2D);
+            t->setStorage(GL_TEXTURE_2D, 1, GL_RGBA8, colorSize);
+        }
+        else
+        {
+            t = new gl::Texture(createTexture(type), std::numeric_limits<GLuint>::max(), type);
+            t->setStorage(type, 1, GL_RGBA8, colorSize);
+        }
 
         if (type == GL_TEXTURE_CUBE_MAP)
         {
@@ -451,6 +461,11 @@ gl::Texture *RendererD3D::getIncompleteTexture(GLenum type)
                 t->getImplementation()->setSubImage(face, 0, area, GL_RGBA8, GL_UNSIGNED_BYTE,
                                                     unpack, color);
             }
+        }
+        else if (type == GL_TEXTURE_EXTERNAL_OES)
+        {
+            t->getImplementation()->setSubImage(GL_TEXTURE_2D, 0, area, GL_RGBA8, GL_UNSIGNED_BYTE,
+                                                unpack, color);
         }
         else
         {
