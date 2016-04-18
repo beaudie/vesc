@@ -29,6 +29,13 @@ EGLAttrib AttributeMap::get(EGLAttrib key, EGLAttrib defaultValue) const
     return (mAttributes.find(key) != mAttributes.end()) ? iter->second : defaultValue;
 }
 
+EGLint AttributeMap::getAsInt(EGLAttrib key, EGLint defaultValue) const
+{
+    std::map<EGLAttrib, EGLAttrib>::const_iterator iter = mAttributes.find(key);
+    return static_cast<EGLint>((mAttributes.find(key) != mAttributes.end()) ? iter->second
+                                                                            : defaultValue);
+}
+
 bool AttributeMap::isEmpty() const
 {
     return mAttributes.empty();

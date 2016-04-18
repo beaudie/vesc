@@ -64,6 +64,11 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
 
     virtual gl::Error setEGLImageTarget(GLenum target, egl::Image *image) = 0;
 
+    virtual gl::Error setImageExternal(GLenum target,
+                                       void *externalImage,
+                                       int planeIndex,
+                                       int subresourceID) = 0;
+
     virtual gl::Error generateMipmaps(const gl::TextureState &textureState) = 0;
 
     virtual void bindTexImage(egl::Surface *surface) = 0;
