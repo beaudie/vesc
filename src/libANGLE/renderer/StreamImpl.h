@@ -19,6 +19,10 @@ class StreamImpl : angle::NonCopyable
   public:
     explicit StreamImpl() {}
     virtual ~StreamImpl() {}
+
+    virtual bool validateD3D11NV12Texture(void *texture) = 0;
+    virtual void referenceD3D11NV12Texture(void *texture) = 0;
+    virtual void releaseD3D11NV12Texture(void *texture) = 0;
 };
 }  // namespace rx
 
