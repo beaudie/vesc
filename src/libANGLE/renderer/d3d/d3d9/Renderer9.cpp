@@ -786,7 +786,9 @@ TransformFeedbackImpl* Renderer9::createTransformFeedback()
     return new TransformFeedbackD3D();
 }
 
-StreamImpl *Renderer9::createStream(const egl::AttributeMap &attribs)
+StreamProducerImpl *Renderer9::createStreamProducer(egl::Stream::ProducerType producerType,
+                                                    egl::Stream::ConsumerType consumerType,
+                                                    const egl::AttributeMap &attribs)
 {
     // Streams are not supported under D3D9
     UNREACHABLE();
@@ -2708,6 +2710,14 @@ TextureStorage *Renderer9::createTextureStorage2D(SwapChainD3D *swapChain)
 TextureStorage *Renderer9::createTextureStorageEGLImage(EGLImageD3D *eglImage)
 {
     return new TextureStorage9_EGLImage(this, eglImage);
+}
+
+TextureStorage *Renderer9::createTextureStorageExternal(
+    egl::Stream *stream,
+    const egl::Stream::GLTextureDescription &desc)
+{
+    UNREACHABLE();
+    return nullptr;
 }
 
 TextureStorage *Renderer9::createTextureStorage2D(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, int levels, bool hintLevelZeroOnly)

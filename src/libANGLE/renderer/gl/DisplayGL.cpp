@@ -63,7 +63,9 @@ gl::Context *DisplayGL::createContext(const egl::Config *config,
     return new gl::Context(config, shareContext, mRenderer, attribs);
 }
 
-StreamImpl *DisplayGL::createStream(const egl::AttributeMap &attribs)
+StreamProducerImpl *DisplayGL::createStreamProducer(egl::Stream::ProducerType producerType,
+                                                    egl::Stream::ConsumerType consumerType,
+                                                    const egl::AttributeMap &attribs)
 {
     UNREACHABLE();
     return nullptr;
