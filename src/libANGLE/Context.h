@@ -368,6 +368,25 @@ class Context final : public ValidationContext
                                  GLenum format,
                                  GLsizei imageSize,
                                  const GLvoid *data);
+    void copyTextureCHROMIUM(GLuint sourceId,
+                             GLuint destId,
+                             GLint internalFormat,
+                             GLenum destType,
+                             GLboolean unpackFlipY,
+                             GLboolean unpackPremultiplyAlpha,
+                             GLboolean unpackUnmultiplyAlpha);
+    void copySubTextureCHROMIUM(GLuint sourceId,
+                                GLuint destId,
+                                GLint xoffset,
+                                GLint yoffset,
+                                GLint x,
+                                GLint y,
+                                GLsizei width,
+                                GLsizei height,
+                                GLboolean unpackFlipY,
+                                GLboolean unpackPremultiplyAlpha,
+                                GLboolean unpackUnmultiplyAlpha);
+    void compressedCopyTextureCHROMIUM(GLuint sourceId, GLuint destId);
 
     Error flush();
     Error finish();
