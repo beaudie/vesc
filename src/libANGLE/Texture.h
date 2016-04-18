@@ -26,6 +26,7 @@
 namespace egl
 {
 class Surface;
+class Stream;
 }
 
 namespace gl
@@ -166,6 +167,7 @@ class Texture final : public egl::ImageSibling,
     Error generateMipmaps();
 
     egl::Surface *getBoundSurface() const;
+    egl::Stream *getBoundStream() const;
 
     rx::TextureImpl *getImplementation() { return mTexture; }
     const rx::TextureImpl *getImplementation() const { return mTexture; }
@@ -186,6 +188,12 @@ class Texture final : public egl::ImageSibling,
     friend class egl::Surface;
     void bindTexImageFromSurface(egl::Surface *surface);
     void releaseTexImageFromSurface();
+
+    // ANGLE-only methods, used internally
+    friend class egl::Stream;
+    void bindStream(egl::Stream *stream);
+    void releaseStream();
+    void imageFromStream(egl::Stream *stream, void *image, int planeIndex, int subresourceID);
 
     rx::TextureImpl *mTexture;
 
@@ -238,6 +246,7 @@ class Texture final : public egl::ImageSibling,
     mutable SamplerCompletenessCache mCompletenessCache;
 
     egl::Surface *mBoundSurface;
+    egl::Stream *mBoundStream;
 };
 
 }
