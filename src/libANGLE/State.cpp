@@ -975,11 +975,12 @@ void State::detachTransformFeedback(GLuint transformFeedback)
     }
 }
 
-bool State::isQueryActive() const
+bool State::isQueryActive(GLenum type) const
 {
     for (auto &iter : mActiveQueries)
     {
-        if (iter.second.get() != NULL)
+        Query *query = iter.second.get();
+        if (query != nullptr && query->getType() == type)
         {
             return true;
         }
