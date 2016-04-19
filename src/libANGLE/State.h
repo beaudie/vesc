@@ -192,7 +192,7 @@ class State : angle::NonCopyable
     void setTransformFeedbackBinding(TransformFeedback *transformFeedback);
     TransformFeedback *getCurrentTransformFeedback() const;
     bool isTransformFeedbackActiveUnpaused() const;
-    void detachTransformFeedback(GLuint transformFeedback);
+    bool removeTransformFeedbackBinding(GLuint transformFeedback);
 
     // Query binding manipulation
     bool isQueryActive(GLenum type) const;
