@@ -24,6 +24,8 @@
 #include "libANGLE/renderer/gl/VertexArrayGL.h"
 #include "libANGLE/renderer/gl/QueryGL.h"
 
+#include <iostream>
+
 namespace rx
 {
 
