@@ -10,9 +10,17 @@
 #define TESTS_ANGLE_UNITTESTS_UTILS_H_
 
 #include "libANGLE/renderer/ImplFactory.h"
+#include "libANGLE/renderer/FramebufferImpl_mock.h"
+#include "libANGLE/renderer/ProgramImpl_mock.h"
+#include "libANGLE/renderer/TextureImpl_mock.h"
 
 namespace rx
 {
+
+class FramebufferImpl;
+class ProgramImpl;
+class TextureImpl;
+class VertexArrayImpl;
 
 // Useful when mocking a part of the ImplFactory class
 class NullFactory : public ImplFactory
@@ -52,6 +60,24 @@ class NullFactory : public ImplFactory
     SamplerImpl *createSampler() override { return nullptr; }
 };
 
+// A class with all the factory methods mocked.
+class MockFactory : public ImplFactory
+{
+  public:
+    MOCK_METHOD0(createCompiler, CompilerImpl *());
+    MOCK_METHOD1(createShader, ShaderImpl *(const gl::Shader::Data &data));
+    MOCK_METHOD1(createProgram, ProgramImpl *(const gl::Program::Data &));
+    MOCK_METHOD1(createFramebuffer, FramebufferImpl *(const gl::Framebuffer::Data &));
+    MOCK_METHOD1(createTexture, TextureImpl *(GLenum target));
+    MOCK_METHOD0(createRenderbuffer, RenderbufferImpl *());
+    MOCK_METHOD0(createBuffer, BufferImpl *());
+    MOCK_METHOD1(createVertexArray, VertexArrayImpl *(const gl::VertexArray::Data &));
+    MOCK_METHOD1(createQuery, QueryImpl *(GLenum type));
+    MOCK_METHOD0(createFenceNV, FenceNVImpl *());
+    MOCK_METHOD0(createFenceSync, FenceSyncImpl *());
+    MOCK_METHOD0(createTransformFeedback, TransformFeedbackImpl *());
+    MOCK_METHOD0(createSampler, SamplerImpl *());
+};
 }
 
 #endif // TESTS_ANGLE_UNITTESTS_UTILS_H_
