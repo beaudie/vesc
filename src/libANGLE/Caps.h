@@ -281,6 +281,9 @@ struct Extensions
     // GL_ANGLE_lossy_etc_decode
     bool lossyETCDecode;
 
+    // GL_CHROMIUM_copy_texture
+    bool copyTexture;
+
     // ES3 Extension support
 
     // GL_EXT_color_buffer_float

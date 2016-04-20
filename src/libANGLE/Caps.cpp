@@ -158,6 +158,7 @@ Extensions::Extensions()
       maxLabelLength(0),
       noError(false),
       lossyETCDecode(false),
+      copyTexture(false),
       colorBufferFloat(false)
 {
 }
@@ -230,6 +231,7 @@ std::vector<std::string> Extensions::getStrings() const
     //InsertExtensionString("GL_KHR_no_error",                     noError,                   &extensionStrings);
 
     InsertExtensionString("GL_ANGLE_lossy_etc_decode",           lossyETCDecode,            &extensionStrings);
+    InsertExtensionString("GL_CHROMIUM_copy_texture",            copyTexture,               &extensionStrings);
     // clang-format on
 
     return extensionStrings;
