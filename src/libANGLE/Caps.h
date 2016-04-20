@@ -290,6 +290,9 @@ struct Extensions
     // GL_CHROMIUM_copy_texture
     bool copyTexture;
 
+    // GL_CHROMIUM_copy_compressed_texture
+    bool copyCompressedTexture;
+
     // ES3 Extension support
 
     // GL_EXT_color_buffer_float

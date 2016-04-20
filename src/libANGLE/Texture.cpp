@@ -595,6 +595,20 @@ Error Texture::copySubTexture(const Offset &destOffset,
                                     unpackUnmultiplyAlpha, source);
 }
 
+Error Texture::copyCompressedTexture(const Texture *source)
+{
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    releaseTexImageInternal();
+    orphanImages();
+
+    ANGLE_TRY(mTexture->copyCompressedTexture(source));
+
+    const auto &sourceDesc = source->getImageDesc(source->getTarget(), 0);
+    setImageDesc(getTarget(), 0, sourceDesc);
+
+    return Error(GL_NO_ERROR);
+}
+
 Error Texture::setStorage(GLenum target, size_t levels, GLenum internalFormat, const Extents &size)
 {
     ASSERT(target == mState.target);

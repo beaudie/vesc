@@ -211,6 +211,7 @@ class Texture final : public egl::ImageSibling,
                          bool unpackPremultiplyAlpha,
                          bool unpackUnmultiplyAlpha,
                          const Texture *source);
+    Error copyCompressedTexture(const Texture *source);
 
     Error setStorage(GLenum target, size_t levels, GLenum internalFormat, const Extents &size);
 

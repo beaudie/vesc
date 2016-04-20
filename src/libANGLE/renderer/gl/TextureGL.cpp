@@ -380,6 +380,12 @@ gl::Error TextureGL::copySubTexture(const gl::Offset &destOffset,
     return gl::Error(GL_INVALID_OPERATION);
 }
 
+gl::Error TextureGL::copyCompressedTexture(const gl::Texture *source)
+{
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 gl::Error TextureGL::setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size)
 {
     // TODO: emulate texture storage with TexImage calls if on GL version <4.2 or the

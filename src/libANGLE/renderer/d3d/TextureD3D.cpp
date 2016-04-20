@@ -1024,6 +1024,26 @@ gl::Error TextureD3D_2D::copySubTexture(const gl::Offset &destOffset,
     return gl::NoError();
 }
 
+gl::Error TextureD3D_2D::copyCompressedTexture(const gl::Texture *source)
+{
+    GLenum sourceTarget = source->getTarget();
+    GLint sourceLevel   = 0;
+
+    GLint destLevel = 0;
+
+    GLenum sizedInternalFormat = source->getInternalFormat(sourceTarget, sourceLevel);
+    gl::Extents size(static_cast<int>(source->getWidth(sourceTarget, sourceLevel)),
+                     static_cast<int>(source->getHeight(sourceTarget, sourceLevel)), 1);
+    redefineImage(destLevel, sizedInternalFormat, size, false);
+
+    ANGLE_TRY(initializeStorage(false));
+    ASSERT(mTexStorage);
+
+    ANGLE_TRY(mRenderer->copyCompressedTexture(source, sourceLevel, mTexStorage, destLevel));
+
+    return gl::NoError();
+}
+
 gl::Error TextureD3D_2D::setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size)
 {
     ASSERT(GL_TEXTURE_2D && size.depth == 1);
@@ -1649,6 +1669,12 @@ gl::Error TextureD3D_Cube::copySubTexture(const gl::Offset &destOffset,
                                           bool unpackPremultiplyAlpha,
                                           bool unpackUnmultiplyAlpha,
                                           const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
+gl::Error TextureD3D_Cube::copyCompressedTexture(const gl::Texture *source)
 {
     UNREACHABLE();
     return gl::Error(GL_INVALID_OPERATION);
@@ -2307,6 +2333,12 @@ gl::Error TextureD3D_3D::copySubTexture(const gl::Offset &destOffset,
     return gl::Error(GL_INVALID_OPERATION);
 }
 
+gl::Error TextureD3D_3D::copyCompressedTexture(const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 gl::Error TextureD3D_3D::setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size)
 {
     ASSERT(target == GL_TEXTURE_3D);
@@ -2909,6 +2941,12 @@ gl::Error TextureD3D_2DArray::copySubTexture(const gl::Offset &destOffset,
     return gl::Error(GL_INVALID_OPERATION);
 }
 
+gl::Error TextureD3D_2DArray::copyCompressedTexture(const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 gl::Error TextureD3D_2DArray::setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size)
 {
     ASSERT(target == GL_TEXTURE_2D_ARRAY);
@@ -3433,6 +3471,12 @@ gl::Error TextureD3D_External::copySubTexture(const gl::Offset &destOffset,
                                               bool unpackPremultiplyAlpha,
                                               bool unpackUnmultiplyAlpha,
                                               const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
+gl::Error TextureD3D_External::copyCompressedTexture(const gl::Texture *source)
 {
     UNREACHABLE();
     return gl::Error(GL_INVALID_OPERATION);
