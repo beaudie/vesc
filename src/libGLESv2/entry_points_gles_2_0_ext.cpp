@@ -1728,4 +1728,20 @@ ANGLE_EXPORT void GL_APIENTRY CopySubTextureCHROMIUM(GLuint sourceId,
     }
 }
 
+ANGLE_EXPORT void GL_APIENTRY CompressedCopyTextureCHROMIUM(GLuint sourceId, GLuint destId)
+{
+    EVENT("(GLuint sourceId = %u, GLuint destId = %u)", sourceId, destId);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!ValidateCompressedCopyTextureCHROMIUM(context, sourceId, destId))
+        {
+            return;
+        }
+
+        context->compressedCopyTextureCHROMIUM(sourceId, destId);
+    }
+}
+
 }  // gl

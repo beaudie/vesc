@@ -200,6 +200,9 @@ ANGLE_EXPORT void GL_APIENTRY CopySubTextureCHROMIUM(GLuint sourceId,
                                                      GLboolean unpackFlipY,
                                                      GLboolean unpackPremultiplyAlpha,
                                                      GLboolean unpackUnmultiplyAlpha);
+
+// GL_CHROMIUM_copy_compressed_texture
+ANGLE_EXPORT void GL_APIENTRY CompressedCopyTextureCHROMIUM(GLuint sourceId, GLuint destId);
 }
 
 #endif // LIBGLESV2_ENTRYPOINTGLES20EXT_H_

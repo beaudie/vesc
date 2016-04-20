@@ -40,4 +40,10 @@ gl::Error TextureImpl::copySubTexture(const gl::Offset &destOffset,
     UNREACHABLE();
     return gl::Error(GL_INVALID_OPERATION);
 }
+
+gl::Error TextureImpl::copyCompressedTexture(const gl::Texture *source)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
 }
