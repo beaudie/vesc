@@ -8,6 +8,7 @@
 #include "gtest/gtest.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Caps.h"
+#include "libANGLE/Data.h"
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/renderer/BufferImpl_mock.h"
 #include "libANGLE/renderer/TransformFeedbackImpl_mock.h"
@@ -19,12 +20,6 @@ using ::testing::SetArgumentPointee;
 
 namespace
 {
-
-class MockFactory : public rx::NullFactory
-{
-  public:
-    MOCK_METHOD0(createTransformFeedback, rx::TransformFeedbackImpl *());
-};
 
 class TransformFeedbackTest : public testing::Test
 {
@@ -59,7 +54,7 @@ class TransformFeedbackTest : public testing::Test
         testing::Mock::VerifyAndClear(mImpl);
     }
 
-    MockFactory mMockFactory;
+    rx::MockFactory mMockFactory;
     rx::MockTransformFeedbackImpl* mImpl;
     gl::TransformFeedback* mFeedback;
     gl::Caps mCaps;
