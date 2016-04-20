@@ -157,6 +157,7 @@ class TextureD3D_2D : public TextureD3D
                              bool unpackPremultiplyAlpha,
                              bool unpackUnmultiplyAlpha,
                              const gl::Texture *source) override;
+    gl::Error copyCompressedTexture(const gl::Texture *source) override;
 
     gl::Error setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size) override;
 
@@ -238,6 +239,7 @@ class TextureD3D_Cube : public TextureD3D
                              bool unpackPremultiplyAlpha,
                              bool unpackUnmultiplyAlpha,
                              const gl::Texture *source) override;
+    gl::Error copyCompressedTexture(const gl::Texture *source) override;
 
     gl::Error setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size) override;
 
@@ -314,6 +316,7 @@ class TextureD3D_3D : public TextureD3D
                              bool unpackPremultiplyAlpha,
                              bool unpackUnmultiplyAlpha,
                              const gl::Texture *source) override;
+    gl::Error copyCompressedTexture(const gl::Texture *source) override;
 
     gl::Error setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size) override;
 
@@ -388,6 +391,7 @@ class TextureD3D_2DArray : public TextureD3D
                              bool unpackPremultiplyAlpha,
                              bool unpackUnmultiplyAlpha,
                              const gl::Texture *source) override;
+    gl::Error copyCompressedTexture(const gl::Texture *source) override;
 
     gl::Error setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size) override;
 
