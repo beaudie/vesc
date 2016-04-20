@@ -596,6 +596,7 @@ void GenerateCaps(IDirect3D9 *d3d9,
     extensions->noError                = true;
     extensions->bindUniformLocation    = true;
     extensions->syncQuery              = extensions->fence;
+    extensions->copyTexture            = true;
 
     // D3D9 has no concept of separate masks and refs for front and back faces in the depth stencil
     // state.
