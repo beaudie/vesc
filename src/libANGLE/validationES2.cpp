@@ -3150,4 +3150,67 @@ bool ValidateCopySubTextureCHROMIUM(Context *context,
     return true;
 }
 
+bool ValidateCompressedCopyTextureCHROMIUM(Context *context, GLuint sourceId, GLuint destId)
+{
+    if (!context->getExtensions().copyCompressedTexture)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION,
+                                   "GL_CHROMIUM_copy_compressed_texture extension not available."));
+        return false;
+    }
+
+    const gl::Texture *source = context->getTexture(sourceId);
+    if (source == nullptr)
+    {
+        context->handleError(
+            Error(GL_INVALID_VALUE, "Source texture is not a valid texture object."));
+        return false;
+    }
+
+    if (source->getTarget() != GL_TEXTURE_2D)
+    {
+        context->handleError(
+            Error(GL_INVALID_VALUE, "Source texture must be of type GL_TEXTURE_2D."));
+        return false;
+    }
+
+    if (source->getWidth(GL_TEXTURE_2D, 0) == 0 || source->getHeight(GL_TEXTURE_2D, 0) == 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Source texture must level 0 defined."));
+        return false;
+    }
+
+    GLenum internalFormat                    = source->getInternalFormat(GL_TEXTURE_2D, 0);
+    const InternalFormat &internalFormatInfo = GetInternalFormatInfo(internalFormat);
+    if (!internalFormatInfo.compressed)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "Source texture must have a compressed internal format."));
+        return false;
+    }
+
+    const gl::Texture *dest = context->getTexture(destId);
+    if (dest == nullptr)
+    {
+        context->handleError(
+            Error(GL_INVALID_VALUE, "Destination texture is not a valid texture object."));
+        return false;
+    }
+
+    if (dest->getTarget() != GL_TEXTURE_2D)
+    {
+        context->handleError(
+            Error(GL_INVALID_VALUE, "Destination texture must be of type GL_TEXTURE_2D."));
+        return false;
+    }
+
+    if (dest->getImmutableFormat())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Destination cannot be immutable."));
+        return false;
+    }
+
+    return true;
+}
+
 }  // namespace gl

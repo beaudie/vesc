@@ -294,6 +294,7 @@ bool ValidateCopySubTextureCHROMIUM(Context *context,
                                     GLboolean unpackFlipY,
                                     GLboolean unpackPremultiplyAlpha,
                                     GLboolean unpackUnmultiplyAlpha);
+bool ValidateCompressedCopyTextureCHROMIUM(Context *context, GLuint sourceId, GLuint destId);
 
 }  // namespace gl
 
