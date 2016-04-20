@@ -2746,6 +2746,19 @@ void Context::copySubTextureCHROMIUM(GLuint sourceId,
     }
 }
 
+void Context::compressedCopyTextureCHROMIUM(GLuint sourceId, GLuint destId)
+{
+    syncStateForTexImage();
+
+    gl::Texture *sourceTexture = getTexture(sourceId);
+    gl::Texture *destTexture   = getTexture(destId);
+    Error error = destTexture->copyCompressedTexture(sourceTexture);
+    if (error.isError())
+    {
+        recordError(error);
+    }
+}
+
 void Context::getBufferPointerv(GLenum target, GLenum /*pname*/, void **params)
 {
     Buffer *buffer = getState().getTargetBuffer(target);
