@@ -38,7 +38,9 @@ class Blit11 : angle::NonCopyable
                           const gl::Rectangle *scissor,
                           GLenum destFormat,
                           GLenum filter,
-                          bool maskOffAlpha);
+                          bool maskOffAlpha,
+                          bool unpackPremultiplyAlpha,
+                          bool unpackUnmultiplyAlpha);
 
     gl::Error copyStencil(ID3D11Resource *source, unsigned int sourceSubresource, const gl::Box &sourceArea, const gl::Extents &sourceSize,
                           ID3D11Resource *dest, unsigned int destSubresource, const gl::Box &destArea, const gl::Extents &destSize,
@@ -57,8 +59,14 @@ class Blit11 : angle::NonCopyable
     {
         BLITSHADER_INVALID,
         BLITSHADER_2D_RGBAF,
+        BLITSHADER_2D_RGBAF_PREMULTIPLY,
+        BLITSHADER_2D_RGBAF_UNMULTIPLY,
         BLITSHADER_2D_BGRAF,
+        BLITSHADER_2D_BGRAF_PREMULTIPLY,
+        BLITSHADER_2D_BGRAF_UNMULTIPLY,
         BLITSHADER_2D_RGBF,
+        BLITSHADER_2D_RGBF_PREMULTIPLY,
+        BLITSHADER_2D_RGBF_UNMULTIPLY,
         BLITSHADER_2D_RGF,
         BLITSHADER_2D_RF,
         BLITSHADER_2D_ALPHA,
@@ -137,7 +145,11 @@ class Blit11 : angle::NonCopyable
 
     ShaderSupport getShaderSupport(const Shader &shader);
 
-    static BlitShaderType GetBlitShaderType(GLenum destinationFormat, bool isSigned, ShaderDimension dimension);
+    static BlitShaderType GetBlitShaderType(GLenum destinationFormat,
+                                            bool isSigned,
+                                            bool unpackPremultiplyAlpha,
+                                            bool unpackUnmultiplyAlpha,
+                                            ShaderDimension dimension);
     static SwizzleShaderType GetSwizzleShaderType(GLenum type, D3D11_SRV_DIMENSION dimensionality);
 
     gl::Error copyDepthStencil(ID3D11Resource *source, unsigned int sourceSubresource, const gl::Box &sourceArea, const gl::Extents &sourceSize,
@@ -146,7 +158,12 @@ class Blit11 : angle::NonCopyable
 
     void addBlitShaderToMap(BlitShaderType blitShaderType, ShaderDimension dimension, ID3D11PixelShader *ps);
 
-    gl::Error getBlitShader(GLenum destFormat, bool isSigned, ShaderDimension dimension, const Shader **shaderOut);
+    gl::Error getBlitShader(GLenum destFormat,
+                            bool isSigned,
+                            bool unpackPremultiplyAlpha,
+                            bool unpackUnmultiplyAlpha,
+                            ShaderDimension dimension,
+                            const Shader **shaderOut);
     gl::Error getSwizzleShader(GLenum type, D3D11_SRV_DIMENSION viewDimension, const Shader **shaderOut);
 
     void addSwizzleShaderToMap(SwizzleShaderType swizzleShaderType, ShaderDimension dimension, ID3D11PixelShader *ps);

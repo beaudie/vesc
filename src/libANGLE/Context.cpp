@@ -2642,6 +2642,52 @@ void Context::compressedTexSubImage3D(GLenum target,
                                                imageSize, reinterpret_cast<const uint8_t *>(data)));
 }
 
+void Context::copyTextureCHROMIUM(GLuint sourceId,
+                                  GLuint destId,
+                                  GLint internalFormat,
+                                  GLenum destType,
+                                  GLboolean unpackFlipY,
+                                  GLboolean unpackPremultiplyAlpha,
+                                  GLboolean unpackUnmultiplyAlpha)
+{
+    syncStateForTexImage();
+
+    gl::Texture *sourceTexture = getTexture(sourceId);
+    gl::Texture *destTexture = getTexture(destId);
+    handleError(destTexture->copyTexture(internalFormat, destType, unpackFlipY == GL_TRUE,
+                                         unpackPremultiplyAlpha == GL_TRUE,
+                                         unpackUnmultiplyAlpha == GL_TRUE, sourceTexture));
+}
+
+void Context::copySubTextureCHROMIUM(GLuint sourceId,
+                                     GLuint destId,
+                                     GLint xoffset,
+                                     GLint yoffset,
+                                     GLint x,
+                                     GLint y,
+                                     GLsizei width,
+                                     GLsizei height,
+                                     GLboolean unpackFlipY,
+                                     GLboolean unpackPremultiplyAlpha,
+                                     GLboolean unpackUnmultiplyAlpha)
+{
+    // Zero sized copies are valid but no-ops
+    if (width == 0 || height == 0)
+    {
+        return;
+    }
+
+    syncStateForTexImage();
+
+    gl::Texture *sourceTexture = getTexture(sourceId);
+    gl::Texture *destTexture = getTexture(destId);
+    Offset offset(xoffset, yoffset, 0);
+    Rectangle area(x, y, width, height);
+    handleError(destTexture->copySubTexture(offset, area, unpackFlipY == GL_TRUE,
+                                            unpackPremultiplyAlpha == GL_TRUE,
+                                            unpackUnmultiplyAlpha == GL_TRUE, sourceTexture));
+}
+
 void Context::getBufferPointerv(GLenum target, GLenum /*pname*/, void **params)
 {
     Buffer *buffer = getState().getTargetBuffer(target);

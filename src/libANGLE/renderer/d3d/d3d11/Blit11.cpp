@@ -16,12 +16,23 @@
 #include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
 #include "third_party/trace_event/trace_event.h"
 
+namespace rx
+{
+
+namespace
+{
+
+// Include inline shaders in the anonymous namespace to make sure no symbols are exported
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough2d11vs.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughdepth2d11ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgbapremultiply2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgbaunmultiply2d11ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2dui11ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2di11ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgbpremultiply2d11ps.h"
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgbunmultiply2d11ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb2dui11ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgb2di11ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrg2d11ps.h"
@@ -59,12 +70,6 @@
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/swizzlef2darrayps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/swizzlei2darrayps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/swizzleui2darrayps.h"
-
-namespace rx
-{
-
-namespace
-{
 
 DXGI_FORMAT GetTextureFormat(ID3D11Resource *resource)
 {
@@ -455,10 +460,16 @@ void Blit11::freeResources()
 }
 
 // static
-Blit11::BlitShaderType Blit11::GetBlitShaderType(GLenum destinationFormat, bool isSigned, ShaderDimension dimension)
+Blit11::BlitShaderType Blit11::GetBlitShaderType(GLenum destinationFormat,
+                                                 bool isSigned,
+                                                 bool unpackPremultiplyAlpha,
+                                                 bool unpackUnmultiplyAlpha,
+                                                 ShaderDimension dimension)
 {
     if (dimension == SHADER_3D)
     {
+        ASSERT(!unpackPremultiplyAlpha && !unpackUnmultiplyAlpha);
+
         if (isSigned)
         {
             switch (destinationFormat)
@@ -496,6 +507,8 @@ Blit11::BlitShaderType Blit11::GetBlitShaderType(GLenum destinationFormat, bool 
     }
     else if (isSigned)
     {
+        ASSERT(!unpackPremultiplyAlpha && !unpackUnmultiplyAlpha);
+
         switch (destinationFormat)
         {
           case GL_RGBA_INTEGER: return BLITSHADER_2D_RGBAI;
@@ -509,23 +522,56 @@ Blit11::BlitShaderType Blit11::GetBlitShaderType(GLenum destinationFormat, bool 
     }
     else
     {
-        switch (destinationFormat)
+        if (unpackPremultiplyAlpha != unpackUnmultiplyAlpha)
         {
-          case GL_RGBA:             return BLITSHADER_2D_RGBAF;
-          case GL_RGBA_INTEGER:     return BLITSHADER_2D_RGBAUI;
-          case GL_BGRA_EXT:         return BLITSHADER_2D_BGRAF;
-          case GL_RGB:              return BLITSHADER_2D_RGBF;
-          case GL_RGB_INTEGER:      return BLITSHADER_2D_RGBUI;
-          case GL_RG:               return BLITSHADER_2D_RGF;
-          case GL_RG_INTEGER:       return BLITSHADER_2D_RGUI;
-          case GL_RED:              return BLITSHADER_2D_RF;
-          case GL_RED_INTEGER:      return BLITSHADER_2D_RUI;
-          case GL_ALPHA:            return BLITSHADER_2D_ALPHA;
-          case GL_LUMINANCE:        return BLITSHADER_2D_LUMA;
-          case GL_LUMINANCE_ALPHA:  return BLITSHADER_2D_LUMAALPHA;
-          default:
-            UNREACHABLE();
-            return BLITSHADER_INVALID;
+            switch (destinationFormat)
+            {
+                case GL_RGBA:
+                    return unpackPremultiplyAlpha ? BLITSHADER_2D_RGBAF_PREMULTIPLY
+                                                  : BLITSHADER_2D_RGBAF_UNMULTIPLY;
+                case GL_BGRA_EXT:
+                    return unpackPremultiplyAlpha ? BLITSHADER_2D_BGRAF_PREMULTIPLY
+                                                  : BLITSHADER_2D_BGRAF_UNMULTIPLY;
+                case GL_RGB:
+                    return unpackPremultiplyAlpha ? BLITSHADER_2D_RGBF_PREMULTIPLY
+                                                  : BLITSHADER_2D_RGBF_UNMULTIPLY;
+                default:
+                    UNREACHABLE();
+                    return BLITSHADER_INVALID;
+            }
+        }
+        else
+        {
+            switch (destinationFormat)
+            {
+                case GL_RGBA:
+                    return BLITSHADER_2D_RGBAF;
+                case GL_RGBA_INTEGER:
+                    return BLITSHADER_2D_RGBAUI;
+                case GL_BGRA_EXT:
+                    return BLITSHADER_2D_BGRAF;
+                case GL_RGB:
+                    return BLITSHADER_2D_RGBF;
+                case GL_RGB_INTEGER:
+                    return BLITSHADER_2D_RGBUI;
+                case GL_RG:
+                    return BLITSHADER_2D_RGF;
+                case GL_RG_INTEGER:
+                    return BLITSHADER_2D_RGUI;
+                case GL_RED:
+                    return BLITSHADER_2D_RF;
+                case GL_RED_INTEGER:
+                    return BLITSHADER_2D_RUI;
+                case GL_ALPHA:
+                    return BLITSHADER_2D_ALPHA;
+                case GL_LUMINANCE:
+                    return BLITSHADER_2D_LUMA;
+                case GL_LUMINANCE_ALPHA:
+                    return BLITSHADER_2D_LUMAALPHA;
+                default:
+                    UNREACHABLE();
+                    return BLITSHADER_INVALID;
+            }
         }
     }
 }
@@ -771,7 +817,9 @@ gl::Error Blit11::copyTexture(ID3D11ShaderResourceView *source,
                               const gl::Rectangle *scissor,
                               GLenum destFormat,
                               GLenum filter,
-                              bool maskOffAlpha)
+                              bool maskOffAlpha,
+                              bool unpackPremultiplyAlpha,
+                              bool unpackUnmultiplyAlpha)
 {
     gl::Error error = initResources();
     if (error.isError())
@@ -797,7 +845,8 @@ gl::Error Blit11::copyTexture(ID3D11ShaderResourceView *source,
     ShaderDimension dimension = (sourceSRVDesc.ViewDimension == D3D11_SRV_DIMENSION_TEXTURE3D) ? SHADER_3D : SHADER_2D;
 
     const Shader *shader = nullptr;
-    error = getBlitShader(destFormat, isSigned, dimension, &shader);
+    error = getBlitShader(destFormat, isSigned, unpackPremultiplyAlpha, unpackUnmultiplyAlpha,
+                          dimension, &shader);
     if (error.isError())
     {
         return error;
@@ -1222,9 +1271,15 @@ void Blit11::clearShaderMap()
     mSwizzleShaderMap.clear();
 }
 
-gl::Error Blit11::getBlitShader(GLenum destFormat, bool isSigned, ShaderDimension dimension, const Shader **shader)
+gl::Error Blit11::getBlitShader(GLenum destFormat,
+                                bool isSigned,
+                                bool unpackPremultiplyAlpha,
+                                bool unpackUnmultiplyAlpha,
+                                ShaderDimension dimension,
+                                const Shader **shader)
 {
-    BlitShaderType blitShaderType = GetBlitShaderType(destFormat, isSigned, dimension);
+    BlitShaderType blitShaderType = GetBlitShaderType(destFormat, isSigned, unpackPremultiplyAlpha,
+                                                      unpackUnmultiplyAlpha, dimension);
 
     if (blitShaderType == BLITSHADER_INVALID)
     {
@@ -1247,12 +1302,42 @@ gl::Error Blit11::getBlitShader(GLenum destFormat, bool isSigned, ShaderDimensio
       case BLITSHADER_2D_RGBAF:
         addBlitShaderToMap(blitShaderType, SHADER_2D, d3d11::CompilePS(device, g_PS_PassthroughRGBA2D, "Blit11 2D RGBA pixel shader"));
         break;
+      case BLITSHADER_2D_RGBAF_PREMULTIPLY:
+          addBlitShaderToMap(blitShaderType, SHADER_2D,
+                             d3d11::CompilePS(device, g_PS_PassthroughRGBAPremultiply2D,
+                                              "Blit11 2D RGBA premultiply pixel shader"));
+          break;
+      case BLITSHADER_2D_RGBAF_UNMULTIPLY:
+          addBlitShaderToMap(blitShaderType, SHADER_2D,
+                             d3d11::CompilePS(device, g_PS_PassthroughRGBAUnmultiply2D,
+                                              "Blit11 2D RGBA unmultiply pixel shader"));
+          break;
       case BLITSHADER_2D_BGRAF:
         addBlitShaderToMap(blitShaderType, SHADER_2D, d3d11::CompilePS(device, g_PS_PassthroughRGBA2D, "Blit11 2D BGRA pixel shader"));
         break;
+      case BLITSHADER_2D_BGRAF_PREMULTIPLY:
+          addBlitShaderToMap(blitShaderType, SHADER_2D,
+                             d3d11::CompilePS(device, g_PS_PassthroughRGBAPremultiply2D,
+                                              "Blit11 2D BGRA premultiply pixel shader"));
+          break;
+      case BLITSHADER_2D_BGRAF_UNMULTIPLY:
+          addBlitShaderToMap(blitShaderType, SHADER_2D,
+                             d3d11::CompilePS(device, g_PS_PassthroughRGBAUnmultiply2D,
+                                              "Blit11 2D BGRA unmultiply pixel shader"));
+          break;
       case BLITSHADER_2D_RGBF:
         addBlitShaderToMap(blitShaderType, SHADER_2D, d3d11::CompilePS(device, g_PS_PassthroughRGB2D, "Blit11 2D RGB pixel shader"));
         break;
+      case BLITSHADER_2D_RGBF_PREMULTIPLY:
+          addBlitShaderToMap(blitShaderType, SHADER_2D,
+                             d3d11::CompilePS(device, g_PS_PassthroughRGBPremultiply2D,
+                                              "Blit11 2D RGB premultiply pixel shader"));
+          break;
+      case BLITSHADER_2D_RGBF_UNMULTIPLY:
+          addBlitShaderToMap(blitShaderType, SHADER_2D,
+                             d3d11::CompilePS(device, g_PS_PassthroughRGBUnmultiply2D,
+                                              "Blit11 2D RGB unmultiply pixel shader"));
+          break;
       case BLITSHADER_2D_RGF:
         addBlitShaderToMap(blitShaderType, SHADER_2D, d3d11::CompilePS(device, g_PS_PassthroughRG2D, "Blit11 2D RG pixel shader"));
         break;

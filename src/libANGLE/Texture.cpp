@@ -563,6 +563,38 @@ Error Texture::copySubImage(GLenum target, size_t level, const Offset &destOffse
     return mTexture->copySubImage(target, level, destOffset, sourceArea, source);
 }
 
+Error Texture::copyTexture(GLenum internalFormat,
+                           GLenum type,
+                           bool unpackFlipY,
+                           bool unpackPremultiplyAlpha,
+                           bool unpackUnmultiplyAlpha,
+                           const Texture *source)
+{
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    releaseTexImageInternal();
+    orphanImages();
+
+    ANGLE_TRY(mTexture->copyTexture(internalFormat, type, unpackFlipY, unpackPremultiplyAlpha,
+                                    unpackUnmultiplyAlpha, source));
+
+    const auto &sourceDesc = source->getImageDesc(source->getTarget(), 0);
+    setImageDesc(getTarget(), 0,
+                 ImageDesc(sourceDesc.size, GetSizedInternalFormat(internalFormat, type)));
+
+    return Error(GL_NO_ERROR);
+}
+
+Error Texture::copySubTexture(const Offset &destOffset,
+                              const Rectangle &sourceArea,
+                              bool unpackFlipY,
+                              bool unpackPremultiplyAlpha,
+                              bool unpackUnmultiplyAlpha,
+                              const Texture *source)
+{
+    return mTexture->copySubTexture(destOffset, sourceArea, unpackFlipY, unpackPremultiplyAlpha,
+                                    unpackUnmultiplyAlpha, source);
+}
+
 Error Texture::setStorage(GLenum target, size_t levels, GLenum internalFormat, const Extents &size)
 {
     ASSERT(target == mState.target);

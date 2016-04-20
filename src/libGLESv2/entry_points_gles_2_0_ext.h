@@ -148,6 +148,27 @@ ANGLE_EXPORT void GL_APIENTRY BindUniformLocationCHROMIUM(GLuint program,
 
 // GL_CHROMIUM_framebuffer_mixed_samples
 ANGLE_EXPORT void GL_APIENTRY CoverageModulationCHROMIUM(GLenum components);
+
+// GL_CHROMIUM_copy_texture
+ANGLE_EXPORT void GL_APIENTRY CopyTextureCHROMIUM(GLuint sourceId,
+                                                  GLuint destId,
+                                                  GLint internalFormat,
+                                                  GLenum destType,
+                                                  GLboolean unpackFlipY,
+                                                  GLboolean unpackPremultiplyAlpha,
+                                                  GLboolean unpackUnmultiplyAlpha);
+
+ANGLE_EXPORT void GL_APIENTRY CopySubTextureCHROMIUM(GLuint sourceId,
+                                                     GLuint destId,
+                                                     GLint xoffset,
+                                                     GLint yoffset,
+                                                     GLint x,
+                                                     GLint y,
+                                                     GLsizei width,
+                                                     GLsizei height,
+                                                     GLboolean unpackFlipY,
+                                                     GLboolean unpackPremultiplyAlpha,
+                                                     GLboolean unpackUnmultiplyAlpha);
 }
 
 #endif // LIBGLESV2_ENTRYPOINTGLES20EXT_H_

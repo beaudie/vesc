@@ -61,6 +61,19 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
     virtual gl::Error copySubImage(GLenum target, size_t level, const gl::Offset &destOffset, const gl::Rectangle &sourceArea,
                                    const gl::Framebuffer *source) = 0;
 
+    virtual gl::Error copyTexture(GLenum internalFormat,
+                                  GLenum type,
+                                  bool unpackFlipY,
+                                  bool unpackPremultiplyAlpha,
+                                  bool unpackUnmultiplyAlpha,
+                                  const gl::Texture *source) = 0;
+    virtual gl::Error copySubTexture(const gl::Offset &destOffset,
+                                     const gl::Rectangle &sourceArea,
+                                     bool unpackFlipY,
+                                     bool unpackPremultiplyAlpha,
+                                     bool unpackUnmultiplyAlpha,
+                                     const gl::Texture *source) = 0;
+
     virtual gl::Error setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size) = 0;
 
     virtual gl::Error setEGLImageTarget(GLenum target, egl::Image *image) = 0;

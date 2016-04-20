@@ -26,6 +26,7 @@
             '<(angle_path)/src/tests/gl_tests/ColorMaskTest.cpp',
             '<(angle_path)/src/tests/gl_tests/CompressedTextureTest.cpp',
             '<(angle_path)/src/tests/gl_tests/CopyTexImageTest.cpp',
+            '<(angle_path)/src/tests/gl_tests/CopyTextureTest.cpp',
             '<(angle_path)/src/tests/gl_tests/CubeMapTextureTest.cpp',
             '<(angle_path)/src/tests/gl_tests/DebugMarkerTest.cpp',
             '<(angle_path)/src/tests/gl_tests/DebugTest.cpp',

@@ -358,6 +358,28 @@ gl::Error TextureGL::copySubImage(GLenum target, size_t level, const gl::Offset 
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error TextureGL::copyTexture(GLenum internalFormat,
+                                 GLenum type,
+                                 bool unpackFlipY,
+                                 bool unpackPremultiplyAlpha,
+                                 bool unpackUnmultiplyAlpha,
+                                 const gl::Texture *source)
+{
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
+gl::Error TextureGL::copySubTexture(const gl::Offset &destOffset,
+                                    const gl::Rectangle &sourceArea,
+                                    bool unpackFlipY,
+                                    bool unpackPremultiplyAlpha,
+                                    bool unpackUnmultiplyAlpha,
+                                    const gl::Texture *source)
+{
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 gl::Error TextureGL::setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size)
 {
     // TODO: emulate texture storage with TexImage calls if on GL version <4.2 or the
