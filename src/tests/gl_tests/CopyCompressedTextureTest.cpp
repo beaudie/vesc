@@ -63,7 +63,7 @@ class CopyCompressedTextureTest : public ANGLETest
         ANGLETest::TearDown();
     }
 
-    GLuint mProgram     = 0;
+    GLuint mProgram = 0;
     GLuint mTextures[2];
 
     typedef void(GL_APIENTRYP PFNGLCOPYCOMPRESSEDTEXTURECHROMIUMPROC)(GLuint sourceId,

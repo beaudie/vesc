@@ -293,6 +293,12 @@ size_t Texture::getDepth(GLenum target, size_t level) const
     return getImageDesc(target, level).size.depth;
 }
 
+const gl::Extents &Texture::getSize(GLenum target, size_t level) const
+{
+    ASSERT(target == mTarget || (mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    return getImageDesc(target, level).size;
+}
+
 GLenum Texture::getInternalFormat(GLenum target, size_t level) const
 {
     ASSERT(target == mTarget || (mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));

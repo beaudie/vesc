@@ -110,6 +110,7 @@ class Texture final : public egl::ImageSibling,
     size_t getWidth(GLenum target, size_t level) const;
     size_t getHeight(GLenum target, size_t level) const;
     size_t getDepth(GLenum target, size_t level) const;
+    const Extents &getSize(GLenum target, size_t level) const;
     GLenum getInternalFormat(GLenum target, size_t level) const;
 
     bool isSamplerComplete(const SamplerState &samplerState, const Data &data) const;
