@@ -1252,12 +1252,13 @@ void GL_APIENTRY GenerateMipmap(GLenum target)
 
         if (texture == NULL)
         {
+            std::cout << __FILE__ << " " << __LINE__ << std::endl;
             context->recordError(Error(GL_INVALID_OPERATION));
             return;
         }
 
         GLenum baseTarget = (target == GL_TEXTURE_CUBE_MAP) ? GL_TEXTURE_CUBE_MAP_POSITIVE_X : target;
-        GLenum internalFormat = texture->getInternalFormat(baseTarget, 0);
+        GLenum internalFormat = texture->getInternalFormat(baseTarget, texture->getBaseLevel());
         const TextureCaps &formatCaps = context->getTextureCaps().get(internalFormat);
         const InternalFormat &formatInfo = GetInternalFormatInfo(internalFormat);
 
