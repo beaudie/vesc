@@ -19,7 +19,7 @@ deps = {
       "https://android.googlesource.com/platform/external/cherry@d2e26b4d864ec2a6757e7f1174e464949ca5bf73",
 
   "third_party/deqp/src":
-      "https://android.googlesource.com/platform/external/deqp@cc0ded6c77267bbb14d21aac358fc5d9690c07f8",
+      "https://android.googlesource.com/platform/external/deqp@cd361df193e7535b9a1029c63dafc277714e74ff",
 
   "third_party/libpng":
       "https://android.googlesource.com/platform/external/libpng@094e181e79a3d6c23fd005679025058b7df1ad6c",
