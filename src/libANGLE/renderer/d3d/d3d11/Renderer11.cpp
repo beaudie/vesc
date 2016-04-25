@@ -3340,7 +3340,7 @@ gl::Error Renderer11::createRenderTargetCopy(RenderTargetD3D *source, RenderTarg
     return gl::Error(GL_NO_ERROR);
 }
 
-FramebufferImpl *Renderer11::createFramebuffer(const gl::Framebuffer::Data &data)
+FramebufferImpl *Renderer11::createFramebuffer(const gl::FramebufferState &data)
 {
     return new Framebuffer11(data, this);
 }

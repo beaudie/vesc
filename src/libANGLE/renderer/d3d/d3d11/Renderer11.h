@@ -188,7 +188,7 @@ class Renderer11 : public RendererD3D
     gl::Error createRenderTargetCopy(RenderTargetD3D *source, RenderTargetD3D **outRT) override;
 
     // Framebuffer creation
-    FramebufferImpl *createFramebuffer(const gl::Framebuffer::Data &data) override;
+    FramebufferImpl *createFramebuffer(const gl::FramebufferState &data) override;
 
     // Shader creation
     ShaderImpl *createShader(const gl::Shader::Data &data) override;

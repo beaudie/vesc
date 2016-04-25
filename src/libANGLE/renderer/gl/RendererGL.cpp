@@ -277,7 +277,7 @@ ProgramImpl *RendererGL::createProgram(const gl::Program::Data &data)
     return new ProgramGL(data, mFunctions, mWorkarounds, mStateManager);
 }
 
-FramebufferImpl *RendererGL::createFramebuffer(const gl::Framebuffer::Data &data)
+FramebufferImpl *RendererGL::createFramebuffer(const gl::FramebufferState &data)
 {
     return new FramebufferGL(data, mFunctions, mStateManager, mWorkarounds, false);
 }
