@@ -38,7 +38,7 @@ struct TranslatedAttribute;
 namespace gl
 {
 struct Caps;
-struct Data;
+struct ContextState;
 class ResourceManager;
 class Shader;
 class InfoLog;
@@ -241,7 +241,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     void bindAttributeLocation(GLuint index, const char *name);
 
-    Error link(const gl::Data &data);
+    Error link(const gl::ContextState &data);
     bool isLinked() const;
 
     Error loadBinary(GLenum binaryFormat, const void *binary, GLsizei length);
@@ -344,7 +344,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     void unlink(bool destroy = false);
     void resetUniformBlockBindings();
 
-    bool linkAttributes(const gl::Data &data,
+    bool linkAttributes(const gl::ContextState &data,
                         InfoLog &infoLog,
                         const AttributeBindings &attributeBindings,
                         const Shader *vertexShader);
