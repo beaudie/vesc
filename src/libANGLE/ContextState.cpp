@@ -6,20 +6,20 @@
 
 // Data.cpp: Container class for all GL relevant state, caps and objects
 
-#include "libANGLE/Data.h"
+#include "libANGLE/ContextState.h"
 #include "libANGLE/ResourceManager.h"
 
 namespace gl
 {
 
-Data::Data(uintptr_t contextIn,
-           GLint clientVersionIn,
-           const State &stateIn,
-           const Caps &capsIn,
-           const TextureCapsMap &textureCapsIn,
-           const Extensions &extensionsIn,
-           const ResourceManager *resourceManagerIn,
-           const Limitations &limitationsIn)
+ContextState::ContextState(uintptr_t contextIn,
+                           GLint clientVersionIn,
+                           const State &stateIn,
+                           const Caps &capsIn,
+                           const TextureCapsMap &textureCapsIn,
+                           const Extensions &extensionsIn,
+                           const ResourceManager *resourceManagerIn,
+                           const Limitations &limitationsIn)
     : context(contextIn),
       clientVersion(clientVersionIn),
       state(&stateIn),
@@ -30,7 +30,7 @@ Data::Data(uintptr_t contextIn,
       limitations(&limitationsIn)
 {}
 
-Data::~Data()
+ContextState::~ContextState()
 {
 }
 

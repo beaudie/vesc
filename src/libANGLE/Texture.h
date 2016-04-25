@@ -35,8 +35,8 @@ class TextureImpl;
 
 namespace gl
 {
+struct ContextState;
 class Framebuffer;
-struct Data;
 
 bool IsMipmapFiltered(const SamplerState &samplerState);
 
@@ -117,7 +117,7 @@ class Texture final : public egl::ImageSibling,
     size_t getDepth(GLenum target, size_t level) const;
     GLenum getInternalFormat(GLenum target, size_t level) const;
 
-    bool isSamplerComplete(const SamplerState &samplerState, const Data &data) const;
+    bool isSamplerComplete(const SamplerState &samplerState, const ContextState &data) const;
     bool isMipmapComplete() const;
     bool isCubeComplete() const;
     size_t getMipCompleteLevels() const;
@@ -211,7 +211,8 @@ class Texture final : public egl::ImageSibling,
 
     GLenum getBaseImageTarget() const;
 
-    bool computeSamplerCompleteness(const SamplerState &samplerState, const Data &data) const;
+    bool computeSamplerCompleteness(const SamplerState &samplerState,
+                                    const ContextState &data) const;
     bool computeMipmapCompleteness() const;
     bool computeLevelCompleteness(GLenum target, size_t level) const;
 

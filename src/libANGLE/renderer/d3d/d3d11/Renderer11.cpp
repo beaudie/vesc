@@ -1308,7 +1308,7 @@ gl::Error Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *t
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::setUniformBuffers(const gl::Data &data,
+gl::Error Renderer11::setUniformBuffers(const gl::ContextState &data,
                                         const std::vector<GLint> &vertexUniformBuffers,
                                         const std::vector<GLint> &fragmentUniformBuffers)
 {
@@ -1459,7 +1459,7 @@ gl::Error Renderer11::setUniformBuffers(const gl::Data &data,
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::updateState(const gl::Data &data, GLenum drawMode)
+gl::Error Renderer11::updateState(const gl::ContextState &data, GLenum drawMode)
 {
     // Applies the render target surface, depth stencil surface, viewport rectangle and
     // scissor rectangle to the renderer
@@ -1609,7 +1609,7 @@ gl::Error Renderer11::applyVertexBuffer(const gl::State &state,
     return gl::NoError();
 }
 
-gl::Error Renderer11::applyIndexBuffer(const gl::Data &data,
+gl::Error Renderer11::applyIndexBuffer(const gl::ContextState &data,
                                        const GLvoid *indices,
                                        GLsizei count,
                                        GLenum mode,
@@ -1731,7 +1731,7 @@ gl::Error Renderer11::applyTransformFeedbackBuffers(const gl::State &state)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::drawArraysImpl(const gl::Data &data,
+gl::Error Renderer11::drawArraysImpl(const gl::ContextState &data,
                                      GLenum mode,
                                      GLint startVertex,
                                      GLsizei count,
@@ -1857,7 +1857,7 @@ gl::Error Renderer11::drawArraysImpl(const gl::Data &data,
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::drawElementsImpl(const gl::Data &data,
+gl::Error Renderer11::drawElementsImpl(const gl::ContextState &data,
                                        const TranslatedIndexData &indexInfo,
                                        GLenum mode,
                                        GLsizei count,
@@ -1932,7 +1932,7 @@ gl::Error Renderer11::drawElementsImpl(const gl::Data &data,
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::drawLineLoop(const gl::Data &data,
+gl::Error Renderer11::drawLineLoop(const gl::ContextState &data,
                                    GLsizei count,
                                    GLenum type,
                                    const GLvoid *indexPointer,
@@ -2036,7 +2036,7 @@ gl::Error Renderer11::drawLineLoop(const gl::Data &data,
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::drawTriangleFan(const gl::Data &data,
+gl::Error Renderer11::drawTriangleFan(const gl::ContextState &data,
                                       GLsizei count,
                                       GLenum type,
                                       const GLvoid *indices,
@@ -2139,7 +2139,7 @@ gl::Error Renderer11::drawTriangleFan(const gl::Data &data,
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::applyShadersImpl(const gl::Data &data, GLenum drawMode)
+gl::Error Renderer11::applyShadersImpl(const gl::ContextState &data, GLenum drawMode)
 {
     ProgramD3D *programD3D  = GetImplAs<ProgramD3D>(data.state->getProgram());
     const auto &inputLayout = programD3D->getCachedInputLayout();
@@ -4262,7 +4262,7 @@ void Renderer11::onBufferDelete(const Buffer11 *deleted)
     mAliveBuffers.erase(deleted);
 }
 
-void Renderer11::onMakeCurrent(const gl::Data &data)
+void Renderer11::onMakeCurrent(const gl::ContextState &data)
 {
     mStateManager.onMakeCurrent(data);
 }
