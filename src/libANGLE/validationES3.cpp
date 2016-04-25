@@ -728,6 +728,11 @@ static CopyConversionSet BuildValidES3CopyTexImageCombinations()
     return set;
 }
 
+static bool EqualOrZero(GLuint a, GLuint b)
+{
+    return a == 0 || b == 0 || a == b;
+}
+
 static bool IsValidES3CopyTexImageCombination(GLenum textureInternalFormat, GLenum frameBufferInternalFormat, GLuint readBufferHandle)
 {
     const InternalFormat &textureInternalFormatInfo = GetInternalFormatInfo(textureInternalFormat);
@@ -832,12 +837,14 @@ static bool IsValidES3CopyTexImageCombination(GLenum textureInternalFormat, GLen
 
         if (textureInternalFormatInfo.pixelBytes > 0)
         {
-            // Section 3.8.5 of the GLES 3.0.3 spec, pg 139, requires that, if the destination format is sized,
-            // component sizes of the source and destination formats must exactly match
-            if (textureInternalFormatInfo.redBits   != sourceEffectiveFormat->redBits   ||
-                textureInternalFormatInfo.greenBits != sourceEffectiveFormat->greenBits ||
-                textureInternalFormatInfo.blueBits  != sourceEffectiveFormat->blueBits  ||
-                textureInternalFormatInfo.alphaBits != sourceEffectiveFormat->alphaBits)
+            // Section 3.8.5 of the GLES 3.0.3 spec, pg 139, requires that, if the destination
+            // format is sized, component sizes of the source and destination formats must exactly
+            // match if they exist.
+            if (!EqualOrZero(textureInternalFormatInfo.redBits, sourceEffectiveFormat->redBits) ||
+                !EqualOrZero(textureInternalFormatInfo.greenBits,
+                             sourceEffectiveFormat->greenBits) ||
+                !EqualOrZero(textureInternalFormatInfo.blueBits, sourceEffectiveFormat->blueBits) ||
+                !EqualOrZero(textureInternalFormatInfo.alphaBits, sourceEffectiveFormat->alphaBits))
             {
                 return false;
             }
