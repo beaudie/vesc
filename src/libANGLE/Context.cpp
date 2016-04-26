@@ -31,6 +31,7 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/validationES.h"
+#include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/Renderer.h"
 
 namespace
@@ -133,6 +134,7 @@ Context::Context(const egl::Config *config,
                         nullptr,
                         mLimitations,
                         GetNoError(attribs)),
+      mImplementation(renderer->createContext()),
       mCompiler(nullptr),
       mRenderer(renderer),
       mClientVersion(GetClientVersion(attribs)),
