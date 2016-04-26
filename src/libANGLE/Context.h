@@ -26,6 +26,7 @@
 
 namespace rx
 {
+class ContextImpl;
 class Renderer;
 }
 
@@ -431,6 +432,9 @@ class Context final : public ValidationContext
     void initExtensionStrings();
 
     void initCaps(GLuint clientVersion);
+    void tryImpl(const gl::Error &error);
+
+    std::unique_ptr<rx::ContextImpl> mImplementation;
 
     // Caps to use for validation
     Caps mCaps;
