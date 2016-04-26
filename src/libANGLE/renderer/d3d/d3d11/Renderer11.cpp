@@ -3350,7 +3350,7 @@ ShaderImpl *Renderer11::createShader(const gl::Shader::Data &data)
     return new ShaderD3D(data);
 }
 
-ProgramImpl *Renderer11::createProgram(const gl::Program::Data &data)
+ProgramImpl *Renderer11::createProgram(const gl::ProgramState &data)
 {
     return new ProgramD3D(data, this);
 }

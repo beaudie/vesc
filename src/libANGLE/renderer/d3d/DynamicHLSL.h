@@ -63,7 +63,7 @@ class DynamicHLSL : angle::NonCopyable
         bool usesFragDepth,
         const std::vector<GLenum> &outputLayout) const;
     bool generateShaderLinkHLSL(const gl::ContextState &data,
-                                const gl::Program::Data &programData,
+                                const gl::ProgramState &programData,
                                 const ProgramD3DMetadata &programMetadata,
                                 const VaryingPacking &varyingPacking,
                                 std::string *pixelHLSL,
@@ -73,12 +73,12 @@ class DynamicHLSL : angle::NonCopyable
 
     std::string generateGeometryShaderHLSL(gl::PrimitiveType primitiveType,
                                            const gl::ContextState &data,
-                                           const gl::Program::Data &programData,
+                                           const gl::ProgramState &programData,
                                            const bool useViewScale,
                                            const std::string &preambleString) const;
 
     void getPixelShaderOutputKey(const gl::ContextState &data,
-                                 const gl::Program::Data &programData,
+                                 const gl::ProgramState &programData,
                                  const ProgramD3DMetadata &metadata,
                                  std::vector<PixelShaderOutputVariable> *outPixelShaderKey);
 
