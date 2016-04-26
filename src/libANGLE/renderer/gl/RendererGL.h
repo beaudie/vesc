@@ -63,7 +63,7 @@ class RendererGL : public Renderer
     // Shader creation
     CompilerImpl *createCompiler() override;
     ShaderImpl *createShader(const gl::Shader::Data &data) override;
-    ProgramImpl *createProgram(const gl::Program::Data &data) override;
+    ProgramImpl *createProgram(const gl::ProgramState &data) override;
 
     // Framebuffer creation
     FramebufferImpl *createFramebuffer(const gl::FramebufferState &data) override;
