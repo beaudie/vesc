@@ -190,7 +190,7 @@ class Renderer9 : public RendererD3D
 
     // Shader creation
     ShaderImpl *createShader(const gl::Shader::Data &data) override;
-    ProgramImpl *createProgram(const gl::Program::Data &data) override;
+    ProgramImpl *createProgram(const gl::ProgramState &data) override;
 
     // Shader operations
     gl::Error loadExecutable(const void *function,
