@@ -1137,9 +1137,9 @@ SwapChainD3D *Renderer11::createSwapChain(NativeWindowD3D *nativeWindow,
                            depthBufferFormat, orientation);
 }
 
-ContextImpl *Renderer11::createContext()
+ContextImpl *Renderer11::createContext(const gl::ContextState &state)
 {
-    return new Context11;
+    return new Context11(state);
 }
 
 CompilerImpl *Renderer11::createCompiler()
