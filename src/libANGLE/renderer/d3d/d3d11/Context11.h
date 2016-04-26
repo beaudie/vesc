@@ -17,8 +17,8 @@ namespace rx
 
 class Context11 : public ContextImpl
 {
-public:
-    Context11() {}
+  public:
+    Context11(const gl::ContextState &state) : ContextImpl(state) {}
     virtual ~Context11() {}
 };
 

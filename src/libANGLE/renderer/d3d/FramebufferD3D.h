@@ -60,20 +60,20 @@ class FramebufferD3D : public FramebufferImpl
     FramebufferD3D(const gl::FramebufferState &data, RendererD3D *renderer);
     virtual ~FramebufferD3D();
 
-    gl::Error clear(const gl::ContextState &data, GLbitfield mask) override;
-    gl::Error clearBufferfv(const gl::ContextState &data,
+    gl::Error clear(const ContextImpl *impl, GLbitfield mask) override;
+    gl::Error clearBufferfv(const ContextImpl *impl,
                             GLenum buffer,
                             GLint drawbuffer,
                             const GLfloat *values) override;
-    gl::Error clearBufferuiv(const gl::ContextState &data,
+    gl::Error clearBufferuiv(const ContextImpl *impl,
                              GLenum buffer,
                              GLint drawbuffer,
                              const GLuint *values) override;
-    gl::Error clearBufferiv(const gl::ContextState &data,
+    gl::Error clearBufferiv(const ContextImpl *impl,
                             GLenum buffer,
                             GLint drawbuffer,
                             const GLint *values) override;
-    gl::Error clearBufferfi(const gl::ContextState &data,
+    gl::Error clearBufferfi(const ContextImpl *impl,
                             GLenum buffer,
                             GLint drawbuffer,
                             GLfloat depth,
@@ -81,10 +81,17 @@ class FramebufferD3D : public FramebufferImpl
 
     GLenum getImplementationColorReadFormat() const override;
     GLenum getImplementationColorReadType() const override;
-    gl::Error readPixels(const gl::State &state, const gl::Rectangle &area, GLenum format, GLenum type, GLvoid *pixels) const override;
+    gl::Error readPixels(const ContextImpl *impl,
+                         const gl::Rectangle &area,
+                         GLenum format,
+                         GLenum type,
+                         GLvoid *pixels) const override;
 
-    gl::Error blit(const gl::State &state, const gl::Rectangle &sourceArea, const gl::Rectangle &destArea,
-                   GLbitfield mask, GLenum filter, const gl::Framebuffer *sourceFramebuffer) override;
+    gl::Error blit(const ContextImpl *impl,
+                   const gl::Rectangle &sourceArea,
+                   const gl::Rectangle &destArea,
+                   GLbitfield mask,
+                   GLenum filter) override;
 
     bool checkStatus() const override;
 
@@ -93,7 +100,7 @@ class FramebufferD3D : public FramebufferImpl
     const gl::AttachmentList &getColorAttachmentsForRender() const;
 
   private:
-    virtual gl::Error clear(const gl::ContextState &data, const ClearParameters &clearParams) = 0;
+    virtual gl::Error clearImpl(const ContextImpl *impl, const ClearParameters &clearParams) = 0;
 
     virtual gl::Error readPixelsImpl(const gl::Rectangle &area,
                                      GLenum format,
@@ -102,9 +109,14 @@ class FramebufferD3D : public FramebufferImpl
                                      const gl::PixelPackState &pack,
                                      uint8_t *pixels) const = 0;
 
-    virtual gl::Error blit(const gl::Rectangle &sourceArea, const gl::Rectangle &destArea, const gl::Rectangle *scissor,
-                           bool blitRenderTarget, bool blitDepth, bool blitStencil, GLenum filter,
-                           const gl::Framebuffer *sourceFramebuffer) = 0;
+    virtual gl::Error blitImpl(const gl::Rectangle &sourceArea,
+                               const gl::Rectangle &destArea,
+                               const gl::Rectangle *scissor,
+                               bool blitRenderTarget,
+                               bool blitDepth,
+                               bool blitStencil,
+                               GLenum filter,
+                               const gl::Framebuffer *sourceFramebuffer) = 0;
 
     virtual GLenum getRenderTargetImplementationFormat(RenderTargetD3D *renderTarget) const = 0;
 

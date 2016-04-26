@@ -21,6 +21,7 @@
 
 namespace rx
 {
+class ContextImpl;
 class ImplFactory;
 class FramebufferImpl;
 class RenderbufferImpl;
@@ -143,20 +144,20 @@ class Framebuffer final : public LabeledObject
     Error invalidate(size_t count, const GLenum *attachments);
     Error invalidateSub(size_t count, const GLenum *attachments, const gl::Rectangle &area);
 
-    Error clear(const gl::ContextState &data, GLbitfield mask);
-    Error clearBufferfv(const gl::ContextState &data,
+    Error clear(const rx::ContextImpl *context, GLbitfield mask);
+    Error clearBufferfv(const rx::ContextImpl *context,
                         GLenum buffer,
                         GLint drawbuffer,
                         const GLfloat *values);
-    Error clearBufferuiv(const gl::ContextState &data,
+    Error clearBufferuiv(const rx::ContextImpl *context,
                          GLenum buffer,
                          GLint drawbuffer,
                          const GLuint *values);
-    Error clearBufferiv(const gl::ContextState &data,
+    Error clearBufferiv(const rx::ContextImpl *context,
                         GLenum buffer,
                         GLint drawbuffer,
                         const GLint *values);
-    Error clearBufferfi(const gl::ContextState &data,
+    Error clearBufferfi(const rx::ContextImpl *context,
                         GLenum buffer,
                         GLint drawbuffer,
                         GLfloat depth,
@@ -164,18 +165,17 @@ class Framebuffer final : public LabeledObject
 
     GLenum getImplementationColorReadFormat() const;
     GLenum getImplementationColorReadType() const;
-    Error readPixels(const gl::State &state,
+    Error readPixels(const rx::ContextImpl *context,
                      const gl::Rectangle &area,
                      GLenum format,
                      GLenum type,
                      GLvoid *pixels) const;
 
-    Error blit(const State &state,
+    Error blit(const rx::ContextImpl *context,
                const Rectangle &sourceArea,
                const Rectangle &destArea,
                GLbitfield mask,
-               GLenum filter,
-               const Framebuffer *sourceFramebuffer);
+               GLenum filter);
 
     enum DirtyBitType
     {

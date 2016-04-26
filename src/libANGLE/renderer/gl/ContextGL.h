@@ -17,8 +17,8 @@ namespace rx
 
 class ContextGL : public ContextImpl
 {
-public:
-    ContextGL() {}
+  public:
+    ContextGL(const gl::ContextState &state) : ContextImpl(state) {}
     virtual ~ContextGL() {}
 };
 

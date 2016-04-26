@@ -17,8 +17,8 @@ namespace rx
 
 class Context9 : public ContextImpl
 {
-public:
-    Context9() {}
+  public:
+    Context9(const gl::ContextState &state) : ContextImpl(state) {}
     virtual ~Context9() {}
 };
 

@@ -134,7 +134,7 @@ Context::Context(const egl::Config *config,
                         nullptr,
                         mLimitations,
                         GetNoError(attribs)),
-      mImplementation(renderer->createContext()),
+      mImplementation(renderer->createContext(getData())),
       mCompiler(nullptr),
       mRenderer(renderer),
       mClientVersion(GetClientVersion(attribs)),
@@ -2130,9 +2130,6 @@ void Context::blitFramebuffer(GLint srcX0,
                               GLbitfield mask,
                               GLenum filter)
 {
-    Framebuffer *readFramebuffer = mState.getReadFramebuffer();
-    ASSERT(readFramebuffer);
-
     Framebuffer *drawFramebuffer = mState.getDrawFramebuffer();
     ASSERT(drawFramebuffer);
 
@@ -2141,7 +2138,7 @@ void Context::blitFramebuffer(GLint srcX0,
 
     syncStateForBlit();
 
-    Error error = drawFramebuffer->blit(mState, srcArea, dstArea, mask, filter, readFramebuffer);
+    Error error = drawFramebuffer->blit(mImplementation.get(), srcArea, dstArea, mask, filter);
     if (error.isError())
     {
         recordError(error);
@@ -2153,7 +2150,7 @@ void Context::clear(GLbitfield mask)
 {
     syncStateForClear();
 
-    Error error = mState.getDrawFramebuffer()->clear(mData, mask);
+    Error error = mState.getDrawFramebuffer()->clear(mImplementation.get(), mask);
     if (error.isError())
     {
         recordError(error);
@@ -2164,7 +2161,8 @@ void Context::clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *valu
 {
     syncStateForClear();
 
-    Error error = mState.getDrawFramebuffer()->clearBufferfv(mData, buffer, drawbuffer, values);
+    Error error = mState.getDrawFramebuffer()->clearBufferfv(mImplementation.get(), buffer,
+                                                             drawbuffer, values);
     if (error.isError())
     {
         recordError(error);
@@ -2175,7 +2173,8 @@ void Context::clearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *valu
 {
     syncStateForClear();
 
-    Error error = mState.getDrawFramebuffer()->clearBufferuiv(mData, buffer, drawbuffer, values);
+    Error error = mState.getDrawFramebuffer()->clearBufferuiv(mImplementation.get(), buffer,
+                                                              drawbuffer, values);
     if (error.isError())
     {
         recordError(error);
@@ -2186,7 +2185,8 @@ void Context::clearBufferiv(GLenum buffer, GLint drawbuffer, const GLint *values
 {
     syncStateForClear();
 
-    Error error = mState.getDrawFramebuffer()->clearBufferiv(mData, buffer, drawbuffer, values);
+    Error error = mState.getDrawFramebuffer()->clearBufferiv(mImplementation.get(), buffer,
+                                                             drawbuffer, values);
     if (error.isError())
     {
         recordError(error);
@@ -2207,7 +2207,8 @@ void Context::clearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLin
 
     syncStateForClear();
 
-    Error error = framebufferObject->clearBufferfi(mData, buffer, drawbuffer, depth, stencil);
+    Error error =
+        framebufferObject->clearBufferfi(mImplementation.get(), buffer, drawbuffer, depth, stencil);
     if (error.isError())
     {
         recordError(error);
@@ -2228,7 +2229,7 @@ void Context::readPixels(GLint x,
     ASSERT(framebufferObject);
 
     Rectangle area(x, y, width, height);
-    Error error = framebufferObject->readPixels(mState, area, format, type, pixels);
+    Error error = framebufferObject->readPixels(mImplementation.get(), area, format, type, pixels);
     if (error.isError())
     {
         recordError(error);

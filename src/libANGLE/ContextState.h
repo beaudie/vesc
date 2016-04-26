@@ -66,7 +66,6 @@ class ValidationContext : angle::NonCopyable
     ContextState mData;
     bool mSkipValidation;
 };
-
 }
 
-#endif // LIBANGLE_CONTEXTSTATE_H_
+#endif  // LIBANGLE_CONTEXTSTATE_H_

@@ -28,7 +28,8 @@ ContextState::ContextState(uintptr_t contextIn,
       extensions(&extensionsIn),
       resourceManager(resourceManagerIn),
       limitations(&limitationsIn)
-{}
+{
+}
 
 ContextState::~ContextState()
 {
