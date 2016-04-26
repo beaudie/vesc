@@ -681,9 +681,9 @@ SwapChainD3D *Renderer9::createSwapChain(NativeWindowD3D *nativeWindow,
                           depthBufferFormat, orientation);
 }
 
-ContextImpl *Renderer9::createContext()
+ContextImpl *Renderer9::createContext(const gl::ContextState &state)
 {
-    return new Context9;
+    return new Context9(state);
 }
 
 CompilerImpl *Renderer9::createCompiler()
@@ -947,9 +947,8 @@ gl::Error Renderer9::updateState(const gl::ContextState &data, GLenum drawMode)
     }
 
     // Setting viewport state
-    setViewport(data.caps, data.state->getViewport(), data.state->getNearPlane(),
-                data.state->getFarPlane(), drawMode, data.state->getRasterizerState().frontFace,
-                false);
+    setViewport(data.state->getViewport(), data.state->getNearPlane(), data.state->getFarPlane(),
+                drawMode, data.state->getRasterizerState().frontFace, false);
 
     // Setting scissors state
     setScissorRectangle(data.state->getScissor(), data.state->isScissorTestEnabled());
@@ -989,16 +988,14 @@ gl::Error Renderer9::setBlendDepthRasterStates(const gl::ContextState &glData, G
     return mStateManager.setBlendDepthRasterStates(*glData.state, mask);
 }
 
-void Renderer9::setViewport(const gl::Caps *caps,
-                            const gl::Rectangle &viewport,
+void Renderer9::setViewport(const gl::Rectangle &viewport,
                             float zNear,
                             float zFar,
                             GLenum drawMode,
                             GLenum frontFace,
                             bool ignoreViewport)
 {
-    mStateManager.setViewportState(caps, viewport, zNear, zFar, drawMode, frontFace,
-                                   ignoreViewport);
+    mStateManager.setViewportState(viewport, zNear, zFar, drawMode, frontFace, ignoreViewport);
 }
 
 bool Renderer9::applyPrimitiveType(GLenum mode, GLsizei count, bool usesPointSize)
