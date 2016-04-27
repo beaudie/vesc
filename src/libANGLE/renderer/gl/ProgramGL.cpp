@@ -58,7 +58,7 @@ void ProgramGL::setBinaryRetrievableHint(bool retrievable)
     UNIMPLEMENTED();
 }
 
-LinkResult ProgramGL::link(const gl::Data &data, gl::InfoLog &infoLog)
+LinkResult ProgramGL::link(const gl::ContextState &data, gl::InfoLog &infoLog)
 {
     // Reset the program state, delete the current program if one exists
     reset();
