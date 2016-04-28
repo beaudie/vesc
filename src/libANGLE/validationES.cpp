@@ -389,6 +389,8 @@ bool ValidQueryType(const Context *context, GLenum queryType)
         return (context->getClientVersion() >= 3);
       case GL_TIME_ELAPSED_EXT:
           return context->getExtensions().disjointTimerQuery;
+      case GL_COMMANDS_COMPLETED_CHROMIUM:
+          return context->getExtensions().syncQuery;
       default:
         return false;
     }
@@ -1185,7 +1187,7 @@ bool ValidateBeginQueryBase(gl::Context *context, GLenum target, GLuint id)
 bool ValidateBeginQueryEXT(gl::Context *context, GLenum target, GLuint id)
 {
     if (!context->getExtensions().occlusionQueryBoolean &&
-        !context->getExtensions().disjointTimerQuery)
+        !context->getExtensions().disjointTimerQuery && !context->getExtensions().syncQuery)
     {
         context->recordError(Error(GL_INVALID_OPERATION, "Query extension not enabled"));
         return false;
@@ -1216,7 +1218,7 @@ bool ValidateEndQueryBase(gl::Context *context, GLenum target)
 bool ValidateEndQueryEXT(gl::Context *context, GLenum target)
 {
     if (!context->getExtensions().occlusionQueryBoolean &&
-        !context->getExtensions().disjointTimerQuery)
+        !context->getExtensions().disjointTimerQuery && !context->getExtensions().syncQuery)
     {
         context->recordError(Error(GL_INVALID_OPERATION, "Query extension not enabled"));
         return false;
@@ -1292,7 +1294,7 @@ bool ValidateGetQueryivBase(Context *context, GLenum target, GLenum pname)
 bool ValidateGetQueryivEXT(Context *context, GLenum target, GLenum pname, GLint *params)
 {
     if (!context->getExtensions().occlusionQueryBoolean &&
-        !context->getExtensions().disjointTimerQuery)
+        !context->getExtensions().disjointTimerQuery && !context->getExtensions().syncQuery)
     {
         context->recordError(Error(GL_INVALID_OPERATION, "Query extension not enabled"));
         return false;
@@ -1344,7 +1346,7 @@ bool ValidateGetQueryObjectivEXT(Context *context, GLuint id, GLenum pname, GLin
 bool ValidateGetQueryObjectuivEXT(Context *context, GLuint id, GLenum pname, GLuint *params)
 {
     if (!context->getExtensions().disjointTimerQuery &&
-        !context->getExtensions().occlusionQueryBoolean)
+        !context->getExtensions().occlusionQueryBoolean && !context->getExtensions().syncQuery)
     {
         context->recordError(Error(GL_INVALID_OPERATION, "Query extension not enabled"));
         return false;
