@@ -30,20 +30,25 @@ Query9::~Query9()
 
 gl::Error Query9::begin()
 {
-    if (mQuery == NULL)
+    D3DQUERYTYPE d3dQueryType = gl_d3d9::ConvertQueryType(getType());
+    if (mQuery == nullptr)
     {
-        HRESULT result = mRenderer->getDevice()->CreateQuery(D3DQUERYTYPE_OCCLUSION, &mQuery);
+        HRESULT result = mRenderer->getDevice()->CreateQuery(d3dQueryType, &mQuery);
         if (FAILED(result))
         {
             return gl::Error(GL_OUT_OF_MEMORY, "Internal query creation failed, result: 0x%X.", result);
         }
     }
 
-    HRESULT result = mQuery->Issue(D3DISSUE_BEGIN);
-    ASSERT(SUCCEEDED(result));
-    if (FAILED(result))
+    if (d3dQueryType != D3DQUERYTYPE_EVENT)
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to begin internal query, result: 0x%X.", result);
+        HRESULT result = mQuery->Issue(D3DISSUE_BEGIN);
+        ASSERT(SUCCEEDED(result));
+        if (FAILED(result))
+        {
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to begin internal query, result: 0x%X.",
+                             result);
+        }
     }
 
     return gl::Error(GL_NO_ERROR);
