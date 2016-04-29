@@ -205,4 +205,9 @@ const egl::Surface *FramebufferAttachment::getSurface() const
     return rx::GetAs<egl::Surface>(mResource);
 }
 
+const FramebufferAttachmentObject *FramebufferAttachment::getResource() const
+{
+    return mResource;
+}
+
 }

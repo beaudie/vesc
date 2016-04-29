@@ -124,6 +124,7 @@ class FramebufferAttachment final
     Renderbuffer *getRenderbuffer() const;
     Texture *getTexture() const;
     const egl::Surface *getSurface() const;
+    const FramebufferAttachmentObject *getResource() const;
 
     // "T" must be static_castable from FramebufferAttachmentRenderTarget
     template <typename T>
