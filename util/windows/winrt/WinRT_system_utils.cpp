@@ -19,4 +19,10 @@ void SetLowPriorityProcess()
     // No equivalent to this in WinRT
 }
 
+void *LoadSymbol(const std::string &moduleName, const std::string &symbolName)
+{
+    // WinRT cannot load code dynamically.
+    return nullptr;
+}
+
 }  // namespace angle
