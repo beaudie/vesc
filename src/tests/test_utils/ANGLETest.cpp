@@ -10,6 +10,7 @@
 #include "ANGLETest.h"
 #include "EGLWindow.h"
 #include "OSWindow.h"
+#include "platform/Platform.h"
 #include "system_utils.h"
 
 namespace angle
@@ -21,6 +22,32 @@ float ColorNorm(GLubyte channelValue)
 {
     return static_cast<float>(channelValue) / 255.0f;
 }
+
+// Use a custom ANGLE platform class to capture and report internal errors.
+class TestPlatform : public angle::Platform
+{
+  public:
+    void logError(const char *errorMessage) override;
+    void logWarning(const char *warningMessage) override;
+    void logInfo(const char *infoMessage) override;
+};
+
+void TestPlatform::logError(const char *errorMessage)
+{
+    FAIL() << errorMessage;
+}
+
+void TestPlatform::logWarning(const char *warningMessage)
+{
+    std::cerr << "Warning: " << warningMessage;
+}
+
+void TestPlatform::logInfo(const char *infoMessage)
+{
+    angle::WriteDebugMessage("%s\n", infoMessage);
+}
+
+TestPlatform g_testPlatformInstance;
 }  // anonymous namespace
 
 GLColor::GLColor() : R(0), G(0), B(0), A(0)
@@ -86,6 +113,13 @@ ANGLETest::~ANGLETest()
 
 void ANGLETest::SetUp()
 {
+    auto initFunc = static_cast<ANGLEPlatformInitializeFunc>(
+        angle::LoadSymbol("libGLESv2", "ANGLEPlatformInitialize"));
+    if (initFunc)
+    {
+        initFunc(&angle::g_testPlatformInstance);
+    }
+
     // Resize the window before creating the context so that the first make current
     // sets the viewport and scissor box to the right size.
     bool needSwap = false;
@@ -133,6 +167,13 @@ void ANGLETest::TearDown()
     if (!destroyEGLContext())
     {
         FAIL() << "egl context destruction failed.";
+    }
+
+    auto shutdownFunc = static_cast<ANGLEPlatformShutdownFunc>(
+        angle::LoadSymbol("libGLESv2", "ANGLEPlatformShutdown"));
+    if (shutdownFunc)
+    {
+        shutdownFunc();
     }
 
     // Check for quit message

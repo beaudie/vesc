@@ -46,4 +46,15 @@ void WriteDebugMessage(const char *format, ...)
     // TODO(jmadill): Implement this
 }
 
+void *LoadSymbol(const std::string &moduleName, const std::string &symbolName)
+{
+    const auto &libraryName = moduleName + ".so";
+    auto library = dlopen(libraryName.c_str();
+    if (!library)
+    {
+        return nullptr;
+    }
+    return dlsym(library, symbolName.c_str());
+}
+
 } // namespace angle
