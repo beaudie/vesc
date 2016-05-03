@@ -25,6 +25,9 @@ void SetLowPriorityProcess();
 // Write a debug message, either to a standard output or Debug window.
 void WriteDebugMessage(const char *format, ...);
 
+// GetProcAddress on Windows, dlopen on Posix
+void *LoadSymbol(const std::string &moduleName, const std::string &symbolName);
+
 } // namespace angle
 
 #endif // SAMPLE_UTIL_PATH_UTILS_H
