@@ -11,9 +11,11 @@
 #define LIBANGLE_RENDERER_VULKAN_FRAMEBUFFERVK_H_
 
 #include "libANGLE/renderer/FramebufferImpl.h"
+#include "libANGLE/renderer/vulkan/renderervk_utils.h"
 
 namespace rx
 {
+class RenderTargetVk;
 
 class FramebufferVk : public FramebufferImpl
 {
@@ -63,6 +65,10 @@ class FramebufferVk : public FramebufferImpl
     bool checkStatus() const override;
 
     void syncState(const gl::Framebuffer::DirtyBits &dirtyBits) override;
+
+  private:
+    bool mDirty;
+    vk::Framebuffer mFramebuffer;
 };
 
 }  // namespace rx
