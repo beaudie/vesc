@@ -114,6 +114,18 @@ const char *VulkanResultString(VkResult result)
     }
 }
 
+bool HasStandardValidationLayer(const std::vector<VkLayerProperties> &layerProps)
+{
+    // Compile the layer names into a set.
+    std::set<std::string> layerNames;
+    for (const auto &layerProp : layerProps)
+    {
+        layerNames.insert(layerProp.layerName);
+    }
+
+    return layerNames.count(g_VkStdValidationLayerName) > 0;
+}
+
 namespace vk
 {
 
@@ -302,9 +314,55 @@ void CommandBuffer::changeImageLayout(VkImage image,
         imageMemoryBarrier.dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
     }
 
-    vkCmdPipelineBarrier(mHandle, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-                         VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 1,
-                         &imageMemoryBarrier);
+    imageBarrier(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                 imageMemoryBarrier);
+}
+
+void CommandBuffer::clearSingleColorImage(VkImage image,
+                                          VkImageLayout imageLayout,
+                                          const VkClearColorValue &color)
+{
+    ASSERT(mHandle != VK_NULL_HANDLE);
+
+    VkImageSubresourceRange range;
+    range.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    range.baseMipLevel   = 0;
+    range.levelCount     = 1;
+    range.baseArrayLayer = 0;
+    range.layerCount     = 1;
+
+    vkCmdClearColorImage(mHandle, image, imageLayout, &color, 1, &range);
+}
+
+void CommandBuffer::copySingleImage(VkImage srcImage,
+                                    VkImageLayout srcImageLayout,
+                                    VkImage destImage,
+                                    VkImageLayout destImageLayout,
+                                    const gl::Box &copyRegion,
+                                    VkImageAspectFlags aspectMask)
+{
+    ASSERT(mHandle != VK_NULL_HANDLE);
+
+    VkImageCopy region;
+    region.srcSubresource.aspectMask     = aspectMask;
+    region.srcSubresource.mipLevel       = 0;
+    region.srcSubresource.baseArrayLayer = 0;
+    region.srcSubresource.layerCount     = 1;
+    region.srcOffset.x                   = copyRegion.x;
+    region.srcOffset.y                   = copyRegion.y;
+    region.srcOffset.z                   = copyRegion.z;
+    region.dstSubresource.aspectMask     = aspectMask;
+    region.dstSubresource.mipLevel       = 0;
+    region.dstSubresource.baseArrayLayer = 0;
+    region.dstSubresource.layerCount     = 1;
+    region.dstOffset.x                   = copyRegion.x;
+    region.dstOffset.y                   = copyRegion.y;
+    region.dstOffset.z                   = copyRegion.z;
+    region.extent.width                  = copyRegion.width;
+    region.extent.height                 = copyRegion.height;
+    region.extent.depth                  = copyRegion.depth;
+
+    vkCmdCopyImage(mHandle, srcImage, srcImageLayout, destImage, destImageLayout, 1, &region);
 }
 
 CommandBuffer::~CommandBuffer()
@@ -316,18 +374,95 @@ CommandBuffer::~CommandBuffer()
     }
 }
 
-}  // namespace vk
-
-bool HasStandardValidationLayer(const std::vector<VkLayerProperties> &layerProps)
+void CommandBuffer::imageBarrier(VkPipelineStageFlags srcStageMask,
+                                 VkPipelineStageFlags destStageMask,
+                                 const VkImageMemoryBarrier &barrier)
 {
-    // Compile the layer names into a set.
-    std::set<std::string> layerNames;
-    for (const auto &layerProp : layerProps)
-    {
-        layerNames.insert(layerProp.layerName);
-    }
-
-    return layerNames.count(g_VkStdValidationLayerName) > 0;
+    ASSERT(mHandle != VK_NULL_HANDLE);
+    vkCmdPipelineBarrier(mHandle, srcStageMask, destStageMask, 0, 0, nullptr, 0, nullptr, 1,
+                         &barrier);
 }
+
+// Semaphore implementation.
+Semaphore::Semaphore() : mDevice(VK_NULL_HANDLE), mHandle(VK_NULL_HANDLE)
+{
+}
+
+Semaphore::Semaphore(VkDevice device) : mDevice(device), mHandle(VK_NULL_HANDLE)
+{
+}
+
+Semaphore::Semaphore(Semaphore &&other) : mDevice(other.mDevice), mHandle(other.mHandle)
+{
+    other.mDevice = VK_NULL_HANDLE;
+    other.mHandle = VK_NULL_HANDLE;
+}
+
+Semaphore::~Semaphore()
+{
+    if (mHandle != VK_NULL_HANDLE)
+    {
+        vkDestroySemaphore(mDevice, mHandle, nullptr);
+        mHandle = VK_NULL_HANDLE;
+    }
+}
+
+Semaphore &Semaphore::operator=(Semaphore &&other)
+{
+    std::swap(mDevice, other.mDevice);
+    std::swap(mHandle, other.mHandle);
+    return *this;
+}
+
+Error Semaphore::init()
+{
+    VkSemaphoreCreateInfo semaphoreInfo = {};
+    semaphoreInfo.sType                 = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+    semaphoreInfo.pNext                 = nullptr;
+    semaphoreInfo.flags                 = 0;
+
+    ANGLE_VK_TRY(vkCreateSemaphore(mDevice, &semaphoreInfo, nullptr, &mHandle));
+
+    return VkSuccess();
+}
+
+Framebuffer::Framebuffer() : mDevice(VK_NULL_HANDLE), mHandle(VK_NULL_HANDLE)
+{
+}
+
+Framebuffer::Framebuffer(VkDevice device) : mDevice(device), mHandle(VK_NULL_HANDLE)
+{
+}
+
+Framebuffer::Framebuffer(Framebuffer &&other) : mDevice(other.mDevice), mHandle(other.mHandle)
+{
+    other.mDevice = VK_NULL_HANDLE;
+    other.mHandle = VK_NULL_HANDLE;
+}
+
+Framebuffer::~Framebuffer()
+{
+    if (mHandle != VK_NULL_HANDLE)
+    {
+        ASSERT(mDevice != VK_NULL_HANDLE);
+        vkDestroyFramebuffer(mDevice, mHandle, nullptr);
+    }
+}
+
+Framebuffer &Framebuffer::operator=(Framebuffer &&other)
+{
+    std::swap(mDevice, other.mDevice);
+    std::swap(mHandle, other.mHandle);
+    return *this;
+}
+
+Error Framebuffer::init(const VkFramebufferCreateInfo &createInfo)
+{
+    ASSERT(mDevice != VK_NULL_HANDLE && mHandle == VK_NULL_HANDLE);
+    ANGLE_VK_TRY(vkCreateFramebuffer(mDevice, &createInfo, nullptr, &mHandle));
+    return VkSuccess();
+}
+
+}  // namespace vk
 
 }  // namespace rx
