@@ -101,8 +101,24 @@ gl::Error ContextVk::drawRangeElements(GLenum mode,
                                        const GLvoid *indices,
                                        const gl::IndexRange &indexRange)
 {
-    UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return gl::NoError();
+}
+
+VkDevice ContextVk::getDevice() const
+{
+    return mRenderer->getDevice();
+}
+
+vk::CommandBuffer *ContextVk::getCommandBuffer()
+{
+    return mRenderer->getCommandBuffer();
+}
+
+vk::Error ContextVk::submitCommands(const vk::CommandBuffer &commandBuffer)
+{
+    // FIXME(jmadill): timeout? or semaphore
+    ANGLE_TRY(mRenderer->submitAndFinishCommandBuffer(commandBuffer, 1000u));
+    return vk::VkSuccess();
 }
 
 void ContextVk::notifyDeviceLost()
@@ -154,9 +170,9 @@ void ContextVk::popGroupMarker()
     UNIMPLEMENTED();
 }
 
-void ContextVk::syncState(const gl::State &state, const gl::State::DirtyBits &dirtyBits)
+void ContextVk::syncState(const gl::State & /*state*/, const gl::State::DirtyBits & /*dirtyBits*/)
 {
-    UNIMPLEMENTED();
+    // TODO(jmadill): Vulkan dirty bits.
 }
 
 GLint ContextVk::getGPUDisjoint()
