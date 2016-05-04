@@ -25,6 +25,45 @@ class AttributeMap;
 namespace rx
 {
 
+namespace vk
+{
+struct Format;
+}
+
+enum class TextureDimension
+{
+    TEX_2D,
+    TEX_CUBE,
+    TEX_3D,
+    TEX_2D_ARRAY,
+};
+
+class StagingImage : angle::NonCopyable
+{
+  public:
+    StagingImage();
+    StagingImage(StagingImage &&other);
+    ~StagingImage();
+    StagingImage &operator=(StagingImage &&other);
+
+    vk::Error init(VkDevice device,
+                   uint32_t queueFamilyIndex,
+                   uint32_t hostVisibleMemoryIndex,
+                   TextureDimension dimension,
+                   VkFormat format,
+                   const gl::Extents &extent);
+
+    VkImage getHandle() const { return mHandle; }
+    VkDeviceMemory getMemory() const { return mMemory; }
+    VkDeviceSize getSize() const { return mSize; }
+
+  private:
+    VkDevice mDevice;
+    VkImage mHandle;
+    VkDeviceMemory mMemory;
+    VkDeviceSize mSize;
+};
+
 class RendererVk : angle::NonCopyable
 {
   public:
@@ -38,6 +77,7 @@ class RendererVk : angle::NonCopyable
 
     VkInstance getInstance() const { return mInstance; }
     VkPhysicalDevice getPhysicalDevice() const { return mPhysicalDevice; }
+    VkQueue getQueue() const { return mQueue; }
     VkDevice getDevice() const { return mDevice; }
 
     vk::Error selectGraphicsQueue();
@@ -45,13 +85,23 @@ class RendererVk : angle::NonCopyable
 
     // TODO(jmadill): Use ContextImpl for command buffers to enable threaded contexts.
     vk::CommandBuffer *getCommandBuffer();
-    vk::Error queueAndFinishCommandBuffer(const vk::CommandBuffer &commandBuffer,
-                                          uint64_t timeoutMS);
+    vk::Error submitAndFinishCommandBuffer(const vk::CommandBuffer &commandBuffer,
+                                           uint64_t timeoutMS);
+    vk::Error submitAndFinishCommandBuffer(const vk::CommandBuffer &commandBuffer,
+                                           const vk::Semaphore &waitSemaphore,
+                                           uint64_t fenceTimeoutMS);
+    vk::ErrorOrResult<vk::Semaphore> submitCommandBufferWithSemaphores(
+        const vk::CommandBuffer &commandBuffer,
+        const vk::Semaphore &waitSemaphore);
 
     const gl::Caps &getNativeCaps() const;
     const gl::TextureCapsMap &getNativeTextureCaps() const;
     const gl::Extensions &getNativeExtensions() const;
     const gl::Limitations &getNativeLimitations() const;
+
+    vk::ErrorOrResult<StagingImage> createStagingImage(TextureDimension dimension,
+                                                       const vk::Format &format,
+                                                       const gl::Extents &extent);
 
   private:
     void ensureCapsInitialized() const;
@@ -79,6 +129,7 @@ class RendererVk : angle::NonCopyable
     VkDevice mDevice;
     VkCommandPool mCommandPool;
     std::unique_ptr<vk::CommandBuffer> mCommandBuffer;
+    uint32_t mHostVisibleMemoryIndex;
 };
 
 }  // namespace rx
