@@ -83,6 +83,15 @@ ANGLEPlatform::ANGLEPlatform()
         "angle-gl", "ANGLE OpenGL Display", glAttribs, &mEvents);
     m_nativeDisplayFactoryRegistry.registerFactory(glFactory);
 
+    std::vector<eglw::EGLAttrib> glesAttribs;
+    glesAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
+    glesAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE);
+    glesAttribs.push_back(EGL_NONE);
+
+    auto *glesFactory = new ANGLENativeDisplayFactory(
+        "angle-gles", "ANGLE OpenGL ES Display", glesAttribs, &mEvents);
+    m_nativeDisplayFactoryRegistry.registerFactory(glesFactory);
+
     m_contextFactoryRegistry.registerFactory(new eglu::GLContextFactory(m_nativeDisplayFactoryRegistry));
 
     // Add Null context type for use in generating case lists
