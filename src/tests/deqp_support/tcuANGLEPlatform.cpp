@@ -76,7 +76,7 @@ ANGLEPlatform::ANGLEPlatform()
 
     std::vector<eglw::EGLAttrib> glAttribs;
     glAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
-    glAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE);
+    glAttribs.push_back(EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
     glAttribs.push_back(EGL_NONE);
 
     auto *glFactory = new ANGLENativeDisplayFactory(
