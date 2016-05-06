@@ -51,10 +51,9 @@ static size_t GetImageDescIndex(GLenum target, size_t level)
 
 Texture::Texture(rx::ImplFactory *factory, GLuint id, GLenum target)
     : egl::ImageSibling(id),
-      mTexture(factory->createTexture(target)),
+      mTexture(factory->createTexture(target, mTextureState)),
       mLabel(),
       mTextureState(),
-      mEffectiveBaseLevel(0),
       mTarget(target),
       mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) *
                   (target == GL_TEXTURE_CUBE_MAP ? 6 : 1)),
@@ -245,36 +244,13 @@ void Texture::setBaseLevel(GLuint baseLevel)
     {
         mTextureState.baseLevel       = baseLevel;
         mCompletenessCache.cacheValid = false;
-        updateEffectiveBaseLevel();
-        mTexture->setBaseLevel(mEffectiveBaseLevel);
-    }
-}
-
-void Texture::updateEffectiveBaseLevel()
-{
-    mEffectiveBaseLevel = mTextureState.baseLevel;
-    if (mTextureState.immutableFormat && mEffectiveBaseLevel > mTextureState.immutableLevels - 1)
-    {
-        mEffectiveBaseLevel = mTextureState.immutableLevels - 1;
-    }
-    // Ensure that this class doesn't access out-of-range memory when querying effective base level
-    // properties.
-    if (mEffectiveBaseLevel > gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS)
-    {
-        // gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS is still an out-of-range level, but the arrays
-        // for level data have an extra dummy level for querying out-of-range base level properties.
-        mEffectiveBaseLevel = gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS;
+        mTexture->setBaseLevel(mTextureState.getEffectiveBaseLevel());
     }
 }
 
 GLuint Texture::getBaseLevel() const
 {
     return mTextureState.baseLevel;
-}
-
-GLuint Texture::getEffectiveBaseLevel() const
-{
-    return mEffectiveBaseLevel;
 }
 
 void Texture::setMaxLevel(GLuint maxLevel)
@@ -343,7 +319,8 @@ GLenum Texture::getInternalFormat(GLenum target, size_t level) const
 
 bool Texture::isSamplerComplete(const SamplerState &samplerState, const ContextState &data) const
 {
-    const ImageDesc &baseImageDesc = getImageDesc(getBaseImageTarget(), mEffectiveBaseLevel);
+    const ImageDesc &baseImageDesc =
+        getImageDesc(getBaseImageTarget(), mTextureState.getEffectiveBaseLevel());
     const TextureCaps &textureCaps = data.textureCaps->get(baseImageDesc.internalFormat);
     if (!mCompletenessCache.cacheValid ||
         mCompletenessCache.samplerState != samplerState ||
@@ -540,7 +517,6 @@ Error Texture::setStorage(GLenum target, size_t levels, GLenum internalFormat, c
 
     mTextureState.immutableFormat = true;
     mTextureState.immutableLevels = static_cast<GLuint>(levels);
-    updateEffectiveBaseLevel();
     clearImageDescs();
     setImageDescChain(levels, size, internalFormat);
 
@@ -559,7 +535,7 @@ Error Texture::generateMipmaps()
         orphanImages();
     }
 
-    Error error = mTexture->generateMipmaps(mTextureState);
+    Error error = mTexture->generateMipmaps();
     if (error.isError())
     {
         return error;
@@ -754,7 +730,8 @@ bool Texture::computeSamplerCompleteness(const SamplerState &samplerState,
     {
         return false;
     }
-    const ImageDesc &baseImageDesc = getImageDesc(getBaseImageTarget(), mEffectiveBaseLevel);
+    const ImageDesc &baseImageDesc =
+        getImageDesc(getBaseImageTarget(), mTextureState.getEffectiveBaseLevel());
     if (baseImageDesc.size.width == 0 || baseImageDesc.size.height == 0 || baseImageDesc.size.depth == 0)
     {
         return false;
@@ -835,7 +812,7 @@ bool Texture::computeMipmapCompleteness() const
 
     size_t maxLevel = std::min<size_t>(expectedMipLevels, mTextureState.maxLevel + 1);
 
-    for (size_t level = mEffectiveBaseLevel; level < maxLevel; level++)
+    for (size_t level = mTextureState.getEffectiveBaseLevel(); level < maxLevel; level++)
     {
         if (mTarget == GL_TEXTURE_CUBE_MAP)
         {
@@ -868,7 +845,8 @@ bool Texture::computeLevelCompleteness(GLenum target, size_t level) const
         return true;
     }
 
-    const ImageDesc &baseImageDesc = getImageDesc(getBaseImageTarget(), mEffectiveBaseLevel);
+    const ImageDesc &baseImageDesc =
+        getImageDesc(getBaseImageTarget(), mTextureState.getEffectiveBaseLevel());
     if (baseImageDesc.size.width == 0 || baseImageDesc.size.height == 0 || baseImageDesc.size.depth == 0)
     {
         return false;
@@ -886,8 +864,8 @@ bool Texture::computeLevelCompleteness(GLenum target, size_t level) const
         return false;
     }
 
-    ASSERT(level >= mEffectiveBaseLevel);
-    const size_t relativeLevel = level - mEffectiveBaseLevel;
+    ASSERT(level >= mTextureState.getEffectiveBaseLevel());
+    const size_t relativeLevel = level - mTextureState.getEffectiveBaseLevel();
     if (levelImageDesc.size.width != std::max(1, baseImageDesc.size.width >> relativeLevel))
     {
         return false;

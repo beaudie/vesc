@@ -2749,13 +2749,16 @@ TextureStorage *Renderer9::createTextureStorage2DArray(GLenum internalformat, bo
     return NULL;
 }
 
-TextureImpl *Renderer9::createTexture(GLenum target)
+TextureImpl *Renderer9::createTexture(GLenum target, const gl::TextureState &data)
 {
     switch(target)
     {
-      case GL_TEXTURE_2D:       return new TextureD3D_2D(this);
-      case GL_TEXTURE_CUBE_MAP: return new TextureD3D_Cube(this);
-      default:                  UNREACHABLE();
+        case GL_TEXTURE_2D:
+            return new TextureD3D_2D(this, data);
+        case GL_TEXTURE_CUBE_MAP:
+            return new TextureD3D_Cube(this, data);
+        default:
+            UNREACHABLE();
     }
 
     return NULL;

@@ -110,8 +110,9 @@ TextureGL::TextureGL(GLenum type,
                      const FunctionsGL *functions,
                      const WorkaroundsGL &workarounds,
                      StateManagerGL *stateManager,
-                     BlitGL *blitter)
-    : TextureImpl(),
+                     BlitGL *blitter,
+                     const gl::TextureState &data)
+    : TextureImpl(data),
       mTextureType(type),
       mFunctions(functions),
       mWorkarounds(workarounds),
@@ -503,14 +504,14 @@ gl::Error TextureGL::setImageExternal(GLenum target,
     return gl::Error(GL_INVALID_OPERATION);
 }
 
-gl::Error TextureGL::generateMipmaps(const gl::TextureState &textureState)
+gl::Error TextureGL::generateMipmaps()
 {
     mStateManager->bindTexture(mTextureType, mTextureID);
     mFunctions->generateMipmap(mTextureType);
 
-    for (size_t level = textureState.baseLevel; level < mLevelInfo.size(); level++)
+    for (size_t level = mData.baseLevel; level < mLevelInfo.size(); level++)
     {
-        mLevelInfo[level] = mLevelInfo[textureState.baseLevel];
+        mLevelInfo[level] = mLevelInfo[mData.baseLevel];
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -712,9 +713,7 @@ static inline void SyncTextureStateSwizzle(const FunctionsGL *functions,
     }
 }
 
-void TextureGL::syncState(size_t textureUnit,
-                          const gl::TextureState &textureState,
-                          const GLuint effectiveBaseLevel) const
+void TextureGL::syncState(size_t textureUnit, const gl::TextureState &textureState) const
 {
     // Callback lamdba to bind this texture only if needed.
     bool textureApplied   = false;
@@ -734,7 +733,7 @@ void TextureGL::syncState(size_t textureUnit,
     SyncTextureStateMember(mFunctions, applyTextureFunc, textureState, mAppliedTextureState, mTextureType, GL_TEXTURE_BASE_LEVEL, &gl::TextureState::baseLevel);
     SyncTextureStateMember(mFunctions, applyTextureFunc, textureState, mAppliedTextureState, mTextureType, GL_TEXTURE_MAX_LEVEL, &gl::TextureState::maxLevel);
 
-    const LevelInfoGL &levelInfo = mLevelInfo[effectiveBaseLevel];
+    const LevelInfoGL &levelInfo = mLevelInfo[textureState.getEffectiveBaseLevel()];
     SyncTextureStateSwizzle(mFunctions, applyTextureFunc, levelInfo, textureState, mAppliedTextureState, mTextureType, GL_TEXTURE_SWIZZLE_R, &gl::TextureState::swizzleRed);
     SyncTextureStateSwizzle(mFunctions, applyTextureFunc, levelInfo, textureState, mAppliedTextureState, mTextureType, GL_TEXTURE_SWIZZLE_G, &gl::TextureState::swizzleGreen);
     SyncTextureStateSwizzle(mFunctions, applyTextureFunc, levelInfo, textureState, mAppliedTextureState, mTextureType, GL_TEXTURE_SWIZZLE_B, &gl::TextureState::swizzleBlue);

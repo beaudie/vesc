@@ -55,7 +55,7 @@ class ImplFactory : angle::NonCopyable
     virtual FramebufferImpl *createFramebuffer(const gl::FramebufferState &data) = 0;
 
     // Texture creation
-    virtual TextureImpl *createTexture(GLenum target) = 0;
+    virtual TextureImpl *createTexture(GLenum target, const gl::TextureState &data) = 0;
 
     // Renderbuffer creation
     virtual RenderbufferImpl *createRenderbuffer() = 0;
