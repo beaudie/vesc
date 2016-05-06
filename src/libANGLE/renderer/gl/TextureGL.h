@@ -55,7 +55,8 @@ class TextureGL : public TextureImpl
               const FunctionsGL *functions,
               const WorkaroundsGL &workarounds,
               StateManagerGL *stateManager,
-              BlitGL *blitter);
+              BlitGL *blitter,
+              const gl::TextureState &data);
     ~TextureGL() override;
 
     void setUsage(GLenum usage) override;
@@ -81,7 +82,7 @@ class TextureGL : public TextureImpl
                                egl::Stream *stream,
                                const egl::Stream::GLTextureDescription &desc) override;
 
-    gl::Error generateMipmaps(const gl::TextureState &textureState) override;
+    gl::Error generateMipmaps() override;
 
     void bindTexImage(egl::Surface *surface) override;
     void releaseTexImage() override;

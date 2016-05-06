@@ -51,7 +51,7 @@ static size_t GetImageDescIndex(GLenum target, size_t level)
 
 Texture::Texture(rx::ImplFactory *factory, GLuint id, GLenum target)
     : egl::ImageSibling(id),
-      mTexture(factory->createTexture(target)),
+      mTexture(factory->createTexture(target, mTextureState)),
       mLabel(),
       mTextureState(),
       mEffectiveBaseLevel(0),
@@ -559,7 +559,7 @@ Error Texture::generateMipmaps()
         orphanImages();
     }
 
-    Error error = mTexture->generateMipmaps(mTextureState);
+    Error error = mTexture->generateMipmaps();
     if (error.isError())
     {
         return error;

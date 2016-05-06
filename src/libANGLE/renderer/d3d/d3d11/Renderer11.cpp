@@ -3733,18 +3733,22 @@ TextureStorage *Renderer11::createTextureStorage2DArray(GLenum internalformat, b
     return new TextureStorage11_2DArray(this, internalformat, renderTarget, width, height, depth, levels);
 }
 
-TextureImpl *Renderer11::createTexture(GLenum target)
+TextureImpl *Renderer11::createTexture(GLenum target, const gl::TextureState &data)
 {
     switch(target)
     {
-      case GL_TEXTURE_2D: return new TextureD3D_2D(this);
-      case GL_TEXTURE_CUBE_MAP: return new TextureD3D_Cube(this);
-      case GL_TEXTURE_3D: return new TextureD3D_3D(this);
-      case GL_TEXTURE_2D_ARRAY: return new TextureD3D_2DArray(this);
-      case GL_TEXTURE_EXTERNAL_OES:
-          return new TextureD3D_External(this);
-      default:
-        UNREACHABLE();
+        case GL_TEXTURE_2D:
+            return new TextureD3D_2D(this, data);
+        case GL_TEXTURE_CUBE_MAP:
+            return new TextureD3D_Cube(this, data);
+        case GL_TEXTURE_3D:
+            return new TextureD3D_3D(this, data);
+        case GL_TEXTURE_2D_ARRAY:
+            return new TextureD3D_2DArray(this, data);
+        case GL_TEXTURE_EXTERNAL_OES:
+            return new TextureD3D_External(this, data);
+        default:
+            UNREACHABLE();
     }
 
     return NULL;

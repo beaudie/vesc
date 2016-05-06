@@ -230,7 +230,7 @@ class Renderer11 : public RendererD3D
     virtual TextureStorage *createTextureStorage2DArray(GLenum internalformat, bool renderTarget, GLsizei width, GLsizei height, GLsizei depth, int levels);
 
     // Texture creation
-    virtual TextureImpl *createTexture(GLenum target);
+    TextureImpl *createTexture(GLenum target, const gl::TextureState &data) override;
 
     // Renderbuffer creation
     virtual RenderbufferImpl *createRenderbuffer();

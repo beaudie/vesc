@@ -110,8 +110,9 @@ TextureGL::TextureGL(GLenum type,
                      const FunctionsGL *functions,
                      const WorkaroundsGL &workarounds,
                      StateManagerGL *stateManager,
-                     BlitGL *blitter)
-    : TextureImpl(),
+                     BlitGL *blitter,
+                     const gl::TextureState &data)
+    : TextureImpl(data),
       mTextureType(type),
       mFunctions(functions),
       mWorkarounds(workarounds),
@@ -503,14 +504,14 @@ gl::Error TextureGL::setImageExternal(GLenum target,
     return gl::Error(GL_INVALID_OPERATION);
 }
 
-gl::Error TextureGL::generateMipmaps(const gl::TextureState &textureState)
+gl::Error TextureGL::generateMipmaps()
 {
     mStateManager->bindTexture(mTextureType, mTextureID);
     mFunctions->generateMipmap(mTextureType);
 
-    for (size_t level = textureState.baseLevel; level < mLevelInfo.size(); level++)
+    for (size_t level = mData.baseLevel; level < mLevelInfo.size(); level++)
     {
-        mLevelInfo[level] = mLevelInfo[textureState.baseLevel];
+        mLevelInfo[level] = mLevelInfo[mData.baseLevel];
     }
 
     return gl::Error(GL_NO_ERROR);
