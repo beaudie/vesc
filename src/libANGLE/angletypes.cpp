@@ -73,6 +73,19 @@ bool TextureState::swizzleRequired() const
            swizzleBlue != GL_BLUE || swizzleAlpha != GL_ALPHA;
 }
 
+GLuint TextureState::getEffectiveBaseLevel() const
+{
+    if (immutableFormat)
+    {
+        return std::min(baseLevel, immutableLevels - 1);
+    }
+    // Some classes use the effective base level to index arrays with level data. By clamping the
+    // effective base level to max levels these arrays need just one extra item to store properties
+    // that should be returned for all out-of-range base level values, instead of needing special
+    // handling for out-of-range base levels.
+    return std::min(baseLevel, static_cast<GLuint>(gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS));
+}
+
 static void MinMax(int a, int b, int *minimum, int *maximum)
 {
     if (a < b)

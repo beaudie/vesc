@@ -237,6 +237,8 @@ struct TextureState
     GLenum usage;
 
     bool swizzleRequired() const;
+
+    GLuint getEffectiveBaseLevel() const;
 };
 
 bool operator==(const TextureState &a, const TextureState &b);

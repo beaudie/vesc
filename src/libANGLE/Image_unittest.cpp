@@ -28,7 +28,7 @@ TEST(ImageTest, RefCounting)
     NiceMock<rx::MockFactory> mockFactory;
     // Create a texture and an EGL image that uses the texture as its source
     rx::MockTextureImpl *textureImpl = new rx::MockTextureImpl();
-    EXPECT_CALL(mockFactory, createTexture(_)).WillOnce(Return(textureImpl));
+    EXPECT_CALL(mockFactory, createTexture(_, _)).WillOnce(Return(textureImpl));
     gl::Texture *texture = new gl::Texture(&mockFactory, 1, GL_TEXTURE_2D);
     texture->addRef();
 
@@ -89,7 +89,7 @@ TEST(ImageTest, RespecificationReleasesReferences)
     NiceMock<rx::MockFactory> mockFactory;
     // Create a texture and an EGL image that uses the texture as its source
     rx::MockTextureImpl *textureImpl = new rx::MockTextureImpl();
-    EXPECT_CALL(mockFactory, createTexture(_)).WillOnce(Return(textureImpl));
+    EXPECT_CALL(mockFactory, createTexture(_, _)).WillOnce(Return(textureImpl));
     gl::Texture *texture = new gl::Texture(&mockFactory, 1, GL_TEXTURE_2D);
     texture->addRef();
 
