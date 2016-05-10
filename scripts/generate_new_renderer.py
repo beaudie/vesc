@@ -21,10 +21,14 @@ import re
 import string
 
 if len(sys.argv) < 3:
-    print('Usage: ' + sys.argv[0] + ' <renderer name> <renderer suffix>')
+    print('Usage: ' + sys.argv[0] + ' <renderer dir name> <renderer class suffix>')
+    sys.exit(1)
 
 renderer_name = sys.argv[1]
 renderer_suffix = sys.argv[2]
+
+# change to the renderer directory
+os.chdir(os.path.join(os.path.dirname(sys.argv[0]), "..", "src", "libANGLE", "renderer"))
 
 # ensure subdir exists
 if not os.path.isdir(renderer_name):
@@ -33,14 +37,17 @@ if not os.path.isdir(renderer_name):
 impl_classes = [
     'Buffer',
     'Compiler',
+    'Context',
+    'Device',
     'Display',
     'FenceNV',
     'FenceSync',
     'Framebuffer',
+    'Image',
     'Program',
     'Query',
     'Renderbuffer',
-    'Renderer',
+    'Sampler',
     'Shader',
     'Surface',
     'Texture',
@@ -49,12 +56,13 @@ impl_classes = [
 ]
 
 h_file_template = """//
-// Copyright 2015 The ANGLE Project Authors. All rights reserved.
+// Copyright 2016 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-
-// $TypedImpl.h: Defines the class interface for $TypedImpl.
+// $TypedImpl.h:
+//    Defines the class interface for $TypedImpl.
+//
 
 #ifndef LIBANGLE_RENDERER_${RendererNameCaps}_${TypedImplCaps}_H_
 #define LIBANGLE_RENDERER_${RendererNameCaps}_${TypedImplCaps}_H_
@@ -71,18 +79,19 @@ class $TypedImpl : public $BaseImpl
     ~$TypedImpl() override;
 $ImplMethodDeclarations$PrivateImplMethodDeclarations};
 
-}
+}  // namespace rx
 
-#endif // LIBANGLE_RENDERER_${RendererNameCaps}_${TypedImplCaps}_H_
+#endif  // LIBANGLE_RENDERER_${RendererNameCaps}_${TypedImplCaps}_H_
 """
 
 cpp_file_template = """//
-// Copyright 2015 The ANGLE Project Authors. All rights reserved.
+// Copyright 2016 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-
-// $TypedImpl.cpp: Implements the class methods for $TypedImpl.
+// $TypedImpl.cpp:
+//    Implements the class methods for $TypedImpl.
+//
 
 #include "libANGLE/renderer/$RendererName/$TypedImpl.h"
 
@@ -91,14 +100,15 @@ cpp_file_template = """//
 namespace rx
 {
 
-$TypedImpl::$TypedImpl($ConstructorParams)
-    : $BaseImpl($BaseContructorArgs)
-{}
+$TypedImpl::$TypedImpl($ConstructorParams) : $BaseImpl($BaseContructorArgs)
+{
+}
 
 $TypedImpl::~$TypedImpl()
-{}
-$ImplMethodDefinitions
+{
 }
+$ImplMethodDefinitions
+}  // namespace rx
 """
 
 def generate_impl_declaration(impl_stub):
@@ -134,8 +144,11 @@ def generate_impl_definition(impl_stub, typed_impl):
             return_statement = '    return egl::Error(EGL_BAD_ACCESS);\n'
         elif return_type == 'LinkResult':
             return_statement = '    return LinkResult(false, gl::Error(GL_INVALID_OPERATION));\n'
-        elif re.search(r'[\*\&]$', return_type):
+        elif re.search(r'\*$', return_type):
             return_statement = '    return static_cast<' + return_type + '>(0);\n'
+        elif re.search(r'const ([^ \&]+) \&$', return_type):
+            obj_type = re.search(r'const ([^ \&]+) \&$', return_type).group(1)
+            return_statement = '    static ' + obj_type + ' local;\n' + '    return local;\n'
         else:
             return_statement = '    return ' + return_type + '();\n'
 
@@ -189,14 +202,18 @@ def parse_impl_header(base_impl):
 
     return impl_stubs, private_impl_stubs, constructor
 
+def get_base_class(base_impl):
+    impl_h_file_path = base_impl + '.h'
+    with open(impl_h_file_path, 'r') as impl_h_file:
+        for line in impl_h_file:
+            match = re.search(r'^class ' + base_impl + r' : public (\w+)', line)
+            if match:
+                return match.group(1)
+    return False
+
 for impl_class in impl_classes:
 
-    base_impl = impl_class
-
-    # special case for Renderer
-    if impl_class != 'Renderer':
-        base_impl += 'Impl'
-
+    base_impl = impl_class + 'Impl'
     typed_impl = impl_class + renderer_suffix
 
     h_file_path = os.path.join(renderer_name, typed_impl + '.h')
@@ -208,10 +225,10 @@ for impl_class in impl_classes:
     # extract impl stubs
     impl_stubs, private_impl_stubs, constructor = parse_impl_header(base_impl)
 
-    # more special case for Renderer
-    # TODO(jmadill): general case for base classes
-    if impl_class == 'Renderer':
-        base_impl_stubs, base_private_impl_stubs, base_constructor = parse_impl_header('ImplFactory')
+    # Handle base classes, skipping angle::NonCopyable.
+    base_class = get_base_class(base_impl)
+    if base_class and base_class != 'angle':
+        base_impl_stubs, base_private_impl_stubs, base_constructor = parse_impl_header(base_class)
         impl_stubs += base_impl_stubs
         private_impl_stubs += base_private_impl_stubs
 
@@ -256,3 +273,10 @@ for impl_class in impl_classes:
 
     h_file.close()
     cpp_file.close()
+
+# Print a block of source files to add to the GYP
+print("Generated files:")
+for impl_class in impl_classes:
+    path = "libANGLE/renderer/" + renderer_name + "/" + impl_class + renderer_suffix
+    print('\'' + path + ".cpp\',")
+    print('\'' + path + ".h\',")
