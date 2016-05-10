@@ -19,4 +19,15 @@ void SetLowPriorityProcess()
     SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);
 }
 
+void *LoadSymbol(const std::string &moduleName, const std::string &symbolName)
+{
+    const auto &libraryName = moduleName + ".dll";
+    auto library = LoadLibraryA(libraryName.c_str());
+    if (!library)
+    {
+        return nullptr;
+    }
+    return GetProcAddress(library, symbolName.c_str());
+}
+
 }  // namespace angle
