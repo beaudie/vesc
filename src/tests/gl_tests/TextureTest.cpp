@@ -2139,6 +2139,13 @@ TEST_P(Texture2DTestES3, ImmutableTextureBaseLevelOutOfRange)
         return;
     }
 
+    if (IsLinux() && IsIntel() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    {
+        // The Mesa Intel driver doesn't clamp the base level
+        std::cout << "Test skipped on Intel Linux OpenGL." << std::endl;
+        return;
+    }
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
 
