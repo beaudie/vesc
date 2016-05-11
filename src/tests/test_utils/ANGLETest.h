@@ -18,6 +18,7 @@
 #include "angle_test_configs.h"
 #include "common/angleutils.h"
 #include "shader_utils.h"
+#include "system_utils.h"
 #include "Vector.h"
 
 #define EXPECT_GL_ERROR(err) EXPECT_EQ(static_cast<GLenum>(err), glGetError())
@@ -196,8 +197,12 @@ class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
 class ANGLETestEnvironment : public testing::Environment
 {
   public:
-    virtual void SetUp();
-    virtual void TearDown();
+    void SetUp() override;
+    void TearDown() override;
+
+  private:
+    // For loading and freeing platform
+    std::unique_ptr<angle::Library> mGLESLibrary;
 };
 
 bool IsIntel();

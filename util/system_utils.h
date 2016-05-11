@@ -6,10 +6,12 @@
 
 // system_utils.h: declaration of OS-specific utility functions
 
-#ifndef SAMPLE_UTIL_PATH_UTILS_H
-#define SAMPLE_UTIL_PATH_UTILS_H
+#ifndef UTIL_SYSTEM_UTILS_H_
+#define UTIL_SYSTEM_UTILS_H_
 
 #include <string>
+
+#include "common/angleutils.h"
 
 namespace angle
 {
@@ -25,6 +27,15 @@ void SetLowPriorityProcess();
 // Write a debug message, either to a standard output or Debug window.
 void WriteDebugMessage(const char *format, ...);
 
+class Library : angle::NonCopyable
+{
+  public:
+    virtual ~Library() {}
+    virtual void *loadSymbol(const std::string &symbolName) = 0;
+};
+
+Library *loadLibrary(const std::string &libraryName);
+
 } // namespace angle
 
-#endif // SAMPLE_UTIL_PATH_UTILS_H
+#endif  // UTIL_SYSTEM_UTILS_H_
