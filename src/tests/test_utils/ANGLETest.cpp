@@ -10,7 +10,7 @@
 #include "ANGLETest.h"
 #include "EGLWindow.h"
 #include "OSWindow.h"
-#include "system_utils.h"
+#include "platform/Platform.h"
 
 namespace angle
 {
@@ -28,6 +28,32 @@ float ColorNorm(GLubyte channelValue)
 {
     return static_cast<float>(channelValue) / 255.0f;
 }
+
+// Use a custom ANGLE platform class to capture and report internal errors.
+class TestPlatform : public angle::Platform
+{
+  public:
+    void logError(const char *errorMessage) override;
+    void logWarning(const char *warningMessage) override;
+    void logInfo(const char *infoMessage) override;
+};
+
+void TestPlatform::logError(const char *errorMessage)
+{
+    FAIL() << errorMessage;
+}
+
+void TestPlatform::logWarning(const char *warningMessage)
+{
+    std::cerr << "Warning: " << warningMessage << std::endl;
+}
+
+void TestPlatform::logInfo(const char *infoMessage)
+{
+    angle::WriteDebugMessage("%s\n", infoMessage);
+}
+
+TestPlatform g_testPlatformInstance;
 }  // anonymous namespace
 
 GLColor::GLColor() : R(0), G(0), B(0), A(0)
@@ -637,6 +663,17 @@ OSWindow *ANGLETest::mOSWindow = NULL;
 
 void ANGLETestEnvironment::SetUp()
 {
+    mGLESLibrary.reset(angle::loadLibrary("libGLESv2"));
+    if (mGLESLibrary)
+    {
+        auto initFunc = reinterpret_cast<ANGLEPlatformInitializeFunc>(
+            mGLESLibrary->getSymbol("ANGLEPlatformInitialize"));
+        if (initFunc)
+        {
+            initFunc(&angle::g_testPlatformInstance);
+        }
+    }
+
     if (!ANGLETest::InitTestWindow())
     {
         FAIL() << "Failed to create ANGLE test window.";
@@ -646,4 +683,14 @@ void ANGLETestEnvironment::SetUp()
 void ANGLETestEnvironment::TearDown()
 {
     ANGLETest::DestroyTestWindow();
+
+    if (mGLESLibrary)
+    {
+        auto shutdownFunc = reinterpret_cast<ANGLEPlatformShutdownFunc>(
+            mGLESLibrary->getSymbol("ANGLEPlatformShutdown"));
+        if (shutdownFunc)
+        {
+            shutdownFunc();
+        }
+    }
 }
