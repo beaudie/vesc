@@ -251,6 +251,16 @@ class DXGISupportHelper : angle::NonCopyable
         if (dxgiFormat == DXGI_FORMAT_UNKNOWN)
             return false;
 
+        if (mFeatureLevel <= D3D_FEATURE_LEVEL_9_3 &&
+            d3d11::GetDXGIFormatSizeInfo(dxgiFormat).blockWidth > 1)
+        {
+            // These formats can't be supported on FL 9_3, because the top level of the SRV can't
+            // be set to anything above zero on textures that have smaller dimensions than the
+            // block dimensions.
+            // See d3d11::MakeValidSize().
+            return false;
+        }
+
         auto dxgiSupport = d3d11::GetDXGISupport(dxgiFormat, mFeatureLevel);
 
         UINT supportedBits = dxgiSupport.alwaysSupportedFlags;

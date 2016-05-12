@@ -116,6 +116,42 @@ TEST_P(CompressedTextureTest, CompressedTexImage)
     EXPECT_GL_NO_ERROR();
 }
 
+TEST_P(CompressedTextureTest, Compressed2x2TexImage)
+{
+    if (!extensionEnabled("GL_EXT_texture_compression_dxt1"))
+    {
+        std::cout << "Test skipped because GL_EXT_texture_compression_dxt1 is not available."
+                  << std::endl;
+        return;
+    }
+
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, pixel_8_width,
+                           pixel_8_height, 0, pixel_8_size, pixel_8_data);
+    glCompressedTexImage2D(GL_TEXTURE_2D, 1, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, pixel_9_width,
+                           pixel_9_height, 0, pixel_9_size, pixel_9_data);
+
+    EXPECT_GL_NO_ERROR();
+
+    glUseProgram(mTextureProgram);
+    glUniform1i(mTextureUniformLocation, 0);
+
+    drawQuad(mTextureProgram, "position", 0.5f);
+
+    EXPECT_GL_NO_ERROR();
+
+    glDeleteTextures(1, &texture);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 TEST_P(CompressedTextureTest, CompressedTexStorage)
 {
     if (!extensionEnabled("GL_EXT_texture_compression_dxt1"))
