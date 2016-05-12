@@ -726,10 +726,18 @@ void TextureGL::syncState(size_t textureUnit) const
         }
     };
 
-    // clang-format off
-
     // Sync texture state
-    SyncTextureStateMember(mFunctions, applyTextureFunc, mState, mAppliedTextureState, mState.target, GL_TEXTURE_BASE_LEVEL, &gl::TextureState::baseLevel);
+    // Apply the effective base level instead of the base level set from the API. This can help with
+    // buggy drivers.
+    if (mAppliedTextureState.getEffectiveBaseLevel() != mState.getEffectiveBaseLevel())
+    {
+        applyTextureFunc();
+        mFunctions->texParameteri(mState.target, GL_TEXTURE_BASE_LEVEL,
+                                  mState.getEffectiveBaseLevel());
+    }
+    mAppliedTextureState.baseLevel = mState.baseLevel;
+
+    // clang-format off
     SyncTextureStateMember(mFunctions, applyTextureFunc, mState, mAppliedTextureState, mState.target, GL_TEXTURE_MAX_LEVEL, &gl::TextureState::maxLevel);
 
     const LevelInfoGL &levelInfo = mLevelInfo[mState.getEffectiveBaseLevel()];
