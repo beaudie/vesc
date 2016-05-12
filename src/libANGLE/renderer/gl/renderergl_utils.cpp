@@ -657,6 +657,9 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
             QueryQueryValue(functions, GL_TIMESTAMP, GL_QUERY_COUNTER_BITS);
     }
 
+    extensions->framebufferMixedSamples = functions->hasGLExtension("GL_NV_framebuffer_mixed_samples") ||
+        functions->hasGLExtension("GL_NV_framebuffer_mixed_samples");
+
     // ANGLE emulates vertex array objects in its GL layer
     extensions->vertexArrayObject = true;
 

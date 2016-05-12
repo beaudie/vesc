@@ -169,6 +169,8 @@ void State::initialize(const Caps &caps,
 
     mDebug.setOutputEnabled(debug);
     mDebug.setMaxLoggedMessages(extensions.maxDebugLoggedMessages);
+
+    mCoverageModulation = GL_NONE;
 }
 
 void State::reset()
@@ -1324,6 +1326,17 @@ Debug &State::getDebug()
     return mDebug;
 }
 
+void State::setCoverageModulation(GLenum components)
+{
+    mCoverageModulation = components;
+    mDirtyBits.set(DIRTY_BIT_COVERAGE_MODULATION);
+}
+
+GLenum State::getCoverageModulation() const
+{
+    return mCoverageModulation;
+}
+
 void State::getBooleanv(GLenum pname, GLboolean *params)
 {
     switch (pname)
@@ -1393,6 +1406,9 @@ void State::getFloatv(GLenum pname, GLfloat *params)
         params[1] = mBlendColor.green;
         params[2] = mBlendColor.blue;
         params[3] = mBlendColor.alpha;
+        break;
+      case GL_COVERAGE_MODULATION_CHROMIUM:
+        params[0] = mCoverageModulation;
         break;
       default:
         UNREACHABLE();
@@ -1631,6 +1647,9 @@ void State::getIntegerv(const ContextState &data, GLenum pname, GLint *params)
           break;
       case GL_DEBUG_GROUP_STACK_DEPTH:
           *params = static_cast<GLint>(mDebug.getGroupStackDepth());
+          break;
+      case GL_COVERAGE_MODULATION_CHROMIUM:
+          *params = static_cast<GLint>(mCoverageModulation);
           break;
       default:
         UNREACHABLE();
