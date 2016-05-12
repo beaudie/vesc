@@ -288,6 +288,9 @@ struct Extensions
 
     // GL_EXT_color_buffer_float
     bool colorBufferFloat;
+
+    // GL_CHROMIUM_framebuffer_mixed_samples
+    bool framebufferMixedSamples;
 };
 
 struct Limitations

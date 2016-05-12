@@ -124,6 +124,8 @@ class StateManagerGL final : angle::NonCopyable
 
     void setFramebufferSRGBEnabled(bool enabled);
 
+    void setCoverageModulation(GLenum components);
+
     void onDeleteQueryObject(QueryGL *query);
 
     gl::Error setDrawArraysState(const gl::ContextState &data,
@@ -253,6 +255,8 @@ class StateManagerGL final : angle::NonCopyable
 
     bool mFramebufferSRGBEnabled;
     bool mTextureCubemapSeamlessEnabled;
+
+    GLenum mCoverageModulation;
 
     gl::State::DirtyBits mLocalDirtyBits;
 };

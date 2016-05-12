@@ -388,6 +388,9 @@ class Context final : public ValidationContext
 
     void bindUniformLocation(GLuint program, GLint location, const GLchar *name);
 
+    // CHROMIUM_framebuffer_mixed_samples
+    void setCoverageModulation(GLenum components);
+
     void recordError(const Error &error) override;
 
     GLenum getError();

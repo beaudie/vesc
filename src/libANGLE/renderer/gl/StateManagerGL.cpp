@@ -112,6 +112,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mClearStencil(0),
       mFramebufferSRGBEnabled(false),
       mTextureCubemapSeamlessEnabled(false),
+      mCoverageModulation(GL_NONE),
       mLocalDirtyBits()
 {
     ASSERT(mFunctions);
@@ -1512,6 +1513,9 @@ void StateManagerGL::syncState(const gl::State &state, const gl::State::DirtyBit
             case gl::State::DIRTY_BIT_PROGRAM_BINDING:
                 // TODO(jmadill): implement this
                 break;
+            case gl::State::DIRTY_BIT_COVERAGE_MODULATION:
+                setCoverageModulation(state.getCoverageModulation());
+                break;
             default:
             {
                 ASSERT(dirtyBit >= gl::State::DIRTY_BIT_CURRENT_VALUE_0 &&
@@ -1541,6 +1545,17 @@ void StateManagerGL::setFramebufferSRGBEnabled(bool enabled)
         {
             mFunctions->disable(GL_FRAMEBUFFER_SRGB);
         }
+    }
+}
+
+void StateManagerGL::setCoverageModulation(GLenum components)
+{
+    if (mCoverageModulation != components)
+    {
+        mCoverageModulation = components;
+        mFunctions->coverageModulationNV(components);
+
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_COVERAGE_MODULATION);
     }
 }
 

@@ -522,7 +522,17 @@ GLenum Framebuffer::checkStatus(const ContextState &data) const
         }
         else if (samples != depthAttachment.getSamples())
         {
-            return GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_ANGLE;
+            // CHROMIUM_framebuffer_mixed_samples allows a framebuffer to be
+            // considered complete when its depth or stencil samples are a
+            // multiple of the number of color samples.
+            const bool mixedSamples = data.extensions->framebufferMixedSamples;
+            if (!mixedSamples)
+                return GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_ANGLE;
+
+            const int colorSamples = samples ? samples : 1;
+            const int depthSamples = depthAttachment.getSamples();
+            if (depthSamples % colorSamples)
+                return GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_ANGLE;
         }
     }
 
@@ -572,7 +582,15 @@ GLenum Framebuffer::checkStatus(const ContextState &data) const
         }
         else if (samples != stencilAttachment.getSamples())
         {
-            return GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_ANGLE;
+            // see the comments in depth attachment check.
+            const bool mixedSamples = data.extensions->framebufferMixedSamples;
+            if (!mixedSamples)
+                return GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_ANGLE;
+
+            const int colorSamples   = samples ? samples : 1;
+            const int stencilSamples = stencilAttachment.getSamples();
+            if (stencilSamples % colorSamples)
+                return GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_ANGLE;
         }
     }
 
