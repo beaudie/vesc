@@ -154,6 +154,7 @@ class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
     void setNoErrorEnabled(bool enabled);
 
     int getClientVersion() const;
+    int getClientMinorVersion() const;
 
     EGLWindow *getEGLWindow() const;
     int getWindowWidth() const;
