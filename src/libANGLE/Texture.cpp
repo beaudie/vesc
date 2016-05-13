@@ -581,7 +581,7 @@ Error Texture::setStorage(GLenum target, size_t levels, GLenum internalFormat, c
     mState.immutableFormat = true;
     mState.immutableLevels = static_cast<GLuint>(levels);
     clearImageDescs();
-    setImageDescChain(levels, size, internalFormat);
+    setImageDescChain(0, levels - 1, size, internalFormat);
 
     return Error(GL_NO_ERROR);
 }
@@ -598,27 +598,38 @@ Error Texture::generateMipmaps()
         orphanImages();
     }
 
-    Error error = mTexture->generateMipmaps();
-    if (error.isError())
+    const int baseLevel            = mState.getEffectiveBaseLevel();
+    const ImageDesc &baseImageInfo = getImageDesc(getBaseImageTarget(), baseLevel);
+    // TODO: Depth shouldn't affect mipmap generation on array textures.
+    const int mipLevels =
+        log2(std::max(std::max(baseImageInfo.size.width, baseImageInfo.size.height),
+                      baseImageInfo.size.depth)) +
+        1;
+    const int maxLevel = std::min<int>(baseLevel + mipLevels - 1, mState.getEffectiveMaxLevel());
+
+    if (maxLevel > baseLevel)
     {
-        return error;
+        ANGLE_TRY(mTexture->generateMipmaps(maxLevel));
+
+        setImageDescChain(baseLevel, maxLevel, baseImageInfo.size, baseImageInfo.internalFormat);
     }
 
-    const ImageDesc &baseImageInfo = getImageDesc(getBaseImageTarget(), 0);
-    size_t mipLevels = log2(std::max(std::max(baseImageInfo.size.width, baseImageInfo.size.height), baseImageInfo.size.depth)) + 1;
-    setImageDescChain(mipLevels, baseImageInfo.size, baseImageInfo.internalFormat);
-
-    return Error(GL_NO_ERROR);
+    return NoError();
 }
 
-void Texture::setImageDescChain(size_t levels, Extents baseSize, GLenum sizedInternalFormat)
+void Texture::setImageDescChain(int baseLevel,
+                                int maxLevel,
+                                Extents baseSize,
+                                GLenum sizedInternalFormat)
 {
-    for (int level = 0; level < static_cast<int>(levels); level++)
+    for (int level = baseLevel; level <= maxLevel; level++)
     {
-        Extents levelSize(
-            std::max<int>(baseSize.width >> level, 1), std::max<int>(baseSize.height >> level, 1),
-            (mState.target == GL_TEXTURE_2D_ARRAY) ? baseSize.depth
-                                                   : std::max<int>(baseSize.depth >> level, 1));
+        int relativeLevel = (level - baseLevel);
+        Extents levelSize(std::max<int>(baseSize.width >> relativeLevel, 1),
+                          std::max<int>(baseSize.height >> relativeLevel, 1),
+                          (mState.target == GL_TEXTURE_2D_ARRAY)
+                              ? baseSize.depth
+                              : std::max<int>(baseSize.depth >> relativeLevel, 1));
         ImageDesc levelInfo(levelSize, sizedInternalFormat);
 
         if (mState.target == GL_TEXTURE_CUBE_MAP)
