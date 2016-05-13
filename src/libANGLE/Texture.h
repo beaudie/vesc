@@ -34,7 +34,6 @@ namespace rx
 class GLImplFactory;
 class TextureImpl;
 class TextureGL;
-class Renderer11;
 }
 
 namespace gl
@@ -108,9 +107,6 @@ struct TextureState final : public angle::NonCopyable
     friend class rx::TextureGL;
     friend bool operator==(const TextureState &a, const TextureState &b);
 
-    // TODO(oetuaho): Remove Renderer11 from friends when GenerateMipmap is fixed.
-    friend class rx::Renderer11;
-
     bool computeSamplerCompleteness(const SamplerState &samplerState,
                                     const ContextState &data) const;
     bool computeMipmapCompleteness() const;
@@ -119,7 +115,10 @@ struct TextureState final : public angle::NonCopyable
     GLenum getBaseImageTarget() const;
 
     void setImageDesc(GLenum target, size_t level, const ImageDesc &desc);
-    void setImageDescChain(size_t levels, Extents baseSize, GLenum sizedInternalFormat);
+    void setImageDescChain(int baselevel,
+                           int maxLevel,
+                           Extents baseSize,
+                           GLenum sizedInternalFormat);
     void clearImageDesc(GLenum target, size_t level);
     void clearImageDescs();
 
@@ -287,7 +286,7 @@ class Texture final : public egl::ImageSibling,
 
     Error setEGLImageTarget(GLenum target, egl::Image *imageTarget);
 
-    Error generateMipmaps();
+    Error generateMipmap();
 
     egl::Surface *getBoundSurface() const;
     egl::Stream *getBoundStream() const;
