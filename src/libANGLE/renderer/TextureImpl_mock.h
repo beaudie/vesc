@@ -32,7 +32,7 @@ class MockTextureImpl : public TextureImpl
     MOCK_METHOD3(setImageExternal,
                  gl::Error(GLenum, egl::Stream *, const egl::Stream::GLTextureDescription &));
     MOCK_METHOD2(setEGLImageTarget, gl::Error(GLenum, egl::Image *));
-    MOCK_METHOD0(generateMipmaps, gl::Error());
+    MOCK_METHOD1(generateMipmaps, gl::Error(GLuint));
     MOCK_METHOD1(bindTexImage, void(egl::Surface *));
     MOCK_METHOD0(releaseTexImage, void(void));
 
