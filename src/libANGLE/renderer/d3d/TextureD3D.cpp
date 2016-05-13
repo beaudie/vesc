@@ -405,14 +405,10 @@ gl::Error TextureD3D::setImageExternal(GLenum target,
     return gl::Error(GL_INVALID_OPERATION);
 }
 
-gl::Error TextureD3D::generateMipmaps()
+gl::Error TextureD3D::generateMipmaps(GLuint maxLevel)
 {
-    GLint mipCount = mipLevels();
-
-    if (mipCount == 1)
-    {
-        return gl::Error(GL_NO_ERROR); // no-op
-    }
+    GLuint baseLevel = mState.getEffectiveBaseLevel();
+    ASSERT(maxLevel > baseLevel);  // Should be checked before calling this.
 
     if (mTexStorage && mRenderer->getWorkarounds().zeroMaxLodWorkaround)
     {
@@ -432,9 +428,9 @@ gl::Error TextureD3D::generateMipmaps()
     }
 
     // Set up proper mipmap chain in our Image array.
-    initMipmapsImages();
+    initMipmapsImages(baseLevel, maxLevel);
 
-    if (mTexStorage && mTexStorage->supportsNativeMipmapFunction())
+    if (mTexStorage && mTexStorage->supportsNativeMipmapFunction() && baseLevel == 0)
     {
         gl::Error error = updateStorage();
         if (error.isError())
@@ -452,7 +448,7 @@ gl::Error TextureD3D::generateMipmaps()
     else
     {
         // Generate the mipmap chain, one level at a time.
-        gl::Error error = generateMipmapsUsingImages();
+        gl::Error error = generateMipmapsUsingImages(maxLevel);
         if (error.isError())
         {
             return error;
@@ -462,12 +458,10 @@ gl::Error TextureD3D::generateMipmaps()
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error TextureD3D::generateMipmapsUsingImages()
+gl::Error TextureD3D::generateMipmapsUsingImages(const GLuint maxLevel)
 {
-    GLint mipCount = mipLevels();
-
     // We know that all layers have the same dimension, for the texture to be complete
-    GLint layerCount = static_cast<GLint>(getLayerCount(getBaseLevel()));
+    GLint layerCount = static_cast<GLint>(getLayerCount(mBaseLevel));
 
     // When making mipmaps with the setData workaround enabled, the texture storage has
     // the image data already. For non-render-target storage, we have to pull it out into
@@ -479,7 +473,7 @@ gl::Error TextureD3D::generateMipmapsUsingImages()
             // Copy from the storage mip 0 to Image mip 0
             for (GLint layer = 0; layer < layerCount; ++layer)
             {
-                gl::ImageIndex srcIndex = getImageIndex(0, layer);
+                gl::ImageIndex srcIndex = getImageIndex(mBaseLevel, layer);
 
                 ImageD3D *image = getImage(srcIndex);
                 gl::Error error = image->copyFromTexStorage(srcIndex, mTexStorage);
@@ -508,7 +502,7 @@ gl::Error TextureD3D::generateMipmapsUsingImages()
 
     for (GLint layer = 0; layer < layerCount; ++layer)
     {
-        for (GLint mip = 1; mip < mipCount; ++mip)
+        for (GLuint mip = mBaseLevel + 1; mip <= maxLevel; ++mip)
         {
             ASSERT(getLayerCount(mip) == layerCount);
 
@@ -1065,11 +1059,11 @@ gl::Error TextureD3D_2D::setEGLImageTarget(GLenum target, egl::Image *image)
     return gl::Error(GL_NO_ERROR);
 }
 
-void TextureD3D_2D::initMipmapsImages()
+void TextureD3D_2D::initMipmapsImages(GLuint baseLevel, GLuint maxLevel)
 {
-    // Purge array levels 1 through q and reset them to represent the generated mipmap levels.
-    int levelCount = mipLevels();
-    for (int level = 1; level < levelCount; level++)
+    // Purge array levels baseLevel + 1 through q and reset them to represent the generated mipmap
+    // levels.
+    for (GLuint level = baseLevel + 1; level <= maxLevel; level++)
     {
         gl::Extents levelSize(std::max(getLevelZeroWidth() >> level, 1),
                               std::max(getLevelZeroHeight() >> level, 1), 1);
@@ -1658,17 +1652,17 @@ void TextureD3D_Cube::releaseTexImage()
     UNREACHABLE();
 }
 
-
-void TextureD3D_Cube::initMipmapsImages()
+void TextureD3D_Cube::initMipmapsImages(GLuint baseLevel, GLuint maxLevel)
 {
-    // Purge array levels 1 through q and reset them to represent the generated mipmap levels.
-    int levelCount = mipLevels();
+    // Purge array levels baseLevel + 1 through q and reset them to represent the generated mipmap
+    // levels.
     for (int faceIndex = 0; faceIndex < 6; faceIndex++)
     {
-        for (int level = 1; level < levelCount; level++)
+        for (GLuint level = baseLevel + 1; level <= maxLevel; level++)
         {
-            int faceLevelSize = (std::max(mImageArray[faceIndex][0]->getWidth() >> level, 1));
-            redefineImage(faceIndex, level, mImageArray[faceIndex][0]->getInternalFormat(),
+            int faceLevelSize =
+                (std::max(mImageArray[faceIndex][baseLevel]->getWidth() >> level, 1));
+            redefineImage(faceIndex, level, mImageArray[faceIndex][baseLevel]->getInternalFormat(),
                           gl::Extents(faceLevelSize, faceLevelSize, 1));
         }
     }
@@ -2257,12 +2251,11 @@ void TextureD3D_3D::releaseTexImage()
     UNREACHABLE();
 }
 
-
-void TextureD3D_3D::initMipmapsImages()
+void TextureD3D_3D::initMipmapsImages(GLuint baseLevel, GLuint maxLevel)
 {
-    // Purge array levels 1 through q and reset them to represent the generated mipmap levels.
-    int levelCount = mipLevels();
-    for (int level = 1; level < levelCount; level++)
+    // Purge array levels baseLevel + 1 through q and reset them to represent the generated mipmap
+    // levels.
+    for (GLuint level = baseLevel + 1; level <= maxLevel; level++)
     {
         gl::Extents levelSize(std::max(getLevelZeroWidth() >> level, 1),
                               std::max(getLevelZeroHeight() >> level, 1),
@@ -2847,17 +2840,16 @@ void TextureD3D_2DArray::releaseTexImage()
     UNREACHABLE();
 }
 
-
-void TextureD3D_2DArray::initMipmapsImages()
+void TextureD3D_2DArray::initMipmapsImages(GLuint baseLevel, GLuint maxLevel)
 {
     int baseWidth     = getLevelZeroWidth();
     int baseHeight    = getLevelZeroHeight();
     int baseDepth     = getLayerCount(getBaseLevel());
     GLenum baseFormat = getBaseLevelInternalFormat();
 
-    // Purge array levels 1 through q and reset them to represent the generated mipmap levels.
-    int levelCount = mipLevels();
-    for (int level = 1; level < levelCount; level++)
+    // Purge array levels baseLevel + 1 through q and reset them to represent the generated mipmap
+    // levels.
+    for (GLuint level = baseLevel + 1; level <= maxLevel; level++)
     {
         gl::Extents levelLayerSize(std::max(baseWidth >> level, 1),
                                    std::max(baseHeight >> level, 1),
@@ -3338,7 +3330,7 @@ gl::Error TextureD3D_External::setEGLImageTarget(GLenum target, egl::Image *imag
     return gl::Error(GL_INVALID_OPERATION);
 }
 
-void TextureD3D_External::initMipmapsImages()
+void TextureD3D_External::initMipmapsImages(GLuint baseLevel, GLuint maxLevel)
 {
     UNREACHABLE();
 }
