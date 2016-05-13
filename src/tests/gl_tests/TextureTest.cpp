@@ -3156,6 +3156,181 @@ TEST_P(TextureLimitsTest, DrawWithTexturePastMaximum)
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
+class Texture2DNorm16TestES3 : public Texture2DTestES3
+{
+  protected:
+    Texture2DNorm16TestES3() : Texture2DTestES3() {}
+
+    void testNorm16Texture(GLint internalformat, GLenum format, GLenum type)
+    {
+        GLushort pixelValue   = type == GL_SHORT ? 0x7FFF : 0x6A35;
+        GLushort imageData[4] = {pixelValue, pixelValue, pixelValue, pixelValue};
+
+        setUpProgram();
+
+        GLuint textures[2];
+
+        glGenTextures(2, textures);
+
+        glActiveTexture(GL_TEXTURE0);
+
+        glBindTexture(GL_TEXTURE_2D, textures[0]);
+        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA16_EXT, 1, 1);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        GLuint fbo;
+        glGenFramebuffers(1, &fbo);
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[0], 0);
+
+        glBindTexture(GL_TEXTURE_2D, textures[1]);
+        glTexStorage2D(GL_TEXTURE_2D, 1, internalformat, 1, 1);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, format, type, imageData);
+
+        EXPECT_GL_NO_ERROR();
+
+        drawQuad(mProgram, "position", 0.5f);
+
+        GLushort rvalue = pixelValue;
+        if (type == GL_SHORT)
+        {
+            // sampled as signed value; then stored as unsigned value
+            rvalue = 0xFFFF;
+        }
+
+        switch (format)
+        {
+            case GL_RED:
+                EXPECT_PIXEL16_EQ(0, 0, rvalue, 0, 0, 0xFFFF);
+                break;
+            case GL_RG:
+                EXPECT_PIXEL16_EQ(0, 0, rvalue, rvalue, 0, 0xFFFF);
+                break;
+            case GL_RGB:
+                EXPECT_PIXEL16_EQ(0, 0, rvalue, rvalue, rvalue, 0xFFFF);
+                break;
+            case GL_RGBA:
+                EXPECT_PIXEL16_EQ(0, 0, rvalue, rvalue, rvalue, rvalue);
+                break;
+        }
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glDeleteFramebuffers(1, &fbo);
+        glDeleteTextures(2, textures);
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void testNorm16Render(GLint internalformat, GLenum format, GLenum type)
+    {
+        GLushort pixelValue   = 0x6A35;
+        GLushort imageData[4] = {pixelValue, pixelValue, pixelValue, pixelValue};
+
+        setUpProgram();
+
+        GLuint textures[2];
+
+        glGenTextures(2, textures);
+
+        glActiveTexture(GL_TEXTURE0);
+
+        glBindTexture(GL_TEXTURE_2D, textures[0]);
+        glTexStorage2D(GL_TEXTURE_2D, 1, internalformat, 1, 1);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        GLuint fbo;
+        glGenFramebuffers(1, &fbo);
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[0], 0);
+
+        glBindTexture(GL_TEXTURE_2D, textures[1]);
+        glTexStorage2D(GL_TEXTURE_2D, 1, internalformat, 1, 1);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, format, type, imageData);
+
+        EXPECT_GL_NO_ERROR();
+
+        drawQuad(mProgram, "position", 0.5f);
+
+        switch (format)
+        {
+            case GL_RED:
+                EXPECT_PIXEL16_EQ(0, 0, pixelValue, 0, 0, 0xFFFF);
+                break;
+            case GL_RG:
+                EXPECT_PIXEL16_EQ(0, 0, pixelValue, pixelValue, 0, 0xFFFF);
+                break;
+            case GL_RGBA:
+                EXPECT_PIXEL16_EQ(0, 0, pixelValue, pixelValue, pixelValue, pixelValue);
+                break;
+        }
+
+        GLuint renderbuffer;
+        glGenRenderbuffers(1, &renderbuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, internalformat, 1, 1);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                  renderbuffer);
+        EXPECT_GL_NO_ERROR();
+
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 1, 1);
+
+        switch (format)
+        {
+            case GL_RED:
+                EXPECT_PIXEL16_EQ(0, 0, 0xFFFF, 0, 0, 0xFFFF);
+                break;
+            case GL_RG:
+                EXPECT_PIXEL16_EQ(0, 0, 0xFFFF, 0xFFFF, 0, 0xFFFF);
+                break;
+            case GL_RGBA:
+                EXPECT_PIXEL16_EQ(0, 0, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF);
+                break;
+        }
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glDeleteFramebuffers(1, &fbo);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        glDeleteRenderbuffers(1, &renderbuffer);
+        glDeleteTextures(2, textures);
+
+        ASSERT_GL_NO_ERROR();
+    }
+};
+
+#undef EXPECT_PIXEL16_EQ
+
+// Test texture formats enabled by the GL_EXT_texture_norm16 extension.
+TEST_P(Texture2DNorm16TestES3, TextureNorm16Test)
+{
+    if (!extensionEnabled("GL_EXT_texture_norm16"))
+    {
+        std::cout << "Test skipped due to missing GL_EXT_texture_norm16." << std::endl;
+        return;
+    }
+
+    testNorm16Texture(GL_R16_EXT, GL_RED, GL_UNSIGNED_SHORT);
+    testNorm16Texture(GL_RG16_EXT, GL_RG, GL_UNSIGNED_SHORT);
+    testNorm16Texture(GL_RGB16_EXT, GL_RGB, GL_UNSIGNED_SHORT);
+    testNorm16Texture(GL_RGBA16_EXT, GL_RGBA, GL_UNSIGNED_SHORT);
+    testNorm16Texture(GL_R16_SNORM_EXT, GL_RED, GL_SHORT);
+    testNorm16Texture(GL_RG16_SNORM_EXT, GL_RG, GL_SHORT);
+    testNorm16Texture(GL_RGB16_SNORM_EXT, GL_RGB, GL_SHORT);
+    testNorm16Texture(GL_RGBA16_SNORM_EXT, GL_RGBA, GL_SHORT);
+
+    testNorm16Render(GL_R16_EXT, GL_RED, GL_UNSIGNED_SHORT);
+    testNorm16Render(GL_RG16_EXT, GL_RG, GL_UNSIGNED_SHORT);
+    testNorm16Render(GL_RGBA16_EXT, GL_RGBA, GL_UNSIGNED_SHORT);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 // TODO(oetuaho): Enable all below tests on OpenGL. Requires a fix for ANGLE bug 1278.
 ANGLE_INSTANTIATE_TEST(Texture2DTest,
@@ -3239,5 +3414,6 @@ ANGLE_INSTANTIATE_TEST(SamplerInStructAndOtherVariableTest,
                        ES2_OPENGL(),
                        ES2_OPENGLES());
 ANGLE_INSTANTIATE_TEST(TextureLimitsTest, ES2_D3D11(), ES2_OPENGL(), ES2_OPENGLES());
+ANGLE_INSTANTIATE_TEST(Texture2DNorm16TestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 
 } // namespace
