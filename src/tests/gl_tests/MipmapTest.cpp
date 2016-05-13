@@ -8,7 +8,21 @@
 
 using namespace angle;
 
-class MipmapTest : public ANGLETest
+class BaseMipmapTest : public ANGLETest
+{
+  protected:
+    void clearAndDrawQuad(GLuint program, GLsizei viewportWidth, GLsizei viewportHeight)
+    {
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glViewport(0, 0, viewportWidth, viewportHeight);
+        ASSERT_GL_NO_ERROR();
+
+        drawQuad(program, "position", 0.0f);
+    }
+};
+
+class MipmapTest : public BaseMipmapTest
 {
   protected:
     MipmapTest()
@@ -33,15 +47,16 @@ class MipmapTest : public ANGLETest
     void setUp2DProgram()
     {
         // Vertex Shader source
+        // clang-format off
         const std::string vs = SHADER_SOURCE
         (
-            attribute vec4 aPosition;
+            attribute vec4 position;
             varying vec2 vTexCoord;
 
             void main()
             {
-                gl_Position = aPosition;
-                vTexCoord   = (aPosition.xy * 0.5) + 0.5;
+                gl_Position = position;
+                vTexCoord   = (position.xy * 0.5) + 0.5;
             }
         );
 
@@ -58,6 +73,7 @@ class MipmapTest : public ANGLETest
                 gl_FragColor = texture2D(uTexture, vTexCoord);
             }
         );
+        // clang-format on
 
         m2DProgram = CompileProgram(vs, fs);
         ASSERT_NE(0u, m2DProgram);
@@ -66,14 +82,15 @@ class MipmapTest : public ANGLETest
     void setUpCubeProgram()
     {
         // A simple vertex shader for the texture cube
+        // clang-format off
         const std::string cubeVS = SHADER_SOURCE
         (
-            attribute vec4 aPosition;
+            attribute vec4 position;
             varying vec4 vPosition;
             void main()
             {
-                gl_Position = aPosition;
-                vPosition = aPosition;
+                gl_Position = position;
+                vPosition = position;
             }
         );
 
@@ -89,6 +106,7 @@ class MipmapTest : public ANGLETest
                 gl_FragColor = textureCube(uTexture, vec3(vPosition.x, -1, vPosition.y));
             }
         );
+        // clang-format on
 
         mCubeProgram = CompileProgram(cubeVS, cubeFS);
         ASSERT_NE(0u, mCubeProgram);
@@ -163,16 +181,6 @@ class MipmapTest : public ANGLETest
         return data;
     }
 
-    void clearAndDrawQuad(GLuint program, GLsizei viewportWidth, GLsizei viewportHeight)
-    {
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glViewport(0, 0, viewportWidth, viewportHeight);
-        ASSERT_GL_NO_ERROR();
-
-        drawQuad(program, "aPosition", 0.0f);
-    }
-
     void clearTextureLevel0(GLenum textarget,
                             GLuint texture,
                             GLfloat red,
@@ -202,7 +210,7 @@ class MipmapTest : public ANGLETest
     GLuint mOffscreenFramebuffer;
 };
 
-class MipmapTestES3 : public ANGLETest
+class MipmapTestES3 : public BaseMipmapTest
 {
   protected:
     MipmapTestES3()
@@ -212,7 +220,8 @@ class MipmapTestES3 : public ANGLETest
           mTextureArraySliceUniformLocation(-1),
           m3DProgram(0),
           mTexture3DSliceUniformLocation(-1),
-          mTexture3DLODUniformLocation(-1)
+          mTexture3DLODUniformLocation(-1),
+          m2DProgram(0)
 
     {
         setWindowWidth(128);
@@ -309,16 +318,44 @@ class MipmapTestES3 : public ANGLETest
         ASSERT_GL_NO_ERROR();
     }
 
+    void setUp2DProgram()
+    {
+        // clang-format off
+        const std::string fragmentShaderSource2D = SHADER_SOURCE
+        (   #version 300 es\n
+            precision highp float;
+            uniform highp sampler2D tex;
+            in vec2 texcoord;
+            out vec4 out_FragColor;
+
+            void main()
+            {
+                out_FragColor = texture(tex, texcoord);
+            }
+        );
+        // clang-format on
+
+        m2DProgram = CompileProgram(vertexShaderSource(), fragmentShaderSource2D);
+        if (m2DProgram == 0)
+        {
+            FAIL() << "shader compilation failed.";
+        }
+
+        ASSERT_GL_NO_ERROR();
+    }
+
     void SetUp() override
     {
         ANGLETest::SetUp();
 
         glGenTextures(1, &mTextureArray);
         glGenTextures(1, &mTexture3D);
+        glGenTextures(1, &mTexture2D);
         ASSERT_GL_NO_ERROR();
 
         setUpArrayProgram();
         setUp3DProgram();
+        setUp2DProgram();
     }
 
     void TearDown() override
@@ -329,11 +366,15 @@ class MipmapTestES3 : public ANGLETest
         glDeleteTextures(1, &mTexture3D);
         glDeleteProgram(m3DProgram);
 
+        glDeleteTextures(1, &mTexture2D);
+        glDeleteProgram(m2DProgram);
+
         ANGLETest::TearDown();
     }
 
     GLuint mTextureArray;
     GLuint mTexture3D;
+    GLuint mTexture2D;
 
     GLuint mArrayProgram;
     GLint mTextureArraySliceUniformLocation;
@@ -341,6 +382,8 @@ class MipmapTestES3 : public ANGLETest
     GLuint m3DProgram;
     GLint mTexture3DSliceUniformLocation;
     GLint mTexture3DLODUniformLocation;
+
+    GLuint m2DProgram;
 };
 
 // This test uses init data for the first three levels of the texture. It passes the level 0 data in, then renders, then level 1, then renders, etc.
@@ -776,6 +819,100 @@ TEST_P(MipmapTestES3, MipmapsForTexture3D)
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_NEAR(px, py, 127, 127, 0, 255, 1.0);
 }
+
+// Creates a texture with levels 0-2, calls generateMipmap with base level 1 so that level 0 stays
+// the same and then samples levels 0 and 2.
+// GLES 3.0.4 section 3.8.10:
+// "Mipmap generation replaces texel array levels levelbase + 1 through q with arrays derived from
+// the levelbase array, regardless of their previous contents. All other mipmap arrays, including
+// the levelbase array, are left unchanged by this computation."
+TEST_P(MipmapTestES3, GenerateMipmapBaseLevel)
+{
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+
+    // Fill level 0 with blue
+    std::vector<GLColor> pixelsBlue(getWindowWidth() * getWindowHeight(), GLColor::blue);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, pixelsBlue.data());
+
+    // Fill level 1 with red
+    std::vector<GLColor> pixelsRed(getWindowWidth() * getWindowHeight() / 4, GLColor::red);
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, getWindowWidth() / 2, getWindowHeight() / 2, 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, pixelsRed.data());
+
+    // Fill level 2 with green
+    std::vector<GLColor> pixelsGreen(getWindowWidth() * getWindowHeight() / 16, GLColor::green);
+    glTexImage2D(GL_TEXTURE_2D, 2, GL_RGBA8, getWindowWidth() / 4, getWindowHeight() / 4, 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, pixelsGreen.data());
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);
+
+    EXPECT_GL_NO_ERROR();
+
+    // The blue level 0 should be untouched by this since base level is 1.
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    EXPECT_GL_NO_ERROR();
+
+    // Draw using level 2. It should be set to red by GenerateMipmap.
+    clearAndDrawQuad(m2DProgram, getWindowWidth() / 4, getWindowHeight() / 4);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 8, getWindowHeight() / 8, GLColor::red);
+
+    // Draw using level 0. It should still be blue.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    clearAndDrawQuad(m2DProgram, getWindowWidth(), getWindowHeight());
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::blue);
+}
+
+// Creates a texture with levels 0-2, calls generateMipmap with max level 1 so that level 2 stays
+// the same and then samples levels 1 and 2.
+// GLES 3.0.4 section 3.8.10:
+// "Mipmap generation replaces texel array levels levelbase + 1 through q with arrays derived from
+// the levelbase array, regardless of their previous contents. All other mipmap arrays, including
+// the levelbase array, are left unchanged by this computation."
+TEST_P(MipmapTestES3, GenerateMipmapMaxLevel)
+{
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+
+    // Fill level 0 with blue
+    std::vector<GLColor> pixelsBlue(getWindowWidth() * getWindowHeight(), GLColor::blue);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, pixelsBlue.data());
+
+    // Fill level 1 with red
+    std::vector<GLColor> pixelsRed(getWindowWidth() * getWindowHeight() / 4, GLColor::red);
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, getWindowWidth() / 2, getWindowHeight() / 2, 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, pixelsRed.data());
+
+    // Fill level 2 with green
+    std::vector<GLColor> pixelsGreen(getWindowWidth() * getWindowHeight() / 16, GLColor::green);
+    glTexImage2D(GL_TEXTURE_2D, 2, GL_RGBA8, getWindowWidth() / 4, getWindowHeight() / 4, 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, pixelsGreen.data());
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
+
+    EXPECT_GL_NO_ERROR();
+
+    // The green level 2 should be untouched by this since max level is 1.
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    EXPECT_GL_NO_ERROR();
+
+    // Draw using level 1. It should be set to blue by GenerateMipmap.
+    clearAndDrawQuad(m2DProgram, getWindowWidth() / 2, getWindowHeight() / 2);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, getWindowHeight() / 4, GLColor::blue);
+
+    // Draw using level 2. It should still be green.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 2);
+    clearAndDrawQuad(m2DProgram, getWindowWidth() / 4, getWindowHeight() / 4);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 8, getWindowHeight() / 8, GLColor::green);
+}
+
+// TODO: Test case where base level is out of range on a non-immutable texture.
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 // Note: we run these tests against 9_3 on WARP due to hardware driver issues on Win7
