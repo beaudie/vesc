@@ -2642,6 +2642,12 @@ void Context::compressedTexSubImage3D(GLenum target,
                                                imageSize, reinterpret_cast<const uint8_t *>(data)));
 }
 
+void Context::generateMipmap(GLenum target)
+{
+    Texture *texture = getTargetTexture(target);
+    handleError(texture->generateMipmaps());
+}
+
 void Context::getBufferPointerv(GLenum target, GLenum /*pname*/, void **params)
 {
     Buffer *buffer = getState().getTargetBuffer(target);
