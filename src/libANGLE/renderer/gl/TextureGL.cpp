@@ -502,14 +502,20 @@ gl::Error TextureGL::setImageExternal(GLenum target,
     return gl::Error(GL_INVALID_OPERATION);
 }
 
-gl::Error TextureGL::generateMipmaps()
+gl::Error TextureGL::generateMipmaps(GLuint maxLevel)
 {
+    // Need to sync base level and max level to driver before calling GenerateMipmap.
+    syncState(0);
     mStateManager->bindTexture(mState.target, mTextureID);
     mFunctions->generateMipmap(mState.target);
 
-    for (size_t level = mState.baseLevel; level < mLevelInfo.size(); level++)
+    ASSERT(maxLevel < mLevelInfo.size());
+
+    GLuint effectiveBaseLevel = mState.getEffectiveBaseLevel();
+
+    for (size_t level = effectiveBaseLevel; level <= maxLevel; level++)
     {
-        mLevelInfo[level] = mLevelInfo[mState.baseLevel];
+        mLevelInfo[level] = mLevelInfo[effectiveBaseLevel];
     }
 
     return gl::Error(GL_NO_ERROR);

@@ -82,7 +82,7 @@ class TextureGL : public TextureImpl
                                egl::Stream *stream,
                                const egl::Stream::GLTextureDescription &desc) override;
 
-    gl::Error generateMipmaps() override;
+    gl::Error generateMipmaps(GLuint maxLevel) override;
 
     void bindTexImage(egl::Surface *surface) override;
     void releaseTexImage() override;

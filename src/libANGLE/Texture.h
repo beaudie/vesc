@@ -260,7 +260,10 @@ class Texture final : public egl::ImageSibling,
 
     const ImageDesc &getImageDesc(GLenum target, size_t level) const;
     void setImageDesc(GLenum target, size_t level, const ImageDesc &desc);
-    void setImageDescChain(size_t levels, Extents baseSize, GLenum sizedInternalFormat);
+    void setImageDescChain(int baseLevel,
+                           int maxLevel,
+                           Extents baseSize,
+                           GLenum sizedInternalFormat);
     void clearImageDesc(GLenum target, size_t level);
     void clearImageDescs();
     void releaseTexImageInternal();
