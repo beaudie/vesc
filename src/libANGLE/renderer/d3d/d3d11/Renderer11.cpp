@@ -3609,8 +3609,8 @@ gl::Error Renderer11::generateMipmapsUsingD3D(TextureStorage *storage,
     ASSERT(storage11->supportsNativeMipmapFunction());
 
     ID3D11ShaderResourceView *srv;
-    gl::Error error =
-        storage11->getSRVLevels(textureState.mBaseLevel, textureState.mMaxLevel, &srv);
+    gl::Error error = storage11->getSRVLevels(textureState.getEffectiveBaseLevel(),
+                                              textureState.getEffectiveMaxLevel(), &srv);
     if (error.isError())
     {
         return error;
