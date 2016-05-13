@@ -467,6 +467,43 @@ inline T shiftData(T input)
     return (input & mask) << inputBitStart;
 }
 
+inline unsigned int countLeadingZeros(unsigned int x)
+{
+    // Use binary search to find the amount of leading zeros.
+    unsigned int zeros = 32u;
+    unsigned int y;
+
+    y = x >> 16u;
+    if (y != 0)
+    {
+        zeros = zeros - 16u;
+        x     = y;
+    }
+    y = x >> 8u;
+    if (y != 0)
+    {
+        zeros = zeros - 8u;
+        x     = y;
+    }
+    y = x >> 4u;
+    if (y != 0)
+    {
+        zeros = zeros - 4u;
+        x     = y;
+    }
+    y = x >> 2u;
+    if (y != 0)
+    {
+        zeros = zeros - 2u;
+        x     = y;
+    }
+    y = x >> 1u;
+    if (y != 0)
+    {
+        return zeros - 2u;
+    }
+    return zeros - x;
+}
 
 inline unsigned char average(unsigned char a, unsigned char b)
 {
