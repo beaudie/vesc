@@ -426,7 +426,8 @@ bool Texture::isCubeComplete() const
 
 size_t Texture::getMipCompleteLevels() const
 {
-    const ImageDesc &baseImageDesc = getImageDesc(getBaseImageTarget(), 0);
+    const ImageDesc &baseImageDesc =
+        getImageDesc(getBaseImageTarget(), mState.getEffectiveBaseLevel());
     if (mState.target == GL_TEXTURE_3D)
     {
         const int maxDim = std::max(std::max(baseImageDesc.size.width, baseImageDesc.size.height),
@@ -870,9 +871,10 @@ bool Texture::computeSamplerCompleteness(const SamplerState &samplerState,
 
 bool Texture::computeMipmapCompleteness() const
 {
-    size_t expectedMipLevels = getMipCompleteLevels();
+    const size_t expectedMipLevels = getMipCompleteLevels();
 
-    size_t maxLevel = std::min<size_t>(expectedMipLevels, mState.maxLevel + 1);
+    const size_t maxLevel =
+        std::min<size_t>(mState.getEffectiveBaseLevel() + expectedMipLevels, mState.maxLevel + 1);
 
     for (size_t level = mState.getEffectiveBaseLevel(); level < maxLevel; level++)
     {
