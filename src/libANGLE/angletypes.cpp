@@ -39,7 +39,7 @@ PrimitiveType GetPrimitiveType(GLenum drawMode)
     }
 }
 
-SamplerState::SamplerState()
+SamplerState::SamplerState(t)
     : minFilter(GL_NEAREST_MIPMAP_LINEAR),
       magFilter(GL_LINEAR),
       wrapS(GL_REPEAT),
@@ -51,6 +51,23 @@ SamplerState::SamplerState()
       compareMode(GL_NONE),
       compareFunc(GL_LEQUAL)
 {
+}
+
+// static
+SamplerState SamplerState::CreateDefaultForTarget(GLenum target)
+{
+    SamplerState state;
+
+    // According to OES_EGL_image_external: For external textures, the default min filter is
+    // GL_LINEAR and the default s and t wrap modes are GL_CLAMP_TO_EDGE.
+    if (target == GL_TEXTURE_EXTERNAL_OES)
+    {
+        state.minFilter = GL_LINEAR;
+        state.wrapS     = GL_CLAMP_TO_EDGE;
+        state.wrapT     = GL_CLAMP_TO_EDGE;
+    }
+
+    return state;
 }
 
 static void MinMax(int a, int b, int *minimum, int *maximum)
