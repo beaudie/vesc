@@ -39,6 +39,7 @@ namespace gl
 {
 struct ContextState;
 class Framebuffer;
+class Texture;
 
 bool IsMipmapFiltered(const SamplerState &samplerState);
 
@@ -51,25 +52,81 @@ struct TextureState final : public angle::NonCopyable
     GLuint getEffectiveBaseLevel() const;
     GLuint getEffectiveMaxLevel() const;
 
+    // Returns the value called "q" in the GLES 3.0.4 spec section 3.8.10.
+    size_t getMipmapMaxLevel() const;
+
+    // Returns true if base level changed.
+    bool setBaseLevel(GLuint baseLevel);
+    void setMaxLevel(GLuint maxLevel);
+
+    bool isCubeComplete() const;
+    bool isSamplerComplete(const SamplerState &samplerState, const ContextState &data) const;
+
     // TODO(jmadill): Make the data members here private.
 
-    const GLenum target;
+    const GLenum mTarget;
 
-    GLenum swizzleRed;
-    GLenum swizzleGreen;
-    GLenum swizzleBlue;
-    GLenum swizzleAlpha;
+    GLenum mSwizzleRed;
+    GLenum mSwizzleGreen;
+    GLenum mSwizzleBlue;
+    GLenum mSwizzleAlpha;
 
-    SamplerState samplerState;
+    SamplerState mSamplerState;
 
-    GLuint baseLevel;
-    GLuint maxLevel;
+    GLuint mBaseLevel;
+    GLuint mMaxLevel;
 
-    bool immutableFormat;
-    GLuint immutableLevels;
+    bool mImmutableFormat;
+    GLuint mImmutableLevels;
 
     // From GL_ANGLE_texture_usage
-    GLenum usage;
+    GLenum mUsage;
+
+  private:
+    // Texture needs access to the ImageDesc functions.
+    friend class Texture;
+
+    bool computeSamplerCompleteness(const SamplerState &samplerState,
+                                    const ContextState &data) const;
+    bool computeMipmapCompleteness() const;
+    bool computeLevelCompleteness(GLenum target, size_t level) const;
+
+    GLenum getBaseImageTarget() const;
+
+    struct ImageDesc
+    {
+        ImageDesc();
+        ImageDesc(const Extents &size, GLenum internalFormat);
+
+        Extents size;
+        GLenum internalFormat;
+    };
+
+    const ImageDesc &getImageDesc(GLenum target, size_t level) const;
+    void setImageDesc(GLenum target, size_t level, const TextureState::ImageDesc &desc);
+    void setImageDescChain(size_t levels, Extents baseSize, GLenum sizedInternalFormat);
+    void clearImageDesc(GLenum target, size_t level);
+    void clearImageDescs();
+
+    std::vector<ImageDesc> mImageDescs;
+
+    struct SamplerCompletenessCache
+    {
+        SamplerCompletenessCache();
+
+        bool cacheValid;
+
+        // All values that affect sampler completeness that are not stored within
+        // the texture itself
+        SamplerState samplerState;
+        bool filterable;
+        GLint clientVersion;
+        bool supportsNPOT;
+
+        // Result of the sampler completeness with the above parameters
+        bool samplerComplete;
+    };
+    mutable SamplerCompletenessCache mCompletenessCache;
 };
 
 bool operator==(const TextureState &a, const TextureState &b);
@@ -152,10 +209,7 @@ class Texture final : public egl::ImageSibling,
     size_t getDepth(GLenum target, size_t level) const;
     GLenum getInternalFormat(GLenum target, size_t level) const;
 
-    bool isSamplerComplete(const SamplerState &samplerState, const ContextState &data) const;
     bool isMipmapComplete() const;
-    bool isCubeComplete() const;
-    size_t getMipCompleteLevels() const;
 
     Error setImage(const PixelUnpackState &unpackState,
                    GLenum target,
@@ -240,48 +294,7 @@ class Texture final : public egl::ImageSibling,
 
     std::string mLabel;
 
-    struct ImageDesc
-    {
-        Extents size;
-        GLenum internalFormat;
-
-        ImageDesc();
-        ImageDesc(const Extents &size, GLenum internalFormat);
-    };
-
-    GLenum getBaseImageTarget() const;
-
-    bool computeSamplerCompleteness(const SamplerState &samplerState,
-                                    const ContextState &data) const;
-    bool computeMipmapCompleteness() const;
-    bool computeLevelCompleteness(GLenum target, size_t level) const;
-
-    const ImageDesc &getImageDesc(GLenum target, size_t level) const;
-    void setImageDesc(GLenum target, size_t level, const ImageDesc &desc);
-    void setImageDescChain(size_t levels, Extents baseSize, GLenum sizedInternalFormat);
-    void clearImageDesc(GLenum target, size_t level);
-    void clearImageDescs();
     void releaseTexImageInternal();
-
-    std::vector<ImageDesc> mImageDescs;
-
-    struct SamplerCompletenessCache
-    {
-        SamplerCompletenessCache();
-
-        bool cacheValid;
-
-        // All values that affect sampler completeness that are not stored within
-        // the texture itself
-        SamplerState samplerState;
-        bool filterable;
-        GLint clientVersion;
-        bool supportsNPOT;
-
-        // Result of the sampler completeness with the above parameters
-        bool samplerComplete;
-    };
-    mutable SamplerCompletenessCache mCompletenessCache;
 
     egl::Surface *mBoundSurface;
     egl::Stream *mBoundStream;
@@ -289,11 +302,11 @@ class Texture final : public egl::ImageSibling,
 
 inline bool operator==(const TextureState &a, const TextureState &b)
 {
-    return a.swizzleRed == b.swizzleRed && a.swizzleGreen == b.swizzleGreen &&
-           a.swizzleBlue == b.swizzleBlue && a.swizzleAlpha == b.swizzleAlpha &&
-           a.samplerState == b.samplerState && a.baseLevel == b.baseLevel &&
-           a.maxLevel == b.maxLevel && a.immutableFormat == b.immutableFormat &&
-           a.immutableLevels == b.immutableLevels && a.usage == b.usage;
+    return a.mSwizzleRed == b.mSwizzleRed && a.mSwizzleGreen == b.mSwizzleGreen &&
+           a.mSwizzleBlue == b.mSwizzleBlue && a.mSwizzleAlpha == b.mSwizzleAlpha &&
+           a.mSamplerState == b.mSamplerState && a.mBaseLevel == b.mBaseLevel &&
+           a.mMaxLevel == b.mMaxLevel && a.mImmutableFormat == b.mImmutableFormat &&
+           a.mImmutableLevels == b.mImmutableLevels && a.mUsage == b.mUsage;
 }
 
 inline bool operator!=(const TextureState &a, const TextureState &b)

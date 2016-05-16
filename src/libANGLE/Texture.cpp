@@ -31,7 +31,7 @@ bool IsPointSampled(const gl::SamplerState &samplerState)
              samplerState.minFilter == GL_NEAREST_MIPMAP_NEAREST));
 }
 
-size_t GetImageDescIndex(GLenum target, size_t level)
+size_t getImageDescIndex(GLenum target, size_t level)
 {
     return IsCubeMapTextureTarget(target) ? ((level * 6) + CubeMapTextureTargetToLayerIndex(target))
                                           : level;
@@ -56,355 +56,100 @@ bool IsMipmapFiltered(const gl::SamplerState &samplerState)
 }
 
 TextureState::TextureState(GLenum target)
-    : target(target),
-      swizzleRed(GL_RED),
-      swizzleGreen(GL_GREEN),
-      swizzleBlue(GL_BLUE),
-      swizzleAlpha(GL_ALPHA),
-      samplerState(),
-      baseLevel(0),
-      maxLevel(1000),
-      immutableFormat(false),
-      immutableLevels(0),
-      usage(GL_NONE)
+    : mTarget(target),
+      mSwizzleRed(GL_RED),
+      mSwizzleGreen(GL_GREEN),
+      mSwizzleBlue(GL_BLUE),
+      mSwizzleAlpha(GL_ALPHA),
+      mSamplerState(),
+      mBaseLevel(0),
+      mMaxLevel(1000),
+      mImmutableFormat(false),
+      mImmutableLevels(0),
+      mUsage(GL_NONE),
+      mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) *
+                  (target == GL_TEXTURE_CUBE_MAP ? 6 : 1)),
+      mCompletenessCache()
 {
 }
 
 bool TextureState::swizzleRequired() const
 {
-    return swizzleRed != GL_RED || swizzleGreen != GL_GREEN || swizzleBlue != GL_BLUE ||
-           swizzleAlpha != GL_ALPHA;
+    return mSwizzleRed != GL_RED || mSwizzleGreen != GL_GREEN || mSwizzleBlue != GL_BLUE ||
+           mSwizzleAlpha != GL_ALPHA;
 }
 
 GLuint TextureState::getEffectiveBaseLevel() const
 {
-    if (immutableFormat)
+    if (mImmutableFormat)
     {
         // GLES 3.0.4 section 3.8.10
-        return std::min(baseLevel, immutableLevels - 1);
+        return std::min(mBaseLevel, mImmutableLevels - 1);
     }
     // Some classes use the effective base level to index arrays with level data. By clamping the
     // effective base level to max levels these arrays need just one extra item to store properties
     // that should be returned for all out-of-range base level values, instead of needing special
     // handling for out-of-range base levels.
-    return std::min(baseLevel, static_cast<GLuint>(gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS));
+    return std::min(mBaseLevel, static_cast<GLuint>(gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS));
 }
 
 GLuint TextureState::getEffectiveMaxLevel() const
 {
-    if (immutableFormat)
+    if (mImmutableFormat)
     {
         // GLES 3.0.4 section 3.8.10
-        GLuint clampedMaxLevel = std::max(maxLevel, getEffectiveBaseLevel());
-        clampedMaxLevel        = std::min(clampedMaxLevel, immutableLevels - 1);
+        GLuint clampedMaxLevel = std::max(mMaxLevel, getEffectiveBaseLevel());
+        clampedMaxLevel        = std::min(clampedMaxLevel, mImmutableLevels - 1);
         return clampedMaxLevel;
     }
-    return maxLevel;
+    return mMaxLevel;
 }
 
-Texture::Texture(rx::GLImplFactory *factory, GLuint id, GLenum target)
-    : egl::ImageSibling(id),
-      mState(target),
-      mTexture(factory->createTexture(mState)),
-      mLabel(),
-      mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) *
-                  (target == GL_TEXTURE_CUBE_MAP ? 6 : 1)),
-      mCompletenessCache(),
-      mBoundSurface(nullptr),
-      mBoundStream(nullptr)
+size_t TextureState::getMipmapMaxLevel() const
 {
-}
-
-Texture::~Texture()
-{
-    if (mBoundSurface)
+    const TextureState::ImageDesc &baseImageDesc =
+        getImageDesc(getBaseImageTarget(), getEffectiveBaseLevel());
+    size_t expectedMipLevels = 0;
+    if (mTarget == GL_TEXTURE_3D)
     {
-        mBoundSurface->releaseTexImage(EGL_BACK_BUFFER);
-        mBoundSurface = nullptr;
+        const int maxDim = std::max(std::max(baseImageDesc.size.width, baseImageDesc.size.height),
+                                    baseImageDesc.size.depth);
+        expectedMipLevels = log2(maxDim);
     }
-    if (mBoundStream)
+    else
     {
-        mBoundStream->releaseTextures();
-        mBoundStream = nullptr;
+        expectedMipLevels = log2(std::max(baseImageDesc.size.width, baseImageDesc.size.height));
     }
-    SafeDelete(mTexture);
+
+    return std::min<size_t>(getEffectiveBaseLevel() + expectedMipLevels, getEffectiveMaxLevel());
 }
 
-void Texture::setLabel(const std::string &label)
+bool TextureState::setBaseLevel(GLuint baseLevel)
 {
-    mLabel = label;
-}
-
-const std::string &Texture::getLabel() const
-{
-    return mLabel;
-}
-
-GLenum Texture::getTarget() const
-{
-    return mState.target;
-}
-
-void Texture::setSwizzleRed(GLenum swizzleRed)
-{
-    mState.swizzleRed = swizzleRed;
-}
-
-GLenum Texture::getSwizzleRed() const
-{
-    return mState.swizzleRed;
-}
-
-void Texture::setSwizzleGreen(GLenum swizzleGreen)
-{
-    mState.swizzleGreen = swizzleGreen;
-}
-
-GLenum Texture::getSwizzleGreen() const
-{
-    return mState.swizzleGreen;
-}
-
-void Texture::setSwizzleBlue(GLenum swizzleBlue)
-{
-    mState.swizzleBlue = swizzleBlue;
-}
-
-GLenum Texture::getSwizzleBlue() const
-{
-    return mState.swizzleBlue;
-}
-
-void Texture::setSwizzleAlpha(GLenum swizzleAlpha)
-{
-    mState.swizzleAlpha = swizzleAlpha;
-}
-
-GLenum Texture::getSwizzleAlpha() const
-{
-    return mState.swizzleAlpha;
-}
-
-void Texture::setMinFilter(GLenum minFilter)
-{
-    mState.samplerState.minFilter = minFilter;
-}
-
-GLenum Texture::getMinFilter() const
-{
-    return mState.samplerState.minFilter;
-}
-
-void Texture::setMagFilter(GLenum magFilter)
-{
-    mState.samplerState.magFilter = magFilter;
-}
-
-GLenum Texture::getMagFilter() const
-{
-    return mState.samplerState.magFilter;
-}
-
-void Texture::setWrapS(GLenum wrapS)
-{
-    mState.samplerState.wrapS = wrapS;
-}
-
-GLenum Texture::getWrapS() const
-{
-    return mState.samplerState.wrapS;
-}
-
-void Texture::setWrapT(GLenum wrapT)
-{
-    mState.samplerState.wrapT = wrapT;
-}
-
-GLenum Texture::getWrapT() const
-{
-    return mState.samplerState.wrapT;
-}
-
-void Texture::setWrapR(GLenum wrapR)
-{
-    mState.samplerState.wrapR = wrapR;
-}
-
-GLenum Texture::getWrapR() const
-{
-    return mState.samplerState.wrapR;
-}
-
-void Texture::setMaxAnisotropy(float maxAnisotropy)
-{
-    mState.samplerState.maxAnisotropy = maxAnisotropy;
-}
-
-float Texture::getMaxAnisotropy() const
-{
-    return mState.samplerState.maxAnisotropy;
-}
-
-void Texture::setMinLod(GLfloat minLod)
-{
-    mState.samplerState.minLod = minLod;
-}
-
-GLfloat Texture::getMinLod() const
-{
-    return mState.samplerState.minLod;
-}
-
-void Texture::setMaxLod(GLfloat maxLod)
-{
-    mState.samplerState.maxLod = maxLod;
-}
-
-GLfloat Texture::getMaxLod() const
-{
-    return mState.samplerState.maxLod;
-}
-
-void Texture::setCompareMode(GLenum compareMode)
-{
-    mState.samplerState.compareMode = compareMode;
-}
-
-GLenum Texture::getCompareMode() const
-{
-    return mState.samplerState.compareMode;
-}
-
-void Texture::setCompareFunc(GLenum compareFunc)
-{
-    mState.samplerState.compareFunc = compareFunc;
-}
-
-GLenum Texture::getCompareFunc() const
-{
-    return mState.samplerState.compareFunc;
-}
-
-const SamplerState &Texture::getSamplerState() const
-{
-    return mState.samplerState;
-}
-
-void Texture::setBaseLevel(GLuint baseLevel)
-{
-    if (mState.baseLevel != baseLevel)
+    if (mBaseLevel != baseLevel)
     {
-        mState.baseLevel              = baseLevel;
+        mBaseLevel                    = baseLevel;
         mCompletenessCache.cacheValid = false;
-        mTexture->setBaseLevel(mState.getEffectiveBaseLevel());
+        return true;
     }
+    return false;
 }
 
-GLuint Texture::getBaseLevel() const
+void TextureState::setMaxLevel(GLuint maxLevel)
 {
-    return mState.baseLevel;
-}
-
-void Texture::setMaxLevel(GLuint maxLevel)
-{
-    if (mState.maxLevel != maxLevel)
+    if (mMaxLevel != maxLevel)
     {
-        mState.maxLevel               = maxLevel;
+        mMaxLevel                     = maxLevel;
         mCompletenessCache.cacheValid = false;
     }
-}
-
-GLuint Texture::getMaxLevel() const
-{
-    return mState.maxLevel;
-}
-
-bool Texture::getImmutableFormat() const
-{
-    return mState.immutableFormat;
-}
-
-GLuint Texture::getImmutableLevels() const
-{
-    return mState.immutableLevels;
-}
-
-void Texture::setUsage(GLenum usage)
-{
-    mState.usage = usage;
-    getImplementation()->setUsage(usage);
-}
-
-GLenum Texture::getUsage() const
-{
-    return mState.usage;
-}
-
-const TextureState &Texture::getTextureState() const
-{
-    return mState;
-}
-
-size_t Texture::getWidth(GLenum target, size_t level) const
-{
-    ASSERT(target == mState.target ||
-           (mState.target == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-    return getImageDesc(target, level).size.width;
-}
-
-size_t Texture::getHeight(GLenum target, size_t level) const
-{
-    ASSERT(target == mState.target ||
-           (mState.target == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-    return getImageDesc(target, level).size.height;
-}
-
-size_t Texture::getDepth(GLenum target, size_t level) const
-{
-    ASSERT(target == mState.target ||
-           (mState.target == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-    return getImageDesc(target, level).size.depth;
-}
-
-GLenum Texture::getInternalFormat(GLenum target, size_t level) const
-{
-    ASSERT(target == mState.target ||
-           (mState.target == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-    return getImageDesc(target, level).internalFormat;
-}
-
-bool Texture::isSamplerComplete(const SamplerState &samplerState, const ContextState &data) const
-{
-    const ImageDesc &baseImageDesc =
-        getImageDesc(getBaseImageTarget(), mState.getEffectiveBaseLevel());
-    const TextureCaps &textureCaps = data.textureCaps->get(baseImageDesc.internalFormat);
-    if (!mCompletenessCache.cacheValid ||
-        mCompletenessCache.samplerState != samplerState ||
-        mCompletenessCache.filterable != textureCaps.filterable ||
-        mCompletenessCache.clientVersion != data.clientVersion ||
-        mCompletenessCache.supportsNPOT != data.extensions->textureNPOT)
-    {
-        mCompletenessCache.cacheValid = true;
-        mCompletenessCache.samplerState = samplerState;
-        mCompletenessCache.filterable = textureCaps.filterable;
-        mCompletenessCache.clientVersion = data.clientVersion;
-        mCompletenessCache.supportsNPOT = data.extensions->textureNPOT;
-        mCompletenessCache.samplerComplete = computeSamplerCompleteness(samplerState, data);
-    }
-    return mCompletenessCache.samplerComplete;
-}
-
-bool Texture::isMipmapComplete() const
-{
-    return computeMipmapCompleteness();
 }
 
 // Tests for cube texture completeness. [OpenGL ES 2.0.24] section 3.7.10 page 81.
-bool Texture::isCubeComplete() const
+bool TextureState::isCubeComplete() const
 {
-    ASSERT(mState.target == GL_TEXTURE_CUBE_MAP);
+    ASSERT(mTarget == GL_TEXTURE_CUBE_MAP);
 
-    const ImageDesc &baseImageDesc = getImageDesc(FirstCubeMapTextureTarget, 0);
+    const TextureState::ImageDesc &baseImageDesc = getImageDesc(FirstCubeMapTextureTarget, 0);
     if (baseImageDesc.size.width == 0 || baseImageDesc.size.width != baseImageDesc.size.height)
     {
         return false;
@@ -412,7 +157,7 @@ bool Texture::isCubeComplete() const
 
     for (GLenum face = FirstCubeMapTextureTarget + 1; face <= LastCubeMapTextureTarget; face++)
     {
-        const ImageDesc &faceImageDesc = getImageDesc(face, 0);
+        const TextureState::ImageDesc &faceImageDesc = getImageDesc(face, 0);
         if (faceImageDesc.size.width != baseImageDesc.size.width ||
             faceImageDesc.size.height != baseImageDesc.size.height ||
             faceImageDesc.internalFormat != baseImageDesc.internalFormat)
@@ -424,386 +169,46 @@ bool Texture::isCubeComplete() const
     return true;
 }
 
-size_t Texture::getMipCompleteLevels() const
+bool TextureState::isSamplerComplete(const SamplerState &samplerState,
+                                     const ContextState &data) const
 {
-    const ImageDesc &baseImageDesc = getImageDesc(getBaseImageTarget(), 0);
-    if (mState.target == GL_TEXTURE_3D)
+    const TextureState::ImageDesc &baseImageDesc =
+        getImageDesc(getBaseImageTarget(), getEffectiveBaseLevel());
+    const TextureCaps &textureCaps = data.textureCaps->get(baseImageDesc.internalFormat);
+    if (!mCompletenessCache.cacheValid || mCompletenessCache.samplerState != samplerState ||
+        mCompletenessCache.filterable != textureCaps.filterable ||
+        mCompletenessCache.clientVersion != data.clientVersion ||
+        mCompletenessCache.supportsNPOT != data.extensions->textureNPOT)
     {
-        const int maxDim = std::max(std::max(baseImageDesc.size.width, baseImageDesc.size.height),
-                                    baseImageDesc.size.depth);
-        return log2(maxDim) + 1;
+        mCompletenessCache.cacheValid      = true;
+        mCompletenessCache.samplerState    = samplerState;
+        mCompletenessCache.filterable      = textureCaps.filterable;
+        mCompletenessCache.clientVersion   = data.clientVersion;
+        mCompletenessCache.supportsNPOT    = data.extensions->textureNPOT;
+        mCompletenessCache.samplerComplete = computeSamplerCompleteness(samplerState, data);
     }
-    else
-    {
-        return log2(std::max(baseImageDesc.size.width, baseImageDesc.size.height)) + 1;
-    }
+    return mCompletenessCache.samplerComplete;
 }
 
-egl::Surface *Texture::getBoundSurface() const
+bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
+                                              const ContextState &data) const
 {
-    return mBoundSurface;
-}
-
-egl::Stream *Texture::getBoundStream() const
-{
-    return mBoundStream;
-}
-
-Error Texture::setImage(const PixelUnpackState &unpackState,
-                        GLenum target,
-                        size_t level,
-                        GLenum internalFormat,
-                        const Extents &size,
-                        GLenum format,
-                        GLenum type,
-                        const uint8_t *pixels)
-{
-    ASSERT(target == mState.target ||
-           (mState.target == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-
-    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    releaseTexImageInternal();
-    orphanImages();
-
-    Error error =
-        mTexture->setImage(target, level, internalFormat, size, format, type, unpackState, pixels);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    setImageDesc(target, level, ImageDesc(size, GetSizedInternalFormat(internalFormat, type)));
-
-    return Error(GL_NO_ERROR);
-}
-
-Error Texture::setSubImage(const PixelUnpackState &unpackState,
-                           GLenum target,
-                           size_t level,
-                           const Box &area,
-                           GLenum format,
-                           GLenum type,
-                           const uint8_t *pixels)
-{
-    ASSERT(target == mState.target ||
-           (mState.target == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-    return mTexture->setSubImage(target, level, area, format, type, unpackState, pixels);
-}
-
-Error Texture::setCompressedImage(const PixelUnpackState &unpackState,
-                                  GLenum target,
-                                  size_t level,
-                                  GLenum internalFormat,
-                                  const Extents &size,
-                                  size_t imageSize,
-                                  const uint8_t *pixels)
-{
-    ASSERT(target == mState.target ||
-           (mState.target == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-
-    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    releaseTexImageInternal();
-    orphanImages();
-
-    Error error = mTexture->setCompressedImage(target, level, internalFormat, size, unpackState,
-                                               imageSize, pixels);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    setImageDesc(target, level, ImageDesc(size, GetSizedInternalFormat(internalFormat, GL_UNSIGNED_BYTE)));
-
-    return Error(GL_NO_ERROR);
-}
-
-Error Texture::setCompressedSubImage(const PixelUnpackState &unpackState,
-                                     GLenum target,
-                                     size_t level,
-                                     const Box &area,
-                                     GLenum format,
-                                     size_t imageSize,
-                                     const uint8_t *pixels)
-{
-    ASSERT(target == mState.target ||
-           (mState.target == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-
-    return mTexture->setCompressedSubImage(target, level, area, format, unpackState, imageSize,
-                                           pixels);
-}
-
-Error Texture::copyImage(GLenum target, size_t level, const Rectangle &sourceArea, GLenum internalFormat,
-                         const Framebuffer *source)
-{
-    ASSERT(target == mState.target ||
-           (mState.target == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-
-    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    releaseTexImageInternal();
-    orphanImages();
-
-    Error error = mTexture->copyImage(target, level, sourceArea, internalFormat, source);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    setImageDesc(target, level, ImageDesc(Extents(sourceArea.width, sourceArea.height, 1),
-                                          GetSizedInternalFormat(internalFormat, GL_UNSIGNED_BYTE)));
-
-    return Error(GL_NO_ERROR);
-}
-
-Error Texture::copySubImage(GLenum target, size_t level, const Offset &destOffset, const Rectangle &sourceArea,
-                            const Framebuffer *source)
-{
-    ASSERT(target == mState.target ||
-           (mState.target == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-
-    return mTexture->copySubImage(target, level, destOffset, sourceArea, source);
-}
-
-Error Texture::setStorage(GLenum target, size_t levels, GLenum internalFormat, const Extents &size)
-{
-    ASSERT(target == mState.target);
-
-    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    releaseTexImageInternal();
-    orphanImages();
-
-    Error error = mTexture->setStorage(target, levels, internalFormat, size);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    mState.immutableFormat = true;
-    mState.immutableLevels = static_cast<GLuint>(levels);
-    clearImageDescs();
-    setImageDescChain(levels, size, internalFormat);
-
-    return Error(GL_NO_ERROR);
-}
-
-Error Texture::generateMipmaps()
-{
-    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    releaseTexImageInternal();
-
-    // EGL_KHR_gl_image states that images are only orphaned when generating mipmaps if the texture
-    // is not mip complete.
-    if (!isMipmapComplete())
-    {
-        orphanImages();
-    }
-
-    Error error = mTexture->generateMipmaps();
-    if (error.isError())
-    {
-        return error;
-    }
-
-    const ImageDesc &baseImageInfo = getImageDesc(getBaseImageTarget(), 0);
-    size_t mipLevels = log2(std::max(std::max(baseImageInfo.size.width, baseImageInfo.size.height), baseImageInfo.size.depth)) + 1;
-    setImageDescChain(mipLevels, baseImageInfo.size, baseImageInfo.internalFormat);
-
-    return Error(GL_NO_ERROR);
-}
-
-void Texture::setImageDescChain(size_t levels, Extents baseSize, GLenum sizedInternalFormat)
-{
-    for (int level = 0; level < static_cast<int>(levels); level++)
-    {
-        Extents levelSize(
-            std::max<int>(baseSize.width >> level, 1), std::max<int>(baseSize.height >> level, 1),
-            (mState.target == GL_TEXTURE_2D_ARRAY) ? baseSize.depth
-                                                   : std::max<int>(baseSize.depth >> level, 1));
-        ImageDesc levelInfo(levelSize, sizedInternalFormat);
-
-        if (mState.target == GL_TEXTURE_CUBE_MAP)
-        {
-            for (GLenum face = FirstCubeMapTextureTarget; face <= LastCubeMapTextureTarget; face++)
-            {
-                setImageDesc(face, level, levelInfo);
-            }
-        }
-        else
-        {
-            setImageDesc(mState.target, level, levelInfo);
-        }
-    }
-}
-
-Texture::ImageDesc::ImageDesc()
-    : ImageDesc(Extents(0, 0, 0), GL_NONE)
-{
-}
-
-Texture::ImageDesc::ImageDesc(const Extents &size, GLenum internalFormat)
-    : size(size),
-      internalFormat(internalFormat)
-{
-}
-
-const Texture::ImageDesc &Texture::getImageDesc(GLenum target, size_t level) const
-{
-    size_t descIndex = GetImageDescIndex(target, level);
-    ASSERT(descIndex < mImageDescs.size());
-    return mImageDescs[descIndex];
-}
-
-void Texture::setImageDesc(GLenum target, size_t level, const ImageDesc &desc)
-{
-    size_t descIndex = GetImageDescIndex(target, level);
-    ASSERT(descIndex < mImageDescs.size());
-    mImageDescs[descIndex] = desc;
-    mCompletenessCache.cacheValid = false;
-}
-
-void Texture::clearImageDesc(GLenum target, size_t level)
-{
-    setImageDesc(target, level, ImageDesc());
-}
-
-void Texture::clearImageDescs()
-{
-    for (size_t descIndex = 0; descIndex < mImageDescs.size(); descIndex++)
-    {
-        mImageDescs[descIndex] = ImageDesc();
-    }
-    mCompletenessCache.cacheValid = false;
-}
-
-void Texture::bindTexImageFromSurface(egl::Surface *surface)
-{
-    ASSERT(surface);
-
-    if (mBoundSurface)
-    {
-        releaseTexImageFromSurface();
-    }
-
-    mTexture->bindTexImage(surface);
-    mBoundSurface = surface;
-
-    // Set the image info to the size and format of the surface
-    ASSERT(mState.target == GL_TEXTURE_2D);
-    Extents size(surface->getWidth(), surface->getHeight(), 1);
-    ImageDesc desc(size, surface->getConfig()->renderTargetFormat);
-    setImageDesc(mState.target, 0, desc);
-}
-
-void Texture::releaseTexImageFromSurface()
-{
-    ASSERT(mBoundSurface);
-    mBoundSurface = nullptr;
-    mTexture->releaseTexImage();
-
-    // Erase the image info for level 0
-    ASSERT(mState.target == GL_TEXTURE_2D);
-    clearImageDesc(mState.target, 0);
-}
-
-void Texture::bindStream(egl::Stream *stream)
-{
-    ASSERT(stream);
-
-    // It should not be possible to bind a texture already bound to another stream
-    ASSERT(mBoundStream == nullptr);
-
-    mBoundStream = stream;
-
-    ASSERT(mState.target == GL_TEXTURE_EXTERNAL_OES);
-}
-
-void Texture::releaseStream()
-{
-    ASSERT(mBoundStream);
-    mBoundStream = nullptr;
-}
-
-void Texture::acquireImageFromStream(const egl::Stream::GLTextureDescription &desc)
-{
-    ASSERT(mBoundStream != nullptr);
-    mTexture->setImageExternal(mState.target, mBoundStream, desc);
-
-    Extents size(desc.width, desc.height, 1);
-    setImageDesc(mState.target, 0, ImageDesc(size, desc.internalFormat));
-}
-
-void Texture::releaseImageFromStream()
-{
-    ASSERT(mBoundStream != nullptr);
-    mTexture->setImageExternal(mState.target, nullptr, egl::Stream::GLTextureDescription());
-
-    // Set to incomplete
-    clearImageDesc(mState.target, 0);
-}
-
-void Texture::releaseTexImageInternal()
-{
-    if (mBoundSurface)
-    {
-        // Notify the surface
-        mBoundSurface->releaseTexImageFromTexture();
-
-        // Then, call the same method as from the surface
-        releaseTexImageFromSurface();
-    }
-}
-
-Error Texture::setEGLImageTarget(GLenum target, egl::Image *imageTarget)
-{
-    ASSERT(target == mState.target);
-    ASSERT(target == GL_TEXTURE_2D);
-
-    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    releaseTexImageInternal();
-    orphanImages();
-
-    Error error = mTexture->setEGLImageTarget(target, imageTarget);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    setTargetImage(imageTarget);
-
-    Extents size(static_cast<int>(imageTarget->getWidth()),
-                 static_cast<int>(imageTarget->getHeight()), 1);
-    GLenum internalFormat = imageTarget->getInternalFormat();
-    GLenum type           = GetInternalFormatInfo(internalFormat).type;
-
-    clearImageDescs();
-    setImageDesc(target, 0, ImageDesc(size, GetSizedInternalFormat(internalFormat, type)));
-
-    return Error(GL_NO_ERROR);
-}
-
-GLenum Texture::getBaseImageTarget() const
-{
-    return mState.target == GL_TEXTURE_CUBE_MAP ? FirstCubeMapTextureTarget : mState.target;
-}
-
-bool Texture::computeSamplerCompleteness(const SamplerState &samplerState,
-                                         const ContextState &data) const
-{
-    if (mState.baseLevel > mState.maxLevel)
+    if (mBaseLevel > mMaxLevel)
     {
         return false;
     }
-    const ImageDesc &baseImageDesc =
-        getImageDesc(getBaseImageTarget(), mState.getEffectiveBaseLevel());
-    if (baseImageDesc.size.width == 0 || baseImageDesc.size.height == 0 || baseImageDesc.size.depth == 0)
+    const TextureState::ImageDesc &baseImageDesc =
+        getImageDesc(getBaseImageTarget(), getEffectiveBaseLevel());
+    if (baseImageDesc.size.width == 0 || baseImageDesc.size.height == 0 ||
+        baseImageDesc.size.depth == 0)
     {
         return false;
     }
     // The cases where the texture is incomplete because base level is out of range should be
     // handled by the above condition.
-    ASSERT(mState.baseLevel < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS || mState.immutableFormat);
+    ASSERT(mBaseLevel < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS || mImmutableFormat);
 
-    if (mState.target == GL_TEXTURE_CUBE_MAP &&
-        baseImageDesc.size.width != baseImageDesc.size.height)
+    if (mTarget == GL_TEXTURE_CUBE_MAP && baseImageDesc.size.width != baseImageDesc.size.height)
     {
         return false;
     }
@@ -841,7 +246,7 @@ bool Texture::computeSamplerCompleteness(const SamplerState &samplerState,
     }
     else
     {
-        if (mState.target == GL_TEXTURE_CUBE_MAP && !isCubeComplete())
+        if (mTarget == GL_TEXTURE_CUBE_MAP && !isCubeComplete())
         {
             return false;
         }
@@ -857,7 +262,8 @@ bool Texture::computeSamplerCompleteness(const SamplerState &samplerState,
     {
         if (samplerState.compareMode == GL_NONE)
         {
-            if ((samplerState.minFilter != GL_NEAREST && samplerState.minFilter != GL_NEAREST_MIPMAP_NEAREST) ||
+            if ((samplerState.minFilter != GL_NEAREST &&
+                 samplerState.minFilter != GL_NEAREST_MIPMAP_NEAREST) ||
                 samplerState.magFilter != GL_NEAREST)
             {
                 return false;
@@ -868,15 +274,13 @@ bool Texture::computeSamplerCompleteness(const SamplerState &samplerState,
     return true;
 }
 
-bool Texture::computeMipmapCompleteness() const
+bool TextureState::computeMipmapCompleteness() const
 {
-    size_t expectedMipLevels = getMipCompleteLevels();
+    const size_t maxLevel = getMipmapMaxLevel();
 
-    size_t maxLevel = std::min<size_t>(expectedMipLevels, mState.maxLevel + 1);
-
-    for (size_t level = mState.getEffectiveBaseLevel(); level < maxLevel; level++)
+    for (size_t level = getEffectiveBaseLevel(); level <= maxLevel; level++)
     {
-        if (mState.target == GL_TEXTURE_CUBE_MAP)
+        if (mTarget == GL_TEXTURE_CUBE_MAP)
         {
             for (GLenum face = FirstCubeMapTextureTarget; face <= LastCubeMapTextureTarget; face++)
             {
@@ -888,7 +292,7 @@ bool Texture::computeMipmapCompleteness() const
         }
         else
         {
-            if (!computeLevelCompleteness(mState.target, level))
+            if (!computeLevelCompleteness(mTarget, level))
             {
                 return false;
             }
@@ -898,23 +302,24 @@ bool Texture::computeMipmapCompleteness() const
     return true;
 }
 
-bool Texture::computeLevelCompleteness(GLenum target, size_t level) const
+bool TextureState::computeLevelCompleteness(GLenum target, size_t level) const
 {
     ASSERT(level < IMPLEMENTATION_MAX_TEXTURE_LEVELS);
 
-    if (mState.immutableFormat)
+    if (mImmutableFormat)
     {
         return true;
     }
 
-    const ImageDesc &baseImageDesc =
-        getImageDesc(getBaseImageTarget(), mState.getEffectiveBaseLevel());
-    if (baseImageDesc.size.width == 0 || baseImageDesc.size.height == 0 || baseImageDesc.size.depth == 0)
+    const TextureState::ImageDesc &baseImageDesc =
+        getImageDesc(getBaseImageTarget(), getEffectiveBaseLevel());
+    if (baseImageDesc.size.width == 0 || baseImageDesc.size.height == 0 ||
+        baseImageDesc.size.depth == 0)
     {
         return false;
     }
 
-    const ImageDesc &levelImageDesc = getImageDesc(target, level);
+    const TextureState::ImageDesc &levelImageDesc = getImageDesc(target, level);
     if (levelImageDesc.size.width == 0 || levelImageDesc.size.height == 0 ||
         levelImageDesc.size.depth == 0)
     {
@@ -926,8 +331,8 @@ bool Texture::computeLevelCompleteness(GLenum target, size_t level) const
         return false;
     }
 
-    ASSERT(level >= mState.getEffectiveBaseLevel());
-    const size_t relativeLevel = level - mState.getEffectiveBaseLevel();
+    ASSERT(level >= getEffectiveBaseLevel());
+    const size_t relativeLevel = level - getEffectiveBaseLevel();
     if (levelImageDesc.size.width != std::max(1, baseImageDesc.size.width >> relativeLevel))
     {
         return false;
@@ -938,14 +343,14 @@ bool Texture::computeLevelCompleteness(GLenum target, size_t level) const
         return false;
     }
 
-    if (mState.target == GL_TEXTURE_3D)
+    if (mTarget == GL_TEXTURE_3D)
     {
         if (levelImageDesc.size.depth != std::max(1, baseImageDesc.size.depth >> relativeLevel))
         {
             return false;
         }
     }
-    else if (mState.target == GL_TEXTURE_2D_ARRAY)
+    else if (mTarget == GL_TEXTURE_2D_ARRAY)
     {
         if (levelImageDesc.size.depth != baseImageDesc.size.depth)
         {
@@ -956,7 +361,74 @@ bool Texture::computeLevelCompleteness(GLenum target, size_t level) const
     return true;
 }
 
-Texture::SamplerCompletenessCache::SamplerCompletenessCache()
+GLenum TextureState::getBaseImageTarget() const
+{
+    return mTarget == GL_TEXTURE_CUBE_MAP ? FirstCubeMapTextureTarget : mTarget;
+}
+
+TextureState::ImageDesc::ImageDesc() : ImageDesc(Extents(0, 0, 0), GL_NONE)
+{
+}
+
+TextureState::ImageDesc::ImageDesc(const Extents &size, GLenum internalFormat)
+    : size(size), internalFormat(internalFormat)
+{
+}
+
+const TextureState::ImageDesc &TextureState::getImageDesc(GLenum target, size_t level) const
+{
+    size_t descIndex = getImageDescIndex(target, level);
+    ASSERT(descIndex < mImageDescs.size());
+    return mImageDescs[descIndex];
+}
+
+void TextureState::setImageDesc(GLenum target, size_t level, const TextureState::ImageDesc &desc)
+{
+    size_t descIndex = getImageDescIndex(target, level);
+    ASSERT(descIndex < mImageDescs.size());
+    mImageDescs[descIndex]        = desc;
+    mCompletenessCache.cacheValid = false;
+}
+
+void TextureState::setImageDescChain(size_t levels, Extents baseSize, GLenum sizedInternalFormat)
+{
+    for (int level = 0; level < static_cast<int>(levels); level++)
+    {
+        Extents levelSize(
+            std::max<int>(baseSize.width >> level, 1), std::max<int>(baseSize.height >> level, 1),
+            (mTarget == GL_TEXTURE_2D_ARRAY) ? baseSize.depth
+                                             : std::max<int>(baseSize.depth >> level, 1));
+        TextureState::ImageDesc levelInfo(levelSize, sizedInternalFormat);
+
+        if (mTarget == GL_TEXTURE_CUBE_MAP)
+        {
+            for (GLenum face = FirstCubeMapTextureTarget; face <= LastCubeMapTextureTarget; face++)
+            {
+                setImageDesc(face, level, levelInfo);
+            }
+        }
+        else
+        {
+            setImageDesc(mTarget, level, levelInfo);
+        }
+    }
+}
+
+void TextureState::clearImageDesc(GLenum target, size_t level)
+{
+    setImageDesc(target, level, TextureState::ImageDesc());
+}
+
+void TextureState::clearImageDescs()
+{
+    for (size_t descIndex = 0; descIndex < mImageDescs.size(); descIndex++)
+    {
+        mImageDescs[descIndex] = TextureState::ImageDesc();
+    }
+    mCompletenessCache.cacheValid = false;
+}
+
+TextureState::SamplerCompletenessCache::SamplerCompletenessCache()
     : cacheValid(false),
       samplerState(),
       filterable(false),
@@ -966,9 +438,559 @@ Texture::SamplerCompletenessCache::SamplerCompletenessCache()
 {
 }
 
+Texture::Texture(rx::GLImplFactory *factory, GLuint id, GLenum target)
+    : egl::ImageSibling(id),
+      mState(target),
+      mTexture(factory->createTexture(mState)),
+      mLabel(),
+      mBoundSurface(nullptr),
+      mBoundStream(nullptr)
+{
+}
+
+Texture::~Texture()
+{
+    if (mBoundSurface)
+    {
+        mBoundSurface->releaseTexImage(EGL_BACK_BUFFER);
+        mBoundSurface = nullptr;
+    }
+    if (mBoundStream)
+    {
+        mBoundStream->releaseTextures();
+        mBoundStream = nullptr;
+    }
+    SafeDelete(mTexture);
+}
+
+void Texture::setLabel(const std::string &label)
+{
+    mLabel = label;
+}
+
+const std::string &Texture::getLabel() const
+{
+    return mLabel;
+}
+
+GLenum Texture::getTarget() const
+{
+    return mState.mTarget;
+}
+
+void Texture::setSwizzleRed(GLenum swizzleRed)
+{
+    mState.mSwizzleRed = swizzleRed;
+}
+
+GLenum Texture::getSwizzleRed() const
+{
+    return mState.mSwizzleRed;
+}
+
+void Texture::setSwizzleGreen(GLenum swizzleGreen)
+{
+    mState.mSwizzleGreen = swizzleGreen;
+}
+
+GLenum Texture::getSwizzleGreen() const
+{
+    return mState.mSwizzleGreen;
+}
+
+void Texture::setSwizzleBlue(GLenum swizzleBlue)
+{
+    mState.mSwizzleBlue = swizzleBlue;
+}
+
+GLenum Texture::getSwizzleBlue() const
+{
+    return mState.mSwizzleBlue;
+}
+
+void Texture::setSwizzleAlpha(GLenum swizzleAlpha)
+{
+    mState.mSwizzleAlpha = swizzleAlpha;
+}
+
+GLenum Texture::getSwizzleAlpha() const
+{
+    return mState.mSwizzleAlpha;
+}
+
+void Texture::setMinFilter(GLenum minFilter)
+{
+    mState.mSamplerState.minFilter = minFilter;
+}
+
+GLenum Texture::getMinFilter() const
+{
+    return mState.mSamplerState.minFilter;
+}
+
+void Texture::setMagFilter(GLenum magFilter)
+{
+    mState.mSamplerState.magFilter = magFilter;
+}
+
+GLenum Texture::getMagFilter() const
+{
+    return mState.mSamplerState.magFilter;
+}
+
+void Texture::setWrapS(GLenum wrapS)
+{
+    mState.mSamplerState.wrapS = wrapS;
+}
+
+GLenum Texture::getWrapS() const
+{
+    return mState.mSamplerState.wrapS;
+}
+
+void Texture::setWrapT(GLenum wrapT)
+{
+    mState.mSamplerState.wrapT = wrapT;
+}
+
+GLenum Texture::getWrapT() const
+{
+    return mState.mSamplerState.wrapT;
+}
+
+void Texture::setWrapR(GLenum wrapR)
+{
+    mState.mSamplerState.wrapR = wrapR;
+}
+
+GLenum Texture::getWrapR() const
+{
+    return mState.mSamplerState.wrapR;
+}
+
+void Texture::setMaxAnisotropy(float maxAnisotropy)
+{
+    mState.mSamplerState.maxAnisotropy = maxAnisotropy;
+}
+
+float Texture::getMaxAnisotropy() const
+{
+    return mState.mSamplerState.maxAnisotropy;
+}
+
+void Texture::setMinLod(GLfloat minLod)
+{
+    mState.mSamplerState.minLod = minLod;
+}
+
+GLfloat Texture::getMinLod() const
+{
+    return mState.mSamplerState.minLod;
+}
+
+void Texture::setMaxLod(GLfloat maxLod)
+{
+    mState.mSamplerState.maxLod = maxLod;
+}
+
+GLfloat Texture::getMaxLod() const
+{
+    return mState.mSamplerState.maxLod;
+}
+
+void Texture::setCompareMode(GLenum compareMode)
+{
+    mState.mSamplerState.compareMode = compareMode;
+}
+
+GLenum Texture::getCompareMode() const
+{
+    return mState.mSamplerState.compareMode;
+}
+
+void Texture::setCompareFunc(GLenum compareFunc)
+{
+    mState.mSamplerState.compareFunc = compareFunc;
+}
+
+GLenum Texture::getCompareFunc() const
+{
+    return mState.mSamplerState.compareFunc;
+}
+
+const SamplerState &Texture::getSamplerState() const
+{
+    return mState.mSamplerState;
+}
+
+void Texture::setBaseLevel(GLuint baseLevel)
+{
+    if (mState.setBaseLevel(baseLevel))
+    {
+        mTexture->setBaseLevel(mState.getEffectiveBaseLevel());
+    }
+}
+
+GLuint Texture::getBaseLevel() const
+{
+    return mState.mBaseLevel;
+}
+
+void Texture::setMaxLevel(GLuint maxLevel)
+{
+    mState.setMaxLevel(maxLevel);
+}
+
+GLuint Texture::getMaxLevel() const
+{
+    return mState.mMaxLevel;
+}
+
+bool Texture::getImmutableFormat() const
+{
+    return mState.mImmutableFormat;
+}
+
+GLuint Texture::getImmutableLevels() const
+{
+    return mState.mImmutableLevels;
+}
+
+void Texture::setUsage(GLenum usage)
+{
+    mState.mUsage = usage;
+}
+
+GLenum Texture::getUsage() const
+{
+    return mState.mUsage;
+}
+
+const TextureState &Texture::getTextureState() const
+{
+    return mState;
+}
+
+size_t Texture::getWidth(GLenum target, size_t level) const
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    return mState.getImageDesc(target, level).size.width;
+}
+
+size_t Texture::getHeight(GLenum target, size_t level) const
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    return mState.getImageDesc(target, level).size.height;
+}
+
+size_t Texture::getDepth(GLenum target, size_t level) const
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    return mState.getImageDesc(target, level).size.depth;
+}
+
+GLenum Texture::getInternalFormat(GLenum target, size_t level) const
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    return mState.getImageDesc(target, level).internalFormat;
+}
+
+bool Texture::isMipmapComplete() const
+{
+    return mState.computeMipmapCompleteness();
+}
+
+egl::Surface *Texture::getBoundSurface() const
+{
+    return mBoundSurface;
+}
+
+egl::Stream *Texture::getBoundStream() const
+{
+    return mBoundStream;
+}
+
+Error Texture::setImage(const PixelUnpackState &unpackState,
+                        GLenum target,
+                        size_t level,
+                        GLenum internalFormat,
+                        const Extents &size,
+                        GLenum format,
+                        GLenum type,
+                        const uint8_t *pixels)
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    releaseTexImageInternal();
+    orphanImages();
+
+    Error error =
+        mTexture->setImage(target, level, internalFormat, size, format, type, unpackState, pixels);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mState.setImageDesc(
+        target, level, TextureState::ImageDesc(size, GetSizedInternalFormat(internalFormat, type)));
+
+    return Error(GL_NO_ERROR);
+}
+
+Error Texture::setSubImage(const PixelUnpackState &unpackState,
+                           GLenum target,
+                           size_t level,
+                           const Box &area,
+                           GLenum format,
+                           GLenum type,
+                           const uint8_t *pixels)
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    return mTexture->setSubImage(target, level, area, format, type, unpackState, pixels);
+}
+
+Error Texture::setCompressedImage(const PixelUnpackState &unpackState,
+                                  GLenum target,
+                                  size_t level,
+                                  GLenum internalFormat,
+                                  const Extents &size,
+                                  size_t imageSize,
+                                  const uint8_t *pixels)
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    releaseTexImageInternal();
+    orphanImages();
+
+    Error error = mTexture->setCompressedImage(target, level, internalFormat, size, unpackState,
+                                               imageSize, pixels);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mState.setImageDesc(
+        target, level,
+        TextureState::ImageDesc(size, GetSizedInternalFormat(internalFormat, GL_UNSIGNED_BYTE)));
+
+    return Error(GL_NO_ERROR);
+}
+
+Error Texture::setCompressedSubImage(const PixelUnpackState &unpackState,
+                                     GLenum target,
+                                     size_t level,
+                                     const Box &area,
+                                     GLenum format,
+                                     size_t imageSize,
+                                     const uint8_t *pixels)
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+
+    return mTexture->setCompressedSubImage(target, level, area, format, unpackState, imageSize,
+                                           pixels);
+}
+
+Error Texture::copyImage(GLenum target, size_t level, const Rectangle &sourceArea, GLenum internalFormat,
+                         const Framebuffer *source)
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    releaseTexImageInternal();
+    orphanImages();
+
+    Error error = mTexture->copyImage(target, level, sourceArea, internalFormat, source);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mState.setImageDesc(
+        target, level,
+        TextureState::ImageDesc(Extents(sourceArea.width, sourceArea.height, 1),
+                                GetSizedInternalFormat(internalFormat, GL_UNSIGNED_BYTE)));
+
+    return Error(GL_NO_ERROR);
+}
+
+Error Texture::copySubImage(GLenum target, size_t level, const Offset &destOffset, const Rectangle &sourceArea,
+                            const Framebuffer *source)
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+
+    return mTexture->copySubImage(target, level, destOffset, sourceArea, source);
+}
+
+Error Texture::setStorage(GLenum target, size_t levels, GLenum internalFormat, const Extents &size)
+{
+    ASSERT(target == mState.mTarget);
+
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    releaseTexImageInternal();
+    orphanImages();
+
+    Error error = mTexture->setStorage(target, levels, internalFormat, size);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    mState.mImmutableFormat = true;
+    mState.mImmutableLevels = static_cast<GLuint>(levels);
+    mState.clearImageDescs();
+    mState.setImageDescChain(levels, size, internalFormat);
+
+    return Error(GL_NO_ERROR);
+}
+
+Error Texture::generateMipmaps()
+{
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    releaseTexImageInternal();
+
+    // EGL_KHR_gl_image states that images are only orphaned when generating mipmaps if the texture
+    // is not mip complete.
+    if (!isMipmapComplete())
+    {
+        orphanImages();
+    }
+
+    Error error = mTexture->generateMipmaps();
+    if (error.isError())
+    {
+        return error;
+    }
+
+    const TextureState::ImageDesc &baseImageInfo =
+        mState.getImageDesc(mState.getBaseImageTarget(), 0);
+    size_t mipLevels = log2(std::max(std::max(baseImageInfo.size.width, baseImageInfo.size.height), baseImageInfo.size.depth)) + 1;
+    mState.setImageDescChain(mipLevels, baseImageInfo.size, baseImageInfo.internalFormat);
+
+    return Error(GL_NO_ERROR);
+}
+
+void Texture::bindTexImageFromSurface(egl::Surface *surface)
+{
+    ASSERT(surface);
+
+    if (mBoundSurface)
+    {
+        releaseTexImageFromSurface();
+    }
+
+    mTexture->bindTexImage(surface);
+    mBoundSurface = surface;
+
+    // Set the image info to the size and format of the surface
+    ASSERT(mState.mTarget == GL_TEXTURE_2D);
+    Extents size(surface->getWidth(), surface->getHeight(), 1);
+    TextureState::ImageDesc desc(size, surface->getConfig()->renderTargetFormat);
+    mState.setImageDesc(mState.mTarget, 0, desc);
+}
+
+void Texture::releaseTexImageFromSurface()
+{
+    ASSERT(mBoundSurface);
+    mBoundSurface = nullptr;
+    mTexture->releaseTexImage();
+
+    // Erase the image info for level 0
+    ASSERT(mState.mTarget == GL_TEXTURE_2D);
+    mState.clearImageDesc(mState.mTarget, 0);
+}
+
+void Texture::bindStream(egl::Stream *stream)
+{
+    ASSERT(stream);
+
+    // It should not be possible to bind a texture already bound to another stream
+    ASSERT(mBoundStream == nullptr);
+
+    mBoundStream = stream;
+
+    ASSERT(mState.mTarget == GL_TEXTURE_EXTERNAL_OES);
+}
+
+void Texture::releaseStream()
+{
+    ASSERT(mBoundStream);
+    mBoundStream = nullptr;
+}
+
+void Texture::acquireImageFromStream(const egl::Stream::GLTextureDescription &desc)
+{
+    ASSERT(mBoundStream != nullptr);
+    mTexture->setImageExternal(mState.mTarget, mBoundStream, desc);
+
+    Extents size(desc.width, desc.height, 1);
+    mState.setImageDesc(mState.mTarget, 0, TextureState::ImageDesc(size, desc.internalFormat));
+}
+
+void Texture::releaseImageFromStream()
+{
+    ASSERT(mBoundStream != nullptr);
+    mTexture->setImageExternal(mState.mTarget, nullptr, egl::Stream::GLTextureDescription());
+
+    // Set to incomplete
+    mState.clearImageDesc(mState.mTarget, 0);
+}
+
+void Texture::releaseTexImageInternal()
+{
+    if (mBoundSurface)
+    {
+        // Notify the surface
+        mBoundSurface->releaseTexImageFromTexture();
+
+        // Then, call the same method as from the surface
+        releaseTexImageFromSurface();
+    }
+}
+
+Error Texture::setEGLImageTarget(GLenum target, egl::Image *imageTarget)
+{
+    ASSERT(target == mState.mTarget);
+    ASSERT(target == GL_TEXTURE_2D);
+
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    releaseTexImageInternal();
+    orphanImages();
+
+    Error error = mTexture->setEGLImageTarget(target, imageTarget);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    setTargetImage(imageTarget);
+
+    Extents size(static_cast<int>(imageTarget->getWidth()),
+                 static_cast<int>(imageTarget->getHeight()), 1);
+    GLenum internalFormat = imageTarget->getInternalFormat();
+    GLenum type           = GetInternalFormatInfo(internalFormat).type;
+
+    mState.clearImageDescs();
+    mState.setImageDesc(
+        target, 0, TextureState::ImageDesc(size, GetSizedInternalFormat(internalFormat, type)));
+
+    return Error(GL_NO_ERROR);
+}
+
 Extents Texture::getAttachmentSize(const gl::FramebufferAttachment::Target &target) const
 {
-    return getImageDesc(target.textureIndex().type, target.textureIndex().mipIndex).size;
+    return mState.getImageDesc(target.textureIndex().type, target.textureIndex().mipIndex).size;
 }
 
 GLenum Texture::getAttachmentInternalFormat(const gl::FramebufferAttachment::Target &target) const
