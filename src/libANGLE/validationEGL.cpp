@@ -862,8 +862,14 @@ Error ValidateCreateImageKHR(const Display *display,
                              "target 2D texture does not have a valid size at specified level.");
             }
 
-            if (level > 0 && (!texture->isMipmapComplete() ||
-                              static_cast<size_t>(level) >= texture->getMipCompleteLevels()))
+            // Note that the spec EGL_KHR_create_image spec does not explicitly specify an error
+            // when the level is outside the base/max level range, but it does mention that the
+            // level "must be a part of the complete texture object <buffer>". It can be argued
+            // that out-of-range levels are not a part of the complete texture.
+            const GLuint effectiveBaseLevel = texture->getTextureState().getEffectiveBaseLevel();
+            if (level > 0 &&
+                (!texture->isMipmapComplete() || static_cast<GLuint>(level) < effectiveBaseLevel ||
+                 static_cast<size_t>(level) > texture->getMipmapMaxLevel()))
             {
                 return Error(EGL_BAD_PARAMETER, "texture must be complete if level is non-zero.");
             }
@@ -918,8 +924,14 @@ Error ValidateCreateImageKHR(const Display *display,
                              "and face.");
             }
 
-            if (level > 0 && (!texture->isMipmapComplete() ||
-                              static_cast<size_t>(level) >= texture->getMipCompleteLevels()))
+            // Note that the spec EGL_KHR_create_image spec does not explicitly specify an error
+            // when the level is outside the base/max level range, but it does mention that the
+            // level "must be a part of the complete texture object <buffer>". It can be argued
+            // that out-of-range levels are not a part of the complete texture.
+            const GLuint effectiveBaseLevel = texture->getTextureState().getEffectiveBaseLevel();
+            if (level > 0 &&
+                (!texture->isMipmapComplete() || static_cast<GLuint>(level) < effectiveBaseLevel ||
+                 static_cast<size_t>(level) > texture->getMipmapMaxLevel()))
             {
                 return Error(EGL_BAD_PARAMETER, "texture must be complete if level is non-zero.");
             }
@@ -985,8 +997,14 @@ Error ValidateCreateImageKHR(const Display *display,
                              "offset at the specified level.");
             }
 
-            if (level > 0 && (!texture->isMipmapComplete() ||
-                              static_cast<size_t>(level) >= texture->getMipCompleteLevels()))
+            // Note that the spec EGL_KHR_create_image spec does not explicitly specify an error
+            // when the level is outside the base/max level range, but it does mention that the
+            // level "must be a part of the complete texture object <buffer>". It can be argued
+            // that out-of-range levels are not a part of the complete texture.
+            const GLuint effectiveBaseLevel = texture->getTextureState().getEffectiveBaseLevel();
+            if (level > 0 &&
+                (!texture->isMipmapComplete() || static_cast<GLuint>(level) < effectiveBaseLevel ||
+                 static_cast<size_t>(level) > texture->getMipmapMaxLevel()))
             {
                 return Error(EGL_BAD_PARAMETER, "texture must be complete if level is non-zero.");
             }

@@ -424,19 +424,24 @@ bool Texture::isCubeComplete() const
     return true;
 }
 
-size_t Texture::getMipCompleteLevels() const
+size_t Texture::getMipmapMaxLevel() const
 {
-    const ImageDesc &baseImageDesc = getImageDesc(getBaseImageTarget(), 0);
+    const ImageDesc &baseImageDesc =
+        getImageDesc(getBaseImageTarget(), mState.getEffectiveBaseLevel());
+    size_t expectedMipLevels = 0;
     if (mState.target == GL_TEXTURE_3D)
     {
         const int maxDim = std::max(std::max(baseImageDesc.size.width, baseImageDesc.size.height),
                                     baseImageDesc.size.depth);
-        return log2(maxDim) + 1;
+        expectedMipLevels = log2(maxDim);
     }
     else
     {
-        return log2(std::max(baseImageDesc.size.width, baseImageDesc.size.height)) + 1;
+        expectedMipLevels = log2(std::max(baseImageDesc.size.width, baseImageDesc.size.height));
     }
+
+    return std::min<size_t>(mState.getEffectiveBaseLevel() + expectedMipLevels,
+                            mState.getEffectiveMaxLevel());
 }
 
 egl::Surface *Texture::getBoundSurface() const
@@ -870,11 +875,9 @@ bool Texture::computeSamplerCompleteness(const SamplerState &samplerState,
 
 bool Texture::computeMipmapCompleteness() const
 {
-    size_t expectedMipLevels = getMipCompleteLevels();
+    const size_t maxLevel = getMipmapMaxLevel();
 
-    size_t maxLevel = std::min<size_t>(expectedMipLevels, mState.maxLevel + 1);
-
-    for (size_t level = mState.getEffectiveBaseLevel(); level < maxLevel; level++)
+    for (size_t level = mState.getEffectiveBaseLevel(); level <= maxLevel; level++)
     {
         if (mState.target == GL_TEXTURE_CUBE_MAP)
         {

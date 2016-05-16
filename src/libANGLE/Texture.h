@@ -155,7 +155,9 @@ class Texture final : public egl::ImageSibling,
     bool isSamplerComplete(const SamplerState &samplerState, const ContextState &data) const;
     bool isMipmapComplete() const;
     bool isCubeComplete() const;
-    size_t getMipCompleteLevels() const;
+
+    // Returns the value called "q" in the GLES 3.0.4 spec section 3.8.10.
+    size_t getMipmapMaxLevel() const;
 
     Error setImage(const PixelUnpackState &unpackState,
                    GLenum target,
