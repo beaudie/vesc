@@ -3175,23 +3175,19 @@ void TextureD3D_2DArray::markAllImagesDirty()
 }
 
 TextureD3D_External::TextureD3D_External(const gl::TextureState &state, RendererD3D *renderer)
-    : TextureD3D(state, renderer)
+    : TextureD3D(state, renderer), mSize(0, 0, 0), mInternalFormat(GL_NONE)
 {
-    mImage = renderer->createImage();
 }
 
 TextureD3D_External::~TextureD3D_External()
 {
-    SafeDelete(mImage);
     SafeDelete(mTexStorage);
 }
 
 ImageD3D *TextureD3D_External::getImage(const gl::ImageIndex &index) const
 {
-    // External images only have one mipmap level
-    ASSERT(index.type == GL_TEXTURE_EXTERNAL_OES);
-    ASSERT(index.mipIndex == 0);
-    return mImage;
+    UNREACHABLE();
+    return nullptr;
 }
 
 GLsizei TextureD3D_External::getLayerCount(int level) const
@@ -3202,19 +3198,19 @@ GLsizei TextureD3D_External::getLayerCount(int level) const
 GLsizei TextureD3D_External::getWidth(GLint level) const
 {
     ASSERT(level == 0);
-    return mImage->getWidth();
+    return mSize.width;
 }
 
 GLsizei TextureD3D_External::getHeight(GLint level) const
 {
     ASSERT(level == 0);
-    return mImage->getHeight();
+    return mSize.height;
 }
 
 GLenum TextureD3D_External::getInternalFormat(GLint level) const
 {
     ASSERT(level == 0);
-    return mImage->getInternalFormat();
+    return mInternalFormat;
 }
 
 bool TextureD3D_External::isDepth(GLint level) const
@@ -3312,11 +3308,17 @@ gl::Error TextureD3D_External::setImageExternal(GLenum target,
     {
         SafeDelete(mTexStorage);
         mTexStorage = nullptr;
+
+        mSize           = gl::Extents(0, 0, 0);
+        mInternalFormat = GL_NONE;
     }
     else
     {
         SafeDelete(mTexStorage);
         mTexStorage = mRenderer->createTextureStorageExternal(stream, desc);
+
+        mSize           = gl::Extents(desc.width, desc.height, 1);
+        mInternalFormat = desc.internalFormat;
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -3334,8 +3336,16 @@ void TextureD3D_External::releaseTexImage()
 
 gl::Error TextureD3D_External::setEGLImageTarget(GLenum target, egl::Image *image)
 {
-    UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    EGLImageD3D *eglImaged3d = GetImplAs<EGLImageD3D>(image);
+
+    SafeDelete(mTexStorage);
+    mTexStorage = mRenderer->createTextureStorageEGLImage(eglImaged3d);
+
+    mSize =
+        gl::Extents(static_cast<int>(image->getWidth()), static_cast<int>(image->getHeight()), 1);
+    mInternalFormat = image->getInternalFormat();
+
+    return gl::Error(GL_NO_ERROR);
 }
 
 void TextureD3D_External::initMipmapsImages()
@@ -3396,14 +3406,6 @@ gl::Error TextureD3D_External::updateStorageLevel(int level)
 {
     UNREACHABLE();
     return gl::Error(GL_NO_ERROR);
-}
-
-void TextureD3D_External::redefineImage(size_t level,
-                                        GLenum internalformat,
-                                        const gl::Extents &size,
-                                        bool forceRelease)
-{
-    UNREACHABLE();
 }
 
 gl::ImageIndexIterator TextureD3D_External::imageIterator() const
