@@ -39,11 +39,15 @@ PrimitiveType GetPrimitiveType(GLenum drawMode)
     }
 }
 
-SamplerState::SamplerState()
-    : minFilter(GL_NEAREST_MIPMAP_LINEAR),
+SamplerState::SamplerState() : SamplerState(GL_TEXTURE_2D)
+{
+}
+
+SamplerState::SamplerState(GLenum target)
+    : minFilter((target == GL_TEXTURE_EXTERNAL_OES) ? GL_LINEAR : GL_NEAREST_MIPMAP_LINEAR),
       magFilter(GL_LINEAR),
-      wrapS(GL_REPEAT),
-      wrapT(GL_REPEAT),
+      wrapS((target == GL_TEXTURE_EXTERNAL_OES) ? GL_CLAMP_TO_EDGE : GL_REPEAT),
+      wrapT((target == GL_TEXTURE_EXTERNAL_OES) ? GL_CLAMP_TO_EDGE : GL_REPEAT),
       wrapR(GL_REPEAT),
       maxAnisotropy(1.0f),
       minLod(-1000.0f),
