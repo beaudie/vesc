@@ -1702,6 +1702,7 @@ gl::Error Renderer9::applyUniforms(const ProgramD3D &programD3D,
         {
             case GL_SAMPLER_2D:
             case GL_SAMPLER_CUBE:
+            case GL_SAMPLER_EXTERNAL_OES:
                 break;
             case GL_BOOL:
             case GL_BOOL_VEC2:
@@ -2757,6 +2758,8 @@ TextureImpl *Renderer9::createTexture(const gl::TextureState &state)
             return new TextureD3D_2D(state, this);
         case GL_TEXTURE_CUBE_MAP:
             return new TextureD3D_Cube(state, this);
+        case GL_TEXTURE_EXTERNAL_OES:
+            return new TextureD3D_External(state, this);
         default:
             UNREACHABLE();
     }
