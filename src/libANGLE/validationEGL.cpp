@@ -862,8 +862,12 @@ Error ValidateCreateImageKHR(const Display *display,
                              "target 2D texture does not have a valid size at specified level.");
             }
 
-            if (level > 0 && (!texture->isMipmapComplete() ||
-                              static_cast<size_t>(level) >= texture->getMipCompleteLevels()))
+            const GLuint effectiveBaseLevel = texture->getTextureState().getEffectiveBaseLevel();
+            // TODO: Consider failing if level is greater than max level
+            if (level > 0 &&
+                (!texture->isMipmapComplete() || static_cast<GLuint>(level) < effectiveBaseLevel ||
+                 static_cast<size_t>(level) >=
+                     effectiveBaseLevel + texture->getMipCompleteLevels()))
             {
                 return Error(EGL_BAD_PARAMETER, "texture must be complete if level is non-zero.");
             }
@@ -918,8 +922,11 @@ Error ValidateCreateImageKHR(const Display *display,
                              "and face.");
             }
 
-            if (level > 0 && (!texture->isMipmapComplete() ||
-                              static_cast<size_t>(level) >= texture->getMipCompleteLevels()))
+            const GLuint effectiveBaseLevel = texture->getTextureState().getEffectiveBaseLevel();
+            if (level > 0 &&
+                (!texture->isMipmapComplete() || static_cast<GLuint>(level) < effectiveBaseLevel ||
+                 static_cast<size_t>(level) >=
+                     effectiveBaseLevel + texture->getMipCompleteLevels()))
             {
                 return Error(EGL_BAD_PARAMETER, "texture must be complete if level is non-zero.");
             }
@@ -985,8 +992,11 @@ Error ValidateCreateImageKHR(const Display *display,
                              "offset at the specified level.");
             }
 
-            if (level > 0 && (!texture->isMipmapComplete() ||
-                              static_cast<size_t>(level) >= texture->getMipCompleteLevels()))
+            const GLuint effectiveBaseLevel = texture->getTextureState().getEffectiveBaseLevel();
+            if (level > 0 &&
+                (!texture->isMipmapComplete() || static_cast<GLuint>(level) < effectiveBaseLevel ||
+                 static_cast<size_t>(level) >=
+                     effectiveBaseLevel + texture->getMipCompleteLevels()))
             {
                 return Error(EGL_BAD_PARAMETER, "texture must be complete if level is non-zero.");
             }
