@@ -498,12 +498,8 @@ class TextureD3D_External : public TextureD3D
 
     gl::Error updateStorageLevel(int level);
 
-    void redefineImage(size_t level,
-                       GLenum internalformat,
-                       const gl::Extents &size,
-                       bool forceRelease);
-
-    ImageD3D *mImage;
+    gl::Extents mSize;
+    GLenum mInternalFormat;
 };
 }
 

@@ -490,6 +490,8 @@ void TCompiler::setResourceString()
               << ":MaxDrawBuffers:" << compileResources.MaxDrawBuffers
               << ":OES_standard_derivatives:" << compileResources.OES_standard_derivatives
               << ":OES_EGL_image_external:" << compileResources.OES_EGL_image_external
+              << ":OES_EGL_image_external_essl3:" << compileResources.OES_EGL_image_external_essl3
+              << ":NV_EGL_stream_consumer_external:" << compileResources.NV_EGL_stream_consumer_external
               << ":ARB_texture_rectangle:" << compileResources.ARB_texture_rectangle
               << ":EXT_draw_buffers:" << compileResources.EXT_draw_buffers
               << ":FragmentPrecisionHigh:" << compileResources.FragmentPrecisionHigh
