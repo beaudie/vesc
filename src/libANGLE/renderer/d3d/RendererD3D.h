@@ -133,7 +133,6 @@ class RendererD3D : public BufferFactoryD3D
                                           GLenum depthBufferFormat,
                                           EGLint orientation) = 0;
 
-    virtual gl::Error generateSwizzle(gl::Texture *texture) = 0;
     virtual gl::Error setSamplerState(gl::SamplerType type, int index, gl::Texture *texture, const gl::SamplerState &sampler) = 0;
     virtual gl::Error setTexture(gl::SamplerType type, int index, gl::Texture *texture) = 0;
 
@@ -145,8 +144,6 @@ class RendererD3D : public BufferFactoryD3D
                                     GLenum drawMode,
                                     const std::vector<D3DUniform *> &uniformArray) = 0;
 
-    virtual unsigned int getReservedVertexUniformVectors() const = 0;
-    virtual unsigned int getReservedFragmentUniformVectors() const = 0;
     virtual unsigned int getReservedVertexUniformBuffers() const = 0;
     virtual unsigned int getReservedFragmentUniformBuffers() const = 0;
 
@@ -210,8 +207,6 @@ class RendererD3D : public BufferFactoryD3D
     virtual RendererClass getRendererClass() const = 0;
     virtual void *getD3DDevice() = 0;
 
-    gl::Error getScratchMemoryBuffer(size_t requestedSize, MemoryBuffer **bufferOut);
-
     // EXT_debug_marker
     void insertEventMarker(GLsizei length, const char *marker);
     void pushGroupMarker(GLsizei length, const char *marker);
@@ -244,7 +239,6 @@ class RendererD3D : public BufferFactoryD3D
 
   protected:
     virtual bool getLUID(LUID *adapterLuid) const = 0;
-    virtual gl::Error applyShadersImpl(const gl::ContextState &data, GLenum drawMode) = 0;
     virtual void generateCaps(gl::Caps *outCaps,
                               gl::TextureCapsMap *outTextureCaps,
                               gl::Extensions *outExtensions,
@@ -257,8 +251,6 @@ class RendererD3D : public BufferFactoryD3D
     static unsigned int GetBlendSampleMask(const gl::ContextState &data, int samples);
     // dirtyPointer is a special value that will make the comparison with any valid pointer fail and force the renderer to re-apply the state.
 
-    gl::Error generateSwizzles(const gl::ContextState &data);
-    gl::Error applyShaders(const gl::ContextState &data, GLenum drawMode);
     gl::Error applyTextures(GLImplFactory *implFactory, const gl::ContextState &data);
     bool skipDraw(const gl::ContextState &data, GLenum drawMode);
     gl::Error markTransformFeedbackUsage(const gl::ContextState &data);
@@ -274,24 +266,8 @@ class RendererD3D : public BufferFactoryD3D
   private:
     void ensureCapsInitialized() const;
 
-    virtual gl::Error drawArraysImpl(const gl::ContextState &data,
-                                     GLenum mode,
-                                     GLint startVertex,
-                                     GLsizei count,
-                                     GLsizei instances) = 0;
-    virtual gl::Error drawElementsImpl(const gl::ContextState &data,
-                                       const TranslatedIndexData &indexInfo,
-                                       GLenum mode,
-                                       GLsizei count,
-                                       GLenum type,
-                                       const GLvoid *indices,
-                                       GLsizei instances) = 0;
-
     typedef std::array<gl::Texture*, gl::IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS> FramebufferTextureArray;
 
-    gl::Error generateSwizzles(const gl::ContextState &data, gl::SamplerType type);
-
-    gl::Error applyState(const gl::ContextState &data, GLenum drawMode);
     gl::Error applyTextures(GLImplFactory *implFactory,
                             const gl::ContextState &data,
                             gl::SamplerType shaderType,
@@ -313,8 +289,6 @@ class RendererD3D : public BufferFactoryD3D
     mutable gl::Limitations mNativeLimitations;
 
     gl::TextureMap mIncompleteTextures;
-    MemoryBuffer mScratchMemoryBuffer;
-    unsigned int mScratchMemoryBufferResetCounter;
 
     mutable bool mWorkaroundsInitialized;
     mutable WorkaroundsD3D mWorkarounds;

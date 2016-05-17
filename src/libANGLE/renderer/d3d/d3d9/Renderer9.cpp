@@ -778,13 +778,6 @@ gl::Error Renderer9::fastCopyBufferToTexture(const gl::PixelUnpackState &unpack,
     return gl::Error(GL_INVALID_OPERATION);
 }
 
-gl::Error Renderer9::generateSwizzle(gl::Texture *texture)
-{
-    // Swizzled textures are not available in ES2 or D3D9
-    UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
-}
-
 gl::Error Renderer9::setSamplerState(gl::SamplerType type, int index, gl::Texture *texture, const gl::SamplerState &samplerState)
 {
     CurSamplerState &appliedSampler = (type == gl::SAMPLER_PIXEL) ? mCurPixelSamplerStates[index]
@@ -1590,25 +1583,17 @@ gl::Error Renderer9::getCountingIB(size_t count, StaticIndexBufferInterface **ou
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer9::applyShadersImpl(const gl::ContextState &data, GLenum /*drawMode*/)
+gl::Error Renderer9::applyShaders(const gl::ContextState &data, GLenum drawMode)
 {
     ProgramD3D *programD3D  = GetImplAs<ProgramD3D>(data.state->getProgram());
     const auto &inputLayout = programD3D->getCachedInputLayout();
 
     ShaderExecutableD3D *vertexExe = NULL;
-    gl::Error error = programD3D->getVertexExecutableForInputLayout(inputLayout, &vertexExe, nullptr);
-    if (error.isError())
-    {
-        return error;
-    }
+    ANGLE_TRY(programD3D->getVertexExecutableForInputLayout(inputLayout, &vertexExe, nullptr));
 
     const gl::Framebuffer *drawFramebuffer = data.state->getDrawFramebuffer();
     ShaderExecutableD3D *pixelExe = NULL;
-    error = programD3D->getPixelExecutableForFramebuffer(drawFramebuffer, &pixelExe);
-    if (error.isError())
-    {
-        return error;
-    }
+    ANGLE_TRY(programD3D->getPixelExecutableForFramebuffer(drawFramebuffer, &pixelExe));
 
     IDirect3DVertexShader9 *vertexShader = (vertexExe ? GetAs<ShaderExecutable9>(vertexExe)->getVertexShader() : nullptr);
     IDirect3DPixelShader9 *pixelShader = (pixelExe ? GetAs<ShaderExecutable9>(pixelExe)->getPixelShader() : nullptr);
@@ -1638,7 +1623,7 @@ gl::Error Renderer9::applyShadersImpl(const gl::ContextState &data, GLenum /*dra
         mAppliedProgramSerial = programSerial;
     }
 
-    return gl::Error(GL_NO_ERROR);
+    return gl::NoError();
 }
 
 gl::Error Renderer9::applyUniforms(const ProgramD3D &programD3D,
@@ -2822,8 +2807,6 @@ gl::Error Renderer9::genericDrawElements(Context9 *context,
 
     programD3D->updateSamplerMapping();
 
-    ANGLE_TRY(generateSwizzles(data));
-
     if (!applyPrimitiveType(mode, count, usesPointSize))
     {
         return gl::NoError();
@@ -2871,7 +2854,6 @@ gl::Error Renderer9::genericDrawArrays(Context9 *context,
 
     programD3D->updateSamplerMapping();
 
-    ANGLE_TRY(generateSwizzles(data));
     if (!applyPrimitiveType(mode, count, usesPointSize))
     {
         return gl::NoError();
