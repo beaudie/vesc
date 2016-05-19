@@ -29,22 +29,12 @@
 namespace rx
 {
 
-namespace
-{
-// If we request a scratch buffer requesting a smaller size this many times,
-// release and recreate the scratch buffer. This ensures we don't have a
-// degenerate case where we are stuck hogging memory.
-const int ScratchMemoryBufferLifetime = 1000;
-
-}  // anonymous namespace
-
 RendererD3D::RendererD3D(egl::Display *display)
     : mDisplay(display),
       mDeviceLost(false),
       mAnnotator(nullptr),
       mPresentPathFastEnabled(false),
       mCapsInitialized(false),
-      mScratchMemoryBufferResetCounter(0),
       mWorkaroundsInitialized(false),
       mDisjoint(false)
 {
@@ -57,7 +47,6 @@ RendererD3D::~RendererD3D()
 
 void RendererD3D::cleanup()
 {
-    mScratchMemoryBuffer.resize(0);
     for (auto &incompleteTexture : mIncompleteTextures)
     {
         incompleteTexture.second.set(nullptr);
@@ -69,37 +58,6 @@ void RendererD3D::cleanup()
         gl::UninitializeDebugAnnotations();
         SafeDelete(mAnnotator);
     }
-}
-
-gl::Error RendererD3D::generateSwizzles(const gl::ContextState &data, gl::SamplerType type)
-{
-    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(data.state->getProgram());
-
-    unsigned int samplerRange = programD3D->getUsedSamplerRange(type);
-
-    for (unsigned int i = 0; i < samplerRange; i++)
-    {
-        GLenum textureType = programD3D->getSamplerTextureType(type, i);
-        GLint textureUnit = programD3D->getSamplerMapping(type, i, *data.caps);
-        if (textureUnit != -1)
-        {
-            gl::Texture *texture = data.state->getSamplerTexture(textureUnit, textureType);
-            ASSERT(texture);
-            if (texture->getTextureState().swizzleRequired())
-            {
-                ANGLE_TRY(generateSwizzle(texture));
-            }
-        }
-    }
-
-    return gl::NoError();
-}
-
-gl::Error RendererD3D::generateSwizzles(const gl::ContextState &data)
-{
-    ANGLE_TRY(generateSwizzles(data, gl::SAMPLER_VERTEX));
-    ANGLE_TRY(generateSwizzles(data, gl::SAMPLER_PIXEL));
-    return gl::NoError();
 }
 
 unsigned int RendererD3D::GetBlendSampleMask(const gl::ContextState &data, int samples)
@@ -136,18 +94,6 @@ unsigned int RendererD3D::GetBlendSampleMask(const gl::ContextState &data, int s
     }
 
     return mask;
-}
-
-// Applies the shaders and shader constants to the Direct3D device
-gl::Error RendererD3D::applyShaders(const gl::ContextState &data, GLenum drawMode)
-{
-    gl::Program *program = data.state->getProgram();
-    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(program);
-    programD3D->updateCachedInputLayout(*data.state);
-
-    ANGLE_TRY(applyShadersImpl(data, drawMode));
-
-    return programD3D->applyUniforms(drawMode);
 }
 
 // For each Direct3D sampler of either the pixel or vertex stage,
@@ -356,36 +302,6 @@ std::string RendererD3D::getVendorString() const
     }
 
     return std::string("");
-}
-
-gl::Error RendererD3D::getScratchMemoryBuffer(size_t requestedSize, MemoryBuffer **bufferOut)
-{
-    if (mScratchMemoryBuffer.size() == requestedSize)
-    {
-        mScratchMemoryBufferResetCounter = ScratchMemoryBufferLifetime;
-        *bufferOut = &mScratchMemoryBuffer;
-        return gl::Error(GL_NO_ERROR);
-    }
-
-    if (mScratchMemoryBuffer.size() > requestedSize)
-    {
-        mScratchMemoryBufferResetCounter--;
-    }
-
-    if (mScratchMemoryBufferResetCounter <= 0 || mScratchMemoryBuffer.size() < requestedSize)
-    {
-        mScratchMemoryBuffer.resize(0);
-        if (!mScratchMemoryBuffer.resize(requestedSize))
-        {
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal buffer.");
-        }
-        mScratchMemoryBufferResetCounter = ScratchMemoryBufferLifetime;
-    }
-
-    ASSERT(mScratchMemoryBuffer.size() >= requestedSize);
-
-    *bufferOut = &mScratchMemoryBuffer;
-    return gl::Error(GL_NO_ERROR);
 }
 
 void RendererD3D::insertEventMarker(GLsizei length, const char *marker)

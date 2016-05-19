@@ -385,6 +385,11 @@ int GetWrapBits(GLenum wrap)
     }
 }
 
+// If we request a scratch buffer requesting a smaller size this many times,
+// release and recreate the scratch buffer. This ensures we don't have a
+// degenerate case where we are stuck hogging memory.
+const int ScratchMemoryBufferLifetime = 1000;
+
 }  // anonymous namespace
 
 Renderer11::Renderer11(egl::Display *display)
@@ -392,7 +397,8 @@ Renderer11::Renderer11(egl::Display *display)
       mStateCache(this),
       mStateManager(this),
       mLastHistogramUpdateTime(ANGLEPlatformCurrent()->monotonicallyIncreasingTime()),
-      mDebug(nullptr)
+      mDebug(nullptr),
+      mScratchMemoryBufferResetCounter(0)
 {
     mVertexDataManager = NULL;
     mIndexDataManager = NULL;
@@ -1178,6 +1184,37 @@ gl::Error Renderer11::generateSwizzle(gl::Texture *texture)
     return gl::Error(GL_NO_ERROR);
 }
 
+
+gl::Error Renderer11::generateSwizzles(const gl::ContextState &data, gl::SamplerType type)
+{
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(data.state->getProgram());
+
+    unsigned int samplerRange = programD3D->getUsedSamplerRange(type);
+
+    for (unsigned int i = 0; i < samplerRange; i++)
+    {
+        GLenum textureType = programD3D->getSamplerTextureType(type, i);
+        GLint textureUnit = programD3D->getSamplerMapping(type, i, *data.caps);
+        if (textureUnit != -1)
+        {
+            gl::Texture *texture = data.state->getSamplerTexture(textureUnit, textureType);
+            ASSERT(texture);
+            if (texture->getTextureState().swizzleRequired())
+            {
+                ANGLE_TRY(generateSwizzle(texture));
+            }
+        }
+    }
+
+    return gl::NoError();
+}
+
+gl::Error Renderer11::generateSwizzles(const gl::ContextState &data)
+{
+    ANGLE_TRY(generateSwizzles(data, gl::SAMPLER_VERTEX));
+    ANGLE_TRY(generateSwizzles(data, gl::SAMPLER_PIXEL));
+    return gl::NoError();
+}
 gl::Error Renderer11::setSamplerState(gl::SamplerType type,
                                       int index,
                                       gl::Texture *texture,
@@ -2122,33 +2159,23 @@ gl::Error Renderer11::drawTriangleFan(const gl::ContextState &data,
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error Renderer11::applyShadersImpl(const gl::ContextState &data, GLenum drawMode)
+gl::Error Renderer11::applyShaders(const gl::ContextState &data, GLenum drawMode)
 {
-    ProgramD3D *programD3D  = GetImplAs<ProgramD3D>(data.state->getProgram());
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(data.state->getProgram());
+    programD3D->updateCachedInputLayout(*data.state);
+
     const auto &inputLayout = programD3D->getCachedInputLayout();
 
     ShaderExecutableD3D *vertexExe = NULL;
-    gl::Error error = programD3D->getVertexExecutableForInputLayout(inputLayout, &vertexExe, nullptr);
-    if (error.isError())
-    {
-        return error;
-    }
+    ANGLE_TRY(programD3D->getVertexExecutableForInputLayout(inputLayout, &vertexExe, nullptr));
 
     const gl::Framebuffer *drawFramebuffer = data.state->getDrawFramebuffer();
     ShaderExecutableD3D *pixelExe = NULL;
-    error = programD3D->getPixelExecutableForFramebuffer(drawFramebuffer, &pixelExe);
-    if (error.isError())
-    {
-        return error;
-    }
+    ANGLE_TRY(programD3D->getPixelExecutableForFramebuffer(drawFramebuffer, &pixelExe));
 
     ShaderExecutableD3D *geometryExe = nullptr;
-    error =
-        programD3D->getGeometryExecutableForPrimitiveType(data, drawMode, &geometryExe, nullptr);
-    if (error.isError())
-    {
-        return error;
-    }
+    ANGLE_TRY(
+        programD3D->getGeometryExecutableForPrimitiveType(data, drawMode, &geometryExe, nullptr));
 
     ID3D11VertexShader *vertexShader = (vertexExe ? GetAs<ShaderExecutable11>(vertexExe)->getVertexShader() : NULL);
 
@@ -2199,7 +2226,7 @@ gl::Error Renderer11::applyShadersImpl(const gl::ContextState &data, GLenum draw
         programD3D->dirtyAllUniforms();
     }
 
-    return gl::Error(GL_NO_ERROR);
+    return programD3D->applyUniforms(drawMode);
 }
 
 gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
@@ -2653,6 +2680,8 @@ bool Renderer11::testDeviceResettable()
 void Renderer11::release()
 {
     RendererD3D::cleanup();
+
+    mScratchMemoryBuffer.resize(0);
 
     releaseDeviceResources();
 
@@ -4465,6 +4494,36 @@ gl::Error Renderer11::genericDrawArrays(Context11 *context,
 FramebufferImpl *Renderer11::createDefaultFramebuffer(const gl::FramebufferState &state)
 {
     return new Framebuffer11(state, this);
+}
+
+gl::Error Renderer11::getScratchMemoryBuffer(size_t requestedSize, MemoryBuffer **bufferOut)
+{
+    if (mScratchMemoryBuffer.size() == requestedSize)
+    {
+        mScratchMemoryBufferResetCounter = ScratchMemoryBufferLifetime;
+        *bufferOut = &mScratchMemoryBuffer;
+        return gl::Error(GL_NO_ERROR);
+    }
+
+    if (mScratchMemoryBuffer.size() > requestedSize)
+    {
+        mScratchMemoryBufferResetCounter--;
+    }
+
+    if (mScratchMemoryBufferResetCounter <= 0 || mScratchMemoryBuffer.size() < requestedSize)
+    {
+        mScratchMemoryBuffer.resize(0);
+        if (!mScratchMemoryBuffer.resize(requestedSize))
+        {
+            return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal buffer.");
+        }
+        mScratchMemoryBufferResetCounter = ScratchMemoryBufferLifetime;
+    }
+
+    ASSERT(mScratchMemoryBuffer.size() >= requestedSize);
+
+    *bufferOut = &mScratchMemoryBuffer;
+    return gl::Error(GL_NO_ERROR);
 }
 
 }  // namespace rx
