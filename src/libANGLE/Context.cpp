@@ -2098,6 +2098,11 @@ void Context::initCaps(GLuint clientVersion)
         //mExtensions.sRGB = false;
     }
 
+    // Some extensions are always available because they are implemented in the GL layer.
+    mExtensions.bindUniformLocation = true;
+    mExtensions.noError             = true;
+    mExtensions.vertexArrayObject   = true;
+
     // Explicitly enable GL_KHR_debug
     mExtensions.debug                   = true;
     mExtensions.maxDebugMessageLength   = 1024;
