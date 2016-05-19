@@ -36,9 +36,17 @@ class AttributeMap;
 class Display;
 struct Config;
 
+struct SurfaceState final : angle::NonCopyable
+{
+    SurfaceState();
+
+    gl::Framebuffer *defaultFramebuffer;
+};
+
 class Surface : public gl::FramebufferAttachmentObject
 {
   public:
+    Surface(rx::SurfaceImpl *impl, EGLint surfaceType, const egl::Config *config, const AttributeMap &attributes);
     virtual ~Surface();
 
     rx::SurfaceImpl *getImplementation() const { return mImplementation; }
@@ -70,7 +78,7 @@ class Surface : public gl::FramebufferAttachmentObject
     EGLenum getTextureTarget() const;
 
     gl::Texture *getBoundTexture() const { return mTexture.get(); }
-    gl::Framebuffer *getDefaultFramebuffer() { return mDefaultFramebuffer; }
+    gl::Framebuffer *getDefaultFramebuffer() { return mState.defaultFramebuffer; }
 
     EGLint isFixedSize() const;
 
@@ -92,10 +100,6 @@ class Surface : public gl::FramebufferAttachmentObject
     bool directComposition() const { return mDirectComposition; }
 
   protected:
-    Surface(rx::SurfaceImpl *impl,
-            EGLint surfaceType,
-            const egl::Config *config,
-            const AttributeMap &attributes);
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override { return mImplementation; }
 
     gl::Framebuffer *createDefaultFramebuffer();
@@ -104,8 +108,8 @@ class Surface : public gl::FramebufferAttachmentObject
     friend class gl::Texture;
     void releaseTexImageFromTexture();
 
+    SurfaceState mState;
     rx::SurfaceImpl *mImplementation;
-    gl::Framebuffer *mDefaultFramebuffer;
     int mCurrentCount;
     bool mDestroyed;
 
