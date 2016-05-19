@@ -102,7 +102,7 @@ bool DebugAnnotationsActive();
 #endif
 
 // A macro asserting a condition and outputting failures to the debug log
-#if !defined(NDEBUG)
+#if !defined(NDEBUG) && !defined(ANGLE_ENABLE_RELEASE_ASSERTS)
 #define ASSERT(expression) { \
     if(!(expression)) \
         ERR("\t! Assert failed in %s(%d): %s\n", __FUNCTION__, __LINE__, #expression); \
