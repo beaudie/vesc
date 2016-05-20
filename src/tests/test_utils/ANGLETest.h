@@ -61,7 +61,7 @@ struct GLColor
 {
     GLColor();
     GLColor(GLubyte r, GLubyte g, GLubyte b, GLubyte a);
-    GLColor(GLuint colorValue);
+    explicit GLColor(GLuint colorValue);
 
     Vector4 toNormalizedVector() const;
 
@@ -88,28 +88,6 @@ bool operator==(const GLColor &a, const GLColor &b);
 std::ostream &operator<<(std::ostream &ostream, const GLColor &color);
 GLColor ReadColor(GLint x, GLint y);
 
-struct GLColor16
-{
-    GLColor16();
-    GLColor16(GLushort r, GLushort g, GLushort b, GLushort a);
-
-    GLushort R, G, B, A;
-
-    static const GLColor16 white;
-};
-
-// Useful to cast any type to GLushort.
-template <typename TR, typename TG, typename TB, typename TA>
-GLColor16 MakeGLColor16(TR r, TG g, TB b, TA a)
-{
-    return GLColor16(static_cast<GLushort>(r), static_cast<GLushort>(g), static_cast<GLushort>(b),
-                     static_cast<GLushort>(a));
-}
-
-bool operator==(const GLColor16 &a, const GLColor16 &b);
-std::ostream &operator<<(std::ostream &ostream, const GLColor16 &color);
-GLColor16 ReadColor16(GLint x, GLint y);
-
 }  // namespace angle
 
 #define EXPECT_PIXEL_EQ(x, y, r, g, b, a) \
@@ -130,8 +108,6 @@ GLColor16 ReadColor16(GLint x, GLint y);
     EXPECT_NEAR((b), pixel[2], abs_error); \
     EXPECT_NEAR((a), pixel[3], abs_error); \
 }
-
-#define EXPECT_PIXEL_COLOR16_EQ(x, y, angleColor) EXPECT_EQ(angleColor, angle::ReadColor16(x, y))
 
 class EGLWindow;
 class OSWindow;
