@@ -709,6 +709,7 @@ gl::ErrorOrResult<GLuint> InternalFormat::computeRowPitch(GLenum formatType,
 
     ASSERT(alignment > 0 && isPow2(alignment));
     CheckedNumeric<GLuint> checkedAlignment(alignment);
+    // TODO: Only apply alignment if element bytes is 1, 2, 4, or 8. (GLES 3.0.4 section 3.7.2)?
     auto aligned = rx::roundUp(checkedRowBytes, checkedAlignment);
     ANGLE_TRY_CHECKED_MATH(aligned);
     return aligned.ValueOrDie();
