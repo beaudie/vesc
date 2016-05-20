@@ -80,7 +80,7 @@ bool DebugAnnotationsActive();
 #endif
 
 // A macro to output a function call and its arguments to the debugging log, in case of error.
-#if defined(ANGLE_TRACE_ENABLED)
+#if defined(ANGLE_TRACE_ENABLED) || defined(ANGLE_ENABLE_RELEASE_ASSERTS)
 #define ERR(message, ...) gl::trace(false, gl::MESSAGE_ERR, "err: %s(%d): " message "\n", __FUNCTION__, __LINE__, ##__VA_ARGS__)
 #else
 #define ERR(message, ...) (void(0))
@@ -101,13 +101,25 @@ bool DebugAnnotationsActive();
 #undef ANGLE_TRACE_ENABLED
 #endif
 
+#if defined(NDEBUG)
+// TODO(jmadill): Detect if debugger is attached and break.
+#define ANGLE_ASSERT_IMPL(expression) \
+    if (!(expression))                \
+    abort()
+#else
+#define ANGLE_ASSERT_IMPL(expression) assert(expression)
+#endif  // defined(NDEBUG)
+
 // A macro asserting a condition and outputting failures to the debug log
-#if !defined(NDEBUG)
-#define ASSERT(expression) { \
-    if(!(expression)) \
-        ERR("\t! Assert failed in %s(%d): %s\n", __FUNCTION__, __LINE__, #expression); \
-        assert(expression); \
-    } ANGLE_EMPTY_STATEMENT
+#if !defined(NDEBUG) || defined(ANGLE_ENABLE_RELEASE_ASSERTS)
+#define ASSERT(expression)                                                                 \
+    {                                                                                      \
+        if (!(expression))                                                                 \
+            ERR("\t! Assert failed in %s:%d (%s): %s\n", __FILE__, __LINE__, __FUNCTION__, \
+                #expression);                                                              \
+        ANGLE_ASSERT_IMPL(expression);                                                     \
+    }                                                                                      \
+    ANGLE_EMPTY_STATEMENT
 #define UNUSED_ASSERTION_VARIABLE(variable)
 #else
 #define ASSERT(expression) (void(0))

@@ -9,11 +9,13 @@
 #include "common/debug.h"
 #include "common/platform.h"
 #include "common/angleutils.h"
+#include "common/Optional.h"
 
 #include <stdarg.h>
 #include <vector>
 #include <fstream>
 #include <cstdio>
+#include <iostream>
 
 namespace gl
 {
@@ -25,6 +27,35 @@ enum DebugTraceOutputType
    DebugTraceOutputTypeNone,
    DebugTraceOutputTypeSetMarker,
    DebugTraceOutputTypeBeginEvent
+};
+
+class FormattedMessage final : angle::NonCopyable
+{
+  public:
+    FormattedMessage(const char *format, va_list vararg) : mFormat(format)
+    {
+        va_copy(mVarArg, vararg);
+    }
+
+    const char *get()
+    {
+        if (!mMessage.valid())
+        {
+            mMessage = FormatString(mFormat, mVarArg);
+        }
+        return mMessage.value().c_str();
+    }
+
+    size_t length()
+    {
+        get();
+        return mMessage.value().length();
+    }
+
+  private:
+    const char *mFormat;
+    va_list mVarArg;
+    Optional<std::string> mMessage;
 };
 
 DebugAnnotator *g_debugAnnotator = nullptr;
@@ -52,19 +83,16 @@ void output(bool traceInDebugOnly, MessageType messageType, DebugTraceOutputType
         }
     }
 
-    std::string formattedMessage;
+    FormattedMessage formattedMessage(format, vararg);
     UNUSED_VARIABLE(formattedMessage);
 
-#if !defined(NDEBUG) && defined(_MSC_VER)
     if (messageType == MESSAGE_ERR)
     {
-        if (formattedMessage.empty())
-        {
-            formattedMessage = FormatString(format, vararg);
-        }
-        OutputDebugStringA(formattedMessage.c_str());
-    }
+        std::cerr << formattedMessage.get();
+#if !defined(NDEBUG) && defined(_MSC_VER)
+        OutputDebugStringA(formattedMessage.get());
 #endif
+    }
 
 #if defined(ANGLE_ENABLE_DEBUG_TRACE)
 #if defined(NDEBUG)
@@ -73,20 +101,15 @@ void output(bool traceInDebugOnly, MessageType messageType, DebugTraceOutputType
         return;
     }
 #endif // NDEBUG
-    if (formattedMessage.empty())
-    {
-        formattedMessage = FormatString(format, vararg);
-    }
-
     static std::ofstream file(TRACE_OUTPUT_FILE, std::ofstream::app);
     if (file)
     {
-        file.write(formattedMessage.c_str(), formattedMessage.length());
+        file.write(formattedMessage.get(), formattedMessage.length());
         file.flush();
     }
 
 #if defined(ANGLE_ENABLE_DEBUG_TRACE_TO_DEBUGGER)
-    OutputDebugStringA(formattedMessage.c_str());
+    OutputDebugStringA(formattedMessage.get());
 #endif // ANGLE_ENABLE_DEBUG_TRACE_TO_DEBUGGER
 
 #endif // ANGLE_ENABLE_DEBUG_TRACE
