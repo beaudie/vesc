@@ -177,7 +177,7 @@ void InfoLog::getLog(GLsizei bufSize, GLsizei *length, char *infoLog) const
 }
 
 // append a santized message to the program info log.
-// The D3D compiler includes a fake file path in some of the warning or error 
+// The D3D compiler includes a fake file path in some of the warning or error
 // messages, so lets remove all occurrences of this fake file path from the log.
 void InfoLog::appendSanitized(const char *message)
 {
@@ -438,6 +438,16 @@ void Program::bindUniformLocation(GLuint index, const char *name)
 {
     // Bind the base uniform name only since array indices other than 0 cannot be bound
     mUniformBindings.bindLocation(index, ParseUniformName(name, nullptr));
+}
+
+void Program::bindFragDataLocation(GLuint index, GLuint colorNumber, const char *name)
+{
+    // BindFragDataLocation can be called before any shaders are attached the program.
+    // If a name that doesn't actually exist in the shader is specified it's
+    // simply ignored when the program is linked.
+
+    mState.mFragDataBindings[name] = FragDataBinding(colorNumber, index);
+
 }
 
 // Links the HLSL code of the vertex and pixel shader by matching up their varyings,
@@ -2245,6 +2255,14 @@ void Program::linkOutputVariables()
         // Don't store outputs for gl_FragDepth, gl_FragColor, etc.
         if (outputVariable.isBuiltIn())
             continue;
+
+        if (outputVariable.location == -1)
+        {
+            // location was not specified.
+            // check and see if this variable has been bound by a call to
+            // bindFragDataLocation
+
+        }
 
         // Since multiple output locations must be specified, use 0 for non-specified locations.
         int baseLocation = (outputVariable.location == -1 ? 0 : outputVariable.location);

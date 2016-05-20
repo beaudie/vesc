@@ -1718,6 +1718,11 @@ void FunctionsGL::initializeProcsGLES()
     profile = 0;
 
     // clang-format off
+    // GL_EXT_blend_func_extended
+    AssignGLExtensionEntryPoint(extensions, "GL_EXT_blend_func_extended", loadProcAddress("BindFragDataLocationIndexedEXT"), &bindFragDataLocationIndexed);
+    AssignGLExtensionEntryPoint(extensions, "GL_EXT_blend_func_extended", loadProcAddress("GetFragDataIndexEXT"), &getFragDataIndex);
+    AssignGLExtensionEntryPoint(extensions, "GL_EXT_blend_func_extended", loadProcAddress("BindFragDataLocationEXT"), &bindFragDataLocation);
+    AssignGLExtensionEntryPoint(extensions, "GL_EXT_blend_func_extended", loadProcAddress("GetProgramResourceLocationIndexEXT"), &getProgramResourceLocationIndex);
 
     // GL_OES_texture_3D
     AssignGLExtensionEntryPoint(extensions, "GL_OES_texture_3D", loadProcAddress("glTexImage3DOES"), &texImage3D);

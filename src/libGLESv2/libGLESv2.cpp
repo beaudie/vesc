@@ -9,6 +9,7 @@
 #include "libGLESv2/entry_points_gles_2_0.h"
 #include "libGLESv2/entry_points_gles_2_0_ext.h"
 #include "libGLESv2/entry_points_gles_3_0.h"
+#include "libGLESv2/entry_points_gles_3_0_ext.h"
 
 #include "common/event_tracer.h"
 
@@ -1567,4 +1568,21 @@ void GL_APIENTRY glBindUniformLocationCHROMIUM(GLuint program, GLint location, c
 {
     return gl::BindUniformLocationCHROMIUM(program, location, name);
 }
+
+// GL_EXT_blend_func_extended
+void GL_APIENTRY glBindFragDataLocationIndexedEXT(GLuint program, GLuint colorNumber, GLuint index, const GLchar* name)
+{
+    return gl::BindFragDataLocationIndexedEXT(program, colorNumber, index, name);
+}
+
+GLint GL_APIENTRY glGetFragDataIndexEXT(GLuint program, const GLchar* name)
+{
+    return gl::GetFragDataIndexEXT(program, name);
+}
+
+void GL_APIENTRY glBindFragDataLocationEXT(GLuint program, GLuint colorNumber, const GLchar* name)
+{
+    return gl::BindFragDataLocationEXT(program, colorNumber, name);
+}
+
 }

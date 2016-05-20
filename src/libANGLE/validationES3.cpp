@@ -2071,4 +2071,96 @@ bool ValidateFlushMappedBufferRange(Context *context,
     return ValidateFlushMappedBufferRangeBase(context, target, offset, length);
 }
 
+// EXT_blend_func_extended.
+bool ValidateBindFragDataLocationIndexed(Context* context,
+                                         GLuint program,
+                                         GLuint colorNumber,
+                                         GLuint index,
+                                         const GLchar* name)
+{
+
+    if (context->getClientVersion() < 3)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3."));
+        return false;
+    }
+
+    const gl::Extensions& ext = context->getExtensions();
+    if (!ext.blendFuncExtended)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "EXT_blend_func_extended not available."));
+        return false;
+    }
+
+    if (GetValidProgram(context, program) == nullptr)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "No such program object."));
+        return false;
+    }
+
+    if (name == nullptr)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Name is null."));
+        return false;
+    }
+
+    if (strncmp(name, "gl_", 3) == 0)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Invalid name."));
+        return false;
+    }
+
+    const gl::Caps& cap = context->getCaps();
+
+    if (index == 0)
+    {
+        if (colorNumber >= cap.maxDrawBuffers)
+        {
+            context->handleError(Error(GL_INVALID_VALUE, "Parameter colorNumber is not less than MAX_DRAW_BUFFERS."));
+            return false;
+        }
+    }
+    else
+    {
+        if (colorNumber >= ext.maxDualSourceDrawBuffers)
+        {
+            context->handleError(Error(GL_INVALID_VALUE, "Parameter colorNumber is not less than MAX_DUAL_SOURCE_DRAW_BUFFERS_EXT."));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool ValidateGetFragDataIndex(Context* context, GLuint program, const GLchar* name)
+{
+    if (context->getClientVersion() < 3)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3."));
+        return false;
+    }
+
+    const gl::Extensions& ext = context->getExtensions();
+    if (!ext.blendFuncExtended)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "EXT_blend_func_extended not available."));
+        return false;
+    }
+
+    const Program* prog = GetValidProgram(context, program);
+    if (prog == nullptr)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "No such program object."));
+        return false;
+    }
+
+    if (!prog->isLinked())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Program has not been linked."));
+        return false;
+    }
+
+    return true;
+}
+
 }  // namespace gl

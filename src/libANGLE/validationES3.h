@@ -306,6 +306,14 @@ bool ValidateFlushMappedBufferRange(Context *context,
                                     GLintptr offset,
                                     GLsizeiptr length);
 
+// EXT_blend_func_extended
+bool ValidateBindFragDataLocationIndexed(Context* context,
+                                         GLuint program,
+                                         GLuint colorNumber,
+                                         GLuint index,
+                                         const GLchar *name);
+bool ValidateGetFragDataIndex(Context* context, GLuint program, const GLchar* name);
+
 }  // namespace gl
 
 #endif // LIBANGLE_VALIDATION_ES3_H_

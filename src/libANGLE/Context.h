@@ -389,6 +389,10 @@ class Context final : public ValidationContext
 
     void bindUniformLocation(GLuint program, GLint location, const GLchar *name);
 
+    // GL_EXT_blend_func_extended
+    void bindFragDataLocationIndexed(GLuint program, GLuint colorNumber, GLuint index, const GLchar *name);
+    GLint getFragDataIndex(GLuint program, const GLchar *name);
+
     void handleError(const Error &error) override;
 
     GLenum getError();

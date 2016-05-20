@@ -50,6 +50,7 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &data)
     mResources.OES_standard_derivatives     = extensions.standardDerivatives;
     mResources.EXT_draw_buffers             = extensions.drawBuffers;
     mResources.EXT_shader_texture_lod       = extensions.shaderTextureLOD;
+    mResources.EXT_blend_func_extended      = extensions.blendFuncExtended;
     // TODO: disabled until the extension is actually supported.
     mResources.OES_EGL_image_external = 0;
     mResources.NV_EGL_stream_consumer_external = extensions.eglStreamConsumerExternal;
@@ -62,6 +63,8 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &data)
     mResources.MaxFragmentInputVectors = caps.maxFragmentInputComponents / 4;
     mResources.MinProgramTexelOffset   = caps.minProgramTexelOffset;
     mResources.MaxProgramTexelOffset   = caps.maxProgramTexelOffset;
+
+    mResources.MaxDualSourceDrawBuffers = extensions.maxDualSourceDrawBuffers;
 }
 
 Compiler::~Compiler()

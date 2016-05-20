@@ -161,7 +161,9 @@ Extensions::Extensions()
       bindUniformLocation(false),
       syncQuery(false),
       colorBufferFloat(false),
-      multisampleCompatibility(false)
+      multisampleCompatibility(false),
+      blendFuncExtended(false),
+      maxDualSourceDrawBuffers(0)
 {
 }
 
@@ -236,6 +238,7 @@ std::vector<std::string> Extensions::getStrings() const
     InsertExtensionString("GL_CHROMIUM_bind_uniform_location",   bindUniformLocation,       &extensionStrings);
     InsertExtensionString("GL_CHROMIUM_sync_query",              syncQuery,                 &extensionStrings);
     InsertExtensionString("GL_EXT_multisample_compatibility",    multisampleCompatibility,  &extensionStrings);
+    InsertExtensionString("GL_EXT_blend_func_extended",          blendFuncExtended,         &extensionStrings);
     // clang-format on
 
     return extensionStrings;

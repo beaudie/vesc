@@ -1112,6 +1112,11 @@ void Context::getIntegerv(GLenum pname, GLint *params)
           *params = mImplementation->getGPUDisjoint();
           break;
 
+      // GL_EXT_blend_func_extended
+      case GL_MAX_DUAL_SOURCE_DRAW_BUFFERS_EXT:
+          *params = mExtensions.maxDualSourceDrawBuffers;
+          break;
+
       default:
         mState.getIntegerv(getData(), pname, params);
         break;
@@ -1378,6 +1383,14 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
               return false;
           }
           *type      = GL_INT;
+          *numParams = 1;
+          return true;
+       case GL_MAX_DUAL_SOURCE_DRAW_BUFFERS_EXT:
+          if (!mExtensions.blendFuncExtended)
+          {
+              return false;
+          }
+          *type = GL_INT;
           *numParams = 1;
           return true;
     }
@@ -1653,6 +1666,23 @@ void Context::bindUniformLocation(GLuint program, GLint location, const GLchar *
     ASSERT(programObject);
 
     programObject->bindUniformLocation(location, name);
+}
+
+void Context::bindFragDataLocationIndexed(GLuint program, GLuint colorNumber, GLuint index, const GLchar *name)
+{
+    Program* programObject = getProgram(program);
+    ASSERT(programObject);
+
+    programObject->bindFragDataLocation(index, colorNumber, name);
+}
+
+GLint Context::getFragDataIndex(GLuint program, const GLchar *name)
+{
+    Program* programObject = getProgram(program);
+    ASSERT(programObject);
+    ASSERT(programObject->isLinked());
+
+    return programObject->getFragDataLocation(name);
 }
 
 void Context::handleError(const Error &error)
