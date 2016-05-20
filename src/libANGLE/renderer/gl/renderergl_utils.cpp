@@ -689,6 +689,19 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
                                  functions->hasGLExtension("GL_EXT_direct_state_access")) ||
                                 (functions->hasGLESExtension("GL_NV_path_rendering") &&
                                  functions->hasGLESExtension("GL_EXT_direct_state_access"));
+
+    // EXT_blend_func_extended.
+    // written against OpenGL ES3.1 but can apply to earlier versions.
+    // This appears to be broken on all OSX platforms.
+#if !defined(ANGLE_PLATFORM_APPLE)
+    extensions->blendFuncExtended = functions->hasGLExtension("GL_ARB_blend_func_extended") ||
+                                    functions->hasGLESExtension("GL_EXT_blend_func_extended");
+    if (extensions->blendFuncExtended)
+    {
+        extensions->maxDualSourceDrawBuffers =
+            QuerySingleGLInt(functions, GL_MAX_DUAL_SOURCE_DRAW_BUFFERS_EXT);
+    }
+#endif
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)
