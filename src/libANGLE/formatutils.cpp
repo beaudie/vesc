@@ -698,6 +698,7 @@ gl::ErrorOrResult<GLuint> InternalFormat::computeRowPitch(GLenum formatType,
     {
         ANGLE_TRY_RESULT(computeBlockSize(formatType, gl::Extents(width, 1, 1)), rowBytes);
     }
+    // TODO: Only apply alignment if element bytes is 1, 2, 4, or 8. (GLES 3.0.4 section 3.7.2)?
     auto checkedResult = rx::CheckedRoundUp(rowBytes, static_cast<GLuint>(alignment));
     ANGLE_TRY_CHECKED_MATH(checkedResult);
     return checkedResult.ValueOrDie();
