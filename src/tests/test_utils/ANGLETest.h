@@ -68,6 +68,8 @@ struct GLColor
     GLColor(const Vector4 &floatColor);
     GLColor(const GLColor16 &color16);
     GLColor(GLuint colorValue);
+    GLColor(const Vector4 &floatColor);
+    GLColor(const GLColor16 &color16);
 
     Vector4 toNormalizedVector() const;
 
@@ -151,6 +153,15 @@ GLColor16 ReadColor16(GLint x, GLint y);
         EXPECT_NEAR(expected.A, actual.A, abs_error);  \
     \
 }
+
+#define EXPECT_COLOR_NEAR(expected, actual, abs_error) \
+                                                       \
+    {                                                  \
+        EXPECT_NEAR(expected.R, actual.R, abs_error);  \
+        EXPECT_NEAR(expected.G, actual.G, abs_error);  \
+        EXPECT_NEAR(expected.B, actual.B, abs_error);  \
+        EXPECT_NEAR(expected.A, actual.A, abs_error);  \
+    }
 
 class EGLWindow;
 class OSWindow;
