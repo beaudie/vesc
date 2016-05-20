@@ -27,6 +27,8 @@ class Program;
 class Shader;
 class ValidationContext;
 
+bool ValidSrcBlendEnum(const Context* context, GLenum val);
+bool ValidDstBlendEnum(const Context* context, GLenum val);
 bool ValidCap(const Context *context, GLenum cap);
 bool ValidTextureTarget(const ValidationContext *context, GLenum target);
 bool ValidTexture2DTarget(const ValidationContext *context, GLenum target);
@@ -260,6 +262,17 @@ bool ValidateGenTextures(Context *context, GLint n, GLuint *textures);
 bool ValidateDeleteTextures(Context *context, GLint n, const GLuint *textures);
 
 bool ValidateGenOrDelete(Context *context, GLint n);
+
+bool ValidateBindFragDataLocationIndexed(const Context* context,
+                                         GLuint program,
+                                         GLuint colorNumber,
+                                         GLuint index,
+                                         const GLchar* name);
+bool ValidateGetProgramResourceLocationIndex(const Context* context,
+                                             GLuint program,
+                                             GLenum programInterface,
+                                             const GLchar* name);
+bool ValidateGetFragDataIndex(const Context* context, GLuint program, const GLchar* name);
 
 // Error messages shared here for use in testing.
 extern const char *g_ExceedsMaxElementErrorMessage;
