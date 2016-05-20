@@ -144,7 +144,17 @@ gl::Error TextureGL::setImage(GLenum target, size_t level, GLenum internalFormat
         nativegl::GetTexImageFormat(mFunctions, mWorkarounds, internalFormat, format, type);
 
     mStateManager->bindTexture(mState.mTarget, mTextureID);
-    if (UseTexImage2D(mState.mTarget))
+
+    if (mWorkarounds.unpackOverlappingRowsSeparatelyUnpackBuffer && unpack.pixelBuffer.get() &&
+        mStateManager->mUnpackRowLength != 0 && mStateManager->mUnpackRowLength < size.width)
+    {
+        // The rows overlap in unpack memory. Upload the texture row by row to work around
+        // driver bug.
+        reserveTexImageToBeFilled(target, level, internalFormat, size, format, type);
+        gl::Box area(0, 0, 0, size.width, size.height, size.depth);
+        setSubImageRowByRowWorkaround(target, level, area, format, type, unpack, pixels);
+    }
+    else if (UseTexImage2D(mState.mTarget))
     {
         ASSERT(size.depth == 1);
         mFunctions->texImage2D(target, static_cast<GLint>(level), texImageFormat.internalFormat,
@@ -165,6 +175,15 @@ gl::Error TextureGL::setImage(GLenum target, size_t level, GLenum internalFormat
     mLevelInfo[level] = GetLevelInfo(internalFormat, texImageFormat.internalFormat);
 
     return gl::Error(GL_NO_ERROR);
+}
+
+void TextureGL::reserveTexImageToBeFilled(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size, GLenum format, GLenum type)
+{
+    GLuint unpackBuffer = mStateManager->mBuffers[GL_PIXEL_UNPACK_BUFFER];
+    mStateManager->bindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+    gl::PixelUnpackState unpack;
+    setImage(target, level, internalFormat, size, format, type, unpack, nullptr);
+    mStateManager->bindBuffer(GL_PIXEL_UNPACK_BUFFER, unpackBuffer);
 }
 
 gl::Error TextureGL::setSubImage(GLenum target, size_t level, const gl::Box &area, GLenum format, GLenum type,
@@ -198,6 +217,62 @@ gl::Error TextureGL::setSubImage(GLenum target, size_t level, const gl::Box &are
            GetLevelInfo(format, texSubImageFormat.format).lumaWorkaround.enabled);
 
     return gl::Error(GL_NO_ERROR);
+}
+
+void TextureGL::setSubImageRowByRowWorkaround(GLenum target, size_t level, const gl::Box &area, GLenum format, GLenum type,
+    const gl::PixelUnpackState &unpack, const uint8_t *pixels)
+{
+    mFunctions->pixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    mFunctions->pixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    // TODO: Support the case where skip is != 0
+    ASSERT(unpack.skipPixels == 0);
+    ASSERT(unpack.skipRows == 0);
+    ASSERT(unpack.skipImages == 0);
+    GLenum sizedFormat = gl::GetSizedInternalFormat(format, type);
+    GLsizei imageGroupSize = gl::GetInternalFormatInfo(sizedFormat).pixelBytes;
+    GLsizei rowBytes = unpack.rowLength * imageGroupSize;
+    GLsizei alignmentDiff = rowBytes & unpack.alignment;
+    if (alignmentDiff != 0)
+    {
+        rowBytes += unpack.alignment - alignmentDiff;
+    }
+    ASSERT(rowBytes % unpack.alignment == 0);
+    if (UseTexImage3D(mState.mTarget))
+    {
+        GLsizei imageHeight = area.height;
+        if (unpack.imageHeight != 0)
+        {
+            imageHeight = unpack.imageHeight;
+        }
+        GLsizei imageBytes = rowBytes * imageHeight;
+        for (GLsizei image = 0; image < area.depth; ++image)
+        {
+            GLsizei imageByteOffset = image * imageBytes;
+            for (GLsizei row = 0; row < area.height; ++row)
+            {
+                GLsizei byteOffset = imageByteOffset + row * rowBytes;
+                const GLubyte *rowPixels = pixels + byteOffset;
+                mFunctions->texSubImage3D(target, level, area.x, row + area.y, image + area.z, area.width, 1, 1, format, type, rowPixels);
+            }
+        }
+    }
+    else if (UseTexImage2D(mState.mTarget))
+    {
+        for (GLsizei row = 0; row < area.height; ++row)
+        {
+            GLsizei byteOffset = row * rowBytes;
+            const GLubyte *rowPixels = pixels + byteOffset;
+            mFunctions->texSubImage2D(target, level, area.x, row + area.y, area.width, 1, format, type, rowPixels);
+        }
+    }
+    else
+    {
+        UNREACHABLE();
+    }
+
+    // Restore unpack state
+    mFunctions->pixelStorei(GL_UNPACK_ALIGNMENT, unpack.alignment);
+    mFunctions->pixelStorei(GL_UNPACK_ROW_LENGTH, unpack.rowLength);
 }
 
 gl::Error TextureGL::setCompressedImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size,

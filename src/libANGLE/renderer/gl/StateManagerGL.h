@@ -30,6 +30,7 @@ namespace rx
 class FunctionsGL;
 class TransformFeedbackGL;
 class QueryGL;
+class TextureGL; // TODO: cleanup
 
 class StateManagerGL final : angle::NonCopyable
 {
@@ -147,6 +148,8 @@ class StateManagerGL final : angle::NonCopyable
     void syncState(const gl::State &state, const gl::State::DirtyBits &glDirtyBits);
 
   private:
+    friend class TextureGL;
+
     gl::Error setGenericDrawState(const gl::ContextState &data);
 
     void setTextureCubemapSeamlessEnabled(bool enabled);
