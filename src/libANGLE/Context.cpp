@@ -1229,6 +1229,11 @@ void Context::getIntegerv(GLenum pname, GLint *params)
           *params = mImplementation->getGPUDisjoint();
           break;
 
+      // GL_EXT_blend_func_extended
+      case GL_MAX_DUAL_SOURCE_DRAW_BUFFERS_EXT:
+          *params = mExtensions.maxDualSourceDrawBuffers;
+          break;
+
       default:
           mGLState.getIntegerv(mState, pname, params);
           break;
@@ -1836,7 +1841,7 @@ const std::string &Context::getRendererString() const
 
 void Context::initExtensionStrings()
 {
-    mExtensionStrings = mExtensions.getStrings();
+    mExtensionStrings = mExtensions.getStrings(mClientVersion);
 
     std::ostringstream combinedStringStream;
     std::copy(mExtensionStrings.begin(), mExtensionStrings.end(), std::ostream_iterator<std::string>(combinedStringStream, " "));
