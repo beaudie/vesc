@@ -295,6 +295,10 @@ struct Extensions
     // GL_EXT_multisample_compatibility.
     // written against ES 3.1 but can apply to earlier versions.
     bool multisampleCompatibility;
+
+    // GL_EXT_blend_func_extended
+    bool blendFuncExtended;
+    GLuint maxDualSourceDrawBuffers;
 };
 
 struct Limitations
