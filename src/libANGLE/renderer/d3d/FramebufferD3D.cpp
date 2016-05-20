@@ -229,7 +229,13 @@ GLenum FramebufferD3D::getImplementationColorReadType() const
     GLenum implementationFormat = getRenderTargetImplementationFormat(attachmentRenderTarget);
     const gl::InternalFormat &implementationFormatInfo = gl::GetInternalFormatInfo(implementationFormat);
 
-    return implementationFormatInfo.type;
+    GLenum type = implementationFormatInfo.type;
+    if (type == GL_HALF_FLOAT)
+    {
+        type = GL_HALF_FLOAT_OES;
+    }
+
+    return type;
 }
 
 gl::Error FramebufferD3D::readPixels(ContextImpl *context,

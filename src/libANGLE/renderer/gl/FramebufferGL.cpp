@@ -219,7 +219,14 @@ GLenum FramebufferGL::getImplementationColorReadType() const
 {
     const auto *readAttachment = mState.getReadAttachment();
     const Format &format       = readAttachment->getFormat();
-    return format.info->type;
+
+    GLenum type = format.info->type;
+    if (type == GL_HALF_FLOAT)
+    {
+        type = GL_HALF_FLOAT_OES;
+    }
+
+    return type;
 }
 
 Error FramebufferGL::readPixels(ContextImpl *context,
@@ -234,7 +241,14 @@ Error FramebufferGL::readPixels(ContextImpl *context,
     mStateManager->setPixelPackState(packState);
 
     mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, mFramebufferID);
-    mFunctions->readPixels(area.x, area.y, area.width, area.height, format, type, pixels);
+
+    GLenum nativeType = type;
+    if (nativeType == GL_HALF_FLOAT_OES && mFunctions->standard != STANDARD_GL_ES)
+    {
+        nativeType = GL_HALF_FLOAT;
+    }
+
+    mFunctions->readPixels(area.x, area.y, area.width, area.height, format, nativeType, pixels);
 
     return Error(GL_NO_ERROR);
 }
