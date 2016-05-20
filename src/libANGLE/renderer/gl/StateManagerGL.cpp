@@ -1617,4 +1617,9 @@ void StateManagerGL::setTextureCubemapSeamlessEnabled(bool enabled)
     }
 }
 
+GLuint StateManagerGL::getBoundBuffer(GLenum type)
+{
+    ASSERT(mBuffers.find(type) != mBuffers.end());
+    return mBuffers[type];
+}
 }

@@ -144,7 +144,17 @@ gl::Error TextureGL::setImage(GLenum target, size_t level, GLenum internalFormat
         nativegl::GetTexImageFormat(mFunctions, mWorkarounds, internalFormat, format, type);
 
     mStateManager->bindTexture(mState.mTarget, mTextureID);
-    if (UseTexImage2D(mState.mTarget))
+
+    if (mWorkarounds.unpackOverlappingRowsSeparatelyUnpackBuffer && unpack.pixelBuffer.get() &&
+        unpack.rowLength != 0 && unpack.rowLength < size.width)
+    {
+        // The rows overlap in unpack memory. Upload the texture row by row to work around
+        // driver bug.
+        reserveTexImageToBeFilled(target, level, internalFormat, size, format, type);
+        gl::Box area(0, 0, 0, size.width, size.height, size.depth);
+        ANGLE_TRY(setSubImageRowByRowWorkaround(target, level, area, format, type, unpack, pixels));
+    }
+    else if (UseTexImage2D(mState.mTarget))
     {
         ASSERT(size.depth == 1);
         mFunctions->texImage2D(target, static_cast<GLint>(level), texImageFormat.internalFormat,
@@ -167,6 +177,20 @@ gl::Error TextureGL::setImage(GLenum target, size_t level, GLenum internalFormat
     return gl::Error(GL_NO_ERROR);
 }
 
+void TextureGL::reserveTexImageToBeFilled(GLenum target,
+                                          size_t level,
+                                          GLenum internalFormat,
+                                          const gl::Extents &size,
+                                          GLenum format,
+                                          GLenum type)
+{
+    GLuint unpackBuffer = mStateManager->getBoundBuffer(GL_PIXEL_UNPACK_BUFFER);
+    mStateManager->bindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+    gl::PixelUnpackState unpack;
+    setImage(target, level, internalFormat, size, format, type, unpack, nullptr);
+    mStateManager->bindBuffer(GL_PIXEL_UNPACK_BUFFER, unpackBuffer);
+}
+
 gl::Error TextureGL::setSubImage(GLenum target, size_t level, const gl::Box &area, GLenum format, GLenum type,
                                  const gl::PixelUnpackState &unpack, const uint8_t *pixels)
 {
@@ -176,7 +200,12 @@ gl::Error TextureGL::setSubImage(GLenum target, size_t level, const gl::Box &are
         nativegl::GetTexSubImageFormat(mFunctions, mWorkarounds, format, type);
 
     mStateManager->bindTexture(mState.mTarget, mTextureID);
-    if (UseTexImage2D(mState.mTarget))
+    if (mWorkarounds.unpackOverlappingRowsSeparatelyUnpackBuffer && unpack.pixelBuffer.get() &&
+        unpack.rowLength != 0 && unpack.rowLength < area.width)
+    {
+        ANGLE_TRY(setSubImageRowByRowWorkaround(target, level, area, format, type, unpack, pixels));
+    }
+    else if (UseTexImage2D(mState.mTarget))
     {
         ASSERT(area.z == 0 && area.depth == 1);
         mFunctions->texSubImage2D(target, static_cast<GLint>(level), area.x, area.y, area.width,
@@ -198,6 +227,79 @@ gl::Error TextureGL::setSubImage(GLenum target, size_t level, const gl::Box &are
            GetLevelInfo(format, texSubImageFormat.format).lumaWorkaround.enabled);
 
     return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error TextureGL::setSubImageRowByRowWorkaround(GLenum target,
+                                                   size_t level,
+                                                   const gl::Box &area,
+                                                   GLenum format,
+                                                   GLenum type,
+                                                   const gl::PixelUnpackState &unpack,
+                                                   const uint8_t *pixels)
+{
+    mFunctions->pixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    mFunctions->pixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    mFunctions->pixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+    mFunctions->pixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+    mFunctions->pixelStorei(GL_UNPACK_SKIP_IMAGES, 0);
+    GLenum sizedFormat =
+        gl::GetSizedInternalFormat(mState.getImageDesc(mState.mTarget, level).internalFormat, type);
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(sizedFormat);
+    GLuint rowBytes                      = 0;
+    ANGLE_TRY_RESULT(
+        formatInfo.computeRowPitch(GL_NONE, area.width, unpack.alignment, unpack.rowLength),
+        rowBytes);
+    GLuint imageBytes = 0;
+    ANGLE_TRY_RESULT(
+        formatInfo.computeDepthPitch(GL_NONE, area.width, area.height, unpack.alignment,
+                                     unpack.rowLength, unpack.imageHeight),
+        imageBytes);
+    bool applySkipImages = UseTexImage3D(mState.mTarget);
+    GLuint skipBytes     = 0;
+    ANGLE_TRY_RESULT(
+        formatInfo.computeSkipBytes(rowBytes, imageBytes, unpack.skipImages, unpack.skipRows,
+                                    unpack.skipPixels, applySkipImages),
+        skipBytes);
+
+    const uint8_t *pixelsWithSkip = pixels + skipBytes;
+    if (UseTexImage3D(mState.mTarget))
+    {
+        for (GLint image = 0; image < area.depth; ++image)
+        {
+            GLint imageByteOffset = image * imageBytes;
+            for (GLint row = 0; row < area.height; ++row)
+            {
+                GLint byteOffset         = imageByteOffset + row * rowBytes;
+                const GLubyte *rowPixels = pixelsWithSkip + byteOffset;
+                mFunctions->texSubImage3D(target, static_cast<GLint>(level), area.x, row + area.y,
+                                          image + area.z, area.width, 1, 1, format, type,
+                                          rowPixels);
+            }
+        }
+    }
+    else if (UseTexImage2D(mState.mTarget))
+    {
+        for (GLint row = 0; row < area.height; ++row)
+        {
+            GLint byteOffset         = row * rowBytes;
+            const GLubyte *rowPixels = pixelsWithSkip + byteOffset;
+            mFunctions->texSubImage2D(target, static_cast<GLint>(level), area.x, row + area.y,
+                                      area.width, 1, format, type, rowPixels);
+        }
+    }
+    else
+    {
+        UNREACHABLE();
+    }
+
+    // Restore unpack state
+    mFunctions->pixelStorei(GL_UNPACK_ALIGNMENT, unpack.alignment);
+    mFunctions->pixelStorei(GL_UNPACK_ROW_LENGTH, unpack.rowLength);
+    mFunctions->pixelStorei(GL_UNPACK_SKIP_PIXELS, unpack.skipPixels);
+    mFunctions->pixelStorei(GL_UNPACK_SKIP_ROWS, unpack.skipRows);
+    mFunctions->pixelStorei(GL_UNPACK_SKIP_IMAGES, unpack.skipImages);
+
+    return gl::NoError();
 }
 
 gl::Error TextureGL::setCompressedImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size,
