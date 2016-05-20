@@ -666,6 +666,14 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
     extensions->framebufferMixedSamples = functions->hasGLExtension("GL_NV_framebuffer_mixed_samples") ||
         functions->hasGLESExtension("GL_NV_framebuffer_mixed_samples");
 
+    // written against OpenGL ES3.1 but can apply to earlier versions.
+    extensions->blendFuncExtended = functions->hasGLExtension("GL_ARB_blend_func_extended") ||
+        functions->hasGLESExtension("GL_EXT_blend_func_extended");
+    if (extensions->blendFuncExtended)
+    {
+        extensions->maxDualSourceDrawBuffers = QuerySingleGLInt(functions, GL_MAX_DUAL_SOURCE_DRAW_BUFFERS_EXT);
+    }
+
     // ANGLE emulates vertex array objects in its GL layer
     extensions->vertexArrayObject = true;
 

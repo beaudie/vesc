@@ -163,10 +163,12 @@ Extensions::Extensions()
       colorBufferFloat(false),
       multisampleCompatibility(false),
       framebufferMixedSamples(false)
+      blendFuncExtended(false),
+      maxDualSourceDrawBuffers(0)
 {
 }
 
-std::vector<std::string> Extensions::getStrings() const
+std::vector<std::string> Extensions::getStrings(int clientVersion) const
 {
     std::vector<std::string> extensionStrings;
 
@@ -238,6 +240,12 @@ std::vector<std::string> Extensions::getStrings() const
     InsertExtensionString("GL_CHROMIUM_sync_query",                syncQuery,                 &extensionStrings);
     InsertExtensionString("GL_EXT_multisample_compatibility",      multisampleCompatibility,  &extensionStrings);
     InsertExtensionString("GL_CHROMIUM_framebuffer_mixed_samples", framebufferMixedSamples,   &extensionStrings);
+
+    // this is only implemented against GLES2 for now.
+    if (clientVersion == 2)
+    {
+        InsertExtensionString("GL_EXT_blend_func_extended",          blendFuncExtended,         &extensionStrings);
+    }
     // clang-format on
 
     return extensionStrings;

@@ -13,6 +13,7 @@
 #include <GLES2/gl2.h>
 #include <GLSLANG/ShaderLang.h>
 
+#include <map>
 #include <set>
 #include <sstream>
 #include <string>
@@ -137,6 +138,18 @@ struct VariableLocation
     bool ignored;
 };
 
+struct FragDataBinding
+{
+    FragDataBinding()
+    {}
+    FragDataBinding(unsigned int colorNumber, unsigned int index)
+        : colorNumber(colorNumber), index(index)
+    {}
+
+    unsigned int colorNumber;
+    unsigned int index;
+};
+
 class ProgramState final : angle::NonCopyable
 {
   public:
@@ -166,10 +179,12 @@ class ProgramState final : angle::NonCopyable
     {
         return mActiveAttribLocationsMask;
     }
+    const std::map<std::string, FragDataBinding> &getFragDataBindings() const { return mFragDataBindings; }
     const std::map<int, VariableLocation> &getOutputVariables() const { return mOutputVariables; }
     const std::vector<LinkedUniform> &getUniforms() const { return mUniforms; }
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
     const std::vector<UniformBlock> &getUniformBlocks() const { return mUniformBlocks; }
+
 
     const LinkedUniform *getUniformByName(const std::string &name) const;
     GLint getUniformLocation(const std::string &name) const;
@@ -205,6 +220,8 @@ class ProgramState final : angle::NonCopyable
     // TODO(jmadill): use unordered/hash map when available
     std::map<int, VariableLocation> mOutputVariables;
 
+    std::map<std::string, FragDataBinding> mFragDataBindings;
+
     bool mBinaryRetrieveableHint;
 };
 
@@ -228,6 +245,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     void bindAttributeLocation(GLuint index, const char *name);
     void bindUniformLocation(GLuint index, const char *name);
+    void bindFragDataLocation(GLuint index, GLuint colorNumber, const char *name);
 
     Error link(const ContextState &data);
     bool isLinked() const;
