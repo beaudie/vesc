@@ -69,7 +69,7 @@ struct Extensions
     Extensions();
 
     // Generate a vector of supported extension strings
-    std::vector<std::string> getStrings() const;
+    std::vector<std::string> getStrings(int clientVersion) const;
 
     // Set all texture related extension support based on the supported textures.
     // Determines support for:
@@ -298,6 +298,10 @@ struct Extensions
 
     // GL_CHROMIUM_framebuffer_mixed_samples
     bool framebufferMixedSamples;
+
+    // GL_EXT_blend_func_extended
+    bool blendFuncExtended;
+    GLuint maxDualSourceDrawBuffers;
 };
 
 struct Limitations

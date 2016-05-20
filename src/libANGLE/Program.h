@@ -13,6 +13,7 @@
 #include <GLES2/gl2.h>
 #include <GLSLANG/ShaderLang.h>
 
+#include <map>
 #include <set>
 #include <sstream>
 #include <string>
@@ -171,6 +172,7 @@ class ProgramState final : angle::NonCopyable
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
     const std::vector<UniformBlock> &getUniformBlocks() const { return mUniformBlocks; }
 
+
     const LinkedUniform *getUniformByName(const std::string &name) const;
     GLint getUniformLocation(const std::string &name) const;
     GLuint getUniformIndex(const std::string &name) const;
@@ -228,6 +230,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     void bindAttributeLocation(GLuint index, const char *name);
     void bindUniformLocation(GLuint index, const char *name);
+    void bindFragDataLocation(GLuint index, GLuint colorNumber, const char *name);
 
     Error link(const ContextState &data);
     bool isLinked() const;
