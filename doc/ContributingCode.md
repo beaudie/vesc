@@ -98,4 +98,4 @@ ChromiumOS, described here:
     * If you are not a committer, ask your reviewer to submit the change list.
 
 For more scenarios like managing multiple changes, see
-(depot_tools tutorial)[http://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html].
+[depot_tools tutorial](http://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html).
