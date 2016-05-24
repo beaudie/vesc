@@ -21,6 +21,7 @@
         'angle_enable_hlsl%': 0,
         'angle_link_glx%': 0,
         'angle_gl_library_type%': 'shared_library',
+        'dcheck_always_on%': 0,
         'conditions':
         [
             ['OS=="win"',
@@ -93,10 +94,36 @@
                             },
                         },
                     }],
+                    ['dcheck_always_on==1',
+                    {
+                        'configurations':
+                        {
+                            'Release_Base':
+                            {
+                                'defines':
+                                [
+                                    'ANGLE_ENABLE_RELEASE_ASSERTS',
+                                ],
+                            },
+                        },
+                    }],
                 ],
             },
             'conditions':
             [
+                ['dcheck_always_on==1',
+                {
+                    'configurations':
+                    {
+                        'Release_Base':
+                        {
+                            'defines':
+                            [
+                                'ANGLE_ENABLE_RELEASE_ASSERTS',
+                            ],
+                        },
+                    },
+                }],
                 ['OS=="win"',
                 {
                     'configurations':
