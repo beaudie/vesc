@@ -101,13 +101,22 @@ bool DebugAnnotationsActive();
 #undef ANGLE_TRACE_ENABLED
 #endif
 
+#if !defined(ANGLE_PLATFORM_WINDOWS) && defined(NDEBUG)
+// TODO(jmadill): Detect if debugger is attached and break.
+#define ANGLE_ASSERT_IMPL(expression) abort()
+#else
+#define ANGLE_ASSERT_IMPL(expression) assert(expression)
+#endif  // defined(NDEBUG)
+
 // A macro asserting a condition and outputting failures to the debug log
-#if !defined(NDEBUG)
-#define ASSERT(expression) { \
-    if(!(expression)) \
-        ERR("\t! Assert failed in %s(%d): %s\n", __FUNCTION__, __LINE__, #expression); \
-        assert(expression); \
-    } ANGLE_EMPTY_STATEMENT
+#if !defined(NDEBUG) || defined(ANGLE_ENABLE_RELEASE_ASSERTS)
+#define ASSERT(expression)                                                                 \
+    {                                                                                      \
+        if (!(expression))                                                                 \
+            ERR("\t! Assert failed in %s(%d): %s\n", __FUNCTION__, __LINE__, #expression); \
+        ANGLE_ASSERT_IMPL(expression);                                                     \
+    }                                                                                      \
+    ANGLE_EMPTY_STATEMENT
 #define UNUSED_ASSERTION_VARIABLE(variable)
 #else
 #define ASSERT(expression) (void(0))
