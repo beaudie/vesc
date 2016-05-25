@@ -54,6 +54,32 @@ class ContextImpl : public GLImplFactory
                                         const GLvoid *indices,
                                         const gl::IndexRange &indexRange) = 0;
 
+    // CHROMIUM_path_rendering path drawing methods.
+    virtual void  stencilFillPath(const PathImpl *path, GLenum fillMode, GLuint mask)
+    {
+        UNIMPLEMENTED();
+    }
+    virtual void stencilStrokePath(const PathImpl *path, GLint reference, GLuint mask)
+    {
+        UNIMPLEMENTED();
+    }
+    virtual void coverFillPath(const PathImpl *path, GLenum coverMode)
+    {
+        UNIMPLEMENTED();
+    }
+    virtual void coverStrokePath(const PathImpl *path, GLenum coverMode)
+    {
+        UNIMPLEMENTED();
+    }
+    virtual void stencilThenCoverFillPath(const PathImpl *path, GLenum fillMode, GLuint mask, GLenum coverMode)
+    {
+        UNIMPLEMENTED();
+    }
+    virtual void stencilThenCoverStrokePath(const PathImpl *path, GLint reference, GLuint mask, GLenum coverMode)
+    {
+        UNIMPLEMENTED();
+    }
+
     // TODO(jmadill): Investigate proper impl methods for this.
     virtual void notifyDeviceLost() = 0;
     virtual bool isDeviceLost() const = 0;
