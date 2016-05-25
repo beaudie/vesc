@@ -14,6 +14,8 @@
     {
         'angle_unittests_sources':
         [
+            '<(angle_path)/src/libANGLE/PathMapper_unittest.cpp',
+            '<(angle_path)/src/libANGLE/PathAllocator_unittest.cpp',
             '<(angle_path)/src/common/BitSetIterator_unittest.cpp',
             '<(angle_path)/src/common/Optional_unittest.cpp',
             '<(angle_path)/src/common/mathutil_unittest.cpp',
