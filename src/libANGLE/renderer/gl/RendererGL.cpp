@@ -242,6 +242,50 @@ gl::Error RendererGL::drawRangeElements(const gl::ContextState &data,
     return gl::Error(GL_NO_ERROR);
 }
 
+void RendererGL::stencilFillPath(const gl::ContextState &state, GLuint path, GLenum fillMode, GLuint mask)
+{
+    mFunctions->stencilFillPathNV(path, fillMode, mask);
+
+    assert(mFunctions->getError() == GL_NO_ERROR);
+}
+
+void RendererGL::stencilStrokePath(const gl::ContextState &state, GLuint path, GLint reference, GLuint mask)
+{
+    mFunctions->stencilStrokePathNV(path, reference, mask);
+
+    assert(mFunctions->getError() == GL_NO_ERROR);
+}
+
+void RendererGL::coverFillPath(const gl::ContextState &state, GLuint path, GLenum coverMode)
+{
+    mFunctions->coverFillPathNV(path, coverMode);
+
+    assert(mFunctions->getError() == GL_NO_ERROR);
+}
+
+void RendererGL::coverStrokePath(const gl::ContextState &state, GLuint path, GLenum coverMode)
+{
+    mFunctions->coverStrokePathNV(path, coverMode);
+
+    assert(mFunctions->getError() == GL_NO_ERROR);
+}
+
+
+void RendererGL::stencilThenCoverFillPath(const gl::ContextState &state, GLuint path, GLenum fillMode, GLuint mask, GLenum coverMode)
+{
+    mFunctions->stencilThenCoverFillPathNV(path, fillMode, mask, coverMode);
+
+    assert(mFunctions->getError() == GL_NO_ERROR);
+}
+
+void RendererGL::stencilThenCoverStrokePath(const gl::ContextState &state, GLuint path, GLint reference, GLuint mask, GLenum coverMode)
+{
+    mFunctions->stencilThenCoverStrokePathNV(path, reference, mask, coverMode);
+
+    assert(mFunctions->getError() == GL_NO_ERROR);
+}
+
+
 ContextImpl *RendererGL::createContext(const gl::ContextState &state)
 {
     return new ContextGL(state, this);

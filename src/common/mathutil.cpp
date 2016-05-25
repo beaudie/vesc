@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <math.h>
+#include <cstring> // for memcpy
 
 namespace gl
 {
@@ -64,4 +65,15 @@ void convert999E5toRGBFloats(unsigned int input, float *red, float *green, float
     *blue = inputData->B * pow(2.0f, (int)inputData->E - g_sharedexp_bias - g_sharedexp_mantissabits);
 }
 
+void setToIdentity(float m[16])
+{
+    const float I[16] = {
+        1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
+    std::memcpy(m, I, sizeof(I));
 }
+
+} // gl
