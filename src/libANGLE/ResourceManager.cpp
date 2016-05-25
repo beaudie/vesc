@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 
-// ResourceManager.cpp: Implements the gl::ResourceManager class, which tracks and 
+// ResourceManager.cpp: Implements the gl::ResourceManager class, which tracks and
 // retrieves objects which may be shared by multiple Contexts.
 
 #include "libANGLE/ResourceManager.h"
@@ -17,6 +17,7 @@
 #include "libANGLE/Shader.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/renderer/GLImplFactory.h"
+#include "libANGLE/renderer/PathRenderingImpl.h"
 
 namespace gl
 {
@@ -153,6 +154,41 @@ GLuint ResourceManager::createFenceSync(rx::GLImplFactory *factory)
     return handle;
 }
 
+GLuint ResourceManager::createPaths(rx::GLImplFactory* factory, GLsizei range)
+{
+    // Path allocation happens in (potentially) large ranges.
+    // For example the classic SVG tiger (http://www.amplesdk.com/examples/markup/svg/tiger/)
+    // has over 200 path objects which are all allocated in one call to the driver.
+    // What we do here is that we allocate the handles from our own "handle space" that
+    // we call the "client" using a PathAllocator.
+    // Then we also ask the driver to perform the same allocation which gives us another range
+    // of handles in a space we call "service". Then we create a mapping
+    // between these two allocated ranges using the PathMapper.
+    // Finally we expose the handles in the client space to the client
+    // code calling into us.
+    // The path ranges are all identified by their starting handle
+    // and then cover the incremental range from that handle onwards.
+
+    // Allocate client side handles.
+    const GLuint client = mPathHandleAllocator.allocateRange(static_cast<GLuint>(range));
+    if (client == PathAllocator::kInvalidPath)
+        return 0;
+
+    // Allocate service (driver side) handles.
+    GLuint service = 0;
+    Error err = factory->getPathRenderer()->createPaths(range, &service);
+    if (err.isError())
+    {
+        mPathHandleAllocator.releaseRange(client, static_cast<GLuint>(range));
+        return 0;
+    }
+
+    // setup the mapping.
+    mPathMap.createMapping(client, client + range - 1, service);
+
+    return client;
+}
+
 void ResourceManager::deleteBuffer(GLuint buffer)
 {
     auto bufferObject = mBufferMap.find(buffer);
@@ -197,7 +233,7 @@ void ResourceManager::deleteProgram(GLuint program)
             mProgramMap.erase(programObject);
         }
         else
-        { 
+        {
             programObject->second->flagForDeletion();
         }
     }
@@ -250,6 +286,33 @@ void ResourceManager::deleteFenceSync(GLuint fenceSync)
         mFenceSyncMap.erase(fenceObjectIt);
     }
 }
+
+void ResourceManager::deletePaths(rx::GLImplFactory* factory, GLuint first, GLsizei range)
+{
+    std::vector<PathMapper::RemovedRange> graveyard;
+    mPathMap.removeMapping(first, first + range - 1, &graveyard);
+
+    for (const auto& carcass : graveyard)
+    {
+        GLuint first = carcass.mFirstServiceHandle;
+        GLuint range = carcass.mRange;
+        while (range > 0)
+        {
+            GLsizei irange;
+            if (range >= static_cast<GLuint>(std::numeric_limits<GLsizei>::max()))
+                irange = std::numeric_limits<GLsizei>::max();
+            else irange = static_cast<GLsizei>(range);
+
+            factory->getPathRenderer()->deletePaths(first, range);
+
+            range -= irange;
+            first += irange;
+        }
+    }
+
+    mPathHandleAllocator.releaseRange(first, static_cast<GLuint>(range));
+}
+
 
 Buffer *ResourceManager::getBuffer(unsigned int handle)
 {
@@ -351,6 +414,59 @@ FenceSync *ResourceManager::getFenceSync(unsigned int handle)
         return fenceObjectIt->second;
     }
 }
+
+GLuint ResourceManager::getPath(GLuint path) const
+{
+    GLuint service = 0;
+    mPathMap.getPath(path, &service);
+    return service;
+}
+
+bool ResourceManager::isPath(rx::GLImplFactory* factory, GLuint path) const
+{
+    if (!mPathHandleAllocator.isUsed(path))
+        return false;
+
+    GLuint service = 0;
+    mPathMap.getPath(path, &service);
+
+    return factory->getPathRenderer()->isPath(service);
+}
+
+bool ResourceManager::hasPath(GLuint handle) const
+{
+    return mPathHandleAllocator.isUsed(handle);
+}
+
+Error ResourceManager::setPathCommands(rx::GLImplFactory *factory, GLuint path, GLsizei numCommands,
+                                      const GLubyte *commands,
+                                      GLsizei numCoords,
+                                      GLenum coordType,
+                                      const void *coords)
+{
+    GLuint service = 0;
+    mPathMap.getPath(path, &service);
+
+    return factory->getPathRenderer()->setCommands(service, numCommands,
+        commands, numCoords, coordType, coords);
+}
+
+void ResourceManager::setPathParameter(rx::GLImplFactory *factory, GLuint path, GLenum pname, GLfloat value)
+{
+    GLuint service = 0;
+    mPathMap.getPath(path, &service);
+
+    factory->getPathRenderer()->setPathParameter(service, pname, value);
+}
+
+void ResourceManager::getPathParameter(rx::GLImplFactory *factory, GLuint path, GLenum pname, GLfloat *value) const
+{
+    GLuint service = 0;
+    mPathMap.getPath(path, &service);
+
+    factory->getPathRenderer()->getPathParameter(service, pname, value);
+}
+
 
 void ResourceManager::setRenderbuffer(GLuint handle, Renderbuffer *buffer)
 {

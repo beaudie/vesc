@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 
 #include "common/BitSetIterator.h"
+#include "common/mathutil.h"
 #include "libANGLE/ContextState.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/TransformFeedback.h"
@@ -23,6 +24,8 @@
 #include "libANGLE/renderer/gl/TransformFeedbackGL.h"
 #include "libANGLE/renderer/gl/VertexArrayGL.h"
 #include "libANGLE/renderer/gl/QueryGL.h"
+
+#include <cstring> // for memcmp
 
 namespace rx
 {
@@ -116,6 +119,9 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mMultisamplingEnabled(true),
       mSampleAlphaToOneEnabled(false),
       mCoverageModulation(GL_NONE),
+      mPathStencilFunc(GL_ALWAYS),
+      mPathStencilRef(0),
+      mPathStencilMask(~GLuint(0)),
       mLocalDirtyBits()
 {
     ASSERT(mFunctions);
@@ -145,6 +151,9 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
             mFunctions->enable(GL_POINT_SPRITE);
         }
     }
+
+    gl::setToIdentity(mPathMatrixMV);
+    gl::setToIdentity(mPathMatrixProj);
 }
 
 void StateManagerGL::deleteProgram(GLuint program)
@@ -1524,6 +1533,17 @@ void StateManagerGL::syncState(const gl::State &state, const gl::State::DirtyBit
             case gl::State::DIRTY_BIT_COVERAGE_MODULATION:
                 setCoverageModulation(state.getCoverageModulation());
                 break;
+            case gl::State::DIRTY_BIT_PATH_RENDERING_MATRIX_MV:
+                setPathRenderingModelViewMatrix(state.getPathRenderingMatrix(GL_PATH_MODELVIEW_MATRIX_CHROMIUM));
+                break;
+            case gl::State::DIRTY_BIT_PATH_RENDERING_MATRIX_PROJ:
+                setPathRenderingProjectionMatrix(state.getPathRenderingMatrix(GL_PATH_PROJECTION_MATRIX_CHROMIUM));
+                break;
+            case gl::State::DIRTY_BIT_PATH_RENDERING_STENCIL_STATE:
+                setPathRenderingStencilState(state.getPathStencilFunc(),
+                  state.getPathStencilRef(),
+                  state.getPathStencilMask());
+                break;
             default:
             {
                 ASSERT(dirtyBit >= gl::State::DIRTY_BIT_CURRENT_VALUE_0 &&
@@ -1600,6 +1620,44 @@ void StateManagerGL::setCoverageModulation(GLenum components)
         mLocalDirtyBits.set(gl::State::DIRTY_BIT_COVERAGE_MODULATION);
     }
 }
+
+void StateManagerGL::setPathRenderingModelViewMatrix(const GLfloat* m)
+{
+    if (std::memcmp(mPathMatrixMV, m, sizeof(mPathMatrixMV)))
+    {
+        std::memcpy(mPathMatrixMV, m, sizeof(mPathMatrixMV));
+        mFunctions->matrixLoadEXT(GL_PATH_MODELVIEW_CHROMIUM, m);
+
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_PATH_RENDERING_MATRIX_MV);
+    }
+}
+
+void StateManagerGL::setPathRenderingProjectionMatrix(const GLfloat* m)
+{
+    if (std::memcmp(mPathMatrixProj, m, sizeof(mPathMatrixProj)))
+    {
+        std::memcpy(mPathMatrixProj, m, sizeof(mPathMatrixProj));
+        mFunctions->matrixLoadEXT(GL_PATH_PROJECTION_CHROMIUM, m);
+
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_PATH_RENDERING_MATRIX_PROJ);
+    }
+}
+
+void StateManagerGL::setPathRenderingStencilState(GLenum func, GLint ref, GLuint mask)
+{
+    if (func != mPathStencilFunc ||
+        ref  != mPathStencilRef  ||
+        mask != mPathStencilMask)
+    {
+        mPathStencilFunc = func;
+        mPathStencilRef  = ref;
+        mPathStencilMask = mask;
+        mFunctions->pathStencilFuncNV(func, ref, mask);
+
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_PATH_RENDERING_STENCIL_STATE);
+    }
+}
+
 
 void StateManagerGL::setTextureCubemapSeamlessEnabled(bool enabled)
 {

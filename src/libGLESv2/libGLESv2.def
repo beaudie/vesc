@@ -205,6 +205,17 @@ EXPORTS
     glBindUniformLocationCHROMIUM   @318
     glCoverageModulationCHROMIUM    @319
 
+    glMatrixLoadfCHROMIUM           @320
+    glMatrixLoadIdentityCHROMIUM    @321
+    glGenPathsCHROMIUM              @322
+    glDeletePathsCHROMIUM           @323
+    glIsPathCHROMIUM                @324
+    glPathCommandsCHROMIUM          @325
+    glPathParameterfCHROMIUM        @326
+    glPathParameteriCHROMIUM        @327
+    glGetPathParameterfvCHROMIUM    @328
+    glGetPathParameterivCHROMIUM    @329
+
     ; GLES 3.0 Functions
     glReadBuffer                    @180
     glDrawRangeElements             @181

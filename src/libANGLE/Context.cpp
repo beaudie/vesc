@@ -11,6 +11,7 @@
 
 #include <iterator>
 #include <sstream>
+#include <cstring> // for memcpy
 
 #include "common/platform.h"
 #include "common/utilities.h"
@@ -33,6 +34,7 @@
 #include "libANGLE/validationES.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/EGLImplFactory.h"
+#include "libANGLE/renderer/PathRenderingImpl.h"
 
 namespace
 {
@@ -437,6 +439,13 @@ GLsync Context::createFenceSync()
     return reinterpret_cast<GLsync>(static_cast<uintptr_t>(handle));
 }
 
+GLuint Context::createPaths(GLsizei range)
+{
+    // no error code specified for cases when
+    // we're out of handles.
+    return mResourceManager->createPaths(mImplementation.get(), range);
+}
+
 GLuint Context::createVertexArray()
 {
     GLuint vertexArray           = mVertexArrayHandleAllocator.allocate();
@@ -534,6 +543,50 @@ void Context::deleteFenceSync(GLsync fenceSync)
     mResourceManager->deleteFenceSync(static_cast<GLuint>(reinterpret_cast<uintptr_t>(fenceSync)));
 }
 
+void Context::deletePaths(GLuint first, GLsizei range)
+{
+    mResourceManager->deletePaths(mImplementation.get(),first, range);
+}
+
+bool Context::hasPathData(GLuint path) const
+{
+    return mResourceManager->isPath(mImplementation.get(), path);
+}
+
+bool Context::hasPath(GLuint path) const
+{
+    return mResourceManager->hasPath(path);
+}
+
+void Context::setPathCommands(GLuint path, GLsizei numCommands,
+                              const GLubyte *commands,
+                              GLsizei numCoords,
+                              GLenum coordType,
+                              const void *coords)
+{
+    const Error err = mResourceManager->setPathCommands(mImplementation.get(),
+        path, numCommands, commands, numCoords, coordType, coords);
+    if (err.isError())
+        handleError(err);
+}
+
+void Context::setPathParameter(GLuint path, GLenum pname, GLfloat value)
+{
+    mResourceManager->setPathParameter(mImplementation.get(),
+        path, pname, value);
+}
+
+void Context::getPathParameter(GLuint path, GLenum pname, GLfloat* value) const
+{
+    mResourceManager->getPathParameter(mImplementation.get(),
+        path, pname, value);
+}
+
+void Context::setPathStencilFunc(GLenum func, GLint ref, GLuint mask)
+{
+    mState.setPathStencilFunc(func, ref, mask);
+}
+
 void Context::deleteVertexArray(GLuint vertexArray)
 {
     auto iter = mVertexArrayMap.find(vertexArray);
@@ -617,6 +670,14 @@ void Context::deleteQuery(GLuint query)
         mQueryMap.erase(queryObject);
     }
 }
+
+// Path *Context::getPath(GLuint handle)
+// {
+//     if (!mExtensions.pathRendering)
+//         return nullptr;
+
+//     return mResourceManager->getPath(handle);
+// }
 
 Buffer *Context::getBuffer(GLuint handle) const
 {
@@ -1016,6 +1077,16 @@ void Context::getFloatv(GLenum pname, GLfloat *params)
       case GL_MAX_TEXTURE_LOD_BIAS:
         *params = mCaps.maxLODBias;
         break;
+
+      case GL_PATH_MODELVIEW_MATRIX_CHROMIUM:
+      case GL_PATH_PROJECTION_MATRIX_CHROMIUM:
+        ASSERT(mExtensions.pathRendering);
+        {
+            const GLfloat* m = mState.getPathRenderingMatrix(pname);
+            std::memcpy(params, m, 16 * sizeof(GLfloat));
+        }
+        break;
+
       default:
         mState.getFloatv(pname, params);
         break;
@@ -1391,6 +1462,16 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
           *type      = GL_INT;
           *numParams = 1;
           return true;
+
+      case GL_PATH_MODELVIEW_MATRIX_CHROMIUM:
+      case GL_PATH_PROJECTION_MATRIX_CHROMIUM:
+          if (!mExtensions.pathRendering)
+          {
+              return false;
+          }
+          *type = GL_FLOAT;
+          *numParams = 16;
+          return true;
     }
 
     if (mExtensions.debug)
@@ -1671,6 +1752,82 @@ void Context::setCoverageModulation(GLenum components)
     mState.setCoverageModulation(components);
 }
 
+void Context::loadPathRenderingMatrix(GLenum matrixMode, const GLfloat* matrix)
+{
+    mState.loadPathRenderingMatrix(matrixMode, matrix);
+}
+
+void Context::stencilFillPath(GLuint path, GLenum fillMode, GLuint mask)
+{
+    const auto p = mResourceManager->getPath(path);
+    if (!p)
+        return;
+
+    // todo: maybe sync only state required for path rendering?
+    syncRendererState();
+
+    getPathRendering()->stencilFillPath(p, fillMode, mask);
+}
+
+void Context::stencilStrokePath(GLuint path, GLint reference, GLuint mask)
+{
+    const auto p = mResourceManager->getPath(path);
+    if (!p)
+        return;
+
+    // todo: maybe sync only state required for path rendering?
+    syncRendererState();
+
+    getPathRendering()->stencilStrokePath(p, reference, mask);
+}
+
+void Context::coverFillPath(GLuint path, GLenum coverMode)
+{
+    const auto p = mResourceManager->getPath(path);
+    if (!p)
+        return;
+
+    // todo: maybe sync only state required for path rendering?
+    syncRendererState();
+
+    getPathRendering()->coverFillPath(p, coverMode);
+}
+
+void Context::coverStrokePath(GLuint path, GLenum coverMode)
+{
+    const auto p = mResourceManager->getPath(path);
+    if (!p)
+        return;
+
+    // todo: maybe sync only state required for path rendering?
+    syncRendererState();
+
+    getPathRendering()->coverStrokePath(p, coverMode);
+}
+
+void Context::stencilThenCoverFillPath(GLuint path, GLenum fillMode, GLuint mask, GLenum coverMode)
+{
+    const auto p = mResourceManager->getPath(path);
+    if (!p)
+        return;
+
+    // todo: maybe sync only state required for path rendering?
+    syncRendererState();
+
+    getPathRendering()->stencilThenCoverFillPath(p, fillMode, mask, coverMode);
+}
+
+void Context::stencilThenCoverStrokePath(GLuint path, GLint reference, GLuint mask, GLenum coverMode)
+{
+    const auto p = mResourceManager->getPath(path);
+    if (!p)
+        return;
+
+    // todo: maybe sync only state required for path rendering?
+    syncRendererState();
+
+    getPathRendering()->stencilThenCoverStrokePath(p, reference, mask, coverMode);
+}
 
 void Context::handleError(const Error &error)
 {
@@ -2057,6 +2214,11 @@ const std::string &Context::getExtensionString(size_t idx) const
 size_t Context::getExtensionStringCount() const
 {
     return mExtensionStrings.size();
+}
+
+rx::PathRenderingImpl* Context::getPathRendering() const
+{
+    return getImplementation()->getPathRenderer();
 }
 
 void Context::beginTransformFeedback(GLenum primitiveMode)

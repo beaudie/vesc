@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/gl/FenceNVGL.h"
 #include "libANGLE/renderer/gl/FenceSyncGL.h"
 #include "libANGLE/renderer/gl/FramebufferGL.h"
+#include "libANGLE/renderer/gl/PathRenderingGL.h"
 #include "libANGLE/renderer/gl/ProgramGL.h"
 #include "libANGLE/renderer/gl/QueryGL.h"
 #include "libANGLE/renderer/gl/RenderbufferGL.h"
@@ -29,12 +30,13 @@ namespace rx
 {
 
 ContextGL::ContextGL(const gl::ContextState &state, RendererGL *renderer)
-    : ContextImpl(state), mRenderer(renderer)
+    : ContextImpl(state), mRenderer(renderer), mPathRenderer(nullptr)
 {
 }
 
 ContextGL::~ContextGL()
 {
+    delete mPathRenderer;
 }
 
 gl::Error ContextGL::initialize()
@@ -108,6 +110,14 @@ TransformFeedbackImpl *ContextGL::createTransformFeedback()
 SamplerImpl *ContextGL::createSampler()
 {
     return new SamplerGL(getFunctions(), getStateManager());
+}
+
+PathRenderingImpl *ContextGL::getPathRenderer()
+{
+    if (!mPathRenderer)
+        mPathRenderer = new PathRenderingGL(getFunctions(), getStateManager());
+
+    return mPathRenderer;
 }
 
 gl::Error ContextGL::flush()
