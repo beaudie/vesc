@@ -13,7 +13,9 @@
 #include "libANGLE/renderer/gl/CompilerGL.h"
 #include "libANGLE/renderer/gl/FenceNVGL.h"
 #include "libANGLE/renderer/gl/FenceSyncGL.h"
+#include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/FramebufferGL.h"
+#include "libANGLE/renderer/gl/PathGL.h"
 #include "libANGLE/renderer/gl/ProgramGL.h"
 #include "libANGLE/renderer/gl/QueryGL.h"
 #include "libANGLE/renderer/gl/RenderbufferGL.h"
@@ -110,6 +112,26 @@ SamplerImpl *ContextGL::createSampler()
     return new SamplerGL(getFunctions(), getStateManager());
 }
 
+std::vector<PathImpl*> ContextGL::createPaths(GLsizei range)
+{
+    const FunctionsGL* funcs = getFunctions();
+
+    std::vector<PathImpl*> ret;
+    ret.resize(range);
+
+    const GLuint first = funcs->genPathsNV(range);
+    if (first == 0)
+        return ret;
+
+    for (GLsizei i=0; i<range; ++i)
+    {
+        const auto id = first + i;
+        ret[i] = new PathGL(funcs, id);
+    }
+
+    return ret;
+}
+
 gl::Error ContextGL::flush()
 {
     return mRenderer->flush();
@@ -162,6 +184,48 @@ gl::Error ContextGL::drawRangeElements(GLenum mode,
                                        const gl::IndexRange &indexRange)
 {
     return mRenderer->drawRangeElements(mState, mode, start, end, count, type, indices, indexRange);
+}
+
+void ContextGL::stencilFillPath(const PathImpl *path, GLenum fillMode, GLuint mask)
+{
+    const auto p = static_cast<const PathGL*>(path);
+
+    mRenderer->stencilFillPath(mState, p->getPathID(), fillMode, mask);
+}
+
+void ContextGL::stencilStrokePath(const PathImpl *path, GLint reference, GLuint mask)
+{
+    const auto p = static_cast<const PathGL*>(path);
+
+    mRenderer->stencilStrokePath(mState, p->getPathID(), reference, mask);
+}
+
+void ContextGL::coverFillPath(const PathImpl *path, GLenum coverMode)
+{
+    const auto p = static_cast<const PathGL*>(path);
+
+    mRenderer->coverFillPath(mState, p->getPathID(), coverMode);
+}
+
+void ContextGL::coverStrokePath(const PathImpl *path, GLenum coverMode)
+{
+    const auto p = static_cast<const PathGL*>(path);
+
+    mRenderer->coverStrokePath(mState, p->getPathID(), coverMode);
+}
+
+void ContextGL::stencilThenCoverFillPath(const PathImpl *path, GLenum fillMode, GLuint mask, GLenum coverMode)
+{
+    const auto p = static_cast<const PathGL*>(path);
+
+    mRenderer->stencilThenCoverFillPath(mState, p->getPathID(), fillMode, mask, coverMode);
+}
+
+void ContextGL::stencilThenCoverStrokePath(const PathImpl *path, GLint reference, GLuint mask, GLenum coverMode)
+{
+    const auto p = static_cast<const PathGL*>(path);
+
+    mRenderer->stencilThenCoverStrokePath(mState, p->getPathID(), reference, mask, coverMode);
 }
 
 void ContextGL::notifyDeviceLost()

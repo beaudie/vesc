@@ -9,6 +9,7 @@
 #include "libANGLE/State.h"
 
 #include "common/BitSetIterator.h"
+#include "common/mathutil.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Debug.h"
@@ -17,6 +18,8 @@
 #include "libANGLE/Query.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
+
+#include <cstring> // for memcpy
 
 namespace gl
 {
@@ -180,6 +183,12 @@ void State::initialize(const Caps &caps,
     }
 
     mCoverageModulation = GL_NONE;
+
+    setToIdentity(mPathMatrixMV);
+    setToIdentity(mPathMatrixProj);
+    mPathStencilFunc = GL_ALWAYS;
+    mPathStencilRef  = 0;
+    mPathStencilMask = ~GLuint(0);
 }
 
 void State::reset()
@@ -226,6 +235,12 @@ void State::reset()
     mUnpack.pixelBuffer.set(NULL);
 
     mProgram = NULL;
+
+    setToIdentity(mPathMatrixMV);
+    setToIdentity(mPathMatrixProj);
+    mPathStencilFunc = GL_ALWAYS;
+    mPathStencilRef  = 0;
+    mPathStencilMask = ~GLuint(0);
 
     // TODO(jmadill): Is this necessary?
     setAllDirtyBits();
@@ -1370,6 +1385,47 @@ void State::setCoverageModulation(GLenum components)
 GLenum State::getCoverageModulation() const
 {
     return mCoverageModulation;
+}
+
+void State::loadPathRenderingMatrix(GLenum matrixMode, const GLfloat* matrix)
+{
+    if (matrixMode == GL_PATH_MODELVIEW_CHROMIUM)
+    {
+        std::memcpy(mPathMatrixMV, matrix, 16 * sizeof(GLfloat));
+        mDirtyBits.set(DIRTY_BIT_PATH_RENDERING_MATRIX_MV);
+    }
+    else if (matrixMode == GL_PATH_PROJECTION_CHROMIUM)
+    {
+        std::memcpy(mPathMatrixProj, matrix, 16 * sizeof(GLfloat));
+        mDirtyBits.set(DIRTY_BIT_PATH_RENDERING_MATRIX_PROJ);
+    }
+    else
+    {
+        UNREACHABLE();
+    }
+}
+
+const GLfloat* State::getPathRenderingMatrix(GLenum which) const
+{
+    if (which == GL_PATH_MODELVIEW_MATRIX_CHROMIUM)
+    {
+        return mPathMatrixMV;
+    }
+    else if (which == GL_PATH_PROJECTION_MATRIX_CHROMIUM)
+    {
+        return mPathMatrixProj;
+    }
+
+    UNREACHABLE();
+    return nullptr;
+}
+
+void State::setPathStencilFunc(GLenum func, GLint ref, GLuint mask)
+{
+    mPathStencilFunc = func;
+    mPathStencilRef  = ref;
+    mPathStencilMask = mask;
+    mDirtyBits.set(DIRTY_BIT_PATH_RENDERING_STENCIL_STATE);
 }
 
 void State::getBooleanv(GLenum pname, GLboolean *params)

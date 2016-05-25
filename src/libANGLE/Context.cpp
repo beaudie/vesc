@@ -11,6 +11,7 @@
 
 #include <iterator>
 #include <sstream>
+#include <cstring> // for memcpy
 
 #include "common/platform.h"
 #include "common/utilities.h"
@@ -20,6 +21,7 @@
 #include "libANGLE/Fence.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
+#include "libANGLE/Path.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/Query.h"
 #include "libANGLE/Renderbuffer.h"
@@ -115,6 +117,11 @@ bool GetDebug(const egl::AttributeMap &attribs)
 bool GetNoError(const egl::AttributeMap &attribs)
 {
     return (attribs.get(EGL_CONTEXT_OPENGL_NO_ERROR_KHR, EGL_FALSE) == EGL_TRUE);
+}
+
+const rx::PathImpl* getPathImpl(const gl::Path *p)
+{
+    return p->getImplementation();
 }
 
 }  // anonymous namespace
@@ -437,6 +444,17 @@ GLsync Context::createFenceSync()
     return reinterpret_cast<GLsync>(static_cast<uintptr_t>(handle));
 }
 
+GLuint Context::createPaths(GLsizei range)
+{
+    const auto first = mResourceManager->createPaths(mImplementation.get(), range);
+    if (first == 0)
+    {
+        handleError(gl::Error(GL_OUT_OF_MEMORY));
+        return 0;
+    }
+    return first;
+}
+
 GLuint Context::createVertexArray()
 {
     GLuint vertexArray           = mVertexArrayHandleAllocator.allocate();
@@ -532,6 +550,98 @@ void Context::deleteFenceSync(GLsync fenceSync)
     // and since our API is currently designed for being called from a single thread, we can delete
     // the fence immediately.
     mResourceManager->deleteFenceSync(static_cast<GLuint>(reinterpret_cast<uintptr_t>(fenceSync)));
+}
+
+void Context::deletePaths(GLuint first, GLsizei range)
+{
+    mResourceManager->deletePaths(mImplementation.get(),first, range);
+}
+
+bool Context::hasPathData(GLuint path) const
+{
+    const auto *p = mResourceManager->getPath(path);
+    if (p == nullptr)
+        return false;
+
+    return p->hasPathData();
+}
+
+bool Context::hasPath(GLuint path) const
+{
+    return mResourceManager->hasPath(path);
+}
+
+void Context::setPathCommands(GLuint path, GLsizei numCommands,
+                              const GLubyte *commands,
+                              GLsizei numCoords,
+                              GLenum coordType,
+                              const void *coords)
+{
+    auto *p = mResourceManager->getPath(path);
+
+    const Error err = p->setCommands(numCommands, commands, numCoords,
+        coordType, coords);
+    if (err.isError())
+        handleError(err);
+}
+
+void Context::setPathParameter(GLuint path, GLenum pname, GLfloat value)
+{
+    auto *p = mResourceManager->getPath(path);
+
+    switch (pname)
+    {
+        case GL_PATH_STROKE_WIDTH_CHROMIUM:
+            p->setStrokeWidth(value);
+            break;
+        case GL_PATH_END_CAPS_CHROMIUM:
+            p->setEndCaps(static_cast<GLenum>(value));
+            break;
+        case GL_PATH_JOIN_STYLE_CHROMIUM:
+            p->setJoinStyle(static_cast<GLenum>(value));
+            break;
+        case GL_PATH_MITER_LIMIT_CHROMIUM:
+            p->setMiterLimit(value);
+            break;
+        case GL_PATH_STROKE_BOUND_CHROMIUM:
+            p->setStrokeBound(value);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void Context::getPathParameter(GLuint path, GLenum pname, GLfloat* value) const
+{
+    const auto *p = mResourceManager->getPath(path);
+
+    switch (pname)
+    {
+        case GL_PATH_STROKE_WIDTH_CHROMIUM:
+            *value = p->getStrokeWidth();
+            break;
+        case GL_PATH_END_CAPS_CHROMIUM:
+            *value = static_cast<GLfloat>(p->getEndCaps());
+            break;
+        case GL_PATH_JOIN_STYLE_CHROMIUM:
+            *value = static_cast<GLfloat>(p->getJoinStyle());
+            break;
+        case GL_PATH_MITER_LIMIT_CHROMIUM:
+            *value = p->getMiterLimit();
+            break;
+        case GL_PATH_STROKE_BOUND_CHROMIUM:
+            *value = p->getStrokeBound();
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void Context::setPathStencilFunc(GLenum func, GLint ref, GLuint mask)
+{
+    mState.setPathStencilFunc(func, ref, mask);
 }
 
 void Context::deleteVertexArray(GLuint vertexArray)
@@ -1016,6 +1126,16 @@ void Context::getFloatv(GLenum pname, GLfloat *params)
       case GL_MAX_TEXTURE_LOD_BIAS:
         *params = mCaps.maxLODBias;
         break;
+
+      case GL_PATH_MODELVIEW_MATRIX_CHROMIUM:
+      case GL_PATH_PROJECTION_MATRIX_CHROMIUM:
+        ASSERT(mExtensions.pathRendering);
+        {
+            const GLfloat* m = mState.getPathRenderingMatrix(pname);
+            std::memcpy(params, m, 16 * sizeof(GLfloat));
+        }
+        break;
+
       default:
         mState.getFloatv(pname, params);
         break;
@@ -1391,6 +1511,16 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
           *type      = GL_INT;
           *numParams = 1;
           return true;
+
+      case GL_PATH_MODELVIEW_MATRIX_CHROMIUM:
+      case GL_PATH_PROJECTION_MATRIX_CHROMIUM:
+          if (!mExtensions.pathRendering)
+          {
+              return false;
+          }
+          *type = GL_FLOAT;
+          *numParams = 16;
+          return true;
     }
 
     if (mExtensions.debug)
@@ -1669,6 +1799,95 @@ void Context::bindUniformLocation(GLuint program, GLint location, const GLchar *
 void Context::setCoverageModulation(GLenum components)
 {
     mState.setCoverageModulation(components);
+}
+
+void Context::loadPathRenderingMatrix(GLenum matrixMode, const GLfloat* matrix)
+{
+    mState.loadPathRenderingMatrix(matrixMode, matrix);
+}
+
+void Context::stencilFillPath(GLuint path, GLenum fillMode, GLuint mask)
+{
+    const auto p = mResourceManager->getPath(path);
+    if (!p)
+        return;
+
+    const auto i = getPathImpl(p);
+
+    // todo: maybe sync only state required for path rendering?
+    syncRendererState();
+
+    getPathRendering()->stencilFillPath(i, fillMode, mask);
+}
+
+void Context::stencilStrokePath(GLuint path, GLint reference, GLuint mask)
+{
+    const auto p = mResourceManager->getPath(path);
+    if (!p)
+        return;
+
+    const auto i = getPathImpl(p);
+
+    // todo: maybe sync only state required for path rendering?
+    syncRendererState();
+
+    getPathRendering()->stencilStrokePath(i, reference, mask);
+}
+
+void Context::coverFillPath(GLuint path, GLenum coverMode)
+{
+    const auto p = mResourceManager->getPath(path);
+    if (!p)
+        return;
+
+    const auto i = getPathImpl(p);
+
+    // todo: maybe sync only state required for path rendering?
+    syncRendererState();
+
+    getPathRendering()->coverFillPath(i, coverMode);
+}
+
+void Context::coverStrokePath(GLuint path, GLenum coverMode)
+{
+    const auto p = mResourceManager->getPath(path);
+    if (!p)
+        return;
+
+    const auto i = getPathImpl(p);
+
+    // todo: maybe sync only state required for path rendering?
+    syncRendererState();
+
+    getPathRendering()->coverStrokePath(i, coverMode);
+}
+
+void Context::stencilThenCoverFillPath(GLuint path, GLenum fillMode, GLuint mask, GLenum coverMode)
+{
+    const auto p = mResourceManager->getPath(path);
+    if (!p)
+        return;
+
+    const auto i = getPathImpl(p);
+
+    // todo: maybe sync only state required for path rendering?
+    syncRendererState();
+
+    getPathRendering()->stencilThenCoverFillPath(i, fillMode, mask, coverMode);
+}
+
+void Context::stencilThenCoverStrokePath(GLuint path, GLint reference, GLuint mask, GLenum coverMode)
+{
+    const auto p = mResourceManager->getPath(path);
+    if (!p)
+        return;
+
+    const auto i = getPathImpl(p);
+
+    // todo: maybe sync only state required for path rendering?
+    syncRendererState();
+
+    getPathRendering()->stencilThenCoverStrokePath(i, reference, mask, coverMode);
 }
 
 void Context::handleError(const Error &error)
@@ -2056,6 +2275,11 @@ const std::string &Context::getExtensionString(size_t idx) const
 size_t Context::getExtensionStringCount() const
 {
     return mExtensionStrings.size();
+}
+
+rx::ContextImpl* Context::getPathRendering() const
+{
+    return mImplementation.get();
 }
 
 void Context::beginTransformFeedback(GLenum primitiveMode)

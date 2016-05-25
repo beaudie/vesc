@@ -721,7 +721,9 @@ inline bool isInf(float f)
     return ((bitCast<uint32_t>(f) & 0x7f800000u) == 0x7f800000u) && !(bitCast<uint32_t>(f) & 0x7fffffu);
 }
 
-}
+void setToIdentity(float m[16]);
+
+} // gl
 
 namespace rx
 {

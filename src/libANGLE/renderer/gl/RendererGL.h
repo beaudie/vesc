@@ -77,6 +77,14 @@ class RendererGL : angle::NonCopyable
                                 const GLvoid *indices,
                                 const gl::IndexRange &indexRange);
 
+    // CHROMIUM_path_rendering implementation
+    void stencilFillPath(const gl::ContextState &state, GLuint path, GLenum fillMode, GLuint mask);
+    void stencilStrokePath(const gl::ContextState &state, GLuint path, GLint reference, GLuint mask);
+    void coverFillPath(const gl::ContextState &state, GLuint path, GLenum coverMode);
+    void coverStrokePath(const gl::ContextState &state, GLuint path, GLenum coverMode);
+    void stencilThenCoverFillPath(const gl::ContextState &state, GLuint path, GLenum fillMode, GLuint mask, GLenum coverMode);
+    void stencilThenCoverStrokePath(const gl::ContextState &state, GLuint path, GLint reference, GLuint mask, GLenum coverMode);
+
     // EXT_debug_marker
     void insertEventMarker(GLsizei length, const char *marker);
     void pushGroupMarker(GLsizei length, const char *marker);
