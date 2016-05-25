@@ -23,6 +23,7 @@ class FunctionsGL;
 class RendererGL;
 class StateManagerGL;
 struct WorkaroundsGL;
+class PathRenderingGL;
 
 class ContextGL : public ContextImpl
 {
@@ -62,6 +63,8 @@ class ContextGL : public ContextImpl
 
     // Sampler object creation
     SamplerImpl *createSampler() override;
+
+    PathRenderingImpl *getPathRenderer() override;
 
     // Flush and finish.
     gl::Error flush() override;
@@ -131,6 +134,8 @@ class ContextGL : public ContextImpl
 
   private:
     RendererGL *mRenderer;
+
+    PathRenderingGL* mPathRenderer;
 };
 
 }  // namespace rx

@@ -13,7 +13,10 @@
 #include "angle_gl.h"
 #include "common/angleutils.h"
 #include "libANGLE/angletypes.h"
+#include "libANGLE/Error.h"
 #include "libANGLE/HandleAllocator.h"
+#include "libANGLE/PathAllocator.h"
+#include "libANGLE/PathMapper.h"
 
 namespace rx
 {
@@ -49,6 +52,7 @@ class ResourceManager : angle::NonCopyable
     GLuint createRenderbuffer();
     GLuint createSampler();
     GLuint createFenceSync(rx::GLImplFactory *factory);
+    GLuint createPaths(rx::GLImplFactory* factory, GLsizei range);
 
     void deleteBuffer(GLuint buffer);
     void deleteShader(GLuint shader);
@@ -57,6 +61,7 @@ class ResourceManager : angle::NonCopyable
     void deleteRenderbuffer(GLuint renderbuffer);
     void deleteSampler(GLuint sampler);
     void deleteFenceSync(GLuint fenceSync);
+    void deletePaths(rx::GLImplFactory *factory, GLuint first, GLsizei range);
 
     Buffer *getBuffer(GLuint handle);
     Shader *getShader(GLuint handle);
@@ -65,6 +70,19 @@ class ResourceManager : angle::NonCopyable
     Renderbuffer *getRenderbuffer(GLuint handle);
     Sampler *getSampler(GLuint handle);
     FenceSync *getFenceSync(GLuint handle);
+
+    // CHROMIUM_path_rendering
+    GLuint getPath(GLuint path) const;
+    bool isPath(rx::GLImplFactory *factory, GLuint path) const;
+    bool hasPath(GLuint path) const;
+    Error setPathCommands(rx::GLImplFactory *factory, GLuint path, GLsizei numCommands,
+                         const GLubyte *commands,
+                         GLsizei numCoords,
+                         GLenum coordType,
+                         const void *coords);
+    void setPathParameter(rx::GLImplFactory *factory, GLuint path, GLenum pname, GLfloat value);
+    void getPathParameter(rx::GLImplFactory *factory, GLuint path, GLenum pname, GLfloat *value) const;
+
 
     void setRenderbuffer(GLuint handle, Renderbuffer *renderbuffer);
 
@@ -78,7 +96,6 @@ class ResourceManager : angle::NonCopyable
   private:
     void createTextureInternal(GLuint handle);
 
-    ;
     std::size_t mRefCount;
 
     ResourceMap<Buffer> mBufferMap;
@@ -100,6 +117,9 @@ class ResourceManager : angle::NonCopyable
 
     ResourceMap<FenceSync> mFenceSyncMap;
     HandleAllocator mFenceSyncHandleAllocator;
+
+    PathMapper    mPathMap;
+    PathAllocator mPathHandleAllocator;
 };
 
 }  // namespace gl

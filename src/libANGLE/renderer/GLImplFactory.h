@@ -36,6 +36,7 @@ class ShaderImpl;
 class TextureImpl;
 class TransformFeedbackImpl;
 class VertexArrayImpl;
+class PathRenderingImpl;
 
 class GLImplFactory : angle::NonCopyable
 {
@@ -73,6 +74,9 @@ class GLImplFactory : angle::NonCopyable
 
     // Sampler object creation
     virtual SamplerImpl *createSampler() = 0;
+
+    // Path rendererer.
+    virtual PathRenderingImpl *getPathRenderer() { return nullptr; }
 };
 
 }  // namespace rx
