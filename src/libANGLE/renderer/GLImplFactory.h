@@ -10,10 +10,12 @@
 #ifndef LIBANGLE_RENDERER_GLIMPLFACTORY_H_
 #define LIBANGLE_RENDERER_GLIMPLFACTORY_H_
 
+#include "angle_gl.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/Shader.h"
 #include "libANGLE/VertexArray.h"
+#include <vector>
 
 namespace gl
 {
@@ -36,6 +38,7 @@ class ShaderImpl;
 class TextureImpl;
 class TransformFeedbackImpl;
 class VertexArrayImpl;
+class PathImpl;
 
 class GLImplFactory : angle::NonCopyable
 {
@@ -73,6 +76,12 @@ class GLImplFactory : angle::NonCopyable
 
     // Sampler object creation
     virtual SamplerImpl *createSampler() = 0;
+
+    virtual std::vector<PathImpl *> createPaths(GLsizei range)
+    {
+        UNIMPLEMENTED();
+        return std::vector<PathImpl *>();
+    }
 };
 
 }  // namespace rx
