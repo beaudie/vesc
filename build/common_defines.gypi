@@ -23,7 +23,7 @@
 
         'conditions':
         [
-            ['OS=="linux" and use_x11==1 and chromeos==0', {
+            ['OS=="linux" and use_x11==1 and xchromeos==0', {
                 'angle_use_glx%': 1,
             },
             {
