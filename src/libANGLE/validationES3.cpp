@@ -472,24 +472,12 @@ bool ValidateES3TexImageParametersBase(Context *context,
     {
         // ...the data would be unpacked from the buffer object such that the memory reads required
         // would exceed the data store size.
-        size_t widthSize = static_cast<size_t>(width);
-        size_t heightSize = static_cast<size_t>(height);
-        size_t depthSize = static_cast<size_t>(depth);
         GLenum sizedFormat = GetSizedInternalFormat(actualInternalFormat, type);
-
-        base::CheckedNumeric<size_t> checkedBytes(
-            gl::GetInternalFormatInfo(sizedFormat).pixelBytes);
-        checkedBytes *= widthSize * heightSize * depthSize;
-
-        if (!checkedBytes.IsValid())
-        {
-            // Overflow past the end of the buffer
-            context->handleError(Error(GL_INVALID_OPERATION, "Integer overflow"));
-            return false;
-        }
-
         const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(sizedFormat);
-        auto copyBytesOrErr = formatInfo.computeBlockSize(type, gl::Extents(width, height, depth));
+        const gl::Extents size(width, height, depth);
+        const auto &unpack = context->getState().getUnpackState();
+
+        auto copyBytesOrErr = formatInfo.computeUnpackSize(type, size, unpack);
         if (copyBytesOrErr.isError())
         {
             context->handleError(copyBytesOrErr.getError());
@@ -1550,7 +1538,7 @@ bool ValidateCompressedTexImage3D(Context *context,
 
     const InternalFormat &formatInfo = GetInternalFormatInfo(internalformat);
     auto blockSizeOrErr =
-        formatInfo.computeBlockSize(GL_UNSIGNED_BYTE, gl::Extents(width, height, depth));
+        formatInfo.computeCompressedImageSize(GL_UNSIGNED_BYTE, gl::Extents(width, height, depth));
     if (blockSizeOrErr.isError())
     {
         context->handleError(blockSizeOrErr.getError());
@@ -1899,7 +1887,7 @@ bool ValidateCompressedTexSubImage3D(Context *context,
 
     const InternalFormat &formatInfo = GetInternalFormatInfo(format);
     auto blockSizeOrErr =
-        formatInfo.computeBlockSize(GL_UNSIGNED_BYTE, gl::Extents(width, height, depth));
+        formatInfo.computeCompressedImageSize(GL_UNSIGNED_BYTE, gl::Extents(width, height, depth));
     if (blockSizeOrErr.isError())
     {
         context->handleError(blockSizeOrErr.getError());
