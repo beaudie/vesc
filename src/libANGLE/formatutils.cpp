@@ -684,23 +684,20 @@ gl::ErrorOrResult<GLuint> InternalFormat::computeRowPitch(GLenum formatType,
                                                           GLint alignment,
                                                           GLint rowLength) const
 {
+    // Compressed images do not use pacl/unpack parameters.
+    if (compressed)
+    {
+        return computeCompressedImageSize(formatType, gl::Extents(width, 1, 1));
+    }
+
     ASSERT(alignment > 0 && isPow2(alignment));
-    GLuint rowBytes;
-    if (rowLength > 0)
-    {
-        ASSERT(!compressed);
-        base::CheckedNumeric<GLuint> checkedBytes(pixelBytes);
-        checkedBytes *= rowLength;
-        ANGLE_TRY_CHECKED_MATH(checkedBytes);
-        rowBytes = checkedBytes.ValueOrDie();
-    }
-    else
-    {
-        ANGLE_TRY_RESULT(computeBlockSize(formatType, gl::Extents(width, 1, 1)), rowBytes);
-    }
-    auto checkedResult = rx::CheckedRoundUp(rowBytes, static_cast<GLuint>(alignment));
-    ANGLE_TRY_CHECKED_MATH(checkedResult);
-    return checkedResult.ValueOrDie();
+    ASSERT(rowLength == 0 || !compressed);
+    base::CheckedNumeric<GLuint> checkedPitch(rowLength > 0 ? rowLength : width);
+    checkedPitch *= pixelBytes;
+    ANGLE_TRY_CHECKED_MATH(checkedPitch);
+    auto aligned = rx::CheckedRoundUp(checkedPitch.ValueOrDie(), static_cast<GLuint>(alignment));
+    ANGLE_TRY_CHECKED_MATH(aligned);
+    return aligned.ValueOrDie();
 }
 
 gl::ErrorOrResult<GLuint> InternalFormat::computeDepthPitch(GLenum formatType,
@@ -710,15 +707,8 @@ gl::ErrorOrResult<GLuint> InternalFormat::computeDepthPitch(GLenum formatType,
                                                             GLint rowLength,
                                                             GLint imageHeight) const
 {
-    GLuint rows;
-    if (imageHeight > 0)
-    {
-        rows = imageHeight;
-    }
-    else
-    {
-        rows = height;
-    }
+    GLuint rows =
+        (imageHeight > 0 ? static_cast<GLuint>(imageHeight) : static_cast<GLuint>(height));
     GLuint rowPitch = 0;
     ANGLE_TRY_RESULT(computeRowPitch(formatType, width, alignment, rowLength), rowPitch);
 
@@ -728,28 +718,19 @@ gl::ErrorOrResult<GLuint> InternalFormat::computeDepthPitch(GLenum formatType,
     return depthPitch.ValueOrDie();
 }
 
-gl::ErrorOrResult<GLuint> InternalFormat::computeBlockSize(GLenum formatType,
-                                                           const gl::Extents &size) const
+gl::ErrorOrResult<GLuint> InternalFormat::computeCompressedImageSize(GLenum formatType,
+                                                                     const gl::Extents &size) const
 {
     base::CheckedNumeric<GLuint> checkedWidth(size.width);
     base::CheckedNumeric<GLuint> checkedHeight(size.height);
     base::CheckedNumeric<GLuint> checkedDepth(size.depth);
 
-    if (compressed)
-    {
-        auto numBlocksWide = (checkedWidth + compressedBlockWidth - 1u) / compressedBlockWidth;
-        auto numBlocksHigh = (checkedHeight + compressedBlockHeight - 1u) / compressedBlockHeight;
-        auto bytes         = numBlocksWide * numBlocksHigh * pixelBytes * checkedDepth;
-        ANGLE_TRY_CHECKED_MATH(bytes);
-        return bytes.ValueOrDie();
-    }
-
-    const Type &typeInfo = GetTypeInfo(formatType);
-    GLuint components    = typeInfo.specialInterpretation ? 1u : componentCount;
-
-    auto result = checkedWidth * checkedHeight * checkedDepth * components * typeInfo.bytes;
-    ANGLE_TRY_CHECKED_MATH(result);
-    return result.ValueOrDie();
+    ASSERT(compressed);
+    auto numBlocksWide = (checkedWidth + compressedBlockWidth - 1u) / compressedBlockWidth;
+    auto numBlocksHigh = (checkedHeight + compressedBlockHeight - 1u) / compressedBlockHeight;
+    auto bytes         = numBlocksWide * numBlocksHigh * pixelBytes * checkedDepth;
+    ANGLE_TRY_CHECKED_MATH(bytes);
+    return bytes.ValueOrDie();
 }
 
 GLuint InternalFormat::computeSkipPixels(GLint rowPitch,
@@ -761,26 +742,52 @@ GLuint InternalFormat::computeSkipPixels(GLint rowPitch,
     return skipImages * depthPitch + skipRows * rowPitch + skipPixels * pixelBytes;
 }
 
+gl::ErrorOrResult<GLuint> InternalFormat::computeUnpackSize(
+    GLenum formatType,
+    const gl::Extents &size,
+    const gl::PixelUnpackState &unpack) const
+{
+    // Compressed images do not use unpack parameters.
+    if (compressed)
+    {
+        return computeCompressedImageSize(formatType, size);
+    }
+
+    base::CheckedNumeric<GLuint> checkedGroups(unpack.rowLength > 0 ? unpack.rowLength
+                                                                    : size.width);
+    base::CheckedNumeric<GLuint> checkedRows(unpack.imageHeight > 0 ? unpack.imageHeight
+                                                                    : size.height);
+
+    // Compute the groups of all the layers in (0,depth-1)
+    auto layerGroups = checkedGroups * checkedRows * (size.depth - 1);
+
+    // Compute the groups in the last layer (for non-3D textures, the only one)
+    auto lastLayerGroups = checkedGroups * (size.height - 1) + size.width;
+
+    // The total size is the sum times the bytes per pixel.
+    auto totalSize = (layerGroups + lastLayerGroups) * pixelBytes;
+
+    ANGLE_TRY_CHECKED_MATH(totalSize);
+
+    return totalSize.ValueOrDie();
+}
+
 GLenum GetSizedInternalFormat(GLenum internalFormat, GLenum type)
 {
-    const InternalFormat& formatInfo = GetInternalFormatInfo(internalFormat);
+    const InternalFormat &formatInfo = GetInternalFormatInfo(internalFormat);
     if (formatInfo.pixelBytes > 0)
     {
         return internalFormat;
     }
-    else
+
+    static const FormatMap formatMap = BuildFormatMap();
+    auto iter                        = formatMap.find(FormatTypePair(internalFormat, type));
+    if (iter != formatMap.end())
     {
-        static const FormatMap formatMap = BuildFormatMap();
-        FormatMap::const_iterator iter = formatMap.find(FormatTypePair(internalFormat, type));
-        if (iter != formatMap.end())
-        {
-            return iter->second;
-        }
-        else
-        {
-            return GL_NONE;
-        }
+        return iter->second;
     }
+
+    return GL_NONE;
 }
 
 const FormatSet &GetAllSizedInternalFormats()
