@@ -10,7 +10,6 @@
 #define LIBANGLE_ERROR_H_
 
 #include "angle_gl.h"
-#include <EGL/egl.h>
 
 #include <string>
 #include <memory>

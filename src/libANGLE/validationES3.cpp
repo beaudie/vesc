@@ -7,6 +7,9 @@
 // validationES3.cpp: Validation functions for OpenGL ES 3.0 entry point parameters
 
 #include "libANGLE/validationES3.h"
+
+#include <base/numerics/safe_math.h>
+
 #include "libANGLE/validationES.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Texture.h"
@@ -474,23 +477,30 @@ bool ValidateES3TexImageParametersBase(Context *context,
         size_t depthSize = static_cast<size_t>(depth);
         GLenum sizedFormat = GetSizedInternalFormat(actualInternalFormat, type);
 
-        size_t pixelBytes = static_cast<size_t>(gl::GetInternalFormatInfo(sizedFormat).pixelBytes);
+        base::CheckedNumeric<size_t> checkedBytes(
+            gl::GetInternalFormatInfo(sizedFormat).pixelBytes);
+        checkedBytes *= widthSize * heightSize * depthSize;
 
-        if (!rx::IsUnsignedMultiplicationSafe(widthSize, heightSize) ||
-            !rx::IsUnsignedMultiplicationSafe(widthSize * heightSize, depthSize) ||
-            !rx::IsUnsignedMultiplicationSafe(widthSize * heightSize * depthSize, pixelBytes))
+        if (!checkedBytes.IsValid())
         {
             // Overflow past the end of the buffer
-            context->handleError(Error(GL_INVALID_OPERATION));
+            context->handleError(Error(GL_INVALID_OPERATION, "Integer overflow"));
             return false;
         }
 
         const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(sizedFormat);
-        size_t copyBytes = formatInfo.computeBlockSize(type, width, height);
-        size_t offset = reinterpret_cast<size_t>(pixels);
+        auto copyBytesOrErr = formatInfo.computeBlockSize(type, width, height);
+        if (copyBytesOrErr.isError())
+        {
+            context->handleError(copyBytesOrErr.getError());
+            return false;
+        }
+        base::CheckedNumeric<size_t> checkedCopyBytes(copyBytesOrErr.getResult());
+        base::CheckedNumeric<size_t> checkedOffset(reinterpret_cast<size_t>(pixels));
+        checkedCopyBytes += checkedOffset;
 
-        if (!rx::IsUnsignedAdditionSafe(offset, copyBytes) ||
-            ((offset + copyBytes) > static_cast<size_t>(pixelUnpackBuffer->getSize())))
+        if (!checkedCopyBytes.IsValid() ||
+            (checkedCopyBytes.ValueOrDie() > static_cast<size_t>(pixelUnpackBuffer->getSize())))
         {
             // Overflow past the end of the buffer
             context->handleError(Error(GL_INVALID_OPERATION));
@@ -503,7 +513,7 @@ bool ValidateES3TexImageParametersBase(Context *context,
         {
             size_t dataBytesPerPixel = static_cast<size_t>(gl::GetTypeInfo(type).bytes);
 
-            if ((offset % dataBytesPerPixel) != 0)
+            if ((checkedOffset.ValueOrDie() % dataBytesPerPixel) != 0)
             {
                 context->handleError(Error(GL_INVALID_OPERATION));
                 return false;
@@ -1539,9 +1549,13 @@ bool ValidateCompressedTexImage3D(Context *context,
     }
 
     const InternalFormat &formatInfo = GetInternalFormatInfo(internalformat);
-    if (imageSize < 0 ||
-        static_cast<GLuint>(imageSize) !=
-            formatInfo.computeBlockSize(GL_UNSIGNED_BYTE, width, height))
+    auto blockSizeOrErr = formatInfo.computeBlockSize(GL_UNSIGNED_BYTE, width, height);
+    if (blockSizeOrErr.isError())
+    {
+        context->handleError(blockSizeOrErr.getError());
+        return false;
+    }
+    if (imageSize < 0 || static_cast<GLuint>(imageSize) != blockSizeOrErr.getResult())
     {
         context->handleError(Error(GL_INVALID_VALUE));
         return false;
@@ -1883,9 +1897,13 @@ bool ValidateCompressedTexSubImage3D(Context *context,
     }
 
     const InternalFormat &formatInfo = GetInternalFormatInfo(format);
-    if (imageSize < 0 ||
-        static_cast<GLuint>(imageSize) !=
-            formatInfo.computeBlockSize(GL_UNSIGNED_BYTE, width, height))
+    auto blockSizeOrErr = formatInfo.computeBlockSize(GL_UNSIGNED_BYTE, width, height);
+    if (blockSizeOrErr.isError())
+    {
+        context->handleError(blockSizeOrErr.getError());
+        return false;
+    }
+    if (imageSize < 0 || static_cast<GLuint>(imageSize) != blockSizeOrErr.getResult())
     {
         context->handleError(Error(GL_INVALID_VALUE));
         return false;

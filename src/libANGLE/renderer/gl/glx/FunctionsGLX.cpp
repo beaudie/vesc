@@ -14,6 +14,14 @@
 // headers, to avoid doubly-defined GLenum macros, typedefs, etc.
 #include <GL/glx.h>
 
+#ifdef Success
+#undef Success
+#endif
+
+#ifdef Always
+#undef Always
+#endif
+
 #include <dlfcn.h>
 #include <algorithm>
 

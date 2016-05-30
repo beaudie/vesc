@@ -164,6 +164,14 @@
 #include <X11/Xresource.h>
 #include <X11/Xutil.h>
 
+#ifdef Success
+#undef Success
+#endif
+
+#ifdef Always
+#undef Always
+#endif
+
 // GLX typedefs
 namespace glx
 {
