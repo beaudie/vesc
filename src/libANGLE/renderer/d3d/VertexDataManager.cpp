@@ -9,6 +9,8 @@
 
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
 
+#include <base/numerics/safe_math.h>
+
 #include "common/BitSetIterator.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/formatutils.h"
@@ -118,27 +120,16 @@ TranslatedAttribute::TranslatedAttribute()
 
 gl::ErrorOrResult<unsigned int> TranslatedAttribute::computeOffset(GLint startVertex) const
 {
-    unsigned int offset = baseOffset;
-    if (usesFirstVertexOffset)
+    if (!usesFirstVertexOffset)
     {
-        unsigned int startVertexUnsigned = static_cast<unsigned int>(startVertex);
-
-        if (!IsUnsignedMultiplicationSafe(stride, startVertexUnsigned))
-        {
-            return gl::Error(GL_INVALID_OPERATION,
-                             "Multiplication overflow in TranslatedAttribute::computeOffset");
-        }
-
-        unsigned int strideOffset = stride * startVertexUnsigned;
-        if (!IsUnsignedAdditionSafe(offset, strideOffset))
-        {
-            return gl::Error(GL_INVALID_OPERATION,
-                             "Addition overflow in TranslatedAttribute::computeOffset");
-        }
-
-        offset += strideOffset;
+        return baseOffset;
     }
-    return offset;
+
+    base::CheckedNumeric<unsigned int> offset;
+
+    offset = baseOffset + stride * static_cast<unsigned int>(startVertex);
+    ANGLE_TRY_CHECKED_MATH(offset);
+    return offset.ValueOrDie();
 }
 
 VertexStorageType ClassifyAttributeStorage(const gl::VertexAttribute &attrib)
@@ -351,7 +342,10 @@ gl::Error VertexDataManager::StoreStaticAttrib(TranslatedAttribute *translated,
 
     VertexBuffer *vertexBuffer = staticBuffer->getVertexBuffer();
 
-    if (!IsUnsignedAdditionSafe(streamOffset, firstElementOffset))
+    base::CheckedNumeric<unsigned int> checkedOffset(streamOffset);
+    checkedOffset += firstElementOffset;
+
+    if (!checkedOffset.IsValid())
     {
         return gl::Error(GL_INVALID_OPERATION,
                          "Integer overflow in VertexDataManager::StoreStaticAttrib");
