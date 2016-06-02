@@ -1516,7 +1516,7 @@ gl::Error Renderer11::updateState(const gl::ContextState &data, GLenum drawMode)
     mStateManager.setScissorRectangle(glState.getScissor(), glState.isScissorTestEnabled());
 
     // Applying rasterizer state to D3D11 device
-    int samples                    = framebufferObject->getCachedSamples(data);
+    int samples                    = framebufferObject->getCachedSamples();
     gl::RasterizerState rasterizer = glState.getRasterizerState();
     rasterizer.pointDrawMode       = (drawMode == GL_POINTS);
     rasterizer.multiSample         = (samples != 0);
