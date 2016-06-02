@@ -464,7 +464,7 @@ bool ValidateES3TexImageParametersBase(Context *context,
     }
 
     // Check for pixel unpack buffer related API errors
-    gl::Buffer *pixelUnpackBuffer = context->getState().getTargetBuffer(GL_PIXEL_UNPACK_BUFFER);
+    gl::Buffer *pixelUnpackBuffer = context->getGLState().getTargetBuffer(GL_PIXEL_UNPACK_BUFFER);
     if (pixelUnpackBuffer != NULL)
     {
         // ...the data would be unpacked from the buffer object such that the memory reads required
@@ -893,17 +893,17 @@ bool ValidateES3CopyTexImageParametersBase(ValidationContext *context,
         return false;
     }
 
-    const auto &state                  = context->getState();
+    const auto &state                  = context->getGLState();
     const gl::Framebuffer *framebuffer = state.getReadFramebuffer();
     GLuint readFramebufferID           = framebuffer->id();
 
-    if (framebuffer->checkStatus(context->getData()) != GL_FRAMEBUFFER_COMPLETE)
+    if (framebuffer->checkStatus(context->getContextState()) != GL_FRAMEBUFFER_COMPLETE)
     {
         context->handleError(Error(GL_INVALID_FRAMEBUFFER_OPERATION));
         return false;
     }
 
-    if (readFramebufferID != 0 && framebuffer->getSamples(context->getData()) != 0)
+    if (readFramebufferID != 0 && framebuffer->getSamples(context->getContextState()) != 0)
     {
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;
@@ -1256,7 +1256,10 @@ bool ValidateFramebufferTextureLayer(Context *context, GLenum target, GLenum att
     return true;
 }
 
-bool ValidES3ReadFormatType(Context *context, GLenum internalFormat, GLenum format, GLenum type)
+bool ValidES3ReadFormatType(ValidationContext *context,
+                            GLenum internalFormat,
+                            GLenum format,
+                            GLenum type)
 {
     const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(internalFormat);
 
@@ -1392,11 +1395,11 @@ bool ValidateInvalidateFramebuffer(Context *context, GLenum target, GLsizei numA
     {
       case GL_DRAW_FRAMEBUFFER:
       case GL_FRAMEBUFFER:
-        defaultFramebuffer = context->getState().getDrawFramebuffer()->id() == 0;
-        break;
+          defaultFramebuffer = context->getGLState().getDrawFramebuffer()->id() == 0;
+          break;
       case GL_READ_FRAMEBUFFER:
-        defaultFramebuffer = context->getState().getReadFramebuffer()->id() == 0;
-        break;
+          defaultFramebuffer = context->getGLState().getReadFramebuffer()->id() == 0;
+          break;
       default:
           context->handleError(Error(GL_INVALID_ENUM, "Invalid framebuffer target"));
         return false;
@@ -1413,8 +1416,8 @@ bool ValidateClearBuffer(ValidationContext *context)
         return false;
     }
 
-    const gl::Framebuffer *fbo = context->getState().getDrawFramebuffer();
-    if (!fbo || fbo->checkStatus(context->getData()) != GL_FRAMEBUFFER_COMPLETE)
+    const gl::Framebuffer *fbo = context->getGLState().getDrawFramebuffer();
+    if (!fbo || fbo->checkStatus(context->getContextState()) != GL_FRAMEBUFFER_COMPLETE)
     {
         context->handleError(Error(GL_INVALID_FRAMEBUFFER_OPERATION));
         return false;
@@ -1478,7 +1481,7 @@ bool ValidateReadBuffer(Context *context, GLenum src)
         return false;
     }
 
-    Framebuffer *readFBO = context->getState().getReadFramebuffer();
+    const Framebuffer *readFBO = context->getGLState().getReadFramebuffer();
 
     if (readFBO == nullptr)
     {
@@ -2000,7 +2003,7 @@ bool ValidateBeginTransformFeedback(Context *context, GLenum primitiveMode)
             return false;
     }
 
-    TransformFeedback *transformFeedback = context->getState().getCurrentTransformFeedback();
+    TransformFeedback *transformFeedback = context->getGLState().getCurrentTransformFeedback();
     ASSERT(transformFeedback != nullptr);
 
     if (transformFeedback->isActive())
