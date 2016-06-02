@@ -138,7 +138,9 @@ class Buffer11::BufferStorage : angle::NonCopyable
 class Buffer11::NativeStorage : public Buffer11::BufferStorage
 {
   public:
-    NativeStorage(Renderer11 *renderer, BufferUsage usage, const NotificationSet *onStorageChanged);
+    NativeStorage(Renderer11 *renderer,
+                  BufferUsage usage,
+                  const angle::BroadcastChannel *onStorageChanged);
     ~NativeStorage() override;
 
     bool isMappable() const override { return mUsage == BUFFER_USAGE_STAGING; }
@@ -163,7 +165,7 @@ class Buffer11::NativeStorage : public Buffer11::BufferStorage
                                unsigned int bufferSize);
 
     ID3D11Buffer *mNativeStorage;
-    const NotificationSet *mOnStorageChanged;
+    const angle::BroadcastChannel *mOnStorageChanged;
 };
 
 // A emulated indexed buffer storage represents an underlying D3D11 buffer for data
@@ -686,7 +688,7 @@ Buffer11::BufferStorage *Buffer11::allocateStorage(BufferUsage usage)
         case BUFFER_USAGE_EMULATED_INDEXED_VERTEX:
             return new EmulatedIndexedStorage(mRenderer);
         case BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK:
-            return new NativeStorage(mRenderer, usage, &mDirectBufferDirtyCallbacks);
+            return new NativeStorage(mRenderer, usage, &mDirectBroadcastChannel);
         default:
             return new NativeStorage(mRenderer, usage, nullptr);
     }
@@ -842,7 +844,7 @@ void Buffer11::initializeStaticData()
     BufferD3D::initializeStaticData();
 
     // Notify when static data changes.
-    mStaticBufferDirtyCallbacks.signal();
+    mStaticBroadcastChannel.signal();
 }
 
 void Buffer11::invalidateStaticData()
@@ -850,27 +852,17 @@ void Buffer11::invalidateStaticData()
     BufferD3D::invalidateStaticData();
 
     // Notify when static data changes.
-    mStaticBufferDirtyCallbacks.signal();
+    mStaticBroadcastChannel.signal();
 }
 
-void Buffer11::addStaticBufferDirtyCallback(const NotificationCallback *callback)
+angle::BroadcastChannel *Buffer11::getStaticBroadcastChannel()
 {
-    mStaticBufferDirtyCallbacks.add(callback);
+    return &mStaticBroadcastChannel;
 }
 
-void Buffer11::removeStaticBufferDirtyCallback(const NotificationCallback *callback)
+angle::BroadcastChannel *Buffer11::getDirectBroadcastChannel()
 {
-    mStaticBufferDirtyCallbacks.remove(callback);
-}
-
-void Buffer11::addDirectBufferDirtyCallback(const NotificationCallback *callback)
-{
-    mDirectBufferDirtyCallbacks.add(callback);
-}
-
-void Buffer11::removeDirectBufferDirtyCallback(const NotificationCallback *callback)
-{
-    mDirectBufferDirtyCallbacks.remove(callback);
+    return &mDirectBroadcastChannel;
 }
 
 Buffer11::BufferStorage::BufferStorage(Renderer11 *renderer, BufferUsage usage)
@@ -894,7 +886,7 @@ gl::Error Buffer11::BufferStorage::setData(const uint8_t *data, size_t offset, s
 
 Buffer11::NativeStorage::NativeStorage(Renderer11 *renderer,
                                        BufferUsage usage,
-                                       const NotificationSet *onStorageChanged)
+                                       const angle::BroadcastChannel *onStorageChanged)
     : BufferStorage(renderer, usage), mNativeStorage(nullptr), mOnStorageChanged(onStorageChanged)
 {
 }
