@@ -7,6 +7,8 @@
 // Data.cpp: Container class for all GL relevant state, caps and objects
 
 #include "libANGLE/ContextState.h"
+
+#include "libANGLE/Framebuffer.h"
 #include "libANGLE/ResourceManager.h"
 
 namespace gl
@@ -461,6 +463,18 @@ bool ValidationContext::getIndexedQueryParameterInfo(GLenum target,
     }
 
     return false;
+}
+
+bool ValidationContext::checkFramebufferStatus(GLenum framebufferType)
+{
+    Framebuffer *framebuffer = mState.getState().getTargetFramebuffer(framebufferType);
+    return (framebuffer->checkStatus(mState) == GL_FRAMEBUFFER_COMPLETE);
+}
+
+int ValidationContext::getFramebufferSamples(GLenum framebufferType)
+{
+    Framebuffer *framebuffer = mState.getState().getTargetFramebuffer(framebufferType);
+    return framebuffer->getSamples(mState);
 }
 
 }  // namespace gl
