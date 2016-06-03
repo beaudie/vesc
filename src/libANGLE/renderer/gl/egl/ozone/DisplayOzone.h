@@ -14,11 +14,15 @@
 
 #include <string>
 
-#include "libANGLE/renderer/gl/DisplayGL.h"
-#include "libANGLE/renderer/gl/egl/FunctionsEGLDL.h"
+#include "libANGLE/renderer/gl/egl/DisplayEGL.h"
 
 struct gbm_device;
 struct gbm_bo;
+
+namespace gl
+{
+class FramebufferState;
+}
 
 namespace rx
 {
@@ -40,7 +44,7 @@ struct SwapControlData final
     int currentSwapInterval;
 };
 
-class DisplayOzone final : public DisplayGL
+class DisplayOzone final : public DisplayEGL
 {
   public:
     struct NativeWindow
@@ -135,8 +139,6 @@ class DisplayOzone final : public DisplayGL
 
     egl::Error getDevice(DeviceImpl **device) override;
 
-    std::string getVendorString() const override;
-
     egl::Error waitClient() const override;
     egl::Error waitNative(EGLint engine,
                           egl::Surface *drawSurface,
@@ -151,13 +153,6 @@ class DisplayOzone final : public DisplayGL
     egl::Error getDriverVersion(std::string *version) const override;
 
   private:
-    const FunctionsGL *getFunctionsGL() const override;
-
-    EGLContext initializeContext(EGLConfig config, const egl::AttributeMap &eglAttributes);
-
-    void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
-    void generateCaps(egl::Caps *outCaps) const override;
-
     GLuint makeShader(GLuint type, const char *src);
     void drawBuffer(Buffer *buffer);
     void drawWithBlit(Buffer *buffer);
@@ -170,9 +165,6 @@ class DisplayOzone final : public DisplayGL
                                 unsigned int tv_usec,
                                 void *data);
     void pageFlipHandler(unsigned int sequence, uint64_t tv);
-
-    EGLConfig mContextConfig;
-    EGLContext mContext;
 
     // TODO(fjhenigman) Implement swap control.  The following stuff will be used for that.
     enum class SwapControl
@@ -187,7 +179,6 @@ class DisplayOzone final : public DisplayGL
     int mMaxSwapInterval;
     int mCurrentSwapInterval;
 
-    FunctionsEGLDL *mEGL;
     FunctionsGL *mFunctionsGL;
 
     gbm_device *mGBM;
