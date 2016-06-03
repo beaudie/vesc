@@ -84,9 +84,12 @@
  3. If your change list needs revision:
     * If you have correctly installed the commit hook from the section above, Gerrit will be able to track your changes by Change-Id.
     * You should need only to update your commit with `git commit --amend` and re-upload with `git cl upload`.
-4. Once your code is reviewed:
+ 4. Integrate change after successful review:
     * If you are a committer, you may submit the change yourself via the Gerrit web interface.
     * If you are not a committer, ask your reviewer to submit the change list.
+ 5. Update your working copy:
+    * `git pull --rebase`
+  
 
 See also:
 
