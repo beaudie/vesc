@@ -290,10 +290,11 @@ namespace rx
 {
 enum VendorID : uint32_t
 {
-    VENDOR_ID_UNKNOWN = 0x0,
-    VENDOR_ID_AMD     = 0x1002,
-    VENDOR_ID_INTEL   = 0x8086,
-    VENDOR_ID_NVIDIA  = 0x10DE,
+    VENDOR_ID_UNKNOWN  = 0x0,
+    VENDOR_ID_AMD      = 0x1002,
+    VENDOR_ID_INTEL    = 0x8086,
+    VENDOR_ID_NVIDIA   = 0x10DE,
+    VENDOR_ID_QUALCOMM = 0x5143,
 };
 
 // A macro that determines whether an object has a given runtime type.
