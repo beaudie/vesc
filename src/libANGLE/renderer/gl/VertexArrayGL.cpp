@@ -18,6 +18,7 @@
 #include "libANGLE/renderer/gl/BufferGL.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
+#include "libANGLE/Version.h"
 
 using namespace gl;
 
@@ -288,7 +289,24 @@ gl::Error VertexArrayGL::streamAttributes(const gl::AttributesMask &activeAttrib
     size_t unmapRetryAttempts = 5;
     while (unmapResult != GL_TRUE && --unmapRetryAttempts > 0)
     {
-        uint8_t *bufferPointer = reinterpret_cast<uint8_t*>(mFunctions->mapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+        uint8_t *bufferPointer;
+        if (mFunctions->isAtLeastGL(gl::Version(1, 5)) ||
+            mFunctions->hasGLESExtension("GL_OES_mapbuffer"))
+        {
+            bufferPointer =
+                reinterpret_cast<uint8_t *>(mFunctions->mapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+        }
+        else if (mFunctions->isAtLeastGLES(gl::Version(3, 0)) ||
+                 mFunctions->hasGLESExtension("GL_EXT_map_buffer_range"))
+        {
+            bufferPointer = reinterpret_cast<uint8_t *>(mFunctions->mapBufferRange(
+                GL_ARRAY_BUFFER, 0, requiredBufferSize, GL_MAP_WRITE_BIT));
+        }
+        else
+        {
+            UNIMPLEMENTED();
+        }
+
         size_t curBufferOffset = bufferEmptySpace;
 
         const auto &attribs = mData.getVertexAttributes();
