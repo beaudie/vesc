@@ -620,7 +620,8 @@ gl::Error TextureStorage11::setData(const gl::ImageIndex &index,
                                     const gl::Box *destBox,
                                     GLenum type,
                                     const gl::PixelUnpackState &unpack,
-                                    const uint8_t *pixelData)
+                                    const uint8_t *pixelData,
+                                    bool applySkipImages)
 {
     ASSERT(!image->isDirty());
 
@@ -659,8 +660,9 @@ gl::Error TextureStorage11::setData(const gl::ImageIndex &index,
     ANGLE_TRY_RESULT(internalFormatInfo.computeDepthPitch(type, width, height, unpack.alignment,
                                                           unpack.rowLength, unpack.imageHeight),
                      srcDepthPitch);
-    const GLsizei srcSkipBytes = internalFormatInfo.computeSkipPixels(
-        srcRowPitch, srcDepthPitch, unpack.skipImages, unpack.skipRows, unpack.skipPixels);
+    const GLsizei srcSkipBytes =
+        internalFormatInfo.computeSkipPixels(srcRowPitch, srcDepthPitch, unpack.skipImages,
+                                             unpack.skipRows, unpack.skipPixels, applySkipImages);
 
     const d3d11::TextureFormat &d3d11Format = d3d11::GetTextureFormatInfo(
         image->getInternalFormat(), mRenderer->getRenderer11DeviceCaps());

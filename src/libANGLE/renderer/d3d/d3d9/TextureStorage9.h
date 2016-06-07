@@ -45,8 +45,13 @@ class TextureStorage9 : public TextureStorage
     bool supportsNativeMipmapFunction() const override;
     virtual int getLevelCount() const;
 
-    virtual gl::Error setData(const gl::ImageIndex &index, ImageD3D *image, const gl::Box *destBox, GLenum type,
-                              const gl::PixelUnpackState &unpack, const uint8_t *pixelData);
+    gl::Error setData(const gl::ImageIndex &index,
+                      ImageD3D *image,
+                      const gl::Box *destBox,
+                      GLenum type,
+                      const gl::PixelUnpackState &unpack,
+                      const uint8_t *pixelData,
+                      bool applySkipImages) override;
 
   protected:
     int mTopLevel;

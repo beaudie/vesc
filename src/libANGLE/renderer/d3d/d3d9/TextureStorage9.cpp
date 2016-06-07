@@ -93,8 +93,13 @@ int TextureStorage9::getLevelCount() const
     return static_cast<int>(mMipLevels) - mTopLevel;
 }
 
-gl::Error TextureStorage9::setData(const gl::ImageIndex &index, ImageD3D *image, const gl::Box *destBox, GLenum type,
-                                   const gl::PixelUnpackState &unpack, const uint8_t *pixelData)
+gl::Error TextureStorage9::setData(const gl::ImageIndex &index,
+                                   ImageD3D *image,
+                                   const gl::Box *destBox,
+                                   GLenum type,
+                                   const gl::PixelUnpackState &unpack,
+                                   const uint8_t *pixelData,
+                                   bool applySkipImages)
 {
     UNREACHABLE();
     return gl::Error(GL_INVALID_OPERATION);

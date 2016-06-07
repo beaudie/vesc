@@ -49,7 +49,8 @@ struct InternalFormat
                              GLint depthPitch,
                              GLint skipImages,
                              GLint skipRows,
-                             GLint skipPixels) const;
+                             GLint skipPixels,
+                             bool applySkipImages) const;
 
     GLuint redBits;
     GLuint greenBits;

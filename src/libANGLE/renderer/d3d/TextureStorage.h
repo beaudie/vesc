@@ -46,8 +46,13 @@ class TextureStorage : angle::NonCopyable
     virtual gl::Error generateMipmap(const gl::ImageIndex &sourceIndex, const gl::ImageIndex &destIndex) = 0;
 
     virtual gl::Error copyToStorage(TextureStorage *destStorage) = 0;
-    virtual gl::Error setData(const gl::ImageIndex &index, ImageD3D *image, const gl::Box *destBox, GLenum type,
-                              const gl::PixelUnpackState &unpack, const uint8_t *pixelData) = 0;
+    virtual gl::Error setData(const gl::ImageIndex &index,
+                              ImageD3D *image,
+                              const gl::Box *destBox,
+                              GLenum type,
+                              const gl::PixelUnpackState &unpack,
+                              const uint8_t *pixelData,
+                              bool applySkipImages) = 0;
 
     // This is a no-op for most implementations of TextureStorage. Some (e.g. TextureStorage11_2D) might override it.
     virtual gl::Error useLevelZeroWorkaroundTexture(bool useLevelZeroTexture) { return gl::Error(GL_NO_ERROR); }

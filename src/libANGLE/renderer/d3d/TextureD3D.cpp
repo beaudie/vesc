@@ -181,7 +181,8 @@ gl::Error TextureD3D::setImageImpl(const gl::ImageIndex &index,
                                    GLenum type,
                                    const gl::PixelUnpackState &unpack,
                                    const uint8_t *pixels,
-                                   ptrdiff_t layerOffset)
+                                   ptrdiff_t layerOffset,
+                                   bool applySkipImages)
 {
     ImageD3D *image = getImage(index);
     ASSERT(image);
@@ -205,12 +206,13 @@ gl::Error TextureD3D::setImageImpl(const gl::ImageIndex &index,
     {
         if (shouldUseSetData(image))
         {
-            error = mTexStorage->setData(index, image, NULL, type, unpack, pixelData);
+            error =
+                mTexStorage->setData(index, image, NULL, type, unpack, pixelData, applySkipImages);
         }
         else
         {
             gl::Box fullImageArea(0, 0, 0, image->getWidth(), image->getHeight(), image->getDepth());
-            error = image->loadData(fullImageArea, unpack, type, pixelData);
+            error = image->loadData(fullImageArea, unpack, type, pixelData, applySkipImages);
         }
 
         if (error.isError())
@@ -224,8 +226,14 @@ gl::Error TextureD3D::setImageImpl(const gl::ImageIndex &index,
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error TextureD3D::subImage(const gl::ImageIndex &index, const gl::Box &area, GLenum format, GLenum type,
-                               const gl::PixelUnpackState &unpack, const uint8_t *pixels, ptrdiff_t layerOffset)
+gl::Error TextureD3D::subImage(const gl::ImageIndex &index,
+                               const gl::Box &area,
+                               GLenum format,
+                               GLenum type,
+                               const gl::PixelUnpackState &unpack,
+                               const uint8_t *pixels,
+                               ptrdiff_t layerOffset,
+                               bool applySkipImages)
 {
     // CPU readback & copy where direct GPU copy is not supported
     const uint8_t *pixelData = NULL;
@@ -242,10 +250,11 @@ gl::Error TextureD3D::subImage(const gl::ImageIndex &index, const gl::Box &area,
 
         if (shouldUseSetData(image))
         {
-            return mTexStorage->setData(index, image, &area, type, unpack, pixelData);
+            return mTexStorage->setData(index, image, &area, type, unpack, pixelData,
+                                        applySkipImages);
         }
 
-        error = image->loadData(area, unpack, type, pixelData);
+        error = image->loadData(area, unpack, type, pixelData, applySkipImages);
         if (error.isError())
         {
             return error;
@@ -770,7 +779,7 @@ gl::Error TextureD3D_2D::setImage(GLenum target,
 
     if (!fastUnpacked)
     {
-        ANGLE_TRY(setImageImpl(index, type, unpack, pixels, 0));
+        ANGLE_TRY(setImageImpl(index, type, unpack, pixels, 0, false));
     }
 
     return gl::Error(GL_NO_ERROR);
@@ -798,7 +807,7 @@ gl::Error TextureD3D_2D::setSubImage(GLenum target,
     }
     else
     {
-        return TextureD3D::subImage(index, area, format, type, unpack, pixels, 0);
+        return TextureD3D::subImage(index, area, format, type, unpack, pixels, 0, false);
     }
 }
 
@@ -1366,7 +1375,7 @@ gl::Error TextureD3D_Cube::setImage(GLenum target, size_t level, GLenum internal
 
     redefineImage(index.layerIndex, static_cast<GLint>(level), sizedInternalFormat, size);
 
-    return setImageImpl(index, type, unpack, pixels, 0);
+    return setImageImpl(index, type, unpack, pixels, 0, false);
 }
 
 gl::Error TextureD3D_Cube::setSubImage(GLenum target, size_t level, const gl::Box &area, GLenum format, GLenum type,
@@ -1375,7 +1384,7 @@ gl::Error TextureD3D_Cube::setSubImage(GLenum target, size_t level, const gl::Bo
     ASSERT(area.depth == 1 && area.z == 0);
 
     gl::ImageIndex index = gl::ImageIndex::MakeCube(target, static_cast<GLint>(level));
-    return TextureD3D::subImage(index, area, format, type, unpack, pixels, 0);
+    return TextureD3D::subImage(index, area, format, type, unpack, pixels, 0, false);
 }
 
 gl::Error TextureD3D_Cube::setCompressedImage(GLenum target, size_t level, GLenum internalFormat, const gl::Extents &size,
@@ -2015,7 +2024,7 @@ gl::Error TextureD3D_3D::setImage(GLenum target,
 
     if (!fastUnpacked)
     {
-        gl::Error error = setImageImpl(index, type, unpack, pixels, 0);
+        gl::Error error = setImageImpl(index, type, unpack, pixels, 0, true);
         if (error.isError())
         {
             return error;
@@ -2054,7 +2063,7 @@ gl::Error TextureD3D_3D::setSubImage(GLenum target,
     }
     else
     {
-        return TextureD3D::subImage(index, area, format, type, unpack, pixels, 0);
+        return TextureD3D::subImage(index, area, format, type, unpack, pixels, 0, true);
     }
 }
 
@@ -2565,7 +2574,7 @@ gl::Error TextureD3D_2DArray::setImage(GLenum target,
     {
         const ptrdiff_t layerOffset = (inputDepthPitch * i);
         gl::ImageIndex index = gl::ImageIndex::Make2DArray(level, i);
-        gl::Error error = setImageImpl(index, type, unpack, pixels, layerOffset);
+        gl::Error error             = setImageImpl(index, type, unpack, pixels, layerOffset, true);
         if (error.isError())
         {
             return error;
@@ -2599,7 +2608,8 @@ gl::Error TextureD3D_2DArray::setSubImage(GLenum target,
         gl::Box layerArea(area.x, area.y, 0, area.width, area.height, 1);
 
         gl::ImageIndex index = gl::ImageIndex::Make2DArray(level, layer);
-        gl::Error error = TextureD3D::subImage(index, layerArea, format, type, unpack, pixels, layerOffset);
+        gl::Error error =
+            TextureD3D::subImage(index, layerArea, format, type, unpack, pixels, layerOffset, true);
         if (error.isError())
         {
             return error;

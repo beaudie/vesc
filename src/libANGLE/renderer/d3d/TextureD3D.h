@@ -74,9 +74,16 @@ class TextureD3D : public TextureImpl
                            GLenum type,
                            const gl::PixelUnpackState &unpack,
                            const uint8_t *pixels,
-                           ptrdiff_t layerOffset);
-    gl::Error subImage(const gl::ImageIndex &index, const gl::Box &area, GLenum format, GLenum type,
-                       const gl::PixelUnpackState &unpack, const uint8_t *pixels, ptrdiff_t layerOffset);
+                           ptrdiff_t layerOffset,
+                           bool applySkipImages);
+    gl::Error subImage(const gl::ImageIndex &index,
+                       const gl::Box &area,
+                       GLenum format,
+                       GLenum type,
+                       const gl::PixelUnpackState &unpack,
+                       const uint8_t *pixels,
+                       ptrdiff_t layerOffset,
+                       bool applySkipImages);
     gl::Error setCompressedImageImpl(const gl::ImageIndex &index,
                                      const gl::PixelUnpackState &unpack,
                                      const uint8_t *pixels,
