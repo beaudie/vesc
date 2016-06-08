@@ -344,6 +344,11 @@ GLuint ProgramState::getUniformIndex(const std::string &name) const
     return GL_INVALID_INDEX;
 }
 
+const std::vector<SamplerBinding> &ProgramState::getAppliedSamplerUniforms() const
+{
+    return mSamplerBindings;
+}
+
 Program::Program(rx::GLImplFactory *factory, ResourceManager *manager, GLuint handle)
     : mProgram(factory->createProgram(mState)),
       mValidated(false),
@@ -678,6 +683,7 @@ Error Program::link(const ContextState &data)
     }
 
     gatherInterfaceBlockInfo();
+    gatherSamplerUniforms();
 
     mLinked = true;
     return NoError();
@@ -1383,6 +1389,19 @@ void Program::setUniform1iv(GLint location, GLsizei count, const GLint *v)
 {
     setUniformInternal(location, count * 1, v);
     mProgram->setUniform1iv(location, count, v);
+
+    const VariableLocation &locationEntry = mState.mUniformLocations[location];
+
+    size_t samplerIndex = mState.mUniformIndexToSamplerIndex[locationEntry.index];
+    if (samplerIndex != GL_INVALID_INDEX)
+    {
+        std::vector<GLuint> &boundTextureUnits =
+            mState.mSamplerBindings[samplerIndex].boundTextureUnits;
+
+        size_t copyCount =
+            std::max<size_t>(count, boundTextureUnits.size() - locationEntry.element);
+        std::copy(v, v + copyCount, boundTextureUnits.begin() + locationEntry.element);
+    }
 }
 
 void Program::setUniform2iv(GLint location, GLsizei count, const GLint *v)
@@ -1726,6 +1745,11 @@ const UniformBlock &Program::getUniformBlockByIndex(GLuint index) const
     return mState.mUniformBlocks[index];
 }
 
+const std::vector<SamplerBinding> &Program::getAppliedSamplerUniforms() const
+{
+    return mState.getAppliedSamplerUniforms();
+}
+
 void Program::bindUniformBlock(GLuint uniformBlockIndex, GLuint uniformBlockBinding)
 {
     mState.mUniformBlockBindings[uniformBlockIndex] = uniformBlockBinding;
@@ -1744,6 +1768,9 @@ void Program::resetUniformBlockBindings()
         mState.mUniformBlockBindings[blockId] = 0;
     }
     mState.mActiveUniformBlockBindings.reset();
+
+    mState.mSamplerBindings.clear();
+    mState.mUniformIndexToSamplerIndex.clear();
 }
 
 void Program::setTransformFeedbackVaryings(GLsizei count, const GLchar *const *varyings, GLenum bufferMode)
@@ -2992,6 +3019,27 @@ void Program::getUniformInternal(GLint location, DestT *dataOut) const
             break;
         default:
             UNREACHABLE();
+    }
+}
+
+void Program::gatherSamplerUniforms()
+{
+    mState.mUniformIndexToSamplerIndex.resize(mState.mUniforms.size(), GL_INVALID_INDEX);
+
+    for (size_t uniformId = 0; uniformId < mState.mUniforms.size(); ++uniformId)
+    {
+        const gl::LinkedUniform &linkedUniform = mState.mUniforms[uniformId];
+
+        if (!linkedUniform.isSampler() || !linkedUniform.staticUse)
+            continue;
+
+        mState.mUniformIndexToSamplerIndex[uniformId] = mState.mSamplerBindings.size();
+
+        // If uniform is a sampler type, insert it into the mSamplerBindings array
+        SamplerBinding samplerBinding;
+        samplerBinding.textureType = gl::SamplerTypeToTextureType(linkedUniform.type);
+        samplerBinding.boundTextureUnits.resize(linkedUniform.elementCount(), 0);
+        mState.mSamplerBindings.push_back(samplerBinding);
     }
 }
 }

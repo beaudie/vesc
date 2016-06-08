@@ -155,6 +155,12 @@ struct BindingInfo
     bool valid;
 };
 
+struct SamplerBinding
+{
+    GLenum textureType;
+    std::vector<GLuint> boundTextureUnits;
+};
+
 class ProgramState final : angle::NonCopyable
 {
   public:
@@ -194,6 +200,8 @@ class ProgramState final : angle::NonCopyable
     GLint getUniformLocation(const std::string &name) const;
     GLuint getUniformIndex(const std::string &name) const;
 
+    const std::vector<SamplerBinding> &getAppliedSamplerUniforms() const;
+
   private:
     friend class Program;
 
@@ -228,6 +236,12 @@ class ProgramState final : angle::NonCopyable
     std::map<int, VariableLocation> mOutputVariables;
 
     bool mBinaryRetrieveableHint;
+
+    // An array of the samplers that are used by the program
+    std::vector<SamplerBinding> mSamplerBindings;
+
+    // A map from a mData.getUniforms() index to a mSamplerBindings index.
+    std::vector<size_t> mUniformIndexToSamplerIndex;
 };
 
 class Program final : angle::NonCopyable, public LabeledObject
@@ -334,6 +348,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     GLuint getUniformBlockBinding(GLuint uniformBlockIndex) const;
 
     const UniformBlock &getUniformBlockByIndex(GLuint index) const;
+
+    const std::vector<SamplerBinding> &getAppliedSamplerUniforms() const;
 
     void setTransformFeedbackVaryings(GLsizei count, const GLchar *const *varyings, GLenum bufferMode);
     void getTransformFeedbackVarying(GLuint index, GLsizei bufSize, GLsizei *length, GLsizei *size, GLenum *type, GLchar *name) const;
@@ -466,6 +482,8 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     template <typename DestT>
     void getUniformInternal(GLint location, DestT *dataOut) const;
+
+    void gatherSamplerUniforms();
 
     ProgramState mState;
     rx::ProgramImpl *mProgram;

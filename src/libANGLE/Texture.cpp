@@ -512,6 +512,7 @@ Texture::~Texture()
 void Texture::setLabel(const std::string &label)
 {
     mLabel = label;
+    mDirtyBits.set(DIRTY_BIT_LABEL);
 }
 
 const std::string &Texture::getLabel() const
@@ -527,6 +528,7 @@ GLenum Texture::getTarget() const
 void Texture::setSwizzleRed(GLenum swizzleRed)
 {
     mState.mSwizzleState.swizzleRed = swizzleRed;
+    mDirtyBits.set(DIRTY_BIT_SWIZZLE_RED);
 }
 
 GLenum Texture::getSwizzleRed() const
@@ -537,6 +539,7 @@ GLenum Texture::getSwizzleRed() const
 void Texture::setSwizzleGreen(GLenum swizzleGreen)
 {
     mState.mSwizzleState.swizzleGreen = swizzleGreen;
+    mDirtyBits.set(DIRTY_BIT_SWIZZLE_GREEN);
 }
 
 GLenum Texture::getSwizzleGreen() const
@@ -547,6 +550,7 @@ GLenum Texture::getSwizzleGreen() const
 void Texture::setSwizzleBlue(GLenum swizzleBlue)
 {
     mState.mSwizzleState.swizzleBlue = swizzleBlue;
+    mDirtyBits.set(DIRTY_BIT_SWIZZLE_BLUE);
 }
 
 GLenum Texture::getSwizzleBlue() const
@@ -557,6 +561,7 @@ GLenum Texture::getSwizzleBlue() const
 void Texture::setSwizzleAlpha(GLenum swizzleAlpha)
 {
     mState.mSwizzleState.swizzleAlpha = swizzleAlpha;
+    mDirtyBits.set(DIRTY_BIT_SWIZZLE_ALPHA);
 }
 
 GLenum Texture::getSwizzleAlpha() const
@@ -567,6 +572,7 @@ GLenum Texture::getSwizzleAlpha() const
 void Texture::setMinFilter(GLenum minFilter)
 {
     mState.mSamplerState.minFilter = minFilter;
+    mDirtyBits.set(DIRTY_BIT_MIN_FILTER);
 }
 
 GLenum Texture::getMinFilter() const
@@ -577,6 +583,7 @@ GLenum Texture::getMinFilter() const
 void Texture::setMagFilter(GLenum magFilter)
 {
     mState.mSamplerState.magFilter = magFilter;
+    mDirtyBits.set(DIRTY_BIT_MAG_FILTER);
 }
 
 GLenum Texture::getMagFilter() const
@@ -587,6 +594,7 @@ GLenum Texture::getMagFilter() const
 void Texture::setWrapS(GLenum wrapS)
 {
     mState.mSamplerState.wrapS = wrapS;
+    mDirtyBits.set(DIRTY_BIT_WRAP_S);
 }
 
 GLenum Texture::getWrapS() const
@@ -597,6 +605,7 @@ GLenum Texture::getWrapS() const
 void Texture::setWrapT(GLenum wrapT)
 {
     mState.mSamplerState.wrapT = wrapT;
+    mDirtyBits.set(DIRTY_BIT_WRAP_T);
 }
 
 GLenum Texture::getWrapT() const
@@ -607,6 +616,7 @@ GLenum Texture::getWrapT() const
 void Texture::setWrapR(GLenum wrapR)
 {
     mState.mSamplerState.wrapR = wrapR;
+    mDirtyBits.set(DIRTY_BIT_WRAP_R);
 }
 
 GLenum Texture::getWrapR() const
@@ -617,6 +627,7 @@ GLenum Texture::getWrapR() const
 void Texture::setMaxAnisotropy(float maxAnisotropy)
 {
     mState.mSamplerState.maxAnisotropy = maxAnisotropy;
+    mDirtyBits.set(DIRTY_BIT_MAX_ANISOTROPY);
 }
 
 float Texture::getMaxAnisotropy() const
@@ -627,6 +638,7 @@ float Texture::getMaxAnisotropy() const
 void Texture::setMinLod(GLfloat minLod)
 {
     mState.mSamplerState.minLod = minLod;
+    mDirtyBits.set(DIRTY_BIT_MIN_LOD);
 }
 
 GLfloat Texture::getMinLod() const
@@ -637,6 +649,7 @@ GLfloat Texture::getMinLod() const
 void Texture::setMaxLod(GLfloat maxLod)
 {
     mState.mSamplerState.maxLod = maxLod;
+    mDirtyBits.set(DIRTY_BIT_MAX_LOD);
 }
 
 GLfloat Texture::getMaxLod() const
@@ -647,6 +660,7 @@ GLfloat Texture::getMaxLod() const
 void Texture::setCompareMode(GLenum compareMode)
 {
     mState.mSamplerState.compareMode = compareMode;
+    mDirtyBits.set(DIRTY_BIT_COMPARE_MODE);
 }
 
 GLenum Texture::getCompareMode() const
@@ -657,6 +671,7 @@ GLenum Texture::getCompareMode() const
 void Texture::setCompareFunc(GLenum compareFunc)
 {
     mState.mSamplerState.compareFunc = compareFunc;
+    mDirtyBits.set(DIRTY_BIT_COMPARE_FUNC);
 }
 
 GLenum Texture::getCompareFunc() const
@@ -674,6 +689,7 @@ void Texture::setBaseLevel(GLuint baseLevel)
     if (mState.setBaseLevel(baseLevel))
     {
         mTexture->setBaseLevel(mState.getEffectiveBaseLevel());
+        mDirtyBits.set(DIRTY_BIT_BASE_LEVEL);
     }
 }
 
@@ -685,6 +701,7 @@ GLuint Texture::getBaseLevel() const
 void Texture::setMaxLevel(GLuint maxLevel)
 {
     mState.setMaxLevel(maxLevel);
+    mDirtyBits.set(DIRTY_BIT_MAX_LEVEL);
 }
 
 GLuint Texture::getMaxLevel() const
@@ -705,6 +722,7 @@ GLuint Texture::getImmutableLevels() const
 void Texture::setUsage(GLenum usage)
 {
     mState.mUsage = usage;
+    mDirtyBits.set(DIRTY_BIT_USAGE);
 }
 
 GLenum Texture::getUsage() const
@@ -1081,6 +1099,15 @@ void Texture::onDetach()
 GLuint Texture::getId() const
 {
     return id();
+}
+
+void Texture::syncImplState()
+{
+    if (mDirtyBits.any())
+    {
+        mTexture->syncState(mDirtyBits);
+        mDirtyBits.reset();
+    }
 }
 
 rx::FramebufferAttachmentObjectImpl *Texture::getAttachmentImpl() const
