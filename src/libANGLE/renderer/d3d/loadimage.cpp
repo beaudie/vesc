@@ -527,6 +527,43 @@ void LoadRGBA8ToBGR5A1(size_t width,
     }
 }
 
+void LoadRGB10A2ToBGR5A1(size_t width,
+                         size_t height,
+                         size_t depth,
+                         const uint8_t *input,
+                         size_t inputRowPitch,
+                         size_t inputDepthPitch,
+                         uint8_t *output,
+                         size_t outputRowPitch,
+                         size_t outputDepthPitch)
+{
+    auto bitRange = [](uint32_t minBit, uint32_t maxBit, uint32_t value) {
+        uint32_t mask = maxBit == 32u ? 0xFFFFFFFFu : ((1u << maxBit) - 1u);
+        return static_cast<uint16_t>((value & mask) >> minBit);
+    };
+
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (size_t y = 0; y < height; y++)
+        {
+            const uint32_t *source =
+                OffsetDataPointer<uint32_t>(input, y, z, inputRowPitch, inputDepthPitch);
+            uint16_t *dest =
+                OffsetDataPointer<uint16_t>(output, y, z, outputRowPitch, outputDepthPitch);
+            for (size_t x = 0; x < width; x++)
+            {
+                // TODO(jmadill): check rounding
+                uint32_t rgb10a2 = source[x];
+                uint16_t r5      = bitRange(0u, 10u, rgb10a2) >> 5u;
+                uint16_t g5      = bitRange(10u, 20u, rgb10a2) >> 5u;
+                uint16_t b5      = bitRange(20u, 30u, rgb10a2) >> 5u;
+                uint16_t a1      = bitRange(30u, 32u, rgb10a2) >> 1u;
+                dest[x]          = (a1 << 15) | (r5 << 10) | (g5 << 5) | b5;
+            }
+        }
+    }
+}
+
 void LoadRGB5A1ToA1RGB5(size_t width, size_t height, size_t depth,
                         const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,
                         uint8_t *output, size_t outputRowPitch, size_t outputDepthPitch)
