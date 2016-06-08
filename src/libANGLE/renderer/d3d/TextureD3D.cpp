@@ -663,6 +663,10 @@ void TextureD3D::setBaseLevel(GLuint baseLevel)
     }
 }
 
+void TextureD3D::syncState(const gl::Texture::DirtyBits &dirtyBits)
+{
+}
+
 TextureD3D_2D::TextureD3D_2D(const gl::TextureState &state, RendererD3D *renderer)
     : TextureD3D(state, renderer)
 {

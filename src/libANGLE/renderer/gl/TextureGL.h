@@ -87,7 +87,6 @@ class TextureGL : public TextureImpl
 
     gl::Error setEGLImageTarget(GLenum target, egl::Image *image) override;
 
-    void syncState(size_t textureUnit) const;
     GLuint getTextureID() const;
 
     gl::Error getAttachmentRenderTarget(const gl::FramebufferAttachment::Target &target,
@@ -96,7 +95,9 @@ class TextureGL : public TextureImpl
         return gl::Error(GL_OUT_OF_MEMORY, "Not supported on OpenGL");
     }
 
-    void setBaseLevel(GLuint) override {}
+    void setBaseLevel(GLuint baseLevel) override;
+
+    void syncState(const gl::Texture::DirtyBits &dirtyBits) override;
 
   private:
     void setImageHelper(GLenum target,
@@ -127,6 +128,8 @@ class TextureGL : public TextureImpl
                                              GLenum type,
                                              const gl::PixelUnpackState &unpack,
                                              const uint8_t *pixels);
+
+    void setLevelInfo(size_t level, size_t levelCount, const LevelInfoGL &levelInfo);
 
     const FunctionsGL *mFunctions;
     const WorkaroundsGL &mWorkarounds;
