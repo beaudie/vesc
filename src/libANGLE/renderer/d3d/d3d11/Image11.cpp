@@ -260,9 +260,11 @@ gl::Error Image11::loadData(const gl::Box &area,
     ANGLE_TRY_RESULT(formatInfo.computeDepthPitch(type, area.width, area.height, unpack.alignment,
                                                   unpack.rowLength, unpack.imageHeight),
                      inputDepthPitch);
-    GLsizei inputSkipBytes =
-        formatInfo.computeSkipPixels(inputRowPitch, inputDepthPitch, unpack.skipImages,
-                                     unpack.skipRows, unpack.skipPixels, applySkipImages);
+    GLsizei inputSkipBytes = 0;
+    ANGLE_TRY_RESULT(
+        formatInfo.computeSkipBytes(inputRowPitch, inputDepthPitch, unpack.skipImages,
+                                    unpack.skipRows, unpack.skipPixels, applySkipImages),
+        inputSkipBytes);
 
     const d3d11::DXGIFormatSize &dxgiFormatInfo = d3d11::GetDXGIFormatSizeInfo(mDXGIFormat);
     GLuint outputPixelSize = dxgiFormatInfo.pixelBytes;

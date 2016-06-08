@@ -488,8 +488,10 @@ gl::Error Image9::loadData(const gl::Box &area,
         formatInfo.computeRowPitch(type, area.width, unpack.alignment, unpack.rowLength),
         inputRowPitch);
     ASSERT(!applySkipImages);
-    GLsizei inputSkipBytes = formatInfo.computeSkipPixels(
-        inputRowPitch, 0, unpack.skipImages, unpack.skipRows, unpack.skipPixels, false);
+    GLsizei inputSkipBytes = 0;
+    ANGLE_TRY_RESULT(formatInfo.computeSkipBytes(inputRowPitch, 0, unpack.skipImages,
+                                                 unpack.skipRows, unpack.skipPixels, false),
+                     inputSkipBytes);
 
     const d3d9::TextureFormat &d3dFormatInfo = d3d9::GetTextureFormatInfo(mInternalFormat);
     ASSERT(d3dFormatInfo.loadFunction != NULL);

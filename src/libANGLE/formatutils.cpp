@@ -763,15 +763,22 @@ gl::ErrorOrResult<GLuint> InternalFormat::computeCompressedImageSize(GLenum form
     return bytes.ValueOrDie();
 }
 
-GLuint InternalFormat::computeSkipPixels(GLint rowPitch,
-                                         GLint depthPitch,
-                                         GLint skipImages,
-                                         GLint skipRows,
-                                         GLint skipPixels,
-                                         bool applySkipImages) const
+gl::ErrorOrResult<GLuint> InternalFormat::computeSkipBytes(GLuint rowPitch,
+                                                           GLuint depthPitch,
+                                                           GLint skipImages,
+                                                           GLint skipRows,
+                                                           GLint skipPixels,
+                                                           bool applySkipImages) const
 {
-    GLuint skipImagesBytes = applySkipImages ? skipImages * depthPitch : 0;
-    return skipImagesBytes + skipRows * rowPitch + skipPixels * pixelBytes;
+    CheckedNumeric<GLuint> checkedRowPitch(rowPitch);
+    CheckedNumeric<GLuint> skipImagesBytes(applySkipImages ? skipImages * depthPitch : 0);
+    CheckedNumeric<GLint> checkedSkipImages(skipImages);
+    CheckedNumeric<GLuint> checkedSkipRows(skipRows);
+    CheckedNumeric<GLint> checkedSkipPixels(skipPixels);
+    CheckedNumeric<GLint> checkedPixelBytes(pixelBytes);
+    auto skipBytes =
+        skipImagesBytes + checkedSkipRows * checkedRowPitch + checkedSkipPixels * checkedPixelBytes;
+    return skipBytes.ValueOrDie();
 }
 
 gl::ErrorOrResult<GLuint> InternalFormat::computeUnpackSize(
