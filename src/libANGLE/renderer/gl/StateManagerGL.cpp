@@ -726,8 +726,8 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
         }
     }
 
-    const std::vector<SamplerBindingGL> &appliedSamplerUniforms = programGL->getAppliedSamplerUniforms();
-    for (const SamplerBindingGL &samplerUniform : appliedSamplerUniforms)
+    const auto &appliedSamplerUniforms = program->getAppliedSamplerUniforms();
+    for (const auto &samplerUniform : appliedSamplerUniforms)
     {
         GLenum textureType = samplerUniform.textureType;
         for (GLuint textureUnitIndex : samplerUniform.boundTextureUnits)
@@ -743,7 +743,7 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
                     bindTexture(textureType, textureGL->getTextureID());
                 }
 
-                textureGL->syncState(textureUnitIndex);
+                //textureGL->syncState(textureUnitIndex);
             }
             else
             {
