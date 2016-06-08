@@ -483,13 +483,15 @@ gl::Error Image9::loadData(const gl::Box &area,
     ASSERT(area.z == 0 && area.depth == 1);
 
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(mInternalFormat);
-    GLsizei inputRowPitch                = 0;
+    GLuint inputRowPitch                 = 0;
     ANGLE_TRY_RESULT(
         formatInfo.computeRowPitch(type, area.width, unpack.alignment, unpack.rowLength),
         inputRowPitch);
     ASSERT(!applySkipImages);
-    GLsizei inputSkipBytes = formatInfo.computeSkipPixels(
-        inputRowPitch, 0, unpack.skipImages, unpack.skipRows, unpack.skipPixels, false);
+    GLuint inputSkipBytes = 0;
+    ANGLE_TRY_RESULT(formatInfo.computeSkipBytes(inputRowPitch, 0, unpack.skipImages,
+                                                 unpack.skipRows, unpack.skipPixels, false),
+                     inputSkipBytes);
 
     const d3d9::TextureFormat &d3dFormatInfo = d3d9::GetTextureFormatInfo(mInternalFormat);
     ASSERT(d3dFormatInfo.loadFunction != NULL);
