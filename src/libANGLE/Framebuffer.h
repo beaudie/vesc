@@ -134,10 +134,18 @@ class Framebuffer final : public LabeledObject
     size_t getNumColorBuffers() const;
     bool hasDepth() const;
     bool hasStencil() const;
-    int getSamples(const ContextState &state) const;
+
     bool usingExtendedDrawBuffers() const;
 
-    GLenum checkStatus(const ContextState &state) const;
+    // This method calls checkStatus.
+    int getSamples(const ContextState &state);
+    GLenum checkStatus(const ContextState &state);
+
+    // These methods do not change any state.
+    // TODO(jmadill): Remove ContextState parameter when able.
+    int getCachedSamples(const ContextState &state) const;
+    GLenum getCachedStatus(const ContextState &state) const;
+
     bool hasValidDepthStencil() const;
 
     Error discard(size_t count, const GLenum *attachments);

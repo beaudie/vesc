@@ -81,6 +81,8 @@ class ValidationContext : angle::NonCopyable
     // Specific methods needed for validation.
     bool getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *numParams);
     bool getIndexedQueryParameterInfo(GLenum target, GLenum *type, unsigned int *numParams);
+    bool checkFramebufferStatus(GLenum framebufferType);
+    int getFramebufferSamples(GLenum framebufferType);
 
   protected:
     ContextState mState;
