@@ -12,12 +12,14 @@
 
 #include <vector>
 
+#include "common/Optional.h"
 #include "common/angleutils.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/RefCountObject.h"
+#include "libANGLE/signal_utils.h"
 
 namespace rx
 {
@@ -86,7 +88,7 @@ class FramebufferState final : angle::NonCopyable
     GLenum mReadBufferState;
 };
 
-class Framebuffer final : public LabeledObject
+class Framebuffer final : public LabeledObject, public angle::SignalReceiver
 {
   public:
     Framebuffer(const Caps &caps, rx::GLImplFactory *factory, GLuint id);
@@ -142,9 +144,8 @@ class Framebuffer final : public LabeledObject
     GLenum checkStatus(const ContextState &state);
 
     // These methods do not change any state.
-    // TODO(jmadill): Remove ContextState parameter when able.
-    int getCachedSamples(const ContextState &state) const;
-    GLenum getCachedStatus(const ContextState &state) const;
+    int getCachedSamples() const;
+    GLenum getCachedStatus() const;
 
     bool hasValidDepthStencil() const;
 
@@ -203,17 +204,30 @@ class Framebuffer final : public LabeledObject
 
     void syncState() const;
 
-  protected:
+    // angle::SignalReceiver implementation
+    void signal(uint32_t token) override;
+
+  private:
     void detachResourceById(GLenum resourceType, GLuint resourceId);
+    void detachMatchingAttachment(FramebufferAttachment *attachment,
+                                  GLenum matchType,
+                                  GLuint matchId,
+                                  size_t dirtyBit);
+    GLenum checkStatusImpl(const ContextState &state);
 
     FramebufferState mState;
     rx::FramebufferImpl *mImpl;
     GLuint mId;
 
+    Optional<GLenum> mCachedStatus;
+    std::vector<angle::ChannelBinding> mDirtyColorAttachmentBindings;
+    angle::ChannelBinding mDirtyDepthAttachmentBinding;
+    angle::ChannelBinding mDirtyStencilAttachmentBinding;
+
     // TODO(jmadill): See if we can make this non-mutable.
     mutable DirtyBits mDirtyBits;
 };
 
-}
+}  // namespace gl
 
 #endif   // LIBANGLE_FRAMEBUFFER_H_
