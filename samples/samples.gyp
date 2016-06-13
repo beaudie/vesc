@@ -69,6 +69,13 @@
             'sources': [ 'hello_triangle/HelloTriangle.cpp', ],
         },
         {
+            'target_name': 'compute_image_2d',
+            'type': 'executable',
+            'dependencies': [ 'sample_util' ],
+            'includes': [ '../build/common_defines.gypi', ],
+            'sources': [ 'compute_image_2d/ComputeImage2D.cpp', ],
+        },
+        {
             'target_name': 'mip_map_2d',
             'type': 'executable',
             'dependencies': [ 'sample_util' ],
