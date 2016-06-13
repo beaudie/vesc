@@ -7,14 +7,14 @@
 // imageformats.h: Defines image format types with functions for mip generation
 // and copying.
 
-#ifndef LIBANGLE_RENDERER_IMAGEFORMATS_H_
-#define LIBANGLE_RENDERER_IMAGEFORMATS_H_
+#ifndef IMAGEUTIL_IMAGEFORMATS_H_
+#define IMAGEUTIL_IMAGEFORMATS_H_
 
 #include "libANGLE/angletypes.h"
 
 #include "common/mathutil.h"
 
-namespace rx
+namespace angle
 {
 
 // Several structures share functionality for reading, writing or mipmapping but the layout
@@ -2025,6 +2025,6 @@ struct R11G11B10F
         dst->B = gl::averageFloat10(src1->B, src2->B);
     }
 };
-}  // namespace rx
+}  // namespace angle
 
-#endif  // LIBANGLE_RENDERER_IMAGEFORMATS_H_
+#endif  // IMAGEUTIL_IMAGEFORMATS_H_

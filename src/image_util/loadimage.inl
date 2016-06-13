@@ -4,22 +4,25 @@
 // found in the LICENSE file.
 //
 
-#include "common/mathutil.h"
+#include <string.h>
 
-namespace rx
+namespace angle
 {
 
-template <typename T>
-inline T *OffsetDataPointer(uint8_t *data, size_t y, size_t z, size_t rowPitch, size_t depthPitch)
-{
-    return reinterpret_cast<T*>(data + (y * rowPitch) + (z * depthPitch));
-}
+    namespace priv
+    {
+        template <typename T>
+        inline T *OffsetDataPointer(uint8_t *data, size_t y, size_t z, size_t rowPitch, size_t depthPitch)
+        {
+            return reinterpret_cast<T*>(data + (y * rowPitch) + (z * depthPitch));
+        }
 
-template <typename T>
-inline const T *OffsetDataPointer(const uint8_t *data, size_t y, size_t z, size_t rowPitch, size_t depthPitch)
-{
-    return reinterpret_cast<const T*>(data + (y * rowPitch) + (z * depthPitch));
-}
+        template <typename T>
+        inline const T *OffsetDataPointer(const uint8_t *data, size_t y, size_t z, size_t rowPitch, size_t depthPitch)
+        {
+            return reinterpret_cast<const T*>(data + (y * rowPitch) + (z * depthPitch));
+        }
+    }
 
 template <typename type, size_t componentCount>
 inline void LoadToNative(size_t width, size_t height, size_t depth,
@@ -32,15 +35,14 @@ inline void LoadToNative(size_t width, size_t height, size_t depth,
 
     if (layerSize == inputDepthPitch && layerSize == outputDepthPitch)
     {
-        ASSERT(rowSize == inputRowPitch && rowSize == outputRowPitch);
         memcpy(output, input, imageSize);
     }
     else if (rowSize == inputRowPitch && rowSize == outputRowPitch)
     {
         for (size_t z = 0; z < depth; z++)
         {
-            const type *source = OffsetDataPointer<type>(input, 0, z, inputRowPitch, inputDepthPitch);
-            type *dest = OffsetDataPointer<type>(output, 0, z, outputRowPitch, outputDepthPitch);
+            const type *source = priv::OffsetDataPointer<type>(input, 0, z, inputRowPitch, inputDepthPitch);
+            type *dest = priv::OffsetDataPointer<type>(output, 0, z, outputRowPitch, outputDepthPitch);
 
             memcpy(dest, source, layerSize);
         }
@@ -51,8 +53,8 @@ inline void LoadToNative(size_t width, size_t height, size_t depth,
         {
             for (size_t y = 0; y < height; y++)
             {
-                const type *source = OffsetDataPointer<type>(input, y, z, inputRowPitch, inputDepthPitch);
-                type *dest = OffsetDataPointer<type>(output, y, z, outputRowPitch, outputDepthPitch);
+                const type *source = priv::OffsetDataPointer<type>(input, y, z, inputRowPitch, inputDepthPitch);
+                type *dest = priv::OffsetDataPointer<type>(output, y, z, outputRowPitch, outputDepthPitch);
                 memcpy(dest, source, width * sizeof(type) * componentCount);
             }
         }
@@ -70,8 +72,8 @@ inline void LoadToNative3To4(size_t width, size_t height, size_t depth,
     {
         for (size_t y = 0; y < height; y++)
         {
-            const type *source = OffsetDataPointer<type>(input, y, z, inputRowPitch, inputDepthPitch);
-            type *dest = OffsetDataPointer<type>(output, y, z, outputRowPitch, outputDepthPitch);
+            const type *source = priv::OffsetDataPointer<type>(input, y, z, inputRowPitch, inputDepthPitch);
+            type *dest = priv::OffsetDataPointer<type>(output, y, z, outputRowPitch, outputDepthPitch);
             for (size_t x = 0; x < width; x++)
             {
                 dest[x * 4 + 0] = source[x * 3 + 0];
@@ -94,8 +96,8 @@ inline void Load32FTo16F(size_t width, size_t height, size_t depth,
     {
         for (size_t y = 0; y < height; y++)
         {
-            const float *source = OffsetDataPointer<float>(input, y, z, inputRowPitch, inputDepthPitch);
-            uint16_t *dest = OffsetDataPointer<uint16_t>(output, y, z, outputRowPitch, outputDepthPitch);
+            const float *source = priv::OffsetDataPointer<float>(input, y, z, inputRowPitch, inputDepthPitch);
+            uint16_t *dest = priv::OffsetDataPointer<uint16_t>(output, y, z, outputRowPitch, outputDepthPitch);
 
             for (size_t x = 0; x < elementWidth; x++)
             {
@@ -117,8 +119,8 @@ inline void LoadCompressedToNative(size_t width, size_t height, size_t depth,
     {
         for (size_t y = 0; y < rows; ++y)
         {
-            const uint8_t *source = OffsetDataPointer<uint8_t>(input, y, z, inputRowPitch, inputDepthPitch);
-            uint8_t *dest = OffsetDataPointer<uint8_t>(output, y, z, outputRowPitch, outputDepthPitch);
+            const uint8_t *source = priv::OffsetDataPointer<uint8_t>(input, y, z, inputRowPitch, inputDepthPitch);
+            uint8_t *dest = priv::OffsetDataPointer<uint8_t>(output, y, z, outputRowPitch, outputDepthPitch);
             memcpy(dest, source, columns * blockSize);
         }
     }
@@ -140,7 +142,7 @@ inline void Initialize4ComponentData(size_t width, size_t height, size_t depth,
     {
         for (size_t y = 0; y < height; y++)
         {
-            type *destRow = OffsetDataPointer<type>(output, y, z, outputRowPitch, outputDepthPitch);
+            type *destRow = priv::OffsetDataPointer<type>(output, y, z, outputRowPitch, outputDepthPitch);
             for (size_t x = 0; x < width; x++)
             {
                 type* destPixel = destRow + x * 4;
@@ -153,4 +155,4 @@ inline void Initialize4ComponentData(size_t width, size_t height, size_t depth,
     }
 }
 
-}
+} // namespace angle
