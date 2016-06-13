@@ -9,7 +9,9 @@
 
 #include "common/mathutil.h"
 
-namespace rx
+#include "image_util/imageformats.h"
+
+namespace angle
 {
 
 namespace priv
@@ -263,4 +265,4 @@ inline void GenerateMip(size_t sourceWidth, size_t sourceHeight, size_t sourceDe
                        mipWidth, mipHeight, mipDepth, destData, destRowPitch, destDepthPitch);
 }
 
-}
+} // namespace angle

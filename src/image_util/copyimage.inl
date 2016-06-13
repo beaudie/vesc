@@ -6,7 +6,7 @@
 
 // copyimage.inl: Defines image copying functions
 
-namespace rx
+namespace angle
 {
 
 template <typename sourceType, typename colorDataType>
@@ -29,4 +29,4 @@ inline void CopyPixel(const uint8_t *source, uint8_t *dest)
     WriteColor<destType, colorDataType>(&temp, dest);
 }
 
-}
+} // namespace angle
