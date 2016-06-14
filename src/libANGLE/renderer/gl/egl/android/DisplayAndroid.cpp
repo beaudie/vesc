@@ -31,7 +31,12 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
 {
     FunctionsEGLDL *egl = new FunctionsEGLDL();
     mEGL = egl;
-    ANGLE_TRY(egl->initialize(display->getNativeDisplayId(), "libEGL.so"));
+#if defined(__LP64__)
+    const char *eglPath = "/system/lib64/libEGL.so";
+#else
+    const char *eglPath = "/system/lib/libEGL.so";
+#endif
+    ANGLE_TRY(egl->initialize(display->getNativeDisplayId(), eglPath));
 
     gl::Version eglVersion(mEGL->majorVersion, mEGL->minorVersion);
     ASSERT(eglVersion >= gl::Version(1, 4));
