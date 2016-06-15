@@ -30,6 +30,7 @@ extern const char *g_VkStdValidationLayerName;
 namespace vk
 {
 class Framebuffer;
+class RenderPass;
 
 class Error final
 {
@@ -78,6 +79,12 @@ class CommandBuffer final : angle::NonCopyable
                            VkImageLayout oldLayout,
                            VkImageLayout newLayout);
 
+    void beginRenderPass(const RenderPass &renderPass,
+                         const Framebuffer &framebuffer,
+                         const gl::Rectangle &renderArea,
+                         const std::vector<VkClearValue> &clearValues);
+    void endRenderPass();
+
     void imageBarrier(VkPipelineStageFlags srcStageMask,
                       VkPipelineStageFlags destStageMask,
                       const VkImageMemoryBarrier &barrier);
@@ -117,6 +124,24 @@ class Semaphore final : angle::NonCopyable
   private:
     VkDevice mDevice;
     VkSemaphore mHandle;
+};
+
+class RenderPass final : angle::NonCopyable
+{
+  public:
+    RenderPass();
+    RenderPass(VkDevice device);
+    RenderPass(RenderPass &&other);
+    ~RenderPass();
+    RenderPass &operator=(RenderPass &&other);
+
+    Error init(const VkRenderPassCreateInfo &createInfo);
+
+    VkRenderPass getHandle() const { return mHandle; }
+
+  private:
+    VkDevice mDevice;
+    VkRenderPass mHandle;
 };
 
 class Framebuffer final : angle::NonCopyable

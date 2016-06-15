@@ -374,6 +374,35 @@ CommandBuffer::~CommandBuffer()
     }
 }
 
+void CommandBuffer::beginRenderPass(const RenderPass &renderPass,
+                                    const Framebuffer &framebuffer,
+                                    const gl::Rectangle &renderArea,
+                                    const std::vector<VkClearValue> &clearValues)
+{
+    ASSERT(!clearValues.empty());
+    ASSERT(mHandle != VK_NULL_HANDLE);
+
+    VkRenderPassBeginInfo beginInfo;
+    beginInfo.sType                    = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    beginInfo.pNext                    = nullptr;
+    beginInfo.renderPass               = renderPass.getHandle();
+    beginInfo.framebuffer              = framebuffer.getHandle();
+    beginInfo.renderArea.offset.x      = static_cast<uint32_t>(renderArea.x);
+    beginInfo.renderArea.offset.y      = static_cast<uint32_t>(renderArea.y);
+    beginInfo.renderArea.extent.width  = static_cast<uint32_t>(renderArea.width);
+    beginInfo.renderArea.extent.height = static_cast<uint32_t>(renderArea.height);
+    beginInfo.clearValueCount          = static_cast<uint32_t>(clearValues.size());
+    beginInfo.pClearValues             = clearValues.data();
+
+    vkCmdBeginRenderPass(mHandle, &beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+}
+
+void CommandBuffer::endRenderPass()
+{
+    ASSERT(mHandle != VK_NULL_HANDLE);
+    vkCmdEndRenderPass(mHandle);
+}
+
 void CommandBuffer::imageBarrier(VkPipelineStageFlags srcStageMask,
                                  VkPipelineStageFlags destStageMask,
                                  const VkImageMemoryBarrier &barrier)
@@ -423,6 +452,44 @@ Error Semaphore::init()
 
     ANGLE_VK_TRY(vkCreateSemaphore(mDevice, &semaphoreInfo, nullptr, &mHandle));
 
+    return VkSuccess();
+}
+
+// RenderPass implementation.
+RenderPass::RenderPass() : mDevice(VK_NULL_HANDLE), mHandle(VK_NULL_HANDLE)
+{
+}
+
+RenderPass::RenderPass(VkDevice device) : mDevice(device), mHandle(VK_NULL_HANDLE)
+{
+}
+
+RenderPass::RenderPass(RenderPass &&other) : mDevice(other.mDevice), mHandle(other.mHandle)
+{
+    other.mDevice = VK_NULL_HANDLE;
+    other.mHandle = VK_NULL_HANDLE;
+}
+
+RenderPass::~RenderPass()
+{
+    if (mHandle != VK_NULL_HANDLE)
+    {
+        ASSERT(mDevice != VK_NULL_HANDLE);
+        vkDestroyRenderPass(mDevice, mHandle, nullptr);
+    }
+}
+
+RenderPass &RenderPass::operator=(RenderPass &&other)
+{
+    std::swap(mDevice, other.mDevice);
+    std::swap(mHandle, other.mHandle);
+    return *this;
+}
+
+Error RenderPass::init(const VkRenderPassCreateInfo &createInfo)
+{
+    ASSERT(mDevice != VK_NULL_HANDLE && mHandle == VK_NULL_HANDLE);
+    ANGLE_VK_TRY(vkCreateRenderPass(mDevice, &createInfo, nullptr, &mHandle));
     return VkSuccess();
 }
 

@@ -71,7 +71,7 @@ gl::ErrorOrResult<const gl::InternalFormat *> GetReadAttachmentInfo(
 }  // anonymous namespace
 
 FramebufferVk::FramebufferVk(const gl::FramebufferState &state)
-    : FramebufferImpl(state), mDirty(true)
+    : FramebufferImpl(state), mDirty(true), mRenderPass(VK_NULL_HANDLE)
 {
 }
 
@@ -312,6 +312,141 @@ void FramebufferVk::syncState(const gl::Framebuffer::DirtyBits &dirtyBits)
 {
     // TODO(jmadill): Smarter scheme for small changes.
     mDirty = true;
+}
+
+vk::Error FramebufferVk::getRenderPass(VkDevice device)
+{
+    if (!mDirty)
+    {
+        return vk::VkSuccess();
+    }
+
+    // TODO(jmadill): Can we use stack-only memory?
+    std::vector<VkAttachmentDescription> attachmentDescs;
+    std::vector<VkAttachmentReference> colorAttachmentRefs;
+    std::vector<VkImageView> attachments;
+    gl::Extents attachmentsSize;
+
+    const auto &colorAttachments = mState.getColorAttachments();
+    for (size_t attachmentIndex = 0; attachmentIndex < colorAttachments.size(); ++attachmentIndex)
+    {
+        const auto &colorAttachment = colorAttachments[attachmentIndex];
+        if (colorAttachment.isAttached())
+        {
+            VkAttachmentDescription colorDesc;
+            VkAttachmentReference colorRef;
+
+            RenderTargetVk *renderTarget = nullptr;
+            ANGLE_TRY(colorAttachment.getRenderTarget<RenderTargetVk>(&renderTarget));
+
+            // TODO(jmadill): We would only need this flag for duplicated attachments.
+            colorDesc.flags   = VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
+            colorDesc.format  = renderTarget->getFormat();
+            colorDesc.samples = ConvertSamples(colorAttachment.getSamples());
+
+            // This flag will preserve the existing depth/color buffer data.
+            // TODO(jmadill): Can use a smarter load/store ops?
+            // FIXME(jmadill): should not be hard coded to clear.
+            colorDesc.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            colorDesc.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
+            colorDesc.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            colorDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            colorDesc.initialLayout  = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            colorDesc.finalLayout    = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+            colorRef.attachment = static_cast<uint32_t>(colorAttachments.size());
+            colorRef.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+            attachmentDescs.push_back(colorDesc);
+            colorAttachmentRefs.push_back(colorRef);
+            attachments.push_back(renderTarget->getImageView());
+
+            ASSERT(attachmentsSize.empty() || attachmentsSize == colorAttachment.getSize());
+            attachmentsSize = colorAttachment.getSize();
+        }
+    }
+
+    const auto *depthStencilAttachment = mState.getDepthStencilAttachment();
+    VkAttachmentReference depthStencilAttachmentRef;
+    bool useDepth = depthStencilAttachment && depthStencilAttachment->isAttached();
+
+    if (useDepth)
+    {
+        VkAttachmentDescription depthStencilDesc;
+
+        RenderTargetVk *renderTarget = nullptr;
+        ANGLE_TRY(depthStencilAttachment->getRenderTarget<RenderTargetVk>(&renderTarget));
+
+        depthStencilDesc.flags          = 0;
+        depthStencilDesc.format         = renderTarget->getFormat();
+        depthStencilDesc.samples        = ConvertSamples(depthStencilAttachment->getSamples());
+        depthStencilDesc.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        depthStencilDesc.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
+        depthStencilDesc.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        depthStencilDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        depthStencilDesc.initialLayout  = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+        depthStencilDesc.finalLayout    = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+        depthStencilAttachmentRef.attachment = static_cast<uint32_t>(attachmentDescs.size());
+        depthStencilAttachmentRef.layout     = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+        attachmentDescs.push_back(depthStencilDesc);
+        attachments.push_back(renderTarget->getImageView());
+
+        ASSERT(attachmentsSize.empty() || attachmentsSize == depthStencilAttachment->getSize());
+        attachmentsSize = depthStencilAttachment->getSize();
+    }
+
+    ASSERT(!attachmentDescs.empty() && !attachments.empty());
+
+    VkSubpassDescription subpassDesc;
+
+    subpassDesc.flags                   = 0;
+    subpassDesc.pipelineBindPoint       = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    subpassDesc.inputAttachmentCount    = 0;
+    subpassDesc.pInputAttachments       = nullptr;
+    subpassDesc.colorAttachmentCount    = static_cast<uint32_t>(colorAttachmentRefs.size());
+    subpassDesc.pColorAttachments       = colorAttachmentRefs.data();
+    subpassDesc.pResolveAttachments     = nullptr;
+    subpassDesc.pDepthStencilAttachment = (useDepth ? &depthStencilAttachmentRef : nullptr);
+    subpassDesc.preserveAttachmentCount = 0;
+    subpassDesc.pPreserveAttachments    = nullptr;
+
+    VkRenderPassCreateInfo renderPassInfo;
+
+    renderPassInfo.sType           = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+    renderPassInfo.pNext           = nullptr;
+    renderPassInfo.attachmentCount = static_cast<uint32_t>(attachmentDescs.size());
+    renderPassInfo.pAttachments    = attachmentDescs.data();
+    renderPassInfo.subpassCount    = 1;
+    renderPassInfo.pSubpasses      = &subpassDesc;
+    renderPassInfo.dependencyCount = 0;
+    renderPassInfo.pDependencies   = nullptr;
+
+    vk::RenderPass renderPass(device);
+    ANGLE_TRY(renderPass.init(renderPassInfo));
+
+    mRenderPass = std::move(renderPass);
+
+    VkFramebufferCreateInfo framebufferInfo;
+
+    framebufferInfo.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    framebufferInfo.pNext           = nullptr;
+    framebufferInfo.flags           = 0;
+    framebufferInfo.renderPass      = mRenderPass.getHandle();
+    framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+    framebufferInfo.pAttachments    = attachments.data();
+    framebufferInfo.width           = static_cast<uint32_t>(attachmentsSize.width);
+    framebufferInfo.height          = static_cast<uint32_t>(attachmentsSize.depth);
+    framebufferInfo.layers          = 1;
+
+    vk::Framebuffer framebuffer(device);
+    ANGLE_TRY(framebuffer.init(framebufferInfo));
+
+    mFramebuffer = std::move(framebuffer);
+
+    mDirty = false;
+    return vk::VkSuccess();
 }
 
 }  // namespace rx
