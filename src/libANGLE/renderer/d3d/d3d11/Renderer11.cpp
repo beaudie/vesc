@@ -1499,8 +1499,7 @@ gl::Error Renderer11::updateState(const gl::ContextState &data, GLenum drawMode)
     // Applies the render target surface, depth stencil surface, viewport rectangle and
     // scissor rectangle to the renderer
     gl::Framebuffer *framebufferObject = glState.getDrawFramebuffer();
-    ASSERT(framebufferObject &&
-           framebufferObject->getCachedStatus(data) == GL_FRAMEBUFFER_COMPLETE);
+    ASSERT(framebufferObject && framebufferObject->getCachedStatus() == GL_FRAMEBUFFER_COMPLETE);
     ANGLE_TRY(applyRenderTarget(framebufferObject));
 
     // Set the present path state
@@ -1517,7 +1516,7 @@ gl::Error Renderer11::updateState(const gl::ContextState &data, GLenum drawMode)
     mStateManager.setScissorRectangle(glState.getScissor(), glState.isScissorTestEnabled());
 
     // Applying rasterizer state to D3D11 device
-    int samples                    = framebufferObject->getCachedSamples(data);
+    int samples                    = framebufferObject->getCachedSamples();
     gl::RasterizerState rasterizer = glState.getRasterizerState();
     rasterizer.pointDrawMode       = (drawMode == GL_POINTS);
     rasterizer.multiSample         = (samples != 0);
