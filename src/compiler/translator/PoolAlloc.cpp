@@ -50,28 +50,17 @@ void SetGlobalPoolAllocator(TPoolAllocator* poolAllocator)
 // Implement the functionality of the TPoolAllocator class, which
 // is documented in PoolAlloc.h.
 //
-TPoolAllocator::TPoolAllocator(int growthIncrement, int allocationAlignment) : 
-    pageSize(growthIncrement),
-    alignment(allocationAlignment),
-    freeList(0),
-    inUseList(0),
-    numCalls(0),
-    totalBytes(0),
-    mLocked(false)
+TPoolAllocator::TPoolAllocator(int growthIncrement, int allocationAlignment)
+    : alignment(allocationAlignment),
+#ifndef ANGLE_TRANSLATOR_NO_POOLALLOC
+      pageSize(growthIncrement),
+      freeList(0),
+      inUseList(0),
+      numCalls(0),
+      totalBytes(0),
+#endif
+      mLocked(false)
 {
-    //
-    // Don't allow page sizes we know are smaller than all common
-    // OS page sizes.
-    //
-    if (pageSize < 4*1024)
-        pageSize = 4*1024;
-
-    //
-    // A large currentPageOffset indicates a new page needs to
-    // be obtained to allocate memory.
-    //
-    currentPageOffset = pageSize;
-
     //
     // Adjust alignment to be at least pointer aligned and
     // power of 2.
@@ -86,6 +75,20 @@ TPoolAllocator::TPoolAllocator(int growthIncrement, int allocationAlignment) :
     alignment = a;
     alignmentMask = a - 1;
 
+#ifndef ANGLE_TRANSLATOR_NO_POOLALLOC
+    //
+    // Don't allow page sizes we know are smaller than all common
+    // OS page sizes.
+    //
+    if (pageSize < 4 * 1024)
+        pageSize = 4 * 1024;
+
+    //
+    // A large currentPageOffset indicates a new page needs to
+    // be obtained to allocate memory.
+    //
+    currentPageOffset = pageSize;
+
     //
     // Align header skip
     //
@@ -93,10 +96,14 @@ TPoolAllocator::TPoolAllocator(int growthIncrement, int allocationAlignment) :
     if (headerSkip < sizeof(tHeader)) {
         headerSkip = (sizeof(tHeader) + alignmentMask) & ~alignmentMask;
     }
+#else
+    stack.push_back({});
+#endif
 }
 
 TPoolAllocator::~TPoolAllocator()
 {
+#ifndef ANGLE_TRANSLATOR_NO_POOLALLOC
     while (inUseList) {
         tHeader* next = inUseList->nextPage;
         inUseList->~tHeader();
@@ -113,6 +120,16 @@ TPoolAllocator::~TPoolAllocator()
         delete [] reinterpret_cast<char*>(freeList);
         freeList = next;
     }
+#else
+    for (auto &allocs : stack)
+    {
+        for (auto alloc : allocs)
+        {
+            free(alloc);
+        }
+    }
+    stack.clear();
+#endif
 }
 
 // Support MSVC++ 6.0
@@ -153,6 +170,7 @@ void TAllocation::checkGuardBlock(unsigned char* blockMem, unsigned char val, co
 
 void TPoolAllocator::push()
 {
+#ifndef ANGLE_TRANSLATOR_NO_POOLALLOC
     tAllocState state = { currentPageOffset, inUseList };
 
     stack.push_back(state);
@@ -161,6 +179,9 @@ void TPoolAllocator::push()
     // Indicate there is no current page to allocate from.
     //
     currentPageOffset = pageSize;
+#else
+    stack.push_back({});
+#endif
 }
 
 //
@@ -175,6 +196,7 @@ void TPoolAllocator::pop()
     if (stack.size() < 1)
         return;
 
+#ifndef ANGLE_TRANSLATOR_NO_POOLALLOC
     tHeader* page = stack.back().page;
     currentPageOffset = stack.back().offset;
 
@@ -193,6 +215,13 @@ void TPoolAllocator::pop()
     }
 
     stack.pop_back();
+#else
+    for (auto &alloc : stack.back())
+    {
+        free(alloc);
+    }
+    stack.pop_back();
+#endif
 }
 
 //
@@ -209,6 +238,7 @@ void* TPoolAllocator::allocate(size_t numBytes)
 {
     ASSERT(!mLocked);
 
+#ifndef ANGLE_TRANSLATOR_NO_POOLALLOC
     //
     // Just keep some interesting statistics.
     //
@@ -285,6 +315,14 @@ void* TPoolAllocator::allocate(size_t numBytes)
     currentPageOffset = (headerSkip + allocationSize + alignmentMask) & ~alignmentMask;
 
     return initializeAllocation(inUseList, ret, numBytes);
+#else
+    void *alloc = malloc(numBytes + alignmentMask);
+    stack.back().push_back(alloc);
+
+    intptr_t intAlloc = reinterpret_cast<intptr_t>(alloc);
+    intAlloc          = (intAlloc + alignmentMask) & ~alignmentMask;
+    return reinterpret_cast<void *>(intAlloc);
+#endif
 }
 
 void TPoolAllocator::lock()
