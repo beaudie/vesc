@@ -5,6 +5,7 @@
 # import the use_x11 variable
 import("//build/config/dcheck_always_on.gni")
 import("//build/config/ui.gni")
+import("//testing/libfuzzer/fuzzer_test.gni")
 import("//third_party/angle/build/angle_common.gni")
 
 angle_git_is_present = exec_script("src/commit_id.py",
@@ -201,6 +202,21 @@ static_library("translator_static") {
 
   public_deps = [
     ":translator_lib",
+  ]
+}
+
+fuzzer_test("translator_fuzzer") {
+  sources = [
+    "src/compiler/fuzz/translator_fuzzer.cpp"
+  ]
+
+  include_dirs = [
+    "include",
+    "src",
+  ]
+
+  deps = [
+    ":translator_static"
   ]
 }
 

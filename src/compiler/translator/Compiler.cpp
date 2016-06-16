@@ -32,6 +32,31 @@
 #include "angle_gl.h"
 #include "common/utilities.h"
 
+#include <iostream>
+
+namespace {
+
+    void DumpFuzzerCase(char const * const * shaderStrings, size_t numStrings, uint32_t type, uint32_t spec, uint32_t options) {
+        static int fileIndex = 0;
+
+        std::ostringstream o;
+        o << "corpus/" << fileIndex++ << ".sample";
+        std::string s = o.str();
+
+        FILE* f = fopen(s.c_str(), "w");
+        fwrite(&type, sizeof(type), 1, f);
+        fwrite(&spec, sizeof(spec), 1, f);
+        fwrite(&options, sizeof(options), 1, f);
+
+        for (int i = 0; i < numStrings; i++) {
+            fwrite(shaderStrings[i], sizeof(char), strlen(shaderStrings[i]), f);
+        }
+
+        fclose(f);
+    }
+
+}
+
 bool IsWebGLBasedSpec(ShShaderSpec spec)
 {
     return (spec == SH_WEBGL_SPEC ||
@@ -394,6 +419,8 @@ TIntermNode *TCompiler::compileTreeImpl(const char *const shaderStrings[],
 bool TCompiler::compile(const char* const shaderStrings[],
     size_t numStrings, int compileOptions)
 {
+    DumpFuzzerCase(shaderStrings, numStrings, shaderType, shaderSpec, compileOptions);
+
     if (numStrings == 0)
         return true;
 
