@@ -157,7 +157,12 @@ public:
     void lock();
     void unlock();
 
-protected:
+  private:
+    size_t alignment;  // all returned allocations will be aligned at
+                       // this granularity, which will be a power of 2
+    size_t alignmentMask;
+
+#ifndef ANGLE_TRANSLATOR_NO_POOLALLOC
     friend struct tHeader;
     
     struct tHeader {
@@ -200,9 +205,6 @@ protected:
     }
 
     size_t pageSize;        // granularity of allocation from the OS
-    size_t alignment;       // all returned allocations will be aligned at 
-                            // this granularity, which will be a power of 2
-    size_t alignmentMask;
     size_t headerSkip;      // amount of memory to skip to make room for the
                             //      header (basically, size of header, rounded
                             //      up to make it aligned
@@ -213,7 +215,11 @@ protected:
 
     int numCalls;           // just an interesting statistic
     size_t totalBytes;      // just an interesting statistic
-private:
+
+#else  // ANGLE_TRANSLATOR_NO_POOLALLOC
+    std::vector<std::vector<void *>> stack;
+#endif
+
     TPoolAllocator& operator=(const TPoolAllocator&);  // dont allow assignment operator
     TPoolAllocator(const TPoolAllocator&);  // dont allow default copy constructor
     bool mLocked;
