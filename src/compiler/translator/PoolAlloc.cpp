@@ -182,7 +182,7 @@ void TPoolAllocator::pop()
         inUseList->~tHeader();
         
         tHeader* nextInUse = inUseList->nextPage;
-        if (inUseList->pageCount > 1)
+        if (true /*inUseList->pageCount > 1*/)
             delete [] reinterpret_cast<char*>(inUseList);
         else {
             inUseList->nextPage = freeList;
@@ -226,7 +226,7 @@ void* TPoolAllocator::allocate(size_t numBytes)
     // Do the allocation, most likely case first, for efficiency.
     // This step could be moved to be inline sometime.
     //
-    if (allocationSize <= pageSize - currentPageOffset) {
+    if (false /*allocationSize <= pageSize - currentPageOffset*/) {
         //
         // Safe to allocate from currentPageOffset.
         //
