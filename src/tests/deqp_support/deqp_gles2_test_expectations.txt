@@ -170,8 +170,6 @@
 1016 WIN LINUX MAC : dEQP-GLES2.functional.shaders.scoping.invalid.redeclare_function_fragment = FAIL
 1020 WIN LINUX MAC : dEQP-GLES2.functional.texture.mipmap.2d.projected.nearest_nearest* = FAIL
 1020 WIN LINUX MAC : dEQP-GLES2.functional.texture.mipmap.2d.projected.linear_nearest* = FAIL
-1025 WIN LINUX MAC : dEQP-GLES2.functional.fragment_ops.random.* = FAIL
-1025 WIN LINUX MAC : dEQP-GLES2.functional.fragment_ops.interaction.basic_shader.* = FAIL
 1027 WIN LINUX MAC : dEQP-GLES2.functional.fbo.render.repeated_clear.tex2d_rgb = FAIL
 1027 WIN LINUX MAC : dEQP-GLES2.functional.fbo.render.repeated_clear.tex2d_rgba = FAIL
 1028 WIN LINUX MAC : dEQP-GLES2.functional.fbo.completeness.renderable.texture.color0.rgb_float = FAIL
