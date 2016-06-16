@@ -233,15 +233,16 @@ TEST_P(DrawCallPerfBenchmark, Run)
     run();
 }
 
-ANGLE_INSTANTIATE_TEST(DrawCallPerfBenchmark,
-                       DrawCallPerfD3D9Params(false, false),
-                       DrawCallPerfD3D9Params(true, false),
-                       DrawCallPerfD3D11Params(false, false),
-                       DrawCallPerfD3D11Params(true, false),
-                       DrawCallPerfD3D11Params(true, true),
-                       DrawCallPerfOpenGLParams(false, false),
-                       DrawCallPerfOpenGLParams(true, false),
-                       DrawCallPerfOpenGLParams(true, true),
-                       DrawCallPerfValidationOnly());
+ANGLE_INSTANTIATE_TEST(
+    DrawCallPerfBenchmark,
+    DrawCallPerfD3D9Params(false, false),
+    DrawCallPerfD3D9Params(true, false),
+    DrawCallPerfD3D11Params(false, false),
+    DrawCallPerfD3D11Params(true, false),
+    DrawCallPerfD3D11Params(true, true),
+    DrawCallPerfOpenGLParams(false, false),
+    // DrawCallPerfOpenGLParams(true, false), Test times out after completion (crbug.com/620687)
+    DrawCallPerfOpenGLParams(true, true),
+    DrawCallPerfValidationOnly());
 
 } // namespace
