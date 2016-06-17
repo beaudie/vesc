@@ -267,6 +267,12 @@ TEST_P(StateChangeTest, FramebufferIncompleteDepthStencilAttachment)
         std::cout << "Test skipped because packed depth+stencil not availble." << std::endl;
         return;
     }
+    if (IsIntel() && isGLES())
+    {
+        // TODO(jmadill): Fix on Windows Intel drivers (http://crbug.com/621233)
+        std::cout << "Test disabled on Windows Intel GLES2." << std::endl;
+        return;
+    }
 
     glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
     glBindTexture(GL_TEXTURE_2D, mTextures[0]);
