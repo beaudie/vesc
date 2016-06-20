@@ -698,6 +698,23 @@ bool IsD3DSM3()
     return IsD3D9() || IsD3D11_FL93();
 }
 
+bool IsDesktopOpenGL()
+{
+    return IsOpenGL() && !IsOpenGLES();
+}
+
+bool IsOpenGLES()
+{
+    std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
+    return (rendererString.find("OpenGL ES") != std::string::npos);
+}
+
+bool IsOpenGL()
+{
+    std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
+    return (rendererString.find("OpenGL") != std::string::npos);
+}
+
 bool IsLinux()
 {
 #if defined(ANGLE_PLATFORM_LINUX)
@@ -716,14 +733,13 @@ bool IsOSX()
 #endif
 }
 
-bool ANGLETest::isOpenGL() const
+bool IsWindows()
 {
-    return getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE;
-}
-
-bool ANGLETest::isGLES() const
-{
-    return getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE;
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    return true;
+#else
+    return false;
+#endif
 }
 
 EGLint ANGLETest::getPlatformRenderer() const

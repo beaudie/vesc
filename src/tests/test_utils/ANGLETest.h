@@ -199,8 +199,6 @@ class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
     int getWindowHeight() const;
     bool isMultisampleEnabled() const;
 
-    bool isOpenGL() const;
-    bool isGLES() const;
     EGLint getPlatformRenderer() const;
 
     void ignoreD3D11SDKLayersWarnings();
@@ -237,6 +235,7 @@ class ANGLETestEnvironment : public testing::Environment
 bool IsIntel();
 bool IsAMD();
 bool IsNVIDIA();
+
 // Note: FL9_3 is explicitly *not* considered D3D11.
 bool IsD3D11();
 bool IsD3D11_FL93();
@@ -244,8 +243,13 @@ bool IsD3D11_FL93();
 bool IsD3D9();
 // Is D3D9 or SM9_3 renderer.
 bool IsD3DSM3();
+bool IsDesktopOpenGL();
+bool IsOpenGLES();
+bool IsOpenGL();
+
 bool IsLinux();
 bool IsOSX();
+bool IsWindows();
 
 // Negative tests may trigger expected errors/warnings in the ANGLE Platform.
 void IgnoreANGLEPlatformMessages();
