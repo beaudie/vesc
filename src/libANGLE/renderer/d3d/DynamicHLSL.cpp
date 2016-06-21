@@ -720,7 +720,7 @@ bool DynamicHLSL::generateShaderLinkHLSL(const gl::ContextState &data,
         ASSERT(!varying.isBuiltIn() && !varying.isStruct());
 
         // Don't reference VS-only transform feedback varyings in the PS.
-        if (registerInfo.packedVarying->vertexOnly)
+        if (packedVarying.vertexOnly || !varying.staticUse)
             continue;
 
         pixelStream << "    ";
