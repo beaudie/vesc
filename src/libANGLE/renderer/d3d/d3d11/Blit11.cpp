@@ -66,6 +66,122 @@ namespace rx
 namespace
 {
 
+void StretchedBlitNearest_RowByRow(const gl::Box &sourceArea,
+                                   const gl::Box &destArea,
+                                   const gl::Rectangle &clippedDestArea,
+                                   const gl::Extents &sourceSize,
+                                   unsigned int sourceRowPitch,
+                                   unsigned int destRowPitch,
+                                   size_t pixelSize,
+                                   const uint8_t *sourceData,
+                                   uint8_t *destData)
+{
+    int srcHeightSubOne = (sourceArea.height - 1);
+    size_t copySize     = pixelSize * destArea.width;
+    size_t srcOffset    = sourceArea.x * pixelSize;
+    size_t destOffset   = destArea.x * pixelSize;
+
+    for (int y = clippedDestArea.y; y < clippedDestArea.y + clippedDestArea.height; y++)
+    {
+        float yPerc = static_cast<float>(y - destArea.y) / (destArea.height - 1);
+
+        // Interpolate using the original source rectangle to determine which row to sample from
+        // while clamping to the edges
+        unsigned int readRow = static_cast<unsigned int>(
+            gl::clamp(sourceArea.y + floor(yPerc * srcHeightSubOne + 0.5f), 0, srcHeightSubOne));
+        unsigned int writeRow = y;
+
+        const uint8_t *sourceRow = sourceData + readRow * sourceRowPitch + srcOffset;
+        uint8_t *destRow         = destData + writeRow * destRowPitch + destOffset;
+        memcpy(destRow, sourceRow, copySize);
+    }
+}
+
+void StretchedBlitNearest_PixelByPixel(const gl::Box &sourceArea,
+                                       const gl::Box &destArea,
+                                       const gl::Rectangle &clippedDestArea,
+                                       const gl::Extents &sourceSize,
+                                       unsigned int sourceRowPitch,
+                                       unsigned int destRowPitch,
+                                       ptrdiff_t readOffset,
+                                       ptrdiff_t writeOffset,
+                                       size_t copySize,
+                                       size_t srcPixelStride,
+                                       size_t destPixelStride,
+                                       const uint8_t *sourceData,
+                                       uint8_t *destData)
+{
+    int srcWidthSubOne  = (sourceArea.width - 1);
+    int srcHeightSubOne = (sourceArea.height - 1);
+
+    for (int y = clippedDestArea.y; y < clippedDestArea.y + clippedDestArea.height; y++)
+    {
+        float yPerc = static_cast<float>(y - destArea.y) / (destArea.height - 1);
+
+        // Interpolate using the original source rectangle to determine which row to sample from
+        // while clamping to the edges
+        unsigned int readRow = static_cast<unsigned int>(
+            gl::clamp(sourceArea.y + floor(yPerc * srcHeightSubOne + 0.5f), 0, srcHeightSubOne));
+        unsigned int writeRow = y;
+
+        for (int x = clippedDestArea.x; x < clippedDestArea.x + clippedDestArea.width; x++)
+        {
+            float xPerc = static_cast<float>(x - destArea.x) / (destArea.width - 1);
+
+            // Interpolate the original source rectangle to determine which column to sample
+            // from while clamping to the edges
+            unsigned int readColumn = static_cast<unsigned int>(
+                gl::clamp(sourceArea.x + floor(xPerc * srcWidthSubOne + 0.5f), 0, srcWidthSubOne));
+            unsigned int writeColumn = x;
+
+            const uint8_t *sourcePixel =
+                sourceData + readRow * sourceRowPitch + readColumn * srcPixelStride + readOffset;
+
+            uint8_t *destPixel =
+                destData + writeRow * destRowPitch + writeColumn * destPixelStride + writeOffset;
+
+            memcpy(destPixel, sourcePixel, copySize);
+        }
+    }
+}
+
+void StretchedBlitNearest(const gl::Box &sourceArea,
+                          const gl::Box &destArea,
+                          const gl::Rectangle &clipRect,
+                          const gl::Extents &sourceSize,
+                          unsigned int sourceRowPitch,
+                          unsigned int destRowPitch,
+                          ptrdiff_t readOffset,
+                          ptrdiff_t writeOffset,
+                          size_t copySize,
+                          size_t srcPixelStride,
+                          size_t destPixelStride,
+                          const uint8_t *sourceData,
+                          uint8_t *destData)
+{
+    gl::Rectangle clippedDestArea(destArea.x, destArea.y, destArea.width, destArea.height);
+    gl::ClipRectangle(clippedDestArea, clipRect, &clippedDestArea);
+
+    // Determine if entire rows can be copied at once instead of each individual pixel, requires
+    // that there is
+    // no out of bounds lookups required, the entire pixel is copied and no stretching
+    if (sourceArea.width == clippedDestArea.width && sourceArea.x >= 0 &&
+        sourceArea.x + sourceArea.width <= sourceSize.width && copySize == srcPixelStride &&
+        copySize == destPixelStride)
+    {
+        StretchedBlitNearest_RowByRow(sourceArea, destArea, clippedDestArea, sourceSize,
+                                      sourceRowPitch, destRowPitch, srcPixelStride, sourceData,
+                                      destData);
+    }
+    else
+    {
+        StretchedBlitNearest_PixelByPixel(sourceArea, destArea, clippedDestArea, sourceSize,
+                                          sourceRowPitch, destRowPitch, readOffset, writeOffset,
+                                          copySize, srcPixelStride, destPixelStride, sourceData,
+                                          destData);
+    }
+}
+
 DXGI_FORMAT GetTextureFormat(ID3D11Resource *resource)
 {
     ID3D11Texture2D *texture = d3d11::DynamicCastComObject<ID3D11Texture2D>(resource);
@@ -903,9 +1019,8 @@ gl::Error Blit11::copyStencil(ID3D11Resource *source, unsigned int sourceSubreso
                               ID3D11Resource *dest, unsigned int destSubresource, const gl::Box &destArea, const gl::Extents &destSize,
                               const gl::Rectangle *scissor)
 {
-    return copyDepthStencil(source, sourceSubresource, sourceArea, sourceSize,
-                            dest, destSubresource, destArea, destSize,
-                            scissor, true);
+    return copyDepthStencilImpl(source, sourceSubresource, sourceArea, sourceSize, dest,
+                                destSubresource, destArea, destSize, scissor, true);
 }
 
 gl::Error Blit11::copyDepth(ID3D11ShaderResourceView *source, const gl::Box &sourceArea, const gl::Extents &sourceSize,
@@ -1019,36 +1134,21 @@ gl::Error Blit11::copyDepthStencil(ID3D11Resource *source, unsigned int sourceSu
                                    ID3D11Resource *dest, unsigned int destSubresource, const gl::Box &destArea, const gl::Extents &destSize,
                                    const gl::Rectangle *scissor)
 {
-    return copyDepthStencil(source, sourceSubresource, sourceArea, sourceSize,
-                            dest, destSubresource, destArea, destSize,
-                            scissor, false);
+    return copyDepthStencilImpl(source, sourceSubresource, sourceArea, sourceSize, dest,
+                                destSubresource, destArea, destSize, scissor, false);
 }
 
-gl::Error Blit11::copyDepthStencil(ID3D11Resource *source, unsigned int sourceSubresource, const gl::Box &sourceArea, const gl::Extents &sourceSize,
-                                   ID3D11Resource *dest, unsigned int destSubresource, const gl::Box &destArea, const gl::Extents &destSize,
-                                   const gl::Rectangle *scissor, bool stencilOnly)
+gl::Error Blit11::copyDepthStencilImpl(ID3D11Resource *source,
+                                       unsigned int sourceSubresource,
+                                       const gl::Box &sourceArea,
+                                       const gl::Extents &sourceSize,
+                                       ID3D11Resource *dest,
+                                       unsigned int destSubresource,
+                                       const gl::Box &destArea,
+                                       const gl::Extents &destSize,
+                                       const gl::Rectangle *scissor,
+                                       bool stencilOnly)
 {
-    gl::Error error = initResources();
-    if (error.isError())
-    {
-        return error;
-    }
-
-    ID3D11Device *device = mRenderer->getDevice();
-    ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
-
-    ID3D11Resource *sourceStaging = CreateStagingTexture(device, deviceContext, source, sourceSubresource, sourceSize, D3D11_CPU_ACCESS_READ);
-    // HACK: Create the destination staging buffer as a read/write texture so ID3D11DevicContext::UpdateSubresource can be called
-    //       using it's mapped data as a source
-    ID3D11Resource *destStaging = CreateStagingTexture(device, deviceContext, dest, destSubresource, destSize, D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE);
-
-    if (!sourceStaging || !destStaging)
-    {
-        SafeRelease(sourceStaging);
-        SafeRelease(destStaging);
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal staging textures for depth stencil blit.");
-    }
-
     DXGI_FORMAT format = GetTextureFormat(source);
     ASSERT(format == GetTextureFormat(dest));
 
@@ -1073,6 +1173,53 @@ gl::Error Blit11::copyDepthStencil(ID3D11Resource *source, unsigned int sourceSu
         copySize = 1;
     }
 
+    return copyAndConvert(source, sourceSubresource, sourceArea, sourceSize, dest, destSubresource,
+                          destArea, destSize, scissor, copyOffset, copyOffset, copySize, pixelSize,
+                          pixelSize, StretchedBlitNearest);
+}
+
+gl::Error Blit11::copyAndConvert(ID3D11Resource *source,
+                                 unsigned int sourceSubresource,
+                                 const gl::Box &sourceArea,
+                                 const gl::Extents &sourceSize,
+                                 ID3D11Resource *dest,
+                                 unsigned int destSubresource,
+                                 const gl::Box &destArea,
+                                 const gl::Extents &destSize,
+                                 const gl::Rectangle *scissor,
+                                 size_t readOffset,
+                                 size_t writeOffset,
+                                 size_t copySize,
+                                 size_t srcPixelStride,
+                                 size_t destPixelStride,
+                                 BlitConvertFunction *convertFunction)
+{
+    gl::Error error = initResources();
+    if (error.isError())
+    {
+        return error;
+    }
+
+    ID3D11Device *device               = mRenderer->getDevice();
+    ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+
+    ID3D11Resource *sourceStaging = CreateStagingTexture(
+        device, deviceContext, source, sourceSubresource, sourceSize, D3D11_CPU_ACCESS_READ);
+    // HACK: Create the destination staging buffer as a read/write texture so
+    // ID3D11DevicContext::UpdateSubresource can be called
+    //       using it's mapped data as a source
+    ID3D11Resource *destStaging =
+        CreateStagingTexture(device, deviceContext, dest, destSubresource, destSize,
+                             D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE);
+
+    if (!sourceStaging || !destStaging)
+    {
+        SafeRelease(sourceStaging);
+        SafeRelease(destStaging);
+        return gl::Error(GL_OUT_OF_MEMORY,
+                         "Failed to create internal staging textures for depth stencil blit.");
+    }
+
     D3D11_MAPPED_SUBRESOURCE sourceMapping;
     HRESULT result = deviceContext->Map(sourceStaging, 0, D3D11_MAP_READ, 0, &sourceMapping);
     if (FAILED(result))
@@ -1092,67 +1239,19 @@ gl::Error Blit11::copyDepthStencil(ID3D11Resource *source, unsigned int sourceSu
         return gl::Error(GL_OUT_OF_MEMORY, "Failed to map internal destination staging texture for depth stencil blit, HRESULT: 0x%X.", result);
     }
 
-    gl::Rectangle clippedDestArea(destArea.x, destArea.y, destArea.width, destArea.height);
-
     // Clip dest area to the destination size
-    gl::ClipRectangle(clippedDestArea, gl::Rectangle(0, 0, destSize.width, destSize.height), &clippedDestArea);
+    gl::Rectangle clipRect = gl::Rectangle(0, 0, destSize.width, destSize.height);
 
     // Clip dest area to the scissor
     if (scissor)
     {
-        gl::ClipRectangle(clippedDestArea, *scissor, &clippedDestArea);
+        gl::ClipRectangle(clipRect, *scissor, &clipRect);
     }
 
-    // Determine if entire rows can be copied at once instead of each individual pixel, requires that there is
-    // no out of bounds lookups required, the entire pixel is copied and no stretching
-    bool wholeRowCopy = sourceArea.width == clippedDestArea.width &&
-                        sourceArea.x >= 0 && sourceArea.x + sourceArea.width <= sourceSize.width &&
-                        copySize == pixelSize;
-
-    for (int y = clippedDestArea.y; y < clippedDestArea.y + clippedDestArea.height; y++)
-    {
-        float yPerc = static_cast<float>(y - destArea.y) / (destArea.height - 1);
-
-        // Interpolate using the original source rectangle to determine which row to sample from while clamping to the edges
-        unsigned int readRow = static_cast<unsigned int>(gl::clamp(sourceArea.y + floor(yPerc * (sourceArea.height - 1) + 0.5f), 0, sourceSize.height - 1));
-        unsigned int writeRow = y;
-
-        if (wholeRowCopy)
-        {
-            void *sourceRow = reinterpret_cast<char*>(sourceMapping.pData) +
-                              readRow * sourceMapping.RowPitch +
-                              sourceArea.x * pixelSize;
-
-            void *destRow = reinterpret_cast<char*>(destMapping.pData) +
-                            writeRow * destMapping.RowPitch +
-                            destArea.x * pixelSize;
-
-            memcpy(destRow, sourceRow, pixelSize * destArea.width);
-        }
-        else
-        {
-            for (int x = clippedDestArea.x; x < clippedDestArea.x + clippedDestArea.width; x++)
-            {
-                float xPerc = static_cast<float>(x - destArea.x) / (destArea.width - 1);
-
-                // Interpolate the original source rectangle to determine which column to sample from while clamping to the edges
-                unsigned int readColumn = static_cast<unsigned int>(gl::clamp(sourceArea.x + floor(xPerc * (sourceArea.width - 1) + 0.5f), 0, sourceSize.width - 1));
-                unsigned int writeColumn = x;
-
-                void *sourcePixel = reinterpret_cast<char*>(sourceMapping.pData) +
-                                    readRow * sourceMapping.RowPitch +
-                                    readColumn * pixelSize +
-                                    copyOffset;
-
-                void *destPixel = reinterpret_cast<char*>(destMapping.pData) +
-                                  writeRow * destMapping.RowPitch +
-                                  writeColumn * pixelSize +
-                                  copyOffset;
-
-                memcpy(destPixel, sourcePixel, copySize);
-            }
-        }
-    }
+    convertFunction(sourceArea, destArea, clipRect, sourceSize, sourceMapping.RowPitch,
+                    destMapping.RowPitch, readOffset, writeOffset, copySize, srcPixelStride,
+                    destPixelStride, static_cast<const uint8_t *>(sourceMapping.pData),
+                    static_cast<uint8_t *>(destMapping.pData));
 
     // HACK: Use ID3D11DevicContext::UpdateSubresource which causes an extra copy compared to ID3D11DevicContext::CopySubresourceRegion
     //       according to MSDN.
@@ -1409,4 +1508,13 @@ gl::Error Blit11::getSwizzleShader(GLenum type, D3D11_SRV_DIMENSION viewDimensio
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::ErrorOrResult<TextureHelper11> Blit11::resolveDepthStencil(RenderTarget11 *dsRenderTarget,
+                                                               bool resolveDepth,
+                                                               bool resolveStencil)
+{
+    ASSERT(resolveDepth || resolveStencil);
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION,
+                     "Multisample depth stencil resolve not implemented yet.");
 }
+}  // namespace rx
