@@ -474,9 +474,10 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     //
     TFieldList *fields = NewPoolTFieldList();
     TSourceLoc zeroSourceLoc = {0, 0, 0, 0};
-    TField *near = new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1), NewPoolTString("near"), zeroSourceLoc);
-    TField *far = new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1), NewPoolTString("far"), zeroSourceLoc);
-    TField *diff = new TField(new TType(EbtFloat, EbpHigh, EvqGlobal, 1), NewPoolTString("diff"), zeroSourceLoc);
+    auto highpFloat1 = new TType(EbtFloat, EbpHigh, EvqGlobal, 1);
+    TField *near = new TField(highpFloat1, NewPoolTString("near"), zeroSourceLoc);
+    TField *far = new TField(highpFloat1, NewPoolTString("far"), zeroSourceLoc);
+    TField *diff = new TField(highpFloat1, NewPoolTString("diff"), zeroSourceLoc);
     fields->push_back(near);
     fields->push_back(far);
     fields->push_back(diff);
@@ -485,6 +486,8 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     symbolTable.insert(COMMON_BUILTINS, depthRangeParameters);
     TVariable *depthRange = new TVariable(NewPoolTString("gl_DepthRange"), TType(depthRangeStruct));
     depthRange->setQualifier(EvqUniform);
+    // Ensure we evaluate the mangled name for depth range, so we allocate to the current scope.
+    depthRange->getType().getMangledName();
     symbolTable.insert(COMMON_BUILTINS, depthRange);
 
     //
