@@ -179,6 +179,13 @@ class CompressedTextureTestD3D11 : public CompressedTextureTest { };
 
 TEST_P(CompressedTextureTestES3, PBOCompressedTexImage)
 {
+    if (!extensionEnabled("GL_EXT_texture_compression_dxt1"))
+    {
+        std::cout << "Test skipped because GL_EXT_texture_compression_dxt1 is not available."
+                  << std::endl;
+        return;
+    }
+
     GLuint texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
