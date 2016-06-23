@@ -1572,3 +1572,41 @@ TEST_F(MalformedShaderTest, ESSL300BuiltInFunctionOverload)
         FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
     }
 }
+
+// causes assert: ../../third_party/angle/src/compiler/translator/ConstantUnion.h:219:
+// TConstantUnion TConstantUnion::operator*(const TConstantUnion &) const: Assertion `type ==
+// constant.type' failed.
+TEST_F(MalformedShaderTest, Assert1)
+{
+    const std::string &shaderString =
+        "#version 100\nuniform mediump mat3 uStageMatrix_0_0_Stage0;\nuniform mediump mat3 "
+        "uStageMatrix_0_1_Stage0;\nuniform highp vec4 urtAdjustment_Stage0;\nattribute highp vec2 "
+        "inPosition;attribute mediump vec4 inColor;attribute mediump vec2 inLocalCoord;varying "
+        "mediump vec4 vinColor_Stage0;varying mediump vec2 vMatrixCoord_0_0_Stage0;varying mediump "
+        "vec2 vMatrixCoord_0_1_Stage0;void main() {// Primitive Processor "
+        "DefaultGeometryProcessor\nvinColor_Stage0 = inColor;vec2 pos2 = "
+        "inPosition;vMatrixCoord_0_0_Stage0 ( u=StageMatrix_0_0_Slength( vec3(inLocalCoord( "
+        "1)).xvai%xrC*-Moord_0_1_Stage0 \275 (uStageMatrix_0_1_Stage0c2) +\027(etexture2D(s2, "
+        "1)).x_o\336gl;ysition = vac4(pos2(x * urtAdjustment_Stage0.x + urtAdjustment_Stage0.y, "
+        "pos2.y * urtAdjustment_Stage0.z + urtAdjustment_Sge0awt., 0, 1);gl_PointSize = 1.0;}";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// causes assert: ../../third_party/angle/src/compiler/translator/ParseContext.cpp:1902: void
+// TParseContext::parseGlobalLayoutQualifier(const TPublicType &): Assertion
+// `!layoutQualifier.isEmpty()' failed.
+TEST_F(MalformedShaderTest, Assert2)
+{
+    const std::string &shaderString =
+        "#define TexCoordPrecision; highp\n#define NUM_STATIC_QUADS 9\n attribute "
+        "TexCoordPrecision vec4 a_posiion; attribute float a_index; uniform mat4 matrix; uniform "
+        "TexCoordPrecision vec2 [a]u;4qd  void main() { vec1 pos = quad[int(a_index)]; gl_Position "
+        "= matrix * vec4(pos, a_position.z, a_position.w); } ";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
