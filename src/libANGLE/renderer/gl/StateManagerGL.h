@@ -30,11 +30,14 @@ namespace rx
 class FunctionsGL;
 class TransformFeedbackGL;
 class QueryGL;
+struct WorkaroundsGL;
 
 class StateManagerGL final : angle::NonCopyable
 {
   public:
-    StateManagerGL(const FunctionsGL *functions, const gl::Caps &rendererCaps);
+    StateManagerGL(const FunctionsGL *functions,
+                   const WorkaroundsGL &workarounds,
+                   const gl::Caps &rendererCaps);
 
     void deleteProgram(GLuint program);
     void deleteVertexArray(GLuint vao);
@@ -146,6 +149,7 @@ class StateManagerGL final : angle::NonCopyable
                                    GLsizei instanceCount,
                                    const GLvoid **outIndices);
 
+    gl::Error preMakeCurrent(const gl::ContextState &data);
     gl::Error onMakeCurrent(const gl::ContextState &data);
 
     void syncState(const gl::State &state, const gl::State::DirtyBits &glDirtyBits);
@@ -158,6 +162,7 @@ class StateManagerGL final : angle::NonCopyable
     void setTextureCubemapSeamlessEnabled(bool enabled);
 
     const FunctionsGL *mFunctions;
+    const WorkaroundsGL &mWorkarounds;
 
     GLuint mProgram;
 

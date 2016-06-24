@@ -28,6 +28,7 @@
 #include "libANGLE/renderer/gl/TransformFeedbackGL.h"
 #include "libANGLE/renderer/gl/VertexArrayGL.h"
 #include "libANGLE/renderer/gl/QueryGL.h"
+#include "libANGLE/renderer/gl/WorkaroundsGL.h"
 
 namespace rx
 {
@@ -40,8 +41,11 @@ StateManagerGL::IndexedBufferBinding::IndexedBufferBinding() : offset(0), size(0
 {
 }
 
-StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &rendererCaps)
+StateManagerGL::StateManagerGL(const FunctionsGL *functions,
+                               const WorkaroundsGL &workarounds,
+                               const gl::Caps &rendererCaps)
     : mFunctions(functions),
+      mWorkarounds(workarounds),
       mProgram(0),
       mVAO(0),
       mVertexAttribCurrentValues(rendererCaps.maxVertexAttributes),
@@ -656,6 +660,22 @@ gl::Error StateManagerGL::setDrawElementsState(const gl::ContextState &data,
     bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getAppliedElementArrayBufferID());
 
     return setGenericDrawState(data);
+}
+
+gl::Error StateManagerGL::preMakeCurrent(const gl::ContextState &data)
+{
+    if (mWorkarounds.makeCurrentResetsNonPausedTransformFeedbackInsertPosition)
+    {
+        // If the context has changed, pause the previous context's transform feedback and queries
+        if (data.getContext() != mPrevDrawContext)
+        {
+            if (mPrevDrawTransformFeedback != nullptr)
+            {
+                mPrevDrawTransformFeedback->syncPausedState(true);
+            }
+        }
+    }
+    return gl::Error(GL_NO_ERROR);
 }
 
 gl::Error StateManagerGL::onMakeCurrent(const gl::ContextState &data)

@@ -700,6 +700,12 @@ Error Display::createContext(const Config *configuration, gl::Context *shareCont
 
 Error Display::makeCurrent(egl::Surface *drawSurface, egl::Surface *readSurface, gl::Context *context)
 {
+    if (context != nullptr && drawSurface != nullptr)
+    {
+        ASSERT(readSurface == drawSurface);
+        context->preMakeCurrent(drawSurface);
+    }
+
     ANGLE_TRY(mImplementation->makeCurrent(drawSurface, readSurface, context));
 
     if (context != nullptr && drawSurface != nullptr)

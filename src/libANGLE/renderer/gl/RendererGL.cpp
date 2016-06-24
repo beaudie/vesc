@@ -93,8 +93,8 @@ RendererGL::RendererGL(const FunctionsGL *functions, const egl::AttributeMap &at
       mCapsInitialized(false)
 {
     ASSERT(mFunctions);
-    mStateManager = new StateManagerGL(mFunctions, getNativeCaps());
     nativegl_gl::GenerateWorkarounds(mFunctions, &mWorkarounds);
+    mStateManager = new StateManagerGL(mFunctions, mWorkarounds, getNativeCaps());
     mBlitter = new BlitGL(functions, mWorkarounds, mStateManager);
 
     mHasDebugOutput = mFunctions->isAtLeastGL(gl::Version(4, 3)) ||
