@@ -707,6 +707,11 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     workarounds->alwaysCallUseProgramAfterLink = true;
 
     workarounds->unpackOverlappingRowsSeparatelyUnpackBuffer = vendor == VENDOR_ID_NVIDIA;
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+    workarounds->makeCurrentResetsNonPausedTransformFeedbackInsertPosition =
+        functions->standard == STANDARD_GL_ES && vendor == VENDOR_ID_QUALCOMM;
+#endif
 }
 
 }

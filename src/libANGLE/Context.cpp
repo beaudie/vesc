@@ -328,6 +328,11 @@ Context::~Context()
     SafeDelete(mCompiler);
 }
 
+void Context::preMakeCurrent(egl::Surface *surface)
+{
+    mImplementation->preMakeCurrent(mState);
+}
+
 void Context::makeCurrent(egl::Surface *surface)
 {
     ASSERT(surface != nullptr);

@@ -21,7 +21,8 @@ struct WorkaroundsGL
           doWhileGLSLCausesGPUHang(false),
           finishDoesNotCauseQueriesToBeAvailable(false),
           alwaysCallUseProgramAfterLink(false),
-          unpackOverlappingRowsSeparatelyUnpackBuffer(false)
+          unpackOverlappingRowsSeparatelyUnpackBuffer(false),
+          makeCurrentResetsNonPausedTransformFeedbackInsertPosition(false)
     {
     }
 
@@ -67,6 +68,10 @@ struct WorkaroundsGL
 
     // In the case of unpacking from a pixel unpack buffer, unpack overlapping rows row by row.
     bool unpackOverlappingRowsSeparatelyUnpackBuffer;
+
+    // On Android Adreno eglMakeCurrent resets TransformFeedback last written position.
+    // Workaround is to pause TransformFeedback before eglMakeCurrent and resume it afterwards.
+    bool makeCurrentResetsNonPausedTransformFeedbackInsertPosition;
 };
 }
 
