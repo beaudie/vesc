@@ -9,10 +9,12 @@
 #include "libANGLE/renderer/gl/DisplayGL.h"
 
 #include "libANGLE/AttributeMap.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/renderer/gl/ContextGL.h"
 #include "libANGLE/renderer/gl/RendererGL.h"
+#include "libANGLE/renderer/gl/StateManagerGL.h"
 #include "libANGLE/renderer/gl/SurfaceGL.h"
 
 #include <EGL/eglext.h>
@@ -75,6 +77,9 @@ egl::Error DisplayGL::makeCurrent(egl::Surface *drawSurface, egl::Surface *readS
     {
         return egl::Error(EGL_SUCCESS);
     }
+
+    ContextGL *glContext = GetImplAs<ContextGL>(context);
+    glContext->getStateManager()->preMakeCurrent(context->getContextState());
 
     SurfaceGL *glDrawSurface = GetImplAs<SurfaceGL>(drawSurface);
     return glDrawSurface->makeCurrent();
