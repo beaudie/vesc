@@ -65,6 +65,7 @@ class Context final : public ValidationContext
 
     virtual ~Context();
 
+    void preMakeCurrent(egl::Surface *surface);
     void makeCurrent(egl::Surface *surface);
     void releaseSurface();
 

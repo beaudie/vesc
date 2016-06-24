@@ -133,6 +133,7 @@ class ContextGL : public ContextImpl
     GLint64 getTimestamp() override;
 
     // Context switching
+    void preMakeCurrent(const gl::ContextState &data) override;
     void onMakeCurrent(const gl::ContextState &data) override;
 
     // Caps queries

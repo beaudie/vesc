@@ -282,10 +282,16 @@ GLint64 ContextGL::getTimestamp()
     return mRenderer->getTimestamp();
 }
 
+void ContextGL::preMakeCurrent(const gl::ContextState &data)
+{
+    // TransformFeedback needs to be paused/resumed on context switches
+    getStateManager()->preMakeCurrent(data);
+}
+
 void ContextGL::onMakeCurrent(const gl::ContextState &data)
 {
     // Queries need to be paused/resumed on context switches
-    mRenderer->getStateManager()->onMakeCurrent(data);
+    getStateManager()->onMakeCurrent(data);
 }
 
 const gl::Caps &ContextGL::getNativeCaps() const
