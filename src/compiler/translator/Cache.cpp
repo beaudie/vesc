@@ -7,6 +7,7 @@
 // Cache.cpp: Implements a cache for various commonly created objects.
 
 #include <limits>
+#include <mutex>
 
 #include "common/angleutils.h"
 #include "common/debug.h"
@@ -61,9 +62,15 @@ TCache::TypeKey::TypeKey(TBasicType basicType,
 }
 
 TCache *TCache::sCache = nullptr;
+std::mutex *sCacheMutex = nullptr;
 
 void TCache::initialize()
 {
+    if (sCacheMutex == nullptr)
+    {
+        sCacheMutex = new std::mutex();
+    }
+
     if (sCache == nullptr)
     {
         sCache = new TCache();
@@ -73,6 +80,7 @@ void TCache::initialize()
 void TCache::destroy()
 {
     SafeDelete(sCache);
+    SafeDelete(sCacheMutex);
 }
 
 const TType *TCache::getType(TBasicType basicType,
@@ -81,6 +89,7 @@ const TType *TCache::getType(TBasicType basicType,
                              unsigned char primarySize,
                              unsigned char secondarySize)
 {
+    std::lock_guard<std::mutex> lock(*sCacheMutex);
     TypeKey key(basicType, precision, qualifier,
                 primarySize, secondarySize);
     auto it = sCache->mTypes.find(key);
