@@ -1031,7 +1031,11 @@ bool State::isQueryActive(GLenum type) const
     for (auto &iter : mActiveQueries)
     {
         Query *query = iter.second.get();
-        if (query != nullptr && query->getType() == type)
+        if (query != nullptr &&
+            (query->getType() == type || (query->getType() == GL_ANY_SAMPLES_PASSED_CONSERVATIVE &&
+                                          type == GL_ANY_SAMPLES_PASSED) ||
+             (query->getType() == GL_ANY_SAMPLES_PASSED &&
+              type == GL_ANY_SAMPLES_PASSED_CONSERVATIVE)))
         {
             return true;
         }
