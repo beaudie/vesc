@@ -60,7 +60,7 @@ TCache::TypeKey::TypeKey(TBasicType basicType,
     components.secondarySize = secondarySize;
 }
 
-TCache *TCache::sCache = nullptr;
+thread_local TCache *sCache = nullptr;
 
 void TCache::initialize()
 {
@@ -68,11 +68,15 @@ void TCache::initialize()
     {
         sCache = new TCache();
     }
+    sCache->AddRef();
 }
 
 void TCache::destroy()
 {
-    SafeDelete(sCache);
+    if (sCache->Release())
+    {
+        sCache = nullptr;
+    }
 }
 
 const TType *TCache::getType(TBasicType basicType,

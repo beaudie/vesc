@@ -28,6 +28,7 @@
 #include "compiler/translator/depgraph/DependencyGraphOutput.h"
 #include "compiler/translator/timing/RestrictFragmentShaderTiming.h"
 #include "compiler/translator/timing/RestrictVertexShaderTiming.h"
+#include "compiler/translator/Cache.h"
 #include "third_party/compiler/ArrayBoundsClamper.h"
 #include "angle_gl.h"
 #include "common/utilities.h"
@@ -150,10 +151,12 @@ TCompiler::TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
       mSourcePath(NULL),
       mTemporaryIndex(0)
 {
+    TCache::initialize();
 }
 
 TCompiler::~TCompiler()
 {
+    TCache::destroy();
 }
 
 bool TCompiler::shouldRunLoopAndIndexingValidation(int compileOptions) const

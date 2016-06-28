@@ -25,8 +25,6 @@ bool InitProcess()
         return false;
     }
 
-    TCache::initialize();
-
     return true;
 }
 
@@ -34,5 +32,4 @@ void DetachProcess()
 {
     FreeParseContextIndex();
     FreePoolIndex();
-    TCache::destroy();
 }
