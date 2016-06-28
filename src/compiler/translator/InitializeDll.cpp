@@ -8,6 +8,7 @@
 #include "compiler/translator/InitializeDll.h"
 #include "compiler/translator/InitializeGlobals.h"
 #include "compiler/translator/InitializeParseContext.h"
+#include "compiler/translator/InitializeGlobals.h"
 
 #include "common/platform.h"
 
@@ -25,7 +26,9 @@ bool InitProcess()
         return false;
     }
 
-    TCache::initialize();
+    if (!InitializeTCacheIndex()) {
+        assert(0 && "InitProcess(): Failed to initialize TCache TLS index");
+    }
 
     return true;
 }
@@ -34,5 +37,5 @@ void DetachProcess()
 {
     FreeParseContextIndex();
     FreePoolIndex();
-    TCache::destroy();
+    FreeTCacheIndex();
 }

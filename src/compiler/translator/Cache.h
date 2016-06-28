@@ -52,8 +52,8 @@ class TCache
 
   private:
     TCache()
-    {
-    }
+        : mRefCount(0)
+    {}
 
     union TypeKey
     {
@@ -83,8 +83,26 @@ class TCache
 
     TypeMap mTypes;
     TPoolAllocator mAllocator;
+    uint32_t mRefCount;
 
-    static TCache *sCache;
+    void AddRef() {
+        assert(mRefCount != UINT32_MAX && "Preventing thread-local cache refcount overflow");
+        ++mRefCount;
+    }
+
+    /**
+     * Returns true if the cache was just destroyed because the reference count
+     * reached 0.
+     */
+    bool Release() {
+        assert(mRefCount != 0);
+        mRefCount--;
+        if (--mRefCount == 0) {
+            delete this;
+            return true;
+        }
+        return false;
+    }
 };
 
 #endif  // COMPILER_TRANSLATOR_CACHE_H_
