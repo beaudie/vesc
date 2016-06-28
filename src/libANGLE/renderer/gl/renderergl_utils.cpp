@@ -536,6 +536,14 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
         LimitVersion(maxSupportedESVersion, gl::Version(2, 0));
     }
 
+    // Check if index constant sampler array indexing is supported
+    if (!functions->isAtLeastGL(gl::Version(4, 0)) &&
+        !functions->isAtLeastGLES(gl::Version(2, 0)) &&
+        !functions->hasExtension("GL_ARB_gpu_shader5"))
+    {
+        LimitVersion(maxSupportedESVersion, gl::Version(0, 0));
+    }
+
     // Check if sampler objects are supported
     if (!functions->isAtLeastGL(gl::Version(3, 3)) &&
         !functions->hasGLExtension("GL_ARB_sampler_objects") &&

@@ -192,6 +192,12 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root)
         sink << "#extension GL_ARB_explicit_attrib_location : require\n";
     }
 
+    // Need to enable gpu_shader5 to have index constant sampler array indexing
+    if (getOutputType() != SH_ESSL_OUTPUT && getOutputType() < SH_GLSL_400_CORE_OUTPUT)
+    {
+        sink << "#extension GL_ARB_gpu_shader5 : require\n";
+    }
+
     TExtensionGLSL extensionGLSL(getOutputType());
     root->traverse(&extensionGLSL);
 
