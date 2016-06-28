@@ -1028,12 +1028,21 @@ bool State::removeTransformFeedbackBinding(GLuint transformFeedback)
 
 bool State::isQueryActive(GLenum type) const
 {
+    // ANY_SAMPLES_PASSED_CONSERVATIVE and ANY_SAMPLES_PASSED are considered the same type.
+    type = (type == GL_ANY_SAMPLES_PASSED_CONSERVATIVE) ? GL_ANY_SAMPLES_PASSED : type;
     for (auto &iter : mActiveQueries)
     {
         Query *query = iter.second.get();
-        if (query != nullptr && query->getType() == type)
+        if (query != nullptr)
         {
-            return true;
+            GLenum activeQueryType = query->getType();
+            activeQueryType        = (activeQueryType == GL_ANY_SAMPLES_PASSED_CONSERVATIVE)
+                                  ? GL_ANY_SAMPLES_PASSED
+                                  : activeQueryType;
+            if (activeQueryType == type)
+            {
+                return true;
+            }
         }
     }
 
