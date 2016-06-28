@@ -10,4 +10,7 @@
 bool InitializePoolIndex();
 void FreePoolIndex();
 
+bool InitializeTCacheIndex();
+void FreeTCacheIndex();
+
 #endif // COMPILER_TRANSLATOR_INITIALIZEGLOBALS_H_

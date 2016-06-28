@@ -10,6 +10,7 @@
 
 #include "common/angleutils.h"
 #include "common/debug.h"
+#include "common/tls.h"
 #include "compiler/translator/Cache.h"
 
 namespace
@@ -60,19 +61,53 @@ TCache::TypeKey::TypeKey(TBasicType basicType,
     components.secondarySize = secondarySize;
 }
 
-TCache *TCache::sCache = nullptr;
+TLSIndex CacheIndex = TLS_INVALID_INDEX;
+
+bool InitializeTCacheIndex()
+{
+    ASSERT(CacheIndex == TLS_INVALID_INDEX);
+    CacheIndex = CreateTLSIndex();
+    return CacheIndex != TLS_INVALID_INDEX;
+}
+
+void FreeTCacheIndex()
+{
+    ASSERT(CacheIndex != TLS_INVALID_INDEX);
+    TCache* cache = static_cast<TCache*>(GetTLSValue(CacheIndex));
+    if (cache)
+    {
+        // Should we assert here? This means effectively that someone leaked a
+        // compiler.
+        //
+        // WARN("Freeing thread-local TCache with %u references", cache->mRefCount);
+        delete cache;
+    }
+    DestroyTLSIndex(CacheIndex);
+    CacheIndex = TLS_INVALID_INDEX;
+}
 
 void TCache::initialize()
 {
-    if (sCache == nullptr)
+    ASSERT(CacheIndex != TLS_INVALID_INDEX && "Cache index not initialized");
+    TCache* cache = static_cast<TCache*>(GetTLSValue(CacheIndex));
+    if (!cache)
     {
-        sCache = new TCache();
+        cache = new TCache();
+        SetTLSValue(CacheIndex, cache);
     }
+
+    cache->AddRef();
 }
 
 void TCache::destroy()
 {
-    SafeDelete(sCache);
+    ASSERT(CacheIndex != TLS_INVALID_INDEX && "Cache index not initialized");
+    TCache* cache = static_cast<TCache*>(GetTLSValue(CacheIndex));
+    ASSERT(cache && "Cache not initialized");
+    if (cache->Release())
+    {
+        SetTLSValue(CacheIndex, nullptr);
+    }
 }
 
 const TType *TCache::getType(TBasicType basicType,
@@ -81,20 +116,24 @@ const TType *TCache::getType(TBasicType basicType,
                              unsigned char primarySize,
                              unsigned char secondarySize)
 {
+    ASSERT(CacheIndex != TLS_INVALID_INDEX && "Invalid TLS cache index for TCache");
+    TCache* cache = static_cast<TCache*>(GetTLSValue(CacheIndex));
+    ASSERT(cache != nullptr && "Cache was not initialized");
+
     TypeKey key(basicType, precision, qualifier,
                 primarySize, secondarySize);
-    auto it = sCache->mTypes.find(key);
-    if (it != sCache->mTypes.end())
+    auto it = cache->mTypes.find(key);
+    if (it != cache->mTypes.end())
     {
         return it->second;
     }
 
-    TScopedAllocator scopedAllocator(&sCache->mAllocator);
+    TScopedAllocator scopedAllocator(&cache->mAllocator);
 
     TType *type = new TType(basicType, precision, qualifier,
                             primarySize, secondarySize);
     type->realize();
-    sCache->mTypes.insert(std::make_pair(key, type));
+    cache->mTypes.insert(std::make_pair(key, type));
 
     return type;
 }
