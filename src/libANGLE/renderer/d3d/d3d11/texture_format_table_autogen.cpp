@@ -102,6 +102,7 @@ bool SupportsFormat(const Renderer11DeviceCaps &deviceCaps)
 ANGLEFormatSet::ANGLEFormatSet()
     : format(ANGLE_FORMAT_NONE),
       glInternalFormat(GL_NONE),
+      fboImplementationInternalFormat(GL_NONE),
       texFormat(DXGI_FORMAT_UNKNOWN),
       srvFormat(DXGI_FORMAT_UNKNOWN),
       rtvFormat(DXGI_FORMAT_UNKNOWN),
@@ -128,11 +129,12 @@ TextureFormat::TextureFormat(GLenum internalFormat,
     // Gather all the load functions for this internal format
     loadFunctions = GetLoadFunctionsMap(internalFormat, formatSet->texFormat);
 
-    ASSERT(loadFunctions.size() != 0 || internalFormat == GL_NONE);
+    ASSERT(loadFunctions.size() != 0 || angleFormat == ANGLE_FORMAT_NONE);
 }
 
 ANGLEFormatSet::ANGLEFormatSet(ANGLEFormat format,
                                GLenum glInternalFormat,
+                               GLenum fboImplementationInternalFormat,
                                DXGI_FORMAT texFormat,
                                DXGI_FORMAT srvFormat,
                                DXGI_FORMAT rtvFormat,
@@ -143,6 +145,7 @@ ANGLEFormatSet::ANGLEFormatSet(ANGLEFormat format,
                                ColorReadFunction colorReadFunction)
     : format(format),
       glInternalFormat(glInternalFormat),
+      fboImplementationInternalFormat(fboImplementationInternalFormat),
       texFormat(texFormat),
       srvFormat(srvFormat),
       rtvFormat(rtvFormat),
@@ -163,6 +166,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_A8_UNORM,
                                                    GL_ALPHA8_EXT,
+                                                   GL_ALPHA8_EXT,
                                                    DXGI_FORMAT_A8_UNORM,
                                                    DXGI_FORMAT_A8_UNORM,
                                                    DXGI_FORMAT_A8_UNORM,
@@ -176,6 +180,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_B4G4R4A4_UNORM:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_B4G4R4A4_UNORM,
+                                                   GL_BGRA4_ANGLEX,
                                                    GL_RGBA4,
                                                    DXGI_FORMAT_B4G4R4A4_UNORM,
                                                    DXGI_FORMAT_B4G4R4A4_UNORM,
@@ -190,6 +195,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_B5G5R5A1_UNORM:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_B5G5R5A1_UNORM,
+                                                   GL_BGR5_A1_ANGLEX,
                                                    GL_RGB5_A1,
                                                    DXGI_FORMAT_B5G5R5A1_UNORM,
                                                    DXGI_FORMAT_B5G5R5A1_UNORM,
@@ -204,6 +210,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_B5G6R5_UNORM:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_B5G6R5_UNORM,
+                                                   GL_BGR565_ANGLEX,
                                                    GL_RGB565,
                                                    DXGI_FORMAT_B5G6R5_UNORM,
                                                    DXGI_FORMAT_B5G6R5_UNORM,
@@ -211,13 +218,14 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_B5G6R5_UNORM,
                                                    ANGLE_FORMAT_R8G8B8A8_UNORM,
-                                                   GenerateMip<R5G6B5>,
-                                                   ReadColor<R5G6B5, GLfloat>);
+                                                   GenerateMip<B5G6R5>,
+                                                   ReadColor<B5G6R5, GLfloat>);
             return formatInfo;
         }
         case ANGLE_FORMAT_B8G8R8A8_UNORM:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_B8G8R8A8_UNORM,
+                                                   GL_BGRA8_EXT,
                                                    GL_BGRA8_EXT,
                                                    DXGI_FORMAT_B8G8R8A8_UNORM,
                                                    DXGI_FORMAT_B8G8R8A8_UNORM,
@@ -233,6 +241,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_BC1_UNORM,
                                                    GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
+                                                   GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
                                                    DXGI_FORMAT_BC1_UNORM,
                                                    DXGI_FORMAT_BC1_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
@@ -246,6 +255,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_BC2_UNORM:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_BC2_UNORM,
+                                                   GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE,
                                                    GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE,
                                                    DXGI_FORMAT_BC2_UNORM,
                                                    DXGI_FORMAT_BC2_UNORM,
@@ -261,6 +271,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_BC3_UNORM,
                                                    GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE,
+                                                   GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE,
                                                    DXGI_FORMAT_BC3_UNORM,
                                                    DXGI_FORMAT_BC3_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
@@ -274,6 +285,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_D16_UNORM_FL10:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_D16_UNORM_FL10,
+                                                   GL_DEPTH_COMPONENT16,
                                                    GL_DEPTH_COMPONENT16,
                                                    DXGI_FORMAT_R16_TYPELESS,
                                                    DXGI_FORMAT_R16_UNORM,
@@ -289,6 +301,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_D16_UNORM_FL9_3,
                                                    GL_DEPTH_COMPONENT16,
+                                                   GL_DEPTH_COMPONENT16,
                                                    DXGI_FORMAT_D16_UNORM,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
@@ -302,6 +315,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_D24_UNORM_S8_UINT_FL10:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_D24_UNORM_S8_UINT_FL10,
+                                                   GL_DEPTH24_STENCIL8_OES,
                                                    GL_DEPTH24_STENCIL8_OES,
                                                    DXGI_FORMAT_R24G8_TYPELESS,
                                                    DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
@@ -317,6 +331,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_D24_UNORM_S8_UINT_FL9_3,
                                                    GL_DEPTH24_STENCIL8_OES,
+                                                   GL_DEPTH24_STENCIL8_OES,
                                                    DXGI_FORMAT_D24_UNORM_S8_UINT,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
@@ -330,6 +345,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_D32_FLOAT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_D32_FLOAT,
+                                                   GL_DEPTH_COMPONENT32F,
                                                    GL_DEPTH_COMPONENT32F,
                                                    DXGI_FORMAT_R32_TYPELESS,
                                                    DXGI_FORMAT_R32_FLOAT,
@@ -345,6 +361,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_D32_FLOAT_S8X24_UINT_FL10,
                                                    GL_DEPTH32F_STENCIL8,
+                                                   GL_DEPTH32F_STENCIL8,
                                                    DXGI_FORMAT_R32G8X24_TYPELESS,
                                                    DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS,
                                                    DXGI_FORMAT_UNKNOWN,
@@ -358,6 +375,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_NONE:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_NONE,
+                                                   GL_NONE,
                                                    GL_NONE,
                                                    DXGI_FORMAT_UNKNOWN,
                                                    DXGI_FORMAT_UNKNOWN,
@@ -373,6 +391,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R10G10B10A2_UINT,
                                                    GL_RGB10_A2UI,
+                                                   GL_RGB10_A2UI,
                                                    DXGI_FORMAT_R10G10B10A2_UINT,
                                                    DXGI_FORMAT_R10G10B10A2_UINT,
                                                    DXGI_FORMAT_R10G10B10A2_UINT,
@@ -386,6 +405,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R10G10B10A2_UNORM:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R10G10B10A2_UNORM,
+                                                   GL_RGB10_A2,
                                                    GL_RGB10_A2,
                                                    DXGI_FORMAT_R10G10B10A2_UNORM,
                                                    DXGI_FORMAT_R10G10B10A2_UNORM,
@@ -401,6 +421,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R11G11B10_FLOAT,
                                                    GL_R11F_G11F_B10F,
+                                                   GL_R11F_G11F_B10F,
                                                    DXGI_FORMAT_R11G11B10_FLOAT,
                                                    DXGI_FORMAT_R11G11B10_FLOAT,
                                                    DXGI_FORMAT_R11G11B10_FLOAT,
@@ -414,6 +435,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R16G16B16A16_FLOAT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16G16B16A16_FLOAT,
+                                                   GL_RGBA16F,
                                                    GL_RGBA16F,
                                                    DXGI_FORMAT_R16G16B16A16_FLOAT,
                                                    DXGI_FORMAT_R16G16B16A16_FLOAT,
@@ -429,6 +451,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16G16B16A16_SINT,
                                                    GL_RGBA16I,
+                                                   GL_RGBA16I,
                                                    DXGI_FORMAT_R16G16B16A16_SINT,
                                                    DXGI_FORMAT_R16G16B16A16_SINT,
                                                    DXGI_FORMAT_R16G16B16A16_SINT,
@@ -442,6 +465,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R16G16B16A16_SNORM:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16G16B16A16_SNORM,
+                                                   GL_RGBA16_SNORM_EXT,
                                                    GL_RGBA16_SNORM_EXT,
                                                    DXGI_FORMAT_R16G16B16A16_SNORM,
                                                    DXGI_FORMAT_R16G16B16A16_SNORM,
@@ -457,6 +481,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16G16B16A16_UINT,
                                                    GL_RGBA16UI,
+                                                   GL_RGBA16UI,
                                                    DXGI_FORMAT_R16G16B16A16_UINT,
                                                    DXGI_FORMAT_R16G16B16A16_UINT,
                                                    DXGI_FORMAT_R16G16B16A16_UINT,
@@ -470,6 +495,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R16G16B16A16_UNORM:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16G16B16A16_UNORM,
+                                                   GL_NONE,
                                                    GL_NONE,
                                                    DXGI_FORMAT_R16G16B16A16_UNORM,
                                                    DXGI_FORMAT_R16G16B16A16_UNORM,
@@ -485,6 +511,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16G16_FLOAT,
                                                    GL_RG16F,
+                                                   GL_RG16F,
                                                    DXGI_FORMAT_R16G16_FLOAT,
                                                    DXGI_FORMAT_R16G16_FLOAT,
                                                    DXGI_FORMAT_R16G16_FLOAT,
@@ -498,6 +525,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R16G16_SINT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16G16_SINT,
+                                                   GL_RG16I,
                                                    GL_RG16I,
                                                    DXGI_FORMAT_R16G16_SINT,
                                                    DXGI_FORMAT_R16G16_SINT,
@@ -513,6 +541,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16G16_SNORM,
                                                    GL_RG16_SNORM_EXT,
+                                                   GL_RG16_SNORM_EXT,
                                                    DXGI_FORMAT_R16G16_SNORM,
                                                    DXGI_FORMAT_R16G16_SNORM,
                                                    DXGI_FORMAT_UNKNOWN,
@@ -526,6 +555,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R16G16_UINT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16G16_UINT,
+                                                   GL_RG16UI,
                                                    GL_RG16UI,
                                                    DXGI_FORMAT_R16G16_UINT,
                                                    DXGI_FORMAT_R16G16_UINT,
@@ -541,6 +571,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16G16_UNORM,
                                                    GL_NONE,
+                                                   GL_NONE,
                                                    DXGI_FORMAT_R16G16_UNORM,
                                                    DXGI_FORMAT_R16G16_UNORM,
                                                    DXGI_FORMAT_R16G16_UNORM,
@@ -554,6 +585,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R16_FLOAT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16_FLOAT,
+                                                   GL_R16F,
                                                    GL_R16F,
                                                    DXGI_FORMAT_R16_FLOAT,
                                                    DXGI_FORMAT_R16_FLOAT,
@@ -569,6 +601,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16_SINT,
                                                    GL_R16I,
+                                                   GL_R16I,
                                                    DXGI_FORMAT_R16_SINT,
                                                    DXGI_FORMAT_R16_SINT,
                                                    DXGI_FORMAT_R16_SINT,
@@ -582,6 +615,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R16_SNORM:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16_SNORM,
+                                                   GL_R16_SNORM_EXT,
                                                    GL_R16_SNORM_EXT,
                                                    DXGI_FORMAT_R16_SNORM,
                                                    DXGI_FORMAT_R16_SNORM,
@@ -597,6 +631,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16_UINT,
                                                    GL_R16UI,
+                                                   GL_R16UI,
                                                    DXGI_FORMAT_R16_UINT,
                                                    DXGI_FORMAT_R16_UINT,
                                                    DXGI_FORMAT_R16_UINT,
@@ -610,6 +645,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R16_UNORM:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R16_UNORM,
+                                                   GL_NONE,
                                                    GL_NONE,
                                                    DXGI_FORMAT_R16_UNORM,
                                                    DXGI_FORMAT_R16_UNORM,
@@ -625,6 +661,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R32G32B32A32_FLOAT,
                                                    GL_RGBA32F,
+                                                   GL_RGBA32F,
                                                    DXGI_FORMAT_R32G32B32A32_FLOAT,
                                                    DXGI_FORMAT_R32G32B32A32_FLOAT,
                                                    DXGI_FORMAT_R32G32B32A32_FLOAT,
@@ -638,6 +675,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R32G32B32A32_SINT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R32G32B32A32_SINT,
+                                                   GL_RGBA32I,
                                                    GL_RGBA32I,
                                                    DXGI_FORMAT_R32G32B32A32_SINT,
                                                    DXGI_FORMAT_R32G32B32A32_SINT,
@@ -653,6 +691,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R32G32B32A32_UINT,
                                                    GL_RGBA32UI,
+                                                   GL_RGBA32UI,
                                                    DXGI_FORMAT_R32G32B32A32_UINT,
                                                    DXGI_FORMAT_R32G32B32A32_UINT,
                                                    DXGI_FORMAT_R32G32B32A32_UINT,
@@ -666,6 +705,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R32G32_FLOAT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R32G32_FLOAT,
+                                                   GL_RG32F,
                                                    GL_RG32F,
                                                    DXGI_FORMAT_R32G32_FLOAT,
                                                    DXGI_FORMAT_R32G32_FLOAT,
@@ -681,6 +721,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R32G32_SINT,
                                                    GL_RG32I,
+                                                   GL_RG32I,
                                                    DXGI_FORMAT_R32G32_SINT,
                                                    DXGI_FORMAT_R32G32_SINT,
                                                    DXGI_FORMAT_R32G32_SINT,
@@ -694,6 +735,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R32G32_UINT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R32G32_UINT,
+                                                   GL_RG32UI,
                                                    GL_RG32UI,
                                                    DXGI_FORMAT_R32G32_UINT,
                                                    DXGI_FORMAT_R32G32_UINT,
@@ -709,6 +751,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R32_FLOAT,
                                                    GL_R32F,
+                                                   GL_R32F,
                                                    DXGI_FORMAT_R32_FLOAT,
                                                    DXGI_FORMAT_R32_FLOAT,
                                                    DXGI_FORMAT_R32_FLOAT,
@@ -722,6 +765,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R32_SINT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R32_SINT,
+                                                   GL_R32I,
                                                    GL_R32I,
                                                    DXGI_FORMAT_R32_SINT,
                                                    DXGI_FORMAT_R32_SINT,
@@ -737,6 +781,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R32_UINT,
                                                    GL_R32UI,
+                                                   GL_R32UI,
                                                    DXGI_FORMAT_R32_UINT,
                                                    DXGI_FORMAT_R32_UINT,
                                                    DXGI_FORMAT_R32_UINT,
@@ -750,6 +795,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R8G8B8A8_SINT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8G8B8A8_SINT,
+                                                   GL_RGBA8I,
                                                    GL_RGBA8I,
                                                    DXGI_FORMAT_R8G8B8A8_SINT,
                                                    DXGI_FORMAT_R8G8B8A8_SINT,
@@ -765,6 +811,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8G8B8A8_SNORM,
                                                    GL_RGBA8_SNORM,
+                                                   GL_RGBA8_SNORM,
                                                    DXGI_FORMAT_R8G8B8A8_SNORM,
                                                    DXGI_FORMAT_R8G8B8A8_SNORM,
                                                    DXGI_FORMAT_UNKNOWN,
@@ -778,6 +825,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R8G8B8A8_UINT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8G8B8A8_UINT,
+                                                   GL_RGBA8UI,
                                                    GL_RGBA8UI,
                                                    DXGI_FORMAT_R8G8B8A8_UINT,
                                                    DXGI_FORMAT_R8G8B8A8_UINT,
@@ -793,6 +841,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8G8B8A8_UNORM,
                                                    GL_RGBA8,
+                                                   GL_RGBA8,
                                                    DXGI_FORMAT_R8G8B8A8_UNORM,
                                                    DXGI_FORMAT_R8G8B8A8_UNORM,
                                                    DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -806,6 +855,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R8G8B8A8_UNORM_NONRENDERABLE:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8G8B8A8_UNORM_NONRENDERABLE,
+                                                   GL_RGBA8,
                                                    GL_RGBA8,
                                                    DXGI_FORMAT_R8G8B8A8_UNORM,
                                                    DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -821,6 +871,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8G8B8A8_UNORM_SRGB,
                                                    GL_SRGB8_ALPHA8,
+                                                   GL_SRGB8_ALPHA8,
                                                    DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                                    DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                                    DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
@@ -834,6 +885,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R8G8B8A8_UNORM_SRGB_NONRENDERABLE:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8G8B8A8_UNORM_SRGB_NONRENDERABLE,
+                                                   GL_SRGB8_ALPHA8,
                                                    GL_SRGB8_ALPHA8,
                                                    DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
                                                    DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
@@ -849,6 +901,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8G8_SINT,
                                                    GL_RG8I,
+                                                   GL_RG8I,
                                                    DXGI_FORMAT_R8G8_SINT,
                                                    DXGI_FORMAT_R8G8_SINT,
                                                    DXGI_FORMAT_R8G8_SINT,
@@ -862,6 +915,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R8G8_SNORM:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8G8_SNORM,
+                                                   GL_RG8_SNORM,
                                                    GL_RG8_SNORM,
                                                    DXGI_FORMAT_R8G8_SNORM,
                                                    DXGI_FORMAT_R8G8_SNORM,
@@ -877,6 +931,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8G8_SNORM_NONRENDERABLE,
                                                    GL_RG8_SNORM,
+                                                   GL_RG8_SNORM,
                                                    DXGI_FORMAT_R8G8_SNORM,
                                                    DXGI_FORMAT_R8G8_SNORM,
                                                    DXGI_FORMAT_UNKNOWN,
@@ -890,6 +945,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R8G8_UINT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8G8_UINT,
+                                                   GL_RG8UI,
                                                    GL_RG8UI,
                                                    DXGI_FORMAT_R8G8_UINT,
                                                    DXGI_FORMAT_R8G8_UINT,
@@ -905,6 +961,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8G8_UNORM,
                                                    GL_RG8,
+                                                   GL_RG8,
                                                    DXGI_FORMAT_R8G8_UNORM,
                                                    DXGI_FORMAT_R8G8_UNORM,
                                                    DXGI_FORMAT_R8G8_UNORM,
@@ -918,6 +975,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R8G8_UNORM_NONRENDERABLE:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8G8_UNORM_NONRENDERABLE,
+                                                   GL_RG8,
                                                    GL_RG8,
                                                    DXGI_FORMAT_R8G8_UNORM,
                                                    DXGI_FORMAT_R8G8_UNORM,
@@ -933,6 +991,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8_SINT,
                                                    GL_R8I,
+                                                   GL_R8I,
                                                    DXGI_FORMAT_R8_SINT,
                                                    DXGI_FORMAT_R8_SINT,
                                                    DXGI_FORMAT_R8_SINT,
@@ -946,6 +1005,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R8_SNORM:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8_SNORM,
+                                                   GL_R8_SNORM,
                                                    GL_R8_SNORM,
                                                    DXGI_FORMAT_R8_SNORM,
                                                    DXGI_FORMAT_R8_SNORM,
@@ -961,6 +1021,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8_SNORM_NONRENDERABLE,
                                                    GL_R8_SNORM,
+                                                   GL_R8_SNORM,
                                                    DXGI_FORMAT_R8_SNORM,
                                                    DXGI_FORMAT_R8_SNORM,
                                                    DXGI_FORMAT_UNKNOWN,
@@ -974,6 +1035,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R8_UINT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8_UINT,
+                                                   GL_R8UI,
                                                    GL_R8UI,
                                                    DXGI_FORMAT_R8_UINT,
                                                    DXGI_FORMAT_R8_UINT,
@@ -989,6 +1051,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8_UNORM,
                                                    GL_R8,
+                                                   GL_R8,
                                                    DXGI_FORMAT_R8_UNORM,
                                                    DXGI_FORMAT_R8_UNORM,
                                                    DXGI_FORMAT_R8_UNORM,
@@ -1002,6 +1065,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_R8_UNORM_NONRENDERABLE:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R8_UNORM_NONRENDERABLE,
+                                                   GL_R8,
                                                    GL_R8,
                                                    DXGI_FORMAT_R8_UNORM,
                                                    DXGI_FORMAT_R8_UNORM,
@@ -1017,6 +1081,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_R9G9B9E5_SHAREDEXP,
                                                    GL_RGB9_E5,
+                                                   GL_RGB9_E5,
                                                    DXGI_FORMAT_R9G9B9E5_SHAREDEXP,
                                                    DXGI_FORMAT_R9G9B9E5_SHAREDEXP,
                                                    DXGI_FORMAT_UNKNOWN,
@@ -1030,6 +1095,7 @@ const ANGLEFormatSet &GetANGLEFormatSet(ANGLEFormat angleFormat)
         case ANGLE_FORMAT_X24_TYPELESS_G8_UINT:
         {
             static const ANGLEFormatSet formatInfo(ANGLE_FORMAT_X24_TYPELESS_G8_UINT,
+                                                   GL_DEPTH24_STENCIL8_OES,
                                                    GL_DEPTH24_STENCIL8_OES,
                                                    DXGI_FORMAT_R24G8_TYPELESS,
                                                    DXGI_FORMAT_X24_TYPELESS_G8_UINT,
@@ -1113,6 +1179,13 @@ const TextureFormat &GetTextureFormatInfo(GLenum internalFormat,
             {
                 break;
             }
+        }
+        case GL_BGR565_ANGLEX:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_B5G6R5_UNORM,
+                                                     nullptr);
+            return textureFormat;
         }
         case GL_BGR5_A1_ANGLEX:
         {
@@ -1212,6 +1285,104 @@ const TextureFormat &GetTextureFormatInfo(GLenum internalFormat,
                 break;
             }
         }
+        case GL_COMPRESSED_RGBA_ASTC_10x10_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_RGBA_ASTC_10x5_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_RGBA_ASTC_10x6_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_RGBA_ASTC_10x8_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_RGBA_ASTC_12x10_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_RGBA_ASTC_12x12_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_RGBA_ASTC_4x4_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_RGBA_ASTC_5x4_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_RGBA_ASTC_5x5_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_RGBA_ASTC_6x5_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_RGBA_ASTC_6x6_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_RGBA_ASTC_8x5_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_RGBA_ASTC_8x6_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_RGBA_ASTC_8x8_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
         case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
         {
             static const TextureFormat textureFormat(internalFormat,
@@ -1267,6 +1438,104 @@ const TextureFormat &GetTextureFormatInfo(GLenum internalFormat,
             {
                 break;
             }
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
+        }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR:
+        {
+            static const TextureFormat textureFormat(internalFormat,
+                                                     ANGLE_FORMAT_NONE,
+                                                     nullptr);
+            return textureFormat;
         }
         case GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC:
         {
@@ -1984,6 +2253,7 @@ const TextureFormat &GetTextureFormatInfo(GLenum internalFormat,
         }
 
         default:
+            UNREACHABLE();
             break;
     }
     // clang-format on

@@ -59,6 +59,9 @@ bool DebugAnnotationsActive();
 
 }
 
+#define ANGLE_ENABLE_DEBUG_TRACE
+#define ANGLE_ENABLE_DEBUG_TRACE_TO_DEBUGGER
+
 #if defined(ANGLE_ENABLE_DEBUG_TRACE) || defined(ANGLE_ENABLE_DEBUG_ANNOTATIONS)
 #define ANGLE_TRACE_ENABLED
 #endif
