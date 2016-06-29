@@ -14,28 +14,62 @@ static void writeVectorPrecisionEmulationHelpers(TInfoSinkBase &sink,
                                                  const unsigned int size)
 {
     std::stringstream vecTypeStrStr;
-    if (outputLanguage == SH_ESSL_OUTPUT)
-        vecTypeStrStr << "highp ";
-    vecTypeStrStr << "vec" << size;
+    if (outputLanguage == SH_HLSL_4_1_OUTPUT)
+    {
+        vecTypeStrStr << "float" << size;
+    }
+    else
+    {
+        if (outputLanguage == SH_ESSL_OUTPUT)
+            vecTypeStrStr << "highp ";
+        vecTypeStrStr << "vec" << size;
+    }
     std::string vecType = vecTypeStrStr.str();
 
-    sink <<
-    vecType << " angle_frm(in " << vecType << " v) {\n"
-    "    v = clamp(v, -65504.0, 65504.0);\n"
-    "    " << vecType << " exponent = floor(log2(abs(v) + 1e-30)) - 10.0;\n"
-    "    bvec" << size << " isNonZero = greaterThanEqual(exponent, vec" << size << "(-25.0));\n"
-    "    v = v * exp2(-exponent);\n"
-    "    v = sign(v) * floor(abs(v));\n"
-    "    return v * exp2(exponent) * vec" << size << "(isNonZero);\n"
-    "}\n";
+    if (outputLanguage == SH_HLSL_4_1_OUTPUT)
+    {
+        // clang-format off
+        sink <<
+            vecType << " angle_frm(" << vecType << " v) {\n"
+            "    v = clamp(v, -65504.0, 65504.0);\n"
+            "    " << vecType << " exponent = floor(log2(abs(v) + 1e-30)) - 10.0;\n"
+            "    bool" << size << " isNonZero = exponent < -25.0;\n"
+            "    v = v * exp2(-exponent);\n"
+            "    v = sign(v) * floor(abs(v));\n"
+            "    return v * exp2(exponent) * (float" << size << ")(isNonZero);\n"
+            "}\n";
 
-    sink <<
-    vecType << " angle_frl(in " << vecType << " v) {\n"
-    "    v = clamp(v, -2.0, 2.0);\n"
-    "    v = v * 256.0;\n"
-    "    v = sign(v) * floor(abs(v));\n"
-    "    return v * 0.00390625;\n"
-    "}\n";
+        sink <<
+            vecType << " angle_frl(" << vecType << " v) {\n"
+            "    v = clamp(v, -2.0, 2.0);\n"
+            "    v = v * 256.0;\n"
+            "    v = sign(v) * floor(abs(v));\n"
+            "    return v * 0.00390625;\n"
+            "}\n";
+        // clang-format on
+    }
+    else
+    {
+        // clang-format off
+        sink <<
+            vecType << " angle_frm(in " << vecType << " v) {\n"
+            "    v = clamp(v, -65504.0, 65504.0);\n"
+            "    " << vecType << " exponent = floor(log2(abs(v) + 1e-30)) - 10.0;\n"
+            "    bvec" << size << " isNonZero = greaterThanEqual(exponent, vec" << size << "(-25.0));\n"
+            "    v = v * exp2(-exponent);\n"
+            "    v = sign(v) * floor(abs(v));\n"
+            "    return v * exp2(exponent) * vec" << size << "(isNonZero);\n"
+            "}\n";
+
+        sink <<
+            vecType << " angle_frl(in " << vecType << " v) {\n"
+            "    v = clamp(v, -2.0, 2.0);\n"
+            "    v = v * 256.0;\n"
+            "    v = sign(v) * floor(abs(v));\n"
+            "    return v * 0.00390625;\n"
+            "}\n";
+        // clang-format on
+    }
 }
 
 static void writeMatrixPrecisionEmulationHelper(TInfoSinkBase &sink,
@@ -45,18 +79,32 @@ static void writeMatrixPrecisionEmulationHelper(TInfoSinkBase &sink,
                                                 const char *functionName)
 {
     std::stringstream matTypeStrStr;
-    if (outputLanguage == SH_ESSL_OUTPUT)
-        matTypeStrStr << "highp ";
-    matTypeStrStr << "mat" << columns;
-    if (rows != columns)
+    if (outputLanguage == SH_HLSL_4_1_OUTPUT)
     {
-        matTypeStrStr << "x" << rows;
+        matTypeStrStr << "float" << columns << "x" << rows;
     }
-
+    else
+    {
+        if (outputLanguage == SH_ESSL_OUTPUT)
+            matTypeStrStr << "highp ";
+        matTypeStrStr << "mat" << columns;
+        if (rows != columns)
+        {
+            matTypeStrStr << "x" << rows;
+        }
+    }
     std::string matType = matTypeStrStr.str();
 
-    sink << matType << " " << functionName << "(in " << matType << " m) {\n"
-            "    " << matType << " rounded;\n";
+    if (outputLanguage == SH_HLSL_4_1_OUTPUT)
+    {
+        sink << matType << " " << functionName << "(" << matType << " m) {\n"
+             << "    " << matType << " rounded;\n";
+    }
+    else
+    {
+        sink << matType << " " << functionName << "(in " << matType << " m) {\n"
+             << "    " << matType << " rounded;\n";
+    }
 
     for (unsigned int i = 0; i < columns; ++i)
     {
@@ -120,27 +168,37 @@ static void writeCommonPrecisionEmulationHelpers(TInfoSinkBase &sink,
     //    numbers will be flushed to zero either way (2^-15 is the smallest
     //    normal positive number), this does not introduce any error.
 
-    std::string floatType = "float";
-    if (outputLanguage == SH_ESSL_OUTPUT)
-        floatType = "highp float";
+    if (outputLanguage == SH_HLSL_4_1_OUTPUT)
+    {
+        // In HLSL scalars are the same as 1-vectors.
+        writeVectorPrecisionEmulationHelpers(sink, outputLanguage, 1);
+    }
+    else
+    {
+        std::string floatType = "float";
+        if (outputLanguage == SH_ESSL_OUTPUT)
+            floatType = "highp float";
 
-    sink <<
-    floatType << " angle_frm(in " << floatType << " x) {\n"
-    "    x = clamp(x, -65504.0, 65504.0);\n"
-    "    " << floatType << " exponent = floor(log2(abs(x) + 1e-30)) - 10.0;\n"
-    "    bool isNonZero = (exponent >= -25.0);\n"
-    "    x = x * exp2(-exponent);\n"
-    "    x = sign(x) * floor(abs(x));\n"
-    "    return x * exp2(exponent) * float(isNonZero);\n"
-    "}\n";
+        // clang-format off
+        sink <<
+            floatType << " angle_frm(in " << floatType << " x) {\n"
+            "    x = clamp(x, -65504.0, 65504.0);\n"
+            "    " << floatType << " exponent = floor(log2(abs(x) + 1e-30)) - 10.0;\n"
+            "    bool isNonZero = (exponent >= -25.0);\n"
+            "    x = x * exp2(-exponent);\n"
+            "    x = sign(x) * floor(abs(x));\n"
+            "    return x * exp2(exponent) * float(isNonZero);\n"
+            "}\n";
 
-    sink <<
-    floatType << " angle_frl(in " << floatType << " x) {\n"
-    "    x = clamp(x, -2.0, 2.0);\n"
-    "    x = x * 256.0;\n"
-    "    x = sign(x) * floor(abs(x));\n"
-    "    return x * 0.00390625;\n"
-    "}\n";
+        sink <<
+            floatType << " angle_frl(in " << floatType << " x) {\n"
+            "    x = clamp(x, -2.0, 2.0);\n"
+            "    x = x * 256.0;\n"
+            "    x = sign(x) * floor(abs(x));\n"
+            "    return x * 0.00390625;\n"
+            "}\n";
+        // clang-format on
+    }
 
     writeVectorPrecisionEmulationHelpers(sink, outputLanguage, 2);
     writeVectorPrecisionEmulationHelpers(sink, outputLanguage, 3);
@@ -168,13 +226,76 @@ static void writeCommonPrecisionEmulationHelpers(TInfoSinkBase &sink,
     }
 }
 
+static const char *GetHLSLTypeStr(const char *floatTypeStr)
+{
+    if (strcmp(floatTypeStr, "float") == 0)
+    {
+        return "float";
+    }
+    if (strcmp(floatTypeStr, "vec2") == 0)
+    {
+        return "float2";
+    }
+    if (strcmp(floatTypeStr, "vec3") == 0)
+    {
+        return "float3";
+    }
+    if (strcmp(floatTypeStr, "vec4") == 0)
+    {
+        return "float4";
+    }
+    if (strcmp(floatTypeStr, "mat2") == 0)
+    {
+        return "float2x2";
+    }
+    if (strcmp(floatTypeStr, "mat3") == 0)
+    {
+        return "float3x3";
+    }
+    if (strcmp(floatTypeStr, "mat4") == 0)
+    {
+        return "float4x4";
+    }
+    if (strcmp(floatTypeStr, "mat2x3") == 0)
+    {
+        return "float2x3";
+    }
+    if (strcmp(floatTypeStr, "mat2x4") == 0)
+    {
+        return "float2x4";
+    }
+    if (strcmp(floatTypeStr, "mat3x2") == 0)
+    {
+        return "float3x2";
+    }
+    if (strcmp(floatTypeStr, "mat3x4") == 0)
+    {
+        return "float3x4";
+    }
+    if (strcmp(floatTypeStr, "mat4x2") == 0)
+    {
+        return "float4x2";
+    }
+    if (strcmp(floatTypeStr, "mat4x3") == 0)
+    {
+        return "float4x3";
+    }
+    UNREACHABLE();
+    return nullptr;
+}
+
 static void writeCompoundAssignmentPrecisionEmulation(
     TInfoSinkBase& sink, ShShaderOutput outputLanguage,
     const char *lType, const char *rType, const char *opStr, const char *opNameStr)
 {
     std::string lTypeStr = lType;
     std::string rTypeStr = rType;
-    if (outputLanguage == SH_ESSL_OUTPUT)
+    if (outputLanguage == SH_HLSL_4_1_OUTPUT)
+    {
+        lTypeStr = GetHLSLTypeStr(lType);
+        rTypeStr = GetHLSLTypeStr(rType);
+    }
+    else if (outputLanguage == SH_ESSL_OUTPUT)
     {
         std::stringstream lTypeStrStr;
         lTypeStrStr << "highp " << lType;
@@ -475,9 +596,8 @@ void EmulatePrecision::writeEmulationHelpers(TInfoSinkBase &sink,
                                              const ShShaderOutput outputLanguage)
 {
     // Other languages not yet supported
-    ASSERT(outputLanguage == SH_GLSL_COMPATIBILITY_OUTPUT ||
-           IsGLSL130OrNewer(outputLanguage) ||
-           outputLanguage == SH_ESSL_OUTPUT);
+    ASSERT(outputLanguage == SH_GLSL_COMPATIBILITY_OUTPUT || IsGLSL130OrNewer(outputLanguage) ||
+           outputLanguage == SH_ESSL_OUTPUT || outputLanguage == SH_HLSL_4_1_OUTPUT);
     writeCommonPrecisionEmulationHelpers(sink, shaderVersion, outputLanguage);
 
     EmulationSet::const_iterator it;
