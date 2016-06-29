@@ -21,6 +21,7 @@
 #include "libANGLE/Uniform.h"
 
 #include "common/mathutil.h"
+#include "common/string_utils.h"
 #include "common/utilities.h"
 
 namespace gl
@@ -2549,6 +2550,107 @@ bool ValidateIsPath(Context *context)
             Error(GL_INVALID_OPERATION, "GL_CHROMIUM_path_rendering is not available."));
         return false;
     }
+    return true;
+}
+
+bool ValidateBindFragmentInputLocation(Context *context,
+                                       GLuint program,
+                                       GLint location,
+                                       const GLchar *name)
+{
+    if (!context->getExtensions().pathRendering)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "GL_CHROMIUM_path_rendering is not available."));
+        return false;
+    }
+
+    const GLint MaxLocation = context->getCaps().maxVaryingVectors * 4;
+    if (location >= MaxLocation)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Location exceeds max varying."));
+        return false;
+    }
+
+    const auto *programObject = context->getProgram(program);
+    if (!programObject)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "No such program."));
+        return false;
+    }
+
+    if (!name)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "No name given."));
+        return false;
+    }
+
+    if (angle::BeginsWith(name, "gl_"))
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Cannot bind a built-in variable."));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateProgramPathFragmentInputGen(Context *context,
+                                         GLuint program,
+                                         GLint location,
+                                         GLenum genMode,
+                                         GLint components,
+                                         const GLfloat *coeffs)
+{
+    if (!context->getExtensions().pathRendering)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "GL_CHROMIUM_path_rendering is not available."));
+        return false;
+    }
+
+    const auto *programObject = context->getProgram(program);
+    if (!programObject || programObject->isFlaggedForDeletion())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "No such program."));
+        return false;
+    }
+
+    if (!programObject->isLinked())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Program is not linked."));
+        return false;
+    }
+
+    switch (genMode)
+    {
+        case GL_NONE:
+            if (components != 0)
+            {
+                context->handleError(Error(GL_INVALID_VALUE, "Invalid components."));
+                return false;
+            }
+            break;
+
+        case GL_OBJECT_LINEAR_CHROMIUM:
+        case GL_EYE_LINEAR_CHROMIUM:
+        case GL_CONSTANT_CHROMIUM:
+            if (components < 1 || components > 4)
+            {
+                context->handleError(Error(GL_INVALID_VALUE, "Invalid components."));
+                return false;
+            }
+            if (!coeffs)
+            {
+                context->handleError(Error(GL_INVALID_VALUE, "No coefficients array given."));
+                return false;
+            }
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Invalid gen mode."));
+            return false;
+    }
+
     return true;
 }
 

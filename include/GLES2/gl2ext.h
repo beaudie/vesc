@@ -918,6 +918,15 @@ typedef void(GL_APIENTRYP PFNGLSTENCILTHENCOVERSTROKEPATHCHROMIUMPROC)(GLuint pa
                                                                        GLint reference,
                                                                        GLuint mask,
                                                                        GLenum coverMode);
+
+typedef void(GL_APIENTRY PFNGLBINDFRAGMENTINPUTLOCATIONCHROMIUMPROC)(GLuint program,
+                                                                     GLint location,
+                                                                     const GLchar *name);
+typedef void(GL_APIENTRYP PFNGLPROGRAMPATHFRAGMENTINPUTGENCHROMIUMPROC)(GLuint program,
+                                                                        GLint location,
+                                                                        GLenum genMode,
+                                                                        GLint components,
+                                                                        const GLfloat *coeffs);
 #ifdef GL_GLEXT_PROTOTYPES
 GL_APICALL void GL_APIENTRY glMatrixLoadfCHROMIUM(GLenum matrixMode, const GLfloat *m);
 GL_APICALL void GL_APIENTRY glMatrixLoadIdentityCHROMIUM(GLenum matrixMode);
@@ -947,6 +956,15 @@ GL_APICALL void GL_APIENTRY glStencilThenCoverStrokePathCHROMIUM(GLuint path,
                                                                  GLint reference,
                                                                  GLuint mask,
                                                                  GLenum coverMode);
+
+GL_APICALL void GL_APIENTRY glBindFragmentInputLocationCHROMIUM(GLuint program,
+                                                                GLint location,
+                                                                const GLchar *name);
+GL_APICALL void GL_APIENTRY glProgramPathFragmentInputGenCHROMIUM(GLuint program,
+                                                                  GLint location,
+                                                                  GLenum genMode,
+                                                                  GLint components,
+                                                                  const GLfloat *coeffs);
 #endif
 #endif /* GL_CHROMIUM_path_rendering */
 
