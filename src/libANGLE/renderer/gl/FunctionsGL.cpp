@@ -433,6 +433,7 @@ FunctionsGL::FunctionsGL()
       coverStrokePathNV(nullptr),
       stencilThenCoverFillPathNV(nullptr),
       stencilThenCoverStrokePathNV(nullptr),
+      programPathFragmentInputGenNV(nullptr),
 
       bindFragDataLocationIndexed(nullptr),
       bindSampler(nullptr),
@@ -859,6 +860,7 @@ void FunctionsGL::initializeProcsDesktopGL()
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glCoverStrokePathNV"), &coverStrokePathNV);
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glStencilThenCoverFillPathNV"), &stencilThenCoverFillPathNV);
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glStencilThenCoverStrokePathNV"), &stencilThenCoverStrokePathNV);
+    AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glProgramPathFragmentInputGenNV"), &programPathFragmentInputGenNV);
 
     // GL_NV_framebuffer_mixed_samples
     AssignGLExtensionEntryPoint(extensions, "GL_NV_framebuffer_mixed_samples", loadProcAddress("glCoverageModulationNV"), &coverageModulationNV);
@@ -1777,6 +1779,7 @@ void FunctionsGL::initializeProcsGLES()
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glCoverStrokePathNV"), &coverStrokePathNV);
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glStencilThenCoverFillPathNV"), &stencilThenCoverFillPathNV);
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glStencilThenCoverStrokePathNV"), &stencilThenCoverStrokePathNV);
+    AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glProgramPathFragmentInputGenNV"), &programPathFragmentInputGenNV);
 
     // GL_OES_texture_3D
     AssignGLExtensionEntryPoint(extensions, "GL_OES_texture_3D", loadProcAddress("glTexImage3DOES"), &texImage3D);
