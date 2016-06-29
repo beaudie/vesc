@@ -1471,6 +1471,24 @@ void Context::stencilThenCoverStrokePath(GLuint path,
     mImplementation->stencilThenCoverStrokePath(pathObj, reference, mask, coverMode);
 }
 
+void Context::bindFragmentInputLocation(GLuint program, GLint location, const GLchar *name)
+{
+    auto *programObject = getProgram(program);
+
+    programObject->bindFragmentInputLocation(location, name);
+}
+
+void Context::programPathFragmentInputGen(GLuint program,
+                                          GLint location,
+                                          GLenum genMode,
+                                          GLint components,
+                                          const GLfloat *coeffs)
+{
+    auto *programObject = getProgram(program);
+
+    handleError(programObject->pathFragmentInputGen(location, genMode, components, coeffs));
+}
+
 void Context::handleError(const Error &error)
 {
     if (error.isError())

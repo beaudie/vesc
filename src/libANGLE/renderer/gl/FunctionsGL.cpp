@@ -433,6 +433,7 @@ FunctionsGL::FunctionsGL()
       coverStrokePathNV(nullptr),
       stencilThenCoverFillPathNV(nullptr),
       stencilThenCoverStrokePathNV(nullptr),
+      programPathFragmentInputGenNV(nullptr),
 
       bindFragDataLocationIndexed(nullptr),
       bindSampler(nullptr),
@@ -840,6 +841,11 @@ void FunctionsGL::initializeProcsDesktopGL()
     // Even though extensions are written against specific versions of GL, many drivers expose the extensions
     // in even older versions.  Always try loading the extensions regardless of GL version.
 
+    // GL_ARB_program_interface_query (loading only functions relevant to GL_NV_path_rendering_here)
+    AssignGLExtensionEntryPoint(extensions, "GL_ARB_program_interface_query", loadProcAddress("glGetProgramInterfaceiv"), &getProgramInterfaceiv);
+    AssignGLExtensionEntryPoint(extensions, "GL_ARB_program_interface_query", loadProcAddress("glGetProgramResourceName"), &getProgramResourceName);
+    AssignGLExtensionEntryPoint(extensions, "GL_ARB_program_interface_query", loadProcAddress("glGetProgramResourceiv"), &getProgramResourceiv);
+
     // EXT_direct_state_access (loading only functions relevant to GL_NV_path_rendering here)
     AssignGLExtensionEntryPoint(extensions, "GL_EXT_direct_state_access", loadProcAddress("glMatrixLoadfEXT"), &matrixLoadEXT);
 
@@ -859,6 +865,7 @@ void FunctionsGL::initializeProcsDesktopGL()
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glCoverStrokePathNV"), &coverStrokePathNV);
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glStencilThenCoverFillPathNV"), &stencilThenCoverFillPathNV);
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glStencilThenCoverStrokePathNV"), &stencilThenCoverStrokePathNV);
+    AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glProgramPathFragmentInputGenNV"), &programPathFragmentInputGenNV);
 
     // GL_NV_framebuffer_mixed_samples
     AssignGLExtensionEntryPoint(extensions, "GL_NV_framebuffer_mixed_samples", loadProcAddress("glCoverageModulationNV"), &coverageModulationNV);
@@ -1005,6 +1012,8 @@ void FunctionsGL::initializeProcsDesktopGL()
     AssignGLExtensionEntryPoint(extensions, "GL_ARB_get_program_binary", loadProcAddress("glGetProgramBinary"), &getProgramBinary);
     AssignGLExtensionEntryPoint(extensions, "GL_ARB_get_program_binary", loadProcAddress("glProgramBinary"), &programBinary);
     AssignGLExtensionEntryPoint(extensions, "GL_ARB_get_program_binary", loadProcAddress("glProgramParameteri"), &programParameteri);
+
+
 
     // 1.0
     if (isAtLeastGL(gl::Version(1, 0)))
@@ -1761,6 +1770,11 @@ void FunctionsGL::initializeProcsGLES()
     // EXT_direct_state_access (loading only functions relevant to GL_NV_path_rendering here)
     AssignGLExtensionEntryPoint(extensions, "GL_EXT_direct_state_access", loadProcAddress("glMatrixLoadfEXT"), &matrixLoadEXT);
 
+    // GL_ARB_program_interface_query (loading only functions relevant to GL_NV_path_rendering_here)
+    AssignGLExtensionEntryPoint(extensions, "GL_ARB_program_interface_query", loadProcAddress("glGetProgramInterfaceiv"), &getProgramInterfaceiv);
+    AssignGLExtensionEntryPoint(extensions, "GL_ARB_program_interface_query", loadProcAddress("glGetProgramResourceName"), &getProgramResourceName);
+    AssignGLExtensionEntryPoint(extensions, "GL_ARB_program_interface_query", loadProcAddress("glGetProgramResourceiv"), &getProgramResourceiv);
+
     // GL_NV_path_rendering
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glGenPathsNV"), &genPathsNV);
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glDeletePathsNV"), &delPathsNV);
@@ -1777,6 +1791,7 @@ void FunctionsGL::initializeProcsGLES()
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glCoverStrokePathNV"), &coverStrokePathNV);
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glStencilThenCoverFillPathNV"), &stencilThenCoverFillPathNV);
     AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glStencilThenCoverStrokePathNV"), &stencilThenCoverStrokePathNV);
+    AssignGLExtensionEntryPoint(extensions, "GL_NV_path_rendering", loadProcAddress("glProgramPathFragmentInputGenNV"), &programPathFragmentInputGenNV);
 
     // GL_OES_texture_3D
     AssignGLExtensionEntryPoint(extensions, "GL_OES_texture_3D", loadProcAddress("glTexImage3DOES"), &texImage3D);
