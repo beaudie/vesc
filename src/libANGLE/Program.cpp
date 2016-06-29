@@ -177,7 +177,7 @@ void InfoLog::getLog(GLsizei bufSize, GLsizei *length, char *infoLog) const
 }
 
 // append a santized message to the program info log.
-// The D3D compiler includes a fake file path in some of the warning or error 
+// The D3D compiler includes a fake file path in some of the warning or error
 // messages, so lets remove all occurrences of this fake file path from the log.
 void InfoLog::appendSanitized(const char *message)
 {
@@ -438,6 +438,109 @@ void Program::bindUniformLocation(GLuint index, const char *name)
 {
     // Bind the base uniform name only since array indices other than 0 cannot be bound
     mUniformBindings.bindLocation(index, ParseUniformName(name, nullptr));
+}
+
+void Program::bindFragmentInputLocation(GLint index, const char *name)
+{
+    // The client wants to bind either "name" or "name[0]".
+    // GL ES 3.1 spec refers to active array names with language such as:
+    // "if the string identifies the base name of an active array, where the
+    // string would exactly match the name of the variable if the suffix "[0]"
+    // were appended to the string".
+
+    // At this point we can not know if the string identifies a simple variable,
+    // a base name of an array, or nothing.  Store both, so if user overwrites
+    // either, both still work correctly.
+    mFragmentInputBindings.bindLocation(index, name);
+    mFragmentInputBindings.bindLocation(index, name + std::string("[0]"));
+}
+
+Error Program::pathFragmentInputGen(GLint index,
+                                    GLenum genMode,
+                                    GLint components,
+                                    const GLfloat *coeffs)
+{
+    // If the location is -1 then the command is silently ignored
+    if (index == -1)
+        return gl::NoError();
+
+    const Shader *fragmentShader = mState.getAttachedFragmentShader();
+    ASSERT(fragmentShader);
+
+    // Find the actual fragment shader varying we're interested in
+    const std::vector<sh::Varying> &inputs = fragmentShader->getVaryings();
+    const sh::Varying *input               = nullptr;
+    bool hasBinding = false;
+
+    for (const auto &binding : mFragmentInputBindings)
+    {
+        if (binding.second != static_cast<GLuint>(index))
+            continue;
+
+        hasBinding = true;
+
+        const auto &originalName = binding.first;
+
+        for (const auto &in : inputs)
+        {
+            if (in.name == originalName)
+            {
+                input = &in;
+                break;
+            }
+            else if (in.isArray())
+            {
+                for (unsigned i = 0; i < in.arraySize; ++i)
+                {
+                    const auto &name = in.name + "[" + std::to_string(i) + "]";
+                    if (name == originalName)
+                    {
+                        input = &in;
+                        break;
+                    }
+                }
+            }
+        }
+        if (input != nullptr)
+            break;
+    }
+
+    // If the binding didn't exist it's an error.
+    if (!hasBinding)
+        return gl::Error(GL_INVALID_OPERATION, "No such binding.");
+
+    // If the input doesn't exist then then the command is silently ignored
+    if (!input)
+        return gl::NoError();
+
+    GLint expectedComponents = 0;
+    switch (input->type)
+    {
+        case GL_FLOAT:
+            expectedComponents = 1;
+            break;
+        case GL_FLOAT_VEC2:
+            expectedComponents = 2;
+            break;
+        case GL_FLOAT_VEC3:
+            expectedComponents = 3;
+            break;
+        case GL_FLOAT_VEC4:
+            expectedComponents = 4;
+            break;
+        default:
+            return Error(GL_INVALID_OPERATION,
+                         "Fragment input type is not a floating point scalar or vector.");
+    }
+
+    if (expectedComponents != components && genMode != GL_NONE)
+    {
+        return Error(GL_INVALID_OPERATION, "Unexpected number of components.");
+    }
+
+    mProgram->setPathFragmentInputGen(input->mappedName, genMode, components, coeffs);
+
+    return gl::NoError();
 }
 
 // Links the HLSL code of the vertex and pixel shader by matching up their varyings,
@@ -1623,7 +1726,6 @@ GLenum Program::getTransformFeedbackBufferMode() const
     return mState.mTransformFeedbackBufferMode;
 }
 
-// static
 bool Program::linkVaryings(InfoLog &infoLog,
                            const Shader *vertexShader,
                            const Shader *fragmentShader)
@@ -1632,6 +1734,8 @@ bool Program::linkVaryings(InfoLog &infoLog,
 
     const std::vector<sh::Varying> &vertexVaryings   = vertexShader->getVaryings();
     const std::vector<sh::Varying> &fragmentVaryings = fragmentShader->getVaryings();
+
+    std::map<GLuint, std::string> staticFragmentInputLocations;
 
     for (const sh::Varying &output : fragmentVaryings)
     {
@@ -1663,6 +1767,29 @@ bool Program::linkVaryings(InfoLog &infoLog,
         if (!matched && output.staticUse)
         {
             infoLog << "Fragment varying " << output.name << " does not match any vertex varying";
+            return false;
+        }
+
+        // Check for aliased path rendering input bindings (if any).
+        // If more than one binding refer statically to the same
+        // location the link must fail.
+
+        if (!output.staticUse)
+            continue;
+
+        const auto inputBinding = mFragmentInputBindings.getBinding(output.name);
+        if (inputBinding == -1)
+            continue;
+
+        const auto it = staticFragmentInputLocations.find(inputBinding);
+        if (it == std::end(staticFragmentInputLocations))
+        {
+            staticFragmentInputLocations.insert(std::make_pair(inputBinding, output.name));
+        }
+        else
+        {
+            infoLog << "Binding for fragment input " << output.name << " conflicts with "
+                    << it->second;
             return false;
         }
     }
