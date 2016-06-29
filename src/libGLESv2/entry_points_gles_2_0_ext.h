@@ -179,6 +179,15 @@ ANGLE_EXPORT void GL_APIENTRY StencilThenCoverStrokePathCHROMIUM(GLuint path,
                                                                  GLint reference,
                                                                  GLuint mask,
                                                                  GLenum coverMode);
+
+ANGLE_EXPORT void GL_APIENTRY BindFragmentInputLocationCHROMIUM(GLuint program,
+                                                                GLint location,
+                                                                const GLchar *name);
+ANGLE_EXPORT void GL_APIENTRY ProgramPathFragmentInputGenCHROMIUM(GLuint program,
+                                                                  GLint location,
+                                                                  GLenum genMode,
+                                                                  GLint components,
+                                                                  const GLfloat *coeffs);
 }
 
 #endif // LIBGLESV2_ENTRYPOINTGLES20EXT_H_

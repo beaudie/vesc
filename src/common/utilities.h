@@ -50,6 +50,8 @@ GLenum LayerIndexToCubeMapTextureTarget(size_t index);
 // set to GL_INVALID_INDEX if the provided name is not an array or the array index is invalid.
 std::string ParseUniformName(const std::string &name, size_t *outSubscript);
 
+
+
 // Find the range of index values in the provided indices pointer.  Primitive restart indices are
 // only counted in the range if primitive restart is disabled.
 IndexRange ComputeIndexRange(GLenum indexType,

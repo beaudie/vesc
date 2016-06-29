@@ -47,6 +47,11 @@ bool HexStringToUInt(const std::string &input, unsigned int *uintOut);
 bool ReadFileToString(const std::string &path, std::string *stringOut);
 
 Optional<std::vector<wchar_t>> WidenString(size_t length, const char *cString);
+
+// Check if the string str begins with the given prefix.
+// Prefix may not be NULL and it needs to be NUL terminated.
+bool BeginsWith(const std::string& str, const char *prefix);
+
 }
 
 #endif // LIBANGLE_STRING_UTILS_H_

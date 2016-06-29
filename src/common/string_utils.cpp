@@ -10,7 +10,7 @@
 #include "string_utils.h"
 
 #include <stdlib.h>
-
+#include <string.h>
 #include <fstream>
 #include <sstream>
 
@@ -155,6 +155,14 @@ Optional<std::vector<wchar_t>> WidenString(size_t length, const char *cString)
     }
 #endif
     return Optional<std::vector<wchar_t>>(wcstring);
+}
+
+bool BeginsWith(const std::string& str, const char *prefix)
+{
+    if (str.empty())
+        return false;
+
+    return strncmp(str.c_str(), prefix, strlen(prefix)) == 0;
 }
 
 }  // namespace angle

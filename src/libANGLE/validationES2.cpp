@@ -2552,4 +2552,22 @@ bool ValidateIsPath(Context *context)
     return true;
 }
 
+bool ValidateBindFragmentInputLocation(Context *context,
+                                       GLuint program,
+                                       GLint location,
+                                       const GLchar *name)
+{
+    return true;
+}
+
+bool ValidateProgramPathFragmentInputGen(Context *context,
+                                         GLuint program,
+                                         GLint location,
+                                         GLenum genMode,
+                                         GLint components,
+                                         const GLfloat *coeffs)
+{
+    return true;
+}
+
 }  // namespace gl

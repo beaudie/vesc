@@ -80,6 +80,9 @@ class ProgramImpl : angle::NonCopyable
     virtual bool getUniformBlockMemberInfo(const std::string &memberUniformName,
                                            sh::BlockMemberInfo *memberInfoOut) const = 0;
 
+    virtual void setPathFragmentInputGen(const std::string &inputName,
+        GLenum genMode, GLint components, const GLfloat *coeffs) = 0;
+
   protected:
     const gl::ProgramState &mState;
 };

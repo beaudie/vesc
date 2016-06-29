@@ -644,6 +644,8 @@ std::string ParseUniformName(const std::string &name, size_t *outSubscript)
     return name.substr(0, open);
 }
 
+
+
 unsigned int ParseAndStripArrayIndex(std::string *name)
 {
     unsigned int subscript = GL_INVALID_INDEX;

@@ -492,6 +492,13 @@ class Context final : public ValidationContext
     void stencilThenCoverFillPath(GLuint path, GLenum fillMode, GLuint mask, GLenum coverMode);
     void stencilThenCoverStrokePath(GLuint path, GLint reference, GLuint mask, GLenum coverMode);
 
+    void BindFragmentInputLocation(GLuint program, GLint location, const GLchar *name);
+    void ProgramPathFragmentInputGen(GLuint program,
+                                     GLint location,
+                                     GLenum genMode,
+                                     GLint components,
+                                     const GLfloat *coeffs);
+
     void handleError(const Error &error) override;
 
     GLenum getError();
