@@ -491,6 +491,60 @@ class Context final : public ValidationContext
     void coverStrokePath(GLuint path, GLenum coverMode);
     void stencilThenCoverFillPath(GLuint path, GLenum fillMode, GLuint mask, GLenum coverMode);
     void stencilThenCoverStrokePath(GLuint path, GLint reference, GLuint mask, GLenum coverMode);
+    void coverFillPathInstanced(GLsizei numPaths,
+                                GLenum pathNameType,
+                                const void *paths,
+                                GLuint pathBase,
+                                GLenum coverMode,
+                                GLenum transformType,
+                                const GLfloat *transformValues);
+    void coverStrokePathInstanced(GLsizei numPaths,
+                                  GLenum pathNameType,
+                                  const void *paths,
+                                  GLuint pathBase,
+                                  GLenum coverMode,
+                                  GLenum transformType,
+                                  const GLfloat *transformValues);
+    void stencilFillPathInstanced(GLsizei numPaths,
+                                  GLenum pathNameType,
+                                  const void *paths,
+                                  GLuint pathBAse,
+                                  GLenum fillMode,
+                                  GLuint mask,
+                                  GLenum transformType,
+                                  const GLfloat *transformValues);
+    void stencilStrokePathInstanced(GLsizei numPaths,
+                                    GLenum pathNameType,
+                                    const void *paths,
+                                    GLuint pathBase,
+                                    GLint reference,
+                                    GLuint mask,
+                                    GLenum transformType,
+                                    const GLfloat *transformValues);
+    void stencilThenCoverFillPathInstanced(GLsizei numPaths,
+                                           GLenum pathNameType,
+                                           const void *paths,
+                                           GLuint pathBase,
+                                           GLenum fillMode,
+                                           GLuint mask,
+                                           GLenum coverMode,
+                                           GLenum transformType,
+                                           const GLfloat *transformValues);
+    void stencilThenCoverStrokePathInstanced(GLsizei numPaths,
+                                             GLenum pathNameType,
+                                             const void *paths,
+                                             GLuint pathBase,
+                                             GLint reference,
+                                             GLuint mask,
+                                             GLenum coverMode,
+                                             GLenum transformType,
+                                             const GLfloat *transformValues);
+    void bindFragmentInputLocation(GLuint program, GLint location, const GLchar *name);
+    void programPathFragmentInputGen(GLuint program,
+                                     GLint location,
+                                     GLenum genMode,
+                                     GLint components,
+                                     const GLfloat *coeffs);
 
     void handleError(const Error &error) override;
 
