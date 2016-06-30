@@ -1610,3 +1610,32 @@ TEST_F(MalformedShaderTest, CompoundMultiplyMatrixValidNonSquareDimensions)
         FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
     }
 }
+
+// causes assert: ../../third_party/angle/src/compiler/translator/ConstantUnion.h:219:
+// TConstantUnion TConstantUnion::operator*(const TConstantUnion &) const: Assertion `type ==
+// constant.type' failed.
+TEST_F(MalformedShaderTest, Assert1)
+{
+    const std::string &shaderString =
+        "void main() {\n"
+        "	vec2(0).qq * a(b);\n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// causes assert: ../../third_party/angle/src/compiler/translator/ParseContext.cpp:1902: void
+// TParseContext::parseGlobalLayoutQualifier(const TPublicType &): Assertion
+// `!layoutQualifier.isEmpty()' failed.
+TEST_F(MalformedShaderTest, Assert2)
+{
+    const std::string &shaderString =
+        "#define Def; highp\n"
+        "uniform Def vec2 a;\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
