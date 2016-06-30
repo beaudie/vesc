@@ -462,6 +462,9 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     map.insert(InternalFormatInfoPair(GL_BGRA4_ANGLEX,      RGBAFormat( 4,  4,  4,  4, 0, GL_BGRA_EXT,     GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT, GL_UNSIGNED_NORMALIZED, false, RequireExt<&Extensions::textureFormatBGRA8888>, RequireExt<&Extensions::textureFormatBGRA8888>, AlwaysSupported)));
     map.insert(InternalFormatInfoPair(GL_BGR5_A1_ANGLEX,    RGBAFormat( 5,  5,  5,  1, 0, GL_BGRA_EXT,     GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT, GL_UNSIGNED_NORMALIZED, false, RequireExt<&Extensions::textureFormatBGRA8888>, RequireExt<&Extensions::textureFormatBGRA8888>, AlwaysSupported)));
 
+    // Special format which is not really supported, so always false for all supports.
+    map.insert(InternalFormatInfoPair(GL_BGR565_ANGLEX,     RGBAFormat( 5,  6,  5,  1, 0, GL_BGRA_EXT,     GL_UNSIGNED_SHORT_5_6_5,           GL_UNSIGNED_NORMALIZED, false, NeverSupported, NeverSupported, NeverSupported)));
+
     // Floating point renderability and filtering is provided by OES_texture_float and OES_texture_half_float
     //                               | Internal format     |          | D |S | Format             | Type                                   | Comp   | SRGB |  Texture supported | Renderable                  | Filterable                                    |
     //                               |                     |          |   |  |                    |                                        | type   |      |                    |                             |                                               |
@@ -681,7 +684,7 @@ const Type &GetTypeInfo(GLenum type)
 const InternalFormat &GetInternalFormatInfo(GLenum internalFormat)
 {
     const InternalFormatInfoMap &formatMap = GetInternalFormatMap();
-    InternalFormatInfoMap::const_iterator iter = formatMap.find(internalFormat);
+    auto iter                              = formatMap.find(internalFormat);
     if (iter != formatMap.end())
     {
         return iter->second;
@@ -689,6 +692,7 @@ const InternalFormat &GetInternalFormatInfo(GLenum internalFormat)
     else
     {
         static const InternalFormat defaultInternalFormat;
+        UNREACHABLE();
         return defaultInternalFormat;
     }
 }
