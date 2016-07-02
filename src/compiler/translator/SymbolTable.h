@@ -469,9 +469,6 @@ class TSymbolTable : angle::NonCopyable
               mInvariantVaryings.count(originalName) > 0);
     }
 
-    void setGlobalInvariant() { mGlobalInvariant = true; }
-    bool getGlobalInvariant() const { return mGlobalInvariant; }
-
     static int nextUniqueId()
     {
         return ++uniqueIdCounter;
@@ -504,6 +501,26 @@ class TSymbolTable : angle::NonCopyable
     bool mGlobalInvariant;
 
     static int uniqueIdCounter;
+
+    friend class TScopedGlobalInvariant;
+};
+
+// Helps maintain the state for the global invariant pragma.
+class TScopedGlobalInvariant
+{
+  public:
+    TScopedGlobalInvariant(TSymbolTable* table, bool value) : mTable(table)
+    {
+        mTable->mGlobalInvariant = value;
+    }
+
+    ~TScopedGlobalInvariant()
+    {
+        mTable->mGlobalInvariant = false;
+    }
+
+  private:
+    TSymbolTable* mTable;
 };
 
 #endif // COMPILER_TRANSLATOR_SYMBOLTABLE_H_
