@@ -246,10 +246,16 @@ TIntermNode *TCompiler::compileTreeImpl(const char *const shaderStrings[],
     if (success)
     {
         mPragma = parseContext.pragma();
-        if (mPragma.stdgl.invariantAll)
-        {
-            symbolTable.setGlobalInvariant();
+        // For the time being, it's necessary to ignore the STDGL
+        // invariant(all) pragma in ESSL 1.00 fragment shaders for
+        // compatibility reasons. See
+        // https://github.com/KhronosGroup/WebGL/pull/1420 for more
+        // discussion.
+        if (shaderVersion == 100 && shaderType == GL_FRAGMENT_SHADER) {
+          mPragma.stdgl.invariantAll = false;
         }
+
+        symbolTable.setGlobalInvariant(mPragma.stdgl.invariantAll);
 
         root = parseContext.getTreeRoot();
         root = intermediate.postProcess(root);
