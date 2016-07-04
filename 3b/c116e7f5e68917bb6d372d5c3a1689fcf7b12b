@@ -1,0 +1,7 @@
+Code-Review+2: Jamie Madill <jmadill@chromium.org>
+Commit-Queue+2: Corentin Wallez <cwallez@chromium.org>
+Submitted-by: Commit Bot <commit-bot@chromium.org>
+Submitted-at: Mon, 04 Jul 2016 18:28:28 +0000
+Reviewed-on: https://chromium-review.googlesource.com/358168
+Project: angle/angle
+Branch: refs/heads/master
