@@ -29,6 +29,8 @@ class TOutputGLSLBase : public TIntermTraverser
         return mOutput;
     }
 
+    static const char *getBuiltInTypeName(const TType &type);
+
   protected:
     TInfoSinkBase &objSink() { return mObjSink; }
     void writeTriplet(Visit visit, const char *preStr, const char *inStr, const char *postStr);
@@ -37,7 +39,7 @@ class TOutputGLSLBase : public TIntermTraverser
     virtual bool writeVariablePrecision(TPrecision precision) = 0;
     void writeFunctionParameters(const TIntermSequence &args);
     const TConstantUnion *writeConstantUnion(const TType &type, const TConstantUnion *pConstUnion);
-    void writeConstructorTriplet(Visit visit, const TType &type, const char *constructorBaseType);
+    void writeConstructorTriplet(Visit visit, const TType &type);
     TString getTypeName(const TType &type);
 
     void visitSymbol(TIntermSymbol *node) override;
