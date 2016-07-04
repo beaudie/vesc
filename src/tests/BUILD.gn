@@ -98,6 +98,10 @@ if (is_win || is_linux || is_mac || is_android) {
       "//third_party/angle:preprocessor",
       "//third_party/angle:translator_static",
     ]
+
+    cflags -= [
+      "/wd4244",  # Conversion: possible loss of data.
+    ]
   }
 }
 
