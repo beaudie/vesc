@@ -45,6 +45,11 @@ class DisplayD3D : public DisplayImpl
                            egl::ImageSibling *buffer,
                            const egl::AttributeMap &attribs) override;
 
+    egl::ErrorOrResult<ClientBufferSiblingImpl *> createImageClientBuffer(
+        EGLenum target,
+        EGLClientBuffer buffer,
+        const egl::AttributeMap &attribs) override;
+
     ContextImpl *createContext(const gl::ContextState &state) override;
 
     StreamProducerImpl *createStreamProducerD3DTextureNV12(

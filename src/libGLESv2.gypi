@@ -205,6 +205,8 @@
         [
             'libANGLE/renderer/d3d/BufferD3D.cpp',
             'libANGLE/renderer/d3d/BufferD3D.h',
+            'libANGLE/renderer/d3d/ClientBufferTextureD3D.cpp',
+            'libANGLE/renderer/d3d/ClientBufferTextureD3D.h',
             'libANGLE/renderer/d3d/CompilerD3D.cpp',
             'libANGLE/renderer/d3d/CompilerD3D.h',
             'libANGLE/renderer/d3d/DeviceD3D.cpp',

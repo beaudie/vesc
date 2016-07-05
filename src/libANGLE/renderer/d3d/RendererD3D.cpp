@@ -300,6 +300,15 @@ std::string RendererD3D::getVendorString() const
     return std::string("");
 }
 
+egl::ErrorOrResult<ClientBufferSiblingD3D *> RendererD3D::createClientBufferSiblingD3D(
+    EGLenum target,
+    EGLClientBuffer buffer,
+    const egl::AttributeMap &attribs)
+{
+    UNREACHABLE();
+    return egl::Error(EGL_BAD_DISPLAY);
+}
+
 void RendererD3D::setGPUDisjoint()
 {
     mDisjoint = true;

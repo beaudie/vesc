@@ -495,6 +495,9 @@ struct DisplayExtensions
     // EGL_KHR_gl_renderbuffer_image
     bool glRenderbufferImage;
 
+    // EGL_ANGLE_d3d_texture_2D_image
+    bool d3dTexture2DImage;
+
     // EGL_KHR_get_all_proc_addresses
     bool getAllProcAddresses;
 

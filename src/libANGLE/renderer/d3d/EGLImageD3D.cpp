@@ -58,6 +58,13 @@ EGLImageD3D::EGLImageD3D(RendererD3D *renderer,
         mAttachmentTarget =
             gl::FramebufferAttachment::Target(GL_NONE, gl::ImageIndex::MakeInvalid());
     }
+    else if (egl::IsClientBufferTarget(target))
+    {
+        mAttachmentBuffer =
+            GetImplAs<ClientBufferSiblingD3D>(GetAs<egl::ClientBufferSibling>(buffer));
+        mAttachmentTarget =
+            gl::FramebufferAttachment::Target(GL_NONE, gl::ImageIndex::MakeInvalid());
+    }
     else
     {
         UNREACHABLE();

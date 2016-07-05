@@ -39,6 +39,7 @@ namespace rx
 class ContextImpl;
 struct D3DUniform;
 struct D3DVarying;
+class ClientBufferSiblingD3D;
 class DeviceD3D;
 class EGLImageD3D;
 class FramebufferImpl;
@@ -131,6 +132,11 @@ class RendererD3D : public BufferFactoryD3D
                                           GLenum backBufferFormat,
                                           GLenum depthBufferFormat,
                                           EGLint orientation) = 0;
+
+    virtual egl::ErrorOrResult<ClientBufferSiblingD3D *> createClientBufferSiblingD3D(
+        EGLenum target,
+        EGLClientBuffer buffer,
+        const egl::AttributeMap &attribs);
 
     virtual gl::Error setSamplerState(gl::SamplerType type, int index, gl::Texture *texture, const gl::SamplerState &sampler) = 0;
     virtual gl::Error setTexture(gl::SamplerType type, int index, gl::Texture *texture) = 0;

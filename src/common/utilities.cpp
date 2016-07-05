@@ -715,6 +715,19 @@ bool IsRenderbufferTarget(EGLenum target)
 {
     return target == EGL_GL_RENDERBUFFER_KHR;
 }
+
+bool IsClientBufferTarget(EGLenum target)
+{
+    switch (target)
+    {
+        case EGL_D3D_TEXTURE_2D_KHR:
+            return true;
+
+        default:
+            return false;
+    }
+}
+
 }  // namespace egl
 
 namespace egl_gl

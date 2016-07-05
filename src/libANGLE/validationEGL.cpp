@@ -810,6 +810,17 @@ Error ValidateCreateImageKHR(const Display *display,
                 }
                 break;
 
+            case EGL_D3D_TEXTURE_LEVEL_ANGLE:
+                if (!displayExtensions.d3dTexture2DImage)
+                {
+                    return Error(EGL_BAD_PARAMETER, "EGL_D3D_TEXTURE_LEVEL_ANGLE cannot be used without EGL_ANGLE_d3d_texture_2D_image support.");
+                }
+                if (target != EGL_D3D_TEXTURE_2D_ANGLE)
+                {
+                    return Error(EGL_BAD_PARAMETER, "EGL_D3D_TEXTURE_LEVEL_ANGLE can only be used on D3D texture targets.");
+                }
+                break;
+
             default:
                 return Error(EGL_BAD_PARAMETER, "invalid attribute: 0x%X", attribute);
         }
@@ -984,6 +995,17 @@ Error ValidateCreateImageKHR(const Display *display,
             {
                 return Error(EGL_BAD_PARAMETER, "target renderbuffer cannot be multisampled.");
             }
+        }
+        break;
+
+        case EGL_D3D_TEXTURE_2D_ANGLE:
+        {
+            if (!displayExtensions.d3dTexture2DImage)
+            {
+                return Error(EGL_BAD_PARAMETER, "EGL_ANGLE_d3d_texture_2D_image not supported.");
+            }
+
+            // Can't validate the D3D objects until later
         }
         break;
 

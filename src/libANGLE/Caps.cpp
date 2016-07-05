@@ -669,6 +669,7 @@ DisplayExtensions::DisplayExtensions()
       glTextureCubemapImage(false),
       glTexture3DImage(false),
       glRenderbufferImage(false),
+      d3dTexture2DImage(false),
       getAllProcAddresses(false),
       flexibleSurfaceCompatibility(false),
       directComposition(false),
@@ -703,6 +704,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_KHR_gl_texture_2D_image",                   glTexture2DImage,               &extensionStrings);
     InsertExtensionString("EGL_KHR_gl_texture_cubemap_image",              glTextureCubemapImage,          &extensionStrings);
     InsertExtensionString("EGL_KHR_gl_texture_3D_image",                   glTexture3DImage,               &extensionStrings);
+    InsertExtensionString("EGL_ANGLE_d3d_texture_2D_image",                d3dTexture2DImage,              &extensionStrings);
     InsertExtensionString("EGL_KHR_gl_renderbuffer_image",                 glRenderbufferImage,            &extensionStrings);
     InsertExtensionString("EGL_KHR_get_all_proc_addresses",                getAllProcAddresses,            &extensionStrings);
     InsertExtensionString("EGL_KHR_stream",                                stream,                         &extensionStrings);
