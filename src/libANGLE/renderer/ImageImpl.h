@@ -19,6 +19,18 @@ class ImageSibling;
 
 namespace rx
 {
+
+class ClientBufferSiblingImpl : angle::NonCopyable
+{
+  public:
+    virtual ~ClientBufferSiblingImpl() {}
+
+    virtual GLenum getInternalFormat() const = 0;
+    virtual size_t getWidth() const          = 0;
+    virtual size_t getHeight() const         = 0;
+    virtual size_t getSamples() const        = 0;
+};
+
 class ImageImpl : angle::NonCopyable
 {
   public:

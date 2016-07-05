@@ -29,6 +29,7 @@ class ContextState;
 namespace rx
 {
 class ContextImpl;
+class ClientBufferSiblingImpl;
 class ImageImpl;
 class SurfaceImpl;
 
@@ -57,6 +58,13 @@ class EGLImplFactory : angle::NonCopyable
     virtual ImageImpl *createImage(EGLenum target,
                                    egl::ImageSibling *buffer,
                                    const egl::AttributeMap &attribs) = 0;
+    virtual ClientBufferSiblingImpl *createImageClientBuffer(EGLenum target,
+                                                             EGLClientBuffer buffer,
+                                                             const egl::AttributeMap &attribs)
+    {
+        UNREACHABLE();
+        return nullptr;
+    }
 
     virtual ContextImpl *createContext(const gl::ContextState &state) = 0;
 

@@ -715,6 +715,13 @@ bool IsRenderbufferTarget(EGLenum target)
 {
     return target == EGL_GL_RENDERBUFFER_KHR;
 }
+
+bool IsClientBufferTarget(EGLenum target)
+{
+    // TODO
+    return false;
+}
+
 }  // namespace egl
 
 namespace egl_gl

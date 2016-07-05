@@ -79,6 +79,45 @@ void ImageSibling::removeImageSource(egl::Image *imageSource)
     mSourcesOf.erase(imageSource);
 }
 
+ClientBufferSibling::ClientBufferSibling(EGLClientBuffer buffer) : ImageSibling(0), mBuffer(buffer)
+{
+}
+
+GLenum ClientBufferSibling::getInternalFormat() const
+{
+    return mImplementation->getInternalFormat();
+}
+
+size_t ClientBufferSibling::getWidth() const
+{
+    return mImplementation->getWidth();
+}
+
+size_t ClientBufferSibling::getHeight() const
+{
+    return mImplementation->getHeight();
+}
+
+size_t ClientBufferSibling::getSamples() const
+{
+    return mImplementation->getSamples();
+}
+
+EGLClientBuffer ClientBufferSibling::getBuffer() const
+{
+    return mBuffer;
+}
+
+rx::ClientBufferSiblingImpl *ClientBufferSibling::getImplementation()
+{
+    return mImplementation;
+}
+
+const rx::ClientBufferSiblingImpl *ClientBufferSibling::getImplementation() const
+{
+    return mImplementation;
+}
+
 Image::Image(rx::ImageImpl *impl, EGLenum target, ImageSibling *buffer, const AttributeMap &attribs)
     : RefCountObject(0),
       mImplementation(impl),
@@ -112,6 +151,14 @@ Image::Image(rx::ImageImpl *impl, EGLenum target, ImageSibling *buffer, const At
         mWidth                         = renderbuffer->getWidth();
         mHeight                        = renderbuffer->getHeight();
         mSamples                       = renderbuffer->getSamples();
+    }
+    else if (IsClientBufferTarget(target))
+    {
+        ClientBufferSibling *clientBuffer = rx::GetAs<ClientBufferSibling>(mSource.get());
+        mInternalFormat                   = clientBuffer->getInternalFormat();
+        mWidth                            = clientBuffer->getWidth();
+        mHeight                           = clientBuffer->getHeight();
+        mSamples                          = clientBuffer->getSamples();
     }
     else
     {

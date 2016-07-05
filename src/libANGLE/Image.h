@@ -18,6 +18,7 @@
 
 namespace rx
 {
+class ClientBufferSiblingImpl;
 class ImageImpl;
 }
 
@@ -49,6 +50,27 @@ class ImageSibling : public RefCountObject
 
     std::set<Image *> mSourcesOf;
     BindingPointer<Image> mTargetOf;
+};
+
+class ClientBufferSibling : public ImageSibling
+{
+  public:
+    ClientBufferSibling(EGLClientBuffer buffer);
+
+    GLenum getInternalFormat() const;
+    size_t getWidth() const;
+    size_t getHeight() const;
+    size_t getSamples() const;
+
+    EGLClientBuffer getBuffer() const;
+
+    rx::ClientBufferSiblingImpl *getImplementation();
+    const rx::ClientBufferSiblingImpl *getImplementation() const;
+
+  private:
+    rx::ClientBufferSiblingImpl *mImplementation;
+
+    EGLClientBuffer mBuffer;
 };
 
 class Image final : public RefCountObject
