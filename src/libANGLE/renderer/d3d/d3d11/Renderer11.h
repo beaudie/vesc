@@ -126,6 +126,11 @@ class Renderer11 : public RendererD3D
                                   GLenum depthBufferFormat,
                                   EGLint orientation) override;
 
+    egl::ErrorOrResult<ClientBufferSiblingD3D *> createClientBufferSiblingD3D(
+        EGLenum target,
+        EGLClientBuffer buffer,
+        const egl::AttributeMap &attribs) override;
+
     virtual gl::Error setSamplerState(gl::SamplerType type, int index, gl::Texture *texture, const gl::SamplerState &sampler);
     virtual gl::Error setTexture(gl::SamplerType type, int index, gl::Texture *texture);
 

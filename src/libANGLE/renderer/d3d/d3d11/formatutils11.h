@@ -17,6 +17,7 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/renderer_utils.h"
 #include "libANGLE/renderer/d3d/formatutilsD3D.h"
+#include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
 
 namespace rx
 {
@@ -30,6 +31,8 @@ typedef bool (*NativeMipmapGenerationSupportFunction)(D3D_FEATURE_LEVEL);
 struct DXGIFormat
 {
     DXGIFormat();
+
+    ANGLEFormat angleFormat;
 
     GLuint redBits;
     GLuint greenBits;

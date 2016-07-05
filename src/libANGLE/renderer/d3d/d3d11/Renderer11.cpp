@@ -23,6 +23,7 @@
 #include "libANGLE/Program.h"
 #include "libANGLE/renderer/renderer_utils.h"
 #include "libANGLE/renderer/d3d/CompilerD3D.h"
+#include "libANGLE/renderer/d3d/ClientBufferTextureD3D.h"
 #include "libANGLE/renderer/d3d/d3d11/Blit11.h"
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Clear11.h"
@@ -1157,6 +1158,115 @@ SwapChainD3D *Renderer11::createSwapChain(NativeWindowD3D *nativeWindow,
 {
     return new SwapChain11(this, GetAs<NativeWindow11>(nativeWindow), shareHandle, backBufferFormat,
                            depthBufferFormat, orientation);
+}
+
+egl::ErrorOrResult<ClientBufferSiblingD3D *> Renderer11::createClientBufferSiblingD3D(
+    EGLenum target,
+    EGLClientBuffer buffer,
+    const egl::AttributeMap &attribs)
+{
+    if (target == EGL_D3D_TEXTURE_2D_KHR)
+    {
+        ASSERT(buffer != nullptr);
+        ID3D11Texture2D *textureD3D = static_cast<ID3D11Texture2D *>(buffer);
+
+        // Check that the texture originated from our device
+        ID3D11Device *device;
+        textureD3D->GetDevice(&device);
+        if (device != mDevice)
+        {
+            return egl::Error(EGL_BAD_PARAMETER, "Texture not created on ANGLE D3D device.");
+        }
+
+        // Get the description and validate it
+        D3D11_TEXTURE2D_DESC desc;
+        textureD3D->GetDesc(&desc);
+        const auto &dxgiFormatInfo = d3d11::GetDXGIFormatInfo(desc.Format);
+        if (dxgiFormatInfo.angleFormat == d3d11::ANGLE_FORMAT_NONE)
+        {
+            return egl::Error(EGL_BAD_PARAMETER, "Texture has unknown or untyped format.");
+        }
+
+        const auto &angleFormatInfo = d3d11::GetANGLEFormatSet(dxgiFormatInfo.angleFormat);
+        ASSERT(angleFormatInfo.texFormat == desc.Format);
+
+        EGLint mipLevel = attribs.getAsInt(EGL_D3D_TEXTURE_LEVEL_KHR, 0);
+        GLsizei width   = std::max(desc.Width >> mipLevel, 1u);
+        GLsizei height  = std::max(desc.Height >> mipLevel, 1u);
+        GLsizei depth   = 1;
+
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+        srvDesc.Format                    = angleFormatInfo.srvFormat;
+        srvDesc.ViewDimension             = D3D_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MostDetailedMip = mipLevel;
+        srvDesc.Texture2D.MipLevels       = 1;
+
+        ID3D11ShaderResourceView *srv = nullptr;
+        HRESULT result = mDevice->CreateShaderResourceView(textureD3D, &srvDesc, &srv);
+        if (FAILED(result))
+        {
+            return egl::Error(EGL_BAD_PARAMETER,
+                              "Failed to create internal texture storage SRV, result: 0x%X.",
+                              result);
+        }
+
+        TextureRenderTarget11 *renderTarget = nullptr;
+
+        if (angleFormatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN)
+        {
+            D3D11_RENDER_TARGET_VIEW_DESC dsvDesc;
+            dsvDesc.Format             = angleFormatInfo.dsvFormat;
+            dsvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+            dsvDesc.Texture2D.MipSlice = mipLevel;
+
+            ID3D11RenderTargetView *rtv = nullptr;
+            result = device->CreateRenderTargetView(textureD3D, &dsvDesc, &rtv);
+            if (FAILED(result))
+            {
+                SafeRelease(srv);
+                return egl::Error(EGL_BAD_PARAMETER,
+                                  "Failed to create internal texture storage RTV, result: 0x%X.",
+                                  result);
+            }
+
+            renderTarget = new TextureRenderTarget11(
+                rtv, textureD3D, srv, srv, angleFormatInfo.glInternalFormat,
+                dxgiFormatInfo.angleFormat, desc.Width >> mipLevel, width, height, depth);
+        }
+        else if (angleFormatInfo.dsvFormat != DXGI_FORMAT_UNKNOWN)
+        {
+            D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+            dsvDesc.Format             = angleFormatInfo.dsvFormat;
+            dsvDesc.ViewDimension      = D3D11_DSV_DIMENSION_TEXTURE2D;
+            dsvDesc.Texture2D.MipSlice = mipLevel;
+            dsvDesc.Flags              = 0;
+
+            ID3D11DepthStencilView *dsv = nullptr;
+            result = device->CreateDepthStencilView(textureD3D, &dsvDesc, &dsv);
+            if (FAILED(result))
+            {
+                SafeRelease(srv);
+                return egl::Error(EGL_BAD_PARAMETER,
+                                  "Failed to create internal texture storage DSV, result: 0x%X.",
+                                  result);
+            }
+            renderTarget = new TextureRenderTarget11(
+                dsv, textureD3D, srv, angleFormatInfo.glInternalFormat, dxgiFormatInfo.angleFormat,
+                desc.Width >> mipLevel, width, height, depth);
+        }
+        else
+        {
+            // Texture format is not renderable.  Can still be wrapped in a TextureRenderTarget11.
+            renderTarget = new TextureRenderTarget11(
+                nullptr, textureD3D, srv, angleFormatInfo.glInternalFormat,
+                dxgiFormatInfo.angleFormat, desc.Width >> mipLevel, width, height, depth);
+        }
+
+        return new ClientBufferTextureD3D(renderTarget);
+    }
+
+    UNREACHABLE();
+    return egl::Error(EGL_BAD_DISPLAY);
 }
 
 void *Renderer11::getD3DDevice()

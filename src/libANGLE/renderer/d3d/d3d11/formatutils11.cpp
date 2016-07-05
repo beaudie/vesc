@@ -238,10 +238,13 @@ static bool RequiresFeatureLevel(D3D_FEATURE_LEVEL featureLevel)
 
 void AddDXGIFormat(DXGIFormatInfoMap *map,
                    DXGI_FORMAT dxgiFormat,
+                   ANGLEFormat angleFormat,
                    GLenum componentType,
                    NativeMipmapGenerationSupportFunction nativeMipmapSupport)
 {
     DXGIFormat info;
+
+    info.angleFormat = angleFormat;
 
     static const ColorFormatInfoMap colorInfoMap = BuildColorFormatInfoMap();
     ColorFormatInfoMap::const_iterator colorInfoIter = colorInfoMap.find(dxgiFormat);
@@ -277,97 +280,97 @@ static DXGIFormatInfoMap BuildDXGIFormatInfoMap()
     DXGIFormatInfoMap map;
 
     // clang-format off
-    //                | DXGI format                         | Component Type        | Color read function              | Native mipmap function
-    AddDXGIFormat(&map, DXGI_FORMAT_UNKNOWN,                  GL_NONE,                NeverSupported);
+    //                | DXGI format                          | ANGLE format                         | Component Type        | Color read function              | Native mipmap function
+    AddDXGIFormat(&map, DXGI_FORMAT_UNKNOWN,                  ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
 
-    AddDXGIFormat(&map, DXGI_FORMAT_A8_UNORM,                 GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
-    AddDXGIFormat(&map, DXGI_FORMAT_R8_UNORM,                 GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16_UNORM,                GL_UNSIGNED_NORMALIZED, NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R8G8_UNORM,               GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_UNORM,             GL_UNSIGNED_NORMALIZED, NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R8G8B8A8_UNORM,           GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_1>);
-    AddDXGIFormat(&map, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,      GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_1>);
-    AddDXGIFormat(&map, DXGI_FORMAT_B8G8R8A8_UNORM,           GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_1>);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_UNORM,       GL_UNSIGNED_NORMALIZED, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_A8_UNORM,                 ANGLE_FORMAT_A8_UNORM,                 GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8_UNORM,                 ANGLE_FORMAT_R8_UNORM,                 GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16_UNORM,                ANGLE_FORMAT_R16_UNORM,                GL_UNSIGNED_NORMALIZED, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8_UNORM,               ANGLE_FORMAT_R8G8_UNORM,               GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_UNORM,             ANGLE_FORMAT_R16G16_UNORM,             GL_UNSIGNED_NORMALIZED, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8B8A8_UNORM,           ANGLE_FORMAT_R8G8B8A8_UNORM,           GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_1>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,      ANGLE_FORMAT_R8G8B8A8_UNORM_SRGB,      GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_1>);
+    AddDXGIFormat(&map, DXGI_FORMAT_B8G8R8A8_UNORM,           ANGLE_FORMAT_B8G8R8A8_UNORM,           GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_1>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_UNORM,       ANGLE_FORMAT_R16G16B16A16_UNORM,       GL_UNSIGNED_NORMALIZED, NeverSupported);
 
-    AddDXGIFormat(&map, DXGI_FORMAT_R8_SNORM,                 GL_SIGNED_NORMALIZED,   RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16_SNORM,                GL_SIGNED_NORMALIZED,   NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R8G8_SNORM,               GL_SIGNED_NORMALIZED,   RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_SNORM,             GL_SIGNED_NORMALIZED,   NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R8G8B8A8_SNORM,           GL_SIGNED_NORMALIZED,   RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_SNORM,       GL_SIGNED_NORMALIZED,   NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8_SNORM,                 ANGLE_FORMAT_R8_SNORM,                 GL_SIGNED_NORMALIZED,   RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16_SNORM,                ANGLE_FORMAT_R16_SNORM,                GL_SIGNED_NORMALIZED,   NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8_SNORM,               ANGLE_FORMAT_R8G8_SNORM,               GL_SIGNED_NORMALIZED,   RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_SNORM,             ANGLE_FORMAT_R16G16_SNORM,             GL_SIGNED_NORMALIZED,   NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8B8A8_SNORM,           ANGLE_FORMAT_R8G8B8A8_SNORM,           GL_SIGNED_NORMALIZED,   RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_SNORM,       ANGLE_FORMAT_R16G16B16A16_SNORM,       GL_SIGNED_NORMALIZED,   NeverSupported);
 
-    AddDXGIFormat(&map, DXGI_FORMAT_R8_UINT,                  GL_UNSIGNED_INT,        NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16_UINT,                 GL_UNSIGNED_INT,        NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32_UINT,                 GL_UNSIGNED_INT,        NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R8G8_UINT,                GL_UNSIGNED_INT,        NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_UINT,              GL_UNSIGNED_INT,        NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G32_UINT,              GL_UNSIGNED_INT,        NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32_UINT,           GL_UNSIGNED_INT,        NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R8G8B8A8_UINT,            GL_UNSIGNED_INT,        NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_UINT,        GL_UNSIGNED_INT,        NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32A32_UINT,        GL_UNSIGNED_INT,        NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8_UINT,                  ANGLE_FORMAT_R8_UINT,                  GL_UNSIGNED_INT,        NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16_UINT,                 ANGLE_FORMAT_R16_UINT,                 GL_UNSIGNED_INT,        NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32_UINT,                 ANGLE_FORMAT_R32_UINT,                 GL_UNSIGNED_INT,        NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8_UINT,                ANGLE_FORMAT_R8G8_UINT,                GL_UNSIGNED_INT,        NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_UINT,              ANGLE_FORMAT_R16G16_UINT,              GL_UNSIGNED_INT,        NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32_UINT,              ANGLE_FORMAT_R32G32_UINT,              GL_UNSIGNED_INT,        NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32_UINT,           ANGLE_FORMAT_NONE,                     GL_UNSIGNED_INT,        NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8B8A8_UINT,            ANGLE_FORMAT_R8G8B8A8_UINT,            GL_UNSIGNED_INT,        NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_UINT,        ANGLE_FORMAT_R16G16B16A16_UINT,        GL_UNSIGNED_INT,        NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32A32_UINT,        ANGLE_FORMAT_R32G32B32A32_UINT,        GL_UNSIGNED_INT,        NeverSupported);
 
-    AddDXGIFormat(&map, DXGI_FORMAT_R8_SINT,                  GL_INT,                 NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16_SINT,                 GL_INT,                 NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32_SINT,                 GL_INT,                 NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R8G8_SINT,                GL_INT,                 NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_SINT,              GL_INT,                 NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G32_SINT,              GL_INT,                 NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32_SINT,           GL_INT,                 NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R8G8B8A8_SINT,            GL_INT,                 NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_SINT,        GL_INT,                 NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32A32_SINT,        GL_INT,                 NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8_SINT,                  ANGLE_FORMAT_R8_SINT,                  GL_INT,                 NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16_SINT,                 ANGLE_FORMAT_R16_SINT,                 GL_INT,                 NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32_SINT,                 ANGLE_FORMAT_R32_SINT,                 GL_INT,                 NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8_SINT,                ANGLE_FORMAT_R8G8_SINT,                GL_INT,                 NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_SINT,              ANGLE_FORMAT_R16G16_SINT,              GL_INT,                 NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32_SINT,              ANGLE_FORMAT_R32G32_SINT,              GL_INT,                 NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32_SINT,           ANGLE_FORMAT_NONE,                     GL_INT,                 NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8B8A8_SINT,            ANGLE_FORMAT_R8G8B8A8_SINT,            GL_INT,                 NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_SINT,        ANGLE_FORMAT_R16G16B16A16_SINT,        GL_INT,                 NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32A32_SINT,        ANGLE_FORMAT_R32G32B32A32_SINT,        GL_INT,                 NeverSupported);
 
-    AddDXGIFormat(&map, DXGI_FORMAT_R10G10B10A2_TYPELESS,     GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R10G10B10A2_UNORM,        GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
-    AddDXGIFormat(&map, DXGI_FORMAT_R10G10B10A2_UINT,         GL_UNSIGNED_INT,        NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R10G10B10A2_TYPELESS,     ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R10G10B10A2_UNORM,        ANGLE_FORMAT_R10G10B10A2_UNORM,        GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R10G10B10A2_UINT,         ANGLE_FORMAT_R10G10B10A2_UINT,         GL_UNSIGNED_INT,        NeverSupported);
 
-    AddDXGIFormat(&map, DXGI_FORMAT_R16_FLOAT,                GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_FLOAT,             GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_2>);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_FLOAT,       GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_2>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16_FLOAT,                ANGLE_FORMAT_R16_FLOAT,                GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_FLOAT,             ANGLE_FORMAT_R16G16_FLOAT,             GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_2>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_FLOAT,       ANGLE_FORMAT_R16G16B16A16_FLOAT,       GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_2>);
 
-    AddDXGIFormat(&map, DXGI_FORMAT_R32_FLOAT,                GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_2>);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G32_FLOAT,             GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32_FLOAT,          GL_FLOAT,               NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32A32_FLOAT,       GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_3>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32_FLOAT,                ANGLE_FORMAT_R32_FLOAT,                GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_2>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32_FLOAT,             ANGLE_FORMAT_R32G32_FLOAT,             GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32_FLOAT,          ANGLE_FORMAT_NONE,                     GL_FLOAT,               NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32A32_FLOAT,       ANGLE_FORMAT_R32G32B32A32_FLOAT,       GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_3>);
 
-    AddDXGIFormat(&map, DXGI_FORMAT_R9G9B9E5_SHAREDEXP,       GL_FLOAT,               NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R11G11B10_FLOAT,          GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
+    AddDXGIFormat(&map, DXGI_FORMAT_R9G9B9E5_SHAREDEXP,       ANGLE_FORMAT_R9G9B9E5_SHAREDEXP,       GL_FLOAT,               NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R11G11B10_FLOAT,          ANGLE_FORMAT_R11G11B10_FLOAT,          GL_FLOAT,               RequiresFeatureLevel<D3D_FEATURE_LEVEL_10_0>);
 
-    AddDXGIFormat(&map, DXGI_FORMAT_R8_TYPELESS,              GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16_TYPELESS,             GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32_TYPELESS,             GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R8G8_TYPELESS,            GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_TYPELESS,          GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G32_TYPELESS,          GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R8G8_TYPELESS,            GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_TYPELESS,          GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G32_TYPELESS,          GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32_TYPELESS,       GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R8G8B8A8_TYPELESS,        GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_TYPELESS,    GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32A32_TYPELESS,    GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8_TYPELESS,              ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16_TYPELESS,             ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32_TYPELESS,             ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8_TYPELESS,            ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_TYPELESS,          ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32_TYPELESS,          ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8_TYPELESS,            ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16_TYPELESS,          ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32_TYPELESS,          ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32_TYPELESS,       ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R8G8B8A8_TYPELESS,        ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R16G16B16A16_TYPELESS,    ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G32B32A32_TYPELESS,    ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
 
-    AddDXGIFormat(&map, DXGI_FORMAT_R24G8_TYPELESS,           GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R24_UNORM_X8_TYPELESS,    GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32G8X24_TYPELESS,        GL_NONE,                NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS, GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R24G8_TYPELESS,           ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R24_UNORM_X8_TYPELESS,    ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32G8X24_TYPELESS,        ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS, ANGLE_FORMAT_NONE,                     GL_NONE,                NeverSupported);
 
-    AddDXGIFormat(&map, DXGI_FORMAT_D16_UNORM,                GL_UNSIGNED_NORMALIZED, NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_D24_UNORM_S8_UINT,        GL_UNSIGNED_INT,        NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_D32_FLOAT_S8X24_UINT,     GL_UNSIGNED_INT,        NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_D32_FLOAT,                GL_FLOAT,               NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_D16_UNORM,                ANGLE_FORMAT_D16_UNORM_FL10,           GL_UNSIGNED_NORMALIZED, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_D24_UNORM_S8_UINT,        ANGLE_FORMAT_D24_UNORM_S8_UINT_FL10,   GL_UNSIGNED_INT,        NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_D32_FLOAT_S8X24_UINT,     ANGLE_FORMAT_D32_FLOAT_S8X24_UINT_FL10,GL_UNSIGNED_INT,        NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_D32_FLOAT,                ANGLE_FORMAT_D32_FLOAT,                GL_FLOAT,               NeverSupported);
 
-    AddDXGIFormat(&map, DXGI_FORMAT_BC1_UNORM,                GL_UNSIGNED_NORMALIZED, NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_BC2_UNORM,                GL_UNSIGNED_NORMALIZED, NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_BC3_UNORM,                GL_UNSIGNED_NORMALIZED, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_BC1_UNORM,                ANGLE_FORMAT_BC1_UNORM,                GL_UNSIGNED_NORMALIZED, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_BC2_UNORM,                ANGLE_FORMAT_BC2_UNORM,                GL_UNSIGNED_NORMALIZED, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_BC3_UNORM,                ANGLE_FORMAT_BC3_UNORM,                GL_UNSIGNED_NORMALIZED, NeverSupported);
 
     // B5G6R5 in D3D11 is treated the same as R5G6B5 in D3D9, so reuse the R5G6B5 functions used by the D3D9 renderer.
     // The same applies to B4G4R4A4 and B5G5R5A1 with A4R4G4B4 and A1R5G5B5 respectively.
-    AddDXGIFormat(&map, DXGI_FORMAT_B5G6R5_UNORM,             GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_1>);
-    AddDXGIFormat(&map, DXGI_FORMAT_B4G4R4A4_UNORM,           GL_UNSIGNED_NORMALIZED, NeverSupported);
-    AddDXGIFormat(&map, DXGI_FORMAT_B5G5R5A1_UNORM,           GL_UNSIGNED_NORMALIZED, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_B5G6R5_UNORM,             ANGLE_FORMAT_B5G6R5_UNORM,             GL_UNSIGNED_NORMALIZED, RequiresFeatureLevel<D3D_FEATURE_LEVEL_9_1>);
+    AddDXGIFormat(&map, DXGI_FORMAT_B4G4R4A4_UNORM,           ANGLE_FORMAT_B4G4R4A4_UNORM,           GL_UNSIGNED_NORMALIZED, NeverSupported);
+    AddDXGIFormat(&map, DXGI_FORMAT_B5G5R5A1_UNORM,           ANGLE_FORMAT_B5G5R5A1_UNORM,           GL_UNSIGNED_NORMALIZED, NeverSupported);
     // clang-format on
 
     return map;

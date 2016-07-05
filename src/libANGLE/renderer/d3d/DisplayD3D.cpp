@@ -204,6 +204,14 @@ ImageImpl *DisplayD3D::createImage(EGLenum target,
     return new EGLImageD3D(mRenderer, target, buffer, attribs);
 }
 
+egl::ErrorOrResult<ClientBufferSiblingImpl *> DisplayD3D::createImageClientBuffer(
+    EGLenum target,
+    EGLClientBuffer buffer,
+    const egl::AttributeMap &attribs)
+{
+    return egl::Error(EGL_BAD_DISPLAY);
+}
+
 egl::Error DisplayD3D::getDevice(DeviceImpl **device)
 {
     return mRenderer->getEGLDevice(device);

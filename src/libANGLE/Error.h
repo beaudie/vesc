@@ -15,6 +15,29 @@
 #include <string>
 #include <memory>
 
+namespace angle
+{
+template <typename ErrorType, int successValue, typename T>
+class ErrorOrResult
+{
+  public:
+    ErrorOrResult(const ErrorType &error) : mError(error) {}
+    ErrorOrResult(ErrorType &&error) : mError(std::move(error)) {}
+
+    ErrorOrResult(T &&result) : mError(ErrorType(successValue)), mResult(std::forward<T>(result)) {}
+
+    ErrorOrResult(const T &result) : mError(ErrorType(successValue)), mResult(result) {}
+
+    bool isError() const { return mError.isError(); }
+    const ErrorType &getError() const { return mError; }
+    T &&getResult() { return std::move(mResult); }
+
+  private:
+    ErrorType mError;
+    T mResult;
+};
+}
+
 namespace gl
 {
 
@@ -48,36 +71,13 @@ class Error final
     mutable std::unique_ptr<std::string> mMessage;
 };
 
-template <typename T>
-class ErrorOrResult
-{
-  public:
-    ErrorOrResult(const gl::Error &error) : mError(error) {}
-    ErrorOrResult(gl::Error &&error) : mError(std::move(error)) {}
-
-    ErrorOrResult(T &&result)
-        : mError(GL_NO_ERROR), mResult(std::forward<T>(result))
-    {
-    }
-
-    ErrorOrResult(const T &result)
-        : mError(GL_NO_ERROR), mResult(result)
-    {
-    }
-
-    bool isError() const { return mError.isError(); }
-    const gl::Error &getError() const { return mError; }
-    T &&getResult() { return std::move(mResult); }
-
-  private:
-    Error mError;
-    T mResult;
-};
-
 inline Error NoError()
 {
     return Error(GL_NO_ERROR);
 }
+
+template <typename T>
+using ErrorOrResult = angle::ErrorOrResult<Error, GL_NO_ERROR, T>;
 
 }  // namespace gl
 
@@ -109,6 +109,9 @@ class Error final
     EGLint mID;
     mutable std::unique_ptr<std::string> mMessage;
 };
+
+template <typename T>
+using ErrorOrResult = angle::ErrorOrResult<Error, EGL_SUCCESS, T>;
 
 }  // namespace egl
 

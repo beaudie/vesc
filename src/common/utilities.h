@@ -81,6 +81,7 @@ size_t CubeMapTextureTargetToLayerIndex(EGLenum target);
 EGLenum LayerIndexToCubeMapTextureTarget(size_t index);
 bool IsTextureTarget(EGLenum target);
 bool IsRenderbufferTarget(EGLenum target);
+bool IsClientBufferTarget(EGLenum target);
 }
 
 namespace egl_gl

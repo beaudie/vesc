@@ -10,6 +10,7 @@
 #define LIBANGLE_RENDERER_D3D_EGLIMAGED3D_H_
 
 #include "libANGLE/FramebufferAttachment.h"
+#include "libANGLE/renderer/FramebufferAttachmentObjectImpl.h"
 #include "libANGLE/renderer/ImageImpl.h"
 
 namespace egl
@@ -23,6 +24,13 @@ class TextureD3D;
 class RenderbufferD3D;
 class RendererD3D;
 class RenderTargetD3D;
+
+class ClientBufferSiblingD3D : public FramebufferAttachmentObjectImpl,
+                               public ClientBufferSiblingImpl
+{
+  public:
+    virtual ~ClientBufferSiblingD3D() {}
+};
 
 class EGLImageD3D final : public ImageImpl
 {

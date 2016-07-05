@@ -184,6 +184,12 @@ EGLAPI EGLBoolean EGLAPIENTRY eglGetSyncAttribKHR (EGLDisplay dpy, EGLSyncKHR sy
 #define EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_KHR 0x30B8
 #endif /* EGL_KHR_gl_texture_cubemap_image */
 
+#ifndef EGL_ANGLE_d3d_texture_2D_image
+#define EGL_ANGLE_d3d_texture_2D_image 1
+#define EGL_D3D_TEXTURE_2D_KHR 0x3AAC
+#define EGL_D3D_TEXTURE_LEVEL_KHR 0x3AAD
+#endif /* EGL_ANGLE_d3d_texture_2D_image */
+
 #ifndef EGL_KHR_image
 #define EGL_KHR_image 1
 typedef void *EGLImageKHR;
