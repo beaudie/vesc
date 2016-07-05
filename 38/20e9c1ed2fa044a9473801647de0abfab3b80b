@@ -1,0 +1,7 @@
+Code-Review+2: Jamie Madill <jmadill@chromium.org>
+Commit-Queue+2: Olli Etuaho <oetuaho@nvidia.com>
+Submitted-by: Commit Bot <commit-bot@chromium.org>
+Submitted-at: Tue, 05 Jul 2016 13:31:26 +0000
+Reviewed-on: https://chromium-review.googlesource.com/358470
+Project: angle/angle
+Branch: refs/heads/master
