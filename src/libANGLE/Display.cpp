@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <iterator>
 #include <map>
+#include <memory>
 #include <sstream>
 #include <vector>
 
@@ -57,10 +58,8 @@
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #endif
 
-namespace egl
-{
-
-namespace
+// The log messages prepend the class name, so make this part of the angle namespace.
+namespace angle
 {
 
 class DefaultPlatform : public angle::Platform
@@ -68,20 +67,49 @@ class DefaultPlatform : public angle::Platform
 public:
     DefaultPlatform() {}
     ~DefaultPlatform() override {}
+
+    void logError(const char *errorMessage) override;
+    void logWarning(const char *warningMessage) override;
+    void logInfo(const char *infoMessage) override;
 };
 
-DefaultPlatform *defaultPlatform = nullptr;
+std::unique_ptr<DefaultPlatform> g_defaultPlatform = nullptr;
+
+void DefaultPlatform::logError(const char *errorMessage)
+{
+    ERR("%s", errorMessage);
+}
+
+void DefaultPlatform::logWarning(const char *warningMessage)
+{
+    // TODO(jmadill): Fix this
+    ERR("%s", warningMessage);
+}
+
+void DefaultPlatform::logInfo(const char *infoMessage)
+{
+    // Uncomment this if you want Vulkan spam.
+    // ERR("%s", infoMessage);
+}
+
+}  // namespace angle
+
+namespace egl
+{
+
+namespace
+{
 
 void InitDefaultPlatformImpl()
 {
     if (ANGLEPlatformCurrent() == nullptr)
     {
-        if (defaultPlatform == nullptr)
+        if (!angle::g_defaultPlatform)
         {
-            defaultPlatform = new DefaultPlatform();
+            angle::g_defaultPlatform.reset(new angle::DefaultPlatform());
         }
 
-        ANGLEPlatformInitialize(defaultPlatform);
+        ANGLEPlatformInitialize(angle::g_defaultPlatform.get());
     }
 }
 
