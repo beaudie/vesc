@@ -50,7 +50,8 @@
     [
         'compiler.gypi',
         'libGLESv2.gypi',
-        'libEGL.gypi'
+        'libEGL.gypi',
+        'vulkan_support/vulkan.gypi',
     ],
 
     'targets':
