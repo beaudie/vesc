@@ -82,7 +82,9 @@ EGLPlatformParameters OPENGL_NULL();
 EGLPlatformParameters OPENGLES();
 EGLPlatformParameters OPENGLES(EGLint major, EGLint minor);
 
-} // namespace egl_platform
+EGLPlatformParameters VULKAN();
+
+}  // namespace egl_platform
 
 // ANGLE tests platforms
 PlatformParameters ES2_D3D9();
@@ -135,6 +137,9 @@ PlatformParameters ES2_OPENGLES(EGLint major, EGLint minor);
 PlatformParameters ES3_OPENGLES();
 PlatformParameters ES3_OPENGLES(EGLint major, EGLint minor);
 
-} // namespace angle
+PlatformParameters ES2_VULKAN();
+PlatformParameters ES3_VULKAN();
+
+}  // namespace angle
 
 #endif // ANGLE_TEST_CONFIGS_H_

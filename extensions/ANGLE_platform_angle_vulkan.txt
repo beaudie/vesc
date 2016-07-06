@@ -1,0 +1,87 @@
+Name
+
+    ANGLE_platform_angle_vulkan
+
+Name Strings
+
+    EGL_ANGLE_platform_angle_vulkan
+
+Contributors
+
+    Jamie Madill, Google
+
+Contacts
+
+    Jamie Madill, Google (jmadill 'at' google 'dot' com)
+
+Status
+
+    Draft
+
+Version
+
+    Version 3, 2016-02-22
+
+Number
+
+    EGL Extension XXX
+
+Extension Type
+
+    EGL client extension
+
+Dependencies
+
+    Requires ANGLE_platform_angle.
+
+Overview
+
+    This extension enables selection of Vulkan display types.
+
+New Types
+
+    None
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    Accepted as values for the EGL_PLATFORM_ANGLE_TYPE_ANGLE attribute:
+
+        EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE               0xBOB0
+
+    Accepted as an attribute name in the <attrib_list> argument of
+    eglGetPlatformDisplayEXT:
+
+        EGL_PLATFORM_ANGLE_ENABLE_VALIDATION_LAYER_ANGLE 0xBOB1
+
+Additions to the EGL Specification
+
+    None.
+
+New Behavior
+
+    To request a display that is backed by a Vulken driver, the value of
+    EGL_PLATFORM_ANGLE_TYPE_ANGLE should be
+    EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE.
+
+    If EGL_PLATFORM_ANGLE_ENABLE_VALIDATION_LAYER_ANGLE is specified, it
+    controls enabling the standard Vulkan validation layers. EGL_TRUE enables
+    the validation and EGL_FALSE disables it. Any value other than these will
+    result in an error. Initially, validation may default to either enabled
+    or disabled, depending on compile-time parameters in the implementation.
+
+Issues
+
+    1) Would it be better to specify validation layers individually?
+
+       RESOLVED: It would give more fined grained control, but the layers
+       are sensitive to ordering, and there may be new ones added or old ones
+       removed, this abstracts the logic into a simpler form.
+
+Revision History
+
+    Version 1, 2016-02-22 (Jamie Madill)
+      - Initial draft
