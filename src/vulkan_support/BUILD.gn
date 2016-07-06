@@ -1,0 +1,30 @@
+# Copyright 2016 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+vulkan_layers_dir = "../../../../vulkan-validation-layers/src/"
+vulkan_gypi =
+    exec_script("//build/gypi_to_gn.py",
+                [
+                  rebase_path("vulkan.gypi"),
+                  "--replace=<(vulkan_layers_path)=$vulkan_layers_dir",
+                ],
+                "scope",
+                [ "vulkan.gypi" ])
+
+config("vulkan_loader_config") {
+  include_dirs = rebase_path(vulkan_gypi.vulkan_loader_include_dirs, ".", "src")
+}
+
+static_library("vulkan_loader") {
+  sources = rebase_path(vulkan_gypi.vulkan_loader_sources, ".", "src")
+  if (is_win) {
+    sources += rebase_path(vulkan_gypi.vulkan_loader_win_sources, ".", "src")
+    cflags = vulkan_gypi.vulkan_loader_cflags_win
+    configs -= [
+      "//build/config/win:nominmax",
+      "//build/config/win:unicode",
+    ]
+  }
+  public_configs = [ ":vulkan_loader_config" ]
+}
