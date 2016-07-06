@@ -276,6 +276,7 @@ bool IsAndroid();
 bool IsLinux();
 bool IsOSX();
 bool IsWindows();
+bool IsVulkan();
 
 // Negative tests may trigger expected errors/warnings in the ANGLE Platform.
 void IgnoreANGLEPlatformMessages();
