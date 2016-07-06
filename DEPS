@@ -1,34 +1,36 @@
 vars = {
+  'android_git': 'https://android.googlesource.com',
   'chromium_git': 'https://chromium.googlesource.com',
 }
 
 deps = {
-  "third_party/gyp":
-      Var('chromium_git') + "/external/gyp@81c2e5ff92af29bab61c982808076ddce3d200a2",
-
-  # TODO(kbr): figure out how to better stay in sync with Chromium's
-  # versions of googletest and googlemock.
-  "src/tests/third_party/googletest":
-      Var('chromium_git') + "/external/googletest.git@9855a87157778d39b95eccfb201a9dc90f6d61c6",
+  "buildtools":
+      Var('chromium_git') + '/chromium/buildtools.git@06e80a0e17319868d4a9b13f9bb6a248dc8d8b20',
 
   "src/tests/third_party/googlemock":
       Var('chromium_git') + "/external/googlemock.git@b2cb211e49d872101d991201362d7b97d7d69910",
 
+  "src/tests/third_party/googletest":
+      Var('chromium_git') + "/external/googletest.git@9855a87157778d39b95eccfb201a9dc90f6d61c6",
+
   # Cherry is a dEQP management GUI written in Go. We use it for viewing test results.
   "third_party/cherry":
-      "https://android.googlesource.com/platform/external/cherry@d2e26b4d864ec2a6757e7f1174e464949ca5bf73",
+      Var('android_git') + "/platform/external/cherry@d2e26b4d864ec2a6757e7f1174e464949ca5bf73",
 
   "third_party/deqp/src":
-      "https://android.googlesource.com/platform/external/deqp@f4f3d8079e7a37d7675ab93583e6438d0bca0e58",
+      Var('android_git') + "/platform/external/deqp@f4f3d8079e7a37d7675ab93583e6438d0bca0e58",
+
+  "third_party/gyp":
+      Var('chromium_git') + "/external/gyp@81c2e5ff92af29bab61c982808076ddce3d200a2",
 
   "third_party/libpng":
-      "https://android.googlesource.com/platform/external/libpng@094e181e79a3d6c23fd005679025058b7df1ad6c",
+      Var('android_git') + "/platform/external/libpng@094e181e79a3d6c23fd005679025058b7df1ad6c",
+
+  "third_party/vulkan-validation-layers/src":
+      Var('android_git') + "/platform/external/vulkan-validation-layers@6b01204f1b2f4890daa01c183e5c41ad9405f7aa",
 
   "third_party/zlib":
       Var('chromium_git') + "/chromium/src/third_party/zlib@afd8c4593c010c045902f6c0501718f1823064a3",
-
-  "buildtools":
-      Var('chromium_git') + '/chromium/buildtools.git@06e80a0e17319868d4a9b13f9bb6a248dc8d8b20',
 }
 
 hooks = [
