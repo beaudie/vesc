@@ -10,6 +10,7 @@
 #include "renderervk_utils.h"
 
 #include "common/debug.h"
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 
 namespace rx
 {
@@ -116,6 +117,11 @@ const char *VulkanResultString(VkResult result)
 namespace vk
 {
 
+Error::Error(VkResult result) : mResult(result), mFile(nullptr), mLine(0)
+{
+    ASSERT(result == VK_SUCCESS);
+}
+
 Error::Error(VkResult result, const char *file, unsigned int line)
     : mResult(result), mFile(file), mLine(line)
 {
@@ -177,7 +183,137 @@ bool Error::isError() const
 
 Error VkSuccess()
 {
-    return Error(VK_SUCCESS, nullptr, 0);
+    return Error(VK_SUCCESS);
+}
+
+// CommandBuffer implementation.
+CommandBuffer::CommandBuffer(VkDevice device, VkCommandPool commandPool)
+    : mDevice(device), mCommandPool(commandPool), mHandle(VK_NULL_HANDLE)
+{
+}
+
+Error CommandBuffer::begin()
+{
+    if (mHandle == VK_NULL_HANDLE)
+    {
+        VkCommandBufferAllocateInfo commandBufferInfo = {};
+        commandBufferInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        commandBufferInfo.pNext              = nullptr;
+        commandBufferInfo.commandPool        = mCommandPool;
+        commandBufferInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        commandBufferInfo.commandBufferCount = 1;
+
+        ANGLE_VK_TRY(vkAllocateCommandBuffers(mDevice, &commandBufferInfo, &mHandle));
+    }
+    else
+    {
+        reset();
+    }
+
+    VkCommandBufferBeginInfo beginInfo = {};
+    beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.pNext                    = nullptr;
+    // TODO(jmadill): Use other flags?
+    beginInfo.flags            = 0;
+    beginInfo.pInheritanceInfo = nullptr;
+
+    ANGLE_VK_TRY(vkBeginCommandBuffer(mHandle, &beginInfo));
+
+    return VkSuccess();
+}
+
+Error CommandBuffer::end()
+{
+    ASSERT(mHandle != VK_NULL_HANDLE);
+    ANGLE_VK_TRY(vkEndCommandBuffer(mHandle));
+    return VkSuccess();
+}
+
+Error CommandBuffer::reset()
+{
+    ASSERT(mHandle != VK_NULL_HANDLE);
+    ANGLE_VK_TRY(vkResetCommandBuffer(mHandle, 0));
+    return VkSuccess();
+}
+
+void CommandBuffer::changeImageLayout(VkImage image,
+                                      VkImageAspectFlags aspectMask,
+                                      VkImageLayout oldLayout,
+                                      VkImageLayout newLayout)
+{
+    ASSERT(mHandle != VK_NULL_HANDLE);
+    VkImageMemoryBarrier imageMemoryBarrier = {};
+    imageMemoryBarrier.sType                = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    imageMemoryBarrier.pNext                = nullptr;
+    imageMemoryBarrier.srcAccessMask        = 0;
+    imageMemoryBarrier.dstAccessMask        = 0;
+    imageMemoryBarrier.oldLayout            = oldLayout;
+    imageMemoryBarrier.newLayout            = newLayout;
+    imageMemoryBarrier.srcQueueFamilyIndex  = VK_QUEUE_FAMILY_IGNORED;
+    imageMemoryBarrier.dstQueueFamilyIndex  = VK_QUEUE_FAMILY_IGNORED;
+    imageMemoryBarrier.image                = image;
+
+    // TODO(jmadill): Is this needed for mipped/layer images?
+    imageMemoryBarrier.subresourceRange.aspectMask     = aspectMask;
+    imageMemoryBarrier.subresourceRange.baseMipLevel   = 0;
+    imageMemoryBarrier.subresourceRange.levelCount     = 1;
+    imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
+    imageMemoryBarrier.subresourceRange.layerCount     = 1;
+
+    if (oldLayout == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
+    {
+        imageMemoryBarrier.srcAccessMask |= VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    }
+
+    if (oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL)
+    {
+        imageMemoryBarrier.srcAccessMask |= VK_ACCESS_TRANSFER_WRITE_BIT;
+    }
+
+    if (oldLayout == VK_IMAGE_LAYOUT_PREINITIALIZED)
+    {
+        imageMemoryBarrier.srcAccessMask |= VK_ACCESS_HOST_WRITE_BIT;
+    }
+
+    if (newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL)
+    {
+        imageMemoryBarrier.dstAccessMask |= VK_ACCESS_TRANSFER_WRITE_BIT;
+    }
+
+    if (newLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL)
+    {
+        imageMemoryBarrier.dstAccessMask |= VK_ACCESS_TRANSFER_READ_BIT;
+    }
+
+    if (newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+    {
+        imageMemoryBarrier.srcAccessMask |=
+            (VK_ACCESS_HOST_WRITE_BIT | VK_ACCESS_TRANSFER_WRITE_BIT);
+        imageMemoryBarrier.dstAccessMask |= VK_ACCESS_SHADER_READ_BIT;
+    }
+
+    if (newLayout == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
+    {
+        imageMemoryBarrier.dstAccessMask |= VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    }
+
+    if (newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL)
+    {
+        imageMemoryBarrier.dstAccessMask |= VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+    }
+
+    vkCmdPipelineBarrier(mHandle, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                         VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 1,
+                         &imageMemoryBarrier);
+}
+
+CommandBuffer::~CommandBuffer()
+{
+    if (mHandle)
+    {
+        vkFreeCommandBuffers(mDevice, mCommandPool, 1, &mHandle);
+        mHandle = VK_NULL_HANDLE;
+    }
 }
 
 }  // namespace vk
