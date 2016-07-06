@@ -26,8 +26,11 @@ debug.txt
 /src/tests/third_party/googletest
 /third_party/cherry
 /third_party/deqp/src
+/third_party/glslang/src
 /third_party/gyp
 /third_party/libpng
+/third_party/spirv-headers/src
+/third_party/spirv-tools/src
 /third_party/vulkan-validation-layers/src
 /third_party/zlib
 /src/tests/third_party/gles_conformance_tests
@@ -45,4 +48,6 @@ TestResults.qpa
 buildtools/
 *.pyc
 *.VC.db
+vulkan_generate_layer_def_files.*
+diag.txt
 
