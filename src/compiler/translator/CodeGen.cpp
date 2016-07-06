@@ -61,6 +61,12 @@ TCompiler* ConstructCompiler(
         // configuration. Return NULL per the ShConstructCompiler API.
         return nullptr;
 #endif // ANGLE_ENABLE_HLSL
+
+      case SH_GLSL_VULKAN_OUTPUT:
+          UNIMPLEMENTED();
+          // TODO(jmadill): Vulkan GLSL
+          return nullptr;
+
       default:
         // Unknown format. Return NULL per the ShConstructCompiler API.
         return nullptr;
