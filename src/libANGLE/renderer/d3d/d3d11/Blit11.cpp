@@ -1197,7 +1197,7 @@ gl::Error Blit11::copyDepthStencilImpl(const TextureHelper11 &source,
                                        const gl::Rectangle *scissor,
                                        bool stencilOnly)
 {
-    ASSERT(source.getANGLEFormat() == dest.getANGLEFormat());
+    ASSERT(source.getFormatSet().format == dest.getFormatSet().format);
 
     auto format             = source.getFormat();
     const auto &sizeInfo    = d3d11::GetDXGIFormatSizeInfo(format);
@@ -1248,7 +1248,7 @@ gl::Error Blit11::copyAndConvert(const TextureHelper11 &source,
     ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
 
     TextureHelper11 sourceStaging;
-    ANGLE_TRY_RESULT(CreateStagingTexture(GL_TEXTURE_2D, source.getANGLEFormat(), sourceSize,
+    ANGLE_TRY_RESULT(CreateStagingTexture(GL_TEXTURE_2D, source.getFormatSet(), sourceSize,
                                           StagingAccess::READ, device),
                      sourceStaging);
 
@@ -1259,7 +1259,7 @@ gl::Error Blit11::copyAndConvert(const TextureHelper11 &source,
     // ID3D11DevicContext::UpdateSubresource can be called
     //       using it's mapped data as a source
     TextureHelper11 destStaging;
-    ANGLE_TRY_RESULT(CreateStagingTexture(GL_TEXTURE_2D, dest.getANGLEFormat(), destSize,
+    ANGLE_TRY_RESULT(CreateStagingTexture(GL_TEXTURE_2D, dest.getFormatSet(), destSize,
                                           StagingAccess::READ_WRITE, device),
                      destStaging);
 

@@ -1533,7 +1533,7 @@ void InitConstantBufferDesc(D3D11_BUFFER_DESC *constantBufferDescription, size_t
 TextureHelper11::TextureHelper11()
     : mTextureType(GL_NONE),
       mFormat(DXGI_FORMAT_UNKNOWN),
-      mANGLEFormat(d3d11::ANGLE_FORMAT_NONE),
+      mFormatSet(nullptr),
       mSampleCount(0),
       mTexture2D(nullptr),
       mTexture3D(nullptr)
@@ -1544,7 +1544,7 @@ TextureHelper11::TextureHelper11(TextureHelper11 &&toCopy)
     : mTextureType(toCopy.mTextureType),
       mExtents(toCopy.mExtents),
       mFormat(toCopy.mFormat),
-      mANGLEFormat(toCopy.mANGLEFormat),
+      mFormatSet(toCopy.mFormatSet),
       mSampleCount(toCopy.mSampleCount),
       mTexture2D(toCopy.mTexture2D),
       mTexture3D(toCopy.mTexture3D)
@@ -1554,10 +1554,10 @@ TextureHelper11::TextureHelper11(TextureHelper11 &&toCopy)
 
 // static
 TextureHelper11 TextureHelper11::MakeAndReference(ID3D11Resource *genericResource,
-                                                  d3d11::ANGLEFormat angleFormat)
+                                                  const d3d11::ANGLEFormatSet &formatSet)
 {
     TextureHelper11 newHelper;
-    newHelper.mANGLEFormat = angleFormat;
+    newHelper.mFormatSet   = &formatSet;
     newHelper.mTexture2D   = d3d11::DynamicCastComObject<ID3D11Texture2D>(genericResource);
     newHelper.mTexture3D   = d3d11::DynamicCastComObject<ID3D11Texture3D>(genericResource);
     newHelper.mTextureType = newHelper.mTexture2D ? GL_TEXTURE_2D : GL_TEXTURE_3D;
@@ -1567,10 +1567,10 @@ TextureHelper11 TextureHelper11::MakeAndReference(ID3D11Resource *genericResourc
 
 // static
 TextureHelper11 TextureHelper11::MakeAndPossess2D(ID3D11Texture2D *texToOwn,
-                                                  d3d11::ANGLEFormat angleFormat)
+                                                  const d3d11::ANGLEFormatSet &formatSet)
 {
     TextureHelper11 newHelper;
-    newHelper.mANGLEFormat = angleFormat;
+    newHelper.mFormatSet   = &formatSet;
     newHelper.mTexture2D   = texToOwn;
     newHelper.mTextureType = GL_TEXTURE_2D;
     newHelper.initDesc();
@@ -1579,10 +1579,10 @@ TextureHelper11 TextureHelper11::MakeAndPossess2D(ID3D11Texture2D *texToOwn,
 
 // static
 TextureHelper11 TextureHelper11::MakeAndPossess3D(ID3D11Texture3D *texToOwn,
-                                                  d3d11::ANGLEFormat angleFormat)
+                                                  const d3d11::ANGLEFormatSet &formatSet)
 {
     TextureHelper11 newHelper;
-    newHelper.mANGLEFormat = angleFormat;
+    newHelper.mFormatSet   = &formatSet;
     newHelper.mTexture3D   = texToOwn;
     newHelper.mTextureType = GL_TEXTURE_3D;
     newHelper.initDesc();
@@ -1615,7 +1615,7 @@ void TextureHelper11::initDesc()
         mFormat         = desc3D.Format;
         mSampleCount    = 1;
     }
-    ASSERT(mFormat == d3d11::GetANGLEFormatSet(mANGLEFormat).texFormat);
+    ASSERT(mFormatSet && mFormat == mFormatSet->texFormat);
 }
 
 TextureHelper11::~TextureHelper11()
@@ -1638,10 +1638,10 @@ TextureHelper11 &TextureHelper11::operator=(TextureHelper11 &&texture)
     mTextureType = texture.mTextureType;
     mExtents     = texture.mExtents;
     mFormat      = texture.mFormat;
-    mANGLEFormat = texture.mANGLEFormat;
+    mFormatSet   = texture.mFormatSet;
     mSampleCount = texture.mSampleCount;
     mTexture2D   = texture.mTexture2D;
-    mTexture3D = texture.mTexture3D;
+    mTexture3D   = texture.mTexture3D;
     texture.reset();
     return *this;
 }
@@ -1651,19 +1651,18 @@ void TextureHelper11::reset()
     mTextureType = GL_NONE;
     mExtents     = gl::Extents();
     mFormat      = DXGI_FORMAT_UNKNOWN;
+    mFormatSet   = nullptr;
     mSampleCount = 0;
     mTexture2D   = nullptr;
     mTexture3D   = nullptr;
 }
 
 gl::ErrorOrResult<TextureHelper11> CreateStagingTexture(GLenum textureType,
-                                                        d3d11::ANGLEFormat angleFormat,
+                                                        const d3d11::ANGLEFormatSet &formatSet,
                                                         const gl::Extents &size,
                                                         StagingAccess readAndWriteAccess,
                                                         ID3D11Device *device)
 {
-    const auto &formatSet = d3d11::GetANGLEFormatSet(angleFormat);
-
     if (textureType == GL_TEXTURE_2D)
     {
         D3D11_TEXTURE2D_DESC stagingDesc;
@@ -1692,7 +1691,7 @@ gl::ErrorOrResult<TextureHelper11> CreateStagingTexture(GLenum textureType,
                              result);
         }
 
-        return TextureHelper11::MakeAndPossess2D(stagingTex, angleFormat);
+        return TextureHelper11::MakeAndPossess2D(stagingTex, formatSet);
     }
     ASSERT(textureType == GL_TEXTURE_3D);
 
@@ -1715,7 +1714,7 @@ gl::ErrorOrResult<TextureHelper11> CreateStagingTexture(GLenum textureType,
                          result);
     }
 
-    return TextureHelper11::MakeAndPossess3D(stagingTex, angleFormat);
+    return TextureHelper11::MakeAndPossess3D(stagingTex, formatSet);
 }
 
 bool UsePresentPathFast(const Renderer11 *renderer,
