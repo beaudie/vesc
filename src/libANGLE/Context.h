@@ -601,7 +601,8 @@ class Context final : public ValidationContext
 
     State mGLState;
 
-    int mClientVersion;
+    int mClientMajorVersion;
+    int mClientMinorVersion;
 
     const egl::Config *mConfig;
     EGLenum mClientType;
