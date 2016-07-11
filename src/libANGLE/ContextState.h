@@ -20,7 +20,8 @@ class ContextState final : public angle::NonCopyable
 {
   public:
     ContextState(uintptr_t context,
-                 GLint clientVersion,
+                 GLint clientMajorVersion,
+                 GLint clientMinorVersion,
                  State *state,
                  const Caps &caps,
                  const TextureCapsMap &textureCaps,
@@ -30,7 +31,8 @@ class ContextState final : public angle::NonCopyable
     ~ContextState();
 
     uintptr_t getContext() const { return mContext; }
-    GLint getClientVersion() const { return mClientVersion; }
+    GLint getClientMajorVersion() const { return clientMajorVersion; }
+    GLint getClientMinorVersion() const { return clientMinorVersion; }
     const State &getState() const { return *mState; }
     const Caps &getCaps() const { return mCaps; }
     const TextureCapsMap &getTextureCaps() const { return mTextureCaps; }
@@ -45,7 +47,8 @@ class ContextState final : public angle::NonCopyable
     friend class ValidationContext;
 
     uintptr_t mContext;
-    GLint mClientVersion;
+    GLint clientMajorVersion;
+    GLint clientMinorVersion;
     State *mState;
     const Caps &mCaps;
     const TextureCapsMap &mTextureCaps;
@@ -57,7 +60,8 @@ class ContextState final : public angle::NonCopyable
 class ValidationContext : angle::NonCopyable
 {
   public:
-    ValidationContext(GLint clientVersion,
+    ValidationContext(GLint clientMajorVersion,
+                      GLint clientMinorVersion,
                       State *state,
                       const Caps &caps,
                       const TextureCapsMap &textureCaps,
@@ -70,7 +74,8 @@ class ValidationContext : angle::NonCopyable
     virtual void handleError(const Error &error) = 0;
 
     const ContextState &getContextState() const { return mState; }
-    int getClientVersion() const { return mState.getClientVersion(); }
+    int getClientMajorVersion() const { return mState.getClientMajorVersion(); }
+    int getClientMinorVersion() const { return mState.getClientMinorVersion(); }
     const State &getGLState() const { return mState.getState(); }
     const Caps &getCaps() const { return mState.getCaps(); }
     const TextureCapsMap &getTextureCaps() const { return mState.getTextureCaps(); }
