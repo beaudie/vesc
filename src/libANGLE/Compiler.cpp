@@ -27,13 +27,15 @@ size_t activeCompilerHandles = 0;
 
 Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     : mImplementation(implFactory->createCompiler()),
-      mSpec(state.getClientVersion() > 2 ? SH_GLES3_SPEC : SH_GLES2_SPEC),
+      mSpec(state.getClientMajorVersion() > 2
+                ? (state.getClientMinorVersion() == 1 ? SH_GLES3_1_SPEC : SH_GLES3_SPEC)
+                : SH_GLES2_SPEC),
       mOutputType(mImplementation->getTranslatorOutputType()),
       mResources(),
       mFragmentCompiler(nullptr),
       mVertexCompiler(nullptr)
 {
-    ASSERT(state.getClientVersion() == 2 || state.getClientVersion() == 3);
+    ASSERT(state.getClientMajorVersion() == 2 || state.getClientMajorVersion() == 3);
 
     const gl::Caps &caps             = state.getCaps();
     const gl::Extensions &extensions = state.getExtensions();
