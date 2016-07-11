@@ -57,6 +57,14 @@ typedef enum {
   SH_GLES3_SPEC = 0x8B86,
   SH_WEBGL2_SPEC = 0x8B87,
 
+  /**
+    TODO: (mradev)
+    Does SH_GLES3_1_SPEC = 0x8B88 make sense?
+    what is the convention
+  */
+  SH_GLES3_1_SPEC = 0x8B88,
+  SH_WEBGL3_SPEC = 0x8BB9,
+
   // The CSS Shaders spec is a subset of the WebGL spec.
   //
   // In both CSS vertex and fragment shaders, ANGLE:

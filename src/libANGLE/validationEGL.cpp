@@ -246,7 +246,6 @@ Error ValidateCreateContext(Display *display, Config *configuration, gl::Context
                             const AttributeMap& attributes)
 {
     ANGLE_TRY(ValidateConfig(display, configuration));
-
     // Get the requested client version (default is 1) and check it is 2 or 3.
     EGLAttrib clientMajorVersion = 1;
     EGLAttrib clientMinorVersion = 0;
@@ -326,7 +325,17 @@ Error ValidateCreateContext(Display *display, Config *configuration, gl::Context
         }
     }
 
-    if ((clientMajorVersion != 2 && clientMajorVersion != 3) || clientMinorVersion != 0)
+    if (clientMajorVersion != 2 && clientMajorVersion != 3)
+    {
+        return Error(EGL_BAD_CONFIG);
+    }
+
+    if (clientMajorVersion != 3 && clientMinorVersion != 0)
+    {
+        return Error(EGL_BAD_CONFIG);
+    }
+
+    if (clientMajorVersion == 3 && clientMinorVersion != 0 && clientMinorVersion != 1)
     {
         return Error(EGL_BAD_CONFIG);
     }
@@ -368,7 +377,7 @@ Error ValidateCreateContext(Display *display, Config *configuration, gl::Context
             return Error(EGL_BAD_MATCH);
         }
 
-        if (shareContext->getClientVersion() != clientMajorVersion)
+        if (shareContext->getClientMajorVersion() != clientMajorVersion)
         {
             return Error(EGL_BAD_CONTEXT);
         }
