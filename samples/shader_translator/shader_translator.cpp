@@ -105,7 +105,14 @@ int main(int argc, char *argv[])
                       case 'e':
                         if (argv[0][4] == '3')
                         {
-                            spec = SH_GLES3_SPEC;
+                            if (argv[0][5] == '1')
+                            {
+                                spec = SH_GLES3_1_SPEC;
+                            }
+                            else
+                            {
+                                spec = SH_GLES3_SPEC;
+                            }
                         }
                         else
                         {
@@ -113,9 +120,13 @@ int main(int argc, char *argv[])
                         }
                         break;
                       case 'w':
-                        if (argv[0][4] == '2')
-                        {
-                            spec = SH_WEBGL2_SPEC;
+                          if (argv[0][4] == '3')
+                          {
+                              spec = SH_WEBGL3_SPEC;
+                          }
+                          else if (argv[0][4] == '2')
+                          {
+                              spec = SH_WEBGL2_SPEC;
                         }
                         else
                         {
