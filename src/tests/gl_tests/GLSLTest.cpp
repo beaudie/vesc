@@ -1865,6 +1865,27 @@ TEST_P(GLSLTest, IndexConstantSamplerArrayIndexing)
     EXPECT_NE(0u, program);
 }
 
+// Test that the pragma directive is supported.
+TEST_P(GLSLTest, PragmaDirective)
+{
+    const std::string vertexShaderSource =
+        "#pragma STDGL invariant(all)\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    const std::string fragmentShaderSource =
+        "precision mediump float;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(1.0);\n"
+        "}\n";
+
+    GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
+    EXPECT_NE(0u, program);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
                        ES2_D3D9(),
