@@ -15,7 +15,8 @@ namespace gl
 {
 
 ContextState::ContextState(uintptr_t contextIn,
-                           GLint clientVersionIn,
+                           GLint clientMajorVersionIn,
+                           GLint clientMinorVersionIn,
                            State *stateIn,
                            const Caps &capsIn,
                            const TextureCapsMap &textureCapsIn,
@@ -23,7 +24,8 @@ ContextState::ContextState(uintptr_t contextIn,
                            const ResourceManager *resourceManagerIn,
                            const Limitations &limitationsIn)
     : mContext(contextIn),
-      mClientVersion(clientVersionIn),
+      clientMajorVersion(clientMajorVersionIn),
+      clientMinorVersion(clientMinorVersionIn),
       mState(stateIn),
       mCaps(capsIn),
       mTextureCaps(textureCapsIn),
@@ -42,7 +44,8 @@ const TextureCaps &ContextState::getTextureCap(GLenum internalFormat) const
     return mTextureCaps.get(internalFormat);
 }
 
-ValidationContext::ValidationContext(GLint clientVersion,
+ValidationContext::ValidationContext(GLint clientMajorVersion,
+                                     GLint clientMinorVersion,
                                      State *state,
                                      const Caps &caps,
                                      const TextureCapsMap &textureCaps,
@@ -51,7 +54,8 @@ ValidationContext::ValidationContext(GLint clientVersion,
                                      const Limitations &limitations,
                                      bool skipValidation)
     : mState(reinterpret_cast<uintptr_t>(this),
-             clientVersion,
+             clientMajorVersion,
+             clientMinorVersion,
              state,
              caps,
              textureCaps,
@@ -330,7 +334,7 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
         case GL_PACK_ROW_LENGTH:
         case GL_PACK_SKIP_ROWS:
         case GL_PACK_SKIP_PIXELS:
-            if ((getClientVersion() < 3) && !getExtensions().packSubimage)
+            if ((getClientMajorVersion() < 3) && !getExtensions().packSubimage)
             {
                 return false;
             }
@@ -340,7 +344,7 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
         case GL_UNPACK_ROW_LENGTH:
         case GL_UNPACK_SKIP_ROWS:
         case GL_UNPACK_SKIP_PIXELS:
-            if ((getClientVersion() < 3) && !getExtensions().unpackSubimage)
+            if ((getClientMajorVersion() < 3) && !getExtensions().unpackSubimage)
             {
                 return false;
             }
@@ -348,7 +352,7 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
             *numParams = 1;
             return true;
         case GL_VERTEX_ARRAY_BINDING:
-            if ((getClientVersion() < 3) && !getExtensions().vertexArrayObject)
+            if ((getClientMajorVersion() < 3) && !getExtensions().vertexArrayObject)
             {
                 return false;
             }
@@ -357,7 +361,7 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
             return true;
         case GL_PIXEL_PACK_BUFFER_BINDING:
         case GL_PIXEL_UNPACK_BUFFER_BINDING:
-            if ((getClientVersion() < 3) && !getExtensions().pixelBufferObject)
+            if ((getClientMajorVersion() < 3) && !getExtensions().pixelBufferObject)
             {
                 return false;
             }
@@ -366,7 +370,7 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
             return true;
     }
 
-    if (getClientVersion() < 3)
+    if (getClientMajorVersion() < 3)
     {
         return false;
     }
@@ -449,7 +453,7 @@ bool ValidationContext::getIndexedQueryParameterInfo(GLenum target,
                                                      GLenum *type,
                                                      unsigned int *numParams)
 {
-    if (getClientVersion() < 3)
+    if (getClientMajorVersion() < 3)
     {
         return false;
     }

@@ -327,10 +327,10 @@ void GL_APIENTRY BlendFuncSeparate(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha
             break;
 
           case GL_SRC_ALPHA_SATURATE:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             break;
 
@@ -382,10 +382,10 @@ void GL_APIENTRY BlendFuncSeparate(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha
             break;
 
           case GL_SRC_ALPHA_SATURATE:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             break;
 
@@ -446,10 +446,10 @@ void GL_APIENTRY BufferData(GLenum target, GLsizeiptr size, const GLvoid* data, 
           case GL_STATIC_COPY:
           case GL_DYNAMIC_READ:
           case GL_DYNAMIC_COPY:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             break;
 
@@ -1564,7 +1564,7 @@ void GL_APIENTRY GetFramebufferAttachmentParameteriv(GLenum target, GLenum attac
             return;
         }
 
-        int clientVersion = context->getClientVersion();
+        int clientVersion = context->getClientMajorVersion();
 
         switch (pname)
         {
@@ -1854,7 +1854,7 @@ void GL_APIENTRY GetProgramiv(GLuint program, GLenum pname, GLint* params)
             return;
         }
 
-        if (context->getClientVersion() < 3)
+        if (context->getClientMajorVersion() < 3)
         {
             switch (pname)
             {
@@ -2181,7 +2181,7 @@ const GLubyte *GL_APIENTRY GetString(GLenum name)
                 return reinterpret_cast<const GLubyte *>(context->getRendererString().c_str());
 
             case GL_VERSION:
-                if (context->getClientVersion() == 2)
+                if (context->getClientMajorVersion() == 2)
                 {
                     return reinterpret_cast<const GLubyte *>(
                         "OpenGL ES 2.0 (ANGLE " ANGLE_VERSION_STRING ")");
@@ -2193,7 +2193,7 @@ const GLubyte *GL_APIENTRY GetString(GLenum name)
                 }
 
             case GL_SHADING_LANGUAGE_VERSION:
-                if (context->getClientVersion() == 2)
+                if (context->getClientMajorVersion() == 2)
                 {
                     return reinterpret_cast<const GLubyte *>(
                         "OpenGL ES GLSL ES 1.00 (ANGLE " ANGLE_VERSION_STRING ")");
@@ -2252,10 +2252,10 @@ void GL_APIENTRY GetTexParameterfv(GLenum target, GLenum pname, GLfloat* params)
               *params = (GLfloat)texture->getWrapT();
             break;
           case GL_TEXTURE_WRAP_R:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = (GLfloat)texture->getWrapR();
             break;
@@ -2264,10 +2264,10 @@ void GL_APIENTRY GetTexParameterfv(GLenum target, GLenum pname, GLfloat* params)
             *params = (GLfloat)(texture->getImmutableFormat() ? GL_TRUE : GL_FALSE);
             break;
           case GL_TEXTURE_IMMUTABLE_LEVELS:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = (GLfloat)texture->getImmutableLevels();
             break;
@@ -2283,84 +2283,86 @@ void GL_APIENTRY GetTexParameterfv(GLenum target, GLenum pname, GLfloat* params)
             *params = (GLfloat)texture->getMaxAnisotropy();
             break;
           case GL_TEXTURE_SWIZZLE_R:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = (GLfloat)texture->getSwizzleRed();
             break;
           case GL_TEXTURE_SWIZZLE_G:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = (GLfloat)texture->getSwizzleGreen();
             break;
           case GL_TEXTURE_SWIZZLE_B:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = (GLfloat)texture->getSwizzleBlue();
             break;
           case GL_TEXTURE_SWIZZLE_A:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = (GLfloat)texture->getSwizzleAlpha();
             break;
           case GL_TEXTURE_BASE_LEVEL:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = (GLfloat)texture->getBaseLevel();
             break;
           case GL_TEXTURE_MAX_LEVEL:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = (GLfloat)texture->getMaxLevel();
             break;
           case GL_TEXTURE_MIN_LOD:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = texture->getSamplerState().minLod;
             break;
           case GL_TEXTURE_MAX_LOD:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = texture->getSamplerState().maxLod;
             break;
           case GL_TEXTURE_COMPARE_MODE:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(
-                    GL_INVALID_ENUM, "GL_TEXTURE_COMPARE_MODE not available in ES versions < 3.0"));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(
+                      Error(GL_INVALID_ENUM,
+                            "GL_TEXTURE_COMPARE_MODE not available in ES versions < 3.0"));
+                  return;
             }
             *params = static_cast<GLfloat>(texture->getCompareMode());
             break;
           case GL_TEXTURE_COMPARE_FUNC:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(
-                    GL_INVALID_ENUM, "GL_TEXTURE_COMPARE_FUNC not available in ES versions < 3.0"));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(
+                      Error(GL_INVALID_ENUM,
+                            "GL_TEXTURE_COMPARE_FUNC not available in ES versions < 3.0"));
+                  return;
             }
             *params = static_cast<GLfloat>(texture->getCompareFunc());
             break;
@@ -2407,10 +2409,10 @@ void GL_APIENTRY GetTexParameteriv(GLenum target, GLenum pname, GLint* params)
             *params = texture->getSamplerState().wrapT;
             break;
           case GL_TEXTURE_WRAP_R:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = texture->getSamplerState().wrapR;
             break;
@@ -2419,10 +2421,10 @@ void GL_APIENTRY GetTexParameteriv(GLenum target, GLenum pname, GLint* params)
             *params = texture->getImmutableFormat() ? GL_TRUE : GL_FALSE;
             break;
           case GL_TEXTURE_IMMUTABLE_LEVELS:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = static_cast<GLint>(texture->getImmutableLevels());
             break;
@@ -2438,84 +2440,86 @@ void GL_APIENTRY GetTexParameteriv(GLenum target, GLenum pname, GLint* params)
             *params = (GLint)texture->getMaxAnisotropy();
             break;
           case GL_TEXTURE_SWIZZLE_R:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = texture->getSwizzleRed();
             break;
           case GL_TEXTURE_SWIZZLE_G:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = texture->getSwizzleGreen();
             break;
           case GL_TEXTURE_SWIZZLE_B:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = texture->getSwizzleBlue();
             break;
           case GL_TEXTURE_SWIZZLE_A:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = texture->getSwizzleAlpha();
             break;
           case GL_TEXTURE_BASE_LEVEL:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = texture->getBaseLevel();
             break;
           case GL_TEXTURE_MAX_LEVEL:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = texture->getMaxLevel();
             break;
           case GL_TEXTURE_MIN_LOD:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = iround<GLint>(texture->getMinLod());
             break;
           case GL_TEXTURE_MAX_LOD:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             *params = iround<GLint>(texture->getMaxLod());
             break;
           case GL_TEXTURE_COMPARE_MODE:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(
-                    GL_INVALID_ENUM, "GL_TEXTURE_COMPARE_MODE not available in ES versions < 3.0"));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(
+                      Error(GL_INVALID_ENUM,
+                            "GL_TEXTURE_COMPARE_MODE not available in ES versions < 3.0"));
+                  return;
             }
             *params = texture->getCompareMode();
             break;
           case GL_TEXTURE_COMPARE_FUNC:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(
-                    GL_INVALID_ENUM, "GL_TEXTURE_COMPARE_FUNC not available in ES versions < 3.0"));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(
+                      Error(GL_INVALID_ENUM,
+                            "GL_TEXTURE_COMPARE_FUNC not available in ES versions < 3.0"));
+                  return;
             }
             *params = texture->getCompareFunc();
             break;
@@ -2903,7 +2907,7 @@ void GL_APIENTRY PixelStorei(GLenum pname, GLint param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (context->getClientVersion() < 3)
+        if (context->getClientMajorVersion() < 3)
         {
             switch (pname)
             {
@@ -3885,10 +3889,10 @@ void GL_APIENTRY VertexAttribPointer(GLuint index, GLint size, GLenum type, GLbo
           case GL_UNSIGNED_INT:
           case GL_INT_2_10_10_10_REV:
           case GL_UNSIGNED_INT_2_10_10_10_REV:
-            if (context->getClientVersion() < 3)
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
+              if (context->getClientMajorVersion() < 3)
+              {
+                  context->handleError(Error(GL_INVALID_ENUM));
+                  return;
             }
             break;
 
