@@ -766,6 +766,7 @@ void DirectiveParser::parseVersion(Token *token)
         mShaderVersion = version;
         PredefineMacro(mMacroSet, "__VERSION__", version);
     }
+
 }
 
 void DirectiveParser::parseLine(Token *token)
