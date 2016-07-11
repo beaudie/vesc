@@ -1909,13 +1909,13 @@ bool ValidateTexImage2D(Context *context,
                         GLenum type,
                         const GLvoid *pixels)
 {
-    if (context->getClientVersion() < 3)
+    if (context->getClientMajorVersion() < 3)
     {
         return ValidateES2TexImageParameters(context, target, level, internalformat, false, false,
                                              0, 0, width, height, border, format, type, pixels);
     }
 
-    ASSERT(context->getClientVersion() >= 3);
+    ASSERT(context->getClientMajorVersion() >= 3);
     return ValidateES3TexImage2DParameters(context, target, level, internalformat, false, false, 0,
                                            0, 0, width, height, 1, border, format, type, pixels);
 }
@@ -1932,13 +1932,13 @@ bool ValidateTexSubImage2D(Context *context,
                            const GLvoid *pixels)
 {
 
-    if (context->getClientVersion() < 3)
+    if (context->getClientMajorVersion() < 3)
     {
         return ValidateES2TexImageParameters(context, target, level, GL_NONE, false, true, xoffset,
                                              yoffset, width, height, 0, format, type, pixels);
     }
 
-    ASSERT(context->getClientVersion() >= 3);
+    ASSERT(context->getClientMajorVersion() >= 3);
     return ValidateES3TexImage2DParameters(context, target, level, GL_NONE, false, true, xoffset,
                                            yoffset, 0, width, height, 1, 0, format, type, pixels);
 }
@@ -1953,7 +1953,7 @@ bool ValidateCompressedTexImage2D(Context *context,
                                   GLsizei imageSize,
                                   const GLvoid *data)
 {
-    if (context->getClientVersion() < 3)
+    if (context->getClientMajorVersion() < 3)
     {
         if (!ValidateES2TexImageParameters(context, target, level, internalformat, true, false, 0,
                                            0, width, height, border, GL_NONE, GL_NONE, data))
@@ -1963,7 +1963,7 @@ bool ValidateCompressedTexImage2D(Context *context,
     }
     else
     {
-        ASSERT(context->getClientVersion() >= 3);
+        ASSERT(context->getClientMajorVersion() >= 3);
         if (!ValidateES3TexImage2DParameters(context, target, level, internalformat, true, false, 0,
                                              0, 0, width, height, 1, border, GL_NONE, GL_NONE,
                                              data))
@@ -2001,7 +2001,7 @@ bool ValidateCompressedTexSubImage2D(Context *context,
                                      GLsizei imageSize,
                                      const GLvoid *data)
 {
-    if (context->getClientVersion() < 3)
+    if (context->getClientMajorVersion() < 3)
     {
         if (!ValidateES2TexImageParameters(context, target, level, GL_NONE, true, true, xoffset,
                                            yoffset, width, height, 0, GL_NONE, GL_NONE, data))
@@ -2011,7 +2011,7 @@ bool ValidateCompressedTexSubImage2D(Context *context,
     }
     else
     {
-        ASSERT(context->getClientVersion() >= 3);
+        ASSERT(context->getClientMajorVersion() >= 3);
         if (!ValidateES3TexImage2DParameters(context, target, level, GL_NONE, true, true, xoffset,
                                              yoffset, 0, width, height, 1, 0, GL_NONE, GL_NONE,
                                              data))
@@ -2145,7 +2145,7 @@ bool ValidateBindTexture(Context *context, GLenum target, GLuint texture)
 
         case GL_TEXTURE_3D:
         case GL_TEXTURE_2D_ARRAY:
-            if (context->getClientVersion() < 3)
+            if (context->getClientMajorVersion() < 3)
             {
                 context->handleError(Error(GL_INVALID_ENUM, "GLES 3.0 disabled"));
                 return false;
