@@ -16,6 +16,8 @@
 
 #include "common/debug.h"
 
+#include "libANGLE/queryconversions.h"
+
 namespace gl
 {
 
@@ -1006,14 +1008,37 @@ void GL_APIENTRY GetBooleani_v(GLenum target, GLuint index, GLboolean *data)
 {
     EVENT("(GLenum target = 0x%X, GLuint index = %u, GLboolean* data = 0x%0.8p)", target, index,
           data);
+
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!context->skipValidation())
+
+        if (!context->getGLVersion().isES31())
         {
             context->handleError(Error(GL_INVALID_OPERATION, "Entry point not implemented"));
         }
-        UNIMPLEMENTED();
+
+        GLenum nativeType;
+        unsigned int numParams = 0;
+
+        switch (target)
+        {
+            case GL_MAX_COMPUTE_WORK_GROUP_SIZE:
+            case GL_MAX_COMPUTE_WORK_GROUP_COUNT:
+                if (index >= 3u)
+                {
+                    context->handleError(Error(GL_INVALID_VALUE));
+                    return;
+                }
+                nativeType = GL_INT;
+                numParams  = 1;
+                break;
+            default:
+                context->handleError(Error(GL_INVALID_ENUM));
+                return;
+        }
+
+        CastStateValues(context, nativeType, target, index, numParams, data);
     }
 }
 

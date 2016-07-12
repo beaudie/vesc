@@ -205,6 +205,8 @@ class Context final : public ValidationContext
 
     bool getIndexedIntegerv(GLenum target, GLuint index, GLint *data);
     bool getIndexedInteger64v(GLenum target, GLuint index, GLint64 *data);
+    template <typename DataType>
+    bool getIndexedIntegerCommon(GLenum target, GLuint index, DataType *data);
 
     void activeTexture(GLenum texture);
     void blendColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha);

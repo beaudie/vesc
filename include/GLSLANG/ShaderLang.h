@@ -48,7 +48,7 @@ typedef unsigned int GLenum;
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 151
+#define ANGLE_SH_VERSION 152
 
 typedef enum {
     SH_GLES2_SPEC,
@@ -318,6 +318,65 @@ typedef struct
     // The maximum number of parameters a function can have when SH_LIMIT_EXPRESSION_COMPLEXITY is
     // turned on.
     int MaxFunctionParameters;
+
+    // GLES 3.1 constants
+    // maximum number of groups in each dimension
+    int MaxComputeWorkGroupCountX;
+    int MaxComputeWorkGroupCountY;
+    int MaxComputeWorkGroupCountZ;
+    // maximum number of threads per work group in each dimension
+    int MaxComputeWorkGroupSizeX;
+    int MaxComputeWorkGroupSizeY;
+    int MaxComputeWorkGroupSizeZ;
+    // maximum number of total uniform components
+    int MaxComputeUniformComponents;
+    // maximum number of texture image units in a compute shader
+    int MaxComputeTextureImageUnits;
+    // maximum number of atomic counters in a compute shader
+    int MaxComputeAtomicCounters;
+    // maximum number of atomic counter buffers in a compute shader
+    int MaxComputeAtomicCounterBuffers;
+    // maximum number of image uniforms in a compute shader
+    int MaxComputeImageUniforms;
+    // maximum number of available image units. One cannot bind an image to a unit which is equal or
+    // bigger than MaxImageUnits
+    int MaxImageUnits;
+    // maximum number of image uniforms in a vertex shader
+    int MaxVertexImageUniforms;
+    // maximum number of image uniforms in a fragment shader
+    int MaxFragmentImageUniforms;
+    // maximum total number of image uniforms in a program
+    int MaxCombinedImageUniforms;
+    // maximum number of ssbos and images in a shader
+    int MaxCombinedShaderOutputResources;
+    // maximum number of atomic counters in a vertex shader
+    int MaxVertexAtomicCounters;
+    // maximum number of atomic counters in a fragment shader
+    int MaxFragmentAtomicCounters;
+    // maximum number of atomic counters in a program
+    int MaxCombinedAtomicCounters;
+    // maximum binding for an atomic counter
+    int MaxAtomicCounterBindings;
+    // maximum number of atomic counter buffers in a vertex shader
+    int MaxVertexAtomicCounterBuffers;
+    // maximum number of atomic counter buffers in a fragment shader
+    int MaxFragmentAtomicCounterBuffers;
+    // maximum number of atomic counter buffers in a program
+    int MaxCombinedAtomicCounterBuffers;
+    // maximum number of buffer object storage in machine units
+    int MaxAtomicCounterBufferSize;
+    // maximum total storage size in bytes of all variables declared as shared in a compute program
+    int MaxComputeSharedMemorySize;
+    // maximum number of explicitly assignable locations
+    int MaxUniformLocations;
+    // maximum size in machine units of a shader storage block
+    int MaxShaderStorageBlockSize;
+    // maximum number of shader storage blocks in a vertex shader
+    int MaxVertexShaderStorageBlocks;
+    // maximum number of shader storage blocks in a fragment shader
+    int MaxFragmentShaderStorageBlocks;
+    // maximum number of individual uniform components (single int, uint, float) in a compute shader
+    int MaxCombinedComputeUniformComponents;
 } ShBuiltInResources;
 
 //
