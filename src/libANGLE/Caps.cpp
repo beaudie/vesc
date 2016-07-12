@@ -637,7 +637,37 @@ Caps::Caps()
       maxTransformFeedbackSeparateAttributes(0),
       maxTransformFeedbackSeparateComponents(0),
       // Table 6.35
-      maxSamples(0)
+      maxSamples(0),
+
+      maxComputeAtomicCounters(0),
+      maxComputeAtomicCounterBuffers(0),
+      maxComputeShaderStorageBlocks(0),
+      maxComputeTextureImageUnits(0),
+      maxComputeUniformBlocks(0),
+      maxComputeWorkGroupCountX(0),
+      maxComputeWorkGroupCountY(0),
+      maxComputeWorkGroupCountZ(0),
+      maxComputeUniformComponents(0),
+      maxComputeWorkGroupInvocations(0),
+      maxComputeWorkGroupSizeX(0),
+      maxComputeWorkGroupSizeY(0),
+      maxComputeWorkGroupSizeZ(0),
+      maxComputeImageUniforms(0),
+      maxImageUnits(0),
+      maxShaderStorageBufferBindings(0),
+      maxCombinedShaderStorageBlocks(0),
+      maxVertexImageUniforms(0),
+      maxFragmentImageUniforms(0),
+      maxCombinedImageUniforms(0),
+      maxCombinedShaderOutputResources(0),
+      maxVertexAtomicCounters(0),
+      maxFragmentAtomicCounters(0),
+      maxCombinedAtomicCounters(0),
+      maxAtomicCounterBindings(0),
+      maxFragmentAtomicCounterBuffers(0),
+      maxVertexAtomicCounterBuffers(0),
+      maxCombinedAtomicCounterBuffers(0),
+      maxAtomicCounterBufferSize(0)
 {
 }
 
