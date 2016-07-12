@@ -340,6 +340,24 @@ bool TParseContext::lValueErrorCheck(const TSourceLoc &line, const char *op, TIn
         case EvqPointCoord:
             message = "can't modify gl_PointCoord";
             break;
+        case EvqNumWorkGroups:
+            message = "can't modify gl_NumWorkGroups";
+            break;
+        case EvqWorkGroupSize:
+            message = "can't modify gl_WorkGroupSize";
+            break;
+        case EvqWorkGroupID:
+            message = "can't modify gl_WorkGroupID";
+            break;
+        case EvqLocalInvocationID:
+            message = "can't modify gl_LocalInvocationID";
+            break;
+        case EvqGlobalInvocationID:
+            message = "can't modify gl_GlobalInvocationID";
+            break;
+        case EvqLocalInvocationIndex:
+            message = "can't modify gl_LocalInvocationIndex";
+            break;
         default:
             //
             // Type that can't be written to?
