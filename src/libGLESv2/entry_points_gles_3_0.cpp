@@ -693,7 +693,14 @@ void GL_APIENTRY GetIntegeri_v(GLenum target, GLuint index, GLint* data)
                 return;
             }
             break;
-
+          case GL_MAX_COMPUTE_WORK_GROUP_SIZE:
+          case GL_MAX_COMPUTE_WORK_GROUP_COUNT:
+              if (index >= 3u)
+              {
+                  context->handleError(Error(GL_INVALID_VALUE));
+                  return;
+              }
+              break;
           default:
               context->handleError(Error(GL_INVALID_ENUM));
             return;
@@ -2184,6 +2191,15 @@ void GL_APIENTRY GetInteger64i_v(GLenum target, GLuint index, GLint64* data)
                 return;
             }
             break;
+
+          case GL_MAX_COMPUTE_WORK_GROUP_SIZE:
+          case GL_MAX_COMPUTE_WORK_GROUP_COUNT:
+              if (index >= 3u)
+              {
+                  context->handleError(Error(GL_INVALID_VALUE));
+                  return;
+              }
+              break;
 
           default:
               context->handleError(Error(GL_INVALID_ENUM));

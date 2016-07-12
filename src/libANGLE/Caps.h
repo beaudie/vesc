@@ -422,6 +422,42 @@ struct Caps
 
     // Table 6.35, Framebuffer Dependent Values
     GLuint maxSamples;
+
+    GLuint maxComputeAtomicCounters;
+    GLuint maxComputeAtomicCounterBuffers;
+    GLuint maxComputeShaderStorageBlocks;
+    GLuint maxComputeTextureImageUnits;
+    GLuint maxComputeUniformBlocks;
+    GLuint maxComputeWorkGroupCountX;
+    GLuint maxComputeWorkGroupCountY;
+    GLuint maxComputeWorkGroupCountZ;
+    GLuint maxComputeUniformComponents;
+    GLuint maxComputeWorkGroupInvocations;
+    GLuint maxComputeWorkGroupSizeX;
+    GLuint maxComputeWorkGroupSizeY;
+    GLuint maxComputeWorkGroupSizeZ;
+    GLuint maxComputeImageUniforms;
+    GLuint maxImageUnits;
+    GLuint maxShaderStorageBufferBindings;
+    GLuint maxCombinedShaderStorageBlocks;
+    GLuint maxVertexImageUniforms;
+    GLuint maxFragmentImageUniforms;
+    GLuint maxCombinedImageUniforms;
+    GLuint maxCombinedShaderOutputResources;
+    GLuint maxVertexAtomicCounters;
+    GLuint maxFragmentAtomicCounters;
+    GLuint maxCombinedAtomicCounters;
+    GLuint maxAtomicCounterBufferBindings;
+    GLuint maxFragmentAtomicCounterBuffers;
+    GLuint maxVertexAtomicCounterBuffers;
+    GLuint maxCombinedAtomicCounterBuffers;
+    GLuint maxAtomicCounterBufferSize;
+    GLuint maxComputeSharedMemorySize;
+    GLuint maxUniformLocations;
+    GLuint maxShaderStorageBlockSize;
+    GLuint maxVertexShaderStorageBlocks;
+    GLuint maxFragmentShaderStorageBlocks;
+    GLuint maxCombinedComputeUniformComponents;
 };
 
 }
