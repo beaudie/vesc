@@ -293,7 +293,6 @@ TIntermTyped *TIntermediate::addComma(TIntermTyped *left,
     {
         resultQualifier = EvqTemporary;
     }
-
     TIntermTyped *commaNode = nullptr;
     if (!left->hasSideEffects())
     {
