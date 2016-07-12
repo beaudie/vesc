@@ -1102,10 +1102,13 @@ gl::Error Renderer11::finish()
     }
 
     mDeviceContext->End(mSyncQuery);
-    mDeviceContext->Flush();
 
+    bool firstCheck = true;
     do
     {
+        UINT flags = firstCheck ? 0 : D3D11_ASYNC_GETDATA_DONOTFLUSH;
+        firstCheck = false;
+
         result = mDeviceContext->GetData(mSyncQuery, NULL, 0, D3D11_ASYNC_GETDATA_DONOTFLUSH);
         if (FAILED(result))
         {
