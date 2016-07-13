@@ -383,6 +383,7 @@ class TextureHelper11 : angle::NonCopyable
     ID3D11Texture2D *getTexture2D() const { return mTexture2D; }
     ID3D11Texture3D *getTexture3D() const { return mTexture3D; }
     ID3D11Resource *getResource() const;
+    bool valid() const;
 
   private:
     void reset();
