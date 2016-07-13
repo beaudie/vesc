@@ -1656,6 +1656,11 @@ void TextureHelper11::reset()
     mTexture3D   = nullptr;
 }
 
+bool TextureHelper11::valid() const
+{
+    return (mTextureType != GL_NONE);
+}
+
 gl::ErrorOrResult<TextureHelper11> CreateStagingTexture(GLenum textureType,
                                                         d3d11::ANGLEFormat angleFormat,
                                                         const gl::Extents &size,
