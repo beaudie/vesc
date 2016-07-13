@@ -1,0 +1,9 @@
+Code-Review+1: Corentin Wallez <cwallez@chromium.org>
+Code-Review+1: Jamie Madill <jmadill@chromium.org>
+Code-Review+2: Geoff Lang <geofflang@chromium.org>
+Commit-Queue+2: Geoff Lang <geofflang@chromium.org>
+Submitted-by: Commit Bot <commit-bot@chromium.org>
+Submitted-at: Wed, 13 Jul 2016 21:28:00 +0000
+Reviewed-on: https://chromium-review.googlesource.com/360029
+Project: angle/angle
+Branch: refs/heads/master
