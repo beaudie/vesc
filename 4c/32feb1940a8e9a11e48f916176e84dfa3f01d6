@@ -1,0 +1,8 @@
+Code-Review+1: Jamie Madill <jmadill@chromium.org>
+Code-Review+2: Geoff Lang <geofflang@chromium.org>
+Commit-Queue+2: Yuly Novikov <ynovikov@chromium.org>
+Submitted-by: Commit Bot <commit-bot@chromium.org>
+Submitted-at: Thu, 14 Jul 2016 17:08:48 +0000
+Reviewed-on: https://chromium-review.googlesource.com/355676
+Project: angle/angle
+Branch: refs/heads/master
