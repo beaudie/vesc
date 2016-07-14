@@ -1,0 +1,9 @@
+Code-Review+2: Corentin Wallez <cwallez@chromium.org>
+Commit-Queue+2: Corentin Wallez <cwallez@chromium.org>
+Code-Review+2: Robert Sesek <rsesek@chromium.org>
+Code-Review+2: Dirk Pranke <dpranke@chromium.org>
+Submitted-by: Corentin Wallez <cwallez@chromium.org>
+Submitted-at: Thu, 14 Jul 2016 18:34:44 +0000
+Reviewed-on: https://chromium-review.googlesource.com/360228
+Project: angle/angle
+Branch: refs/heads/master
