@@ -92,6 +92,8 @@
             'compiler/translator/ScalarizeVecAndMatConstructorArgs.h',
             'compiler/translator/SearchSymbol.cpp',
             'compiler/translator/SearchSymbol.h',
+            'compiler/translator/SimplifyLoopConditions.cpp',
+            'compiler/translator/SimplifyLoopConditions.h',
             'compiler/translator/SymbolTable.cpp',
             'compiler/translator/SymbolTable.h',
             'compiler/translator/Types.cpp',
