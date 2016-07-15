@@ -180,6 +180,14 @@ class Context final : public ValidationContext
     TransformFeedback *getTransformFeedback(GLuint handle) const;
     LabeledObject *getLabeledObject(GLenum identifier, GLuint name) const;
     LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
+    void objectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label);
+    void objectPtrLabel(const void *ptr, GLsizei length, const GLchar *label);
+    void getObjectLabel(GLenum identifier,
+                        GLuint name,
+                        GLsizei bufSize,
+                        GLsizei *length,
+                        GLchar *label) const;
+    void getObjectPtrLabel(const void *ptr, GLsizei bufSize, GLsizei *length, GLchar *label) const;
 
     Texture *getTargetTexture(GLenum target) const;
     Texture *getSamplerTexture(unsigned int sampler, GLenum type) const;
