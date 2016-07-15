@@ -46,6 +46,15 @@ config("internal_config") {
     "include",
     "src",
   ]
+
+  # Enable more default warnings on Windows.
+  if (is_win) {
+    cflags = [
+      "/we4244", # Conversion: possible loss of data.
+      "/we4456", # Declaration hides local variable.
+      "/we4457", # Declaration hides function parameter.
+    ]
+  }
 }
 
 if (is_win) {
