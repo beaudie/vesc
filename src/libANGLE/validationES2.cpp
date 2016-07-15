@@ -1603,6 +1603,32 @@ static bool ValidateObjectIdentifierAndName(Context *context, GLenum identifier,
     return true;
 }
 
+static bool ValidateLabelLength(Context *context, GLsizei length, const GLchar *label)
+{
+    size_t labelLength = 0;
+
+    if (length < 0)
+    {
+        if (label != nullptr)
+        {
+            labelLength = strlen(label);
+        }
+    }
+    else
+    {
+        labelLength = static_cast<size_t>(length);
+    }
+
+    if (labelLength > context->getExtensions().maxLabelLength)
+    {
+        context->handleError(
+            Error(GL_INVALID_VALUE, "Label length is larger than GL_MAX_LABEL_LENGTH."));
+        return false;
+    }
+
+    return true;
+}
+
 bool ValidateObjectLabelKHR(Context *context,
                             GLenum identifier,
                             GLuint name,
@@ -1620,11 +1646,8 @@ bool ValidateObjectLabelKHR(Context *context,
         return false;
     }
 
-    size_t labelLength = (length < 0) ? strlen(label) : length;
-    if (labelLength > context->getExtensions().maxLabelLength)
+    if (!ValidateLabelLength(context, length, label))
     {
-        context->handleError(
-            Error(GL_INVALID_VALUE, "Label length is larger than GL_MAX_LABEL_LENGTH."));
         return false;
     }
 
@@ -1655,8 +1678,7 @@ bool ValidateGetObjectLabelKHR(Context *context,
         return false;
     }
 
-    // Can no-op if bufSize is zero.
-    return bufSize > 0;
+    return true;
 }
 
 static bool ValidateObjectPtrName(Context *context, const void *ptr)
@@ -1686,11 +1708,8 @@ bool ValidateObjectPtrLabelKHR(Context *context,
         return false;
     }
 
-    size_t labelLength = (length < 0) ? strlen(label) : length;
-    if (labelLength > context->getExtensions().maxLabelLength)
+    if (!ValidateLabelLength(context, length, label))
     {
-        context->handleError(
-            Error(GL_INVALID_VALUE, "Label length is larger than GL_MAX_LABEL_LENGTH."));
         return false;
     }
 
@@ -1720,8 +1739,7 @@ bool ValidateGetObjectPtrLabelKHR(Context *context,
         return false;
     }
 
-    // Can no-op if bufSize is zero.
-    return bufSize > 0;
+    return true;
 }
 
 bool ValidateGetPointervKHR(Context *context, GLenum pname, void **params)
