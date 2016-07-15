@@ -298,6 +298,56 @@ TEST_P(CopyTexImageTest, SubImageRGBToL)
     verifyResults(tex, expected1, 7, 7);
 }
 
+class CopyTexImageTestES3 : public CopyTexImageTest
+{
+  protected:
+    void SetUp() override
+    {
+        /*
+            for now using the setup from class CopyTexImageTest is just fine,
+            but at some point proper specialization would be necessary.
+        */
+        CopyTexImageTest::SetUp();
+    }
+
+    void TearDown() override
+    {
+        /*
+            for now using the tear down from class CopyTexImageTest is just fine,
+            but at some point proper specialization would be necessary.
+        */
+        CopyTexImageTest::TearDown();
+    }
+};
+
+/*
+    The test verifies that glCopyTexSubImage2D generates a GL_INVALID_OPERATION error
+    when the attachment to read pixels from is GL_NONE.
+    Reference: GL ES 3.0 3.8.5 Alternate Texture Image Specification Commands
+*/
+TEST_P(CopyTexImageTestES3, ReadBufferIsNone)
+{
+    GLuint texture   = 0x1234;
+    GLfloat color0[] = {
+        0.25f, 1.0f, 0.75f, 0.5f,
+    };
+
+    GLuint fbo0 = createFramebuffer(GL_RGBA, GL_UNSIGNED_BYTE, color0);
+    GLuint tex  = createTextureFromCopyTexImage(fbo0, GL_RGBA);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo0);
+    glBindTexture(GL_TEXTURE_2D, tex);
+
+    glReadBuffer(GL_NONE);
+
+    EXPECT_GL_NO_ERROR();
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 4, 4);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    glDeleteFramebuffers(1, &fbo0);
+    glDeleteTextures(1, &tex);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(CopyTexImageTest,
@@ -307,4 +357,6 @@ ANGLE_INSTANTIATE_TEST(CopyTexImageTest,
                        ES2_OPENGL(),
                        ES2_OPENGL(3, 3),
                        ES2_OPENGLES());
+
+ANGLE_INSTANTIATE_TEST(CopyTexImageTestES3, ES3_OPENGL(3, 3), ES3_OPENGLES());
 }
