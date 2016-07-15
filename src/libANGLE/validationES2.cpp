@@ -1620,7 +1620,19 @@ bool ValidateObjectLabelKHR(Context *context,
         return false;
     }
 
-    size_t labelLength = (length < 0) ? strlen(label) : length;
+    size_t labelLength = 0;
+    if (length < 0)
+    {
+        if (label != NULL)
+        {
+            labelLength = strlen(label);
+        }
+    }
+    else
+    {
+        labelLength = static_cast<size_t>(length);
+    }
+
     if (labelLength > context->getExtensions().maxLabelLength)
     {
         context->handleError(
@@ -1686,7 +1698,18 @@ bool ValidateObjectPtrLabelKHR(Context *context,
         return false;
     }
 
-    size_t labelLength = (length < 0) ? strlen(label) : length;
+    size_t labelLength = 0;
+    if (length < 0)
+    {
+        if (label != NULL)
+        {
+            labelLength = strlen(label);
+        }
+    }
+    else
+    {
+        labelLength = length;
+    }
     if (labelLength > context->getExtensions().maxLabelLength)
     {
         context->handleError(
