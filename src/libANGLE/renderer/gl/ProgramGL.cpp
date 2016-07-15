@@ -537,11 +537,12 @@ void ProgramGL::postLink()
         GLint queryResults[ArraySize(kQueryProperties)];
         GLsizei queryLength = 0;
 
-        mFunctions->getProgramResourceiv(mProgramID, GL_FRAGMENT_INPUT_NV, i,
-                                         ArraySize(kQueryProperties), kQueryProperties,
-                                         ArraySize(queryResults), &queryLength, queryResults);
+        mFunctions->getProgramResourceiv(
+            mProgramID, GL_FRAGMENT_INPUT_NV, i, static_cast<GLsizei>(ArraySize(kQueryProperties)),
+            kQueryProperties, static_cast<GLsizei>(ArraySize(queryResults)), &queryLength,
+            queryResults);
 
-        ASSERT(queryLength == ArraySize(kQueryProperties));
+        ASSERT(queryLength == static_cast<GLsizei>(ArraySize(kQueryProperties)));
 
         PathRenderingFragmentInput input;
         input.name     = name;
