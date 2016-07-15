@@ -298,6 +298,27 @@ TEST_P(CopyTexImageTest, SubImageRGBToL)
     verifyResults(tex, expected1, 7, 7);
 }
 
+TEST_P(CopyTexImageTest, ReadBufferIsNone)
+{
+    GLuint texture   = 0x1234;
+    GLfloat color0[] = {
+        0.25f, 1.0f, 0.75f, 0.5f,
+    };
+    GLuint fbo0 = createFramebuffer(GL_RGB, GL_UNSIGNED_BYTE, color0);
+    GLuint tex  = createTextureFromCopyTexImage(fbo0, GL_LUMINANCE);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo0);
+
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glReadBuffer(GL_NONE);
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 4, 4);
+
+    ASSERT_EGL_TRUE(glGetError() == GL_INVALID_OPERATION);
+
+    glDeleteFramebuffers(1, &fbo0);
+    glDeleteTextures(1, &tex);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(CopyTexImageTest,
@@ -306,5 +327,6 @@ ANGLE_INSTANTIATE_TEST(CopyTexImageTest,
                        ES2_D3D11(EGL_EXPERIMENTAL_PRESENT_PATH_FAST_ANGLE),
                        ES2_OPENGL(),
                        ES2_OPENGL(3, 3),
+                       ES3_OPENGL(3, 3),
                        ES2_OPENGLES());
 }
