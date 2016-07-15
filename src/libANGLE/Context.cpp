@@ -178,6 +178,17 @@ bool GetNoError(const egl::AttributeMap &attribs)
     return (attribs.get(EGL_CONTEXT_OPENGL_NO_ERROR_KHR, EGL_FALSE) == EGL_TRUE);
 }
 
+std::string GetObjectLabelFromPointer(GLsizei length, const GLchar *label)
+{
+    std::string labelName;
+    if (label != nullptr)
+    {
+        size_t labelLength = length < 0 ? strlen(label) : length;
+        labelName          = std::string(label, labelLength);
+    }
+    return labelName;
+}
+
 }  // anonymous namespace
 
 namespace gl
@@ -863,6 +874,24 @@ LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) const
 LabeledObject *Context::getLabeledObjectFromPtr(const void *ptr) const
 {
     return getFenceSync(reinterpret_cast<GLsync>(const_cast<void *>(ptr)));
+}
+
+void Context::objectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label)
+{
+    LabeledObject *object = getLabeledObject(identifier, name);
+    ASSERT(object != nullptr);
+
+    std::string labelName = GetObjectLabelFromPointer(length, label);
+    object->setLabel(labelName);
+}
+
+void Context::objectLabelPtr(const void *ptr, GLsizei length, const GLchar *label)
+{
+    LabeledObject *object = getLabeledObjectFromPtr(ptr);
+    ASSERT(object != nullptr);
+
+    std::string labelName = GetObjectLabelFromPointer(length, label);
+    object->setLabel(labelName);
 }
 
 bool Context::isSampler(GLuint samplerName) const
