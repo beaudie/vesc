@@ -1269,7 +1269,16 @@ void GL_APIENTRY ObjectLabelKHR(GLenum identifier, GLuint name, GLsizei length, 
         LabeledObject *object = context->getLabeledObject(identifier, name);
         ASSERT(object != nullptr);
 
-        std::string lbl(label, (length > 0) ? static_cast<size_t>(length) : strlen(label));
+        std::string lbl;
+        if (label != NULL)
+        {
+            int labelLength = length;
+            if (labelLength < 0)
+            {
+                labelLength = strlen(label);
+            }
+            lbl = std::string(label, static_cast<size_t>(labelLength));
+        }
         object->setLabel(lbl);
     }
 }
@@ -1294,10 +1303,22 @@ GetObjectLabelKHR(GLenum identifier, GLuint name, GLsizei bufSize, GLsizei *leng
         ASSERT(object != nullptr);
 
         const std::string &objectLabel = object->getLabel();
-        size_t writeLength = std::min(static_cast<size_t>(bufSize) - 1, objectLabel.length());
-        std::copy(objectLabel.begin(), objectLabel.begin() + writeLength, label);
-        label[writeLength] = '\0';
-        *length            = static_cast<GLsizei>(writeLength);
+        size_t writeLength = 0;
+        if (label == NULL)
+        {
+            writeLength = std::min(static_cast<size_t>(bufSize) - 1, objectLabel.length());
+            std::copy(objectLabel.begin(), objectLabel.begin() + writeLength, label);
+            label[writeLength] = '\0';
+        }
+        else
+        {
+            writeLength = objectLabel.length();
+        }
+
+        if (length != NULL)
+        {
+            *length = static_cast<GLsizei>(writeLength);
+        }
     }
 }
 
@@ -1317,7 +1338,16 @@ void GL_APIENTRY ObjectPtrLabelKHR(const void *ptr, GLsizei length, const GLchar
         LabeledObject *object = context->getLabeledObjectFromPtr(ptr);
         ASSERT(object != nullptr);
 
-        std::string lbl(label, (length > 0) ? static_cast<size_t>(length) : strlen(label));
+        std::string lbl;
+        if (label != NULL)
+        {
+            int labelLength = length;
+            if (labelLength < 0)
+            {
+                labelLength = strlen(label);
+            }
+            lbl = std::string(label, static_cast<size_t>(labelLength));
+        }
         object->setLabel(lbl);
     }
 }
@@ -1344,10 +1374,23 @@ void GL_APIENTRY GetObjectPtrLabelKHR(const void *ptr,
         ASSERT(object != nullptr);
 
         const std::string &objectLabel = object->getLabel();
-        size_t writeLength = std::min(static_cast<size_t>(bufSize) - 1, objectLabel.length());
-        std::copy(objectLabel.begin(), objectLabel.begin() + writeLength, label);
-        label[writeLength] = '\0';
-        *length            = static_cast<GLsizei>(writeLength);
+
+        size_t writeLength = 0;
+        if (label == NULL)
+        {
+            writeLength = std::min(static_cast<size_t>(bufSize) - 1, objectLabel.length());
+            std::copy(objectLabel.begin(), objectLabel.begin() + writeLength, label);
+            label[writeLength] = '\0';
+        }
+        else
+        {
+            writeLength = objectLabel.length();
+        }
+
+        if (length != NULL)
+        {
+            *length = static_cast<GLsizei>(writeLength);
+        }
     }
 }
 

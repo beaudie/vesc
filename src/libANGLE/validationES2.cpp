@@ -1620,8 +1620,16 @@ bool ValidateObjectLabelKHR(Context *context,
         return false;
     }
 
-    size_t labelLength = (length < 0) ? strlen(label) : length;
-    if (labelLength > context->getExtensions().maxLabelLength)
+    int labelLength = length;
+    if (labelLength < 0)
+    {
+        if (label != NULL)
+        {
+            labelLength = strlen(label);
+        }
+    }
+
+    if (static_cast<size_t>(labelLength) > context->getExtensions().maxLabelLength)
     {
         context->handleError(
             Error(GL_INVALID_VALUE, "Label length is larger than GL_MAX_LABEL_LENGTH."));
@@ -1686,7 +1694,18 @@ bool ValidateObjectPtrLabelKHR(Context *context,
         return false;
     }
 
-    size_t labelLength = (length < 0) ? strlen(label) : length;
+    size_t labelLength = 0;
+    if (length < 0)
+    {
+        if (label != NULL)
+        {
+            labelLength = strlen(label);
+        }
+    }
+    else
+    {
+        labelLength = length;
+    }
     if (labelLength > context->getExtensions().maxLabelLength)
     {
         context->handleError(
