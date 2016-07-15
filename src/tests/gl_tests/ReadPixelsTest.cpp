@@ -642,6 +642,22 @@ TEST_P(ReadPixelsTextureTest, MipLayerAttachment2DArrayPBO)
     testPBORead(GL_TEXTURE_2D_ARRAY, 2, 1, 1);
 }
 
+/*
+    The test verifies that glReadPixels generates a GL_INVALID_OPERATION error
+    when the attachment to read pixels from is GL_NONE.
+    Reference: GL ES 3.0 4.3.2 Reading Pixels
+*/
+TEST_P(ReadPixelsTextureTest, ReadBufferIsNone)
+{
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, mFBO);
+
+    glReadBuffer(GL_NONE);
+    std::vector<GLubyte> pixels(4);
+    glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
+
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
 }  // anonymous namespace
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
