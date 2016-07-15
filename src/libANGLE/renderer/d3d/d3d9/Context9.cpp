@@ -16,7 +16,6 @@
 #include "libANGLE/renderer/d3d/RenderbufferD3D.h"
 #include "libANGLE/renderer/d3d/SamplerD3D.h"
 #include "libANGLE/renderer/d3d/TextureD3D.h"
-#include "libANGLE/renderer/d3d/TransformFeedbackD3D.h"
 #include "libANGLE/renderer/d3d/d3d9/Buffer9.h"
 #include "libANGLE/renderer/d3d/d3d9/Fence9.h"
 #include "libANGLE/renderer/d3d/d3d9/Framebuffer9.h"
@@ -112,7 +111,8 @@ FenceSyncImpl *Context9::createFenceSync()
 
 TransformFeedbackImpl *Context9::createTransformFeedback()
 {
-    return new TransformFeedbackD3D();
+    UNREACHABLE();
+    return nullptr;
 }
 
 SamplerImpl *Context9::createSampler()

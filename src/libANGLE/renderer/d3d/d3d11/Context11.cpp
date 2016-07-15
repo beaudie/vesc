@@ -16,12 +16,12 @@
 #include "libANGLE/renderer/d3d/RenderbufferD3D.h"
 #include "libANGLE/renderer/d3d/SamplerD3D.h"
 #include "libANGLE/renderer/d3d/TextureD3D.h"
-#include "libANGLE/renderer/d3d/TransformFeedbackD3D.h"
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Fence11.h"
 #include "libANGLE/renderer/d3d/d3d11/Framebuffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/StateManager11.h"
+#include "libANGLE/renderer/d3d/d3d11/TransformFeedback11.h"
 #include "libANGLE/renderer/d3d/d3d11/VertexArray11.h"
 
 namespace rx
@@ -123,7 +123,7 @@ FenceSyncImpl *Context11::createFenceSync()
 
 TransformFeedbackImpl *Context11::createTransformFeedback()
 {
-    return new TransformFeedbackD3D();
+    return new TransformFeedback11(getNativeCaps().maxTransformFeedbackSeparateAttributes);
 }
 
 SamplerImpl *Context11::createSampler()
