@@ -1540,7 +1540,6 @@ void Context::coverFillPathInstanced(GLsizei numPaths,
 
     mImplementation->coverFillPathInstanced(pathObjects, coverMode, transformType, transformValues);
 }
-
 void Context::coverStrokePathInstanced(GLsizei numPaths,
                                        GLenum pathNameType,
                                        const void *paths,
@@ -1558,7 +1557,6 @@ void Context::coverStrokePathInstanced(GLsizei numPaths,
     mImplementation->coverStrokePathInstanced(pathObjects, coverMode, transformType,
                                               transformValues);
 }
-
 void Context::stencilFillPathInstanced(GLsizei numPaths,
                                        GLenum pathNameType,
                                        const void *paths,
@@ -1577,7 +1575,6 @@ void Context::stencilFillPathInstanced(GLsizei numPaths,
     mImplementation->stencilFillPathInstanced(pathObjects, fillMode, mask, transformType,
                                               transformValues);
 }
-
 void Context::stencilStrokePathInstanced(GLsizei numPaths,
                                          GLenum pathNameType,
                                          const void *paths,
@@ -1596,7 +1593,6 @@ void Context::stencilStrokePathInstanced(GLsizei numPaths,
     mImplementation->stencilStrokePathInstanced(pathObjects, reference, mask, transformType,
                                                 transformValues);
 }
-
 void Context::stencilThenCoverFillPathInstanced(GLsizei numPaths,
                                                 GLenum pathNameType,
                                                 const void *paths,
@@ -1616,7 +1612,6 @@ void Context::stencilThenCoverFillPathInstanced(GLsizei numPaths,
     mImplementation->stencilThenCoverFillPathInstanced(pathObjects, coverMode, fillMode, mask,
                                                        transformType, transformValues);
 }
-
 void Context::stencilThenCoverStrokePathInstanced(GLsizei numPaths,
                                                   GLenum pathNameType,
                                                   const void *paths,
@@ -1635,24 +1630,6 @@ void Context::stencilThenCoverStrokePathInstanced(GLsizei numPaths,
 
     mImplementation->stencilThenCoverStrokePathInstanced(pathObjects, coverMode, reference, mask,
                                                          transformType, transformValues);
-}
-
-void Context::bindFragmentInputLocation(GLuint program, GLint location, const GLchar *name)
-{
-    auto *programObject = getProgram(program);
-
-    programObject->bindFragmentInputLocation(location, name);
-}
-
-void Context::programPathFragmentInputGen(GLuint program,
-                                          GLint location,
-                                          GLenum genMode,
-                                          GLint components,
-                                          const GLfloat *coeffs)
-{
-    auto *programObject = getProgram(program);
-
-    programObject->pathFragmentInputGen(location, genMode, components, coeffs);
 }
 
 void Context::handleError(const Error &error)

@@ -273,16 +273,6 @@ bool ValidateStencilThenCoverStrokePathInstanced(Context *context,
                                                  GLenum coverMode,
                                                  GLenum transformType,
                                                  const GLfloat *transformValues);
-bool ValidateBindFragmentInputLocation(Context *context,
-                                       GLuint program,
-                                       GLint location,
-                                       const GLchar *name);
-bool ValidateProgramPathFragmentInputGen(Context *context,
-                                         GLuint program,
-                                         GLint location,
-                                         GLenum genMode,
-                                         GLint components,
-                                         const GLfloat *coeffs);
 
 }  // namespace gl
 
