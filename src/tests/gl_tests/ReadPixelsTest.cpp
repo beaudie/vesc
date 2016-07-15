@@ -642,6 +642,23 @@ TEST_P(ReadPixelsTextureTest, MipLayerAttachment2DArrayPBO)
     testPBORead(GL_TEXTURE_2D_ARRAY, 2, 1, 1);
 }
 
+TEST_P(ReadPixelsPBODrawTest, ReadBufferIsNone)
+{
+    ASSERT_GL_NO_ERROR();
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, mFBO);
+
+    glReadBuffer(GL_NONE);
+    std::vector<GLubyte> pixels(4);
+    glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
+
+    ASSERT_EGL_TRUE(glGetError() == GL_INVALID_OPERATION);
+
+    // restore the state so that we do not mess up other tests
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+}
+
 }  // anonymous namespace
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
