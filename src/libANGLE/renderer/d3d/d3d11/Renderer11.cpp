@@ -444,7 +444,7 @@ Renderer11::Renderer11(egl::Display *display)
     mAppliedGeometryShader = NULL;
     mAppliedPixelShader = NULL;
 
-    mAppliedNumXFBBindings = static_cast<size_t>(-1);
+    mLastStreamOutContext = angle::DirtyPointer;
 
     ZeroMemory(&mAdapterDescription, sizeof(mAdapterDescription));
 
@@ -1668,22 +1668,30 @@ gl::Error Renderer11::applyIndexBuffer(const gl::ContextState &data,
     return gl::NoError();
 }
 
-gl::Error Renderer11::applyTransformFeedbackBuffers(const gl::State &state)
+gl::Error Renderer11::applyTransformFeedbackBuffers(const gl::ContextState &data)
 {
-    size_t numXFBBindings = 0;
+    const auto &state        = data.getState();
+    uintptr_t currentContext = data.getContext();
+    auto &currentBindings    = mStreamOutBindings[data.getContext()];
+
+    const gl::TransformFeedback *transformFeedback = state.getCurrentTransformFeedback();
+    UINT bindingCount = static_cast<UINT>(transformFeedback->getIndexedBufferCount());
+    ASSERT(bindingCount <= gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS);
+
     bool requiresUpdate = false;
 
-    if (state.isTransformFeedbackActiveUnpaused())
+    if (mLastStreamOutContext != currentContext)
     {
-        const gl::TransformFeedback *transformFeedback = state.getCurrentTransformFeedback();
-        numXFBBindings = transformFeedback->getIndexedBufferCount();
-        ASSERT(numXFBBindings <= gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS);
-
-        for (size_t i = 0; i < numXFBBindings; i++)
+        requiresUpdate = true;
+    }
+    else if (state.isTransformFeedbackActiveUnpaused())
+    {
+        for (size_t bindingIdx = 0; bindingIdx < bindingCount; bindingIdx++)
         {
-            const OffsetBindingPointer<gl::Buffer> &binding = transformFeedback->getIndexedBuffer(i);
+            const OffsetBindingPointer<gl::Buffer> &binding =
+                transformFeedback->getIndexedBuffer(bindingIdx);
 
-            ID3D11Buffer *d3dBuffer = nullptr;
+            uintptr_t d3dBuffer = 0;
             if (binding.get() != nullptr)
             {
                 Buffer11 *storage = GetImplAs<Buffer11>(binding.get());
@@ -1692,23 +1700,27 @@ gl::Error Renderer11::applyTransformFeedbackBuffers(const gl::State &state)
                 {
                     return bufferOrError.getError();
                 }
-                d3dBuffer = bufferOrError.getResult();
+                d3dBuffer = reinterpret_cast<uintptr_t>(bufferOrError.getResult());
             }
 
-            // TODO: mAppliedTFBuffers and friends should also be kept in a vector.
-            if (d3dBuffer != mAppliedTFBuffers[i] || binding.getOffset() != mAppliedTFOffsets[i])
+            // TODO: StreamOutBindings::soBuffers and friends should also be kept in a vector.
+            if (d3dBuffer != currentBindings.soBuffers[bindingIdx] ||
+                binding.getOffset() != currentBindings.tfOffsets[bindingIdx])
             {
                 requiresUpdate = true;
             }
         }
     }
 
-    if (requiresUpdate || numXFBBindings != mAppliedNumXFBBindings)
+    if (requiresUpdate || bindingCount != currentBindings.bindingCount)
     {
-        const gl::TransformFeedback *transformFeedback = state.getCurrentTransformFeedback();
-        for (size_t i = 0; i < numXFBBindings; ++i)
+        std::array<ID3D11Buffer *, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS> d3dBuffers = {
+            nullptr};
+
+        for (size_t bindingIdx = 0; bindingIdx < bindingCount; ++bindingIdx)
         {
-            const OffsetBindingPointer<gl::Buffer> &binding = transformFeedback->getIndexedBuffer(i);
+            const OffsetBindingPointer<gl::Buffer> &binding =
+                transformFeedback->getIndexedBuffer(bindingIdx);
             if (binding.get() != nullptr)
             {
                 Buffer11 *storage = GetImplAs<Buffer11>(binding.get());
@@ -1718,24 +1730,31 @@ gl::Error Renderer11::applyTransformFeedbackBuffers(const gl::State &state)
                     return bufferOrError.getError();
                 }
                 ID3D11Buffer *d3dBuffer = bufferOrError.getResult();
+                uintptr_t d3dBufferId   = reinterpret_cast<uintptr_t>(d3dBuffer);
 
-                mCurrentD3DOffsets[i] = (mAppliedTFBuffers[i] != d3dBuffer || mAppliedTFOffsets[i] != binding.getOffset()) ?
-                                        static_cast<UINT>(binding.getOffset()) : -1;
-                mAppliedTFBuffers[i] = d3dBuffer;
+                currentBindings.soOffsets[bindingIdx] =
+                    (currentBindings.soBuffers[bindingIdx] != d3dBufferId ||
+                     currentBindings.tfOffsets[bindingIdx] != binding.getOffset())
+                        ? static_cast<UINT>(binding.getOffset())
+                        : -1;
+                currentBindings.soBuffers[bindingIdx] = d3dBufferId;
+                d3dBuffers[bindingIdx]                = d3dBuffer;
             }
             else
             {
-                mAppliedTFBuffers[i]  = nullptr;
-                mCurrentD3DOffsets[i] = 0;
+                currentBindings.soBuffers[bindingIdx] = 0;
+                currentBindings.soOffsets[bindingIdx] = 0;
+                currentBindings.tfOffsets[bindingIdx] = binding.getOffset();
+                d3dBuffers[bindingIdx]                = nullptr;
             }
-            mAppliedTFOffsets[i] = binding.getOffset();
         }
+        currentBindings.bindingCount = bindingCount;
 
-        mAppliedNumXFBBindings = numXFBBindings;
-
-        mDeviceContext->SOSetTargets(static_cast<unsigned int>(numXFBBindings), mAppliedTFBuffers,
-                                     mCurrentD3DOffsets);
+        mDeviceContext->SOSetTargets(currentBindings.bindingCount, d3dBuffers.data(),
+                                     currentBindings.soOffsets.data());
     }
+
+    mLastStreamOutContext = currentContext;
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -2549,13 +2568,7 @@ void Renderer11::markAllStateDirty()
     mAppliedGeometryShader = angle::DirtyPointer;
     mAppliedPixelShader    = angle::DirtyPointer;
 
-    mAppliedNumXFBBindings = static_cast<size_t>(-1);
-
-    for (size_t i = 0; i < gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS; i++)
-    {
-        mAppliedTFBuffers[i] = NULL;
-        mAppliedTFOffsets[i] = 0;
-    }
+    mLastStreamOutContext = angle::DirtyPointer;
 
     memset(&mAppliedVertexConstants, 0, sizeof(dx_VertexConstants11));
     memset(&mAppliedPixelConstants, 0, sizeof(dx_PixelConstants11));
@@ -4233,7 +4246,7 @@ gl::Error Renderer11::genericDrawElements(Context11 *context,
 
     ANGLE_TRY(applyIndexBuffer(data, indices, count, mode, type, &indexInfo));
 
-    applyTransformFeedbackBuffers(glState);
+    applyTransformFeedbackBuffers(data);
     // Transform feedback is not allowed for DrawElements, this error should have been caught at the
     // API validation layer.
     ASSERT(!glState.isTransformFeedbackActiveUnpaused());
@@ -4275,7 +4288,7 @@ gl::Error Renderer11::genericDrawArrays(Context11 *context,
     }
 
     ANGLE_TRY(updateState(data, mode));
-    ANGLE_TRY(applyTransformFeedbackBuffers(glState));
+    ANGLE_TRY(applyTransformFeedbackBuffers(data));
     ANGLE_TRY(applyVertexBuffer(glState, mode, first, count, instances, nullptr));
     ANGLE_TRY(applyTextures(context, data));
     ANGLE_TRY(applyShaders(data, mode));
