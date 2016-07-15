@@ -152,7 +152,7 @@ class Renderer11 : public RendererD3D
                                GLenum mode,
                                GLenum type,
                                TranslatedIndexData *indexInfo);
-    gl::Error applyTransformFeedbackBuffers(const gl::State &state);
+    gl::Error applyTransformFeedbackBuffers(const gl::ContextState &data);
 
     // lost device
     bool testDeviceLost() override;
@@ -470,15 +470,23 @@ class Renderer11 : public RendererD3D
     bool mAppliedIBChanged;
 
     // Currently applied transform feedback buffers
-    size_t mAppliedNumXFBBindings;
-    ID3D11Buffer *mAppliedTFBuffers[gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS]; // Tracks the current D3D buffers
-                                                                                        // in use for streamout
-    GLintptr mAppliedTFOffsets[gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS]; // Tracks the current GL-specified
-                                                                                   // buffer offsets to transform feedback
-                                                                                   // buffers
-    UINT mCurrentD3DOffsets[gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS];  // Tracks the D3D buffer offsets,
-                                                                                 // which may differ from GLs, due
-                                                                                 // to different append behavior
+    struct StreamOutBindings
+    {
+        UINT bindingCount = 0;
+
+        // Tracks the current D3D buffers in use for streamout
+        std::array<uintptr_t, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS> soBuffers = {
+            angle::DirtyPointer};
+
+        // Tracks the current GL-specified buffer offsets to transform feedback buffers
+        std::array<GLintptr, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS> tfOffsets = {0};
+
+        // Tracks the D3D buffer offsets, which may differ from GLs, due to different append
+        // behavior
+        std::array<UINT, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS> soOffsets = {0};
+    };
+    std::unordered_map<uintptr_t, StreamOutBindings> mStreamOutBindings;
+    uintptr_t mLastStreamOutContext;
 
     // Currently applied shaders
     uintptr_t mAppliedVertexShader;

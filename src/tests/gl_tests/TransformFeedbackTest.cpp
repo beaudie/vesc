@@ -17,7 +17,6 @@ class TransformFeedbackTest : public ANGLETest
   protected:
     TransformFeedbackTest()
         : mProgram(0),
-          mTransformFeedbackBufferSize(0),
           mTransformFeedbackBuffer(0),
           mTransformFeedback(0)
     {
@@ -34,7 +33,6 @@ class TransformFeedbackTest : public ANGLETest
         ANGLETest::SetUp();
 
         glGenBuffers(1, &mTransformFeedbackBuffer);
-        mTransformFeedbackBufferSize = 1 << 24;  // ~16MB
         glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, mTransformFeedbackBuffer);
         glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, mTransformFeedbackBufferSize, NULL,
                      GL_STATIC_DRAW);
@@ -99,7 +97,7 @@ class TransformFeedbackTest : public ANGLETest
 
     GLuint mProgram;
 
-    size_t mTransformFeedbackBufferSize;
+    static const size_t mTransformFeedbackBufferSize = 1 << 24;
     GLuint mTransformFeedbackBuffer;
     GLuint mTransformFeedback;
 };
@@ -141,6 +139,65 @@ TEST_P(TransformFeedbackTest, ZeroSizedViewport)
     EXPECT_GL_NO_ERROR();
 
     EXPECT_EQ(2u, primitivesWritten);
+}
+
+// Test that rebinding a buffer with the same offset resets the offset (no longer appending from the
+// old position)
+TEST_P(TransformFeedbackTest, BufferRebinding)
+{
+    // Set the program's transform feedback varyings (just gl_Position)
+    std::vector<std::string> tfVaryings;
+    tfVaryings.push_back("gl_Position");
+    compileDefaultProgram(tfVaryings, GL_INTERLEAVED_ATTRIBS);
+
+    glUseProgram(mProgram);
+
+    // Make sure the buffer has zero'd data
+    std::array<float, mTransformFeedbackBufferSize / sizeof(float)> data = {0};
+    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, mTransformFeedbackBuffer);
+    glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, mTransformFeedbackBufferSize, data.data(),
+                 GL_STATIC_DRAW);
+
+    // Bind the buffer for transform feedback output and start transform feedback
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBuffer);
+    glBeginTransformFeedback(GL_TRIANGLES);
+
+    // Create a query to check how many primitives were written
+    GLuint primitivesWrittenQuery = 0;
+    glGenQueries(1, &primitivesWrittenQuery);
+    glBeginQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, primitivesWrittenQuery);
+
+    drawQuad(mProgram, "position", 0.5f, 1.0f);
+
+    // Pause, reset the buffer and resume
+    glPauseTransformFeedback();
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBuffer);
+    glResumeTransformFeedback();
+
+    drawQuad(mProgram, "position", 0.5f, 0.5f);
+
+    // End the query and transform feedkback
+    glEndQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN);
+    glEndTransformFeedback();
+
+    glUseProgram(0);
+
+    // Check how many primitives were written and verify that some were written even if
+    // no pixels were rendered
+    GLuint primitivesWritten = 0;
+    glGetQueryObjectuiv(primitivesWrittenQuery, GL_QUERY_RESULT_EXT, &primitivesWritten);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_EQ(4u, primitivesWritten);
+
+    // Check the buffer data
+    const float *bufferData = static_cast<float *>(glMapBufferRange(
+        GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBufferSize, GL_MAP_READ_BIT));
+
+    for (size_t dataIdx = 6; dataIdx < mTransformFeedbackBufferSize / sizeof(float); dataIdx++)
+    {
+        EXPECT_EQ(0.0f, bufferData[dataIdx]) << "Buffer overrun detected.";
+    }
 }
 
 // Test that XFB can write back vertices to a buffer and that we can draw from this buffer afterward.
@@ -441,14 +498,6 @@ TEST_P(TransformFeedbackTest, MultiplePaused)
 // contexts returns the correct results.  Helps expose bugs in ANGLE's virtual contexts.
 TEST_P(TransformFeedbackTest, MultiContext)
 {
-    if (GetParam() == ES3_D3D11())
-    {
-        std::cout << "Test skipped because the D3D backends cannot support simultaneous transform "
-                     "feedback or queries on multiple contexts yet."
-                  << std::endl;
-        return;
-    }
-
 #if defined(ANGLE_PLATFORM_APPLE)
     if ((IsNVIDIA() || IsAMD()) && GetParam() == ES3_OPENGL())
     {
@@ -773,7 +822,6 @@ class TransformFeedbackLifetimeTest : public TransformFeedbackTest
         compileDefaultProgram(tfVaryings, GL_SEPARATE_ATTRIBS);
 
         glGenBuffers(1, &mTransformFeedbackBuffer);
-        mTransformFeedbackBufferSize = 1 << 24;  // ~16MB
         glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, mTransformFeedbackBuffer);
         glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, mTransformFeedbackBufferSize, NULL,
                      GL_DYNAMIC_DRAW);
