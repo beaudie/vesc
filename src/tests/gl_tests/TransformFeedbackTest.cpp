@@ -441,14 +441,6 @@ TEST_P(TransformFeedbackTest, MultiplePaused)
 // contexts returns the correct results.  Helps expose bugs in ANGLE's virtual contexts.
 TEST_P(TransformFeedbackTest, MultiContext)
 {
-    if (GetParam() == ES3_D3D11())
-    {
-        std::cout << "Test skipped because the D3D backends cannot support simultaneous transform "
-                     "feedback or queries on multiple contexts yet."
-                  << std::endl;
-        return;
-    }
-
 #if defined(ANGLE_PLATFORM_APPLE)
     if ((IsNVIDIA() || IsAMD()) && GetParam() == ES3_OPENGL())
     {
