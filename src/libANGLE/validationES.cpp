@@ -1101,6 +1101,13 @@ bool ValidateReadPixels(ValidationContext *context,
 
     const Framebuffer *framebuffer = context->getGLState().getReadFramebuffer();
     ASSERT(framebuffer);
+
+    if (framebuffer->getReadBufferState() == GL_NONE)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
     const FramebufferAttachment *readBuffer = framebuffer->getReadColorbuffer();
     if (!readBuffer)
     {
@@ -1666,6 +1673,12 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
     }
 
     if (readFramebuffer->id() != 0 && readFramebuffer->getSamples(context->getContextState()) != 0)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    if (readFramebuffer->getReadBufferState() == GL_NONE)
     {
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;
