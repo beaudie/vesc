@@ -39,6 +39,8 @@ test("angle_unittests") {
     "//third_party/angle:preprocessor",
     "//third_party/angle:translator_static",
   ]
+
+  configs += [ "//third_party/angle:extra_warnings" ]
 }
 
 if (is_win || is_linux || is_mac || is_android) {
@@ -78,6 +80,7 @@ if (is_win || is_linux || is_mac || is_android) {
     sources += [ "//gpu/angle_end2end_tests_main.cc" ]
 
     configs += [
+      "//third_party/angle:extra_warnings",
       "//third_party/angle:internal_config",
       "//third_party/angle:libANGLE_config",
     ]
@@ -126,6 +129,7 @@ if (is_win) {
     sources += [ "//gpu/angle_perftests_main.cc" ]
 
     configs += [
+      "//third_party/angle:extra_warnings",
       "//third_party/angle:internal_config",
       "//third_party/angle:libANGLE_config",
     ]
