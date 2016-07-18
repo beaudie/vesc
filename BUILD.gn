@@ -46,6 +46,12 @@ config("internal_config") {
     "include",
     "src",
   ]
+
+  # Enable more default warnings on Windows.
+  if (is_win) {
+    "/we4244", # Conversion: possible loss of data.
+    "/we4456"  # Variable shadowing.
+  }
 }
 
 if (is_win) {
