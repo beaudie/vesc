@@ -9,6 +9,7 @@
 #include "libGLESv2/entry_points_gles_2_0.h"
 #include "libGLESv2/entry_points_gles_2_0_ext.h"
 #include "libGLESv2/entry_points_gles_3_0.h"
+#include "libGLESv2/entry_points_gles_3_1.h"
 
 #include "common/event_tracer.h"
 
@@ -1764,4 +1765,467 @@ void GL_APIENTRY glProgramPathFragmentInputGenCHROMIUM(GLuint program,
 {
     gl::ProgramPathFragmentInputGenCHROMIUM(program, location, genMode, components, coeffs);
 }
+
+// GLES 3.1
+void GL_APIENTRY glDispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ)
+{
+    return gl::DispatchCompute(numGroupsX, numGroupsY, numGroupsZ);
 }
+
+void GL_APIENTRY glDispatchComputeIndirect(GLintptr indirect)
+{
+    return gl::DispatchComputeIndirect(indirect);
+}
+
+void GL_APIENTRY glDrawArraysIndirect(GLenum mode, const void *indirect)
+{
+    return gl::DrawArraysIndirect(mode, indirect);
+}
+
+void GL_APIENTRY glDrawElementsIndirect(GLenum mode, GLenum type, const void *indirect)
+{
+    return gl::DrawElementsIndirect(mode, type, indirect);
+}
+
+void GL_APIENTRY glFramebufferParameteri(GLenum target, GLenum pname, GLint param)
+{
+    return gl::FramebufferParameteri(target, pname, param);
+}
+
+void GL_APIENTRY glGetFramebufferParameteriv(GLenum target, GLenum pname, GLint *params)
+{
+    return gl::GetFramebufferParameteriv(target, pname, params);
+}
+
+void GL_APIENTRY glGetProgramInterfaceiv(GLuint program,
+                                         GLenum programInterface,
+                                         GLenum pname,
+                                         GLint *params)
+{
+    return gl::GetProgramInterfaceiv(program, programInterface, pname, params);
+}
+
+GLuint GL_APIENTRY glGetProgramResourceIndex(GLuint program,
+                                             GLenum programInterface,
+                                             const GLchar *name)
+{
+    return gl::GetProgramResourceIndex(program, programInterface, name);
+}
+
+void GL_APIENTRY glGetProgramResourceName(GLuint program,
+                                          GLenum programInterface,
+                                          GLuint index,
+                                          GLsizei bufSize,
+                                          GLsizei *length,
+                                          GLchar *name)
+{
+    return gl::GetProgramResourceName(program, programInterface, index, bufSize, length, name);
+}
+
+void GL_APIENTRY glGetProgramResourceiv(GLuint program,
+                                        GLenum programInterface,
+                                        GLuint index,
+                                        GLsizei propCount,
+                                        const GLenum *props,
+                                        GLsizei bufSize,
+                                        GLsizei *length,
+                                        GLint *params)
+{
+    return gl::GetProgramResourceiv(program, programInterface, index, propCount, props, bufSize,
+                                    length, params);
+}
+
+GLint GL_APIENTRY glGetProgramResourceLocation(GLuint program,
+                                               GLenum programInterface,
+                                               const GLchar *name)
+{
+    return gl::GetProgramResourceLocation(program, programInterface, name);
+}
+
+void GL_APIENTRY glUseProgramStages(GLuint pipeline, GLbitfield stages, GLuint program)
+{
+    return gl::UseProgramStages(pipeline, stages, program);
+}
+
+void GL_APIENTRY glActiveShaderProgram(GLuint pipeline, GLuint program)
+{
+    return gl::ActiveShaderProgram(pipeline, program);
+}
+
+GLuint GL_APIENTRY glCreateShaderProgramv(GLenum type, GLsizei count, const GLchar *const *strings)
+{
+    return gl::CreateShaderProgramv(type, count, strings);
+}
+
+void GL_APIENTRY glBindProgramPipeline(GLuint pipeline)
+{
+    return gl::BindProgramPipeline(pipeline);
+}
+
+void GL_APIENTRY glDeleteProgramPipelines(GLsizei n, const GLuint *pipelines)
+{
+    return gl::DeleteProgramPipelines(n, pipelines);
+}
+
+void GL_APIENTRY glGenProgramPipelines(GLsizei n, GLuint *pipelines)
+{
+    return gl::GenProgramPipelines(n, pipelines);
+}
+
+GLboolean GL_APIENTRY glIsProgramPipeline(GLuint pipeline)
+{
+    return gl::IsProgramPipeline(pipeline);
+}
+
+void GL_APIENTRY glGetProgramPipelineiv(GLuint pipeline, GLenum pname, GLint *params)
+{
+    return gl::GetProgramPipelineiv(pipeline, pname, params);
+}
+
+void GL_APIENTRY glProgramUniform1i(GLuint program, GLint location, GLint v0)
+{
+    return gl::ProgramUniform1i(program, location, v0);
+}
+
+void GL_APIENTRY glProgramUniform2i(GLuint program, GLint location, GLint v0, GLint v1)
+{
+    return gl::ProgramUniform2i(program, location, v0, v1);
+}
+
+void GL_APIENTRY glProgramUniform3i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2)
+{
+    return gl::ProgramUniform3i(program, location, v0, v1, v2);
+}
+
+void GL_APIENTRY
+glProgramUniform4i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2, GLint v3)
+{
+    return gl::ProgramUniform4i(program, location, v0, v1, v2, v3);
+}
+
+void GL_APIENTRY glProgramUniform1ui(GLuint program, GLint location, GLuint v0)
+{
+    return gl::ProgramUniform1ui(program, location, v0);
+}
+
+void GL_APIENTRY glProgramUniform2ui(GLuint program, GLint location, GLuint v0, GLuint v1)
+{
+    return gl::ProgramUniform2ui(program, location, v0, v1);
+}
+
+void GL_APIENTRY
+glProgramUniform3ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2)
+{
+    return gl::ProgramUniform3ui(program, location, v0, v1, v2);
+}
+
+void GL_APIENTRY
+glProgramUniform4ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3)
+{
+    return gl::ProgramUniform4ui(program, location, v0, v1, v2, v3);
+}
+
+void GL_APIENTRY glProgramUniform1f(GLuint program, GLint location, GLfloat v0)
+{
+    return gl::ProgramUniform1f(program, location, v0);
+}
+
+void GL_APIENTRY glProgramUniform2f(GLuint program, GLint location, GLfloat v0, GLfloat v1)
+{
+    return gl::ProgramUniform2f(program, location, v0, v1);
+}
+
+void GL_APIENTRY
+glProgramUniform3f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2)
+{
+    return gl::ProgramUniform3f(program, location, v0, v1, v2);
+}
+
+void GL_APIENTRY
+glProgramUniform4f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
+{
+    return gl::ProgramUniform4f(program, location, v0, v1, v2, v3);
+}
+
+void GL_APIENTRY glProgramUniform1iv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLint *value)
+{
+    return gl::ProgramUniform1iv(program, location, count, value);
+}
+
+void GL_APIENTRY glProgramUniform2iv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLint *value)
+{
+    return gl::ProgramUniform2iv(program, location, count, value);
+}
+
+void GL_APIENTRY glProgramUniform3iv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLint *value)
+{
+    return gl::ProgramUniform3iv(program, location, count, value);
+}
+
+void GL_APIENTRY glProgramUniform4iv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLint *value)
+{
+    return gl::ProgramUniform4iv(program, location, count, value);
+}
+
+void GL_APIENTRY glProgramUniform1uiv(GLuint program,
+                                      GLint location,
+                                      GLsizei count,
+                                      const GLuint *value)
+{
+    return gl::ProgramUniform1uiv(program, location, count, value);
+}
+
+void GL_APIENTRY glProgramUniform2uiv(GLuint program,
+                                      GLint location,
+                                      GLsizei count,
+                                      const GLuint *value)
+{
+    return gl::ProgramUniform2uiv(program, location, count, value);
+}
+
+void GL_APIENTRY glProgramUniform3uiv(GLuint program,
+                                      GLint location,
+                                      GLsizei count,
+                                      const GLuint *value)
+{
+    return gl::ProgramUniform3uiv(program, location, count, value);
+}
+
+void GL_APIENTRY glProgramUniform4uiv(GLuint program,
+                                      GLint location,
+                                      GLsizei count,
+                                      const GLuint *value)
+{
+    return gl::ProgramUniform4uiv(program, location, count, value);
+}
+
+void GL_APIENTRY glProgramUniform1fv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLfloat *value)
+{
+    return gl::ProgramUniform1fv(program, location, count, value);
+}
+
+void GL_APIENTRY glProgramUniform2fv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLfloat *value)
+{
+    return gl::ProgramUniform2fv(program, location, count, value);
+}
+
+void GL_APIENTRY glProgramUniform3fv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLfloat *value)
+{
+    return gl::ProgramUniform3fv(program, location, count, value);
+}
+
+void GL_APIENTRY glProgramUniform4fv(GLuint program,
+                                     GLint location,
+                                     GLsizei count,
+                                     const GLfloat *value)
+{
+    return gl::ProgramUniform4fv(program, location, count, value);
+}
+
+void GL_APIENTRY glProgramUniformMatrix2fv(GLuint program,
+                                           GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *value)
+{
+    return gl::ProgramUniformMatrix2fv(program, location, count, transpose, value);
+}
+
+void GL_APIENTRY glProgramUniformMatrix3fv(GLuint program,
+                                           GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *value)
+{
+    return gl::ProgramUniformMatrix3fv(program, location, count, transpose, value);
+}
+
+void GL_APIENTRY glProgramUniformMatrix4fv(GLuint program,
+                                           GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *value)
+{
+    return gl::ProgramUniformMatrix4fv(program, location, count, transpose, value);
+}
+
+void GL_APIENTRY glProgramUniformMatrix2x3fv(GLuint program,
+                                             GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    return gl::ProgramUniformMatrix2x3fv(program, location, count, transpose, value);
+}
+
+void GL_APIENTRY glProgramUniformMatrix3x2fv(GLuint program,
+                                             GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    return gl::ProgramUniformMatrix3x2fv(program, location, count, transpose, value);
+}
+
+void GL_APIENTRY glProgramUniformMatrix2x4fv(GLuint program,
+                                             GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    return gl::ProgramUniformMatrix2x4fv(program, location, count, transpose, value);
+}
+
+void GL_APIENTRY glProgramUniformMatrix4x2fv(GLuint program,
+                                             GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    return gl::ProgramUniformMatrix4x2fv(program, location, count, transpose, value);
+}
+
+void GL_APIENTRY glProgramUniformMatrix3x4fv(GLuint program,
+                                             GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    return gl::ProgramUniformMatrix3x4fv(program, location, count, transpose, value);
+}
+
+void GL_APIENTRY glProgramUniformMatrix4x3fv(GLuint program,
+                                             GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    return gl::ProgramUniformMatrix4x3fv(program, location, count, transpose, value);
+}
+
+void GL_APIENTRY glValidateProgramPipeline(GLuint pipeline)
+{
+    return gl::ValidateProgramPipeline(pipeline);
+}
+
+void GL_APIENTRY glGetProgramPipelineInfoLog(GLuint pipeline,
+                                             GLsizei bufSize,
+                                             GLsizei *length,
+                                             GLchar *infoLog)
+{
+    return gl::GetProgramPipelineInfoLog(pipeline, bufSize, length, infoLog);
+}
+
+void GL_APIENTRY glBindImageTexture(GLuint unit,
+                                    GLuint texture,
+                                    GLint level,
+                                    GLboolean layered,
+                                    GLint layer,
+                                    GLenum access,
+                                    GLenum format)
+{
+    return gl::BindImageTexture(unit, texture, level, layered, layer, access, format);
+}
+
+void GL_APIENTRY glGetBooleani_v(GLenum target, GLuint index, GLboolean *data)
+{
+    return gl::GetBooleani_v(target, index, data);
+}
+
+void GL_APIENTRY glMemoryBarrier(GLbitfield barriers)
+{
+    return gl::MemoryBarrier(barriers);
+}
+
+void GL_APIENTRY glMemoryBarrierByRegion(GLbitfield barriers)
+{
+    return gl::MemoryBarrierByRegion(barriers);
+}
+
+void GL_APIENTRY glTexStorage2DMultisample(GLenum target,
+                                           GLsizei samples,
+                                           GLenum internalformat,
+                                           GLsizei width,
+                                           GLsizei height,
+                                           GLboolean fixedsamplelocations)
+{
+    return gl::TexStorage2DMultisample(target, samples, internalformat, width, height,
+                                       fixedsamplelocations);
+}
+
+void GL_APIENTRY glGetMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
+{
+    return gl::GetMultisamplefv(pname, index, val);
+}
+
+void GL_APIENTRY glSampleMaski(GLuint maskNumber, GLbitfield mask)
+{
+    return gl::SampleMaski(maskNumber, mask);
+}
+
+void GL_APIENTRY glGetTexLevelParameteriv(GLenum target, GLint level, GLenum pname, GLint *params)
+{
+    return gl::GetTexLevelParameteriv(target, level, pname, params);
+}
+
+void GL_APIENTRY glGetTexLevelParameterfv(GLenum target, GLint level, GLenum pname, GLfloat *params)
+{
+    return gl::GetTexLevelParameterfv(target, level, pname, params);
+}
+
+void GL_APIENTRY glBindVertexBuffer(GLuint bindingindex,
+                                    GLuint buffer,
+                                    GLintptr offset,
+                                    GLsizei stride)
+{
+    return gl::BindVertexBuffer(bindingindex, buffer, offset, stride);
+}
+
+void GL_APIENTRY glVertexAttribFormat(GLuint attribindex,
+                                      GLint size,
+                                      GLenum type,
+                                      GLboolean normalized,
+                                      GLuint relativeoffset)
+{
+    return gl::VertexAttribFormat(attribindex, size, type, normalized, relativeoffset);
+}
+
+void GL_APIENTRY glVertexAttribIFormat(GLuint attribindex,
+                                       GLint size,
+                                       GLenum type,
+                                       GLuint relativeoffset)
+{
+    return gl::VertexAttribIFormat(attribindex, size, type, relativeoffset);
+}
+
+void GL_APIENTRY glVertexAttribBinding(GLuint attribindex, GLuint bindingindex)
+{
+    return gl::VertexAttribBinding(attribindex, bindingindex);
+}
+
+void GL_APIENTRY glVertexBindingDivisor(GLuint bindingindex, GLuint divisor)
+{
+    return gl::VertexBindingDivisor(bindingindex, divisor);
+}
+}  // extern "C"
