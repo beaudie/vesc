@@ -337,6 +337,76 @@ EXPORTS
     glTexStorage3D                  @282
     glGetInternalformativ           @283
 
+    ; GLES 3.1 Functions
+    glDispatchCompute               @343
+    glDispatchComputeIndirect       @344
+    glDrawArraysIndirect            @345
+    glDrawElementsIndirect          @346
+    glFramebufferParameteri         @347
+    glGetFramebufferParameteriv     @348
+    glGetProgramInterfaceiv         @349
+    glGetProgramResourceIndex       @350
+    glGetProgramResourceName        @351
+    glGetProgramResourceiv          @352
+    glGetProgramResourceLocation    @353
+    glUseProgramStages              @354
+    glActiveShaderProgram           @355
+    glCreateShaderProgramv          @356
+    glBindProgramPipeline           @357
+    glDeleteProgramPipelines        @358
+    glGenProgramPipelines           @359
+    glIsProgramPipeline             @360
+    glGetProgramPipelineiv          @361
+    glProgramUniform1i              @362
+    glProgramUniform2i              @363
+    glProgramUniform3i              @364
+    glProgramUniform4i              @365
+    glProgramUniform1ui             @366
+    glProgramUniform2ui             @367
+    glProgramUniform3ui             @368
+    glProgramUniform4ui             @369
+    glProgramUniform1f              @370
+    glProgramUniform2f              @371
+    glProgramUniform3f              @372
+    glProgramUniform4f              @373
+    glProgramUniform1iv             @374
+    glProgramUniform2iv             @375
+    glProgramUniform3iv             @376
+    glProgramUniform4iv             @377
+    glProgramUniform1uiv            @378
+    glProgramUniform2uiv            @379
+    glProgramUniform3uiv            @380
+    glProgramUniform4uiv            @381
+    glProgramUniform1fv             @382
+    glProgramUniform2fv             @383
+    glProgramUniform3fv             @384
+    glProgramUniform4fv             @385
+    glProgramUniformMatrix2fv       @386
+    glProgramUniformMatrix3fv       @387
+    glProgramUniformMatrix4fv       @388
+    glProgramUniformMatrix2x3fv     @389
+    glProgramUniformMatrix3x2fv     @390
+    glProgramUniformMatrix2x4fv     @391
+    glProgramUniformMatrix4x2fv     @392
+    glProgramUniformMatrix3x4fv     @393
+    glProgramUniformMatrix4x3fv     @394
+    glValidateProgramPipeline       @395
+    glGetProgramPipelineInfoLog     @396
+    glBindImageTexture              @397
+    glGetBooleani_v                 @398
+    glMemoryBarrier                 @399
+    glMemoryBarrierByRegion         @400
+    glTexStorage2DMultisample       @401
+    glGetMultisamplefv              @402
+    glSampleMaski                   @403
+    glGetTexLevelParameteriv        @404
+    glGetTexLevelParameterfv        @405
+    glBindVertexBuffer              @406
+    glVertexAttribFormat            @407
+    glVertexAttribIFormat           @408
+    glVertexAttribBinding           @409
+    glVertexBindingDivisor          @410
+
     ; ANGLE Platform Implementation
     ANGLEPlatformCurrent            @290
     ANGLEPlatformInitialize         @291
