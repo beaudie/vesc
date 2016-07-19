@@ -37,8 +37,10 @@ class TranslatorHLSL;
 bool IsWebGLBasedSpec(ShShaderSpec spec);
 
 //
-// Helper function to check if the shader type is GLSL.
+// Helper functions to check if the shader type is GLSL, and if so
+// what version.
 //
+bool IsGLSL120OrNewer(ShShaderOutput output);
 bool IsGLSL130OrNewer(ShShaderOutput output);
 
 //
@@ -153,7 +155,7 @@ class TCompiler : public TShHandleBase
     const TExtensionBehavior& getExtensionBehavior() const;
     const char *getSourcePath() const;
     const TPragma& getPragma() const { return mPragma; }
-    void writePragma();
+    void writePragma(int compileOptions);
     unsigned int *getTemporaryIndex() { return &mTemporaryIndex; }
 
     const ArrayBoundsClamper& getArrayBoundsClamper() const;
@@ -171,6 +173,8 @@ class TCompiler : public TShHandleBase
     {
         return (compileOptions & SH_VARIABLES) != 0;
     }
+
+    virtual bool shouldFlattenPragmaStdglInvariantAll() = 0;
 
   private:
     // Creates the function call DAG for further analysis, returning false if there is a recursion

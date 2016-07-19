@@ -42,7 +42,7 @@ void TranslatorGLSL::translate(TIntermNode *root, int compileOptions)
 
     // Write pragmas after extensions because some drivers consider pragmas
     // like non-preprocessor tokens.
-    writePragma();
+    writePragma(compileOptions);
 
     bool precisionEmulation = getResources().WEBGL_debug_shader_precision && getPragma().debugShaderPrecision;
 
@@ -143,6 +143,14 @@ void TranslatorGLSL::translate(TIntermNode *root, int compileOptions)
                            getShaderVersion(),
                            getOutputType());
     root->traverse(&outputGLSL);
+}
+
+bool TranslatorGLSL::shouldFlattenPragmaStdglInvariantAll()
+{
+    // Required when outputting to any GLSL version greater than 1.20,
+    // but since ANGLE doesn't translate to that version, return true
+    // for the next higher version.
+    return IsGLSL130OrNewer(getOutputType());
 }
 
 void TranslatorGLSL::writeVersion(TIntermNode *root)
