@@ -211,6 +211,13 @@ typedef enum {
     // This flag works around bugs in Mac drivers related to do-while by
     // transforming them into an other construct.
     SH_REWRITE_DO_WHILE_LOOPS = 0x400000,
+
+    // Flatten "#pragma STDGL invariant(all)" into the declaration of
+    // varying variables and built-in GLSL variables. This compiler
+    // option is enabled automatically when outputting desktop GLSL
+    // versions greater than or equal to 130, because desktop GLSL only
+    // supports this #pragma in the vertex shader.
+    SH_FLATTEN_PRAGMA_STDGL_INVARIANT_ALL = 0x800000,
 } ShCompileOptions;
 
 // Defines alternate strategies for implementing array index clamping.
