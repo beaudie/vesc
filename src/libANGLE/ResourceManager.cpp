@@ -99,7 +99,7 @@ GLuint ResourceManager::createShader(rx::GLImplFactory *factory,
 {
     GLuint handle = mProgramShaderHandleAllocator.allocate();
 
-    if (type == GL_VERTEX_SHADER || type == GL_FRAGMENT_SHADER)
+    if (type == GL_VERTEX_SHADER || type == GL_FRAGMENT_SHADER || type == GL_COMPUTE_SHADER)
     {
         mShaderMap[handle] = new Shader(this, factory, rendererLimitations, type, handle);
     }
