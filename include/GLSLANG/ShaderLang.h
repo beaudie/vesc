@@ -48,7 +48,7 @@ typedef unsigned int GLenum;
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 150
+#define ANGLE_SH_VERSION 151
 
 typedef enum {
     SH_GLES2_SPEC,
@@ -211,6 +211,12 @@ typedef enum {
     // This flag works around bugs in Mac drivers related to do-while by
     // transforming them into an other construct.
     SH_REWRITE_DO_WHILE_LOOPS = 0x400000,
+
+    // Flatten "#pragma STDGL invariant(all)" into the declarations of
+    // varying variables and built-in GLSL variables. This compiler
+    // option is enabled automatically when needed for ESSL 1.00
+    // shaders.
+    SH_FLATTEN_PRAGMA_STDGL_INVARIANT_ALL = 0x800000,
 } ShCompileOptions;
 
 // Defines alternate strategies for implementing array index clamping.
