@@ -1511,8 +1511,25 @@ TIntermAggregate *TParseContext::parseSingleDeclaration(TPublicType &publicType,
                                                         const TSourceLoc &identifierOrTypeLocation,
                                                         const TString &identifier)
 {
-    TIntermSymbol *symbol =
-        intermediate.addSymbol(0, identifier, TType(publicType), identifierOrTypeLocation);
+    TType type(publicType);
+    if ((mCompileOptions & SH_FLATTEN_PRAGMA_STDGL_INVARIANT_ALL) &&
+        mDirectiveHandler.pragma().stdgl.invariantAll)
+    {
+        TQualifier qualifier = type.getQualifier();
+
+        // The directive handler has already taken care of rejecting
+        // invalid uses of this pragma (for example, in ESSL 3.00
+        // fragment shaders), so at this point, flatten it into all
+        // affected variable declarations. This includes the output
+        // variables in vertex shaders, and inputs in fragment
+        // shaders (which only applies to ESSL 1.00).
+        if (qualifier == EvqVaryingOut || qualifier == EvqVertexOut || qualifier == EvqVaryingIn)
+        {
+            type.setInvariant(true);
+        }
+    }
+
+    TIntermSymbol *symbol = intermediate.addSymbol(0, identifier, type, identifierOrTypeLocation);
 
     bool emptyDeclaration = (identifier == "");
 
@@ -1537,7 +1554,7 @@ TIntermAggregate *TParseContext::parseSingleDeclaration(TPublicType &publicType,
             recover();
 
         TVariable *variable = nullptr;
-        if (!declareVariable(identifierOrTypeLocation, identifier, TType(publicType), &variable))
+        if (!declareVariable(identifierOrTypeLocation, identifier, type, &variable))
             recover();
 
         if (variable && symbol)
