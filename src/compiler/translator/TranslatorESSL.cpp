@@ -77,6 +77,12 @@ void TranslatorESSL::translate(TIntermNode *root, int) {
     // Write array bounds clamping emulation if needed.
     getArrayBoundsClamper().OutputClampingFunctionDefinition(sink);
 
+    if (getShaderType() == GL_COMPUTE_SHADER)
+    {
+        sink << "layout (local_size_x=" << getLocalSizeX() << ", local_size_y=" << getLocalSizeY()
+             << ", local_size_z=" << getLocalSizeZ() << ") in;\n";
+    }
+
     // Write translated shader.
     TOutputESSL outputESSL(sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(),
                            getSymbolTable(), shaderVer, precisionEmulation);
