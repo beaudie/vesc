@@ -155,6 +155,13 @@ struct BindingInfo
     bool valid;
 };
 
+enum struct ProgramType
+{
+    NONE = 0,
+    RENDER_PROGRAM,
+    COMPUTE_PROGRAM
+};
+
 class ProgramState final : angle::NonCopyable
 {
   public:
@@ -165,6 +172,7 @@ class ProgramState final : angle::NonCopyable
 
     const Shader *getAttachedVertexShader() const { return mAttachedVertexShader; }
     const Shader *getAttachedFragmentShader() const { return mAttachedFragmentShader; }
+    const Shader *getAttachedComputeShader() const { return mAttachedComputeShader; }
     const std::vector<std::string> &getTransformFeedbackVaryingNames() const
     {
         return mTransformFeedbackVaryingNames;
@@ -193,6 +201,8 @@ class ProgramState final : angle::NonCopyable
     GLint getUniformLocation(const std::string &name) const;
     GLuint getUniformIndex(const std::string &name) const;
 
+    ProgramType getProgramType() const { return mProgramType; }
+
   private:
     friend class Program;
 
@@ -200,6 +210,7 @@ class ProgramState final : angle::NonCopyable
 
     Shader *mAttachedFragmentShader;
     Shader *mAttachedVertexShader;
+    Shader *mAttachedComputeShader;
 
     std::vector<std::string> mTransformFeedbackVaryingNames;
     std::vector<sh::Varying> mTransformFeedbackVaryingVars;
@@ -224,6 +235,9 @@ class ProgramState final : angle::NonCopyable
     std::map<int, VariableLocation> mOutputVariables;
 
     bool mBinaryRetrieveableHint;
+
+    // it will be used to discern compute and render (vertex + fragment) programs
+    ProgramType mProgramType;
 };
 
 class Program final : angle::NonCopyable, public LabeledObject
