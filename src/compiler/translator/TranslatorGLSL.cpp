@@ -134,6 +134,12 @@ void TranslatorGLSL::translate(TIntermNode *root, int compileOptions)
         }
     }
 
+    if (getShaderType() == GL_COMPUTE_SHADER)
+    {
+        sink << "layout (local_size_x=" << getLocalSizeX() << ", local_size_y=" << getLocalSizeY()
+             << ", local_size_z=" << getLocalSizeZ() << ") in;\n";
+    }
+
     // Write translated shader.
     TOutputGLSL outputGLSL(sink,
                            getArrayIndexClampingStrategy(),

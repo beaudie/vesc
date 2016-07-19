@@ -358,6 +358,9 @@ bool TParseContext::lValueErrorCheck(const TSourceLoc &line, const char *op, TIn
         case EvqLocalInvocationIndex:
             message = "can't modify gl_LocalInvocationIndex";
             break;
+        case EvqComputeIn:
+            message = "can't modify work group size variable";
+            break;
         default:
             //
             // Type that can't be written to?
@@ -1028,6 +1031,7 @@ bool TParseContext::singleDeclarationErrorCheck(const TPublicType &publicType,
         case EvqAttribute:
         case EvqVertexIn:
         case EvqFragmentOut:
+        case EvqComputeIn:
             if (publicType.type == EbtStruct)
             {
                 error(identifierLocation, "cannot be used with a structure",
@@ -1070,6 +1074,12 @@ bool TParseContext::singleDeclarationErrorCheck(const TPublicType &publicType,
         return true;
     }
 
+    if (publicType.qualifier != EvqComputeIn &&
+        layoutWorkGroupSizeErrorCheck(identifierLocation, layoutQualifier))
+    {
+        return true;
+    }
+
     return false;
 }
 
@@ -1080,6 +1090,47 @@ bool TParseContext::layoutLocationErrorCheck(const TSourceLoc &location,
     {
         error(location, "invalid layout qualifier:", "location",
               "only valid on program inputs and outputs");
+        return true;
+    }
+
+    return false;
+}
+
+bool TParseContext::layoutSupportedErrorCheck(const TSourceLoc &location,
+                                              const TString &layoutQualifierName,
+                                              int versionRequired)
+{
+
+    if (mShaderVersion < versionRequired)
+    {
+        error(location, "invalid layout qualifier:", layoutQualifierName.c_str(), "not supported");
+        return true;
+    }
+
+    return false;
+}
+
+bool TParseContext::layoutWorkGroupSizeErrorCheck(const TSourceLoc &location,
+                                                  const TLayoutQualifier &layoutQualifier)
+{
+    if (layoutQualifier.localSizeX != -1)
+    {
+        error(location, "invalid layout qualifier:", "local_size_x",
+              "only valid when used with 'in'");
+        return true;
+    }
+
+    if (layoutQualifier.localSizeY != -1)
+    {
+        error(location, "invalid layout qualifier:", "local_size_y",
+              "only valid when used with 'in'");
+        return true;
+    }
+
+    if (layoutQualifier.localSizeZ != -1)
+    {
+        error(location, "invalid layout qualifier:", "local_size_z",
+              "only valid when used with 'in'");
         return true;
     }
 
@@ -1439,6 +1490,12 @@ TPublicType TParseContext::addFullySpecifiedType(TQualifier qualifier,
         if (sh::IsVarying(qualifier) || qualifier == EvqVertexIn || qualifier == EvqFragmentOut)
         {
             es3InputOutputTypeCheck(qualifier, typeSpecifier, typeSpecifier.line);
+        }
+        if (qualifier == EvqComputeIn)
+        {
+            error(typeSpecifier.line, "'in' can be only used to specify the local group size",
+                  "in");
+            recover();
         }
     }
 
@@ -1908,13 +1965,6 @@ TIntermAggregate *TParseContext::parseArrayInitDeclarator(const TPublicType &pub
 
 void TParseContext::parseGlobalLayoutQualifier(const TPublicType &typeQualifier)
 {
-    if (typeQualifier.qualifier != EvqUniform)
-    {
-        error(typeQualifier.line, "invalid qualifier:", getQualifierString(typeQualifier.qualifier),
-              "global layout must be uniform");
-        recover();
-        return;
-    }
 
     const TLayoutQualifier layoutQualifier = typeQualifier.layoutQualifier;
 
@@ -1926,27 +1976,111 @@ void TParseContext::parseGlobalLayoutQualifier(const TPublicType &typeQualifier)
         return;
     }
 
-    if (mShaderVersion < 300)
+    if (!layoutQualifier.isCombinationValid())
     {
-        error(typeQualifier.line, "layout qualifiers supported in GLSL ES 3.00 only", "layout");
+        error(typeQualifier.line, "invalid combination:", "layout");
         recover();
         return;
     }
 
-    if (layoutLocationErrorCheck(typeQualifier.line, typeQualifier.layoutQualifier))
+    if (typeQualifier.qualifier == EvqComputeIn)
     {
-        recover();
-        return;
-    }
 
-    if (layoutQualifier.matrixPacking != EmpUnspecified)
-    {
-        mDefaultMatrixPacking = layoutQualifier.matrixPacking;
-    }
+        if (mComputeWorkGroupSizeDeclared)
+        {
+            error(typeQualifier.line, "Work group size can be declared only once", "layout");
+            recover();
+            return;
+        }
+        mComputeWorkGroupSizeDeclared = true;
 
-    if (layoutQualifier.blockStorage != EbsUnspecified)
+        if (mShaderVersion < 310)
+        {
+            error(typeQualifier.line, "in type qualifier supported in GLSL ES 3.10 only", "layout");
+            recover();
+            return;
+        }
+
+        if (!layoutQualifier.isGroupSizeSpecified())
+        {
+            error(typeQualifier.line, "No local work group size specified", "layout");
+            recover();
+            return;
+        }
+
+        const TVariable *maxComputeWorkGroupSize = static_cast<const TVariable *>(
+            symbolTable.findBuiltIn("gl_MaxComputeWorkGroupSize", mShaderVersion));
+
+        const TConstantUnion *maxComputeWorkGroupSizeData =
+            maxComputeWorkGroupSize->getConstPointer();
+
+        int maxComputeWorkGroupSizeX = maxComputeWorkGroupSizeData[0].getIConst();
+        int maxComputeWorkGroupSizeY = maxComputeWorkGroupSizeData[1].getIConst();
+        int maxComputeWorkGroupSizeZ = maxComputeWorkGroupSizeData[2].getIConst();
+
+        // we copy them. If it is has not been specified at all, we set the default value which is 1
+        mLocalSizeX = layoutQualifier.localSizeX == -1 ? 1 : layoutQualifier.localSizeX;
+        mLocalSizeY = layoutQualifier.localSizeY == -1 ? 1 : layoutQualifier.localSizeY;
+        mLocalSizeZ = layoutQualifier.localSizeZ == -1 ? 1 : layoutQualifier.localSizeZ;
+
+        if (mLocalSizeX < 1 || mLocalSizeX > maxComputeWorkGroupSizeX)
+        {
+            error(typeQualifier.line, "invalid value:", "local_size_x",
+                  "Value must be at least 1 and no bigger than gl_MaxComputeWorkGroupSize.x");
+            recover();
+            return;
+        }
+
+        if (mLocalSizeY < 1 || mLocalSizeY > maxComputeWorkGroupSizeY)
+        {
+            error(typeQualifier.line, "invalid value:", "local_size_y",
+                  "Value must be at least 1 and no bigger than gl_MaxComputeWorkGroupSize.y");
+            recover();
+            return;
+        }
+
+        if (mLocalSizeZ < 1 || mLocalSizeZ > maxComputeWorkGroupSizeZ)
+        {
+            error(typeQualifier.line, "invalid value:", "local_size_z",
+                  "Value must be at least 1 and no bigger than gl_MaxComputeWorkGroupSize.z");
+            recover();
+            return;
+        }
+    }
+    else
     {
-        mDefaultBlockStorage = layoutQualifier.blockStorage;
+
+        if (typeQualifier.qualifier != EvqUniform)
+        {
+            error(typeQualifier.line, "invalid qualifier:",
+                  getQualifierString(typeQualifier.qualifier), "global layout must be uniform");
+            recover();
+            return;
+        }
+
+        if (mShaderVersion < 300)
+        {
+            error(typeQualifier.line, "layout qualifiers supported in GLSL ES 3.00 and above",
+                  "layout");
+            recover();
+            return;
+        }
+
+        if (layoutLocationErrorCheck(typeQualifier.line, typeQualifier.layoutQualifier))
+        {
+            recover();
+            return;
+        }
+
+        if (layoutQualifier.matrixPacking != EmpUnspecified)
+        {
+            mDefaultMatrixPacking = layoutQualifier.matrixPacking;
+        }
+
+        if (layoutQualifier.blockStorage != EbsUnspecified)
+        {
+            mDefaultBlockStorage = layoutQualifier.blockStorage;
+        }
     }
 }
 
@@ -3197,6 +3331,9 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
     qualifier.location      = -1;
     qualifier.matrixPacking = EmpUnspecified;
     qualifier.blockStorage  = EbsUnspecified;
+    qualifier.localSizeX    = -1;
+    qualifier.localSizeY    = -1;
+    qualifier.localSizeZ    = -1;
 
     if (qualifierType == "shared")
     {
@@ -3244,14 +3381,11 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
     qualifier.location      = -1;
     qualifier.matrixPacking = EmpUnspecified;
     qualifier.blockStorage  = EbsUnspecified;
+    qualifier.localSizeX    = -1;
+    qualifier.localSizeY    = -1;
+    qualifier.localSizeZ    = -1;
 
-    if (qualifierType != "location")
-    {
-        error(qualifierTypeLine, "invalid layout qualifier", qualifierType.c_str(),
-              "only location may have arguments");
-        recover();
-    }
-    else
+    if (qualifierType == "location")
     {
         // must check that location is non-negative
         if (intValue < 0)
@@ -3265,12 +3399,60 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
             qualifier.location = intValue;
         }
     }
+    else if (qualifierType == "local_size_x")
+    {
+        if (layoutSupportedErrorCheck(qualifierTypeLine, qualifierType, 310))
+        {
+            recover();
+        }
+        if (intValue < 0)
+        {
+            error(intValueLine, "out of range:", intValueString.c_str(),
+                  "local_size_x must be positive");
+            recover();
+        }
+        qualifier.localSizeX = intValue;
+    }
+    else if (qualifierType == "local_size_y")
+    {
+        if (layoutSupportedErrorCheck(qualifierTypeLine, qualifierType, 310))
+        {
+            recover();
+        }
+        if (intValue < 0)
+        {
+            error(intValueLine, "out of range:", intValueString.c_str(),
+                  "local_size_y must be positive");
+            recover();
+        }
+        qualifier.localSizeY = intValue;
+    }
+    else if (qualifierType == "local_size_z")
+    {
+        if (layoutSupportedErrorCheck(qualifierTypeLine, qualifierType, 310))
+        {
+            recover();
+        }
+        if (intValue < 0)
+        {
+            error(intValueLine, "out of range:", intValueString.c_str(),
+                  "local_size_z must be positive");
+            recover();
+        }
+        qualifier.localSizeZ = intValue;
+    }
+    else
+    {
+        error(qualifierTypeLine, "invalid layout qualifier", qualifierType.c_str());
+        recover();
+    }
 
     return qualifier;
 }
 
 TLayoutQualifier TParseContext::joinLayoutQualifiers(TLayoutQualifier leftQualifier,
-                                                     TLayoutQualifier rightQualifier)
+                                                     TLayoutQualifier rightQualifier,
+                                                     const TSourceLoc &rightQualifierLocation)
 {
     TLayoutQualifier joinedQualifier = leftQualifier;
 
@@ -3285,6 +3467,39 @@ TLayoutQualifier TParseContext::joinLayoutQualifiers(TLayoutQualifier leftQualif
     if (rightQualifier.blockStorage != EbsUnspecified)
     {
         joinedQualifier.blockStorage = rightQualifier.blockStorage;
+    }
+    if (rightQualifier.localSizeX != -1)
+    {
+        if (joinedQualifier.localSizeX != -1 &&
+            joinedQualifier.localSizeX != rightQualifier.localSizeX)
+        {
+            error(rightQualifierLocation,
+                  "Cannot have multiple different work group size specifiers", "local_size_x");
+            recover();
+        }
+        joinedQualifier.localSizeX = rightQualifier.localSizeX;
+    }
+    if (rightQualifier.localSizeY != -1)
+    {
+        if (joinedQualifier.localSizeY != -1 &&
+            joinedQualifier.localSizeY != rightQualifier.localSizeY)
+        {
+            error(rightQualifierLocation,
+                  "Cannot have multiple different work group size specifiers", "local_size_y");
+            recover();
+        }
+        joinedQualifier.localSizeY = rightQualifier.localSizeY;
+    }
+    if (rightQualifier.localSizeZ != -1)
+    {
+        if (joinedQualifier.localSizeZ != -1 &&
+            joinedQualifier.localSizeZ != rightQualifier.localSizeZ)
+        {
+            error(rightQualifierLocation,
+                  "Cannot have multiple different work group size specifiers", "local_size_z");
+            recover();
+        }
+        joinedQualifier.localSizeZ = rightQualifier.localSizeZ;
     }
 
     return joinedQualifier;
