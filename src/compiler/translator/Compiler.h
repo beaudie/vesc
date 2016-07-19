@@ -151,8 +151,10 @@ class TCompiler : public TShHandleBase
     const TExtensionBehavior& getExtensionBehavior() const;
     const char *getSourcePath() const;
     const TPragma& getPragma() const { return mPragma; }
-    void writePragma();
+    void writePragma(int compileOptions);
     unsigned int *getTemporaryIndex() { return &mTemporaryIndex; }
+    // Relies on collectVariables having been called.
+    bool varyingHasStaticReference(const char *varyingName);
 
     const ArrayBoundsClamper& getArrayBoundsClamper() const;
     ShArrayIndexClampingStrategy getArrayIndexClampingStrategy() const;
@@ -164,11 +166,14 @@ class TCompiler : public TShHandleBase
     std::vector<sh::ShaderVariable> expandedUniforms;
     std::vector<sh::Varying> varyings;
     std::vector<sh::InterfaceBlock> interfaceBlocks;
+    bool variablesCollected;
 
     virtual bool shouldCollectVariables(int compileOptions)
     {
         return (compileOptions & SH_VARIABLES) != 0;
     }
+
+    virtual bool shouldFlattenPragmaStdglInvariantAll() = 0;
 
   private:
     // Creates the function call DAG for further analysis, returning false if there is a recursion
