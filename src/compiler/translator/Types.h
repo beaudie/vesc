@@ -326,6 +326,11 @@ class TType
         return invariant;
     }
 
+    void setInvariant(bool i)
+    {
+        invariant = i;
+    }
+
     TLayoutQualifier getLayoutQualifier() const
     {
         return layoutQualifier;

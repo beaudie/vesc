@@ -392,10 +392,19 @@ TIntermNode *TCompiler::compileTreeImpl(const char *const shaderStrings[],
 }
 
 bool TCompiler::compile(const char* const shaderStrings[],
-    size_t numStrings, int compileOptions)
+    size_t numStrings, int compileOptionsIn)
 {
     if (numStrings == 0)
         return true;
+
+    int compileOptions = compileOptionsIn;
+
+    // Apply key workarounds.
+    if (shouldFlattenPragmaStdglInvariantAll()) {
+        // This should be harmless to do in all cases, but for the
+        // moment, leave this as a workaround.
+        compileOptions |= SH_FLATTEN_PRAGMA_STDGL_INVARIANT_ALL;
+    }
 
     TScopedPoolAllocator scopedAlloc(&allocator);
     TIntermNode *root = compileTreeImpl(shaderStrings, numStrings, compileOptions);
@@ -871,9 +880,11 @@ const BuiltInFunctionEmulator& TCompiler::getBuiltInFunctionEmulator() const
     return builtInFunctionEmulator;
 }
 
-void TCompiler::writePragma()
+void TCompiler::writePragma(int compileOptions)
 {
-    TInfoSinkBase &sink = infoSink.obj;
-    if (mPragma.stdgl.invariantAll)
-        sink << "#pragma STDGL invariant(all)\n";
+    if (!(compileOptions & SH_FLATTEN_PRAGMA_STDGL_INVARIANT_ALL)) {
+        TInfoSinkBase &sink = infoSink.obj;
+        if (mPragma.stdgl.invariantAll)
+            sink << "#pragma STDGL invariant(all)\n";
+    }
 }
