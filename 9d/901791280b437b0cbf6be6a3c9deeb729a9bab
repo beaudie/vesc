@@ -1,0 +1,7 @@
+Code-Review+2: Geoff Lang <geofflang@chromium.org>
+Commit-Queue+2: Olli Etuaho <oetuaho@nvidia.com>
+Submitted-by: Commit Bot <commit-bot@chromium.org>
+Submitted-at: Wed, 20 Jul 2016 09:51:41 +0000
+Reviewed-on: https://chromium-review.googlesource.com/361300
+Project: angle/angle
+Branch: refs/heads/master
