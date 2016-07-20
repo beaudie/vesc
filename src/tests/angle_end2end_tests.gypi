@@ -78,6 +78,7 @@
             '<(angle_path)/src/tests/egl_tests/EGLQueryContextTest.cpp',
             '<(angle_path)/src/tests/egl_tests/EGLSanityCheckTest.cpp',
             '<(angle_path)/src/tests/egl_tests/EGLSurfaceTest.cpp',
+            '<(angle_path)/src/tests/egl_tests/EGLThreadTest.cpp',
             '<(angle_path)/src/tests/test_utils/ANGLETest.cpp',
             '<(angle_path)/src/tests/test_utils/ANGLETest.h',
             '<(angle_path)/src/tests/test_utils/angle_test_configs.cpp',
@@ -95,8 +96,6 @@
             '<(angle_path)/src/tests/egl_tests/EGLDeviceTest.cpp',
             '<(angle_path)/src/tests/egl_tests/EGLPresentPathD3D11Test.cpp',
             '<(angle_path)/src/tests/egl_tests/EGLStreamTest.cpp',
-            # TODO(cwallez) for Linux, requires a portable implementation of threads
-            '<(angle_path)/src/tests/egl_tests/EGLThreadTest.cpp',
             '<(angle_path)/src/tests/egl_tests/media/yuvtest.inl',
         ],
         'angle_end2end_tests_x11_sources':
