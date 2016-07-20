@@ -11,6 +11,8 @@
 #include "gtest/gtest.h"
 #include "GLSLANG/ShaderLang.h"
 
+#include <thread>
+
 class ShCompileTest : public testing::Test
 {
   public:
@@ -34,16 +36,24 @@ class ShCompileTest : public testing::Test
         }
     }
 
-    void testCompile(const char **shaderStrings, int stringCount, bool expectation)
+    bool testCompiler(ShHandle compiler,
+                      const char **shaderStrings,
+                      int stringCount,
+                      bool expectation)
     {
-        bool success                  = ShCompile(mCompiler, shaderStrings, stringCount, 0);
-        const std::string &compileLog = ShGetInfoLog(mCompiler);
+        bool success                  = ShCompile(compiler, shaderStrings, stringCount, 0);
+        const std::string &compileLog = ShGetInfoLog(compiler);
         EXPECT_EQ(expectation, success) << compileLog;
+        return (success == expectation);
     }
 
-  private:
+    void testCompile(const char **shaderStrings, int stringCount, bool expectation)
+    {
+        testCompiler(mCompiler, shaderStrings, stringCount, expectation);
+    }
+
     ShBuiltInResources mResources;
-    ShHandle mCompiler;
+    ShHandle mCompiler = nullptr;
 };
 
 // Test calling ShCompile with more than one shader source string.
@@ -80,4 +90,58 @@ TEST_F(ShCompileTest, TokensSplitInShaderStrings)
                                    shaderString3.c_str()};
 
     testCompile(shaderStrings, 3, true);
+}
+
+class ShCompileMultithread : public ShCompileTest
+{
+  public:
+    ShCompileMultithread() {}
+
+    bool testNewCompiler(const ShBuiltInResources &resources,
+                         const char **shaderStrings,
+                         int stringCount,
+                         bool expectation)
+    {
+        ShHandle compiler = ShConstructCompiler(GL_FRAGMENT_SHADER, SH_WEBGL_SPEC,
+                                                SH_GLSL_COMPATIBILITY_OUTPUT, &resources);
+        if (!compiler)
+            return false;
+
+        bool result =
+            ShCompileTest::testCompiler(compiler, shaderStrings, stringCount, expectation);
+        ShDestruct(compiler);
+        return result;
+    }
+
+    std::thread spawnThread(const char **shaderStrings, int stringCount, bool expectation)
+    {
+        return std::thread(&ShCompileMultithread::testNewCompiler, this, mResources, shaderStrings,
+                           stringCount, expectation);
+    }
+
+    static const int kThreads = 2000;
+};
+
+// Test compilation on multiple threads.
+TEST_F(ShCompileMultithread, TestManyThreads)
+{
+    std::vector<std::thread> manyThreads;
+
+    const std::string &shaderString =
+        "precision mediump float;\n"
+        "void main() {\n"
+        "    gl_FragColor = vec4(0.0);\n"
+        "}";
+
+    const char *shaderStrings[] = {shaderString.c_str()};
+
+    for (int cnt = 0; cnt < kThreads; ++cnt)
+    {
+        manyThreads.push_back(spawnThread(shaderStrings, 1, true));
+    }
+
+    for (auto &thread : manyThreads)
+    {
+        thread.join();
+    }
 }
