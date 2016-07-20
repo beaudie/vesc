@@ -27,7 +27,7 @@ IntermNodePatternMatcher::IntermNodePatternMatcher(const unsigned int mask) : mM
 {
 }
 
-bool IntermNodePatternMatcher::match(TIntermBinary *node, TIntermNode *parentNode)
+bool IntermNodePatternMatcher::matchInternal(TIntermBinary *node, TIntermNode *parentNode)
 {
     if ((mMask & kExpressionReturningArray) != 0)
     {
@@ -42,6 +42,32 @@ bool IntermNodePatternMatcher::match(TIntermBinary *node, TIntermNode *parentNod
     {
         if (node->getRight()->hasSideEffects() &&
             (node->getOp() == EOpLogicalOr || node->getOp() == EOpLogicalAnd))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool IntermNodePatternMatcher::match(TIntermBinary *node, TIntermNode *parentNode)
+{
+    // L-value tracking information is needed to check for dynamic indexing in L-value.
+    ASSERT(!(mMask & kDynamicIndexingOfVectorOrMatrixInLValue));
+    return matchInternal(node, parentNode);
+}
+
+bool IntermNodePatternMatcher::match(TIntermBinary *node,
+                                     TIntermNode *parentNode,
+                                     bool isLValueRequiredHere)
+{
+    if (matchInternal(node, parentNode))
+    {
+        return true;
+    }
+    if (mMask & kDynamicIndexingOfVectorOrMatrixInLValue)
+    {
+        if (isLValueRequiredHere && node->getOp() == EOpIndexIndirect &&
+            !node->getLeft()->isArray() && node->getLeft()->getBasicType() != EbtStruct)
         {
             return true;
         }
