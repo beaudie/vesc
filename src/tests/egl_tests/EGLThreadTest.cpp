@@ -1,83 +1,72 @@
 #include "gtest/gtest.h"
 
+#include <thread>
+
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
-typedef EGLAPI EGLDisplay EGLAPIENTRY EGLGetDisplay(EGLNativeDisplayType display_id);
-typedef EGLAPI EGLBoolean EGLAPIENTRY EGLInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor);
-typedef EGLAPI EGLContext EGLAPIENTRY EGLGetCurrentContext(void);
-typedef EGLAPI EGLSurface EGLAPIENTRY EGLGetCurrentSurface(EGLint readdraw);
-typedef EGLAPI EGLBoolean EGLAPIENTRY EGLTerminate(EGLDisplay dpy);
+#include "system_utils.h"
+
+typedef EGLAPI EGLDisplay(EGLAPIENTRY *EGLGetDisplay)(EGLNativeDisplayType display_id);
+typedef EGLAPI EGLBoolean(EGLAPIENTRY *EGLInitialize)(EGLDisplay dpy, EGLint *major, EGLint *minor);
+typedef EGLAPI EGLContext(EGLAPIENTRY *EGLGetCurrentContext)(void);
+typedef EGLAPI EGLSurface(EGLAPIENTRY *EGLGetCurrentSurface)(EGLint readdraw);
+typedef EGLAPI EGLBoolean(EGLAPIENTRY *EGLTerminate)(EGLDisplay dpy);
 
 class EGLThreadTest : public testing::Test
 {
   public:
-    virtual void SetUp() {}
-    virtual void TearDown() {}
-
-    EGLGetDisplay *mGetDisplay;
-    EGLInitialize *mInitialize;
-    EGLGetCurrentContext *mGetCurrentContext;
-    EGLGetCurrentSurface *mGetCurrentSurface;
-
-    EGLDisplay mDisplay;
-
-    HMODULE mEGL;
-    HMODULE mGLESv2;
-
-    static DWORD WINAPI ThreadingTestEntryPoint(LPVOID thisPointer);
-
-  private:
     void ThreadingTest();
-};
 
-DWORD WINAPI EGLThreadTest::ThreadingTestEntryPoint(LPVOID lpParameter)
-{
-    EGLThreadTest *test = (EGLThreadTest *)lpParameter;
-    test->ThreadingTest();
-    return 0;
-}
+  protected:
+    EGLGetDisplay mGetDisplay               = nullptr;
+    EGLInitialize mInitialize               = nullptr;
+    EGLGetCurrentContext mGetCurrentContext = nullptr;
+    EGLGetCurrentSurface mGetCurrentSurface = nullptr;
+
+    EGLDisplay mDisplay = EGL_NO_DISPLAY;
+
+    std::unique_ptr<angle::Library> mEGL;
+};
 
 void EGLThreadTest::ThreadingTest()
 {
-    mEGL = LoadLibrary(TEXT("libEGL.dll"));
-    mGLESv2 = LoadLibrary(TEXT("libGLESv2.dll"));
+    mEGL.reset(angle::loadLibrary("libEGL"));
 
-    EXPECT_TRUE(mEGL != NULL);
-    EXPECT_TRUE(mGLESv2 != NULL);
+    EXPECT_TRUE(mEGL);
 
-    mGetDisplay = (EGLGetDisplay *)GetProcAddress(mEGL, "eglGetDisplay");
-    mInitialize = (EGLInitialize *)GetProcAddress(mEGL, "eglInitialize");
-    mGetCurrentContext = (EGLGetCurrentContext *)GetProcAddress(mEGL, "eglGetCurrentContext");
-    mGetCurrentSurface = (EGLGetCurrentSurface *)GetProcAddress(mEGL, "eglGetCurrentSurface");
+    mGetDisplay = reinterpret_cast<EGLGetDisplay>(mEGL->getSymbol("eglGetDisplay"));
+    mInitialize = reinterpret_cast<EGLInitialize>(mEGL->getSymbol("eglInitialize"));
+    mGetCurrentContext =
+        reinterpret_cast<EGLGetCurrentContext>(mEGL->getSymbol("eglGetCurrentContext"));
+    mGetCurrentSurface =
+        reinterpret_cast<EGLGetCurrentSurface>(mEGL->getSymbol("eglGetCurrentSurface"));
 
     EXPECT_TRUE(mGetDisplay != NULL);
     EXPECT_TRUE(mInitialize != NULL);
     EXPECT_TRUE(mGetCurrentContext != NULL);
     EXPECT_TRUE(mGetCurrentSurface != NULL);
 
-    mDisplay = mGetDisplay(EGL_D3D11_ELSE_D3D9_DISPLAY_ANGLE);
+    mDisplay = mGetDisplay(EGL_DEFAULT_DISPLAY);
 
-    EXPECT_TRUE(mDisplay!= EGL_NO_DISPLAY);
+    EXPECT_TRUE(mDisplay != EGL_NO_DISPLAY);
 
     mInitialize(mDisplay, NULL, NULL);
     mGetCurrentContext();
 }
 
+// Test a bug in our EGL TLS implementation.
 TEST_F(EGLThreadTest, thread_init_crash)
 {
-    DWORD threadId;
-    HANDLE threadHandle = CreateThread(NULL, 0, EGLThreadTest::ThreadingTestEntryPoint, this, 0, &threadId);
-    EXPECT_TRUE(threadHandle != NULL);
+    std::thread runner(&EGLThreadTest::ThreadingTest, this);
 
     // wait for signal from thread
-    DWORD waitResult = WaitForSingleObject(threadHandle, 1000);
-    EXPECT_EQ(waitResult, WAIT_OBJECT_0);
+    runner.join();
 
     // crash, because the TLS value is NULL on main thread
     mGetCurrentSurface(EGL_DRAW);
     mGetCurrentContext();
 
-    auto terminate = (EGLTerminate *)GetProcAddress(mEGL, "eglTerminate");
+    auto terminate = reinterpret_cast<EGLTerminate>(mEGL->getSymbol("eglTerminate"));
     terminate(mDisplay);
 }
