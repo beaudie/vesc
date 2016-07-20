@@ -498,12 +498,9 @@ static const yytype_uint8 yytranslate[] =
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint16 yyrline[] =
-{
-       0,   110,   110,   117,   118,   129,   129,   150,   150,   171,
-     174,   177,   180,   183,   186,   189,   192,   195,   198,   201,
-     204,   207,   210,   230,   250,   253,   256,   259,   262,   265
-};
+static const yytype_uint16 yyrline[] = {0,   110, 110, 117, 118, 129, 129, 150, 150, 171,
+                                        174, 177, 180, 183, 186, 189, 192, 195, 198, 202,
+                                        206, 209, 212, 232, 252, 255, 258, 261, 264, 267};
 #endif
 
 #if YYDEBUG || YYERROR_VERBOSE || 0
@@ -1495,6 +1492,7 @@ yyreduce:
   case 18:
 
     {
+        assert((yyvsp[0]) >= 0);
         (yyval) = (yyvsp[-2]) >> (yyvsp[0]);
     }
 
@@ -1503,6 +1501,7 @@ yyreduce:
   case 19:
 
     {
+        assert((yyvsp[0]) >= 0);
         (yyval) = (yyvsp[-2]) << (yyvsp[0]);
     }
 
@@ -1882,9 +1881,9 @@ int yylex(YYSTYPE *lvalp, Context *context)
         break;
       }
       case pp::Token::IDENTIFIER:
-        *lvalp = static_cast<YYSTYPE>(-1);
-        type = TOK_IDENTIFIER;
-        break;
+          *lvalp = static_cast<YYSTYPE>(0);
+          type   = TOK_IDENTIFIER;
+          break;
       case pp::Token::OP_OR:
         type = TOK_OP_OR;
         break;

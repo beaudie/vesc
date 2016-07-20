@@ -1635,3 +1635,13 @@ TEST_F(MalformedShaderTest, DefineWithSemicolon)
         FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
     }
 }
+
+// Covers a bug in our parsing of malformed shift preprocessor expressions.
+TEST_F(MalformedShaderTest, LineDirectiveShift)
+{
+    const std::string &shaderString = "#line x << y";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}

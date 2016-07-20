@@ -196,9 +196,11 @@ expression
         $$ = $1 < $3;
     }
     | expression TOK_OP_RIGHT expression {
+        assert($3 >= 0);
         $$ = $1 >> $3;
     }
     | expression TOK_OP_LEFT expression {
+        assert($3 >= 0);
         $$ = $1 << $3;
     }
     | expression '-' expression {
@@ -297,7 +299,7 @@ int yylex(YYSTYPE *lvalp, Context *context)
         break;
       }
       case pp::Token::IDENTIFIER:
-        *lvalp = static_cast<YYSTYPE>(-1);
+        *lvalp = static_cast<YYSTYPE>(0);
         type = TOK_IDENTIFIER;
         break;
       case pp::Token::OP_OR:
