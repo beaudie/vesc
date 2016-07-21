@@ -102,11 +102,11 @@ class ReadPixelsPBOTest : public ReadPixelsTest
 
     void TearDown() override
     {
-        ANGLETest::TearDown();
-
         glDeleteBuffers(1, &mPBO);
         glDeleteTextures(1, &mTexture);
         glDeleteFramebuffers(1, &mFBO);
+
+        ANGLETest::TearDown();
     }
 
     GLuint mPBO;
