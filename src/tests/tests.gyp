@@ -71,6 +71,7 @@
                                 [
                                     '<(DEPTH)/testing/gmock/include',
                                     '<(DEPTH)/testing/gtest/include',
+                                    '<(DEPTH)/testing/third_party/googletest/googletest/include',
                                 ],
                             },
                         }],
