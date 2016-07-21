@@ -12,23 +12,10 @@
 class InitializeVariables : public TIntermTraverser
 {
   public:
-    struct InitVariableInfo
-    {
-        TString name;
-        TType type;
+    typedef std::vector<sh::ShaderVariable> InitVariableList;
 
-        InitVariableInfo(const TString &_name, const TType &_type)
-            : name(_name),
-              type(_type)
-        {
-        }
-    };
-    typedef TVector<InitVariableInfo> InitVariableInfoList;
-
-    InitializeVariables(const InitVariableInfoList &vars)
-        : TIntermTraverser(true, false, false),
-          mVariables(vars),
-          mCodeInserted(false)
+    InitializeVariables(const InitVariableList &vars)
+        : TIntermTraverser(true, false, false), mVariables(vars), mCodeInserted(false)
     {
     }
 
@@ -44,7 +31,7 @@ class InitializeVariables : public TIntermTraverser
   private:
     void insertInitCode(TIntermSequence *sequence);
 
-    InitVariableInfoList mVariables;
+    const InitVariableList &mVariables;
     bool mCodeInserted;
 };
 

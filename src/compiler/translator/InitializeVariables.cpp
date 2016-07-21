@@ -6,20 +6,87 @@
 
 #include "compiler/translator/InitializeVariables.h"
 
+#include "angle_gl.h"
 #include "common/debug.h"
 
 namespace
 {
 
-TIntermConstantUnion *constructFloatConstUnionNode(const TType &type)
+TType constructType(sh::GLenum type)
+{
+    switch (type)
+    {
+        case GL_FLOAT:
+            return TType(EbtFloat);
+        case GL_FLOAT_VEC2:
+            return TType(EbtFloat, 2);
+        case GL_FLOAT_VEC3:
+            return TType(EbtFloat, 3);
+        case GL_FLOAT_VEC4:
+            return TType(EbtFloat, 4);
+        case GL_FLOAT_MAT2:
+            return TType(EbtFloat, 2, 2);
+        case GL_FLOAT_MAT3:
+            return TType(EbtFloat, 3, 3);
+        case GL_FLOAT_MAT4:
+            return TType(EbtFloat, 4, 4);
+        case GL_FLOAT_MAT2x3:
+            return TType(EbtFloat, 2, 3);
+        case GL_FLOAT_MAT2x4:
+            return TType(EbtFloat, 2, 4);
+        case GL_FLOAT_MAT3x2:
+            return TType(EbtFloat, 3, 2);
+        case GL_FLOAT_MAT3x4:
+            return TType(EbtFloat, 3, 4);
+        case GL_FLOAT_MAT4x2:
+            return TType(EbtFloat, 4, 2);
+        case GL_FLOAT_MAT4x3:
+            return TType(EbtFloat, 4, 3);
+        case GL_INT:
+            return TType(EbtInt);
+        case GL_INT_VEC2:
+            return TType(EbtInt, 2);
+        case GL_INT_VEC3:
+            return TType(EbtInt, 3);
+        case GL_INT_VEC4:
+            return TType(EbtInt, 4);
+        case GL_UNSIGNED_INT:
+            return TType(EbtUInt);
+        case GL_UNSIGNED_INT_VEC2:
+            return TType(EbtUInt, 2);
+        case GL_UNSIGNED_INT_VEC3:
+            return TType(EbtUInt, 3);
+        case GL_UNSIGNED_INT_VEC4:
+            return TType(EbtUInt, 4);
+        default:
+            ASSERT(false);
+            return TType();
+    }
+}
+
+TIntermConstantUnion *constructConstUnionNode(const TType &type)
 {
     TType myType = type;
-    unsigned char size = static_cast<unsigned char>(myType.getNominalSize());
-    if (myType.isMatrix())
-        size *= size;
+    int size          = type.getNominalSize() * type.getSecondarySize();
     TConstantUnion *u = new TConstantUnion[size];
     for (int ii = 0; ii < size; ++ii)
-        u[ii].setFConst(0.0f);
+    {
+        switch (type.getBasicType())
+        {
+            case EbtFloat:
+                u[ii].setFConst(0.0f);
+                break;
+            case EbtInt:
+                u[ii].setIConst(0);
+                break;
+            case EbtUInt:
+                u[ii].setUConst(0u);
+                break;
+            default:
+                ASSERT(false);
+                return nullptr;
+        }
+    }
 
     myType.clearArrayness();
     myType.setQualifier(EvqConst);
@@ -81,24 +148,26 @@ void InitializeVariables::insertInitCode(TIntermSequence *sequence)
 {
     for (size_t ii = 0; ii < mVariables.size(); ++ii)
     {
-        const InitVariableInfo &varInfo = mVariables[ii];
-
-        if (varInfo.type.isArray())
+        const sh::ShaderVariable &var = mVariables[ii];
+        ASSERT(!var.isStruct());
+        TType type   = constructType(var.type);
+        TString name = TString(var.name.c_str());
+        if (var.isArray())
         {
-            for (int index = varInfo.type.getArraySize() - 1; index >= 0; --index)
+            for (int index = static_cast<int>(var.arraySize) - 1; index >= 0; --index)
             {
                 TIntermBinary *assign = new TIntermBinary(EOpAssign);
                 sequence->insert(sequence->begin(), assign);
 
                 TIntermBinary *indexDirect = new TIntermBinary(EOpIndexDirect);
-                TIntermSymbol *symbol = new TIntermSymbol(0, varInfo.name, varInfo.type);
+                TIntermSymbol *symbol      = new TIntermSymbol(0, name, type);
                 indexDirect->setLeft(symbol);
                 TIntermConstantUnion *indexNode = constructIndexNode(index);
                 indexDirect->setRight(indexNode);
 
                 assign->setLeft(indexDirect);
 
-                TIntermConstantUnion *zeroConst = constructFloatConstUnionNode(varInfo.type);
+                TIntermConstantUnion *zeroConst = constructConstUnionNode(type);
                 assign->setRight(zeroConst);
             }
         }
@@ -106,9 +175,9 @@ void InitializeVariables::insertInitCode(TIntermSequence *sequence)
         {
             TIntermBinary *assign = new TIntermBinary(EOpAssign);
             sequence->insert(sequence->begin(), assign);
-            TIntermSymbol *symbol = new TIntermSymbol(0, varInfo.name, varInfo.type);
+            TIntermSymbol *symbol = new TIntermSymbol(0, name, type);
             assign->setLeft(symbol);
-            TIntermConstantUnion *zeroConst = constructFloatConstUnionNode(varInfo.type);
+            TIntermConstantUnion *zeroConst = constructConstUnionNode(type);
             assign->setRight(zeroConst);
         }
 
