@@ -537,4 +537,23 @@ template void GetVariableTraverser::traverse(const TType &, const TString &, std
 template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<Uniform> *);
 template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<Varying> *);
 
+bool IsBuiltinOutputVariable(TQualifier qualifier)
+{
+    static const TQualifier allOutVariableQualifiers[] = {EvqPosition,  EvqPointSize,
+                                                          EvqFragDepth, EvqFragDepthEXT,
+                                                          EvqFragColor, EvqSecondaryFragColorEXT,
+                                                          EvqFragData,  EvqSecondaryFragDataEXT};
+
+    static const size_t outVariableQualifiersCount = ArraySize(allOutVariableQualifiers);
+
+    for (size_t i = 0; i < outVariableQualifiersCount; ++i)
+    {
+        if (allOutVariableQualifiers[i] == qualifier)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 }

@@ -67,7 +67,8 @@ class TParseContext : angle::NonCopyable
           mUsesSecondaryOutputs(false),
           mMinProgramTexelOffset(resources.MinProgramTexelOffset),
           mMaxProgramTexelOffset(resources.MaxProgramTexelOffset),
-          mComputeShaderLocalSizeDeclared(false)
+          mComputeShaderLocalSizeDeclared(false),
+          mDeclaringFunction(false)
     {
         mComputeShaderLocalSize.fill(-1);
     }
@@ -119,6 +120,12 @@ class TParseContext : angle::NonCopyable
     bool isComputeShaderLocalSizeDeclared() const { return mComputeShaderLocalSizeDeclared; }
     sh::WorkGroupSize getComputeShaderLocalSize() const;
 
+    void enterFunctionDeclaration() { mDeclaringFunction = true; }
+
+    void exitFunctionDeclaration() { mDeclaringFunction = false; }
+
+    bool declaringFunction() const { return mDeclaringFunction; }
+
     // This method is guaranteed to succeed, even if no variable with 'name' exists.
     const TVariable *getNamedVariable(const TSourceLoc &location, const TString *name, const TSymbol *symbol);
     TIntermTyped *parseVariableIdentifier(const TSourceLoc &location,
@@ -160,8 +167,7 @@ class TParseContext : angle::NonCopyable
                                        TQualifier qualifier,
                                        const TType &type);
     void checkIsParameterQualifierValid(const TSourceLoc &line,
-                                        TQualifier qualifier,
-                                        TQualifier paramQualifier,
+                                        const TPublicType &publicType,
                                         TType *type);
     bool checkCanUseExtension(const TSourceLoc &line, const TString &extension);
     void singleDeclarationErrorCheck(const TPublicType &publicType,
@@ -173,11 +179,16 @@ class TParseContext : angle::NonCopyable
                                           const TLayoutQualifier &layoutQualifier);
 
     void functionCallLValueErrorCheck(const TFunction *fnCandidate, TIntermAggregate *fnCall);
-    void checkInvariantIsOutVariableES3(const TQualifier qualifier,
-                                        const TSourceLoc &invariantLocation);
+    void checkInvariantIsOutVariable(bool invariant,
+                                     const TQualifier qualifier,
+                                     const TSourceLoc &invariantLocation);
     void checkInputOutputTypeIsValidES3(const TQualifier qualifier,
                                         const TPublicType &type,
                                         const TSourceLoc &qualifierLocation);
+
+    void checkJoinQualifiers(const TPublicType &leftType,
+                             const TPublicType &rightType,
+                             const TSourceLoc &rightTypeLoc);
 
     const TPragma &pragma() const { return mDirectiveHandler.pragma(); }
     const TExtensionBehavior &extensionBehavior() const { return mDirectiveHandler.extensionBehavior(); }
@@ -195,9 +206,7 @@ class TParseContext : angle::NonCopyable
                             TIntermTyped *initializer,
                             TIntermNode **intermNode);
 
-    TPublicType addFullySpecifiedType(TQualifier qualifier,
-                                      bool invariant,
-                                      TLayoutQualifier layoutQualifier,
+    TPublicType addFullySpecifiedType(const TPublicType &qualifiers,
                                       const TPublicType &typeSpecifier);
 
     TIntermAggregate *parseSingleDeclaration(TPublicType &publicType,
@@ -224,7 +233,7 @@ class TParseContext : angle::NonCopyable
                                                       const TSourceLoc &initLocation,
                                                       TIntermTyped *initializer);
 
-    TIntermAggregate *parseInvariantDeclaration(const TSourceLoc &invariantLoc,
+    TIntermAggregate *parseInvariantDeclaration(const TPublicType &publicType,
                                                 const TSourceLoc &identifierLoc,
                                                 const TString *identifier,
                                                 const TSymbol *symbol);
@@ -320,6 +329,9 @@ class TParseContext : angle::NonCopyable
                                           const TSourceLoc &rightQualifierLocation);
     TPublicType joinInterpolationQualifiers(const TSourceLoc &interpolationLoc, TQualifier interpolationQualifier,
                                             const TSourceLoc &storageLoc, TQualifier storageQualifier);
+    TPublicType joinQualifiers(const TPublicType &leftType,
+                               const TPublicType &rightType,
+                               const TSourceLoc &rightTypeLoc);
 
     // Performs an error check for embedded struct declarations.
     void enterStructDeclaration(const TSourceLoc &line, const TString &identifier);
@@ -389,6 +401,22 @@ class TParseContext : angle::NonCopyable
     bool checkIsValidTypeAndQualifierForArray(const TSourceLoc &indexLocation,
                                               const TPublicType &elementType);
 
+    bool joinSmooth(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinSmoothIn(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinSmoothOut(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinFlat(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinFlatIn(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinFlatOut(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinCentroid(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinCentroidIn(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinCentroidOut(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinFragmentIn(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinFragmentOut(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinVertexIn(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinVertexOut(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinComputeIn(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+    bool joinIn(const TQualifier leftQualifier, TQualifier *joinedQualifier) const;
+
     TIntermTyped *addBinaryMathInternal(
         TOperator op, TIntermTyped *left, TIntermTyped *right, const TSourceLoc &loc);
     TIntermTyped *createAssign(
@@ -435,6 +463,8 @@ class TParseContext : angle::NonCopyable
     // keep track of local group size declared in layout. It should be declared only once.
     bool mComputeShaderLocalSizeDeclared;
     sh::WorkGroupSize mComputeShaderLocalSize;
+    // keeps track whether we are declaring / defining a function
+    bool mDeclaringFunction;
 };
 
 int PaParseStrings(
