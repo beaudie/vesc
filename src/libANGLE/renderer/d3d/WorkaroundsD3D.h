@@ -52,6 +52,10 @@ struct WorkaroundsD3D
     // from a staging texture to a depth/stencil texture triggers a timeout/TDR. The workaround
     // is to use UpdateSubresource to trigger an extra copy.
     bool depthStencilBlitExtraCopy = false;
+
+    // NVIDIA drivers sometimes write out-of-order results to StreamOut buffers when transform
+    // feedback is used to repeatedly write to the same buffer positions.
+    bool flushAfterEndingTransformFeedback = false;
 };
 
 }  // namespace rx

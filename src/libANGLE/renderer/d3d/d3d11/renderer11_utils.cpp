@@ -1520,6 +1520,8 @@ WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps,
     // TODO(jmadill): Narrow problematic driver range.
     workarounds.depthStencilBlitExtraCopy = (adapterDesc.VendorId == VENDOR_ID_NVIDIA);
 
+    workarounds.flushAfterEndingTransformFeedback = (adapterDesc.VendorId == VENDOR_ID_NVIDIA);
+
     return workarounds;
 }
 
