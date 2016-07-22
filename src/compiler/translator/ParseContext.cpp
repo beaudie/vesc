@@ -16,6 +16,17 @@
 #include "compiler/translator/ValidateGlobalInitializer.h"
 #include "compiler/translator/util.h"
 
+namespace
+{
+// GLSL ES 3.10 does not impose a strict order on type qualifiers and allows multiple layout
+// declarations
+// GLSL ES 3.10 Revision 4, 4.10 Order of Qualification
+bool AreTypeQualifierChecksRelaxed(int shaderVersion)
+{
+    return shaderVersion >= 310;
+}
+}  // namespace
+
 ///////////////////////////////////////////////////////////////////////
 //
 // Sub- vector and matrix fields
@@ -934,7 +945,8 @@ void TParseContext::checkIsParameterQualifierValid(
     const TTypeQualifierBuilder &typeQualifierBuilder,
     TType *type)
 {
-    TTypeQualifier typeQualifier = typeQualifierBuilder.getParameterTypeQualifier(&mDiagnostics);
+    TTypeQualifier typeQualifier = typeQualifierBuilder.getParameterTypeQualifier(
+        &mDiagnostics, AreTypeQualifierChecksRelaxed(mShaderVersion));
 
     if (typeQualifier.qualifier == EvqOut || typeQualifier.qualifier == EvqInOut)
     {
@@ -1401,7 +1413,8 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
 TPublicType TParseContext::addFullySpecifiedType(const TTypeQualifierBuilder &typeQualifierBuilder,
                                                  const TPublicType &typeSpecifier)
 {
-    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(&mDiagnostics);
+    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(
+        &mDiagnostics, AreTypeQualifierChecksRelaxed(mShaderVersion));
 
     TPublicType returnType     = typeSpecifier;
     returnType.qualifier       = typeQualifier.qualifier;
@@ -1700,7 +1713,8 @@ TIntermAggregate *TParseContext::parseInvariantDeclaration(
     const TString *identifier,
     const TSymbol *symbol)
 {
-    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(&mDiagnostics);
+    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(
+        &mDiagnostics, AreTypeQualifierChecksRelaxed(mShaderVersion));
 
     if (!typeQualifier.invariant)
     {
@@ -1908,7 +1922,8 @@ TIntermAggregate *TParseContext::parseArrayInitDeclarator(const TPublicType &pub
 
 void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &typeQualifierBuilder)
 {
-    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(&mDiagnostics);
+    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(
+        &mDiagnostics, AreTypeQualifierChecksRelaxed(mShaderVersion));
     const TLayoutQualifier layoutQualifier = typeQualifier.layoutQualifier;
 
     checkInvariantVariableQualifier(typeQualifier.invariant, typeQualifier.qualifier,
@@ -2486,7 +2501,8 @@ TIntermAggregate *TParseContext::addInterfaceBlock(
 {
     checkIsNotReserved(nameLine, blockName);
 
-    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(&mDiagnostics);
+    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(
+        &mDiagnostics, AreTypeQualifierChecksRelaxed(mShaderVersion));
 
     if (typeQualifier.qualifier != EvqUniform)
     {
@@ -3173,37 +3189,8 @@ TLayoutQualifier TParseContext::joinLayoutQualifiers(TLayoutQualifier leftQualif
                                                      TLayoutQualifier rightQualifier,
                                                      const TSourceLoc &rightQualifierLocation)
 {
-    TLayoutQualifier joinedQualifier = leftQualifier;
-
-    if (rightQualifier.location != -1)
-    {
-        joinedQualifier.location = rightQualifier.location;
-    }
-    if (rightQualifier.matrixPacking != EmpUnspecified)
-    {
-        joinedQualifier.matrixPacking = rightQualifier.matrixPacking;
-    }
-    if (rightQualifier.blockStorage != EbsUnspecified)
-    {
-        joinedQualifier.blockStorage = rightQualifier.blockStorage;
-    }
-
-    for (size_t i = 0u; i < rightQualifier.localSize.size(); ++i)
-    {
-        if (rightQualifier.localSize[i] != -1)
-        {
-            if (joinedQualifier.localSize[i] != -1 &&
-                joinedQualifier.localSize[i] != rightQualifier.localSize[i])
-            {
-                error(rightQualifierLocation,
-                      "Cannot have multiple different work group size specifiers",
-                      getWorkGroupSizeString(i));
-            }
-            joinedQualifier.localSize[i] = rightQualifier.localSize[i];
-        }
-    }
-
-    return joinedQualifier;
+    return sh::JoinLayoutQualifiers(leftQualifier, rightQualifier, rightQualifierLocation,
+                                    &mDiagnostics);
 }
 
 TFieldList *TParseContext::addStructDeclaratorListWithQualifiers(
@@ -3211,7 +3198,8 @@ TFieldList *TParseContext::addStructDeclaratorListWithQualifiers(
     TPublicType *typeSpecifier,
     TFieldList *fieldList)
 {
-    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(&mDiagnostics);
+    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(
+        &mDiagnostics, AreTypeQualifierChecksRelaxed(mShaderVersion));
 
     typeSpecifier->qualifier       = typeQualifier.qualifier;
     typeSpecifier->layoutQualifier = typeQualifier.layoutQualifier;
