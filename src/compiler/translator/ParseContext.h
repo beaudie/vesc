@@ -66,7 +66,8 @@ class TParseContext : angle::NonCopyable
           mUsesSecondaryOutputs(false),
           mMinProgramTexelOffset(resources.MinProgramTexelOffset),
           mMaxProgramTexelOffset(resources.MaxProgramTexelOffset),
-          mComputeShaderLocalSizeDeclared(false)
+          mComputeShaderLocalSizeDeclared(false),
+          mDeclaringFunction(false)
     {
         mComputeShaderLocalSize.fill(-1);
     }
@@ -118,6 +119,12 @@ class TParseContext : angle::NonCopyable
     bool isComputeShaderLocalSizeDeclared() const { return mComputeShaderLocalSizeDeclared; }
     sh::WorkGroupSize getComputeShaderLocalSize() const;
 
+    void enterFunctionDeclaration() { mDeclaringFunction = true; }
+
+    void exitFunctionDeclaration() { mDeclaringFunction = false; }
+
+    bool declaringFunction() const { return mDeclaringFunction; }
+
     // This method is guaranteed to succeed, even if no variable with 'name' exists.
     const TVariable *getNamedVariable(const TSourceLoc &location, const TString *name, const TSymbol *symbol);
     TIntermTyped *parseVariableIdentifier(const TSourceLoc &location,
@@ -131,11 +138,7 @@ class TParseContext : angle::NonCopyable
     void binaryOpError(const TSourceLoc &line, const char *op, TString left, TString right);
 
     bool checkIsNotReserved(const TSourceLoc &line, const TString &identifier);
-    void checkPrecisionSpecified(const TSourceLoc &line, TPrecision precision, TBasicType type);
-    bool checkCanBeLValue(const TSourceLoc &line, const char *op, TIntermTyped *node);
-    void checkIsConst(TIntermTyped *node);
-    void checkIsScalarInteger(TIntermTyped *node, const char *token);
-    void checkIsAtGlobalLevel(const TSourceLoc &line, const char *token);
+
     bool checkConstructorArguments(const TSourceLoc &line,
                                    TIntermNode *argumentsNode,
                                    const TFunction &function,
@@ -146,10 +149,7 @@ class TParseContext : angle::NonCopyable
     unsigned int checkIsValidArraySize(const TSourceLoc &line, TIntermTyped *expr);
     bool checkIsValidQualifierForArray(const TSourceLoc &line, const TPublicType &type);
     bool checkIsValidTypeForArray(const TSourceLoc &line, const TPublicType &type);
-    bool checkIsNonVoid(const TSourceLoc &line, const TString &identifier, const TBasicType &type);
-    void checkIsScalarBool(const TSourceLoc &line, const TIntermTyped *type);
-    void checkIsScalarBool(const TSourceLoc &line, const TPublicType &pType);
-    bool checkIsNotSampler(const TSourceLoc &line, const TPublicType &pType, const char *reason);
+
     void checkDeclaratorLocationIsNotSpecified(const TSourceLoc &line, const TPublicType &pType);
     void checkLocationIsNotSpecified(const TSourceLoc &location,
                                      const TLayoutQualifier &layoutQualifier);
@@ -157,10 +157,20 @@ class TParseContext : angle::NonCopyable
                                        TQualifier qualifier,
                                        const TType &type);
     void checkIsParameterQualifierValid(const TSourceLoc &line,
-                                        TQualifier qualifier,
-                                        TQualifier paramQualifier,
+                                        const TPublicType &publicType,
                                         TType *type);
     bool checkCanUseExtension(const TSourceLoc &line, const TString &extension);
+    void checkPrecisionSpecified(const TSourceLoc &line, TPrecision precision, TBasicType type);
+    bool checkCanBeLValue(const TSourceLoc &line, const char *op, TIntermTyped *);
+    void checkIsConst(TIntermTyped *node);
+    void checkIsScalarInteger(TIntermTyped *node, const char *token);
+    void checkIsAtGlobalLevel(const TSourceLoc &line, const char *token);
+    bool checkIsNonVoid(const TSourceLoc &line, const TString &identifier, const TBasicType &type);
+    void checkIsScalarBool(const TSourceLoc &, const TIntermTyped *);
+    void checkIsScalarBool(const TSourceLoc &, const TPublicType &);
+    bool checkIsNotSampler(const TSourceLoc &line, const TPublicType &pType, const char *reason);
+    bool checkIsNotImage(const TSourceLoc &line, const TPublicType &pType, const char *reason);
+
     void singleDeclarationErrorCheck(const TPublicType &publicType,
                                      const TSourceLoc &identifierLocation);
     void checkLayoutQualifierSupported(const TSourceLoc &location,
@@ -168,9 +178,10 @@ class TParseContext : angle::NonCopyable
                                        int versionRequired);
     bool checkWorkGroupSizeIsNotSpecified(const TSourceLoc &location,
                                           const TLayoutQualifier &layoutQualifier);
-
-    void functionCallLValueErrorCheck(const TFunction *fnCandidate, TIntermAggregate *fnCall);
-    void checkInvariantIsOutVariableES3(const TQualifier qualifier,
+    void checkIsImageBindingInLimit(const TSourceLoc &location, int binding);
+    void functionCallLValueErrorCheck(const TFunction *fnCandidate, TIntermAggregate *);
+    void checkInvariantIsOutVariableES3(bool invariant,
+                                        TQualifier qualifier,
                                         const TSourceLoc &invariantLocation);
     void checkInputOutputTypeIsValidES3(const TQualifier qualifier,
                                         const TPublicType &type,
@@ -183,6 +194,7 @@ class TParseContext : angle::NonCopyable
     void handleExtensionDirective(const TSourceLoc &loc, const char *extName, const char *behavior);
     void handlePragmaDirective(const TSourceLoc &loc, const char *name, const char *value, bool stdgl);
 
+    bool containsImage(const TType &type);
     bool containsSampler(const TType &type);
     const TFunction* findFunction(
         const TSourceLoc &line, TFunction *pfnCall, int inputShaderVersion, bool *builtIn = 0);
@@ -192,9 +204,7 @@ class TParseContext : angle::NonCopyable
                             TIntermTyped *initializer,
                             TIntermNode **intermNode);
 
-    TPublicType addFullySpecifiedType(TQualifier qualifier,
-                                      bool invariant,
-                                      TLayoutQualifier layoutQualifier,
+    TPublicType addFullySpecifiedType(const TPublicType &qualifiers,
                                       const TPublicType &typeSpecifier);
 
     TIntermAggregate *parseSingleDeclaration(TPublicType &publicType,
@@ -225,6 +235,11 @@ class TParseContext : angle::NonCopyable
                                                 const TSourceLoc &identifierLoc,
                                                 const TString *identifier,
                                                 const TSymbol *symbol);
+
+    TIntermAggregate *parseEmptyDeclaration(const TPublicType &publicType,
+                                            const TSourceLoc &identifierOrTypeLocation,
+                                            const TString *identifier,
+                                            const TSymbol *symbol);
 
     TIntermAggregate *parseDeclarator(TPublicType &publicType,
                                       TIntermAggregate *aggregateDeclaration,
@@ -317,6 +332,9 @@ class TParseContext : angle::NonCopyable
                                           const TSourceLoc &rightQualifierLocation);
     TPublicType joinInterpolationQualifiers(const TSourceLoc &interpolationLoc, TQualifier interpolationQualifier,
                                             const TSourceLoc &storageLoc, TQualifier storageQualifier);
+    TPublicType joinTypeQualifiers(const TPublicType &leftType,
+                                   const TPublicType &rightType,
+                                   const TSourceLoc &rightTypeLoc);
 
     // Performs an error check for embedded struct declarations.
     void enterStructDeclaration(const TSourceLoc &line, const TString &identifier);
@@ -343,6 +361,7 @@ class TParseContext : angle::NonCopyable
     TIntermBranch *addBranch(TOperator op, TIntermTyped *returnValue, const TSourceLoc &loc);
 
     void checkTextureOffsetConst(TIntermAggregate *functionCall);
+    void checkImageMemoryAccess(TIntermAggregate *functionCall);
     TIntermTyped *addFunctionCallOrMethod(TFunction *fnCall,
                                           TIntermNode *paramNode,
                                           TIntermNode *thisNode,
@@ -428,6 +447,8 @@ class TParseContext : angle::NonCopyable
     // keep track of local group size declared in layout. It should be declared only once.
     bool mComputeShaderLocalSizeDeclared;
     sh::WorkGroupSize mComputeShaderLocalSize;
+    // keeps track whether we are declaring / defining a function
+    bool mDeclaringFunction;
 };
 
 int PaParseStrings(

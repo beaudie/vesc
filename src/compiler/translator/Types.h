@@ -712,6 +712,19 @@ struct TPublicType
     {
         return array || isMatrix() || isVector();
     }
+
+    bool isQualifierUnspecified() const
+    {
+        return (qualifier == EvqGlobal || qualifier == EvqTemporary);
+    }
+
+    // This is the proper order for the qualifiers:
+    // invariant-qualifier interpolation-qualifier layout-qualifier other-storage-qualifier
+    // precision-qualifier
+    // The method returns an index for the qualifier used.
+    int getMaximumQualifierIndex() const;
+
+    int getMaximumQualifierIndexForFunctionParameter() const;
 };
 
 #endif // COMPILER_TRANSLATOR_TYPES_H_

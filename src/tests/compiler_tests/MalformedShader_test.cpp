@@ -2378,3 +2378,68 @@ TEST_F(MalformedComputeShaderTest, SpecialVariableWorkGroupSize)
         FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
     }
 }
+
+// invariant can be only used with output variables
+TEST_F(MalformedComputeShaderTest, InvariantBlockSize)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "invariant layout(local_size_x = 15) in;\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// it is not an error to use invariant with input variables in a fragment shader in ess1
+// GLSL ES 1.0.17, 4.6.1 The Invariant Qualifier
+TEST_F(MalformedShaderTest, CorrectInvariantFragmentInputESS1)
+{
+    const std::string &shaderString =
+        "precision mediump float;\n"
+        "invariant varying vec4 myInput;\n"
+        "void main() {\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+    }
+}
+
+// it is an error to use invariant with input variables in a fragment shader in ess3
+// GLSL ES 3.00.6, 4.6.1 The Invariant Qualifier
+TEST_F(MalformedShaderTest, IncorrectInvariantFragmentInputESS3)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "invariant in vec4 myInput;\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// it is an error to use invariant with input variables in a fragment shader in ess31
+// GLSL ES 3.10, 4.8.1 The Invariant Qualifier
+TEST_F(MalformedFragmentShaderGLES31Test, IncorrectInvariantFragmentInputESS31)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "invariant in vec4 myInput;\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
