@@ -211,17 +211,15 @@ Error FramebufferGL::clearBufferfi(ContextImpl *context,
 GLenum FramebufferGL::getImplementationColorReadFormat() const
 {
     const FramebufferAttachment *readAttachment = mState.getReadAttachment();
-    GLenum internalFormat = readAttachment->getInternalFormat();
-    const InternalFormat &internalFormatInfo    = GetInternalFormatInfo(internalFormat);
-    return internalFormatInfo.format;
+    const Format &format                        = readAttachment->getFormat();
+    return format.info->format;
 }
 
 GLenum FramebufferGL::getImplementationColorReadType() const
 {
     const FramebufferAttachment *readAttachment = mState.getReadAttachment();
-    GLenum internalFormat = readAttachment->getInternalFormat();
-    const InternalFormat &internalFormatInfo    = GetInternalFormatInfo(internalFormat);
-    return internalFormatInfo.type;
+    const Format &format                        = readAttachment->getFormat();
+    return format.type;
 }
 
 Error FramebufferGL::readPixels(ContextImpl *context,

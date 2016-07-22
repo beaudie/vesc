@@ -69,6 +69,13 @@ struct InternalFormat
                                                 const gl::Extents &size,
                                                 const gl::PixelUnpackState &unpack) const;
 
+    bool isLUMA() const;
+
+    bool operator==(const InternalFormat &other) const;
+    bool operator!=(const InternalFormat &other) const;
+
+    GLenum internalFormat;
+
     GLuint redBits;
     GLuint greenBits;
     GLuint blueBits;
@@ -99,6 +106,33 @@ struct InternalFormat
     SupportCheckFunction textureSupport;
     SupportCheckFunction renderSupport;
     SupportCheckFunction filterSupport;
+};
+
+// A "Format" is either a sized format, or an {unsized format, type} combination.
+struct Format
+{
+    // Sized types only.
+    explicit Format(GLenum internalFormat);
+    explicit Format(const InternalFormat &internalFormat);
+
+    // Sized or unsized types.
+    Format(GLenum internalFormat, GLenum format, GLenum type);
+
+    Format(const Format &other);
+    Format &operator=(const Format &other);
+
+    GLenum asSized() const;
+    bool isSized() const;
+    bool valid() const;
+
+    bool operator==(const Format &other) const;
+    bool operator!=(const Format &other) const;
+
+    static Format Invalid();
+
+    const InternalFormat *info;
+    GLenum format;
+    GLenum type;
 };
 
 const InternalFormat &GetInternalFormatInfo(GLenum internalFormat);
