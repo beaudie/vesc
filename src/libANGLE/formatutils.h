@@ -251,6 +251,10 @@ VertexFormatType GetVertexFormatType(const VertexAttribute &attrib);
 VertexFormatType GetVertexFormatType(const VertexAttribute &attrib, GLenum currentValueType);
 const VertexFormat &GetVertexFormatFromType(VertexFormatType vertexFormatType);
 
+bool GetEffectiveInternalFormat(const InternalFormat &srcFormat,
+                                const InternalFormat &destFormat,
+                                GLenum *outEffectiveFormat);
+
 }  // namespace gl
 
 #endif // LIBANGLE_FORMATUTILS_H_
