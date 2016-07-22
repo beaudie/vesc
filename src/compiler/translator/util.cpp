@@ -537,4 +537,25 @@ template void GetVariableTraverser::traverse(const TType &, const TString &, std
 template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<Uniform> *);
 template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<Varying> *);
 
+bool IsBuiltinOutputVariable(const TString &name)
+{
+
+    const TString allOutVariableNames[] = {
+        TString("gl_Position"),  TString("gl_PointSize"),
+        TString("gl_FragDepth"), TString("gl_FragDepthEXT"),
+        TString("gl_FragColor"), TString("gl_SecondaryFragColorEXT"),
+        TString("gl_FragData"),  TString("gl_SecondaryFragDataEXT")};
+
+    static const size_t outVariableNamesCount = ArraySize(allOutVariableNames);
+
+    for (size_t i = 0; i < outVariableNamesCount; ++i)
+    {
+        if (allOutVariableNames[i] == name)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 }
