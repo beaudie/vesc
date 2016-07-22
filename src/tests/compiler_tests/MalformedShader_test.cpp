@@ -2283,7 +2283,7 @@ TEST_F(MalformedComputeShaderTest, CorrectUsageOfComputeBuiltins)
     }
 }
 
-// It is illegal to write to a special variable
+// It is illegal to write to a special variable.
 TEST_F(MalformedComputeShaderTest, SpecialVariableNumWorkGroups)
 {
     const std::string &shaderString =
@@ -2299,7 +2299,7 @@ TEST_F(MalformedComputeShaderTest, SpecialVariableNumWorkGroups)
     }
 }
 
-// It is illegal to write to a special variable
+// It is illegal to write to a special variable.
 TEST_F(MalformedComputeShaderTest, SpecialVariableWorkGroupID)
 {
     const std::string &shaderString =
@@ -2315,7 +2315,7 @@ TEST_F(MalformedComputeShaderTest, SpecialVariableWorkGroupID)
     }
 }
 
-// It is illegal to write to a special variable
+// It is illegal to write to a special variable.
 TEST_F(MalformedComputeShaderTest, SpecialVariableLocalInvocationID)
 {
     const std::string &shaderString =
@@ -2331,7 +2331,7 @@ TEST_F(MalformedComputeShaderTest, SpecialVariableLocalInvocationID)
     }
 }
 
-// It is illegal to write to a special variable
+// It is illegal to write to a special variable.
 TEST_F(MalformedComputeShaderTest, SpecialVariableGlobalInvocationID)
 {
     const std::string &shaderString =
@@ -2347,7 +2347,7 @@ TEST_F(MalformedComputeShaderTest, SpecialVariableGlobalInvocationID)
     }
 }
 
-// It is illegal to write to a special variable
+// It is illegal to write to a special variable.
 TEST_F(MalformedComputeShaderTest, SpecialVariableLocalInvocationIndex)
 {
     const std::string &shaderString =
@@ -2363,7 +2363,7 @@ TEST_F(MalformedComputeShaderTest, SpecialVariableLocalInvocationIndex)
     }
 }
 
-// It is illegal to write to a special variable
+// It is illegal to write to a special variable.
 TEST_F(MalformedComputeShaderTest, SpecialVariableWorkGroupSize)
 {
     const std::string &shaderString =
@@ -2372,6 +2372,38 @@ TEST_F(MalformedComputeShaderTest, SpecialVariableWorkGroupSize)
         "void main()\n"
         "{\n"
         "   gl_WorkGroupSize = uvec3(1); \n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// Invariant can be only used with output variables.
+TEST_F(MalformedComputeShaderTest, InvariantBlockSize)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "invariant layout(local_size_x = 15) in;\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// Invariant declaration should follow the following format "invariant <out variable name>".
+// Test having an incorrect qualifier in the invariant declaration.
+TEST_F(MalformedShaderTest, InvariantDeclarationWithStorageQualifier)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec4 foo;\n"
+        "invariant centroid foo;\n"
+        "void main() {\n"
         "}\n";
     if (compile(shaderString))
     {

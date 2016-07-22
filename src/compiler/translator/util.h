@@ -65,6 +65,7 @@ class GetVariableTraverser : angle::NonCopyable
     const TSymbolTable &mSymbolTable;
 };
 
+bool IsBuiltinOutputVariable(TQualifier qualifier);
 }
 
 #endif // COMPILER_TRANSLATOR_UTIL_H_
