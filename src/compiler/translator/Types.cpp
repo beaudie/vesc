@@ -465,3 +465,91 @@ int TStructure::calculateDeepestNesting() const
         maxNesting = std::max(maxNesting, (*mFields)[i]->type()->getDeepestStructNesting());
     return 1 + maxNesting;
 }
+
+int TPublicType::getMaximumQualifierIndex() const
+{
+    // precision qualifier
+    if (precision != EbpUndefined)
+    {
+        return 4;
+    }
+
+    // storage qualifier
+    switch (qualifier)
+    {
+        case EvqVaryingIn:
+        case EvqVaryingOut:
+        case EvqAttribute:
+        case EvqSmoothIn:
+        case EvqSmoothOut:
+        case EvqCentroid:
+        case EvqCentroidIn:
+        case EvqCentroidOut:
+        case EvqFlatIn:
+        case EvqFlatOut:
+        case EvqComputeIn:
+        case EvqVertexIn:
+        case EvqVertexOut:
+        case EvqFragmentIn:
+        case EvqFragmentOut:
+        case EvqUniform:
+        case EvqConst:
+            return 3;
+        default:
+            break;
+    }
+
+    // layout qualifier
+    if (!layoutQualifier.isEmpty())
+    {
+        return 2;
+    }
+
+    // interpolation qualifier
+    switch (qualifier)
+    {
+        case EvqSmooth:
+        case EvqFlat:
+            return 1;
+        default:
+            break;
+    }
+
+    // invariant qualifier
+    if (invariant)
+    {
+        return 0;
+    }
+
+    ASSERT(isQualifierUnspecified());
+    return -1;
+}
+
+int TPublicType::getMaximumQualifierIndexForFunctionParameter() const
+{
+    // precision qualifier
+    if (precision != EbpUndefined)
+    {
+        return 2;
+    }
+
+    // storage qualifier
+    switch (qualifier)
+    {
+        case EvqIn:
+        case EvqOut:
+        case EvqInOut:
+            return 1;
+        case EvqConst:
+        case EvqConstReadOnly:
+            return 0;
+
+        default:
+            break;
+    }
+
+    // there can be other qualifiers, but they are invalid in a function header
+    // we can return -1 as they will be handled somewhere else
+
+    return -1;
+}

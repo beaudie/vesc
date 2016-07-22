@@ -66,7 +66,8 @@ class TParseContext : angle::NonCopyable
           mUsesSecondaryOutputs(false),
           mMinProgramTexelOffset(resources.MinProgramTexelOffset),
           mMaxProgramTexelOffset(resources.MaxProgramTexelOffset),
-          mComputeShaderLocalSizeDeclared(false)
+          mComputeShaderLocalSizeDeclared(false),
+          mDeclaringFunction(false)
     {
         mComputeShaderLocalSize.fill(-1);
     }
@@ -118,6 +119,12 @@ class TParseContext : angle::NonCopyable
     bool isComputeShaderLocalSizeDeclared() const { return mComputeShaderLocalSizeDeclared; }
     sh::WorkGroupSize getComputeShaderLocalSize() const;
 
+    void enterFunctionDeclaration() { mDeclaringFunction = true; }
+
+    void exitFunctionDeclaration() { mDeclaringFunction = false; }
+
+    bool declaringFunction() const { return mDeclaringFunction; }
+
     // This method is guaranteed to succeed, even if no variable with 'name' exists.
     const TVariable *getNamedVariable(const TSourceLoc &location, const TString *name, const TSymbol *symbol);
     TIntermTyped *parseVariableIdentifier(const TSourceLoc &location,
@@ -157,8 +164,7 @@ class TParseContext : angle::NonCopyable
                                        TQualifier qualifier,
                                        const TType &type);
     void checkIsParameterQualifierValid(const TSourceLoc &line,
-                                        TQualifier qualifier,
-                                        TQualifier paramQualifier,
+                                        const TPublicType &publicType,
                                         TType *type);
     bool checkCanUseExtension(const TSourceLoc &line, const TString &extension);
     void singleDeclarationErrorCheck(const TPublicType &publicType,
@@ -170,8 +176,9 @@ class TParseContext : angle::NonCopyable
                                           const TLayoutQualifier &layoutQualifier);
 
     void functionCallLValueErrorCheck(const TFunction *fnCandidate, TIntermAggregate *fnCall);
-    void checkInvariantIsOutVariableES3(const TQualifier qualifier,
-                                        const TSourceLoc &invariantLocation);
+    void checkInvariantIsOutVariable(bool invariant,
+                                     const TQualifier qualifier,
+                                     const TSourceLoc &invariantLocation);
     void checkInputOutputTypeIsValidES3(const TQualifier qualifier,
                                         const TPublicType &type,
                                         const TSourceLoc &qualifierLocation);
@@ -192,9 +199,7 @@ class TParseContext : angle::NonCopyable
                             TIntermTyped *initializer,
                             TIntermNode **intermNode);
 
-    TPublicType addFullySpecifiedType(TQualifier qualifier,
-                                      bool invariant,
-                                      TLayoutQualifier layoutQualifier,
+    TPublicType addFullySpecifiedType(const TPublicType &qualifiers,
                                       const TPublicType &typeSpecifier);
 
     TIntermAggregate *parseSingleDeclaration(TPublicType &publicType,
@@ -225,6 +230,11 @@ class TParseContext : angle::NonCopyable
                                                 const TSourceLoc &identifierLoc,
                                                 const TString *identifier,
                                                 const TSymbol *symbol);
+
+    TIntermAggregate *parseEmptyDeclaration(const TPublicType &publicType,
+                                            const TSourceLoc &identifierOrTypeLocation,
+                                            const TString *identifier,
+                                            const TSymbol *symbol);
 
     TIntermAggregate *parseDeclarator(TPublicType &publicType,
                                       TIntermAggregate *aggregateDeclaration,
@@ -317,6 +327,9 @@ class TParseContext : angle::NonCopyable
                                           const TSourceLoc &rightQualifierLocation);
     TPublicType joinInterpolationQualifiers(const TSourceLoc &interpolationLoc, TQualifier interpolationQualifier,
                                             const TSourceLoc &storageLoc, TQualifier storageQualifier);
+    TPublicType joinTypeQualifiers(const TPublicType &leftType,
+                                   const TPublicType &rightType,
+                                   const TSourceLoc &rightTypeLoc);
 
     // Performs an error check for embedded struct declarations.
     void enterStructDeclaration(const TSourceLoc &line, const TString &identifier);
@@ -428,6 +441,8 @@ class TParseContext : angle::NonCopyable
     // keep track of local group size declared in layout. It should be declared only once.
     bool mComputeShaderLocalSizeDeclared;
     sh::WorkGroupSize mComputeShaderLocalSize;
+    // keeps track whether we are declaring / defining a function
+    bool mDeclaringFunction;
 };
 
 int PaParseStrings(
