@@ -212,12 +212,12 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
 %type <interm> single_declaration init_declarator_list
 
 %type <interm> parameter_declaration parameter_declarator parameter_type_specifier
-%type <interm.qualifier> parameter_qualifier parameter_type_qualifier
 %type <interm.layoutQualifier> layout_qualifier layout_qualifier_id_list layout_qualifier_id
 
 %type <interm.precision> precision_qualifier
 %type <interm.type> type_qualifier fully_specified_type type_specifier storage_qualifier interpolation_qualifier
-%type <interm.type> type_specifier_no_prec type_specifier_nonarray
+%type <interm.type> single_type_qualifier invariant_qualifier
+%type <interm.type> type_specifier_no_prec type_specifier_nonarray /*array_specifier*/
 %type <interm.type> struct_specifier
 %type <interm.field> struct_declarator
 %type <interm.fieldList> struct_declarator_list struct_declaration struct_declaration_list
@@ -639,6 +639,10 @@ declaration
         context->parseGlobalLayoutQualifier($1);
         $$ = 0;
     }
+    | type_qualifier IDENTIFIER SEMICOLON // e.g. to qualify an existing variable as invariant
+    {
+        $$ = context->parseEmptyDeclaration($1, @2, $2.string, $2.symbol);
+    }
     ;
 
 function_prototype
@@ -691,6 +695,7 @@ function_header
         $$ = context->parseFunctionHeader($1, $2.string, @2);
 
         context->symbolTable.push();
+        context->enterFunctionDeclaration();
     }
     ;
 
@@ -734,47 +739,31 @@ parameter_declaration
     //
     // Type + name
     //
-    : parameter_type_qualifier parameter_qualifier parameter_declarator {
-        $$ = $3;
-        if (context->paramErrorCheck(@3, $1, $2, $$.param.type))
-            context->recover();
-    }
-    | parameter_qualifier parameter_declarator {
+    : type_qualifier parameter_declarator {
         $$ = $2;
-        if (context->parameterSamplerErrorCheck(@2, $1, *$2.param.type))
+        if (context->paramErrorCheck(@2, $1, $2.param.type))
+        {
             context->recover();
-        if (context->paramErrorCheck(@2, EvqTemporary, $1, $$.param.type))
-            context->recover();
+        }
     }
-    //
-    // Only type
-    //
-    | parameter_type_qualifier parameter_qualifier parameter_type_specifier {
-        $$ = $3;
-        if (context->paramErrorCheck(@3, $1, $2, $$.param.type))
-            context->recover();
-    }
-    | parameter_qualifier parameter_type_specifier {
-        $$ = $2;
-        if (context->parameterSamplerErrorCheck(@2, $1, *$2.param.type))
-            context->recover();
-        if (context->paramErrorCheck(@2, EvqTemporary, $1, $$.param.type))
-            context->recover();
-    }
-    ;
+    | parameter_declarator {
+        $$ = $1;
 
-parameter_qualifier
-    : /* empty */ {
-        $$ = EvqIn;
+        $$.param.type->setQualifier(EvqIn);
+
     }
-    | IN_QUAL {
-        $$ = EvqIn;
+    | type_qualifier parameter_type_specifier {
+        $$ = $2;
+        if (context->paramErrorCheck(@2, $1, $2.param.type))
+        {
+            context->recover();
+        }
     }
-    | OUT_QUAL {
-        $$ = EvqOut;
-    }
-    | INOUT_QUAL {
-        $$ = EvqInOut;
+    | parameter_type_specifier {
+        $$ = $1;
+
+        $$.param.type->setQualifier(EvqIn);
+
     }
     ;
 
@@ -840,10 +829,6 @@ single_declaration
         $$.type = $1;
         $$.intermAggregate = context->parseSingleInitDeclaration($$.type, @2, *$2.string, @3, $4);
     }
-    | INVARIANT IDENTIFIER {
-        // $$.type is not used in invariant declarations.
-        $$.intermAggregate = context->parseInvariantDeclaration(@1, @2, $2.string, $2.symbol);
-    }
     ;
 
 fully_specified_type
@@ -858,27 +843,89 @@ fully_specified_type
         }
     }
     | type_qualifier type_specifier  {
-        $$ = context->addFullySpecifiedType($1.qualifier, $1.invariant, $1.layoutQualifier, $2);
+        if ($1.precision != EbpUndefined)
+        {
+            $2.precision = $1.precision;
+        }
+
+        if ($1.precision != EbpUndefined && !SupportsPrecision($2.type)) {
+            context->error(@1, "illegal type for precision qualifier", getBasicString($2.type));
+            context->recover();
+        }
+
+        if (context->precisionErrorCheck(@1, $2.precision, $2.type)) {
+            context->recover();
+        }
+
+        $$ = context->addFullySpecifiedType($1, $2);
+
     }
     ;
 
 interpolation_qualifier
     : SMOOTH {
-        $$.qualifier = EvqSmooth;
+        $$.setBasic(EbtVoid, EvqSmooth, @1);
     }
     | FLAT {
-        $$.qualifier = EvqFlat;
+        $$.setBasic(EbtVoid, EvqFlat, @1);
     }
     ;
-
-parameter_type_qualifier
-    : CONST_QUAL {
-        $$ = EvqConst;
-    }
-    ;
-
+    
 type_qualifier
-    : ATTRIBUTE {
+    : single_type_qualifier {
+        $$ = $1;
+    }
+    | type_qualifier single_type_qualifier {
+        $$ = context->joinTypeQualifiers($1, $2, @2);
+    }
+    ;
+    
+invariant_qualifier
+    : INVARIANT {
+        /*
+            empty
+        */
+    }
+    ;
+
+single_type_qualifier
+    : storage_qualifier {
+        if (!context->declaringFunction() && $1.qualifier != EvqConst && !context->symbolTable.atGlobalLevel())
+        {
+            context->error(@1, "Local variables can only use the const storage qualifier.", getQualifierString($1.qualifier));
+            context->recover();
+        }
+        $$.setBasic(EbtVoid, $1.qualifier, @1);
+    }
+    | layout_qualifier {
+        if (context->globalErrorCheck(@1, context->symbolTable.atGlobalLevel(), "layout"))
+        {
+            context->recover();
+        }
+        $$.setBasic(EbtVoid, EvqGlobal, @1);
+        $$.layoutQualifier = $1;
+    }
+    | precision_qualifier {
+        $$.setBasic(EbtVoid, context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary, @1);
+        $$.precision = $1;
+    }
+    | interpolation_qualifier {
+        $$.setBasic(EbtVoid, $1.qualifier, @1);
+    }
+    | invariant_qualifier {
+        if (context->globalErrorCheck(@1, context->symbolTable.atGlobalLevel(), "invariant"))
+        {
+            context->recover();
+        }
+        $$.setBasic(EbtVoid, EvqGlobal, @1);
+        $$.invariant = true;
+    }
+    ;
+
+
+storage_qualifier
+    : 
+    ATTRIBUTE {
         VERTEX_ONLY("attribute", @1);
         ES2_ONLY("attribute", @1);
         if (context->globalErrorCheck(@1, context->symbolTable.atGlobalLevel(), "attribute"))
@@ -894,66 +941,22 @@ type_qualifier
         else
             $$.setBasic(EbtVoid, EvqVaryingIn, @1);
     }
-    | INVARIANT VARYING {
-        ES2_ONLY("varying", @1);
-        if (context->globalErrorCheck(@1, context->symbolTable.atGlobalLevel(), "invariant varying"))
-            context->recover();
-        if (context->getShaderType() == GL_VERTEX_SHADER)
-            $$.setBasic(EbtVoid, EvqVaryingOut, @1);
-        else
-            $$.setBasic(EbtVoid, EvqVaryingIn, @1);
-        $$.invariant = true;
-    }
-    | storage_qualifier {
-        if ($1.qualifier != EvqConst && !context->symbolTable.atGlobalLevel())
-        {
-            context->error(@1, "Local variables can only use the const storage qualifier.", getQualifierString($1.qualifier));
-            context->recover();
-        }
-        $$.setBasic(EbtVoid, $1.qualifier, @1);
-    }
-    | interpolation_qualifier storage_qualifier {
-        $$ = context->joinInterpolationQualifiers(@1, $1.qualifier, @2, $2.qualifier);
-    }
-    | interpolation_qualifier {
-        context->error(@1, "interpolation qualifier requires a fragment 'in' or vertex 'out' storage qualifier", getInterpolationString($1.qualifier));
-        context->recover();
-
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtVoid, qual, @1);
-    }
-    | layout_qualifier {
-        $$.qualifier = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.layoutQualifier = $1;
-    }
-    | layout_qualifier storage_qualifier {
-        $$.setBasic(EbtVoid, $2.qualifier, @2);
-        $$.layoutQualifier = $1;
-    }
-    | INVARIANT storage_qualifier {
-        context->es3InvariantErrorCheck($2.qualifier, @1);
-        $$.setBasic(EbtVoid, $2.qualifier, @2);
-        $$.invariant = true;
-    }
-    | INVARIANT interpolation_qualifier storage_qualifier {
-        context->es3InvariantErrorCheck($3.qualifier, @1);
-        $$ = context->joinInterpolationQualifiers(@2, $2.qualifier, @3, $3.qualifier);
-        $$.invariant = true;
-    }
-    ;
-
-storage_qualifier
-    : CONST_QUAL {
+    | CONST_QUAL {
         $$.qualifier = EvqConst;
     }
     | IN_QUAL {
-        ES3_OR_NEWER("in", @1, "storage qualifier");
-        if (context->getShaderType() == GL_FRAGMENT_SHADER)
+        if (context->declaringFunction())
         {
+            $$.qualifier = EvqIn;
+        }
+        else if (context->getShaderType() == GL_FRAGMENT_SHADER)
+        {
+            ES3_OR_NEWER("in", @1, "storage qualifier");
             $$.qualifier = EvqFragmentIn;
         }
         else if (context->getShaderType() == GL_VERTEX_SHADER)
         {
+            ES3_OR_NEWER("in", @1, "storage qualifier");
             $$.qualifier = EvqVertexIn;
         }
         else
@@ -963,19 +966,28 @@ storage_qualifier
         }
     }
     | OUT_QUAL {
-        ES3_OR_NEWER("out", @1, "storage qualifier");
-        DRAW_ONLY("out", @1);
-        $$.qualifier = (context->getShaderType() == GL_FRAGMENT_SHADER) ? EvqFragmentOut : EvqVertexOut;
+        if (context->declaringFunction())
+        {
+            $$.qualifier = EvqOut;
+        }
+        else
+        {
+            ES3_OR_NEWER("out", @1, "storage qualifier");
+            DRAW_ONLY("out", @1);
+            $$.qualifier = (context->getShaderType() == GL_FRAGMENT_SHADER) ? EvqFragmentOut : EvqVertexOut;
+        }
     }
-    | CENTROID IN_QUAL {
-        ES3_OR_NEWER("centroid in", @1, "storage qualifier");
-        FRAG_ONLY("centroid in", @1);
-        $$.qualifier = EvqCentroidIn;
+    | INOUT_QUAL {
+        if (!context->declaringFunction())
+        {
+            context->error(@1, "invalid inout qualifier", "'inout' can be only used with function parameters");
+            context->recover();
+        }
+        $$.qualifier = EvqInOut;
     }
-    | CENTROID OUT_QUAL {
-        ES3_OR_NEWER("centroid out", @1, "storage qualifier");
-        VERTEX_ONLY("centroid out", @1);
-        $$.qualifier = EvqCentroidOut;
+    | CENTROID {
+        ES3_OR_NEWER("centroid", @1, "storage qualifier");
+        $$.qualifier = EvqCentroid;
     }
     | UNIFORM {
         if (context->globalErrorCheck(@1, context->symbolTable.atGlobalLevel(), "uniform"))
@@ -990,18 +1002,6 @@ type_specifier
 
         if ($$.precision == EbpUndefined) {
             $$.precision = context->symbolTable.getDefaultPrecision($1.type);
-            if (context->precisionErrorCheck(@1, $$.precision, $1.type)) {
-                context->recover();
-            }
-        }
-    }
-    | precision_qualifier type_specifier_no_prec {
-        $$ = $2;
-        $$.precision = $1;
-
-        if (!SupportsPrecision($2.type)) {
-            context->error(@1, "illegal type for precision qualifier", getBasicString($2.type));
-            context->recover();
         }
     }
     ;
@@ -1324,6 +1324,21 @@ struct_declaration
         // ES3 Only, but errors should be handled elsewhere
         $2.qualifier = $1.qualifier;
         $2.layoutQualifier = $1.layoutQualifier;
+        
+        if ($1.precision != EbpUndefined)
+        {
+            $2.precision = $1.precision;
+        }
+
+        if ($1.precision != EbpUndefined && !SupportsPrecision($2.type)) {
+            context->error(@1, "illegal type for precision qualifier", getBasicString($2.type));
+            context->recover();
+        }
+
+        if (context->precisionErrorCheck(@1, $2.precision, $2.type)) {
+            context->recover();
+        }
+        
         $$ = context->addStructDeclaratorList($2, $3);
     }
     ;

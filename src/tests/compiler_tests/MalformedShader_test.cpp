@@ -1963,9 +1963,851 @@ TEST_F(MalformedVertexShaderTest, InvalidSettingOfPrecisionToBoolVariables)
         "gl_Position = vec4(0.0, 0.0, 0.0, 1.0);\n"
         "}";
 
->>>>>>> a890aa4... Add compute shader compilation support
     if (compile(shaderString))
     {
         FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// repeating uniform storage qualifiers is invalid. Added due to GLES 3.1 grammar changes
+TEST_F(MalformedFragmentShaderGLES31Test, RepeatingUniforms)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "uniform uniform float myValue;"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// repeating varying storage qualifiers is invalid. Added due to GLES 3.1 grammar changes
+TEST_F(MalformedFragmentShaderGLES31Test, RepeatingVaryings)
+{
+    const std::string &shaderString =
+        "precision mediump float;\n"
+        "varying varying vec4 myColor;"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// layout should be first. Added due to GLES 3.1 grammar changes
+TEST_F(MalformedFragmentShaderGLES31Test, WrongOrderQualifiers)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "out layout(location=1) vec4 myColor;\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// centroid out is the proper order. In centroid is invalid. Added due to GLES 3.1 grammar changes
+TEST_F(MalformedVertexShaderTest, WrongOrderCentroidOut)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "in vec4 uv;\n"
+        "out centroid vec4 position;\n"
+        "void main() {\n"
+        "position = uv;\n"
+        "gl_Position = uv;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// centroid in is the proper order. Out centroid is invalid. Added due to GLES 3.1 grammar changes
+TEST_F(MalformedShaderTest, WrongOrderCentroidIn)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "in centroid vec4 colorIN;\n"
+        "out vec4 colorOUT;\n"
+        "void main() {\n"
+        "colorOUT = colorIN;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// type cannot be before the storage qualifier. Added due to GLES 3.1 grammar changes
+TEST_F(MalformedShaderTest, WrongOrderTypeStorage)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "centroid in vec4 colorIN;\n"
+        "vec4 out colorOUT;\n"
+        "void main() {\n"
+        "colorOUT = colorIN;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// cannot repeat the types. Added due to GLES 3.1 grammar changes
+TEST_F(MalformedShaderTest, RepeatingTypes)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "centroid in vec4 colorIN;\n"
+        "vec4 vec4 out colorOUT;\n"
+        "void main() {\n"
+        "colorOUT = colorIN;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// cannot repeat storage qualifiers. I.e. uniform out is invalid.
+TEST_F(MalformedShaderTest, RepeatingDifferentStorageQualifiers)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "centroid in vec4 colorIN;\n"
+        "uniform out vec4 colorOUT;\n"
+        "void main() {\n"
+        "colorOUT = colorIN;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// cannot repeat layout qualifiers. I.e. uniform out is invalid.
+TEST_F(MalformedShaderTest, RepeatingLayoutQualifiers)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "in vec4 colorIN;\n"
+        "layout(location=0) layout(location=0) out vec4 colorOUT;\n"
+        "void main() {\n"
+        "colorOUT = colorIN;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// repeating the attribute storage qualifier
+TEST_F(MalformedVertexShaderTest, RepeatingAttributes)
+{
+    const std::string &shaderString =
+        "precision mediump float;\n"
+        "attribute attribute vec4 positionIN;\n"
+        "void main() {\n"
+        "gl_Position = positionIN;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// wrong order for invariant varying. It should be 'invariant varying', not 'varying invariant'
+TEST_F(MalformedVertexShaderTest, VaryingInvariantWrongOrder)
+{
+    const std::string &shaderString =
+        "precision mediump float;\n"
+        "attribute vec4 positionIN;\n"
+        "varying invariant vec4 dataOUT;\n"
+        "void main() {\n"
+        "gl_Position = positionIN;\n"
+        "dataOUT = 0.5 * dataOUT + vec4(0.5);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// mixing varying and attribute storage qualifiers. It should be only one given the circumstances.
+TEST_F(MalformedVertexShaderTest, AttributeVaryingMix)
+{
+    const std::string &shaderString1 =
+        "precision mediump float;\n"
+        "attribute varying vec4 positionIN;\n"
+        "void main() {\n"
+        "gl_Position = positionIN;\n"
+        "}\n";
+
+    const std::string &shaderString2 =
+        "precision mediump float;\n"
+        "varying attribute vec4 positionIN;\n"
+        "void main() {\n"
+        "gl_Position = positionIN;\n"
+        "}\n";
+
+    if (compile(shaderString1))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+
+    if (compile(shaderString2))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// repeating interpolation qualifiers. It should be specified only once.
+TEST_F(MalformedVertexShaderTest, RepeatingInterpolationQualifiers)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "in vec4 positionIN;\n"
+        "flat flat out vec4 dataOUT;\n"
+        "void main() {\n"
+        "gl_Position = positionIN;\n"
+        "dataOUT = 0.5 * dataOUT + vec4(0.5);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// wrong order for interpolation and storage qualifier. The correct order is interpolation qualifier
+// and then storage qualifier
+TEST_F(MalformedVertexShaderTest, WrongOrderInterpolationStorageQualifiers)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "in vec4 positionIN;\n"
+        "out flat vec4 dataOUT;\n"
+        "void main() {\n"
+        "gl_Position = positionIN;\n"
+        "dataOUT = 0.5 * dataOUT + vec4(0.5);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// correct order is invariant, interpolation, storage
+TEST_F(MalformedVertexShaderTest, WrongOrderInvariantInterpolationStorageQualifiers)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "in vec4 positionIN;\n"
+        "flat invariant out vec4 dataOUT;\n"
+        "void main() {\n"
+        "gl_Position = positionIN;\n"
+        "dataOUT = 0.5 * dataOUT + vec4(0.5);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+/*
+    invariant qualifier is always first
+*/
+TEST_F(MalformedVertexShaderTest, WrongOrderInvariantNotFirst)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "in vec4 positionIN;\n"
+        "centroid out invariant vec4 dataOUT;\n"
+        "void main() {\n"
+        "gl_Position = positionIN;\n"
+        "dataOUT = 0.5 * dataOUT + vec4(0.5);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+/*
+    precision qualifier is in the wrong place
+*/
+TEST_F(MalformedVertexShaderTest, WrongOrderPrecision)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "in vec4 positionIN;\n"
+        "highp centroid out vec4 dataOUT;\n"
+        "void main() {\n"
+        "gl_Position = positionIN;\n"
+        "dataOUT = 0.5 * dataOUT + vec4(0.5);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// cannot repeat in the 'in' storage qualifier
+TEST_F(MalformedVertexShaderTest, RepeatingInQualifier)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "in in vec4 positionIN;\n"
+        "void main() {\n"
+        "gl_Position = positionIN;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// cannot repeat the attribute qualifier
+TEST_F(MalformedVertexShaderTest, RepeatingAttributeQualifier)
+{
+    const std::string &shaderString =
+        "precision mediump float;\n"
+        "attribute attribute vec4 positionIN;\n"
+        "void main() {\n"
+        "gl_Position = positionIN;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// vertex input cannot be qualified with invariant
+TEST_F(MalformedVertexShaderTest, InvariantVertexInput)
+{
+    const std::string &shaderString =
+        "precision mediump float;\n"
+        "invariant attribute vec4 positionIN;\n"
+        "void main() {\n"
+        "gl_Position = positionIN;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// invariant can be only used with output variables
+TEST_F(MalformedComputeShaderTest, InvariantBlockSize)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "invariant layout(local_size_x = 15) in;\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// it is not an error to use invariant with input variables in a fragment shader in ess1
+TEST_F(MalformedShaderTest, CorrectInvariantFragmentInputESS1)
+{
+    const std::string &shaderString =
+        "precision mediump float;\n"
+        "invariant varying vec4 myInput;\n"
+        "void main() {\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+    }
+}
+
+// it is an error to use invariant with input variables in a fragment shader in ess3
+TEST_F(MalformedShaderTest, IncorrectInvariantFragmentInputESS3)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "invariant in vec4 myInput;\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// it is an error to use invariant with input variables in a fragment shader in ess31
+TEST_F(MalformedFragmentShaderGLES31Test, IncorrectInvariantFragmentInputESS31)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "invariant in vec4 myInput;\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// correct precision in a function header. copied from deqp
+TEST_F(MalformedShaderTest, CorrectPrecisionQualifierInFunctionHeader)
+{
+    const std::string &shaderString =
+        "precision lowp float;\n"
+        "varying float value;\n"
+        "float foo0 (const in lowp float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "	gl_FragColor = vec4(foo0(value));\n"
+        "}";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+    }
+}
+
+// const out is not a valid combination of qualifiers
+TEST_F(MalformedShaderTest, InvalidFunctionParametersConstOut)
+{
+    const std::string &shaderString =
+        "precision lowp float;\n"
+        "varying float value;\n"
+        "float foo0 (const out lowp float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "	gl_FragColor = vec4(foo0(value));\n"
+        "}";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure" << mInfoLog;
+    }
+}
+
+// const inout is not a valid combination of qualifiers
+TEST_F(MalformedShaderTest, InvalidFunctionParametersConstInOut)
+{
+    const std::string &shaderString =
+        "precision lowp float;\n"
+        "varying float value;\n"
+        "float foo0 (const inout lowp float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "	gl_FragColor = vec4(foo0(value));\n"
+        "}";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure" << mInfoLog;
+    }
+}
+
+// cannot have invariant with a function parameter
+TEST_F(MalformedShaderTest, InvalidFunctionParametersInvariant)
+{
+    const std::string &shaderString =
+        "precision lowp float;\n"
+        "varying float value;\n"
+        "float foo0 (invariant in float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "	gl_FragColor = vec4(foo0(value));\n"
+        "}";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure" << mInfoLog;
+    }
+}
+
+// cannot have attribute with a function parameter
+TEST_F(MalformedShaderTest, InvalidFunctionParametersAttribute)
+{
+    const std::string &shaderString =
+        "precision lowp float;\n"
+        "varying float value;\n"
+        "float foo0 (attribute float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "	gl_FragColor = vec4(foo0(value));\n"
+        "}";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure" << mInfoLog;
+    }
+}
+
+// cannot have varying with a function parameter
+TEST_F(MalformedShaderTest, InvalidFunctionParametersVarying)
+{
+    const std::string &shaderString =
+        "precision lowp float;\n"
+        "varying float value;\n"
+        "float foo0 (varying float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "	gl_FragColor = vec4(foo0(value));\n"
+        "}";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure" << mInfoLog;
+    }
+}
+
+// cannot have layout with a function parameter
+TEST_F(MalformedShaderTest, InvalidFunctionParametersLayout)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision lowp float;\n"
+        "in float value;\n"
+        "float foo0 (layout(location = 3) in float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "out vec4 colorOUT;\n"
+        "void main()\n"
+        "{\n"
+        "	colorOUT = vec4(foo0(value));\n"
+        "}";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure" << mInfoLog;
+    }
+}
+
+// cannot have centroid with a function parameter
+TEST_F(MalformedShaderTest, InvalidFunctionParametersCentroidIn)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision lowp float;\n"
+        "in float value;\n"
+        "float foo0 (centroid in float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "out vec4 colorOUT;\n"
+        "void main()\n"
+        "{\n"
+        "	colorOUT = vec4(foo0(value));\n"
+        "}";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure" << mInfoLog;
+    }
+}
+
+// cannot have centroid with a function parameter
+TEST_F(MalformedShaderTest, InvalidFunctionParametersCentroidOut)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision lowp float;\n"
+        "in float value;\n"
+        "float foo0 (centroid out float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "out vec4 colorOUT;\n"
+        "void main()\n"
+        "{\n"
+        "	colorOUT = vec4(foo0(value));\n"
+        "}";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure" << mInfoLog;
+    }
+}
+
+// cannot have interpolation qualifiers with a function parameter
+TEST_F(MalformedShaderTest, InvalidFunctionParametersFlatIn)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision lowp float;\n"
+        "in float value;\n"
+        "float foo0 (flat in float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "out vec4 colorOUT;\n"
+        "void main()\n"
+        "{\n"
+        "	colorOUT = vec4(foo0(value));\n"
+        "}";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure" << mInfoLog;
+    }
+}
+
+// cannot have interpolation qualifiers with a function parameter
+TEST_F(MalformedShaderTest, InvalidFunctionParametersFlatOut)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision lowp float;\n"
+        "in float value;\n"
+        "float foo0 (flat out float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "out vec4 colorOUT;\n"
+        "void main()\n"
+        "{\n"
+        "	colorOUT = vec4(foo0(value));\n"
+        "}";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure" << mInfoLog;
+    }
+}
+
+// cannot have interpolation qualifiers with a function parameter
+TEST_F(MalformedShaderTest, InvalidFunctionParametersFlatInOut)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision lowp float;\n"
+        "in float value;\n"
+        "float foo0 (flat inout float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "out vec4 colorOUT;\n"
+        "void main()\n"
+        "{\n"
+        "	colorOUT = vec4(foo0(value));\n"
+        "}";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure" << mInfoLog;
+    }
+}
+
+// it is valid to not have any parameter qualifiers
+TEST_F(MalformedShaderTest, ValidNoQualifiersForFunctionParameters)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision lowp float;\n"
+        "in float value;\n"
+        "float foo0 (float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "out vec4 colorOUT;\n"
+        "void main()\n"
+        "{\n"
+        "	colorOUT = vec4(foo0(value));\n"
+        "}";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success" << mInfoLog;
+    }
+}
+
+// having just const is fine
+TEST_F(MalformedFragmentShaderGLES31Test, ValidUseOfConstQualifierInFunctionHeader)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision lowp float;\n"
+        "in float value;\n"
+        "float foo0 (const float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "out vec4 colorOUT;\n"
+        "void main()\n"
+        "{\n"
+        "	colorOUT = vec4(foo0(value));\n"
+        "}";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success" << mInfoLog;
+    }
+}
+
+// cannot use a const parameter in a constant expression
+TEST_F(MalformedFragmentShaderGLES31Test, InvalidUsageOfConstParameter)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision lowp float;\n"
+        "in float value;\n"
+        "float func(const float gotcha)\n"
+        "{\n"
+        "	const float theConstant2 = gotcha;\n"
+        "	return theConstant2*2.0;\n"
+        "}\n"
+        "out vec4 colorOUT;\n"
+        "void main()\n"
+        "{\n"
+        "	colorOUT = vec4(foo0(value));\n"
+        "}";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure" << mInfoLog;
+    }
+}
+
+// (const) (in|out|inout) (precision) is valid
+TEST_F(MalformedFragmentShaderGLES31Test, ValidFunctionParamQualifiers)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision lowp float;\n"
+        "in float value;\n"
+        "float foo0 (in mediump float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "out vec4 colorOUT;\n"
+        "void main()\n"
+        "{\n"
+        "	colorOUT = vec4(foo0(value));\n"
+        "}";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success" << mInfoLog;
+    }
+}
+
+// (const) (in|out|inout) (precision) is valid
+TEST_F(MalformedFragmentShaderGLES31Test, ValidFunctionParamQualifiersConst)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision lowp float;\n"
+        "in float value;\n"
+        "float foo0 (const mediump float x) {\n"
+        "   return 2.0*x;\n"
+        "}\n"
+        "out vec4 colorOUT;\n"
+        "void main()\n"
+        "{\n"
+        "	colorOUT = vec4(foo0(value));\n"
+        "}";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success" << mInfoLog;
+    }
+}
+
+// (const) (in|out|inout) (precision) is valid
+TEST_F(MalformedFragmentShaderGLES31Test, ValidFunctionParamDeclarations)
+{
+    const std::string &shaderString =
+        "precision mediump float;\n"
+        "float foo0 (const lowp float x)\n"
+        "{\n"
+        "    return x + 1.0;\n"
+        "}\n"
+        "void foo1 ( mediump float x)\n"
+        "{\n"
+        "    x = 1.0;\n"
+        "}\n"
+        "float foo2 ( mediump float x)\n"
+        "{\n"
+        "    return x + 1.0;\n"
+        "}\n"
+        "void main()\n"
+        "{\n"
+        "    float result;\n"
+        "    foo1(result);\n"
+        "    float x0 = foo0(1.0);\n"
+        "    foo2(result);\n"
+        "}";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success" << mInfoLog;
+    }
+}
+
+// in parameter_qualifier is set by default
+TEST_F(MalformedFragmentShaderGLES31Test, ValidFunctionDeclarationAndDefinition)
+{
+    const std::string &shaderString =
+        "precision mediump float;\n"
+        "varying float in0;\n"
+        "float func (float f);\n"
+        "void main() {\n"
+        "    gl_FragColor = vec4(func(in0));\n"
+        "}\n"
+        "float func (in float f) {\n"
+        "    return -f;\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success" << mInfoLog;
     }
 }
