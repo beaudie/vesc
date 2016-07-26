@@ -691,6 +691,14 @@ gl::Error StateManagerGL::setDrawElementsState(const gl::ContextState &data,
     return setGenericDrawState(data);
 }
 
+gl::Error StateManagerGL::setDispatchComputeState(const gl::ContextState &data,
+                                                  GLuint numGroupsX,
+                                                  GLuint numGroupsY,
+                                                  GLuint numGroupsZ)
+{
+    return setGenericComputeState(data);
+}
+
 gl::Error StateManagerGL::pauseTransformFeedback(const gl::ContextState &data)
 {
     // If the context is going to be changed, pause the previous context's transform feedback

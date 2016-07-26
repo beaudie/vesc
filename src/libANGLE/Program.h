@@ -359,6 +359,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     {
         return mState.mActiveAttribLocationsMask;
     }
+    
+    bool isComputeProgram() { return mState.mAttachedComputeShader != nullptr; }
 
   private:
     class Bindings final : angle::NonCopyable

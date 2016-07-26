@@ -2270,7 +2270,7 @@ TIntermAggregate *TParseContext::addFunctionPrototypeDeclaration(const TFunction
         else
         {
             TIntermSymbol *paramSymbol = intermediate.addSymbol(0, "", *param.type, location);
-            prototype                  = intermediate.growAggregate(prototype, paramSymbol, location);
+            prototype = intermediate.growAggregate(prototype, paramSymbol, location);
         }
     }
 

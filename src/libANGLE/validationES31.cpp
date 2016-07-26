@@ -5,7 +5,7 @@
 //
 
 // validationES31.cpp: Validation functions for OpenGL ES 3.1 entry point parameters
-
+#include "libANGLE/validationES.h"
 #include "libANGLE/validationES3.h"
 #include "libANGLE/validationES31.h"
 
@@ -131,6 +131,77 @@ bool ValidateBindImageTexture(Context *context,
                 context->handleError(Error(GL_INVALID_ENUM, "format is not supported."));
                 return false;
         }
+    }
+
+    return true;
+}
+
+bool ValidateDispatchCompute(Context *context,
+                             GLuint numGroupsX,
+                             GLuint numGroupsY,
+                             GLuint numGroupsZ)
+{
+
+    if (!context->getGLVersion().isES31())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support ES 3.1."));
+        return false;
+    }
+
+    const gl::State &state = context->getGLState();
+
+    if (!ValidateProgramUniforms(context))
+    {
+        return false;
+    }
+    gl::Program *program = state.getProgram();
+
+    if (!program->isComputeProgram())
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "No active program for the compute shader stage."));
+        return false;
+    }
+
+    if (numGroupsX < 1)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "numGroupsX must be positive."));
+        return false;
+    }
+
+    if (numGroupsY < 1)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "numGroupsY must be positive."));
+        return false;
+    }
+
+    if (numGroupsZ < 1)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "numGroupsZ must be positive."));
+        return false;
+    }
+
+    const gl::Caps &caps = context->getCaps();
+
+    if (numGroupsX > caps.maxComputeWorkGroupCount[0])
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "numGroupsX cannot be more than %u.",
+                                   caps.maxComputeWorkGroupCount[0]));
+        return false;
+    }
+
+    if (numGroupsY > caps.maxComputeWorkGroupCount[1])
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "numGroupsY cannot be more than %u.",
+                                   caps.maxComputeWorkGroupCount[1]));
+        return false;
+    }
+
+    if (numGroupsZ > caps.maxComputeWorkGroupCount[2])
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "numGroupsZ cannot be more than %u.",
+                                   caps.maxComputeWorkGroupCount[2]));
+        return false;
     }
 
     return true;

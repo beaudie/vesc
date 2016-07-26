@@ -153,6 +153,11 @@ class StateManagerGL final : angle::NonCopyable
                                    GLsizei instanceCount,
                                    const GLvoid **outIndices);
 
+    gl::Error setDispatchComputeState(const gl::ContextState &data,
+                                      GLuint numGroupsX,
+                                      GLuint numGroupsY,
+                                      GLuint numGroupsZ);
+
     gl::Error pauseTransformFeedback(const gl::ContextState &data);
     gl::Error onMakeCurrent(const gl::ContextState &data);
 

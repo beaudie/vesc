@@ -137,8 +137,15 @@ class RendererGL : angle::NonCopyable
                                              GLenum transformType,
                                              const GLfloat *transformValues);
 
+<<<<<<< HEAD
     GLenum getResetStatus();
 
+=======
+    gl::Error dispatchCompute(const gl::ContextState &data,
+                              GLuint numGroupsX,
+                              GLuint numGroupsY,
+                              GLuint numGroupsZ);
+>>>>>>> Add dispatch compute
     // EXT_debug_marker
     void insertEventMarker(GLsizei length, const char *marker);
     void pushGroupMarker(GLsizei length, const char *marker);

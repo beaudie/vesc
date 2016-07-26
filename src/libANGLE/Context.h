@@ -481,6 +481,7 @@ class Context final : public ValidationContext
 
     void generateMipmap(GLenum target);
 
+    Error dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ);
     Error bindImageTexture(GLuint unit,
                            GLuint texture,
                            GLint level,

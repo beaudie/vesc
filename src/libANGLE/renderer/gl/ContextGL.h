@@ -97,6 +97,9 @@ class ContextGL : public ContextImpl
                                 const GLvoid *indices,
                                 const gl::IndexRange &indexRange) override;
 
+    // dispatch compute methods
+    gl::Error dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ);
+
     // CHROMIUM_path_rendering implementation
     void stencilFillPath(const gl::Path *path, GLenum fillMode, GLuint mask) override;
     void stencilStrokePath(const gl::Path *path, GLint reference, GLuint mask) override;

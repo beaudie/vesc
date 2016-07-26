@@ -436,9 +436,23 @@ void RendererGL::stencilThenCoverStrokePathInstanced(const gl::ContextState &sta
     ASSERT(mFunctions->getError() == GL_NO_ERROR);
 }
 
+<<<<<<< HEAD
 GLenum RendererGL::getResetStatus()
 {
     return mFunctions->getGraphicsResetStatus();
+=======
+gl::Error RendererGL::dispatchCompute(const gl::ContextState &data,
+                                      GLuint numGroupsX,
+                                      GLuint numGroupsY,
+                                      GLuint numGroupsZ)
+{
+
+    ANGLE_TRY(mStateManager->setDispatchComputeState(data, numGroupsX, numGroupsY, numGroupsZ));
+
+    mFunctions->dispatchCompute(numGroupsX, numGroupsY, numGroupsZ);
+
+    return gl::Error(GL_NO_ERROR);
+>>>>>>> Add dispatch compute
 }
 
 ContextImpl *RendererGL::createContext(const gl::ContextState &state)

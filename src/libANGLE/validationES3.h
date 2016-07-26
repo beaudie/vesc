@@ -315,6 +315,7 @@ bool ValidateGetInteger64i_v(ValidationContext *context,
                              GLenum target,
                              GLuint index,
                              GLint64 *data);
+
 }  // namespace gl
 
 #endif // LIBANGLE_VALIDATION_ES3_H_

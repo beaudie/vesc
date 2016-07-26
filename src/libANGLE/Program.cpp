@@ -1613,8 +1613,6 @@ bool Program::validateImages(InfoLog *infoLog, const Caps &caps)
 
         for (unsigned int arrayElement = 0; arrayElement < uniform.elementCount(); ++arrayElement)
         {
-
-            // GLuint imageBinding = dataPtr[arrayElement];
             /*
             if (textureUnit >= caps.maxCombinedTextureImageUnits)
             {
