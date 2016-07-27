@@ -589,6 +589,15 @@ void InsertBuiltInFunctions(sh::GLenum type,
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int3, "imageSize", gimage2DArray);
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int2, "imageSize", gimageCube);
 
+    symbolTable.insertBuiltInOperatorWithNoParameters(ESSL3_1_BUILTINS, EOpMemoryBarrier, voidType,
+                                                      "memoryBarrier");
+    symbolTable.insertBuiltInOperatorWithNoParameters(
+        ESSL3_1_BUILTINS, EOpMemoryBarrierAtomicCounter, voidType, "memoryBarrierAtomicCounter");
+    symbolTable.insertBuiltInOperatorWithNoParameters(ESSL3_1_BUILTINS, EOpMemoryBarrierBuffer,
+                                                      voidType, "memoryBarrierBuffer");
+    symbolTable.insertBuiltInOperatorWithNoParameters(ESSL3_1_BUILTINS, EOpMemoryBarrierImage,
+                                                      voidType, "memoryBarrierImage");
+
     //
     // Depth range in window coordinates
     //
@@ -824,6 +833,14 @@ void IdentifyBuiltIns(sh::GLenum type,
                 ESSL3_1_BUILTINS,
                 new TVariable(NewPoolTString("gl_LocalInvocationIndex"),
                               TType(EbtUInt, EbpUndefined, EvqLocalInvocationIndex, 1)));
+
+            const TType *voidType = TCache::getType(EbtVoid);
+            symbolTable.insertBuiltInOperatorWithNoParameters(ESSL3_1_BUILTINS, EOpBarrier,
+                                                              voidType, "barrier");
+            symbolTable.insertBuiltInOperatorWithNoParameters(
+                ESSL3_1_BUILTINS, EOpMemoryBarrierShared, voidType, "memoryBarrierShared");
+            symbolTable.insertBuiltInOperatorWithNoParameters(
+                ESSL3_1_BUILTINS, EOpGroupMemoryBarrier, voidType, "groupMemoryBarrier");
         }
         break;
 
