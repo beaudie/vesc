@@ -193,11 +193,20 @@ const char *GetOperatorString(TOperator op)
       case EOpBitwiseAndAssign: return "&=";
       case EOpBitwiseXorAssign: return "^=";
       case EOpBitwiseOrAssign: return "|=";
+      
+      case EOpBarrier: return "barrier";
+      case EOpMemoryBarrier: return "memoryBarrier";
+      case EOpMemoryBarrierAtomicCounter: return "memoryBarrierAtomicCounter";
+      case EOpMemoryBarrierBuffer: return "memoryBarrierBuffer";
+      case EOpMemoryBarrierImage: return "memoryBarrierImage";
+      case EOpMemoryBarrierShared: return "memoryBarrierShared";
+      case EOpGroupMemoryBarrier: return "groupMemoryBarrier";
 
       default: break;
     }
     return "";
 }
+<<<<<<< HEAD
 
 bool IsAssignment(TOperator op)
 {
@@ -227,3 +236,5 @@ bool IsAssignment(TOperator op)
             return false;
     }
 }
+=======
+>>>>>>> Add support for barriers

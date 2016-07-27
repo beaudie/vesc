@@ -30,6 +30,9 @@ bool ValidateDispatchCompute(Context *context,
                              GLuint numGroupsX,
                              GLuint numGroupsY,
                              GLuint numGroupsZ);
+                             
+bool ValidateMemoryBarrier(Context *context, GLbitfield barriers);
+bool ValidateMemoryBarrierByRegion(Context *context, GLbitfield barriers);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES31_H_

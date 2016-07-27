@@ -112,7 +112,9 @@ class ContextImpl : public GLImplFactory
     virtual GLenum getResetStatus() = 0;
 =======
     virtual gl::Error dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ) = 0;
-
+    virtual gl::Error memoryBarrier(GLbitfield barriers) = 0;
+    virtual gl::Error memoryBarrierByRegion(GLbitfield barriers) = 0;
+    
     // TODO(jmadill): Investigate proper impl methods for this.
     virtual void notifyDeviceLost() = 0;
     virtual bool isDeviceLost() const = 0;

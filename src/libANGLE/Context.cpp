@@ -240,7 +240,9 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mResetStrategy(GetResetStrategy(attribs)),
       mRobustAccess(GetRobustAccess(attribs)),
       mCurrentSurface(nullptr),
-      mResourceManager(nullptr)
+      mResourceManager(nullptr),
+      mMemoryBarrierUsedBits(0),
+      mMemoryBarrierByRegionUsedBits(0)
 {
     ASSERT(!mRobustAccess);  // Unimplemented
 
@@ -2427,6 +2429,9 @@ void Context::syncRendererState()
     mImplementation->syncState(mGLState, dirtyBits);
     mGLState.clearDirtyBits();
     mGLState.syncDirtyObjects();
+    
+    mMemoryBarrierUsedBits = 0;
+    mMemoryBarrierByRegionUsedBits = 0;
 }
 
 void Context::syncRendererState(const State::DirtyBits &bitMask,
@@ -2437,6 +2442,9 @@ void Context::syncRendererState(const State::DirtyBits &bitMask,
     mGLState.clearDirtyBits(dirtyBits);
 
     mGLState.syncDirtyObjects(objectMask);
+    
+    mMemoryBarrierUsedBits = 0;
+    mMemoryBarrierByRegionUsedBits = 0;
 }
 
 void Context::blitFramebuffer(GLint srcX0,
@@ -2996,6 +3004,26 @@ Error Context::bindImageTexture(GLuint unit,
     else
     {
         mGLState.clearImageTexture(unit);
+    }
+    return NoError();
+}
+
+Error Context::memoryBarrier(GLbitfield barriers)
+{
+    GLbitfield unsetBits = mMemoryBarrierUsedBits & ~barriers;
+    if (unsetBits != 0)
+    {
+        ANGLE_TRY(mImplementation->memoryBarrier(unsetBits));
+    }
+    return NoError();
+}
+
+Error Context::memoryBarrierByRegion(GLbitfield barriers)
+{
+    GLbitfield unsetBits = mMemoryBarrierByRegionUsedBits & ~barriers;
+    if (unsetBits != 0)
+    {
+        ANGLE_TRY(mImplementation->memoryBarrierByRegion(unsetBits));
     }
     return NoError();
 }

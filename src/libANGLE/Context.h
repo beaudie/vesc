@@ -489,7 +489,10 @@ class Context final : public ValidationContext
                            GLint layer,
                            GLenum access,
                            GLenum format);
-
+                           
+    Error memoryBarrier(GLbitfield barriers);
+    Error memoryBarrierByRegion(GLbitfield barriers);
+    
     Error flush();
     Error finish();
 
@@ -685,6 +688,10 @@ class Context final : public ValidationContext
     State::DirtyObjects mClearDirtyObjects;
     State::DirtyBits mBlitDirtyBits;
     State::DirtyObjects mBlitDirtyObjects;
+    
+    // keep track of the sync commands
+    GLbitfield mMemoryBarrierUsedBits;
+    GLbitfield mMemoryBarrierByRegionUsedBits;
 };
 
 }  // namespace gl

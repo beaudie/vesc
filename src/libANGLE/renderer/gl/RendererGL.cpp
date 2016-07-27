@@ -455,6 +455,18 @@ gl::Error RendererGL::dispatchCompute(const gl::ContextState &data,
 >>>>>>> Add dispatch compute
 }
 
+gl::Error RendererGL::memoryBarrier(const gl::ContextState & data, GLbitfield barriers)
+{
+    mFunctions->memoryBarrier(barriers);
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error RendererGL::memoryBarrierByRegion(const gl::ContextState & data, GLbitfield barriers)
+{
+    mFunctions->memoryBarrierByRegion(barriers);
+    return gl::Error(GL_NO_ERROR);
+}
+
 ContextImpl *RendererGL::createContext(const gl::ContextState &state)
 {
     return new ContextGL(state, this);

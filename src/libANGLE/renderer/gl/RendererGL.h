@@ -145,7 +145,13 @@ class RendererGL : angle::NonCopyable
                               GLuint numGroupsX,
                               GLuint numGroupsY,
                               GLuint numGroupsZ);
+<<<<<<< HEAD
 >>>>>>> Add dispatch compute
+=======
+                              
+    gl::Error memoryBarrier(const gl::ContextState &data, GLbitfield barriers);
+    gl::Error memoryBarrierByRegion(const gl::ContextState &data, GLbitfield barriers);
+>>>>>>> Add support for barriers
     // EXT_debug_marker
     void insertEventMarker(GLsizei length, const char *marker);
     void pushGroupMarker(GLsizei length, const char *marker);

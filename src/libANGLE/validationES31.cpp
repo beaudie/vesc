@@ -207,4 +207,33 @@ bool ValidateDispatchCompute(Context *context,
     return true;
 }
 
+bool ValidateMemoryBarrier(Context *context, GLbitfield barriers)
+{
+
+    if ((barriers & ~GL_ALL_BARRIER_BITS) != 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Invalid barrier passed to glMemoryBarrier."));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateMemoryBarrierByRegion(Context *context, GLbitfield barriers)
+{
+    static const GLbitfield validBitmask = GL_ATOMIC_COUNTER_BARRIER_BIT |
+                                           GL_FRAMEBUFFER_BARRIER_BIT |
+                                           GL_SHADER_IMAGE_ACCESS_BARRIER_BIT |
+                                           GL_SHADER_STORAGE_BARRIER_BIT |
+                                           GL_TEXTURE_FETCH_BARRIER_BIT |
+                                           GL_UNIFORM_BARRIER_BIT;
+    if (barriers != GL_ALL_BARRIER_BITS && (barriers & ~validBitmask) != 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "Invalid barrier passed to glMemoryBarrierByRegion."));
+        return false;
+    }
+
+    return true;
+}
+
 }  // namespace gl

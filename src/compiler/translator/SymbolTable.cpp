@@ -285,8 +285,11 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level, TOperator op, const char *e
     {
         TFunction *function = new TFunction(NewPoolTString(name), rvalue, op, ext);
 
-        function->addParameter(TConstParameter(ptype1));
-
+        if (ptype1)
+        {
+            function->addParameter(TConstParameter(ptype1));
+        }
+        
         if (ptype2)
         {
             function->addParameter(TConstParameter(ptype2));

@@ -99,7 +99,9 @@ class ContextGL : public ContextImpl
 
     // dispatch compute methods
     gl::Error dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ);
-
+    gl::Error memoryBarrier(GLbitfield barriers) override;
+    gl::Error memoryBarrierByRegion(GLbitfield barriers) override;
+    
     // CHROMIUM_path_rendering implementation
     void stencilFillPath(const gl::Path *path, GLenum fillMode, GLuint mask) override;
     void stencilStrokePath(const gl::Path *path, GLint reference, GLuint mask) override;

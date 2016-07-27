@@ -2536,22 +2536,58 @@ TEST_F(MalformedFragmentShaderGLES31Test, ImageR32FNoMemoryQualifier)
     }
 }
 
-// A valid image declaration with a correct memory qualifier.
-// GLSL ES 3.10, Revision 4, 4.9 Memory Access Qualifiers
-TEST_F(MalformedFragmentShaderGLES31Test, ImageR32FWithCorrectMemoryQualifier)
+// memoryBarrierShared is only available in a compute shader
+TEST_F(MalformedFragmentShaderGLES31Test, InvalidUseOfMemoryBarrierShared)
 {
     const std::string &shaderString =
         "#version 310 es\n"
         "precision mediump float;\n"
         "precision mediump image2D;\n"
-        "in vec4 myInput;\n"
-        "layout(r32f) uniform readonly image2D myImage;\n"
+        "in float in0;\n"
         "void main() {\n"
+        "    memoryBarrierShared();\n"
         "}\n";
 
-    if (!compile(shaderString))
+    if (compile(shaderString))
     {
-        FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// A valid image declaration with a correct memory qualifier.
+// GLSL ES 3.10, Revision 4, 4.9 Memory Access Qualifiers
+TEST_F(MalformedFragmentShaderGLES31Test, ImageR32FWithCorrectMemoryQualifier)
+{
+        const std::string &shaderString =
+            "#version 310 es\n"
+            "precision mediump float;\n"
+            "precision mediump image2D;\n"
+            "in vec4 myInput;\n"
+            "layout(r32f) uniform readonly image2D myImage;\n"
+            "void main() {\n"
+            "}\n";
+
+      if (!compile(shaderString))
+      {
+      FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+      }
+}
+
+// groupMemoryBarrier is only available in a compute shader
+TEST_F(MalformedFragmentShaderGLES31Test, InvalidUseOfGroupMemoryBarrier)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "in float in0;\n"
+        "void main() {\n"
+        "    gl_FragColor = vec4(in0);\n"
+        "    groupMemoryBarrier();\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
     }
 }
 
@@ -2876,6 +2912,21 @@ TEST_F(MalformedComputeShaderTest, CorrectUsageOfBindingLayoutQualifier)
         "layout(binding = 1, rgba32f) uniform image2D myImage;\n"
         "void main() {\n"
         "   imageStore(myImage, ivec2(gl_LocalInvocationID.xy), vec4(1.0));\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+      FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+  }
+}
+// barrier can be used in a compute shader
+TEST_F(MalformedComputeShaderTest, ValidUseOfBarrier)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "layout(local_size_x = 15) in;\n"
+        "void main() {\n"
+        "   barrier();\n"
         "}\n";
 
     if (!compile(shaderString))
