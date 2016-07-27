@@ -23,7 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <windows.h>
+#include "windows/WindowsAngle.h"
 #include "common/platform.h"
 
 #if _WIN32_WINNT_WINBLUE

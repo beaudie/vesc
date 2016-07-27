@@ -22,7 +22,7 @@
 #include "system_utils.h"
 
 #if (DE_OS == DE_OS_WIN32)
-#include <Windows.h>
+#include "windows/WindowsAngle.h"
 #elif (DE_OS == DE_OS_UNIX) || (DE_OS == DE_OS_OSX)
 #include <sys/unistd.h>
 #include <sys/stat.h>

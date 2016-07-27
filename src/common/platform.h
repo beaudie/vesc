@@ -44,7 +44,7 @@
 #       define NOMINMAX 1
 #   endif
 
-#   include <windows.h>
+#include "windows/WindowsAngle.h"
 #   include <intrin.h>
 
 #   if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)

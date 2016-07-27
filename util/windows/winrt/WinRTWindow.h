@@ -10,7 +10,7 @@
 #define UTIL_WINRT_WINDOW_H
 
 #include <string>
-#include <windows.h>
+#include "windows/WindowsAngle.h"
 #include <windows.applicationmodel.core.h>
 #include <wrl.h>
 

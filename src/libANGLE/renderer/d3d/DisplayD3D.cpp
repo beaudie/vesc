@@ -7,7 +7,7 @@
 // DisplayD3D.cpp: D3D implementation of egl::Display
 
 // These headers annoyingly have to be the first lines in the file.
-#include <Windows.h>
+#include "windows/WindowsAngle.h"
 #include <cfgmgr32.h>
 #include <strsafe.h>
 #include <setupapi.h>

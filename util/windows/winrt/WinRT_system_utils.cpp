@@ -8,7 +8,7 @@
 
 #include "system_utils.h"
 
-#include <windows.h>
+#include "windows/WindowsAngle.h"
 #include <array>
 
 namespace angle

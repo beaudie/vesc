@@ -9,7 +9,7 @@
 #include "system_utils.h"
 
 #include <stdarg.h>
-#include <windows.h>
+#include "windows/WindowsAngle.h"
 #include <array>
 #include <vector>
 
