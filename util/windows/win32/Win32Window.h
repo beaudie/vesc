@@ -9,7 +9,7 @@
 #ifndef UTIL_WIN32_WINDOW_H
 #define UTIL_WIN32_WINDOW_H
 
-#include <windows.h>
+#include "windows/WindowsAngle.h"
 #include <string>
 
 #include "OSWindow.h"

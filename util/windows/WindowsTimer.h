@@ -9,7 +9,7 @@
 #ifndef UTIL_WINDOWS_TIMER_H
 #define UTIL_WINDOWS_TIMER_H
 
-#include <windows.h>
+#include "windows/WindowsAngle.h"
 
 #include "Timer.h"
 

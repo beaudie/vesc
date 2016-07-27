@@ -9,7 +9,7 @@
 #ifndef UTIL_WIN32_PIXMAP_H_
 #define UTIL_WIN32_PIXMAP_H_
 
-#include <windows.h>
+#include "windows/WindowsAngle.h"
 
 #include "OSPixmap.h"
 
