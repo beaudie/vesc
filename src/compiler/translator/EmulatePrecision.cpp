@@ -497,7 +497,7 @@ void EmulatePrecision::visitSymbol(TIntermSymbol *node)
     {
         TIntermNode *parent = getParentNode();
         TIntermNode *replacement = createRoundingFunctionCallNode(node);
-        mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, true));
+        queueReplacementWithParent(parent, node, replacement, OriginalNode::BECOMES_CHILD);
     }
 }
 
@@ -543,7 +543,7 @@ bool EmulatePrecision::visitBinary(Visit visit, TIntermBinary *node)
                 break;
             }
             TIntermNode *replacement = createRoundingFunctionCallNode(node);
-            mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, true));
+            queueReplacement(node, replacement, OriginalNode::BECOMES_CHILD);
             break;
           }
 
@@ -553,10 +553,9 @@ bool EmulatePrecision::visitBinary(Visit visit, TIntermBinary *node)
               mEmulateCompoundAdd.insert(
                   TypePair(type.getBuiltInTypeNameString(),
                            node->getRight()->getType().getBuiltInTypeNameString()));
-              TIntermNode *parent      = getParentNode();
               TIntermNode *replacement = createCompoundAssignmentFunctionCallNode(
                   node->getLeft(), node->getRight(), "add");
-              mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, false));
+              queueReplacement(node, replacement, OriginalNode::BECOMES_CHILD);
               break;
           }
           case EOpSubAssign:
@@ -564,10 +563,9 @@ bool EmulatePrecision::visitBinary(Visit visit, TIntermBinary *node)
               mEmulateCompoundSub.insert(
                   TypePair(type.getBuiltInTypeNameString(),
                            node->getRight()->getType().getBuiltInTypeNameString()));
-              TIntermNode *parent      = getParentNode();
               TIntermNode *replacement = createCompoundAssignmentFunctionCallNode(
                   node->getLeft(), node->getRight(), "sub");
-              mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, false));
+              queueReplacement(node, replacement, OriginalNode::IS_DROPPED);
               break;
           }
           case EOpMulAssign:
@@ -579,10 +577,9 @@ bool EmulatePrecision::visitBinary(Visit visit, TIntermBinary *node)
               mEmulateCompoundMul.insert(
                   TypePair(type.getBuiltInTypeNameString(),
                            node->getRight()->getType().getBuiltInTypeNameString()));
-              TIntermNode *parent      = getParentNode();
               TIntermNode *replacement = createCompoundAssignmentFunctionCallNode(
                   node->getLeft(), node->getRight(), "mul");
-              mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, false));
+              queueReplacement(node, replacement, OriginalNode::IS_DROPPED);
               break;
           }
           case EOpDivAssign:
@@ -590,10 +587,9 @@ bool EmulatePrecision::visitBinary(Visit visit, TIntermBinary *node)
               mEmulateCompoundDiv.insert(
                   TypePair(type.getBuiltInTypeNameString(),
                            node->getRight()->getType().getBuiltInTypeNameString()));
-              TIntermNode *parent      = getParentNode();
               TIntermNode *replacement = createCompoundAssignmentFunctionCallNode(
                   node->getLeft(), node->getRight(), "div");
-              mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, false));
+              queueReplacement(node, replacement, OriginalNode::IS_DROPPED);
               break;
           }
           default:
@@ -649,7 +645,7 @@ bool EmulatePrecision::visitAggregate(Visit visit, TIntermAggregate *node)
                 parentUsesResult(parent, node))
             {
                 TIntermNode *replacement = createRoundingFunctionCallNode(node);
-                mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, true));
+                queueReplacement(node, replacement, OriginalNode::BECOMES_CHILD);
             }
         }
         break;
@@ -659,7 +655,7 @@ bool EmulatePrecision::visitAggregate(Visit visit, TIntermAggregate *node)
         if (canRoundFloat(node->getType()) && visit == PreVisit && parentUsesResult(parent, node))
         {
             TIntermNode *replacement = createRoundingFunctionCallNode(node);
-            mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, true));
+            queueReplacement(node, replacement, OriginalNode::BECOMES_CHILD);
         }
         break;
     }
@@ -681,9 +677,8 @@ bool EmulatePrecision::visitUnary(Visit visit, TIntermUnary *node)
       default:
         if (canRoundFloat(node->getType()) && visit == PreVisit)
         {
-            TIntermNode *parent = getParentNode();
             TIntermNode *replacement = createRoundingFunctionCallNode(node);
-            mReplacements.push_back(NodeUpdateEntry(parent, node, replacement, true));
+            queueReplacement(node, replacement, OriginalNode::BECOMES_CHILD);
         }
         break;
     }
