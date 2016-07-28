@@ -309,6 +309,8 @@ bool ValidateFlushMappedBufferRange(Context *context,
                                     GLintptr offset,
                                     GLsizeiptr length);
 
+bool ValidateGetBooleaniv(Context *context, GLenum target, GLuint index, GLboolean *data);
+
 }  // namespace gl
 
 #endif // LIBANGLE_VALIDATION_ES3_H_

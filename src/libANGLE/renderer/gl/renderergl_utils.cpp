@@ -120,6 +120,13 @@ static GLint QuerySingleGLInt(const FunctionsGL *functions, GLenum name)
     return result;
 }
 
+static GLint QuerySingleIndexGLInt(const FunctionsGL *functions, GLenum name, size_t index)
+{
+    GLint result;
+    functions->getIntegeri_v(name, index, &result);
+    return result;
+}
+
 static GLint QueryGLIntRange(const FunctionsGL *functions, GLenum name, size_t index)
 {
     GLint result[2] = {};
@@ -590,6 +597,125 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
         !functions->isAtLeastGLES(gl::Version(3, 0)))
     {
         LimitVersion(maxSupportedESVersion, gl::Version(2, 0));
+    }
+
+    // Compute shaders and SSBOs were originally introduced in OpenGL 4.3
+    // Images and atomic operation were introduced in OpenGL 4.2
+    if (functions->isAtLeastGL(gl::Version(4, 3)) || functions->isAtLeastGLES(gl::Version(3, 1)))
+    {
+
+        caps->maxFramebufferWidth    = QuerySingleGLInt(functions, GL_MAX_FRAMEBUFFER_WIDTH);
+        caps->maxFramebufferHeight   = QuerySingleGLInt(functions, GL_MAX_FRAMEBUFFER_HEIGHT);
+        caps->maxFramebufferSamples  = QuerySingleGLInt(functions, GL_MAX_FRAMEBUFFER_SAMPLES);
+        caps->maxSampleMaskWords     = QuerySingleGLInt(functions, GL_MAX_SAMPLE_MASK_WORDS);
+        caps->maxColorTextureSamples = QuerySingleGLInt(functions, GL_MAX_COLOR_TEXTURE_SAMPLES);
+        caps->maxDepthTextureSamples = QuerySingleGLInt(functions, GL_MAX_DEPTH_TEXTURE_SAMPLES);
+        caps->maxIntegerSamples      = QuerySingleGLInt(functions, GL_MAX_INTEGER_SAMPLES);
+
+        caps->maxVertexAttribRelativeOffset =
+            QuerySingleGLInt(functions, GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET);
+        caps->maxVertexAttribBindings = QuerySingleGLInt(functions, GL_MAX_VERTEX_ATTRIB_BINDINGS);
+        caps->maxVertexAttribStride   = QuerySingleGLInt(functions, GL_MAX_VERTEX_ATTRIB_STRIDE);
+
+        caps->maxVertexAtomicCounterBuffers =
+            QuerySingleGLInt(functions, GL_MAX_VERTEX_ATOMIC_COUNTER_BUFFERS);
+        caps->maxVertexAtomicCounters = QuerySingleGLInt(functions, GL_MAX_VERTEX_ATOMIC_COUNTERS);
+        caps->maxVertexImageUniforms  = QuerySingleGLInt(functions, GL_MAX_VERTEX_IMAGE_UNIFORMS);
+        caps->maxVertexShaderStorageBlocks =
+            QuerySingleGLInt(functions, GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS);
+
+        caps->maxFragmentAtomicCounterBuffers =
+            QuerySingleGLInt(functions, GL_MAX_FRAGMENT_ATOMIC_COUNTER_BUFFERS);
+        caps->maxFragmentAtomicCounters =
+            QuerySingleGLInt(functions, GL_MAX_FRAGMENT_ATOMIC_COUNTERS);
+        caps->maxFragmentImageUniforms =
+            QuerySingleGLInt(functions, GL_MAX_FRAGMENT_IMAGE_UNIFORMS);
+        caps->maxFragmentShaderStorageBlocks =
+            QuerySingleGLInt(functions, GL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS);
+        caps->minProgramTextureGatherOffset =
+            QuerySingleGLInt(functions, GL_MIN_PROGRAM_TEXTURE_GATHER_OFFSET);
+        caps->maxProgramTextureGatherOffset =
+            QuerySingleGLInt(functions, GL_MAX_PROGRAM_TEXTURE_GATHER_OFFSET);
+
+        caps->maxComputeWorkGroupCountX =
+            QuerySingleIndexGLInt(functions, GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0);
+        caps->maxComputeWorkGroupCountY =
+            QuerySingleIndexGLInt(functions, GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1);
+        caps->maxComputeWorkGroupCountZ =
+            QuerySingleIndexGLInt(functions, GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2);
+
+        caps->maxComputeWorkGroupSizeX =
+            QuerySingleIndexGLInt(functions, GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0);
+        caps->maxComputeWorkGroupSizeY =
+            QuerySingleIndexGLInt(functions, GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1);
+        caps->maxComputeWorkGroupSizeZ =
+            QuerySingleIndexGLInt(functions, GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2);
+
+        caps->maxComputeWorkGroupInvocations =
+            QuerySingleGLInt(functions, GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS);
+
+        caps->maxComputeUniformBlocks = QuerySingleGLInt(functions, GL_MAX_COMPUTE_UNIFORM_BLOCKS);
+
+        caps->maxComputeTextureImageUnits =
+            QuerySingleGLInt(functions, GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS);
+
+        caps->maxComputeSharedMemorySize =
+            QuerySingleGLInt(functions, GL_MAX_COMPUTE_SHARED_MEMORY_SIZE);
+
+        caps->maxComputeUniformComponents =
+            QuerySingleGLInt(functions, GL_MAX_COMPUTE_UNIFORM_COMPONENTS);
+
+        caps->maxComputeAtomicCounterBuffers =
+            QuerySingleGLInt(functions, GL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS);
+
+        caps->maxComputeAtomicCounters =
+            QuerySingleGLInt(functions, GL_MAX_COMPUTE_ATOMIC_COUNTERS);
+
+        caps->maxComputeImageUniforms = QuerySingleGLInt(functions, GL_MAX_COMPUTE_IMAGE_UNIFORMS);
+
+        caps->maxCombinedComputeUniformComponents =
+            QuerySingleGLInt(functions, GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS);
+
+        caps->maxComputeShaderStorageBlocks =
+            QuerySingleGLInt(functions, GL_MAX_COMPUTE_SHADER_STORAGE_BLOCKS);
+
+        caps->maxCombinedShaderOutputResources =
+            QuerySingleGLInt(functions, GL_MAX_COMBINED_SHADER_OUTPUT_RESOURCES);
+
+        caps->maxUniformLocations = QuerySingleGLInt(functions, GL_MAX_UNIFORM_LOCATIONS);
+
+        caps->maxAtomicCounterBufferBindings =
+            QuerySingleGLInt(functions, GL_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS);
+
+        caps->maxAtomicCounterBufferSize =
+            QuerySingleGLInt(functions, GL_MAX_ATOMIC_COUNTER_BUFFER_SIZE);
+
+        caps->maxCombinedAtomicCounterBuffers =
+            QuerySingleGLInt(functions, GL_MAX_COMBINED_ATOMIC_COUNTER_BUFFERS);
+
+        caps->maxCombinedAtomicCounters =
+            QuerySingleGLInt(functions, GL_MAX_COMBINED_ATOMIC_COUNTERS);
+
+        caps->maxImageUnits = QuerySingleGLInt(functions, GL_MAX_IMAGE_UNITS);
+
+        caps->maxCombinedImageUniforms =
+            QuerySingleGLInt(functions, GL_MAX_COMBINED_IMAGE_UNIFORMS);
+
+        caps->maxShaderStorageBufferBindings =
+            QuerySingleGLInt(functions, GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS);
+
+        caps->maxShaderStorageBlockSize =
+            QuerySingleGLInt64(functions, GL_MAX_SHADER_STORAGE_BLOCK_SIZE);
+
+        caps->maxCombinedShaderStorageBlocks =
+            QuerySingleGLInt(functions, GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS);
+
+        caps->shaderStorageBufferOffsetAllignment =
+            QuerySingleGLInt(functions, GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT);
+    }
+    else
+    {
+        LimitVersion(maxSupportedESVersion, gl::Version(3, 0));
     }
 
     // TODO(geofflang): The gl-uniform-arrays WebGL conformance test struggles to complete on time
