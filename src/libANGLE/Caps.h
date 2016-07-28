@@ -422,6 +422,68 @@ struct Caps
 
     // Table 6.35, Framebuffer Dependent Values
     GLuint maxSamples;
+
+    // ES 3.1 (April 29, 2015) Table 20.40 Implementation dependent values (cont.)
+    GLuint maxFramebufferWidth;
+    GLuint maxFramebufferHeight;
+    GLuint maxFramebufferSamples;
+    GLuint maxSampleMaskWords;
+    GLuint maxColorTextureSamples;
+    GLuint maxDepthTextureSamples;
+    GLuint maxIntegerSamples;
+
+    // ES 3.1 (April 29, 2015) Table 20.41 Implementation dependent values (cont.)
+    GLint maxVertexAttribRelativeOffset;
+    GLint maxVertexAttribBindings;
+    GLint maxVertexAttribStride;
+
+    // ES 3.1 (April 29, 2015) Table 20.43 implementation dependent vertex shader limits
+    GLuint maxVertexAtomicCounterBuffers;
+    GLuint maxVertexAtomicCounters;
+    GLuint maxVertexImageUniforms;
+    GLuint maxVertexShaderStorageBlocks;
+
+    // ES 3.1 (April 29, 2015) Table 20.44 implementation dependent fragment shader limits
+    GLuint maxFragmentAtomicCounterBuffers;
+    GLuint maxFragmentAtomicCounters;
+    GLuint maxFragmentImageUniforms;
+    GLuint maxFragmentShaderStorageBlocks;
+    GLint minProgramTextureGatherOffset;
+    GLuint maxProgramTextureGatherOffset;
+
+    // ES 3.1 (April 29, 2015) Table 20.45 implementation dependent compute shader limits
+    GLuint maxComputeWorkGroupCountX;
+    GLuint maxComputeWorkGroupCountY;
+    GLuint maxComputeWorkGroupCountZ;
+    GLuint maxComputeWorkGroupSizeX;
+    GLuint maxComputeWorkGroupSizeY;
+    GLuint maxComputeWorkGroupSizeZ;
+    GLuint maxComputeWorkGroupInvocations;
+    GLuint maxComputeUniformBlocks;
+    GLuint maxComputeTextureImageUnits;
+    GLuint maxComputeSharedMemorySize;
+    GLuint maxComputeUniformComponents;
+    GLuint maxComputeAtomicCounterBuffers;
+    GLuint maxComputeAtomicCounters;
+    GLuint maxComputeImageUniforms;
+    GLuint maxCombinedComputeUniformComponents;
+    GLuint maxComputeShaderStorageBlocks;
+
+    // ES 3.1 (April 29, 2015) Table 20.46 implementation dependent aggregate shader limits
+    GLuint maxCombinedShaderOutputResources;
+
+    // ES 3.1 (April 29, 2015) Table 20.47 implementation dependent aggregate shader limits (cont.)
+    GLuint maxUniformLocations;
+    GLuint maxAtomicCounterBufferBindings;
+    GLuint maxAtomicCounterBufferSize;
+    GLuint maxCombinedAtomicCounterBuffers;
+    GLuint maxCombinedAtomicCounters;
+    GLuint maxImageUnits;
+    GLuint maxCombinedImageUniforms;
+    GLuint maxShaderStorageBufferBindings;
+    GLuint maxShaderStorageBlockSize;
+    GLuint maxCombinedShaderStorageBlocks;
+    GLuint shaderStorageBufferOffsetAllignment;
 };
 
 }

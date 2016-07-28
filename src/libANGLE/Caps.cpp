@@ -637,7 +637,69 @@ Caps::Caps()
       maxTransformFeedbackSeparateAttributes(0),
       maxTransformFeedbackSeparateComponents(0),
       // Table 6.35
-      maxSamples(0)
+      maxSamples(0),
+
+      // ES 3.1 (April 29, 2015) Table 20.40
+      maxFramebufferWidth(0),
+      maxFramebufferHeight(0),
+      maxFramebufferSamples(0),
+      maxSampleMaskWords(0),
+      maxColorTextureSamples(0),
+      maxDepthTextureSamples(0),
+      maxIntegerSamples(0),
+
+      // ES 3.1 (April 29, 2015) Table 20.41
+      maxVertexAttribRelativeOffset(0),
+      maxVertexAttribBindings(0),
+      maxVertexAttribStride(0),
+
+      // ES 3.1 (April 29, 2015) Table 20.43
+      maxVertexAtomicCounterBuffers(0),
+      maxVertexAtomicCounters(0),
+      maxVertexImageUniforms(0),
+      maxVertexShaderStorageBlocks(0),
+
+      // ES 3.1 (April 29, 2015) Table 20.44
+      maxFragmentAtomicCounterBuffers(0),
+      maxFragmentAtomicCounters(0),
+      maxFragmentImageUniforms(0),
+      maxFragmentShaderStorageBlocks(0),
+      minProgramTextureGatherOffset(0),
+      maxProgramTextureGatherOffset(0),
+
+      // ES 3.1 (April 29, 2015) Table 20.45
+      maxComputeWorkGroupCountX(0),
+      maxComputeWorkGroupCountY(0),
+      maxComputeWorkGroupCountZ(0),
+      maxComputeWorkGroupSizeX(0),
+      maxComputeWorkGroupSizeY(0),
+      maxComputeWorkGroupSizeZ(0),
+      maxComputeWorkGroupInvocations(0),
+      maxComputeUniformBlocks(0),
+      maxComputeTextureImageUnits(0),
+      maxComputeSharedMemorySize(0),
+      maxComputeUniformComponents(0),
+      maxComputeAtomicCounterBuffers(0),
+      maxComputeAtomicCounters(0),
+      maxComputeImageUniforms(0),
+      maxCombinedComputeUniformComponents(0),
+      maxComputeShaderStorageBlocks(0),
+
+      // ES 3.1 (April 29, 2015) Table 20.46
+      maxCombinedShaderOutputResources(0),
+
+      // ES 3.1 (April 29, 2015) Table 20.47
+      maxUniformLocations(0),
+      maxAtomicCounterBufferBindings(0),
+      maxAtomicCounterBufferSize(0),
+      maxCombinedAtomicCounterBuffers(0),
+      maxCombinedAtomicCounters(0),
+      maxImageUnits(0),
+      maxCombinedImageUniforms(0),
+      maxShaderStorageBufferBindings(0),
+      maxShaderStorageBlockSize(0),
+      maxCombinedShaderStorageBlocks(0),
+      shaderStorageBufferOffsetAllignment(0)
 {
 }
 
