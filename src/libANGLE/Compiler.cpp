@@ -78,6 +78,36 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     mResources.MaxFragmentInputVectors = caps.maxFragmentInputComponents / 4;
     mResources.MinProgramTexelOffset   = caps.minProgramTexelOffset;
     mResources.MaxProgramTexelOffset   = caps.maxProgramTexelOffset;
+
+    // GLSL ES 3.1 compute shader constants
+    mResources.MaxComputeWorkGroupSizeX = caps.maxComputeWorkGroupSizeX;
+    mResources.MaxComputeWorkGroupSizeY = caps.maxComputeWorkGroupSizeY;
+    mResources.MaxComputeWorkGroupSizeZ = caps.maxComputeWorkGroupSizeZ;
+
+    mResources.MaxComputeWorkGroupCountX = caps.maxComputeWorkGroupCountX;
+    mResources.MaxComputeWorkGroupCountY = caps.maxComputeWorkGroupCountY;
+    mResources.MaxComputeWorkGroupCountZ = caps.maxComputeWorkGroupCountZ;
+
+    mResources.MaxComputeUniformComponents    = caps.maxComputeUniformComponents;
+    mResources.MaxComputeTextureImageUnits    = caps.maxComputeTextureImageUnits;
+    mResources.MaxComputeAtomicCounters       = caps.maxComputeAtomicCounters;
+    mResources.MaxComputeAtomicCounterBuffers = caps.maxComputeAtomicCounterBuffers;
+
+    mResources.MaxComputeImageUniforms          = caps.maxComputeImageUniforms;
+    mResources.MaxImageUnits                    = caps.maxImageUnits;
+    mResources.MaxVertexImageUniforms           = caps.maxVertexImageUniforms;
+    mResources.MaxFragmentImageUniforms         = caps.maxFragmentImageUniforms;
+    mResources.MaxCombinedImageUniforms         = caps.maxCombinedImageUniforms;
+    mResources.MaxCombinedShaderOutputResources = caps.maxCombinedShaderOutputResources;
+    mResources.MaxVertexAtomicCounters          = caps.maxVertexAtomicCounters;
+    mResources.MaxFragmentAtomicCounters        = caps.maxFragmentAtomicCounters;
+    mResources.MaxCombinedAtomicCounters        = caps.maxCombinedAtomicCounters;
+    mResources.MaxCombinedAtomicCounters        = caps.maxCombinedAtomicCounters;
+    mResources.MaxAtomicCounterBindings         = caps.maxAtomicCounterBufferBindings;
+    mResources.MaxFragmentAtomicCounterBuffers  = caps.maxFragmentAtomicCounterBuffers;
+    mResources.MaxVertexAtomicCounterBuffers    = caps.maxVertexAtomicCounterBuffers;
+    mResources.MaxCombinedAtomicCounterBuffers  = caps.maxCombinedAtomicCounterBuffers;
+    mResources.MaxAtomicCounterBufferSize       = caps.maxAtomicCounterBufferSize;
 }
 
 Compiler::~Compiler()
