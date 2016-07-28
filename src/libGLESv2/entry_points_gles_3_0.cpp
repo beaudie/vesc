@@ -665,7 +665,10 @@ void GL_APIENTRY GetIntegeri_v(GLenum target, GLuint index, GLint* data)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (context->getClientMajorVersion() < 3)
+
+        const GLVersion &glVersion = context->getGLVersion();
+
+        if (!glVersion.isES3OrGreater())
         {
             context->handleError(Error(GL_INVALID_OPERATION));
             return;
@@ -693,7 +696,19 @@ void GL_APIENTRY GetIntegeri_v(GLenum target, GLuint index, GLint* data)
                 return;
             }
             break;
-
+          case GL_MAX_COMPUTE_WORK_GROUP_SIZE:
+          case GL_MAX_COMPUTE_WORK_GROUP_COUNT:
+              if (!glVersion.isES31())
+              {
+                  context->handleError(Error(GL_INVALID_OPERATION));
+                  return;
+              }
+              if (index >= 3u)
+              {
+                  context->handleError(Error(GL_INVALID_VALUE));
+                  return;
+              }
+              break;
           default:
               context->handleError(Error(GL_INVALID_ENUM));
             return;
@@ -2156,7 +2171,9 @@ void GL_APIENTRY GetInteger64i_v(GLenum target, GLuint index, GLint64* data)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (context->getClientMajorVersion() < 3)
+        const GLVersion &glVersion = context->getGLVersion();
+
+        if (!glVersion.isES3OrGreater())
         {
             context->handleError(Error(GL_INVALID_OPERATION));
             return;
@@ -2184,6 +2201,20 @@ void GL_APIENTRY GetInteger64i_v(GLenum target, GLuint index, GLint64* data)
                 return;
             }
             break;
+
+          case GL_MAX_COMPUTE_WORK_GROUP_SIZE:
+          case GL_MAX_COMPUTE_WORK_GROUP_COUNT:
+              if (!glVersion.isES31())
+              {
+                  context->handleError(Error(GL_INVALID_OPERATION));
+                  return;
+              }
+              if (index >= 3u)
+              {
+                  context->handleError(Error(GL_INVALID_VALUE));
+                  return;
+              }
+              break;
 
           default:
               context->handleError(Error(GL_INVALID_ENUM));

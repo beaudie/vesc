@@ -1366,7 +1366,129 @@ void Context::getIntegerv(GLenum pname, GLint *params)
       case GL_GPU_DISJOINT_EXT:
           *params = mImplementation->getGPUDisjoint();
           break;
-
+      case GL_MAX_FRAMEBUFFER_WIDTH:
+          *params = mCaps.maxFramebufferWidth;
+          break;
+      case GL_MAX_FRAMEBUFFER_HEIGHT:
+          *params = mCaps.maxFramebufferHeight;
+          break;
+      case GL_MAX_FRAMEBUFFER_SAMPLES:
+          *params = mCaps.maxFramebufferSamples;
+          break;
+      case GL_MAX_SAMPLE_MASK_WORDS:
+          *params = mCaps.maxSampleMaskWords;
+          break;
+      case GL_MAX_COLOR_TEXTURE_SAMPLES:
+          *params = mCaps.maxColorTextureSamples;
+          break;
+      case GL_MAX_DEPTH_TEXTURE_SAMPLES:
+          *params = mCaps.maxDepthTextureSamples;
+          break;
+      case GL_MAX_INTEGER_SAMPLES:
+          *params = mCaps.maxIntegerSamples;
+          break;
+      case GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET:
+          *params = mCaps.maxVertexAttribRelativeOffset;
+          break;
+      case GL_MAX_VERTEX_ATTRIB_BINDINGS:
+          *params = mCaps.maxVertexAttribBindings;
+          break;
+      case GL_MAX_VERTEX_ATTRIB_STRIDE:
+          *params = mCaps.maxVertexAttribStride;
+          break;
+      case GL_MAX_VERTEX_ATOMIC_COUNTER_BUFFERS:
+          *params = mCaps.maxVertexAtomicCounterBuffers;
+          break;
+      case GL_MAX_VERTEX_ATOMIC_COUNTERS:
+          *params = mCaps.maxVertexAtomicCounters;
+          break;
+      case GL_MAX_VERTEX_IMAGE_UNIFORMS:
+          *params = mCaps.maxVertexImageUniforms;
+          break;
+      case GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS:
+          *params = mCaps.maxVertexShaderStorageBlocks;
+          break;
+      case GL_MAX_FRAGMENT_ATOMIC_COUNTER_BUFFERS:
+          *params = mCaps.maxFragmentAtomicCounterBuffers;
+          break;
+      case GL_MAX_FRAGMENT_ATOMIC_COUNTERS:
+          *params = mCaps.maxFragmentAtomicCounters;
+          break;
+      case GL_MAX_FRAGMENT_IMAGE_UNIFORMS:
+          *params = mCaps.maxFragmentImageUniforms;
+          break;
+      case GL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS:
+          *params = mCaps.maxFragmentShaderStorageBlocks;
+          break;
+      case GL_MIN_PROGRAM_TEXTURE_GATHER_OFFSET:
+          *params = mCaps.minProgramTextureGatherOffset;
+          break;
+      case GL_MAX_PROGRAM_TEXTURE_GATHER_OFFSET:
+          *params = mCaps.maxProgramTextureGatherOffset;
+          break;
+      case GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS:
+          *params = mCaps.maxComputeWorkGroupInvocations;
+          break;
+      case GL_MAX_COMPUTE_UNIFORM_BLOCKS:
+          *params = mCaps.maxComputeUniformBlocks;
+          break;
+      case GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS:
+          *params = mCaps.maxComputeTextureImageUnits;
+          break;
+      case GL_MAX_COMPUTE_SHARED_MEMORY_SIZE:
+          *params = mCaps.maxComputeSharedMemorySize;
+          break;
+      case GL_MAX_COMPUTE_UNIFORM_COMPONENTS:
+          *params = mCaps.maxComputeUniformComponents;
+          break;
+      case GL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS:
+          *params = mCaps.maxComputeAtomicCounterBuffers;
+          break;
+      case GL_MAX_COMPUTE_ATOMIC_COUNTERS:
+          *params = mCaps.maxComputeAtomicCounters;
+          break;
+      case GL_MAX_COMPUTE_IMAGE_UNIFORMS:
+          *params = mCaps.maxComputeImageUniforms;
+          break;
+      case GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS:
+          *params = mCaps.maxCombinedComputeUniformComponents;
+          break;
+      case GL_MAX_COMPUTE_SHADER_STORAGE_BLOCKS:
+          *params = mCaps.maxComputeShaderStorageBlocks;
+          break;
+      case GL_MAX_COMBINED_SHADER_OUTPUT_RESOURCES:
+          *params = mCaps.maxCombinedShaderOutputResources;
+          break;
+      case GL_MAX_UNIFORM_LOCATIONS:
+          *params = mCaps.maxUniformLocations;
+          break;
+      case GL_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS:
+          *params = mCaps.maxAtomicCounterBufferBindings;
+          break;
+      case GL_MAX_ATOMIC_COUNTER_BUFFER_SIZE:
+          *params = mCaps.maxAtomicCounterBufferSize;
+          break;
+      case GL_MAX_COMBINED_ATOMIC_COUNTER_BUFFERS:
+          *params = mCaps.maxCombinedAtomicCounterBuffers;
+          break;
+      case GL_MAX_COMBINED_ATOMIC_COUNTERS:
+          *params = mCaps.maxCombinedAtomicCounters;
+          break;
+      case GL_MAX_IMAGE_UNITS:
+          *params = mCaps.maxImageUnits;
+          break;
+      case GL_MAX_COMBINED_IMAGE_UNIFORMS:
+          *params = mCaps.maxCombinedImageUniforms;
+          break;
+      case GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS:
+          *params = mCaps.maxShaderStorageBufferBindings;
+          break;
+      case GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS:
+          *params = mCaps.maxCombinedShaderStorageBlocks;
+          break;
+      case GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT:
+          *params = mCaps.shaderStorageBufferOffsetAllignment;
+          break;
       default:
           mGLState.getIntegerv(mState, pname, params);
           break;
@@ -1399,6 +1521,10 @@ void Context::getInteger64v(GLenum pname, GLint64 *params)
       case GL_TIMESTAMP_EXT:
           *params = mImplementation->getTimestamp();
           break;
+
+      case GL_MAX_SHADER_STORAGE_BLOCK_SIZE:
+          *params = mCaps.maxShaderStorageBlockSize;
+          break;
       default:
         UNREACHABLE();
         break;
@@ -1410,12 +1536,64 @@ void Context::getPointerv(GLenum pname, void **params) const
     mGLState.getPointerv(pname, params);
 }
 
+template <typename DataType>
+bool Context::getIndexedIntegerCommon(GLenum target, GLuint index, DataType *data)
+{
+    switch (target)
+    {
+        case GL_MAX_COMPUTE_WORK_GROUP_COUNT:
+            if (index == 0u)
+            {
+                *data = mCaps.maxComputeWorkGroupCountX;
+                return true;
+            }
+            else if (index == 1u)
+            {
+                *data = mCaps.maxComputeWorkGroupCountY;
+                return true;
+            }
+            else if (index == 2u)
+            {
+                *data = mCaps.maxComputeWorkGroupCountZ;
+                return true;
+            }
+        case GL_MAX_COMPUTE_WORK_GROUP_SIZE:
+            if (index == 0u)
+            {
+                *data = mCaps.maxComputeWorkGroupSizeX;
+                return true;
+            }
+            else if (index == 1u)
+            {
+                *data = mCaps.maxComputeWorkGroupSizeY;
+                return true;
+            }
+            else if (index == 2u)
+            {
+                *data = mCaps.maxComputeWorkGroupSizeZ;
+                return true;
+            }
+        default:
+            break;
+    }
+    return false;
+}
+
+template bool Context::getIndexedIntegerCommon<GLint>(GLenum target, GLuint index, GLint *data);
+template bool Context::getIndexedIntegerCommon<GLint64>(GLenum target, GLuint index, GLint64 *data);
+
 bool Context::getIndexedIntegerv(GLenum target, GLuint index, GLint *data)
 {
     // Queries about context capabilities and maximums are answered by Context.
     // Queries about current GL state values are answered by State.
     // Indexed integer queries all refer to current state, so this function is a
     // mere passthrough.
+
+    if (getIndexedIntegerCommon(target, index, data))
+    {
+        return true;
+    }
+
     return mGLState.getIndexedIntegerv(target, index, data);
 }
 
@@ -1425,6 +1603,12 @@ bool Context::getIndexedInteger64v(GLenum target, GLuint index, GLint64 *data)
     // Queries about current GL state values are answered by State.
     // Indexed integer queries all refer to current state, so this function is a
     // mere passthrough.
+
+    if (getIndexedIntegerCommon(target, index, data))
+    {
+        return true;
+    }
+
     return mGLState.getIndexedInteger64v(target, index, data);
 }
 

@@ -2160,4 +2160,29 @@ bool ValidateFlushMappedBufferRange(Context *context,
     return ValidateFlushMappedBufferRangeBase(context, target, offset, length);
 }
 
+bool ValidateGetBooleaniv(Context *context, GLenum target, GLuint index, GLboolean *data)
+{
+
+    if (!context->getGLVersion().isES31())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Entry point not implemented"));
+        return false;
+    }
+    switch (target)
+    {
+        case GL_MAX_COMPUTE_WORK_GROUP_SIZE:
+        case GL_MAX_COMPUTE_WORK_GROUP_COUNT:
+            if (index >= 3u)
+            {
+                context->handleError(Error(GL_INVALID_VALUE));
+                return false;
+            }
+            break;
+        default:
+            context->handleError(Error(GL_INVALID_ENUM));
+            return false;
+    }
+    return true;
+}
+
 }  // namespace gl
