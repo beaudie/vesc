@@ -665,75 +665,21 @@ void GL_APIENTRY GetIntegeri_v(GLenum target, GLuint index, GLint* data)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (context->getClientMajorVersion() < 3)
+        GLenum nativeType;
+        unsigned int numParams = 0;
+        if (!context->skipValidation() &&
+            !ValidateIndexedStateQuery(context, target, index, &nativeType, &numParams))
         {
-            context->handleError(Error(GL_INVALID_OPERATION));
             return;
         }
 
-        const Caps &caps = context->getCaps();
-        switch (target)
+        if (nativeType == GL_INT)
         {
-          case GL_TRANSFORM_FEEDBACK_BUFFER_START:
-          case GL_TRANSFORM_FEEDBACK_BUFFER_SIZE:
-          case GL_TRANSFORM_FEEDBACK_BUFFER_BINDING:
-            if (index >= caps.maxTransformFeedbackSeparateAttributes)
-            {
-                context->handleError(Error(GL_INVALID_VALUE));
-                return;
-            }
-            break;
-
-          case GL_UNIFORM_BUFFER_START:
-          case GL_UNIFORM_BUFFER_SIZE:
-          case GL_UNIFORM_BUFFER_BINDING:
-            if (index >= caps.maxCombinedUniformBlocks)
-            {
-                context->handleError(Error(GL_INVALID_VALUE));
-                return;
-            }
-            break;
-
-          default:
-              context->handleError(Error(GL_INVALID_ENUM));
-            return;
+            context->getIndexedIntegerv(target, index, data);
         }
-
-        if (!(context->getIndexedIntegerv(target, index, data)))
+        else
         {
-            GLenum nativeType;
-            unsigned int numParams = 0;
-            if (!context->getIndexedQueryParameterInfo(target, &nativeType, &numParams))
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
-            }
-
-            if (numParams == 0)
-            {
-                return; // it is known that pname is valid, but there are no parameters to return
-            }
-
-            if (nativeType == GL_INT_64_ANGLEX)
-            {
-                GLint64 minIntValue = static_cast<GLint64>(std::numeric_limits<int>::min());
-                GLint64 maxIntValue = static_cast<GLint64>(std::numeric_limits<int>::max());
-                GLint64 *int64Params = new GLint64[numParams];
-
-                context->getIndexedInteger64v(target, index, int64Params);
-
-                for (unsigned int i = 0; i < numParams; ++i)
-                {
-                    GLint64 clampedValue = std::max(std::min(int64Params[i], maxIntValue), minIntValue);
-                    data[i] = static_cast<GLint>(clampedValue);
-                }
-
-                delete [] int64Params;
-            }
-            else
-            {
-                UNREACHABLE();
-            }
+            CastStateValues(context, nativeType, target, index, numParams, data);
         }
     }
 }
@@ -2156,70 +2102,21 @@ void GL_APIENTRY GetInteger64i_v(GLenum target, GLuint index, GLint64* data)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (context->getClientMajorVersion() < 3)
+        GLenum nativeType;
+        unsigned int numParams = 0;
+        if (!context->skipValidation() &&
+            !ValidateIndexedStateQuery(context, target, index, &nativeType, &numParams))
         {
-            context->handleError(Error(GL_INVALID_OPERATION));
             return;
         }
 
-        const Caps &caps = context->getCaps();
-        switch (target)
+        if (nativeType == GL_INT_64_ANGLEX)
         {
-          case GL_TRANSFORM_FEEDBACK_BUFFER_START:
-          case GL_TRANSFORM_FEEDBACK_BUFFER_SIZE:
-          case GL_TRANSFORM_FEEDBACK_BUFFER_BINDING:
-            if (index >= caps.maxTransformFeedbackSeparateAttributes)
-            {
-                context->handleError(Error(GL_INVALID_VALUE));
-                return;
-            }
-            break;
-
-          case GL_UNIFORM_BUFFER_START:
-          case GL_UNIFORM_BUFFER_SIZE:
-          case GL_UNIFORM_BUFFER_BINDING:
-            if (index >= caps.maxUniformBufferBindings)
-            {
-                context->handleError(Error(GL_INVALID_VALUE));
-                return;
-            }
-            break;
-
-          default:
-              context->handleError(Error(GL_INVALID_ENUM));
-            return;
+            context->getIndexedInteger64v(target, index, data);
         }
-
-        if (!(context->getIndexedInteger64v(target, index, data)))
+        else
         {
-            GLenum nativeType;
-            unsigned int numParams = 0;
-            if (!context->getIndexedQueryParameterInfo(target, &nativeType, &numParams))
-            {
-                context->handleError(Error(GL_INVALID_ENUM));
-                return;
-            }
-
-            if (numParams == 0)
-                return; // it is known that pname is valid, but there are no parameters to return
-
-            if (nativeType == GL_INT)
-            {
-                GLint *intParams = new GLint[numParams];
-
-                context->getIndexedIntegerv(target, index, intParams);
-
-                for (unsigned int i = 0; i < numParams; ++i)
-                {
-                    data[i] = static_cast<GLint64>(intParams[i]);
-                }
-
-                delete [] intParams;
-            }
-            else
-            {
-                UNREACHABLE();
-            }
+            CastStateValues(context, nativeType, target, index, numParams, data);
         }
     }
 }

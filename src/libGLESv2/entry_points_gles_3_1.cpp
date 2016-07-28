@@ -13,8 +13,11 @@
 #include "libANGLE/Error.h"
 
 #include "libANGLE/validationES3.h"
+#include "libANGLE/validationES31.h"
 
 #include "common/debug.h"
+
+#include "libANGLE/queryconversions.h"
 
 namespace gl
 {
@@ -1006,14 +1009,26 @@ void GL_APIENTRY GetBooleani_v(GLenum target, GLuint index, GLboolean *data)
 {
     EVENT("(GLenum target = 0x%X, GLuint index = %u, GLboolean* data = 0x%0.8p)", target, index,
           data);
+
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!context->skipValidation())
+        GLenum nativeType;
+        unsigned int numParams = 0;
+        if (!context->skipValidation() &&
+            !ValidateGetBooleaniv(context, target, index, data, &nativeType, &numParams))
         {
-            context->handleError(Error(GL_INVALID_OPERATION, "Entry point not implemented"));
+            return;
         }
-        UNIMPLEMENTED();
+
+        if (nativeType == GL_BOOL)
+        {
+            context->getIndexedBooleanv(target, index, data);
+        }
+        else
+        {
+            CastStateValues(context, nativeType, target, index, numParams, data);
+        }
     }
 }
 
