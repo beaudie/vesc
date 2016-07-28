@@ -317,8 +317,9 @@ typedef int ESymbolLevel;
 const int COMMON_BUILTINS = 0;
 const int ESSL1_BUILTINS = 1;
 const int ESSL3_BUILTINS = 2;
-const int LAST_BUILTIN_LEVEL = ESSL3_BUILTINS;
-const int GLOBAL_LEVEL = 3;
+const int ESSL3_1_BUILTINS   = 3;
+const int LAST_BUILTIN_LEVEL = ESSL3_1_BUILTINS;
+const int GLOBAL_LEVEL       = 4;
 
 class TSymbolTable : angle::NonCopyable
 {
@@ -379,10 +380,13 @@ class TSymbolTable : angle::NonCopyable
         return table[level]->insert(symbol);
     }
 
-    bool insertConstInt(ESymbolLevel level, const char *name, int value)
+    bool insertConstInt(ESymbolLevel level,
+                        const char *name,
+                        int value,
+                        TPrecision precision = EbpUndefined)
     {
-        TVariable *constant = new TVariable(
-            NewPoolTString(name), TType(EbtInt, EbpUndefined, EvqConst, 1));
+        TVariable *constant =
+            new TVariable(NewPoolTString(name), TType(EbtInt, precision, EvqConst, 1));
         TConstantUnion *unionArray = new TConstantUnion[1];
         unionArray[0].setIConst(value);
         constant->shareConstPointer(unionArray);
@@ -397,6 +401,25 @@ class TSymbolTable : angle::NonCopyable
         unionArray[0].setIConst(value);
         constant->shareConstPointer(unionArray);
         return insert(level, ext, constant);
+    }
+
+    bool insertConstIvec3(ESymbolLevel level,
+                          const char *name,
+                          int xValue,
+                          int yValue,
+                          int zValue,
+                          TPrecision precision = EbpUndefined)
+    {
+        TVariable *constantIvec3 =
+            new TVariable(NewPoolTString(name), TType(EbtInt, precision, EvqConst, 3));
+
+        TConstantUnion *unionArray = new TConstantUnion[3];
+        unionArray[0].setIConst(xValue);
+        unionArray[1].setIConst(yValue);
+        unionArray[2].setIConst(zValue);
+        constantIvec3->shareConstPointer(unionArray);
+
+        return insert(level, constantIvec3);
     }
 
     void insertBuiltIn(ESymbolLevel level, TOperator op, const char *ext, const TType *rvalue, const char *name,
