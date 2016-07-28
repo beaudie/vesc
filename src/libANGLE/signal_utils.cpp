@@ -25,14 +25,15 @@ BroadcastChannel::~BroadcastChannel()
 
 void BroadcastChannel::addReceiver(ChannelBinding *receiver)
 {
-    ASSERT(mReceivers.count(receiver) == 0);
-    mReceivers.insert(receiver);
+    ASSERT(std::find(mReceivers.begin(), mReceivers.end(), receiver) == mReceivers.end());
+    mReceivers.push_back(receiver);
 }
 
 void BroadcastChannel::removeReceiver(ChannelBinding *receiver)
 {
-    ASSERT(mReceivers.count(receiver) == 1);
-    mReceivers.erase(receiver);
+    auto iter = std::find(mReceivers.begin(), mReceivers.end(), receiver);
+    ASSERT(iter != mReceivers.end());
+    mReceivers.erase(iter);
 }
 
 void BroadcastChannel::signal() const
