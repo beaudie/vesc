@@ -141,7 +141,13 @@ class TIntermTyped : public TIntermNode
     TBasicType getBasicType() const { return mType.getBasicType(); }
     TQualifier getQualifier() const { return mType.getQualifier(); }
     TPrecision getPrecision() const { return mType.getPrecision(); }
+<<<<<<< HEAD
     TMemoryQualifier getMemoryQualifier() const { return mType.getMemoryQualifier(); }
+=======
+    bool isReadOnly() const { return mType.isReadOnly(); }
+    bool isWriteOnly() const { return mType.isWriteOnly(); }
+    TLayoutQualifier getLayoutQualifier() const { return mType.getLayoutQualifier(); }
+>>>>>>> b4721ce... Add binding layout qualifier for images
     int getCols() const { return mType.getCols(); }
     int getRows() const { return mType.getRows(); }
     int getNominalSize() const { return mType.getNominalSize(); }

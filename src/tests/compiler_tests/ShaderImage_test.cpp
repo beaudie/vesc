@@ -135,7 +135,7 @@ TEST_F(ShaderImageTest, ImageDeclaration)
     const std::string &shaderString =
         "#version 310 es\n"
         "layout(local_size_x = 4) in;"
-        "layout(rgba32f) uniform highp image2D myImage;\n"
+        "layout(rgba32f, binding = 1) uniform highp image2D myImage;\n"
         "layout(rgba32f) uniform highp image2D myImage2;\n"
         "void doSomething() {}\n"
         "void main() {\n"
@@ -181,8 +181,8 @@ TEST_F(ShaderImageTest, ImageStore)
     const std::string &shaderString =
         "#version 310 es\n"
         "layout(local_size_x = 4) in;"
-        "layout(rgba32f) uniform highp image2D myImageInput;\n"
-        "layout(rgba32f) uniform highp image2D myImageOutput;\n"
+        "layout(rgba32f, binding = 1) uniform highp image2D myImageInput;\n"
+        "layout(rgba32f, binding = 2) uniform highp image2D myImageOutput;\n"
         "void main() {\n"
         "imageStore(myImageOutput, ivec2(gl_LocalInvocationID.xy), vec4(0.0));\n"
         "vec4 result = imageLoad(myImageInput, ivec2(gl_LocalInvocationID.xy) + ivec2(10));\n"
@@ -201,7 +201,8 @@ TEST_F(ShaderImageTest, ImageStore)
 
     const TIntermTyped *storeArgument1Typed = (*storeArguments)[0]->getAsTyped();
     ASSERT_EQ(EbtImage2D, storeArgument1Typed->getBasicType());
-
+    ASSERT_EQ(2, storeArgument1Typed->getLayoutQualifier().binding);
+    
     const TIntermTyped *storeArgument2Typed = (*storeArguments)[1]->getAsTyped();
     ASSERT_EQ(EbtInt, storeArgument2Typed->getBasicType());
     ASSERT_EQ(2, storeArgument2Typed->getNominalSize());
@@ -219,7 +220,8 @@ TEST_F(ShaderImageTest, ImageStore)
 
     const TIntermTyped *loadArgument1Typed = (*loadArguments)[0]->getAsTyped();
     ASSERT_EQ(EbtImage2D, loadArgument1Typed->getBasicType());
-
+    ASSERT_EQ(1, loadArgument1Typed->getLayoutQualifier().binding);
+    
     const TIntermTyped *loadArgument2Typed = (*loadArguments)[1]->getAsTyped();
     ASSERT_EQ(EbtInt, loadArgument2Typed->getBasicType());
     ASSERT_EQ(2, loadArgument2Typed->getNominalSize());

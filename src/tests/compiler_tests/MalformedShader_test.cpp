@@ -2849,3 +2849,79 @@ TEST_F(MalformedFragmentShaderGLES31Test, ReadonlyWithStructMember)
         FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
     }
 }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 38580f9... Add support for images in the compiler
+=======
+<<<<<<< HEAD
+>>>>>>> b51b29e... Add support for images in the compiler
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Change grammar to support features from es31
+=======
+>>>>>>> Add support for images in the compiler
+=======
+
+// a correct compute shader with shared memory
+TEST_F(MalformedComputeShaderTest, CorrectUsageOfBindingLayoutQualifier)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "layout(local_size_x = 5) in;\n"
+        "layout(binding = 1, rgba32f) uniform image2D myImage;\n"
+        "void main() {\n"
+        "   imageStore(myImage, ivec2(gl_LocalInvocationID.xy), vec4(1.0));\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+    }
+}
+
+// setting image binding unit to negative
+TEST_F(MalformedFragmentShaderGLES31Test, ImageBindingUnitNegative)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "uniform float a;\n"
+        "layout(rgba32f, binding = -1) uniform mediump image2D myImage;\n"
+        "out vec4 outFrag;\n"
+        "void main() {\n"
+        "   outFrag = vec4(a);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// setting the binding unit to a value bigger than the maximum binding unit
+TEST_F(MalformedFragmentShaderGLES31Test, ImageBindingUnitTooBig)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(rgba32f, binding = 9999) uniform mediump image2D myImage;\n"
+        "uniform float a;\n"
+        "out vec4 outFrag;\n"
+        "void main() {\n"
+        "   outFrag = vec4(a);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+>>>>>>> Add binding layout qualifier for images
+>>>>>>> b4721ce... Add binding layout qualifier for images
+>>>>>>> 3a5e8df... Add binding layout qualifier for images
+>>>>>>> 17c5ba4... Add binding layout qualifier for images

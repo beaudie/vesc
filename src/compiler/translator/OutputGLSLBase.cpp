@@ -108,14 +108,42 @@ void TOutputGLSLBase::writeLayoutQualifier(const TType &type)
     {
         if (layoutQualifier.location >= 0)
         {
-            TInfoSinkBase &out = objSink();
             out << "location = " << layoutQualifier.location;
         }
     }
 
     if (IsImage(type.getBasicType()) && layoutQualifier.imageInternalFormat != EiifUnspecified)
     {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        if (!isFirst)
+        {
+            out << ", ";
+            isFirst = false;
+        }
+=======
+<<<<<<< HEAD
+=======
+        if (!isFirst)
+        {
+            out << ", ";
+        }
+        isFirst = false;
+>>>>>>> b4721ce... Add binding layout qualifier for images
+>>>>>>> 3a5e8df... Add binding layout qualifier for images
+>>>>>>> 17c5ba4... Add binding layout qualifier for images
         out << getImageInternalFormatString(layoutQualifier.imageInternalFormat);
+    }
+    
+    if (layoutQualifier.binding != -1)
+    {
+        if (!isFirst)
+        {
+            out << ", ";
+        }
+        isFirst = false;
+        out << "binding = " << layoutQualifier.binding;
     }
 
     out << ") ";

@@ -138,6 +138,37 @@ TEST_P(ImageGLES31Test, ImplicitBindingPoints)
     EXPECT_EQ(0, myImage2Unit);
 }
 
+// The test checks whether the binding locations can be retrieved through GetUniformiv.
+// Each image should have a separate image binding.
+TEST_P(ImageGLES31Test, ExplicitBindingPoints)
+{
+    const std::string csSource =
+        "#version 310 es\n"
+        "layout(local_size_x=1) in;\n"
+        "precision highp image2D;\n"
+        "layout(rgba32f, binding = 1) uniform image2D myImage;\n"
+        "layout(rgba32f, binding = 4) uniform image2D myImage2;\n"
+        "void main()\n"
+        "{\n"
+        "   imageLoad(myImage, ivec2(0));"
+        "   imageLoad(myImage2, ivec2(0));"
+        "}\n";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+
+    GLint myImageLoc  = glGetUniformLocation(program.get(), "myImage");
+    GLint myImage2Loc = glGetUniformLocation(program.get(), "myImage2");
+
+    GLint myImageUnit  = -1;
+    GLint myImage2Unit = -1;
+
+    glGetUniformiv(program.get(), myImageLoc, &myImageUnit);
+    EXPECT_EQ(1, myImageUnit);
+
+    glGetUniformiv(program.get(), myImage2Loc, &myImage2Unit);
+    EXPECT_EQ(4, myImage2Unit);
+}
+
 ANGLE_INSTANTIATE_TEST(ImageGLES31Test, ES31_OPENGL(), ES31_OPENGLES());
 
 }  // namespace

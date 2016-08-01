@@ -187,6 +187,18 @@ class TParseContext : angle::NonCopyable
     void checkInvariantVariableQualifier(bool invariant,
                                          const TQualifier qualifier,
                                          const TSourceLoc &invariantLocation);
+<<<<<<< HEAD
+=======
+=======
+    void checkInvariantIsOutVariable(bool invariant,
+                                     const TQualifier qualifier,
+                                     const TSourceLoc &invariantLocation);
+<<<<<<< HEAD
+>>>>>>> Change grammar to support features from es31
+=======
+    void checkIsImageBindingInLimit(const TSourceLoc &location, int binding);
+>>>>>>> Add binding layout qualifier for images
+>>>>>>> 17c5ba4... Add binding layout qualifier for images
     void checkInputOutputTypeIsValidES3(const TQualifier qualifier,
                                         const TPublicType &type,
                                         const TSourceLoc &qualifierLocation);

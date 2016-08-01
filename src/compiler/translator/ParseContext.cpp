@@ -1103,6 +1103,11 @@ void TParseContext::singleDeclarationErrorCheck(const TPublicType &publicType,
     {
         checkLocationIsNotSpecified(identifierLocation, publicType.layoutQualifier);
     }
+    
+    if(IsImage(publicType.type))
+    {
+        checkIsImageBindingInLimit(identifierLocation, publicType.layoutQualifier.binding);
+    }
 
     if (IsImage(publicType.type))
     {
@@ -1197,6 +1202,20 @@ void TParseContext::checkLayoutQualifierSupported(const TSourceLoc &location,
     if (mShaderVersion < versionRequired)
     {
         error(location, "invalid layout qualifier:", layoutQualifierName.c_str(), "not supported");
+    }
+}
+
+void TParseContext::checkIsImageBindingInLimit(const TSourceLoc &location, int binding)
+{
+    const TVariable *maxImageUnits = static_cast<const TVariable *>(
+        symbolTable.findBuiltIn("gl_MaxImageUnits", mShaderVersion));
+
+    const TConstantUnion *maxImageUnitsData = maxImageUnits->getConstPointer();
+
+    if (binding >= maxImageUnitsData->getIConst())
+    {
+        error(location, "out of range:", std::to_string(binding).c_str(),
+              "binding must be less than GL_MAX_IMAGE_UNITS");
     }
 }
 
@@ -1766,7 +1785,12 @@ TIntermAggregate *TParseContext::parseSingleDeclaration(TPublicType &publicType,
     bool emptyDeclaration = (identifier == "");
 
     mDeferredSingleDeclarationErrorCheck = emptyDeclaration;
-
+    
+    if(IsImage(publicType.type))
+    {
+        checkIsImageBindingInLimit(identifierOrTypeLocation, publicType.layoutQualifier.binding);
+    }
+    
     if (emptyDeclaration)
     {
         if (publicType.isUnsizedArray())
@@ -3433,6 +3457,16 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
         parseLocalSize(qualifierType, qualifierTypeLine, intValue, intValueLine, intValueString, 2u,
                        &qualifier.localSize);
     }
+    else if (qualifierType == "binding")
+    {
+        checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 310);
+        if (intValue < 0)
+        {
+            error(intValueLine, "out of range:", intValueString.c_str(),
+                  "binding cannot be negative");
+        }
+        qualifier.binding = intValue;
+    }
     else
     {
         error(qualifierTypeLine, "invalid layout qualifier", qualifierType.c_str());
@@ -3477,6 +3511,13 @@ TLayoutQualifier TParseContext::joinLayoutQualifiers(TLayoutQualifier leftQualif
     if (rightQualifier.imageInternalFormat != EiifUnspecified)
     {
         joinedQualifier.imageInternalFormat = rightQualifier.imageInternalFormat;
+    }
+    if (rightQualifier.binding != -1)
+    {
+        if (mShaderVersion < 310) {
+            error(rightQualifierLocation, "qualifier requires gles 3.1 or above", "binding");
+        }
+        joinedQualifier.binding = rightQualifier.binding;
     }
 
     return joinedQualifier;

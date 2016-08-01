@@ -583,6 +583,8 @@ struct TLayoutQualifier
 
     // Compute shader layout qualifiers.
     sh::WorkGroupSize localSize;
+    
+    int binding;
 
     // Image format layout qualifier
     TLayoutImageInternalFormat imageInternalFormat;
@@ -596,6 +598,7 @@ struct TLayoutQualifier
         layoutQualifier.blockStorage = EbsUnspecified;
 
         layoutQualifier.localSize.fill(-1);
+        layoutQualifier.binding = -1;
 
         layoutQualifier.imageInternalFormat = EiifUnspecified;
         return layoutQualifier;
@@ -612,7 +615,7 @@ struct TLayoutQualifier
     {
         bool workSizeSpecified = localSize.isAnyValueSet();
         bool otherLayoutQualifiersSpecified =
-            (location != -1 || matrixPacking != EmpUnspecified || blockStorage != EbsUnspecified ||
+            (location != -1 || matrixPacking != EmpUnspecified || blockStorage != EbsUnspecified || binding != -1 || 
              imageInternalFormat != EiifUnspecified);
 
         // we can have either the work group size specified, or the other layout qualifiers
