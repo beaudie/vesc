@@ -486,6 +486,7 @@ COMPILER_EXPORT const std::map<std::string, std::string> *ShGetNameHashingMap(
 // Parameters:
 // handle: Specifies the compiler
 COMPILER_EXPORT const std::vector<sh::Uniform> *ShGetUniforms(const ShHandle handle);
+COMPILER_EXPORT const std::vector<sh::SharedVariable> *ShGetSharedVariables(const ShHandle handle);
 COMPILER_EXPORT const std::vector<sh::Varying> *ShGetVaryings(const ShHandle handle);
 COMPILER_EXPORT const std::vector<sh::Attribute> *ShGetAttributes(const ShHandle handle);
 COMPILER_EXPORT const std::vector<sh::OutputVariable> *ShGetOutputVariables(const ShHandle handle);

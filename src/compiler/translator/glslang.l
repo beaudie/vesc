@@ -125,6 +125,7 @@ O           [0-7]
 "in"           { return IN_QUAL; }
 "out"          { return OUT_QUAL; }
 "inout"        { return INOUT_QUAL; }
+"shared"       { return SHARED; }
 
 "float"        { return FLOAT_TYPE; }
 "int"          { return INT_TYPE; }

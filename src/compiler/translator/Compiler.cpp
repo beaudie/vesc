@@ -578,6 +578,7 @@ void TCompiler::clearResults()
     attributes.clear();
     outputVariables.clear();
     uniforms.clear();
+    sharedVariables.clear();
     expandedUniforms.clear();
     varyings.clear();
     interfaceBlocks.clear();
@@ -834,7 +835,7 @@ void TCompiler::collectVariables(TIntermNode* root)
 {
     if (!variablesCollected)
     {
-        sh::CollectVariables collect(&attributes, &outputVariables, &uniforms, &varyings,
+        sh::CollectVariables collect(&attributes, &outputVariables, &uniforms, &sharedVariables, &varyings,
                                      &interfaceBlocks, hashFunction, symbolTable, extensionBehavior);
         root->traverse(&collect);
 

@@ -53,6 +53,7 @@ class ShaderState final : angle::NonCopyable
 
     const std::vector<sh::Varying> &getVaryings() const { return mVaryings; }
     const std::vector<sh::Uniform> &getUniforms() const { return mUniforms; }
+    const std::vector<sh::SharedVariable> &getSharedVariables() const { return mSharedVariables; }
     const std::vector<sh::InterfaceBlock> &getInterfaceBlocks() const { return mInterfaceBlocks; }
     const std::vector<sh::Attribute> &getActiveAttributes() const { return mActiveAttributes; }
     const std::vector<sh::OutputVariable> &getActiveOutputVariables() const
@@ -74,6 +75,7 @@ class ShaderState final : angle::NonCopyable
 
     std::vector<sh::Varying> mVaryings;
     std::vector<sh::Uniform> mUniforms;
+    std::vector<sh::SharedVariable> mSharedVariables;
     std::vector<sh::InterfaceBlock> mInterfaceBlocks;
     std::vector<sh::Attribute> mActiveAttributes;
     std::vector<sh::OutputVariable> mActiveOutputVariables;
@@ -123,6 +125,7 @@ class Shader final : angle::NonCopyable, public LabeledObject
 
     const std::vector<sh::Varying> &getVaryings() const;
     const std::vector<sh::Uniform> &getUniforms() const;
+    const std::vector<sh::SharedVariable> &getSharedVariables() const;
     const std::vector<sh::InterfaceBlock> &getInterfaceBlocks() const;
     const std::vector<sh::Attribute> &getActiveAttributes() const;
     const std::vector<sh::OutputVariable> &getActiveOutputVariables() const;

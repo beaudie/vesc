@@ -557,3 +557,98 @@ int TStructure::calculateDeepestNesting() const
         maxNesting = std::max(maxNesting, (*mFields)[i]->type()->getDeepestStructNesting());
     return 1 + maxNesting;
 }
+<<<<<<< HEAD
+=======
+
+// See GLSL ES 3.00.6, 4.7 Order of Qualification for the order of each qualifier group
+// The grammar yields a strict order to the storage qualifiers: centroid in and centroid out
+int TPublicType::getMaximumQualifierIndex() const
+{
+    // precision qualifier
+    if (precision != EbpUndefined)
+    {
+        return 5;
+    }
+
+    // storage qualifier
+    switch (qualifier)
+    {
+        case EvqVaryingIn:
+        case EvqVaryingOut:
+        case EvqAttribute:
+        case EvqSmoothIn:
+        case EvqSmoothOut:
+        case EvqCentroidIn:
+        case EvqCentroidOut:
+        case EvqFlatIn:
+        case EvqFlatOut:
+        case EvqComputeIn:
+        case EvqVertexIn:
+        case EvqFragmentIn:
+        case EvqVertexOut:
+        case EvqFragmentOut:
+        case EvqUniform:
+        case EvqShared:
+        case EvqConst:
+            return 4;
+        case EvqCentroid:
+            return 3;
+        default:
+            break;
+    }
+
+    // layout qualifier
+    if (!layoutQualifier.isEmpty())
+    {
+        return 2;
+    }
+
+    // interpolation qualifier
+    switch (qualifier)
+    {
+        case EvqSmooth:
+        case EvqFlat:
+            return 1;
+        default:
+            break;
+    }
+
+    // invariant qualifier
+    if (invariant)
+    {
+        return 0;
+    }
+
+    ASSERT(IsQualifierUnspecified(qualifier));
+    return -1;
+}
+
+int TPublicType::getMaximumQualifierIndexForFunctionParameter() const
+{
+    // precision qualifier
+    if (precision != EbpUndefined)
+    {
+        return 2;
+    }
+
+    // storage qualifier
+    switch (qualifier)
+    {
+        case EvqIn:
+        case EvqOut:
+        case EvqInOut:
+            return 1;
+        case EvqConst:
+        case EvqConstReadOnly:
+            return 0;
+
+        default:
+            break;
+    }
+
+    // there can be other qualifiers, but they are invalid in a function header
+    // we can return -1 as they will be handled somewhere else
+
+    return -1;
+}
+>>>>>>> da42fa5... Add support for shared memory

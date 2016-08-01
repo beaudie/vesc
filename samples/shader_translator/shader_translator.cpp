@@ -448,6 +448,7 @@ void PrintVariable(const std::string &prefix, size_t index, const sh::ShaderVari
 static void PrintActiveVariables(ShHandle compiler)
 {
     const std::vector<sh::Uniform> *uniforms = ShGetUniforms(compiler);
+    const std::vector<sh::SharedVariable> *sharedVariables = ShGetSharedVariables(compiler);
     const std::vector<sh::Varying> *varyings = ShGetVaryings(compiler);
     const std::vector<sh::Attribute> *attributes = ShGetAttributes(compiler);
     const std::vector<sh::OutputVariable> *outputs = ShGetOutputVariables(compiler);
@@ -470,6 +471,11 @@ static void PrintActiveVariables(ShHandle compiler)
             numVars = attributes->size();
             varCategoryName = "attribute";
         }
+        else if (varCategory == 3)
+        {
+            numVars = sharedVariables->size();
+            varCategoryName = "shared";
+        }
         else
         {
             numVars         = outputs->size();
@@ -485,6 +491,8 @@ static void PrintActiveVariables(ShHandle compiler)
                 var = &((*varyings)[i]);
             else if (varCategory == 2)
                 var = &((*attributes)[i]);
+            else if (varCategory == 3)
+                var = &((*sharedVariables)[i]);
             else
                 var = &((*outputs)[i]);
 

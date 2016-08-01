@@ -2972,7 +2972,129 @@ TEST_F(MalformedFragmentShaderGLES31Test, ImageBindingUnitTooBig)
         FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
     }
 }
+<<<<<<< HEAD
 >>>>>>> Add binding layout qualifier for images
+<<<<<<< HEAD
 >>>>>>> b4721ce... Add binding layout qualifier for images
+<<<<<<< HEAD
 >>>>>>> 3a5e8df... Add binding layout qualifier for images
+<<<<<<< HEAD
 >>>>>>> 17c5ba4... Add binding layout qualifier for images
+=======
+=======
+=======
+=======
+
+
+// shared memory used in a vertex shader despite being only available in the compute shader
+TEST_F(MalformedVertexShaderGLES31Test, VertexShaderSharedMemory)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "in vec4 i;\n"
+        "shared float myShared[10];\n"
+        "void main() {\n"
+        "    gl_Position = i;\n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// shared memory used in a fragment shader despite being only available in the compute shader
+TEST_F(MalformedFragmentShaderGLES31Test, FragmentShaderSharedMemory)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "float fun(float a) {\n"
+        "   return a * 2.0;\n"
+        "}\n"
+        "shared float myShared[10];\n"
+        "out vec4 color;\n"
+        "void main() {\n"
+        "   float ff = fun(2.0);\n"
+        "   color = vec4(ff);\n"
+        "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// using the uniform storage qualifier instead of uniform.
+TEST_F(MalformedFragmentShaderGLES31Test, SharedStorageQualifierInsteadOfUniform)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(binding = 2, rgba32f) shared readonly highp image2D myImage;\n"
+        "out vec4 color;\n"
+        "void main() {\n"
+        "   color = vec4(5.0);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// combination of uniform and shared. It is not possible to set both uniform and shared qualifiers.
+TEST_F(MalformedComputeShaderTest, UniformSharedMemory)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(local_size_x = 5) in;"
+        "uniform shared float myShared[100];\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// a correct compute shader with shared memory
+TEST_F(MalformedComputeShaderTest, CorrectUsageOfSharedMemory)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(local_size_x = 5) in;"
+        "shared float myShared[100];\n"
+        "void main() {\n"
+        "   myShared[gl_LocalInvocationID.x] = 1.0;\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+    }
+}
+
+// an incorrect initialization of a shared variable
+TEST_F(MalformedComputeShaderTest, SharedVariableInitialization)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "layout(local_size_x = 5) in;"
+        "shared uint myShared = 0;\n"
+        "void main() {\n"
+        "   myShared = 1;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+>>>>>>> Add support for shared memory
+>>>>>>> 512e071... Add support for shared memory
+>>>>>>> 06abfa4... Add support for shared memory
+>>>>>>> da42fa5... Add support for shared memory

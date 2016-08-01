@@ -217,6 +217,27 @@ bool Uniform::isSameUniformAtLinkTime(const Uniform &other) const
     return ShaderVariable::isSameVariableAtLinkTime(other, true);
 }
 
+SharedVariable::SharedVariable()
+{}
+
+SharedVariable::~SharedVariable()
+{}
+
+SharedVariable::SharedVariable(const SharedVariable &other)
+    : ShaderVariable(other)
+{}
+
+SharedVariable &SharedVariable::operator=(const SharedVariable &other)
+{
+    ShaderVariable::operator=(other);
+    return *this;
+}
+
+bool SharedVariable::operator==(const SharedVariable &other) const
+{
+    return ShaderVariable::operator==(other);
+}
+
 InterfaceVariable::InterfaceVariable() : location(-1)
 {}
 

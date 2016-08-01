@@ -415,6 +415,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     bool linkVaryings(InfoLog &infoLog, const Shader *vertexShader, const Shader *fragmentShader) const;
     bool validateVertexAndFragmentUniforms(InfoLog &infoLog) const;
     bool linkUniforms(gl::InfoLog &infoLog, const gl::Caps &caps, const Bindings &uniformBindings);
+    bool linkSharedVariables(gl::InfoLog &infoLog, const gl::Caps &caps);
     bool indexUniforms(gl::InfoLog &infoLog, const gl::Caps &caps, const Bindings &uniformBindings);
     bool areMatchingInterfaceBlocks(gl::InfoLog &infoLog,
                                     const sh::InterfaceBlock &vertexInterfaceBlock,

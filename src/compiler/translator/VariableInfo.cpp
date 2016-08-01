@@ -67,6 +67,7 @@ VarT *FindVariable(const TString &name,
 CollectVariables::CollectVariables(std::vector<sh::Attribute> *attribs,
                                    std::vector<sh::OutputVariable> *outputVariables,
                                    std::vector<sh::Uniform> *uniforms,
+                                   std::vector<sh::SharedVariable> *sharedVariables,
                                    std::vector<sh::Varying> *varyings,
                                    std::vector<sh::InterfaceBlock> *interfaceBlocks,
                                    ShHashFunction64 hashFunction,
@@ -76,6 +77,7 @@ CollectVariables::CollectVariables(std::vector<sh::Attribute> *attribs,
       mAttribs(attribs),
       mOutputVariables(outputVariables),
       mUniforms(uniforms),
+      mSharedVariables(sharedVariables),
       mVaryings(varyings),
       mInterfaceBlocks(interfaceBlocks),
       mDepthRangeAdded(false),
@@ -197,6 +199,26 @@ void CollectVariables::visitSymbol(TIntermSymbol *symbol)
                 }
 
                 // It's an internal error to reference an undefined user uniform
+                ASSERT(symbolName.compare(0, 3, "gl_") != 0 || var);
+            }
+            break;
+          case EvqShared:
+            {
+                const TInterfaceBlock *interfaceBlock = symbol->getType().getInterfaceBlock();
+                if (interfaceBlock)
+                {
+                    InterfaceBlock *namedBlock = FindVariable(interfaceBlock->name(), mInterfaceBlocks);
+                    ASSERT(namedBlock);
+                    var = FindVariable(symbolName, &namedBlock->fields);
+
+                    // Set static use on the parent interface block here
+                    namedBlock->staticUse = true;
+                }
+                else
+                {
+                    var = FindVariable(symbolName, mSharedVariables);
+                }
+                // It's an internal error to reference an undefined user shared variable
                 ASSERT(symbolName.compare(0, 3, "gl_") != 0 || var);
             }
             break;
@@ -580,7 +602,7 @@ bool CollectVariables::visitAggregate(Visit, TIntermAggregate *node)
             }
             else if (qualifier == EvqAttribute || qualifier == EvqVertexIn ||
                      qualifier == EvqFragmentOut || qualifier == EvqUniform ||
-                     IsVarying(qualifier))
+                     qualifier == EvqShared || IsVarying(qualifier))
             {
                 switch (qualifier)
                 {
@@ -593,6 +615,9 @@ bool CollectVariables::visitAggregate(Visit, TIntermAggregate *node)
                     break;
                   case EvqUniform:
                     visitInfoList(sequence, mUniforms);
+                    break;
+                  case EvqShared:
+                    visitInfoList(sequence, mSharedVariables);
                     break;
                   default:
                     visitInfoList(sequence, mVaryings);

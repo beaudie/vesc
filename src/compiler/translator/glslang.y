@@ -162,6 +162,10 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
 %token <lex> BREAK CONTINUE DO ELSE FOR IF DISCARD RETURN SWITCH CASE DEFAULT
 %token <lex> BVEC2 BVEC3 BVEC4 IVEC2 IVEC3 IVEC4 VEC2 VEC3 VEC4 UVEC2 UVEC3 UVEC4
 %token <lex> MATRIX2 MATRIX3 MATRIX4 IN_QUAL OUT_QUAL INOUT_QUAL UNIFORM VARYING
+<<<<<<< HEAD
+=======
+%token <lex> READONLY WRITEONLY SHARED
+>>>>>>> 512e071... Add support for shared memory
 %token <lex> MATRIX2x3 MATRIX3x2 MATRIX2x4 MATRIX4x2 MATRIX3x4 MATRIX4x3
 %token <lex> CENTROID FLAT SMOOTH
 %token <lex> READONLY WRITEONLY
@@ -954,6 +958,11 @@ storage_qualifier
     | WRITEONLY {
         $$ = new TMemoryQualifierWrapper(EvqWriteOnly, @1);
     }
+    | SHARED {
+        context->checkIsAtGlobalLevel(@1, "shared");
+        COMPUTE_ONLY("shared", @1);
+        $$ = EvqShared;
+    }
     ;
 
 type_specifier
@@ -1003,6 +1012,9 @@ layout_qualifier_id
     }
     | IDENTIFIER EQUAL UINTCONSTANT {
         $$ = context->parseLayoutQualifier(*$1.string, @1, $3.i, @3);
+    }
+    | SHARED {
+        $$ = context->parseLayoutQualifier("shared", @1);
     }
     ;
 

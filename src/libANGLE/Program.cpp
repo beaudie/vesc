@@ -611,6 +611,11 @@ Error Program::link(const ContextState &data)
         {
             return NoError();
         }
+        
+        if (!linkSharedVariables(mInfoLog, caps))
+        {
+            return Error(GL_NO_ERROR);
+        }
 
         rx::LinkResult result = mProgram->link(data, mInfoLog);
 
@@ -2002,6 +2007,15 @@ bool Program::linkUniforms(gl::InfoLog &infoLog,
         return false;
     }
 
+    return true;
+}
+
+bool Program::linkSharedVariables(gl::InfoLog &infoLog,
+                                  const gl::Caps &caps)
+{
+    /*
+        TODO (mradev): Figure out the memory layout for shared variables. The spec does not say anything.
+    */
     return true;
 }
 

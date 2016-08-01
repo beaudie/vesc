@@ -493,6 +493,8 @@ template void GetVariableTraverser::setTypeSpecificInfo(
     const TType &type, const TString& name, ShaderVariable *variable);
 template void GetVariableTraverser::setTypeSpecificInfo(
     const TType &type, const TString& name, Uniform *variable);
+    template void GetVariableTraverser::setTypeSpecificInfo(
+        const TType &type, const TString& name, SharedVariable *variable);
 
 template<>
 void GetVariableTraverser::setTypeSpecificInfo(
@@ -559,6 +561,7 @@ void GetVariableTraverser::traverse(const TType &type,
 template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<InterfaceBlockField> *);
 template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<ShaderVariable> *);
 template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<Uniform> *);
+template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<SharedVariable> *);
 template void GetVariableTraverser::traverse(const TType &, const TString &, std::vector<Varying> *);
 
 // GLSL ES 1.0.17 4.6.1 The Invariant Qualifier

@@ -40,6 +40,12 @@ const std::vector<sh::Uniform> *GetVariableList(const TCompiler *compiler)
 }
 
 template <>
+const std::vector<sh::SharedVariable> *GetVariableList(const TCompiler *compiler)
+{
+    return &compiler->getSharedVariables();
+}
+
+template <>
 const std::vector<sh::Varying> *GetVariableList(const TCompiler *compiler)
 {
     return &compiler->getVaryings();
@@ -336,6 +342,11 @@ const std::map<std::string, std::string> *ShGetNameHashingMap(
 const std::vector<sh::Uniform> *ShGetUniforms(const ShHandle handle)
 {
     return GetShaderVariables<sh::Uniform>(handle);
+}
+
+const std::vector<sh::SharedVariable> *ShGetSharedVariables(const ShHandle handle)
+{
+    return GetShaderVariables<sh::SharedVariable>(handle);
 }
 
 const std::vector<sh::Varying> *ShGetVaryings(const ShHandle handle)

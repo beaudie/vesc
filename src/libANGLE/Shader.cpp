@@ -234,6 +234,7 @@ void Shader::compile(Compiler *compiler)
     mState.mShaderVersion = 100;
     mState.mVaryings.clear();
     mState.mUniforms.clear();
+    mState.mSharedVariables.clear();
     mState.mInterfaceBlocks.clear();
     mState.mActiveAttributes.clear();
     mState.mActiveOutputVariables.clear();
@@ -312,6 +313,7 @@ void Shader::compile(Compiler *compiler)
         case GL_COMPUTE_SHADER:
         {
             mState.mLocalSize = ShGetComputeShaderLocalGroupSize(compilerHandle);
+            mState.mSharedVariables = GetShaderVariables(ShGetSharedVariables(compilerHandle));
             break;
         }
         case GL_VERTEX_SHADER:
@@ -379,6 +381,11 @@ const std::vector<sh::Varying> &Shader::getVaryings() const
 const std::vector<sh::Uniform> &Shader::getUniforms() const
 {
     return mState.getUniforms();
+}
+
+const std::vector<sh::SharedVariable> &Shader::getSharedVariables() const
+{
+    return mState.getSharedVariables();
 }
 
 const std::vector<sh::InterfaceBlock> &Shader::getInterfaceBlocks() const

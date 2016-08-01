@@ -24,6 +24,7 @@ class CollectVariables : public TIntermTraverser
     CollectVariables(std::vector<Attribute> *attribs,
                      std::vector<OutputVariable> *outputVariables,
                      std::vector<Uniform> *uniforms,
+                     std::vector<SharedVariable> *sharedVariables,
                      std::vector<Varying> *varyings,
                      std::vector<InterfaceBlock> *interfaceBlocks,
                      ShHashFunction64 hashFunction,
@@ -44,6 +45,7 @@ class CollectVariables : public TIntermTraverser
     std::vector<Attribute> *mAttribs;
     std::vector<OutputVariable> *mOutputVariables;
     std::vector<Uniform> *mUniforms;
+    std::vector<SharedVariable> *mSharedVariables;
     std::vector<Varying> *mVaryings;
     std::vector<InterfaceBlock> *mInterfaceBlocks;
 
