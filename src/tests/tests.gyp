@@ -51,26 +51,14 @@
                 {
                     'target_name': 'angle_test_support',
                     'type': 'none',
-                    'conditions':
-                    [
-                        ['angle_standalone==1',
-                        {
-                            'dependencies': [
-                                'angle_internal_gmock',
-                                'angle_internal_gtest',
-                            ],
-                        },
-                        {
-                            'dependencies': [
-                                '<(DEPTH)/testing/gmock.gyp:gmock',
-                                '<(DEPTH)/testing/gtest.gyp:gtest',
-                            ],
-                        }],
+                    'dependencies': [
+                        'angle_internal_gmock',
+                        'angle_internal_gtest',
                     ],
                 },
             ],
         }],
-        ['angle_standalone==1 and angle_build_winrt==0',
+        ['angle_build_winrt==0',
         {
             'targets':
             [
