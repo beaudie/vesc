@@ -12,6 +12,7 @@
 #include "libANGLE/Config.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
+#include "libANGLE/renderer/gl/RendererGL.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 #include "libANGLE/renderer/gl/wgl/DXGISwapChainWindowSurfaceWGL.h"
 #include "libANGLE/renderer/gl/wgl/FunctionsWGL.h"
@@ -59,6 +60,7 @@ DisplayWGL::DisplayWGL()
       mOpenGLModule(nullptr),
       mFunctionsWGL(nullptr),
       mFunctionsGL(nullptr),
+      mHasARBCreateContextRobustness(false),
       mWindowClass(0),
       mWindow(nullptr),
       mDeviceContext(nullptr),
@@ -89,6 +91,8 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
 
     mFunctionsWGL = new FunctionsWGL();
     mFunctionsWGL->initialize(mOpenGLModule, nullptr);
+
+    mHasARBCreateContextRobustness = mFunctionsWGL->hasExtension("WGL_ARB_create_context_robustness");
 
     // WGL can't grab extensions until it creates a context because it needs to load the driver's DLLs first.
     // Create a dummy context to load the driver and determine which GL versions are available.
@@ -258,6 +262,12 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
         }
 
         std::vector<int> contextCreationAttributes;
+
+        if (mHasARBCreateContextRobustness)
+        {
+            contextCreationAttributes.push_back(GLX_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB);
+            contextCreationAttributes.push_back(GLX_LOSE_CONTEXT_ON_RESET_ARB);
+        }
 
         // Don't request a specific version unless the user wants one.  WGL will return the highest version
         // that the driver supports if no version is requested.
@@ -543,13 +553,16 @@ egl::ConfigSet DisplayWGL::generateConfigs()
 
 bool DisplayWGL::testDeviceLost()
 {
-    //UNIMPLEMENTED();
+    if (mHasARBCreateContextRobustness)
+    {
+        return this->getRenderer()->getResetStatus() != GL_NO_ERROR;
+    }
+
     return false;
 }
 
 egl::Error DisplayWGL::restoreLostDevice()
 {
-    UNIMPLEMENTED();
     return egl::Error(EGL_BAD_DISPLAY);
 }
 
@@ -619,6 +632,8 @@ void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     // prefer to swap with inverted Y.
     outExtensions->postSubBuffer      = mUseDXGISwapChains;
     outExtensions->surfaceOrientation = mUseDXGISwapChains;
+
+    outExtensions->createContextRobustness = mHasARBCreateContextRobustness;
 }
 
 void DisplayWGL::generateCaps(egl::Caps *outCaps) const
