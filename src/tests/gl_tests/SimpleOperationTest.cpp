@@ -41,7 +41,7 @@ TEST_P(SimpleOperationTest, CompileVertexShader)
     );
 
     GLuint shader = CompileShader(GL_VERTEX_SHADER, source);
-    EXPECT_NE(shader, 0u);
+    EXPECT_NE(0u, shader);
     glDeleteShader(shader);
 
     EXPECT_GL_NO_ERROR();
@@ -60,7 +60,7 @@ TEST_P(SimpleOperationTest, CompileFragmentShader)
     );
 
     GLuint shader = CompileShader(GL_FRAGMENT_SHADER, source);
-    EXPECT_NE(shader, 0u);
+    EXPECT_NE(0u, shader);
     glDeleteShader(shader);
 
     EXPECT_GL_NO_ERROR();
@@ -85,7 +85,7 @@ TEST_P(SimpleOperationTest, LinkProgram)
     );
 
     GLuint program = CompileProgram(vsSource, fsSource);
-    EXPECT_NE(program, 0u);
+    EXPECT_NE(0u, program);
     glDeleteProgram(program);
 
     EXPECT_GL_NO_ERROR();
@@ -112,7 +112,7 @@ TEST_P(SimpleOperationTest, LinkProgramWithUniforms)
     );
 
     GLuint program = CompileProgram(vsSource, fsSource);
-    EXPECT_NE(program, 0u);
+    EXPECT_NE(0u, program);
 
     GLint uniformLoc = glGetUniformLocation(program, "u_input");
     EXPECT_NE(-1, uniformLoc);
@@ -142,7 +142,7 @@ TEST_P(SimpleOperationTest, LinkProgramWithAttributes)
     );
 
     GLuint program = CompileProgram(vsSource, fsSource);
-    EXPECT_NE(program, 0u);
+    EXPECT_NE(0u, program);
 
     GLint attribLoc = glGetAttribLocation(program, "a_input");
     EXPECT_NE(-1, attribLoc);
