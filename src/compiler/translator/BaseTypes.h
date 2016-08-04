@@ -346,6 +346,15 @@ enum TQualifier
     EvqFlatIn,
     EvqCentroidIn,  // Implies smooth
 
+    // GLSL ES 3.1 compute shader special variables
+    EvqComputeIn,
+    EvqNumWorkGroups,
+    EvqWorkGroupSize,
+    EvqWorkGroupID,
+    EvqLocalInvocationID,
+    EvqGlobalInvocationID,
+    EvqLocalInvocationIndex,
+
     // end of list
     EvqLast
 };
@@ -371,6 +380,13 @@ struct TLayoutQualifier
     TLayoutMatrixPacking matrixPacking;
     TLayoutBlockStorage blockStorage;
 
+    // Compute shader layout qualifiers.
+    // -1 would mean unspecified.
+    // They are 1 by default in the shader however.
+    int localSizeX;
+    int localSizeY;
+    int localSizeZ;
+
     static TLayoutQualifier create()
     {
         TLayoutQualifier layoutQualifier;
@@ -379,12 +395,33 @@ struct TLayoutQualifier
         layoutQualifier.matrixPacking = EmpUnspecified;
         layoutQualifier.blockStorage = EbsUnspecified;
 
+        layoutQualifier.localSizeX = -1;
+        layoutQualifier.localSizeY = -1;
+        layoutQualifier.localSizeZ = -1;
+
         return layoutQualifier;
     }
 
     bool isEmpty() const
     {
-        return location == -1 && matrixPacking == EmpUnspecified && blockStorage == EbsUnspecified;
+        return location == -1 && matrixPacking == EmpUnspecified &&
+               blockStorage == EbsUnspecified && localSizeX == -1 && localSizeY == -1 &&
+               localSizeZ == -1;
+    }
+
+    bool isGroupSizeSpecified() const
+    {
+        return (localSizeX != -1 || localSizeY != -1 || localSizeZ != -1);
+    }
+
+    bool isCombinationValid() const
+    {
+        bool workSizeSpecified = isGroupSizeSpecified();
+        bool otherLayoutQualifiersSpecified =
+            (location != -1 || matrixPacking != EmpUnspecified || blockStorage != EbsUnspecified);
+
+        // we can have either the work group size specified, or the other layout qualifiers
+        return (workSizeSpecified != otherLayoutQualifiersSpecified);
     }
 };
 
@@ -432,6 +469,13 @@ inline const char* getQualifierString(TQualifier q)
     case EvqSmoothIn:               return "smooth in";
     case EvqFlatIn:                 return "flat in";
     case EvqCentroidIn:             return "smooth centroid in";
+    case EvqComputeIn:              return "in";
+    case EvqNumWorkGroups:          return "NumWorkGroups";
+    case EvqWorkGroupSize:          return "WorkGroupSize";
+    case EvqWorkGroupID:            return "WorkGroupID";
+    case EvqLocalInvocationID:      return "LocalInvocationID";
+    case EvqGlobalInvocationID:     return "GlobalInvocationID";
+    case EvqLocalInvocationIndex:   return "LocalInvocationIndex";
     default: UNREACHABLE();         return "unknown qualifier";
     }
     // clang-format on

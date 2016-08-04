@@ -65,7 +65,11 @@ class TParseContext : angle::NonCopyable
           mUsesFragColor(false),
           mUsesSecondaryOutputs(false),
           mMinProgramTexelOffset(resources.MinProgramTexelOffset),
-          mMaxProgramTexelOffset(resources.MaxProgramTexelOffset)
+          mMaxProgramTexelOffset(resources.MaxProgramTexelOffset),
+          mLocalSizeDeclared(false),
+          mLocalSizeX(-1),
+          mLocalSizeY(-1),
+          mLocalSizeZ(-1)
     {
     }
 
@@ -114,6 +118,11 @@ class TParseContext : angle::NonCopyable
     void incrSwitchNestingLevel() { ++mSwitchNestingLevel; }
     void decrSwitchNestingLevel() { --mSwitchNestingLevel; }
 
+    bool isLocalSizeDeclared() const { return mLocalSizeDeclared; }
+    int getLocalSizeX() const { return mLocalSizeX; }
+    int getLocalSizeY() const { return mLocalSizeY; }
+    int getLocalSizeZ() const { return mLocalSizeZ; }
+
     // This method is guaranteed to succeed, even if no variable with 'name' exists.
     const TVariable *getNamedVariable(const TSourceLoc &location, const TString *name, const TSymbol *symbol);
     TIntermTyped *parseVariableIdentifier(const TSourceLoc &location,
@@ -149,6 +158,11 @@ class TParseContext : angle::NonCopyable
     bool extensionErrorCheck(const TSourceLoc &line, const TString&);
     bool singleDeclarationErrorCheck(const TPublicType &publicType, const TSourceLoc &identifierLocation);
     bool layoutLocationErrorCheck(const TSourceLoc &location, const TLayoutQualifier &layoutQualifier);
+    bool layoutSupportedErrorCheck(const TSourceLoc &location,
+                                   const TString &layoutQualifierName,
+                                   int versionRequired);
+    bool layoutWorkGroupSizeErrorCheck(const TSourceLoc &location,
+                                       const TLayoutQualifier &layoutQualifier);
     bool functionCallLValueErrorCheck(const TFunction *fnCandidate, TIntermAggregate *);
     void es3InvariantErrorCheck(const TQualifier qualifier, const TSourceLoc &invariantLocation);
     void es3InputOutputTypeCheck(const TQualifier qualifier,
@@ -286,7 +300,9 @@ class TParseContext : angle::NonCopyable
                                           const TString &intValueString,
                                           int intValue,
                                           const TSourceLoc &intValueLine);
-    TLayoutQualifier joinLayoutQualifiers(TLayoutQualifier leftQualifier, TLayoutQualifier rightQualifier);
+    TLayoutQualifier joinLayoutQualifiers(TLayoutQualifier leftQualifier,
+                                          TLayoutQualifier rightQualifier,
+                                          const TSourceLoc &rightQualifierLocation);
     TPublicType joinInterpolationQualifiers(const TSourceLoc &interpolationLoc, TQualifier interpolationQualifier,
                                             const TSourceLoc &storageLoc, TQualifier storageQualifier);
 
@@ -396,6 +412,12 @@ class TParseContext : angle::NonCopyable
                                  // gl_Secondary FragColor or both.
     int mMinProgramTexelOffset;
     int mMaxProgramTexelOffset;
+
+    // keep track of local group size declared in layout. It should be declared only once.
+    bool mLocalSizeDeclared;
+    int mLocalSizeX;
+    int mLocalSizeY;
+    int mLocalSizeZ;
 };
 
 int PaParseStrings(
