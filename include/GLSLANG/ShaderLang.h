@@ -496,6 +496,7 @@ COMPILER_EXPORT const std::vector<sh::Varying> *ShGetVaryings(const ShHandle han
 COMPILER_EXPORT const std::vector<sh::Attribute> *ShGetAttributes(const ShHandle handle);
 COMPILER_EXPORT const std::vector<sh::OutputVariable> *ShGetOutputVariables(const ShHandle handle);
 COMPILER_EXPORT const std::vector<sh::InterfaceBlock> *ShGetInterfaceBlocks(const ShHandle handle);
+COMPILER_EXPORT const std::array<int, 3> *ShGetLocalGroupSize(const ShHandle handle);
 
 typedef struct
 {
