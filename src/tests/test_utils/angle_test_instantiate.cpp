@@ -67,6 +67,19 @@ bool IsPlatformAvailable(const PlatformParameters &param)
                 new EGLWindow(param.majorVersion, param.minorVersion, param.eglParameters);
             result = eglWindow->initializeGL(osWindow);
 
+            if (result && param.majorVersion >= 3)
+            {
+                GLint majorVersion = 0;
+                GLint minorVersion = 0;
+                glGetIntegerv(GL_MAJOR_VERSION, &majorVersion);
+                glGetIntegerv(GL_MINOR_VERSION, &minorVersion);
+                if (majorVersion < param.majorVersion ||
+                    (majorVersion == param.majorVersion && minorVersion < param.minorVersion))
+                {
+                    result = false;
+                }
+            }
+
             eglWindow->destroyGL();
             SafeDelete(eglWindow);
         }
