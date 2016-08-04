@@ -682,8 +682,31 @@ void IdentifyBuiltIns(sh::GLenum type, ShShaderSpec spec,
         symbolTable.insert(ESSL3_BUILTINS, new TVariable(NewPoolTString("gl_VertexID"),
                                                          TType(EbtInt, EbpHigh, EvqVertexID, 1)));
         break;
+
       case GL_COMPUTE_SHADER:
-          break;
+      {
+          symbolTable.insert(ESSL3_1_BUILTINS,
+                             new TVariable(NewPoolTString("gl_NumWorkGroups"),
+                                           TType(EbtUInt, EbpUndefined, EvqNumWorkGroups, 3)));
+          symbolTable.insert(ESSL3_1_BUILTINS,
+                             new TVariable(NewPoolTString("gl_WorkGroupSize"),
+                                           TType(EbtUInt, EbpUndefined, EvqWorkGroupSize, 3)));
+          symbolTable.insert(ESSL3_1_BUILTINS,
+                             new TVariable(NewPoolTString("gl_WorkGroupID"),
+                                           TType(EbtUInt, EbpUndefined, EvqWorkGroupID, 3)));
+          symbolTable.insert(ESSL3_1_BUILTINS,
+                             new TVariable(NewPoolTString("gl_LocalInvocationID"),
+                                           TType(EbtUInt, EbpUndefined, EvqLocalInvocationID, 3)));
+          symbolTable.insert(ESSL3_1_BUILTINS,
+                             new TVariable(NewPoolTString("gl_GlobalInvocationID"),
+                                           TType(EbtUInt, EbpUndefined, EvqGlobalInvocationID, 3)));
+          symbolTable.insert(
+              ESSL3_1_BUILTINS,
+              new TVariable(NewPoolTString("gl_LocalInvocationIndex"),
+                            TType(EbtUInt, EbpUndefined, EvqLocalInvocationIndex, 1)));
+      }
+      break;
+
       default:
         assert(false && "Language not supported");
     }
