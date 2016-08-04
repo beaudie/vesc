@@ -70,6 +70,8 @@ class ShaderState final : angle::NonCopyable
     std::string mTranslatedSource;
     std::string mSource;
 
+    std::array<int, 3> mLocalSize;
+
     std::vector<sh::Varying> mVaryings;
     std::vector<sh::Uniform> mUniforms;
     std::vector<sh::InterfaceBlock> mInterfaceBlocks;
@@ -126,6 +128,8 @@ class Shader final : angle::NonCopyable, public LabeledObject
     const std::vector<sh::OutputVariable> &getActiveOutputVariables() const;
 
     int getSemanticIndex(const std::string &attributeName) const;
+
+    const std::array<int, 3> &getLocalSize() const { return mState.mLocalSize; }
 
   private:
     static void getSourceImpl(const std::string &source, GLsizei bufSize, GLsizei *length, char *buffer);
