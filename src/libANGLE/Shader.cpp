@@ -75,6 +75,10 @@ bool CompareShaderVar(const sh::ShaderVariable &x, const sh::ShaderVariable &y)
 
 ShaderState::ShaderState(GLenum shaderType) : mLabel(), mShaderType(shaderType), mShaderVersion(100)
 {
+    for (size_t index = 0u; index < 3u; ++index)
+    {
+        mLocalSize[index] = -1;
+    }
 }
 
 ShaderState::~ShaderState()
@@ -306,7 +310,11 @@ void Shader::compile(Compiler *compiler)
     mState.mUniforms        = GetShaderVariables(ShGetUniforms(compilerHandle));
     mState.mInterfaceBlocks = GetShaderVariables(ShGetInterfaceBlocks(compilerHandle));
 
-    if (mState.mShaderType == GL_VERTEX_SHADER)
+    if (mState.mShaderType == GL_COMPUTE_SHADER)
+    {
+        mState.mLocalSize = ShGetComputeShaderLocalGroupSize(compilerHandle);
+    }
+    else if (mState.mShaderType == GL_VERTEX_SHADER)
     {
         mState.mActiveAttributes = GetActiveShaderVariables(ShGetAttributes(compilerHandle));
     }
