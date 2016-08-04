@@ -65,8 +65,13 @@ class TParseContext : angle::NonCopyable
           mUsesFragColor(false),
           mUsesSecondaryOutputs(false),
           mMinProgramTexelOffset(resources.MinProgramTexelOffset),
-          mMaxProgramTexelOffset(resources.MaxProgramTexelOffset)
+          mMaxProgramTexelOffset(resources.MaxProgramTexelOffset),
+          mComputeShaderLocalSizeDeclared(false)
     {
+        for (size_t i = 0u; i < 3u; ++i)
+        {
+            mComputeShaderLocalSize[i] = -1;
+        }
     }
 
     const pp::Preprocessor &getPreprocessor() const { return mPreprocessor; }
@@ -114,6 +119,9 @@ class TParseContext : angle::NonCopyable
     void incrSwitchNestingLevel() { ++mSwitchNestingLevel; }
     void decrSwitchNestingLevel() { --mSwitchNestingLevel; }
 
+    bool isComputeShaderLocalSizeDeclared() const { return mComputeShaderLocalSizeDeclared; }
+    std::array<int, 3> getComputeShaderLocalSize() const;
+
     // This method is guaranteed to succeed, even if no variable with 'name' exists.
     const TVariable *getNamedVariable(const TSourceLoc &location, const TString *name, const TSymbol *symbol);
     TIntermTyped *parseVariableIdentifier(const TSourceLoc &location,
@@ -149,6 +157,11 @@ class TParseContext : angle::NonCopyable
     bool extensionErrorCheck(const TSourceLoc &line, const TString&);
     bool singleDeclarationErrorCheck(const TPublicType &publicType, const TSourceLoc &identifierLocation);
     bool layoutLocationErrorCheck(const TSourceLoc &location, const TLayoutQualifier &layoutQualifier);
+    void layoutSupportedErrorCheck(const TSourceLoc &location,
+                                   const TString &layoutQualifierName,
+                                   int versionRequired);
+    bool layoutWorkGroupSizeErrorCheck(const TSourceLoc &location,
+                                       const TLayoutQualifier &layoutQualifier);
     bool functionCallLValueErrorCheck(const TFunction *fnCandidate, TIntermAggregate *);
     void es3InvariantErrorCheck(const TQualifier qualifier, const TSourceLoc &invariantLocation);
     void es3InputOutputTypeCheck(const TQualifier qualifier,
@@ -283,10 +296,11 @@ class TParseContext : angle::NonCopyable
         const TString &qualifierType, const TSourceLoc &qualifierTypeLine);
     TLayoutQualifier parseLayoutQualifier(const TString &qualifierType,
                                           const TSourceLoc &qualifierTypeLine,
-                                          const TString &intValueString,
                                           int intValue,
                                           const TSourceLoc &intValueLine);
-    TLayoutQualifier joinLayoutQualifiers(TLayoutQualifier leftQualifier, TLayoutQualifier rightQualifier);
+    TLayoutQualifier joinLayoutQualifiers(TLayoutQualifier leftQualifier,
+                                          TLayoutQualifier rightQualifier,
+                                          const TSourceLoc &rightQualifierLocation);
     TPublicType joinInterpolationQualifiers(const TSourceLoc &interpolationLoc, TQualifier interpolationQualifier,
                                             const TSourceLoc &storageLoc, TQualifier storageQualifier);
 
@@ -396,6 +410,10 @@ class TParseContext : angle::NonCopyable
                                  // gl_Secondary FragColor or both.
     int mMinProgramTexelOffset;
     int mMaxProgramTexelOffset;
+
+    // keep track of local group size declared in layout. It should be declared only once.
+    bool mComputeShaderLocalSizeDeclared;
+    std::array<int, 3> mComputeShaderLocalSize;
 };
 
 int PaParseStrings(
