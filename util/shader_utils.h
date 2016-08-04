@@ -8,6 +8,7 @@
 #define SAMPLE_UTIL_SHADER_UTILS_H
 
 #include <export.h>
+#include <GLES3/gl31.h>
 #include <GLES3/gl3.h>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
@@ -29,5 +30,6 @@ CompileProgramWithTransformFeedback(const std::string &vsSource,
                                     GLenum bufferMode);
 ANGLE_EXPORT GLuint CompileProgram(const std::string &vsSource, const std::string &fsSource);
 ANGLE_EXPORT GLuint CompileProgramFromFiles(const std::string &vsPath, const std::string &fsPath);
-
+ANGLE_EXPORT GLuint CompileComputeProgram(const std::string &csSource,
+                                          bool outputErrorMessages = true);
 #endif // SAMPLE_UTIL_SHADER_UTILS_H
