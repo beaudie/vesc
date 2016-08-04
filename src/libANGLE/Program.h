@@ -165,6 +165,7 @@ class ProgramState final : angle::NonCopyable
 
     const Shader *getAttachedVertexShader() const { return mAttachedVertexShader; }
     const Shader *getAttachedFragmentShader() const { return mAttachedFragmentShader; }
+    const Shader *getAttachedComputeShader() const { return mAttachedComputeShader; }
     const std::vector<std::string> &getTransformFeedbackVaryingNames() const
     {
         return mTransformFeedbackVaryingNames;
@@ -200,6 +201,7 @@ class ProgramState final : angle::NonCopyable
 
     Shader *mAttachedFragmentShader;
     Shader *mAttachedVertexShader;
+    Shader *mAttachedComputeShader;
 
     std::vector<std::string> mTransformFeedbackVaryingNames;
     std::vector<sh::Varying> mTransformFeedbackVaryingVars;

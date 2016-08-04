@@ -29,6 +29,20 @@ class SimpleOperationTest : public ANGLETest
     }
 };
 
+class SimpleOperationTestES31 : public ANGLETest
+{
+  protected:
+    SimpleOperationTestES31()
+    {
+        setWindowWidth(128);
+        setWindowHeight(128);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
+};
+
 TEST_P(SimpleOperationTest, CompileVertexShader)
 {
     const std::string source = SHADER_SOURCE
@@ -198,6 +212,63 @@ TEST_P(SimpleOperationTest, BufferSubData)
     EXPECT_GL_NO_ERROR();
 }
 
+// link a simple compute program. It should be successful
+TEST_P(SimpleOperationTestES31, LinkComputeProgram)
+{
+    const std::string csSource =
+        "#version 310 es\n"
+        "layout(local_size_x=1) in;\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint program = CompileComputeProgram(csSource, false);
+    EXPECT_NE(program, 0u);
+
+    glDeleteProgram(program);
+
+    EXPECT_GL_NO_ERROR();
+}
+
+// link a simple compute program. There is no local size and linking should fail
+TEST_P(SimpleOperationTestES31, LinkComputeProgramNoLocalSizeLinkError)
+{
+    const std::string csSource =
+        "#version 310 es\n"
+        "void main()\n"
+        "{\n"
+        "}\n";
+
+    GLuint program = CompileComputeProgram(csSource, false);
+    EXPECT_EQ(program, 0u);
+
+    glDeleteProgram(program);
+
+    EXPECT_GL_NO_ERROR();
+}
+
+TEST_P(SimpleOperationTestES31, LinkComputeProgramWithUniforms)
+{
+    const std::string csSource =
+        "#version 310 es\n"
+        "layout(local_size_x=1) in;\n"
+        "uniform int myUniformInt;\n"
+        "void main()\n"
+        "{\n"
+        "int q = myUniformInt;\n"
+        "}\n";
+
+    GLuint program = CompileComputeProgram(csSource, false);
+    EXPECT_NE(program, 0u);
+
+    GLint uniformLoc = glGetUniformLocation(program, "myUniformInt");
+    EXPECT_NE(-1, uniformLoc);
+
+    glDeleteProgram(program);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(SimpleOperationTest,
                        ES2_D3D9(),
@@ -208,5 +279,7 @@ ANGLE_INSTANTIATE_TEST(SimpleOperationTest,
                        ES3_OPENGL(),
                        ES2_OPENGLES(),
                        ES3_OPENGLES());
+
+ANGLE_INSTANTIATE_TEST(SimpleOperationTestES31, ES31_OPENGL(), ES31_OPENGLES());
 
 } // namespace
