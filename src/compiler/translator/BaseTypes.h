@@ -350,6 +350,12 @@ enum TQualifier
 
     // GLSL ES 3.1 compute shader special variables
     EvqComputeIn,
+    EvqNumWorkGroups,
+    EvqWorkGroupSize,
+    EvqWorkGroupID,
+    EvqLocalInvocationID,
+    EvqGlobalInvocationID,
+    EvqLocalInvocationIndex,
 
     // end of list
     EvqLast
@@ -491,6 +497,12 @@ inline const char* getQualifierString(TQualifier q)
     case EvqFlatIn:                 return "flat in";
     case EvqCentroidIn:             return "smooth centroid in";
     case EvqComputeIn:              return "in";
+    case EvqNumWorkGroups:          return "NumWorkGroups";
+    case EvqWorkGroupSize:          return "WorkGroupSize";
+    case EvqWorkGroupID:            return "WorkGroupID";
+    case EvqLocalInvocationID:      return "LocalInvocationID";
+    case EvqGlobalInvocationID:     return "GlobalInvocationID";
+    case EvqLocalInvocationIndex:   return "LocalInvocationIndex";
     default: UNREACHABLE();         return "unknown qualifier";
     }
     // clang-format on
