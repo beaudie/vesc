@@ -10,9 +10,9 @@
 #ifndef GLSLANG_SHADERVARS_H_
 #define GLSLANG_SHADERVARS_H_
 
+#include <algorithm>
 #include <string>
 #include <vector>
-#include <algorithm>
 
 // Assume ShaderLang.h is included before ShaderVars.h, for sh::GLenum
 // Note: make sure to increment ANGLE_SH_VERSION when changing ShaderVars.h
@@ -214,6 +214,29 @@ struct COMPILER_EXPORT InterfaceBlock
     bool isRowMajorLayout;
     bool staticUse;
     std::vector<InterfaceBlockField> fields;
+};
+
+struct COMPILER_EXPORT WorkGroupSize
+{
+
+    void fill(int fillValue);
+    void setLocalSize(int localSizeX, int localSizeY, int localSizeZ);
+
+    int &operator[](size_t index);
+    int operator[](size_t index) const;
+    size_t size() const;
+    bool operator==(const WorkGroupSize &right) const;
+    bool operator!=(const WorkGroupSize &right) const;
+
+    // checks whether any of the values are set
+    bool isAnyValueSet() const;
+
+    // checks whether all of the values are set
+    bool isDeclared() const;
+
+    // checks whether either all of the values are set
+    bool isLocalSizeValid() const;
+    int localSizeQualifiers[3];
 };
 
 }  // namespace sh

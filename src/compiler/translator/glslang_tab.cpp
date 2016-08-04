@@ -377,7 +377,7 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
     }  \
 }
 
-#define DRAW_ONLY(S, L) {  \
+#define NON_COMPUTE_ONLY(S, L) {  \
     if (context->getShaderType() != GL_VERTEX_SHADER && context->getShaderType() != GL_FRAGMENT_SHADER) {  \
         context->error(L, " supported in vertex and fragment shaders only ", S);  \
         context->recover();  \
@@ -3643,7 +3643,7 @@ yyreduce:
 
     {
         ES3_OR_NEWER("out", (yylsp[0]), "storage qualifier");
-        DRAW_ONLY("out", (yylsp[0]));
+        NON_COMPUTE_ONLY("out", (yylsp[0]));
         (yyval.interm.type).qualifier = (context->getShaderType() == GL_FRAGMENT_SHADER) ? EvqFragmentOut : EvqVertexOut;
     }
 

@@ -750,13 +750,14 @@ GLuint GL_APIENTRY CreateShader(GLenum type)
     {
         switch (type)
         {
-          case GL_FRAGMENT_SHADER:
-          case GL_VERTEX_SHADER:
-            return context->createShader(type);
+            case GL_COMPUTE_SHADER:
+            case GL_FRAGMENT_SHADER:
+            case GL_VERTEX_SHADER:
+                return context->createShader(type);
 
-          default:
-              context->handleError(Error(GL_INVALID_ENUM));
-            return 0;
+            default:
+                context->handleError(Error(GL_INVALID_ENUM));
+                return 0;
         }
     }
 

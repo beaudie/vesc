@@ -51,7 +51,15 @@ class GLProgram
 {
   public:
     GLProgram(const std::string &vertexShader, const std::string &fragmentShader)
-        : mHandle(0), mVertexShader(vertexShader), mFragmentShader(fragmentShader)
+        : mHandle(0),
+          mVertexShader(vertexShader),
+          mFragmentShader(fragmentShader),
+          flagIsCompute(false)
+    {
+    }
+
+    GLProgram(const std::string &computeShader)
+        : mHandle(0), mComputeShader(computeShader), flagIsCompute(true)
     {
     }
 
@@ -61,7 +69,14 @@ class GLProgram
     {
         if (mHandle == 0)
         {
-            mHandle = CompileProgram(mVertexShader, mFragmentShader);
+            if (flagIsCompute)
+            {
+                mHandle = CompileComputeProgram(mComputeShader);
+            }
+            else
+            {
+                mHandle = CompileProgram(mVertexShader, mFragmentShader);
+            }
         }
         return mHandle;
     }
@@ -70,10 +85,16 @@ class GLProgram
     GLuint mHandle;
     const std::string mVertexShader;
     const std::string mFragmentShader;
+    const std::string mComputeShader;
+    bool flagIsCompute;
 };
 
 #define ANGLE_GL_PROGRAM(name, vertex, fragment) \
     GLProgram name(vertex, fragment);            \
+    ASSERT_NE(0u, name.get());
+
+#define ANGLE_GL_COMPUTE_PROGRAM(name, compute) \
+    GLProgram name(compute);                    \
     ASSERT_NE(0u, name.get());
 
 }  // namespace angle
