@@ -165,6 +165,7 @@ class ProgramState final : angle::NonCopyable
 
     const Shader *getAttachedVertexShader() const { return mAttachedVertexShader; }
     const Shader *getAttachedFragmentShader() const { return mAttachedFragmentShader; }
+    const Shader *getAttachedComputeShader() const { return mAttachedComputeShader; }
     const std::vector<std::string> &getTransformFeedbackVaryingNames() const
     {
         return mTransformFeedbackVaryingNames;
@@ -198,8 +199,11 @@ class ProgramState final : angle::NonCopyable
 
     std::string mLabel;
 
+    std::array<int, 3> mComputeShaderLocalSize;
+
     Shader *mAttachedFragmentShader;
     Shader *mAttachedVertexShader;
+    Shader *mAttachedComputeShader;
 
     std::vector<std::string> mTransformFeedbackVaryingNames;
     std::vector<sh::Varying> mTransformFeedbackVaryingVars;
@@ -377,8 +381,17 @@ class Program final : angle::NonCopyable, public LabeledObject
                         InfoLog &infoLog,
                         const Bindings &attributeBindings,
                         const Shader *vertexShader);
+    bool validateUniformBlocksCount(GLuint maxUniformBlocks,
+                                    const std::vector<sh::InterfaceBlock> &block,
+                                    const std::string &errorMessage,
+                                    InfoLog &infoLog);
+    bool matchInterfaceBlocksBetweenVertexAndFragmentShader(
+        const std::vector<sh::InterfaceBlock> &vertexInterfaceBlocks,
+        const std::vector<sh::InterfaceBlock> &fragmentInterfaceBlocks,
+        InfoLog &infoLog);
     bool linkUniformBlocks(InfoLog &infoLog, const Caps &caps);
     bool linkVaryings(InfoLog &infoLog, const Shader *vertexShader, const Shader *fragmentShader) const;
+    bool doVertexAndFragmentUniformsMatch(InfoLog &infoLog);
     bool linkUniforms(gl::InfoLog &infoLog, const gl::Caps &caps, const Bindings &uniformBindings);
     bool indexUniforms(gl::InfoLog &infoLog, const gl::Caps &caps, const Bindings &uniformBindings);
     bool areMatchingInterfaceBlocks(gl::InfoLog &infoLog, const sh::InterfaceBlock &vertexInterfaceBlock,
@@ -406,6 +419,13 @@ class Program final : angle::NonCopyable, public LabeledObject
     std::vector<const sh::Varying *> getMergedVaryings() const;
     void linkOutputVariables();
 
+    bool flattenUniformsAndCheckCapsForShader(const gl::Shader &shader,
+                                              GLuint maxUniformComponents,
+                                              GLuint maxTextureImageUnits,
+                                              const std::string &componentsErrorMessage,
+                                              const std::string &samplerErrorMessage,
+                                              std::vector<LinkedUniform> &samplerUniforms,
+                                              InfoLog &infoLog);
     bool flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog);
 
     struct VectorAndSamplerCount
