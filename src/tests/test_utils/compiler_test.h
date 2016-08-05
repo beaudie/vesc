@@ -93,4 +93,6 @@ const TIntermSymbol *FindSymbolNode(TIntermNode *root,
                                     const TString &symbolName,
                                     TBasicType basicType);
 
+const TIntermAggregate *FindFunctionNode(TIntermNode *root, const TString &functionName);
+
 #endif // TESTS_TEST_UTILS_COMPILER_TEST_H_
