@@ -91,15 +91,34 @@ void TOutputGLSLBase::writeBuiltInFunctionTriplet(
 
 void TOutputGLSLBase::writeLayoutQualifier(const TType &type)
 {
+
+    if (type.getBasicType() == EbtInterfaceBlock)
+        return;
+
+    const TLayoutQualifier &layoutQualifier = type.getLayoutQualifier();
+
+    if (layoutQualifier.isEmpty())
+        return;
+
+    TInfoSinkBase &out = objSink();
+
+    out << "layout(";
+
     if (type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqVertexIn)
     {
-        const TLayoutQualifier &layoutQualifier = type.getLayoutQualifier();
         if (layoutQualifier.location >= 0)
         {
             TInfoSinkBase &out = objSink();
-            out << "layout(location = " << layoutQualifier.location << ") ";
+            out << "location = " << layoutQualifier.location;
         }
     }
+
+    if (IsImage(type.getBasicType()) && layoutQualifier.imageInternalFormat != EiifUnspecified)
+    {
+        out << getImageInternalFormatString(layoutQualifier.imageInternalFormat);
+    }
+
+    out << ") ";
 }
 
 void TOutputGLSLBase::writeVariableType(const TType &type)
@@ -140,6 +159,18 @@ void TOutputGLSLBase::writeVariableType(const TType &type)
             out << type.getQualifierString() << " ";
         }
     }
+
+    const TMemoryQualifier &memoryQualifier = type.getMemoryQualifier();
+    if (memoryQualifier.readonly)
+    {
+        out << "readonly ";
+    }
+
+    if (memoryQualifier.writeonly)
+    {
+        out << "writeonly ";
+    }
+
     // Declare the struct if we have not done so already.
     if (type.getBasicType() == EbtStruct && !structDeclared(type.getStruct()))
     {
