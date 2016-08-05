@@ -61,6 +61,13 @@ class StateManagerGL final : angle::NonCopyable
     void beginQuery(GLenum type, GLuint query);
     void endQuery(GLenum type, GLuint query);
     void onBeginQuery(QueryGL *query);
+    void bindImageTexture(GLuint unit,
+                          GLuint texture,
+                          GLint level,
+                          GLboolean layered,
+                          GLint layer,
+                          GLenum access,
+                          GLenum format);
 
     void setAttributeCurrentData(size_t index, const gl::VertexAttribCurrentValueData &data);
 
@@ -154,7 +161,10 @@ class StateManagerGL final : angle::NonCopyable
     GLuint getBoundBuffer(GLenum type);
 
   private:
+    gl::Error setGenericState(
+        const gl::ContextState &data);  // sets state common for both render and compute
     gl::Error setGenericDrawState(const gl::ContextState &data);
+    gl::Error setGenericComputeState(const gl::ContextState &data);
 
     void setTextureCubemapSeamlessEnabled(bool enabled);
 
@@ -180,6 +190,7 @@ class StateManagerGL final : angle::NonCopyable
     size_t mTextureUnitIndex;
     std::map<GLenum, std::vector<GLuint>> mTextures;
     std::vector<GLuint> mSamplers;
+    std::vector<gl::BindImageState> mImageBindings;
 
     GLuint mTransformFeedback;
 

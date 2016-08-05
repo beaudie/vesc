@@ -142,7 +142,8 @@ GLenum VariableComponentType(GLenum type)
       case GL_INT_VEC2:
       case GL_INT_VEC3:
       case GL_INT_VEC4:
-        return GL_INT;
+      case GL_IMAGE_2D:
+          return GL_INT;
       case GL_UNSIGNED_INT:
       case GL_UNSIGNED_INT_VEC2:
       case GL_UNSIGNED_INT_VEC3:
@@ -307,7 +308,10 @@ int VariableColumnCount(GLenum type)
       case GL_SAMPLER_2D_SHADOW:
       case GL_SAMPLER_CUBE_SHADOW:
       case GL_SAMPLER_2D_ARRAY_SHADOW:
-        return 1;
+      case GL_IMAGE_2D:
+      case GL_INT_IMAGE_2D:
+      case GL_UNSIGNED_INT_IMAGE_2D:
+          return 1;
       case GL_BOOL_VEC2:
       case GL_FLOAT_VEC2:
       case GL_INT_VEC2:
@@ -365,6 +369,27 @@ bool IsSamplerType(GLenum type)
     return false;
 }
 
+bool IsImageType(GLenum type)
+{
+    switch (type)
+    {
+        case GL_IMAGE_2D:
+        case GL_INT_IMAGE_2D:
+        case GL_UNSIGNED_INT_IMAGE_2D:
+            return true;
+    }
+    return false;
+}
+
+bool IsOpaqueType(GLenum type)
+{
+    /*
+        TODO: (mradev)
+        add atomic types
+    */
+    return IsImageType(type) || IsSamplerType(type);
+}
+
 GLenum SamplerTypeToTextureType(GLenum samplerType)
 {
     switch (samplerType)
@@ -398,6 +423,20 @@ GLenum SamplerTypeToTextureType(GLenum samplerType)
       default:
         UNREACHABLE();
         return 0;
+    }
+}
+
+GLenum ImageTypeToTextureType(GLenum imageType)
+{
+    switch(imageType)
+    {
+      case GL_IMAGE_2D:
+      case GL_INT_IMAGE_2D:
+      case GL_UNSIGNED_INT_IMAGE_2D:
+          return GL_TEXTURE_2D;
+      default:
+          UNREACHABLE();
+          return 0;
     }
 }
 

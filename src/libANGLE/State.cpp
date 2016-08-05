@@ -70,7 +70,8 @@ State::~State()
 
 void State::initialize(const Caps &caps,
                        const Extensions &extensions,
-                       GLuint clientVersion,
+                       GLuint clientMajorVersion,
+                       GLuint clientMinorVersion,
                        bool debug)
 {
     mMaxDrawBuffers = caps.maxDrawBuffers;
@@ -159,11 +160,16 @@ void State::initialize(const Caps &caps,
 
     mSamplerTextures[GL_TEXTURE_2D].resize(caps.maxCombinedTextureImageUnits);
     mSamplerTextures[GL_TEXTURE_CUBE_MAP].resize(caps.maxCombinedTextureImageUnits);
-    if (clientVersion >= 3)
+    if (clientMajorVersion >= 3)
     {
         // TODO: These could also be enabled via extension
         mSamplerTextures[GL_TEXTURE_2D_ARRAY].resize(caps.maxCombinedTextureImageUnits);
         mSamplerTextures[GL_TEXTURE_3D].resize(caps.maxCombinedTextureImageUnits);
+
+        if (clientMinorVersion >= 1)
+        {
+            mImageBindings.resize(caps.maxImageUnits);
+        }
     }
     if (extensions.eglImageExternal || extensions.eglStreamConsumerExternal)
     {
@@ -766,6 +772,16 @@ void State::detachTexture(const TextureMap &zeroTextures, GLuint texture)
         }
     }
 
+    for (size_t unitIndex = 0; unitIndex < mImageBindings.size(); ++unitIndex)
+    {
+        const auto &imageBindingType = mImageBindings[unitIndex];
+
+        if (imageBindingType.texture == texture)
+        {
+            clearImageTexture(unitIndex);
+        }
+    }
+
     // [OpenGL ES 2.0.24] section 4.4 page 112:
     // If a texture object is deleted while its image is attached to the currently bound framebuffer, then it is
     // as if Texture2DAttachment had been called, with a texture of 0, for each attachment point to which this
@@ -825,6 +841,12 @@ void State::detachSampler(GLuint sampler)
             samplerBinding.set(NULL);
         }
     }
+}
+
+const BindImageState &State::getImageBindingState(size_t unit) const
+{
+    ASSERT(unit < mImageBindings.size());
+    return mImageBindings[unit];
 }
 
 void State::setRenderbufferBinding(Renderbuffer *renderbuffer)
@@ -1970,6 +1992,22 @@ void State::setObjectDirty(GLenum target)
             mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
             break;
     }
+}
+
+void State::setImageTexture(GLuint unit,
+                            GLuint texture,
+                            GLint level,
+                            GLboolean layered,
+                            GLint layer,
+                            GLenum access,
+                            GLenum format)
+{
+    mImageBindings[unit] = BindImageState(texture, level, layered, layer, access, format);
+}
+
+void State::clearImageTexture(GLuint unit)
+{
+    mImageBindings[unit] = BindImageState();
 }
 
 }  // namespace gl

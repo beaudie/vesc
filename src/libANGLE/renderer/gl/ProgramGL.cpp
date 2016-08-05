@@ -355,6 +355,11 @@ const std::vector<SamplerBindingGL> &ProgramGL::getAppliedSamplerUniforms() cons
     return mSamplerBindings;
 }
 
+const std::vector<ImageBindingGL> &ProgramGL::getAppliedImageUniforms() const
+{
+    return mImageBindings;
+}
+
 bool ProgramGL::getUniformBlockSize(const std::string &blockName, size_t *sizeOut) const
 {
     ASSERT(mProgramID != 0u);
@@ -478,6 +483,16 @@ void ProgramGL::postLink()
     const auto &uniformLocations = mState.getUniformLocations();
     const auto &uniforms = mState.getUniforms();
     mUniformRealLocationMap.resize(uniformLocations.size(), GL_INVALID_INDEX);
+
+    std::vector<std::vector<GLuint>> uniformToLocation;
+    uniformToLocation.resize(uniforms.size());
+
+    for (size_t uniformId = 0; uniformId < uniforms.size(); ++uniformId)
+    {
+        const gl::LinkedUniform &linkedUniform = uniforms[uniformId];
+        uniformToLocation[uniformId].resize(linkedUniform.elementCount(), 0);
+    }
+
     for (size_t uniformLocation = 0; uniformLocation < uniformLocations.size(); uniformLocation++)
     {
         const auto &entry = uniformLocations[uniformLocation];
@@ -499,24 +514,47 @@ void ProgramGL::postLink()
 
         GLint realLocation = mFunctions->getUniformLocation(mProgramID, fullName.c_str());
         mUniformRealLocationMap[uniformLocation] = realLocation;
+
+        uniformToLocation[entry.index][entry.element] = realLocation;
     }
 
     mUniformIndexToSamplerIndex.resize(mState.getUniforms().size(), GL_INVALID_INDEX);
+    mUniformIndexToImageIndex.resize(mState.getUniforms().size(), GL_INVALID_INDEX);
 
     for (size_t uniformId = 0; uniformId < uniforms.size(); ++uniformId)
     {
         const gl::LinkedUniform &linkedUniform = uniforms[uniformId];
 
-        if (!linkedUniform.isSampler() || !linkedUniform.staticUse)
+        if (!linkedUniform.staticUse)
             continue;
 
-        mUniformIndexToSamplerIndex[uniformId] = mSamplerBindings.size();
+        if (linkedUniform.isSampler())
+        {
+            mUniformIndexToSamplerIndex[uniformId] = mSamplerBindings.size();
 
-        // If uniform is a sampler type, insert it into the mSamplerBindings array
-        SamplerBindingGL samplerBinding;
-        samplerBinding.textureType = gl::SamplerTypeToTextureType(linkedUniform.type);
-        samplerBinding.boundTextureUnits.resize(linkedUniform.elementCount(), 0);
-        mSamplerBindings.push_back(samplerBinding);
+            // If uniform is a sampler type, insert it into the mSamplerBindings array
+            SamplerBindingGL samplerBinding;
+            samplerBinding.textureType = gl::SamplerTypeToTextureType(linkedUniform.type);
+            samplerBinding.boundTextureUnits.resize(linkedUniform.elementCount(), 0);
+            mSamplerBindings.push_back(samplerBinding);
+        }
+        else if (linkedUniform.isImage())
+        {
+            mUniformIndexToImageIndex[uniformId] = mImageBindings.size();
+
+            ImageBindingGL imageBinding;
+            imageBinding.boundTextureUnits.resize(linkedUniform.elementCount(), 0);
+
+            for (size_t arrayIndex = 0; arrayIndex < linkedUniform.elementCount(); ++arrayIndex)
+            {
+                GLuint uniformRealLocation = uniformToLocation[uniformId][arrayIndex];
+                GLuint imageBindingValue   = 0;
+                mFunctions->getUniformuiv(mProgramID, uniformRealLocation, &imageBindingValue);
+                imageBinding.boundTextureUnits[arrayIndex] = imageBindingValue;
+            }
+
+            mImageBindings.push_back(imageBinding);
+        }
     }
 
     // Discover CHROMIUM_path_rendering fragment inputs if enabled.

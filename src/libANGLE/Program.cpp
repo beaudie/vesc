@@ -352,7 +352,8 @@ Program::Program(rx::GLImplFactory *factory, ResourceManager *manager, GLuint ha
       mRefCount(0),
       mResourceManager(manager),
       mHandle(handle),
-      mSamplerUniformRange(0, 0)
+      mSamplerUniformRange(0, 0),
+      mImageUniformRange(0, 0)
 {
     ASSERT(mProgram);
 
@@ -1596,6 +1597,63 @@ bool Program::validateSamplers(InfoLog *infoLog, const Caps &caps)
     return true;
 }
 
+bool Program::validateImages(InfoLog *infoLog, const Caps &caps)
+{
+    for (unsigned int imageIndex = mImageUniformRange.start;
+         imageIndex < mImageUniformRange.end; ++imageIndex)
+    {
+        const LinkedUniform &uniform = mState.mUniforms[imageIndex];
+        ASSERT(uniform.isImage());
+
+        if (!uniform.staticUse)
+            continue;
+
+        //const GLuint *dataPtr = reinterpret_cast<const GLuint *>(uniform.getDataPtrToElement(0));
+        //GLenum textureType    = ImageTypeToTextureType(uniform.type);
+
+        for (unsigned int arrayElement = 0; arrayElement < uniform.elementCount(); ++arrayElement)
+        {
+            
+            //GLuint imageBinding = dataPtr[arrayElement];
+            /*
+            if (textureUnit >= caps.maxCombinedTextureImageUnits)
+            {
+                if (infoLog)
+                {
+                    (*infoLog) << "Sampler uniform (" << textureUnit
+                               << ") exceeds GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS ("
+                               << caps.maxCombinedTextureImageUnits << ")";
+                }
+
+                mCachedValidateSamplersResult = false;
+                return false;
+            }
+
+            if (mTextureUnitTypesCache[textureUnit] != GL_NONE)
+            {
+                if (textureType != mTextureUnitTypesCache[textureUnit])
+                {
+                    if (infoLog)
+                    {
+                        (*infoLog) << "Samplers of conflicting types refer to the same texture "
+                                      "image unit ("
+                                   << textureUnit << ").";
+                    }
+
+                    mCachedValidateSamplersResult = false;
+                    return false;
+                }
+            }
+            else
+            {
+                mTextureUnitTypesCache[textureUnit] = textureType;
+            }*/
+        }
+    }
+
+    return true;
+}
+
 bool Program::isValidated() const
 {
     return mValidated;
@@ -2560,29 +2618,38 @@ void Program::linkOutputVariables()
 bool Program::flattenUniformsAndCheckCapsForShader(const gl::Shader &shader,
                                                    GLuint maxUniformComponents,
                                                    GLuint maxTextureImageUnits,
+                                                   GLuint maxImageUniforms,
                                                    const std::string &componentsErrorMessage,
                                                    const std::string &samplerErrorMessage,
+                                                   const std::string &imageErrorMessage,
                                                    std::vector<LinkedUniform> &samplerUniforms,
-                                                   InfoLog &infoLog)
+                                                   std::vector<LinkedUniform> &imageUniforms,
+                                                   InfoLog &infoLog,
+                                                   ProgramObjectCount *objectCount)
 {
-    VectorAndSamplerCount vasCount;
     for (const sh::Uniform &uniform : shader.getUniforms())
     {
         if (uniform.staticUse)
         {
-            vasCount += flattenUniform(uniform, uniform.name, &samplerUniforms);
+            *objectCount += flattenUniform(uniform, uniform.name, &samplerUniforms, &imageUniforms);
         }
     }
 
-    if (vasCount.vectorCount > maxUniformComponents)
+    if (objectCount->vectorCount > maxUniformComponents)
     {
         infoLog << componentsErrorMessage << maxUniformComponents << ").";
         return false;
     }
 
-    if (vasCount.samplerCount > maxTextureImageUnits)
+    if (objectCount->samplerCount > maxTextureImageUnits)
     {
         infoLog << samplerErrorMessage << maxTextureImageUnits << ").";
+        return false;
+    }
+    
+    if (objectCount->imageCount > maxImageUniforms)
+    {
+        infoLog << imageErrorMessage << maxImageUniforms << ").";
         return false;
     }
 
@@ -2592,18 +2659,21 @@ bool Program::flattenUniformsAndCheckCapsForShader(const gl::Shader &shader,
 bool Program::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
 {
     std::vector<LinkedUniform> samplerUniforms;
-
+    std::vector<LinkedUniform> imageUniforms;
+    
     if (mState.mAttachedComputeShader)
     {
         const gl::Shader *computeShader = mState.getAttachedComputeShader();
-
+        ProgramObjectCount objectCount;
         // TODO (mradev): check whether we need finer-grained component counting
         if (!flattenUniformsAndCheckCapsForShader(
                 *computeShader, caps.maxComputeUniformComponents / 4,
                 caps.maxComputeTextureImageUnits,
+                caps.maxComputeImageUniforms,
                 "Compute shader active uniforms exceed MAX_COMPUTE_UNIFORM_COMPONENTS (",
                 "Compute shader sampler count exceeds MAX_COMPUTE_TEXTURE_IMAGE_UNITS (",
-                samplerUniforms, infoLog))
+                "Compute shader image uniform count exceeds MAX_COMPUTE_IMAGE_UNIFORMS (",
+                samplerUniforms, imageUniforms, infoLog, &objectCount))
         {
             return false;
         }
@@ -2611,23 +2681,34 @@ bool Program::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
     else
     {
         const gl::Shader *vertexShader = mState.getAttachedVertexShader();
-
+        ProgramObjectCount vertexObjectCount;
         if (!flattenUniformsAndCheckCapsForShader(
-                *vertexShader, caps.maxVertexUniformVectors, caps.maxVertexTextureImageUnits,
+                *vertexShader, caps.maxVertexUniformVectors, caps.maxVertexTextureImageUnits, caps.maxVertexImageUniforms,
                 "Vertex shader active uniforms exceed MAX_VERTEX_UNIFORM_VECTORS (",
                 "Vertex shader sampler count exceeds MAX_VERTEX_TEXTURE_IMAGE_UNITS (",
-                samplerUniforms, infoLog))
+                "Vertex shader image uniform count exceeds MAX_VERTEX_IMAGE_UNIFORMS (",
+                samplerUniforms, imageUniforms, infoLog, &vertexObjectCount))
         {
             return false;
         }
-        const gl::Shader *fragmentShader = mState.getAttachedFragmentShader();
 
+        const gl::Shader *fragmentShader = mState.getAttachedFragmentShader();
+        ProgramObjectCount fragmentObjectCount;
         if (!flattenUniformsAndCheckCapsForShader(
-                *fragmentShader, caps.maxFragmentUniformVectors, caps.maxTextureImageUnits,
+                *fragmentShader, caps.maxFragmentUniformVectors, caps.maxTextureImageUnits, caps.maxFragmentImageUniforms,
                 "Fragment shader active uniforms exceed MAX_FRAGMENT_UNIFORM_VECTORS (",
-                "Fragment shader sampler count exceeds MAX_TEXTURE_IMAGE_UNITS (", samplerUniforms,
-                infoLog))
+                "Fragment shader sampler count exceeds MAX_TEXTURE_IMAGE_UNITS (", 
+                "Fragment shader image uniform count exceeds MAX_FRAGMENT_IMAGE_UNIFORMS (",
+                samplerUniforms, imageUniforms,
+                infoLog, &fragmentObjectCount))
         {
+            return false;
+        }
+        
+        if (vertexObjectCount.imageCount + fragmentObjectCount.imageCount > caps.maxCombinedImageUniforms)
+        {
+            infoLog << "Program image uniform count exceeds MAX_COMBINED_IMAGE_UNIFORMS ("
+                    << caps.maxCombinedImageUniforms << ").";
             return false;
         }
     }
@@ -2637,15 +2718,21 @@ bool Program::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
         mSamplerUniformRange.start + static_cast<unsigned int>(samplerUniforms.size());
 
     mState.mUniforms.insert(mState.mUniforms.end(), samplerUniforms.begin(), samplerUniforms.end());
+    
+    mImageUniformRange.start = static_cast<unsigned int>(mState.mUniforms.size());
+    mImageUniformRange.end =
+        mImageUniformRange.start + static_cast<unsigned int>(imageUniforms.size());
+    mState.mUniforms.insert(mState.mUniforms.end(), imageUniforms.begin(), imageUniforms.end());
 
     return true;
 }
 
-Program::VectorAndSamplerCount Program::flattenUniform(const sh::ShaderVariable &uniform,
+Program::ProgramObjectCount Program::flattenUniform(const sh::ShaderVariable &uniform,
                                                        const std::string &fullName,
-                                                       std::vector<LinkedUniform> *samplerUniforms)
+                                                       std::vector<LinkedUniform> *samplerUniforms,
+                                                       std::vector<LinkedUniform> *imageUniforms)
 {
-    VectorAndSamplerCount vectorAndSamplerCount;
+    ProgramObjectCount programObjectCount;
 
     if (uniform.isStruct())
     {
@@ -2658,17 +2745,21 @@ Program::VectorAndSamplerCount Program::flattenUniform(const sh::ShaderVariable 
                 const sh::ShaderVariable &field  = uniform.fields[fieldIndex];
                 const std::string &fieldFullName = (fullName + elementString + "." + field.name);
 
-                vectorAndSamplerCount += flattenUniform(field, fieldFullName, samplerUniforms);
+                programObjectCount += flattenUniform(field, fieldFullName, samplerUniforms, imageUniforms);
             }
         }
 
-        return vectorAndSamplerCount;
+        return programObjectCount;
     }
 
     // Not a struct
     bool isSampler = IsSamplerType(uniform.type);
+    bool isImage   = IsImageType(uniform.type);
+    bool isOpaque = isSampler||isImage;
+
     if (!UniformInList(mState.getUniforms(), fullName) &&
-        !UniformInList(*samplerUniforms, fullName))
+        !UniformInList(*samplerUniforms, fullName) &&
+        !UniformInList(*imageUniforms, fullName))
     {
         gl::LinkedUniform linkedUniform(uniform.type, uniform.precision, fullName,
                                         uniform.arraySize, -1,
@@ -2680,6 +2771,10 @@ Program::VectorAndSamplerCount Program::flattenUniform(const sh::ShaderVariable 
         {
             samplerUniforms->push_back(linkedUniform);
         }
+        else if (isImage)
+        {
+            imageUniforms->push_back(linkedUniform);
+        }
         else
         {
             mState.mUniforms.push_back(linkedUniform);
@@ -2690,11 +2785,12 @@ Program::VectorAndSamplerCount Program::flattenUniform(const sh::ShaderVariable 
 
     // Samplers aren't "real" uniforms, so they don't count towards register usage.
     // Likewise, don't count "real" uniforms towards sampler count.
-    vectorAndSamplerCount.vectorCount =
-        (isSampler ? 0 : (VariableRegisterCount(uniform.type) * elementCount));
-    vectorAndSamplerCount.samplerCount = (isSampler ? elementCount : 0);
-
-    return vectorAndSamplerCount;
+    programObjectCount.vectorCount =
+        (isOpaque ? 0 : (VariableRegisterCount(uniform.type) * elementCount));
+    programObjectCount.samplerCount = (isSampler ? elementCount : 0);
+    programObjectCount.imageCount = (isImage ? elementCount : 0);
+    
+    return programObjectCount;
 }
 
 void Program::gatherInterfaceBlockInfo()

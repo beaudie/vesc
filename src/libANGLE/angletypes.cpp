@@ -140,4 +140,15 @@ bool operator!=(const Extents &lhs, const Extents &rhs)
 {
     return !(lhs == rhs);
 }
+
+bool operator==(const BindImageState &a, const BindImageState &b)
+{
+    return (a.texture == b.texture && a.level == b.level && a.layered == b.layered &&
+            a.layer == b.layer && a.access == b.access && a.format == b.format);
+}
+
+bool operator!=(const BindImageState &a, const BindImageState &b)
+{
+    return !(a == b);
+}
 }

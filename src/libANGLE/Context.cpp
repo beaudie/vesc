@@ -246,7 +246,8 @@ Context::Context(rx::EGLImplFactory *implFactory,
 
     initCaps();
 
-    mGLState.initialize(mCaps, mExtensions, mClientMajorVersion, GetDebug(attribs));
+    mGLState.initialize(mCaps, mExtensions, mClientMajorVersion, mClientMinorVersion,
+                        GetDebug(attribs));
 
     mFenceNVHandleAllocator.setBaseHandle(0);
 
@@ -2924,6 +2925,7 @@ void Context::generateMipmap(GLenum target)
     handleError(texture->generateMipmap());
 }
 
+
 void Context::copyTextureCHROMIUM(GLuint sourceId,
                                   GLuint destId,
                                   GLint internalFormat,
@@ -2968,6 +2970,26 @@ void Context::copySubTextureCHROMIUM(GLuint sourceId,
     handleError(destTexture->copySubTexture(offset, area, unpackFlipY == GL_TRUE,
                                             unpackPremultiplyAlpha == GL_TRUE,
                                             unpackUnmultiplyAlpha == GL_TRUE, sourceTexture));
+}
+
+Error Context::bindImageTexture(GLuint unit,
+                                GLuint texture,
+                                GLint level,
+                                GLboolean layered,
+                                GLint layer,
+                                GLenum access,
+                                GLenum format)
+{
+
+    if (texture != 0)
+    {
+        mGLState.setImageTexture(unit, texture, level, layered, layer, access, format);
+    }
+    else
+    {
+        mGLState.clearImageTexture(unit);
+    }
+    return NoError();
 }
 
 void Context::getBufferPointerv(GLenum target, GLenum /*pname*/, void **params)

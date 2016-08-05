@@ -147,6 +147,9 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
                                         GLint border,
                                         Format *textureFormatOut);
 
+// validates uniforms (uniform buffers, textures, images) in a program
+bool ValidateProgramUniforms(ValidationContext *context);
+
 bool ValidateDrawArrays(ValidationContext *context,
                         GLenum mode,
                         GLint first,

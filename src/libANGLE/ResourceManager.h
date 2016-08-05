@@ -67,6 +67,7 @@ class ResourceManager : angle::NonCopyable
     Shader *getShader(GLuint handle);
     Program *getProgram(GLuint handle) const;
     Texture *getTexture(GLuint handle);
+    const Texture *getTexture(GLuint handle) const;
     Renderbuffer *getRenderbuffer(GLuint handle);
     Sampler *getSampler(GLuint handle);
     FenceSync *getFenceSync(GLuint handle);

@@ -16,7 +16,15 @@ namespace gl
 class Context;
 
 bool ValidateGetBooleani_v(Context *context, GLenum target, GLuint index, GLboolean *data);
-
+                          
+bool ValidateBindImageTexture(Context *context,
+                              GLuint unit,
+                              GLuint texture,
+                              GLint level,
+                              GLboolean layered,
+                              GLint layer,
+                              GLenum access,
+                              GLenum format);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES31_H_

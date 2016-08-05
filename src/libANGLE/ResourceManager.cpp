@@ -325,11 +325,15 @@ Shader *ResourceManager::getShader(unsigned int handle)
 
 Texture *ResourceManager::getTexture(unsigned int handle)
 {
+    return const_cast<Texture *>(static_cast<const ResourceManager *>(this)->getTexture(handle));
+}
+
+const Texture *ResourceManager::getTexture(unsigned int handle) const
+{
     if (handle == 0)
         return nullptr;
 
     auto texture = mTextureMap.find(handle);
-
     if (texture == mTextureMap.end())
     {
         return nullptr;

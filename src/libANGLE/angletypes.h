@@ -197,6 +197,40 @@ struct SamplerState
 bool operator==(const SamplerState &a, const SamplerState &b);
 bool operator!=(const SamplerState &a, const SamplerState &b);
 
+struct BindImageState
+{
+
+    BindImageState()
+        : texture(0), level(0), layered(GL_FALSE), layer(0), access(GL_READ_ONLY), format(GL_R32UI)
+    {
+    }
+
+    BindImageState(GLuint textureIn,
+                   GLint levelIn,
+                   GLboolean layeredIn,
+                   GLint layerIn,
+                   GLenum accessIn,
+                   GLenum formatIn)
+        : texture(textureIn),
+          level(levelIn),
+          layered(layeredIn),
+          layer(layerIn),
+          access(accessIn),
+          format(formatIn)
+    {
+    }
+
+    GLuint texture;
+    GLint level;
+    GLboolean layered;
+    GLint layer;
+    GLenum access;
+    GLenum format;
+};
+
+bool operator==(const BindImageState &a, const BindImageState &b);
+bool operator!=(const BindImageState &a, const BindImageState &b);
+
 struct PixelUnpackState
 {
     BindingPointer<Buffer> pixelBuffer;

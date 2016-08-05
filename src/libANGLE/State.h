@@ -41,7 +41,8 @@ class State : angle::NonCopyable
 
     void initialize(const Caps &caps,
                     const Extensions &extensions,
-                    GLuint clientVersion,
+                    GLuint clientMajorVersion,
+                    GLuint clientMinorVersion,
                     bool debug);
     void reset();
 
@@ -160,6 +161,9 @@ class State : angle::NonCopyable
     GLuint getSamplerTextureId(unsigned int sampler, GLenum type) const;
     void detachTexture(const TextureMap &zeroTextures, GLuint texture);
     void initializeZeroTextures(const TextureMap &zeroTextures);
+
+    // returns the saved state for the image at that unit
+    const BindImageState &getImageBindingState(size_t unit) const;
 
     // Sampler object binding manipulation
     void setSamplerBinding(GLuint textureUnit, Sampler *sampler);
@@ -390,6 +394,18 @@ class State : angle::NonCopyable
     void syncDirtyObject(GLenum target);
     void setObjectDirty(GLenum target);
 
+    // binds the image texture to the specified unit
+    void setImageTexture(GLuint unit,
+                         GLuint texture,
+                         GLint level,
+                         GLboolean layered,
+                         GLint layer,
+                         GLenum access,
+                         GLenum format);
+
+    // clears the binding
+    void clearImageTexture(GLuint unit);
+
   private:
     // Cached values from Context's caps
     GLuint mMaxDrawBuffers;
@@ -438,6 +454,9 @@ class State : angle::NonCopyable
     typedef std::vector<BindingPointer<Texture>> TextureBindingVector;
     typedef std::map<GLenum, TextureBindingVector> TextureBindingMap;
     TextureBindingMap mSamplerTextures;
+
+    typedef std::vector<BindImageState> ImageBindingVector;
+    ImageBindingVector mImageBindings;
 
     typedef std::vector<BindingPointer<Sampler>> SamplerBindingVector;
     SamplerBindingVector mSamplers;

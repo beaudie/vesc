@@ -27,6 +27,11 @@ struct SamplerBindingGL
     std::vector<GLuint> boundTextureUnits;
 };
 
+struct ImageBindingGL
+{
+    std::vector<GLuint> boundTextureUnits;
+};
+
 class ProgramGL : public ProgramImpl
 {
   public:
@@ -79,6 +84,7 @@ class ProgramGL : public ProgramImpl
 
     GLuint getProgramID() const;
     const std::vector<SamplerBindingGL> &getAppliedSamplerUniforms() const;
+    const std::vector<ImageBindingGL> &getAppliedImageUniforms() const;
 
   private:
     void preLink();
@@ -109,6 +115,11 @@ class ProgramGL : public ProgramImpl
     std::vector<PathRenderingFragmentInput> mPathRenderingFragmentInputs;
 
     bool mEnablePathRendering;
+
+    // An array of the images that are used by the program
+    std::vector<ImageBindingGL> mImageBindings;
+    // a map from a mData.getUniforms() index to a mImageBindings index;
+    std::vector<size_t> mUniformIndexToImageIndex;
 
     GLuint mProgramID;
 };

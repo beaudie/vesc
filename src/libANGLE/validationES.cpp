@@ -1513,7 +1513,9 @@ bool ValidateUniform(gl::Context *context, GLenum uniformType, GLint location, G
 
     GLenum targetBoolType = VariableBoolVectorType(uniformType);
     bool samplerUniformCheck = (IsSamplerType(uniform->type) && uniformType == GL_INT);
-    if (!samplerUniformCheck && uniformType != uniform->type && targetBoolType != uniform->type)
+    bool imageUniformCheck   = (IsImageType(uniform->type) && uniformType == GL_INT);
+    if (!samplerUniformCheck && !imageUniformCheck && uniformType != uniform->type &&
+        targetBoolType != uniform->type)
     {
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;
@@ -1793,6 +1795,65 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
     return true;
 }
 
+bool ValidateProgramUniforms(ValidationContext *context)
+{
+    const State &state = context->getGLState();
+    gl::Program *program = state.getProgram();
+    
+    if (!program)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    if (!program->validateSamplers(NULL, context->getCaps()))
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+    
+    if (!program->validateImages(NULL, context->getCaps()))
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+    
+    // Uniform buffer validation
+    for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
+    {
+        const gl::UniformBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
+        GLuint blockBinding = program->getUniformBlockBinding(uniformBlockIndex);
+        const OffsetBindingPointer<Buffer> &uniformBuffer =
+            state.getIndexedUniformBuffer(blockBinding);
+
+        if (uniformBuffer.get() == nullptr)
+        {
+            // undefined behaviour
+            context->handleError(
+                Error(GL_INVALID_OPERATION,
+                      "It is undefined behaviour to have a used but unbound uniform buffer."));
+            return false;
+        }
+
+        size_t uniformBufferSize = uniformBuffer.getSize();
+        if (uniformBufferSize == 0)
+        {
+            // Bind the whole buffer.
+            uniformBufferSize = static_cast<size_t>(uniformBuffer->getSize());
+        }
+
+        if (uniformBufferSize < uniformBlock.dataSize)
+        {
+            // undefined behaviour
+            context->handleError(
+                Error(GL_INVALID_OPERATION,
+                      "It is undefined behaviour to use a uniform buffer that is too small."));
+            return false;
+        }
+    }
+    return true;
+}
+
 static bool ValidateDrawBase(ValidationContext *context,
                              GLenum mode,
                              GLsizei count,
@@ -1857,51 +1918,9 @@ static bool ValidateDrawBase(ValidationContext *context,
         return false;
     }
 
-    gl::Program *program = state.getProgram();
-    if (!program)
+    if (!ValidateProgramUniforms(context))
     {
-        context->handleError(Error(GL_INVALID_OPERATION));
         return false;
-    }
-
-    if (!program->validateSamplers(NULL, context->getCaps()))
-    {
-        context->handleError(Error(GL_INVALID_OPERATION));
-        return false;
-    }
-
-    // Uniform buffer validation
-    for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
-    {
-        const gl::UniformBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
-        GLuint blockBinding = program->getUniformBlockBinding(uniformBlockIndex);
-        const OffsetBindingPointer<Buffer> &uniformBuffer =
-            state.getIndexedUniformBuffer(blockBinding);
-
-        if (uniformBuffer.get() == nullptr)
-        {
-            // undefined behaviour
-            context->handleError(
-                Error(GL_INVALID_OPERATION,
-                      "It is undefined behaviour to have a used but unbound uniform buffer."));
-            return false;
-        }
-
-        size_t uniformBufferSize = uniformBuffer.getSize();
-        if (uniformBufferSize == 0)
-        {
-            // Bind the whole buffer.
-            uniformBufferSize = static_cast<size_t>(uniformBuffer->getSize());
-        }
-
-        if (uniformBufferSize < uniformBlock.dataSize)
-        {
-            // undefined behaviour
-            context->handleError(
-                Error(GL_INVALID_OPERATION,
-                      "It is undefined behaviour to use a uniform buffer that is too small."));
-            return false;
-        }
     }
 
     // No-op if zero count
