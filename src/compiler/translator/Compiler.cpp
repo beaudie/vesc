@@ -449,12 +449,14 @@ bool TCompiler::InitBuiltInSymbolTable(const ShBuiltInResources &resources)
     integer.primarySize = 1;
     integer.secondarySize = 1;
     integer.array = false;
+    integer.memoryQualifier = TMemoryQualifier::create();
 
     TPublicType floatingPoint;
     floatingPoint.type = EbtFloat;
     floatingPoint.primarySize = 1;
     floatingPoint.secondarySize = 1;
     floatingPoint.array = false;
+    floatingPoint.memoryQualifier = TMemoryQualifier::create();
 
     switch(shaderType)
     {
@@ -497,6 +499,7 @@ void TCompiler::initSamplerDefaultPrecision(TBasicType samplerType)
     sampler.secondarySize = 1;
     sampler.array         = false;
     sampler.type          = samplerType;
+    sampler.memoryQualifier = TMemoryQualifier::create();
     symbolTable.setDefaultPrecision(sampler, EbpLow);
 }
 

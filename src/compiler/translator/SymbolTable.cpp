@@ -233,6 +233,37 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level, TOperator op, const char *e
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtInt, 4) : rvalue, name, TCache::getType(EbtISampler2DArray), ptype2, ptype3, ptype4, ptype5);
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtUInt, 4) : rvalue, name, TCache::getType(EbtUSampler2DArray), ptype2, ptype3, ptype4, ptype5);
     }
+    else if (IsGImage(ptype1->getBasicType()))
+    {
+        insertUnmangledBuiltIn(name);
+
+        const TType *floatImage = TCache::getType(convertGTypeToFloat(ptype1->getBasicType()));
+        const TType *intImage   = TCache::getType(convertGTypeToInt(ptype1->getBasicType()));
+        const TType *unsignedImage =
+            TCache::getType(convertGTypeToUnsigned(ptype1->getBasicType()));
+        bool isReturnGvec4 = (rvalue->getBasicType() == EbtGVec4);
+
+        const TType *passValueFloat    = TCache::getType(EbtFloat, 4);
+        const TType *passValueInt      = TCache::getType(EbtInt, 4);
+        const TType *passValueUnsigned = TCache::getType(EbtUInt, 4);
+
+        const TType *returnValueFloat    = isReturnGvec4 ? passValueFloat : rvalue;
+        const TType *returnValueInt      = isReturnGvec4 ? passValueInt : rvalue;
+        const TType *returnValueUnsigned = isReturnGvec4 ? passValueUnsigned : rvalue;
+
+        bool isThirdArgumentGvec4 = (ptype3 != nullptr && ptype3->getBasicType() == EbtGVec4);
+
+        const TType *thirdArgumentFloat    = isThirdArgumentGvec4 ? passValueFloat : ptype3;
+        const TType *thirdArgumentInt      = isThirdArgumentGvec4 ? passValueInt : ptype3;
+        const TType *thirdArgumentUnsigned = isThirdArgumentGvec4 ? passValueUnsigned : ptype3;
+
+        insertBuiltIn(level, returnValueFloat, name, floatImage, ptype2, thirdArgumentFloat, ptype4,
+                      ptype5);
+        insertBuiltIn(level, returnValueInt, name, intImage, ptype2, thirdArgumentInt, ptype4,
+                      ptype5);
+        insertBuiltIn(level, returnValueUnsigned, name, unsignedImage, ptype2,
+                      thirdArgumentUnsigned, ptype4, ptype5);
+    }
     else if (IsGenType(rvalue) || IsGenType(ptype1) || IsGenType(ptype2) || IsGenType(ptype3))
     {
         ASSERT(!ptype4 && !ptype5);

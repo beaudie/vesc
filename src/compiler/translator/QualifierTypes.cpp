@@ -115,6 +115,31 @@ bool HasRepeatingQualifiers(const std::vector<const TQualifierWrapperBase *> &qu
                 }
                 break;
             }
+            case QtMemory:
+            {
+                // Go over all of the memory qualifiers up until the current one and check for
+                // repetitions.
+                // Having both readonly and writeonly in a sequence is valid.
+                // GLSL ES 3.10 Revision 4, 4.9 Memory Access Qualifiers
+                TQualifier currentQualifier =
+                    static_cast<const TMemoryQualifierWrapper *>(qualifiers[i])->getQualifier();
+                for (size_t j = 1; j < i; ++j)
+                {
+                    if (qualifiers[j]->getType() == QtMemory)
+                    {
+                        const TMemoryQualifierWrapper *previousQualifierWrapper =
+                            static_cast<const TMemoryQualifierWrapper *>(qualifiers[j]);
+                        TQualifier previousQualifier = previousQualifierWrapper->getQualifier();
+                        if (currentQualifier == previousQualifier)
+                        {
+                            *errorMessage = previousQualifierWrapper->getQualifierString().c_str();
+                            *errorMessage += " specified multiple times";
+                            return true;
+                        }
+                    }
+                }
+                break;
+            }
             default:
                 UNREACHABLE();
         }
@@ -133,12 +158,13 @@ bool AreQualifiersInOrder(const std::vector<const TQualifierWrapperBase *> &qual
     bool foundInterpolation = false;
     bool foundStorage       = false;
     bool foundPrecision     = false;
+    bool foundMemory        = false;
     for (size_t i = 1; i < qualifiers.size(); ++i)
     {
         switch (qualifiers[i]->getType())
         {
             case QtInvariant:
-                if (foundInterpolation || foundStorage || foundPrecision)
+                if (foundInterpolation || foundStorage || foundPrecision || foundMemory)
                 {
                     *errorMessage = "The invariant qualifier has to be first in the expression.";
                     return false;
@@ -148,6 +174,11 @@ bool AreQualifiersInOrder(const std::vector<const TQualifierWrapperBase *> &qual
                 if (foundStorage)
                 {
                     *errorMessage = "Storage qualifiers have to be after interpolation qualifiers.";
+                    return false;
+                }
+                if (foundMemory)
+                {
+                    *errorMessage = "Memory qualifiers have to be after interpolation qualifiers.";
                     return false;
                 }
                 else if (foundPrecision)
@@ -164,6 +195,11 @@ bool AreQualifiersInOrder(const std::vector<const TQualifierWrapperBase *> &qual
                     *errorMessage = "Storage qualifiers have to be after layout qualifiers.";
                     return false;
                 }
+                if (foundMemory)
+                {
+                    *errorMessage = "Memory qualifiers have to be after layout qualifiers.";
+                    return false;
+                }
                 else if (foundPrecision)
                 {
                     *errorMessage = "Precision qualifiers have to be after layout qualifiers.";
@@ -177,6 +213,14 @@ bool AreQualifiersInOrder(const std::vector<const TQualifierWrapperBase *> &qual
                     return false;
                 }
                 foundStorage = true;
+                break;
+            case QtMemory:
+                if (foundPrecision)
+                {
+                    *errorMessage = "Precision qualifiers have to be after memory qualifiers.";
+                    return false;
+                }
+                foundMemory = true;
                 break;
             case QtPrecision:
                 foundPrecision = true;
@@ -192,6 +236,7 @@ bool AreQualifiersInOrder(const std::vector<const TQualifierWrapperBase *> &qual
 
 TTypeQualifier::TTypeQualifier(TQualifier scope, const TSourceLoc &loc)
     : layoutQualifier(TLayoutQualifier::create()),
+      memoryQualifier(TMemoryQualifier::create()),
       precision(EbpUndefined),
       qualifier(scope),
       invariant(false),
@@ -253,6 +298,11 @@ TTypeQualifier TTypeQualifierBuilder::getParameterTypeQualifier(TDiagnostics *di
             case QtInvariant:
             case QtInterpolation:
             case QtLayout:
+                break;
+            case QtMemory:
+                isQualifierValid = joinMemoryQualifier(
+                    &typeQualifier.memoryQualifier,
+                    static_cast<const TMemoryQualifierWrapper *>(qualifier)->getQualifier());
                 break;
             case QtStorage:
                 isQualifierValid = joinParameterStorageQualifier(
@@ -352,6 +402,11 @@ TTypeQualifier TTypeQualifierBuilder::getVariableTypeQualifier(TDiagnostics *dia
                     static_cast<const TPrecisionQualifierWrapper *>(qualifier)->getQualifier();
                 ASSERT(typeQualifier.precision != EbpUndefined);
                 break;
+            case QtMemory:
+                isQualifierValid = joinMemoryQualifier(
+                    &typeQualifier.memoryQualifier,
+                    static_cast<const TMemoryQualifierWrapper *>(qualifier)->getQualifier());
+                break;
             default:
                 UNREACHABLE();
         }
@@ -364,6 +419,23 @@ TTypeQualifier TTypeQualifierBuilder::getVariableTypeQualifier(TDiagnostics *dia
         }
     }
     return typeQualifier;
+}
+
+bool TTypeQualifierBuilder::joinMemoryQualifier(TMemoryQualifier *joinedMemoryQualifier,
+                                                TQualifier memoryQualifier) const
+{
+    switch (memoryQualifier)
+    {
+        case EvqReadOnly:
+            joinedMemoryQualifier->readonly = true;
+            break;
+        case EvqWriteOnly:
+            joinedMemoryQualifier->writeonly = true;
+            break;
+        default:
+            UNREACHABLE();
+    }
+    return true;
 }
 
 bool TTypeQualifierBuilder::joinVariableStorageQualifier(TQualifier *joinedQualifier,

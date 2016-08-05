@@ -21,7 +21,8 @@ enum TQualifierType
     QtInterpolation,
     QtLayout,
     QtStorage,
-    QtPrecision
+    QtPrecision,
+    QtMemory
 };
 
 class TQualifierWrapperBase : angle::NonCopyable
@@ -112,6 +113,22 @@ class TPrecisionQualifierWrapper final : public TQualifierWrapperBase
     TPrecision mPrecisionQualifier;
 };
 
+class TMemoryQualifierWrapper final : public TQualifierWrapperBase
+{
+  public:
+    TMemoryQualifierWrapper(TQualifier memoryQualifier, const TSourceLoc &line)
+        : TQualifierWrapperBase(line), mMemoryQualifier(memoryQualifier)
+    {
+    }
+    ~TMemoryQualifierWrapper() {}
+
+    TQualifierType getType() const { return QtMemory; }
+    TString getQualifierString() const { return ::getQualifierString(mMemoryQualifier); }
+    TQualifier getQualifier() const { return mMemoryQualifier; }
+  private:
+    TQualifier mMemoryQualifier;
+};
+
 // TTypeQualifier tightly covers type_qualifier from the grammar
 struct TTypeQualifier
 {
@@ -119,6 +136,7 @@ struct TTypeQualifier
     TTypeQualifier(TQualifier scope, const TSourceLoc &loc);
 
     TLayoutQualifier layoutQualifier;
+    TMemoryQualifier memoryQualifier;
     TPrecision precision;
     TQualifier qualifier;
     bool invariant;
@@ -150,7 +168,8 @@ class TTypeQualifierBuilder : angle::NonCopyable
     // Handles the joining of storage qualifiers for variables.
     bool joinVariableStorageQualifier(TQualifier *joinedQualifier,
                                       TQualifier storageQualifier) const;
-
+    bool joinMemoryQualifier(TMemoryQualifier *joinedMemoryQualifier,
+                             TQualifier memoryQualifier) const;
     std::vector<const TQualifierWrapperBase *> mQualifiers;
 };
 
