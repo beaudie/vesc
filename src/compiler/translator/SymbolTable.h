@@ -480,7 +480,7 @@ class TSymbolTable : angle::NonCopyable
         mInvariantVaryings.insert(originalName);
     }
 
-    void clearInvariantVarying()
+    void clearInvariantVaryings()
     {
         mInvariantVaryings.clear();
     }
