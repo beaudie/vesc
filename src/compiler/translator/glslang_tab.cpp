@@ -359,35 +359,30 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
 #define VERTEX_ONLY(S, L) {  \
     if (context->getShaderType() != GL_VERTEX_SHADER) {  \
         context->error(L, " supported in vertex shaders only ", S);  \
-        context->recover();  \
     }  \
 }
 
 #define FRAG_ONLY(S, L) {  \
     if (context->getShaderType() != GL_FRAGMENT_SHADER) {  \
         context->error(L, " supported in fragment shaders only ", S);  \
-        context->recover();  \
     }  \
 }
 
 #define ES2_ONLY(S, L) {  \
     if (context->getShaderVersion() != 100) {  \
         context->error(L, " supported in GLSL ES 1.00 only ", S);  \
-        context->recover();  \
     }  \
 }
 
 #define ES3_OR_NEWER(TOKEN, LINE, REASON) {  \
     if (context->getShaderVersion() < 300) {  \
         context->error(LINE, REASON " supported in GLSL ES 3.00 and above only ", TOKEN);  \
-        context->recover();  \
     }  \
 }
 
 #define ES3_1_ONLY(TOKEN, LINE, REASON) {  \
     if (context->getShaderVersion() != 310) {  \
         context->error(LINE, REASON " supported in GLSL ES 3.10 only ", TOKEN);  \
-        context->recover();  \
     }  \
 }
 
@@ -703,34 +698,34 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   221,   221,   222,   225,   235,   238,   243,   248,   253,
-     258,   264,   267,   270,   273,   276,   279,   285,   293,   304,
-     308,   316,   319,   325,   329,   336,   342,   351,   359,   365,
-     372,   382,   385,   388,   391,   401,   402,   403,   404,   412,
-     413,   416,   419,   426,   427,   430,   436,   437,   441,   448,
-     449,   452,   455,   458,   464,   465,   468,   474,   475,   482,
-     483,   490,   491,   498,   499,   505,   506,   512,   513,   519,
-     520,   526,   527,   535,   536,   537,   538,   542,   543,   544,
-     548,   552,   556,   560,   567,   570,   576,   584,   592,   595,
-     601,   612,   616,   620,   624,   631,   637,   640,   647,   655,
-     676,   685,   695,   723,   728,   738,   743,   753,   756,   759,
-     762,   768,   775,   778,   782,   786,   791,   796,   803,   807,
-     811,   815,   820,   825,   829,   836,   846,   852,   855,   861,
-     867,   874,   883,   893,   901,   904,   911,   915,   919,   924,
-     932,   935,   946,   950,   959,   968,   976,   986,   998,  1001,
-    1004,  1010,  1017,  1020,  1026,  1029,  1032,  1038,  1041,  1046,
-    1061,  1065,  1069,  1073,  1077,  1081,  1086,  1091,  1096,  1101,
-    1106,  1111,  1116,  1121,  1126,  1131,  1136,  1141,  1146,  1151,
-    1156,  1161,  1166,  1171,  1176,  1181,  1186,  1190,  1194,  1198,
-    1202,  1206,  1210,  1214,  1218,  1222,  1226,  1230,  1234,  1238,
-    1242,  1246,  1255,  1263,  1267,  1280,  1280,  1283,  1283,  1289,
-    1292,  1308,  1311,  1320,  1324,  1330,  1337,  1352,  1356,  1360,
-    1361,  1367,  1368,  1369,  1370,  1371,  1372,  1373,  1377,  1378,
-    1378,  1378,  1388,  1389,  1393,  1393,  1394,  1394,  1399,  1402,
-    1412,  1415,  1421,  1422,  1426,  1434,  1438,  1445,  1445,  1452,
-    1455,  1462,  1467,  1482,  1482,  1487,  1487,  1494,  1494,  1502,
-    1505,  1511,  1514,  1520,  1524,  1531,  1534,  1537,  1540,  1543,
-    1552,  1556,  1563,  1566,  1572,  1572
+       0,   216,   216,   217,   220,   230,   233,   238,   243,   248,
+     253,   259,   262,   265,   268,   271,   274,   280,   287,   298,
+     302,   310,   313,   319,   323,   330,   336,   345,   353,   359,
+     365,   374,   377,   380,   383,   393,   394,   395,   396,   404,
+     405,   408,   411,   418,   419,   422,   428,   429,   433,   440,
+     441,   444,   447,   450,   456,   457,   460,   466,   467,   474,
+     475,   482,   483,   490,   491,   497,   498,   504,   505,   511,
+     512,   518,   519,   526,   527,   528,   529,   533,   534,   535,
+     539,   543,   547,   551,   558,   561,   567,   574,   581,   584,
+     590,   599,   603,   607,   611,   618,   624,   627,   634,   642,
+     662,   671,   679,   705,   709,   717,   721,   729,   732,   735,
+     738,   744,   751,   754,   758,   762,   767,   772,   779,   783,
+     787,   791,   796,   801,   805,   812,   822,   828,   831,   837,
+     843,   849,   857,   866,   873,   876,   882,   886,   890,   895,
+     903,   906,   917,   921,   929,   937,   944,   952,   963,   966,
+     969,   975,   982,   985,   991,   994,   997,  1003,  1006,  1011,
+    1024,  1028,  1032,  1036,  1040,  1044,  1049,  1054,  1059,  1064,
+    1069,  1074,  1079,  1084,  1089,  1094,  1099,  1104,  1109,  1114,
+    1119,  1124,  1129,  1134,  1139,  1144,  1149,  1153,  1157,  1161,
+    1165,  1169,  1173,  1177,  1181,  1185,  1189,  1193,  1197,  1201,
+    1205,  1209,  1217,  1224,  1228,  1241,  1241,  1244,  1244,  1250,
+    1253,  1268,  1271,  1280,  1284,  1290,  1296,  1309,  1313,  1317,
+    1318,  1324,  1325,  1326,  1327,  1328,  1329,  1330,  1334,  1335,
+    1335,  1335,  1345,  1346,  1350,  1350,  1351,  1351,  1356,  1359,
+    1369,  1372,  1378,  1379,  1383,  1390,  1394,  1401,  1401,  1408,
+    1411,  1418,  1422,  1435,  1435,  1440,  1440,  1446,  1446,  1454,
+    1457,  1463,  1466,  1472,  1476,  1483,  1486,  1489,  1492,  1495,
+    1504,  1508,  1515,  1518,  1524,  1524
 };
 #endif
 
@@ -2480,8 +2475,7 @@ yyreduce:
   case 17:
 
     {
-        if (context->integerErrorCheck((yyvsp[0].interm.intermTypedNode), "[]"))
-            context->recover();
+        context->integerErrorCheck((yyvsp[0].interm.intermTypedNode), "[]");
         (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
     }
 
@@ -2597,8 +2591,7 @@ yyreduce:
   case 29:
 
     {
-        if (context->reservedErrorCheck((yylsp[0]), *(yyvsp[0].lex).string))
-            context->recover();
+        context->reservedErrorCheck((yylsp[0]), *(yyvsp[0].lex).string);
         const TType *type = TCache::getType(EbtVoid, EbpUndefined);
         TFunction *function = new TFunction((yyvsp[0].lex).string, type);
         (yyval.interm.function) = function;
@@ -2609,8 +2602,7 @@ yyreduce:
   case 30:
 
     {
-        if (context->reservedErrorCheck((yylsp[0]), *(yyvsp[0].lex).string))
-            context->recover();
+        context->reservedErrorCheck((yylsp[0]), *(yyvsp[0].lex).string);
         const TType *type = TCache::getType(EbtVoid, EbpUndefined);
         TFunction *function = new TFunction((yyvsp[0].lex).string, type);
         (yyval.interm.function) = function;
@@ -2927,8 +2919,7 @@ yyreduce:
   case 72:
 
     {
-        if (context->lValueErrorCheck((yylsp[-1]), "assign", (yyvsp[-2].interm.intermTypedNode)))
-            context->recover();
+        context->lValueErrorCheck((yylsp[-1]), "assign", (yyvsp[-2].interm.intermTypedNode));
         (yyval.interm.intermTypedNode) = context->addAssign((yyvsp[-1].interm).op, (yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.intermTypedNode), (yylsp[-1]));
     }
 
@@ -3037,8 +3028,7 @@ yyreduce:
   case 86:
 
     {
-        if (context->constErrorCheck((yyvsp[0].interm.intermTypedNode)))
-            context->recover();
+        context->constErrorCheck((yyvsp[0].interm.intermTypedNode));
         (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
     }
 
@@ -3047,8 +3037,7 @@ yyreduce:
   case 87:
 
     {
-        if (context->enterStructDeclaration((yylsp[-1]), *(yyvsp[-1].lex).string))
-            context->recover();
+        context->enterStructDeclaration((yylsp[-1]), *(yyvsp[-1].lex).string);
         (yyval.lex) = (yyvsp[-1].lex);
     }
 
@@ -3078,11 +3067,9 @@ yyreduce:
     {
         if (((yyvsp[-2].interm.precision) == EbpHigh) && (context->getShaderType() == GL_FRAGMENT_SHADER) && !context->getFragmentPrecisionHigh()) {
             context->error((yylsp[-3]), "precision is not supported in fragment shader", "highp");
-            context->recover();
         }
         if (!context->symbolTable.setDefaultPrecision( (yyvsp[-1].interm.type), (yyvsp[-2].interm.precision) )) {
             context->error((yylsp[-3]), "illegal type argument for default precision qualifier", getBasicString((yyvsp[-1].interm.type).type));
-            context->recover();
         }
         (yyval.interm.intermNode) = 0;
     }
@@ -3174,7 +3161,6 @@ yyreduce:
             // This parameter > first is void
             //
             context->error((yylsp[-1]), "cannot be an argument type except for '(void)'", "void");
-            context->recover();
             delete (yyvsp[0].interm).param.type;
         } else {
             // Add the parameter
@@ -3200,10 +3186,8 @@ yyreduce:
     {
         if ((yyvsp[-1].interm.type).type == EbtVoid) {
             context->error((yylsp[0]), "illegal use of type 'void'", (yyvsp[0].lex).string->c_str());
-            context->recover();
         }
-        if (context->reservedErrorCheck((yylsp[0]), *(yyvsp[0].lex).string))
-            context->recover();
+        context->reservedErrorCheck((yylsp[0]), *(yyvsp[0].lex).string);
         TParameter param = {(yyvsp[0].lex).string, new TType((yyvsp[-1].interm.type))};
         (yyval.interm).param = param;
     }
@@ -3214,15 +3198,13 @@ yyreduce:
 
     {
         // Check that we can make an array out of this type
-        if (context->arrayTypeErrorCheck((yylsp[-2]), (yyvsp[-4].interm.type)))
-            context->recover();
+        context->arrayTypeErrorCheck((yylsp[-2]), (yyvsp[-4].interm.type));
 
-        if (context->reservedErrorCheck((yylsp[-3]), *(yyvsp[-3].lex).string))
-            context->recover();
+        context->reservedErrorCheck((yylsp[-3]), *(yyvsp[-3].lex).string);
 
         int size;
-        if (context->arraySizeErrorCheck((yylsp[-2]), (yyvsp[-1].interm.intermTypedNode), size))
-            context->recover();
+        context->arraySizeErrorCheck((yylsp[-2]), (yyvsp[-1].interm.intermTypedNode), size);
+
         (yyvsp[-4].interm.type).setArraySize(size);
 
         TType* type = new TType((yyvsp[-4].interm.type));
@@ -3236,8 +3218,7 @@ yyreduce:
 
     {
         (yyval.interm) = (yyvsp[0].interm);
-        if (context->paramErrorCheck((yylsp[0]), (yyvsp[-2].interm.qualifier), (yyvsp[-1].interm.qualifier), (yyval.interm).param.type))
-            context->recover();
+        context->paramErrorCheck((yylsp[0]), (yyvsp[-2].interm.qualifier), (yyvsp[-1].interm.qualifier), (yyval.interm).param.type);
     }
 
     break;
@@ -3246,10 +3227,8 @@ yyreduce:
 
     {
         (yyval.interm) = (yyvsp[0].interm);
-        if (context->parameterSamplerErrorCheck((yylsp[0]), (yyvsp[-1].interm.qualifier), *(yyvsp[0].interm).param.type))
-            context->recover();
-        if (context->paramErrorCheck((yylsp[0]), EvqTemporary, (yyvsp[-1].interm.qualifier), (yyval.interm).param.type))
-            context->recover();
+        context->parameterSamplerErrorCheck((yylsp[0]), (yyvsp[-1].interm.qualifier), *(yyvsp[0].interm).param.type);
+        context->paramErrorCheck((yylsp[0]), EvqTemporary, (yyvsp[-1].interm.qualifier), (yyval.interm).param.type);
     }
 
     break;
@@ -3258,8 +3237,7 @@ yyreduce:
 
     {
         (yyval.interm) = (yyvsp[0].interm);
-        if (context->paramErrorCheck((yylsp[0]), (yyvsp[-2].interm.qualifier), (yyvsp[-1].interm.qualifier), (yyval.interm).param.type))
-            context->recover();
+        context->paramErrorCheck((yylsp[0]), (yyvsp[-2].interm.qualifier), (yyvsp[-1].interm.qualifier), (yyval.interm).param.type);
     }
 
     break;
@@ -3268,10 +3246,8 @@ yyreduce:
 
     {
         (yyval.interm) = (yyvsp[0].interm);
-        if (context->parameterSamplerErrorCheck((yylsp[0]), (yyvsp[-1].interm.qualifier), *(yyvsp[0].interm).param.type))
-            context->recover();
-        if (context->paramErrorCheck((yylsp[0]), EvqTemporary, (yyvsp[-1].interm.qualifier), (yyval.interm).param.type))
-            context->recover();
+        context->parameterSamplerErrorCheck((yylsp[0]), (yyvsp[-1].interm.qualifier), *(yyvsp[0].interm).param.type);
+        context->paramErrorCheck((yylsp[0]), EvqTemporary, (yyvsp[-1].interm.qualifier), (yyval.interm).param.type);
     }
 
     break;
@@ -3489,8 +3465,7 @@ yyreduce:
     {
         VERTEX_ONLY("attribute", (yylsp[0]));
         ES2_ONLY("attribute", (yylsp[0]));
-        if (context->globalErrorCheck((yylsp[0]), context->symbolTable.atGlobalLevel(), "attribute"))
-            context->recover();
+        context->globalErrorCheck((yylsp[0]), context->symbolTable.atGlobalLevel(), "attribute");
         (yyval.interm.type).setBasic(EbtVoid, EvqAttribute, (yylsp[0]));
     }
 
@@ -3500,8 +3475,7 @@ yyreduce:
 
     {
         ES2_ONLY("varying", (yylsp[0]));
-        if (context->globalErrorCheck((yylsp[0]), context->symbolTable.atGlobalLevel(), "varying"))
-            context->recover();
+        context->globalErrorCheck((yylsp[0]), context->symbolTable.atGlobalLevel(), "varying");
         if (context->getShaderType() == GL_VERTEX_SHADER)
             (yyval.interm.type).setBasic(EbtVoid, EvqVaryingOut, (yylsp[0]));
         else
@@ -3514,8 +3488,7 @@ yyreduce:
 
     {
         ES2_ONLY("varying", (yylsp[-1]));
-        if (context->globalErrorCheck((yylsp[-1]), context->symbolTable.atGlobalLevel(), "invariant varying"))
-            context->recover();
+        context->globalErrorCheck((yylsp[-1]), context->symbolTable.atGlobalLevel(), "invariant varying");
         if (context->getShaderType() == GL_VERTEX_SHADER)
             (yyval.interm.type).setBasic(EbtVoid, EvqVaryingOut, (yylsp[-1]));
         else
@@ -3531,7 +3504,6 @@ yyreduce:
         if ((yyvsp[0].interm.type).qualifier != EvqConst && !context->symbolTable.atGlobalLevel())
         {
             context->error((yylsp[0]), "Local variables can only use the const storage qualifier.", getQualifierString((yyvsp[0].interm.type).qualifier));
-            context->recover();
         }
         (yyval.interm.type).setBasic(EbtVoid, (yyvsp[0].interm.type).qualifier, (yylsp[0]));
     }
@@ -3550,7 +3522,6 @@ yyreduce:
 
     {
         context->error((yylsp[0]), "interpolation qualifier requires a fragment 'in' or vertex 'out' storage qualifier", getInterpolationString((yyvsp[0].interm.type).qualifier));
-        context->recover();
 
         TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
         (yyval.interm.type).setBasic(EbtVoid, qual, (yylsp[0]));
@@ -3636,7 +3607,6 @@ yyreduce:
         if (context->getShaderType() == GL_VERTEX_SHADER)
         {
             context->error((yylsp[-1]), "invalid storage qualifier", "it is an error to use 'centroid in' in the vertex shader");
-            context->recover();
         }
         (yyval.interm.type).qualifier = (context->getShaderType() == GL_FRAGMENT_SHADER) ? EvqCentroidIn : EvqVertexIn;
     }
@@ -3650,7 +3620,6 @@ yyreduce:
         if (context->getShaderType() == GL_FRAGMENT_SHADER)
         {
             context->error((yylsp[-1]), "invalid storage qualifier", "it is an error to use 'centroid out' in the fragment shader");
-            context->recover();
         }
         (yyval.interm.type).qualifier = (context->getShaderType() == GL_FRAGMENT_SHADER) ? EvqFragmentOut : EvqCentroidOut;
     }
@@ -3660,8 +3629,7 @@ yyreduce:
   case 145:
 
     {
-        if (context->globalErrorCheck((yylsp[0]), context->symbolTable.atGlobalLevel(), "uniform"))
-            context->recover();
+        context->globalErrorCheck((yylsp[0]), context->symbolTable.atGlobalLevel(), "uniform");
         (yyval.interm.type).qualifier = EvqUniform;
     }
 
@@ -3674,9 +3642,7 @@ yyreduce:
 
         if ((yyval.interm.type).precision == EbpUndefined) {
             (yyval.interm.type).precision = context->symbolTable.getDefaultPrecision((yyvsp[0].interm.type).type);
-            if (context->precisionErrorCheck((yylsp[0]), (yyval.interm.type).precision, (yyvsp[0].interm.type).type)) {
-                context->recover();
-            }
+            context->precisionErrorCheck((yylsp[0]), (yyval.interm.type).precision, (yyvsp[0].interm.type).type);
         }
     }
 
@@ -3690,7 +3656,6 @@ yyreduce:
 
         if (!SupportsPrecision((yyvsp[0].interm.type).type)) {
             context->error((yylsp[-1]), "illegal type for precision qualifier", getBasicString((yyvsp[0].interm.type).type));
-            context->recover();
         }
     }
 
@@ -3792,12 +3757,10 @@ yyreduce:
     {
         (yyval.interm.type) = (yyvsp[-3].interm.type);
 
-        if (context->arrayTypeErrorCheck((yylsp[-2]), (yyvsp[-3].interm.type)))
-            context->recover();
-        else {
+        if (!context->arrayTypeErrorCheck((yylsp[-2]), (yyvsp[-3].interm.type)))
+        {
             int size;
-            if (context->arraySizeErrorCheck((yylsp[-2]), (yyvsp[-1].interm.intermTypedNode), size))
-                context->recover();
+            context->arraySizeErrorCheck((yylsp[-2]), (yyvsp[-1].interm.intermTypedNode), size);
             (yyval.interm.type).setArraySize(size);
         }
     }
@@ -4200,7 +4163,6 @@ yyreduce:
         if (!context->supportsExtension("GL_OES_EGL_image_external") &&
             !context->supportsExtension("GL_NV_EGL_stream_consumer_external")) {
             context->error((yylsp[0]), "unsupported type", "samplerExternalOES");
-            context->recover();
         }
         TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
         (yyval.interm.type).setBasic(EbtSamplerExternalOES, qual, (yylsp[0]));
@@ -4213,7 +4175,6 @@ yyreduce:
     {
         if (!context->supportsExtension("GL_ARB_texture_rectangle")) {
             context->error((yylsp[0]), "unsupported type", "sampler2DRect");
-            context->recover();
         }
         TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
         (yyval.interm.type).setBasic(EbtSampler2DRect, qual, (yylsp[0]));
@@ -4247,7 +4208,7 @@ yyreduce:
 
   case 205:
 
-    { if (context->enterStructDeclaration((yylsp[-1]), *(yyvsp[-1].lex).string)) context->recover(); }
+    { context->enterStructDeclaration((yylsp[-1]), *(yyvsp[-1].lex).string); }
 
     break;
 
@@ -4261,7 +4222,7 @@ yyreduce:
 
   case 207:
 
-    { if (context->enterStructDeclaration((yylsp[0]), *(yyvsp[0].lex).string)) context->recover(); }
+    { context->enterStructDeclaration((yylsp[0]), *(yyvsp[0].lex).string); }
 
     break;
 
@@ -4290,7 +4251,6 @@ yyreduce:
             for (size_t j = 0; j < (yyval.interm.fieldList)->size(); ++j) {
                 if ((*(yyval.interm.fieldList))[j]->name() == field->name()) {
                     context->error((yylsp[0]), "duplicate field name in structure:", "struct", field->name().c_str());
-                    context->recover();
                 }
             }
             (yyval.interm.fieldList)->push_back(field);
@@ -4338,8 +4298,7 @@ yyreduce:
   case 215:
 
     {
-        if (context->reservedErrorCheck((yylsp[0]), *(yyvsp[0].lex).string))
-            context->recover();
+        context->reservedErrorCheck((yylsp[0]), *(yyvsp[0].lex).string);
 
         TType* type = new TType(EbtVoid, EbpUndefined);
         (yyval.interm.field) = new TField(type, (yyvsp[0].lex).string, (yylsp[0]));
@@ -4350,13 +4309,11 @@ yyreduce:
   case 216:
 
     {
-        if (context->reservedErrorCheck((yylsp[-3]), *(yyvsp[-3].lex).string))
-            context->recover();
+        context->reservedErrorCheck((yylsp[-3]), *(yyvsp[-3].lex).string);
 
         TType* type = new TType(EbtVoid, EbpUndefined);
         int size;
-        if (context->arraySizeErrorCheck((yylsp[-1]), (yyvsp[-1].interm.intermTypedNode), size))
-            context->recover();
+        context->arraySizeErrorCheck((yylsp[-1]), (yyvsp[-1].interm.intermTypedNode), size);
         type->setArraySize(size);
 
         (yyval.interm.field) = new TField(type, (yyvsp[-3].lex).string, (yylsp[-3]));
@@ -4547,8 +4504,7 @@ yyreduce:
   case 244:
 
     {
-        if (context->boolErrorCheck((yylsp[-4]), (yyvsp[-2].interm.intermTypedNode)))
-            context->recover();
+        context->boolErrorCheck((yylsp[-4]), (yyvsp[-2].interm.intermTypedNode));
         (yyval.interm.intermNode) = context->intermediate.addSelection((yyvsp[-2].interm.intermTypedNode), (yyvsp[0].interm.nodePair), (yylsp[-4]));
     }
 
@@ -4607,8 +4563,7 @@ yyreduce:
 
     {
         (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
-        if (context->boolErrorCheck((yyvsp[0].interm.intermTypedNode)->getLine(), (yyvsp[0].interm.intermTypedNode)))
-            context->recover();
+        context->boolErrorCheck((yyvsp[0].interm.intermTypedNode)->getLine(), (yyvsp[0].interm.intermTypedNode));
     }
 
     break;
@@ -4617,13 +4572,11 @@ yyreduce:
 
     {
         TIntermNode *intermNode;
-        if (context->boolErrorCheck((yylsp[-2]), (yyvsp[-3].interm.type)))
-            context->recover();
+        context->boolErrorCheck((yylsp[-2]), (yyvsp[-3].interm.type));
 
         if (!context->executeInitializer((yylsp[-2]), *(yyvsp[-2].lex).string, (yyvsp[-3].interm.type), (yyvsp[0].interm.intermTypedNode), &intermNode))
             (yyval.interm.intermTypedNode) = (yyvsp[0].interm.intermTypedNode);
         else {
-            context->recover();
             (yyval.interm.intermTypedNode) = 0;
         }
     }
@@ -4655,8 +4608,7 @@ yyreduce:
   case 256:
 
     {
-        if (context->boolErrorCheck((yylsp[0]), (yyvsp[-2].interm.intermTypedNode)))
-            context->recover();
+        context->boolErrorCheck((yylsp[0]), (yyvsp[-2].interm.intermTypedNode));
 
         (yyval.interm.intermNode) = context->intermediate.addLoop(ELoopDoWhile, 0, (yyvsp[-2].interm.intermTypedNode), 0, (yyvsp[-5].interm.intermNode), (yylsp[-4]));
         context->decrLoopNestingLevel();
