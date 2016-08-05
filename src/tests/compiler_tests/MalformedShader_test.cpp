@@ -2494,6 +2494,245 @@ TEST_F(MalformedShaderTest, InvariantDeclarationWithPrecisionQualifier)
         "invariant highp foo;\n"
         "void main() {\n"
         "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+// r32f, r32i, r32ui require either writeonly or readonly memory qualifiers
+// GLSL ES 3.10, Revision 4, 4.9 Memory Access Qualifiers
+TEST_F(MalformedFragmentShaderGLES31Test, ImageR32FNoMemoryQualifier)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "in vec4 myInput;\n"
+        "layout(r32f) uniform image2D myImage;\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// A valid image declaration with a correct memory qualifier.
+// GLSL ES 3.10, Revision 4, 4.9 Memory Access Qualifiers
+TEST_F(MalformedFragmentShaderGLES31Test, ImageR32FWithCorrectMemoryQualifier)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "in vec4 myInput;\n"
+        "layout(r32f) uniform readonly image2D myImage;\n"
+        "void main() {\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+    }
+}
+
+// It is undefined behavior to call imageStore when the image is qualified as readonly.
+// OpenGL ES 3.10, 8.22 Texture Image Loads and Stores
+TEST_F(MalformedFragmentShaderGLES31Test, StoreInReadOnlyImage)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "in vec4 myInput;\n"
+        "layout(r32f) uniform readonly image2D myImage;\n"
+        "void main() {\n"
+        "   imageStore(myImage, ivec2(0), 1.0);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// It is undefined behavior to call imageLoad when the image qualified as writeonly.
+// OpenGL ES 3.10, 8.22 Texture Image Loads and Stores
+TEST_F(MalformedFragmentShaderGLES31Test, LoadFromWriteOnlyImage)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "in vec4 myInput;\n"
+        "layout(r32f) uniform writeonly image2D myImage;\n"
+        "void main() {\n"
+        "   imageLoad(myImage, ivec2(0));\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// A valid declaration and usage of an image3D.
+TEST_F(MalformedFragmentShaderGLES31Test, ValidImage3D)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image3D;\n"
+        "in vec4 myInput;\n"
+        "layout(rgba32f) uniform image3D myImage;\n"
+        "void main() {\n"
+        "   imageLoad(myImage, ivec3(0));\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+    }
+}
+
+// A valid declaration and usage of an imageCube.
+TEST_F(MalformedFragmentShaderGLES31Test, ValidImageCube)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump imageCube;\n"
+        "in vec4 myInput;\n"
+        "layout(rgba32f) uniform imageCube myImage;\n"
+        "void main() {\n"
+        "   imageLoad(myImage, ivec3(0));\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+    }
+}
+
+// A valid declaration and usage of an image2DArray.
+TEST_F(MalformedFragmentShaderGLES31Test, ValidImage2DArray)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2DArray;\n"
+        "in vec4 myInput;\n"
+        "layout(rgba32f) uniform image2DArray myImage;\n"
+        "void main() {\n"
+        "   imageLoad(myImage, ivec3(0));\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+    }
+}
+
+// Images cannot be l-values.
+TEST_F(MalformedFragmentShaderGLES31Test, ImageLValueFunctionDeclarationInOut)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "void myFunc(inout image2D someImage);\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// Images cannot be l-values.
+TEST_F(MalformedFragmentShaderGLES31Test, ImageLValueFunctionDefinitionInOut)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "void myFunc(inout image2D someImage) {}\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// Images cannot be l-values.
+TEST_F(MalformedFragmentShaderGLES31Test, ImageLValueFunctionDefinitionOut)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "void myFunc(out image2D someImage) {}\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// Cannot assign to images.
+TEST_F(MalformedFragmentShaderGLES31Test, ImageAssignment)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "layout(rgba32f) uniform image2D myImage;\n"
+        "layout(rgba32f) uniform image2D myImage2;\n"
+        "void main() {\n"
+        "   myImage = myImage2;\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+TEST_F(MalformedFragmentShaderGLES31Test, InvalidLayoutInFunctionHeader)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "void myFunc(layout(location=0) in float someImage) {}\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// The memory qualifier should be specified when having an image as a function argument.
+TEST_F(MalformedFragmentShaderGLES31Test, ReadOnlyQualifierMissingInFunctionArgument)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "layout(rgba32f) uniform readonly image2D myImage;\n"
+        "void myFunc(in image2D someImage) {}\n"
+        "void main() {\n"
+        "   myFunc(myImage);\n"
+        "}\n";
+
     if (compile(shaderString))
     {
         FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
@@ -2511,6 +2750,148 @@ TEST_F(MalformedShaderTest, InvariantDeclarationWithLayoutQualifier)
         "invariant layout(location=0) foo;\n"
         "void main() {\n"
         "}\n";
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+// The memory qualifier should be specified when having an image as a function argument.
+TEST_F(MalformedFragmentShaderGLES31Test, WriteOnlyQualifierMissingInFunctionArgument)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "layout(rgba32f) uniform writeonly image2D myImage;\n"
+        "void myFunc(in image2D someImage) {}\n"
+        "void main() {\n"
+        "   myFunc(myImage);\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// The memory qualifiers for the image declaration and function argument match and the test should
+// pass.
+TEST_F(MalformedFragmentShaderGLES31Test, CorrectImageMemoryQualifierSpecified)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "layout(rgba32f) uniform image2D myImage;\n"
+        "void myFunc(in image2D someImage) {}\n"
+        "void main() {\n"
+        "   myFunc(myImage);\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+    }
+}
+
+// The test adds additional qualifiers to the argument in the function header.
+// This is correct since no memory qualifiers are discarded upon the function call.
+TEST_F(MalformedFragmentShaderGLES31Test, CorrectImageMemoryQualifierSpecified2)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "layout(rgba32f) uniform image2D myImage;\n"
+        "void myFunc(in readonly writeonly image2D someImage) {}\n"
+        "void main() {\n"
+        "   myFunc(myImage);\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+    }
+}
+
+// Images are not allowed in structs.
+TEST_F(MalformedFragmentShaderGLES31Test, ImageInStruct)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "struct myStruct { layout(rgba32f) uniform image2D myImage; }\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// Images are not allowed in interface blocks.
+TEST_F(MalformedFragmentShaderGLES31Test, ImageInInterfaceBlock)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "precision mediump image2D;\n"
+        "uniform myBlock { layout(rgba32f) uniform image2D myImage; }\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// Readonly used with an interface block.
+TEST_F(MalformedFragmentShaderGLES31Test, ReadonlyWithInterfaceBlock)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "uniform readonly myBlock { float something; }\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// Readonly used with an invariant.
+TEST_F(MalformedFragmentShaderGLES31Test, ReadonlyWithInvariant)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "out vec4 something;\n"
+        "invariant readonly something;\n"
+        "void main() {\n"
+        "}\n";
+
+    if (compile(shaderString))
+    {
+        FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
+    }
+}
+
+// Readonly used with a member of a structure.
+TEST_F(MalformedFragmentShaderGLES31Test, ReadonlyWithStructMember)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "out vec4 something;\n"
+        "struct MyStruct { readonly float myMember; };\n"
+        "void main() {\n"
+        "}\n";
+
     if (compile(shaderString))
     {
         FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
