@@ -161,12 +161,16 @@ class TParseContext : angle::NonCopyable
     void checkIsScalarBool(const TSourceLoc &line, const TIntermTyped *type);
     void checkIsScalarBool(const TSourceLoc &line, const TPublicType &pType);
     bool checkIsNotSampler(const TSourceLoc &line, const TPublicType &pType, const char *reason);
+    bool checkIsNotImage(const TSourceLoc &line, const TPublicType &pType, const char *reason);
     void checkDeclaratorLocationIsNotSpecified(const TSourceLoc &line, const TPublicType &pType);
     void checkLocationIsNotSpecified(const TSourceLoc &location,
                                      const TLayoutQualifier &layoutQualifier);
     void checkOutParameterIsNotSampler(const TSourceLoc &line,
                                        TQualifier qualifier,
                                        const TType &type);
+    void checkOutParameterIsNotImage(const TSourceLoc &line,
+                                     TQualifier qualifier,
+                                     const TType &type);
     void checkIsParameterQualifierValid(const TSourceLoc &line,
                                         const TQualifierSequence &qualifierSequence,
                                         TType *type);
@@ -186,7 +190,9 @@ class TParseContext : angle::NonCopyable
     void checkInputOutputTypeIsValidES3(const TQualifier qualifier,
                                         const TPublicType &type,
                                         const TSourceLoc &qualifierLocation);
-
+    void checkLocalVariableConstStorageQualifier(const TQualifierWrapperBase &qualifier);
+    bool checkIsMemoryQualifierNotSpecified(const TMemoryQualifier &memoryQualifier,
+                                            const TSourceLoc &location);
     const TPragma &pragma() const { return mDirectiveHandler.pragma(); }
     const TExtensionBehavior &extensionBehavior() const { return mDirectiveHandler.extensionBehavior(); }
     bool supportsExtension(const char *extension);
@@ -194,6 +200,7 @@ class TParseContext : angle::NonCopyable
     void handleExtensionDirective(const TSourceLoc &loc, const char *extName, const char *behavior);
     void handlePragmaDirective(const TSourceLoc &loc, const char *name, const char *value, bool stdgl);
 
+    bool containsImage(const TType &type);
     bool containsSampler(const TType &type);
     const TFunction* findFunction(
         const TSourceLoc &line, TFunction *pfnCall, int inputShaderVersion, bool *builtIn = 0);
@@ -353,6 +360,9 @@ class TParseContext : angle::NonCopyable
     TIntermBranch *addBranch(TOperator op, TIntermTyped *returnValue, const TSourceLoc &loc);
 
     void checkTextureOffsetConst(TIntermAggregate *functionCall);
+    void checkImageMemoryAccessForBuiltinFunctions(TIntermAggregate *functionCall);
+    void checkImageMemoryAccessForUserDefinedFunctions(const TFunction *functionDefinition,
+                                                       const TIntermAggregate *functionCall);
     TIntermTyped *addFunctionCallOrMethod(TFunction *fnCall,
                                           TIntermNode *paramNode,
                                           TIntermNode *thisNode,

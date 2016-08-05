@@ -201,7 +201,7 @@ const TType *VectorType(const TType *type, int size)
 void TSymbolTable::insertBuiltIn(ESymbolLevel level, TOperator op, const char *ext, const TType *rvalue, const char *name,
                                  const TType *ptype1, const TType *ptype2, const TType *ptype3, const TType *ptype4, const TType *ptype5)
 {
-    if (ptype1->getBasicType() == EbtGSampler2D)
+    if (ptype1 != nullptr && ptype1->getBasicType() == EbtGSampler2D)
     {
         insertUnmangledBuiltIn(name);
         bool gvec4 = (rvalue->getBasicType() == EbtGVec4);
@@ -209,7 +209,7 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level, TOperator op, const char *e
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtInt, 4) : rvalue, name, TCache::getType(EbtISampler2D), ptype2, ptype3, ptype4, ptype5);
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtUInt, 4) : rvalue, name, TCache::getType(EbtUSampler2D), ptype2, ptype3, ptype4, ptype5);
     }
-    else if (ptype1->getBasicType() == EbtGSampler3D)
+    else if (ptype1 != nullptr && ptype1->getBasicType() == EbtGSampler3D)
     {
         insertUnmangledBuiltIn(name);
         bool gvec4 = (rvalue->getBasicType() == EbtGVec4);
@@ -217,7 +217,7 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level, TOperator op, const char *e
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtInt, 4) : rvalue, name, TCache::getType(EbtISampler3D), ptype2, ptype3, ptype4, ptype5);
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtUInt, 4) : rvalue, name, TCache::getType(EbtUSampler3D), ptype2, ptype3, ptype4, ptype5);
     }
-    else if (ptype1->getBasicType() == EbtGSamplerCube)
+    else if (ptype1 != nullptr && ptype1->getBasicType() == EbtGSamplerCube)
     {
         insertUnmangledBuiltIn(name);
         bool gvec4 = (rvalue->getBasicType() == EbtGVec4);
@@ -225,13 +225,44 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level, TOperator op, const char *e
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtInt, 4) : rvalue, name, TCache::getType(EbtISamplerCube), ptype2, ptype3, ptype4, ptype5);
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtUInt, 4) : rvalue, name, TCache::getType(EbtUSamplerCube), ptype2, ptype3, ptype4, ptype5);
     }
-    else if (ptype1->getBasicType() == EbtGSampler2DArray)
+    else if (ptype1 != nullptr && ptype1->getBasicType() == EbtGSampler2DArray)
     {
         insertUnmangledBuiltIn(name);
         bool gvec4 = (rvalue->getBasicType() == EbtGVec4);
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtFloat, 4) : rvalue, name, TCache::getType(EbtSampler2DArray), ptype2, ptype3, ptype4, ptype5);
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtInt, 4) : rvalue, name, TCache::getType(EbtISampler2DArray), ptype2, ptype3, ptype4, ptype5);
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtUInt, 4) : rvalue, name, TCache::getType(EbtUSampler2DArray), ptype2, ptype3, ptype4, ptype5);
+    }
+    else if (ptype1 != nullptr && IsGImage(ptype1->getBasicType()))
+    {
+        insertUnmangledBuiltIn(name);
+
+        const TType *floatImage = TCache::getType(convertGTypeToFloat(ptype1->getBasicType()));
+        const TType *intImage   = TCache::getType(convertGTypeToInt(ptype1->getBasicType()));
+        const TType *unsignedImage =
+            TCache::getType(convertGTypeToUnsigned(ptype1->getBasicType()));
+        bool isReturnGvec4 = (rvalue->getBasicType() == EbtGVec4);
+
+        const TType *passValueFloat    = TCache::getType(EbtFloat, 4);
+        const TType *passValueInt      = TCache::getType(EbtInt, 4);
+        const TType *passValueUnsigned = TCache::getType(EbtUInt, 4);
+
+        const TType *returnValueFloat    = isReturnGvec4 ? passValueFloat : rvalue;
+        const TType *returnValueInt      = isReturnGvec4 ? passValueInt : rvalue;
+        const TType *returnValueUnsigned = isReturnGvec4 ? passValueUnsigned : rvalue;
+
+        bool isThirdArgumentGvec4 = (ptype3 != nullptr && ptype3->getBasicType() == EbtGVec4);
+
+        const TType *thirdArgumentFloat    = isThirdArgumentGvec4 ? passValueFloat : ptype3;
+        const TType *thirdArgumentInt      = isThirdArgumentGvec4 ? passValueInt : ptype3;
+        const TType *thirdArgumentUnsigned = isThirdArgumentGvec4 ? passValueUnsigned : ptype3;
+
+        insertBuiltIn(level, returnValueFloat, name, floatImage, ptype2, thirdArgumentFloat, ptype4,
+                      ptype5);
+        insertBuiltIn(level, returnValueInt, name, intImage, ptype2, thirdArgumentInt, ptype4,
+                      ptype5);
+        insertBuiltIn(level, returnValueUnsigned, name, unsignedImage, ptype2,
+                      thirdArgumentUnsigned, ptype4, ptype5);
     }
     else if (IsGenType(rvalue) || IsGenType(ptype1) || IsGenType(ptype2) || IsGenType(ptype3))
     {

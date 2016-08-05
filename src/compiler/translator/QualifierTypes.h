@@ -21,7 +21,8 @@ enum TQualifierType
     QtInterpolation,
     QtLayout,
     QtStorage,
-    QtPrecision
+    QtPrecision,
+    QtMemory
 };
 
 class TQualifierWrapperBase : angle::NonCopyable
@@ -112,6 +113,22 @@ class TPrecisionQualifierWrapper final : public TQualifierWrapperBase
     TPrecision mPrecisionQualifier;
 };
 
+class TMemoryQualifierWrapper final : public TQualifierWrapperBase
+{
+  public:
+    TMemoryQualifierWrapper(TQualifier memoryQualifier, const TSourceLoc &line)
+        : TQualifierWrapperBase(line), mMemoryQualifier(memoryQualifier)
+    {
+    }
+    ~TMemoryQualifierWrapper() {}
+
+    TQualifierType getType() const { return QtMemory; }
+    TString getQualifierString() const { return ::getQualifierString(mMemoryQualifier); }
+    TQualifier getQualifier() const { return mMemoryQualifier; }
+  private:
+    TQualifier mMemoryQualifier;
+};
+
 class TQualifierSequence final : angle::NonCopyable
 {
   public:
@@ -131,9 +148,12 @@ class TQualifierSequence final : angle::NonCopyable
     // set to EbpUndefined.
     void getParameterQualifiers(TDiagnostics *diagnostics,
                                 TQualifier *outQualifier,
-                                TPrecision *outPrecision) const;
+                                TPrecision *outPrecision,
+                                TMemoryQualifier *outMemoryQualifier) const;
 
   private:
+    bool joinMemoryQualifier(TMemoryQualifier *joinedMemoryQualifier,
+                             TQualifier memoryQualifier) const;
     bool joinParameterStorageQualifier(TQualifier *joinedQualifier,
                                        TQualifier storageQualifier) const;
     bool joinVariableStorageQualifier(TQualifier *joinedQualifier,
