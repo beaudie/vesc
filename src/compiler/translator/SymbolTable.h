@@ -433,25 +433,53 @@ class TSymbolTable : angle::NonCopyable
         return insert(level, constantIvec3);
     }
 
-    void insertBuiltIn(ESymbolLevel level, TOperator op, const char *ext, const TType *rvalue, const char *name,
-                       const TType *ptype1, const TType *ptype2 = 0, const TType *ptype3 = 0, const TType *ptype4 = 0, const TType *ptype5 = 0);
+    void insertBuiltIn(ESymbolLevel level,
+                       TOperator op,
+                       const char *ext,
+                       const TType *rvalue,
+                       const char *name,
+                       const TType *ptype1 = 0,
+                       const TType *ptype2 = 0,
+                       const TType *ptype3 = 0,
+                       const TType *ptype4 = 0,
+                       const TType *ptype5 = 0);
 
-    void insertBuiltIn(ESymbolLevel level, const TType *rvalue, const char *name,
-                       const TType *ptype1, const TType *ptype2 = 0, const TType *ptype3 = 0, const TType *ptype4 = 0, const TType *ptype5 = 0)
+    void insertBuiltIn(ESymbolLevel level,
+                       const TType *rvalue,
+                       const char *name,
+                       const TType *ptype1 = 0,
+                       const TType *ptype2 = 0,
+                       const TType *ptype3 = 0,
+                       const TType *ptype4 = 0,
+                       const TType *ptype5 = 0)
     {
         insertUnmangledBuiltIn(name);
         insertBuiltIn(level, EOpNull, "", rvalue, name, ptype1, ptype2, ptype3, ptype4, ptype5);
     }
 
-    void insertBuiltIn(ESymbolLevel level, const char *ext, const TType *rvalue, const char *name,
-                       const TType *ptype1, const TType *ptype2 = 0, const TType *ptype3 = 0, const TType *ptype4 = 0, const TType *ptype5 = 0)
+    void insertBuiltIn(ESymbolLevel level,
+                       const char *ext,
+                       const TType *rvalue,
+                       const char *name,
+                       const TType *ptype1 = 0,
+                       const TType *ptype2 = 0,
+                       const TType *ptype3 = 0,
+                       const TType *ptype4 = 0,
+                       const TType *ptype5 = 0)
     {
         insertUnmangledBuiltIn(name);
         insertBuiltIn(level, EOpNull, ext, rvalue, name, ptype1, ptype2, ptype3, ptype4, ptype5);
     }
 
-    void insertBuiltIn(ESymbolLevel level, TOperator op, const TType *rvalue, const char *name,
-                       const TType *ptype1, const TType *ptype2 = 0, const TType *ptype3 = 0, const TType *ptype4 = 0, const TType *ptype5 = 0)
+    void insertBuiltIn(ESymbolLevel level,
+                       TOperator op,
+                       const TType *rvalue,
+                       const char *name,
+                       const TType *ptype1 = 0,
+                       const TType *ptype2 = 0,
+                       const TType *ptype3 = 0,
+                       const TType *ptype4 = 0,
+                       const TType *ptype5 = 0)
     {
         insertUnmangledBuiltIn(name);
         insertBuiltIn(level, op, "", rvalue, name, ptype1, ptype2, ptype3, ptype4, ptype5);
@@ -460,7 +488,7 @@ class TSymbolTable : angle::NonCopyable
     TSymbol *find(const TString &name, int shaderVersion,
                   bool *builtIn = NULL, bool *sameScope = NULL) const;
     TSymbol *findBuiltIn(const TString &name, int shaderVersion) const;
-    
+
     TSymbolTableLevel *getOuterLevel()
     {
         assert(currentLevel() >= 1);
