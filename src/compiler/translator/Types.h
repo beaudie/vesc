@@ -120,6 +120,7 @@ class TStructure : public TFieldListCollection
     bool containsArrays() const;
     bool containsType(TBasicType t) const;
     bool containsSamplers() const;
+    bool containsImages() const;
 
     void createSamplerSymbols(const TString &structName,
                               const TString &structAPIName,
@@ -235,10 +236,18 @@ class TType
   public:
     POOL_ALLOCATOR_NEW_DELETE();
     TType()
-        : type(EbtVoid), precision(EbpUndefined), qualifier(EvqGlobal), invariant(false),
+        : type(EbtVoid),
+          precision(EbpUndefined),
+          qualifier(EvqGlobal),
+          invariant(false),
+          memoryQualifier(TMemoryQualifier::create()),
           layoutQualifier(TLayoutQualifier::create()),
-          primarySize(0), secondarySize(0), array(false), arraySize(0),
-          interfaceBlock(nullptr), structure(nullptr)
+          primarySize(0),
+          secondarySize(0),
+          array(false),
+          arraySize(0),
+          interfaceBlock(nullptr),
+          structure(nullptr)
     {
     }
     explicit TType(TBasicType t, unsigned char ps = 1, unsigned char ss = 1)
@@ -246,6 +255,7 @@ class TType
           precision(EbpUndefined),
           qualifier(EvqGlobal),
           invariant(false),
+          memoryQualifier(TMemoryQualifier::create()),
           layoutQualifier(TLayoutQualifier::create()),
           primarySize(ps),
           secondarySize(ss),
@@ -255,12 +265,24 @@ class TType
           structure(0)
     {
     }
-    TType(TBasicType t, TPrecision p, TQualifier q = EvqTemporary,
-          unsigned char ps = 1, unsigned char ss = 1, bool a = false)
-        : type(t), precision(p), qualifier(q), invariant(false),
+    TType(TBasicType t,
+          TPrecision p,
+          TQualifier q     = EvqTemporary,
+          unsigned char ps = 1,
+          unsigned char ss = 1,
+          bool a           = false)
+        : type(t),
+          precision(p),
+          qualifier(q),
+          invariant(false),
+          memoryQualifier(TMemoryQualifier::create()),
           layoutQualifier(TLayoutQualifier::create()),
-          primarySize(ps), secondarySize(ss), array(a), arraySize(0),
-          interfaceBlock(0), structure(0)
+          primarySize(ps),
+          secondarySize(ss),
+          array(a),
+          arraySize(0),
+          interfaceBlock(0),
+          structure(0)
     {
     }
     explicit TType(const TPublicType &p);
@@ -269,6 +291,7 @@ class TType
           precision(p),
           qualifier(EvqTemporary),
           invariant(false),
+          memoryQualifier(TMemoryQualifier::create()),
           layoutQualifier(TLayoutQualifier::create()),
           primarySize(1),
           secondarySize(1),
@@ -278,12 +301,22 @@ class TType
           structure(userDef)
     {
     }
-    TType(TInterfaceBlock *interfaceBlockIn, TQualifier qualifierIn,
-          TLayoutQualifier layoutQualifierIn, int arraySizeIn)
-        : type(EbtInterfaceBlock), precision(EbpUndefined), qualifier(qualifierIn),
-          invariant(false), layoutQualifier(layoutQualifierIn),
-          primarySize(1), secondarySize(1), array(arraySizeIn > 0), arraySize(arraySizeIn),
-          interfaceBlock(interfaceBlockIn), structure(0)
+    TType(TInterfaceBlock *interfaceBlockIn,
+          TQualifier qualifierIn,
+          TLayoutQualifier layoutQualifierIn,
+          int arraySizeIn)
+        : type(EbtInterfaceBlock),
+          precision(EbpUndefined),
+          qualifier(qualifierIn),
+          invariant(false),
+          memoryQualifier(TMemoryQualifier::create()),
+          layoutQualifier(layoutQualifierIn),
+          primarySize(1),
+          secondarySize(1),
+          array(arraySizeIn > 0),
+          arraySize(arraySizeIn),
+          interfaceBlock(interfaceBlockIn),
+          structure(0)
     {
     }
 
@@ -327,6 +360,9 @@ class TType
     }
 
     void setInvariant(bool i) { invariant = i; }
+
+    TMemoryQualifier getMemoryQualifier() const { return memoryQualifier; }
+    void setMemoryQualifier(const TMemoryQualifier &mq) { memoryQualifier = mq; }
 
     TLayoutQualifier getLayoutQualifier() const
     {
@@ -553,6 +589,11 @@ class TType
         return structure ? structure->containsSamplers() : false;
     }
 
+    bool isStructureContainingImages() const
+    {
+        return structure ? structure->containsImages() : false;
+    }
+
     void createSamplerSymbols(const TString &structName,
                               const TString &structAPIName,
                               const unsigned int arrayOfStructsSize,
@@ -579,6 +620,7 @@ class TType
     TPrecision precision;
     TQualifier qualifier;
     bool invariant;
+    TMemoryQualifier memoryQualifier;
     TLayoutQualifier layoutQualifier;
     unsigned char primarySize; // size of vector or cols matrix
     unsigned char secondarySize; // rows of a matrix
@@ -603,6 +645,7 @@ struct TTypeSpecifierNonArray
     unsigned char secondarySize;        // rows of matrix
     TType *userDef;
     TSourceLoc line;
+    TMemoryQualifier memoryQualifier;
 
     // true if the type was defined by a struct specifier rather than a reference to a type name.
     bool isStructSpecifier;
@@ -615,6 +658,7 @@ struct TTypeSpecifierNonArray
         userDef           = nullptr;
         line = ln;
         isStructSpecifier = false;
+        memoryQualifier   = TMemoryQualifier::create();
     }
 
     void setAggregate(unsigned char size)
@@ -647,6 +691,7 @@ struct TPublicType
 {
     TTypeSpecifierNonArray typeSpecifierNonArray;
     TLayoutQualifier layoutQualifier;
+    TMemoryQualifier memoryQualifier;
     TQualifier qualifier;
     bool invariant;
     TPrecision precision;
@@ -657,6 +702,7 @@ struct TPublicType
     {
         typeSpecifierNonArray = typeSpecifier;
         layoutQualifier       = TLayoutQualifier::create();
+        memoryQualifier       = TMemoryQualifier::create();
         qualifier             = q;
         invariant             = false;
         precision             = EbpUndefined;

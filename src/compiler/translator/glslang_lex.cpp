@@ -453,46 +453,46 @@ static yyconst flex_int16_t yy_accept[820] =
       165,  166,  177,   32,  177,  156,   26,  167,  168,  169,
         2,  161,  162,  163,  177,  177,  177,   25,  159,  177,
       177,  177,   50,   51,   52,  177,  177,  177,  177,  177,
-      177,  177,  177,  177,  177,  177,   86,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,   98,  177,  177,  177,
 
       177,  177,  177,  177,  153,  177,  177,  177,  177,  177,
       177,  177,  177,  177,  177,  177,  138,  177,  177,  176,
-       56,   57,   58,  177,  177,   14,  177,   91,  177,  177,
-      177,  177,   89,  177,  177,  177,  154,  149,   92,  177,
+       56,   57,   58,  177,  177,   14,  177,  103,  177,  177,
+      177,  177,  101,  177,  177,  177,  154,  149,  104,  177,
       177,  177,  177,  177,  177,  144,  177,  177,  177,   78,
        38,   41,   43,   42,   39,   45,   44,   46,   40,  177,
       177,  177,  177,  160,  135,  177,  177,  147,  177,  177,
-      177,   34,   87,  173,   22,  148,   77,  177,  158,   17,
+      177,   34,   99,  173,   22,  148,   77,  177,  158,   17,
       177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
       177,  177,  177,  177,   19,   33,  177,  177,  177,  177,
 
-      177,  177,   93,   94,   95,  177,  177,  177,  177,  177,
+      177,  177,  105,   79,   85,  177,  177,  177,  177,  177,
         3,  177,  177,  177,  177,  177,  177,  177,  177,  177,
       177,  177,  140,  177,  177,  177,  177,  177,    8,  177,
-      177,    9,  177,  177,  177,  177,   20,   79,   11,  150,
-       97,   98,   99,  177,  177,  177,  177,  177,  177,  177,
-      177,  177,  177,  177,  177,  145,  177,  177,  177,   81,
-       83,   80,  177,  177,  177,  177,  177,  177,  177,  141,
-      101,  102,  103,  177,  177,  157,  177,  146,  177,  177,
+      177,    9,  177,  177,  177,  177,   20,   93,   11,  150,
+      106,   80,   87,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  145,  177,  177,  177,   91,
+       95,   94,  177,  177,  177,  177,  177,  177,  177,  141,
+      107,   81,   86,  177,  177,  157,  177,  146,  177,  177,
         6,  177,  177,  177,  177,  177,  177,  177,  177,  177,
-       96,  151,    1,  177,  177,  177,  177,  177,  175,  177,
+       90,  151,    1,  177,  177,  177,  177,  177,  175,  177,
 
-       90,    5,  170,   59,   62,  177,  177,  177,  177,  177,
-      177,  177,  177,  177,  177,  177,  177,  177,   82,  177,
-      177,  177,  177,  100,  177,  177,  177,  177,  177,  120,
+      102,    5,  170,   59,   62,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  177,   92,  177,
+      177,  177,  177,   88,  177,  177,  177,  177,  177,  120,
        66,   67,  177,  177,  177,  177,  177,  177,  177,  177,
-      177,  177,  177,  177,  177,   88,  177,  177,  177,  104,
-      122,   70,   71,  177,  177,   84,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  100,  177,  177,  177,   89,
+      122,   70,   71,  177,  177,   96,  177,  177,  177,  177,
       177,  177,  177,  115,  177,  177,  177,  177,  177,  177,
       177,  177,  177,  177,  129,  177,  177,  177,  177,   60,
       177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
-      177,  177,  116,  105,  177,  106,  177,  177,  177,  130,
+      177,  177,  116,  108,  177,   82,  177,  177,  177,  130,
 
       177,  177,   68,  177,  177,  177,  177,  177,  177,  177,
       177,  177,  177,  177,  177,  177,  117,  177,  177,  131,
-      177,  177,   72,  107,  108,  177,  111,  177,  112,  177,
-      177,  177,  177,  177,   85,  177,  177,  177,  177,   64,
-      177,   63,  126,  177,  177,  109,  110,  177,  177,  177,
+      177,  177,   72,  109,   83,  177,  111,  177,  112,  177,
+      177,  177,  177,  177,   97,  177,  177,  177,  177,   64,
+      177,   63,  126,  177,  177,  110,   84,  177,  177,  177,
       177,  177,  177,  177,  177,  177,  177,  124,  127,  118,
       177,   65,  177,  177,  177,  177,  177,  177,  177,  177,
       125,  128,  177,  177,  121,   69,  177,  177,  171,  177,
@@ -1054,6 +1054,7 @@ static int reserved_word(yyscan_t yyscanner);
 static int ES2_reserved_ES3_keyword(TParseContext *context, int token);
 static int ES2_keyword_ES3_reserved(TParseContext *context, int token);
 static int ES2_ident_ES3_keyword(TParseContext *context, int token);
+static int ES2_ident_ES3_reserved_ES3_1_keyword(TParseContext *context, int token);
 static int uint_constant(TParseContext *context);
 static int int_constant(TParseContext *context);
 static int float_constant(yyscan_t yyscanner);
@@ -1700,21 +1701,63 @@ case 78:
 YY_RULE_SETUP
 { return ES2_ident_ES3_keyword(context, LAYOUT); }
 	YY_BREAK
-/* Reserved keywords for GLSL ES 3.00 that are not reserved for GLSL ES 1.00 */
 case 79:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IMAGE2D); }
+	YY_BREAK
 case 80:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IIMAGE2D); }
+	YY_BREAK
 case 81:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, UIMAGE2D); }
+	YY_BREAK
 case 82:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IMAGE2DARRAY); }
+	YY_BREAK
 case 83:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IIMAGE2DARRAY); }
+	YY_BREAK
 case 84:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, UIMAGE2DARRAY); }
+	YY_BREAK
 case 85:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IMAGE3D); }
+	YY_BREAK
 case 86:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, UIMAGE3D); }
+	YY_BREAK
 case 87:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IIMAGE3D); }
+	YY_BREAK
 case 88:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IIMAGECUBE); }
+	YY_BREAK
 case 89:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, UIMAGECUBE); }
+	YY_BREAK
 case 90:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IMAGECUBE); }
+	YY_BREAK
 case 91:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, READONLY); }
+	YY_BREAK
 case 92:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, WRITEONLY); }
+	YY_BREAK
+/* Reserved keywords for GLSL ES 3.00 that are not reserved for GLSL ES 1.00 */
 case 93:
 case 94:
 case 95:
@@ -1758,10 +1801,10 @@ case 132:
 case 133:
 case 134:
 YY_RULE_SETUP
-{ 
+{
     if (context->getShaderVersion() < 300) {
-		yylval->lex.string = NewPoolTString(yytext); 
-	    return check_type(yyscanner); 
+		yylval->lex.string = NewPoolTString(yytext);
+	    return check_type(yyscanner);
 	}
 	return reserved_word(yyscanner);
 }
@@ -1827,7 +1870,7 @@ YY_RULE_SETUP
 case 177:
 YY_RULE_SETUP
 {
-   yylval->lex.string = NewPoolTString(yytext); 
+   yylval->lex.string = NewPoolTString(yytext);
    return check_type(yyscanner);
 }
 	YY_BREAK
@@ -3257,7 +3300,7 @@ yy_size_t string_input(char* buf, yy_size_t max_size, yyscan_t yyscanner) {
 
 int check_type(yyscan_t yyscanner) {
     struct yyguts_t* yyg = (struct yyguts_t*) yyscanner;
-    
+
     int token = IDENTIFIER;
     TSymbol* symbol = yyextra->symbolTable.find(yytext, yyextra->getShaderVersion());
     if (symbol && symbol->isVariable()) {
@@ -3294,6 +3337,24 @@ int ES2_keyword_ES3_reserved(TParseContext *context, int token)
     yyscan_t yyscanner = (yyscan_t) context->getScanner();
 
     if (context->getShaderVersion() >= 300)
+    {
+        return reserved_word(yyscanner);
+    }
+
+    return token;
+}
+
+int ES2_ident_ES3_reserved_ES3_1_keyword(TParseContext *context, int token)
+{
+    struct yyguts_t* yyg = (struct yyguts_t*) context->getScanner();
+    yyscan_t yyscanner = (yyscan_t) context->getScanner();
+
+    if (context->getShaderVersion() < 300)
+    {
+        yylval->lex.string = NewPoolTString(yytext);
+        return check_type(yyscanner);
+    }
+    else if (context->getShaderVersion() == 300)
     {
         return reserved_word(yyscanner);
     }
@@ -3389,7 +3450,7 @@ int glslang_initialize(TParseContext* context) {
 int glslang_finalize(TParseContext* context) {
     yyscan_t scanner = context->getScanner();
     if (scanner == NULL) return 0;
-    
+
     context->setScanner(NULL);
     yylex_destroy(scanner);
 
