@@ -133,47 +133,6 @@ format_entry_template = """{space}{{
 {space}}}
 """
 
-def get_component_type(format_id):
-    if "SNORM" in format_id:
-        return "snorm"
-    elif "UNORM" in format_id:
-        return "unorm"
-    elif "FLOAT" in format_id:
-        return "float"
-    elif "UINT" in format_id:
-        return "uint"
-    elif "SINT" in format_id:
-        return "int"
-    elif format_id == "NONE":
-        return "none"
-    elif "SRGB" in format_id:
-        return "unorm"
-    else:
-        raise ValueError("Unknown component type for " + format_id)
-
-def get_channel_tokens(format_id):
-    r = re.compile(r'([ABDGLRS][\d]+)')
-    return filter(r.match, r.split(format_id))
-
-def get_channels(format_id):
-    channels = ''
-    tokens = get_channel_tokens(format_id)
-    if len(tokens) == 0:
-        return None
-    for token in tokens:
-        channels += token[0].lower()
-
-    return channels
-
-def get_bits(format_id):
-    bits = {}
-    tokens = get_channel_tokens(format_id)
-    if len(tokens) == 0:
-        return None
-    for token in tokens:
-        bits[token[0]] = int(token[1:])
-    return bits
-
 def json_to_table_data(format_id, json, angle_to_gl):
 
     table_data = ""
@@ -193,13 +152,13 @@ def json_to_table_data(format_id, json, angle_to_gl):
         parsed["fboImplementationInternalFormat"] = parsed["glInternalFormat"]
 
     if "componentType" not in parsed:
-        parsed["componentType"] = get_component_type(format_id)
+        parsed["componentType"] = angle_format.get_component_type(format_id)
 
     if "channels" not in parsed:
-        parsed["channels"] = get_channels(format_id)
+        parsed["channels"] = angle_format.get_channels(format_id)
 
     if "bits" not in parsed:
-        parsed["bits"] = get_bits(format_id)
+        parsed["bits"] = angle_format.get_bits(format_id)
 
     # Derived values.
     parsed["mipGenerationFunction"] = get_mip_generation_function(parsed)
