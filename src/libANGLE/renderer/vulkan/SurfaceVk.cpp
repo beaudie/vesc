@@ -11,6 +11,7 @@
 
 #include "common/debug.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
+#include "libANGLE/renderer/vulkan/Format.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
 namespace rx
@@ -19,10 +20,10 @@ namespace rx
 namespace
 {
 
-VkFormat GetVkFormatFromConfig(const egl::Config &config)
+const vk::Format &GetVkFormatFromConfig(const egl::Config &config)
 {
     // TODO(jmadill): Properly handle format interpretation.
-    return VK_FORMAT_B8G8R8A8_UNORM;
+    return vk::Format::Get(GL_RGBA8);
 }
 
 }  // namespace
@@ -237,7 +238,7 @@ vk::Error WindowSurfaceVk::initializeImpl()
         preTransform = surfaceCaps.currentTransform;
     }
 
-    VkFormat configSurfaceFormat = GetVkFormatFromConfig(mConfig);
+    const vk::Format &configSurfaceFormat = GetVkFormatFromConfig(mConfig);
 
     uint32_t surfaceFormatCount = 0;
     ANGLE_VK_TRY(vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, mSurface, &surfaceFormatCount,
@@ -256,7 +257,7 @@ vk::Error WindowSurfaceVk::initializeImpl()
         bool foundFormat = false;
         for (const auto &surfaceFormat : surfaceFormats)
         {
-            if (surfaceFormat.format == configSurfaceFormat)
+            if (surfaceFormat.format == configSurfaceFormat.native)
             {
                 foundFormat = true;
                 break;
@@ -272,7 +273,7 @@ vk::Error WindowSurfaceVk::initializeImpl()
     swapchainInfo.flags                    = 0;
     swapchainInfo.surface                  = mSurface;
     swapchainInfo.minImageCount            = minImageCount;
-    swapchainInfo.imageFormat              = configSurfaceFormat;
+    swapchainInfo.imageFormat              = configSurfaceFormat.native;
     swapchainInfo.imageColorSpace          = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
     swapchainInfo.imageExtent.width        = mWidth;
     swapchainInfo.imageExtent.height       = mHeight;
@@ -309,7 +310,7 @@ vk::Error WindowSurfaceVk::initializeImpl()
         imageViewInfo.flags                           = 0;
         imageViewInfo.image                           = swapchainImage;
         imageViewInfo.viewType                        = VK_IMAGE_VIEW_TYPE_2D;
-        imageViewInfo.format                          = configSurfaceFormat;
+        imageViewInfo.format                          = configSurfaceFormat.native;
         imageViewInfo.components.r                    = VK_COMPONENT_SWIZZLE_R;
         imageViewInfo.components.g                    = VK_COMPONENT_SWIZZLE_G;
         imageViewInfo.components.b                    = VK_COMPONENT_SWIZZLE_B;
