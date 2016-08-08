@@ -278,7 +278,7 @@ postfix_expression
 
 integer_expression
     : expression {
-        context->integerErrorCheck($1, "[]");
+        context->checkIsScalarInteger($1, "[]");
         $$ = $1;
     }
     ;
@@ -357,13 +357,13 @@ function_identifier
         $$ = context->addConstructorFunc($1);
     }
     | IDENTIFIER {
-        context->reservedErrorCheck(@1, *$1.string);
+        context->checkIsNotReserved(@1, *$1.string);
         const TType *type = TCache::getType(EbtVoid, EbpUndefined);
         TFunction *function = new TFunction($1.string, type);
         $$ = function;
     }
     | FIELD_SELECTION {
-        context->reservedErrorCheck(@1, *$1.string);
+        context->checkIsNotReserved(@1, *$1.string);
         const TType *type = TCache::getType(EbtVoid, EbpUndefined);
         TFunction *function = new TFunction($1.string, type);
         $$ = function;
@@ -517,7 +517,7 @@ conditional_expression
 assignment_expression
     : conditional_expression { $$ = $1; }
     | unary_expression assignment_operator assignment_expression {
-        context->lValueErrorCheck(@2, "assign", $1);
+        context->checkCanBeLValue(@2, "assign", $1);
         $$ = context->addAssign($2.op, $1, $3, @2);
     }
     ;
@@ -565,7 +565,7 @@ expression
 
 constant_expression
     : conditional_expression {
-        context->constErrorCheck($1);
+        context->checkIsConst($1);
         $$ = $1;
     }
     ;
@@ -672,18 +672,17 @@ parameter_declarator
         if ($1.type == EbtVoid) {
             context->error(@2, "illegal use of type 'void'", $2.string->c_str());
         }
-        context->reservedErrorCheck(@2, *$2.string);
+        context->checkIsNotReserved(@2, *$2.string);
         TParameter param = {$2.string, new TType($1)};
         $$.param = param;
     }
     | type_specifier identifier LEFT_BRACKET constant_expression RIGHT_BRACKET {
         // Check that we can make an array out of this type
-        context->arrayTypeErrorCheck(@3, $1);
+        context->checkIsValidTypeForArray(@3, $1);
 
-        context->reservedErrorCheck(@2, *$2.string);
+        context->checkIsNotReserved(@2, *$2.string);
 
-        int size;
-        context->arraySizeErrorCheck(@3, $4, size);
+        unsigned int size = context->checkIsValidArraySize(@3, $4);
 
         $1.setArraySize(size);
 
@@ -704,24 +703,24 @@ parameter_declaration
     //
     : parameter_type_qualifier parameter_qualifier parameter_declarator {
         $$ = $3;
-        context->paramErrorCheck(@3, $1, $2, $$.param.type);
+        context->checkIsParameterQualifierValid(@3, $1, $2, $$.param.type);
     }
     | parameter_qualifier parameter_declarator {
         $$ = $2;
-        context->parameterSamplerErrorCheck(@2, $1, *$2.param.type);
-        context->paramErrorCheck(@2, EvqTemporary, $1, $$.param.type);
+        context->checkOutParameterIsNotSampler(@2, $1, *$2.param.type);
+        context->checkIsParameterQualifierValid(@2, EvqTemporary, $1, $$.param.type);
     }
     //
     // Only type
     //
     | parameter_type_qualifier parameter_qualifier parameter_type_specifier {
         $$ = $3;
-        context->paramErrorCheck(@3, $1, $2, $$.param.type);
+        context->checkIsParameterQualifierValid(@3, $1, $2, $$.param.type);
     }
     | parameter_qualifier parameter_type_specifier {
         $$ = $2;
-        context->parameterSamplerErrorCheck(@2, $1, *$2.param.type);
-        context->paramErrorCheck(@2, EvqTemporary, $1, $$.param.type);
+        context->checkOutParameterIsNotSampler(@2, $1, *$2.param.type);
+        context->checkIsParameterQualifierValid(@2, EvqTemporary, $1, $$.param.type);
     }
     ;
 
@@ -843,12 +842,12 @@ type_qualifier
     : ATTRIBUTE {
         VERTEX_ONLY("attribute", @1);
         ES2_ONLY("attribute", @1);
-        context->globalErrorCheck(@1, context->symbolTable.atGlobalLevel(), "attribute");
+        context->checkIsAtGlobalLevel(@1, "attribute");
         $$.setBasic(EbtVoid, EvqAttribute, @1);
     }
     | VARYING {
         ES2_ONLY("varying", @1);
-        context->globalErrorCheck(@1, context->symbolTable.atGlobalLevel(), "varying");
+        context->checkIsAtGlobalLevel(@1, "varying");
         if (context->getShaderType() == GL_VERTEX_SHADER)
             $$.setBasic(EbtVoid, EvqVaryingOut, @1);
         else
@@ -856,7 +855,7 @@ type_qualifier
     }
     | INVARIANT VARYING {
         ES2_ONLY("varying", @1);
-        context->globalErrorCheck(@1, context->symbolTable.atGlobalLevel(), "invariant varying");
+        context->checkIsAtGlobalLevel(@1, "invariant varying");
         if (context->getShaderType() == GL_VERTEX_SHADER)
             $$.setBasic(EbtVoid, EvqVaryingOut, @1);
         else
@@ -935,7 +934,7 @@ storage_qualifier
         $$.qualifier = (context->getShaderType() == GL_FRAGMENT_SHADER) ? EvqFragmentOut : EvqCentroidOut;
     }
     | UNIFORM {
-        context->globalErrorCheck(@1, context->symbolTable.atGlobalLevel(), "uniform");
+        context->checkIsAtGlobalLevel(@1, "uniform");
         $$.qualifier = EvqUniform;
     }
     ;
@@ -946,7 +945,7 @@ type_specifier
 
         if ($$.precision == EbpUndefined) {
             $$.precision = context->symbolTable.getDefaultPrecision($1.type);
-            context->precisionErrorCheck(@1, $$.precision, $1.type);
+            context->checkPrecisionSpecified(@1, $$.precision, $1.type);
         }
     }
     | precision_qualifier type_specifier_no_prec {
@@ -1011,10 +1010,9 @@ type_specifier_no_prec
     | type_specifier_nonarray LEFT_BRACKET constant_expression RIGHT_BRACKET {
         $$ = $1;
 
-        if (!context->arrayTypeErrorCheck(@2, $1))
+        if (!context->checkIsValidTypeForArray(@2, $1))
         {
-            int size;
-            context->arraySizeErrorCheck(@2, $3, size);
+            unsigned int size = context->checkIsValidArraySize(@2, $3);
             $$.setArraySize(size);
         }
     }
@@ -1288,17 +1286,16 @@ struct_declarator_list
 
 struct_declarator
     : identifier {
-        context->reservedErrorCheck(@1, *$1.string);
+        context->checkIsNotReserved(@1, *$1.string);
 
         TType* type = new TType(EbtVoid, EbpUndefined);
         $$ = new TField(type, $1.string, @1);
     }
     | identifier LEFT_BRACKET constant_expression RIGHT_BRACKET {
-        context->reservedErrorCheck(@1, *$1.string);
+        context->checkIsNotReserved(@1, *$1.string);
 
         TType* type = new TType(EbtVoid, EbpUndefined);
-        int size;
-        context->arraySizeErrorCheck(@3, $3, size);
+        unsigned int size = context->checkIsValidArraySize(@3, $3);
         type->setArraySize(size);
 
         $$ = new TField(type, $1.string, @1);
@@ -1381,7 +1378,7 @@ expression_statement
 
 selection_statement
     : IF LEFT_PAREN expression RIGHT_PAREN selection_rest_statement {
-        context->boolErrorCheck(@1, $3);
+        context->checkIsScalarBool(@1, $3);
         $$ = context->intermediate.addSelection($3, $5, @1);
     }
     ;
@@ -1417,11 +1414,11 @@ condition
     // In 1996 c++ draft, conditions can include single declarations
     : expression {
         $$ = $1;
-        context->boolErrorCheck($1->getLine(), $1);
+        context->checkIsScalarBool($1->getLine(), $1);
     }
     | fully_specified_type identifier EQUAL initializer {
         TIntermNode *intermNode;
-        context->boolErrorCheck(@2, $1);
+        context->checkIsScalarBool(@2, $1);
 
         if (!context->executeInitializer(@2, *$2.string, $1, $4, &intermNode))
             $$ = $4;
@@ -1438,7 +1435,7 @@ iteration_statement
         context->decrLoopNestingLevel();
     }
     | DO { context->incrLoopNestingLevel(); } statement_with_scope WHILE LEFT_PAREN expression RIGHT_PAREN SEMICOLON {
-        context->boolErrorCheck(@8, $6);
+        context->checkIsScalarBool(@8, $6);
 
         $$ = context->intermediate.addLoop(ELoopDoWhile, 0, $6, 0, $3, @4);
         context->decrLoopNestingLevel();
