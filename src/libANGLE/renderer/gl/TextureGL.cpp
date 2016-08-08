@@ -456,6 +456,43 @@ gl::Error TextureGL::copySubImage(GLenum target, size_t level, const gl::Offset 
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error TextureGL::copyTexture(GLenum internalFormat,
+                                 GLenum type,
+                                 bool unpackFlipY,
+                                 bool unpackPremultiplyAlpha,
+                                 bool unpackUnmultiplyAlpha,
+                                 const gl::Texture *source)
+{
+    const TextureGL *sourceTextureGL = GetImplAs<TextureGL>(source);
+
+    const gl::ImageDesc &sourceImageDesc =
+        sourceTextureGL->mState.getImageDesc(source->getTarget(), 0);
+
+    return mBlitter->copyTexture(sourceTextureGL->mTextureID, sourceTextureGL->mState.mTarget,
+                                 sourceImageDesc.format.format, mTextureID, mState.mTarget,
+                                 sourceImageDesc.format.format, sourceImageDesc.size, unpackFlipY,
+                                 unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
+}
+
+gl::Error TextureGL::copySubTexture(const gl::Offset &destOffset,
+                                    const gl::Rectangle &sourceArea,
+                                    bool unpackFlipY,
+                                    bool unpackPremultiplyAlpha,
+                                    bool unpackUnmultiplyAlpha,
+                                    const gl::Texture *source)
+{
+    const TextureGL *sourceTextureGL = GetImplAs<TextureGL>(source);
+
+    const gl::Format &sourceFormat =
+        sourceTextureGL->mState.getImageDesc(source->getTarget(), 0).format;
+    const gl::Format &destFormat = mState.getImageDesc(mState.mTarget, 0).format;
+
+    return mBlitter->copySubTexture(sourceTextureGL->mTextureID, sourceTextureGL->mState.mTarget,
+                                    sourceFormat.format, sourceArea, mTextureID, mState.mTarget,
+                                    destFormat.format, destOffset, unpackFlipY,
+                                    unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
+}
+
 gl::Error TextureGL::setStorage(GLenum target, size_t levels, GLenum internalFormat, const gl::Extents &size)
 {
     // TODO: emulate texture storage with TexImage calls if on GL version <4.2 or the

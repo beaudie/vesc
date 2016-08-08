@@ -52,6 +52,29 @@ class BlitGL : public angle::NonCopyable
                                                   const gl::Rectangle &sourceArea,
                                                   const gl::Framebuffer *source);
 
+    gl::Error copyTexture(GLuint sourceTexture,
+                          GLenum sourceTarget,
+                          GLenum sourceInternalFormat,
+                          GLuint destTexture,
+                          GLenum destTarget,
+                          GLenum destInternalFormat,
+                          const gl::Extents &size,
+                          bool unpackFlipY,
+                          bool unpackPremultiplyAlpha,
+                          bool unpackUnmultiplyAlpha);
+
+    gl::Error copySubTexture(GLuint sourceTexture,
+                             GLenum sourceTarget,
+                             GLenum sourceInternalFormat,
+                             const gl::Rectangle &sourceArea,
+                             GLuint destTexture,
+                             GLenum destTarget,
+                             GLenum destInternalFormat,
+                             const gl::Offset &destOffset,
+                             bool unpackFlipY,
+                             bool unpackPremultiplyAlpha,
+                             bool unpackUnmultiplyAlpha);
+
     gl::Error initializeResources();
 
   private:

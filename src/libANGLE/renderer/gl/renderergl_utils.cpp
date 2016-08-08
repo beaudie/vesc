@@ -847,6 +847,7 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
         functions->hasGLExtension("GL_NV_framebuffer_mixed_samples") ||
         functions->hasGLESExtension("GL_NV_framebuffer_mixed_samples");
 
+    extensions->copyTexture = true;
 
     // NV_path_rendering
     // We also need interface query which is available in

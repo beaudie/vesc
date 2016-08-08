@@ -198,6 +198,87 @@ gl::Error BlitGL::copySubImageToLUMAWorkaroundTexture(GLuint texture,
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error BlitGL::copyTexture(GLuint sourceTexture,
+                              GLenum sourceTarget,
+                              GLenum sourceInternalFormat,
+                              GLuint destTexture,
+                              GLenum destTarget,
+                              GLenum destInternalFormat,
+                              const gl::Extents &size,
+                              bool unpackFlipY,
+                              bool unpackPremultiplyAlpha,
+                              bool unpackUnmultiplyAlpha)
+{
+    ANGLE_TRY(initializeResources());
+
+    bool premultiplyAlphaChange = unpackPremultiplyAlpha != unpackUnmultiplyAlpha;
+
+    bool sourceFormatContainSupersetOfDestFormat =
+        (sourceInternalFormat == destInternalFormat && sourceInternalFormat != GL_BGRA_EXT) ||
+        (sourceInternalFormat == GL_RGBA && destInternalFormat == GL_RGB);
+
+    if (sourceTarget == GL_TEXTURE_2D && destTarget == GL_TEXTURE_2D && !unpackFlipY &&
+        !premultiplyAlphaChange && sourceFormatContainSupersetOfDestFormat)
+    {
+
+        mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+        mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                         sourceTexture, 0);
+
+        mStateManager->bindTexture(destTarget, destTexture);
+
+        mFunctions->copyTexImage2D(destTarget, 0, destInternalFormat, 0, 0, size.width, size.height,
+                                   0);
+
+        return gl::NoError();
+    }
+
+    UNIMPLEMENTED();
+
+    return gl::NoError();
+}
+
+gl::Error BlitGL::copySubTexture(GLuint sourceTexture,
+                                 GLenum sourceTarget,
+                                 GLenum sourceInternalFormat,
+                                 const gl::Rectangle &sourceArea,
+                                 GLuint destTexture,
+                                 GLenum destTarget,
+                                 GLenum destInternalFormat,
+                                 const gl::Offset &destOffset,
+                                 bool unpackFlipY,
+                                 bool unpackPremultiplyAlpha,
+                                 bool unpackUnmultiplyAlpha)
+{
+    ANGLE_TRY(initializeResources());
+
+    bool premultiplyAlphaChange = unpackPremultiplyAlpha != unpackUnmultiplyAlpha;
+
+    bool sourceFormatContainSupersetOfDestFormat =
+        (sourceInternalFormat == destInternalFormat && sourceInternalFormat != GL_BGRA_EXT) ||
+        (sourceInternalFormat == GL_RGBA && destInternalFormat == GL_RGB);
+
+    if (sourceTarget == GL_TEXTURE_2D && destTarget == GL_TEXTURE_2D && !unpackFlipY &&
+        !premultiplyAlphaChange && sourceFormatContainSupersetOfDestFormat)
+    {
+
+        mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+        mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                         sourceTexture, 0);
+
+        mStateManager->bindTexture(destTarget, destTexture);
+
+        mFunctions->copyTexSubImage2D(destTarget, 0, destOffset.x, destOffset.y, sourceArea.x,
+                                      sourceArea.y, sourceArea.width, sourceArea.height);
+
+        return gl::NoError();
+    }
+
+    UNIMPLEMENTED();
+
+    return gl::NoError();
+}
+
 gl::Error BlitGL::initializeResources()
 {
     if (mBlitProgram == 0)
