@@ -603,12 +603,17 @@ void StateManagerGL::endQuery(GLenum type, GLuint query)
 
 void StateManagerGL::onBeginQuery(QueryGL *query)
 {
-    mCurrentQueries.insert(query);
+    ASSERT(mQueries.find(query->getType()) == mQueries.end());
+    mCurrentQueries.insert(std::make_pair(query->getType(), query));
 }
 
 void StateManagerGL::onDeleteQueryObject(QueryGL *query)
 {
-    mCurrentQueries.erase(query);
+    auto iter = mCurrentQueries.find(query->getType());
+    if (iter != mCurrentQueries.end() && iter->second == query)
+    {
+        mCurrentQueries.erase(iter);
+    }
 }
 
 gl::Error StateManagerGL::setDrawArraysState(const gl::ContextState &data,
@@ -670,18 +675,37 @@ void StateManagerGL::pauseTransformFeedback()
     }
 }
 
-void StateManagerGL::pauseQueries()
+void StateManagerGL::pauseAllQueries()
 {
-    for (QueryGL *prevQuery : mCurrentQueries)
+    for (auto query : mCurrentQueries)
     {
-        prevQuery->pause();
+        query.second->pause();
     }
 }
-void StateManagerGL::resumeQueries()
+
+void StateManagerGL::pauseQuery(GLenum type)
 {
-    for (QueryGL *prevQuery : mCurrentQueries)
+    auto iter = mCurrentQueries.find(type);
+    if (iter != mCurrentQueries.end())
     {
-        prevQuery->resume();
+        iter->second->pause();
+    }
+}
+
+void StateManagerGL::resumeAllQueries()
+{
+    for (auto query : mCurrentQueries)
+    {
+        query.second->resume();
+    }
+}
+
+void StateManagerGL::resumeQuery(GLenum type)
+{
+    auto iter = mCurrentQueries.find(type);
+    if (iter != mCurrentQueries.end())
+    {
+        iter->second->resume();
     }
 }
 
@@ -692,7 +716,7 @@ gl::Error StateManagerGL::onMakeCurrent(const gl::ContextState &data)
     // If the context has changed, pause the previous context's queries
     if (data.getContext() != mPrevDrawContext)
     {
-        pauseQueries();
+        pauseAllQueries();
     }
     mCurrentQueries.clear();
     mPrevDrawTransformFeedback = nullptr;
@@ -707,7 +731,7 @@ gl::Error StateManagerGL::onMakeCurrent(const gl::ContextState &data)
             QueryGL *queryGL = GetImplAs<QueryGL>(query);
             queryGL->resume();
 
-            mCurrentQueries.insert(queryGL);
+            mCurrentQueries.insert(std::make_pair(queryType, queryGL));
         }
     }
 
