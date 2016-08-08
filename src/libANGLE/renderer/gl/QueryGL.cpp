@@ -43,8 +43,18 @@ GLuint64 MergeQueryResults(GLenum type, GLuint64 currentResult, GLuint64 newResu
 namespace rx
 {
 
-QueryGL::QueryGL(GLenum type, const FunctionsGL *functions, StateManagerGL *stateManager)
-    : QueryImpl(type),
+QueryGL::QueryGL(GLenum type) : QueryImpl(type)
+{
+}
+
+QueryGL::~QueryGL()
+{
+}
+
+StandardQueryGL::StandardQueryGL(GLenum type,
+                                 const FunctionsGL *functions,
+                                 StateManagerGL *stateManager)
+    : QueryGL(type),
       mType(type),
       mFunctions(functions),
       mStateManager(stateManager),
@@ -54,7 +64,7 @@ QueryGL::QueryGL(GLenum type, const FunctionsGL *functions, StateManagerGL *stat
 {
 }
 
-QueryGL::~QueryGL()
+StandardQueryGL::~StandardQueryGL()
 {
     mStateManager->deleteQuery(mActiveQuery);
     mStateManager->onDeleteQueryObject(this);
@@ -65,19 +75,19 @@ QueryGL::~QueryGL()
     }
 }
 
-gl::Error QueryGL::begin()
+gl::Error StandardQueryGL::begin()
 {
     mResultSum = 0;
     mStateManager->onBeginQuery(this);
     return resume();
 }
 
-gl::Error QueryGL::end()
+gl::Error StandardQueryGL::end()
 {
     return pause();
 }
 
-gl::Error QueryGL::queryCounter()
+gl::Error StandardQueryGL::queryCounter()
 {
     ASSERT(mType == GL_TIMESTAMP);
 
@@ -92,7 +102,7 @@ gl::Error QueryGL::queryCounter()
 }
 
 template <typename T>
-gl::Error QueryGL::getResultBase(T *params)
+gl::Error StandardQueryGL::getResultBase(T *params)
 {
     ASSERT(mActiveQuery == 0);
 
@@ -108,27 +118,27 @@ gl::Error QueryGL::getResultBase(T *params)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error QueryGL::getResult(GLint *params)
+gl::Error StandardQueryGL::getResult(GLint *params)
 {
     return getResultBase(params);
 }
 
-gl::Error QueryGL::getResult(GLuint *params)
+gl::Error StandardQueryGL::getResult(GLuint *params)
 {
     return getResultBase(params);
 }
 
-gl::Error QueryGL::getResult(GLint64 *params)
+gl::Error StandardQueryGL::getResult(GLint64 *params)
 {
     return getResultBase(params);
 }
 
-gl::Error QueryGL::getResult(GLuint64 *params)
+gl::Error StandardQueryGL::getResult(GLuint64 *params)
 {
     return getResultBase(params);
 }
 
-gl::Error QueryGL::isResultAvailable(bool *available)
+gl::Error StandardQueryGL::isResultAvailable(bool *available)
 {
     ASSERT(mActiveQuery == 0);
 
@@ -142,7 +152,7 @@ gl::Error QueryGL::isResultAvailable(bool *available)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error QueryGL::pause()
+gl::Error StandardQueryGL::pause()
 {
     if (mActiveQuery != 0)
     {
@@ -162,7 +172,7 @@ gl::Error QueryGL::pause()
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error QueryGL::resume()
+gl::Error StandardQueryGL::resume()
 {
     if (mActiveQuery == 0)
     {
@@ -180,7 +190,7 @@ gl::Error QueryGL::resume()
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error QueryGL::flush(bool force)
+gl::Error StandardQueryGL::flush(bool force)
 {
     while (!mPendingQueries.empty())
     {
@@ -219,4 +229,108 @@ gl::Error QueryGL::flush(bool force)
     return gl::Error(GL_NO_ERROR);
 }
 
+SyncQueryGL::SyncQueryGL(GLenum type, const FunctionsGL *functions, StateManagerGL *stateManager)
+    : QueryGL(type),
+      mFunctions(functions),
+      mStateManager(stateManager),
+      mSync(nullptr),
+      mFinished(false)
+{
+    ASSERT(type == GL_COMMANDS_COMPLETED_CHROMIUM);
+}
+
+SyncQueryGL::~SyncQueryGL()
+{
+}
+
+gl::Error SyncQueryGL::begin()
+{
+    return gl::NoError();
+}
+
+gl::Error SyncQueryGL::end()
+{
+    mSync = mFunctions->fenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+    return gl::NoError();
+}
+
+gl::Error SyncQueryGL::queryCounter()
+{
+    UNREACHABLE();
+    return gl::NoError();
+}
+
+gl::Error SyncQueryGL::getResult(GLint *params)
+{
+    return getResultBase(params);
+}
+
+gl::Error SyncQueryGL::getResult(GLuint *params)
+{
+    return getResultBase(params);
+}
+
+gl::Error SyncQueryGL::getResult(GLint64 *params)
+{
+    return getResultBase(params);
+}
+
+gl::Error SyncQueryGL::getResult(GLuint64 *params)
+{
+    return getResultBase(params);
+}
+
+gl::Error SyncQueryGL::isResultAvailable(bool *available)
+{
+    ANGLE_TRY(flush(false));
+    *available = mFinished;
+    return gl::NoError();
+}
+
+gl::Error SyncQueryGL::pause()
+{
+    return gl::NoError();
+}
+
+gl::Error SyncQueryGL::resume()
+{
+    return gl::NoError();
+}
+
+gl::Error SyncQueryGL::flush(bool force)
+{
+    if (mSync == nullptr)
+    {
+        ASSERT(mFinished);
+        return gl::NoError();
+    }
+
+    if (force)
+    {
+        mFunctions->clientWaitSync(mSync, 0, 0);
+        mFinished = true;
+    }
+    else
+    {
+        GLint value = 0;
+        mFunctions->getSynciv(mSync, GL_SYNC_STATUS, 1, nullptr, &value);
+        mFinished = (value == GL_SIGNALED);
+    }
+
+    if (mFinished)
+    {
+        mFunctions->deleteSync(mSync);
+        mSync = nullptr;
+    }
+
+    return gl::NoError();
+}
+
+template <typename T>
+gl::Error SyncQueryGL::getResultBase(T *params)
+{
+    ANGLE_TRY(flush(true));
+    *params = static_cast<T>(mFinished ? GL_TRUE : GL_FALSE);
+    return gl::NoError();
+}
 }

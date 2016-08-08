@@ -848,6 +848,9 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
         functions->hasGLESExtension("GL_NV_framebuffer_mixed_samples");
 
     extensions->copyTexture = true;
+    extensions->syncQuery   = functions->isAtLeastGL(gl::Version(3, 2)) ||
+                            functions->hasGLExtension("GL_ARB_sync") ||
+                            functions->isAtLeastGLES(gl::Version(3, 0));
 
     // NV_path_rendering
     // We also need interface query which is available in
