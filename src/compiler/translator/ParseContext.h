@@ -121,40 +121,43 @@ class TParseContext : angle::NonCopyable
 
     bool parseVectorFields(const TString&, int vecSize, TVectorFields&, const TSourceLoc &line);
 
-    bool reservedErrorCheck(const TSourceLoc &line, const TString &identifier);
     void assignError(const TSourceLoc &line, const char *op, TString left, TString right);
     void unaryOpError(const TSourceLoc &line, const char *op, TString operand);
     void binaryOpError(const TSourceLoc &line, const char *op, TString left, TString right);
-    void precisionErrorCheck(const TSourceLoc &line, TPrecision precision, TBasicType type);
-    bool lValueErrorCheck(const TSourceLoc &line, const char *op, TIntermTyped*);
-    void constErrorCheck(TIntermTyped *node);
-    void integerErrorCheck(TIntermTyped *node, const char *token);
-    void globalErrorCheck(const TSourceLoc &line, bool global, const char *token);
-    bool constructorErrorCheck(const TSourceLoc &line,
-                               TIntermNode *argumentsNode,
-                               TFunction &function,
-                               TOperator op,
-                               TType *type);
-    void arraySizeErrorCheck(const TSourceLoc &line, TIntermTyped *expr, int &size);
-    bool arrayQualifierErrorCheck(const TSourceLoc &line, const TPublicType &type);
-    bool arrayTypeErrorCheck(const TSourceLoc &line, const TPublicType &type);
-    bool voidErrorCheck(const TSourceLoc &line, const TString &identifier, const TBasicType &type);
-    void boolErrorCheck(const TSourceLoc &, const TIntermTyped *);
-    void boolErrorCheck(const TSourceLoc &, const TPublicType &);
-    bool samplerErrorCheck(const TSourceLoc &line, const TPublicType &pType, const char *reason);
-    void locationDeclaratorListCheck(const TSourceLoc &line, const TPublicType &pType);
-    void parameterSamplerErrorCheck(const TSourceLoc &line,
-                                    TQualifier qualifier,
-                                    const TType &type);
-    void paramErrorCheck(const TSourceLoc &line,
-                         TQualifier qualifier,
-                         TQualifier paramQualifier,
-                         TType *type);
-    bool extensionErrorCheck(const TSourceLoc &line, const TString&);
+
+    bool checkIsNotReserved(const TSourceLoc &line, const TString &identifier);
+    void checkPrecisionSpecified(const TSourceLoc &line, TPrecision precision, TBasicType type);
+    bool checkCanBeLValue(const TSourceLoc &line, const char *op, TIntermTyped *);
+    void checkIsConst(TIntermTyped *node);
+    void checkIsScalarInteger(TIntermTyped *node, const char *token);
+    void checkIsAtGlobalLevel(const TSourceLoc &line, const char *token);
+    bool checkConstructorArguments(const TSourceLoc &line,
+                                   TIntermNode *argumentsNode,
+                                   const TFunction &function,
+                                   TOperator op,
+                                   const TType &type);
+
+    // Returns a valid array size to use.
+    unsigned int checkIsValidArraySize(const TSourceLoc &line, TIntermTyped *expr);
+    bool checkIsValidQualifierForArray(const TSourceLoc &line, const TPublicType &type);
+    bool checkIsValidTypeForArray(const TSourceLoc &line, const TPublicType &type);
+    bool checkIsNonVoid(const TSourceLoc &line, const TString &identifier, const TBasicType &type);
+    void checkIsScalarBool(const TSourceLoc &, const TIntermTyped *);
+    void checkIsScalarBool(const TSourceLoc &, const TPublicType &);
+    bool checkIsNotSampler(const TSourceLoc &line, const TPublicType &pType, const char *reason);
+    void checkDeclaratorLocationIsNotSpecified(const TSourceLoc &line, const TPublicType &pType);
+    void checkLocationIsNotSpecified(const TSourceLoc &location,
+                                     const TLayoutQualifier &layoutQualifier);
+    void checkOutParameterIsNotSampler(const TSourceLoc &line,
+                                       TQualifier qualifier,
+                                       const TType &type);
+    void checkIsParameterQualifierValid(const TSourceLoc &line,
+                                        TQualifier qualifier,
+                                        TQualifier paramQualifier,
+                                        TType *type);
+    bool checkCanUseExtension(const TSourceLoc &line, const TString &extension);
     void singleDeclarationErrorCheck(const TPublicType &publicType,
                                      const TSourceLoc &identifierLocation);
-    void layoutLocationErrorCheck(const TSourceLoc &location,
-                                  const TLayoutQualifier &layoutQualifier);
     void functionCallLValueErrorCheck(const TFunction *fnCandidate, TIntermAggregate *);
     void es3InvariantErrorCheck(const TQualifier qualifier, const TSourceLoc &invariantLocation);
     void es3InputOutputTypeCheck(const TQualifier qualifier,
@@ -255,7 +258,6 @@ class TParseContext : angle::NonCopyable
                                    const TSourceLoc &location);
     TFunction *addConstructorFunc(const TPublicType &publicType);
     TIntermTyped *addConstructor(TIntermNode *arguments,
-                                 TType *type,
                                  TOperator op,
                                  TFunction *fnCall,
                                  const TSourceLoc &line);
