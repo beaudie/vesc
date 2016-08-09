@@ -39,6 +39,7 @@
             '<(angle_path)/src/tests/gl_tests/FramebufferRenderMipmapTest.cpp',
             '<(angle_path)/src/tests/gl_tests/FramebufferTest.cpp',
             '<(angle_path)/src/tests/gl_tests/GLSLTest.cpp',
+            '<(angle_path)/src/tests/gl_tests/ImageGLES31Test.cpp',
             '<(angle_path)/src/tests/gl_tests/ImageTest.cpp',
             '<(angle_path)/src/tests/gl_tests/IncompleteTextureTest.cpp',
             '<(angle_path)/src/tests/gl_tests/IndexBufferOffsetTest.cpp',

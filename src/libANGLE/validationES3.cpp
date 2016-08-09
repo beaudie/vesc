@@ -2207,6 +2207,18 @@ bool ValidateIndexedStateQuery(ValidationContext *context, GLenum pname, GLuint 
                 return false;
             }
             break;
+        case GL_IMAGE_BINDING_ACCESS:
+        case GL_IMAGE_BINDING_FORMAT:
+        case GL_IMAGE_BINDING_NAME:
+        case GL_IMAGE_BINDING_LAYER:
+        case GL_IMAGE_BINDING_LAYERED:
+        case GL_IMAGE_BINDING_LEVEL:
+            if (index >= caps.maxImageUnits)
+            {
+                context->handleError(Error(GL_INVALID_VALUE));
+                return false;
+            }
+            break;
         default:
             context->handleError(Error(GL_INVALID_ENUM));
             return false;

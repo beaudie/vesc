@@ -1835,6 +1835,21 @@ void State::getIntegeri_v(GLenum target, GLuint index, GLint *data)
             *data = mUniformBuffers[index].id();
         }
         break;
+      case GL_IMAGE_BINDING_LEVEL:
+          *data = mImageBindings[index].level;
+          break;
+      case GL_IMAGE_BINDING_NAME:
+          *data = mImageBindings[index].texture;
+          break;
+      case GL_IMAGE_BINDING_LAYER:
+          *data = mImageBindings[index].layer;
+          break;
+      case GL_IMAGE_BINDING_FORMAT:
+          *data = mImageBindings[index].format;
+          break;
+      case GL_IMAGE_BINDING_ACCESS:
+          *data = mImageBindings[index].access;
+          break;
       default:
           UNREACHABLE();
           break;
@@ -1877,7 +1892,15 @@ void State::getInteger64i_v(GLenum target, GLuint index, GLint64 *data)
 
 void State::getBooleani_v(GLenum target, GLuint index, GLboolean *data)
 {
-    UNREACHABLE();
+    switch (target)
+    {
+        case GL_IMAGE_BINDING_LAYERED:
+            *data = mImageBindings[index].layered;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
 }
 
 bool State::hasMappedBuffer(GLenum target) const

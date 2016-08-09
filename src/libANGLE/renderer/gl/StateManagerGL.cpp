@@ -819,7 +819,7 @@ gl::Error StateManagerGL::setGenericState(const gl::ContextState &data)
             const gl::Texture *texture           = resourceManager.getTexture(imageState.texture);
             if (texture)
             {
-                const TextureGL *textureGL           = GetImplAs<TextureGL>(texture);
+                const TextureGL *textureGL = GetImplAs<TextureGL>(texture);
                 bindImageTexture(unitIndex, textureGL->getTextureID(), imageState.level,
                                  imageState.layered, imageState.layer, imageState.access,
                                  imageState.format);

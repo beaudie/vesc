@@ -2925,7 +2925,6 @@ void Context::generateMipmap(GLenum target)
     handleError(texture->generateMipmap());
 }
 
-
 void Context::copyTextureCHROMIUM(GLuint sourceId,
                                   GLuint destId,
                                   GLint internalFormat,

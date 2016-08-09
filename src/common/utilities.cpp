@@ -376,6 +376,15 @@ bool IsImageType(GLenum type)
         case GL_IMAGE_2D:
         case GL_INT_IMAGE_2D:
         case GL_UNSIGNED_INT_IMAGE_2D:
+        case GL_IMAGE_2D_ARRAY:
+        case GL_INT_IMAGE_2D_ARRAY:
+        case GL_UNSIGNED_INT_IMAGE_2D_ARRAY:
+        case GL_IMAGE_3D:
+        case GL_INT_IMAGE_3D:
+        case GL_UNSIGNED_INT_IMAGE_3D:
+        case GL_IMAGE_CUBE:
+        case GL_INT_IMAGE_CUBE:
+        case GL_UNSIGNED_INT_IMAGE_CUBE:
             return true;
     }
     return false;
@@ -428,15 +437,27 @@ GLenum SamplerTypeToTextureType(GLenum samplerType)
 
 GLenum ImageTypeToTextureType(GLenum imageType)
 {
-    switch(imageType)
+    switch (imageType)
     {
-      case GL_IMAGE_2D:
-      case GL_INT_IMAGE_2D:
-      case GL_UNSIGNED_INT_IMAGE_2D:
-          return GL_TEXTURE_2D;
-      default:
-          UNREACHABLE();
-          return 0;
+        case GL_IMAGE_2D:
+        case GL_INT_IMAGE_2D:
+        case GL_UNSIGNED_INT_IMAGE_2D:
+            return GL_TEXTURE_2D;
+        case GL_IMAGE_2D_ARRAY:
+        case GL_INT_IMAGE_2D_ARRAY:
+        case GL_UNSIGNED_INT_IMAGE_2D_ARRAY:
+            return GL_TEXTURE_2D_ARRAY;
+        case GL_IMAGE_3D:
+        case GL_INT_IMAGE_3D:
+        case GL_UNSIGNED_INT_IMAGE_3D:
+            return GL_TEXTURE_3D;
+        case GL_IMAGE_CUBE:
+        case GL_INT_IMAGE_CUBE:
+        case GL_UNSIGNED_INT_IMAGE_CUBE:
+            return GL_TEXTURE_CUBE_MAP;
+        default:
+            UNREACHABLE();
+            return 0;
     }
 }
 

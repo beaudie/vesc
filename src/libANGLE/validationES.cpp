@@ -1797,9 +1797,9 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
 
 bool ValidateProgramUniforms(ValidationContext *context)
 {
-    const State &state = context->getGLState();
+    const State &state   = context->getGLState();
     gl::Program *program = state.getProgram();
-    
+
     if (!program)
     {
         context->handleError(Error(GL_INVALID_OPERATION));
@@ -1811,18 +1811,19 @@ bool ValidateProgramUniforms(ValidationContext *context)
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;
     }
-    
+
     if (!program->validateImages(NULL, context->getCaps()))
     {
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;
     }
-    
+
     // Uniform buffer validation
-    for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
+    for (unsigned int uniformBlockIndex = 0;
+         uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
     {
         const gl::UniformBlock &uniformBlock = program->getUniformBlockByIndex(uniformBlockIndex);
-        GLuint blockBinding = program->getUniformBlockBinding(uniformBlockIndex);
+        GLuint blockBinding                  = program->getUniformBlockBinding(uniformBlockIndex);
         const OffsetBindingPointer<Buffer> &uniformBuffer =
             state.getIndexedUniformBuffer(blockBinding);
 

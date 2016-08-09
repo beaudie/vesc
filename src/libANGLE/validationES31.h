@@ -16,7 +16,7 @@ namespace gl
 class Context;
 
 bool ValidateGetBooleani_v(Context *context, GLenum target, GLuint index, GLboolean *data);
-                          
+
 bool ValidateBindImageTexture(Context *context,
                               GLuint unit,
                               GLuint texture,

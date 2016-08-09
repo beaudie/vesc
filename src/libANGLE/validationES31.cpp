@@ -89,9 +89,7 @@ bool ValidateBindImageTexture(Context *context,
             case GL_TEXTURE_CUBE_MAP:
                 break;
             default:
-                context->handleError(
-                    Error(GL_INVALID_VALUE,
-                          "invalid texture target."));
+                context->handleError(Error(GL_INVALID_VALUE, "invalid texture target."));
                 return false;
                 break;
         }
@@ -101,7 +99,7 @@ bool ValidateBindImageTexture(Context *context,
             context->handleError(Error(GL_INVALID_VALUE, "Layer cannot be negative"));
             return false;
         }
-        
+
         switch (access)
         {
             case GL_READ_ONLY:

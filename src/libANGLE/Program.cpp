@@ -1599,8 +1599,8 @@ bool Program::validateSamplers(InfoLog *infoLog, const Caps &caps)
 
 bool Program::validateImages(InfoLog *infoLog, const Caps &caps)
 {
-    for (unsigned int imageIndex = mImageUniformRange.start;
-         imageIndex < mImageUniformRange.end; ++imageIndex)
+    for (unsigned int imageIndex = mImageUniformRange.start; imageIndex < mImageUniformRange.end;
+         ++imageIndex)
     {
         const LinkedUniform &uniform = mState.mUniforms[imageIndex];
         ASSERT(uniform.isImage());
@@ -1608,13 +1608,13 @@ bool Program::validateImages(InfoLog *infoLog, const Caps &caps)
         if (!uniform.staticUse)
             continue;
 
-        //const GLuint *dataPtr = reinterpret_cast<const GLuint *>(uniform.getDataPtrToElement(0));
-        //GLenum textureType    = ImageTypeToTextureType(uniform.type);
+        // const GLuint *dataPtr = reinterpret_cast<const GLuint *>(uniform.getDataPtrToElement(0));
+        // GLenum textureType    = ImageTypeToTextureType(uniform.type);
 
         for (unsigned int arrayElement = 0; arrayElement < uniform.elementCount(); ++arrayElement)
         {
-            
-            //GLuint imageBinding = dataPtr[arrayElement];
+
+            // GLuint imageBinding = dataPtr[arrayElement];
             /*
             if (textureUnit >= caps.maxCombinedTextureImageUnits)
             {
@@ -2646,7 +2646,7 @@ bool Program::flattenUniformsAndCheckCapsForShader(const gl::Shader &shader,
         infoLog << samplerErrorMessage << maxTextureImageUnits << ").";
         return false;
     }
-    
+
     if (objectCount->imageCount > maxImageUniforms)
     {
         infoLog << imageErrorMessage << maxImageUniforms << ").";
@@ -2660,7 +2660,7 @@ bool Program::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
 {
     std::vector<LinkedUniform> samplerUniforms;
     std::vector<LinkedUniform> imageUniforms;
-    
+
     if (mState.mAttachedComputeShader)
     {
         const gl::Shader *computeShader = mState.getAttachedComputeShader();
@@ -2668,8 +2668,7 @@ bool Program::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
         // TODO (mradev): check whether we need finer-grained component counting
         if (!flattenUniformsAndCheckCapsForShader(
                 *computeShader, caps.maxComputeUniformComponents / 4,
-                caps.maxComputeTextureImageUnits,
-                caps.maxComputeImageUniforms,
+                caps.maxComputeTextureImageUnits, caps.maxComputeImageUniforms,
                 "Compute shader active uniforms exceed MAX_COMPUTE_UNIFORM_COMPONENTS (",
                 "Compute shader sampler count exceeds MAX_COMPUTE_TEXTURE_IMAGE_UNITS (",
                 "Compute shader image uniform count exceeds MAX_COMPUTE_IMAGE_UNIFORMS (",
@@ -2683,7 +2682,8 @@ bool Program::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
         const gl::Shader *vertexShader = mState.getAttachedVertexShader();
         ProgramObjectCount vertexObjectCount;
         if (!flattenUniformsAndCheckCapsForShader(
-                *vertexShader, caps.maxVertexUniformVectors, caps.maxVertexTextureImageUnits, caps.maxVertexImageUniforms,
+                *vertexShader, caps.maxVertexUniformVectors, caps.maxVertexTextureImageUnits,
+                caps.maxVertexImageUniforms,
                 "Vertex shader active uniforms exceed MAX_VERTEX_UNIFORM_VECTORS (",
                 "Vertex shader sampler count exceeds MAX_VERTEX_TEXTURE_IMAGE_UNITS (",
                 "Vertex shader image uniform count exceeds MAX_VERTEX_IMAGE_UNIFORMS (",
@@ -2695,17 +2695,18 @@ bool Program::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
         const gl::Shader *fragmentShader = mState.getAttachedFragmentShader();
         ProgramObjectCount fragmentObjectCount;
         if (!flattenUniformsAndCheckCapsForShader(
-                *fragmentShader, caps.maxFragmentUniformVectors, caps.maxTextureImageUnits, caps.maxFragmentImageUniforms,
+                *fragmentShader, caps.maxFragmentUniformVectors, caps.maxTextureImageUnits,
+                caps.maxFragmentImageUniforms,
                 "Fragment shader active uniforms exceed MAX_FRAGMENT_UNIFORM_VECTORS (",
-                "Fragment shader sampler count exceeds MAX_TEXTURE_IMAGE_UNITS (", 
+                "Fragment shader sampler count exceeds MAX_TEXTURE_IMAGE_UNITS (",
                 "Fragment shader image uniform count exceeds MAX_FRAGMENT_IMAGE_UNIFORMS (",
-                samplerUniforms, imageUniforms,
-                infoLog, &fragmentObjectCount))
+                samplerUniforms, imageUniforms, infoLog, &fragmentObjectCount))
         {
             return false;
         }
-        
-        if (vertexObjectCount.imageCount + fragmentObjectCount.imageCount > caps.maxCombinedImageUniforms)
+
+        if (vertexObjectCount.imageCount + fragmentObjectCount.imageCount >
+            caps.maxCombinedImageUniforms)
         {
             infoLog << "Program image uniform count exceeds MAX_COMBINED_IMAGE_UNIFORMS ("
                     << caps.maxCombinedImageUniforms << ").";
@@ -2718,7 +2719,7 @@ bool Program::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
         mSamplerUniformRange.start + static_cast<unsigned int>(samplerUniforms.size());
 
     mState.mUniforms.insert(mState.mUniforms.end(), samplerUniforms.begin(), samplerUniforms.end());
-    
+
     mImageUniformRange.start = static_cast<unsigned int>(mState.mUniforms.size());
     mImageUniformRange.end =
         mImageUniformRange.start + static_cast<unsigned int>(imageUniforms.size());
@@ -2728,9 +2729,9 @@ bool Program::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
 }
 
 Program::ProgramObjectCount Program::flattenUniform(const sh::ShaderVariable &uniform,
-                                                       const std::string &fullName,
-                                                       std::vector<LinkedUniform> *samplerUniforms,
-                                                       std::vector<LinkedUniform> *imageUniforms)
+                                                    const std::string &fullName,
+                                                    std::vector<LinkedUniform> *samplerUniforms,
+                                                    std::vector<LinkedUniform> *imageUniforms)
 {
     ProgramObjectCount programObjectCount;
 
@@ -2745,7 +2746,8 @@ Program::ProgramObjectCount Program::flattenUniform(const sh::ShaderVariable &un
                 const sh::ShaderVariable &field  = uniform.fields[fieldIndex];
                 const std::string &fieldFullName = (fullName + elementString + "." + field.name);
 
-                programObjectCount += flattenUniform(field, fieldFullName, samplerUniforms, imageUniforms);
+                programObjectCount +=
+                    flattenUniform(field, fieldFullName, samplerUniforms, imageUniforms);
             }
         }
 
@@ -2755,11 +2757,10 @@ Program::ProgramObjectCount Program::flattenUniform(const sh::ShaderVariable &un
     // Not a struct
     bool isSampler = IsSamplerType(uniform.type);
     bool isImage   = IsImageType(uniform.type);
-    bool isOpaque = isSampler||isImage;
+    bool isOpaque  = isSampler || isImage;
 
     if (!UniformInList(mState.getUniforms(), fullName) &&
-        !UniformInList(*samplerUniforms, fullName) &&
-        !UniformInList(*imageUniforms, fullName))
+        !UniformInList(*samplerUniforms, fullName) && !UniformInList(*imageUniforms, fullName))
     {
         gl::LinkedUniform linkedUniform(uniform.type, uniform.precision, fullName,
                                         uniform.arraySize, -1,
@@ -2788,8 +2789,8 @@ Program::ProgramObjectCount Program::flattenUniform(const sh::ShaderVariable &un
     programObjectCount.vectorCount =
         (isOpaque ? 0 : (VariableRegisterCount(uniform.type) * elementCount));
     programObjectCount.samplerCount = (isSampler ? elementCount : 0);
-    programObjectCount.imageCount = (isImage ? elementCount : 0);
-    
+    programObjectCount.imageCount   = (isImage ? elementCount : 0);
+
     return programObjectCount;
 }
 

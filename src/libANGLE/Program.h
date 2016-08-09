@@ -374,7 +374,7 @@ class Program final : angle::NonCopyable, public LabeledObject
       private:
         std::unordered_map<std::string, GLuint> mBindings;
     };
-    
+
     struct ProgramObjectCount
     {
         ProgramObjectCount() : vectorCount(0), samplerCount(0), imageCount(0) {}
@@ -439,7 +439,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     std::vector<const sh::Varying *> getMergedVaryings() const;
     void linkOutputVariables();
-    
+
     bool flattenUniformsAndCheckCapsForShader(const gl::Shader &shader,
                                               GLuint maxUniformComponents,
                                               GLuint maxTextureImageUnits,
@@ -452,11 +452,11 @@ class Program final : angle::NonCopyable, public LabeledObject
                                               InfoLog &infoLog,
                                               ProgramObjectCount *objectCount);
     bool flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog);
-    
+
     ProgramObjectCount flattenUniform(const sh::ShaderVariable &uniform,
-                                         const std::string &fullName,
-                                         std::vector<LinkedUniform> *samplerUniforms,
-                                         std::vector<LinkedUniform> *imageUniforms);
+                                      const std::string &fullName,
+                                      std::vector<LinkedUniform> *samplerUniforms,
+                                      std::vector<LinkedUniform> *imageUniforms);
 
     void gatherInterfaceBlockInfo();
     template <typename VarT>
