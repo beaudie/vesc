@@ -139,6 +139,9 @@ def parse_json_into_switch_string(json_data):
 
         for dxgi_format, type_functions in sorted(dxgi_to_type_map.iteritems()):
 
+            if dxgi_format == dxgi_format_unknown:
+                continue
+
             # Main case statements
             table_data += '                case ' + dxgi_format + ':\n'
             table_data += '                {\n'
