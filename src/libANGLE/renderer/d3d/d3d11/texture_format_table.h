@@ -38,6 +38,8 @@ struct LoadImageFunctionInfo
     bool requiresConversion;
 };
 
+using LoadFunctionMap = LoadImageFunctionInfo(*)(GLenum);
+
 // For sized GL internal formats, there are several possible corresponding D3D11 formats depending
 // on device capabilities.
 // This structure allows querying for the DXGI texture formats to use for textures, SRVs, RTVs and
@@ -71,7 +73,6 @@ struct Format final : angle::NonCopyable
     const Format &swizzle;
 
     InitializeTextureDataFunction dataInitializerFunction;
-    typedef std::map<GLenum, LoadImageFunctionInfo> LoadFunctionMap;
 
     LoadFunctionMap loadFunctions;
 };
