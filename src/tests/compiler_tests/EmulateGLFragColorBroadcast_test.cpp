@@ -1,0 +1,60 @@
+//
+// Copyright (c) 2016 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+#include "angle_gl.h"
+#include "gtest/gtest.h"
+#include "GLSLANG/ShaderLang.h"
+#include "tests/test_utils/compiler_test.h"
+
+namespace
+{
+
+const int kMaxDrawBuffers = 2;
+
+class EmulateGLFragColorBroadcastTest : public MatchOutputCodeTest
+{
+  public:
+    EmulateGLFragColorBroadcastTest()
+        : MatchOutputCodeTest(GL_FRAGMENT_SHADER,
+                              0,  // compile options
+                              SH_GLSL_COMPATIBILITY_OUTPUT)
+    {
+        getResources()->MaxDrawBuffers   = kMaxDrawBuffers;
+        getResources()->EXT_draw_buffers = 1;
+    }
+
+  protected:
+    void enableDrawBuffers() {}
+};
+
+TEST_F(EmulateGLFragColorBroadcastTest, FragColorNoBroadcast)
+{
+    const std::string shaderString =
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(1, 0, 0, 0);\n"
+        "}\n";
+    compile(shaderString);
+    EXPECT_TRUE(foundInCode("gl_FragColor"));
+    EXPECT_FALSE(foundInCode("gl_FragData[0]"));
+    EXPECT_FALSE(foundInCode("gl_FragData[1]"));
+}
+
+TEST_F(EmulateGLFragColorBroadcastTest, FragColorBroadcast)
+{
+    const std::string shaderString =
+        "#extension GL_EXT_draw_buffers : require\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(1, 0, 0, 0);\n"
+        "}\n";
+    compile(shaderString);
+    EXPECT_FALSE(foundInCode("gl_FragColor"));
+    EXPECT_TRUE(foundInCode("gl_FragData[0]"));
+    EXPECT_TRUE(foundInCode("gl_FragData[1]"));
+}
+
+}  // namespace anonymous
