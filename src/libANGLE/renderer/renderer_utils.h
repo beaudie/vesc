@@ -75,6 +75,20 @@ ColorWriteFunction GetColorWriteFunction(const gl::FormatType &formatType);
 ColorCopyFunction GetFastCopyFunction(const FastCopyFunctionMap &fastCopyFunctions,
                                       const gl::FormatType &formatType);
 
+struct LoadImageFunctionInfo
+{
+    LoadImageFunctionInfo() : loadFunction(nullptr), requiresConversion(false) {}
+    LoadImageFunctionInfo(LoadImageFunction loadFunction, bool requiresConversion)
+        : loadFunction(loadFunction), requiresConversion(requiresConversion)
+    {
+    }
+
+    LoadImageFunction loadFunction;
+    bool requiresConversion;
+};
+
+using LoadFunctionMap = LoadImageFunctionInfo (*)(GLenum);
+
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_RENDERER_UTILS_H_
