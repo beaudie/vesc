@@ -94,14 +94,6 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
 
                     return loadFunctionsMap;
                 }
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
                 default:
                 {
                     static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
@@ -114,49 +106,20 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
         }
         case GL_ALPHA16F_EXT:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_HALF_FLOAT, LoadImageFunctionInfo(LoadA16FToRGBA16F, true) },
-                        { GL_HALF_FLOAT_OES, LoadImageFunctionInfo(LoadA16FToRGBA16F, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_HALF_FLOAT, LoadImageFunctionInfo(LoadA16FToRGBA16F, true) },
+                { GL_HALF_FLOAT_OES, LoadImageFunctionInfo(LoadA16FToRGBA16F, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_HALF_FLOAT, LoadImageFunctionInfo(LoadA16FToRGBA16F, true) },
-                        { GL_HALF_FLOAT_OES, LoadImageFunctionInfo(LoadA16FToRGBA16F, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_ALPHA32F_EXT:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_FLOAT, LoadImageFunctionInfo(LoadA32FToRGBA32F, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_FLOAT, LoadImageFunctionInfo(LoadA32FToRGBA32F, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_FLOAT, LoadImageFunctionInfo(LoadA32FToRGBA32F, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_ALPHA8_EXT:
         {
@@ -179,7 +142,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_BGR565_ANGLEX:
@@ -196,100 +159,42 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_BGR5_A1_ANGLEX:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadToNative<GLubyte,4>, false) },
-                        { GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT, LoadImageFunctionInfo(LoadRGB5A1ToRGBA8, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadToNative<GLubyte,4>, false) },
+                { GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT, LoadImageFunctionInfo(LoadRGB5A1ToRGBA8, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadToNative<GLubyte,4>, false) },
-                        { GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT, LoadImageFunctionInfo(LoadRGB5A1ToRGBA8, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_BGRA4_ANGLEX:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadToNative<GLubyte,4>, false) },
-                        { GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT, LoadImageFunctionInfo(LoadRGBA4ToRGBA8, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadToNative<GLubyte,4>, false) },
+                { GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT, LoadImageFunctionInfo(LoadRGBA4ToRGBA8, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadToNative<GLubyte,4>, false) },
-                        { GL_UNSIGNED_SHORT_4_4_4_4_REV_EXT, LoadImageFunctionInfo(LoadRGBA4ToRGBA8, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_BGRA8_EXT:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadToNative<GLubyte,4>, false) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadToNative<GLubyte,4>, false) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadToNative<GLubyte,4>, false) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_BGRA_EXT:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_COMPRESSED_R11_EAC:
         {
@@ -304,7 +209,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_COMPRESSED_RG11_EAC:
@@ -320,7 +225,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_COMPRESSED_RGB8_ETC2:
@@ -336,7 +241,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2:
@@ -352,7 +257,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_COMPRESSED_RGBA8_ETC2_EAC:
@@ -368,96 +273,40 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadCompressedToNative<4,4,8>, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadCompressedToNative<4,4,8>, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadCompressedToNative<4,4,8>, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadCompressedToNative<4,4,16>, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadCompressedToNative<4,4,16>, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadCompressedToNative<4,4,16>, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadCompressedToNative<4,4,16>, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadCompressedToNative<4,4,16>, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadCompressedToNative<4,4,16>, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadCompressedToNative<4,4,8>, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadCompressedToNative<4,4,8>, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadCompressedToNative<4,4,8>, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_COMPRESSED_SIGNED_R11_EAC:
         {
@@ -472,7 +321,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_COMPRESSED_SIGNED_RG11_EAC:
@@ -488,7 +337,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC:
@@ -504,7 +353,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_COMPRESSED_SRGB8_ETC2:
@@ -520,7 +369,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2:
@@ -536,7 +385,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_DEPTH24_STENCIL8:
@@ -560,7 +409,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_DEPTH32F_STENCIL8:
@@ -571,14 +420,6 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                 {
                     static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
                         { GL_FLOAT_32_UNSIGNED_INT_24_8_REV, LoadImageFunctionInfo(LoadD32FS8X24ToD32FS8X24, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_FLOAT_32_UNSIGNED_INT_24_8_REV, LoadImageFunctionInfo(UnimplementedLoadFunction, true) },
                     };
 
                     return loadFunctionsMap;
@@ -615,7 +456,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_DEPTH_COMPONENT24:
@@ -639,7 +480,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_DEPTH_COMPONENT32F:
@@ -650,14 +491,6 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                 {
                     static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
                         { GL_FLOAT, LoadImageFunctionInfo(LoadD32FToD32F, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_FLOAT, LoadImageFunctionInfo(UnimplementedLoadFunction, true) },
                     };
 
                     return loadFunctionsMap;
@@ -674,25 +507,11 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
         }
         case GL_DEPTH_COMPONENT32_OES:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_INT, LoadImageFunctionInfo(LoadR32ToR24G8, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_UNSIGNED_INT, LoadImageFunctionInfo(LoadR32ToR24G8, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_INT, LoadImageFunctionInfo(LoadR32ToR24G8, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_ETC1_RGB8_LOSSY_DECODE_ANGLE:
         {
@@ -707,7 +526,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_ETC1_RGB8_OES:
@@ -723,7 +542,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_LUMINANCE:
@@ -749,14 +568,6 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
 
                     return loadFunctionsMap;
                 }
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
                 default:
                 {
                     static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
@@ -769,93 +580,36 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
         }
         case GL_LUMINANCE16F_EXT:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_HALF_FLOAT, LoadImageFunctionInfo(LoadL16FToRGBA16F, true) },
-                        { GL_HALF_FLOAT_OES, LoadImageFunctionInfo(LoadL16FToRGBA16F, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_HALF_FLOAT, LoadImageFunctionInfo(LoadL16FToRGBA16F, true) },
+                { GL_HALF_FLOAT_OES, LoadImageFunctionInfo(LoadL16FToRGBA16F, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_HALF_FLOAT, LoadImageFunctionInfo(LoadL16FToRGBA16F, true) },
-                        { GL_HALF_FLOAT_OES, LoadImageFunctionInfo(LoadL16FToRGBA16F, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_LUMINANCE32F_EXT:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_FLOAT, LoadImageFunctionInfo(LoadL32FToRGBA32F, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_FLOAT, LoadImageFunctionInfo(LoadL32FToRGBA32F, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_FLOAT, LoadImageFunctionInfo(LoadL32FToRGBA32F, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_LUMINANCE8_ALPHA8_EXT:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadLA8ToRGBA8, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadLA8ToRGBA8, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadLA8ToRGBA8, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_LUMINANCE8_EXT:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadL8ToRGBA8, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadL8ToRGBA8, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(LoadL8ToRGBA8, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_LUMINANCE_ALPHA:
         {
@@ -880,14 +634,6 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
 
                     return loadFunctionsMap;
                 }
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
                 default:
                 {
                     static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
@@ -900,49 +646,20 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
         }
         case GL_LUMINANCE_ALPHA16F_EXT:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_HALF_FLOAT, LoadImageFunctionInfo(LoadLA16FToRGBA16F, true) },
-                        { GL_HALF_FLOAT_OES, LoadImageFunctionInfo(LoadLA16FToRGBA16F, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_HALF_FLOAT, LoadImageFunctionInfo(LoadLA16FToRGBA16F, true) },
+                { GL_HALF_FLOAT_OES, LoadImageFunctionInfo(LoadLA16FToRGBA16F, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_HALF_FLOAT, LoadImageFunctionInfo(LoadLA16FToRGBA16F, true) },
-                        { GL_HALF_FLOAT_OES, LoadImageFunctionInfo(LoadLA16FToRGBA16F, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_LUMINANCE_ALPHA32F_EXT:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_FLOAT, LoadImageFunctionInfo(LoadLA32FToRGBA32F, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_FLOAT, LoadImageFunctionInfo(LoadLA32FToRGBA32F, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_FLOAT, LoadImageFunctionInfo(LoadLA32FToRGBA32F, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_R11F_G11F_B10F:
         {
@@ -960,7 +677,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_R16F:
@@ -978,7 +695,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_R16I:
@@ -994,7 +711,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_R16UI:
@@ -1010,7 +727,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_R16_EXT:
@@ -1026,7 +743,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_R16_SNORM_EXT:
@@ -1042,7 +759,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_R32F:
@@ -1058,7 +775,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_R32I:
@@ -1074,7 +791,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_R32UI:
@@ -1090,7 +807,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_R8:
@@ -1106,7 +823,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_R8I:
@@ -1122,7 +839,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_R8UI:
@@ -1138,7 +855,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_R8_SNORM:
@@ -1154,7 +871,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RG16F:
@@ -1172,7 +889,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RG16I:
@@ -1188,7 +905,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RG16UI:
@@ -1204,7 +921,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RG16_EXT:
@@ -1220,7 +937,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RG16_SNORM_EXT:
@@ -1236,7 +953,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RG32F:
@@ -1252,7 +969,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RG32I:
@@ -1268,7 +985,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RG32UI:
@@ -1284,7 +1001,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RG8:
@@ -1300,7 +1017,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RG8I:
@@ -1316,7 +1033,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RG8UI:
@@ -1332,7 +1049,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RG8_SNORM:
@@ -1348,32 +1065,17 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                        { GL_UNSIGNED_SHORT_5_6_5, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
+                { GL_UNSIGNED_SHORT_5_6_5, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                        { GL_UNSIGNED_SHORT_5_6_5, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_RGB10_A2:
         {
@@ -1388,7 +1090,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB10_A2UI:
@@ -1404,7 +1106,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB16F:
@@ -1422,7 +1124,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB16I:
@@ -1438,7 +1140,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB16UI:
@@ -1454,7 +1156,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB16_EXT:
@@ -1470,7 +1172,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB16_SNORM_EXT:
@@ -1486,7 +1188,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB32F:
@@ -1502,7 +1204,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB32I:
@@ -1518,7 +1220,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB32UI:
@@ -1534,7 +1236,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB565:
@@ -1560,7 +1262,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB5_A1:
@@ -1588,7 +1290,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB8:
@@ -1604,7 +1306,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB8I:
@@ -1620,7 +1322,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB8UI:
@@ -1636,7 +1338,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB8_SNORM:
@@ -1652,7 +1354,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGB9_E5:
@@ -1671,34 +1373,18 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGBA:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                        { GL_UNSIGNED_SHORT_4_4_4_4, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                        { GL_UNSIGNED_SHORT_5_5_5_1, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
+                { GL_UNSIGNED_SHORT_4_4_4_4, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
+                { GL_UNSIGNED_SHORT_5_5_5_1, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { GL_UNSIGNED_BYTE, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                        { GL_UNSIGNED_SHORT_4_4_4_4, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                        { GL_UNSIGNED_SHORT_5_5_5_1, LoadImageFunctionInfo(UnreachableLoadFunction, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
         case GL_RGBA16F:
         {
@@ -1715,7 +1401,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGBA16I:
@@ -1731,7 +1417,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGBA16UI:
@@ -1747,7 +1433,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGBA16_EXT:
@@ -1763,7 +1449,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGBA16_SNORM_EXT:
@@ -1779,7 +1465,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGBA32F:
@@ -1795,7 +1481,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGBA32I:
@@ -1811,7 +1497,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGBA32UI:
@@ -1827,7 +1513,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGBA4:
@@ -1853,7 +1539,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGBA8:
@@ -1869,7 +1555,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGBA8I:
@@ -1885,7 +1571,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGBA8UI:
@@ -1901,7 +1587,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_RGBA8_SNORM:
@@ -1917,7 +1603,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_SRGB8:
@@ -1933,7 +1619,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_SRGB8_ALPHA8:
@@ -1949,32 +1635,17 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                     return loadFunctionsMap;
                 }
                 default:
-                    break;
+                break;
             }
         }
         case GL_STENCIL_INDEX8:
         {
-            switch (dxgiFormat)
-            {
-                case DXGI_FORMAT_UNKNOWN:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { DXGI_FORMAT_D24_UNORM_S8_UINT, LoadImageFunctionInfo(UnimplementedLoadFunction, true) },
-                        { DXGI_FORMAT_R24G8_TYPELESS, LoadImageFunctionInfo(UnimplementedLoadFunction, true) },
-                    };
+            static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
+                { DXGI_FORMAT_D24_UNORM_S8_UINT, LoadImageFunctionInfo(UnimplementedLoadFunction, true) },
+                { DXGI_FORMAT_R24G8_TYPELESS, LoadImageFunctionInfo(UnimplementedLoadFunction, true) },
+            };
 
-                    return loadFunctionsMap;
-                }
-                default:
-                {
-                    static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
-                        { DXGI_FORMAT_D24_UNORM_S8_UINT, LoadImageFunctionInfo(UnimplementedLoadFunction, true) },
-                        { DXGI_FORMAT_R24G8_TYPELESS, LoadImageFunctionInfo(UnimplementedLoadFunction, true) },
-                    };
-
-                    return loadFunctionsMap;
-                }
-            }
+            return loadFunctionsMap;
         }
 
         default:
