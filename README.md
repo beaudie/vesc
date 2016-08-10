@@ -2,19 +2,23 @@
 
 The goal of ANGLE is to allow users of multiple operating systems to seamlessly run WebGL and other OpenGL ES content by translating OpenGL ES API calls to one of the hardware-supported APIs available for that platform. ANGLE currently provides translation from OpenGL ES 2.0 to desktop OpenGL, Direct3D 9, and Direct3D 11. Support for translation from OpenGL ES 3.0 to all of these APIs is nearing completion, and future plans include enabling validated ES-to-ES support.
 
-|                |  Direct3D 9   |    Direct3D 11      |    Desktop GL      |    GL ES  |
-|----------------|:-------------:|:-------------------:|:------------------:|:---------:|
-| OpenGL ES 2.0  |    complete   |      complete       |     complete       |   planned |
-| OpenGL ES 3.0  |               |  nearing completion | nearing completion |   planned |
-[Level of OpenGL ES support via backing renderers]
+### Level of OpenGL ES support via backing renderers
 
+|                |  Direct3D 9   |  Direct3D 11     |   Desktop GL   |    GL ES      |
+|----------------|:-------------:|:----------------:|:--------------:|:-------------:|
+| OpenGL ES 2.0  |    complete   |    complete      |    complete    |   complete    |
+| OpenGL ES 3.0  |               |    complete      |    complete    |  in progress  |
+| OpenGL ES 3.1  |               |   not started    |   in progress  |  in progress  |
 
-|             |    Direct3D 9  |   Direct3D 11  |   Desktop GL  |
-|------------:|:--------------:|:--------------:|:-------------:|
-| Windows     |        *       |        *       |       *       |
-| Linux       |                |                |       *       |
-| Mac OS X    |                |                |   in progress |
-[Platform support via backing renderers]
+### Platform support via backing renderers
+
+|             |    Direct3D 9  |   Direct3D 11  |   Desktop GL  |    GL ES    |   Vulkan    |
+|------------:|:--------------:|:--------------:|:-------------:|:-----------:|:-----------:|
+| Windows     |        *       |        *       |       *       |      *      | in progress |
+| Linux       |                |                |       *       |             |   planned   |
+| Mac OS X    |                |                |   in progress |             |             |
+| Chrome OS   |                |                |               |      *      |   planned   |
+| Android     |                |                |               |      *      |   planned   |
 
 ANGLE v1.0.772 was certified compliant by passing the ES 2.0.3 conformance tests in October 2011. ANGLE also provides an implementation of the EGL 1.4 specification.
 
