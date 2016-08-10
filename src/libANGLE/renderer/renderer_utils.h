@@ -75,6 +75,16 @@ ColorWriteFunction GetColorWriteFunction(const gl::FormatType &formatType);
 ColorCopyFunction GetFastCopyFunction(const FastCopyFunctionMap &fastCopyFunctions,
                                       const gl::FormatType &formatType);
 
+using LoadImageFunction = void (*)(size_t width,
+                                   size_t height,
+                                   size_t depth,
+                                   const uint8_t *input,
+                                   size_t inputRowPitch,
+                                   size_t inputDepthPitch,
+                                   uint8_t *output,
+                                   size_t outputRowPitch,
+                                   size_t outputDepthPitch);
+
 struct LoadImageFunctionInfo
 {
     LoadImageFunctionInfo() : loadFunction(nullptr), requiresConversion(false) {}
