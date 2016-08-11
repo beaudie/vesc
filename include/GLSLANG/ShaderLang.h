@@ -216,6 +216,10 @@ typedef enum {
     // constant pow expressions incorrectly. Only applies to the HLSL back-end. It works
     // by expanding the integer pow expressions into a series of multiplies.
     SH_EXPAND_SELECT_HLSL_INTEGER_POW_EXPRESSIONS = 0x800000,
+
+    // This flag works around an issue in translating GLSL function texelFetchOffset on
+    // INTEL drivers. It works by translating texelFetchOffset into texelFetch.
+    SH_REWRITE_TEXELFETCHOFFSET_TO_TEXELFETCH = 0x1000000,
 } ShCompileOptions;
 
 // Defines alternate strategies for implementing array index clamping.
