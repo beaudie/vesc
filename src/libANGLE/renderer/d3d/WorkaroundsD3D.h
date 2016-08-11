@@ -63,6 +63,13 @@ struct WorkaroundsD3D
     // NVIDIA drivers sometimes write out-of-order results to StreamOut buffers when transform
     // feedback is used to repeatedly write to the same buffer positions.
     bool flushAfterEndingTransformFeedback = false;
+
+    // On INTEL drivers D3D function texture.Load returns 0 when at least one of the coordinates of
+    // Location is negative whether Location together with the offset are legal or not. This will
+    // cause problems when translating GLSL function texelFetchOffset to texture.Load as there is no
+    // such restriction on texelFetchOffset in GLSL. We translated texelFetchOffset into texelFetch
+    // by addingOffset directly to Location to work around this issue.
+    bool texelFetchOffsetWorkAround = false;
 };
 
 }  // namespace rx
