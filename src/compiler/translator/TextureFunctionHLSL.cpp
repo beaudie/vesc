@@ -832,8 +832,42 @@ void OutputTextureSampleFunctionReturnStatement(
 
     const int hlslCoords = GetHLSLCoordCount(textureFunction, outputType);
 
-    out << GetSamplerCoordinateTypeString(textureFunction, hlslCoords) << "(" << texCoordX << ", "
-        << texCoordY;
+    const bool IsLoadOffset = textureFunction.offset &&
+                              textureFunction.method == TextureFunctionHLSL::TextureFunction::FETCH;
+    int loadOffsetSize = 0;
+
+    if (IsLoadOffset)
+    {
+        out << GetSamplerCoordinateTypeString(textureFunction, hlslCoords) << "(" << texCoordX
+            << "+offset.x, " << texCoordY << "+offset.y";
+
+        switch (textureFunction.sampler)
+        {
+            case EbtSampler2D:
+            case EbtSampler2DArray:
+            case EbtISampler2D:
+            case EbtISampler2DArray:
+            case EbtUSampler2D:
+            case EbtUSampler2DArray:
+            case EbtSampler2DShadow:
+            case EbtSampler2DArrayShadow:
+            case EbtSamplerExternalOES:
+                loadOffsetSize = 2;
+                break;
+            case EbtSampler3D:
+            case EbtISampler3D:
+            case EbtUSampler3D:
+                loadOffsetSize = 3;
+                break;
+            default:
+                UNREACHABLE();
+        }
+    }
+    else
+    {
+       out << GetSamplerCoordinateTypeString(textureFunction, hlslCoords) << "(" << texCoordX
+           << ", " << texCoordY;
+    }
 
     if (outputType == SH_HLSL_3_0_OUTPUT)
     {
@@ -841,11 +875,22 @@ void OutputTextureSampleFunctionReturnStatement(
         {
             if (textureFunction.coords < 3)
             {
-                out << ", 0";
+                if (loadOffsetSize == 3)
+                {
+                    out << ", offset.z";
+                }
+                else
+                {
+                    out << ", 0";
+                }
             }
             else
             {
                 out << ", " << texCoordZ;
+                if (loadOffsetSize == 3)
+                {
+                    out << "+offset.z";
+                }
             }
         }
 
@@ -879,6 +924,10 @@ void OutputTextureSampleFunctionReturnStatement(
             ASSERT(!IsIntegerSampler(textureFunction.sampler) ||
                    !IsSamplerCube(textureFunction.sampler) || texCoordZ == "face");
             out << ", " << texCoordZ;
+            if (loadOffsetSize == 3)
+            {
+                out << "+offset.z";
+            }
         }
 
         if (textureFunction.method == TextureFunctionHLSL::TextureFunction::GRAD)
@@ -896,6 +945,10 @@ void OutputTextureSampleFunctionReturnStatement(
                     // The resulting third component of P' in the shadow forms is used as
                     // Dref
                     out << "), " << texCoordZ;
+                    if (loadOffsetSize == 3)
+                    {
+                        out << "+offset.z";
+                    }
                 }
                 else
                 {
@@ -903,6 +956,10 @@ void OutputTextureSampleFunctionReturnStatement(
                     {
                         case 3:
                             out << "), t.z";
+                            if (loadOffsetSize == 3)
+                            {
+                                out << "+offset.z";
+                            }
                             break;
                         case 4:
                             out << "), t.w";
@@ -930,6 +987,10 @@ void OutputTextureSampleFunctionReturnStatement(
                 // According to ESSL 3.00.4 sec 8.8 p95 on textureProj:
                 // The resulting third component of P' in the shadow forms is used as Dref
                 out << "), " << texCoordZ;
+                if ((loadOffsetSize == 3))
+                {
+                    out << "+offset.z";
+                }
             }
             else
             {
@@ -937,6 +998,10 @@ void OutputTextureSampleFunctionReturnStatement(
                 {
                     case 3:
                         out << "), t.z";
+                        if (loadOffsetSize == 3)
+                        {
+                            out << "+offset.z";
+                        }
                         break;
                     case 4:
                         out << "), t.w";
@@ -970,7 +1035,7 @@ void OutputTextureSampleFunctionReturnStatement(
             }
         }
 
-        if (textureFunction.offset &&
+        if (!IsLoadOffset && textureFunction.offset &&
             (!IsIntegerSampler(textureFunction.sampler) ||
              textureFunction.method == TextureFunctionHLSL::TextureFunction::FETCH))
         {
