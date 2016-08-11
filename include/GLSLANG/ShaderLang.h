@@ -222,6 +222,10 @@ typedef enum {
     // varying variables and built-in GLSL variables. This compiler
     // option is enabled automatically when needed.
     SH_FLATTEN_PRAGMA_STDGL_INVARIANT_ALL = 0x1000000,
+
+    // This flag works around an issue in translating GLSL function texelFetchOffset on
+    // INTEL drivers. It works by translating texelFetchOffset into texelFetch.
+    SH_REWRITE_TEXELFETCHOFFSET_TO_TEXELFETCH = 0x2000000,
 } ShCompileOptions;
 
 // Defines alternate strategies for implementing array index clamping.
