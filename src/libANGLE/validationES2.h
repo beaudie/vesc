@@ -305,6 +305,17 @@ bool ValidateCopySubTextureCHROMIUM(Context *context,
                                     GLboolean unpackPremultiplyAlpha,
                                     GLboolean unpackUnmultiplyAlpha);
 
+bool ValidateBufferData(ValidationContext *context,
+                        GLenum target,
+                        GLsizeiptr size,
+                        const GLvoid *data,
+                        GLenum usage);
+bool ValidateBufferSubData(ValidationContext *context,
+                           GLenum target,
+                           GLintptr offset,
+                           GLsizeiptr size,
+                           const GLvoid *data);
+
 }  // namespace gl
 
 #endif // LIBANGLE_VALIDATION_ES2_H_

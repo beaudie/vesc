@@ -43,7 +43,7 @@ enum class CopyResult
 namespace gl_d3d11
 {
 
-D3D11_MAP GetD3DMapTypeFromBits(GLbitfield access)
+D3D11_MAP GetD3DMapTypeFromBits(BufferUsage usage, GLbitfield access)
 {
     bool readBit  = ((access & GL_MAP_READ_BIT) != 0);
     bool writeBit = ((access & GL_MAP_WRITE_BIT) != 0);
@@ -59,7 +59,8 @@ D3D11_MAP GetD3DMapTypeFromBits(GLbitfield access)
     }
     else if (writeBit && !readBit)
     {
-        return D3D11_MAP_WRITE;
+        // Special case for uniform storage - we only allow full buffer updates.
+        return usage == BUFFER_USAGE_UNIFORM ? D3D11_MAP_WRITE_DISCARD : D3D11_MAP_WRITE;
     }
     else if (writeBit && readBit)
     {
@@ -123,7 +124,7 @@ class Buffer11::NativeStorage : public Buffer11::BufferStorage
                   const angle::BroadcastChannel *onStorageChanged);
     ~NativeStorage() override;
 
-    bool isMappable() const override { return mUsage == BUFFER_USAGE_STAGING; }
+    bool isMappable() const override;
 
     ID3D11Buffer *getNativeStorage() const { return mNativeStorage; }
     gl::ErrorOrResult<CopyResult> copyFromStorage(BufferStorage *source,
@@ -272,10 +273,10 @@ Buffer11::~Buffer11()
     mRenderer->onBufferDelete(this);
 }
 
-gl::Error Buffer11::setData(const void *data, size_t size, GLenum usage)
+gl::Error Buffer11::setData(GLenum target, const void *data, size_t size, GLenum usage)
 {
     updateD3DBufferUsage(usage);
-    ANGLE_TRY(setSubData(data, size, 0));
+    ANGLE_TRY(setSubData(target, data, size, 0));
     return gl::NoError();
 }
 
@@ -299,16 +300,21 @@ gl::ErrorOrResult<Buffer11::SystemMemoryStorage *> Buffer11::getSystemMemoryStor
     return GetAs<SystemMemoryStorage>(storage);
 }
 
-gl::Error Buffer11::setSubData(const void *data, size_t size, size_t offset)
+gl::Error Buffer11::setSubData(GLenum target, const void *data, size_t size, size_t offset)
 {
     size_t requiredSize = size + offset;
 
     if (data && size > 0)
     {
         // Use system memory storage for dynamic buffers.
-
+        // Try using a constant storage for constant buffers
         BufferStorage *writeBuffer = nullptr;
-        if (supportsDirectBinding())
+        // TODO(jmadill): Verify size check is correct.
+        if (target == GL_UNIFORM_BUFFER && offset == 0 && size >= mSize)
+        {
+            ANGLE_TRY_RESULT(getBufferStorage(BUFFER_USAGE_UNIFORM), writeBuffer);
+        }
+        else if (supportsDirectBinding())
         {
             ANGLE_TRY_RESULT(getStagingStorage(), writeBuffer);
         }
@@ -876,6 +882,11 @@ Buffer11::NativeStorage::~NativeStorage()
     SafeRelease(mNativeStorage);
 }
 
+bool Buffer11::NativeStorage::isMappable() const
+{
+    return (mUsage == BUFFER_USAGE_STAGING || mUsage == BUFFER_USAGE_UNIFORM);
+}
+
 // Returns true if it recreates the direct buffer
 gl::ErrorOrResult<CopyResult> Buffer11::NativeStorage::copyFromStorage(BufferStorage *source,
                                                                        size_t sourceOffset,
@@ -1055,11 +1066,11 @@ gl::Error Buffer11::NativeStorage::map(size_t offset,
                                        GLbitfield access,
                                        uint8_t **mapPointerOut)
 {
-    ASSERT(mUsage == BUFFER_USAGE_STAGING);
+    ASSERT(isMappable());
 
     D3D11_MAPPED_SUBRESOURCE mappedResource;
     ID3D11DeviceContext *context = mRenderer->getDeviceContext();
-    D3D11_MAP d3dMapType         = gl_d3d11::GetD3DMapTypeFromBits(access);
+    D3D11_MAP d3dMapType         = gl_d3d11::GetD3DMapTypeFromBits(mUsage, access);
     UINT d3dMapFlag              = ((access & GL_MAP_UNSYNCHRONIZED_BIT) != 0 ? D3D11_MAP_FLAG_DO_NOT_WAIT : 0);
 
     HRESULT result = context->Map(mNativeStorage, 0, d3dMapType, d3dMapFlag, &mappedResource);
@@ -1076,7 +1087,7 @@ gl::Error Buffer11::NativeStorage::map(size_t offset,
 
 void Buffer11::NativeStorage::unmap()
 {
-    ASSERT(mUsage == BUFFER_USAGE_STAGING);
+    ASSERT(isMappable());
     ID3D11DeviceContext *context = mRenderer->getDeviceContext();
     context->Unmap(mNativeStorage, 0);
 }

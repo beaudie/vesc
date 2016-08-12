@@ -77,13 +77,6 @@ class UniformBufferTest : public ANGLETest
 // Basic UBO functionality.
 TEST_P(UniformBufferTest, Simple)
 {
-    // TODO(jmadill): Figure out why this fails on Intel.
-    if (IsIntel() && GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
-    {
-        std::cout << "Test skipped on Intel." << std::endl;
-        return;
-    }
-
     glClear(GL_COLOR_BUFFER_BIT);
     float floatData[4] = {0.5f, 0.75f, 0.25f, 1.0f};
 
