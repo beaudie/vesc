@@ -34,7 +34,7 @@
 
 #if (DE_OS == DE_OS_WIN32)
     #define ANGLE_EGL_LIBRARY_NAME "libEGL.dll"
-#elif (DE_OS == DE_OS_UNIX)
+#elif (DE_OS == DE_OS_UNIX) || (DE_OS == DE_OS_ANDROID)
     #define ANGLE_EGL_LIBRARY_NAME "libEGL.so"
 #elif (DE_OS == DE_OS_OSX)
     #define ANGLE_EGL_LIBRARY_NAME "libEGL.dylib"
