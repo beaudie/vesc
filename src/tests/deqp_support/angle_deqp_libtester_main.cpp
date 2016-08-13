@@ -46,13 +46,16 @@ tcu::RandomOrderExecutor *g_executor = nullptr;
 
 const char *g_dEQPDataSearchDirs[] =
 {
+#if (DE_OS != DE_OS_ANDROID)
     "data",
+#endif
     "third_party/deqp/data",
     "../third_party/deqp/src/data",
     "deqp_support/data",
     "third_party/deqp/src/data",
     "../../third_party/deqp/src/data",
-    "../../../third_party/deqp/src/data"
+    "../../../third_party/deqp/src/data",
+    "../../sdcard/chromium_tests_root/third_party/deqp/src/data",
 };
 
 // TODO(jmadill): upstream to dEQP?
@@ -127,7 +130,11 @@ bool InitPlatform(int argc, const char *argv[])
 
         g_cmdLine = new tcu::CommandLine(argc, argv);
         g_archive = new tcu::DirArchive(deqpDataDir.c_str());
-        g_log = new tcu::TestLog(g_cmdLine->getLogFileName(), g_cmdLine->getLogFlags());
+        std::string logFileName = g_cmdLine->getLogFileName();
+#if (DE_OS == DE_OS_ANDROID)
+        logFileName = deqpDataDir + "/" + g_cmdLine->getLogFileName();
+#endif
+        g_log = new tcu::TestLog(logFileName.c_str(), g_cmdLine->getLogFlags());
         g_testCtx = new tcu::TestContext(*g_platform, *g_archive, *g_log, *g_cmdLine, DE_NULL);
         g_root = new tcu::TestPackageRoot(*g_testCtx, tcu::TestPackageRegistry::getSingleton());
         g_executor = new tcu::RandomOrderExecutor(*g_root, *g_testCtx);
