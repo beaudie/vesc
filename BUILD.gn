@@ -501,7 +501,7 @@ config("angle_util_config") {
   }
 }
 
-static_library("angle_util") {
+shared_library("angle_util") {
   sources = rebase_path(util_gypi.util_sources, ".", "util")
 
   if (is_win) {
@@ -542,6 +542,7 @@ static_library("angle_util") {
   defines = [
     "GL_GLEXT_PROTOTYPES",
     "EGL_EGLEXT_PROTOTYPES",
+    "LIBANGLE_UTIL_IMPLEMENTATION",
   ]
 
   configs += [
