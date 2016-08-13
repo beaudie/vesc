@@ -10,9 +10,11 @@
 #ifndef UTIL_MATRIX_H
 #define UTIL_MATRIX_H
 
+#include <export.h>
+
 #include "Vector.h"
 
-struct Matrix4
+struct ANGLE_EXPORT Matrix4
 {
     float data[16];
 
@@ -50,7 +52,7 @@ struct Matrix4
 };
 
 Matrix4 operator*(const Matrix4 &a, const Matrix4 &b);
-Matrix4 &operator*=(Matrix4 &a, const Matrix4 &b);
+ANGLE_EXPORT Matrix4 &operator*=(Matrix4 &a, const Matrix4 &b);
 Matrix4 operator*(const Matrix4 &a, float b);
 Matrix4 &operator*=(Matrix4 &a, float b);
 Vector4 operator*(const Matrix4 &a, const Vector4 &b);
