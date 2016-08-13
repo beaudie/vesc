@@ -23,11 +23,17 @@
 namespace
 {
 
+#if (DE_OS == DE_OS_ANDROID)
+const char *g_CaseListRelativePath = "/../../sdcard/chromium_tests_root/third_party/deqp/src/android/cts/master/";
+#else
 const char *g_CaseListRelativePath = "/../../third_party/deqp/src/android/cts/master/";
+#endif
 
 const char *g_TestExpectationsSearchPaths[] = {
-    "/../../src/tests/deqp_support/", "/../../third_party/angle/src/tests/deqp_support/",
+    "/../../src/tests/deqp_support/",
+    "/../../third_party/angle/src/tests/deqp_support/",
     "/deqp_support/",
+    "/../../sdcard/chromium_tests_root/third_party/angle/src/tests/deqp_support/",
 };
 
 const char *g_CaseListFiles[] = {
