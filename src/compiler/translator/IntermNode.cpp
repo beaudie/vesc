@@ -391,36 +391,9 @@ TIntermSelection::TIntermSelection(const TIntermSelection &node) : TIntermTyped(
     mFalseBlock = falseCopy;
 }
 
-//
-// Say whether or not an operation node changes the value of a variable.
-//
 bool TIntermOperator::isAssignment() const
 {
-    switch (mOp)
-    {
-      case EOpPostIncrement:
-      case EOpPostDecrement:
-      case EOpPreIncrement:
-      case EOpPreDecrement:
-      case EOpAssign:
-      case EOpAddAssign:
-      case EOpSubAssign:
-      case EOpMulAssign:
-      case EOpVectorTimesMatrixAssign:
-      case EOpVectorTimesScalarAssign:
-      case EOpMatrixTimesScalarAssign:
-      case EOpMatrixTimesMatrixAssign:
-      case EOpDivAssign:
-      case EOpIModAssign:
-      case EOpBitShiftLeftAssign:
-      case EOpBitShiftRightAssign:
-      case EOpBitwiseAndAssign:
-      case EOpBitwiseXorAssign:
-      case EOpBitwiseOrAssign:
-        return true;
-      default:
-        return false;
-    }
+    return IsAssignment(mOp);
 }
 
 bool TIntermOperator::isMultiplication() const
@@ -614,17 +587,15 @@ void TIntermUnary::promote(const TType *funcReturnType)
 // For lots of operations it should already be established that the operand
 // combination is valid, but returns false if operator can't work on operands.
 //
-bool TIntermBinary::promote()
+void TIntermBinary::promote()
 {
     ASSERT(mLeft->isArray() == mRight->isArray());
 
     ASSERT(!isMultiplication() ||
            mOp == GetMulOpBasedOnOperands(mLeft->getType(), mRight->getType()));
 
-    //
     // Base assumption:  just make the type the same as the left
     // operand.  Then only deviations from this need be coded.
-    //
     setType(mLeft->getType());
 
     // The result gets promoted to the highest precision.
@@ -676,13 +647,11 @@ bool TIntermBinary::promote()
           default:
             break;
         }
-        return true;
+        return;
     }
 
     // If we reach here, at least one of the operands is vector or matrix.
     // The other operand could be a scalar, vector, or matrix.
-    // Can these two operands be combined?
-    //
     TBasicType basicType = mLeft->getBasicType();
 
     switch (mOp)
@@ -723,7 +692,6 @@ bool TIntermBinary::promote()
             break;
         case EOpAssign:
         case EOpInitialize:
-            // No more additional checks are needed.
             ASSERT((mLeft->getNominalSize() == mRight->getNominalSize()) &&
                    (mLeft->getSecondarySize() == mRight->getSecondarySize()));
             break;
@@ -745,44 +713,15 @@ bool TIntermBinary::promote()
         case EOpBitwiseAndAssign:
         case EOpBitwiseXorAssign:
         case EOpBitwiseOrAssign:
-            if ((mLeft->isMatrix() && mRight->isVector()) ||
-                (mLeft->isVector() && mRight->isMatrix()))
-            {
-                return false;
-            }
-
-            // Are the sizes compatible?
-            if (mLeft->getNominalSize() != mRight->getNominalSize() ||
-                mLeft->getSecondarySize() != mRight->getSecondarySize())
-            {
-                // If the nominal sizes of operands do not match:
-                // One of them must be a scalar.
-                if (!mLeft->isScalar() && !mRight->isScalar())
-                    return false;
-
-                // In the case of compound assignment other than multiply-assign,
-                // the right side needs to be a scalar. Otherwise a vector/matrix
-                // would be assigned to a scalar. A scalar can't be shifted by a
-                // vector either.
-                if (!mRight->isScalar() &&
-                    (isAssignment() || mOp == EOpBitShiftLeft || mOp == EOpBitShiftRight))
-                    return false;
-            }
-
-            {
-                const int secondarySize =
-                    std::max(mLeft->getSecondarySize(), mRight->getSecondarySize());
-                setType(TType(basicType, higherPrecision, resultQualifier,
-                              static_cast<unsigned char>(nominalSize),
-                              static_cast<unsigned char>(secondarySize)));
-                if (mLeft->isArray())
-                {
-                    ASSERT(mLeft->getArraySize() == mRight->getArraySize());
-                    mType.setArraySize(mLeft->getArraySize());
-                }
-            }
+        {
+            const int secondarySize =
+                std::max(mLeft->getSecondarySize(), mRight->getSecondarySize());
+            setType(TType(basicType, higherPrecision, resultQualifier,
+                          static_cast<unsigned char>(nominalSize),
+                          static_cast<unsigned char>(secondarySize)));
+            ASSERT(!mLeft->isArray() && !mRight->isArray());
             break;
-
+        }
         case EOpEqual:
         case EOpNotEqual:
         case EOpLessThan:
@@ -791,13 +730,21 @@ bool TIntermBinary::promote()
         case EOpGreaterThanEqual:
             ASSERT((mLeft->getNominalSize() == mRight->getNominalSize()) &&
                    (mLeft->getSecondarySize() == mRight->getSecondarySize()));
-            setType(TType(EbtBool, EbpUndefined));
+            setType(TType(EbtBool, EbpUndefined, resultQualifier));
             break;
 
+        case EOpIndexDirect:
+        case EOpIndexIndirect:
+        case EOpIndexDirectInterfaceBlock:
+        case EOpIndexDirectStruct:
+            // TODO (oetuaho): These ops could be handled here as well (should be done closer to the
+            // top of the function).
+            UNREACHABLE();
+            break;
         default:
-            return false;
+            UNREACHABLE();
+            break;
     }
-    return true;
 }
 
 TIntermTyped *TIntermBinary::fold(TDiagnostics *diagnostics)
