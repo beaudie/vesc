@@ -413,6 +413,7 @@ class TIntermBinary : public TIntermOperator
     TIntermBinary(TOperator op, TIntermTyped *left, TIntermTyped *right)
         : TIntermOperator(op), mLeft(left), mRight(right), mAddIndexClamp(false)
     {
+        promote();
     }
 
     TIntermTyped *deepCopy() const override { return new TIntermBinary(*this); }
@@ -433,7 +434,7 @@ class TIntermBinary : public TIntermOperator
     void setRight(TIntermTyped *node) { mRight = node; }
     TIntermTyped *getLeft() const { return mLeft; }
     TIntermTyped *getRight() const { return mRight; }
-    bool promote();
+    void promote();
     TIntermTyped *fold(TDiagnostics *diagnostics);
 
     void setAddIndexClamp() { mAddIndexClamp = true; }
