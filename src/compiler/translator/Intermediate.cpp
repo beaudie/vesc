@@ -58,29 +58,6 @@ TIntermTyped *TIntermediate::addIndex(
 }
 
 //
-// Add one node as the parent of another that it operates on.
-//
-// Returns the added node.
-//
-TIntermTyped *TIntermediate::addUnaryMath(
-    TOperator op, TIntermTyped *child, const TSourceLoc &line, const TType *funcReturnType)
-{
-    //
-    // Make a new node for the operator.
-    //
-    TIntermUnary *node = new TIntermUnary(op);
-    node->setLine(line);
-    node->setOperand(child);
-    node->promote(funcReturnType);
-
-    TIntermTyped *foldedNode = node->fold(mInfoSink);
-    if (foldedNode)
-        return foldedNode;
-
-    return node;
-}
-
-//
 // This is the safe way to change the operator on an aggregate, as it
 // does lots of error checking and fixing.  Especially for establishing
 // a function call's operation on it's set of parameters.  Sequences
@@ -411,7 +388,8 @@ TIntermAggregate *TIntermediate::postProcess(TIntermNode *root)
     return aggRoot;
 }
 
-TIntermTyped *TIntermediate::foldAggregateBuiltIn(TIntermAggregate *aggregate)
+TIntermTyped *TIntermediate::foldAggregateBuiltIn(TIntermAggregate *aggregate,
+                                                  TDiagnostics *diagnostics)
 {
     switch (aggregate->getOp())
     {
@@ -438,12 +416,12 @@ TIntermTyped *TIntermediate::foldAggregateBuiltIn(TIntermAggregate *aggregate)
         case EOpFaceForward:
         case EOpReflect:
         case EOpRefract:
-            return aggregate->fold(mInfoSink);
+            return aggregate->fold(diagnostics);
         default:
             // TODO: Add support for folding array constructors
             if (aggregate->isConstructor() && !aggregate->isArray())
             {
-                return aggregate->fold(mInfoSink);
+                return aggregate->fold(diagnostics);
             }
             // Constant folding not supported for the built-in.
             return nullptr;
