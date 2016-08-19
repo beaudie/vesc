@@ -2143,13 +2143,77 @@ TEST_P(GLSLTest, RenderTrisWithPointCoord)
         "    gl_PointSize = 1.0;\n"
         "}";
     const std::string &frag =
+#if 0
         "void main()\n"
         "{\n"
         "    gl_FragColor = vec4(gl_PointCoord.xy, 0, 1);\n"
         "    gl_FragColor = vec4(0, 1, 0, 1);\n"
         "}";
+#else
 
-    ANGLE_GL_PROGRAM(prog, vert, frag);
+"/*\n"
+"** Copyright (c) 2012 The Khronos Group Inc.\n"
+"**\n"
+"** Permission is hereby granted, free of charge, to any person obtaining a\n"
+"** copy of this software and/or associated documentation files (the\n"
+"** \"Materials\"), to deal in the Materials without restriction, including\n"
+"** without limitation the rights to use, copy, modify, merge, publish,\n"
+"** distribute, sublicense, and/or sell copies of the Materials, and to\n"
+"** permit persons to whom the Materials are furnished to do so, subject to\n"
+"** the following conditions:\n"
+"**\n"
+"** The above copyright notice and this permission notice shall be included\n"
+"** in all copies or substantial portions of the Materials.\n"
+"**\n"
+"** THE MATERIALS ARE PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\n"
+"** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\n"
+"** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\n"
+"** IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\n"
+"** CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\n"
+"** TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\n"
+"** MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.\n"
+"*/\n"
+"\n"
+"\n"
+"#ifdef GL_ES\n"
+"precision mediump float;\n"
+"#endif\n"
+"// simple macro expansions.\n"
+"// Tests for Too few macro arguments, too many macro arguments.\n"
+"// Macros with no arguments.\n"
+"\n"
+"#define t1 -1\n"
+"#define t2 2\n"
+"\n"
+"#define test -258\n"
+"#define test1 (test*test)\n"
+"#define test2(x) (x+test1)\n"
+"#define test3() (test2(8)*(test*test1))\n"
+"#define test4(x,y) (x+y)\n"
+"\n"
+"void main(void)\n"
+"{\n"
+" int sum =0;\n"
+" sum = test3();\n"
+" sum = test3(3);\n"
+"\n"
+" sum = test2(9);\n"
+" sum = test2(9,8);\n"
+"\n"
+" sum = test4;\n"
+" sum = test2(8,5,78,9);\n"
+" sum = sum + test1;\n"
+" sum = 8+58+sum;\n"
+" sum = sum +test;\n"
+" sum = (t1+t2);\n"
+" sum = test4(test3(),test2(test3())); \n"
+" sum = test4(3,8,5);\n"
+" sum = test4();\n"
+"}\n";
+
+#endif
+
+    ANGLE_GL_PROGRAM(prog, "", frag);
     drawQuad(prog.get(), "aPosition", 0.5f);
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
