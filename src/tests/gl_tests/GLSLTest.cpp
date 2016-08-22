@@ -2181,6 +2181,45 @@ TEST_P(GLSLTest, NestedPowStatements)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+TEST_P(GLSLTest, Thingy)
+{
+    const std::string &fragmentShader =
+        "precision mediump float;\n"
+        "\n"
+        "#define t1 -1\n"
+        "#define t2 2\n"
+        "\n"
+        "#define test -258\n"
+        "#define test1 (test*test)\n"
+        "#define test2(x) (x+test1)\n"
+        "#define test3() (test2(8)*(test*test1))\n"
+        "#define test4(x,y) (x+y)\n"
+        "\n"
+        "void main(void)\n"
+        "{\n"
+        " int sum =0;\n"
+        " sum = test3();\n"
+        " sum = test3(3);\n"
+        "\n"
+        " sum = test2(9);\n"
+        " sum = test2(9,8);\n"
+        "\n"
+        " sum = test4;\n"
+        " sum = test2(8,5,78,9);\n"
+        " sum = sum + test1;\n"
+        " sum = 8+58+sum;\n"
+        " sum = sum +test;\n"
+        " sum = (t1+t2);\n"
+        " sum = test4(test3(),test2(test3())); \n"
+        " sum = test4(3,8,5);\n"
+        " sum = test4();\n"
+        "}\n";
+
+    GLuint program = CompileProgram(mSimpleVSSource, fragmentShader);
+    EXPECT_EQ(0u, program);
+    glDeleteProgram(program);
+}
+
 }  // anonymous namespace
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
