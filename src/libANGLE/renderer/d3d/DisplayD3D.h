@@ -68,7 +68,8 @@ class DisplayD3D : public DisplayImpl
     egl::Error waitNative(EGLint engine,
                           egl::Surface *drawSurface,
                           egl::Surface *readSurface) const override;
-
+    // TODO (mradev): Figure out how to check whether the ES version is supported. Bug id 1477
+    bool isESVersionSupported(const gl::Version &esVersion) const override { return true; }
   private:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
     void generateCaps(egl::Caps *outCaps) const override;

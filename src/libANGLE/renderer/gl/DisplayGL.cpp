@@ -92,4 +92,8 @@ const gl::Version &DisplayGL::getMaxSupportedESVersion() const
     return mRenderer->getMaxSupportedESVersion();
 }
 
+bool DisplayGL::isESVersionSupported(const gl::Version &esVersion) const
+{
+    return getMaxSupportedESVersion() >= esVersion;
+}
 }

@@ -996,4 +996,8 @@ Device *Display::getDevice() const
     return mDevice;
 }
 
+bool Display::isESVersionSupported(const gl::Version &esVersion) const
+{
+    return mImplementation->isESVersionSupported(esVersion);
+}
 }
