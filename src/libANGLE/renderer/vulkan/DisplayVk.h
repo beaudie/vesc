@@ -70,7 +70,7 @@ class DisplayVk : public DisplayImpl
     StreamProducerImpl *createStreamProducerD3DTextureNV12(
         egl::Stream::ConsumerType consumerType,
         const egl::AttributeMap &attribs) override;
-
+    bool isESVersionSupported(const gl::Version &esVersion) const override { return true; }
   private:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
     void generateCaps(egl::Caps *outCaps) const override;

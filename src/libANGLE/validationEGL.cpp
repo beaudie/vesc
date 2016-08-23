@@ -393,6 +393,11 @@ Error ValidateCreateContext(Display *display, Config *configuration, gl::Context
         }
     }
 
+    if (!display->isESVersionSupported(gl::Version(clientMajorVersion, clientMinorVersion)))
+    {
+        return Error(EGL_BAD_CONFIG);
+    }
+
     return Error(EGL_SUCCESS);
 }
 
