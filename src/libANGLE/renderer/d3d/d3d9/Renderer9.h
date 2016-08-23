@@ -330,6 +330,11 @@ class Renderer9 : public RendererD3D
 
     DebugAnnotator9 *getAnnotator() { return &mAnnotator; }
 
+    gl::Version getMaxSupportedESVersion(const gl::Version &esVersion) const override
+    {
+        return gl::Version(2, 0);
+    }
+
   protected:
     gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) override;
 

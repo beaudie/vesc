@@ -70,6 +70,9 @@ class DisplayVk : public DisplayImpl
     StreamProducerImpl *createStreamProducerD3DTextureNV12(
         egl::Stream::ConsumerType consumerType,
         const egl::AttributeMap &attribs) override;
+    // TODO (mradev): Figure out how to check whether the ES version is supported.
+    // http://anglebug.com/1477
+    gl::Version getMaxSupportedESVersion() const override;
 
   private:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
