@@ -38,8 +38,8 @@ class TexCoordDrawTest : public ANGLETest
   protected:
     TexCoordDrawTest() : ANGLETest(), mProgram(0), mFramebuffer(0), mFramebufferColorTexture(0)
     {
-        setWindowWidth(128);
-        setWindowHeight(128);
+        setWindowWidth(1024);
+        setWindowHeight(1024);
         setConfigRedBits(8);
         setConfigGreenBits(8);
         setConfigBlueBits(8);
@@ -127,8 +127,6 @@ class TexCoordDrawTest : public ANGLETest
 
     GLuint mProgram;
     GLuint mFramebuffer;
-
-  private:
     GLuint mFramebufferColorTexture;
 };
 
@@ -339,7 +337,7 @@ class Texture2DTestES3 : public Texture2DTest
             "out vec4 fragColor;\n"
             "void main()\n"
             "{\n"
-            "    fragColor = texture(tex, texcoord);\n"
+            "    fragColor = vec4(texture(tex, texcoord).xyz, 1.0);\n"
             "}\n");
     }
 
@@ -3478,6 +3476,63 @@ TEST_P(Texture2DTestES3, UnpackOverlappingRowsFromUnpackBuffer)
                  actual.data());
     std::vector<GLColor> expected(windowPixelCount, GLColor::green);
     EXPECT_EQ(expected, actual);
+}
+
+template <typename T>
+T UNorm(double value)
+{
+    return static_cast<T>(value * static_cast<double>(std::numeric_limits<T>::max()));
+}
+
+// Test rendering a depth texture with mipmaps.
+TEST_P(Texture2DTestES3, DepthTexturesWithMipmaps)
+{
+    const int size = getWindowWidth();
+
+    auto dim   = [size](int level) { return size >> level; };
+    int levels = static_cast<int>(log2(size));
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    glTexStorage2D(GL_TEXTURE_2D, levels, GL_DEPTH_COMPONENT24, size, size);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    ASSERT_GL_NO_ERROR();
+
+    glUseProgram(mProgram);
+    GLint uniLoc = glGetUniformLocation(mProgram, "tex");
+    ASSERT_NE(-1, uniLoc);
+    glUniform1i(uniLoc, 0);
+
+    std::vector<unsigned char> expected;
+
+    for (int level = 0; level < levels; ++level)
+    {
+        double value = (static_cast<double>(level) / static_cast<double>(levels - 1));
+        expected.push_back(UNorm<unsigned char>(value));
+
+        int levelDim = dim(level);
+
+        ASSERT_GT(levelDim, 0);
+
+        std::vector<unsigned int> initData(levelDim * levelDim, UNorm<unsigned int>(value));
+        glTexSubImage2D(GL_TEXTURE_2D, level, 0, 0, levelDim, levelDim, GL_DEPTH_COMPONENT,
+                        GL_UNSIGNED_INT, initData.data());
+    }
+    ASSERT_GL_NO_ERROR();
+
+    for (int level = 0; level < levels; ++level)
+    {
+        glViewport(0, 0, dim(level), dim(level));
+        drawQuad(mProgram, "position", 0.5f);
+        GLColor actual = ReadColor(0, 0);
+        EXPECT_NEAR(expected[level], actual.R, 10u);
+    }
+
+    ASSERT_GL_NO_ERROR();
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.

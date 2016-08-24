@@ -438,6 +438,8 @@ LoadImageFunctionInfo DEPTH_COMPONENT32F_to_D32_FLOAT(GLenum type)
     {
         case GL_FLOAT:
             return LoadImageFunctionInfo(LoadD32FToD32F, true);
+        case GL_UNSIGNED_INT:
+            return LoadImageFunctionInfo(LoadR32UNormToD32F, true);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
