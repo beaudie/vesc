@@ -67,6 +67,11 @@ float RNG::randomFloatBetween(float min, float max)
     return floatDistribution(mGenerator);
 }
 
+float RNG::randomZeroToOne()
+{
+    return randomFloatBetween(0.0f, 1.0f);
+}
+
 float RNG::randomNegativeOneToOne()
 {
     return randomFloatBetween(-1.0f, 1.0f);

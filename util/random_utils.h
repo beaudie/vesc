@@ -32,6 +32,7 @@ class RNG
     unsigned int randomUInt();
     float randomFloat();
     float randomFloatBetween(float min, float max);
+    float randomZeroToOne();
     float randomNegativeOneToOne();
 
   private:

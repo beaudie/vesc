@@ -919,13 +919,6 @@ class BlitFramebufferTest : public ANGLETest
 // Tests resolving a multisample depth buffer.
 TEST_P(BlitFramebufferTest, MultisampleDepth)
 {
-    // TODO(jmadill): Triage this driver bug.
-    if (IsAMD() && IsD3D11())
-    {
-        std::cout << "Test skipped on AMD D3D11." << std::endl;
-        return;
-    }
-
     GLRenderbuffer renderbuf;
     glBindRenderbuffer(GL_RENDERBUFFER, renderbuf.get());
     glRenderbufferStorageMultisample(GL_RENDERBUFFER, 2, GL_DEPTH_COMPONENT24, 256, 256);
