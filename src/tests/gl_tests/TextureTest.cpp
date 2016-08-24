@@ -4,6 +4,7 @@
 // found in the LICENSE file.
 //
 
+#include "random_utils.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 
@@ -3478,6 +3479,54 @@ TEST_P(Texture2DTestES3, UnpackOverlappingRowsFromUnpackBuffer)
                  actual.data());
     std::vector<GLColor> expected(windowPixelCount, GLColor::green);
     EXPECT_EQ(expected, actual);
+}
+
+template <typename T>
+T UNorm(float value)
+{
+    return static_cast<T>(value * static_cast<float>(std::numeric_limits<T>::max()));
+}
+
+// Test rendering a depth texture with mipmaps.
+TEST_P(Texture2DTestES3, DepthTexturesWithMipmaps)
+{
+    const int width  = 117;
+    const int height = 97;
+
+    auto w = [width](int level) { return width >> level; };
+    auto h = [height](int level) { return height >> level; };
+
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    glTexStorage2D(GL_TEXTURE_2D, 7, GL_DEPTH_COMPONENT24, 117, 97);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    ASSERT_GL_NO_ERROR();
+
+    RNG rng;
+
+    std::vector<unsigned char> expected;
+
+    for (int level = 0; level < 7; ++level)
+    {
+        float value = rng.randomZeroToOne();
+        expected.push_back(UNorm<unsigned char>(value));
+        std::vector<unsigned int> initData(w(level) * h(level), UNorm<unsigned int>(value));
+        glTexSubImage2D(GL_TEXTURE_2D, level, 0, 0, w(level), h(level), GL_DEPTH_COMPONENT,
+                        GL_UNSIGNED_INT, initData.data());
+    }
+    ASSERT_GL_NO_ERROR();
+
+    for (int level = 0; level < 7; ++level)
+    {
+        glViewport(0, 0, w(level), h(level));
+        drawQuad(mProgram, "position", 0.5f);
+        GLColor actual = ReadColor(0, 0);
+        EXPECT_NEAR(expected[level], actual.R, 10u);
+    }
+    ASSERT_GL_NO_ERROR();
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.

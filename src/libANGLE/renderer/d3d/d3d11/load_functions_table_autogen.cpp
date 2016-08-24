@@ -491,6 +491,7 @@ const std::map<GLenum, LoadImageFunctionInfo> &GetLoadFunctionsMap(GLenum intern
                 {
                     static const std::map<GLenum, LoadImageFunctionInfo> loadFunctionsMap = {
                         { GL_FLOAT, LoadImageFunctionInfo(LoadD32FToD32F, true) },
+                        { GL_UNSIGNED_INT, LoadImageFunctionInfo(LoadR32UNormToD32F, true) },
                     };
 
                     return loadFunctionsMap;

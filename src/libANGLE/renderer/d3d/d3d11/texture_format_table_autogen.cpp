@@ -831,34 +831,17 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         }
         case GL_DEPTH_COMPONENT24:
         {
-            if (OnlyFL10Plus(deviceCaps))
-            {
-                static const Format info(GL_DEPTH_COMPONENT24,
-                                         angle::Format::ID::D24_UNORM_S8_UINT,
-                                         DXGI_FORMAT_R24G8_TYPELESS,
-                                         DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
-                                         DXGI_FORMAT_UNKNOWN,
-                                         DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                         DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
-                                         GL_RGBA32F,
-                                         nullptr,
-                                         deviceCaps);
-                return info;
-            }
-            else
-            {
-                static const Format info(GL_DEPTH_COMPONENT24,
-                                         angle::Format::ID::D24_UNORM_S8_UINT,
-                                         DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                         DXGI_FORMAT_UNKNOWN,
-                                         DXGI_FORMAT_UNKNOWN,
-                                         DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                         DXGI_FORMAT_UNKNOWN,
-                                         GL_RGBA32F,
-                                         nullptr,
-                                         deviceCaps);
-                return info;
-            }
+            static const Format info(GL_DEPTH_COMPONENT24,
+                                     angle::Format::ID::D32_FLOAT,
+                                     DXGI_FORMAT_R32_TYPELESS,
+                                     DXGI_FORMAT_R32_FLOAT,
+                                     DXGI_FORMAT_UNKNOWN,
+                                     DXGI_FORMAT_D32_FLOAT,
+                                     DXGI_FORMAT_R32_FLOAT,
+                                     GL_RGBA32F,
+                                     nullptr,
+                                     deviceCaps);
+            return info;
         }
         case GL_DEPTH_COMPONENT32F:
         {
