@@ -186,9 +186,11 @@ gl::Error TextureStorage11::getSRV(const gl::TextureState &textureState,
     // Make sure to add the level offset for our tiny compressed texture workaround
     const GLuint effectiveBaseLevel = textureState.getEffectiveBaseLevel();
     bool swizzleRequired   = textureState.swizzleRequired();
-    bool mipmapping = gl::IsMipmapFiltered(textureState.getSamplerState());
-    unsigned int mipLevels =
-        mipmapping ? (textureState.getEffectiveMaxLevel() - effectiveBaseLevel + 1) : 1;
+    // Here we don't check IsMipmapFiltered.
+    // bool mipmapping = gl::IsMipmapFiltered(textureState.getSamplerState());
+    // unsigned int mipLevels =
+    //    mipmapping ? (textureState.getEffectiveMaxLevel() - effectiveBaseLevel + 1) : 1;
+    unsigned int mipLevels = textureState.getEffectiveMaxLevel() - effectiveBaseLevel + 1;
 
     // Make sure there's 'mipLevels' mipmap levels below the base level (offset by the top level,
     // which corresponds to GL level 0)

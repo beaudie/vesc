@@ -2354,11 +2354,19 @@ void Renderer11::SamplerMetadataD3D11::update(unsigned int samplerIndex, const g
 {
     unsigned int baseLevel = texture.getTextureState().getEffectiveBaseLevel();
     GLenum sizedFormat     = texture.getFormat(texture.getTarget(), baseLevel).asSized();
-    if (mSamplerMetadata[samplerIndex].baseLevel != static_cast<int>(baseLevel))
-    {
-        mSamplerMetadata[samplerIndex].baseLevel = static_cast<int>(baseLevel);
-        mDirty                                   = true;
-    }
+    /*
+if (mSamplerMetadata[samplerIndex].baseLevel != static_cast<int>(baseLevel))
+{
+    mSamplerMetadata[samplerIndex].baseLevel = static_cast<int>(baseLevel);
+    mDirty                                   = true;
+}
+    */
+    // This is a workaround. Only to quickly verify that
+    // textures2D[samplerIndex].GetDimensions(baseLevel + lod, width, height, numberOfLevels)'s
+    // result when baseLevel > 0
+    // It equals we use textures2D[samplerIndex].GetDimensions(lod, width, height, numberOfLevels)
+    // in HLSL file
+    mSamplerMetadata[samplerIndex].baseLevel = 0;
 
     // Some metadata is needed only for integer textures. We avoid updating the constant buffer
     // unnecessarily by changing the data only in case the texture is an integer texture and
