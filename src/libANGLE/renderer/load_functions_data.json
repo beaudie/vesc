@@ -253,7 +253,8 @@
   },
   "GL_DEPTH_COMPONENT32F": {
     "D32_FLOAT": {
-      "GL_FLOAT": "LoadD32FToD32F"
+      "GL_FLOAT": "LoadD32FToD32F",
+      "GL_UNSIGNED_INT": "LoadR32UNormToD32F"
     }
   },
   "GL_RG32I": {
