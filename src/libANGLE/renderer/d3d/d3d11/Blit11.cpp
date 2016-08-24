@@ -274,21 +274,21 @@ void CopyDepthStencil(const gl::Box &sourceArea,
     }
 }
 
-Blit11::BlitConvertFunction *GetCopyDepthStencilFunction(GLenum internalFormat)
+Blit11::BlitConvertFunction *GetCopyDepthStencilFunction(angle::Format::ID formatID)
 {
-    switch (internalFormat)
+    switch (formatID)
     {
-        case GL_DEPTH_COMPONENT16:
+        case angle::Format::ID::D16_UNORM:
             return &CopyDepthStencil<LoadDepth16>;
-        case GL_DEPTH_COMPONENT24:
+        case angle::Format::ID::D24_UNORM:
             return &CopyDepthStencil<LoadDepth24>;
-        case GL_DEPTH_COMPONENT32F:
+        case angle::Format::ID::D32_FLOAT:
             return &CopyDepthStencil<LoadDepth32F>;
-        case GL_STENCIL_INDEX8:
+        case angle::Format::ID::S8_UINT:
             return &CopyDepthStencil<LoadStencil8>;
-        case GL_DEPTH24_STENCIL8:
+        case angle::Format::ID::D24_UNORM_S8_UINT:
             return &CopyDepthStencil<LoadDepth24Stencil8>;
-        case GL_DEPTH32F_STENCIL8:
+        case angle::Format::ID::D32_FLOAT_S8X24_UINT:
             return &CopyDepthStencil<LoadDepth32FStencil8>;
         default:
             UNREACHABLE();
@@ -1939,7 +1939,7 @@ gl::ErrorOrResult<TextureHelper11> Blit11::resolveDepth(RenderTarget11 *depth)
 
     gl::Box copyBox(0, 0, 0, extents.width, extents.height, 1);
 
-    const auto &copyFunction = GetCopyDepthStencilFunction(depth->getInternalFormat());
+    const auto &copyFunction = GetCopyDepthStencilFunction(depth->getFormatSet().format.id);
     const auto &dsFormatSet  = depth->getFormatSet();
     const auto &dsDxgiInfo   = d3d11::GetDXGIFormatSizeInfo(dsFormatSet.texFormat);
 
@@ -2113,7 +2113,7 @@ gl::ErrorOrResult<TextureHelper11> Blit11::resolveStencil(RenderTarget11 *depthS
                                           StagingAccess::READ_WRITE, device),
                      dest);
 
-    const auto &copyFunction = GetCopyDepthStencilFunction(depthStencil->getInternalFormat());
+    const auto &copyFunction = GetCopyDepthStencilFunction(depthStencil->getFormatSet().format.id);
     const auto &dsFormatSet  = depthStencil->getFormatSet();
     const auto &dsDxgiInfo   = d3d11::GetDXGIFormatSizeInfo(dsFormatSet.texFormat);
 
