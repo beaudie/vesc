@@ -256,7 +256,8 @@
   },
   "GL_DEPTH_COMPONENT32F": {
     "DXGI_FORMAT_R32_TYPELESS": {
-      "GL_FLOAT": "LoadD32FToD32F"
+      "GL_FLOAT": "LoadD32FToD32F",
+      "GL_UNSIGNED_INT": "LoadR32UNormToD32F"
     },
     "DXGI_FORMAT_UNKNOWN": {
       "GL_FLOAT": "UnimplementedLoadFunction"
