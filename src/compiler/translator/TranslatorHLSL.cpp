@@ -17,7 +17,6 @@
 #include "compiler/translator/SeparateArrayInitialization.h"
 #include "compiler/translator/SeparateDeclarations.h"
 #include "compiler/translator/SeparateExpressionsReturningArrays.h"
-#include "compiler/translator/SplitSequenceOperator.h"
 #include "compiler/translator/UnfoldShortCircuitToIf.h"
 
 TranslatorHLSL::TranslatorHLSL(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
@@ -33,13 +32,6 @@ void TranslatorHLSL::translate(TIntermNode *root, int compileOptions)
     sh::AddDefaultReturnStatements(root);
 
     SeparateDeclarations(root);
-
-    // TODO (oetuaho): Sequence operators should also be split in case there is dynamic indexing of
-    // a vector or matrix as an l-value inside (RemoveDynamicIndexing transformation step generates
-    // statements in this case).
-    SplitSequenceOperator(root, IntermNodePatternMatcher::kExpressionReturningArray |
-                                    IntermNodePatternMatcher::kUnfoldedShortCircuitExpression,
-                          getTemporaryIndex());
 
     // Note that SeparateDeclarations needs to be run before UnfoldShortCircuitToIf.
     UnfoldShortCircuitToIf(root, getTemporaryIndex());
