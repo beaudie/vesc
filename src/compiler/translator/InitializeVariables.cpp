@@ -14,36 +14,6 @@
 namespace
 {
 
-TIntermConstantUnion *constructConstUnionNode(const TType &type)
-{
-    TType myType = type;
-    myType.clearArrayness();
-    myType.setQualifier(EvqConst);
-    size_t size          = myType.getObjectSize();
-    TConstantUnion *u = new TConstantUnion[size];
-    for (size_t ii = 0; ii < size; ++ii)
-    {
-        switch (type.getBasicType())
-        {
-            case EbtFloat:
-                u[ii].setFConst(0.0f);
-                break;
-            case EbtInt:
-                u[ii].setIConst(0);
-                break;
-            case EbtUInt:
-                u[ii].setUConst(0u);
-                break;
-            default:
-                UNREACHABLE();
-                return nullptr;
-        }
-    }
-
-    TIntermConstantUnion *node = new TIntermConstantUnion(u, myType);
-    return node;
-}
-
 TIntermConstantUnion *constructIndexNode(int index)
 {
     TConstantUnion *u = new TConstantUnion[1];
@@ -143,7 +113,9 @@ void VariableInitializer::insertInitCode(TIntermSequence *sequence)
 
                 assign->setLeft(indexDirect);
 
-                TIntermConstantUnion *zeroConst = constructConstUnionNode(type);
+                TType elementType = type;
+                elementType.clearArrayness();
+                TIntermConstantUnion *zeroConst = TIntermConstantUnion::CreateZero(elementType);
                 assign->setRight(zeroConst);
             }
         }
@@ -172,7 +144,7 @@ void VariableInitializer::insertInitCode(TIntermSequence *sequence)
 
                 const sh::ShaderVariable &field = var.fields[fieldIndex];
                 TType fieldType                 = sh::ConvertShaderVariableTypeToTType(field.type);
-                TIntermConstantUnion *zeroConst = constructConstUnionNode(fieldType);
+                TIntermConstantUnion *zeroConst = TIntermConstantUnion::CreateZero(fieldType);
                 assign->setRight(zeroConst);
             }
         }
@@ -183,7 +155,7 @@ void VariableInitializer::insertInitCode(TIntermSequence *sequence)
             sequence->insert(sequence->begin(), assign);
             TIntermSymbol *symbol = new TIntermSymbol(0, name, type);
             assign->setLeft(symbol);
-            TIntermConstantUnion *zeroConst = constructConstUnionNode(type);
+            TIntermConstantUnion *zeroConst = TIntermConstantUnion::CreateZero(type);
             assign->setRight(zeroConst);
         }
 
