@@ -2585,6 +2585,39 @@ TConstantUnion *TIntermConstantUnion::FoldAggregateBuiltIn(TIntermAggregate *agg
 }
 
 // static
+TIntermConstantUnion *TIntermConstantUnion::CreateZero(const TType &type)
+{
+    ASSERT(type.isScalar() || type.isVector() || type.isMatrix());
+
+    TType constType = type;
+    constType.setQualifier(EvqConst);
+
+    size_t size       = constType.getObjectSize();
+    TConstantUnion *u = new TConstantUnion[size];
+    for (size_t ii = 0; ii < size; ++ii)
+    {
+        switch (type.getBasicType())
+        {
+            case EbtFloat:
+                u[ii].setFConst(0.0f);
+                break;
+            case EbtInt:
+                u[ii].setIConst(0);
+                break;
+            case EbtUInt:
+                u[ii].setUConst(0u);
+                break;
+            default:
+                UNREACHABLE();
+                return nullptr;
+        }
+    }
+
+    TIntermConstantUnion *node = new TIntermConstantUnion(u, constType);
+    return node;
+}
+
+// static
 TString TIntermTraverser::hash(const TString &name, ShHashFunction64 hashFunction)
 {
     if (hashFunction == NULL || name.empty())

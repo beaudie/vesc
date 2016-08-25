@@ -453,6 +453,7 @@ class TType
             invalidateMangledName();
         }
     }
+    bool isStruct() const { return structure != nullptr; }
 
     const TString &getMangledName() const
     {
