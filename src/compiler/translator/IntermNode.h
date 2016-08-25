@@ -361,6 +361,9 @@ class TIntermConstantUnion : public TIntermTyped
                                                     TInfoSink &infoSink);
     static TConstantUnion *FoldAggregateBuiltIn(TIntermAggregate *aggregate, TInfoSink &infoSink);
 
+    // Only works with scalars, vectors and matrices
+    static TIntermConstantUnion *CreateZero(const TType &type);
+
   protected:
     // Same data may be shared between multiple constant unions, so it can't be modified.
     const TConstantUnion *mUnionArrayPointer;
