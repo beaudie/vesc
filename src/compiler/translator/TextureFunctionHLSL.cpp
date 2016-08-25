@@ -475,20 +475,22 @@ void OutputTextureSizeFunctionBody(TInfoSinkBase &out,
                                    const TextureFunctionHLSL::TextureFunction &textureFunction,
                                    const TString &textureReference)
 {
-    out << "int baseLevel = samplerMetadata[samplerIndex].baseLevel;\n";
     if (IsSampler3D(textureFunction.sampler) || IsSamplerArray(textureFunction.sampler) ||
         (IsIntegerSampler(textureFunction.sampler) && IsSamplerCube(textureFunction.sampler)))
     {
         // "depth" stores either the number of layers in an array texture or 3D depth
-        out << "    uint width; uint height; uint depth; uint numberOfLevels;\n"
-            << "    " << textureReference
-            << ".GetDimensions(baseLevel + lod, width, height, depth, numberOfLevels);\n";
+        out << "    uint width; uint height; uint depth;\n"
+            << "    " << textureReference << ".GetDimensions(width, height, depth);\n"
+            << "    width = max(width >> lod, 1);\n"
+            << "    height = max(height >> lod, 1);\n"
+            << "    depth = max(depth >> lod, 1);\n";
     }
     else if (IsSampler2D(textureFunction.sampler) || IsSamplerCube(textureFunction.sampler))
     {
-        out << "    uint width; uint height; uint numberOfLevels;\n"
-            << "    " << textureReference
-            << ".GetDimensions(baseLevel + lod, width, height, numberOfLevels);\n";
+        out << "    uint width; uint height;\n"
+            << "    " << textureReference << ".GetDimensions(width, height);\n"
+            << "    width = max(width >> lod, 1);\n"
+            << "    height = max(height >> lod, 1);\n";
     }
     else
         UNREACHABLE();
