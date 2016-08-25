@@ -4,6 +4,7 @@
 // found in the LICENSE file.
 //
 
+#include "compiler/translator/BreakVariableAliasingInInnerLoops.h"
 #include "compiler/translator/Cache.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/CallDAG.h"
@@ -386,6 +387,11 @@ TIntermNode *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         {
             RegenerateStructNames gen(symbolTable, shaderVersion);
             root->traverse(&gen);
+        }
+
+        if (success && (compileOptions & SH_BREAK_VARIABLE_ALIASING_IN_INNER_LOOPS))
+        {
+            BreakVariableAliasingInInnerLoops(root);
         }
 
         if (success && shaderType == GL_FRAGMENT_SHADER && shaderVersion == 100 &&

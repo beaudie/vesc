@@ -222,6 +222,8 @@ typedef enum {
     // varying variables and built-in GLSL variables. This compiler
     // option is enabled automatically when needed.
     SH_FLATTEN_PRAGMA_STDGL_INVARIANT_ALL = 0x1000000,
+
+    SH_BREAK_VARIABLE_ALIASING_IN_INNER_LOOPS = 0x2000000,
 } ShCompileOptions;
 
 // Defines alternate strategies for implementing array index clamping.
