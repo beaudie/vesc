@@ -159,6 +159,9 @@ class TIntermTyped : public TIntermNode
 
     bool isConstructorWithOnlyConstantUnionParameters();
 
+    // Only works with scalars, vectors and matrices
+    static TIntermTyped *CreateZero(const TType &type);
+
   protected:
     TType mType;
 
