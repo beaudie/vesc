@@ -2130,35 +2130,6 @@ TEST_P(GLSLTest_ES3, SequenceOperatorEvaluationOrderShortCircuit)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
-// Sequence operator evaluates operands from left to right (ESSL 3.00 section 5.9).
-// Indexing the vector needs to be evaluated after func() for the right result.
-TEST_P(GLSLTest_ES3, SequenceOperatorEvaluationOrderDynamicVectorIndexingInLValue)
-{
-    const std::string &fragmentShaderSource =
-        "#version 300 es\n"
-        "precision mediump float;\n"
-        "out vec4 my_FragColor;\n"
-        "uniform int u_zero;\n"
-        "int sideEffectCount = 0;\n"
-        "float func() {\n"
-        "    ++sideEffectCount;\n"
-        "    return -1.0;\n"
-        "}\n"
-        "void main() {\n"
-        "    vec4 v = vec4(0.0, 2.0, 4.0, 6.0); \n"
-        "    float f = (func(), (++v[u_zero + sideEffectCount]));\n"
-        "    bool green = abs(f - 3.0) < 0.01 && abs(v[1] - 3.0) < 0.01 && sideEffectCount == 1;\n"
-        "    my_FragColor = vec4(0.0, (green ? 1.0 : 0.0), 0.0, 1.0);\n"
-        "}\n";
-
-    GLuint program = CompileProgram(mSimpleVSSource, fragmentShaderSource);
-    ASSERT_NE(0u, program);
-
-    drawQuad(program, "inputAttribute", 0.5f);
-
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
-}
-
 // Test that using gl_PointCoord with GL_TRIANGLES doesn't produce a link error.
 // From WebGL test conformance/rendering/point-specific-shader-variables.html
 // See http://anglebug.com/1380
@@ -2180,33 +2151,6 @@ TEST_P(GLSLTest, RenderTrisWithPointCoord)
 
     ANGLE_GL_PROGRAM(prog, vert, frag);
     drawQuad(prog.get(), "aPosition", 0.5f);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
-}
-
-// Convers a bug with the integer pow statement workaround.
-TEST_P(GLSLTest, NestedPowStatements)
-{
-    const std::string &vert =
-        "attribute vec2 position;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_Position = vec4(position, 0, 1);\n"
-        "}";
-    const std::string &frag =
-        "precision mediump float;\n"
-        "float func(float v)\n"
-        "{\n"
-        "   float f1 = pow(v, 2.0);\n"
-        "   return pow(f1 + v, 2.0);\n"
-        "}\n"
-        "void main()\n"
-        "{\n"
-        "    float v = func(2.0);\n"
-        "    gl_FragColor = abs(v - 36.0) < 0.001 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);\n"
-        "}";
-
-    ANGLE_GL_PROGRAM(prog, vert, frag);
-    drawQuad(prog.get(), "position", 0.5f);
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
