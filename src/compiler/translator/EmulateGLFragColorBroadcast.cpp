@@ -17,33 +17,18 @@
 namespace
 {
 
-TIntermConstantUnion *constructIndexNode(int index)
-{
-    TConstantUnion *u = new TConstantUnion[1];
-    u[0].setIConst(index);
-
-    TType type(EbtInt, EbpUndefined, EvqConst, 1);
-    TIntermConstantUnion *node = new TIntermConstantUnion(u, type);
-    return node;
-}
-
 TIntermBinary *constructGLFragDataNode(int index)
 {
-    TIntermBinary *indexDirect = new TIntermBinary(EOpIndexDirect);
-    TIntermSymbol *symbol      = new TIntermSymbol(0, "gl_FragData", TType(EbtFloat, 4));
-    indexDirect->setLeft(symbol);
-    TIntermConstantUnion *indexNode = constructIndexNode(index);
-    indexDirect->setRight(indexNode);
-    return indexDirect;
+    TIntermSymbol *symbol   = new TIntermSymbol(0, "gl_FragData", TType(EbtFloat, 4));
+    TIntermTyped *indexNode = TIntermTyped::CreateIndexNode(index);
+    return new TIntermBinary(EOpIndexDirect, symbol, indexNode);
 }
 
 TIntermBinary *constructGLFragDataAssignNode(int index)
 {
-    TIntermBinary *assign = new TIntermBinary(EOpAssign);
-    assign->setLeft(constructGLFragDataNode(index));
-    assign->setRight(constructGLFragDataNode(0));
-    assign->setType(TType(EbtFloat, 4));
-    return assign;
+    TIntermTyped *fragDataIndex = constructGLFragDataNode(index);
+    TIntermTyped *fragDataZero = constructGLFragDataNode(0);
+    return new TIntermBinary(EOpAssign, fragDataIndex, fragDataZero);
 }
 
 class GLFragColorBroadcastTraverser : public TIntermTraverser
