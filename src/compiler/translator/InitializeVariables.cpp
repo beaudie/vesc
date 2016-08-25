@@ -14,36 +14,6 @@
 namespace
 {
 
-TIntermConstantUnion *constructConstUnionNode(const TType &type)
-{
-    TType myType = type;
-    myType.clearArrayness();
-    myType.setQualifier(EvqConst);
-    size_t size          = myType.getObjectSize();
-    TConstantUnion *u = new TConstantUnion[size];
-    for (size_t ii = 0; ii < size; ++ii)
-    {
-        switch (type.getBasicType())
-        {
-            case EbtFloat:
-                u[ii].setFConst(0.0f);
-                break;
-            case EbtInt:
-                u[ii].setIConst(0);
-                break;
-            case EbtUInt:
-                u[ii].setUConst(0u);
-                break;
-            default:
-                UNREACHABLE();
-                return nullptr;
-        }
-    }
-
-    TIntermConstantUnion *node = new TIntermConstantUnion(u, myType);
-    return node;
-}
-
 TIntermConstantUnion *constructIndexNode(int index)
 {
     TConstantUnion *u = new TConstantUnion[1];
@@ -124,30 +94,7 @@ void VariableInitializer::insertInitCode(TIntermSequence *sequence)
     {
         const sh::ShaderVariable &var = mVariables[ii];
         TString name = TString(var.name.c_str());
-        if (var.isArray())
-        {
-            TType type = sh::ConvertShaderVariableTypeToTType(var.type);
-            size_t pos = name.find_last_of('[');
-            if (pos != TString::npos)
-                name = name.substr(0, pos);
-            for (int index = static_cast<int>(var.arraySize) - 1; index >= 0; --index)
-            {
-                TIntermBinary *assign = new TIntermBinary(EOpAssign);
-                sequence->insert(sequence->begin(), assign);
-
-                TIntermBinary *indexDirect = new TIntermBinary(EOpIndexDirect);
-                TIntermSymbol *symbol      = new TIntermSymbol(0, name, type);
-                indexDirect->setLeft(symbol);
-                TIntermConstantUnion *indexNode = constructIndexNode(index);
-                indexDirect->setRight(indexNode);
-
-                assign->setLeft(indexDirect);
-
-                TIntermConstantUnion *zeroConst = constructConstUnionNode(type);
-                assign->setRight(zeroConst);
-            }
-        }
-        else if (var.isStruct())
+        if (var.isStruct())
         {
             TFieldList *fields = new TFieldList;
             TSourceLoc loc;
@@ -172,21 +119,30 @@ void VariableInitializer::insertInitCode(TIntermSequence *sequence)
 
                 const sh::ShaderVariable &field = var.fields[fieldIndex];
                 TType fieldType                 = sh::ConvertShaderVariableTypeToTType(field.type);
-                TIntermConstantUnion *zeroConst = constructConstUnionNode(fieldType);
-                assign->setRight(zeroConst);
+                TIntermTyped *zero = TIntermTyped::CreateZero(fieldType);
+                assign->setRight(zero);
             }
         }
         else
         {
-            TType type            = sh::ConvertShaderVariableTypeToTType(var.type);
-            TIntermBinary *assign = new TIntermBinary(EOpAssign);
-            sequence->insert(sequence->begin(), assign);
-            TIntermSymbol *symbol = new TIntermSymbol(0, name, type);
-            assign->setLeft(symbol);
-            TIntermConstantUnion *zeroConst = constructConstUnionNode(type);
-            assign->setRight(zeroConst);
-        }
+            if (var.isArray())
+            {
+                size_t pos = name.find_last_of('[');
+                if (pos != TString::npos)
+                {
+                    name = name.substr(0, pos);
+                }
+            }
 
+            TType type = sh::ConvertShaderVariableTypeToTType(var.type);
+            TIntermSymbol *symbol = new TIntermSymbol(0, name, type);
+            TIntermTyped *zero = TIntermTyped::CreateZero(type);
+
+            TIntermBinary *assign = new TIntermBinary(EOpAssign);
+            assign->setLeft(symbol);
+            assign->setRight(zero);
+            sequence->insert(sequence->begin(), assign);
+        }
     }
 }
 
