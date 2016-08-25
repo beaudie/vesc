@@ -473,22 +473,34 @@ void GetTextureReference(TInfoSinkBase &out,
 
 void OutputTextureSizeFunctionBody(TInfoSinkBase &out,
                                    const TextureFunctionHLSL::TextureFunction &textureFunction,
-                                   const TString &textureReference)
+                                   const TString &textureReference,
+                                   bool getDimensionsIgnoresBaseLevel)
 {
-    out << "int baseLevel = samplerMetadata[samplerIndex].baseLevel;\n";
+    if (getDimensionsIgnoresBaseLevel)
+    {
+        out << "int mip = samplerMetadata[samplerIndex].baseLevel + lod;\n";
+    }
+    else
+    {
+        out << "int mip = lod;\n";
+    }
+
     if (IsSampler3D(textureFunction.sampler) || IsSamplerArray(textureFunction.sampler) ||
         (IsIntegerSampler(textureFunction.sampler) && IsSamplerCube(textureFunction.sampler)))
     {
         // "depth" stores either the number of layers in an array texture or 3D depth
         out << "    uint width; uint height; uint depth; uint numberOfLevels;\n"
-            << "    " << textureReference
-            << ".GetDimensions(baseLevel + lod, width, height, depth, numberOfLevels);\n";
+            << "    " << textureReference << ".GetDimensions(0, width, height, depth, numberOfLevels);\n"
+            << "    width = max(width >> mip, 1);\n"
+            << "    height = max(height >> mip, 1);\n"
+            << "    depth = max(depth >> mip, 1);\n";
     }
     else if (IsSampler2D(textureFunction.sampler) || IsSamplerCube(textureFunction.sampler))
     {
         out << "    uint width; uint height; uint numberOfLevels;\n"
-            << "    " << textureReference
-            << ".GetDimensions(baseLevel + lod, width, height, numberOfLevels);\n";
+            << "    " << textureReference << ".GetDimensions(0, width, height, numberOfLevels);\n"
+            << "    width = max(width >> mip, 1);\n"
+            << "    height = max(height >> mip, 1);\n";
     }
     else
         UNREACHABLE();
@@ -1249,7 +1261,9 @@ TString TextureFunctionHLSL::useTextureFunction(const TString &name,
     return textureFunction.name();
 }
 
-void TextureFunctionHLSL::textureFunctionHeader(TInfoSinkBase &out, const ShShaderOutput outputType)
+void TextureFunctionHLSL::textureFunctionHeader(TInfoSinkBase &out,
+                                                const ShShaderOutput outputType,
+                                                bool getDimensionsIgnoresBaseLevel)
 {
     for (const TextureFunction &textureFunction : mUsesTexture)
     {
@@ -1272,7 +1286,8 @@ void TextureFunctionHLSL::textureFunctionHeader(TInfoSinkBase &out, const ShShad
 
         if (textureFunction.method == TextureFunction::SIZE)
         {
-            OutputTextureSizeFunctionBody(out, textureFunction, textureReference);
+            OutputTextureSizeFunctionBody(out, textureFunction, textureReference,
+                                          getDimensionsIgnoresBaseLevel);
         }
         else
         {
