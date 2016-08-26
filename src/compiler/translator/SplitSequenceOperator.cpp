@@ -35,6 +35,7 @@ class SplitSequenceOperatorTraverser : public TLValueTrackingTraverser
     // Marked to true once an operation that needs to be hoisted out of the expression has been
     // found. After that, no more AST updates are performed on that traversal.
     bool mFoundExpressionToSplit;
+    bool mDidSplit;
     int mInsideSequenceOperator;
 
     IntermNodePatternMatcher mPatternToSplitMatcher;
@@ -45,6 +46,7 @@ SplitSequenceOperatorTraverser::SplitSequenceOperatorTraverser(unsigned int patt
                                                                int shaderVersion)
     : TLValueTrackingTraverser(true, false, true, symbolTable, shaderVersion),
       mFoundExpressionToSplit(false),
+      mDidSplit(false),
       mInsideSequenceOperator(0),
       mPatternToSplitMatcher(patternsToSplitMask)
 {
@@ -53,6 +55,7 @@ SplitSequenceOperatorTraverser::SplitSequenceOperatorTraverser(unsigned int patt
 void SplitSequenceOperatorTraverser::nextIteration()
 {
     mFoundExpressionToSplit = false;
+    mDidSplit               = false;
     mInsideSequenceOperator = 0;
     nextTemporaryIndex();
 }
@@ -87,7 +90,9 @@ bool SplitSequenceOperatorTraverser::visitAggregate(Visit visit, TIntermAggregat
         }
         else if (visit == PostVisit)
         {
-            if (mFoundExpressionToSplit)
+            // Only do the split if we didn't already split another sequence operator that's inside
+            // this sequence operator.
+            if (mFoundExpressionToSplit && !mDidSplit)
             {
                 // Move all operands of the sequence operation except the last one into separate
                 // statements in the parent block.
@@ -102,6 +107,7 @@ bool SplitSequenceOperatorTraverser::visitAggregate(Visit visit, TIntermAggregat
                 insertStatementsInParentBlock(insertions);
                 // Replace the sequence with its last operand
                 queueReplacement(node, node->getSequence()->back(), OriginalNode::IS_DROPPED);
+                mDidSplit = true;
             }
             mInsideSequenceOperator--;
         }
