@@ -142,7 +142,11 @@ ES3FormatCombinationSet BuildES3FormatSet()
     InsertES3FormatCombo(&set, GL_RED,                GL_RED,             GL_FLOAT                         );
     InsertES3FormatCombo(&set, GL_RED,                GL_RED,             GL_HALF_FLOAT                    );
     InsertES3FormatCombo(&set, GL_RED,                GL_RED,             GL_HALF_FLOAT_OES                );
+    InsertES3FormatCombo(&set, GL_DEPTH_COMPONENT,    GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT                );
+    InsertES3FormatCombo(&set, GL_DEPTH_COMPONENT,    GL_DEPTH_COMPONENT, GL_UNSIGNED_INT                  );
+    InsertES3FormatCombo(&set, GL_DEPTH_COMPONENT,    GL_DEPTH_COMPONENT, GL_FLOAT                         );
     InsertES3FormatCombo(&set, GL_DEPTH_STENCIL,      GL_DEPTH_STENCIL,   GL_UNSIGNED_INT_24_8             );
+    InsertES3FormatCombo(&set, GL_DEPTH_STENCIL,      GL_DEPTH_STENCIL,   GL_FLOAT_32_UNSIGNED_INT_24_8_REV             );
 
     // Depth stencil formats
     InsertES3FormatCombo(&set, GL_DEPTH_COMPONENT16,  GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT                );
@@ -164,6 +168,8 @@ ES3FormatCombinationSet BuildES3FormatSet()
     InsertES3FormatCombo(&set, GL_ALPHA,              GL_ALPHA,           GL_FLOAT                         );
 
     // From GL_OES_texture_half_float
+    InsertES3FormatCombo(&set, GL_RGBA,               GL_RGBA,            GL_HALF_FLOAT_OES                );
+    InsertES3FormatCombo(&set, GL_RGB,                GL_RGB,             GL_HALF_FLOAT_OES                );
     InsertES3FormatCombo(&set, GL_LUMINANCE_ALPHA,    GL_LUMINANCE_ALPHA, GL_HALF_FLOAT                    );
     InsertES3FormatCombo(&set, GL_LUMINANCE_ALPHA,    GL_LUMINANCE_ALPHA, GL_HALF_FLOAT_OES                );
     InsertES3FormatCombo(&set, GL_LUMINANCE,          GL_LUMINANCE,       GL_HALF_FLOAT                    );
@@ -750,6 +756,7 @@ static CopyConversionSet BuildValidES3CopyTexImageCombinations()
     set.insert(CopyConversion(GL_RG, GL_BGRA_EXT));
     set.insert(CopyConversion(GL_RGB, GL_BGRA_EXT));
     set.insert(CopyConversion(GL_RGBA, GL_BGRA_EXT));
+    set.insert(CopyConversion(GL_BGRA_EXT, GL_BGRA_EXT));
 
     set.insert(CopyConversion(GL_RED_INTEGER, GL_RED_INTEGER));
     set.insert(CopyConversion(GL_RED_INTEGER, GL_RG_INTEGER));
