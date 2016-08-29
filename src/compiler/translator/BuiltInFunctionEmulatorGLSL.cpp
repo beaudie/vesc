@@ -11,6 +11,16 @@
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/VersionGLSL.h"
 
+void InitBuiltInAbsFunctionEmulatorForGLSLWorkarounds(BuiltInFunctionEmulator *emu,
+                                                      sh::GLenum shaderType)
+{
+    if (shaderType == GL_VERTEX_SHADER)
+    {
+        const TType *int1 = TCache::getType(EbtInt);
+        emu->addEmulatedFunction(EOpAbs, int1, "#define webgl_abs_emu(x) ((x) >= 0 ? (x) : -(x))");
+    }
+}
+
 void InitBuiltInFunctionEmulatorForGLSLWorkarounds(BuiltInFunctionEmulator *emu, sh::GLenum shaderType)
 {
     // we use macros here instead of function definitions to work around more GLSL
