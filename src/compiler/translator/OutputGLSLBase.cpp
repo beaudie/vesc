@@ -105,8 +105,9 @@ void TOutputGLSLBase::writeLayoutQualifier(const TType &type)
 
 void TOutputGLSLBase::writeVariableType(const TType &type)
 {
+    TQualifier qualifier = type.getQualifier();
     TInfoSinkBase &out = objSink();
-    if (type.isInvariant())
+    if (type.isInvariant() && qualifier != EvqFragmentIn && !IsGLSL420OrNewer(mOutput))
     {
         out << "invariant ";
     }
@@ -115,7 +116,6 @@ void TOutputGLSLBase::writeVariableType(const TType &type)
         TInterfaceBlock *interfaceBlock = type.getInterfaceBlock();
         declareInterfaceBlockLayout(interfaceBlock);
     }
-    TQualifier qualifier = type.getQualifier();
     if (qualifier != EvqTemporary && qualifier != EvqGlobal)
     {
         if (IsGLSL130OrNewer(mOutput))
