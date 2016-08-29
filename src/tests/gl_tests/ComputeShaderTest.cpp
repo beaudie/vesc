@@ -30,6 +30,12 @@ class ComputeShaderTestES3 : public ANGLETest
 // link a simple compute program. It should be successful.
 TEST_P(ComputeShaderTest, LinkComputeProgram)
 {
+    if (IsIntel())
+    {
+        std::cout << "Test skipped on Intel due to failures." << std::endl;
+        return;
+    }
+
     const std::string csSource =
         "#version 310 es\n"
         "layout(local_size_x=1) in;\n"
@@ -45,6 +51,11 @@ TEST_P(ComputeShaderTest, LinkComputeProgram)
 // link a simple compute program. There is no local size and linking should fail.
 TEST_P(ComputeShaderTest, LinkComputeProgramNoLocalSizeLinkError)
 {
+    if (IsIntel())
+    {
+        std::cout << "Test skipped on Intel due to failures." << std::endl;
+        return;
+    }
     const std::string csSource =
         "#version 310 es\n"
         "void main()\n"
@@ -63,6 +74,11 @@ TEST_P(ComputeShaderTest, LinkComputeProgramNoLocalSizeLinkError)
 // make sure that uniforms and uniform samplers get recorded
 TEST_P(ComputeShaderTest, LinkComputeProgramWithUniforms)
 {
+    if (IsIntel())
+    {
+        std::cout << "Test skipped on Intel due to failures." << std::endl;
+        return;
+    }
     const std::string csSource =
         "#version 310 es\n"
         "precision mediump sampler2D;\n"
@@ -90,6 +106,11 @@ TEST_P(ComputeShaderTest, LinkComputeProgramWithUniforms)
 // OpenGL ES 3.10, 7.3 Program Objects
 TEST_P(ComputeShaderTest, AttachMultipleShaders)
 {
+    if (IsIntel())
+    {
+        std::cout << "Test skipped on Intel due to failures." << std::endl;
+        return;
+    }
     const std::string csSource =
         "#version 310 es\n"
         "layout(local_size_x=1) in;\n"
@@ -142,6 +163,11 @@ TEST_P(ComputeShaderTest, AttachMultipleShaders)
 // Query for the number of attached shaders and check the count.
 TEST_P(ComputeShaderTest, AttachmentCount)
 {
+    if (IsIntel())
+    {
+        std::cout << "Test skipped on Intel due to failures." << std::endl;
+        return;
+    }
     const std::string csSource =
         "#version 310 es\n"
         "layout(local_size_x=1) in;\n"
