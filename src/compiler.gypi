@@ -87,6 +87,8 @@
             'compiler/translator/RegenerateStructNames.h',
             'compiler/translator/RemovePow.cpp',
             'compiler/translator/RemovePow.h',
+            'compiler/translator/RewriteAbsInt.cpp',
+            'compiler/translator/RewriteAbsInt.h',
             'compiler/translator/RewriteDoWhile.cpp',
             'compiler/translator/RewriteDoWhile.h',
             'compiler/translator/RewriteTexelFetchOffset.cpp',
