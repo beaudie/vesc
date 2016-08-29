@@ -75,6 +75,11 @@ ShCompileOptions ShaderGL::prepareSourceAndReturnOptions(std::stringstream *sour
         options |= SH_USE_UNUSED_STANDARD_SHARED_BLOCKS;
     }
 
+    if (mWorkarounds.removeInvariantForFragmentInput)
+    {
+        options |= SH_REMOVE_INVARIANT_FOR_FRAGMENT_INPUT;
+    }
+
     return options;
 }
 

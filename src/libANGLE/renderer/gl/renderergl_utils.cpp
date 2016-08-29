@@ -903,6 +903,8 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
 
     workarounds->emulateIsnanFloat = IsIntel(vendor);
 
+    workarounds->removeInvariantForFragmentInput = IsIntel(vendor);
+
     workarounds->doesSRGBClearsOnLinearFramebufferAttachments =
         functions->standard == STANDARD_GL_DESKTOP && (IsIntel(vendor) || IsAMD(vendor));
 
