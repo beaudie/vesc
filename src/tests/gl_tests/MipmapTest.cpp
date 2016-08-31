@@ -622,9 +622,9 @@ TEST_P(MipmapTest, GenerateMipmapFromRenderedImage)
 TEST_P(MipmapTest, RenderOntoLevelZeroAfterGenerateMipmap)
 {
     // TODO(geofflang): Figure out why this is broken on AMD OpenGL
-    if ((IsAMD() || IsIntel()) && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
+    if (IsAMD() && getPlatformRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE)
     {
-        std::cout << "Test skipped on Intel/AMD OpenGL." << std::endl;
+        std::cout << "Test skipped on AMD OpenGL." << std::endl;
         return;
     }
 

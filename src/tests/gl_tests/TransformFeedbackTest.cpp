@@ -221,13 +221,6 @@ TEST_P(TransformFeedbackTest, BufferRebinding)
 // Test that XFB can write back vertices to a buffer and that we can draw from this buffer afterward.
 TEST_P(TransformFeedbackTest, RecordAndDraw)
 {
-    // TODO(jmadill): Figure out why this fails on Intel.
-    if (IsIntel() && GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
-    {
-        std::cout << "Test skipped on Intel." << std::endl;
-        return;
-    }
-
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
