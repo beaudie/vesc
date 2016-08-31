@@ -384,7 +384,6 @@ class TIntermOperator : public TIntermTyped
 {
   public:
     TOperator getOp() const { return mOp; }
-    void setOp(TOperator op) { mOp = op; }
 
     bool isAssignment() const;
     bool isMultiplication() const;
@@ -461,18 +460,10 @@ class TIntermBinary : public TIntermOperator
 class TIntermUnary : public TIntermOperator
 {
   public:
-    TIntermUnary(TOperator op, const TType &type)
-        : TIntermOperator(op, type),
-          mOperand(NULL),
-          mUseEmulatedFunction(false) {}
-    TIntermUnary(TOperator op)
-        : TIntermOperator(op),
-          mOperand(NULL),
-          mUseEmulatedFunction(false) {}
-
     TIntermUnary(TOperator op, TIntermTyped *operand)
         : TIntermOperator(op), mOperand(operand), mUseEmulatedFunction(false)
     {
+        promote();
     }
 
     TIntermTyped *deepCopy() const override { return new TIntermUnary(*this); }
@@ -483,9 +474,7 @@ class TIntermUnary : public TIntermOperator
 
     bool hasSideEffects() const override { return isAssignment() || mOperand->hasSideEffects(); }
 
-    void setOperand(TIntermTyped *operand) { mOperand = operand; }
     TIntermTyped *getOperand() { return mOperand; }
-    void promote(const TType *funcReturnType);
     TIntermTyped *fold(TDiagnostics *diagnostics);
 
     void setUseEmulatedFunction() { mUseEmulatedFunction = true; }
@@ -499,6 +488,8 @@ class TIntermUnary : public TIntermOperator
     bool mUseEmulatedFunction;
 
   private:
+    void promote();
+
     TIntermUnary(const TIntermUnary &node);  // note: not deleted, just private!
 };
 
@@ -531,6 +522,8 @@ class TIntermAggregate : public TIntermOperator
 
     // Note: only supported for nodes that can be a part of an expression.
     TIntermTyped *deepCopy() const override { return new TIntermAggregate(*this); }
+
+    void setOp(TOperator op) { mOp = op; }
 
     TIntermAggregate *getAsAggregate() override { return this; }
     void traverse(TIntermTraverser *it) override;

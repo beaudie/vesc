@@ -3204,7 +3204,6 @@ TIntermTyped *TParseContext::createUnaryMath(TOperator op,
 
     TIntermUnary *node = new TIntermUnary(op, child);
     node->setLine(loc);
-    node->promote(funcReturnType);
 
     TIntermTyped *foldedNode = node->fold(&mDiagnostics);
     if (foldedNode)
