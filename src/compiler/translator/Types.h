@@ -620,6 +620,8 @@ struct TPublicType
     // true if the type was defined by a struct specifier rather than a reference to a type name.
     bool isStructSpecifier;
 
+    void setBasic(TBasicType bt, const TSourceLoc &ln) { setBasic(bt, EvqUnspecified, ln); }
+
     void setBasic(TBasicType bt, TQualifier q, const TSourceLoc &ln)
     {
         type = bt;
@@ -635,6 +637,8 @@ struct TPublicType
         line = ln;
         isStructSpecifier = false;
     }
+
+    void setQualifier(TQualifier q) { qualifier = q; }
 
     void setAggregate(unsigned char size)
     {
