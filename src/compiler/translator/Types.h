@@ -620,19 +620,19 @@ struct TPublicType
     // true if the type was defined by a struct specifier rather than a reference to a type name.
     bool isStructSpecifier;
 
-    void setBasic(TBasicType bt, TQualifier q, const TSourceLoc &ln)
+    void setBasic(TBasicType bt, const TSourceLoc &ln)
     {
-        type = bt;
-        layoutQualifier = TLayoutQualifier::create();
-        qualifier = q;
-        invariant = false;
-        precision = EbpUndefined;
-        primarySize = 1;
-        secondarySize = 1;
-        array = false;
-        arraySize = 0;
-        userDef = 0;
-        line = ln;
+        type              = bt;
+        layoutQualifier   = TLayoutQualifier::create();
+        qualifier         = EvqUnspecified;
+        invariant         = false;
+        precision         = EbpUndefined;
+        primarySize       = 1;
+        secondarySize     = 1;
+        array             = false;
+        arraySize         = 0;
+        userDef           = 0;
+        line              = ln;
         isStructSpecifier = false;
     }
 

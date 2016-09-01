@@ -3311,7 +3311,8 @@ TPublicType TParseContext::addStructure(const TSourceLoc &structLine,
     }
 
     TPublicType publicType;
-    publicType.setBasic(EbtStruct, EvqTemporary, structLine);
+    publicType.setBasic(EbtStruct, structLine);
+    publicType.qualifier         = EvqTemporary;
     publicType.userDef = structureType;
     publicType.isStructSpecifier = true;
     exitStructDeclaration();

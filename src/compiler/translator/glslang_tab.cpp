@@ -727,18 +727,18 @@ static const yytype_uint16 yyrline[] =
      805,   812,   822,   828,   831,   837,   841,   848,   854,   861,
      865,   868,   871,   880,   886,   894,   897,   917,   936,   943,
      947,   954,   964,   967,   970,   976,   983,   986,   992,   995,
-     998,  1004,  1007,  1012,  1024,  1028,  1032,  1036,  1040,  1044,
-    1049,  1054,  1059,  1064,  1069,  1074,  1079,  1084,  1089,  1094,
-    1099,  1104,  1109,  1114,  1119,  1124,  1129,  1134,  1139,  1144,
-    1149,  1153,  1157,  1161,  1165,  1169,  1173,  1177,  1181,  1185,
-    1189,  1193,  1197,  1201,  1205,  1209,  1217,  1224,  1228,  1241,
-    1241,  1244,  1244,  1250,  1253,  1268,  1271,  1278,  1282,  1288,
-    1294,  1306,  1310,  1314,  1315,  1321,  1322,  1323,  1324,  1325,
-    1326,  1327,  1331,  1332,  1332,  1332,  1342,  1343,  1347,  1347,
-    1348,  1348,  1353,  1356,  1366,  1369,  1375,  1376,  1380,  1387,
-    1391,  1398,  1398,  1405,  1408,  1415,  1419,  1432,  1432,  1437,
-    1437,  1443,  1443,  1451,  1454,  1460,  1463,  1469,  1473,  1480,
-    1483,  1486,  1489,  1492,  1501,  1505,  1512,  1515,  1521,  1521
+     998,  1004,  1008,  1014,  1026,  1029,  1032,  1035,  1038,  1041,
+    1045,  1049,  1053,  1057,  1061,  1065,  1069,  1073,  1077,  1081,
+    1085,  1089,  1093,  1097,  1101,  1105,  1109,  1113,  1117,  1121,
+    1125,  1128,  1131,  1134,  1137,  1140,  1143,  1146,  1149,  1152,
+    1155,  1158,  1161,  1164,  1167,  1170,  1177,  1183,  1186,  1198,
+    1198,  1201,  1201,  1207,  1210,  1225,  1228,  1235,  1239,  1245,
+    1251,  1263,  1267,  1271,  1272,  1278,  1279,  1280,  1281,  1282,
+    1283,  1284,  1288,  1289,  1289,  1289,  1299,  1300,  1304,  1304,
+    1305,  1305,  1310,  1313,  1323,  1326,  1332,  1333,  1337,  1344,
+    1348,  1355,  1355,  1362,  1365,  1372,  1376,  1389,  1389,  1394,
+    1394,  1400,  1400,  1408,  1411,  1417,  1420,  1426,  1430,  1437,
+    1440,  1443,  1446,  1449,  1458,  1462,  1469,  1472,  1478,  1478
 };
 #endif
 
@@ -3682,6 +3682,7 @@ yyreduce:
 
     {
         (yyval.interm.type) = (yyvsp[0].interm.type);
+        (yyval.interm.type).qualifier = (context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary);
     }
 
     break;
@@ -3691,6 +3692,7 @@ yyreduce:
     {
         ES3_OR_NEWER("[]", (yylsp[-1]), "implicitly sized array");
         (yyval.interm.type) = (yyvsp[-2].interm.type);
+        (yyval.interm.type).qualifier = (context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary);
         (yyval.interm.type).setArraySize(0);
     }
 
@@ -3700,7 +3702,7 @@ yyreduce:
 
     {
         (yyval.interm.type) = (yyvsp[-3].interm.type);
-
+        (yyval.interm.type).qualifier = (context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary);
         if (context->checkIsValidTypeForArray((yylsp[-2]), (yyvsp[-3].interm.type)))
         {
             unsigned int size = context->checkIsValidArraySize((yylsp[-2]), (yyvsp[-1].interm.intermTypedNode));
@@ -3713,8 +3715,7 @@ yyreduce:
   case 154:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtVoid, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtVoid, (yylsp[0]));
     }
 
     break;
@@ -3722,8 +3723,7 @@ yyreduce:
   case 155:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtFloat, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtFloat, (yylsp[0]));
     }
 
     break;
@@ -3731,8 +3731,7 @@ yyreduce:
   case 156:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtInt, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtInt, (yylsp[0]));
     }
 
     break;
@@ -3740,8 +3739,7 @@ yyreduce:
   case 157:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtUInt, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtUInt, (yylsp[0]));
     }
 
     break;
@@ -3749,8 +3747,7 @@ yyreduce:
   case 158:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtBool, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtBool, (yylsp[0]));
     }
 
     break;
@@ -3758,8 +3755,7 @@ yyreduce:
   case 159:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtFloat, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtFloat, (yylsp[0]));
         (yyval.interm.type).setAggregate(2);
     }
 
@@ -3768,8 +3764,7 @@ yyreduce:
   case 160:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtFloat, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtFloat, (yylsp[0]));
         (yyval.interm.type).setAggregate(3);
     }
 
@@ -3778,8 +3773,7 @@ yyreduce:
   case 161:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtFloat, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtFloat, (yylsp[0]));
         (yyval.interm.type).setAggregate(4);
     }
 
@@ -3788,8 +3782,7 @@ yyreduce:
   case 162:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtBool, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtBool, (yylsp[0]));
         (yyval.interm.type).setAggregate(2);
     }
 
@@ -3798,8 +3791,7 @@ yyreduce:
   case 163:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtBool, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtBool, (yylsp[0]));
         (yyval.interm.type).setAggregate(3);
     }
 
@@ -3808,8 +3800,7 @@ yyreduce:
   case 164:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtBool, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtBool, (yylsp[0]));
         (yyval.interm.type).setAggregate(4);
     }
 
@@ -3818,8 +3809,7 @@ yyreduce:
   case 165:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtInt, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtInt, (yylsp[0]));
         (yyval.interm.type).setAggregate(2);
     }
 
@@ -3828,8 +3818,7 @@ yyreduce:
   case 166:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtInt, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtInt, (yylsp[0]));
         (yyval.interm.type).setAggregate(3);
     }
 
@@ -3838,8 +3827,7 @@ yyreduce:
   case 167:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtInt, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtInt, (yylsp[0]));
         (yyval.interm.type).setAggregate(4);
     }
 
@@ -3848,8 +3836,7 @@ yyreduce:
   case 168:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtUInt, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtUInt, (yylsp[0]));
         (yyval.interm.type).setAggregate(2);
     }
 
@@ -3858,8 +3845,7 @@ yyreduce:
   case 169:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtUInt, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtUInt, (yylsp[0]));
         (yyval.interm.type).setAggregate(3);
     }
 
@@ -3868,8 +3854,7 @@ yyreduce:
   case 170:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtUInt, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtUInt, (yylsp[0]));
         (yyval.interm.type).setAggregate(4);
     }
 
@@ -3878,8 +3863,7 @@ yyreduce:
   case 171:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtFloat, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtFloat, (yylsp[0]));
         (yyval.interm.type).setMatrix(2, 2);
     }
 
@@ -3888,8 +3872,7 @@ yyreduce:
   case 172:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtFloat, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtFloat, (yylsp[0]));
         (yyval.interm.type).setMatrix(3, 3);
     }
 
@@ -3898,8 +3881,7 @@ yyreduce:
   case 173:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtFloat, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtFloat, (yylsp[0]));
         (yyval.interm.type).setMatrix(4, 4);
     }
 
@@ -3908,8 +3890,7 @@ yyreduce:
   case 174:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtFloat, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtFloat, (yylsp[0]));
         (yyval.interm.type).setMatrix(2, 3);
     }
 
@@ -3918,8 +3899,7 @@ yyreduce:
   case 175:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtFloat, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtFloat, (yylsp[0]));
         (yyval.interm.type).setMatrix(3, 2);
     }
 
@@ -3928,8 +3908,7 @@ yyreduce:
   case 176:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtFloat, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtFloat, (yylsp[0]));
         (yyval.interm.type).setMatrix(2, 4);
     }
 
@@ -3938,8 +3917,7 @@ yyreduce:
   case 177:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtFloat, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtFloat, (yylsp[0]));
         (yyval.interm.type).setMatrix(4, 2);
     }
 
@@ -3948,8 +3926,7 @@ yyreduce:
   case 178:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtFloat, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtFloat, (yylsp[0]));
         (yyval.interm.type).setMatrix(3, 4);
     }
 
@@ -3958,8 +3935,7 @@ yyreduce:
   case 179:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtFloat, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtFloat, (yylsp[0]));
         (yyval.interm.type).setMatrix(4, 3);
     }
 
@@ -3968,8 +3944,7 @@ yyreduce:
   case 180:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtSampler2D, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtSampler2D, (yylsp[0]));
     }
 
     break;
@@ -3977,8 +3952,7 @@ yyreduce:
   case 181:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtSampler3D, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtSampler3D, (yylsp[0]));
     }
 
     break;
@@ -3986,8 +3960,7 @@ yyreduce:
   case 182:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtSamplerCube, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtSamplerCube, (yylsp[0]));
     }
 
     break;
@@ -3995,8 +3968,7 @@ yyreduce:
   case 183:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtSampler2DArray, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtSampler2DArray, (yylsp[0]));
     }
 
     break;
@@ -4004,8 +3976,7 @@ yyreduce:
   case 184:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtISampler2D, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtISampler2D, (yylsp[0]));
     }
 
     break;
@@ -4013,8 +3984,7 @@ yyreduce:
   case 185:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtISampler3D, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtISampler3D, (yylsp[0]));
     }
 
     break;
@@ -4022,8 +3992,7 @@ yyreduce:
   case 186:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtISamplerCube, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtISamplerCube, (yylsp[0]));
     }
 
     break;
@@ -4031,8 +4000,7 @@ yyreduce:
   case 187:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtISampler2DArray, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtISampler2DArray, (yylsp[0]));
     }
 
     break;
@@ -4040,8 +4008,7 @@ yyreduce:
   case 188:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtUSampler2D, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtUSampler2D, (yylsp[0]));
     }
 
     break;
@@ -4049,8 +4016,7 @@ yyreduce:
   case 189:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtUSampler3D, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtUSampler3D, (yylsp[0]));
     }
 
     break;
@@ -4058,8 +4024,7 @@ yyreduce:
   case 190:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtUSamplerCube, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtUSamplerCube, (yylsp[0]));
     }
 
     break;
@@ -4067,8 +4032,7 @@ yyreduce:
   case 191:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtUSampler2DArray, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtUSampler2DArray, (yylsp[0]));
     }
 
     break;
@@ -4076,8 +4040,7 @@ yyreduce:
   case 192:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtSampler2DShadow, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtSampler2DShadow, (yylsp[0]));
     }
 
     break;
@@ -4085,8 +4048,7 @@ yyreduce:
   case 193:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtSamplerCubeShadow, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtSamplerCubeShadow, (yylsp[0]));
     }
 
     break;
@@ -4094,8 +4056,7 @@ yyreduce:
   case 194:
 
     {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtSampler2DArrayShadow, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtSampler2DArrayShadow, (yylsp[0]));
     }
 
     break;
@@ -4107,8 +4068,7 @@ yyreduce:
             !context->supportsExtension("GL_NV_EGL_stream_consumer_external")) {
             context->error((yylsp[0]), "unsupported type", "samplerExternalOES");
         }
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtSamplerExternalOES, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtSamplerExternalOES, (yylsp[0]));
     }
 
     break;
@@ -4119,8 +4079,7 @@ yyreduce:
         if (!context->supportsExtension("GL_ARB_texture_rectangle")) {
             context->error((yylsp[0]), "unsupported type", "sampler2DRect");
         }
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtSampler2DRect, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtSampler2DRect, (yylsp[0]));
     }
 
     break;
@@ -4129,7 +4088,6 @@ yyreduce:
 
     {
         (yyval.interm.type) = (yyvsp[0].interm.type);
-        (yyval.interm.type).qualifier = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
     }
 
     break;
@@ -4142,8 +4100,7 @@ yyreduce:
         // type.
         //
         TType& structure = static_cast<TVariable*>((yyvsp[0].lex).symbol)->getType();
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        (yyval.interm.type).setBasic(EbtStruct, qual, (yylsp[0]));
+        (yyval.interm.type).setBasic(EbtStruct, (yylsp[0]));
         (yyval.interm.type).userDef = &structure;
     }
 

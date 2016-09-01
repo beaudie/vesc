@@ -1003,15 +1003,17 @@ layout_qualifier_id
 type_specifier_no_prec
     : type_specifier_nonarray {
         $$ = $1;
+        $$.qualifier = (context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary);
     }
     | type_specifier_nonarray LEFT_BRACKET RIGHT_BRACKET {
         ES3_OR_NEWER("[]", @2, "implicitly sized array");
         $$ = $1;
+        $$.qualifier = (context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary);
         $$.setArraySize(0);
     }
     | type_specifier_nonarray LEFT_BRACKET constant_expression RIGHT_BRACKET {
         $$ = $1;
-
+        $$.qualifier = (context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary);
         if (context->checkIsValidTypeForArray(@2, $1))
         {
             unsigned int size = context->checkIsValidArraySize(@2, $3);
@@ -1022,208 +1024,164 @@ type_specifier_no_prec
 
 type_specifier_nonarray
     : VOID_TYPE {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtVoid, qual, @1);
+        $$.setBasic(EbtVoid, @1);
     }
     | FLOAT_TYPE {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtFloat, qual, @1);
+        $$.setBasic(EbtFloat, @1);
     }
     | INT_TYPE {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtInt, qual, @1);
+        $$.setBasic(EbtInt, @1);
     }
     | UINT_TYPE {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtUInt, qual, @1);
+        $$.setBasic(EbtUInt, @1);
     }
     | BOOL_TYPE {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtBool, qual, @1);
+        $$.setBasic(EbtBool, @1);
     }
     | VEC2 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtFloat, qual, @1);
+        $$.setBasic(EbtFloat, @1);
         $$.setAggregate(2);
     }
     | VEC3 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtFloat, qual, @1);
+        $$.setBasic(EbtFloat, @1);
         $$.setAggregate(3);
     }
     | VEC4 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtFloat, qual, @1);
+        $$.setBasic(EbtFloat, @1);
         $$.setAggregate(4);
     }
     | BVEC2 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtBool, qual, @1);
+        $$.setBasic(EbtBool, @1);
         $$.setAggregate(2);
     }
     | BVEC3 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtBool, qual, @1);
+        $$.setBasic(EbtBool, @1);
         $$.setAggregate(3);
     }
     | BVEC4 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtBool, qual, @1);
+        $$.setBasic(EbtBool, @1);
         $$.setAggregate(4);
     }
     | IVEC2 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtInt, qual, @1);
+        $$.setBasic(EbtInt, @1);
         $$.setAggregate(2);
     }
     | IVEC3 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtInt, qual, @1);
+        $$.setBasic(EbtInt, @1);
         $$.setAggregate(3);
     }
     | IVEC4 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtInt, qual, @1);
+        $$.setBasic(EbtInt, @1);
         $$.setAggregate(4);
     }
     | UVEC2 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtUInt, qual, @1);
+        $$.setBasic(EbtUInt, @1);
         $$.setAggregate(2);
     }
     | UVEC3 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtUInt, qual, @1);
+        $$.setBasic(EbtUInt, @1);
         $$.setAggregate(3);
     }
     | UVEC4 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtUInt, qual, @1);
+        $$.setBasic(EbtUInt, @1);
         $$.setAggregate(4);
     }
     | MATRIX2 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtFloat, qual, @1);
+        $$.setBasic(EbtFloat, @1);
         $$.setMatrix(2, 2);
     }
     | MATRIX3 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtFloat, qual, @1);
+        $$.setBasic(EbtFloat, @1);
         $$.setMatrix(3, 3);
     }
     | MATRIX4 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtFloat, qual, @1);
+        $$.setBasic(EbtFloat, @1);
         $$.setMatrix(4, 4);
     }
     | MATRIX2x3 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtFloat, qual, @1);
+        $$.setBasic(EbtFloat, @1);
         $$.setMatrix(2, 3);
     }
     | MATRIX3x2 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtFloat, qual, @1);
+        $$.setBasic(EbtFloat, @1);
         $$.setMatrix(3, 2);
     }
     | MATRIX2x4 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtFloat, qual, @1);
+        $$.setBasic(EbtFloat, @1);
         $$.setMatrix(2, 4);
     }
     | MATRIX4x2 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtFloat, qual, @1);
+        $$.setBasic(EbtFloat, @1);
         $$.setMatrix(4, 2);
     }
     | MATRIX3x4 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtFloat, qual, @1);
+        $$.setBasic(EbtFloat, @1);
         $$.setMatrix(3, 4);
     }
     | MATRIX4x3 {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtFloat, qual, @1);
+        $$.setBasic(EbtFloat, @1);
         $$.setMatrix(4, 3);
     }
     | SAMPLER2D {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtSampler2D, qual, @1);
+        $$.setBasic(EbtSampler2D, @1);
     }
     | SAMPLER3D {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtSampler3D, qual, @1);
+        $$.setBasic(EbtSampler3D, @1);
     }
     | SAMPLERCUBE {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtSamplerCube, qual, @1);
+        $$.setBasic(EbtSamplerCube, @1);
     }
     | SAMPLER2DARRAY {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtSampler2DArray, qual, @1);
+        $$.setBasic(EbtSampler2DArray, @1);
     }
     | ISAMPLER2D {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtISampler2D, qual, @1);
+        $$.setBasic(EbtISampler2D, @1);
     }
     | ISAMPLER3D {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtISampler3D, qual, @1);
+        $$.setBasic(EbtISampler3D, @1);
     }
     | ISAMPLERCUBE {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtISamplerCube, qual, @1);
+        $$.setBasic(EbtISamplerCube, @1);
     }
     | ISAMPLER2DARRAY {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtISampler2DArray, qual, @1);
+        $$.setBasic(EbtISampler2DArray, @1);
     }
     | USAMPLER2D {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtUSampler2D, qual, @1);
+        $$.setBasic(EbtUSampler2D, @1);
     }
     | USAMPLER3D {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtUSampler3D, qual, @1);
+        $$.setBasic(EbtUSampler3D, @1);
     }
     | USAMPLERCUBE {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtUSamplerCube, qual, @1);
+        $$.setBasic(EbtUSamplerCube, @1);
     }
     | USAMPLER2DARRAY {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtUSampler2DArray, qual, @1);
+        $$.setBasic(EbtUSampler2DArray, @1);
     }
     | SAMPLER2DSHADOW {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtSampler2DShadow, qual, @1);
+        $$.setBasic(EbtSampler2DShadow, @1);
     }
     | SAMPLERCUBESHADOW {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtSamplerCubeShadow, qual, @1);
+        $$.setBasic(EbtSamplerCubeShadow, @1);
     }
     | SAMPLER2DARRAYSHADOW {
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtSampler2DArrayShadow, qual, @1);
+        $$.setBasic(EbtSampler2DArrayShadow, @1);
     }
     | SAMPLER_EXTERNAL_OES {
         if (!context->supportsExtension("GL_OES_EGL_image_external") &&
             !context->supportsExtension("GL_NV_EGL_stream_consumer_external")) {
             context->error(@1, "unsupported type", "samplerExternalOES");
         }
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtSamplerExternalOES, qual, @1);
+        $$.setBasic(EbtSamplerExternalOES, @1);
     }
     | SAMPLER2DRECT {
         if (!context->supportsExtension("GL_ARB_texture_rectangle")) {
             context->error(@1, "unsupported type", "sampler2DRect");
         }
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtSampler2DRect, qual, @1);
+        $$.setBasic(EbtSampler2DRect, @1);
     }
     | struct_specifier {
         $$ = $1;
-        $$.qualifier = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
     }
     | TYPE_NAME {
         //
@@ -1231,8 +1189,7 @@ type_specifier_nonarray
         // type.
         //
         TType& structure = static_cast<TVariable*>($1.symbol)->getType();
-        TQualifier qual = context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary;
-        $$.setBasic(EbtStruct, qual, @1);
+        $$.setBasic(EbtStruct, @1);
         $$.userDef = &structure;
     }
     ;

@@ -294,13 +294,14 @@ inline bool SupportsPrecision(TBasicType type)
 //
 enum TQualifier
 {
-    EvqTemporary,   // For temporaries (within a function), read/write
-    EvqGlobal,      // For globals read/write
-    EvqConst,       // User defined constants and non-output parameters in functions
-    EvqAttribute,   // Readonly
-    EvqVaryingIn,   // readonly, fragment shaders only
-    EvqVaryingOut,  // vertex shaders only  read/write
-    EvqUniform,     // Readonly, vertex and fragment
+    EvqUnspecified,  // For TQualifier initialization when the actual qualifier is not yet known
+    EvqTemporary,    // For temporaries (within a function), read/write
+    EvqGlobal,       // For globals read/write
+    EvqConst,        // User defined constants and non-output parameters in functions
+    EvqAttribute,    // Readonly
+    EvqVaryingIn,    // readonly, fragment shaders only
+    EvqVaryingOut,   // vertex shaders only  read/write
+    EvqUniform,      // Readonly, vertex and fragment
 
     EvqVertexIn,     // Vertex shader input
     EvqFragmentOut,  // Fragment shader output
@@ -452,6 +453,7 @@ inline const char* getQualifierString(TQualifier q)
     // clang-format off
     switch(q)
     {
+    case EvqUnspecified:            return "Unspecified";
     case EvqTemporary:              return "Temporary";
     case EvqGlobal:                 return "Global";
     case EvqConst:                  return "const";
