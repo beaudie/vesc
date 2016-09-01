@@ -19,7 +19,7 @@ namespace angle
 {
 
 ANGLE_EXPORT std::string GetExecutablePath();
-ANGLE_EXPORT std::string GetExecutableDirectory();
+ANGLE_EXPORT const std::string &GetExecutableDirectory();
 ANGLE_EXPORT std::string GetSharedLibraryExtension();
 
 // Cross platform equivalent of the Windows Sleep function

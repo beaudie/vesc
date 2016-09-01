@@ -35,11 +35,17 @@ std::string GetExecutablePath()
     return buffer.data();
 }
 
-std::string GetExecutableDirectory()
+std::string GetExecutableDirectoryHelper()
 {
     std::string executablePath = GetExecutablePath();
     size_t lastPathSepLoc = executablePath.find_last_of("/");
     return (lastPathSepLoc != std::string::npos) ? executablePath.substr(0, lastPathSepLoc) : "";
+}
+
+const std::string &GetExecutableDirectory()
+{
+    static std::string executableDirectory = GetExecutableDirectoryHelper();
+    return executableDirectory;
 }
 
 std::string GetSharedLibraryExtension()
