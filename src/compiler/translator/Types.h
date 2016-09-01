@@ -594,44 +594,25 @@ class TType
     mutable TString mangled;
 };
 
-//
-// This is a workaround for a problem with the yacc stack,  It can't have
-// types that it thinks have non-trivial constructors.  It should
-// just be used while recognizing the grammar, not anything else.  Pointers
-// could be used, but also trying to avoid lots of memory management overhead.
-//
-// Not as bad as it looks, there is no actual assumption that the fields
-// match up or are name the same or anything like that.
-//
-struct TPublicType
+// TTypeSpecifierNonArray stores all of the necessary fields for type_specifier_nonarray from the
+// grammar
+struct TTypeSpecifierNonArray
 {
     TBasicType type;
-    TLayoutQualifier layoutQualifier;
-    TQualifier qualifier;
-    bool invariant;
-    TPrecision precision;
     unsigned char primarySize;          // size of vector or cols of matrix
     unsigned char secondarySize;        // rows of matrix
-    bool array;
-    int arraySize;
     TType *userDef;
     TSourceLoc line;
 
     // true if the type was defined by a struct specifier rather than a reference to a type name.
     bool isStructSpecifier;
 
-    void setBasic(TBasicType bt, TQualifier q, const TSourceLoc &ln)
+    void initialize(TBasicType bt, TSourceLoc ln)
     {
         type = bt;
-        layoutQualifier = TLayoutQualifier::create();
-        qualifier = q;
-        invariant = false;
-        precision = EbpUndefined;
         primarySize = 1;
         secondarySize = 1;
-        array = false;
-        arraySize = 0;
-        userDef = 0;
+        userDef           = nullptr;
         line = ln;
         isStructSpecifier = false;
     }
@@ -648,71 +629,92 @@ struct TPublicType
         secondarySize = r;
     }
 
-    bool isUnsizedArray() const
+    bool isMatrix() const { return primarySize > 1 && secondarySize > 1; }
+
+    bool isVector() const { return primarySize > 1 && secondarySize == 1; }
+};
+
+//
+// This is a workaround for a problem with the yacc stack,  It can't have
+// types that it thinks have non-trivial constructors.  It should
+// just be used while recognizing the grammar, not anything else.  Pointers
+// could be used, but also trying to avoid lots of memory management overhead.
+//
+// Not as bad as it looks, there is no actual assumption that the fields
+// match up or are name the same or anything like that.
+//
+struct TPublicType
+{
+    TTypeSpecifierNonArray typeSpecifierNonArray;
+    TLayoutQualifier layoutQualifier;
+    TQualifier qualifier;
+    bool invariant;
+    TPrecision precision;
+    bool array;
+    int arraySize;
+
+    void initialize(const TTypeSpecifierNonArray &typeSpecifier, TQualifier q)
     {
-        return array && arraySize == 0;
+        typeSpecifierNonArray = typeSpecifier;
+        layoutQualifier       = TLayoutQualifier::create();
+        qualifier             = q;
+        invariant             = false;
+        precision             = EbpUndefined;
+        array                 = false;
+        arraySize             = 0;
     }
-    void setArraySize(int s)
+
+    TBasicType getBasicType() const { return typeSpecifierNonArray.type; }
+    void setBasicType(TBasicType basicType) { typeSpecifierNonArray.type = basicType; }
+
+    unsigned char getPrimarySize() const { return typeSpecifierNonArray.primarySize; }
+    unsigned char getSecondarySize() const { return typeSpecifierNonArray.secondarySize; }
+    void initializeSizeForScalarTypes()
     {
-        array = true;
-        arraySize = s;
+        typeSpecifierNonArray.primarySize   = 1;
+        typeSpecifierNonArray.secondarySize = 1;
     }
-    void clearArrayness()
-    {
-        array = false;
-        arraySize = 0;
-    }
+
+    const TType *getUserDef() const { return typeSpecifierNonArray.userDef; }
+    const TSourceLoc &getLine() const { return typeSpecifierNonArray.line; }
+
+    bool isStructSpecifier() const { return typeSpecifierNonArray.isStructSpecifier; }
 
     bool isStructureContainingArrays() const
     {
-        if (!userDef)
+        if (!typeSpecifierNonArray.userDef)
         {
             return false;
         }
 
-        return userDef->isStructureContainingArrays();
+        return typeSpecifierNonArray.userDef->isStructureContainingArrays();
     }
 
     bool isStructureContainingType(TBasicType t) const
     {
-        if (!userDef)
+        if (!typeSpecifierNonArray.userDef)
         {
             return false;
         }
 
-        return userDef->isStructureContainingType(t);
+        return typeSpecifierNonArray.userDef->isStructureContainingType(t);
     }
 
-    bool isMatrix() const
+    bool isUnsizedArray() const { return array && arraySize == 0; }
+    void setArraySize(int s)
     {
-        return primarySize > 1 && secondarySize > 1;
+        array     = true;
+        arraySize = s;
     }
-
-    bool isVector() const
+    void clearArrayness()
     {
-        return primarySize > 1 && secondarySize == 1;
-    }
-
-    int getCols() const
-    {
-        ASSERT(isMatrix());
-        return primarySize;
-    }
-
-    int getRows() const
-    {
-        ASSERT(isMatrix());
-        return secondarySize;
-    }
-
-    int getNominalSize() const
-    {
-        return primarySize;
+        array     = false;
+        arraySize = 0;
     }
 
     bool isAggregate() const
     {
-        return array || isMatrix() || isVector();
+        return array || typeSpecifierNonArray.isMatrix() || typeSpecifierNonArray.isVector();
     }
 };
 
