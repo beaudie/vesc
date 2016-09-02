@@ -75,6 +75,11 @@ struct WorkaroundsD3D
     // and Offset is in range. To work around this, we translatie texelFetchOffset into texelFetch
     // by adding Offset directly to Location before reading the texture.
     bool preAddTexelFetchOffsets = false;
+
+    // In Intel driver, the data with format DXGI_FORMAT_B5G6R5_UNORM will be parsed incorrectly.
+    // This workaroud will disable B5G6R5 support when it's Intel driver. By default, it wll use
+    // R8G8B8A8 format.
+    bool formatB5G6R5ParseError = false;
 };
 
 }  // namespace rx
