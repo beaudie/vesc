@@ -1544,6 +1544,7 @@ WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps,
 
     // TODO(jmadill): Disable when we have a fixed driver version.
     workarounds.emulateTinyStencilTextures = (adapterDesc.VendorId == VENDOR_ID_AMD);
+    workarounds.formatB5G6R5ParseError = (adapterDesc.VendorId == VENDOR_ID_INTEL);
 
     return workarounds;
 }
