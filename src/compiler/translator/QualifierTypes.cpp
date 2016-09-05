@@ -54,6 +54,14 @@ TLayoutQualifier JoinLayoutQualifiers(TLayoutQualifier leftQualifier,
 namespace
 {
 
+// GLSL ES 3.10 does not impose a strict order on type qualifiers and allows multiple layout
+// declarations.
+// GLSL ES 3.10 Revision 4, 4.10 Order of Qualification
+bool AreTypeQualifierChecksRelaxed(int shaderVersion)
+{
+    return shaderVersion >= 310;
+}
+
 bool IsScopeQualifier(TQualifier qualifier)
 {
     return qualifier == EvqGlobal || qualifier == EvqTemporary;
@@ -523,7 +531,9 @@ TTypeQualifier::TTypeQualifier(TQualifier scope, const TSourceLoc &loc)
     ASSERT(IsScopeQualifier(qualifier));
 }
 
-TTypeQualifierBuilder::TTypeQualifierBuilder(const TStorageQualifierWrapper *scope)
+TTypeQualifierBuilder::TTypeQualifierBuilder(const TStorageQualifierWrapper *scope,
+                                             int shaderVersion)
+    : mShaderVersion(shaderVersion)
 {
     ASSERT(IsScopeQualifier(scope->getQualifier()));
     mQualifiers.push_back(scope);
@@ -534,9 +544,9 @@ void TTypeQualifierBuilder::appendQualifier(const TQualifierWrapperBase *qualifi
     mQualifiers.push_back(qualifier);
 }
 
-bool TTypeQualifierBuilder::checkSequenceIsValid(TDiagnostics *diagnostics,
-                                                 bool areQualifierChecksRelaxed) const
+bool TTypeQualifierBuilder::checkSequenceIsValid(TDiagnostics *diagnostics) const
 {
+    bool areQualifierChecksRelaxed = AreTypeQualifierChecksRelaxed(mShaderVersion);
     std::string errorMessage;
     if (HasRepeatingQualifiers(mQualifiers, areQualifierChecksRelaxed, &errorMessage))
     {
@@ -555,15 +565,13 @@ bool TTypeQualifierBuilder::checkSequenceIsValid(TDiagnostics *diagnostics,
     return true;
 }
 
-TTypeQualifier TTypeQualifierBuilder::getParameterTypeQualifier(
-    TDiagnostics *diagnostics,
-    bool areQualifierChecksRelaxed) const
+TTypeQualifier TTypeQualifierBuilder::getParameterTypeQualifier(TDiagnostics *diagnostics) const
 {
     ASSERT(IsInvariantCorrect(mQualifiers));
     ASSERT(static_cast<const TStorageQualifierWrapper *>(mQualifiers[0])->getQualifier() ==
            EvqTemporary);
 
-    if (!checkSequenceIsValid(diagnostics, areQualifierChecksRelaxed))
+    if (!checkSequenceIsValid(diagnostics))
     {
         return TTypeQualifier(EvqTemporary, mQualifiers[0]->getLine());
     }
@@ -571,7 +579,7 @@ TTypeQualifier TTypeQualifierBuilder::getParameterTypeQualifier(
     // If the qualifier checks are relaxed, then it is easier to sort the qualifiers so
     // that the order imposed by the GLSL ES 3.00 spec is kept. Then we can use the same code to
     // combine the qualifiers.
-    if (areQualifierChecksRelaxed)
+    if (AreTypeQualifierChecksRelaxed(mShaderVersion))
     {
         // Copy the qualifier sequence so that we can sort them.
         QualifierSequence sortedQualifierSequence = mQualifiers;
@@ -581,12 +589,11 @@ TTypeQualifier TTypeQualifierBuilder::getParameterTypeQualifier(
     return GetParameterTypeQualifierFromSortedSequence(mQualifiers, diagnostics);
 }
 
-TTypeQualifier TTypeQualifierBuilder::getVariableTypeQualifier(TDiagnostics *diagnostics,
-                                                               bool areQualifierChecksRelaxed) const
+TTypeQualifier TTypeQualifierBuilder::getVariableTypeQualifier(TDiagnostics *diagnostics) const
 {
     ASSERT(IsInvariantCorrect(mQualifiers));
 
-    if (!checkSequenceIsValid(diagnostics, areQualifierChecksRelaxed))
+    if (!checkSequenceIsValid(diagnostics))
     {
         return TTypeQualifier(
             static_cast<const TStorageQualifierWrapper *>(mQualifiers[0])->getQualifier(),
@@ -596,7 +603,7 @@ TTypeQualifier TTypeQualifierBuilder::getVariableTypeQualifier(TDiagnostics *dia
     // If the qualifier checks are relaxed, then it is easier to sort the qualifiers so
     // that the order imposed by the GLSL ES 3.00 spec is kept. Then we can use the same code to
     // combine the qualifiers.
-    if (areQualifierChecksRelaxed)
+    if (AreTypeQualifierChecksRelaxed(mShaderVersion))
     {
         // Copy the qualifier sequence so that we can sort them.
         QualifierSequence sortedQualifierSequence = mQualifiers;
