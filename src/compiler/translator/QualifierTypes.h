@@ -150,23 +150,25 @@ class TTypeQualifierBuilder : angle::NonCopyable
     using QualifierSequence = std::vector<const TQualifierWrapperBase *>;
 
   public:
-    TTypeQualifierBuilder(const TStorageQualifierWrapper *scope);
+    TTypeQualifierBuilder(const TStorageQualifierWrapper *scope,
+                          int shaderVersion,
+                          TDiagnostics *diagnostics);
     // Adds the passed qualifier to the end of the sequence.
     void appendQualifier(const TQualifierWrapperBase *qualifier);
     // Checks for the order of qualification and repeating qualifiers.
-    bool checkSequenceIsValid(TDiagnostics *diagnostics, bool areQualifierChecksRelaxed) const;
+    bool checkSequenceIsValid() const;
     // Goes over the qualifier sequence and parses it to form a type qualifier for a function
     // parameter.
     // The returned object is initialized even if the parsing fails.
-    TTypeQualifier getParameterTypeQualifier(TDiagnostics *diagnostics,
-                                             bool areQualifierChecksRelaxed) const;
+    TTypeQualifier getParameterTypeQualifier() const;
     // Goes over the qualifier sequence and parses it to form a type qualifier for a variable.
     // The returned object is initialized even if the parsing fails.
-    TTypeQualifier getVariableTypeQualifier(TDiagnostics *diagnostics,
-                                            bool areQualifierChecksRelaxed) const;
+    TTypeQualifier getVariableTypeQualifier() const;
 
   private:
     QualifierSequence mQualifiers;
+    bool mAreQualifierChecksRelaxed;
+    TDiagnostics *mDiagnostics;
 };
 
 #endif  // COMPILER_TRANSLATOR_QUALIFIER_TYPES_H_
