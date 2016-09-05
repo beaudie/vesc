@@ -22,6 +22,7 @@ TLayoutQualifier JoinLayoutQualifiers(TLayoutQualifier leftQualifier,
     if (rightQualifier.location != -1)
     {
         joinedQualifier.location = rightQualifier.location;
+        ++joinedQualifier.locationsSpecified;
     }
     if (rightQualifier.matrixPacking != EmpUnspecified)
     {
@@ -96,6 +97,9 @@ bool HasRepeatingQualifiers(const TTypeQualifierBuilder::QualifierSequence &qual
     bool layoutFound        = false;
     bool interpolationFound = false;
 
+    unsigned int locationsSpecified = 0;
+    bool isOut                      = false;
+
     // The iteration starts from one since the first qualifier only reveals the scope of the
     // expression. It is inserted first whenever the sequence gets created.
     for (size_t i = 1; i < qualifiers.size(); ++i)
@@ -130,6 +134,9 @@ bool HasRepeatingQualifiers(const TTypeQualifierBuilder::QualifierSequence &qual
                     return true;
                 }
                 layoutFound = true;
+                const TLayoutQualifier &currentQualifier =
+                    static_cast<const TLayoutQualifierWrapper *>(qualifiers[i])->getQualifier();
+                locationsSpecified += currentQualifier.locationsSpecified;
                 break;
             }
             case QtInterpolation:
@@ -151,6 +158,10 @@ bool HasRepeatingQualifiers(const TTypeQualifierBuilder::QualifierSequence &qual
                 // repetitions.
                 TQualifier currentQualifier =
                     static_cast<const TStorageQualifierWrapper *>(qualifiers[i])->getQualifier();
+                if (currentQualifier == EvqVertexOut || currentQualifier == EvqFragmentOut)
+                {
+                    isOut = true;
+                }
                 for (size_t j = 1; j < i; ++j)
                 {
                     if (qualifiers[j]->getType() == QtStorage)
@@ -171,6 +182,15 @@ bool HasRepeatingQualifiers(const TTypeQualifierBuilder::QualifierSequence &qual
             default:
                 UNREACHABLE();
         }
+    }
+
+    if (locationsSpecified > 1 && isOut)
+    {
+        // GLSL ES 3.00.6 section 4.3.8.2 Output Layout Qualifiers
+        // GLSL ES 3.10 section 4.4.2 Output Layout Qualifiers
+        // "The qualifier may appear at most once within a declaration."
+        *errorMessage = "Output layout location specified multiple times.";
+        return true;
     }
 
     return false;
