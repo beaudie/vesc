@@ -16,17 +16,6 @@
 #include "compiler/translator/ValidateGlobalInitializer.h"
 #include "compiler/translator/util.h"
 
-namespace
-{
-// GLSL ES 3.10 does not impose a strict order on type qualifiers and allows multiple layout
-// declarations
-// GLSL ES 3.10 Revision 4, 4.10 Order of Qualification
-bool AreTypeQualifierChecksRelaxed(int shaderVersion)
-{
-    return shaderVersion >= 310;
-}
-}  // namespace
-
 ///////////////////////////////////////////////////////////////////////
 //
 // Sub- vector and matrix fields
@@ -945,8 +934,7 @@ void TParseContext::checkIsParameterQualifierValid(
     const TTypeQualifierBuilder &typeQualifierBuilder,
     TType *type)
 {
-    TTypeQualifier typeQualifier = typeQualifierBuilder.getParameterTypeQualifier(
-        &mDiagnostics, AreTypeQualifierChecksRelaxed(mShaderVersion));
+    TTypeQualifier typeQualifier = typeQualifierBuilder.getParameterTypeQualifier();
 
     if (typeQualifier.qualifier == EvqOut || typeQualifier.qualifier == EvqInOut)
     {
@@ -1414,8 +1402,7 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
 TPublicType TParseContext::addFullySpecifiedType(const TTypeQualifierBuilder &typeQualifierBuilder,
                                                  const TPublicType &typeSpecifier)
 {
-    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(
-        &mDiagnostics, AreTypeQualifierChecksRelaxed(mShaderVersion));
+    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier();
 
     TPublicType returnType     = typeSpecifier;
     returnType.qualifier       = typeQualifier.qualifier;
@@ -1717,8 +1704,7 @@ TIntermAggregate *TParseContext::parseInvariantDeclaration(
     const TString *identifier,
     const TSymbol *symbol)
 {
-    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(
-        &mDiagnostics, AreTypeQualifierChecksRelaxed(mShaderVersion));
+    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier();
 
     if (!typeQualifier.invariant)
     {
@@ -1926,8 +1912,7 @@ TIntermAggregate *TParseContext::parseArrayInitDeclarator(const TPublicType &pub
 
 void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &typeQualifierBuilder)
 {
-    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(
-        &mDiagnostics, AreTypeQualifierChecksRelaxed(mShaderVersion));
+    TTypeQualifier typeQualifier           = typeQualifierBuilder.getVariableTypeQualifier();
     const TLayoutQualifier layoutQualifier = typeQualifier.layoutQualifier;
 
     checkInvariantVariableQualifier(typeQualifier.invariant, typeQualifier.qualifier,
@@ -2507,8 +2492,7 @@ TIntermAggregate *TParseContext::addInterfaceBlock(
 {
     checkIsNotReserved(nameLine, blockName);
 
-    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(
-        &mDiagnostics, AreTypeQualifierChecksRelaxed(mShaderVersion));
+    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier();
 
     if (typeQualifier.qualifier != EvqUniform)
     {
@@ -3204,8 +3188,7 @@ TFieldList *TParseContext::addStructDeclaratorListWithQualifiers(
     TPublicType *typeSpecifier,
     TFieldList *fieldList)
 {
-    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(
-        &mDiagnostics, AreTypeQualifierChecksRelaxed(mShaderVersion));
+    TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier();
 
     typeSpecifier->qualifier       = typeQualifier.qualifier;
     typeSpecifier->layoutQualifier = typeQualifier.layoutQualifier;

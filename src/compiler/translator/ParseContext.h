@@ -83,6 +83,7 @@ class TParseContext : angle::NonCopyable
     ShShaderSpec getShaderSpec() const { return mShaderSpec; }
     int numErrors() const { return mDiagnostics.numErrors(); }
     TInfoSink &infoSink() { return mDiagnostics.infoSink(); }
+    TDiagnostics *getDiagnostics() { return &mDiagnostics; }
     void error(const TSourceLoc &loc, const char *reason, const char *token,
                const char *extraInfo="");
     void warning(const TSourceLoc &loc, const char *reason, const char *token,

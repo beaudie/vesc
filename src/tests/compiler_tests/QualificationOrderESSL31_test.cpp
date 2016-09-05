@@ -41,13 +41,6 @@ class QualificationVertexShaderTestESSL31 : public testing::Test
         return mASTRoot != nullptr;
     }
 
-    const TIntermSymbol *findSymbolInAST(const TString &stringToFind, TBasicType basicType)
-    {
-        ShaderVariableFinder finder(stringToFind, basicType);
-        mASTRoot->traverse(&finder);
-        return finder.getNode();
-    }
-
   protected:
     TranslatorESSL *mTranslator;
     TIntermNode *mASTRoot;
@@ -70,7 +63,7 @@ TEST_F(QualificationVertexShaderTestESSL31, CentroidOut)
     }
     else
     {
-        const TIntermSymbol *node = findSymbolInAST("something", EbtFloat);
+        const TIntermSymbol *node = FindShaderVariable(mASTRoot, "something", EbtFloat);
         ASSERT_NE(nullptr, node);
 
         const TType &type = node->getType();
@@ -93,7 +86,7 @@ TEST_F(QualificationVertexShaderTestESSL31, AllQualifiersMixed)
     }
     else
     {
-        const TIntermSymbol *node = findSymbolInAST("something", EbtFloat);
+        const TIntermSymbol *node = FindShaderVariable(mASTRoot, "something", EbtFloat);
         ASSERT_NE(nullptr, node);
 
         const TType &type = node->getType();
@@ -118,7 +111,7 @@ TEST_F(QualificationVertexShaderTestESSL31, MultipleLayouts)
     }
     else
     {
-        const TIntermSymbol *node = findSymbolInAST("something", EbtFloat);
+        const TIntermSymbol *node = FindShaderVariable(mASTRoot, "something", EbtFloat);
         ASSERT_NE(nullptr, node);
 
         const TType &type = node->getType();
@@ -145,7 +138,8 @@ TEST_F(QualificationVertexShaderTestESSL31, MultipleLayoutsInterfaceBlock)
     }
     else
     {
-        const TIntermSymbol *node = findSymbolInAST("MyInterfaceName", EbtInterfaceBlock);
+        const TIntermSymbol *node =
+            FindShaderVariable(mASTRoot, "MyInterfaceName", EbtInterfaceBlock);
         ASSERT_NE(nullptr, node);
 
         const TType &type                = node->getType();
@@ -173,7 +167,8 @@ TEST_F(QualificationVertexShaderTestESSL31, MultipleLayoutsInterfaceBlock2)
     }
     else
     {
-        const TIntermSymbol *node = findSymbolInAST("MyInterfaceName", EbtInterfaceBlock);
+        const TIntermSymbol *node =
+            FindShaderVariable(mASTRoot, "MyInterfaceName", EbtInterfaceBlock);
         ASSERT_NE(nullptr, node);
 
         const TType &type                = node->getType();

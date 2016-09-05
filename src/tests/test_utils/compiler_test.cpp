@@ -172,3 +172,37 @@ bool MatchOutputCodeTest::notFoundInCode(const char *stringToFind) const
     }
     return true;
 }
+
+class ShaderVariableFinder : public TIntermTraverser
+{
+  public:
+    ShaderVariableFinder(const TString &variableName, TBasicType basicType)
+        : TIntermTraverser(true, false, false),
+          mVariableName(variableName),
+          mNodeFound(nullptr),
+          mBasicType(basicType)
+    {
+    }
+
+    void visitSymbol(TIntermSymbol *node)
+    {
+        if (node->getBasicType() == mBasicType && node->getSymbol() == mVariableName)
+        {
+            mNodeFound = node;
+        }
+    }
+
+    const TIntermSymbol *getNode() const { return mNodeFound; }
+
+  private:
+    TString mVariableName;
+    TIntermSymbol *mNodeFound;
+    TBasicType mBasicType;
+};
+
+const TIntermSymbol *FindShaderVariable(TIntermNode *astRoot, const TString &name, TBasicType type)
+{
+    ShaderVariableFinder finder(name, type);
+    astRoot->traverse(&finder);
+    return finder.getNode();
+}
