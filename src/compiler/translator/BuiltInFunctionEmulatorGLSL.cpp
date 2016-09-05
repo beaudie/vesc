@@ -163,7 +163,7 @@ void InitBuiltInFunctionEmulatorForGLSLMissingFunctions(BuiltInFunctionEmulator 
             "            float scale;\n"
             "            if(exponent < 0)\n"
             "            {\n"
-            "                scale = 1.0 / (1 << -exponent);\n"
+            "                scale = 1.0 / (1 << abs(exponent));\n"
             "            }\n"
             "            else\n"
             "            {\n"
