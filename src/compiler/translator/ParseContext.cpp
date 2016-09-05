@@ -3150,6 +3150,7 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
         else
         {
             qualifier.location = intValue;
+            qualifier.locationsSpecified = 1;
         }
     }
     else if (qualifierType == "local_size_x")
