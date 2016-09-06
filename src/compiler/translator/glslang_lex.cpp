@@ -420,7 +420,7 @@ struct yy_trans_info
             12,  177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 15,  177, 177,
             23,  177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177,
             177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177,
-            199, 203, 235, 0,   189, 185, 0,   188, 182, 0,   184, 178, 195, 196, 177, 136, 177,
+            199, 203, 235, 0,   189, 185, 0,   188, 182, 0,   184, 178, 195, 196, 177, 137, 177,
             177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177,
             177, 177, 177, 177, 177, 13,  177, 177, 177, 177, 177, 177, 177, 177, 177,
 
@@ -428,45 +428,45 @@ struct yy_trans_info
             177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177,
             177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 0,   186, 0,
             185, 187, 181, 177, 177, 177, 30,  177, 177, 18,  174, 177, 177, 177, 177, 177, 177,
-            177, 177, 177, 177, 16,  139, 177, 177, 177, 177, 21,  177, 177, 143, 155, 177, 177,
+            177, 177, 177, 177, 16,  140, 177, 177, 177, 177, 21,  177, 177, 144, 155, 177, 177,
             177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 152, 4,   35,  36,  37,
 
             177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177,
-            177, 177, 177, 177, 177, 177, 177, 142, 31,  177, 177, 28,  177, 177, 177, 177, 177,
+            177, 177, 177, 177, 177, 177, 177, 143, 31,  177, 177, 28,  177, 177, 177, 177, 177,
             177, 177, 47,  48,  49,  29,  177, 177, 177, 177, 177, 177, 10,  53,  54,  55,  177,
-            137, 177, 177, 7,   177, 177, 177, 177, 164, 165, 166, 177, 32,  177, 156, 26,  167,
+            138, 177, 177, 7,   177, 177, 177, 177, 164, 165, 166, 177, 32,  177, 156, 26,  167,
             168, 169, 2,   161, 162, 163, 177, 177, 177, 25,  159, 177, 177, 177, 50,  51,  52,
-            177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 98,  177, 177, 177,
+            177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 99,  177, 177, 177,
 
-            177, 177, 177, 177, 153, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 138,
-            177, 177, 176, 56,  57,  58,  177, 177, 14,  177, 103, 177, 177, 177, 177, 101, 177,
-            177, 177, 154, 149, 104, 177, 177, 177, 177, 177, 177, 144, 177, 177, 177, 78,  38,
-            41,  43,  42,  39,  45,  44,  46,  40,  177, 177, 177, 177, 160, 135, 177, 177, 147,
-            177, 177, 177, 34,  99,  173, 22,  148, 77,  177, 158, 17,  177, 177, 177, 177, 177,
+            177, 177, 177, 177, 153, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 139,
+            177, 177, 176, 56,  57,  58,  177, 177, 14,  177, 104, 177, 177, 177, 177, 102, 177,
+            177, 177, 154, 149, 105, 177, 177, 177, 177, 177, 177, 145, 177, 177, 177, 78,  38,
+            41,  43,  42,  39,  45,  44,  46,  40,  177, 177, 177, 177, 160, 136, 177, 177, 147,
+            177, 177, 177, 34,  100, 173, 22,  148, 77,  177, 158, 17,  177, 177, 177, 177, 177,
             177, 177, 177, 177, 177, 177, 177, 177, 177, 19,  33,  177, 177, 177, 177,
 
-            177, 177, 105, 79,  85,  177, 177, 177, 177, 177, 3,   177, 177, 177, 177, 177, 177,
-            177, 177, 177, 177, 177, 140, 177, 177, 177, 177, 177, 8,   177, 177, 9,   177, 177,
-            177, 177, 20,  93,  11,  150, 106, 80,  87,  177, 177, 177, 177, 177, 177, 177, 177,
-            177, 177, 177, 177, 145, 177, 177, 177, 91,  95,  94,  177, 177, 177, 177, 177, 177,
-            177, 141, 107, 81,  86,  177, 177, 157, 177, 146, 177, 177, 6,   177, 177, 177, 177,
+            177, 177, 106, 79,  85,  177, 177, 177, 177, 177, 3,   177, 177, 177, 177, 177, 177,
+            177, 177, 177, 177, 177, 141, 177, 177, 177, 177, 177, 8,   177, 177, 9,   177, 177,
+            177, 177, 20,  93,  11,  150, 107, 80,  87,  177, 177, 177, 177, 177, 177, 177, 177,
+            177, 177, 177, 177, 146, 177, 177, 177, 91,  96,  94,  177, 177, 177, 177, 177, 177,
+            177, 142, 108, 81,  86,  177, 177, 157, 177, 95,  177, 177, 6,   177, 177, 177, 177,
             177, 177, 177, 177, 177, 90,  151, 1,   177, 177, 177, 177, 177, 175, 177,
 
-            102, 5,   170, 59,  62,  177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177,
-            177, 92,  177, 177, 177, 177, 88,  177, 177, 177, 177, 177, 120, 66,  67,  177, 177,
-            177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 100, 177, 177, 177, 89,  122,
-            70,  71,  177, 177, 96,  177, 177, 177, 177, 177, 177, 177, 115, 177, 177, 177, 177,
-            177, 177, 177, 177, 177, 177, 129, 177, 177, 177, 177, 60,  177, 177, 177, 177, 177,
-            177, 177, 177, 177, 177, 177, 177, 116, 108, 177, 82,  177, 177, 177, 130,
+            103, 5,   170, 59,  62,  177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177,
+            177, 92,  177, 177, 177, 177, 88,  177, 177, 177, 177, 177, 121, 66,  67,  177, 177,
+            177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 101, 177, 177, 177, 89,  123,
+            70,  71,  177, 177, 97,  177, 177, 177, 177, 177, 177, 177, 116, 177, 177, 177, 177,
+            177, 177, 177, 177, 177, 177, 130, 177, 177, 177, 177, 60,  177, 177, 177, 177, 177,
+            177, 177, 177, 177, 177, 177, 177, 117, 109, 177, 82,  177, 177, 177, 131,
 
-            177, 177, 68,  177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 117,
-            177, 177, 131, 177, 177, 72,  109, 83,  177, 111, 177, 112, 177, 177, 177, 177, 177,
-            97,  177, 177, 177, 177, 64,  177, 63,  126, 177, 177, 110, 84,  177, 177, 177, 177,
-            177, 177, 177, 177, 177, 177, 124, 127, 118, 177, 65,  177, 177, 177, 177, 177, 177,
-            177, 177, 125, 128, 177, 177, 121, 69,  177, 177, 171, 177, 177, 177, 74,  177, 177,
-            123, 73,  177, 177, 177, 177, 177, 177, 132, 177, 177, 177, 177, 177, 177,
+            177, 177, 68,  177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 177, 118,
+            177, 177, 132, 177, 177, 72,  110, 83,  177, 112, 177, 113, 177, 177, 177, 177, 177,
+            98,  177, 177, 177, 177, 64,  177, 63,  127, 177, 177, 111, 84,  177, 177, 177, 177,
+            177, 177, 177, 177, 177, 177, 125, 128, 119, 177, 65,  177, 177, 177, 177, 177, 177,
+            177, 177, 126, 129, 177, 177, 122, 69,  177, 177, 171, 177, 177, 177, 74,  177, 177,
+            124, 73,  177, 177, 177, 177, 177, 177, 133, 177, 177, 177, 177, 177, 177,
 
-            133, 177, 177, 177, 75,  177, 134, 113, 114, 177, 177, 177, 61,  177, 177, 172, 119,
+            134, 177, 177, 177, 75,  177, 135, 114, 115, 177, 177, 177, 61,  177, 177, 172, 120,
             76,  0};
 
         static yyconst flex_int32_t yy_ec[256] = {
@@ -803,20 +803,20 @@ struct yy_trans_info
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
-        /*
-        //
-        // Copyright (c) 2002-2013 The ANGLE Project Authors. All rights reserved.
-        // Use of this source code is governed by a BSD-style license that can be
-        // found in the LICENSE file.
-        //
+/*
+//
+// Copyright (c) 2002-2013 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
 
-        This file contains the Lex specification for GLSL ES.
-        Based on ANSI C grammar, Lex specification:
-        http://www.lysator.liu.se/c/ANSI-C-grammar-l.html
+This file contains the Lex specification for GLSL ES.
+Based on ANSI C grammar, Lex specification:
+http://www.lysator.liu.se/c/ANSI-C-grammar-l.html
 
-        IF YOU MODIFY THIS FILE YOU ALSO NEED TO RUN generate_parser.sh,
-        WHICH GENERATES THE GLSL ES LEXER (glslang_lex.cpp).
-        */
+IF YOU MODIFY THIS FILE YOU ALSO NEED TO RUN generate_parser.sh,
+WHICH GENERATES THE GLSL ES LEXER (glslang_lex.cpp).
+*/
 
 #include "compiler/translator/glslang.h"
 #include "compiler/translator/ParseContext.h"
@@ -851,6 +851,7 @@ static int ES2_reserved_ES3_keyword(TParseContext *context, int token);
 static int ES2_keyword_ES3_reserved(TParseContext *context, int token);
 static int ES2_ident_ES3_keyword(TParseContext *context, int token);
 static int ES2_ident_ES3_reserved_ES3_1_keyword(TParseContext *context, int token);
+static int ES2_and_ES3_reserved_ES3_1_keyword(TParseContext *context, int token);
 static int uint_constant(TParseContext *context);
 static int int_constant(TParseContext *context);
 static int float_constant(yyscan_t yyscanner);
@@ -1539,10 +1540,16 @@ case 91:
 case 92:
     YY_RULE_SETUP { return ES2_ident_ES3_reserved_ES3_1_keyword(context, WRITEONLY); }
     YY_BREAK
-/* Reserved keywords for GLSL ES 3.00 that are not reserved for GLSL ES 1.00 */
 case 93:
+    YY_RULE_SETUP { return ES2_ident_ES3_reserved_ES3_1_keyword(context, COHERENT); }
+    YY_BREAK
 case 94:
+    YY_RULE_SETUP { return ES2_ident_ES3_reserved_ES3_1_keyword(context, RESTRICT); }
+    YY_BREAK
 case 95:
+    YY_RULE_SETUP { return ES2_and_ES3_reserved_ES3_1_keyword(context, VOLATILE); }
+    YY_BREAK
+/* Reserved keywords for GLSL ES 3.00 that are not reserved for GLSL ES 1.00 */
 case 96:
 case 97:
 case 98:
@@ -1582,30 +1589,31 @@ case 131:
 case 132:
 case 133:
 case 134:
-YY_RULE_SETUP
-{ 
-    if (context->getShaderVersion() < 300) {
-		yylval->lex.string = NewPoolTString(yytext); 
+case 135:
+    YY_RULE_SETUP
+    {
+        if (context->getShaderVersion() < 300)
+        {
+            yylval->lex.string = NewPoolTString(yytext); 
 	    return check_type(yyscanner); 
 	}
 	return reserved_word(yyscanner);
 }
 	YY_BREAK
 /* Reserved keywords in GLSL ES 1.00 that are not reserved in GLSL ES 3.00 */
-case 135:
-YY_RULE_SETUP
-{
-    if (context->getShaderVersion() >= 300)
-    {
-        yylval->lex.string = NewPoolTString(yytext);
-        return check_type(yyscanner);
-    }
-
-    return reserved_word(yyscanner);
-}
-	YY_BREAK
-/* Reserved keywords */
 case 136:
+    YY_RULE_SETUP
+    {
+        if (context->getShaderVersion() >= 300)
+        {
+            yylval->lex.string = NewPoolTString(yytext);
+            return check_type(yyscanner);
+        }
+
+        return reserved_word(yyscanner);
+    }
+    YY_BREAK
+/* Reserved keywords */
 case 137:
 case 138:
 case 139:
@@ -3154,6 +3162,19 @@ int ES2_ident_ES3_keyword(TParseContext *context, int token)
     {
         yylval->lex.string = NewPoolTString(yytext);
         return check_type(yyscanner);
+    }
+
+    return token;
+}
+
+int ES2_and_ES3_reserved_ES3_1_keyword(TParseContext *context, int token)
+{
+    struct yyguts_t *yyg = (struct yyguts_t *)context->getScanner();
+    yyscan_t yyscanner   = (yyscan_t)context->getScanner();
+
+    if (context->getShaderVersion() < 310)
+    {
+        return reserved_word(yyscanner);
     }
 
     return token;
