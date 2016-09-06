@@ -55,6 +55,16 @@ int ShaderGL::prepareSourceAndReturnOptions(std::stringstream *sourceStream,
         options |= SH_REWRITE_DO_WHILE_LOOPS;
     }
 
+    if (mWorkarounds.emulateAbsIntFunction)
+    {
+        options |= SH_EMULATE_ABS_INT_FUNCTION;
+    }
+
+    if (mWorkarounds.addAndTrueToLoopCondition)
+    {
+        options |= SH_ADD_AND_TRUE_TO_LOOP_CONDITION;
+    }
+
     return options;
 }
 
