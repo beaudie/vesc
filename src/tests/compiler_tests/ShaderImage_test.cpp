@@ -149,3 +149,42 @@ TEST_F(ShaderImageTest, ImageStore)
     ASSERT_EQ(EbtInt, loadArgument2Typed->getBasicType());
     ASSERT_EQ(2, loadArgument2Typed->getNominalSize());
 }
+
+// Check that memory qualifiers are correctly parsed.
+TEST_F(ShaderImageTest, ImageMemoryQualifiers)
+{
+    const std::string &shaderString =
+        "#version 310 es\n"
+        "layout(local_size_x = 4) in;"
+        "layout(rgba32f) uniform highp coherent readonly image2D image1;\n"
+        "layout(rgba32f) uniform highp volatile writeonly image2D image2;\n"
+        "layout(rgba32f) uniform highp volatile restrict readonly writeonly image2D image3;\n"
+        "void main() {\n"
+        "}";
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed" << mInfoLog;
+    }
+
+    const TIntermSymbol *image1Symbol = FindSymbolNode(mASTRoot, "image1", EbtImage2D);
+    ASSERT_NE(nullptr, image1Symbol);
+    const TMemoryQualifier &image1MemoryQualifier = image1Symbol->getType().getMemoryQualifier();
+    ASSERT_EQ(true, image1MemoryQualifier.coherent);
+    ASSERT_EQ(true, image1MemoryQualifier.readonly);
+
+    const TIntermSymbol *image2Symbol = FindSymbolNode(mASTRoot, "image2", EbtImage2D);
+    ASSERT_NE(nullptr, image2Symbol);
+    const TMemoryQualifier &image2MemoryQualifier = image2Symbol->getType().getMemoryQualifier();
+    ASSERT_EQ(true, image2MemoryQualifier.coherent);
+    ASSERT_EQ(true, image2MemoryQualifier.volatileQualifier);
+    ASSERT_EQ(true, image2MemoryQualifier.writeonly);
+
+    const TIntermSymbol *image3Symbol = FindSymbolNode(mASTRoot, "image3", EbtImage2D);
+    ASSERT_NE(nullptr, image3Symbol);
+    const TMemoryQualifier &image3MemoryQualifier = image3Symbol->getType().getMemoryQualifier();
+    ASSERT_EQ(true, image3MemoryQualifier.coherent);
+    ASSERT_EQ(true, image3MemoryQualifier.volatileQualifier);
+    ASSERT_EQ(true, image3MemoryQualifier.restrictQualifier);
+    ASSERT_EQ(true, image3MemoryQualifier.writeonly);
+    ASSERT_EQ(true, image3MemoryQualifier.readonly);
+}
