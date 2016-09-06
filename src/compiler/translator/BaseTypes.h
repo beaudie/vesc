@@ -508,6 +508,9 @@ enum TQualifier
     // GLSL ES 3.1 memory qualifiers
     EvqReadOnly,
     EvqWriteOnly,
+    EvqCoherent,
+    EvqRestrict,
+    EvqVolatile,
 
     // end of list
     EvqLast
@@ -610,17 +613,28 @@ struct TMemoryQualifier
     // imageSize().
     bool readonly;
     bool writeonly;
+    bool coherent;
+
+    // restrict and volatile are reserved keywords in C/C++
+    bool restrictQualifier;
+    bool volatileQualifier;
     static TMemoryQualifier create()
     {
         TMemoryQualifier memoryQualifier;
 
-        memoryQualifier.readonly  = false;
-        memoryQualifier.writeonly = false;
+        memoryQualifier.readonly          = false;
+        memoryQualifier.writeonly         = false;
+        memoryQualifier.coherent          = false;
+        memoryQualifier.restrictQualifier = false;
+        memoryQualifier.volatileQualifier = false;
 
         return memoryQualifier;
     }
 
-    bool isEmpty() { return !readonly && !writeonly; }
+    bool isEmpty()
+    {
+        return !readonly && !writeonly && !coherent && !restrictQualifier && !volatileQualifier;
+    }
 };
 
 inline const char *getWorkGroupSizeString(size_t dimension)
