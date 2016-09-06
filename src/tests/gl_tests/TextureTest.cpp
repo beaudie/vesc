@@ -3480,6 +3480,39 @@ TEST_P(Texture2DTestES3, UnpackOverlappingRowsFromUnpackBuffer)
     EXPECT_EQ(expected, actual);
 }
 
+// Tests unpacking into the unsized GL_ALPHA format.
+TEST_P(Texture2DTestES3, UnsizedAlphaUnpackBuffer)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, getWindowWidth(), getWindowHeight(), 0, GL_ALPHA,
+                 GL_UNSIGNED_BYTE, nullptr);
+
+    std::vector<GLubyte> bufferData(getWindowWidth() * getWindowHeight(), 2);
+
+    for (int i = 0; i < 10; ++i)
+    {
+        angle::GLBuffer unpackBuffer;
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, unpackBuffer.get());
+        glBufferData(GL_PIXEL_UNPACK_BUFFER, getWindowWidth() * getWindowHeight(),
+                     bufferData.data(), GL_STATIC_DRAW);
+
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, getWindowWidth(), getWindowHeight(), GL_ALPHA,
+                        GL_UNSIGNED_BYTE, nullptr);
+
+        glClearColor(0.5f, 0.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        drawQuad(mProgram, "position", 0.5f);
+        swapBuffers();
+
+        ASSERT_GL_NO_ERROR();
+    }
+    EXPECT_PIXEL_NEAR(0, 0, 0, 0, 0, 127, 1);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 // TODO(oetuaho): Enable all below tests on OpenGL. Requires a fix for ANGLE bug 1278.
 ANGLE_INSTANTIATE_TEST(Texture2DTest,
