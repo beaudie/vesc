@@ -482,6 +482,7 @@ void InsertBuiltInFunctions(sh::GLenum type, ShShaderSpec spec, const ShBuiltInR
     fields->push_back(far);
     fields->push_back(diff);
     TStructure *depthRangeStruct = new TStructure(NewPoolTString("gl_DepthRangeParameters"), fields);
+    depthRangeStruct->setUniqueId(TSymbolTable::nextUniqueId());
     TVariable *depthRangeParameters =
         new TVariable(&depthRangeStruct->name(), TType(depthRangeStruct), true);
     symbolTable.insert(COMMON_BUILTINS, depthRangeParameters);

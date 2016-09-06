@@ -9,6 +9,7 @@
 #include "angle_gl.h"
 #include "common/debug.h"
 #include "compiler/translator/IntermNode.h"
+#include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/util.h"
 
 namespace
@@ -156,6 +157,7 @@ void VariableInitializer::insertInitCode(TIntermSequence *sequence)
                 fields->push_back(new TField(nullptr, new TString(field.name.c_str()), loc));
             }
             TStructure *structure = new TStructure(new TString(var.structName.c_str()), fields);
+            structure->setUniqueId(TSymbolTable::nextUniqueId());
             TType type;
             type.setStruct(structure);
             for (int fieldIndex = 0; fieldIndex < static_cast<int>(var.fields.size()); ++fieldIndex)
