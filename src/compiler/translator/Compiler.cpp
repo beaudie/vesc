@@ -18,6 +18,7 @@
 #include "compiler/translator/RegenerateStructNames.h"
 #include "compiler/translator/RemovePow.h"
 #include "compiler/translator/RewriteDoWhile.h"
+#include "compiler/translator/RewriteForAndWhile.h"
 #include "compiler/translator/ScalarizeVecAndMatConstructorArgs.h"
 #include "compiler/translator/UnfoldShortCircuitAST.h"
 #include "compiler/translator/ValidateLimitations.h"
@@ -337,6 +338,10 @@ TIntermNode *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         // This pass might emit short circuits so keep it before the short circuit unfolding
         if (success && (compileOptions & SH_REWRITE_DO_WHILE_LOOPS))
             RewriteDoWhile(root, getTemporaryIndex());
+
+        // Word around For and While loop bugs on Intel Mac OSX.
+        if (success && (compileOptions & SH_REWRITE_FOR_AND_WHILE_LOOPS))
+            sh::RewriteForAndWhile(root, getTemporaryIndex());
 
         if (success && (compileOptions & SH_UNFOLD_SHORT_CIRCUIT))
         {

@@ -93,6 +93,8 @@
             'compiler/translator/RemovePow.h',
             'compiler/translator/RewriteDoWhile.cpp',
             'compiler/translator/RewriteDoWhile.h',
+            'compiler/translator/RewriteForAndWhile.cpp',
+            'compiler/translator/RewriteForAndWhile.h',
             'compiler/translator/RewriteTexelFetchOffset.cpp',
             'compiler/translator/RewriteTexelFetchOffset.h',
             'compiler/translator/ScalarizeVecAndMatConstructorArgs.cpp',
