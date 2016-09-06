@@ -4,6 +4,10 @@
 // found in the LICENSE file.
 //
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
+
 #include "QualifierTypes.h"
 
 #include "Diagnostics.h"
