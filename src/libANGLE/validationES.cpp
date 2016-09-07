@@ -394,6 +394,103 @@ bool ValidCompressedImageSize(const ValidationContext *context,
     return true;
 }
 
+bool ValidImageDataSize(ValidationContext *context,
+                        GLenum textureTarget,
+                        GLsizei width,
+                        GLsizei height,
+                        GLsizei depth,
+                        GLenum internalFormat,
+                        GLenum type,
+                        const GLvoid *pixels,
+                        GLsizei imageSize)
+{
+    gl::Buffer *pixelUnpackBuffer = context->getGLState().getTargetBuffer(GL_PIXEL_UNPACK_BUFFER);
+    if (pixelUnpackBuffer == nullptr && imageSize < 0)
+    {
+        // Checks are not required
+        return true;
+    }
+
+    GLenum sizedFormat                   = GetSizedInternalFormat(internalFormat, type);
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(sizedFormat);
+    Extents size(width, height, depth);
+    const auto &unpack = context->getGLState().getUnpackState();
+
+    auto copyBytesOrErr = formatInfo.computeUnpackSize(type, size, unpack);
+    if (copyBytesOrErr.isError())
+    {
+        context->handleError(copyBytesOrErr.getError());
+        return false;
+    }
+
+    CheckedNumeric<size_t> checkedCopyBytes(copyBytesOrErr.getResult());
+    CheckedNumeric<size_t> checkedOffset(pixelUnpackBuffer ? reinterpret_cast<size_t>(pixels) : 0u);
+    checkedCopyBytes += checkedOffset;
+
+    auto rowPitchOrErr =
+        formatInfo.computeRowPitch(type, width, unpack.alignment, unpack.rowLength);
+    if (rowPitchOrErr.isError())
+    {
+        context->handleError(rowPitchOrErr.getError());
+        return false;
+    }
+    auto depthPitchOrErr = formatInfo.computeDepthPitch(type, width, height, unpack.alignment,
+                                                        unpack.rowLength, unpack.imageHeight);
+    if (depthPitchOrErr.isError())
+    {
+        context->handleError(depthPitchOrErr.getError());
+        return false;
+    }
+
+    bool targetIs3D     = textureTarget == GL_TEXTURE_3D || textureTarget == GL_TEXTURE_2D_ARRAY;
+    auto skipBytesOrErr = formatInfo.computeSkipBytes(
+        rowPitchOrErr.getResult(), depthPitchOrErr.getResult(), unpack.skipImages, unpack.skipRows,
+        unpack.skipPixels, targetIs3D);
+    if (skipBytesOrErr.isError())
+    {
+        context->handleError(skipBytesOrErr.getError());
+        return false;
+    }
+    checkedCopyBytes += skipBytesOrErr.getResult();
+
+    if (!checkedCopyBytes.IsValid())
+    {
+        // Overflow in computation
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    size_t requiredCopyBytes = checkedCopyBytes.ValueOrDie();
+    if (pixelUnpackBuffer)
+    {
+        if (requiredCopyBytes > static_cast<size_t>(pixelUnpackBuffer->getSize()))
+        {
+            // Overflow past the end of the buffer
+            context->handleError(
+                Error(GL_INVALID_OPERATION, "Pixel unpack buffer is not large enough."));
+            return false;
+        }
+    }
+    else
+    {
+        ASSERT(imageSize >= 0);
+        if (pixels == nullptr && imageSize != 0)
+        {
+            context->handleError(
+                Error(GL_INVALID_OPERATION, "imageSize must be 0 if no texture data is provided."));
+        }
+
+        if (static_cast<size_t>(imageSize) < requiredCopyBytes)
+        {
+            context->handleError(
+                Error(GL_INVALID_OPERATION, "imageSize must be at least %u.", requiredCopyBytes));
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool ValidQueryType(const Context *context, GLenum queryType)
 {
     static_assert(GL_ANY_SAMPLES_PASSED == GL_ANY_SAMPLES_PASSED_EXT, "GL extension enums not equal.");
@@ -1628,8 +1725,44 @@ bool ValidateStateQuery(ValidationContext *context,
     }
 
     // pname is valid, but there are no parameters to return
-    if (numParams == 0)
+    if (*numParams == 0)
     {
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateRobustStateQuery(ValidationContext *context,
+                              GLenum pname,
+                              GLsizei bufSize,
+                              GLenum *nativeType,
+                              unsigned int *numParams)
+{
+    if (!context->getExtensions().robustQueries)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "GL_ANGLE_robust_queries is not available."));
+        return false;
+    }
+
+    if (bufSize < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "bufSize cannot be negative."));
+        return false;
+    }
+
+    if (!ValidateStateQuery(context, pname, nativeType, numParams))
+    {
+        return false;
+    }
+
+    if (static_cast<unsigned int>(bufSize) < *numParams)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION,
+                  "%u parameters are required when querying 0x%X but %i were provided.", *numParams,
+                  pname, bufSize));
         return false;
     }
 
