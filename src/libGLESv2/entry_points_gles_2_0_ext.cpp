@@ -16,6 +16,7 @@
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Shader.h"
 #include "libANGLE/Query.h"
+#include "libANGLE/queryconversions.h"
 
 #include "libANGLE/validationES.h"
 #include "libANGLE/validationES2.h"
@@ -1932,6 +1933,72 @@ ANGLE_EXPORT void GL_APIENTRY CopySubTextureCHROMIUM(GLuint sourceId,
 
         context->copySubTextureCHROMIUM(sourceId, destId, xoffset, yoffset, x, y, width, height,
                                         unpackFlipY, unpackPremultiplyAlpha, unpackUnmultiplyAlpha);
+    }
+}
+
+ANGLE_EXPORT void GL_APIENTRY GetIntegervRobustANGLE(GLenum pname,
+                                                     GLsizei bufSize,
+                                                     GLsizei *length,
+                                                     GLint *data)
+{
+    EVENT(
+        "(GLenum pname = 0x%X,  GLsizei bufsize = %d, GLsizei* length = 0x%0.8p, GLint* params = "
+        "0x%0.8p)",
+        pname, bufSize, length, params);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        GLenum nativeType;
+        unsigned int numParams = 0;
+        if (!ValidateRobustStateQuery(context, pname, bufSize, &nativeType, &numParams))
+        {
+            *length = 0;
+            return;
+        }
+
+        if (nativeType == GL_INT)
+        {
+            context->getIntegerv(pname, data);
+        }
+        else
+        {
+            CastStateValues(context, nativeType, pname, numParams, data);
+        }
+        *length = numParams;
+    }
+}
+
+ANGLE_EXPORT void GL_APIENTRY TexImage2DRobustANGLE(GLenum target,
+                                                    GLint level,
+                                                    GLint internalformat,
+                                                    GLsizei width,
+                                                    GLsizei height,
+                                                    GLint border,
+                                                    GLenum format,
+                                                    GLenum type,
+                                                    GLsizei imageSize,
+                                                    const void *pixels)
+{
+    EVENT(
+        "(GLenum target = 0x%X, GLint level = %d, GLint internalformat = %d, GLsizei width = %d, "
+        "GLsizei height = %d, "
+        "GLint border = %d, GLenum format = 0x%X, GLenum type = 0x%X, GLsizei imageSize = %d, "
+        "const GLvoid* pixels = 0x%0.8p)",
+        target, level, internalformat, width, height, border, format, type, imageSize, pixels);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!context->skipValidation() &&
+            !ValidateTexImage2DRobust(context, target, level, internalformat, width, height, border,
+                                      format, type, imageSize, pixels))
+        {
+            return;
+        }
+
+        context->texImage2D(target, level, internalformat, width, height, border, format, type,
+                            pixels);
     }
 }
 
