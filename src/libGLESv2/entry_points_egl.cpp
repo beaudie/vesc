@@ -1472,6 +1472,10 @@ __eglMustCastToProperFunctionPointerType EGLAPIENTRY GetProcAddress(const char *
         INSERT_PROC_ADDRESS(gl, CopyTextureCHROMIUM);
         INSERT_PROC_ADDRESS(gl, CopySubTextureCHROMIUM);
 
+        // GL_ANGLE_robust_queries
+        INSERT_PROC_ADDRESS(gl, GetIntegervRobustANGLE);
+        INSERT_PROC_ADDRESS(gl, TexImage2DRobustANGLE);
+
         // GLES3 core
         INSERT_PROC_ADDRESS(gl, ReadBuffer);
         INSERT_PROC_ADDRESS(gl, DrawRangeElements);
