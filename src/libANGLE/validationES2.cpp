@@ -285,9 +285,21 @@ bool IsValidCopyTextureSourceTarget(Context *context, GLenum target)
 
 }  // anonymous namespace
 
-bool ValidateES2TexImageParameters(Context *context, GLenum target, GLint level, GLenum internalformat, bool isCompressed, bool isSubImage,
-                                   GLint xoffset, GLint yoffset, GLsizei width, GLsizei height,
-                                   GLint border, GLenum format, GLenum type, const GLvoid *pixels)
+bool ValidateES2TexImageParameters(Context *context,
+                                   GLenum target,
+                                   GLint level,
+                                   GLenum internalformat,
+                                   bool isCompressed,
+                                   bool isSubImage,
+                                   GLint xoffset,
+                                   GLint yoffset,
+                                   GLsizei width,
+                                   GLsizei height,
+                                   GLint border,
+                                   GLenum format,
+                                   GLenum type,
+                                   GLsizei imageSize,
+                                   const GLvoid *pixels)
 {
     if (!ValidTexture2DDestinationTarget(context, target))
     {
@@ -690,6 +702,12 @@ bool ValidateES2TexImageParameters(Context *context, GLenum target, GLint level,
                 return false;
             }
         }
+    }
+
+    if (!ValidImageDataSize(context, target, width, height, 1, internalformat, type, pixels,
+                            imageSize))
+    {
+        return false;
     }
 
     return true;
@@ -1962,12 +1980,51 @@ bool ValidateTexImage2D(Context *context,
     if (context->getClientMajorVersion() < 3)
     {
         return ValidateES2TexImageParameters(context, target, level, internalformat, false, false,
-                                             0, 0, width, height, border, format, type, pixels);
+                                             0, 0, width, height, border, format, type, -1, pixels);
     }
 
     ASSERT(context->getClientMajorVersion() >= 3);
     return ValidateES3TexImage2DParameters(context, target, level, internalformat, false, false, 0,
-                                           0, 0, width, height, 1, border, format, type, pixels);
+                                           0, 0, width, height, 1, border, format, type, -1,
+                                           pixels);
+}
+
+bool ValidateTexImage2DRobust(Context *context,
+                              GLenum target,
+                              GLint level,
+                              GLint internalformat,
+                              GLsizei width,
+                              GLsizei height,
+                              GLint border,
+                              GLenum format,
+                              GLenum type,
+                              GLsizei imageSize,
+                              const GLvoid *pixels)
+{
+    if (!context->getExtensions().robustQueries)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "GL_ANGLE_robust_queries is not available."));
+        return false;
+    }
+
+    if (imageSize < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "imageSize cannot be negative."));
+        return false;
+    }
+
+    if (context->getClientMajorVersion() < 3)
+    {
+        return ValidateES2TexImageParameters(context, target, level, internalformat, false, false,
+                                             0, 0, width, height, border, format, type, imageSize,
+                                             pixels);
+    }
+
+    ASSERT(context->getClientMajorVersion() >= 3);
+    return ValidateES3TexImage2DParameters(context, target, level, internalformat, false, false, 0,
+                                           0, 0, width, height, 1, border, format, type, imageSize,
+                                           pixels);
 }
 
 bool ValidateTexSubImage2D(Context *context,
@@ -1985,12 +2042,13 @@ bool ValidateTexSubImage2D(Context *context,
     if (context->getClientMajorVersion() < 3)
     {
         return ValidateES2TexImageParameters(context, target, level, GL_NONE, false, true, xoffset,
-                                             yoffset, width, height, 0, format, type, pixels);
+                                             yoffset, width, height, 0, format, type, -1, pixels);
     }
 
     ASSERT(context->getClientMajorVersion() >= 3);
     return ValidateES3TexImage2DParameters(context, target, level, GL_NONE, false, true, xoffset,
-                                           yoffset, 0, width, height, 1, 0, format, type, pixels);
+                                           yoffset, 0, width, height, 1, 0, format, type, -1,
+                                           pixels);
 }
 
 bool ValidateCompressedTexImage2D(Context *context,
@@ -2006,7 +2064,7 @@ bool ValidateCompressedTexImage2D(Context *context,
     if (context->getClientMajorVersion() < 3)
     {
         if (!ValidateES2TexImageParameters(context, target, level, internalformat, true, false, 0,
-                                           0, width, height, border, GL_NONE, GL_NONE, data))
+                                           0, width, height, border, GL_NONE, GL_NONE, -1, data))
         {
             return false;
         }
@@ -2015,7 +2073,7 @@ bool ValidateCompressedTexImage2D(Context *context,
     {
         ASSERT(context->getClientMajorVersion() >= 3);
         if (!ValidateES3TexImage2DParameters(context, target, level, internalformat, true, false, 0,
-                                             0, 0, width, height, 1, border, GL_NONE, GL_NONE,
+                                             0, 0, width, height, 1, border, GL_NONE, GL_NONE, -1,
                                              data))
         {
             return false;
@@ -2054,7 +2112,7 @@ bool ValidateCompressedTexSubImage2D(Context *context,
     if (context->getClientMajorVersion() < 3)
     {
         if (!ValidateES2TexImageParameters(context, target, level, GL_NONE, true, true, xoffset,
-                                           yoffset, width, height, 0, GL_NONE, GL_NONE, data))
+                                           yoffset, width, height, 0, GL_NONE, GL_NONE, -1, data))
         {
             return false;
         }
@@ -2063,7 +2121,7 @@ bool ValidateCompressedTexSubImage2D(Context *context,
     {
         ASSERT(context->getClientMajorVersion() >= 3);
         if (!ValidateES3TexImage2DParameters(context, target, level, GL_NONE, true, true, xoffset,
-                                             yoffset, 0, width, height, 1, 0, GL_NONE, GL_NONE,
+                                             yoffset, 0, width, height, 1, 0, GL_NONE, GL_NONE, -1,
                                              data))
         {
             return false;
