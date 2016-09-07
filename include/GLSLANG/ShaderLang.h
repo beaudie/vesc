@@ -49,7 +49,7 @@ typedef unsigned int GLenum;
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 158
+#define ANGLE_SH_VERSION 159
 
 typedef enum {
     SH_GLES2_SPEC,
@@ -211,6 +211,10 @@ typedef enum {
     // This flag works around an issue in translating GLSL function texelFetchOffset on
     // INTEL drivers. It works by translating texelFetchOffset into texelFetch.
     SH_REWRITE_TEXELFETCHOFFSET_TO_TEXELFETCH = 0x4000000,
+
+    // This flag works around a bug in evaluating unary minus operator on integer on some INTEL
+    // drivers. It works by translating -(int) into ~(int)+1.
+    SH_REWRITE_UNARY_MINURS_OPERATOR_ON_INTEGER = 0x8000000,
 } ShCompileOptions;
 
 // Defines alternate strategies for implementing array index clamping.
