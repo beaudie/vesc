@@ -115,7 +115,6 @@ bool Traverser::visitAggregate(Visit visit, TIntermAggregate *node)
 
     // Position+offset
     TIntermBinary *add = new TIntermBinary(EOpAdd);
-    add->setType(node->getType());
     // Position
     TIntermTyped *texCoordNode = sequence->at(1)->getAsTyped();
     ASSERT(texCoordNode);

@@ -434,6 +434,7 @@ class TType
     {
         return isScalar() && (type == EbtInt || type == EbtUInt);
     }
+    bool isScalarSignedInt() const { return isScalar() && type == EbtInt; }
 
     TStructure *getStruct() const
     {

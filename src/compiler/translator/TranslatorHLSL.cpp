@@ -16,6 +16,7 @@
 #include "compiler/translator/RemoveDynamicIndexing.h"
 #include "compiler/translator/RewriteElseBlocks.h"
 #include "compiler/translator/RewriteTexelFetchOffset.h"
+#include "compiler/translator/RewriteUnaryMinusOperatorInt.h"
 #include "compiler/translator/SeparateArrayInitialization.h"
 #include "compiler/translator/SeparateDeclarations.h"
 #include "compiler/translator/SeparateExpressionsReturningArrays.h"
@@ -103,6 +104,12 @@ void TranslatorHLSL::translate(TIntermNode *root, int compileOptions)
     {
         sh::RewriteTexelFetchOffset(root, getTemporaryIndex(), getSymbolTable(),
                                     getShaderVersion());
+    }
+
+    if (((compileOptions & SH_REWRITE_UNARY_MINURS_OPERATOR_ON_INTEGER) != 0) &&
+        getShaderType() == GL_VERTEX_SHADER)
+    {
+        sh::RewriteUnaryMinusOperatorInt(root, getTemporaryIndex());
     }
 
     sh::OutputHLSL outputHLSL(getShaderType(), getShaderVersion(), getExtensionBehavior(),

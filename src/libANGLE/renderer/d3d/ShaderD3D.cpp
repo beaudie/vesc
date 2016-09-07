@@ -59,6 +59,10 @@ ShaderD3D::ShaderD3D(const gl::ShaderState &data, const WorkaroundsD3D &workarou
     {
         mAdditionalOptions |= SH_REWRITE_TEXELFETCHOFFSET_TO_TEXELFETCH;
     }
+    if (workarounds.rewriteUnaryMinusOperator)
+    {
+        mAdditionalOptions |= SH_REWRITE_UNARY_MINURS_OPERATOR_ON_INTEGER;
+    }
 }
 
 ShaderD3D::~ShaderD3D()
