@@ -2111,7 +2111,8 @@ void GL_APIENTRY GetBufferParameteri64v(GLenum target, GLenum pname, GLint64* pa
             return;
         }
 
-        if (!ValidBufferParameter(context, pname))
+        GLsizei numParams = 0;
+        if (!ValidBufferParameter(context, pname, &numParams))
         {
             context->handleError(Error(GL_INVALID_ENUM));
             return;

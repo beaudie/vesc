@@ -257,8 +257,11 @@ bool ValidBufferTarget(const ValidationContext *context, GLenum target)
     }
 }
 
-bool ValidBufferParameter(const Context *context, GLenum pname)
+bool ValidBufferParameter(const ValidationContext *context, GLenum pname, GLsizei *numParams)
 {
+    // All buffer parameter queries return one value.
+    *numParams = 1;
+
     const Extensions &extensions = context->getExtensions();
 
     switch (pname)
@@ -387,6 +390,103 @@ bool ValidCompressedImageSize(const ValidationContext *context,
             (static_cast<GLuint>(height) > formatInfo.compressedBlockHeight &&
              height % formatInfo.compressedBlockHeight != 0))
         {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool ValidImageDataSize(ValidationContext *context,
+                        GLenum textureTarget,
+                        GLsizei width,
+                        GLsizei height,
+                        GLsizei depth,
+                        GLenum internalFormat,
+                        GLenum type,
+                        const GLvoid *pixels,
+                        GLsizei imageSize)
+{
+    gl::Buffer *pixelUnpackBuffer = context->getGLState().getTargetBuffer(GL_PIXEL_UNPACK_BUFFER);
+    if (pixelUnpackBuffer == nullptr && imageSize < 0)
+    {
+        // Checks are not required
+        return true;
+    }
+
+    GLenum sizedFormat                   = GetSizedInternalFormat(internalFormat, type);
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(sizedFormat);
+    Extents size(width, height, depth);
+    const auto &unpack = context->getGLState().getUnpackState();
+
+    auto copyBytesOrErr = formatInfo.computeUnpackSize(type, size, unpack);
+    if (copyBytesOrErr.isError())
+    {
+        context->handleError(copyBytesOrErr.getError());
+        return false;
+    }
+
+    CheckedNumeric<size_t> checkedCopyBytes(copyBytesOrErr.getResult());
+    CheckedNumeric<size_t> checkedOffset(pixelUnpackBuffer ? reinterpret_cast<size_t>(pixels) : 0u);
+    checkedCopyBytes += checkedOffset;
+
+    auto rowPitchOrErr =
+        formatInfo.computeRowPitch(type, width, unpack.alignment, unpack.rowLength);
+    if (rowPitchOrErr.isError())
+    {
+        context->handleError(rowPitchOrErr.getError());
+        return false;
+    }
+    auto depthPitchOrErr = formatInfo.computeDepthPitch(type, width, height, unpack.alignment,
+                                                        unpack.rowLength, unpack.imageHeight);
+    if (depthPitchOrErr.isError())
+    {
+        context->handleError(depthPitchOrErr.getError());
+        return false;
+    }
+
+    bool targetIs3D     = textureTarget == GL_TEXTURE_3D || textureTarget == GL_TEXTURE_2D_ARRAY;
+    auto skipBytesOrErr = formatInfo.computeSkipBytes(
+        rowPitchOrErr.getResult(), depthPitchOrErr.getResult(), unpack.skipImages, unpack.skipRows,
+        unpack.skipPixels, targetIs3D);
+    if (skipBytesOrErr.isError())
+    {
+        context->handleError(skipBytesOrErr.getError());
+        return false;
+    }
+    checkedCopyBytes += skipBytesOrErr.getResult();
+
+    if (!checkedCopyBytes.IsValid())
+    {
+        // Overflow in computation
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    size_t requiredCopyBytes = checkedCopyBytes.ValueOrDie();
+    if (pixelUnpackBuffer)
+    {
+        if (requiredCopyBytes > static_cast<size_t>(pixelUnpackBuffer->getSize()))
+        {
+            // Overflow past the end of the buffer
+            context->handleError(
+                Error(GL_INVALID_OPERATION, "Pixel unpack buffer is not large enough."));
+            return false;
+        }
+    }
+    else
+    {
+        ASSERT(imageSize >= 0);
+        if (pixels == nullptr && imageSize != 0)
+        {
+            context->handleError(
+                Error(GL_INVALID_OPERATION, "imageSize must be 0 if no texture data is provided."));
+        }
+
+        if (static_cast<size_t>(imageSize) < requiredCopyBytes)
+        {
+            context->handleError(
+                Error(GL_INVALID_OPERATION, "imageSize must be at least %u.", requiredCopyBytes));
             return false;
         }
     }
@@ -1628,8 +1728,44 @@ bool ValidateStateQuery(ValidationContext *context,
     }
 
     // pname is valid, but there are no parameters to return
-    if (numParams == 0)
+    if (*numParams == 0)
     {
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateRobustStateQuery(ValidationContext *context,
+                              GLenum pname,
+                              GLsizei bufSize,
+                              GLenum *nativeType,
+                              unsigned int *numParams)
+{
+    if (!context->getExtensions().robustQueries)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "GL_ANGLE_robust_queries is not available."));
+        return false;
+    }
+
+    if (bufSize < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "bufSize cannot be negative."));
+        return false;
+    }
+
+    if (!ValidateStateQuery(context, pname, nativeType, numParams))
+    {
+        return false;
+    }
+
+    if (static_cast<unsigned int>(bufSize) < *numParams)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION,
+                  "%u parameters are required when querying 0x%X but %i were provided.", *numParams,
+                  pname, bufSize));
         return false;
     }
 
@@ -3097,6 +3233,427 @@ bool ValidateGenOrDelete(Context *context, GLint n)
         context->handleError(Error(GL_INVALID_VALUE, "n < 0"));
         return false;
     }
+    return true;
+}
+
+bool ValidateGetFramebufferAttachmentParameteriv(ValidationContext *context,
+                                                 GLenum target,
+                                                 GLenum attachment,
+                                                 GLenum pname,
+                                                 GLsizei *numParams)
+{
+    // Only one parameter is returned from glGetFramebufferAttachmentParameteriv
+    *numParams = 1;
+
+    if (!ValidFramebufferTarget(target))
+    {
+        context->handleError(Error(GL_INVALID_ENUM));
+        return false;
+    }
+
+    int clientVersion = context->getClientMajorVersion();
+
+    switch (pname)
+    {
+        case GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE:
+        case GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME:
+        case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL:
+        case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE:
+            break;
+
+        case GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING:
+            if (clientVersion < 3 && !context->getExtensions().sRGB)
+            {
+                context->handleError(Error(GL_INVALID_ENUM));
+                return false;
+            }
+            break;
+
+        case GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE:
+        case GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE:
+        case GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE:
+        case GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE:
+        case GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE:
+        case GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE:
+        case GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE:
+        case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER:
+            if (clientVersion < 3)
+            {
+                context->handleError(Error(GL_INVALID_ENUM));
+                return false;
+            }
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM));
+            return false;
+    }
+
+    // Determine if the attachment is a valid enum
+    switch (attachment)
+    {
+        case GL_BACK:
+        case GL_FRONT:
+        case GL_DEPTH:
+        case GL_STENCIL:
+        case GL_DEPTH_STENCIL_ATTACHMENT:
+            if (clientVersion < 3)
+            {
+                context->handleError(Error(GL_INVALID_ENUM));
+                return false;
+            }
+            break;
+
+        case GL_DEPTH_ATTACHMENT:
+        case GL_STENCIL_ATTACHMENT:
+            break;
+
+        default:
+            if (attachment < GL_COLOR_ATTACHMENT0_EXT ||
+                (attachment - GL_COLOR_ATTACHMENT0_EXT) >= context->getCaps().maxColorAttachments)
+            {
+                context->handleError(Error(GL_INVALID_ENUM));
+                return false;
+            }
+            break;
+    }
+
+    const Framebuffer *framebuffer = context->getGLState().getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+
+    if (framebuffer->id() == 0)
+    {
+        if (clientVersion < 3)
+        {
+            context->handleError(Error(GL_INVALID_OPERATION));
+            return false;
+        }
+
+        switch (attachment)
+        {
+            case GL_BACK:
+            case GL_DEPTH:
+            case GL_STENCIL:
+                break;
+
+            default:
+                context->handleError(Error(GL_INVALID_OPERATION));
+                return false;
+        }
+    }
+    else
+    {
+        if (attachment >= GL_COLOR_ATTACHMENT0_EXT && attachment <= GL_COLOR_ATTACHMENT15_EXT)
+        {
+            // Valid attachment query
+        }
+        else
+        {
+            switch (attachment)
+            {
+                case GL_DEPTH_ATTACHMENT:
+                case GL_STENCIL_ATTACHMENT:
+                    break;
+
+                case GL_DEPTH_STENCIL_ATTACHMENT:
+                    if (!framebuffer->hasValidDepthStencil())
+                    {
+                        context->handleError(Error(GL_INVALID_OPERATION));
+                        return false;
+                    }
+                    break;
+
+                default:
+                    context->handleError(Error(GL_INVALID_OPERATION));
+                    return false;
+            }
+        }
+    }
+
+    const FramebufferAttachment *attachmentObject = framebuffer->getAttachment(attachment);
+    if (attachmentObject)
+    {
+        ASSERT(attachmentObject->type() == GL_RENDERBUFFER ||
+               attachmentObject->type() == GL_TEXTURE ||
+               attachmentObject->type() == GL_FRAMEBUFFER_DEFAULT);
+
+        switch (pname)
+        {
+            case GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME:
+                if (attachmentObject->type() != GL_RENDERBUFFER &&
+                    attachmentObject->type() != GL_TEXTURE)
+                {
+                    context->handleError(Error(GL_INVALID_ENUM));
+                    return false;
+                }
+                break;
+
+            case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL:
+                if (attachmentObject->type() != GL_TEXTURE)
+                {
+                    context->handleError(Error(GL_INVALID_ENUM));
+                    return false;
+                }
+                break;
+
+            case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE:
+                if (attachmentObject->type() != GL_TEXTURE)
+                {
+                    context->handleError(Error(GL_INVALID_ENUM));
+                    return false;
+                }
+                break;
+
+            case GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE:
+                if (attachment == GL_DEPTH_STENCIL_ATTACHMENT)
+                {
+                    context->handleError(Error(GL_INVALID_OPERATION));
+                    return false;
+                }
+                break;
+
+            case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER:
+                if (attachmentObject->type() != GL_TEXTURE)
+                {
+                    context->handleError(Error(GL_INVALID_ENUM));
+                    return false;
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+    else
+    {
+        // ES 2.0.25 spec pg 127 states that if the value of FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE
+        // is NONE, then querying any other pname will generate INVALID_ENUM.
+
+        // ES 3.0.2 spec pg 235 states that if the attachment type is none,
+        // GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME will return zero and be an
+        // INVALID_OPERATION for all other pnames
+
+        switch (pname)
+        {
+            case GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE:
+                break;
+
+            case GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME:
+                if (clientVersion < 3)
+                {
+                    context->handleError(Error(GL_INVALID_ENUM));
+                    return false;
+                }
+                break;
+
+            default:
+                if (clientVersion < 3)
+                {
+                    context->handleError(Error(GL_INVALID_ENUM));
+                    return false;
+                }
+                else
+                {
+                    context->handleError(Error(GL_INVALID_OPERATION));
+                    return false;
+                }
+        }
+    }
+
+    return true;
+}
+
+bool ValidateGetFramebufferAttachmentParameterivRobustANGLE(ValidationContext *context,
+                                                            GLenum target,
+                                                            GLenum attachment,
+                                                            GLenum pname,
+                                                            GLsizei bufSize,
+                                                            GLsizei *numParams)
+{
+    if (!context->getExtensions().robustQueries)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "GL_ANGLE_robust_queries is not available."));
+        return false;
+    }
+
+    if (bufSize < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "bufSize cannot be negative."));
+        return false;
+    }
+
+    if (!ValidateGetFramebufferAttachmentParameteriv(context, target, attachment, pname, numParams))
+    {
+        return false;
+    }
+
+    if (bufSize < *numParams)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION,
+                  "%u parameters are required when querying 0x%X but %i were provided.", *numParams,
+                  pname, bufSize));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateGetBufferParameteriv(ValidationContext *context,
+                                  GLenum target,
+                                  GLenum pname,
+                                  GLsizei *numParams)
+{
+    // Initialize result
+    *numParams = 0;
+
+    if (!ValidBufferTarget(context, target))
+    {
+        context->handleError(Error(GL_INVALID_ENUM));
+        return false;
+    }
+
+    if (!ValidBufferParameter(context, pname, numParams))
+    {
+        context->handleError(Error(GL_INVALID_ENUM));
+        return false;
+    }
+
+    if (context->getGLState().getTargetBuffer(target) == nullptr)
+    {
+        // A null buffer means that "0" is bound to the requested buffer target
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateGetBufferParameterivRobustANGLE(ValidationContext *context,
+                                             GLenum target,
+                                             GLenum pname,
+                                             GLsizei bufSize,
+                                             GLsizei *numParams)
+{
+    if (!context->getExtensions().robustQueries)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "GL_ANGLE_robust_queries is not available."));
+        return false;
+    }
+
+    if (bufSize < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "bufSize cannot be negative."));
+        return false;
+    }
+
+    if (!ValidateGetBufferParameteriv(context, target, pname, numParams))
+    {
+        return false;
+    }
+
+    if (bufSize < *numParams)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION,
+                  "%u parameters are required when querying 0x%X but %i were provided.", *numParams,
+                  pname, bufSize));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateGetProgramiv(Context *context, GLuint program, GLenum pname, GLsizei *numParams)
+{
+    // Currently, all GetProgramiv queries return 1 parameter
+    *numParams = 1;
+
+    Program *programObject = GetValidProgram(context, program);
+    if (!programObject)
+    {
+        return false;
+    }
+
+    switch (pname)
+    {
+        case GL_DELETE_STATUS:
+        case GL_LINK_STATUS:
+        case GL_VALIDATE_STATUS:
+        case GL_INFO_LOG_LENGTH:
+        case GL_ATTACHED_SHADERS:
+        case GL_ACTIVE_ATTRIBUTES:
+        case GL_ACTIVE_ATTRIBUTE_MAX_LENGTH:
+        case GL_ACTIVE_UNIFORMS:
+        case GL_ACTIVE_UNIFORM_MAX_LENGTH:
+            break;
+
+        case GL_PROGRAM_BINARY_LENGTH:
+            if (context->getClientMajorVersion() < 3 && !context->getExtensions().getProgramBinary)
+            {
+                context->handleError(Error(GL_INVALID_ENUM,
+                                           "Querying GL_PROGRAM_BINARY_LENGTH requires "
+                                           "GL_OES_get_program_binary or ES 3.0."));
+                return false;
+            }
+            break;
+
+        case GL_ACTIVE_UNIFORM_BLOCKS:
+        case GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH:
+        case GL_TRANSFORM_FEEDBACK_BUFFER_MODE:
+        case GL_TRANSFORM_FEEDBACK_VARYINGS:
+        case GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH:
+        case GL_PROGRAM_BINARY_RETRIEVABLE_HINT:
+            if (context->getClientMajorVersion() < 3)
+            {
+                context->handleError(Error(GL_INVALID_ENUM, "Querying requires at least ES 3.0."));
+                return false;
+            }
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Unknown parameter name."));
+            return false;
+    }
+
+    return true;
+}
+
+bool ValidateGetProgramivRobustANGLE(Context *context,
+                                     GLuint program,
+                                     GLenum pname,
+                                     GLsizei bufSize,
+                                     GLsizei *numParams)
+{
+    if (!context->getExtensions().robustQueries)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "GL_ANGLE_robust_queries is not available."));
+        return false;
+    }
+
+    if (bufSize < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "bufSize cannot be negative."));
+        return false;
+    }
+
+    if (!ValidateGetProgramiv(context, program, pname, numParams))
+    {
+        return false;
+    }
+
+    if (bufSize < *numParams)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION,
+                  "%u parameters are required when querying 0x%X but %i were provided.", *numParams,
+                  pname, bufSize));
+        return false;
+    }
+
     return true;
 }
 
