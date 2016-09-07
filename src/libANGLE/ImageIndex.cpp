@@ -196,7 +196,7 @@ bool ImageIndexIterator::hasNext() const
 void ImageIndexIterator::done()
 {
     mCurrentMip   = mMipRange.end;
-    mCurrentLayer = maxLayer();
+    mCurrentLayer = 0;
 }
 
 }  // namespace gl
