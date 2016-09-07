@@ -2241,6 +2241,100 @@ TEST_P(GLSLTest, NestedPowStatements)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Convers a bug with the unary minus operator on signed integer workaround.
+TEST_P(GLSLTest_ES3, UnaryMinusOperatorSignedInt)
+{
+    const std::string &vert =
+        "#version 300 es\n"
+        "in highp vec4 position;\n"
+        "out mediump vec4 v_color;\n"
+        "uniform int ui_one;\n"
+        "uniform int ui_two;\n"
+        "uniform int ui_three;\n"
+        "void main() {\n"
+        "	int s[3];\n"
+        "	s[0] = ui_one;\n"
+        "	s[1] = -(-(-ui_two + 1) + 1);\n"  // s[1] = -ui_two
+        "	s[2] = ui_three;\n"
+        "	int result = 0;\n"
+        "	for (int i = 0; i < ui_three; i++) {\n"
+        "		result += s[i];\n"
+        "	}\n"
+        "	v_color = (result == 2) ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);\n"
+        "	gl_Position = position;\n"
+        "}\n";
+    const std::string &frag =
+        "#version 300 es\n"
+        "in mediump vec4 v_color;\n"
+        "layout(location=0) out mediump vec4 o_color;\n"
+        "void main() {\n"
+        "	o_color = v_color;\n"
+        "}\n";
+
+    GLuint program = CompileProgram(vert, frag);
+    ASSERT_NE(0u, program);
+
+    gl::Context *context   = reinterpret_cast<gl::Context *>(getEGLWindow()->getContext());
+    gl::Program *glProgram = context->getProgram(program);
+    GLint oneIndex         = glProgram->getUniformLocation("ui_one");
+    GLint twoIndex         = glProgram->getUniformLocation("ui_two");
+    GLint threeIndex       = glProgram->getUniformLocation("ui_three");
+    glUseProgram(program);
+    glUniform1i(oneIndex, 1);
+    glUniform1i(twoIndex, 2);
+    glUniform1i(threeIndex, 3);
+
+    drawQuad(program, "position", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Convers a bug with the unary minus operator on unsigned integer workaround.
+TEST_P(GLSLTest_ES3, UnaryMinusOperatorUnsignedInt)
+{
+    const std::string &vert =
+        "#version 300 es\n"
+        "in highp vec4 position;\n"
+        "out mediump vec4 v_color;\n"
+        "uniform uint ui_one;\n"
+        "uniform uint ui_two;\n"
+        "uniform uint ui_three;\n"
+        "void main() {\n"
+        "	uint s[3];\n"
+        "	s[0] = ui_one;\n"
+        "	s[1] = -(-(-ui_two + 1u) + 1u);\n"  // s[1] = -ui_two
+        "	s[2] = ui_three;\n"
+        "	uint result = 0u;\n"
+        "	for (uint i = 0u; i < ui_three; i++) {\n"
+        "		result += s[i];\n"
+        "	}\n"
+        "	v_color = (result == 2u) ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);\n"
+        "	gl_Position = position;\n"
+        "}\n";
+    const std::string &frag =
+        "#version 300 es\n"
+        "in mediump vec4 v_color;\n"
+        "layout(location=0) out mediump vec4 o_color;\n"
+        "void main() {\n"
+        "	o_color = v_color;\n"
+        "}\n";
+
+    GLuint program = CompileProgram(vert, frag);
+    ASSERT_NE(0u, program);
+
+    gl::Context *context   = reinterpret_cast<gl::Context *>(getEGLWindow()->getContext());
+    gl::Program *glProgram = context->getProgram(program);
+    GLint oneIndex         = glProgram->getUniformLocation("ui_one");
+    GLint twoIndex         = glProgram->getUniformLocation("ui_two");
+    GLint threeIndex       = glProgram->getUniformLocation("ui_three");
+    glUseProgram(program);
+    glUniform1ui(oneIndex, 1u);
+    glUniform1ui(twoIndex, 2u);
+    glUniform1ui(threeIndex, 3u);
+
+    drawQuad(program, "position", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Test a nested sequence operator with a ternary operator inside. The ternary operator is
 // intended to be such that it gets converted to an if statement on the HLSL backend.
 TEST_P(GLSLTest, NestedSequenceOperatorWithTernaryInside)
