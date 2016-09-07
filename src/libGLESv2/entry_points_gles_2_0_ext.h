@@ -259,6 +259,22 @@ ANGLE_EXPORT void GL_APIENTRY CopySubTextureCHROMIUM(GLuint sourceId,
                                                      GLboolean unpackPremultiplyAlpha,
                                                      GLboolean unpackUnmultiplyAlpha);
 
+// GL_ANGLE_robust_queries
+ANGLE_EXPORT void GL_APIENTRY GetIntegervRobustANGLE(GLenum pname,
+                                                     GLsizei bufSize,
+                                                     GLsizei *length,
+                                                     GLint *data);
+ANGLE_EXPORT void GL_APIENTRY TexImage2DRobustANGLE(GLenum target,
+                                                    GLint level,
+                                                    GLint internalformat,
+                                                    GLsizei width,
+                                                    GLsizei height,
+                                                    GLint border,
+                                                    GLenum format,
+                                                    GLenum type,
+                                                    GLsizei imageSize,
+                                                    const void *pixels);
+
 }  // namespace gl
 
 #endif // LIBGLESV2_ENTRYPOINTGLES20EXT_H_

@@ -292,6 +292,9 @@ struct Extensions
     // GL_CHROMIUM_copy_texture
     bool copyTexture;
 
+    // GL_ANGLE_robust_queries
+    bool robustQueries;
+
     // ES3 Extension support
 
     // GL_EXT_color_buffer_float

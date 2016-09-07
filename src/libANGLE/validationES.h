@@ -51,6 +51,16 @@ bool ValidCompressedImageSize(const ValidationContext *context,
                               GLenum internalFormat,
                               GLsizei width,
                               GLsizei height);
+bool ValidImageDataSize(ValidationContext *context,
+                        GLenum textureTarget,
+                        GLsizei width,
+                        GLsizei height,
+                        GLsizei depth,
+                        GLenum internalFormat,
+                        GLenum type,
+                        const GLvoid *pixels,
+                        GLsizei imageSize);
+
 bool ValidQueryType(const Context *context, GLenum queryType);
 
 // Returns valid program if id is a valid program name
@@ -131,6 +141,12 @@ bool ValidateStateQuery(ValidationContext *context,
                         GLenum pname,
                         GLenum *nativeType,
                         unsigned int *numParams);
+
+bool ValidateRobustStateQuery(ValidationContext *context,
+                              GLenum pname,
+                              GLsizei bufSize,
+                              GLenum *nativeType,
+                              unsigned int *numParams);
 
 bool ValidateCopyTexImageParametersBase(ValidationContext *context,
                                         GLenum target,

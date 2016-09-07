@@ -1,4 +1,4 @@
-#ifndef __gl2ext_h_
+ifndef __gl2ext_h_
 #define __gl2ext_h_ 1
 
 #ifdef __cplusplus
@@ -3233,6 +3233,16 @@ GL_APICALL void GL_APIENTRY glEndTilingQCOM (GLbitfield preserveMask);
 #define GL_COMPRESSED_RGBA8_LOSSY_DECODE_ETC2_EAC_ANGLE                  0x9699
 #define GL_COMPRESSED_SRGB8_ALPHA8_LOSSY_DECODE_ETC2_EAC_ANGLE           0x969A
 #endif /* GL_ANGLE_lossy_etc_decode */
+
+#ifndef GL_ANGLE_robust_queries
+#define GL_ANGLE_robust_queries 1
+typedef void (GL_APIENTRYP PFNGLGETINTEGERVROBUSTANGLEPROC) (GLenum pname, GLsizei bufSize, GLsizei *length, GLint *data);
+typedef void (GL_APIENTRYP PFNGLTEXIMAGE2DROBUSTANGLEPROC) (GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, GLsizei imageSize, const void *pixels);
+#ifdef GL_GLEXT_PROTOTYPES
+GL_APICALL void GL_APIENTRY glGetIntegervRobustANGLE (GLenum pname, GLsizei bufSize, GLsizei *length, GLint *data);
+GL_APICALL void GL_APIENTRY glTexImage2DRobustANGLE (GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, GLsizei imageSize, const void *pixels);
+#endif
+#endif /* GL_ANGLE_robust_queries */
 
 #ifdef __cplusplus
 }
