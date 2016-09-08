@@ -1063,37 +1063,6 @@ TEST_P(GLSLTest_ES3, MissingReturnArrayOfStructs)
     EXPECT_NE(0u, program);
 }
 
-// Verify that functions without return statements still compile
-TEST_P(GLSLTest_ES3, MissingReturnStructOfArrays)
-{
-    // TODO(cwallez) remove the suppression once NVIDIA removes the restriction for
-    // GLSL >= 300. It was defined only in GLSL 2.0, section 6.1.
-    if (IsNVIDIA() && IsOpenGLES())
-    {
-        std::cout << "Test skipped on NVIDIA OpenGL ES because it disallows returning "
-                     "structure of arrays"
-                  << std::endl;
-        return;
-    }
-
-    const std::string vertexShaderSource =
-        "#version 300 es\n"
-        "in float v_varying;\n"
-        "struct s { float a[2]; int b[2]; vec2 c[2]; };\n"
-        "s f() { if (v_varying > 0.0) { return s(float[2](1.0, 1.0), int[2](1, 1),"
-        "vec2[2](vec2(1.0, 1.0), vec2(1.0, 1.0))); } }\n"
-        "void main() { gl_Position = vec4(f().a[0], 0, 0, 1); }\n";
-
-    const std::string fragmentShaderSource =
-        "#version 300 es\n"
-        "precision mediump float;\n"
-        "out vec4 my_FragColor;\n"
-        "void main() { my_FragColor = vec4(0, 0, 0, 1); }\n";
-
-    GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
-    EXPECT_NE(0u, program);
-}
-
 // Verify that using invariant(all) in both shaders fails in ESSL 3.00.
 TEST_P(GLSLTest_ES3, InvariantAllBoth)
 {
@@ -2161,35 +2130,6 @@ TEST_P(GLSLTest_ES3, SequenceOperatorEvaluationOrderShortCircuit)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
-// Sequence operator evaluates operands from left to right (ESSL 3.00 section 5.9).
-// Indexing the vector needs to be evaluated after func() for the right result.
-TEST_P(GLSLTest_ES3, SequenceOperatorEvaluationOrderDynamicVectorIndexingInLValue)
-{
-    const std::string &fragmentShaderSource =
-        "#version 300 es\n"
-        "precision mediump float;\n"
-        "out vec4 my_FragColor;\n"
-        "uniform int u_zero;\n"
-        "int sideEffectCount = 0;\n"
-        "float func() {\n"
-        "    ++sideEffectCount;\n"
-        "    return -1.0;\n"
-        "}\n"
-        "void main() {\n"
-        "    vec4 v = vec4(0.0, 2.0, 4.0, 6.0); \n"
-        "    float f = (func(), (++v[u_zero + sideEffectCount]));\n"
-        "    bool green = abs(f - 3.0) < 0.01 && abs(v[1] - 3.0) < 0.01 && sideEffectCount == 1;\n"
-        "    my_FragColor = vec4(0.0, (green ? 1.0 : 0.0), 0.0, 1.0);\n"
-        "}\n";
-
-    GLuint program = CompileProgram(mSimpleVSSource, fragmentShaderSource);
-    ASSERT_NE(0u, program);
-
-    drawQuad(program, "inputAttribute", 0.5f);
-
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
-}
-
 // Test that using gl_PointCoord with GL_TRIANGLES doesn't produce a link error.
 // From WebGL test conformance/rendering/point-specific-shader-variables.html
 // See http://anglebug.com/1380
@@ -2241,33 +2181,69 @@ TEST_P(GLSLTest, NestedPowStatements)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
-// Test a nested sequence operator with a ternary operator inside. The ternary operator is
-// intended to be such that it gets converted to an if statement on the HLSL backend.
-TEST_P(GLSLTest, NestedSequenceOperatorWithTernaryInside)
+// Test that multiplication ops are properly validated.
+TEST_P(GLSLTest, FoldedIntProductOutOfBounds)
 {
-    const std::string &vert =
-        "attribute vec2 position;\n"
+    const std::string &fragmentShader =
+        "precision mediump float;\n"
+        "void main(void)\n"
+        "{\n"
+        " int prod = -2580 * 25800 * 25800;\n"
+        " gl_FragColor = vec4(float(prod));\n"
+        "}\n";
+
+    GLuint program = CompileProgram(mSimpleVSSource, fragmentShader);
+    EXPECT_EQ(0u, program);
+    glDeleteProgram(program);
+}
+
+// Test that multiplication ops are properly validated.
+TEST_P(GLSLTest_ES3, FoldedUIntProductOutOfBounds)
+{
+    const std::string &fragmentShader =
+        "#version 300 es\n"
+        "precision mediump float;\n"
         "void main()\n"
         "{\n"
-        "    gl_Position = vec4(position, 0, 1);\n"
-        "}";
+        "   unsigned int prod = 2580u * 25800u * 25800u;\n"
+        "   gl_FragColor = vec4(float(prod));\n"
+        "}\n";
 
-    // Note that the uniform keep_flop_positive doesn't need to be set - the test expects it to have
-    // its default value false.
-    const std::string &frag =
+    GLuint program = CompileProgram(mSimpleVSSource, fragmentShader);
+    EXPECT_EQ(0u, program);
+    glDeleteProgram(program);
+}
+
+// Test that addition ops are properly validated.
+TEST_P(GLSLTest, FoldedIntSumOutOfBounds)
+{
+    const std::string &fragmentShader =
         "precision mediump float;\n"
-        "uniform bool keep_flop_positive;\n"
-        "float flop;\n"
-        "void main() {\n"
-        "    flop = -1.0,\n"
-        "    (flop *= -1.0,\n"
-        "    keep_flop_positive ? 0.0 : flop *= -1.0),\n"
-        "    gl_FragColor = vec4(0, -flop, 0, 1);\n"
-        "}";
+        "void main(void)\n"
+        "{\n"
+        " int sum = 2147483647 + 2147483647;\n"
+        " gl_FragColor = vec4(float(sum));\n"
+        "}\n";
 
-    ANGLE_GL_PROGRAM(prog, vert, frag);
-    drawQuad(prog.get(), "position", 0.5f);
-    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    GLuint program = CompileProgram(mSimpleVSSource, fragmentShader);
+    EXPECT_EQ(0u, program);
+    glDeleteProgram(program);
+}
+
+// Test that subtraction ops are properly validated.
+TEST_P(GLSLTest, FoldedIntDifferenceOutOfBounds)
+{
+    const std::string &fragmentShader =
+        "precision mediump float;\n"
+        "void main(void)\n"
+        "{\n"
+        " int diff = -2147483000 - 2147483000;\n"
+        " gl_FragColor = vec4(float(diff));\n"
+        "}\n";
+
+    GLuint program = CompileProgram(mSimpleVSSource, fragmentShader);
+    EXPECT_EQ(0u, program);
+    glDeleteProgram(program);
 }
 
 }  // anonymous namespace
