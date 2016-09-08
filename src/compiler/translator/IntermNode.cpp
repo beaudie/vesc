@@ -943,12 +943,12 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
       case EOpAdd:
         resultArray = new TConstantUnion[objectSize];
         for (size_t i = 0; i < objectSize; i++)
-            resultArray[i] = leftArray[i] + rightArray[i];
+            resultArray[i] = TConstantUnion::add(leftArray[i], rightArray[i], diagnostics);
         break;
       case EOpSub:
         resultArray = new TConstantUnion[objectSize];
         for (size_t i = 0; i < objectSize; i++)
-            resultArray[i] = leftArray[i] - rightArray[i];
+            resultArray[i] = TConstantUnion::sub(leftArray[i], rightArray[i], diagnostics);
         break;
 
       case EOpMul:
@@ -956,7 +956,7 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
       case EOpMatrixTimesScalar:
         resultArray = new TConstantUnion[objectSize];
         for (size_t i = 0; i < objectSize; i++)
-            resultArray[i] = leftArray[i] * rightArray[i];
+            resultArray[i] = TConstantUnion::mul(leftArray[i], rightArray[i], diagnostics);
         break;
 
       case EOpMatrixTimesMatrix:
