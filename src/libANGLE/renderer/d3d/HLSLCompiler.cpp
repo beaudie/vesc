@@ -136,7 +136,7 @@ gl::Error HLSLCompiler::initialize()
 
     if (!mD3DCompilerModule)
     {
-        return gl::Error(GL_INVALID_OPERATION, "No D3D compiler module found - aborting!\n");
+        return gl::Error(GL_OUT_OF_MEMORY, "No D3D compiler module found - aborting!\n");
     }
 
     mD3DCompileFunc = reinterpret_cast<pD3DCompile>(GetProcAddress(mD3DCompilerModule, "D3DCompile"));
@@ -155,7 +155,7 @@ gl::Error HLSLCompiler::initialize()
 
     if (mD3DCompileFunc == nullptr)
     {
-        return gl::Error(GL_INVALID_OPERATION, "Error finding D3DCompile entry point");
+        return gl::Error(GL_OUT_OF_MEMORY, "Error finding D3DCompile entry point");
     }
 
     mInitialized = true;
