@@ -358,7 +358,8 @@ class TIntermConstantUnion : public TIntermTyped
 
     TConstantUnion *foldBinary(TOperator op,
                                TIntermConstantUnion *rightNode,
-                               TDiagnostics *diagnostics);
+                               TDiagnostics *diagnostics,
+                               const TSourceLoc &line);
     TConstantUnion *foldUnaryNonComponentWise(TOperator op);
     TConstantUnion *foldUnaryComponentWise(TOperator op, TDiagnostics *diagnostics);
 
