@@ -1027,7 +1027,8 @@ TIntermTyped *TIntermBinary::fold(TDiagnostics *diagnostics)
             {
                 return nullptr;
             }
-            TConstantUnion *constArray = leftConstant->foldBinary(mOp, rightConstant, diagnostics);
+            TConstantUnion *constArray =
+                leftConstant->foldBinary(mOp, rightConstant, diagnostics, mLeft->getLine());
 
             // Nodes may be constant folded without being qualified as constant.
             return CreateFoldedNode(constArray, this, mType.getQualifier());
@@ -1098,7 +1099,8 @@ TIntermTyped *TIntermAggregate::fold(TDiagnostics *diagnostics)
 //
 TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
                                                  TIntermConstantUnion *rightNode,
-                                                 TDiagnostics *diagnostics)
+                                                 TDiagnostics *diagnostics,
+                                                 const TSourceLoc &line)
 {
     const TConstantUnion *leftArray  = getUnionArrayPointer();
     const TConstantUnion *rightArray = rightNode->getUnionArrayPointer();
@@ -1126,12 +1128,12 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
       case EOpAdd:
         resultArray = new TConstantUnion[objectSize];
         for (size_t i = 0; i < objectSize; i++)
-            resultArray[i] = TConstantUnion::add(leftArray[i], rightArray[i], diagnostics);
+            resultArray[i] = TConstantUnion::add(leftArray[i], rightArray[i], diagnostics, line);
         break;
       case EOpSub:
         resultArray = new TConstantUnion[objectSize];
         for (size_t i = 0; i < objectSize; i++)
-            resultArray[i] = TConstantUnion::sub(leftArray[i], rightArray[i], diagnostics);
+            resultArray[i] = TConstantUnion::sub(leftArray[i], rightArray[i], diagnostics, line);
         break;
 
       case EOpMul:
@@ -1139,11 +1141,12 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
       case EOpMatrixTimesScalar:
         resultArray = new TConstantUnion[objectSize];
         for (size_t i = 0; i < objectSize; i++)
-            resultArray[i] = TConstantUnion::mul(leftArray[i], rightArray[i], diagnostics);
+            resultArray[i] = TConstantUnion::mul(leftArray[i], rightArray[i], diagnostics, line);
         break;
 
       case EOpMatrixTimesMatrix:
         {
+            // TODO(jmadll): This code should check for overflows.
             ASSERT(getType().getBasicType() == EbtFloat && rightNode->getBasicType() == EbtFloat);
 
             const int leftCols = getCols();
@@ -1245,6 +1248,7 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
 
       case EOpMatrixTimesVector:
         {
+            // TODO(jmadll): This code should check for overflows.
             ASSERT(rightNode->getBasicType() == EbtFloat);
 
             const int matrixCols = getCols();
@@ -1267,6 +1271,7 @@ TConstantUnion *TIntermConstantUnion::foldBinary(TOperator op,
 
       case EOpVectorTimesMatrix:
         {
+            // TODO(jmadll): This code should check for overflows.
             ASSERT(getType().getBasicType() == EbtFloat);
 
             const int matrixCols = rightNode->getType().getCols();

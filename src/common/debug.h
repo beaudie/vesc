@@ -57,7 +57,7 @@ void InitializeDebugAnnotations(DebugAnnotator *debugAnnotator);
 void UninitializeDebugAnnotations();
 bool DebugAnnotationsActive();
 
-}
+}  // namespace gl
 
 #if defined(ANGLE_ENABLE_DEBUG_TRACE) || defined(ANGLE_ENABLE_DEBUG_ANNOTATIONS)
 #define ANGLE_TRACE_ENABLED
@@ -156,7 +156,7 @@ bool DebugAnnotationsActive();
 #define UNREACHABLE() { \
     ERR("\t! Unreachable reached: %s(%d)\n", __FUNCTION__, __LINE__); \
     assert(false); \
-    } ANGLE_EMPTY_STATEMENT
+    }
 #else
     #define UNREACHABLE() ERR("\t! Unreachable reached: %s(%d)\n", __FUNCTION__, __LINE__)
 #endif
