@@ -1456,9 +1456,8 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 // case statements into non-empty case statements, disallowing fall-through from them.
                 // Also no need to output ; after selection (if) statements or sequences. This is done just
                 // for code clarity.
-                TIntermSelection *asSelection = (*sit)->getAsSelectionNode();
-                ASSERT(asSelection == nullptr || !asSelection->usesTernaryOperator());
-                if ((*sit)->getAsCaseNode() == nullptr && asSelection == nullptr && !IsSequence(*sit))
+                if ((*sit)->getAsCaseNode() == nullptr && (*sit)->getAsSelectionNode() == nullptr &&
+                    !IsSequence(*sit))
                     out << ";\n";
             }
 
@@ -1982,11 +1981,16 @@ void OutputHLSL::writeSelection(TInfoSinkBase &out, TIntermSelection *node)
     }
 }
 
+bool OutputHLSL::visitTernary(Visit, TIntermTernary *)
+{
+    UNREACHABLE();
+    return false;
+}
+
 bool OutputHLSL::visitSelection(Visit visit, TIntermSelection *node)
 {
     TInfoSinkBase &out = getInfoSink();
 
-    ASSERT(!node->usesTernaryOperator());
     ASSERT(mInsideFunction);
 
     // D3D errors when there is a gradient operation in a loop in an unflattened if.
