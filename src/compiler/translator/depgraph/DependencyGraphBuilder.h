@@ -21,6 +21,7 @@ class TDependencyGraphBuilder : public TIntermTraverser
     void visitSymbol(TIntermSymbol *) override;
     bool visitBinary(Visit visit, TIntermBinary *) override;
     bool visitSelection(Visit visit, TIntermSelection *) override;
+    //bool visitTernary(Visit visit, TIntermTernary *) override;
     bool visitAggregate(Visit visit, TIntermAggregate *) override;
     bool visitLoop(Visit visit, TIntermLoop *) override;
 

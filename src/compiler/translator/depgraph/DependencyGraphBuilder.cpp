@@ -219,6 +219,31 @@ bool TDependencyGraphBuilder::visitSelection(
     return false;
 }
 
+// TODO: Not sure what to do here yet...
+/*bool TDependencyGraphBuilder::visitTernary(
+    Visit visit, TIntermTernary *intermTernary)
+{
+    if (TIntermNode *intermCondition = intermTernary->getCondition())
+    {
+        TNodeSetMaintainer nodeSetMaintainer(this);
+
+        intermCondition->traverse(this);
+        if (TParentNodeSet *conditionNodes = mNodeSets.getTopSet())
+        {
+            TGraphSelection *selection = mGraph->createSelection(intermTernary);
+            connectMultipleNodesToSingleNode(conditionNodes, selection);
+        }
+    }
+
+    if (TIntermNode *intermTrueBlock = intermTernary->getTrueExpression())
+        intermTrueBlock->traverse(this);
+
+    if (TIntermNode *intermFalseBlock = intermTernary->getFalseExpression())
+        intermFalseBlock->traverse(this);
+
+    return false;
+}*/
+
 bool TDependencyGraphBuilder::visitLoop(Visit visit, TIntermLoop *intermLoop)
 {
     if (TIntermTyped *intermCondition = intermLoop->getCondition())
