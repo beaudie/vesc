@@ -3930,7 +3930,7 @@ TIntermTyped *TParseContext::addTernarySelection(TIntermTyped *cond,
         return falseBlock;
     }
 
-    return intermediate.addSelection(cond, trueBlock, falseBlock, loc);
+    return intermediate.addTernarySelection(cond, trueBlock, falseBlock, loc);
 }
 
 //
