@@ -292,6 +292,14 @@ void TIntermAggregate::setBuiltInFunctionPrecision()
         mType.setPrecision(precision);
 }
 
+bool TIntermTernary::replaceChildNode(TIntermNode *original, TIntermNode *replacement)
+{
+    REPLACE_IF_IS(mCondition, TIntermTyped, original, replacement);
+    REPLACE_IF_IS(mTrueExpression, TIntermTyped, original, replacement);
+    REPLACE_IF_IS(mFalseExpression, TIntermTyped, original, replacement);
+    return false;
+}
+
 bool TIntermSelection::replaceChildNode(
     TIntermNode *original, TIntermNode *replacement)
 {
@@ -456,20 +464,15 @@ TIntermUnary::TIntermUnary(const TIntermUnary &node)
     mOperand = operandCopy;
 }
 
-TIntermSelection::TIntermSelection(const TIntermSelection &node) : TIntermTyped(node)
+TIntermTernary::TIntermTernary(const TIntermTernary &node) : TIntermTyped(node)
 {
-    // Only supported for ternary nodes, not if statements.
-    TIntermTyped *trueTyped  = node.mTrueBlock->getAsTyped();
-    TIntermTyped *falseTyped = node.mFalseBlock->getAsTyped();
-    ASSERT(trueTyped != nullptr);
-    ASSERT(falseTyped != nullptr);
     TIntermTyped *conditionCopy = node.mCondition->deepCopy();
-    TIntermTyped *trueCopy      = trueTyped->deepCopy();
-    TIntermTyped *falseCopy = falseTyped->deepCopy();
+    TIntermTyped *trueCopy      = node.mTrueExpression->deepCopy();
+    TIntermTyped *falseCopy     = node.mFalseExpression->deepCopy();
     ASSERT(conditionCopy != nullptr && trueCopy != nullptr && falseCopy != nullptr);
-    mCondition  = conditionCopy;
-    mTrueBlock  = trueCopy;
-    mFalseBlock = falseCopy;
+    mCondition       = conditionCopy;
+    mTrueExpression  = trueCopy;
+    mFalseExpression = falseCopy;
 }
 
 bool TIntermOperator::isAssignment() const
