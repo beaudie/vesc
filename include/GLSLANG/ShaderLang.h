@@ -49,7 +49,7 @@ typedef unsigned int GLenum;
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 158
+#define ANGLE_SH_VERSION 159
 
 typedef enum {
     SH_GLES2_SPEC,
@@ -113,14 +113,6 @@ typedef enum {
     // This flag works around bug in Intel Mac drivers related to abs(i) where
     // i is an integer.
     SH_EMULATE_ABS_INT_FUNCTION = 0x0100,
-
-    // This is an experimental flag to enforce restrictions that aim to prevent
-    // timing attacks.
-    // It generates compilation errors for shaders that could expose sensitive
-    // texture information via the timing channel.
-    // To use this flag, you must compile the shader under the WebGL spec
-    // (using the SH_WEBGL_SPEC flag).
-    SH_TIMING_RESTRICTIONS = 0x0200,
 
     // This flag prints the dependency graph that is used to enforce timing
     // restrictions on fragment shaders.
