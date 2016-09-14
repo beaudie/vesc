@@ -21,6 +21,8 @@
 #include "libANGLE/renderer/gl/WorkaroundsGL.h"
 #include "libANGLE/renderer/gl/formatutilsgl.h"
 
+using angle::CheckedNumeric;
+
 namespace rx
 {
 
@@ -84,6 +86,38 @@ static LevelInfoGL GetLevelInfo(GLenum originalFormat, GLenum destinationFormat)
                        GetLUMAWorkaroundInfo(originalFormatInfo, destinationFormat));
 }
 
+gl::ErrorOrResult<bool> ShouldApplyLastRowPaddingWorkaround(const gl::Box &area,
+                                                            const gl::PixelUnpackState &unpack,
+                                                            GLenum format,
+                                                            GLenum type,
+                                                            bool useTexImage3D,
+                                                            const uint8_t *pixels)
+{
+    CheckedNumeric<size_t> checkedEndByte;
+    CheckedNumeric<size_t> pixelBytes;
+    size_t rowPitch;
+
+    gl::Extents size(area.width, area.height, area.depth);
+    const gl::InternalFormat &glFormat =
+        gl::GetInternalFormatInfo(gl::GetSizedInternalFormat(format, type));
+    ANGLE_TRY_RESULT(glFormat.computeUnpackEndByte(type, size, unpack, useTexImage3D),
+                     checkedEndByte);
+    ANGLE_TRY_RESULT(glFormat.computeRowPitch(type, area.width, unpack.alignment, unpack.rowLength),
+                     rowPitch);
+    pixelBytes = glFormat.computePixelBytes(type);
+
+    checkedEndByte += reinterpret_cast<intptr_t>(pixels);
+
+    ANGLE_TRY_CHECKED_MATH(pixelBytes);
+    if (pixelBytes.ValueOrDie() * size.width < rowPitch) {
+        checkedEndByte += rowPitch - pixelBytes * size.width;
+    }
+
+    ANGLE_TRY_CHECKED_MATH(checkedEndByte);
+
+    return checkedEndByte.ValueOrDie() > static_cast<size_t>(unpack.pixelBuffer->getSize());
+}
+
 LUMAWorkaroundGL::LUMAWorkaroundGL() : LUMAWorkaroundGL(false, GL_NONE)
 {
 }
@@ -144,12 +178,27 @@ gl::Error TextureGL::setImage(GLenum target, size_t level, GLenum internalFormat
         // driver bug.
         reserveTexImageToBeFilled(target, level, internalFormat, size, format, type);
         gl::Box area(0, 0, 0, size.width, size.height, size.depth);
-        ANGLE_TRY(setSubImageRowByRowWorkaround(target, level, area, format, type, unpack, pixels));
+        return setSubImageRowByRowWorkaround(target, level, area, format, type, unpack, pixels);
     }
-    else
+
+    if (mWorkarounds.unpackLastRowSeparatelyForPaddingInclusion && unpack.pixelBuffer.get())
     {
-        setImageHelper(target, level, internalFormat, size, format, type, pixels);
+        bool apply;
+        gl::Box area(0, 0, 0, size.width, size.height, size.depth);
+        ANGLE_TRY_RESULT(ShouldApplyLastRowPaddingWorkaround(area, unpack, format, type,
+                                                             UseTexImage3D(mState.mTarget), pixels),
+                         apply);
+
+        if (apply)
+        {
+            reserveTexImageToBeFilled(target, level, internalFormat, size, format, type);
+            return setSubImageAlignmentWorkaround(target, level, area, format, type, unpack,
+                                                  pixels);
+        }
     }
+
+    setImageHelper(target, level, internalFormat, size, format, type, pixels);
+
     return gl::NoError();
 }
 
@@ -212,32 +261,44 @@ gl::Error TextureGL::setSubImage(GLenum target, size_t level, const gl::Box &are
     nativegl::TexSubImageFormat texSubImageFormat =
         nativegl::GetTexSubImageFormat(mFunctions, mWorkarounds, format, type);
 
+    ASSERT(mLevelInfo[level].lumaWorkaround.enabled ==
+           GetLevelInfo(format, texSubImageFormat.format).lumaWorkaround.enabled);
+
     mStateManager->bindTexture(mState.mTarget, mTextureID);
     if (mWorkarounds.unpackOverlappingRowsSeparatelyUnpackBuffer && unpack.pixelBuffer.get() &&
         unpack.rowLength != 0 && unpack.rowLength < area.width)
     {
-        ANGLE_TRY(setSubImageRowByRowWorkaround(target, level, area, format, type, unpack, pixels));
+        return setSubImageRowByRowWorkaround(target, level, area, format, type, unpack, pixels);
     }
-    else if (UseTexImage2D(mState.mTarget))
+
+    if (mWorkarounds.unpackLastRowSeparatelyForPaddingInclusion && unpack.pixelBuffer.get())
+    {
+        bool apply;
+        ANGLE_TRY_RESULT(ShouldApplyLastRowPaddingWorkaround(area, unpack, format, type,
+                                                             UseTexImage3D(mState.mTarget), pixels),
+                         apply);
+
+        if (apply)
+        {
+            return setSubImageAlignmentWorkaround(target, level, area, format, type, unpack,
+                                                  pixels);
+        }
+    }
+
+    if (UseTexImage2D(mState.mTarget))
     {
         ASSERT(area.z == 0 && area.depth == 1);
         mFunctions->texSubImage2D(target, static_cast<GLint>(level), area.x, area.y, area.width,
                                   area.height, texSubImageFormat.format, texSubImageFormat.type,
                                   pixels);
     }
-    else if (UseTexImage3D(mState.mTarget))
+    else
     {
+        ASSERT(UseTexImage3D(mState.mTarget));
         mFunctions->texSubImage3D(target, static_cast<GLint>(level), area.x, area.y, area.z,
                                   area.width, area.height, area.depth, texSubImageFormat.format,
                                   texSubImageFormat.type, pixels);
     }
-    else
-    {
-        UNREACHABLE();
-    }
-
-    ASSERT(mLevelInfo[level].lumaWorkaround.enabled ==
-           GetLevelInfo(format, texSubImageFormat.format).lumaWorkaround.enabled);
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -250,26 +311,26 @@ gl::Error TextureGL::setSubImageRowByRowWorkaround(GLenum target,
                                                    const gl::PixelUnpackState &unpack,
                                                    const uint8_t *pixels)
 {
-    gl::PixelUnpackState unpackToUse;
-    unpackToUse.pixelBuffer = unpack.pixelBuffer;
-    mStateManager->setPixelUnpackState(unpackToUse);
-    unpackToUse.pixelBuffer.set(nullptr);
-    const gl::Format &glFormat           = mState.getImageDesc(mState.mTarget, level).format;
+    gl::PixelUnpackState directUnpack;
+    directUnpack.pixelBuffer = unpack.pixelBuffer;
+    directUnpack.alignment   = 1;
+    mStateManager->setPixelUnpackState(directUnpack);
+    directUnpack.pixelBuffer.set(nullptr);
+
+    const gl::InternalFormat &glFormat =
+        gl::GetInternalFormatInfo(gl::GetSizedInternalFormat(format, type));
     GLuint rowBytes                      = 0;
-    ANGLE_TRY_RESULT(
-        glFormat.info->computeRowPitch(GL_NONE, area.width, unpack.alignment, unpack.rowLength),
-        rowBytes);
+    ANGLE_TRY_RESULT(glFormat.computeRowPitch(type, area.width, unpack.alignment, unpack.rowLength),
+                     rowBytes);
     GLuint imageBytes = 0;
-    ANGLE_TRY_RESULT(
-        glFormat.info->computeDepthPitch(GL_NONE, area.width, area.height, unpack.alignment,
-                                         unpack.rowLength, unpack.imageHeight),
-        imageBytes);
+    ANGLE_TRY_RESULT(glFormat.computeDepthPitch(type, area.width, area.height, unpack.alignment,
+                                                unpack.rowLength, unpack.imageHeight),
+                     imageBytes);
     bool useTexImage3D = UseTexImage3D(mState.mTarget);
     GLuint skipBytes   = 0;
-    ANGLE_TRY_RESULT(
-        glFormat.info->computeSkipBytes(rowBytes, imageBytes, unpack.skipImages, unpack.skipRows,
-                                        unpack.skipPixels, useTexImage3D),
-        skipBytes);
+    ANGLE_TRY_RESULT(glFormat.computeSkipBytes(rowBytes, imageBytes, unpack.skipImages,
+                                               unpack.skipRows, unpack.skipPixels, useTexImage3D),
+                     skipBytes);
 
     const uint8_t *pixelsWithSkip = pixels + skipBytes;
     if (useTexImage3D)
@@ -287,8 +348,9 @@ gl::Error TextureGL::setSubImageRowByRowWorkaround(GLenum target,
             }
         }
     }
-    else if (UseTexImage2D(mState.mTarget))
+    else
     {
+        ASSERT(UseTexImage2D(mState.mTarget));
         for (GLint row = 0; row < area.height; ++row)
         {
             GLint byteOffset         = row * rowBytes;
@@ -297,10 +359,84 @@ gl::Error TextureGL::setSubImageRowByRowWorkaround(GLenum target,
                                       area.width, 1, format, type, rowPixels);
         }
     }
+    return gl::NoError();
+}
+
+gl::Error TextureGL::setSubImageAlignmentWorkaround(GLenum target,
+                                                    size_t level,
+                                                    const gl::Box &area,
+                                                    GLenum format,
+                                                    GLenum type,
+                                                    const gl::PixelUnpackState &unpack,
+                                                    const uint8_t *pixels)
+{
+    const gl::InternalFormat &glFormat =
+        gl::GetInternalFormatInfo(gl::GetSizedInternalFormat(format, type));
+    GLuint rowBytes = 0;
+    ANGLE_TRY_RESULT(glFormat.computeRowPitch(type, area.width, unpack.alignment, unpack.rowLength),
+                     rowBytes);
+    GLuint imageBytes = 0;
+    ANGLE_TRY_RESULT(glFormat.computeDepthPitch(type, area.width, area.height, unpack.alignment,
+                                                unpack.rowLength, unpack.imageHeight),
+                     imageBytes);
+    bool useTexImage3D = UseTexImage3D(mState.mTarget);
+    GLuint skipBytes   = 0;
+    ANGLE_TRY_RESULT(glFormat.computeSkipBytes(rowBytes, imageBytes, unpack.skipImages,
+                                               unpack.skipRows, unpack.skipPixels, useTexImage3D),
+                     skipBytes);
+
+    gl::PixelUnpackState directUnpack;
+    directUnpack.pixelBuffer = unpack.pixelBuffer;
+    directUnpack.alignment   = 1;
+
+    if (useTexImage3D)
+    {
+        if (area.depth > 1)
+        {
+            mFunctions->texSubImage3D(target, static_cast<GLint>(level), area.x, area.y, area.z,
+                                      area.width, area.height, area.depth - 1, format, type,
+                                      pixels);
+        }
+
+        if (area.height > 1)
+        {
+            // Does not include the padding as it will be done by the driver
+            GLint lastImageOffset          = (area.depth - 1) * imageBytes;
+            const GLubyte *lastImagePixels = pixels + lastImageOffset;
+            mFunctions->texSubImage3D(target, static_cast<GLint>(level), area.x, area.y,
+                                      area.z + area.depth - 1, area.width, area.height - 1, 1,
+                                      format, type, lastImagePixels);
+        }
+
+        mStateManager->setPixelUnpackState(directUnpack);
+
+        GLint lastRowOffset =
+            skipBytes + (area.depth - 1) * imageBytes + (area.height - 1) * rowBytes;
+        const GLubyte *lastRowPixels = pixels + lastRowOffset;
+        mFunctions->texSubImage3D(target, static_cast<GLint>(level), area.x,
+                                  area.y + area.height - 1, area.z + area.depth - 1, area.width, 1,
+                                  1, format, type, lastRowPixels);
+    }
     else
     {
-        UNREACHABLE();
+        ASSERT(UseTexImage2D(mState.mTarget));
+        if (area.height > 1)
+        {
+            mFunctions->texSubImage2D(target, static_cast<GLint>(level), area.x, area.y, area.width,
+                                      area.height - 1, format, type, pixels);
+        }
+
+        mStateManager->setPixelUnpackState(directUnpack);
+
+        GLint lastRowOffset          = skipBytes + (area.height - 1) * rowBytes;
+        const GLubyte *lastRowPixels = pixels + lastRowOffset;
+        mFunctions->texSubImage2D(target, static_cast<GLint>(level), area.x,
+                                  area.y + area.height - 1, area.width, 1, format, type,
+                                  lastRowPixels);
     }
+
+    directUnpack.pixelBuffer.set(nullptr);
+
     return gl::NoError();
 }
 
