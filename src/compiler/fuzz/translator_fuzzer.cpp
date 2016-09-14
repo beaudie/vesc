@@ -12,7 +12,33 @@
 #include "compiler/translator/Compiler.h"
 #include "angle_gl.h"
 
-static std::unordered_map<uint64_t, TCompiler *> translators;
+struct TranslatorCacheKey
+{
+    uint32_t type;
+    uint32_t spec;
+    uint32_t output;
+
+    bool operator==(const TranslatorCacheKey &other) const
+    {
+        return type == other.type && spec == other.spec && output == other.output;
+    }
+};
+
+namespace std
+{
+
+template <>
+struct hash<TranslatorCacheKey>
+{
+    std::size_t operator()(const TranslatorCacheKey &k) const
+    {
+        return (hash<uint32_t>()(k.type) << 1) ^ (hash<uint32_t>()(k.spec) >> 1) ^
+               hash<uint32_t>()(k.output);
+    }
+};
+}
+
+static std::unordered_map<TranslatorCacheKey, TCompiler *> translators;
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 {
@@ -83,41 +109,52 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
         return 0;
     }
 
-    TCompiler *translator =
-        ConstructCompiler(type, static_cast<ShShaderSpec>(spec), SH_ESSL_OUTPUT);
+    TranslatorCacheKey key;
+    key.type   = type;
+    key.spec   = spec;
+    key.output = output;
 
-    if (!translator)
+    if (translators.find(key) == translators.end())
     {
-        return 0;
+        TCompiler *translator = ConstructCompiler(type, static_cast<ShShaderSpec>(spec),
+                                                  static_cast<ShShaderOutput>(output));
+
+        if (!translator)
+        {
+            return 0;
+        }
+
+        ShBuiltInResources resources;
+        ShInitBuiltInResources(&resources);
+
+        // Enable all the extensions to have more coverage
+        resources.OES_standard_derivatives        = 1;
+        resources.OES_EGL_image_external          = 1;
+        resources.OES_EGL_image_external_essl3    = 1;
+        resources.NV_EGL_stream_consumer_external = 1;
+        resources.ARB_texture_rectangle           = 1;
+        resources.EXT_blend_func_extended         = 1;
+        resources.EXT_draw_buffers                = 1;
+        resources.EXT_frag_depth                  = 1;
+        resources.EXT_shader_texture_lod          = 1;
+        resources.WEBGL_debug_shader_precision    = 1;
+        resources.EXT_shader_framebuffer_fetch    = 1;
+        resources.NV_shader_framebuffer_fetch     = 1;
+        resources.ARM_shader_framebuffer_fetch    = 1;
+
+        if (!translator->Init(resources))
+        {
+            DeleteCompiler(translator);
+            return 0;
+        }
+
+        translators[key] = translator;
     }
 
-    ShBuiltInResources resources;
-    ShInitBuiltInResources(&resources);
-
-    // Enable all the extensions to have more coverage
-    resources.OES_standard_derivatives        = 1;
-    resources.OES_EGL_image_external          = 1;
-    resources.OES_EGL_image_external_essl3    = 1;
-    resources.NV_EGL_stream_consumer_external = 1;
-    resources.ARB_texture_rectangle           = 1;
-    resources.EXT_blend_func_extended         = 1;
-    resources.EXT_draw_buffers                = 1;
-    resources.EXT_frag_depth                  = 1;
-    resources.EXT_shader_texture_lod          = 1;
-    resources.WEBGL_debug_shader_precision    = 1;
-    resources.EXT_shader_framebuffer_fetch    = 1;
-    resources.NV_shader_framebuffer_fetch     = 1;
-    resources.ARM_shader_framebuffer_fetch    = 1;
-
-    if (!translator->Init(resources))
-    {
-        DeleteCompiler(translator);
-        return 0;
-    }
+    TCompiler *translator = translators[key];
 
     const char *shaderStrings[] = {reinterpret_cast<const char *>(data)};
     translator->compile(shaderStrings, 1, options);
 
-    DeleteCompiler(translator);
     return 0;
 }
