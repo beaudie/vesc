@@ -898,6 +898,11 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     workarounds->unpackOverlappingRowsSeparatelyUnpackBuffer = vendor == VENDOR_ID_NVIDIA;
 
     workarounds->initializeCurrentVertexAttributes = vendor == VENDOR_ID_NVIDIA;
+
+    workarounds->unpackLastRowSeparatelyForPaddingInclusion = vendor == VENDOR_ID_NVIDIA;
+#if defined(ANGLE_PLATFORM_APPLE)
+    workarounds->unpackLastRowSeparatelyForPaddingInclusion = true;
+#endif
 }
 
 }

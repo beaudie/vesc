@@ -70,6 +70,10 @@ struct WorkaroundsGL
 
     // During initialization, assign the current vertex attributes to the spec-mandated defaults.
     bool initializeCurrentVertexAttributes;
+
+    // When uploading textures from an unpack buffer, some drivers count an extra row padding when
+    // checking if the pixel unpack buffer is big enough.
+    bool unpackLastRowSeparatelyForPaddingInclusion;
 };
 }
 
