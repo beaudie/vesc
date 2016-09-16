@@ -70,6 +70,11 @@ void TextureCapsMap::remove(GLenum internalFormat)
     }
 }
 
+void TextureCapsMap::clear()
+{
+    mCapsMap.clear();
+}
+
 const TextureCaps &TextureCapsMap::get(GLenum internalFormat) const
 {
     static TextureCaps defaultUnsupportedTexture;
@@ -161,6 +166,7 @@ Extensions::Extensions()
       bindUniformLocation(false),
       syncQuery(false),
       copyTexture(false),
+      webglCompatibility(false),
       colorBufferFloat(false),
       multisampleCompatibility(false),
       framebufferMixedSamples(false),
@@ -173,78 +179,13 @@ std::vector<std::string> Extensions::getStrings() const
 {
     std::vector<std::string> extensionStrings;
 
-    // clang-format off
-    //                   | Extension name                         | Supported flag           | Output vector   |
-    InsertExtensionString("GL_OES_element_index_uint",             elementIndexUint,          &extensionStrings);
-    InsertExtensionString("GL_OES_packed_depth_stencil",           packedDepthStencil,        &extensionStrings);
-    InsertExtensionString("GL_OES_get_program_binary",             getProgramBinary,          &extensionStrings);
-    InsertExtensionString("GL_OES_rgb8_rgba8",                     rgb8rgba8,                 &extensionStrings);
-    InsertExtensionString("GL_EXT_texture_format_BGRA8888",        textureFormatBGRA8888,     &extensionStrings);
-    InsertExtensionString("GL_EXT_read_format_bgra",               readFormatBGRA,            &extensionStrings);
-    InsertExtensionString("GL_NV_pixel_buffer_object",             pixelBufferObject,         &extensionStrings);
-    InsertExtensionString("GL_OES_mapbuffer",                      mapBuffer,                 &extensionStrings);
-    InsertExtensionString("GL_EXT_map_buffer_range",               mapBufferRange,            &extensionStrings);
-    InsertExtensionString("GL_EXT_color_buffer_half_float",        colorBufferHalfFloat,      &extensionStrings);
-    InsertExtensionString("GL_OES_texture_half_float",             textureHalfFloat,          &extensionStrings);
-    InsertExtensionString("GL_OES_texture_half_float_linear",      textureHalfFloatLinear,    &extensionStrings);
-    InsertExtensionString("GL_OES_texture_float",                  textureFloat,              &extensionStrings);
-    InsertExtensionString("GL_OES_texture_float_linear",           textureFloatLinear,        &extensionStrings);
-    InsertExtensionString("GL_EXT_texture_rg",                     textureRG,                 &extensionStrings);
-    InsertExtensionString("GL_EXT_texture_compression_dxt1",       textureCompressionDXT1,    &extensionStrings);
-    InsertExtensionString("GL_ANGLE_texture_compression_dxt3",     textureCompressionDXT3,    &extensionStrings);
-    InsertExtensionString("GL_ANGLE_texture_compression_dxt5",     textureCompressionDXT5,    &extensionStrings);
-    InsertExtensionString("GL_KHR_texture_compression_astc_hdr",   textureCompressionASTCHDR, &extensionStrings);
-    InsertExtensionString("GL_KHR_texture_compression_astc_ldr",   textureCompressionASTCLDR, &extensionStrings);
-    InsertExtensionString("GL_OES_compressed_ETC1_RGB8_texture",   compressedETC1RGB8Texture, &extensionStrings);
-    InsertExtensionString("GL_EXT_sRGB",                           sRGB,                      &extensionStrings);
-    InsertExtensionString("GL_ANGLE_depth_texture",                depthTextures,             &extensionStrings);
-    InsertExtensionString("GL_OES_depth32",                        depth32,                   &extensionStrings);
-    InsertExtensionString("GL_EXT_texture_storage",                textureStorage,            &extensionStrings);
-    InsertExtensionString("GL_OES_texture_npot",                   textureNPOT,               &extensionStrings);
-    InsertExtensionString("GL_EXT_draw_buffers",                   drawBuffers,               &extensionStrings);
-    InsertExtensionString("GL_EXT_texture_filter_anisotropic",     textureFilterAnisotropic,  &extensionStrings);
-    InsertExtensionString("GL_EXT_occlusion_query_boolean",        occlusionQueryBoolean,     &extensionStrings);
-    InsertExtensionString("GL_NV_fence",                           fence,                     &extensionStrings);
-    InsertExtensionString("GL_ANGLE_timer_query",                  timerQuery,                &extensionStrings);
-    InsertExtensionString("GL_EXT_disjoint_timer_query",           disjointTimerQuery,        &extensionStrings);
-    InsertExtensionString("GL_EXT_robustness",                     robustness,                &extensionStrings);
-    InsertExtensionString("GL_EXT_blend_minmax",                   blendMinMax,               &extensionStrings);
-    InsertExtensionString("GL_ANGLE_framebuffer_blit",             framebufferBlit,           &extensionStrings);
-    InsertExtensionString("GL_ANGLE_framebuffer_multisample",      framebufferMultisample,    &extensionStrings);
-    InsertExtensionString("GL_ANGLE_instanced_arrays",             instancedArrays,           &extensionStrings);
-    InsertExtensionString("GL_ANGLE_pack_reverse_row_order",       packReverseRowOrder,       &extensionStrings);
-    InsertExtensionString("GL_OES_standard_derivatives",           standardDerivatives,       &extensionStrings);
-    InsertExtensionString("GL_EXT_shader_texture_lod",             shaderTextureLOD,          &extensionStrings);
-    InsertExtensionString("GL_NV_shader_framebuffer_fetch",        NVshaderFramebufferFetch,  &extensionStrings);
-    InsertExtensionString("GL_ARM_shader_framebuffer_fetch",       ARMshaderFramebufferFetch, &extensionStrings);
-    InsertExtensionString("GL_EXT_shader_framebuffer_fetch",       shaderFramebufferFetch,    &extensionStrings);
-    InsertExtensionString("GL_EXT_frag_depth",                     fragDepth,                 &extensionStrings);
-    InsertExtensionString("GL_ANGLE_texture_usage",                textureUsage,              &extensionStrings);
-    InsertExtensionString("GL_ANGLE_translated_shader_source",     translatedShaderSource,    &extensionStrings);
-    InsertExtensionString("GL_OES_fbo_render_mipmap",              fboRenderMipmap,           &extensionStrings);
-    InsertExtensionString("GL_EXT_discard_framebuffer",            discardFramebuffer,        &extensionStrings);
-    InsertExtensionString("GL_EXT_debug_marker",                   debugMarker,               &extensionStrings);
-    InsertExtensionString("GL_OES_EGL_image",                      eglImage,                  &extensionStrings);
-    InsertExtensionString("GL_OES_EGL_image_external",             eglImageExternal,          &extensionStrings);
-    InsertExtensionString("GL_OES_EGL_image_external_essl3",       eglImageExternalEssl3,     &extensionStrings);
-    InsertExtensionString("GL_NV_EGL_stream_consumer_external",    eglStreamConsumerExternal, &extensionStrings);
-    InsertExtensionString("GL_EXT_unpack_subimage",                unpackSubimage,            &extensionStrings);
-    InsertExtensionString("GL_NV_pack_subimage",                   packSubimage,              &extensionStrings);
-    InsertExtensionString("GL_EXT_color_buffer_float",             colorBufferFloat,          &extensionStrings);
-    InsertExtensionString("GL_OES_vertex_array_object",            vertexArrayObject,         &extensionStrings);
-    InsertExtensionString("GL_KHR_debug",                          debug,                     &extensionStrings);
-    // TODO(jmadill): Enable this when complete.
-    //InsertExtensionString("GL_KHR_no_error",                     noError,                   &extensionStrings);
-
-    InsertExtensionString("GL_ANGLE_lossy_etc_decode",             lossyETCDecode,            &extensionStrings);
-    InsertExtensionString("GL_CHROMIUM_bind_uniform_location",     bindUniformLocation,       &extensionStrings);
-    InsertExtensionString("GL_CHROMIUM_sync_query",                syncQuery,                 &extensionStrings);
-    InsertExtensionString("GL_CHROMIUM_copy_texture",              copyTexture,               &extensionStrings);
-    InsertExtensionString("GL_EXT_multisample_compatibility",      multisampleCompatibility,  &extensionStrings);
-    InsertExtensionString("GL_CHROMIUM_framebuffer_mixed_samples", framebufferMixedSamples,   &extensionStrings);
-    InsertExtensionString("GL_EXT_texture_norm16",                 textureNorm16,             &extensionStrings);
-    InsertExtensionString("GL_CHROMIUM_path_rendering",            pathRendering,             &extensionStrings);
-    // clang-format on
+    for (const auto &extensionInfo : GetExtensionInfoMap())
+    {
+        if (this->*(extensionInfo.second.ExtensionsMember))
+        {
+            extensionStrings.push_back(extensionInfo.first);
+        }
+    }
 
     return extensionStrings;
 }
@@ -555,6 +496,83 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     textureNorm16             = DetermineTextureNorm16Support(textureCaps);
 }
 
+const ExtensionInfoMap &GetExtensionInfoMap()
+{
+    static const ExtensionInfoMap extensionInfo = {
+        {"GL_OES_element_index_uint", {true, &Extensions::elementIndexUint}},
+        {"GL_OES_packed_depth_stencil", {false, &Extensions::packedDepthStencil}},
+        {"GL_OES_get_program_binary", {false, &Extensions::getProgramBinary}},
+        {"GL_OES_rgb8_rgba8", {false, &Extensions::rgb8rgba8}},
+        {"GL_EXT_texture_format_BGRA8888", {false, &Extensions::textureFormatBGRA8888}},
+        {"GL_EXT_read_format_bgra", {false, &Extensions::readFormatBGRA}},
+        {"GL_NV_pixel_buffer_object", {false, &Extensions::pixelBufferObject}},
+        {"GL_OES_mapbuffer", {false, &Extensions::mapBuffer}},
+        {"GL_EXT_map_buffer_range", {false, &Extensions::mapBufferRange}},
+        {"GL_EXT_color_buffer_half_float", {false, &Extensions::colorBufferHalfFloat}},
+        {"GL_OES_texture_half_float", {false, &Extensions::textureHalfFloat}},
+        {"GL_OES_texture_half_float_linear", {false, &Extensions::textureHalfFloatLinear}},
+        {"GL_OES_texture_float", {false, &Extensions::textureFloat}},
+        {"GL_OES_texture_float_linear", {false, &Extensions::textureFloatLinear}},
+        {"GL_EXT_texture_rg", {false, &Extensions::textureRG}},
+        {"GL_EXT_texture_compression_dxt1", {false, &Extensions::textureCompressionDXT1}},
+        {"GL_ANGLE_texture_compression_dxt3", {false, &Extensions::textureCompressionDXT3}},
+        {"GL_ANGLE_texture_compression_dxt5", {false, &Extensions::textureCompressionDXT5}},
+        {"GL_KHR_texture_compression_astc_hdr", {false, &Extensions::textureCompressionASTCHDR}},
+        {"GL_KHR_texture_compression_astc_ldr", {false, &Extensions::textureCompressionASTCLDR}},
+        {"GL_OES_compressed_ETC1_RGB8_texture", {false, &Extensions::compressedETC1RGB8Texture}},
+        {"GL_EXT_sRGB", {false, &Extensions::sRGB}},
+        {"GL_ANGLE_depth_texture", {false, &Extensions::depthTextures}},
+        {"GL_OES_depth32", {false, &Extensions::depth32}},
+        {"GL_EXT_texture_storage", {false, &Extensions::textureStorage}},
+        {"GL_OES_texture_npot", {false, &Extensions::textureNPOT}},
+        {"GL_EXT_draw_buffers", {false, &Extensions::drawBuffers}},
+        {"GL_EXT_texture_filter_anisotropic", {false, &Extensions::textureFilterAnisotropic}},
+        {"GL_EXT_occlusion_query_boolean", {false, &Extensions::occlusionQueryBoolean}},
+        {"GL_NV_fence", {false, &Extensions::fence}},
+        {"GL_ANGLE_timer_query", {false, &Extensions::timerQuery}},
+        {"GL_EXT_disjoint_timer_query", {false, &Extensions::disjointTimerQuery}},
+        {"GL_EXT_robustness", {false, &Extensions::robustness}},
+        {"GL_EXT_blend_minmax", {false, &Extensions::blendMinMax}},
+        {"GL_ANGLE_framebuffer_blit", {false, &Extensions::framebufferBlit}},
+        {"GL_ANGLE_framebuffer_multisample", {false, &Extensions::framebufferMultisample}},
+        {"GL_ANGLE_instanced_arrays", {false, &Extensions::instancedArrays}},
+        {"GL_ANGLE_pack_reverse_row_order", {false, &Extensions::packReverseRowOrder}},
+        {"GL_OES_standard_derivatives", {false, &Extensions::standardDerivatives}},
+        {"GL_EXT_shader_texture_lod", {false, &Extensions::shaderTextureLOD}},
+        {"GL_NV_shader_framebuffer_fetch", {false, &Extensions::NVshaderFramebufferFetch}},
+        {"GL_ARM_shader_framebuffer_fetch", {false, &Extensions::ARMshaderFramebufferFetch}},
+        {"GL_EXT_shader_framebuffer_fetch", {false, &Extensions::shaderFramebufferFetch}},
+        {"GL_EXT_frag_depth", {false, &Extensions::fragDepth}},
+        {"GL_ANGLE_texture_usage", {false, &Extensions::textureUsage}},
+        {"GL_ANGLE_translated_shader_source", {false, &Extensions::translatedShaderSource}},
+        {"GL_OES_fbo_render_mipmap", {false, &Extensions::fboRenderMipmap}},
+        {"GL_EXT_discard_framebuffer", {false, &Extensions::discardFramebuffer}},
+        {"GL_EXT_debug_marker", {false, &Extensions::debugMarker}},
+        {"GL_OES_EGL_image", {false, &Extensions::eglImage}},
+        {"GL_OES_EGL_image_external", {false, &Extensions::eglImageExternal}},
+        {"GL_OES_EGL_image_external_essl3", {false, &Extensions::eglImageExternalEssl3}},
+        {"GL_NV_EGL_stream_consumer_external", {false, &Extensions::eglStreamConsumerExternal}},
+        {"GL_EXT_unpack_subimage", {false, &Extensions::unpackSubimage}},
+        {"GL_NV_pack_subimage", {false, &Extensions::packSubimage}},
+        {"GL_EXT_color_buffer_float", {false, &Extensions::colorBufferFloat}},
+        {"GL_OES_vertex_array_object", {false, &Extensions::vertexArrayObject}},
+        {"GL_KHR_debug", {false, &Extensions::debug}},
+        // TODO(jmadill): Enable this when complete.
+        //{ "GL_KHR_no_error", {false, &Extensions::                    noError}},
+        {"GL_ANGLE_lossy_etc_decode", {false, &Extensions::lossyETCDecode}},
+        {"GL_CHROMIUM_bind_uniform_location", {false, &Extensions::bindUniformLocation}},
+        {"GL_CHROMIUM_sync_query", {false, &Extensions::syncQuery}},
+        {"GL_CHROMIUM_copy_texture", {false, &Extensions::copyTexture}},
+        {"GL_ANGLE_webgl_compatibility", {false, &Extensions::webglCompatibility}},
+        {"GL_EXT_multisample_compatibility", {false, &Extensions::multisampleCompatibility}},
+        {"GL_CHROMIUM_framebuffer_mixed_samples", {false, &Extensions::framebufferMixedSamples}},
+        {"GL_EXT_texture_norm16", {false, &Extensions::textureNorm16}},
+        {"GL_CHROMIUM_path_rendering", {false, &Extensions::pathRendering}},
+    };
+
+    return extensionInfo;
+}
+
 TypePrecision::TypePrecision()
 {
     range[0] = 0;
@@ -739,7 +757,8 @@ DisplayExtensions::DisplayExtensions()
       stream(false),
       streamConsumerGLTexture(false),
       streamConsumerGLTextureYUV(false),
-      streamProducerD3DTextureNV12(false)
+      streamProducerD3DTextureNV12(false),
+      createContextWebGLCompatibility(false)
 {
 }
 
@@ -773,6 +792,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_NV_stream_consumer_gltexture_yuv",          streamConsumerGLTextureYUV,     &extensionStrings);
     InsertExtensionString("EGL_ANGLE_flexible_surface_compatibility",      flexibleSurfaceCompatibility,   &extensionStrings);
     InsertExtensionString("EGL_ANGLE_stream_producer_d3d_texture_nv12",    streamProducerD3DTextureNV12,   &extensionStrings);
+    InsertExtensionString("EGL_ANGLE_create_context_webgl_compatibility",  createContextWebGLCompatibility,&extensionStrings);
     // TODO(jmadill): Enable this when complete.
     //InsertExtensionString("KHR_create_context_no_error",                   createContextNoError,           &extensionStrings);
     // clang-format on
