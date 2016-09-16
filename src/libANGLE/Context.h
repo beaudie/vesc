@@ -481,6 +481,8 @@ class Context final : public ValidationContext
 
     void generateMipmap(GLenum target);
 
+    bool enableExtension(const char *name);
+
     Error flush();
     Error finish();
 
@@ -612,7 +614,8 @@ class Context final : public ValidationContext
     void initRendererString();
     void initExtensionStrings();
 
-    void initCaps();
+    void initCaps(bool webGLContext);
+    void updateCaps();
 
     LabeledObject *getLabeledObject(GLenum identifier, GLuint name) const;
     LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
@@ -656,6 +659,7 @@ class Context final : public ValidationContext
     std::string mRendererString;
     std::string mExtensionString;
     std::vector<std::string> mExtensionStrings;
+    std::vector<std::string> mEnableableExtensions;
 
     // Recorded errors
     typedef std::set<GLenum> ErrorSet;

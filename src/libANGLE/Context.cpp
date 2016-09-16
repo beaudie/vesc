@@ -179,6 +179,11 @@ bool GetNoError(const egl::AttributeMap &attribs)
     return (attribs.get(EGL_CONTEXT_OPENGL_NO_ERROR_KHR, EGL_FALSE) == EGL_TRUE);
 }
 
+bool GetWebGLContext(const egl::AttributeMap &attribs)
+{
+    return (attribs.get(EGL_CONTEXT_WEBGL_COMPATABILITY_ANGLE, EGL_FALSE) == EGL_TRUE);
+}
+
 std::string GetObjectLabelFromPointer(GLsizei length, const GLchar *label)
 {
     std::string labelName;
@@ -244,7 +249,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
 {
     ASSERT(!mRobustAccess);  // Unimplemented
 
-    initCaps();
+    initCaps(GetWebGLContext(attribs));
 
     mGLState.initialize(mCaps, mExtensions, mClientMajorVersion, GetDebug(attribs));
 
@@ -2342,13 +2347,15 @@ bool Context::hasActiveTransformFeedback(GLuint program) const
     return false;
 }
 
-void Context::initCaps()
+void Context::initCaps(bool webGLContext)
 {
     mCaps = mImplementation->getNativeCaps();
 
     mExtensions = mImplementation->getNativeExtensions();
 
     mLimitations = mImplementation->getNativeLimitations();
+
+    mExtensions.webglCompatability = webGLContext;
 
     if (mClientMajorVersion < 3)
     {
@@ -2385,7 +2392,13 @@ void Context::initCaps()
 
     mCaps.maxFragmentInputComponents = std::min<GLuint>(mCaps.maxFragmentInputComponents, IMPLEMENTATION_MAX_VARYING_VECTORS * 4);
 
+    updateCaps();
+}
+
+void Context::updateCaps()
+{
     mCaps.compressedTextureFormats.clear();
+    mTextureCaps.clear();
 
     const TextureCapsMap &rendererFormats = mImplementation->getNativeTextureCaps();
     for (TextureCapsMap::const_iterator i = rendererFormats.begin(); i != rendererFormats.end(); i++)
@@ -2922,6 +2935,30 @@ void Context::generateMipmap(GLenum target)
 {
     Texture *texture = getTargetTexture(target);
     handleError(texture->generateMipmap());
+}
+
+bool Context::enableExtension(const char *name)
+{
+    const ExtensionInfoMap &extensionInfos = GetExtensionInfoMap();
+    ASSERT(extensionInfos.find(name) != extensionInfos.end());
+    const auto &extension = extensionInfos.at(name);
+
+    if (mExtensions.*(extension.ExtensionsMember))
+    {
+        // Extension already enabled
+        return true;
+    }
+
+    const auto &nativeExtensions = mImplementation->getNativeExtensions();
+    if (!(nativeExtensions.*(extension.ExtensionsMember)))
+    {
+        // Underlying implementation does not support this valid extension
+        return false;
+    }
+
+    mExtensions.*(extension.ExtensionsMember) = true;
+    updateCaps();
+    return true;
 }
 
 void Context::copyTextureCHROMIUM(GLuint sourceId,
