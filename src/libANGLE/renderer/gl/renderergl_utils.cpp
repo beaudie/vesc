@@ -891,6 +891,7 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
 
 #if defined(ANGLE_PLATFORM_APPLE)
     workarounds->doWhileGLSLCausesGPUHang = true;
+    workarounds->useUnusedBlocksWithStandardOrShardLayout = true;
 #endif
 
     workarounds->finishDoesNotCauseQueriesToBeAvailable =

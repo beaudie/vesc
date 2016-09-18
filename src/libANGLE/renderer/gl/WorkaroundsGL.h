@@ -23,7 +23,8 @@ struct WorkaroundsGL
           alwaysCallUseProgramAfterLink(false),
           unpackOverlappingRowsSeparatelyUnpackBuffer(false),
           emulateAbsIntFunction(false),
-          addAndTrueToLoopCondition(false)
+          addAndTrueToLoopCondition(false),
+          useUnusedBlocksWithStandardOrShardLayout(false)
     {
     }
 
@@ -80,6 +81,11 @@ struct WorkaroundsGL
     // On Intel Mac, calculation of loop conditions in for and while loop has bug.
     // Add "&& true" to the end of the condition expression to work around the bug.
     bool addAndTrueToLoopCondition;
+
+    // On Mac with OpenGL version 4.1, unused std140 or shared uniform blocks will be
+    // treated as inactive which is not consistent with WebGL2.0 spec. Reference all members in a
+    // unused std140 or shared uniform block at the beginning of main to work around it.
+    bool useUnusedBlocksWithStandardOrShardLayout;
 };
 }
 
