@@ -49,7 +49,7 @@ typedef unsigned int GLenum;
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 161
+#define ANGLE_SH_VERSION 162
 
 typedef enum {
     SH_GLES2_SPEC,
@@ -198,6 +198,14 @@ const ShCompileOptions SH_REWRITE_TEXELFETCHOFFSET_TO_TEXELFETCH = UINT64_C(1) <
 // This flag works around condition bug of for and while loops in Intel Mac OSX drivers.
 // Condition calculation is not correct. Rewrite it from "CONDITION" to "CONDITION && true".
 const ShCompileOptions SH_ADD_AND_TRUE_TO_LOOP_CONDITION = UINT64_C(1) << 25;
+
+// This flag will use all uniforms of unused std140 and shared uniform blocks at the
+// beginning of the vertex/fragment shader's main(). It is intended as a workaround for Mac
+// drivers which's shader version are lower than 4.50. In those versions, they will treat unused
+// std140 and shared uniform blocks' members as unactive. However, WebGL2.0 based on
+// OpenGL ES3.04 requires all members of a named uniform block declared with a shared or std140
+// layout qualifier are considered active. The uniform block itself is also considered active.
+const ShCompileOptions SH_USE_UNUSED_STANDARD_SHARED_BLOCKS = UINT64_C(1) << 26;
 
 // Defines alternate strategies for implementing array index clamping.
 typedef enum {
