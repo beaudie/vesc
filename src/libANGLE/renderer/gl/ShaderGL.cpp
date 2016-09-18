@@ -65,6 +65,11 @@ ShCompileOptions ShaderGL::prepareSourceAndReturnOptions(std::stringstream *sour
         options |= SH_ADD_AND_TRUE_TO_LOOP_CONDITION;
     }
 
+    if (mWorkarounds.useUnusedBlocksWithStandardOrShardLayout)
+    {
+        options |= SH_USE_UNUSED_STANDARD_SHARED_BLOCKS;
+    }
+
     return options;
 }
 

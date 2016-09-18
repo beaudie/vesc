@@ -396,6 +396,51 @@ TEST_P(UniformBufferTest, ActiveUniformNames)
     EXPECT_EQ("blockName.f", std::string(&strBuffer[0]));
 }
 
+// Tests active uniforms and blocks when the layout is std140, shared and packed.
+TEST_P(UniformBufferTest, ActiveUniformBlockNumber)
+{
+    const std::string &vertexShaderSource =
+        "#version 300 es\n"
+        "in vec2 position;\n"
+        "out float v;\n"
+        "layout(std140) uniform blockName1 {\n"
+        "  float f;\n"
+        "} instanceName;\n"
+        "layout(shared) uniform blockName2 {\n"
+        "  float f2;\n"
+        "  bool b2;\n"
+        "};\n"
+        "layout(packed) uniform blockName3 {\n"
+        "  float f3;\n"
+        "};\n"
+        "void main() {\n"
+        "  v = instanceName.f;\n"
+        "  gl_Position = vec4(position, 0, 1);\n"
+        "}";
+
+    const std::string &fragmentShaderSource =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "in float v;\n"
+        "out vec4 color;\n"
+        "void main() {\n"
+        "  color = vec4(v, 0, 0, 1);\n"
+        "}";
+
+    GLuint program = CompileProgram(vertexShaderSource, fragmentShaderSource);
+    ASSERT_NE(0u, program);
+
+    GLint activeUniforms;
+    glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &activeUniforms);
+
+    ASSERT_EQ(3, activeUniforms);
+
+    GLint activeUniformBlocks;
+    glGetProgramiv(program, GL_ACTIVE_UNIFORM_BLOCKS, &activeUniformBlocks);
+
+    ASSERT_EQ(2, activeUniformBlocks);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(UniformBufferTest,
                        ES3_D3D11(),
