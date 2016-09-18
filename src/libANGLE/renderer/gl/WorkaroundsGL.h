@@ -23,7 +23,8 @@ struct WorkaroundsGL
           alwaysCallUseProgramAfterLink(false),
           unpackOverlappingRowsSeparatelyUnpackBuffer(false),
           emulateAbsIntFunction(false),
-          addAndTrueToLoopCondition(false)
+          addAndTrueToLoopCondition(false),
+          useUnusedBlocksWithStandardOrSharedLayout(false)
     {
     }
 
@@ -94,6 +95,11 @@ struct WorkaroundsGL
     // The last pixel read will be A, but the driver will think it is B, causing it to generate an
     // error when the pixel buffer is just big enough.
     bool unpackLastRowSeparatelyForPaddingInclusion;
+
+    // On Mac with OpenGL version 4.1, unused std140 or shared uniform blocks will be
+    // treated as inactive which is not consistent with WebGL2.0 spec. Reference all members in a
+    // unused std140 or shared uniform block at the beginning of main to work around it.
+    bool useUnusedBlocksWithStandardOrSharedLayout;
 };
 }
 
