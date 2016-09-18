@@ -282,6 +282,14 @@ TType GetShaderVariableBasicType(const sh::ShaderVariable &var)
 {
     switch (var.type)
     {
+        case GL_BOOL:
+            return TType(EbtBool);
+        case GL_BOOL_VEC2:
+            return TType(EbtBool, 2);
+        case GL_BOOL_VEC3:
+            return TType(EbtBool, 3);
+        case GL_BOOL_VEC4:
+            return TType(EbtBool, 4);
         case GL_FLOAT:
             return TType(EbtFloat);
         case GL_FLOAT_VEC2:
