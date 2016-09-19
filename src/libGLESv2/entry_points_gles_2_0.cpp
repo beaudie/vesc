@@ -123,6 +123,13 @@ void GL_APIENTRY BindBuffer(GLenum target, GLuint buffer)
             return;
         }
 
+        if (!context->getGLState().isBindGeneratesResourceEnabled() &&
+            !context->isBufferGenerated(buffer))
+        {
+            context->handleError(Error(GL_INVALID_OPERATION, "Buffer was not generated"));
+            return;
+        }
+
         switch (target)
         {
           case GL_ARRAY_BUFFER:
@@ -170,6 +177,13 @@ void GL_APIENTRY BindFramebuffer(GLenum target, GLuint framebuffer)
             return;
         }
 
+        if (!context->getGLState().isBindGeneratesResourceEnabled() &&
+            !context->isFramebufferGenerated(framebuffer))
+        {
+            context->handleError(Error(GL_INVALID_OPERATION, "Framebuffer was not generated"));
+            return;
+        }
+
         if (target == GL_READ_FRAMEBUFFER_ANGLE || target == GL_FRAMEBUFFER)
         {
             context->bindReadFramebuffer(framebuffer);
@@ -192,6 +206,13 @@ void GL_APIENTRY BindRenderbuffer(GLenum target, GLuint renderbuffer)
         if (target != GL_RENDERBUFFER)
         {
             context->handleError(Error(GL_INVALID_ENUM));
+            return;
+        }
+
+        if (!context->getGLState().isBindGeneratesResourceEnabled() &&
+            !context->isRenderbufferGenerated(renderbuffer))
+        {
+            context->handleError(Error(GL_INVALID_OPERATION, "Renderbuffer was not generated"));
             return;
         }
 

@@ -147,6 +147,10 @@ class State : angle::NonCopyable
     void setGenerateMipmapHint(GLenum hint);
     void setFragmentShaderDerivativeHint(GLenum hint);
 
+    // GL_CHROMIUM_bind_generates_resource
+    bool isBindGeneratesResourceEnabled() const;
+    void setBindGeneratesResource(bool enabled);
+
     // Viewport state setter/getter
     void setViewportParams(GLint x, GLint y, GLsizei width, GLsizei height);
     const Rectangle &getViewport() const;
@@ -417,6 +421,8 @@ class State : angle::NonCopyable
 
     GLenum mGenerateMipmapHint;
     GLenum mFragmentShaderDerivativeHint;
+
+    bool mBindGeneratesResource;
 
     Rectangle mViewport;
     float mNearZ;
