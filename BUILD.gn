@@ -115,6 +115,9 @@ static_library("preprocessor") {
 
 config("translator_static_config") {
   defines = [ "ANGLE_TRANSLATOR_STATIC" ]
+}
+
+config("translator_extra_config") {
   if (use_libfuzzer) {
     defines += [ "ANGLE_TRANSLATOR_DISABLE_POOL_ALLOC" ]
   }
@@ -198,11 +201,9 @@ static_library("translator_lib") {
     defines += [ "ANGLE_ENABLE_HLSL" ]
   }
   configs -= angle_undefine_configs
-  configs += [
-    ":internal_config",
-    ":translator_static_config",
-  ]
+  configs += [":internal_config", ":translator_static_config"]
   public_configs = [ ":external_config" ]
+  all_dependent_configs = [":translator_extra_config"]
 
   deps = [
     ":includes",
