@@ -50,6 +50,7 @@ State::State()
       mLineWidth(0),
       mGenerateMipmapHint(GL_NONE),
       mFragmentShaderDerivativeHint(GL_NONE),
+      mBindGeneratesResource(true),
       mNearZ(0),
       mFarZ(0),
       mReadFramebuffer(nullptr),
@@ -633,6 +634,9 @@ void State::setEnableFeature(GLenum feature, bool enabled)
       case GL_DEBUG_OUTPUT:
           mDebug.setOutputEnabled(enabled);
           break;
+      case GL_BIND_GENERATES_RESOURCE_CHROMIUM:
+          setBindGeneratesResource(enabled);
+          break;
       default:                               UNREACHABLE();
     }
 }
@@ -658,6 +662,8 @@ bool State::getEnableFeature(GLenum feature) const
           return mDebug.isOutputSynchronous();
       case GL_DEBUG_OUTPUT:
           return mDebug.isOutputEnabled();
+      case GL_BIND_GENERATES_RESOURCE_CHROMIUM:
+          return isBindGeneratesResourceEnabled();
       default:                               UNREACHABLE(); return false;
     }
 }
@@ -686,6 +692,16 @@ void State::setFragmentShaderDerivativeHint(GLenum hint)
     // TODO: Propagate the hint to shader translator so we can write
     // ddx, ddx_coarse, or ddx_fine depending on the hint.
     // Ignore for now. It is valid for implementations to ignore hint.
+}
+
+bool State::isBindGeneratesResourceEnabled() const
+{
+    return mBindGeneratesResource;
+}
+
+void State::setBindGeneratesResource(bool enabled)
+{
+    mBindGeneratesResource = enabled;
 }
 
 void State::setViewportParams(GLint x, GLint y, GLsizei width, GLsizei height)
@@ -1485,6 +1501,9 @@ void State::getBooleanv(GLenum pname, GLboolean *params)
           break;
       case GL_SAMPLE_ALPHA_TO_ONE_EXT:
           *params = mSampleAlphaToOne;
+          break;
+      case GL_BIND_GENERATES_RESOURCE_CHROMIUM:
+          *params = isBindGeneratesResourceEnabled() ? GL_TRUE : GL_FALSE;
           break;
       default:
         UNREACHABLE();

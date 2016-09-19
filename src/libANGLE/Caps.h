@@ -296,6 +296,9 @@ struct Extensions
     // GL_ANGLE_webgl_compatibility
     bool webglCompatibility;
 
+    // GL_CHROMIUM_bind_generates_resource
+    bool bindGeneratesResource;
+
     // ES3 Extension support
 
     // GL_EXT_color_buffer_float

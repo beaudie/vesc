@@ -2080,6 +2080,26 @@ Framebuffer *Context::checkFramebufferAllocation(GLuint framebuffer)
     return framebufferIt->second;
 }
 
+bool Context::isTextureGenerated(GLuint texture) const
+{
+    return mResourceManager->isTextureGenerated(texture);
+}
+
+bool Context::isBufferGenerated(GLuint buffer) const
+{
+    return mResourceManager->isBufferGenerated(buffer);
+}
+
+bool Context::isRenderbufferGenerated(GLuint renderbuffer) const
+{
+    return mResourceManager->isRenderbufferGenerated(renderbuffer);
+}
+
+bool Context::isFramebufferGenerated(GLuint framebuffer) const
+{
+    return mFramebufferMap.find(framebuffer) != mFramebufferMap.end();
+}
+
 bool Context::isVertexArrayGenerated(GLuint vertexArray)
 {
     return mVertexArrayMap.find(vertexArray) != mVertexArrayMap.end();
@@ -2376,6 +2396,7 @@ void Context::initCaps(bool webGLContext)
     // Some extensions are always available because they are implemented in the GL layer.
     mExtensions.bindUniformLocation = true;
     mExtensions.vertexArrayObject   = true;
+    mExtensions.bindGeneratesResource = true;
 
     // Enable the no error extension if the context was created with the flag.
     mExtensions.noError = mSkipValidation;

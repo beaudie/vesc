@@ -129,6 +129,9 @@ bool ValidCap(const Context *context, GLenum cap)
       case GL_DEBUG_OUTPUT:
           return context->getExtensions().debug;
 
+      case GL_BIND_GENERATES_RESOURCE_CHROMIUM:
+          return context->getExtensions().bindGeneratesResource;
+
       default:
         return false;
     }
