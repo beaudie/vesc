@@ -29,6 +29,7 @@ struct Macro
     Macro()
         : predefined(false),
           disabled(false),
+          expansionCount(0),
           type(kTypeObj)
     {
     }
@@ -36,6 +37,7 @@ struct Macro
 
     bool predefined;
     mutable bool disabled;
+    mutable int expansionCount;
 
     Type type;
     std::string name;
