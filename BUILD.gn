@@ -198,11 +198,9 @@ static_library("translator_lib") {
     defines += [ "ANGLE_ENABLE_HLSL" ]
   }
   configs -= angle_undefine_configs
-  configs += [
-    ":internal_config",
-    ":translator_static_config",
-  ]
+  configs += [":internal_config"]
   public_configs = [ ":external_config" ]
+  all_dependent_configs = [":translator_static_config"]
 
   deps = [
     ":includes",
@@ -232,7 +230,6 @@ static_library("translator_static") {
 
   configs -= angle_undefine_configs
   configs += [ ":internal_config" ]
-  public_configs = [ ":translator_static_config" ]
 
   public_deps = [
     ":translator_lib",
