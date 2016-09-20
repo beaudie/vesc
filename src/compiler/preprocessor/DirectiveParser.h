@@ -7,10 +7,10 @@
 #ifndef COMPILER_PREPROCESSOR_DIRECTIVEPARSER_H_
 #define COMPILER_PREPROCESSOR_DIRECTIVEPARSER_H_
 
-#include "Lexer.h"
-#include "Macro.h"
-#include "pp_utils.h"
-#include "SourceLocation.h"
+#include "common/angleutils.h"
+#include "compiler/preprocessor/Lexer.h"
+#include "compiler/preprocessor/Macro.h"
+#include "compiler/preprocessor/SourceLocation.h"
 
 namespace pp
 {
@@ -19,7 +19,7 @@ class Diagnostics;
 class DirectiveHandler;
 class Tokenizer;
 
-class DirectiveParser : public Lexer
+class DirectiveParser : public Lexer, angle::NonCopyable
 {
   public:
     DirectiveParser(Tokenizer *tokenizer,
@@ -30,7 +30,6 @@ class DirectiveParser : public Lexer
     void lex(Token *token) override;
 
   private:
-    PP_DISALLOW_COPY_AND_ASSIGN(DirectiveParser);
 
     void parseDirective(Token *token);
     void parseDefine(Token *token);
