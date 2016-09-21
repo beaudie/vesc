@@ -32,7 +32,7 @@ class ReadPixelsTest : public ANGLETest
     }
 };
 
-// Test out of bounds reads.
+// Test out of bounds framebuffer reads.
 TEST_P(ReadPixelsTest, OutOfBounds)
 {
     // TODO: re-enable once root cause of http://anglebug.com/1413 is fixed
@@ -83,16 +83,22 @@ class ReadPixelsPBOTest : public ReadPixelsTest
         ANGLETest::SetUp();
 
         glGenBuffers(1, &mPBO);
+        glGenFramebuffers(1, &mFBO);
+
+        Reset(4 * getWindowWidth() * getWindowHeight(), 4, 1);
+    }
+
+    void Reset(GLuint bufferSize, GLuint fboWidth, GLuint fboHeight)
+    {
         glBindBuffer(GL_PIXEL_PACK_BUFFER, mPBO);
-        glBufferData(GL_PIXEL_PACK_BUFFER, 4 * getWindowWidth() * getWindowHeight(), nullptr,
-                     GL_STATIC_DRAW);
+        glBufferData(GL_PIXEL_PACK_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
         glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
+        glDeleteTextures(1, &mTexture);
         glGenTextures(1, &mTexture);
         glBindTexture(GL_TEXTURE_2D, mTexture);
-        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 4, 1);
+        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, fboWidth, fboHeight);
 
-        glGenFramebuffers(1, &mFBO);
         glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture, 0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -109,10 +115,62 @@ class ReadPixelsPBOTest : public ReadPixelsTest
         ANGLETest::TearDown();
     }
 
-    GLuint mPBO;
-    GLuint mTexture;
-    GLuint mFBO;
+    GLuint mPBO     = 0;
+    GLuint mTexture = 0;
+    GLuint mFBO     = 0;
 };
+
+// Test basic usage of PBOs.
+TEST_P(ReadPixelsPBOTest, Basic)
+{
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_GL_NO_ERROR();
+
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, mPBO);
+    glReadPixels(0, 0, 16, 16, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+    GLvoid *mappedPtr      = glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, 32, GL_MAP_READ_BIT);
+    unsigned char *dataPtr = static_cast<unsigned char *>(mappedPtr);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_EQ(255, dataPtr[0]);
+    EXPECT_EQ(0, dataPtr[1]);
+    EXPECT_EQ(0, dataPtr[2]);
+    EXPECT_EQ(255, dataPtr[3]);
+
+    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Test an error is generated when the PBO is too small.
+TEST_P(ReadPixelsPBOTest, PBOTooSmall)
+{
+    Reset(4 * 16 * 16 - 1, 16, 16);
+
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_GL_NO_ERROR();
+
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, mPBO);
+    glReadPixels(0, 0, 16, 16, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
+// Test an error is generated when the PBO is mapped.
+TEST_P(ReadPixelsPBOTest, PBOMapped)
+{
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_GL_NO_ERROR();
+
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, mPBO);
+    void *mappedPtr = glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, 32, GL_MAP_READ_BIT);
+    glReadPixels(0, 0, 16, 16, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
 
 // Test that binding a PBO to ARRAY_BUFFER works as expected.
 TEST_P(ReadPixelsPBOTest, ArrayBufferTarget)
