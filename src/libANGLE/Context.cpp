@@ -2539,6 +2539,11 @@ void Context::readPixels(GLint x,
                          GLenum type,
                          GLvoid *pixels)
 {
+    if (width == 0 || height == 0)
+    {
+        return;
+    }
+
     syncStateForReadPixels();
 
     Framebuffer *framebufferObject = mGLState.getReadFramebuffer();
@@ -2577,6 +2582,11 @@ void Context::copyTexSubImage2D(GLenum target,
                                 GLsizei width,
                                 GLsizei height)
 {
+    if (width == 0 || height == 0)
+    {
+        return;
+    }
+
     // Only sync the read FBO
     mGLState.syncDirtyObject(GL_READ_FRAMEBUFFER);
 
@@ -2599,6 +2609,11 @@ void Context::copyTexSubImage3D(GLenum target,
                                 GLsizei width,
                                 GLsizei height)
 {
+    if (width == 0 || height == 0)
+    {
+        return;
+    }
+
     // Only sync the read FBO
     mGLState.syncDirtyObject(GL_READ_FRAMEBUFFER);
 
