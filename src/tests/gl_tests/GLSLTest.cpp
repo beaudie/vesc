@@ -2433,6 +2433,31 @@ TEST_P(GLSLTest, FoldedIntDifferenceOutOfBounds)
     glDeleteProgram(program);
 }
 
+// Test that using a sampler2D and samplerExternalOES in the same shader works (anglebug.com/1534)
+TEST_P(GLSLTest, ExternalAnd2DSampler)
+{
+    if (!extensionEnabled("GL_OES_EGL_image_external"))
+    {
+        std::cout << "Test skipped because GL_OES_EGL_image_external is not available."
+                  << std::endl;
+        return;
+    }
+
+    const std::string fragmentShader =
+        "precision mediump float;\n"
+        "uniform samplerExternalOES tex0;\n"
+        "uniform sampler2D tex1;\n"
+        "void main(void)\n"
+        "{\n"
+        " vec2 uv = vec2(0.0, 0.0);"
+        " gl_FragColor = texture2D(tex0, uv) + texture2D(tex1, uv);\n"
+        "}\n";
+
+    GLuint program = CompileProgram(mSimpleVSSource, fragmentShader);
+    EXPECT_NE(0u, program);
+    glDeleteProgram(program);
+}
+
 }  // anonymous namespace
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
