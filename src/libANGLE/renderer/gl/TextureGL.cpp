@@ -120,7 +120,7 @@ gl::ErrorOrResult<bool> ShouldApplyLastRowPaddingWorkaround(const gl::Box &area,
 
     checkedEndByte += reinterpret_cast<intptr_t>(pixels);
 
-    // At the point checkedEndByte is the actual last byte read.
+    // At this point checkedEndByte is the actual last byte read.
     // The driver adds an extra row padding (if any), mimic it.
     ANGLE_TRY_CHECKED_MATH(pixelBytes);
     if (pixelBytes.ValueOrDie() * size.width < rowPitch)
@@ -211,8 +211,7 @@ gl::Error TextureGL::setImage(GLenum target, size_t level, GLenum internalFormat
         if (apply)
         {
             reserveTexImageToBeFilled(target, level, internalFormat, size, format, type);
-            return setSubImageAlignmentWorkaround(target, level, area, format, type, unpack,
-                                                  pixels);
+            return setSubImagePaddingWorkaround(target, level, area, format, type, unpack, pixels);
         }
     }
 
@@ -301,8 +300,7 @@ gl::Error TextureGL::setSubImage(GLenum target, size_t level, const gl::Box &are
         // by uploading the last row (and last level if 3D) separately.
         if (apply)
         {
-            return setSubImageAlignmentWorkaround(target, level, area, format, type, unpack,
-                                                  pixels);
+            return setSubImagePaddingWorkaround(target, level, area, format, type, unpack, pixels);
         }
     }
 
@@ -383,13 +381,13 @@ gl::Error TextureGL::setSubImageRowByRowWorkaround(GLenum target,
     return gl::NoError();
 }
 
-gl::Error TextureGL::setSubImageAlignmentWorkaround(GLenum target,
-                                                    size_t level,
-                                                    const gl::Box &area,
-                                                    GLenum format,
-                                                    GLenum type,
-                                                    const gl::PixelUnpackState &unpack,
-                                                    const uint8_t *pixels)
+gl::Error TextureGL::setSubImagePaddingWorkaround(GLenum target,
+                                                  size_t level,
+                                                  const gl::Box &area,
+                                                  GLenum format,
+                                                  GLenum type,
+                                                  const gl::PixelUnpackState &unpack,
+                                                  const uint8_t *pixels)
 {
     const gl::InternalFormat &glFormat =
         gl::GetInternalFormatInfo(gl::GetSizedInternalFormat(format, type));
