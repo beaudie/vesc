@@ -2387,6 +2387,13 @@ void Context::initCaps(bool webGLContext)
     mExtensions.maxDebugGroupStackDepth = 1024;
     mExtensions.maxLabelLength          = 1024;
 
+    // Force off the depth textures extension in ES3 due to validation incompatibility.
+    // See http://crbug.com/649200
+    if (mClientMajorVersion >= 3)
+    {
+        mExtensions.depthTextures = false;
+    }
+
     // Apply implementation limits
     mCaps.maxVertexAttributes = std::min<GLuint>(mCaps.maxVertexAttributes, MAX_VERTEX_ATTRIBS);
     mCaps.maxVertexUniformBlocks = std::min<GLuint>(mCaps.maxVertexUniformBlocks, IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS);
