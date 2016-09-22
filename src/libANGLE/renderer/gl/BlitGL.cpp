@@ -130,11 +130,7 @@ gl::Error BlitGL::copySubImageToLUMAWorkaroundTexture(GLuint texture,
                                                       const gl::Rectangle &sourceArea,
                                                       const gl::Framebuffer *source)
 {
-    gl::Error error = initializeResources();
-    if (error.isError())
-    {
-        return error;
-    }
+    ANGLE_TRY(initializeResources());
 
     // Blit the framebuffer to the first scratch texture
     const FramebufferGL *sourceFramebufferGL = GetImplAs<FramebufferGL>(source);
@@ -190,10 +186,16 @@ gl::Error BlitGL::copySubImageToLUMAWorkaroundTexture(GLuint texture,
 
     mFunctions->drawArrays(GL_TRIANGLES, 0, 6);
 
-    // Finally, copy the swizzled texture to the destination texture
+    // Copy the swizzled texture to the destination texture
     mStateManager->bindTexture(textureType, texture);
     mFunctions->copyTexSubImage2D(target, static_cast<GLint>(level), destOffset.x, destOffset.y, 0,
                                   0, sourceArea.width, sourceArea.height);
+
+    // Finally orphan the scratch textures so they can be GCed by the driver.
+    mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[0]);
+    mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[1]);
+    mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
     return gl::Error(GL_NO_ERROR);
 }
