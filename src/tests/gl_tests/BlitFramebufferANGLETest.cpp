@@ -1061,10 +1061,98 @@ TEST_P(BlitFramebufferTest, MultisampleStencil)
     ASSERT_GL_NO_ERROR();
 }
 
+// Test based on dEQP's stencil only blit test.
+TEST_P(BlitFramebufferTest, StencilOnly)
+{
+    // Init program.
+    const std::string &vertex =
+        "#version 300 es\n"
+        "in vec4 position;\n"
+        "void main() {\n"
+        "  gl_Position = position;\n"
+        "}";
+    const std::string &fragment =
+        "#version 300 es\n"
+        "out mediump vec4 colorOut;\n"
+        "uniform mediump vec3 color;\n"
+        "void main() {\n"
+        "   colorOut = vec4(color, 1.0);\n"
+        "}";
+
+    ANGLE_GL_PROGRAM(flatShader, vertex, fragment);
+    glUseProgram(flatShader.get());
+    GLint colorLoc = glGetUniformLocation(flatShader.get(), "color");
+    ASSERT_NE(-1, colorLoc);
+
+    const int SRC  = 0;
+    const int DEST = 1;
+
+    // Init framebuffers.
+    GLFramebuffer fbos[2];
+    GLTexture color[2];
+    GLRenderbuffer depthStencil[2];
+
+    for (int idx = SRC; idx <= DEST; ++idx)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, fbos[idx].get());
+        glBindTexture(GL_TEXTURE_2D, color[idx].get());
+        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 16, 16);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                               color[idx].get(), 0);
+        glBindRenderbuffer(GL_RENDERBUFFER, depthStencil[idx].get());
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 16, 16);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                                  depthStencil[idx].get());
+        ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+        ASSERT_GL_NO_ERROR();
+        glClearBufferfi(GL_DEPTH_STENCIL, 0, 1.0f, 0);
+    }
+
+    // Fill source with red, depth = 0.5, stencil = 7
+    glBindFramebuffer(GL_FRAMEBUFFER, fbos[SRC].get());
+    glViewport(0, 0, 16, 16);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glStencilFunc(GL_ALWAYS, 7, 0xffu);
+    glUniform3f(colorLoc, 1.0f, 0.0f, 0.0f);
+    drawQuad(flatShader.get(), "position", 0.5f);
+
+    // Fill dest with yellow, depth = 0.0, stencil = 1
+    glBindFramebuffer(GL_FRAMEBUFFER, fbos[DEST].get());
+    glStencilFunc(GL_ALWAYS, 1, 0xffu);
+    glUniform3f(colorLoc, 1.0f, 1.0f, 0.0f);
+    drawQuad(flatShader.get(), "position", 0.0f);
+
+    // Perform copy.
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbos[SRC].get());
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbos[DEST].get());
+    glBlitFramebuffer(0, 0, 16, 16, 0, 0, 16, 16, GL_STENCIL_BUFFER_BIT, GL_NEAREST);
+
+    // Render blue where depth < 0, decrement on depth failure.
+    glBindFramebuffer(GL_FRAMEBUFFER, fbos[DEST].get());
+    glStencilOp(GL_KEEP, GL_DECR, GL_KEEP);
+    glStencilFunc(GL_ALWAYS, 0, 0xffu);
+
+    glUniform3f(colorLoc, 0.0f, 0.0f, 1.0f);
+    drawQuad(flatShader.get(), "position", 0.0f);
+
+    // Render green where stencil == 6.
+    glDisable(GL_DEPTH_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glStencilFunc(GL_EQUAL, 6, 0xffu);
+
+    glUniform3f(colorLoc, 0.0f, 1.0f, 0.0f);
+    drawQuad(flatShader.get(), "position", 0.0f);
+
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
 ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,
                        ES2_D3D9(),
                        ES2_D3D11(EGL_EXPERIMENTAL_PRESENT_PATH_COPY_ANGLE),
                        ES2_D3D11(EGL_EXPERIMENTAL_PRESENT_PATH_FAST_ANGLE));
 
-ANGLE_INSTANTIATE_TEST(BlitFramebufferTest, ES3_D3D11());
+ANGLE_INSTANTIATE_TEST(BlitFramebufferTest, ES3_D3D11(), ES3_OPENGL());
