@@ -46,6 +46,7 @@ class DXGISwapChainWindowSurfaceWGL : public SurfaceGL
     egl::Error querySurfacePointerANGLE(EGLint attribute, void **value) override;
     egl::Error bindTexImage(gl::Texture *texture, EGLint buffer) override;
     egl::Error releaseTexImage(EGLint buffer) override;
+    egl::Error getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc) override;
     void setSwapInterval(EGLint interval) override;
 
     EGLint getWidth() const override;
@@ -99,6 +100,8 @@ class DXGISwapChainWindowSurfaceWGL : public SurfaceGL
     EGLint mSwapInterval;
 
     EGLint mOrientation;
+
+    LONGLONG mCounterFrequency;
 };
 }  // namespace rx
 

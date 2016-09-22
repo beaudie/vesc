@@ -28,8 +28,7 @@ TextureCaps::TextureCaps()
     : texturable(false),
       filterable(false),
       renderable(false),
-      sampleCounts()
-{
+      sampleCounts(){
 }
 
 GLuint TextureCaps::getMaxSamples() const
@@ -777,7 +776,11 @@ DisplayExtensions::DisplayExtensions()
       streamConsumerGLTexture(false),
       streamConsumerGLTextureYUV(false),
       streamProducerD3DTextureNV12(false),
+<<<<<<< 44d0a736545d6babbd57430d42671545e8d3892b
       createContextWebGLCompatibility(false)
+=======
+      getSyncValues(false)
+>>>>>>> Progress so far
 {
 }
 
@@ -812,6 +815,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_ANGLE_flexible_surface_compatibility",      flexibleSurfaceCompatibility,   &extensionStrings);
     InsertExtensionString("EGL_ANGLE_stream_producer_d3d_texture_nv12",    streamProducerD3DTextureNV12,   &extensionStrings);
     InsertExtensionString("EGL_ANGLE_create_context_webgl_compatibility",  createContextWebGLCompatibility,&extensionStrings);
+    InsertExtensionString("EGL_CHROMIUM_sync_control",                     getSyncValues,                  &extensionStrings);
     // TODO(jmadill): Enable this when complete.
     //InsertExtensionString("KHR_create_context_no_error",                   createContextNoError,           &extensionStrings);
     // clang-format on

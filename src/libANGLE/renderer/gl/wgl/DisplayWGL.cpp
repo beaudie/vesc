@@ -633,6 +633,9 @@ void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->postSubBuffer      = mUseDXGISwapChains;
     outExtensions->surfaceOrientation = mUseDXGISwapChains;
 
+    // GetSyncValues extension implementation depends on DXGI swap chain surface too.
+    //outExtensions->getSyncValues      = mUseDXGISwapChains;
+
     outExtensions->createContextRobustness = mHasARBCreateContextRobustness;
 }
 

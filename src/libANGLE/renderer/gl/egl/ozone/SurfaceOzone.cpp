@@ -70,6 +70,12 @@ egl::Error SurfaceOzone::releaseTexImage(EGLint buffer)
     return egl::Error(EGL_SUCCESS);
 }
 
+egl::Error SurfaceOzone::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc)
+{
+    UNIMPLEMENTED();
+    return egl::Error(EGL_BAD_ACCESS);
+}
+
 void SurfaceOzone::setSwapInterval(EGLint interval)
 {
     mSwapControl.targetSwapInterval = interval;

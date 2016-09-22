@@ -592,6 +592,9 @@ struct DisplayExtensions
 
     // EGL_ANGLE_create_context_webgl_compatibility
     bool createContextWebGLCompatibility;
+
+    // EGL_CHROMIUM_get_sync_values
+    bool getSyncValues;
 };
 
 struct DeviceExtensions

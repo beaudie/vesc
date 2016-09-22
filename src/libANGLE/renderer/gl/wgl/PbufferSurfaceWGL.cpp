@@ -169,6 +169,12 @@ egl::Error PbufferSurfaceWGL::releaseTexImage(EGLint buffer)
     return egl::Error(EGL_SUCCESS);
 }
 
+egl::Error PbufferSurfaceWGL::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc)
+{
+    UNIMPLEMENTED();
+    return egl::Error(EGL_BAD_SURFACE);
+}
+
 void PbufferSurfaceWGL::setSwapInterval(EGLint interval)
 {
 }
