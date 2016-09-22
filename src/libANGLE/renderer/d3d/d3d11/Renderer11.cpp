@@ -1013,10 +1013,13 @@ egl::ConfigSet Renderer11::generateConfigs()
             config.colorBufferType = EGL_RGB_BUFFER;
             config.configCaveat    = EGL_NONE;
             config.configID        = static_cast<EGLint>(configs.size() + 1);
+
             // Can only support a conformant ES2 with feature level greater than 10.0.
-            config.conformant = (mRenderer11DeviceCaps.featureLevel >= D3D_FEATURE_LEVEL_10_0)
-                                    ? (EGL_OPENGL_ES2_BIT | EGL_OPENGL_ES3_BIT_KHR)
-                                    : 0;
+            config.conformant = ((mRenderer11DeviceCaps.featureLevel >= D3D_FEATURE_LEVEL_10_0) ? EGL_OPENGL_ES2_BIT : 0);
+
+            // We can only support conformant ES3 on FL 10.1+
+            const gl::Version &maxVersion = getMaxSupportedESVersion();
+            config.conformant |= (maxVersion.major >= 3 ? EGL_OPENGL_ES3_BIT_KHR : 0);
 
             // PresentPathFast may not be conformant
             if (mPresentPathFastEnabled)
@@ -1035,11 +1038,10 @@ egl::ConfigSet Renderer11::generateConfigs()
             config.nativeRenderable  = EGL_FALSE;
             config.nativeVisualID    = 0;
             config.nativeVisualType  = EGL_NONE;
-            // Can't support ES3 at all without feature level 10.0
-            config.renderableType =
-                EGL_OPENGL_ES2_BIT | ((mRenderer11DeviceCaps.featureLevel >= D3D_FEATURE_LEVEL_10_0)
-                                          ? EGL_OPENGL_ES3_BIT_KHR
-                                          : 0);
+
+            // Can't support ES3 at all without feature level 10.1
+            config.renderableType = EGL_OPENGL_ES2_BIT | (maxVersion.major >= 3 ? EGL_OPENGL_ES3_BIT_KHR : 0);
+
             config.sampleBuffers         = 0;  // FIXME: enumerate multi-sampling
             config.samples               = 0;
             config.stencilSize           = depthStencilBufferFormatInfo.stencilBits;
