@@ -960,7 +960,6 @@ gl::ErrorOrResult<GLuint> InternalFormat::computeUnpackSize(
 
     CheckedNumeric<GLuint> depthMinusOne  = size.depth - 1;
     CheckedNumeric<GLuint> heightMinusOne = size.height - 1;
-    CheckedNumeric<GLuint> pixelBytes     = computePixelBytes(formatType);
 
     CheckedNumeric<GLuint> totalSize = depthMinusOne * depthPitch;
     totalSize += heightMinusOne * rowPitch;
