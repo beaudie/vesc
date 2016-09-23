@@ -94,8 +94,8 @@ if (is_win || is_linux || is_mac || is_android) {
       "//testing/gtest",
       "//third_party/angle:angle_image_util",
       "//third_party/angle:angle_util",
-      "//third_party/angle:libEGL",
-      "//third_party/angle:libGLESv2",
+      "//third_party/angle:libEGL_ANGLE",
+      "//third_party/angle:libGLESv2_ANGLE",
       "//third_party/angle:preprocessor",
       "//third_party/angle:translator",
     ]
@@ -282,7 +282,7 @@ if (build_angle_deqp_tests) {
       ":angle_deqp_decpp",
       "//third_party/angle:angle_common",
       "//third_party/angle:angle_util",
-      "//third_party/angle:libEGL",
+      "//third_party/angle:libEGL_ANGLE",
       "//third_party/libpng:libpng",
     ]
     configs -= deqp_undefine_configs
