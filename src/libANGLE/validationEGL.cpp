@@ -1601,14 +1601,6 @@ Error ValidateGetSyncValuesCHROMIUM(const Display *display,
         return Error(EGL_BAD_SURFACE, "getSyncValues surface cannot be EGL_NO_SURFACE");
     }
 
-    // TODO: is this the right check?
-    /*
-    if (!surface->directComposition)
-    {
-        return Error(EGL_BAD_SURFACE, "DirectComposition surface required");
-    }
-    */
-
     if (ust == nullptr)
     {
         return egl::Error(EGL_BAD_PARAMETER, "ust is null");

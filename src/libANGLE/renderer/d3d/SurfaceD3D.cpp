@@ -97,9 +97,15 @@ egl::Error SurfaceD3D::releaseTexImage(EGLint)
 
 egl::Error SurfaceD3D::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc)
 {
-    // TODO: the implementation should actually go here.
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_SURFACE);
+    EGLint result = mSwapChain->getSyncValues(ust, msc, sbc);
+    if (result != EGL_SUCCESS)
+    {
+        return egl::Error(result, "Failed to get frame statistics");
+    }
+    else
+    {
+        return egl::Error(EGL_SUCCESS);
+    }
 }
 
 egl::Error SurfaceD3D::resetSwapChain()

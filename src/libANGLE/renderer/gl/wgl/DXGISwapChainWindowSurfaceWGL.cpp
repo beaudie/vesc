@@ -59,12 +59,6 @@ DXGISwapChainWindowSurfaceWGL::DXGISwapChainWindowSurfaceWGL(const egl::SurfaceS
       mSwapInterval(1),
       mOrientation(orientation)
 {
-  LARGE_INTEGER counterFreqency = {};
-  BOOL success = QueryPerformanceFrequency(&counterFreqency);
-  UNUSED_ASSERTION_VARIABLE(success);
-  ASSERT(success);
-
-  mCounterFrequency = counterFreqency.QuadPart;
 }
 
 DXGISwapChainWindowSurfaceWGL::~DXGISwapChainWindowSurfaceWGL()
@@ -266,29 +260,6 @@ egl::Error DXGISwapChainWindowSurfaceWGL::releaseTexImage(EGLint buffer)
 
     mTextureID     = 0;
     mTextureHandle = nullptr;
-
-    return egl::Error(EGL_SUCCESS);
-}
-
-egl::Error DXGISwapChainWindowSurfaceWGL::getSyncValues(EGLuint64KHR *ust,
-                                                        EGLuint64KHR *msc,
-                                                        EGLuint64KHR *sbc)
-{
-    DXGI_FRAME_STATISTICS stats = {};
-    HRESULT result = mSwapChain->GetFrameStatistics(&stats);
-    
-    if (FAILED(result))
-    {
-        return egl::Error(EGL_BAD_ALLOC, "Failed to get frame statistics, result: 0x%X", result);
-    }
-
-    // TODO: convert DXGI_FRAME_STATISTICS to output values
-    // stats.SyncQPCTime -> ust with conversion to microseconds via QueryPerformanceFrequency
-    // stats.SyncRefreshCount -> msc
-    // stats.PresentCount -> sbc
-    *ust = stats.SyncQPCTime.QuadPart / (mCounterFrequency / 1000000);
-    *msc = stats.SyncRefreshCount;
-    *sbc = stats.PresentCount;
 
     return egl::Error(EGL_SUCCESS);
 }
