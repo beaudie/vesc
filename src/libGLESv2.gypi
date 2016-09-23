@@ -802,6 +802,13 @@
                             'ANGLE_ENABLE_VULKAN',
                         ],
                     }],
+                    ['angle_enable_null==1',
+                    {
+                        'defines':
+                        [
+                            'ANGLE_ENABLE_NULL',
+                        ],
+                    }],
                 ],
             },
             'conditions':
