@@ -11,6 +11,11 @@
 
 #include "common/debug.h"
 
+#include "libANGLE/renderer/null/ContextNULL.h"
+#include "libANGLE/renderer/null/DeviceNULL.h"
+#include "libANGLE/renderer/null/ImageNULL.h"
+#include "libANGLE/renderer/null/SurfaceNULL.h"
+
 namespace rx
 {
 
@@ -24,21 +29,20 @@ DisplayNULL::~DisplayNULL()
 
 egl::Error DisplayNULL::initialize(egl::Display *display)
 {
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
+    mDevice = new DeviceNULL();
+    return egl::Success();
 }
 
 void DisplayNULL::terminate()
 {
-    UNIMPLEMENTED();
+    SafeDelete(mDevice);
 }
 
 egl::Error DisplayNULL::makeCurrent(egl::Surface *drawSurface,
                                     egl::Surface *readSurface,
                                     gl::Context *context)
 {
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
+    return egl::Success();
 }
 
 egl::ConfigSet DisplayNULL::generateConfigs()
@@ -49,52 +53,45 @@ egl::ConfigSet DisplayNULL::generateConfigs()
 
 bool DisplayNULL::testDeviceLost()
 {
-    UNIMPLEMENTED();
-    return bool();
+    return false;
 }
 
 egl::Error DisplayNULL::restoreLostDevice()
 {
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
+    return egl::Success();
 }
 
 bool DisplayNULL::isValidNativeWindow(EGLNativeWindowType window) const
 {
-    UNIMPLEMENTED();
-    return bool();
+    return true;
 }
 
 std::string DisplayNULL::getVendorString() const
 {
-    UNIMPLEMENTED();
-    return std::string();
+    return "NULL";
 }
 
 egl::Error DisplayNULL::getDevice(DeviceImpl **device)
 {
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
+    *device = mDevice;
+    return egl::Success();
 }
 
 egl::Error DisplayNULL::waitClient() const
 {
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
+    return egl::Success();
 }
 
 egl::Error DisplayNULL::waitNative(EGLint engine,
                                    egl::Surface *drawSurface,
                                    egl::Surface *readSurface) const
 {
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
+    return egl::Success();
 }
 
 gl::Version DisplayNULL::getMaxSupportedESVersion() const
 {
-    UNIMPLEMENTED();
-    return gl::Version();
+    return gl::Version(3, 2);
 }
 
 SurfaceImpl *DisplayNULL::createWindowSurface(const egl::SurfaceState &state,
@@ -102,16 +99,14 @@ SurfaceImpl *DisplayNULL::createWindowSurface(const egl::SurfaceState &state,
                                               EGLNativeWindowType window,
                                               const egl::AttributeMap &attribs)
 {
-    UNIMPLEMENTED();
-    return static_cast<SurfaceImpl *>(0);
+    return new SurfaceNULL(state);
 }
 
 SurfaceImpl *DisplayNULL::createPbufferSurface(const egl::SurfaceState &state,
                                                const egl::Config *configuration,
                                                const egl::AttributeMap &attribs)
 {
-    UNIMPLEMENTED();
-    return static_cast<SurfaceImpl *>(0);
+    return new SurfaceNULL(state);
 }
 
 SurfaceImpl *DisplayNULL::createPbufferFromClientBuffer(const egl::SurfaceState &state,
@@ -120,8 +115,7 @@ SurfaceImpl *DisplayNULL::createPbufferFromClientBuffer(const egl::SurfaceState 
                                                         EGLClientBuffer buffer,
                                                         const egl::AttributeMap &attribs)
 {
-    UNIMPLEMENTED();
-    return static_cast<SurfaceImpl *>(0);
+    return new SurfaceNULL(state);
 }
 
 SurfaceImpl *DisplayNULL::createPixmapSurface(const egl::SurfaceState &state,
@@ -129,22 +123,19 @@ SurfaceImpl *DisplayNULL::createPixmapSurface(const egl::SurfaceState &state,
                                               NativePixmapType nativePixmap,
                                               const egl::AttributeMap &attribs)
 {
-    UNIMPLEMENTED();
-    return static_cast<SurfaceImpl *>(0);
+    return new SurfaceNULL(state);
 }
 
 ImageImpl *DisplayNULL::createImage(EGLenum target,
                                     egl::ImageSibling *buffer,
                                     const egl::AttributeMap &attribs)
 {
-    UNIMPLEMENTED();
-    return static_cast<ImageImpl *>(0);
+    return new ImageNULL();
 }
 
 ContextImpl *DisplayNULL::createContext(const gl::ContextState &state)
 {
-    UNIMPLEMENTED();
-    return static_cast<ContextImpl *>(0);
+    return new ContextNULL(state);
 }
 
 StreamProducerImpl *DisplayNULL::createStreamProducerD3DTextureNV12(
@@ -152,17 +143,46 @@ StreamProducerImpl *DisplayNULL::createStreamProducerD3DTextureNV12(
     const egl::AttributeMap &attribs)
 {
     UNIMPLEMENTED();
-    return static_cast<StreamProducerImpl *>(0);
+    return nullptr;
 }
 
 void DisplayNULL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
-    UNIMPLEMENTED();
+    outExtensions->createContextRobustness            = true;
+    outExtensions->d3dShareHandleClientBuffer         = false;
+    outExtensions->d3dTextureClientBuffer             = false;
+    outExtensions->surfaceD3DTexture2DShareHandle     = false;
+    outExtensions->querySurfacePointer                = false;
+    outExtensions->windowFixedSize                    = false;
+    outExtensions->keyedMutex                         = false;
+    outExtensions->surfaceOrientation                 = false;
+    outExtensions->postSubBuffer                      = true;
+    outExtensions->createContext                      = true;
+    outExtensions->deviceQuery                        = true;
+    outExtensions->image                              = true;
+    outExtensions->imageBase                          = true;
+    outExtensions->imagePixmap                        = false;
+    outExtensions->glTexture2DImage                   = true;
+    outExtensions->glTextureCubemapImage              = true;
+    outExtensions->glTexture3DImage                   = true;
+    outExtensions->glRenderbufferImage                = true;
+    outExtensions->getAllProcAddresses                = true;
+    outExtensions->flexibleSurfaceCompatibility       = true;
+    outExtensions->directComposition                  = true;
+    outExtensions->createContextNoError               = true;
+    outExtensions->stream                             = false;
+    outExtensions->streamConsumerGLTexture            = false;
+    outExtensions->streamConsumerGLTextureYUV         = false;
+    outExtensions->streamProducerD3DTextureNV12       = false;
+    outExtensions->createContextWebGLCompatibility    = true;
+    outExtensions->createContextBindGeneratesResource = true;
+    outExtensions->getSyncValues                      = false;
+    outExtensions->swapBuffersWithDamage              = true;
 }
 
 void DisplayNULL::generateCaps(egl::Caps *outCaps) const
 {
-    UNIMPLEMENTED();
+    outCaps->textureNPOT = true;
 }
 
 }  // namespace rx

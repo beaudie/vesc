@@ -25,4 +25,10 @@ egl::Error SurfaceImpl::swapWithDamage(EGLint *rects, EGLint n_rects)
     return egl::Error(EGL_BAD_SURFACE, "swapWithDamage implementation missing.");
 }
 
+egl::Error SurfaceImpl::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc)
+{
+    UNREACHABLE();
+    return egl::Error(EGL_BAD_SURFACE, "getSyncValues implementation missing.");
+}
+
 }  // namespace rx
