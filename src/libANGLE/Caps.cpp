@@ -776,11 +776,8 @@ DisplayExtensions::DisplayExtensions()
       streamConsumerGLTexture(false),
       streamConsumerGLTextureYUV(false),
       streamProducerD3DTextureNV12(false),
-<<<<<<< 44d0a736545d6babbd57430d42671545e8d3892b
-      createContextWebGLCompatibility(false)
-=======
+      createContextWebGLCompatibility(false),
       getSyncValues(false)
->>>>>>> Progress so far
 {
 }
 

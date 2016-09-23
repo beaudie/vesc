@@ -1097,6 +1097,8 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
 
     outExtensions->flexibleSurfaceCompatibility = true;
     outExtensions->directComposition            = !!mDCompModule;
+
+    outExtensions->getSyncValues = true;
 }
 
 gl::Error Renderer11::flush()

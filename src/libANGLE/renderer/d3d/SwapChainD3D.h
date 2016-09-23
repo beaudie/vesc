@@ -12,6 +12,7 @@
 
 #include <GLES2/gl2.h>
 #include <EGL/egl.h>
+#include <EGL/eglext.h>
 
 #include "common/angleutils.h"
 #include "common/platform.h"
@@ -49,6 +50,8 @@ class SwapChainD3D : angle::NonCopyable
 
     HANDLE getShareHandle() { return mShareHandle; }
     virtual void *getKeyedMutex() = 0;
+
+    virtual EGLint getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc) = 0;
 
   protected:
     const GLenum mOffscreenRenderTargetFormat;

@@ -923,9 +923,6 @@ void Display::initDisplayExtensions()
     // Force EGL_KHR_get_all_proc_addresses on.
     mDisplayExtensions.getAllProcAddresses = true;
 
-    // TODO: remove this hack before check-in
-    mDisplayExtensions.getSyncValues = true;
-
     mDisplayExtensionString = GenerateExtensionsString(mDisplayExtensions);
 }
 

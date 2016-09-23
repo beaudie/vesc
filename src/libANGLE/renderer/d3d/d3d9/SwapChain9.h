@@ -46,6 +46,8 @@ class SwapChain9 : public SwapChainD3D
 
     void *getKeyedMutex() override;
 
+    EGLint getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc) override;
+
   private:
     void release();
 

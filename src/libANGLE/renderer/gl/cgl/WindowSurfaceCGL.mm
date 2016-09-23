@@ -295,12 +295,6 @@ egl::Error WindowSurfaceCGL::releaseTexImage(EGLint buffer)
     return egl::Error(EGL_SUCCESS);
 }
 
-egl::Error getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc)
-{
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_SURFACE);
-}
-
 void WindowSurfaceCGL::setSwapInterval(EGLint interval)
 {
     // TODO(cwallez) investigate implementing swap intervals other than 0
