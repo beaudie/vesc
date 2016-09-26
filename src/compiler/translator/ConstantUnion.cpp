@@ -376,29 +376,61 @@ TConstantUnion TConstantUnion::rshift(const TConstantUnion &lhs,
                                       const TSourceLoc &line)
 {
     TConstantUnion returnValue;
-    ASSERT((lhs.type == rhs.type) && (lhs.type == EbtInt || lhs.type == EbtUInt));
-    switch (lhs.type)
+    ASSERT(lhs.type == EbtInt || lhs.type == EbtUInt);
+    ASSERT(rhs.type == EbtInt || rhs.type == EbtUInt);
+    if ((lhs.type == EbtInt && lhs.iConst < 0) ||
+        (rhs.type == EbtInt && (rhs.iConst < 0 || rhs.iConst > 31)) ||
+        (rhs.type == EbtUInt && rhs.uConst > 31))
     {
-        case EbtInt:
-            if (lhs.iConst < 0 || rhs.iConst < 0)
-            {
-                diag->error(line, "Undefined shift", ">>", "");
+        diag->error(line, "Undefined shift (operand out of range)", ">>", "");
+        switch (lhs.type)
+        {
+            case EbtInt:
                 returnValue.setIConst(0);
-            }
-            else
-            {
-                returnValue.setIConst(lhs.iConst >> rhs.iConst);
-            }
-            break;
-
-        case EbtUInt:
-            returnValue.setUConst(lhs.uConst >> rhs.uConst);
-            break;
-
-        default:
-            UNREACHABLE();
+                break;
+            case EbtUInt:
+                returnValue.setUConst(0u);
+                break;
+            default:
+                UNREACHABLE();
+        }
     }
+    else
+    {
+        switch (lhs.type)
+        {
+            case EbtInt:
+                switch (rhs.type)
+                {
+                    case EbtInt:
+                        returnValue.setIConst(lhs.iConst >> rhs.iConst);
+                        break;
+                    case EbtUInt:
+                        returnValue.setIConst(lhs.iConst >> rhs.uConst);
+                        break;
+                    default:
+                        UNREACHABLE();
+                }
+                break;
 
+            case EbtUInt:
+                switch (rhs.type)
+                {
+                    case EbtInt:
+                        returnValue.setUConst(lhs.uConst >> rhs.iConst);
+                        break;
+                    case EbtUInt:
+                        returnValue.setUConst(lhs.uConst >> rhs.uConst);
+                        break;
+                    default:
+                        UNREACHABLE();
+                }
+                break;
+
+            default:
+                UNREACHABLE();
+        }
+    }
     return returnValue;
 }
 
@@ -409,30 +441,60 @@ TConstantUnion TConstantUnion::lshift(const TConstantUnion &lhs,
                                       const TSourceLoc &line)
 {
     TConstantUnion returnValue;
-    // The signedness of the second parameter might be different, but we
-    // don't care, since the result is undefined if the second parameter is
-    // negative, and aliasing should not be a problem with unions.
-    ASSERT((lhs.type == rhs.type) && (lhs.type == EbtInt || lhs.type == EbtUInt));
-    switch (lhs.type)
+    ASSERT(lhs.type == EbtInt || lhs.type == EbtUInt);
+    ASSERT(rhs.type == EbtInt || rhs.type == EbtUInt);
+    if ((lhs.type == EbtInt && lhs.iConst < 0) ||
+        (rhs.type == EbtInt && (rhs.iConst < 0 || rhs.iConst > 31)) ||
+        (rhs.type == EbtUInt && rhs.uConst > 31))
     {
-        case EbtInt:
-            if (lhs.iConst < 0 || rhs.iConst < 0)
-            {
-                diag->error(line, "Undefined shift", "<<", "");
+        diag->error(line, "Undefined shift (operand out of range)", "<<", "");
+        switch (lhs.type)
+        {
+            case EbtInt:
                 returnValue.setIConst(0);
-            }
-            else
-            {
-                returnValue.setIConst(lhs.iConst << rhs.iConst);
-            }
-            break;
+                break;
+            case EbtUInt:
+                returnValue.setUConst(0u);
+                break;
+            default:
+                UNREACHABLE();
+        }
+    }
+    else
+    {
+        switch (lhs.type)
+        {
+            case EbtInt:
+                switch (rhs.type)
+                {
+                    case EbtInt:
+                        returnValue.setIConst(lhs.iConst << rhs.iConst);
+                        break;
+                    case EbtUInt:
+                        returnValue.setIConst(lhs.iConst << rhs.uConst);
+                        break;
+                    default:
+                        UNREACHABLE();
+                }
+                break;
 
-        case EbtUInt:
-            returnValue.setUConst(lhs.uConst << rhs.uConst);
-            break;
+            case EbtUInt:
+                switch (rhs.type)
+                {
+                    case EbtInt:
+                        returnValue.setUConst(lhs.uConst << rhs.iConst);
+                        break;
+                    case EbtUInt:
+                        returnValue.setUConst(lhs.uConst << rhs.uConst);
+                        break;
+                    default:
+                        UNREACHABLE();
+                }
+                break;
 
-        default:
-            UNREACHABLE();
+            default:
+                UNREACHABLE();
+        }
     }
 
     return returnValue;
