@@ -52,9 +52,18 @@ class BlitGL : public angle::NonCopyable
                                                   const gl::Rectangle &sourceArea,
                                                   const gl::Framebuffer *source);
 
+    gl::Error blitColorBufferWithSRGBWorkaround(
+            const Framebuffer *source,
+            const Framebuffer *dest,
+            const gl::Rectangle &sourceArea,
+            const gl::Rectangle &destArea,
+            GLenum filter);
+
     gl::Error initializeResources();
 
   private:
+    void orphanScratchTextures();
+
     const FunctionsGL *mFunctions;
     const WorkaroundsGL &mWorkarounds;
     StateManagerGL *mStateManager;
