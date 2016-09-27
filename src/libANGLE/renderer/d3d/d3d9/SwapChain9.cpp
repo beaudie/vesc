@@ -397,6 +397,12 @@ void *SwapChain9::getKeyedMutex()
     return nullptr;
 }
 
+EGLint SwapChain9::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc)
+{
+    UNREACHABLE();
+    return EGL_BAD_SURFACE;
+}
+
 void SwapChain9::recreate()
 {
     if (!mSwapChain)
