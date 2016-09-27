@@ -192,10 +192,96 @@ gl::Error BlitGL::copySubImageToLUMAWorkaroundTexture(GLuint texture,
                                   0, sourceArea.width, sourceArea.height);
 
     // Finally orphan the scratch textures so they can be GCed by the driver.
+    orphanScratchTextures();
+
+    return gl::NoError();
+}
+
+gl::Error BlitGL::blitColorBufferWithSRGBWorkaround(
+        const gl::Framebuffer *source,
+        const gl::Framebuffer *dest,
+        const gl::Rectangle &sourceAreaIn,
+        const gl::Rectangle &destAreaIn,
+        GLenum filter)
+{
+    // Normalize the destination area to have positive width and height because we will use
+    // glViewport to set it, which doesn't allow negative width or height.
+    gl::Rectangle sourceArea = sourceAreaIn;
+    gl::Rectangle destArea = destAreaIn;
+    if (destArea.width < 0)
+    {
+        destArea.x += destArea.width;
+        destArea.width = - destArea.width;
+        sourceArea.x += sourceArea.width;
+        sourceArea.width = - sourceArea.width;
+    }
+    if (destArea.height < 0)
+    {
+        destArea.y += destArea.height;
+        destArea.height = - destArea.height;
+        sourceArea.y += sourceArea.height;
+        sourceArea.height = - sourceArea.height;
+    }
+
+    // Get source framebuffer data as a texture, compute scale and offset.
+
+    // Compute src blit region with integers
+    
+
+    GLuint textureId;
+    gl::Vector2 textureRegionOffset;
+    gl::Vector2 textureRegionSize;
+    // TODO(cwallez) once texture dirty bits are landed, reuse texture instead of using CopyTexImage2D
+    {
+        textureId = mScratchTextures[0];
+        // copytex
+        // Setup tex to filter and clamp to edge
+        textureRegionOffset = gl::Vector2(0.0, 0.0);
+        textureRegionSize = gl::Vector2(1.0, 1.0);
+    }
+
+    // Compute normalized src blit region
+    gl::Vector2 normalizedSrcRegionOffset;
+    gl::Vector2 normalizedSrcRegionSize;
+
+    ASSERT(textureRegion.size.x != 0 && textureRegionSize.y != 0);
+    gl::Vector2 texCoordScale = gl::Vector2(
+        normalizedSrcRegionSize.x / textureRegionSize.x,
+        normalizedSrcRegionSize.y / textureRegionSize.y
+    );
+    gl::Vector2 texCoordOffset = gl::Vector2(
+        textureRegionSize.x * textureRegionOffset.x - texCoordScale.x * normalizedSrcRegionSize.x,
+        textureRegionSize.y * textureRegionOffset.y - texCoordScale.y * normalizedSrcRegionSize.y
+    );
+
+    gl::Vector2 texCoordMin = textureRegionOffset;
+    gl::Vector2 texCoordMax = gl::Vector2(
+        texCoordMin.x + textureRegionSize.x,
+        texCoordMin.y + textureRegionSize.y,
+    );
+
+    // Reset all the state except scissor and viewport
+    mStateManager->setDepthRange(0.0f, 1.0f);
+    mStateManager->setBlendEnabled(false);
+    mStateManager->setColorMask(true, true, true, true);
+    mStateManager->setSampleAlphaToCoverageEnabled(false);
+    mStateManager->setSampleCoverageEnabled(false);
+    mStateManager->setDepthTestEnabled(false);
+    mStateManager->setStencilTestEnabled(false);
+    mStateManager->setCullFaceEnabled(false);
+    mStateManager->setPolygonOffsetFillEnabled(false);
+    mStateManager->setRasterizerDiscardEnabled(false);
+
+    // Use the viewport to draw exactly to the destination rectangle
+    mStateManager->setViewport(gl::Rectangle(destArea.x, destArea.y, destArea.width, destArea.height));
+
+    // Set uniforms
+    mStateManager->useProgram(mBlitProgram);
+    mStateManager->activeTexture(0);
     mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[0]);
-    mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[1]);
-    mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    mStateManager->bindVertexArray(mVAO, 0);
+    mFunctions->drawArrays(GL_TRIANGLES, 0, 6);
 
     return gl::NoError();
 }
@@ -289,4 +375,14 @@ gl::Error BlitGL::initializeResources()
 
     return gl::NoError();
 }
+
+void BlitGL::orphanScratchTextures()
+{
+    mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[0]);
+    mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[1]);
+    mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+}
+
 }
