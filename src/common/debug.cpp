@@ -171,4 +171,20 @@ ScopedPerfEventHelper::~ScopedPerfEventHelper()
     }
 }
 
+}  // namespace gl
+
+namespace angle
+{
+
+LogMessage::LogMessage(const char *file, int line, LogSeverity severity)
+{
+    // TODO(jmadill)
 }
+
+std::ostream &LogMessage::stream()
+{
+    // TODO(jmadill)
+    return std::cerr;
+}
+
+}  // namespace angle

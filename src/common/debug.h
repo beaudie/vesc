@@ -159,4 +159,76 @@ bool DebugAnnotationsActive();
     #define UNREACHABLE() ERR("\t! Unreachable reached: %s(%d)\n", __FUNCTION__, __LINE__)
 #endif
 
+// Based on code from Chromium's base/logging.h
+#if defined(COMPILER_GCC) || __clang__
+#define ANGLE_LOGGING_CRASH() __builtin_trap()
+#else
+#define ANGLE_LOGGING_CRASH() ((void)(*(volatile char *)0 = 0))
+#endif
+
+namespace angle
+{
+
+// This class is used to explicitly ignore values in the conditional
+// logging macros.  This avoids compiler warnings like "value computed
+// is not used" and "statement has no effect".
+class LogMessageVoidify
+{
+  public:
+    LogMessageVoidify() {}
+    // This has to be an operator with a precedence lower than << but
+    // higher than ?:
+    void operator&(std::ostream &) {}
+};
+
+typedef int LogSeverity;
+const LogSeverity LOG_VERBOSE = -1;  // This is level 1 verbosity
+// Note: the log severities are used to index into the array of names,
+// see log_severity_names.
+const LogSeverity LOG_INFO           = 0;
+const LogSeverity LOG_WARNING        = 1;
+const LogSeverity LOG_ERROR          = 2;
+const LogSeverity LOG_FATAL          = 3;
+const LogSeverity LOG_NUM_SEVERITIES = 4;
+
+// This class more or less represents a particular log message.  You
+// create an instance of LogMessage and then stream stuff to it.
+// When you finish streaming to it, ~LogMessage is called and the
+// full message gets streamed to the appropriate destination.
+//
+// You shouldn't actually use LogMessage's constructor to log things,
+// though.  You should use the LOG() macro (and variants thereof)
+// above.
+class LogMessage
+{
+  public:
+    // Used for LOG(severity).
+    LogMessage(const char *file, int line, LogSeverity severity);
+
+    std::ostream &stream();
+};
+
+}  // namespace angle
+
+#define ANGLE_COMPACT_LOG_EX_FATAL(ClassName, ...) \
+    ::angle::ClassName(__FILE__, __LINE__, ::angle::LOG_FATAL, ##__VA_ARGS__)
+
+#define ANGLE_COMPACT_LOG_FATAL ANGLE_COMPACT_LOG_EX_FATAL(LogMessage)
+
+// We use the preprocessor's merging operator, "##", so that, e.g.,
+// LOG(INFO) becomes the token COMPACT_GOOGLE_LOG_INFO.  There's some funny
+// subtle difference between ostream member streaming functions (e.g.,
+// ostream::operator<<(int) and ostream non-member streaming functions
+// (e.g., ::operator<<(ostream&, string&): it turns out that it's
+// impossible to stream something like a string directly to an unnamed
+// ostream. We employ a neat hack by calling the stream() member
+// function of LogMessage which seems to avoid the problem.
+#define ANGLE_LOG_STREAM(severity) ANGLE_COMPACT_LOG_##severity.stream()
+
+#define ANGLE_EAT_STREAM_PARAMETERS \
+    true ? (void)0 : ::angle::LogMessageVoidify() & ANGLE_LOG_STREAM(FATAL)
+
+#define ANGLE_CRASH_CHECK(condition) \
+    !(condition) ? ANGLE_LOGGING_CRASH() : ANGLE_EAT_STREAM_PARAMETERS
+
 #endif   // COMMON_DEBUG_H_
