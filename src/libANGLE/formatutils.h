@@ -59,29 +59,20 @@ struct InternalFormat
                                                 GLint alignment,
                                                 GLint rowLength,
                                                 GLint imageHeight) const;
+
     gl::ErrorOrResult<GLuint> computeCompressedImageSize(GLenum formatType,
                                                          const gl::Extents &size) const;
+
     gl::ErrorOrResult<GLuint> computeSkipBytes(GLuint rowPitch,
                                                GLuint depthPitch,
-                                               GLint skipImages,
-                                               GLint skipRows,
-                                               GLint skipPixels,
-                                               bool applySkipImages) const;
+                                               const gl::PackUnpackStateBase &state,
+                                               bool is3D) const;
 
-    gl::ErrorOrResult<GLuint> computePackSize(GLenum formatType,
-                                              const gl::Extents &size,
-                                              const gl::PixelPackState &pack) const;
-    gl::ErrorOrResult<GLuint> computeUnpackSize(GLenum formatType,
-                                                const gl::Extents &size,
-                                                const gl::PixelUnpackState &unpack) const;
+    gl::ErrorOrResult<GLuint> computePackUnpackEndByte(GLenum formatType,
+                                                       const gl::Extents &size,
+                                                       const gl::PackUnpackStateBase &state,
+                                                       bool is3D) const;
 
-    gl::ErrorOrResult<GLuint> computePackEndByte(GLenum formatType,
-                                                 const gl::Extents &size,
-                                                 const gl::PixelPackState &pack) const;
-    gl::ErrorOrResult<GLuint> computeUnpackEndByte(GLenum formatType,
-                                                   const gl::Extents &size,
-                                                   const gl::PixelUnpackState &unpack,
-                                                   bool applySkipImages) const;
     bool isLUMA() const;
     GLenum getReadPixelsFormat() const;
     GLenum getReadPixelsType() const;

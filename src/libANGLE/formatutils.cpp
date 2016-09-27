@@ -917,19 +917,17 @@ gl::ErrorOrResult<GLuint> InternalFormat::computeCompressedImageSize(GLenum form
 
 gl::ErrorOrResult<GLuint> InternalFormat::computeSkipBytes(GLuint rowPitch,
                                                            GLuint depthPitch,
-                                                           GLint skipImages,
-                                                           GLint skipRows,
-                                                           GLint skipPixels,
-                                                           bool applySkipImages) const
+                                                           const gl::PackUnpackStateBase &state,
+                                                           bool is3D) const
 {
     CheckedNumeric<GLuint> checkedRowPitch(rowPitch);
     CheckedNumeric<GLuint> checkedDepthPitch(depthPitch);
-    CheckedNumeric<GLuint> checkedSkipImages(static_cast<GLuint>(skipImages));
-    CheckedNumeric<GLuint> checkedSkipRows(static_cast<GLuint>(skipRows));
-    CheckedNumeric<GLuint> checkedSkipPixels(static_cast<GLuint>(skipPixels));
+    CheckedNumeric<GLuint> checkedSkipImages(static_cast<GLuint>(state.skipImages));
+    CheckedNumeric<GLuint> checkedSkipRows(static_cast<GLuint>(state.skipRows));
+    CheckedNumeric<GLuint> checkedSkipPixels(static_cast<GLuint>(state.skipPixels));
     CheckedNumeric<GLuint> checkedPixelBytes(pixelBytes);
     auto checkedSkipImagesBytes = checkedSkipImages * checkedDepthPitch;
-    if (!applySkipImages)
+    if (!is3D)
     {
         checkedSkipImagesBytes = 0;
     }
@@ -939,108 +937,46 @@ gl::ErrorOrResult<GLuint> InternalFormat::computeSkipBytes(GLuint rowPitch,
     return skipBytes.ValueOrDie();
 }
 
-gl::ErrorOrResult<GLuint> InternalFormat::computePackSize(GLenum formatType,
-                                                          const gl::Extents &size,
-                                                          const gl::PixelPackState &pack) const
-{
-    ASSERT(!compressed);
-
-    if (size.height == 0)
-    {
-        return 0;
-    }
-
-    CheckedNumeric<GLuint> rowPitch;
-    ANGLE_TRY_RESULT(computeRowPitch(formatType, size.width, pack.alignment, pack.rowLength),
-                     rowPitch);
-
-    CheckedNumeric<GLuint> heightMinusOne = size.height - 1;
-    CheckedNumeric<GLuint> bytes          = computePixelBytes(formatType);
-
-    CheckedNumeric<GLuint> totalSize = heightMinusOne * rowPitch;
-    totalSize += size.width * bytes;
-
-    ANGLE_TRY_CHECKED_MATH(totalSize);
-
-    return totalSize.ValueOrDie();
-}
-
-gl::ErrorOrResult<GLuint> InternalFormat::computeUnpackSize(
+gl::ErrorOrResult<GLuint> InternalFormat::computePackUnpackEndByte(
     GLenum formatType,
     const gl::Extents &size,
-    const gl::PixelUnpackState &unpack) const
+    const gl::PackUnpackStateBase &state,
+    bool is3D) const
 {
-    // Compressed images do not use unpack parameters.
+    GLuint depthPitch = 0;
+    if (is3D)
+    {
+        ANGLE_TRY_RESULT(computeDepthPitch(formatType, size.width, size.height, state.alignment,
+                                           state.rowLength, state.imageHeight),
+                         depthPitch);
+    }
+
+    GLuint rowPitch = 0;
+    ANGLE_TRY_RESULT(computeRowPitch(formatType, size.width, state.alignment, state.rowLength),
+                     rowPitch);
+
+    CheckedNumeric<GLuint> checkedCopyBytes = 0;
     if (compressed)
     {
-        return computeCompressedImageSize(formatType, size);
+        ANGLE_TRY_RESULT(computeCompressedImageSize(formatType, size), checkedCopyBytes);
     }
-
-    if (size.height == 0 || size.depth == 0)
+    else if (size.height != 0 && (!is3D || size.depth != 0))
     {
-        return 0;
+        CheckedNumeric<GLuint> bytes = computePixelBytes(formatType);
+        checkedCopyBytes += size.width * bytes;
+
+        CheckedNumeric<GLuint> heightMinusOne = size.height - 1;
+        checkedCopyBytes += heightMinusOne * rowPitch;
+
+        if (is3D)
+        {
+            CheckedNumeric<GLuint> depthMinusOne = size.depth - 1;
+            checkedCopyBytes += depthMinusOne * depthPitch;
+        }
     }
 
-    CheckedNumeric<GLuint> rowPitch;
-    CheckedNumeric<GLuint> depthPitch;
-    ANGLE_TRY_RESULT(computeRowPitch(formatType, size.width, unpack.alignment, unpack.rowLength),
-                     rowPitch);
-    ANGLE_TRY_RESULT(computeDepthPitch(formatType, size.width, size.height, unpack.alignment,
-                                       unpack.rowLength, unpack.imageHeight),
-                     depthPitch);
-
-    CheckedNumeric<GLuint> depthMinusOne  = size.depth - 1;
-    CheckedNumeric<GLuint> heightMinusOne = size.height - 1;
-    CheckedNumeric<GLuint> bytes          = computePixelBytes(formatType);
-
-    CheckedNumeric<GLuint> totalSize = depthMinusOne * depthPitch;
-    totalSize += heightMinusOne * rowPitch;
-    totalSize += size.width * bytes;
-
-    ANGLE_TRY_CHECKED_MATH(totalSize);
-
-    return totalSize.ValueOrDie();
-}
-
-gl::ErrorOrResult<GLuint> InternalFormat::computePackEndByte(GLenum formatType,
-                                                             const gl::Extents &size,
-                                                             const gl::PixelPackState &pack) const
-{
-    GLuint rowPitch;
-    CheckedNumeric<GLuint> checkedSkipBytes;
-    CheckedNumeric<GLuint> checkedCopyBytes;
-
-    ANGLE_TRY_RESULT(computeRowPitch(formatType, size.width, pack.alignment, pack.rowLength),
-                     rowPitch);
-    ANGLE_TRY_RESULT(computeSkipBytes(rowPitch, 0, 0, pack.skipRows, pack.skipPixels, false),
-                     checkedSkipBytes);
-    ANGLE_TRY_RESULT(computePackSize(formatType, size, pack), checkedCopyBytes);
-
-    CheckedNumeric<GLuint> endByte = checkedCopyBytes + checkedSkipBytes;
-
-    ANGLE_TRY_CHECKED_MATH(endByte);
-    return endByte.ValueOrDie();
-}
-
-gl::ErrorOrResult<GLuint> InternalFormat::computeUnpackEndByte(GLenum formatType,
-                                                               const gl::Extents &size,
-                                                               const gl::PixelUnpackState &unpack,
-                                                               bool applySkipImages) const
-{
-    GLuint rowPitch;
-    GLuint depthPitch;
-    CheckedNumeric<GLuint> checkedSkipBytes;
-    CheckedNumeric<GLuint> checkedCopyBytes;
-
-    ANGLE_TRY_RESULT(computeRowPitch(formatType, size.width, unpack.alignment, unpack.rowLength),
-                     rowPitch);
-    ANGLE_TRY_RESULT(computeDepthPitch(formatType, size.width, size.height, unpack.alignment,
-                                       unpack.rowLength, unpack.imageHeight),
-                     depthPitch);
-    ANGLE_TRY_RESULT(computeSkipBytes(rowPitch, depthPitch, unpack.skipImages, unpack.skipRows,
-                                      unpack.skipPixels, applySkipImages),
-                     checkedSkipBytes);
-    ANGLE_TRY_RESULT(computeUnpackSize(formatType, size, unpack), checkedCopyBytes);
+    CheckedNumeric<GLuint> checkedSkipBytes = 0;
+    ANGLE_TRY_RESULT(computeSkipBytes(rowPitch, depthPitch, state, is3D), checkedSkipBytes);
 
     CheckedNumeric<GLuint> endByte = checkedCopyBytes + checkedSkipBytes;
 
