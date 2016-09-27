@@ -1612,6 +1612,8 @@ void Context::getBooleani_v(GLenum target, GLuint index, GLboolean *data)
 
 Error Context::drawArrays(GLenum mode, GLint first, GLsizei count)
 {
+    Sleep(1);
+
     syncRendererState();
     ANGLE_TRY(mImplementation->drawArrays(mode, first, count));
     MarkTransformFeedbackBufferUsage(mGLState.getCurrentTransformFeedback());
