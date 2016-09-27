@@ -192,10 +192,131 @@ gl::Error BlitGL::copySubImageToLUMAWorkaroundTexture(GLuint texture,
                                   0, sourceArea.width, sourceArea.height);
 
     // Finally orphan the scratch textures so they can be GCed by the driver.
+    orphanScratchTextures();
+
+    return gl::NoError();
+}
+
+gl::Error BlitGL::blitColorBufferWithSRGBWorkaround(
+        const gl::Framebuffer *source,
+        const gl::Framebuffer *dest,
+        const gl::Rectangle &sourceAreaIn,
+        const gl::Rectangle &destAreaIn,
+        GLenum filter)
+{
+    // Normalize the destination area to have positive width and height because we will use
+    // glViewport to set it, which doesn't allow negative width or height.
+    gl::Rectangle sourceArea = sourceAreaIn;
+    gl::Rectangle destArea = destAreaIn;
+    if (destArea.width < 0)
+    {
+        destArea.x += destArea.width;
+        destArea.width = - destArea.width;
+        sourceArea.x += sourceArea.width;
+        sourceArea.width = - sourceArea.width;
+    }
+    if (destArea.height < 0)
+    {
+        destArea.y += destArea.height;
+        destArea.height = - destArea.height;
+        sourceArea.y += sourceArea.height;
+        sourceArea.height = - sourceArea.height;
+    }
+
+    // The blit will be emulated by getting the source of the blit in a texture and sampling it
+    // with CLAMP_TO_EDGE. The quad used to draw can trivial compute texture coordinates going
+    // from (0, 0) to (1, 1). These texture coordinates will need to be transformed to make two
+    // regions match:
+    //  - The region of the texture representing the source framebuffer region that will be sampled
+    //  - The region of the drawn quad that corresponds to non-clamped blit
+    //
+    //  These two regions, T (texture) and D (dest) are defined by their offset in texcoord space
+    //  in (0, 1)^2 and their size in texcoord space in (0, 1)^2. The size can be negative.
+    //
+    //  Then if P is the quad texcoord, Q the texcoord inside T, and R the texture texcoord:
+    //    - Q = (P - D.offset) / D.size
+    //    - Q = (R - T.offset) / T.size
+    //  Hence R = (P - D.offset) / D.size * T.size - T.offset
+    //          = P * (T.size / D.size) + (T.offset - D.offset * T.size / D.size)
+
+    GLuint textureId;
+    gl::Vector2 TOffset;
+    gl::Vector2 TSize;
+
+    // TODO(cwallez) once texture dirty bits are landed, reuse texture instead of using CopyTexImage2D
+    {
+        textureId = mScratchTextures[0];
+        TOffset = gl::Vector2(0.0, 0.0);
+        TSize = gl::Vector2(1.0, 1.0);
+
+        int copyX = sourceArea.x;
+        int copyY = sourceArea.y;
+        int copyWidth = sourceArea.width;
+        int copyHeight = sourceArea.height;
+
+        if (copyWidth < 0)
+        {
+            copyX -= copyWidth;
+            copyWidth = - copyWidth;
+            TOffset.x = 1.0;
+            TSize.x = -1.0;
+        }
+        if (copyHeight < 0)
+        {
+            copyY -= copyHeight;
+            copyHeight = - copyHeight;
+            TOffset.y = 1.0;
+            TSize.y = -1.0;
+        }
+
+        const gl::FramebufferAttachment* readAttachment = source->getReadColorbuffer();
+        GLenum format = readAttachment->getFormat().info->internalFormat;
+        const FramebufferGL *sourceGL = GetImplAs<FramebufferGL>(source);
+        mStateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, sourceGL->getFramebufferID());
+        mStateManager->bindTexture(GL_TEXTURE_2D, textureId);
+
+        mFunctions->copyTexImage2D(GL_TEXTURE_2D, 0, format, copyX, copyY, copyWidth, copyHeight, 0);
+        // Setup tex to filter and clamp to edge
+        // TODO: reset state in other workaround too.
+    }
+
+    // Compute normalized draw quad region
+    gl::Vector2 DOffset;
+    gl::Vector2 DSize;
+
+    // TODO assert or early exit
+    gl::Vector2 texCoordScale = gl::Vector2(
+        TSize.x / DSize.x,
+        TSize.y / DSize.y
+    );
+    gl::Vector2 texCoordOffset = gl::Vector2(
+        TOffset.x - DOffset.x * texCoordScale.x,
+        TOffset.y - DOffset.y * texCoordScale.y
+    );
+    (void)texCoordOffset;
+
+    // Reset all the state except scissor and viewport
+    mStateManager->setDepthRange(0.0f, 1.0f);
+    mStateManager->setBlendEnabled(false);
+    mStateManager->setColorMask(true, true, true, true);
+    mStateManager->setSampleAlphaToCoverageEnabled(false);
+    mStateManager->setSampleCoverageEnabled(false);
+    mStateManager->setDepthTestEnabled(false);
+    mStateManager->setStencilTestEnabled(false);
+    mStateManager->setCullFaceEnabled(false);
+    mStateManager->setPolygonOffsetFillEnabled(false);
+    mStateManager->setRasterizerDiscardEnabled(false);
+
+    // Use the viewport to draw exactly to the destination rectangle
+    mStateManager->setViewport(gl::Rectangle(destArea.x, destArea.y, destArea.width, destArea.height));
+
+    // Set uniforms
+    mStateManager->useProgram(mBlitProgram);
+    mStateManager->activeTexture(0);
     mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[0]);
-    mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[1]);
-    mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    mStateManager->bindVertexArray(mVAO, 0);
+    mFunctions->drawArrays(GL_TRIANGLES, 0, 6);
 
     return gl::NoError();
 }
@@ -289,4 +410,14 @@ gl::Error BlitGL::initializeResources()
 
     return gl::NoError();
 }
+
+void BlitGL::orphanScratchTextures()
+{
+    mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[0]);
+    mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[1]);
+    mFunctions->texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+}
+
 }
