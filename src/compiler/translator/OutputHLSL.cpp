@@ -31,11 +31,6 @@
 namespace
 {
 
-bool IsSequence(TIntermNode *node)
-{
-    return node->getAsAggregate() != nullptr && node->getAsAggregate()->getOp() == EOpSequence;
-}
-
 void WriteSingleConstant(TInfoSinkBase &out, const TConstantUnion *const constUnion)
 {
     ASSERT(constUnion != nullptr);
@@ -1418,163 +1413,174 @@ TString OutputHLSL::samplerNamePrefixFromStruct(TIntermTyped *node)
     }
 }
 
+bool OutputHLSL::visitBlock(Visit visit, TIntermBlock *node)
+{
+    TInfoSinkBase &out = getInfoSink();
+
+    if (mInsideFunction)
+    {
+        outputLineDirective(out, node->getLine().first_line);
+        out << "{\n";
+    }
+
+    for (TIntermSequence::iterator sit = node->getSequence()->begin();
+         sit != node->getSequence()->end(); sit++)
+    {
+        outputLineDirective(out, (*sit)->getLine().first_line);
+
+        (*sit)->traverse(this);
+
+        // Don't output ; after case labels, they're terminated by :
+        // This is needed especially since outputting a ; after a case statement would turn empty
+        // case statements into non-empty case statements, disallowing fall-through from them.
+        // Also no need to output ; after if statements or sequences. This is done just for
+        // code clarity.
+        if ((*sit)->getAsCaseNode() == nullptr && (*sit)->getAsIfElseNode() == nullptr &&
+            (*sit)->getAsBlock() == nullptr)
+            out << ";\n";
+    }
+
+    if (mInsideFunction)
+    {
+        outputLineDirective(out, node->getLine().last_line);
+        out << "}\n";
+    }
+
+    return false;
+}
+
 bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
 {
     TInfoSinkBase &out = getInfoSink();
 
     switch (node->getOp())
     {
-      case EOpSequence:
-        {
-            if (mInsideFunction)
+        case EOpDeclaration:
+            if (visit == PreVisit)
             {
-                outputLineDirective(out, node->getLine().first_line);
-                out << "{\n";
-            }
+                TIntermSequence *sequence = node->getSequence();
+                TIntermTyped *variable    = (*sequence)[0]->getAsTyped();
+                ASSERT(sequence->size() == 1);
 
-            for (TIntermSequence::iterator sit = node->getSequence()->begin(); sit != node->getSequence()->end(); sit++)
-            {
-                outputLineDirective(out, (*sit)->getLine().first_line);
-
-                (*sit)->traverse(this);
-
-                // Don't output ; after case labels, they're terminated by :
-                // This is needed especially since outputting a ; after a case statement would turn empty
-                // case statements into non-empty case statements, disallowing fall-through from them.
-                // Also no need to output ; after if statements or sequences. This is done just for
-                // code clarity.
-                if ((*sit)->getAsCaseNode() == nullptr && (*sit)->getAsIfElseNode() == nullptr &&
-                    !IsSequence(*sit))
-                    out << ";\n";
-            }
-
-            if (mInsideFunction)
-            {
-                outputLineDirective(out, node->getLine().last_line);
-                out << "}\n";
-            }
-
-            return false;
-        }
-      case EOpDeclaration:
-        if (visit == PreVisit)
-        {
-            TIntermSequence *sequence = node->getSequence();
-            TIntermTyped *variable = (*sequence)[0]->getAsTyped();
-            ASSERT(sequence->size() == 1);
-
-            if (variable &&
-                (variable->getQualifier() == EvqTemporary ||
-                 variable->getQualifier() == EvqGlobal || variable->getQualifier() == EvqConst))
-            {
-                ensureStructDefined(variable->getType());
-
-                if (!variable->getAsSymbolNode() || variable->getAsSymbolNode()->getSymbol() != "")   // Variable declaration
+                if (variable &&
+                    (variable->getQualifier() == EvqTemporary ||
+                     variable->getQualifier() == EvqGlobal || variable->getQualifier() == EvqConst))
                 {
-                    if (!mInsideFunction)
+                    ensureStructDefined(variable->getType());
+
+                    if (!variable->getAsSymbolNode() ||
+                        variable->getAsSymbolNode()->getSymbol() != "")  // Variable declaration
                     {
-                        out << "static ";
+                        if (!mInsideFunction)
+                        {
+                            out << "static ";
+                        }
+
+                        out << TypeString(variable->getType()) + " ";
+
+                        TIntermSymbol *symbol = variable->getAsSymbolNode();
+
+                        if (symbol)
+                        {
+                            symbol->traverse(this);
+                            out << ArrayString(symbol->getType());
+                            out << " = " + initializer(symbol->getType());
+                        }
+                        else
+                        {
+                            variable->traverse(this);
+                        }
                     }
-
-                    out << TypeString(variable->getType()) + " ";
-
-                    TIntermSymbol *symbol = variable->getAsSymbolNode();
-
-                    if (symbol)
+                    else if (variable->getAsSymbolNode() &&
+                             variable->getAsSymbolNode()->getSymbol() ==
+                                 "")  // Type (struct) declaration
                     {
-                        symbol->traverse(this);
-                        out << ArrayString(symbol->getType());
-                        out << " = " + initializer(symbol->getType());
+                        // Already added to constructor map
                     }
                     else
-                    {
-                        variable->traverse(this);
-                    }
+                        UNREACHABLE();
                 }
-                else if (variable->getAsSymbolNode() && variable->getAsSymbolNode()->getSymbol() == "")   // Type (struct) declaration
+                else if (variable && IsVaryingOut(variable->getQualifier()))
                 {
-                    // Already added to constructor map
-                }
-                else UNREACHABLE();
-            }
-            else if (variable && IsVaryingOut(variable->getQualifier()))
-            {
-                for (TIntermSequence::iterator sit = sequence->begin(); sit != sequence->end(); sit++)
-                {
-                    TIntermSymbol *symbol = (*sit)->getAsSymbolNode();
+                    for (TIntermSequence::iterator sit = sequence->begin(); sit != sequence->end();
+                         sit++)
+                    {
+                        TIntermSymbol *symbol = (*sit)->getAsSymbolNode();
 
-                    if (symbol)
-                    {
-                        // Vertex (output) varyings which are declared but not written to should still be declared to allow successful linking
-                        mReferencedVaryings[symbol->getSymbol()] = symbol;
-                    }
-                    else
-                    {
-                        (*sit)->traverse(this);
+                        if (symbol)
+                        {
+                            // Vertex (output) varyings which are declared but not written to should
+                            // still be declared to allow successful linking
+                            mReferencedVaryings[symbol->getSymbol()] = symbol;
+                        }
+                        else
+                        {
+                            (*sit)->traverse(this);
+                        }
                     }
                 }
-            }
 
-            return false;
-        }
-        else if (visit == InVisit)
-        {
-            out << ", ";
-        }
-        break;
-      case EOpInvariantDeclaration:
-        // Do not do any translation
-        return false;
-      case EOpPrototype:
-        if (visit == PreVisit)
-        {
-            size_t index = mCallDag.findIndex(node);
-            // Skip the prototype if it is not implemented (and thus not used)
-            if (index == CallDAG::InvalidIndex)
-            {
                 return false;
             }
-
-            TIntermSequence *arguments = node->getSequence();
-
-            TString name = DecorateFunctionIfNeeded(node->getNameObj());
-            out << TypeString(node->getType()) << " " << name << DisambiguateFunctionName(arguments)
-                << (mOutputLod0Function ? "Lod0(" : "(");
-
-            for (unsigned int i = 0; i < arguments->size(); i++)
+            else if (visit == InVisit)
             {
-                TIntermSymbol *symbol = (*arguments)[i]->getAsSymbolNode();
-
-                if (symbol)
-                {
-                    out << argumentString(symbol);
-
-                    if (i < arguments->size() - 1)
-                    {
-                        out << ", ";
-                    }
-                }
-                else UNREACHABLE();
+                out << ", ";
             }
-
-            out << ");\n";
-
-            // Also prototype the Lod0 variant if needed
-            bool needsLod0 = mASTMetadataList[index].mNeedsLod0;
-            if (needsLod0 && !mOutputLod0Function && mShaderType == GL_FRAGMENT_SHADER)
-            {
-                mOutputLod0Function = true;
-                node->traverse(this);
-                mOutputLod0Function = false;
-            }
-
+            break;
+        case EOpInvariantDeclaration:
+            // Do not do any translation
             return false;
-        }
-        break;
-      case EOpComma:
-          outputTriplet(out, visit, "(", ", ", ")");
-          break;
-      case EOpFunction:
+        case EOpPrototype:
+            if (visit == PreVisit)
+            {
+                size_t index = mCallDag.findIndex(node);
+                // Skip the prototype if it is not implemented (and thus not used)
+                if (index == CallDAG::InvalidIndex)
+                {
+                    return false;
+                }
+
+                TIntermSequence *arguments = node->getSequence();
+
+                TString name = DecorateFunctionIfNeeded(node->getNameObj());
+                out << TypeString(node->getType()) << " " << name
+                    << DisambiguateFunctionName(arguments) << (mOutputLod0Function ? "Lod0(" : "(");
+
+                for (unsigned int i = 0; i < arguments->size(); i++)
+                {
+                    TIntermSymbol *symbol = (*arguments)[i]->getAsSymbolNode();
+
+                    if (symbol)
+                    {
+                        out << argumentString(symbol);
+
+                        if (i < arguments->size() - 1)
+                        {
+                            out << ", ";
+                        }
+                    }
+                    else
+                        UNREACHABLE();
+                }
+
+                out << ");\n";
+
+                // Also prototype the Lod0 variant if needed
+                bool needsLod0 = mASTMetadataList[index].mNeedsLod0;
+                if (needsLod0 && !mOutputLod0Function && mShaderType == GL_FRAGMENT_SHADER)
+                {
+                    mOutputLod0Function = true;
+                    node->traverse(this);
+                    mOutputLod0Function = false;
+                }
+
+                return false;
+            }
+            break;
+        case EOpComma:
+            outputTriplet(out, visit, "(", ", ", ")");
+            break;
+        case EOpFunction:
         {
             ASSERT(mCurrentFunctionMetadata == nullptr);
             TString name = TFunction::unmangleName(node->getNameObj().getString());
@@ -1622,7 +1628,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
             ASSERT(sequence->size() == 2);
             TIntermNode *body = (*sequence)[1];
             // The function body node will output braces.
-            ASSERT(IsSequence(body));
+            ASSERT(body->getAsBlock() != nullptr);
             body->traverse(this);
             mInsideFunction = false;
 
@@ -1922,8 +1928,6 @@ void OutputHLSL::writeIfElse(TInfoSinkBase &out, TIntermIfElse *node)
     if (node->getTrueBlock())
     {
         // The trueBlock child node will output braces.
-        ASSERT(IsSequence(node->getTrueBlock()));
-
         node->getTrueBlock()->traverse(this);
 
         // Detect true discard
@@ -1945,8 +1949,6 @@ void OutputHLSL::writeIfElse(TInfoSinkBase &out, TIntermIfElse *node)
         outputLineDirective(out, node->getFalseBlock()->getLine().first_line);
 
         // The falseBlock child node will output braces.
-        ASSERT(IsSequence(node->getFalseBlock()));
-
         node->getFalseBlock()->traverse(this);
 
         outputLineDirective(out, node->getFalseBlock()->getLine().first_line);
@@ -2086,7 +2088,6 @@ bool OutputHLSL::visitLoop(Visit visit, TIntermLoop *node)
     if (node->getBody())
     {
         // The loop body node will output braces.
-        ASSERT(IsSequence(node->getBody()));
         node->getBody()->traverse(this);
     }
     else
@@ -2176,15 +2177,15 @@ bool OutputHLSL::visitBranch(Visit visit, TIntermBranch *node)
 
 bool OutputHLSL::isSingleStatement(TIntermNode *node)
 {
-    TIntermAggregate *aggregate = node->getAsAggregate();
+    if (node->getAsBlock())
+    {
+        return false;
+    }
 
+    TIntermAggregate *aggregate = node->getAsAggregate();
     if (aggregate)
     {
-        if (aggregate->getOp() == EOpSequence)
-        {
-            return false;
-        }
-        else if (aggregate->getOp() == EOpDeclaration)
+        if (aggregate->getOp() == EOpDeclaration)
         {
             // Declaring multiple comma-separated variables must be considered multiple statements
             // because each individual declaration has side effects which are visible in the next.
