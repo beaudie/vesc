@@ -335,6 +335,18 @@ TEST_P(RobustClientMemoryTest, TexImage2D)
     }
 }
 
+// Test basic usage and validation of glReadPixelsRobustANGLE
+TEST_P(RobustClientMemoryTest, ReadPixels)
+{
+    if (!extensionsPresent())
+    {
+        return;
+    }
+
+    GLsizei dataDimension = 1024;
+    std::vector<GLubyte> rgbaData(dataDimension * dataDimension * 4);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(RobustClientMemoryTest,
