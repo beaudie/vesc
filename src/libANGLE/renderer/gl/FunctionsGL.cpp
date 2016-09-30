@@ -58,7 +58,11 @@ static std::vector<std::string> GetIndexedExtensions(PFNGLGETINTEGERVPROC getInt
 template <typename T>
 static void AssignGLEntryPoint(void *function, T *outFunction)
 {
-    *outFunction = reinterpret_cast<T>(function);
+    ASSERT(function != nullptr);
+    if (function != nullptr)
+    {
+        *outFunction = reinterpret_cast<T>(function);
+    }
 }
 
 template <typename T>
@@ -75,7 +79,11 @@ static void AssignGLExtensionEntryPoint(const std::vector<std::string> &extensio
         }
     }
 
-    *outFunction = reinterpret_cast<T>(function);
+    ASSERT(function != nullptr);
+    if (function != nullptr)
+    {
+        *outFunction = reinterpret_cast<T>(function);
+    }
 }
 
 FunctionsGL::FunctionsGL()
@@ -907,7 +915,6 @@ void FunctionsGL::initializeProcsDesktopGL()
     AssignGLExtensionEntryPoint(extensions, "GL_ARB_sync", loadProcAddress("glClientWaitSync"), &clientWaitSync);
     AssignGLExtensionEntryPoint(extensions, "GL_ARB_sync", loadProcAddress("glDeleteSync"), &deleteSync);
     AssignGLExtensionEntryPoint(extensions, "GL_ARB_sync", loadProcAddress("glFenceSync"), &fenceSync);
-    AssignGLExtensionEntryPoint(extensions, "GL_ARB_sync", loadProcAddress("glGetInteger64i_v"), &getInteger64i_v);
     AssignGLExtensionEntryPoint(extensions, "GL_ARB_sync", loadProcAddress("glGetInteger64v"), &getInteger64v);
     AssignGLExtensionEntryPoint(extensions, "GL_ARB_sync", loadProcAddress("glGetSynciv"), &getSynciv);
     AssignGLExtensionEntryPoint(extensions, "GL_ARB_sync", loadProcAddress("glIsSync"), &isSync);
@@ -1878,7 +1885,7 @@ void FunctionsGL::initializeProcsGLES()
     AssignGLExtensionEntryPoint(extensions, "GL_EXT_disjoint_timer_query", loadProcAddress("glEndQueryEXT"), &endQuery);
     AssignGLExtensionEntryPoint(extensions, "GL_EXT_disjoint_timer_query", loadProcAddress("glQueryCounterEXT"), &queryCounter);
     AssignGLExtensionEntryPoint(extensions, "GL_EXT_disjoint_timer_query", loadProcAddress("glGetQueryivEXT"), &getQueryiv);
-    AssignGLExtensionEntryPoint(extensions, "GL_EXT_disjoint_timer_query", loadProcAddress("glGetQueryObjectivEXT"), &getQueryObjectiv);
+    //AssignGLExtensionEntryPoint(extensions, "GL_EXT_disjoint_timer_query", loadProcAddress("glGetQueryObjectivEXT"), &getQueryObjectiv);
     AssignGLExtensionEntryPoint(extensions, "GL_EXT_disjoint_timer_query", loadProcAddress("glGetQueryObjectuivEXT"), &getQueryObjectuiv);
     AssignGLExtensionEntryPoint(extensions, "GL_EXT_disjoint_timer_query", loadProcAddress("glGetQueryObjecti64vEXT"), &getQueryObjecti64v);
     AssignGLExtensionEntryPoint(extensions, "GL_EXT_disjoint_timer_query", loadProcAddress("glGetQueryObjectui64vEXT"), &getQueryObjectui64v);
