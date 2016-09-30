@@ -874,7 +874,7 @@ bool Buffer11::NativeStorage::isMappable(GLbitfield access) const
         return (mUsage == BUFFER_USAGE_STAGING);
     }
     ASSERT((access & GL_MAP_WRITE_BIT) != 0);
-    return (mUsage == BUFFER_USAGE_STAGING || mUsage == BUFFER_USAGE_UNIFORM);
+    return mUsage == BUFFER_USAGE_STAGING;
 }
 
 // Returns true if it recreates the direct buffer
@@ -895,8 +895,9 @@ gl::ErrorOrResult<CopyResult> Buffer11::NativeStorage::copyFromStorage(BufferSto
         resize(requiredSize, preserveData);
     }
 
-    if (source->getUsage() == BUFFER_USAGE_PIXEL_PACK ||
-        source->getUsage() == BUFFER_USAGE_SYSTEM_MEMORY)
+    if ((source->getUsage() == BUFFER_USAGE_PIXEL_PACK ||
+         source->getUsage() == BUFFER_USAGE_SYSTEM_MEMORY) &&
+        isMappable(GL_MAP_WRITE_BIT))
     {
         ASSERT(source->isMappable(GL_MAP_READ_BIT));
 
