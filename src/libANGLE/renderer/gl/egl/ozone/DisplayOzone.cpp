@@ -121,7 +121,7 @@ DisplayOzone::Buffer::Buffer(DisplayOzone *display,
 
 DisplayOzone::Buffer::~Buffer()
 {
-    mDisplay->mFunctionsGL->deleteFramebuffers(1, &mGLFB);
+    mDisplay->mFunctionsGL->zeleteFramebuffers(1, &mGLFB);
     reset();
 }
 
