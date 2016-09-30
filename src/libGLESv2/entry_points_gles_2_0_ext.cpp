@@ -2286,7 +2286,23 @@ ANGLE_EXPORT void GL_APIENTRY ReadPixelsRobustANGLE(GLint x,
         "GLenum format = 0x%X, GLenum type = 0x%X, GLsizei bufsize = %d, GLsizei* length = "
         "0x%0.8p, GLvoid* pixels = 0x%0.8p)",
         x, y, width, height, format, type, bufSize, length, pixels);
-    UNIMPLEMENTED();
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        SetRobustLengthParam(length, 0);
+
+        GLsizei writeLength = 0;
+        if (!ValidateReadPixelsRobustANGLE(context, x, y, width, height, format, type, bufSize,
+                                           &writeLength, pixels))
+        {
+            return;
+        }
+
+        context->readPixels(x, y, width, height, format, type, pixels);
+
+        SetRobustLengthParam(length, writeLength);
+    }
 }
 
 ANGLE_EXPORT void GL_APIENTRY TexImage2DRobustANGLE(GLenum target,
@@ -2690,7 +2706,23 @@ ANGLE_EXPORT void GL_APIENTRY ReadnPixelsRobustANGLE(GLint x,
         "GLenum format = 0x%X, GLenum type = 0x%X, GLsizei bufsize = %d, GLsizei* length = "
         "0x%0.8p, GLvoid *data = 0x%0.8p)",
         x, y, width, height, format, type, bufSize, length, data);
-    UNIMPLEMENTED();
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        SetRobustLengthParam(length, 0);
+
+        GLsizei writeLength = 0;
+        if (!ValidateReadnPixelsRobustANGLE(context, x, y, width, height, format, type, bufSize,
+                                            &writeLength, data))
+        {
+            return;
+        }
+
+        context->readPixels(x, y, width, height, format, type, data);
+
+        SetRobustLengthParam(length, writeLength);
+    }
 }
 
 ANGLE_EXPORT void GL_APIENTRY GetnUniformfvRobustANGLE(GLuint program,
