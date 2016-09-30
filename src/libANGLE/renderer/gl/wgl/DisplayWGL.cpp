@@ -341,7 +341,8 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     mFunctionsGL->initialize();
 
     // Make sure that if we requested a robust context, we got one
-    ASSERT(mHasARBCreateContextRobustness == (mFunctionsGL->hasExtension("GL_ARB_robustness") || mFunctionsGL->hasExtension("GL_KHR_robustness")));
+    ASSERT(mHasARBCreateContextRobustness == (mFunctionsGL->hasExtension("GL_ARB_robustness") ||
+                                              mFunctionsGL->hasExtension("GL_KHR_robustness")));
 
     // Intel OpenGL ES drivers are not currently supported due to bugs in the driver and ANGLE
     VendorID vendor = GetVendorID(mFunctionsGL);
