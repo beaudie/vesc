@@ -1042,12 +1042,15 @@ void Buffer11::NativeStorage::FillBufferDesc(D3D11_BUFFER_DESC *bufferDesc,
             bufferDesc->BindFlags      = D3D11_BIND_CONSTANT_BUFFER;
             bufferDesc->CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-            // Constant buffers must be of a limited size, and aligned to 16 byte boundaries
-            // For our purposes we ignore any buffer data past the maximum constant buffer size
-            bufferDesc->ByteWidth = roundUp(bufferDesc->ByteWidth, 16u);
-            bufferDesc->ByteWidth =
-                std::min<UINT>(bufferDesc->ByteWidth,
-                               static_cast<UINT>(renderer->getNativeCaps().maxUniformBlockSize));
+            if (!renderer->getRenderer11DeviceCaps().supportsConstantBufferOffsets)
+            {
+                // Constant buffers must be of a limited size, and aligned to 16 byte boundaries
+                // For our purposes we ignore any buffer data past the maximum constant buffer size
+                bufferDesc->ByteWidth = roundUp(bufferDesc->ByteWidth, 16u);
+                bufferDesc->ByteWidth = std::min<UINT>(
+                    bufferDesc->ByteWidth,
+                    static_cast<UINT>(renderer->getNativeCaps().maxUniformBlockSize));
+            }
             break;
 
         default:
