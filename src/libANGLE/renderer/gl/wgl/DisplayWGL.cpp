@@ -340,6 +340,9 @@ egl::Error DisplayWGL::initialize(egl::Display *display)
     mFunctionsGL = new FunctionsGLWindows(mOpenGLModule, mFunctionsWGL->getProcAddress);
     mFunctionsGL->initialize();
 
+    // Make sure that if we requested a robust context, we got one
+    ASSERT(mHasARBCreateContextRobustness == (mFunctionsGL->hasExtension("GL_ARB_robustness") || mFunctionsGL->hasExtension("GL_KHR_robustness")));
+
     // Intel OpenGL ES drivers are not currently supported due to bugs in the driver and ANGLE
     VendorID vendor = GetVendorID(mFunctionsGL);
     if (requestedDisplayType == EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE && vendor == VENDOR_ID_INTEL)
