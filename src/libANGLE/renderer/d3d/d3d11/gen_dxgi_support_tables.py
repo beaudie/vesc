@@ -46,6 +46,7 @@ namespace d3d11
 #define {prefix}RT D3D11_FORMAT_SUPPORT_RENDER_TARGET
 #define {prefix}MS D3D11_FORMAT_SUPPORT_MULTISAMPLE_RENDERTARGET
 #define {prefix}DS D3D11_FORMAT_SUPPORT_DEPTH_STENCIL
+#define {prefix}MIPGEN D3D11_FORMAT_SUPPORT_MIP_AUTOGEN
 
 namespace
 {{
@@ -58,7 +59,8 @@ const DXGISupport &GetDefaultSupport()
                                   D3D11_FORMAT_SUPPORT_SHADER_SAMPLE |
                                   D3D11_FORMAT_SUPPORT_RENDER_TARGET |
                                   D3D11_FORMAT_SUPPORT_MULTISAMPLE_RENDERTARGET |
-                                  D3D11_FORMAT_SUPPORT_DEPTH_STENCIL;
+                                  D3D11_FORMAT_SUPPORT_DEPTH_STENCIL |
+                                  D3D11_FORMAT_SUPPORT_MIP_AUTOGEN;
     static const DXGISupport defaultSupport(0, 0, AllSupportFlags);
     return defaultSupport;
 }}
@@ -105,6 +107,7 @@ const DXGISupport &GetDXGISupport_11_0(DXGI_FORMAT dxgiFormat)
 #undef {prefix}RT
 #undef {prefix}MS
 #undef {prefix}DS
+#undef {prefix}MIPGEN
 
 const DXGISupport &GetDXGISupport(DXGI_FORMAT dxgiFormat, D3D_FEATURE_LEVEL featureLevel)
 {{
@@ -138,7 +141,8 @@ def do_format(format_data):
         'shaderSample': macro_prefix + 'SAMPLE',
         'renderTarget': macro_prefix + 'RT',
         'multisampleRT': macro_prefix + 'MS',
-        'depthStencil': macro_prefix + 'DS'
+        'depthStencil': macro_prefix + 'DS',
+        'mipAutoGen': macro_prefix + 'MIPGEN'
     }
 
     for format_name, format_support in sorted(format_data.iteritems()):
