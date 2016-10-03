@@ -45,6 +45,7 @@ WHICH GENERATES THE GLSL ES preprocessor expression parser.
 #include "DiagnosticsBase.h"
 #include "Lexer.h"
 #include "Token.h"
+#include "common/mathutil.h"
 
 #if defined(_MSC_VER)
 typedef __int64 YYSTYPE;
@@ -196,7 +197,7 @@ expression
         $$ = $1 < $3;
     }
     | expression TOK_OP_RIGHT expression {
-        if ($2 < 0 || $3 < 0)
+        if ($1 < 0 || $3 < 0 || $3 > 31)
         {
             if (!context->isIgnoringErrors())
             {
@@ -216,7 +217,7 @@ expression
         }
     }
     | expression TOK_OP_LEFT expression {
-        if ($2 < 0 || $3 < 0)
+        if ($1 < 0 || $3 < 0 || $3 > 31)
         {
             if (!context->isIgnoringErrors())
             {
@@ -236,10 +237,10 @@ expression
         }
     }
     | expression '-' expression {
-        $$ = $1 - $3;
+        $$ = gl::WrappingDiff<int>($1, $3);
     }
     | expression '+' expression {
-        $$ = $1 + $3;
+        $$ = gl::WrappingSum<int>($1, $3);
     }
     | expression '%' expression {
         if ($3 == 0)
@@ -276,13 +277,20 @@ expression
             }
             $$ = static_cast<YYSTYPE>(0);
         }
+        else if ($1 == std::numeric_limits<int>::min() && $3 == -1)
+        {
+            // Check for the special case where the minimum representable number is
+            // divided by -1. If left alone this leads to integer overflow in C++, which
+            // has undefined results.
+            $$ = 0x7fffffff;
+        }
         else
         {
             $$ = $1 / $3;
         }
     }
     | expression '*' expression {
-        $$ = $1 * $3;
+        $$ = gl::WrappingMul($1, $3);
     }
     | '!' expression %prec TOK_UNARY {
         $$ = ! $2;
@@ -291,7 +299,16 @@ expression
         $$ = ~ $2;
     }
     | '-' expression %prec TOK_UNARY {
-        $$ = - $2;
+        // Check for negation of minimum representable integer to prevent undefined signed int
+        // overflow.
+        if ($2 == std::numeric_limits<int>::min())
+        {
+            $$ = std::numeric_limits<int>::min();
+        }
+        else
+        {
+            $$ = - $2;
+        }
     }
     | '+' expression %prec TOK_UNARY {
         $$ = + $2;
