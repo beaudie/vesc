@@ -267,6 +267,7 @@ bool VaryingPacking::packVaryings(gl::InfoLog &infoLog,
             continue;
         }
 
+        bool found = false;
         for (const PackedVarying &packedVarying : packedVaryings)
         {
             const auto &varying = *packedVarying.varying;
@@ -274,7 +275,6 @@ bool VaryingPacking::packVaryings(gl::InfoLog &infoLog,
             // Make sure transform feedback varyings aren't optimized out.
             if (uniqueVaryingNames.count(transformFeedbackVaryingName) == 0)
             {
-                bool found = false;
                 if (transformFeedbackVaryingName == varying.name)
                 {
                     if (!packVarying(packedVarying))
@@ -286,13 +286,14 @@ bool VaryingPacking::packVaryings(gl::InfoLog &infoLog,
                     found = true;
                     break;
                 }
-                if (!found)
-                {
-                    infoLog << "Transform feedback varying " << transformFeedbackVaryingName
-                            << " does not exist in the vertex shader.";
-                    return false;
-                }
             }
+        }
+
+        if (!found)
+        {
+            infoLog << "Transform feedback varying " << transformFeedbackVaryingName
+                    << " does not exist in the vertex shader.";
+            return false;
         }
     }
 
