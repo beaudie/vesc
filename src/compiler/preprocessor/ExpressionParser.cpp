@@ -103,6 +103,7 @@
 #include "DiagnosticsBase.h"
 #include "Lexer.h"
 #include "Token.h"
+#include "common/mathutil.h"
 
 #if defined(_MSC_VER)
 typedef __int64 YYSTYPE;
@@ -500,9 +501,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   110,   110,   117,   118,   129,   129,   150,   150,   171,
-     174,   177,   180,   183,   186,   189,   192,   195,   198,   218,
-     238,   241,   244,   264,   284,   287,   290,   293,   296,   299
+       0,   111,   111,   118,   119,   130,   130,   151,   151,   172,
+     175,   178,   181,   184,   187,   190,   193,   196,   199,   224,
+     249,   252,   255,   275,   302,   305,   308,   311,   323,   326
 };
 #endif
 
@@ -1495,7 +1496,7 @@ yyreduce:
   case 18:
 
     {
-        if ((yyvsp[-1]) < 0 || (yyvsp[0]) < 0)
+        if ((yyvsp[0]) < 0 || (yyvsp[0]) > 31)
         {
             if (!context->isIgnoringErrors())
             {
@@ -1509,6 +1510,11 @@ yyreduce:
             }
             (yyval) = static_cast<YYSTYPE>(0);
         }
+        else if ((yyvsp[-2]) < 0)
+        {
+            // Logical shift right.
+            (yyval) = static_cast<YYSTYPE>(static_cast<uint32_t>((yyvsp[-2])) >> (yyvsp[0]));
+        }
         else
         {
             (yyval) = (yyvsp[-2]) >> (yyvsp[0]);
@@ -1520,7 +1526,7 @@ yyreduce:
   case 19:
 
     {
-        if ((yyvsp[-1]) < 0 || (yyvsp[0]) < 0)
+        if ((yyvsp[0]) < 0 || (yyvsp[0]) > 31)
         {
             if (!context->isIgnoringErrors())
             {
@@ -1534,6 +1540,11 @@ yyreduce:
             }
             (yyval) = static_cast<YYSTYPE>(0);
         }
+        else if ((yyvsp[-2]) < 0)
+        {
+            // Logical shift left.
+            (yyval) = static_cast<YYSTYPE>(static_cast<uint32_t>((yyvsp[-2])) << (yyvsp[0]));
+        }
         else
         {
             (yyval) = (yyvsp[-2]) << (yyvsp[0]);
@@ -1545,7 +1556,7 @@ yyreduce:
   case 20:
 
     {
-        (yyval) = (yyvsp[-2]) - (yyvsp[0]);
+        (yyval) = gl::WrappingDiff<int>((yyvsp[-2]), (yyvsp[0]));
     }
 
     break;
@@ -1553,7 +1564,7 @@ yyreduce:
   case 21:
 
     {
-        (yyval) = (yyvsp[-2]) + (yyvsp[0]);
+        (yyval) = gl::WrappingSum<int>((yyvsp[-2]), (yyvsp[0]));
     }
 
     break;
@@ -1600,6 +1611,13 @@ yyreduce:
             }
             (yyval) = static_cast<YYSTYPE>(0);
         }
+        else if ((yyvsp[-2]) == std::numeric_limits<int>::min() && (yyvsp[0]) == -1)
+        {
+            // Check for the special case where the minimum representable number is
+            // divided by -1. If left alone this leads to integer overflow in C++, which
+            // has undefined results.
+            (yyval) = 0x7fffffff;
+        }
         else
         {
             (yyval) = (yyvsp[-2]) / (yyvsp[0]);
@@ -1611,7 +1629,7 @@ yyreduce:
   case 24:
 
     {
-        (yyval) = (yyvsp[-2]) * (yyvsp[0]);
+        (yyval) = gl::WrappingMul((yyvsp[-2]), (yyvsp[0]));
     }
 
     break;
@@ -1635,7 +1653,16 @@ yyreduce:
   case 27:
 
     {
-        (yyval) = - (yyvsp[0]);
+        // Check for negation of minimum representable integer to prevent undefined signed int
+        // overflow.
+        if ((yyvsp[0]) == std::numeric_limits<int>::min())
+        {
+            (yyval) = std::numeric_limits<int>::min();
+        }
+        else
+        {
+            (yyval) = -(yyvsp[0]);
+        }
     }
 
     break;
