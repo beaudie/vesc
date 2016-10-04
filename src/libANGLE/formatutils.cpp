@@ -846,7 +846,6 @@ const InternalFormat &GetInternalFormatInfo(GLenum internalFormat)
     else
     {
         static const InternalFormat defaultInternalFormat;
-        UNREACHABLE();
         return defaultInternalFormat;
     }
 }
