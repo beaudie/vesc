@@ -2057,7 +2057,7 @@ TIntermAggregate *TParseContext::addFunctionPrototypeDeclaration(const TFunction
     return prototype;
 }
 
-TIntermAggregate *TParseContext::addFunctionDefinition(const TFunction &function,
+TIntermFunctionDefinition *TParseContext::addFunctionDefinition(const TFunction &function,
                                                        TIntermAggregate *functionPrototype,
                                                        TIntermBlock *functionBody,
                                                        const TSourceLoc &location)
@@ -2068,21 +2068,15 @@ TIntermAggregate *TParseContext::addFunctionDefinition(const TFunction &function
         error(location, "function does not return a value:", "", function.getName().c_str());
     }
 
-    TIntermAggregate *functionNode = new TIntermAggregate(EOpFunction);
-    functionNode->setLine(location);
-
-    ASSERT(functionPrototype != nullptr);
-    functionNode->getSequence()->push_back(functionPrototype);
-
     if (functionBody == nullptr)
     {
         functionBody = new TIntermBlock();
         functionBody->setLine(location);
     }
-    functionNode->getSequence()->push_back(functionBody);
+    TIntermFunctionDefinition *functionNode = new TIntermFunctionDefinition(function.getReturnType(), functionPrototype, functionBody);
+    functionNode->setLine(location);
 
     functionNode->getFunctionInfo()->setFromFunction(function);
-    functionNode->setType(function.getReturnType());
 
     symbolTable.pop();
     return functionNode;
