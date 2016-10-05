@@ -93,12 +93,40 @@ class CallDAG::CallDAGCreator : public TIntermTraverser
         }
 
         std::set<CreatorFunctionData*> callees;
-        TIntermAggregate *node;
+        TIntermFunctionDefinition *node;
         TString name;
         size_t index;
         bool indexAssigned;
         bool visiting;
     };
+
+    bool visitFunctionDefinition(Visit visit, TIntermFunctionDefinition *node) override
+    {
+        // Create the record if need be and remember the node.
+        if (visit == PreVisit)
+        {
+            auto it = mFunctions.find(node->getFunctionInfo()->getName());
+
+            if (it == mFunctions.end())
+            {
+                mCurrentFunction = &mFunctions[node->getFunctionInfo()->getName()];
+            }
+            else
+            {
+                mCurrentFunction = &it->second;
+            }
+
+            mCurrentFunction->node = node;
+            mCurrentFunction->name = node->getFunctionInfo()->getName();
+
+        }
+        else if (visit == PostVisit)
+        {
+            mCurrentFunction = nullptr;
+        }
+        return true;
+    }
+
 
     // Aggregates the AST node for each function as well as the name of the functions called by it
     bool visitAggregate(Visit visit, TIntermAggregate *node) override
@@ -113,31 +141,6 @@ class CallDAG::CallDAGCreator : public TIntermTraverser
                 record.name  = node->getFunctionInfo()->getName();
             }
             break;
-          case EOpFunction:
-            {
-                // Function definition, create the record if need be and remember the node.
-                if (visit == PreVisit)
-                {
-                    auto it = mFunctions.find(node->getFunctionInfo()->getName());
-
-                    if (it == mFunctions.end())
-                    {
-                        mCurrentFunction = &mFunctions[node->getFunctionInfo()->getName()];
-                    }
-                    else
-                    {
-                        mCurrentFunction = &it->second;
-                    }
-
-                    mCurrentFunction->node = node;
-                    mCurrentFunction->name = node->getFunctionInfo()->getName();
-                }
-                else if (visit == PostVisit)
-                {
-                    mCurrentFunction = nullptr;
-                }
-                break;
-            }
           case EOpFunctionCall:
             {
                 // Function call, add the callees

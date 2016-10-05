@@ -32,6 +32,7 @@ class TDiagnostics;
 class TIntermTraverser;
 class TIntermAggregate;
 class TIntermBlock;
+class TIntermFunctionDefinition;
 class TIntermSwizzle;
 class TIntermBinary;
 class TIntermUnary;
@@ -94,6 +95,7 @@ class TIntermNode : angle::NonCopyable
     virtual void traverse(TIntermTraverser *) = 0;
     virtual TIntermTyped *getAsTyped() { return 0; }
     virtual TIntermConstantUnion *getAsConstantUnion() { return 0; }
+    virtual TIntermFunctionDefinition *getAsFunctionDefinition() { return nullptr; }
     virtual TIntermAggregate *getAsAggregate() { return 0; }
     virtual TIntermBlock *getAsBlock() { return nullptr; }
     virtual TIntermSwizzle *getAsSwizzleNode() { return nullptr; }
@@ -527,7 +529,7 @@ class TIntermUnary : public TIntermOperator
 
 class TFunctionInfo
 {
-  public:
+public:
     POOL_ALLOCATOR_NEW_DELETE();
     TFunctionInfo() : mId(0) {}
 
@@ -545,9 +547,41 @@ class TFunctionInfo
 
     void setId(int functionId) { mId = functionId; }
     int getId() const { return mId; }
-  private:
+private:
     TName mName;
     int mId;
+};
+
+// Node for function definitions.
+class TIntermFunctionDefinition : public TIntermTyped
+{
+public:
+    // TODO: See if more things could be added to parameters.
+    TIntermFunctionDefinition(const TType &type, TIntermAggregate *parameters, TIntermBlock *body)
+        : TIntermTyped(type), mParameters(parameters), mBody(body)
+    {
+        ASSERT(parameters != nullptr);
+        ASSERT(body != nullptr);
+    }
+
+    TIntermFunctionDefinition *getAsFunctionDefinition() override { return this; }
+    void traverse(TIntermTraverser *it) override;
+    bool replaceChildNode(TIntermNode *original, TIntermNode *replacement) override;
+
+    TIntermTyped *deepCopy() const override { UNREACHABLE(); return nullptr; }
+    bool hasSideEffects() const override { UNREACHABLE(); return true; }
+
+    TIntermAggregate *getFunctionParameters() const { return mParameters; }
+    TIntermBlock *getBody() const { return mBody; }
+
+    TFunctionInfo *getFunctionInfo() { return &mFunctionInfo; }
+    const TFunctionInfo *getFunctionInfo() const { return &mFunctionInfo; }
+
+private:
+    TIntermAggregate *mParameters;
+    TIntermBlock *mBody;
+
+    TFunctionInfo mFunctionInfo;
 };
 
 typedef TVector<TIntermNode *> TIntermSequence;
@@ -809,6 +843,7 @@ class TIntermTraverser : angle::NonCopyable
     virtual bool visitIfElse(Visit visit, TIntermIfElse *node) { return true; }
     virtual bool visitSwitch(Visit visit, TIntermSwitch *node) { return true; }
     virtual bool visitCase(Visit visit, TIntermCase *node) { return true; }
+    virtual bool visitFunctionDefinition(Visit visit, TIntermFunctionDefinition *node) { return true; }
     virtual bool visitAggregate(Visit visit, TIntermAggregate *node) { return true; }
     virtual bool visitBlock(Visit visit, TIntermBlock *node) { return true; }
     virtual bool visitLoop(Visit visit, TIntermLoop *node) { return true; }
@@ -827,6 +862,7 @@ class TIntermTraverser : angle::NonCopyable
     virtual void traverseIfElse(TIntermIfElse *node);
     virtual void traverseSwitch(TIntermSwitch *node);
     virtual void traverseCase(TIntermCase *node);
+    virtual void traverseFunctionDefinition(TIntermFunctionDefinition *node);
     virtual void traverseAggregate(TIntermAggregate *node);
     virtual void traverseBlock(TIntermBlock *node);
     virtual void traverseLoop(TIntermLoop *node);
@@ -1043,6 +1079,7 @@ class TLValueTrackingTraverser : public TIntermTraverser
 
     void traverseBinary(TIntermBinary *node) final;
     void traverseUnary(TIntermUnary *node) final;
+    void traverseFunctionDefinition(TIntermFunctionDefinition *node) final;
     void traverseAggregate(TIntermAggregate *node) final;
 
   protected:
