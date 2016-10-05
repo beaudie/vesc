@@ -10,11 +10,11 @@
 namespace
 {
 
-void OutputFunction(TInfoSinkBase &out, const char *str, TIntermAggregate *node)
+void OutputFunction(TInfoSinkBase &out, const char *str, TFunctionInfo *info)
 {
     const char *internal =
-        node->getFunctionInfo()->getNameObj().isInternal() ? " (internal function)" : "";
-    out << str << internal << ": " << node->getFunctionInfo()->getNameObj().getString();
+        info->getNameObj().isInternal() ? " (internal function)" : "";
+    out << str << internal << ": " << info->getNameObj().getString();
 }
 
 //
@@ -48,6 +48,7 @@ class TOutputTraverser : public TIntermTraverser
     bool visitUnary(Visit visit, TIntermUnary *) override;
     bool visitTernary(Visit visit, TIntermTernary *node) override;
     bool visitIfElse(Visit visit, TIntermIfElse *node) override;
+    bool visitFunctionDefinition(Visit visit, TIntermFunctionDefinition *node) override;
     bool visitAggregate(Visit visit, TIntermAggregate *) override;
     bool visitBlock(Visit visit, TIntermBlock *) override;
     bool visitLoop(Visit visit, TIntermLoop *) override;
@@ -372,6 +373,15 @@ bool TOutputTraverser::visitUnary(Visit visit, TIntermUnary *node)
     return true;
 }
 
+bool TOutputTraverser::visitFunctionDefinition(Visit visit, TIntermFunctionDefinition *node)
+{
+    TInfoSinkBase &out = sink;
+    OutputTreeText(out, node, mDepth);
+    OutputFunction(out, "Function Definition", node->getFunctionInfo());
+    out << "\n";
+    return true;
+}
+
 bool TOutputTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
 {
     TInfoSinkBase &out = sink;
@@ -389,10 +399,9 @@ bool TOutputTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
     switch (node->getOp())
     {
       case EOpComma:         out << "Comma\n"; return true;
-      case EOpFunction:      OutputFunction(out, "Function Definition", node); break;
-      case EOpFunctionCall:  OutputFunction(out, "Function Call", node); break;
+      case EOpFunctionCall:  OutputFunction(out, "Function Call", node->getFunctionInfo()); break;
       case EOpParameters:    out << "Function Parameters: ";              break;
-      case EOpPrototype:     OutputFunction(out, "Function Prototype", node); break;
+      case EOpPrototype:     OutputFunction(out, "Function Prototype", node->getFunctionInfo()); break;
 
       case EOpConstructFloat: out << "Construct float"; break;
       case EOpConstructVec2:  out << "Construct vec2";  break;
