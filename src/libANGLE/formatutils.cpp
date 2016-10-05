@@ -160,7 +160,6 @@ GLenum GetSizedFormatInternal(GLenum format, GLenum type)
     if (format == GL_NONE)
         return GL_NONE;
 
-    UNREACHABLE();
     return GL_NONE;
 }
 
@@ -846,7 +845,6 @@ const InternalFormat &GetInternalFormatInfo(GLenum internalFormat)
     else
     {
         static const InternalFormat defaultInternalFormat;
-        UNREACHABLE();
         return defaultInternalFormat;
     }
 }
