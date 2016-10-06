@@ -35,6 +35,7 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/validationES.h"
+#include "libANGLE/Workarounds.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/EGLImplFactory.h"
 #include "libANGLE/queryconversions.h"
@@ -255,6 +256,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
     ASSERT(!mRobustAccess);  // Unimplemented
 
     initCaps(GetWebGLContext(attribs));
+    initWorkarounds();
 
     mGLState.initialize(mCaps, mExtensions, mClientMajorVersion, GetDebug(attribs),
                         GetBindGeneratesResource(attribs));
@@ -1926,7 +1928,12 @@ void Context::handleError(const Error &error)
 {
     if (error.isError())
     {
-        mErrors.insert(error.getCode());
+        GLenum code = error.getCode();
+        mErrors.insert(code);
+        if (code == GL_OUT_OF_MEMORY && getWorkarounds().loseContextOnOutOfMemory)
+        {
+            markContextLost();
+        }
 
         if (!error.getMessage().empty())
         {
@@ -1996,7 +2003,7 @@ GLenum Context::getResetStatus()
             mContextLost = true;
         }
     }
-    else if (mResetStatus != GL_NO_ERROR)
+    else if (mResetStatus == GL_NO_ERROR)
     {
         mResetStatus = mImplementation->getResetStatus();
     }
@@ -2478,6 +2485,13 @@ void Context::updateCaps()
 
         mTextureCaps.insert(format, formatCaps);
     }
+}
+
+void Context::initWorkarounds()
+{
+    // Lose the context upon out of memory error if the application is
+    // expecting to watch for those events.
+    mWorkarounds.loseContextOnOutOfMemory = (mResetStrategy == GL_LOSE_CONTEXT_ON_RESET_EXT);
 }
 
 void Context::syncRendererState()
@@ -3548,6 +3562,11 @@ void Context::bufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, con
     Buffer *buffer = mGLState.getTargetBuffer(target);
     ASSERT(buffer);
     handleError(buffer->bufferSubData(target, data, size, offset));
+}
+
+const Workarounds &Context::getWorkarounds() const
+{
+    return mWorkarounds;
 }
 
 }  // namespace gl

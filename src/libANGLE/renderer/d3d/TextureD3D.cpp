@@ -500,7 +500,8 @@ gl::Error TextureD3D::generateMipmapUsingImages(const GLuint maxLevel)
     // As a result, even if the storage is a rendertarget, we can't use the GPU to generate the mipmaps without further work.
     // The D3D9 renderer works around this by copying each level of the texture into its own single-layer GPU texture (in Blit9::boxFilter).
     // Feature Level 9_3 could do something similar, or it could continue to use CPU-side mipmap generation, or something else.
-    bool renderableStorage = (mTexStorage && mTexStorage->isRenderTarget() && !(mRenderer->getWorkarounds().zeroMaxLodWorkaround));
+    bool renderableStorage = (mTexStorage && mTexStorage->isRenderTarget() &&
+                              !(mRenderer->getWorkarounds().zeroMaxLodWorkaround));
 
     for (GLint layer = 0; layer < layerCount; ++layer)
     {
