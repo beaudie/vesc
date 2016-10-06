@@ -1533,7 +1533,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
         case EOpPrototype:
             if (visit == PreVisit)
             {
-                size_t index = mCallDag.findIndex(node);
+                size_t index = mCallDag.findIndex(node->getFunctionInfo());
                 // Skip the prototype if it is not implemented (and thus not used)
                 if (index == CallDAG::InvalidIndex)
                 {
@@ -1542,7 +1542,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
 
                 TIntermSequence *arguments = node->getSequence();
 
-                TString name = DecorateFunctionIfNeeded(node->getNameObj());
+                TString name = DecorateFunctionIfNeeded(node->getFunctionInfo()->getNameObj());
                 out << TypeString(node->getType()) << " " << name
                     << DisambiguateFunctionName(arguments) << (mOutputLod0Function ? "Lod0(" : "(");
 
@@ -1583,9 +1583,8 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
         case EOpFunction:
         {
             ASSERT(mCurrentFunctionMetadata == nullptr);
-            TString name = TFunction::unmangleName(node->getNameObj().getString());
 
-            size_t index = mCallDag.findIndex(node);
+            size_t index = mCallDag.findIndex(node->getFunctionInfo());
             ASSERT(index != CallDAG::InvalidIndex);
             mCurrentFunctionMetadata = &mASTMetadataList[index];
 
@@ -1594,13 +1593,13 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
             TIntermSequence *sequence  = node->getSequence();
             TIntermSequence *arguments = (*sequence)[0]->getAsAggregate()->getSequence();
 
-            if (name == "main")
+            if (node->getFunctionInfo()->isMain())
             {
                 out << "gl_main(";
             }
             else
             {
-                out << DecorateFunctionIfNeeded(node->getNameObj())
+                out << DecorateFunctionIfNeeded(node->getFunctionInfo()->getNameObj())
                     << DisambiguateFunctionName(arguments) << (mOutputLod0Function ? "Lod0(" : "(");
             }
 
@@ -1637,7 +1636,7 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
             bool needsLod0 = mASTMetadataList[index].mNeedsLod0;
             if (needsLod0 && !mOutputLod0Function && mShaderType == GL_FRAGMENT_SHADER)
             {
-                ASSERT(name != "main");
+                ASSERT(!node->getFunctionInfo()->isMain());
                 mOutputLod0Function = true;
                 node->traverse(this);
                 mOutputLod0Function = false;
@@ -1657,23 +1656,23 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
                 {
                     UNIMPLEMENTED();
                 }
-                size_t index = mCallDag.findIndex(node);
+                size_t index = mCallDag.findIndex(node->getFunctionInfo());
                 ASSERT(index != CallDAG::InvalidIndex);
                 lod0 &= mASTMetadataList[index].mNeedsLod0;
 
-                out << DecorateFunctionIfNeeded(node->getNameObj());
+                out << DecorateFunctionIfNeeded(node->getFunctionInfo()->getNameObj());
                 out << DisambiguateFunctionName(node->getSequence());
                 out << (lod0 ? "Lod0(" : "(");
             }
-            else if (node->getNameObj().isInternal())
+            else if (node->getFunctionInfo()->getNameObj().isInternal())
             {
                 // This path is used for internal functions that don't have their definitions in the
                 // AST, such as precision emulation functions.
-                out << DecorateFunctionIfNeeded(node->getNameObj()) << "(";
+                out << DecorateFunctionIfNeeded(node->getFunctionInfo()->getNameObj()) << "(";
             }
             else
             {
-                TString name           = TFunction::unmangleName(node->getNameObj().getString());
+                TString name = TFunction::unmangleName(node->getFunctionInfo()->getName());
                 TBasicType samplerType = (*arguments)[0]->getAsTyped()->getType().getBasicType();
                 int coords                  = (*arguments)[1]->getAsTyped()->getNominalSize();
                 TString textureFunctionName = mTextureFunctionHLSL->useTextureFunction(

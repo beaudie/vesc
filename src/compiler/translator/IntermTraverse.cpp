@@ -199,13 +199,13 @@ void TLValueTrackingTraverser::addToFunctionMap(const TName &name, TIntermSequen
 bool TLValueTrackingTraverser::isInFunctionMap(const TIntermAggregate *callNode) const
 {
     ASSERT(callNode->getOp() == EOpFunctionCall);
-    return (mFunctionMap.find(callNode->getNameObj()) != mFunctionMap.end());
+    return (mFunctionMap.find(callNode->getFunctionInfo()->getNameObj()) != mFunctionMap.end());
 }
 
 TIntermSequence *TLValueTrackingTraverser::getFunctionParameters(const TIntermAggregate *callNode)
 {
     ASSERT(isInFunctionMap(callNode));
-    return mFunctionMap[callNode->getNameObj()];
+    return mFunctionMap[callNode->getFunctionInfo()->getNameObj()];
 }
 
 void TLValueTrackingTraverser::setInFunctionCallOutParameter(bool inOutParameter)
@@ -507,11 +507,11 @@ void TLValueTrackingTraverser::traverseAggregate(TIntermAggregate *node)
             TIntermAggregate *params = sequence->front()->getAsAggregate();
             ASSERT(params != nullptr);
             ASSERT(params->getOp() == EOpParameters);
-            addToFunctionMap(node->getNameObj(), params->getSequence());
+            addToFunctionMap(node->getFunctionInfo()->getNameObj(), params->getSequence());
             break;
         }
         case EOpPrototype:
-            addToFunctionMap(node->getNameObj(), sequence);
+            addToFunctionMap(node->getFunctionInfo()->getNameObj(), sequence);
             break;
         default:
             break;

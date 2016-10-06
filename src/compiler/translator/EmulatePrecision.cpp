@@ -432,7 +432,7 @@ TIntermAggregate *createInternalFunctionCallNode(TString name, TIntermNode *chil
     callNode->setOp(EOpFunctionCall);
     TName nameObj(TFunction::mangleName(name));
     nameObj.setInternal(true);
-    callNode->setNameObj(nameObj);
+    callNode->getFunctionInfo()->setNameObj(nameObj);
     callNode->getSequence()->push_back(child);
     return callNode;
 }

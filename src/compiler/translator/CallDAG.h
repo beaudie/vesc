@@ -57,7 +57,7 @@ class CallDAG : angle::NonCopyable
     InitResult init(TIntermNode *root, TInfoSinkBase *info);
 
     // Returns InvalidIndex if the function wasn't found
-    size_t findIndex(const TIntermAggregate *function) const;
+    size_t findIndex(const TFunctionInfo *functionInfo) const;
 
     const Record &getRecordFromIndex(size_t index) const;
     const Record &getRecord(const TIntermAggregate *function) const;
