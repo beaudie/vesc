@@ -663,6 +663,11 @@ void TextureD3D::setBaseLevel(GLuint baseLevel)
     }
 }
 
+void TextureD3D::syncState(const gl::Texture::DirtyBits &dirtyBits)
+{
+    // TODO(geofflang): Use dirty bits
+}
+
 TextureD3D_2D::TextureD3D_2D(const gl::TextureState &state, RendererD3D *renderer)
     : TextureD3D(state, renderer)
 {
@@ -964,6 +969,26 @@ gl::Error TextureD3D_2D::copySubTexture(const gl::Offset &destOffset,
                                      gl::GetInternalFormatInfo(getBaseLevelInternalFormat()).format,
                                      destOffset, mTexStorage, destLevel, unpackFlipY,
                                      unpackPremultiplyAlpha, unpackUnmultiplyAlpha));
+
+    return gl::NoError();
+}
+
+gl::Error TextureD3D_2D::copyCompressedTexture(const gl::Texture *source)
+{
+    GLenum sourceTarget = source->getTarget();
+    GLint sourceLevel   = 0;
+
+    GLint destLevel = 0;
+
+    GLenum sizedInternalFormat = source->getFormat(sourceTarget, sourceLevel).asSized();
+    gl::Extents size(static_cast<int>(source->getWidth(sourceTarget, sourceLevel)),
+                     static_cast<int>(source->getHeight(sourceTarget, sourceLevel)), 1);
+    redefineImage(destLevel, sizedInternalFormat, size, false);
+
+    ANGLE_TRY(initializeStorage(false));
+    ASSERT(mTexStorage);
+
+    ANGLE_TRY(mRenderer->copyCompressedTexture(source, sourceLevel, mTexStorage, destLevel));
 
     return gl::NoError();
 }
