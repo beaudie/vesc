@@ -336,6 +336,17 @@ GLint64 RendererD3D::getTimestamp()
     return 0;
 }
 
+const WorkaroundsD3D &RendererD3D::getWorkaroundsD3D() const
+{
+    if (!mWorkaroundsInitialized)
+    {
+        generateWorkarounds(&mWorkarounds);
+        mWorkaroundsInitialized = true;
+    }
+
+    return mWorkarounds;
+}
+
 void RendererD3D::ensureCapsInitialized() const
 {
     if (!mCapsInitialized)

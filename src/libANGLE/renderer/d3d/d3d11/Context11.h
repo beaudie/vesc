@@ -117,6 +117,9 @@ class Context11 : public ContextImpl
     const gl::Extensions &getNativeExtensions() const override;
     const gl::Limitations &getNativeLimitations() const override;
 
+    // Cross-platform access to workarounds.
+    const Workarounds& getWorkarounds() const override;
+
     Renderer11 *getRenderer() const { return mRenderer; }
 
   private:

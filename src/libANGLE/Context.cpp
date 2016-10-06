@@ -35,6 +35,7 @@
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/validationES.h"
+#include "libANGLE/Workarounds.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/EGLImplFactory.h"
 #include "libANGLE/queryconversions.h"
@@ -1926,7 +1927,11 @@ void Context::handleError(const Error &error)
 {
     if (error.isError())
     {
-        mErrors.insert(error.getCode());
+        auto code = error.getCode();
+        mErrors.insert(code);
+        if (code == GL_OUT_OF_MEMORY && getWorkarounds().loseContextOnOutOfMemory) {
+            markContextLost();
+        }
 
         if (!error.getMessage().empty())
         {
@@ -3548,6 +3553,11 @@ void Context::bufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, con
     Buffer *buffer = mGLState.getTargetBuffer(target);
     ASSERT(buffer);
     handleError(buffer->bufferSubData(target, data, size, offset));
+}
+
+const rx::Workarounds& Context::getWorkarounds() const
+{
+    return mImplementation->getWorkarounds();
 }
 
 }  // namespace gl

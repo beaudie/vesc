@@ -9,6 +9,8 @@
 #ifndef LIBANGLE_RENDERER_D3D_WORKAROUNDSD3D_H_
 #define LIBANGLE_RENDERER_D3D_WORKAROUNDSD3D_H_
 
+#include "libANGLE/Workarounds.h"
+
 // TODO(jmadill,zmo,geofflang): make a workarounds library that can operate
 // independent of ANGLE's renderer. Workarounds should also be accessible
 // outside of the Renderer.
@@ -24,7 +26,7 @@ struct D3DCompilerWorkarounds
     bool enableIEEEStrictness = false;
 };
 
-struct WorkaroundsD3D
+struct WorkaroundsD3D : Workarounds
 {
     // On some systems, having extra rendertargets than necessary slows down the shader.
     // We can fix this by optimizing those out of the shader. At the same time, we can

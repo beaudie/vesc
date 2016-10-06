@@ -353,7 +353,7 @@ void FramebufferD3D::syncState(const gl::Framebuffer::DirtyBits &dirtyBits)
 
     const auto &colorAttachments = mState.getColorAttachments();
     const auto &drawBufferStates = mState.getDrawBufferStates();
-    const auto &workarounds      = mRenderer->getWorkarounds();
+    const auto &workarounds      = mRenderer->getWorkaroundsD3D();
 
     for (size_t attachmentIndex = 0; attachmentIndex < colorAttachments.size(); ++attachmentIndex)
     {

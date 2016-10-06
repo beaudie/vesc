@@ -1506,16 +1506,16 @@ ID3D11BlendState *LazyBlendState::resolve(ID3D11Device *device)
     return mResource;
 }
 
-WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps,
-                                   const DXGI_ADAPTER_DESC &adapterDesc)
+void GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps,
+                         const DXGI_ADAPTER_DESC &adapterDesc,
+                         WorkaroundsD3D* workarounds)
 {
     bool is9_3 = (deviceCaps.featureLevel <= D3D_FEATURE_LEVEL_9_3);
 
-    WorkaroundsD3D workarounds;
-    workarounds.mrtPerfWorkaround = true;
-    workarounds.setDataFasterThanImageUpload = true;
-    workarounds.zeroMaxLodWorkaround             = is9_3;
-    workarounds.useInstancedPointSpriteEmulation = is9_3;
+    workarounds->mrtPerfWorkaround = true;
+    workarounds->setDataFasterThanImageUpload = true;
+    workarounds->zeroMaxLodWorkaround             = is9_3;
+    workarounds->useInstancedPointSpriteEmulation = is9_3;
 
     // TODO(jmadill): Narrow problematic driver range.
     if (adapterDesc.VendorId == VENDOR_ID_NVIDIA)
@@ -1526,29 +1526,31 @@ WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps,
             WORD part2 = LOWORD(deviceCaps.driverVersion.value().LowPart);
 
             // Disable the workaround to fix a second driver bug on newer NVIDIA.
-            workarounds.depthStencilBlitExtraCopy = (part1 <= 13u && part2 < 6881);
+            workarounds->depthStencilBlitExtraCopy = (part1 <= 13u && part2 < 6881);
         }
         else
         {
-            workarounds.depthStencilBlitExtraCopy = true;
+            workarounds->depthStencilBlitExtraCopy = true;
         }
     }
 
     // TODO(jmadill): Disable workaround when we have a fixed compiler DLL.
-    workarounds.expandIntegerPowExpressions = true;
+    workarounds->expandIntegerPowExpressions = true;
 
-    workarounds.flushAfterEndingTransformFeedback = (adapterDesc.VendorId == VENDOR_ID_NVIDIA);
-    workarounds.getDimensionsIgnoresBaseLevel     = (adapterDesc.VendorId == VENDOR_ID_NVIDIA);
+    workarounds->flushAfterEndingTransformFeedback = (adapterDesc.VendorId == VENDOR_ID_NVIDIA);
+    workarounds->getDimensionsIgnoresBaseLevel     = (adapterDesc.VendorId == VENDOR_ID_NVIDIA);
 
-    workarounds.preAddTexelFetchOffsets = (adapterDesc.VendorId == VENDOR_ID_INTEL);
-    workarounds.disableB5G6R5Support    = (adapterDesc.VendorId == VENDOR_ID_INTEL);
-    workarounds.rewriteUnaryMinusOperator = (adapterDesc.VendorId == VENDOR_ID_INTEL);
-    workarounds.emulateIsnanFloat         = (adapterDesc.VendorId == VENDOR_ID_INTEL);
+    workarounds->preAddTexelFetchOffsets = (adapterDesc.VendorId == VENDOR_ID_INTEL);
+    workarounds->disableB5G6R5Support    = (adapterDesc.VendorId == VENDOR_ID_INTEL);
+    workarounds->rewriteUnaryMinusOperator = (adapterDesc.VendorId == VENDOR_ID_INTEL);
+    workarounds->emulateIsnanFloat         = (adapterDesc.VendorId == VENDOR_ID_INTEL);
 
     // TODO(jmadill): Disable when we have a fixed driver version.
-    workarounds.emulateTinyStencilTextures = (adapterDesc.VendorId == VENDOR_ID_AMD);
+    workarounds->emulateTinyStencilTextures = (adapterDesc.VendorId == VENDOR_ID_AMD);
 
-    return workarounds;
+    // TODO(kbr): rethink how this workaround is enabled. Is it
+    // desired to enable it all the time, or only when embedded in Chromium?
+    workarounds->loseContextOnOutOfMemory = true;
 }
 
 void InitConstantBufferDesc(D3D11_BUFFER_DESC *constantBufferDescription, size_t byteWidth)

@@ -181,6 +181,11 @@ const gl::Limitations &ContextVk::getNativeLimitations() const
     return mRenderer->getNativeLimitations();
 }
 
+const Workarounds& ContextVk::getWorkarounds() const
+{
+    return mRenderer->getWorkarounds();
+}
+
 CompilerImpl *ContextVk::createCompiler()
 {
     return new CompilerVk();

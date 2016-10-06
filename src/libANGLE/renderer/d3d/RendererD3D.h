@@ -147,7 +147,7 @@ class RendererD3D : public BufferFactoryD3D
 
     virtual int getMajorShaderModel() const = 0;
 
-    const WorkaroundsD3D &getWorkarounds() const;
+    const WorkaroundsD3D &getWorkaroundsD3D() const;
 
     // Pixel operations
     virtual gl::Error copyImage2D(const gl::Framebuffer *framebuffer, const gl::Rectangle &sourceRect, GLenum destFormat,
@@ -283,7 +283,7 @@ class RendererD3D : public BufferFactoryD3D
                                        FramebufferTextureArray *outTextureArray);
     gl::Texture *getIncompleteTexture(GLImplFactory *implFactory, GLenum type);
 
-    virtual WorkaroundsD3D generateWorkarounds() const = 0;
+    virtual void generateWorkarounds(WorkaroundsD3D* workarounds) const = 0;
 
     mutable bool mCapsInitialized;
     mutable gl::Caps mNativeCaps;

@@ -16,6 +16,9 @@ namespace rx
 
 RendererVk::RendererVk() : mCapsInitialized(false)
 {
+    // TODO(kbr): rethink how this workaround is enabled. Is it
+    // desired to enable it all the time, or only when embedded in Chromium?
+    mWorkarounds.loseContextOnOutOfMemory = true;
 }
 
 RendererVk::~RendererVk()
@@ -61,6 +64,11 @@ const gl::Limitations &RendererVk::getNativeLimitations() const
 {
     ensureCapsInitialized();
     return mNativeLimitations;
+}
+
+const Workarounds& RendererVk::getWorkarounds() const
+{
+    return mWorkarounds;
 }
 
 }  // namespace rx

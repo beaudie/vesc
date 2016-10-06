@@ -87,7 +87,7 @@ inline bool isDeviceLostError(HRESULT errorCode)
     }
 }
 
-WorkaroundsD3D GenerateWorkarounds();
+void GenerateWorkarounds(WorkaroundsD3D* workarounds);
 }
 
 }

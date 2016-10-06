@@ -9,13 +9,16 @@
 #ifndef LIBANGLE_RENDERER_GL_WORKAROUNDSGL_H_
 #define LIBANGLE_RENDERER_GL_WORKAROUNDSGL_H_
 
+#include "libANGLE/Workarounds.h"
+
 namespace rx
 {
 
-struct WorkaroundsGL
+struct WorkaroundsGL : Workarounds
 {
     WorkaroundsGL()
-        : avoid1BitAlphaTextureFormats(false),
+        : Workarounds(),
+          avoid1BitAlphaTextureFormats(false),
           rgba4IsNotSupportedForColorRendering(false),
           doesSRGBClearsOnLinearFramebufferAttachments(false),
           doWhileGLSLCausesGPUHang(false),
