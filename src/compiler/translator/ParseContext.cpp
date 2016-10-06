@@ -2024,8 +2024,7 @@ TIntermAggregate *TParseContext::addFunctionPrototypeDeclaration(const TFunction
 
     TIntermAggregate *prototype = new TIntermAggregate;
     prototype->setType(function.getReturnType());
-    prototype->setName(function.getMangledName());
-    prototype->setFunctionId(function.getUniqueId());
+    prototype->getFunctionInfo()->setFromFunction(function);
 
     for (size_t i = 0; i < function.getParamCount(); i++)
     {
@@ -2082,9 +2081,8 @@ TIntermAggregate *TParseContext::addFunctionDefinition(const TFunction &function
     }
     functionNode->getSequence()->push_back(functionBody);
 
-    functionNode->setName(function.getMangledName().c_str());
+    functionNode->getFunctionInfo()->setFromFunction(function);
     functionNode->setType(function.getReturnType());
-    functionNode->setFunctionId(function.getUniqueId());
 
     symbolTable.pop();
     return functionNode;
@@ -3679,7 +3677,7 @@ TIntermBranch *TParseContext::addBranch(TOperator op,
 void TParseContext::checkTextureOffsetConst(TIntermAggregate *functionCall)
 {
     ASSERT(!functionCall->isUserDefined());
-    const TString &name        = functionCall->getName();
+    const TString &name        = functionCall->getFunctionInfo()->getName();
     TIntermNode *offset        = nullptr;
     TIntermSequence *arguments = functionCall->getSequence();
     if (name.compare(0, 16, "texelFetchOffset") == 0 ||
@@ -3868,8 +3866,7 @@ TIntermTyped *TParseContext::addFunctionCallOrMethod(TFunction *fnCall,
                 // if builtIn == true, it's definitely a builtIn function with EOpNull
                 if (!builtIn)
                     aggregate->setUserDefined();
-                aggregate->setName(fnCandidate->getMangledName());
-                aggregate->setFunctionId(fnCandidate->getUniqueId());
+                aggregate->getFunctionInfo()->setFromFunction(*fnCandidate);
 
                 // This needs to happen after the name is set
                 if (builtIn)
