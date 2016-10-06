@@ -76,7 +76,7 @@ class CallDAG::CallDAGCreator : public TIntermTraverser
                 record.callees.push_back(static_cast<int>(callee->index));
             }
 
-            (*idToIndex)[data.node->getFunctionId()] = static_cast<int>(data.index);
+            (*idToIndex)[data.node->getFunctionInfo()->getId()] = static_cast<int>(data.index);
         }
     }
 
@@ -109,8 +109,8 @@ class CallDAG::CallDAGCreator : public TIntermTraverser
             if (visit == PreVisit)
             {
                 // Function declaration, create an empty record.
-                auto& record = mFunctions[node->getName()];
-                record.name = node->getName();
+                auto &record = mFunctions[node->getFunctionInfo()->getName()];
+                record.name  = node->getFunctionInfo()->getName();
             }
             break;
           case EOpFunction:
@@ -118,11 +118,11 @@ class CallDAG::CallDAGCreator : public TIntermTraverser
                 // Function definition, create the record if need be and remember the node.
                 if (visit == PreVisit)
                 {
-                    auto it = mFunctions.find(node->getName());
+                    auto it = mFunctions.find(node->getFunctionInfo()->getName());
 
                     if (it == mFunctions.end())
                     {
-                        mCurrentFunction = &mFunctions[node->getName()];
+                        mCurrentFunction = &mFunctions[node->getFunctionInfo()->getName()];
                     }
                     else
                     {
@@ -130,8 +130,7 @@ class CallDAG::CallDAGCreator : public TIntermTraverser
                     }
 
                     mCurrentFunction->node = node;
-                    mCurrentFunction->name = node->getName();
-
+                    mCurrentFunction->name = node->getFunctionInfo()->getName();
                 }
                 else if (visit == PostVisit)
                 {
@@ -147,7 +146,7 @@ class CallDAG::CallDAGCreator : public TIntermTraverser
                     // Do not handle calls to builtin functions
                     if (node->isUserDefined())
                     {
-                        auto it = mFunctions.find(node->getName());
+                        auto it = mFunctions.find(node->getFunctionInfo()->getName());
                         ASSERT(it != mFunctions.end());
 
                         // We might be in a top-level function call to set a global variable
@@ -283,13 +282,9 @@ CallDAG::~CallDAG()
 
 const size_t CallDAG::InvalidIndex = std::numeric_limits<size_t>::max();
 
-size_t CallDAG::findIndex(const TIntermAggregate *function) const
+size_t CallDAG::findIndex(const TFunctionInfo *functionInfo) const
 {
-    TOperator op = function->getOp();
-    ASSERT(op == EOpPrototype || op == EOpFunction || op == EOpFunctionCall);
-    UNUSED_ASSERTION_VARIABLE(op);
-
-    auto it = mFunctionIdToIndex.find(function->getFunctionId());
+    auto it = mFunctionIdToIndex.find(functionInfo->getId());
 
     if (it == mFunctionIdToIndex.end())
     {
@@ -309,7 +304,7 @@ const CallDAG::Record &CallDAG::getRecordFromIndex(size_t index) const
 
 const CallDAG::Record &CallDAG::getRecord(const TIntermAggregate *function) const
 {
-    size_t index = findIndex(function);
+    size_t index = findIndex(function->getFunctionInfo());
     ASSERT(index != InvalidIndex && index < mRecords.size());
     return mRecords[index];
 }
