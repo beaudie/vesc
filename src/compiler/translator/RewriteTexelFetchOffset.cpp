@@ -75,7 +75,7 @@ bool Traverser::visitAggregate(Visit visit, TIntermAggregate *node)
         return true;
     }
 
-    if (node->getName().compare(0, 16, "texelFetchOffset") != 0)
+    if (node->getFunctionInfo()->getName().compare(0, 16, "texelFetchOffset") != 0)
     {
         return true;
     }
@@ -85,11 +85,12 @@ bool Traverser::visitAggregate(Visit visit, TIntermAggregate *node)
     ASSERT(sequence->size() == 4u);
 
     // Decide if there is a 2DArray sampler.
-    bool is2DArray = node->getName().find("s2a1") != TString::npos;
+    bool is2DArray = node->getFunctionInfo()->getName().find("s2a1") != TString::npos;
 
     // Create new argument list from node->getName().
     // e.g. Get "(is2a1;vi3;i1;" from "texelFetchOffset(is2a1;vi3;i1;vi2;"
-    TString newArgs           = node->getName().substr(16, node->getName().length() - 20);
+    TString newArgs = node->getFunctionInfo()->getName().substr(
+        16, node->getFunctionInfo()->getName().length() - 20);
     TString newName           = "texelFetch" + newArgs;
     TSymbol *texelFetchSymbol = symbolTable->findBuiltIn(newName, shaderVersion);
     ASSERT(texelFetchSymbol);
@@ -98,8 +99,8 @@ bool Traverser::visitAggregate(Visit visit, TIntermAggregate *node)
     // Create new node that represents the call of function texelFetch.
     // Its argument list will be: texelFetch(sampler, Position+offset, lod).
     TIntermAggregate *texelFetchNode = new TIntermAggregate(EOpFunctionCall);
-    texelFetchNode->setName(newName);
-    texelFetchNode->setFunctionId(uniqueId);
+    texelFetchNode->getFunctionInfo()->setName(newName);
+    texelFetchNode->getFunctionInfo()->setId(uniqueId);
     texelFetchNode->setType(node->getType());
     texelFetchNode->setLine(node->getLine());
 
