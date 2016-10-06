@@ -361,7 +361,12 @@ StateManagerGL *ContextGL::getStateManager()
     return mRenderer->getStateManager();
 }
 
-const WorkaroundsGL &ContextGL::getWorkaroundsGL()
+const Workarounds &ContextGL::getWorkarounds() const
+{
+    return getWorkaroundsGL();
+}
+
+const WorkaroundsGL &ContextGL::getWorkaroundsGL() const
 {
     return mRenderer->getWorkarounds();
 }

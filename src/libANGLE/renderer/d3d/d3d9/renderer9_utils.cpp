@@ -640,17 +640,18 @@ void MakeValidSize(bool isImage, D3DFORMAT format, GLsizei *requestWidth, GLsize
     *levelOffset = upsampleCount;
 }
 
-WorkaroundsD3D GenerateWorkarounds()
+void GenerateWorkarounds(WorkaroundsD3D* workarounds)
 {
-    WorkaroundsD3D workarounds;
-    workarounds.mrtPerfWorkaround = true;
-    workarounds.setDataFasterThanImageUpload = false;
-    workarounds.useInstancedPointSpriteEmulation = false;
+    workarounds->mrtPerfWorkaround = true;
+    workarounds->setDataFasterThanImageUpload = false;
+    workarounds->useInstancedPointSpriteEmulation = false;
 
     // TODO(jmadill): Disable workaround when we have a fixed compiler DLL.
-    workarounds.expandIntegerPowExpressions = true;
+    workarounds->expandIntegerPowExpressions = true;
 
-    return workarounds;
+    // TODO(kbr): rethink how this workaround is enabled. Is it
+    // desired to enable it all the time, or only when embedded in Chromium?
+    workarounds->loseContextOnOutOfMemory = true;
 }
 
 }  // namespace d3d9

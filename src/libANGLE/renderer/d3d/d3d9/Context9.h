@@ -117,6 +117,9 @@ class Context9 : public ContextImpl
     const gl::Extensions &getNativeExtensions() const override;
     const gl::Limitations &getNativeLimitations() const override;
 
+    // Cross-platform access to workarounds.
+    const Workarounds& getWorkarounds() const override;
+
   private:
     Renderer9 *mRenderer;
 };

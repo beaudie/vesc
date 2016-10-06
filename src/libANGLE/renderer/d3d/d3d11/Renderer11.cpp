@@ -908,7 +908,7 @@ void Renderer11::populateRenderer11DeviceCaps()
         }
     }
 
-    if (getWorkarounds().disableB5G6R5Support)
+    if (getWorkaroundsD3D().disableB5G6R5Support)
     {
         mRenderer11DeviceCaps.B5G6R5support = 0;
     }
@@ -1568,7 +1568,7 @@ bool Renderer11::applyPrimitiveType(GLenum mode, GLsizei count, bool usesPointSi
     // If instanced pointsprite emulation is being used and  If gl_PointSize is used in the shader,
     // GL_POINTS mode is expected to render pointsprites.
     // Instanced PointSprite emulation requires that the topology to be D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST.
-    if (mode == GL_POINTS && usesPointSize && getWorkarounds().useInstancedPointSpriteEmulation)
+    if (mode == GL_POINTS && usesPointSize && getWorkaroundsD3D().useInstancedPointSpriteEmulation)
     {
         primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     }
@@ -1796,7 +1796,7 @@ gl::Error Renderer11::drawArraysImpl(const gl::ContextState &data,
     }
 
     bool useInstancedPointSpriteEmulation =
-        programD3D->usesPointSize() && getWorkarounds().useInstancedPointSpriteEmulation;
+        programD3D->usesPointSize() && getWorkaroundsD3D().useInstancedPointSpriteEmulation;
 
     if (instances > 0)
     {
@@ -2887,17 +2887,6 @@ std::string Renderer11::getShaderModelSuffix() const
       case D3D_FEATURE_LEVEL_9_3:  return "_level_9_3";
       default: UNREACHABLE();      return "";
     }
-}
-
-const WorkaroundsD3D &RendererD3D::getWorkarounds() const
-{
-    if (!mWorkaroundsInitialized)
-    {
-        mWorkarounds            = generateWorkarounds();
-        mWorkaroundsInitialized = true;
-    }
-
-    return mWorkarounds;
 }
 
 gl::Error Renderer11::copyImageInternal(const gl::Framebuffer *framebuffer,
@@ -4217,9 +4206,9 @@ void Renderer11::generateCaps(gl::Caps *outCaps, gl::TextureCapsMap *outTextureC
                            outExtensions, outLimitations);
 }
 
-WorkaroundsD3D Renderer11::generateWorkarounds() const
+void Renderer11::generateWorkarounds(WorkaroundsD3D* workarounds) const
 {
-    return d3d11::GenerateWorkarounds(mRenderer11DeviceCaps, mAdapterDescription);
+    return d3d11::GenerateWorkarounds(mRenderer11DeviceCaps, mAdapterDescription, workarounds);
 }
 
 gl::Error Renderer11::clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd)

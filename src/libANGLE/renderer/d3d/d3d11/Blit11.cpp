@@ -1615,7 +1615,7 @@ gl::Error Blit11::copyAndConvert(const TextureHelper11 &source,
                        destPixelStride, convertFunction);
 
     // Work around timeouts/TDRs in older NVIDIA drivers.
-    if (mRenderer->getWorkarounds().depthStencilBlitExtraCopy)
+    if (mRenderer->getWorkaroundsD3D().depthStencilBlitExtraCopy)
     {
         D3D11_MAPPED_SUBRESOURCE mapped;
         deviceContext->Map(destStaging.getResource(), 0, D3D11_MAP_READ, 0, &mapped);

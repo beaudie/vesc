@@ -384,7 +384,7 @@ class Renderer11 : public RendererD3D
                       gl::Extensions *outExtensions,
                       gl::Limitations *outLimitations) const override;
 
-    WorkaroundsD3D generateWorkarounds() const override;
+    void generateWorkarounds(WorkaroundsD3D* workarounds) const override;
 
     gl::Error drawLineLoop(const gl::ContextState &data,
                            GLsizei count,

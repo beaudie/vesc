@@ -28,6 +28,7 @@ namespace rx
 {
 class ContextImpl;
 class EGLImplFactory;
+struct Workarounds;
 }
 
 namespace egl
@@ -595,6 +596,7 @@ class Context final : public ValidationContext
     size_t getExtensionStringCount() const;
 
     rx::ContextImpl *getImplementation() const { return mImplementation.get(); }
+    const rx::Workarounds& getWorkarounds() const;
 
   private:
     void syncRendererState();

@@ -1014,7 +1014,7 @@ gl::Error StateManager11::syncFramebuffer(gl::Framebuffer *framebuffer)
     const auto &colorRTs = framebuffer11->getCachedColorRenderTargets();
 
     size_t appliedRTIndex  = 0;
-    bool skipInactiveRTs   = mRenderer->getWorkarounds().mrtPerfWorkaround;
+    bool skipInactiveRTs   = mRenderer->getWorkaroundsD3D().mrtPerfWorkaround;
     const auto &drawStates = framebuffer->getDrawBufferStates();
 
     for (size_t rtIndex = 0; rtIndex < colorRTs.size(); ++rtIndex)

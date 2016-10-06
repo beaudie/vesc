@@ -917,6 +917,10 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     workarounds->unpackLastRowSeparatelyForPaddingInclusion = vendor == VENDOR_ID_NVIDIA;
     workarounds->packLastRowSeparatelyForPaddingInclusion   = vendor == VENDOR_ID_NVIDIA;
 #endif
+
+    // TODO(kbr): rethink how this workaround is enabled. Is it
+    // desired to enable it all the time, or only when embedded in Chromium?
+    workarounds->loseContextOnOutOfMemory = true;
 }
 
 }

@@ -82,6 +82,9 @@ class ContextVk : public ContextImpl
     const gl::Extensions &getNativeExtensions() const override;
     const gl::Limitations &getNativeLimitations() const override;
 
+    // Cross-platform access to workarounds.
+    const Workarounds& getWorkarounds() const override;
+
     // Shader creation
     CompilerImpl *createCompiler() override;
     ShaderImpl *createShader(const gl::ShaderState &state) override;

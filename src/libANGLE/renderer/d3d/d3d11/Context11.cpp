@@ -55,7 +55,7 @@ CompilerImpl *Context11::createCompiler()
 
 ShaderImpl *Context11::createShader(const gl::ShaderState &data)
 {
-    return new ShaderD3D(data, mRenderer->getWorkarounds());
+    return new ShaderD3D(data, mRenderer->getWorkaroundsD3D());
 }
 
 ProgramImpl *Context11::createProgram(const gl::ProgramState &data)
@@ -265,6 +265,11 @@ const gl::Extensions &Context11::getNativeExtensions() const
 const gl::Limitations &Context11::getNativeLimitations() const
 {
     return mRenderer->getNativeLimitations();
+}
+
+const Workarounds &Context11::getWorkarounds() const
+{
+    return mRenderer->getWorkaroundsD3D();
 }
 
 }  // namespace rx

@@ -35,7 +35,7 @@ void TransformFeedback11::begin(GLenum primitiveMode)
 
 void TransformFeedback11::end()
 {
-    if (mRenderer->getWorkarounds().flushAfterEndingTransformFeedback)
+    if (mRenderer->getWorkaroundsD3D().flushAfterEndingTransformFeedback)
     {
         mRenderer->getDeviceContext()->Flush();
     }

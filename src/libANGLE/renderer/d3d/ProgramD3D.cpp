@@ -383,7 +383,7 @@ ProgramD3DMetadata::ProgramD3DMetadata(RendererD3D *renderer,
     : mRendererMajorShaderModel(renderer->getMajorShaderModel()),
       mShaderModelSuffix(renderer->getShaderModelSuffix()),
       mUsesInstancedPointSpriteEmulation(
-          renderer->getWorkarounds().useInstancedPointSpriteEmulation),
+          renderer->getWorkaroundsD3D().useInstancedPointSpriteEmulation),
       mUsesViewScale(renderer->presentPathFastEnabled()),
       mVertexShader(vertexShader),
       mFragmentShader(fragmentShader)
@@ -599,7 +599,7 @@ bool ProgramD3D::usesGeometryShader(GLenum drawMode) const
 
 bool ProgramD3D::usesInstancedPointSpriteEmulation() const
 {
-    return mRenderer->getWorkarounds().useInstancedPointSpriteEmulation;
+    return mRenderer->getWorkaroundsD3D().useInstancedPointSpriteEmulation;
 }
 
 GLint ProgramD3D::getSamplerMapping(gl::SamplerType type,

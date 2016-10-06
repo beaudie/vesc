@@ -12,6 +12,7 @@
 
 #include "common/angleutils.h"
 #include "libANGLE/Caps.h"
+#include "libANGLE/Workarounds.h"
 
 namespace rx
 {
@@ -27,6 +28,8 @@ class RendererVk : angle::NonCopyable
     const gl::Extensions &getNativeExtensions() const;
     const gl::Limitations &getNativeLimitations() const;
 
+    const Workarounds& getWorkarounds() const;
+
   private:
     void ensureCapsInitialized() const;
     void generateCaps(gl::Caps *outCaps,
@@ -39,6 +42,7 @@ class RendererVk : angle::NonCopyable
     mutable gl::TextureCapsMap mNativeTextureCaps;
     mutable gl::Extensions mNativeExtensions;
     mutable gl::Limitations mNativeLimitations;
+    mutable Workarounds mWorkarounds;
 };
 
 }  // namespace rx

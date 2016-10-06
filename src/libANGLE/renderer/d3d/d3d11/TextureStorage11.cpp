@@ -202,7 +202,7 @@ gl::Error TextureStorage11::getSRV(const gl::TextureState &textureState,
         ASSERT(mipLevels == 1 || mipLevels == mMipLevels);
     }
 
-    if (mRenderer->getWorkarounds().zeroMaxLodWorkaround)
+    if (mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround)
     {
         // We must ensure that the level zero texture is in sync with mipped texture.
         ANGLE_TRY(useLevelZeroWorkaroundTexture(mipLevels == 1));
@@ -215,7 +215,7 @@ gl::Error TextureStorage11::getSRV(const gl::TextureState &textureState,
 
     // We drop the stencil when sampling from the SRV if three conditions hold:
     // 1. the drop stencil workaround is enabled.
-    bool workaround = mRenderer->getWorkarounds().emulateTinyStencilTextures;
+    bool workaround = mRenderer->getWorkaroundsD3D().emulateTinyStencilTextures;
     // 2. this is a stencil texture.
     bool hasStencil = (d3d11::GetDXGIFormatInfo(mFormatInfo.dsvFormat).stencilBits > 0);
     // 3. the texture has a 1x1 or 2x2 mip.
@@ -324,7 +324,7 @@ gl::Error TextureStorage11::getSRVLevels(GLint baseLevel,
         ASSERT(mipLevels == 1 || mipLevels == mMipLevels);
     }
 
-    if (mRenderer->getWorkarounds().zeroMaxLodWorkaround)
+    if (mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround)
     {
         // We must ensure that the level zero texture is in sync with mipped texture.
         ANGLE_TRY(useLevelZeroWorkaroundTexture(mipLevels == 1));
@@ -411,7 +411,7 @@ gl::Error TextureStorage11::updateSubresourceLevel(ID3D11Resource *srcTexture,
 
     // If the zero-LOD workaround is active and we want to update a level greater than zero, then we
     // should update the mipmapped texture, even if mapmaps are currently disabled.
-    if (index.mipIndex > 0 && mRenderer->getWorkarounds().zeroMaxLodWorkaround)
+    if (index.mipIndex > 0 && mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround)
     {
         ANGLE_TRY(getMippedResource(&dstTexture));
     }
@@ -464,7 +464,7 @@ gl::Error TextureStorage11::copySubresourceLevel(ID3D11Resource *dstTexture,
 
     // If the zero-LOD workaround is active and we want to update a level greater than zero, then we
     // should update the mipmapped texture, even if mapmaps are currently disabled.
-    if (index.mipIndex > 0 && mRenderer->getWorkarounds().zeroMaxLodWorkaround)
+    if (index.mipIndex > 0 && mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround)
     {
         ANGLE_TRY(getMippedResource(&srcTexture));
     }
@@ -759,7 +759,7 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer,
     mTextureDepth  = 1;
 
     // The LevelZeroOnly hint should only be true if the zero max LOD workaround is active.
-    ASSERT(!mUseLevelZeroTexture || mRenderer->getWorkarounds().zeroMaxLodWorkaround);
+    ASSERT(!mUseLevelZeroTexture || mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround);
 }
 
 TextureStorage11_2D::~TextureStorage11_2D()
@@ -811,7 +811,7 @@ gl::Error TextureStorage11_2D::copyToStorage(TextureStorage *destStorage)
     TextureStorage11_2D *dest11           = GetAs<TextureStorage11_2D>(destStorage);
     ID3D11DeviceContext *immediateContext = mRenderer->getDeviceContext();
 
-    if (mRenderer->getWorkarounds().zeroMaxLodWorkaround)
+    if (mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround)
     {
         // If either mTexture or mLevelZeroTexture exist, then we need to copy them into the
         // corresponding textures in destStorage.
@@ -1003,7 +1003,7 @@ gl::Error TextureStorage11_2D::getResource(ID3D11Resource **outResource)
 gl::Error TextureStorage11_2D::getMippedResource(ID3D11Resource **outResource)
 {
     // This shouldn't be called unless the zero max LOD workaround is active.
-    ASSERT(mRenderer->getWorkarounds().zeroMaxLodWorkaround);
+    ASSERT(mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround);
 
     ANGLE_TRY(ensureTextureExists(mMipLevels));
 
@@ -1014,7 +1014,7 @@ gl::Error TextureStorage11_2D::getMippedResource(ID3D11Resource **outResource)
 gl::Error TextureStorage11_2D::ensureTextureExists(int mipLevels)
 {
     // If mMipLevels = 1 then always use mTexture rather than mLevelZeroTexture.
-    bool useLevelZeroTexture = mRenderer->getWorkarounds().zeroMaxLodWorkaround
+    bool useLevelZeroTexture = mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround
                                    ? (mipLevels == 1) && (mMipLevels > 1)
                                    : false;
     ID3D11Texture2D **outputTexture = useLevelZeroTexture ? &mLevelZeroTexture : &mTexture;
@@ -1206,7 +1206,7 @@ gl::Error TextureStorage11_2D::createSRV(int baseLevel,
 
     ID3D11Resource *srvTexture = texture;
 
-    if (mRenderer->getWorkarounds().zeroMaxLodWorkaround)
+    if (mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround)
     {
         ASSERT(mTopLevel == 0);
         ASSERT(baseLevel == 0);
@@ -1809,7 +1809,7 @@ TextureStorage11_Cube::TextureStorage11_Cube(Renderer11 *renderer,
     mTextureDepth  = 1;
 
     // The LevelZeroOnly hint should only be true if the zero max LOD workaround is active.
-    ASSERT(!mUseLevelZeroTexture || mRenderer->getWorkarounds().zeroMaxLodWorkaround);
+    ASSERT(!mUseLevelZeroTexture || mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround);
 }
 
 TextureStorage11_Cube::~TextureStorage11_Cube()
@@ -1855,7 +1855,7 @@ TextureStorage11_Cube::~TextureStorage11_Cube()
 
 UINT TextureStorage11_Cube::getSubresourceIndex(const gl::ImageIndex &index) const
 {
-    if (mRenderer->getWorkarounds().zeroMaxLodWorkaround && mUseLevelZeroTexture &&
+    if (mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround && mUseLevelZeroTexture &&
         index.mipIndex == 0)
     {
         UINT arraySlice  = static_cast<UINT>(index.hasLayer() ? index.layerIndex : 0);
@@ -1879,7 +1879,7 @@ gl::Error TextureStorage11_Cube::copyToStorage(TextureStorage *destStorage)
 
     TextureStorage11_Cube *dest11 = GetAs<TextureStorage11_Cube>(destStorage);
 
-    if (mRenderer->getWorkarounds().zeroMaxLodWorkaround)
+    if (mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround)
     {
         ID3D11DeviceContext *immediateContext = mRenderer->getDeviceContext();
 
@@ -2131,7 +2131,7 @@ gl::Error TextureStorage11_Cube::getResource(ID3D11Resource **outResource)
 gl::Error TextureStorage11_Cube::getMippedResource(ID3D11Resource **outResource)
 {
     // This shouldn't be called unless the zero max LOD workaround is active.
-    ASSERT(mRenderer->getWorkarounds().zeroMaxLodWorkaround);
+    ASSERT(mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround);
 
     gl::Error error = ensureTextureExists(mMipLevels);
     if (error.isError())
@@ -2146,7 +2146,7 @@ gl::Error TextureStorage11_Cube::getMippedResource(ID3D11Resource **outResource)
 gl::Error TextureStorage11_Cube::ensureTextureExists(int mipLevels)
 {
     // If mMipLevels = 1 then always use mTexture rather than mLevelZeroTexture.
-    bool useLevelZeroTexture = mRenderer->getWorkarounds().zeroMaxLodWorkaround
+    bool useLevelZeroTexture = mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround
                                    ? (mipLevels == 1) && (mMipLevels > 1)
                                    : false;
     ID3D11Texture2D **outputTexture = useLevelZeroTexture ? &mLevelZeroTexture : &mTexture;
@@ -2422,7 +2422,7 @@ gl::Error TextureStorage11_Cube::createSRV(int baseLevel,
 
     ID3D11Resource *srvTexture = texture;
 
-    if (mRenderer->getWorkarounds().zeroMaxLodWorkaround)
+    if (mRenderer->getWorkaroundsD3D().zeroMaxLodWorkaround)
     {
         ASSERT(mTopLevel == 0);
         ASSERT(baseLevel == 0);

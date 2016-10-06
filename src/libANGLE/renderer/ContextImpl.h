@@ -16,6 +16,11 @@
 #include "libANGLE/ContextState.h"
 #include "libANGLE/renderer/GLImplFactory.h"
 
+namespace rx
+{
+struct Workarounds;
+}
+
 namespace gl
 {
 class Path;
@@ -134,6 +139,9 @@ class ContextImpl : public GLImplFactory
     virtual const gl::TextureCapsMap &getNativeTextureCaps() const = 0;
     virtual const gl::Extensions &getNativeExtensions() const = 0;
     virtual const gl::Limitations &getNativeLimitations() const = 0;
+
+    // Cross-platform access to workarounds.
+    virtual const Workarounds &getWorkarounds() const = 0;
 
     const gl::ContextState &getContextState() { return mState; }
     int getClientMajorVersion() const { return mState.getClientMajorVersion(); }

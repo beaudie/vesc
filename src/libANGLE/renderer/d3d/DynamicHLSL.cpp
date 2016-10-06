@@ -195,7 +195,7 @@ std::string DynamicHLSL::generateVertexShaderForInputLayout(
     // must be used.
     bool usesPointSize = sourceShader.find("GL_USES_POINT_SIZE") != std::string::npos;
     bool useInstancedPointSpriteEmulation =
-        usesPointSize && mRenderer->getWorkarounds().useInstancedPointSpriteEmulation;
+        usesPointSize && mRenderer->getWorkaroundsD3D().useInstancedPointSpriteEmulation;
 
     // Instanced PointSprite emulation requires additional entries in the
     // VS_INPUT structure to support the vertices that make up the quad vertices.
@@ -421,7 +421,7 @@ bool DynamicHLSL::generateShaderLinkHLSL(const gl::ContextState &data,
 
     bool useInstancedPointSpriteEmulation =
         programMetadata.usesPointSize() &&
-        mRenderer->getWorkarounds().useInstancedPointSpriteEmulation;
+        mRenderer->getWorkaroundsD3D().useInstancedPointSpriteEmulation;
 
     // Validation done in the compiler
     ASSERT(!fragmentShader->usesFragColor() || !fragmentShader->usesFragData());
