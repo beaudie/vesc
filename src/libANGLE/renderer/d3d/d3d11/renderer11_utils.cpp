@@ -214,6 +214,11 @@ D3D11_TEXTURE_ADDRESS_MODE ConvertTextureWrap(GLenum wrap)
     return D3D11_TEXTURE_ADDRESS_WRAP;
 }
 
+UINT ConvertMaxAnisotropy(float maxAnisotropy, D3D_FEATURE_LEVEL featureLevel)
+{
+    return std::min(static_cast<UINT>(maxAnisotropy), static_cast<UINT>(D3D11_MAX_MAXANISOTROPY));
+}
+
 D3D11_QUERY ConvertQueryType(GLenum queryType)
 {
     switch (queryType)

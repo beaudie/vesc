@@ -246,7 +246,8 @@ void ConvertMinFilter(GLenum minFilter, D3DTEXTUREFILTERTYPE *d3dMinFilter, D3DT
 
     // Disabling mipmapping will always sample from level 0 of the texture. It is possible to work
     // around this by modifying D3DSAMP_MAXMIPLEVEL to force a specific mip level to become the
-    // lowest sampled mip level and using a large negative value for D3DSAMP_MIPMAPLODBIAS to
+    // lowest sampled mip level and using a maxTextureAnisotropylarge negative value for
+    // D3DSAMP_MIPMAPLODBIAS to
     // ensure that only the base mip level is sampled.
     if (baseLevel > 0 && *d3dMipFilter == D3DTEXF_NONE)
     {
