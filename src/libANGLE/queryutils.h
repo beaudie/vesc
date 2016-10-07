@@ -18,6 +18,7 @@ class Buffer;
 class Framebuffer;
 class Program;
 class Renderbuffer;
+class Sampler;
 class Shader;
 class Texture;
 
@@ -31,6 +32,18 @@ void QueryRenderbufferiv(const Renderbuffer *renderbuffer, GLenum pname, GLint *
 void QueryShaderiv(const Shader *shader, GLenum pname, GLint *params);
 void QueryTexParameterfv(const Texture *texture, GLenum pname, GLfloat *params);
 void QueryTexParameteriv(const Texture *texture, GLenum pname, GLint *params);
+void QuerySamplerParameterfv(const Sampler *sampler, GLenum pname, GLfloat *params);
+void QuerySamplerParameteriv(const Sampler *sampler, GLenum pname, GLint *params);
+
+void SetTexParameterf(Texture *texture, GLenum pname, GLfloat param);
+void SetTexParameterfv(Texture *texture, GLenum pname, const GLfloat *params);
+void SetTexParameteri(Texture *texture, GLenum pname, GLint param);
+void SetTexParameteriv(Texture *texture, GLenum pname, const GLint *params);
+
+void SetSamplerParameterf(Sampler *sampler, GLenum pname, GLfloat param);
+void SetSamplerParameterfv(Sampler *sampler, GLenum pname, const GLfloat *params);
+void SetSamplerParameteri(Sampler *sampler, GLenum pname, GLint param);
+void SetSamplerParameteriv(Sampler *sampler, GLenum pname, const GLint *params);
 }
 
 #endif  // LIBANGLE_QUERYUTILS_H_
