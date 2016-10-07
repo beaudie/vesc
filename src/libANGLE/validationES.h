@@ -359,6 +359,21 @@ bool ValidateGetShaderivRobustANGLE(Context *context,
                                     GLsizei *length,
                                     GLint *params);
 
+bool ValidateGetTexParameterfv(Context *context, GLenum target, GLenum pname, GLfloat *params);
+bool ValidateGetTexParameterfvRobustANGLE(Context *context,
+                                          GLenum target,
+                                          GLenum pname,
+                                          GLsizei bufSize,
+                                          GLsizei *length,
+                                          GLfloat *params);
+bool ValidateGetTexParameteriv(Context *context, GLenum target, GLenum pname, GLint *params);
+bool ValidateGetTexParameterivRobustANGLE(Context *context,
+                                          GLenum target,
+                                          GLenum pname,
+                                          GLsizei bufSize,
+                                          GLsizei *length,
+                                          GLint *params);
+
 // Error messages shared here for use in testing.
 extern const char *g_ExceedsMaxElementErrorMessage;
 }  // namespace gl
