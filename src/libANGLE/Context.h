@@ -156,11 +156,6 @@ class Context final : public ValidationContext
 
     void setVertexAttribDivisor(GLuint index, GLuint divisor);
 
-    void samplerParameteri(GLuint sampler, GLenum pname, GLint param);
-    void samplerParameterf(GLuint sampler, GLenum pname, GLfloat param);
-    GLint getSamplerParameteri(GLuint sampler, GLenum pname);
-    GLfloat getSamplerParameterf(GLuint sampler, GLenum pname);
-
     void programParameteri(GLuint program, GLenum pname, GLint value);
 
     Buffer *getBuffer(GLuint handle) const;
