@@ -410,6 +410,92 @@ bool ValidateGetShaderivBase(Context *context, GLuint shader, GLenum pname, GLsi
     return true;
 }
 
+bool ValidateGetTexParameterBase(Context *context, GLenum target, GLenum pname, GLsizei *length)
+{
+    if (length)
+    {
+        *length = 0;
+    }
+
+    if (!ValidTextureTarget(context, target) && !ValidTextureExternalTarget(context, target))
+    {
+        context->handleError(Error(GL_INVALID_ENUM, "Invalid texture target"));
+        return false;
+    }
+
+    if (context->getTargetTexture(target) == nullptr)
+    {
+        // Should only be possible for external textures
+        context->handleError(Error(GL_INVALID_ENUM, "No texture bound."));
+        return false;
+    }
+
+    switch (pname)
+    {
+        case GL_TEXTURE_MAG_FILTER:
+        case GL_TEXTURE_MIN_FILTER:
+        case GL_TEXTURE_WRAP_S:
+        case GL_TEXTURE_WRAP_T:
+            break;
+
+        case GL_TEXTURE_USAGE_ANGLE:
+            if (!context->getExtensions().textureUsage)
+            {
+                context->handleError(
+                    Error(GL_INVALID_ENUM, "GL_ANGLE_texture_usage is not enabled."));
+                return false;
+            }
+            break;
+
+        case GL_TEXTURE_MAX_ANISOTROPY_EXT:
+            if (!context->getExtensions().textureFilterAnisotropic)
+            {
+                context->handleError(
+                    Error(GL_INVALID_ENUM, "GL_EXT_texture_filter_anisotropic is not enabled."));
+                return false;
+            }
+            break;
+
+        case GL_TEXTURE_IMMUTABLE_FORMAT:
+            if (context->getClientMajorVersion() < 3 && !context->getExtensions().textureStorage)
+            {
+                context->handleError(
+                    Error(GL_INVALID_ENUM, "GL_EXT_texture_storage is not enabled."));
+                return false;
+            }
+            break;
+
+        case GL_TEXTURE_WRAP_R:
+        case GL_TEXTURE_IMMUTABLE_LEVELS:
+        case GL_TEXTURE_SWIZZLE_R:
+        case GL_TEXTURE_SWIZZLE_G:
+        case GL_TEXTURE_SWIZZLE_B:
+        case GL_TEXTURE_SWIZZLE_A:
+        case GL_TEXTURE_BASE_LEVEL:
+        case GL_TEXTURE_MAX_LEVEL:
+        case GL_TEXTURE_MIN_LOD:
+        case GL_TEXTURE_MAX_LOD:
+        case GL_TEXTURE_COMPARE_MODE:
+        case GL_TEXTURE_COMPARE_FUNC:
+            if (context->getClientMajorVersion() < 3)
+            {
+                context->handleError(Error(GL_INVALID_ENUM, "pname requires OpenGL ES 3.0."));
+                return false;
+            }
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Unknown pname."));
+            return false;
+    }
+
+    if (length)
+    {
+        *length = 1;
+    }
+    return true;
+}
+
 }  // anonymous namespace
 
 bool ValidTextureTarget(const ValidationContext *context, GLenum target)
@@ -3957,6 +4043,66 @@ bool ValidateGetShaderivRobustANGLE(Context *context,
     }
 
     if (!ValidateGetShaderivBase(context, shader, pname, length))
+    {
+        return false;
+    }
+
+    if (!ValidateRobustBufferSize(context, bufSize, *length))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateGetTexParameterfv(Context *context, GLenum target, GLenum pname, GLfloat *params)
+{
+    return ValidateGetTexParameterBase(context, target, pname, nullptr);
+}
+
+bool ValidateGetTexParameterfvRobustANGLE(Context *context,
+                                          GLenum target,
+                                          GLenum pname,
+                                          GLsizei bufSize,
+                                          GLsizei *length,
+                                          GLfloat *params)
+{
+    if (!ValidateRobustEntryPoint(context, bufSize))
+    {
+        return false;
+    }
+
+    if (!ValidateGetTexParameterBase(context, target, pname, length))
+    {
+        return false;
+    }
+
+    if (!ValidateRobustBufferSize(context, bufSize, *length))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateGetTexParameteriv(Context *context, GLenum target, GLenum pname, GLint *params)
+{
+    return ValidateGetTexParameterBase(context, target, pname, nullptr);
+}
+
+bool ValidateGetTexParameterivRobustANGLE(Context *context,
+                                          GLenum target,
+                                          GLenum pname,
+                                          GLsizei bufSize,
+                                          GLsizei *length,
+                                          GLint *params)
+{
+    if (!ValidateRobustEntryPoint(context, bufSize))
+    {
+        return false;
+    }
+
+    if (!ValidateGetTexParameterBase(context, target, pname, length))
     {
         return false;
     }
