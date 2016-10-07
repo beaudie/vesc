@@ -13,9 +13,85 @@
 #include "libANGLE/Program.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Shader.h"
+#include "libANGLE/Texture.h"
 
 namespace gl
 {
+
+namespace
+{
+template <typename QueryType>
+void QueryTexParameterBase(const Texture *texture, GLenum pname, QueryType *params)
+{
+    ASSERT(texture != nullptr);
+
+    switch (pname)
+    {
+        case GL_TEXTURE_MAG_FILTER:
+            *params = static_cast<QueryType>(texture->getMagFilter());
+            break;
+        case GL_TEXTURE_MIN_FILTER:
+            *params = static_cast<QueryType>(texture->getMinFilter());
+            break;
+        case GL_TEXTURE_WRAP_S:
+            *params = static_cast<QueryType>(texture->getWrapS());
+            break;
+        case GL_TEXTURE_WRAP_T:
+            *params = static_cast<QueryType>(texture->getWrapT());
+            break;
+        case GL_TEXTURE_WRAP_R:
+            *params = static_cast<QueryType>(texture->getWrapR());
+            break;
+        case GL_TEXTURE_IMMUTABLE_FORMAT:
+            *params = static_cast<QueryType>(texture->getImmutableFormat() ? GL_TRUE : GL_FALSE);
+            break;
+        case GL_TEXTURE_IMMUTABLE_LEVELS:
+            *params = static_cast<QueryType>(texture->getImmutableLevels());
+            break;
+        case GL_TEXTURE_USAGE_ANGLE:
+            *params = static_cast<QueryType>(texture->getUsage());
+            break;
+        case GL_TEXTURE_MAX_ANISOTROPY_EXT:
+            *params = static_cast<QueryType>(texture->getMaxAnisotropy());
+            break;
+        case GL_TEXTURE_SWIZZLE_R:
+            *params = static_cast<QueryType>(texture->getSwizzleRed());
+            break;
+        case GL_TEXTURE_SWIZZLE_G:
+            *params = static_cast<QueryType>(texture->getSwizzleGreen());
+            break;
+        case GL_TEXTURE_SWIZZLE_B:
+            *params = static_cast<QueryType>(texture->getSwizzleBlue());
+            break;
+        case GL_TEXTURE_SWIZZLE_A:
+            *params = static_cast<QueryType>(texture->getSwizzleAlpha());
+            break;
+        case GL_TEXTURE_BASE_LEVEL:
+            *params = static_cast<QueryType>(texture->getBaseLevel());
+            break;
+        case GL_TEXTURE_MAX_LEVEL:
+            *params = static_cast<QueryType>(texture->getMaxLevel());
+            break;
+        case GL_TEXTURE_MIN_LOD:
+            *params = static_cast<QueryType>(texture->getSamplerState().minLod);
+            break;
+        case GL_TEXTURE_MAX_LOD:
+            *params = static_cast<QueryType>(texture->getSamplerState().maxLod);
+            break;
+        case GL_TEXTURE_COMPARE_MODE:
+            *params = static_cast<QueryType>(texture->getCompareMode());
+            break;
+        case GL_TEXTURE_COMPARE_FUNC:
+            *params = static_cast<QueryType>(texture->getCompareFunc());
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+}  // anonymous namespace
+
 void QueryFramebufferAttachmentParameteriv(const Framebuffer *framebuffer,
                                            GLenum attachment,
                                            GLenum pname,
@@ -274,5 +350,15 @@ void QueryShaderiv(const Shader *shader, GLenum pname, GLint *params)
             UNREACHABLE();
             break;
     }
+}
+
+void QueryTexParameterfv(const Texture *texture, GLenum pname, GLfloat *params)
+{
+    QueryTexParameterBase(texture, pname, params);
+}
+
+void QueryTexParameteriv(const Texture *texture, GLenum pname, GLint *params)
+{
+    QueryTexParameterBase(texture, pname, params);
 }
 }

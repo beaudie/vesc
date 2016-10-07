@@ -2222,7 +2222,21 @@ ANGLE_EXPORT void GL_APIENTRY GetTexParameterfvRobustANGLE(GLenum target,
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufsize = %d, GLsizei* length = "
         "0x%0.8p, GLfloat* params = 0x%0.8p)",
         target, pname, bufSize, length, params);
-    UNIMPLEMENTED();
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        GLsizei numParams = 0;
+        if (!ValidateGetTexParameterfvRobustANGLE(context, target, pname, bufSize, &numParams,
+                                                  params))
+        {
+            return;
+        }
+
+        Texture *texture = context->getTargetTexture(target);
+        QueryTexParameterfv(texture, pname, params);
+        SetRobustLengthParam(length, numParams);
+    }
 }
 
 ANGLE_EXPORT void GL_APIENTRY GetTexParameterivRobustANGLE(GLenum target,
@@ -2235,7 +2249,21 @@ ANGLE_EXPORT void GL_APIENTRY GetTexParameterivRobustANGLE(GLenum target,
         "(GLenum target = 0x%X, GLenum pname = 0x%X, GLsizei bufsize = %d, GLsizei* length = "
         "0x%0.8p, GLfloat* params = 0x%0.8p)",
         target, pname, bufSize, length, params);
-    UNIMPLEMENTED();
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        GLsizei numParams = 0;
+        if (!ValidateGetTexParameterivRobustANGLE(context, target, pname, bufSize, &numParams,
+                                                  params))
+        {
+            return;
+        }
+
+        Texture *texture = context->getTargetTexture(target);
+        QueryTexParameteriv(texture, pname, params);
+        SetRobustLengthParam(length, numParams);
+    }
 }
 
 ANGLE_EXPORT void GL_APIENTRY GetUniformfvRobustANGLE(GLuint program,
