@@ -534,7 +534,7 @@ bool ValidQueryType(const Context *context, GLenum queryType)
     }
 }
 
-Program *GetValidProgram(Context *context, GLuint id)
+Program *GetValidProgram(ValidationContext *context, GLuint id)
 {
     // ES3 spec (section 2.11.1) -- "Commands that accept shader or program object names will generate the
     // error INVALID_VALUE if the provided name is not the name of either a shader or program object and
@@ -558,7 +558,7 @@ Program *GetValidProgram(Context *context, GLuint id)
     return validProgram;
 }
 
-Shader *GetValidShader(Context *context, GLuint id)
+Shader *GetValidShader(ValidationContext *context, GLuint id)
 {
     // See ValidProgram for spec details.
 
