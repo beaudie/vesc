@@ -23,6 +23,8 @@
 #include "libANGLE/renderer/gl/formatutilsgl.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
+#include <tuple>
+
 using angle::CheckedNumeric;
 
 namespace rx
@@ -112,6 +114,16 @@ LUMAWorkaroundGL::LUMAWorkaroundGL(bool enabled_, GLenum workaroundFormat_)
 {
 }
 
+bool operator==(const LUMAWorkaroundGL &a, const LUMAWorkaroundGL &b)
+{
+    return std::tie(a.enabled, a.workaroundFormat) == std::tie(b.enabled, b.workaroundFormat);
+}
+
+bool operator!=(const LUMAWorkaroundGL &a, const LUMAWorkaroundGL &b)
+{
+    return !(a == b);
+}
+
 LevelInfoGL::LevelInfoGL() : LevelInfoGL(GL_NONE, false, LUMAWorkaroundGL())
 {
 }
@@ -123,6 +135,17 @@ LevelInfoGL::LevelInfoGL(GLenum sourceFormat_,
       depthStencilWorkaround(depthStencilWorkaround_),
       lumaWorkaround(lumaWorkaround_)
 {
+}
+
+bool operator==(const LevelInfoGL &a, const LevelInfoGL &b)
+{
+    return std::tie(a.sourceFormat, a.depthStencilWorkaround, a.lumaWorkaround) ==
+           std::tie(b.sourceFormat, b.depthStencilWorkaround, b.lumaWorkaround);
+}
+
+bool operator!=(const LevelInfoGL &a, const LevelInfoGL &b)
+{
+    return !(a == b);
 }
 
 TextureGL::TextureGL(const gl::TextureState &state,
@@ -800,7 +823,11 @@ gl::Error TextureGL::setEGLImageTarget(GLenum target, egl::Image *image)
 
 void TextureGL::syncState(const gl::Texture::DirtyBits &dirtyBits)
 {
-    ASSERT(dirtyBits.any());
+    if (dirtyBits.none() && mLocalDirtyBits.none())
+    {
+        return;
+    }
+
     mStateManager->bindTexture(mState.mTarget, mTextureID);
 
     if (dirtyBits[gl::Texture::DIRTY_BIT_BASE_LEVEL] || dirtyBits[gl::Texture::DIRTY_BIT_MAX_LEVEL])
@@ -889,6 +916,11 @@ void TextureGL::syncState(const gl::Texture::DirtyBits &dirtyBits)
     }
 
     mLocalDirtyBits.reset();
+}
+
+bool TextureGL::hasAnyDirtyBit() const
+{
+    return mLocalDirtyBits.any();
 }
 
 void TextureGL::syncTextureStateSwizzle(const FunctionsGL *functions, GLenum name, GLenum value)
@@ -1011,9 +1043,7 @@ void TextureGL::setLevelInfo(size_t level, size_t levelCount, const LevelInfoGL 
     GLuint baseLevel              = mState.getEffectiveBaseLevel();
     const auto &prevBaseLevelInfo = mLevelInfo[baseLevel];
     bool needsResync =
-        level <= baseLevel && level + levelCount >= baseLevel &&
-        (prevBaseLevelInfo.depthStencilWorkaround != levelInfo.depthStencilWorkaround ||
-         prevBaseLevelInfo.lumaWorkaround.enabled != levelInfo.lumaWorkaround.enabled);
+        level <= baseLevel && level + levelCount >= baseLevel && prevBaseLevelInfo != levelInfo;
     if (needsResync)
     {
         mLocalDirtyBits |= GetLevelWorkaroundDirtyBits();
