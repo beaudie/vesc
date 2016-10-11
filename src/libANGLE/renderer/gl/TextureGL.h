@@ -30,6 +30,9 @@ struct LUMAWorkaroundGL
     LUMAWorkaroundGL(bool enabled, GLenum workaroundFormat);
 };
 
+bool operator==(const LUMAWorkaroundGL &a, const LUMAWorkaroundGL &b);
+bool operator!=(const LUMAWorkaroundGL &a, const LUMAWorkaroundGL &b);
+
 // Structure containing information about format and workarounds for each mip level of the
 // TextureGL.
 struct LevelInfoGL
@@ -48,6 +51,9 @@ struct LevelInfoGL
                 bool depthStencilWorkaround,
                 const LUMAWorkaroundGL &lumaWorkaround);
 };
+
+bool operator==(const LevelInfoGL &a, const LevelInfoGL &b);
+bool operator!=(const LevelInfoGL &a, const LevelInfoGL &b);
 
 class TextureGL : public TextureImpl
 {
@@ -92,6 +98,7 @@ class TextureGL : public TextureImpl
     void setBaseLevel(GLuint) override {}
 
     void syncState(const gl::Texture::DirtyBits &dirtyBits) override;
+    bool hasAnyDirtyBit() const;
 
   private:
     void setImageHelper(GLenum target,
