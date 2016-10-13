@@ -105,6 +105,9 @@ bool TOutputTraverser::visitBinary(Visit visit, TIntermBinary *node)
 
     switch (node->getOp())
     {
+      case EOpComma:
+        out << "comma";
+        break;
       case EOpAssign:
         out << "move second child to first child";
         break;
@@ -399,7 +402,6 @@ bool TOutputTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
 
     switch (node->getOp())
     {
-      case EOpComma:         out << "Comma\n"; return true;
       case EOpFunctionCall:
           OutputFunction(out, "Function Call", node->getFunctionSymbolInfo());
           break;

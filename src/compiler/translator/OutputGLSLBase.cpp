@@ -300,6 +300,9 @@ bool TOutputGLSLBase::visitBinary(Visit visit, TIntermBinary *node)
     TInfoSinkBase &out = objSink();
     switch (node->getOp())
     {
+      case EOpComma:
+        writeTriplet(visit, "(", ", ", ")");
+        break;
       case EOpInitialize:
         if (visit == InVisit)
         {
@@ -940,9 +943,6 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
         break;
       case EOpVectorNotEqual:
         writeBuiltInFunctionTriplet(visit, "notEqual(", useEmulatedFunction);
-        break;
-      case EOpComma:
-        writeTriplet(visit, "(", ", ", ")");
         break;
 
       case EOpMod:
