@@ -487,6 +487,14 @@ class Context final : public ValidationContext
 
     GLboolean enableExtension(const char *name);
 
+    Error bindImageTexture(GLuint unit,
+                           GLuint texture,
+                           GLint level,
+                           GLboolean layered,
+                           GLint layer,
+                           GLenum access,
+                           GLenum format);
+
     Error flush();
     Error finish();
 

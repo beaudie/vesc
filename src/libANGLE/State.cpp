@@ -71,7 +71,8 @@ State::~State()
 
 void State::initialize(const Caps &caps,
                        const Extensions &extensions,
-                       GLuint clientVersion,
+                       GLuint clientMajorVersion,
+                       GLuint clientMinorVersion,
                        bool debug,
                        bool bindGeneratesResource)
 {
@@ -163,11 +164,16 @@ void State::initialize(const Caps &caps,
 
     mSamplerTextures[GL_TEXTURE_2D].resize(caps.maxCombinedTextureImageUnits);
     mSamplerTextures[GL_TEXTURE_CUBE_MAP].resize(caps.maxCombinedTextureImageUnits);
-    if (clientVersion >= 3)
+    if (clientMajorVersion >= 3)
     {
         // TODO: These could also be enabled via extension
         mSamplerTextures[GL_TEXTURE_2D_ARRAY].resize(caps.maxCombinedTextureImageUnits);
         mSamplerTextures[GL_TEXTURE_3D].resize(caps.maxCombinedTextureImageUnits);
+
+        if (clientMinorVersion >= 1)
+        {
+            mImageUnits.resize(caps.maxImageUnits);
+        }
     }
     if (extensions.eglImageExternal || extensions.eglStreamConsumerExternal)
     {
@@ -777,6 +783,16 @@ void State::detachTexture(const TextureMap &zeroTextures, GLuint texture)
         }
     }
 
+    for (size_t unitIndex = 0; unitIndex < mImageUnits.size(); ++unitIndex)
+    {
+        const auto &imageUnit = mImageUnits[unitIndex];
+
+        if (imageUnit.texture->getId() == texture)
+        {
+            mImageUnits[unitIndex] = ImageUnit();
+        }
+    }
+
     // [OpenGL ES 2.0.24] section 4.4 page 112:
     // If a texture object is deleted while its image is attached to the currently bound framebuffer, then it is
     // as if Texture2DAttachment had been called, with a texture of 0, for each attachment point to which this
@@ -836,6 +852,12 @@ void State::detachSampler(GLuint sampler)
             samplerBinding.set(NULL);
         }
     }
+}
+
+const ImageUnit &State::getImageUnit(size_t unit) const
+{
+    ASSERT(unit < mImageUnits.size());
+    return mImageUnits[unit];
 }
 
 void State::setRenderbufferBinding(Renderbuffer *renderbuffer)
@@ -1827,6 +1849,37 @@ void State::getIntegeri_v(GLenum target, GLuint index, GLint *data)
             *data = mUniformBuffers[index].id();
         }
         break;
+      case GL_IMAGE_BINDING_NAME:
+        if (static_cast<size_t>(index) < mImageUnits.size())
+        {
+            *data = mImageUnits[index].texture ?
+                        mImageUnits[index].texture->getId() : 0;
+        }
+        break;
+      case GL_IMAGE_BINDING_LEVEL:
+        if (static_cast<size_t>(index) < mImageUnits.size())
+        {
+            *data = mImageUnits[index].level;
+        }
+        break;
+      case GL_IMAGE_BINDING_LAYER:
+        if (static_cast<size_t>(index) < mImageUnits.size())
+        {
+            *data = mImageUnits[index].layer;
+        }
+        break;
+      case GL_IMAGE_BINDING_ACCESS:
+        if (static_cast<size_t>(index) < mImageUnits.size())
+        {
+            *data = mImageUnits[index].access;
+        }
+        break;
+        case GL_IMAGE_BINDING_FORMAT:
+        if (static_cast<size_t>(index) < mImageUnits.size())
+        {
+            *data = mImageUnits[index].format;
+        }
+        break;
       default:
           UNREACHABLE();
           break;
@@ -1869,7 +1922,18 @@ void State::getInteger64i_v(GLenum target, GLuint index, GLint64 *data)
 
 void State::getBooleani_v(GLenum target, GLuint index, GLboolean *data)
 {
-    UNREACHABLE();
+    switch (target)
+    {
+      case GL_IMAGE_BINDING_LAYERED:
+        if (static_cast<size_t>(index) < mImageUnits.size())
+        {
+            *data = mImageUnits[index].layered;
+        }
+        break;
+      default:
+          UNREACHABLE();
+          break;
+    }
 }
 
 bool State::hasMappedBuffer(GLenum target) const
@@ -1984,6 +2048,17 @@ void State::setObjectDirty(GLenum target)
             mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
             break;
     }
+}
+
+void State::bindImageTexture(GLuint unit,
+                             gl::Texture *texture,
+                             GLint level,
+                             GLboolean layered,
+                             GLint layer,
+                             GLenum access,
+                             GLenum format)
+{
+    mImageUnits[unit] = ImageUnit(texture, level, layered, layer, access, format);
 }
 
 }  // namespace gl

@@ -22,6 +22,7 @@ namespace gl
 class Buffer;
 class State;
 class Program;
+class Texture;
 struct VertexAttribute;
 struct VertexAttribCurrentValueData;
 
@@ -196,6 +197,39 @@ struct SamplerState
 
 bool operator==(const SamplerState &a, const SamplerState &b);
 bool operator!=(const SamplerState &a, const SamplerState &b);
+
+struct ImageUnit
+{
+    ImageUnit()
+        : texture(nullptr), level(0), layered(GL_FALSE), layer(0), access(GL_READ_ONLY), format(GL_R32UI)
+    {
+    }
+
+    ImageUnit(Texture *textureIn,
+              GLint levelIn,
+              GLboolean layeredIn,
+              GLint layerIn,
+              GLenum accessIn,
+              GLenum formatIn)
+        : texture(textureIn),
+          level(levelIn),
+          layered(layeredIn),
+          layer(layerIn),
+          access(accessIn),
+          format(formatIn)
+    {
+    }
+
+    Texture *texture;
+    GLint level;
+    GLboolean layered;
+    GLint layer;
+    GLenum access;
+    GLenum format;
+};
+
+bool operator==(const ImageUnit &a, const ImageUnit &b);
+bool operator!=(const ImageUnit &a, const ImageUnit &b);
 
 struct PixelStoreStateBase
 {

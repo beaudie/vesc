@@ -136,6 +136,8 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
     mTextures[GL_TEXTURE_2D_ARRAY].resize(rendererCaps.maxCombinedTextureImageUnits);
     mTextures[GL_TEXTURE_3D].resize(rendererCaps.maxCombinedTextureImageUnits);
 
+    mImageUnitBindings.resize(rendererCaps.maxImageUnits);
+
     mIndexedBuffers[GL_UNIFORM_BUFFER].resize(rendererCaps.maxCombinedUniformBlocks);
 
     for (GLenum queryType : QueryTypes)
@@ -200,6 +202,21 @@ void StateManagerGL::deleteTexture(GLuint texture)
                 {
                     activeTexture(textureUnitIndex);
                     bindTexture(textureTypeIter.first, 0);
+                }
+            }
+        }
+
+        for (size_t unitIndex = 0; unitIndex < mImageUnitBindings.size(); ++unitIndex)
+        {
+            const auto &imageUnit = mImageUnitBindings[unitIndex];
+            if (imageUnit.texture)
+            {
+                const TextureGL *textureGL = GetImplAs<TextureGL>(imageUnit.texture);
+
+                if (textureGL->getTextureID() == texture)
+                {
+                    bindImageTexture(unitIndex, 0, imageUnit.level, imageUnit.layered, imageUnit.layer,
+                                     imageUnit.access, imageUnit.format);
                 }
             }
         }
@@ -393,6 +410,23 @@ void StateManagerGL::bindTexture(GLenum type, GLuint texture)
     {
         mTextures[type][mTextureUnitIndex] = texture;
         mFunctions->bindTexture(type, texture);
+    }
+}
+
+void StateManagerGL::bindImageTexture(GLuint unit,
+                                      gl::Texture *texture,
+                                      GLint level,
+                                      GLboolean layered,
+                                      GLint layer,
+                                      GLenum access,
+                                      GLenum format)
+{
+    gl::ImageUnit tmpImageUnit(texture, level, layered, layer, access, format);
+    if (mImageUnitBindings[unit] != tmpImageUnit)
+    {
+        mImageUnitBindings[unit] = tmpImageUnit;
+        const TextureGL *textureGL = GetImplAs<TextureGL>(texture);
+        mFunctions->bindImageTexture(unit, textureGL->getTextureID(), level, layered, layer, access, format);
     }
 }
 
@@ -706,10 +740,9 @@ gl::Error StateManagerGL::onMakeCurrent(const gl::ContextState &data)
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
+gl::Error StateManagerGL::setGenericState(const gl::ContextState &data)
 {
     const gl::State &state = data.getState();
-
     // Sync the current program state
     const gl::Program *program = state.getProgram();
     const ProgramGL *programGL = GetImplAs<ProgramGL>(program);
@@ -779,6 +812,31 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
         }
     }
 
+    // get image bindings
+    const std::vector<ImageBindingGL> &appliedImageUniforms = programGL->getAppliedImageUniforms();
+    for (const ImageBindingGL &imageUniform : appliedImageUniforms)
+    {
+        for (GLuint unitIndex : imageUniform.boundImageUnits)
+        {
+            const gl::ImageUnit &imageUnit = state.getImageUnit(unitIndex);
+            if (imageUnit.texture)
+            {
+                bindImageTexture(unitIndex, imageUnit.texture, imageUnit.level,
+                                 imageUnit.layered, imageUnit.layer, imageUnit.access,
+                                 imageUnit.format);
+            }
+        }
+    }
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
+{
+    const gl::State &state = data.getState();
+
+    setGenericState(data);
+
     const gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
     const FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
     bindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferGL->getFramebufferID());
@@ -804,6 +862,14 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
         bindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
         mPrevDrawTransformFeedback = nullptr;
     }
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error StateManagerGL::setGenericComputeState(const gl::ContextState &data)
+{
+
+    setGenericState(data);
 
     return gl::Error(GL_NO_ERROR);
 }
