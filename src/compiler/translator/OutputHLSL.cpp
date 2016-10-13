@@ -867,6 +867,9 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
 
     switch (node->getOp())
     {
+      case EOpComma:
+        outputTriplet(out, visit, "(", ", ", ")");
+        break;
       case EOpAssign:
         if (node->getLeft()->isArray())
         {
@@ -1641,9 +1644,6 @@ bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
 
                 return false;
             }
-            break;
-        case EOpComma:
-            outputTriplet(out, visit, "(", ", ", ")");
             break;
         case EOpFunctionCall:
         {
