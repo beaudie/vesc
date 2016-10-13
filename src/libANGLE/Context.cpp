@@ -256,8 +256,8 @@ Context::Context(rx::EGLImplFactory *implFactory,
 
     initCaps(GetWebGLContext(attribs));
 
-    mGLState.initialize(mCaps, mExtensions, mClientMajorVersion, GetDebug(attribs),
-                        GetBindGeneratesResource(attribs));
+    mGLState.initialize(mCaps, mExtensions, mClientMajorVersion, mClientMinorVersion,
+                        GetDebug(attribs), GetBindGeneratesResource(attribs));
 
     mFenceNVHandleAllocator.setBaseHandle(0);
 
@@ -3066,6 +3066,18 @@ void Context::copySubTextureCHROMIUM(GLuint sourceId,
     handleError(destTexture->copySubTexture(offset, area, unpackFlipY == GL_TRUE,
                                             unpackPremultiplyAlpha == GL_TRUE,
                                             unpackUnmultiplyAlpha == GL_TRUE, sourceTexture));
+}
+
+Error Context::bindImageTexture(GLuint unit,
+                                GLuint texture,
+                                GLint level,
+                                GLboolean layered,
+                                GLint layer,
+                                GLenum access,
+                                GLenum format)
+{
+    mGLState.bindImageTexture(unit, getTexture(texture), level, layered, layer, access, format);
+    return NoError();
 }
 
 void Context::getBufferPointerv(GLenum target, GLenum /*pname*/, void **params)

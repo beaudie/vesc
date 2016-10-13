@@ -123,6 +123,9 @@ GLenum VariableComponentType(GLenum type)
       case GL_FLOAT_MAT4x3:
         return GL_FLOAT;
       case GL_INT:
+      case GL_INT_VEC2:
+      case GL_INT_VEC3:
+      case GL_INT_VEC4:
       case GL_SAMPLER_2D:
       case GL_SAMPLER_3D:
       case GL_SAMPLER_CUBE:
@@ -139,9 +142,18 @@ GLenum VariableComponentType(GLenum type)
       case GL_SAMPLER_2D_SHADOW:
       case GL_SAMPLER_CUBE_SHADOW:
       case GL_SAMPLER_2D_ARRAY_SHADOW:
-      case GL_INT_VEC2:
-      case GL_INT_VEC3:
-      case GL_INT_VEC4:
+      case GL_IMAGE_2D:
+      case GL_IMAGE_3D:
+      case GL_IMAGE_CUBE:
+      case GL_IMAGE_2D_ARRAY:
+      case GL_INT_IMAGE_2D:
+      case GL_INT_IMAGE_3D:
+      case GL_INT_IMAGE_CUBE:
+      case GL_INT_IMAGE_2D_ARRAY:
+      case GL_UNSIGNED_INT_IMAGE_2D:
+      case GL_UNSIGNED_INT_IMAGE_3D:
+      case GL_UNSIGNED_INT_IMAGE_CUBE:
+      case GL_UNSIGNED_INT_IMAGE_2D_ARRAY:
         return GL_INT;
       case GL_UNSIGNED_INT:
       case GL_UNSIGNED_INT_VEC2:
@@ -247,6 +259,18 @@ int VariableRowCount(GLenum type)
       case GL_SAMPLER_2D_SHADOW:
       case GL_SAMPLER_CUBE_SHADOW:
       case GL_SAMPLER_2D_ARRAY_SHADOW:
+      case GL_IMAGE_2D:
+      case GL_IMAGE_3D:
+      case GL_IMAGE_CUBE:
+      case GL_IMAGE_2D_ARRAY:
+      case GL_INT_IMAGE_2D:
+      case GL_INT_IMAGE_3D:
+      case GL_INT_IMAGE_CUBE:
+      case GL_INT_IMAGE_2D_ARRAY:
+      case GL_UNSIGNED_INT_IMAGE_2D:
+      case GL_UNSIGNED_INT_IMAGE_3D:
+      case GL_UNSIGNED_INT_IMAGE_CUBE:
+      case GL_UNSIGNED_INT_IMAGE_2D_ARRAY:
         return 1;
       case GL_FLOAT_MAT2:
       case GL_FLOAT_MAT3x2:
@@ -295,6 +319,18 @@ int VariableColumnCount(GLenum type)
       case GL_SAMPLER_2D_SHADOW:
       case GL_SAMPLER_CUBE_SHADOW:
       case GL_SAMPLER_2D_ARRAY_SHADOW:
+      case GL_IMAGE_2D:
+      case GL_IMAGE_3D:
+      case GL_IMAGE_CUBE:
+      case GL_IMAGE_2D_ARRAY:
+      case GL_INT_IMAGE_2D:
+      case GL_INT_IMAGE_3D:
+      case GL_INT_IMAGE_CUBE:
+      case GL_INT_IMAGE_2D_ARRAY:
+      case GL_UNSIGNED_INT_IMAGE_2D:
+      case GL_UNSIGNED_INT_IMAGE_3D:
+      case GL_UNSIGNED_INT_IMAGE_CUBE:
+      case GL_UNSIGNED_INT_IMAGE_2D_ARRAY:
         return 1;
       case GL_BOOL_VEC2:
       case GL_FLOAT_VEC2:
@@ -350,6 +386,27 @@ bool IsSamplerType(GLenum type)
         return true;
     }
 
+    return false;
+}
+
+bool IsImageType(GLenum type)
+{
+    switch (type)
+    {
+        case GL_IMAGE_2D:
+        case GL_IMAGE_3D:
+        case GL_IMAGE_CUBE:
+        case GL_IMAGE_2D_ARRAY:
+        case GL_INT_IMAGE_2D:
+        case GL_INT_IMAGE_3D:
+        case GL_INT_IMAGE_CUBE:
+        case GL_INT_IMAGE_2D_ARRAY:
+        case GL_UNSIGNED_INT_IMAGE_2D:
+        case GL_UNSIGNED_INT_IMAGE_3D:
+        case GL_UNSIGNED_INT_IMAGE_CUBE:
+        case GL_UNSIGNED_INT_IMAGE_2D_ARRAY:
+            return true;
+    }
     return false;
 }
 

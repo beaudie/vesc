@@ -373,6 +373,25 @@ class Program final : angle::NonCopyable, public LabeledObject
       private:
         std::unordered_map<std::string, GLuint> mBindings;
     };
+ 
+    struct ProgramObjectCount
+    {
+        ProgramObjectCount() : vectorCount(0), samplerCount(0), imageCount(0) {}
+        ProgramObjectCount(const ProgramObjectCount &other) = default;
+        ProgramObjectCount &operator=(const ProgramObjectCount &other) = default;
+
+        ProgramObjectCount &operator+=(const ProgramObjectCount &other)
+        {
+            vectorCount += other.vectorCount;
+            samplerCount += other.samplerCount;
+            imageCount += other.imageCount;
+            return *this;
+        }
+
+        unsigned int vectorCount;
+        unsigned int samplerCount;
+        unsigned int imageCount;
+    };
 
     void unlink(bool destroy = false);
     void resetUniformBlockBindings();
@@ -419,36 +438,24 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     std::vector<const sh::Varying *> getMergedVaryings() const;
     void linkOutputVariables();
-
+ 
     bool flattenUniformsAndCheckCapsForShader(const gl::Shader &shader,
                                               GLuint maxUniformComponents,
                                               GLuint maxTextureImageUnits,
+                                              GLuint maxImageUniforms,
                                               const std::string &componentsErrorMessage,
                                               const std::string &samplerErrorMessage,
+                                              const std::string &imageErrorMessage,
                                               std::vector<LinkedUniform> &samplerUniforms,
-                                              InfoLog &infoLog);
+                                              std::vector<LinkedUniform> &imageUniforms,
+                                              InfoLog &infoLog,
+                                              ProgramObjectCount *objectCount);
     bool flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog);
-
-    struct VectorAndSamplerCount
-    {
-        VectorAndSamplerCount() : vectorCount(0), samplerCount(0) {}
-        VectorAndSamplerCount(const VectorAndSamplerCount &other) = default;
-        VectorAndSamplerCount &operator=(const VectorAndSamplerCount &other) = default;
-
-        VectorAndSamplerCount &operator+=(const VectorAndSamplerCount &other)
-        {
-            vectorCount += other.vectorCount;
-            samplerCount += other.samplerCount;
-            return *this;
-        }
-
-        unsigned int vectorCount;
-        unsigned int samplerCount;
-    };
-
-    VectorAndSamplerCount flattenUniform(const sh::ShaderVariable &uniform,
+ 
+    ProgramObjectCount flattenUniform(const sh::ShaderVariable &uniform,
                                          const std::string &fullName,
-                                         std::vector<LinkedUniform> *samplerUniforms);
+                                         std::vector<LinkedUniform> *samplerUniforms,
+                                         std::vector<LinkedUniform> *imageUniforms);
 
     void gatherInterfaceBlockInfo();
     template <typename VarT>
@@ -492,6 +499,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     Optional<bool> mCachedValidateSamplersResult;
     std::vector<GLenum> mTextureUnitTypesCache;
     RangeUI mSamplerUniformRange;
+    RangeUI mImageUniformRange;
 };
 }
 

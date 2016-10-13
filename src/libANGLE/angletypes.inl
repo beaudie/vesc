@@ -41,4 +41,15 @@ inline bool operator!=(const SamplerState &a, const SamplerState &b)
     return !(a == b);
 }
 
+inline bool operator==(const ImageUnit &a, const ImageUnit &b)
+{
+    return (a.texture == b.texture && a.level == b.level && a.layered == b.layered &&
+            a.layer == b.layer && a.access == b.access && a.format == b.format);
+}
+
+inline bool operator!=(const ImageUnit &a, const ImageUnit &b)
+{
+    return !(a == b);
+}
+
 }
