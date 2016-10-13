@@ -563,6 +563,22 @@ bool ValidationContext::getIndexedQueryParameterInfo(GLenum target,
             *numParams = 1;
             return true;
         }
+        case GL_IMAGE_BINDING_NAME:
+        case GL_IMAGE_BINDING_LEVEL:
+        case GL_IMAGE_BINDING_LAYER:
+        case GL_IMAGE_BINDING_ACCESS:
+        case GL_IMAGE_BINDING_FORMAT:
+        {
+            *type      = GL_INT;
+            *numParams = 1;
+            return true;
+        }
+        case GL_IMAGE_BINDING_LAYERED:
+        {
+            *type      = GL_BOOL;
+            *numParams = 1;
+            return true;
+        }
     }
 
     return false;

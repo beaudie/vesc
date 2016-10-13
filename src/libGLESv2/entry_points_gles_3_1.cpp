@@ -994,11 +994,14 @@ void GL_APIENTRY BindImageTexture(GLuint unit,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!context->skipValidation())
+        if (!context->skipValidation() &&
+            !ValidateBindImageTexture(context, unit, texture, level, layered, layer, access,
+                                      format))
         {
-            context->handleError(Error(GL_INVALID_OPERATION, "Entry point not implemented"));
+            return;
         }
-        UNIMPLEMENTED();
+
+        context->bindImageTexture(unit, texture, level, layered, layer, access, format);
     }
 }
 
