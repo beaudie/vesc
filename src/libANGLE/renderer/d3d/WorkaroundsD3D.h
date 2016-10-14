@@ -94,6 +94,11 @@ struct WorkaroundsD3D
     // this bug, we use an expression to emulate function isnan(). Tracking bug:
     // https://crbug.com/650547
     bool emulateIsnanFloat = false;
+
+    // On Skylake using Intel drivers, using clear() on a target with width or height < 16 may not
+    // take effect. To work around this bug, we call clear() twice when using clear() on such
+    // target. Tracking bug: https://crbug.com/655534
+    bool callClearTwiceOnSmallTarget = false;
 };
 
 }  // namespace rx

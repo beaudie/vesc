@@ -257,6 +257,73 @@ enum VendorID : uint32_t
     VENDOR_ID_QUALCOMM = 0x5143,
 };
 
+// Referenced from https://cgit.freedesktop.org/vaapi/intel-driver/tree/src/i965_pciids.h
+namespace Intel_DeviceIDs
+{
+const uint32_t Haswell[] = {
+    0x0402, 0x0412, 0x0422, 0x0406, 0x0416, 0x0426, 0x040A, 0x041A, 0x042A, 0x040B, 0x041B, 0x042B,
+    0x040E, 0x041E, 0x042E, 0x0C02, 0x0C12, 0x0C22, 0x0C06, 0x0C16, 0x0C26, 0x0C0A, 0x0C1A, 0x0C2A,
+    0x0C0B, 0x0C1B, 0x0C2B, 0x0C0E, 0x0C1E, 0x0C2E, 0x0A02, 0x0A12, 0x0A22, 0x0A06, 0x0A16, 0x0A26,
+    0x0A0A, 0x0A1A, 0x0A2A, 0x0A0B, 0x0A1B, 0x0A2B, 0x0A0E, 0x0A1E, 0x0A2E, 0x0D02, 0x0D12, 0x0D22,
+    0x0D06, 0x0D16, 0x0D26, 0x0D0A, 0x0D1A, 0x0D2A, 0x0D0B, 0x0D1B, 0x0D2B, 0x0D0E, 0x0D1E, 0x0D2E};
+
+const uint32_t Broadwell[] = {0x1602, 0x1606, 0x160A, 0x160B, 0x160D, 0x160E,
+                              0x1612, 0x1616, 0x161A, 0x161B, 0x161D, 0x161E,
+                              0x1622, 0x1626, 0x162A, 0x162B, 0x162D, 0x162E};
+
+const uint32_t Skylake[] = {0x1902, 0x1906, 0x190A, 0x190B, 0x190E, 0x1912, 0x1913, 0x1915, 0x1916,
+                            0x1917, 0x191A, 0x191B, 0x191D, 0x191E, 0x1921, 0x1923, 0x1926, 0x1927,
+                            0x192A, 0x192B, 0x192D, 0x1932, 0x193A, 0x193B, 0x193D};
+
+const uint32_t Kabylake[] = {0x5916, 0x5913, 0x5906, 0x5926, 0x5921, 0x5915, 0x590E,
+                             0x591E, 0x5912, 0x5917, 0x5902, 0x591B, 0x593B, 0x590B,
+                             0x591A, 0x590A, 0x591D, 0x5908, 0x5923, 0x5927};
+
+inline bool isKabylake(uint32_t DeviceId)
+{
+    ULONGLONG size = sizeof(Kabylake) / sizeof(uint32_t);
+    for (ULONGLONG i = 0; i < size; i++)
+    {
+        if (DeviceId == Kabylake[i])
+            return true;
+    }
+    return false;
+}
+
+inline bool isSkylake(uint32_t DeviceId)
+{
+    ULONGLONG size = sizeof(Skylake) / sizeof(uint32_t);
+    for (ULONGLONG i = 0; i < size; i++)
+    {
+        if (DeviceId == Skylake[i])
+            return true;
+    }
+    return false;
+}
+
+inline bool isBroadwell(uint32_t DeviceId)
+{
+    ULONGLONG size = sizeof(Broadwell) / sizeof(uint32_t);
+    for (ULONGLONG i = 0; i < size; i++)
+    {
+        if (DeviceId == Broadwell[i])
+            return true;
+    }
+    return false;
+}
+
+inline bool isHaswell(uint32_t DeviceId)
+{
+    ULONGLONG size = sizeof(Haswell) / sizeof(uint32_t);
+    for (ULONGLONG i = 0; i < size; i++)
+    {
+        if (DeviceId == Haswell[i])
+            return true;
+    }
+    return false;
+}
+}  // namespace Intel_DeviceIDs
+
 // A macro that determines whether an object has a given runtime type.
 #if defined(__clang__)
 #if __has_feature(cxx_rtti)

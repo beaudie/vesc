@@ -1855,6 +1855,13 @@ WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps,
     workarounds.disableB5G6R5Support    = (adapterDesc.VendorId == VENDOR_ID_INTEL);
     workarounds.rewriteUnaryMinusOperator = (adapterDesc.VendorId == VENDOR_ID_INTEL);
     workarounds.emulateIsnanFloat         = (adapterDesc.VendorId == VENDOR_ID_INTEL);
+    if (adapterDesc.VendorId == VENDOR_ID_INTEL)
+    {
+        if (Intel_DeviceIDs::isSkylake(adapterDesc.DeviceId))
+        {
+            workarounds.callClearTwiceOnSmallTarget = true;
+        }
+    }
 
     // TODO(jmadill): Disable when we have a fixed driver version.
     workarounds.emulateTinyStencilTextures = (adapterDesc.VendorId == VENDOR_ID_AMD);
