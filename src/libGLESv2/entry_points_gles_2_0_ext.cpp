@@ -2538,7 +2538,19 @@ ANGLE_EXPORT void GL_APIENTRY TexSubImage2DRobustANGLE(GLenum target,
         "GLsizei width = %d, GLsizei height = %d, GLenum format = 0x%X, GLenum type = 0x%X, "
         "GLsizei bufsize = %d, const GLvoid* pixels = 0x%0.8p)",
         target, level, xoffset, yoffset, width, height, format, type, bufSize, pixels);
-    UNIMPLEMENTED();
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!ValidateTexSubImage2DRobustANGLE(context, target, level, xoffset, yoffset, width,
+                                              height, format, type, bufSize, pixels))
+        {
+            return;
+        }
+
+        context->texSubImage2D(target, level, xoffset, yoffset, width, height, format, type,
+                               pixels);
+    }
 }
 
 ANGLE_EXPORT void GL_APIENTRY TexImage3DRobustANGLE(GLenum target,
@@ -2558,7 +2570,19 @@ ANGLE_EXPORT void GL_APIENTRY TexImage3DRobustANGLE(GLenum target,
         "GLsizei height = %d, GLsizei depth = %d, GLint border = %d, GLenum format = 0x%X, "
         "GLenum type = 0x%X, GLsizei bufsize = %d, const GLvoid* pixels = 0x%0.8p)",
         target, level, internalformat, width, height, depth, border, format, type, bufSize, pixels);
-    UNIMPLEMENTED();
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!ValidateTexImage3DRobustANGLE(context, target, level, internalformat, width, height,
+                                           depth, border, format, type, bufSize, pixels))
+        {
+            return;
+        }
+
+        context->texImage3D(target, level, internalformat, width, height, depth, border, format,
+                            type, pixels);
+    }
 }
 
 ANGLE_EXPORT void GL_APIENTRY TexSubImage3DRobustANGLE(GLenum target,
@@ -2574,6 +2598,26 @@ ANGLE_EXPORT void GL_APIENTRY TexSubImage3DRobustANGLE(GLenum target,
                                                        GLsizei bufSize,
                                                        const void *pixels)
 {
+    EVENT(
+        "(GLenum target = 0x%X, GLint level = %d, GLint xoffset = %d, GLint yoffset = %d, "
+        "GLint zoffset = %d, GLsizei width = %d, GLsizei height = %d, GLsizei depth = %d, "
+        "GLenum format = 0x%X, GLenum type = 0x%X, GLsizei bufsize = %d, const GLvoid* pixels = "
+        "0x%0.8p)",
+        target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, bufSize,
+        pixels);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!ValidateTexSubImage3DRobustANGLE(context, target, level, xoffset, yoffset, zoffset,
+                                              width, height, depth, format, type, bufSize, pixels))
+        {
+            return;
+        }
+
+        context->texSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth,
+                               format, type, pixels);
+    }
 }
 
 ANGLE_EXPORT void GL_APIENTRY
