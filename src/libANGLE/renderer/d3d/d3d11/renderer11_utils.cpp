@@ -1859,6 +1859,7 @@ WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps,
         (IsBroadwell(adapterDesc.DeviceId) || IsHaswell(adapterDesc.DeviceId));
     workarounds.emulateIsnanFloat =
         IsIntel(adapterDesc.VendorId) && IsSkylake(adapterDesc.DeviceId);
+    workarounds.callClearTwice = IsIntel(adapterDesc.VendorId) && IsSkylake(adapterDesc.DeviceId);
 
     // TODO(jmadill): Disable when we have a fixed driver version.
     workarounds.emulateTinyStencilTextures = IsAMD(adapterDesc.VendorId);
