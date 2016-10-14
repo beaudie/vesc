@@ -1852,6 +1852,7 @@ WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps,
     workarounds.flushAfterEndingTransformFeedback = IsNvidia(adapterDesc.VendorId);
     workarounds.getDimensionsIgnoresBaseLevel     = IsNvidia(adapterDesc.VendorId);
 
+    // TODO(jiawei.shao@intel.com): Narrow driver range when we have a fixed driver.
     workarounds.preAddTexelFetchOffsets = IsIntel(adapterDesc.VendorId);
     workarounds.disableB5G6R5Support    = IsIntel(adapterDesc.VendorId);
     workarounds.rewriteUnaryMinusOperator =
@@ -1859,6 +1860,7 @@ WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps,
         (IsBroadwell(adapterDesc.DeviceId) || IsHaswell(adapterDesc.DeviceId));
     workarounds.emulateIsnanFloat =
         IsIntel(adapterDesc.VendorId) && IsSkylake(adapterDesc.DeviceId);
+    workarounds.callClearTwice = IsIntel(adapterDesc.VendorId) && IsSkylake(adapterDesc.DeviceId);
 
     // TODO(jmadill): Disable when we have a fixed driver version.
     workarounds.emulateTinyStencilTextures = IsAMD(adapterDesc.VendorId);
