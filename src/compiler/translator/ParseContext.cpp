@@ -1282,9 +1282,10 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
                                        const TString &identifier,
                                        const TPublicType &pType,
                                        TIntermTyped *initializer,
-                                       TIntermNode **intermNode)
+                                       TIntermBinary **initNode)
 {
-    ASSERT(intermNode != nullptr);
+    ASSERT(initNode != nullptr);
+    ASSERT(*initNode == nullptr);
     TType type = TType(pType);
 
     TVariable *variable = nullptr;
@@ -1356,7 +1357,7 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
         if (initializer->getAsConstantUnion())
         {
             variable->shareConstPointer(initializer->getAsConstantUnion()->getUnionArrayPointer());
-            *intermNode = nullptr;
+            *initNode = nullptr;
             return false;
         }
         else if (initializer->getAsSymbolNode())
@@ -1369,7 +1370,7 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
             if (constArray)
             {
                 variable->shareConstPointer(constArray);
-                *intermNode = nullptr;
+                *initNode = nullptr;
                 return false;
             }
         }
@@ -1377,8 +1378,8 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
 
     TIntermSymbol *intermSymbol = intermediate.addSymbol(
         variable->getUniqueId(), variable->getName(), variable->getType(), line);
-    *intermNode = createAssign(EOpInitialize, intermSymbol, initializer, line);
-    if (*intermNode == nullptr)
+    *initNode = createAssign(EOpInitialize, intermSymbol, initializer, line);
+    if (*initNode == nullptr)
     {
         assignError(line, "=", intermSymbol->getCompleteString(), initializer->getCompleteString());
         return true;
@@ -1527,9 +1528,10 @@ void TParseContext::checkInputOutputTypeIsValidES3(const TQualifier qualifier,
     }
 }
 
-TIntermAggregate *TParseContext::parseSingleDeclaration(TPublicType &publicType,
-                                                        const TSourceLoc &identifierOrTypeLocation,
-                                                        const TString &identifier)
+TIntermDeclaration *TParseContext::parseSingleDeclaration(
+    TPublicType &publicType,
+    const TSourceLoc &identifierOrTypeLocation,
+    const TString &identifier)
 {
     TType type(publicType);
     if ((mCompileOptions & SH_FLATTEN_PRAGMA_STDGL_INVARIANT_ALL) &&
@@ -1565,6 +1567,9 @@ TIntermAggregate *TParseContext::parseSingleDeclaration(TPublicType &publicType,
 
     mDeferredSingleDeclarationErrorCheck = emptyDeclaration;
 
+    TIntermDeclaration *declaration = new TIntermDeclaration();
+    declaration->setLine(identifierOrTypeLocation);
+
     if (emptyDeclaration)
     {
         if (publicType.isUnsizedArray())
@@ -1585,17 +1590,23 @@ TIntermAggregate *TParseContext::parseSingleDeclaration(TPublicType &publicType,
         declareVariable(identifierOrTypeLocation, identifier, type, &variable);
 
         if (variable && symbol)
+        {
             symbol->setId(variable->getUniqueId());
+        }
     }
 
-    return TIntermediate::MakeAggregate(symbol, identifierOrTypeLocation);
+    // We append the symbol even if the declaration is empty, mainly because of struct declarations
+    // that may just declare a type.
+    declaration->appendDeclarator(symbol);
+
+    return declaration;
 }
 
-TIntermAggregate *TParseContext::parseSingleArrayDeclaration(TPublicType &publicType,
-                                                             const TSourceLoc &identifierLocation,
-                                                             const TString &identifier,
-                                                             const TSourceLoc &indexLocation,
-                                                             TIntermTyped *indexExpression)
+TIntermDeclaration *TParseContext::parseSingleArrayDeclaration(TPublicType &publicType,
+                                                               const TSourceLoc &identifierLocation,
+                                                               const TString &identifier,
+                                                               const TSourceLoc &indexLocation,
+                                                               TIntermTyped *indexExpression)
 {
     mDeferredSingleDeclarationErrorCheck = false;
 
@@ -1615,38 +1626,44 @@ TIntermAggregate *TParseContext::parseSingleArrayDeclaration(TPublicType &public
     TVariable *variable = nullptr;
     declareVariable(identifierLocation, identifier, arrayType, &variable);
 
+    TIntermDeclaration *declaration = new TIntermDeclaration();
+    declaration->setLine(identifierLocation);
+
     TIntermSymbol *symbol = intermediate.addSymbol(0, identifier, arrayType, identifierLocation);
     if (variable && symbol)
+    {
         symbol->setId(variable->getUniqueId());
+        declaration->appendDeclarator(symbol);
+    }
 
-    return TIntermediate::MakeAggregate(symbol, identifierLocation);
+    return declaration;
 }
 
-TIntermAggregate *TParseContext::parseSingleInitDeclaration(const TPublicType &publicType,
-                                                            const TSourceLoc &identifierLocation,
-                                                            const TString &identifier,
-                                                            const TSourceLoc &initLocation,
-                                                            TIntermTyped *initializer)
+TIntermDeclaration *TParseContext::parseSingleInitDeclaration(const TPublicType &publicType,
+                                                              const TSourceLoc &identifierLocation,
+                                                              const TString &identifier,
+                                                              const TSourceLoc &initLocation,
+                                                              TIntermTyped *initializer)
 {
     mDeferredSingleDeclarationErrorCheck = false;
 
     singleDeclarationErrorCheck(publicType, identifierLocation);
 
-    TIntermNode *intermNode = nullptr;
-    if (!executeInitializer(identifierLocation, identifier, publicType, initializer, &intermNode))
+    TIntermDeclaration *declaration = new TIntermDeclaration();
+    declaration->setLine(identifierLocation);
+
+    TIntermBinary *initNode = nullptr;
+    if (!executeInitializer(identifierLocation, identifier, publicType, initializer, &initNode))
     {
-        //
-        // Build intermediate representation
-        //
-        return intermNode ? TIntermediate::MakeAggregate(intermNode, initLocation) : nullptr;
+        if (initNode)
+        {
+            declaration->appendDeclarator(initNode);
+        }
     }
-    else
-    {
-        return nullptr;
-    }
+    return declaration;
 }
 
-TIntermAggregate *TParseContext::parseSingleArrayInitDeclaration(
+TIntermDeclaration *TParseContext::parseSingleArrayInitDeclaration(
     TPublicType &publicType,
     const TSourceLoc &identifierLocation,
     const TString &identifier,
@@ -1674,16 +1691,20 @@ TIntermAggregate *TParseContext::parseSingleArrayInitDeclaration(
     // This ensures useless error messages regarding the variable's non-arrayness won't follow.
     arrayType.setArraySize(size);
 
+    TIntermDeclaration *declaration = new TIntermDeclaration();
+    declaration->setLine(identifierLocation);
+
     // initNode will correspond to the whole of "type b[n] = initializer".
-    TIntermNode *initNode = nullptr;
+    TIntermBinary *initNode = nullptr;
     if (!executeInitializer(identifierLocation, identifier, arrayType, initializer, &initNode))
     {
-        return initNode ? TIntermediate::MakeAggregate(initNode, initLocation) : nullptr;
+        if (initNode)
+        {
+            declaration->appendDeclarator(initNode);
+        }
     }
-    else
-    {
-        return nullptr;
-    }
+
+    return declaration;
 }
 
 TIntermAggregate *TParseContext::parseInvariantDeclaration(
@@ -1740,10 +1761,10 @@ TIntermAggregate *TParseContext::parseInvariantDeclaration(
     return aggregate;
 }
 
-TIntermAggregate *TParseContext::parseDeclarator(TPublicType &publicType,
-                                                 TIntermAggregate *aggregateDeclaration,
-                                                 const TSourceLoc &identifierLocation,
-                                                 const TString &identifier)
+void TParseContext::parseDeclarator(TPublicType &publicType,
+                                    const TSourceLoc &identifierLocation,
+                                    const TString &identifier,
+                                    TIntermDeclaration *declarationOut)
 {
     // If the declaration starting this declarator list was empty (example: int,), some checks were
     // not performed.
@@ -1763,17 +1784,18 @@ TIntermAggregate *TParseContext::parseDeclarator(TPublicType &publicType,
     TIntermSymbol *symbol =
         intermediate.addSymbol(0, identifier, TType(publicType), identifierLocation);
     if (variable && symbol)
+    {
         symbol->setId(variable->getUniqueId());
-
-    return intermediate.growAggregate(aggregateDeclaration, symbol, identifierLocation);
+        declarationOut->appendDeclarator(symbol);
+    }
 }
 
-TIntermAggregate *TParseContext::parseArrayDeclarator(TPublicType &publicType,
-                                                      TIntermAggregate *aggregateDeclaration,
-                                                      const TSourceLoc &identifierLocation,
-                                                      const TString &identifier,
-                                                      const TSourceLoc &arrayLocation,
-                                                      TIntermTyped *indexExpression)
+void TParseContext::parseArrayDeclarator(TPublicType &publicType,
+                                         const TSourceLoc &identifierLocation,
+                                         const TString &identifier,
+                                         const TSourceLoc &arrayLocation,
+                                         TIntermTyped *indexExpression,
+                                         TIntermDeclaration *declarationOut)
 {
     // If the declaration starting this declarator list was empty (example: int,), some checks were
     // not performed.
@@ -1801,18 +1823,16 @@ TIntermAggregate *TParseContext::parseArrayDeclarator(TPublicType &publicType,
         if (variable && symbol)
             symbol->setId(variable->getUniqueId());
 
-        return intermediate.growAggregate(aggregateDeclaration, symbol, identifierLocation);
+        declarationOut->appendDeclarator(symbol);
     }
-
-    return nullptr;
 }
 
-TIntermAggregate *TParseContext::parseInitDeclarator(const TPublicType &publicType,
-                                                     TIntermAggregate *aggregateDeclaration,
-                                                     const TSourceLoc &identifierLocation,
-                                                     const TString &identifier,
-                                                     const TSourceLoc &initLocation,
-                                                     TIntermTyped *initializer)
+void TParseContext::parseInitDeclarator(const TPublicType &publicType,
+                                        const TSourceLoc &identifierLocation,
+                                        const TString &identifier,
+                                        const TSourceLoc &initLocation,
+                                        TIntermTyped *initializer,
+                                        TIntermDeclaration *declarationOut)
 {
     // If the declaration starting this declarator list was empty (example: int,), some checks were
     // not performed.
@@ -1824,35 +1844,27 @@ TIntermAggregate *TParseContext::parseInitDeclarator(const TPublicType &publicTy
 
     checkDeclaratorLocationIsNotSpecified(identifierLocation, publicType);
 
-    TIntermNode *intermNode = nullptr;
-    if (!executeInitializer(identifierLocation, identifier, publicType, initializer, &intermNode))
+    TIntermBinary *initNode = nullptr;
+    if (!executeInitializer(identifierLocation, identifier, publicType, initializer, &initNode))
     {
         //
         // build the intermediate representation
         //
-        if (intermNode)
+        if (initNode)
         {
-            return intermediate.growAggregate(aggregateDeclaration, intermNode, initLocation);
+            declarationOut->appendDeclarator(initNode);
         }
-        else
-        {
-            return aggregateDeclaration;
-        }
-    }
-    else
-    {
-        return nullptr;
     }
 }
 
-TIntermAggregate *TParseContext::parseArrayInitDeclarator(const TPublicType &publicType,
-                                                          TIntermAggregate *aggregateDeclaration,
-                                                          const TSourceLoc &identifierLocation,
-                                                          const TString &identifier,
-                                                          const TSourceLoc &indexLocation,
-                                                          TIntermTyped *indexExpression,
-                                                          const TSourceLoc &initLocation,
-                                                          TIntermTyped *initializer)
+void TParseContext::parseArrayInitDeclarator(const TPublicType &publicType,
+                                             const TSourceLoc &identifierLocation,
+                                             const TString &identifier,
+                                             const TSourceLoc &indexLocation,
+                                             TIntermTyped *indexExpression,
+                                             const TSourceLoc &initLocation,
+                                             TIntermTyped *initializer,
+                                             TIntermDeclaration *declarationOut)
 {
     // If the declaration starting this declarator list was empty (example: int,), some checks were
     // not performed.
@@ -1880,21 +1892,13 @@ TIntermAggregate *TParseContext::parseArrayInitDeclarator(const TPublicType &pub
     arrayType.setArraySize(size);
 
     // initNode will correspond to the whole of "b[n] = initializer".
-    TIntermNode *initNode = nullptr;
+    TIntermBinary *initNode = nullptr;
     if (!executeInitializer(identifierLocation, identifier, arrayType, initializer, &initNode))
     {
         if (initNode)
         {
-            return intermediate.growAggregate(aggregateDeclaration, initNode, initLocation);
+            declarationOut->appendDeclarator(initNode);
         }
-        else
-        {
-            return aggregateDeclaration;
-        }
-    }
-    else
-    {
-        return nullptr;
     }
 }
 
@@ -2388,7 +2392,7 @@ TIntermTyped *TParseContext::addConstructor(TIntermNode *arguments,
 //
 // Interface/uniform blocks
 //
-TIntermAggregate *TParseContext::addInterfaceBlock(
+TIntermDeclaration *TParseContext::addInterfaceBlock(
     const TTypeQualifierBuilder &typeQualifierBuilder,
     const TSourceLoc &nameLine,
     const TString &blockName,
@@ -2540,13 +2544,14 @@ TIntermAggregate *TParseContext::addInterfaceBlock(
         symbolName = instanceTypeDef->getName();
     }
 
-    TIntermAggregate *aggregate = TIntermediate::MakeAggregate(
-        intermediate.addSymbol(symbolId, symbolName, interfaceBlockType, typeQualifier.line),
-        nameLine);
-    aggregate->setOp(EOpDeclaration);
+    TIntermSymbol *blockSymbol =
+        intermediate.addSymbol(symbolId, symbolName, interfaceBlockType, typeQualifier.line);
+    TIntermDeclaration *declaration = new TIntermDeclaration();
+    declaration->appendDeclarator(blockSymbol);
+    declaration->setLine(nameLine);
 
     exitStructDeclaration();
-    return aggregate;
+    return declaration;
 }
 
 void TParseContext::enterStructDeclaration(const TSourceLoc &line, const TString &identifier)
@@ -3577,10 +3582,10 @@ TIntermTyped *TParseContext::addBinaryMathBooleanResult(TOperator op,
     return node;
 }
 
-TIntermTyped *TParseContext::createAssign(TOperator op,
-                                          TIntermTyped *left,
-                                          TIntermTyped *right,
-                                          const TSourceLoc &loc)
+TIntermBinary *TParseContext::createAssign(TOperator op,
+                                           TIntermTyped *left,
+                                           TIntermTyped *right,
+                                           const TSourceLoc &loc)
 {
     if (binaryOpCommonCheck(op, left, right, loc))
     {

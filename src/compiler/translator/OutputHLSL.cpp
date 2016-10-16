@@ -1519,84 +1519,80 @@ bool OutputHLSL::visitFunctionDefinition(Visit visit, TIntermFunctionDefinition 
     return false;
 }
 
+bool OutputHLSL::visitDeclaration(Visit visit, TIntermDeclaration *node)
+{
+    TInfoSinkBase &out = getInfoSink();
+    if (visit == PreVisit)
+    {
+        TIntermSequence *sequence = node->getSequence();
+        TIntermTyped *variable    = (*sequence)[0]->getAsTyped();
+        ASSERT(sequence->size() == 1);
+
+        if (variable &&
+            (variable->getQualifier() == EvqTemporary || variable->getQualifier() == EvqGlobal ||
+             variable->getQualifier() == EvqConst))
+        {
+            ensureStructDefined(variable->getType());
+
+            if (!variable->getAsSymbolNode() ||
+                variable->getAsSymbolNode()->getSymbol() != "")  // Variable declaration
+            {
+                if (!mInsideFunction)
+                {
+                    out << "static ";
+                }
+
+                out << TypeString(variable->getType()) + " ";
+
+                TIntermSymbol *symbol = variable->getAsSymbolNode();
+
+                if (symbol)
+                {
+                    symbol->traverse(this);
+                    out << ArrayString(symbol->getType());
+                    out << " = " + initializer(symbol->getType());
+                }
+                else
+                {
+                    variable->traverse(this);
+                }
+            }
+            else if (variable->getAsSymbolNode() &&
+                     variable->getAsSymbolNode()->getSymbol() == "")  // Type (struct) declaration
+            {
+                // Already added to constructor map
+            }
+            else
+                UNREACHABLE();
+        }
+        else if (variable && IsVaryingOut(variable->getQualifier()))
+        {
+            for (TIntermSequence::iterator sit = sequence->begin(); sit != sequence->end(); sit++)
+            {
+                TIntermSymbol *symbol = (*sit)->getAsSymbolNode();
+
+                if (symbol)
+                {
+                    // Vertex (output) varyings which are declared but not written to should
+                    // still be declared to allow successful linking
+                    mReferencedVaryings[symbol->getSymbol()] = symbol;
+                }
+                else
+                {
+                    (*sit)->traverse(this);
+                }
+            }
+        }
+    }
+    return false;
+}
+
 bool OutputHLSL::visitAggregate(Visit visit, TIntermAggregate *node)
 {
     TInfoSinkBase &out = getInfoSink();
 
     switch (node->getOp())
     {
-        case EOpDeclaration:
-            if (visit == PreVisit)
-            {
-                TIntermSequence *sequence = node->getSequence();
-                TIntermTyped *variable    = (*sequence)[0]->getAsTyped();
-                ASSERT(sequence->size() == 1);
-
-                if (variable &&
-                    (variable->getQualifier() == EvqTemporary ||
-                     variable->getQualifier() == EvqGlobal || variable->getQualifier() == EvqConst))
-                {
-                    ensureStructDefined(variable->getType());
-
-                    if (!variable->getAsSymbolNode() ||
-                        variable->getAsSymbolNode()->getSymbol() != "")  // Variable declaration
-                    {
-                        if (!mInsideFunction)
-                        {
-                            out << "static ";
-                        }
-
-                        out << TypeString(variable->getType()) + " ";
-
-                        TIntermSymbol *symbol = variable->getAsSymbolNode();
-
-                        if (symbol)
-                        {
-                            symbol->traverse(this);
-                            out << ArrayString(symbol->getType());
-                            out << " = " + initializer(symbol->getType());
-                        }
-                        else
-                        {
-                            variable->traverse(this);
-                        }
-                    }
-                    else if (variable->getAsSymbolNode() &&
-                             variable->getAsSymbolNode()->getSymbol() ==
-                                 "")  // Type (struct) declaration
-                    {
-                        // Already added to constructor map
-                    }
-                    else
-                        UNREACHABLE();
-                }
-                else if (variable && IsVaryingOut(variable->getQualifier()))
-                {
-                    for (TIntermSequence::iterator sit = sequence->begin(); sit != sequence->end();
-                         sit++)
-                    {
-                        TIntermSymbol *symbol = (*sit)->getAsSymbolNode();
-
-                        if (symbol)
-                        {
-                            // Vertex (output) varyings which are declared but not written to should
-                            // still be declared to allow successful linking
-                            mReferencedVaryings[symbol->getSymbol()] = symbol;
-                        }
-                        else
-                        {
-                            (*sit)->traverse(this);
-                        }
-                    }
-                }
-
-                return false;
-            }
-            else if (visit == InVisit)
-            {
-                out << ", ";
-            }
-            break;
         case EOpInvariantDeclaration:
             // Do not do any translation
             return false;
@@ -2172,39 +2168,6 @@ bool OutputHLSL::visitBranch(Visit visit, TIntermBranch *node)
         }
         break;
       default: UNREACHABLE();
-    }
-
-    return true;
-}
-
-bool OutputHLSL::isSingleStatement(TIntermNode *node)
-{
-    if (node->getAsBlock())
-    {
-        return false;
-    }
-
-    TIntermAggregate *aggregate = node->getAsAggregate();
-    if (aggregate)
-    {
-        if (aggregate->getOp() == EOpDeclaration)
-        {
-            // Declaring multiple comma-separated variables must be considered multiple statements
-            // because each individual declaration has side effects which are visible in the next.
-            return false;
-        }
-        else
-        {
-            for (TIntermSequence::iterator sit = aggregate->getSequence()->begin(); sit != aggregate->getSequence()->end(); sit++)
-            {
-                if (!isSingleStatement(*sit))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
     }
 
     return true;
