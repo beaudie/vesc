@@ -2424,6 +2424,10 @@ TIntermAggregate *TParseContext::addInterfaceBlock(
     if (blockLayoutQualifier.blockStorage == EbsUnspecified)
     {
         blockLayoutQualifier.blockStorage = mDefaultBlockStorage;
+        if (IsWebGLBasedSpec(mShaderSpec) && blockLayoutQualifier.blockStorage != EbsStd140)
+        {
+            error(nameLine, "Only std140 layout is allowed in WebGL", blockName.c_str());
+        }
     }
 
     checkWorkGroupSizeIsNotSpecified(nameLine, blockLayoutQualifier);
@@ -2865,10 +2869,18 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const TString &qualifierTyp
 
     if (qualifierType == "shared")
     {
+        if (IsWebGLBasedSpec(mShaderSpec))
+        {
+            error(qualifierTypeLine, "Only std140 layout is allowed in WebGL", "shared");
+        }
         qualifier.blockStorage = EbsShared;
     }
     else if (qualifierType == "packed")
     {
+        if (IsWebGLBasedSpec(mShaderSpec))
+        {
+            error(qualifierTypeLine, "Only std140 layout is allowed in WebGL", "packed");
+        }
         qualifier.blockStorage = EbsPacked;
     }
     else if (qualifierType == "std140")
