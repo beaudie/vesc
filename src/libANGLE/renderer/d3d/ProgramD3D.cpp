@@ -1285,22 +1285,64 @@ gl::Error ProgramD3D::getGeometryExecutableForPrimitiveType(const gl::ContextSta
     return error;
 }
 
-LinkResult ProgramD3D::compileProgramExecutables(const gl::ContextState &data, gl::InfoLog &infoLog)
+struct VertexProgramTask
+{
+    ProgramD3D *program;
+    ShaderExecutableD3D *defaultVertexExecutable = nullptr;
+    gl::InfoLog infoLog;
+    gl::Error error;
+    VertexProgramTask() : error(GL_NO_ERROR) {}
+};
+
+void CALLBACK CompileProgram(PTP_CALLBACK_INSTANCE Instance, PVOID Context, PTP_WORK work)
+{
+    VertexProgramTask *task = reinterpret_cast<VertexProgramTask *>(Context);
+    task->error = task->program->CompileVertexShader(&task->defaultVertexExecutable, task->infoLog);
+}
+
+gl::Error ProgramD3D::CompileVertexShader(ShaderExecutableD3D **defaultVertexExecutable,
+                                          gl::InfoLog &infoLog)
 {
     const gl::InputLayout &defaultInputLayout =
         GetDefaultInputLayoutFromShader(mState.getAttachedVertexShader());
-    ShaderExecutableD3D *defaultVertexExecutable = NULL;
-    gl::Error error =
-        getVertexExecutableForInputLayout(defaultInputLayout, &defaultVertexExecutable, &infoLog);
-    if (error.isError())
-    {
-        return LinkResult(false, error);
-    }
+    return getVertexExecutableForInputLayout(defaultInputLayout, defaultVertexExecutable, &infoLog);
+}
+
+LinkResult ProgramD3D::compileProgramExecutables(const gl::ContextState &data, gl::InfoLog &infoLog)
+{
+    VertexProgramTask vertex_task;
+    vertex_task.program = this;
+
+#if ANGLE_MULTITHREADED_D3D_SHADER_COMPILE == ANGLE_ENABLED
+    PTP_WORK work = CreateThreadpoolWork(&CompileProgram, &vertex_task, nullptr);
+    SubmitThreadpoolWork(work);
+#else
+    CompileProgram(nullptr, &vertex_task, nullptr)
+#endif
 
     std::vector<GLenum> defaultPixelOutput      = GetDefaultOutputLayoutFromShader(getPixelShaderKey());
     ShaderExecutableD3D *defaultPixelExecutable = NULL;
-    error =
+    gl::Error error =
         getPixelExecutableForOutputLayout(defaultPixelOutput, &defaultPixelExecutable, &infoLog);
+
+#if ANGLE_MULTITHREADED_D3D_SHADER_COMPILE == ANGLE_ENABLED
+    WaitForThreadpoolWorkCallbacks(work, FALSE);
+    CloseThreadpoolWork(work);
+#endif
+
+    if (vertex_task.infoLog.getLength() > 0)
+    {
+        std::vector<char> tempCharBuffer(vertex_task.infoLog.getLength() + 3);
+        vertex_task.infoLog.getLog((GLsizei)vertex_task.infoLog.getLength(), NULL,
+                                   &tempCharBuffer[0]);
+        infoLog << &tempCharBuffer[0];
+    }
+
+    if (vertex_task.error.isError())
+    {
+        return LinkResult(false, vertex_task.error);
+    }
+
     if (error.isError())
     {
         return LinkResult(false, error);
@@ -1325,9 +1367,9 @@ LinkResult ProgramD3D::compileProgramExecutables(const gl::ContextState &data, g
         vertexShaderD3D->appendDebugInfo("\nGEOMETRY SHADER END\n\n\n");
     }
 
-    if (defaultVertexExecutable)
+    if (vertex_task.defaultVertexExecutable)
     {
-        vertexShaderD3D->appendDebugInfo(defaultVertexExecutable->getDebugInfo());
+        vertexShaderD3D->appendDebugInfo(vertex_task.defaultVertexExecutable->getDebugInfo());
     }
 
     if (defaultPixelExecutable)
@@ -1337,7 +1379,7 @@ LinkResult ProgramD3D::compileProgramExecutables(const gl::ContextState &data, g
         fragmentShaderD3D->appendDebugInfo(defaultPixelExecutable->getDebugInfo());
     }
 
-    bool linkSuccess = (defaultVertexExecutable && defaultPixelExecutable &&
+    bool linkSuccess = (vertex_task.defaultVertexExecutable && defaultPixelExecutable &&
                         (!usesGeometryShader(GL_POINTS) || pointGS));
     return LinkResult(linkSuccess, gl::Error(GL_NO_ERROR));
 }
