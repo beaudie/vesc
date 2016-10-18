@@ -247,6 +247,10 @@ class ProgramD3D : public ProgramImpl
 
     bool isSamplerMappingDirty() { return mDirtySamplerMapping; }
 
+    // This is called from a child thread to compile the vertex shader.
+    gl::Error CompileVertexShader(ShaderExecutableD3D **defaultVertexExecutable,
+                                  gl::InfoLog &infoLog);
+
   private:
     class VertexExecutable
     {
