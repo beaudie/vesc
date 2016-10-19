@@ -114,6 +114,8 @@
             'libANGLE/ImageIndex.cpp',
             'libANGLE/IndexRangeCache.cpp',
             'libANGLE/IndexRangeCache.h',
+			'libANGLE/IntelDriver.h',
+			'libANGLE/IntelDriver.cpp',
             'libANGLE/Path.h',
             'libANGLE/Path.cpp',
             'libANGLE/Platform.cpp',
