@@ -11,6 +11,7 @@
 
 #include "libANGLE/Constants.h"
 #include "libANGLE/RefCountObject.h"
+#include "libANGLE/IntelDriver.h"
 
 #include <stdint.h>
 
