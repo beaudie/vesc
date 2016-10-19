@@ -884,6 +884,11 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
         extensions->textureSRGBDecode = false;
     }
 #endif
+
+    extensions->sRGBWriteControl = functions->isAtLeastGL(gl::Version(3, 0)) ||
+                                   functions->hasGLExtension("GL_EXT_framebuffer_sRGB") ||
+                                   functions->hasGLExtension("GL_ARB_framebuffer_sRGB") ||
+                                   functions->hasGLESExtension("GL_EXT_sRGB_write_control");
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)
