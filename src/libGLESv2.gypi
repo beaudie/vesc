@@ -169,6 +169,8 @@
             'libANGLE/renderer/DeviceImpl.h',
             'libANGLE/renderer/DisplayImpl.cpp',
             'libANGLE/renderer/DisplayImpl.h',
+            'libANGLE/renderer/drivers/Intel.cpp',
+            'libANGLE/renderer/drivers/Intel.h',
             'libANGLE/renderer/EGLImplFactory.h',
             'libANGLE/renderer/FenceNVImpl.h',
             'libANGLE/renderer/FenceSyncImpl.h',
