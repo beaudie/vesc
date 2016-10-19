@@ -257,6 +257,11 @@ enum VendorID : uint32_t
     VENDOR_ID_QUALCOMM = 0x5143,
 };
 
+#define IS_AMD(vendor_id) (vendor_id == VENDOR_ID_AMD)
+#define IS_INTEL(vendor_id) (vendor_id == VENDOR_ID_INTEL)
+#define IS_NVIDIA(vendor_id) (vendor_id == VENDOR_ID_NVIDIA)
+#define IS_QUALCOMM(vendor_id) (vendor_id == VENDOR_ID_QUALCOMM)
+
 // A macro that determines whether an object has a given runtime type.
 #if defined(__clang__)
 #if __has_feature(cxx_rtti)
