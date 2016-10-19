@@ -871,6 +871,9 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
         functions->isAtLeastGLES(gl::Version(3, 1));
 
     extensions->pathRendering = canEnableGLPathRendering || canEnableESPathRendering;
+
+    extensions->textureSRGBDecode = functions->hasGLExtension("GL_EXT_texture_sRGB_decode") ||
+                                    functions->hasGLESExtension("GL_EXT_texture_sRGB_decode");
 }
 
 void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workarounds)
