@@ -11,6 +11,7 @@
 
 #include "common/angleutils.h"
 #include "common/mathutil.h"
+#include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/d3d/HLSLCompiler.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
 #include "libANGLE/renderer/d3d/RenderTargetD3D.h"
