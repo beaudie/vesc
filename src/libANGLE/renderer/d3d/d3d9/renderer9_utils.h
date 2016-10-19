@@ -13,6 +13,7 @@
 #include "common/Color.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/renderer/driver_utils.h"
 
 namespace gl
 {
