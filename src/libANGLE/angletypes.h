@@ -257,6 +257,26 @@ enum VendorID : uint32_t
     VENDOR_ID_QUALCOMM = 0x5143,
 };
 
+inline bool IsAMD(uint32_t vendor_id)
+{
+    return vendor_id == VENDOR_ID_AMD;
+}
+
+inline bool IsIntel(uint32_t vendor_id)
+{
+    return vendor_id == VENDOR_ID_INTEL;
+}
+
+inline bool IsNvidia(uint32_t vendor_id)
+{
+    return vendor_id == VENDOR_ID_NVIDIA;
+}
+
+inline bool IsQualcomm(uint32_t vendor_id)
+{
+    return vendor_id == VENDOR_ID_QUALCOMM;
+}
+
 // A macro that determines whether an object has a given runtime type.
 #if defined(__clang__)
 #if __has_feature(cxx_rtti)
