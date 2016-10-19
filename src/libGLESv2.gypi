@@ -208,6 +208,8 @@
             'libANGLE/validationES3.h',
             'libANGLE/validationES31.cpp',
             'libANGLE/validationES31.h',
+            'libANGLE/Vendors/Intel/IntelDriver.cpp',
+            'libANGLE/Vendors/Intel/IntelDriver.h',
             'third_party/murmurhash/MurmurHash3.cpp',
             'third_party/murmurhash/MurmurHash3.h',
         ],
