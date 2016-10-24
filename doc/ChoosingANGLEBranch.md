@@ -44,3 +44,18 @@ branch has been created, and that branch is used by a Chromium release, the
 fixes for those bugs will be applied to the ANGLE branches for uptake by
 Chromium and any other projects using that branch. You should need only to
 perform a `git pull` to check for and apply any such changes.
+
+## Cherry-picking a change to a release branch
+
+Occasionally a bug fix must be merged back to an earlier Chromium
+release branch. To do this:
+
+1. Look up the branch number in
+[OmahaProxy](https://omahaproxy.appspot.com/). For example, M55
+corresponds to branch number 2883.
+2. `git checkout chromium/[branch_number]`
+3. `git cherry-pick [commit_hash]`
+4. Fix any merge conflicts.
+5. `git cl upload`
+
+Have the cherry-pick reviewed, and then land it.
