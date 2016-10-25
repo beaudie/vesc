@@ -246,14 +246,14 @@
             'target_name': 'preprocessor',
             'type': 'static_library',
             'dependencies': [ 'angle_common' ],
-            'includes': [ '../build/common_defines.gypi', ],
+            'includes': [ '../gypfiles/common_defines.gypi', ],
             'sources': [ '<@(angle_preprocessor_sources)', ],
         },
         {
             'target_name': 'translator_lib',
             'type': 'static_library',
             'dependencies': [ 'preprocessor', 'angle_common' ],
-            'includes': [ '../build/common_defines.gypi', ],
+            'includes': [ '../gypfiles/common_defines.gypi', ],
             'include_dirs':
             [
                 '.',
@@ -339,7 +339,7 @@
             'target_name': 'translator',
             'type': '<(component)',
             'dependencies': [ 'translator_lib', 'angle_common' ],
-            'includes': [ '../build/common_defines.gypi', ],
+            'includes': [ '../gypfiles/common_defines.gypi', ],
             'include_dirs':
             [
                 '.',
@@ -360,7 +360,7 @@
             'target_name': 'translator_static',
             'type': 'static_library',
             'dependencies': [ 'translator_lib' ],
-            'includes': [ '../build/common_defines.gypi', ],
+            'includes': [ '../gypfiles/common_defines.gypi', ],
             'include_dirs':
             [
                 '.',

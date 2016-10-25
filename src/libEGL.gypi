@@ -17,7 +17,7 @@
             ],
             'includes':
             [
-                '../build/common_defines.gypi',
+                '../gypfiles/common_defines.gypi',
             ],
             'include_dirs':
             [
