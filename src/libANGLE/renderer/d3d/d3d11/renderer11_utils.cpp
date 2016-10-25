@@ -1857,7 +1857,8 @@ WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps,
     workarounds.emulateIsnanFloat         = (adapterDesc.VendorId == VENDOR_ID_INTEL);
 
     // TODO(jmadill): Disable when we have a fixed driver version.
-    workarounds.emulateTinyStencilTextures = (adapterDesc.VendorId == VENDOR_ID_AMD);
+    workarounds.emulateTinyStencilTextures = (adapterDesc.VendorId == VENDOR_ID_AMD) &&
+                                             deviceCaps.featureLevel >= D3D_FEATURE_LEVEL_10_1;
 
     return workarounds;
 }
