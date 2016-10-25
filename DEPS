@@ -27,6 +27,12 @@ deps = {
 
   'buildtools':
       Var('chromium_git') + '/chromium/buildtools.git' + '@' + '39b1db2ab4aa4b2ccaa263c29bdf63e7c1ee28aa',
+
+  'build':
+      Var('chromium_git') + '/chromium/src/build.git' + '@' + 'a3b623a6eff6dc9d58a03251ae22bccf92f67cb2',
+
+  'tools/clang':
+      Var('chromium_git') + '/chromium/src/tools/clang.git' + '@' + '75350a858c51ad69e2aae051a8727534542da29f',
 }
 
 hooks = [
@@ -97,6 +103,13 @@ hooks = [
                 '--bucket', 'chromium-gn',
                 '-s', 'buildtools/linux64/gn.sha1',
     ],
+  },
+  {
+    # Pull clang if needed or requested via GYP_DEFINES.
+    # Note: On Win, this should run after win_toolchain, as it may use it.
+    'name': 'clang',
+    'pattern': '.',
+    'action': ['python', 'tools/clang/scripts/update.py', '--if-needed'],
   },
   {
     # A change to a .gyp, .gypi, or to GYP itself should run the generator.

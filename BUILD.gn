@@ -6,9 +6,15 @@
 import("//build/config/dcheck_always_on.gni")
 import("//build/config/linux/pkg_config.gni")
 import("//build/config/ui.gni")
-import("//testing/libfuzzer/fuzzer_test.gni")
-import("//third_party/angle/gni/angle.gni")
-import("//ui/ozone/ozone.gni")
+import("gni/angle.gni")
+
+if (build_with_chromium) {
+  import("//ui/ozone/ozone.gni")
+  import("//testing/libfuzzer/fuzzer_test.gni")
+} else {
+  ozone_platform_gbm = false
+  use_libfuzzer = false
+}
 
 if (ozone_platform_gbm) {
   pkg_config("libdrm") {
