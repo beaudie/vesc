@@ -37,7 +37,9 @@ struct Format final : angle::NonCopyable
            angle::Format::ID formatID,
            DXGI_FORMAT texFormat,
            DXGI_FORMAT srvFormat,
+           DXGI_FORMAT srgbDisabledSRVFormat,
            DXGI_FORMAT rtvFormat,
+           DXGI_FORMAT srgbDisabledRTVFormat,
            DXGI_FORMAT dsvFormat,
            DXGI_FORMAT blitSRVFormat,
            GLenum swizzleFormat,
@@ -50,8 +52,13 @@ struct Format final : angle::NonCopyable
     const angle::Format &format;
 
     DXGI_FORMAT texFormat;
+
     DXGI_FORMAT srvFormat;
+    DXGI_FORMAT srgbDisabledSRVFormat;
+
     DXGI_FORMAT rtvFormat;
+    DXGI_FORMAT srgbDisabledRTVFormat;
+
     DXGI_FORMAT dsvFormat;
 
     DXGI_FORMAT blitSRVFormat;

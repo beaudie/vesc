@@ -206,6 +206,12 @@ def get_swizzle_format_id(internal_format, angle_format):
 
     return swizzle
 
+def get_srgb_disabled_srv_format(angle_format):
+    return angle_format["srvFormatSRGBDisabled"] if "srvFormatSRGBDisabled" in angle_format else angle_format["srvFormat"]
+
+def get_srgb_disabled_rtv_format(angle_format):
+    return angle_format["rtvFormatSRGBDisabled"] if "rtvFormatSRGBDisabled" in angle_format else angle_format["rtvFormat"]
+
 def get_blit_srv_format(angle_format):
     if 'channels' not in angle_format:
         return 'DXGI_FORMAT_UNKNOWN'
@@ -220,7 +226,9 @@ format_entry_template = """{space}{{
 {space}                             angle::Format::ID::{formatName},
 {space}                             {texFormat},
 {space}                             {srvFormat},
+{space}                             {srvFormatSRGBDisabled},
 {space}                             {rtvFormat},
+{space}                             {rtvFormatSRGBDisabled},
 {space}                             {dsvFormat},
 {space}                             {blitSRVFormat},
 {space}                             {swizzleFormat},
@@ -236,7 +244,9 @@ split_format_entry_template = """{space}    {condition}
 {space}                                 angle::Format::ID::{formatName},
 {space}                                 {texFormat},
 {space}                                 {srvFormat},
+{space}                                 {srvFormatSRGBDisabled},
 {space}                                 {rtvFormat},
+{space}                                 {rtvFormatSRGBDisabled},
 {space}                                 {dsvFormat},
 {space}                                 {blitSRVFormat},
 {space}                                 {swizzleFormat},
@@ -265,6 +275,8 @@ def json_to_table_data(internal_format, format_name, prefix, json):
         parsed[k] = v
 
     # Derived values.
+    parsed["srvFormatSRGBDisabled"] = get_srgb_disabled_srv_format(parsed)
+    parsed["rtvFormatSRGBDisabled"] = get_srgb_disabled_rtv_format(parsed)
     parsed["blitSRVFormat"] = get_blit_srv_format(parsed)
     parsed["swizzleFormat"] = get_swizzle_format_id(internal_format, parsed)
     parsed["initializer"]   = get_internal_format_initializer(internal_format, json)
