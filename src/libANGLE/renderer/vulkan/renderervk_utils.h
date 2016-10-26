@@ -14,9 +14,14 @@
 
 #include "libANGLE/Error.h"
 
+namespace gl
+{
+struct Box;
+struct Rectangle;
+}
+
 namespace rx
 {
-
 const char *VulkanResultString(VkResult result);
 bool HasStandardValidationLayer(const std::vector<VkLayerProperties> &layerProps);
 
@@ -24,6 +29,7 @@ extern const char *g_VkStdValidationLayerName;
 
 namespace vk
 {
+class Framebuffer;
 
 class Error final
 {
@@ -72,12 +78,63 @@ class CommandBuffer final : angle::NonCopyable
                            VkImageLayout oldLayout,
                            VkImageLayout newLayout);
 
+    void imageBarrier(VkPipelineStageFlags srcStageMask,
+                      VkPipelineStageFlags destStageMask,
+                      const VkImageMemoryBarrier &barrier);
+
+    void clearSingleColorImage(VkImage image,
+                               VkImageLayout imageLayout,
+                               const VkClearColorValue &color);
+
+    void copySingleImage(VkImage srcImage,
+                         VkImageLayout srcImageLayout,
+                         VkImage destImage,
+                         VkImageLayout destImageLayout,
+                         const gl::Box &copyRegion,
+                         VkImageAspectFlags aspectMask);
+
     VkCommandBuffer getHandle() const { return mHandle; }
 
   private:
     VkDevice mDevice;
     VkCommandPool mCommandPool;
     VkCommandBuffer mHandle;
+};
+
+class Semaphore final : angle::NonCopyable
+{
+  public:
+    Semaphore();
+    Semaphore(VkDevice device);
+    Semaphore(Semaphore &&other);
+    ~Semaphore();
+    Semaphore &operator=(Semaphore &&other);
+
+    Error init();
+
+    VkSemaphore getHandle() const { return mHandle; }
+
+  private:
+    VkDevice mDevice;
+    VkSemaphore mHandle;
+};
+
+class Framebuffer final : angle::NonCopyable
+{
+  public:
+    Framebuffer();
+    Framebuffer(VkDevice device);
+    Framebuffer(Framebuffer &&other);
+    ~Framebuffer();
+    Framebuffer &operator=(Framebuffer &&other);
+
+    Error init(const VkFramebufferCreateInfo &createInfo);
+
+    VkFramebuffer getHandle() const { return mHandle; }
+
+  private:
+    VkDevice mDevice;
+    VkFramebuffer mHandle;
 };
 
 }  // namespace vk
