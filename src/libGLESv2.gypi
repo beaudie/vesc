@@ -618,6 +618,8 @@
             'libANGLE/renderer/vulkan/TransformFeedbackVk.h',
             'libANGLE/renderer/vulkan/VertexArrayVk.cpp',
             'libANGLE/renderer/vulkan/VertexArrayVk.h',
+            'libANGLE/renderer/vulkan/renderervk_utils.cpp',
+            'libANGLE/renderer/vulkan/renderervk_utils.h',
         ],
         'libangle_null_sources':
         [
@@ -999,9 +1001,17 @@
                     [
                         '<@(libangle_vulkan_sources)',
                     ],
+                    'dependencies':
+                    [
+                        'vulkan_loader',
+                    ],
                     'defines':
                     [
                         'ANGLE_ENABLE_VULKAN',
+                    ],
+                    'export_dependent_settings':
+                    [
+                        'vulkan_loader',
                     ],
                 }],
                 ['angle_enable_null==1',
