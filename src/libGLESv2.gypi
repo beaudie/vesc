@@ -599,6 +599,7 @@
             'libANGLE/renderer/vulkan/FenceNVVk.h',
             'libANGLE/renderer/vulkan/FenceSyncVk.cpp',
             'libANGLE/renderer/vulkan/FenceSyncVk.h',
+            'libANGLE/renderer/vulkan/Format.h',
             'libANGLE/renderer/vulkan/FramebufferVk.cpp',
             'libANGLE/renderer/vulkan/FramebufferVk.h',
             'libANGLE/renderer/vulkan/ImageVk.cpp',
@@ -625,6 +626,8 @@
             'libANGLE/renderer/vulkan/VertexArrayVk.h',
             'libANGLE/renderer/vulkan/renderervk_utils.cpp',
             'libANGLE/renderer/vulkan/renderervk_utils.h',
+            'libANGLE/renderer/vulkan/formatutilsvk.cpp',
+            'libANGLE/renderer/vulkan/vk_format_table_autogen.cpp',
         ],
         'libangle_null_sources':
         [
