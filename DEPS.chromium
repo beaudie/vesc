@@ -12,6 +12,8 @@
 vars = {
   'android_git': 'https://android.googlesource.com',
   'deqp_revision': 'f4f3d8079e7a37d7675ab93583e6438d0bca0e58',
+  'spirv_headers_revision': 'bd47a9abaefac00be692eae677daed1b977e625c',
+  'spirv_tools_revision': '2d89b6a9c5b88ad34784b8275141187afcc5045b',
   'vulkan_revision': '665734bffa6e3364f2f12fe533a030f54274df66',
 }
 
@@ -19,6 +21,12 @@ deps_os = {
   'win': {
     'src/third_party/deqp/src':
       Var('android_git') + '/platform/external/deqp@' + Var('deqp_revision'),
+
+    'src/third_party/spirv-headers/src':
+      Var('android_git') + '/platform/external/shaderc/spirv-headers@' + Var('spirv_headers_revision'),
+
+    'src/third_party/spirv-tools-angle/src':
+      Var('android_git') + '/platform/external/shaderc/spirv-tools@' + Var('spirv_tools_revision'),
 
     'src/third_party/vulkan-validation-layers/src':
       Var('android_git') + '/platform/external/vulkan-validation-layers@' + Var('vulkan_revision'),
