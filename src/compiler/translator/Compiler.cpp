@@ -487,6 +487,14 @@ bool TCompiler::compile(const char *const shaderStrings[],
         return false;
     }
 
+    if ((compileOptions & SH_FLATTEN_PRAGMA_STDGL_INVARIANT_ALL) && !(compileOptions & SH_VARIABLES))
+    {
+        infoSink.info.prefix(EPrefixError);
+        infoSink.info
+            << "Unsupported compile flags: flatten STDGL invariant(all) requires SH_VARIABLES";
+        return false;
+    }
+
     TScopedPoolAllocator scopedAlloc(&allocator);
     TIntermBlock *root = compileTreeImpl(shaderStrings, numStrings, compileOptions);
 

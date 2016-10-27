@@ -57,7 +57,7 @@ void TranslatorGLSL::translate(TIntermNode *root, ShCompileOptions compileOption
     // variables that are actually used, to avoid affecting the behavior of the shader.
     if ((compileOptions & SH_FLATTEN_PRAGMA_STDGL_INVARIANT_ALL) && getPragma().stdgl.invariantAll)
     {
-        collectVariables(root);
+        ASSERT(variablesCollected);
 
         switch (getShaderType())
         {
