@@ -13,11 +13,15 @@ class ScalarizeVecAndMatConstructorArgs : public TIntermTraverser
 {
   public:
     ScalarizeVecAndMatConstructorArgs(sh::GLenum shaderType,
-                                      bool fragmentPrecisionHigh)
+                                      bool fragmentPrecisionHigh,
+                                      unsigned int *temporaryIndex)
         : TIntermTraverser(true, false, false),
           mTempVarCount(0),
           mShaderType(shaderType),
-          mFragmentPrecisionHigh(fragmentPrecisionHigh) {}
+          mFragmentPrecisionHigh(fragmentPrecisionHigh)
+    {
+        useTemporaryIndex(temporaryIndex);
+    }
 
   protected:
     bool visitAggregate(Visit visit, TIntermAggregate *node) override;
@@ -32,12 +36,11 @@ class ScalarizeVecAndMatConstructorArgs : public TIntermTraverser
     //   vec4 v(1, m);
     // We will rewrite to:
     //   mat4 m(0);
-    //   mat4 _webgl_tmp_mat_0 = m;
-    //   vec4 v(1, _webgl_tmp_mat_0[0][0], _webgl_tmp_mat_0[0][1], _webgl_tmp_mat_0[0][2]);
-    // This function is to create nodes for "mat4 _webgl_tmp_mat_0 = m;" and insert it to
+    //   mat4 s0 = m;
+    //   vec4 v(1, s0[0][0], s0[0][1], s0[0][2]);
+    // This function is to create nodes for "mat4 s0 = m;" and insert it to
     // the code sequence.
-    // Return the temporary variable name.
-    TString createTempVariable(TIntermTyped *original);
+    void createTempVariable(TIntermTyped *original);
 
     std::vector<TIntermSequence> mBlockStack;
     int mTempVarCount;
