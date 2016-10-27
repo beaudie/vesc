@@ -497,7 +497,6 @@ class TSymbolTable : angle::NonCopyable
     // variable's type, not here.
     bool isVaryingInvariant(const std::string &originalName) const
     {
-        ASSERT(atGlobalLevel());
         return table[currentLevel()]->isVaryingInvariant(originalName);
     }
 
