@@ -1581,6 +1581,21 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
     return false;
 }
 
+void TParseContext::addFullySpecifiedType(TPublicType *typeSpecifier)
+{
+    checkPrecisionSpecified(typeSpecifier->getLine(), typeSpecifier->precision,
+                            typeSpecifier->getBasicType());
+
+    if (mShaderVersion < 300)
+    {
+        if (typeSpecifier->array)
+        {
+            error(typeSpecifier->getLine(), "not supported", "first-class array");
+            typeSpecifier->clearArrayness();
+        }
+    }
+}
+
 TPublicType TParseContext::addFullySpecifiedType(const TTypeQualifierBuilder &typeQualifierBuilder,
                                                  const TPublicType &typeSpecifier)
 {
