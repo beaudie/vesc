@@ -117,17 +117,58 @@ bool DebugAnnotationsActive();
 #define ANGLE_ASSERT_IMPL(expression) ANGLE_CRASH()
 #endif  // !defined(NDEBUG)
 
+namespace logging
+{
+
+// Helper macro which avoids evaluating the arguments to a stream if
+// the condition doesn't hold. Condition is evaluated once and only once.
+#define LAZY_STREAM(stream, condition) \
+    !(condition) ? (void)0 : ::logging::LogMessageVoidify() & (stream)
+
+// We use the preprocessor's merging operator, "##", so that, e.g.,
+// LOG(INFO) becomes the token COMPACT_GOOGLE_LOG_INFO.  There's some funny
+// subtle difference between ostream member streaming functions (e.g.,
+// ostream::operator<<(int) and ostream non-member streaming functions
+// (e.g., ::operator<<(ostream&, string&): it turns out that it's
+// impossible to stream something like a string directly to an unnamed
+// ostream. We employ a neat hack by calling the stream() member
+// function of LogMessage which seems to avoid the problem.
+#define LOG_STREAM(severity) COMPACT_GOOGLE_LOG_##severity.stream()
+
+#if defined(NDEBUG) && !defined(ANGLE_ENABLE_ASSERTS)
+#define ANGLE_ASSERTS_ON() 0
+#else
+#define ANGLE_ASSERTS_ON() 1
+#endif
+
+// This class is used to explicitly ignore values in the conditional
+// logging macros.  This avoids compiler warnings like "value computed
+// is not used" and "statement has no effect".
+class LogMessageVoidify
+{
+  public:
+    LogMessageVoidify() {}
+    // This has to be an operator with a precedence lower than << but
+    // higher than ?:
+    void operator&(std::ostream &) {}
+};
+
+// This can be any ostream, it is unused, but needs to be a valid reference.
+std::ostream &DummyStream();
+
+}  // namespace logging
+
 // A macro asserting a condition and outputting failures to the debug log
-#if defined(ANGLE_ENABLE_ASSERTS)
+#if ANGLE_ASSERTS_ON()
 #define ASSERT(expression)                                                                        \
     (expression ? static_cast<void>(0)                                                            \
                 : (ERR("\t! Assert failed in %s(%d): %s\n", __FUNCTION__, __LINE__, #expression), \
                    ANGLE_ASSERT_IMPL(expression)))
-#define UNUSED_ASSERTION_VARIABLE(variable)
 #else
-#define ASSERT(expression) (void(0))
-#define UNUSED_ASSERTION_VARIABLE(variable) ((void)variable)
-#endif
+#define ASSERT(condition)                                                            \
+    LAZY_STREAM(::logging::DummyStream(), ANGLE_ASSERTS_ON() ? !(condition) : false) \
+        << "Check failed: " #condition ". "
+#endif  // ANGLE_ASSERTS_ON()
 
 #define UNUSED_VARIABLE(variable) ((void)variable)
 
