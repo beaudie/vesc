@@ -171,4 +171,12 @@ ScopedPerfEventHelper::~ScopedPerfEventHelper()
     }
 }
 
+}  // namespace gl
+
+namespace logging
+{
+std::ostream &DummyStream()
+{
+    return std::cout;
 }
+}  // namespace logging
