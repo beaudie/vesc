@@ -145,6 +145,15 @@ void GL_APIENTRY BindBuffer(GLenum target, GLuint buffer)
           case GL_TRANSFORM_FEEDBACK_BUFFER:
             context->bindGenericTransformFeedbackBuffer(buffer);
             return;
+          case GL_ATOMIC_COUNTER_BUFFER:
+              UNIMPLEMENTED();
+              break;
+          case GL_SHADER_STORAGE_BUFFER:
+              UNIMPLEMENTED();
+              break;
+          case GL_DISPATCH_INDIRECT_BUFFER:
+              UNIMPLEMENTED();
+              break;
 
           default:
               context->handleError(Error(GL_INVALID_ENUM));
