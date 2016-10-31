@@ -6,6 +6,8 @@
 
 // Version.inl: Encapsulation of a GL version.
 
+#include <tuple>
+
 namespace gl
 {
 
@@ -15,29 +17,39 @@ inline Version::Version()
 }
 
 inline Version::Version(GLuint major_, GLuint minor_)
+    : major(major_),
+      minor(minor_)
 {
-    major = major_;
-    minor = minor_;
 }
 
 inline bool operator==(const Version &a, const Version &b)
 {
-    return a.major == b.major && a.minor == b.minor;
+    return std::tie(a.major, a.minor) == std::tie(b.major, b.minor);
 }
 
 inline bool operator!=(const Version &a, const Version &b)
 {
-    return !(a == b);
+    return std::tie(a.major, a.minor) != std::tie(b.major, b.minor);
 }
 
 inline bool operator>=(const Version &a, const Version &b)
 {
-    return a.major > b.major || (a.major == b.major && a.minor >= b.minor);
+    return std::tie(a.major, a.minor) >= std::tie(b.major, b.minor);
+}
+
+inline bool operator<=(const Version &a, const Version &b)
+{
+    return std::tie(a.major, a.minor) <= std::tie(b.major, b.minor);
 }
 
 inline bool operator<(const Version &a, const Version &b)
 {
-    return !(a >= b);
+    return std::tie(a.major, a.minor) < std::tie(b.major, b.minor);
+}
+
+inline bool operator>(const Version &a, const Version &b)
+{
+    return std::tie(a.major, a.minor) > std::tie(b.major, b.minor);
 }
 
 }

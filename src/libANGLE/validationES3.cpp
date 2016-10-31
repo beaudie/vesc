@@ -1922,7 +1922,7 @@ bool ValidateIndexedStateQuery(ValidationContext *context,
 
 bool ValidateGetIntegeri_v(ValidationContext *context, GLenum target, GLuint index, GLint *data)
 {
-    if (!context->getGLVersion().isES3OrGreater())
+    if (context->getClientVersion() < Version(3, 0))
     {
         context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.0"));
         return false;
@@ -1937,7 +1937,7 @@ bool ValidateGetIntegeri_vRobustANGLE(ValidationContext *context,
                                       GLsizei *length,
                                       GLint *data)
 {
-    if (!context->getGLVersion().isES3OrGreater())
+    if (context->getClientVersion() < Version(3, 0))
     {
         context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.0"));
         return false;
@@ -1963,7 +1963,7 @@ bool ValidateGetIntegeri_vRobustANGLE(ValidationContext *context,
 
 bool ValidateGetInteger64i_v(ValidationContext *context, GLenum target, GLuint index, GLint64 *data)
 {
-    if (!context->getGLVersion().isES3OrGreater())
+    if (context->getClientVersion() < Version(3, 0))
     {
         context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.0"));
         return false;
@@ -1978,7 +1978,7 @@ bool ValidateGetInteger64i_vRobustANGLE(ValidationContext *context,
                                         GLsizei *length,
                                         GLint64 *data)
 {
-    if (!context->getGLVersion().isES3OrGreater())
+    if (context->getClientVersion() < Version(3, 0))
     {
         context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.0"));
         return false;
