@@ -167,12 +167,15 @@ GLenum GetResetStrategy(const egl::AttributeMap &attribs)
 
 bool GetRobustAccess(const egl::AttributeMap &attribs)
 {
-    return (attribs.get(EGL_CONTEXT_OPENGL_ROBUST_ACCESS_EXT, EGL_FALSE) == EGL_TRUE);
+    return (attribs.get(EGL_CONTEXT_OPENGL_ROBUST_ACCESS_EXT, EGL_FALSE) == EGL_TRUE) ||
+           ((attribs.get(EGL_CONTEXT_FLAGS_KHR, 0) & EGL_CONTEXT_OPENGL_ROBUST_ACCESS_BIT_KHR) !=
+            0);
 }
 
 bool GetDebug(const egl::AttributeMap &attribs)
 {
-    return (attribs.get(EGL_CONTEXT_OPENGL_DEBUG, EGL_FALSE) == EGL_TRUE);
+    return (attribs.get(EGL_CONTEXT_OPENGL_DEBUG, EGL_FALSE) == EGL_TRUE) ||
+           ((attribs.get(EGL_CONTEXT_FLAGS_KHR, 0) & EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR) != 0);
 }
 
 bool GetNoError(const egl::AttributeMap &attribs)
@@ -254,7 +257,10 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mCurrentSurface(nullptr),
       mResourceManager(nullptr)
 {
-    ASSERT(!mRobustAccess);  // Unimplemented
+    if (mRobustAccess)
+    {
+        UNIMPLEMENTED();
+    }
 
     initCaps(GetWebGLContext(attribs));
     initWorkarounds();
