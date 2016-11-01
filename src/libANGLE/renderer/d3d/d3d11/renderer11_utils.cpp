@@ -828,6 +828,38 @@ size_t GetMaximumPixelTextureUnits(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
+size_t GetMaximumComputeUniformVectors(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT;
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return D3D10_REQ_CONSTANT_BUFFER_ELEMENT_COUNT;
+
+        default:
+            return 0;
+    }
+}
+
+size_t GetMaximumComputeTextureUnits(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            return D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT;
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            return D3D10_COMMONSHADER_SAMPLER_SLOT_COUNT;
+
+        default:
+            return 0;
+    }
+}
+
 int GetMinimumTexelOffset(D3D_FEATURE_LEVEL featureLevel)
 {
     switch (featureLevel)
@@ -1143,6 +1175,46 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
     caps->maxTextureImageUnits  = static_cast<GLuint>(GetMaximumPixelTextureUnits(featureLevel));
     caps->minProgramTexelOffset = GetMinimumTexelOffset(featureLevel);
     caps->maxProgramTexelOffset = GetMaximumTexelOffset(featureLevel);
+
+    // Compute shader limits
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+        case D3D_FEATURE_LEVEL_11_0:
+            caps->maxComputeWorkGroupCount[0] = D3D11_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
+            caps->maxComputeWorkGroupCount[1] = D3D11_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
+            caps->maxComputeWorkGroupCount[2] = D3D11_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
+            caps->maxComputeWorkGroupSize[0]  = D3D11_CS_THREAD_GROUP_MAX_X;
+            caps->maxComputeWorkGroupSize[1]  = D3D11_CS_THREAD_GROUP_MAX_Y;
+            caps->maxComputeWorkGroupSize[2]  = D3D11_CS_THREAD_GROUP_MAX_Z;
+            caps->maxComputeWorkGroupInvocations = D3D11_CS_THREAD_GROUP_MAX_THREADS_PER_GROUP;
+            break;
+
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+            caps->maxComputeWorkGroupCount[0] = D3D11_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
+            caps->maxComputeWorkGroupCount[1] = D3D11_CS_DISPATCH_MAX_THREAD_GROUPS_PER_DIMENSION;
+            caps->maxComputeWorkGroupCount[2] = D3D11_CS_4_X_DISPATCH_MAX_THREAD_GROUPS_IN_Z_DIMENSION;
+            caps->maxComputeWorkGroupSize[0]  = D3D11_CS_4_X_THREAD_GROUP_MAX_X;
+            caps->maxComputeWorkGroupSize[1]  = D3D11_CS_4_X_THREAD_GROUP_MAX_Y;
+            caps->maxComputeWorkGroupSize[2]  = 1;
+            caps->maxComputeWorkGroupInvocations = D3D11_CS_4_X_THREAD_GROUP_MAX_THREADS_PER_GROUP;
+            break;
+
+        default:
+            caps->maxComputeWorkGroupCount[0] = 0;
+            caps->maxComputeWorkGroupCount[1] = 0;
+            caps->maxComputeWorkGroupCount[2] = 0;
+            caps->maxComputeWorkGroupSize[0]  = 0;
+            caps->maxComputeWorkGroupSize[1]  = 0;
+            caps->maxComputeWorkGroupSize[2]  = 0;
+            caps->maxComputeWorkGroupInvocations = 0;
+            caps->maxComputeWorkGroupInvocations = 0;
+    }
+    caps->maxComputeUniformComponents =
+        static_cast<GLuint>(GetMaximumComputeUniformVectors(featureLevel)) * 4;
+    caps->maxComputeTextureImageUnits =
+        static_cast<GLuint>(GetMaximumComputeTextureUnits(featureLevel));
 
     // Aggregate shader limits
     caps->maxUniformBufferBindings = caps->maxVertexUniformBlocks + caps->maxFragmentUniformBlocks;
