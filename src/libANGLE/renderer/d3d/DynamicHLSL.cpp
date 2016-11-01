@@ -772,8 +772,82 @@ bool DynamicHLSL::generateShaderLinkHLSL(const gl::ContextState &data,
                 << "    return generateOutput();\n"
                 << "}\n";
 
-    *vertexHLSL = vertexStream.str();
-    *pixelHLSL  = pixelStream.str();
+    *vertexHLSL  = vertexStream.str();
+    *pixelHLSL   = pixelStream.str();
+
+    return true;
+}
+
+bool DynamicHLSL::generateComputeShaderLinkHLSL(const gl::ContextState &data,
+                            const gl::ProgramState &programData,
+                            const ProgramD3DMetadata &programMetadata,
+                            std::string *computeHLSL) const
+{
+    ASSERT(computeHLSL->empty());
+
+    const gl::Shader *computeShaderGL   = programData.getAttachedComputeShader();
+    const int shaderModel              = mRenderer->getMajorShaderModel();
+
+    // usesViewScale() isn't supported in the D3D9 renderer
+    ASSERT(shaderModel >= 4 || !programMetadata.usesViewScale());
+
+    std::stringstream computeStream;
+    computeStream << computeShaderGL->getTranslatedSource();
+
+    computeStream << "\nstruct CS_INPUT\n{\n";
+    if (programMetadata.usesWorkGroupID())
+    {
+        computeStream << "    uint3 _WorkGroupID : " << "SV_GroupID;\n";
+    }
+
+    if (programMetadata.usesLocalInvocationID())
+    {
+        computeStream << "    uint3 _LocalInvocationID : " << "SV_GroupThreadID;\n";
+    }
+
+    if (programMetadata.usesGlobalInvocationID())
+    {
+        computeStream << "    uint3 _GlobalInvocationID : " << "SV_DispatchThreadID;\n";
+    }
+
+    if (programMetadata.usesLocalInvocationIndex())
+    {
+        computeStream << "    uint _LocalInvocationIndex : " << "SV_GroupIndex;\n";
+    }
+
+    computeStream << "};\n\n";
+
+    const sh::WorkGroupSize &localSize = programMetadata.getComputeShaderWorkGroupSize();
+    computeStream << "[numthreads(" << localSize[0] << ", " << localSize[1] << ", "
+                  << localSize[2] << ")]\n";
+
+    computeStream << "void main(CS_INPUT input)\n"
+                  << "{\n";
+
+    if (programMetadata.usesWorkGroupID())
+    {
+        computeStream << "    gl_WorkGroupID = input._WorkGroupID;\n";
+    }
+    if (programMetadata.usesLocalInvocationID())
+    {
+        computeStream << "    gl_LocalInvocationID = input._LocalInvocationID;\n";
+    }
+    if (programMetadata.usesGlobalInvocationID())
+    {
+        computeStream << "    gl_GlobalInvocationID = input._GlobalInvocationID;\n";
+    }
+    if (programMetadata.usesLocalInvocationIndex())
+    {
+        computeStream << "    gl_LocalInvocationIndex = input._LocalInvocationIndex;\n";
+    }
+
+    computeStream << "\n"
+                  << "    gl_main();\n"
+                  << "\n"
+                  << "    return;\n"
+                  << "}\n";
+
+    *computeHLSL = computeStream.str();
 
     return true;
 }
