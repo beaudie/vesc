@@ -13,6 +13,7 @@
 int main(int argc, char **argv)
 {
     testing::InitGoogleTest(&argc, argv);
+    deqp_libtester_init_platform(argc, const_cast<const char **>(argv));
     int rt = RUN_ALL_TESTS();
     deqp_libtester_shutdown_platform();
     return rt;

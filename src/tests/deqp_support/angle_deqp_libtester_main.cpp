@@ -187,6 +187,38 @@ ANGLE_LIBTESTER_EXPORT int deqp_libtester_main(int argc, const char *argv[])
     return 0;
 }
 
+ANGLE_LIBTESTER_EXPORT bool deqp_libtester_init_platform(int argc, const char *argv[])
+{
+    if (g_platform != nullptr)
+    {
+        deqp_libtester_shutdown_platform();
+    }
+
+    // Only forward specific flags to dEQP
+    const char *forwardedFlags[] = {
+        "--deqp-egl-display-type=",
+    };
+
+    std::vector<const char *> flags{
+        "",  // Program name
+    };
+
+    for (int argvIndex = 1; argvIndex < argc; argvIndex++)
+    {
+        auto flag = argv[argvIndex];
+        for (auto forwardedFlag : forwardedFlags)
+        {
+            if (strncmp(flag, forwardedFlag, strlen(forwardedFlag)) == 0)
+            {
+                flags.push_back(flag);
+                break;
+            }
+        }
+    }
+
+    return InitPlatform(static_cast<int>(flags.size()), flags.data());
+}
+
 ANGLE_LIBTESTER_EXPORT void deqp_libtester_shutdown_platform()
 {
     delete g_executor;
