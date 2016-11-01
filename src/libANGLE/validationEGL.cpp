@@ -399,17 +399,6 @@ Error ValidateCreateContext(Display *display, Config *configuration, gl::Context
         return Error(EGL_BAD_ATTRIBUTE);
     }
 
-    if ((contextFlags & EGL_CONTEXT_OPENGL_ROBUST_ACCESS_BIT_KHR) > 0)
-    {
-        robustAccess = true;
-    }
-
-    if (robustAccess)
-    {
-        // Unimplemented
-        return Error(EGL_BAD_CONFIG);
-    }
-
     if (shareContext)
     {
         // Shared context is invalid or is owned by another display
