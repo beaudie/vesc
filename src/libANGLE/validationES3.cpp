@@ -8,6 +8,9 @@
 
 #include "libANGLE/validationES3.h"
 
+#include "base/numerics/safe_conversions.h"
+#include "common/mathutil.h"
+#include "common/utilities.h"
 #include "libANGLE/validationES.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Texture.h"
@@ -15,9 +18,6 @@
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/FramebufferAttachment.h"
-
-#include "common/mathutil.h"
-#include "common/utilities.h"
 
 using namespace angle;
 
@@ -2036,18 +2036,47 @@ bool ValidateCopyBufferSubData(ValidationContext *context,
         return false;
     }
 
+    CheckedNumeric<GLintptr> checkedReadOffset(readOffset);
+    CheckedNumeric<GLintptr> checkedWriteOffset(writeOffset);
+    CheckedNumeric<GLintptr> checkedSize(size);
+
+    auto checkedReadSum  = checkedReadOffset + checkedSize;
+    auto checkedWriteSum = checkedWriteOffset + checkedSize;
+
+    if (!checkedReadSum.IsValid() || !checkedWriteSum.IsValid() ||
+        !IsValueInRangeForNumericType<GLintptr>(readBuffer->getSize()) ||
+        !IsValueInRangeForNumericType<GLintptr>(writeBuffer->getSize()))
+    {
+        context->handleError(
+            Error(GL_INVALID_VALUE, "Integer overflow when validating copy offsets."));
+        return false;
+    }
+
     if (readOffset < 0 || writeOffset < 0 || size < 0 ||
-        static_cast<unsigned int>(readOffset + size) > readBuffer->getSize() ||
-        static_cast<unsigned int>(writeOffset + size) > writeBuffer->getSize())
+        checkedReadSum.ValueOrDie() > readBuffer->getSize() ||
+        checkedWriteSum.ValueOrDie() > writeBuffer->getSize())
     {
         context->handleError(Error(GL_INVALID_VALUE));
         return false;
     }
 
-    if (readBuffer == writeBuffer && std::abs(readOffset - writeOffset) < size)
+    if (readBuffer == writeBuffer)
     {
-        context->handleError(Error(GL_INVALID_VALUE));
-        return false;
+        auto checkedOffsetDiff = checkedReadOffset - checkedWriteOffset;
+        if (!checkedOffsetDiff.IsValid())
+        {
+            // This should not be possible, but is in here for safety.
+            UNREACHABLE();
+            context->handleError(
+                Error(GL_INVALID_VALUE, "Integer overflow when validating same buffer copy."));
+            return false;
+        }
+
+        if (std::abs(checkedOffsetDiff.ValueOrDie()) < size)
+        {
+            context->handleError(Error(GL_INVALID_VALUE));
+            return false;
+        }
     }
 
     return true;
