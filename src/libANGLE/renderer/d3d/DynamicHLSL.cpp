@@ -772,8 +772,67 @@ bool DynamicHLSL::generateShaderLinkHLSL(const gl::ContextState &data,
                 << "    return generateOutput();\n"
                 << "}\n";
 
-    *vertexHLSL = vertexStream.str();
-    *pixelHLSL  = pixelStream.str();
+    *vertexHLSL  = vertexStream.str();
+    *pixelHLSL   = pixelStream.str();
+
+    return true;
+}
+
+bool DynamicHLSL::generateShaderLinkHLSL(const gl::ContextState &data,
+                            const gl::ProgramState &programData,
+                            const ProgramD3DMetadata &programMetadata,
+                            std::string *computeHLSL) const
+{
+    ASSERT(computeHLSL->empty());
+
+    const gl::Shader *computeShaderGL   = programData.getAttachedComputeShader();
+    const int shaderModel              = mRenderer->getMajorShaderModel();
+
+    // usesViewScale() isn't supported in the D3D9 renderer
+    ASSERT(shaderModel >= 4 || !programMetadata.usesViewScale());
+
+    std::stringstream computeStream;
+    computeStream << computeShaderGL->getTranslatedSource();
+
+    computeStream << "\nstruct CS_INPUT\n{\n";
+    if (programMetadata.usesWorkGroupID())
+    {
+        computeStream << "    uint4 gl_WorkGroupID : " << "SV_GroupID;\n";
+    }
+
+    if (programMetadata.usesLocalInvocationID())
+    {
+        computeStream << "    uint4 gl_LocalInvocationID : " << "SV_GroupThreadID\n";
+    }
+
+    if (programMetadata.usesGlobalInvocationID())
+    {
+        computeStream << "    uint4 gl_GlobalInvocationID : " << "SV_DispatchThreadID;\n";
+    }
+
+    if (programMetadata.usesLocalInvocationIndex())
+    {
+        computeStream << "    uint4 gl_LocalInvocationIndex : " << "SV_GroupIndex;\n";
+    }
+
+    computeStream << "};\n";
+
+    if (programMetadata.usesWorkGroupSize())
+    {
+        const sh::WorkGroupSize &localSize = programMetadata.getComputeShaderWorkGroupSize();
+        computeStream << "[numthreads(" << localSize[0] << ", " << localSize[1] << ", "
+                      << localSize[2] << ")]\n";
+    }
+    computeStream << "void main(CS_INPUT input)\n"
+                  << "{\n";
+
+    computeStream << "\n"
+                  << "    gl_main();\n"
+                  << "\n"
+                  << "    return;\n"
+                  << "}\n";
+
+    *computeHLSL = computeStream.str();
 
     return true;
 }

@@ -60,6 +60,7 @@ enum ShaderType
     SHADER_VERTEX,
     SHADER_PIXEL,
     SHADER_GEOMETRY,
+    SHADER_COMPUTE,
     SHADER_TYPE_MAX
 };
 

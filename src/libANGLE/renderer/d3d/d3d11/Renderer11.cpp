@@ -445,6 +445,7 @@ Renderer11::Renderer11(egl::Display *display)
     mAppliedVertexShader = NULL;
     mAppliedGeometryShader = NULL;
     mAppliedPixelShader = NULL;
+    mAppliedComputeShader = NULL;
 
     mAppliedTFObject = angle::DirtyPointer;
 
@@ -2042,67 +2043,84 @@ gl::Error Renderer11::drawTriangleFan(const gl::ContextState &data,
 gl::Error Renderer11::applyShaders(const gl::ContextState &data, GLenum drawMode)
 {
     const auto &glState    = data.getState();
+    bool dirtyUniforms = false;
     ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
-    programD3D->updateCachedInputLayout(glState);
-
-    const auto &inputLayout = programD3D->getCachedInputLayout();
-
-    ShaderExecutableD3D *vertexExe = nullptr;
-    ANGLE_TRY(programD3D->getVertexExecutableForInputLayout(inputLayout, &vertexExe, nullptr));
-
-    const gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
-    ShaderExecutableD3D *pixelExe          = nullptr;
-    ANGLE_TRY(programD3D->getPixelExecutableForFramebuffer(drawFramebuffer, &pixelExe));
-
-    ShaderExecutableD3D *geometryExe = nullptr;
-    ANGLE_TRY(
-        programD3D->getGeometryExecutableForPrimitiveType(data, drawMode, &geometryExe, nullptr));
-
-    ID3D11VertexShader *vertexShader =
-        (vertexExe ? GetAs<ShaderExecutable11>(vertexExe)->getVertexShader() : nullptr);
-
-    ID3D11PixelShader *pixelShader = nullptr;
-    // Skip pixel shader if we're doing rasterizer discard.
-    bool rasterizerDiscard = glState.getRasterizerState().rasterizerDiscard;
-    if (!rasterizerDiscard)
+    if (programD3D->isComputeShaderAttached())
     {
-        pixelShader = (pixelExe ? GetAs<ShaderExecutable11>(pixelExe)->getPixelShader() : nullptr);
-    }
+        ShaderExecutableD3D *computeExe = nullptr;
+        ANGLE_TRY(programD3D->getComputeExecutable(data, &computeExe, nullptr));
 
-    ID3D11GeometryShader *geometryShader = nullptr;
-    bool transformFeedbackActive         = glState.isTransformFeedbackActiveUnpaused();
-    if (transformFeedbackActive)
-    {
-        geometryShader =
-            (vertexExe ? GetAs<ShaderExecutable11>(vertexExe)->getStreamOutShader() : nullptr);
+        ID3D11ComputeShader *computeShader =
+            (computeExe ? GetAs<ShaderExecutable11>(computeExe)->getComputeShader() : nullptr);
+
+        if (reinterpret_cast<uintptr_t>(computeShader) != mAppliedComputeShader)
+        {
+            mDeviceContext->CSSetShader(computeShader, nullptr, 0);
+            mAppliedComputeShader = reinterpret_cast<uintptr_t>(computeShader);
+            dirtyUniforms = true;
+        }
     }
     else
     {
-        geometryShader =
-            (geometryExe ? GetAs<ShaderExecutable11>(geometryExe)->getGeometryShader() : nullptr);
-    }
+        programD3D->updateCachedInputLayout(glState);
 
-    bool dirtyUniforms = false;
+        const auto &inputLayout = programD3D->getCachedInputLayout();
 
-    if (reinterpret_cast<uintptr_t>(vertexShader) != mAppliedVertexShader)
-    {
-        mDeviceContext->VSSetShader(vertexShader, nullptr, 0);
-        mAppliedVertexShader = reinterpret_cast<uintptr_t>(vertexShader);
-        dirtyUniforms = true;
-    }
+        ShaderExecutableD3D *vertexExe = nullptr;
+        ANGLE_TRY(programD3D->getVertexExecutableForInputLayout(inputLayout, &vertexExe, nullptr));
 
-    if (reinterpret_cast<uintptr_t>(geometryShader) != mAppliedGeometryShader)
-    {
-        mDeviceContext->GSSetShader(geometryShader, nullptr, 0);
-        mAppliedGeometryShader = reinterpret_cast<uintptr_t>(geometryShader);
-        dirtyUniforms = true;
-    }
+        const gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
+        ShaderExecutableD3D *pixelExe          = nullptr;
+        ANGLE_TRY(programD3D->getPixelExecutableForFramebuffer(drawFramebuffer, &pixelExe));
 
-    if (reinterpret_cast<uintptr_t>(pixelShader) != mAppliedPixelShader)
-    {
-        mDeviceContext->PSSetShader(pixelShader, nullptr, 0);
-        mAppliedPixelShader = reinterpret_cast<uintptr_t>(pixelShader);
-        dirtyUniforms = true;
+        ShaderExecutableD3D *geometryExe = nullptr;
+        ANGLE_TRY(
+            programD3D->getGeometryExecutableForPrimitiveType(data, drawMode, &geometryExe, nullptr));
+
+        ID3D11VertexShader *vertexShader =
+            (vertexExe ? GetAs<ShaderExecutable11>(vertexExe)->getVertexShader() : nullptr);
+
+        ID3D11PixelShader *pixelShader = nullptr;
+        // Skip pixel shader if we're doing rasterizer discard.
+        bool rasterizerDiscard = glState.getRasterizerState().rasterizerDiscard;
+        if (!rasterizerDiscard)
+        {
+            pixelShader = (pixelExe ? GetAs<ShaderExecutable11>(pixelExe)->getPixelShader() : nullptr);
+        }
+
+        ID3D11GeometryShader *geometryShader = nullptr;
+        bool transformFeedbackActive         = glState.isTransformFeedbackActiveUnpaused();
+        if (transformFeedbackActive)
+        {
+            geometryShader =
+                (vertexExe ? GetAs<ShaderExecutable11>(vertexExe)->getStreamOutShader() : nullptr);
+        }
+        else
+        {
+            geometryShader =
+                (geometryExe ? GetAs<ShaderExecutable11>(geometryExe)->getGeometryShader() : nullptr);
+        }
+
+        if (reinterpret_cast<uintptr_t>(vertexShader) != mAppliedVertexShader)
+        {
+            mDeviceContext->VSSetShader(vertexShader, nullptr, 0);
+            mAppliedVertexShader = reinterpret_cast<uintptr_t>(vertexShader);
+            dirtyUniforms = true;
+        }
+
+        if (reinterpret_cast<uintptr_t>(geometryShader) != mAppliedGeometryShader)
+        {
+            mDeviceContext->GSSetShader(geometryShader, nullptr, 0);
+            mAppliedGeometryShader = reinterpret_cast<uintptr_t>(geometryShader);
+            dirtyUniforms = true;
+        }
+
+        if (reinterpret_cast<uintptr_t>(pixelShader) != mAppliedPixelShader)
+        {
+            mDeviceContext->PSSetShader(pixelShader, nullptr, 0);
+            mAppliedPixelShader = reinterpret_cast<uintptr_t>(pixelShader);
+            dirtyUniforms = true;
+        }
     }
 
     if (dirtyUniforms)
@@ -3327,6 +3345,19 @@ gl::Error Renderer11::loadExecutable(const void *function,
             *outExecutable = new ShaderExecutable11(function, length, geometryShader);
         }
         break;
+      case SHADER_COMPUTE:
+        {
+            ID3D11ComputeShader *computeShader = NULL;
+
+            HRESULT result = mDevice->CreateComputeShader(function, length, NULL, &computeShader);
+            ASSERT(SUCCEEDED(result));
+            if (FAILED(result))
+            {
+                return gl::Error(GL_OUT_OF_MEMORY, "Failed to create compute shader, result: 0x%X.", result);
+            }
+
+            *outExecutable = new ShaderExecutable11(function, length, computeShader);
+        }
       default:
         UNREACHABLE();
         return gl::Error(GL_INVALID_OPERATION);
@@ -3354,6 +3385,9 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog,
         break;
       case SHADER_GEOMETRY:
         profileType = "gs";
+        break;
+      case SHADER_COMPUTE:
+        profileType = "cs";
         break;
       default:
         UNREACHABLE();

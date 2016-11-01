@@ -502,6 +502,7 @@ class Renderer11 : public RendererD3D
     uintptr_t mAppliedVertexShader;
     uintptr_t mAppliedGeometryShader;
     uintptr_t mAppliedPixelShader;
+    uintptr_t mAppliedComputeShader;
 
     dx_VertexConstants11 mAppliedVertexConstants;
     ID3D11Buffer *mDriverConstantBufferVS;

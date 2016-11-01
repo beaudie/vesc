@@ -469,6 +469,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     template <typename DestT>
     void getUniformInternal(GLint location, DestT *dataOut) const;
 
+    bool isComputeShaderAttached() const { return mState.getAttachedComputeShader() != nullptr; }
+
     ProgramState mState;
     rx::ProgramImpl *mProgram;
 
