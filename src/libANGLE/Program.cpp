@@ -2758,7 +2758,12 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
     size_t blockSize = 0;
 
     // Don't define this block at all if it's not active in the implementation.
-    if (!mProgram->getUniformBlockSize(interfaceBlock.name, &blockSize))
+    std::stringstream blockNameStr;
+    blockNameStr << interfaceBlock.name;
+    if (interfaceBlock.arraySize > 0) {
+        blockNameStr << "[0]";
+    }
+    if (!mProgram->getUniformBlockSize(blockNameStr.str(), &blockSize))
     {
         return;
     }
@@ -2804,15 +2809,11 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
                     UNREACHABLE();
             }
 
-            // TODO(jmadill): Determine if we can ever have an inactive array element block.
-            size_t blockElementSize = 0;
-            if (!mProgram->getUniformBlockSize(block.nameWithArrayIndex(), &blockElementSize))
-            {
-                continue;
-            }
-
-            ASSERT(blockElementSize == blockSize);
-            block.dataSize = static_cast<unsigned int>(blockElementSize);
+            // Since all block elements in array share the same uniforms members,
+            // they will all be active once any uniform member is used.
+            // So, here we will add every block element in array due to that
+            // interfaceBlock.name[0] is active which was checked at the beginning.
+            block.dataSize = static_cast<unsigned int>(blockSize);
             mState.mUniformBlocks.push_back(block);
         }
     }
