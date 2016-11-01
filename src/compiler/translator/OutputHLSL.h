@@ -52,6 +52,8 @@ class OutputHLSL : public TIntermTraverser
 
     static bool canWriteAsHLSLLiteral(TIntermTyped *expression);
 
+    void setComputeShaderLocalSize(int localSizeX, int localSizeY, int localSizeZ);
+
   protected:
     void header(TInfoSinkBase &out, const BuiltInFunctionEmulator *builtInFunctionEmulator);
 
@@ -159,6 +161,12 @@ class OutputHLSL : public TIntermTraverser
     bool mUsesInstanceID;
     bool mUsesVertexID;
     bool mUsesFragDepth;
+    bool mUsesNumWorkGroups;
+    bool mUsesWorkGroupSize;
+    bool mUsesWorkGroupID;
+    bool mUsesLocalInvocationID;
+    bool mUsesGlobalInvocationID;
+    bool mUsesLocalInvocationIndex;
     bool mUsesXor;
     bool mUsesDiscardRewriting;
     bool mUsesNestedBreak;
@@ -219,6 +227,8 @@ class OutputHLSL : public TIntermTraverser
   private:
     TString samplerNamePrefixFromStruct(TIntermTyped *node);
     bool ancestorEvaluatesToSamplerInStruct(Visit visit);
+
+    sh::WorkGroupSize mComputeShaderLocalSize;
 };
 
 }

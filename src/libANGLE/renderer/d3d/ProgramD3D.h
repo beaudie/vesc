@@ -103,6 +103,8 @@ class ProgramD3DMetadata final : angle::NonCopyable
     ProgramD3DMetadata(RendererD3D *renderer,
                        const ShaderD3D *vertexShader,
                        const ShaderD3D *fragmentShader);
+    ProgramD3DMetadata(RendererD3D *renderer,
+                       const ShaderD3D *computeShader);
 
     int getRendererMajorShaderModel() const;
     bool usesBroadcast(const gl::ContextState &data) const;
@@ -118,6 +120,13 @@ class ProgramD3DMetadata final : angle::NonCopyable
     bool usesMultipleFragmentOuts() const;
     GLint getMajorShaderVersion() const;
     const ShaderD3D *getFragmentShader() const;
+    bool usesNumWorkGroups() const;
+    bool usesWorkGroupSize() const;
+    bool usesWorkGroupID() const;
+    bool usesLocalInvocationID() const;
+    bool usesGlobalInvocationID() const;
+    bool usesLocalInvocationIndex() const;
+    const sh::WorkGroupSize& getComputeShaderWorkGroupSize() const;
 
   private:
     const int mRendererMajorShaderModel;
@@ -126,6 +135,7 @@ class ProgramD3DMetadata final : angle::NonCopyable
     const bool mUsesViewScale;
     const ShaderD3D *mVertexShader;
     const ShaderD3D *mFragmentShader;
+    const ShaderD3D *mComputeShader;
 };
 
 class ProgramD3D : public ProgramImpl
@@ -164,6 +174,9 @@ class ProgramD3D : public ProgramImpl
                                                     GLenum drawMode,
                                                     ShaderExecutableD3D **outExecutable,
                                                     gl::InfoLog *infoLog);
+    gl::Error ProgramD3D::getComputeExecutable(const gl::ContextState &data,
+                                               ShaderExecutableD3D **outExecutable,
+                                               gl::InfoLog *infoLog);
 
     LinkResult link(const gl::ContextState &data, gl::InfoLog &infoLog) override;
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
@@ -370,6 +383,8 @@ class ProgramD3D : public ProgramImpl
     bool mUsesFragDepth;
     std::vector<PixelShaderOutputVariable> mPixelShaderKey;
 
+    std::string mComputeHLSL;
+
     // Common code for all dynamic geometry shaders. Consists mainly of the GS input and output
     // structures, built from the linked varying info. We store the string itself instead of the
     // packed varyings for simplicity.
@@ -377,6 +392,13 @@ class ProgramD3D : public ProgramImpl
 
     bool mUsesPointSize;
     bool mUsesFlatInterpolation;
+
+    bool mUsesNumWorkGroups;
+    bool mUsesWorkGroupSize;
+    bool mUsesWorkGroupID;
+    bool mUsesLocalInvocationID;
+    bool mUsesGlobalInvocationID;
+    bool mUsesLocalInvocationIndex;
 
     UniformStorageD3D *mVertexUniformStorage;
     UniformStorageD3D *mFragmentUniformStorage;
