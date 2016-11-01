@@ -2755,13 +2755,6 @@ void Program::defineUniformBlockMembers(const std::vector<VarT> &fields,
 void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenum shaderType)
 {
     int blockIndex   = static_cast<int>(mState.mUniformBlocks.size());
-    size_t blockSize = 0;
-
-    // Don't define this block at all if it's not active in the implementation.
-    if (!mProgram->getUniformBlockSize(interfaceBlock.name, &blockSize))
-    {
-        return;
-    }
 
     // Track the first and last uniform index to determine the range of active uniforms in the
     // block.
@@ -2810,14 +2803,19 @@ void Program::defineUniformBlock(const sh::InterfaceBlock &interfaceBlock, GLenu
             {
                 continue;
             }
-
-            ASSERT(blockElementSize == blockSize);
             block.dataSize = static_cast<unsigned int>(blockElementSize);
             mState.mUniformBlocks.push_back(block);
         }
     }
     else
     {
+        size_t blockSize = 0;
+        // Don't define this block at all if it's not active in the implementation.
+        if (!mProgram->getUniformBlockSize(interfaceBlock.name, &blockSize))
+        {
+            return;
+        }
+
         UniformBlock block(interfaceBlock.name, false, 0);
         block.memberUniformIndexes = blockUniformIndexes;
 
