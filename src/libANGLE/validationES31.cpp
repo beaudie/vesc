@@ -64,4 +64,71 @@ bool ValidateGetBooleani_vRobustANGLE(Context *context,
     return true;
 }
 
+bool ValidateDispatchCompute(Context *context,
+                             GLuint numGroupsX,
+                             GLuint numGroupsY,
+                             GLuint numGroupsZ)
+{
+
+    if (!context->getGLVersion().isES31())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support ES 3.1."));
+        return false;
+    }
+
+    const gl::State &state = context->getGLState();
+
+    gl::Program *program = state.getProgram();
+
+    if (program == NULL)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "No active program for the compute shader stage."));
+        return false;
+    }
+    else
+    {
+        if (program->isLinked())
+        {
+            if (program->getAttachedComputeShader() == NULL)
+            {
+                context->handleError(Error(GL_INVALID_OPERATION,
+                                           "a linked program object contains no compute shaders"));
+                return false;
+            }
+        }
+        else
+        {
+            context->handleError(
+                Error(GL_INVALID_OPERATION, "program has not been successfully linked."));
+            return false;
+        }
+    }
+
+    const gl::Caps &caps = context->getCaps();
+
+    if (numGroupsX > caps.maxComputeWorkGroupCount[0])
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "numGroupsX cannot be more than %u.",
+                                   caps.maxComputeWorkGroupCount[0]));
+        return false;
+    }
+
+    if (numGroupsY > caps.maxComputeWorkGroupCount[1])
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "numGroupsY cannot be more than %u.",
+                                   caps.maxComputeWorkGroupCount[1]));
+        return false;
+    }
+
+    if (numGroupsZ > caps.maxComputeWorkGroupCount[2])
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "numGroupsZ cannot be more than %u.",
+                                   caps.maxComputeWorkGroupCount[2]));
+        return false;
+    }
+
+    return true;
+}
+
 }  // namespace gl
