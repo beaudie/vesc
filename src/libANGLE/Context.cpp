@@ -3003,6 +3003,15 @@ void Context::copySubTextureCHROMIUM(GLuint sourceId,
                                             unpackUnmultiplyAlpha == GL_TRUE, sourceTexture));
 }
 
+Error Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ)
+{
+    syncRendererState();
+
+    ANGLE_TRY(mImplementation->dispatchCompute(numGroupsX, numGroupsY, numGroupsZ));
+
+    return NoError();
+}
+
 void Context::compressedCopyTextureCHROMIUM(GLuint sourceId, GLuint destId)
 {
     syncStateForTexImage();

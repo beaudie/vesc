@@ -199,6 +199,11 @@ std::string Context11::getVendorString() const
     return mRenderer->getVendorString();
 }
 
+gl::Error Context11::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ)
+{
+    return mRenderer->dispatchCompute(mState, numGroupsX, numGroupsY, numGroupsZ);
+}
+
 std::string Context11::getRendererDescription() const
 {
     return mRenderer->getRendererDescription();

@@ -110,6 +110,8 @@ class ContextImpl : public GLImplFactory
     // Device loss
     virtual GLenum getResetStatus() = 0;
 
+    virtual gl::Error dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ);
+
     // Vendor and description strings.
     virtual std::string getVendorString() const = 0;
     virtual std::string getRendererDescription() const = 0;
