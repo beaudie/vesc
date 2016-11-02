@@ -4594,4 +4594,15 @@ gl::DebugAnnotator *Renderer11::getAnnotator()
     return mAnnotator;
 }
 
+gl::Error Renderer11::dispatchCompute(const gl::ContextState &data,
+                                      GLuint numGroupsX,
+                                      GLuint numGroupsY,
+                                      GLuint numGroupsZ)
+{
+
+    mDeviceContext->Dispatch(numGroupsX, numGroupsY, numGroupsZ);
+
+    return gl::NoError();
+}
+
 }  // namespace rx

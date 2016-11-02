@@ -110,4 +110,10 @@ void ContextImpl::stencilThenCoverStrokePathInstanced(const std::vector<gl::Path
     UNREACHABLE();
 }
 
+gl::Error ContextImpl::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ)
+{
+    UNREACHABLE();
+    return gl::NoError();
+}
+
 }  // namespace rx
