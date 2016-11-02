@@ -482,6 +482,7 @@ class Context final : public ValidationContext
     void compressedCopyTextureCHROMIUM(GLuint sourceId, GLuint destId);
 
     void generateMipmap(GLenum target);
+    Error dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ);
 
     GLboolean enableExtension(const char *name);
 

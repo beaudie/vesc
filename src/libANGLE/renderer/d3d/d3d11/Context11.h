@@ -91,6 +91,7 @@ class Context11 : public ContextImpl
 
     // Device loss
     GLenum getResetStatus() override;
+    gl::Error dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGroupsZ) override;
 
     // Vendor and description strings.
     std::string getVendorString() const override;

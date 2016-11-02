@@ -23,6 +23,10 @@ bool ValidateGetBooleani_vRobustANGLE(Context *context,
                                       GLsizei *length,
                                       GLboolean *data);
 
+bool ValidateDispatchCompute(Context *context,
+                             GLuint numGroupsX,
+                             GLuint numGroupsY,
+                             GLuint numGroupsZ);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES31_H_
