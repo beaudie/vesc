@@ -25,7 +25,7 @@ static std::set<OSXWindow*> gAllWindows;
 @implementation Application
     - (void) sendEvent: (NSEvent*) nsEvent
     {
-        if ([nsEvent type] == NSApplicationDefined)
+        if ([nsEvent type] == NSEventTypeApplicationDefined)
         {
             for (auto window : gAllWindows)
             {
@@ -276,10 +276,10 @@ static Key NSCodeToKey(int keyCode)
 
 static void AddNSKeyStateToEvent(Event *event, int state)
 {
-    event->Key.Shift = state & NSShiftKeyMask;
-    event->Key.Control = state & NSControlKeyMask;
-    event->Key.Alt = state & NSAlternateKeyMask;
-    event->Key.System = state & NSCommandKeyMask;
+    event->Key.Shift   = state & NSEventModifierFlagShift;
+    event->Key.Control = state & NSEventModifierFlagControl;
+    event->Key.Alt     = state & NSEventModifierFlagOption;
+    event->Key.System  = state & NSEventModifierFlagCommand;
 }
 
 static MouseButton TranslateMouseButton(int button)
@@ -496,7 +496,7 @@ static MouseButton TranslateMouseButton(int button)
         // It currently doesn't work when modifiers are unchanged, such as when pressing
         // both shift keys. GLFW has a solution for this but it requires tracking the
         // state of the keys. Implementing this is still TODO(cwallez)
-        int modifier = [nsEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask;
+        int modifier = [nsEvent modifierFlags] & NSEventModifierFlagDeviceIndependentFlagsMask;
         if (modifier < mCurrentModifier)
         {
             event.Type = Event::EVENT_KEY_RELEASED;
@@ -532,8 +532,8 @@ bool OSXWindow::initialize(const std::string &name, size_t width, size_t height)
         return false;
     }
 
-    unsigned int styleMask = NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask |
-                             NSMiniaturizableWindowMask;
+    unsigned int styleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable |
+                             NSWindowStyleMaskResizable | NSWindowStyleMaskMiniaturizable;
     mWindow = [[NSWindow alloc] initWithContentRect: NSMakeRect(0, 0, width, height)
                                           styleMask: styleMask
                                             backing: NSBackingStoreBuffered
@@ -604,16 +604,16 @@ void OSXWindow::messageLoop()
     {
         while (true)
         {
-            NSEvent* event = [NSApp nextEventMatchingMask: NSAnyEventMask
-                                                untilDate: [NSDate distantPast]
-                                                   inMode: NSDefaultRunLoopMode
-                                                  dequeue: YES];
+            NSEvent *event = [NSApp nextEventMatchingMask:NSEventMaskAny
+                                                untilDate:[NSDate distantPast]
+                                                   inMode:NSDefaultRunLoopMode
+                                                  dequeue:YES];
             if (event == nil)
             {
                 break;
             }
 
-            if ([event type] == NSAppKitDefined)
+            if ([event type] == NSEventTypeAppKitDefined)
             {
                 continue;
             }
@@ -667,15 +667,15 @@ void OSXWindow::signalTestEvent()
 {
     @autoreleasepool
     {
-        NSEvent *event = [NSEvent otherEventWithType: NSApplicationDefined
-                                            location: NSMakePoint(0, 0)
-                                       modifierFlags: 0
-                                           timestamp: 0.0
-                                        windowNumber: [mWindow windowNumber]
-                                             context: nil
-                                             subtype: 0
-                                               data1: 0
-                                               data2: 0];
+        NSEvent *event = [NSEvent otherEventWithType:NSEventTypeApplicationDefined
+                                            location:NSMakePoint(0, 0)
+                                       modifierFlags:0
+                                           timestamp:0.0
+                                        windowNumber:[mWindow windowNumber]
+                                             context:nil
+                                             subtype:0
+                                               data1:0
+                                               data2:0];
         [NSApp postEvent: event atStart: YES];
     }
 }
