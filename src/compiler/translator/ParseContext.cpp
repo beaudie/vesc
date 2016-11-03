@@ -2595,7 +2595,15 @@ TIntermTyped *TParseContext::addConstructor(TIntermNode *arguments,
     TType type = fnCall->getReturnType();
     if (type.isUnsizedArray())
     {
-        type.setArraySize(static_cast<unsigned int>(fnCall->getParamCount()));
+        if (fnCall->getParamCount() == 0)
+        {
+            error(line, "implicitly sized array constructor must have at least one argument", "[]");
+            type.setArraySize(1u);
+        }
+        else
+        {
+            type.setArraySize(static_cast<unsigned int>(fnCall->getParamCount()));
+        }
     }
     bool constType = true;
     for (size_t i = 0; i < fnCall->getParamCount(); ++i)
