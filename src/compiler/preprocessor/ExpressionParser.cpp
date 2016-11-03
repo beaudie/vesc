@@ -500,7 +500,7 @@ static const yytype_uint16 yyrline[] =
 {
        0,   108,   108,   115,   116,   127,   127,   148,   148,   169,
      172,   175,   178,   181,   184,   187,   190,   193,   196,   221,
-     246,   249,   252,   272,   299,   302,   305,   308,   320,   323
+     246,   249,   252,   278,   305,   308,   311,   314,   326,   329
 };
 #endif
 
@@ -1582,6 +1582,12 @@ yyreduce:
                 *(context->valid) = false;
             }
             (yyval) = static_cast<YYSTYPE>(0);
+        }
+        else if ((yyvsp[-2]) == std::numeric_limits<YYSTYPE>::min() && (yyvsp[0]) == -1)
+        {
+            // Check for the special case where the minimum representable number is
+            // divided by -1. If left alone this has undefined results.
+            (yyval) = 0;
         }
         else
         {
