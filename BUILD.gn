@@ -10,7 +10,7 @@ import("//testing/libfuzzer/fuzzer_test.gni")
 import("//third_party/angle/build/angle_common.gni")
 import("//ui/ozone/ozone.gni")
 
-if (ozone_platform_gbm) {
+if (use_ozone) {
   pkg_config("libdrm") {
     packages = [ "libdrm" ]
   }
@@ -292,6 +292,8 @@ config("libANGLE_config") {
     defines += [ "ANGLE_ENABLE_OPENGL" ]
     if (use_x11) {
       defines += [ "ANGLE_USE_X11" ]
+    } else if (use_ozone) {
+      defines += [ "ANGLE_USE_OZONE" ]
     }
   }
   if (angle_enable_vulkan) {
@@ -390,7 +392,7 @@ static_library("libANGLE") {
         "log",
       ]
     }
-    if (ozone_platform_gbm) {
+    if (use_ozone) {
       configs += [ ":libdrm" ]
       defines += [ "ANGLE_USE_OZONE" ]
       deps += [ "//third_party/minigbm" ]
