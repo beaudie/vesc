@@ -3300,7 +3300,7 @@ gl::Error Renderer11::createRenderTarget(int width,
         if (FAILED(result))
         {
             ASSERT(result == E_OUTOFMEMORY);
-            return gl::Error(GL_OUT_OF_MEMORY,
+            return gl::Error(GL_INVALID_OPERATION,
                              "Failed to create render target texture, result: 0x%X.", result);
         }
 
@@ -3321,7 +3321,7 @@ gl::Error Renderer11::createRenderTarget(int width,
                 ASSERT(result == E_OUTOFMEMORY);
                 SafeRelease(texture);
                 return gl::Error(
-                    GL_OUT_OF_MEMORY,
+                    GL_INVALID_OPERATION,
                     "Failed to create render target shader resource view, result: 0x%X.", result);
             }
 
@@ -3341,7 +3341,7 @@ gl::Error Renderer11::createRenderTarget(int width,
                     ASSERT(result == E_OUTOFMEMORY);
                     SafeRelease(texture);
                     SafeRelease(srv);
-                    return gl::Error(GL_OUT_OF_MEMORY,
+                    return gl::Error(GL_INVALID_OPERATION,
                                      "Failed to create render target shader resource view for "
                                      "blits, result: 0x%X.",
                                      result);
@@ -3371,7 +3371,7 @@ gl::Error Renderer11::createRenderTarget(int width,
                 SafeRelease(texture);
                 SafeRelease(srv);
                 SafeRelease(blitSRV);
-                return gl::Error(GL_OUT_OF_MEMORY,
+                return gl::Error(GL_INVALID_OPERATION,
                                  "Failed to create render target depth stencil view, result: 0x%X.",
                                  result);
             }
@@ -3397,7 +3397,7 @@ gl::Error Renderer11::createRenderTarget(int width,
                 SafeRelease(texture);
                 SafeRelease(srv);
                 SafeRelease(blitSRV);
-                return gl::Error(GL_OUT_OF_MEMORY,
+                return gl::Error(GL_INVALID_OPERATION,
                                  "Failed to create render target render target view, result: 0x%X.",
                                  result);
             }

@@ -41,6 +41,8 @@
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/queryutils.h"
 
+#include "platform/Platform.h"
+
 namespace
 {
 
@@ -1937,6 +1939,7 @@ void Context::handleError(const Error &error)
             auto *debug = &mGLState.getDebug();
             debug->insertMessage(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR, error.getID(),
                                  GL_DEBUG_SEVERITY_HIGH, error.getMessage());
+            ANGLEPlatformCurrent()->logError(error.getMessage().c_str());
         }
     }
 }

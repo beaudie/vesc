@@ -1761,7 +1761,8 @@ bool ValidateRenderbufferStorageParametersANGLE(gl::Context *context, GLenum tar
         const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
         if (static_cast<GLuint>(samples) > formatCaps.getMaxSamples())
         {
-            context->handleError(Error(GL_OUT_OF_MEMORY));
+            context->handleError(
+                Error(GL_INVALID_OPERATION, "Format does not support enough samples."));
             return false;
         }
     }
