@@ -1484,6 +1484,7 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
     TVariable *variable = nullptr;
     if (type.isUnsizedArray())
     {
+        //ASSERT(initializer->getArraySize() != 0);
         type.setArraySize(initializer->getArraySize());
     }
     if (!declareVariable(line, identifier, type, &variable))
