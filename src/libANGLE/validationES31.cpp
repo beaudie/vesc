@@ -78,35 +78,31 @@ bool ValidateDispatchCompute(Context *context,
 
     const gl::State &state = context->getGLState();
 
-    /*if (!ValidateProgramUniforms(context))
-    {
-            return false;
-    }*/
     gl::Program *program = state.getProgram();
 
-    if (!program->isComputeProgram())
+    if (program == NULL)
     {
         context->handleError(
             Error(GL_INVALID_OPERATION, "No active program for the compute shader stage."));
         return false;
     }
-
-    if (numGroupsX < 1)
+    else
     {
-        context->handleError(Error(GL_INVALID_VALUE, "numGroupsX must be positive."));
-        return false;
-    }
-
-    if (numGroupsY < 1)
-    {
-        context->handleError(Error(GL_INVALID_VALUE, "numGroupsY must be positive."));
-        return false;
-    }
-
-    if (numGroupsZ < 1)
-    {
-        context->handleError(Error(GL_INVALID_VALUE, "numGroupsZ must be positive."));
-        return false;
+        if (program->isLinked())
+        {
+            if (program->getAttachedComputeShader() == NULL)
+            {
+                context->handleError(Error(GL_INVALID_OPERATION,
+                                           "a linked program object contains no compute shaders"));
+                return false;
+            }
+        }
+        else
+        {
+            context->handleError(
+                Error(GL_INVALID_OPERATION, "program has not been successfully linked."));
+            return false;
+        }
     }
 
     const gl::Caps &caps = context->getCaps();
