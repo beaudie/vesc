@@ -20,7 +20,13 @@ if (is_win) {
 } else if (is_linux && use_x11 && !is_chromeos) {
   angle_enable_gl = true
 } else if (is_mac || use_ozone) {
-  angle_enable_gl = true
+  if (is_linux && !is_chromeos) {
+    # TODO(thomasanderson): Enable angle gl on ozone linux when there's a
+    # wayland/x11 backend for angle.  Currently ANGLE_USE_OZONE relies on drm.
+    angle_enable_null = true
+  } else {
+    angle_enable_gl = true
+  }
 } else if (is_android) {
   angle_enable_gl = true
 }
