@@ -10,99 +10,192 @@
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 
 #include "common/debug.h"
+#include "libANGLE/renderer/vulkan/FramebufferVk.h"
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 
 namespace rx
 {
 
-SurfaceVk::SurfaceVk(const egl::SurfaceState &surfaceState) : SurfaceImpl(surfaceState)
+OffscreenSurfaceVk::OffscreenSurfaceVk(const egl::SurfaceState &surfaceState,
+                                       RendererVk *renderer,
+                                       EGLint width,
+                                       EGLint height)
+    : SurfaceImpl(surfaceState), mRenderer(renderer), mWidth(width), mHeight(height)
 {
 }
 
-SurfaceVk::~SurfaceVk()
+OffscreenSurfaceVk::~OffscreenSurfaceVk()
 {
 }
 
-egl::Error SurfaceVk::initialize()
+egl::Error OffscreenSurfaceVk::initialize()
+{
+    return egl::Error(EGL_SUCCESS);
+}
+
+FramebufferImpl *OffscreenSurfaceVk::createDefaultFramebuffer(const gl::FramebufferState &state)
+{
+    return new FramebufferVk(state);
+}
+
+egl::Error OffscreenSurfaceVk::swap()
+{
+    return egl::Error(EGL_SUCCESS);
+}
+
+egl::Error OffscreenSurfaceVk::postSubBuffer(EGLint /*x*/,
+                                             EGLint /*y*/,
+                                             EGLint /*width*/,
+                                             EGLint /*height*/)
+{
+    return egl::Error(EGL_SUCCESS);
+}
+
+egl::Error OffscreenSurfaceVk::querySurfacePointerANGLE(EGLint /*attribute*/, void ** /*value*/)
+{
+    UNREACHABLE();
+    return egl::Error(EGL_BAD_CURRENT_SURFACE);
+}
+
+egl::Error OffscreenSurfaceVk::bindTexImage(gl::Texture * /*texture*/, EGLint /*buffer*/)
+{
+    return egl::Error(EGL_SUCCESS);
+}
+
+egl::Error OffscreenSurfaceVk::releaseTexImage(EGLint /*buffer*/)
+{
+    return egl::Error(EGL_SUCCESS);
+}
+
+egl::Error OffscreenSurfaceVk::getSyncValues(EGLuint64KHR *ust,
+                                             EGLuint64KHR *msc,
+                                             EGLuint64KHR *sbc)
 {
     UNIMPLEMENTED();
     return egl::Error(EGL_BAD_ACCESS);
 }
 
-FramebufferImpl *SurfaceVk::createDefaultFramebuffer(const gl::FramebufferState &state)
+void OffscreenSurfaceVk::setSwapInterval(EGLint /*interval*/)
 {
-    UNIMPLEMENTED();
-    return static_cast<FramebufferImpl *>(0);
 }
 
-egl::Error SurfaceVk::swap()
+EGLint OffscreenSurfaceVk::getWidth() const
+{
+    return mWidth;
+}
+
+EGLint OffscreenSurfaceVk::getHeight() const
+{
+    return mHeight;
+}
+
+EGLint OffscreenSurfaceVk::isPostSubBufferSupported() const
+{
+    return EGL_FALSE;
+}
+
+EGLint OffscreenSurfaceVk::getSwapBehavior() const
+{
+    return EGL_BUFFER_PRESERVED;
+}
+
+gl::Error OffscreenSurfaceVk::getAttachmentRenderTarget(
+    const gl::FramebufferAttachment::Target & /*target*/,
+    FramebufferAttachmentRenderTarget ** /*rtOut*/)
+{
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
+WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
+                                 RendererVk *renderer,
+                                 EGLNativeWindowType window)
+    : SurfaceImpl(surfaceState), mRenderer(renderer)
+{
+}
+
+WindowSurfaceVk::~WindowSurfaceVk()
+{
+}
+
+egl::Error WindowSurfaceVk::initialize()
+{
+    // TODO(jmadill)
+    return egl::Error(EGL_SUCCESS);
+}
+
+FramebufferImpl *WindowSurfaceVk::createDefaultFramebuffer(const gl::FramebufferState &state)
+{
+    return new FramebufferVk(state);
+}
+
+egl::Error WindowSurfaceVk::swap()
+{
+    // TODO(jmadill)
+    return egl::Error(EGL_SUCCESS);
+}
+
+egl::Error WindowSurfaceVk::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
+{
+    // TODO(jmadill)
+    return egl::Error(EGL_SUCCESS);
+}
+
+egl::Error WindowSurfaceVk::querySurfacePointerANGLE(EGLint attribute, void **value)
+{
+    UNREACHABLE();
+    return egl::Error(EGL_BAD_CURRENT_SURFACE);
+}
+
+egl::Error WindowSurfaceVk::bindTexImage(gl::Texture *texture, EGLint buffer)
+{
+    return egl::Error(EGL_SUCCESS);
+}
+
+egl::Error WindowSurfaceVk::releaseTexImage(EGLint buffer)
+{
+    return egl::Error(EGL_SUCCESS);
+}
+
+egl::Error WindowSurfaceVk::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc)
 {
     UNIMPLEMENTED();
     return egl::Error(EGL_BAD_ACCESS);
 }
 
-egl::Error SurfaceVk::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
+void WindowSurfaceVk::setSwapInterval(EGLint interval)
 {
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
 }
 
-egl::Error SurfaceVk::querySurfacePointerANGLE(EGLint attribute, void **value)
+EGLint WindowSurfaceVk::getWidth() const
 {
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
+    // TODO(jmadill)
+    return 0;
 }
 
-egl::Error SurfaceVk::bindTexImage(gl::Texture *texture, EGLint buffer)
+EGLint WindowSurfaceVk::getHeight() const
 {
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
+    // TODO(jmadill)
+    return 0;
 }
 
-egl::Error SurfaceVk::releaseTexImage(EGLint buffer)
+EGLint WindowSurfaceVk::isPostSubBufferSupported() const
 {
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
+    // TODO(jmadill)
+    return EGL_FALSE;
 }
 
-egl::Error SurfaceVk::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc)
+EGLint WindowSurfaceVk::getSwapBehavior() const
 {
-    UNIMPLEMENTED();
-    return egl::Error(EGL_BAD_ACCESS);
+    // TODO(jmadill)
+    return EGL_BUFFER_DESTROYED;
 }
 
-void SurfaceVk::setSwapInterval(EGLint interval)
+gl::Error WindowSurfaceVk::getAttachmentRenderTarget(
+    const gl::FramebufferAttachment::Target &target,
+    FramebufferAttachmentRenderTarget **rtOut)
 {
-    UNIMPLEMENTED();
-}
-
-EGLint SurfaceVk::getWidth() const
-{
-    UNIMPLEMENTED();
-    return EGLint();
-}
-
-EGLint SurfaceVk::getHeight() const
-{
-    UNIMPLEMENTED();
-    return EGLint();
-}
-
-EGLint SurfaceVk::isPostSubBufferSupported() const
-{
-    UNIMPLEMENTED();
-    return EGLint();
-}
-
-EGLint SurfaceVk::getSwapBehavior() const
-{
-    UNIMPLEMENTED();
-    return EGLint();
-}
-
-gl::Error SurfaceVk::getAttachmentRenderTarget(const gl::FramebufferAttachment::Target &target,
-                                               FramebufferAttachmentRenderTarget **rtOut)
-{
-    UNIMPLEMENTED();
+    UNREACHABLE();
     return gl::Error(GL_INVALID_OPERATION);
 }
 
