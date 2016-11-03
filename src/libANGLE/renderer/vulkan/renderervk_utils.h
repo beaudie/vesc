@@ -57,8 +57,28 @@ using ErrorOrResult = angle::ErrorOrResultBase<Error, ResultT, VkResult, VK_SUCC
 // Avoid conflicting with X headers which define "Success".
 Error VkSuccess();
 
+template <typename HandleT>
+class WrappedObject : angle::NonCopyable
+{
+  public:
+    WrappedObject() : mDevice(VK_NULL_HANDLE), mHandle(VK_NULL_HANDLE) {}
+    WrappedObject(VkDevice device) : mDevice(device), mHandle(VK_NULL_HANDLE) {}
+    WrappedObject(WrappedObject &&other) : mDevice(other.mDevice), mHandle(other.mHandle)
+    {
+        other.mDevice = VK_NULL_HANDLE;
+        other.mHandle = VK_NULL_HANDLE;
+    }
+    virtual ~WrappedObject() {}
+
+    HandleT getHandle() const { return mHandle; }
+
+  protected:
+    VkDevice mDevice;
+    HandleT mHandle;
+};
+
 // Helper class that wraps a Vulkan command buffer.
-class CommandBuffer final : angle::NonCopyable
+class CommandBuffer final : public WrappedObject<VkCommandBuffer>
 {
   public:
     CommandBuffer(VkDevice device, VkCommandPool commandPool);
@@ -72,12 +92,8 @@ class CommandBuffer final : angle::NonCopyable
                            VkImageLayout oldLayout,
                            VkImageLayout newLayout);
 
-    VkCommandBuffer getHandle() const { return mHandle; }
-
   private:
-    VkDevice mDevice;
     VkCommandPool mCommandPool;
-    VkCommandBuffer mHandle;
 };
 
 }  // namespace vk

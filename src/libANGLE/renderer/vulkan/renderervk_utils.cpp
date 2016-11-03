@@ -188,7 +188,7 @@ Error VkSuccess()
 
 // CommandBuffer implementation.
 CommandBuffer::CommandBuffer(VkDevice device, VkCommandPool commandPool)
-    : mDevice(device), mCommandPool(commandPool), mHandle(VK_NULL_HANDLE)
+    : WrappedObject(device), mCommandPool(commandPool)
 {
 }
 
