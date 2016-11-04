@@ -2427,6 +2427,19 @@ TEST_P(GLSLTest_ES3, FoldedInvalidLeftShift)
     glDeleteProgram(program);
 }
 
+// Test that using crazy constants with exp2 doesn't cause floating point errors.
+TEST_P(GLSLTest, Exp2FoldingWithHugeFloat)
+{
+    const std::string &fragmentShader =
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = vec4(exp2(2140711969967.0) - 1.0);\n"
+        "}\n";
+    GLuint shader = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
+    EXPECT_EQ(0u, shader);
+    glDeleteShader(shader);
+}
+
 }  // anonymous namespace
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.

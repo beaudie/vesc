@@ -1814,15 +1814,15 @@ TConstantUnion *TIntermConstantUnion::foldUnaryComponentWise(TOperator op,
                 break;
 
             case EOpSin:
-                foldFloatTypeUnary(operandArray[i], &sinf, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &sinf, &resultArray[i]);
                 break;
 
             case EOpCos:
-                foldFloatTypeUnary(operandArray[i], &cosf, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &cosf, &resultArray[i]);
                 break;
 
             case EOpTan:
-                foldFloatTypeUnary(operandArray[i], &tanf, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &tanf, &resultArray[i]);
                 break;
 
             case EOpAsin:
@@ -1832,7 +1832,7 @@ TConstantUnion *TIntermConstantUnion::foldUnaryComponentWise(TOperator op,
                     UndefinedConstantFoldingError(getLine(), op, getType().getBasicType(),
                                                   diagnostics, &resultArray[i]);
                 else
-                    foldFloatTypeUnary(operandArray[i], &asinf, &resultArray[i]);
+                    foldFloatTypeUnary(diagnostics, op, operandArray[i], &asinf, &resultArray[i]);
                 break;
 
             case EOpAcos:
@@ -1842,27 +1842,27 @@ TConstantUnion *TIntermConstantUnion::foldUnaryComponentWise(TOperator op,
                     UndefinedConstantFoldingError(getLine(), op, getType().getBasicType(),
                                                   diagnostics, &resultArray[i]);
                 else
-                    foldFloatTypeUnary(operandArray[i], &acosf, &resultArray[i]);
+                    foldFloatTypeUnary(diagnostics, op, operandArray[i], &acosf, &resultArray[i]);
                 break;
 
             case EOpAtan:
-                foldFloatTypeUnary(operandArray[i], &atanf, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &atanf, &resultArray[i]);
                 break;
 
             case EOpSinh:
-                foldFloatTypeUnary(operandArray[i], &sinhf, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &sinhf, &resultArray[i]);
                 break;
 
             case EOpCosh:
-                foldFloatTypeUnary(operandArray[i], &coshf, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &coshf, &resultArray[i]);
                 break;
 
             case EOpTanh:
-                foldFloatTypeUnary(operandArray[i], &tanhf, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &tanhf, &resultArray[i]);
                 break;
 
             case EOpAsinh:
-                foldFloatTypeUnary(operandArray[i], &asinhf, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &asinhf, &resultArray[i]);
                 break;
 
             case EOpAcosh:
@@ -1871,7 +1871,7 @@ TConstantUnion *TIntermConstantUnion::foldUnaryComponentWise(TOperator op,
                     UndefinedConstantFoldingError(getLine(), op, getType().getBasicType(),
                                                   diagnostics, &resultArray[i]);
                 else
-                    foldFloatTypeUnary(operandArray[i], &acoshf, &resultArray[i]);
+                    foldFloatTypeUnary(diagnostics, op, operandArray[i], &acoshf, &resultArray[i]);
                 break;
 
             case EOpAtanh:
@@ -1881,7 +1881,7 @@ TConstantUnion *TIntermConstantUnion::foldUnaryComponentWise(TOperator op,
                     UndefinedConstantFoldingError(getLine(), op, getType().getBasicType(),
                                                   diagnostics, &resultArray[i]);
                 else
-                    foldFloatTypeUnary(operandArray[i], &atanhf, &resultArray[i]);
+                    foldFloatTypeUnary(diagnostics, op, operandArray[i], &atanhf, &resultArray[i]);
                 break;
 
             case EOpAbs:
@@ -1931,15 +1931,15 @@ TConstantUnion *TIntermConstantUnion::foldUnaryComponentWise(TOperator op,
                 break;
 
             case EOpFloor:
-                foldFloatTypeUnary(operandArray[i], &floorf, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &floorf, &resultArray[i]);
                 break;
 
             case EOpTrunc:
-                foldFloatTypeUnary(operandArray[i], &truncf, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &truncf, &resultArray[i]);
                 break;
 
             case EOpRound:
-                foldFloatTypeUnary(operandArray[i], &roundf, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &roundf, &resultArray[i]);
                 break;
 
             case EOpRoundEven:
@@ -1957,7 +1957,7 @@ TConstantUnion *TIntermConstantUnion::foldUnaryComponentWise(TOperator op,
             }
 
             case EOpCeil:
-                foldFloatTypeUnary(operandArray[i], &ceilf, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &ceilf, &resultArray[i]);
                 break;
 
             case EOpFract:
@@ -1999,20 +1999,24 @@ TConstantUnion *TIntermConstantUnion::foldUnaryComponentWise(TOperator op,
                 break;
 
             case EOpExp:
-                foldFloatTypeUnary(operandArray[i], &expf, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &expf, &resultArray[i]);
                 break;
 
             case EOpLog:
                 // For log(x), results are undefined if x <= 0, we are choosing to set result to 0.
                 if (operandArray[i].getFConst() <= 0.0f)
+                {
                     UndefinedConstantFoldingError(getLine(), op, getType().getBasicType(),
                                                   diagnostics, &resultArray[i]);
+                }
                 else
-                    foldFloatTypeUnary(operandArray[i], &logf, &resultArray[i]);
+                {
+                    foldFloatTypeUnary(diagnostics, op, operandArray[i], &logf, &resultArray[i]);
+                }
                 break;
 
             case EOpExp2:
-                foldFloatTypeUnary(operandArray[i], &exp2f, &resultArray[i]);
+                foldFloatTypeUnary(diagnostics, op, operandArray[i], &exp2f, &resultArray[i]);
                 break;
 
             case EOpLog2:
@@ -2020,22 +2024,36 @@ TConstantUnion *TIntermConstantUnion::foldUnaryComponentWise(TOperator op,
                 // And log2f is not available on some plarforms like old android, so just using
                 // log(x)/log(2) here.
                 if (operandArray[i].getFConst() <= 0.0f)
+                {
                     UndefinedConstantFoldingError(getLine(), op, getType().getBasicType(),
                                                   diagnostics, &resultArray[i]);
+                }
                 else
                 {
-                    foldFloatTypeUnary(operandArray[i], &logf, &resultArray[i]);
-                    resultArray[i].setFConst(resultArray[i].getFConst() / logf(2.0f));
+                    foldFloatTypeUnary(diagnostics, op, operandArray[i], &logf, &resultArray[i]);
+                    if (resultArray[i].getFConst() <= 0.0f)
+                    {
+                        UndefinedConstantFoldingError(getLine(), op, getType().getBasicType(),
+                                                      diagnostics, &resultArray[i]);
+                    }
+                    else
+                    {
+                        resultArray[i].setFConst(resultArray[i].getFConst() / logf(2.0f));
+                    }
                 }
                 break;
 
             case EOpSqrt:
                 // For sqrt(x), results are undefined if x < 0, we are choosing to set result to 0.
                 if (operandArray[i].getFConst() < 0.0f)
+                {
                     UndefinedConstantFoldingError(getLine(), op, getType().getBasicType(),
                                                   diagnostics, &resultArray[i]);
+                }
                 else
-                    foldFloatTypeUnary(operandArray[i], &sqrtf, &resultArray[i]);
+                {
+                    foldFloatTypeUnary(diagnostics, op, operandArray[i], &sqrtf, &resultArray[i]);
+                }
                 break;
 
             case EOpInverseSqrt:
@@ -2045,12 +2063,22 @@ TConstantUnion *TIntermConstantUnion::foldUnaryComponentWise(TOperator op,
                 // Also, for inversesqrt(x), results are undefined if x <= 0, we are choosing to set
                 // result to 0.
                 if (operandArray[i].getFConst() <= 0.0f)
+                {
                     UndefinedConstantFoldingError(getLine(), op, getType().getBasicType(),
                                                   diagnostics, &resultArray[i]);
+                }
                 else
                 {
-                    foldFloatTypeUnary(operandArray[i], &sqrtf, &resultArray[i]);
-                    resultArray[i].setFConst(1.0f / resultArray[i].getFConst());
+                    foldFloatTypeUnary(diagnostics, op, operandArray[i], &sqrtf, &resultArray[i]);
+                    if (resultArray[i].getFConst() <= 0.0f)
+                    {
+                        UndefinedConstantFoldingError(getLine(), op, getType().getBasicType(),
+                                                      diagnostics, &resultArray[i]);
+                    }
+                    else
+                    {
+                        resultArray[i].setFConst(1.0f / resultArray[i].getFConst());
+                    }
                 }
                 break;
 
@@ -2088,14 +2116,26 @@ TConstantUnion *TIntermConstantUnion::foldUnaryComponentWise(TOperator op,
     return resultArray;
 }
 
-void TIntermConstantUnion::foldFloatTypeUnary(const TConstantUnion &parameter,
+void TIntermConstantUnion::foldFloatTypeUnary(TDiagnostics *diagnostics,
+                                              TOperator op,
+                                              const TConstantUnion &parameter,
                                               FloatTypeUnaryFunc builtinFunc,
                                               TConstantUnion *result) const
 {
     ASSERT(builtinFunc);
-
     ASSERT(getType().getBasicType() == EbtFloat);
-    result->setFConst(builtinFunc(parameter.getFConst()));
+    ASSERT(std::isfinite(parameter.getFConst()));
+    float foldedValue = builtinFunc(parameter.getFConst());
+    if (!std::isfinite(foldedValue))
+    {
+        diagnostics->error(getLine(), "Constant folding produced non-finite result",
+                           GetOperatorString(op), "");
+        result->setFConst(0);
+    }
+    else
+    {
+        result->setFConst(foldedValue);
+    }
 }
 
 // static

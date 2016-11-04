@@ -386,7 +386,9 @@ class TIntermConstantUnion : public TIntermTyped
 
   private:
     typedef float(*FloatTypeUnaryFunc) (float);
-    void foldFloatTypeUnary(const TConstantUnion &parameter,
+    void foldFloatTypeUnary(TDiagnostics *diagnostics,
+                            TOperator op,
+                            const TConstantUnion &parameter,
                             FloatTypeUnaryFunc builtinFunc,
                             TConstantUnion *result) const;
 
