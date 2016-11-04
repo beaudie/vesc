@@ -72,6 +72,32 @@ Optional<std::string> FindTestExpectationsPath(const std::string &exeDir,
     return Optional<std::string>::Invalid();
 }
 
+gpu::GPUTestConfig::API GetCurrentAPI()
+{
+    static constexpr std::pair<const char*, gpu::GPUTestConfig::API> eglDisplayAPIs[] = {
+        { "angle-d3d9", gpu::GPUTestConfig::kAPID3D9 },
+        { "angle-d3d11", gpu::GPUTestConfig::kAPID3D11 },
+        { "angle-gl", gpu::GPUTestConfig::kAPID3D11 },
+        { "angle-gles", gpu::GPUTestConfig::kAPIGLES },
+    };
+
+    const char* eglDisplayType = deqp_libtester_get_egl_display_type();
+    if (eglDisplayType == nullptr)
+    {
+        return gpu::GPUTestConfig::kAPIUnknown;
+    }
+
+    for (auto displayAPI : eglDisplayAPIs)
+    {
+        if (strcmp(eglDisplayType, displayAPI.first) == 0)
+        {
+            return displayAPI.second;
+        }
+    }
+
+    return gpu::GPUTestConfig::kAPIUnknown;
+}
+
 class dEQPCaseList
 {
   public:
@@ -161,6 +187,7 @@ void dEQPCaseList::initialize()
         std::cerr << "Failed to load test configuration." << std::endl;
         Die();
     }
+    mTestConfig.set_api(GetCurrentAPI());
 
     std::ifstream caseListStream(caseListPath);
     if (caseListStream.fail())
