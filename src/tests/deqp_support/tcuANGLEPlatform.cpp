@@ -116,3 +116,14 @@ tcu::Platform *createPlatform()
 {
     return new tcu::ANGLEPlatform();
 }
+
+const char *getDefaultEGLDisplay()
+{
+#if (DE_OS == DE_OS_WIN32)
+    return "angle-d3d11";
+#elif defined(ANGLE_USE_OZONE) || (DE_OS == DE_OS_ANDROID)
+    return "angle-gles";
+#else
+    return "angle-gl";
+#endif
+}
