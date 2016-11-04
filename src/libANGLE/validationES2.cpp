@@ -3618,4 +3618,85 @@ bool ValidateAttachShader(ValidationContext *context, GLuint program, GLuint sha
     return true;
 }
 
+bool ValidateBindAttribLocation(ValidationContext *context,
+                                GLuint program,
+                                GLuint index,
+                                const GLchar *name)
+{
+    if (index >= MAX_VERTEX_ATTRIBS)
+    {
+        context->handleError(Error(GL_INVALID_VALUE));
+        return false;
+    }
+
+    Program *programObject = GetValidProgram(context, program);
+
+    if (!programObject)
+    {
+        return false;
+    }
+
+    if (strncmp(name, "gl_", 3) == 0)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateBindBuffer(ValidationContext *context, GLenum target, GLuint buffer)
+{
+    if (!ValidBufferTarget(context, target))
+    {
+        context->handleError(Error(GL_INVALID_ENUM));
+        return false;
+    }
+
+    if (!context->getGLState().isBindGeneratesResourceEnabled() &&
+        !context->isBufferGenerated(buffer))
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Buffer was not generated"));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateBindFramebuffer(ValidationContext *context, GLenum target, GLuint framebuffer)
+{
+    if (!ValidFramebufferTarget(target))
+    {
+        context->handleError(Error(GL_INVALID_ENUM));
+        return false;
+    }
+
+    if (!context->getGLState().isBindGeneratesResourceEnabled() &&
+        !context->isFramebufferGenerated(framebuffer))
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Framebuffer was not generated"));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateBindRenderbuffer(ValidationContext *context, GLenum target, GLuint renderbuffer)
+{
+    if (target != GL_RENDERBUFFER)
+    {
+        context->handleError(Error(GL_INVALID_ENUM));
+        return false;
+    }
+
+    if (!context->getGLState().isBindGeneratesResourceEnabled() &&
+        !context->isRenderbufferGenerated(renderbuffer))
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Renderbuffer was not generated"));
+        return false;
+    }
+
+    return true;
+}
+
 }  // namespace gl
