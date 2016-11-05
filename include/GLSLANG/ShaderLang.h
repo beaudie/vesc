@@ -49,7 +49,7 @@ typedef unsigned int GLenum;
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 166
+#define ANGLE_SH_VERSION 167
 
 enum ShShaderSpec
 {
@@ -85,7 +85,10 @@ enum ShShaderOutput
     // Prefer using these to specify HLSL output type:
     SH_HLSL_3_0_OUTPUT       = 0x8B48,  // D3D 9
     SH_HLSL_4_1_OUTPUT       = 0x8B49,  // D3D 11
-    SH_HLSL_4_0_FL9_3_OUTPUT = 0x8B4A   // D3D 11 feature level 9_3
+    SH_HLSL_4_0_FL9_3_OUTPUT = 0x8B4A,  // D3D 11 feature level 9_3
+
+    // Output specialized GLSL to be fed to glslang for Vulkan SPIR.
+    SH_GLSL_VULKAN_OUTPUT = 0x8B4B,
 };
 
 // Compile options.
