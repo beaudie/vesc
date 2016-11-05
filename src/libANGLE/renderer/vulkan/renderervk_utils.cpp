@@ -412,6 +412,15 @@ void CommandBuffer::imageBarrier(VkPipelineStageFlags srcStageMask,
                          &barrier);
 }
 
+void CommandBuffer::draw(uint32_t vertexCount,
+                         uint32_t instanceCount,
+                         uint32_t firstVertex,
+                         uint32_t firstInstance)
+{
+    ASSERT(mHandle != VK_NULL_HANDLE);
+    vkCmdDraw(mHandle, vertexCount, instanceCount, firstVertex, firstInstance);
+}
+
 // Semaphore implementation.
 Semaphore::Semaphore()
 {

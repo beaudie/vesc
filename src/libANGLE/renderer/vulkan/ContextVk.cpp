@@ -59,8 +59,9 @@ gl::Error ContextVk::finish()
 
 gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
 {
-    UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    vk::CommandBuffer *commandBuffer = mRenderer->getCommandBuffer();
+    commandBuffer->draw(count, 1, first, 0);
+    return gl::NoError();
 }
 
 gl::Error ContextVk::drawArraysInstanced(GLenum mode,
