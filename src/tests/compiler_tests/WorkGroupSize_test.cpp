@@ -13,6 +13,8 @@
 #include "compiler/translator/TranslatorESSL.h"
 #include "tests/test_utils/compiler_test.h"
 
+using namespace sh;
+
 class WorkGroupSizeTest : public testing::Test
 {
   public:
@@ -22,7 +24,7 @@ class WorkGroupSizeTest : public testing::Test
     void SetUp() override
     {
         ShBuiltInResources resources;
-        ShInitBuiltInResources(&resources);
+        sh::InitBuiltInResources(&resources);
 
         mTranslator = new TranslatorESSL(GL_COMPUTE_SHADER, SH_GLES3_1_SPEC);
         ASSERT_TRUE(mTranslator->Init(resources));
