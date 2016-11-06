@@ -20,6 +20,11 @@
 #include "compiler/translator/VariablePacker.h"
 #include "angle_gl.h"
 
+using namespace sh;
+
+namespace sh_angle
+{
+
 namespace
 {
 
@@ -34,31 +39,31 @@ template <typename VarT>
 const std::vector<VarT> *GetVariableList(const TCompiler *compiler);
 
 template <>
-const std::vector<sh::Uniform> *GetVariableList(const TCompiler *compiler)
+const std::vector<Uniform> *GetVariableList(const TCompiler *compiler)
 {
     return &compiler->getUniforms();
 }
 
 template <>
-const std::vector<sh::Varying> *GetVariableList(const TCompiler *compiler)
+const std::vector<Varying> *GetVariableList(const TCompiler *compiler)
 {
     return &compiler->getVaryings();
 }
 
 template <>
-const std::vector<sh::Attribute> *GetVariableList(const TCompiler *compiler)
+const std::vector<Attribute> *GetVariableList(const TCompiler *compiler)
 {
     return &compiler->getAttributes();
 }
 
 template <>
-const std::vector<sh::OutputVariable> *GetVariableList(const TCompiler *compiler)
+const std::vector<OutputVariable> *GetVariableList(const TCompiler *compiler)
 {
     return &compiler->getOutputVariables();
 }
 
 template <>
-const std::vector<sh::InterfaceBlock> *GetVariableList(const TCompiler *compiler)
+const std::vector<InterfaceBlock> *GetVariableList(const TCompiler *compiler)
 {
     return &compiler->getInterfaceBlocks();
 }
@@ -332,32 +337,32 @@ const std::map<std::string, std::string> *ShGetNameHashingMap(
     return &(compiler->getNameMap());
 }
 
-const std::vector<sh::Uniform> *ShGetUniforms(const ShHandle handle)
+const std::vector<Uniform> *ShGetUniforms(const ShHandle handle)
 {
-    return GetShaderVariables<sh::Uniform>(handle);
+    return GetShaderVariables<Uniform>(handle);
 }
 
-const std::vector<sh::Varying> *ShGetVaryings(const ShHandle handle)
+const std::vector<Varying> *ShGetVaryings(const ShHandle handle)
 {
-    return GetShaderVariables<sh::Varying>(handle);
+    return GetShaderVariables<Varying>(handle);
 }
 
-const std::vector<sh::Attribute> *ShGetAttributes(const ShHandle handle)
+const std::vector<Attribute> *ShGetAttributes(const ShHandle handle)
 {
-    return GetShaderVariables<sh::Attribute>(handle);
+    return GetShaderVariables<Attribute>(handle);
 }
 
-const std::vector<sh::OutputVariable> *ShGetOutputVariables(const ShHandle handle)
+const std::vector<OutputVariable> *ShGetOutputVariables(const ShHandle handle)
 {
-    return GetShaderVariables<sh::OutputVariable>(handle);
+    return GetShaderVariables<OutputVariable>(handle);
 }
 
-const std::vector<sh::InterfaceBlock> *ShGetInterfaceBlocks(const ShHandle handle)
+const std::vector<InterfaceBlock> *ShGetInterfaceBlocks(const ShHandle handle)
 {
-    return GetShaderVariables<sh::InterfaceBlock>(handle);
+    return GetShaderVariables<InterfaceBlock>(handle);
 }
 
-sh::WorkGroupSize ShGetComputeShaderLocalGroupSize(const ShHandle handle)
+WorkGroupSize ShGetComputeShaderLocalGroupSize(const ShHandle handle)
 {
     ASSERT(handle);
 
@@ -369,7 +374,7 @@ sh::WorkGroupSize ShGetComputeShaderLocalGroupSize(const ShHandle handle)
 }
 
 bool ShCheckVariablesWithinPackingLimits(int maxVectors,
-                                         const std::vector<sh::ShaderVariable> &variables)
+                                         const std::vector<ShaderVariable> &variables)
 {
     VariablePacker packer;
     return packer.CheckVariablesWithinPackingLimits(maxVectors, variables);
@@ -408,3 +413,5 @@ const std::map<std::string, unsigned int> *ShGetUniformRegisterMap(const ShHandl
     return nullptr;
 #endif  // ANGLE_ENABLE_HLSL
 }
+
+}  // namespace sh_angle

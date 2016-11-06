@@ -13,13 +13,15 @@
 #include "GLSLANG/ShaderLang.h"
 #include "compiler/translator/TranslatorESSL.h"
 
+using namespace sh;
+
 class TypeTrackingTest : public testing::Test
 {
   public:
     TypeTrackingTest() {}
 
   protected:
-    virtual void SetUp()
+    void SetUp() override
     {
         ShBuiltInResources resources;
         ShInitBuiltInResources(&resources);
@@ -29,10 +31,7 @@ class TypeTrackingTest : public testing::Test
         ASSERT_TRUE(mTranslator->Init(resources));
     }
 
-    virtual void TearDown()
-    {
-        delete mTranslator;
-    }
+    void TearDown() override { delete mTranslator; }
 
     void compile(const std::string& shaderString)
     {

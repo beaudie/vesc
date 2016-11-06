@@ -14,6 +14,8 @@
 #include "GLSLANG/ShaderLang.h"
 #include "tests/test_utils/compiler_test.h"
 
+using namespace sh;
+
 class QualificationVertexShaderTestESSL31 : public testing::Test
 {
   public:

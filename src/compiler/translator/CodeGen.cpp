@@ -16,6 +16,9 @@
 #include "compiler/translator/TranslatorHLSL.h"
 #endif // ANGLE_ENABLE_HLSL
 
+namespace sh
+{
+
 //
 // This function must be provided to create the actual
 // compile object used by higher level code.  It returns
@@ -74,3 +77,5 @@ void DeleteCompiler(TCompiler* compiler)
 {
     delete compiler;
 }
+
+}  // namespace sh

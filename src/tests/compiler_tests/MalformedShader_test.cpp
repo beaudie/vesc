@@ -12,6 +12,8 @@
 #include "GLSLANG/ShaderLang.h"
 #include "compiler/translator/TranslatorESSL.h"
 
+using namespace sh;
+
 class MalformedShaderTest : public testing::Test
 {
   public:

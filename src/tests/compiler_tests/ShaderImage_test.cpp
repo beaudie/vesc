@@ -114,7 +114,7 @@ class ShaderImageTest : public testing::Test
         ShBuiltInResources resources;
         ShInitBuiltInResources(&resources);
 
-        mTranslator = new TranslatorESSL(GL_COMPUTE_SHADER, SH_GLES3_1_SPEC);
+        mTranslator = new sh::TranslatorESSL(GL_COMPUTE_SHADER, SH_GLES3_1_SPEC);
         ASSERT_TRUE(mTranslator->Init(resources));
     }
 
@@ -134,7 +134,7 @@ class ShaderImageTest : public testing::Test
   protected:
     std::string mTranslatedCode;
     std::string mInfoLog;
-    TranslatorESSL *mTranslator;
+    sh::TranslatorESSL *mTranslator;
     TIntermNode *mASTRoot;
 };
 

@@ -49,9 +49,10 @@ typedef unsigned int GLenum;
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 164
+#define ANGLE_SH_VERSION 165
 
-typedef enum {
+enum ShShaderSpec
+{
     SH_GLES2_SPEC,
     SH_WEBGL_SPEC,
 
@@ -60,10 +61,9 @@ typedef enum {
 
     SH_GLES3_1_SPEC,
     SH_WEBGL3_SPEC,
+};
 
-} ShShaderSpec;
-
-typedef enum
+enum ShShaderOutput
 {
     // ESSL output only supported in some configurations.
     SH_ESSL_OUTPUT = 0x8B45,
@@ -92,11 +92,11 @@ typedef enum
     SH_HLSL_3_0_OUTPUT       = 0x8B48,  // D3D 9
     SH_HLSL_4_1_OUTPUT       = 0x8B49,  // D3D 11
     SH_HLSL_4_0_FL9_3_OUTPUT = 0x8B4A   // D3D 11 feature level 9_3
-} ShShaderOutput;
+};
 
 // Compile options.
 
-typedef uint64_t ShCompileOptions;
+using ShCompileOptions = uint64_t;
 
 const ShCompileOptions SH_VALIDATE                           = 0;
 const ShCompileOptions SH_VALIDATE_LOOP_INDEXING             = UINT64_C(1) << 0;
@@ -226,35 +226,24 @@ const ShCompileOptions SH_USE_UNUSED_STANDARD_SHARED_BLOCKS = UINT64_C(1) << 28;
 const ShCompileOptions SH_DONT_REMOVE_INVARIANT_FOR_FRAGMENT_INPUT = UINT64_C(1) << 29;
 
 // Defines alternate strategies for implementing array index clamping.
-typedef enum {
-  // Use the clamp intrinsic for array index clamping.
-  SH_CLAMP_WITH_CLAMP_INTRINSIC = 1,
+enum ShArrayIndexClampingStrategy
+{
+    // Use the clamp intrinsic for array index clamping.
+    SH_CLAMP_WITH_CLAMP_INTRINSIC = 1,
 
-  // Use a user-defined function for array index clamping.
-  SH_CLAMP_WITH_USER_DEFINED_INT_CLAMP_FUNCTION
-} ShArrayIndexClampingStrategy;
-
-//
-// Driver must call this first, once, before doing any other
-// compiler operations.
-// If the function succeeds, the return value is true, else false.
-//
-COMPILER_EXPORT bool ShInitialize();
-//
-// Driver should call this at shutdown.
-// If the function succeeds, the return value is true, else false.
-//
-COMPILER_EXPORT bool ShFinalize();
+    // Use a user-defined function for array index clamping.
+    SH_CLAMP_WITH_USER_DEFINED_INT_CLAMP_FUNCTION
+};
 
 // The 64 bits hash function. The first parameter is the input string; the
 // second parameter is the string length.
-typedef khronos_uint64_t (*ShHashFunction64)(const char*, size_t);
+using ShHashFunction64 = khronos_uint64_t (*)(const char *, size_t);
 
 //
 // Implementation dependent built-in resources (constants and extensions).
 // The names for these resources has been obtained by stripping gl_/GL_.
 //
-typedef struct
+struct ShBuiltInResources
 {
     // Constants.
     int MaxVertexAttribs;
@@ -386,15 +375,7 @@ typedef struct
 
     // maximum number of buffer object storage in machine units
     int MaxAtomicCounterBufferSize;
-
-} ShBuiltInResources;
-
-//
-// Initialize built-in resources with minimum expected values.
-// Parameters:
-// resources: The object to initialize. Will be comparable with memcmp.
-//
-COMPILER_EXPORT void ShInitBuiltInResources(ShBuiltInResources *resources);
+};
 
 //
 // ShHandle held by but opaque to the driver.  It is allocated,
@@ -403,7 +384,31 @@ COMPILER_EXPORT void ShInitBuiltInResources(ShBuiltInResources *resources);
 //
 // If handle creation fails, 0 will be returned.
 //
-typedef void *ShHandle;
+using ShHandle = void *;
+
+// Scope these APIs so they don't conflict with any other glslang-based implementation.
+// (IE, the Vulkan glslang)
+namespace sh_angle
+{
+
+//
+// Driver must call this first, once, before doing any other
+// compiler operations.
+// If the function succeeds, the return value is true, else false.
+//
+COMPILER_EXPORT bool ShInitialize();
+//
+// Driver should call this at shutdown.
+// If the function succeeds, the return value is true, else false.
+//
+COMPILER_EXPORT bool ShFinalize();
+
+//
+// Initialize built-in resources with minimum expected values.
+// Parameters:
+// resources: The object to initialize. Will be comparable with memcmp.
+//
+COMPILER_EXPORT void ShInitBuiltInResources(ShBuiltInResources *resources);
 
 //
 // Returns the a concatenated list of the items in ShBuiltInResources as a
@@ -503,12 +508,6 @@ COMPILER_EXPORT const std::vector<sh::OutputVariable> *ShGetOutputVariables(cons
 COMPILER_EXPORT const std::vector<sh::InterfaceBlock> *ShGetInterfaceBlocks(const ShHandle handle);
 COMPILER_EXPORT sh::WorkGroupSize ShGetComputeShaderLocalGroupSize(const ShHandle handle);
 
-typedef struct
-{
-    sh::GLenum type;
-    int size;
-} ShVariableInfo;
-
 // Returns true if the passed in variables pack in maxVectors following
 // the packing rules from the GLSL 1.017 spec, Appendix A, section 7.
 // Returns false otherwise. Also look at the SH_ENFORCE_PACKING_RESTRICTIONS
@@ -536,5 +535,9 @@ COMPILER_EXPORT bool ShGetInterfaceBlockRegister(const ShHandle handle,
 // have been extracted from structs.
 COMPILER_EXPORT const std::map<std::string, unsigned int> *ShGetUniformRegisterMap(
     const ShHandle handle);
+
+}  // namespace sh_angle
+
+using namespace sh_angle;
 
 #endif // GLSLANG_SHADERLANG_H_

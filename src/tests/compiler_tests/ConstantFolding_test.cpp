@@ -15,6 +15,8 @@
 #include "compiler/translator/PoolAlloc.h"
 #include "compiler/translator/TranslatorESSL.h"
 
+using namespace sh;
+
 template <typename T>
 class ConstantFinder : public TIntermTraverser
 {
