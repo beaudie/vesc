@@ -46,6 +46,8 @@ WHICH GENERATES THE GLSL ES PARSER (glslang_tab.cpp AND glslang_tab.h).
 
 #define YYENABLE_NLS 0
 
+using namespace sh;
+
 %}
 %expect 1 /* One shift reduce conflict because of if | else */
 %parse-param {TParseContext* context}

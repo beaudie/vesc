@@ -44,6 +44,9 @@ WHICH GENERATES THE GLSL ES LEXER (glslang_lex.cpp).
 #include "compiler/preprocessor/Token.h"
 #include "compiler/translator/util.h"
 #include "compiler/translator/length_limits.h"
+
+using namespace sh;
+
 #include "glslang_tab.h"
 
 /* windows only pragma */
