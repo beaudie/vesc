@@ -65,12 +65,14 @@ Error Renderbuffer::setStorageMultisample(size_t samples, GLenum internalformat,
 {
     orphanImages();
 
-    ANGLE_TRY(mRenderbuffer->setStorageMultisample(samples, internalformat, width, height));
+    GLuint supportedSamples = 0;
+    ANGLE_TRY(mRenderbuffer->setStorageMultisample(samples, internalformat, width, height,
+                                                   &supportedSamples));
 
     mWidth          = static_cast<GLsizei>(width);
     mHeight         = static_cast<GLsizei>(height);
     mFormat         = Format(internalformat);
-    mSamples        = static_cast<GLsizei>(samples);
+    mSamples        = static_cast<GLsizei>(supportedSamples);
 
     mDirtyChannel.signal();
 

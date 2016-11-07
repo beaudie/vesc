@@ -25,7 +25,8 @@ class RenderbufferVk : public RenderbufferImpl
     gl::Error setStorageMultisample(size_t samples,
                                     GLenum internalformat,
                                     size_t width,
-                                    size_t height) override;
+                                    size_t height,
+                                    GLuint *supportedSamples) override;
     gl::Error setStorageEGLImageTarget(egl::Image *image) override;
 
     gl::Error getAttachmentRenderTarget(const gl::FramebufferAttachment::Target &target,

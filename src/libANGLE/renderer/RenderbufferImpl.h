@@ -29,7 +29,11 @@ class RenderbufferImpl : public FramebufferAttachmentObjectImpl
     virtual ~RenderbufferImpl() {}
 
     virtual gl::Error setStorage(GLenum internalformat, size_t width, size_t height) = 0;
-    virtual gl::Error setStorageMultisample(size_t samples, GLenum internalformat, size_t width, size_t height) = 0;
+    virtual gl::Error setStorageMultisample(size_t samples,
+                                            GLenum internalformat,
+                                            size_t width,
+                                            size_t height,
+                                            GLuint *supportedSamples) = 0;
     virtual gl::Error setStorageEGLImageTarget(egl::Image *image) = 0;
 };
 

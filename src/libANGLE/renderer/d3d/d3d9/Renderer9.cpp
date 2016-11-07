@@ -2455,9 +2455,6 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
 {
     const d3d9::TextureFormat &d3d9FormatInfo = d3d9::GetTextureFormatInfo(format);
 
-    const gl::TextureCaps &textureCaps = getNativeTextureCaps().get(format);
-    GLuint supportedSamples = textureCaps.getNearestSamples(samples);
-
     IDirect3DTexture9 *texture      = nullptr;
     IDirect3DSurface9 *renderTarget = NULL;
     if (width > 0 && height > 0)
@@ -2469,17 +2466,17 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
         if (formatInfo.depthBits > 0 || formatInfo.stencilBits > 0)
         {
             result = mDevice->CreateDepthStencilSurface(width, height, d3d9FormatInfo.renderFormat,
-                                                        gl_d3d9::GetMultisampleType(supportedSamples),
-                                                        0, FALSE, &renderTarget, NULL);
+                                                        gl_d3d9::GetMultisampleType(samples), 0,
+                                                        FALSE, &renderTarget, NULL);
         }
         else
         {
             requiresInitialization = (d3d9FormatInfo.dataInitializerFunction != nullptr);
-            if (supportedSamples > 0)
+            if (samples > 0)
             {
                 result = mDevice->CreateRenderTarget(width, height, d3d9FormatInfo.renderFormat,
-                                                     gl_d3d9::GetMultisampleType(supportedSamples),
-                                                     0, FALSE, &renderTarget, nullptr);
+                                                     gl_d3d9::GetMultisampleType(samples), 0, FALSE,
+                                                     &renderTarget, nullptr);
             }
             else
             {
@@ -2512,8 +2509,7 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
         }
     }
 
-    *outRT = new TextureRenderTarget9(texture, 0, renderTarget, format, width, height, 1,
-                                      supportedSamples);
+    *outRT = new TextureRenderTarget9(texture, 0, renderTarget, format, width, height, 1, samples);
     return gl::Error(GL_NO_ERROR);
 }
 

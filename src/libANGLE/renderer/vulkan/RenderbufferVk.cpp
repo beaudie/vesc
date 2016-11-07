@@ -31,7 +31,8 @@ gl::Error RenderbufferVk::setStorage(GLenum internalformat, size_t width, size_t
 gl::Error RenderbufferVk::setStorageMultisample(size_t samples,
                                                 GLenum internalformat,
                                                 size_t width,
-                                                size_t height)
+                                                size_t height,
+                                                GLuint *supportedSamples)
 {
     UNIMPLEMENTED();
     return gl::Error(GL_INVALID_OPERATION);
