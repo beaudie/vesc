@@ -3262,9 +3262,6 @@ gl::Error Renderer11::createRenderTarget(int width,
 {
     const d3d11::Format &formatInfo = d3d11::Format::Get(format, mRenderer11DeviceCaps);
 
-    const gl::TextureCaps &textureCaps = getNativeTextureCaps().get(format);
-    GLuint supportedSamples            = textureCaps.getNearestSamples(samples);
-
     if (width > 0 && height > 0)
     {
         // Create texture resource
@@ -3274,7 +3271,7 @@ gl::Error Renderer11::createRenderTarget(int width,
         desc.MipLevels          = 1;
         desc.ArraySize          = 1;
         desc.Format             = formatInfo.texFormat;
-        desc.SampleDesc.Count   = (supportedSamples == 0) ? 1 : supportedSamples;
+        desc.SampleDesc.Count   = (samples == 0) ? 1 : samples;
         desc.SampleDesc.Quality = 0;
         desc.Usage              = D3D11_USAGE_DEFAULT;
         desc.CPUAccessFlags     = 0;
@@ -3310,8 +3307,8 @@ gl::Error Renderer11::createRenderTarget(int width,
         {
             D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
             srvDesc.Format        = formatInfo.srvFormat;
-            srvDesc.ViewDimension = (supportedSamples == 0) ? D3D11_SRV_DIMENSION_TEXTURE2D
-                                                            : D3D11_SRV_DIMENSION_TEXTURE2DMS;
+            srvDesc.ViewDimension =
+                (samples == 0) ? D3D11_SRV_DIMENSION_TEXTURE2D : D3D11_SRV_DIMENSION_TEXTURE2DMS;
             srvDesc.Texture2D.MostDetailedMip = 0;
             srvDesc.Texture2D.MipLevels       = 1;
 
@@ -3329,9 +3326,8 @@ gl::Error Renderer11::createRenderTarget(int width,
             {
                 D3D11_SHADER_RESOURCE_VIEW_DESC blitSRVDesc;
                 blitSRVDesc.Format        = formatInfo.blitSRVFormat;
-                blitSRVDesc.ViewDimension = (supportedSamples == 0)
-                                                ? D3D11_SRV_DIMENSION_TEXTURE2D
-                                                : D3D11_SRV_DIMENSION_TEXTURE2DMS;
+                blitSRVDesc.ViewDimension = (samples == 0) ? D3D11_SRV_DIMENSION_TEXTURE2D
+                                                           : D3D11_SRV_DIMENSION_TEXTURE2DMS;
                 blitSRVDesc.Texture2D.MostDetailedMip = 0;
                 blitSRVDesc.Texture2D.MipLevels       = 1;
 
@@ -3358,8 +3354,8 @@ gl::Error Renderer11::createRenderTarget(int width,
         {
             D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
             dsvDesc.Format        = formatInfo.dsvFormat;
-            dsvDesc.ViewDimension = (supportedSamples == 0) ? D3D11_DSV_DIMENSION_TEXTURE2D
-                                                            : D3D11_DSV_DIMENSION_TEXTURE2DMS;
+            dsvDesc.ViewDimension =
+                (samples == 0) ? D3D11_DSV_DIMENSION_TEXTURE2D : D3D11_DSV_DIMENSION_TEXTURE2DMS;
             dsvDesc.Texture2D.MipSlice = 0;
             dsvDesc.Flags              = 0;
 
@@ -3377,7 +3373,7 @@ gl::Error Renderer11::createRenderTarget(int width,
             }
 
             *outRT = new TextureRenderTarget11(dsv, texture, srv, format, formatInfo, width, height,
-                                               1, supportedSamples);
+                                               1, samples);
 
             SafeRelease(dsv);
         }
@@ -3385,8 +3381,8 @@ gl::Error Renderer11::createRenderTarget(int width,
         {
             D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
             rtvDesc.Format        = formatInfo.rtvFormat;
-            rtvDesc.ViewDimension = (supportedSamples == 0) ? D3D11_RTV_DIMENSION_TEXTURE2D
-                                                            : D3D11_RTV_DIMENSION_TEXTURE2DMS;
+            rtvDesc.ViewDimension =
+                (samples == 0) ? D3D11_RTV_DIMENSION_TEXTURE2D : D3D11_RTV_DIMENSION_TEXTURE2DMS;
             rtvDesc.Texture2D.MipSlice = 0;
 
             ID3D11RenderTargetView *rtv = NULL;
@@ -3409,7 +3405,7 @@ gl::Error Renderer11::createRenderTarget(int width,
             }
 
             *outRT = new TextureRenderTarget11(rtv, texture, srv, blitSRV, format, formatInfo,
-                                               width, height, 1, supportedSamples);
+                                               width, height, 1, samples);
 
             SafeRelease(rtv);
         }
@@ -3426,7 +3422,7 @@ gl::Error Renderer11::createRenderTarget(int width,
     {
         *outRT = new TextureRenderTarget11(
             static_cast<ID3D11RenderTargetView *>(nullptr), nullptr, nullptr, nullptr, format,
-            d3d11::Format::Get(GL_NONE, mRenderer11DeviceCaps), width, height, 1, supportedSamples);
+            d3d11::Format::Get(GL_NONE, mRenderer11DeviceCaps), width, height, 1, samples);
     }
 
     return gl::Error(GL_NO_ERROR);

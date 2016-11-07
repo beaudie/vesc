@@ -51,7 +51,11 @@ gl::Error RenderbufferGL::setStorage(GLenum internalformat, size_t width, size_t
     return gl::Error(GL_NO_ERROR);
 }
 
-gl::Error RenderbufferGL::setStorageMultisample(size_t samples, GLenum internalformat, size_t width, size_t height)
+gl::Error RenderbufferGL::setStorageMultisample(size_t samples,
+                                                GLenum internalformat,
+                                                size_t width,
+                                                size_t height,
+                                                GLuint *supportedSamples)
 {
     mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mRenderbufferID);
 
@@ -78,7 +82,9 @@ gl::Error RenderbufferGL::setStorageMultisample(size_t samples, GLenum internalf
             ASSERT(error == GL_NO_ERROR);
         } while (error != GL_NO_ERROR);
     }
-
+    // Driver supports the transition from samples -> supported samples. So, here we keep consistent
+    // with renderbufferStorageMultisample and use samples directly.
+    *supportedSamples = static_cast<GLsizei>(samples);
     return gl::Error(GL_NO_ERROR);
 }
 
