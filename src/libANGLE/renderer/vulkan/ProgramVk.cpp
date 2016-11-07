@@ -10,6 +10,9 @@
 #include "libANGLE/renderer/vulkan/ProgramVk.h"
 
 #include "common/debug.h"
+#include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/GlslangWrapper.h"
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 
 namespace rx
 {
@@ -39,10 +42,16 @@ void ProgramVk::setBinaryRetrievableHint(bool retrievable)
     UNIMPLEMENTED();
 }
 
-LinkResult ProgramVk::link(const gl::ContextState &data, gl::InfoLog &infoLog)
+LinkResult ProgramVk::link(ContextImpl *contextImpl, gl::InfoLog &infoLog)
 {
-    UNIMPLEMENTED();
-    return LinkResult(false, gl::Error(GL_INVALID_OPERATION));
+    ContextVk *context             = GetAs<ContextVk>(contextImpl);
+    RendererVk *renderer           = context->getRenderer();
+    GlslangWrapper *glslangWrapper = renderer->getGlslangWrapper();
+
+    const std::string &vertexSource   = mState.getAttachedVertexShader()->getTranslatedSource();
+    const std::string &fragmentSource = mState.getAttachedFragmentShader()->getTranslatedSource();
+
+    return glslangWrapper->linkProgram(vertexSource, fragmentSource);
 }
 
 GLboolean ProgramVk::validate(const gl::Caps &caps, gl::InfoLog *infoLog)

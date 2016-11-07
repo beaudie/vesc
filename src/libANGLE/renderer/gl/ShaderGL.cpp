@@ -36,8 +36,8 @@ ShaderGL::~ShaderGL()
     }
 }
 
-ShCompileOptions ShaderGL::prepareSourceAndReturnOptions(std::stringstream *sourceStream,
-                                                         std::string * /*sourcePath*/)
+uint64_t ShaderGL::prepareSourceAndReturnOptions(std::stringstream *sourceStream,
+                                                 std::string * /*sourcePath*/)
 {
     // Reset the previous state
     if (mShaderID != 0)

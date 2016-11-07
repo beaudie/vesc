@@ -19,6 +19,7 @@
 #include "libANGLE/renderer/vulkan/CompilerVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/Format.h"
+#include "libANGLE/renderer/vulkan/GlslangWrapper.h"
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
 #include "platform/Platform.h"
@@ -91,12 +92,19 @@ RendererVk::RendererVk()
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mDevice(VK_NULL_HANDLE),
       mCommandPool(VK_NULL_HANDLE),
-      mHostVisibleMemoryIndex(std::numeric_limits<uint32_t>::max())
+      mHostVisibleMemoryIndex(std::numeric_limits<uint32_t>::max()),
+      mGlslangWrapper(nullptr)
 {
 }
 
 RendererVk::~RendererVk()
 {
+    if (mGlslangWrapper)
+    {
+        GlslangWrapper::ReleaseReference();
+        mGlslangWrapper = nullptr;
+    }
+
     if (mDebugReportCallback)
     {
         ASSERT(mInstance);
@@ -294,6 +302,8 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs)
 
     ANGLE_VK_CHECK(mHostVisibleMemoryIndex < std::numeric_limits<uint32_t>::max(),
                    VK_ERROR_INITIALIZATION_FAILED);
+
+    mGlslangWrapper = GlslangWrapper::GetReference();
 
     return vk::VkSuccess();
 }
@@ -649,6 +659,11 @@ vk::ErrorOrResult<vk::StagingImage> RendererVk::createStagingImage(TextureDimens
                                 dimension, format.native, extent));
 
     return stagingImage;
+}
+
+GlslangWrapper *RendererVk::getGlslangWrapper()
+{
+    return mGlslangWrapper;
 }
 
 }  // namespace rx

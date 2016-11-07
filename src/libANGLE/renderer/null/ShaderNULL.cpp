@@ -22,11 +22,11 @@ ShaderNULL::~ShaderNULL()
 {
 }
 
-ShCompileOptions ShaderNULL::prepareSourceAndReturnOptions(std::stringstream *sourceStream,
-                                                           std::string *sourcePath)
+uint64_t ShaderNULL::prepareSourceAndReturnOptions(std::stringstream *sourceStream,
+                                                   std::string *sourcePath)
 {
     UNIMPLEMENTED();
-    return ShCompileOptions();
+    return 0;
 }
 
 bool ShaderNULL::postTranslateCompile(gl::Compiler *compiler, std::string *infoLog)

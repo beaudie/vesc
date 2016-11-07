@@ -210,6 +210,11 @@
             'compiler/translator/UtilsHLSL.cpp',
             'compiler/translator/UtilsHLSL.h',
         ],
+        'angle_translator_lib_vulkan_sources':
+        [
+            'compiler/translator/TranslatorVulkan.cpp',
+            'compiler/translator/TranslatorVulkan.h',
+        ],
         'angle_preprocessor_sources':
         [
             'compiler/preprocessor/DiagnosticsBase.cpp',
@@ -334,6 +339,24 @@
                         '<@(angle_translator_lib_hlsl_sources)',
                     ],
                 }],
+                ['angle_enable_vulkan==1',
+                {
+                    'defines':
+                    [
+                        'ANGLE_ENABLE_VULKAN',
+                    ],
+                    'direct_dependent_settings':
+                    {
+                        'defines':
+                        [
+                            'ANGLE_ENABLE_VULKAN',
+                        ],
+                    },
+                    'sources':
+                    [
+                        '<@(angle_translator_lib_vulkan_sources)',
+                    ],
+                }],
             ],
         },
 
@@ -376,6 +399,20 @@
                         'defines':
                         [
                             'ANGLE_ENABLE_HLSL',
+                        ],
+                    },
+                }],
+                ['angle_enable_vulkan==1',
+                {
+                    'defines':
+                    [
+                        'ANGLE_ENABLE_VULKAN',
+                    ],
+                    'direct_dependent_settings':
+                    {
+                        'defines':
+                        [
+                            'ANGLE_ENABLE_VULKAN',
                         ],
                     },
                 }],

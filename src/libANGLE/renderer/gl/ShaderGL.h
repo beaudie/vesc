@@ -25,8 +25,8 @@ class ShaderGL : public ShaderImpl
     ~ShaderGL() override;
 
     // ShaderImpl implementation
-    ShCompileOptions prepareSourceAndReturnOptions(std::stringstream *sourceStream,
-                                                   std::string *sourcePath) override;
+    uint64_t prepareSourceAndReturnOptions(std::stringstream *sourceStream,
+                                           std::string *sourcePath) override;
     bool postTranslateCompile(gl::Compiler *compiler, std::string *infoLog) override;
     std::string getDebugInfo() const override;
 

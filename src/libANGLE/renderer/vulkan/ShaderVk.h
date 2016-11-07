@@ -22,8 +22,9 @@ class ShaderVk : public ShaderImpl
     ~ShaderVk() override;
 
     // Returns additional sh::Compile options.
-    ShCompileOptions prepareSourceAndReturnOptions(std::stringstream *sourceStream,
-                                                   std::string *sourcePath) override;
+    uint64_t prepareSourceAndReturnOptions(std::stringstream *sourceStream,
+                                           std::string *sourcePath) override;
+
     // Returns success for compiling on the driver. Returns success.
     bool postTranslateCompile(gl::Compiler *compiler, std::string *infoLog) override;
 

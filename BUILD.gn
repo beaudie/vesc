@@ -83,6 +83,10 @@ static_library("translator") {
     defines = [ "ANGLE_ENABLE_HLSL" ]
   }
 
+  if (angle_enable_vulkan) {
+    defines = [ "ANGLE_ENABLE_VULKAN" ]
+  }
+
   configs -= angle_undefine_configs
   configs += [ ":internal_config" ]
   public_configs = [ ":translator_static_config" ]
@@ -206,6 +210,14 @@ static_library("translator_lib") {
         rebase_path(compiler_gypi.angle_translator_lib_hlsl_sources, ".", "src")
     defines += [ "ANGLE_ENABLE_HLSL" ]
   }
+
+  if (angle_enable_vulkan || use_libfuzzer) {
+    sources += rebase_path(compiler_gypi.angle_translator_lib_vulkan_sources,
+                           ".",
+                           "src")
+    defines += [ "ANGLE_ENABLE_VULKAN" ]
+  }
+
   configs -= angle_undefine_configs
   configs += [
     ":internal_config",

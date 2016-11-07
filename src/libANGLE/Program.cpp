@@ -17,7 +17,7 @@
 #include "common/utilities.h"
 #include "common/version.h"
 #include "compiler/translator/blocklayout.h"
-#include "libANGLE/ContextState.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/features.h"
 #include "libANGLE/renderer/GLImplFactory.h"
@@ -547,8 +547,10 @@ void Program::pathFragmentInputGen(GLint index,
 // The attached shaders are checked for linking errors by matching up their variables.
 // Uniform, input and output variables get collected.
 // The code gets compiled into binaries.
-Error Program::link(const ContextState &data)
+Error Program::link(const gl::Context *context)
 {
+    const auto &data = context->getContextState();
+
     unlink(false);
 
     mInfoLog.reset();
@@ -597,7 +599,7 @@ Error Program::link(const ContextState &data)
             return NoError();
         }
 
-        rx::LinkResult result = mProgram->link(data, mInfoLog);
+        rx::LinkResult result = mProgram->link(context->getImplementation(), mInfoLog);
 
         if (result.error.isError() || !result.linkSuccess)
         {
@@ -654,7 +656,7 @@ Error Program::link(const ContextState &data)
 
         linkOutputVariables();
 
-        rx::LinkResult result = mProgram->link(data, mInfoLog);
+        rx::LinkResult result = mProgram->link(context->getImplementation(), mInfoLog);
         if (result.error.isError() || !result.linkSuccess)
         {
             return result.error;

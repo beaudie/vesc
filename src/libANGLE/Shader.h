@@ -17,11 +17,13 @@
 #include <vector>
 
 #include "angle_gl.h"
-#include <GLSLANG/ShaderLang.h>
+#include <GLSLANG/ShaderVars.h>
 
 #include "common/angleutils.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/Debug.h"
+
+enum ShShaderOutput;
 
 namespace rx
 {

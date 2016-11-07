@@ -11,8 +11,9 @@
 #define LIBANGLE_PROGRAM_H_
 
 #include <GLES2/gl2.h>
-#include <GLSLANG/ShaderLang.h>
+#include <GLSLANG/ShaderVars.h>
 
+#include <map>
 #include <set>
 #include <sstream>
 #include <string>
@@ -38,6 +39,7 @@ struct TranslatedAttribute;
 namespace gl
 {
 struct Caps;
+class Context;
 class ContextState;
 class ResourceManager;
 class Shader;
@@ -262,7 +264,7 @@ class Program final : angle::NonCopyable, public LabeledObject
                               GLint components,
                               const GLfloat *coeffs);
 
-    Error link(const ContextState &data);
+    Error link(const gl::Context *context);
     bool isLinked() const;
 
     Error loadBinary(GLenum binaryFormat, const void *binary, GLsizei length);

@@ -16,6 +16,7 @@
 #include "libANGLE/Uniform.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/features.h"
+#include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/d3d/DynamicHLSL.h"
 #include "libANGLE/renderer/d3d/FramebufferD3D.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
@@ -1342,8 +1343,10 @@ LinkResult ProgramD3D::compileProgramExecutables(const gl::ContextState &data, g
     return LinkResult(linkSuccess, gl::Error(GL_NO_ERROR));
 }
 
-LinkResult ProgramD3D::link(const gl::ContextState &data, gl::InfoLog &infoLog)
+LinkResult ProgramD3D::link(ContextImpl *contextImpl, gl::InfoLog &infoLog)
 {
+    const auto &data = contextImpl->getContextState();
+
     reset();
 
     const gl::Shader *vertexShader   = mState.getAttachedVertexShader();

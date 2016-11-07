@@ -602,6 +602,8 @@
             'libANGLE/renderer/vulkan/Format.h',
             'libANGLE/renderer/vulkan/FramebufferVk.cpp',
             'libANGLE/renderer/vulkan/FramebufferVk.h',
+            'libANGLE/renderer/vulkan/GlslangWrapper.cpp',
+            'libANGLE/renderer/vulkan/GlslangWrapper.h',
             'libANGLE/renderer/vulkan/ImageVk.cpp',
             'libANGLE/renderer/vulkan/ImageVk.h',
             'libANGLE/renderer/vulkan/ProgramVk.cpp',
@@ -1013,6 +1015,7 @@
                     ],
                     'dependencies':
                     [
+                        'glslang',
                         'vulkan_loader',
                     ],
                     'defines':

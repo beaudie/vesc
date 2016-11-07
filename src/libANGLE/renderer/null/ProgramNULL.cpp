@@ -39,7 +39,7 @@ void ProgramNULL::setBinaryRetrievableHint(bool retrievable)
     UNIMPLEMENTED();
 }
 
-LinkResult ProgramNULL::link(const gl::ContextState &data, gl::InfoLog &infoLog)
+LinkResult ProgramNULL::link(ContextImpl *contextImpl, gl::InfoLog &infoLog)
 {
     UNIMPLEMENTED();
     return LinkResult(false, gl::Error(GL_INVALID_OPERATION));

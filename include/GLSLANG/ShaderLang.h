@@ -6,23 +6,6 @@
 #ifndef GLSLANG_SHADERLANG_H_
 #define GLSLANG_SHADERLANG_H_
 
-#if defined(COMPONENT_BUILD) && !defined(ANGLE_TRANSLATOR_STATIC)
-#if defined(_WIN32) || defined(_WIN64)
-
-#if defined(ANGLE_TRANSLATOR_IMPLEMENTATION)
-#define COMPILER_EXPORT __declspec(dllexport)
-#else
-#define COMPILER_EXPORT __declspec(dllimport)
-#endif  // defined(ANGLE_TRANSLATOR_IMPLEMENTATION)
-
-#else  // defined(_WIN32) || defined(_WIN64)
-#define COMPILER_EXPORT __attribute__((visibility("default")))
-#endif
-
-#else  // defined(COMPONENT_BUILD) && !defined(ANGLE_TRANSLATOR_STATIC)
-#define COMPILER_EXPORT
-#endif
-
 #include <stddef.h>
 
 #include "KHR/khrplatform.h"
@@ -37,13 +20,6 @@
 // and the shading language compiler.
 //
 
-namespace sh
-{
-// GLenum alias
-typedef unsigned int GLenum;
-}
-
-// Must be included after GLenum proxy typedef
 // Note: make sure to increment ANGLE_SH_VERSION when changing ShaderVars.h
 #include "ShaderVars.h"
 
