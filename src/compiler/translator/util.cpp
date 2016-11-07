@@ -8,17 +8,9 @@
 
 #include <limits>
 
+#include "common/utilities.h"
 #include "compiler/preprocessor/numeric_lex.h"
 #include "compiler/translator/SymbolTable.h"
-#include "common/utilities.h"
-
-bool strtof_clamp(const std::string &str, float *value)
-{
-    bool success = pp::numeric_lex_float(str, value);
-    if (!success)
-        *value = std::numeric_limits<float>::max();
-    return success;
-}
 
 bool atoi_clamp(const char *str, unsigned int *value)
 {
@@ -30,6 +22,145 @@ bool atoi_clamp(const char *str, unsigned int *value)
 
 namespace sh
 {
+
+float NumericLexFloat32OutOfRangeToInfinity(const std::string &str)
+{
+    // Parses a decimal string using scientific notation into a floating point number.
+    // Out-of-range values are converted to infinity. Values that are too small to be
+    // represented are converted to zero.
+
+    // The mantissa in decimal scientific notation. The magnitude of the mantissa integer does not
+    // matter.
+    unsigned int decimalMantissa = 0;
+    size_t i                     = 0;
+    bool decimalPointSeen        = false;
+    bool finishedParsingMantissa = false;
+    bool nonZeroSeenInMantissa   = false;
+
+    // The exponent offset reflects the position of the decimal point.
+    int exponentOffset = -1;
+    while (i < str.length() && !finishedParsingMantissa)
+    {
+        const char &c = str[i];
+        if (c == 'e' || c == 'E')
+        {
+            finishedParsingMantissa = true;
+        }
+        else if (c == '.')
+        {
+            decimalPointSeen = true;
+            ++i;
+        }
+        else
+        {
+            unsigned int digit = static_cast<unsigned int>(c) - 48u;
+            ASSERT(digit >= 0u && digit < 10u);
+            if (digit != 0u)
+            {
+                nonZeroSeenInMantissa = true;
+            }
+            if (nonZeroSeenInMantissa)
+            {
+                // Add bits to the mantissa until space runs out in 32-bit int. This should be
+                // enough precision to make the resulting binary mantissa accurate to 1 ULP.
+                if (decimalMantissa < std::numeric_limits<unsigned int>::max() / 10u)
+                {
+                    decimalMantissa = decimalMantissa * 10u + digit;
+                }
+                if (!decimalPointSeen)
+                {
+                    ++exponentOffset;
+                }
+            }
+            else if (decimalPointSeen)
+            {
+                --exponentOffset;
+            }
+            ++i;
+        }
+    }
+    if (decimalMantissa == 0)
+    {
+        return 0.0f;
+    }
+    int exponent = 0;
+    if (i < str.length())
+    {
+        ASSERT(str[i] == 'e' || str[i] == 'E');
+        ++i;
+        bool negativeExponent = false;
+        if (str[i] == '-')
+        {
+            negativeExponent = true;
+            ++i;
+        }
+        else if (str[i] == '+')
+        {
+            ++i;
+        }
+        while (i < str.length())
+        {
+            const char &c      = str[i];
+            unsigned int digit = static_cast<unsigned int>(c) - 48u;
+            ASSERT(digit >= 0u && digit < 10u);
+            exponent = exponent * 10 + digit;
+            ++i;
+        }
+        if (negativeExponent)
+        {
+            exponent = -exponent;
+        }
+    }
+    exponent = exponent + exponentOffset;
+    if (exponent > std::numeric_limits<float>::max_exponent10)
+    {
+        return std::numeric_limits<float>::infinity();
+    }
+    else if (exponent < std::numeric_limits<float>::min_exponent10)
+    {
+        return 0.0f;
+    }
+    // The float exponent is in range, so we need to actually evaluate the float.
+    double value = decimalMantissa;
+
+    // Calculate the exponent offset to normalize the mantissa.
+    int normalizationExponentOffset = 0;
+    while (decimalMantissa >= 10u)
+    {
+        --normalizationExponentOffset;
+        decimalMantissa /= 10u;
+    }
+    // Apply the exponent.
+    value *= std::pow(10.0, static_cast<double>(exponent + normalizationExponentOffset));
+    if (value > static_cast<double>(std::numeric_limits<float>::max()))
+    {
+        return std::numeric_limits<float>::infinity();
+    }
+    if (value < static_cast<double>(std::numeric_limits<float>::min()))
+    {
+        return 0.0f;
+    }
+    return static_cast<float>(value);
+}
+
+bool strtof_clamp(const std::string &str, float *value)
+{
+    // Try the standard float parsing path first.
+    bool success = pp::numeric_lex_float(str, value);
+
+    // If the standard path doesn't succeed, take the path that can handle the following corner
+    // cases:
+    //   1. The decimal mantissa is very small but the exponent is very large, putting the resulting
+    //   number inside the float range.
+    //   2. The decimal mantissa is very large but the exponent is very small, putting the resulting
+    //   number inside the float range.
+    //   3. The value is out-of-range and should be evaluated as infinity.
+    //   4. The value is too small and should be evaluated as zero.
+    // See ESSL 3.00.6 section 4.1.4 for the relevant specification.
+    if (!success)
+        *value = NumericLexFloat32OutOfRangeToInfinity(str);
+    return !gl::isInf(*value);
+}
 
 GLenum GLVariableType(const TType &type)
 {
