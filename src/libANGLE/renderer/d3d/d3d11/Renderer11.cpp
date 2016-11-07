@@ -3283,10 +3283,15 @@ gl::Error Renderer11::createRenderTarget(int width,
         // If a rendertarget or depthstencil format exists for this texture format,
         // we'll flag it to allow binding that way. Shader resource views are a little
         // more complicated.
-        bool bindRTV = false, bindDSV = false, bindSRV = false;
-        bindRTV = (formatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN);
-        bindDSV = (formatInfo.dsvFormat != DXGI_FORMAT_UNKNOWN);
-        bindSRV = (formatInfo.srvFormat != DXGI_FORMAT_UNKNOWN);
+        bool bindRTV = (formatInfo.rtvFormat != DXGI_FORMAT_UNKNOWN);
+        bool bindDSV = (formatInfo.dsvFormat != DXGI_FORMAT_UNKNOWN);
+
+        // D3D feature level 10.0 no longer allows creation of textures with both the bind SRV and
+        // DSV flags when multisampled.
+        bool supportsMultisampledDepthStencilSRVs =
+            mRenderer11DeviceCaps.featureLevel > D3D_FEATURE_LEVEL_10_0;
+        bool bindSRV = (formatInfo.srvFormat != DXGI_FORMAT_UNKNOWN) &&
+                       (supportedSamples == 0 || supportsMultisampledDepthStencilSRVs);
 
         desc.BindFlags = (bindRTV ? D3D11_BIND_RENDER_TARGET : 0) |
                          (bindDSV ? D3D11_BIND_DEPTH_STENCIL : 0) |
@@ -4300,6 +4305,9 @@ void Renderer11::onBufferDelete(const Buffer11 *deleted)
 gl::ErrorOrResult<TextureHelper11>
 Renderer11::resolveMultisampledTexture(RenderTarget11 *renderTarget, bool depth, bool stencil)
 {
+    // Multisampled depth stencil SRVs are not available
+    ASSERT(mRenderer11DeviceCaps.featureLevel > D3D_FEATURE_LEVEL_10_0);
+
     if (depth && !stencil)
     {
         return mBlit->resolveDepth(renderTarget);
