@@ -9,6 +9,7 @@
 //
 
 #include "test_utils/ANGLETest.h"
+#include "test_utils/gl_raii.h"
 #include "shader_utils.h"
 
 using namespace angle;
@@ -296,5 +297,144 @@ TEST_P(EXTMultisampleCompatibilityTest, DrawAlphaOneAndResolve)
     EXPECT_EQ(0, memcmp(results[0].get(), results[2].get(), kResultSize));
 }
 
-
 ANGLE_INSTANTIATE_TEST(EXTMultisampleCompatibilityTest, ES2_OPENGL(), ES2_OPENGLES(), ES3_OPENGL());
+
+class MultisampleCompatibilityTest : public ANGLETest
+{
+
+  protected:
+    MultisampleCompatibilityTest()
+    {
+        setWindowWidth(64);
+        setWindowHeight(64);
+        setConfigRedBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
+
+    void prepareForDraw(GLsizei numSamples)
+    {
+        // Create a sample buffer.
+        GLsizei max_samples = 0;
+        glGetIntegerv(GL_MAX_SAMPLES, &max_samples);
+        numSamples = std::min(numSamples, max_samples);
+
+        glGenRenderbuffers(1, &mSampleRB);
+        glBindRenderbuffer(GL_RENDERBUFFER, mSampleRB);
+        glRenderbufferStorageMultisampleANGLE(GL_RENDERBUFFER, numSamples, GL_RGBA8_OES, kWidth,
+                                              kHeight);
+        GLint param = 0;
+        glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_SAMPLES, &param);
+        EXPECT_GE(param, numSamples);
+
+        glGenFramebuffers(1, &mSampleFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, mSampleFBO);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, mSampleRB);
+        EXPECT_EQ(static_cast<GLenum>(GL_FRAMEBUFFER_COMPLETE),
+                  glCheckFramebufferStatus(GL_FRAMEBUFFER));
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        // Create another FBO to resolve the multisample buffer into.
+        glGenTextures(1, &mResolveTex);
+        glBindTexture(GL_TEXTURE_2D, mResolveTex);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glGenFramebuffers(1, &mResolveFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, mResolveFBO);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mResolveTex, 0);
+        EXPECT_EQ(static_cast<GLenum>(GL_FRAMEBUFFER_COMPLETE),
+                  glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+        glViewport(0, 0, kWidth, kHeight);
+        glBindFramebuffer(GL_FRAMEBUFFER, mSampleFBO);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    void prepareForVerify()
+    {
+        // Resolve.
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, mSampleFBO);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mResolveFBO);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glBlitFramebufferANGLE(0, 0, kWidth, kHeight, 0, 0, kWidth, kHeight, GL_COLOR_BUFFER_BIT,
+                               GL_NEAREST);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, mResolveFBO);
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void cleanup()
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glDeleteFramebuffers(1, &mResolveFBO);
+        glDeleteFramebuffers(1, &mSampleFBO);
+        glDeleteTextures(1, &mResolveTex);
+        glDeleteRenderbuffers(1, &mSampleRB);
+
+        ASSERT_GL_NO_ERROR();
+    }
+    GLuint mSampleFBO;
+    GLuint mResolveFBO;
+    GLuint mSampleRB;
+    GLuint mResolveTex;
+};
+
+// Test that enabling GL_SAMPLE_COVERAGE affects rendering.
+TEST_P(MultisampleCompatibilityTest, DrawCoverageAndResolve)
+{
+    const std::string &vertex =
+        "#version 300 es\n"
+        "in vec2 position;\n"
+        "void main() {\n"
+        "  gl_Position = vec4(position, 0.0, 0.5);\n"
+        "}";
+    const std::string &fragment =
+        "#version 300 es\n"
+        "out mediump vec4 red;\n"
+        "void main() {\n"
+        "   red = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "   gl_FragDepth = 0.5;\n"
+        "}";
+
+    ANGLE_GL_PROGRAM(drawRed, vertex, fragment);
+
+    std::unique_ptr<uint8_t[]> results[2];
+    const GLint kResultSize = kWidth * kHeight * 4;
+
+    int maxSamples = 1;
+    glGetInternalformativ(GL_RENDERBUFFER, GL_RGBA8, GL_SAMPLES, 1, &maxSamples);
+    int iterationCount = maxSamples + 1;
+    for (int samples = 1; samples < iterationCount; samples++)
+    {
+        for (int pass = 0; pass < 2; ++pass)
+        {
+            prepareForDraw(samples);
+            if (pass == 1)
+            {
+                glEnable(GL_SAMPLE_COVERAGE);
+            }
+            glSampleCoverage(1.0, false);
+            drawQuad(drawRed.get(), "position", 0.5f);
+
+            prepareForVerify();
+            results[pass].reset(new uint8_t[kResultSize]);
+            memset(results[pass].get(), 123u, kResultSize);
+            glReadPixels(0, 0, kWidth, kHeight, GL_RGBA, GL_UNSIGNED_BYTE, results[pass].get());
+            if (pass == 1)
+            {
+                glDisable(GL_SAMPLE_COVERAGE);
+            }
+
+            cleanup();
+        }
+        EXPECT_EQ(0, memcmp(results[0].get(), results[1].get(), kResultSize));
+    }
+}
+
+ANGLE_INSTANTIATE_TEST(MultisampleCompatibilityTest, ES3_D3D11());
