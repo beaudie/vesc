@@ -1007,7 +1007,13 @@ gl::Error Renderer9::updateState(Context9 *context, GLenum drawMode)
     setScissorRectangle(glState.getScissor(), glState.isScissorTestEnabled());
 
     // Setting blend, depth stencil, and rasterizer states
-    int samples                    = framebuffer->getSamples(data);
+    // Since framebuffer->getSamples will return the original samples which may be different with
+    // the sample counts that we set in render target view, here we use renderTarget->getSamples to
+    // get the actual samples.
+    auto firstColorAttachment   = framebuffer->getFirstColorbuffer();
+    RenderTarget9 *renderTarget = nullptr;
+    ANGLE_TRY(firstColorAttachment->getRenderTarget(&renderTarget));
+    GLsizei samples                = renderTarget->getSamples();
     gl::RasterizerState rasterizer = glState.getRasterizerState();
     rasterizer.pointDrawMode       = (drawMode == GL_POINTS);
     rasterizer.multiSample         = (samples != 0);
@@ -2455,9 +2461,6 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
 {
     const d3d9::TextureFormat &d3d9FormatInfo = d3d9::GetTextureFormatInfo(format);
 
-    const gl::TextureCaps &textureCaps = getNativeTextureCaps().get(format);
-    GLuint supportedSamples = textureCaps.getNearestSamples(samples);
-
     IDirect3DTexture9 *texture      = nullptr;
     IDirect3DSurface9 *renderTarget = NULL;
     if (width > 0 && height > 0)
@@ -2469,17 +2472,17 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
         if (formatInfo.depthBits > 0 || formatInfo.stencilBits > 0)
         {
             result = mDevice->CreateDepthStencilSurface(width, height, d3d9FormatInfo.renderFormat,
-                                                        gl_d3d9::GetMultisampleType(supportedSamples),
-                                                        0, FALSE, &renderTarget, NULL);
+                                                        gl_d3d9::GetMultisampleType(samples), 0,
+                                                        FALSE, &renderTarget, NULL);
         }
         else
         {
             requiresInitialization = (d3d9FormatInfo.dataInitializerFunction != nullptr);
-            if (supportedSamples > 0)
+            if (samples > 0)
             {
                 result = mDevice->CreateRenderTarget(width, height, d3d9FormatInfo.renderFormat,
-                                                     gl_d3d9::GetMultisampleType(supportedSamples),
-                                                     0, FALSE, &renderTarget, nullptr);
+                                                     gl_d3d9::GetMultisampleType(samples), 0, FALSE,
+                                                     &renderTarget, nullptr);
             }
             else
             {
@@ -2512,8 +2515,7 @@ gl::Error Renderer9::createRenderTarget(int width, int height, GLenum format, GL
         }
     }
 
-    *outRT = new TextureRenderTarget9(texture, 0, renderTarget, format, width, height, 1,
-                                      supportedSamples);
+    *outRT = new TextureRenderTarget9(texture, 0, renderTarget, format, width, height, 1, samples);
     return gl::Error(GL_NO_ERROR);
 }
 

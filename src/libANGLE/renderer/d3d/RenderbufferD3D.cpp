@@ -54,10 +54,11 @@ gl::Error RenderbufferD3D::setStorageMultisample(size_t samples, GLenum internal
         return gl::Error(GL_OUT_OF_MEMORY, "Renderbuffer format does not support %u samples, %u is the maximum.",
                          samples, formatCaps.getMaxSamples());
     }
+    GLuint supportedSamples = formatCaps.getNearestSamples(static_cast<GLsizei>(samples));
 
     RenderTargetD3D *newRT = NULL;
     ANGLE_TRY(mRenderer->createRenderTarget(static_cast<int>(width), static_cast<int>(height),
-                                            creationFormat, static_cast<GLsizei>(samples), &newRT));
+                                            creationFormat, supportedSamples, &newRT));
 
     SafeDelete(mRenderTarget);
     mImage        = nullptr;
