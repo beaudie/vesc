@@ -44,6 +44,7 @@ struct D3DUniform : angle::NonCopyable
     unsigned int elementCount() const { return std::max(1u, arraySize); }
     bool isReferencedByVertexShader() const;
     bool isReferencedByFragmentShader() const;
+    bool isReferencedByComputeShader() const;
 
     // Duplicated from the GL layer
     GLenum type;
@@ -60,6 +61,7 @@ struct D3DUniform : angle::NonCopyable
     // Register information.
     unsigned int vsRegisterIndex;
     unsigned int psRegisterIndex;
+    unsigned int csRegisterIndex;
     unsigned int registerCount;
 
     // Register "elements" are used for uniform structs in ES3, to appropriately identify single
@@ -70,14 +72,22 @@ struct D3DUniform : angle::NonCopyable
 
 struct D3DUniformBlock
 {
-    D3DUniformBlock() : vsRegisterIndex(GL_INVALID_INDEX), psRegisterIndex(GL_INVALID_INDEX) {}
+    D3DUniformBlock()
+        : vsRegisterIndex(GL_INVALID_INDEX),
+          psRegisterIndex(GL_INVALID_INDEX),
+          csRegisterIndex(GL_INVALID_INDEX)
+    {
+    }
 
     bool vertexStaticUse() const { return vsRegisterIndex != GL_INVALID_INDEX; }
 
     bool fragmentStaticUse() const { return psRegisterIndex != GL_INVALID_INDEX; }
 
+    bool computeStaticUse() const { return csRegisterIndex != GL_INVALID_INDEX; }
+
     unsigned int vsRegisterIndex;
     unsigned int psRegisterIndex;
+    unsigned int csRegisterIndex;
 };
 
 struct D3DVarying final
@@ -178,7 +188,9 @@ class ProgramD3D : public ProgramImpl
 
     void initializeUniformStorage();
     gl::Error applyUniforms(GLenum drawMode);
+    gl::Error ProgramD3D::applyComputeUniform();
     gl::Error applyUniformBuffers(const gl::ContextState &data);
+    gl::Error applyComputeUniformBuffer(const gl::ContextState &data);
     void dirtyAllUniforms();
 
     void setUniform1fv(GLint location, GLsizei count, const GLfloat *v);
@@ -234,6 +246,7 @@ class ProgramD3D : public ProgramImpl
 
     const UniformStorageD3D &getVertexUniformStorage() const { return *mVertexUniformStorage; }
     const UniformStorageD3D &getFragmentUniformStorage() const { return *mFragmentUniformStorage; }
+    const UniformStorageD3D &getComputeUniformStorage() const { return *mComputeUniformStorage; }
 
     unsigned int getSerial() const;
 
@@ -380,6 +393,7 @@ class ProgramD3D : public ProgramImpl
 
     UniformStorageD3D *mVertexUniformStorage;
     UniformStorageD3D *mFragmentUniformStorage;
+    UniformStorageD3D *mComputeUniformStorage;
 
     std::vector<Sampler> mSamplersPS;
     std::vector<Sampler> mSamplersVS;
@@ -396,6 +410,7 @@ class ProgramD3D : public ProgramImpl
 
     std::vector<GLint> mVertexUBOCache;
     std::vector<GLint> mFragmentUBOCache;
+    std::vector<GLint> mComputeUBOCache;
     VertexExecutable::Signature mCachedVertexSignature;
     gl::InputLayout mCachedInputLayout;
 

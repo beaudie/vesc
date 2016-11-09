@@ -145,13 +145,19 @@ class RendererD3D : public BufferFactoryD3D
     virtual gl::Error setUniformBuffers(const gl::ContextState &data,
                                         const std::vector<GLint> &vertexUniformBuffers,
                                         const std::vector<GLint> &fragmentUniformBuffers) = 0;
+    virtual gl::Error setComputeUniformBuffer(const gl::ContextState &data,
+                                              const std::vector<GLint> &computeUniformBuffers);
 
     virtual gl::Error applyUniforms(const ProgramD3D &programD3D,
                                     GLenum drawMode,
                                     const std::vector<D3DUniform *> &uniformArray) = 0;
 
+    virtual gl::Error applyComputeUniform(const ProgramD3D &programD3D,
+                                          const std::vector<D3DUniform *> &uniformArray);
+
     virtual unsigned int getReservedVertexUniformBuffers() const = 0;
     virtual unsigned int getReservedFragmentUniformBuffers() const = 0;
+    virtual unsigned int getReservedComputeUniformBuffers() const;
 
     virtual int getMajorShaderModel() const = 0;
 

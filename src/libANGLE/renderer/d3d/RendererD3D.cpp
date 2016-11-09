@@ -369,4 +369,24 @@ const gl::Limitations &RendererD3D::getNativeLimitations() const
     return mNativeLimitations;
 }
 
+gl::Error RendererD3D::setComputeUniformBuffer(const gl::ContextState &data,
+                                               const std::vector<GLint> &computeUniformBuffers)
+{
+    UNREACHABLE();
+    return gl::NoError();
+}
+
+gl::Error RendererD3D::applyComputeUniform(const ProgramD3D &programD3D,
+                                           const std::vector<D3DUniform *> &uniformArray)
+{
+    UNREACHABLE();
+    return gl::NoError();
+}
+
+unsigned int RendererD3D::getReservedComputeUniformBuffers() const
+{
+    UNREACHABLE();
+    return 0;
+}
+
 }  // namespace rx

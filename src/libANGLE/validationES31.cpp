@@ -70,9 +70,9 @@ bool ValidateDispatchCompute(Context *context,
                              GLuint numGroupsZ)
 {
 
-    if (!context->getGLVersion().isES31())
+    if (context->getClientVersion() < ES_3_1)
     {
-        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support ES 3.1."));
+        context->handleError(Error(GL_INVALID_OPERATION, "Context less than ES 3.1."));
         return false;
     }
 

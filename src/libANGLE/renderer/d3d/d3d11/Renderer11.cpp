@@ -452,10 +452,12 @@ Renderer11::Renderer11(egl::Display *display)
 
     mDriverConstantBufferVS = NULL;
     mDriverConstantBufferPS = NULL;
+    mDriverConstantBufferCS = NULL;
 
     mAppliedVertexShader   = NULL;
     mAppliedGeometryShader = NULL;
     mAppliedPixelShader    = NULL;
+    mAppliedComputeShader  = NULL;
 
     mAppliedTFObject = angle::DirtyPointer;
 
@@ -1592,6 +1594,72 @@ gl::Error Renderer11::setUniformBuffers(const gl::ContextState &data,
     return gl::NoError();
 }
 
+gl::Error Renderer11::setComputeUniformBuffer(const gl::ContextState &data,
+                                              const std::vector<GLint> &computeUniformBuffers)
+{
+    for (size_t uniformBufferIndex = 0; uniformBufferIndex < computeUniformBuffers.size();
+         uniformBufferIndex++)
+    {
+        GLint binding = computeUniformBuffers[uniformBufferIndex];
+
+        if (binding == -1)
+        {
+            continue;
+        }
+
+        const OffsetBindingPointer<gl::Buffer> &uniformBuffer =
+            data.getState().getIndexedUniformBuffer(binding);
+        GLintptr uniformBufferOffset = uniformBuffer.getOffset();
+        GLsizeiptr uniformBufferSize = uniformBuffer.getSize();
+
+        if (uniformBuffer.get() == nullptr)
+        {
+            continue;
+        }
+
+        Buffer11 *bufferStorage      = GetImplAs<Buffer11>(uniformBuffer.get());
+        ID3D11Buffer *constantBuffer = nullptr;
+
+        ANGLE_TRY_RESULT(
+            bufferStorage->getConstantBufferRange(uniformBufferOffset, uniformBufferSize),
+            constantBuffer);
+
+        if (!constantBuffer)
+        {
+            return gl::Error(GL_OUT_OF_MEMORY, "Error retrieving constant buffer");
+        }
+
+        if (mCurrentConstantBufferCS[uniformBufferIndex] != bufferStorage->getSerial() ||
+            mCurrentConstantBufferCSOffset[uniformBufferIndex] != uniformBufferOffset ||
+            mCurrentConstantBufferCSSize[uniformBufferIndex] != uniformBufferSize)
+        {
+            if (mRenderer11DeviceCaps.supportsConstantBufferOffsets && uniformBufferSize != 0)
+            {
+                UINT firstConstant = 0, numConstants = 0;
+                CalculateConstantBufferParams(uniformBufferOffset, uniformBufferSize,
+                                              &firstConstant, &numConstants);
+                mDeviceContext1->CSSetConstantBuffers1(
+                    getReservedComputeUniformBuffers() +
+                        static_cast<unsigned int>(uniformBufferIndex),
+                    1, &constantBuffer, &firstConstant, &numConstants);
+            }
+            else
+            {
+                mDeviceContext->CSSetConstantBuffers(
+                    getReservedComputeUniformBuffers() +
+                        static_cast<unsigned int>(uniformBufferIndex),
+                    1, &constantBuffer);
+            }
+
+            mCurrentConstantBufferCS[uniformBufferIndex]       = bufferStorage->getSerial();
+            mCurrentConstantBufferCSOffset[uniformBufferIndex] = uniformBufferOffset;
+            mCurrentConstantBufferCSSize[uniformBufferIndex]   = uniformBufferSize;
+        }
+    }
+
+    return gl::NoError();
+}
+
 gl::Error Renderer11::updateState(const gl::ContextState &data, GLenum drawMode)
 {
     const auto &glState = data.getState();
@@ -2262,6 +2330,37 @@ gl::Error Renderer11::applyShaders(const gl::ContextState &data, GLenum drawMode
     return programD3D->applyUniforms(drawMode);
 }
 
+gl::Error Renderer11::applyComputeShader(const gl::ContextState &data)
+{
+    const auto &glState    = data.getState();
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(glState.getProgram());
+    programD3D->updateCachedInputLayout(glState);
+
+    // getComputeShader() depend on Xinghua's patch
+    /*
+          ShaderExecutableD3D *computeExe = nullptr;
+          ANGLE_TRY(programD3D->getComputeExecutable(data, &computeExe, nullptr));
+
+            ID3D11ComputeShader *computeShader =
+                    (computeExe ? GetAs<ShaderExecutable11>(computeExe)->getComputeShader() :
+       nullptr);
+
+            bool dirtyUniforms = false;
+            if (reinterpret_cast<uintptr_t>(computeShader) != mAppliedComputeShader)
+            {
+                    mDeviceContext->PSSetShader(computeShader, nullptr, 0);
+                    mAppliedComputeShader = reinterpret_cast<uintptr_t>(computeShader);
+                    dirtyUniforms = true;
+            }
+
+            if (dirtyUniforms)
+            {
+                    programD3D->dirtyAllUniforms();
+            }
+    */
+    return programD3D->applyComputeUniform();
+}
+
 gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
                                     GLenum drawMode,
                                     const std::vector<D3DUniform *> &uniformArray)
@@ -2426,6 +2525,94 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
             mCurrentGeometryConstantBuffer = mDriverConstantBufferPS;
         }
     }
+
+    return gl::Error(GL_NO_ERROR);
+}
+
+gl::Error Renderer11::applyComputeUniform(const ProgramD3D &programD3D,
+                                          const std::vector<D3DUniform *> &uniformArray)
+{
+    unsigned int totalRegisterCountCS = 0;
+
+    bool computeUniformsDirty = false;
+
+    for (const D3DUniform *uniform : uniformArray)
+    {
+        if (uniform->isReferencedByComputeShader() && !uniform->isSampler())
+        {
+            totalRegisterCountCS += uniform->registerCount;
+            computeUniformsDirty = (computeUniformsDirty || uniform->dirty);
+        }
+    }
+
+    const UniformStorage11 *computeUniformStorage =
+        GetAs<UniformStorage11>(&programD3D.getComputeUniformStorage());
+    ASSERT(computeUniformStorage);
+
+    ID3D11Buffer *computeConstantBuffer = computeUniformStorage->getConstantBuffer();
+
+    float(*mapCS)[4] = NULL;
+
+    if (totalRegisterCountCS > 0 && computeUniformsDirty)
+    {
+        D3D11_MAPPED_SUBRESOURCE map = {0};
+        HRESULT result =
+            mDeviceContext->Map(computeConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &map);
+        ASSERT(SUCCEEDED(result));
+        mapCS = (float(*)[4])map.pData;
+    }
+
+    for (const D3DUniform *uniform : uniformArray)
+    {
+        if (uniform->isSampler())
+            continue;
+
+        unsigned int componentCount = (4 - uniform->registerElement);
+
+        // we assume that uniforms from structs are arranged in struct order in our uniforms list.
+        // otherwise we would overwrite previously written regions of memory.
+        if (uniform->isReferencedByComputeShader() && mapCS)
+        {
+            memcpy(&mapCS[uniform->csRegisterIndex][uniform->registerElement], uniform->data,
+                   uniform->registerCount * sizeof(float) * componentCount);
+        }
+    }
+
+    if (mapCS)
+    {
+        mDeviceContext->Unmap(computeConstantBuffer, 0);
+    }
+
+    if (mCurrentComputeConstantBuffer != computeConstantBuffer)
+    {
+        mDeviceContext->CSSetConstantBuffers(
+            d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DEFAULT_UNIFORM_BLOCK, 1, &computeConstantBuffer);
+        mCurrentComputeConstantBuffer = computeConstantBuffer;
+    }
+
+    if (!mDriverConstantBufferCS)
+    {
+        D3D11_BUFFER_DESC constantBufferDescription = {0};
+        // TODO(yizhou) mSamplerMetadataCS is unimplemented, it's default initialized currently.
+        d3d11::InitConstantBufferDesc(
+            &constantBufferDescription,
+            sizeof(dx_VertexConstants11) + mSamplerMetadataCS.sizeBytes());
+        HRESULT result =
+            mDevice->CreateBuffer(&constantBufferDescription, nullptr, &mDriverConstantBufferCS);
+        ASSERT(SUCCEEDED(result));
+        if (FAILED(result))
+        {
+            return gl::Error(GL_OUT_OF_MEMORY,
+                             "Failed to create compute shader constant buffer, result: 0x%X.",
+                             result);
+        }
+        mDeviceContext->CSSetConstantBuffers(d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DRIVER, 1,
+                                             &mDriverConstantBufferCS);
+    }
+
+    // Sampler metadata and driver constants need to coexist in the same constant buffer to conserve
+    // constant buffer slots. We update both in the constant buffer if needed.
+    // TODO(yizhou) medadata and driver constants of computeshader is unimplemented
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -2598,6 +2785,7 @@ void Renderer11::markAllStateDirty()
     mAppliedVertexShader   = angle::DirtyPointer;
     mAppliedGeometryShader = angle::DirtyPointer;
     mAppliedPixelShader    = angle::DirtyPointer;
+    mAppliedComputeShader  = angle::DirtyPointer;
 
     mAppliedTFObject = angle::DirtyPointer;
 
@@ -2640,6 +2828,7 @@ void Renderer11::releaseDeviceResources()
 
     SafeRelease(mDriverConstantBufferVS);
     SafeRelease(mDriverConstantBufferPS);
+    SafeRelease(mDriverConstantBufferCS);
     SafeRelease(mSyncQuery);
 }
 
@@ -2823,6 +3012,12 @@ unsigned int Renderer11::getReservedVertexUniformBuffers() const
 }
 
 unsigned int Renderer11::getReservedFragmentUniformBuffers() const
+{
+    // we reserve one buffer for the application uniforms, and one for driver uniforms
+    return 2;
+}
+
+unsigned int Renderer11::getReservedComputeUniformBuffers() const
 {
     // we reserve one buffer for the application uniforms, and one for driver uniforms
     return 2;
@@ -4603,6 +4798,16 @@ gl::Error Renderer11::dispatchCompute(const gl::ContextState &data,
                                       GLuint numGroupsY,
                                       GLuint numGroupsZ)
 {
+    const auto &glState  = data.getState();
+    gl::Program *program = glState.getProgram();
+    ASSERT(program != nullptr);
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(program);
+
+    programD3D->updateSamplerMapping();
+    // TODO(yizhou) applyTextures for compute shader
+    // ANGLE_TRY(applyTextures(context, data));
+    ANGLE_TRY(applyComputeShader(data));
+    ANGLE_TRY(programD3D->applyComputeUniformBuffer(data));
 
     mDeviceContext->Dispatch(numGroupsX, numGroupsY, numGroupsZ);
 

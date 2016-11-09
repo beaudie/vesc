@@ -358,6 +358,11 @@ bool D3DUniform::isReferencedByFragmentShader() const
     return psRegisterIndex != GL_INVALID_INDEX;
 }
 
+bool D3DUniform::isReferencedByComputeShader() const
+{
+    return psRegisterIndex != GL_INVALID_INDEX;
+}
+
 // D3DVarying Implementation
 
 D3DVarying::D3DVarying() : semanticIndex(0), componentCount(0), outputSlot(0)
@@ -1493,6 +1498,7 @@ void ProgramD3D::assignUniformBlockRegisters()
     // Assign registers and update sizes.
     const ShaderD3D *vertexShaderD3D   = GetImplAs<ShaderD3D>(mState.getAttachedVertexShader());
     const ShaderD3D *fragmentShaderD3D = GetImplAs<ShaderD3D>(mState.getAttachedFragmentShader());
+    const ShaderD3D *computeShaderD3D  = GetImplAs<ShaderD3D>(mState.getAttachedComputeShader());
 
     for (const gl::UniformBlock &uniformBlock : mState.getUniformBlocks())
     {
@@ -1512,6 +1518,13 @@ void ProgramD3D::assignUniformBlockRegisters()
             unsigned int baseRegister =
                 fragmentShaderD3D->getInterfaceBlockRegister(uniformBlock.name);
             d3dUniformBlock.psRegisterIndex = baseRegister + uniformBlockElement;
+        }
+
+        if (uniformBlock.computeStaticUse)
+        {
+            unsigned int baseRegister =
+                computeShaderD3D->getInterfaceBlockRegister(uniformBlock.name);
+            d3dUniformBlock.csRegisterIndex = baseRegister + uniformBlockElement;
         }
 
         mD3DUniformBlocks.push_back(d3dUniformBlock);
@@ -1562,6 +1575,24 @@ gl::Error ProgramD3D::applyUniforms(GLenum drawMode)
     return gl::Error(GL_NO_ERROR);
 }
 
+gl::Error ProgramD3D::applyComputeUniform()
+{
+    ASSERT(!mDirtySamplerMapping);
+
+    gl::Error error = mRenderer->applyComputeUniform(*this, mD3DUniforms);
+    if (error.isError())
+    {
+        return error;
+    }
+
+    for (D3DUniform *d3dUniform : mD3DUniforms)
+    {
+        d3dUniform->dirty = false;
+    }
+
+    return gl::Error(GL_NO_ERROR);
+}
+
 gl::Error ProgramD3D::applyUniformBuffers(const gl::ContextState &data)
 {
     if (mState.getUniformBlocks().empty())
@@ -1588,7 +1619,8 @@ gl::Error ProgramD3D::applyUniformBuffers(const gl::ContextState &data)
         GLuint blockBinding                 = mState.getUniformBlockBinding(uniformBlockIndex);
 
         // Unnecessary to apply an unreferenced standard or shared UBO
-        if (!uniformBlock.vertexStaticUse() && !uniformBlock.fragmentStaticUse())
+        if (!uniformBlock.vertexStaticUse() && !uniformBlock.fragmentStaticUse() &&
+            !uniformBlock.computeStaticUse())
         {
             continue;
         }
@@ -1623,6 +1655,53 @@ gl::Error ProgramD3D::applyUniformBuffers(const gl::ContextState &data)
     }
 
     return mRenderer->setUniformBuffers(data, mVertexUBOCache, mFragmentUBOCache);
+}
+
+gl::Error ProgramD3D::applyComputeUniformBuffer(const gl::ContextState &data)
+{
+    if (mState.getUniformBlocks().empty())
+    {
+        return gl::Error(GL_NO_ERROR);
+    }
+
+    // Lazy init.
+    if (mD3DUniformBlocks.empty())
+    {
+        assignUniformBlockRegisters();
+    }
+
+    mComputeUBOCache.clear();
+
+    const unsigned int reservedBuffersInCS = mRenderer->getReservedComputeUniformBuffers();
+
+    for (unsigned int uniformBlockIndex = 0; uniformBlockIndex < mD3DUniformBlocks.size();
+         uniformBlockIndex++)
+    {
+        const D3DUniformBlock &uniformBlock = mD3DUniformBlocks[uniformBlockIndex];
+        GLuint blockBinding                 = mState.getUniformBlockBinding(uniformBlockIndex);
+
+        // Unnecessary to apply an unreferenced standard or shared UBO
+        if (!uniformBlock.computeStaticUse())
+        {
+            continue;
+        }
+
+        if (uniformBlock.computeStaticUse())
+        {
+            unsigned int registerIndex = uniformBlock.csRegisterIndex - reservedBuffersInCS;
+            ASSERT(registerIndex < data.getCaps().maxComputeUniformBlocks);
+
+            if (mComputeUBOCache.size() <= registerIndex)
+            {
+                mComputeUBOCache.resize(registerIndex + 1, -1);
+            }
+
+            ASSERT(mComputeUBOCache[registerIndex] == -1);
+            mComputeUBOCache[registerIndex] = blockBinding;
+        }
+    }
+
+    return mRenderer->setComputeUniformBuffer(data, mComputeUBOCache);
 }
 
 void ProgramD3D::dirtyAllUniforms()

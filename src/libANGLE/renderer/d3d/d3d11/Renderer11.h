@@ -144,6 +144,8 @@ class Renderer11 : public RendererD3D
     gl::Error setUniformBuffers(const gl::ContextState &data,
                                 const std::vector<GLint> &vertexUniformBuffers,
                                 const std::vector<GLint> &fragmentUniformBuffers) override;
+    gl::Error setComputeUniformBuffer(const gl::ContextState &data,
+                                      const std::vector<GLint> &computeUniformBuffers) override;
 
     gl::Error updateState(const gl::ContextState &data, GLenum drawMode);
 
@@ -152,6 +154,8 @@ class Renderer11 : public RendererD3D
     gl::Error applyUniforms(const ProgramD3D &programD3D,
                             GLenum drawMode,
                             const std::vector<D3DUniform *> &uniformArray) override;
+    gl::Error applyComputeUniform(const ProgramD3D &programD3D,
+                                  const std::vector<D3DUniform *> &uniformArray) override;
     gl::Error applyVertexBuffer(const gl::State &state,
                                 GLenum mode,
                                 GLint first,
@@ -177,6 +181,7 @@ class Renderer11 : public RendererD3D
     unsigned int getReservedFragmentUniformVectors() const;
     unsigned int getReservedVertexUniformBuffers() const override;
     unsigned int getReservedFragmentUniformBuffers() const override;
+    unsigned int getReservedComputeUniformBuffers() const override;
 
     bool getShareHandleSupport() const;
 
@@ -417,6 +422,7 @@ class Renderer11 : public RendererD3D
                               int instances);
 
     gl::Error applyShaders(const gl::ContextState &data, GLenum drawMode);
+    gl::Error Renderer11::applyComputeShader(const gl::ContextState &data);
     gl::Error generateSwizzle(gl::Texture *texture);
     gl::Error generateSwizzles(const gl::ContextState &data, gl::SamplerType type);
     gl::Error generateSwizzles(const gl::ContextState &data);
@@ -515,6 +521,7 @@ class Renderer11 : public RendererD3D
     uintptr_t mAppliedVertexShader;
     uintptr_t mAppliedGeometryShader;
     uintptr_t mAppliedPixelShader;
+    uintptr_t mAppliedComputeShader;
 
     dx_VertexConstants11 mAppliedVertexConstants;
     ID3D11Buffer *mDriverConstantBufferVS;
@@ -531,6 +538,13 @@ class Renderer11 : public RendererD3D
     unsigned int mCurrentConstantBufferPS[gl::IMPLEMENTATION_MAX_FRAGMENT_SHADER_UNIFORM_BUFFERS];
     GLintptr mCurrentConstantBufferPSOffset[gl::IMPLEMENTATION_MAX_FRAGMENT_SHADER_UNIFORM_BUFFERS];
     GLsizeiptr mCurrentConstantBufferPSSize[gl::IMPLEMENTATION_MAX_FRAGMENT_SHADER_UNIFORM_BUFFERS];
+
+    ID3D11Buffer *mDriverConstantBufferCS;
+    SamplerMetadataD3D11 mSamplerMetadataCS;
+    ID3D11Buffer *mCurrentComputeConstantBuffer;
+    unsigned int mCurrentConstantBufferCS[gl::IMPLEMENTATION_MAX_COMPUTE_SHADER_UNIFORM_BUFFERS];
+    GLintptr mCurrentConstantBufferCSOffset[gl::IMPLEMENTATION_MAX_COMPUTE_SHADER_UNIFORM_BUFFERS];
+    GLsizeiptr mCurrentConstantBufferCSSize[gl::IMPLEMENTATION_MAX_COMPUTE_SHADER_UNIFORM_BUFFERS];
 
     ID3D11Buffer *mCurrentGeometryConstantBuffer;
 
