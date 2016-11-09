@@ -394,8 +394,11 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
              (outputType == SH_GLSL_COMPATIBILITY_OUTPUT)))
             initializeGLPosition(root);
 
-        if (success && !(compileOptions & SH_DONT_REMOVE_INVARIANT_FOR_FRAGMENT_INPUT) &&
-            shaderType == GL_FRAGMENT_SHADER && IsGLSL420OrNewer(outputType))
+        if (success &&
+            (((compileOptions & SH_DONT_REMOVE_INVARIANT_FOR_FRAGMENT_INPUT) == 0 &&
+              shaderType == GL_FRAGMENT_SHADER && IsGLSL420OrNewer(outputType)) ||
+             ((compileOptions & SH_REMOVE_INVARIANT_FOR_ESSL3) != 0 && shaderVersion >= 300 &&
+              shaderType == GL_VERTEX_SHADER && IsGLSL410OrOlder(outputType))))
             sh::RemoveInvariantDeclaration(root);
 
         // This pass might emit short circuits so keep it before the short circuit unfolding
