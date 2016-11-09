@@ -58,23 +58,24 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     const gl::Extensions &extensions = state.getExtensions();
 
     sh::InitBuiltInResources(&mResources);
-    mResources.MaxVertexAttribs             = caps.maxVertexAttributes;
-    mResources.MaxVertexUniformVectors      = caps.maxVertexUniformVectors;
-    mResources.MaxVaryingVectors            = caps.maxVaryingVectors;
-    mResources.MaxVertexTextureImageUnits   = caps.maxVertexTextureImageUnits;
-    mResources.MaxCombinedTextureImageUnits = caps.maxCombinedTextureImageUnits;
-    mResources.MaxTextureImageUnits         = caps.maxTextureImageUnits;
-    mResources.MaxFragmentUniformVectors    = caps.maxFragmentUniformVectors;
-    mResources.MaxDrawBuffers               = caps.maxDrawBuffers;
-    mResources.OES_standard_derivatives     = extensions.standardDerivatives;
-    mResources.EXT_draw_buffers             = extensions.drawBuffers;
-    mResources.EXT_shader_texture_lod       = extensions.shaderTextureLOD;
-    mResources.OES_EGL_image_external          = extensions.eglImageExternal;
-    mResources.OES_EGL_image_external_essl3    = extensions.eglImageExternalEssl3;
-    mResources.NV_EGL_stream_consumer_external = extensions.eglStreamConsumerExternal;
+    mResources.MaxVertexAttribs                 = caps.maxVertexAttributes;
+    mResources.MaxVertexUniformVectors          = caps.maxVertexUniformVectors;
+    mResources.MaxVaryingVectors                = caps.maxVaryingVectors;
+    mResources.MaxVertexTextureImageUnits       = caps.maxVertexTextureImageUnits;
+    mResources.MaxCombinedTextureImageUnits     = caps.maxCombinedTextureImageUnits;
+    mResources.MaxTextureImageUnits             = caps.maxTextureImageUnits;
+    mResources.MaxFragmentUniformVectors        = caps.maxFragmentUniformVectors;
+    mResources.MaxDrawBuffers                   = caps.maxDrawBuffers;
+    mResources.OES_standard_derivatives         = extensions.standardDerivatives;
+    mResources.EXT_draw_buffers                 = extensions.drawBuffers;
+    mResources.EXT_shader_texture_lod           = extensions.shaderTextureLOD;
+    mResources.OES_EGL_image_external           = extensions.eglImageExternal;
+    mResources.OES_EGL_image_external_essl3     = extensions.eglImageExternalEssl3;
+    mResources.NV_EGL_stream_consumer_external  = extensions.eglStreamConsumerExternal;
     // TODO: use shader precision caps to determine if high precision is supported?
-    mResources.FragmentPrecisionHigh = 1;
-    mResources.EXT_frag_depth        = extensions.fragDepth;
+    mResources.FragmentPrecisionHigh            = 1;
+    mResources.EXT_frag_depth                   = extensions.fragDepth;
+    mResources.ANGLE_webgl_compatibility        = state.getExtensions().webglCompatibility;
 
     // GLSL ES 3.0 constants
     mResources.MaxVertexOutputVectors  = caps.maxVertexOutputComponents / 4;

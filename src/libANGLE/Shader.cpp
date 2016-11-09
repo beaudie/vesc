@@ -247,10 +247,13 @@ void Shader::compile(Compiler *compiler)
         mImplementation->prepareSourceAndReturnOptions(&sourceStream, &sourcePath);
     ShCompileOptions compileOptions = (SH_OBJECT_CODE | SH_VARIABLES | additionalOptions);
 
-    // Add default options to prevent unexpected behavior during compilation.
-    compileOptions |= SH_LIMIT_CALL_STACK_DEPTH;
-    compileOptions |= SH_LIMIT_EXPRESSION_COMPLEXITY;
-    compileOptions |= SH_ENFORCE_PACKING_RESTRICTIONS;
+    // Add default options to WebGL shaders to prevent unexpected behavior during compilation.
+    if (compiler->IsWebGLCompatible())
+    {
+        compileOptions |= SH_LIMIT_CALL_STACK_DEPTH;
+        compileOptions |= SH_LIMIT_EXPRESSION_COMPLEXITY;
+        compileOptions |= SH_ENFORCE_PACKING_RESTRICTIONS;
+    }
 
     // Some targets (eg D3D11 Feature Level 9_3 and below) do not support non-constant loop indexes
     // in fragment shaders. Shader compilation will fail. To provide a better error message we can
