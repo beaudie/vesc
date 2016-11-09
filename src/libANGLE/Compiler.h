@@ -33,6 +33,7 @@ class Compiler final : angle::NonCopyable
 
     ShHandle getCompilerHandle(GLenum type);
     ShShaderOutput getShaderOutputType() const { return mOutputType; }
+    bool IsWebGLCompatible() const { return mResources.ANGLE_webgl_compatibility > 0; }
 
   private:
     rx::CompilerImpl *mImplementation;
