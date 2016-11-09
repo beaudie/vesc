@@ -49,7 +49,7 @@ typedef unsigned int GLenum;
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 166
+#define ANGLE_SH_VERSION 167
 
 enum ShShaderSpec
 {

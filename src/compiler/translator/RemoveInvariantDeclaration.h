@@ -7,11 +7,13 @@
 #ifndef COMPILER_TRANSLATOR_REMOVEINVARIANTDECLARATION_H_
 #define COMPILER_TRANSLATOR_REMOVEINVARIANTDECLARATION_H_
 
+#include "GLSLANG/ShaderLang.h"
+
 class TIntermNode;
 namespace sh
 {
 
-void RemoveInvariantDeclaration(TIntermNode *root);
+void RemoveInvariantDeclaration(TIntermNode *root, GLenum shadeType);
 
 }  // namespace sh
 
