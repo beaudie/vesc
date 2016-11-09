@@ -12,11 +12,15 @@
 namespace sh
 {
 class TIntermNode;
+class TSymbolTable;
 
 typedef std::vector<sh::ShaderVariable> InitVariableList;
 
-// This function cannot currently initialize structures containing arrays for an ESSL 1.00 backend.
-void InitializeVariables(TIntermNode *root, const InitVariableList &vars);
+// Currently this function is only capable of initializing variables of basic types,
+// array of basic types, or struct of basic types.
+void InitializeVariables(TIntermNode *root,
+                         const InitVariableList &vars,
+                         const TSymbolTable &symbolTable);
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_INITIALIZEVARIABLES_H_
