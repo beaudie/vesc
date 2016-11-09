@@ -103,10 +103,11 @@ TOutputGLSLBase::TOutputGLSLBase(TInfoSinkBase &objSink,
 
 void TOutputGLSLBase::writeInvariantQualifier(const TType &type)
 {
-    bool removeInvariant = ((type.getQualifier() == EvqVaryingIn && sh::IsGLSL420OrNewer(mOutput) &&
-                             !(mCompileOptions & SH_DONT_REMOVE_INVARIANT_FOR_FRAGMENT_INPUT)) ||
-                            (sh::IsGLSL410OrOlder(mOutput) && mShaderVersion >= 300 &&
-                             !!(mCompileOptions & SH_REMOVE_INVARIANT_FOR_ESSL3)));
+    bool removeInvariant =
+        ((type.getQualifier() == EvqVaryingIn && sh::IsGLSL420OrNewer(mOutput) &&
+          (mCompileOptions & SH_DONT_REMOVE_INVARIANT_FOR_FRAGMENT_INPUT) == 0) ||
+         (sh::IsGLSL410OrOlder(mOutput) && mShaderVersion >= 300 &&
+          (mCompileOptions & SH_REMOVE_INVARIANT_FOR_ESSL3) != 0));
     if (!removeInvariant)
     {
         TInfoSinkBase &out = objSink();
@@ -165,7 +166,7 @@ void TOutputGLSLBase::writeLayoutQualifier(const TType &type)
 const char *TOutputGLSLBase::mapQualifierToString(TQualifier qualifier)
 {
     if (sh::IsGLSL410OrOlder(mOutput) && mShaderVersion >= 300 &&
-        !!(mCompileOptions & SH_REMOVE_CENTROID_FOR_ESSL3))
+        (mCompileOptions & SH_REMOVE_CENTROID_FOR_ESSL3) != 0)
     {
         switch (qualifier)
         {
@@ -960,8 +961,7 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
             ASSERT(sequence && sequence->size() == 1);
             const TIntermSymbol *symbol = sequence->front()->getAsSymbolNode();
             ASSERT(symbol);
-            writeInvariantQualifier(symbol->getType());
-            out << hashVariableName(symbol->getName());
+            out << "invariant " << hashVariableName(symbol->getName());
         }
         visitChildren = false;
         break;
