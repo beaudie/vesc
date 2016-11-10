@@ -248,6 +248,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
                         mFramebufferMap,
                         GetNoError(attribs)),
       mImplementation(implFactory->createContext(mState)),
+      mLabel(nullptr),
       mCompiler(nullptr),
       mConfig(config),
       mClientType(EGL_OPENGL_ES_API),
@@ -442,6 +443,16 @@ Context::~Context()
     }
 
     SafeDelete(mCompiler);
+}
+
+void Context::setLabel(EGLLabelKHR label)
+{
+    mLabel = label;
+}
+
+EGLLabelKHR Context::getLabel() const
+{
+    return mLabel;
 }
 
 void Context::makeCurrent(egl::Surface *surface)
