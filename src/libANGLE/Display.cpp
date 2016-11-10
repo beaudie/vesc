@@ -324,7 +324,8 @@ Display *Display::GetDisplayFromDevice(void *native_display)
 }
 
 Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice)
-    : mImplementation(nullptr),
+    : mLabel(nullptr),
+      mImplementation(nullptr),
       mDisplayId(displayId),
       mAttributeMap(),
       mConfigSet(),
@@ -370,6 +371,16 @@ Display::~Display()
 
     SafeDelete(mDevice);
     SafeDelete(mImplementation);
+}
+
+void Display::setLabel(EGLLabelKHR label)
+{
+    mLabel = label;
+}
+
+EGLLabelKHR Display::getLabel() const
+{
+    return mLabel;
 }
 
 void Display::setAttributes(rx::DisplayImpl *impl, const AttributeMap &attribMap)

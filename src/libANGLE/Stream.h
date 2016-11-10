@@ -17,6 +17,7 @@
 
 #include "common/angleutils.h"
 #include "libANGLE/AttributeMap.h"
+#include "libANGLE/Debug.h"
 
 namespace rx
 {
@@ -34,7 +35,7 @@ namespace egl
 class Display;
 class Error;
 
-class Stream final : angle::NonCopyable
+class Stream final : public LabeledObject, angle::NonCopyable
 {
   public:
     Stream(Display *display, const AttributeMap &attribs);
@@ -63,6 +64,9 @@ class Stream final : angle::NonCopyable
     };
 
     EGLenum getState() const;
+
+    void setLabel(EGLLabelKHR label) override;
+    EGLLabelKHR getLabel() const override;
 
     void setConsumerLatency(EGLint latency);
     EGLint getConsumerLatency() const;
@@ -104,6 +108,9 @@ class Stream final : angle::NonCopyable
 
     // Producer Implementation
     rx::StreamProducerImpl *mProducerImplementation;
+
+    // Debug label
+    EGLLabelKHR mLabel;
 
     // Associated GL context. Note that this is a weak pointer used for validation purposes only,
     // and should never be arbitrarily dereferenced without knowing the context still exists as it

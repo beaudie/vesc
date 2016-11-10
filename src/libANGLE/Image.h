@@ -11,6 +11,7 @@
 
 #include "common/angleutils.h"
 #include "libANGLE/AttributeMap.h"
+#include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/formatutils.h"
@@ -52,11 +53,14 @@ class ImageSibling : public RefCountObject
     BindingPointer<Image> mTargetOf;
 };
 
-class Image final : public RefCountObject
+class Image final : public LabeledObject, public RefCountObject
 {
   public:
     Image(rx::ImageImpl *impl, EGLenum target, ImageSibling *buffer, const AttributeMap &attribs);
     ~Image();
+
+    void setLabel(EGLLabelKHR label) override;
+    EGLLabelKHR getLabel() const override;
 
     const gl::Format &getFormat() const;
     size_t getWidth() const;
@@ -78,6 +82,8 @@ class Image final : public RefCountObject
     gl::Error orphanSibling(ImageSibling *sibling);
 
     rx::ImageImpl *mImplementation;
+
+    EGLLabelKHR mLabel;
 
     gl::Format mFormat;
     size_t mWidth;

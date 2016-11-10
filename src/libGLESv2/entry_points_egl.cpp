@@ -36,7 +36,7 @@ EGLint EGLAPIENTRY GetError(void)
     Thread *thread = GetCurrentThread();
 
     EGLint error = thread->getError();
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return error;
 }
 
@@ -70,7 +70,7 @@ EGLBoolean EGLAPIENTRY Initialize(EGLDisplay dpy, EGLint *major, EGLint *minor)
     if (major) *major = 1;
     if (minor) *minor = 4;
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -93,7 +93,7 @@ EGLBoolean EGLAPIENTRY Terminate(EGLDisplay dpy)
 
     display->terminate();
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -140,7 +140,7 @@ const char *EGLAPIENTRY QueryString(EGLDisplay dpy, EGLint name)
           return NULL;
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return result;
 }
 
@@ -178,7 +178,7 @@ EGLBoolean EGLAPIENTRY GetConfigs(EGLDisplay dpy, EGLConfig *configs, EGLint con
     }
     *num_config = static_cast<EGLint>(filteredConfigs.size());
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -217,7 +217,7 @@ EGLBoolean EGLAPIENTRY ChooseConfig(EGLDisplay dpy, const EGLint *attrib_list, E
     }
     *num_config = static_cast<EGLint>(filteredConfigs.size());
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -245,7 +245,7 @@ EGLBoolean EGLAPIENTRY GetConfigAttrib(EGLDisplay dpy, EGLConfig config, EGLint 
         return EGL_FALSE;
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -327,7 +327,7 @@ EGLSurface EGLAPIENTRY CreatePixmapSurface(EGLDisplay dpy, EGLConfig config, EGL
 
     UNIMPLEMENTED();   // FIXME
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_NO_SURFACE;
 }
 
@@ -354,7 +354,7 @@ EGLBoolean EGLAPIENTRY DestroySurface(EGLDisplay dpy, EGLSurface surface)
 
     display->destroySurface((Surface*)surface);
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -482,7 +482,7 @@ EGLBoolean EGLAPIENTRY QuerySurface(EGLDisplay dpy, EGLSurface surface, EGLint a
           return EGL_FALSE;
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -512,7 +512,7 @@ EGLContext EGLAPIENTRY CreateContext(EGLDisplay dpy, EGLConfig config, EGLContex
         return EGL_NO_CONTEXT;
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return static_cast<EGLContext>(context);
 }
 
@@ -544,7 +544,7 @@ EGLBoolean EGLAPIENTRY DestroyContext(EGLDisplay dpy, EGLContext ctx)
 
     display->destroyContext(context);
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -677,7 +677,7 @@ EGLBoolean EGLAPIENTRY MakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface r
         previousContext->releaseSurface();
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -688,12 +688,12 @@ EGLSurface EGLAPIENTRY GetCurrentSurface(EGLint readdraw)
 
     if (readdraw == EGL_READ)
     {
-        thread->setError(Error(EGL_SUCCESS));
+        thread->setSuccess();
         return thread->getReadSurface();
     }
     else if (readdraw == EGL_DRAW)
     {
-        thread->setError(Error(EGL_SUCCESS));
+        thread->setSuccess();
         return thread->getDrawSurface();
     }
     else
@@ -710,7 +710,7 @@ EGLDisplay EGLAPIENTRY GetCurrentDisplay(void)
 
     EGLDisplay dpy = thread->getDisplay();
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return dpy;
 }
 
@@ -749,7 +749,7 @@ EGLBoolean EGLAPIENTRY QueryContext(EGLDisplay dpy, EGLContext ctx, EGLint attri
           return EGL_FALSE;
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -776,7 +776,7 @@ EGLBoolean EGLAPIENTRY WaitGL(void)
         return EGL_FALSE;
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -807,7 +807,7 @@ EGLBoolean EGLAPIENTRY WaitNative(EGLint engine)
         return EGL_FALSE;
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -845,7 +845,7 @@ EGLBoolean EGLAPIENTRY SwapBuffers(EGLDisplay dpy, EGLSurface surface)
         return EGL_FALSE;
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -872,7 +872,7 @@ EGLBoolean EGLAPIENTRY CopyBuffers(EGLDisplay dpy, EGLSurface surface, EGLNative
 
     UNIMPLEMENTED();   // FIXME
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return 0;
 }
 
@@ -936,7 +936,7 @@ EGLBoolean EGLAPIENTRY BindTexImage(EGLDisplay dpy, EGLSurface surface, EGLint b
         }
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -958,7 +958,7 @@ EGLBoolean EGLAPIENTRY SurfaceAttrib(EGLDisplay dpy, EGLSurface surface, EGLint 
 
     UNIMPLEMENTED();   // FIXME
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -1007,7 +1007,7 @@ EGLBoolean EGLAPIENTRY ReleaseTexImage(EGLDisplay dpy, EGLSurface surface, EGLin
         }
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -1038,7 +1038,7 @@ EGLBoolean EGLAPIENTRY SwapInterval(EGLDisplay dpy, EGLint interval)
 
     draw_surface->setSwapInterval(clampedInterval);
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -1064,7 +1064,7 @@ EGLBoolean EGLAPIENTRY BindAPI(EGLenum api)
 
     thread->setAPI(api);
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -1075,7 +1075,7 @@ EGLenum EGLAPIENTRY QueryAPI(void)
 
     EGLenum API = thread->getAPI();
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return API;
 }
 
@@ -1116,7 +1116,7 @@ EGLBoolean EGLAPIENTRY ReleaseThread(void)
 
     MakeCurrent(EGL_NO_DISPLAY, EGL_NO_CONTEXT, EGL_NO_SURFACE, EGL_NO_SURFACE);
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -1141,7 +1141,7 @@ EGLBoolean EGLAPIENTRY WaitClient(void)
         return EGL_FALSE;
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -1153,7 +1153,7 @@ EGLContext EGLAPIENTRY GetCurrentContext(void)
 
     gl::Context *context = thread->getContext();
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return static_cast<EGLContext>(context);
 }
 
@@ -1876,7 +1876,7 @@ __eglMustCastToProperFunctionPointerType EGLAPIENTRY GetProcAddress(const char *
 
     static const ProcAddressMap procAddressMap = generateProcAddressMap();
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     auto iter = procAddressMap.find(procname);
     return iter != procAddressMap.end() ? iter->second : nullptr;
 }

@@ -23,7 +23,7 @@
 namespace egl
 {
 
-SurfaceState::SurfaceState() : defaultFramebuffer(nullptr)
+SurfaceState::SurfaceState() : label(nullptr), defaultFramebuffer(nullptr)
 {
 }
 
@@ -85,6 +85,16 @@ Surface::~Surface()
 
     SafeDelete(mState.defaultFramebuffer);
     SafeDelete(mImplementation);
+}
+
+void Surface::setLabel(EGLLabelKHR label)
+{
+    mState.label = label;
+}
+
+EGLLabelKHR Surface::getLabel() const
+{
+    return mState.label;
 }
 
 Error Surface::initialize()

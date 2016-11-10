@@ -14,6 +14,7 @@
 #include <EGL/egl.h>
 
 #include "common/angleutils.h"
+#include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/RefCountObject.h"
@@ -41,15 +42,19 @@ struct SurfaceState final : angle::NonCopyable
 {
     SurfaceState();
 
+    EGLLabelKHR label;
     gl::Framebuffer *defaultFramebuffer;
 };
 
-class Surface : public gl::FramebufferAttachmentObject
+class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
 {
   public:
     virtual ~Surface();
 
     rx::SurfaceImpl *getImplementation() const { return mImplementation; }
+
+    void setLabel(EGLLabelKHR label) override;
+    EGLLabelKHR getLabel() const override;
 
     EGLint getType() const;
 

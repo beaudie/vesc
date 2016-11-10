@@ -83,6 +83,7 @@ void ImageSibling::removeImageSource(egl::Image *imageSource)
 Image::Image(rx::ImageImpl *impl, EGLenum target, ImageSibling *buffer, const AttributeMap &attribs)
     : RefCountObject(0),
       mImplementation(impl),
+      mLabel(nullptr),
       mFormat(gl::Format::Invalid()),
       mWidth(0),
       mHeight(0),
@@ -134,6 +135,16 @@ Image::~Image()
         mSource->removeImageSource(this);
         mSource.set(nullptr);
     }
+}
+
+void Image::setLabel(EGLLabelKHR label)
+{
+    mLabel = label;
+}
+
+EGLLabelKHR Image::getLabel() const
+{
+    return mLabel;
 }
 
 void Image::addTargetSibling(ImageSibling *sibling)
