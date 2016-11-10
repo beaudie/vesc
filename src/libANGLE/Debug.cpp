@@ -301,3 +301,67 @@ void Debug::pushDefaultGroup()
     mGroups.push_back(std::move(g));
 }
 }  // namespace gl
+
+namespace egl
+{
+
+Debug::Debug()
+    : mCallback(nullptr),
+      mEnabledMessageTypes({
+          {EGL_DEBUG_MSG_CRITICAL_KHR, true},
+          {EGL_DEBUG_MSG_ERROR_KHR, true},
+          {EGL_DEBUG_MSG_WARN_KHR, false},
+          {EGL_DEBUG_MSG_INFO_KHR, false},
+      })
+{
+}
+
+void Debug::setCallback(EGLDEBUGPROCKHR callback, const AttributeMap &attribs)
+{
+    mCallback = callback;
+    if (mCallback != nullptr)
+    {
+        mEnabledMessageTypes[EGL_DEBUG_MSG_CRITICAL_KHR] =
+            attribs.getAsInt(EGL_DEBUG_MSG_CRITICAL_KHR, EGL_TRUE) == EGL_TRUE;
+        mEnabledMessageTypes[EGL_DEBUG_MSG_ERROR_KHR] =
+            attribs.getAsInt(EGL_DEBUG_MSG_ERROR_KHR, EGL_TRUE) == EGL_TRUE;
+        mEnabledMessageTypes[EGL_DEBUG_MSG_WARN_KHR] =
+            attribs.getAsInt(EGL_DEBUG_MSG_WARN_KHR, EGL_FALSE) == EGL_TRUE;
+        mEnabledMessageTypes[EGL_DEBUG_MSG_INFO_KHR] =
+            attribs.getAsInt(EGL_DEBUG_MSG_INFO_KHR, EGL_FALSE) == EGL_TRUE;
+    }
+    else
+    {
+        mEnabledMessageTypes[EGL_DEBUG_MSG_CRITICAL_KHR] = true;
+        mEnabledMessageTypes[EGL_DEBUG_MSG_ERROR_KHR]    = true;
+        mEnabledMessageTypes[EGL_DEBUG_MSG_WARN_KHR]     = false;
+        mEnabledMessageTypes[EGL_DEBUG_MSG_INFO_KHR]     = false;
+    }
+}
+
+EGLDEBUGPROCKHR Debug::getCallback() const
+{
+    return mCallback;
+}
+
+bool Debug::isMessageTypeEnabled(EGLint type) const
+{
+    ASSERT(mEnabledMessageTypes.find(type) != mEnabledMessageTypes.end());
+    return mEnabledMessageTypes.at(type);
+}
+
+void Debug::insertMessage(EGLenum error,
+                          const char *command,
+                          EGLint messageType,
+                          EGLLabelKHR threadLabel,
+                          EGLLabelKHR objectLabel,
+                          const std::string &message) const
+{
+    ASSERT(mEnabledMessageTypes.find(messageType) != mEnabledMessageTypes.end());
+    if (mCallback && mEnabledMessageTypes.at(messageType))
+    {
+        mCallback(error, command, messageType, threadLabel, objectLabel, message.c_str());
+    }
+}
+
+}  // namespace egl

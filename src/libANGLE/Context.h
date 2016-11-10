@@ -56,7 +56,7 @@ class VertexArray;
 class Sampler;
 class TransformFeedback;
 
-class Context final : public ValidationContext
+class Context final : public egl::LabeledObject, public ValidationContext
 {
   public:
     Context(rx::EGLImplFactory *implFactory,
@@ -65,6 +65,9 @@ class Context final : public ValidationContext
             const egl::AttributeMap &attribs);
 
     virtual ~Context();
+
+    void setLabel(EGLLabelKHR label) override;
+    EGLLabelKHR getLabel() const override;
 
     void makeCurrent(egl::Surface *surface);
     void releaseSurface();
@@ -632,10 +635,12 @@ class Context final : public ValidationContext
     void updateCaps();
     void initWorkarounds();
 
-    LabeledObject *getLabeledObject(GLenum identifier, GLuint name) const;
-    LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
+    gl::LabeledObject *getLabeledObject(GLenum identifier, GLuint name) const;
+    gl::LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
 
     std::unique_ptr<rx::ContextImpl> mImplementation;
+
+    EGLLabelKHR mLabel;
 
     // Caps to use for validation
     Caps mCaps;

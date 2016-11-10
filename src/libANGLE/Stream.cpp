@@ -27,6 +27,7 @@ namespace egl
 Stream::Stream(Display *display, const AttributeMap &attribs)
     : mDisplay(display),
       mProducerImplementation(nullptr),
+      mLabel(nullptr),
       mState(EGL_STREAM_STATE_CREATED_KHR),
       mProducerFrame(0),
       mConsumerFrame(0),
@@ -78,6 +79,16 @@ EGLuint64KHR Stream::getConsumerFrame() const
 EGLenum Stream::getState() const
 {
     return mState;
+}
+
+void Stream::setLabel(EGLLabelKHR label)
+{
+    mLabel = label;
+}
+
+EGLLabelKHR Stream::getLabel() const
+{
+    return mLabel;
 }
 
 void Stream::setConsumerAcquireTimeout(EGLint timeout)

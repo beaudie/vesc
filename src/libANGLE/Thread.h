@@ -9,7 +9,10 @@
 #ifndef LIBANGLE_THREAD_H_
 #define LIBANGLE_THREAD_H_
 
+#include "libANGLE/Debug.h"
+
 #include <EGL/egl.h>
+#include <string>
 
 namespace gl
 {
@@ -18,16 +21,23 @@ class Context;
 
 namespace egl
 {
-class Error;
 class Display;
+class Error;
 class Surface;
 
-class Thread
+class Thread : public LabeledObject
 {
   public:
     Thread();
 
-    void setError(const Error &error);
+    void setLabel(EGLLabelKHR label) override;
+    EGLLabelKHR getLabel() const override;
+
+    void setSuccess();
+    void setError(const Error &error,
+                  const Debug *debug,
+                  const char *command,
+                  const LabeledObject *object);
     EGLint getError() const;
 
     void setAPI(EGLenum api);
@@ -44,6 +54,7 @@ class Thread
     gl::Context *getValidContext() const;
 
   private:
+    EGLLabelKHR mLabel;
     EGLint mError;
     EGLenum mAPI;
     egl::Display *mDisplay;

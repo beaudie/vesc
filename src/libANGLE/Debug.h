@@ -11,10 +11,14 @@
 
 #include "angle_gl.h"
 #include "common/angleutils.h"
+#include "libANGLE/AttributeMap.h"
 
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
 #include <deque>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 namespace gl
 {
@@ -116,5 +120,38 @@ class Debug : angle::NonCopyable
     std::vector<Group> mGroups;
 };
 }  // namespace gl
+
+namespace egl
+{
+
+class LabeledObject
+{
+  public:
+    virtual ~LabeledObject() {}
+    virtual void setLabel(EGLLabelKHR label) = 0;
+    virtual EGLLabelKHR getLabel() const     = 0;
+};
+
+class Debug : angle::NonCopyable
+{
+  public:
+    Debug();
+
+    void setCallback(EGLDEBUGPROCKHR callback, const AttributeMap &attribs);
+    EGLDEBUGPROCKHR getCallback() const;
+    bool isMessageTypeEnabled(EGLint type) const;
+
+    void insertMessage(EGLenum error,
+                       const char *command,
+                       EGLint messageType,
+                       EGLLabelKHR threadLabel,
+                       EGLLabelKHR objectLabel,
+                       const std::string &message) const;
+
+  private:
+    EGLDEBUGPROCKHR mCallback;
+    std::unordered_map<EGLint, bool> mEnabledMessageTypes;
+};
+}
 
 #endif  // LIBANGLE_DEBUG_H_

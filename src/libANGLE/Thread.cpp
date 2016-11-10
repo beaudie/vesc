@@ -13,8 +13,35 @@
 
 namespace egl
 {
+
+namespace
+{
+
+EGLint GetMessageTypeFromErrorCode(EGLint errorCode)
+{
+    switch (errorCode)
+    {
+        case EGL_BAD_ALLOC:
+        case EGL_CONTEXT_LOST:
+            return EGL_DEBUG_MSG_CRITICAL_KHR;
+
+        case EGL_BAD_CONTEXT:
+        case EGL_BAD_PARAMETER:
+        case EGL_BAD_DISPLAY:
+        case EGL_BAD_DEVICE_EXT:
+            return EGL_DEBUG_MSG_ERROR_KHR;
+
+        case EGL_SUCCESS:
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+}
+
 Thread::Thread()
-    : mError(EGL_SUCCESS),
+    : mLabel(nullptr),
+      mError(EGL_SUCCESS),
       mAPI(EGL_OPENGL_ES_API),
       mDisplay(static_cast<egl::Display *>(EGL_NO_DISPLAY)),
       mDrawSurface(static_cast<egl::Surface *>(EGL_NO_SURFACE)),
@@ -23,9 +50,34 @@ Thread::Thread()
 {
 }
 
-void Thread::setError(const Error &error)
+void Thread::setLabel(EGLLabelKHR label)
 {
+    mLabel = label;
+}
+
+EGLLabelKHR Thread::getLabel() const
+{
+    return mLabel;
+}
+
+void Thread::setSuccess()
+{
+    mError = EGL_SUCCESS;
+}
+
+void Thread::setError(const Error &error,
+                      const Debug *debug,
+                      const char *command,
+                      const LabeledObject *object)
+{
+    ASSERT(debug != nullptr);
+
     mError = error.getCode();
+    if (error.isError() && !error.getMessage().empty())
+    {
+        debug->insertMessage(error.getCode(), command, GetMessageTypeFromErrorCode(error.getCode()),
+                             getLabel(), object ? object->getLabel() : nullptr, error.getMessage());
+    }
 }
 
 EGLint Thread::getError() const

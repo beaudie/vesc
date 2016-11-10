@@ -17,6 +17,7 @@
 #include "libANGLE/AttributeMap.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Config.h"
+#include "libANGLE/Debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Version.h"
 
@@ -37,10 +38,13 @@ class Image;
 class Surface;
 class Stream;
 
-class Display final : angle::NonCopyable
+class Display final : public LabeledObject, angle::NonCopyable
 {
   public:
     ~Display();
+
+    void setLabel(EGLLabelKHR label) override;
+    EGLLabelKHR getLabel() const override;
 
     Error initialize();
     void terminate();
@@ -131,6 +135,8 @@ class Display final : angle::NonCopyable
 
     void initDisplayExtensions();
     void initVendorString();
+
+    EGLLabelKHR mLabel;
 
     rx::DisplayImpl *mImplementation;
 

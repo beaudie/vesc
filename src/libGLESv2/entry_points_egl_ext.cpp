@@ -41,7 +41,7 @@ EGLBoolean EGLAPIENTRY QuerySurfacePointerANGLE(EGLDisplay dpy, EGLSurface surfa
 
     if (!display->getExtensions().querySurfacePointer)
     {
-        thread->setError(Error(EGL_SUCCESS));
+        thread->setSuccess();
         return EGL_FALSE;
     }
 
@@ -116,7 +116,7 @@ EGLBoolean EGLAPIENTRY PostSubBufferNV(EGLDisplay dpy, EGLSurface surface, EGLin
     if (!display->getExtensions().postSubBuffer)
     {
         // Spec is not clear about how this should be handled.
-        thread->setError(Error(EGL_SUCCESS));
+        thread->setSuccess();
         return EGL_TRUE;
     }
 
@@ -127,7 +127,7 @@ EGLBoolean EGLAPIENTRY PostSubBufferNV(EGLDisplay dpy, EGLSurface surface, EGLin
         return EGL_FALSE;
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return EGL_TRUE;
 }
 
@@ -341,7 +341,7 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform, void *native_disp
             return EGL_NO_DISPLAY;
         }
 
-        thread->setError(Error(EGL_SUCCESS));
+        thread->setSuccess();
         return Display::GetDisplayFromAttribs(native_display,
                                               AttributeMap::CreateFromIntArray(attrib_list));
     }
@@ -356,7 +356,7 @@ EGLDisplay EGLAPIENTRY GetPlatformDisplayEXT(EGLenum platform, void *native_disp
             return EGL_NO_DISPLAY;
         }
 
-        thread->setError(Error(EGL_SUCCESS));
+        thread->setSuccess();
         return Display::GetDisplayFromDevice(native_display);
     }
     else
@@ -439,7 +439,7 @@ const char * EGLAPIENTRY QueryDeviceStringEXT(EGLDeviceEXT device, EGLint name)
           return nullptr;
     }
 
-    thread->setError(Error(EGL_SUCCESS));
+    thread->setSuccess();
     return result;
 }
 
