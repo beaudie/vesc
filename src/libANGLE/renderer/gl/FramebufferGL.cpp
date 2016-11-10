@@ -283,6 +283,9 @@ Error FramebufferGL::blit(ContextImpl *context,
     const Framebuffer *sourceFramebuffer     = context->getGLState().getReadFramebuffer();
     const Framebuffer *destFramebuffer       = context->getGLState().getDrawFramebuffer();
 
+    const FramebufferAttachment *colorReadAttachment = sourceFramebuffer->getReadColorbuffer();
+    GLsizei readAttachmentSamples                    = colorReadAttachment->getSamples();
+
     bool needManualColorBlit = false;
 
     // The manual SRGB blit is only needed to perform correct linear interpolation. We don't
@@ -299,9 +302,8 @@ Error FramebufferGL::blit(ContextImpl *context,
         //      corresponding to the read buffer is SRGB, the red, green, and blue components are
         //      converted from the non-linear sRGB color space according [...].
         {
-            const FramebufferAttachment *readAttachment = sourceFramebuffer->getReadColorbuffer();
-            bool sourceSRGB =
-                readAttachment != nullptr && readAttachment->getColorEncoding() == GL_SRGB;
+            bool sourceSRGB = colorReadAttachment != nullptr &&
+                              colorReadAttachment->getColorEncoding() == GL_SRGB;
             needManualColorBlit =
                 needManualColorBlit || (sourceSRGB && mFunctions->isAtMostGL(gl::Version(4, 3)));
         }
@@ -335,7 +337,7 @@ Error FramebufferGL::blit(ContextImpl *context,
     mStateManager->setFramebufferSRGBEnabledForFramebuffer(true, this);
 
     GLenum blitMask = mask;
-    if (needManualColorBlit && (mask & GL_COLOR_BUFFER_BIT))
+    if (needManualColorBlit && (mask & GL_COLOR_BUFFER_BIT) && readAttachmentSamples <= 1)
     {
         ANGLE_TRY(mBlitter->blitColorBufferWithShader(sourceFramebuffer, destFramebuffer,
                                                       sourceArea, destArea, filter));
