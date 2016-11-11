@@ -3692,4 +3692,339 @@ bool ValidateBindRenderbuffer(ValidationContext *context, GLenum target, GLuint 
     return true;
 }
 
+static bool ValidBlendEquationMode(GLenum mode)
+{
+    switch (mode)
+    {
+        case GL_FUNC_ADD:
+        case GL_FUNC_SUBTRACT:
+        case GL_FUNC_REVERSE_SUBTRACT:
+        case GL_MIN:
+        case GL_MAX:
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+bool ValidateBlendEquation(ValidationContext *context, GLenum mode)
+{
+    if (!ValidBlendEquationMode(mode))
+    {
+        context->handleError(Error(GL_INVALID_ENUM, "Invalid blend equation"));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateBlendEquationSeparate(ValidationContext *context, GLenum modeRGB, GLenum modeAlpha)
+{
+    if (!ValidBlendEquationMode(modeRGB))
+    {
+        context->handleError(Error(GL_INVALID_ENUM, "Invalid RGB blend equation"));
+        return false;
+    }
+
+    if (!ValidBlendEquationMode(modeAlpha))
+    {
+        context->handleError(Error(GL_INVALID_ENUM, "Invalid alpha blend equation"));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateBlendFunc(ValidationContext *context, GLenum sfactor, GLenum dfactor)
+{
+    return ValidateBlendFuncSeparate(context, sfactor, dfactor, sfactor, dfactor);
+}
+
+bool ValidateBlendFuncSeparate(ValidationContext *context,
+                               GLenum srcRGB,
+                               GLenum dstRGB,
+                               GLenum srcAlpha,
+                               GLenum dstAlpha)
+{
+    switch (srcRGB)
+    {
+        case GL_ZERO:
+        case GL_ONE:
+        case GL_SRC_COLOR:
+        case GL_ONE_MINUS_SRC_COLOR:
+        case GL_DST_COLOR:
+        case GL_ONE_MINUS_DST_COLOR:
+        case GL_SRC_ALPHA:
+        case GL_ONE_MINUS_SRC_ALPHA:
+        case GL_DST_ALPHA:
+        case GL_ONE_MINUS_DST_ALPHA:
+        case GL_CONSTANT_COLOR:
+        case GL_ONE_MINUS_CONSTANT_COLOR:
+        case GL_CONSTANT_ALPHA:
+        case GL_ONE_MINUS_CONSTANT_ALPHA:
+        case GL_SRC_ALPHA_SATURATE:
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Invalid blend function"));
+            return false;
+    }
+
+    switch (dstRGB)
+    {
+        case GL_ZERO:
+        case GL_ONE:
+        case GL_SRC_COLOR:
+        case GL_ONE_MINUS_SRC_COLOR:
+        case GL_DST_COLOR:
+        case GL_ONE_MINUS_DST_COLOR:
+        case GL_SRC_ALPHA:
+        case GL_ONE_MINUS_SRC_ALPHA:
+        case GL_DST_ALPHA:
+        case GL_ONE_MINUS_DST_ALPHA:
+        case GL_CONSTANT_COLOR:
+        case GL_ONE_MINUS_CONSTANT_COLOR:
+        case GL_CONSTANT_ALPHA:
+        case GL_ONE_MINUS_CONSTANT_ALPHA:
+            break;
+
+        case GL_SRC_ALPHA_SATURATE:
+            if (context->getClientMajorVersion() < 3)
+            {
+                context->handleError(Error(GL_INVALID_ENUM, "Invalid blend function"));
+                return false;
+            }
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Invalid blend function"));
+            return false;
+    }
+
+    switch (srcAlpha)
+    {
+        case GL_ZERO:
+        case GL_ONE:
+        case GL_SRC_COLOR:
+        case GL_ONE_MINUS_SRC_COLOR:
+        case GL_DST_COLOR:
+        case GL_ONE_MINUS_DST_COLOR:
+        case GL_SRC_ALPHA:
+        case GL_ONE_MINUS_SRC_ALPHA:
+        case GL_DST_ALPHA:
+        case GL_ONE_MINUS_DST_ALPHA:
+        case GL_CONSTANT_COLOR:
+        case GL_ONE_MINUS_CONSTANT_COLOR:
+        case GL_CONSTANT_ALPHA:
+        case GL_ONE_MINUS_CONSTANT_ALPHA:
+        case GL_SRC_ALPHA_SATURATE:
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Invalid blend function"));
+            return false;
+    }
+
+    switch (dstAlpha)
+    {
+        case GL_ZERO:
+        case GL_ONE:
+        case GL_SRC_COLOR:
+        case GL_ONE_MINUS_SRC_COLOR:
+        case GL_DST_COLOR:
+        case GL_ONE_MINUS_DST_COLOR:
+        case GL_SRC_ALPHA:
+        case GL_ONE_MINUS_SRC_ALPHA:
+        case GL_DST_ALPHA:
+        case GL_ONE_MINUS_DST_ALPHA:
+        case GL_CONSTANT_COLOR:
+        case GL_ONE_MINUS_CONSTANT_COLOR:
+        case GL_CONSTANT_ALPHA:
+        case GL_ONE_MINUS_CONSTANT_ALPHA:
+            break;
+
+        case GL_SRC_ALPHA_SATURATE:
+            if (context->getClientMajorVersion() < 3)
+            {
+                context->handleError(Error(GL_INVALID_ENUM, "Invalid blend function"));
+                return false;
+            }
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Invalid blend function"));
+            return false;
+    }
+
+    if (context->getLimitations().noSimultaneousConstantColorAndAlphaBlendFunc)
+    {
+        bool constantColorUsed =
+            (srcRGB == GL_CONSTANT_COLOR || srcRGB == GL_ONE_MINUS_CONSTANT_COLOR ||
+             dstRGB == GL_CONSTANT_COLOR || dstRGB == GL_ONE_MINUS_CONSTANT_COLOR);
+
+        bool constantAlphaUsed =
+            (srcRGB == GL_CONSTANT_ALPHA || srcRGB == GL_ONE_MINUS_CONSTANT_ALPHA ||
+             dstRGB == GL_CONSTANT_ALPHA || dstRGB == GL_ONE_MINUS_CONSTANT_ALPHA);
+
+        if (constantColorUsed && constantAlphaUsed)
+        {
+            ERR("Simultaneous use of GL_CONSTANT_ALPHA/GL_ONE_MINUS_CONSTANT_ALPHA and "
+                "GL_CONSTANT_COLOR/GL_ONE_MINUS_CONSTANT_COLOR not supported by this "
+                "implementation.");
+            context->handleError(Error(GL_INVALID_OPERATION,
+                                       "Simultaneous use of "
+                                       "GL_CONSTANT_ALPHA/GL_ONE_MINUS_CONSTANT_ALPHA and "
+                                       "GL_CONSTANT_COLOR/GL_ONE_MINUS_CONSTANT_COLOR not "
+                                       "supported by this implementation."));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool ValidateBlendFuncSeparate(ValidationContext *context,
+                               GLenum srcRGB,
+                               GLenum dstRGB,
+                               GLenum srcAlpha,
+                               GLenum dstAlpha)
+{
+    switch (srcRGB)
+    {
+        case GL_ZERO:
+        case GL_ONE:
+        case GL_SRC_COLOR:
+        case GL_ONE_MINUS_SRC_COLOR:
+        case GL_DST_COLOR:
+        case GL_ONE_MINUS_DST_COLOR:
+        case GL_SRC_ALPHA:
+        case GL_ONE_MINUS_SRC_ALPHA:
+        case GL_DST_ALPHA:
+        case GL_ONE_MINUS_DST_ALPHA:
+        case GL_CONSTANT_COLOR:
+        case GL_ONE_MINUS_CONSTANT_COLOR:
+        case GL_CONSTANT_ALPHA:
+        case GL_ONE_MINUS_CONSTANT_ALPHA:
+        case GL_SRC_ALPHA_SATURATE:
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Invalid blend function"));
+            return false;
+    }
+
+    switch (dstRGB)
+    {
+        case GL_ZERO:
+        case GL_ONE:
+        case GL_SRC_COLOR:
+        case GL_ONE_MINUS_SRC_COLOR:
+        case GL_DST_COLOR:
+        case GL_ONE_MINUS_DST_COLOR:
+        case GL_SRC_ALPHA:
+        case GL_ONE_MINUS_SRC_ALPHA:
+        case GL_DST_ALPHA:
+        case GL_ONE_MINUS_DST_ALPHA:
+        case GL_CONSTANT_COLOR:
+        case GL_ONE_MINUS_CONSTANT_COLOR:
+        case GL_CONSTANT_ALPHA:
+        case GL_ONE_MINUS_CONSTANT_ALPHA:
+            break;
+
+        case GL_SRC_ALPHA_SATURATE:
+            if (context->getClientMajorVersion() < 3)
+            {
+                context->handleError(Error(GL_INVALID_ENUM, "Invalid blend function"));
+                return false;
+            }
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Invalid blend function"));
+            return false;
+    }
+
+    switch (srcAlpha)
+    {
+        case GL_ZERO:
+        case GL_ONE:
+        case GL_SRC_COLOR:
+        case GL_ONE_MINUS_SRC_COLOR:
+        case GL_DST_COLOR:
+        case GL_ONE_MINUS_DST_COLOR:
+        case GL_SRC_ALPHA:
+        case GL_ONE_MINUS_SRC_ALPHA:
+        case GL_DST_ALPHA:
+        case GL_ONE_MINUS_DST_ALPHA:
+        case GL_CONSTANT_COLOR:
+        case GL_ONE_MINUS_CONSTANT_COLOR:
+        case GL_CONSTANT_ALPHA:
+        case GL_ONE_MINUS_CONSTANT_ALPHA:
+        case GL_SRC_ALPHA_SATURATE:
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Invalid blend function"));
+            return false;
+    }
+
+    switch (dstAlpha)
+    {
+        case GL_ZERO:
+        case GL_ONE:
+        case GL_SRC_COLOR:
+        case GL_ONE_MINUS_SRC_COLOR:
+        case GL_DST_COLOR:
+        case GL_ONE_MINUS_DST_COLOR:
+        case GL_SRC_ALPHA:
+        case GL_ONE_MINUS_SRC_ALPHA:
+        case GL_DST_ALPHA:
+        case GL_ONE_MINUS_DST_ALPHA:
+        case GL_CONSTANT_COLOR:
+        case GL_ONE_MINUS_CONSTANT_COLOR:
+        case GL_CONSTANT_ALPHA:
+        case GL_ONE_MINUS_CONSTANT_ALPHA:
+            break;
+
+        case GL_SRC_ALPHA_SATURATE:
+            if (context->getClientMajorVersion() < 3)
+            {
+                context->handleError(Error(GL_INVALID_ENUM, "Invalid blend function"));
+                return false;
+            }
+            break;
+
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Invalid blend function"));
+            return false;
+    }
+
+    if (context->getLimitations().noSimultaneousConstantColorAndAlphaBlendFunc)
+    {
+        bool constantColorUsed =
+            (srcRGB == GL_CONSTANT_COLOR || srcRGB == GL_ONE_MINUS_CONSTANT_COLOR ||
+             dstRGB == GL_CONSTANT_COLOR || dstRGB == GL_ONE_MINUS_CONSTANT_COLOR);
+
+        bool constantAlphaUsed =
+            (srcRGB == GL_CONSTANT_ALPHA || srcRGB == GL_ONE_MINUS_CONSTANT_ALPHA ||
+             dstRGB == GL_CONSTANT_ALPHA || dstRGB == GL_ONE_MINUS_CONSTANT_ALPHA);
+
+        if (constantColorUsed && constantAlphaUsed)
+        {
+            ERR("Simultaneous use of GL_CONSTANT_ALPHA/GL_ONE_MINUS_CONSTANT_ALPHA and "
+                "GL_CONSTANT_COLOR/GL_ONE_MINUS_CONSTANT_COLOR not supported by this "
+                "implementation.");
+            context->handleError(Error(GL_INVALID_OPERATION,
+                                       "Simultaneous use of "
+                                       "GL_CONSTANT_ALPHA/GL_ONE_MINUS_CONSTANT_ALPHA and "
+                                       "GL_CONSTANT_COLOR/GL_ONE_MINUS_CONSTANT_COLOR not "
+                                       "supported by this implementation."));
+            return false;
+        }
+    }
+
+    return true;
+}
+
 }  // namespace gl
