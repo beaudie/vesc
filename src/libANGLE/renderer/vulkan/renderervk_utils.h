@@ -39,6 +39,7 @@ enum class TextureDimension
 namespace vk
 {
 class Framebuffer;
+class RenderPass;
 
 class Error final
 {
@@ -115,6 +116,12 @@ class CommandBuffer final : public WrappedObject<VkCommandBuffer>
                            VkImageLayout oldLayout,
                            VkImageLayout newLayout);
 
+    void beginRenderPass(const RenderPass &renderPass,
+                         const Framebuffer &framebuffer,
+                         const gl::Rectangle &renderArea,
+                         const std::vector<VkClearValue> &clearValues);
+    void endRenderPass();
+
     void imageBarrier(VkPipelineStageFlags srcStageMask,
                       VkPipelineStageFlags destStageMask,
                       const VkImageMemoryBarrier &barrier);
@@ -170,6 +177,18 @@ class DeviceMemory final : public WrappedObject<VkDeviceMemory>
     Error allocate(const VkMemoryAllocateInfo &allocInfo);
     Error map(VkDeviceSize offset, VkDeviceSize size, VkMemoryMapFlags flags, uint8_t **mapPointer);
     void unmap();
+};
+
+class RenderPass final : public WrappedObject<VkRenderPass>
+{
+  public:
+    RenderPass();
+    RenderPass(VkDevice device);
+    RenderPass(RenderPass &&other);
+    ~RenderPass();
+    RenderPass &operator=(RenderPass &&other);
+
+    Error init(const VkRenderPassCreateInfo &createInfo);
 };
 
 class StagingImage final : angle::NonCopyable
