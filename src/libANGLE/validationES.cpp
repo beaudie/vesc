@@ -3463,8 +3463,8 @@ static bool ValidateSizedGetUniform(Context *context,
 
     if (length)
     {
-        // Cast is safe because of comparison to bufSize.
-        *length = static_cast<GLsizei>(requiredBytes);
+        // Only one value is returned by glGetUniform
+        *length = 1;
     }
 
     return true;
