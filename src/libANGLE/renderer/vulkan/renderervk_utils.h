@@ -14,16 +14,31 @@
 
 #include "libANGLE/Error.h"
 
+namespace gl
+{
+struct Box;
+struct Extents;
+struct Rectangle;
+}
+
 namespace rx
 {
-
 const char *VulkanResultString(VkResult result);
 bool HasStandardValidationLayer(const std::vector<VkLayerProperties> &layerProps);
 
 extern const char *g_VkStdValidationLayerName;
 
+enum class TextureDimension
+{
+    TEX_2D,
+    TEX_CUBE,
+    TEX_3D,
+    TEX_2D_ARRAY,
+};
+
 namespace vk
 {
+class Framebuffer;
 
 class Error final
 {
@@ -100,8 +115,88 @@ class CommandBuffer final : public WrappedObject<VkCommandBuffer>
                            VkImageLayout oldLayout,
                            VkImageLayout newLayout);
 
+    void imageBarrier(VkPipelineStageFlags srcStageMask,
+                      VkPipelineStageFlags destStageMask,
+                      const VkImageMemoryBarrier &barrier);
+
+    void clearSingleColorImage(VkImage image,
+                               VkImageLayout imageLayout,
+                               const VkClearColorValue &color);
+
+    void copySingleImage(VkImage srcImage,
+                         VkImageLayout srcImageLayout,
+                         VkImage destImage,
+                         VkImageLayout destImageLayout,
+                         const gl::Box &copyRegion,
+                         VkImageAspectFlags aspectMask);
+
   private:
     VkCommandPool mCommandPool;
+};
+
+class Semaphore final : public WrappedObject<VkSemaphore>
+{
+  public:
+    Semaphore();
+    Semaphore(VkDevice device);
+    Semaphore(Semaphore &&other);
+    ~Semaphore();
+    Semaphore &operator=(Semaphore &&other);
+
+    Error init();
+};
+
+class Framebuffer final : public WrappedObject<VkFramebuffer>
+{
+  public:
+    Framebuffer();
+    Framebuffer(VkDevice device);
+    Framebuffer(Framebuffer &&other);
+    ~Framebuffer();
+    Framebuffer &operator=(Framebuffer &&other);
+
+    Error init(const VkFramebufferCreateInfo &createInfo);
+};
+
+class DeviceMemory final : public WrappedObject<VkDeviceMemory>
+{
+  public:
+    DeviceMemory();
+    DeviceMemory(VkDevice device);
+    DeviceMemory(DeviceMemory &&other);
+    ~DeviceMemory();
+    DeviceMemory &operator=(DeviceMemory &&other);
+
+    Error allocate(const VkMemoryAllocateInfo &allocInfo);
+    Error map(VkDeviceSize offset, VkDeviceSize size, VkMemoryMapFlags flags, uint8_t **mapPointer);
+    void unmap();
+};
+
+class StagingImage final : angle::NonCopyable
+{
+  public:
+    StagingImage();
+    StagingImage(StagingImage &&other);
+    ~StagingImage();
+    StagingImage &operator=(StagingImage &&other);
+
+    vk::Error init(VkDevice device,
+                   uint32_t queueFamilyIndex,
+                   uint32_t hostVisibleMemoryIndex,
+                   TextureDimension dimension,
+                   VkFormat format,
+                   const gl::Extents &extent);
+
+    VkImage getHandle() const { return mHandle; }
+    DeviceMemory &getMemory() { return mMemory; }
+    const DeviceMemory &getMemory() const { return mMemory; }
+    VkDeviceSize getSize() const { return mSize; }
+
+  private:
+    VkDevice mDevice;
+    VkImage mHandle;
+    DeviceMemory mMemory;
+    VkDeviceSize mSize;
 };
 
 }  // namespace vk

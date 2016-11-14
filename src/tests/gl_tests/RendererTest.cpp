@@ -124,13 +124,6 @@ TEST_P(RendererTest, RequestedRendererCreated)
 // Perform a simple operation (clear and read pixels) to verify the device is working
 TEST_P(RendererTest, SimpleOperation)
 {
-    // TODO(jmadil): Vulkan clear.
-    if (IsVulkan())
-    {
-        std::cout << "Vulkan clears not yet implemented" << std::endl;
-        return;
-    }
-
     glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
