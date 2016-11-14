@@ -188,7 +188,7 @@ Error VkSuccess()
 
 // CommandBuffer implementation.
 CommandBuffer::CommandBuffer(VkDevice device, VkCommandPool commandPool)
-    : mDevice(device), mCommandPool(commandPool), mHandle(VK_NULL_HANDLE)
+    : WrappedObject(device), mCommandPool(commandPool)
 {
 }
 
@@ -196,6 +196,7 @@ Error CommandBuffer::begin()
 {
     if (mHandle == VK_NULL_HANDLE)
     {
+        ASSERT(validDevice());
         VkCommandBufferAllocateInfo commandBufferInfo = {};
         commandBufferInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
         commandBufferInfo.pNext              = nullptr;
@@ -224,14 +225,14 @@ Error CommandBuffer::begin()
 
 Error CommandBuffer::end()
 {
-    ASSERT(mHandle != VK_NULL_HANDLE);
+    ASSERT(valid());
     ANGLE_VK_TRY(vkEndCommandBuffer(mHandle));
     return VkSuccess();
 }
 
 Error CommandBuffer::reset()
 {
-    ASSERT(mHandle != VK_NULL_HANDLE);
+    ASSERT(valid());
     ANGLE_VK_TRY(vkResetCommandBuffer(mHandle, 0));
     return VkSuccess();
 }
@@ -241,7 +242,7 @@ void CommandBuffer::changeImageLayout(VkImage image,
                                       VkImageLayout oldLayout,
                                       VkImageLayout newLayout)
 {
-    ASSERT(mHandle != VK_NULL_HANDLE);
+    ASSERT(valid());
     VkImageMemoryBarrier imageMemoryBarrier = {};
     imageMemoryBarrier.sType                = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
     imageMemoryBarrier.pNext                = nullptr;
@@ -311,8 +312,8 @@ CommandBuffer::~CommandBuffer()
 {
     if (mHandle)
     {
+        ASSERT(validDevice());
         vkFreeCommandBuffers(mDevice, mCommandPool, 1, &mHandle);
-        mHandle = VK_NULL_HANDLE;
     }
 }
 
