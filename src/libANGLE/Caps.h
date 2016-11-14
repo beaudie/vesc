@@ -657,6 +657,9 @@ struct ClientExtensions
     // EGL_ANGLE_platform_angle_null
     bool platformANGLENULL;
 
+    // EGL_ANGLE_platform_angle_vulkan
+    bool platformANGLEVulkan;
+
     // EGL_ANGLE_device_creation
     bool deviceCreation;
 
@@ -673,6 +676,6 @@ struct ClientExtensions
     bool clientGetAllProcAddresses;
 };
 
-}
+}  // namespace egl
 
 #endif // LIBANGLE_CAPS_H_
