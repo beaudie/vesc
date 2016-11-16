@@ -946,6 +946,7 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
 #endif
 
     workarounds->removeInvariantAndCentroidForESSL3 = functions->isAtMostGL(gl::Version(4, 1));
+    workarounds->removeInvariantForESSL3            = IsAMD(vendor);
 }
 
 }

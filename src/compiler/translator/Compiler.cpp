@@ -116,6 +116,10 @@ bool RemoveInvariant(sh::GLenum shaderType,
         shaderVersion >= 300 && shaderType == GL_VERTEX_SHADER && IsGLSL410OrOlder(outputType))
         return true;
 
+    if ((compileOptions & SH_REMOVE_INVARIANT_FOR_ESSL3) != 0 && shaderVersion >= 300 &&
+        shaderType == GL_VERTEX_SHADER)
+        return true;
+
     return false;
 }
 

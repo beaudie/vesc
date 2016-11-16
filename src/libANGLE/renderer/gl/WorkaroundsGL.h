@@ -27,7 +27,8 @@ struct WorkaroundsGL
           emulateIsnanFloat(false),
           useUnusedBlocksWithStandardOrSharedLayout(false),
           dontRemoveInvariantForFragmentInput(false),
-          removeInvariantAndCentroidForESSL3(false)
+          removeInvariantAndCentroidForESSL3(false),
+          removeInvariantForESSL3(false)
     {
     }
 
@@ -120,6 +121,11 @@ struct WorkaroundsGL
 
     // This flag is used to fix spec difference between GLSL 4.1 or lower and ESSL3.
     bool removeInvariantAndCentroidForESSL3;
+
+    // AMD driver in Linux requires invariant qualifier to match between shaders even for GLSL >=
+    // 4.2. This conflicts with ESSL 3.0 which disallows invariant qualifier in fragment shader.
+    // Remove invariant qualifier in vertex shader to workaround AMD driver bug.
+    bool removeInvariantForESSL3;
 };
 }
 

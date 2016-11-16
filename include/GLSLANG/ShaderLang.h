@@ -32,7 +32,7 @@ typedef unsigned int GLenum;
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 167
+#define ANGLE_SH_VERSION 168
 
 enum ShShaderSpec
 {
@@ -210,6 +210,12 @@ const ShCompileOptions SH_DONT_REMOVE_INVARIANT_FOR_FRAGMENT_INPUT = UINT64_C(1)
 // developers' content. A more complex workaround of dynamically generating, compiling, and
 // re-linking shaders that use these qualifiers should be implemented.
 const ShCompileOptions SH_REMOVE_INVARIANT_AND_CENTROID_FOR_ESSL3 = UINT64_C(1) << 30;
+
+// AMD driver in Linux requires invariant qualifier to match between vertex and fragment shaders,
+// while ESSL 3.0 disallows invariant qualifier in fragment shader and GLSL >= 4.2 doesn't require
+// invariant qualifier to match between shaders. Remove invariant qualifier from vertex shader to
+// workaround AMD driver bug.
+const ShCompileOptions SH_REMOVE_INVARIANT_FOR_ESSL3 = UINT64_C(1) << 31;
 
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy

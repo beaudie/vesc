@@ -85,6 +85,11 @@ ShCompileOptions ShaderGL::prepareSourceAndReturnOptions(std::stringstream *sour
         options |= SH_REMOVE_INVARIANT_AND_CENTROID_FOR_ESSL3;
     }
 
+    if (mWorkarounds.removeInvariantForESSL3)
+    {
+        options |= SH_REMOVE_INVARIANT_FOR_ESSL3;
+    }
+
     return options;
 }
 
