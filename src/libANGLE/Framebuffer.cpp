@@ -1,3 +1,11 @@
+#include "Framebuffer.h"
+#include "Framebuffer.h"
+#include "Framebuffer.h"
+#include "Framebuffer.h"
+#include "Framebuffer.h"
+#include "Framebuffer.h"
+#include "Framebuffer.h"
+#include "Framebuffer.h"
 //
 // Copyright (c) 2002-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
@@ -240,6 +248,26 @@ const gl::FramebufferAttachment *FramebufferState::getDrawBuffer(size_t drawBuff
 size_t FramebufferState::getDrawBufferCount() const
 {
     return mDrawBufferStates.size();
+}
+
+void FramebufferState::setDefaultWidth(GLint defaultWidth)
+{
+    mDefaultWidth = defaultWidth;
+}
+
+void FramebufferState::setDefaultHeight(GLint defaultHeight)
+{
+    mDefaultHeight = defaultHeight;
+}
+
+void FramebufferState::setDefaultSamples(GLint defaultSamples)
+{
+    mDefaultSamples = defaultSamples;
+}
+
+void FramebufferState::setDefaultFixedSampleLocations(GLboolean defaultFixedSampleLocations)
+{
+    mDefaultFixedSampleLocations = defaultFixedSampleLocations;
 }
 
 Error Framebuffer::getSamplePosition(size_t index, GLfloat *xy) const
@@ -534,6 +562,7 @@ GLenum Framebuffer::checkStatusImpl(const ContextState &state)
     int samples = -1;
     bool missingAttachment = true;
 
+    // TODO(yizhou): Check status for default framebuffer parameters.
     for (const FramebufferAttachment &colorAttachment : mState.mColorAttachments)
     {
         if (colorAttachment.isAttached())
@@ -1054,6 +1083,56 @@ bool Framebuffer::formsCopyingFeedbackLoopWith(GLuint copyTextureID, GLint copyT
         }
     }
     return false;
+}
+
+Error Framebuffer::getDefaultWidth(GLenum target, GLint *defaultWidth)
+{
+    return mImpl->getDefaultWidth(target, defaultWidth);
+}
+
+Error Framebuffer::getDefaultHeight(GLenum target, GLint *defaultHeight)
+{
+    return mImpl->getDefaultHeight(target, defaultHeight);
+}
+
+Error Framebuffer::getDefaultSamples(GLenum target, GLint *defaultSamples)
+{
+    return mImpl->getDefaultSamples(target, defaultSamples);
+}
+
+Error Framebuffer::getDefaultFixedSampleLocations(GLenum target, GLint *defaultFixedSampleLocations)
+{
+    return mImpl->getDefaultFixedSampleLocations(target, defaultFixedSampleLocations);
+}
+
+const std::vector<FramebufferAttachment> &Framebuffer::getColorAttachments() const
+{
+    return mState.getColorAttachments();
+}
+
+void Framebuffer::setDefaultWidth(GLenum target, GLint defaultWidth)
+{
+    mState.setDefaultWidth(defaultWidth);
+    mImpl->setDefaultWidth(target, defaultWidth);
+}
+
+void Framebuffer::setDefaultHeight(GLenum target, GLint defaultHeight)
+{
+    mState.setDefaultHeight(defaultHeight);
+    mImpl->setDefaultHeight(target, defaultHeight);
+}
+
+void Framebuffer::setDefaultSamples(GLenum target, GLint defaultSamples)
+{
+    mState.setDefaultSamples(defaultSamples);
+    mImpl->setDefaultSamples(target, defaultSamples);
+}
+
+void Framebuffer::setDefaultFixedSampleLocations(GLenum target,
+                                                 GLboolean defaultFixedSampleLocations)
+{
+    mState.setDefaultFixedSampleLocations(defaultFixedSampleLocations);
+    mImpl->setDefaultFixedSampleLocations(target, defaultFixedSampleLocations);
 }
 
 }  // namespace gl

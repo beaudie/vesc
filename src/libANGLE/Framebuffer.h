@@ -82,6 +82,15 @@ class FramebufferState final : angle::NonCopyable
     const FramebufferAttachment *getDrawBuffer(size_t drawBufferIdx) const;
     size_t getDrawBufferCount() const;
 
+    GLint getDefaultWidth() const { return mDefaultWidth; };
+    GLint getDefaultHeight() const { return mDefaultHeight; };
+    GLint getDefaultSamples() const { return mDefaultSamples; };
+    GLboolean getDefaultFixedSampleLocations() const { return mDefaultFixedSampleLocations; };
+    void setDefaultWidth(GLint defaultWidth);
+    void setDefaultHeight(GLint defaultHeight);
+    void setDefaultSamples(GLint defaultSamples);
+    void setDefaultFixedSampleLocations(GLboolean defaultFixedSampleLocations);
+
   private:
     friend class Framebuffer;
 
@@ -93,7 +102,13 @@ class FramebufferState final : angle::NonCopyable
 
     std::vector<GLenum> mDrawBufferStates;
     GLenum mReadBufferState;
+
     std::bitset<IMPLEMENTATION_MAX_DRAW_BUFFERS> mEnabledDrawBuffers;
+
+    GLint mDefaultWidth;
+    GLint mDefaultHeight;
+    GLint mDefaultSamples;
+    GLboolean mDefaultFixedSampleLocations;
 };
 
 class Framebuffer final : public LabeledObject, public angle::SignalReceiver
@@ -133,6 +148,9 @@ class Framebuffer final : public LabeledObject, public angle::SignalReceiver
 
     size_t getDrawbufferStateCount() const;
     GLenum getDrawBufferState(size_t drawBuffer) const;
+
+    const std::vector<FramebufferAttachment> &getColorAttachments() const;
+
     const std::vector<GLenum> &getDrawBufferStates() const;
     void setDrawBuffers(size_t count, const GLenum *buffers);
     const FramebufferAttachment *getDrawBuffer(size_t drawBuffer) const;
@@ -151,6 +169,15 @@ class Framebuffer final : public LabeledObject, public angle::SignalReceiver
     int getSamples(const ContextState &state);
 
     Error getSamplePosition(size_t index, GLfloat *xy) const;
+
+    Error getDefaultWidth(GLenum target, GLint *defaultWidth);
+    Error getDefaultHeight(GLenum target, GLint *defaultHeight);
+    Error getDefaultSamples(GLenum target, GLint *defaultSamples);
+    Error getDefaultFixedSampleLocations(GLenum target, GLint *defaultFixedSampleLocations);
+    void setDefaultWidth(GLenum target, GLint defaultWidth);
+    void setDefaultHeight(GLenum target, GLint defaultHeight);
+    void setDefaultSamples(GLenum target, GLint defaultSamples);
+    void setDefaultFixedSampleLocations(GLenum target, GLboolean defaultFixedSampleLocations);
 
     GLenum checkStatus(const ContextState &state);
 

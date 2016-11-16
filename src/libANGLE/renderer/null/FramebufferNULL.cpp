@@ -137,4 +137,42 @@ gl::Error FramebufferNULL::getSamplePosition(size_t index, GLfloat *xy) const
     return gl::NoError();
 }
 
+gl::Error FramebufferNULL::getDefaultHeight(GLenum target, GLint *defaultHeight)
+{
+    return gl::NoError();
+}
+
+gl::Error FramebufferNULL::getDefaultWidth(GLenum target, GLint *defaultWidth)
+{
+    return gl::NoError();
+}
+
+gl::Error FramebufferNULL::getDefaultSamples(GLenum target, GLint *defaultSamples)
+{
+    return gl::NoError();
+}
+
+gl::Error FramebufferNULL::getDefaultFixedSampleLocations(GLenum target,
+                                                          GLint *defaultFixedSampleLocations)
+{
+    return gl::NoError();
+}
+
+void FramebufferNULL::setDefaultWidth(GLenum target, GLint defaultWidth)
+{
+}
+
+void FramebufferNULL::setDefaultHeight(GLenum target, GLint defaultHeight)
+{
+}
+
+void FramebufferNULL::setDefaultSamples(GLenum target, GLint defaultSamples)
+{
+}
+
+void FramebufferNULL::setDefaultFixedSampleLocations(GLenum target,
+                                                     GLboolean defaultFixedSampleLocations)
+{
+}
+
 }  // namespace rx
