@@ -1334,6 +1334,159 @@ GLuint Program::getUniformIndex(const std::string &name) const
     return mState.getUniformIndex(name);
 }
 
+void Program::setProgramUniform1iv(GLint location, GLsizei count, const GLint *v)
+{
+    GLsizei clampedCount = setUniformInternal(location, count, 1, v);
+    mProgram->setProgramUniform1iv(location, clampedCount, v);
+}
+
+void Program::setProgramUniform2iv(GLint location, GLsizei count, const GLint *v)
+{
+    GLsizei clampedCount = setUniformInternal(location, count, 2, v);
+    mProgram->setProgramUniform2iv(location, clampedCount, v);
+}
+
+void Program::setProgramUniform3iv(GLint location, GLsizei count, const GLint *v)
+{
+    GLsizei clampedCount = setUniformInternal(location, count, 3, v);
+    mProgram->setProgramUniform3iv(location, clampedCount, v);
+}
+
+void Program::setProgramUniform4iv(GLint location, GLsizei count, const GLint *v)
+{
+    GLsizei clampedCount = setUniformInternal(location, count, 4, v);
+    mProgram->setProgramUniform4iv(location, clampedCount, v);
+}
+
+void Program::setProgramUniform1uiv(GLint location, GLsizei count, const GLuint *v)
+{
+    GLsizei clampedCount = setUniformInternal(location, count, 1, v);
+    mProgram->setProgramUniform1uiv(location, clampedCount, v);
+}
+
+void Program::setProgramUniform2uiv(GLint location, GLsizei count, const GLuint *v)
+{
+    GLsizei clampedCount = setUniformInternal(location, count, 2, v);
+    mProgram->setProgramUniform2uiv(location, clampedCount, v);
+}
+
+void Program::setProgramUniform3uiv(GLint location, GLsizei count, const GLuint *v)
+{
+    GLsizei clampedCount = setUniformInternal(location, count, 3, v);
+    mProgram->setProgramUniform3uiv(location, clampedCount, v);
+}
+
+void Program::setProgramUniform4uiv(GLint location, GLsizei count, const GLuint *v)
+{
+    GLsizei clampedCount = setUniformInternal(location, count, 4, v);
+    mProgram->setProgramUniform4uiv(location, clampedCount, v);
+}
+
+void Program::setProgramUniform1fv(GLint location, GLsizei count, const GLfloat *v)
+{
+    GLsizei clampedCount = setUniformInternal(location, count, 1, v);
+    mProgram->setProgramUniform1fv(location, clampedCount, v);
+}
+
+void Program::setProgramUniform2fv(GLint location, GLsizei count, const GLfloat *v)
+{
+    GLsizei clampedCount = setUniformInternal(location, count, 2, v);
+    mProgram->setProgramUniform2fv(location, clampedCount, v);
+}
+
+void Program::setProgramUniform3fv(GLint location, GLsizei count, const GLfloat *v)
+{
+    GLsizei clampedCount = setUniformInternal(location, count, 3, v);
+    mProgram->setProgramUniform3fv(location, clampedCount, v);
+}
+
+void Program::setProgramUniform4fv(GLint location, GLsizei count, const GLfloat *v)
+{
+    GLsizei clampedCount = setUniformInternal(location, count, 4, v);
+    mProgram->setProgramUniform4fv(location, clampedCount, v);
+}
+
+void Program::setProgramUniformMatrix2fv(GLint location,
+                                         GLsizei count,
+                                         GLboolean transpose,
+                                         const GLfloat *v)
+{
+    GLsizei clampedCount = setMatrixUniformInternal<2, 2>(location, count, transpose, v);
+    mProgram->setProgramUniformMatrix2fv(location, clampedCount, transpose, v);
+}
+
+void Program::setProgramUniformMatrix3fv(GLint location,
+                                         GLsizei count,
+                                         GLboolean transpose,
+                                         const GLfloat *v)
+{
+    GLsizei clampedCount = setMatrixUniformInternal<3, 3>(location, count, transpose, v);
+    mProgram->setProgramUniformMatrix3fv(location, clampedCount, transpose, v);
+}
+
+void Program::setProgramUniformMatrix4fv(GLint location,
+                                         GLsizei count,
+                                         GLboolean transpose,
+                                         const GLfloat *v)
+{
+    GLsizei clampedCount = setMatrixUniformInternal<4, 4>(location, count, transpose, v);
+    mProgram->setProgramUniformMatrix4fv(location, clampedCount, transpose, v);
+}
+
+void Program::setProgramUniformMatrix2x3fv(GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *v)
+{
+    GLsizei clampedCount = setMatrixUniformInternal<2, 3>(location, count, transpose, v);
+    mProgram->setProgramUniformMatrix2x3fv(location, clampedCount, transpose, v);
+}
+
+void Program::setProgramUniformMatrix2x4fv(GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *v)
+{
+    GLsizei clampedCount = setMatrixUniformInternal<2, 4>(location, count, transpose, v);
+    mProgram->setProgramUniformMatrix2x4fv(location, clampedCount, transpose, v);
+}
+
+void Program::setProgramUniformMatrix3x2fv(GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *v)
+{
+    GLsizei clampedCount = setMatrixUniformInternal<3, 2>(location, count, transpose, v);
+    mProgram->setProgramUniformMatrix3x2fv(location, clampedCount, transpose, v);
+}
+
+void Program::setProgramUniformMatrix3x4fv(GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *v)
+{
+    GLsizei clampedCount = setMatrixUniformInternal<3, 4>(location, count, transpose, v);
+    mProgram->setProgramUniformMatrix3x4fv(location, clampedCount, transpose, v);
+}
+
+void Program::setProgramUniformMatrix4x2fv(GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *v)
+{
+    GLsizei clampedCount = setMatrixUniformInternal<4, 2>(location, count, transpose, v);
+    mProgram->setProgramUniformMatrix4x2fv(location, clampedCount, transpose, v);
+}
+
+void Program::setProgramUniformMatrix4x3fv(GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *v)
+{
+    GLsizei clampedCount = setMatrixUniformInternal<4, 3>(location, count, transpose, v);
+    mProgram->setProgramUniformMatrix4x3fv(location, clampedCount, transpose, v);
+}
+
 void Program::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
 {
     GLsizei clampedCount = setUniformInternal(location, count, 1, v);

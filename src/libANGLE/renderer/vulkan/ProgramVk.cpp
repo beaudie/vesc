@@ -51,6 +51,138 @@ GLboolean ProgramVk::validate(const gl::Caps &caps, gl::InfoLog *infoLog)
     return GLboolean();
 }
 
+void ProgramVk::setProgramUniform1iv(GLint location, GLsizei count, const GLint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniform2iv(GLint location, GLsizei count, const GLint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniform3iv(GLint location, GLsizei count, const GLint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniform4iv(GLint location, GLsizei count, const GLint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniform1uiv(GLint location, GLsizei count, const GLuint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniform2uiv(GLint location, GLsizei count, const GLuint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniform3uiv(GLint location, GLsizei count, const GLuint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniform4uiv(GLint location, GLsizei count, const GLuint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniform1fv(GLint location, GLsizei count, const GLfloat *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniform2fv(GLint location, GLsizei count, const GLfloat *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniform3fv(GLint location, GLsizei count, const GLfloat *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniform4fv(GLint location, GLsizei count, const GLfloat *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniformMatrix2fv(GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniformMatrix3fv(GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniformMatrix4fv(GLint location,
+                                           GLsizei count,
+                                           GLboolean transpose,
+                                           const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniformMatrix2x3fv(GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniformMatrix3x2fv(GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniformMatrix2x4fv(GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniformMatrix4x2fv(GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniformMatrix3x4fv(GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramVk::setProgramUniformMatrix4x3fv(GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
 void ProgramVk::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
 {
     UNIMPLEMENTED();
