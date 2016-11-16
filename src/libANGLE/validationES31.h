@@ -22,7 +22,11 @@ bool ValidateGetBooleani_vRobustANGLE(Context *context,
                                       GLsizei bufSize,
                                       GLsizei *length,
                                       GLboolean *data);
-
+bool ValidationFramebufferParameteri(Context *context, GLenum target, GLenum pname, GLint param);
+bool ValidationGetFramebufferParameteri(Context *context,
+                                        GLenum target,
+                                        GLenum pname,
+                                        GLint *params);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES31_H_

@@ -65,6 +65,8 @@ void QueryActiveUniformBlockiv(const Program *program,
 
 void QueryInternalFormativ(const TextureCaps &format, GLenum pname, GLsizei bufSize, GLint *params);
 
+void QueryFramebufferParameteriv(const Framebuffer *framebuffer, GLenum pname, GLint *params);
+
 void SetTexParameterf(Texture *texture, GLenum pname, GLfloat param);
 void SetTexParameterfv(Texture *texture, GLenum pname, const GLfloat *params);
 void SetTexParameteri(Texture *texture, GLenum pname, GLint param);
@@ -74,6 +76,8 @@ void SetSamplerParameterf(Sampler *sampler, GLenum pname, GLfloat param);
 void SetSamplerParameterfv(Sampler *sampler, GLenum pname, const GLfloat *params);
 void SetSamplerParameteri(Sampler *sampler, GLenum pname, GLint param);
 void SetSamplerParameteriv(Sampler *sampler, GLenum pname, const GLint *params);
+
+void SetFramebufferParameteri(Framebuffer *framebuffer, GLenum pname, GLint param);
 }
 
 #endif  // LIBANGLE_QUERYUTILS_H_
