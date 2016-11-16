@@ -65,6 +65,17 @@ class FramebufferNULL : public FramebufferImpl
     void syncState(const gl::Framebuffer::DirtyBits &dirtyBits) override;
 
     gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
+
+    gl::Error getDefaultWidth(GLenum target, GLint *defaultWidth) override;
+    gl::Error getDefaultHeight(GLenum target, GLint *defaultHeight) override;
+    gl::Error getDefaultSamples(GLenum target, GLint *defaultSamples) override;
+    gl::Error getDefaultFixedSampleLocations(GLenum target,
+                                             GLint *defaultFixedSampleLocations) override;
+    void setDefaultWidth(GLenum target, GLint defaultWidth) override;
+    void setDefaultHeight(GLenum target, GLint defaultHeight) override;
+    void setDefaultSamples(GLenum target, GLint defaultSamples) override;
+    void setDefaultFixedSampleLocations(GLenum target,
+                                        GLboolean defaultFixedSampleLocations) override;
 };
 
 }  // namespace rx

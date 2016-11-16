@@ -376,6 +376,62 @@ gl::Error FramebufferGL::getSamplePosition(size_t index, GLfloat *xy) const
     return gl::NoError();
 }
 
+gl::Error FramebufferGL::getDefaultWidth(GLenum target, GLint *defaultWidth)
+{
+    mStateManager->bindFramebuffer(target, mFramebufferID);
+    mFunctions->getFramebufferParameteriv(target, GL_FRAMEBUFFER_DEFAULT_WIDTH, defaultWidth);
+    return gl::NoError();
+}
+
+gl::Error FramebufferGL::getDefaultHeight(GLenum target, GLint *defaultHeight)
+{
+    mStateManager->bindFramebuffer(target, mFramebufferID);
+    mFunctions->getFramebufferParameteriv(target, GL_FRAMEBUFFER_DEFAULT_HEIGHT, defaultHeight);
+    return gl::NoError();
+}
+
+gl::Error FramebufferGL::getDefaultSamples(GLenum target, GLint *defaultSamples)
+{
+    mStateManager->bindFramebuffer(target, mFramebufferID);
+    mFunctions->getFramebufferParameteriv(target, GL_FRAMEBUFFER_DEFAULT_SAMPLES, defaultSamples);
+    return gl::NoError();
+}
+
+gl::Error FramebufferGL::getDefaultFixedSampleLocations(GLenum target,
+                                                        GLint *defaultFixedSampleLocations)
+{
+    mStateManager->bindFramebuffer(target, mFramebufferID);
+    mFunctions->getFramebufferParameteriv(target, GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS,
+                                          defaultFixedSampleLocations);
+    return gl::NoError();
+}
+
+void FramebufferGL::setDefaultWidth(GLenum target, GLint defaultWidth)
+{
+    mStateManager->bindFramebuffer(target, mFramebufferID);
+    mFunctions->framebufferParameteri(target, GL_FRAMEBUFFER_DEFAULT_WIDTH, defaultWidth);
+}
+
+void FramebufferGL::setDefaultHeight(GLenum target, GLint defaultHeight)
+{
+    mStateManager->bindFramebuffer(target, mFramebufferID);
+    mFunctions->framebufferParameteri(target, GL_FRAMEBUFFER_DEFAULT_HEIGHT, defaultHeight);
+}
+
+void FramebufferGL::setDefaultSamples(GLenum target, GLint defaultSamples)
+{
+    mStateManager->bindFramebuffer(target, mFramebufferID);
+    mFunctions->framebufferParameteri(target, GL_FRAMEBUFFER_DEFAULT_SAMPLES, defaultSamples);
+}
+
+void FramebufferGL::setDefaultFixedSampleLocations(GLenum target,
+                                                   GLboolean defaultFixedSampleLocations)
+{
+    mStateManager->bindFramebuffer(target, mFramebufferID);
+    mFunctions->framebufferParameteri(target, GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS,
+                                      defaultFixedSampleLocations);
+}
+
 bool FramebufferGL::checkStatus() const
 {
     mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
