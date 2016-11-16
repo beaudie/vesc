@@ -431,6 +431,51 @@ gl::Error Framebuffer11::getSamplePosition(size_t index, GLfloat *xy) const
     return gl::InternalError() << "getSamplePosition is unimplemented.";
 }
 
+gl::Error Framebuffer11::getDefaultWidth(GLint *defaultWidth)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "getDefaultWidth is unimplemented.";
+}
+
+gl::Error Framebuffer11::getDefaultHeight(GLint *defaultHeight)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "getDefaultHeight is unimplemented.";
+}
+
+gl::Error Framebuffer11::getDefaultSamples(GLint *defaultSamples)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "getDefaultSamples is unimplemented.";
+}
+
+gl::Error Framebuffer11::getDefaultFixedSampleLocations(GLint *defaultFixedSampleLocations)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "getDefaultFixedSampleLocations is unimplemented.";
+}
+
+void Framebuffer11::setDefaultWidth(GLenum target, GLint defaultWidth)
+{
+    UNIMPLEMENTED();
+}
+
+void Framebuffer11::setDefaultHeight(GLenum target, GLint defaultHeight)
+{
+    UNIMPLEMENTED();
+}
+
+void Framebuffer11::setDefaultSamples(GLenum target, GLint defaultSamples)
+{
+    UNIMPLEMENTED();
+}
+
+void Framebuffer11::setDefaultFixedSampleLocations(GLenum target,
+                                                   GLboolean defaultFixedSampleLocations)
+{
+    UNIMPLEMENTED();
+}
+
 bool Framebuffer11::hasAnyInternalDirtyBit() const
 {
     return mInternalDirtyBits.any();

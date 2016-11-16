@@ -74,6 +74,17 @@ class FramebufferImpl : angle::NonCopyable
 
     virtual gl::Error getSamplePosition(size_t index, GLfloat *xy) const = 0;
 
+    virtual gl::Error getDefaultWidth(GLint *defaultWidth)                               = 0;
+    virtual gl::Error getDefaultHeight(GLint *defaultHeight)                             = 0;
+    virtual gl::Error getDefaultSamples(GLint *defaultSamples)                           = 0;
+    virtual gl::Error getDefaultFixedSampleLocations(GLint *defaultFixedSampleLocations) = 0;
+
+    virtual void setDefaultWidth(GLenum target, GLint defaultWidth)     = 0;
+    virtual void setDefaultHeight(GLenum target, GLint defaultHeight)   = 0;
+    virtual void setDefaultSamples(GLenum target, GLint defaultSamples) = 0;
+    virtual void setDefaultFixedSampleLocations(GLenum target,
+                                                GLboolean defaultFixedSampleLocations) = 0;
+
     const gl::FramebufferState &getState() const { return mState; }
 
   protected:
