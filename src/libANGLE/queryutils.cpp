@@ -730,6 +730,133 @@ void QueryInternalFormativ(const TextureCaps &format, GLenum pname, GLsizei bufS
     }
 }
 
+void QueryFramebufferParameteriv(const Framebuffer *framebuffer, GLenum pname, GLint *params)
+{
+    ASSERT(framebuffer);
+    const FramebufferAttachment *attachmentObject;
+
+	switch (pname) {
+	case GL_FRAMEBUFFER_DEFAULT_WIDTH:
+	{
+		GLint maxwidth = -1;
+		for (GLenum attachment = GL_COLOR_ATTACHMENT0; attachment <= GL_COLOR_ATTACHMENT15;
+			++attachment)
+		{
+			attachmentObject = framebuffer->getAttachment(attachment);
+			Texture *tex = attachmentObject->getTexture();
+			GLenum texTarget = tex->getTarget();
+			GLint texBaseLevel = tex->getBaseLevel();
+			GLint width = static_cast<GLint>(tex->getWidth(texTarget, static_cast<size_t>(texBaseLevel)));
+			if (width > maxwidth)
+				maxwidth = width;
+		}
+
+		attachmentObject = framebuffer->getAttachment(GL_DEPTH_ATTACHMENT);
+		Texture *tex = attachmentObject->getTexture();
+		GLenum texTarget = tex->getTarget();
+		GLint texBaseLevel = tex->getBaseLevel();
+		maxwidth = static_cast<GLint>((maxwidth > tex->getWidth(texTarget, static_cast<size_t>(texBaseLevel)))
+			? maxwidth
+			: tex->getWidth(texTarget, texBaseLevel));
+
+		attachmentObject = framebuffer->getAttachment(GL_STENCIL_ATTACHMENT);
+		tex = attachmentObject->getTexture();
+		texTarget = tex->getTarget();
+		texBaseLevel = tex->getBaseLevel();
+		maxwidth = static_cast<GLint>((maxwidth > tex->getWidth(texTarget, static_cast<size_t>(texBaseLevel)))
+			? maxwidth
+			: tex->getWidth(texTarget, static_cast<size_t>(texBaseLevel)));
+
+		if (maxwidth == -1)
+		{
+			*params = framebuffer->getDefaultWidth();
+		}
+		else
+		{
+			*params = maxwidth;
+		}
+		break;
+	}
+	case GL_FRAMEBUFFER_DEFAULT_HEIGHT:
+	{
+		GLint maxheight = -1;
+		for (GLenum attachment = GL_COLOR_ATTACHMENT0; attachment <= GL_COLOR_ATTACHMENT15;
+			++attachment)
+		{
+			attachmentObject = framebuffer->getAttachment(attachment);
+			Texture *tex = attachmentObject->getTexture();
+			GLenum texTarget = tex->getTarget();
+			GLint texBaseLevel = tex->getBaseLevel();
+			GLint height = static_cast<GLint>(tex->getHeight(texTarget, static_cast<size_t>(texBaseLevel)));
+			if (height > maxheight)
+				maxheight = height;
+		}
+
+		attachmentObject = framebuffer->getAttachment(GL_DEPTH_ATTACHMENT);
+		Texture *tex = attachmentObject->getTexture();
+		GLenum texTarget = tex->getTarget();
+		GLint texBaseLevel = tex->getBaseLevel();
+		maxheight = static_cast<GLint>((maxheight > tex->getHeight(texTarget, static_cast<size_t>(texBaseLevel)))
+			? maxheight
+			: tex->getHeight(texTarget, texBaseLevel));
+
+		attachmentObject = framebuffer->getAttachment(GL_STENCIL_ATTACHMENT);
+		tex = attachmentObject->getTexture();
+		texTarget = tex->getTarget();
+		texBaseLevel = tex->getBaseLevel();
+		maxheight = static_cast<GLint>((maxheight > tex->getHeight(texTarget, static_cast<size_t>(texBaseLevel)))
+			? maxheight
+			: tex->getHeight(texTarget, static_cast<size_t>(texBaseLevel)));
+
+		if (maxheight == -1)
+		{
+			*params = framebuffer->getDefaultHeight();
+		}
+		else
+		{
+			*params = maxheight;
+		}
+		break;
+	}
+	case GL_FRAMEBUFFER_DEFAULT_SAMPLES:
+	{
+		// multisample texture is not supported yet
+		break;
+	}
+	case GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+	{
+		// multisample texture is not supported yet
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+void SetFramebufferParameteri(Framebuffer *framebuffer, GLenum pname, GLint param)
+{
+    ASSERT(framebuffer);
+
+    switch (pname)
+    {
+        case GL_FRAMEBUFFER_DEFAULT_WIDTH:
+            framebuffer->setDefaultWidth(param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_HEIGHT:
+            framebuffer->setDefaultHeight(param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_SAMPLES:
+            framebuffer->setDefaultSamples(param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+            framebuffer->setDefaultFixedSampleLocations(param);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
 void SetTexParameterf(Texture *texture, GLenum pname, GLfloat param)
 {
     SetTexParameterBase(texture, pname, &param);

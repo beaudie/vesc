@@ -935,4 +935,44 @@ bool Framebuffer::complete(const ContextState &state)
     return (checkStatus(state) == GL_FRAMEBUFFER_COMPLETE);
 }
 
+const GLint Framebuffer::getDefaultWidth() const
+{
+    return mState.getDefaultWidth();
+}
+
+const GLint Framebuffer::getDefaultHeight() const
+{
+    return mState.getDefaultHeight();
+}
+
+const GLint Framebuffer::getDefaultSamples() const
+{
+    return mState.getDefaultSamples();
+}
+
+const GLint Framebuffer::getDefaultFixedSampleLocations() const
+{
+    return mState.getDefaultFixedSampleLocations();
+}
+
+void Framebuffer::setDefaultWidth(GLint defaultwidth)
+{
+    mState.setDefaultWidth(defaultwidth);
+}
+
+void Framebuffer::setDefaultHeight(GLint defaultheight)
+{
+    mState.setDefaultHeight(defaultheight);
+}
+
+void Framebuffer::setDefaultSamples(GLint defaultsamples)
+{
+    mState.setDefaultSamples(defaultsamples);
+}
+
+void Framebuffer::setDefaultFixedSampleLocations(GLint defaultfixedsamplelocations)
+{
+    mState.setDefaultFixedSampleLocations(defaultfixedsamplelocations);
+}
+
 }  // namespace gl
