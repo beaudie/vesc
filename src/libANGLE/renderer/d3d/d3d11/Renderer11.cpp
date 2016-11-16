@@ -4577,7 +4577,7 @@ gl::Error Renderer11::getScratchMemoryBuffer(size_t requestedSize, MemoryBuffer 
 
 gl::Version Renderer11::getMaxSupportedESVersion() const
 {
-    return gl::Version(d3d11_gl::GetMaximumClientVersion(mRenderer11DeviceCaps.featureLevel), 0);
+    return gl::Version(d3d11_gl::GetMaximumClientVersion(mRenderer11DeviceCaps.featureLevel), 1);
 }
 
 gl::DebugAnnotator *Renderer11::getAnnotator()
