@@ -357,4 +357,49 @@ gl::Error FramebufferD3D::getSamplePosition(size_t index, GLfloat *xy) const
     return gl::InternalError() << "getSamplePosition is unimplemented.";
 }
 
+gl::Error FramebufferD3D::getDefaultHeight(GLint *defaultHeight)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "getDefaultHeight is unimplemented.";
+}
+
+gl::Error FramebufferD3D::getDefaultWidth(GLint *defaultWidth)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "getDefaultWidth is unimplemented.";
+}
+
+gl::Error FramebufferD3D::getDefaultSamples(GLint *defaultSamples)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "getDefaultSamples is unimplemented.";
+}
+
+gl::Error FramebufferD3D::getDefaultFixedSampleLocations(GLint *defaultFixedSampleLocations)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "getDefaultFixedSampleLocations is unimplemented.";
+}
+
+void FramebufferD3D::setDefaultWidth(GLenum target, GLint defaultWidth)
+{
+    UNIMPLEMENTED();
+}
+
+void FramebufferD3D::setDefaultHeight(GLenum target, GLint defaultHeight)
+{
+    UNIMPLEMENTED();
+}
+
+void FramebufferD3D::setDefaultSamples(GLenum target, GLint defaultSamples)
+{
+    UNIMPLEMENTED();
+}
+
+void FramebufferD3D::setDefaultFixedSampleLocations(GLenum target,
+                                                    GLboolean defaultFixedSampleLocations)
+{
+    UNIMPLEMENTED();
+}
+
 }  // namespace rx
