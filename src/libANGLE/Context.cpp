@@ -3716,4 +3716,54 @@ void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
     }
 }
 
+void Context::getFramebufferParameteriv(GLenum target, GLenum pname, GLint *params)
+{
+    Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+
+    switch (pname)
+    {
+        case GL_FRAMEBUFFER_DEFAULT_WIDTH:
+            framebuffer->getDefaultWidth(params);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_HEIGHT:
+            framebuffer->getDefaultHeight(params);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_SAMPLES:
+            framebuffer->getDefaultSamples(params);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+            framebuffer->getDefaultFixedSampleLocations(params);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void Context::setFramebufferParameteri(GLenum target, GLenum pname, GLint param)
+{
+    Framebuffer *framebuffer = mGLState.getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+
+    switch (pname)
+    {
+        case GL_FRAMEBUFFER_DEFAULT_WIDTH:
+            framebuffer->setDefaultWidth(param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_HEIGHT:
+            framebuffer->setDefaultHeight(param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_SAMPLES:
+            framebuffer->setDefaultSamples(param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+            framebuffer->setDefaultFixedSampleLocations(static_cast<GLboolean>(param));
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
 }  // namespace gl
