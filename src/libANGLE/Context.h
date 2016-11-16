@@ -621,6 +621,9 @@ class Context final : public ValidationContext
     rx::ContextImpl *getImplementation() const { return mImplementation.get(); }
     const Workarounds &getWorkarounds() const;
 
+    void getFramebufferParameteriv(Framebuffer *framebuffer, GLenum pname, GLint *params);
+    void setFramebufferParameteri(Framebuffer *framebuffer, GLenum pname, GLint param);
+
   private:
     void syncRendererState();
     void syncRendererState(const State::DirtyBits &bitMask, const State::DirtyObjects &objectMask);

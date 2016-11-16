@@ -82,6 +82,15 @@ class FramebufferState final : angle::NonCopyable
     const FramebufferAttachment *getDrawBuffer(size_t drawBufferIdx) const;
     size_t getDrawBufferCount() const;
 
+    GLint getDefaultWidth() const { return mDefaultWidth; };
+    GLint getDefaultHeight() const { return mDefaultHeight; };
+    GLint getDefaultSamples() const { return mDefaultSamples; };
+    GLboolean getDefaultFixedSampleLocations() const { return mDefaultFixedSampleLocations; };
+    void setDefaultWidth(GLint defaultWidth);
+    void setDefaultHeight(GLint defaultHeight);
+    void setDefaultSamples(GLint defaultSamples);
+    void setDefaultFixedSampleLocations(GLboolean defaultFixedSampleLocations);
+
   private:
     friend class Framebuffer;
 
@@ -94,6 +103,11 @@ class FramebufferState final : angle::NonCopyable
     std::vector<GLenum> mDrawBufferStates;
     GLenum mReadBufferState;
     std::bitset<IMPLEMENTATION_MAX_DRAW_BUFFERS> mEnabledDrawBuffers;
+
+    GLint mDefaultWidth;
+    GLint mDefaultHeight;
+    GLint mDefaultSamples;
+    GLboolean mDefaultFixedSampleLocations;
 };
 
 class Framebuffer final : public LabeledObject, public angle::SignalReceiver
@@ -157,6 +171,15 @@ class Framebuffer final : public LabeledObject, public angle::SignalReceiver
 
     Error getSamplePosition(size_t index, GLfloat *xy) const;
 
+    Error getDefaultWidth(GLint *defaultWidth);
+    Error getDefaultHeight(GLint *defaultHeight);
+    Error getDefaultSamples(GLint *defaultSamples);
+    Error getDefaultFixedSampleLocations(GLint *defaultFixedSampleLocations);
+    void setDefaultWidth(GLint defaultWidth);
+    void setDefaultHeight(GLint defaultHeight);
+    void setDefaultSamples(GLint defaultSamples);
+    void setDefaultFixedSampleLocations(GLboolean defaultFixedSampleLocations);
+
     GLenum checkStatus(const ContextState &state);
 
     // Helper for checkStatus == GL_FRAMEBUFFER_COMPLETE.
@@ -210,8 +233,12 @@ class Framebuffer final : public LabeledObject, public angle::SignalReceiver
         DIRTY_BIT_STENCIL_ATTACHMENT,
         DIRTY_BIT_DRAW_BUFFERS,
         DIRTY_BIT_READ_BUFFER,
+        DIRTY_BIT_DEFAULT_WIDTH,
+        DIRTY_BIT_DEFAULT_HEIGHT,
+        DIRTY_BIT_DEFAULT_SAMPLES,
+        DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS,
         DIRTY_BIT_UNKNOWN,
-        DIRTY_BIT_MAX = DIRTY_BIT_UNKNOWN,
+        DIRTY_BIT_MAX = DIRTY_BIT_UNKNOWN
     };
 
     typedef std::bitset<DIRTY_BIT_MAX> DirtyBits;
