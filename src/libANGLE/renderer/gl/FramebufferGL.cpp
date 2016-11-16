@@ -419,6 +419,19 @@ void FramebufferGL::syncState(const Framebuffer::DirtyBits &dirtyBits)
             case Framebuffer::DIRTY_BIT_READ_BUFFER:
                 mFunctions->readBuffer(mState.getReadBufferState());
                 break;
+            case Framebuffer::DIRTY_BIT_DEFAULT_WIDTH:
+                mFunctions->framebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH,
+                                                  mState.getDefaultWidth());
+            case Framebuffer::DIRTY_BIT_DEFAULT_HEIGHT:
+                mFunctions->framebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT,
+                                                  mState.getDefaultHeight());
+            case Framebuffer::DIRTY_BIT_DEFAULT_SAMPLES:
+                mFunctions->framebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES,
+                                                  mState.getDefaultSamples());
+            case Framebuffer::DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+                mFunctions->framebufferParameteri(GL_FRAMEBUFFER,
+                                                  GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS,
+                                                  mState.getDefaultFixedSampleLocations());
             default:
             {
                 ASSERT(Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0 == 0 &&

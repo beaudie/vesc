@@ -86,7 +86,6 @@ void SetSamplerParameterf(Sampler *sampler, GLenum pname, GLfloat param);
 void SetSamplerParameterfv(Sampler *sampler, GLenum pname, const GLfloat *params);
 void SetSamplerParameteri(Sampler *sampler, GLenum pname, GLint param);
 void SetSamplerParameteriv(Sampler *sampler, GLenum pname, const GLint *params);
-
 }  // namespace gl
 
 namespace egl
