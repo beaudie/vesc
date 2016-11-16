@@ -44,7 +44,11 @@ FramebufferState::FramebufferState()
     : mLabel(),
       mColorAttachments(1),
       mDrawBufferStates(1, GL_NONE),
-      mReadBufferState(GL_COLOR_ATTACHMENT0_EXT)
+      mReadBufferState(GL_COLOR_ATTACHMENT0_EXT),
+      mDefaultWidth(0),
+      mDefaultHeight(0),
+      mDefaultSamples(0),
+      mDefaultFixedSampleLocations(GL_FALSE)
 {
     mDrawBufferStates[0] = GL_COLOR_ATTACHMENT0_EXT;
     mEnabledDrawBuffers.set(0);
@@ -54,7 +58,11 @@ FramebufferState::FramebufferState(const Caps &caps)
     : mLabel(),
       mColorAttachments(caps.maxColorAttachments),
       mDrawBufferStates(caps.maxDrawBuffers, GL_NONE),
-      mReadBufferState(GL_COLOR_ATTACHMENT0_EXT)
+      mReadBufferState(GL_COLOR_ATTACHMENT0_EXT),
+      mDefaultWidth(0),
+      mDefaultHeight(0),
+      mDefaultSamples(0),
+      mDefaultFixedSampleLocations(GL_FALSE)
 {
     ASSERT(mDrawBufferStates.size() > 0);
     mDrawBufferStates[0] = GL_COLOR_ATTACHMENT0_EXT;
@@ -544,6 +552,7 @@ GLenum Framebuffer::checkStatusImpl(const ContextState &state)
     int samples = -1;
     bool missingAttachment = true;
 
+    // TODO(yizhou): Check status for default framebuffer parameters.
     for (const FramebufferAttachment &colorAttachment : mState.mColorAttachments)
     {
         if (colorAttachment.isAttached())
@@ -1093,6 +1102,50 @@ bool Framebuffer::formsCopyingFeedbackLoopWith(GLuint copyTextureID,
         }
     }
     return false;
+}
+
+GLint Framebuffer::getDefaultWidth()
+{
+    return mState.getDefaultWidth();
+}
+
+GLint Framebuffer::getDefaultHeight()
+{
+    return mState.getDefaultHeight();
+}
+
+GLint Framebuffer::getDefaultSamples()
+{
+    return mState.getDefaultSamples();
+}
+
+GLint Framebuffer::getDefaultFixedSampleLocations()
+{
+    return mState.getDefaultFixedSampleLocations();
+}
+
+void Framebuffer::setDefaultWidth(GLint defaultWidth)
+{
+    mState.mDefaultWidth = defaultWidth;
+    mDirtyBits.set(DIRTY_BIT_DEFAULT_WIDTH);
+}
+
+void Framebuffer::setDefaultHeight(GLint defaultHeight)
+{
+    mState.mDefaultHeight = defaultHeight;
+    mDirtyBits.set(DIRTY_BIT_DEFAULT_HEIGHT);
+}
+
+void Framebuffer::setDefaultSamples(GLint defaultSamples)
+{
+    mState.mDefaultSamples = defaultSamples;
+    mDirtyBits.set(DIRTY_BIT_DEFAULT_SAMPLES);
+}
+
+void Framebuffer::setDefaultFixedSampleLocations(GLboolean defaultFixedSampleLocations)
+{
+    mState.mDefaultFixedSampleLocations = defaultFixedSampleLocations;
+    mDirtyBits.set(DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS);
 }
 
 }  // namespace gl
