@@ -13,6 +13,7 @@
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/Framebuffer.h"
+#include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Sampler.h"
@@ -826,6 +827,65 @@ void QueryInternalFormativ(const TextureCaps &format, GLenum pname, GLsizei bufS
         }
         break;
 
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void QueryFramebufferParameteriv(Framebuffer *framebuffer,
+                                 GLenum target,
+                                 GLenum pname,
+                                 GLint *params)
+{
+    ASSERT(framebuffer);
+
+    switch (pname)
+    {
+        case GL_FRAMEBUFFER_DEFAULT_WIDTH:
+        {
+            framebuffer->getDefaultWidth(params);
+            break;
+        }
+        case GL_FRAMEBUFFER_DEFAULT_HEIGHT:
+        {
+            framebuffer->getDefaultHeight(params);
+            break;
+        }
+        case GL_FRAMEBUFFER_DEFAULT_SAMPLES:
+        {
+            framebuffer->getDefaultSamples(params);
+            break;
+        }
+        case GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+        {
+            framebuffer->getDefaultFixedSampleLocations(params);
+            break;
+        }
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void SetFramebufferParameteri(Framebuffer *framebuffer, GLenum target, GLenum pname, GLint param)
+{
+    ASSERT(framebuffer);
+
+    switch (pname)
+    {
+        case GL_FRAMEBUFFER_DEFAULT_WIDTH:
+            framebuffer->setDefaultWidth(target, param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_HEIGHT:
+            framebuffer->setDefaultHeight(target, param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_SAMPLES:
+            framebuffer->setDefaultSamples(target, param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+            framebuffer->setDefaultFixedSampleLocations(target, static_cast<GLboolean>(param));
+            break;
         default:
             UNREACHABLE();
             break;

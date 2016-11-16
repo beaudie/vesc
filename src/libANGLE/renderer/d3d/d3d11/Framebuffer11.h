@@ -48,6 +48,16 @@ class Framebuffer11 : public FramebufferD3D, public angle::SignalReceiver
 
     gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
 
+    gl::Error getDefaultWidth(GLint *defaultWidth) override;
+    gl::Error getDefaultHeight(GLint *defaultHeight) override;
+    gl::Error getDefaultSamples(GLint *defaultSamples) override;
+    gl::Error getDefaultFixedSampleLocations(GLint *defaultFixedSampleLocations) override;
+    void setDefaultWidth(GLenum target, GLint defaultWidth) override;
+    void setDefaultHeight(GLenum target, GLint defaultHeight) override;
+    void setDefaultSamples(GLenum target, GLint defaultSamples) override;
+    void setDefaultFixedSampleLocations(GLenum target,
+                                        GLboolean defaultFixedSampleLocations) override;
+
   private:
     gl::Error clearImpl(ContextImpl *context, const ClearParameters &clearParams) override;
 

@@ -101,6 +101,16 @@ class FramebufferD3D : public FramebufferImpl
 
     gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
 
+    gl::Error getDefaultWidth(GLint *defaultWidth) override;
+    gl::Error getDefaultHeight(GLint *defaultHeight) override;
+    gl::Error getDefaultSamples(GLint *defaultSamples) override;
+    gl::Error getDefaultFixedSampleLocations(GLint *defaultFixedSampleLocations) override;
+    void setDefaultWidth(GLenum target, GLint defaultWidth) override;
+    void setDefaultHeight(GLenum target, GLint defaultHeight) override;
+    void setDefaultSamples(GLenum target, GLint defaultSamples) override;
+    void setDefaultFixedSampleLocations(GLenum target,
+                                        GLboolean defaultFixedSampleLocations) override;
+
   private:
     virtual gl::Error clearImpl(ContextImpl *impl, const ClearParameters &clearParams) = 0;
 
