@@ -28,6 +28,55 @@ class ProgramNULL : public ProgramImpl
     LinkResult link(const gl::ContextState &data, gl::InfoLog &infoLog) override;
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
 
+    void setProgramUniform1iv(GLint location, GLsizei count, const GLint *v) override;
+    void setProgramUniform2iv(GLint location, GLsizei count, const GLint *v) override;
+    void setProgramUniform3iv(GLint location, GLsizei count, const GLint *v) override;
+    void setProgramUniform4iv(GLint location, GLsizei count, const GLint *v) override;
+    void setProgramUniform1uiv(GLint location, GLsizei count, const GLuint *v) override;
+    void setProgramUniform2uiv(GLint location, GLsizei count, const GLuint *v) override;
+    void setProgramUniform3uiv(GLint location, GLsizei count, const GLuint *v) override;
+    void setProgramUniform4uiv(GLint location, GLsizei count, const GLuint *v) override;
+    void setProgramUniform1fv(GLint location, GLsizei count, const GLfloat *v) override;
+    void setProgramUniform2fv(GLint location, GLsizei count, const GLfloat *v) override;
+    void setProgramUniform3fv(GLint location, GLsizei count, const GLfloat *v) override;
+    void setProgramUniform4fv(GLint location, GLsizei count, const GLfloat *v) override;
+    void setProgramUniformMatrix2fv(GLint location,
+                                    GLsizei count,
+                                    GLboolean transpose,
+                                    const GLfloat *value) override;
+    void setProgramUniformMatrix3fv(GLint location,
+                                    GLsizei count,
+                                    GLboolean transpose,
+                                    const GLfloat *value) override;
+    void setProgramUniformMatrix4fv(GLint location,
+                                    GLsizei count,
+                                    GLboolean transpose,
+                                    const GLfloat *value) override;
+    void setProgramUniformMatrix2x3fv(GLint location,
+                                      GLsizei count,
+                                      GLboolean transpose,
+                                      const GLfloat *value) override;
+    void setProgramUniformMatrix3x2fv(GLint location,
+                                      GLsizei count,
+                                      GLboolean transpose,
+                                      const GLfloat *value) override;
+    void setProgramUniformMatrix2x4fv(GLint location,
+                                      GLsizei count,
+                                      GLboolean transpose,
+                                      const GLfloat *value) override;
+    void setProgramUniformMatrix4x2fv(GLint location,
+                                      GLsizei count,
+                                      GLboolean transpose,
+                                      const GLfloat *value) override;
+    void setProgramUniformMatrix3x4fv(GLint location,
+                                      GLsizei count,
+                                      GLboolean transpose,
+                                      const GLfloat *value) override;
+    void setProgramUniformMatrix4x3fv(GLint location,
+                                      GLsizei count,
+                                      GLboolean transpose,
+                                      const GLfloat *value) override;
+
     void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) override;
     void setUniform2fv(GLint location, GLsizei count, const GLfloat *v) override;
     void setUniform3fv(GLint location, GLsizei count, const GLfloat *v) override;

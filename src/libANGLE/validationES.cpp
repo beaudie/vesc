@@ -2535,6 +2535,62 @@ bool ValidateGetQueryObjectui64vRobustANGLE(Context *context,
     return true;
 }
 
+static bool ValidateProgramUniformCommonBase(gl::Context *context,
+                                             GLenum targetUniformType,
+                                             GLuint program,
+                                             GLint location,
+                                             GLsizei count,
+                                             const LinkedUniform **uniformOut)
+{
+    if (count < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE));
+        return false;
+    }
+
+    if (program == 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE));
+        return false;
+    }
+
+    gl::Program *programObject = GetValidProgram(context, program);
+    if (!programObject)
+    {
+        return false;
+    }
+
+    if (!programObject || !programObject->isLinked())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    if (programObject->isIgnoredUniformLocation(location))
+    {
+        // Silently ignore the uniform command
+        return false;
+    }
+
+    if (!programObject->isValidUniformLocation(location))
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    const LinkedUniform &uniform = programObject->getUniformByLocation(location);
+
+    // attempting to write an array to a non-array uniform is an INVALID_OPERATION
+    if (!uniform.isArray() && count > 1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    *uniformOut = &uniform;
+    return true;
+}
+
 static bool ValidateUniformCommonBase(gl::Context *context,
                                       GLenum targetUniformType,
                                       GLint location,
@@ -2576,6 +2632,74 @@ static bool ValidateUniformCommonBase(gl::Context *context,
     }
 
     *uniformOut = &uniform;
+    return true;
+}
+
+bool ValidateProgramUniform(gl::Context *context,
+                            GLenum uniformType,
+                            GLuint program,
+                            GLint location,
+                            GLsizei count)
+{
+    // Check for ES31 uniform entry points
+    if (VariableComponentType(uniformType) == GL_UNSIGNED_INT &&
+        context->getClientMajorVersion() < 3)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    const LinkedUniform *uniform = nullptr;
+    if (!ValidateProgramUniformCommonBase(context, uniformType, program, location, count, &uniform))
+    {
+        return false;
+    }
+
+    GLenum targetBoolType    = VariableBoolVectorType(uniformType);
+    bool samplerUniformCheck = (IsSamplerType(uniform->type) && uniformType == GL_INT);
+    if (!samplerUniformCheck && uniformType != uniform->type && targetBoolType != uniform->type)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateProgramUniformMatrix(gl::Context *context,
+                                  GLenum matrixType,
+                                  GLuint program,
+                                  GLint location,
+                                  GLsizei count,
+                                  GLboolean transpose)
+{
+    // Check for ES31 uniform entry points
+    int rows = VariableRowCount(matrixType);
+    int cols = VariableColumnCount(matrixType);
+    if (rows != cols && context->getClientMajorVersion() < 3)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    if (transpose != GL_FALSE && context->getClientMajorVersion() < 3)
+    {
+        context->handleError(Error(GL_INVALID_VALUE));
+        return false;
+    }
+
+    const LinkedUniform *uniform = nullptr;
+    if (!ValidateProgramUniformCommonBase(context, matrixType, program, location, count, &uniform))
+    {
+        return false;
+    }
+
+    if (uniform->type != matrixType)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
     return true;
 }
 

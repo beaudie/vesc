@@ -51,6 +51,138 @@ GLboolean ProgramNULL::validate(const gl::Caps &caps, gl::InfoLog *infoLog)
     return GLboolean();
 }
 
+void ProgramNULL::setProgramUniform1iv(GLint location, GLsizei count, const GLint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniform2iv(GLint location, GLsizei count, const GLint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniform3iv(GLint location, GLsizei count, const GLint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniform4iv(GLint location, GLsizei count, const GLint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniform1uiv(GLint location, GLsizei count, const GLuint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniform2uiv(GLint location, GLsizei count, const GLuint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniform3uiv(GLint location, GLsizei count, const GLuint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniform4uiv(GLint location, GLsizei count, const GLuint *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniform1fv(GLint location, GLsizei count, const GLfloat *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniform2fv(GLint location, GLsizei count, const GLfloat *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniform3fv(GLint location, GLsizei count, const GLfloat *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniform4fv(GLint location, GLsizei count, const GLfloat *v)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniformMatrix2fv(GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniformMatrix3fv(GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniformMatrix4fv(GLint location,
+                                             GLsizei count,
+                                             GLboolean transpose,
+                                             const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniformMatrix2x3fv(GLint location,
+                                               GLsizei count,
+                                               GLboolean transpose,
+                                               const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniformMatrix3x2fv(GLint location,
+                                               GLsizei count,
+                                               GLboolean transpose,
+                                               const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniformMatrix2x4fv(GLint location,
+                                               GLsizei count,
+                                               GLboolean transpose,
+                                               const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniformMatrix4x2fv(GLint location,
+                                               GLsizei count,
+                                               GLboolean transpose,
+                                               const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniformMatrix3x4fv(GLint location,
+                                               GLsizei count,
+                                               GLboolean transpose,
+                                               const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
+void ProgramNULL::setProgramUniformMatrix4x3fv(GLint location,
+                                               GLsizei count,
+                                               GLboolean transpose,
+                                               const GLfloat *value)
+{
+    UNIMPLEMENTED();
+}
+
 void ProgramNULL::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
 {
     UNIMPLEMENTED();

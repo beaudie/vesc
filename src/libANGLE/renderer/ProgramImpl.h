@@ -39,6 +39,55 @@ class ProgramImpl : angle::NonCopyable
     virtual LinkResult link(const gl::ContextState &data, gl::InfoLog &infoLog) = 0;
     virtual GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) = 0;
 
+    virtual void setProgramUniform1iv(GLint location, GLsizei count, const GLint *v)   = 0;
+    virtual void setProgramUniform2iv(GLint location, GLsizei count, const GLint *v)   = 0;
+    virtual void setProgramUniform3iv(GLint location, GLsizei count, const GLint *v)   = 0;
+    virtual void setProgramUniform4iv(GLint location, GLsizei count, const GLint *v)   = 0;
+    virtual void setProgramUniform1uiv(GLint location, GLsizei count, const GLuint *v) = 0;
+    virtual void setProgramUniform2uiv(GLint location, GLsizei count, const GLuint *v) = 0;
+    virtual void setProgramUniform3uiv(GLint location, GLsizei count, const GLuint *v) = 0;
+    virtual void setProgramUniform4uiv(GLint location, GLsizei count, const GLuint *v) = 0;
+    virtual void setProgramUniform1fv(GLint location, GLsizei count, const GLfloat *v) = 0;
+    virtual void setProgramUniform2fv(GLint location, GLsizei count, const GLfloat *v) = 0;
+    virtual void setProgramUniform3fv(GLint location, GLsizei count, const GLfloat *v) = 0;
+    virtual void setProgramUniform4fv(GLint location, GLsizei count, const GLfloat *v) = 0;
+    virtual void setProgramUniformMatrix2fv(GLint location,
+                                            GLsizei count,
+                                            GLboolean transpose,
+                                            const GLfloat *value) = 0;
+    virtual void setProgramUniformMatrix3fv(GLint location,
+                                            GLsizei count,
+                                            GLboolean transpose,
+                                            const GLfloat *value) = 0;
+    virtual void setProgramUniformMatrix4fv(GLint location,
+                                            GLsizei count,
+                                            GLboolean transpose,
+                                            const GLfloat *value) = 0;
+    virtual void setProgramUniformMatrix2x3fv(GLint location,
+                                              GLsizei count,
+                                              GLboolean transpose,
+                                              const GLfloat *value) = 0;
+    virtual void setProgramUniformMatrix3x2fv(GLint location,
+                                              GLsizei count,
+                                              GLboolean transpose,
+                                              const GLfloat *value) = 0;
+    virtual void setProgramUniformMatrix2x4fv(GLint location,
+                                              GLsizei count,
+                                              GLboolean transpose,
+                                              const GLfloat *value) = 0;
+    virtual void setProgramUniformMatrix4x2fv(GLint location,
+                                              GLsizei count,
+                                              GLboolean transpose,
+                                              const GLfloat *value) = 0;
+    virtual void setProgramUniformMatrix3x4fv(GLint location,
+                                              GLsizei count,
+                                              GLboolean transpose,
+                                              const GLfloat *value) = 0;
+    virtual void setProgramUniformMatrix4x3fv(GLint location,
+                                              GLsizei count,
+                                              GLboolean transpose,
+                                              const GLfloat *value) = 0;
+
     virtual void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) = 0;
     virtual void setUniform2fv(GLint location, GLsizei count, const GLfloat *v) = 0;
     virtual void setUniform3fv(GLint location, GLsizei count, const GLfloat *v) = 0;

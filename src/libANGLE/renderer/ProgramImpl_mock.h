@@ -30,6 +30,29 @@ class MockProgramImpl : public rx::ProgramImpl
     MOCK_METHOD2(link, LinkResult(const gl::ContextState &, gl::InfoLog &));
     MOCK_METHOD2(validate, GLboolean(const gl::Caps &, gl::InfoLog *));
 
+    MOCK_METHOD3(setProgramUniform1iv, void(GLint, GLsizei, const GLint *));
+    MOCK_METHOD3(setProgramUniform2iv, void(GLint, GLsizei, const GLint *));
+    MOCK_METHOD3(setProgramUniform3iv, void(GLint, GLsizei, const GLint *));
+    MOCK_METHOD3(setProgramUniform4iv, void(GLint, GLsizei, const GLint *));
+    MOCK_METHOD3(setProgramUniform1uiv, void(GLint, GLsizei, const GLuint *));
+    MOCK_METHOD3(setProgramUniform2uiv, void(GLint, GLsizei, const GLuint *));
+    MOCK_METHOD3(setProgramUniform3uiv, void(GLint, GLsizei, const GLuint *));
+    MOCK_METHOD3(setProgramUniform4uiv, void(GLint, GLsizei, const GLuint *));
+    MOCK_METHOD3(setProgramUniform1fv, void(GLint, GLsizei, const GLfloat *));
+    MOCK_METHOD3(setProgramUniform2fv, void(GLint, GLsizei, const GLfloat *));
+    MOCK_METHOD3(setProgramUniform3fv, void(GLint, GLsizei, const GLfloat *));
+    MOCK_METHOD3(setProgramUniform4fv, void(GLint, GLsizei, const GLfloat *));
+
+    MOCK_METHOD4(setProgramUniformMatrix2fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
+    MOCK_METHOD4(setProgramUniformMatrix3fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
+    MOCK_METHOD4(setProgramUniformMatrix4fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
+    MOCK_METHOD4(setProgramUniformMatrix2x3fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
+    MOCK_METHOD4(setProgramUniformMatrix3x2fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
+    MOCK_METHOD4(setProgramUniformMatrix2x4fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
+    MOCK_METHOD4(setProgramUniformMatrix4x2fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
+    MOCK_METHOD4(setProgramUniformMatrix3x4fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
+    MOCK_METHOD4(setProgramUniformMatrix4x3fv, void(GLint, GLsizei, GLboolean, const GLfloat *));
+
     MOCK_METHOD3(setUniform1fv, void(GLint, GLsizei, const GLfloat *));
     MOCK_METHOD3(setUniform2fv, void(GLint, GLsizei, const GLfloat *));
     MOCK_METHOD3(setUniform3fv, void(GLint, GLsizei, const GLfloat *));
