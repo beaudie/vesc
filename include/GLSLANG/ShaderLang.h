@@ -32,7 +32,7 @@ typedef unsigned int GLenum;
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 167
+#define ANGLE_SH_VERSION 168
 
 enum ShShaderSpec
 {
@@ -82,12 +82,6 @@ const ShCompileOptions SH_OBJECT_CODE                        = UINT64_C(1) << 2;
 const ShCompileOptions SH_VARIABLES                          = UINT64_C(1) << 3;
 const ShCompileOptions SH_LINE_DIRECTIVES                    = UINT64_C(1) << 4;
 const ShCompileOptions SH_SOURCE_PATH                        = UINT64_C(1) << 5;
-const ShCompileOptions SH_UNROLL_FOR_LOOP_WITH_INTEGER_INDEX = UINT64_C(1) << 6;
-// If a sampler array index happens to be a loop index,
-//   1) if its type is integer, unroll the loop.
-//   2) if its type is float, fail the shader compile.
-// This is to work around a mac driver bug.
-const ShCompileOptions SH_UNROLL_FOR_LOOP_WITH_SAMPLER_ARRAY_INDEX = UINT64_C(1) << 7;
 
 // This flag works around bug in Intel Mac drivers related to abs(i) where
 // i is an integer.
