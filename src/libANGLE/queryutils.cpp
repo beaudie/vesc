@@ -12,6 +12,7 @@
 
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Framebuffer.h"
+#include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Sampler.h"
@@ -724,6 +725,158 @@ void QueryInternalFormativ(const TextureCaps &format, GLenum pname, GLsizei bufS
         }
         break;
 
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void QueryFramebufferParameteriv(const Framebuffer *framebuffer, GLenum pname, GLint *params)
+{
+    ASSERT(framebuffer);
+    const FramebufferAttachment *attachmentObject;
+    Texture *tex;
+    GLenum texTarget;
+    GLint texBaseLevel;
+    const std::vector<FramebufferAttachment> colorAttachments = framebuffer->getColorAttachments();
+
+    switch (pname)
+    {
+        case GL_FRAMEBUFFER_DEFAULT_WIDTH:
+        {
+            size_t maxwidth = 0;
+
+            for (const auto attachmentObject : colorAttachments)
+            {
+                if (attachmentObject.isAttached())
+                {
+                    tex          = attachmentObject.getTexture();
+                    texTarget    = tex->getTarget();
+                    texBaseLevel = tex->getBaseLevel();
+                    maxwidth =
+                        (maxwidth > tex->getWidth(texTarget, static_cast<size_t>(texBaseLevel)))
+                            ? maxwidth
+                            : tex->getWidth(texTarget, static_cast<size_t>(texBaseLevel));
+                }
+            }
+            attachmentObject = framebuffer->getAttachment(GL_DEPTH_ATTACHMENT);
+            if (attachmentObject && attachmentObject->isAttached())
+            {
+                tex          = attachmentObject->getTexture();
+                texTarget    = tex->getTarget();
+                texBaseLevel = tex->getBaseLevel();
+                maxwidth = (maxwidth > tex->getWidth(texTarget, static_cast<size_t>(texBaseLevel)))
+                               ? maxwidth
+                               : tex->getWidth(texTarget, texBaseLevel);
+            }
+
+            attachmentObject = framebuffer->getAttachment(GL_STENCIL_ATTACHMENT);
+            if (attachmentObject && attachmentObject->isAttached())
+            {
+                tex          = attachmentObject->getTexture();
+                texTarget    = tex->getTarget();
+                texBaseLevel = tex->getBaseLevel();
+                maxwidth = (maxwidth > tex->getWidth(texTarget, static_cast<size_t>(texBaseLevel)))
+                               ? maxwidth
+                               : tex->getWidth(texTarget, static_cast<size_t>(texBaseLevel));
+            }
+
+            if (maxwidth == 0)
+            {
+                *params = framebuffer->getDefaultWidth();
+            }
+            else
+            {
+                *params = static_cast<GLint>(maxwidth);
+            }
+            break;
+        }
+        case GL_FRAMEBUFFER_DEFAULT_HEIGHT:
+        {
+            size_t maxheight = 0;
+            for (const auto attachmentObject : colorAttachments)
+            {
+                if (attachmentObject.isAttached())
+                {
+                    tex          = attachmentObject.getTexture();
+                    texTarget    = tex->getTarget();
+                    texBaseLevel = tex->getBaseLevel();
+                    maxheight =
+                        (maxheight > tex->getHeight(texTarget, static_cast<size_t>(texBaseLevel)))
+                            ? maxheight
+                            : tex->getHeight(texTarget, static_cast<size_t>(texBaseLevel));
+                }
+            }
+
+            attachmentObject = framebuffer->getAttachment(GL_DEPTH_ATTACHMENT);
+            if (attachmentObject && attachmentObject->isAttached())
+            {
+                tex          = attachmentObject->getTexture();
+                texTarget    = tex->getTarget();
+                texBaseLevel = tex->getBaseLevel();
+                maxheight =
+                    (maxheight > tex->getHeight(texTarget, static_cast<size_t>(texBaseLevel)))
+                        ? maxheight
+                        : tex->getHeight(texTarget, texBaseLevel);
+            }
+
+            attachmentObject = framebuffer->getAttachment(GL_STENCIL_ATTACHMENT);
+            if (attachmentObject && attachmentObject->isAttached())
+            {
+                tex          = attachmentObject->getTexture();
+                texTarget    = tex->getTarget();
+                texBaseLevel = tex->getBaseLevel();
+                maxheight =
+                    (maxheight > tex->getHeight(texTarget, static_cast<size_t>(texBaseLevel)))
+                        ? maxheight
+                        : tex->getHeight(texTarget, static_cast<size_t>(texBaseLevel));
+            }
+
+            if (maxheight == 0)
+            {
+                *params = framebuffer->getDefaultHeight();
+            }
+            else
+            {
+                *params = static_cast<GLint>(maxheight);
+            }
+            break;
+        }
+        case GL_FRAMEBUFFER_DEFAULT_SAMPLES:
+        {
+            // multisample texture is not supported yet
+            *params = framebuffer->getDefaultSamples();
+            break;
+        }
+        case GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+        {
+            // multisample texture is not supported yet
+            *params = framebuffer->getDefaultFixedSampleLocations();
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void SetFramebufferParameteri(Framebuffer *framebuffer, GLenum pname, GLint param)
+{
+    ASSERT(framebuffer);
+
+    switch (pname)
+    {
+        case GL_FRAMEBUFFER_DEFAULT_WIDTH:
+            framebuffer->setDefaultWidth(param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_HEIGHT:
+            framebuffer->setDefaultHeight(param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_SAMPLES:
+            framebuffer->setDefaultSamples(param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+            framebuffer->setDefaultFixedSampleLocations(param);
+            break;
         default:
             UNREACHABLE();
             break;

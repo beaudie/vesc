@@ -80,6 +80,18 @@ class FramebufferState final : angle::NonCopyable
     const FramebufferAttachment *getDrawBuffer(size_t drawBufferIdx) const;
     size_t getDrawBufferCount() const;
 
+    GLint getDefaultWidth() const { return mDefaultWidth; };
+    GLint getDefaultHeight() const { return mDefaultHeight; };
+    GLint getDefaultSamples() const { return mDefaultSamples; };
+    GLint getDefaultFixedSampleLocations() const { return mDefaultFixedSampleLocations; };
+    void setDefaultWidth(GLint defaultwidth) { mDefaultWidth = defaultwidth; };
+    void setDefaultHeight(GLint defaultheight) { mDefaultHeight = defaultheight; };
+    void setDefaultSamples(GLint defaultsamples) { mDefaultSamples = defaultsamples; };
+    void setDefaultFixedSampleLocations(GLint defaultfixedsamplelocations)
+    {
+        mDefaultFixedSampleLocations = defaultfixedsamplelocations;
+    };
+
   private:
     friend class Framebuffer;
 
@@ -91,6 +103,11 @@ class FramebufferState final : angle::NonCopyable
 
     std::vector<GLenum> mDrawBufferStates;
     GLenum mReadBufferState;
+
+    GLint mDefaultWidth;
+    GLint mDefaultHeight;
+    GLint mDefaultSamples;
+    GLint mDefaultFixedSampleLocations;
 };
 
 class Framebuffer final : public LabeledObject, public angle::SignalReceiver
@@ -129,6 +146,18 @@ class Framebuffer final : public LabeledObject, public angle::SignalReceiver
 
     size_t getDrawbufferStateCount() const;
     GLenum getDrawBufferState(size_t drawBuffer) const;
+
+    GLint getDefaultWidth() const;
+    GLint getDefaultHeight() const;
+    GLint getDefaultSamples() const;
+    GLint getDefaultFixedSampleLocations() const;
+    void setDefaultWidth(GLint defaultwidth);
+    void setDefaultHeight(GLint defaultheight);
+    void setDefaultSamples(GLint defaultsamples);
+    void setDefaultFixedSampleLocations(GLint defaultfixedsamplelocations);
+
+    const std::vector<FramebufferAttachment> &getColorAttachments() const;
+
     const std::vector<GLenum> &getDrawBufferStates() const;
     void setDrawBuffers(size_t count, const GLenum *buffers);
     const FramebufferAttachment *getDrawBuffer(size_t drawBuffer) const;
