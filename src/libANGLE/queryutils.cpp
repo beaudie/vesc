@@ -12,6 +12,7 @@
 
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Framebuffer.h"
+#include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Sampler.h"
@@ -727,6 +728,158 @@ void QueryInternalFormativ(const TextureCaps &format, GLenum pname, GLsizei bufS
         }
         break;
 
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void QueryFramebufferParameteriv(const Framebuffer *framebuffer, GLenum pname, GLint *params)
+{
+    ASSERT(framebuffer);
+    const FramebufferAttachment *attachmentObject;
+    Texture *tex;
+    gl::Extents size;
+    const std::vector<FramebufferAttachment> colorAttachments = framebuffer->getColorAttachments();
+
+    switch (pname)
+    {
+        case GL_FRAMEBUFFER_DEFAULT_WIDTH:
+        {
+            GLint maxwidth = 0;
+
+            for (const auto colorAttachmentObject : colorAttachments)
+            {
+                if (colorAttachmentObject.isAttached())
+                {
+                    size     = colorAttachmentObject.getSize();
+                    maxwidth = maxwidth > size.width ? maxwidth : size.width;
+                }
+            }
+            attachmentObject = framebuffer->getAttachment(GL_DEPTH_ATTACHMENT);
+            if (attachmentObject && attachmentObject->isAttached())
+            {
+                size     = attachmentObject->getSize();
+                maxwidth = maxwidth > size.width ? maxwidth : size.width;
+            }
+
+            attachmentObject = framebuffer->getAttachment(GL_STENCIL_ATTACHMENT);
+            if (attachmentObject && attachmentObject->isAttached())
+            {
+                size     = attachmentObject->getSize();
+                maxwidth = maxwidth > size.width ? maxwidth : size.width;
+            }
+
+            if (maxwidth == 0)
+            {
+                *params = framebuffer->getDefaultWidth();
+            }
+            else
+            {
+                *params = static_cast<GLint>(maxwidth);
+            }
+            break;
+        }
+        case GL_FRAMEBUFFER_DEFAULT_HEIGHT:
+        {
+            GLint maxheight = 0;
+            for (const auto colorAttachmentObject : colorAttachments)
+            {
+                if (colorAttachmentObject.isAttached())
+                {
+                    size      = colorAttachmentObject.getSize();
+                    maxheight = maxheight > size.height ? maxheight : size.height;
+                }
+            }
+
+            attachmentObject = framebuffer->getAttachment(GL_DEPTH_ATTACHMENT);
+            if (attachmentObject && attachmentObject->isAttached())
+            {
+                size      = attachmentObject->getSize();
+                maxheight = maxheight > size.height ? maxheight : size.height;
+            }
+
+            attachmentObject = framebuffer->getAttachment(GL_STENCIL_ATTACHMENT);
+            if (attachmentObject && attachmentObject->isAttached())
+            {
+                size      = attachmentObject->getSize();
+                maxheight = maxheight > size.height ? maxheight : size.height;
+            }
+
+            if (maxheight == 0)
+            {
+                *params = framebuffer->getDefaultHeight();
+            }
+            else
+            {
+                *params = static_cast<GLint>(maxheight);
+            }
+            break;
+        }
+        case GL_FRAMEBUFFER_DEFAULT_SAMPLES:
+        {
+            GLint maxsamples = 0;
+            for (const auto colorAttachmentObject : colorAttachments)
+            {
+                if (colorAttachmentObject.isAttached())
+                {
+                    tex        = colorAttachmentObject.getTexture();
+                    maxsamples = (maxsamples > tex->getSamples(tex->getTarget(), 0))
+                                     ? maxsamples
+                                     : tex->getSamples(tex->getTarget(), 0);
+                }
+            }
+
+            if (maxsamples == 0)
+            {
+                *params = framebuffer->getDefaultSamples();
+            }
+            else
+            {
+                *params = maxsamples;
+            }
+            break;
+        }
+        case GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+        {
+            // es3.1 spec section 9.4 states that"The value of TEXTURE_FIXED_SAMPLE_LOCATIONS is
+            // the same for all attached textures, if the attached images are a mix of renderbuffers
+            // and textures, the value of TEXTURE_FIXED_SAMPLE_LOCATIONS must be TRUE for all
+            // attached textures."
+            if (!colorAttachments.empty() && colorAttachments[0].isAttached())
+            {
+                tex     = colorAttachments[0].getTexture();
+                *params = tex->getFixedSampleLocation(tex->getTarget(), 0);
+            }
+            else
+            {
+                *params = framebuffer->getDefaultFixedSampleLocations();
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void SetFramebufferParameteri(Framebuffer *framebuffer, GLenum pname, GLint param)
+{
+    ASSERT(framebuffer);
+
+    switch (pname)
+    {
+        case GL_FRAMEBUFFER_DEFAULT_WIDTH:
+            framebuffer->setDefaultWidth(param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_HEIGHT:
+            framebuffer->setDefaultHeight(param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_SAMPLES:
+            framebuffer->setDefaultSamples(param);
+            break;
+        case GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+            framebuffer->setDefaultFixedSampleLocations(static_cast<GLboolean>(param));
+            break;
         default:
             UNREACHABLE();
             break;

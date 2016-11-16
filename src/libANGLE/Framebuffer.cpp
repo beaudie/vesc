@@ -43,7 +43,11 @@ FramebufferState::FramebufferState()
     : mLabel(),
       mColorAttachments(1),
       mDrawBufferStates(1, GL_NONE),
-      mReadBufferState(GL_COLOR_ATTACHMENT0_EXT)
+      mReadBufferState(GL_COLOR_ATTACHMENT0_EXT),
+      mDefaultWidth(0),
+      mDefaultHeight(0),
+      mDefaultSamples(0),
+      mDefaultFixedSampleLocations(0)
 {
     mDrawBufferStates[0] = GL_COLOR_ATTACHMENT0_EXT;
 }
@@ -52,7 +56,11 @@ FramebufferState::FramebufferState(const Caps &caps)
     : mLabel(),
       mColorAttachments(caps.maxColorAttachments),
       mDrawBufferStates(caps.maxDrawBuffers, GL_NONE),
-      mReadBufferState(GL_COLOR_ATTACHMENT0_EXT)
+      mReadBufferState(GL_COLOR_ATTACHMENT0_EXT),
+      mDefaultWidth(0),
+      mDefaultHeight(0),
+      mDefaultSamples(0),
+      mDefaultFixedSampleLocations(0)
 {
     ASSERT(mDrawBufferStates.size() > 0);
     mDrawBufferStates[0] = GL_COLOR_ATTACHMENT0_EXT;
@@ -956,6 +964,51 @@ void Framebuffer::signal(SignalToken token)
 bool Framebuffer::complete(const ContextState &state)
 {
     return (checkStatus(state) == GL_FRAMEBUFFER_COMPLETE);
+}
+
+GLint Framebuffer::getDefaultWidth() const
+{
+    return mState.getDefaultWidth();
+}
+
+GLint Framebuffer::getDefaultHeight() const
+{
+    return mState.getDefaultHeight();
+}
+
+GLint Framebuffer::getDefaultSamples() const
+{
+    return mState.getDefaultSamples();
+}
+
+GLboolean Framebuffer::getDefaultFixedSampleLocations() const
+{
+    return mState.getDefaultFixedSampleLocations();
+}
+
+const std::vector<FramebufferAttachment> &Framebuffer::getColorAttachments() const
+{
+    return mState.getColorAttachments();
+}
+
+void Framebuffer::setDefaultWidth(GLint defaultwidth)
+{
+    mState.setDefaultWidth(defaultwidth);
+}
+
+void Framebuffer::setDefaultHeight(GLint defaultheight)
+{
+    mState.setDefaultHeight(defaultheight);
+}
+
+void Framebuffer::setDefaultSamples(GLint defaultsamples)
+{
+    mState.setDefaultSamples(defaultsamples);
+}
+
+void Framebuffer::setDefaultFixedSampleLocations(GLboolean defaultfixedsamplelocations)
+{
+    mState.setDefaultFixedSampleLocations(defaultfixedsamplelocations);
 }
 
 }  // namespace gl

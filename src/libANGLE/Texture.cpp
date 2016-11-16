@@ -414,7 +414,7 @@ GLenum TextureState::getBaseImageTarget() const
     return mTarget == GL_TEXTURE_CUBE_MAP ? FirstCubeMapTextureTarget : mTarget;
 }
 
-ImageDesc::ImageDesc() : ImageDesc(Extents(0, 0, 0), Format::Invalid(), 0)
+ImageDesc::ImageDesc() : ImageDesc(Extents(0, 0, 0), Format::Invalid(), 0, true)
 {
 }
 
@@ -423,8 +423,11 @@ ImageDesc::ImageDesc(const Extents &size, const Format &format)
 {
 }
 
-ImageDesc::ImageDesc(const Extents &size, const Format &format, const GLsizei samples)
-    : size(size), format(format), samples(samples)
+ImageDesc::ImageDesc(const Extents &size,
+                     const Format &format,
+                     const GLsizei samples,
+                     const GLboolean fixedSampleLocations)
+    : size(size), format(format), samples(samples), fixedSampleLocations(fixedSampleLocations)
 {
 }
 
@@ -474,10 +477,11 @@ void TextureState::setImageDescChain(GLuint baseLevel,
 
 void TextureState::setImageDescChainMultisample(Extents baseSize,
                                                 const Format &format,
-                                                GLsizei samples)
+                                                GLsizei samples,
+                                                GLboolean fixedSampleLocations)
 {
     ASSERT(mTarget == GL_TEXTURE_2D_MULTISAMPLE);
-    ImageDesc levelInfo(baseSize, format, samples);
+    ImageDesc levelInfo(baseSize, format, samples, fixedSampleLocations);
     setImageDesc(mTarget, 0, levelInfo);
 }
 
@@ -819,6 +823,13 @@ GLsizei Texture::getSamples(GLenum target, size_t level) const
     return mState.getImageDesc(target, level).samples;
 }
 
+GLboolean Texture::getFixedSampleLocation(GLenum target, size_t level) const
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    return mState.getImageDesc(target, level).fixedSampleLocations;
+}
+
 bool Texture::isMipmapComplete() const
 {
     return mState.computeMipmapCompleteness();
@@ -1033,7 +1044,8 @@ Error Texture::setStorageMultisample(GLenum target,
     mState.mImmutableFormat = true;
     mState.mImmutableLevels = static_cast<GLuint>(1);
     mState.clearImageDescs();
-    mState.setImageDescChainMultisample(size, Format(internalFormat), samples);
+    mState.setImageDescChainMultisample(size, Format(internalFormat), samples,
+                                        fixedSampleLocations);
 
     mDirtyChannel.signal();
 

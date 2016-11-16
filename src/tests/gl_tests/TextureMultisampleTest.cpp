@@ -56,7 +56,8 @@ class TextureMultisampleTestES31 : public TextureMultisampleTest
     TextureMultisampleTestES31() : TextureMultisampleTest() {}
 };
 
-// Tests that if es version < 3.1, GL_TEXTURE_2D_MULTISAMPLE is not supported in GetInternalformativ.
+// Tests that if es version < 3.1, GL_TEXTURE_2D_MULTISAMPLE is not supported in
+// GetInternalformativ.
 TEST_P(TextureMultisampleTest, MultisampleTargetGetInternalFormativBase)
 {
     GLint maxSamples = 0;
@@ -71,7 +72,8 @@ TEST_P(TextureMultisampleTest, MultisampleTargetGetInternalFormativBase)
     }
 }
 
-// Tests that if es version < 3.1, GL_TEXTURE_2D_MULTISAMPLE is not supported in FramebufferTexture2D.
+// Tests that if es version < 3.1, GL_TEXTURE_2D_MULTISAMPLE is not supported in
+// FramebufferTexture2D.
 TEST_P(TextureMultisampleTest, MultisampleTargetFramebufferTexture2D)
 {
     GLint samples = 1;
