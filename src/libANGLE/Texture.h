@@ -49,11 +49,10 @@ struct ImageDesc final
 {
     ImageDesc();
     ImageDesc(const Extents &size, const Format &format);
-
     ImageDesc(const Extents &size,
               const Format &format,
               const GLsizei samples,
-              GLboolean fixedSampleLocations);
+              const GLboolean fixedSampleLocations);
 
     ImageDesc(const ImageDesc &other) = default;
     ImageDesc &operator=(const ImageDesc &other) = default;
@@ -127,6 +126,7 @@ struct TextureState final : public angle::NonCopyable
                            GLuint maxLevel,
                            Extents baseSize,
                            const Format &format);
+
     void setImageDescChainMultisample(Extents baseSize,
                                       const Format &format,
                                       GLsizei samples,
@@ -258,7 +258,9 @@ class Texture final : public egl::ImageSibling,
     size_t getHeight(GLenum target, size_t level) const;
     size_t getDepth(GLenum target, size_t level) const;
     GLsizei getSamples(GLenum target, size_t level) const;
+
     GLboolean getFixedSampleLocations(GLenum target, size_t level) const;
+
     const Format &getFormat(GLenum target, size_t level) const;
 
     bool isMipmapComplete() const;
