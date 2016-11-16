@@ -40,6 +40,15 @@ class MockFramebufferImpl : public rx::FramebufferImpl
 
     MOCK_CONST_METHOD2(getSamplePosition, gl::Error(size_t, GLfloat *));
 
+    MOCK_METHOD2(getDefaultWidth, gl::Error(GLenum, GLint *));
+    MOCK_METHOD2(getDefaultHeight, gl::Error(GLenum, GLint *));
+    MOCK_METHOD2(getDefaultSamples, gl::Error(GLenum, GLint *));
+    MOCK_METHOD2(getDefaultFixedSampleLocations, gl::Error(GLenum, GLint *));
+    MOCK_METHOD2(setDefaultWidth, void(GLenum, GLint));
+    MOCK_METHOD2(setDefaultHeight, void(GLenum, GLint));
+    MOCK_METHOD2(setDefaultSamples, void(GLenum, GLint));
+    MOCK_METHOD2(setDefaultFixedSampleLocations, void(GLenum, GLboolean));
+
     MOCK_METHOD5(
         blit,
         gl::Error(ContextImpl *, const gl::Rectangle &, const gl::Rectangle &, GLbitfield, GLenum));
