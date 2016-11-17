@@ -37,7 +37,7 @@ class TOutputGLSLBase : public TIntermTraverser
   protected:
     TInfoSinkBase &objSink() { return mObjSink; }
     void writeTriplet(Visit visit, const char *preStr, const char *inStr, const char *postStr);
-    void writeLayoutQualifier(const TType &type);
+    virtual void writeLayoutQualifier(const TType &type);
     void writeInvariantQualifier(const TType &type);
     void writeVariableType(const TType &type);
     virtual bool writeVariablePrecision(TPrecision precision) = 0;
