@@ -17,6 +17,9 @@
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 #include "libANGLE/renderer/gl/WorkaroundsGL.h"
 
+namespace rx
+{
+
 namespace
 {
 
@@ -46,10 +49,60 @@ gl::Error CheckLinkStatus(const rx::FunctionsGL *functions, GLuint program)
     return gl::NoError();
 }
 
-} // anonymous namespace
-
-namespace rx
+class StateGuard : public angle::NonCopyable
 {
+  public:
+    enum
+    {
+        KEEP_SCISSOR = 1,
+    };
+
+    StateGuard(StateManagerGL *stateManager,
+               const FunctionsGL *functions,
+               gl::Rectangle viewport,
+               int keepState = 0)
+        : mStateManager(stateManager), mFunctions(functions)
+    {
+        if (!(keepState & KEEP_SCISSOR))
+        {
+            mStateManager->setScissorTestEnabled(false);
+        }
+        mStateManager->setViewport(viewport);
+        mStateManager->setDepthRange(0.0f, 1.0f);
+        mStateManager->setBlendEnabled(false);
+        mStateManager->setColorMask(true, true, true, true);
+        mStateManager->setSampleAlphaToCoverageEnabled(false);
+        mStateManager->setSampleCoverageEnabled(false);
+        mStateManager->setDepthTestEnabled(false);
+        mStateManager->setStencilTestEnabled(false);
+        mStateManager->setCullFaceEnabled(false);
+        mStateManager->setPolygonOffsetFillEnabled(false);
+        mStateManager->setRasterizerDiscardEnabled(false);
+
+        mStateManager->pauseTransformFeedback();
+        mStateManager->pauseQueries();
+    }
+
+    ~StateGuard()
+    {
+        // XFB resuming will be done automatically
+        mStateManager->resumeQueries();
+    }
+
+    void willUseTextureUnit(int unit)
+    {
+        if (mFunctions->bindSampler)
+        {
+            mStateManager->bindSampler(unit, 0);
+        }
+    }
+
+  private:
+    StateManagerGL *mStateManager;
+    const FunctionsGL *mFunctions;
+};
+
+}  // anonymous namespace
 
 BlitGL::BlitGL(const FunctionsGL *functions,
                const WorkaroundsGL &workarounds,
@@ -169,22 +222,13 @@ gl::Error BlitGL::copySubImageToLUMAWorkaroundTexture(GLuint texture,
                                      mScratchTextures[1], 0);
 
     // Render to the destination texture, sampling from the scratch texture
-    mStateManager->setViewport(gl::Rectangle(0, 0, sourceArea.width, sourceArea.height));
-    mStateManager->setScissorTestEnabled(false);
-    mStateManager->setDepthRange(0.0f, 1.0f);
-    mStateManager->setBlendEnabled(false);
-    mStateManager->setColorMask(true, true, true, true);
-    mStateManager->setSampleAlphaToCoverageEnabled(false);
-    mStateManager->setSampleCoverageEnabled(false);
-    mStateManager->setDepthTestEnabled(false);
-    mStateManager->setStencilTestEnabled(false);
-    mStateManager->setCullFaceEnabled(false);
-    mStateManager->setPolygonOffsetFillEnabled(false);
-    mStateManager->setRasterizerDiscardEnabled(false);
-    mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[0]);
+    StateGuard guard(mStateManager, mFunctions,
+                     gl::Rectangle(0, 0, sourceArea.width, sourceArea.height));
+    guard.willUseTextureUnit(0);
 
     setScratchTextureParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     setScratchTextureParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
     mStateManager->activeTexture(0);
     mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[0]);
 
@@ -302,6 +346,11 @@ gl::Error BlitGL::blitColorBufferWithShader(const gl::Framebuffer *source,
 
         mFunctions->copyTexImage2D(GL_TEXTURE_2D, 0, format, inBoundsSource.x, inBoundsSource.y,
                                    inBoundsSource.width, inBoundsSource.height, 0);
+
+        setScratchTextureParameter(GL_TEXTURE_MIN_FILTER, filter);
+        setScratchTextureParameter(GL_TEXTURE_MAG_FILTER, filter);
+        setScratchTextureParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        setScratchTextureParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
 
     // Compute normalized sampled draw quad region
@@ -334,28 +383,14 @@ gl::Error BlitGL::blitColorBufferWithShader(const gl::Framebuffer *source,
     gl::Vector2 texCoordOffset = gl::Vector2(TOffset.x - DOffset.x * texCoordScale.x,
                                              TOffset.y - DOffset.y * texCoordScale.y);
 
-    // Reset all the state except scissor and viewport
-    mStateManager->setDepthRange(0.0f, 1.0f);
-    mStateManager->setBlendEnabled(false);
-    mStateManager->setColorMask(true, true, true, true);
-    mStateManager->setSampleAlphaToCoverageEnabled(false);
-    mStateManager->setSampleCoverageEnabled(false);
-    mStateManager->setDepthTestEnabled(false);
-    mStateManager->setStencilTestEnabled(false);
-    mStateManager->setCullFaceEnabled(false);
-    mStateManager->setPolygonOffsetFillEnabled(false);
-    mStateManager->setRasterizerDiscardEnabled(false);
-
-    // Use the viewport to draw exactly to the destination rectangle
-    mStateManager->setViewport(destArea);
+    // Reset all the state except scissor and use the viewport to draw exactly to the destination
+    // rectangle
+    StateGuard guard(mStateManager, mFunctions, destArea, StateGuard::KEEP_SCISSOR);
+    guard.willUseTextureUnit(0);
 
     // Set uniforms
-    setScratchTextureParameter(GL_TEXTURE_MIN_FILTER, filter);
-    setScratchTextureParameter(GL_TEXTURE_MAG_FILTER, filter);
-    setScratchTextureParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    setScratchTextureParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     mStateManager->activeTexture(0);
-    mStateManager->bindTexture(GL_TEXTURE_2D, mScratchTextures[0]);
+    mStateManager->bindTexture(GL_TEXTURE_2D, textureId);
 
     mStateManager->useProgram(mBlitProgram);
     mFunctions->uniform1i(mSourceTextureLocation, 0);
