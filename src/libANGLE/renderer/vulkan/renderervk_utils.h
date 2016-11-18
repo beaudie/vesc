@@ -28,6 +28,7 @@ namespace vk
 class Error final
 {
   public:
+    Error(VkResult result);
     Error(VkResult result, const char *file, unsigned int line);
     ~Error();
 
@@ -50,8 +51,34 @@ class Error final
     unsigned int mLine;
 };
 
+template <typename ResultT>
+using ErrorOrResult = angle::ErrorOrResultBase<Error, ResultT, VkResult, VK_SUCCESS>;
+
 // Avoid conflicting with X headers which define "Success".
 Error VkSuccess();
+
+// Helper class that wraps a Vulkan command buffer.
+class CommandBuffer final : angle::NonCopyable
+{
+  public:
+    CommandBuffer(VkDevice device, VkCommandPool commandPool);
+    ~CommandBuffer();
+
+    Error begin();
+    Error end();
+    Error reset();
+    void changeImageLayout(VkImage image,
+                           VkImageAspectFlags aspectMask,
+                           VkImageLayout oldLayout,
+                           VkImageLayout newLayout);
+
+    VkCommandBuffer getHandle() const { return mHandle; }
+
+  private:
+    VkDevice mDevice;
+    VkCommandPool mCommandPool;
+    VkCommandBuffer mHandle;
+};
 
 }  // namespace vk
 
@@ -66,5 +93,8 @@ Error VkSuccess();
         }                                                              \
     }                                                                  \
     ANGLE_EMPTY_STATEMENT
+
+#define ANGLE_VK_CHECK(test, error) ANGLE_VK_TRY(test ? VK_SUCCESS : error)
+#define ANGLE_VK_UNREACHABLE() rx::vk::Error(VK_ERROR_VALIDATION_FAILED_EXT, __FILE__, __LINE__)
 
 #endif  // LIBANGLE_RENDERER_VULKAN_RENDERERVK_UTILS_H_
