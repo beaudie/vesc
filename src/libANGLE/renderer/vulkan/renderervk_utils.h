@@ -41,6 +41,7 @@ namespace vk
 class DeviceMemory;
 class Framebuffer;
 class Image;
+class RenderPass;
 
 class Error final
 {
@@ -115,6 +116,7 @@ class CommandBuffer final : public WrappedObject<VkCommandBuffer>
     Error begin();
     Error end();
     Error reset();
+
     void singleImageBarrier(VkPipelineStageFlags srcStageMask,
                             VkPipelineStageFlags dstStageMask,
                             VkDependencyFlags dependencyFlags,
@@ -126,6 +128,12 @@ class CommandBuffer final : public WrappedObject<VkCommandBuffer>
                          const vk::Image &destImage,
                          const gl::Box &copyRegion,
                          VkImageAspectFlags aspectMask);
+
+    void beginRenderPass(const RenderPass &renderPass,
+                         const Framebuffer &framebuffer,
+                         const gl::Rectangle &renderArea,
+                         const std::vector<VkClearValue> &clearValues);
+    void endRenderPass();
 
   private:
     VkCommandPool mCommandPool;
@@ -215,6 +223,18 @@ class DeviceMemory final : public WrappedObject<VkDeviceMemory>
     Error allocate(const VkMemoryAllocateInfo &allocInfo);
     Error map(VkDeviceSize offset, VkDeviceSize size, VkMemoryMapFlags flags, uint8_t **mapPointer);
     void unmap();
+};
+
+class RenderPass final : public WrappedObject<VkRenderPass>
+{
+  public:
+    RenderPass();
+    RenderPass(VkDevice device);
+    RenderPass(RenderPass &&other);
+    ~RenderPass();
+    RenderPass &operator=(RenderPass &&other);
+
+    Error init(const VkRenderPassCreateInfo &createInfo);
 };
 
 class StagingImage final : angle::NonCopyable
