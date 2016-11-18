@@ -13,6 +13,7 @@
 #include <vulkan/vulkan.h>
 
 #include "libANGLE/renderer/SurfaceImpl.h"
+#include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/renderervk_utils.h"
 
 namespace rx
@@ -96,15 +97,19 @@ class WindowSurfaceVk : public SurfaceImpl
     };
 
     vk::Error initializeImpl();
+    vk::Error nextSwapchainImage();
+    vk::Error swapImpl();
 
     RendererVk *mRenderer;
     const egl::Config &mConfig;
     EGLNativeWindowType mNativeWindowType;
-    EGLint mWidth;
-    EGLint mHeight;
     VkSurfaceKHR mSurface;
     VkSwapchainKHR mSwapchain;
     std::vector<SwapchainImage> mSwapchainImages;
+
+    uint32_t mCurrentSwapchainImageIndex;
+    RenderTargetVk mCurrentRenderTarget;
+    vk::Semaphore mPresentCompleteSemaphore;
 };
 
 }  // namespace rx

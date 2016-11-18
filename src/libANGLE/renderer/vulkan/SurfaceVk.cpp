@@ -121,11 +121,13 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
       mRenderer(renderer),
       mConfig(config),
       mNativeWindowType(window),
-      mWidth(width),
-      mHeight(height),
       mSurface(VK_NULL_HANDLE),
-      mSwapchain(VK_NULL_HANDLE)
+      mSwapchain(VK_NULL_HANDLE),
+      mCurrentSwapchainImageIndex(0),
+      mCurrentRenderTarget()
 {
+    mCurrentRenderTarget.setWidth(static_cast<int>(width));
+    mCurrentRenderTarget.setHeight(static_cast<int>(height));
 }
 
 WindowSurfaceVk::~WindowSurfaceVk()
@@ -171,28 +173,33 @@ vk::Error WindowSurfaceVk::initializeImpl()
     ANGLE_VK_TRY(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, mSurface, &surfaceCaps));
 
     // Adjust width and height to the swapchain if necessary.
-    if (surfaceCaps.currentExtent.width != 0xFFFFFFFFu)
-    {
-        ASSERT(surfaceCaps.currentExtent.height != 0xFFFFFFFFu);
-        mWidth  = static_cast<EGLint>(surfaceCaps.currentExtent.width);
-        mHeight = static_cast<EGLint>(surfaceCaps.currentExtent.height);
-    }
-    else
+    uint32_t width  = surfaceCaps.currentExtent.width;
+    uint32_t height = surfaceCaps.currentExtent.height;
+
+    // TODO(jmadill): Support devices which don't support copy. We use this for ReadPixels.
+    ANGLE_VK_CHECK((surfaceCaps.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_SRC_BIT) != 0,
+                   VK_ERROR_INITIALIZATION_FAILED);
+
+    if (surfaceCaps.currentExtent.width == 0xFFFFFFFFu)
     {
         ASSERT(surfaceCaps.currentExtent.height == 0xFFFFFFFFu);
 
         RECT rect;
         ANGLE_VK_CHECK(GetClientRect(mNativeWindowType, &rect) == TRUE,
                        VK_ERROR_INITIALIZATION_FAILED);
-        if (mWidth == 0)
+        if (mCurrentRenderTarget.getExtents().width == 0)
         {
-            mWidth = static_cast<EGLint>(rect.right - rect.left);
+            width = static_cast<uint32_t>(rect.right - rect.left);
         }
-        if (mHeight == 0)
+        if (mCurrentRenderTarget.getExtents().height == 0)
         {
-            mHeight = static_cast<EGLint>(rect.bottom - rect.top);
+            height = static_cast<uint32_t>(rect.bottom - rect.top);
         }
     }
+
+    mCurrentRenderTarget.setWidth(static_cast<int>(width));
+    mCurrentRenderTarget.setHeight(static_cast<int>(height));
+    mCurrentRenderTarget.setDepth(1);
 
     uint32_t presentModeCount = 0;
     ANGLE_VK_TRY(vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, mSurface,
@@ -265,17 +272,18 @@ vk::Error WindowSurfaceVk::initializeImpl()
     }
 
     VkSwapchainCreateInfoKHR swapchainInfo;
-    swapchainInfo.sType                 = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    swapchainInfo.pNext                 = nullptr;
-    swapchainInfo.flags                 = 0;
-    swapchainInfo.surface               = mSurface;
-    swapchainInfo.minImageCount         = minImageCount;
-    swapchainInfo.imageFormat           = configSurfaceFormat.native;
-    swapchainInfo.imageColorSpace       = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
-    swapchainInfo.imageExtent.width     = mWidth;
-    swapchainInfo.imageExtent.height    = mHeight;
-    swapchainInfo.imageArrayLayers      = 1;
-    swapchainInfo.imageUsage            = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    swapchainInfo.sType              = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+    swapchainInfo.pNext              = nullptr;
+    swapchainInfo.flags              = 0;
+    swapchainInfo.surface            = mSurface;
+    swapchainInfo.minImageCount      = minImageCount;
+    swapchainInfo.imageFormat        = configSurfaceFormat.native;
+    swapchainInfo.imageColorSpace    = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
+    swapchainInfo.imageExtent.width  = width;
+    swapchainInfo.imageExtent.height = height;
+    swapchainInfo.imageArrayLayers   = 1;
+    swapchainInfo.imageUsage =
+        (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT);
     swapchainInfo.imageSharingMode      = VK_SHARING_MODE_EXCLUSIVE;
     swapchainInfo.queueFamilyIndexCount = 0;
     swapchainInfo.pQueueFamilyIndices   = nullptr;
@@ -298,6 +306,12 @@ vk::Error WindowSurfaceVk::initializeImpl()
     // CommandBuffer is a singleton in the Renderer.
     vk::CommandBuffer *commandBuffer = mRenderer->getCommandBuffer();
     ANGLE_TRY(commandBuffer->begin());
+
+    VkClearColorValue transparentBlack;
+    transparentBlack.float32[0] = 0.0f;
+    transparentBlack.float32[1] = 0.0f;
+    transparentBlack.float32[2] = 0.0f;
+    transparentBlack.float32[3] = 0.0f;
 
     for (auto swapchainImage : swapchainImages)
     {
@@ -322,16 +336,21 @@ vk::Error WindowSurfaceVk::initializeImpl()
         vk::ImageView imageView(device);
         ANGLE_TRY(imageView.init(imageViewInfo));
 
-        // Set optimal color layout for the image.
-        image.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-                           commandBuffer);
+        // Set transfer dest layout, and clear the image to black.
+        image.changeLayoutTop(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                              commandBuffer);
+        commandBuffer->clearSingleColorImage(image, transparentBlack);
 
         SwapchainImage swapImage(std::move(image), std::move(imageView));
         mSwapchainImages.push_back(std::move(swapImage));
     }
 
     ANGLE_TRY(commandBuffer->end());
-    ANGLE_TRY(mRenderer->queueAndFinishCommandBuffer(*commandBuffer, 2000ull));
+    ANGLE_TRY(mRenderer->submitAndFinishCommandBuffer(*commandBuffer, 2000ull));
+
+    // Start by getting the next available swapchain image.
+    ANGLE_TRY(nextSwapchainImage());
+    mCurrentRenderTarget.setFormat(configSurfaceFormat);
 
     return vk::NoError();
 }
@@ -343,8 +362,60 @@ FramebufferImpl *WindowSurfaceVk::createDefaultFramebuffer(const gl::Framebuffer
 
 egl::Error WindowSurfaceVk::swap()
 {
-    // TODO(jmadill)
-    return egl::Error(EGL_SUCCESS);
+    return swapImpl().toEGL(EGL_BAD_ALLOC);
+}
+
+vk::Error WindowSurfaceVk::swapImpl()
+{
+    vk::CommandBuffer *currentCB = mRenderer->getCommandBuffer();
+
+    auto *image = &mSwapchainImages[mCurrentSwapchainImageIndex].image;
+
+    currentCB->begin();
+    image->changeLayoutWithStages(VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                                  VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                                  VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, currentCB);
+    currentCB->end();
+
+    ANGLE_TRY(
+        mRenderer->submitAndFinishCommandBuffer(*currentCB, mPresentCompleteSemaphore, 1000u));
+
+    VkPresentInfoKHR presentInfo;
+    presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+    presentInfo.pNext              = nullptr;
+    presentInfo.waitSemaphoreCount = 0;
+    presentInfo.pWaitSemaphores    = nullptr;
+    presentInfo.swapchainCount     = 1;
+    presentInfo.pSwapchains        = &mSwapchain;
+    presentInfo.pImageIndices      = &mCurrentSwapchainImageIndex;
+    presentInfo.pResults           = nullptr;
+
+    ANGLE_VK_TRY(vkQueuePresentKHR(mRenderer->getQueue(), &presentInfo));
+
+    // Get the next available swapchain iamge.
+    ANGLE_TRY(nextSwapchainImage());
+
+    return vk::NoError();
+}
+
+vk::Error WindowSurfaceVk::nextSwapchainImage()
+{
+    VkDevice device = mRenderer->getDevice();
+
+    vk::Semaphore presentComplete(device);
+    ANGLE_TRY(presentComplete.init());
+
+    ANGLE_VK_TRY(vkAcquireNextImageKHR(device, mSwapchain, std::numeric_limits<uint64_t>::max(),
+                                       presentComplete.getHandle(), nullptr,
+                                       &mCurrentSwapchainImageIndex));
+
+    auto &swapchainImage = mSwapchainImages[mCurrentSwapchainImageIndex];
+    // TODO(jmadill): Figure out ownership here.
+    mCurrentRenderTarget.setImage(&swapchainImage.image);
+    mCurrentRenderTarget.setImageView(&swapchainImage.view);
+    mPresentCompleteSemaphore = std::move(presentComplete);
+
+    return vk::NoError();
 }
 
 egl::Error WindowSurfaceVk::postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height)
@@ -375,12 +446,12 @@ void WindowSurfaceVk::setSwapInterval(EGLint interval)
 
 EGLint WindowSurfaceVk::getWidth() const
 {
-    return mWidth;
+    return mCurrentRenderTarget.getExtents().width;
 }
 
 EGLint WindowSurfaceVk::getHeight() const
 {
-    return mHeight;
+    return mCurrentRenderTarget.getExtents().height;
 }
 
 EGLint WindowSurfaceVk::isPostSubBufferSupported() const
@@ -396,11 +467,11 @@ EGLint WindowSurfaceVk::getSwapBehavior() const
 }
 
 gl::Error WindowSurfaceVk::getAttachmentRenderTarget(
-    const gl::FramebufferAttachment::Target &target,
+    const gl::FramebufferAttachment::Target & /*target*/,
     FramebufferAttachmentRenderTarget **rtOut)
 {
-    UNREACHABLE();
-    return gl::Error(GL_INVALID_OPERATION);
+    *rtOut = &mCurrentRenderTarget;
+    return gl::NoError();
 }
 
 // SwapchainImage implementation.
