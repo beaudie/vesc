@@ -363,6 +363,8 @@ class Program final : angle::NonCopyable, public LabeledObject
         return mState.mActiveAttribLocationsMask;
     }
 
+    const ProgramState &getState() const { return mState; }
+
   private:
     class Bindings final : angle::NonCopyable
     {
@@ -498,6 +500,6 @@ class Program final : angle::NonCopyable, public LabeledObject
     std::vector<GLenum> mTextureUnitTypesCache;
     RangeUI mSamplerUniformRange;
 };
-}
+}  // namespace gl
 
 #endif   // LIBANGLE_PROGRAM_H_
