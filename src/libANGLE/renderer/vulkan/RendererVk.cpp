@@ -25,20 +25,22 @@ RendererVk::~RendererVk()
 
 vk::Error RendererVk::initialize()
 {
-    VkApplicationInfo applicationInfo  = {};
-    applicationInfo.sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    applicationInfo.pNext              = nullptr;
-    applicationInfo.pApplicationName   = "ANGLE";
-    applicationInfo.applicationVersion = 1;
-    applicationInfo.pEngineName        = "ANGLE";
-    applicationInfo.engineVersion      = 1;
-    applicationInfo.apiVersion         = VK_API_VERSION_1_0;
+    VkApplicationInfo applicationInfo = {
+        .sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO,
+        .pNext              = nullptr,
+        .pApplicationName   = "ANGLE",
+        .applicationVersion = 1,
+        .pEngineName        = "ANGLE",
+        .engineVersion      = 1,
+        .apiVersion         = VK_API_VERSION_1_0,
+    };
 
-    VkInstanceCreateInfo instanceInfo = {};
-    instanceInfo.sType                = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    instanceInfo.pNext                = nullptr;
-    instanceInfo.flags                = 0;
-    instanceInfo.pApplicationInfo     = &applicationInfo;
+    VkInstanceCreateInfo instanceInfo = {
+        .sType                = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+        .pNext                = nullptr,
+        .flags                = 0,
+        .pApplicationInfo     = &applicationInfo,
+    };
 
     // TODO(jmadill): Layers and extensions.
     instanceInfo.enabledExtensionCount   = 0;
