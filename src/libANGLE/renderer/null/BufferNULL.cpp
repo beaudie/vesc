@@ -22,13 +22,21 @@ BufferNULL::~BufferNULL()
 {
 }
 
-gl::Error BufferNULL::setData(GLenum target, const void *data, size_t size, GLenum usage)
+gl::Error BufferNULL::setData(ContextImpl *context,
+                              GLenum target,
+                              const void *data,
+                              size_t size,
+                              GLenum usage)
 {
     UNIMPLEMENTED();
     return gl::Error(GL_INVALID_OPERATION);
 }
 
-gl::Error BufferNULL::setSubData(GLenum target, const void *data, size_t size, size_t offset)
+gl::Error BufferNULL::setSubData(ContextImpl *context,
+                                 GLenum target,
+                                 const void *data,
+                                 size_t size,
+                                 size_t offset)
 {
     UNIMPLEMENTED();
     return gl::Error(GL_INVALID_OPERATION);
