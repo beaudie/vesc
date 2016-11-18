@@ -101,6 +101,11 @@ TEST_P(RendererTest, RequestedRendererCreated)
         ASSERT_TRUE(found);
     }
 
+    if (platform.renderer == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
+    {
+        ASSERT_TRUE(IsVulkan());
+    }
+
     EGLint glesMajorVersion = GetParam().majorVersion;
 
     // Ensure that the renderer string contains GL ES 3.0, if we requested a GL ES 3.0
@@ -119,6 +124,13 @@ TEST_P(RendererTest, RequestedRendererCreated)
 // Perform a simple operation (clear and read pixels) to verify the device is working
 TEST_P(RendererTest, SimpleOperation)
 {
+    // TODO(jmadil): Vulkan clear.
+    if (IsVulkan())
+    {
+        std::cout << "Vulkan clears not yet implemented" << std::endl;
+        return;
+    }
+
     glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
@@ -206,5 +218,9 @@ ANGLE_INSTANTIATE_TEST(RendererTest,
                        ES3_OPENGLES(),
                        ES3_OPENGLES(3, 0),
                        ES3_OPENGLES(3, 1),
-                       ES3_OPENGLES(3, 2));
-}
+                       ES3_OPENGLES(3, 2),
+
+                       // ES on top of Vulkan
+                       ES2_VULKAN(),
+                       ES3_VULKAN());
+}  // anonymous namespace
