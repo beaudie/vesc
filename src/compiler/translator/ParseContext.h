@@ -142,6 +142,8 @@ class TParseContext : angle::NonCopyable
     bool checkCanUseExtension(const TSourceLoc &line, const TString &extension);
     void singleDeclarationErrorCheck(const TPublicType &publicType,
                                      const TSourceLoc &identifierLocation);
+    void emptyDeclarationErrorCheck(const TPublicType &publicType,
+                                    const TSourceLoc &identifierLocation);
     void checkLayoutQualifierSupported(const TSourceLoc &location,
                                        const TString &layoutQualifierName,
                                        int versionRequired);
