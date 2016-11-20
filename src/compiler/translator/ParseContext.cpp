@@ -1714,6 +1714,11 @@ TPublicType TParseContext::addFullySpecifiedType(const TTypeQualifierBuilder &ty
             error(typeSpecifier.getLine(), "'in' can be only used to specify the local group size",
                   "in");
         }
+        if (returnType.qualifier == EvqShared && !returnType.layoutQualifier.isEmpty())
+        {
+            error(typeSpecifier.getLine(),
+                  "Shared memory declarations cannot have layout specified", "layout");
+        }
     }
 
     return returnType;
