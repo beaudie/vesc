@@ -52,7 +52,11 @@ class TokenLexer : public Lexer
 }  // anonymous namespace
 
 MacroExpander::MacroExpander(Lexer *lexer, MacroSet *macroSet, Diagnostics *diagnostics)
-    : mLexer(lexer), mMacroSet(macroSet), mDiagnostics(diagnostics), mTotalTokensInContexts(0)
+    : mLexer(lexer),
+      mMacroSet(macroSet),
+      mDiagnostics(diagnostics),
+      mTotalTokensInContexts(0),
+      mDeferReenablingMacros(false)
 {
 }
 
@@ -187,7 +191,14 @@ void MacroExpander::popMacro()
     ASSERT(context->empty());
     ASSERT(context->macro->disabled);
     ASSERT(context->macro->expansionCount > 0);
-    context->macro->disabled = false;
+    if (mDeferReenablingMacros)
+    {
+        mMacrosToReenable.push_back(context->macro);
+    }
+    else
+    {
+        context->macro->disabled = false;
+    }
     context->macro->expansionCount--;
     mTotalTokensInContexts -= context->replacements.size();
     delete context;
@@ -262,6 +273,11 @@ bool MacroExpander::collectMacroArgs(const Macro &macro,
     ASSERT(token.type == '(');
 
     args->push_back(MacroArg());
+
+    // Defer reenabling macros until args collection is finished to avoid the possibility of
+    // infinite recursion. Otherwise infinite recursion might happen when expanding the args after
+    // macros have been popped from the context stack when parsing the args.
+    ScopedMacroReenabler deferReenablingMacros(this);
 
     int openParens = 1;
     while (openParens != 0)
