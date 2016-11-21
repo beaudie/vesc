@@ -163,15 +163,13 @@ void ProgramNULL::setUniformBlockBinding(GLuint uniformBlockIndex, GLuint unifor
 
 bool ProgramNULL::getUniformBlockSize(const std::string &blockName, size_t *sizeOut) const
 {
-    UNIMPLEMENTED();
-    return bool();
+    return true;
 }
 
 bool ProgramNULL::getUniformBlockMemberInfo(const std::string &memberUniformName,
                                             sh::BlockMemberInfo *memberInfoOut) const
 {
-    UNIMPLEMENTED();
-    return bool();
+    return true;
 }
 
 void ProgramNULL::setPathFragmentInputGen(const std::string &inputName,
