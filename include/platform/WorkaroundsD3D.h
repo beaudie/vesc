@@ -106,6 +106,11 @@ struct WorkaroundsD3D
     // for buffer data.
     // D3D11-only workaround. See http://crbug.com/593024.
     bool useSystemMemoryForConstantBuffers = false;
+
+    // When performing a maskedComponent clear using a float color, there are some instances where
+    // the clear color needs to be adjusted for emulated GL formats and formats with 1-bit alpha
+    // components
+    bool adjustAlphaClearValues = false;
 };
 
 }  // namespace angle
