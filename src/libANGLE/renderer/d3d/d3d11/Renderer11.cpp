@@ -883,9 +883,9 @@ void Renderer11::populateRenderer11DeviceCaps()
                                                       sizeof(D3D11_FEATURE_DATA_D3D11_OPTIONS));
         if (SUCCEEDED(result))
         {
-            mRenderer11DeviceCaps.supportsClearView = (d3d11Options.ClearView != FALSE);
+            mRenderer11DeviceCaps.supportsClearView = (d3d11Options.ClearView == TRUE);
             mRenderer11DeviceCaps.supportsConstantBufferOffsets =
-                (d3d11Options.ConstantBufferOffsetting != FALSE);
+                (d3d11Options.ConstantBufferOffsetting == TRUE);
         }
     }
 
@@ -1602,7 +1602,7 @@ gl::Error Renderer11::updateState(const gl::ContextState &data, GLenum drawMode)
         RenderTarget11 *renderTarget = nullptr;
         ANGLE_TRY(firstColorAttachment->getRenderTarget(&renderTarget));
         samples = renderTarget->getSamples();
-    }
+    }    
     gl::RasterizerState rasterizer = glState.getRasterizerState();
     rasterizer.pointDrawMode       = (drawMode == GL_POINTS);
     rasterizer.multiSample         = (samples != 0);
