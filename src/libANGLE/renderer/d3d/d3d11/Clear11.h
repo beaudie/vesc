@@ -40,7 +40,6 @@ class Clear11 : angle::NonCopyable
         RenderTarget11 *renderTarget;
     };
 
-    ID3D11BlendState *getBlendState(const std::vector<MaskedRenderTarget> &rts);
     ID3D11DepthStencilState *getDepthStencilState(const ClearParameters &clearParams);
 
     struct ClearShader final : public angle::NonCopyable
@@ -63,13 +62,6 @@ class Clear11 : angle::NonCopyable
     template <unsigned int vsSize, unsigned int psSize>
     static ClearShader CreateClearShader(ID3D11Device *device, DXGI_FORMAT colorType, const BYTE(&vsByteCode)[vsSize], const BYTE(&psByteCode)[psSize]);
 
-    struct ClearBlendInfo
-    {
-        bool maskChannels[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT][4];
-    };
-    typedef bool(*ClearBlendInfoComparisonFunction)(const ClearBlendInfo&, const ClearBlendInfo &);
-    typedef std::map<ClearBlendInfo, ID3D11BlendState*, ClearBlendInfoComparisonFunction> ClearBlendStateMap;
-
     struct ClearDepthStencilInfo
     {
         bool clearDepth;
@@ -81,8 +73,6 @@ class Clear11 : angle::NonCopyable
 
     Renderer11 *mRenderer;
 
-    ClearBlendStateMap mClearBlendStates;
-
     ClearShader *mFloatClearShader;
     ClearShader *mUintClearShader;
     ClearShader *mIntClearShader;
@@ -90,7 +80,9 @@ class Clear11 : angle::NonCopyable
     ClearDepthStencilStateMap mClearDepthStencilStates;
 
     ID3D11Buffer *mVertexBuffer;
-    ID3D11RasterizerState *mRasterizerState;
+    ID3D11RasterizerState *mRasterizerStateWithScissor;
+    ID3D11RasterizerState *mRasterizerStateWithoutScissor;
+    ID3D11BlendState *mBlendState;
 };
 
 }
