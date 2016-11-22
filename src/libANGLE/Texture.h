@@ -55,6 +55,8 @@ struct ImageDesc final
 
     Extents size;
     Format format;
+    GLsizei samples;
+    GLboolean mFixedSampleLocations;
 };
 
 struct SwizzleState final
@@ -139,6 +141,9 @@ struct TextureState final : public angle::NonCopyable
 
     // From GL_ANGLE_texture_usage
     GLenum mUsage;
+
+    GLsizei mSamples;
+    GLboolean mFixedSampleLocations;
 
     std::vector<ImageDesc> mImageDescs;
 
@@ -239,6 +244,10 @@ class Texture final : public egl::ImageSibling,
 
     void setUsage(GLenum usage);
     GLenum getUsage() const;
+
+    GLsizei getSamples() const;
+
+    GLboolean getFixedSampleLocations() const;
 
     const TextureState &getTextureState() const;
 
@@ -391,6 +400,7 @@ inline bool operator==(const TextureState &a, const TextureState &b)
     return a.mSwizzleState == b.mSwizzleState && a.mSamplerState == b.mSamplerState &&
            a.mBaseLevel == b.mBaseLevel && a.mMaxLevel == b.mMaxLevel &&
            a.mImmutableFormat == b.mImmutableFormat && a.mImmutableLevels == b.mImmutableLevels &&
+           a.mSamples == b.mSamples && a.mFixedSampleLocations == b.mFixedSampleLocations &&
            a.mUsage == b.mUsage;
 }
 
@@ -400,4 +410,4 @@ inline bool operator!=(const TextureState &a, const TextureState &b)
 }
 }
 
-#endif   // LIBANGLE_TEXTURE_H_
+#endif  // LIBANGLE_TEXTURE_H_
