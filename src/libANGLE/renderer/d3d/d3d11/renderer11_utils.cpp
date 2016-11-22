@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 
 #include <algorithm>
+#include <versionhelpers.h>
 
 #include "common/debug.h"
 #include "libANGLE/formatutils.h"
@@ -1781,14 +1782,17 @@ LazyInputLayout::LazyInputLayout(const D3D11_INPUT_ELEMENT_DESC *inputDesc,
       mByteCode(byteCode),
       mDebugName(debugName)
 {
-    memcpy(&mInputDesc[0], inputDesc, sizeof(D3D11_INPUT_ELEMENT_DESC) * inputDescLen);
+    if (inputDesc)
+    {
+        memcpy(&mInputDesc[0], inputDesc, sizeof(D3D11_INPUT_ELEMENT_DESC) * inputDescLen);
+    }
 }
 
 ID3D11InputLayout *LazyInputLayout::resolve(ID3D11Device *device)
 {
     checkAssociatedDevice(device);
 
-    if (mResource == nullptr)
+    if (mByteCode != nullptr && mResource == nullptr)
     {
         HRESULT result =
             device->CreateInputLayout(&mInputDesc[0], static_cast<UINT>(mInputDesc.size()),
@@ -1889,6 +1893,10 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
     }
 
     workarounds.useSystemMemoryForConstantBuffers = IsIntel(adapterDesc.VendorId);
+
+    // Adjust float alpha clear components to work around driver issues with rounding/truncation on
+    // formats with 1-bit alpha components and undefined alpha values for some emulated GL formats.
+    workarounds.adjustAlphaClearValues = true;
 
     // Call platform hooks for testing overrides.
     ANGLEPlatformCurrent()->overrideWorkaroundsD3D(&workarounds);
