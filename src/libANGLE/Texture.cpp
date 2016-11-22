@@ -42,16 +42,17 @@ bool IsMipmapFiltered(const gl::SamplerState &samplerState)
 {
     switch (samplerState.minFilter)
     {
-      case GL_NEAREST:
-      case GL_LINEAR:
-        return false;
-      case GL_NEAREST_MIPMAP_NEAREST:
-      case GL_LINEAR_MIPMAP_NEAREST:
-      case GL_NEAREST_MIPMAP_LINEAR:
-      case GL_LINEAR_MIPMAP_LINEAR:
-        return true;
-      default: UNREACHABLE();
-        return false;
+        case GL_NEAREST:
+        case GL_LINEAR:
+            return false;
+        case GL_NEAREST_MIPMAP_NEAREST:
+        case GL_LINEAR_MIPMAP_NEAREST:
+        case GL_NEAREST_MIPMAP_LINEAR:
+        case GL_LINEAR_MIPMAP_LINEAR:
+            return true;
+        default:
+            UNREACHABLE();
+            return false;
     }
 }
 
@@ -95,6 +96,8 @@ TextureState::TextureState(GLenum target)
       mImmutableFormat(false),
       mImmutableLevels(0),
       mUsage(GL_NONE),
+      mSamples(0),
+      mFixedSampleLocations(GL_TRUE),
       mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) *
                   (target == GL_TEXTURE_CUBE_MAP ? 6 : 1)),
       mCompletenessCache()
@@ -135,7 +138,7 @@ GLuint TextureState::getEffectiveMaxLevel() const
 GLuint TextureState::getMipmapMaxLevel() const
 {
     const ImageDesc &baseImageDesc = getImageDesc(getBaseImageTarget(), getEffectiveBaseLevel());
-    GLuint expectedMipLevels = 0;
+    GLuint expectedMipLevels       = 0;
     if (mTarget == GL_TEXTURE_3D)
     {
         const int maxDim = std::max(std::max(baseImageDesc.size.width, baseImageDesc.size.height),
@@ -763,26 +766,48 @@ GLenum Texture::getUsage() const
     return mState.mUsage;
 }
 
+void Texture::setSamples(GLsizei samples)
+{
+    mState.mSamples = samples;
+    mDirtyBits.set(DIRTY_BIT_SAMPLES);
+}
+
+GLsizei Texture::getSamples() const
+{
+    return mState.mSamples;
+}
+
+void Texture::setFixedSampleLocations(GLboolean fixed)
+{
+    mState.mFixedSampleLocations = fixed;
+    mDirtyBits.set(DIRTY_BIT_FIXED_SAMPLE_LOCATIONS);
+}
+
+GLboolean Texture::getFixedSampleLocations() const
+{
+    return mState.mFixedSampleLocations;
+}
+
 const TextureState &Texture::getTextureState() const
 {
     return mState;
 }
 
-size_t Texture::getWidth(GLenum target, size_t level) const
+int Texture::getWidth(GLenum target, size_t level) const
 {
     ASSERT(target == mState.mTarget ||
            (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
     return mState.getImageDesc(target, level).size.width;
 }
 
-size_t Texture::getHeight(GLenum target, size_t level) const
+int Texture::getHeight(GLenum target, size_t level) const
 {
     ASSERT(target == mState.mTarget ||
            (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
     return mState.getImageDesc(target, level).size.height;
 }
 
-size_t Texture::getDepth(GLenum target, size_t level) const
+int Texture::getDepth(GLenum target, size_t level) const
 {
     ASSERT(target == mState.mTarget ||
            (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
@@ -794,6 +819,71 @@ const Format &Texture::getFormat(GLenum target, size_t level) const
     ASSERT(target == mState.mTarget ||
            (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
     return mState.getImageDesc(target, level).format;
+}
+
+GLenum Texture::getChannelBaseType(GLenum target, size_t level, GLenum pname) const
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    const InternalFormat *info = mState.getImageDesc(target, level).format.info;
+    switch (pname)
+    {
+        case GL_TEXTURE_RED_TYPE:
+            return info->redBits ? info->componentType : GL_NONE;
+        case GL_TEXTURE_GREEN_TYPE:
+            return info->greenBits ? info->componentType : GL_NONE;
+        case GL_TEXTURE_BLUE_TYPE:
+            return info->blueBits ? info->componentType : GL_NONE;
+        case GL_TEXTURE_ALPHA_TYPE:
+            return info->alphaBits ? info->componentType : GL_NONE;
+        case GL_TEXTURE_DEPTH_TYPE:
+            return info->depthBits ? info->componentType : GL_NONE;
+        default:
+            UNREACHABLE();
+            return GL_NONE;
+    }
+}
+
+GLuint Texture::getChannelSize(GLenum target, size_t level, GLenum pname) const
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    const InternalFormat *info = mState.getImageDesc(target, level).format.info;
+    switch (pname)
+    {
+        case GL_TEXTURE_RED_SIZE:
+            return info->redBits;
+        case GL_TEXTURE_GREEN_SIZE:
+            return info->greenBits;
+        case GL_TEXTURE_BLUE_SIZE:
+            return info->blueBits;
+        case GL_TEXTURE_ALPHA_SIZE:
+            return info->alphaBits;
+        case GL_TEXTURE_DEPTH_SIZE:
+            return info->depthBits;
+        case GL_TEXTURE_STENCIL_SIZE:
+            return info->stencilBits;
+        case GL_TEXTURE_SHARED_SIZE:
+            return info->sharedBits;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+GLenum Texture::getInternalFormat(GLenum target, size_t level) const
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    return mState.getImageDesc(target, level).format.info->internalFormat;
+}
+
+bool Texture::isCompressed(GLenum target, size_t level) const
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    const InternalFormat *info = mState.getImageDesc(target, level).format.info;
+    return info->compressed;
 }
 
 bool Texture::isMipmapComplete() const
@@ -888,7 +978,10 @@ Error Texture::setCompressedSubImage(const PixelUnpackState &unpackState,
                                            pixels);
 }
 
-Error Texture::copyImage(GLenum target, size_t level, const Rectangle &sourceArea, GLenum internalFormat,
+Error Texture::copyImage(GLenum target,
+                         size_t level,
+                         const Rectangle &sourceArea,
+                         GLenum internalFormat,
                          const Framebuffer *source)
 {
     ASSERT(target == mState.mTarget ||
@@ -908,7 +1001,10 @@ Error Texture::copyImage(GLenum target, size_t level, const Rectangle &sourceAre
     return NoError();
 }
 
-Error Texture::copySubImage(GLenum target, size_t level, const Offset &destOffset, const Rectangle &sourceArea,
+Error Texture::copySubImage(GLenum target,
+                            size_t level,
+                            const Offset &destOffset,
+                            const Rectangle &sourceArea,
                             const Framebuffer *source)
 {
     ASSERT(target == mState.mTarget ||
@@ -1137,7 +1233,7 @@ const Format &Texture::getAttachmentFormat(const gl::FramebufferAttachment::Targ
     return getFormat(target.textureIndex().type, target.textureIndex().mipIndex);
 }
 
-GLsizei Texture::getAttachmentSamples(const gl::FramebufferAttachment::Target &/*target*/) const
+GLsizei Texture::getAttachmentSamples(const gl::FramebufferAttachment::Target & /*target*/) const
 {
     // Multisample textures not currently supported
     return 0;
