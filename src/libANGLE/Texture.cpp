@@ -42,16 +42,17 @@ bool IsMipmapFiltered(const gl::SamplerState &samplerState)
 {
     switch (samplerState.minFilter)
     {
-      case GL_NEAREST:
-      case GL_LINEAR:
-        return false;
-      case GL_NEAREST_MIPMAP_NEAREST:
-      case GL_LINEAR_MIPMAP_NEAREST:
-      case GL_NEAREST_MIPMAP_LINEAR:
-      case GL_LINEAR_MIPMAP_LINEAR:
-        return true;
-      default: UNREACHABLE();
-        return false;
+        case GL_NEAREST:
+        case GL_LINEAR:
+            return false;
+        case GL_NEAREST_MIPMAP_NEAREST:
+        case GL_LINEAR_MIPMAP_NEAREST:
+        case GL_NEAREST_MIPMAP_LINEAR:
+        case GL_LINEAR_MIPMAP_LINEAR:
+            return true;
+        default:
+            UNREACHABLE();
+            return false;
     }
 }
 
@@ -95,6 +96,8 @@ TextureState::TextureState(GLenum target)
       mImmutableFormat(false),
       mImmutableLevels(0),
       mUsage(GL_NONE),
+      mSamples(0),
+      mFixedSampleLocations(GL_TRUE),
       mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) *
                   (target == GL_TEXTURE_CUBE_MAP ? 6 : 1)),
       mCompletenessCache()
@@ -135,7 +138,7 @@ GLuint TextureState::getEffectiveMaxLevel() const
 GLuint TextureState::getMipmapMaxLevel() const
 {
     const ImageDesc &baseImageDesc = getImageDesc(getBaseImageTarget(), getEffectiveBaseLevel());
-    GLuint expectedMipLevels = 0;
+    GLuint expectedMipLevels       = 0;
     if (mTarget == GL_TEXTURE_3D)
     {
         const int maxDim = std::max(std::max(baseImageDesc.size.width, baseImageDesc.size.height),
@@ -763,6 +766,16 @@ GLenum Texture::getUsage() const
     return mState.mUsage;
 }
 
+GLsizei Texture::getSamples() const
+{
+    return mState.mSamples;
+}
+
+GLboolean Texture::getFixedSampleLocations() const
+{
+    return mState.mFixedSampleLocations;
+}
+
 const TextureState &Texture::getTextureState() const
 {
     return mState;
@@ -888,7 +901,10 @@ Error Texture::setCompressedSubImage(const PixelUnpackState &unpackState,
                                            pixels);
 }
 
-Error Texture::copyImage(GLenum target, size_t level, const Rectangle &sourceArea, GLenum internalFormat,
+Error Texture::copyImage(GLenum target,
+                         size_t level,
+                         const Rectangle &sourceArea,
+                         GLenum internalFormat,
                          const Framebuffer *source)
 {
     ASSERT(target == mState.mTarget ||
@@ -908,7 +924,10 @@ Error Texture::copyImage(GLenum target, size_t level, const Rectangle &sourceAre
     return NoError();
 }
 
-Error Texture::copySubImage(GLenum target, size_t level, const Offset &destOffset, const Rectangle &sourceArea,
+Error Texture::copySubImage(GLenum target,
+                            size_t level,
+                            const Offset &destOffset,
+                            const Rectangle &sourceArea,
                             const Framebuffer *source)
 {
     ASSERT(target == mState.mTarget ||
@@ -1137,7 +1156,7 @@ const Format &Texture::getAttachmentFormat(const gl::FramebufferAttachment::Targ
     return getFormat(target.textureIndex().type, target.textureIndex().mipIndex);
 }
 
-GLsizei Texture::getAttachmentSamples(const gl::FramebufferAttachment::Target &/*target*/) const
+GLsizei Texture::getAttachmentSamples(const gl::FramebufferAttachment::Target & /*target*/) const
 {
     // Multisample textures not currently supported
     return 0;
