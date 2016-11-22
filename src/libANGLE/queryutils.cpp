@@ -26,6 +26,63 @@ namespace gl
 namespace
 {
 template <typename ParamType>
+void QueryTexLevelParameterBase(const Texture *texture,
+                                GLint level,
+                                GLenum pname,
+                                ParamType *params)
+{
+    ASSERT(texture != nullptr);
+
+    switch (pname)
+    {
+        case GL_TEXTURE_RED_TYPE:
+        case GL_TEXTURE_GREEN_TYPE:
+        case GL_TEXTURE_BLUE_TYPE:
+        case GL_TEXTURE_ALPHA_TYPE:
+        case GL_TEXTURE_DEPTH_TYPE:
+            *params = ConvertFromGLenum<ParamType>(
+                texture->getChannelBaseType(texture->getTarget(), level, pname));
+            break;
+        case GL_TEXTURE_RED_SIZE:
+        case GL_TEXTURE_GREEN_SIZE:
+        case GL_TEXTURE_BLUE_SIZE:
+        case GL_TEXTURE_ALPHA_SIZE:
+        case GL_TEXTURE_DEPTH_SIZE:
+        case GL_TEXTURE_STENCIL_SIZE:
+        case GL_TEXTURE_SHARED_SIZE:
+            *params = ConvertFromGLuint<ParamType>(
+                texture->getChannelSize(texture->getTarget(), level, pname));
+            break;
+        case GL_TEXTURE_INTERNAL_FORMAT:
+            *params = ConvertFromGLenum<ParamType>(
+                texture->getInternalFormat(texture->getTarget(), level));
+            break;
+        case GL_TEXTURE_WIDTH:
+            *params = ConvertFromGLint<ParamType>(texture->getWidth(texture->getTarget(), level));
+            break;
+        case GL_TEXTURE_HEIGHT:
+            *params = ConvertFromGLint<ParamType>(texture->getHeight(texture->getTarget(), level));
+            break;
+        case GL_TEXTURE_DEPTH:
+            *params = ConvertFromGLint<ParamType>(texture->getDepth(texture->getTarget(), level));
+            break;
+        case GL_TEXTURE_SAMPLES:
+            *params = ConvertFromGLint<ParamType>(texture->getSamples());
+            break;
+        case GL_TEXTURE_FIXED_SAMPLE_LOCATIONS:
+            *params = ConvertFromGLboolean<ParamType>(texture->getFixedSampleLocations());
+            break;
+        case GL_TEXTURE_COMPRESSED:
+            *params =
+                ConvertFromGLboolean<ParamType>(texture->isCompressed(texture->getTarget(), level));
+            break;
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+template <typename ParamType>
 void QueryTexParameterBase(const Texture *texture, GLenum pname, ParamType *params)
 {
     ASSERT(texture != nullptr);
@@ -597,6 +654,16 @@ void QueryShaderiv(const Shader *shader, GLenum pname, GLint *params)
             UNREACHABLE();
             break;
     }
+}
+
+void QueryTexLevelParameterfv(const Texture *texture, GLint level, GLenum pname, GLfloat *params)
+{
+    QueryTexLevelParameterBase(texture, level, pname, params);
+}
+
+void QueryTexLevelParameteriv(const Texture *texture, GLint level, GLenum pname, GLint *params)
+{
+    QueryTexLevelParameterBase(texture, level, pname, params);
 }
 
 void QueryTexParameterfv(const Texture *texture, GLenum pname, GLfloat *params)
