@@ -1,0 +1,240 @@
+//
+// Copyright 2016 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// WorkerThread:
+//   Asychronous tasks/threads for ANGLE, similar to a TaskRunner in Chromium.
+//   Can be implemented as different targets, depending on platform.
+//
+
+#ifndef LIBANGLE_WORKER_THREAD_H_
+#define LIBANGLE_WORKER_THREAD_H_
+
+#include <array>
+#include <future>
+#include <vector>
+
+#include "common/debug.h"
+#include "libANGLE/features.h"
+
+namespace angle
+{
+// Indicates whether a WaitableEvent should automatically reset the event state after a single
+// waiting thread has been released or remain signaled until reset() is manually invoked.
+enum class EventResetPolicy
+{
+    Manual,
+    Automatic
+};
+
+// Specify the initial state on creation.
+enum class EventInitialState
+{
+    NonSignaled,
+    Signaled
+};
+
+namespace priv
+{
+
+// An even that we can wait on, useful for joining worker threads.
+template <typename Impl>
+class WaitableEventBase
+{
+  public:
+    WaitableEventBase(EventResetPolicy resetPolicy, EventInitialState initialState);
+
+    WaitableEventBase(WaitableEventBase &&other);
+
+    // Puts the event in the un-signaled state.
+    void reset();
+
+    // Waits indefinitely for the event to be signaled.
+    void wait();
+
+    // Puts the event in the signaled state, causing any thread blocked on Wait to be woken up.
+    // The event state is reset to non-signaled after a waiting thread has been released.
+    void signal();
+
+    // Wait, synchronously, on multiple events.
+    // returns the index of a WaitableEvent which has been signaled.
+    static size_t WaitMany(Impl **waitables, size_t count);
+
+    template <size_t Count>
+    static size_t WaitMany(std::array<Impl, Count> *waitables);
+
+  protected:
+    EventResetPolicy mResetPolicy;
+    bool mSignaled;
+};
+
+template <typename Impl>
+WaitableEventBase<Impl>::WaitableEventBase(EventResetPolicy resetPolicy,
+                                           EventInitialState initialState)
+    : mResetPolicy(resetPolicy), mSignaled(initialState == EventInitialState::Signaled)
+{
+}
+
+template <typename Impl>
+WaitableEventBase<Impl>::WaitableEventBase(WaitableEventBase &&other)
+    : mResetPolicy(other.mResetPolicy), mSignaled(other.mSignaled)
+{
+}
+
+template <typename Impl>
+void WaitableEventBase<Impl>::reset()
+{
+    static_cast<Impl *>(this)->resetImpl();
+}
+
+template <typename Impl>
+void WaitableEventBase<Impl>::wait()
+{
+    static_cast<Impl *>(this)->waitImpl();
+}
+
+template <typename Impl>
+void WaitableEventBase<Impl>::signal()
+{
+    static_cast<Impl *>(this)->signalImpl();
+}
+
+template <typename Impl>
+// static
+size_t WaitableEventBase<Impl>::WaitMany(Impl **waitables, size_t count)
+{
+    ASSERT(count > 0);
+
+    for (size_t index = 0; index < count; ++index)
+    {
+        waitables[index]->wait();
+    }
+
+    return 0;
+}
+
+template <typename Impl>
+template <size_t Count>
+// static
+size_t WaitableEventBase<Impl>::WaitMany(std::array<Impl, Count> *waitables)
+{
+    ASSERT(Count > 0);
+
+    for (size_t index = 0; index < Count; ++index)
+    {
+        (*waitables)[index].wait();
+    }
+
+    return 0;
+}
+
+class SingleThreadedWaitableEvent : public WaitableEventBase<SingleThreadedWaitableEvent>
+{
+  public:
+    SingleThreadedWaitableEvent(EventResetPolicy resetPolicy, EventInitialState initialState);
+    ~SingleThreadedWaitableEvent();
+
+    SingleThreadedWaitableEvent(SingleThreadedWaitableEvent &&other);
+
+    void resetImpl();
+    void waitImpl();
+    void signalImpl();
+};
+
+class AsyncWaitableEvent : public WaitableEventBase<AsyncWaitableEvent>
+{
+  public:
+    AsyncWaitableEvent(EventResetPolicy resetPolicy, EventInitialState initialState);
+    ~AsyncWaitableEvent();
+
+    AsyncWaitableEvent(AsyncWaitableEvent &&other);
+
+    void resetImpl();
+    void waitImpl();
+    void signalImpl();
+
+  private:
+    friend class AsyncWorkerPool;
+    void setFuture(std::future<void> &&future);
+
+    std::future<void> mFuture;
+};
+
+}  // namespace priv
+
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+using WaitableEvent = priv::AsyncWaitableEvent;
+#else
+using WaitableEvent = priv::SingleThreadedWaitableEvent;
+#endif  // (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+
+// A callback function with no return value and no arguments.
+class Closure
+{
+  public:
+    virtual void operator()() = 0;
+};
+
+namespace priv
+{
+
+// Request WorkerThreads from the WorkerThreadPool. Each pool can keep worker threads around so
+// we avoid the costly spin up and spin down time.
+template <typename Impl>
+class WorkerThreadPoolBase : angle::NonCopyable
+{
+  public:
+    WorkerThreadPoolBase(size_t maxThreads);
+    ~WorkerThreadPoolBase();
+
+    // Returns an event to wait on for the task to finish.
+    // If the pool fails to creat the task, returns null.
+    WaitableEvent postWorkerTask(Closure *task);
+};
+
+template <typename Impl>
+WorkerThreadPoolBase<Impl>::WorkerThreadPoolBase(size_t maxThreads)
+{
+}
+
+template <typename Impl>
+WorkerThreadPoolBase<Impl>::~WorkerThreadPoolBase()
+{
+}
+
+template <typename Impl>
+WaitableEvent WorkerThreadPoolBase<Impl>::postWorkerTask(Closure *task)
+{
+    return static_cast<Impl *>(this)->postWorkerTaskImpl(task);
+}
+
+class SingleThreadedWorkerPool : public WorkerThreadPoolBase<SingleThreadedWorkerPool>
+{
+  public:
+    SingleThreadedWorkerPool(size_t maxThreads);
+    ~SingleThreadedWorkerPool();
+
+    SingleThreadedWaitableEvent postWorkerTaskImpl(Closure *task);
+};
+
+class AsyncWorkerPool : public WorkerThreadPoolBase<AsyncWorkerPool>
+{
+  public:
+    AsyncWorkerPool(size_t maxThreads);
+    ~AsyncWorkerPool();
+
+    AsyncWaitableEvent postWorkerTaskImpl(Closure *task);
+};
+
+}  // namespace priv
+
+#if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+using WorkerThreadPool = priv::AsyncWorkerPool;
+#else
+using WorkerThreadPool = priv::SingleThreadedWorkerPool;
+#endif  // (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+
+}  // namespace angle
+
+#endif  // LIBANGLE_WORKER_THREAD_H_
