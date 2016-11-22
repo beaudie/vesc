@@ -997,7 +997,7 @@ Error ValidateCreateImageKHR(const Display *display,
                              "target 3D texture does not have a valid size at specified level.");
             }
 
-            if (static_cast<size_t>(zOffset) >=
+            if (static_cast<int>(zOffset) >=
                 texture->getDepth(GL_TEXTURE_3D, static_cast<size_t>(level)))
             {
                 return Error(EGL_BAD_PARAMETER,

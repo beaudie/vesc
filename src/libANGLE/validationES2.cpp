@@ -385,8 +385,8 @@ bool ValidateES2TexImageParameters(Context *context,
             }
         }
 
-        if (static_cast<size_t>(xoffset + width) > texture->getWidth(target, level) ||
-            static_cast<size_t>(yoffset + height) > texture->getHeight(target, level))
+        if (static_cast<int>(xoffset + width) > texture->getWidth(target, level) ||
+            static_cast<int>(yoffset + height) > texture->getHeight(target, level))
         {
             context->handleError(Error(GL_INVALID_VALUE));
             return false;
@@ -3271,8 +3271,8 @@ bool ValidateCopySubTextureCHROMIUM(Context *context,
         return false;
     }
 
-    if (static_cast<size_t>(x + width) > source->getWidth(sourceTarget, 0) ||
-        static_cast<size_t>(y + height) > source->getHeight(sourceTarget, 0))
+    if (static_cast<int>(x + width) > source->getWidth(sourceTarget, 0) ||
+        static_cast<int>(y + height) > source->getHeight(sourceTarget, 0))
     {
         context->handleError(
             Error(GL_INVALID_VALUE, "Source texture not large enough to copy from."));
@@ -3325,8 +3325,8 @@ bool ValidateCopySubTextureCHROMIUM(Context *context,
         return false;
     }
 
-    if (static_cast<size_t>(xoffset + width) > dest->getWidth(destTarget, 0) ||
-        static_cast<size_t>(yoffset + height) > dest->getHeight(destTarget, 0))
+    if (static_cast<int>(xoffset + width) > dest->getWidth(destTarget, 0) ||
+        static_cast<int>(yoffset + height) > dest->getHeight(destTarget, 0))
     {
         context->handleError(
             Error(GL_INVALID_VALUE, "Destination texture not large enough to copy to."));
