@@ -36,22 +36,316 @@ size_t GetImageDescIndex(GLenum target, size_t level)
     return IsCubeMapTextureTarget(target) ? ((level * 6) + CubeMapTextureTargetToLayerIndex(target))
                                           : level;
 }
+
+GLenum GetBaseTypeFromInternalFormat(GLenum internalFormat, GLenum pname)
+{
+    switch (internalFormat)
+    {
+        // signed normalized fixed-point internalformat
+        case GL_R8_SNORM:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                    return GL_SIGNED_NORMALIZED;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RG8_SNORM:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                    return GL_SIGNED_NORMALIZED;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RGB8_SNORM:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                case GL_TEXTURE_BLUE_TYPE:
+                    return GL_SIGNED_NORMALIZED;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RGBA8_SNORM:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                case GL_TEXTURE_BLUE_TYPE:
+                case GL_TEXTURE_ALPHA_TYPE:
+                    return GL_SIGNED_NORMALIZED;
+                default:
+                    return GL_NONE;
+            }
+        // unsigned normalized fixed-point internalformat
+        case GL_R8:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                    return GL_UNSIGNED_NORMALIZED;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RG8:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                    return GL_UNSIGNED_NORMALIZED;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RGB8:
+        case GL_RGB565:
+        case GL_SRGB8:
+        case GL_RGB9_E5:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                case GL_TEXTURE_BLUE_TYPE:
+                    return GL_UNSIGNED_NORMALIZED;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RGBA4:
+        case GL_RGB5_A1:
+        case GL_RGBA8:
+        case GL_RGB10_A2:
+        case GL_SRGB8_ALPHA8_EXT:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                case GL_TEXTURE_BLUE_TYPE:
+                case GL_TEXTURE_ALPHA_TYPE:
+                    return GL_UNSIGNED_NORMALIZED;
+                default:
+                    return GL_NONE;
+            }
+        // floating-point internalformat
+        case GL_R16F:
+        case GL_R32F:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                    return GL_FLOAT;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RG16F:
+        case GL_RG32F:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                    return GL_FLOAT;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RGB16F_EXT:
+        case GL_RGB32F_EXT:
+        case GL_R11F_G11F_B10F:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                case GL_TEXTURE_BLUE_TYPE:
+                    return GL_FLOAT;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RGBA16F_EXT:
+        case GL_RGBA32F_EXT:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                case GL_TEXTURE_BLUE_TYPE:
+                case GL_TEXTURE_ALPHA_TYPE:
+                    return GL_FLOAT;
+                default:
+                    return GL_NONE;
+            }
+        // signed unnormalized integer internalformat
+        case GL_R8I:
+        case GL_R16I:
+        case GL_R32I:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                    return GL_INT;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RG8I:
+        case GL_RG16I:
+        case GL_RG32I:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                    return GL_INT;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RGB8I:
+        case GL_RGB16I:
+        case GL_RGB32I:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                case GL_TEXTURE_BLUE_TYPE:
+                    return GL_INT;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RGBA8I:
+        case GL_RGBA16I:
+        case GL_RGBA32I:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                case GL_TEXTURE_BLUE_TYPE:
+                case GL_TEXTURE_ALPHA_TYPE:
+                    return GL_INT;
+                default:
+                    return GL_NONE;
+            }
+        // unsigned unnormalized integer internalformat
+        case GL_R8UI:
+        case GL_R16UI:
+        case GL_R32UI:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                    return GL_UNSIGNED_INT;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RG8UI:
+        case GL_RG16UI:
+        case GL_RG32UI:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                    return GL_UNSIGNED_INT;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RGB8UI:
+        case GL_RGB16UI:
+        case GL_RGB32UI:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                case GL_TEXTURE_BLUE_TYPE:
+                    return GL_UNSIGNED_INT;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RGBA8UI:
+        case GL_RGBA16UI:
+        case GL_RGBA32UI:
+        case GL_RGB10_A2UI:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                case GL_TEXTURE_BLUE_TYPE:
+                case GL_TEXTURE_ALPHA_TYPE:
+                    return GL_UNSIGNED_INT;
+                default:
+                    return GL_NONE;
+            }
+
+        // sized depth/stencil internalformat
+        case GL_DEPTH_COMPONENT16:
+        case GL_DEPTH_COMPONENT24:
+        case GL_DEPTH24_STENCIL8:
+            switch (pname)
+            {
+                case GL_TEXTURE_DEPTH_TYPE:
+                    return GL_UNSIGNED_NORMALIZED;
+                default:
+                    return GL_NONE;
+            }
+        case GL_DEPTH_COMPONENT32F:
+        case GL_DEPTH32F_STENCIL8:
+            switch (pname)
+            {
+                case GL_TEXTURE_DEPTH_TYPE:
+                    return GL_FLOAT;
+                default:
+                    return GL_NONE;
+            }
+        case GL_STENCIL_INDEX8:
+            return GL_NONE;
+        // unsized internalformat
+        case GL_RGB:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                case GL_TEXTURE_BLUE_TYPE:
+                    return GL_UNSIGNED_NORMALIZED;
+                default:
+                    return GL_NONE;
+            }
+        case GL_RGBA:
+            switch (pname)
+            {
+                case GL_TEXTURE_RED_TYPE:
+                case GL_TEXTURE_GREEN_TYPE:
+                case GL_TEXTURE_BLUE_TYPE:
+                case GL_TEXTURE_ALPHA_TYPE:
+                    return GL_UNSIGNED_NORMALIZED;
+                default:
+                    return GL_NONE;
+            }
+        case GL_ALPHA:
+        case GL_LUMINANCE_ALPHA:
+            switch (pname)
+            {
+                case GL_TEXTURE_ALPHA_TYPE:
+                    return GL_UNSIGNED_NORMALIZED;
+                default:
+                    return GL_NONE;
+            }
+        case GL_LUMINANCE:
+            return GL_NONE;
+        case 0:  // No storage, no valid internalformat
+            return GL_NONE;
+        default:
+            UNREACHABLE();
+            return GL_NONE;
+    }
+}
+
 }  // namespace
 
 bool IsMipmapFiltered(const gl::SamplerState &samplerState)
 {
     switch (samplerState.minFilter)
     {
-      case GL_NEAREST:
-      case GL_LINEAR:
-        return false;
-      case GL_NEAREST_MIPMAP_NEAREST:
-      case GL_LINEAR_MIPMAP_NEAREST:
-      case GL_NEAREST_MIPMAP_LINEAR:
-      case GL_LINEAR_MIPMAP_LINEAR:
-        return true;
-      default: UNREACHABLE();
-        return false;
+        case GL_NEAREST:
+        case GL_LINEAR:
+            return false;
+        case GL_NEAREST_MIPMAP_NEAREST:
+        case GL_LINEAR_MIPMAP_NEAREST:
+        case GL_NEAREST_MIPMAP_LINEAR:
+        case GL_LINEAR_MIPMAP_LINEAR:
+            return true;
+        default:
+            UNREACHABLE();
+            return false;
     }
 }
 
@@ -95,6 +389,8 @@ TextureState::TextureState(GLenum target)
       mImmutableFormat(false),
       mImmutableLevels(0),
       mUsage(GL_NONE),
+      mSamples(0),
+      mFixedSampleLocations(GL_TRUE),
       mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) *
                   (target == GL_TEXTURE_CUBE_MAP ? 6 : 1)),
       mCompletenessCache()
@@ -135,7 +431,7 @@ GLuint TextureState::getEffectiveMaxLevel() const
 GLuint TextureState::getMipmapMaxLevel() const
 {
     const ImageDesc &baseImageDesc = getImageDesc(getBaseImageTarget(), getEffectiveBaseLevel());
-    GLuint expectedMipLevels = 0;
+    GLuint expectedMipLevels       = 0;
     if (mTarget == GL_TEXTURE_3D)
     {
         const int maxDim = std::max(std::max(baseImageDesc.size.width, baseImageDesc.size.height),
@@ -763,26 +1059,48 @@ GLenum Texture::getUsage() const
     return mState.mUsage;
 }
 
+void Texture::setSamples(GLsizei samples)
+{
+    mState.mSamples = samples;
+    mDirtyBits.set(DIRTY_BIT_SAMPLES);
+}
+
+GLsizei Texture::getSamples() const
+{
+    return mState.mSamples;
+}
+
+void Texture::setFixedSampleLocations(GLboolean fixed)
+{
+    mState.mFixedSampleLocations = fixed;
+    mDirtyBits.set(DIRTY_BIT_FIXED_SAMPLE_LOCATIONS);
+}
+
+GLboolean Texture::getFixedSampleLocations() const
+{
+    return mState.mFixedSampleLocations;
+}
+
 const TextureState &Texture::getTextureState() const
 {
     return mState;
 }
 
-size_t Texture::getWidth(GLenum target, size_t level) const
+int Texture::getWidth(GLenum target, size_t level) const
 {
     ASSERT(target == mState.mTarget ||
            (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
     return mState.getImageDesc(target, level).size.width;
 }
 
-size_t Texture::getHeight(GLenum target, size_t level) const
+int Texture::getHeight(GLenum target, size_t level) const
 {
     ASSERT(target == mState.mTarget ||
            (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
     return mState.getImageDesc(target, level).size.height;
 }
 
-size_t Texture::getDepth(GLenum target, size_t level) const
+int Texture::getDepth(GLenum target, size_t level) const
 {
     ASSERT(target == mState.mTarget ||
            (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
@@ -794,6 +1112,71 @@ const Format &Texture::getFormat(GLenum target, size_t level) const
     ASSERT(target == mState.mTarget ||
            (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
     return mState.getImageDesc(target, level).format;
+}
+
+GLenum Texture::getChannelBaseType(GLenum target, size_t level, GLenum pname) const
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    return GetBaseTypeFromInternalFormat(
+        mState.getImageDesc(target, level).format.info->internalFormat, pname);
+}
+
+GLuint Texture::getChannelSize(GLenum target, size_t level, GLenum pname) const
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    const InternalFormat *info = mState.getImageDesc(target, level).format.info;
+    switch (pname)
+    {
+        case GL_TEXTURE_RED_SIZE:
+            return info->redBits;
+        case GL_TEXTURE_GREEN_SIZE:
+            return info->greenBits;
+        case GL_TEXTURE_BLUE_SIZE:
+            return info->blueBits;
+        case GL_TEXTURE_ALPHA_SIZE:
+            return info->alphaBits;
+        case GL_TEXTURE_DEPTH_SIZE:
+            return info->depthBits;
+        case GL_TEXTURE_STENCIL_SIZE:
+            return info->stencilBits;
+        case GL_TEXTURE_SHARED_SIZE:
+            return info->sharedBits;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+GLenum Texture::getInternalFormat(GLenum target, size_t level) const
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    return mState.getImageDesc(target, level).format.info->internalFormat;
+}
+
+bool Texture::isCompressed(GLenum target, size_t level) const
+{
+    ASSERT(target == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
+    const GLenum internalFormat = mState.getImageDesc(target, level).format.info->internalFormat;
+    switch (internalFormat)
+    {
+        case GL_COMPRESSED_R11_EAC:
+        case GL_COMPRESSED_SIGNED_R11_EAC:
+        case GL_COMPRESSED_RG11_EAC:
+        case GL_COMPRESSED_SIGNED_RG11_EAC:
+        case GL_COMPRESSED_RGB8_ETC2:
+        case GL_COMPRESSED_SRGB8_ETC2:
+        case GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2:
+        case GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2:
+        case GL_COMPRESSED_RGBA8_ETC2_EAC:
+        case GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC:
+            return true;
+        default:
+            return false;
+    }
 }
 
 bool Texture::isMipmapComplete() const
@@ -888,7 +1271,10 @@ Error Texture::setCompressedSubImage(const PixelUnpackState &unpackState,
                                            pixels);
 }
 
-Error Texture::copyImage(GLenum target, size_t level, const Rectangle &sourceArea, GLenum internalFormat,
+Error Texture::copyImage(GLenum target,
+                         size_t level,
+                         const Rectangle &sourceArea,
+                         GLenum internalFormat,
                          const Framebuffer *source)
 {
     ASSERT(target == mState.mTarget ||
@@ -908,7 +1294,10 @@ Error Texture::copyImage(GLenum target, size_t level, const Rectangle &sourceAre
     return NoError();
 }
 
-Error Texture::copySubImage(GLenum target, size_t level, const Offset &destOffset, const Rectangle &sourceArea,
+Error Texture::copySubImage(GLenum target,
+                            size_t level,
+                            const Offset &destOffset,
+                            const Rectangle &sourceArea,
                             const Framebuffer *source)
 {
     ASSERT(target == mState.mTarget ||
@@ -1137,7 +1526,7 @@ const Format &Texture::getAttachmentFormat(const gl::FramebufferAttachment::Targ
     return getFormat(target.textureIndex().type, target.textureIndex().mipIndex);
 }
 
-GLsizei Texture::getAttachmentSamples(const gl::FramebufferAttachment::Target &/*target*/) const
+GLsizei Texture::getAttachmentSamples(const gl::FramebufferAttachment::Target & /*target*/) const
 {
     // Multisample textures not currently supported
     return 0;
