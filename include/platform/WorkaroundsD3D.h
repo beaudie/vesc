@@ -106,6 +106,12 @@ struct WorkaroundsD3D
     // for buffer data.
     // D3D11-only workaround. See http://crbug.com/593024.
     bool useSystemMemoryForConstantBuffers = false;
+
+    // On Windows 7 and below, some drivers do not properly convert float values to outputs
+    // some emulated int/sint formats. This affects masked clears where a float clear color is
+    // specified on these emulated formats. To workaround this issue, a corrected clear color is
+    // specified for each RTV target and passed in using a constant buffer.
+    bool adjustClearColorsForRtvs = false;
 };
 
 }  // namespace angle
