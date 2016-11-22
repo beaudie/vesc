@@ -612,6 +612,8 @@ void IdentifyBuiltIns(sh::GLenum type, ShShaderSpec spec,
     {
       case GL_FRAGMENT_SHADER:
       {
+          int maxDrawBuffers = resources.MaxDrawBuffers >= 1 ? resources.MaxDrawBuffers : 1;
+
           symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_FragCoord"),
               TType(EbtFloat, EbpMedium, EvqFragCoord, 4)));
           symbolTable.insert(COMMON_BUILTINS, new TVariable(NewPoolTString("gl_FrontFacing"),
@@ -622,10 +624,10 @@ void IdentifyBuiltIns(sh::GLenum type, ShShaderSpec spec,
           symbolTable.insert(ESSL1_BUILTINS, new TVariable(NewPoolTString("gl_FragColor"),
               TType(EbtFloat, EbpMedium, EvqFragColor, 4)));
           TType fragData(EbtFloat, EbpMedium, EvqFragData, 4, 1, true);
-          fragData.setArraySize(resources.MaxDrawBuffers);
+          fragData.setArraySize(maxDrawBuffers);
           symbolTable.insert(ESSL1_BUILTINS, new TVariable(NewPoolTString("gl_FragData"), fragData));
 
-          if (resources.EXT_blend_func_extended)
+          if (resources.EXT_blend_func_extended && resources.MaxDualSourceDrawBuffers > 0)
           {
               symbolTable.insert(
                   ESSL1_BUILTINS, "GL_EXT_blend_func_extended",
@@ -655,7 +657,7 @@ void IdentifyBuiltIns(sh::GLenum type, ShShaderSpec spec,
           if (resources.EXT_shader_framebuffer_fetch || resources.NV_shader_framebuffer_fetch)
           {
               TType lastFragData(EbtFloat, EbpMedium, EvqLastFragData, 4, 1, true);
-              lastFragData.setArraySize(resources.MaxDrawBuffers);
+              lastFragData.setArraySize(maxDrawBuffers);
 
               if (resources.EXT_shader_framebuffer_fetch)
               {
