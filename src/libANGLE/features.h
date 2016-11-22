@@ -50,4 +50,9 @@
 #define ANGLE_PROGRAM_LINK_VALIDATE_UNIFORM_PRECISION ANGLE_ENABLED
 #endif
 
+// Controls if our threading code uses std::async or falls back to single-threaded operations.
+#if !defined(ANGLE_STD_ASYNC_WORKERS)
+#define ANGLE_STD_ASYNC_WORKERS ANGLE_ENABLED
+#endif
+
 #endif // LIBANGLE_FEATURES_H_
