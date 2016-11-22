@@ -77,11 +77,15 @@ MacroExpander::ScopedMacroReenabler::~ScopedMacroReenabler()
     mExpander->mMacrosToReenable.clear();
 }
 
-MacroExpander::MacroExpander(Lexer *lexer, MacroSet *macroSet, Diagnostics *diagnostics)
+MacroExpander::MacroExpander(Lexer *lexer,
+                             MacroSet *macroSet,
+                             Diagnostics *diagnostics,
+                             int allowedMacroExpansionDepth)
     : mLexer(lexer),
       mMacroSet(macroSet),
       mDiagnostics(diagnostics),
       mTotalTokensInContexts(0),
+      mAllowedMacroExpansionDepth(allowedMacroExpansionDepth),
       mDeferReenablingMacros(false)
 {
 }
@@ -377,7 +381,12 @@ bool MacroExpander::collectMacroArgs(const Macro &macro,
     for (auto &arg : *args)
     {
         TokenLexer lexer(&arg);
-        MacroExpander expander(&lexer, mMacroSet, mDiagnostics);
+        if (mAllowedMacroExpansionDepth < 1)
+        {
+            mDiagnostics->report(Diagnostics::PP_OUT_OF_MEMORY, token.location, token.text);
+            return false;
+        }
+        MacroExpander expander(&lexer, mMacroSet, mDiagnostics, mAllowedMacroExpansionDepth - 1);
 
         arg.clear();
         expander.lex(&token);
