@@ -388,12 +388,13 @@
             'libANGLE/renderer/d3d/d3d11/shaders/compiled/buffertotexture11_ps_4i.h',
             'libANGLE/renderer/d3d/d3d11/shaders/compiled/buffertotexture11_ps_4ui.h',
             'libANGLE/renderer/d3d/d3d11/shaders/compiled/buffertotexture11_vs.h',
+            'libANGLE/renderer/d3d/d3d11/shaders/compiled/clearanytype11_fl9vs.h',
+            'libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloat11_fl9ps.h',
             'libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloat11ps.h',
-            'libANGLE/renderer/d3d/d3d11/shaders/compiled/clearfloat11vs.h',
             'libANGLE/renderer/d3d/d3d11/shaders/compiled/clearsint11ps.h',
-            'libANGLE/renderer/d3d/d3d11/shaders/compiled/clearsint11vs.h',
             'libANGLE/renderer/d3d/d3d11/shaders/compiled/clearuint11ps.h',
-            'libANGLE/renderer/d3d/d3d11/shaders/compiled/clearuint11vs.h',
+            'libANGLE/renderer/d3d/d3d11/shaders/compiled/multicolorclearfloat11ps.h',
+            'libANGLE/renderer/d3d/d3d11/shaders/compiled/multicolorclearfloat11_fl9ps.h',
             'libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough2d11vs.h',
             'libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough3d11gs.h',
             'libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough3d11vs.h',
@@ -768,7 +769,6 @@
                 }],
             ],
         },
-
         {
             'target_name': 'libANGLE_renderer_config',
             'type': 'none',
@@ -814,7 +814,6 @@
                 ],
             },
         },
-
         {
             'target_name': 'libANGLE',
             'type': 'static_library',
@@ -1107,7 +1106,6 @@
                 }],
             ],
         },
-
         {
             'target_name': 'libGLESv2_static',
             'type': 'static_library',
