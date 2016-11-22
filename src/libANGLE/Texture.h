@@ -140,6 +140,9 @@ struct TextureState final : public angle::NonCopyable
     // From GL_ANGLE_texture_usage
     GLenum mUsage;
 
+    GLsizei mSamples;
+    GLboolean mFixedSampleLocations;
+
     std::vector<ImageDesc> mImageDescs;
 
     struct SamplerCompletenessCache
@@ -240,12 +243,22 @@ class Texture final : public egl::ImageSibling,
     void setUsage(GLenum usage);
     GLenum getUsage() const;
 
+    void setSamples(GLsizei samples);
+    GLsizei getSamples() const;
+
+    void setFixedSampleLocations(GLboolean fixed);
+    GLboolean getFixedSampleLocations() const;
+
     const TextureState &getTextureState() const;
 
-    size_t getWidth(GLenum target, size_t level) const;
-    size_t getHeight(GLenum target, size_t level) const;
-    size_t getDepth(GLenum target, size_t level) const;
+    int getWidth(GLenum target, size_t level) const;
+    int getHeight(GLenum target, size_t level) const;
+    int getDepth(GLenum target, size_t level) const;
     const Format &getFormat(GLenum target, size_t level) const;
+    GLenum getChannelBaseType(GLenum target, size_t level, GLenum pname) const;
+    GLuint getChannelSize(GLenum target, size_t level, GLenum pname) const;
+    GLenum getInternalFormat(GLenum target, size_t level) const;
+    bool isCompressed(GLenum target, size_t level) const;
 
     bool isMipmapComplete() const;
 
@@ -347,6 +360,8 @@ class Texture final : public egl::ImageSibling,
         DIRTY_BIT_SWIZZLE_ALPHA,
         DIRTY_BIT_BASE_LEVEL,
         DIRTY_BIT_MAX_LEVEL,
+        DIRTY_BIT_SAMPLES,
+        DIRTY_BIT_FIXED_SAMPLE_LOCATIONS,
 
         // Misc
         DIRTY_BIT_LABEL,
@@ -391,6 +406,7 @@ inline bool operator==(const TextureState &a, const TextureState &b)
     return a.mSwizzleState == b.mSwizzleState && a.mSamplerState == b.mSamplerState &&
            a.mBaseLevel == b.mBaseLevel && a.mMaxLevel == b.mMaxLevel &&
            a.mImmutableFormat == b.mImmutableFormat && a.mImmutableLevels == b.mImmutableLevels &&
+           a.mSamples == b.mSamples && a.mFixedSampleLocations == b.mFixedSampleLocations &&
            a.mUsage == b.mUsage;
 }
 
@@ -400,4 +416,4 @@ inline bool operator!=(const TextureState &a, const TextureState &b)
 }
 }
 
-#endif   // LIBANGLE_TEXTURE_H_
+#endif  // LIBANGLE_TEXTURE_H_
