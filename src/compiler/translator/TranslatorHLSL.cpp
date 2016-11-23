@@ -39,14 +39,13 @@ void TranslatorHLSL::translate(TIntermNode *root, ShCompileOptions compileOption
 
     sh::AddDefaultReturnStatements(root);
 
-    SeparateDeclarations(root);
-
     // Note that SimplifyLoopConditions needs to be run before any other AST transformations that
     // may need to generate new statements from loop conditions or loop expressions.
     SimplifyLoopConditions(root,
                            IntermNodePatternMatcher::kExpressionReturningArray |
                                IntermNodePatternMatcher::kUnfoldedShortCircuitExpression |
-                               IntermNodePatternMatcher::kDynamicIndexingOfVectorOrMatrixInLValue,
+                               IntermNodePatternMatcher::kDynamicIndexingOfVectorOrMatrixInLValue |
+                               IntermNodePatternMatcher::kMultiDeclaration,
                            getTemporaryIndex(), getSymbolTable(), getShaderVersion());
 
     SplitSequenceOperator(root,
@@ -54,6 +53,8 @@ void TranslatorHLSL::translate(TIntermNode *root, ShCompileOptions compileOption
                               IntermNodePatternMatcher::kUnfoldedShortCircuitExpression |
                               IntermNodePatternMatcher::kDynamicIndexingOfVectorOrMatrixInLValue,
                           getTemporaryIndex(), getSymbolTable(), getShaderVersion());
+
+    SeparateDeclarations(root);
 
     // Note that SeparateDeclarations needs to be run before UnfoldShortCircuitToIf.
     UnfoldShortCircuitToIf(root, getTemporaryIndex());

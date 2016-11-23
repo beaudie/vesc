@@ -40,6 +40,7 @@ class SimplifyLoopConditionsTraverser : public TLValueTrackingTraverser
     bool visitBinary(Visit visit, TIntermBinary *node) override;
     bool visitAggregate(Visit visit, TIntermAggregate *node) override;
     bool visitTernary(Visit visit, TIntermTernary *node) override;
+    bool visitDeclaration(Visit visit, TIntermDeclaration *node) override;
 
     void nextIteration();
     bool foundLoopToChange() const { return mFoundLoopToChange; }
@@ -48,7 +49,7 @@ class SimplifyLoopConditionsTraverser : public TLValueTrackingTraverser
     // Marked to true once an operation that needs to be hoisted out of the expression has been
     // found. After that, no more AST updates are performed on that traversal.
     bool mFoundLoopToChange;
-    bool mInsideLoopConditionOrExpression;
+    bool mInsideLoopInitConditionOrExpression;
     IntermNodePatternMatcher mConditionsToSimplify;
 };
 
@@ -58,7 +59,7 @@ SimplifyLoopConditionsTraverser::SimplifyLoopConditionsTraverser(
     int shaderVersion)
     : TLValueTrackingTraverser(true, false, false, symbolTable, shaderVersion),
       mFoundLoopToChange(false),
-      mInsideLoopConditionOrExpression(false),
+      mInsideLoopInitConditionOrExpression(false),
       mConditionsToSimplify(conditionsToSimplifyMask)
 {
 }
@@ -66,7 +67,7 @@ SimplifyLoopConditionsTraverser::SimplifyLoopConditionsTraverser(
 void SimplifyLoopConditionsTraverser::nextIteration()
 {
     mFoundLoopToChange               = false;
-    mInsideLoopConditionOrExpression = false;
+    mInsideLoopInitConditionOrExpression = false;
     nextTemporaryIndex();
 }
 
@@ -83,7 +84,7 @@ bool SimplifyLoopConditionsTraverser::visitBinary(Visit visit, TIntermBinary *no
     if (mFoundLoopToChange)
         return false;
 
-    if (!mInsideLoopConditionOrExpression)
+    if (!mInsideLoopInitConditionOrExpression)
         return false;
 
     mFoundLoopToChange = mConditionsToSimplify.match(node, getParentNode(), isLValueRequiredHere());
@@ -96,7 +97,7 @@ bool SimplifyLoopConditionsTraverser::visitAggregate(Visit visit, TIntermAggrega
         return false;
 
     // If we're outside a loop condition, we only need to traverse nodes that may contain loops.
-    if (!mInsideLoopConditionOrExpression)
+    if (!mInsideLoopInitConditionOrExpression)
         return false;
 
     mFoundLoopToChange = mConditionsToSimplify.match(node, getParentNode());
@@ -109,7 +110,20 @@ bool SimplifyLoopConditionsTraverser::visitTernary(Visit visit, TIntermTernary *
         return false;
 
     // Don't traverse ternary operators outside loop conditions.
-    if (!mInsideLoopConditionOrExpression)
+    if (!mInsideLoopInitConditionOrExpression)
+        return false;
+
+    mFoundLoopToChange = mConditionsToSimplify.match(node);
+    return !mFoundLoopToChange;
+}
+
+bool SimplifyLoopConditionsTraverser::visitDeclaration(Visit visit, TIntermDeclaration *node)
+{
+    if (mFoundLoopToChange)
+        return false;
+
+    // Don't traverse ternary operators outside loop conditions.
+    if (!mInsideLoopInitConditionOrExpression)
         return false;
 
     mFoundLoopToChange = mConditionsToSimplify.match(node);
@@ -127,11 +141,16 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
 
     // Note: No need to traverse the loop init node.
 
-    mInsideLoopConditionOrExpression = true;
-    TLoopType loopType               = node->getType();
+    mInsideLoopInitConditionOrExpression = true;
+    TLoopType loopType                   = node->getType();
 
     if (node->getCondition())
     {
+        if (node->getInit())
+        {
+            node->getInit()->traverse(this);
+        }
+
         node->getCondition()->traverse(this);
 
         if (mFoundLoopToChange)
@@ -173,7 +192,7 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
                 //   do {
                 //     { body; }
                 //     s0 = expr;
-                //   while (s0);
+                //   } while (s0);
                 TIntermSequence tempInitSeq;
                 tempInitSeq.push_back(createTempInitDeclaration(CreateBoolConstantNode(true)));
                 insertStatementsInParentBlock(tempInitSeq);
@@ -256,7 +275,7 @@ void SimplifyLoopConditionsTraverser::traverseLoop(TIntermLoop *node)
         }
     }
 
-    mInsideLoopConditionOrExpression = false;
+    mInsideLoopInitConditionOrExpression = false;
 
     if (!mFoundLoopToChange && node->getBody())
         node->getBody()->traverse(this);
