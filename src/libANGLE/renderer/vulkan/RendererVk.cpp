@@ -18,6 +18,8 @@
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
 #include "platform/Platform.h"
 
+#include <iostream>
+
 namespace rx
 {
 
@@ -31,6 +33,7 @@ VkResult VerifyExtensionsPresent(const std::vector<VkExtensionProperties> &exten
     std::set<std::string> extensionNames;
     for (const auto &extensionProp : extensionProps)
     {
+        std::cout << extensionProp.extensionName << std::endl;
         extensionNames.insert(extensionProp.extensionName);
     }
 
@@ -72,12 +75,16 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs)
     enabledInstanceExtensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
 #if defined(ANGLE_PLATFORM_WINDOWS)
     enabledInstanceExtensions.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
+#elif defined(ANGLE_PLATFORM_LINUX)
+    enabledInstanceExtensions.push_back(VK_KHR_XCB_SURFACE_EXTENSION_NAME);
 #else
 #error Unsupported Vulkan platform.
-#endif  // defined(ANGLE_PLATFORM_WINDOWS)
+#endif  // defined(ANGLE_PLATFORM_WINDOWS) || defined(ANGLE_PLATFORM_LINUX)
 
     // Verify the required extensions are in the extension names set. Fail if not.
+    std::cout << "HERE0" << std::endl;
     ANGLE_VK_TRY(VerifyExtensionsPresent(instanceExtensionProps, enabledInstanceExtensions));
+    std::cout << "HERE1" << std::endl;
 
     VkApplicationInfo applicationInfo;
     applicationInfo.sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO;
