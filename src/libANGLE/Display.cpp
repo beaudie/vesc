@@ -58,7 +58,13 @@
 #endif  // defined(ANGLE_ENABLE_NULL)
 
 #if defined(ANGLE_ENABLE_VULKAN)
-#include "libANGLE/renderer/vulkan/DisplayVk.h"
+#if defined(ANGLE_PLATFORM_WINDOWS)
+#include "libANGLE/renderer/vulkan/DisplayVkWin32.h"
+#elif defined(ANGLE_PLATFORM_LINUX)
+#include "libANGLE/renderer/vulkan/DisplayVkXcb.h"
+#else
+#error Unsupported Vulkan platform.
+#endif
 #endif  // defined(ANGLE_ENABLE_VULKAN)
 
 // The log messages prepend the class name, so make this part of the angle namespace.
@@ -247,7 +253,13 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap)
 
         case EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE:
 #if defined(ANGLE_ENABLE_VULKAN)
-            impl = new rx::DisplayVk();
+#if defined(ANGLE_PLATFORM_WINDOWS)
+            impl = new rx::DisplayVkWin32();
+#elif defined(ANGLE_PLATFORM_LINUX)
+            impl = new rx::DisplayVkXcb();
+#else
+#error Unsupported Vulkan platform.
+#endif
 #else
             // No display available
             UNREACHABLE();
