@@ -135,7 +135,7 @@ RendererVk::~RendererVk()
     }
 }
 
-vk::Error RendererVk::initialize(const egl::AttributeMap &attribs)
+vk::Error RendererVk::initialize(const egl::AttributeMap &attribs, const char *wsiName)
 {
     // Gather global layer properties.
     uint32_t instanceLayerCount = 0;
@@ -191,11 +191,7 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs)
 
     std::vector<const char *> enabledInstanceExtensions;
     enabledInstanceExtensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
-#if defined(ANGLE_PLATFORM_WINDOWS)
-    enabledInstanceExtensions.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
-#else
-#error Unsupported Vulkan platform.
-#endif  // defined(ANGLE_PLATFORM_WINDOWS)
+    enabledInstanceExtensions.push_back(wsiName);
 
     // TODO(jmadill): Should be able to continue initialization if debug report ext missing.
     if (mEnableValidationLayers)

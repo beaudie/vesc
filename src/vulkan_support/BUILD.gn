@@ -37,11 +37,20 @@ config("vulkan_loader_config") {
   if (is_win) {
     defines += [ "VK_USE_PLATFORM_WIN32_KHR" ]
   }
+  if (is_linux) {
+    defines += [ "VK_USE_PLATFORM_XCB_KHR" ]
+  }
 }
 
 config("vulkan_loader_internal_config") {
   if (is_clang || !is_win) {
     cflags = [ "-Wno-unused-function" ]
+  }
+  if (is_linux) {
+    defines = [
+      "SYSCONFDIR=\"/etc\"",
+      "DATADIR=\"/usr/share\"",
+    ]
   }
 }
 
@@ -171,11 +180,18 @@ layer_names = [
 
 action("vulkan_gen_json_files") {
   script = "$third_party_dir/angle/scripts/generate_vulkan_layers_json.py"
-  sources =
-      rebase_path(vulkan_gypi.vulkan_gen_json_files_sources_win, ".", "src")
+  if (is_win) {
+    sources =
+        rebase_path(vulkan_gypi.vulkan_gen_json_files_sources_win, ".", "src")
+    args = [ "$raw_vulkan_layers_dir/layers/windows" ]
+  }
+  if (is_linux) {
+    sources =
+        rebase_path(vulkan_gypi.vulkan_gen_json_files_sources_linux, ".", "src")
+    args = [ "$raw_vulkan_layers_dir/layers/linux" ]
+  }
   outputs = vulkan_gypi.vulkan_gen_json_files_outputs
-  args = [
-    "$raw_vulkan_layers_dir/layers/windows",
+  args += [
     "$raw_vulkan_gen_dir/json",
     rebase_path(root_build_dir),
   ]
@@ -279,8 +295,8 @@ config("glslang_config") {
 config("glslang_internal_config") {
   if (is_clang || !is_win) {
     cflags = [
-      "-Wno-reorder",
       "-Wno-ignored-qualifiers",
+      "-Wno-reorder",
     ]
   }
 }
@@ -300,6 +316,9 @@ static_library("glslang") {
     ]
 
     sources += rebase_path(vulkan_gypi.glslang_win_sources, ".", "src")
+  }
+  if (is_linux) {
+    sources += rebase_path(vulkan_gypi.glslang_unix_sources, ".", "src")
   }
 }
 
