@@ -55,7 +55,7 @@ gl::Error BufferVk::setData(ContextImpl *context,
 
     // The requirements size is not always equal to the specified API size.
     ASSERT(memoryRequirements.size >= size);
-    mRequiredSize = memoryRequirements.size;
+    mRequiredSize = static_cast<size_t>(memoryRequirements.size);
 
     VkPhysicalDeviceMemoryProperties memoryProperties;
     vkGetPhysicalDeviceMemoryProperties(contextVk->getRenderer()->getPhysicalDevice(),
