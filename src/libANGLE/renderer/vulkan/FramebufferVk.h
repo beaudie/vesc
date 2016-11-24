@@ -78,8 +78,6 @@ class FramebufferVk : public FramebufferImpl
   private:
     FramebufferVk(const gl::FramebufferState &state);
     FramebufferVk(const gl::FramebufferState &state, WindowSurfaceVk *backbuffer);
-
-    WindowSurfaceVk *mBackbuffer;
 };
 
 }  // namespace rx
