@@ -771,6 +771,9 @@ class FunctionsGL
     PFNGLVERTEXARRAYVERTEXBUFFERPROC vertexArrayVertexBuffer;
     PFNGLVERTEXARRAYVERTEXBUFFERSPROC vertexArrayVertexBuffers;
 
+    // Desktop extensions
+    PFNGLDISCARDFRAMEBUFFEREXTPROC discardFramebuffer;
+
     // ES 3.2
     PFNGLBLENDBARRIERPROC blendBarrier;
     PFNGLPRIMITIVEBOUNDINGBOXPROC primitiveBoundingBox;
