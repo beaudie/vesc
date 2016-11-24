@@ -949,10 +949,10 @@
                             ],
                             'link_settings': {
                                 'ldflags': [
-                                    '<!@(<(pkg-config) --libs-only-L --libs-only-other x11 xi xext)',
+                                    '<!@(<(pkg-config) --libs-only-L --libs-only-other x11 xi xext xcb)',
                                 ],
                                 'libraries': [
-                                    '<!@(<(pkg-config) --libs-only-l x11 xi xext) -ldl',
+                                    '<!@(<(pkg-config) --libs-only-l x11 xi xext xcb) -ldl',
                                 ],
                             },
                         }],

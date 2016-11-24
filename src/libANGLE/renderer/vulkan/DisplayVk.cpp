@@ -19,7 +19,7 @@
 namespace rx
 {
 
-DisplayVk::DisplayVk() : DisplayImpl(), mRenderer(nullptr)
+DisplayVk::DisplayVk() : DisplayImpl(), mRenderer(nullptr), mXcbConnection(nullptr)
 {
 }
 
@@ -31,11 +31,17 @@ egl::Error DisplayVk::initialize(egl::Display *display)
 {
     ASSERT(!mRenderer && display != nullptr);
     mRenderer.reset(new RendererVk());
+    ASSERT(mXcbConnection == nullptr);
+    mXcbConnection = xcb_connect(nullptr, nullptr);
+    ASSERT(mXcbConnection != nullptr);
     return mRenderer->initialize(display->getAttributeMap()).toEGL(EGL_NOT_INITIALIZED);
 }
 
 void DisplayVk::terminate()
 {
+    ASSERT(mXcbConnection != nullptr);
+    xcb_disconnect(mXcbConnection);
+    mXcbConnection = nullptr;
     mRenderer.reset(nullptr);
 }
 
@@ -102,10 +108,17 @@ egl::Error DisplayVk::restoreLostDevice()
     return egl::Error(EGL_BAD_ACCESS);
 }
 
+//XXX if DisplayVk gets split into multiple classes (windows, x) then this becomes a virtual function
 bool DisplayVk::isValidNativeWindow(EGLNativeWindowType window) const
 {
-    // TODO(jmadill): Cross-platform this.
+#if defined(ANGLE_PLATFORM_WINDOWS)
     return (IsWindow(window) == TRUE);
+#elif defined(ANGLE_PLATFORM_LINUX)
+    // TODO(fjhenigman): X window check, as in DisplayGLX::isValidNativeWindow
+    return true;
+#else
+#error Unsupported platform!
+#endif
 }
 
 std::string DisplayVk::getVendorString() const
@@ -146,7 +159,7 @@ SurfaceImpl *DisplayVk::createWindowSurface(const egl::SurfaceState &state,
     EGLint width  = attribs.getAsInt(EGL_WIDTH, 0);
     EGLint height = attribs.getAsInt(EGL_HEIGHT, 0);
 
-    return new WindowSurfaceVk(state, mRenderer.get(), *configuration, window, width, height);
+    return new WindowSurfaceVk(state, mRenderer.get(), *configuration, window, width, height, mXcbConnection);
 }
 
 SurfaceImpl *DisplayVk::createPbufferSurface(const egl::SurfaceState &state,
