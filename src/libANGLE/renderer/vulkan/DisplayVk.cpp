@@ -102,12 +102,6 @@ egl::Error DisplayVk::restoreLostDevice()
     return egl::Error(EGL_BAD_ACCESS);
 }
 
-bool DisplayVk::isValidNativeWindow(EGLNativeWindowType window) const
-{
-    // TODO(jmadill): Cross-platform this.
-    return (IsWindow(window) == TRUE);
-}
-
 std::string DisplayVk::getVendorString() const
 {
     std::string vendorString = "Google Inc.";
@@ -145,7 +139,7 @@ SurfaceImpl *DisplayVk::createWindowSurface(const egl::SurfaceState &state,
     EGLint width  = attribs.getAsInt(EGL_WIDTH, 0);
     EGLint height = attribs.getAsInt(EGL_HEIGHT, 0);
 
-    return new WindowSurfaceVk(state, window, width, height);
+    return createWindowSurfaceVk(state, window, width, height);
 }
 
 SurfaceImpl *DisplayVk::createPbufferSurface(const egl::SurfaceState &state,

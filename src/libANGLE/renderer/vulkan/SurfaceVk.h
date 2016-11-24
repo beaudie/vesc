@@ -83,18 +83,21 @@ class WindowSurfaceVk : public SurfaceImpl
         const vk::RenderPass &compatibleRenderPass);
     void onBeginRenderPass();
 
+  protected:
+    EGLNativeWindowType mNativeWindowType;
+    VkInstance mInstance;
+    VkSurfaceKHR mSurface;
+
   private:
+    virtual vk::Error createSurfaceVk(uint32_t *width, uint32_t *height) = 0;
     vk::Error initializeImpl(RendererVk *renderer);
     vk::Error nextSwapchainImage(RendererVk *renderer);
     vk::Error swapImpl(RendererVk *renderer);
 
-    EGLNativeWindowType mNativeWindowType;
-    VkSurfaceKHR mSurface;
     VkSwapchainKHR mSwapchain;
     // These are needed for resource deallocation.
     // TODO(jmadill): Don't store these here.
     VkDevice mDevice;
-    VkInstance mInstance;
 
     RenderTargetVk mRenderTarget;
     vk::Semaphore mPresentCompleteSemaphore;
