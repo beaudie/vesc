@@ -263,6 +263,7 @@ if (angle_use_commit_id) {
 
 config("libANGLE_config") {
   cflags = []
+  cflags_cc = []
   defines = []
   if (angle_enable_d3d9) {
     defines += [ "ANGLE_ENABLE_D3D9" ]
@@ -301,6 +302,12 @@ config("libANGLE_config") {
   }
   if (is_win) {
     cflags += [ "/wd4530" ]  # C++ exception handler used, but unwind semantics are not enabled.
+  }
+  if (is_clang) {
+    cflags_cc += [
+      "-Wno-missing-braces",
+      "-Wno-pessimizing-move",
+    ]
   }
 }
 

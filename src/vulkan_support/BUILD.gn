@@ -35,6 +35,23 @@ config("vulkan_loader_config") {
   if (is_win) {
     defines += [ "VK_USE_PLATFORM_WIN32_KHR" ]
   }
+  if (is_linux) {
+    defines += [ "VK_USE_PLATFORM_XCB_KHR" ]
+  }
+  if (is_clang) {
+    cflags = [
+      "-Wno-unknown-pragmas",
+      "-Wno-tautological-pointer-compare",
+      "-Wno-parentheses-equality",
+      "-Wno-unused-function",
+    ]
+  }
+  if (is_linux) {
+    defines += [
+      "SYSCONFDIR=\"/etc\"",
+      "DATADIR=\"/usr/share\"",
+    ]
+  }
 }
 
 vulkan_undefine_configs = []
@@ -257,6 +274,12 @@ config("glslang_config") {
     glslang_dir,
     "$glslang_dir/glslang/Public",
   ]
+  if (is_clang) {
+    cflags_cc = [
+      "-Wno-reorder",
+      "-Wno-ignored-qualifiers",
+    ]
+  }
 }
 
 static_library("glslang") {
@@ -281,6 +304,11 @@ static_library("glslang") {
 
 config("vulkan_core_validation_config") {
   include_dirs = [ glslang_dir ]
+  if (is_clang) {
+    cflags_cc = [
+      "-Wno-header-hygiene",
+    ]
+  }
 }
 
 source_set("vulkan_core_validation_glslang") {
@@ -376,6 +404,11 @@ foreach(index, layer_indexes) {
     if (is_win) {
       sources += [ "$vulkan_gen_dir/$layer.def" ]
       deps += [ ":vulkan_${layer}_def_file" ]
+    }
+    if (is_clang) {
+      cflags_cc = [
+        "-Wno-header-hygiene",
+      ]
     }
   }
 }

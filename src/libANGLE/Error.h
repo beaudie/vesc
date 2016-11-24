@@ -44,8 +44,10 @@ class ErrorOrResultBase
 namespace gl
 {
 
+/*
 template <typename T>
 class ErrorOrResult;
+*/
 
 class Error final
 {
@@ -91,11 +93,13 @@ class ErrorStream : angle::NonCopyable
 
     operator Error();
 
+    /*
     template <typename T>
     operator ErrorOrResult<T>()
     {
         return static_cast<Error>(*this);
     }
+    */
 
   private:
     std::ostringstream mErrorStream;
@@ -135,6 +139,7 @@ ErrorStream<EnumT> &ErrorStream<EnumT>::operator<<(T value)
 using OutOfMemory   = priv::ErrorStream<GL_OUT_OF_MEMORY>;
 using InternalError = priv::ErrorStream<GL_INVALID_OPERATION>;
 
+/*
 template <typename T>
 class ErrorOrResult
 {
@@ -160,6 +165,7 @@ class ErrorOrResult
     Error mError;
     T mResult;
 };
+*/
 
 inline Error NoError()
 {
