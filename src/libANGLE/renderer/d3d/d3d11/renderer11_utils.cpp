@@ -1023,24 +1023,24 @@ unsigned int GetReservedFragmentUniformVectors(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
-GLint GetMaximumClientVersion(D3D_FEATURE_LEVEL featureLevel)
+gl::Version GetMaximumClientVersion(D3D_FEATURE_LEVEL featureLevel)
 {
     switch (featureLevel)
     {
         case D3D_FEATURE_LEVEL_11_1:
         case D3D_FEATURE_LEVEL_11_0:
         case D3D_FEATURE_LEVEL_10_1:
-            return 3;
+            return gl::Version(3, 1);
 
         case D3D_FEATURE_LEVEL_10_0:
         case D3D_FEATURE_LEVEL_9_3:
         case D3D_FEATURE_LEVEL_9_2:
         case D3D_FEATURE_LEVEL_9_1:
-            return 2;
+            return gl::Version(2, 0);
 
         default:
             UNREACHABLE();
-            return 0;
+            return gl::Version(0, 0);
     }
 }
 
@@ -1052,7 +1052,9 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
     const gl::FormatSet &allFormats = gl::GetAllSizedInternalFormats();
     for (gl::FormatSet::const_iterator internalFormat = allFormats.begin(); internalFormat != allFormats.end(); ++internalFormat)
     {
-        gl::TextureCaps textureCaps = GenerateTextureFormatCaps(GetMaximumClientVersion(featureLevel), *internalFormat, device, renderer11DeviceCaps);
+        gl::TextureCaps textureCaps =
+            GenerateTextureFormatCaps(GetMaximumClientVersion(featureLevel).major, *internalFormat,
+                                      device, renderer11DeviceCaps);
         textureCapsMap->insert(*internalFormat, textureCaps);
 
         maxSamples = std::max(maxSamples, textureCaps.getMaxSamples());
