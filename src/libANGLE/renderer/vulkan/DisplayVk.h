@@ -12,6 +12,8 @@
 
 #include "libANGLE/renderer/DisplayImpl.h"
 
+struct xcb_connection_t;
+
 namespace rx
 {
 class RendererVk;
@@ -78,6 +80,8 @@ class DisplayVk : public DisplayImpl
     void generateCaps(egl::Caps *outCaps) const override;
 
     std::unique_ptr<RendererVk> mRenderer;
+
+    xcb_connection_t *mXcbConnection;
 };
 
 }  // namespace rx

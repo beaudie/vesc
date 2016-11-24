@@ -117,7 +117,8 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
                                  const egl::Config &config,
                                  EGLNativeWindowType window,
                                  EGLint width,
-                                 EGLint height)
+                                 EGLint height,
+                                 xcb_connection_t *conn)
     : SurfaceImpl(surfaceState),
       mRenderer(renderer),
       mConfig(config),
@@ -126,7 +127,8 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
       mSwapchain(VK_NULL_HANDLE),
       mCurrentSwapchainImageIndex(0),
       mRenderTarget(GetVkFormatFromConfig(mConfig),
-                    gl::Extents(static_cast<int>(width), static_cast<int>(height), 1))
+                    gl::Extents(static_cast<int>(width), static_cast<int>(height), 1)),
+      mXcbConnection(conn)
 {
 }
 
@@ -154,7 +156,7 @@ egl::Error WindowSurfaceVk::initialize()
 
 vk::Error WindowSurfaceVk::initializeImpl()
 {
-    // TODO(jmadill): Make this platform-specific.
+#if defined(ANGLE_PLATFORM_WINDOWS)
     VkWin32SurfaceCreateInfoKHR createInfo;
 
     createInfo.sType     = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
@@ -164,6 +166,17 @@ vk::Error WindowSurfaceVk::initializeImpl()
     createInfo.hwnd      = mNativeWindowType;
     ANGLE_VK_TRY(
         vkCreateWin32SurfaceKHR(mRenderer->getInstance(), &createInfo, nullptr, &mSurface));
+#else
+    VkXcbSurfaceCreateInfoKHR createInfo;
+
+    createInfo.sType     = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
+    createInfo.pNext     = nullptr;
+    createInfo.flags     = 0;
+    createInfo.connection = mXcbConnection;
+    createInfo.window     = mNativeWindowType;
+    ANGLE_VK_TRY(
+        vkCreateXcbSurfaceKHR(mRenderer->getInstance(), &createInfo, nullptr, &mSurface));
+#endif
 
     uint32_t presentQueue = 0;
     ANGLE_TRY_RESULT(mRenderer->selectPresentQueueForSurface(mSurface), presentQueue);
@@ -185,16 +198,26 @@ vk::Error WindowSurfaceVk::initializeImpl()
     {
         ASSERT(surfaceCaps.currentExtent.height == 0xFFFFFFFFu);
 
+#if defined(ANGLE_PLATFORM_WINDOWS)
         RECT rect;
         ANGLE_VK_CHECK(GetClientRect(mNativeWindowType, &rect) == TRUE,
                        VK_ERROR_INITIALIZATION_FAILED);
+#endif
         if (mRenderTarget.getExtents().width == 0)
         {
+#if defined(ANGLE_PLATFORM_WINDOWS)
             width = static_cast<uint32_t>(rect.right - rect.left);
+#else
+            width = 640;
+#endif
         }
         if (mRenderTarget.getExtents().height == 0)
         {
+#if defined(ANGLE_PLATFORM_WINDOWS)
             height = static_cast<uint32_t>(rect.bottom - rect.top);
+#else
+            height = 480;
+#endif
         }
     }
 
