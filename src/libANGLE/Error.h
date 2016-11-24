@@ -91,11 +91,13 @@ class ErrorStream : angle::NonCopyable
 
     operator Error();
 
+    /*
     template <typename T>
     operator ErrorOrResult<T>()
     {
         return static_cast<Error>(*this);
     }
+    */
 
   private:
     std::ostringstream mErrorStream;

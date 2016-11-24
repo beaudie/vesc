@@ -71,7 +71,10 @@ if (is_win) {
   }
 }
 
-angle_undefine_configs = [ "//build/config/compiler:default_include_dirs" ]
+angle_undefine_configs = [
+  "//build/config/clang:find_bad_constructs",
+  "//build/config/compiler:default_include_dirs",
+]
 
 # Holds the shared includes so we only need to list them once.
 source_set("includes") {
@@ -255,6 +258,7 @@ if (angle_use_commit_id) {
 
 config("libANGLE_config") {
   cflags = []
+  cflags_cc = []
   defines = []
   if (angle_enable_d3d9) {
     defines += [ "ANGLE_ENABLE_D3D9" ]
@@ -293,6 +297,12 @@ config("libANGLE_config") {
   }
   if (is_win) {
     cflags += [ "/wd4530" ]  # C++ exception handler used, but unwind semantics are not enabled.
+  }
+  if (is_clang) {
+    cflags_cc += [
+      "-Wno-missing-braces",
+      "-Wno-pessimizing-move",
+    ]
   }
 }
 
@@ -548,6 +558,7 @@ shared_library("angle_util") {
     ":debug_annotations_config",
     ":extra_warnings",
   ]
+  configs -= [ "//build/config/clang:find_bad_constructs" ]
 
   public_configs = [
     ":angle_util_config",

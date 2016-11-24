@@ -16,6 +16,8 @@
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/renderervk_utils.h"
 
+struct xcb_connection_t;
+
 namespace rx
 {
 class RendererVk;
@@ -56,7 +58,8 @@ class WindowSurfaceVk : public SurfaceImpl
     WindowSurfaceVk(const egl::SurfaceState &surfaceState,
                     EGLNativeWindowType window,
                     EGLint width,
-                    EGLint height);
+                    EGLint height,
+                    xcb_connection_t *conn);
     ~WindowSurfaceVk() override;
 
     egl::Error initialize(const DisplayImpl *displayImpl) override;
@@ -97,6 +100,8 @@ class WindowSurfaceVk : public SurfaceImpl
     uint32_t mCurrentSwapchainImageIndex;
     std::vector<vk::Image> mSwapchainImages;
     std::vector<vk::ImageView> mSwapchainImageViews;
+
+    xcb_connection_t *mXcbConnection;
 };
 
 }  // namespace rx
