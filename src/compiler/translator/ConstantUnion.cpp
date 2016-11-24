@@ -23,11 +23,20 @@ T CheckedSum(base::CheckedNumeric<T> lhs,
              TDiagnostics *diag,
              const TSourceLoc &line)
 {
-    ASSERT(lhs.IsValid() && rhs.IsValid());
+    if (!lhs.IsValid())
+    {
+        diag->error(line, "Left-hand operand out of range", "+", "");
+        return 0;
+    }
+    if (!rhs.IsValid())
+    {
+        diag->error(line, "Right-hand operand out of range", "+", "");
+        return 0;
+    }
     auto result = lhs + rhs;
     if (!result.IsValid())
     {
-        diag->error(line, "Addition out of range", "*", "");
+        diag->error(line, "Addition out of range", "+", "");
         return 0;
     }
     return result.ValueOrDefault(0);
@@ -39,11 +48,21 @@ T CheckedDiff(base::CheckedNumeric<T> lhs,
               TDiagnostics *diag,
               const TSourceLoc &line)
 {
+    if (!lhs.IsValid())
+    {
+        diag->error(line, "Left-hand operand out of range", "-", "");
+        return 0;
+    }
+    if (!rhs.IsValid())
+    {
+        diag->error(line, "Right-hand operand out of range", "-", "");
+        return 0;
+    }
     ASSERT(lhs.IsValid() && rhs.IsValid());
     auto result = lhs - rhs;
     if (!result.IsValid())
     {
-        diag->error(line, "Difference out of range", "*", "");
+        diag->error(line, "Difference out of range", "-", "");
         return 0;
     }
     return result.ValueOrDefault(0);
@@ -55,6 +74,16 @@ T CheckedMul(base::CheckedNumeric<T> lhs,
              TDiagnostics *diag,
              const TSourceLoc &line)
 {
+    if (!lhs.IsValid())
+    {
+        diag->error(line, "Left-hand operand out of range", "*", "");
+        return 0;
+    }
+    if (!rhs.IsValid())
+    {
+        diag->error(line, "Right-hand operand out of range", "*", "");
+        return 0;
+    }
     ASSERT(lhs.IsValid() && rhs.IsValid());
     auto result = lhs * rhs;
     if (!result.IsValid())
