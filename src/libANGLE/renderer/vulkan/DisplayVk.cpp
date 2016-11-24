@@ -104,8 +104,8 @@ egl::Error DisplayVk::restoreLostDevice()
 
 bool DisplayVk::isValidNativeWindow(EGLNativeWindowType window) const
 {
-    // TODO(jmadill): Cross-platform this.
-    return (IsWindow(window) == TRUE);
+    UNIMPLEMENTED();
+    return false;
 }
 
 std::string DisplayVk::getVendorString() const
@@ -145,7 +145,7 @@ SurfaceImpl *DisplayVk::createWindowSurface(const egl::SurfaceState &state,
     EGLint width  = attribs.getAsInt(EGL_WIDTH, 0);
     EGLint height = attribs.getAsInt(EGL_HEIGHT, 0);
 
-    return new WindowSurfaceVk(state, window, width, height);
+    return new WindowSurfaceVk(state, window, width, height, mXcbConnection);
 }
 
 SurfaceImpl *DisplayVk::createPbufferSurface(const egl::SurfaceState &state,
