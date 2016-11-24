@@ -85,13 +85,17 @@ class WindowSurfaceVk : public SurfaceImpl
         const vk::RenderPass &compatibleRenderPass);
     void onBeginRenderPass();
 
+  protected:
+    EGLNativeWindowType mNativeWindowType;
+    VkSurfaceKHR mSurface;
+    VkInstance mInstance;
+
   private:
+    virtual vk::ErrorOrResult<gl::Extents> createSurfaceVk(RendererVk *renderer) = 0;
     vk::Error initializeImpl(RendererVk *renderer);
     vk::Error nextSwapchainImage(RendererVk *renderer);
     vk::Error swapImpl(RendererVk *renderer);
 
-    EGLNativeWindowType mNativeWindowType;
-    VkSurfaceKHR mSurface;
     VkSwapchainKHR mSwapchain;
 
     RenderTargetVk mRenderTarget;
