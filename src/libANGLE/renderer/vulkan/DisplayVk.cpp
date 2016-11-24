@@ -104,8 +104,12 @@ egl::Error DisplayVk::restoreLostDevice()
 
 bool DisplayVk::isValidNativeWindow(EGLNativeWindowType window) const
 {
-    // TODO(jmadill): Cross-platform this.
+#ifdef WIN32
     return (IsWindow(window) == TRUE);
+#else
+    // TODO(fjhenigman): X window check, as in DisplayGLX::isValidNativeWindow
+    return true;
+#endif
 }
 
 std::string DisplayVk::getVendorString() const
