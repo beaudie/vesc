@@ -127,8 +127,7 @@ static void BindFramebufferAttachment(const FunctionsGL *functions,
 
 Error FramebufferGL::discard(size_t count, const GLenum *attachments)
 {
-    UNIMPLEMENTED();
-    return Error(GL_INVALID_OPERATION);
+    return invalidate(count, attachments);
 }
 
 Error FramebufferGL::invalidate(size_t count, const GLenum *attachments)
@@ -138,6 +137,11 @@ Error FramebufferGL::invalidate(size_t count, const GLenum *attachments)
     {
         mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
         mFunctions->invalidateFramebuffer(GL_FRAMEBUFFER, static_cast<GLsizei>(count), attachments);
+    }
+    else if (mFunctions->discardFramebuffer)
+    {
+        mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
+        mFunctions->discardFramebuffer(GL_FRAMEBUFFER, static_cast<GLsizei>(count), attachments);
     }
 
     return Error(GL_NO_ERROR);
