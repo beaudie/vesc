@@ -86,6 +86,7 @@ if (is_win || is_linux || is_mac || is_android) {
       # Set rpath to find libEGL.so and libGLESv2.so even in a non-component build.
       configs += [ "//build/config/gcc:rpath_for_built_shared_libraries" ]
     }
+    configs -= [ "//build/config/clang:find_bad_constructs" ]
 
     deps = [
       "//base",
