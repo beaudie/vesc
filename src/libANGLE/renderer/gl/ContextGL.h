@@ -174,6 +174,8 @@ class ContextGL : public ContextImpl
     StateManagerGL *getStateManager();
     const WorkaroundsGL &getWorkaroundsGL();
 
+    void getMultisamplefv(GLenum pname, GLuint index, GLfloat *val) override;
+
   private:
     RendererGL *mRenderer;
 };
