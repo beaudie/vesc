@@ -2702,6 +2702,10 @@ void Context::framebufferTexture2D(GLenum target,
         {
             index = ImageIndex::Make2D(level);
         }
+        else if (textarget == GL_TEXTURE_2D_MULTISAMPLE)
+        {
+            index = ImageIndex::Make2DMultisample(level);
+        }
         else
         {
             ASSERT(IsCubeMapTextureTarget(textarget));
@@ -3683,6 +3687,12 @@ void Context::bindRenderbuffer(GLenum target, GLuint renderbuffer)
     Renderbuffer *object =
         mResourceManager->checkRenderbufferAllocation(mImplementation.get(), renderbuffer);
     mGLState.setRenderbufferBinding(object);
+}
+
+void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
+{
+    syncRendererState();
+    mImplementation->getMultisamplefv(pname, index, val);
 }
 
 }  // namespace gl
