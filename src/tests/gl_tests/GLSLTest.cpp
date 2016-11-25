@@ -6,6 +6,7 @@
 
 #include "test_utils/ANGLETest.h"
 
+#include "common/angleutils.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Program.h"
 #include "test_utils/gl_raii.h"
@@ -2423,6 +2424,33 @@ TEST_P(GLSLTest_ES3, FoldedInvalidLeftShift)
         "}\n";
 
     GLuint program = CompileProgram(mSimpleVSSource, fragmentShader);
+    EXPECT_EQ(0u, program);
+    glDeleteProgram(program);
+}
+
+// Test that the varying packing code handles very big varying arrays correctly
+TEST_P(GLSLTest, TooBigVaryingArray)
+{
+    GLint maxVaryings = 0;
+    glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
+
+    const std::string &vertexShader =
+        "varying vec4 v_giant[" + ToString(maxVaryings + 1) + "];\n"
+        "void main()\n"
+        "{\n"
+        "    v_giant[0] = vec4(0.0);\n"
+        "    gl_Position = vec4(1.0);\n"
+        "}\n";
+
+    const std::string &fragmentShader =
+        "precision highp float;\n"
+        "varying vec4 v_giant[" + ToString(maxVaryings + 1) + "];\n"
+        "void main()\n"
+        "{\n"
+        "  gl_FragColor = v_giant[0];\n"
+        "}\n";
+
+    GLuint program = CompileProgram(vertexShader, fragmentShader);
     EXPECT_EQ(0u, program);
     glDeleteProgram(program);
 }
