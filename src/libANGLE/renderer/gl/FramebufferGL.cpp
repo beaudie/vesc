@@ -100,6 +100,12 @@ static void BindFramebufferAttachment(const FunctionsGL *functions,
                 functions->framebufferTextureLayer(GL_FRAMEBUFFER, attachmentPoint, textureGL->getTextureID(),
                                                    attachment->mipLevel(), attachment->layer());
             }
+            else if (texture->getTarget() == GL_TEXTURE_2D_MULTISAMPLE)
+            {
+                functions->framebufferTexture2D(GL_FRAMEBUFFER, attachmentPoint,
+                                                GL_TEXTURE_2D_MULTISAMPLE,
+                                                textureGL->getTextureID(), attachment->mipLevel());
+            }
             else
             {
                 UNREACHABLE();
