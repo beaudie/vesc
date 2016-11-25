@@ -2295,7 +2295,6 @@ bool ValidateBindTexture(Context *context, GLenum target, GLuint texture)
                 context->handleError(Error(GL_INVALID_ENUM, "Context does not support GLES3.1"));
                 return false;
             }
-            UNIMPLEMENTED();
             break;
 
         case GL_TEXTURE_EXTERNAL_OES:
