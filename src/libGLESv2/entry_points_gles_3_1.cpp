@@ -1052,11 +1052,21 @@ void GL_APIENTRY TexStorage2DMultisample(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!context->skipValidation())
+        if (!context->skipValidation() &&
+            !ValidateTexStorageMultiSample2DParameters(context, target, samples, internalformat,
+                                                       width, height, fixedsamplelocations))
         {
-            context->handleError(Error(GL_INVALID_OPERATION, "Entry point not implemented"));
+            return;
         }
-        UNIMPLEMENTED();
+        Extents size(width, height, 1);
+        Texture *texture = context->getTargetTexture(target);
+        Error error      = texture->setStorageMultisample(target, samples, internalformat, size,
+                                                     fixedsamplelocations);
+        if (error.isError())
+        {
+            context->handleError(error);
+            return;
+        }
     }
 }
 

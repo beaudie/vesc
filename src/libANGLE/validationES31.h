@@ -22,7 +22,13 @@ bool ValidateGetBooleani_vRobustANGLE(Context *context,
                                       GLsizei bufSize,
                                       GLsizei *length,
                                       GLboolean *data);
-
+bool ValidateTexStorageMultiSample2DParameters(Context *context,
+                                               GLenum target,
+                                               GLsizei samples,
+                                               GLint internalFormat,
+                                               GLsizei width,
+                                               GLsizei height,
+                                               GLboolean fixedsamplelocations);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES31_H_
