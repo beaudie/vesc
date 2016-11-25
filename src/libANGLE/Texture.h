@@ -302,6 +302,12 @@ class Texture final : public egl::ImageSibling,
 
     Error setStorage(GLenum target, GLsizei levels, GLenum internalFormat, const Extents &size);
 
+    Error setStorageMultisample(GLenum target,
+                                GLsizei samples,
+                                GLint internalformat,
+                                gl::Extents size,
+                                GLboolean fixedsamplelocations);
+
     Error setEGLImageTarget(GLenum target, egl::Image *imageTarget);
 
     Error generateMipmap();

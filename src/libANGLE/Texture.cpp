@@ -974,6 +974,29 @@ Error Texture::setStorage(GLenum target, GLsizei levels, GLenum internalFormat, 
     return NoError();
 }
 
+Error Texture::setStorageMultisample(GLenum target,
+                                     GLsizei samples,
+                                     GLint internalFormat,
+                                     gl::Extents size,
+                                     GLboolean fixedsamplelocations)
+{
+    ASSERT(target == mState.mTarget);
+
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    releaseTexImageInternal();
+    orphanImages();
+
+    ANGLE_TRY(mTexture->setStorageMultisample(target, samples, internalFormat, size,
+                                              fixedsamplelocations));
+
+    mState.mImmutableFormat = false;
+    mState.mImmutableLevels = static_cast<GLuint>(0);
+    mState.clearImageDescs();
+    mState.setImageDescChain(0, static_cast<GLuint>(0), size, Format(internalFormat));
+
+    return NoError();
+}
+
 Error Texture::generateMipmap()
 {
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after

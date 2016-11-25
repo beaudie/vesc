@@ -581,6 +581,8 @@ class Context final : public ValidationContext
     void bindFramebuffer(GLenum target, GLuint framebuffer);
     void bindRenderbuffer(GLenum target, GLuint renderbuffer);
 
+    void getMultisamplefv(GLenum pname, GLuint index, GLfloat *val);
+
     void copyBufferSubData(GLenum readTarget,
                            GLenum writeTarget,
                            GLintptr readOffset,

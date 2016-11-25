@@ -3394,10 +3394,23 @@ bool ValidateFramebufferTexture2D(Context *context, GLenum target, GLenum attach
                 }
             }
             break;
-
-          default:
-              context->handleError(Error(GL_INVALID_ENUM));
-            return false;
+            case GL_TEXTURE_2D_MULTISAMPLE:
+            {
+                if (level != 0)
+                {
+                    context->handleError(Error(GL_INVALID_VALUE));
+                    return false;
+                }
+                if (tex->getTarget() != GL_TEXTURE_2D_MULTISAMPLE)
+                {
+                    context->handleError(Error(GL_INVALID_OPERATION));
+                    return false;
+                }
+            }
+            break;
+            default:
+                context->handleError(Error(GL_INVALID_ENUM));
+                return false;
         }
 
         const Format &format = tex->getFormat(textarget, level);
