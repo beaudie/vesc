@@ -62,6 +62,11 @@ ImageIndex ImageIndex::MakeGeneric(GLenum target, GLint mipIndex)
     return ImageIndex(target, mipIndex, layerIndex);
 }
 
+ImageIndex ImageIndex::Make2DMultisample(GLint level)
+{
+    return ImageIndex(GL_TEXTURE_2D_MULTISAMPLE, level, ENTIRE_LEVEL);
+}
+
 ImageIndex ImageIndex::MakeInvalid()
 {
     return ImageIndex(GL_NONE, -1, -1);
@@ -121,6 +126,13 @@ ImageIndexIterator ImageIndexIterator::Make2DArray(GLint minMip, GLint maxMip,
 {
     return ImageIndexIterator(GL_TEXTURE_2D_ARRAY, Range<GLint>(minMip, maxMip),
                               Range<GLint>(0, IMPLEMENTATION_MAX_2D_ARRAY_TEXTURE_LAYERS), layerCounts);
+}
+
+ImageIndexIterator ImageIndexIterator::Make2DMultisample()
+{
+    return ImageIndexIterator(GL_TEXTURE_2D_MULTISAMPLE, Range<GLint>(0, 0),
+                              Range<GLint>(ImageIndex::ENTIRE_LEVEL, ImageIndex::ENTIRE_LEVEL),
+                              NULL);
 }
 
 ImageIndexIterator::ImageIndexIterator(GLenum type, const Range<GLint> &mipRange,

@@ -93,6 +93,7 @@ TextureState::TextureState(GLenum target)
       mMaxLevel(1000),
       mImmutableFormat(false),
       mImmutableLevels(0),
+      mSamples(1),
       mUsage(GL_NONE),
       mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) *
                   (target == GL_TEXTURE_CUBE_MAP ? 6 : 1)),
@@ -425,6 +426,11 @@ const ImageDesc &TextureState::getImageDesc(GLenum target, size_t level) const
     size_t descIndex = GetImageDescIndex(target, level);
     ASSERT(descIndex < mImageDescs.size());
     return mImageDescs[descIndex];
+}
+
+void TextureState::setSamples(GLsizei samples)
+{
+    mSamples = samples;
 }
 
 void TextureState::setImageDesc(GLenum target, size_t level, const ImageDesc &desc)
@@ -778,6 +784,12 @@ const Format &Texture::getFormat(GLenum target, size_t level) const
     return mState.getImageDesc(target, level).format;
 }
 
+GLsizei Texture::getSamples(GLenum target) const
+{
+    ASSERT(target == mState.mTarget);
+    return mState.getSamples();
+}
+
 bool Texture::isMipmapComplete() const
 {
     return mState.computeMipmapCompleteness();
@@ -974,6 +986,32 @@ Error Texture::setStorage(GLenum target, GLsizei levels, GLenum internalFormat, 
     return NoError();
 }
 
+Error Texture::setStorageMultisample(GLenum target,
+                                     GLsizei samples,
+                                     GLint internalFormat,
+                                     gl::Extents size,
+                                     GLboolean fixedsamplelocations)
+{
+    ASSERT(target == mState.mTarget);
+
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    releaseTexImageInternal();
+    orphanImages();
+
+    ANGLE_TRY(mTexture->setStorageMultisample(target, samples, internalFormat, size,
+                                              fixedsamplelocations));
+
+    mState.setSamples(samples);
+    mState.mImmutableFormat = true;
+    mState.mImmutableLevels = static_cast<GLuint>(0);
+    mState.clearImageDescs();
+    mState.setImageDescChain(0, static_cast<GLuint>(0), size, Format(internalFormat));
+
+    mDirtyChannel.signal();
+
+    return NoError();
+}
+
 Error Texture::generateMipmap()
 {
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
@@ -1119,10 +1157,9 @@ const Format &Texture::getAttachmentFormat(const gl::FramebufferAttachment::Targ
     return getFormat(target.textureIndex().type, target.textureIndex().mipIndex);
 }
 
-GLsizei Texture::getAttachmentSamples(const gl::FramebufferAttachment::Target &/*target*/) const
+GLsizei Texture::getAttachmentSamples(const gl::FramebufferAttachment::Target &target) const
 {
-    // Multisample textures not currently supported
-    return 0;
+    return getSamples(target.textureIndex().type);
 }
 
 void Texture::onAttach()
