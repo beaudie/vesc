@@ -85,6 +85,12 @@ class TextureVk : public TextureImpl
                                         FramebufferAttachmentRenderTarget **rtOut) override;
 
     void syncState(const gl::Texture::DirtyBits &dirtyBits) override;
+
+    gl::Error setStorageMultisample(GLenum target,
+                                    GLsizei samples,
+                                    GLint internalformat,
+                                    gl::Extents size,
+                                    GLboolean fixedsamplelocations) override;
 };
 
 }  // namespace rx

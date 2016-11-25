@@ -34,14 +34,20 @@ const char* getBasicString(TBasicType t)
         case EbtSamplerExternalOES:   return "samplerExternalOES";
         case EbtSampler2DRect:        return "sampler2DRect";
         case EbtSampler2DArray:       return "sampler2DArray";
+        case EbtSampler2DMS:
+            return "sampler2DMS";
         case EbtISampler2D:           return "isampler2D";
         case EbtISampler3D:           return "isampler3D";
         case EbtISamplerCube:         return "isamplerCube";
         case EbtISampler2DArray:      return "isampler2DArray";
+        case EbtISampler2DMS:
+            return "isampler2DMS";
         case EbtUSampler2D:           return "usampler2D";
         case EbtUSampler3D:           return "usampler3D";
         case EbtUSamplerCube:         return "usamplerCube";
         case EbtUSampler2DArray:      return "usampler2DArray";
+        case EbtUSampler2DMS:
+            return "usampler2DMS";
         case EbtSampler2DShadow:      return "sampler2DShadow";
         case EbtSamplerCubeShadow:    return "samplerCubeShadow";
         case EbtSampler2DArrayShadow: return "sampler2DArrayShadow";
@@ -278,6 +284,9 @@ TString TType::buildMangledName() const
       case EbtSampler2DRect:
         mangledName += "s2r";
         break;
+      case EbtSampler2DMS:
+          mangledName += "s2ms";
+          break;
       case EbtISampler2D:
         mangledName += "is2";
         break;
@@ -290,6 +299,9 @@ TString TType::buildMangledName() const
       case EbtISampler2DArray:
         mangledName += "is2a";
         break;
+      case EbtISampler2DMS:
+          mangledName += "is2ms";
+          break;
       case EbtUSampler2D:
         mangledName += "us2";
         break;
@@ -302,6 +314,9 @@ TString TType::buildMangledName() const
       case EbtUSampler2DArray:
         mangledName += "us2a";
         break;
+      case EbtUSampler2DMS:
+          mangledName += "us2ms";
+          break;
       case EbtSampler2DShadow:
         mangledName += "s2s";
         break;
