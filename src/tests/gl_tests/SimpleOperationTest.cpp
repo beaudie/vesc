@@ -67,13 +67,6 @@ void SimpleOperationTest::verifyBuffer(const std::vector<uint8_t> &data, GLenum 
 
 TEST_P(SimpleOperationTest, CompileVertexShader)
 {
-    if (IsVulkan())
-    {
-        // TODO(jmadill): Complete Vulkan implementation.
-        std::cout << "Test skipped on Vulkan." << std::endl;
-        return;
-    }
-
     const std::string source = SHADER_SOURCE
     (
         attribute vec4 a_input;
@@ -92,13 +85,6 @@ TEST_P(SimpleOperationTest, CompileVertexShader)
 
 TEST_P(SimpleOperationTest, CompileFragmentShader)
 {
-    if (IsVulkan())
-    {
-        // TODO(jmadill): Complete Vulkan implementation.
-        std::cout << "Test skipped on Vulkan." << std::endl;
-        return;
-    }
-
     const std::string source = SHADER_SOURCE
     (
         precision mediump float;
@@ -118,13 +104,6 @@ TEST_P(SimpleOperationTest, CompileFragmentShader)
 
 TEST_P(SimpleOperationTest, LinkProgram)
 {
-    if (IsVulkan())
-    {
-        // TODO(jmadill): Complete Vulkan implementation.
-        std::cout << "Test skipped on Vulkan." << std::endl;
-        return;
-    }
-
     const std::string vsSource = SHADER_SOURCE
     (
         void main()
