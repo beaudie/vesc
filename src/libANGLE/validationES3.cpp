@@ -99,57 +99,57 @@ bool ValidateES3TexImageParametersBase(Context *context,
 
     switch (target)
     {
-      case GL_TEXTURE_2D:
-        if (static_cast<GLuint>(width) > (caps.max2DTextureSize >> level) ||
-            static_cast<GLuint>(height) > (caps.max2DTextureSize >> level))
-        {
-            context->handleError(Error(GL_INVALID_VALUE));
-            return false;
-        }
-        break;
+        case GL_TEXTURE_2D:
+            if (static_cast<GLuint>(width) > (caps.max2DTextureSize >> level) ||
+                static_cast<GLuint>(height) > (caps.max2DTextureSize >> level))
+            {
+                context->handleError(Error(GL_INVALID_VALUE));
+                return false;
+            }
+            break;
 
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
-        if (!isSubImage && width != height)
-        {
-            context->handleError(Error(GL_INVALID_VALUE));
-            return false;
-        }
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
+            if (!isSubImage && width != height)
+            {
+                context->handleError(Error(GL_INVALID_VALUE));
+                return false;
+            }
 
-        if (static_cast<GLuint>(width) > (caps.maxCubeMapTextureSize >> level))
-        {
-            context->handleError(Error(GL_INVALID_VALUE));
-            return false;
-        }
-        break;
+            if (static_cast<GLuint>(width) > (caps.maxCubeMapTextureSize >> level))
+            {
+                context->handleError(Error(GL_INVALID_VALUE));
+                return false;
+            }
+            break;
 
-      case GL_TEXTURE_3D:
-        if (static_cast<GLuint>(width) > (caps.max3DTextureSize >> level) ||
-            static_cast<GLuint>(height) > (caps.max3DTextureSize >> level) ||
-            static_cast<GLuint>(depth) > (caps.max3DTextureSize >> level))
-        {
-            context->handleError(Error(GL_INVALID_VALUE));
-            return false;
-        }
-        break;
+        case GL_TEXTURE_3D:
+            if (static_cast<GLuint>(width) > (caps.max3DTextureSize >> level) ||
+                static_cast<GLuint>(height) > (caps.max3DTextureSize >> level) ||
+                static_cast<GLuint>(depth) > (caps.max3DTextureSize >> level))
+            {
+                context->handleError(Error(GL_INVALID_VALUE));
+                return false;
+            }
+            break;
 
-      case GL_TEXTURE_2D_ARRAY:
-        if (static_cast<GLuint>(width) > (caps.max2DTextureSize >> level) ||
-            static_cast<GLuint>(height) > (caps.max2DTextureSize >> level) ||
-            static_cast<GLuint>(depth) > caps.maxArrayTextureLayers)
-        {
-            context->handleError(Error(GL_INVALID_VALUE));
-            return false;
-        }
-        break;
+        case GL_TEXTURE_2D_ARRAY:
+            if (static_cast<GLuint>(width) > (caps.max2DTextureSize >> level) ||
+                static_cast<GLuint>(height) > (caps.max2DTextureSize >> level) ||
+                static_cast<GLuint>(depth) > caps.maxArrayTextureLayers)
+            {
+                context->handleError(Error(GL_INVALID_VALUE));
+                return false;
+            }
+            break;
 
-      default:
-          context->handleError(Error(GL_INVALID_ENUM));
-        return false;
+        default:
+            context->handleError(Error(GL_INVALID_ENUM));
+            return false;
     }
 
     gl::Texture *texture = context->getTargetTexture(IsCubeMapTextureTarget(target) ? GL_TEXTURE_CUBE_MAP : target);
@@ -738,7 +738,7 @@ bool ValidateES3TexStorageParametersBase(Context *context,
 
     switch (target)
     {
-      case GL_TEXTURE_2D:
+        case GL_TEXTURE_2D:
         {
             if (static_cast<GLuint>(width) > caps.max2DTextureSize ||
                 static_cast<GLuint>(height) > caps.max2DTextureSize)
@@ -746,10 +746,10 @@ bool ValidateES3TexStorageParametersBase(Context *context,
                 context->handleError(Error(GL_INVALID_VALUE));
                 return false;
             }
+            break;
         }
-        break;
 
-      case GL_TEXTURE_CUBE_MAP:
+        case GL_TEXTURE_CUBE_MAP:
         {
             if (width != height)
             {
@@ -762,10 +762,10 @@ bool ValidateES3TexStorageParametersBase(Context *context,
                 context->handleError(Error(GL_INVALID_VALUE));
                 return false;
             }
+            break;
         }
-        break;
 
-      case GL_TEXTURE_3D:
+        case GL_TEXTURE_3D:
         {
             if (static_cast<GLuint>(width) > caps.max3DTextureSize ||
                 static_cast<GLuint>(height) > caps.max3DTextureSize ||
@@ -774,10 +774,10 @@ bool ValidateES3TexStorageParametersBase(Context *context,
                 context->handleError(Error(GL_INVALID_VALUE));
                 return false;
             }
+            break;
         }
-        break;
 
-      case GL_TEXTURE_2D_ARRAY:
+        case GL_TEXTURE_2D_ARRAY:
         {
             if (static_cast<GLuint>(width) > caps.max2DTextureSize ||
                 static_cast<GLuint>(height) > caps.max2DTextureSize ||
@@ -786,12 +786,12 @@ bool ValidateES3TexStorageParametersBase(Context *context,
                 context->handleError(Error(GL_INVALID_VALUE));
                 return false;
             }
+            break;
         }
-        break;
 
-      default:
-          UNREACHABLE();
-        return false;
+        default:
+            UNREACHABLE();
+            return false;
     }
 
     gl::Texture *texture = context->getTargetTexture(target);
@@ -931,7 +931,7 @@ bool ValidateFramebufferTextureLayer(Context *context, GLenum target, GLenum att
 
         switch (tex->getTarget())
         {
-          case GL_TEXTURE_2D_ARRAY:
+            case GL_TEXTURE_2D_ARRAY:
             {
                 if (level > gl::log2(caps.max2DTextureSize))
                 {
@@ -944,10 +944,10 @@ bool ValidateFramebufferTextureLayer(Context *context, GLenum target, GLenum att
                     context->handleError(Error(GL_INVALID_VALUE));
                     return false;
                 }
+                break;
             }
-            break;
 
-          case GL_TEXTURE_3D:
+            case GL_TEXTURE_3D:
             {
                 if (level > gl::log2(caps.max3DTextureSize))
                 {
@@ -960,12 +960,12 @@ bool ValidateFramebufferTextureLayer(Context *context, GLenum target, GLenum att
                     context->handleError(Error(GL_INVALID_VALUE));
                     return false;
                 }
+                break;
             }
-            break;
 
-          default:
-              context->handleError(Error(GL_INVALID_OPERATION));
-            return false;
+            default:
+                context->handleError(Error(GL_INVALID_OPERATION));
+                return false;
         }
 
         const auto &format = tex->getFormat(tex->getTarget(), level);
@@ -1022,16 +1022,16 @@ bool ValidateInvalidateFramebuffer(Context *context, GLenum target, GLsizei numA
 
     switch (target)
     {
-      case GL_DRAW_FRAMEBUFFER:
-      case GL_FRAMEBUFFER:
-          defaultFramebuffer = context->getGLState().getDrawFramebuffer()->id() == 0;
-          break;
-      case GL_READ_FRAMEBUFFER:
-          defaultFramebuffer = context->getGLState().getReadFramebuffer()->id() == 0;
-          break;
-      default:
-          context->handleError(Error(GL_INVALID_ENUM, "Invalid framebuffer target"));
-        return false;
+        case GL_DRAW_FRAMEBUFFER:
+        case GL_FRAMEBUFFER:
+            defaultFramebuffer = context->getGLState().getDrawFramebuffer()->id() == 0;
+            break;
+        case GL_READ_FRAMEBUFFER:
+            defaultFramebuffer = context->getGLState().getReadFramebuffer()->id() == 0;
+            break;
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "Invalid framebuffer target"));
+            return false;
     }
 
     return ValidateDiscardFramebufferBase(context, target, numAttachments, attachments, defaultFramebuffer);

@@ -1300,20 +1300,20 @@ bool ValidTextureTarget(const ValidationContext *context, GLenum target)
 {
     switch (target)
     {
-      case GL_TEXTURE_2D:
-      case GL_TEXTURE_CUBE_MAP:
-        return true;
+        case GL_TEXTURE_2D:
+        case GL_TEXTURE_CUBE_MAP:
+            return true;
 
-      case GL_TEXTURE_3D:
-      case GL_TEXTURE_2D_ARRAY:
-          return (context->getClientMajorVersion() >= 3);
+        case GL_TEXTURE_3D:
+        case GL_TEXTURE_2D_ARRAY:
+            return (context->getClientMajorVersion() >= 3);
 
-      case GL_TEXTURE_2D_MULTISAMPLE:
-          UNIMPLEMENTED();
-          return (context->getClientVersion() >= Version(3, 1));
+        case GL_TEXTURE_2D_MULTISAMPLE:
+            UNIMPLEMENTED();
+            return (context->getClientVersion() >= Version(3, 1));
 
-      default:
-        return false;
+        default:
+            return false;
     }
 }
 
@@ -1360,16 +1360,16 @@ bool ValidTexture2DDestinationTarget(const ValidationContext *context, GLenum ta
 {
     switch (target)
     {
-      case GL_TEXTURE_2D:
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
-        return true;
-      default:
-          return false;
+        case GL_TEXTURE_2D:
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
+            return true;
+        default:
+            return false;
     }
 }
 
@@ -1377,11 +1377,11 @@ bool ValidTexture3DDestinationTarget(const ValidationContext *context, GLenum ta
 {
     switch (target)
     {
-      case GL_TEXTURE_3D:
-      case GL_TEXTURE_2D_ARRAY:
-          return true;
-      default:
-        return false;
+        case GL_TEXTURE_3D:
+        case GL_TEXTURE_2D_ARRAY:
+            return true;
+        default:
+            return false;
     }
 }
 
@@ -1392,10 +1392,14 @@ bool ValidFramebufferTarget(GLenum target)
 
     switch (target)
     {
-      case GL_FRAMEBUFFER:      return true;
-      case GL_READ_FRAMEBUFFER: return true;
-      case GL_DRAW_FRAMEBUFFER: return true;
-      default:                  return false;
+        case GL_FRAMEBUFFER:
+            return true;
+        case GL_READ_FRAMEBUFFER:
+            return true;
+        case GL_DRAW_FRAMEBUFFER:
+            return true;
+        default:
+            return false;
     }
 }
 
@@ -1403,30 +1407,30 @@ bool ValidBufferTarget(const ValidationContext *context, GLenum target)
 {
     switch (target)
     {
-      case GL_ARRAY_BUFFER:
-      case GL_ELEMENT_ARRAY_BUFFER:
-        return true;
+        case GL_ARRAY_BUFFER:
+        case GL_ELEMENT_ARRAY_BUFFER:
+            return true;
 
-      case GL_PIXEL_PACK_BUFFER:
-      case GL_PIXEL_UNPACK_BUFFER:
-          return (context->getExtensions().pixelBufferObject ||
-                  context->getClientMajorVersion() >= 3);
+        case GL_PIXEL_PACK_BUFFER:
+        case GL_PIXEL_UNPACK_BUFFER:
+            return (context->getExtensions().pixelBufferObject ||
+                    context->getClientMajorVersion() >= 3);
 
-      case GL_COPY_READ_BUFFER:
-      case GL_COPY_WRITE_BUFFER:
-      case GL_TRANSFORM_FEEDBACK_BUFFER:
-      case GL_UNIFORM_BUFFER:
-          return (context->getClientMajorVersion() >= 3);
+        case GL_COPY_READ_BUFFER:
+        case GL_COPY_WRITE_BUFFER:
+        case GL_TRANSFORM_FEEDBACK_BUFFER:
+        case GL_UNIFORM_BUFFER:
+            return (context->getClientMajorVersion() >= 3);
 
-      case GL_ATOMIC_COUNTER_BUFFER:
-      case GL_SHADER_STORAGE_BUFFER:
-      case GL_DRAW_INDIRECT_BUFFER:
-      case GL_DISPATCH_INDIRECT_BUFFER:
-          UNIMPLEMENTED();
-          return context->getClientVersion() >= Version(3, 1);
+        case GL_ATOMIC_COUNTER_BUFFER:
+        case GL_SHADER_STORAGE_BUFFER:
+        case GL_DRAW_INDIRECT_BUFFER:
+        case GL_DISPATCH_INDIRECT_BUFFER:
+            UNIMPLEMENTED();
+            return context->getClientVersion() >= Version(3, 1);
 
-      default:
-        return false;
+        default:
+            return false;
     }
 }
 
@@ -1439,22 +1443,23 @@ bool ValidMipLevel(const ValidationContext *context, GLenum target, GLint level)
         case GL_TEXTURE_2D:
             maxDimension = caps.max2DTextureSize;
             break;
-      case GL_TEXTURE_CUBE_MAP:
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
-          maxDimension = caps.maxCubeMapTextureSize;
-          break;
-      case GL_TEXTURE_3D:
-          maxDimension = caps.max3DTextureSize;
-          break;
-      case GL_TEXTURE_2D_ARRAY:
-          maxDimension = caps.max2DTextureSize;
-          break;
-      default: UNREACHABLE();
+        case GL_TEXTURE_CUBE_MAP:
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
+            maxDimension = caps.maxCubeMapTextureSize;
+            break;
+        case GL_TEXTURE_3D:
+            maxDimension = caps.max3DTextureSize;
+            break;
+        case GL_TEXTURE_2D_ARRAY:
+            maxDimension = caps.max2DTextureSize;
+            break;
+        default:
+            UNREACHABLE();
     }
 
     return level <= gl::log2(static_cast<int>(maxDimension));
@@ -1613,17 +1618,17 @@ bool ValidQueryType(const Context *context, GLenum queryType)
 
     switch (queryType)
     {
-      case GL_ANY_SAMPLES_PASSED:
-      case GL_ANY_SAMPLES_PASSED_CONSERVATIVE:
-        return true;
-      case GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN:
-          return (context->getClientMajorVersion() >= 3);
-      case GL_TIME_ELAPSED_EXT:
-          return context->getExtensions().disjointTimerQuery;
-      case GL_COMMANDS_COMPLETED_CHROMIUM:
-          return context->getExtensions().syncQuery;
-      default:
-        return false;
+        case GL_ANY_SAMPLES_PASSED:
+        case GL_ANY_SAMPLES_PASSED_CONSERVATIVE:
+            return true;
+        case GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN:
+            return (context->getClientMajorVersion() >= 3);
+        case GL_TIME_ELAPSED_EXT:
+            return context->getExtensions().disjointTimerQuery;
+        case GL_COMMANDS_COMPLETED_CHROMIUM:
+            return context->getExtensions().syncQuery;
+        default:
+            return false;
     }
 }
 
@@ -1689,22 +1694,22 @@ bool ValidateAttachmentTarget(gl::Context *context, GLenum attachment)
     {
         switch (attachment)
         {
-          case GL_DEPTH_ATTACHMENT:
-          case GL_STENCIL_ATTACHMENT:
-              break;
+            case GL_DEPTH_ATTACHMENT:
+            case GL_STENCIL_ATTACHMENT:
+                break;
 
-          case GL_DEPTH_STENCIL_ATTACHMENT:
-              if (!context->getExtensions().webglCompatibility &&
-                  context->getClientMajorVersion() < 3)
-              {
-                  context->handleError(Error(GL_INVALID_ENUM));
-                  return false;
-              }
-              break;
+            case GL_DEPTH_STENCIL_ATTACHMENT:
+                if (!context->getExtensions().webglCompatibility &&
+                    context->getClientMajorVersion() < 3)
+                {
+                    context->handleError(Error(GL_INVALID_ENUM));
+                    return false;
+                }
+                break;
 
-          default:
-              context->handleError(Error(GL_INVALID_ENUM));
-              return false;
+            default:
+                context->handleError(Error(GL_INVALID_ENUM));
+                return false;
         }
     }
 
@@ -1716,11 +1721,11 @@ bool ValidateRenderbufferStorageParametersBase(gl::Context *context, GLenum targ
 {
     switch (target)
     {
-      case GL_RENDERBUFFER:
-        break;
-      default:
-          context->handleError(Error(GL_INVALID_ENUM));
-        return false;
+        case GL_RENDERBUFFER:
+            break;
+        default:
+            context->handleError(Error(GL_INVALID_ENUM));
+            return false;
     }
 
     if (width < 0 || height < 0 || samples < 0)
@@ -1847,13 +1852,13 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
 {
     switch (filter)
     {
-      case GL_NEAREST:
-        break;
-      case GL_LINEAR:
-        break;
-      default:
-          context->handleError(Error(GL_INVALID_ENUM));
-        return false;
+        case GL_NEAREST:
+            break;
+        case GL_LINEAR:
+            break;
+        default:
+            context->handleError(Error(GL_INVALID_ENUM));
+            return false;
     }
 
     if ((mask & ~(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)) != 0)
@@ -2689,24 +2694,24 @@ bool ValidateStateQuery(ValidationContext *context,
 
     switch (pname)
     {
-      case GL_TEXTURE_BINDING_2D:
-      case GL_TEXTURE_BINDING_CUBE_MAP:
-      case GL_TEXTURE_BINDING_3D:
-      case GL_TEXTURE_BINDING_2D_ARRAY:
-        break;
-      case GL_TEXTURE_BINDING_EXTERNAL_OES:
-          if (!context->getExtensions().eglStreamConsumerExternal &&
-              !context->getExtensions().eglImageExternal)
-          {
-              context->handleError(Error(GL_INVALID_ENUM,
-                                         "Neither NV_EGL_stream_consumer_external nor "
-                                         "GL_OES_EGL_image_external extensions enabled"));
-              return false;
-          }
-          break;
+        case GL_TEXTURE_BINDING_2D:
+        case GL_TEXTURE_BINDING_CUBE_MAP:
+        case GL_TEXTURE_BINDING_3D:
+        case GL_TEXTURE_BINDING_2D_ARRAY:
+            break;
+        case GL_TEXTURE_BINDING_EXTERNAL_OES:
+            if (!context->getExtensions().eglStreamConsumerExternal &&
+                !context->getExtensions().eglImageExternal)
+            {
+                context->handleError(Error(GL_INVALID_ENUM,
+                                           "Neither NV_EGL_stream_consumer_external nor "
+                                           "GL_OES_EGL_image_external extensions enabled"));
+                return false;
+            }
+            break;
 
-      case GL_IMPLEMENTATION_COLOR_READ_TYPE:
-      case GL_IMPLEMENTATION_COLOR_READ_FORMAT:
+        case GL_IMPLEMENTATION_COLOR_READ_TYPE:
+        case GL_IMPLEMENTATION_COLOR_READ_FORMAT:
         {
             if (context->getGLState().getReadFramebuffer()->checkStatus(
                     context->getContextState()) != GL_FRAMEBUFFER_COMPLETE)
@@ -2730,11 +2735,11 @@ bool ValidateStateQuery(ValidationContext *context,
                 context->handleError(Error(GL_INVALID_OPERATION));
                 return false;
             }
+            break;
         }
-        break;
 
-      default:
-        break;
+        default:
+            break;
     }
 
     // pname is valid, but there are no parameters to return
@@ -2834,30 +2839,30 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
     GLuint maxDimension = 0;
     switch (target)
     {
-      case GL_TEXTURE_2D:
-        maxDimension = caps.max2DTextureSize;
-        break;
+        case GL_TEXTURE_2D:
+            maxDimension = caps.max2DTextureSize;
+            break;
 
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
-      case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
-      case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
-        maxDimension = caps.maxCubeMapTextureSize;
-        break;
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
+            maxDimension = caps.maxCubeMapTextureSize;
+            break;
 
-      case GL_TEXTURE_2D_ARRAY:
-        maxDimension = caps.max2DTextureSize;
-        break;
+        case GL_TEXTURE_2D_ARRAY:
+            maxDimension = caps.max2DTextureSize;
+            break;
 
-      case GL_TEXTURE_3D:
-        maxDimension = caps.max3DTextureSize;
-        break;
+        case GL_TEXTURE_3D:
+            maxDimension = caps.max3DTextureSize;
+            break;
 
-      default:
-          context->handleError(Error(GL_INVALID_ENUM));
-        return false;
+        default:
+            context->handleError(Error(GL_INVALID_ENUM));
+            return false;
     }
 
     gl::Texture *texture =
@@ -2934,17 +2939,17 @@ static bool ValidateDrawBase(ValidationContext *context,
 {
     switch (mode)
     {
-      case GL_POINTS:
-      case GL_LINES:
-      case GL_LINE_LOOP:
-      case GL_LINE_STRIP:
-      case GL_TRIANGLES:
-      case GL_TRIANGLE_STRIP:
-      case GL_TRIANGLE_FAN:
-        break;
-      default:
-          context->handleError(Error(GL_INVALID_ENUM));
-        return false;
+        case GL_POINTS:
+        case GL_LINES:
+        case GL_LINE_LOOP:
+        case GL_LINE_STRIP:
+        case GL_TRIANGLES:
+        case GL_TRIANGLE_STRIP:
+        case GL_TRIANGLE_FAN:
+            break;
+        default:
+            context->handleError(Error(GL_INVALID_ENUM));
+            return false;
     }
 
     if (count < 0)
@@ -3139,19 +3144,19 @@ bool ValidateDrawElements(ValidationContext *context,
 {
     switch (type)
     {
-      case GL_UNSIGNED_BYTE:
-      case GL_UNSIGNED_SHORT:
-          break;
-      case GL_UNSIGNED_INT:
-          if (context->getClientMajorVersion() < 3 && !context->getExtensions().elementIndexUint)
-          {
-              context->handleError(Error(GL_INVALID_ENUM));
-              return false;
-          }
-          break;
-      default:
-          context->handleError(Error(GL_INVALID_ENUM));
-          return false;
+        case GL_UNSIGNED_BYTE:
+        case GL_UNSIGNED_SHORT:
+            break;
+        case GL_UNSIGNED_INT:
+            if (context->getClientMajorVersion() < 3 && !context->getExtensions().elementIndexUint)
+            {
+                context->handleError(Error(GL_INVALID_ENUM));
+                return false;
+            }
+            break;
+        default:
+            context->handleError(Error(GL_INVALID_ENUM));
+            return false;
     }
 
     const State &state = context->getGLState();
@@ -3360,7 +3365,7 @@ bool ValidateFramebufferTexture2D(Context *context, GLenum target, GLenum attach
 
         switch (textarget)
         {
-          case GL_TEXTURE_2D:
+            case GL_TEXTURE_2D:
             {
                 if (level > gl::log2(caps.max2DTextureSize))
                 {
@@ -3372,15 +3377,15 @@ bool ValidateFramebufferTexture2D(Context *context, GLenum target, GLenum attach
                     context->handleError(Error(GL_INVALID_OPERATION));
                     return false;
                 }
+                break;
             }
-            break;
 
-          case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
-          case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
-          case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
-          case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
-          case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
-          case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
+            case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
+            case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
+            case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
+            case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
+            case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
+            case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
             {
                 if (level > gl::log2(caps.maxCubeMapTextureSize))
                 {
@@ -3392,12 +3397,12 @@ bool ValidateFramebufferTexture2D(Context *context, GLenum target, GLenum attach
                     context->handleError(Error(GL_INVALID_OPERATION));
                     return false;
                 }
+                break;
             }
-            break;
 
-          default:
-              context->handleError(Error(GL_INVALID_ENUM));
-            return false;
+            default:
+                context->handleError(Error(GL_INVALID_ENUM));
+                return false;
         }
 
         const Format &format = tex->getFormat(textarget, level);
@@ -3590,31 +3595,31 @@ bool ValidateDiscardFramebufferBase(Context *context, GLenum target, GLsizei num
         {
             switch (attachments[i])
             {
-              case GL_DEPTH_ATTACHMENT:
-              case GL_STENCIL_ATTACHMENT:
-              case GL_DEPTH_STENCIL_ATTACHMENT:
-                if (defaultFramebuffer)
-                {
-                    context->handleError(
-                        Error(GL_INVALID_ENUM,
-                              "Invalid attachment when the default framebuffer is bound"));
+                case GL_DEPTH_ATTACHMENT:
+                case GL_STENCIL_ATTACHMENT:
+                case GL_DEPTH_STENCIL_ATTACHMENT:
+                    if (defaultFramebuffer)
+                    {
+                        context->handleError(
+                            Error(GL_INVALID_ENUM,
+                                  "Invalid attachment when the default framebuffer is bound"));
+                        return false;
+                    }
+                    break;
+                case GL_COLOR:
+                case GL_DEPTH:
+                case GL_STENCIL:
+                    if (!defaultFramebuffer)
+                    {
+                        context->handleError(
+                            Error(GL_INVALID_ENUM,
+                                  "Invalid attachment when the default framebuffer is not bound"));
+                        return false;
+                    }
+                    break;
+                default:
+                    context->handleError(Error(GL_INVALID_ENUM, "Invalid attachment"));
                     return false;
-                }
-                break;
-              case GL_COLOR:
-              case GL_DEPTH:
-              case GL_STENCIL:
-                if (!defaultFramebuffer)
-                {
-                    context->handleError(
-                        Error(GL_INVALID_ENUM,
-                              "Invalid attachment when the default framebuffer is not bound"));
-                    return false;
-                }
-                break;
-              default:
-                  context->handleError(Error(GL_INVALID_ENUM, "Invalid attachment"));
-                return false;
             }
         }
     }
