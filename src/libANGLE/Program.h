@@ -371,6 +371,8 @@ class Program final : angle::NonCopyable, public LabeledObject
         return mState.mActiveAttribLocationsMask;
     }
 
+    const ProgramState &getState() const { return mState; }
+
   private:
     class Bindings final : angle::NonCopyable
     {
