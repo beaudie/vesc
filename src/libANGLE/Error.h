@@ -16,6 +16,31 @@
 #include <string>
 #include <memory>
 
+namespace angle
+{
+template <typename ErrorT, typename ResultT, typename ErrorBaseT, ErrorBaseT NoErrorVal>
+class ErrorOrResultBase
+{
+  public:
+    ErrorOrResultBase(const ErrorT &error) : mError(error) {}
+    ErrorOrResultBase(ErrorT &&error) : mError(std::move(error)) {}
+
+    ErrorOrResultBase(ResultT &&result) : mError(NoErrorVal), mResult(std::forward<ResultT>(result))
+    {
+    }
+
+    ErrorOrResultBase(const ResultT &result) : mError(NoErrorVal), mResult(result) {}
+
+    bool isError() const { return mError.isError(); }
+    const ErrorT &getError() const { return mError; }
+    ResultT &&getResult() { return std::move(mResult); }
+
+  private:
+    ErrorT mError;
+    ResultT mResult;
+};
+}  // namespace angle
+
 namespace gl
 {
 
@@ -141,6 +166,9 @@ inline Error NoError()
     return Error(GL_NO_ERROR);
 }
 
+template <typename ResultT>
+using ErrorOrResult = angle::ErrorOrResultBase<Error, ResultT, GLenum, GL_NO_ERROR>;
+
 }  // namespace gl
 
 namespace egl
@@ -152,6 +180,7 @@ class Error final
     explicit inline Error(EGLint errorCode);
     Error(EGLint errorCode, const char *msg, ...);
     Error(EGLint errorCode, EGLint id, const char *msg, ...);
+    Error(EGLint errorCode, EGLint id, const std::string &msg);
     inline Error(const Error &other);
     inline Error(Error &&other);
 
@@ -176,6 +205,9 @@ inline Error NoError()
 {
     return Error(EGL_SUCCESS);
 }
+
+template <typename ResultT>
+using ErrorOrResult = angle::ErrorOrResultBase<Error, ResultT, EGLint, EGL_SUCCESS>;
 
 }  // namespace egl
 
