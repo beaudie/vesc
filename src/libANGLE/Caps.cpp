@@ -168,6 +168,7 @@ Extensions::Extensions()
       copyTexture(false),
       copyCompressedTexture(false),
       webglCompatibility(false),
+      requestExtension(false),
       bindGeneratesResource(false),
       robustClientMemory(false),
       textureSRGBDecode(false),
@@ -506,7 +507,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
     auto buildExtensionInfoMap = []() {
         auto enableableExtension = [](ExtensionInfo::ExtensionBool member) {
             ExtensionInfo info;
-            info.Enableable       = true;
+            info.Requestable      = true;
             info.ExtensionsMember = member;
             return info;
         };
@@ -585,6 +586,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_CHROMIUM_copy_texture"] = esOnlyExtension(&Extensions::copyTexture);
         map["GL_CHROMIUM_copy_compressed_texture"] = esOnlyExtension(&Extensions::copyCompressedTexture);
         map["GL_ANGLE_webgl_compatibility"] = esOnlyExtension(&Extensions::webglCompatibility);
+        map["GL_ANGLE_request_extension"] = esOnlyExtension(&Extensions::requestExtension);
         map["GL_CHROMIUM_bind_generates_resource"] = esOnlyExtension(&Extensions::bindGeneratesResource);
         map["GL_ANGLE_robust_client_memory"] = esOnlyExtension(&Extensions::robustClientMemory);
         map["GL_EXT_texture_sRGB_decode"] = esOnlyExtension(&Extensions::textureSRGBDecode);
