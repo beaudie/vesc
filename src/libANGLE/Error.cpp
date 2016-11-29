@@ -16,6 +16,11 @@
 namespace gl
 {
 
+Error::Error(GLenum errorCode, const std::string &message)
+    : mCode(errorCode), mID(errorCode), mMessage(new std::string(message))
+{
+}
+
 Error::Error(GLenum errorCode, const char *msg, ...) : mCode(errorCode), mID(errorCode)
 {
     va_list vararg;
@@ -64,7 +69,42 @@ bool Error::operator!=(const Error &other) const
 {
     return !(*this == other);
 }
+
+namespace priv
+{
+template <GLenum EnumT>
+ErrorStream<EnumT>::ErrorStream()
+{
 }
+
+template <GLenum EnumT>
+ErrorStream<EnumT> &ErrorStream<EnumT>::operator<<(const char *cString)
+{
+    mErrorStream << cString;
+    return *this;
+}
+
+#if defined(ANGLE_PLATFORM_WINDOWS)
+template <GLenum EnumT>
+ErrorStream<EnumT> &ErrorStream<EnumT>::operator<<(HRESULT hresult)
+{
+    mErrorStream << "HRESULT: 0x" << std::ios::hex << hresult;
+    return *this;
+}
+#endif  // defined(ANGLE_PLATFORM_WINDOWS)
+
+template <GLenum EnumT>
+ErrorStream<EnumT>::operator gl::Error()
+{
+    return Error(EnumT, mErrorStream.str().c_str());
+}
+
+template class ErrorStream<GL_OUT_OF_MEMORY>;
+template class ErrorStream<GL_INVALID_OPERATION>;
+
+}  // namespace priv
+
+}  // namespace gl
 
 namespace egl
 {

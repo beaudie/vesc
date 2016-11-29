@@ -181,7 +181,6 @@ class Blit11 : angle::NonCopyable
     };
 
     gl::Error initResources();
-    void freeResources();
 
     ShaderSupport getShaderSupport(const Shader &shader);
 
@@ -262,12 +261,12 @@ class Blit11 : angle::NonCopyable
     std::map<SwizzleShaderType, Shader> mSwizzleShaderMap;
 
     bool mResourcesInitialized;
-    ID3D11Buffer *mVertexBuffer;
-    ID3D11SamplerState *mPointSampler;
-    ID3D11SamplerState *mLinearSampler;
-    ID3D11RasterizerState *mScissorEnabledRasterizerState;
-    ID3D11RasterizerState *mScissorDisabledRasterizerState;
-    ID3D11DepthStencilState *mDepthStencilState;
+    angle::ComPtr<ID3D11Buffer> mVertexBuffer;
+    angle::ComPtr<ID3D11SamplerState> mPointSampler;
+    angle::ComPtr<ID3D11SamplerState> mLinearSampler;
+    angle::ComPtr<ID3D11RasterizerState> mScissorEnabledRasterizerState;
+    angle::ComPtr<ID3D11RasterizerState> mScissorDisabledRasterizerState;
+    angle::ComPtr<ID3D11DepthStencilState> mDepthStencilState;
 
     d3d11::LazyInputLayout mQuad2DIL;
     d3d11::LazyShader<ID3D11VertexShader> mQuad2DVS;
@@ -279,7 +278,7 @@ class Blit11 : angle::NonCopyable
 
     d3d11::LazyBlendState mAlphaMaskBlendState;
 
-    ID3D11Buffer *mSwizzleCB;
+    angle::ComPtr<ID3D11Buffer> mSwizzleCB;
 
     d3d11::LazyShader<ID3D11VertexShader> mResolveDepthStencilVS;
     d3d11::LazyShader<ID3D11PixelShader> mResolveDepthPS;
