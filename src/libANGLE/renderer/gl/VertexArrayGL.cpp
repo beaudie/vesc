@@ -97,6 +97,26 @@ gl::Error VertexArrayGL::syncDrawElementsState(const gl::AttributesMask &activeA
                          primitiveRestartEnabled, outIndices);
 }
 
+gl::Error VertexArrayGL::syncElementArrayState() const
+{
+    gl::Buffer *elementArrayBuffer = mData.getElementArrayBuffer().get();
+    if (elementArrayBuffer != nullptr)
+    {
+        if (elementArrayBuffer != mAppliedElementArrayBuffer.get())
+        {
+            const BufferGL *bufferGL = GetImplAs<BufferGL>(elementArrayBuffer);
+            mStateManager->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferGL->getBufferID());
+            mAppliedElementArrayBuffer.set(elementArrayBuffer);
+        }
+    }
+    else
+    {
+        return Error(GL_INVALID_OPERATION, "Element array buffer must be bound");
+    }
+
+    return Error(GL_NO_ERROR);
+}
+
 gl::Error VertexArrayGL::syncDrawState(const gl::AttributesMask &activeAttributesMask,
                                        GLint first,
                                        GLsizei count,
@@ -141,13 +161,13 @@ gl::Error VertexArrayGL::syncDrawState(const gl::AttributesMask &activeAttribute
     return Error(GL_NO_ERROR);
 }
 
-Error VertexArrayGL::syncIndexData(GLsizei count,
-                                   GLenum type,
-                                   const GLvoid *indices,
-                                   bool primitiveRestartEnabled,
-                                   bool attributesNeedStreaming,
-                                   IndexRange *outIndexRange,
-                                   const GLvoid **outIndices) const
+gl::Error VertexArrayGL::syncIndexData(GLsizei count,
+                                       GLenum type,
+                                       const GLvoid *indices,
+                                       bool primitiveRestartEnabled,
+                                       bool attributesNeedStreaming,
+                                       IndexRange *outIndexRange,
+                                       const GLvoid **outIndices) const
 {
     ASSERT(outIndices);
 

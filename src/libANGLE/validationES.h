@@ -251,6 +251,11 @@ bool ValidateDrawElementsInstancedANGLE(Context *context,
                                         const GLvoid *indices,
                                         GLsizei primcount,
                                         IndexRange *indexRangeOut);
+bool ValidateDrawArraysIndirect(Context *context, GLenum mode, const GLvoid *indirect);
+bool ValidateDrawElementsIndirect(Context *context,
+                                  GLenum mode,
+                                  GLenum type,
+                                  const GLvoid *indirect);
 
 bool ValidateFramebufferTextureBase(Context *context, GLenum target, GLenum attachment,
                                     GLuint texture, GLint level);
