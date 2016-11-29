@@ -264,6 +264,12 @@ void ANGLETest::TearDown()
     angle::WriteDebugMessage("Exiting %s.%s\n", info->test_case_name(), info->name());
 
     swapBuffers();
+
+    if (eglGetError() != EGL_SUCCESS)
+    {
+        FAIL() << "egl error during swap.";
+    }
+
     mOSWindow->messageLoop();
 
     if (!destroyEGLContext())
