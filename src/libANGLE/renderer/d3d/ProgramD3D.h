@@ -170,7 +170,7 @@ class ProgramD3D : public ProgramImpl
                                                     ShaderExecutableD3D **outExecutable,
                                                     gl::InfoLog *infoLog);
 
-    LinkResult link(const gl::ContextState &data, gl::InfoLog &infoLog) override;
+    LinkResult link(ContextImpl *contextImpl, gl::InfoLog &infoLog) override;
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
 
     bool getUniformBlockSize(const std::string &blockName, size_t *sizeOut) const override;

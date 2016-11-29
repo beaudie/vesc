@@ -24,6 +24,8 @@ struct BlockMemberInfo;
 
 namespace rx
 {
+class ContextImpl;
+
 using LinkResult = gl::ErrorOrResult<bool>;
 
 class ContextImpl;
@@ -40,7 +42,7 @@ class ProgramImpl : angle::NonCopyable
     virtual gl::Error save(gl::BinaryOutputStream *stream) = 0;
     virtual void setBinaryRetrievableHint(bool retrievable) = 0;
 
-    virtual LinkResult link(const gl::ContextState &data, gl::InfoLog &infoLog) = 0;
+    virtual LinkResult link(ContextImpl *contextImpl, gl::InfoLog &infoLog) = 0;
     virtual GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) = 0;
 
     virtual void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) = 0;
@@ -87,6 +89,6 @@ class ProgramImpl : angle::NonCopyable
     const gl::ProgramState &mState;
 };
 
-}
+}  // namespace rx
 
 #endif // LIBANGLE_RENDERER_PROGRAMIMPL_H_
