@@ -84,6 +84,11 @@ class WindowSurfaceVk : public SurfaceImpl
     gl::Error getAttachmentRenderTarget(const gl::FramebufferAttachment::Target &target,
                                         FramebufferAttachmentRenderTarget **rtOut) override;
 
+    gl::ErrorOrResult<vk::Framebuffer *> getCurrentFramebuffer(
+        VkDevice device,
+        const vk::RenderPass &compatibleRenderPass);
+    void onBeginRenderPass();
+
   private:
     vk::Error initializeImpl();
     vk::Error nextSwapchainImage();
@@ -101,6 +106,7 @@ class WindowSurfaceVk : public SurfaceImpl
     uint32_t mCurrentSwapchainImageIndex;
     std::vector<vk::Image> mSwapchainImages;
     std::vector<vk::ImageView> mSwapchainImageViews;
+    std::vector<vk::Framebuffer> mSwapchainFramebuffers;
 };
 
 }  // namespace rx
