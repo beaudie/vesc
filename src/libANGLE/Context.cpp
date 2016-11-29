@@ -1670,6 +1670,18 @@ Error Context::drawRangeElements(GLenum mode,
     return mImplementation->drawRangeElements(mode, start, end, count, type, indices, indexRange);
 }
 
+Error Context::drawArraysIndirect(GLenum mode, const GLvoid *indirect)
+{
+    syncRendererState();
+    return mImplementation->drawArraysIndirect(mode, indirect);
+}
+
+Error Context::drawElementsIndirect(GLenum mode, GLenum type, const GLvoid *indirect)
+{
+    syncRendererState();
+    return mImplementation->drawElementsIndirect(mode, type, indirect);
+}
+
 Error Context::flush()
 {
     return mImplementation->flush();

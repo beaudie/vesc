@@ -662,6 +662,34 @@ gl::Error StateManagerGL::setDrawElementsState(const gl::ContextState &data,
     return setGenericDrawState(data);
 }
 
+gl::Error StateManagerGL::setDrawIndirectState(const gl::ContextState &data, GLenum type)
+{
+    const gl::State &state = data.getState();
+
+    if (type != GL_NONE)
+    {
+        const gl::VertexArray *vao = state.getVertexArray();
+        const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
+        gl::Error error            = vaoGL->syncElementArrayState();
+        if (error.isError())
+        {
+            return error;
+        }
+    }
+    gl::Buffer *drawIndirectBuffer = state.getDrawIndirectBuffer();
+    if (drawIndirectBuffer != nullptr)
+    {
+        const BufferGL *bufferGL = GetImplAs<BufferGL>(drawIndirectBuffer);
+        bindBuffer(GL_DRAW_INDIRECT_BUFFER, bufferGL->getBufferID());
+    }
+    else
+    {
+        return gl::Error(GL_INVALID_OPERATION, "Draw indirect buffer must be bound");
+    }
+
+    return setGenericDrawState(data);
+}
+
 void StateManagerGL::pauseTransformFeedback()
 {
     if (mPrevDrawTransformFeedback != nullptr)
