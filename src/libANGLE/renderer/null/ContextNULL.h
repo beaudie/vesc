@@ -52,6 +52,7 @@ class ContextNULL : public ContextImpl
                                 GLenum type,
                                 const GLvoid *indices,
                                 const gl::IndexRange &indexRange) override;
+    gl::Error drawIndirect(GLenum mode, GLenum type, const GLvoid *indirect) override;
 
     // CHROMIUM_path_rendering path drawing methods.
     void stencilFillPath(const gl::Path *path, GLenum fillMode, GLuint mask) override;

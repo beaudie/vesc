@@ -192,6 +192,12 @@ gl::Error Context11::drawRangeElements(GLenum mode,
     return mRenderer->genericDrawElements(this, mode, count, type, indices, 0, indexRange);
 }
 
+gl::Error Context11::drawIndirect(GLenum mode, GLenum type, const GLvoid *indirect)
+{
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 GLenum Context11::getResetStatus()
 {
     return mRenderer->getResetStatus();

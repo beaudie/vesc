@@ -55,11 +55,17 @@ void GL_APIENTRY DrawArraysIndirect(GLenum mode, const void *indirect)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!context->skipValidation())
+        if (!ValidateDrawArraysIndirect(context, mode, indirect))
         {
-            context->handleError(Error(GL_INVALID_OPERATION, "Entry point not implemented"));
+            return;
         }
-        UNIMPLEMENTED();
+
+        Error error = context->drawIndirect(mode, GL_NONE, indirect);
+        if (error.isError())
+        {
+            context->handleError(error);
+            return;
+        }
     }
 }
 
@@ -69,11 +75,17 @@ void GL_APIENTRY DrawElementsIndirect(GLenum mode, GLenum type, const void *indi
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!context->skipValidation())
+        if (!ValidateDrawElementsIndirect(context, mode, type, indirect))
         {
-            context->handleError(Error(GL_INVALID_OPERATION, "Entry point not implemented"));
+            return;
         }
-        UNIMPLEMENTED();
+
+        Error error = context->drawIndirect(mode, type, indirect);
+        if (error.isError())
+        {
+            context->handleError(error);
+            return;
+        }
     }
 }
 

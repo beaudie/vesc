@@ -77,6 +77,10 @@ class RendererGL : angle::NonCopyable
                                 GLenum type,
                                 const GLvoid *indices,
                                 const gl::IndexRange &indexRange);
+    gl::Error drawIndirect(const gl::ContextState &data,
+                           GLenum mode,
+                           GLenum type,
+                           const GLvoid *indirect);
 
     // CHROMIUM_path_rendering implementation
     void stencilFillPath(const gl::ContextState &state,

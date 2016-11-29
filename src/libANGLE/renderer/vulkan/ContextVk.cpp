@@ -106,6 +106,12 @@ gl::Error ContextVk::drawRangeElements(GLenum mode,
     return gl::Error(GL_INVALID_OPERATION);
 }
 
+gl::Error ContextVk::drawIndirect(GLenum mode, GLenum type, const GLvoid *indirect)
+{
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 GLenum ContextVk::getResetStatus()
 {
     UNIMPLEMENTED();

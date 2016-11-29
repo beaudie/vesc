@@ -53,6 +53,7 @@ class ContextVk : public ContextImpl
                                 GLenum type,
                                 const GLvoid *indices,
                                 const gl::IndexRange &indexRange) override;
+    gl::Error drawIndirect(GLenum mode, GLenum type, const GLvoid *indirect) override;
 
     // Device loss
     GLenum getResetStatus() override;
