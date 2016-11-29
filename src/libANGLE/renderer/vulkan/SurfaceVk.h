@@ -13,6 +13,7 @@
 #include <vulkan/vulkan.h>
 
 #include "libANGLE/renderer/SurfaceImpl.h"
+#include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/renderervk_utils.h"
 
 namespace rx
@@ -84,27 +85,22 @@ class WindowSurfaceVk : public SurfaceImpl
                                         FramebufferAttachmentRenderTarget **rtOut) override;
 
   private:
-    struct SwapchainImage final : angle::NonCopyable
-    {
-        SwapchainImage();
-        SwapchainImage(vk::Image &&image, vk::ImageView &&view);
-        SwapchainImage(SwapchainImage &&other);
-        SwapchainImage &operator=(SwapchainImage &&other);
-
-        vk::Image image;
-        vk::ImageView view;
-    };
-
     vk::Error initializeImpl();
+    vk::Error nextSwapchainImage();
+    vk::Error swapImpl();
 
     RendererVk *mRenderer;
     const egl::Config &mConfig;
     EGLNativeWindowType mNativeWindowType;
-    EGLint mWidth;
-    EGLint mHeight;
     VkSurfaceKHR mSurface;
     VkSwapchainKHR mSwapchain;
-    std::vector<SwapchainImage> mSwapchainImages;
+
+    RenderTargetVk mRenderTarget;
+    vk::Semaphore mPresentCompleteSemaphore;
+
+    uint32_t mCurrentSwapchainImageIndex;
+    std::vector<vk::Image> mSwapchainImages;
+    std::vector<vk::ImageView> mSwapchainImageViews;
 };
 
 }  // namespace rx
