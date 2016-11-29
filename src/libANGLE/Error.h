@@ -10,6 +10,7 @@
 #define LIBANGLE_ERROR_H_
 
 #include "angle_gl.h"
+#include "common/angleutils.h"
 #include <EGL/egl.h>
 
 #include <string>
@@ -18,10 +19,14 @@
 namespace gl
 {
 
+template <typename T>
+class ErrorOrResult;
+
 class Error final
 {
   public:
     explicit inline Error(GLenum errorCode);
+    Error(GLenum errorCode, const std::string &msg);
     Error(GLenum errorCode, const char *msg, ...);
     Error(GLenum errorCode, GLuint id, const char *msg, ...);
     inline Error(const Error &other);
@@ -47,6 +52,37 @@ class Error final
     GLuint mID;
     mutable std::unique_ptr<std::string> mMessage;
 };
+
+namespace priv
+{
+template <GLenum EnumT>
+class ErrorStream : angle::NonCopyable
+{
+  public:
+    ErrorStream();
+
+    // TODO(jmadill): Add more output filters.
+    ErrorStream &operator<<(const char *cString);
+
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    ErrorStream &operator<<(HRESULT hresult);
+#endif  // defined(ANGLE_PLATFORM_WINDOWS)
+
+    operator Error();
+
+    template <typename T>
+    operator ErrorOrResult<T>()
+    {
+        return static_cast<Error>(*this);
+    }
+
+  private:
+    std::ostringstream mErrorStream;
+};
+}  // namespace priv
+
+using OutOfMemory   = priv::ErrorStream<GL_OUT_OF_MEMORY>;
+using InternalError = priv::ErrorStream<GL_INVALID_OPERATION>;
 
 template <typename T>
 class ErrorOrResult
