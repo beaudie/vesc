@@ -26,6 +26,7 @@ VertexArrayState::~VertexArrayState()
         mVertexAttributes[i].buffer.set(nullptr);
     }
     mElementArrayBuffer.set(nullptr);
+    mDrawIndirectBuffer.set(nullptr);
 }
 
 VertexArray::VertexArray(rx::GLImplFactory *factory, GLuint id, size_t maxAttribs)
@@ -66,6 +67,11 @@ void VertexArray::detachBuffer(GLuint bufferName)
     if (mState.mElementArrayBuffer.id() == bufferName)
     {
         mState.mElementArrayBuffer.set(nullptr);
+    }
+
+    if (mState.mDrawIndirectBuffer.id() == bufferName)
+    {
+        mState.mDrawIndirectBuffer.set(nullptr);
     }
 }
 
@@ -124,6 +130,11 @@ void VertexArray::setElementArrayBuffer(Buffer *buffer)
 {
     mState.mElementArrayBuffer.set(buffer);
     mDirtyBits.set(DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
+}
+
+void VertexArray::setDrawIndirectBuffer(Buffer *buffer)
+{
+    mState.mDrawIndirectBuffer.set(buffer);
 }
 
 void VertexArray::syncImplState()

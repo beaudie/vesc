@@ -133,6 +133,7 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
         case GL_DEPTH_BITS:
         case GL_STENCIL_BITS:
         case GL_ELEMENT_ARRAY_BUFFER_BINDING:
+        case GL_DRAW_INDIRECT_BUFFER_BINDING:
         case GL_CULL_FACE_MODE:
         case GL_FRONT_FACE:
         case GL_ACTIVE_TEXTURE:

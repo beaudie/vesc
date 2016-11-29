@@ -40,6 +40,7 @@ class VertexArrayState final : public angle::NonCopyable
     const std::string &getLabel() const { return mLabel; }
 
     const BindingPointer<Buffer> &getElementArrayBuffer() const { return mElementArrayBuffer; }
+    const BindingPointer<Buffer> &getDrawIndirectBuffer() const { return mDrawIndirectBuffer; }
     size_t getMaxAttribs() const { return mVertexAttributes.size(); }
     size_t getMaxEnabledAttribute() const { return mMaxEnabledAttribute; }
     const std::vector<VertexAttribute> &getVertexAttributes() const { return mVertexAttributes; }
@@ -53,6 +54,7 @@ class VertexArrayState final : public angle::NonCopyable
     std::string mLabel;
     std::vector<VertexAttribute> mVertexAttributes;
     BindingPointer<Buffer> mElementArrayBuffer;
+    BindingPointer<Buffer> mDrawIndirectBuffer;
     size_t mMaxEnabledAttribute;
 };
 
@@ -76,10 +78,15 @@ class VertexArray final : public LabeledObject
                            bool normalized, bool pureInteger, GLsizei stride, const void *pointer);
 
     void setElementArrayBuffer(Buffer *buffer);
+    void setDrawIndirectBuffer(Buffer *buffer);
 
     const BindingPointer<Buffer> &getElementArrayBuffer() const
     {
         return mState.getElementArrayBuffer();
+    }
+    const BindingPointer<Buffer> &getDrawIndirectBuffer() const
+    {
+        return mState.getDrawIndirectBuffer();
     }
     size_t getMaxAttribs() const { return mState.getVertexAttributes().size(); }
     const std::vector<VertexAttribute> &getVertexAttributes() const

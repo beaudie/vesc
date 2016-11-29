@@ -1168,6 +1168,8 @@ Buffer *State::getTargetBuffer(GLenum target) const
       case GL_COPY_READ_BUFFER:          return mCopyReadBuffer.get();
       case GL_COPY_WRITE_BUFFER:         return mCopyWriteBuffer.get();
       case GL_ELEMENT_ARRAY_BUFFER:      return getVertexArray()->getElementArrayBuffer().get();
+      case GL_DRAW_INDIRECT_BUFFER:
+          return getVertexArray()->getDrawIndirectBuffer().get();
       case GL_PIXEL_PACK_BUFFER:         return mPack.pixelBuffer.get();
       case GL_PIXEL_UNPACK_BUFFER:       return mUnpack.pixelBuffer.get();
       case GL_TRANSFORM_FEEDBACK_BUFFER: return mTransformFeedback->getGenericBuffer().get();
@@ -1601,6 +1603,9 @@ void State::getIntegerv(const ContextState &data, GLenum pname, GLint *params)
       case GL_ARRAY_BUFFER_BINDING:                     *params = mArrayBuffer.id();                              break;
       case GL_ELEMENT_ARRAY_BUFFER_BINDING:             *params = getVertexArray()->getElementArrayBuffer().id(); break;
         //case GL_FRAMEBUFFER_BINDING:                    // now equivalent to GL_DRAW_FRAMEBUFFER_BINDING_ANGLE
+      case GL_DRAW_INDIRECT_BUFFER_BINDING:
+          *params = getVertexArray()->getDrawIndirectBuffer().id();
+          break;
       case GL_DRAW_FRAMEBUFFER_BINDING_ANGLE:           *params = mDrawFramebuffer->id();                         break;
       case GL_READ_FRAMEBUFFER_BINDING_ANGLE:           *params = mReadFramebuffer->id();                         break;
       case GL_RENDERBUFFER_BINDING:                     *params = mRenderbuffer.id();                             break;
