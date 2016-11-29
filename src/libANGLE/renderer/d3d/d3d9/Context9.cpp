@@ -178,6 +178,20 @@ gl::Error Context9::drawRangeElements(GLenum mode,
     return mRenderer->genericDrawElements(this, mode, count, type, indices, 0, indexRange);
 }
 
+gl::Error drawArraysIndirect(GLenum mode, const GLvoid *indirect)
+{
+    // D3D9 doesn't support ES 3.1.
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
+gl::Error drawElementsIndirect(GLenum mode, GLenum type, const GLvoid *indirect)
+{
+    // D3D9 doesn't support ES 3.1.
+    UNREACHABLE();
+    return gl::Error(GL_INVALID_OPERATION);
+}
+
 GLenum Context9::getResetStatus()
 {
     return mRenderer->getResetStatus();
