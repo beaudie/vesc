@@ -45,6 +45,23 @@ enum SamplerType
     SAMPLER_VERTEX
 };
 
+struct DrawArraysIndirectCommand
+{
+    GLuint count;
+    GLuint primCount;
+    GLuint first;
+    GLuint reservedMustBeZero;
+};
+
+struct DrawElementsIndirectCommand
+{
+    GLuint count;
+    GLuint primCount;
+    GLuint firstIndex;
+    GLuint baseVertex;
+    GLuint reservedMustBeZero;
+};
+
 struct Rectangle
 {
     Rectangle() : x(0), y(0), width(0), height(0) {}
