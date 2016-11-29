@@ -258,6 +258,7 @@ bool IsAndroid();
 bool IsLinux();
 bool IsOSX();
 bool IsWindows();
+bool IsVulkan();
 
 // Debug/Release
 bool IsDebug();
