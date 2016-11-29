@@ -3027,10 +3027,7 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
     return true;
 }
 
-static bool ValidateDrawBase(ValidationContext *context,
-                             GLenum mode,
-                             GLsizei count,
-                             GLsizei primcount)
+static bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
 {
     switch (mode)
     {
@@ -3167,7 +3164,7 @@ bool ValidateDrawArrays(ValidationContext *context,
         return false;
     }
 
-    if (!ValidateDrawBase(context, mode, count, primcount))
+    if (!ValidateDrawBase(context, mode, count))
     {
         return false;
     }
@@ -3238,13 +3235,7 @@ bool ValidateDrawArraysInstancedANGLE(Context *context,
     return ValidateDrawArraysInstanced(context, mode, first, count, primcount);
 }
 
-bool ValidateDrawElements(ValidationContext *context,
-                          GLenum mode,
-                          GLsizei count,
-                          GLenum type,
-                          const GLvoid *indices,
-                          GLsizei primcount,
-                          IndexRange *indexRangeOut)
+bool ValidateDrawElementsBase(ValidationContext *context, GLenum type)
 {
     switch (type)
     {
@@ -3275,6 +3266,22 @@ bool ValidateDrawElements(ValidationContext *context,
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;
     }
+
+    return true;
+}
+
+bool ValidateDrawElements(ValidationContext *context,
+                          GLenum mode,
+                          GLsizei count,
+                          GLenum type,
+                          const GLvoid *indices,
+                          GLsizei primcount,
+                          IndexRange *indexRangeOut)
+{
+    if (!ValidateDrawElementsBase(context, type))
+        return false;
+
+    const State &state = context->getGLState();
 
     // Check for mapped buffers
     if (state.hasMappedBuffer(GL_ELEMENT_ARRAY_BUFFER))
@@ -3321,7 +3328,7 @@ bool ValidateDrawElements(ValidationContext *context,
         return false;
     }
 
-    if (!ValidateDrawBase(context, mode, count, primcount))
+    if (!ValidateDrawBase(context, mode, count))
     {
         return false;
     }
@@ -3402,6 +3409,98 @@ bool ValidateDrawElementsInstancedANGLE(Context *context,
 
     return ValidateDrawElementsInstanced(context, mode, count, type, indices, primcount,
                                          indexRangeOut);
+}
+
+bool ValidateDrawIndirectBase(Context *context, GLenum mode, const GLvoid *indirect)
+{
+    // Here the third parameter 1 is only to pass the count validation.
+    if (!ValidateDrawBase(context, mode, 1))
+    {
+        return false;
+    }
+
+    const State &state = context->getGLState();
+
+    // An INVALID_OPERATION error is generated if zero is bound to VERTEX_ARRAY_BINDING,
+    // DRAW_INDIRECT_BUFFER or to any enabled vertex array.
+    if (!state.getVertexArrayId())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    gl::Buffer *drawIndirectBuffer = state.getDrawIndirectBuffer().get();
+    if (!drawIndirectBuffer)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    // An INVALID_VALUE error is generated if indirect is not a multiple of the size, in basic
+    // machine units, of uint.
+    GLint64 offset = reinterpret_cast<GLint64>(indirect);
+    if ((static_cast<GLuint>(offset) % sizeof(GLuint)) != 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE));
+        return false;
+    }
+    if (static_cast<GLuint>(offset) > (std::numeric_limits<GLuint>::max()))
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    // An INVALID_OPERATION error is generated if the command would source data beyond the end of
+    // the buffer object.
+    // The size of Draw*IndirectCommand is at least 4 uints.
+    if ((drawIndirectBuffer->getSize() - offset) < 4)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateDrawArraysIndirect(Context *context, GLenum mode, const GLvoid *indirect)
+{
+    const State &state                          = context->getGLState();
+    gl::TransformFeedback *curTransformFeedback = state.getCurrentTransformFeedback();
+    if (curTransformFeedback && curTransformFeedback->isActive() &&
+        !curTransformFeedback->isPaused())
+    {
+        // An INVALID_OPERATION error is generated if transform feedback is active and not paused.
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    if (!ValidateDrawIndirectBase(context, mode, indirect))
+        return false;
+
+    return true;
+}
+
+bool ValidateDrawElementsIndirect(Context *context,
+                                  GLenum mode,
+                                  GLenum type,
+                                  const GLvoid *indirect)
+{
+    if (!ValidateDrawElementsBase(context, type))
+        return false;
+
+    const State &state             = context->getGLState();
+    const gl::VertexArray *vao     = state.getVertexArray();
+    gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
+    if (!elementArrayBuffer)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    if (!ValidateDrawIndirectBase(context, mode, indirect))
+        return false;
+
+    return true;
 }
 
 bool ValidateFramebufferTextureBase(Context *context,

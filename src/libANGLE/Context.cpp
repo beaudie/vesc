@@ -325,6 +325,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
 
     bindVertexArray(0);
     bindArrayBuffer(0);
+    bindDrawIndirectBuffer(0);
     bindElementArrayBuffer(0);
 
     bindRenderbuffer(GL_RENDERBUFFER, 0);
@@ -957,6 +958,12 @@ void Context::bindArrayBuffer(GLuint bufferHandle)
 {
     Buffer *buffer = mResourceManager->checkBufferAllocation(mImplementation.get(), bufferHandle);
     mGLState.setArrayBufferBinding(buffer);
+}
+
+void Context::bindDrawIndirectBuffer(GLuint bufferHandle)
+{
+    Buffer *buffer = mResourceManager->checkBufferAllocation(mImplementation.get(), bufferHandle);
+    mGLState.setDrawIndirectBufferBinding(buffer);
 }
 
 void Context::bindElementArrayBuffer(GLuint bufferHandle)
@@ -1661,6 +1668,18 @@ Error Context::drawRangeElements(GLenum mode,
 {
     syncRendererState();
     return mImplementation->drawRangeElements(mode, start, end, count, type, indices, indexRange);
+}
+
+Error Context::drawArraysIndirect(GLenum mode, const GLvoid *indirect)
+{
+    syncRendererState();
+    return mImplementation->drawArraysIndirect(mode, indirect);
+}
+
+Error Context::drawElementsIndirect(GLenum mode, GLenum type, const GLvoid *indirect)
+{
+    syncRendererState();
+    return mImplementation->drawElementsIndirect(mode, type, indirect);
 }
 
 Error Context::flush()
@@ -3644,11 +3663,7 @@ void Context::bindBuffer(GLenum target, GLuint buffer)
             }
             break;
         case GL_DRAW_INDIRECT_BUFFER:
-            if (buffer != 0)
-            {
-                // Binding buffers to this binding point is not implemented yet.
-                UNIMPLEMENTED();
-            }
+            bindDrawIndirectBuffer(buffer);
             break;
         case GL_DISPATCH_INDIRECT_BUFFER:
             if (buffer != 0)

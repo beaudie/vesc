@@ -143,6 +143,7 @@ class Context final : public ValidationContext
     void bindPixelUnpackBuffer(GLuint bufferHandle);
     void useProgram(GLuint program);
     void bindTransformFeedback(GLuint transformFeedbackHandle);
+    void bindDrawIndirectBuffer(GLuint bufferHandle);
 
     Error beginQuery(GLenum target, GLuint query);
     Error endQuery(GLenum target);
@@ -309,6 +310,8 @@ class Context final : public ValidationContext
                             GLenum type,
                             const GLvoid *indices,
                             const IndexRange &indexRange);
+    Error drawArraysIndirect(GLenum mode, const GLvoid *indirect);
+    Error drawElementsIndirect(GLenum mode, GLenum type, const GLvoid *indirect);
 
     void blitFramebuffer(GLint srcX0,
                          GLint srcY0,
