@@ -42,8 +42,8 @@ namespace gl
 struct Caps;
 class Context;
 class ContextState;
-class ResourceManager;
 class Shader;
+class ShaderProgramManager;
 class InfoLog;
 class Buffer;
 class Framebuffer;
@@ -236,7 +236,7 @@ class ProgramState final : angle::NonCopyable
 class Program final : angle::NonCopyable, public LabeledObject
 {
   public:
-    Program(rx::GLImplFactory *factory, ResourceManager *manager, GLuint handle);
+    Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, GLuint handle);
     ~Program();
 
     GLuint id() const { return mHandle; }
@@ -496,7 +496,7 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     unsigned int mRefCount;
 
-    ResourceManager *mResourceManager;
+    ShaderProgramManager *mResourceManager;
     const GLuint mHandle;
 
     InfoLog mInfoLog;
