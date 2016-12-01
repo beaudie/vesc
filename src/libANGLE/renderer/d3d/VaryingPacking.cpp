@@ -12,8 +12,7 @@
 
 #include "common/utilities.h"
 #include "compiler/translator/blocklayoutHLSL.h"
-#include "libANGLE/renderer/d3d/DynamicHLSL.h"
-#include "libANGLE/renderer/d3d/ProgramD3D.h"
+#include "libANGLE/Program.h"
 
 namespace rx
 {

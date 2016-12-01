@@ -56,14 +56,6 @@ struct TranslatedIndexData;
 class UniformStorageD3D;
 class VertexBuffer;
 
-enum ShaderType
-{
-    SHADER_VERTEX,
-    SHADER_PIXEL,
-    SHADER_GEOMETRY,
-    SHADER_TYPE_MAX
-};
-
 struct DeviceIdentifier
 {
     UINT VendorId;
