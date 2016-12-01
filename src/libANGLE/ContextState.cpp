@@ -15,12 +15,12 @@ namespace gl
 {
 
 ContextState::ContextState(uintptr_t contextIn,
+                           const ContextState *shareContextState,
                            const Version &clientVersion,
                            State *stateIn,
                            const Caps &capsIn,
                            const TextureCapsMap &textureCapsIn,
                            const Extensions &extensionsIn,
-                           const ResourceManager *resourceManagerIn,
                            const Limitations &limitationsIn,
                            const ResourceMap<Framebuffer> &framebufferMap)
     : mClientVersion(clientVersion),
@@ -29,14 +29,59 @@ ContextState::ContextState(uintptr_t contextIn,
       mCaps(capsIn),
       mTextureCaps(textureCapsIn),
       mExtensions(extensionsIn),
-      mResourceManager(resourceManagerIn),
       mLimitations(limitationsIn),
-      mFramebufferMap(framebufferMap)
+      mFramebufferMap(framebufferMap),
+      mBuffers(nullptr),
+      mShaders(nullptr),
+      mPrograms(nullptr),
+      mTextures(nullptr),
+      mRenderbuffers(nullptr),
+      mSamplers(nullptr),
+      mFenceSyncs(nullptr),
+      mPaths(nullptr)
 {
+    if (shareContextState != nullptr)
+    {
+        mBuffers = shareContextState->mBuffers;
+        mBuffers->addRef();
+        mShaders = shareContextState->mShaders;
+        mShaders->addRef();
+        mPrograms = shareContextState->mPrograms;
+        mPrograms->addRef();
+        mTextures = shareContextState->mTextures;
+        mTextures->addRef();
+        mRenderbuffers = shareContextState->mRenderbuffers;
+        mRenderbuffers->addRef();
+        mSamplers = shareContextState->mSamplers;
+        mSamplers->addRef();
+        mFenceSyncs = shareContextState->mFenceSyncs;
+        mFenceSyncs->addRef();
+        mPaths = shareContextState->mPaths;
+        mPaths->addRef();
+    }
+    else
+    {
+        mBuffers       = new BufferManager();
+        mShaders       = new ShaderManager();
+        mPrograms      = new ProgramManager();
+        mTextures      = new TextureManager();
+        mRenderbuffers = new RenderbufferManager();
+        mSamplers      = new SamplerManager();
+        mFenceSyncs    = new FenceSyncManager();
+        mPaths         = new PathManager();
+    }
 }
 
 ContextState::~ContextState()
 {
+    mBuffers->release();
+    mShaders->release();
+    mPrograms->release();
+    mTextures->release();
+    mRenderbuffers->release();
+    mSamplers->release();
+    mFenceSyncs->release();
+    mPaths->release();
 }
 
 const TextureCaps &ContextState::getTextureCap(GLenum internalFormat) const
@@ -44,22 +89,22 @@ const TextureCaps &ContextState::getTextureCap(GLenum internalFormat) const
     return mTextureCaps.get(internalFormat);
 }
 
-ValidationContext::ValidationContext(const Version &clientVersion,
+ValidationContext::ValidationContext(const ValidationContext *shareContext,
+                                     const Version &clientVersion,
                                      State *state,
                                      const Caps &caps,
                                      const TextureCapsMap &textureCaps,
                                      const Extensions &extensions,
-                                     const ResourceManager *resourceManager,
                                      const Limitations &limitations,
                                      const ResourceMap<Framebuffer> &framebufferMap,
                                      bool skipValidation)
     : mState(reinterpret_cast<uintptr_t>(this),
+             shareContext ? &shareContext->mState : nullptr,
              clientVersion,
              state,
              caps,
              textureCaps,
              extensions,
-             resourceManager,
              limitations,
              framebufferMap),
       mSkipValidation(skipValidation)
@@ -597,27 +642,27 @@ bool ValidationContext::getIndexedQueryParameterInfo(GLenum target,
 
 Program *ValidationContext::getProgram(GLuint handle) const
 {
-    return mState.mResourceManager->getProgram(handle);
+    return mState.mPrograms->getProgram(handle);
 }
 
 Shader *ValidationContext::getShader(GLuint handle) const
 {
-    return mState.mResourceManager->getShader(handle);
+    return mState.mShaders->getShader(handle);
 }
 
 bool ValidationContext::isTextureGenerated(GLuint texture) const
 {
-    return mState.mResourceManager->isTextureGenerated(texture);
+    return mState.mTextures->isTextureGenerated(texture);
 }
 
 bool ValidationContext::isBufferGenerated(GLuint buffer) const
 {
-    return mState.mResourceManager->isBufferGenerated(buffer);
+    return mState.mBuffers->isBufferGenerated(buffer);
 }
 
 bool ValidationContext::isRenderbufferGenerated(GLuint renderbuffer) const
 {
-    return mState.mResourceManager->isRenderbufferGenerated(renderbuffer);
+    return mState.mRenderbuffers->isRenderbufferGenerated(renderbuffer);
 }
 
 bool ValidationContext::isFramebufferGenerated(GLuint framebuffer) const
