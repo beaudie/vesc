@@ -981,7 +981,7 @@ Blit11::ShaderSupport Blit11::getShaderSupport(const Shader &shader)
     return support;
 }
 
-gl::Error Blit11::swizzleTexture(ID3D11ShaderResourceView *source,
+gl::Error Blit11::swizzleTexture(const angle::ComPtr<ID3D11ShaderResourceView> &source,
                                  ID3D11RenderTargetView *dest,
                                  const gl::Extents &size,
                                  const gl::SwizzleState &swizzleTarget)
@@ -1109,7 +1109,7 @@ gl::Error Blit11::swizzleTexture(ID3D11ShaderResourceView *source,
     deviceContext->RSSetViewports(1, &viewport);
 
     // Apply textures
-    stateManager->setShaderResource(gl::SAMPLER_PIXEL, 0, source);
+    stateManager->setShaderResource(gl::SAMPLER_PIXEL, 0, source.Get());
 
     // Apply samplers
     deviceContext->PSSetSamplers(0, 1, mPointSampler.GetAddressOf());

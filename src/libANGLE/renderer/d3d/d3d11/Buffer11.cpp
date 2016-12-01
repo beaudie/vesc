@@ -148,7 +148,7 @@ class Buffer11::NativeStorage : public Buffer11::BufferStorage
 
     bool isMappable(GLbitfield access) const override;
 
-    ID3D11Buffer *getNativeStorage() const { return mNativeStorage; }
+    ID3D11Buffer *getNativeStorage() const { return mNativeStorage.Get(); }
     gl::ErrorOrResult<CopyResult> copyFromStorage(BufferStorage *source,
                                                   size_t sourceOffset,
                                                   size_t size,
@@ -168,11 +168,10 @@ class Buffer11::NativeStorage : public Buffer11::BufferStorage
                                Renderer11 *renderer,
                                BufferUsage usage,
                                unsigned int bufferSize);
-    void clearSRVs();
 
-    ID3D11Buffer *mNativeStorage;
+    angle::ComPtr<ID3D11Buffer> mNativeStorage;
     const angle::BroadcastChannel *mOnStorageChanged;
-    std::map<DXGI_FORMAT, ID3D11ShaderResourceView *> mBufferResourceViews;
+    std::map<DXGI_FORMAT, angle::ComPtr<ID3D11ShaderResourceView>> mBufferResourceViews;
 };
 
 // A emulated indexed buffer storage represents an underlying D3D11 buffer for data
@@ -204,7 +203,7 @@ class Buffer11::EmulatedIndexedStorage : public Buffer11::BufferStorage
     void unmap() override;
 
   private:
-    ID3D11Buffer *mNativeStorage;       // contains expanded data for use by D3D
+    angle::ComPtr<ID3D11Buffer> mNativeStorage;  // contains expanded data for use by D3D
     MemoryBuffer mMemoryBuffer;         // original data (not expanded)
     MemoryBuffer mIndicesMemoryBuffer;  // indices data
 };
@@ -401,7 +400,7 @@ gl::Error Buffer11::copySubData(BufferImpl *source,
 
     if (!copySource || !copyDest)
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate internal staging buffer.");
+        return gl::OutOfMemory() << "Failed to allocate internal staging buffer.";
     }
 
     // If copying to/from a pixel pack buffer, we must have a staging or
@@ -473,7 +472,7 @@ gl::Error Buffer11::mapRange(size_t offset, size_t length, GLbitfield access, GL
 
     if (!mMappedStorage)
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to allocate mappable internal buffer.");
+        return gl::OutOfMemory() << "Failed to allocate mappable internal buffer.";
     }
 
     if ((access & GL_MAP_WRITE_BIT) > 0)
@@ -924,8 +923,6 @@ Buffer11::NativeStorage::NativeStorage(Renderer11 *renderer,
 
 Buffer11::NativeStorage::~NativeStorage()
 {
-    SafeRelease(mNativeStorage);
-    clearSRVs();
 }
 
 bool Buffer11::NativeStorage::isMappable(GLbitfield access) const
@@ -990,8 +987,9 @@ gl::ErrorOrResult<CopyResult> Buffer11::NativeStorage::copyFromStorage(BufferSto
 
         ID3D11Buffer *sourceBuffer = GetAs<NativeStorage>(source)->getNativeStorage();
 
-        context->CopySubresourceRegion(mNativeStorage, 0, static_cast<unsigned int>(destOffset), 0,
-                                       0, sourceBuffer, 0, &srcBox);
+        context->CopySubresourceRegion(mNativeStorage.Get(), 0,
+                                       static_cast<unsigned int>(destOffset), 0, 0, sourceBuffer, 0,
+                                       &srcBox);
     }
 
     return createBuffer ? CopyResult::RECREATED : CopyResult::NOT_RECREATED;
@@ -1010,8 +1008,7 @@ gl::Error Buffer11::NativeStorage::resize(size_t size, bool preserveData)
 
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY, "Failed to create internal buffer, result: 0x%X.",
-                         result);
+        return gl::OutOfMemory() << "Failed to create internal buffer, " << result;
     }
 
     d3d11::SetDebugName(newBuffer, "Buffer11::NativeStorage");
@@ -1029,17 +1026,16 @@ gl::Error Buffer11::NativeStorage::resize(size_t size, bool preserveData)
         srcBox.front  = 0;
         srcBox.back   = 1;
 
-        context->CopySubresourceRegion(newBuffer, 0, 0, 0, 0, mNativeStorage, 0, &srcBox);
+        context->CopySubresourceRegion(newBuffer, 0, 0, 0, 0, mNativeStorage.Get(), 0, &srcBox);
     }
 
     // No longer need the old buffer
-    SafeRelease(mNativeStorage);
     mNativeStorage = newBuffer;
 
     mBufferSize = bufferDesc.ByteWidth;
 
     // Free the SRVs.
-    clearSRVs();
+    mBufferResourceViews.clear();
 
     // Notify that the storage has changed.
     if (mOnStorageChanged)
@@ -1125,23 +1121,23 @@ gl::Error Buffer11::NativeStorage::map(size_t offset,
     D3D11_MAP d3dMapType         = gl_d3d11::GetD3DMapTypeFromBits(mUsage, access);
     UINT d3dMapFlag              = ((access & GL_MAP_UNSYNCHRONIZED_BIT) != 0 ? D3D11_MAP_FLAG_DO_NOT_WAIT : 0);
 
-    HRESULT result = context->Map(mNativeStorage, 0, d3dMapType, d3dMapFlag, &mappedResource);
+    HRESULT result = context->Map(mNativeStorage.Get(), 0, d3dMapType, d3dMapFlag, &mappedResource);
     ASSERT(SUCCEEDED(result));
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY,
-                         "Failed to map native storage in Buffer11::NativeStorage::map");
+        return gl::OutOfMemory() << "Failed to map native storage in Buffer11::NativeStorage::map, "
+                                 << result;
     }
     ASSERT(mappedResource.pData);
     *mapPointerOut = static_cast<uint8_t *>(mappedResource.pData) + offset;
-    return gl::Error(GL_NO_ERROR);
+    return gl::NoError();
 }
 
 void Buffer11::NativeStorage::unmap()
 {
     ASSERT(isMappable(GL_MAP_WRITE_BIT) || isMappable(GL_MAP_READ_BIT));
     ID3D11DeviceContext *context = mRenderer->getDeviceContext();
-    context->Unmap(mNativeStorage, 0);
+    context->Unmap(mNativeStorage.Get(), 0);
 }
 
 gl::ErrorOrResult<ID3D11ShaderResourceView *> Buffer11::NativeStorage::getSRVForFormat(
@@ -1151,7 +1147,7 @@ gl::ErrorOrResult<ID3D11ShaderResourceView *> Buffer11::NativeStorage::getSRVFor
 
     if (bufferSRVIt != mBufferResourceViews.end())
     {
-        return bufferSRVIt->second;
+        return bufferSRVIt->second.Get();
     }
 
     ID3D11Device *device                = mRenderer->getDevice();
@@ -1165,26 +1161,19 @@ gl::ErrorOrResult<ID3D11ShaderResourceView *> Buffer11::NativeStorage::getSRVFor
     bufferSRVDesc.ViewDimension        = D3D11_SRV_DIMENSION_BUFFER;
     bufferSRVDesc.Format               = srvFormat;
 
-    HRESULT result = device->CreateShaderResourceView(mNativeStorage, &bufferSRVDesc, &bufferSRV);
+    HRESULT result =
+        device->CreateShaderResourceView(mNativeStorage.Get(), &bufferSRVDesc, &bufferSRV);
     ASSERT(SUCCEEDED(result));
     if (FAILED(result))
     {
-        return gl::Error(GL_OUT_OF_MEMORY,
-                         "Error creating buffer SRV in Buffer11::NativeStorage::getSRVForFormat");
+        return gl::OutOfMemory()
+               << "Error creating buffer SRV in Buffer11::NativeStorage::getSRVForFormat, "
+               << result;
     }
 
     mBufferResourceViews[srvFormat] = bufferSRV;
 
     return bufferSRV;
-}
-
-void Buffer11::NativeStorage::clearSRVs()
-{
-    for (auto &srv : mBufferResourceViews)
-    {
-        SafeRelease(srv.second);
-    }
-    mBufferResourceViews.clear();
 }
 
 // Buffer11::EmulatedIndexStorage implementation
@@ -1196,7 +1185,6 @@ Buffer11::EmulatedIndexedStorage::EmulatedIndexedStorage(Renderer11 *renderer)
 
 Buffer11::EmulatedIndexedStorage::~EmulatedIndexedStorage()
 {
-    SafeRelease(mNativeStorage);
 }
 
 gl::ErrorOrResult<ID3D11Buffer *> Buffer11::EmulatedIndexedStorage::getNativeStorage(
@@ -1209,7 +1197,7 @@ gl::ErrorOrResult<ID3D11Buffer *> Buffer11::EmulatedIndexedStorage::getNativeSto
     // be cleared to avoid unnecessary recreation of the buffer.
     if (mNativeStorage == nullptr || indexInfo->srcIndicesChanged)
     {
-        SafeRelease(mNativeStorage);
+        mNativeStorage.Reset();
 
         // Copy the source index data. This ensures that the lifetime of the indices pointer
         // stays with this storage until the next time we invalidate.
@@ -1232,9 +1220,8 @@ gl::ErrorOrResult<ID3D11Buffer *> Buffer11::EmulatedIndexedStorage::getNativeSto
 
         if (!mIndicesMemoryBuffer.resize(indicesDataSize))
         {
-            return gl::Error(GL_OUT_OF_MEMORY,
-                             "Error resizing index memory buffer in "
-                             "Buffer11::EmulatedIndexedStorage::getNativeStorage");
+            return gl::OutOfMemory() << "Error resizing index memory buffer in "
+                                        "Buffer11::EmulatedIndexedStorage::getNativeStorage";
         }
 
         memcpy(mIndicesMemoryBuffer.data(), indexInfo->srcIndices, indicesDataSize);
@@ -1253,9 +1240,8 @@ gl::ErrorOrResult<ID3D11Buffer *> Buffer11::EmulatedIndexedStorage::getNativeSto
         MemoryBuffer expandedData;
         if (!expandedData.resize(expandedDataSize))
         {
-            return gl::Error(
-                GL_OUT_OF_MEMORY,
-                "Error resizing buffer in Buffer11::EmulatedIndexedStorage::getNativeStorage");
+            return gl::OutOfMemory()
+                   << "Error resizing buffer in Buffer11::EmulatedIndexedStorage::getNativeStorage";
         }
 
         // Clear the contents of the allocated buffer
@@ -1305,16 +1291,16 @@ gl::ErrorOrResult<ID3D11Buffer *> Buffer11::EmulatedIndexedStorage::getNativeSto
 
         D3D11_SUBRESOURCE_DATA subResourceData = {expandedData.data(), 0, 0};
 
-        HRESULT result = device->CreateBuffer(&bufferDesc, &subResourceData, &mNativeStorage);
+        HRESULT result =
+            device->CreateBuffer(&bufferDesc, &subResourceData, mNativeStorage.GetAddressOf());
         if (FAILED(result))
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "Could not create emulated index data buffer: %08lX",
-                             result);
+            return gl::OutOfMemory() << "Could not create emulated index data buffer, " << result;
         }
         d3d11::SetDebugName(mNativeStorage, "Buffer11::EmulatedIndexedStorage");
     }
 
-    return mNativeStorage;
+    return mNativeStorage.Get();
 }
 
 gl::ErrorOrResult<CopyResult> Buffer11::EmulatedIndexedStorage::copyFromStorage(
@@ -1338,12 +1324,12 @@ gl::Error Buffer11::EmulatedIndexedStorage::resize(size_t size, bool preserveDat
     {
         if (!mMemoryBuffer.resize(size))
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to resize EmulatedIndexedStorage");
+            return gl::OutOfMemory() << "Failed to resize EmulatedIndexedStorage";
         }
         mBufferSize = size;
     }
 
-    return gl::Error(GL_NO_ERROR);
+    return gl::NoError();
 }
 
 gl::Error Buffer11::EmulatedIndexedStorage::map(size_t offset,
@@ -1353,7 +1339,7 @@ gl::Error Buffer11::EmulatedIndexedStorage::map(size_t offset,
 {
     ASSERT(!mMemoryBuffer.empty() && offset + length <= mMemoryBuffer.size());
     *mapPointerOut = mMemoryBuffer.data() + offset;
-    return gl::Error(GL_NO_ERROR);
+    return gl::NoError();
 }
 
 void Buffer11::EmulatedIndexedStorage::unmap()
@@ -1395,12 +1381,12 @@ gl::Error Buffer11::PackStorage::resize(size_t size, bool preserveData)
     {
         if (!mMemoryBuffer.resize(size))
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to resize internal buffer storage.");
+            return gl::OutOfMemory() << "Failed to resize internal buffer storage.";
         }
         mBufferSize = size;
     }
 
-    return gl::Error(GL_NO_ERROR);
+    return gl::NoError();
 }
 
 gl::Error Buffer11::PackStorage::map(size_t offset,
@@ -1419,7 +1405,7 @@ gl::Error Buffer11::PackStorage::map(size_t offset,
     mDataModified = (mDataModified || (access & GL_MAP_WRITE_BIT) != 0);
 
     *mapPointerOut = mMemoryBuffer.data() + offset;
-    return gl::Error(GL_NO_ERROR);
+    return gl::NoError();
 }
 
 void Buffer11::PackStorage::unmap()
@@ -1520,7 +1506,7 @@ gl::Error Buffer11::SystemMemoryStorage::resize(size_t size, bool preserveData)
     {
         if (!mSystemCopy.resize(size))
         {
-            return gl::Error(GL_OUT_OF_MEMORY, "Failed to resize SystemMemoryStorage");
+            return gl::OutOfMemory() << "Failed to resize SystemMemoryStorage";
         }
         mBufferSize = size;
     }
@@ -1535,7 +1521,7 @@ gl::Error Buffer11::SystemMemoryStorage::map(size_t offset,
 {
     ASSERT(!mSystemCopy.empty() && offset + length <= mSystemCopy.size());
     *mapPointerOut = mSystemCopy.data() + offset;
-    return gl::Error(GL_NO_ERROR);
+    return gl::NoError();
 }
 
 void Buffer11::SystemMemoryStorage::unmap()

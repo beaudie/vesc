@@ -26,7 +26,7 @@ class Blit11 : angle::NonCopyable
     explicit Blit11(Renderer11 *renderer);
     ~Blit11();
 
-    gl::Error swizzleTexture(ID3D11ShaderResourceView *source,
+    gl::Error swizzleTexture(const angle::ComPtr<ID3D11ShaderResourceView> &source,
                              ID3D11RenderTargetView *dest,
                              const gl::Extents &size,
                              const gl::SwizzleState &swizzleTarget);
