@@ -40,8 +40,9 @@ class Clear11 : angle::NonCopyable
         RenderTarget11 *renderTarget;
     };
 
-    ID3D11BlendState *getBlendState(const std::vector<MaskedRenderTarget> &rts);
-    ID3D11DepthStencilState *getDepthStencilState(const ClearParameters &clearParams);
+    gl::ErrorOrResult<ID3D11BlendState *> getBlendState(const std::vector<MaskedRenderTarget> &rts);
+    gl::ErrorOrResult<ID3D11DepthStencilState *> getDepthStencilState(
+        const ClearParameters &clearParams);
 
     struct ClearShader final : public angle::NonCopyable
     {
@@ -67,8 +68,8 @@ class Clear11 : angle::NonCopyable
     {
         bool maskChannels[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT][4];
     };
-    typedef bool(*ClearBlendInfoComparisonFunction)(const ClearBlendInfo&, const ClearBlendInfo &);
-    typedef std::map<ClearBlendInfo, ID3D11BlendState*, ClearBlendInfoComparisonFunction> ClearBlendStateMap;
+    using ClearBlendInfoComparisonFunction = bool (*)(const ClearBlendInfo &,
+                                                      const ClearBlendInfo &);
 
     struct ClearDepthStencilInfo
     {
@@ -76,21 +77,25 @@ class Clear11 : angle::NonCopyable
         bool clearStencil;
         UINT8 stencilWriteMask;
     };
-    typedef bool(*ClearDepthStencilInfoComparisonFunction)(const ClearDepthStencilInfo&, const ClearDepthStencilInfo &);
-    typedef std::map<ClearDepthStencilInfo, ID3D11DepthStencilState*, ClearDepthStencilInfoComparisonFunction> ClearDepthStencilStateMap;
+    using ClearDepthStencilInfoComparisonFunction = bool (*)(const ClearDepthStencilInfo &,
+                                                             const ClearDepthStencilInfo &);
 
     Renderer11 *mRenderer;
 
-    ClearBlendStateMap mClearBlendStates;
+    std::map<ClearBlendInfo, angle::ComPtr<ID3D11BlendState>, ClearBlendInfoComparisonFunction>
+        mClearBlendStates;
 
     ClearShader *mFloatClearShader;
     ClearShader *mUintClearShader;
     ClearShader *mIntClearShader;
 
-    ClearDepthStencilStateMap mClearDepthStencilStates;
+    std::map<ClearDepthStencilInfo,
+             angle::ComPtr<ID3D11DepthStencilState>,
+             ClearDepthStencilInfoComparisonFunction>
+        mClearDepthStencilStates;
 
-    ID3D11Buffer *mVertexBuffer;
-    ID3D11RasterizerState *mRasterizerState;
+    angle::ComPtr<ID3D11Buffer> mVertexBuffer;
+    angle::ComPtr<ID3D11RasterizerState> mRasterizerState;
 };
 
 }

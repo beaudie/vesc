@@ -1410,7 +1410,7 @@ gl::Error Renderer11::setSamplerState(gl::SamplerType type,
 
 gl::Error Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *texture)
 {
-    ID3D11ShaderResourceView *textureSRV = NULL;
+    angle::ComPtr<ID3D11ShaderResourceView> textureSRV;
 
     if (texture)
     {
@@ -1428,7 +1428,7 @@ gl::Error Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *t
 
         // If we get NULL back from getSRV here, something went wrong in the texture class and we're
         // unexpectedly missing the shader resource view
-        ASSERT(textureSRV != NULL);
+        ASSERT(textureSRV != nullptr);
 
         textureImpl->resetDirty();
     }
@@ -1438,7 +1438,7 @@ gl::Error Renderer11::setTexture(gl::SamplerType type, int index, gl::Texture *t
            (type == gl::SAMPLER_VERTEX &&
             static_cast<unsigned int>(index) < getNativeCaps().maxVertexTextureImageUnits));
 
-    mStateManager.setShaderResource(type, index, textureSRV);
+    mStateManager.setShaderResource(type, index, textureSRV.Get());
 
     return gl::Error(GL_NO_ERROR);
 }
@@ -3139,13 +3139,13 @@ gl::Error Renderer11::copyTexture(const gl::Texture *source,
     if (unpackPremultiplyAlpha == unpackUnmultiplyAlpha && !unpackFlipY &&
         sourceStorage11->getFormatSet().texFormat == destStorage11->getFormatSet().texFormat)
     {
-        ID3D11Resource *sourceResource = nullptr;
+        angle::ComPtr<ID3D11Resource> sourceResource;
         ANGLE_TRY(sourceStorage11->getResource(&sourceResource));
 
         gl::ImageIndex sourceIndex = gl::ImageIndex::Make2D(sourceLevel);
         UINT sourceSubresource     = sourceStorage11->getSubresourceIndex(sourceIndex);
 
-        ID3D11Resource *destResource = nullptr;
+        angle::ComPtr<ID3D11Resource> destResource;
         ANGLE_TRY(destStorage11->getResource(&destResource));
 
         gl::ImageIndex destIndex = gl::ImageIndex::Make2D(destLevel);
@@ -3160,13 +3160,13 @@ gl::Error Renderer11::copyTexture(const gl::Texture *source,
             1u,
         };
 
-        mDeviceContext->CopySubresourceRegion(destResource, destSubresource, destOffset.x,
-                                              destOffset.y, destOffset.z, sourceResource,
+        mDeviceContext->CopySubresourceRegion(destResource.Get(), destSubresource, destOffset.x,
+                                              destOffset.y, destOffset.z, sourceResource.Get(),
                                               sourceSubresource, &sourceBox);
     }
     else
     {
-        ID3D11ShaderResourceView *sourceSRV = nullptr;
+        angle::ComPtr<ID3D11ShaderResourceView> sourceSRV;
         ANGLE_TRY(sourceStorage11->getSRVLevels(sourceLevel, sourceLevel, &sourceSRV));
 
         gl::ImageIndex destIndex             = gl::ImageIndex::Make2D(destLevel);
@@ -3193,9 +3193,9 @@ gl::Error Renderer11::copyTexture(const gl::Texture *source,
 
         // Use nearest filtering because source and destination are the same size for the direct
         // copy
-        ANGLE_TRY(mBlit->copyTexture(sourceSRV, sourceArea, sourceSize, destRTV, destArea, destSize,
-                                     nullptr, destFormat, GL_NEAREST, false, unpackPremultiplyAlpha,
-                                     unpackUnmultiplyAlpha));
+        ANGLE_TRY(mBlit->copyTexture(sourceSRV.Get(), sourceArea, sourceSize, destRTV, destArea,
+                                     destSize, nullptr, destFormat, GL_NEAREST, false,
+                                     unpackPremultiplyAlpha, unpackUnmultiplyAlpha));
     }
 
     destStorage11->markLevelDirty(destLevel);
@@ -3211,7 +3211,7 @@ gl::Error Renderer11::copyCompressedTexture(const gl::Texture *source,
     TextureStorage11_2D *destStorage11 = GetAs<TextureStorage11_2D>(storage);
     ASSERT(destStorage11);
 
-    ID3D11Resource *destResource = nullptr;
+    angle::ComPtr<ID3D11Resource> destResource;
     ANGLE_TRY(destStorage11->getResource(&destResource));
 
     gl::ImageIndex destIndex = gl::ImageIndex::Make2D(destLevel);
@@ -3226,14 +3226,14 @@ gl::Error Renderer11::copyCompressedTexture(const gl::Texture *source,
     TextureStorage11_2D *sourceStorage11 = GetAs<TextureStorage11_2D>(sourceStorage);
     ASSERT(sourceStorage11);
 
-    ID3D11Resource *sourceResource = nullptr;
+    angle::ComPtr<ID3D11Resource> sourceResource;
     ANGLE_TRY(sourceStorage11->getResource(&sourceResource));
 
     gl::ImageIndex sourceIndex = gl::ImageIndex::Make2D(sourceLevel);
     UINT sourceSubresource     = sourceStorage11->getSubresourceIndex(sourceIndex);
 
-    mDeviceContext->CopySubresourceRegion(destResource, destSubresource, 0, 0, 0, sourceResource,
-                                          sourceSubresource, nullptr);
+    mDeviceContext->CopySubresourceRegion(destResource.Get(), destSubresource, 0, 0, 0,
+                                          sourceResource.Get(), sourceSubresource, nullptr);
 
     return gl::NoError();
 }
@@ -3738,11 +3738,11 @@ gl::Error Renderer11::generateMipmapUsingD3D(TextureStorage *storage,
     ASSERT(storage11->isRenderTarget());
     ASSERT(storage11->supportsNativeMipmapFunction());
 
-    ID3D11ShaderResourceView *srv;
+    angle::ComPtr<ID3D11ShaderResourceView> srv;
     ANGLE_TRY(storage11->getSRVLevels(textureState.getEffectiveBaseLevel(),
                                       textureState.getEffectiveMaxLevel(), &srv));
 
-    mDeviceContext->GenerateMips(srv);
+    mDeviceContext->GenerateMips(srv.Get());
 
     return gl::NoError();
 }

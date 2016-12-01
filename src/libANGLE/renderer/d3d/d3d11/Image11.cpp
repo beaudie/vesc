@@ -310,12 +310,12 @@ gl::Error Image11::copyFromTexStorage(const gl::ImageIndex &imageIndex, TextureS
 {
     TextureStorage11 *storage11 = GetAs<TextureStorage11>(source);
 
-    ID3D11Resource *resource = nullptr;
+    angle::ComPtr<ID3D11Resource> resource;
     ANGLE_TRY(storage11->getResource(&resource));
 
     UINT subresourceIndex = storage11->getSubresourceIndex(imageIndex);
     TextureHelper11 textureHelper =
-        TextureHelper11::MakeAndReference(resource, storage11->getFormatSet());
+        TextureHelper11::MakeAndReference(resource.Get(), storage11->getFormatSet());
 
     gl::Box sourceBox(0, 0, 0, mWidth, mHeight, mDepth);
     return copyWithoutConversion(gl::Offset(), sourceBox, textureHelper, subresourceIndex);
