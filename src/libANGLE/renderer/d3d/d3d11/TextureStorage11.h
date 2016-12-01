@@ -117,7 +117,7 @@ class TextureStorage11 : public TextureStorage
     unsigned int mTextureDepth;
 
     gl::SwizzleState mSwizzleCache[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
-    ID3D11Texture2D *mDropStencilTexture;
+    angle::ComPtr<ID3D11Texture2D> mDropStencilTexture;
 
   private:
     const UINT mBindFlags;
@@ -134,13 +134,13 @@ class TextureStorage11 : public TextureStorage
         bool swizzle     = false;
         bool dropStencil = false;
     };
-    typedef std::map<SRVKey, ID3D11ShaderResourceView *> SRVCache;
-
     gl::Error getCachedOrCreateSRV(const SRVKey &key, ID3D11ShaderResourceView **outSRV);
 
-    SRVCache mSrvCache;
-    std::array<ID3D11ShaderResourceView *, gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS> mLevelSRVs;
-    std::array<ID3D11ShaderResourceView *, gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS> mLevelBlitSRVs;
+    std::map<SRVKey, angle::ComPtr<ID3D11ShaderResourceView>> mSrvCache;
+    std::array<angle::ComPtr<ID3D11ShaderResourceView>, gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS>
+        mLevelSRVs;
+    std::array<angle::ComPtr<ID3D11ShaderResourceView>, gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS>
+        mLevelBlitSRVs;
 };
 
 class TextureStorage11_2D : public TextureStorage11
@@ -178,7 +178,7 @@ class TextureStorage11_2D : public TextureStorage11
                         ID3D11Resource *texture,
                         ID3D11ShaderResourceView **outSRV) const override;
 
-    ID3D11Texture2D *mTexture;
+    angle::ComPtr<ID3D11Texture2D> mTexture;
     RenderTarget11 *mRenderTarget[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
     bool mHasKeyedMutex;
 
@@ -191,13 +191,14 @@ class TextureStorage11_2D : public TextureStorage11
     // One example of this is an application that creates a texture, calls glGenerateMipmap, and then disables mipmaps on the texture.
     // A more likely example is an app that creates an empty texture, renders to it, and then calls glGenerateMipmap
     // TODO: In this rendering scenario, release the mLevelZeroTexture after mTexture has been created to save memory.
-    ID3D11Texture2D *mLevelZeroTexture;
+    angle::ComPtr<ID3D11Texture2D> mLevelZeroTexture;
     RenderTarget11 *mLevelZeroRenderTarget;
     bool mUseLevelZeroTexture;
 
     // Swizzle-related variables
-    ID3D11Texture2D *mSwizzleTexture;
-    ID3D11RenderTargetView *mSwizzleRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
+    angle::ComPtr<ID3D11Texture2D> mSwizzleTexture;
+    angle::ComPtr<ID3D11RenderTargetView>
+        mSwizzleRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 
     Image11 *mAssociatedImages[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 };
@@ -232,7 +233,7 @@ class TextureStorage11_External : public TextureStorage11
                         ID3D11Resource *texture,
                         ID3D11ShaderResourceView **outSRV) const override;
 
-    ID3D11Texture2D *mTexture;
+    angle::ComPtr<ID3D11Texture2D> mTexture;
     int mSubresourceIndex;
     bool mHasKeyedMutex;
 
@@ -283,7 +284,7 @@ class TextureStorage11_EGLImage final : public TextureStorage11
     uintptr_t mCurrentRenderTarget;
 
     // Swizzle-related variables
-    ID3D11Texture2D *mSwizzleTexture;
+    angle::ComPtr<ID3D11Texture2D> mSwizzleTexture;
     std::vector<ID3D11RenderTargetView *> mSwizzleRenderTargets;
 };
 
@@ -326,16 +327,17 @@ class TextureStorage11_Cube : public TextureStorage11
 
     static const size_t CUBE_FACE_COUNT = 6;
 
-    ID3D11Texture2D *mTexture;
+    angle::ComPtr<ID3D11Texture2D> mTexture;
     RenderTarget11 *mRenderTarget[CUBE_FACE_COUNT][gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 
     // Level-zero workaround members. See TextureStorage11_2D's workaround members for a description.
-    ID3D11Texture2D *mLevelZeroTexture;
+    angle::ComPtr<ID3D11Texture2D> mLevelZeroTexture;
     RenderTarget11 *mLevelZeroRenderTarget[CUBE_FACE_COUNT];
     bool mUseLevelZeroTexture;
 
-    ID3D11Texture2D *mSwizzleTexture;
-    ID3D11RenderTargetView *mSwizzleRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
+    angle::ComPtr<ID3D11Texture2D> mSwizzleTexture;
+    angle::ComPtr<ID3D11RenderTargetView>
+        mSwizzleRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 
     Image11 *mAssociatedImages[CUBE_FACE_COUNT][gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 };
@@ -371,11 +373,12 @@ class TextureStorage11_3D : public TextureStorage11
 
     RenderTarget11 *mLevelRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
 
-    ID3D11Texture3D *mTexture;
-    ID3D11Texture3D *mSwizzleTexture;
-    ID3D11RenderTargetView *mSwizzleRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
+    angle::ComPtr<ID3D11Texture3D> mTexture;
+    angle::ComPtr<ID3D11Texture3D> mSwizzleTexture;
+    std::array<angle::ComPtr<ID3D11RenderTargetView>, gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS>
+        mSwizzleRenderTargets;
 
-    Image11 *mAssociatedImages[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
+    std::array<Image11 *, gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS> mAssociatedImages;
 };
 
 class TextureStorage11_2DArray : public TextureStorage11
@@ -411,13 +414,13 @@ class TextureStorage11_2DArray : public TextureStorage11
     typedef std::map<LevelLayerKey, RenderTarget11*> RenderTargetMap;
     RenderTargetMap mRenderTargets;
 
-    ID3D11Texture2D *mTexture;
+    angle::ComPtr<ID3D11Texture2D> mTexture;
 
-    ID3D11Texture2D *mSwizzleTexture;
-    ID3D11RenderTargetView *mSwizzleRenderTargets[gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS];
+    angle::ComPtr<ID3D11Texture2D> mSwizzleTexture;
+    std::array<angle::ComPtr<ID3D11RenderTargetView>, gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS>
+        mSwizzleRenderTargets;
 
-    typedef std::map<LevelLayerKey, Image11*> ImageMap;
-    ImageMap mAssociatedImages;
+    std::map<LevelLayerKey, Image11 *> mAssociatedImages;
 };
 
 }
