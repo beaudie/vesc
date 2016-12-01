@@ -18,6 +18,7 @@ namespace gl
 class BufferManager;
 class ContextState;
 class FenceSyncManager;
+class FramebufferManager;
 class PathManager;
 class ProgramManager;
 class RenderbufferManager;
@@ -40,8 +41,7 @@ class ContextState final : public angle::NonCopyable
                  const Caps &caps,
                  const TextureCapsMap &textureCaps,
                  const Extensions &extensions,
-                 const Limitations &limitations,
-                 const ResourceMap<Framebuffer> &framebufferMap);
+                 const Limitations &limitations);
     ~ContextState();
 
     uintptr_t getContext() const { return mContext; }
@@ -67,7 +67,6 @@ class ContextState final : public angle::NonCopyable
     const TextureCapsMap &mTextureCaps;
     const Extensions &mExtensions;
     const Limitations &mLimitations;
-    const ResourceMap<Framebuffer> &mFramebufferMap;
 
     BufferManager *mBuffers;
     ShaderManager *mShaders;
@@ -77,6 +76,7 @@ class ContextState final : public angle::NonCopyable
     SamplerManager *mSamplers;
     FenceSyncManager *mFenceSyncs;
     PathManager *mPaths;
+    FramebufferManager *mFramebuffers;
 };
 
 class ValidationContext : angle::NonCopyable
@@ -89,7 +89,6 @@ class ValidationContext : angle::NonCopyable
                       const TextureCapsMap &textureCaps,
                       const Extensions &extensions,
                       const Limitations &limitations,
-                      const ResourceMap<Framebuffer> &framebufferMap,
                       bool skipValidation);
     virtual ~ValidationContext() {}
 

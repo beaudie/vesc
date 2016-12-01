@@ -21,8 +21,7 @@ ContextState::ContextState(uintptr_t contextIn,
                            const Caps &capsIn,
                            const TextureCapsMap &textureCapsIn,
                            const Extensions &extensionsIn,
-                           const Limitations &limitationsIn,
-                           const ResourceMap<Framebuffer> &framebufferMap)
+                           const Limitations &limitationsIn)
     : mClientVersion(clientVersion),
       mContext(contextIn),
       mState(stateIn),
@@ -30,7 +29,6 @@ ContextState::ContextState(uintptr_t contextIn,
       mTextureCaps(textureCapsIn),
       mExtensions(extensionsIn),
       mLimitations(limitationsIn),
-      mFramebufferMap(framebufferMap),
       mBuffers(nullptr),
       mShaders(nullptr),
       mPrograms(nullptr),
@@ -38,7 +36,8 @@ ContextState::ContextState(uintptr_t contextIn,
       mRenderbuffers(nullptr),
       mSamplers(nullptr),
       mFenceSyncs(nullptr),
-      mPaths(nullptr)
+      mPaths(nullptr),
+      mFramebuffers(nullptr)
 {
     if (shareContextState != nullptr)
     {
@@ -70,6 +69,8 @@ ContextState::ContextState(uintptr_t contextIn,
         mFenceSyncs    = new FenceSyncManager();
         mPaths         = new PathManager();
     }
+
+    mFramebuffers = new FramebufferManager();
 }
 
 ContextState::~ContextState()
@@ -82,6 +83,7 @@ ContextState::~ContextState()
     mSamplers->release();
     mFenceSyncs->release();
     mPaths->release();
+    mFramebuffers->release();
 }
 
 const TextureCaps &ContextState::getTextureCap(GLenum internalFormat) const
@@ -96,7 +98,6 @@ ValidationContext::ValidationContext(const ValidationContext *shareContext,
                                      const TextureCapsMap &textureCaps,
                                      const Extensions &extensions,
                                      const Limitations &limitations,
-                                     const ResourceMap<Framebuffer> &framebufferMap,
                                      bool skipValidation)
     : mState(reinterpret_cast<uintptr_t>(this),
              shareContext ? &shareContext->mState : nullptr,
@@ -105,8 +106,7 @@ ValidationContext::ValidationContext(const ValidationContext *shareContext,
              caps,
              textureCaps,
              extensions,
-             limitations,
-             framebufferMap),
+             limitations),
       mSkipValidation(skipValidation)
 {
 }

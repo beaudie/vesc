@@ -457,4 +457,48 @@ PathManager::~PathManager()
     }
 }
 
+GLuint FramebufferManager::createFramebuffer()
+{
+    return allocateEmptyObject();
+}
+
+void FramebufferManager::deleteFramebuffer(GLuint framebuffer)
+{
+    deleteObject(framebuffer, [](Framebuffer *framebuffer) {
+        ASSERT(framebuffer->id() != 0);
+        delete framebuffer;
+        return true;
+    });
+}
+
+Framebuffer *FramebufferManager::checkFramebufferAllocation(rx::GLImplFactory *factory, const Caps& caps, GLuint handle)
+{
+    return checkObjectAllocation(handle, [&]() {
+        return new Framebuffer(caps, factory, handle);
+    });
+}
+
+Framebuffer *FramebufferManager::getFramebuffer(GLuint handle) const
+{
+    return getObject(handle);
+}
+
+void FramebufferManager::setDefaultFramebuffer(Framebuffer* framebuffer)
+{
+    ASSERT(framebuffer == nullptr || framebuffer->id() == 0);
+    mObjectMap[0] = framebuffer;
+}
+
+FramebufferManager::~FramebufferManager()
+{
+    for (auto framebuffer : mObjectMap)
+    {
+        // Default framebuffer are owned by their respective Surface
+        if (framebuffer.second != nullptr && framebuffer.second->id() != 0)
+        {
+            SafeDelete(framebuffer.second);
+        }
+    }
+}
+
 }  // namespace gl

@@ -655,9 +655,6 @@ class Context final : public ValidationContext
 
     TextureMap mZeroTextures;
 
-    ResourceMap<Framebuffer> mFramebufferMap;
-    HandleAllocator mFramebufferHandleAllocator;
-
     ResourceMap<FenceNV> mFenceNVMap;
     HandleAllocator mFenceNVHandleAllocator;
 

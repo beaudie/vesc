@@ -246,7 +246,6 @@ Context::Context(rx::EGLImplFactory *implFactory,
                         mTextureCaps,
                         mExtensions,
                         mLimitations,
-                        mFramebufferMap,
                         GetNoError(attribs)),
       mImplementation(implFactory->createContext(mState)),
       mCompiler(nullptr),
@@ -384,15 +383,6 @@ Context::~Context()
 {
     mGLState.reset();
 
-    for (auto framebuffer : mFramebufferMap)
-    {
-        // Default framebuffer are owned by their respective Surface
-        if (framebuffer.second != nullptr && framebuffer.second->id() != 0)
-        {
-            SafeDelete(framebuffer.second);
-        }
-    }
-
     for (auto fence : mFenceNVMap)
     {
         SafeDelete(fence.second);
@@ -471,7 +461,7 @@ void Context::makeCurrent(egl::Surface *surface)
         {
             mGLState.setDrawFramebufferBinding(newDefault);
         }
-        mFramebufferMap[0] = newDefault;
+        mState.mFramebuffers->setDefaultFramebuffer(newDefault);
     }
 
     // Notify the renderer of a context switch
@@ -493,7 +483,7 @@ void Context::releaseSurface()
         {
             mGLState.setDrawFramebufferBinding(nullptr);
         }
-        mFramebufferMap.erase(0);
+        mState.mFramebuffers->setDefaultFramebuffer(nullptr);
     }
 
     mCurrentSurface->setIsCurrent(false);
@@ -566,11 +556,7 @@ GLuint Context::createTransformFeedback()
 // Returns an unused framebuffer name
 GLuint Context::createFramebuffer()
 {
-    GLuint handle = mFramebufferHandleAllocator.allocate();
-
-    mFramebufferMap[handle] = NULL;
-
-    return handle;
+    return mState.mFramebuffers->createFramebuffer();
 }
 
 GLuint Context::createFenceNV()
@@ -778,16 +764,12 @@ void Context::deleteTransformFeedback(GLuint transformFeedback)
 
 void Context::deleteFramebuffer(GLuint framebuffer)
 {
-    auto framebufferObject = mFramebufferMap.find(framebuffer);
-
-    if (framebufferObject != mFramebufferMap.end())
+    if (mState.mFramebuffers->getFramebuffer(framebuffer))
     {
         detachFramebuffer(framebuffer);
-
-        mFramebufferHandleAllocator.release(framebufferObject->first);
-        delete framebufferObject->second;
-        mFramebufferMap.erase(framebufferObject);
     }
+
+    mState.mFramebuffers->deleteFramebuffer(framebuffer);
 }
 
 void Context::deleteFenceNV(GLuint fence)
@@ -1147,10 +1129,9 @@ void Context::getQueryObjectui64v(GLuint id, GLenum pname, GLuint64 *params)
     handleError(GetQueryObjectParameter(getQuery(id), pname, params));
 }
 
-Framebuffer *Context::getFramebuffer(unsigned int handle) const
+Framebuffer *Context::getFramebuffer(GLuint handle) const
 {
-    auto framebufferIt = mFramebufferMap.find(handle);
-    return ((framebufferIt == mFramebufferMap.end()) ? nullptr : framebufferIt->second);
+    return mState.mFramebuffers->getFramebuffer(handle);
 }
 
 FenceNV *Context::getFenceNV(unsigned int handle)
