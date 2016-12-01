@@ -423,4 +423,54 @@ PathManager::~PathManager()
     }
 }
 
+GLuint FramebufferManager::createFramebuffer()
+{
+    return AllocateEmptyObject(&mHandleAllocator, &mFramebuffers);
+}
+
+void FramebufferManager::deleteFramebuffer(GLuint framebuffer)
+{
+    DeleteObject(&mHandleAllocator, &mFramebuffers, framebuffer, [](Framebuffer *framebuffer) {
+        ASSERT(framebuffer->id() != 0);
+        delete framebuffer;
+    });
+}
+
+Framebuffer *FramebufferManager::checkFramebufferAllocation(rx::GLImplFactory *factory,
+                                                            const Caps &caps,
+                                                            GLuint handle)
+{
+    return CheckObjectAllocation(
+        &mHandleAllocator, &mFramebuffers, handle,
+        [&caps, &factory, &handle]() { return new Framebuffer(caps, factory, handle); });
+}
+
+Framebuffer *FramebufferManager::getFramebuffer(GLuint handle) const
+{
+    return GetObject(mFramebuffers, handle);
+}
+
+void FramebufferManager::setDefaultFramebuffer(Framebuffer *framebuffer)
+{
+    ASSERT(framebuffer == nullptr || framebuffer->id() == 0);
+    mFramebuffers[0] = framebuffer;
+}
+
+bool FramebufferManager::isFramebufferGenerated(GLuint framebuffer)
+{
+    return framebuffer != 0 && mFramebuffers.find(framebuffer) != mFramebuffers.end();
+}
+
+FramebufferManager::~FramebufferManager()
+{
+    for (auto framebuffer : mFramebuffers)
+    {
+        // Default framebuffer are owned by their respective Surface
+        if (framebuffer.second != nullptr && framebuffer.second->id() != 0)
+        {
+            SafeDelete(framebuffer.second);
+        }
+    }
+}
+
 }  // namespace gl

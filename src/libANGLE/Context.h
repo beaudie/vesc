@@ -619,7 +619,6 @@ class Context final : public ValidationContext
     void syncStateForBlit();
     VertexArray *checkVertexArrayAllocation(GLuint vertexArrayHandle);
     TransformFeedback *checkTransformFeedbackAllocation(GLuint transformFeedback);
-    Framebuffer *checkFramebufferAllocation(GLuint framebufferHandle);
 
     void detachBuffer(GLuint buffer);
     void detachTexture(GLuint texture);
@@ -657,9 +656,6 @@ class Context final : public ValidationContext
     EGLenum mClientType;
 
     TextureMap mZeroTextures;
-
-    ResourceMap<Framebuffer> mFramebufferMap;
-    HandleAllocator mFramebufferHandleAllocator;
 
     ResourceMap<FenceNV> mFenceNVMap;
     HandleAllocator mFenceNVHandleAllocator;
