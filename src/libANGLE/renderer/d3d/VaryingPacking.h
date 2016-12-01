@@ -11,7 +11,14 @@
 #ifndef LIBANGLE_RENDERER_D3D_VARYINGPACKING_H_
 #define LIBANGLE_RENDERER_D3D_VARYINGPACKING_H_
 
-#include "libANGLE/renderer/d3d/RendererD3D.h"
+#include <GLSLANG/ShaderVars.h>
+
+#include "libANGLE/angletypes.h"
+
+namespace gl
+{
+class InfoLog;
+}
 
 namespace rx
 {

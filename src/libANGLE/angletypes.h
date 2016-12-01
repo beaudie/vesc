@@ -336,6 +336,59 @@ inline GLenum FramebufferBindingToEnum(FramebufferBinding binding)
             return GL_NONE;
     }
 }
-}
+}  // namespace angle
+
+namespace gl
+{
+class ContextState;
+}  // namespace gl
+
+namespace rx
+{
+enum ShaderType
+{
+    SHADER_VERTEX,
+    SHADER_PIXEL,
+    SHADER_GEOMETRY,
+    SHADER_TYPE_MAX
+};
+
+class ShaderD3D;
+class RendererD3D;
+
+class ProgramD3DMetadata final : angle::NonCopyable
+{
+  public:
+    ProgramD3DMetadata(RendererD3D *renderer,
+                       const ShaderD3D *vertexShader,
+                       const ShaderD3D *fragmentShader);
+
+    int getRendererMajorShaderModel() const;
+    bool usesBroadcast(const gl::ContextState &data) const;
+    bool usesFragDepth() const;
+    bool usesPointCoord() const;
+    bool usesFragCoord() const;
+    bool usesPointSize() const;
+    bool usesInsertedPointCoordValue() const;
+    bool usesViewScale() const;
+    bool addsPointCoordToVertexShader() const;
+    bool usesTransformFeedbackGLPosition() const;
+    bool usesSystemValuePointSize() const;
+    bool usesMultipleFragmentOuts() const;
+    GLint getMajorShaderVersion() const;
+    const ShaderD3D *getFragmentShader() const;
+
+  private:
+    const int mRendererMajorShaderModel;
+    const std::string mShaderModelSuffix;
+    const bool mUsesInstancedPointSpriteEmulation;
+    const bool mUsesViewScale;
+    const ShaderD3D *mVertexShader;
+    const ShaderD3D *mFragmentShader;
+};
+
+std::string GetVaryingSemantic(int majorShaderModel, bool programUsesPointSize);
+
+}  // namespace rx
 
 #endif // LIBANGLE_ANGLETYPES_H_

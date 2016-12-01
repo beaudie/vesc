@@ -97,37 +97,6 @@ struct D3DVarying final
     unsigned int outputSlot;
 };
 
-class ProgramD3DMetadata final : angle::NonCopyable
-{
-  public:
-    ProgramD3DMetadata(RendererD3D *renderer,
-                       const ShaderD3D *vertexShader,
-                       const ShaderD3D *fragmentShader);
-
-    int getRendererMajorShaderModel() const;
-    bool usesBroadcast(const gl::ContextState &data) const;
-    bool usesFragDepth() const;
-    bool usesPointCoord() const;
-    bool usesFragCoord() const;
-    bool usesPointSize() const;
-    bool usesInsertedPointCoordValue() const;
-    bool usesViewScale() const;
-    bool addsPointCoordToVertexShader() const;
-    bool usesTransformFeedbackGLPosition() const;
-    bool usesSystemValuePointSize() const;
-    bool usesMultipleFragmentOuts() const;
-    GLint getMajorShaderVersion() const;
-    const ShaderD3D *getFragmentShader() const;
-
-  private:
-    const int mRendererMajorShaderModel;
-    const std::string mShaderModelSuffix;
-    const bool mUsesInstancedPointSpriteEmulation;
-    const bool mUsesViewScale;
-    const ShaderD3D *mVertexShader;
-    const ShaderD3D *mFragmentShader;
-};
-
 class ProgramD3D : public ProgramImpl
 {
   public:
