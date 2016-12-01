@@ -3614,6 +3614,7 @@ void Context::bindRenderbuffer(GLenum target, GLuint renderbuffer)
 
 void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 {
+    syncRendererState();
     mImplementation->getMultisamplefv(pname, index, val);
 }
 

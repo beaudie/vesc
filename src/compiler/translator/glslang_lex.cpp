@@ -1776,8 +1776,17 @@ YY_RULE_SETUP
 	YY_BREAK
 /* Reserved keywords for GLSL ES 3.00 that are not reserved for GLSL ES 1.00 */
 case 96:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, SAMPLER2DMS); }
+    YY_BREAK
 case 97:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, ISAMPLER2DMS); }
+YY_BREAK
 case 98:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, USAMPLER2DMS); }
+	YY_BREAK
 case 99:
 case 100:
 case 101:
