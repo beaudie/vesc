@@ -170,6 +170,14 @@ TEST_P(PointSpritesTest, PointWithoutAttributesCompliance)
         return;
     }
 
+#if !defined(NDEBUG)
+    // http://anglebug.com/1646
+    if (IsWindows() && IsIntel()) {
+        std::cout << "Test skipped on debug Windows intel." << std::endl;
+        return;
+    }
+#endif
+
     // clang-format off
     const std::string fs = SHADER_SOURCE
     (
