@@ -485,4 +485,76 @@ PathManager::~PathManager()
     }
 }
 
+FramebufferManager::~FramebufferManager()
+{
+    for (auto framebuffer : mFramebuffers)
+    {
+        // Default framebuffer are owned by their respective Surface
+        if (framebuffer.second != nullptr && framebuffer.second->id() != 0)
+        {
+            SafeDelete(framebuffer.second);
+        }
+    }
+}
+
+GLuint FramebufferManager::createFramebuffer()
+{
+    return AllocateEmptyObject(&mHandleAllocator, &mFramebuffers);
+}
+
+void FramebufferManager::deleteFramebuffer(GLuint framebuffer)
+{
+    DeleteObject(&mHandleAllocator, &mFramebuffers, framebuffer, [](Framebuffer *framebuffer) {
+        ASSERT(framebuffer->id() != 0);
+        delete framebuffer;
+    });
+}
+
+Framebuffer *FramebufferManager::checkFramebufferAllocation(rx::GLImplFactory *factory,
+                                                            const Caps &caps,
+                                                            GLuint handle)
+{
+    if (handle == 0)
+    {
+        return mFramebuffers[handle];
+    }
+
+    auto objectMapIter   = mFramebuffers.find(handle);
+    bool handleAllocated = (objectMapIter != mFramebuffers.end());
+
+    if (handleAllocated && objectMapIter->second != nullptr)
+    {
+        return objectMapIter->second;
+    }
+
+    Framebuffer *object = new Framebuffer(caps, factory, handle);
+    if (handleAllocated)
+    {
+        objectMapIter->second = object;
+    }
+    else
+    {
+        mHandleAllocator.reserve(handle);
+        mFramebuffers[handle] = object;
+    }
+
+    return object;
+}
+
+Framebuffer *FramebufferManager::getFramebuffer(GLuint handle) const
+{
+    return GetObject(mFramebuffers, handle);
+}
+
+void FramebufferManager::setDefaultFramebuffer(Framebuffer *framebuffer)
+{
+    ASSERT(framebuffer == nullptr || framebuffer->id() == 0);
+    mFramebuffers[0] = framebuffer;
+}
+
+bool FramebufferManager::isFramebufferGenerated(GLuint framebuffer)
+{
+    return framebuffer != 0 && mFramebuffers.find(framebuffer) != mFramebuffers.end();
+}
+
 }  // namespace gl
