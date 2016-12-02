@@ -162,7 +162,6 @@ std::ostream &DummyStream();
 
 #define UNIMPLEMENTED()                                           \
     {                                                             \
-        ERR("\t! Unimplemented: %s(%d)", __FUNCTION__, __LINE__); \
         ASSERT(NOASSERT_UNIMPLEMENTED);                           \
     }                                                             \
     ANGLE_EMPTY_STATEMENT
