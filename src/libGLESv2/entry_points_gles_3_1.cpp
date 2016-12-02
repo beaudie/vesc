@@ -260,7 +260,11 @@ void GL_APIENTRY BindProgramPipeline(GLuint pipeline)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        UNIMPLEMENTED();
+        if (pipeline != 0)
+        {
+            // Binding non-zero pipelines is not implemented yet.
+            UNIMPLEMENTED();
+        }
     }
 }
 
