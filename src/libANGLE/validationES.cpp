@@ -822,7 +822,16 @@ bool ValidateTexParameterBase(Context *context,
                 context->handleError(Error(GL_INVALID_ENUM, "pname requires OpenGL ES 3.1."));
                 return false;
             }
-            UNIMPLEMENTED();
+            switch (ConvertToGLenum(params[0]))
+            {
+                case GL_DEPTH_COMPONENT:
+                case GL_STENCIL_INDEX:
+                    break;
+
+                default:
+                    context->handleError(Error(GL_INVALID_ENUM, "Unknown param value."));
+                    return false;
+            }
             break;
 
         case GL_TEXTURE_SRGB_DECODE_EXT:
@@ -1309,7 +1318,6 @@ bool ValidTextureTarget(const ValidationContext *context, GLenum target)
             return (context->getClientMajorVersion() >= 3);
 
         case GL_TEXTURE_2D_MULTISAMPLE:
-            UNIMPLEMENTED();
             return (context->getClientVersion() >= Version(3, 1));
 
         default:
