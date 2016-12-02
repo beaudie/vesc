@@ -1309,7 +1309,6 @@ bool ValidTextureTarget(const ValidationContext *context, GLenum target)
             return (context->getClientMajorVersion() >= 3);
 
         case GL_TEXTURE_2D_MULTISAMPLE:
-            UNIMPLEMENTED();
             return (context->getClientVersion() >= Version(3, 1));
 
         default:

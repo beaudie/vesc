@@ -840,11 +840,23 @@ void GL_APIENTRY BindBufferBase(GLenum target, GLuint index, GLuint buffer)
             break;
 
           case GL_ATOMIC_COUNTER_BUFFER:
-              UNIMPLEMENTED();
+              if (index >= caps.maxAtomicCounterBufferBindings)
+              {
+                  context->handleError(Error(
+                      GL_INVALID_VALUE,
+                      "Binding index must be less than GL_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS."));
+                  return;
+              }
               break;
 
           case GL_SHADER_STORAGE_BUFFER:
-              UNIMPLEMENTED();
+              if (index >= caps.maxShaderStorageBufferBindings)
+              {
+                  context->handleError(Error(
+                      GL_INVALID_VALUE,
+                      "Binding index must be less than GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS."));
+                  return;
+              }
               break;
 
           default:
