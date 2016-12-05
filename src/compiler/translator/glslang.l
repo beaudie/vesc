@@ -253,9 +253,6 @@ O           [0-7]
 "samplerBuffer"     |
 "isamplerBuffer"    |
 "usamplerBuffer"    |
-"sampler2DMS"       |
-"isampler2DMS"      |
-"usampler2DMS"      |
 "sampler2DMSArray"  |
 "isampler2DMSArray" |
 "usampler2DMSArray" { 
