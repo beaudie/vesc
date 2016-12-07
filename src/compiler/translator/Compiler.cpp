@@ -25,6 +25,7 @@
 #include "compiler/translator/RemoveInvariantDeclaration.h"
 #include "compiler/translator/RemovePow.h"
 #include "compiler/translator/RewriteDoWhile.h"
+#include "compiler/translator/RewriteUnaryMinusOperatorFloat.h"
 #include "compiler/translator/ScalarizeVecAndMatConstructorArgs.h"
 #include "compiler/translator/UnfoldShortCircuitAST.h"
 #include "compiler/translator/UseInterfaceBlockFields.h"
@@ -410,6 +411,9 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         {
             RemovePow(root);
         }
+
+        if (success && (compileOptions & SH_REWRITE_FLOAT_UNARY_MINUS_OPERATOR))
+            sh::RewriteUnaryMinusOperatorFloat(root);
 
         if (success && shouldCollectVariables(compileOptions))
         {
