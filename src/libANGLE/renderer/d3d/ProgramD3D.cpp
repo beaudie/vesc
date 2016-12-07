@@ -1490,8 +1490,8 @@ LinkResult ProgramD3D::link(const gl::ContextState &data, gl::InfoLog &infoLog)
 
     // Map the varyings to the register file
     VaryingPacking varyingPacking(data.getCaps().maxVaryingVectors);
-    if (!varyingPacking.packVaryings(infoLog, packedVaryings,
-                                     mState.getTransformFeedbackVaryingNames()))
+    if (!varyingPacking.packUserVaryings(infoLog, packedVaryings,
+                                         mState.getTransformFeedbackVaryingNames()))
     {
         return false;
     }
@@ -1501,7 +1501,7 @@ LinkResult ProgramD3D::link(const gl::ContextState &data, gl::InfoLog &infoLog)
     metadata.apply(SHADER_VERTEX, &varyingPacking);
     metadata.apply(SHADER_PIXEL, &varyingPacking);
 
-    if (static_cast<GLuint>(varyingPacking.getRegisterCount()) > data.getCaps().maxVaryingVectors)
+    if (!varyingPacking.validateBuiltins())
     {
         infoLog << "No varying registers left to support gl_FragCoord/gl_PointCoord";
         return false;
