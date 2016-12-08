@@ -34,7 +34,10 @@ const char *g_ExceedsMaxElementErrorMessage = "Element value exceeds maximum ele
 
 namespace
 {
-bool ValidateDrawAttribs(ValidationContext *context, GLint primcount, GLint maxVertex)
+bool ValidateDrawAttribs(ValidationContext *context,
+                         GLint primcount,
+                         GLint maxVertex,
+                         GLint vertexCount)
 {
     const gl::State &state     = context->getGLState();
     const gl::Program *program = state.getProgram();
@@ -42,6 +45,9 @@ bool ValidateDrawAttribs(ValidationContext *context, GLint primcount, GLint maxV
     const VertexArray *vao    = state.getVertexArray();
     const auto &vertexAttribs = vao->getVertexAttributes();
     size_t maxEnabledAttrib   = vao->getMaxEnabledAttribute();
+
+    bool webglCompatibility = context->getExtensions().webglCompatibility;
+
     for (size_t attributeIndex = 0; attributeIndex < maxEnabledAttrib; ++attributeIndex)
     {
         const VertexAttribute &attrib = vertexAttribs[attributeIndex];
@@ -54,23 +60,26 @@ bool ValidateDrawAttribs(ValidationContext *context, GLint primcount, GLint maxV
                 GLint64 attribStride = static_cast<GLint64>(ComputeVertexAttributeStride(attrib));
                 GLint64 maxVertexElement = 0;
 
+                bool readsData = true;
                 if (attrib.divisor > 0)
                 {
+                    readsData = primcount > 0;
                     maxVertexElement =
-                        static_cast<GLint64>(primcount) / static_cast<GLint64>(attrib.divisor);
+                        static_cast<GLint64>(primcount - 1) / static_cast<GLint64>(attrib.divisor);
                 }
                 else
                 {
+                    readsData        = vertexCount > 0;
                     maxVertexElement = static_cast<GLint64>(maxVertex);
                 }
 
                 // If we're drawing zero vertices, we have enough data.
-                if (maxVertexElement > 0)
+                if (readsData)
                 {
                     // Note: Last vertex element does not take the full stride!
                     GLint64 attribSize =
                         static_cast<GLint64>(ComputeVertexAttributeTypeSize(attrib));
-                    GLint64 attribDataSize = (maxVertexElement - 1) * attribStride + attribSize;
+                    GLint64 attribDataSize = maxVertexElement * attribStride + attribSize;
                     GLint64 attribOffset   = static_cast<GLint64>(attrib.offset);
 
                     // [OpenGL ES 3.0.2] section 2.9.4 page 40:
@@ -84,6 +93,15 @@ bool ValidateDrawAttribs(ValidationContext *context, GLint primcount, GLint maxV
                         return false;
                     }
                 }
+            }
+            else if (webglCompatibility)
+            {
+                // [WebGL 1.0] Section 6.5 Enabled Vertex Attributes and Range Checking
+                // If a vertex attribute is enabled as an array via enableVertexAttribArray but no
+                // buffer is bound to that attribute via bindBuffer and vertexAttribPointer, then
+                // calls to drawArrays or drawElements will generate an INVALID_OPERATION error.
+                context->handleError(
+                    Error(GL_INVALID_OPERATION, "An enabled vertex array has no buffer."));
             }
             else if (attrib.pointer == NULL)
             {
@@ -3172,7 +3190,17 @@ bool ValidateDrawArrays(ValidationContext *context,
         return false;
     }
 
-    if (!ValidateDrawAttribs(context, primcount, count))
+    CheckedNumeric<GLint> maxVertex = first;
+    maxVertex += count;
+    maxVertex -= 1;
+
+    if (!maxVertex.IsValid())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Integer overflow."));
+        return false;
+    }
+
+    if (!ValidateDrawAttribs(context, primcount, maxVertex.ValueOrDie(), count))
     {
         return false;
     }
@@ -3285,10 +3313,25 @@ bool ValidateDrawElements(ValidationContext *context,
 
     const gl::VertexArray *vao     = state.getVertexArray();
     gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
-    if (!indices && !elementArrayBuffer)
+    if (!elementArrayBuffer)
     {
-        context->handleError(Error(GL_INVALID_OPERATION));
-        return false;
+        if (context->getExtensions().webglCompatibility && count > 0)
+        {
+            // [WebGL 1.0] Section 6.2 No Client Side Arrays
+            // If drawElements is called with a count greater than zero, and no WebGLBuffer is bound
+            // to the ELEMENT_ARRAY_BUFFER binding point, an INVALID_OPERATION error is generated.
+            context->handleError(
+                Error(GL_INVALID_OPERATION, "There is no element array buffer and count > 0."));
+            return false;
+        }
+        else if (!indices)
+        {
+            // This is an application error that would normally result in a crash,
+            // but we catch it and return an error
+            context->handleError(
+                Error(GL_INVALID_OPERATION, "No element array buffer and no pointer."));
+            return false;
+        }
     }
 
     if (elementArrayBuffer)
@@ -3355,7 +3398,8 @@ bool ValidateDrawElements(ValidationContext *context,
         return false;
     }
 
-    if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(indexRangeOut->vertexCount())))
+    if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(indexRangeOut->end),
+                             static_cast<GLint>(indexRangeOut->vertexCount())))
     {
         return false;
     }
