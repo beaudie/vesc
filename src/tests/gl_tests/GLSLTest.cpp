@@ -2427,6 +2427,51 @@ TEST_P(GLSLTest_ES3, FoldedInvalidLeftShift)
     glDeleteProgram(program);
 }
 
+// Test that literal infinity can be written out from the shader translator.
+TEST_P(GLSLTest_ES3, LiteralInfinityOutput)
+{
+    const std::string &fragmentShader =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 out_color;\n"
+        "uniform float u;\n"
+        "void main()\n"
+        "{\n"
+        "   float infVar = 1.0e40 - u;\n"
+        "   bool correct = isinf(infVar);\n"
+        "   out_color = correct ? vec4(0.0, 1.0, 0.0, 1.0) : vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, mSimpleVSSource, fragmentShader);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that literal NaN can be written out from the shader translator.
+// This test is not mandatory to pass, since ESSL 3.00.6 section 12.4 says "The only requirement is
+// that isnan() must return false if NaNs are not supported."
+TEST_P(GLSLTest_ES3, LiteralNaNOutput)
+{
+    if (IsD3D11())
+        return;
+
+    const std::string &fragmentShader =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 out_color;\n"
+        "uniform float u;\n"
+        "void main()\n"
+        "{\n"
+        "   float nanVar = 0.0 / 0.0 - u;\n"
+        "   bool correct = isnan(nanVar);\n"
+        "   out_color = correct ? vec4(0.0, 1.0, 0.0, 1.0) : vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, mSimpleVSSource, fragmentShader);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 }  // anonymous namespace
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these tests should be run against.
