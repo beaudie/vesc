@@ -39,6 +39,7 @@ struct TranslatedAttribute;
 namespace gl
 {
 struct Caps;
+class Context;
 class ContextState;
 class ResourceManager;
 class Shader;
@@ -266,8 +267,15 @@ class Program final : angle::NonCopyable, public LabeledObject
     Error link(const ContextState &data);
     bool isLinked() const;
 
-    Error loadBinary(GLenum binaryFormat, const void *binary, GLsizei length);
-    Error saveBinary(GLenum *binaryFormat, void *binary, GLsizei bufSize, GLsizei *length) const;
+    Error loadBinary(const gl::Context *context,
+                     GLenum binaryFormat,
+                     const void *binary,
+                     GLsizei length);
+    Error saveBinary(const gl::Context *context,
+                     GLenum *binaryFormat,
+                     void *binary,
+                     GLsizei bufSize,
+                     GLsizei *length) const;
     GLint getBinaryLength() const;
     void setBinaryRetrievableHint(bool retrievable);
     bool getBinaryRetrievableHint() const;
@@ -497,6 +505,6 @@ class Program final : angle::NonCopyable, public LabeledObject
     std::vector<GLenum> mTextureUnitTypesCache;
     RangeUI mSamplerUniformRange;
 };
-}
+}  // namespace gl
 
 #endif   // LIBANGLE_PROGRAM_H_
