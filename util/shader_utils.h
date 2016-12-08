@@ -33,4 +33,6 @@ ANGLE_EXPORT GLuint CompileProgramFromFiles(const std::string &vsPath, const std
 ANGLE_EXPORT GLuint CompileComputeProgram(const std::string &csSource,
                                           bool outputErrorMessages = true);
 
+ANGLE_EXPORT GLuint LoadBinaryProgram(const std::vector<uint8_t> &binary, GLenum binaryFormat);
+
 #endif // SAMPLE_UTIL_SHADER_UTILS_H

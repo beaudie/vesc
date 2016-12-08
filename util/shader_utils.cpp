@@ -189,3 +189,10 @@ GLuint CompileComputeProgram(const std::string &csSource, bool outputErrorMessag
 
     return CheckLinkStatusAndReturnProgram(program, outputErrorMessages);
 }
+
+GLuint LoadBinaryProgram(const std::vector<uint8_t> &binary, GLenum binaryFormat)
+{
+    GLuint program = glCreateProgram();
+    glProgramBinaryOES(program, binaryFormat, binary.data(), static_cast<GLint>(binary.size()));
+    return CheckLinkStatusAndReturnProgram(program, true);
+}
