@@ -17,7 +17,7 @@
 #include "common/utilities.h"
 #include "common/version.h"
 #include "compiler/translator/blocklayout.h"
-#include "libANGLE/ContextState.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/features.h"
 #include "libANGLE/renderer/GLImplFactory.h"
@@ -710,7 +710,10 @@ bool Program::isLinked() const
     return mLinked;
 }
 
-Error Program::loadBinary(GLenum binaryFormat, const void *binary, GLsizei length)
+Error Program::loadBinary(const gl::Context *context,
+                          GLenum binaryFormat,
+                          const void *binary,
+                          GLsizei length)
 {
     unlink(false);
 
@@ -726,19 +729,21 @@ Error Program::loadBinary(GLenum binaryFormat, const void *binary, GLsizei lengt
 
     BinaryInputStream stream(binary, length);
 
-    int majorVersion = stream.readInt<int>();
-    int minorVersion = stream.readInt<int>();
-    if (majorVersion != ANGLE_MAJOR_VERSION || minorVersion != ANGLE_MINOR_VERSION)
+    unsigned char commitString[ANGLE_COMMIT_HASH_SIZE];
+    stream.readBytes(commitString, ANGLE_COMMIT_HASH_SIZE);
+    if (memcmp(commitString, ANGLE_COMMIT_HASH, sizeof(unsigned char) * ANGLE_COMMIT_HASH_SIZE) !=
+        0)
     {
         mInfoLog << "Invalid program binary version.";
         return Error(GL_NO_ERROR);
     }
 
-    unsigned char commitString[ANGLE_COMMIT_HASH_SIZE];
-    stream.readBytes(commitString, ANGLE_COMMIT_HASH_SIZE);
-    if (memcmp(commitString, ANGLE_COMMIT_HASH, sizeof(unsigned char) * ANGLE_COMMIT_HASH_SIZE) != 0)
+    int majorVersion = stream.readInt<int>();
+    int minorVersion = stream.readInt<int>();
+    if (majorVersion != context->getClientMajorVersion() ||
+        minorVersion != context->getClientMinorVersion())
     {
-        mInfoLog << "Invalid program binary version.";
+        mInfoLog << "Cannot load program binaries across different ES context versions.";
         return Error(GL_NO_ERROR);
     }
 
@@ -846,10 +851,14 @@ Error Program::loadBinary(GLenum binaryFormat, const void *binary, GLsizei lengt
     ANGLE_TRY_RESULT(mProgram->load(mInfoLog, &stream), mLinked);
 
     return NoError();
-#endif // #if ANGLE_PROGRAM_BINARY_LOAD == ANGLE_ENABLED
+#endif  // #if ANGLE_PROGRAM_BINARY_LOAD == ANGLE_ENABLED
 }
 
-Error Program::saveBinary(GLenum *binaryFormat, void *binary, GLsizei bufSize, GLsizei *length) const
+Error Program::saveBinary(const gl::Context *context,
+                          GLenum *binaryFormat,
+                          void *binary,
+                          GLsizei bufSize,
+                          GLsizei *length) const
 {
     if (binaryFormat)
     {
@@ -858,9 +867,19 @@ Error Program::saveBinary(GLenum *binaryFormat, void *binary, GLsizei bufSize, G
 
     BinaryOutputStream stream;
 
-    stream.writeInt(ANGLE_MAJOR_VERSION);
-    stream.writeInt(ANGLE_MINOR_VERSION);
     stream.writeBytes(reinterpret_cast<const unsigned char*>(ANGLE_COMMIT_HASH), ANGLE_COMMIT_HASH_SIZE);
+
+    // nullptr context is supported when computing binary length.
+    if (context)
+    {
+        stream.writeInt(context->getClientVersion().major);
+        stream.writeInt(context->getClientVersion().minor);
+    }
+    else
+    {
+        stream.writeInt(2);
+        stream.writeInt(0);
+    }
 
     stream.writeInt(mState.mComputeShaderLocalSize[0]);
     stream.writeInt(mState.mComputeShaderLocalSize[1]);
@@ -982,7 +1001,7 @@ Error Program::saveBinary(GLenum *binaryFormat, void *binary, GLsizei bufSize, G
 GLint Program::getBinaryLength() const
 {
     GLint length;
-    Error error = saveBinary(nullptr, nullptr, std::numeric_limits<GLint>::max(), &length);
+    Error error = saveBinary(nullptr, nullptr, nullptr, std::numeric_limits<GLint>::max(), &length);
     if (error.isError())
     {
         return 0;
@@ -2957,4 +2976,4 @@ void Program::getUniformInternal(GLint location, DestT *dataOut) const
             UNREACHABLE();
     }
 }
-}
+}  // namespace gl
