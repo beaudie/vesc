@@ -99,17 +99,21 @@ void FramebufferAttachment::attach(GLenum type,
                                    const ImageIndex &textureIndex,
                                    FramebufferAttachmentObject *resource)
 {
+    if (resource == nullptr)
+    {
+        ASSERT(type == GL_NONE);
+        detach();
+    }
+
     mType = type;
     mTarget = Target(binding, textureIndex);
+    resource->onAttach();
 
-    if (resource)
-    {
-        resource->onAttach();
-    }
     if (mResource != nullptr)
     {
         mResource->onDetach();
     }
+
     mResource = resource;
 }
 
