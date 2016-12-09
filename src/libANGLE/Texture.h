@@ -120,6 +120,7 @@ struct TextureState final : public angle::NonCopyable
                            GLuint maxLevel,
                            Extents baseSize,
                            const Format &format);
+
     void clearImageDesc(GLenum target, size_t level);
     void clearImageDescs();
 
@@ -139,6 +140,9 @@ struct TextureState final : public angle::NonCopyable
 
     // From GL_ANGLE_texture_usage
     GLenum mUsage;
+
+    GLsizei mSamples;
+    GLboolean mFixedSampleLocations;
 
     std::vector<ImageDesc> mImageDescs;
 
@@ -240,6 +244,12 @@ class Texture final : public egl::ImageSibling,
     void setUsage(GLenum usage);
     GLenum getUsage() const;
 
+    void setSamples(GLsizei samples);
+    GLsizei getSamples() const;
+
+    void setFixedSampleLocations(GLboolean fixed);
+    GLboolean getFixedSampleLocations() const;
+
     const TextureState &getTextureState() const;
 
     size_t getWidth(GLenum target, size_t level) const;
@@ -306,6 +316,12 @@ class Texture final : public egl::ImageSibling,
     Error copyCompressedTexture(const Texture *source);
 
     Error setStorage(GLenum target, GLsizei levels, GLenum internalFormat, const Extents &size);
+
+    Error setStorageMultisample(GLenum target,
+                                GLsizei samples,
+                                GLint internalformat,
+                                const Extents &size,
+                                GLboolean fixedSampleLocations);
 
     Error setEGLImageTarget(GLenum target, egl::Image *imageTarget);
 
