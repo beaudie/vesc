@@ -1194,12 +1194,13 @@ VertexFormatType GetVertexFormatType(GLenum type, GLboolean normalized, GLuint c
 
 VertexFormatType GetVertexFormatType(const VertexAttribute &attrib)
 {
-    return GetVertexFormatType(attrib.type, attrib.normalized, attrib.size, attrib.pureInteger);
+    const auto &format = attrib.getFormat();
+    return GetVertexFormatType(format.type, format.normalized, format.size, format.pureInteger);
 }
 
 VertexFormatType GetVertexFormatType(const VertexAttribute &attrib, GLenum currentValueType)
 {
-    if (!attrib.enabled)
+    if (!attrib.getFormat().enabled)
     {
         return GetVertexFormatType(currentValueType, GL_FALSE, 4, (currentValueType != GL_FLOAT));
     }
