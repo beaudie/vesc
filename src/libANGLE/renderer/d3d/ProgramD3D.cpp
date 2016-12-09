@@ -2354,7 +2354,7 @@ void ProgramD3D::initAttribLocationsToD3DSemantic()
 void ProgramD3D::updateCachedInputLayout(const gl::State &state)
 {
     mCachedInputLayout.clear();
-    const auto &vertexAttributes = state.getVertexArray()->getVertexAttributes();
+    const auto &vertexInfos = state.getVertexArray()->getVertexInfos();
 
     for (unsigned int locationIndex : IterateBitSet(mState.getActiveAttribLocationsMask()))
     {
@@ -2367,7 +2367,7 @@ void ProgramD3D::updateCachedInputLayout(const gl::State &state)
                 mCachedInputLayout.resize(d3dSemantic + 1, gl::VERTEX_FORMAT_INVALID);
             }
             mCachedInputLayout[d3dSemantic] =
-                GetVertexFormatType(vertexAttributes[locationIndex],
+                GetVertexFormatType(vertexInfos[locationIndex].attrib,
                                     state.getVertexAttribCurrentValue(locationIndex).Type);
         }
     }
