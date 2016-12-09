@@ -34,7 +34,10 @@ const char *g_ExceedsMaxElementErrorMessage = "Element value exceeds maximum ele
 
 namespace
 {
-bool ValidateDrawAttribs(ValidationContext *context, GLint primcount, GLint maxVertex)
+bool ValidateDrawAttribs(ValidationContext *context,
+                         GLint primcount,
+                         GLint maxVertex,
+                         GLint vertexCount)
 {
     const gl::State &state     = context->getGLState();
     const gl::Program *program = state.getProgram();
@@ -53,26 +56,29 @@ bool ValidateDrawAttribs(ValidationContext *context, GLint primcount, GLint maxV
 
             if (buffer)
             {
-                GLint64 attribStride = static_cast<GLint64>(ComputeVertexAttributeStride(attrib));
                 GLint64 maxVertexElement = 0;
-
-                if (attrib.divisor > 0)
+                bool readsData           = false;
+                if (attrib.divisor == 0)
                 {
-                    maxVertexElement =
-                        static_cast<GLint64>(primcount) / static_cast<GLint64>(attrib.divisor);
-                }
-                else
-                {
+                    readsData        = vertexCount > 0;
                     maxVertexElement = static_cast<GLint64>(maxVertex);
+                }
+                else if (primcount > 0)
+                {
+                    readsData = true;
+                    maxVertexElement =
+                        static_cast<GLint64>(primcount - 1) / static_cast<GLint64>(attrib.divisor);
                 }
 
                 // If we're drawing zero vertices, we have enough data.
-                if (maxVertexElement > 0)
+                if (readsData)
                 {
                     // Note: Last vertex element does not take the full stride!
+                    GLint64 attribStride =
+                        static_cast<GLint64>(ComputeVertexAttributeStride(attrib));
                     GLint64 attribSize =
                         static_cast<GLint64>(ComputeVertexAttributeTypeSize(attrib));
-                    GLint64 attribDataSize = (maxVertexElement - 1) * attribStride + attribSize;
+                    GLint64 attribDataSize = maxVertexElement * attribStride + attribSize;
                     GLint64 attribOffset   = static_cast<GLint64>(attrib.offset);
 
                     // [OpenGL ES 3.0.2] section 2.9.4 page 40:
@@ -3183,7 +3189,17 @@ bool ValidateDrawArrays(ValidationContext *context,
         return false;
     }
 
-    if (!ValidateDrawAttribs(context, primcount, count))
+    CheckedNumeric<GLint> maxVertex = first;
+    maxVertex += count;
+    maxVertex -= 1;
+
+    if (!maxVertex.IsValid())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Integer overflow."));
+        return false;
+    }
+
+    if (!ValidateDrawAttribs(context, primcount, maxVertex.ValueOrDie(), count))
     {
         return false;
     }
@@ -3372,7 +3388,8 @@ bool ValidateDrawElements(ValidationContext *context,
         return false;
     }
 
-    if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(indexRangeOut->vertexCount())))
+    if (!ValidateDrawAttribs(context, primcount, static_cast<GLint>(indexRangeOut->end),
+                             static_cast<GLint>(indexRangeOut->vertexCount())))
     {
         return false;
     }
