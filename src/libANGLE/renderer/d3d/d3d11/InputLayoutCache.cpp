@@ -41,8 +41,8 @@ gl::InputLayout GetInputLayout(const std::vector<const TranslatedAttribute *> &t
     for (size_t attributeIndex = 0; attributeIndex < translatedAttributes.size(); ++attributeIndex)
     {
         const TranslatedAttribute *translatedAttribute = translatedAttributes[attributeIndex];
-        inputLayout[attributeIndex] = gl::GetVertexFormatType(
-            *translatedAttribute->attribute, translatedAttribute->currentValueType);
+        inputLayout[attributeIndex]                    = gl::GetVertexFormatType(
+            translatedAttribute->vertexInfo->attrib, translatedAttribute->currentValueType);
     }
     return inputLayout;
 }
@@ -116,13 +116,13 @@ void SortAttributesByLayout(const gl::Program *program,
         (*sortedD3DSemanticsOut)[d3dSemantic] = d3dSemantic;
 
         const auto *arrayAttrib = &vertexArrayAttribs[locationIndex];
-        if (arrayAttrib->attribute && arrayAttrib->attribute->enabled)
+        if (arrayAttrib->vertexInfo && arrayAttrib->vertexInfo->attrib.enabled)
         {
             (*sortedAttributesOut)[d3dSemantic] = arrayAttrib;
         }
         else
         {
-            ASSERT(currentValueAttribs[locationIndex].attribute);
+            ASSERT(currentValueAttribs[locationIndex].vertexInfo);
             (*sortedAttributesOut)[d3dSemantic] = &currentValueAttribs[locationIndex];
         }
     }
@@ -481,7 +481,6 @@ gl::Error InputLayoutCache::updateInputLayout(const gl::State &state,
         layout.flags |= PackedAttributeLayout::FLAG_INSTANCED_RENDERING_ACTIVE;
     }
 
-    const auto &attribs            = state.getVertexArray()->getVertexAttributes();
     const auto &locationToSemantic = programD3D->getAttribLocationToD3DSemantics();
 
     for (unsigned long attribIndex : angle::IterateBitSet(program->getActiveAttribLocationsMask()))
@@ -490,13 +489,15 @@ gl::Error InputLayoutCache::updateInputLayout(const gl::State &state,
         // This will prevent mismatched vertex shaders from using the same input layout
         GLenum glslElementType = GetGLSLAttributeType(shaderAttributes, attribIndex);
 
-        const auto &attrib = attribs[attribIndex];
+        const auto &vertexInfo = state.getVertexArray()->getVertexInfo(attribIndex);
         int d3dSemantic    = locationToSemantic[attribIndex];
 
         const auto &currentValue              = state.getVertexAttribCurrentValue(attribIndex);
-        gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib, currentValue.Type);
+        gl::VertexFormatType vertexFormatType =
+            gl::GetVertexFormatType(vertexInfo.attrib, currentValue.Type);
 
-        layout.addAttributeData(glslElementType, d3dSemantic, vertexFormatType, attrib.divisor);
+        layout.addAttributeData(glslElementType, d3dSemantic, vertexFormatType,
+                                vertexInfo.binding->divisor);
     }
 
     ID3D11InputLayout *inputLayout = nullptr;
@@ -566,7 +567,7 @@ gl::Error InputLayoutCache::createInputLayout(const AttribIndexArray &sortedSema
             attrib.divisor > 0 ? D3D11_INPUT_PER_INSTANCE_DATA : D3D11_INPUT_PER_VERTEX_DATA;
 
         const auto &vertexFormatType =
-            gl::GetVertexFormatType(*attrib.attribute, attrib.currentValueType);
+            gl::GetVertexFormatType(attrib.vertexInfo->attrib, attrib.currentValueType);
         const auto &vertexFormatInfo = d3d11::GetVertexFormatInfo(vertexFormatType, mFeatureLevel);
 
         auto *inputElement = &inputElements[inputElementCount];

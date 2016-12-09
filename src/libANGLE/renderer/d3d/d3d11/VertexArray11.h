@@ -38,6 +38,7 @@ class VertexArray11 : public VertexArrayImpl, public angle::SignalReceiver
 
   private:
     void updateVertexAttribStorage(size_t attribIndex);
+    size_t getAttribIndex(size_t index);
 
     std::vector<VertexStorageType> mAttributeStorageTypes;
     std::vector<TranslatedAttribute> mTranslatedAttribs;
