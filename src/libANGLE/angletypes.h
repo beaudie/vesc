@@ -23,6 +23,7 @@ class Buffer;
 class State;
 class Program;
 struct VertexAttribute;
+struct VertexBinding;
 struct VertexAttribCurrentValueData;
 
 enum PrimitiveType
