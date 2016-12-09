@@ -147,4 +147,14 @@ void TextureVk::syncState(const gl::Texture::DirtyBits &dirtyBits)
     UNIMPLEMENTED();
 }
 
+gl::Error TextureVk::setStorageMultisample(GLenum target,
+                                           GLsizei samples,
+                                           GLint internalformat,
+                                           gl::Extents size,
+                                           GLboolean fixedsamplelocations)
+{
+    UNIMPLEMENTED();
+    return gl::NoError();
+}
+
 }  // namespace rx

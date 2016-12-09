@@ -128,4 +128,13 @@ void TextureNULL::syncState(const gl::Texture::DirtyBits &dirtyBits)
 {
 }
 
+gl::Error TextureNULL::setStorageMultisample(GLenum target,
+                                             GLsizei samples,
+                                             GLint internalformat,
+                                             gl::Extents size,
+                                             GLboolean fixedsamplelocations)
+{
+    return gl::NoError();
+}
+
 }  // namespace rx
