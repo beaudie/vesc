@@ -45,6 +45,12 @@ class TextureD3D : public TextureImpl
     GLint getBaseLevelHeight() const;
     GLenum getBaseLevelInternalFormat() const;
 
+    gl::Error setStorageMultisample(GLenum target,
+                                    GLsizei samples,
+                                    GLint internalFormat,
+                                    gl::Extents size,
+                                    GLboolean fixedSampleLocations) override;
+
     bool isImmutable() const { return mImmutable; }
 
     virtual gl::Error getRenderTarget(const gl::ImageIndex &index, RenderTargetD3D **outRT) = 0;
