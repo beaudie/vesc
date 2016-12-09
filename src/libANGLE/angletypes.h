@@ -24,6 +24,7 @@ class State;
 class Program;
 struct VertexAttribute;
 struct VertexAttribCurrentValueData;
+struct VertexInfo;
 
 enum PrimitiveType
 {
