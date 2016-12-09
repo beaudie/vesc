@@ -11,15 +11,15 @@ namespace gl
 
 inline bool operator==(const VertexAttribute &a, const VertexAttribute &b)
 {
-    return a.enabled == b.enabled &&
-           a.type == b.type &&
-           a.size == b.size &&
-           a.normalized == b.normalized &&
-           a.pureInteger == b.pureInteger &&
-           a.stride == b.stride &&
-           a.pointer == b.pointer &&
-           a.buffer.get() == b.buffer.get() &&
-           a.divisor == b.divisor;
+	return a.enabled == b.enabled &&
+		a.type == b.type &&
+		a.size == b.size &&
+		a.normalized == b.normalized &&
+		a.pureInteger == b.pureInteger &&
+		a.stride() == b.stride() &&
+		a.pointer() == b.pointer() &&
+		a.buffer()->get() == b.buffer()->get() &&
+		a.divisor() == b.divisor();
 }
 
 inline bool operator!=(const VertexAttribute &a, const VertexAttribute &b)
