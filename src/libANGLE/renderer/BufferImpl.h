@@ -12,6 +12,7 @@
 #include "common/angleutils.h"
 #include "common/mathutil.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/VertexAttribute.h"
 
 #include <stdint.h>
 
