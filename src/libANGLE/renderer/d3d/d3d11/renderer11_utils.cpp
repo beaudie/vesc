@@ -1125,6 +1125,12 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
 
     // Vertex shader limits
     caps->maxVertexAttributes = static_cast<GLuint>(GetMaximumVertexInputSlots(featureLevel));
+    caps->maxVertexAttribBindings = caps->maxVertexAttributes;
+    // [OpenGL ES 3.1] Section 20 Page 400:
+    // Table 20.41: Implementation Dependent Values
+    caps->maxVertexAttribStride         = 2048;
+    caps->maxVertexAttribRelativeOffset = 2047;
+
     caps->maxVertexUniformComponents =
         static_cast<GLuint>(GetMaximumVertexUniformVectors(featureLevel)) * 4;
     caps->maxVertexUniformVectors =

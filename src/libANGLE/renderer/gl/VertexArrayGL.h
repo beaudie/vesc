@@ -86,12 +86,15 @@ class VertexArrayGL : public VertexArrayImpl
 
     mutable BindingPointer<gl::Buffer> mAppliedElementArrayBuffer;
     mutable std::vector<gl::VertexAttribute> mAppliedAttributes;
+    mutable std::vector<gl::VertexBufferBinding> mAppliedVertexBufferBindings;
 
     mutable size_t mStreamingElementArrayBufferSize;
     mutable GLuint mStreamingElementArrayBuffer;
 
     mutable size_t mStreamingArrayBufferSize;
     mutable GLuint mStreamingArrayBuffer;
+
+    bool mVertexAttribBindingAvailable;
 
     gl::AttributesMask mAttributesNeedStreaming;
 };
