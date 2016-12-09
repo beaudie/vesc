@@ -289,7 +289,7 @@ void QueryVertexAttribBase(const VertexAttribute &attrib,
             *params = ConvertFromGLuint<ParamType>(attrib.size);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_STRIDE:
-            *params = ConvertFromGLuint<ParamType>(attrib.stride);
+            *params = ConvertFromGLuint<ParamType>(attrib.stride());
             break;
         case GL_VERTEX_ATTRIB_ARRAY_TYPE:
             *params = ConvertFromGLenum<ParamType>(attrib.type);
@@ -298,10 +298,10 @@ void QueryVertexAttribBase(const VertexAttribute &attrib,
             *params = ConvertFromGLboolean<ParamType>(attrib.normalized);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING:
-            *params = ConvertFromGLuint<ParamType>(attrib.buffer.id());
+            *params = ConvertFromGLuint<ParamType>(attrib.buffer()->id());
             break;
         case GL_VERTEX_ATTRIB_ARRAY_DIVISOR:
-            *params = ConvertFromGLuint<ParamType>(attrib.divisor);
+            *params = ConvertFromGLuint<ParamType>(attrib.divisor());
             break;
         case GL_VERTEX_ATTRIB_ARRAY_INTEGER:
             *params = ConvertFromGLboolean<ParamType>(attrib.pureInteger);
@@ -640,7 +640,7 @@ void QueryVertexAttribPointerv(const VertexAttribute &attrib, GLenum pname, GLvo
     switch (pname)
     {
         case GL_VERTEX_ATTRIB_ARRAY_POINTER:
-            *pointer = const_cast<GLvoid *>(attrib.pointer);
+            *pointer = const_cast<GLvoid *>(attrib.pointer());
             break;
 
         default:

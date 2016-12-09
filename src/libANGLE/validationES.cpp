@@ -52,13 +52,13 @@ bool ValidateDrawAttribs(ValidationContext *context,
         const VertexAttribute &attrib = vertexAttribs[attributeIndex];
         if (program->isAttribLocationActive(attributeIndex) && attrib.enabled)
         {
-            gl::Buffer *buffer = attrib.buffer.get();
+            gl::Buffer *buffer = attrib.buffer()->get();
 
             if (buffer)
             {
                 CheckedNumeric<GLint64> maxVertexElement = 0;
                 bool readsData                           = false;
-                if (attrib.divisor == 0)
+                if (attrib.divisor() == 0)
                 {
                     readsData        = vertexCount > 0;
                     maxVertexElement = static_cast<GLint64>(maxVertex);
@@ -66,8 +66,8 @@ bool ValidateDrawAttribs(ValidationContext *context,
                 else if (primcount > 0)
                 {
                     readsData = true;
-                    maxVertexElement =
-                        static_cast<GLint64>(primcount - 1) / static_cast<GLint64>(attrib.divisor);
+                    maxVertexElement = static_cast<GLint64>(primcount - 1) /
+                                       static_cast<GLint64>(attrib.divisor());
                 }
 
                 // If we're drawing zero vertices, we have enough data.
@@ -78,7 +78,7 @@ bool ValidateDrawAttribs(ValidationContext *context,
                     CheckedNumeric<GLint64> attribSize   = ComputeVertexAttributeTypeSize(attrib);
                     CheckedNumeric<GLint64> attribDataSize =
                         maxVertexElement * attribStride + attribSize;
-                    CheckedNumeric<GLint64> maxOffset = attribDataSize + attrib.offset;
+                    CheckedNumeric<GLint64> maxOffset = attribDataSize + attrib.offset();
 
                     if (!maxOffset.IsValid())
                     {
@@ -107,7 +107,7 @@ bool ValidateDrawAttribs(ValidationContext *context,
                 context->handleError(
                     Error(GL_INVALID_OPERATION, "An enabled vertex array has no buffer."));
             }
-            else if (attrib.pointer == NULL)
+            else if (attrib.pointer() == nullptr)
             {
                 // This is an application error that would normally result in a crash,
                 // but we catch it and return an error
@@ -3243,7 +3243,7 @@ static bool ValidateDrawInstancedANGLE(Context *context)
     for (size_t attributeIndex = 0; attributeIndex < MAX_VERTEX_ATTRIBS; attributeIndex++)
     {
         const VertexAttribute &attrib = vao->getVertexAttribute(attributeIndex);
-        if (program->isAttribLocationActive(attributeIndex) && attrib.divisor == 0)
+        if (program->isAttribLocationActive(attributeIndex) && attrib.divisor() == 0)
         {
             return true;
         }
