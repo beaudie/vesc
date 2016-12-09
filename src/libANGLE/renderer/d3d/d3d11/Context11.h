@@ -121,6 +121,8 @@ class Context11 : public ContextImpl
 
     Renderer11 *getRenderer() const { return mRenderer; }
 
+    void getMultisamplefv(GLenum pname, GLuint index, GLfloat *val) override;
+
   private:
     Renderer11 *mRenderer;
 };

@@ -264,4 +264,9 @@ std::vector<PathImpl *> ContextVk::createPaths(GLsizei)
     return std::vector<PathImpl *>();
 }
 
+void ContextVk::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
+{
+    UNIMPLEMENTED();
+}
+
 }  // namespace rx

@@ -282,4 +282,9 @@ const gl::Limitations &Context11::getNativeLimitations() const
     return mRenderer->getNativeLimitations();
 }
 
+void Context11::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
+{
+    UNIMPLEMENTED();
+}
+
 }  // namespace rx

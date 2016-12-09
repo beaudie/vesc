@@ -119,6 +119,8 @@ class ContextVk : public ContextImpl
     // Path object creation
     std::vector<PathImpl *> createPaths(GLsizei) override;
 
+    void getMultisamplefv(GLenum pname, GLuint index, GLfloat *val) override;
+
   private:
     RendererVk *mRenderer;
 };

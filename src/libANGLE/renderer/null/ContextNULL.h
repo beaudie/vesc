@@ -163,6 +163,8 @@ class ContextNULL : public ContextImpl
 
     std::vector<PathImpl *> createPaths(GLsizei range) override;
 
+    void getMultisamplefv(GLenum pname, GLuint index, GLfloat *val) override;
+
   private:
     gl::Caps mCaps;
     gl::TextureCapsMap mTextureCaps;

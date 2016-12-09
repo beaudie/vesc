@@ -1,3 +1,4 @@
+#line 17 "./glslang.l"
 //
 // Copyright (c) 2012-2013 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
@@ -412,6 +413,7 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[824] =
     {   0,
+<<<<<<< HEAD
         0,    0,    0,    0,  242,  240,  239,  239,  223,  229,
       234,  218,  219,  227,  226,  215,  224,  222,  228,  181,
       181,  216,  212,  230,  217,  231,  235,  178,  220,  221,
@@ -503,6 +505,98 @@ static yyconst flex_int16_t yy_accept[824] =
       178,  178,  178,  178,  135,  178,  178,  178,   76,  178,
       136,  115,  116,  178,  178,  178,   62,  178,  178,  173,
       121,   77,    0
+=======
+        0,    0,    0,    0,  241,  239,  238,  238,  222,  228,
+      233,  217,  218,  226,  225,  214,  223,  221,  227,  180,
+      180,  215,  211,  229,  216,  230,  234,  177,  219,  220,
+      232,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  212,  231,  213,  224,  237,  236,  240,  235,  208,
+      194,  213,  202,  197,  192,  200,  190,  201,  191,  186,
+      193,  185,  179,  180,    0,  183,    0,  220,  212,  219,
+      209,  205,  207,  206,  210,  177,  198,  204,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+
+       12,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,   15,  177,  177,   23,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  199,  203,  235,    0,  189,  185,    0,  188,  182,
+        0,  184,  178,  195,  196,  177,  137,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+       13,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+
+      177,   27,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,   24,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  177,    0,  186,
+        0,  185,  187,  181,  177,  177,  177,   30,  177,  177,
+       18,  174,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,   16,  140,  177,  177,  177,  177,   21,  177,
+      177,  144,  155,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  152,    4,   35,   36,   37,
+
+      177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  143,   31,  177,  177,   28,  177,
+      177,  177,  177,  177,  177,  177,   47,   48,   49,   29,
+      177,  177,  177,  177,  177,  177,   10,   53,   54,   55,
+      177,  138,  177,  177,    7,  177,  177,  177,  177,  164,
+      165,  166,  177,   32,  177,  156,   26,  167,  168,  169,
+        2,  161,  162,  163,  177,  177,  177,   25,  159,  177,
+      177,  177,   50,   51,   52,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  102,  177,  177,  177,
+
+      177,  177,  177,  177,  153,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  139,  177,  177,  176,
+       56,   57,   58,  177,  177,   14,  177,  107,  177,  177,
+      177,  177,  105,  177,  177,  177,  154,  149,  108,  177,
+      177,  177,  177,  177,  177,  145,  177,  177,  177,   81,
+       38,   41,   43,   42,   39,   45,   44,   46,   40,  177,
+      177,  177,  177,  160,  136,  177,  177,  147,  177,  177,
+      177,   34,  103,  173,   22,  148,   80,  177,  158,   17,
+      177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,   19,   33,  177,  177,  177,  177,
+
+      177,  177,  109,   82,   88,  177,  177,  177,  177,  177,
+        3,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  141,  177,  177,  177,  177,  177,    8,  177,
+      177,    9,  177,  177,  177,  177,   20,   96,   11,  150,
+      110,   83,   90,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  146,  177,  177,  177,   94,
+       99,   97,  177,  177,  177,  177,  177,  177,  177,  142,
+      111,   84,   89,  177,  177,  157,  177,   98,  177,  177,
+        6,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+       93,  151,    1,  177,  177,  177,  177,  177,  175,  177,
+
+      106,    5,  170,   59,   62,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  177,   95,  177,
+      177,  177,  177,   91,  177,  177,  177,  177,  177,  124,
+       67,   68,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  104,  177,  177,  177,   92,
+      126,   72,   73,  177,  177,  100,  177,  177,  177,  177,
+      177,  177,  177,  119,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,   66,  177,  177,  177,  177,   60,
+      177,  177,  177,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  120,  112,  177,   85,  177,  177,  177,   71,
+
+      177,  177,   69,  177,  177,  177,  177,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  121,  177,  177,   76,
+      177,  177,   74,  113,   86,  177,  115,  177,  116,  177,
+      177,  177,  177,  177,  101,  177,  177,  177,  177,   64,
+      177,   63,  130,  177,  177,  114,   87,  177,  177,  177,
+      177,  177,  177,  177,  177,  177,  177,  128,  131,  122,
+      177,   65,  177,  177,  177,  177,  177,  177,  177,  177,
+      129,  132,  177,  177,  125,   70,  177,  177,  171,  177,
+      177,  177,   77,  177,  177,  127,   75,  177,  177,  177,
+      177,  177,  177,  133,  177,  177,  177,  177,  177,  177,
+
+      134,  177,  177,  177,   78,  177,  135,  117,  118,  177,
+      177,  177,   61,  177,  177,  172,  123,   79,    0
+>>>>>>> implement es 3.1 feature, multisampled textures.
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -1063,9 +1157,12 @@ static int reserved_word(yyscan_t yyscanner);
 static int ES2_reserved_ES3_keyword(TParseContext *context, int token);
 static int ES2_keyword_ES3_reserved(TParseContext *context, int token);
 static int ES2_ident_ES3_keyword(TParseContext *context, int token);
-static int ES2_ident_ES3_reserved_ES3_1_keyword(TParseContext *context, int token);
 static int ES2_and_ES3_reserved_ES3_1_keyword(TParseContext *context, int token);
+<<<<<<< HEAD
 static int ES2_and_ES3_ident_ES3_1_keyword(TParseContext *context, int token);
+=======
+static int ES2_ident_ES3_reserved_ES3_1_keyword(TParseContext *context, int token);
+>>>>>>> implement es 3.1 feature, multisampled textures.
 static int uint_constant(TParseContext *context);
 static int int_constant(TParseContext *context);
 static int float_constant(yyscan_t yyscanner);
@@ -1662,7 +1759,11 @@ YY_RULE_SETUP
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
+<<<<<<< HEAD
 { return ES2_ident_ES3_keyword(context, SAMPLER2DARRAY); }
+=======
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, SAMPLER2DMS); }
+>>>>>>> implement es 3.1 feature, multisampled textures.
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
@@ -1682,6 +1783,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
+<<<<<<< HEAD
 { return ES2_ident_ES3_keyword(context, USAMPLER2D); }
 	YY_BREAK
 case 72:
@@ -1785,8 +1887,119 @@ YY_RULE_SETUP
 { return ES2_and_ES3_reserved_ES3_1_keyword(context, VOLATILE); }
 	YY_BREAK
 /* Reserved keywords for GLSL ES 3.00 that are not reserved for GLSL ES 1.00 */
+=======
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, ISAMPLER2DMS); }
+	YY_BREAK
+case 72:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_keyword(context, USAMPLER2D); }
+	YY_BREAK
+case 73:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_keyword(context, USAMPLER3D); }
+	YY_BREAK
+case 74:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_keyword(context, USAMPLERCUBE); }
+	YY_BREAK
+case 75:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_keyword(context, USAMPLER2DARRAY); }
+	YY_BREAK
+case 76:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, USAMPLER2DMS); }
+	YY_BREAK
+case 77:
+YY_RULE_SETUP
+{ return ES2_reserved_ES3_keyword(context, SAMPLER2DSHADOW); }
+	YY_BREAK
+case 78:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_keyword(context, SAMPLERCUBESHADOW); }
+	YY_BREAK
+case 79:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_keyword(context, SAMPLER2DARRAYSHADOW); }
+	YY_BREAK
+case 80:
+YY_RULE_SETUP
+{ return STRUCT; }
+	YY_BREAK
+case 81:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_keyword(context, LAYOUT); }
+	YY_BREAK
+case 82:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IMAGE2D); }
+	YY_BREAK
+case 83:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IIMAGE2D); }
+	YY_BREAK
+case 84:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, UIMAGE2D); }
+	YY_BREAK
+case 85:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IMAGE2DARRAY); }
+	YY_BREAK
+case 86:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IIMAGE2DARRAY); }
+	YY_BREAK
+case 87:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, UIMAGE2DARRAY); }
+	YY_BREAK
+case 88:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IMAGE3D); }
+	YY_BREAK
+case 89:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, UIMAGE3D); }
+	YY_BREAK
+case 90:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IIMAGE3D); }
+	YY_BREAK
+case 91:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IIMAGECUBE); }
+	YY_BREAK
+case 92:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, UIMAGECUBE); }
+	YY_BREAK
+case 93:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, IMAGECUBE); }
+	YY_BREAK
+case 94:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, READONLY); }
+	YY_BREAK
+case 95:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, WRITEONLY); }
+	YY_BREAK
+case 96:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, COHERENT); }
+	YY_BREAK
+>>>>>>> implement es 3.1 feature, multisampled textures.
 case 97:
+YY_RULE_SETUP
+{ return ES2_ident_ES3_reserved_ES3_1_keyword(context, RESTRICT); }
+	YY_BREAK
 case 98:
+YY_RULE_SETUP
+{ return ES2_and_ES3_reserved_ES3_1_keyword(context, VOLATILE); }
+	YY_BREAK
+/* Reserved keywords for GLSL ES 3.00 that are not reserved for GLSL ES 1.00 */
 case 99:
 case 100:
 case 101:

@@ -147,6 +147,8 @@ class ContextImpl : public GLImplFactory
     const gl::Extensions &getExtensions() const { return mState.getExtensions(); }
     const gl::Limitations &getLimitations() const { return mState.getLimitations(); }
 
+    virtual void getMultisamplefv(GLenum pname, GLuint index, GLfloat *val);
+
   protected:
     const gl::ContextState &mState;
 };

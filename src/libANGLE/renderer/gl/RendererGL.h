@@ -166,6 +166,8 @@ class RendererGL : angle::NonCopyable
     const gl::Extensions &getNativeExtensions() const;
     const gl::Limitations &getNativeLimitations() const;
 
+    void getMultisamplefv(GLenum pname, GLuint index, GLfloat *val);
+
   private:
     void ensureCapsInitialized() const;
     void generateCaps(gl::Caps *outCaps,
