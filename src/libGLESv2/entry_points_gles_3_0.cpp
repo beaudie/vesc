@@ -1069,7 +1069,9 @@ void GL_APIENTRY GetVertexAttribIiv(GLuint index, GLenum pname, GLint* params)
             context->getGLState().getVertexAttribCurrentValue(index);
         const VertexAttribute &attrib =
             context->getGLState().getVertexArray()->getVertexAttribute(index);
-        QueryVertexAttribIiv(attrib, currentValues, pname, params);
+        const VertexBufferBinding &binding =
+            context->getGLState().getVertexArray()->getVertexBufferBinding(attrib.bindingIndex);
+        QueryVertexAttribIiv(attrib, binding, currentValues, pname, params);
     }
 }
 
@@ -1091,7 +1093,9 @@ void GL_APIENTRY GetVertexAttribIuiv(GLuint index, GLenum pname, GLuint* params)
             context->getGLState().getVertexAttribCurrentValue(index);
         const VertexAttribute &attrib =
             context->getGLState().getVertexArray()->getVertexAttribute(index);
-        QueryVertexAttribIuiv(attrib, currentValues, pname, params);
+        const VertexBufferBinding &binding =
+            context->getGLState().getVertexArray()->getVertexBufferBinding(attrib.bindingIndex);
+        QueryVertexAttribIuiv(attrib, binding, currentValues, pname, params);
     }
 }
 
