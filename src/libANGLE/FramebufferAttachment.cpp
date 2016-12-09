@@ -110,6 +110,10 @@ void FramebufferAttachment::attach(GLenum type,
     {
         mResource->onDetach();
     }
+    else
+    {
+        mType = GL_NONE;
+    }
     mResource = resource;
 }
 
