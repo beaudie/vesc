@@ -1090,11 +1090,11 @@ gl::Error StateManager11::updateCurrentValueAttribs(const gl::State &state,
 {
     const auto &activeAttribsMask  = state.getProgram()->getActiveAttribLocationsMask();
     const auto &dirtyActiveAttribs = (activeAttribsMask & mDirtyCurrentValueAttribs);
-    const auto &vertexAttributes   = state.getVertexArray()->getVertexAttributes();
+    const auto &vertexInfos        = state.getVertexArray()->getVertexInfos();
 
     for (auto attribIndex : angle::IterateBitSet(dirtyActiveAttribs))
     {
-        if (vertexAttributes[attribIndex].enabled)
+        if (vertexInfos[attribIndex].attrib.enabled)
             continue;
 
         mDirtyCurrentValueAttribs.reset(attribIndex);
@@ -1103,7 +1103,7 @@ gl::Error StateManager11::updateCurrentValueAttribs(const gl::State &state,
             state.getVertexAttribCurrentValue(static_cast<unsigned int>(attribIndex));
         auto currentValueAttrib              = &mCurrentValueAttribs[attribIndex];
         currentValueAttrib->currentValueType = currentValue.Type;
-        currentValueAttrib->attribute        = &vertexAttributes[attribIndex];
+        currentValueAttrib->vertexInfo       = &vertexInfos[attribIndex];
 
         ANGLE_TRY(vertexDataManager->storeCurrentValue(currentValue, currentValueAttrib,
                                                        static_cast<size_t>(attribIndex)));
