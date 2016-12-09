@@ -99,6 +99,8 @@ class ContextGL : public ContextImpl
     gl::Error drawArraysIndirect(GLenum mode, const GLvoid *indirect) override;
     gl::Error drawElementsIndirect(GLenum mode, GLenum type, const GLvoid *indirect) override;
 
+    gl::Error getMultisamplefv(GLenum pname, GLuint index, GLfloat *val) override;
+
     // CHROMIUM_path_rendering implementation
     void stencilFillPath(const gl::Path *path, GLenum fillMode, GLuint mask) override;
     void stencilStrokePath(const gl::Path *path, GLint reference, GLuint mask) override;

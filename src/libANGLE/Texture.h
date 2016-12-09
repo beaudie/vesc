@@ -101,6 +101,8 @@ struct TextureState final : public angle::NonCopyable
     const SamplerState &getSamplerState() const { return mSamplerState; }
     GLenum getUsage() const { return mUsage; }
 
+    GLsizei getSamples() const { return mSamples; }
+
   private:
     // Texture needs access to the ImageDesc functions.
     friend class Texture;
@@ -120,6 +122,7 @@ struct TextureState final : public angle::NonCopyable
                            GLuint maxLevel,
                            Extents baseSize,
                            const Format &format);
+    void setSamples(GLsizei samples);
     void clearImageDesc(GLenum target, size_t level);
     void clearImageDescs();
 
@@ -136,6 +139,8 @@ struct TextureState final : public angle::NonCopyable
 
     bool mImmutableFormat;
     GLuint mImmutableLevels;
+
+    GLsizei mSamples;
 
     // From GL_ANGLE_texture_usage
     GLenum mUsage;
@@ -237,6 +242,8 @@ class Texture final : public egl::ImageSibling,
 
     GLuint getImmutableLevels() const;
 
+    GLsizei getSamples(GLenum target) const;
+
     void setUsage(GLenum usage);
     GLenum getUsage() const;
 
@@ -306,6 +313,12 @@ class Texture final : public egl::ImageSibling,
     Error copyCompressedTexture(const Texture *source);
 
     Error setStorage(GLenum target, GLsizei levels, GLenum internalFormat, const Extents &size);
+
+    Error setStorageMultisample(GLenum target,
+                                GLsizei samples,
+                                GLint internalformat,
+                                gl::Extents size,
+                                GLboolean fixedSampleLocations);
 
     Error setEGLImageTarget(GLenum target, egl::Image *imageTarget);
 
