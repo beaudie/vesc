@@ -2035,7 +2035,7 @@ TIntermDeclaration *TParseContext::parseSingleArrayInitDeclaration(
     return declaration;
 }
 
-TIntermAggregate *TParseContext::parseInvariantDeclaration(
+TIntermInvariantDeclaration *TParseContext::parseInvariantDeclaration(
     const TTypeQualifierBuilder &typeQualifierBuilder,
     const TSourceLoc &identifierLoc,
     const TString *identifier,
@@ -2085,9 +2085,7 @@ TIntermAggregate *TParseContext::parseInvariantDeclaration(
     TIntermSymbol *intermSymbol =
         intermediate.addSymbol(variable->getUniqueId(), *identifier, type, identifierLoc);
 
-    TIntermAggregate *aggregate = TIntermediate::MakeAggregate(intermSymbol, identifierLoc);
-    aggregate->setOp(EOpInvariantDeclaration);
-    return aggregate;
+    return new TIntermInvariantDeclaration(intermSymbol, identifierLoc);
 }
 
 void TParseContext::parseDeclarator(TPublicType &publicType,
