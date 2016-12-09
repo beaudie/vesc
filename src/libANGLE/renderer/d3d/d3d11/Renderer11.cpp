@@ -4393,25 +4393,26 @@ GLenum Renderer11::getVertexComponentType(gl::VertexFormatType vertexFormatType)
     return d3d11::GetComponentType(format.nativeFormat);
 }
 
-gl::ErrorOrResult<unsigned int> Renderer11::getVertexSpaceRequired(
-    const gl::VertexAttribute &attrib,
-    GLsizei count,
-    GLsizei instances) const
+gl::ErrorOrResult<unsigned int> Renderer11::getVertexSpaceRequired(const gl::VertexInfo &vertexInfo,
+                                                                   GLsizei count,
+                                                                   GLsizei instances) const
 {
+    const gl::VertexAttribute &attrib = vertexInfo.attrib;
     if (!attrib.enabled)
     {
         return 16u;
     }
 
     unsigned int elementCount = 0;
-    if (instances == 0 || attrib.divisor == 0)
+    const gl::VertexBinding &binding = *vertexInfo.binding;
+    if (instances == 0 || binding.divisor == 0)
     {
         elementCount = count;
     }
     else
     {
         // Round up to divisor, if possible
-        elementCount = UnsignedCeilDivide(static_cast<unsigned int>(instances), attrib.divisor);
+        elementCount = UnsignedCeilDivide(static_cast<unsigned int>(instances), binding.divisor);
     }
 
     gl::VertexFormatType formatType      = gl::GetVertexFormatType(attrib);
