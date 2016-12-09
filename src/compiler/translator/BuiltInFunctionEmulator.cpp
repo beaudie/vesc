@@ -119,6 +119,25 @@ void BuiltInFunctionEmulator::addEmulatedFunction(TOperator op, const TType *par
     mEmulatedFunctions[FunctionId(op, param1, param2)] = std::string(emulatedFunctionDefinition);
 }
 
+void BuiltInFunctionEmulator::addEmulatedFunctionWithDependency(
+    DependencyType dep,
+    TOperator op,
+    const TType *param1,
+    const TType *param2,
+    const char *emulatedFunctionDefinition)
+{
+    FunctionId id(op, param1, param2);
+    mEmulatedFunctions[id] = std::string(emulatedFunctionDefinition);
+    if (dep == IS_DEPENDENCY)
+    {
+        mDependencyId = id;
+    }
+    else if (dep == IS_DEPENDENT)
+    {
+        mFunctionDependencies[id] = mDependencyId;
+    }
+}
+
 void BuiltInFunctionEmulator::addEmulatedFunction(TOperator op, const TType *param1, const TType *param2,
                                                   const TType *param3, const char *emulatedFunctionDefinition)
 {
@@ -163,6 +182,12 @@ bool BuiltInFunctionEmulator::SetFunctionCalled(const FunctionId &functionId)
             if (mFunctions[i] == functionId)
                 return true;
         }
+        // If the function depends on another, mark the dependency as called.
+        auto dependency = mFunctionDependencies.find(functionId);
+        if (dependency != mFunctionDependencies.end())
+        {
+            SetFunctionCalled((*dependency).second);
+        }
         // Copy the functionId if it needs to be stored, to make sure that the TType pointers inside
         // remain valid and constant.
         mFunctions.push_back(functionId.getCopy());
@@ -193,6 +218,14 @@ TString BuiltInFunctionEmulator::GetEmulatedFunctionName(
 {
     ASSERT(name[name.length() - 1] == '(');
     return "webgl_" + name.substr(0, name.length() - 1) + "_emu(";
+}
+
+BuiltInFunctionEmulator::FunctionId::FunctionId()
+    : mOp(EOpNull),
+      mParam1(TCache::getType(EbtVoid)),
+      mParam2(TCache::getType(EbtVoid)),
+      mParam3(TCache::getType(EbtVoid))
+{
 }
 
 BuiltInFunctionEmulator::FunctionId::FunctionId(TOperator op, const TType *param)

@@ -22,6 +22,12 @@ namespace sh
 class BuiltInFunctionEmulator
 {
   public:
+    enum DependencyType
+    {
+        IS_DEPENDENCY,
+        IS_DEPENDENT
+    };
+
     BuiltInFunctionEmulator();
 
     void MarkBuiltInFunctionsForEmulation(TIntermNode *root);
@@ -44,6 +50,14 @@ class BuiltInFunctionEmulator
     void addEmulatedFunction(TOperator op, const TType *param1, const TType *param2, const TType *param3,
                              const char *emulatedFunctionDefinition);
 
+    // After adding a dependency function by setting dep to IS_DEPENDENCY, subsequent functions with
+    // IS_DEPENDENT will have that function as their dependency.
+    void addEmulatedFunctionWithDependency(DependencyType dep,
+                                           TOperator op,
+                                           const TType *param1,
+                                           const TType *param2,
+                                           const char *emulatedFunctionDefinition);
+
   private:
     class BuiltInFunctionEmulationMarker;
 
@@ -57,9 +71,13 @@ class BuiltInFunctionEmulator
 
     class FunctionId {
       public:
+        FunctionId();
         FunctionId(TOperator op, const TType *param);
         FunctionId(TOperator op, const TType *param1, const TType *param2);
         FunctionId(TOperator op, const TType *param1, const TType *param2, const TType *param3);
+
+        FunctionId(const FunctionId &) = default;
+        FunctionId &operator=(const FunctionId &) = default;
 
         bool operator==(const FunctionId &other) const;
         bool operator<(const FunctionId &other) const;
@@ -80,6 +98,14 @@ class BuiltInFunctionEmulator
 
     // Map from function id to emulated function definition
     std::map<FunctionId, std::string> mEmulatedFunctions;
+
+    // The latest function added with IS_DEPENDENCY flag. Functions added with IS_DEPENDENT will
+    // have this function as their dependency.
+    FunctionId mDependencyId;
+
+    // Map from dependent functions to their dependencies. This structure allows each function to
+    // have at most one dependency.
+    std::map<FunctionId, FunctionId> mFunctionDependencies;
 
     // Called function ids
     std::vector<FunctionId> mFunctions;
