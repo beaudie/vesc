@@ -153,6 +153,8 @@
             'libANGLE/VertexAttribute.cpp',
             'libANGLE/VertexAttribute.h',
             'libANGLE/VertexAttribute.inl',
+            'libANGLE/VertexBufferBinding.cpp',
+            'libANGLE/VertexBufferBinding.h',
             'libANGLE/WorkerThread.cpp',
             'libANGLE/WorkerThread.h',
             'libANGLE/angletypes.cpp',

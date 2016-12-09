@@ -10,6 +10,7 @@
 #define LIBANGLE_RENDERER_GL_VERTEXARRAYGL_H_
 
 #include "libANGLE/renderer/VertexArrayImpl.h"
+#include "libANGLE/VertexBufferBinding.h"
 
 namespace rx
 {
@@ -86,6 +87,7 @@ class VertexArrayGL : public VertexArrayImpl
 
     mutable BindingPointer<gl::Buffer> mAppliedElementArrayBuffer;
     mutable std::vector<gl::VertexAttribute> mAppliedAttributes;
+    mutable std::vector<gl::VertexBufferBinding> mAppliedVertexBufferBindings;
 
     mutable size_t mStreamingElementArrayBufferSize;
     mutable GLuint mStreamingElementArrayBuffer;

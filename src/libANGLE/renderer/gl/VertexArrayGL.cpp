@@ -28,7 +28,7 @@ namespace
 {
 bool AttributeNeedsStreaming(const VertexAttribute &attribute)
 {
-    return (attribute.enabled && attribute.buffer.get() == nullptr);
+    return (attribute.enabled && attribute.buffer()->get() == nullptr);
 }
 
 }  // anonymous namespace
@@ -50,10 +50,24 @@ VertexArrayGL::VertexArrayGL(const VertexArrayState &state,
     ASSERT(mStateManager);
     mFunctions->genVertexArrays(1, &mVertexArrayID);
 
-    // Set the cached vertex attribute array size
+    // Set the cached vertex attribute array and vertex buffer binding array size
     GLint maxVertexAttribs = 0;
     mFunctions->getIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttribs);
-    mAppliedAttributes.resize(maxVertexAttribs);
+    GLint maxVertexAttribBindings = maxVertexAttribs;
+    if (mFunctions->version >= Version(4, 3))
+    {
+        mFunctions->getIntegerv(GL_MAX_VERTEX_ATTRIB_BINDINGS, &maxVertexAttribBindings);
+        ASSERT(maxVertexAttribBindings >= maxVertexAttribs);
+    }
+    mAppliedVertexBufferBindings.resize(maxVertexAttribs);
+    for (GLint i = 0; i < maxVertexAttribs; i++)
+    {
+        mAppliedVertexBufferBindings[i].index = i;
+        if (i < maxVertexAttribs)
+        {
+            mAppliedAttributes.push_back(VertexAttribute(i, &mAppliedVertexBufferBindings[i]));
+        }
+    }
 }
 
 VertexArrayGL::~VertexArrayGL()
@@ -70,9 +84,9 @@ VertexArrayGL::~VertexArrayGL()
     mStreamingArrayBuffer = 0;
 
     mAppliedElementArrayBuffer.set(nullptr);
-    for (size_t idx = 0; idx < mAppliedAttributes.size(); idx++)
+    for (size_t idx = 0; idx < mAppliedVertexBufferBindings.size(); idx++)
     {
-        mAppliedAttributes[idx].buffer.set(nullptr);
+        mAppliedVertexBufferBindings[idx].buffer.set(nullptr);
     }
 }
 
@@ -319,7 +333,7 @@ gl::Error VertexArrayGL::streamAttributes(const gl::AttributesMask &activeAttrib
             const size_t sourceStride = ComputeVertexAttributeStride(attrib);
             const size_t destStride   = ComputeVertexAttributeTypeSize(attrib);
 
-            const uint8_t *inputPointer = reinterpret_cast<const uint8_t *>(attrib.pointer);
+            const uint8_t *inputPointer = reinterpret_cast<const uint8_t *>(attrib.pointer());
 
             // Pack the data when copying it, user could have supplied a very large stride that
             // would cause the buffer to be much larger than needed.
@@ -439,7 +453,7 @@ void VertexArrayGL::updateAttribPointer(size_t attribIndex)
     }
 
     mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
-    const Buffer *arrayBuffer = attrib.buffer.get();
+    const Buffer *arrayBuffer = attrib.buffer()->get();
     if (arrayBuffer != nullptr)
     {
         const BufferGL *arrayBufferGL = GetImplAs<BufferGL>(arrayBuffer);
@@ -449,24 +463,26 @@ void VertexArrayGL::updateAttribPointer(size_t attribIndex)
     {
         mStateManager->bindBuffer(GL_ARRAY_BUFFER, 0);
     }
-    mAppliedAttributes[attribIndex].buffer = attrib.buffer;
+    size_t bindingIndex = mAppliedAttributes[attribIndex].bindingIndex();
+    mAppliedVertexBufferBindings[bindingIndex].buffer = *attrib.buffer();
 
     if (attrib.pureInteger)
     {
         mFunctions->vertexAttribIPointer(static_cast<GLuint>(attribIndex), attrib.size, attrib.type,
-                                         attrib.stride, attrib.pointer);
+                                         attrib.stride(), attrib.pointer());
     }
     else
     {
         mFunctions->vertexAttribPointer(static_cast<GLuint>(attribIndex), attrib.size, attrib.type,
-                                        attrib.normalized, attrib.stride, attrib.pointer);
+                                        attrib.normalized, attrib.stride(), attrib.pointer());
     }
     mAppliedAttributes[attribIndex].size        = attrib.size;
     mAppliedAttributes[attribIndex].type        = attrib.type;
     mAppliedAttributes[attribIndex].normalized  = attrib.normalized;
     mAppliedAttributes[attribIndex].pureInteger = attrib.pureInteger;
-    mAppliedAttributes[attribIndex].stride      = attrib.stride;
-    mAppliedAttributes[attribIndex].pointer     = attrib.pointer;
+
+    mAppliedVertexBufferBindings[bindingIndex].stride  = attrib.stride();
+    mAppliedVertexBufferBindings[bindingIndex].pointer = attrib.pointer();
 }
 
 void VertexArrayGL::syncState(const VertexArray::DirtyBits &dirtyBits)
@@ -491,18 +507,25 @@ void VertexArrayGL::syncState(const VertexArray::DirtyBits &dirtyBits)
                 static_cast<size_t>(dirtyBit) - VertexArray::DIRTY_BIT_ATTRIB_0_POINTER;
             updateAttribPointer(attribIndex);
         }
+        else if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_BINDING &&
+                 dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_BINDING)
+        {
+            // TODO(jiawei.shao@intel.com): Element array buffer bindings
+        }
         else if (dirtyBit >= VertexArray::DIRTY_BIT_ATTRIB_0_DIVISOR &&
                  dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX_DIVISOR)
         {
-            size_t attribIndex =
+            size_t bindingIndex =
                 static_cast<size_t>(dirtyBit) - VertexArray::DIRTY_BIT_ATTRIB_0_DIVISOR;
-            const VertexAttribute &attrib = mData.getVertexAttribute(attribIndex);
+            const VertexBufferBinding &binding = mData.getVertexBufferBinding(bindingIndex);
 
-            if (mAppliedAttributes[attribIndex].divisor != attrib.divisor)
+            if (mAppliedVertexBufferBindings[bindingIndex].divisor != binding.divisor)
             {
                 mStateManager->bindVertexArray(mVertexArrayID, getAppliedElementArrayBufferID());
-                mFunctions->vertexAttribDivisor(static_cast<GLuint>(attribIndex), attrib.divisor);
-                mAppliedAttributes[attribIndex].divisor = attrib.divisor;
+                // TODO(jiawei.shao@intel.com): Element array buffer bindings
+                size_t attribIndex = binding.attribIndex;
+                mFunctions->vertexAttribDivisor(static_cast<GLuint>(attribIndex), binding.divisor);
+                mAppliedVertexBufferBindings[bindingIndex].divisor = binding.divisor;
             }
         }
         else
