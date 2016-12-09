@@ -1194,7 +1194,8 @@ VertexFormatType GetVertexFormatType(GLenum type, GLboolean normalized, GLuint c
 
 VertexFormatType GetVertexFormatType(const VertexAttribute &attrib)
 {
-    return GetVertexFormatType(attrib.type, attrib.normalized, attrib.size, attrib.pureInteger);
+    const auto &format = attrib.format;
+    return GetVertexFormatType(format.type, format.normalized, format.size, format.pureInteger);
 }
 
 VertexFormatType GetVertexFormatType(const VertexAttribute &attrib, GLenum currentValueType)

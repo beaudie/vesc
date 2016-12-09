@@ -100,13 +100,14 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
     for (auto attribIndex : angle::IterateBitSet(programGL->getActiveAttribLocationsMask()))
     {
         const auto &attrib = attribs[attribIndex];
+        const auto &binding = *attrib.binding;
         if (attrib.enabled)
         {
             VkVertexInputBindingDescription bindingDesc;
             bindingDesc.binding = static_cast<uint32_t>(vertexBindings.size());
             bindingDesc.stride  = static_cast<uint32_t>(gl::ComputeVertexAttributeTypeSize(attrib));
             bindingDesc.inputRate =
-                (attrib.divisor > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX);
+                (binding.divisor > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX);
 
             gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib);
 
@@ -114,13 +115,13 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
             attribDesc.binding  = bindingDesc.binding;
             attribDesc.format   = vk::GetNativeVertexFormat(vertexFormatType);
             attribDesc.location = static_cast<uint32_t>(attribIndex);
-            attribDesc.offset   = static_cast<uint32_t>(attrib.offset);
+            attribDesc.offset   = static_cast<uint32_t>(ComputeVertexAttributeOffset(attrib));
 
             vertexBindings.push_back(bindingDesc);
             vertexAttribs.push_back(attribDesc);
 
             // TODO(jmadill): Offset handling.
-            gl::Buffer *bufferGL = attrib.buffer.get();
+            gl::Buffer *bufferGL = binding.buffer.get();
             ASSERT(bufferGL);
             BufferVk *bufferVk = GetImplAs<BufferVk>(bufferGL);
             vertexHandles.push_back(bufferVk->getVkBuffer().getHandle());
