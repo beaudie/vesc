@@ -373,6 +373,7 @@ void GenerateCaps(const FunctionsGL *functions, gl::Caps *caps, gl::TextureCapsM
         functions->isAtLeastGLES(gl::Version(2, 0)))
     {
         caps->maxVertexAttributes = QuerySingleGLInt(functions, GL_MAX_VERTEX_ATTRIBS);
+        caps->maxVertexAttribBindings    = caps->maxVertexAttributes;
         caps->maxVertexUniformComponents = QuerySingleGLInt(functions, GL_MAX_VERTEX_UNIFORM_COMPONENTS);
         caps->maxVertexTextureImageUnits = QuerySingleGLInt(functions, GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS);
     }
