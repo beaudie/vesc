@@ -1308,6 +1308,15 @@ bool ValidateGetInternalFormativBase(Context *context,
         case GL_RENDERBUFFER:
             break;
 
+        case GL_TEXTURE_2D_MULTISAMPLE:
+            if (context->getClientVersion() < ES_3_1)
+            {
+                context->handleError(
+                    Error(GL_INVALID_OPERATION, "Entry point requires at least OpenGL ES 3.1."));
+                return false;
+            }
+            break;
+
         default:
             context->handleError(Error(GL_INVALID_ENUM, "Invalid target."));
             return false;
@@ -3613,6 +3622,28 @@ bool ValidateFramebufferTexture2D(Context *context,
                     return false;
                 }
                 if (tex->getTarget() != GL_TEXTURE_CUBE_MAP)
+                {
+                    context->handleError(Error(GL_INVALID_OPERATION));
+                    return false;
+                }
+            }
+            break;
+
+            case GL_TEXTURE_2D_MULTISAMPLE:
+            {
+                if (context->getClientVersion() < ES_3_1)
+                {
+                    context->handleError(Error(GL_INVALID_OPERATION,
+                                               "Entry point requires at least OpenGL ES 3.1."));
+                    return false;
+                }
+
+                if (level != 0)
+                {
+                    context->handleError(Error(GL_INVALID_VALUE));
+                    return false;
+                }
+                if (tex->getTarget() != GL_TEXTURE_2D_MULTISAMPLE)
                 {
                     context->handleError(Error(GL_INVALID_OPERATION));
                     return false;

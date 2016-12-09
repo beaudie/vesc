@@ -55,6 +55,13 @@ gl::Error Framebuffer9::invalidateSub(size_t, const GLenum *, const gl::Rectangl
     return gl::NoError();
 }
 
+gl::Error Framebuffer9::getSamplePosition(size_t index, GLfloat *xy) const
+{
+    // Shouldn't ever reach here in D3D9
+    UNREACHABLE();
+    return gl::InternalError();
+}
+
 gl::Error Framebuffer9::clearImpl(ContextImpl *context, const ClearParameters &clearParams)
 {
     const gl::FramebufferAttachment *colorAttachment        = mState.getColorAttachment(0);
