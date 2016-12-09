@@ -50,15 +50,17 @@ bool ValidateDrawAttribs(ValidationContext *context,
     for (size_t attributeIndex = 0; attributeIndex < maxEnabledAttrib; ++attributeIndex)
     {
         const VertexAttribute &attrib = vertexAttribs[attributeIndex];
+        const VertexBufferBinding &binding = vao->getVertexBufferBinding(attrib.bindingIndex);
         if (program->isAttribLocationActive(attributeIndex) && attrib.enabled)
         {
-            gl::Buffer *buffer = attrib.buffer.get();
+            gl::Buffer *buffer = binding.buffer.get();
 
             if (buffer)
             {
+
                 GLint maxVertexElement = 0;
                 bool readsData         = false;
-                if (attrib.divisor == 0)
+                if (binding.divisor == 0)
                 {
                     readsData        = vertexCount > 0;
                     maxVertexElement = maxVertex;
@@ -66,7 +68,7 @@ bool ValidateDrawAttribs(ValidationContext *context,
                 else if (primcount > 0)
                 {
                     readsData = true;
-                    maxVertexElement = (primcount - 1) / attrib.divisor;
+                    maxVertexElement = (primcount - 1) / binding.divisor;
                 }
 
                 // If we're drawing zero vertices, we have enough data.
@@ -84,7 +86,7 @@ bool ValidateDrawAttribs(ValidationContext *context,
                     // We know attribStride is given as a GLsizei which is typedefed to int.
                     // We also know an upper bound for attribSize.
                     static_assert(std::is_same<int, GLsizei>::value, "");
-                    uint64_t attribStride = ComputeVertexAttributeStride(attrib);
+                    uint64_t attribStride = ComputeVertexAttributeStride(attrib, binding);
                     uint64_t attribSize   = ComputeVertexAttributeTypeSize(attrib);
                     ASSERT(attribStride <= kIntMax && attribSize <= kMaxAttribSize);
 
@@ -94,8 +96,8 @@ bool ValidateDrawAttribs(ValidationContext *context,
                     uint64_t attribDataSizeNoOffset = maxVertexElement * attribStride + attribSize;
 
                     // An overflow can happen when adding the offset, check for it.
-                    uint64_t attribOffset = attrib.offset;
-                    if (attribDataSizeNoOffset > kUint64Max - attrib.offset)
+                    uint64_t attribOffset = ComputeVertexAttributeOffset(attrib, binding);
+                    if (attribDataSizeNoOffset > kUint64Max - attribOffset)
                     {
                         context->handleError(Error(GL_INVALID_OPERATION, "Integer overflow."));
                         return false;
@@ -123,7 +125,7 @@ bool ValidateDrawAttribs(ValidationContext *context,
                 context->handleError(
                     Error(GL_INVALID_OPERATION, "An enabled vertex array has no buffer."));
             }
-            else if (attrib.pointer == NULL)
+            else if (binding.bindingPointer == nullptr)
             {
                 // This is an application error that would normally result in a crash,
                 // but we catch it and return an error
@@ -3281,7 +3283,8 @@ static bool ValidateDrawInstancedANGLE(Context *context)
     for (size_t attributeIndex = 0; attributeIndex < MAX_VERTEX_ATTRIBS; attributeIndex++)
     {
         const VertexAttribute &attrib = vao->getVertexAttribute(attributeIndex);
-        if (program->isAttribLocationActive(attributeIndex) && attrib.divisor == 0)
+        const VertexBufferBinding &binding = vao->getVertexBufferBinding(attrib.bindingIndex);
+        if (program->isAttribLocationActive(attributeIndex) && binding.divisor == 0)
         {
             return true;
         }
