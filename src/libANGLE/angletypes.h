@@ -22,6 +22,7 @@ namespace gl
 class Buffer;
 class State;
 class Program;
+struct AttributeFormat;
 struct VertexAttribute;
 struct VertexAttribCurrentValueData;
 
