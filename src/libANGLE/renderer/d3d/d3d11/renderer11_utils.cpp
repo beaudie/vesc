@@ -1214,7 +1214,13 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
     caps->maxServerWaitTimeout = 0;
 
     // Vertex shader limits
+    // D3D11_REQ_MULTI_ELEMENT_STRUCTURE_SIZE_IN_BYTES == 2048
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/ff819065(v=vs.85).aspx
+    caps->maxVertexAttribStride         = 2048;
+    // TODO(jiawei.shao@intel.com: add a test to get caps->maxVertexAttribRelativeOffset
     caps->maxVertexAttributes = static_cast<GLuint>(GetMaximumVertexInputSlots(featureLevel));
+    caps->maxVertexAttribBindings = caps->maxVertexAttributes;
+
     caps->maxVertexUniformComponents =
         static_cast<GLuint>(GetMaximumVertexUniformVectors(featureLevel)) * 4;
     caps->maxVertexUniformVectors =
