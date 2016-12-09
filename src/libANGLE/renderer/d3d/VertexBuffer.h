@@ -22,6 +22,7 @@
 namespace gl
 {
 struct VertexAttribute;
+struct VertexBinding;
 struct VertexAttribCurrentValueData;
 }
 
@@ -38,7 +39,10 @@ class VertexBuffer : angle::NonCopyable
 
     virtual gl::Error initialize(unsigned int size, bool dynamicUsage) = 0;
 
+    // Warning: you should ensure binding really matches attrib.bindingIndex before using this
+    // function.
     virtual gl::Error storeVertexAttributes(const gl::VertexAttribute &attrib,
+                                            const gl::VertexBinding &binding,
                                             GLenum currentValueType,
                                             GLint start,
                                             GLsizei count,
@@ -86,7 +90,11 @@ class VertexBufferInterface : angle::NonCopyable
     gl::Error discard();
 
     gl::Error setBufferSize(unsigned int size);
+
+    // Warning: you should ensure binding really matches attrib.bindingIndex before using this
+    // function.
     gl::ErrorOrResult<unsigned int> getSpaceRequired(const gl::VertexAttribute &attrib,
+                                                     const gl::VertexBinding &binding,
                                                      GLsizei count,
                                                      GLsizei instances) const;
     BufferFactoryD3D *const mFactory;
@@ -100,7 +108,10 @@ class StreamingVertexBufferInterface : public VertexBufferInterface
     StreamingVertexBufferInterface(BufferFactoryD3D *factory, std::size_t initialSize);
     ~StreamingVertexBufferInterface();
 
+    // Warning: you should ensure binding really matches attrib.bindingIndex before using this
+    // function.
     gl::Error storeDynamicAttribute(const gl::VertexAttribute &attrib,
+                                    const gl::VertexBinding &binding,
                                     GLenum currentValueType,
                                     GLint start,
                                     GLsizei count,
@@ -108,7 +119,10 @@ class StreamingVertexBufferInterface : public VertexBufferInterface
                                     unsigned int *outStreamOffset,
                                     const uint8_t *sourceData);
 
+    // Warning: you should ensure binding really matches attrib.bindingIndex before using this
+    // function.
     gl::Error reserveVertexSpace(const gl::VertexAttribute &attribute,
+                                 const gl::VertexBinding &binding,
                                  GLsizei count,
                                  GLsizei instances);
 
@@ -125,22 +139,37 @@ class StaticVertexBufferInterface : public VertexBufferInterface
     explicit StaticVertexBufferInterface(BufferFactoryD3D *factory);
     ~StaticVertexBufferInterface();
 
+    // Warning: you should ensure binding really matches attrib.bindingIndex before using this
+    // function.
     gl::Error storeStaticAttribute(const gl::VertexAttribute &attrib,
+                                   const gl::VertexBinding &binding,
                                    GLint start,
                                    GLsizei count,
                                    GLsizei instances,
                                    const uint8_t *sourceData);
 
-    bool matchesAttribute(const gl::VertexAttribute &attribute) const;
-    void setAttribute(const gl::VertexAttribute &attribute);
+    // Warning: you should ensure binding really matches attrib.bindingIndex before using this
+    // function.
+    bool matchesAttribute(const gl::VertexAttribute &attribute,
+                          const gl::VertexBinding &binding) const;
+
+    // Warning: you should ensure binding really matches attrib.bindingIndex before using this
+    // function.
+    void setAttribute(const gl::VertexAttribute &attribute, const gl::VertexBinding &binding);
 
   private:
     class AttributeSignature final : angle::NonCopyable
     {
       public:
         AttributeSignature();
-        bool matchesAttribute(const gl::VertexAttribute &attrib) const;
-        void set(const gl::VertexAttribute &attrib);
+        // Warning: you should ensure binding really matches attrib.bindingIndex before using this
+        // function.
+        bool matchesAttribute(const gl::VertexAttribute &attrib,
+                              const gl::VertexBinding &binding) const;
+
+        // Warning: you should ensure binding really matches attrib.bindingIndex before using this
+        // function.
+        void set(const gl::VertexAttribute &attrib, const gl::VertexBinding &binding);
 
       private:
         GLenum type;
