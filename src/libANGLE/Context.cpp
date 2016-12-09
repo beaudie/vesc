@@ -27,6 +27,7 @@
 #include "libANGLE/Path.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/Query.h"
+#include "libANGLE/queryutils.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/Sampler.h"
@@ -2077,7 +2078,8 @@ VertexArray *Context::checkVertexArrayAllocation(GLuint vertexArrayHandle)
     VertexArray *vertexArray = getVertexArray(vertexArrayHandle);
     if (!vertexArray)
     {
-        vertexArray = new VertexArray(mImplementation.get(), vertexArrayHandle, MAX_VERTEX_ATTRIBS);
+        vertexArray = new VertexArray(mImplementation.get(), vertexArrayHandle,
+                                      mCaps.maxVertexAttributes, mCaps.maxVertexAttribBindings);
 
         mVertexArrayMap[vertexArrayHandle] = vertexArray;
     }
@@ -2463,6 +2465,8 @@ void Context::initCaps(bool webGLContext)
 
     // Apply implementation limits
     mCaps.maxVertexAttributes = std::min<GLuint>(mCaps.maxVertexAttributes, MAX_VERTEX_ATTRIBS);
+    mCaps.maxVertexAttribBindings =
+        std::min<GLuint>(mCaps.maxVertexAttribBindings, MAX_VERTEX_ATTRIB_BINDINGS);
     mCaps.maxVertexUniformBlocks = std::min<GLuint>(mCaps.maxVertexUniformBlocks, IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS);
     mCaps.maxVertexOutputComponents = std::min<GLuint>(mCaps.maxVertexOutputComponents, IMPLEMENTATION_MAX_VARYING_VECTORS * 4);
 
@@ -3516,6 +3520,44 @@ void Context::vertexAttribI4iv(GLuint index, const GLint *v)
 void Context::vertexAttribI4uiv(GLuint index, const GLuint *v)
 {
     mGLState.setVertexAttribu(index, v);
+}
+
+void Context::getVertexAttribiv(GLuint index, GLenum pname, GLint *params)
+{
+    const VertexAttribCurrentValueData &currentValues =
+        getGLState().getVertexAttribCurrentValue(index);
+    const VertexInfo &vertexInfo = getGLState().getVertexArray()->getVertexInfo(index);
+    QueryVertexAttribiv(vertexInfo, currentValues, pname, params);
+}
+
+void Context::getVertexAttribfv(GLuint index, GLenum pname, GLfloat *params)
+{
+    const VertexAttribCurrentValueData &currentValues =
+        getGLState().getVertexAttribCurrentValue(index);
+    const VertexInfo &vertexInfo = getGLState().getVertexArray()->getVertexInfo(index);
+    QueryVertexAttribfv(vertexInfo, currentValues, pname, params);
+}
+
+void Context::getVertexAttribIiv(GLuint index, GLenum pname, GLint *params)
+{
+    const VertexAttribCurrentValueData &currentValues =
+        getGLState().getVertexAttribCurrentValue(index);
+    const VertexInfo &vertexInfo = getGLState().getVertexArray()->getVertexInfo(index);
+    QueryVertexAttribIiv(vertexInfo, currentValues, pname, params);
+}
+
+void Context::getVertexAttribIuiv(GLuint index, GLenum pname, GLuint *params)
+{
+    const VertexAttribCurrentValueData &currentValues =
+        getGLState().getVertexAttribCurrentValue(index);
+    const VertexInfo &vertexInfo = getGLState().getVertexArray()->getVertexInfo(index);
+    QueryVertexAttribIuiv(vertexInfo, currentValues, pname, params);
+}
+
+void Context::getVertexAttribPointerv(GLuint index, GLenum pname, GLvoid **pointer)
+{
+    const VertexInfo &vertexInfo = getGLState().getVertexArray()->getVertexInfo(index);
+    QueryVertexAttribPointerv(vertexInfo, pname, pointer);
 }
 
 void Context::debugMessageControl(GLenum source,
