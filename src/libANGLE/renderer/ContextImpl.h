@@ -61,6 +61,7 @@ class ContextImpl : public GLImplFactory
                                         const GLvoid *indices,
                                         const gl::IndexRange &indexRange) = 0;
 
+    virtual gl::Error getMultisamplefv(GLenum pname, GLuint index, GLfloat *val) = 0;
     virtual gl::Error drawArraysIndirect(GLenum mode, const GLvoid *indirect) = 0;
     virtual gl::Error drawElementsIndirect(GLenum mode, GLenum type, const GLvoid *indirect) = 0;
 
