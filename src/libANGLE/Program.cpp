@@ -818,6 +818,11 @@ Error Program::loadBinary(const gl::Context *context,
         mState.mUniformBlocks.push_back(uniformBlock);
     }
 
+    for (GLuint &binding : mState.mUniformBlockBindings)
+    {
+        stream.readInt(&binding);
+    }
+
     unsigned int transformFeedbackVaryingCount = stream.readInt<unsigned int>();
     ASSERT(mState.mTransformFeedbackVaryingVars.empty());
     for (unsigned int transformFeedbackVaryingIndex = 0;
@@ -934,6 +939,11 @@ Error Program::saveBinary(const gl::Context *context,
         {
             stream.writeInt(memberUniformIndex);
         }
+    }
+
+    for (GLuint binding : mState.mUniformBlockBindings)
+    {
+        stream.writeInt(binding);
     }
 
     stream.writeInt(mState.mTransformFeedbackVaryingVars.size());
