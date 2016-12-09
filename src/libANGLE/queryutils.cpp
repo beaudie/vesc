@@ -270,6 +270,7 @@ GLint ConvertCurrentValue(GLfloat currentValue)
 
 template <typename ParamType, typename CurrentDataType, size_t CurrentValueCount>
 void QueryVertexAttribBase(const VertexAttribute &attrib,
+                           const VertexBufferBinding &binding,
                            const CurrentDataType (&currentValueData)[CurrentValueCount],
                            GLenum pname,
                            ParamType *params)
@@ -289,7 +290,7 @@ void QueryVertexAttribBase(const VertexAttribute &attrib,
             *params = ConvertFromGLuint<ParamType>(attrib.size);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_STRIDE:
-            *params = ConvertFromGLuint<ParamType>(attrib.stride);
+            *params = ConvertFromGLuint<ParamType>(attrib.vertexAttribArrayStride);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_TYPE:
             *params = ConvertFromGLenum<ParamType>(attrib.type);
@@ -298,10 +299,10 @@ void QueryVertexAttribBase(const VertexAttribute &attrib,
             *params = ConvertFromGLboolean<ParamType>(attrib.normalized);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING:
-            *params = ConvertFromGLuint<ParamType>(attrib.buffer.id());
+            *params = ConvertFromGLuint<ParamType>(binding.buffer.id());
             break;
         case GL_VERTEX_ATTRIB_ARRAY_DIVISOR:
-            *params = ConvertFromGLuint<ParamType>(attrib.divisor);
+            *params = ConvertFromGLuint<ParamType>(binding.divisor);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_INTEGER:
             *params = ConvertFromGLboolean<ParamType>(attrib.pureInteger);
@@ -620,27 +621,29 @@ void QuerySamplerParameteriv(const Sampler *sampler, GLenum pname, GLint *params
 }
 
 void QueryVertexAttribfv(const VertexAttribute &attrib,
+                         const VertexBufferBinding &binding,
                          const VertexAttribCurrentValueData &currentValueData,
                          GLenum pname,
                          GLfloat *params)
 {
-    QueryVertexAttribBase(attrib, currentValueData.FloatValues, pname, params);
+    QueryVertexAttribBase(attrib, binding, currentValueData.FloatValues, pname, params);
 }
 
 void QueryVertexAttribiv(const VertexAttribute &attrib,
+                         const VertexBufferBinding &binding,
                          const VertexAttribCurrentValueData &currentValueData,
                          GLenum pname,
                          GLint *params)
 {
-    QueryVertexAttribBase(attrib, currentValueData.FloatValues, pname, params);
+    QueryVertexAttribBase(attrib, binding, currentValueData.FloatValues, pname, params);
 }
 
-void QueryVertexAttribPointerv(const VertexAttribute &attrib, GLenum pname, GLvoid **pointer)
+void QueryVertexBindingPointerv(const VertexBufferBinding &binding, GLenum pname, GLvoid **pointer)
 {
     switch (pname)
     {
         case GL_VERTEX_ATTRIB_ARRAY_POINTER:
-            *pointer = const_cast<GLvoid *>(attrib.pointer);
+            *pointer = const_cast<GLvoid *>(binding.bindingPointer);
             break;
 
         default:
@@ -650,19 +653,21 @@ void QueryVertexAttribPointerv(const VertexAttribute &attrib, GLenum pname, GLvo
 }
 
 void QueryVertexAttribIiv(const VertexAttribute &attrib,
+                          const VertexBufferBinding &binding,
                           const VertexAttribCurrentValueData &currentValueData,
                           GLenum pname,
                           GLint *params)
 {
-    QueryVertexAttribBase(attrib, currentValueData.IntValues, pname, params);
+    QueryVertexAttribBase(attrib, binding, currentValueData.IntValues, pname, params);
 }
 
 void QueryVertexAttribIuiv(const VertexAttribute &attrib,
+                           const VertexBufferBinding &binding,
                            const VertexAttribCurrentValueData &currentValueData,
                            GLenum pname,
                            GLuint *params)
 {
-    QueryVertexAttribBase(attrib, currentValueData.UnsignedIntValues, pname, params);
+    QueryVertexAttribBase(attrib, binding, currentValueData.UnsignedIntValues, pname, params);
 }
 
 void QueryActiveUniformBlockiv(const Program *program,

@@ -4,6 +4,7 @@
 // found in the LICENSE file.
 //
 // Implementation of the state class for mananging GLES 3 Vertex Array Objects.
+// Represents a vertex attribute format information record in ES3.1.
 //
 
 #include "libANGLE/VertexAttribute.h"
@@ -11,16 +12,28 @@
 namespace gl
 {
 
-VertexAttribute::VertexAttribute()
+// [OpenGL ES 3.1] (November 3, 2016) Section 20 Page 361
+// Table 20.2: Vertex Array Object State
+VertexBufferBinding::VertexBufferBinding() : stride(16), divisor(0), bindingOffset(0)
+{
+}
+
+VertexAttribute::VertexAttribute(size_t index)
     : enabled(false),
       type(GL_FLOAT),
       size(4),
       normalized(false),
       pureInteger(false),
-      stride(0),
-      pointer(NULL),
-      divisor(0)
+      relativeOffset(0),
+      bindingIndex(index),
+      vertexAttribArrayStride(0)
 {
+}
+
+GLintptr ComputeVertexAttributeOffset(const VertexAttribute &attrib,
+                                      const VertexBufferBinding &binding)
+{
+    return binding.bindingOffset + attrib.relativeOffset;
 }
 
 size_t ComputeVertexAttributeTypeSize(const VertexAttribute& attrib)
@@ -43,16 +56,16 @@ size_t ComputeVertexAttributeTypeSize(const VertexAttribute& attrib)
     }
 }
 
-size_t ComputeVertexAttributeStride(const VertexAttribute& attrib)
+size_t ComputeVertexAttributeStride(const VertexAttribute &attrib,
+                                    const VertexBufferBinding &binding)
 {
-    if (!attrib.enabled)
-    {
-        return 16;
-    }
-    return attrib.stride ? attrib.stride : ComputeVertexAttributeTypeSize(attrib);
+    // Rendering always uses VERTEX_BINDING_STRIDE.
+    // (https://www.opengl.org/registry/specs/ARB/vertex_attrib_binding.txt Issues(3))
+    return attrib.enabled ? binding.stride : 16;
 }
 
 size_t ComputeVertexAttributeElementCount(const VertexAttribute &attrib,
+                                          const VertexBufferBinding &binding,
                                           size_t drawCount,
                                           size_t instanceCount)
 {
@@ -61,14 +74,15 @@ size_t ComputeVertexAttributeElementCount(const VertexAttribute &attrib,
     // A vertex attribute with a positive divisor loads one instanced vertex for every set of
     // non-instanced vertices, and the instanced vertex index advances once every "mDivisor"
     // instances.
-    if (instanceCount > 0 && attrib.divisor > 0)
+    if (instanceCount > 0 && binding.divisor > 0)
     {
         // When instanceDrawCount is not a multiple attrib.divisor, the division must round up.
         // For instance, with 5 non-instanced vertices and a divisor equal to 3, we need 2 instanced
         // vertices.
-        return (instanceCount + attrib.divisor - 1u) / attrib.divisor;
+        return (instanceCount + binding.divisor - 1u) / binding.divisor;
     }
 
     return drawCount;
 }
-}
+
+}  // namespace gl
