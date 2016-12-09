@@ -17,47 +17,25 @@ using namespace angle;
 namespace rx
 {
 
-namespace
-{
-size_t GetAttribIndex(unsigned long dirtyBit)
-{
-    if (dirtyBit >= gl::VertexArray::DIRTY_BIT_ATTRIB_0_ENABLED &&
-        dirtyBit < gl::VertexArray::DIRTY_BIT_ATTRIB_MAX_ENABLED)
-    {
-        return dirtyBit - gl::VertexArray::DIRTY_BIT_ATTRIB_0_ENABLED;
-    }
-
-    if (dirtyBit >= gl::VertexArray::DIRTY_BIT_ATTRIB_0_POINTER &&
-        dirtyBit < gl::VertexArray::DIRTY_BIT_ATTRIB_MAX_POINTER)
-    {
-        return dirtyBit - gl::VertexArray::DIRTY_BIT_ATTRIB_0_POINTER;
-    }
-
-    ASSERT(dirtyBit >= gl::VertexArray::DIRTY_BIT_ATTRIB_0_DIVISOR &&
-           dirtyBit < gl::VertexArray::DIRTY_BIT_ATTRIB_MAX_DIVISOR);
-    return static_cast<size_t>(dirtyBit) - gl::VertexArray::DIRTY_BIT_ATTRIB_0_DIVISOR;
-}
-}  // anonymous namespace
-
 VertexArray11::VertexArray11(const gl::VertexArrayState &data)
     : VertexArrayImpl(data),
-      mAttributeStorageTypes(data.getVertexAttributes().size(), VertexStorageType::CURRENT_VALUE),
-      mTranslatedAttribs(data.getVertexAttributes().size()),
-      mCurrentBuffers(data.getVertexAttributes().size())
+      mAttributeStorageTypes(data.getMaxAttribs(), VertexStorageType::CURRENT_VALUE),
+      mTranslatedAttribs(data.getMaxAttribs()),
+      mCurrentBuffers(data.getMaxAttribs())
 {
     for (size_t attribIndex = 0; attribIndex < mCurrentBuffers.size(); ++attribIndex)
     {
-        mOnBufferDataDirty.push_back(ChannelBinding(this, static_cast<SignalToken>(attribIndex)));
+        mOnBufferDataDirty.emplace_back(this, static_cast<SignalToken>(attribIndex));
     }
 }
 
 VertexArray11::~VertexArray11()
 {
-    for (size_t attribIndex = 0; attribIndex < mCurrentBuffers.size(); ++attribIndex)
+    for (auto &buffer : mCurrentBuffers)
     {
-        if (mCurrentBuffers[attribIndex].get())
+        if (buffer.get())
         {
-            mCurrentBuffers[attribIndex].set(nullptr);
+            buffer.set(nullptr);
         }
     }
 }
@@ -69,14 +47,17 @@ void VertexArray11::syncState(const gl::VertexArray::DirtyBits &dirtyBits)
         if (dirtyBit == gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
             continue;
 
-        size_t attribIndex = GetAttribIndex(dirtyBit);
-        mAttribsToUpdate.set(attribIndex);
+        size_t index = gl::VertexArray::getAttribIndex(dirtyBit);
+        // TODO(jiawei.shao@intel.com): Vertex Attrib Bindings
+        ASSERT(mData.getVertexAttribute(index).getFormat().bindingIndex == index);
+        mAttribsToUpdate.set(index);
     }
 }
 
 void VertexArray11::updateVertexAttribStorage(size_t attribIndex)
 {
     const auto &attrib = mData.getVertexAttribute(attribIndex);
+    const auto &binding = attrib.getBinding();
 
     // Note: having an unchanged storage type doesn't mean the attribute is clean.
     auto oldStorageType = mAttributeStorageTypes[attribIndex];
@@ -105,7 +86,7 @@ void VertexArray11::updateVertexAttribStorage(size_t attribIndex)
     }
 
     gl::Buffer *oldBufferGL = mCurrentBuffers[attribIndex].get();
-    gl::Buffer *newBufferGL = attrib.buffer.get();
+    gl::Buffer *newBufferGL = binding.buffer.get();
     Buffer11 *oldBuffer11   = oldBufferGL ? GetImplAs<Buffer11>(oldBufferGL) : nullptr;
     Buffer11 *newBuffer11   = newBufferGL ? GetImplAs<Buffer11>(newBufferGL) : nullptr;
 
@@ -130,7 +111,7 @@ void VertexArray11::updateVertexAttribStorage(size_t attribIndex)
             }
         }
         mOnBufferDataDirty[attribIndex].bind(newChannel);
-        mCurrentBuffers[attribIndex] = attrib.buffer;
+        mCurrentBuffers[attribIndex] = binding.buffer;
     }
 }
 
@@ -173,7 +154,7 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(VertexDataManager *vertexD
             // Record basic attrib info
             translatedAttrib->attribute        = &attribs[dirtyAttribIndex];
             translatedAttrib->currentValueType = currentValue.Type;
-            translatedAttrib->divisor          = translatedAttrib->attribute->divisor;
+            translatedAttrib->divisor          = translatedAttrib->attribute->getBinding().divisor;
 
             switch (mAttributeStorageTypes[dirtyAttribIndex])
             {
@@ -209,7 +190,7 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(VertexDataManager *vertexD
             // Record basic attrib info
             dynamicAttrib->attribute        = &attribs[dynamicAttribIndex];
             dynamicAttrib->currentValueType = currentValue.Type;
-            dynamicAttrib->divisor          = dynamicAttrib->attribute->divisor;
+            dynamicAttrib->divisor          = dynamicAttrib->attribute->getBinding().divisor;
         }
 
         return vertexDataManager->storeDynamicAttribs(&mTranslatedAttribs, activeDynamicAttribs,
