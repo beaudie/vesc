@@ -328,6 +328,7 @@ class Renderer11 : public RendererD3D
     VertexConversionType getVertexConversionType(gl::VertexFormatType vertexFormatType) const override;
     GLenum getVertexComponentType(gl::VertexFormatType vertexFormatType) const override;
     gl::ErrorOrResult<unsigned int> getVertexSpaceRequired(const gl::VertexAttribute &attrib,
+                                                           const gl::VertexBufferBinding &binding,
                                                            GLsizei count,
                                                            GLsizei instances) const override;
 
