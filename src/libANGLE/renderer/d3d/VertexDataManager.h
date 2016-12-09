@@ -19,7 +19,9 @@ namespace gl
 {
 class State;
 struct VertexAttribute;
+struct VertexAttribBinding;
 struct VertexAttribCurrentValueData;
+struct VertexBinding;
 }
 
 namespace rx
@@ -55,6 +57,7 @@ struct TranslatedAttribute
     bool active;
 
     const gl::VertexAttribute *attribute;
+    const gl::VertexBinding *binding;
     GLenum currentValueType;
     unsigned int baseOffset;
     bool usesFirstVertexOffset;
@@ -76,7 +79,7 @@ enum class VertexStorageType
 };
 
 // Given a vertex attribute, return the type of storage it will use.
-VertexStorageType ClassifyAttributeStorage(const gl::VertexAttribute &attrib);
+VertexStorageType ClassifyAttributeStorage(const gl::VertexAttribBinding &attribBinding);
 
 class VertexDataManager : angle::NonCopyable
 {

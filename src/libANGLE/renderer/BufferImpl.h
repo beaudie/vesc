@@ -18,6 +18,7 @@
 namespace gl
 {
 class BufferState;
+struct VertexAttribBinding;
 }
 
 namespace rx

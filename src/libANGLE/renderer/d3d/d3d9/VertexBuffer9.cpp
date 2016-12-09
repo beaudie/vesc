@@ -56,7 +56,7 @@ gl::Error VertexBuffer9::initialize(unsigned int size, bool dynamicUsage)
     return gl::NoError();
 }
 
-gl::Error VertexBuffer9::storeVertexAttributes(const gl::VertexAttribute &attrib,
+gl::Error VertexBuffer9::storeVertexAttributes(const gl::VertexAttribBinding &attribBinding,
                                                GLenum currentValueType,
                                                GLint start,
                                                GLsizei count,
@@ -69,14 +69,15 @@ gl::Error VertexBuffer9::storeVertexAttributes(const gl::VertexAttribute &attrib
         return gl::Error(GL_OUT_OF_MEMORY, "Internal vertex buffer is not initialized.");
     }
 
-    int inputStride = static_cast<int>(gl::ComputeVertexAttributeStride(attrib));
-    int elementSize = static_cast<int>(gl::ComputeVertexAttributeTypeSize(attrib));
+    int inputStride = static_cast<int>(
+        gl::ComputeVertexAttributeStride(attribBinding.attrib, attribBinding.binding));
+    int elementSize = static_cast<int>(gl::ComputeVertexAttributeTypeSize(attribBinding.attrib));
 
     DWORD lockFlags = mDynamicUsage ? D3DLOCK_NOOVERWRITE : 0;
 
     uint8_t *mapPtr = nullptr;
 
-    auto errorOrMapSize = mRenderer->getVertexSpaceRequired(attrib, count, instances);
+    auto errorOrMapSize = mRenderer->getVertexSpaceRequired(attribBinding, count, instances);
     if (errorOrMapSize.isError())
     {
         return errorOrMapSize.getError();
@@ -92,12 +93,13 @@ gl::Error VertexBuffer9::storeVertexAttributes(const gl::VertexAttribute &attrib
 
     const uint8_t *input = sourceData;
 
-    if (instances == 0 || attrib.divisor == 0)
+    if (instances == 0 || attribBinding.binding.divisor == 0)
     {
         input += inputStride * start;
     }
 
-    gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib, currentValueType);
+    gl::VertexFormatType vertexFormatType =
+        gl::GetVertexFormatType(attribBinding.attrib, currentValueType);
     const d3d9::VertexFormat &d3dVertexInfo = d3d9::GetVertexFormatInfo(mRenderer->getCapsDeclTypes(), vertexFormatType);
     bool needsConversion = (d3dVertexInfo.conversionType & VERTEX_CONVERT_CPU) > 0;
 

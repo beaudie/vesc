@@ -92,7 +92,7 @@ class BufferFactoryD3D : angle::NonCopyable
     virtual VertexConversionType getVertexConversionType(gl::VertexFormatType vertexFormatType) const = 0;
     virtual GLenum getVertexComponentType(gl::VertexFormatType vertexFormatType) const = 0;
     virtual gl::ErrorOrResult<unsigned int> getVertexSpaceRequired(
-        const gl::VertexAttribute &attrib,
+        const gl::VertexAttribBinding &attribBinding,
         GLsizei count,
         GLsizei instances) const = 0;
 };

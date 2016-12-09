@@ -327,9 +327,10 @@ class Renderer11 : public RendererD3D
     bool getLUID(LUID *adapterLuid) const override;
     VertexConversionType getVertexConversionType(gl::VertexFormatType vertexFormatType) const override;
     GLenum getVertexComponentType(gl::VertexFormatType vertexFormatType) const override;
-    gl::ErrorOrResult<unsigned int> getVertexSpaceRequired(const gl::VertexAttribute &attrib,
-                                                           GLsizei count,
-                                                           GLsizei instances) const override;
+    gl::ErrorOrResult<unsigned int> getVertexSpaceRequired(
+        const gl::VertexAttribBinding &attribBinding,
+        GLsizei count,
+        GLsizei instances) const override;
 
     gl::Error readFromAttachment(const gl::FramebufferAttachment &srcAttachment,
                                  const gl::Rectangle &sourceArea,

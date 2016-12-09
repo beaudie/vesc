@@ -22,7 +22,7 @@ class VertexBuffer9 : public VertexBuffer
 
     gl::Error initialize(unsigned int size, bool dynamicUsage) override;
 
-    gl::Error storeVertexAttributes(const gl::VertexAttribute &attrib,
+    gl::Error storeVertexAttributes(const gl::VertexAttribBinding &attribBinding,
                                     GLenum currentValueType,
                                     GLint start,
                                     GLsizei count,
