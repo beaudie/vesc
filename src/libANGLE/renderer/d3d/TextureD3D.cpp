@@ -144,6 +144,16 @@ GLenum TextureD3D::getBaseLevelInternalFormat() const
     return (baseImage ? baseImage->getInternalFormat() : GL_NONE);
 }
 
+gl::Error TextureD3D::setStorageMultisample(GLenum target,
+                                            GLsizei samples,
+                                            GLint internalFormat,
+                                            gl::Extents size,
+                                            GLboolean fixedsamplelocations)
+{
+    UNIMPLEMENTED();
+    return gl::Error(GL_INVALID_OPERATION, "setStorageMultisample is unimplemented");
+}
+
 bool TextureD3D::shouldUseSetData(const ImageD3D *image) const
 {
     if (!mRenderer->getWorkarounds().setDataFasterThanImageUpload)

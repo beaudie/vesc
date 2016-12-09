@@ -118,6 +118,12 @@ class TextureD3D : public TextureImpl
     bool mImmutable;
     TextureStorage *mTexStorage;
 
+    gl::Error setStorageMultisample(GLenum target,
+                                    GLsizei samples,
+                                    GLint internalFormat,
+                                    gl::Extents size,
+                                    GLboolean fixedsamplelocations) override;
+
   private:
     virtual gl::Error initializeStorage(bool renderTarget) = 0;
 

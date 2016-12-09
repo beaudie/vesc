@@ -117,6 +117,8 @@ class Context9 : public ContextImpl
     const gl::Extensions &getNativeExtensions() const override;
     const gl::Limitations &getNativeLimitations() const override;
 
+    void getMultisamplefv(GLenum pname, GLuint index, GLfloat *val) override;
+
   private:
     Renderer9 *mRenderer;
 };
