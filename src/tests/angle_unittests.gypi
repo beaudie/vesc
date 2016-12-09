@@ -44,6 +44,7 @@
             '<(angle_path)/src/libANGLE/renderer/TransformFeedbackImpl_mock.h',
             '<(angle_path)/src/libANGLE/signal_utils_unittest.cpp',
             '<(angle_path)/src/libANGLE/validationES_unittest.cpp',
+            '<(angle_path)/src/libANGLE/VertexArray_unittest.cpp',
             '<(angle_path)/src/tests/angle_unittests_utils.h',
             '<(angle_path)/src/tests/compiler_tests/API_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/CollectVariables_test.cpp',
