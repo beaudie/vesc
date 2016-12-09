@@ -1471,6 +1471,23 @@ TIntermTyped *TParseContext::parseVariableIdentifier(const TSourceLoc &location,
         const TConstantUnion *constArray = variable->getConstPointer();
         return intermediate.addConstantUnion(constArray, variable->getType(), location);
     }
+    else if (variable->getType().getQualifier() == EvqWorkGroupSize &&
+             mComputeShaderLocalSizeDeclared)
+    {
+        sh::WorkGroupSize workGroupSize = getComputeShaderLocalSize();
+        TConstantUnion *constArray      = new TConstantUnion[3];
+        for (size_t i = 0; i < 3; ++i)
+        {
+            constArray[i].setUConst(static_cast<unsigned int>(workGroupSize[i]));
+        }
+
+        ASSERT(variable->getType().getBasicType() == EbtUInt);
+        ASSERT(variable->getType().getObjectSize() == 3);
+
+        TType type(variable->getType());
+        type.setQualifier(EvqConst);
+        return intermediate.addConstantUnion(constArray, type, location);
+    }
     else
     {
         return intermediate.addSymbol(variable->getUniqueId(), variable->getName(),
