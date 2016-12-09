@@ -428,9 +428,9 @@ struct Caps
     GLuint64 maxServerWaitTimeout;
 
     // ES 3.1 (April 29, 2015) Table 20.41: Implementation dependent values (cont.)
-    GLint maxVertexAttribRelativeOffset;
-    GLint maxVertexAttribBindings;
-    GLint maxVertexAttribStride;
+    GLuint maxVertexAttribRelativeOffset;
+    GLuint maxVertexAttribBindings;
+    GLuint maxVertexAttribStride;
     GLuint maxElementsIndices;
     GLuint maxElementsVertices;
     std::vector<GLenum> compressedTextureFormats;

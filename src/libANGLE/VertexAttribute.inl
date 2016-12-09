@@ -16,9 +16,15 @@ inline bool operator==(const VertexAttribute &a, const VertexAttribute &b)
            a.size == b.size &&
            a.normalized == b.normalized &&
            a.pureInteger == b.pureInteger &&
-           a.stride == b.stride &&
-           a.pointer == b.pointer &&
+           a.bindingIndex == b.bindingIndex;
+}
+
+inline bool operator==(const VertexBufferBinding &a, const VertexBufferBinding &b)
+{
+    return a.stride == b.stride &&
+           a.bindingPointer == b.bindingPointer &&
            a.buffer.get() == b.buffer.get() &&
+           a.bindingOffset == b.bindingOffset &&
            a.divisor == b.divisor;
 }
 
