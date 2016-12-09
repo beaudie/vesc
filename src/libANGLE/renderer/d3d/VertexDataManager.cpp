@@ -45,7 +45,8 @@ int ElementsInBuffer(const gl::VertexAttribute &attrib, unsigned int size)
     }
 
     GLsizei stride = static_cast<GLsizei>(ComputeVertexAttributeStride(attrib));
-    return (size - attrib.offset % stride +
+    GLsizei offset = static_cast<GLsizei>(ComputeVertexAttributeOffset(attrib));
+    return (size - offset % stride +
             (stride - static_cast<GLsizei>(ComputeVertexAttributeTypeSize(attrib)))) /
            stride;
 }
@@ -58,7 +59,8 @@ bool DirectStoragePossible(const gl::VertexAttribute &attrib)
         return false;
     }
 
-    gl::Buffer *buffer = attrib.buffer.get();
+    const gl::AttributeBinding &binding = attrib.getBinding();
+    gl::Buffer *buffer                  = binding.buffer.get();
     if (!buffer)
     {
         return false;
@@ -75,7 +77,8 @@ bool DirectStoragePossible(const gl::VertexAttribute &attrib)
     // 4-byte boundary, whichever is smaller. (Undocumented, and experimentally confirmed)
     size_t alignment = 4;
 
-    if (attrib.type != GL_FLOAT)
+    const gl::AttributeFormat &format = attrib.format;
+    if (format.type != GL_FLOAT)
     {
         gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib);
 
@@ -98,9 +101,10 @@ bool DirectStoragePossible(const gl::VertexAttribute &attrib)
         }
     }
 
+    GLintptr offset = ComputeVertexAttributeOffset(attrib);
     // Final alignment check - unaligned data must be converted.
     return (static_cast<size_t>(ComputeVertexAttributeStride(attrib)) % alignment == 0) &&
-           (static_cast<size_t>(attrib.offset) % alignment == 0);
+           (static_cast<size_t>(offset) % alignment == 0);
 }
 }  // anonymous namespace
 
@@ -140,8 +144,9 @@ VertexStorageType ClassifyAttributeStorage(const gl::VertexAttribute &attrib)
         return VertexStorageType::CURRENT_VALUE;
     }
 
+    const gl::AttributeBinding &binding = attrib.getBinding();
     // If specified with immediate data, we must use dynamic storage.
-    auto *buffer = attrib.buffer.get();
+    auto *buffer = binding.buffer.get();
     if (!buffer)
     {
         return VertexStorageType::DYNAMIC;
@@ -238,7 +243,7 @@ gl::Error VertexDataManager::prepareVertexData(const gl::State &state,
         translated->active           = true;
         translated->attribute        = &attrib;
         translated->currentValueType = currentValueData.Type;
-        translated->divisor          = attrib.divisor;
+        translated->divisor          = attrib.getBinding().divisor;
 
         switch (ClassifyAttributeStorage(attrib))
         {
@@ -283,19 +288,21 @@ gl::Error VertexDataManager::prepareVertexData(const gl::State &state,
 // static
 void VertexDataManager::StoreDirectAttrib(TranslatedAttribute *directAttrib)
 {
-    const auto &attrib   = *directAttrib->attribute;
-    gl::Buffer *buffer   = attrib.buffer.get();
+    const auto &attrib  = *directAttrib->attribute;
+    const auto &binding = attrib.getBinding();
+
+    gl::Buffer *buffer   = binding.buffer.get();
     BufferD3D *bufferD3D = buffer ? GetImplAs<BufferD3D>(buffer) : nullptr;
 
     ASSERT(DirectStoragePossible(attrib));
     directAttrib->vertexBuffer.set(nullptr);
     directAttrib->storage = bufferD3D;
     directAttrib->serial  = bufferD3D->getSerial();
-    directAttrib->stride = static_cast<unsigned int>(ComputeVertexAttributeStride(attrib));
-    directAttrib->baseOffset = static_cast<unsigned int>(attrib.offset);
+    directAttrib->stride     = static_cast<unsigned int>(ComputeVertexAttributeStride(attrib));
+    directAttrib->baseOffset = static_cast<unsigned int>(ComputeVertexAttributeOffset(attrib));
 
     // Instanced vertices do not apply the 'start' offset
-    directAttrib->usesFirstVertexOffset = (attrib.divisor == 0);
+    directAttrib->usesFirstVertexOffset = (binding.divisor == 0);
 }
 
 // static
@@ -304,16 +311,18 @@ gl::Error VertexDataManager::StoreStaticAttrib(TranslatedAttribute *translated,
                                                GLsizei instances)
 {
     const gl::VertexAttribute &attrib = *translated->attribute;
+    const auto &binding               = attrib.getBinding();
 
-    gl::Buffer *buffer = attrib.buffer.get();
+    gl::Buffer *buffer = binding.buffer.get();
     ASSERT(buffer && attrib.enabled && !DirectStoragePossible(attrib));
     BufferD3D *bufferD3D = GetImplAs<BufferD3D>(buffer);
 
     // Compute source data pointer
     const uint8_t *sourceData = nullptr;
+    const int offset          = static_cast<int>(ComputeVertexAttributeOffset(attrib));
 
     ANGLE_TRY(bufferD3D->getData(&sourceData));
-    sourceData += static_cast<int>(attrib.offset);
+    sourceData += offset;
 
     unsigned int streamOffset = 0;
 
@@ -328,15 +337,14 @@ gl::Error VertexDataManager::StoreStaticAttrib(TranslatedAttribute *translated,
     {
         // Convert the entire buffer
         int totalCount = ElementsInBuffer(attrib, static_cast<unsigned int>(bufferD3D->getSize()));
-        int startIndex = static_cast<int>(attrib.offset) /
-                         static_cast<int>(ComputeVertexAttributeStride(attrib));
+        int startIndex = offset / static_cast<int>(ComputeVertexAttributeStride(attrib));
 
         ANGLE_TRY(
             staticBuffer->storeStaticAttribute(attrib, -startIndex, totalCount, 0, sourceData));
     }
 
     unsigned int firstElementOffset =
-        (static_cast<unsigned int>(attrib.offset) /
+        (static_cast<unsigned int>(offset) /
          static_cast<unsigned int>(ComputeVertexAttributeStride(attrib))) *
         translated->stride;
 
@@ -356,7 +364,7 @@ gl::Error VertexDataManager::StoreStaticAttrib(TranslatedAttribute *translated,
     translated->baseOffset = streamOffset + firstElementOffset;
 
     // Instanced vertices do not apply the 'start' offset
-    translated->usesFirstVertexOffset = (attrib.divisor == 0);
+    translated->usesFirstVertexOffset = (binding.divisor == 0);
 
     return gl::NoError();
 }
@@ -411,11 +419,12 @@ void VertexDataManager::PromoteDynamicAttribs(
     for (auto attribIndex : IterateBitSet(dynamicAttribsMask))
     {
         const auto &dynamicAttrib = translatedAttribs[attribIndex];
-        gl::Buffer *buffer = dynamicAttrib.attribute->buffer.get();
+        const auto &binding       = dynamicAttrib.attribute->getBinding();
+        gl::Buffer *buffer        = binding.buffer.get();
         if (buffer)
         {
             BufferD3D *bufferD3D = GetImplAs<BufferD3D>(buffer);
-            size_t typeSize = ComputeVertexAttributeTypeSize(*dynamicAttrib.attribute);
+            size_t typeSize      = ComputeVertexAttributeTypeSize(*dynamicAttrib.attribute);
             bufferD3D->promoteStaticUsage(count * static_cast<int>(typeSize));
         }
     }
@@ -428,7 +437,7 @@ gl::Error VertexDataManager::reserveSpaceForAttrib(const TranslatedAttribute &tr
     const gl::VertexAttribute &attrib = *translatedAttrib.attribute;
     ASSERT(!DirectStoragePossible(attrib));
 
-    gl::Buffer *buffer   = attrib.buffer.get();
+    gl::Buffer *buffer   = attrib.getBinding().buffer.get();
     BufferD3D *bufferD3D = buffer ? GetImplAs<BufferD3D>(buffer) : nullptr;
     ASSERT(!bufferD3D || bufferD3D->getStaticVertexBuffer(attrib) == nullptr);
 
@@ -446,16 +455,17 @@ gl::Error VertexDataManager::storeDynamicAttrib(TranslatedAttribute *translated,
                                                 GLsizei count,
                                                 GLsizei instances)
 {
-    const gl::VertexAttribute &attrib = *translated->attribute;
+    const auto &attrib  = *translated->attribute;
+    const auto &binding = attrib.getBinding();
 
-    gl::Buffer *buffer = attrib.buffer.get();
+    gl::Buffer *buffer = binding.buffer.get();
     ASSERT(buffer || attrib.pointer);
     ASSERT(attrib.enabled);
 
     BufferD3D *storage = buffer ? GetImplAs<BufferD3D>(buffer) : nullptr;
 
     // Instanced vertices do not apply the 'start' offset
-    GLint firstVertexIndex = (attrib.divisor > 0 ? 0 : start);
+    GLint firstVertexIndex = (binding.divisor > 0 ? 0 : start);
 
     // Compute source data pointer
     const uint8_t *sourceData = nullptr;
@@ -463,10 +473,12 @@ gl::Error VertexDataManager::storeDynamicAttrib(TranslatedAttribute *translated,
     if (buffer)
     {
         ANGLE_TRY(storage->getData(&sourceData));
-        sourceData += static_cast<int>(attrib.offset);
+        sourceData += static_cast<int>(ComputeVertexAttributeOffset(attrib));
     }
     else
     {
+        // Attributes using client memory ignore the VERTEX_ATTRIB_BINDING state.
+        // https://www.opengl.org/registry/specs/ARB/vertex_attrib_binding.txt
         sourceData = static_cast<const uint8_t*>(attrib.pointer);
     }
 

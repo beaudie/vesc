@@ -355,6 +355,8 @@ void QueryVertexAttribBase(const VertexAttribute &attrib,
                            GLenum pname,
                            ParamType *params)
 {
+    const AttributeFormat &format   = attrib.format;
+    const AttributeBinding &binding = attrib.getBinding();
     switch (pname)
     {
         case GL_CURRENT_VERTEX_ATTRIB:
@@ -367,25 +369,25 @@ void QueryVertexAttribBase(const VertexAttribute &attrib,
             *params = ConvertFromGLboolean<ParamType>(attrib.enabled);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_SIZE:
-            *params = ConvertFromGLuint<ParamType>(attrib.size);
+            *params = ConvertFromGLuint<ParamType>(format.size);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_STRIDE:
             *params = ConvertFromGLuint<ParamType>(attrib.stride);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_TYPE:
-            *params = ConvertFromGLenum<ParamType>(attrib.type);
+            *params = ConvertFromGLenum<ParamType>(format.type);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_NORMALIZED:
-            *params = ConvertFromGLboolean<ParamType>(attrib.normalized);
+            *params = ConvertFromGLboolean<ParamType>(format.normalized);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING:
-            *params = ConvertFromGLuint<ParamType>(attrib.buffer.id());
+            *params = ConvertFromGLuint<ParamType>(binding.buffer.id());
             break;
         case GL_VERTEX_ATTRIB_ARRAY_DIVISOR:
-            *params = ConvertFromGLuint<ParamType>(attrib.divisor);
+            *params = ConvertFromGLuint<ParamType>(binding.divisor);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_INTEGER:
-            *params = ConvertFromGLboolean<ParamType>(attrib.pureInteger);
+            *params = ConvertFromGLboolean<ParamType>(format.pureInteger);
             break;
         default:
             UNREACHABLE();
