@@ -25,6 +25,8 @@ class Framebuffer9 : public FramebufferD3D
     gl::Error invalidate(size_t count, const GLenum *attachments) override;
     gl::Error invalidateSub(size_t count, const GLenum *attachments, const gl::Rectangle &area) override;
 
+    gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
+
   private:
     gl::Error clearImpl(ContextImpl *context, const ClearParameters &clearParams) override;
 

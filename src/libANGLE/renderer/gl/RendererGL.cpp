@@ -585,4 +585,10 @@ const gl::Limitations &RendererGL::getNativeLimitations() const
     return mNativeLimitations;
 }
 
+gl::Error RendererGL::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
+{
+    mFunctions->getMultisamplefv(pname, index, val);
+    return gl::NoError();
+}
+
 }  // namespace rx

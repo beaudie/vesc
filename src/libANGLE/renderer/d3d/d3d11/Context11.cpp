@@ -83,7 +83,7 @@ TextureImpl *Context11::createTexture(const gl::TextureState &state)
         case GL_TEXTURE_EXTERNAL_OES:
             return new TextureD3D_External(state, mRenderer);
         case GL_TEXTURE_2D_MULTISAMPLE:
-            UNIMPLEMENTED();
+            return new TextureD3D_2DMULTISAMPLE(state, mRenderer);
             break;
         default:
             UNREACHABLE();
@@ -280,6 +280,12 @@ const gl::Extensions &Context11::getNativeExtensions() const
 const gl::Limitations &Context11::getNativeLimitations() const
 {
     return mRenderer->getNativeLimitations();
+}
+
+gl::Error Context11::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "getMultisamplefv is unimplemented.";
 }
 
 }  // namespace rx

@@ -49,12 +49,14 @@ struct ImageDesc final
 {
     ImageDesc();
     ImageDesc(const Extents &size, const Format &format);
+    ImageDesc(const Extents &size, const Format &format, const GLsizei samples);
 
     ImageDesc(const ImageDesc &other) = default;
     ImageDesc &operator=(const ImageDesc &other) = default;
 
     Extents size;
     Format format;
+    GLsizei samples;
 };
 
 struct SwizzleState final
@@ -120,6 +122,8 @@ struct TextureState final : public angle::NonCopyable
                            GLuint maxLevel,
                            Extents baseSize,
                            const Format &format);
+    void setImageDescChainMultisample(Extents baseSize, const Format &format, GLsizei samples);
+
     void clearImageDesc(GLenum target, size_t level);
     void clearImageDescs();
 
@@ -245,6 +249,7 @@ class Texture final : public egl::ImageSibling,
     size_t getWidth(GLenum target, size_t level) const;
     size_t getHeight(GLenum target, size_t level) const;
     size_t getDepth(GLenum target, size_t level) const;
+    GLsizei getSamples(GLenum target, size_t level) const;
     const Format &getFormat(GLenum target, size_t level) const;
 
     bool isMipmapComplete() const;
@@ -306,6 +311,12 @@ class Texture final : public egl::ImageSibling,
     Error copyCompressedTexture(const Texture *source);
 
     Error setStorage(GLenum target, GLsizei levels, GLenum internalFormat, const Extents &size);
+
+    Error setStorageMultisample(GLenum target,
+                                GLsizei samples,
+                                GLint internalformat,
+                                const Extents &size,
+                                GLboolean fixedSampleLocations);
 
     Error setEGLImageTarget(GLenum target, egl::Image *imageTarget);
 

@@ -128,4 +128,10 @@ void FramebufferVk::syncState(const gl::Framebuffer::DirtyBits &dirtyBits)
     UNIMPLEMENTED();
 }
 
+gl::Error FramebufferVk::getSamplePosition(size_t index, GLfloat *xy) const
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "getSamplePosition is unimplemented.";
+}
+
 }  // namespace rx
