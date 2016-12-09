@@ -3,7 +3,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// Helper structure describing a single vertex attribute
+// Helper structure describing a single vertex attribute.
+// Representing a vertex attribute format information record in ES3.1
 //
 
 #ifndef LIBANGLE_VERTEXATTRIBUTE_H_
