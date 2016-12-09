@@ -2077,7 +2077,8 @@ VertexArray *Context::checkVertexArrayAllocation(GLuint vertexArrayHandle)
     VertexArray *vertexArray = getVertexArray(vertexArrayHandle);
     if (!vertexArray)
     {
-        vertexArray = new VertexArray(mImplementation.get(), vertexArrayHandle, MAX_VERTEX_ATTRIBS);
+        vertexArray = new VertexArray(mImplementation.get(), vertexArrayHandle,
+                                      mCaps.maxVertexAttributes, mCaps.maxVertexAttribBindings);
 
         mVertexArrayMap[vertexArrayHandle] = vertexArray;
     }
