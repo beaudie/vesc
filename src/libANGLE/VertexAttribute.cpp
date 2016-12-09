@@ -3,7 +3,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// Implementation of the state class for mananging GLES 3 Vertex Array Objects.
+// Implementation of the state class for mananging GLES 3 Vertex Array Objects
+// Represents a vertex attribute format information record in ES3.1
 //
 
 #include "libANGLE/VertexAttribute.h"
