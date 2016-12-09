@@ -26,6 +26,7 @@ class Texture;
 struct TextureCaps;
 struct UniformBlock;
 struct VertexAttribute;
+struct VertexBinding;
 struct VertexAttribCurrentValueData;
 
 void QueryFramebufferAttachmentParameteriv(const Framebuffer *framebuffer,
@@ -52,20 +53,33 @@ void QueryTexParameterfv(const Texture *texture, GLenum pname, GLfloat *params);
 void QueryTexParameteriv(const Texture *texture, GLenum pname, GLint *params);
 void QuerySamplerParameterfv(const Sampler *sampler, GLenum pname, GLfloat *params);
 void QuerySamplerParameteriv(const Sampler *sampler, GLenum pname, GLint *params);
+
+// Warning: you should ensure binding really matches attrib.bindingIndex before using this function.
 void QueryVertexAttribfv(const VertexAttribute &attrib,
+                         const VertexBinding &binding,
                          const VertexAttribCurrentValueData &currentValueData,
                          GLenum pname,
                          GLfloat *params);
+
+// Warning: you should ensure binding really matches attrib.bindingIndex before using this function.
 void QueryVertexAttribiv(const VertexAttribute &attrib,
+                         const VertexBinding &binding,
                          const VertexAttribCurrentValueData &currentValueData,
                          GLenum pname,
                          GLint *params);
+
 void QueryVertexAttribPointerv(const VertexAttribute &attrib, GLenum pname, GLvoid **pointer);
+
+// Warning: you should ensure binding really matches attrib.bindingIndex before using this function.
 void QueryVertexAttribIiv(const VertexAttribute &attrib,
+                          const VertexBinding &binding,
                           const VertexAttribCurrentValueData &currentValueData,
                           GLenum pname,
                           GLint *params);
+
+// Warning: you should ensure binding really matches attrib.bindingIndex before using this function.
 void QueryVertexAttribIuiv(const VertexAttribute &attrib,
+                           const VertexBinding &binding,
                            const VertexAttribCurrentValueData &currentValueData,
                            GLenum pname,
                            GLuint *params);
