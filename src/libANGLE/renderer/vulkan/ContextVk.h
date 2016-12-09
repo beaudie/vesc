@@ -56,6 +56,8 @@ class ContextVk : public ContextImpl
     gl::Error drawArraysIndirect(GLenum mode, const GLvoid *indirect) override;
     gl::Error drawElementsIndirect(GLenum mode, GLenum type, const GLvoid *indirect) override;
 
+    gl::Error getMultisamplefv(GLenum pname, GLuint index, GLfloat *val) override;
+
     // Device loss
     GLenum getResetStatus() override;
 

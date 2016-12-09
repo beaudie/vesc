@@ -384,4 +384,9 @@ const WorkaroundsGL &ContextGL::getWorkaroundsGL() const
     return mRenderer->getWorkarounds();
 }
 
+gl::Error ContextGL::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
+{
+    return mRenderer->getMultisamplefv(pname, index, val);
+}
+
 }  // namespace rx

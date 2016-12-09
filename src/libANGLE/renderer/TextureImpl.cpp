@@ -47,4 +47,13 @@ gl::Error TextureImpl::copyCompressedTexture(const gl::Texture *source)
     return gl::Error(GL_INVALID_OPERATION,
                      "CHROMIUM_copy_compressed_texture exposed but not implemented.");
 }
+gl::Error TextureImpl::setStorageMultisample(GLenum target,
+                                             GLsizei samples,
+                                             GLint internalformat,
+                                             gl::Extents size,
+                                             GLboolean fixedSampleLocations)
+{
+    UNREACHABLE();
+    return gl::InternalError() << "setStorageMultisample is unimplemented.";
+}
 }
