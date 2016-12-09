@@ -1136,7 +1136,11 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
     caps->maxServerWaitTimeout = 0;
 
     // Vertex shader limits
+    // TODO(jiawei.shao@intel.com): make a test in angle_end2end_tests for
+    // caps->maxVertexAttribStride and caps->maxVertexAttribRelativeOffset for ES3.1 context.
     caps->maxVertexAttributes = static_cast<GLuint>(GetMaximumVertexInputSlots(featureLevel));
+    caps->maxVertexAttribBindings = caps->maxVertexAttributes;
+
     caps->maxVertexUniformComponents =
         static_cast<GLuint>(GetMaximumVertexUniformVectors(featureLevel)) * 4;
     caps->maxVertexUniformVectors =
