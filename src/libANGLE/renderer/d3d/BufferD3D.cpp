@@ -90,7 +90,7 @@ StaticIndexBufferInterface *BufferD3D::getStaticIndexBuffer()
     return mStaticIndexBuffer;
 }
 
-StaticVertexBufferInterface *BufferD3D::getStaticVertexBuffer(const gl::VertexAttribute &attribute)
+StaticVertexBufferInterface *BufferD3D::getStaticVertexBuffer(const gl::VertexInfo &vertexInfo)
 {
     if (mStaticVertexBuffers.empty())
     {
@@ -111,7 +111,7 @@ StaticVertexBufferInterface *BufferD3D::getStaticVertexBuffer(const gl::VertexAt
     // If there is a cached static buffer that already contains the attribute, then return it
     for (const auto &staticBuffer : mStaticVertexBuffers)
     {
-        if (staticBuffer->matchesAttribute(attribute))
+        if (staticBuffer->matchesAttribute(vertexInfo))
         {
             return staticBuffer.get();
         }
@@ -134,7 +134,7 @@ StaticVertexBufferInterface *BufferD3D::getStaticVertexBuffer(const gl::VertexAt
 
     // At this point, we must create a new static buffer for the attribute data.
     auto newStaticBuffer = new StaticVertexBufferInterface(mFactory);
-    newStaticBuffer->setAttribute(attribute);
+    newStaticBuffer->setAttribute(vertexInfo);
     mStaticVertexBuffers.push_back(std::unique_ptr<StaticVertexBufferInterface>(newStaticBuffer));
     return newStaticBuffer;
 }

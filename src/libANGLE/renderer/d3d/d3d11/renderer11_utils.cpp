@@ -1215,6 +1215,8 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
 
     // Vertex shader limits
     caps->maxVertexAttributes = static_cast<GLuint>(GetMaximumVertexInputSlots(featureLevel));
+    caps->maxVertexAttribBindings = caps->maxVertexAttributes;
+
     caps->maxVertexUniformComponents =
         static_cast<GLuint>(GetMaximumVertexUniformVectors(featureLevel)) * 4;
     caps->maxVertexUniformVectors =
