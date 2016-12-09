@@ -85,7 +85,7 @@ BufferImpl *ContextGL::createBuffer(const gl::BufferState &state)
 
 VertexArrayImpl *ContextGL::createVertexArray(const gl::VertexArrayState &data)
 {
-    return new VertexArrayGL(data, getFunctions(), getStateManager());
+    return new VertexArrayGL(data, getFunctions(), getStateManager(), mRenderer->getNativeCaps());
 }
 
 QueryImpl *ContextGL::createQuery(GLenum type)
