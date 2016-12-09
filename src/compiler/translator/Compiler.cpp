@@ -570,6 +570,8 @@ bool TCompiler::InitBuiltInSymbolTable(const ShBuiltInResources &resources)
     initSamplerDefaultPrecision(EbtSamplerExternalOES);
     // It isn't specified whether Sampler2DRect has default precision.
     initSamplerDefaultPrecision(EbtSampler2DRect);
+    // It isn't specified whether Sampler2DMS has default precision.
+    initSamplerDefaultPrecision(EbtSampler2DMS);
 
     InsertBuiltInFunctions(shaderType, shaderSpec, resources, symbolTable);
 
