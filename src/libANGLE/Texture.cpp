@@ -1,3 +1,4 @@
+#include "Texture.h"
 //
 // Copyright (c) 2002-2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
@@ -95,6 +96,8 @@ TextureState::TextureState(GLenum target)
       mImmutableFormat(false),
       mImmutableLevels(0),
       mUsage(GL_NONE),
+      mSamples(0),
+      mFixedSampleLocations(GL_TRUE),
       mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) *
                   (target == GL_TEXTURE_CUBE_MAP ? 6 : 1)),
       mCompletenessCache()
@@ -796,6 +799,16 @@ const Format &Texture::getFormat(GLenum target, size_t level) const
     return mState.getImageDesc(target, level).format;
 }
 
+GLsizei Texture::getSamples() const
+{
+    return mState.mSamples;
+}
+
+GLboolean Texture::getFixedSampleLocations() const
+{
+    return mState.mFixedSampleLocations;
+}
+
 bool Texture::isMipmapComplete() const
 {
     return mState.computeMipmapCompleteness();
@@ -992,6 +1005,33 @@ Error Texture::setStorage(GLenum target, GLsizei levels, GLenum internalFormat, 
     return NoError();
 }
 
+Error Texture::setStorageMultisample(GLenum target,
+                                     GLsizei samples,
+                                     GLint internalFormat,
+                                     const Extents &size,
+                                     GLboolean fixedSampleLocations)
+{
+    ASSERT(target == mState.mTarget);
+
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    releaseTexImageInternal();
+    orphanImages();
+
+    ANGLE_TRY(mTexture->setStorageMultisample(target, samples, internalFormat, size,
+                                              fixedSampleLocations));
+
+    mState.mImmutableFormat = true;
+    mState.mImmutableLevels = static_cast<GLuint>(1);
+    mState.clearImageDescs();
+    mState.setImageDescChain(0, 0, size, Format(internalFormat));
+    mState.mSamples              = samples;
+    mState.mFixedSampleLocations = fixedSampleLocations;
+
+    mDirtyChannel.signal();
+
+    return NoError();
+}
+
 Error Texture::generateMipmap()
 {
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
@@ -1137,10 +1177,12 @@ const Format &Texture::getAttachmentFormat(const gl::FramebufferAttachment::Targ
     return getFormat(target.textureIndex().type, target.textureIndex().mipIndex);
 }
 
-GLsizei Texture::getAttachmentSamples(const gl::FramebufferAttachment::Target &/*target*/) const
+GLsizei Texture::getAttachmentSamples(const gl::FramebufferAttachment::Target &target) const
 {
-    // Multisample textures not currently supported
-    return 0;
+    ASSERT(target.textureIndex().type == mState.mTarget ||
+           (mState.mTarget == GL_TEXTURE_CUBE_MAP &&
+            IsCubeMapTextureTarget(target.textureIndex().type)));
+    return getSamples();
 }
 
 void Texture::onAttach()
