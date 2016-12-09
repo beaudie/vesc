@@ -41,7 +41,7 @@ gl::InputLayout GetInputLayout(const std::vector<const TranslatedAttribute *> &t
     for (size_t attributeIndex = 0; attributeIndex < translatedAttributes.size(); ++attributeIndex)
     {
         const TranslatedAttribute *translatedAttribute = translatedAttributes[attributeIndex];
-        inputLayout[attributeIndex] = gl::GetVertexFormatType(
+        inputLayout[attributeIndex]                    = gl::GetVertexFormatType(
             *translatedAttribute->attribute, translatedAttribute->currentValueType);
     }
     return inputLayout;
@@ -496,7 +496,8 @@ gl::Error InputLayoutCache::updateInputLayout(const gl::State &state,
         const auto &currentValue              = state.getVertexAttribCurrentValue(attribIndex);
         gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib, currentValue.Type);
 
-        layout.addAttributeData(glslElementType, d3dSemantic, vertexFormatType, attrib.divisor);
+        layout.addAttributeData(glslElementType, d3dSemantic, vertexFormatType,
+                                attrib.binding->divisor);
     }
 
     ID3D11InputLayout *inputLayout = nullptr;
