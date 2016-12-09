@@ -219,24 +219,28 @@ bool StaticVertexBufferInterface::AttributeSignature::matchesAttribute(
 {
     size_t attribStride = ComputeVertexAttributeStride(attrib);
 
-    if (type != attrib.type || size != attrib.size || static_cast<GLuint>(stride) != attribStride ||
-        normalized != attrib.normalized || pureInteger != attrib.pureInteger)
+    const auto &format = attrib.format;
+    if (type != format.type || size != format.size || static_cast<GLuint>(stride) != attribStride ||
+        normalized != format.normalized || pureInteger != format.pureInteger)
     {
         return false;
     }
 
-    size_t attribOffset = (static_cast<size_t>(attrib.offset) % attribStride);
+    size_t attribOffset =
+        (static_cast<size_t>(ComputeVertexAttributeOffset(attrib)) % attribStride);
     return (offset == attribOffset);
 }
 
 void StaticVertexBufferInterface::AttributeSignature::set(const gl::VertexAttribute &attrib)
 {
-    type        = attrib.type;
-    size        = attrib.size;
-    normalized  = attrib.normalized;
-    pureInteger = attrib.pureInteger;
+    const auto &format = attrib.format;
+    type               = format.type;
+    size               = format.size;
+    normalized         = format.normalized;
+    pureInteger        = format.pureInteger;
     offset = stride = static_cast<GLuint>(ComputeVertexAttributeStride(attrib));
-    offset = static_cast<size_t>(attrib.offset) % ComputeVertexAttributeStride(attrib);
+    offset          = static_cast<size_t>(ComputeVertexAttributeOffset(attrib)) %
+             ComputeVertexAttributeStride(attrib);
 }
 
 StaticVertexBufferInterface::StaticVertexBufferInterface(BufferFactoryD3D *factory)
