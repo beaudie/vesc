@@ -50,13 +50,16 @@ bool ValidateDrawAttribs(ValidationContext *context,
     for (size_t attributeIndex = 0; attributeIndex < maxEnabledAttrib; ++attributeIndex)
     {
         const VertexAttribute &attrib = vertexAttribs[attributeIndex];
-        if (!program->isAttribLocationActive(attributeIndex) || !attrib.enabled)
+        const AttributeFormat &format = attrib.getFormat();
+
+        if (!program->isAttribLocationActive(attributeIndex) || !format.enabled)
         {
             continue;
         }
 
+        const AttributeBinding &binding = attrib.getBinding();
         // If we have no buffer, then we either get an error, or there are no more checks to be done.
-        gl::Buffer *buffer = attrib.buffer.get();
+        gl::Buffer *buffer = binding.buffer.get();
         if (!buffer)
         {
             if (webglCompatibility)
@@ -70,7 +73,7 @@ bool ValidateDrawAttribs(ValidationContext *context,
                     Error(GL_INVALID_OPERATION, "An enabled vertex array has no buffer."));
                 return false;
             }
-            else if (attrib.pointer == nullptr)
+            else if (format.pointer == nullptr)
             {
                 // This is an application error that would normally result in a crash,
                 // but we catch it and return an error
@@ -89,13 +92,13 @@ bool ValidateDrawAttribs(ValidationContext *context,
         }
 
         GLint maxVertexElement = 0;
-        if (attrib.divisor == 0)
+        if (binding.divisor == 0)
         {
             maxVertexElement = maxVertex;
         }
         else
         {
-            maxVertexElement = (primcount - 1) / attrib.divisor;
+            maxVertexElement = (primcount - 1) / binding.divisor;
         }
 
         // We do manual overflow checks here instead of using safe_math.h because it was
@@ -120,8 +123,9 @@ bool ValidateDrawAttribs(ValidationContext *context,
         uint64_t attribDataSizeNoOffset = maxVertexElement * attribStride + attribSize;
 
         // An overflow can happen when adding the offset, check for it.
-        uint64_t attribOffset = attrib.offset;
-        if (attribDataSizeNoOffset > kUint64Max - attrib.offset)
+        uint64_t attribOffset = ComputeVertexAttributeOffset(attrib);
+
+        if (attribDataSizeNoOffset > kUint64Max - attribOffset)
         {
             context->handleError(Error(GL_INVALID_OPERATION, "Integer overflow."));
             return false;
@@ -3375,11 +3379,11 @@ static bool ValidateDrawInstancedANGLE(Context *context)
 
     gl::Program *program = state.getProgram();
 
-    const VertexArray *vao = state.getVertexArray();
+    const auto &attribs = state.getVertexArray()->getVertexAttributes();
     for (size_t attributeIndex = 0; attributeIndex < MAX_VERTEX_ATTRIBS; attributeIndex++)
     {
-        const VertexAttribute &attrib = vao->getVertexAttribute(attributeIndex);
-        if (program->isAttribLocationActive(attributeIndex) && attrib.divisor == 0)
+        const VertexAttribute &attrib = attribs[attributeIndex];
+        if (program->isAttribLocationActive(attributeIndex) && attrib.getBinding().divisor == 0)
         {
             return true;
         }
