@@ -351,6 +351,7 @@ void InsertBuiltInFunctions(sh::GLenum type,
     const TType *gsamplerCube    = TCache::getType(EbtGSamplerCube);
     const TType *gsampler3D      = TCache::getType(EbtGSampler3D);
     const TType *gsampler2DArray = TCache::getType(EbtGSampler2DArray);
+    const TType *gsampler2DMS    = TCache::getType(EbtGSampler2DMS);
 
     //
     // Texture Functions for GLSL ES 3.0
@@ -430,6 +431,7 @@ void InsertBuiltInFunctions(sh::GLenum type,
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, int2, "textureSize", sampler2DShadow, int1);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, int2, "textureSize", samplerCubeShadow, int1);
     symbolTable.insertBuiltIn(ESSL3_BUILTINS, int3, "textureSize", sampler2DArrayShadow, int1);
+    symbolTable.insertBuiltIn(ESSL3_BUILTINS, int2, "textureSize", gsampler2DMS);
 
     if (resources.OES_EGL_image_external_essl3)
     {
@@ -588,6 +590,8 @@ void InsertBuiltInFunctions(sh::GLenum type,
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int3, "imageSize", gimage3D);
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int3, "imageSize", gimage2DArray);
     symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, int2, "imageSize", gimageCube);
+
+    symbolTable.insertBuiltIn(ESSL3_1_BUILTINS, gvec4, "texelFetch", gsampler2DMS, int2, int1);
 
     //
     // Depth range in window coordinates
