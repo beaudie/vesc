@@ -364,28 +364,28 @@ void QueryVertexAttribBase(const VertexAttribute &attrib,
             }
             break;
         case GL_VERTEX_ATTRIB_ARRAY_ENABLED:
-            *params = ConvertFromGLboolean<ParamType>(attrib.enabled);
+            *params = ConvertFromGLboolean<ParamType>(attrib.getAttribFormat().enabled);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_SIZE:
-            *params = ConvertFromGLuint<ParamType>(attrib.size);
+            *params = ConvertFromGLuint<ParamType>(attrib.getAttribFormat().size);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_STRIDE:
-            *params = ConvertFromGLuint<ParamType>(attrib.stride);
+            *params = ConvertFromGLuint<ParamType>(attrib.getAttribFormat().stride);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_TYPE:
-            *params = ConvertFromGLenum<ParamType>(attrib.type);
+            *params = ConvertFromGLenum<ParamType>(attrib.getAttribFormat().type);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_NORMALIZED:
-            *params = ConvertFromGLboolean<ParamType>(attrib.normalized);
+            *params = ConvertFromGLboolean<ParamType>(attrib.getAttribFormat().normalized);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING:
-            *params = ConvertFromGLuint<ParamType>(attrib.buffer.id());
+            *params = ConvertFromGLuint<ParamType>(attrib.getAttribBinding().buffer.id());
             break;
         case GL_VERTEX_ATTRIB_ARRAY_DIVISOR:
-            *params = ConvertFromGLuint<ParamType>(attrib.divisor);
+            *params = ConvertFromGLuint<ParamType>(attrib.getAttribBinding().divisor);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_INTEGER:
-            *params = ConvertFromGLboolean<ParamType>(attrib.pureInteger);
+            *params = ConvertFromGLboolean<ParamType>(attrib.getAttribFormat().pureInteger);
             break;
         default:
             UNREACHABLE();
@@ -739,7 +739,7 @@ void QueryVertexAttribPointerv(const VertexAttribute &attrib, GLenum pname, GLvo
     switch (pname)
     {
         case GL_VERTEX_ATTRIB_ARRAY_POINTER:
-            *pointer = const_cast<GLvoid *>(attrib.pointer);
+            *pointer = const_cast<GLvoid *>(attrib.getAttribFormat().pointer);
             break;
 
         default:
