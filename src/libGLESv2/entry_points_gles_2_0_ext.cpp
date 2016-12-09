@@ -2321,7 +2321,9 @@ ANGLE_EXPORT void GL_APIENTRY GetVertexAttribfvRobustANGLE(GLuint index,
             context->getGLState().getVertexAttribCurrentValue(index);
         const VertexAttribute &attrib =
             context->getGLState().getVertexArray()->getVertexAttribute(index);
-        QueryVertexAttribfv(attrib, currentValues, pname, params);
+        const VertexBufferBinding &binding =
+            context->getGLState().getVertexArray()->getVertexBufferBinding(attrib.bindingIndex);
+        QueryVertexAttribfv(attrib, binding, currentValues, pname, params);
         SetRobustLengthParam(length, writeLength);
     }
 }
@@ -2351,7 +2353,9 @@ ANGLE_EXPORT void GL_APIENTRY GetVertexAttribivRobustANGLE(GLuint index,
             context->getGLState().getVertexAttribCurrentValue(index);
         const VertexAttribute &attrib =
             context->getGLState().getVertexArray()->getVertexAttribute(index);
-        QueryVertexAttribiv(attrib, currentValues, pname, params);
+        const VertexBufferBinding &binding =
+            context->getGLState().getVertexArray()->getVertexBufferBinding(attrib.bindingIndex);
+        QueryVertexAttribiv(attrib, binding, currentValues, pname, params);
         SetRobustLengthParam(length, writeLength);
     }
 }
@@ -2379,7 +2383,9 @@ ANGLE_EXPORT void GL_APIENTRY GetVertexAttribPointervRobustANGLE(GLuint index,
 
         const VertexAttribute &attrib =
             context->getGLState().getVertexArray()->getVertexAttribute(index);
-        QueryVertexAttribPointerv(attrib, pname, pointer);
+        const VertexBufferBinding &binding =
+            context->getGLState().getVertexArray()->getVertexBufferBinding(attrib.bindingIndex);
+        QueryVertexBindingPointerv(binding, pname, pointer);
         SetRobustLengthParam(length, writeLength);
     }
 }
@@ -2739,7 +2745,9 @@ ANGLE_EXPORT void GL_APIENTRY GetVertexAttribIivRobustANGLE(GLuint index,
             context->getGLState().getVertexAttribCurrentValue(index);
         const VertexAttribute &attrib =
             context->getGLState().getVertexArray()->getVertexAttribute(index);
-        QueryVertexAttribIiv(attrib, currentValues, pname, params);
+        const VertexBufferBinding &binding =
+            context->getGLState().getVertexArray()->getVertexBufferBinding(attrib.bindingIndex);
+        QueryVertexAttribIiv(attrib, binding, currentValues, pname, params);
         SetRobustLengthParam(length, writeLength);
     }
 }
@@ -2769,7 +2777,9 @@ ANGLE_EXPORT void GL_APIENTRY GetVertexAttribIuivRobustANGLE(GLuint index,
             context->getGLState().getVertexAttribCurrentValue(index);
         const VertexAttribute &attrib =
             context->getGLState().getVertexArray()->getVertexAttribute(index);
-        QueryVertexAttribIuiv(attrib, currentValues, pname, params);
+        const VertexBufferBinding &binding =
+            context->getGLState().getVertexArray()->getVertexBufferBinding(attrib.bindingIndex);
+        QueryVertexAttribIuiv(attrib, binding, currentValues, pname, params);
         SetRobustLengthParam(length, writeLength);
     }
 }
