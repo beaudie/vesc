@@ -33,6 +33,12 @@ size_t GetAttribIndex(unsigned long dirtyBit)
         return dirtyBit - gl::VertexArray::DIRTY_BIT_ATTRIB_0_POINTER;
     }
 
+    if (dirtyBit >= gl::VertexArray::DIRTY_BIT_ATTRIB_0_BINDING &&
+        dirtyBit < gl::VertexArray::DIRTY_BIT_ATTRIB_MAX_BINDING)
+    {
+        return dirtyBit - gl::VertexArray::DIRTY_BIT_ATTRIB_0_BINDING;
+    }
+
     ASSERT(dirtyBit >= gl::VertexArray::DIRTY_BIT_ATTRIB_0_DIVISOR &&
            dirtyBit < gl::VertexArray::DIRTY_BIT_ATTRIB_MAX_DIVISOR);
     return static_cast<size_t>(dirtyBit) - gl::VertexArray::DIRTY_BIT_ATTRIB_0_DIVISOR;
@@ -105,7 +111,7 @@ void VertexArray11::updateVertexAttribStorage(size_t attribIndex)
     }
 
     gl::Buffer *oldBufferGL = mCurrentBuffers[attribIndex].get();
-    gl::Buffer *newBufferGL = attrib.buffer.get();
+    gl::Buffer *newBufferGL = attrib.buffer()->get();
     Buffer11 *oldBuffer11   = oldBufferGL ? GetImplAs<Buffer11>(oldBufferGL) : nullptr;
     Buffer11 *newBuffer11   = newBufferGL ? GetImplAs<Buffer11>(newBufferGL) : nullptr;
 
@@ -130,7 +136,7 @@ void VertexArray11::updateVertexAttribStorage(size_t attribIndex)
             }
         }
         mOnBufferDataDirty[attribIndex].bind(newChannel);
-        mCurrentBuffers[attribIndex] = attrib.buffer;
+        mCurrentBuffers[attribIndex] = *attrib.buffer();
     }
 }
 
@@ -173,7 +179,7 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(VertexDataManager *vertexD
             // Record basic attrib info
             translatedAttrib->attribute        = &attribs[dirtyAttribIndex];
             translatedAttrib->currentValueType = currentValue.Type;
-            translatedAttrib->divisor          = translatedAttrib->attribute->divisor;
+            translatedAttrib->divisor          = translatedAttrib->attribute->divisor();
 
             switch (mAttributeStorageTypes[dirtyAttribIndex])
             {
@@ -209,7 +215,7 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(VertexDataManager *vertexD
             // Record basic attrib info
             dynamicAttrib->attribute        = &attribs[dynamicAttribIndex];
             dynamicAttrib->currentValueType = currentValue.Type;
-            dynamicAttrib->divisor          = dynamicAttrib->attribute->divisor;
+            dynamicAttrib->divisor          = dynamicAttrib->attribute->divisor();
         }
 
         return vertexDataManager->storeDynamicAttribs(&mTranslatedAttribs, activeDynamicAttribs,

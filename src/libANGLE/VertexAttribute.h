@@ -3,37 +3,47 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// Helper structure describing a single vertex attribute
+// Helper structure describing a single vertex attribute.
+// Representing a vertex attribute format information record in ES3.1
 //
 
 #ifndef LIBANGLE_VERTEXATTRIBUTE_H_
 #define LIBANGLE_VERTEXATTRIBUTE_H_
 
 #include "libANGLE/Buffer.h"
+#include "libANGLE/VertexBufferBinding.h"
 
 namespace gl
 {
 
 struct VertexAttribute
 {
-    bool enabled; // From glEnable/DisableVertexAttribArray
+    bool enabled;  // From glEnable/DisableVertexAttribArray
 
+    size_t index;
     GLenum type;
     GLuint size;
     bool normalized;
     bool pureInteger;
-    GLuint stride; // 0 means natural stride
+    GLintptr relativeOffset;
 
-    union
-    {
-        const GLvoid *pointer;
-        GLintptr offset;
-    };
-    BindingPointer<Buffer> buffer; // Captured when glVertexAttribPointer is called.
+    explicit VertexAttribute(size_t index, VertexBufferBinding *vertexBufferBinding);
 
-    GLuint divisor;
+    void bindVertexBuffer(VertexBufferBinding *vertexBufferBinding);
+    VertexBufferBinding *vertexBufferBinding() const { return binding; }
+    size_t bindingIndex() const;
 
-    VertexAttribute();
+    GLuint stride() const;
+    GLuint divisor() const;
+
+    GLintptr vertexBindingOffset() const;
+    GLintptr offset() const;
+    GLvoid *pointer() const;
+
+    BindingPointer<Buffer> *buffer() const;
+
+  private:
+    VertexBufferBinding *binding;
 };
 
 bool operator==(const VertexAttribute &a, const VertexAttribute &b);
@@ -65,7 +75,7 @@ struct VertexAttribCurrentValueData
 bool operator==(const VertexAttribCurrentValueData &a, const VertexAttribCurrentValueData &b);
 bool operator!=(const VertexAttribCurrentValueData &a, const VertexAttribCurrentValueData &b);
 
-}
+}  // namespace gl
 
 #include "VertexAttribute.inl"
 

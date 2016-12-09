@@ -25,7 +25,7 @@ namespace rx
 {
 class GLImplFactory;
 class VertexArrayImpl;
-}
+}  // namespace rx
 
 namespace gl
 {
@@ -34,13 +34,14 @@ class Buffer;
 class VertexArrayState final : public angle::NonCopyable
 {
   public:
-    explicit VertexArrayState(size_t maxAttribs);
+    explicit VertexArrayState(size_t maxAttribs, size_t maxAttribBindings);
     ~VertexArrayState();
 
     const std::string &getLabel() const { return mLabel; }
 
     const BindingPointer<Buffer> &getElementArrayBuffer() const { return mElementArrayBuffer; }
     size_t getMaxAttribs() const { return mVertexAttributes.size(); }
+    size_t getMaxBufferBindings() const { return mVertexBufferBindings.size(); }
     size_t getMaxEnabledAttribute() const { return mMaxEnabledAttribute; }
     const std::vector<VertexAttribute> &getVertexAttributes() const { return mVertexAttributes; }
     const VertexAttribute &getVertexAttribute(size_t index) const
@@ -51,15 +52,16 @@ class VertexArrayState final : public angle::NonCopyable
   private:
     friend class VertexArray;
     std::string mLabel;
-    std::vector<VertexAttribute> mVertexAttributes;
     BindingPointer<Buffer> mElementArrayBuffer;
+    std::vector<VertexAttribute> mVertexAttributes;
+    std::vector<VertexBufferBinding> mVertexBufferBindings;
     size_t mMaxEnabledAttribute;
 };
 
 class VertexArray final : public LabeledObject
 {
   public:
-    VertexArray(rx::GLImplFactory *factory, GLuint id, size_t maxAttribs);
+    VertexArray(rx::GLImplFactory *factory, GLuint id, size_t maxAttribs, size_t maxAttribBindings);
     ~VertexArray();
 
     GLuint id() const;
@@ -68,6 +70,19 @@ class VertexArray final : public LabeledObject
     const std::string &getLabel() const override;
 
     const VertexAttribute &getVertexAttribute(size_t attributeIndex) const;
+
+    void setVertexAttribFormat(size_t attributeIndex,
+                               GLint size,
+                               GLenum type,
+                               bool normalized,
+                               bool pureInteger,
+                               GLintptr relativeOffset);
+    void bindVertexBuffer(size_t bindingIndex,
+                          gl::Buffer *boundBuffer,
+                          const void *pointer,
+                          GLsizei stride);
+    void setVertexAttribBinding(size_t attributeIndex, size_t bindingIndex);
+    void setVertexBindingDivisor(size_t bindingIndex, GLuint divisor);
 
     void detachBuffer(GLuint bufferName);
     void setVertexAttribDivisor(size_t index, GLuint divisor);
@@ -81,7 +96,8 @@ class VertexArray final : public LabeledObject
     {
         return mState.getElementArrayBuffer();
     }
-    size_t getMaxAttribs() const { return mState.getVertexAttributes().size(); }
+    size_t getMaxAttribs() const { return mState.getMaxAttribs(); }
+    size_t getMaxBufferBindings() const { return mState.getMaxBufferBindings(); }
     const std::vector<VertexAttribute> &getVertexAttributes() const
     {
         return mState.getVertexAttributes();
@@ -103,9 +119,13 @@ class VertexArray final : public LabeledObject
         DIRTY_BIT_ATTRIB_0_POINTER   = DIRTY_BIT_ATTRIB_MAX_ENABLED,
         DIRTY_BIT_ATTRIB_MAX_POINTER = DIRTY_BIT_ATTRIB_0_POINTER + gl::MAX_VERTEX_ATTRIBS,
 
-        // Reserve bits for divisors
-        DIRTY_BIT_ATTRIB_0_DIVISOR   = DIRTY_BIT_ATTRIB_MAX_POINTER,
-        DIRTY_BIT_ATTRIB_MAX_DIVISOR = DIRTY_BIT_ATTRIB_0_DIVISOR + gl::MAX_VERTEX_ATTRIBS,
+        // Reserve bits for vertex attrib bindings
+        DIRTY_BIT_ATTRIB_0_BINDING   = DIRTY_BIT_ATTRIB_MAX_POINTER,
+        DIRTY_BIT_ATTRIB_MAX_BINDING = DIRTY_BIT_ATTRIB_0_BINDING + gl::MAX_VERTEX_ATTRIB_BINDINGS,
+
+        // Reserve bits for attrib divisors
+        DIRTY_BIT_ATTRIB_0_DIVISOR   = DIRTY_BIT_ATTRIB_MAX_BINDING,
+        DIRTY_BIT_ATTRIB_MAX_DIVISOR = DIRTY_BIT_ATTRIB_0_DIVISOR + gl::MAX_VERTEX_ATTRIB_BINDINGS,
 
         DIRTY_BIT_UNKNOWN = DIRTY_BIT_ATTRIB_MAX_DIVISOR,
         DIRTY_BIT_MAX     = DIRTY_BIT_UNKNOWN,
@@ -125,6 +145,6 @@ class VertexArray final : public LabeledObject
     rx::VertexArrayImpl *mVertexArray;
 };
 
-}
+}  // namespace gl
 
 #endif // LIBANGLE_VERTEXARRAY_H_
