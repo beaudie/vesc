@@ -1270,7 +1270,8 @@ const VertexAttribCurrentValueData &State::getVertexAttribCurrentValue(unsigned 
 
 const void *State::getVertexAttribPointer(unsigned int attribNum) const
 {
-    return getVertexArray()->getVertexAttribute(attribNum).pointer;
+    const VertexAttribute &attrib = getVertexArray()->getVertexAttribute(attribNum);
+    return attrib.getAttribFormat().pointer;
 }
 
 void State::setPackAlignment(GLint alignment)
@@ -1933,14 +1934,14 @@ bool State::hasMappedBuffer(GLenum target) const
 {
     if (target == GL_ARRAY_BUFFER)
     {
-        const VertexArray *vao = getVertexArray();
-        const auto &vertexAttribs = vao->getVertexAttributes();
+        const VertexArray *vao    = getVertexArray();
         size_t maxEnabledAttrib = vao->getMaxEnabledAttribute();
+        const auto &vertexAttribs = vao->getVertexAttributes();
         for (size_t attribIndex = 0; attribIndex < maxEnabledAttrib; attribIndex++)
         {
             const gl::VertexAttribute &vertexAttrib = vertexAttribs[attribIndex];
-            gl::Buffer *boundBuffer = vertexAttrib.buffer.get();
-            if (vertexAttrib.enabled && boundBuffer && boundBuffer->isMapped())
+            auto *boundBuffer                       = vertexAttrib.getAttribBinding().buffer.get();
+            if (vertexAttrib.getAttribFormat().enabled && boundBuffer && boundBuffer->isMapped())
             {
                 return true;
             }

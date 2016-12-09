@@ -2871,24 +2871,27 @@ gl::ErrorOrResult<unsigned int> Renderer9::getVertexSpaceRequired(const gl::Vert
                                                                   GLsizei count,
                                                                   GLsizei instances) const
 {
+    const gl::AttributeFormat &format   = attrib.getAttribFormat();
+    const gl::AttributeBinding &binding = attrib.getAttribBinding();
+
     gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib, GL_FLOAT);
     const d3d9::VertexFormat &d3d9VertexInfo =
         d3d9::GetVertexFormatInfo(getCapsDeclTypes(), vertexFormatType);
 
-    if (!attrib.enabled)
+    if (!format.enabled)
     {
         return 16u;
     }
 
     unsigned int elementCount = 0;
-    if (instances == 0 || attrib.divisor == 0)
+    if (instances == 0 || binding.divisor == 0)
     {
         elementCount = static_cast<unsigned int>(count);
     }
     else
     {
         // Round up to divisor, if possible
-        elementCount = UnsignedCeilDivide(static_cast<unsigned int>(instances), attrib.divisor);
+        elementCount = UnsignedCeilDivide(static_cast<unsigned int>(instances), binding.divisor);
     }
 
     if (d3d9VertexInfo.outputElementSize > std::numeric_limits<unsigned int>::max() / elementCount)

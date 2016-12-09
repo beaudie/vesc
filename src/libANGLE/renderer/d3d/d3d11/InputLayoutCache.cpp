@@ -41,7 +41,7 @@ gl::InputLayout GetInputLayout(const std::vector<const TranslatedAttribute *> &t
     for (size_t attributeIndex = 0; attributeIndex < translatedAttributes.size(); ++attributeIndex)
     {
         const TranslatedAttribute *translatedAttribute = translatedAttributes[attributeIndex];
-        inputLayout[attributeIndex] = gl::GetVertexFormatType(
+        inputLayout[attributeIndex]                    = gl::GetVertexFormatType(
             *translatedAttribute->attribute, translatedAttribute->currentValueType);
     }
     return inputLayout;
@@ -116,7 +116,7 @@ void SortAttributesByLayout(const gl::Program *program,
         (*sortedD3DSemanticsOut)[d3dSemantic] = d3dSemantic;
 
         const auto *arrayAttrib = &vertexArrayAttribs[locationIndex];
-        if (arrayAttrib->attribute && arrayAttrib->attribute->enabled)
+        if (arrayAttrib->attribute && arrayAttrib->attribute->getAttribFormat().enabled)
         {
             (*sortedAttributesOut)[d3dSemantic] = arrayAttrib;
         }
@@ -481,9 +481,9 @@ gl::Error InputLayoutCache::updateInputLayout(const gl::State &state,
         layout.flags |= PackedAttributeLayout::FLAG_INSTANCED_RENDERING_ACTIVE;
     }
 
-    const auto &attribs            = state.getVertexArray()->getVertexAttributes();
     const auto &locationToSemantic = programD3D->getAttribLocationToD3DSemantics();
 
+    const auto &attribs = state.getVertexArray()->getVertexAttributes();
     for (unsigned long attribIndex : angle::IterateBitSet(program->getActiveAttribLocationsMask()))
     {
         // Record the type of the associated vertex shader vector in our key
@@ -496,7 +496,8 @@ gl::Error InputLayoutCache::updateInputLayout(const gl::State &state,
         const auto &currentValue              = state.getVertexAttribCurrentValue(attribIndex);
         gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib, currentValue.Type);
 
-        layout.addAttributeData(glslElementType, d3dSemantic, vertexFormatType, attrib.divisor);
+        layout.addAttributeData(glslElementType, d3dSemantic, vertexFormatType,
+                                attrib.getAttribBinding().divisor);
     }
 
     ID3D11InputLayout *inputLayout = nullptr;
