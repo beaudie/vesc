@@ -129,7 +129,7 @@ gl::Error VertexBuffer11::storeVertexAttributes(const gl::VertexAttribute &attri
 
     const uint8_t *input = sourceData;
 
-    if (instances == 0 || attrib.divisor == 0)
+    if (instances == 0 || attrib.getBinding().divisor == 0)
     {
         input += inputStride * start;
     }
