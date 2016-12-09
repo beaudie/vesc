@@ -40,7 +40,9 @@ class BufferD3D : public BufferImpl
     virtual gl::Error markTransformFeedbackUsage() = 0;
     virtual gl::Error getData(const uint8_t **outData) = 0;
 
-    StaticVertexBufferInterface *getStaticVertexBuffer(const gl::VertexAttribute &attribute);
+    StaticVertexBufferInterface *BufferD3D::getStaticVertexBuffer(
+        const gl::VertexAttribute &attribute,
+        const gl::VertexBufferBinding &binding);
     StaticIndexBufferInterface *getStaticIndexBuffer();
 
     virtual void initializeStaticData();

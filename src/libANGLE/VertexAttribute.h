@@ -3,47 +3,61 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// Helper structure describing a single vertex attribute
+// Helper structure describing a single vertex attribute.
+// Representing a vertex attribute format information record in ES3.1
 //
 
 #ifndef LIBANGLE_VERTEXATTRIBUTE_H_
 #define LIBANGLE_VERTEXATTRIBUTE_H_
 
 #include "libANGLE/Buffer.h"
+#include "libANGLE/VertexArray.h"
 
 namespace gl
 {
 
+struct VertexBufferBinding
+{
+    GLuint stride;  // 0 means natural stride
+    GLuint divisor;
+
+    union {
+        const GLvoid *bindingPointer;
+        GLintptr bindingOffset;
+    };
+    BindingPointer<Buffer> buffer;
+
+    VertexBufferBinding();
+};
+
 struct VertexAttribute
 {
-    bool enabled; // From glEnable/DisableVertexAttribArray
+    bool enabled;  // From glEnable/DisableVertexAttribArray
 
     GLenum type;
     GLuint size;
     bool normalized;
     bool pureInteger;
-    GLuint stride; // 0 means natural stride
+    GLintptr relativeOffset;
 
-    union
-    {
-        const GLvoid *pointer;
-        GLintptr offset;
-    };
-    BindingPointer<Buffer> buffer; // Captured when glVertexAttribPointer is called.
+    size_t bindingIndex;  // Index of VertexBufferBinding object in VertexArray
 
-    GLuint divisor;
-
-    VertexAttribute();
+    explicit VertexAttribute(size_t attribIndex);
 };
 
 bool operator==(const VertexAttribute &a, const VertexAttribute &b);
 bool operator!=(const VertexAttribute &a, const VertexAttribute &b);
 
-size_t ComputeVertexAttributeTypeSize(const VertexAttribute& attrib);
-size_t ComputeVertexAttributeStride(const VertexAttribute& attrib);
+size_t ComputeVertexAttributeTypeSize(const VertexAttribute &attrib);
+size_t ComputeVertexAttributeStride(const VertexAttribute &attrib,
+                                    const VertexBufferBinding &binding);
 size_t ComputeVertexAttributeElementCount(const VertexAttribute &attrib,
+                                          const VertexBufferBinding &binding,
                                           size_t drawCount,
                                           size_t instanceCount);
+
+GLintptr ComputeVertexAttributeOffset(const VertexAttribute &attrib,
+                                      const VertexBufferBinding &binding);
 
 struct VertexAttribCurrentValueData
 {
@@ -65,7 +79,7 @@ struct VertexAttribCurrentValueData
 bool operator==(const VertexAttribCurrentValueData &a, const VertexAttribCurrentValueData &b);
 bool operator!=(const VertexAttribCurrentValueData &a, const VertexAttribCurrentValueData &b);
 
-}
+}  // namespace gl
 
 #include "VertexAttribute.inl"
 

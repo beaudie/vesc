@@ -482,6 +482,7 @@ gl::Error InputLayoutCache::updateInputLayout(const gl::State &state,
     }
 
     const auto &attribs            = state.getVertexArray()->getVertexAttributes();
+    const auto &bindings           = state.getVertexArray()->getVertexBufferBindings();
     const auto &locationToSemantic = programD3D->getAttribLocationToD3DSemantics();
 
     for (unsigned long attribIndex : angle::IterateBitSet(program->getActiveAttribLocationsMask()))
@@ -491,12 +492,13 @@ gl::Error InputLayoutCache::updateInputLayout(const gl::State &state,
         GLenum glslElementType = GetGLSLAttributeType(shaderAttributes, attribIndex);
 
         const auto &attrib = attribs[attribIndex];
+        const auto &binding = bindings[attrib.bindingIndex];
         int d3dSemantic    = locationToSemantic[attribIndex];
 
         const auto &currentValue              = state.getVertexAttribCurrentValue(attribIndex);
         gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib, currentValue.Type);
 
-        layout.addAttributeData(glslElementType, d3dSemantic, vertexFormatType, attrib.divisor);
+        layout.addAttributeData(glslElementType, d3dSemantic, vertexFormatType, binding.divisor);
     }
 
     ID3D11InputLayout *inputLayout = nullptr;
