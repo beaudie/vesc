@@ -957,9 +957,13 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     // TODO(oetuaho): Make this specific to the affected driver versions. Versions that came after
     // 364 are known to be affected, at least up to 375.
     workarounds->emulateAtan2Float = IsNvidia(vendor);
+
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    workarounds->reapplyUBOBindingsAfterLoadingBinaryProgram = IsAMD(vendor);
+#endif  // defined(ANGLE_PLATFORM_WINDOWS)
 }
 
-}
+}  // namespace nativegl_gl
 
 namespace nativegl
 {
