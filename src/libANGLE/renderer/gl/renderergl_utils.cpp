@@ -953,9 +953,13 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
     workarounds->removeInvariantAndCentroidForESSL3 =
         functions->isAtMostGL(gl::Version(4, 1)) ||
         (functions->standard == STANDARD_GL_DESKTOP && IsAMD(vendor));
+
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    workarounds->reapplyUBOBindingsAfterLoadingBinaryProgram = IsAMD(vendor);
+#endif  // defined(ANGLE_PLATFORM_WINDOWS)
 }
 
-}
+}  // namespace nativegl_gl
 
 namespace nativegl
 {
