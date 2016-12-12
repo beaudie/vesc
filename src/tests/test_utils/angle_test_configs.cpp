@@ -78,7 +78,7 @@ std::ostream &operator<<(std::ostream& stream, const PlatformParameters &pp)
         stream << "DEFAULT";
         break;
       default:
-        UNREACHABLE();
+        stream << "UNDEFINED";
         break;
     }
 
