@@ -5,7 +5,8 @@
 //
 // The SeparateDeclarations function processes declarations, so that in the end each declaration
 // contains only one declarator.
-// This is useful as an intermediate step when initialization needs to be separated from declaration,
+// This is useful as an intermediate step when initialization needs to be separated from
+// declaration,
 // or when things need to be unfolded out of the initializer.
 // Example:
 //     int a[1] = int[1](1), b[1] = int[1](2);

@@ -38,10 +38,17 @@ class BuiltInFunctionEmulator
     void OutputEmulatedFunctions(TInfoSinkBase &out) const;
 
     // Add functions that need to be emulated.
-    void addEmulatedFunction(TOperator op, const TType *param, const char *emulatedFunctionDefinition);
-    void addEmulatedFunction(TOperator op, const TType *param1, const TType *param2,
+    void addEmulatedFunction(TOperator op,
+                             const TType *param,
                              const char *emulatedFunctionDefinition);
-    void addEmulatedFunction(TOperator op, const TType *param1, const TType *param2, const TType *param3,
+    void addEmulatedFunction(TOperator op,
+                             const TType *param1,
+                             const TType *param2,
+                             const char *emulatedFunctionDefinition);
+    void addEmulatedFunction(TOperator op,
+                             const TType *param1,
+                             const TType *param2,
+                             const TType *param3,
                              const char *emulatedFunctionDefinition);
 
   private:
@@ -53,9 +60,13 @@ class BuiltInFunctionEmulator
     // emulated one.
     bool SetFunctionCalled(TOperator op, const TType &param);
     bool SetFunctionCalled(TOperator op, const TType &param1, const TType &param2);
-    bool SetFunctionCalled(TOperator op, const TType &param1, const TType &param2, const TType &param3);
+    bool SetFunctionCalled(TOperator op,
+                           const TType &param1,
+                           const TType &param2,
+                           const TType &param3);
 
-    class FunctionId {
+    class FunctionId
+    {
       public:
         FunctionId(TOperator op, const TType *param);
         FunctionId(TOperator op, const TType *param1, const TType *param2);
@@ -65,11 +76,14 @@ class BuiltInFunctionEmulator
         bool operator<(const FunctionId &other) const;
 
         FunctionId getCopy() const;
+
       private:
         TOperator mOp;
 
-        // The memory that these TType objects use is freed by PoolAllocator. The BuiltInFunctionEmulator's lifetime
-        // can extend until after the memory pool is freed, but that's not an issue since this class never destructs
+        // The memory that these TType objects use is freed by PoolAllocator. The
+        // BuiltInFunctionEmulator's lifetime
+        // can extend until after the memory pool is freed, but that's not an issue since this class
+        // never destructs
         // these objects.
         const TType *mParam1;
         const TType *mParam2;

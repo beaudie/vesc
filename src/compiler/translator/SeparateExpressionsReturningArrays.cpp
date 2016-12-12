@@ -3,7 +3,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// SeparateExpressionsReturningArrays splits array-returning expressions that are not array names from more complex
+// SeparateExpressionsReturningArrays splits array-returning expressions that are not array names
+// from more complex
 // expressions, assigning them to a temporary variable a#.
 // Examples where a, b and c are all arrays:
 // (a = b) == (a = c) is split into a = b; type[n] a1 = a; a = c; type[n] a2 = a; a1 == a2;
@@ -33,7 +34,8 @@ class SeparateExpressionsTraverser : public TIntermTraverser
     bool foundArrayExpression() const { return mFoundArrayExpression; }
 
   protected:
-    // Marked to true once an operation that needs to be hoisted out of the expression has been found.
+    // Marked to true once an operation that needs to be hoisted out of the expression has been
+    // found.
     // After that, no more AST updates are performed on that traversal.
     bool mFoundArrayExpression;
 
@@ -59,7 +61,7 @@ TIntermBinary *CopyAssignmentNode(TIntermBinary *node)
 TIntermAggregate *CopyAggregateNode(TIntermAggregate *node)
 {
     TIntermAggregate *copyNode = new TIntermAggregate(node->getOp());
-    TIntermSequence *copySeq = copyNode->getSequence();
+    TIntermSequence *copySeq   = copyNode->getSequence();
     copySeq->insert(copySeq->begin(), node->getSequence()->begin(), node->getSequence()->end());
     copyNode->setType(node->getType());
     *copyNode->getFunctionSymbolInfo() = *node->getFunctionSymbolInfo();
@@ -99,7 +101,7 @@ bool SeparateExpressionsTraverser::visitBinary(Visit visit, TIntermBinary *node)
 bool SeparateExpressionsTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
 {
     if (mFoundArrayExpression)
-        return false; // No need to traverse further
+        return false;  // No need to traverse further
 
     if (!mPatternToSeparateMatcher.match(node, getParentNode()))
         return true;
@@ -123,7 +125,7 @@ void SeparateExpressionsTraverser::nextIteration()
     nextTemporaryIndex();
 }
 
-} // namespace
+}  // namespace
 
 void SeparateExpressionsReturningArrays(TIntermNode *root, unsigned int *temporaryIndex)
 {
@@ -137,8 +139,7 @@ void SeparateExpressionsReturningArrays(TIntermNode *root, unsigned int *tempora
         root->traverse(&traverser);
         if (traverser.foundArrayExpression())
             traverser.updateTree();
-    }
-    while (traverser.foundArrayExpression());
+    } while (traverser.foundArrayExpression());
 }
 
 }  // namespace sh
