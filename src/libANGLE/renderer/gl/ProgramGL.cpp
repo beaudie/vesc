@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/gl/ProgramGL.h"
 
+#include "common/BitSetIterator.h"
 #include "common/angleutils.h"
 #include "common/debug.h"
 #include "common/string_utils.h"
