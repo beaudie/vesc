@@ -121,6 +121,12 @@ void TranslatorHLSL::translate(TIntermNode *root, ShCompileOptions compileOption
                               getSourcePath(), getOutputType(), numRenderTargets, getUniforms(),
                               compileOptions);
 
+    if (getShaderType() == GL_COMPUTE_SHADER && isComputeShaderLocalSizeDeclared())
+    {
+        const sh::WorkGroupSize &localSize = getComputeShaderLocalSize();
+        outputHLSL.setComputeShaderLocalSize(localSize[0], localSize[1], localSize[2]);
+    }
+
     outputHLSL.output(root, getInfoSink().obj);
 
     mInterfaceBlockRegisterMap = outputHLSL.getInterfaceBlockRegisterMap();
