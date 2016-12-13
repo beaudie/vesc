@@ -29,6 +29,9 @@ const char *GetShaderTypeString(GLenum type)
         case GL_FRAGMENT_SHADER:
             return "FRAGMENT";
 
+        case GL_COMPUTE_SHADER:
+            return "COMPUTE";
+
         default:
             UNREACHABLE();
             return "";
@@ -94,6 +97,11 @@ void ShaderD3D::uncompile()
     mUsesPointCoord = false;
     mUsesDepthRange = false;
     mUsesFragDepth = false;
+    mUsesNumWorkGroups = false;
+    mUsesWorkGroupID = false;
+    mUsesLocalInvocationID = false;
+    mUsesGlobalInvocationID = false;
+    mUsesLocalInvocationIndex = false;
     mUsesDiscardRewriting = false;
     mUsesNestedBreak = false;
     mRequiresIEEEStrictCompiling = false;
@@ -192,7 +200,15 @@ bool ShaderD3D::postTranslateCompile(gl::Compiler *compiler, std::string *infoLo
     mUsesPointSize             = translatedSource.find("GL_USES_POINT_SIZE") != std::string::npos;
     mUsesPointCoord            = translatedSource.find("GL_USES_POINT_COORD") != std::string::npos;
     mUsesDepthRange            = translatedSource.find("GL_USES_DEPTH_RANGE") != std::string::npos;
-    mUsesFragDepth = translatedSource.find("GL_USES_FRAG_DEPTH") != std::string::npos;
+    mUsesFragDepth             = translatedSource.find("GL_USES_FRAG_DEPTH") != std::string::npos;
+    mUsesNumWorkGroups = translatedSource.find("GL_USES_NUM_WORK_GROUPS") != std::string::npos;
+    mUsesWorkGroupID   = translatedSource.find("GL_USES_WORK_GROUP_ID") != std::string::npos;
+    mUsesLocalInvocationID =
+        translatedSource.find("GL_USES_LOCAL_INVOCATION_ID") != std::string::npos;
+    mUsesGlobalInvocationID =
+        translatedSource.find("GL_USES_GLOBAL_INVOCATION_ID") != std::string::npos;
+    mUsesLocalInvocationIndex =
+        translatedSource.find("GL_USES_LOCAL_INVOCATION_INDEX") != std::string::npos;
     mUsesDiscardRewriting =
         translatedSource.find("ANGLE_USES_DISCARD_REWRITING") != std::string::npos;
     mUsesNestedBreak  = translatedSource.find("ANGLE_USES_NESTED_BREAK") != std::string::npos;
@@ -200,6 +216,11 @@ bool ShaderD3D::postTranslateCompile(gl::Compiler *compiler, std::string *infoLo
         translatedSource.find("ANGLE_REQUIRES_IEEE_STRICT_COMPILING") != std::string::npos;
 
     ShHandle compilerHandle = compiler->getCompilerHandle(mData.getShaderType());
+
+    if (mData.getShaderType() == GL_COMPUTE_SHADER)
+    {
+        mComputeShaderWorkGroupSize = ShGetComputeShaderLocalGroupSize(compilerHandle);
+    }
 
     mUniformRegisterMap = GetUniformRegisterMap(sh::GetUniformRegisterMap(compilerHandle));
 
