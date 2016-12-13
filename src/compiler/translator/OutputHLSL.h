@@ -37,7 +37,8 @@ class OutputHLSL : public TIntermTraverser
                ShShaderOutput outputType,
                int numRenderTargets,
                const std::vector<Uniform> &uniforms,
-               ShCompileOptions compileOptions);
+               ShCompileOptions compileOptions,
+               const WorkGroupSize &computeShaderLocalSize);
 
     ~OutputHLSL();
 
@@ -174,6 +175,12 @@ class OutputHLSL : public TIntermTraverser
     bool mUsesInstanceID;
     bool mUsesVertexID;
     bool mUsesFragDepth;
+    bool mUsesNumWorkGroups;
+    bool mUsesWorkGroupSize;
+    bool mUsesWorkGroupID;
+    bool mUsesLocalInvocationID;
+    bool mUsesGlobalInvocationID;
+    bool mUsesLocalInvocationIndex;
     bool mUsesXor;
     bool mUsesDiscardRewriting;
     bool mUsesNestedBreak;
@@ -235,6 +242,8 @@ class OutputHLSL : public TIntermTraverser
   private:
     TString samplerNamePrefixFromStruct(TIntermTyped *node);
     bool ancestorEvaluatesToSamplerInStruct(Visit visit);
+
+    WorkGroupSize mComputeShaderLocalSize;
 };
 }
 

@@ -3532,6 +3532,21 @@ gl::Error Renderer11::loadExecutable(const void *function,
             *outExecutable = new ShaderExecutable11(function, length, geometryShader);
         }
         break;
+        case SHADER_COMPUTE:
+        {
+            ID3D11ComputeShader *computeShader = NULL;
+
+            HRESULT result = mDevice->CreateComputeShader(function, length, NULL, &computeShader);
+            ASSERT(SUCCEEDED(result));
+            if (FAILED(result))
+            {
+                return gl::Error(GL_OUT_OF_MEMORY, "Failed to create compute shader, result: 0x%X.",
+                                 result);
+            }
+
+            *outExecutable = new ShaderExecutable11(function, length, computeShader);
+        }
+        break;
         default:
             UNREACHABLE();
             return gl::Error(GL_INVALID_OPERATION);
@@ -3560,6 +3575,9 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog,
             break;
         case SHADER_GEOMETRY:
             profileStream << "gs";
+            break;
+        case SHADER_COMPUTE:
+            profileStream << "cs";
             break;
         default:
             UNREACHABLE();
