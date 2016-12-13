@@ -531,6 +531,8 @@ class Renderer11 : public RendererD3D
 
     ID3D11Buffer *mCurrentGeometryConstantBuffer;
 
+    ID3D11Buffer *mCurrentComputeConstantBuffer;
+
     // Vertex, index and input layouts
     VertexDataManager *mVertexDataManager;
     IndexDataManager *mIndexDataManager;

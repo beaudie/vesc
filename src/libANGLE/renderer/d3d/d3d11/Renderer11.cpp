@@ -2260,9 +2260,11 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
 {
     unsigned int totalRegisterCountVS = 0;
     unsigned int totalRegisterCountPS = 0;
+    unsigned int totalRegisterCountCS = 0;
 
     bool vertexUniformsDirty = false;
     bool pixelUniformsDirty  = false;
+    bool computeUniformsDirty = false;
 
     for (const D3DUniform *uniform : uniformArray)
     {
@@ -2277,20 +2279,31 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
             totalRegisterCountPS += uniform->registerCount;
             pixelUniformsDirty = (pixelUniformsDirty || uniform->dirty);
         }
+
+        if (uniform->isReferencedByComputeShader() && !uniform->isSampler())
+        {
+            totalRegisterCountCS += uniform->registerCount;
+            computeUniformsDirty = (computeUniformsDirty || uniform->dirty);
+        }
     }
 
     const UniformStorage11 *vertexUniformStorage =
         GetAs<UniformStorage11>(&programD3D.getVertexUniformStorage());
     const UniformStorage11 *fragmentUniformStorage =
         GetAs<UniformStorage11>(&programD3D.getFragmentUniformStorage());
+    const UniformStorage11 *computeUniformStorage =
+        GetAs<UniformStorage11>(&programD3D.getComputeUniformStorage());
     ASSERT(vertexUniformStorage);
     ASSERT(fragmentUniformStorage);
+    ASSERT(computeUniformStorage);
 
     ID3D11Buffer *vertexConstantBuffer = vertexUniformStorage->getConstantBuffer();
     ID3D11Buffer *pixelConstantBuffer  = fragmentUniformStorage->getConstantBuffer();
+    ID3D11Buffer *computeConstantBuffer = computeUniformStorage->getConstantBuffer();
 
-    float(*mapVS)[4] = NULL;
-    float(*mapPS)[4] = NULL;
+    float(*mapVS)[4] = nullptr;
+    float(*mapPS)[4] = nullptr;
+    float(*mapCS)[4] = nullptr;
 
     if (totalRegisterCountVS > 0 && vertexUniformsDirty)
     {
@@ -2308,6 +2321,15 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
             mDeviceContext->Map(pixelConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &map);
         ASSERT(SUCCEEDED(result));
         mapPS = (float(*)[4])map.pData;
+    }
+
+    if (totalRegisterCountCS > 0 && computeUniformsDirty)
+    {
+        D3D11_MAPPED_SUBRESOURCE map = {0};
+        HRESULT result =
+            mDeviceContext->Map(computeConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &map);
+        ASSERT(SUCCEEDED(result));
+        mapCS = (float(*)[4])map.pData;
     }
 
     for (const D3DUniform *uniform : uniformArray)
@@ -2331,6 +2353,12 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
             memcpy(&mapPS[uniform->psRegisterIndex][uniform->registerElement], uniform->data,
                    uniform->registerCount * sizeof(float) * componentCount);
         }
+
+        if (uniform->isReferencedByComputeShader() && mapCS)
+        {
+            memcpy(&mapCS[uniform->csRegisterIndex][uniform->registerElement], uniform->data,
+                   uniform->registerCount * sizeof(float) * componentCount);
+        }
     }
 
     if (mapVS)
@@ -2341,6 +2369,11 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
     if (mapPS)
     {
         mDeviceContext->Unmap(pixelConstantBuffer, 0);
+    }
+
+    if (mapCS)
+    {
+        mDeviceContext->Unmap(computeConstantBuffer, 0);
     }
 
     if (mCurrentVertexConstantBuffer != vertexConstantBuffer)
@@ -2355,6 +2388,13 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
         mDeviceContext->PSSetConstantBuffers(
             d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DEFAULT_UNIFORM_BLOCK, 1, &pixelConstantBuffer);
         mCurrentPixelConstantBuffer = pixelConstantBuffer;
+    }
+
+    if (mCurrentComputeConstantBuffer != computeConstantBuffer)
+    {
+        mDeviceContext->CSSetConstantBuffers(
+            d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DEFAULT_UNIFORM_BLOCK, 1, &computeConstantBuffer);
+        mCurrentComputeConstantBuffer = computeConstantBuffer;
     }
 
     if (!mDriverConstantBufferVS)
@@ -2392,6 +2432,8 @@ gl::Error Renderer11::applyUniforms(const ProgramD3D &programD3D,
         mDeviceContext->PSSetConstantBuffers(d3d11::RESERVED_CONSTANT_BUFFER_SLOT_DRIVER, 1,
                                              &mDriverConstantBufferPS);
     }
+
+    // TODO(Xinghua): apply driver constants for compute shader when implement dispatchcompute.
 
     // Sampler metadata and driver constants need to coexist in the same constant buffer to conserve
     // constant buffer slots. We update both in the constant buffer if needed.
@@ -2608,9 +2650,10 @@ void Renderer11::markAllStateDirty()
         mCurrentConstantBufferPSSize[i]   = 0;
     }
 
-    mCurrentVertexConstantBuffer   = NULL;
-    mCurrentPixelConstantBuffer    = NULL;
-    mCurrentGeometryConstantBuffer = NULL;
+    mCurrentVertexConstantBuffer   = nullptr;
+    mCurrentPixelConstantBuffer    = nullptr;
+    mCurrentGeometryConstantBuffer = nullptr;
+    mCurrentComputeConstantBuffer  = nullptr;
 
     mCurrentPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
 }
@@ -3460,15 +3503,14 @@ gl::Error Renderer11::loadExecutable(const void *function,
     {
         case SHADER_VERTEX:
         {
-            ID3D11VertexShader *vertexShader      = NULL;
-            ID3D11GeometryShader *streamOutShader = NULL;
+            ID3D11VertexShader *vertexShader      = nullptr;
+            ID3D11GeometryShader *streamOutShader = nullptr;
 
             HRESULT result = mDevice->CreateVertexShader(function, length, NULL, &vertexShader);
             ASSERT(SUCCEEDED(result));
             if (FAILED(result))
             {
-                return gl::Error(GL_OUT_OF_MEMORY, "Failed to create vertex shader, result: 0x%X.",
-                                 result);
+                return gl::OutOfMemory() << "Failed to create vertex shader, " << result;
             }
 
             if (!streamOutVaryings.empty())
@@ -3496,8 +3538,7 @@ gl::Error Renderer11::loadExecutable(const void *function,
                 ASSERT(SUCCEEDED(result));
                 if (FAILED(result))
                 {
-                    return gl::Error(GL_OUT_OF_MEMORY,
-                                     "Failed to create steam output shader, result: 0x%X.", result);
+                    return gl::OutOfMemory() << "Failed to create steam output shader, " << result;
                 }
             }
 
@@ -3507,14 +3548,13 @@ gl::Error Renderer11::loadExecutable(const void *function,
         break;
         case SHADER_PIXEL:
         {
-            ID3D11PixelShader *pixelShader = NULL;
+            ID3D11PixelShader *pixelShader = nullptr;
 
             HRESULT result = mDevice->CreatePixelShader(function, length, NULL, &pixelShader);
             ASSERT(SUCCEEDED(result));
             if (FAILED(result))
             {
-                return gl::Error(GL_OUT_OF_MEMORY, "Failed to create pixel shader, result: 0x%X.",
-                                 result);
+                return gl::OutOfMemory() << "Failed to create pixel shader, " << result;
             }
 
             *outExecutable = new ShaderExecutable11(function, length, pixelShader);
@@ -3522,17 +3562,30 @@ gl::Error Renderer11::loadExecutable(const void *function,
         break;
         case SHADER_GEOMETRY:
         {
-            ID3D11GeometryShader *geometryShader = NULL;
+            ID3D11GeometryShader *geometryShader = nullptr;
 
             HRESULT result = mDevice->CreateGeometryShader(function, length, NULL, &geometryShader);
             ASSERT(SUCCEEDED(result));
             if (FAILED(result))
             {
-                return gl::Error(GL_OUT_OF_MEMORY,
-                                 "Failed to create geometry shader, result: 0x%X.", result);
+                return gl::OutOfMemory() << "Failed to create geometry shader, " << result;
             }
 
             *outExecutable = new ShaderExecutable11(function, length, geometryShader);
+        }
+        break;
+        case SHADER_COMPUTE:
+        {
+            ID3D11ComputeShader *computeShader = nullptr;
+
+            HRESULT result = mDevice->CreateComputeShader(function, length, NULL, &computeShader);
+            ASSERT(SUCCEEDED(result));
+            if (FAILED(result))
+            {
+                return gl::OutOfMemory() << "Failed to create compute shader, " << result;
+            }
+
+            *outExecutable = new ShaderExecutable11(function, length, computeShader);
         }
         break;
         default:
@@ -3563,6 +3616,9 @@ gl::Error Renderer11::compileToExecutable(gl::InfoLog &infoLog,
             break;
         case SHADER_GEOMETRY:
             profileStream << "gs";
+            break;
+        case SHADER_COMPUTE:
+            profileStream << "cs";
             break;
         default:
             UNREACHABLE();
