@@ -115,6 +115,11 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
     mUsesInstanceID              = false;
     mUsesVertexID                = false;
     mUsesFragDepth               = false;
+    mUsesNumWorkGroups           = false;
+    mUsesWorkGroupID             = false;
+    mUsesLocalInvocationID       = false;
+    mUsesGlobalInvocationID      = false;
+    mUsesLocalInvocationIndex    = false;
     mUsesXor                     = false;
     mUsesDiscardRewriting        = false;
     mUsesNestedBreak             = false;
@@ -132,13 +137,21 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
     mUniformHLSL         = new UniformHLSL(mStructureHLSL, outputType, uniforms);
     mTextureFunctionHLSL = new TextureFunctionHLSL;
 
-    if (mOutputType == SH_HLSL_3_0_OUTPUT)
+    if (mShaderType == GL_COMPUTE_SHADER)
     {
-        // Fragment shaders need dx_DepthRange, dx_ViewCoords and dx_DepthFront.
-        // Vertex shaders need a slightly different set: dx_DepthRange, dx_ViewCoords and
-        // dx_ViewAdjust.
-        // In both cases total 3 uniform registers need to be reserved.
-        mUniformHLSL->reserveUniformRegisters(3);
+        // Reserve register for gl_NumWorkGroups
+        mUniformHLSL->reserveUniformRegisters(1);
+    }
+    else
+    {
+        if (mOutputType == SH_HLSL_3_0_OUTPUT)
+        {
+            // Fragment shaders need dx_DepthRange, dx_ViewCoords and dx_DepthFront.
+            // Vertex shaders need a slightly different set: dx_DepthRange, dx_ViewCoords and
+            // dx_ViewAdjust.
+            // In both cases total 3 uniform registers need to be reserved.
+            mUniformHLSL->reserveUniformRegisters(3);
+        }
     }
 
     // Reserve registers for the default uniform block and driver constants
@@ -540,7 +553,7 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
             out << "#define GL_USES_FRAG_DATA\n";
         }
     }
-    else  // Vertex shader
+    else if (mShaderType == GL_VERTEX_SHADER)
     {
         out << "// Attributes\n";
         out << attributes;
@@ -631,6 +644,36 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
             out << "\n";
         }
     }
+    else  // Compute shader
+    {
+        if (mUsesNumWorkGroups)
+        {
+            out << "cbuffer DriverConstants : register(b1)\n"
+                   "{\n";
+            out << "    uint3 gl_NumWorkGroups : packoffset(c0);\n";
+            out << "};\n";
+        }
+
+        if (mUsesWorkGroupID)
+        {
+            out << "static uint3 gl_WorkGroupID = uint3(0, 0, 0);\n";
+        }
+
+        if (mUsesLocalInvocationID)
+        {
+            out << "static uint3 gl_LocalInvocationID = uint3(0, 0, 0);\n";
+        }
+
+        if (mUsesGlobalInvocationID)
+        {
+            out << "static uint3 gl_GlobalInvocationID = uint3(0, 0, 0);\n";
+        }
+
+        if (mUsesLocalInvocationIndex)
+        {
+            out << "static uint gl_LocalInvocationIndex = uint(0);\n";
+        }
+    }
 
     bool getDimensionsIgnoresBaseLevel =
         (mCompileOptions & SH_HLSL_GET_DIMENSIONS_IGNORES_BASE_LEVEL) != 0;
@@ -664,6 +707,31 @@ void OutputHLSL::header(TInfoSinkBase &out, const BuiltInFunctionEmulator *built
     if (mUsesDepthRange)
     {
         out << "#define GL_USES_DEPTH_RANGE\n";
+    }
+
+    if (mUsesNumWorkGroups)
+    {
+        out << "#define GL_USES_NUM_WORK_GROUPS\n";
+    }
+
+    if (mUsesWorkGroupID)
+    {
+        out << "#define GL_USES_WORK_GROUP_ID\n";
+    }
+
+    if (mUsesLocalInvocationID)
+    {
+        out << "#define GL_USES_LOCAL_INVOCATION_ID\n";
+    }
+
+    if (mUsesGlobalInvocationID)
+    {
+        out << "#define GL_USES_GLOBAL_INVOCATION_ID\n";
+    }
+
+    if (mUsesLocalInvocationIndex)
+    {
+        out << "#define GL_USES_LOCAL_INVOCATION_INDEX\n";
     }
 
     if (mUsesXor)
@@ -778,6 +846,31 @@ void OutputHLSL::visitSymbol(TIntermSymbol *node)
         {
             mUsesFragDepth = true;
             out << "gl_Depth";
+        }
+        else if (qualifier == EvqNumWorkGroups)
+        {
+            mUsesNumWorkGroups = true;
+            out << name;
+        }
+        else if (qualifier == EvqWorkGroupID)
+        {
+            mUsesWorkGroupID = true;
+            out << name;
+        }
+        else if (qualifier == EvqLocalInvocationID)
+        {
+            mUsesLocalInvocationID = true;
+            out << name;
+        }
+        else if (qualifier == EvqGlobalInvocationID)
+        {
+            mUsesGlobalInvocationID = true;
+            out << name;
+        }
+        else if (qualifier == EvqLocalInvocationIndex)
+        {
+            mUsesLocalInvocationIndex = true;
+            out << name;
         }
         else
         {

@@ -20,6 +20,7 @@ ShaderExecutable11::ShaderExecutable11(const void *function, size_t length, ID3D
     mVertexExecutable = NULL;
     mGeometryExecutable = NULL;
     mStreamOutExecutable = NULL;
+    mComputeExecutable = NULL;
 }
 
 ShaderExecutable11::ShaderExecutable11(const void *function, size_t length, ID3D11VertexShader *executable, ID3D11GeometryShader *streamOut)
@@ -29,6 +30,7 @@ ShaderExecutable11::ShaderExecutable11(const void *function, size_t length, ID3D
     mPixelExecutable = NULL;
     mGeometryExecutable = NULL;
     mStreamOutExecutable = streamOut;
+    mComputeExecutable = NULL;
 }
 
 ShaderExecutable11::ShaderExecutable11(const void *function, size_t length, ID3D11GeometryShader *executable)
@@ -38,6 +40,19 @@ ShaderExecutable11::ShaderExecutable11(const void *function, size_t length, ID3D
     mVertexExecutable = NULL;
     mPixelExecutable = NULL;
     mStreamOutExecutable = NULL;
+    mComputeExecutable = NULL;
+}
+
+ShaderExecutable11::ShaderExecutable11(const void *function,
+                                       size_t length,
+                                       ID3D11ComputeShader *executable)
+    : ShaderExecutableD3D(function, length)
+{
+    mComputeExecutable = executable;
+    mPixelExecutable = NULL;
+    mVertexExecutable = NULL;
+    mGeometryExecutable = NULL;
+    mStreamOutExecutable = NULL;
 }
 
 ShaderExecutable11::~ShaderExecutable11()
@@ -46,6 +61,7 @@ ShaderExecutable11::~ShaderExecutable11()
     SafeRelease(mPixelExecutable);
     SafeRelease(mGeometryExecutable);
     SafeRelease(mStreamOutExecutable);
+    SafeRelease(mComputeExecutable);
 }
 
 ID3D11VertexShader *ShaderExecutable11::getVertexShader() const
@@ -66,6 +82,11 @@ ID3D11GeometryShader *ShaderExecutable11::getGeometryShader() const
 ID3D11GeometryShader *ShaderExecutable11::getStreamOutShader() const
 {
     return mStreamOutExecutable;
+}
+
+ID3D11ComputeShader *ShaderExecutable11::getComputeShader() const
+{
+    return mComputeExecutable;
 }
 
 UniformStorage11::UniformStorage11(Renderer11 *renderer, size_t initialSize)
