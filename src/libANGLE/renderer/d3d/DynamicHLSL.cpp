@@ -764,6 +764,74 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::ContextState &data,
     *pixelHLSL  = pixelStream.str();
 }
 
+void DynamicHLSL::generateComputeShaderLinkHLSL(const gl::ContextState &data,
+                                                const gl::ProgramState &programData,
+                                                const ProgramD3DMetadata &programMetadata,
+                                                std::string *computeHLSL) const
+{
+    ASSERT(computeHLSL->empty());
+    const gl::Shader *computeShaderGL = programData.getAttachedComputeShader();
+    std::stringstream computeStream;
+    computeStream << computeShaderGL->getTranslatedSource();
+
+    computeStream << "\nstruct CS_INPUT\n{\n";
+    if (programMetadata.usesWorkGroupID())
+    {
+        computeStream << "    uint3 dx_WorkGroupID : "
+                      << "SV_GroupID;\n";
+    }
+
+    if (programMetadata.usesLocalInvocationID())
+    {
+        computeStream << "    uint3 dx_LocalInvocationID : "
+                      << "SV_GroupThreadID;\n";
+    }
+
+    if (programMetadata.usesGlobalInvocationID())
+    {
+        computeStream << "    uint3 dx_GlobalInvocationID : "
+                      << "SV_DispatchThreadID;\n";
+    }
+
+    if (programMetadata.usesLocalInvocationIndex())
+    {
+        computeStream << "    uint dx_LocalInvocationIndex : "
+                      << "SV_GroupIndex;\n";
+    }
+
+    computeStream << "};\n\n";
+
+    const sh::WorkGroupSize &localSize = programMetadata.getComputeShaderWorkGroupSize();
+    computeStream << "[numthreads(" << localSize[0] << ", " << localSize[1] << ", " << localSize[2]
+                  << ")]\n";
+
+    computeStream << "void main(CS_INPUT input)\n"
+                  << "{\n";
+
+    if (programMetadata.usesWorkGroupID())
+    {
+        computeStream << "    gl_WorkGroupID = input.dx_WorkGroupID;\n";
+    }
+    if (programMetadata.usesLocalInvocationID())
+    {
+        computeStream << "    gl_LocalInvocationID = input.dx_LocalInvocationID;\n";
+    }
+    if (programMetadata.usesGlobalInvocationID())
+    {
+        computeStream << "    gl_GlobalInvocationID = input.dx_GlobalInvocationID;\n";
+    }
+    if (programMetadata.usesLocalInvocationIndex())
+    {
+        computeStream << "    gl_LocalInvocationIndex = input.dx_LocalInvocationIndex;\n";
+    }
+
+    computeStream << "\n"
+                  << "    gl_main();\n"
+                  << "}\n";
+
+    *computeHLSL = computeStream.str();
+}
+
 std::string DynamicHLSL::generateGeometryShaderPreamble(const VaryingPacking &varyingPacking,
                                                         const BuiltinVaryingsD3D &builtinsD3D) const
 {
