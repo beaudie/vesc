@@ -126,7 +126,8 @@ EGLint SwapChain9::reset(int backbufferWidth, int backbufferHeight, EGLint swapI
                                        &mOffscreenTexture, pShareHandle);
         if (FAILED(result))
         {
-            ERR("Could not create offscreen texture: %08lX", result);
+            ERR() << "Could not create offscreen texture: " << std::hex << std::uppercase
+                  << std::setw(8) << std::setfill('0') << result;
             release();
 
             if (d3d9::isDeviceLostError(result))
@@ -212,7 +213,8 @@ EGLint SwapChain9::reset(int backbufferWidth, int backbufferHeight, EGLint swapI
         {
             ASSERT(result == D3DERR_OUTOFVIDEOMEMORY || result == E_OUTOFMEMORY || result == D3DERR_INVALIDCALL || result == D3DERR_DEVICELOST);
 
-            ERR("Could not create additional swap chains or offscreen surfaces: %08lX", result);
+            ERR() << "Could not create additional swap chains or offscreen surfaces: " << std::hex
+                  << std::uppercase << std::setw(8) << std::setfill('0') << result;
             release();
 
             if (d3d9::isDeviceLostError(result))
@@ -240,7 +242,8 @@ EGLint SwapChain9::reset(int backbufferWidth, int backbufferHeight, EGLint swapI
         {
             ASSERT(result == D3DERR_OUTOFVIDEOMEMORY || result == E_OUTOFMEMORY || result == D3DERR_INVALIDCALL);
 
-            ERR("Could not create depthstencil surface for new swap chain: 0x%08X", result);
+            ERR() << "Could not create depthstencil surface for new swap chain: 0x" << std::hex
+                  << std::uppercase << std::setw(8) << std::setfill('0') << result;
             release();
 
             if (d3d9::isDeviceLostError(result))

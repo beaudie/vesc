@@ -8,6 +8,8 @@
 
 #include "libANGLE/renderer/gl/egl/SurfaceEGL.h"
 
+#include <iomanip>
+
 #include "common/debug.h"
 
 namespace rx
@@ -94,7 +96,8 @@ void SurfaceEGL::setSwapInterval(EGLint interval)
     EGLBoolean success = mEGL->swapInterval(interval);
     if (success == EGL_FALSE)
     {
-        ERR("eglSwapInterval error 0x%04x", mEGL->getError());
+        ERR() << "eglSwapInterval error 0x" << std::hex << std::setw(4) << std::setfill('0')
+              << mEGL->getError();
         ASSERT(false);
     }
 }
