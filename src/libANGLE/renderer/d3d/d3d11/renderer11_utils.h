@@ -361,7 +361,7 @@ enum ReservedConstantBufferSlot
     RESERVED_CONSTANT_BUFFER_SLOT_DEFAULT_UNIFORM_BLOCK = 0,
     RESERVED_CONSTANT_BUFFER_SLOT_DRIVER                = 1,
 
-    RESERVED_CONSTANT_BUFFER_SLOT_COUNT = 2
+    RESERVED_CONSTANT_BUFFER_SLOT_COUNT = 2,
 };
 
 void InitConstantBufferDesc(D3D11_BUFFER_DESC *constantBufferDescription, size_t byteWidth);
