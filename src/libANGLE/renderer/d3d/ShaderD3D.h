@@ -61,6 +61,11 @@ class ShaderD3D : public ShaderImpl
     bool usesDepthRange() const { return mUsesDepthRange; }
     bool usesFragDepth() const { return mUsesFragDepth; }
 
+    const sh::WorkGroupSize &getComputeShaderWorkGroupSize() const
+    {
+        return mComputeShaderWorkGroupSize;
+    }
+
     ShShaderOutput getCompilerOutputType() const;
 
   private:
@@ -76,6 +81,8 @@ class ShaderD3D : public ShaderImpl
     bool mUsesDiscardRewriting;
     bool mUsesNestedBreak;
     bool mRequiresIEEEStrictCompiling;
+
+    sh::WorkGroupSize mComputeShaderWorkGroupSize;
 
     ShShaderOutput mCompilerOutputType;
     mutable std::string mDebugInfo;
