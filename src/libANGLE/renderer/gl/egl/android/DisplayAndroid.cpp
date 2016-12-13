@@ -7,6 +7,7 @@
 // DisplayAndroid.cpp: Android implementation of egl::Display
 
 #include <android/native_window.h>
+#include <iomanip>
 
 #include "common/debug.h"
 #include "libANGLE/Display.h"
@@ -114,7 +115,8 @@ void DisplayAndroid::terminate()
     EGLBoolean success = mEGL->makeCurrent(EGL_NO_SURFACE, EGL_NO_CONTEXT);
     if (success == EGL_FALSE)
     {
-        ERR("eglMakeCurrent error 0x%04x", mEGL->getError());
+        ERR() << "eglMakeCurrent error 0x" << std::hex << std::setw(4) << std::setfill('0')
+              << mEGL->getError();
     }
 
     if (mDummyPbuffer != EGL_NO_SURFACE)
@@ -123,7 +125,8 @@ void DisplayAndroid::terminate()
         mDummyPbuffer = EGL_NO_SURFACE;
         if (success == EGL_FALSE)
         {
-            ERR("eglDestroySurface error 0x%04x", mEGL->getError());
+            ERR() << "eglDestroySurface error 0x" << std::hex << std::setw(4) << std::setfill('0')
+                  << mEGL->getError();
         }
     }
 
@@ -133,14 +136,16 @@ void DisplayAndroid::terminate()
         mContext = EGL_NO_CONTEXT;
         if (success == EGL_FALSE)
         {
-            ERR("eglDestroyContext error 0x%04x", mEGL->getError());
+            ERR() << "eglDestroyContext error 0x" << std::hex << std::setw(4) << std::setfill('0')
+                  << mEGL->getError();
         }
     }
 
     egl::Error result = mEGL->terminate();
     if (result.isError())
     {
-        ERR("eglTerminate error 0x%04x", result.getCode());
+        ERR() << "eglTerminate error 0x" << std::hex << std::setw(4) << std::setfill('0')
+              << result.getCode();
     }
 
     SafeDelete(mEGL);

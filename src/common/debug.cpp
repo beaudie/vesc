@@ -25,99 +25,19 @@ namespace gl
 namespace
 {
 
-class FormattedString final : angle::NonCopyable
-{
-  public:
-    FormattedString(const char *format, va_list vararg) : mFormat(format)
-    {
-        va_copy(mVarArg, vararg);
-    }
-
-    const char *c_str() { return str().c_str(); }
-
-    const std::string &str()
-    {
-        if (!mMessage.valid())
-        {
-            mMessage = FormatString(mFormat, mVarArg);
-        }
-        return mMessage.value();
-    }
-
-    size_t length()
-    {
-        c_str();
-        return mMessage.value().length();
-    }
-
-  private:
-    const char *mFormat;
-    va_list mVarArg;
-    Optional<std::string> mMessage;
-};
-enum DebugTraceOutputType
-{
-   DebugTraceOutputTypeNone,
-   DebugTraceOutputTypeSetMarker,
-   DebugTraceOutputTypeBeginEvent
-};
-
 DebugAnnotator *g_debugAnnotator = nullptr;
 
-void output(bool traceInDebugOnly, MessageType messageType, DebugTraceOutputType outputType,
-            const char *format, va_list vararg)
+const char *const log_severity_names[LOG_NUM_SEVERITIES] = {"EVENT", "WARN", "ERR"};
+
+const char *log_severity_name(int severity)
 {
-    if (DebugAnnotationsActive())
-    {
-        static std::vector<char> buffer(512);
-        size_t len = FormatStringIntoVector(format, vararg, buffer);
-        std::wstring formattedWideMessage(buffer.begin(), buffer.begin() + len);
-
-        ASSERT(g_debugAnnotator != nullptr);
-        switch (outputType)
-        {
-          case DebugTraceOutputTypeNone:
-            break;
-          case DebugTraceOutputTypeBeginEvent:
-            g_debugAnnotator->beginEvent(formattedWideMessage.c_str());
-            break;
-          case DebugTraceOutputTypeSetMarker:
-            g_debugAnnotator->setMarker(formattedWideMessage.c_str());
-            break;
-        }
-    }
-
-    FormattedString formattedMessage(format, vararg);
-
-    if (messageType == MESSAGE_ERR)
-    {
-        std::cerr << formattedMessage.c_str();
-#if !defined(NDEBUG) && defined(_MSC_VER)
-        OutputDebugStringA(formattedMessage.c_str());
-#endif  // !defined(NDEBUG) && defined(_MSC_VER)
-    }
-
-#if defined(ANGLE_ENABLE_DEBUG_TRACE)
-#if defined(NDEBUG)
-    if (traceInDebugOnly)
-    {
-        return;
-    }
-#endif  // NDEBUG
-    static std::ofstream file(TRACE_OUTPUT_FILE, std::ofstream::app);
-    if (file)
-    {
-        file.write(formattedMessage.c_str(), formattedMessage.length());
-        file.flush();
-    }
-
-#if defined(ANGLE_ENABLE_DEBUG_TRACE_TO_DEBUGGER)
-    OutputDebugStringA(formattedMessage.c_str());
-#endif  // ANGLE_ENABLE_DEBUG_TRACE_TO_DEBUGGER
-
-#endif  // ANGLE_ENABLE_DEBUG_TRACE
+    if (severity >= 0 && severity < LOG_NUM_SEVERITIES)
+        return log_severity_names[severity];
+    return "UNKNOWN";
 }
 
+// A log message handler that gets notified of every log message we process.
+LogMessageHandlerFunction log_message_handler = nullptr;
 } // namespace
 
 bool DebugAnnotationsActive()
@@ -141,14 +61,6 @@ void UninitializeDebugAnnotations()
     g_debugAnnotator = nullptr;
 }
 
-void trace(bool traceInDebugOnly, MessageType messageType, const char *format, ...)
-{
-    va_list vararg;
-    va_start(vararg, format);
-    output(traceInDebugOnly, messageType, DebugTraceOutputTypeSetMarker, format, vararg);
-    va_end(vararg);
-}
-
 ScopedPerfEventHelper::ScopedPerfEventHelper(const char* format, ...)
 {
 #if !defined(ANGLE_ENABLE_DEBUG_TRACE)
@@ -157,9 +69,12 @@ ScopedPerfEventHelper::ScopedPerfEventHelper(const char* format, ...)
         return;
     }
 #endif // !ANGLE_ENABLE_DEBUG_TRACE
+
     va_list vararg;
     va_start(vararg, format);
-    output(true, MESSAGE_EVENT, DebugTraceOutputTypeBeginEvent, format, vararg);
+    std::vector<char> buffer(512);
+    size_t len = FormatStringIntoVector(format, vararg, buffer);
+    ANGLE_LOG(EVENT) << std::string(&buffer[0], len);
     va_end(vararg);
 }
 
@@ -174,6 +89,98 @@ ScopedPerfEventHelper::~ScopedPerfEventHelper()
 std::ostream &DummyStream()
 {
     return std::cout;
+}
+
+bool ShouldCreateLogMessage(int severity)
+{
+#if defined(ANGLE_ENABLE_ASSERTS)
+    if (severity == LOG_ERR)
+    {
+        return true;
+    }
+#endif
+#if defined(ANGLE_ENABLE_DEBUG_TRACE) || defined(ANGLE_ENABLE_DEBUG_ANNOTATIONS)
+    return true;
+#else
+    return false;
+#endif
+}
+
+void SetLogMessageHandler(LogMessageHandlerFunction handler)
+{
+    log_message_handler = handler;
+}
+
+LogMessage::LogMessage(const char *function, int line, LogSeverity severity)
+    : severity_(severity), function_(function), line_(line)
+{
+    Init(function, line);
+}
+
+LogMessage::~LogMessage()
+{
+    stream_ << std::endl;
+    std::string str_newline(stream_.str());
+
+    if (DebugAnnotationsActive())
+    {
+        std::wstring formattedWideMessage(str_newline.begin(), str_newline.end());
+
+        switch (severity_)
+        {
+            case LOG_EVENT:
+                g_debugAnnotator->beginEvent(formattedWideMessage.c_str());
+                break;
+            default:
+                g_debugAnnotator->setMarker(formattedWideMessage.c_str());
+                break;
+        }
+    }
+
+    // Give any log message handler first dibs on the message.
+    bool handled = log_message_handler &&
+                   log_message_handler(severity_, function_, line_, message_start_, str_newline);
+
+    if (!handled && severity_ == LOG_ERR)
+    {
+        std::cerr << str_newline;
+#if !defined(NDEBUG) && defined(_MSC_VER)
+        OutputDebugStringA(str_newline.c_str());
+#endif  // !defined(NDEBUG) && defined(_MSC_VER)
+    }
+
+#if defined(ANGLE_ENABLE_DEBUG_TRACE)
+#if defined(NDEBUG)
+    if (severity_ == LOG_EVENT || severity_ == LOG_WARN)
+    {
+        return;
+    }
+#endif  // NDEBUG
+    static std::ofstream file(TRACE_OUTPUT_FILE, std::ofstream::app);
+    if (file)
+    {
+        file.write(str_newline.c_str(), str_newline.length());
+        file.flush();
+    }
+
+#if defined(ANGLE_ENABLE_DEBUG_TRACE_TO_DEBUGGER)
+    OutputDebugStringA(str_newline.c_str());
+#endif  // ANGLE_ENABLE_DEBUG_TRACE_TO_DEBUGGER
+
+#endif  // ANGLE_ENABLE_DEBUG_TRACE
+}
+
+// writes the common header info to the stream
+void LogMessage::Init(const char *function, int line)
+{
+    if (severity_ >= 0)
+        stream_ << log_severity_name(severity_);
+    else
+        stream_ << "VERBOSE" << -severity_;
+
+    stream_ << ": " << function << "(" << line << "): ";
+
+    message_start_ = stream_.str().length();
 }
 
 }  // namespace gl

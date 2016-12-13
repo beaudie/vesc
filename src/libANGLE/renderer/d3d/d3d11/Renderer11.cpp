@@ -733,7 +733,7 @@ egl::Error Renderer11::initializeD3DDevice()
 
         if (!mDevice || FAILED(result))
         {
-            ERR("Failed creating Debug D3D11 device - falling back to release runtime.\n");
+            ERR() << "Failed creating Debug D3D11 device - falling back to release runtime.\n";
         }
 
         if (!mDevice || FAILED(result))
@@ -869,7 +869,7 @@ void Renderer11::populateRenderer11DeviceCaps()
     if (FAILED(hr))
     {
         mRenderer11DeviceCaps.driverVersion.reset();
-        ERR("Error querying driver version from DXGI Adapter.");
+        ERR() << "Error querying driver version from DXGI Adapter.";
     }
     else
     {
@@ -2651,7 +2651,8 @@ bool Renderer11::testDeviceLost()
 
     if (isLost)
     {
-        ERR("The D3D11 device was removed: 0x%08X", result);
+        ERR() << "The D3D11 device was removed: 0x" << std::hex << std::uppercase << std::setw(8)
+              << std::setfill('0') << result;
     }
 
     return isLost;
@@ -2761,7 +2762,8 @@ bool Renderer11::resetDevice()
 
     if (result.isError())
     {
-        ERR("Could not reinitialize D3D11 device: %08X", result.getCode());
+        ERR() << "Could not reinitialize D3D11 device: " << std::hex << std::uppercase
+              << std::setw(8) << std::setfill('0') << result.getCode();
         return false;
     }
 

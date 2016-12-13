@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
 
+#include <iomanip>
 #include <sstream>
 #include <EGL/eglext.h>
 
@@ -2258,13 +2259,14 @@ bool Renderer9::resetDevice()
 
     if (FAILED(result))
     {
-        ERR("Reset/ResetEx failed multiple times: 0x%08X", result);
+        ERR() << "Reset/ResetEx failed multiple times: 0x" << std::hex << std::uppercase
+              << std::setw(8) << std::setfill('0') << result;
         return false;
     }
 
     if (removedDevice && lost)
     {
-        ERR("Device lost reset failed multiple times");
+        ERR() << "Device lost reset failed multiple times";
         return false;
     }
 

@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/d3d/d3d11/SwapChain11.h"
 
+#include <iomanip>
 #include <EGL/eglext.h>
 
 #include "libANGLE/features.h"
@@ -227,7 +228,8 @@ EGLint SwapChain11::resetOffscreenColorBuffer(int backbufferWidth, int backbuffe
 
         if (FAILED(result))
         {
-            ERR("Could not create offscreen texture: %08lX", result);
+            ERR() << "Could not create offscreen texture: " << std::hex << std::uppercase
+                  << std::setw(8) << std::setfill('0') << result;
             release();
 
             if (d3d11::isDeviceLostError(result))
@@ -251,7 +253,8 @@ EGLint SwapChain11::resetOffscreenColorBuffer(int backbufferWidth, int backbuffe
             // Fall back to no share handle on failure
             if (FAILED(result))
             {
-                ERR("Could not query offscreen texture resource: %08lX", result);
+                ERR() << "Could not query offscreen texture resource: " << std::hex
+                      << std::uppercase << std::setw(8) << std::setfill('0') << result;
             }
             else
             {
@@ -261,7 +264,8 @@ EGLint SwapChain11::resetOffscreenColorBuffer(int backbufferWidth, int backbuffe
                 if (FAILED(result))
                 {
                     mShareHandle = NULL;
-                    ERR("Could not get offscreen texture shared handle: %08lX", result);
+                    ERR() << "Could not get offscreen texture shared handle: " << std::hex
+                          << std::uppercase << std::setw(8) << std::setfill('0') << result;
                 }
             }
         }
@@ -348,7 +352,8 @@ EGLint SwapChain11::resetOffscreenDepthBuffer(int backbufferWidth, int backbuffe
             device->CreateTexture2D(&depthStencilTextureDesc, NULL, &mDepthStencilTexture);
         if (FAILED(result))
         {
-            ERR("Could not create depthstencil surface for new swap chain: 0x%08X", result);
+            ERR() << "Could not create depthstencil surface for new swap chain: 0x" << std::hex
+                  << std::uppercase << std::setw(8) << std::setfill('0') << result;
             release();
 
             if (d3d11::isDeviceLostError(result))
@@ -423,7 +428,8 @@ EGLint SwapChain11::resize(EGLint backbufferWidth, EGLint backbufferHeight)
     HRESULT result = mSwapChain->GetDesc(&desc);
     if (FAILED(result))
     {
-        ERR("Error reading swap chain description: 0x%08X", result);
+        ERR() << "Error reading swap chain description: 0x" << std::hex << std::uppercase
+              << std::setw(8) << std::setfill('0') << result;
         release();
         return EGL_BAD_ALLOC;
     }
@@ -432,7 +438,8 @@ EGLint SwapChain11::resize(EGLint backbufferWidth, EGLint backbufferHeight)
 
     if (FAILED(result))
     {
-        ERR("Error resizing swap chain buffers: 0x%08X", result);
+        ERR() << "Error resizing swap chain buffers: 0x" << std::hex << std::uppercase
+              << std::setw(8) << std::setfill('0') << result;
         release();
 
         if (d3d11::isDeviceLostError(result))
@@ -523,7 +530,8 @@ EGLint SwapChain11::reset(EGLint backbufferWidth, EGLint backbufferHeight, EGLin
 
         if (FAILED(result))
         {
-            ERR("Could not create additional swap chains or offscreen surfaces: %08lX", result);
+            ERR() << "Could not create additional swap chains or offscreen surfaces: " << std::hex
+                  << std::uppercase << std::setw(8) << std::setfill('0') << result;
             release();
 
             if (d3d11::isDeviceLostError(result))
@@ -810,18 +818,20 @@ EGLint SwapChain11::present(EGLint x, EGLint y, EGLint width, EGLint height)
 
     if (result == DXGI_ERROR_DEVICE_REMOVED)
     {
-        ERR("Present failed: the D3D11 device was removed: 0x%08X",
-            mRenderer->getDevice()->GetDeviceRemovedReason());
+        ERR() << "Present failed: the D3D11 device was removed: 0x" << std::hex << std::uppercase
+              << std::setw(8) << std::setfill('0')
+              << mRenderer->getDevice()->GetDeviceRemovedReason();
         return EGL_CONTEXT_LOST;
     }
     else if (result == DXGI_ERROR_DEVICE_RESET)
     {
-        ERR("Present failed: the D3D11 device was reset from a bad command.");
+        ERR() << "Present failed: the D3D11 device was reset from a bad command.";
         return EGL_CONTEXT_LOST;
     }
     else if (FAILED(result))
     {
-        ERR("Present failed with error code 0x%08X", result);
+        ERR() << "Present failed with error code 0x" << std::hex << std::uppercase << std::setw(8)
+              << std::setfill('0') << result;
     }
 
     mNativeWindow->commitChange();

@@ -11,6 +11,7 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <sstream>
 #include <string>
 
 #include "common/angleutils.h"
@@ -21,17 +22,6 @@
 
 namespace gl
 {
-
-enum MessageType
-{
-    MESSAGE_TRACE,
-    MESSAGE_FIXME,
-    MESSAGE_ERR,
-    MESSAGE_EVENT,
-};
-
-// Outputs text to the debugging log, or the debugging window
-void trace(bool traceInDebugOnly, MessageType messageType, const char *format, ...);
 
 // Pairs a D3D begin event with an end event.
 class ScopedPerfEventHelper : angle::NonCopyable
@@ -70,6 +60,88 @@ class LogMessageVoidify
 // This can be any ostream, it is unused, but needs to be a valid reference.
 std::ostream &DummyStream();
 
+// Used by ANGLE_LOG_IS_ON to lazy-evaluate stream arguments.
+bool ShouldCreateLogMessage(int severity);
+
+// Sets the Log Message Handler that gets passed every log message before
+// it's sent to other log destinations (if any).
+// Returns true to signal that it handled the message and the message
+// should not be sent to other log destinations.
+typedef bool (*LogMessageHandlerFunction)(int severity,
+                                          const char *function,
+                                          int line,
+                                          size_t message_start,
+                                          const std::string &str);
+void SetLogMessageHandler(LogMessageHandlerFunction handler);
+
+typedef int LogSeverity;
+// Note: the log severities are used to index into the array of names,
+// see log_severity_names.
+const LogSeverity LOG_EVENT          = 0;
+const LogSeverity LOG_WARN           = 1;
+const LogSeverity LOG_ERR            = 2;
+const LogSeverity LOG_NUM_SEVERITIES = 3;
+
+// A few definitions of macros that don't generate much code. These are used
+// by ANGLE_LOG(). Since these are used all over our code, it's
+// better to have compact code for these operations.
+#define ANGLE_COMPACT_GOOGLE_LOG_EX_EVENT(ClassName, ...) \
+    ::gl::ClassName(__FUNCTION__, __LINE__, ::gl::LOG_EVENT, ##__VA_ARGS__)
+#define ANGLE_COMPACT_GOOGLE_LOG_EX_WARN(ClassName, ...) \
+    ::gl::ClassName(__FUNCTION__, __LINE__, ::gl::LOG_WARN, ##__VA_ARGS__)
+#define ANGLE_COMPACT_GOOGLE_LOG_EX_ERR(ClassName, ...) \
+    ::gl::ClassName(__FUNCTION__, __LINE__, ::gl::LOG_ERR, ##__VA_ARGS__)
+
+#define ANGLE_COMPACT_GOOGLE_LOG_EVENT ANGLE_COMPACT_GOOGLE_LOG_EX_EVENT(LogMessage)
+#define ANGLE_COMPACT_GOOGLE_LOG_WARN ANGLE_COMPACT_GOOGLE_LOG_EX_WARN(LogMessage)
+#define ANGLE_COMPACT_GOOGLE_LOG_ERR ANGLE_COMPACT_GOOGLE_LOG_EX_ERR(LogMessage)
+
+#define ANGLE_LOG_IS_ON(severity) (::gl::ShouldCreateLogMessage(::gl::LOG_##severity))
+
+// Helper macro which avoids evaluating the arguments to a stream if the condition doesn't hold.
+// Condition is evaluated once and only once.
+#define ANGLE_LAZY_STREAM(stream, condition) \
+    !(condition) ? static_cast<void>(0) : ::gl::LogMessageVoidify() & (stream)
+
+// We use the preprocessor's merging operator, "##", so that, e.g.,
+// ANGLE_LOG(EVENT) becomes the token ANGLE_COMPACT_GOOGLE_LOG_EVENT.  There's some funny
+// subtle difference between ostream member streaming functions (e.g.,
+// ostream::operator<<(int) and ostream non-member streaming functions
+// (e.g., ::operator<<(ostream&, string&): it turns out that it's
+// impossible to stream something like a string directly to an unnamed
+// ostream. We employ a neat hack by calling the stream() member
+// function of LogMessage which seems to avoid the problem.
+#define ANGLE_LOG_STREAM(severity) ANGLE_COMPACT_GOOGLE_LOG_##severity.stream()
+
+#define ANGLE_LOG(severity) ANGLE_LAZY_STREAM(ANGLE_LOG_STREAM(severity), ANGLE_LOG_IS_ON(severity))
+
+// This class more or less represents a particular log message.  You
+// create an instance of LogMessage and then stream stuff to it.
+// When you finish streaming to it, ~LogMessage is called and the
+// full message gets streamed to the appropriate destination.
+//
+// You shouldn't actually use LogMessage's constructor to log things,
+// though.  You should use the ANGLE_LOG() macro above.
+class LogMessage : angle::NonCopyable
+{
+  public:
+    // Used for ANGLE_LOG(severity).
+    LogMessage(const char *function, int line, LogSeverity severity);
+
+    ~LogMessage();
+
+    std::ostream &stream() { return stream_; }
+
+  private:
+    void Init(const char *function, int line);
+
+    LogSeverity severity_;
+    std::ostringstream stream_;
+    size_t message_start_;  // Offset of the start of the message (past prefix info).
+    // The function and line information passed in to the constructor.
+    const char *function_;
+    const int line_;
+};
 }  // namespace gl
 
 #if defined(ANGLE_ENABLE_DEBUG_TRACE) || defined(ANGLE_ENABLE_DEBUG_ANNOTATIONS)
@@ -81,26 +153,8 @@ std::ostream &DummyStream();
 #define ANGLE_ENABLE_ASSERTS
 #endif
 
-// A macro to output a trace of a function call and its arguments to the debugging log
-#if defined(ANGLE_TRACE_ENABLED)
-#define TRACE(message, ...) gl::trace(true, gl::MESSAGE_TRACE, "trace: %s(%d): " message "\n", __FUNCTION__, __LINE__, ##__VA_ARGS__)
-#else
-#define TRACE(message, ...) (void(0))
-#endif
-
-// A macro to output a function call and its arguments to the debugging log, to denote an item in need of fixing.
-#if defined(ANGLE_TRACE_ENABLED)
-#define FIXME(message, ...) gl::trace(false, gl::MESSAGE_FIXME, "fixme: %s(%d): " message "\n", __FUNCTION__, __LINE__, ##__VA_ARGS__)
-#else
-#define FIXME(message, ...) (void(0))
-#endif
-
-// A macro to output a function call and its arguments to the debugging log, in case of error.
-#if defined(ANGLE_TRACE_ENABLED) || defined(ANGLE_ENABLE_ASSERTS)
-#define ERR(message, ...) gl::trace(false, gl::MESSAGE_ERR, "err: %s(%d): " message "\n", __FUNCTION__, __LINE__, ##__VA_ARGS__)
-#else
-#define ERR(message, ...) (void(0))
-#endif
+#define WARN() ANGLE_LOG(WARN)
+#define ERR() ANGLE_LOG(ERR)
 
 // A macro to log a performance event around a scope.
 #if defined(ANGLE_TRACE_ENABLED)
@@ -130,11 +184,6 @@ std::ostream &DummyStream();
 #define ANGLE_ASSERT_IMPL(expression) ANGLE_CRASH()
 #endif  // !defined(NDEBUG)
 
-// Helper macro which avoids evaluating the arguments to a stream if the condition doesn't hold.
-// Condition is evaluated once and only once.
-#define ANGLE_LAZY_STREAM(stream, condition) \
-    !(condition) ? static_cast<void>(0) : ::gl::LogMessageVoidify() & (stream)
-
 #if defined(NDEBUG) && !defined(ANGLE_ENABLE_ASSERTS)
 #define ANGLE_ASSERTS_ON 0
 #else
@@ -143,10 +192,10 @@ std::ostream &DummyStream();
 
 // A macro asserting a condition and outputting failures to the debug log
 #if ANGLE_ASSERTS_ON
-#define ASSERT(expression)                                                                      \
-    (expression ? static_cast<void>(0)                                                          \
-                : (ERR("\t! Assert failed in %s(%d): %s", __FUNCTION__, __LINE__, #expression), \
-                   ANGLE_ASSERT_IMPL(expression)))
+#define ASSERT(expression)                                                                         \
+    (expression ? static_cast<void>(0) : ((ERR() << "\t! Assert failed in " << __FUNCTION__ << "(" \
+                                                 << __LINE__ << "): " << #expression),             \
+                                          ANGLE_ASSERT_IMPL(expression)))
 #else
 #define ASSERT(condition)                                                           \
     ANGLE_LAZY_STREAM(::gl::DummyStream(), ANGLE_ASSERTS_ON ? !(condition) : false) \
@@ -160,15 +209,16 @@ std::ostream &DummyStream();
 #define NOASSERT_UNIMPLEMENTED 1
 #endif
 
-#define UNIMPLEMENTED()                                           \
-    {                                                             \
-        ERR("\t! Unimplemented: %s(%d)", __FUNCTION__, __LINE__); \
-        ASSERT(NOASSERT_UNIMPLEMENTED);                           \
-    }                                                             \
+#define UNIMPLEMENTED()                                                           \
+    {                                                                             \
+        ERR() << "\t! Unimplemented: " << __FUNCTION__ << "(" << __LINE__ << ")"; \
+        ASSERT(NOASSERT_UNIMPLEMENTED);                                           \
+    }                                                                             \
     ANGLE_EMPTY_STATEMENT
 
 // A macro for code which is not expected to be reached under valid assumptions
-#define UNREACHABLE() \
-    (ERR("\t! Unreachable reached: %s(%d)", __FUNCTION__, __LINE__), ASSERT(false))
+#define UNREACHABLE()                                                                  \
+    ((ERR() << "\t! Unreachable reached: " << __FUNCTION__ << "(" << __LINE__ << ")"), \
+     ASSERT(false))
 
 #endif   // COMMON_DEBUG_H_
