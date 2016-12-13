@@ -3152,8 +3152,8 @@ bool ValidateDrawBase(ValidationContext *context, GLenum mode, GLsizei count)
         {
             // Note: these separate values are not supported in WebGL, due to D3D's limitations. See
             // Section 6.10 of the WebGL 1.0 spec
-            ERR("This ANGLE implementation does not support separate front/back stencil "
-                "writemasks, reference values, or stencil mask values.");
+            ERR() << "This ANGLE implementation does not support separate front/back stencil "
+                     "writemasks, reference values, or stencil mask values.";
             context->handleError(Error(GL_INVALID_OPERATION));
             return false;
         }
@@ -4591,7 +4591,7 @@ bool ValidateEnable(Context *context, GLenum cap)
 
         // We also output an error message to the debugger window if tracing is active, so that
         // developers can see the error message.
-        ERR("%s", errorMessage);
+        ERR() << errorMessage;
         return false;
     }
 
