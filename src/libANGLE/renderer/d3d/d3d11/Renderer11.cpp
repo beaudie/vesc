@@ -929,6 +929,7 @@ egl::ConfigSet Renderer11::generateConfigs()
     // 32-bit supported formats
     colorBufferFormats.push_back(GL_BGRA8_EXT);
     colorBufferFormats.push_back(GL_RGBA8_OES);
+    colorBufferFormats.push_back(GL_RGB10_A2);
 
     // 24-bit supported formats
     colorBufferFormats.push_back(GL_RGB8_OES);
