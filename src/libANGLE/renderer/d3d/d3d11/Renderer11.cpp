@@ -935,9 +935,13 @@ egl::ConfigSet Renderer11::generateConfigs()
 
     if (!mPresentPathFastEnabled)
     {
-        // 16-bit supported formats
         // These aren't valid D3D11 swapchain formats, so don't expose them as configs
         // if present path fast is active
+
+        // 32-bit
+        colorBufferFormats.push_back(GL_RGB10_A2);
+
+        // 16-bit supported formats
         colorBufferFormats.push_back(GL_RGBA4);
         colorBufferFormats.push_back(GL_RGB5_A1);
         colorBufferFormats.push_back(GL_RGB565);
