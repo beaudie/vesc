@@ -60,6 +60,16 @@ class ShaderD3D : public ShaderImpl
     bool usesPointCoord() const { return mUsesPointCoord; }
     bool usesDepthRange() const { return mUsesDepthRange; }
     bool usesFragDepth() const { return mUsesFragDepth; }
+    bool usesNumWorkGroups() const { return mUsesNumWorkGroups; }
+    bool usesWorkGroupID() const { return mUsesWorkGroupID; }
+    bool usesLocalInvocationID() const { return mUsesLocalInvocationID; }
+    bool usesGlobalInvocationID() const { return mUsesGlobalInvocationID; }
+    bool usesLocalInvocationIndex() const { return mUsesLocalInvocationIndex; }
+
+    const sh::WorkGroupSize &getComputeShaderWorkGroupSize() const
+    {
+        return mComputeShaderWorkGroupSize;
+    }
 
     ShShaderOutput getCompilerOutputType() const;
 
@@ -73,9 +83,16 @@ class ShaderD3D : public ShaderImpl
     bool mUsesPointCoord;
     bool mUsesDepthRange;
     bool mUsesFragDepth;
+    bool mUsesNumWorkGroups;
+    bool mUsesWorkGroupID;
+    bool mUsesLocalInvocationID;
+    bool mUsesGlobalInvocationID;
+    bool mUsesLocalInvocationIndex;
     bool mUsesDiscardRewriting;
     bool mUsesNestedBreak;
     bool mRequiresIEEEStrictCompiling;
+
+    sh::WorkGroupSize mComputeShaderWorkGroupSize;
 
     ShShaderOutput mCompilerOutputType;
     mutable std::string mDebugInfo;
