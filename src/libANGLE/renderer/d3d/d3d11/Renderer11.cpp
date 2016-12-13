@@ -924,24 +924,21 @@ void Renderer11::populateRenderer11DeviceCaps()
 
 egl::ConfigSet Renderer11::generateConfigs()
 {
-    std::vector<GLenum> colorBufferFormats;
+    // Bool is true if format can be used as swapchain.
+    std::map<GLenum, bool> colorBufferFormats;
 
     // 32-bit supported formats
-    colorBufferFormats.push_back(GL_BGRA8_EXT);
-    colorBufferFormats.push_back(GL_RGBA8_OES);
+    colorBufferFormats[GL_BGRA8_EXT] = true;
 
     // 24-bit supported formats
-    colorBufferFormats.push_back(GL_RGB8_OES);
+    colorBufferFormats[GL_RGB8_OES] = true;
 
-    if (!mPresentPathFastEnabled)
-    {
-        // 16-bit supported formats
-        // These aren't valid D3D11 swapchain formats, so don't expose them as configs
-        // if present path fast is active
-        colorBufferFormats.push_back(GL_RGBA4);
-        colorBufferFormats.push_back(GL_RGB5_A1);
-        colorBufferFormats.push_back(GL_RGB565);
-    }
+    // These aren't valid D3D11 swapchain formats, only expose them as pbuffer
+    // formats if present path fast is active.
+    colorBufferFormats[GL_RGBA4]    = !mPresentPathFastEnabled;
+    colorBufferFormats[GL_RGB5_A1]  = !mPresentPathFastEnabled;
+    colorBufferFormats[GL_RGB565]   = !mPresentPathFastEnabled;
+    colorBufferFormats[GL_RGB10_A2] = !mPresentPathFastEnabled;
 
     static const GLenum depthStencilBufferFormats[] = {
         GL_NONE, GL_DEPTH24_STENCIL8_OES, GL_DEPTH_COMPONENT16,
@@ -954,8 +951,9 @@ egl::ConfigSet Renderer11::generateConfigs()
         mPresentPathFastEnabled ? 0 : EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE;
 
     egl::ConfigSet configs;
-    for (GLenum colorBufferInternalFormat : colorBufferFormats)
+    for (const auto &formatPair : colorBufferFormats)
     {
+        GLenum colorBufferInternalFormat = formatPair.first;
         const gl::TextureCaps &colorBufferFormatCaps =
             rendererTextureCaps.get(colorBufferInternalFormat);
         if (!colorBufferFormatCaps.renderable)
@@ -1035,7 +1033,15 @@ egl::ConfigSet Renderer11::generateConfigs()
             config.sampleBuffers = 0;  // FIXME: enumerate multi-sampling
             config.samples       = 0;
             config.stencilSize   = depthStencilBufferFormatInfo.stencilBits;
-            config.surfaceType = EGL_PBUFFER_BIT | EGL_WINDOW_BIT | EGL_SWAP_BEHAVIOR_PRESERVED_BIT;
+            if (formatPair.second)
+            {
+                config.surfaceType =
+                    EGL_PBUFFER_BIT | EGL_WINDOW_BIT | EGL_SWAP_BEHAVIOR_PRESERVED_BIT;
+            }
+            else
+            {
+                config.surfaceType = EGL_PBUFFER_BIT;
+            }
             config.transparentType       = EGL_NONE;
             config.transparentRedValue   = 0;
             config.transparentGreenValue = 0;
