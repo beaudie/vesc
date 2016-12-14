@@ -257,7 +257,8 @@ const int ESSL1_BUILTINS     = 1;
 const int ESSL3_BUILTINS     = 2;
 const int ESSL3_1_BUILTINS   = 3;
 const int LAST_BUILTIN_LEVEL = ESSL3_1_BUILTINS;
-const int GLOBAL_LEVEL       = 4;
+const int BUILTIN_LEVELS_COUNT = LAST_BUILTIN_LEVEL + 1;
+const int GLOBAL_LEVEL         = BUILTIN_LEVELS_COUNT;
 
 class TSymbolTable : angle::NonCopyable
 {
@@ -360,7 +361,7 @@ class TSymbolTable : angle::NonCopyable
                        const TType *ptype4 = 0,
                        const TType *ptype5 = 0)
     {
-        insertUnmangledBuiltIn(name);
+        insertUnmangledBuiltIn(name, level);
         insertBuiltIn(level, EOpNull, "", rvalue, name, ptype1, ptype2, ptype3, ptype4, ptype5);
     }
 
@@ -374,7 +375,7 @@ class TSymbolTable : angle::NonCopyable
                        const TType *ptype4 = 0,
                        const TType *ptype5 = 0)
     {
-        insertUnmangledBuiltIn(name);
+        insertUnmangledBuiltIn(name, level);
         insertBuiltIn(level, EOpNull, ext, rvalue, name, ptype1, ptype2, ptype3, ptype4, ptype5);
     }
 
@@ -388,7 +389,7 @@ class TSymbolTable : angle::NonCopyable
                        const TType *ptype4 = 0,
                        const TType *ptype5 = 0)
     {
-        insertUnmangledBuiltIn(name);
+        insertUnmangledBuiltIn(name, level);
         insertBuiltIn(level, op, "", rvalue, name, ptype1, ptype2, ptype3, ptype4, ptype5);
     }
 
@@ -452,25 +453,24 @@ class TSymbolTable : angle::NonCopyable
 
     static int nextUniqueId() { return ++uniqueIdCounter; }
 
-    bool hasUnmangledBuiltIn(const char *name)
-    {
-        return mUnmangledBuiltinNames.count(std::string(name)) > 0;
-    }
+    bool hasUnmangledBuiltInAtLevel(const char *name, ESymbolLevel level);
+
+    // Checks whether there is a built-in accessible by a shader with the specified version.
+    bool hasUnmangledBuiltInForShaderVersion(const char *name, int shaderVersion);
 
   private:
     ESymbolLevel currentLevel() const { return static_cast<ESymbolLevel>(table.size() - 1); }
 
-    // Used to insert unmangled functions to check redeclaration of built-ins in ESSL 3.00.
-    void insertUnmangledBuiltIn(const char *name)
-    {
-        mUnmangledBuiltinNames.insert(std::string(name));
-    }
+    // Used to insert unmangled functions to check redeclaration of built-ins in ESSL 3.00 and
+    // above.
+    void insertUnmangledBuiltIn(const char *name, ESymbolLevel level);
 
     std::vector<TSymbolTableLevel *> table;
     typedef TMap<TBasicType, TPrecision> PrecisionStackLevel;
     std::vector<PrecisionStackLevel *> precisionStack;
 
-    std::set<std::string> mUnmangledBuiltinNames;
+    typedef std::set<std::string> UnmangledBuiltinsLevel;
+    std::array<UnmangledBuiltinsLevel, BUILTIN_LEVELS_COUNT> mUnmangledBuiltinNames;
 
     static int uniqueIdCounter;
 };
