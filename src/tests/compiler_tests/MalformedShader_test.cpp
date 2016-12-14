@@ -3329,3 +3329,21 @@ TEST_F(MalformedComputeShaderTest, SharedGlobalLayoutDeclaration)
         FAIL() << "Shader compilation succeeded, expecting failure " << mInfoLog;
     }
 }
+
+// Declaring functions with the same names as built-ins from higher ESSL versions should not cause
+// redeclaration errors.
+TEST_F(MalformedShaderTest, BuiltinESSL31FunctionDeclaredinESSL30Shader)
+{
+    const std::string &shaderString =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "void imageSize() {}\n"
+        "void main() {\n"
+        "   imageSize();\n"
+        "}\n";
+
+    if (!compile(shaderString))
+    {
+        FAIL() << "Shader compilation failed, expecting success " << mInfoLog;
+    }
+}

@@ -248,7 +248,7 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level,
 {
     if (ptype1->getBasicType() == EbtGSampler2D)
     {
-        insertUnmangledBuiltIn(name);
+        insertUnmangledBuiltIn(name, level);
         bool gvec4 = (rvalue->getBasicType() == EbtGVec4);
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtFloat, 4) : rvalue, name,
                       TCache::getType(EbtSampler2D), ptype2, ptype3, ptype4, ptype5);
@@ -259,7 +259,7 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level,
     }
     else if (ptype1->getBasicType() == EbtGSampler3D)
     {
-        insertUnmangledBuiltIn(name);
+        insertUnmangledBuiltIn(name, level);
         bool gvec4 = (rvalue->getBasicType() == EbtGVec4);
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtFloat, 4) : rvalue, name,
                       TCache::getType(EbtSampler3D), ptype2, ptype3, ptype4, ptype5);
@@ -270,7 +270,7 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level,
     }
     else if (ptype1->getBasicType() == EbtGSamplerCube)
     {
-        insertUnmangledBuiltIn(name);
+        insertUnmangledBuiltIn(name, level);
         bool gvec4 = (rvalue->getBasicType() == EbtGVec4);
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtFloat, 4) : rvalue, name,
                       TCache::getType(EbtSamplerCube), ptype2, ptype3, ptype4, ptype5);
@@ -281,7 +281,7 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level,
     }
     else if (ptype1->getBasicType() == EbtGSampler2DArray)
     {
-        insertUnmangledBuiltIn(name);
+        insertUnmangledBuiltIn(name, level);
         bool gvec4 = (rvalue->getBasicType() == EbtGVec4);
         insertBuiltIn(level, gvec4 ? TCache::getType(EbtFloat, 4) : rvalue, name,
                       TCache::getType(EbtSampler2DArray), ptype2, ptype3, ptype4, ptype5);
@@ -292,7 +292,7 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level,
     }
     else if (IsGImage(ptype1->getBasicType()))
     {
-        insertUnmangledBuiltIn(name);
+        insertUnmangledBuiltIn(name, level);
 
         const TType *floatType    = TCache::getType(EbtFloat, 4);
         const TType *intType      = TCache::getType(EbtInt, 4);
@@ -330,7 +330,7 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level,
     else if (IsGenType(rvalue) || IsGenType(ptype1) || IsGenType(ptype2) || IsGenType(ptype3))
     {
         ASSERT(!ptype4 && !ptype5);
-        insertUnmangledBuiltIn(name);
+        insertUnmangledBuiltIn(name, level);
         insertBuiltIn(level, op, ext, SpecificType(rvalue, 1), name, SpecificType(ptype1, 1),
                       SpecificType(ptype2, 1), SpecificType(ptype3, 1));
         insertBuiltIn(level, op, ext, SpecificType(rvalue, 2), name, SpecificType(ptype1, 2),
@@ -343,7 +343,7 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level,
     else if (IsVecType(rvalue) || IsVecType(ptype1) || IsVecType(ptype2) || IsVecType(ptype3))
     {
         ASSERT(!ptype4 && !ptype5);
-        insertUnmangledBuiltIn(name);
+        insertUnmangledBuiltIn(name, level);
         insertBuiltIn(level, op, ext, VectorType(rvalue, 2), name, VectorType(ptype1, 2),
                       VectorType(ptype2, 2), VectorType(ptype3, 2));
         insertBuiltIn(level, op, ext, VectorType(rvalue, 3), name, VectorType(ptype1, 3),
@@ -377,7 +377,7 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level,
             function->addParameter(TConstParameter(ptype5));
         }
 
-        ASSERT(hasUnmangledBuiltIn(name));
+        ASSERT(hasUnmangledBuiltInAtLevel(name, level));
         insert(level, function);
     }
 }
@@ -405,6 +405,59 @@ TPrecision TSymbolTable::getDefaultPrecision(TBasicType type) const
         level--;
     }
     return prec;
+}
+
+void TSymbolTable::insertUnmangledBuiltIn(const char *name, ESymbolLevel level)
+{
+    ASSERT(level >= 0 && level < static_cast<ESymbolLevel>(mUnmangledBuiltinNames.size()));
+    mUnmangledBuiltinNames[level]->insert(std::string(name));
+}
+
+bool TSymbolTable::hasUnmangledBuiltInAtLevel(const char *name, ESymbolLevel level)
+{
+    ASSERT(level >= 0 && level < static_cast<ESymbolLevel>(mUnmangledBuiltinNames.size()));
+    return mUnmangledBuiltinNames[level]->count(std::string(name)) > 0;
+}
+
+bool TSymbolTable::hasUnmangledBuiltInForShaderVersion(const char *name, int shaderVersion)
+{
+    ASSERT(currentLevel() >= LAST_BUILTIN_LEVEL);
+
+    switch (shaderVersion)
+    {
+        case 310:
+        {
+            if (mUnmangledBuiltinNames[ESSL3_1_BUILTINS]->count(std::string(name)) > 0)
+            {
+                return true;
+            }
+        }
+        case 300:
+        {
+            if (mUnmangledBuiltinNames[ESSL3_BUILTINS]->count(std::string(name)) > 0)
+            {
+                return true;
+            }
+        }
+        case 100:
+        {
+            if (mUnmangledBuiltinNames[ESSL1_BUILTINS]->count(std::string(name)) > 0)
+            {
+                return true;
+            }
+            break;
+        }
+        default:
+            UNREACHABLE();
+    }
+
+    return mUnmangledBuiltinNames[COMMON_BUILTINS]->count(std::string(name)) > 0;
+}
+
+ESymbolLevel TSymbolTable::currentLevel() const
+{
+    ASSERT(table.size() == precisionStack.size() && table.size() == mUnmangledBuiltinNames.size());
+    return static_cast<ESymbolLevel>(table.size() - 1);
 }
 
 }  // namespace sh
