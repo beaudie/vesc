@@ -2050,6 +2050,11 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
                 return false;
             }
         }
+        else if (drawColorBuffer)
+        {
+            context->handleError(Error(GL_INVALID_OPERATION, "Read buffer misses image"));
+            return false;
+        }
     }
 
     GLenum masks[]       = {GL_DEPTH_BUFFER_BIT, GL_STENCIL_BUFFER_BIT};
@@ -2076,6 +2081,12 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
                     context->handleError(Error(GL_INVALID_OPERATION));
                     return false;
                 }
+            }
+            else if (drawBuffer)
+            {
+                context->handleError(
+                    Error(GL_INVALID_OPERATION, "Depth or stencil buffer misses image"));
+                return false;
             }
         }
     }
