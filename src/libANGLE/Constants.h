@@ -14,6 +14,8 @@ namespace gl
 
 enum
 {
+    MAX_SAMPLE_MASK_WORDS = 8,
+
     MAX_VERTEX_ATTRIBS         = 16,
     MAX_VERTEX_ATTRIB_BINDINGS = 16,
 
