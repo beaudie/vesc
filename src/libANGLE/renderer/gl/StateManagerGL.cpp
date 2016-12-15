@@ -88,6 +88,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mSampleCoverageEnabled(false),
       mSampleCoverageValue(1.0f),
       mSampleCoverageInvert(false),
+      mSampleMaskEnabled(false),
       mDepthTestEnabled(false),
       mDepthFunc(GL_LESS),
       mDepthMask(true),
@@ -138,6 +139,12 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
     mTextures[GL_TEXTURE_2D_MULTISAMPLE].resize(rendererCaps.maxCombinedTextureImageUnits);
 
     mIndexedBuffers[GL_UNIFORM_BUFFER].resize(rendererCaps.maxCombinedUniformBlocks);
+
+    mSampleMaskValues.resize(rendererCaps.maxSampleMaskWords);
+    for (size_t maskIndex = 0; maskIndex < rendererCaps.maxSampleMaskWords; ++maskIndex)
+    {
+        mSampleMaskValues[maskIndex] = ~GLbitfield(0);
+    }
 
     for (GLenum queryType : QueryTypes)
     {
@@ -1093,6 +1100,36 @@ void StateManagerGL::setSampleCoverage(float value, bool invert)
     }
 }
 
+void StateManagerGL::setSampleMaskEnabled(bool enabled)
+{
+    if (mSampleMaskEnabled != enabled)
+    {
+        mSampleMaskEnabled = enabled;
+        if (mSampleMaskEnabled)
+        {
+            mFunctions->enable(GL_SAMPLE_MASK);
+        }
+        else
+        {
+            mFunctions->disable(GL_SAMPLE_MASK);
+        }
+
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_SAMPLE_MASK_ENABLED);
+    }
+}
+
+void StateManagerGL::setSampleMaski(GLuint maskNumber, GLbitfield mask)
+{
+    ASSERT(maskNumber < mSampleMaskValues.size());
+    if (mSampleMaskValues[maskNumber] != mask)
+    {
+        mSampleMaskValues[maskNumber] = mask;
+        mFunctions->sampleMaski(maskNumber, mask);
+
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_SAMPLE_MASK_WORD_0 + maskNumber);
+    }
+}
+
 void StateManagerGL::setDepthTestEnabled(bool enabled)
 {
     if (mDepthTestEnabled != enabled)
@@ -1647,15 +1684,37 @@ void StateManagerGL::syncState(const gl::ContextState &data,
                     data, state.getFramebufferSRGB(),
                     GetImplAs<FramebufferGL>(state.getDrawFramebuffer()));
                 break;
+            case gl::State::DIRTY_BIT_SAMPLE_MASK_ENABLED:
+                setSampleMaskEnabled(state.isSampleMaskEnabled());
+                break;
             default:
             {
-                ASSERT(dirtyBit >= gl::State::DIRTY_BIT_CURRENT_VALUE_0 &&
-                       dirtyBit < gl::State::DIRTY_BIT_CURRENT_VALUE_MAX);
-                size_t attribIndex =
-                    static_cast<size_t>(dirtyBit) - gl::State::DIRTY_BIT_CURRENT_VALUE_0;
-                setAttributeCurrentData(attribIndex,
-                                        state.getVertexAttribCurrentValue(attribIndex));
-                break;
+                if (dirtyBit >= gl::State::DIRTY_BIT_CURRENT_VALUE_0 &&
+                    dirtyBit < gl::State::DIRTY_BIT_CURRENT_VALUE_MAX)
+                {
+                    size_t attribIndex =
+                        static_cast<size_t>(dirtyBit) - gl::State::DIRTY_BIT_CURRENT_VALUE_0;
+                    setAttributeCurrentData(attribIndex,
+                                            state.getVertexAttribCurrentValue(attribIndex));
+                    break;
+                }
+                else if (dirtyBit >= gl::State::DIRTY_BIT_SAMPLE_MASK_WORD_0 &&
+                         dirtyBit < gl::State::DIRTY_BIT_SAMPLE_MASK_WORD_MAX)
+                {
+                    size_t maskNumber =
+                        static_cast<size_t>(dirtyBit) - gl::State::DIRTY_BIT_SAMPLE_MASK_WORD_0;
+                    // Only set the available sample mask values.
+                    if (maskNumber < mSampleMaskValues.size())
+                    {
+                        GLbitfield mask = state.getSampleMask(maskNumber);
+                        setSampleMaski(maskNumber, mask);
+                    }
+                    break;
+                }
+                else
+                {
+                    NOTREACHED();
+                }
             }
         }
 

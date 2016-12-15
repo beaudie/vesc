@@ -644,6 +644,10 @@ bool ValidationContext::getQueryParameterInfo(GLenum pname, GLenum *type, unsign
             *type      = GL_INT_64_ANGLEX;
             *numParams = 1;
             return true;
+        case GL_SAMPLE_MASK:
+            *type      = GL_BOOL;
+            *numParams = 1;
+            return true;
     }
 
     return false;
@@ -685,6 +689,7 @@ bool ValidationContext::getIndexedQueryParameterInfo(GLenum target,
 
     switch (target)
     {
+        case GL_SAMPLE_MASK_VALUE:
         case GL_MAX_COMPUTE_WORK_GROUP_COUNT:
         case GL_MAX_COMPUTE_WORK_GROUP_SIZE:
         case GL_ATOMIC_COUNTER_BUFFER_BINDING:
