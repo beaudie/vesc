@@ -267,10 +267,11 @@ const gl::Limitations &Context9::getNativeLimitations() const
     return mRenderer->getNativeLimitations();
 }
 
-void Context9::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
+gl::Error Context9::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 {
     // D3D9 doesn't support ES 3.1.
     UNREACHABLE();
+    return gl::InternalError() << "D3D9 doesn't support ES 3.1.";
 }
 
 }  // namespace rx

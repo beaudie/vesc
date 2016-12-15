@@ -87,7 +87,7 @@ class TextureNULL : public TextureImpl
                                     GLsizei samples,
                                     GLint internalformat,
                                     gl::Extents size,
-                                    GLboolean fixedsamplelocations) override;
+                                    GLboolean fixedSampleLocations) override;
 };
 
 }  // namespace rx

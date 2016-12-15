@@ -100,7 +100,7 @@ class TextureGL : public TextureImpl
                                     GLsizei samples,
                                     GLint internalFormat,
                                     gl::Extents size,
-                                    GLboolean fixedsamplelocations) override;
+                                    GLboolean fixedSampleLocations) override;
 
     gl::Error setImageExternal(GLenum target,
                                egl::Stream *stream,

@@ -282,9 +282,10 @@ const gl::Limitations &Context11::getNativeLimitations() const
     return mRenderer->getNativeLimitations();
 }
 
-void Context11::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
+gl::Error Context11::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 {
     UNIMPLEMENTED();
+    return gl::InternalError() << "getMultisamplefv is unimplemented.";
 }
 
 }  // namespace rx

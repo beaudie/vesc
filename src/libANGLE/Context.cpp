@@ -3704,10 +3704,10 @@ void Context::bindRenderbuffer(GLenum target, GLuint renderbuffer)
     mGLState.setRenderbufferBinding(object);
 }
 
-void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
+Error Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 {
     syncRendererState();
-    mImplementation->getMultisamplefv(pname, index, val);
+    return mImplementation->getMultisamplefv(pname, index, val);
 }
 
 }  // namespace gl

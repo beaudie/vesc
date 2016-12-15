@@ -1009,7 +1009,7 @@ Error Texture::setStorageMultisample(GLenum target,
                                      GLsizei samples,
                                      GLint internalFormat,
                                      gl::Extents size,
-                                     GLboolean fixedsamplelocations)
+                                     GLboolean fixedSampleLocations)
 {
     ASSERT(target == mState.mTarget);
 
@@ -1017,14 +1017,14 @@ Error Texture::setStorageMultisample(GLenum target,
     releaseTexImageInternal();
     orphanImages();
 
-    // d3d11 setStorageMultisample is unimplemented
-    if (mTexture == NULL)
+    // D3D11 setStorageMultisample is unimplemented
+    if (mTexture == nullptr)
     {
         UNIMPLEMENTED();
-        return gl::Error(GL_INVALID_OPERATION);
+        return gl::InternalError();
     }
     ANGLE_TRY(mTexture->setStorageMultisample(target, samples, internalFormat, size,
-                                              fixedsamplelocations));
+                                              fixedSampleLocations));
 
     mState.setSamples(samples);
     mState.mImmutableFormat = true;

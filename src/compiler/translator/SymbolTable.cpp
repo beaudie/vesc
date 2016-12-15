@@ -294,12 +294,9 @@ void TSymbolTable::insertBuiltIn(ESymbolLevel level,
     {
         insertUnmangledBuiltIn(name);
         bool gvec4 = (rvalue->getBasicType() == EbtGVec4);
-        insertBuiltIn(level, gvec4 ? TCache::getType(EbtFloat, 4) : rvalue, name,
-                      TCache::getType(EbtSampler2DMS), ptype2, ptype3, ptype4, ptype5);
-        insertBuiltIn(level, gvec4 ? TCache::getType(EbtInt, 4) : rvalue, name,
-                      TCache::getType(EbtISampler2DMS), ptype2, ptype3, ptype4, ptype5);
-        insertBuiltIn(level, gvec4 ? TCache::getType(EbtUInt, 4) : rvalue, name,
-                      TCache::getType(EbtUSampler2DMS), ptype2, ptype3, ptype4, ptype5);
+        insertBuiltIn(level, gvec4 ? TCache::getType(EbtFloat, 4) : rvalue, name, TCache::getType(EbtSampler2DMS), ptype2, ptype3, ptype4, ptype5);
+        insertBuiltIn(level, gvec4 ? TCache::getType(EbtInt, 4) : rvalue, name, TCache::getType(EbtISampler2DMS), ptype2, ptype3, ptype4, ptype5);
+        insertBuiltIn(level, gvec4 ? TCache::getType(EbtUInt, 4) : rvalue, name, TCache::getType(EbtUSampler2DMS), ptype2, ptype3, ptype4, ptype5);
     }
     else if (IsGImage(ptype1->getBasicType()))
     {

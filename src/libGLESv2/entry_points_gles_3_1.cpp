@@ -1043,13 +1043,17 @@ void GL_APIENTRY GetMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-
         if (!context->skipValidation() && !ValidateGetMultisample(context, pname, index, val))
         {
             return;
         }
 
-        context->getMultisamplefv(pname, index, val);
+        Error error = context->getMultisamplefv(pname, index, val);
+        if (error.isError())
+        {
+            context->handleError(error);
+            return;
+        }
     }
 }
 

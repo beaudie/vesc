@@ -110,9 +110,4 @@ void ContextImpl::stencilThenCoverStrokePathInstanced(const std::vector<gl::Path
     UNREACHABLE();
 }
 
-void ContextImpl::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
-{
-    UNREACHABLE();
-}
-
 }  // namespace rx

@@ -91,6 +91,8 @@ class Context11 : public ContextImpl
     gl::Error drawArraysIndirect(GLenum mode, const GLvoid *indirect) override;
     gl::Error drawElementsIndirect(GLenum mode, GLenum type, const GLvoid *indirect) override;
 
+    gl::Error getMultisamplefv(GLenum pname, GLuint index, GLfloat *val) override;
+
     // Device loss
     GLenum getResetStatus() override;
 
@@ -120,8 +122,6 @@ class Context11 : public ContextImpl
     const gl::Limitations &getNativeLimitations() const override;
 
     Renderer11 *getRenderer() const { return mRenderer; }
-
-    void getMultisamplefv(GLenum pname, GLuint index, GLfloat *val) override;
 
   private:
     Renderer11 *mRenderer;

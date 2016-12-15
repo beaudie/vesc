@@ -318,7 +318,7 @@ class Texture final : public egl::ImageSibling,
                                 GLsizei samples,
                                 GLint internalformat,
                                 gl::Extents size,
-                                GLboolean fixedsamplelocations);
+                                GLboolean fixedSampleLocations);
 
     Error setEGLImageTarget(GLenum target, egl::Image *imageTarget);
 

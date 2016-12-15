@@ -51,9 +51,9 @@ gl::Error TextureImpl::setStorageMultisample(GLenum target,
                                              GLsizei samples,
                                              GLint internalformat,
                                              gl::Extents size,
-                                             GLboolean fixedsamplelocations)
+                                             GLboolean fixedSampleLocations)
 {
     UNREACHABLE();
-    return gl::NoError();
+    return gl::InternalError() << "setStorageMultisample is unimplemented.";
 }
 }

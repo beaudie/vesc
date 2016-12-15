@@ -148,10 +148,10 @@ gl::Error TextureD3D::setStorageMultisample(GLenum target,
                                             GLsizei samples,
                                             GLint internalFormat,
                                             gl::Extents size,
-                                            GLboolean fixedsamplelocations)
+                                            GLboolean fixedSampleLocations)
 {
     UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION, "setStorageMultisample is unimplemented");
+    return gl::InternalError() << "setStorageMultisample is unimplemented.";
 }
 
 bool TextureD3D::shouldUseSetData(const ImageD3D *image) const

@@ -151,10 +151,10 @@ gl::Error TextureVk::setStorageMultisample(GLenum target,
                                            GLsizei samples,
                                            GLint internalformat,
                                            gl::Extents size,
-                                           GLboolean fixedsamplelocations)
+                                           GLboolean fixedSampleLocations)
 {
     UNIMPLEMENTED();
-    return gl::NoError();
+    return gl::InternalError() << "setStorageMultisample is unimplemented.";
 }
 
 }  // namespace rx

@@ -329,8 +329,9 @@ std::vector<PathImpl *> ContextNULL::createPaths(GLsizei range)
     return result;
 }
 
-void ContextNULL::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
+gl::Error ContextNULL::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 {
+    return gl::NoError();
 }
 
 }  // namespace rx

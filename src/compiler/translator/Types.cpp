@@ -23,6 +23,7 @@ const char *getBasicString(TBasicType t)
 {
     switch (t)
     {
+<<<<<<< HEAD
         case EbtVoid:
             return "void";
         case EbtFloat:
@@ -77,6 +78,35 @@ const char *getBasicString(TBasicType t)
             return "structure";
         case EbtInterfaceBlock:
             return "interface block";
+=======
+        case EbtVoid:                 return "void";
+        case EbtFloat:                return "float";
+        case EbtInt:                  return "int";
+        case EbtUInt:                 return "uint";
+        case EbtBool:                 return "bool";
+        case EbtSampler2D:            return "sampler2D";
+        case EbtSampler3D:            return "sampler3D";
+        case EbtSamplerCube:          return "samplerCube";
+        case EbtSamplerExternalOES:   return "samplerExternalOES";
+        case EbtSampler2DRect:        return "sampler2DRect";
+        case EbtSampler2DArray:       return "sampler2DArray";
+        case EbtSampler2DMS:          return "sampler2DMS";
+        case EbtISampler2D:           return "isampler2D";
+        case EbtISampler3D:           return "isampler3D";
+        case EbtISamplerCube:         return "isamplerCube";
+        case EbtISampler2DArray:      return "isampler2DArray";
+        case EbtISampler2DMS:         return "isampler2DMS";
+        case EbtUSampler2D:           return "usampler2D";
+        case EbtUSampler3D:           return "usampler3D";
+        case EbtUSamplerCube:         return "usamplerCube";
+        case EbtUSampler2DArray:      return "usampler2DArray";
+        case EbtUSampler2DMS:         return "usampler2DMS";
+        case EbtSampler2DShadow:      return "sampler2DShadow";
+        case EbtSamplerCubeShadow:    return "samplerCubeShadow";
+        case EbtSampler2DArrayShadow: return "sampler2DArrayShadow";
+        case EbtStruct:               return "structure";
+        case EbtInterfaceBlock:       return "interface block";
+>>>>>>> Modify return type for getMultisamplefv
         case EbtImage2D:
             return "image2D";
         case EbtIImage2D:
@@ -280,6 +310,7 @@ TString TType::buildMangledName() const
 
     switch (type)
     {
+<<<<<<< HEAD
         case EbtFloat:
             mangledName += 'f';
             break;
@@ -397,6 +428,125 @@ TString TType::buildMangledName() const
         default:
             // EbtVoid, EbtAddress and non types
             break;
+=======
+      case EbtFloat:
+        mangledName += 'f';
+        break;
+      case EbtInt:
+        mangledName += 'i';
+        break;
+      case EbtUInt:
+        mangledName += 'u';
+        break;
+      case EbtBool:
+        mangledName += 'b';
+        break;
+      case EbtSampler2D:
+        mangledName += "s2";
+        break;
+      case EbtSampler3D:
+        mangledName += "s3";
+        break;
+      case EbtSamplerCube:
+        mangledName += "sC";
+        break;
+      case EbtSampler2DArray:
+        mangledName += "s2a";
+        break;
+      case EbtSamplerExternalOES:
+        mangledName += "sext";
+        break;
+      case EbtSampler2DRect:
+        mangledName += "s2r";
+        break;
+      case EbtSampler2DMS:
+        mangledName += "s2ms";
+        break;
+      case EbtISampler2D:
+        mangledName += "is2";
+        break;
+      case EbtISampler3D:
+        mangledName += "is3";
+        break;
+      case EbtISamplerCube:
+        mangledName += "isC";
+        break;
+      case EbtISampler2DArray:
+        mangledName += "is2a";
+        break;
+      case EbtISampler2DMS:
+        mangledName += "is2ms";
+        break;
+      case EbtUSampler2D:
+        mangledName += "us2";
+        break;
+      case EbtUSampler3D:
+        mangledName += "us3";
+        break;
+      case EbtUSamplerCube:
+        mangledName += "usC";
+        break;
+      case EbtUSampler2DArray:
+        mangledName += "us2a";
+        break;
+      case EbtUSampler2DMS:
+        mangledName += "us2ms";
+        break;
+      case EbtSampler2DShadow:
+        mangledName += "s2s";
+        break;
+      case EbtSamplerCubeShadow:
+        mangledName += "sCs";
+        break;
+      case EbtSampler2DArrayShadow:
+        mangledName += "s2as";
+        break;
+      case EbtImage2D:
+          mangledName += "im2";
+          break;
+      case EbtIImage2D:
+          mangledName += "iim2";
+          break;
+      case EbtUImage2D:
+          mangledName += "uim2";
+          break;
+      case EbtImage3D:
+          mangledName += "im3";
+          break;
+      case EbtIImage3D:
+          mangledName += "iim3";
+          break;
+      case EbtUImage3D:
+          mangledName += "uim3";
+          break;
+      case EbtImage2DArray:
+          mangledName += "im2a";
+          break;
+      case EbtIImage2DArray:
+          mangledName += "iim2a";
+          break;
+      case EbtUImage2DArray:
+          mangledName += "uim2a";
+          break;
+      case EbtImageCube:
+          mangledName += "imc";
+          break;
+      case EbtIImageCube:
+          mangledName += "iimc";
+          break;
+      case EbtUImageCube:
+          mangledName += "uimc";
+          break;
+      case EbtStruct:
+        mangledName += structure->mangledName();
+        break;
+      case EbtInterfaceBlock:
+        mangledName += interfaceBlock->mangledName();
+        break;
+      default:
+        // EbtVoid, EbtAddress and non types
+        break;
+>>>>>>> Modify return type for getMultisamplefv
     }
 
     if (isMatrix())
