@@ -2054,6 +2054,11 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
                 return false;
             }
         }
+        else if (drawColorBuffer)
+        {
+            context->handleError(Error(GL_INVALID_OPERATION, "No read color buffer is bound."));
+            return false;
+        }
     }
 
     GLenum masks[]       = {GL_DEPTH_BUFFER_BIT, GL_STENCIL_BUFFER_BIT};
@@ -2080,6 +2085,12 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
                     context->handleError(Error(GL_INVALID_OPERATION));
                     return false;
                 }
+            }
+            else if (drawBuffer)
+            {
+                context->handleError(
+                    Error(GL_INVALID_OPERATION, "No read depth/stencil buffer is bound."));
+                return false;
             }
         }
     }
