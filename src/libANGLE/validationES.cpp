@@ -1974,6 +1974,12 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
         const gl::FramebufferAttachment *drawColorBuffer = drawFramebuffer->getFirstColorbuffer();
         const Extensions &extensions                     = context->getExtensions();
 
+        // WebGL 2.0 BlitFramebuffer when blitting from a missing attachment
+        // In OpenGL ES it is undefined what happens when an operation tries to blit from a missing
+        // attachment and WebGL defines it to be an error. We do the check unconditionnaly as the
+        // situation is an application error that would lead to a crash in ANGLE.
+        bool hasDrawBuffer = false;
+
         if (readColorBuffer && drawColorBuffer)
         {
             const Format &readFormat = readColorBuffer->getFormat();
@@ -1985,6 +1991,7 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
                     drawFramebuffer->getDrawBuffer(drawbufferIdx);
                 if (attachment)
                 {
+                    hasDrawBuffer = true;
                     const Format &drawFormat = attachment->getFormat();
 
                     // The GL ES 3.0.2 spec (pg 193) states that:
@@ -2054,6 +2061,11 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
                 return false;
             }
         }
+        if (!readColorBuffer && hasDrawBuffer)
+        {
+            context->handleError(Error(GL_INVALID_OPERATION, "No read color buffer is bound."));
+            return false;
+        }
     }
 
     GLenum masks[]       = {GL_DEPTH_BUFFER_BIT, GL_STENCIL_BUFFER_BIT};
@@ -2080,6 +2092,12 @@ bool ValidateBlitFramebufferParameters(ValidationContext *context,
                     context->handleError(Error(GL_INVALID_OPERATION));
                     return false;
                 }
+            }
+            else if (drawBuffer)
+            {
+                context->handleError(
+                    Error(GL_INVALID_OPERATION, "No read depth/stencil buffer is bound."));
+                return false;
             }
         }
     }
