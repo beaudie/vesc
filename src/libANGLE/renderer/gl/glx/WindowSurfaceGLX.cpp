@@ -63,7 +63,7 @@ WindowSurfaceGLX::~WindowSurfaceGLX()
     mGLXDisplay->syncXCommands();
 }
 
-egl::Error WindowSurfaceGLX::initialize()
+egl::Error WindowSurfaceGLX::initialize(const DisplayImpl *displayImpl)
 {
     // Check that the window's visual ID is valid, as part of the AMGLE_x11_visual
     // extension.
@@ -241,4 +241,4 @@ bool WindowSurfaceGLX::getWindowDimensions(Window window, unsigned int *width, u
     return XGetGeometry(mDisplay, window, &root, &x, &y, width, height, &border, &depth) != 0;
 }
 
-}
+}  // namespace rx

@@ -24,7 +24,7 @@ SurfaceNULL::~SurfaceNULL()
 {
 }
 
-egl::Error SurfaceNULL::initialize()
+egl::Error SurfaceNULL::initialize(const DisplayImpl *displayImpl)
 {
     return egl::NoError();
 }

@@ -53,7 +53,7 @@ class Surface : public gl::FramebufferAttachmentObject
 
     EGLint getType() const;
 
-    Error initialize();
+    Error initialize(const Display &display);
     Error swap();
     Error swapWithDamage(EGLint *rects, EGLint n_rects);
     Error postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height);

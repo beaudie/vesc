@@ -55,7 +55,7 @@ PbufferSurfaceCGL::~PbufferSurfaceCGL()
     }
 }
 
-egl::Error PbufferSurfaceCGL::initialize()
+egl::Error PbufferSurfaceCGL::initialize(const DisplayImpl *displayImpl)
 {
     mFunctions->genRenderbuffers(1, &mColorRenderbuffer);
     mStateManager->bindRenderbuffer(GL_RENDERBUFFER, mColorRenderbuffer);
@@ -140,4 +140,4 @@ FramebufferImpl *PbufferSurfaceCGL::createDefaultFramebuffer(const gl::Framebuff
                              mRenderer->getBlitter(), mStateManager);
 }
 
-}
+}  // namespce rx

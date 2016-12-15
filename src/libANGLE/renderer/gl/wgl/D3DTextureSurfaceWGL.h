@@ -37,7 +37,7 @@ class D3DTextureSurfaceWGL : public SurfaceGL
 
     static egl::Error ValidateD3DTextureClientBuffer(EGLClientBuffer clientBuffer);
 
-    egl::Error initialize() override;
+    egl::Error initialize(const DisplayImpl *displayImpl) override;
     egl::Error makeCurrent() override;
     egl::Error unMakeCurrent() override;
 

@@ -226,7 +226,7 @@ egl::Error D3DTextureSurfaceWGL::ValidateD3DTextureClientBuffer(EGLClientBuffer 
     return GetD3DTextureInfo(clientBuffer, nullptr, nullptr, nullptr, nullptr);
 }
 
-egl::Error D3DTextureSurfaceWGL::initialize()
+egl::Error D3DTextureSurfaceWGL::initialize(const DisplayImpl *displayImpl)
 {
     IUnknown *device = nullptr;
     ANGLE_TRY(GetD3DTextureInfo(mClientBuffer, &mWidth, &mHeight, &mObject, &device));

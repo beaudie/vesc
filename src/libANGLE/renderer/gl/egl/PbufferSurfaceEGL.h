@@ -26,7 +26,7 @@ class PbufferSurfaceEGL : public SurfaceEGL
                       const std::vector<EGLint> &attribList,
                       EGLContext context,
                       RendererGL *renderer);
-    ~PbufferSurfaceEGL() override;
+    ~PbufferSurfaceEGL(const DisplayImpl *displayImpl) override;
 
     egl::Error initialize() override;
 };

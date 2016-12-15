@@ -22,7 +22,7 @@ SurfaceVk::~SurfaceVk()
 {
 }
 
-egl::Error SurfaceVk::initialize()
+egl::Error SurfaceVk::initialize(const DisplayImpl *displayImpl)
 {
     UNIMPLEMENTED();
     return egl::Error(EGL_BAD_ACCESS);

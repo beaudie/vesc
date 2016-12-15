@@ -26,7 +26,7 @@ SurfaceOzone::~SurfaceOzone()
     delete mBuffer;
 }
 
-egl::Error SurfaceOzone::initialize()
+egl::Error SurfaceOzone::initialize(const DisplayImpl *displayImpl)
 {
     return egl::Error(EGL_SUCCESS);
 }

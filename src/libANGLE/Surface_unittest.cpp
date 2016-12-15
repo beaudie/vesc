@@ -28,7 +28,7 @@ class MockSurfaceImpl : public rx::SurfaceImpl
     MockSurfaceImpl() : SurfaceImpl(mockState) {}
     virtual ~MockSurfaceImpl() { destroy(); }
 
-    MOCK_METHOD0(initialize, egl::Error());
+    MOCK_METHOD1(initialize, egl::Error(const DisplayImpl *));
     MOCK_METHOD1(createDefaultFramebuffer, rx::FramebufferImpl *(const gl::FramebufferState &data));
     MOCK_METHOD0(swap, egl::Error());
     MOCK_METHOD2(swapWithDamage, egl::Error(EGLint *, EGLint));

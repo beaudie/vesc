@@ -194,7 +194,7 @@ WindowSurfaceCGL::~WindowSurfaceCGL()
     }
 }
 
-egl::Error WindowSurfaceCGL::initialize()
+egl::Error WindowSurfaceCGL::initialize(const DisplayImpl *displayImpl)
 {
     unsigned width  = getWidth();
     unsigned height = getHeight();
@@ -329,4 +329,4 @@ FramebufferImpl *WindowSurfaceCGL::createDefaultFramebuffer(const gl::Framebuffe
                              mStateManager);
 }
 
-}
+}  // namespace rx

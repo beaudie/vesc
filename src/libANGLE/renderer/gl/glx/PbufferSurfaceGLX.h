@@ -30,7 +30,7 @@ class PbufferSurfaceGLX : public SurfaceGLX
                       glx::FBConfig fbConfig);
     ~PbufferSurfaceGLX() override;
 
-    egl::Error initialize() override;
+    egl::Error initialize(const DisplayImpl *displayImpl) override;
     egl::Error makeCurrent() override;
 
     egl::Error swap() override;
@@ -59,6 +59,6 @@ class PbufferSurfaceGLX : public SurfaceGLX
     glx::Pbuffer mPbuffer;
 };
 
-}
+}  // namespace rx
 
 #endif // LIBANGLE_RENDERER_GL_GLX_PBUFFERSURFACEGLX_H_

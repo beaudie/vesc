@@ -38,7 +38,7 @@ class DXGISwapChainWindowSurfaceWGL : public SurfaceGL
                                   EGLint orientation);
     ~DXGISwapChainWindowSurfaceWGL() override;
 
-    egl::Error initialize() override;
+    egl::Error initialize(const DisplayImpl *displayImpl) override;
     egl::Error makeCurrent() override;
 
     egl::Error swap() override;
