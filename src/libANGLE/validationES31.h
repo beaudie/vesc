@@ -23,6 +23,7 @@ bool ValidateGetBooleani_vRobustANGLE(Context *context,
                                       GLsizei bufSize,
                                       GLsizei *length,
                                       GLboolean *data);
+bool ValidateSampleMaski(Context *context, GLuint maskNumber);
 
 bool ValidateGetTexLevelParameterfv(Context *context,
                                     GLenum target,
