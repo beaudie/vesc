@@ -82,7 +82,7 @@ void SurfaceD3D::releaseSwapChain()
     SafeDelete(mSwapChain);
 }
 
-egl::Error SurfaceD3D::initialize()
+egl::Error SurfaceD3D::initialize(const DisplayImpl *displayImpl)
 {
     if (mNativeWindow->getNativeWindow())
     {

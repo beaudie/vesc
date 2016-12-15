@@ -32,7 +32,7 @@ class WindowSurfaceGLX : public SurfaceGLX
                      glx::FBConfig fbConfig);
     ~WindowSurfaceGLX() override;
 
-    egl::Error initialize() override;
+    egl::Error initialize(const DisplayImpl *displayImpl) override;
     egl::Error makeCurrent() override;
 
     egl::Error swap() override;
@@ -68,6 +68,6 @@ class WindowSurfaceGLX : public SurfaceGLX
     SwapControlData mSwapControl;
 };
 
-}
+}  // namespace rx
 
 #endif // LIBANGLE_RENDERER_GL_GLX_WINDOWSURFACEGLX_H_

@@ -41,7 +41,7 @@ WindowSurfaceWGL::~WindowSurfaceWGL()
     mDeviceContext = nullptr;
 }
 
-egl::Error WindowSurfaceWGL::initialize()
+egl::Error WindowSurfaceWGL::initialize(const DisplayImpl *displayImpl)
 {
     mDeviceContext = GetDC(mWindow);
     if (!mDeviceContext)

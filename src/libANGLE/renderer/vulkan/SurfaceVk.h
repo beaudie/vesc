@@ -21,7 +21,7 @@ class SurfaceVk : public SurfaceImpl
     SurfaceVk(const egl::SurfaceState &surfaceState);
     ~SurfaceVk() override;
 
-    egl::Error initialize() override;
+    egl::Error initialize(const DisplayImpl *displayImpl) override;
     FramebufferImpl *createDefaultFramebuffer(const gl::FramebufferState &state) override;
     egl::Error swap() override;
     egl::Error postSubBuffer(EGLint x, EGLint y, EGLint width, EGLint height) override;
