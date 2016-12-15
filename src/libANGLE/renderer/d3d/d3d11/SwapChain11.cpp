@@ -285,9 +285,16 @@ EGLint SwapChain11::resetOffscreenColorBuffer(int backbufferWidth, int backbuffe
     offscreenSRVDesc.Texture2D.MostDetailedMip = 0;
     offscreenSRVDesc.Texture2D.MipLevels = static_cast<UINT>(-1);
 
-    result = device->CreateShaderResourceView(mOffscreenTexture, &offscreenSRVDesc, &mOffscreenSRView);
-    ASSERT(SUCCEEDED(result));
-    d3d11::SetDebugName(mOffscreenSRView, "Offscreen back buffer shader resource");
+    D3D11_TEXTURE2D_DESC textureDesc;
+    mOffscreenTexture->GetDesc(&textureDesc);
+
+    if (textureDesc.BindFlags & D3D11_BIND_SHADER_RESOURCE)
+    {
+        result = device->CreateShaderResourceView(mOffscreenTexture, &offscreenSRVDesc,
+                                                  &mOffscreenSRView);
+        ASSERT(SUCCEEDED(result));
+        d3d11::SetDebugName(mOffscreenSRView, "Offscreen back buffer shader resource");
+    }
 
     if (previousOffscreenTexture != nullptr)
     {

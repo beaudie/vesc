@@ -1016,6 +1016,7 @@ gl::Error StateManager11::syncFramebuffer(gl::Framebuffer *framebuffer)
     size_t appliedRTIndex  = 0;
     bool skipInactiveRTs   = mRenderer->getWorkarounds().mrtPerfWorkaround;
     const auto &drawStates = framebuffer->getDrawBufferStates();
+    size_t maxExistingRT   = 0;
 
     for (size_t rtIndex = 0; rtIndex < colorRTs.size(); ++rtIndex)
     {
@@ -1031,6 +1032,7 @@ gl::Error StateManager11::syncFramebuffer(gl::Framebuffer *framebuffer)
         {
             framebufferRTVs[appliedRTIndex] = renderTarget->getRenderTargetView();
             ASSERT(framebufferRTVs[appliedRTIndex]);
+            maxExistingRT = appliedRTIndex;
 
             if (missingColorRenderTarget)
             {
@@ -1071,7 +1073,8 @@ gl::Error StateManager11::syncFramebuffer(gl::Framebuffer *framebuffer)
     }
 
     // TODO(jmadill): Use context caps?
-    UINT drawBuffers = mRenderer->getNativeCaps().maxDrawBuffers;
+    UINT drawBuffers =
+        std::min(static_cast<GLuint>(maxExistingRT) + 1, mRenderer->getNativeCaps().maxDrawBuffers);
 
     // Apply the render target and depth stencil
     mRenderer->getDeviceContext()->OMSetRenderTargets(drawBuffers, framebufferRTVs.data(),
