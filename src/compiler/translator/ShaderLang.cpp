@@ -161,6 +161,7 @@ void ShInitBuiltInResources(ShBuiltInResources *resources)
     resources->EXT_shader_framebuffer_fetch    = 0;
     resources->NV_shader_framebuffer_fetch     = 0;
     resources->ARM_shader_framebuffer_fetch    = 0;
+    resources->OVR_multiview                   = 0;
 
     resources->NV_draw_buffers = 0;
 
@@ -369,6 +370,16 @@ WorkGroupSize ShGetComputeShaderLocalGroupSize(const ShHandle handle)
     ASSERT(compiler);
 
     return compiler->getComputeShaderLocalSize();
+}
+
+int ShGetVertexShaderNumViews(const ShHandle handle)
+{
+    ASSERT(handle);
+    TShHandleBase *base = static_cast<TShHandleBase *>(handle);
+    TCompiler *compiler = base->getAsCompiler();
+    ASSERT(compiler);
+
+    return compiler->getNumViews();
 }
 
 bool ShCheckVariablesWithinPackingLimits(int maxVectors,
