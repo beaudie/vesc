@@ -325,7 +325,6 @@ GLenum GLVariableType(const TType &type)
     }
 
     switch (type.getBasicType())
-<<<<<<< HEAD
     {  
         case EbtSampler2D:
             return GL_SAMPLER_2D;
@@ -393,55 +392,6 @@ GLenum GLVariableType(const TType &type)
             return GL_UNSIGNED_INT_IMAGE_CUBE;
         default:
             UNREACHABLE();
->>>>>>> Fix up translator style.
-=======
-    {
-      case EbtSampler2D:            return GL_SAMPLER_2D;
-      case EbtSampler3D:            return GL_SAMPLER_3D;
-      case EbtSamplerCube:          return GL_SAMPLER_CUBE;
-      case EbtSamplerExternalOES:   return GL_SAMPLER_EXTERNAL_OES;
-      case EbtSampler2DRect:        return GL_SAMPLER_2D_RECT_ARB;
-      case EbtSampler2DArray:       return GL_SAMPLER_2D_ARRAY;
-      case EbtSampler2DMS:          return GL_SAMPLER_2D_MULTISAMPLE;
-      case EbtISampler2D:           return GL_INT_SAMPLER_2D;
-      case EbtISampler3D:           return GL_INT_SAMPLER_3D;
-      case EbtISamplerCube:         return GL_INT_SAMPLER_CUBE;
-      case EbtISampler2DArray:      return GL_INT_SAMPLER_2D_ARRAY;
-      case EbtISampler2DMS:         return GL_INT_SAMPLER_2D_MULTISAMPLE;
-      case EbtUSampler2D:           return GL_UNSIGNED_INT_SAMPLER_2D;
-      case EbtUSampler3D:           return GL_UNSIGNED_INT_SAMPLER_3D;
-      case EbtUSamplerCube:         return GL_UNSIGNED_INT_SAMPLER_CUBE;
-      case EbtUSampler2DArray:      return GL_UNSIGNED_INT_SAMPLER_2D_ARRAY;
-      case EbtUSampler2DMS:         return GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE;
-      case EbtSampler2DShadow:      return GL_SAMPLER_2D_SHADOW;
-      case EbtSamplerCubeShadow:    return GL_SAMPLER_CUBE_SHADOW;
-      case EbtSampler2DArrayShadow: return GL_SAMPLER_2D_ARRAY_SHADOW;
-      case EbtImage2D:
-          return GL_IMAGE_2D;
-      case EbtIImage2D:
-          return GL_INT_IMAGE_2D;
-      case EbtUImage2D:
-          return GL_UNSIGNED_INT_IMAGE_2D;
-      case EbtImage2DArray:
-          return GL_IMAGE_2D_ARRAY;
-      case EbtIImage2DArray:
-          return GL_INT_IMAGE_2D_ARRAY;
-      case EbtUImage2DArray:
-          return GL_UNSIGNED_INT_IMAGE_2D_ARRAY;
-      case EbtImage3D:
-          return GL_IMAGE_3D;
-      case EbtIImage3D:
-          return GL_INT_IMAGE_3D;
-      case EbtUImage3D:
-          return GL_UNSIGNED_INT_IMAGE_3D;
-      case EbtImageCube:
-          return GL_IMAGE_CUBE;
-      case EbtIImageCube:
-          return GL_INT_IMAGE_CUBE;
-      case EbtUImageCube:
-          return GL_UNSIGNED_INT_IMAGE_CUBE;
-      default: UNREACHABLE();
->>>>>>> Modify return type for getMultisamplefv
     }
 
     return GL_NONE;
