@@ -1345,15 +1345,6 @@ gl::Error Renderer11::setSamplerState(gl::SamplerType type,
                                       gl::Texture *texture,
                                       const gl::SamplerState &samplerState)
 {
-    // Make sure to add the level offset for our tiny compressed texture workaround
-    TextureD3D *textureD3D = GetImplAs<TextureD3D>(texture);
-
-    TextureStorage *storage = nullptr;
-    ANGLE_TRY(textureD3D->getNativeTexture(&storage));
-
-    // Storage should exist, texture should be complete
-    ASSERT(storage);
-
     // Sampler metadata that's passed to shaders in uniforms is stored separately from rest of the
     // sampler state since having it in contiguous memory makes it possible to memcpy to a constant
     // buffer, and it doesn't affect the state set by PSSetSamplers/VSSetSamplers.
