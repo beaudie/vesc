@@ -2620,7 +2620,7 @@ gl::Error Renderer9::compileToExecutable(gl::InfoLog &infoLog,
                                          ShaderType type,
                                          const std::vector<D3DVarying> &streamOutVaryings,
                                          bool separatedOutputBuffers,
-                                         const D3DCompilerWorkarounds &workarounds,
+                                         const angle::CompilerWorkaroundsD3D &workarounds,
                                          ShaderExecutableD3D **outExectuable)
 {
     // Transform feedback is not supported in ES2 or D3D9
@@ -2905,7 +2905,7 @@ void Renderer9::generateCaps(gl::Caps *outCaps,
                           outExtensions, outLimitations);
 }
 
-WorkaroundsD3D Renderer9::generateWorkarounds() const
+angle::WorkaroundsD3D Renderer9::generateWorkarounds() const
 {
     return d3d9::GenerateWorkarounds();
 }
