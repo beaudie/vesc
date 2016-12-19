@@ -1995,6 +1995,158 @@ gl::Error Renderer11::drawElementsImpl(const gl::ContextState &data,
     return gl::NoError();
 }
 
+gl::Error Renderer11::drawArraysIndirectImpl(const gl::ContextState &data,
+                                             GLenum mode,
+                                             const GLvoid *indirect)
+{
+    if (skipDraw(data, mode))
+    {
+        return gl::NoError();
+    }
+
+    const auto &glState            = data.getState();
+    gl::Buffer *drawIndirectBuffer = glState.getDrawIndirectBuffer();
+    ASSERT(drawIndirectBuffer);
+
+    BufferD3D *bufferD3D = GetImplAs<BufferD3D>(drawIndirectBuffer);
+    Buffer11 *storage    = GetAs<Buffer11>(bufferD3D);
+
+    // TODO(jiajia.qin@intel.com): Use compute shader to do it.
+    const uint8_t *bufferData = nullptr;
+    ANGLE_TRY(storage->getData(&bufferData));
+    ASSERT(bufferData);
+    uintptr_t offset = reinterpret_cast<uintptr_t>(indirect);
+
+    const unsigned int *cmd = reinterpret_cast<const unsigned int *>(bufferData + offset);
+    GLuint count            = cmd[0];
+    GLuint instances        = cmd[1];
+    GLuint first            = cmd[2];
+
+    ANGLE_TRY(applyVertexBuffer(glState, mode, first, count, instances, nullptr));
+
+    if (mode == GL_LINE_LOOP)
+    {
+        return drawLineLoop(data, count, GL_NONE, nullptr, 0, instances);
+    }
+    if (mode == GL_TRIANGLE_FAN)
+    {
+        return drawTriangleFan(data, count, GL_NONE, nullptr, 0, instances);
+    }
+
+    ID3D11Buffer *buffer = nullptr;
+    ANGLE_TRY_RESULT(storage->getBuffer(BUFFER_USAGE_INDIRECT), buffer);
+    mAppliedIndirectBufferChanged = false;
+    if (mAppliedIndirectBuffer != buffer || mAppliedIndirectBufferOffset != offset)
+    {
+        mAppliedIndirectBuffer        = buffer;
+        mAppliedIndirectBufferOffset  = offset;
+        mAppliedIndirectBufferChanged = true;
+    }
+
+    unsigned int size    = static_cast<unsigned int>(sizeof(D3D11_DRAW_INSTANCED_INDIRECT_ARGS));
+    int8_t *indirectData = new int8_t[size];
+    int *indirectCmd     = reinterpret_cast<int *>(indirectData);
+    indirectCmd[0]       = count;
+    indirectCmd[1]       = instances;
+    indirectCmd[2]       = 0;
+    indirectCmd[3]       = 0;
+
+    ID3D11Buffer *translatedBuffer = nullptr;
+    ANGLE_TRY_RESULT(
+        storage->getTranslatedIndirectBuffer(indirectData, mAppliedIndirectBufferChanged, size),
+        translatedBuffer);
+
+    mDeviceContext->DrawInstancedIndirect(translatedBuffer, 0);
+    return gl::NoError();
+}
+
+gl::Error Renderer11::drawElementsIndirectImpl(const gl::ContextState &data,
+                                               GLenum mode,
+                                               GLenum type,
+                                               const GLvoid *indirect)
+{
+    if (skipDraw(data, mode))
+    {
+        return gl::NoError();
+    }
+
+    const auto &glState            = data.getState();
+    gl::Buffer *drawIndirectBuffer = glState.getDrawIndirectBuffer();
+    ASSERT(drawIndirectBuffer);
+
+    BufferD3D *bufferD3D = GetImplAs<BufferD3D>(drawIndirectBuffer);
+    Buffer11 *storage    = GetAs<Buffer11>(bufferD3D);
+
+    // TODO(jiajia.qin@intel.com): Use compute shader to do it.
+    const uint8_t *bufferData = nullptr;
+    ANGLE_TRY(storage->getData(&bufferData));
+    ASSERT(bufferData);
+    uintptr_t offset = reinterpret_cast<uintptr_t>(indirect);
+
+    const int *cmd    = reinterpret_cast<const int *>(bufferData + offset);
+    GLuint count      = cmd[0];
+    GLuint instances  = cmd[1];
+    GLuint firstIndex = cmd[2];
+    GLint baseVertex  = cmd[3];
+
+    const gl::Type &typeInfo = gl::GetTypeInfo(type);
+    uint8_t *indices         = static_cast<uint8_t *>(0) + firstIndex * typeInfo.bytes;
+
+    gl::VertexArray *vao           = glState.getVertexArray();
+    gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
+    ASSERT(elementArrayBuffer);
+    gl::IndexRange indexRange;
+    ANGLE_TRY(elementArrayBuffer->getIndexRange(type, reinterpret_cast<size_t>(indices), count,
+                                                glState.isPrimitiveRestartEnabled(), &indexRange));
+
+    TranslatedIndexData indexInfo;
+    indexInfo.indexRange = indexRange;
+    ANGLE_TRY(applyIndexBuffer(data, indices, count, mode, type, &indexInfo));
+    size_t vertexCount = indexInfo.indexRange.vertexCount();
+    ANGLE_TRY(applyVertexBuffer(glState, mode,
+                                static_cast<GLsizei>(indexInfo.indexRange.start) + baseVertex,
+                                static_cast<GLsizei>(vertexCount), instances, &indexInfo));
+
+    int baseVertexLocation = -static_cast<int>(indexInfo.indexRange.start);
+    if (mode == GL_LINE_LOOP)
+    {
+        return drawLineLoop(data, count, type, indices, baseVertexLocation, instances);
+    }
+
+    if (mode == GL_TRIANGLE_FAN)
+    {
+        return drawTriangleFan(data, count, type, indices, baseVertexLocation, instances);
+    }
+
+    ID3D11Buffer *buffer = nullptr;
+    ANGLE_TRY_RESULT(storage->getBuffer(BUFFER_USAGE_INDIRECT), buffer);
+    mAppliedIndirectBufferChanged = false;
+    if (mAppliedIndirectBuffer != buffer || mAppliedIndirectBufferOffset != offset)
+    {
+        mAppliedIndirectBuffer        = buffer;
+        mAppliedIndirectBufferOffset  = offset;
+        mAppliedIndirectBufferChanged = true;
+    }
+
+    unsigned int size =
+        static_cast<unsigned int>(sizeof(D3D11_DRAW_INDEXED_INSTANCED_INDIRECT_ARGS));
+    int8_t *indirectData = new int8_t[size];
+    int *indirectCmd     = reinterpret_cast<int *>(indirectData);
+    indirectCmd[0]       = count;
+    indirectCmd[1]       = instances;
+    indirectCmd[2]       = 0;
+    indirectCmd[3]       = baseVertexLocation;
+    indirectCmd[4]       = 0;
+
+    ID3D11Buffer *translatedBuffer = nullptr;
+    ANGLE_TRY_RESULT(
+        storage->getTranslatedIndirectBuffer(indirectData, mAppliedIndirectBufferChanged, size),
+        translatedBuffer);
+
+    mDeviceContext->DrawIndexedInstancedIndirect(translatedBuffer, 0);
+    return gl::NoError();
+}
+
 gl::Error Renderer11::drawLineLoop(const gl::ContextState &data,
                                    GLsizei count,
                                    GLenum type,
@@ -4560,6 +4712,40 @@ gl::Error Renderer11::genericDrawArrays(Context11 *context,
         {
             ANGLE_TRY(markTransformFeedbackUsage(data));
         }
+    }
+
+    return gl::NoError();
+}
+
+gl::Error Renderer11::genericDrawIndirect(Context11 *context,
+                                          GLenum mode,
+                                          GLenum type,
+                                          const GLvoid *indirect)
+{
+    const auto &data     = context->getContextState();
+    const auto &glState  = data.getState();
+    gl::Program *program = glState.getProgram();
+    ASSERT(program != nullptr);
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(program);
+    bool usesPointSize     = programD3D->usesPointSize();
+    programD3D->updateSamplerMapping();
+
+    ANGLE_TRY(generateSwizzles(data));
+    applyPrimitiveType(mode, 0, usesPointSize);
+    ANGLE_TRY(updateState(data, mode));
+    ANGLE_TRY(applyTransformFeedbackBuffers(data));
+    ASSERT(!glState.isTransformFeedbackActiveUnpaused());
+    ANGLE_TRY(applyTextures(context, data));
+    ANGLE_TRY(applyShaders(data, mode));
+    ANGLE_TRY(programD3D->applyUniformBuffers(data));
+
+    if (type == GL_NONE)
+    {
+        ANGLE_TRY(drawArraysIndirectImpl(data, mode, indirect));
+    }
+    else
+    {
+        ANGLE_TRY(drawElementsIndirectImpl(data, mode, type, indirect));
     }
 
     return gl::NoError();
