@@ -209,6 +209,41 @@ class Buffer11::EmulatedIndexedStorage : public Buffer11::BufferStorage
     MemoryBuffer mIndicesMemoryBuffer;  // indices data
 };
 
+// A translated indirect buffer storage represents an underlying D3D11 buffer for indirect draw
+// data.
+class Buffer11::TranslatedIndirectStorage : public Buffer11::BufferStorage
+{
+  public:
+    TranslatedIndirectStorage(Renderer11 *renderer);
+    ~TranslatedIndirectStorage() override;
+
+    bool isMappable(GLbitfield access) const override { return true; }
+
+    gl::ErrorOrResult<ID3D11Buffer *> getNativeStorage(const uint8_t *bufferData,
+                                                       uintptr_t offset,
+                                                       bool isIndirectBufferChanged,
+                                                       int baseVertex,
+                                                       bool isIndexed);
+
+    gl::ErrorOrResult<CopyResult> copyFromStorage(BufferStorage *source,
+                                                  size_t sourceOffset,
+                                                  size_t size,
+                                                  size_t destOffset) override;
+
+    gl::Error resize(size_t size, bool preserveData) override;
+
+    gl::Error map(size_t offset,
+                  size_t length,
+                  GLbitfield access,
+                  uint8_t **mapPointerOut) override;
+    void unmap() override;
+
+  private:
+    angle::ComPtr<ID3D11Buffer>
+        mNativeStorage;  // contains the translated indirect data for use by d3d11
+    MemoryBuffer mMemoryBuffer;
+};
+
 // Pack storage represents internal storage for pack buffers. We implement pack buffers
 // as CPU memory, tied to a staging texture, for asynchronous texture readback.
 class Buffer11::PackStorage : public Buffer11::BufferStorage
@@ -617,6 +652,28 @@ gl::ErrorOrResult<ID3D11Buffer *> Buffer11::getEmulatedIndexedBuffer(
     return nativeStorage;
 }
 
+gl::ErrorOrResult<ID3D11Buffer *> Buffer11::getTranslatedIndirectBuffer(
+    const uint8_t *bufferData,
+    uintptr_t offset,
+    bool isIndirectBufferChanged,
+    int baseVertex,
+    bool isIndexed)
+{
+    ASSERT(bufferData);
+
+    BufferStorage *untypedStorage = nullptr;
+    ANGLE_TRY_RESULT(getBufferStorage(BUFFER_USAGE_TRANSLATED_INDIRECT), untypedStorage);
+
+    TranslatedIndirectStorage *translatedStorage = GetAs<TranslatedIndirectStorage>(untypedStorage);
+
+    ID3D11Buffer *nativeStorage = nullptr;
+    ANGLE_TRY_RESULT(translatedStorage->getNativeStorage(
+                         bufferData, offset, isIndirectBufferChanged, baseVertex, isIndexed),
+                     nativeStorage);
+
+    return nativeStorage;
+}
+
 gl::Error Buffer11::getConstantBufferRange(GLintptr offset,
                                            GLsizeiptr size,
                                            ID3D11Buffer **bufferOut,
@@ -716,6 +773,8 @@ Buffer11::BufferStorage *Buffer11::allocateStorage(BufferUsage usage)
             return new SystemMemoryStorage(mRenderer);
         case BUFFER_USAGE_EMULATED_INDEXED_VERTEX:
             return new EmulatedIndexedStorage(mRenderer);
+        case BUFFER_USAGE_TRANSLATED_INDIRECT:
+            return new TranslatedIndirectStorage(mRenderer);
         case BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK:
             return new NativeStorage(mRenderer, usage, &mDirectBroadcastChannel);
         default:
@@ -1368,6 +1427,125 @@ gl::Error Buffer11::EmulatedIndexedStorage::map(size_t offset,
 }
 
 void Buffer11::EmulatedIndexedStorage::unmap()
+{
+    // No-op
+}
+
+// Buffer11::TranslatedIndirectStorage implementation
+
+Buffer11::TranslatedIndirectStorage::TranslatedIndirectStorage(Renderer11 *renderer)
+    : BufferStorage(renderer, BUFFER_USAGE_TRANSLATED_INDIRECT), mNativeStorage()
+{
+}
+
+Buffer11::TranslatedIndirectStorage::~TranslatedIndirectStorage()
+{
+}
+
+gl::ErrorOrResult<ID3D11Buffer *> Buffer11::TranslatedIndirectStorage::getNativeStorage(
+    const uint8_t *bufferData,
+    uintptr_t offset,
+    bool isIndirectBufferChanged,
+    int baseVertex,
+    bool isIndexed)
+{
+    // If a change in the direct applied from the last draw call is detected, then the translated
+    // indirect buffer needs to be invalidated.  After invalidation, the change detected flag should
+    // be cleared to avoid unnecessary recreation of the buffer.
+    if (isIndirectBufferChanged)
+    {
+        mNativeStorage.Reset();
+        isIndirectBufferChanged = false;
+    }
+
+    if (!mNativeStorage)
+    {
+        ID3D11Device *device = mRenderer->getDevice();
+
+        // TODO(jiajia.qin@intel.com): Use compute shader to do it.
+        const unsigned int *cmd = reinterpret_cast<const unsigned int *>(bufferData + offset);
+        GLuint count            = cmd[0];
+        GLuint instances        = cmd[1];
+        D3D11_SUBRESOURCE_DATA subResourceData = {0, 0, 0};
+        D3D11_BUFFER_DESC bufferDesc;
+        bufferDesc.MiscFlags      = D3D11_RESOURCE_MISC_DRAWINDIRECT_ARGS;
+        bufferDesc.Usage          = D3D11_USAGE_DEFAULT;
+        bufferDesc.BindFlags      = 0;
+        bufferDesc.CPUAccessFlags = 0;
+        if (isIndexed)
+        {
+            bufferDesc.ByteWidth = sizeof(D3D11_DRAW_INDEXED_INSTANCED_INDIRECT_ARGS);
+            D3D11_DRAW_INDEXED_INSTANCED_INDIRECT_ARGS args;
+            args.IndexCountPerInstance = count;
+            args.InstanceCount         = instances;
+            args.StartIndexLocation    = 0;
+            args.BaseVertexLocation    = baseVertex;
+            args.StartInstanceLocation = 0;
+            subResourceData.pSysMem    = &args;
+        }
+        else
+        {
+            bufferDesc.ByteWidth = sizeof(D3D11_DRAW_INSTANCED_INDIRECT_ARGS);
+            D3D11_DRAW_INSTANCED_INDIRECT_ARGS args;
+            args.VertexCountPerInstance = count;
+            args.InstanceCount          = instances;
+            args.StartVertexLocation    = 0;
+            args.StartInstanceLocation  = 0;
+            subResourceData.pSysMem     = &args;
+        }
+
+        HRESULT result =
+            device->CreateBuffer(&bufferDesc, &subResourceData, mNativeStorage.GetAddressOf());
+        if (FAILED(result))
+        {
+            return gl::OutOfMemory() << "Could not create translated indirect buffer: " << result;
+        }
+        d3d11::SetDebugName(mNativeStorage, "Buffer11::TranslatedIndirectStorage");
+    }
+
+    return mNativeStorage.Get();
+}
+
+gl::ErrorOrResult<CopyResult> Buffer11::TranslatedIndirectStorage::copyFromStorage(
+    BufferStorage *source,
+    size_t sourceOffset,
+    size_t size,
+    size_t destOffset)
+{
+    ASSERT(source->isMappable(GL_MAP_READ_BIT));
+    uint8_t *sourceData = nullptr;
+    ANGLE_TRY(source->map(sourceOffset, size, GL_MAP_READ_BIT, &sourceData));
+    ASSERT(destOffset + size <= mMemoryBuffer.size());
+    memcpy(mMemoryBuffer.data() + destOffset, sourceData, size);
+    source->unmap();
+    return CopyResult::RECREATED;
+}
+
+gl::Error Buffer11::TranslatedIndirectStorage::resize(size_t size, bool preserveData)
+{
+    if (mMemoryBuffer.size() < size)
+    {
+        if (!mMemoryBuffer.resize(size))
+        {
+            return gl::OutOfMemory() << "Failed to resize TranslatedIndirectStorage";
+        }
+        mBufferSize = size;
+    }
+
+    return gl::NoError();
+}
+
+gl::Error Buffer11::TranslatedIndirectStorage::map(size_t offset,
+                                                   size_t length,
+                                                   GLbitfield access,
+                                                   uint8_t **mapPointerOut)
+{
+    ASSERT(!mMemoryBuffer.empty() && offset + length <= mMemoryBuffer.size());
+    *mapPointerOut = mMemoryBuffer.data() + offset;
+    return gl::NoError();
+}
+
+void Buffer11::TranslatedIndirectStorage::unmap()
 {
     // No-op
 }
