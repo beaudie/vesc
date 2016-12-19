@@ -1718,6 +1718,7 @@
                     'dependencies':
                     [
                         'angle_deqp_libgles2',
+                        '<(angle_path)/src/angle.gyp:libEGL', # Real dependency is in angle_deqp_libtester, however, not propagated here by GYP
                     ],
                     'sources':
                     [
@@ -1731,6 +1732,7 @@
                     'dependencies':
                     [
                         'angle_deqp_libgles3',
+                        '<(angle_path)/src/angle.gyp:libEGL', # Real dependency is in angle_deqp_libtester, however, not propagated here by GYP
                     ],
                     'sources':
                     [
@@ -1744,6 +1746,7 @@
                     'dependencies':
                     [
                         'angle_deqp_libgles31',
+                        '<(angle_path)/src/angle.gyp:libEGL', # Real dependency is in angle_deqp_libtester, however, not propagated here by GYP
                     ],
                     'sources':
                     [
@@ -1757,6 +1760,7 @@
                     'dependencies':
                     [
                         'angle_deqp_libegl',
+                        '<(angle_path)/src/angle.gyp:libEGL', # Real dependency is in angle_deqp_libtester, however, not propagated here by GYP
                     ],
                     'sources':
                     [
@@ -1861,6 +1865,7 @@
                     [
                         'angle_deqp_gtest_support',
                         'angle_deqp_libgles2',
+                        '<(angle_path)/src/angle.gyp:libEGL', # Real dependency is in angle_deqp_libtester, however, not propagated here by GYP
                     ],
                     'sources':
                     [
@@ -1876,6 +1881,7 @@
                     [
                         'angle_deqp_gtest_support',
                         'angle_deqp_libgles3',
+                        '<(angle_path)/src/angle.gyp:libEGL', # Real dependency is in angle_deqp_libtester, however, not propagated here by GYP
                     ],
                     'sources':
                     [
@@ -1891,6 +1897,7 @@
                     [
                         'angle_deqp_gtest_support',
                         'angle_deqp_libgles31',
+                        '<(angle_path)/src/angle.gyp:libEGL', # Real dependency is in angle_deqp_libtester, however, not propagated here by GYP
                     ],
                     'sources':
                     [
@@ -1906,6 +1913,7 @@
                     [
                         'angle_deqp_gtest_support',
                         'angle_deqp_libegl',
+                        '<(angle_path)/src/angle.gyp:libEGL', # Real dependency is in angle_deqp_libtester, however, not propagated here by GYP
                     ],
                     'sources':
                     [
