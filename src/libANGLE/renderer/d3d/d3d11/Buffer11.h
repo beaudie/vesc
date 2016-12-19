@@ -35,10 +35,12 @@ enum BufferUsage
     BUFFER_USAGE_STAGING,
     BUFFER_USAGE_VERTEX_OR_TRANSFORM_FEEDBACK,
     BUFFER_USAGE_INDEX,
+    BUFFER_USAGE_INDIRECT,
     BUFFER_USAGE_PIXEL_UNPACK,
     BUFFER_USAGE_PIXEL_PACK,
     BUFFER_USAGE_UNIFORM,
     BUFFER_USAGE_EMULATED_INDEXED_VERTEX,
+    BUFFER_USAGE_TRANSLATED_INDIRECT,
 
     BUFFER_USAGE_COUNT,
 };
@@ -55,6 +57,9 @@ class Buffer11 : public BufferD3D
     gl::ErrorOrResult<ID3D11Buffer *> getEmulatedIndexedBuffer(SourceIndexData *indexInfo,
                                                                const TranslatedAttribute &attribute,
                                                                GLint startVertex);
+    gl::ErrorOrResult<ID3D11Buffer *> getTranslatedIndirectBuffer(int8_t *indirectArgs,
+                                                                  bool isIndirectBufferChanged,
+                                                                  unsigned int size);
     gl::Error getConstantBufferRange(GLintptr offset,
                                      GLsizeiptr size,
                                      ID3D11Buffer **bufferOut,
@@ -94,6 +99,7 @@ class Buffer11 : public BufferD3D
   private:
     class BufferStorage;
     class EmulatedIndexedStorage;
+    class TranslatedIndirectStorage;
     class NativeStorage;
     class PackStorage;
     class SystemMemoryStorage;
