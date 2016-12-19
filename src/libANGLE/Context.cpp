@@ -531,8 +531,7 @@ GLuint Context::createProgram()
 
 GLuint Context::createShader(GLenum type)
 {
-    return mResourceManager->createShader(mImplementation.get(),
-                                          mImplementation->getNativeLimitations(), type);
+    return mResourceManager->createShader(mImplementation.get(), mLimitations, type);
 }
 
 GLuint Context::createTexture()
@@ -2473,6 +2472,12 @@ void Context::initCaps(bool webGLContext)
         {
             mExtensions.*(extensionInfo.second.ExtensionsMember) = false;
         }
+    }
+
+    // WebGL 1.0 [Section 6.10] Stencil Separate Mask and Reference Value
+    if (webGLContext)
+    {
+        mLimitations.noSeparateStencilRefsAndMasks = true;
     }
 
     // Generate texture caps
