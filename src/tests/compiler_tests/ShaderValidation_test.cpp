@@ -10,74 +10,57 @@
 #include "angle_gl.h"
 #include "gtest/gtest.h"
 #include "GLSLANG/ShaderLang.h"
-#include "compiler/translator/TranslatorESSL.h"
 #include "tests/test_utils/ShaderCompileTreeTest.h"
 
 using namespace sh;
 
-class MalformedShaderTest : public ShaderCompileTreeTest
+// Tests that don't target a specific version of the API spec (sometimes there are minor
+// differences). They choose the shader spec version with version directives.
+class FragmentShaderValidationTest : public ShaderCompileTreeTest
 {
   public:
-    MalformedShaderTest() {}
+    FragmentShaderValidationTest() {}
   protected:
     ::GLenum getShaderType() const override { return GL_FRAGMENT_SHADER; }
-    ShShaderSpec getShaderSpec() const override { return SH_GLES3_SPEC; }
+    ShShaderSpec getShaderSpec() const override { return SH_GLES3_1_SPEC; }
 };
 
-class MalformedVertexShaderTest : public ShaderCompileTreeTest
+// Tests that don't target a specific version of the API spec (sometimes there are minor
+// differences). They choose the shader spec version with version directives.
+class VertexShaderValidationTest : public ShaderCompileTreeTest
 {
   public:
-    MalformedVertexShaderTest() {}
+    VertexShaderValidationTest() {}
 
   protected:
     ::GLenum getShaderType() const override { return GL_VERTEX_SHADER; }
-    ShShaderSpec getShaderSpec() const override { return SH_GLES3_SPEC; }
+    ShShaderSpec getShaderSpec() const override { return SH_GLES3_1_SPEC; }
 };
 
-class MalformedWebGL2ShaderTest : public ShaderCompileTreeTest
+class WebGL2FragmentShaderValidationTest : public ShaderCompileTreeTest
 {
   public:
-    MalformedWebGL2ShaderTest() {}
+    WebGL2FragmentShaderValidationTest() {}
 
   protected:
     ::GLenum getShaderType() const override { return GL_FRAGMENT_SHADER; }
     ShShaderSpec getShaderSpec() const override { return SH_WEBGL2_SPEC; }
 };
 
-class MalformedWebGL1ShaderTest : public ShaderCompileTreeTest
+class WebGL1FragmentShaderValidationTest : public ShaderCompileTreeTest
 {
   public:
-    MalformedWebGL1ShaderTest() {}
+    WebGL1FragmentShaderValidationTest() {}
 
   protected:
     ::GLenum getShaderType() const override { return GL_FRAGMENT_SHADER; }
     ShShaderSpec getShaderSpec() const override { return SH_WEBGL_SPEC; }
 };
 
-class MalformedVertexShaderGLES31Test : public ShaderCompileTreeTest
+class ComputeShaderValidationTest : public ShaderCompileTreeTest
 {
   public:
-    MalformedVertexShaderGLES31Test() {}
-
-  private:
-    ::GLenum getShaderType() const override { return GL_VERTEX_SHADER; }
-    ShShaderSpec getShaderSpec() const override { return SH_GLES3_1_SPEC; }
-};
-
-class MalformedFragmentShaderGLES31Test : public ShaderCompileTreeTest
-{
-  public:
-    MalformedFragmentShaderGLES31Test() {}
-
-  private:
-    ::GLenum getShaderType() const override { return GL_FRAGMENT_SHADER; }
-    ShShaderSpec getShaderSpec() const override { return SH_GLES3_1_SPEC; }
-};
-
-class MalformedComputeShaderTest : public ShaderCompileTreeTest
-{
-  public:
-    MalformedComputeShaderTest() {}
+    ComputeShaderValidationTest() {}
 
   private:
     ::GLenum getShaderType() const override { return GL_COMPUTE_SHADER; }
@@ -86,7 +69,7 @@ class MalformedComputeShaderTest : public ShaderCompileTreeTest
 
 // This is a test for a bug that used to exist in ANGLE:
 // Calling a function with all parameters missing should not succeed.
-TEST_F(MalformedShaderTest, FunctionParameterMismatch)
+TEST_F(FragmentShaderValidationTest, FunctionParameterMismatch)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -104,7 +87,7 @@ TEST_F(MalformedShaderTest, FunctionParameterMismatch)
 }
 
 // Functions can't be redeclared as variables in the same scope (ESSL 1.00 section 4.2.7)
-TEST_F(MalformedShaderTest, RedeclaringFunctionAsVariable)
+TEST_F(FragmentShaderValidationTest, RedeclaringFunctionAsVariable)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -122,7 +105,7 @@ TEST_F(MalformedShaderTest, RedeclaringFunctionAsVariable)
 }
 
 // Functions can't be redeclared as structs in the same scope (ESSL 1.00 section 4.2.7)
-TEST_F(MalformedShaderTest, RedeclaringFunctionAsStruct)
+TEST_F(FragmentShaderValidationTest, RedeclaringFunctionAsStruct)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -140,7 +123,7 @@ TEST_F(MalformedShaderTest, RedeclaringFunctionAsStruct)
 }
 
 // Functions can't be redeclared with different qualifiers (ESSL 1.00 section 6.1.0)
-TEST_F(MalformedShaderTest, RedeclaringFunctionWithDifferentQualifiers)
+TEST_F(FragmentShaderValidationTest, RedeclaringFunctionWithDifferentQualifiers)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -158,7 +141,7 @@ TEST_F(MalformedShaderTest, RedeclaringFunctionWithDifferentQualifiers)
 }
 
 // Assignment and equality are undefined for structures containing arrays (ESSL 1.00 section 5.7)
-TEST_F(MalformedShaderTest, CompareStructsContainingArrays)
+TEST_F(FragmentShaderValidationTest, CompareStructsContainingArrays)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -176,7 +159,7 @@ TEST_F(MalformedShaderTest, CompareStructsContainingArrays)
 }
 
 // Assignment and equality are undefined for structures containing arrays (ESSL 1.00 section 5.7)
-TEST_F(MalformedShaderTest, AssignStructsContainingArrays)
+TEST_F(FragmentShaderValidationTest, AssignStructsContainingArrays)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -194,8 +177,9 @@ TEST_F(MalformedShaderTest, AssignStructsContainingArrays)
     }
 }
 
-// Assignment and equality are undefined for structures containing samplers (ESSL 1.00 sections 5.7 and 5.9)
-TEST_F(MalformedShaderTest, CompareStructsContainingSamplers)
+// Assignment and equality are undefined for structures containing samplers (ESSL 1.00 sections 5.7
+// and 5.9)
+TEST_F(FragmentShaderValidationTest, CompareStructsContainingSamplers)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -214,7 +198,7 @@ TEST_F(MalformedShaderTest, CompareStructsContainingSamplers)
 
 // Samplers are not allowed as l-values (ESSL 3.00 section 4.1.7), our interpretation is that this
 // extends to structs containing samplers. ESSL 1.00 spec is clearer about this.
-TEST_F(MalformedShaderTest, AssignStructsContainingSamplers)
+TEST_F(FragmentShaderValidationTest, AssignStructsContainingSamplers)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -235,7 +219,7 @@ TEST_F(MalformedShaderTest, AssignStructsContainingSamplers)
 
 // This is a regression test for a particular bug that was in ANGLE.
 // It also verifies that ESSL3 functionality doesn't leak to ESSL1.
-TEST_F(MalformedShaderTest, ArrayWithNoSizeInInitializerList)
+TEST_F(FragmentShaderValidationTest, ArrayWithNoSizeInInitializerList)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -250,7 +234,7 @@ TEST_F(MalformedShaderTest, ArrayWithNoSizeInInitializerList)
 }
 
 // Const variables need an initializer.
-TEST_F(MalformedShaderTest, ConstVarNotInitialized)
+TEST_F(FragmentShaderValidationTest, ConstVarNotInitialized)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -272,7 +256,7 @@ TEST_F(MalformedShaderTest, ConstVarNotInitialized)
 // ESSL1 is the non-initialization check that's used for both language versions.
 // Whether ESSL1 compilation generates the most helpful error messages is a
 // secondary concern.
-TEST_F(MalformedShaderTest, ConstStructNotInitialized)
+TEST_F(FragmentShaderValidationTest, ConstStructNotInitialized)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -297,7 +281,7 @@ TEST_F(MalformedShaderTest, ConstStructNotInitialized)
 // ESSL1 is the non-initialization check that's used for both language versions.
 // Whether ESSL1 compilation generates the most helpful error messages is a
 // secondary concern.
-TEST_F(MalformedShaderTest, ConstArrayNotInitialized)
+TEST_F(FragmentShaderValidationTest, ConstArrayNotInitialized)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -314,7 +298,7 @@ TEST_F(MalformedShaderTest, ConstArrayNotInitialized)
 }
 
 // Block layout qualifiers can't be used on non-block uniforms (ESSL 3.00 section 4.3.8.3)
-TEST_F(MalformedShaderTest, BlockLayoutQualifierOnRegularUniform)
+TEST_F(FragmentShaderValidationTest, BlockLayoutQualifierOnRegularUniform)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -331,7 +315,7 @@ TEST_F(MalformedShaderTest, BlockLayoutQualifierOnRegularUniform)
 }
 
 // Block layout qualifiers can't be used on non-block uniforms (ESSL 3.00 section 4.3.8.3)
-TEST_F(MalformedShaderTest, BlockLayoutQualifierOnUniformWithEmptyDecl)
+TEST_F(FragmentShaderValidationTest, BlockLayoutQualifierOnUniformWithEmptyDecl)
 {
     // Yes, the comma in the declaration below is not a typo.
     // Empty declarations are allowed in GLSL.
@@ -350,7 +334,7 @@ TEST_F(MalformedShaderTest, BlockLayoutQualifierOnUniformWithEmptyDecl)
 }
 
 // Arrays of arrays are not allowed (ESSL 3.00 section 4.1.9)
-TEST_F(MalformedShaderTest, ArraysOfArrays1)
+TEST_F(FragmentShaderValidationTest, ArraysOfArrays1)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -367,7 +351,7 @@ TEST_F(MalformedShaderTest, ArraysOfArrays1)
 }
 
 // Arrays of arrays are not allowed (ESSL 3.00 section 4.1.9)
-TEST_F(MalformedShaderTest, ArraysOfArrays2)
+TEST_F(FragmentShaderValidationTest, ArraysOfArrays2)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -384,7 +368,7 @@ TEST_F(MalformedShaderTest, ArraysOfArrays2)
 }
 
 // Implicitly sized arrays need to be initialized (ESSL 3.00 section 4.1.9)
-TEST_F(MalformedShaderTest, UninitializedImplicitArraySize)
+TEST_F(FragmentShaderValidationTest, UninitializedImplicitArraySize)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -402,7 +386,7 @@ TEST_F(MalformedShaderTest, UninitializedImplicitArraySize)
 
 // An operator can only form a constant expression if all the operands are constant expressions
 // - even operands of ternary operator that are never evaluated. (ESSL 3.00 section 4.3.3)
-TEST_F(MalformedShaderTest, TernaryOperatorNotConstantExpression)
+TEST_F(FragmentShaderValidationTest, TernaryOperatorNotConstantExpression)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -420,7 +404,7 @@ TEST_F(MalformedShaderTest, TernaryOperatorNotConstantExpression)
 }
 
 // Ternary operator can't operate on arrays (ESSL 3.00 section 5.7)
-TEST_F(MalformedShaderTest, TernaryOperatorOnArrays)
+TEST_F(FragmentShaderValidationTest, TernaryOperatorOnArrays)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -439,7 +423,7 @@ TEST_F(MalformedShaderTest, TernaryOperatorOnArrays)
 }
 
 // Ternary operator can't operate on structs (ESSL 3.00 section 5.7)
-TEST_F(MalformedShaderTest, TernaryOperatorOnStructs)
+TEST_F(FragmentShaderValidationTest, TernaryOperatorOnStructs)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -460,7 +444,7 @@ TEST_F(MalformedShaderTest, TernaryOperatorOnStructs)
 
 // Array length() returns a constant signed integral expression (ESSL 3.00 section 4.1.9)
 // Assigning it to unsigned should result in an error.
-TEST_F(MalformedShaderTest, AssignArrayLengthToUnsigned)
+TEST_F(FragmentShaderValidationTest, AssignArrayLengthToUnsigned)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -479,7 +463,7 @@ TEST_F(MalformedShaderTest, AssignArrayLengthToUnsigned)
 
 // Global variable initializers need to be constant expressions (ESSL 1.00 section 4.3)
 // Initializing with a varying should be an error.
-TEST_F(MalformedShaderTest, AssignVaryingToGlobal)
+TEST_F(FragmentShaderValidationTest, AssignVaryingToGlobal)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -496,7 +480,7 @@ TEST_F(MalformedShaderTest, AssignVaryingToGlobal)
 
 // Global variable initializers need to be constant expressions (ESSL 3.00 section 4.3)
 // Initializing with an uniform should be an error.
-TEST_F(MalformedShaderTest, AssignUniformToGlobalESSL3)
+TEST_F(FragmentShaderValidationTest, AssignUniformToGlobalESSL3)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -516,7 +500,7 @@ TEST_F(MalformedShaderTest, AssignUniformToGlobalESSL3)
 // Global variable initializers need to be constant expressions (ESSL 1.00 section 4.3)
 // Initializing with an uniform should generate a warning
 // (we don't generate an error on ESSL 1.00 because of legacy compatibility)
-TEST_F(MalformedShaderTest, AssignUniformToGlobalESSL1)
+TEST_F(FragmentShaderValidationTest, AssignUniformToGlobalESSL1)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -529,7 +513,8 @@ TEST_F(MalformedShaderTest, AssignUniformToGlobalESSL1)
     {
         if (!hasWarning())
         {
-            FAIL() << "Shader compilation succeeded without warnings, expecting warning " << mInfoLog;
+            FAIL() << "Shader compilation succeeded without warnings, expecting warning "
+                   << mInfoLog;
         }
     }
     else
@@ -540,7 +525,7 @@ TEST_F(MalformedShaderTest, AssignUniformToGlobalESSL1)
 
 // Global variable initializers need to be constant expressions (ESSL 1.00 section 4.3)
 // Initializing with an user-defined function call should be an error.
-TEST_F(MalformedShaderTest, AssignFunctionCallToGlobal)
+TEST_F(FragmentShaderValidationTest, AssignFunctionCallToGlobal)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -557,7 +542,7 @@ TEST_F(MalformedShaderTest, AssignFunctionCallToGlobal)
 
 // Global variable initializers need to be constant expressions (ESSL 1.00 section 4.3)
 // Initializing with an assignment to another global should be an error.
-TEST_F(MalformedShaderTest, AssignAssignmentToGlobal)
+TEST_F(FragmentShaderValidationTest, AssignAssignmentToGlobal)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -574,7 +559,7 @@ TEST_F(MalformedShaderTest, AssignAssignmentToGlobal)
 
 // Global variable initializers need to be constant expressions (ESSL 1.00 section 4.3)
 // Initializing with incrementing another global should be an error.
-TEST_F(MalformedShaderTest, AssignIncrementToGlobal)
+TEST_F(FragmentShaderValidationTest, AssignIncrementToGlobal)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -591,7 +576,7 @@ TEST_F(MalformedShaderTest, AssignIncrementToGlobal)
 
 // Global variable initializers need to be constant expressions (ESSL 1.00 section 4.3)
 // Initializing with a texture lookup function call should be an error.
-TEST_F(MalformedShaderTest, AssignTexture2DToGlobal)
+TEST_F(FragmentShaderValidationTest, AssignTexture2DToGlobal)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -608,7 +593,7 @@ TEST_F(MalformedShaderTest, AssignTexture2DToGlobal)
 
 // Global variable initializers need to be constant expressions (ESSL 3.00 section 4.3)
 // Initializing with a non-constant global should be an error.
-TEST_F(MalformedShaderTest, AssignNonConstGlobalToGlobal)
+TEST_F(FragmentShaderValidationTest, AssignNonConstGlobalToGlobal)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -627,7 +612,7 @@ TEST_F(MalformedShaderTest, AssignNonConstGlobalToGlobal)
 
 // Global variable initializers need to be constant expressions (ESSL 3.00 section 4.3)
 // Initializing with a constant global should be fine.
-TEST_F(MalformedShaderTest, AssignConstGlobalToGlobal)
+TEST_F(FragmentShaderValidationTest, AssignConstGlobalToGlobal)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -645,7 +630,7 @@ TEST_F(MalformedShaderTest, AssignConstGlobalToGlobal)
 }
 
 // Statically assigning to both gl_FragData and gl_FragColor is forbidden (ESSL 1.00 section 7.2)
-TEST_F(MalformedShaderTest, WriteBothFragDataAndFragColor)
+TEST_F(FragmentShaderValidationTest, WriteBothFragDataAndFragColor)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -662,7 +647,7 @@ TEST_F(MalformedShaderTest, WriteBothFragDataAndFragColor)
 }
 
 // Version directive must be on the first line (ESSL 3.00 section 3.3)
-TEST_F(MalformedShaderTest, VersionOnSecondLine)
+TEST_F(FragmentShaderValidationTest, VersionOnSecondLine)
 {
     const std::string &shaderString =
         "\n"
@@ -679,7 +664,7 @@ TEST_F(MalformedShaderTest, VersionOnSecondLine)
 }
 
 // Layout qualifier can only appear in global scope (ESSL 3.00 section 4.3.8)
-TEST_F(MalformedShaderTest, LayoutQualifierInCondition)
+TEST_F(FragmentShaderValidationTest, LayoutQualifierInCondition)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -700,7 +685,7 @@ TEST_F(MalformedShaderTest, LayoutQualifierInCondition)
 }
 
 // Layout qualifier can only appear where specified (ESSL 3.00 section 4.3.8)
-TEST_F(MalformedShaderTest, LayoutQualifierInFunctionReturnType)
+TEST_F(FragmentShaderValidationTest, LayoutQualifierInFunctionReturnType)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -721,7 +706,7 @@ TEST_F(MalformedShaderTest, LayoutQualifierInFunctionReturnType)
 
 // If there is more than one output, the location must be specified for all outputs.
 // (ESSL 3.00.04 section 4.3.8.2)
-TEST_F(MalformedShaderTest, TwoOutputsNoLayoutQualifiers)
+TEST_F(FragmentShaderValidationTest, TwoOutputsNoLayoutQualifiers)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -740,7 +725,7 @@ TEST_F(MalformedShaderTest, TwoOutputsNoLayoutQualifiers)
 }
 
 // (ESSL 3.00.04 section 4.3.8.2)
-TEST_F(MalformedShaderTest, TwoOutputsFirstLayoutQualifier)
+TEST_F(FragmentShaderValidationTest, TwoOutputsFirstLayoutQualifier)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -759,7 +744,7 @@ TEST_F(MalformedShaderTest, TwoOutputsFirstLayoutQualifier)
 }
 
 // (ESSL 3.00.04 section 4.3.8.2)
-TEST_F(MalformedShaderTest, TwoOutputsSecondLayoutQualifier)
+TEST_F(FragmentShaderValidationTest, TwoOutputsSecondLayoutQualifier)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -778,7 +763,7 @@ TEST_F(MalformedShaderTest, TwoOutputsSecondLayoutQualifier)
 }
 
 // Uniforms can be arrays (ESSL 3.00 section 4.3.5)
-TEST_F(MalformedShaderTest, UniformArray)
+TEST_F(FragmentShaderValidationTest, UniformArray)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -795,7 +780,7 @@ TEST_F(MalformedShaderTest, UniformArray)
 }
 
 // Fragment shader input variables cannot be arrays of structs (ESSL 3.00 section 4.3.4)
-TEST_F(MalformedShaderTest, FragmentInputArrayOfStructs)
+TEST_F(FragmentShaderValidationTest, FragmentInputArrayOfStructs)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -817,7 +802,7 @@ TEST_F(MalformedShaderTest, FragmentInputArrayOfStructs)
 // Vertex shader inputs can't be arrays (ESSL 3.00 section 4.3.4)
 // This test is testing the case where the array brackets are after the variable name, so
 // the arrayness isn't known when the type and qualifiers are initially parsed.
-TEST_F(MalformedVertexShaderTest, VertexShaderInputArray)
+TEST_F(VertexShaderValidationTest, VertexShaderInputArray)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -834,7 +819,7 @@ TEST_F(MalformedVertexShaderTest, VertexShaderInputArray)
 
 // Vertex shader inputs can't be arrays (ESSL 3.00 section 4.3.4)
 // This test is testing the case where the array brackets are after the type.
-TEST_F(MalformedVertexShaderTest, VertexShaderInputArrayType)
+TEST_F(VertexShaderValidationTest, VertexShaderInputArrayType)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -850,7 +835,7 @@ TEST_F(MalformedVertexShaderTest, VertexShaderInputArrayType)
 }
 
 // Fragment shader inputs can't contain booleans (ESSL 3.00 section 4.3.4)
-TEST_F(MalformedShaderTest, FragmentShaderInputStructWithBool)
+TEST_F(FragmentShaderValidationTest, FragmentShaderInputStructWithBool)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -870,7 +855,7 @@ TEST_F(MalformedShaderTest, FragmentShaderInputStructWithBool)
 }
 
 // Fragment shader inputs without a flat qualifier can't contain integers (ESSL 3.00 section 4.3.4)
-TEST_F(MalformedShaderTest, FragmentShaderInputStructWithInt)
+TEST_F(FragmentShaderValidationTest, FragmentShaderInputStructWithInt)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -890,7 +875,7 @@ TEST_F(MalformedShaderTest, FragmentShaderInputStructWithInt)
 }
 
 // Selecting a field of a vector that's the result of dynamic indexing a constant array should work.
-TEST_F(MalformedShaderTest, ShaderSelectingFieldOfVectorIndexedFromArray)
+TEST_F(FragmentShaderValidationTest, ShaderSelectingFieldOfVectorIndexedFromArray)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -910,7 +895,7 @@ TEST_F(MalformedShaderTest, ShaderSelectingFieldOfVectorIndexedFromArray)
 // Passing an array into a function and then passing a value from that array into another function
 // should work. This is a regression test for a bug where the mangled name of a TType was not
 // properly updated when determining the type resulting from array indexing.
-TEST_F(MalformedShaderTest, ArrayValueFromFunctionParameterAsParameter)
+TEST_F(FragmentShaderValidationTest, ArrayValueFromFunctionParameterAsParameter)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -934,7 +919,7 @@ TEST_F(MalformedShaderTest, ArrayValueFromFunctionParameterAsParameter)
 }
 
 // Test that out-of-range integer literal generates an error in ESSL 3.00.
-TEST_F(MalformedShaderTest, OutOfRangeIntegerLiteral)
+TEST_F(FragmentShaderValidationTest, OutOfRangeIntegerLiteral)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -952,7 +937,7 @@ TEST_F(MalformedShaderTest, OutOfRangeIntegerLiteral)
 
 // Test that vector field selection from a value taken from an array constructor is accepted as a
 // constant expression.
-TEST_F(MalformedShaderTest, FieldSelectionFromVectorArrayConstructorIsConst)
+TEST_F(FragmentShaderValidationTest, FieldSelectionFromVectorArrayConstructorIsConst)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -971,7 +956,7 @@ TEST_F(MalformedShaderTest, FieldSelectionFromVectorArrayConstructorIsConst)
 
 // Test that structure field selection from a value taken from an array constructor is accepted as a
 // constant expression.
-TEST_F(MalformedShaderTest, FieldSelectionFromStructArrayConstructorIsConst)
+TEST_F(FragmentShaderValidationTest, FieldSelectionFromStructArrayConstructorIsConst)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -990,7 +975,7 @@ TEST_F(MalformedShaderTest, FieldSelectionFromStructArrayConstructorIsConst)
 }
 
 // Test that a reference to a const array is accepted as a constant expression.
-TEST_F(MalformedShaderTest, ArraySymbolIsConst)
+TEST_F(FragmentShaderValidationTest, ArraySymbolIsConst)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1010,7 +995,7 @@ TEST_F(MalformedShaderTest, ArraySymbolIsConst)
 
 // Test that using an array constructor in a parameter to a built-in function is accepted as a
 // constant expression.
-TEST_F(MalformedShaderTest, BuiltInFunctionAppliedToArrayConstructorIsConst)
+TEST_F(FragmentShaderValidationTest, BuiltInFunctionAppliedToArrayConstructorIsConst)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1029,7 +1014,8 @@ TEST_F(MalformedShaderTest, BuiltInFunctionAppliedToArrayConstructorIsConst)
 
 // Test that using an array constructor in a parameter to a built-in function is accepted as a
 // constant expression.
-TEST_F(MalformedShaderTest, BuiltInFunctionWithMultipleParametersAppliedToArrayConstructorIsConst)
+TEST_F(FragmentShaderValidationTest,
+       BuiltInFunctionWithMultipleParametersAppliedToArrayConstructorIsConst)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1048,7 +1034,8 @@ TEST_F(MalformedShaderTest, BuiltInFunctionWithMultipleParametersAppliedToArrayC
 
 // Test that using an array constructor in a parameter to a constructor is accepted as a constant
 // expression.
-TEST_F(MalformedShaderTest, ConstructorWithMultipleParametersAppliedToArrayConstructorIsConst)
+TEST_F(FragmentShaderValidationTest,
+       ConstructorWithMultipleParametersAppliedToArrayConstructorIsConst)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1067,7 +1054,7 @@ TEST_F(MalformedShaderTest, ConstructorWithMultipleParametersAppliedToArrayConst
 
 // Test that using an array constructor in an operand of the ternary selection operator is accepted
 // as a constant expression.
-TEST_F(MalformedShaderTest, TernaryOperatorAppliedToArrayConstructorIsConst)
+TEST_F(FragmentShaderValidationTest, TernaryOperatorAppliedToArrayConstructorIsConst)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1086,7 +1073,7 @@ TEST_F(MalformedShaderTest, TernaryOperatorAppliedToArrayConstructorIsConst)
 
 // Test that a ternary operator with one unevaluated non-constant operand is not a constant
 // expression.
-TEST_F(MalformedShaderTest, TernaryOperatorNonConstantOperand)
+TEST_F(FragmentShaderValidationTest, TernaryOperatorNonConstantOperand)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -1103,7 +1090,7 @@ TEST_F(MalformedShaderTest, TernaryOperatorNonConstantOperand)
 }
 
 // Test that a sampler can't be used in constructor argument list
-TEST_F(MalformedShaderTest, SamplerInConstructorArguments)
+TEST_F(FragmentShaderValidationTest, SamplerInConstructorArguments)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -1120,7 +1107,7 @@ TEST_F(MalformedShaderTest, SamplerInConstructorArguments)
 }
 
 // Test that void can't be used in constructor argument list
-TEST_F(MalformedShaderTest, VoidInConstructorArguments)
+TEST_F(FragmentShaderValidationTest, VoidInConstructorArguments)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -1137,7 +1124,7 @@ TEST_F(MalformedShaderTest, VoidInConstructorArguments)
 }
 
 // Test that a shader passing a struct into a constructor of array of structs with 1 element works.
-TEST_F(MalformedShaderTest, SingleStructArrayConstructor)
+TEST_F(FragmentShaderValidationTest, SingleStructArrayConstructor)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1157,7 +1144,7 @@ TEST_F(MalformedShaderTest, SingleStructArrayConstructor)
 }
 
 // Test that a shader with empty constructor parameter list is not accepted.
-TEST_F(MalformedShaderTest, EmptyArrayConstructor)
+TEST_F(FragmentShaderValidationTest, EmptyArrayConstructor)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1177,7 +1164,7 @@ TEST_F(MalformedShaderTest, EmptyArrayConstructor)
 
 // Test that indexing fragment outputs with a non-constant expression is forbidden, even if ANGLE
 // is able to constant fold the index expression. ESSL 3.00 section 4.3.6.
-TEST_F(MalformedShaderTest, DynamicallyIndexedFragmentOutput)
+TEST_F(FragmentShaderValidationTest, DynamicallyIndexedFragmentOutput)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1196,7 +1183,7 @@ TEST_F(MalformedShaderTest, DynamicallyIndexedFragmentOutput)
 
 // Test that indexing an interface block array with a non-constant expression is forbidden, even if
 // ANGLE is able to constant fold the index expression. ESSL 3.00 section 4.3.7.
-TEST_F(MalformedShaderTest, DynamicallyIndexedInterfaceBlock)
+TEST_F(FragmentShaderValidationTest, DynamicallyIndexedInterfaceBlock)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1220,7 +1207,7 @@ TEST_F(MalformedShaderTest, DynamicallyIndexedInterfaceBlock)
 
 // Test that a shader that uses a struct definition in place of a struct constructor does not
 // compile. See GLSL ES 1.00 section 5.4.3.
-TEST_F(MalformedShaderTest, StructConstructorWithStructDefinition)
+TEST_F(FragmentShaderValidationTest, StructConstructorWithStructDefinition)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -1238,7 +1225,7 @@ TEST_F(MalformedShaderTest, StructConstructorWithStructDefinition)
 // Test that indexing gl_FragData with a non-constant expression is forbidden in WebGL 2.0, even
 // when ANGLE is able to constant fold the index.
 // WebGL 2.0 spec section 'GLSL ES 1.00 Fragment Shader Output'
-TEST_F(MalformedWebGL2ShaderTest, IndexFragDataWithNonConstant)
+TEST_F(WebGL2FragmentShaderValidationTest, IndexFragDataWithNonConstant)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -1256,7 +1243,7 @@ TEST_F(MalformedWebGL2ShaderTest, IndexFragDataWithNonConstant)
 
 // Test that a non-constant texture offset is not accepted for textureOffset.
 // ESSL 3.00 section 8.8
-TEST_F(MalformedShaderTest, TextureOffsetNonConst)
+TEST_F(FragmentShaderValidationTest, TextureOffsetNonConst)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1277,7 +1264,7 @@ TEST_F(MalformedShaderTest, TextureOffsetNonConst)
 
 // Test that a non-constant texture offset is not accepted for textureProjOffset with bias.
 // ESSL 3.00 section 8.8
-TEST_F(MalformedShaderTest, TextureProjOffsetNonConst)
+TEST_F(FragmentShaderValidationTest, TextureProjOffsetNonConst)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1298,7 +1285,7 @@ TEST_F(MalformedShaderTest, TextureProjOffsetNonConst)
 
 // Test that an out-of-range texture offset is not accepted.
 // GLES 3.0.4 section 3.8.10 specifies that out-of-range offset has undefined behavior.
-TEST_F(MalformedShaderTest, TextureLodOffsetOutOfRange)
+TEST_F(FragmentShaderValidationTest, TextureLodOffsetOutOfRange)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1318,7 +1305,7 @@ TEST_F(MalformedShaderTest, TextureLodOffsetOutOfRange)
 
 // Test that default precision qualifier for uint is not accepted.
 // ESSL 3.00.4 section 4.5.4: Only allowed for float, int and sampler types.
-TEST_F(MalformedShaderTest, DefaultPrecisionUint)
+TEST_F(FragmentShaderValidationTest, DefaultPrecisionUint)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1337,7 +1324,7 @@ TEST_F(MalformedShaderTest, DefaultPrecisionUint)
 
 // Test that sampler3D needs to be precision qualified.
 // ESSL 3.00.4 section 4.5.4: New ESSL 3.00 sampler types don't have predefined precision.
-TEST_F(MalformedShaderTest, NoPrecisionSampler3D)
+TEST_F(FragmentShaderValidationTest, NoPrecisionSampler3D)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1357,7 +1344,7 @@ TEST_F(MalformedShaderTest, NoPrecisionSampler3D)
 // Test that using a non-constant expression in a for loop initializer is forbidden in WebGL 1.0,
 // even when ANGLE is able to constant fold the initializer.
 // ESSL 1.00 Appendix A.
-TEST_F(MalformedWebGL1ShaderTest, NonConstantLoopIndex)
+TEST_F(WebGL1FragmentShaderValidationTest, NonConstantLoopIndex)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -1376,7 +1363,7 @@ TEST_F(MalformedWebGL1ShaderTest, NonConstantLoopIndex)
 
 // Check that indices that are not integers are rejected.
 // The check should be done even if ESSL 1.00 Appendix A limitations are not applied.
-TEST_F(MalformedShaderTest, NonIntegerIndex)
+TEST_F(FragmentShaderValidationTest, NonIntegerIndex)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -1394,7 +1381,7 @@ TEST_F(MalformedShaderTest, NonIntegerIndex)
 
 // ESSL1 shaders with a duplicate function prototype should be rejected.
 // ESSL 1.00.17 section 4.2.7.
-TEST_F(MalformedShaderTest, DuplicatePrototypeESSL1)
+TEST_F(FragmentShaderValidationTest, DuplicatePrototypeESSL1)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -1413,7 +1400,7 @@ TEST_F(MalformedShaderTest, DuplicatePrototypeESSL1)
 
 // ESSL3 shaders with a duplicate function prototype should be allowed.
 // ESSL 3.00.4 section 4.2.3.
-TEST_F(MalformedShaderTest, DuplicatePrototypeESSL3)
+TEST_F(FragmentShaderValidationTest, DuplicatePrototypeESSL3)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1434,7 +1421,7 @@ TEST_F(MalformedShaderTest, DuplicatePrototypeESSL3)
 
 // Shaders with a local function prototype should be rejected.
 // ESSL 3.00.4 section 4.2.4.
-TEST_F(MalformedShaderTest, LocalFunctionPrototype)
+TEST_F(FragmentShaderValidationTest, LocalFunctionPrototype)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1453,7 +1440,7 @@ TEST_F(MalformedShaderTest, LocalFunctionPrototype)
 
 // ESSL 3.00 fragment shaders can not use #pragma STDGL invariant(all).
 // ESSL 3.00.4 section 4.6.1. Does not apply to other versions of ESSL.
-TEST_F(MalformedShaderTest, ESSL300FragmentInvariantAll)
+TEST_F(FragmentShaderValidationTest, ESSL300FragmentInvariantAll)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1471,7 +1458,7 @@ TEST_F(MalformedShaderTest, ESSL300FragmentInvariantAll)
 }
 
 // Built-in functions can be overloaded in ESSL 1.00.
-TEST_F(MalformedShaderTest, ESSL100BuiltInFunctionOverload)
+TEST_F(FragmentShaderValidationTest, ESSL100BuiltInFunctionOverload)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -1490,7 +1477,7 @@ TEST_F(MalformedShaderTest, ESSL100BuiltInFunctionOverload)
 }
 
 // Built-in functions can not be overloaded in ESSL 3.00.
-TEST_F(MalformedShaderTest, ESSL300BuiltInFunctionOverload)
+TEST_F(FragmentShaderValidationTest, ESSL300BuiltInFunctionOverload)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1511,7 +1498,7 @@ TEST_F(MalformedShaderTest, ESSL300BuiltInFunctionOverload)
 }
 
 // Multiplying a 4x2 matrix with a 4x2 matrix should not work.
-TEST_F(MalformedShaderTest, CompoundMultiplyMatrixIdenticalNonSquareDimensions)
+TEST_F(FragmentShaderValidationTest, CompoundMultiplyMatrixIdenticalNonSquareDimensions)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1530,7 +1517,7 @@ TEST_F(MalformedShaderTest, CompoundMultiplyMatrixIdenticalNonSquareDimensions)
 }
 
 // Multiplying a matrix with 2 columns and 4 rows with a 2x2 matrix should work.
-TEST_F(MalformedShaderTest, CompoundMultiplyMatrixValidNonSquareDimensions)
+TEST_F(FragmentShaderValidationTest, CompoundMultiplyMatrixValidNonSquareDimensions)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1549,7 +1536,7 @@ TEST_F(MalformedShaderTest, CompoundMultiplyMatrixValidNonSquareDimensions)
 }
 
 // Covers a bug where we would set the incorrect result size on an out-of-bounds vector swizzle.
-TEST_F(MalformedShaderTest, OutOfBoundsVectorSwizzle)
+TEST_F(FragmentShaderValidationTest, OutOfBoundsVectorSwizzle)
 {
     const std::string &shaderString =
         "void main() {\n"
@@ -1562,7 +1549,7 @@ TEST_F(MalformedShaderTest, OutOfBoundsVectorSwizzle)
 }
 
 // Covers a bug where strange preprocessor defines could trigger asserts.
-TEST_F(MalformedShaderTest, DefineWithSemicolon)
+TEST_F(FragmentShaderValidationTest, DefineWithSemicolon)
 {
     const std::string &shaderString =
         "#define Def; highp\n"
@@ -1574,7 +1561,7 @@ TEST_F(MalformedShaderTest, DefineWithSemicolon)
 }
 
 // Covers a bug in our parsing of malformed shift preprocessor expressions.
-TEST_F(MalformedShaderTest, LineDirectiveUndefinedShift)
+TEST_F(FragmentShaderValidationTest, LineDirectiveUndefinedShift)
 {
     const std::string &shaderString = "#line x << y";
     if (compile(shaderString))
@@ -1584,7 +1571,7 @@ TEST_F(MalformedShaderTest, LineDirectiveUndefinedShift)
 }
 
 // Covers a bug in our parsing of malformed shift preprocessor expressions.
-TEST_F(MalformedShaderTest, LineDirectiveNegativeShift)
+TEST_F(FragmentShaderValidationTest, LineDirectiveNegativeShift)
 {
     const std::string &shaderString = "#line x << -1";
     if (compile(shaderString))
@@ -1594,7 +1581,7 @@ TEST_F(MalformedShaderTest, LineDirectiveNegativeShift)
 }
 
 // gl_MaxImageUnits is only available in ES 3.1 shaders.
-TEST_F(MalformedShaderTest, MaxImageUnitsInES3Shader)
+TEST_F(FragmentShaderValidationTest, MaxImageUnitsInES3Shader)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1611,7 +1598,7 @@ TEST_F(MalformedShaderTest, MaxImageUnitsInES3Shader)
 }
 
 // struct += struct is an invalid operation.
-TEST_F(MalformedShaderTest, StructCompoundAssignStruct)
+TEST_F(FragmentShaderValidationTest, StructCompoundAssignStruct)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1630,7 +1617,7 @@ TEST_F(MalformedShaderTest, StructCompoundAssignStruct)
 }
 
 // struct == different struct is an invalid operation.
-TEST_F(MalformedShaderTest, StructEqDifferentStruct)
+TEST_F(FragmentShaderValidationTest, StructEqDifferentStruct)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1651,7 +1638,7 @@ TEST_F(MalformedShaderTest, StructEqDifferentStruct)
 }
 
 // Compute shaders are not supported in versions lower than 310.
-TEST_F(MalformedComputeShaderTest, Version100)
+TEST_F(ComputeShaderValidationTest, Version100)
 {
     const std::string &shaderString =
         "void main()\n"
@@ -1665,7 +1652,7 @@ TEST_F(MalformedComputeShaderTest, Version100)
 }
 
 // Compute shaders are not supported in versions lower than 310.
-TEST_F(MalformedComputeShaderTest, Version300)
+TEST_F(ComputeShaderValidationTest, Version300)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -1682,7 +1669,7 @@ TEST_F(MalformedComputeShaderTest, Version300)
 // Compute shaders should have work group size specified. However, it is not a compile time error
 // to not have the size specified, but rather a link time one.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, NoWorkGroupSizeSpecified)
+TEST_F(ComputeShaderValidationTest, NoWorkGroupSizeSpecified)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1700,7 +1687,7 @@ TEST_F(MalformedComputeShaderTest, NoWorkGroupSizeSpecified)
 // The spec is not clear whether having a local size qualifier equal zero
 // is correct.
 // TODO (mradev): Ask people from Khronos to clarify the spec.
-TEST_F(MalformedComputeShaderTest, WorkGroupSizeTooSmallXdimension)
+TEST_F(ComputeShaderValidationTest, WorkGroupSizeTooSmallXdimension)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1716,7 +1703,7 @@ TEST_F(MalformedComputeShaderTest, WorkGroupSizeTooSmallXdimension)
 
 // Work group size is correct for the x and y dimensions, but not for the z dimension.
 // GLSL ES 3.10 Revision 4, 7.1.3 Compute Shader Special Variables
-TEST_F(MalformedComputeShaderTest, WorkGroupSizeTooSmallZDimension)
+TEST_F(ComputeShaderValidationTest, WorkGroupSizeTooSmallZDimension)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1732,7 +1719,7 @@ TEST_F(MalformedComputeShaderTest, WorkGroupSizeTooSmallZDimension)
 
 // Work group size is bigger than the minimum in the x dimension.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, WorkGroupSizeTooBigXDimension)
+TEST_F(ComputeShaderValidationTest, WorkGroupSizeTooBigXDimension)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1748,7 +1735,7 @@ TEST_F(MalformedComputeShaderTest, WorkGroupSizeTooBigXDimension)
 
 // Work group size is bigger than the minimum in the y dimension.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, WorkGroupSizeTooBigYDimension)
+TEST_F(ComputeShaderValidationTest, WorkGroupSizeTooBigYDimension)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1764,7 +1751,7 @@ TEST_F(MalformedComputeShaderTest, WorkGroupSizeTooBigYDimension)
 
 // Work group size is definitely bigger than the minimum in the z dimension.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, WorkGroupSizeTooBigZDimension)
+TEST_F(ComputeShaderValidationTest, WorkGroupSizeTooBigZDimension)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1779,7 +1766,7 @@ TEST_F(MalformedComputeShaderTest, WorkGroupSizeTooBigZDimension)
 }
 
 // Work group size specified through macro expansion.
-TEST_F(MalformedComputeShaderTest, WorkGroupSizeMacro)
+TEST_F(ComputeShaderValidationTest, WorkGroupSizeMacro)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1795,7 +1782,7 @@ TEST_F(MalformedComputeShaderTest, WorkGroupSizeMacro)
 }
 
 // Work group size specified as an unsigned integer.
-TEST_F(MalformedComputeShaderTest, WorkGroupSizeUnsignedInteger)
+TEST_F(ComputeShaderValidationTest, WorkGroupSizeUnsignedInteger)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1810,7 +1797,7 @@ TEST_F(MalformedComputeShaderTest, WorkGroupSizeUnsignedInteger)
 }
 
 // Work group size specified in hexadecimal.
-TEST_F(MalformedComputeShaderTest, WorkGroupSizeHexadecimal)
+TEST_F(ComputeShaderValidationTest, WorkGroupSizeHexadecimal)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1826,7 +1813,7 @@ TEST_F(MalformedComputeShaderTest, WorkGroupSizeHexadecimal)
 
 // local_size_x is -1 in hexadecimal format.
 // -1 is used as unspecified value in the TLayoutQualifier structure.
-TEST_F(MalformedComputeShaderTest, WorkGroupSizeMinusOneHexadecimal)
+TEST_F(ComputeShaderValidationTest, WorkGroupSizeMinusOneHexadecimal)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1841,7 +1828,7 @@ TEST_F(MalformedComputeShaderTest, WorkGroupSizeMinusOneHexadecimal)
 }
 
 // Work group size specified in octal.
-TEST_F(MalformedComputeShaderTest, WorkGroupSizeOctal)
+TEST_F(ComputeShaderValidationTest, WorkGroupSizeOctal)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1856,7 +1843,7 @@ TEST_F(MalformedComputeShaderTest, WorkGroupSizeOctal)
 }
 
 // Work group size is negative. It is specified in hexadecimal.
-TEST_F(MalformedComputeShaderTest, WorkGroupSizeNegativeHexadecimal)
+TEST_F(ComputeShaderValidationTest, WorkGroupSizeNegativeHexadecimal)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1872,7 +1859,7 @@ TEST_F(MalformedComputeShaderTest, WorkGroupSizeNegativeHexadecimal)
 
 // Multiple work group layout qualifiers with differing values.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, DifferingLayoutQualifiers)
+TEST_F(ComputeShaderValidationTest, DifferingLayoutQualifiers)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1888,7 +1875,7 @@ TEST_F(MalformedComputeShaderTest, DifferingLayoutQualifiers)
 
 // Multiple work group input variables with differing local size values.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, MultipleInputVariablesDifferingLocalSize)
+TEST_F(ComputeShaderValidationTest, MultipleInputVariablesDifferingLocalSize)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1905,7 +1892,7 @@ TEST_F(MalformedComputeShaderTest, MultipleInputVariablesDifferingLocalSize)
 
 // Multiple work group input variables with differing local size values.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, MultipleInputVariablesDifferingLocalSize2)
+TEST_F(ComputeShaderValidationTest, MultipleInputVariablesDifferingLocalSize2)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1922,7 +1909,7 @@ TEST_F(MalformedComputeShaderTest, MultipleInputVariablesDifferingLocalSize2)
 
 // Multiple work group input variables with the same local size values. It should compile.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, MultipleInputVariablesSameLocalSize)
+TEST_F(ComputeShaderValidationTest, MultipleInputVariablesSameLocalSize)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1940,7 +1927,7 @@ TEST_F(MalformedComputeShaderTest, MultipleInputVariablesSameLocalSize)
 // Multiple work group input variables with the same local size values. It should compile.
 // Since the default value is 1, it should compile.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, MultipleInputVariablesSameLocalSize2)
+TEST_F(ComputeShaderValidationTest, MultipleInputVariablesSameLocalSize2)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1958,7 +1945,7 @@ TEST_F(MalformedComputeShaderTest, MultipleInputVariablesSameLocalSize2)
 // Multiple work group input variables with the same local size values. It should compile.
 // Since the default value is 1, it should compile.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, MultipleInputVariablesSameLocalSize3)
+TEST_F(ComputeShaderValidationTest, MultipleInputVariablesSameLocalSize3)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1975,7 +1962,7 @@ TEST_F(MalformedComputeShaderTest, MultipleInputVariablesSameLocalSize3)
 
 // Specifying row_major qualifier in a work group size layout.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, RowMajorInComputeInputLayout)
+TEST_F(ComputeShaderValidationTest, RowMajorInComputeInputLayout)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -1991,7 +1978,7 @@ TEST_F(MalformedComputeShaderTest, RowMajorInComputeInputLayout)
 
 // local size layout can be used only with compute input variables
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, UniformComputeInputLayout)
+TEST_F(ComputeShaderValidationTest, UniformComputeInputLayout)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2007,7 +1994,7 @@ TEST_F(MalformedComputeShaderTest, UniformComputeInputLayout)
 
 // local size layout can be used only with compute input variables
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, UniformBufferComputeInputLayout)
+TEST_F(ComputeShaderValidationTest, UniformBufferComputeInputLayout)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2023,7 +2010,7 @@ TEST_F(MalformedComputeShaderTest, UniformBufferComputeInputLayout)
 
 // local size layout can be used only with compute input variables
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, StructComputeInputLayout)
+TEST_F(ComputeShaderValidationTest, StructComputeInputLayout)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2039,7 +2026,7 @@ TEST_F(MalformedComputeShaderTest, StructComputeInputLayout)
 
 // local size layout can be used only with compute input variables
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, StructBodyComputeInputLayout)
+TEST_F(ComputeShaderValidationTest, StructBodyComputeInputLayout)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2057,7 +2044,7 @@ TEST_F(MalformedComputeShaderTest, StructBodyComputeInputLayout)
 
 // local size layout can be used only with compute input variables
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, TypeComputeInputLayout)
+TEST_F(ComputeShaderValidationTest, TypeComputeInputLayout)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2073,7 +2060,7 @@ TEST_F(MalformedComputeShaderTest, TypeComputeInputLayout)
 
 // Invalid use of the out storage qualifier in a compute shader.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, InvalidOutStorageQualifier)
+TEST_F(ComputeShaderValidationTest, InvalidOutStorageQualifier)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2090,7 +2077,7 @@ TEST_F(MalformedComputeShaderTest, InvalidOutStorageQualifier)
 
 // Invalid use of the out storage qualifier in a compute shader.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, InvalidOutStorageQualifier2)
+TEST_F(ComputeShaderValidationTest, InvalidOutStorageQualifier2)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2107,7 +2094,7 @@ TEST_F(MalformedComputeShaderTest, InvalidOutStorageQualifier2)
 
 // Invalid use of the in storage qualifier. Can be only used to describe the local block size.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, InvalidInStorageQualifier)
+TEST_F(ComputeShaderValidationTest, InvalidInStorageQualifier)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2125,7 +2112,7 @@ TEST_F(MalformedComputeShaderTest, InvalidInStorageQualifier)
 // Invalid use of the in storage qualifier. Can be only used to describe the local block size.
 // The test checks a different part of the GLSL grammar than what InvalidInStorageQualifier checks.
 // GLSL ES 3.10 Revision 4, 4.4.1.1 Compute Shader Inputs
-TEST_F(MalformedComputeShaderTest, InvalidInStorageQualifier2)
+TEST_F(ComputeShaderValidationTest, InvalidInStorageQualifier2)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2141,7 +2128,7 @@ TEST_F(MalformedComputeShaderTest, InvalidInStorageQualifier2)
 }
 
 // The local_size layout qualifier is only available in compute shaders.
-TEST_F(MalformedVertexShaderGLES31Test, InvalidUseOfLocalSizeX)
+TEST_F(VertexShaderValidationTest, InvalidUseOfLocalSizeX)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2159,7 +2146,7 @@ TEST_F(MalformedVertexShaderGLES31Test, InvalidUseOfLocalSizeX)
 }
 
 // The local_size layout qualifier is only available in compute shaders.
-TEST_F(MalformedFragmentShaderGLES31Test, InvalidUseOfLocalSizeX)
+TEST_F(FragmentShaderValidationTest, InvalidUseOfLocalSizeX)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2179,7 +2166,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, InvalidUseOfLocalSizeX)
 // It is a compile time error to use the gl_WorkGroupSize constant if
 // the local size has not been declared yet.
 // GLSL ES 3.10 Revision 4, 7.1.3 Compute Shader Special Variables
-TEST_F(MalformedComputeShaderTest, InvalidUsageOfWorkGroupSize)
+TEST_F(ComputeShaderValidationTest, InvalidUsageOfWorkGroupSize)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2195,7 +2182,7 @@ TEST_F(MalformedComputeShaderTest, InvalidUsageOfWorkGroupSize)
 }
 
 // The test covers the compute shader built-in variables and constants.
-TEST_F(MalformedComputeShaderTest, CorrectUsageOfComputeBuiltins)
+TEST_F(ComputeShaderValidationTest, CorrectUsageOfComputeBuiltins)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2216,7 +2203,7 @@ TEST_F(MalformedComputeShaderTest, CorrectUsageOfComputeBuiltins)
 }
 
 // It is illegal to write to a special variable.
-TEST_F(MalformedComputeShaderTest, SpecialVariableNumWorkGroups)
+TEST_F(ComputeShaderValidationTest, SpecialVariableNumWorkGroups)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2232,7 +2219,7 @@ TEST_F(MalformedComputeShaderTest, SpecialVariableNumWorkGroups)
 }
 
 // It is illegal to write to a special variable.
-TEST_F(MalformedComputeShaderTest, SpecialVariableWorkGroupID)
+TEST_F(ComputeShaderValidationTest, SpecialVariableWorkGroupID)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2248,7 +2235,7 @@ TEST_F(MalformedComputeShaderTest, SpecialVariableWorkGroupID)
 }
 
 // It is illegal to write to a special variable.
-TEST_F(MalformedComputeShaderTest, SpecialVariableLocalInvocationID)
+TEST_F(ComputeShaderValidationTest, SpecialVariableLocalInvocationID)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2264,7 +2251,7 @@ TEST_F(MalformedComputeShaderTest, SpecialVariableLocalInvocationID)
 }
 
 // It is illegal to write to a special variable.
-TEST_F(MalformedComputeShaderTest, SpecialVariableGlobalInvocationID)
+TEST_F(ComputeShaderValidationTest, SpecialVariableGlobalInvocationID)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2280,7 +2267,7 @@ TEST_F(MalformedComputeShaderTest, SpecialVariableGlobalInvocationID)
 }
 
 // It is illegal to write to a special variable.
-TEST_F(MalformedComputeShaderTest, SpecialVariableLocalInvocationIndex)
+TEST_F(ComputeShaderValidationTest, SpecialVariableLocalInvocationIndex)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2296,7 +2283,7 @@ TEST_F(MalformedComputeShaderTest, SpecialVariableLocalInvocationIndex)
 }
 
 // It is illegal to write to a special variable.
-TEST_F(MalformedComputeShaderTest, SpecialVariableWorkGroupSize)
+TEST_F(ComputeShaderValidationTest, SpecialVariableWorkGroupSize)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2312,7 +2299,7 @@ TEST_F(MalformedComputeShaderTest, SpecialVariableWorkGroupSize)
 }
 
 // It is illegal to apply an unary operator to a sampler.
-TEST_F(MalformedShaderTest, SamplerUnaryOperator)
+TEST_F(FragmentShaderValidationTest, SamplerUnaryOperator)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -2329,7 +2316,7 @@ TEST_F(MalformedShaderTest, SamplerUnaryOperator)
 }
 
 // Invariant cannot be used with a work group size declaration.
-TEST_F(MalformedComputeShaderTest, InvariantBlockSize)
+TEST_F(ComputeShaderValidationTest, InvariantBlockSize)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2344,7 +2331,7 @@ TEST_F(MalformedComputeShaderTest, InvariantBlockSize)
 }
 
 // Invariant cannot be used with a non-output variable in ESSL3.
-TEST_F(MalformedShaderTest, InvariantNonOuput)
+TEST_F(FragmentShaderValidationTest, InvariantNonOuput)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -2360,7 +2347,7 @@ TEST_F(MalformedShaderTest, InvariantNonOuput)
 
 // Invariant declaration should follow the following format "invariant <out variable name>".
 // Test having an incorrect qualifier in the invariant declaration.
-TEST_F(MalformedShaderTest, InvariantDeclarationWithStorageQualifier)
+TEST_F(FragmentShaderValidationTest, InvariantDeclarationWithStorageQualifier)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -2377,7 +2364,7 @@ TEST_F(MalformedShaderTest, InvariantDeclarationWithStorageQualifier)
 
 // Invariant declaration should follow the following format "invariant <out variable name>".
 // Test having an incorrect precision qualifier in the invariant declaration.
-TEST_F(MalformedShaderTest, InvariantDeclarationWithPrecisionQualifier)
+TEST_F(FragmentShaderValidationTest, InvariantDeclarationWithPrecisionQualifier)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -2394,7 +2381,7 @@ TEST_F(MalformedShaderTest, InvariantDeclarationWithPrecisionQualifier)
 
 // Invariant declaration should follow the following format "invariant <out variable name>".
 // Test having an incorrect layout qualifier in the invariant declaration.
-TEST_F(MalformedShaderTest, InvariantDeclarationWithLayoutQualifier)
+TEST_F(FragmentShaderValidationTest, InvariantDeclarationWithLayoutQualifier)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -2412,7 +2399,7 @@ TEST_F(MalformedShaderTest, InvariantDeclarationWithLayoutQualifier)
 // Variable declaration with both invariant and layout qualifiers is not valid in the formal grammar
 // provided in the ESSL 3.00 spec. ESSL 3.10 starts allowing this combination, but ESSL 3.00 should
 // still disallow it.
-TEST_F(MalformedShaderTest, VariableDeclarationWithInvariantAndLayoutQualifierESSL300)
+TEST_F(FragmentShaderValidationTest, VariableDeclarationWithInvariantAndLayoutQualifierESSL300)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -2428,7 +2415,7 @@ TEST_F(MalformedShaderTest, VariableDeclarationWithInvariantAndLayoutQualifierES
 
 // Bit shift with a rhs value > 31 has an undefined result in the GLSL spec. We disallow it.
 // ESSL 3.00.6 section 5.9.
-TEST_F(MalformedShaderTest, ShiftBy32)
+TEST_F(FragmentShaderValidationTest, ShiftBy32)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -2443,7 +2430,7 @@ TEST_F(MalformedShaderTest, ShiftBy32)
 }
 
 // Test that deferring global variable init works with an empty main().
-TEST_F(MalformedShaderTest, DeferGlobalVariableInitWithEmptyMain)
+TEST_F(FragmentShaderValidationTest, DeferGlobalVariableInitWithEmptyMain)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -2457,7 +2444,7 @@ TEST_F(MalformedShaderTest, DeferGlobalVariableInitWithEmptyMain)
 }
 
 // Test that pruning empty declarations from loop init expression works.
-TEST_F(MalformedShaderTest, EmptyDeclarationAsLoopInit)
+TEST_F(FragmentShaderValidationTest, EmptyDeclarationAsLoopInit)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -2478,7 +2465,7 @@ TEST_F(MalformedShaderTest, EmptyDeclarationAsLoopInit)
 }
 // r32f, r32i, r32ui do not require either the writeonly or readonly memory qualifiers.
 // GLSL ES 3.10, Revision 4, 4.9 Memory Access Qualifiers
-TEST_F(MalformedFragmentShaderGLES31Test, ImageR32FNoMemoryQualifier)
+TEST_F(FragmentShaderValidationTest, ImageR32FNoMemoryQualifier)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2498,7 +2485,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ImageR32FNoMemoryQualifier)
 // Images which do not have r32f, r32i or r32ui as internal format, must have readonly or writeonly
 // specified.
 // GLSL ES 3.10, Revision 4, 4.9 Memory Access Qualifiers
-TEST_F(MalformedFragmentShaderGLES31Test, ImageR32FWithCorrectMemoryQualifier)
+TEST_F(FragmentShaderValidationTest, ImageR32FWithCorrectMemoryQualifier)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2517,7 +2504,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ImageR32FWithCorrectMemoryQualifier)
 
 // It is a compile-time error to call imageStore when the image is qualified as readonly.
 // GLSL ES 3.10 Revision 4, 4.9 Memory Access Qualifiers
-TEST_F(MalformedFragmentShaderGLES31Test, StoreInReadOnlyImage)
+TEST_F(FragmentShaderValidationTest, StoreInReadOnlyImage)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2537,7 +2524,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, StoreInReadOnlyImage)
 
 // It is a compile-time error to call imageLoad when the image is qualified as writeonly.
 // GLSL ES 3.10 Revision 4, 4.9 Memory Access Qualifiers
-TEST_F(MalformedFragmentShaderGLES31Test, LoadFromWriteOnlyImage)
+TEST_F(FragmentShaderValidationTest, LoadFromWriteOnlyImage)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2556,7 +2543,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, LoadFromWriteOnlyImage)
 }
 
 // A valid declaration and usage of an image3D.
-TEST_F(MalformedFragmentShaderGLES31Test, ValidImage3D)
+TEST_F(FragmentShaderValidationTest, ValidImage3D)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2575,7 +2562,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ValidImage3D)
 }
 
 // A valid declaration and usage of an imageCube.
-TEST_F(MalformedFragmentShaderGLES31Test, ValidImageCube)
+TEST_F(FragmentShaderValidationTest, ValidImageCube)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2594,7 +2581,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ValidImageCube)
 }
 
 // A valid declaration and usage of an image2DArray.
-TEST_F(MalformedFragmentShaderGLES31Test, ValidImage2DArray)
+TEST_F(FragmentShaderValidationTest, ValidImage2DArray)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2614,7 +2601,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ValidImage2DArray)
 
 // Images cannot be l-values.
 // GLSL ES 3.10 Revision 4, 4.1.7 Opaque Types
-TEST_F(MalformedFragmentShaderGLES31Test, ImageLValueFunctionDefinitionInOut)
+TEST_F(FragmentShaderValidationTest, ImageLValueFunctionDefinitionInOut)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2632,7 +2619,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ImageLValueFunctionDefinitionInOut)
 
 // Cannot assign to images.
 // GLSL ES 3.10 Revision 4, 4.1.7 Opaque Types
-TEST_F(MalformedFragmentShaderGLES31Test, ImageAssignment)
+TEST_F(FragmentShaderValidationTest, ImageAssignment)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2652,7 +2639,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ImageAssignment)
 
 // Passing an image qualifier to a function should not be able to discard the readonly qualifier.
 // GLSL ES 3.10 Revision 4, 4.9 Memory Access Qualifiers
-TEST_F(MalformedFragmentShaderGLES31Test, ReadOnlyQualifierMissingInFunctionArgument)
+TEST_F(FragmentShaderValidationTest, ReadOnlyQualifierMissingInFunctionArgument)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2672,7 +2659,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ReadOnlyQualifierMissingInFunctionArgu
 
 // Passing an image qualifier to a function should not be able to discard the writeonly qualifier.
 // GLSL ES 3.10 Revision 4, 4.9 Memory Access Qualifiers
-TEST_F(MalformedFragmentShaderGLES31Test, WriteOnlyQualifierMissingInFunctionArgument)
+TEST_F(FragmentShaderValidationTest, WriteOnlyQualifierMissingInFunctionArgument)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2693,7 +2680,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, WriteOnlyQualifierMissingInFunctionArg
 // Passing an image parameter as an argument to another function should not be able to discard the
 // writeonly qualifier.
 // GLSL ES 3.10 Revision 4, 4.9 Memory Access Qualifiers
-TEST_F(MalformedFragmentShaderGLES31Test, DiscardWriteonlyInFunctionBody)
+TEST_F(FragmentShaderValidationTest, DiscardWriteonlyInFunctionBody)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2714,7 +2701,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, DiscardWriteonlyInFunctionBody)
 
 // The memory qualifiers for the image declaration and function argument match and the test should
 // pass.
-TEST_F(MalformedFragmentShaderGLES31Test, CorrectImageMemoryQualifierSpecified)
+TEST_F(FragmentShaderValidationTest, CorrectImageMemoryQualifierSpecified)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2735,7 +2722,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, CorrectImageMemoryQualifierSpecified)
 // The test adds additional qualifiers to the argument in the function header.
 // This is correct since no memory qualifiers are discarded upon the function call.
 // GLSL ES 3.10 Revision 4, 4.9 Memory Access Qualifiers
-TEST_F(MalformedFragmentShaderGLES31Test, CorrectImageMemoryQualifierSpecified2)
+TEST_F(FragmentShaderValidationTest, CorrectImageMemoryQualifierSpecified2)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2755,7 +2742,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, CorrectImageMemoryQualifierSpecified2)
 
 // Images are not allowed in structs.
 // GLSL ES 3.10 Revision 4, 4.1.8 Structures
-TEST_F(MalformedFragmentShaderGLES31Test, ImageInStruct)
+TEST_F(FragmentShaderValidationTest, ImageInStruct)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2773,7 +2760,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ImageInStruct)
 
 // Images are not allowed in interface blocks.
 // GLSL ES 3.10 Revision 4, 4.3.9 Interface Blocks
-TEST_F(MalformedFragmentShaderGLES31Test, ImageInInterfaceBlock)
+TEST_F(FragmentShaderValidationTest, ImageInInterfaceBlock)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2790,7 +2777,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ImageInInterfaceBlock)
 }
 
 // Readonly used with an interface block.
-TEST_F(MalformedFragmentShaderGLES31Test, ReadonlyWithInterfaceBlock)
+TEST_F(FragmentShaderValidationTest, ReadonlyWithInterfaceBlock)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2806,7 +2793,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ReadonlyWithInterfaceBlock)
 }
 
 // Readonly used with an invariant.
-TEST_F(MalformedFragmentShaderGLES31Test, ReadonlyWithInvariant)
+TEST_F(FragmentShaderValidationTest, ReadonlyWithInvariant)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2823,7 +2810,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ReadonlyWithInvariant)
 }
 
 // Readonly used with a member of a structure.
-TEST_F(MalformedFragmentShaderGLES31Test, ReadonlyWithStructMember)
+TEST_F(FragmentShaderValidationTest, ReadonlyWithStructMember)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2840,7 +2827,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ReadonlyWithStructMember)
 }
 
 // It should not be possible to use an internal format layout qualifier with an interface block.
-TEST_F(MalformedFragmentShaderGLES31Test, ImageInternalFormatWithInterfaceBlock)
+TEST_F(FragmentShaderValidationTest, ImageInternalFormatWithInterfaceBlock)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2858,7 +2845,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ImageInternalFormatWithInterfaceBlock)
 
 // It should not be possible to use an internal format layout qualifier with a uniform without a
 // type.
-TEST_F(MalformedFragmentShaderGLES31Test, ImageInternalFormatInGlobalLayoutQualifier)
+TEST_F(FragmentShaderValidationTest, ImageInternalFormatInGlobalLayoutQualifier)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2876,7 +2863,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, ImageInternalFormatInGlobalLayoutQuali
 
 // ESSL 1.00 section 4.1.7.
 // Samplers are not allowed as operands for most operations. Test this for ternary operator.
-TEST_F(MalformedShaderTest, SamplerAsTernaryOperand)
+TEST_F(FragmentShaderValidationTest, SamplerAsTernaryOperand)
 {
     const std::string &shaderString =
         "precision mediump float;\n"
@@ -2896,7 +2883,7 @@ TEST_F(MalformedShaderTest, SamplerAsTernaryOperand)
 // ESSL 1.00.17 section 4.5.2.
 // ESSL 3.00.6 section 4.5.3.
 // Precision must be specified for floats. Test this with a declaration with no qualifiers.
-TEST_F(MalformedShaderTest, FloatDeclarationNoQualifiersNoPrecision)
+TEST_F(FragmentShaderValidationTest, FloatDeclarationNoQualifiersNoPrecision)
 {
     const std::string &shaderString =
         "vec4 foo = vec4(0.0);\n"
@@ -2912,7 +2899,7 @@ TEST_F(MalformedShaderTest, FloatDeclarationNoQualifiersNoPrecision)
 }
 
 // Check compiler doesn't crash on incorrect unsized array declarations.
-TEST_F(MalformedShaderTest, IncorrectUnsizedArray)
+TEST_F(FragmentShaderValidationTest, IncorrectUnsizedArray)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -2933,7 +2920,7 @@ TEST_F(MalformedShaderTest, IncorrectUnsizedArray)
 
 // Check compiler doesn't crash when a bvec is on the right hand side of a logical operator.
 // ESSL 3.00.6 section 5.9.
-TEST_F(MalformedShaderTest, LogicalOpRHSIsBVec)
+TEST_F(FragmentShaderValidationTest, LogicalOpRHSIsBVec)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -2952,7 +2939,7 @@ TEST_F(MalformedShaderTest, LogicalOpRHSIsBVec)
 
 // Check compiler doesn't crash when there's an unsized array constructor with no parameters.
 // ESSL 3.00.6 section 4.1.9: Array size must be greater than zero.
-TEST_F(MalformedShaderTest, UnsizedArrayConstructorNoParameters)
+TEST_F(FragmentShaderValidationTest, UnsizedArrayConstructorNoParameters)
 {
     const std::string &shaderString =
         "#version 300 es\n"
@@ -2969,7 +2956,7 @@ TEST_F(MalformedShaderTest, UnsizedArrayConstructorNoParameters)
 
 // Passing an image parameter as an argument to another function should not be able to discard the
 // coherent qualifier.
-TEST_F(MalformedFragmentShaderGLES31Test, CoherentQualifierMissingInFunctionArgument)
+TEST_F(FragmentShaderValidationTest, CoherentQualifierMissingInFunctionArgument)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -2989,7 +2976,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, CoherentQualifierMissingInFunctionArgu
 
 // Passing an image parameter as an argument to another function should not be able to discard the
 // volatile qualifier.
-TEST_F(MalformedFragmentShaderGLES31Test, VolatileQualifierMissingInFunctionArgument)
+TEST_F(FragmentShaderValidationTest, VolatileQualifierMissingInFunctionArgument)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3009,7 +2996,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, VolatileQualifierMissingInFunctionArgu
 
 // The restrict qualifier can be discarded from a function argument.
 // GLSL ES 3.10 Revision 4, 4.9 Memory Access Qualifiers
-TEST_F(MalformedFragmentShaderGLES31Test, RestrictQualifierDiscardedInFunctionArgument)
+TEST_F(FragmentShaderValidationTest, RestrictQualifierDiscardedInFunctionArgument)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3029,7 +3016,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, RestrictQualifierDiscardedInFunctionAr
 
 // Function image arguments can be overqualified.
 // GLSL ES 3.10 Revision 4, 4.9 Memory Access Qualifiers
-TEST_F(MalformedFragmentShaderGLES31Test, OverqualifyingImageParameter)
+TEST_F(FragmentShaderValidationTest, OverqualifyingImageParameter)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3049,7 +3036,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, OverqualifyingImageParameter)
 
 // Test that work group size can be used to size arrays.
 // GLSL ES 3.10.4 section 7.1.3 Compute Shader Special Variables
-TEST_F(MalformedComputeShaderTest, WorkGroupSizeAsArraySize)
+TEST_F(ComputeShaderValidationTest, WorkGroupSizeAsArraySize)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3068,7 +3055,7 @@ TEST_F(MalformedComputeShaderTest, WorkGroupSizeAsArraySize)
 
 // Shared memory variables cannot be used inside a vertex shader.
 // GLSL ES 3.10 Revision 4, 4.3.8 Shared Variables
-TEST_F(MalformedVertexShaderGLES31Test, VertexShaderSharedMemory)
+TEST_F(VertexShaderValidationTest, VertexShaderSharedMemory)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3086,7 +3073,7 @@ TEST_F(MalformedVertexShaderGLES31Test, VertexShaderSharedMemory)
 
 // Shared memory variables cannot be used inside a fragment shader.
 // GLSL ES 3.10 Revision 4, 4.3.8 Shared Variables
-TEST_F(MalformedFragmentShaderGLES31Test, FragmentShaderSharedMemory)
+TEST_F(FragmentShaderValidationTest, FragmentShaderSharedMemory)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3103,7 +3090,7 @@ TEST_F(MalformedFragmentShaderGLES31Test, FragmentShaderSharedMemory)
 }
 
 // Shared memory cannot be combined with any other storage qualifier.
-TEST_F(MalformedComputeShaderTest, UniformSharedMemory)
+TEST_F(ComputeShaderValidationTest, UniformSharedMemory)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3120,7 +3107,7 @@ TEST_F(MalformedComputeShaderTest, UniformSharedMemory)
 }
 
 // Correct usage of shared memory variables.
-TEST_F(MalformedComputeShaderTest, CorrectUsageOfSharedMemory)
+TEST_F(ComputeShaderValidationTest, CorrectUsageOfSharedMemory)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3139,7 +3126,7 @@ TEST_F(MalformedComputeShaderTest, CorrectUsageOfSharedMemory)
 
 // Shared memory variables cannot be initialized.
 // GLSL ES 3.10 Revision 4, 4.3.8 Shared Variables
-TEST_F(MalformedComputeShaderTest, SharedVariableInitialization)
+TEST_F(ComputeShaderValidationTest, SharedVariableInitialization)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3157,7 +3144,7 @@ TEST_F(MalformedComputeShaderTest, SharedVariableInitialization)
 
 // Local variables cannot be qualified as shared.
 // GLSL ES 3.10 Revision 4, 4.3 Storage Qualifiers
-TEST_F(MalformedComputeShaderTest, SharedMemoryInFunctionBody)
+TEST_F(ComputeShaderValidationTest, SharedMemoryInFunctionBody)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3177,7 +3164,7 @@ TEST_F(MalformedComputeShaderTest, SharedMemoryInFunctionBody)
 }
 
 // Struct members cannot be qualified as shared.
-TEST_F(MalformedComputeShaderTest, SharedMemoryInStruct)
+TEST_F(ComputeShaderValidationTest, SharedMemoryInStruct)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3196,7 +3183,7 @@ TEST_F(MalformedComputeShaderTest, SharedMemoryInStruct)
 }
 
 // Interface block members cannot be qualified as shared.
-TEST_F(MalformedComputeShaderTest, SharedMemoryInInterfaceBlock)
+TEST_F(ComputeShaderValidationTest, SharedMemoryInInterfaceBlock)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3215,7 +3202,7 @@ TEST_F(MalformedComputeShaderTest, SharedMemoryInInterfaceBlock)
 }
 
 // The shared qualifier cannot be used with any other qualifier.
-TEST_F(MalformedComputeShaderTest, SharedWithInvariant)
+TEST_F(ComputeShaderValidationTest, SharedWithInvariant)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3232,7 +3219,7 @@ TEST_F(MalformedComputeShaderTest, SharedWithInvariant)
 }
 
 // The shared qualifier cannot be used with any other qualifier.
-TEST_F(MalformedComputeShaderTest, SharedWithMemoryQualifier)
+TEST_F(ComputeShaderValidationTest, SharedWithMemoryQualifier)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3249,7 +3236,7 @@ TEST_F(MalformedComputeShaderTest, SharedWithMemoryQualifier)
 }
 
 // The shared qualifier cannot be used with any other qualifier.
-TEST_F(MalformedComputeShaderTest, SharedGlobalLayoutDeclaration)
+TEST_F(ComputeShaderValidationTest, SharedGlobalLayoutDeclaration)
 {
     const std::string &shaderString =
         "#version 310 es\n"
@@ -3267,7 +3254,7 @@ TEST_F(MalformedComputeShaderTest, SharedGlobalLayoutDeclaration)
 
 // Declaring a function with the same name as a built-in from a higher ESSL version should not cause
 // a redeclaration error.
-TEST_F(MalformedShaderTest, BuiltinESSL31FunctionDeclaredInESSL30Shader)
+TEST_F(FragmentShaderValidationTest, BuiltinESSL31FunctionDeclaredInESSL30Shader)
 {
     const std::string &shaderString =
         "#version 300 es\n"
