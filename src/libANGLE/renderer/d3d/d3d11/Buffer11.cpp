@@ -905,7 +905,6 @@ gl::Error Buffer11::BufferStorage::setData(const uint8_t *data, size_t offset, s
 
     uint8_t *writePointer = nullptr;
     ANGLE_TRY(map(offset, mapSize, GL_MAP_WRITE_BIT, &writePointer));
-
     memcpy(writePointer, data, mapSize);
 
     unmap();
@@ -1083,6 +1082,12 @@ void Buffer11::NativeStorage::FillBufferDesc(D3D11_BUFFER_DESC *bufferDesc,
         case BUFFER_USAGE_INDEX:
             bufferDesc->Usage          = D3D11_USAGE_DEFAULT;
             bufferDesc->BindFlags      = D3D11_BIND_INDEX_BUFFER;
+            bufferDesc->CPUAccessFlags = 0;
+            break;
+        case BUFFER_USAGE_INDIRECT:
+            bufferDesc->MiscFlags      = D3D11_RESOURCE_MISC_DRAWINDIRECT_ARGS;
+            bufferDesc->Usage          = D3D11_USAGE_DEFAULT;
+            bufferDesc->BindFlags      = 0;
             bufferDesc->CPUAccessFlags = 0;
             break;
 
