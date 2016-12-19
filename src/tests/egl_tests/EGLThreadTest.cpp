@@ -3,11 +3,11 @@
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
-typedef EGLAPI EGLDisplay EGLAPIENTRY EGLGetDisplay(EGLNativeDisplayType display_id);
-typedef EGLAPI EGLBoolean EGLAPIENTRY EGLInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor);
-typedef EGLAPI EGLContext EGLAPIENTRY EGLGetCurrentContext(void);
-typedef EGLAPI EGLSurface EGLAPIENTRY EGLGetCurrentSurface(EGLint readdraw);
-typedef EGLAPI EGLBoolean EGLAPIENTRY EGLTerminate(EGLDisplay dpy);
+typedef EGLDisplay EGLGetDisplay(EGLNativeDisplayType display_id);
+typedef EGLBoolean EGLInitialize(EGLDisplay dpy, EGLint *major, EGLint *minor);
+typedef EGLContext EGLGetCurrentContext(void);
+typedef EGLSurface EGLGetCurrentSurface(EGLint readdraw);
+typedef EGLBoolean EGLTerminate(EGLDisplay dpy);
 
 class EGLThreadTest : public testing::Test
 {
