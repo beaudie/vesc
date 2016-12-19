@@ -1706,6 +1706,32 @@ gl::Error Renderer11::applyRenderTarget(gl::Framebuffer *framebuffer)
     return mStateManager.syncFramebuffer(framebuffer);
 }
 
+gl::Error Renderer11::applyNonDynamicVertexBuffer(const gl::State &state, GLenum mode)
+{
+    const auto &vertexArray = state.getVertexArray();
+    auto *vertexArray11     = GetImplAs<VertexArray11>(vertexArray);
+
+    ANGLE_TRY(vertexArray11->updateDirtyAttribs(state));
+
+    ANGLE_TRY(mStateManager.updateCurrentValueAttribs(state, mVertexDataManager));
+
+    const auto &vertexArrayAttribs  = vertexArray11->getTranslatedAttribs();
+    const auto &currentValueAttribs = mStateManager.getCurrentValueAttribs();
+    ANGLE_TRY(mInputLayoutCache.applyVertexBuffers(state, vertexArrayAttribs, currentValueAttribs,
+                                                   mode, 0, nullptr, 0));
+
+    // InputLayoutCache::applyVertexBuffers calls through to the Bufer11 to get the native vertex
+    // buffer (ID3D11Buffer *). Because we allocate these buffers lazily, this will trigger
+    // allocation. This in turn will signal that the buffer is dirty. Since we just resolved the
+    // dirty-ness in VertexArray11::updateDirtyAttribs, this can make us do a needless
+    // update on the second draw call.
+    // Hence we clear the flags here, after we've applied vertex data, since we know everything
+    // is clean. This is a bit of a hack.
+    vertexArray11->clearDirtyAttribs(state);
+
+    return gl::NoError();
+}
+
 gl::Error Renderer11::applyVertexBuffer(const gl::State &state,
                                         GLenum mode,
                                         GLint first,
@@ -2012,6 +2038,82 @@ gl::Error Renderer11::drawElementsImpl(const gl::ContextState &data,
         mDeviceContext->DrawIndexed(count, 0, baseVertex);
     }
     return gl::NoError();
+}
+
+gl::Error Renderer11::drawArraysIndirectImpl(const gl::ContextState &data,
+                                             GLenum mode,
+                                             const GLvoid *indirect)
+{
+    if (skipDraw(data, mode))
+    {
+        return gl::NoError();
+    }
+
+    const auto &glState            = data.getState();
+    gl::Buffer *drawIndirectBuffer = glState.getDrawIndirectBuffer();
+    ASSERT(drawIndirectBuffer);
+    uintptr_t offset = reinterpret_cast<uintptr_t>(indirect);
+
+    BufferD3D *bufferD3D = GetImplAs<BufferD3D>(drawIndirectBuffer);
+    Buffer11 *storage    = GetAs<Buffer11>(bufferD3D);
+
+    const auto &vertexArray = glState.getVertexArray();
+    auto *vertexArray11     = GetImplAs<VertexArray11>(vertexArray);
+    // If there is no dynamic attributes, we can directly use the indirect buffer.
+    if (!(vertexArray11->hasDynamicAttribs(glState)) && mode != GL_LINE_LOOP &&
+        mode != GL_TRIANGLE_FAN)
+    {
+        applyNonDynamicVertexBuffer(glState, mode);
+
+        ID3D11Buffer *buffer = nullptr;
+        ANGLE_TRY_RESULT(storage->getBuffer(BUFFER_USAGE_INDIRECT), buffer);
+        mDeviceContext->DrawInstancedIndirect(buffer, static_cast<unsigned int>(offset));
+        return gl::NoError();
+    }
+
+    const uint8_t *bufferData = nullptr;
+    ANGLE_TRY(storage->getData(&bufferData));
+    ASSERT(bufferData);
+
+    const unsigned int *cmd = reinterpret_cast<const unsigned int *>(bufferData + offset);
+    GLuint count            = cmd[0];
+    GLuint instances        = cmd[1];
+    GLuint first            = cmd[2];
+
+    ANGLE_TRY(applyVertexBuffer(glState, mode, first, count, instances, nullptr));
+
+    if (mode == GL_LINE_LOOP)
+    {
+        return drawLineLoop(data, count, GL_NONE, nullptr, 0, instances);
+    }
+    if (mode == GL_TRIANGLE_FAN)
+    {
+        return drawTriangleFan(data, count, GL_NONE, nullptr, 0, instances);
+    }
+
+    mAppliedIndirectBufferChanged = false;
+    if (mAppliedIndirectBuffer != drawIndirectBuffer || mAppliedIndirectBufferOffset != offset)
+    {
+        mAppliedIndirectBuffer        = drawIndirectBuffer;
+        mAppliedIndirectBufferOffset  = offset;
+        mAppliedIndirectBufferChanged = true;
+    }
+    ID3D11Buffer *translatedBuffer = nullptr;
+    ANGLE_TRY_RESULT(storage->getTranslatedIndirectBuffer(bufferData, offset,
+                                                          mAppliedIndirectBufferChanged, 0, false),
+                     translatedBuffer);
+
+    mDeviceContext->DrawInstancedIndirect(translatedBuffer, 0);
+    return gl::NoError();
+}
+
+gl::Error Renderer11::drawElementsIndirectImpl(const gl::ContextState &data,
+                                               GLenum mode,
+                                               GLenum type,
+                                               const GLvoid *indirect)
+{
+    UNIMPLEMENTED();
+    return gl::InternalError() << "DrawElementsIndirect hasn't been implemented for D3D11 backend.";
 }
 
 gl::Error Renderer11::drawLineLoop(const gl::ContextState &data,
@@ -4579,6 +4681,40 @@ gl::Error Renderer11::genericDrawArrays(Context11 *context,
         {
             ANGLE_TRY(markTransformFeedbackUsage(data));
         }
+    }
+
+    return gl::NoError();
+}
+
+gl::Error Renderer11::genericDrawIndirect(Context11 *context,
+                                          GLenum mode,
+                                          GLenum type,
+                                          const GLvoid *indirect)
+{
+    const auto &data     = context->getContextState();
+    const auto &glState  = data.getState();
+    gl::Program *program = glState.getProgram();
+    ASSERT(program != nullptr);
+    ProgramD3D *programD3D = GetImplAs<ProgramD3D>(program);
+    bool usesPointSize     = programD3D->usesPointSize();
+    programD3D->updateSamplerMapping();
+
+    ANGLE_TRY(generateSwizzles(data));
+    applyPrimitiveType(mode, 0, usesPointSize);
+    ANGLE_TRY(updateState(data, mode));
+    ANGLE_TRY(applyTransformFeedbackBuffers(data));
+    ASSERT(!glState.isTransformFeedbackActiveUnpaused());
+    ANGLE_TRY(applyTextures(context, data));
+    ANGLE_TRY(applyShaders(data, mode));
+    ANGLE_TRY(programD3D->applyUniformBuffers(data));
+
+    if (type == GL_NONE)
+    {
+        ANGLE_TRY(drawArraysIndirectImpl(data, mode, indirect));
+    }
+    else
+    {
+        ANGLE_TRY(drawElementsIndirectImpl(data, mode, type, indirect));
     }
 
     return gl::NoError();

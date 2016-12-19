@@ -152,6 +152,9 @@ class Renderer11 : public RendererD3D
     gl::Error applyUniforms(const ProgramD3D &programD3D,
                             GLenum drawMode,
                             const std::vector<D3DUniform *> &uniformArray) override;
+    // Warning: please make sure all attributes buffer are non-dynamic before using
+    // applyNonDynamicVertexBuffer
+    gl::Error applyNonDynamicVertexBuffer(const gl::State &state, GLenum mode);
     gl::Error applyVertexBuffer(const gl::State &state,
                                 GLenum mode,
                                 GLint first,
@@ -374,6 +377,11 @@ class Renderer11 : public RendererD3D
                                   GLsizei instances,
                                   const gl::IndexRange &indexRange);
 
+    gl::Error genericDrawIndirect(Context11 *context,
+                                  GLenum mode,
+                                  GLenum type,
+                                  const GLvoid *indirect);
+
     // Necessary hack for default framebuffers in D3D.
     FramebufferImpl *createDefaultFramebuffer(const gl::FramebufferState &state) override;
 
@@ -397,6 +405,13 @@ class Renderer11 : public RendererD3D
                                GLenum type,
                                const GLvoid *indices,
                                GLsizei instances);
+    gl::Error drawArraysIndirectImpl(const gl::ContextState &data,
+                                     GLenum mode,
+                                     const GLvoid *indirect);
+    gl::Error drawElementsIndirectImpl(const gl::ContextState &data,
+                                       GLenum mode,
+                                       GLenum type,
+                                       const GLvoid *indirect);
 
     void generateCaps(gl::Caps *outCaps,
                       gl::TextureCapsMap *outTextureCaps,
@@ -509,6 +524,11 @@ class Renderer11 : public RendererD3D
     DXGI_FORMAT mAppliedIBFormat;
     unsigned int mAppliedIBOffset;
     bool mAppliedIBChanged;
+
+    // Currently applied indirect buffer
+    gl::Buffer *mAppliedIndirectBuffer;
+    uintptr_t mAppliedIndirectBufferOffset;
+    bool mAppliedIndirectBufferChanged;
 
     // Currently applied transform feedback buffers
     uintptr_t mAppliedTFObject;

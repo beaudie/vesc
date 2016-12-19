@@ -54,6 +54,24 @@ void VertexArray11::syncState(const gl::VertexArray::DirtyBits &dirtyBits)
     }
 }
 
+void VertexArray11::updateVertexAttribStorages(const gl::State &state)
+{
+    const gl::Program *program  = state.getProgram();
+    const auto &activeLocations = program->getActiveAttribLocationsMask();
+
+    if (mAttribsToUpdate.any())
+    {
+        // Skip attrib locations the program doesn't use.
+        const auto &activeToUpdate = (mAttribsToUpdate & activeLocations);
+
+        for (auto toUpdateIndex : angle::IterateBitSet(activeToUpdate))
+        {
+            mAttribsToUpdate.reset(toUpdateIndex);
+            updateVertexAttribStorage(toUpdateIndex);
+        }
+    }
+}
+
 void VertexArray11::updateVertexAttribStorage(size_t attribIndex)
 {
     const auto &attrib = mData.getVertexAttribute(attribIndex);
@@ -115,29 +133,18 @@ void VertexArray11::updateVertexAttribStorage(size_t attribIndex)
     }
 }
 
-gl::Error VertexArray11::updateDirtyAndDynamicAttribs(VertexDataManager *vertexDataManager,
-                                                      const gl::State &state,
-                                                      GLint start,
-                                                      GLsizei count,
-                                                      GLsizei instances)
+bool VertexArray11::hasDynamicAttribs(const gl::State &state)
+{
+    updateVertexAttribStorages(state);
+    return mDynamicAttribsMask.any();
+}
+
+gl::Error VertexArray11::updateDirtyAttribs(const gl::State &state)
 {
     const gl::Program *program  = state.getProgram();
     const auto &activeLocations = program->getActiveAttribLocationsMask();
-
-    if (mAttribsToUpdate.any())
-    {
-        // Skip attrib locations the program doesn't use.
-        const auto &activeToUpdate = (mAttribsToUpdate & activeLocations);
-
-        for (auto toUpdateIndex : angle::IterateBitSet(activeToUpdate))
-        {
-            mAttribsToUpdate.reset(toUpdateIndex);
-            updateVertexAttribStorage(toUpdateIndex);
-        }
-    }
-
-    const auto &attribs = mData.getVertexAttributes();
-    const auto &bindings = mData.getVertexBindings();
+    const auto &attribs         = mData.getVertexAttributes();
+    const auto &bindings        = mData.getVertexBindings();
 
     if (mAttribsToTranslate.any())
     {
@@ -153,8 +160,8 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(VertexDataManager *vertexD
                 state.getVertexAttribCurrentValue(static_cast<unsigned int>(dirtyAttribIndex));
 
             // Record basic attrib info
-            translatedAttrib->attribute        = &attribs[dirtyAttribIndex];
-            translatedAttrib->binding = &bindings[translatedAttrib->attribute->bindingIndex];
+            translatedAttrib->attribute = &attribs[dirtyAttribIndex];
+            translatedAttrib->binding   = &bindings[translatedAttrib->attribute->bindingIndex];
             translatedAttrib->currentValueType = currentValue.Type;
             translatedAttrib->divisor          = translatedAttrib->binding->divisor;
 
@@ -178,6 +185,23 @@ gl::Error VertexArray11::updateDirtyAndDynamicAttribs(VertexDataManager *vertexD
         }
     }
 
+    return gl::NoError();
+}
+
+gl::Error VertexArray11::updateDirtyAndDynamicAttribs(VertexDataManager *vertexDataManager,
+                                                      const gl::State &state,
+                                                      GLint start,
+                                                      GLsizei count,
+                                                      GLsizei instances)
+{
+    const gl::Program *program  = state.getProgram();
+    const auto &activeLocations = program->getActiveAttribLocationsMask();
+
+    updateVertexAttribStorages(state);
+    updateDirtyAttribs(state);
+
+    const auto &attribs  = mData.getVertexAttributes();
+    const auto &bindings = mData.getVertexBindings();
     if (mDynamicAttribsMask.any())
     {
         auto activeDynamicAttribs = (mDynamicAttribsMask & activeLocations);
@@ -213,6 +237,13 @@ void VertexArray11::signal(SignalToken token)
 
     // This can change a buffer's storage, we'll need to re-check.
     mAttribsToUpdate.set(token);
+}
+
+void VertexArray11::clearDirtyAttribs(const gl::State &state)
+{
+    const gl::Program *program  = state.getProgram();
+    const auto &activeLocations = program->getActiveAttribLocationsMask();
+    mAttribsToUpdate &= ~activeLocations;
 }
 
 void VertexArray11::clearDirtyAndPromoteDynamicAttribs(const gl::State &state, GLsizei count)
