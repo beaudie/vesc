@@ -57,7 +57,7 @@
             '<(angle_path)/src/tests/compiler_tests/FragDepth_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/GLSLCompatibilityOutput_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/IntermNode_test.cpp',
-            '<(angle_path)/src/tests/compiler_tests/MalformedShader_test.cpp',
+            '<(angle_path)/src/tests/compiler_tests/ShaderValidation_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/NV_draw_buffers_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/Pack_Unpack_test.cpp',
             '<(angle_path)/src/tests/compiler_tests/PruneEmptyDeclarations_test.cpp',
