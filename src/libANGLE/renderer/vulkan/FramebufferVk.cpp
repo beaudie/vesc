@@ -369,7 +369,7 @@ gl::ErrorOrResult<vk::RenderPass *> FramebufferVk::getRenderPass(VkDevice device
             colorDesc.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
             colorDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
             colorDesc.initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;
-            colorDesc.finalLayout    = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;  // FIXME
+            colorDesc.finalLayout    = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
             colorRef.attachment = static_cast<uint32_t>(colorAttachments.size()) - 1u;
             colorRef.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -397,7 +397,7 @@ gl::ErrorOrResult<vk::RenderPass *> FramebufferVk::getRenderPass(VkDevice device
         depthStencilDesc.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
         depthStencilDesc.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
         depthStencilDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        depthStencilDesc.initialLayout  = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+        depthStencilDesc.initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;
         depthStencilDesc.finalLayout    = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
         depthStencilAttachmentRef.attachment = static_cast<uint32_t>(attachmentDescs.size());
@@ -531,7 +531,15 @@ gl::Error FramebufferVk::beginRenderPass(VkDevice device,
     colorClear.float32[3] = glState.getColorClearValue().alpha;
 
     std::vector<VkClearValue> attachmentClearValues;
-    attachmentClearValues.push_back({colorClear});
+    VkClearValue clear;
+    clear.color = colorClear;
+    attachmentClearValues.push_back(clear);
+    VkClearDepthStencilValue depthStencilClear;
+    memset(&depthStencilClear, 0, sizeof(VkClearDepthStencilValue));
+    depthStencilClear.depth   = glState.getDepthClearValue();
+    depthStencilClear.stencil = glState.getStencilClearValue();
+    clear.depthStencil        = depthStencilClear;
+    attachmentClearValues.push_back(clear);
 
     // Updated the cached image layout of the attachments in this FBO.
     // For a default FBO, we need to call through to the WindowSurfaceVk

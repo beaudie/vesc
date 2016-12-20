@@ -99,13 +99,18 @@ class WindowSurfaceVk : public SurfaceImpl
     VkDevice mDevice;
     VkInstance mInstance;
 
-    RenderTargetVk mRenderTarget;
+    RenderTargetVk mColorRenderTarget;
+    RenderTargetVk mDepthStencilRenderTarget;
     vk::Semaphore mPresentCompleteSemaphore;
 
     uint32_t mCurrentSwapchainImageIndex;
     std::vector<vk::Image> mSwapchainImages;
     std::vector<vk::ImageView> mSwapchainImageViews;
     std::vector<vk::Framebuffer> mSwapchainFramebuffers;
+
+    vk::Image mDepthStencilImage;
+    vk::DeviceMemory mDepthStencilMemory;
+    vk::ImageView mDepthStencilImageView;
 
     xcb_connection_t *mXcbConnection;
 };
