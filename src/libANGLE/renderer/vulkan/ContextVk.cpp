@@ -96,6 +96,8 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
     std::vector<VkVertexInputAttributeDescription> vertexAttribs;
     std::vector<VkBuffer> vertexHandles;
     std::vector<VkDeviceSize> vertexOffsets;
+    std::vector<BufferVk *> clientVertexBuffers;
+    gl::BufferState dummyState;
 
     for (auto attribIndex : angle::IterateBitSet(programGL->getActiveAttribLocationsMask()))
     {
@@ -114,15 +116,33 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
             attribDesc.binding  = bindingDesc.binding;
             attribDesc.format   = vk::GetNativeVertexFormat(vertexFormatType);
             attribDesc.location = static_cast<uint32_t>(attribIndex);
-            attribDesc.offset   = static_cast<uint32_t>(attrib.offset);
+            attribDesc.offset   = attrib.buffer.get() ? static_cast<uint32_t>(attrib.offset) : 0u;
 
             vertexBindings.push_back(bindingDesc);
             vertexAttribs.push_back(attribDesc);
 
             // TODO(jmadill): Offset handling.
             gl::Buffer *bufferGL = attrib.buffer.get();
-            ASSERT(bufferGL);
-            BufferVk *bufferVk = GetImplAs<BufferVk>(bufferGL);
+            BufferVk *bufferVk;
+            if (bufferGL == nullptr)
+            {
+                bufferVk = new BufferVk(dummyState);
+                ANGLE_TRY(bufferVk->setData(this, GL_ARRAY_BUFFER, attrib.pointer,
+                                            attrib.size * count, GL_DYNAMIC_DRAW));
+                GLvoid *data;
+                ANGLE_TRY(bufferVk->map(GL_MAP_WRITE_BIT, &data));
+                uint8_t *dst       = reinterpret_cast<uint8_t *>(data);
+                const uint8_t *src = reinterpret_cast<const uint8_t *>(attrib.pointer);
+                for (size_t i = 0; i < count; i++, dst += attrib.size)
+                    memcpy(dst, src + i * bindingDesc.stride, attrib.size);
+                GLboolean result;
+                ANGLE_TRY(bufferVk->unmap(&result));
+                clientVertexBuffers.push_back(bufferVk);
+            }
+            else
+            {
+                bufferVk = GetImplAs<BufferVk>(bufferGL);
+            }
             vertexHandles.push_back(bufferVk->getVkBuffer().getHandle());
             vertexOffsets.push_back(0);
         }
@@ -275,6 +295,9 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
 
     ANGLE_TRY(mRenderer->submitAndFinishCommandBuffer(*commandBuffer, 1000));
     ANGLE_TRY(vkFBO->onDrawn());
+
+    for (auto buf : clientVertexBuffers)
+        delete buf;
 
     return gl::NoError();
 }
