@@ -429,6 +429,11 @@ Error Image::init(const VkImageCreateInfo &createInfo)
     return NoError();
 }
 
+void Image::setCurrentLayout(VkImageLayout layout)
+{
+    mCurrentLayout = layout;
+}
+
 void Image::changeLayoutTop(VkImageAspectFlags aspectMask,
                             VkImageLayout newLayout,
                             CommandBuffer *commandBuffer)

@@ -369,7 +369,7 @@ gl::ErrorOrResult<vk::RenderPass *> FramebufferVk::getRenderPass(VkDevice device
             colorDesc.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
             colorDesc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
             colorDesc.initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;
-            colorDesc.finalLayout    = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; // FIXME
+            colorDesc.finalLayout    = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;  // FIXME
 
             colorRef.attachment = static_cast<uint32_t>(colorAttachments.size()) - 1u;
             colorRef.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
@@ -546,6 +546,28 @@ gl::Error FramebufferVk::beginRenderPass(VkDevice device,
     ANGLE_TRY(commandBuffer->begin());
     commandBuffer->beginRenderPass(*renderPass, *framebuffer, glState.getViewport(),
                                    attachmentClearValues);
+    return gl::NoError();
+}
+
+gl::Error FramebufferVk::onDrawn()
+{
+    for (const auto &colorAttachment : mState.getColorAttachments())
+    {
+        if (colorAttachment.isAttached())
+        {
+            RenderTargetVk *renderTarget = nullptr;
+            ANGLE_TRY(colorAttachment.getRenderTarget(&renderTarget));
+            renderTarget->getImage()->setCurrentLayout(VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+        }
+    }
+    const auto *depthStencilAttachment = mState.getDepthStencilAttachment();
+    if (depthStencilAttachment && depthStencilAttachment->isAttached())
+    {
+        RenderTargetVk *renderTarget = nullptr;
+        ANGLE_TRY(depthStencilAttachment->getRenderTarget<RenderTargetVk>(&renderTarget));
+        renderTarget->getImage()->setCurrentLayout(
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+    }
     return gl::NoError();
 }
 

@@ -58,11 +58,11 @@
 #endif  // defined(ANGLE_ENABLE_NULL)
 
 #if defined(ANGLE_ENABLE_VULKAN)
-#   if defined(ANGLE_PLATFORM_WINDOWS)
-#       include "libANGLE/renderer/vulkan/DisplayVkWin32.h"
-#   else
-#       include "libANGLE/renderer/vulkan/DisplayVkXcb.h"
-#   endif
+#if defined(ANGLE_PLATFORM_WINDOWS)
+#include "libANGLE/renderer/vulkan/DisplayVkWin32.h"
+#else
+#include "libANGLE/renderer/vulkan/DisplayVkXcb.h"
+#endif
 #endif  // defined(ANGLE_ENABLE_VULKAN)
 
 // The log messages prepend the class name, so make this part of the angle namespace.

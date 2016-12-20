@@ -161,7 +161,7 @@ vk::Error WindowSurfaceVk::initializeImpl(RendererVk *renderer)
     mDevice   = renderer->getDevice();
     mInstance = renderer->getInstance();
 
-    // TODO(jmadill): Make this platform-specific.
+// TODO(jmadill): Make this platform-specific.
 #if defined(ANGLE_PLATFORM_WINDOWS)
     VkWin32SurfaceCreateInfoKHR createInfo;
 
@@ -174,9 +174,9 @@ vk::Error WindowSurfaceVk::initializeImpl(RendererVk *renderer)
 #else
     VkXcbSurfaceCreateInfoKHR createInfo;
 
-    createInfo.sType     = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
-    createInfo.pNext     = nullptr;
-    createInfo.flags     = 0;
+    createInfo.sType      = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
+    createInfo.pNext      = nullptr;
+    createInfo.flags      = 0;
     createInfo.connection = mXcbConnection;
     createInfo.window     = mNativeWindowType;
     ANGLE_VK_TRY(vkCreateXcbSurfaceKHR(renderer->getInstance(), &createInfo, nullptr, &mSurface));
@@ -212,7 +212,7 @@ vk::Error WindowSurfaceVk::initializeImpl(RendererVk *renderer)
 #if defined(ANGLE_PLATFORM_WINDOWS)
             width = static_cast<uint32_t>(rect.right - rect.left);
 #else
-            width = 640;
+            width  = 640;
 #endif
         }
         if (mRenderTarget.getExtents().height == 0)
