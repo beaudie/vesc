@@ -96,6 +96,8 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
     std::vector<VkVertexInputAttributeDescription> vertexAttribs;
     std::vector<VkBuffer> vertexHandles;
     std::vector<VkDeviceSize> vertexOffsets;
+    std::vector<BufferVk *> clientVertexBuffers;
+    gl::BufferState dummyState;
 
     for (auto attribIndex : angle::IterateBitSet(programGL->getActiveAttribLocationsMask()))
     {
@@ -114,15 +116,25 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
             attribDesc.binding  = bindingDesc.binding;
             attribDesc.format   = vk::GetNativeVertexFormat(vertexFormatType);
             attribDesc.location = static_cast<uint32_t>(attribIndex);
-            attribDesc.offset   = static_cast<uint32_t>(attrib.offset);
+            attribDesc.offset   = attrib.buffer.get() ? static_cast<uint32_t>(attrib.offset) : 0u;
 
             vertexBindings.push_back(bindingDesc);
             vertexAttribs.push_back(attribDesc);
 
             // TODO(jmadill): Offset handling.
             gl::Buffer *bufferGL = attrib.buffer.get();
-            ASSERT(bufferGL);
-            BufferVk *bufferVk = GetImplAs<BufferVk>(bufferGL);
+            BufferVk *bufferVk;
+            if (bufferGL == nullptr)
+            {
+                bufferVk = new BufferVk(dummyState);
+                bufferVk->setData(this, GL_ARRAY_BUFFER, attrib.pointer,
+                                  attrib.size * bindingDesc.stride, GL_DYNAMIC_DRAW);
+                clientVertexBuffers.push_back(bufferVk);
+            }
+            else
+            {
+                bufferVk = GetImplAs<BufferVk>(bufferGL);
+            }
             vertexHandles.push_back(bufferVk->getVkBuffer().getHandle());
             vertexOffsets.push_back(0);
         }
@@ -275,6 +287,9 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
 
     ANGLE_TRY(mRenderer->submitAndFinishCommandBuffer(*commandBuffer, 1000));
     ANGLE_TRY(vkFBO->onDrawn());
+
+    for (auto buf : clientVertexBuffers)
+        delete buf;
 
     return gl::NoError();
 }
