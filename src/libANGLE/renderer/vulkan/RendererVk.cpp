@@ -672,7 +672,7 @@ vk::ErrorOrResult<vk::StagingImage> RendererVk::createStagingImage(TextureDimens
     ANGLE_TRY(stagingImage.init(mCurrentQueueFamilyIndex, mHostVisibleMemoryIndex, dimension,
                                 format.native, extent));
 
-    //XXX gcc wants the move, but clang doesn't?
+    // XXX gcc wants the move, but clang doesn't?
     return std::move(stagingImage);
 }
 

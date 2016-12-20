@@ -172,6 +172,8 @@ class Image final : public WrappedObject<VkImage>
 
     Error init(const VkImageCreateInfo &createInfo);
 
+    void setCurrentLayout(VkImageLayout layout);
+
     void changeLayoutTop(VkImageAspectFlags aspectMask,
                          VkImageLayout newLayout,
                          CommandBuffer *commandBuffer);

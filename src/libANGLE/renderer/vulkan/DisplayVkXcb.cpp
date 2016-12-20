@@ -25,7 +25,7 @@ egl::Error DisplayVkXcb::initialize(egl::Display *display)
     mXcbConnection = xcb_connect(nullptr, nullptr);
     if (mXcbConnection == nullptr)
     {
-        //TODO(fjhenigman): return an error
+        // TODO(fjhenigman): return an error
     }
     return DisplayVk::initialize(display);
 }

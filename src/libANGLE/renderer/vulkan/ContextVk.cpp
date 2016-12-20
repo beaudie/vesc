@@ -274,6 +274,7 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
     ANGLE_TRY(commandBuffer->end());
 
     ANGLE_TRY(mRenderer->submitAndFinishCommandBuffer(*commandBuffer, 1000));
+    ANGLE_TRY(vkFBO->onDrawn());
 
     return gl::NoError();
 }
