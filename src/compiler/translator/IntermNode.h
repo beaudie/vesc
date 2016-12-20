@@ -780,6 +780,8 @@ class TIntermIfElse : public TIntermNode
     TIntermIfElse(TIntermTyped *cond, TIntermBlock *trueB, TIntermBlock *falseB)
         : TIntermNode(), mCondition(cond), mTrueBlock(trueB), mFalseBlock(falseB)
     {
+        ASSERT(mCondition != nullptr);
+        ASSERT(mTrueBlock != nullptr);
     }
 
     void traverse(TIntermTraverser *it) override;

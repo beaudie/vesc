@@ -1954,22 +1954,11 @@ void OutputHLSL::writeIfElse(TInfoSinkBase &out, TIntermIfElse *node)
 
     outputLineDirective(out, node->getLine().first_line);
 
-    bool discard = false;
+    // The trueBlock child node will output braces.
+    node->getTrueBlock()->traverse(this);
 
-    if (node->getTrueBlock())
-    {
-        // The trueBlock child node will output braces.
-        node->getTrueBlock()->traverse(this);
-
-        // Detect true discard
-        discard = (discard || FindDiscard::search(node->getTrueBlock()));
-    }
-    else
-    {
-        // TODO(oetuaho): Check if the semicolon inside is necessary.
-        // It's there as a result of conservative refactoring of the output.
-        out << "{;}\n";
-    }
+    // Detect true discard
+    bool discard = FindDiscard::search(node->getTrueBlock());
 
     outputLineDirective(out, node->getLine().first_line);
 

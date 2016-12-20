@@ -362,6 +362,8 @@ bool TIntermIfElse::replaceChildNode(TIntermNode *original, TIntermNode *replace
     REPLACE_IF_IS(mCondition, TIntermTyped, original, replacement);
     REPLACE_IF_IS(mTrueBlock, TIntermBlock, original, replacement);
     REPLACE_IF_IS(mFalseBlock, TIntermBlock, original, replacement);
+    ASSERT(mCondition != nullptr);
+    ASSERT(mTrueBlock != nullptr);
     return false;
 }
 

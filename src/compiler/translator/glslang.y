@@ -1347,13 +1347,12 @@ statement_with_scope
 compound_statement_no_new_scope
     // Statement that doesn't create a new scope, for selection_statement, iteration_statement
     : LEFT_BRACE RIGHT_BRACE {
-        $$ = 0;
+        $$ = new TIntermBlock();
+        $$->setLine(@$);
     }
     | LEFT_BRACE statement_list RIGHT_BRACE {
-        if ($2) {
-            $2->setLine(@$);
-        }
         $$ = $2;
+        $$->setLine(@$);
     }
     ;
 

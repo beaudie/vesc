@@ -744,8 +744,7 @@ void TIntermTraverser::traverseIfElse(TIntermIfElse *node)
     {
         incrementDepth(node);
         node->getCondition()->traverse(this);
-        if (node->getTrueBlock())
-            node->getTrueBlock()->traverse(this);
+        node->getTrueBlock()->traverse(this);
         if (node->getFalseBlock())
             node->getFalseBlock()->traverse(this);
         decrementDepth();
