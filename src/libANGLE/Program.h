@@ -265,7 +265,7 @@ class Program final : angle::NonCopyable, public LabeledObject
                               GLint components,
                               const GLfloat *coeffs);
 
-    Error link(const ContextState &data);
+    Error link(const gl::Context *context);
     bool isLinked() const;
 
     Error loadBinary(const Context *context,
@@ -370,6 +370,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     {
         return mState.mActiveAttribLocationsMask;
     }
+
+    const ProgramState &getState() const { return mState; }
 
   private:
     class Bindings final : angle::NonCopyable

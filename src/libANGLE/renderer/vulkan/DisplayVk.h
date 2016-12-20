@@ -12,6 +12,8 @@
 
 #include "libANGLE/renderer/DisplayImpl.h"
 
+struct xcb_connection_t;
+
 namespace rx
 {
 class RendererVk;
@@ -69,11 +71,15 @@ class DisplayVk : public DisplayImpl
         const egl::AttributeMap &attribs) override;
     gl::Version getMaxSupportedESVersion() const override;
 
+    RendererVk *getRenderer() const { return mRenderer.get(); }
+
   private:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
     void generateCaps(egl::Caps *outCaps) const override;
 
-    RendererVk *mRenderer;
+    std::unique_ptr<RendererVk> mRenderer;
+
+    xcb_connection_t *mXcbConnection;
 };
 
 }  // namespace rx

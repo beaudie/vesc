@@ -48,4 +48,6 @@ TestResults.qpa
 buildtools/
 *.pyc
 *.TMP
-
+*.VC.db
+vulkan_generate_layer_def_files.*
+diag.txt

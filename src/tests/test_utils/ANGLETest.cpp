@@ -248,6 +248,12 @@ void ANGLETest::TearDown()
     angle::WriteDebugMessage("Exiting %s.%s\n", info->test_case_name(), info->name());
 
     swapBuffers();
+
+    if (eglGetError() != EGL_SUCCESS)
+    {
+        FAIL() << "egl error during swap.";
+    }
+
     mOSWindow->messageLoop();
 
     if (!destroyEGLContext())
@@ -628,6 +634,11 @@ void ANGLETest::setBindGeneratesResource(bool bindGeneratesResource)
     mEGLWindow->setBindGeneratesResource(bindGeneratesResource);
 }
 
+void ANGLETest::setVulkanLayersEnabled(bool enabled)
+{
+    mEGLWindow->setVulkanLayersEnabled(enabled);
+}
+
 int ANGLETest::getClientMajorVersion() const
 {
     return mEGLWindow->getClientMajorVersion();
@@ -777,6 +788,12 @@ bool IsAndroid()
 #else
     return false;
 #endif
+}
+
+bool IsVulkan()
+{
+    std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
+    return (rendererString.find("Vulkan") != std::string::npos);
 }
 
 bool IsLinux()

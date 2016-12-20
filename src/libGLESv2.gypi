@@ -613,6 +613,8 @@
             'libANGLE/renderer/vulkan/FenceSyncVk.h',
             'libANGLE/renderer/vulkan/FramebufferVk.cpp',
             'libANGLE/renderer/vulkan/FramebufferVk.h',
+            'libANGLE/renderer/vulkan/GlslangWrapper.cpp',
+            'libANGLE/renderer/vulkan/GlslangWrapper.h',
             'libANGLE/renderer/vulkan/ImageVk.cpp',
             'libANGLE/renderer/vulkan/ImageVk.h',
             'libANGLE/renderer/vulkan/ProgramVk.cpp',
@@ -623,6 +625,8 @@
             'libANGLE/renderer/vulkan/RenderbufferVk.h',
             'libANGLE/renderer/vulkan/RendererVk.cpp',
             'libANGLE/renderer/vulkan/RendererVk.h',
+            'libANGLE/renderer/vulkan/RenderTargetVk.cpp',
+            'libANGLE/renderer/vulkan/RenderTargetVk.h',
             'libANGLE/renderer/vulkan/SamplerVk.cpp',
             'libANGLE/renderer/vulkan/SamplerVk.h',
             'libANGLE/renderer/vulkan/ShaderVk.cpp',
@@ -635,6 +639,21 @@
             'libANGLE/renderer/vulkan/TransformFeedbackVk.h',
             'libANGLE/renderer/vulkan/VertexArrayVk.cpp',
             'libANGLE/renderer/vulkan/VertexArrayVk.h',
+            'libANGLE/renderer/vulkan/formatutilsvk.h',
+            'libANGLE/renderer/vulkan/formatutilsvk.cpp',
+            'libANGLE/renderer/vulkan/renderervk_utils.cpp',
+            'libANGLE/renderer/vulkan/renderervk_utils.h',
+            'libANGLE/renderer/vulkan/vk_format_table_autogen.cpp',
+        ],
+        'libangle_vulkan_win32_sources':
+        [
+            'libANGLE/renderer/vulkan/DisplayVkWin32.cpp',
+            'libANGLE/renderer/vulkan/DisplayVkWin32.h',
+        ],
+        'libangle_vulkan_xcb_sources':
+        [
+            'libANGLE/renderer/vulkan/DisplayVkXcb.cpp',
+            'libANGLE/renderer/vulkan/DisplayVkXcb.h',
         ],
         'libangle_null_sources':
         [
@@ -948,10 +967,10 @@
                             ],
                             'link_settings': {
                                 'ldflags': [
-                                    '<!@(<(pkg-config) --libs-only-L --libs-only-other x11 xi xext)',
+                                    '<!@(<(pkg-config) --libs-only-L --libs-only-other x11 xi xext xcb)',
                                 ],
                                 'libraries': [
-                                    '<!@(<(pkg-config) --libs-only-l x11 xi xext) -ldl',
+                                    '<!@(<(pkg-config) --libs-only-l x11 xi xext xcb) -ldl',
                                 ],
                             },
                         }],
@@ -1025,9 +1044,35 @@
                     [
                         '<@(libangle_vulkan_sources)',
                     ],
+                    'conditions':
+                    [
+                        ['OS=="win"',
+                        {
+                            'sources':
+                            [
+                                '<@(libangle_vulkan_win32_sources)',
+                            ],
+                        }],
+                        ['OS=="linux"',
+                        {
+                            'sources':
+                            [
+                                '<@(libangle_vulkan_xcb_sources)',
+                            ],
+                        }],
+                    ],
+                    'dependencies':
+                    [
+                        'glslang',
+                        'vulkan_loader',
+                    ],
                     'defines':
                     [
                         'ANGLE_ENABLE_VULKAN',
+                    ],
+                    'export_dependent_settings':
+                    [
+                        'vulkan_loader',
                     ],
                 }],
                 ['angle_enable_null==1',

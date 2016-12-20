@@ -106,6 +106,11 @@ TEST_P(RendererTest, RequestedRendererCreated)
         ASSERT_TRUE(IsNULL());
     }
 
+    if (platform.renderer == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
+    {
+        ASSERT_TRUE(IsVulkan());
+    }
+
     EGLint glesMajorVersion = GetParam().majorVersion;
     EGLint glesMinorVersion = GetParam().minorVersion;
 
@@ -126,6 +131,9 @@ TEST_P(RendererTest, RequestedRendererCreated)
     {
         FAIL() << "Unhandled GL ES client version.";
     }
+
+    ASSERT_GL_NO_ERROR();
+    ASSERT_EGL_SUCCESS();
 }
 
 // Perform a simple operation (clear and read pixels) to verify the device is working
@@ -140,6 +148,8 @@ TEST_P(RendererTest, SimpleOperation)
     glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_PIXEL_EQ(0, 0, 0, 255, 0, 255);
+
+    ASSERT_GL_NO_ERROR();
 }
 
 // Select configurations (e.g. which renderer, which GLES major version) these tests should be run against.
@@ -229,5 +239,9 @@ ANGLE_INSTANTIATE_TEST(RendererTest,
                        // All ES version on top of the NULL backend
                        ES2_NULL(),
                        ES3_NULL(),
-                       ES31_NULL());
-}
+                       ES31_NULL(),
+
+                       // ES on top of Vulkan
+                       ES2_VULKAN(),
+                       ES3_VULKAN());
+}  // anonymous namespace
