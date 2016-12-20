@@ -1858,8 +1858,22 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
     workarounds.rewriteUnaryMinusOperator =
         IsIntel(adapterDesc.VendorId) &&
         (IsBroadwell(adapterDesc.DeviceId) || IsHaswell(adapterDesc.DeviceId));
-    workarounds.emulateIsnanFloat =
-        IsIntel(adapterDesc.VendorId) && IsSkylake(adapterDesc.DeviceId);
+    if (IsIntel(adapterDesc.VendorId))
+    {
+        if (deviceCaps.driverVersion.valid())
+        {
+            WORD part1 = HIWORD(deviceCaps.driverVersion.value().LowPart);
+            WORD part2 = LOWORD(deviceCaps.driverVersion.value().LowPart);
+
+            // Disable the workaround on the new fixed driver.
+            workarounds.emulateIsnanFloat =
+                IsSkylake(adapterDesc.DeviceId) && (part1 <= 16u && part2 < 4542);
+        }
+        else
+        {
+            workarounds.emulateIsnanFloat = true;
+        }
+    }
     workarounds.callClearTwiceOnSmallTarget =
         IsIntel(adapterDesc.VendorId) && IsSkylake(adapterDesc.DeviceId);
 
