@@ -63,8 +63,8 @@ egl::ConfigSet DisplayVk::generateConfigs()
     singleton.colorBufferType       = EGL_RGB_BUFFER;
     singleton.configCaveat          = EGL_NONE;
     singleton.conformant            = 0;
-    singleton.depthSize             = 0;
-    singleton.stencilSize           = 0;
+    singleton.depthSize             = 24;
+    singleton.stencilSize           = 8;
     singleton.level                 = 0;
     singleton.matchNativePixmap     = EGL_NONE;
     singleton.maxPBufferWidth       = 0;

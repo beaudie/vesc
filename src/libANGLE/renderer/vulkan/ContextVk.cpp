@@ -223,6 +223,19 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
     multisampleState.alphaToOneEnable      = VK_FALSE;
 
     // TODO(jmadill): Depth/stencil state.
+    VkPipelineDepthStencilStateCreateInfo depthStencilState;
+    memset(&depthStencilState, 0, sizeof(depthStencilState));
+    depthStencilState.sType            = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+    depthStencilState.pNext            = nullptr;
+    depthStencilState.depthTestEnable  = VK_TRUE;
+    depthStencilState.depthWriteEnable = VK_TRUE;
+    depthStencilState.depthCompareOp   = VK_COMPARE_OP_LESS_OR_EQUAL;
+    depthStencilState.depthBoundsTestEnable = VK_FALSE;
+    depthStencilState.back.failOp           = VK_STENCIL_OP_KEEP;
+    depthStencilState.back.passOp           = VK_STENCIL_OP_KEEP;
+    depthStencilState.back.compareOp        = VK_COMPARE_OP_ALWAYS;
+    depthStencilState.stencilTestEnable     = VK_FALSE;
+    depthStencilState.front                 = depthStencilState.back;
 
     // TODO(jmadill): Blend state/MRT.
     VkPipelineColorBlendAttachmentState blendAttachmentState;
@@ -270,7 +283,7 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
     pipelineInfo.pViewportState      = &viewportState;
     pipelineInfo.pRasterizationState = &rasterState;
     pipelineInfo.pMultisampleState   = &multisampleState;
-    pipelineInfo.pDepthStencilState  = nullptr;
+    pipelineInfo.pDepthStencilState  = &depthStencilState;
     pipelineInfo.pColorBlendState    = &blendState;
     pipelineInfo.pDynamicState       = nullptr;
     pipelineInfo.layout              = pipelineLayout->getHandle();
