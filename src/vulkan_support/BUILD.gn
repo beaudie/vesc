@@ -26,7 +26,11 @@ config("vulkan_loader_config") {
 
 config("vulkan_loader_internal_config") {
   if (is_clang || !is_win) {
-    cflags = [ "-Wno-unused-function" ]
+    # TODO(jmadill): List cast calling convention warning when fix is upstreamed.
+    cflags = [
+      "-Wno-cast-calling-convention",
+      "-Wno-unused-function",
+    ]
   }
 }
 
