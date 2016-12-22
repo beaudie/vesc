@@ -270,8 +270,6 @@ Context::Context(rx::EGLImplFactory *implFactory,
     mGLState.initialize(mCaps, mExtensions, getClientVersion(), GetDebug(attribs),
                         GetBindGeneratesResource(attribs));
 
-    mFenceNVHandleAllocator.setBaseHandle(0);
-
     // [OpenGL ES 2.0.24] section 3.7 page 83:
     // In the initial state, TEXTURE_2D and TEXTURE_CUBE_MAP have twodimensional
     // and cube map texture state vectors respectively associated with them.
@@ -383,11 +381,6 @@ Context::Context(rx::EGLImplFactory *implFactory,
 Context::~Context()
 {
     mGLState.reset();
-
-    for (auto fence : mFenceNVMap)
-    {
-        SafeDelete(fence.second);
-    }
 
     for (auto query : mQueryMap)
     {
@@ -561,11 +554,7 @@ GLuint Context::createFramebuffer()
 
 GLuint Context::createFenceNV()
 {
-    GLuint handle = mFenceNVHandleAllocator.allocate();
-
-    mFenceNVMap[handle] = new FenceNV(mImplementation->createFenceNV());
-
-    return handle;
+    return mState.mFenceNVs->createFenceNV(mImplementation.get());
 }
 
 // Returns an unused query name
@@ -774,14 +763,7 @@ void Context::deleteFramebuffer(GLuint framebuffer)
 
 void Context::deleteFenceNV(GLuint fence)
 {
-    auto fenceObject = mFenceNVMap.find(fence);
-
-    if (fenceObject != mFenceNVMap.end())
-    {
-        mFenceNVHandleAllocator.release(fenceObject->first);
-        delete fenceObject->second;
-        mFenceNVMap.erase(fenceObject);
-    }
+    mState.mFenceNVs->deleteFenceNV(fence);
 }
 
 void Context::deleteQuery(GLuint query)
@@ -1142,18 +1124,9 @@ Framebuffer *Context::getFramebuffer(GLuint handle) const
     return mState.mFramebuffers->getFramebuffer(handle);
 }
 
-FenceNV *Context::getFenceNV(unsigned int handle)
+FenceNV *Context::getFenceNV(GLuint handle)
 {
-    auto fence = mFenceNVMap.find(handle);
-
-    if (fence == mFenceNVMap.end())
-    {
-        return NULL;
-    }
-    else
-    {
-        return fence->second;
-    }
+    return mState.mFenceNVs->getFenceNV(handle);
 }
 
 Query *Context::getQuery(unsigned int handle, bool create, GLenum type)

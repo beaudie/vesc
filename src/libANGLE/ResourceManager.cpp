@@ -106,6 +106,12 @@ void deleteObject(HandleAllocator *handleAllocator,
                         [](ResourceType *object) { object->release(); });
 }
 
+void deleteObject(HandleAllocator *handleAllocator, ResourceMap<FenceNV> *objectMap, GLuint handle)
+{
+    return deleteObject(handleAllocator, objectMap, handle,
+                        [](FenceNV *object) { SafeDelete(object); });
+}
+
 template <typename ResourceType>
 ResourceType *getObject(const ResourceMap<ResourceType> &objectMap, GLuint handle)
 {
@@ -469,6 +475,27 @@ FramebufferManager::~FramebufferManager()
             SafeDelete(framebuffer.second);
         }
     }
+}
+
+FenceNVManager::FenceNVManager()
+{
+    mHandleAllocator.setBaseHandle(0);
+}
+
+GLuint FenceNVManager::createFenceNV(rx::GLImplFactory *factory)
+{
+    return insertObject(&mHandleAllocator, &mObjectMap,
+                        [&](GLuint) { return new FenceNV(factory->createFenceNV()); });
+}
+
+void FenceNVManager::deleteFenceNV(GLuint fenceNV)
+{
+    deleteObject(&mHandleAllocator, &mObjectMap, fenceNV);
+}
+
+FenceNV *FenceNVManager::getFenceNV(GLuint handle) const
+{
+    return getObject(mObjectMap, handle);
 }
 
 }  // namespace gl

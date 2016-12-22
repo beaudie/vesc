@@ -26,6 +26,7 @@ namespace gl
 {
 class Buffer;
 struct Caps;
+class FenceNV;
 class FenceSync;
 class Framebuffer;
 struct Limitations;
@@ -185,6 +186,18 @@ class FramebufferManager : public ResourceManagerBase<HandleAllocator>
 
   private:
     ResourceMap<Framebuffer> mFramebuffers;
+};
+
+class FenceNVManager : public TypedResourceManager<FenceNV, HandleAllocator>
+{
+  public:
+    FenceNVManager();
+    GLuint createFenceNV(rx::GLImplFactory *factory);
+    void deleteFenceNV(GLuint fenceNV);
+    FenceNV *getFenceNV(GLuint handle) const;
+
+  protected:
+    ~FenceNVManager() override {}
 };
 
 }  // namespace gl

@@ -657,9 +657,6 @@ class Context final : public ValidationContext
 
     TextureMap mZeroTextures;
 
-    ResourceMap<FenceNV> mFenceNVMap;
-    HandleAllocator mFenceNVHandleAllocator;
-
     ResourceMap<Query> mQueryMap;
     HandleAllocator mQueryHandleAllocator;
 

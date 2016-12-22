@@ -58,7 +58,8 @@ ContextState::ContextState(uintptr_t contextIn,
       mSamplers(GetSharedResourceManager(shareContextState, &ContextState::mSamplers)),
       mFenceSyncs(GetSharedResourceManager(shareContextState, &ContextState::mFenceSyncs)),
       mPaths(GetSharedResourceManager(shareContextState, &ContextState::mPaths)),
-      mFramebuffers(new FramebufferManager())
+      mFramebuffers(new FramebufferManager()),
+      mFenceNVs(new FenceNVManager())
 {
 }
 
@@ -72,6 +73,7 @@ ContextState::~ContextState()
     mFenceSyncs->release();
     mPaths->release();
     mFramebuffers->release();
+    mFenceNVs->release();
 }
 
 const TextureCaps &ContextState::getTextureCap(GLenum internalFormat) const
