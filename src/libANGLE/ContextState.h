@@ -17,6 +17,7 @@ namespace gl
 {
 class BufferManager;
 class ContextState;
+class FenceNVManager;
 class FenceSyncManager;
 class FramebufferManager;
 class PathManager;
@@ -75,6 +76,7 @@ class ContextState final : public angle::NonCopyable
     FenceSyncManager *mFenceSyncs;
     PathManager *mPaths;
     FramebufferManager *mFramebuffers;
+    FenceNVManager *mFenceNVs;
 };
 
 class ValidationContext : angle::NonCopyable
