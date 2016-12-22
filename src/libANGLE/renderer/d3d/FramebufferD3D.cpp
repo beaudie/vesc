@@ -263,9 +263,10 @@ gl::Error FramebufferD3D::blit(ContextImpl *context,
 {
     const auto &glState                      = context->getGLState();
     const gl::Framebuffer *sourceFramebuffer = glState.getReadFramebuffer();
+    const gl::Framebuffer *destFramebuffer   = glState.getDrawFramebuffer();
     bool blitRenderTarget = false;
     if ((mask & GL_COLOR_BUFFER_BIT) && sourceFramebuffer->getReadColorbuffer() != nullptr &&
-        mState.getFirstColorAttachment() != nullptr)
+        destFramebuffer->hasEnabledDrawBuffer())
     {
         blitRenderTarget = true;
     }
