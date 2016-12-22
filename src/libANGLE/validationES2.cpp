@@ -436,6 +436,15 @@ bool ValidateES2TexImageParameters(Context *context,
                     return false;
                 }
                 break;
+            case GL_COMPRESSED_SRGB_S3TC_DXT1_EXT:
+            case GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT:
+            case GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT:
+            case GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT:
+                if (!context->getExtensions().textureCompressionS3TCsRGB)
+                {
+                    context->handleError(Error(GL_INVALID_ENUM));
+                    return false;
+                }
             case GL_ETC1_RGB8_OES:
                 if (!context->getExtensions().compressedETC1RGB8Texture)
                 {
