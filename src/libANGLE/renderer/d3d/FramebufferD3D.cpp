@@ -263,37 +263,13 @@ gl::Error FramebufferD3D::blit(ContextImpl *context,
 {
     const auto &glState                      = context->getGLState();
     const gl::Framebuffer *sourceFramebuffer = glState.getReadFramebuffer();
-    bool blitRenderTarget = false;
-    if ((mask & GL_COLOR_BUFFER_BIT) && sourceFramebuffer->getReadColorbuffer() != nullptr &&
-        mState.getFirstColorAttachment() != nullptr)
+    const gl::Rectangle *scissor = glState.isScissorTestEnabled() ? &glState.getScissor() : nullptr;
+    gl::Error error = blitImpl(sourceArea, destArea, scissor, (mask & GL_COLOR_BUFFER_BIT) != 0,
+                               (mask & GL_DEPTH_BUFFER_BIT) != 0,
+                               (mask & GL_STENCIL_BUFFER_BIT) != 0, filter, sourceFramebuffer);
+    if (error.isError())
     {
-        blitRenderTarget = true;
-    }
-
-    bool blitStencil = false;
-    if ((mask & GL_STENCIL_BUFFER_BIT) && sourceFramebuffer->getStencilbuffer() != nullptr &&
-        mState.getStencilAttachment() != nullptr)
-    {
-        blitStencil = true;
-    }
-
-    bool blitDepth = false;
-    if ((mask & GL_DEPTH_BUFFER_BIT) && sourceFramebuffer->getDepthbuffer() != nullptr &&
-        mState.getDepthAttachment() != nullptr)
-    {
-        blitDepth = true;
-    }
-
-    if (blitRenderTarget || blitDepth || blitStencil)
-    {
-        const gl::Rectangle *scissor =
-            glState.isScissorTestEnabled() ? &glState.getScissor() : nullptr;
-        gl::Error error = blitImpl(sourceArea, destArea, scissor, blitRenderTarget, blitDepth,
-                                   blitStencil, filter, sourceFramebuffer);
-        if (error.isError())
-        {
-            return error;
-        }
+        return error;
     }
 
     return gl::Error(GL_NO_ERROR);
