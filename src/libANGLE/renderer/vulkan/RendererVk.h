@@ -24,6 +24,7 @@ class AttributeMap;
 
 namespace rx
 {
+class GlslangWrapper;
 
 namespace vk
 {
@@ -66,6 +67,8 @@ class RendererVk : angle::NonCopyable
                                                            const vk::Format &format,
                                                            const gl::Extents &extent);
 
+    GlslangWrapper *getGlslangWrapper();
+
   private:
     void ensureCapsInitialized() const;
     void generateCaps(gl::Caps *outCaps,
@@ -93,6 +96,7 @@ class RendererVk : angle::NonCopyable
     VkCommandPool mCommandPool;
     std::unique_ptr<vk::CommandBuffer> mCommandBuffer;
     uint32_t mHostVisibleMemoryIndex;
+    GlslangWrapper *mGlslangWrapper;
 };
 
 }  // namespace rx
