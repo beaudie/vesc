@@ -644,6 +644,11 @@ void ANGLETest::setBindGeneratesResource(bool bindGeneratesResource)
     mEGLWindow->setBindGeneratesResource(bindGeneratesResource);
 }
 
+void ANGLETest::setVulkanLayersEnabled(bool enabled)
+{
+    mEGLWindow->setVulkanLayersEnabled(enabled);
+}
+
 int ANGLETest::getClientMajorVersion() const
 {
     return mEGLWindow->getClientMajorVersion();
