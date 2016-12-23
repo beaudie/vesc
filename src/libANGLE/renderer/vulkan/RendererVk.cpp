@@ -20,6 +20,7 @@
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
+#include "libANGLE/renderer/vulkan/formatutilsvk.h"
 #include "platform/Platform.h"
 
 namespace rx
@@ -89,7 +90,8 @@ RendererVk::RendererVk()
       mQueue(VK_NULL_HANDLE),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mDevice(VK_NULL_HANDLE),
-      mCommandPool(VK_NULL_HANDLE)
+      mCommandPool(VK_NULL_HANDLE),
+      mHostVisibleMemoryIndex(std::numeric_limits<uint32_t>::max())
 {
 }
 
@@ -285,6 +287,22 @@ vk::Error RendererVk::initialize(const egl::AttributeMap &attribs)
     {
         ANGLE_TRY(initializeDevice(firstGraphicsQueueFamily));
     }
+
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(mPhysicalDevice, &memoryProperties);
+
+    for (uint32_t memoryIndex = 0; memoryIndex < memoryProperties.memoryTypeCount; ++memoryIndex)
+    {
+        if ((memoryProperties.memoryTypes[memoryIndex].propertyFlags &
+             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0)
+        {
+            mHostVisibleMemoryIndex = memoryIndex;
+            break;
+        }
+    }
+
+    ANGLE_VK_CHECK(mHostVisibleMemoryIndex < std::numeric_limits<uint32_t>::max(),
+                   VK_ERROR_INITIALIZATION_FAILED);
 
     return vk::NoError();
 }
@@ -514,8 +532,8 @@ vk::CommandBuffer *RendererVk::getCommandBuffer()
     return mCommandBuffer.get();
 }
 
-vk::Error RendererVk::queueAndFinishCommandBuffer(const vk::CommandBuffer &commandBuffer,
-                                                  uint64_t timeoutMS)
+vk::Error RendererVk::submitAndFinishCommandBuffer(const vk::CommandBuffer &commandBuffer,
+                                                   uint64_t timeoutMS)
 {
     VkFenceCreateInfo fenceInfo;
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
@@ -547,9 +565,95 @@ vk::Error RendererVk::queueAndFinishCommandBuffer(const vk::CommandBuffer &comma
         res = vkWaitForFences(mDevice, 1, &commandFence, VK_TRUE, timeoutMS * 1000ull);
     }
     ANGLE_VK_TRY(res);
+
     vkDestroyFence(mDevice, commandFence, nullptr);
 
     return vk::NoError();
+}
+
+vk::Error RendererVk::submitAndFinishCommandBuffer(const vk::CommandBuffer &commandBuffer,
+                                                   const vk::Semaphore &waitSemaphore,
+                                                   uint64_t fenceTimeoutMS)
+{
+    VkFenceCreateInfo fenceInfo;
+    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    fenceInfo.pNext = nullptr;
+    fenceInfo.flags = 0;
+
+    VkFence commandFence = VK_NULL_HANDLE;
+    ANGLE_VK_TRY(vkCreateFence(mDevice, &fenceInfo, nullptr, &commandFence));
+
+    VkCommandBuffer commandBufferHandle = commandBuffer.getHandle();
+    VkSemaphore waitHandle              = waitSemaphore.getHandle();
+    VkPipelineStageFlags waitStageMask  = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+
+    VkSubmitInfo submitInfo;
+    submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.pNext                = nullptr;
+    submitInfo.waitSemaphoreCount   = 1;
+    submitInfo.pWaitSemaphores      = &waitHandle;
+    submitInfo.pWaitDstStageMask    = &waitStageMask;
+    submitInfo.commandBufferCount   = 1;
+    submitInfo.pCommandBuffers      = &commandBufferHandle;
+    submitInfo.signalSemaphoreCount = 0;
+    submitInfo.pSignalSemaphores    = nullptr;
+
+    ANGLE_VK_TRY(vkQueueSubmit(mQueue, 1, &submitInfo, commandFence));
+
+    // TODO(jmadill): Investigate how to properly queue command buffer work.
+    VkResult res = VK_TIMEOUT;
+    for (unsigned int guard = 0; guard < 10000 && res == VK_TIMEOUT; ++guard)
+    {
+        res = vkWaitForFences(mDevice, 1, &commandFence, VK_TRUE, fenceTimeoutMS * 1000ull);
+    }
+    ANGLE_VK_TRY(res);
+
+    vkDestroyFence(mDevice, commandFence, nullptr);
+
+    return vk::NoError();
+}
+
+vk::ErrorOrResult<vk::Semaphore> RendererVk::submitCommandBufferWithSemaphores(
+    const vk::CommandBuffer &commandBuffer,
+    const vk::Semaphore &waitSemaphore)
+{
+    // Use a semaphore to indicate we're done the command buffer work.
+    vk::Semaphore doneCommandSemaphore(mDevice);
+    ANGLE_TRY(doneCommandSemaphore.init());
+
+    VkCommandBuffer commandBufferHandle = commandBuffer.getHandle();
+    VkSemaphore doneCommandsHandle      = doneCommandSemaphore.getHandle();
+    VkSemaphore waitHandle              = waitSemaphore.getHandle();
+
+    VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+
+    VkSubmitInfo submitInfo;
+    submitInfo.sType                = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.pNext                = nullptr;
+    submitInfo.waitSemaphoreCount   = 1;
+    submitInfo.pWaitSemaphores      = &waitHandle;
+    submitInfo.pWaitDstStageMask    = &waitStageMask;
+    submitInfo.commandBufferCount   = 1;
+    submitInfo.pCommandBuffers      = &commandBufferHandle;
+    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.pSignalSemaphores    = &doneCommandsHandle;
+
+    ANGLE_VK_TRY(vkQueueSubmit(mQueue, 1, &submitInfo, VK_NULL_HANDLE));
+
+    return std::move(doneCommandSemaphore);
+}
+
+vk::ErrorOrResult<vk::StagingImage> RendererVk::createStagingImage(TextureDimension dimension,
+                                                                   const vk::Format &format,
+                                                                   const gl::Extents &extent)
+{
+    ASSERT(mHostVisibleMemoryIndex != std::numeric_limits<uint32_t>::max());
+
+    vk::StagingImage stagingImage(mDevice);
+    ANGLE_TRY(stagingImage.init(mCurrentQueueFamilyIndex, mHostVisibleMemoryIndex, dimension,
+                                format.native, extent));
+
+    return std::move(stagingImage);
 }
 
 }  // namespace rx
