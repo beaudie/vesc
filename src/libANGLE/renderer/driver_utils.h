@@ -9,6 +9,8 @@
 #ifndef LIBANGLE_RENDERER_DRIVER_UTILS_H_
 #define LIBANGLE_RENDERER_DRIVER_UTILS_H_
 
+#include <memory>
+
 #include "libANGLE/angletypes.h"
 
 namespace rx
@@ -46,6 +48,25 @@ inline bool IsQualcomm(uint32_t vendor_id)
 }
 
 // Intel
+class IntelDriverVersion final : angle::NonCopyable
+{
+  public:
+    IntelDriverVersion();
+    IntelDriverVersion(uint16_t part1, uint16_t part2, uint16_t part3, uint16_t part4);
+    ~IntelDriverVersion(){};
+    bool operator==(const IntelDriverVersion &);
+    bool operator!=(const IntelDriverVersion &);
+    bool operator<(const IntelDriverVersion &);
+    bool operator>=(const IntelDriverVersion &);
+
+  private:
+    uint16_t mVersionPart1;
+    uint16_t mVersionPart2;
+    uint16_t mVersionPart3;
+    uint16_t mVersionPart4;
+};
+
+IntelDriverVersion *getIntelDriverVersion(std::string version);
 bool IsHaswell(uint32_t DeviceId);
 bool IsBroadwell(uint32_t DeviceId);
 bool IsCherryView(uint32_t DeviceId);

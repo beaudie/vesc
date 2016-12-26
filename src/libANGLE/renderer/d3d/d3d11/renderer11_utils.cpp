@@ -980,6 +980,18 @@ size_t GetMaximumStreamOutputSeparateComponents(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
+IntelDriverVersion *getIntelDriverVersion(const Optional<LARGE_INTEGER> driverVersion)
+{
+    if (!driverVersion.valid())
+        return new IntelDriverVersion();
+    uint64_t versionNum = driverVersion.value().QuadPart;
+    uint16_t part1      = (versionNum >> 48) & 0xffff;
+    uint16_t part2      = (versionNum >> 32) & 0xffff;
+    uint16_t part3      = (versionNum >> 16) & 0xffff;
+    uint16_t part4      = versionNum & 0xffff;
+    return new IntelDriverVersion(part1, part2, part3, part4);
+}
+
 }  // anonymous namespace
 
 unsigned int GetReservedVertexUniformVectors(D3D_FEATURE_LEVEL featureLevel)
@@ -1853,28 +1865,24 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
     workarounds.flushAfterEndingTransformFeedback = IsNvidia(adapterDesc.VendorId);
     workarounds.getDimensionsIgnoresBaseLevel     = IsNvidia(adapterDesc.VendorId);
 
-    workarounds.preAddTexelFetchOffsets = IsIntel(adapterDesc.VendorId);
-    workarounds.disableB5G6R5Support    = IsIntel(adapterDesc.VendorId);
-    workarounds.rewriteUnaryMinusOperator =
-        IsIntel(adapterDesc.VendorId) &&
-        (IsBroadwell(adapterDesc.DeviceId) || IsHaswell(adapterDesc.DeviceId));
-    if (IsIntel(adapterDesc.VendorId) && IsSkylake(adapterDesc.DeviceId))
+    std::unique_ptr<IntelDriverVersion> intelCurVersion(
+        d3d11_gl::getIntelDriverVersion(deviceCaps.driverVersion));
+    std::unique_ptr<IntelDriverVersion> intelFixedVersion;
+    if (IsIntel(adapterDesc.VendorId))
     {
-        if (deviceCaps.driverVersion.valid())
+        workarounds.preAddTexelFetchOffsets           = true;
+        workarounds.useSystemMemoryForConstantBuffers = true;
+        intelFixedVersion.reset(getIntelDriverVersion("20.19.15.4539"));
+        workarounds.disableB5G6R5Support = *intelCurVersion.get() < *intelFixedVersion.get();
+        if (IsSkylake(adapterDesc.DeviceId))
         {
-            WORD part1 = HIWORD(deviceCaps.driverVersion.value().LowPart);
-            WORD part2 = LOWORD(deviceCaps.driverVersion.value().LowPart);
-
-            // Disable the workaround on the new fixed driver.
-            workarounds.emulateIsnanFloat = part1 <= 16u && part2 < 4542u;
+            workarounds.callClearTwiceOnSmallTarget = true;
+            intelFixedVersion.reset(getIntelDriverVersion("21.20.16.4542"));
+            workarounds.emulateIsnanFloat = *intelCurVersion.get() < *intelFixedVersion.get();
         }
-        else
-        {
-            workarounds.emulateIsnanFloat = true;
-        }
+        workarounds.rewriteUnaryMinusOperator =
+            IsBroadwell(adapterDesc.DeviceId) || IsHaswell(adapterDesc.DeviceId);
     }
-    workarounds.callClearTwiceOnSmallTarget =
-        IsIntel(adapterDesc.VendorId) && IsSkylake(adapterDesc.DeviceId);
 
     // TODO(jmadill): Disable when we have a fixed driver version.
     workarounds.emulateTinyStencilTextures = IsAMD(adapterDesc.VendorId);
@@ -1887,8 +1895,6 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
     {
         workarounds.emulateTinyStencilTextures = false;
     }
-
-    workarounds.useSystemMemoryForConstantBuffers = IsIntel(adapterDesc.VendorId);
 
     // Call platform hooks for testing overrides.
     ANGLEPlatformCurrent()->overrideWorkaroundsD3D(&workarounds);
