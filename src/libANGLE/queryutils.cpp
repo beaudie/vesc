@@ -58,16 +58,16 @@ void QueryTexLevelParameterBase(const Texture *texture,
                 texture->getInternalFormat(texture->getTarget(), level));
             break;
         case GL_TEXTURE_WIDTH:
-            *params = ConvertFromGLint<ParamType>(texture->getWidth(texture->getTarget(), level));
+            *params = ConvertFromGLuint<ParamType>(texture->getWidth(texture->getTarget(), level));
             break;
         case GL_TEXTURE_HEIGHT:
-            *params = ConvertFromGLint<ParamType>(texture->getHeight(texture->getTarget(), level));
+            *params = ConvertFromGLuint<ParamType>(texture->getHeight(texture->getTarget(), level));
             break;
         case GL_TEXTURE_DEPTH:
-            *params = ConvertFromGLint<ParamType>(texture->getDepth(texture->getTarget(), level));
+            *params = ConvertFromGLuint<ParamType>(texture->getDepth(texture->getTarget(), level));
             break;
         case GL_TEXTURE_SAMPLES:
-            *params = ConvertFromGLint<ParamType>(texture->getSamples());
+            *params = ConvertFromGLuint<ParamType>(texture->getSamples());
             break;
         case GL_TEXTURE_FIXED_SAMPLE_LOCATIONS:
             *params = ConvertFromGLboolean<ParamType>(texture->getFixedSampleLocations());
