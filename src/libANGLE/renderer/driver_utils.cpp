@@ -7,6 +7,8 @@
 // driver_utils.h : provides more information about current driver.
 
 #include <algorithm>
+#include <sstream>
+#include <string>
 
 #include "libANGLE/renderer/driver_utils.h"
 
@@ -46,6 +48,65 @@ const uint32_t Kabylake[] = {0x5916, 0x5913, 0x5906, 0x5926, 0x5921, 0x5915, 0x5
                              0x591A, 0x590A, 0x591D, 0x5908, 0x5923, 0x5927};
 
 }  // anonymous namespace
+
+IntelDriverVersion::IntelDriverVersion()
+    : mVersionPart1(0), mVersionPart2(0), mVersionPart3(0), mVersionPart4(0)
+{
+}
+
+IntelDriverVersion::IntelDriverVersion(uint16_t part1,
+                                       uint16_t part2,
+                                       uint16_t part3,
+                                       uint16_t part4)
+    : mVersionPart1(part1), mVersionPart2(part2), mVersionPart3(part3), mVersionPart4(part4)
+{
+}
+
+bool IntelDriverVersion::operator==(const IntelDriverVersion &version)
+{
+    return mVersionPart1 == version.mVersionPart1 && mVersionPart2 == version.mVersionPart2 &&
+           mVersionPart3 == version.mVersionPart3 && mVersionPart4 == version.mVersionPart4;
+}
+
+bool IntelDriverVersion::operator!=(const IntelDriverVersion &version)
+{
+    return !(*this == version);
+}
+
+bool IntelDriverVersion::operator<(const IntelDriverVersion &version)
+{
+    // See http://www.intel.com/content/www/us/en/support/graphics-drivers/000005654.html to
+    // understand the Intel graphics driver version number.
+    // mVersionPart1 changes with OS version. mVersionPart2 changes with DirectX version.
+    // mVersionPart3 stands for release year. mVersionPart4 is driver specific unique version
+    // number.
+    // For example: Intel driver version '20.19.15.4539'
+    //              20   -> windows 10 driver
+    //              19   -> DirectX 12 first version(12.0) supported
+    //              15   -> Driver released in 2015
+    //              4539 -> Driver specific unique version number
+    // So, we only need to check the last part.
+    return mVersionPart4 < version.mVersionPart4;
+}
+
+bool IntelDriverVersion::operator>=(const IntelDriverVersion &version)
+{
+    return !(*this < version);
+}
+
+IntelDriverVersion *getIntelDriverVersion(std::string version)
+{
+    if (version.empty())
+        return new IntelDriverVersion();
+
+    std::stringstream ss(version);
+    uint16_t part1, part2, part3, part4;
+    ss >> part1;
+    ss.ignore(std::numeric_limits<std::streamsize>::max(), '.') >> part2;
+    ss.ignore(std::numeric_limits<std::streamsize>::max(), '.') >> part3;
+    ss.ignore(std::numeric_limits<std::streamsize>::max(), '.') >> part4;
+    return new IntelDriverVersion(part1, part2, part3, part4);
+}
 
 bool IsHaswell(uint32_t DeviceId)
 {
