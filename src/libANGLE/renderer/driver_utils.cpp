@@ -7,6 +7,8 @@
 // driver_utils.h : provides more information about current driver.
 
 #include <algorithm>
+#include <sstream>
+#include <string>
 
 #include "libANGLE/renderer/driver_utils.h"
 
@@ -46,6 +48,109 @@ const uint32_t Kabylake[] = {0x5916, 0x5913, 0x5906, 0x5926, 0x5921, 0x5915, 0x5
                              0x591A, 0x590A, 0x591D, 0x5908, 0x5923, 0x5927};
 
 }  // anonymous namespace
+
+IntelDriverVersion::IntelDriverVersion(const std::string version)
+    : mVersion(version),
+      mIntVersion(0),
+      mVersionPart1(0),
+      mVersionPart2(0),
+      mVersionPart3(0),
+      mVersionPart4(0)
+{
+    initialize(version);
+}
+
+IntelDriverVersion::IntelDriverVersion(const int64_t version)
+    : mVersion(std::string()),
+      mIntVersion(version),
+      mVersionPart1(0),
+      mVersionPart2(0),
+      mVersionPart3(0),
+      mVersionPart4(0)
+{
+    initialize(version);
+}
+
+void IntelDriverVersion::initialize(const std::string version)
+{
+    if (version.empty())
+        return;
+    size_t pos1   = version.find_first_of('.', 0);
+    mVersionPart1 = convertToInt(version.substr(0, pos1));
+    size_t pos2   = version.find_first_of('.', pos1 + 1);
+    mVersionPart2 = convertToInt(version.substr(pos1 + 1, pos2 - pos1 - 1));
+    size_t pos3   = version.find_first_of('.', pos2 + 1);
+    mVersionPart3 = convertToInt(version.substr(pos2 + 1, pos3 - pos2 - 1));
+    mVersionPart4 = convertToInt(version.substr(pos3 + 1));
+}
+
+void IntelDriverVersion::initialize(const int64_t version)
+{
+    mVersionPart1 = (version >> 48) & 0xffff;
+    mVersionPart2 = (version >> 32) & 0xffff;
+    mVersionPart3 = (version >> 16) & 0xffff;
+    mVersionPart4 = version & 0xffff;
+}
+
+int IntelDriverVersion::convertToInt(std::string str)
+{
+    int num;
+    std::stringstream ss(str);
+    ss >> num;
+    return num;
+}
+
+std::string IntelDriverVersion::getVersion()
+{
+    if (!mVersion.empty())
+        return mVersion;
+
+    std::stringstream ss;
+    ss << mVersionPart1 << '.' << mVersionPart2 << '.' << mVersionPart3 << '.' << mVersionPart4;
+    std::string result = ss.str();
+    return result;
+}
+
+int IntelDriverVersion::getVersionPart1()
+{
+    return mVersionPart1;
+}
+
+int IntelDriverVersion::getVersionPart2()
+{
+    return mVersionPart2;
+}
+
+int IntelDriverVersion::getVersionPart3()
+{
+    return mVersionPart3;
+}
+
+int IntelDriverVersion::getVersionPart4()
+{
+    return mVersionPart4;
+}
+
+bool operator==(IntelDriverVersion version1, IntelDriverVersion version2)
+{
+    return !(std::strcmp(version1.getVersion().c_str(), version2.getVersion().c_str()));
+}
+
+bool operator!=(IntelDriverVersion version1, IntelDriverVersion version2)
+{
+    return !(version1 == version2);
+}
+
+bool operator<(IntelDriverVersion version1, IntelDriverVersion version2)
+{
+    return version1.getVersionPart3() <= version2.getVersionPart3() &&
+           version1.getVersionPart4() < version2.getVersionPart4();
+}
+
+bool operator>=(IntelDriverVersion version1, IntelDriverVersion version2)
+{
+    return !(version1 < version2);
+}
 
 bool IsHaswell(uint32_t DeviceId)
 {
