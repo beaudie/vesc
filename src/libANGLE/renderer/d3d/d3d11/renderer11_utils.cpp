@@ -1854,7 +1854,18 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
     workarounds.getDimensionsIgnoresBaseLevel     = IsNvidia(adapterDesc.VendorId);
 
     workarounds.preAddTexelFetchOffsets = IsIntel(adapterDesc.VendorId);
-    workarounds.disableB5G6R5Support    = IsIntel(adapterDesc.VendorId);
+    if (IsIntel(adapterDesc.VendorId))
+    {
+        if (deviceCaps.driverVersion.valid())
+        {
+            WORD part                        = LOWORD(deviceCaps.driverVersion.value().LowPart);
+            workarounds.disableB5G6R5Support = part < 4539;
+        }
+        else
+        {
+            workarounds.disableB5G6R5Support = true;
+        }
+    }
     workarounds.rewriteUnaryMinusOperator =
         IsIntel(adapterDesc.VendorId) &&
         (IsBroadwell(adapterDesc.DeviceId) || IsHaswell(adapterDesc.DeviceId));
