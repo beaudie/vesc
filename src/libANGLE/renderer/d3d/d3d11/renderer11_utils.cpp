@@ -1854,7 +1854,19 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
     workarounds.getDimensionsIgnoresBaseLevel     = IsNvidia(adapterDesc.VendorId);
 
     workarounds.preAddTexelFetchOffsets = IsIntel(adapterDesc.VendorId);
-    workarounds.disableB5G6R5Support    = IsIntel(adapterDesc.VendorId);
+    if (IsIntel(adapterDesc.VendorId))
+    {
+        if (deviceCaps.driverVersion.valid())
+        {
+            workarounds.disableB5G6R5Support =
+                IntelDriverVersion(deviceCaps.driverVersion.value().QuadPart) <
+                IntelDriverVersion("20.19.15.4539");
+        }
+        else
+        {
+            workarounds.disableB5G6R5Support = true;
+        }
+    }
     workarounds.rewriteUnaryMinusOperator =
         IsIntel(adapterDesc.VendorId) &&
         (IsBroadwell(adapterDesc.DeviceId) || IsHaswell(adapterDesc.DeviceId));
@@ -1862,11 +1874,10 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
     {
         if (deviceCaps.driverVersion.valid())
         {
-            WORD part1 = HIWORD(deviceCaps.driverVersion.value().LowPart);
-            WORD part2 = LOWORD(deviceCaps.driverVersion.value().LowPart);
-
             // Disable the workaround on the new fixed driver.
-            workarounds.emulateIsnanFloat = part1 <= 16u && part2 < 4542u;
+            workarounds.emulateIsnanFloat =
+                IntelDriverVersion(deviceCaps.driverVersion.value().QuadPart) <
+                IntelDriverVersion("21.20.16.4542");
         }
         else
         {

@@ -45,6 +45,35 @@ inline bool IsQualcomm(uint32_t vendor_id)
     return vendor_id == VENDOR_ID_QUALCOMM;
 }
 
+class IntelDriverVersion
+{
+  public:
+    IntelDriverVersion(const std::string version);
+    IntelDriverVersion(const int64_t version);
+    ~IntelDriverVersion(){};
+    std::string getVersion();
+    int getVersionPart1();
+    int getVersionPart2();
+    int getVersionPart3();
+    int getVersionPart4();
+
+  private:
+    void initialize(const std::string version);
+    void initialize(const int64_t version);
+    int convertToInt(std::string str);
+    std::string mVersion;
+    int64_t mIntVersion;
+    int mVersionPart1;
+    int mVersionPart2;
+    int mVersionPart3;
+    int mVersionPart4;
+};
+
+bool operator==(IntelDriverVersion, IntelDriverVersion);
+bool operator!=(IntelDriverVersion, IntelDriverVersion);
+bool operator<(IntelDriverVersion, IntelDriverVersion);
+bool operator>=(IntelDriverVersion, IntelDriverVersion);
+
 // Intel
 bool IsHaswell(uint32_t DeviceId);
 bool IsBroadwell(uint32_t DeviceId);
