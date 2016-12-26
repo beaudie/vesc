@@ -980,6 +980,20 @@ size_t GetMaximumStreamOutputSeparateComponents(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
+bool EnableWorkaround(Optional<LARGE_INTEGER> driverVersion,
+                      WORD fixedVersionPart1,
+                      WORD fixedVersionPart2)
+{
+    if (driverVersion.valid())
+    {
+        WORD part1 = HIWORD(driverVersion.value().LowPart);
+        WORD part2 = LOWORD(driverVersion.value().LowPart);
+        return part1 <= fixedVersionPart1 && part2 < fixedVersionPart2;
+    }
+
+    return true;
+}
+
 }  // anonymous namespace
 
 unsigned int GetReservedVertexUniformVectors(D3D_FEATURE_LEVEL featureLevel)
@@ -1833,18 +1847,9 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
     // TODO(jmadill): Narrow problematic driver range.
     if (IsNvidia(adapterDesc.VendorId))
     {
-        if (deviceCaps.driverVersion.valid())
-        {
-            WORD part1 = HIWORD(deviceCaps.driverVersion.value().LowPart);
-            WORD part2 = LOWORD(deviceCaps.driverVersion.value().LowPart);
-
-            // Disable the workaround to fix a second driver bug on newer NVIDIA.
-            workarounds.depthStencilBlitExtraCopy = (part1 <= 13u && part2 < 6881);
-        }
-        else
-        {
-            workarounds.depthStencilBlitExtraCopy = true;
-        }
+        // Disable the workaround to fix a second driver bug on newer NVIDIA.
+        workarounds.depthStencilBlitExtraCopy =
+            d3d11_gl::EnableWorkaround(deviceCaps.driverVersion, 13u, 6881u);
     }
 
     // TODO(jmadill): Disable workaround when we have a fixed compiler DLL.
@@ -1854,24 +1859,19 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
     workarounds.getDimensionsIgnoresBaseLevel     = IsNvidia(adapterDesc.VendorId);
 
     workarounds.preAddTexelFetchOffsets = IsIntel(adapterDesc.VendorId);
-    workarounds.disableB5G6R5Support    = IsIntel(adapterDesc.VendorId);
+    if (IsIntel(adapterDesc.VendorId))
+    {
+        workarounds.disableB5G6R5Support =
+            d3d11_gl::EnableWorkaround(deviceCaps.driverVersion, 15u, 4539u);
+    }
     workarounds.rewriteUnaryMinusOperator =
         IsIntel(adapterDesc.VendorId) &&
         (IsBroadwell(adapterDesc.DeviceId) || IsHaswell(adapterDesc.DeviceId));
     if (IsIntel(adapterDesc.VendorId) && IsSkylake(adapterDesc.DeviceId))
     {
-        if (deviceCaps.driverVersion.valid())
-        {
-            WORD part1 = HIWORD(deviceCaps.driverVersion.value().LowPart);
-            WORD part2 = LOWORD(deviceCaps.driverVersion.value().LowPart);
-
-            // Disable the workaround on the new fixed driver.
-            workarounds.emulateIsnanFloat = part1 <= 16u && part2 < 4542u;
-        }
-        else
-        {
-            workarounds.emulateIsnanFloat = true;
-        }
+        // Disable the workaround on the new fixed driver.
+        workarounds.emulateIsnanFloat =
+            d3d11_gl::EnableWorkaround(deviceCaps.driverVersion, 16u, 4542u);
     }
     workarounds.callClearTwiceOnSmallTarget =
         IsIntel(adapterDesc.VendorId) && IsSkylake(adapterDesc.DeviceId);
