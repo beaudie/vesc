@@ -340,6 +340,11 @@ Context::Context(rx::EGLImplFactory *implFactory,
     bindCopyWriteBuffer(0);
     bindPixelPackBuffer(0);
     bindPixelUnpackBuffer(0);
+    bindGenericAtomicCounterBuffer(0);
+    for (unsigned int i = 0; i < mCaps.maxAtomicCounterBufferBindings; i++)
+    {
+        bindIndexedAtomicCounterBuffer(0, i, 0, 0);
+    }
 
     if (getClientVersion() >= Version(3, 0))
     {
@@ -1042,6 +1047,21 @@ void Context::bindIndexedTransformFeedbackBuffer(GLuint bufferHandle,
 {
     Buffer *buffer = mResourceManager->checkBufferAllocation(mImplementation.get(), bufferHandle);
     mGLState.getCurrentTransformFeedback()->bindIndexedBuffer(index, buffer, offset, size);
+}
+
+void Context::bindGenericAtomicCounterBuffer(GLuint bufferHandle)
+{
+    Buffer *buffer = mResourceManager->checkBufferAllocation(mImplementation.get(), bufferHandle);
+    mGLState.setGenericAtomicCounterBufferBinding(buffer);
+}
+
+void Context::bindIndexedAtomicCounterBuffer(GLuint bufferHandle,
+                                             GLuint index,
+                                             GLintptr offset,
+                                             GLsizeiptr size)
+{
+    Buffer *buffer = mResourceManager->checkBufferAllocation(mImplementation.get(), bufferHandle);
+    mGLState.setIndexedAtomicCounterBufferBinding(index, buffer, offset, size);
 }
 
 void Context::bindCopyReadBuffer(GLuint bufferHandle)
@@ -3658,11 +3678,7 @@ void Context::bindBuffer(GLenum target, GLuint buffer)
             bindGenericTransformFeedbackBuffer(buffer);
             break;
         case GL_ATOMIC_COUNTER_BUFFER:
-            if (buffer != 0)
-            {
-                // Binding buffers to this binding point is not implemented yet.
-                UNIMPLEMENTED();
-            }
+            bindGenericAtomicCounterBuffer(buffer);
             break;
         case GL_SHADER_STORAGE_BUFFER:
             if (buffer != 0)

@@ -137,6 +137,11 @@ class Context final : public ValidationContext
                                             GLuint index,
                                             GLintptr offset,
                                             GLsizeiptr size);
+    void bindGenericAtomicCounterBuffer(GLuint bufferHandle);
+    void bindIndexedAtomicCounterBuffer(GLuint bufferHandle,
+                                        GLuint index,
+                                        GLintptr offset,
+                                        GLsizeiptr size);
     void bindCopyReadBuffer(GLuint bufferHandle);
     void bindCopyWriteBuffer(GLuint bufferHandle);
     void bindPixelPackBuffer(GLuint bufferHandle);
