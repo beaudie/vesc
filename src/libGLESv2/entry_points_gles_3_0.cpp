@@ -729,6 +729,22 @@ void GL_APIENTRY BindBufferRange(GLenum target, GLuint index, GLuint buffer, GLi
             }
             break;
 
+          case GL_ATOMIC_COUNTER_BUFFER:
+              if (context->getClientVersion() < ES_3_1)
+              {
+                  context->handleError(Error(
+                      GL_INVALID_ENUM, "GL_ATOMIC_COUNTER_BUFFER is not supported in GLES3.0"));
+                  return;
+              }
+              if (index >= caps.maxAtomicCounterBufferBindings)
+              {
+                  context->handleError(Error(GL_INVALID_VALUE,
+                                             "index is greater than or equal to the number of "
+                                             "GL_ATOMIC_COUNTER_BUFFER indexed binding points,"));
+                  return;
+              }
+              break;
+
           default:
               context->handleError(Error(GL_INVALID_ENUM));
             return;
@@ -785,6 +801,15 @@ void GL_APIENTRY BindBufferRange(GLenum target, GLuint index, GLuint buffer, GLi
             context->bindGenericUniformBuffer(buffer);
             break;
 
+          case GL_ATOMIC_COUNTER_BUFFER:
+              if (buffer != 0 && (offset % 4) != 0)
+              {
+                  context->handleError(Error(GL_INVALID_VALUE, "offset must be a multiple of 4"));
+                  return;
+              }
+              context->bindIndexedAtomicCounterBuffer(buffer, index, offset, size);
+              context->bindGenericAtomicCounterBuffer(buffer);
+              break;
           default:
             UNREACHABLE();
         }
@@ -825,6 +850,12 @@ void GL_APIENTRY BindBufferBase(GLenum target, GLuint index, GLuint buffer)
             break;
 
           case GL_ATOMIC_COUNTER_BUFFER:
+              if (context->getClientVersion() < ES_3_1)
+              {
+                  context->handleError(Error(
+                      GL_INVALID_ENUM, "GL_ATOMIC_COUNTER_BUFFER is not supported in GLES3.0"));
+                  return;
+              }
               if (index >= caps.maxAtomicCounterBufferBindings)
               {
                   context->handleError(Error(
@@ -879,11 +910,8 @@ void GL_APIENTRY BindBufferBase(GLenum target, GLuint index, GLuint buffer)
             break;
 
           case GL_ATOMIC_COUNTER_BUFFER:
-              if (buffer != 0)
-              {
-                  // Binding buffers to this binding point is not implemented yet.
-                  UNIMPLEMENTED();
-              }
+              context->bindIndexedAtomicCounterBuffer(buffer, index, 0, 0);
+              context->bindGenericAtomicCounterBuffer(buffer);
               break;
 
           case GL_SHADER_STORAGE_BUFFER:

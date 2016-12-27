@@ -1842,6 +1842,23 @@ bool ValidateIndexedStateQuery(ValidationContext *context,
                 return false;
             }
             break;
+        case GL_ATOMIC_COUNTER_BUFFER_START:
+        case GL_ATOMIC_COUNTER_BUFFER_SIZE:
+        case GL_ATOMIC_COUNTER_BUFFER_BINDING:
+            if (context->getClientVersion() < ES_3_1)
+            {
+                context->handleError(
+                    Error(GL_INVALID_ENUM, "The target is not supported in GLES3.0"));
+                return false;
+            }
+            if (index >= caps.maxAtomicCounterBufferBindings)
+            {
+                context->handleError(
+                    Error(GL_INVALID_VALUE,
+                          "index is outside the valid range for GL_ATOMIC_COUNTER_BUFFER_BINDING"));
+                return false;
+            }
+            break;
         default:
             context->handleError(Error(GL_INVALID_ENUM));
             return false;
