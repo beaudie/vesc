@@ -1230,6 +1230,127 @@ bool ValidateIsVertexArray(Context *context)
     return true;
 }
 
+bool ValidateBindBufferRange(Context *context,
+                             GLenum target,
+                             GLuint index,
+                             GLuint buffer,
+                             GLintptr offset,
+                             GLsizeiptr size)
+{
+    if (context->getClientMajorVersion() < 3)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    if (buffer != 0 && offset < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "buffer is non-zero and offset is negative."));
+        return false;
+    }
+
+    if (buffer != 0 && size < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE, "buffer is non-zero and size is negative."));
+        return false;
+    }
+
+    if (!context->getGLState().isBindGeneratesResourceEnabled() &&
+        !context->isBufferGenerated(buffer))
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Buffer was not generated."));
+        return false;
+    }
+
+    const Caps &caps = context->getCaps();
+    switch (target)
+    {
+        case GL_TRANSFORM_FEEDBACK_BUFFER:
+        {
+            if (index >= caps.maxTransformFeedbackSeparateAttributes)
+            {
+                context->handleError(Error(GL_INVALID_VALUE,
+                                           "index is greater than or equal to the number of "
+                                           "TRANSFORM_FEEDBACK_BUFFER indexed binding points."));
+                return false;
+            }
+            if (buffer != 0 && ((offset % 4) != 0 || (size % 4) != 0))
+            {
+                context->handleError(
+                    Error(GL_INVALID_VALUE, "offset and size must be multiple of 4."));
+                return false;
+            }
+
+            TransformFeedback *curTransformFeedback =
+                context->getGLState().getCurrentTransformFeedback();
+            if (curTransformFeedback && curTransformFeedback->isActive())
+            {
+                context->handleError(Error(GL_INVALID_OPERATION,
+                                           "target is TRANSFORM_FEEDBACK_BUFFER and transform "
+                                           "feedback is currently active."));
+                return false;
+            }
+            break;
+        }
+        case GL_UNIFORM_BUFFER:
+        {
+            if (index >= caps.maxUniformBufferBindings)
+            {
+                context->handleError(Error(GL_INVALID_VALUE,
+                                           "index is greater than or equal to the number of "
+                                           "UNIFORM_BUFFER indexed binding points."));
+                return false;
+            }
+
+            if (buffer != 0 && (offset % caps.uniformBufferOffsetAlignment) != 0)
+            {
+                context->handleError(
+                    Error(GL_INVALID_VALUE,
+                          "offset must be multiple of value of UNIFORM_BUFFER_OFFSET_ALIGNMENT."));
+                return false;
+            }
+            break;
+        }
+        case GL_ATOMIC_COUNTER_BUFFER:
+        {
+            if (context->getClientVersion() < ES_3_1)
+            {
+                context->handleError(
+                    Error(GL_INVALID_ENUM, "ATOMIC_COUNTER_BUFFER is not supported in GLES3."));
+                return false;
+            }
+            if (index >= caps.maxAtomicCounterBufferBindings)
+            {
+                context->handleError(Error(GL_INVALID_VALUE,
+                                           "index is greater than or equal to the number of "
+                                           "ATOMIC_COUNTER_BUFFER indexed binding points."));
+                return false;
+            }
+            if (buffer != 0 && (offset % 4) != 0)
+            {
+                context->handleError(Error(GL_INVALID_VALUE, "offset must be a multiple of 4."));
+                return false;
+            }
+            break;
+        }
+        case GL_SHADER_STORAGE_BUFFER:
+        {
+            if (context->getClientVersion() < ES_3_1)
+            {
+                context->handleError(
+                    Error(GL_INVALID_ENUM, "ATOMIC_COUNTER_BUFFER is not supported in GLES3."));
+                return false;
+            }
+            break;
+        }
+        default:
+            context->handleError(Error(GL_INVALID_ENUM, "the target is not supported."));
+            return false;
+    }
+
+    return true;
+}
+
 bool ValidateProgramBinary(Context *context,
                            GLuint program,
                            GLenum binaryFormat,
@@ -1839,6 +1960,23 @@ bool ValidateIndexedStateQuery(ValidationContext *context,
             if (index >= 3u)
             {
                 context->handleError(Error(GL_INVALID_VALUE));
+                return false;
+            }
+            break;
+        case GL_ATOMIC_COUNTER_BUFFER_START:
+        case GL_ATOMIC_COUNTER_BUFFER_SIZE:
+        case GL_ATOMIC_COUNTER_BUFFER_BINDING:
+            if (context->getClientVersion() < ES_3_1)
+            {
+                context->handleError(
+                    Error(GL_INVALID_ENUM, "The target is not supported in GLES3.0"));
+                return false;
+            }
+            if (index >= caps.maxAtomicCounterBufferBindings)
+            {
+                context->handleError(
+                    Error(GL_INVALID_VALUE,
+                          "index is outside the valid range for GL_ATOMIC_COUNTER_BUFFER_BINDING"));
                 return false;
             }
             break;

@@ -188,6 +188,13 @@ bool ValidateCompressedTexImage3D(Context *context,
 bool ValidateBindVertexArray(Context *context, GLuint array);
 bool ValidateIsVertexArray(Context *context);
 
+bool ValidateBindBufferRange(Context *context,
+                             GLenum target,
+                             GLuint index,
+                             GLuint buffer,
+                             GLintptr offset,
+                             GLsizeiptr size);
+
 bool ValidateProgramBinary(Context *context,
                            GLuint program,
                            GLenum binaryFormat,
