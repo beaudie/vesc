@@ -312,6 +312,12 @@ Context::Context(rx::EGLImplFactory *implFactory,
         Texture *zeroTexture2DMultisample =
             new Texture(mImplementation.get(), 0, GL_TEXTURE_2D_MULTISAMPLE);
         mZeroTextures[GL_TEXTURE_2D_MULTISAMPLE].set(zeroTexture2DMultisample);
+
+        bindGenericAtomicCounterBuffer(0);
+        for (unsigned int i = 0; i < mCaps.maxAtomicCounterBufferBindings; i++)
+        {
+            bindIndexedAtomicCounterBuffer(0, i, 0, 0);
+        }
     }
 
     if (mExtensions.eglImageExternal || mExtensions.eglStreamConsumerExternal)
@@ -1042,6 +1048,21 @@ void Context::bindIndexedTransformFeedbackBuffer(GLuint bufferHandle,
 {
     Buffer *buffer = mResourceManager->checkBufferAllocation(mImplementation.get(), bufferHandle);
     mGLState.getCurrentTransformFeedback()->bindIndexedBuffer(index, buffer, offset, size);
+}
+
+void Context::bindGenericAtomicCounterBuffer(GLuint bufferHandle)
+{
+    Buffer *buffer = mResourceManager->checkBufferAllocation(mImplementation.get(), bufferHandle);
+    mGLState.setGenericAtomicCounterBufferBinding(buffer);
+}
+
+void Context::bindIndexedAtomicCounterBuffer(GLuint bufferHandle,
+                                             GLuint index,
+                                             GLintptr offset,
+                                             GLsizeiptr size)
+{
+    Buffer *buffer = mResourceManager->checkBufferAllocation(mImplementation.get(), bufferHandle);
+    mGLState.setIndexedAtomicCounterBufferBinding(index, buffer, offset, size);
 }
 
 void Context::bindCopyReadBuffer(GLuint bufferHandle)
@@ -3658,11 +3679,7 @@ void Context::bindBuffer(GLenum target, GLuint buffer)
             bindGenericTransformFeedbackBuffer(buffer);
             break;
         case GL_ATOMIC_COUNTER_BUFFER:
-            if (buffer != 0)
-            {
-                // Binding buffers to this binding point is not implemented yet.
-                UNIMPLEMENTED();
-            }
+            bindGenericAtomicCounterBuffer(buffer);
             break;
         case GL_SHADER_STORAGE_BUFFER:
             if (buffer != 0)

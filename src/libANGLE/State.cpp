@@ -173,6 +173,8 @@ void State::initialize(const Caps &caps,
     if (clientVersion >= Version(3, 1))
     {
         mSamplerTextures[GL_TEXTURE_2D_MULTISAMPLE].resize(caps.maxCombinedTextureImageUnits);
+
+        mAtomicCounterBuffers.resize(caps.maxAtomicCounterBufferBindings);
     }
     if (extensions.eglImageExternal || extensions.eglStreamConsumerExternal)
     {
@@ -255,6 +257,13 @@ void State::reset()
 
     mPack.pixelBuffer.set(NULL);
     mUnpack.pixelBuffer.set(NULL);
+
+    mGenericAtomicCounterBuffer.set(nullptr);
+    for (BufferVector::iterator bufItr = mAtomicCounterBuffers.begin();
+         bufItr != mAtomicCounterBuffers.end(); ++bufItr)
+    {
+        bufItr->set(nullptr);
+    }
 
     mProgram = NULL;
 
@@ -1148,6 +1157,25 @@ const OffsetBindingPointer<Buffer> &State::getIndexedUniformBuffer(size_t index)
     return mUniformBuffers[index];
 }
 
+void State::setGenericAtomicCounterBufferBinding(Buffer *buffer)
+{
+    mGenericAtomicCounterBuffer.set(buffer);
+}
+
+void State::setIndexedAtomicCounterBufferBinding(GLuint index,
+                                                 Buffer *buffer,
+                                                 GLintptr offset,
+                                                 GLsizeiptr size)
+{
+    mAtomicCounterBuffers[index].set(buffer, offset, size);
+}
+
+const OffsetBindingPointer<Buffer> &State::getIndexedAtomicCounterBuffer(size_t index) const
+{
+    ASSERT(static_cast<size_t>(index) < mAtomicCounterBuffers.size());
+    return mAtomicCounterBuffers[index];
+}
+
 void State::setCopyReadBufferBinding(Buffer *buffer)
 {
     mCopyReadBuffer.set(buffer);
@@ -1183,8 +1211,7 @@ Buffer *State::getTargetBuffer(GLenum target) const
       case GL_TRANSFORM_FEEDBACK_BUFFER: return mTransformFeedback->getGenericBuffer().get();
       case GL_UNIFORM_BUFFER:            return mGenericUniformBuffer.get();
       case GL_ATOMIC_COUNTER_BUFFER:
-          UNIMPLEMENTED();
-          return nullptr;
+          return mGenericAtomicCounterBuffer.get();
       case GL_SHADER_STORAGE_BUFFER:
           UNIMPLEMENTED();
           return nullptr;
@@ -1196,9 +1223,10 @@ Buffer *State::getTargetBuffer(GLenum target) const
 
 void State::detachBuffer(GLuint bufferName)
 {
-    BindingPointer<Buffer> *buffers[] = {
-        &mArrayBuffer,      &mCopyReadBuffer,     &mCopyWriteBuffer,     &mDrawIndirectBuffer,
-        &mPack.pixelBuffer, &mUnpack.pixelBuffer, &mGenericUniformBuffer};
+    BindingPointer<Buffer> *buffers[] = {&mArrayBuffer,        &mGenericAtomicCounterBuffer,
+                                         &mCopyReadBuffer,     &mCopyWriteBuffer,
+                                         &mDrawIndirectBuffer, &mPack.pixelBuffer,
+                                         &mUnpack.pixelBuffer, &mGenericUniformBuffer};
     for (auto buffer : buffers)
     {
         if (buffer->id() == bufferName)
@@ -1846,6 +1874,9 @@ void State::getIntegerv(const ContextState &data, GLenum pname, GLint *params)
       case GL_COVERAGE_MODULATION_CHROMIUM:
           *params = static_cast<GLint>(mCoverageModulation);
           break;
+      case GL_ATOMIC_COUNTER_BUFFER_BINDING:
+          *params = mGenericAtomicCounterBuffer.id();
+          break;
       default:
         UNREACHABLE();
         break;
@@ -1884,6 +1915,12 @@ void State::getIntegeri_v(GLenum target, GLuint index, GLint *data)
             *data = mUniformBuffers[index].id();
         }
         break;
+      case GL_ATOMIC_COUNTER_BUFFER_BINDING:
+          if (static_cast<size_t>(index) < mAtomicCounterBuffers.size())
+          {
+              *data = mAtomicCounterBuffers[index].id();
+          }
+          break;
       default:
           UNREACHABLE();
           break;
@@ -1918,6 +1955,18 @@ void State::getInteger64i_v(GLenum target, GLuint index, GLint64 *data)
             *data = mUniformBuffers[index].getSize();
         }
         break;
+      case GL_ATOMIC_COUNTER_BUFFER_START:
+          if (static_cast<size_t>(index) < mAtomicCounterBuffers.size())
+          {
+              *data = mAtomicCounterBuffers[index].getOffset();
+          }
+          break;
+      case GL_ATOMIC_COUNTER_BUFFER_SIZE:
+          if (static_cast<size_t>(index) < mAtomicCounterBuffers.size())
+          {
+              *data = mAtomicCounterBuffers[index].getSize();
+          }
+          break;
       default:
           UNREACHABLE();
           break;
