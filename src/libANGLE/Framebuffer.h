@@ -81,6 +81,9 @@ class FramebufferState final : angle::NonCopyable
     const FramebufferAttachment *getDrawBuffer(size_t drawBufferIdx) const;
     size_t getDrawBufferCount() const;
 
+    void setDrawBufferSideBySide(GLenum buf);
+    GLenum getDrawBufferSideBySide() const;
+
   private:
     friend class Framebuffer;
 
@@ -89,6 +92,9 @@ class FramebufferState final : angle::NonCopyable
     std::vector<FramebufferAttachment> mColorAttachments;
     FramebufferAttachment mDepthAttachment;
     FramebufferAttachment mStencilAttachment;
+
+    // Side-by-side draw buffer selection - not actually GL state, but implemented at a higher level
+    GLenum mDrawBufferSideBySide;
 
     std::vector<GLenum> mDrawBufferStates;
     GLenum mReadBufferState;
@@ -135,6 +141,9 @@ class Framebuffer final : public LabeledObject, public angle::SignalReceiver
     void setDrawBuffers(size_t count, const GLenum *buffers);
     const FramebufferAttachment *getDrawBuffer(size_t drawBuffer) const;
     bool hasEnabledDrawBuffer() const;
+
+    void setDrawBufferSideBySide(GLenum buf);
+    GLenum getDrawBufferSideBySide() const;
 
     GLenum getReadBufferState() const;
     void setReadBuffer(GLenum buffer);

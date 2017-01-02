@@ -927,6 +927,12 @@ void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
     mDrawFramebuffer = framebuffer;
     mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
 
+    // Draw framebuffer binding can have an effect on the scissor and viewport if side-by-side
+    // multiview drawing is being used.
+    mDirtyBits.set(DIRTY_BIT_SCISSOR_TEST_ENABLED);
+    mDirtyBits.set(DIRTY_BIT_SCISSOR);
+    mDirtyBits.set(DIRTY_BIT_VIEWPORT);
+
     if (mDrawFramebuffer && mDrawFramebuffer->hasAnyDirtyBit())
     {
         mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
@@ -1500,6 +1506,17 @@ void State::setFramebufferSRGB(bool sRGB)
 bool State::getFramebufferSRGB() const
 {
     return mFramebufferSRGB;
+}
+
+void State::setDrawBufferSideBySide(GLenum buf)
+{
+    if (mDrawFramebuffer->getDrawBufferSideBySide() != buf)
+    {
+        mDrawFramebuffer->setDrawBufferSideBySide(buf);
+        mDirtyBits.set(DIRTY_BIT_SCISSOR_TEST_ENABLED);
+        mDirtyBits.set(DIRTY_BIT_SCISSOR);
+        mDirtyBits.set(DIRTY_BIT_VIEWPORT);
+    }
 }
 
 void State::getBooleanv(GLenum pname, GLboolean *params)

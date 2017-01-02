@@ -41,6 +41,8 @@ DrawCallPerfParams DrawCallPerfD3D9Params(bool useNullDevice, bool renderToTextu
 
 DrawCallPerfParams DrawCallPerfOpenGLParams(bool useNullDevice, bool renderToTexture);
 
+DrawCallPerfParams DrawCallPerfOpenGLParamsGLES3(bool useNullDevice, bool renderToTexture);
+
 DrawCallPerfParams DrawCallPerfValidationOnly();
 
 #endif  // TESTS_PERF_TESTS_DRAW_CALL_PERF_PARAMS_H_

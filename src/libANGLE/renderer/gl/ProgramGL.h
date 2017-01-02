@@ -84,6 +84,8 @@ class ProgramGL : public ProgramImpl
     GLuint getProgramID() const;
     const std::vector<SamplerBindingGL> &getAppliedSamplerUniforms() const;
 
+    GLint getViewIDOVRUniformLocation() const { return mViewIDOVRUniformLocation; }
+
   private:
     void preLink();
     bool checkLinkStatus(gl::InfoLog &infoLog);
@@ -113,6 +115,8 @@ class ProgramGL : public ProgramImpl
     std::vector<PathRenderingFragmentInput> mPathRenderingFragmentInputs;
 
     bool mEnablePathRendering;
+
+    GLint mViewIDOVRUniformLocation;
 
     GLuint mProgramID;
 };
