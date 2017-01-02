@@ -178,6 +178,7 @@ bool ValidateGetQueryObjectui64vRobustANGLE(Context *context,
                                             GLsizei bufSize,
                                             GLsizei *length,
                                             GLuint64 *params);
+bool ValidateDrawBufferSideBySideANGLE(Context *context, GLenum buf);
 
 bool ValidateProgramUniform(Context *context,
                             GLenum uniformType,

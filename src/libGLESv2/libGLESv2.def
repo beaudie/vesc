@@ -406,6 +406,7 @@ EXPORTS
     glVertexAttribIFormat           @410
     glVertexAttribBinding           @411
     glVertexBindingDivisor          @412
+    glDrawBufferSideBySideANGLE     @413
 
     ; ANGLE Platform Implementation
     ANGLEPlatformCurrent            @290

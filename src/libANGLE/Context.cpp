@@ -2447,6 +2447,7 @@ void Context::initCaps(bool webGLContext)
     mExtensions.vertexArrayObject   = true;
     mExtensions.bindGeneratesResource = true;
     mExtensions.requestExtension      = true;
+    mExtensions.multiviewSideBySide   = true;
 
     // Enable the no error extension if the context was created with the flag.
     mExtensions.noError = mSkipValidation;
@@ -3614,6 +3615,11 @@ void Context::copyBufferSubData(GLenum readTarget,
     Buffer *writeBuffer = mGLState.getTargetBuffer(writeTarget);
 
     handleError(writeBuffer->copyBufferSubData(readBuffer, readOffset, writeOffset, size));
+}
+
+void Context::drawBufferSideBySide(GLenum buf)
+{
+    mGLState.setDrawBufferSideBySide(buf);
 }
 
 void Context::bindAttribLocation(GLuint program, GLuint index, const GLchar *name)

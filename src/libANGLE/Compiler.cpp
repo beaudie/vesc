@@ -75,6 +75,7 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const ContextState &state)
     // TODO: use shader precision caps to determine if high precision is supported?
     mResources.FragmentPrecisionHigh = 1;
     mResources.EXT_frag_depth        = extensions.fragDepth;
+    mResources.OVR_multiview         = extensions.multiviewSideBySide;
 
     // GLSL ES 3.0 constants
     mResources.MaxVertexOutputVectors  = caps.maxVertexOutputComponents / 4;
