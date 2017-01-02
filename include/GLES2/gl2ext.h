@@ -3709,6 +3709,14 @@ GL_APICALL void GL_APIENTRY glGetQueryObjectui64vRobustANGLE(GLuint id, GLenum p
 #endif
 #endif /* GL_ANGLE_robust_client_memory */
 
+#ifndef GL_ANGLE_multiview_side_by_side
+#define GL_ANGLE_multiview_side_by_side 1
+typedef void(GL_APIENTRYP PFNGLDRAWBUFFERSIDEBYSIDEANGLE)(GLenum buf);
+#ifdef GL_GLEXT_PROTOTYPES
+GL_APICALL void GL_APIENTRY glDrawBufferSideBySideANGLE(GLenum buf);
+#endif
+#endif /* GL_ANGLE_multiview_side_by_side */
+
 #ifdef __cplusplus
 }
 #endif

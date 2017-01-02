@@ -2228,4 +2228,10 @@ void GL_APIENTRY glVertexBindingDivisor(GLuint bindingindex, GLuint divisor)
 {
     gl::VertexBindingDivisor(bindingindex, divisor);
 }
+
+void GL_APIENTRY glDrawBufferSideBySideANGLE(GLenum buf)
+{
+    gl::DrawBufferSideBySideANGLE(buf);
+}
+
 }  // extern "C"

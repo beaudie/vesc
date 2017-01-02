@@ -2657,6 +2657,25 @@ bool ValidateGetQueryObjectui64vRobustANGLE(Context *context,
     return true;
 }
 
+bool ValidateDrawBufferSideBySideANGLE(Context *context, GLenum buf)
+{
+    if (!context->getExtensions().multiviewSideBySide)
+    {
+        context->handleError(
+            Error(GL_INVALID_OPERATION, "Side-by-side multiview extension not enabled"));
+        return false;
+    }
+
+    if (buf != GL_BACK && buf != GL_BACK_LEFT && buf != GL_BACK_RIGHT && buf != GL_NONE)
+    {
+        context->handleError(Error(
+            GL_INVALID_OPERATION,
+            "Invalid buf value - must be one of GL_BACK, GL_BACK_LEFT, GL_BACK_RIGHT or GL_NONE"));
+        return false;
+    }
+    return true;
+}
+
 static bool ValidateUniformCommonBase(gl::Context *context,
                                       gl::Program *program,
                                       GLenum targetUniformType,
