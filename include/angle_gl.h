@@ -16,9 +16,17 @@
 #include "GLES3/gl31.h"
 #include "GLES3/gl32.h"
 
-// The following enum is used in ANGLE, but is from desktop GL
+// The following enums are used in ANGLE, but are from desktop GL
 #ifndef GL_SAMPLER_2D_RECT_ARB
 #define GL_SAMPLER_2D_RECT_ARB 0x8B63
+#endif
+
+#ifndef GL_BACK_LEFT
+#define GL_BACK_LEFT 0x0402
+#endif
+
+#ifndef GL_BACK_RIGHT
+#define GL_BACK_RIGHT 0x0403
 #endif
 
 #endif // ANGLEGL_H_

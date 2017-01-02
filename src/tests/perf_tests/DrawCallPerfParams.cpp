@@ -64,6 +64,7 @@ DrawCallPerfParams DrawCallPerfOpenGLParams(bool useNullDevice, bool renderToTex
     DrawCallPerfParams params;
     params.eglParameters = useNullDevice ? OPENGL_NULL() : OPENGL();
     params.useFBO        = renderToTexture;
+    params.majorVersion  = 3;  // TODO: Something cleaner?
     return params;
 }
 
@@ -74,5 +75,6 @@ DrawCallPerfParams DrawCallPerfValidationOnly()
     params.iterations     = 10000;
     params.numTris        = 0;
     params.runTimeSeconds = 5.0;
+    params.majorVersion   = 3;  // TODO: Something cleaner?
     return params;
 }

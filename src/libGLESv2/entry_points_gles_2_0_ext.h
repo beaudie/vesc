@@ -591,6 +591,9 @@ ANGLE_EXPORT void GL_APIENTRY GetQueryObjectui64vRobustANGLE(GLuint id,
                                                              GLsizei *length,
                                                              GLuint64 *params);
 
+// GL_ANGLE_multiview_side_by_side
+ANGLE_EXPORT void GL_APIENTRY DrawBufferSideBySideANGLE(GLenum buf);
+
 }  // namespace gl
 
 #endif // LIBGLESV2_ENTRYPOINTGLES20EXT_H_

@@ -838,6 +838,18 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
     const FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
     bindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferGL->getFramebufferID());
 
+    GLenum buf = framebuffer->getDrawBufferSideBySide();
+    if (buf != GL_NONE)
+    {
+        setScissorTestEnabled(true);
+        // GL_BACK is mostly implemented in RendererGL, which sets the state required for left and
+        // right halves.
+        if (buf != GL_BACK)
+        {
+            setScissorAndViewportForSideBySideDraw(state, buf, framebuffer);
+        }
+    }
+
     // Seamless cubemaps are required for ES3 and higher contexts.
     setTextureCubemapSeamlessEnabled(data.getClientMajorVersion() >= 3);
 
@@ -860,6 +872,34 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
     }
 
     return gl::NoError();
+}
+
+void StateManagerGL::setScissorAndViewportForSideBySideDraw(const gl::State &state,
+                                                            GLenum buf,
+                                                            const gl::Framebuffer *framebuffer)
+{
+    gl::Extents fbSize       = framebuffer->getAttachment(GL_COLOR_ATTACHMENT0)->getSize();
+    int halfWidth            = fbSize.width / 2;
+    gl::Rectangle halfBounds = gl::Rectangle(0, 0, halfWidth, fbSize.height);
+    gl::Rectangle scissor    = halfBounds;
+    if (state.isScissorTestEnabled())
+    {
+        ClipRectangle(state.getScissor(), halfBounds, &scissor);
+    }
+    if (buf == GL_BACK_LEFT)
+    {
+        setScissor(scissor);
+        setViewport(state.getViewport());
+    }
+    else
+    {
+        ASSERT(buf == GL_BACK_RIGHT);
+        scissor.x += halfWidth;
+        setScissor(scissor);
+        gl::Rectangle viewport = state.getViewport();
+        viewport.x += halfWidth;
+        setViewport(viewport);
+    }
 }
 
 void StateManagerGL::setAttributeCurrentData(size_t index,

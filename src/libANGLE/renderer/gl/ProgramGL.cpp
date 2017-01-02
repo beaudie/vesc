@@ -34,7 +34,8 @@ ProgramGL::ProgramGL(const gl::ProgramState &data,
       mWorkarounds(workarounds),
       mStateManager(stateManager),
       mEnablePathRendering(enablePathRendering),
-      mProgramID(0)
+      mProgramID(0),
+      mViewIDOVRUniformLocation(-1)
 {
     ASSERT(mFunctions);
     ASSERT(mStateManager);
@@ -687,6 +688,9 @@ void ProgramGL::postLink()
         samplerBinding.boundTextureUnits.resize(linkedUniform.elementCount(), 0);
         mSamplerBindings.push_back(samplerBinding);
     }
+
+    mViewIDOVRUniformLocation =
+        mFunctions->getUniformLocation(mProgramID, "webgl_angle_ViewID_OVR");
 
     // Discover CHROMIUM_path_rendering fragment inputs if enabled.
     if (!mEnablePathRendering)
