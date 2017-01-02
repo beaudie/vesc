@@ -859,7 +859,56 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
         mPrevDrawTransformFeedback = nullptr;
     }
 
+    GLenum buf = framebuffer->getDrawBufferSideBySide();
+    if (buf == GL_NONE)
+    {
+        // TODO: Only do these changes if another side-by-side mode has been used.
+        if (!state.isScissorTestEnabled())
+        {
+            mFunctions->disable(GL_SCISSOR_TEST);
+        }
+        mFunctions->scissor(mScissor.x, mScissor.y, mScissor.width, mScissor.height);
+        mFunctions->viewport(mViewport.x, mViewport.y, mViewport.width, mViewport.height);
+    }
+    else if (buf == GL_BACK)
+    {
+        // Mostly implemented in RendererGL, which sets the state required for left and right
+        // halves.
+        mFunctions->enable(GL_SCISSOR_TEST);
+    }
+    else
+    {
+        mFunctions->enable(GL_SCISSOR_TEST);
+        setScissorAndViewportForSideBySideDraw(state, buf, framebuffer);
+    }
+
     return gl::NoError();
+}
+
+void StateManagerGL::setScissorAndViewportForSideBySideDraw(const gl::State &state,
+                                                            GLenum buf,
+                                                            const gl::Framebuffer *framebuffer)
+{
+    gl::Extents fbSize       = framebuffer->getAttachment(GL_COLOR_ATTACHMENT0)->getSize();
+    int halfWidth            = fbSize.width / 2;
+    gl::Rectangle halfBounds = gl::Rectangle(0, 0, halfWidth, fbSize.height);
+    gl::Rectangle scissor    = halfBounds;
+    if (state.isScissorTestEnabled())
+    {
+        ClipRectangle(mScissor, halfBounds, &scissor);
+    }
+    if (buf == GL_BACK_LEFT)
+    {
+        mFunctions->scissor(scissor.x, scissor.y, scissor.width, scissor.height);
+        mFunctions->viewport(mViewport.x, mViewport.y, mViewport.width, mViewport.height);
+    }
+    else
+    {
+        ASSERT(buf == GL_BACK_RIGHT);
+        mFunctions->scissor(scissor.x + halfWidth, scissor.y, scissor.width, scissor.height);
+        mFunctions->viewport(mViewport.x + halfWidth, mViewport.y, mViewport.width,
+                             mViewport.height);
+    }
 }
 
 void StateManagerGL::setAttributeCurrentData(size_t index,

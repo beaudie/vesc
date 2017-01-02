@@ -50,6 +50,7 @@
             '<(angle_path)/src/tests/gl_tests/MaxTextureSizeTest.cpp',
             '<(angle_path)/src/tests/gl_tests/MipmapTest.cpp',
             '<(angle_path)/src/tests/gl_tests/MultisampleCompatibilityTest.cpp',
+            '<(angle_path)/src/tests/gl_tests/MultiviewSideBySideTest.cpp',
             '<(angle_path)/src/tests/gl_tests/media/pixel.inl',
             '<(angle_path)/src/tests/gl_tests/PackUnpackTest.cpp',
             '<(angle_path)/src/tests/gl_tests/PathRenderingTest.cpp',

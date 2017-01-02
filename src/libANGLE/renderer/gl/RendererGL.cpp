@@ -184,6 +184,38 @@ gl::Error RendererGL::finish()
     return gl::NoError();
 }
 
+// In multiview drawing below, the left buffer is drawn last so that emulated gl_ViewID_OVR is set
+// to zero at the end of drawing.
+#define DRAW_CALL(drawCall)                                                                       \
+    if (!mSkipDrawCalls)                                                                          \
+    {                                                                                             \
+        gl::Framebuffer *drawFramebuffer = data.getState().getDrawFramebuffer();                  \
+        if (drawFramebuffer->getDrawBufferSideBySide() == GL_BACK)                                \
+        {                                                                                         \
+            ProgramGL *program =                                                                  \
+                static_cast<ProgramGL *>(data.getState().getProgram()->getImplementation());      \
+            GLint viewIDLocation = program->getViewIDOVRUniformLocation();                        \
+            mStateManager->setScissorAndViewportForSideBySideDraw(data.getState(), GL_BACK_RIGHT, \
+                                                                  drawFramebuffer);               \
+            if (viewIDLocation != -1)                                                             \
+            {                                                                                     \
+                mFunctions->uniform1i(viewIDLocation, 1);                                         \
+            }                                                                                     \
+            drawCall;                                                                             \
+            mStateManager->setScissorAndViewportForSideBySideDraw(data.getState(), GL_BACK_LEFT,  \
+                                                                  drawFramebuffer);               \
+            if (viewIDLocation != -1)                                                             \
+            {                                                                                     \
+                mFunctions->uniform1i(viewIDLocation, 0);                                         \
+            }                                                                                     \
+            drawCall;                                                                             \
+        }                                                                                         \
+        else                                                                                      \
+        {                                                                                         \
+            drawCall;                                                                             \
+        }                                                                                         \
+    }
+
 gl::Error RendererGL::drawArrays(const gl::ContextState &data,
                                  GLenum mode,
                                  GLint first,
@@ -191,10 +223,7 @@ gl::Error RendererGL::drawArrays(const gl::ContextState &data,
 {
     ANGLE_TRY(mStateManager->setDrawArraysState(data, first, count, 0));
 
-    if (!mSkipDrawCalls)
-    {
-        mFunctions->drawArrays(mode, first, count);
-    }
+    DRAW_CALL(mFunctions->drawArrays(mode, first, count));
 
     return gl::NoError();
 }
@@ -207,10 +236,7 @@ gl::Error RendererGL::drawArraysInstanced(const gl::ContextState &data,
 {
     ANGLE_TRY(mStateManager->setDrawArraysState(data, first, count, instanceCount));
 
-    if (!mSkipDrawCalls)
-    {
-        mFunctions->drawArraysInstanced(mode, first, count, instanceCount);
-    }
+    DRAW_CALL(mFunctions->drawArraysInstanced(mode, first, count, instanceCount));
 
     return gl::NoError();
 }
@@ -225,10 +251,7 @@ gl::Error RendererGL::drawElements(const gl::ContextState &data,
     const GLvoid *drawIndexPtr = nullptr;
     ANGLE_TRY(mStateManager->setDrawElementsState(data, count, type, indices, 0, &drawIndexPtr));
 
-    if (!mSkipDrawCalls)
-    {
-        mFunctions->drawElements(mode, count, type, drawIndexPtr);
-    }
+    DRAW_CALL(mFunctions->drawElements(mode, count, type, drawIndexPtr));
 
     return gl::NoError();
 }
@@ -245,10 +268,7 @@ gl::Error RendererGL::drawElementsInstanced(const gl::ContextState &data,
     ANGLE_TRY(mStateManager->setDrawElementsState(data, count, type, indices, instances,
                                                   &drawIndexPointer));
 
-    if (!mSkipDrawCalls)
-    {
-        mFunctions->drawElementsInstanced(mode, count, type, drawIndexPointer, instances);
-    }
+    DRAW_CALL(mFunctions->drawElementsInstanced(mode, count, type, drawIndexPointer, instances));
 
     return gl::NoError();
 }
@@ -266,10 +286,7 @@ gl::Error RendererGL::drawRangeElements(const gl::ContextState &data,
     ANGLE_TRY(
         mStateManager->setDrawElementsState(data, count, type, indices, 0, &drawIndexPointer));
 
-    if (!mSkipDrawCalls)
-    {
-        mFunctions->drawRangeElements(mode, start, end, count, type, drawIndexPointer);
-    }
+    DRAW_CALL(mFunctions->drawRangeElements(mode, start, end, count, type, drawIndexPointer));
 
     return gl::NoError();
 }
@@ -280,10 +297,8 @@ gl::Error RendererGL::drawArraysIndirect(const gl::ContextState &data,
 {
     ANGLE_TRY(mStateManager->setDrawIndirectState(data, GL_NONE));
 
-    if (!mSkipDrawCalls)
-    {
-        mFunctions->drawArraysIndirect(mode, indirect);
-    }
+    DRAW_CALL(mFunctions->drawArraysIndirect(mode, indirect));
+
     return gl::NoError();
 }
 
@@ -294,10 +309,8 @@ gl::Error RendererGL::drawElementsIndirect(const gl::ContextState &data,
 {
     ANGLE_TRY(mStateManager->setDrawIndirectState(data, type));
 
-    if (!mSkipDrawCalls)
-    {
-        mFunctions->drawElementsIndirect(mode, type, indirect);
-    }
+    DRAW_CALL(mFunctions->drawElementsIndirect(mode, type, indirect));
+
     return gl::NoError();
 }
 
