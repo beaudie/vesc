@@ -162,6 +162,10 @@ class StateManagerGL final : angle::NonCopyable
 
     GLuint getBoundBuffer(GLenum type);
 
+    void setScissorAndViewportForSideBySideDraw(const gl::State &state,
+                                                GLenum buf,
+                                                const gl::Extents &fbSize);
+
   private:
     gl::Error setGenericDrawState(const gl::ContextState &data);
 

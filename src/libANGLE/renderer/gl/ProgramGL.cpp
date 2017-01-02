@@ -34,7 +34,8 @@ ProgramGL::ProgramGL(const gl::ProgramState &data,
       mWorkarounds(workarounds),
       mStateManager(stateManager),
       mEnablePathRendering(enablePathRendering),
-      mProgramID(0)
+      mProgramID(0),
+      mViewIDOVRUniformLocation(-1)
 {
     ASSERT(mFunctions);
     ASSERT(mStateManager);
@@ -650,6 +651,9 @@ void ProgramGL::postLink()
         GLint realLocation = mFunctions->getUniformLocation(mProgramID, fullName.c_str());
         mUniformRealLocationMap[uniformLocation] = realLocation;
     }
+
+    mViewIDOVRUniformLocation =
+        mFunctions->getUniformLocation(mProgramID, "webgl_angle_ViewID_OVR");
 
     // Discover CHROMIUM_path_rendering fragment inputs if enabled.
     if (!mEnablePathRendering)

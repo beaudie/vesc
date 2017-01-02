@@ -597,6 +597,8 @@ class Context final : public ValidationContext
                            GLintptr writeOffset,
                            GLsizeiptr size);
 
+    void drawBufferSideBySide(GLenum buf);
+
     void handleError(const Error &error) override;
 
     GLenum getError();

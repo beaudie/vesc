@@ -1,0 +1,151 @@
+Name
+
+    ANGLE_multiview_side_by_side
+
+Name Strings
+
+    GL_ANGLE_multiview_side_by_side
+
+Contributors
+
+    Olli Etuaho, NVIDIA
+
+Contact
+
+    Olli Etuaho, NVIDIA (oetuaho 'at' nvidia 'dot' com)
+
+Status
+
+    Implemented in ANGLE ES3
+
+Version
+
+    Last Modified Date: January 6, 2017
+    Author Revision: 1
+
+Number
+
+    OpenGL ES Extension #??
+
+Dependencies
+
+    OpenGL ES 3.0 is required.
+
+    The extension is written against the OpenGL ES 3.0 specification.
+
+Overview
+
+    The extension adds a form of multiview drawing where the draw framebuffer
+    is split into side-by-side left and right halves, and any draw calls can be
+    duplicated between both halves. Whether the framebuffer is being split and
+    if draw calls should be duplicated can be toggled by calling
+    DrawBufferSideBySideANGLE.
+
+IP Status
+
+    No known IP claims.
+
+New Types
+
+    None
+
+New Procedures and Functions
+
+    void DrawBufferSideBySideANGLE(enum buf);
+
+New Tokens
+
+    Accepted by the <buf> parameter of DrawBufferSideBySideANGLE:
+
+    GL_BACK_LEFT              0x0402
+    GL_BACK_RIGHT             0x0403
+
+Additions to Chapter 4 of the OpenGL ES 3.0 Specification (Per-Fragment
+Operations and the Framebuffer)
+
+    Append after the end of section 4.2.1 (Selecting Buffers for Writing):
+
+    "The command
+
+      void DrawBufferSideBySideANGLE( enum buf );
+
+    sets the active halves of the current draw framebuffer. The function accepts
+    four values for the <buf> parameter:
+
+    * GL_NONE treats the draw framebuffer as a single framebuffer.
+    * GL_BACK_LEFT chooses the left half of the draw framebuffer for drawing.
+    * GL_BACK_RIGHT chooses the right half of the draw framebuffer for drawing.
+    * GL_BACK duplicates the draw calls between the left and right halves.
+
+    The command
+
+        View( uint id );
+
+    does not exist in the GL, but is used here to describe the multi-view
+    functionality in this section. The effect of this hypothetical function is
+    to set the value of the shader built-in input uint gl_ViewID_OVR.
+
+    When the active halves have been set to GL_NONE, the effect of drawing
+    commands is:
+
+      View(0);
+      <drawing-command>
+
+    When the left half of the buffer is chosen for drawing, the effect of
+    drawing commands is:
+
+      If the scissor test is enabled:
+        Set the scissor rectangle to the intersection between the scissor
+        rectangle set through the API and the left half of the draw framebuffer.
+      If the scissor test is disabled:
+        Set the scissor rectangle to the left half of the framebuffer.
+      Enable the scissor test.
+      View(0);
+      <drawing-command>
+      Reset the scissor rectangle and viewport to their values at the beginning
+      of the drawing command.
+
+    When the right half of the buffer is chosen for drawing, the effect of
+    drawing commands is:
+
+      If the scissor test is enabled:
+        Set the scissor rectangle to the intersection between the scissor
+        rectangle set through the API, offset to the right by half of the draw
+        framebuffer width and the right half of the draw framebuffer.
+      If the scissor test is disabled:
+        Set the scissor rectangle to the left half of the framebuffer.
+      Enable the scissor test.
+      Offset the viewport to the right by half of the draw framebuffer width.
+      View(0);
+      <drawing-command>
+      Reset the scissor rectangle and viewport to their values at the beginning
+      of the draw command.
+
+    When the draw calls are being duplicated between the left and right halves,
+    the effect of drawing commands is:
+
+      Execute the drawing command as if the right half of the framebuffer would
+      be chosen for drawing.
+      Execute the drawing command as if the left half of the framebuffer would
+      be chosen for drawing.
+
+    The shader uses gl_ViewID_OVR to compute view dependent outputs. To be able
+    to refer to gl_ViewID_OVR, the shader needs to enable the GL_OVR_multiview
+    or GL_OVR_multiview2 extension.
+
+    In this mode there are several restrictions:
+
+        - no transform feedback
+        - no timer query
+        - occlusion query results must be between max and sum of per-view
+          queries, inclusive
+
+    If the value of <buf> is not one of the accepted values, then the error
+    INVALID_ENUM is generated."
+
+Issues
+
+Revision History
+
+    Revision 1, 2017/01/06, oetuaho
+      - first draft

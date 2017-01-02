@@ -43,6 +43,7 @@ void BindResourceChannel(ChannelBinding *binding, FramebufferAttachmentObject *r
 FramebufferState::FramebufferState()
     : mLabel(),
       mColorAttachments(1),
+      mDrawBufferSideBySide(GL_NONE),
       mDrawBufferStates(1, GL_NONE),
       mReadBufferState(GL_COLOR_ATTACHMENT0_EXT)
 {
@@ -246,6 +247,16 @@ Error Framebuffer::getSamplePosition(size_t index, GLfloat *xy) const
 {
     ANGLE_TRY(mImpl->getSamplePosition(index, xy));
     return gl::NoError();
+}
+
+void FramebufferState::setDrawBufferSideBySide(GLenum buf)
+{
+    mDrawBufferSideBySide = buf;
+}
+
+GLenum FramebufferState::getDrawBufferSideBySide() const
+{
+    return mDrawBufferSideBySide;
 }
 
 bool FramebufferState::colorAttachmentsAreUniqueImages() const
@@ -464,6 +475,16 @@ bool Framebuffer::hasEnabledDrawBuffer() const
     }
 
     return false;
+}
+
+void Framebuffer::setDrawBufferSideBySide(GLenum buf)
+{
+    mState.setDrawBufferSideBySide(buf);
+}
+
+GLenum Framebuffer::getDrawBufferSideBySide() const
+{
+    return mState.getDrawBufferSideBySide();
 }
 
 GLenum Framebuffer::getReadBufferState() const
