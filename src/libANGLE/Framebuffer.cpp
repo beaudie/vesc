@@ -43,6 +43,7 @@ void BindResourceChannel(ChannelBinding *binding, FramebufferAttachmentObject *r
 FramebufferState::FramebufferState()
     : mLabel(),
       mColorAttachments(1),
+      mDrawBufferSideBySide(GL_NONE),
       mDrawBufferStates(1, GL_NONE),
       mReadBufferState(GL_COLOR_ATTACHMENT0_EXT)
 {
@@ -230,6 +231,16 @@ const gl::FramebufferAttachment *FramebufferState::getDrawBuffer(size_t drawBuff
 size_t FramebufferState::getDrawBufferCount() const
 {
     return mDrawBufferStates.size();
+}
+
+void FramebufferState::setDrawBufferSideBySide(GLenum buf)
+{
+    mDrawBufferSideBySide = buf;
+}
+
+GLenum FramebufferState::getDrawBufferSideBySide() const
+{
+    return mDrawBufferSideBySide;
 }
 
 bool FramebufferState::colorAttachmentsAreUniqueImages() const
@@ -448,6 +459,16 @@ bool Framebuffer::hasEnabledDrawBuffer() const
     }
 
     return false;
+}
+
+void Framebuffer::setDrawBufferSideBySide(GLenum buf)
+{
+    mState.setDrawBufferSideBySide(buf);
+}
+
+GLenum Framebuffer::getDrawBufferSideBySide() const
+{
+    return mState.getDrawBufferSideBySide();
 }
 
 GLenum Framebuffer::getReadBufferState() const

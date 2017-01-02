@@ -77,6 +77,8 @@ class ProgramGL : public ProgramImpl
 
     GLuint getProgramID() const;
 
+    GLint getViewIDOVRUniformLocation() const { return mViewIDOVRUniformLocation; }
+
   private:
     void preLink();
     bool checkLinkStatus(gl::InfoLog &infoLog);
@@ -102,6 +104,8 @@ class ProgramGL : public ProgramImpl
     bool mEnablePathRendering;
 
     GLuint mProgramID;
+
+    GLint mViewIDOVRUniformLocation;
 };
 
 }

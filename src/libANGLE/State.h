@@ -298,6 +298,9 @@ class State : angle::NonCopyable
     void setFramebufferSRGB(bool sRGB);
     bool getFramebufferSRGB() const;
 
+    // GL_ANGLE_multiview_side_by_side
+    void setDrawBufferSideBySide(GLenum buf);
+
     // State query functions
     void getBooleanv(GLenum pname, GLboolean *params);
     void getFloatv(GLenum pname, GLfloat *params);

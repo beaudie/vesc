@@ -95,6 +95,8 @@ ShCompileOptions ShaderGL::prepareSourceAndReturnOptions(std::stringstream *sour
         options |= SH_REWRITE_FLOAT_UNARY_MINUS_OPERATOR;
     }
 
+    options |= SH_TRANSLATE_VIEWID_OVR_TO_UNIFORM;
+
     return options;
 }
 

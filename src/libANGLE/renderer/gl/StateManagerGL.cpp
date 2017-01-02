@@ -861,6 +861,37 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
     return gl::NoError();
 }
 
+void StateManagerGL::setScissorAndViewportForSideBySideDraw(const gl::State &state,
+                                                            GLenum buf,
+                                                            const gl::Extents &fbSize)
+{
+    int halfWidth            = fbSize.width / 2;
+    gl::Rectangle halfBounds = gl::Rectangle(0, 0, halfWidth, fbSize.height);
+    gl::Rectangle scissor    = halfBounds;
+    if (state.isScissorTestEnabled())
+    {
+        ClipRectangle(state.getScissor(), halfBounds, &scissor);
+    }
+    if (buf == GL_BACK_LEFT)
+    {
+        setScissor(scissor);
+        setViewport(state.getViewport());
+    }
+    else
+    {
+        ASSERT(buf == GL_BACK_RIGHT);
+        scissor.x += halfWidth;
+        setScissor(scissor);
+        gl::Rectangle viewport = state.getViewport();
+        viewport.x += halfWidth;
+        setViewport(viewport);
+    }
+    // The scissor and viewport dirty bits will be set again if the draw framebuffer changes or the
+    // side-by-side mode of the draw framebuffer changes.
+    mLocalDirtyBits.reset(gl::State::DIRTY_BIT_SCISSOR);
+    mLocalDirtyBits.reset(gl::State::DIRTY_BIT_VIEWPORT);
+}
+
 void StateManagerGL::setAttributeCurrentData(size_t index,
                                              const gl::VertexAttribCurrentValueData &data)
 {
@@ -1384,19 +1415,53 @@ void StateManagerGL::syncState(const gl::State &state, const gl::State::DirtyBit
         return;
     }
 
+    GLenum sideBySideBuf = state.getDrawFramebuffer()
+                               ? state.getDrawFramebuffer()->getDrawBufferSideBySide()
+                               : GL_NONE;
+
     // TODO(jmadill): Investigate only syncing vertex state for active attributes
     for (auto dirtyBit : angle::IterateBitSet(glAndLocalDirtyBits))
     {
         switch (dirtyBit)
         {
             case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
-                setScissorTestEnabled(state.isScissorTestEnabled());
+                setScissorTestEnabled(state.isScissorTestEnabled() || sideBySideBuf != GL_NONE);
                 break;
             case gl::State::DIRTY_BIT_SCISSOR:
-                setScissor(state.getScissor());
+                if (sideBySideBuf != GL_NONE)
+                {
+                    if (sideBySideBuf != GL_BACK)
+                    {
+                        // GL_BACK is mostly implemented in RendererGL, which sets the state
+                        // required for left and right halves.
+                        gl::Extents fbSize = state.getDrawFramebuffer()
+                                                 ->getAttachment(GL_COLOR_ATTACHMENT0)
+                                                 ->getSize();
+                        setScissorAndViewportForSideBySideDraw(state, sideBySideBuf, fbSize);
+                    }
+                }
+                else
+                {
+                    setScissor(state.getScissor());
+                }
                 break;
             case gl::State::DIRTY_BIT_VIEWPORT:
-                setViewport(state.getViewport());
+                if (sideBySideBuf != GL_NONE)
+                {
+                    if (sideBySideBuf != GL_BACK &&
+                        !glAndLocalDirtyBits.test(gl::State::DIRTY_BIT_SCISSOR))
+                    {
+                        // If the scissor dirty bit is set, this is redundant.
+                        gl::Extents fbSize = state.getDrawFramebuffer()
+                                                 ->getAttachment(GL_COLOR_ATTACHMENT0)
+                                                 ->getSize();
+                        setScissorAndViewportForSideBySideDraw(state, sideBySideBuf, fbSize);
+                    }
+                }
+                else
+                {
+                    setViewport(state.getViewport());
+                }
                 break;
             case gl::State::DIRTY_BIT_DEPTH_RANGE:
                 setDepthRange(state.getNearPlane(), state.getFarPlane());

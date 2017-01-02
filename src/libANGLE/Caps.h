@@ -348,6 +348,9 @@ struct Extensions
 
     // GL_CHROMIUM_path_rendering
     bool pathRendering;
+
+    // GL_ANGLE_multiview_side_by_side
+    bool multiviewSideBySide;
 };
 
 struct ExtensionInfo

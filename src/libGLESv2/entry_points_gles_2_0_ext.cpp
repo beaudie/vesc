@@ -3360,4 +3360,19 @@ ANGLE_EXPORT void GL_APIENTRY GetQueryObjectui64vRobustANGLE(GLuint id,
     }
 }
 
+ANGLE_EXPORT void GL_APIENTRY DrawBufferSideBySideANGLE(GLenum buf)
+{
+    EVENT("(GLenum buf = 0x%X)", buf);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        if (!ValidateDrawBufferSideBySideANGLE(context, buf))
+        {
+            return;
+        }
+        context->drawBufferSideBySide(buf);
+    }
+}
+
 }  // gl
