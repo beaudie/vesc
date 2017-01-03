@@ -20,6 +20,7 @@
 #include "libANGLE/renderer/null/ImageNULL.h"
 #include "libANGLE/renderer/null/PathNULL.h"
 #include "libANGLE/renderer/null/ProgramNULL.h"
+#include "libANGLE/renderer/null/ProgramPipelineNULL.h"
 #include "libANGLE/renderer/null/QueryNULL.h"
 #include "libANGLE/renderer/null/RenderbufferNULL.h"
 #include "libANGLE/renderer/null/SamplerNULL.h"
@@ -351,6 +352,12 @@ TransformFeedbackImpl *ContextNULL::createTransformFeedback(const gl::TransformF
 SamplerImpl *ContextNULL::createSampler()
 {
     return new SamplerNULL();
+}
+
+ProgramPipelineImpl *ContextNULL::createProgramPipeline(const gl::ProgramPipelineState &state)
+{
+    return new ProgramPipelineNULL(state);
+    // return nullptr;
 }
 
 std::vector<PathImpl *> ContextNULL::createPaths(GLsizei range)
