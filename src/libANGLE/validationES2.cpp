@@ -1658,6 +1658,14 @@ static bool ValidateObjectIdentifierAndName(Context *context, GLenum identifier,
             }
             return true;
 
+        // case GL_PROGRAM_PIPELINE: // No need, no this GLenum at all
+        //     if (context->getProgramPipeline(name) == nullptr)
+        //     {
+        //         context->handleError(Error(GL_INVALID_VALUE, "name is not a valid program pipeline."));
+        //         return false;
+        //     }
+        //     return true;
+
         default:
             context->handleError(Error(GL_INVALID_ENUM, "Invalid identifier."));
             return false;

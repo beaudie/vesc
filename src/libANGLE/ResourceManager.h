@@ -36,6 +36,7 @@ class Renderbuffer;
 class Sampler;
 class Shader;
 class Texture;
+class ProgramPipeline;
 
 template <typename HandleAllocatorType>
 class ResourceManagerBase : angle::NonCopyable
@@ -169,7 +170,7 @@ class RenderbufferManager
 {
   public:
     GLuint createRenderbuffer();
-    Renderbuffer *getRenderbuffer(GLuint handle);
+    Renderbuffer *getRenderbuffer(GLuint handle) const;
     bool isRenderbufferGenerated(GLuint renderbuffer) const;
 
     Renderbuffer *checkRenderbufferAllocation(rx::GLImplFactory *factory, GLuint handle)
@@ -188,8 +189,8 @@ class SamplerManager : public TypedResourceManager<Sampler, HandleAllocator, Sam
 {
   public:
     GLuint createSampler();
-    Sampler *getSampler(GLuint handle);
-    bool isSampler(GLuint sampler);
+    Sampler *getSampler(GLuint handle) const;
+    bool isSampler(GLuint sampler) const;
 
     Sampler *checkSamplerAllocation(rx::GLImplFactory *factory, GLuint handle)
     {
@@ -207,7 +208,7 @@ class FenceSyncManager : public TypedResourceManager<FenceSync, HandleAllocator,
 {
   public:
     GLuint createFenceSync(rx::GLImplFactory *factory);
-    FenceSync *getFenceSync(GLuint handle);
+    FenceSync *getFenceSync(GLuint handle) const;
 
     static void DeleteObject(FenceSync *fenceSync);
 
@@ -238,7 +239,7 @@ class FramebufferManager
     GLuint createFramebuffer();
     Framebuffer *getFramebuffer(GLuint handle) const;
     void setDefaultFramebuffer(Framebuffer *framebuffer);
-    bool isFramebufferGenerated(GLuint framebuffer);
+    bool isFramebufferGenerated(GLuint framebuffer) const;
 
     void invalidateFramebufferComplenessCache();
 
@@ -256,6 +257,38 @@ class FramebufferManager
 
   protected:
     ~FramebufferManager() override {}
+};
+
+class ProgramPipelineManager //: public ResourceManagerBase<HandleAllocator>
+    : public TypedResourceManager<ProgramPipeline, HandleAllocator, ProgramPipelineManager>
+{
+  public:
+    // GLuint createProgramPipeline(rx::GLImplFactory *factory);
+    GLuint createProgramPipeline();
+    // void deleteProgramPipeline(const Context *context, GLuint shader);
+    ProgramPipeline *getProgramPipeline(GLuint handle) const;
+    // void setProgramPipelineBinding(ProgramPipeline *pipeline);
+    bool isProgramPipelineGenerated(GLuint framebuffer) const;
+
+    ProgramPipeline *checkProgramPipelineAllocation(rx::GLImplFactory *factory, GLuint handle)
+    {
+        return checkObjectAllocation(factory, handle);
+    }
+
+    static ProgramPipeline *AllocateNewObject(rx::GLImplFactory *factory, GLuint handle);
+    static void DeleteObject(ProgramPipeline *pipeline);
+
+  protected:
+    ~ProgramPipelineManager() override {}
+
+  // private:
+    // template <typename ObjectType>
+    // void deleteObject(const Context *context, ResourceMap<ObjectType> *objectMap, GLuint id);
+
+    // void reset(const Context *context) override;
+
+    // ResourceMap<ProgramPipeline> mProgramPipelineMap;
+    // HandleAllocator mProgramPipelineHandleAllocator;
 };
 
 }  // namespace gl
