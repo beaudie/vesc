@@ -24,6 +24,7 @@ class RenderbufferManager;
 class SamplerManager;
 class ShaderProgramManager;
 class TextureManager;
+class ProgramPipelineManager;
 class ValidationContext;
 
 static constexpr Version ES_2_0 = Version(2, 0);
@@ -81,6 +82,7 @@ class ContextState final : public angle::NonCopyable
     SamplerManager *mSamplers;
     FenceSyncManager *mFenceSyncs;
     PathManager *mPaths;
+    ProgramPipelineManager *mPipelines;
     FramebufferManager *mFramebuffers;
 };
 
@@ -122,6 +124,7 @@ class ValidationContext : angle::NonCopyable
     bool isBufferGenerated(GLuint buffer) const;
     bool isRenderbufferGenerated(GLuint renderbuffer) const;
     bool isFramebufferGenerated(GLuint framebuffer) const;
+    bool isProgramPipelineGenerated(GLuint pipeline) const;
 
     bool usingDisplayTextureShareGroup() const;
 

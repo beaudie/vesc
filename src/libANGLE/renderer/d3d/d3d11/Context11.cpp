@@ -63,6 +63,12 @@ ProgramImpl *Context11::createProgram(const gl::ProgramState &data)
     return new ProgramD3D(data, mRenderer);
 }
 
+ProgramPipelineImpl *Context11::createProgramPipeline(const gl::ProgramPipelineState &data)
+{
+    UNIMPLEMENTED();
+    return nullptr;
+}
+
 FramebufferImpl *Context11::createFramebuffer(const gl::FramebufferState &data)
 {
     return new Framebuffer11(data, mRenderer);

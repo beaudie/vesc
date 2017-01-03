@@ -16,6 +16,7 @@
 #include "common/Color.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Program.h"
+#include "libANGLE/ProgramPipeline.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Sampler.h"
@@ -201,6 +202,10 @@ class State : angle::NonCopyable
     // Program binding manipulation
     void setProgram(const Context *context, Program *newProgram);
     Program *getProgram() const;
+
+    // Program Pipeline binding manipulation
+    void setProgramPipelineBinding(ProgramPipeline *pipeline);
+    void detachProgramPipeline(GLuint pipeline);
 
     // Transform feedback object (not buffer) binding manipulation
     void setTransformFeedbackBinding(TransformFeedback *transformFeedback);
@@ -480,6 +485,7 @@ class State : angle::NonCopyable
     Framebuffer *mDrawFramebuffer;
     BindingPointer<Renderbuffer> mRenderbuffer;
     Program *mProgram;
+    ProgramPipeline *mPipeline;
 
     typedef std::vector<VertexAttribCurrentValueData> VertexAttribVector;
     VertexAttribVector mVertexAttribCurrentValues; // From glVertexAttrib

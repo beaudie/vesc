@@ -491,6 +491,12 @@ ProgramImpl *ContextVk::createProgram(const gl::ProgramState &state)
     return new ProgramVk(state);
 }
 
+ProgramPipelineImpl *ContextVk::createProgramPipeline(const gl::ProgramPipelineState &state)
+{
+    UNIMPLEMENTED();
+    return nullptr;
+}
+
 FramebufferImpl *ContextVk::createFramebuffer(const gl::FramebufferState &state)
 {
     return FramebufferVk::CreateUserFBO(state);
