@@ -55,6 +55,7 @@ struct VertexAttribute;
 class VertexArray;
 class Sampler;
 class TransformFeedback;
+class ProgramPipeline;
 
 class Context final : public ValidationContext
 {
@@ -82,6 +83,7 @@ class Context final : public ValidationContext
     GLuint createSampler();
     GLuint createTransformFeedback();
     GLsync createFenceSync();
+    GLuint createProgramPipeline();
     GLuint createPaths(GLsizei range);
 
     void deleteBuffer(GLuint buffer);
@@ -92,6 +94,7 @@ class Context final : public ValidationContext
     void deleteSampler(GLuint sampler);
     void deleteTransformFeedback(GLuint transformFeedback);
     void deleteFenceSync(GLsync fenceSync);
+    void deleteProgramPipeline(GLuint pipeline);
     void deletePaths(GLuint first, GLsizei range);
 
     // CHROMIUM_path_rendering
@@ -161,6 +164,8 @@ class Context final : public ValidationContext
     void useProgram(GLuint program);
     void bindTransformFeedback(GLuint transformFeedbackHandle);
     void bindDrawIndirectBuffer(GLuint bufferHandle);
+    void bindProgramPipeline(GLuint pipelineHandle);
+    void useProgramStages(GLuint pipeline, GLbitfield stages, GLuint program);
 
     Error beginQuery(GLenum target, GLuint query);
     Error endQuery(GLenum target);
@@ -217,6 +222,8 @@ class Context final : public ValidationContext
     Query *getQuery(GLuint handle, bool create, GLenum type);
     Query *getQuery(GLuint handle) const;
     TransformFeedback *getTransformFeedback(GLuint handle) const;
+    ProgramPipeline *getProgramPipeline(GLuint handle) const;
+
     void objectLabel(GLenum identifier, GLuint name, GLsizei length, const GLchar *label);
     void objectPtrLabel(const void *ptr, GLsizei length, const GLchar *label);
     void getObjectLabel(GLenum identifier,
@@ -712,6 +719,7 @@ class Context final : public ValidationContext
     void detachVertexArray(GLuint vertexArray);
     void detachTransformFeedback(GLuint transformFeedback);
     void detachSampler(GLuint sampler);
+    void detachProgramPipeline(GLuint pipeline);
 
     void initRendererString();
     void initVersionStrings();

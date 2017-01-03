@@ -10,18 +10,20 @@
 
 #include "libANGLE/validationES2.h"
 #include "libANGLE/validationES3.h"
+
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
-#include "libANGLE/Texture.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
-#include "libANGLE/formatutils.h"
 #include "libANGLE/Image.h"
-#include "libANGLE/Query.h"
 #include "libANGLE/Program.h"
-#include "libANGLE/Uniform.h"
+#include "libANGLE/Query.h"
+#include "libANGLE/Texture.h"
 #include "libANGLE/TransformFeedback.h"
+#include "libANGLE/Uniform.h"
 #include "libANGLE/VertexArray.h"
+
+#include "libANGLE/formatutils.h"
 
 #include "common/mathutil.h"
 #include "common/utilities.h"
