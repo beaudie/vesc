@@ -769,4 +769,98 @@ bool ValidateGetProgramResourceName(Context *context,
     return true;
 }
 
+bool ValidateGenProgramPipelines(Context *context, GLint n, GLuint *)
+{
+    return ValidateGenOrDeleteES31(context, n);
+}
+
+bool ValidateDeleteProgramPipelines(Context *context, GLint n, const GLuint *)
+{
+    return ValidateGenOrDeleteES31(context, n);
+}
+
+bool ValidateGenOrDeleteES31(Context *context, GLint n)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.1"));
+        return false;
+    }
+
+    return ValidateGenOrDelete(context, n);
+}
+
+bool ValidateBindProgramPipeline(Context *context, GLuint pipeline)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    if (!context->getGLState().isBindGeneratesResourceEnabled() &&
+        !context->isProgramPipelineGenerated(pipeline))
+    {
+        // The default program pipeline should always exist
+        // ASSERT(pipeline != 0);
+        context->handleError(Error(GL_INVALID_OPERATION, "program pipeline was not generated."));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateGetProgramPipelineiv(Context *context, GLuint pipeline, GLenum pname, GLint *params)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.1."));
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateUseProgramStages(Context *context, GLuint pipeline, GLbitfield stages, GLuint program)
+{
+    if (context->getClientVersion() < ES_3_1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Context does not support GLES3.1."));
+        return false;
+    }
+
+    if (!context->getGLState().isBindGeneratesResourceEnabled() &&
+        !context->isProgramPipelineGenerated(pipeline))
+    {
+        // The default program pipeline should always exist
+        // ASSERT(pipeline != 0);
+        context->handleError(Error(GL_INVALID_OPERATION, "program pipeline was not generated."));
+        return false;
+    }
+
+    if ((stages != GL_ALL_SHADER_BITS) &&
+        (stages & ~(GL_VERTEX_SHADER_BIT | GL_FRAGMENT_SHADER_BIT | GL_COMPUTE_SHADER_BIT)) != 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE));
+        return false;
+    }
+
+    if (program != 0)
+    {
+        Program *programObject = GetValidProgram(context, program);
+        if (programObject == nullptr)
+        {
+            return false;
+        }
+
+        if (!programObject->isSeparable() || !programObject->isLinked())
+        // Generate error if program linked unsuccessfully last time
+        {
+            context->handleError(Error(GL_INVALID_OPERATION));
+            return false;
+        }
+    }
+    return true;
+}
+
 }  // namespace gl

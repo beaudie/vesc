@@ -17,6 +17,7 @@
 #include "libANGLE/renderer/gl/FramebufferGL.h"
 #include "libANGLE/renderer/gl/PathGL.h"
 #include "libANGLE/renderer/gl/ProgramGL.h"
+#include "libANGLE/renderer/gl/ProgramPipelineGL.h"
 #include "libANGLE/renderer/gl/QueryGL.h"
 #include "libANGLE/renderer/gl/RenderbufferGL.h"
 #include "libANGLE/renderer/gl/RendererGL.h"
@@ -58,6 +59,12 @@ ProgramImpl *ContextGL::createProgram(const gl::ProgramState &data)
 {
     return new ProgramGL(data, getFunctions(), getWorkaroundsGL(), getStateManager(),
                          getExtensions().pathRendering);
+}
+
+ProgramPipelineImpl *ContextGL::createProgramPipeline(const gl::ProgramPipelineState &data)
+{
+    return new ProgramPipelineGL(data, getFunctions());
+    // return nullptr;
 }
 
 FramebufferImpl *ContextGL::createFramebuffer(const gl::FramebufferState &data)
