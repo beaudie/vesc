@@ -176,6 +176,9 @@ class ContextNULL : public ContextImpl
     // Sampler object creation
     SamplerImpl *createSampler() override;
 
+    // ProgramPipeline object creation
+    ProgramPipelineImpl *createProgramPipeline(const gl::ProgramPipelineState &data) override;
+
     std::vector<PathImpl *> createPaths(GLsizei range) override;
 
   private:

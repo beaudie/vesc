@@ -18,6 +18,7 @@
 #include "libANGLE/Shader.h"
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/VertexArray.h"
+#include "libANGLE/ProgramPipeline.h"
 
 namespace gl
 {
@@ -41,6 +42,7 @@ class ShaderImpl;
 class TextureImpl;
 class TransformFeedbackImpl;
 class VertexArrayImpl;
+class ProgramPipelineImpl;
 
 class GLImplFactory : angle::NonCopyable
 {
@@ -79,6 +81,9 @@ class GLImplFactory : angle::NonCopyable
 
     // Sampler object creation
     virtual SamplerImpl *createSampler() = 0;
+
+    // Program Pipeline object creation
+    virtual ProgramPipelineImpl *createProgramPipeline(const gl::ProgramPipelineState &data) = 0;
 
     virtual std::vector<PathImpl *> createPaths(GLsizei range) = 0;
 };

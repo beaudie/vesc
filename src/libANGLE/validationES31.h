@@ -85,6 +85,13 @@ bool ValidateVertexAttribBinding(ValidationContext *context,
                                  GLuint bindingIndex);
 bool ValidateVertexBindingDivisor(ValidationContext *context, GLuint bindingIndex, GLuint divisor);
 
+bool ValidateGenOrDeleteES31(Context *context, GLint n);
+
+bool ValidateGenProgramPipelines(Context *context, GLint n, GLuint *pipelines);
+bool ValidateDeleteProgramPipelines(Context *context, GLint n, const GLuint *pipelines);
+bool ValidateBindProgramPipeline(Context *context, GLuint pipeline);
+bool ValidateGetProgramPipelineiv(Context *context, GLuint pipeline, GLenum pname, GLint *params);
+bool ValidateUseProgramStages(Context *context, GLuint pipeline, GLbitfield stages, GLuint program);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES31_H_
