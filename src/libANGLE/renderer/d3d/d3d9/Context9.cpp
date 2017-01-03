@@ -56,6 +56,12 @@ ProgramImpl *Context9::createProgram(const gl::ProgramState &data)
     return new ProgramD3D(data, mRenderer);
 }
 
+ProgramPipelineImpl *Context9::createProgramPipeline(const gl::ProgramPipelineState &data)
+{
+    UNREACHABLE();
+    return nullptr;
+}
+
 FramebufferImpl *Context9::createFramebuffer(const gl::FramebufferState &data)
 {
     return new Framebuffer9(data, mRenderer);

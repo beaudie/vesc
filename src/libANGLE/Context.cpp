@@ -25,6 +25,7 @@
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Path.h"
 #include "libANGLE/Program.h"
+#include "libANGLE/ProgramPipeline.h"
 #include "libANGLE/Query.h"
 #include "libANGLE/queryutils.h"
 #include "libANGLE/Renderbuffer.h"
@@ -459,6 +460,7 @@ void Context::destroy(egl::Display *display)
     mState.mFenceSyncs->release(this);
     mState.mPaths->release(this);
     mState.mFramebuffers->release(this);
+    mState.mPipelines->release(this);
 }
 
 Context::~Context()
@@ -644,6 +646,11 @@ GLuint Context::createQuery()
     return handle;
 }
 
+GLuint Context::createProgramPipeline()
+{
+    return mState.mPipelines->createProgramPipeline();
+}
+
 void Context::deleteBuffer(GLuint buffer)
 {
     if (mState.mBuffers->getBuffer(buffer))
@@ -692,6 +699,16 @@ void Context::deleteFenceSync(GLsync fenceSync)
     // the fence immediately.
     mState.mFenceSyncs->deleteObject(this,
                                      static_cast<GLuint>(reinterpret_cast<uintptr_t>(fenceSync)));
+}
+
+void Context::deleteProgramPipeline(GLuint pipeline)
+{
+    if (mState.mPipelines->getProgramPipeline(pipeline))
+    {
+        detachProgramPipeline(pipeline);
+    }
+
+    mState.mPipelines->deleteObject(this, pipeline);
 }
 
 void Context::deletePaths(GLuint first, GLsizei range)
@@ -902,6 +919,11 @@ TransformFeedback *Context::getTransformFeedback(GLuint handle) const
     return (iter != mTransformFeedbackMap.end()) ? iter->second : nullptr;
 }
 
+ProgramPipeline *Context::getProgramPipeline(GLuint handle) const
+{
+    return mState.mPipelines->getProgramPipeline(handle);
+}
+
 LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) const
 {
     switch (identifier)
@@ -926,6 +948,8 @@ LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) const
             return getRenderbuffer(name);
         case GL_FRAMEBUFFER:
             return getFramebuffer(name);
+        // case GL_PROGRAM_PIPELINE: // No need, no this GLenum
+        //    return getProgramPipeline(name);
         default:
             UNREACHABLE();
             return nullptr;
@@ -1151,6 +1175,17 @@ void Context::bindTransformFeedback(GLuint transformFeedbackHandle)
     TransformFeedback *transformFeedback =
         checkTransformFeedbackAllocation(transformFeedbackHandle);
     mGLState.setTransformFeedbackBinding(transformFeedback);
+}
+
+void Context::bindProgramPipeline(GLuint pipelineHandle)
+{
+    ProgramPipeline *object =
+        mState.mPipelines->checkProgramPipelineAllocation(mImplementation.get(), pipelineHandle);
+    mGLState.setProgramPipelineBinding(object);
+}
+
+void Context::useProgramStages(GLuint pipeline, GLbitfield stages, GLuint program)
+{
 }
 
 Error Context::beginQuery(GLenum target, GLuint query)
@@ -2329,6 +2364,11 @@ void Context::detachTransformFeedback(GLuint transformFeedback)
 void Context::detachSampler(GLuint sampler)
 {
     mGLState.detachSampler(sampler);
+}
+
+void Context::detachProgramPipeline(GLuint pipeline)
+{
+    mGLState.detachProgramPipeline(pipeline);
 }
 
 void Context::setVertexAttribDivisor(GLuint index, GLuint divisor)
