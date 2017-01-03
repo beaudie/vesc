@@ -19,6 +19,7 @@
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Fence11.h"
 #include "libANGLE/renderer/d3d/d3d11/Framebuffer11.h"
+#include "libANGLE/renderer/d3d/d3d11/ProgramPipeline11.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/StateManager11.h"
 #include "libANGLE/renderer/d3d/d3d11/TransformFeedback11.h"
@@ -61,6 +62,11 @@ ShaderImpl *Context11::createShader(const gl::ShaderState &data)
 ProgramImpl *Context11::createProgram(const gl::ProgramState &data)
 {
     return new ProgramD3D(data, mRenderer);
+}
+
+ProgramPipelineImpl *Context11::createProgramPipeline(const gl::ProgramPipelineState &data)
+{
+    return new ProgramPipeline11(data);
 }
 
 FramebufferImpl *Context11::createFramebuffer(const gl::FramebufferState &data)

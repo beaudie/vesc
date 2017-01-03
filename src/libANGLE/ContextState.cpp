@@ -89,6 +89,9 @@ ContextState::ContextState(ContextID contextIn,
       mFenceSyncs(
           AllocateOrGetSharedResourceManager(shareContextState, &ContextState::mFenceSyncs)),
       mPaths(AllocateOrGetSharedResourceManager(shareContextState, &ContextState::mPaths)),
+      // mPipelines(AllocateOrGetSharedResourceManager(shareContextState,
+      // &ContextState::mPipelines)),
+      mPipelines(new ProgramPipelineManager()),
       mFramebuffers(new FramebufferManager())
 {
 }
@@ -735,6 +738,11 @@ bool ValidationContext::isBufferGenerated(GLuint buffer) const
 bool ValidationContext::isRenderbufferGenerated(GLuint renderbuffer) const
 {
     return mState.mRenderbuffers->isRenderbufferGenerated(renderbuffer);
+}
+
+bool ValidationContext::isProgramPipelineGenerated(GLuint pipeline) const
+{
+    return mState.mPipelines->isProgramPipelineGenerated(pipeline);
 }
 
 bool ValidationContext::isFramebufferGenerated(GLuint framebuffer) const

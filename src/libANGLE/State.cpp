@@ -19,6 +19,7 @@
 #include "libANGLE/Debug.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
+// #include "libANGLE/ProgramPipeline.h"
 #include "libANGLE/Query.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
@@ -196,6 +197,8 @@ void State::initialize(const Caps &caps,
 
     mProgram = nullptr;
 
+    mPipeline = nullptr;
+
     mReadFramebuffer = nullptr;
     mDrawFramebuffer = nullptr;
 
@@ -277,7 +280,9 @@ void State::reset(const Context *context)
         buf.set(nullptr);
     }
 
-    mProgram = NULL;
+    // mProgram = NULL;
+
+    mPipeline = nullptr;
 
     angle::Matrix<GLfloat>::setToIdentity(mPathMatrixProj);
     angle::Matrix<GLfloat>::setToIdentity(mPathMatrixMV);
@@ -1108,6 +1113,21 @@ void State::setProgram(const Context *context, Program *newProgram)
 Program *State::getProgram() const
 {
     return mProgram;
+}
+
+void State::setProgramPipelineBinding(ProgramPipeline *pipeline)
+{
+    /* mPipeline = pipeline;
+    mPipeline.set(DIRTY_BIT_PROGRAM_PIPELINE_BINDING);
+
+    if (mPipeline && mPipeline->hasAnyDirtyBit())
+    {
+        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_PIPELINE);
+    }*/
+}
+
+void State::detachProgramPipeline(GLuint pipeline)
+{
 }
 
 void State::setTransformFeedbackBinding(TransformFeedback *transformFeedback)

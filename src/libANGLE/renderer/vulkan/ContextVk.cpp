@@ -21,6 +21,7 @@
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/ProgramVk.h"
+#include "libANGLE/renderer/vulkan/ProgramPipelineVk.h"
 #include "libANGLE/renderer/vulkan/QueryVk.h"
 #include "libANGLE/renderer/vulkan/RenderbufferVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
@@ -489,6 +490,11 @@ ShaderImpl *ContextVk::createShader(const gl::ShaderState &state)
 ProgramImpl *ContextVk::createProgram(const gl::ProgramState &state)
 {
     return new ProgramVk(state);
+}
+
+ProgramPipelineImpl *ContextVk::createProgramPipeline(const gl::ProgramPipelineState &state)
+{
+    return new ProgramPipelineVk(state);
 }
 
 FramebufferImpl *ContextVk::createFramebuffer(const gl::FramebufferState &state)
