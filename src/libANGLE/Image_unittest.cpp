@@ -47,7 +47,7 @@ TEST(ImageTest, RefCounting)
     renderbuffer->addRef();
 
     EXPECT_CALL(*renderbufferImpl, setStorageEGLImageTarget(_))
-        .WillOnce(Return(gl::Error(GL_NO_ERROR)))
+        .WillOnce(Return(gl::NoError()))
         .RetiresOnSaturation();
     renderbuffer->setStorageEGLImageTarget(image);
 
@@ -74,7 +74,7 @@ TEST(ImageTest, RefCounting)
     // Simulate deletion of the renderbuffer and verify that the deletion cascades to all objects
     EXPECT_CALL(*imageImpl, destructor()).Times(1).RetiresOnSaturation();
     EXPECT_CALL(*imageImpl, orphan(_))
-        .WillOnce(Return(gl::Error(GL_NO_ERROR)))
+        .WillOnce(Return(gl::NoError()))
         .RetiresOnSaturation();
 
     EXPECT_CALL(*textureImpl, destructor()).Times(1).RetiresOnSaturation();
@@ -96,7 +96,7 @@ TEST(ImageTest, RespecificationReleasesReferences)
     gl::PixelUnpackState defaultUnpackState;
 
     EXPECT_CALL(*textureImpl, setImage(_, _, _, _, _, _, _, _))
-        .WillOnce(Return(gl::Error(GL_NO_ERROR)))
+        .WillOnce(Return(gl::NoError()))
         .RetiresOnSaturation();
     texture->setImage(defaultUnpackState, GL_TEXTURE_2D, 0, GL_RGBA8, gl::Extents(1, 1, 1), GL_RGBA,
                       GL_UNSIGNED_BYTE, nullptr);
@@ -112,10 +112,10 @@ TEST(ImageTest, RespecificationReleasesReferences)
 
     // Respecify the texture and verify that the image releases its reference
     EXPECT_CALL(*imageImpl, orphan(_))
-        .WillOnce(Return(gl::Error(GL_NO_ERROR)))
+        .WillOnce(Return(gl::NoError()))
         .RetiresOnSaturation();
     EXPECT_CALL(*textureImpl, setImage(_, _, _, _, _, _, _, _))
-        .WillOnce(Return(gl::Error(GL_NO_ERROR)))
+        .WillOnce(Return(gl::NoError()))
         .RetiresOnSaturation();
 
     texture->setImage(defaultUnpackState, GL_TEXTURE_2D, 0, GL_RGBA8, gl::Extents(1, 1, 1), GL_RGBA,
