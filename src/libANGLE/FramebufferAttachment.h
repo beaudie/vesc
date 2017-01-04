@@ -122,6 +122,7 @@ class FramebufferAttachment final
     GLsizei getSamples() const;
     GLenum type() const { return mType; }
     bool isAttached() const { return mType != GL_NONE; }
+    GLboolean getFixedSampleLocations() const;
 
     Renderbuffer *getRenderbuffer() const;
     Texture *getTexture() const;
@@ -160,6 +161,8 @@ class FramebufferAttachmentObject
     virtual const Format &getAttachmentFormat(
         const FramebufferAttachment::Target &target) const                                  = 0;
     virtual GLsizei getAttachmentSamples(const FramebufferAttachment::Target &target) const = 0;
+    virtual GLboolean getAttachmentFixedSampleLocations(
+        const gl::FramebufferAttachment::Target &target) const = 0;
 
     virtual void onAttach() = 0;
     virtual void onDetach() = 0;
@@ -199,6 +202,11 @@ inline gl::Error FramebufferAttachment::getRenderTargetImpl(
 {
     ASSERT(mResource);
     return mResource->getAttachmentRenderTarget(mTarget, rtOut);
+}
+
+inline GLboolean FramebufferAttachment::getFixedSampleLocations() const
+{
+    return mResource->getAttachmentFixedSampleLocations(mTarget);
 }
 
 } // namespace gl
