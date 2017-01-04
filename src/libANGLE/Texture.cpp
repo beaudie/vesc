@@ -1224,6 +1224,12 @@ GLsizei Texture::getAttachmentSamples(const FramebufferAttachment::Target &targe
     return getSamples(target.textureIndex().type, 0);
 }
 
+GLboolean Texture::getAttachmentFixedSampleLocations(
+    const gl::FramebufferAttachment::Target &target) const
+{
+    return getFixedSampleLocations(target.textureIndex().type, 0);
+}
+
 void Texture::onAttach()
 {
     addRef();
