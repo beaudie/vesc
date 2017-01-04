@@ -89,6 +89,8 @@ class Surface : public gl::FramebufferAttachmentObject
     const gl::Format &getAttachmentFormat(
         const gl::FramebufferAttachment::Target &target) const override;
     GLsizei getAttachmentSamples(const gl::FramebufferAttachment::Target &target) const override;
+    GLboolean getAttachmentFixedSampleLocations(
+        const gl::FramebufferAttachment::Target &target) const override;
 
     void onAttach() override {}
     void onDetach() override {}

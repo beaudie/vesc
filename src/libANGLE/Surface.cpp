@@ -254,6 +254,13 @@ GLsizei Surface::getAttachmentSamples(const gl::FramebufferAttachment::Target &t
     return getConfig()->samples;
 }
 
+GLboolean Surface::getAttachmentFixedSampleLocations(
+    const gl::FramebufferAttachment::Target &target) const
+{
+    UNREACHABLE();
+    return GLboolean();
+}
+
 GLuint Surface::getId() const
 {
     UNREACHABLE();

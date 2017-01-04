@@ -520,6 +520,9 @@ GLenum Framebuffer::checkStatusImpl(const ContextState &state)
     unsigned int colorbufferSize = 0;
     int samples = -1;
     bool missingAttachment = true;
+    GLboolean fixedSampleLocations = false;
+    bool hasTexture                = false;
+    bool hasRenderbuffer           = false;
 
     for (const FramebufferAttachment &colorAttachment : mState.mColorAttachments)
     {
@@ -561,9 +564,26 @@ GLenum Framebuffer::checkStatusImpl(const ContextState &state)
                 {
                     return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
                 }
+
+                // ES3.1 (section 9.4) states that The value of TEXTURE_FIXED_SAMPLE_LOCATIONS is
+                // the same
+                // for all attached textures.
+                if (hasTexture)
+                {
+                    if (colorAttachment.getFixedSampleLocations() != fixedSampleLocations)
+                    {
+                        return GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE;
+                    }
+                }
+                else
+                {
+                    fixedSampleLocations = colorAttachment.getFixedSampleLocations();
+                    hasTexture           = true;
+                }
             }
             else if (colorAttachment.type() == GL_RENDERBUFFER)
             {
+                hasRenderbuffer = true;
                 if (!formatCaps.renderable || format.info->depthBits > 0 ||
                     format.info->stencilBits > 0)
                 {
@@ -592,7 +612,7 @@ GLenum Framebuffer::checkStatusImpl(const ContextState &state)
             }
             else
             {
-                samples = colorAttachment.getSamples();
+                samples           = colorAttachment.getSamples();
                 colorbufferSize   = format.info->pixelBytes;
                 missingAttachment = false;
             }
@@ -725,6 +745,15 @@ GLenum Framebuffer::checkStatusImpl(const ContextState &state)
     if (missingAttachment)
     {
         return GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT;
+    }
+
+    // ES3.1(section 9.4) states that if the attached images are a mix of renderbuffers and
+    // textures, the value of TEXTURE_FIXED_SAMPLE_LOCATIONS must be TRUE for all attached
+    // textures.
+    if (hasTexture && hasRenderbuffer)
+    {
+        if (fixedSampleLocations == false)
+            return GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE;
     }
 
     // In ES 2.0, all color attachments must have the same width and height.

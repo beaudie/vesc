@@ -516,7 +516,7 @@ size_t GetMaximumRenderToBufferWindowSize(D3D_FEATURE_LEVEL featureLevel)
         case D3D_FEATURE_LEVEL_10_0:
             return D3D10_REQ_RENDER_TO_BUFFER_WINDOW_WIDTH;
 
-		// REQ_RENDER_TO_BUFFER_WINDOW_WIDTH not supported on D3D11 Feature Level 9
+        // REQ_RENDER_TO_BUFFER_WINDOW_WIDTH not supported on D3D11 Feature Level 9
         case D3D_FEATURE_LEVEL_9_3:
         case D3D_FEATURE_LEVEL_9_2:
         case D3D_FEATURE_LEVEL_9_1:

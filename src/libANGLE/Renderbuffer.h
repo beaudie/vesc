@@ -63,6 +63,12 @@ class Renderbuffer final : public egl::ImageSibling,
         return getFormat();
     }
     GLsizei getAttachmentSamples(const FramebufferAttachment::Target &/*target*/) const override { return getSamples(); }
+    GLboolean getAttachmentFixedSampleLocations(
+        const FramebufferAttachment::Target &target) const override
+    {
+        UNREACHABLE();
+        return GLboolean();
+    }
 
     void onAttach() override;
     void onDetach() override;

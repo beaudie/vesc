@@ -339,6 +339,8 @@ class Texture final : public egl::ImageSibling,
     Extents getAttachmentSize(const FramebufferAttachment::Target &target) const override;
     const Format &getAttachmentFormat(const FramebufferAttachment::Target &target) const override;
     GLsizei getAttachmentSamples(const FramebufferAttachment::Target &target) const override;
+    GLboolean getAttachmentFixedSampleLocations(
+        const FramebufferAttachment::Target &target) const override;
 
     void onAttach() override;
     void onDetach() override;
