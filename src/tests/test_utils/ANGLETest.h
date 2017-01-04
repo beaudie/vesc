@@ -20,6 +20,7 @@
 #include "common/vector_utils.h"
 #include "shader_utils.h"
 #include "system_utils.h"
+#include "../libANGLE/Version.h"
 
 #define ASSERT_GL_TRUE(a) ASSERT_EQ(static_cast<GLboolean>(GL_TRUE), (a))
 #define ASSERT_GL_FALSE(a) ASSERT_EQ(static_cast<GLboolean>(GL_FALSE), (a))
@@ -50,6 +51,10 @@
     ASSERT_NE(static_cast<GLenum>(expected), static_cast<GLenum>(actual))
 #define EXPECT_GLENUM_NE(expected, actual) \
     EXPECT_NE(static_cast<GLenum>(expected), static_cast<GLenum>(actual))
+
+static constexpr gl::Version ES_2_0 = gl::Version(2, 0);
+static constexpr gl::Version ES_3_0 = gl::Version(3, 0);
+static constexpr gl::Version ES_3_1 = gl::Version(3, 1);
 
 namespace angle
 {
@@ -241,6 +246,7 @@ class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
 
     int getClientMajorVersion() const;
     int getClientMinorVersion() const;
+    gl::Version getClientVersion() const;
 
     EGLWindow *getEGLWindow() const;
     int getWindowWidth() const;
