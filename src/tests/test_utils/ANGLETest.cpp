@@ -716,6 +716,11 @@ int ANGLETest::getClientMinorVersion() const
     return mEGLWindow->getClientMinorVersion();
 }
 
+gl::Version ANGLETest::getClientVersion() const
+{
+    return gl::Version(mEGLWindow->getClientMajorVersion(), mEGLWindow->getClientMinorVersion());
+}
+
 EGLWindow *ANGLETest::getEGLWindow() const
 {
     return mEGLWindow;

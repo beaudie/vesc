@@ -107,7 +107,7 @@ TEST_P(TextureMultisampleTestES31, ValidateTextureStorageMultisampleParameters)
 {
     glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, mTexture);
     glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA8, 1, 1, GL_FALSE);
-    if (getClientMajorVersion() < 3 || getClientMinorVersion() < 1)
+    if (getClientVersion() < ES_3_1)
     {
         ASSERT_GL_ERROR(GL_INVALID_OPERATION);
         return;
