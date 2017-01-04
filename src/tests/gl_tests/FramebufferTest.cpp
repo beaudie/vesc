@@ -390,3 +390,109 @@ TEST_P(FramebufferTest_ES3, DepthOnlyAsDepthStencil)
 }
 
 ANGLE_INSTANTIATE_TEST(FramebufferTest_ES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+
+class FramebufferTest_ES31 : public ANGLETest
+{
+  protected:
+    FramebufferTest_ES31() : mFramebuffer(0), mRenderbuffer(0), mTextures{0, 0} {}
+
+    void SetUp() override
+    {
+        ANGLETest::SetUp();
+
+        glGenFramebuffers(1, &mFramebuffer);
+        glGenRenderbuffers(1, &mRenderbuffer);
+        glGenTextures(2, mTextures);
+    }
+
+    void TearDown() override
+    {
+        glDeleteFramebuffers(1, &mFramebuffer);
+        glDeleteRenderbuffers(1, &mRenderbuffer);
+        glDeleteTextures(2, mTextures);
+        ANGLETest::TearDown();
+    }
+
+    GLuint mFramebuffer;
+    GLuint mRenderbuffer;
+    GLuint mTextures[2];
+};
+
+// Test that without attachment, the value of the framebuffer’s FRAMEBUFFER_DEFAULT_WIDTH and
+// FRAMEBUFFER_DEFAULT_HEIGHT parameters are both zero, incomplete error should be reported.
+TEST_P(FramebufferTest_ES31, IncompleteMissingAttachmentDefaultParam)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    if (getClientMajorVersion() < 3 || getClientMinorVersion() < 1)
+    {
+        EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT,
+                         glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    }
+    else
+    {
+        glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 0);
+        glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 0);
+        EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT,
+                         glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+        glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 1);
+        glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 1);
+        EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    }
+}
+
+ANGLE_INSTANTIATE_TEST(FramebufferTest_ES31,
+                       ES3_OPENGL(),
+                       ES3_OPENGLES(),
+                       ES31_OPENGL(),
+                       ES31_OPENGLES());
+
+class FramebufferMultisampleTest_ES31 : public FramebufferTest_ES31
+{
+  protected:
+    FramebufferMultisampleTest_ES31() : FramebufferTest_ES31() {}
+};
+
+// Test that the sample count of all attachments should be same.
+TEST_P(FramebufferMultisampleTest_ES31, IncompleteMultisampleSampleCount)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, mTextures[0]);
+    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA8, 1, 1, true);
+    glBindRenderbuffer(GL_RENDERBUFFER, mRenderbuffer);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 2, GL_RGBA8, 1, 1);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE,
+                           mTextures[0], 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, mRenderbuffer);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE,
+                     glCheckFramebufferStatus(GL_FRAMEBUFFER));
+}
+
+// Test that the value of TEXTURE_FIXED_SAMPLE_LOCATIONS is the same for all
+// attached textures; if the attached images are a mix of renderbuffers
+// and textures, the value of TEXTURE_FIXED_SAMPLE_LOCATIONS must be
+// TRUE for all attached textures.
+TEST_P(FramebufferMultisampleTest_ES31, IncompleteMultisampleFixedSampleLocations)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, mTextures[0]);
+    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA8, 1, 1, false);
+    glBindRenderbuffer(GL_RENDERBUFFER, mRenderbuffer);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 1, GL_RGBA8, 1, 1);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE,
+                           mTextures[0], 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_RENDERBUFFER, mRenderbuffer);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE,
+                     glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, mTextures[1]);
+    glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGB8, 1, 1, true);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D_MULTISAMPLE,
+                           mTextures[1], 0);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE,
+                     glCheckFramebufferStatus(GL_FRAMEBUFFER));
+}
+
+ANGLE_INSTANTIATE_TEST(FramebufferMultisampleTest_ES31, ES31_OPENGL(), ES31_OPENGLES());
