@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 
 #include "common/debug.h"
+#include "common/utilities.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
@@ -33,14 +34,26 @@ gl::Error BufferVk::setData(ContextImpl *context,
     ContextVk *contextVk = GetAs<ContextVk>(context);
     auto device          = contextVk->getDevice();
 
+    VkBufferCreateInfo createInfo;
     // TODO(jmadill): Proper usage bit implementation. Likely will involve multiple backing buffers
     // like in D3D11.
-    VkBufferCreateInfo createInfo;
+    switch (target)
+    {
+        case GL_ARRAY_BUFFER:
+            createInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+            break;
+
+        case GL_ELEMENT_ARRAY_BUFFER:
+            createInfo.usage = VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
+            break;
+
+        default:
+            UNIMPLEMENTED();
+    }
     createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     createInfo.pNext                 = nullptr;
     createInfo.flags                 = 0;
     createInfo.size                  = size;
-    createInfo.usage                 = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
     createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
     createInfo.queueFamilyIndexCount = 0;
     createInfo.pQueueFamilyIndices   = nullptr;
@@ -113,8 +126,7 @@ gl::Error BufferVk::map(GLenum access, GLvoid **mapPtr)
     ASSERT(mBuffer.getHandle() != VK_NULL_HANDLE);
     ASSERT(mBuffer.getMemory().getHandle() != VK_NULL_HANDLE);
 
-    ANGLE_TRY(
-        mBuffer.getMemory().map(0, mState.getSize(), 0, reinterpret_cast<uint8_t **>(mapPtr)));
+    ANGLE_TRY(mBuffer.getMemory().map(0, mRequiredSize, 0, reinterpret_cast<uint8_t **>(mapPtr)));
 
     return gl::NoError();
 }
@@ -145,8 +157,12 @@ gl::Error BufferVk::getIndexRange(GLenum type,
                                   bool primitiveRestartEnabled,
                                   gl::IndexRange *outRange)
 {
-    UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    uint8_t *indices;
+    ANGLE_TRY(mBuffer.getMemory().map(0, mRequiredSize, 0, reinterpret_cast<uint8_t **>(&indices)));
+    *outRange = gl::ComputeIndexRange(type, indices, count, primitiveRestartEnabled);
+    mBuffer.getMemory().unmap();
+
+    return gl::NoError();
 }
 
 vk::Error BufferVk::setDataImpl(const uint8_t *data, size_t size, size_t offset)

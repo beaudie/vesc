@@ -60,16 +60,188 @@ gl::Error ContextVk::finish()
     return gl::Error(GL_INVALID_OPERATION);
 }
 
-gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
+gl::Error ContextVk::prepareVertexInput(GLsizei count,
+                                        GLsizei instanceCount,
+                                        gl::BufferState &dummyState,
+                                        std::vector<VkVertexInputBindingDescription> *outBindings,
+                                        std::vector<VkVertexInputAttributeDescription> *outAttribs,
+                                        std::vector<VkBuffer> *outHandles,
+                                        std::vector<VkDeviceSize> *outOffsets,
+                                        std::vector<BufferVk *> *outInterimBuffers)
 {
-    VkDevice device       = mRenderer->getDevice();
     const auto &state     = mState.getState();
     const auto &programGL = state.getProgram();
     const auto &vao       = state.getVertexArray();
     const auto &attribs   = vao->getVertexAttributes();
+
+    for (auto attribIndex : angle::IterateBitSet(programGL->getActiveAttribLocationsMask()))
+    {
+        const auto &attrib = attribs[attribIndex];
+        if (attrib.enabled)
+        {
+            size_t typeSize = gl::ComputeVertexAttributeTypeSize(attrib);
+
+            VkVertexInputBindingDescription bindingDesc;
+            bindingDesc.binding = static_cast<uint32_t>((*outBindings).size());
+            bindingDesc.stride  = (attrib.stride == 0 ? typeSize : attrib.stride);
+            bindingDesc.inputRate =
+                (attrib.divisor > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX);
+
+            gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib);
+
+            VkVertexInputAttributeDescription attribDesc;
+            attribDesc.binding  = bindingDesc.binding;
+            attribDesc.format   = vk::GetNativeVertexFormat(vertexFormatType);
+            attribDesc.location = static_cast<uint32_t>(attribIndex);
+            attribDesc.offset   = attrib.buffer.get() ? static_cast<uint32_t>(attrib.offset) : 0u;
+
+            gl::Buffer *bufferGL = attrib.buffer.get();
+            BufferVk *bufferVk;
+            // Vulkan only support divisor of vaule 1
+            if (bufferGL == nullptr || attrib.divisor > 1)
+            {
+                size_t elementCount = (attrib.divisor > 0 ? instanceCount : count);
+                BufferVk *buffer    = new BufferVk(dummyState);
+                ANGLE_TRY(buffer->setData(this, GL_ARRAY_BUFFER, nullptr, typeSize * elementCount,
+                                          GL_DYNAMIC_DRAW));
+                GLvoid *data;
+                ANGLE_TRY(buffer->map(GL_MAP_WRITE_BIT, &data));
+                uint8_t *dst   = static_cast<uint8_t *>(data);
+                size_t stride  = (attrib.stride == 0 ? typeSize : attrib.stride);
+                size_t divisor = (attrib.divisor > 1 ? attrib.divisor : 1);
+                GLboolean result;
+
+                if (bufferGL == nullptr)
+                {
+                    const uint8_t *src = static_cast<const uint8_t *>(attrib.pointer);
+                    for (size_t i = 0; i < elementCount; i++, dst += typeSize)
+                        memcpy(dst, src + (i / divisor) * stride, typeSize);
+                }
+                else
+                {
+                    GLvoid *read;
+                    ANGLE_TRY(GetImplAs<BufferVk>(bufferGL)->map(GL_MAP_READ_BIT, &read));
+                    uint8_t *src = static_cast<uint8_t *>(read) + attrib.offset;
+                    for (size_t i = 0; i < elementCount; i++, dst += typeSize)
+                        memcpy(dst, src + (i / divisor) * stride, typeSize);
+                    ANGLE_TRY(GetImplAs<BufferVk>(bufferGL)->unmap(&result));
+                }
+                ANGLE_TRY(buffer->unmap(&result));
+                bindingDesc.stride = typeSize;
+                attribDesc.offset  = 0;
+                (*outInterimBuffers).push_back(buffer);
+                bufferVk = buffer;
+            }
+            else
+            {
+                bufferVk = GetImplAs<BufferVk>(bufferGL);
+            }
+
+            (*outBindings).push_back(bindingDesc);
+            (*outAttribs).push_back(attribDesc);
+
+            (*outHandles).push_back(bufferVk->getVkBuffer().getHandle());
+            (*outOffsets).push_back(0);
+        }
+        else
+        {
+            UNIMPLEMENTED();
+        }
+    }
+
+    return gl::NoError();
+}
+
+gl::Error ContextVk::prepareIndexInput(GLsizei count,
+                                       GLenum type,
+                                       const GLvoid *indices,
+                                       gl::BufferState &dummyState,
+                                       BufferVk **outBuffer,
+                                       VkDeviceSize *outOffset,
+                                       VkIndexType *outType,
+                                       bool *outNewBufferCreated)
+{
+    const auto &state = mState.getState();
+    const auto &vao   = state.getVertexArray();
+
+    gl::Buffer *elementArrayBuffer = vao->getElementArrayBuffer().get();
+
+    // Vulkan doesn't support GL_UNSIGNED_BYTE type
+    if (elementArrayBuffer == nullptr || type == GL_UNSIGNED_BYTE)
+    {
+        GLboolean result;
+        const uint8_t *src;
+        uint32_t typeSize;
+
+        if (elementArrayBuffer != nullptr)
+        {
+            GLvoid *read;
+            ANGLE_TRY(GetImplAs<BufferVk>(elementArrayBuffer)->map(GL_MAP_READ_BIT, &read));
+            uint64_t offset = reinterpret_cast<uint64_t>(indices);
+            src             = static_cast<uint8_t *>(read) + offset;
+        }
+        else
+        {
+            src = static_cast<const uint8_t *>(indices);
+        }
+
+        if (type == GL_UNSIGNED_BYTE || type == GL_UNSIGNED_SHORT)
+        {
+            typeSize = 2;
+        }
+        else if (type == GL_UNSIGNED_INT)
+        {
+            typeSize = 4;
+        }
+        BufferVk *buffer = new BufferVk(dummyState);
+        ANGLE_TRY(buffer->setData(this, GL_ELEMENT_ARRAY_BUFFER, nullptr, typeSize * count,
+                                  GL_DYNAMIC_DRAW));
+        GLvoid *data;
+        ANGLE_TRY(buffer->map(GL_MAP_WRITE_BIT, &data));
+        if (type == GL_UNSIGNED_BYTE)
+        {
+            uint16_t *dst = static_cast<uint16_t *>(data);
+            for (size_t i = 0; i < count; i++)
+            {
+                if (src[i] == 0xFFu)
+                    dst[i] = 0xFFFFu;
+                else
+                    dst[i] = src[i];
+            }
+        }
+        else
+        {
+            memcpy(data, src, typeSize * count);
+        }
+        ANGLE_TRY(buffer->unmap(&result));
+        if (elementArrayBuffer != nullptr)
+        {
+            ANGLE_TRY(GetImplAs<BufferVk>(elementArrayBuffer)->unmap(&result));
+        }
+        *outBuffer           = buffer;
+        *outOffset           = 0;
+        *outNewBufferCreated = true;
+    }
+    else
+    {
+        *outBuffer           = GetImplAs<BufferVk>(elementArrayBuffer);
+        *outOffset           = reinterpret_cast<VkDeviceSize>(indices);
+        *outNewBufferCreated = false;
+    }
+    *outType = (type == GL_UNSIGNED_INT ? VK_INDEX_TYPE_UINT32 : VK_INDEX_TYPE_UINT16);
+
+    return gl::NoError();
+}
+
+gl::Error ContextVk::preparePipeline(GLenum mode,
+                                     std::vector<VkVertexInputBindingDescription> &vertexBindings,
+                                     std::vector<VkVertexInputAttributeDescription> &vertexAttribs,
+                                     vk::RenderPass *renderPass)
+{
+    VkDevice device       = mRenderer->getDevice();
+    const auto &state     = mState.getState();
+    const auto &programGL = state.getProgram();
     const auto &programVk = GetImplAs<ProgramVk>(programGL);
-    const auto *drawFBO   = state.getDrawFramebuffer();
-    FramebufferVk *vkFBO  = GetImplAs<FramebufferVk>(drawFBO);
 
     // { vertex, fragment }
     VkPipelineShaderStageCreateInfo shaderStages[2];
@@ -90,68 +262,6 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
     shaderStages[1].pName               = "main";
     shaderStages[1].pSpecializationInfo = nullptr;
 
-    // Process vertex attributes
-    // TODO(jmadill): Caching with dirty bits.
-    std::vector<VkVertexInputBindingDescription> vertexBindings;
-    std::vector<VkVertexInputAttributeDescription> vertexAttribs;
-    std::vector<VkBuffer> vertexHandles;
-    std::vector<VkDeviceSize> vertexOffsets;
-    std::vector<BufferVk *> clientVertexBuffers;
-    gl::BufferState dummyState;
-
-    for (auto attribIndex : angle::IterateBitSet(programGL->getActiveAttribLocationsMask()))
-    {
-        const auto &attrib = attribs[attribIndex];
-        if (attrib.enabled)
-        {
-            VkVertexInputBindingDescription bindingDesc;
-            bindingDesc.binding = static_cast<uint32_t>(vertexBindings.size());
-            bindingDesc.stride  = static_cast<uint32_t>(gl::ComputeVertexAttributeTypeSize(attrib));
-            bindingDesc.inputRate =
-                (attrib.divisor > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX);
-
-            gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib);
-
-            VkVertexInputAttributeDescription attribDesc;
-            attribDesc.binding  = bindingDesc.binding;
-            attribDesc.format   = vk::GetNativeVertexFormat(vertexFormatType);
-            attribDesc.location = static_cast<uint32_t>(attribIndex);
-            attribDesc.offset   = attrib.buffer.get() ? static_cast<uint32_t>(attrib.offset) : 0u;
-
-            vertexBindings.push_back(bindingDesc);
-            vertexAttribs.push_back(attribDesc);
-
-            // TODO(jmadill): Offset handling.
-            gl::Buffer *bufferGL = attrib.buffer.get();
-            BufferVk *bufferVk;
-            if (bufferGL == nullptr)
-            {
-                bufferVk = new BufferVk(dummyState);
-                ANGLE_TRY(bufferVk->setData(this, GL_ARRAY_BUFFER, attrib.pointer,
-                                            attrib.size * count, GL_DYNAMIC_DRAW));
-                GLvoid *data;
-                ANGLE_TRY(bufferVk->map(GL_MAP_WRITE_BIT, &data));
-                uint8_t *dst       = reinterpret_cast<uint8_t *>(data);
-                const uint8_t *src = reinterpret_cast<const uint8_t *>(attrib.pointer);
-                for (size_t i = 0; i < count; i++, dst += attrib.size)
-                    memcpy(dst, src + i * bindingDesc.stride, attrib.size);
-                GLboolean result;
-                ANGLE_TRY(bufferVk->unmap(&result));
-                clientVertexBuffers.push_back(bufferVk);
-            }
-            else
-            {
-                bufferVk = GetImplAs<BufferVk>(bufferGL);
-            }
-            vertexHandles.push_back(bufferVk->getVkBuffer().getHandle());
-            vertexOffsets.push_back(0);
-        }
-        else
-        {
-            UNIMPLEMENTED();
-        }
-    }
-
     // TODO(jmadill): Validate with ASSERT against physical device limits/caps?
     VkPipelineVertexInputStateCreateInfo vertexInputState;
     vertexInputState.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -167,7 +277,7 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
     inputAssemblyState.pNext    = nullptr;
     inputAssemblyState.flags    = 0;
     inputAssemblyState.topology = gl_vk::GetPrimitiveTopology(mode);
-    inputAssemblyState.primitiveRestartEnable = VK_FALSE;
+    inputAssemblyState.primitiveRestartEnable = state.isPrimitiveRestartEnabled();
 
     const gl::Rectangle &viewportGL = state.getViewport();
     VkViewport viewportVk;
@@ -262,11 +372,6 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
     blendState.blendConstants[2] = 0.0f;
     blendState.blendConstants[3] = 0.0f;
 
-    // TODO(jmadill): Dynamic state.
-    vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY_RESULT(vkFBO->getRenderPass(device), renderPass);
-    ASSERT(renderPass && renderPass->valid());
-
     vk::PipelineLayout *pipelineLayout = nullptr;
     ANGLE_TRY_RESULT(programVk->getPipelineLayout(device), pipelineLayout);
     ASSERT(pipelineLayout && pipelineLayout->valid());
@@ -297,22 +402,12 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
 
     mCurrentPipeline = std::move(newPipeline);
 
-    vk::CommandBuffer *commandBuffer = mRenderer->getCommandBuffer();
-    ANGLE_TRY(vkFBO->beginRenderPass(device, commandBuffer, state));
-
-    commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline);
-    commandBuffer->bindVertexBuffers(0, vertexHandles, vertexOffsets);
-    commandBuffer->draw(count, 1, first, 0);
-    commandBuffer->endRenderPass();
-    ANGLE_TRY(commandBuffer->end());
-
-    ANGLE_TRY(mRenderer->submitAndFinishCommandBuffer(*commandBuffer, 1000));
-    ANGLE_TRY(vkFBO->onDrawn());
-
-    for (auto buf : clientVertexBuffers)
-        delete buf;
-
     return gl::NoError();
+}
+
+gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
+{
+    return drawArraysInstanced(mode, first, count, 1);
 }
 
 gl::Error ContextVk::drawArraysInstanced(GLenum mode,
@@ -320,7 +415,45 @@ gl::Error ContextVk::drawArraysInstanced(GLenum mode,
                                          GLsizei count,
                                          GLsizei instanceCount)
 {
-    UNIMPLEMENTED();
+    VkDevice device      = mRenderer->getDevice();
+    const auto &state    = mState.getState();
+    const auto *drawFBO  = state.getDrawFramebuffer();
+    FramebufferVk *vkFBO = GetImplAs<FramebufferVk>(drawFBO);
+
+    // Process vertex attributes
+    // TODO(jmadill): Caching with dirty bits.
+    std::vector<VkVertexInputBindingDescription> vertexBindings;
+    std::vector<VkVertexInputAttributeDescription> vertexAttribs;
+    std::vector<VkBuffer> vertexHandles;
+    std::vector<VkDeviceSize> vertexOffsets;
+    std::vector<BufferVk *> interimBuffers;
+    gl::BufferState dummyState;
+
+    ANGLE_TRY(prepareVertexInput(count, instanceCount, dummyState, &vertexBindings, &vertexAttribs,
+                                 &vertexHandles, &vertexOffsets, &interimBuffers));
+
+    // TODO(jmadill): Dynamic state.
+    vk::RenderPass *renderPass = nullptr;
+    ANGLE_TRY_RESULT(vkFBO->getRenderPass(device), renderPass);
+    ASSERT(renderPass && renderPass->valid());
+
+    ANGLE_TRY(preparePipeline(mode, vertexBindings, vertexAttribs, renderPass));
+
+    vk::CommandBuffer *commandBuffer = mRenderer->getCommandBuffer();
+    ANGLE_TRY(vkFBO->beginRenderPass(device, commandBuffer, state));
+
+    commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline);
+    commandBuffer->bindVertexBuffers(0, vertexHandles, vertexOffsets);
+    commandBuffer->draw(count, instanceCount, first, 0);
+    commandBuffer->endRenderPass();
+    ANGLE_TRY(commandBuffer->end());
+
+    ANGLE_TRY(mRenderer->submitAndFinishCommandBuffer(*commandBuffer, 1000));
+    ANGLE_TRY(vkFBO->onDrawn());
+
+    for (auto buf : interimBuffers)
+        delete buf;
+
     return gl::Error(GL_INVALID_OPERATION);
 }
 
@@ -330,18 +463,65 @@ gl::Error ContextVk::drawElements(GLenum mode,
                                   const GLvoid *indices,
                                   const gl::IndexRange &indexRange)
 {
-    UNIMPLEMENTED();
-    return gl::Error(GL_INVALID_OPERATION);
+    return drawElementsInstanced(mode, count, type, indices, 1, indexRange);
 }
 
 gl::Error ContextVk::drawElementsInstanced(GLenum mode,
                                            GLsizei count,
                                            GLenum type,
                                            const GLvoid *indices,
-                                           GLsizei instances,
+                                           GLsizei instanceCount,
                                            const gl::IndexRange &indexRange)
 {
-    UNIMPLEMENTED();
+    VkDevice device      = mRenderer->getDevice();
+    const auto &state    = mState.getState();
+    const auto *drawFBO  = state.getDrawFramebuffer();
+    FramebufferVk *vkFBO = GetImplAs<FramebufferVk>(drawFBO);
+
+    // Process vertex attributes
+    // TODO(jmadill): Caching with dirty bits.
+    std::vector<VkVertexInputBindingDescription> vertexBindings;
+    std::vector<VkVertexInputAttributeDescription> vertexAttribs;
+    std::vector<VkBuffer> vertexHandles;
+    std::vector<VkDeviceSize> vertexOffsets;
+    std::vector<BufferVk *> interimBuffers;
+    gl::BufferState dummyState;
+
+    ANGLE_TRY(prepareVertexInput(indexRange.end + 1, instanceCount, dummyState, &vertexBindings,
+                                 &vertexAttribs, &vertexHandles, &vertexOffsets, &interimBuffers));
+
+    BufferVk *indexBuffer;
+    VkDeviceSize indexOffset;
+    VkIndexType indexType;
+    bool newBufferCreated;
+    ANGLE_TRY(prepareIndexInput(count, type, indices, dummyState, &indexBuffer, &indexOffset,
+                                &indexType, &newBufferCreated));
+
+    // TODO(jmadill): Dynamic state.
+    vk::RenderPass *renderPass = nullptr;
+    ANGLE_TRY_RESULT(vkFBO->getRenderPass(device), renderPass);
+    ASSERT(renderPass && renderPass->valid());
+
+    ANGLE_TRY(preparePipeline(mode, vertexBindings, vertexAttribs, renderPass));
+
+    vk::CommandBuffer *commandBuffer = mRenderer->getCommandBuffer();
+    ANGLE_TRY(vkFBO->beginRenderPass(device, commandBuffer, state));
+
+    commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline);
+    commandBuffer->bindVertexBuffers(0, vertexHandles, vertexOffsets);
+    commandBuffer->bindIndexBuffer(indexBuffer->getVkBuffer().getHandle(), indexOffset, indexType);
+    commandBuffer->drawIndexed(count, instanceCount, 0, 0, 0);
+    commandBuffer->endRenderPass();
+    ANGLE_TRY(commandBuffer->end());
+
+    ANGLE_TRY(mRenderer->submitAndFinishCommandBuffer(*commandBuffer, 1000));
+    ANGLE_TRY(vkFBO->onDrawn());
+
+    for (auto buf : interimBuffers)
+        delete buf;
+    if (newBufferCreated)
+        delete indexBuffer;
+
     return gl::Error(GL_INVALID_OPERATION);
 }
 

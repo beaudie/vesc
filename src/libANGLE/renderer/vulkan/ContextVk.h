@@ -18,6 +18,7 @@
 namespace rx
 {
 class RendererVk;
+class BufferVk;
 
 class ContextVk : public ContextImpl
 {
@@ -129,6 +130,29 @@ class ContextVk : public ContextImpl
     RendererVk *getRenderer() { return mRenderer; }
 
   private:
+    gl::Error prepareVertexInput(GLsizei count,
+                                 GLsizei instanceCount,
+                                 gl::BufferState &dummyState,
+                                 std::vector<VkVertexInputBindingDescription> *outBindings,
+                                 std::vector<VkVertexInputAttributeDescription> *outAttribs,
+                                 std::vector<VkBuffer> *outHandles,
+                                 std::vector<VkDeviceSize> *outOffsets,
+                                 std::vector<BufferVk *> *outInterimBuffers);
+
+    gl::Error prepareIndexInput(GLsizei count,
+                                GLenum type,
+                                const GLvoid *indices,
+                                gl::BufferState &dummyState,
+                                BufferVk **outBuffer,
+                                VkDeviceSize *outOffset,
+                                VkIndexType *outType,
+                                bool *outNewBufferCreated);
+
+    gl::Error preparePipeline(GLenum mode,
+                              std::vector<VkVertexInputBindingDescription> &vertexBindings,
+                              std::vector<VkVertexInputAttributeDescription> &vertexAttribs,
+                              vk::RenderPass *renderPass);
+
     RendererVk *mRenderer;
     vk::Pipeline mCurrentPipeline;
 };

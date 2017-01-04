@@ -148,10 +148,18 @@ class CommandBuffer final : public WrappedObject<VkCommandBuffer>
               uint32_t firstVertex,
               uint32_t firstInstance);
 
+    void drawIndexed(uint32_t indexCount,
+                     uint32_t instanceCount,
+                     uint32_t firstIndex,
+                     int32_t vertexOffset,
+                     uint32_t firstInstance);
+
     void bindPipeline(VkPipelineBindPoint pipelineBindPoint, const vk::Pipeline &pipeline);
     void bindVertexBuffers(uint32_t firstBinding,
                            const std::vector<VkBuffer> &buffers,
                            const std::vector<VkDeviceSize> &offsets);
+
+    void bindIndexBuffer(VkBuffer buffer, VkDeviceSize offset, VkIndexType indexType);
 
   private:
     VkCommandPool mCommandPool;
