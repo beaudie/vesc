@@ -62,7 +62,7 @@ egl::ConfigSet DisplayVk::generateConfigs()
     singleton.bindToTextureRGBA     = EGL_FALSE;
     singleton.colorBufferType       = EGL_RGB_BUFFER;
     singleton.configCaveat          = EGL_NONE;
-    singleton.conformant            = 0;
+    singleton.conformant            = EGL_OPENGL_ES2_BIT | EGL_OPENGL_ES3_BIT_KHR;
     singleton.depthSize             = 24;
     singleton.stencilSize           = 8;
     singleton.level                 = 0;
@@ -75,7 +75,7 @@ egl::ConfigSet DisplayVk::generateConfigs()
     singleton.nativeRenderable      = EGL_TRUE;
     singleton.nativeVisualID        = 0;
     singleton.nativeVisualType      = EGL_NONE;
-    singleton.renderableType        = EGL_OPENGL_ES2_BIT;
+    singleton.renderableType        = EGL_OPENGL_ES2_BIT | EGL_OPENGL_ES3_BIT;
     singleton.sampleBuffers         = 0;
     singleton.samples               = 0;
     singleton.surfaceType           = EGL_WINDOW_BIT;
@@ -199,8 +199,7 @@ StreamProducerImpl *DisplayVk::createStreamProducerD3DTextureNV12(
 
 gl::Version DisplayVk::getMaxSupportedESVersion() const
 {
-    UNIMPLEMENTED();
-    return gl::Version(0, 0);
+    return gl::Version(3, 0);
 }
 
 void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const

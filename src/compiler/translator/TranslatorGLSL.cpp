@@ -212,6 +212,7 @@ void TranslatorGLSL::translate(TIntermNode *root, ShCompileOptions compileOption
                            getSymbolTable(), getShaderType(), getShaderVersion(), getOutputType(),
                            compileOptions);
     root->traverse(&outputGLSL);
+    printf("\n %s\n", sink.c_str());
 }
 
 bool TranslatorGLSL::shouldFlattenPragmaStdglInvariantAll()

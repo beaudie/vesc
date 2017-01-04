@@ -72,6 +72,8 @@ LinkResult GlslangWrapper::linkProgram(const std::string &vertexSource,
 
     std::array<int, 2> lengths = {
         {static_cast<int>(vertexSource.length()), static_cast<int>(fragmentSource.length())}};
+    ERR("VertexShader:\n %s\n", vertexSource.c_str());
+    ERR("FragmentShader:\n %s\n", fragmentSource.c_str());
 
     // Enable SPIR-V and Vulkan rules when parsing GLSL
     EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules);

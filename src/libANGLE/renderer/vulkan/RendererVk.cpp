@@ -514,7 +514,8 @@ void RendererVk::generateCaps(gl::Caps *outCaps,
 {
     // TODO(jmadill): Caps.
     outCaps->maxDrawBuffers      = 1;
-    outCaps->maxVertexAttributes = 1;
+    outCaps->maxVertexAttributes = 1024;
+    outCaps->maxElementIndex     = (1ul << 32) - 1;
 
     // Enable this for simple buffer readback testing, but some functionality is missing.
     // TODO(jmadill): Support full mapBufferRange extension.

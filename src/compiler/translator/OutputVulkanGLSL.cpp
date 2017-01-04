@@ -38,24 +38,7 @@ TOutputVulkanGLSL::TOutputVulkanGLSL(TInfoSinkBase &objSink,
 // TODO(jmadill): This is not complete.
 void TOutputVulkanGLSL::writeLayoutQualifier(const TType &type)
 {
-    TInfoSinkBase &out                      = objSink();
-    const TLayoutQualifier &layoutQualifier = type.getLayoutQualifier();
-    out << "layout(";
-
-    if (type.getQualifier() == EvqAttribute || type.getQualifier() == EvqFragmentOut ||
-        type.getQualifier() == EvqVertexIn)
-    {
-        out << "location = "
-            << "0";  // FIXME
-    }
-
-    if (IsImage(type.getBasicType()) && layoutQualifier.imageInternalFormat != EiifUnspecified)
-    {
-        ASSERT(type.getQualifier() == EvqTemporary || type.getQualifier() == EvqUniform);
-        out << getImageInternalFormatString(layoutQualifier.imageInternalFormat);
-    }
-
-    out << ") ";
+    TOutputGLSLBase::writeLayoutQualifier(type);
 }
 
 bool TOutputVulkanGLSL::writeVariablePrecision(TPrecision precision)
