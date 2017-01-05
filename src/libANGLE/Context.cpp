@@ -2479,6 +2479,12 @@ void Context::initCaps(bool webGLContext)
         }
     }
 
+    // If this context is for WebGL, apply the draw buffer limit.
+    if (webGLContext)
+    {
+        mCaps.maxDrawBuffers = 1;
+    }
+
     // Generate texture caps
     updateCaps();
 }
