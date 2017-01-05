@@ -1122,8 +1122,9 @@ vk::Error StagingBuffer::init(ContextVk *contextVk, VkDeviceSize size, StagingUs
     createInfo.pQueueFamilyIndices   = nullptr;
 
     ANGLE_TRY(mBuffer.init(contextVk->getDevice(), createInfo));
-    ANGLE_TRY(AllocateBufferMemory(contextVk, static_cast<size_t>(size), &mBuffer, &mDeviceMemory,
-                                   &mSize));
+    ANGLE_TRY(AllocateBufferMemory(contextVk, static_cast<size_t>(size), &mBuffer,
+                                   VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &mDeviceMemory, &mSize,
+                                   nullptr));
 
     return vk::NoError();
 }
@@ -1154,8 +1155,10 @@ Optional<uint32_t> FindMemoryType(const VkPhysicalDeviceMemoryProperties &memory
 Error AllocateBufferMemory(ContextVk *contextVk,
                            size_t size,
                            Buffer *buffer,
+                           VkMemoryPropertyFlags flags,
                            DeviceMemory *deviceMemoryOut,
-                           size_t *requiredSizeOut)
+                           size_t *requiredSizeOut,
+                           size_t *alignmentOut)
 {
     VkDevice device = contextVk->getDevice();
 
@@ -1173,9 +1176,8 @@ Error AllocateBufferMemory(ContextVk *contextVk,
     vkGetPhysicalDeviceMemoryProperties(contextVk->getRenderer()->getPhysicalDevice(),
                                         &memoryProperties);
 
-    auto memoryTypeIndex =
-        FindMemoryType(memoryProperties, memoryRequirements,
-                       VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    auto memoryTypeIndex = FindMemoryType(memoryProperties, memoryRequirements,
+                                          VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | flags);
     ANGLE_VK_CHECK(memoryTypeIndex.valid(), VK_ERROR_INCOMPATIBLE_DRIVER);
 
     VkMemoryAllocateInfo allocInfo;
@@ -1186,6 +1188,11 @@ Error AllocateBufferMemory(ContextVk *contextVk,
 
     ANGLE_TRY(deviceMemoryOut->allocate(device, allocInfo));
     ANGLE_TRY(buffer->bindMemory(device, *deviceMemoryOut));
+
+    if (alignmentOut)
+    {
+        *alignmentOut = memoryRequirements.alignment;
+    }
 
     return NoError();
 }

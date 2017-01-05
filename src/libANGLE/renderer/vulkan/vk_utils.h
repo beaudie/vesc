@@ -648,8 +648,10 @@ Optional<uint32_t> FindMemoryType(const VkPhysicalDeviceMemoryProperties &memory
 Error AllocateBufferMemory(ContextVk *contextVk,
                            size_t size,
                            Buffer *buffer,
+                           VkMemoryPropertyFlags flags,
                            DeviceMemory *deviceMemoryOut,
-                           size_t *requiredSizeOut);
+                           size_t *requiredSizeOut,
+                           size_t *alignmentOut);
 
 struct BufferAndMemory final : private angle::NonCopyable
 {

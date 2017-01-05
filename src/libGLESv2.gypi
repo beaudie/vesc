@@ -745,6 +745,8 @@
             'libANGLE/renderer/vulkan/SamplerVk.h',
             'libANGLE/renderer/vulkan/ShaderVk.cpp',
             'libANGLE/renderer/vulkan/ShaderVk.h',
+            'libANGLE/renderer/vulkan/StreamingBufferManager.h',
+            'libANGLE/renderer/vulkan/StreamingBufferManager.cpp',
             'libANGLE/renderer/vulkan/SurfaceVk.cpp',
             'libANGLE/renderer/vulkan/SurfaceVk.h',
             'libANGLE/renderer/vulkan/SyncVk.cpp',
