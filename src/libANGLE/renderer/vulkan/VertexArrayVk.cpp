@@ -33,6 +33,30 @@ void VertexArrayVk::destroy(const gl::Context *context)
 {
 }
 
+void VertexArrayVk::streamVertexData(const gl::Context *context, GLsizei count)
+{
+    const auto &attribs          = mState.getVertexAttributes();
+    const auto &bindings         = mState.getVertexBindings();
+    const gl::Program *programGL = context->getGLState().getProgram();
+
+    for (auto attribIndex : programGL->getActiveAttribLocationsMask())
+    {
+        const auto &attrib   = attribs[attribIndex];
+        const auto &binding  = bindings[attrib.bindingIndex];
+        gl::Buffer *bufferGL = binding.getBuffer().get();
+        printf("index %d   count %d   stride %d\n", (int)attribIndex, (int)count,
+               (int)binding.getStride());
+        if (attrib.enabled && !bufferGL)
+        {
+            BufferVk *bufferVk = new BufferVk(*new gl::BufferState);
+            (void)bufferVk->setData(context, 0, attrib.pointer, count * binding.getStride(),
+                                    (gl::BufferUsage)0);
+            mCurrentVkBuffersCache[attribIndex]           = bufferVk;
+            mCurrentVertexBufferHandlesCache[attribIndex] = bufferVk->getVkBuffer().getHandle();
+        }
+    }
+}
+
 void VertexArrayVk::syncState(const gl::Context *context,
                               const gl::VertexArray::DirtyBits &dirtyBits)
 {
@@ -125,7 +149,9 @@ void VertexArrayVk::updateVertexDescriptions(const gl::Context *context)
         {
             VkVertexInputBindingDescription bindingDesc;
             bindingDesc.binding = static_cast<uint32_t>(mCurrentVertexBindingDescs.size());
-            bindingDesc.stride  = static_cast<uint32_t>(gl::ComputeVertexAttributeTypeSize(attrib));
+            //XXX bindingDesc.stride = static_cast<uint32_t>(gl::ComputeVertexAttributeTypeSize(attrib));
+            bindingDesc.stride = binding.getStride();
+            printf("bindingDesc.stride %d\n", (int)bindingDesc.stride);
             bindingDesc.inputRate = (binding.getDivisor() > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE
                                                               : VK_VERTEX_INPUT_RATE_VERTEX);
 

@@ -23,6 +23,7 @@ class VertexArrayVk : public VertexArrayImpl
     VertexArrayVk(const gl::VertexArrayState &state);
     void destroy(const gl::Context *context) override;
 
+    void streamVertexData(const gl::Context *context, GLsizei count);
     void syncState(const gl::Context *context,
                    const gl::VertexArray::DirtyBits &dirtyBits) override;
 
