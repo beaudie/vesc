@@ -66,7 +66,7 @@ gl::Error InitDefaultUniformBlock(const gl::Context *context,
     VkMemoryPropertyFlags flags =
         (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
     ANGLE_TRY(AllocateBufferMemory(vk::GetImpl(context), flags, &storageOut->buffer,
-                                   &storageOut->memory, requiredSizeOut));
+                                   &storageOut->memory, requiredSizeOut, nullptr));
 
     return gl::NoError();
 }
@@ -365,7 +365,8 @@ gl::Error ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
                 (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
             size_t requiredSize = 0;
             ANGLE_TRY(AllocateBufferMemory(contextVk, flags, &mEmptyUniformBlockStorage.buffer,
-                                           &mEmptyUniformBlockStorage.memory, &requiredSize));
+                                           &mEmptyUniformBlockStorage.memory, &requiredSize,
+                                           nullptr));
         }
 
         ANGLE_TRY(updateDefaultUniformsDescriptorSet(contextVk));

@@ -172,7 +172,8 @@ vk::Error AllocateBufferOrImageMemory(ContextVk *contextVk,
                                       VkMemoryPropertyFlags memoryPropertyFlags,
                                       T *bufferOrImage,
                                       vk::DeviceMemory *deviceMemoryOut,
-                                      size_t *requiredSizeOut)
+                                      size_t *requiredSizeOut,
+                                      size_t *alignmentOut)
 {
     VkDevice device                              = contextVk->getDevice();
     const vk::MemoryProperties &memoryProperties = contextVk->getRenderer()->getMemoryProperties();
@@ -187,6 +188,11 @@ vk::Error AllocateBufferOrImageMemory(ContextVk *contextVk,
     ANGLE_TRY(FindAndAllocateCompatibleMemory(device, memoryProperties, memoryPropertyFlags,
                                               memoryRequirements, deviceMemoryOut));
     ANGLE_TRY(bufferOrImage->bindMemory(device, *deviceMemoryOut));
+
+    if (alignmentOut)
+    {
+        *alignmentOut = memoryRequirements.alignment;
+    }
 
     return vk::NoError();
 }
@@ -1167,7 +1173,7 @@ vk::Error StagingBuffer::init(ContextVk *contextVk, VkDeviceSize size, StagingUs
         (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
     ANGLE_TRY(mBuffer.init(contextVk->getDevice(), createInfo));
-    ANGLE_TRY(AllocateBufferMemory(contextVk, flags, &mBuffer, &mDeviceMemory, &mSize));
+    ANGLE_TRY(AllocateBufferMemory(contextVk, flags, &mBuffer, &mDeviceMemory, &mSize, nullptr));
 
     return vk::NoError();
 }
@@ -1182,10 +1188,11 @@ Error AllocateBufferMemory(ContextVk *contextVk,
                            VkMemoryPropertyFlags memoryPropertyFlags,
                            Buffer *buffer,
                            DeviceMemory *deviceMemoryOut,
-                           size_t *requiredSizeOut)
+                           size_t *requiredSizeOut,
+                           size_t *alignmentOut)
 {
     return AllocateBufferOrImageMemory(contextVk, memoryPropertyFlags, buffer, deviceMemoryOut,
-                                       requiredSizeOut);
+                                       requiredSizeOut, alignmentOut);
 }
 
 Error AllocateImageMemory(ContextVk *contextVk,
@@ -1195,7 +1202,7 @@ Error AllocateImageMemory(ContextVk *contextVk,
                           size_t *requiredSizeOut)
 {
     return AllocateBufferOrImageMemory(contextVk, memoryPropertyFlags, image, deviceMemoryOut,
-                                       requiredSizeOut);
+                                       requiredSizeOut, nullptr);
 }
 
 // GarbageObject implementation.
