@@ -23,10 +23,12 @@ namespace rx
 VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state)
     : VertexArrayImpl(state),
       mCurrentArrayBufferHandles{},
+      mCurrentArrayBufferOffsets{},
       mCurrentArrayBufferResources{},
       mCurrentElementArrayBufferResource(nullptr)
 {
     mCurrentArrayBufferHandles.fill(VK_NULL_HANDLE);
+    mCurrentArrayBufferOffsets.fill(0);
     mCurrentArrayBufferResources.fill(nullptr);
 
     mPackedInputBindings.fill({0, 0});
@@ -39,6 +41,39 @@ VertexArrayVk::~VertexArrayVk()
 
 void VertexArrayVk::destroy(const gl::Context *context)
 {
+}
+
+gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
+                                          StreamingBuffer *stream,
+                                          GLint lastVertex)
+{
+    const auto &attribs          = mState.getVertexAttributes();
+    const auto &bindings         = mState.getVertexBindings();
+    const gl::Program *programGL = context->getGLState().getProgram();
+
+    for (auto attribIndex : programGL->getActiveAttribLocationsMask())
+    {
+        const auto &attrib   = attribs[attribIndex];
+        const auto &binding  = bindings[attrib.bindingIndex];
+        gl::Buffer *bufferGL = binding.getBuffer().get();
+
+        if (attrib.enabled && !bufferGL)
+        {
+            // TODO(fjhenigman): Work with more formats than just GL_FLOAT.
+            ASSERT(attrib.type == GL_FLOAT);
+            const size_t amount =
+                lastVertex * binding.getStride() + gl::ComputeVertexAttributeTypeSize(attrib);
+            const uint8_t *src = static_cast<const uint8_t *>(attrib.pointer);
+            uint8_t *dst       = nullptr;
+            ANGLE_TRY(stream->allocate(context, amount, &dst,
+                                       &mCurrentArrayBufferHandles[attribIndex],
+                                       &mCurrentArrayBufferOffsets[attribIndex]));
+            memcpy(dst, src, amount);
+        }
+    }
+
+    ANGLE_TRY(stream->flush(context));
+    return gl::NoError();
 }
 
 void VertexArrayVk::syncState(const gl::Context *context,
@@ -94,6 +129,8 @@ void VertexArrayVk::syncState(const gl::Context *context,
                 mCurrentArrayBufferResources[attribIndex] = nullptr;
                 mCurrentArrayBufferHandles[attribIndex]   = VK_NULL_HANDLE;
             }
+            // TODO(jmadill): Offset handling.  Assume zero for now.
+            mCurrentArrayBufferOffsets[attribIndex] = 0;
         }
         else
         {
@@ -107,6 +144,11 @@ const gl::AttribArray<VkBuffer> &VertexArrayVk::getCurrentArrayBufferHandles() c
     return mCurrentArrayBufferHandles;
 }
 
+const gl::AttribArray<VkDeviceSize> &VertexArrayVk::getCurrentArrayBufferOffsets() const
+{
+    return mCurrentArrayBufferOffsets;
+}
+
 void VertexArrayVk::updateDrawDependencies(vk::CommandBufferNode *readNode,
                                            const gl::AttributesMask &activeAttribsMask,
                                            Serial serial,
@@ -115,8 +157,8 @@ void VertexArrayVk::updateDrawDependencies(vk::CommandBufferNode *readNode,
     // Handle the bound array buffers.
     for (auto attribIndex : activeAttribsMask)
     {
-        ASSERT(mCurrentArrayBufferResources[attribIndex]);
-        mCurrentArrayBufferResources[attribIndex]->onReadResource(readNode, serial);
+        if (mCurrentArrayBufferResources[attribIndex])
+            mCurrentArrayBufferResources[attribIndex]->onReadResource(readNode, serial);
     }
 
     // Handle the bound element array buffer.
