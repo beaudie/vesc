@@ -9,6 +9,7 @@
 
 #include "renderervk_utils.h"
 
+#include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
@@ -1119,6 +1120,7 @@ void GarbageObject::destroy(VkDevice device)
             vkFreeMemory(device, reinterpret_cast<VkDeviceMemory>(mHandle), nullptr);
             break;
         case HandleType::Buffer:
+            printf("destroy buffer %p\n", mHandle);
             vkDestroyBuffer(device, reinterpret_cast<VkBuffer>(mHandle), nullptr);
             break;
         case HandleType::Image:
@@ -1158,6 +1160,70 @@ void GarbageObject::destroy(VkDevice device)
         default:
             UNREACHABLE();
             break;
+    }
+}
+
+BufferStream::BufferStream(ContextVk *context) : mContext(context)
+{
+}
+
+BufferStream::~BufferStream()
+{
+}
+
+gl::Error BufferStream::map(size_t amount,
+                            uint8_t **ptrOut,
+                            VkBuffer *handleOut,
+                            VkDeviceSize *offsetOut)
+{
+    RendererVk *renderer = mContext->getRenderer();
+    setQueueSerial(renderer->getCurrentQueueSerial());
+    VkDevice device = mContext->getDevice();
+
+    if (mOffset + amount > mSize)
+    {
+        unmap();
+        renderer->releaseResource(*this, &mBuffer);
+        renderer->releaseResource(*this, &mMemory);
+
+        VkBufferCreateInfo createInfo;
+        createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        createInfo.pNext                 = nullptr;
+        createInfo.flags                 = 0;
+        createInfo.size                  = std::max(amount, static_cast<typeof(amount)>(0x100u));
+        createInfo.usage                 = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+        createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+        createInfo.queueFamilyIndexCount = 0;
+        createInfo.pQueueFamilyIndices   = nullptr;
+        ANGLE_TRY(mBuffer.init(device, createInfo));
+        ANGLE_TRY(vk::AllocateBufferMemory(mContext, createInfo.size, &mBuffer, &mMemory, &mSize));
+        mOffset = 0;
+    }
+
+    ASSERT(mBuffer.valid());
+    *handleOut = mBuffer.getHandle();
+    printf("returning buffer handle %p\n", *handleOut);
+
+    if (!mPtr)
+    {
+        // TODO(fjhenigman): only map what we need
+        ANGLE_TRY(mMemory.map(device, 0, mSize, 0, &mPtr));
+    }
+    ASSERT(mPtr);
+    *ptrOut    = mPtr + mOffset;
+    *offsetOut = mOffset;
+    mOffset += amount;
+    ASSERT(mOffset <= mSize);
+
+    return gl::NoError();
+}
+
+void BufferStream::unmap()
+{
+    if (mPtr)
+    {
+        mMemory.unmap(mContext->getDevice());
+        mPtr = nullptr;
     }
 }
 
