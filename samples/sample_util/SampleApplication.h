@@ -28,7 +28,7 @@ class SampleApplication
                       size_t height,
                       EGLint glesMajorVersion  = 2,
                       EGLint glesMinorVersion  = 0,
-                      EGLint requestedRenderer = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
+                      EGLint requestedRenderer = EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE);
     virtual ~SampleApplication();
 
     virtual bool initialize();
