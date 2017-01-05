@@ -25,10 +25,14 @@ class VertexArrayVk : public VertexArrayImpl
 
     void destroy(const gl::Context *context) override;
 
+    gl::Error streamVertexData(ContextVk *context, GLsizei count);
     void syncState(const gl::Context *context,
                    const gl::VertexArray::DirtyBits &dirtyBits) override;
 
     const gl::AttribArray<VkBuffer> &getCurrentArrayBufferHandles() const;
+    const gl::AttribArray<VkDeviceSize> &getCurrentArrayBufferOffsets() const;
+    const VkBuffer *handles() const;
+    const VkDeviceSize *offsets() const;
 
     void updateDrawDependencies(vk::CommandBufferNode *readNode,
                                 const gl::AttributesMask &activeAttribsMask,
@@ -43,6 +47,7 @@ class VertexArrayVk : public VertexArrayImpl
 
   private:
     gl::AttribArray<VkBuffer> mCurrentArrayBufferHandles;
+    gl::AttribArray<VkDeviceSize> mCurrentArrayBufferOffsets;
     gl::AttribArray<ResourceVk *> mCurrentArrayBufferResources;
     ResourceVk *mCurrentElementArrayBufferResource;
 
