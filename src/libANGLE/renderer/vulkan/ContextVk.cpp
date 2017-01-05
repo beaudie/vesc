@@ -62,7 +62,7 @@ enum DescriptorPoolIndex : uint8_t
 }  // anonymous namespace
 
 ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
-    : ContextImpl(state), mRenderer(renderer), mCurrentDrawMode(GL_NONE)
+    : ContextImpl(state), mRenderer(renderer), mCurrentDrawMode(GL_NONE), mVertexData(this)
 {
     // The module handle is filled out at draw time.
     mCurrentShaderStages[0].sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -295,7 +295,7 @@ gl::Error ContextVk::initPipeline(const gl::Context *context)
     return gl::NoError();
 }
 
-gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode, DrawType drawType)
+gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode, DrawType drawType, GLsizei count)
 {
     if (mode != mCurrentDrawMode)
     {
@@ -321,17 +321,18 @@ gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode, DrawType
 
     // Process vertex attributes. Assume zero offsets for now.
     // TODO(jmadill): Offset handling.
-    const auto &vertexHandles    = vkVAO->getCurrentArrayBufferHandles();
-    angle::MemoryBuffer *zeroBuf = nullptr;
-    ANGLE_TRY(context->getZeroFilledBuffer(maxAttrib * sizeof(VkDeviceSize), &zeroBuf));
+    //const auto &vertexHandles    = vkVAO->getCurrentArrayBufferHandles();
+    //angle::MemoryBuffer *zeroBuf = nullptr;
+    //ANGLE_TRY(context->getZeroFilledBuffer(maxAttrib * sizeof(VkDeviceSize), &zeroBuf));
 
     vk::CommandBufferAndState *commandBuffer = nullptr;
     ANGLE_TRY(mRenderer->getStartedCommandBuffer(&commandBuffer));
     ANGLE_TRY(mRenderer->ensureInRenderPass(context, vkFBO));
 
     commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline);
-    commandBuffer->bindVertexBuffers(0, maxAttrib, vertexHandles.data(),
-                                     reinterpret_cast<const VkDeviceSize *>(zeroBuf->data()));
+    ContextVk *contextVk = vk::GetImpl(context);
+    ANGLE_TRY(vkVAO->streamVertexData(contextVk, count));
+    commandBuffer->bindVertexBuffers(0, maxAttrib, vkVAO->handles(), vkVAO->offsets());
 
     // TODO(jmadill): the queue serial should be bound to the pipeline.
     setQueueSerial(queueSerial);
@@ -339,7 +340,6 @@ gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode, DrawType
                                       drawType);
 
     // TODO(jmadill): Can probably use more dirty bits here.
-    ContextVk *contextVk = vk::GetImpl(context);
     ANGLE_TRY(programVk->updateUniforms(contextVk));
     programVk->updateTexturesDescriptorSet(contextVk);
 
@@ -361,7 +361,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context, GLenum mode, DrawType
 
 gl::Error ContextVk::drawArrays(const gl::Context *context, GLenum mode, GLint first, GLsizei count)
 {
-    ANGLE_TRY(setupDraw(context, mode, DrawType::Arrays));
+    ANGLE_TRY(setupDraw(context, mode, DrawType::Arrays, count));
 
     vk::CommandBufferAndState *commandBuffer = nullptr;
     ANGLE_TRY(mRenderer->getStartedCommandBuffer(&commandBuffer));
@@ -386,7 +386,9 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
                                   GLenum type,
                                   const void *indices)
 {
-    ANGLE_TRY(setupDraw(context, mode, DrawType::Elements));
+    ANGLE_TRY(setupDraw(context, mode, DrawType::Elements,
+                        0 /*TODO scan through indices to find out which vertex data to copy*/
+    ));
 
     if (indices)
     {
@@ -881,6 +883,11 @@ gl::Error ContextVk::dispatchCompute(const gl::Context *context,
 vk::DescriptorPool *ContextVk::getDescriptorPool()
 {
     return &mDescriptorPool;
+}
+
+vk::BufferStream *ContextVk::getVertexData()
+{
+    return &mVertexData;
 }
 
 }  // namespace rx

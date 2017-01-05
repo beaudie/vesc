@@ -707,6 +707,23 @@ Error InitializeRenderPassFromDesc(VkDevice device,
                                    const RenderPassDesc &desc,
                                    RenderPass *renderPass);
 
+class BufferStream : public ResourceVk
+{
+  public:
+    BufferStream(ContextVk *context);
+    ~BufferStream();
+    gl::Error map(size_t amount, uint8_t **ptrOut, VkBuffer *handleOut, VkDeviceSize *offsetOut);
+    void unmap();
+
+  private:
+    ContextVk *mContext;
+    vk::Buffer mBuffer;
+    vk::DeviceMemory mMemory;
+    VkDeviceSize mOffset;
+    size_t mSize;
+    uint8_t *mPtr;
+};
+
 }  // namespace vk
 
 namespace gl_vk
