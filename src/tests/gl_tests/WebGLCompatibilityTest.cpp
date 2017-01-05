@@ -300,6 +300,22 @@ TEST_P(WebGLCompatibilityTest, MaxStride)
     EXPECT_GL_ERROR(GL_INVALID_VALUE);
 }
 
+// Test the WebGL limit of 1 for the max draw buffers.
+TEST_P(WebGLCompatibilityTest, MaxDrawBuffers)
+{
+    GLint maxDrawBuffers = 0;
+    glGetIntegerv(GL_MAX_DRAW_BUFFERS, &maxDrawBuffers);
+    ASSERT_GL_NO_ERROR();
+
+    ASSERT_EQ(1, maxDrawBuffers);
+
+    GLint maxColorAttachments = 0;
+    glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &maxColorAttachments);
+    ASSERT_GL_NO_ERROR();
+
+    ASSERT_EQ(1, maxColorAttachments);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(WebGLCompatibilityTest,
