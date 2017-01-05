@@ -187,6 +187,8 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap, const D
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
             // Default to D3D displays
             impl = new rx::DisplayD3D(state);
+#elif defined(ANGLE_ENABLE_VULKAN)
+            impl = new rx::DisplayVkXcb(state);
 #elif defined(ANGLE_USE_X11)
             impl = new rx::DisplayGLX(state);
 #elif defined(ANGLE_PLATFORM_APPLE)

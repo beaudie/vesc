@@ -31,6 +31,8 @@
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
 #include "libANGLE/renderer/vulkan/formatutilsvk.h"
 
+static void br(){}
+
 namespace rx
 {
 
@@ -121,8 +123,18 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
 
             // TODO(jmadill): Offset handling.
             gl::Buffer *bufferGL = attrib.buffer.get();
-            ASSERT(bufferGL);
-            BufferVk *bufferVk = GetImplAs<BufferVk>(bufferGL);
+            //ASSERT(bufferGL);
+            BufferVk *bufferVk;
+            if (bufferGL)
+            {
+                bufferVk = GetImplAs<BufferVk>(bufferGL);
+            }
+            else
+            {
+                br();
+                bufferVk = new BufferVk(gl::BufferState());
+                bufferVk->setData(this, 0, attrib.pointer, attrib.size*3*sizeof(GLfloat), 0);
+            }
             vertexHandles.push_back(bufferVk->getVkBuffer().getHandle());
             vertexOffsets.push_back(0);
         }

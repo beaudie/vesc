@@ -242,13 +242,13 @@ bool EGLWindow::initializeGL(OSWindow *osWindow)
 
     const EGLint configAttributes[] =
     {
-        EGL_RED_SIZE,       (mRedBits >= 0)     ? mRedBits     : EGL_DONT_CARE,
-        EGL_GREEN_SIZE,     (mGreenBits >= 0)   ? mGreenBits   : EGL_DONT_CARE,
-        EGL_BLUE_SIZE,      (mBlueBits >= 0)    ? mBlueBits    : EGL_DONT_CARE,
-        EGL_ALPHA_SIZE,     (mAlphaBits >= 0)   ? mAlphaBits   : EGL_DONT_CARE,
-        EGL_DEPTH_SIZE,     (mDepthBits >= 0)   ? mDepthBits   : EGL_DONT_CARE,
-        EGL_STENCIL_SIZE,   (mStencilBits >= 0) ? mStencilBits : EGL_DONT_CARE,
-        EGL_SAMPLE_BUFFERS, mMultisample ? 1 : 0,
+        EGL_RED_SIZE,       8,//(mRedBits >= 0)     ? mRedBits     : EGL_DONT_CARE,
+        EGL_GREEN_SIZE,     8,//(mGreenBits >= 0)   ? mGreenBits   : EGL_DONT_CARE,
+        EGL_BLUE_SIZE,      8,//(mBlueBits >= 0)    ? mBlueBits    : EGL_DONT_CARE,
+        EGL_ALPHA_SIZE,     8,//(mAlphaBits >= 0)   ? mAlphaBits   : EGL_DONT_CARE,
+        EGL_DEPTH_SIZE,     0,//(mDepthBits >= 0)   ? mDepthBits   : EGL_DONT_CARE,
+        EGL_STENCIL_SIZE,   0,//(mStencilBits >= 0) ? mStencilBits : EGL_DONT_CARE,
+        EGL_SAMPLE_BUFFERS, 0,//mMultisample ? 1 : 0,
         EGL_NONE
     };
 
