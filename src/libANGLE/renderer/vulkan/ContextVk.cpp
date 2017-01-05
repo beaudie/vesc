@@ -102,11 +102,15 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
         const auto &attrib = attribs[attribIndex];
         if (attrib.enabled)
         {
+            gl::Buffer *bufferGL = attrib.buffer.get();
+
             VkVertexInputBindingDescription bindingDesc;
             bindingDesc.binding = static_cast<uint32_t>(vertexBindings.size());
-            bindingDesc.stride  = static_cast<uint32_t>(gl::ComputeVertexAttributeTypeSize(attrib));
+            bindingDesc.stride  = static_cast<uint32_t>(attrib.stride);
             bindingDesc.inputRate =
-                (attrib.divisor > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX);
+                (attrib.divisor > 0
+                     ? VK_VERTEX_INPUT_RATE_INSTANCE
+                     : VK_VERTEX_INPUT_RATE_VERTEX);  // XXX should the divisor value go somewhere?
 
             gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib);
 
@@ -114,17 +118,29 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
             attribDesc.binding  = bindingDesc.binding;
             attribDesc.format   = vk::GetNativeVertexFormat(vertexFormatType);
             attribDesc.location = static_cast<uint32_t>(attribIndex);
-            attribDesc.offset   = static_cast<uint32_t>(attrib.offset);
+            attribDesc.offset   = bufferGL ? static_cast<uint32_t>(attrib.offset) : 0;
 
             vertexBindings.push_back(bindingDesc);
             vertexAttribs.push_back(attribDesc);
 
             // TODO(jmadill): Offset handling.
-            gl::Buffer *bufferGL = attrib.buffer.get();
-            ASSERT(bufferGL);
-            BufferVk *bufferVk = GetImplAs<BufferVk>(bufferGL);
-            vertexHandles.push_back(bufferVk->getVkBuffer().getHandle());
-            vertexOffsets.push_back(0);
+            if (bufferGL)
+            {
+                BufferVk *bufferVk = GetImplAs<BufferVk>(bufferGL);
+                vertexHandles.push_back(bufferVk->getVkBuffer().getHandle());
+                vertexOffsets.push_back(0);
+            }
+            else
+            {
+                // TODO(fjhenigman): Store interleaved attributes in one shot, instead of
+                // sequentially.
+                VkBuffer buffer;
+                size_t offset;
+                ANGLE_TRY(mClientBuffer.store(this, attrib.pointer, attrib.stride * count, &buffer,
+                                              &offset));
+                vertexHandles.push_back(buffer);
+                vertexOffsets.push_back(offset);
+            }
         }
         else
         {

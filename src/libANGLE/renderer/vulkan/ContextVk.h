@@ -130,6 +130,7 @@ class ContextVk : public ContextImpl
 
   private:
     RendererVk *mRenderer;
+    SharedBufferFactory mClientBuffer;
     vk::Pipeline mCurrentPipeline;
 };
 
