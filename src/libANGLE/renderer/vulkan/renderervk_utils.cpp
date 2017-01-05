@@ -7,6 +7,8 @@
 //    Helper functions for the Vulkan Renderer.
 //
 
+#include <cstring>
+
 #include "renderervk_utils.h"
 
 #include "libANGLE/renderer/vulkan/ContextVk.h"
@@ -937,6 +939,91 @@ uint32_t MemoryProperties::findCompatibleMemoryIndex(uint32_t bitMask, uint32_t 
     UNREACHABLE();
     return std::numeric_limits<uint32_t>::max();
 }
+
+#if 0
+gl::Error SharedBufferFactory::store(ContextVk *context,
+                                     const void *data,
+                                     size_t size,
+                                     VkBuffer *bufferOut,
+                                     size_t *offsetOut)
+{
+    if (!mBuffer.valid() || size + mOffset > mSize)
+    {
+        if (size > minimumSize)
+        {
+            mSize = size;
+        }
+        else
+        {
+            mSize = minimumSize;
+        }
+
+        // TODO(fjhenigman): factor out VkBuffer creation - this code is duplicated in at least
+        // BufferVk::setData()
+        auto device = context->getDevice();
+
+        // TODO(jmadill): Proper usage bit implementation. Likely will involve multiple backing
+        // buffers
+        // like in D3D11.
+        VkBufferCreateInfo createInfo;
+        createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        createInfo.pNext                 = nullptr;
+        createInfo.flags                 = 0;
+        createInfo.size                  = mSize;
+        createInfo.usage                 = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+        createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+        createInfo.queueFamilyIndexCount = 0;
+        createInfo.pQueueFamilyIndices   = nullptr;
+
+        vk::Buffer newBuffer(device);
+        ANGLE_TRY(newBuffer.init(createInfo));
+
+        // Find a compatible memory pool index. If the index doesn't change, we could cache it.
+        // Not finding a valid memory pool means an out-of-spec driver, or internal error.
+        // TODO(jmadill): More efficient memory allocation.
+        VkMemoryRequirements memoryRequirements;
+        vkGetBufferMemoryRequirements(device, newBuffer.getHandle(), &memoryRequirements);
+
+        // The requirements size is not always equal to the specified API size.
+        ASSERT(memoryRequirements.size >= mSize);
+
+        VkPhysicalDeviceMemoryProperties memoryProperties;
+        vkGetPhysicalDeviceMemoryProperties(context->getRenderer()->getPhysicalDevice(),
+                                            &memoryProperties);
+
+        auto memoryTypeIndex = FindMemoryType(
+            memoryProperties, memoryRequirements,
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+        ANGLE_VK_CHECK(memoryTypeIndex.valid(), VK_ERROR_INCOMPATIBLE_DRIVER);
+
+        VkMemoryAllocateInfo allocInfo;
+        allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocInfo.pNext           = nullptr;
+        allocInfo.memoryTypeIndex = memoryTypeIndex.value();
+        allocInfo.allocationSize  = memoryRequirements.size;
+
+        ANGLE_TRY(newBuffer.getMemory().allocate(allocInfo));
+        ANGLE_TRY(newBuffer.bindMemory());
+
+        mBuffer = std::move(newBuffer);
+        mOffset = 0;
+    }
+
+    ASSERT(mBuffer.getHandle() != VK_NULL_HANDLE);
+    ASSERT(mBuffer.getMemory().getHandle() != VK_NULL_HANDLE);
+
+    uint8_t *mapPtr;
+    ANGLE_TRY(mBuffer.getMemory().map(mOffset, size, 0, &mapPtr));
+    std::memcpy(mapPtr, data, size);
+    mBuffer.getMemory().unmap();
+
+    *bufferOut = mBuffer.getHandle();
+    *offsetOut = mOffset;
+    mOffset += size;
+
+    return gl::NoError();
+}
+#endif
 
 Optional<uint32_t> FindMemoryType(const VkPhysicalDeviceMemoryProperties &memoryProps,
                                   const VkMemoryRequirements &requirements,

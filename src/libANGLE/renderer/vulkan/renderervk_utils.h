@@ -498,6 +498,24 @@ class GarbageObject final : public IGarbageObject
     T mObject;
 };
 
+#if 0
+class SharedBufferFactory
+{
+  public:
+    gl::Error store(ContextVk *mContext,
+                    const void *data,
+                    size_t size,
+                    VkBuffer *bufferOut,
+                    size_t *offsetOut);
+
+  private:
+    vk::Buffer mBuffer;
+    size_t mSize;
+    size_t mOffset;
+    static constexpr size_t minimumSize = 1 << 16;
+};
+#endif
+
 Optional<uint32_t> FindMemoryType(const VkPhysicalDeviceMemoryProperties &memoryProps,
                                   const VkMemoryRequirements &requirements,
                                   uint32_t propertyFlagMask);

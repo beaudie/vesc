@@ -73,8 +73,10 @@ void VertexArrayVk::syncState(const gl::Context *context,
             }
             else
             {
-                mCurrentVkBuffersCache[attribIndex]           = nullptr;
-                mCurrentVertexBufferHandlesCache[attribIndex] = VK_NULL_HANDLE;
+                BufferVk *bufferVk = new BufferVk(*new gl::BufferState);
+                (void)bufferVk->setData(context, 0, attrib.pointer, 24, (gl::BufferUsage)0);
+                mCurrentVkBuffersCache[attribIndex]           = bufferVk;
+                mCurrentVertexBufferHandlesCache[attribIndex] = bufferVk->getVkBuffer().getHandle();
             }
         }
         else
