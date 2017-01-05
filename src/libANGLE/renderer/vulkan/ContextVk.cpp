@@ -11,6 +11,7 @@
 
 #include "common/bitset_utils.h"
 #include "common/debug.h"
+#include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
@@ -67,7 +68,9 @@ ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
       mRenderer(renderer),
       mCurrentDrawMode(GL_NONE),
       mVertexArrayDirty(false),
-      mTexturesDirty(false)
+      mTexturesDirty(false),
+      mIndexData(VK_BUFFER_USAGE_INDEX_BUFFER_BIT),
+      mVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT)
 {
 }
 
@@ -152,7 +155,8 @@ gl::Error ContextVk::initPipeline(const gl::Context *context)
 gl::Error ContextVk::setupDraw(const gl::Context *context,
                                GLenum mode,
                                DrawType drawType,
-                               vk::CommandBuffer **commandBuffer)
+                               vk::CommandBuffer **commandBuffer,
+                               GLint lastVertex)
 {
     if (mode != mCurrentDrawMode)
     {
@@ -175,12 +179,6 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     FramebufferVk *vkFBO  = vk::GetImpl(drawFBO);
     Serial queueSerial    = mRenderer->getCurrentQueueSerial();
     uint32_t maxAttrib    = programGL->getState().getMaxActiveAttribLocation();
-
-    // Process vertex attributes. Assume zero offsets for now.
-    // TODO(jmadill): Offset handling.
-    const auto &vertexHandles    = vkVAO->getCurrentArrayBufferHandles();
-    angle::MemoryBuffer *zeroBuf = nullptr;
-    ANGLE_TRY(context->getZeroFilledBuffer(maxAttrib * sizeof(VkDeviceSize), &zeroBuf));
 
     // TODO(jmadill): Need to link up the TextureVk to the Secondary CB.
     vk::CommandBufferNode *renderNode = nullptr;
@@ -229,10 +227,12 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
         }
     }
 
+    ContextVk *contextVk = vk::GetImpl(context);
+    ANGLE_TRY(vkVAO->streamVertexData(contextVk, &mVertexData, lastVertex));
     (*commandBuffer)->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline);
     (*commandBuffer)
-        ->bindVertexBuffers(0, maxAttrib, vertexHandles.data(),
-                            reinterpret_cast<const VkDeviceSize *>(zeroBuf->data()));
+        ->bindVertexBuffers(0, maxAttrib, vkVAO->getCurrentArrayBufferHandles().data(),
+                            vkVAO->getCurrentArrayBufferOffsets().data());
 
     // Update the queue serial for the pipeline object.
     // TODO(jmadill): the queue serial should be bound to the pipeline.
@@ -261,7 +261,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
 gl::Error ContextVk::drawArrays(const gl::Context *context, GLenum mode, GLint first, GLsizei count)
 {
     vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(setupDraw(context, mode, DrawType::Arrays, &commandBuffer));
+    ANGLE_TRY(setupDraw(context, mode, DrawType::Arrays, &commandBuffer, first + count - 1));
     commandBuffer->draw(count, 1, first, 0);
     return gl::NoError();
 }
@@ -282,30 +282,43 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
                                   GLenum type,
                                   const void *indices)
 {
-    vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(setupDraw(context, mode, DrawType::Elements, &commandBuffer));
-
-    if (indices)
-    {
-        // TODO(jmadill): Buffer offsets and immediate data.
-        UNIMPLEMENTED();
-        return gl::InternalError() << "Only zero-offset index buffers are currently implemented.";
-    }
-
     if (type == GL_UNSIGNED_BYTE)
     {
-        // TODO(jmadill): Index translation.
+        // TODO(fjhenigman): Index translation.
         UNIMPLEMENTED();
         return gl::InternalError() << "Unsigned byte translation is not yet implemented.";
     }
 
-    const gl::Buffer *elementArrayBuffer =
-        mState.getState().getVertexArray()->getElementArrayBuffer().get();
-    ASSERT(elementArrayBuffer);
+    gl::IndexRange range;
+    VkBuffer buffer;
+    VkDeviceSize offset;
+    if (indices)
+    {
+        ContextVk *contextVk = vk::GetImpl(context);
+        range = gl::ComputeIndexRange(type, indices, count, false /*primitiveRestartEnabled*/);
+        GLsizei amount = sizeof(GLushort) * count;
+        uint8_t *dst;
+        ANGLE_TRY(mIndexData.allocate(contextVk, amount, &dst, &buffer, &offset));
+        memcpy(dst, indices, amount);
+        ANGLE_TRY(mVertexData.flush(contextVk));
+    }
+    else
+    {
+        const gl::Buffer *elementArrayBuffer =
+            mState.getState().getVertexArray()->getElementArrayBuffer().get();
+        ASSERT(elementArrayBuffer);
 
-    BufferVk *elementArrayBufferVk = vk::GetImpl(elementArrayBuffer);
+        BufferVk *elementArrayBufferVk = vk::GetImpl(elementArrayBuffer);
+        ANGLE_TRY(elementArrayBufferVk->getIndexRange(context, type, 0, count,
+                                                      false /*primitiveRestartEnabled*/, &range));
+        buffer = elementArrayBufferVk->getVkBuffer().getHandle();
+        offset = 0;
+    }
 
-    commandBuffer->bindIndexBuffer(elementArrayBufferVk->getVkBuffer(), 0, GetVkIndexType(type));
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(setupDraw(context, mode, DrawType::Elements, &commandBuffer, range.end));
+
+    commandBuffer->bindIndexBuffer(buffer, offset, GetVkIndexType(type));
     commandBuffer->drawIndexed(count, 1, 0, 0, 0);
 
     return gl::NoError();

@@ -13,6 +13,7 @@
 #include <vulkan/vulkan.h>
 
 #include "libANGLE/renderer/ContextImpl.h"
+#include "libANGLE/renderer/vulkan/StreamingBufferManager.h"
 #include "libANGLE/renderer/vulkan/renderervk_utils.h"
 
 namespace rx
@@ -164,7 +165,8 @@ class ContextVk : public ContextImpl, public ResourceVk
     gl::Error setupDraw(const gl::Context *context,
                         GLenum mode,
                         DrawType drawType,
-                        vk::CommandBuffer **commandBuffer);
+                        vk::CommandBuffer **commandBuffer,
+                        GLint lastVertex);
 
     RendererVk *mRenderer;
     vk::Pipeline mCurrentPipeline;
@@ -175,12 +177,15 @@ class ContextVk : public ContextImpl, public ResourceVk
     std::unique_ptr<vk::PipelineDesc> mPipelineDesc;
 
     // The descriptor pool is externally sychronized, so cannot be accessed from different threads
-    // simulataneously. Hence, we keep it in the ContextVk instead of the RendererVk.
+    // simultaneously. Hence, we keep it in the ContextVk instead of the RendererVk.
     vk::DescriptorPool mDescriptorPool;
 
     // Triggers adding dependencies to the command graph.
     bool mVertexArrayDirty;
     bool mTexturesDirty;
+
+    StreamingBufferManager mIndexData;
+    StreamingBufferManager mVertexData;
 };
 
 }  // namespace rx

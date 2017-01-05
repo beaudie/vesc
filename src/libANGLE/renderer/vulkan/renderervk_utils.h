@@ -361,7 +361,7 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                            uint32_t bindingCount,
                            const VkBuffer *buffers,
                            const VkDeviceSize *offsets);
-    void bindIndexBuffer(const vk::Buffer &buffer, VkDeviceSize offset, VkIndexType indexType);
+    void bindIndexBuffer(VkBuffer buffer, VkDeviceSize offset, VkIndexType indexType);
     void bindDescriptorSets(VkPipelineBindPoint bindPoint,
                             const vk::PipelineLayout &layout,
                             uint32_t firstSet,
@@ -644,7 +644,8 @@ Error AllocateBufferMemory(ContextVk *contextVk,
                            size_t size,
                            Buffer *buffer,
                            DeviceMemory *deviceMemoryOut,
-                           size_t *requiredSizeOut);
+                           size_t *requiredSizeOut,
+                           VkMemoryPropertyFlagBits flags);
 
 struct BufferAndMemory final : private angle::NonCopyable
 {
