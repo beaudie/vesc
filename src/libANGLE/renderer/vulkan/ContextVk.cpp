@@ -102,6 +102,8 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
         const auto &attrib = attribs[attribIndex];
         if (attrib.enabled)
         {
+            gl::Buffer *bufferGL = attrib.buffer.get();
+
             VkVertexInputBindingDescription bindingDesc;
             bindingDesc.binding = static_cast<uint32_t>(vertexBindings.size());
             bindingDesc.stride  = static_cast<uint32_t>(gl::ComputeVertexAttributeTypeSize(attrib));
@@ -114,15 +116,23 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
             attribDesc.binding  = bindingDesc.binding;
             attribDesc.format   = vk::GetNativeVertexFormat(vertexFormatType);
             attribDesc.location = static_cast<uint32_t>(attribIndex);
-            attribDesc.offset   = static_cast<uint32_t>(attrib.offset);
+            attribDesc.offset   = bufferGL ? static_cast<uint32_t>(attrib.offset) : 0;
 
             vertexBindings.push_back(bindingDesc);
             vertexAttribs.push_back(attribDesc);
 
             // TODO(jmadill): Offset handling.
-            gl::Buffer *bufferGL = attrib.buffer.get();
-            ASSERT(bufferGL);
-            BufferVk *bufferVk = GetImplAs<BufferVk>(bufferGL);
+            //ASSERT(bufferGL);
+            BufferVk *bufferVk;
+            if (bufferGL)
+            {
+                bufferVk = GetImplAs<BufferVk>(bufferGL);
+            }
+            else
+            {
+                bufferVk = new BufferVk(gl::BufferState());
+                bufferVk->setData(this, 0, attrib.pointer, bindingDesc.stride * count, 0);
+            }
             vertexHandles.push_back(bufferVk->getVkBuffer().getHandle());
             vertexOffsets.push_back(0);
         }
