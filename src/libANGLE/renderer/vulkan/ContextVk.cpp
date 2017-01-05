@@ -31,11 +31,52 @@
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
 #include "libANGLE/renderer/vulkan/formatutilsvk.h"
 
+#include <iostream>
+
 namespace rx
 {
 
+ClientBuffer::ClientBuffer() : mBuffer(gl::BufferState()), mSize(0), mOffset(0) {}
+
+gl::Error ClientBuffer::init(ContextVk *contextVk, size_t size)
+{
+    mSize = size;
+    ANGLE_TRY(mBuffer.setData(contextVk, 0, nullptr, size, 0));
+    return gl::Error(GL_NO_ERROR);
+}
+
+// Copy in 'count' items with given size and stride from 'ptr.'
+// Return the offset where the data is placed.
+gl::Error ClientBuffer::copy(size_t count, size_t size, size_t stride, const void *srcPtr, size_t *offset)
+{
+    GLvoid *dstPtr;
+    ANGLE_TRY(mBuffer.map(0, &dstPtr));
+    uint8_t *dst = static_cast<uint8_t *>(dstPtr) + mOffset;
+    const uint8_t *src = static_cast<const uint8_t *>(srcPtr);
+    for (size_t i = 0; i < count; ++i)
+    {
+        memcpy(dst, src, size);
+        src += stride;
+        dst += size;
+    }
+    ANGLE_TRY(mBuffer.unmap(nullptr));
+    *offset = mOffset;
+    mOffset += count * size;
+    return gl::Error(GL_NO_ERROR);
+}
+
+bool ClientBuffer::canFit(size_t amount) const
+{
+    return amount <= mSize - mOffset;
+}
+
+VkBuffer ClientBuffer::getHandle() const
+{
+    return mBuffer.getVkBuffer().getHandle();
+}
+
 ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
-    : ContextImpl(state), mRenderer(renderer)
+    : ContextImpl(state), mRenderer(renderer), mClientBuffer(nullptr)
 {
 }
 
@@ -97,16 +138,24 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
     std::vector<VkBuffer> vertexHandles;
     std::vector<VkDeviceSize> vertexOffsets;
 
+    std::cout << "draw " << count << " vertices\n";
+
     for (auto attribIndex : angle::IterateBitSet(programGL->getActiveAttribLocationsMask()))
     {
         const auto &attrib = attribs[attribIndex];
         if (attrib.enabled)
         {
+            gl::Buffer *bufferGL = attrib.buffer.get();
+
             VkVertexInputBindingDescription bindingDesc;
             bindingDesc.binding = static_cast<uint32_t>(vertexBindings.size());
             bindingDesc.stride  = static_cast<uint32_t>(gl::ComputeVertexAttributeTypeSize(attrib));
             bindingDesc.inputRate =
-                (attrib.divisor > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX);
+                (attrib.divisor > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX);  //XXX should the divisor value go somewhere?
+
+            std::cout << "attrib " << attribIndex << "\n";
+            std::cout << "  size " << bindingDesc.stride << std::endl;
+            std::cout << "  stride " << attrib.stride << std::endl; // 0 == above number
 
             gl::VertexFormatType vertexFormatType = gl::GetVertexFormatType(attrib);
 
@@ -114,17 +163,35 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
             attribDesc.binding  = bindingDesc.binding;
             attribDesc.format   = vk::GetNativeVertexFormat(vertexFormatType);
             attribDesc.location = static_cast<uint32_t>(attribIndex);
-            attribDesc.offset   = static_cast<uint32_t>(attrib.offset);
+            attribDesc.offset   = bufferGL ? static_cast<uint32_t>(attrib.offset) : 0;
 
             vertexBindings.push_back(bindingDesc);
             vertexAttribs.push_back(attribDesc);
 
             // TODO(jmadill): Offset handling.
-            gl::Buffer *bufferGL = attrib.buffer.get();
-            ASSERT(bufferGL);
-            BufferVk *bufferVk = GetImplAs<BufferVk>(bufferGL);
-            vertexHandles.push_back(bufferVk->getVkBuffer().getHandle());
-            vertexOffsets.push_back(0);
+            //ASSERT(bufferGL);
+            if (bufferGL)
+            {
+                BufferVk *bufferVk = GetImplAs<BufferVk>(bufferGL);
+                vertexHandles.push_back(bufferVk->getVkBuffer().getHandle());
+                vertexOffsets.push_back(0);
+            }
+            else
+            {
+                if (!mClientBuffer || !mClientBuffer->canFit(count * bindingDesc.stride))
+                {
+                    mClientBuffer = new ClientBuffer();
+                    ANGLE_TRY(mClientBuffer->init(this, 0x20000));
+                }
+                if (!mClientBuffer->canFit(count * bindingDesc.stride))
+                {
+                    return gl::Error(GL_OUT_OF_MEMORY);
+                }
+                size_t offset;
+                ANGLE_TRY(mClientBuffer->copy(count, bindingDesc.stride, attrib.stride, attrib.pointer, &offset));
+                vertexHandles.push_back(mClientBuffer->getHandle());
+                vertexOffsets.push_back(offset);
+            }
         }
         else
         {

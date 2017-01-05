@@ -13,11 +13,28 @@
 #include <vulkan/vulkan.h>
 
 #include "libANGLE/renderer/ContextImpl.h"
+#include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/renderervk_utils.h"
 
 namespace rx
 {
 class RendererVk;
+class ContextVk;
+
+class ClientBuffer
+{
+  public:
+    ClientBuffer();
+    gl::Error init(ContextVk *context, size_t size);
+    bool canFit(size_t amount) const;
+    gl::Error copy(size_t count, size_t size, size_t stride, const void *ptr, size_t *offset);
+    VkBuffer getHandle() const;
+
+  private:
+    BufferVk mBuffer;
+    size_t mSize;
+    size_t mOffset;
+};
 
 class ContextVk : public ContextImpl
 {
@@ -130,6 +147,7 @@ class ContextVk : public ContextImpl
 
   private:
     RendererVk *mRenderer;
+    ClientBuffer *mClientBuffer;
     vk::Pipeline mCurrentPipeline;
 };
 

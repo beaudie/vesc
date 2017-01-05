@@ -15,6 +15,8 @@
 
 #include "SampleApplication.h"
 #include "shader_utils.h"
+#include "math.h"
+#include <iostream>
 
 class HelloTriangleSample : public SampleApplication
 {
@@ -26,12 +28,13 @@ class HelloTriangleSample : public SampleApplication
 
     virtual bool initialize()
     {
+#if 1
         const std::string vs = SHADER_SOURCE
         (
-            attribute vec4 vPosition;
+            attribute vec3 vPosition;
             void main()
             {
-                gl_Position = vPosition;
+                gl_Position = vec4(vPosition, 1.);
             }
         );
 
@@ -43,8 +46,31 @@ class HelloTriangleSample : public SampleApplication
                 gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
             }
         );
+#else
+        const std::string vs = SHADER_SOURCE
+        (
+            attribute vec3 vPosition;
+            attribute vec3 vColor;
+            varying vec3 fColor;
+            void main()
+            {
+                fColor = vColor;
+                gl_Position = vec4(vPosition, 1.);
+            }
+        );
 
+        const std::string fs = SHADER_SOURCE
+        (
+            precision mediump float;
+            varying vec3 fColor;
+            void main()
+            {
+                gl_FragColor = vec4(fColor, 1.);
+            }
+        );
+#endif
         mProgram = CompileProgram(vs, fs);
+
         if (!mProgram)
         {
             return false;
@@ -60,13 +86,20 @@ class HelloTriangleSample : public SampleApplication
         glDeleteProgram(mProgram);
     }
 
+#define P(p) ((GLfloat)sin(mFrame*.008 + p*M_PI/180.))
     virtual void draw()
     {
         GLfloat vertices[] =
         {
-             0.0f,  0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-             0.5f, -0.5f, 0.0f,
+#if 0
+             0.0f,  0.5f, 0.0f,  1.f, 0.f, 0.f,
+            -0.5f, -0.5f, 0.0f,  0.f, 1.f, 0.f,
+             0.5f, -0.5f, 0.0f,  0.f, 0.f, 1.f,
+#else
+             P(  0) ,P( 90), 0.f,  P(45), 0.f, 0.f,
+             P(120), P(210), 0.f,  0.f, P(165), 0.f,
+             P(240), P(330), 0.f,  0.f, 0.f, P(285),
+#endif
         };
 
         // Set the viewport
@@ -79,14 +112,16 @@ class HelloTriangleSample : public SampleApplication
         glUseProgram(mProgram);
 
         // Load the vertex data
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, vertices);
         glEnableVertexAttribArray(0);
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
+        mFrame += 1.;
     }
 
   private:
     GLuint mProgram;
+    double mFrame;
 };
 
 int main(int argc, char **argv)
