@@ -116,7 +116,7 @@ gl::Error BufferVk::map(ContextImpl *context, GLenum access, GLvoid **mapPtr)
     ASSERT(mBuffer.getMemory().getHandle() != VK_NULL_HANDLE);
 
     ANGLE_TRY(
-        mBuffer.getMemory().map(0, mState.getSize(), 0, reinterpret_cast<uint8_t **>(mapPtr)));
+        mBuffer.getMemory().map(0, mRequiredSize, 0, reinterpret_cast<uint8_t **>(mapPtr)));
 
     return gl::NoError();
 }
