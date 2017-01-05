@@ -23,11 +23,13 @@ namespace rx
 VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state)
     : VertexArrayImpl(state),
       mCurrentArrayBufferHandles{},
+      mCurrentArrayBufferOffsets{},
       mCurrentArrayBufferResources{},
       mCurrentElementArrayBufferResource(nullptr),
       mCurrentVertexDescsValid(false)
 {
     mCurrentArrayBufferHandles.fill(VK_NULL_HANDLE);
+    mCurrentArrayBufferOffsets.fill(0);
     mCurrentArrayBufferResources.fill(nullptr);
     mCurrentVertexBindingDescs.reserve(state.getMaxAttribs());
     mCurrentVertexAttribDescs.reserve(state.getMaxAttribs());
@@ -39,6 +41,39 @@ VertexArrayVk::~VertexArrayVk()
 
 void VertexArrayVk::destroy(const gl::Context *context)
 {
+}
+
+gl::Error VertexArrayVk::streamVertexData(ContextVk *context,
+                                          StreamingBufferManager *stream,
+                                          GLsizei count)
+{
+    const auto &attribs          = mState.getVertexAttributes();
+    const auto &bindings         = mState.getVertexBindings();
+    const gl::Program *programGL = context->getGLState().getProgram();
+
+    for (auto attribIndex : programGL->getActiveAttribLocationsMask())
+    {
+        const auto &attrib   = attribs[attribIndex];
+        const auto &binding  = bindings[attrib.bindingIndex];
+        gl::Buffer *bufferGL = binding.getBuffer().get();
+
+        if (attrib.enabled && !bufferGL)
+        {
+            // TODO(fjhenigman): Work with more formats than just GL_FLOAT.
+            ASSERT(attrib.type == GL_FLOAT);
+            const size_t amount =
+                (count - 1) * binding.getStride() + gl::ComputeVertexAttributeTypeSize(attrib);
+            const uint8_t *src = static_cast<const uint8_t *>(attrib.pointer);
+            uint8_t *dst;
+            ANGLE_TRY(stream->allocate(context, amount, &dst,
+                                       &mCurrentArrayBufferHandles[attribIndex],
+                                       &mCurrentArrayBufferOffsets[attribIndex]));
+            memcpy(dst, src, amount);
+        }
+    }
+
+    ANGLE_TRY(stream->flush(context));
+    return gl::NoError();
 }
 
 void VertexArrayVk::syncState(const gl::Context *context,
@@ -95,6 +130,8 @@ void VertexArrayVk::syncState(const gl::Context *context,
                 mCurrentArrayBufferResources[attribIndex] = nullptr;
                 mCurrentArrayBufferHandles[attribIndex]   = VK_NULL_HANDLE;
             }
+            // TODO(jmadill): Offset handling.  Assume zero for now.
+            mCurrentArrayBufferOffsets[attribIndex] = 0;
         }
         else
         {
@@ -108,6 +145,11 @@ const gl::AttribArray<VkBuffer> &VertexArrayVk::getCurrentArrayBufferHandles() c
     return mCurrentArrayBufferHandles;
 }
 
+const gl::AttribArray<VkDeviceSize> &VertexArrayVk::getCurrentArrayBufferOffsets() const
+{
+    return mCurrentArrayBufferOffsets;
+}
+
 void VertexArrayVk::updateDrawDependencies(vk::CommandBufferNode *readNode,
                                            const gl::AttributesMask &activeAttribsMask,
                                            Serial serial,
@@ -116,8 +158,8 @@ void VertexArrayVk::updateDrawDependencies(vk::CommandBufferNode *readNode,
     // Handle the bound array buffers.
     for (auto attribIndex : activeAttribsMask)
     {
-        ASSERT(mCurrentArrayBufferResources[attribIndex]);
-        mCurrentArrayBufferResources[attribIndex]->updateDependencies(readNode, serial);
+        if (mCurrentArrayBufferResources[attribIndex])
+            mCurrentArrayBufferResources[attribIndex]->updateDependencies(readNode, serial);
     }
 
     // Handle the bound element array buffer.
@@ -151,11 +193,13 @@ void VertexArrayVk::updateVertexDescriptions(const gl::Context *context)
     {
         const auto &attrib  = attribs[attribIndex];
         const auto &binding = bindings[attrib.bindingIndex];
+        gl::Buffer *bufferGL = binding.getBuffer().get();
         if (attrib.enabled)
         {
             VkVertexInputBindingDescription bindingDesc;
             bindingDesc.binding = static_cast<uint32_t>(mCurrentVertexBindingDescs.size());
-            bindingDesc.stride  = static_cast<uint32_t>(gl::ComputeVertexAttributeTypeSize(attrib));
+            bindingDesc.stride  = static_cast<uint32_t>(
+                bufferGL ? gl::ComputeVertexAttributeTypeSize(attrib) : binding.getStride());
             bindingDesc.inputRate = (binding.getDivisor() > 0 ? VK_VERTEX_INPUT_RATE_INSTANCE
                                                               : VK_VERTEX_INPUT_RATE_VERTEX);
 

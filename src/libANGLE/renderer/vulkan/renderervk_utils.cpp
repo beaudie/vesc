@@ -1098,7 +1098,7 @@ vk::Error StagingBuffer::init(ContextVk *contextVk, VkDeviceSize size, StagingUs
 
     ANGLE_TRY(mBuffer.init(contextVk->getDevice(), createInfo));
     ANGLE_TRY(AllocateBufferMemory(contextVk, static_cast<size_t>(size), &mBuffer, &mDeviceMemory,
-                                   &mSize));
+                                   &mSize, VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
 
     return vk::NoError();
 }
@@ -1130,7 +1130,8 @@ Error AllocateBufferMemory(ContextVk *contextVk,
                            size_t size,
                            Buffer *buffer,
                            DeviceMemory *deviceMemoryOut,
-                           size_t *requiredSizeOut)
+                           size_t *requiredSizeOut,
+                           VkMemoryPropertyFlagBits flags)
 {
     VkDevice device = contextVk->getDevice();
 
@@ -1148,9 +1149,8 @@ Error AllocateBufferMemory(ContextVk *contextVk,
     vkGetPhysicalDeviceMemoryProperties(contextVk->getRenderer()->getPhysicalDevice(),
                                         &memoryProperties);
 
-    auto memoryTypeIndex =
-        FindMemoryType(memoryProperties, memoryRequirements,
-                       VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    auto memoryTypeIndex = FindMemoryType(memoryProperties, memoryRequirements,
+                                          VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | flags);
     ANGLE_VK_CHECK(memoryTypeIndex.valid(), VK_ERROR_INCOMPATIBLE_DRIVER);
 
     VkMemoryAllocateInfo allocInfo;
@@ -1204,6 +1204,7 @@ void GarbageObject::destroy(VkDevice device)
             vkFreeMemory(device, reinterpret_cast<VkDeviceMemory>(mHandle), nullptr);
             break;
         case HandleType::Buffer:
+            printf("destroy buffer %p\n", mHandle);
             vkDestroyBuffer(device, reinterpret_cast<VkBuffer>(mHandle), nullptr);
             break;
         case HandleType::Image:

@@ -69,7 +69,8 @@ gl::Error BufferVk::setData(const gl::Context *context,
 
         ANGLE_TRY(mBuffer.init(device, createInfo));
         ANGLE_TRY(vk::AllocateBufferMemory(contextVk, size, &mBuffer, &mBufferMemory,
-                                           &mCurrentRequiredSize));
+                                           &mCurrentRequiredSize,
+                                           VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
     }
 
     if (data)
