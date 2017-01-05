@@ -2479,6 +2479,13 @@ void Context::initCaps(bool webGLContext)
         }
     }
 
+    // If this context is for WebGL, apply the draw buffer & color attachment limit.
+    if (webGLContext)
+    {
+        mCaps.maxDrawBuffers      = 1;
+        mCaps.maxColorAttachments = 1;
+    }
+
     // Generate texture caps
     updateCaps();
 }
@@ -2518,6 +2525,14 @@ void Context::updateCaps()
         }
 
         mTextureCaps.insert(format, formatCaps);
+    }
+
+    // Update the render caps based on client extensions.
+    if (mExtensions.drawBuffers)
+    {
+        const Caps &renderCaps    = mImplementation->getNativeCaps();
+        mCaps.maxDrawBuffers      = renderCaps.maxDrawBuffers;
+        mCaps.maxColorAttachments = renderCaps.maxColorAttachments;
     }
 }
 
