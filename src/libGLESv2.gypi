@@ -37,6 +37,18 @@
             'common/vector_utils.h',
             'common/version.h',
         ],
+        'libangle_common_linux_sources':
+        [
+            'common/system_utils_linux.cpp',
+        ],
+        'libangle_common_osx_sources':
+        [
+            'common/system_utils_osx.cpp',
+        ],
+        'libangle_common_win_sources':
+        [
+            'common/system_utils_win.cpp',
+        ],
         'libangle_image_util_sources':
         [
             'image_util/copyimage.cpp',

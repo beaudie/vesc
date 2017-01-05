@@ -140,7 +140,25 @@
                             ],
                         },
                     },
+                    'sources':
+                    [
+                        '<@(libangle_common_win_sources)',
+                    ],
                 }],
+                ['OS=="OSX"',
+                {
+                    'sources':
+                    [
+                        '<@(libangle_common_osx_sources)',
+                    ],
+                }],
+                ['OS=="linux"',
+                {
+                    'sources':
+                    [
+                        '<@(libangle_common_linux_sources)',
+                    ],
+                }]
             ],
         },
 
