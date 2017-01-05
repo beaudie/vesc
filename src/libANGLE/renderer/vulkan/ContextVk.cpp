@@ -67,7 +67,8 @@ ContextVk::ContextVk(const gl::ContextState &state, RendererVk *renderer)
       mRenderer(renderer),
       mCurrentDrawMode(GL_NONE),
       mVertexArrayDirty(false),
-      mTexturesDirty(false)
+      mTexturesDirty(false),
+      mStreamingVertexData(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, 1024 * 1024)
 {
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
     memset(&mClearDepthStencilValue, 0, sizeof(mClearDepthStencilValue));
@@ -156,6 +157,8 @@ gl::Error ContextVk::initPipeline(const gl::Context *context)
 gl::Error ContextVk::setupDraw(const gl::Context *context,
                                GLenum mode,
                                DrawType drawType,
+                               int firstVertex,
+                               int lastVertex,
                                vk::CommandBuffer **commandBuffer)
 {
     if (mode != mCurrentDrawMode)
@@ -169,21 +172,15 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
         ANGLE_TRY(initPipeline(context));
     }
 
-    const auto &state     = mState.getState();
+    const auto &state            = mState.getState();
     const gl::Program *programGL = state.getProgram();
-    ProgramVk *programVk  = vk::GetImpl(programGL);
+    ProgramVk *programVk         = vk::GetImpl(programGL);
     const gl::VertexArray *vao   = state.getVertexArray();
-    VertexArrayVk *vkVAO  = vk::GetImpl(vao);
-    const auto *drawFBO   = state.getDrawFramebuffer();
-    FramebufferVk *vkFBO  = vk::GetImpl(drawFBO);
+    VertexArrayVk *vkVAO         = vk::GetImpl(vao);
+    const auto *drawFBO          = state.getDrawFramebuffer();
+    FramebufferVk *vkFBO         = vk::GetImpl(drawFBO);
     Serial queueSerial           = mRenderer->getCurrentQueueSerial();
     uint32_t maxAttrib           = programGL->getState().getMaxActiveAttribLocation();
-
-    // Process vertex attributes. Assume zero offsets for now.
-    // TODO(jmadill): Offset handling.
-    const auto &vertexHandles    = vkVAO->getCurrentArrayBufferHandles();
-    angle::MemoryBuffer *zeroBuf = nullptr;
-    ANGLE_TRY(context->getZeroFilledBuffer(maxAttrib * sizeof(VkDeviceSize), &zeroBuf));
 
     // TODO(jmadill): Need to link up the TextureVk to the Secondary CB.
     vk::CommandBufferNode *renderNode = nullptr;
@@ -233,9 +230,11 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
     }
 
     (*commandBuffer)->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline->get());
+    ContextVk *contextVk = vk::GetImpl(context);
+    ANGLE_TRY(vkVAO->streamVertexData(contextVk, &mStreamingVertexData, firstVertex, lastVertex));
     (*commandBuffer)
-        ->bindVertexBuffers(0, maxAttrib, vertexHandles.data(),
-                            reinterpret_cast<const VkDeviceSize *>(zeroBuf->data()));
+        ->bindVertexBuffers(0, maxAttrib, vkVAO->getCurrentArrayBufferHandles().data(),
+                            vkVAO->getCurrentArrayBufferOffsets().data());
 
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentPipeline && mCurrentPipeline->valid());
@@ -264,7 +263,7 @@ gl::Error ContextVk::setupDraw(const gl::Context *context,
 gl::Error ContextVk::drawArrays(const gl::Context *context, GLenum mode, GLint first, GLsizei count)
 {
     vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(setupDraw(context, mode, DrawType::Arrays, &commandBuffer));
+    ANGLE_TRY(setupDraw(context, mode, DrawType::Arrays, first, first + count - 1, &commandBuffer));
     commandBuffer->draw(count, 1, first, 0);
     return gl::NoError();
 }
@@ -286,7 +285,7 @@ gl::Error ContextVk::drawElements(const gl::Context *context,
                                   const void *indices)
 {
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(setupDraw(context, mode, DrawType::Elements, &commandBuffer));
+    ANGLE_TRY(setupDraw(context, mode, DrawType::Elements, 0, count - 1, &commandBuffer));
 
     if (indices)
     {
