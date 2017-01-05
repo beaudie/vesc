@@ -644,7 +644,8 @@ Error AllocateBufferMemory(ContextVk *contextVk,
                            size_t size,
                            Buffer *buffer,
                            DeviceMemory *deviceMemoryOut,
-                           size_t *requiredSizeOut);
+                           size_t *requiredSizeOut,
+                           VkMemoryPropertyFlagBits flags);
 
 struct BufferAndMemory final : private angle::NonCopyable
 {
