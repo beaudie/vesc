@@ -49,6 +49,7 @@ ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_OBJECT);
 namespace rx
 {
 class DisplayVk;
+class RendererVk;
 
 ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_VK_OBJECT);
 
@@ -624,6 +625,20 @@ struct BufferAndMemory final : private angle::NonCopyable
 };
 
 }  // namespace vk
+
+class StreamBuffer : public ResourceVk
+{
+  public:
+    ~StreamBuffer() { printf("~StreamBuffer\n"); }
+    void release(RendererVk *renderer);
+    gl::Error stuff(ContextVk *context, const void *data, size_t amount, VkBuffer *handleOut, VkDeviceSize *offsetOut);
+
+  private:
+    vk::Buffer mBuffer;
+    vk::DeviceMemory mMemory;
+    VkDeviceSize mOffset = 0;
+    static constexpr size_t mSize = 0x10000;
+};
 
 namespace gl_vk
 {

@@ -9,6 +9,7 @@
 
 #include "renderervk_utils.h"
 
+#include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
@@ -1119,6 +1120,7 @@ void GarbageObject::destroy(VkDevice device)
             vkFreeMemory(device, reinterpret_cast<VkDeviceMemory>(mHandle), nullptr);
             break;
         case HandleType::Buffer:
+            printf("destroy buffer %p\n", mHandle);
             vkDestroyBuffer(device, reinterpret_cast<VkBuffer>(mHandle), nullptr);
             break;
         case HandleType::Image:
@@ -1162,6 +1164,44 @@ void GarbageObject::destroy(VkDevice device)
 }
 
 }  // namespace vk
+
+void StreamBuffer::release(RendererVk *renderer)
+{
+    renderer->releaseResource(*this, &mBuffer);
+    renderer->releaseResource(*this, &mMemory);
+}
+
+gl::Error StreamBuffer::stuff(ContextVk *context, const void *data, size_t amount, VkBuffer *handleOut, VkDeviceSize *offsetOut)
+{
+    VkDevice device = context->getDevice();
+    //XXX Serial queueSerial    = context->getRenderer()->getCurrentQueueSerial();
+
+    if (!mBuffer.valid())
+    {
+        VkBufferCreateInfo createInfo;
+        createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        createInfo.pNext                 = nullptr;
+        createInfo.flags                 = 0;
+        createInfo.size                  = mSize;
+        createInfo.usage                 = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+        createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+        createInfo.queueFamilyIndexCount = 0;
+        createInfo.pQueueFamilyIndices   = nullptr;
+        ANGLE_TRY(mBuffer.init(device, createInfo));
+        size_t reqSize;
+        ANGLE_TRY(vk::AllocateBufferMemory(context, mSize, &mBuffer, &mMemory, &reqSize));
+    }
+    uint8_t *ptr;
+    ANGLE_TRY(mMemory.map(device, 0, mSize, 0, &ptr));
+    memcpy(ptr + mOffset, data, amount);
+    *handleOut = mBuffer.getHandle();
+    printf("returning buffer handle %p\n",*handleOut);
+    *offsetOut = mOffset;
+    mOffset += amount;
+    if (mOffset > mSize) mOffset = 0;
+    mMemory.unmap(device);
+    return gl::NoError();
+}
 
 namespace gl_vk
 {
