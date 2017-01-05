@@ -625,6 +625,18 @@ struct BufferAndMemory final : private angle::NonCopyable
 
 }  // namespace vk
 
+class StreamBuffer : public ResourceVk
+{
+  public:
+    gl::Error stuff(const gl::Context *context, const void *data, size_t amount, VkBuffer *handleOut, VkDeviceSize *offsetOut);
+
+  private:
+    vk::Buffer mBuffer;
+    vk::DeviceMemory mMemory;
+    VkDeviceSize mOffset = 0;
+    static constexpr size_t mSize = 0x10000;
+};
+
 namespace gl_vk
 {
 VkPrimitiveTopology GetPrimitiveTopology(GLenum mode);
