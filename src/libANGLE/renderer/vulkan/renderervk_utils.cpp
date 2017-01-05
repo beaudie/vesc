@@ -9,6 +9,7 @@
 
 #include "renderervk_utils.h"
 
+#include "libANGLE/Context.h"
 #include "libANGLE/SizedMRUCache.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
@@ -1159,6 +1160,45 @@ Error AllocateBufferMemory(ContextVk *contextVk,
     return NoError();
 }
 
+Error AllocateBufferMemory2(ContextVk *contextVk,
+                           size_t size,
+                           Buffer *buffer,
+                           DeviceMemory *deviceMemoryOut,
+                           size_t *requiredSizeOut)
+{
+    VkDevice device = contextVk->getDevice();
+
+    // Find a compatible memory pool index. If the index doesn't change, we could cache it.
+    // Not finding a valid memory pool means an out-of-spec driver, or internal error.
+    // TODO(jmadill): More efficient memory allocation.
+    VkMemoryRequirements memoryRequirements;
+    vkGetBufferMemoryRequirements(device, buffer->getHandle(), &memoryRequirements);
+
+    // The requirements size is not always equal to the specified API size.
+    ASSERT(memoryRequirements.size >= size);
+    *requiredSizeOut = static_cast<size_t>(memoryRequirements.size);
+
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(contextVk->getRenderer()->getPhysicalDevice(),
+                                        &memoryProperties);
+
+    auto memoryTypeIndex =
+        FindMemoryType(memoryProperties, memoryRequirements,
+                       VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
+    ANGLE_VK_CHECK(memoryTypeIndex.valid(), VK_ERROR_INCOMPATIBLE_DRIVER);
+
+    VkMemoryAllocateInfo allocInfo;
+    allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.pNext           = nullptr;
+    allocInfo.memoryTypeIndex = memoryTypeIndex.value();
+    allocInfo.allocationSize  = memoryRequirements.size;
+
+    ANGLE_TRY(deviceMemoryOut->allocate(device, allocInfo));
+    ANGLE_TRY(buffer->bindMemory(device, *deviceMemoryOut));
+
+    return NoError();
+}
+
 // GarbageObject implementation.
 GarbageObject::GarbageObject()
     : mSerial(), mHandleType(HandleType::Invalid), mHandle(VK_NULL_HANDLE)
@@ -1198,6 +1238,7 @@ void GarbageObject::destroy(VkDevice device)
             vkFreeMemory(device, reinterpret_cast<VkDeviceMemory>(mHandle), nullptr);
             break;
         case HandleType::Buffer:
+            printf("destroy buffer %p\n", mHandle);
             vkDestroyBuffer(device, reinterpret_cast<VkBuffer>(mHandle), nullptr);
             break;
         case HandleType::Image:
@@ -1488,6 +1529,81 @@ Error InitializeRenderPassFromDesc(VkDevice device,
 
     ANGLE_TRY(renderPass->init(device, createInfo));
     return vk::NoError();
+}
+
+BufferStream::BufferStream(ContextVk *context) : mContext(context)
+{
+}
+
+BufferStream::~BufferStream()
+{
+}
+
+gl::Error BufferStream::allocate(size_t amount,
+                                 uint8_t **ptrOut,
+                                 VkBuffer *handleOut,
+                                 VkDeviceSize *offsetOut)
+{
+    RendererVk *renderer = mContext->getRenderer();
+    setQueueSerial(renderer->getCurrentQueueSerial());
+    VkDevice device = mContext->getDevice();
+
+    if (mOffset + amount > mSize)
+    {
+        if (mPtr)
+        {
+            mMemory.unmap(device);
+            mPtr = nullptr;
+        }
+        renderer->releaseResource(*this, &mBuffer);
+        renderer->releaseResource(*this, &mMemory);
+
+        VkBufferCreateInfo createInfo;
+        createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        createInfo.pNext                 = nullptr;
+        createInfo.flags                 = 0;
+        createInfo.size                  = std::max(amount, static_cast<typeof(amount)>(0x100u));
+        createInfo.usage                 = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+        createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+        createInfo.queueFamilyIndexCount = 0;
+        createInfo.pQueueFamilyIndices   = nullptr;
+        ANGLE_TRY(mBuffer.init(device, createInfo));
+        ANGLE_TRY(vk::AllocateBufferMemory2(mContext, createInfo.size, &mBuffer, &mMemory, &mSize));
+        ANGLE_TRY(mMemory.map(device, 0, mSize, 0, &mPtr));
+        mOffset    = 0;
+        mLastFlush = 0;
+    }
+
+    ASSERT(mBuffer.valid());
+    *handleOut = mBuffer.getHandle();
+    printf("returning buffer handle %p\n", *handleOut);
+
+    ASSERT(mPtr);
+    *ptrOut    = mPtr + mOffset;
+    *offsetOut = mOffset;
+    mOffset += amount;
+    ASSERT(mOffset <= mSize);
+
+    return gl::NoError();
+}
+
+gl::Error BufferStream::flush()
+{
+    if (mOffset > mLastFlush)
+    {
+        VkMappedMemoryRange range;
+        range.sType  = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+        range.pNext  = nullptr;
+        range.memory = mMemory.getHandle();
+        range.offset = mLastFlush;
+        range.size   = mOffset - mLastFlush;
+        printf("flush %u to %u\n",(unsigned)mLastFlush,(unsigned)mOffset);
+        ANGLE_VK_TRY(vkFlushMappedMemoryRanges(mContext->getDevice(), 1, &range));
+
+        mLastFlush = mOffset;
+    }
+
+    return gl::NoError();
 }
 
 }  // namespace vk

@@ -21,12 +21,14 @@ namespace rx
 
 VertexArrayVk::VertexArrayVk(const gl::VertexArrayState &state)
     : VertexArrayImpl(state),
-      mCurrentArrayBufferHandles{},
+      // mCurrentArrayBufferHandles{},
       mCurrentArrayBufferResources{},
       mCurrentElementArrayBufferResource(nullptr),
+      mHandles(state.getMaxAttribs(), VK_NULL_HANDLE),
+      mOffsets(state.getMaxAttribs(), 0),
       mCurrentVertexDescsValid(false)
 {
-    mCurrentArrayBufferHandles.fill(VK_NULL_HANDLE);
+    // mCurrentArrayBufferHandles.fill(VK_NULL_HANDLE);
     mCurrentArrayBufferResources.fill(nullptr);
     mCurrentVertexBindingDescs.reserve(state.getMaxAttribs());
     mCurrentVertexAttribDescs.reserve(state.getMaxAttribs());
@@ -38,6 +40,74 @@ VertexArrayVk::~VertexArrayVk()
 
 void VertexArrayVk::destroy(const gl::Context *context)
 {
+}
+
+/* TODO
+- the whole buffer will be mapped after it is allocated (and unmapped after it's filled)
+- map() will change to allocate() which will allocate memory if needed, and anyway return ptr,
+handle, offset - unmap() will change to flush() which will flush everything since the last flush
+*/
+gl::Error VertexArrayVk::streamVertexData(ContextVk *context, GLsizei count)
+{
+    const auto &attribs          = mState.getVertexAttributes();
+    const auto &bindings         = mState.getVertexBindings();
+    const gl::Program *programGL = context->getGLState().getProgram();
+
+    auto vertexData = context->getVertexData();
+    for (auto attribIndex : programGL->getActiveAttribLocationsMask())
+    {
+        const auto &attrib   = attribs[attribIndex];
+        const auto &binding  = bindings[attrib.bindingIndex];
+        gl::Buffer *bufferGL = binding.getBuffer().get();
+        auto b               = mCurrentArrayBufferResources[attribIndex];
+        if (b)
+            // XXX cast is ugly.  changing the array from BufferVk to ResourceVk was supposed to be
+            // an improvement...
+            mHandles[attribIndex] = ((BufferVk *)b)->getVkBuffer().getHandle();
+        mOffsets[attribIndex] = 0;
+        if (attrib.enabled && !bufferGL)
+        {
+            printf("index %d   count %d   addr %p   stride %d   size %d\n", (int)attribIndex,
+                   (int)count, attrib.pointer, (int)binding.getStride(),
+                   (int)gl::ComputeVertexAttributeTypeSize(attrib));
+
+            const size_t srcStride = binding.getStride();
+            const size_t dstStride = gl::ComputeVertexAttributeTypeSize(attrib);
+            const uint8_t *src     = static_cast<const uint8_t *>(attrib.pointer);
+            uint8_t *dst;
+            ANGLE_TRY(vertexData->allocate(count * dstStride, &dst, &mHandles[attribIndex],
+                                           &mOffsets[attribIndex]));
+
+            // Pack data tightly into the destination.  If source has holes we must copy vertices
+            // one by one.
+            if (srcStride == dstStride)
+            {
+                memcpy(dst, src, count * dstStride);
+            }
+            else
+            {
+                for (int i = 0; i < count; ++i)
+                {
+                    memcpy(dst, src, dstStride);
+                    dst += dstStride;
+                    src += srcStride;
+                }
+            }
+        }
+    }
+
+    ANGLE_TRY(vertexData->flush());
+    return gl::NoError();
+}
+
+const VkBuffer *VertexArrayVk::handles() const
+{
+    return mHandles.data();
+}
+
+const VkDeviceSize *VertexArrayVk::offsets() const
+{
+    return mOffsets.data();
 }
 
 void VertexArrayVk::syncState(const gl::Context *context,
@@ -87,12 +157,12 @@ void VertexArrayVk::syncState(const gl::Context *context,
             {
                 BufferVk *bufferVk                        = vk::GetImpl(bufferGL);
                 mCurrentArrayBufferResources[attribIndex] = bufferVk;
-                mCurrentArrayBufferHandles[attribIndex]   = bufferVk->getVkBuffer().getHandle();
+                // mCurrentArrayBufferHandles[attribIndex]   = bufferVk->getVkBuffer().getHandle();
             }
             else
             {
                 mCurrentArrayBufferResources[attribIndex] = nullptr;
-                mCurrentArrayBufferHandles[attribIndex]   = VK_NULL_HANDLE;
+                // mCurrentArrayBufferHandles[attribIndex]   = VK_NULL_HANDLE;
             }
         }
         else
@@ -102,10 +172,12 @@ void VertexArrayVk::syncState(const gl::Context *context,
     }
 }
 
+/*
 const gl::AttribArray<VkBuffer> &VertexArrayVk::getCurrentArrayBufferHandles() const
 {
     return mCurrentArrayBufferHandles;
 }
+*/
 
 void VertexArrayVk::updateCurrentBufferSerials(const gl::AttributesMask &activeAttribsMask,
                                                Serial serial,
@@ -114,8 +186,8 @@ void VertexArrayVk::updateCurrentBufferSerials(const gl::AttributesMask &activeA
     // Handle the bound array buffers.
     for (auto attribIndex : activeAttribsMask)
     {
-        ASSERT(mCurrentArrayBufferResources[attribIndex]);
-        mCurrentArrayBufferResources[attribIndex]->setQueueSerial(serial);
+        if (mCurrentArrayBufferResources[attribIndex])
+            mCurrentArrayBufferResources[attribIndex]->setQueueSerial(serial);
     }
 
     // Handle the bound element array buffer.

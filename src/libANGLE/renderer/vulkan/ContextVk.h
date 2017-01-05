@@ -156,9 +156,11 @@ class ContextVk : public ContextImpl, public ResourceVk
 
     vk::DescriptorPool *getDescriptorPool();
 
+    vk::BufferStream *getVertexData();
+
   private:
     gl::Error initPipeline(const gl::Context *context);
-    gl::Error setupDraw(const gl::Context *context, GLenum mode, DrawType drawType);
+    gl::Error setupDraw(const gl::Context *context, GLenum mode, DrawType drawType, GLsizei count);
 
     RendererVk *mRenderer;
     vk::Pipeline mCurrentPipeline;
@@ -181,8 +183,10 @@ class ContextVk : public ContextImpl, public ResourceVk
     VkGraphicsPipelineCreateInfo mCurrentPipelineInfo;
 
     // The descriptor pool is externally sychronized, so cannot be accessed from different threads
-    // simulataneously. Hence, we keep it in the ContextVk instead of the RendererVk.
+    // simultaneously. Hence, we keep it in the ContextVk instead of the RendererVk.
     vk::DescriptorPool mDescriptorPool;
+
+    vk::BufferStream mVertexData;
 };
 
 }  // namespace rx
