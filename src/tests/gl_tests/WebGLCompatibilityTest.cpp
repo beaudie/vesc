@@ -49,6 +49,10 @@ class WebGLCompatibilityTest : public ANGLETest
     PFNGLREQUESTEXTENSIONANGLEPROC glRequestExtensionANGLE = nullptr;
 };
 
+class WebGL2CompatibilityTest : public WebGLCompatibilityTest
+{
+};
+
 // Context creation would fail if EGL_ANGLE_create_context_webgl_compatibility was not available so
 // the GL extension should always be present
 TEST_P(WebGLCompatibilityTest, ExtensionStringExposed)
@@ -731,6 +735,70 @@ TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoopWithDepthStencil)
     EXPECT_GL_NO_ERROR();
 }
 
+// The source and the target for CopyTexSubImage3D are the same 3D texture.
+// But the level of the 3D texture != the level of the read attachment.
+TEST_P(WebGL2CompatibilityTest, NoTextureCopyingFeedbackLoopBetween3DLevels)
+{
+    GLTexture texture;
+    GLFramebuffer framebuffer;
+
+    glBindTexture(GL_TEXTURE_3D, texture.get());
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage3D(GL_TEXTURE_3D, 1, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.get(), 0, 0);
+    ASSERT_GL_NO_ERROR();
+
+    glCopyTexSubImage3D(GL_TEXTURE_3D, 1, 0, 0, 0, 0, 0, 2, 2);
+    EXPECT_GL_NO_ERROR();
+}
+
+// The source and the target for CopyTexSubImage3D are the same 3D texture.
+// But the zoffset of the 3D texture != the layer of the read attachment.
+TEST_P(WebGL2CompatibilityTest, NoTextureCopyingFeedbackLoopBetween3DLayers)
+{
+    GLTexture texture;
+    GLFramebuffer framebuffer;
+
+    glBindTexture(GL_TEXTURE_3D, texture.get());
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.get(), 0, 1);
+    ASSERT_GL_NO_ERROR();
+
+    glCopyTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, 0, 0, 2, 2);
+    EXPECT_GL_NO_ERROR();
+}
+
+// The source and the target for CopyTexSubImage3D are the same 3D texture.
+// And the level / zoffset of the 3D texture is equal to the level / layer of the read attachment.
+TEST_P(WebGL2CompatibilityTest, TextureCopyingFeedbackLoop3D)
+{
+    // This test seems to have issues on OpenGL drivers (NVIDIA) due to an incomplete FBO.
+    // TODO(jmadill): Figure out why OpenGL drivers can return incomplete attachment here.
+    if (IsOpenGL())
+    {
+        std::cout << "Test skipped on OpenGL." << std::endl;
+        return;
+    }
+
+    GLTexture texture;
+    GLFramebuffer framebuffer;
+
+    glBindTexture(GL_TEXTURE_3D, texture.get());
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, 4, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage3D(GL_TEXTURE_3D, 1, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.get(), 1, 0);
+    ASSERT_GL_NO_ERROR();
+
+    glCopyTexSubImage3D(GL_TEXTURE_3D, 1, 0, 0, 0, 0, 0, 2, 2);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(WebGLCompatibilityTest,
@@ -743,4 +811,5 @@ ANGLE_INSTANTIATE_TEST(WebGLCompatibilityTest,
                        ES2_OPENGLES(),
                        ES3_OPENGLES());
 
+ANGLE_INSTANTIATE_TEST(WebGL2CompatibilityTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 }  // namespace
