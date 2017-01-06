@@ -54,18 +54,16 @@ class RendererVk : angle::NonCopyable
     vk::Error submitAndFinishCommandBuffer(const vk::CommandBuffer &commandBuffer);
     vk::Error waitThenFinishCommandBuffer(const vk::CommandBuffer &commandBuffer,
                                           const vk::Semaphore &waitSemaphore);
-    vk::ErrorOrResult<vk::Semaphore> submitCommandBufferWithSemaphores(
-        const vk::CommandBuffer &commandBuffer,
-        const vk::Semaphore &waitSemaphore);
 
     const gl::Caps &getNativeCaps() const;
     const gl::TextureCapsMap &getNativeTextureCaps() const;
     const gl::Extensions &getNativeExtensions() const;
     const gl::Limitations &getNativeLimitations() const;
 
-    vk::ErrorOrResult<vk::StagingImage> createStagingImage(TextureDimension dimension,
-                                                           const vk::Format &format,
-                                                           const gl::Extents &extent);
+    vk::Error createStagingImage(TextureDimension dimension,
+                                 const vk::Format &format,
+                                 const gl::Extents &extent,
+                                 vk::StagingImage *imageOut);
 
     GlslangWrapper *getGlslangWrapper();
 
@@ -94,7 +92,7 @@ class RendererVk : angle::NonCopyable
     uint32_t mCurrentQueueFamilyIndex;
     VkDevice mDevice;
     VkCommandPool mCommandPool;
-    std::unique_ptr<vk::CommandBuffer> mCommandBuffer;
+    vk::CommandBuffer mCommandBuffer;
     uint32_t mHostVisibleMemoryIndex;
     GlslangWrapper *mGlslangWrapper;
 };
