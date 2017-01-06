@@ -61,7 +61,7 @@ TEST(SurfaceTest, DestructionDeletesImpl)
 
     EXPECT_CALL(*impl, destroy()).Times(1).RetiresOnSaturation();
 
-    surface->onDestroy();
+    surface->onDestroy(nullptr);
 
     // Only needed because the mock is leaked if bugs are present,
     // which logs an error, but does not cause the test to fail.
