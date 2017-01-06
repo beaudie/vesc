@@ -212,6 +212,8 @@ class Framebuffer final : public LabeledObject, public angle::SignalReceiver
     // angle::SignalReceiver implementation
     void signal(angle::SignalToken token) override;
 
+    bool formsRenderingFeedbackLoopWith(const State &state) const;
+
   private:
     void detachResourceById(GLenum resourceType, GLuint resourceId);
     void detachMatchingAttachment(FramebufferAttachment *attachment,

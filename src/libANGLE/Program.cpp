@@ -1569,6 +1569,8 @@ bool Program::validateSamplers(InfoLog *infoLog, const Caps &caps)
         std::fill(mTextureUnitTypesCache.begin(), mTextureUnitTypesCache.end(), GL_NONE);
     }
 
+    mTextureUnitCache.clear();
+
     // if any two active samplers in a program are of different types, but refer to the same
     // texture image unit, and this is the current program, then ValidateProgram will fail, and
     // DrawArrays and DrawElements will issue the INVALID_OPERATION error.
@@ -1618,6 +1620,7 @@ bool Program::validateSamplers(InfoLog *infoLog, const Caps &caps)
             }
             else
             {
+                mTextureUnitCache.push_back(textureUnit);
                 mTextureUnitTypesCache[textureUnit] = textureType;
             }
         }
@@ -3062,4 +3065,25 @@ void Program::getUniformInternal(GLint location, DestT *dataOut) const
             UNREACHABLE();
     }
 }
+
+bool Program::formsFeedbackLoopWith(const gl::State &state, GLuint drawTextureID) const
+{
+    // Must be called after a successful link, after samplers are validated.
+    ASSERT(mLinked);
+    ASSERT(mCachedValidateSamplersResult.valid() && mCachedValidateSamplersResult.value());
+
+    for (GLuint textureUnit : mTextureUnitCache)
+    {
+        GLenum textureType   = mTextureUnitTypesCache[textureUnit];
+        GLenum readTextureID = state.getSamplerTextureId(textureUnit, textureType);
+        if (readTextureID == drawTextureID)
+        {
+            // TODO(jmadill): Check for appropriate overlap.
+            return true;
+        }
+    }
+
+    return false;
+}
+
 }  // namespace gl
