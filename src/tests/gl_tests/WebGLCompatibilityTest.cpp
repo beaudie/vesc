@@ -41,6 +41,11 @@ class WebGLCompatibilityTest : public ANGLETest
                                     const std::array<GLenum, 2> &drawBuffers,
                                     GLenum expectedError);
 
+    // Called from RenderingFeedbackLoopWithDrawBuffers.
+    void drawBuffersFeedbackLoop(GLuint program,
+                                 const std::array<GLenum, 2> &drawBuffers,
+                                 GLenum expectedError);
+
     PFNGLREQUESTEXTENSIONANGLEPROC glRequestExtensionANGLE = nullptr;
 };
 
@@ -541,6 +546,91 @@ TEST_P(WebGLCompatibilityTest, TextureCopyingFeedbackLoops)
     EXPECT_GL_NO_ERROR();
 }
 
+void WebGLCompatibilityTest::drawBuffersFeedbackLoop(GLuint program,
+                                                     const std::array<GLenum, 2> &drawBuffers,
+                                                     GLenum expectedError)
+{
+    glDrawBuffers(2, drawBuffers.data());
+
+    // Make sure framebuffer is complete before feedback loop detection
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    drawQuad(program, "aPosition", 0.5f, 1.0f, true);
+
+    // "Rendering to a texture where it samples from should geneates INVALID_OPERATION. Otherwise,
+    // it should be NO_ERROR"
+    EXPECT_GL_ERROR(expectedError);
+}
+
+// This tests that rendering feedback loops works as expected with WebGL 2.
+// Based on WebGL test conformance2/rendering/rendering-sampling-feedback-loop.html
+TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoopWithDrawBuffers)
+{
+    const std::string vertexShader =
+        "#version 300 es\n"
+        "in vec4 aPosition;\n"
+        "out vec2 texCoord;\n"
+        "void main() {\n"
+        "    gl_Position = aPosition;\n"
+        "    texCoord = (aPosition.xy * 0.5) + 0.5;\n"
+        "}\n";
+
+    const std::string fragmentShader =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "uniform sampler2D tex;\n"
+        "in vec2 texCoord;\n"
+        "out vec4 oColor;\n"
+        "void main() {\n"
+        "    oColor = texture(tex, texCoord);\n"
+        "}\n";
+
+    GLsizei width  = 8;
+    GLsizei height = 8;
+
+    // This shader must in ES3/WebGL 2, because of the shader semantics.
+    if (getClientMajorVersion() < 3)
+    {
+        // No WEBGL_draw_buffers support -- this is legal.
+        return;
+    }
+
+    GLint maxDrawBuffers = 0;
+    glGetIntegerv(GL_MAX_DRAW_BUFFERS, &maxDrawBuffers);
+
+    if (maxDrawBuffers < 2)
+    {
+        std::cout << "Test skipped because MAX_DRAW_BUFFERS is too small." << std::endl;
+        return;
+    }
+
+    ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
+    glUseProgram(program.get());
+    glViewport(0, 0, width, height);
+
+    GLTexture tex0;
+    GLTexture tex1;
+    GLFramebuffer fbo;
+    FillTexture2D(tex0.get(), width, height, GLColor::red, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+    FillTexture2D(tex1.get(), width, height, GLColor::green, 0, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+    ASSERT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, tex1.get());
+    GLint texLoc = glGetUniformLocation(program.get(), "tex");
+    ASSERT_NE(-1, texLoc);
+    glUniform1i(texLoc, 0);
+
+    // The sampling texture is bound to COLOR_ATTACHMENT1 during resource allocation
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo.get());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex0.get(), 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, tex1.get(), 0);
+    ASSERT_GL_NO_ERROR();
+
+    drawBuffersFeedbackLoop(program.get(), {{GL_NONE, GL_COLOR_ATTACHMENT1}}, GL_INVALID_OPERATION);
+    drawBuffersFeedbackLoop(program.get(), {{GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1}},
+                            GL_INVALID_OPERATION);
+    drawBuffersFeedbackLoop(program.get(), {{GL_COLOR_ATTACHMENT0, GL_NONE}}, GL_NO_ERROR);
+}
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(WebGLCompatibilityTest,
