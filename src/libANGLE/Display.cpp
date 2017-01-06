@@ -764,7 +764,7 @@ Error Display::makeCurrent(egl::Surface *drawSurface, egl::Surface *readSurface,
     if (context != nullptr && drawSurface != nullptr)
     {
         ASSERT(readSurface == drawSurface);
-        context->makeCurrent(drawSurface);
+        context->makeCurrent(this, drawSurface);
     }
 
     return egl::Error(EGL_SUCCESS);
@@ -806,7 +806,7 @@ void Display::destroySurface(Surface *surface)
     }
 
     mState.surfaceSet.erase(surface);
-    surface->onDestroy();
+    surface->onDestroy(this);
 }
 
 void Display::destroyImage(egl::Image *image)
@@ -825,6 +825,7 @@ void Display::destroyStream(egl::Stream *stream)
 
 void Display::destroyContext(gl::Context *context)
 {
+    context->destroy(this);
     mContextSet.erase(context);
     SafeDelete(context);
 }
