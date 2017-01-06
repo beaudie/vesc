@@ -12,6 +12,8 @@
 
 #include <vulkan/vulkan.h>
 
+#include <array>
+
 #include "libANGLE/renderer/SurfaceImpl.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 #include "libANGLE/renderer/vulkan/renderervk_utils.h"
@@ -49,6 +51,41 @@ class OffscreenSurfaceVk : public SurfaceImpl
     EGLint mWidth;
     EGLint mHeight;
 };
+
+template <typename T, size_t N>
+class ArrayVector
+{
+  public:
+    using ArrayT = std::array<T, N>;
+
+    ArrayVector() : mCurSize(0) {}
+
+    size_t size() const { return mCurSize; }
+    typename ArrayT::iterator begin() { return mData.begin(); }
+    typename ArrayT::const_iterator begin() const { return mData.begin(); }
+    typename ArrayT::iterator end() { return mData.begin() + mCurSize; }
+    typename ArrayT::const_iterator end() const { return mData.begin() + mCurSize; }
+    void resize(size_t newSize) { mCurSize = newSize; }
+    T &operator[](size_t index)
+    {
+        ASSERT(index < mCurSize);
+        return mData[index];
+    }
+    const T &operator[](size_t index) const
+    {
+        ASSERT(index < mCurSize);
+        return mData[index];
+    }
+    bool empty() const { return mCurSize == 0; }
+
+  private:
+    size_t mCurSize;
+    std::array<T, N> mData;
+};
+
+constexpr uint32_t IMPLEMENTATION_MAX_SWAPCHAIN_IMAGES = 4;
+template <typename T>
+using SwapchainImageArray = ArrayVector<T, IMPLEMENTATION_MAX_SWAPCHAIN_IMAGES>;
 
 class WindowSurfaceVk : public SurfaceImpl
 {
@@ -98,9 +135,9 @@ class WindowSurfaceVk : public SurfaceImpl
     vk::Semaphore mPresentCompleteSemaphore;
 
     uint32_t mCurrentSwapchainImageIndex;
-    std::vector<vk::Image> mSwapchainImages;
-    std::vector<vk::ImageView> mSwapchainImageViews;
-    std::vector<vk::Framebuffer> mSwapchainFramebuffers;
+    SwapchainImageArray<vk::Image> mSwapchainImages;
+    SwapchainImageArray<vk::ImageView> mSwapchainImageViews;
+    SwapchainImageArray<vk::Framebuffer> mSwapchainFramebuffers;
 };
 
 }  // namespace rx
