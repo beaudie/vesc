@@ -401,6 +401,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     {
         return mState.mSamplerBindings;
     }
+    const ProgramState &getState() const { return mState; }
 
   private:
     class Bindings final : angle::NonCopyable
