@@ -976,4 +976,33 @@ bool Framebuffer::complete(const ContextState &state)
     return (checkStatus(state) == GL_FRAMEBUFFER_COMPLETE);
 }
 
+bool Framebuffer::formsRenderingFeedbackLoopWith(const State &state) const
+{
+    const Program *program = state.getProgram();
+
+    // TODO(jmadill): Default framebuffer feedback loops.
+    if (mId == 0)
+    {
+        return false;
+    }
+
+    // TODO(jmadill): Make this more efficient by skipping inactive draw buffers.
+    GLuint numDrawBuffers = static_cast<GLuint>(mState.mDrawBufferStates.size());
+    for (GLuint drawIndex = 0; drawIndex < numDrawBuffers; ++drawIndex)
+    {
+        const FramebufferAttachment *attachment = getDrawBuffer(drawIndex);
+        if (attachment && attachment->type() == GL_TEXTURE)
+        {
+            // Validate the feedback loop.
+            if (program->formsFeedbackLoopWith(state, attachment->id()))
+            {
+                return true;
+            }
+        }
+    }
+
+    // TODO(jmadill): Validate depth-stencil feedback loop.
+    return false;
+}
+
 }  // namespace gl
