@@ -397,6 +397,11 @@ class Renderer9 : public RendererD3D
     gl::Error clearRenderTarget(RenderTargetD3D *renderTarget,
                                 const gl::ColorF &clearValues) override;
 
+    gl::Error getSamplePosition(const gl::Context *context,
+                                RenderTargetD3D *attachmentRenderTarget,
+                                size_t index,
+                                GLfloat *xy) const override;
+
   private:
     gl::Error drawArraysImpl(const gl::ContextState &data,
                              GLenum mode,

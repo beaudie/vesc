@@ -46,6 +46,7 @@
 #include "libANGLE/renderer/d3d/d3d11/PixelTransfer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Query11.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
+#include "libANGLE/renderer/d3d/d3d11/SamplePosition11.h"
 #include "libANGLE/renderer/d3d/d3d11/ShaderExecutable11.h"
 #include "libANGLE/renderer/d3d/d3d11/StreamProducerNV12.h"
 #include "libANGLE/renderer/d3d/d3d11/SwapChain11.h"
@@ -384,6 +385,7 @@ Renderer11::Renderer11(egl::Display *display)
 
     mBlit          = nullptr;
     mPixelTransfer = nullptr;
+    mSamplePosition = nullptr;
 
     mClear = nullptr;
 
@@ -777,6 +779,9 @@ void Renderer11::initializeDevice()
 
     ASSERT(!mBlit);
     mBlit = new Blit11(this);
+
+    ASSERT(!mSamplePosition);
+    mSamplePosition = new SamplePosition11(this);
 
     ASSERT(!mClear);
     mClear = new Clear11(this);
@@ -2477,6 +2482,7 @@ void Renderer11::releaseDeviceResources()
     SafeDelete(mClear);
     SafeDelete(mTrim);
     SafeDelete(mPixelTransfer);
+    SafeDelete(mSamplePosition);
 
     mDriverConstantBufferVS.reset();
     mDriverConstantBufferPS.reset();
@@ -4614,6 +4620,16 @@ gl::Error Renderer11::clearRenderTarget(RenderTargetD3D *renderTarget,
     const d3d11::RenderTargetView &rtv = renderTarget11->getRenderTargetView();
 
     mDeviceContext->ClearRenderTargetView(rtv.get(), &clearValues.red);
+
+    return gl::NoError();
+}
+
+gl::Error Renderer11::getSamplePosition(const gl::Context *context,
+                                        RenderTargetD3D *attachmentRenderTarget,
+                                        size_t index,
+                                        GLfloat *xy) const
+{
+    mSamplePosition->getSample(context, attachmentRenderTarget, index, xy);
 
     return gl::NoError();
 }
