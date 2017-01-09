@@ -39,6 +39,7 @@ class IndexDataManager;
 struct PackPixelsParams;
 class PixelTransfer11;
 class RenderTarget11;
+class SamplePosition11;
 class StreamingIndexBufferInterface;
 class Trim11;
 class VertexDataManager;
@@ -458,6 +459,11 @@ class Renderer11 : public RendererD3D
                                 const float clearDepthValue,
                                 const unsigned int clearStencilValue) override;
 
+    gl::Error getSamplePosition(const gl::Context *context,
+                                RenderTargetD3D *attachmentRenderTarget,
+                                size_t index,
+                                GLfloat *xy) const override;
+
   private:
     gl::Error drawArraysImpl(const gl::Context *context,
                              GLenum mode,
@@ -610,7 +616,10 @@ class Renderer11 : public RendererD3D
     gl::DebugAnnotator *mAnnotator;
 
     mutable Optional<bool> mSupportsShareHandles;
+
     ResourceManager11 mResourceManager11;
+
+    SamplePosition11 *mSamplePosition;
 };
 
 }  // namespace rx

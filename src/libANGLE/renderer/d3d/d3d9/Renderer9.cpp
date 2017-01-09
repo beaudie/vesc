@@ -3320,4 +3320,13 @@ gl::Error Renderer9::applyTextures(const gl::Context *context)
     return gl::NoError();
 }
 
+gl::Error Renderer9::getSamplePosition(const gl::Context *context,
+                                       RenderTargetD3D *attachmentRenderTarget,
+                                       size_t index,
+                                       GLfloat *xy) const
+{
+    UNREACHABLE();
+    return gl::InternalError() << "getSamplePosition is unsupported in d3d9.";
+}
+
 }  // namespace rx
