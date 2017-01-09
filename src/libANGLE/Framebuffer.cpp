@@ -1172,9 +1172,9 @@ int Framebuffer::getCachedSamples(const Context *context)
     return 0;
 }
 
-Error Framebuffer::getSamplePosition(size_t index, GLfloat *xy) const
+Error Framebuffer::getSamplePosition(const gl::Context *context, size_t index, GLfloat *xy) const
 {
-    ANGLE_TRY(mImpl->getSamplePosition(index, xy));
+    ANGLE_TRY(mImpl->getSamplePosition(context, index, xy));
     return NoError();
 }
 
