@@ -405,4 +405,21 @@ GLenum Framebuffer9::getRenderTargetImplementationFormat(RenderTargetD3D *render
     return d3dFormatInfo.info().glInternalFormat;
 }
 
+gl::Error Framebuffer9::getSamplePosition(const gl::Context *context,
+                                          size_t index,
+                                          GLfloat *xy) const
+{
+    UNREACHABLE();
+    return gl::InternalError() << "getSamplePosition is unsupported to d3d9.";
+}
+
+gl::Error Framebuffer9::SamplePositionImpl(const gl::Context *context,
+                                           RenderTargetD3D *attachmentRenderTarget,
+                                           size_t index,
+                                           GLfloat *xy) const
+{
+    UNREACHABLE();
+    return gl::InternalError() << "Multisample is unsupported in d3d9.";
+}
+
 }  // namespace rx
