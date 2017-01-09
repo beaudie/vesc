@@ -339,7 +339,7 @@ ANGLE_INSTANTIATE_TEST(FramebufferFormatsTest,
 class FramebufferTest_ES3 : public ANGLETest
 {
   protected:
-    FramebufferTest_ES3() : mFramebuffer(0), mRenderbuffer(0) {}
+    FramebufferTest_ES3() : mFramebuffer(0), mRenderbuffer(0), mTexture(0) {}
 
     void SetUp() override
     {
@@ -347,17 +347,21 @@ class FramebufferTest_ES3 : public ANGLETest
 
         glGenFramebuffers(1, &mFramebuffer);
         glGenRenderbuffers(1, &mRenderbuffer);
+        glGenTextures(1, &mTexture);
     }
 
     void TearDown() override
     {
         glDeleteFramebuffers(1, &mFramebuffer);
         glDeleteRenderbuffers(1, &mRenderbuffer);
+        glDeleteTextures(1, &mTexture);
+
         ANGLETest::TearDown();
     }
 
     GLuint mFramebuffer;
     GLuint mRenderbuffer;
+    GLuint mTexture;
 };
 
 // Covers invalidating an incomplete framebuffer. This should be a no-op, but should not error.
@@ -387,6 +391,28 @@ TEST_P(FramebufferTest_ES3, DepthOnlyAsDepthStencil)
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
                               mRenderbuffer);
     EXPECT_GLENUM_NE(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+}
+
+TEST_P(FramebufferTest_ES3, CompleteWithNonZeroBaseLevel)
+{
+    // This fails on Mac OSX, Windows OpenGL and NVIDIA Linux.
+    if ((!IsNVIDIA() && IsLinux()) || IsD3D11())
+    {
+        GLint level = 1;
+        glBindTexture(GL_TEXTURE_2D, mTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, level, GL_RGBA, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, level);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture,
+                               level);
+
+        // Verify the framebuffer is complete.
+        ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    }
 }
 
 ANGLE_INSTANTIATE_TEST(FramebufferTest_ES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
