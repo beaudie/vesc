@@ -3353,6 +3353,8 @@ gl::Error Renderer11::createRenderTarget(int width,
             }
         }
 
+        bool isWebGLCompatible = getNativeExtensions().webglCompatibility;
+
         if (bindDSV)
         {
             D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
@@ -3373,6 +3375,12 @@ gl::Error Renderer11::createRenderTarget(int width,
                 return gl::Error(GL_OUT_OF_MEMORY,
                                  "Failed to create render target depth stencil view, result: 0x%X.",
                                  result);
+            }
+
+            if (isWebGLCompatible)
+            {
+                mDeviceContext->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+                                                      1.0f, 0);
             }
 
             *outRT = new TextureRenderTarget11(dsv, texture, srv, format, formatInfo, width, height,
@@ -3401,7 +3409,12 @@ gl::Error Renderer11::createRenderTarget(int width,
                                  result);
             }
 
-            if (formatInfo.dataInitializerFunction != NULL)
+            if (isWebGLCompatible)
+            {
+                const float clearValues[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+                mDeviceContext->ClearRenderTargetView(rtv, clearValues);
+            }
+            else if (formatInfo.dataInitializerFunction != NULL)
             {
                 const float clearValues[4] = {0.0f, 0.0f, 0.0f, 1.0f};
                 mDeviceContext->ClearRenderTargetView(rtv, clearValues);
