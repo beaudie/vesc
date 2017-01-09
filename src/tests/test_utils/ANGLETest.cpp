@@ -491,12 +491,6 @@ void ANGLETest::checkD3D11SDKLayersMessages()
 
     const char *extensionString =
         static_cast<const char *>(eglQueryString(mEGLWindow->getDisplay(), EGL_EXTENSIONS));
-    if (!extensionString)
-    {
-        std::cout << "Error getting extension string from EGL Window." << std::endl;
-        return;
-    }
-
     if (!strstr(extensionString, "EGL_EXT_device_query"))
     {
         return;

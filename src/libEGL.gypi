@@ -53,38 +53,5 @@
                 }],
             ],
         },
-
-        {
-            'target_name': 'libEGL_static',
-            'type': 'static_library',
-            'dependencies':
-            [
-                'libGLESv2_static',
-            ],
-            'includes':
-            [
-                '../gyp/common_defines.gypi',
-            ],
-            'include_dirs':
-            [
-                '.',
-                '../include',
-            ],
-            'sources':
-            [
-                '<@(libegl_sources)',
-            ],
-            'defines':
-            [
-                'EGLAPI=',
-            ],
-            'direct_dependent_settings':
-            {
-                'defines':
-                [
-                    'EGLAPI=',
-                ],
-            },
-        },
     ],
 }
