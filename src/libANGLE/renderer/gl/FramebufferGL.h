@@ -82,7 +82,9 @@ class FramebufferGL : public FramebufferImpl
                    GLbitfield mask,
                    GLenum filter) override;
 
-    gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
+    gl::Error getSamplePosition(const gl::Context *context,
+                                size_t index,
+                                GLfloat *xy) const override;
 
     bool checkStatus() const override;
 

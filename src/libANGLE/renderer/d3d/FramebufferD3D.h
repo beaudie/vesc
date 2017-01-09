@@ -99,7 +99,9 @@ class FramebufferD3D : public FramebufferImpl
 
     const gl::AttachmentList &getColorAttachmentsForRender(const gl::Context *context);
 
-    gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
+    virtual gl::Error getSamplePosition(const gl::Context *context,
+                                        size_t index,
+                                        GLfloat *xy) const override = 0;
 
   private:
     virtual gl::Error clearImpl(const gl::Context *context, const ClearParameters &clearParams) = 0;
@@ -123,6 +125,11 @@ class FramebufferD3D : public FramebufferImpl
                                const gl::Framebuffer *sourceFramebuffer) = 0;
 
     virtual GLenum getRenderTargetImplementationFormat(RenderTargetD3D *renderTarget) const = 0;
+
+    virtual gl::Error SamplePositionImpl(const gl::Context *context,
+                                         RenderTargetD3D *attachmentRenderTarget,
+                                         size_t index,
+                                         GLfloat *xy) const = 0;
 
     RendererD3D *mRenderer;
     Optional<gl::AttachmentList> mColorAttachmentsForRender;
