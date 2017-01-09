@@ -30,6 +30,10 @@ class Framebuffer9 : public FramebufferD3D
                             const GLenum *attachments,
                             const gl::Rectangle &area) override;
 
+    gl::Error getSamplePosition(const gl::Context *context,
+                                size_t index,
+                                GLfloat *xy) const override;
+
   private:
     gl::Error clearImpl(const gl::Context *context, const ClearParameters &clearParams) override;
 
@@ -52,6 +56,11 @@ class Framebuffer9 : public FramebufferD3D
                        const gl::Framebuffer *sourceFramebuffer) override;
 
     GLenum getRenderTargetImplementationFormat(RenderTargetD3D *renderTarget) const override;
+
+    gl::Error SamplePositionImpl(const gl::Context *context,
+                                 RenderTargetD3D *attachmentRenderTarget,
+                                 size_t index,
+                                 GLfloat *xy) const override;
 
     Renderer9 *const mRenderer;
 };

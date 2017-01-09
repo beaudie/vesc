@@ -54,7 +54,9 @@ class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
 
     void signal(size_t channelID) override;
 
-    gl::Error getSamplePosition(size_t index, GLfloat *xy) const override;
+    gl::Error getSamplePosition(const gl::Context *context,
+                                size_t index,
+                                GLfloat *xy) const override;
 
   private:
     gl::Error clearImpl(const gl::Context *context, const ClearParameters &clearParams) override;
@@ -88,6 +90,11 @@ class Framebuffer11 : public FramebufferD3D, public OnRenderTargetDirtyReceiver
 
     void updateColorRenderTarget(const gl::Context *context, size_t colorIndex);
     void updateDepthStencilRenderTarget(const gl::Context *context);
+
+    gl::Error SamplePositionImpl(const gl::Context *context,
+                                 RenderTargetD3D *attachmentRenderTarget,
+                                 size_t index,
+                                 GLfloat *xy) const override;
 
     Renderer11 *const mRenderer;
     RenderTargetArray mCachedColorRenderTargets;
