@@ -2979,6 +2979,7 @@ gl::Error TextureStorage11_2DMultisample::getResource(const gl::Context *context
     ANGLE_TRY(ensureTextureExists(1));
 
     *outResource = &mTexture;
+
     return gl::NoError();
 }
 
@@ -3055,6 +3056,7 @@ gl::Error TextureStorage11_2DMultisample::getRenderTarget(const gl::Context *con
             getLevelWidth(level), getLevelHeight(level), 1, mSamples));
 
         *outRT = mRenderTarget.get();
+
         return gl::NoError();
     }
 
