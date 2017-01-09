@@ -97,6 +97,8 @@ TString TextureString(const HLSLTextureSamplerGroup type)
             return "TextureCube";
         case HLSL_TEXTURE_2D_ARRAY:
             return "Texture2DArray";
+        case HLSL_TEXTURE_2D_MULTISAMPLE:
+            return "Texture2DMS<float4>";
         case HLSL_TEXTURE_3D:
             return "Texture3D";
         case HLSL_TEXTURE_2D_MS:
@@ -145,6 +147,8 @@ TString TextureGroupSuffix(const HLSLTextureSamplerGroup type)
             return "Cube";
         case HLSL_TEXTURE_2D_ARRAY:
             return "2DArray";
+        case HLSL_TEXTURE_2D_MULTISAMPLE:
+            return "2DMS";
         case HLSL_TEXTURE_3D:
             return "3D";
         case HLSL_TEXTURE_2D_MS:
