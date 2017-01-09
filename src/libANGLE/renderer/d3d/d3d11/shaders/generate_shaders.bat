@@ -129,7 +129,6 @@ call:BuildShader ResolveDepthStencil.hlsl   VS_ResolveDepthStencil   vs_4_1   co
 call:BuildShader ResolveDepthStencil.hlsl   PS_ResolveDepth          ps_4_1   compiled/resolvedepth11_ps.h         %debug%
 call:BuildShader ResolveDepthStencil.hlsl   PS_ResolveDepthStencil   ps_4_1   compiled/resolvedepthstencil11_ps.h  %debug%
 call:BuildShader ResolveDepthStencil.hlsl   PS_ResolveStencil        ps_4_1   compiled/resolvestencil11_ps.h       %debug%
-
 echo.
 
 if %successCount% GTR 0 (

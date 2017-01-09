@@ -463,8 +463,26 @@ void Framebuffer11::signal(size_t channelID)
 
 gl::Error Framebuffer11::getSamplePosition(size_t index, GLfloat *xy) const
 {
-    UNIMPLEMENTED();
-    return gl::InternalError() << "getSamplePosition is unimplemented.";
+    const gl::FramebufferAttachment *attachment = mState.getFirstNonNullAttachment();
+
+    if (attachment == nullptr)
+    {
+        return gl::InternalError() << "no Attachment is bind to the context.";
+    }
+
+    GLsizei sampleCount = attachment->getSamples();
+
+    const auto &format                 = attachment->getFormat().info->internalFormat;
+    const gl::TextureCaps &textureCaps = mRenderer->getNativeTextureCaps().get(format);
+
+    GLuint supportedSamples = textureCaps.getNearestSamples(sampleCount);
+    if (supportedSamples == 0)
+    {
+        return gl::InternalError() << "multisample is unsupported for this internal format.";
+    }
+
+    d3d11_gl::SamplePositionHelper::GetSamplePosition(sampleCount, index, xy);
+    return gl::NoError();
 }
 
 bool Framebuffer11::hasAnyInternalDirtyBit() const

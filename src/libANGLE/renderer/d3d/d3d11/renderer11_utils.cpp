@@ -1441,6 +1441,32 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
 #endif
 }
 
+std::unordered_map<int, std::unique_ptr<float>> SamplePositionHelper::mSamplePositionsMap;
+
+void SamplePositionHelper::GetSamplePosition(GLsizei sampleCount, size_t index, GLfloat *xy)
+{
+    if (mSamplePositionsMap.empty())
+    {
+        mSamplePositionsMap[1].reset(new float[2]{0.5f, 0.5f});
+        mSamplePositionsMap[2].reset(new float[4]{0.75f, 0.75f, 0.25f, 0.25f});
+        mSamplePositionsMap[4].reset(
+            new float[8]{0.375f, 0.125f, 0.875f, 0.375f, 0.125f, 0.625f, 0.625f, 0.875f});
+        mSamplePositionsMap[8].reset(
+            new float[16]{0.5625f, 0.3125f, 0.4375f, 0.6875f, 0.8125f, 0.5625f, 0.3125f, 0.1875f,
+                          0.1875f, 0.8125f, 0.0625f, 0.4375f, 0.6875f, 0.9375f, 0.9375f, 0.0625f});
+        mSamplePositionsMap[16].reset(
+            new float[32]{0.5625f, 0.5625f, 0.4375f, 0.3125f, 0.3125f, 0.625f,  0.75f,   0.4375f,
+                          0.1875f, 0.375f,  0.625f,  0.8125f, 0.8125f, 0.6875f, 0.6875f, 0.1875f,
+                          0.375f,  0.875f,  0.5f,    0.0625f, 0.25f,   0.125f,  0.125f,  0.75f,
+                          0.0f,    0.5f,    0.9375f, 0.25f,   0.875f,  0.9375f, 0.0625f, 0.0f});
+    }
+
+    sampleCount = static_cast<GLsizei>(pow(2, ceil(log(sampleCount))));
+
+    xy[0] = mSamplePositionsMap[sampleCount].get()[2 * index];
+    xy[1] = mSamplePositionsMap[sampleCount].get()[2 * index + 1];
+}
+
 }  // namespace d3d11_gl
 
 namespace gl_d3d11
