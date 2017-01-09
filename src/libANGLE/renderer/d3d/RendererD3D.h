@@ -332,6 +332,11 @@ class RendererD3D : public BufferFactoryD3D
 
     Serial generateSerial();
 
+    virtual gl::Error getSamplePosition(const gl::Context *context,
+                                        RenderTargetD3D *attachmentRenderTarget,
+                                        size_t index,
+                                        GLfloat *xy) const = 0;
+
   protected:
     virtual bool getLUID(LUID *adapterLuid) const = 0;
     virtual void generateCaps(gl::Caps *outCaps,

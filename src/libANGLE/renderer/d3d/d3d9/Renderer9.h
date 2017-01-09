@@ -399,6 +399,11 @@ class Renderer9 : public RendererD3D
                                 const float clearDepthValue,
                                 const unsigned int clearStencilValue) override;
 
+    gl::Error getSamplePosition(const gl::Context *context,
+                                RenderTargetD3D *attachmentRenderTarget,
+                                size_t index,
+                                GLfloat *xy) const override;
+
   private:
     gl::Error drawArraysImpl(const gl::ContextState &data,
                              GLenum mode,
