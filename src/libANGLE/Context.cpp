@@ -4208,13 +4208,13 @@ void Context::texStorage2DMultisample(GLenum target,
 
 void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 {
-    mGLState.syncDirtyObject(this, GL_READ_FRAMEBUFFER);
-    const Framebuffer *framebuffer = mGLState.getReadFramebuffer();
+    mGLState.syncDirtyObject(this, GL_DRAW_FRAMEBUFFER);
+    const Framebuffer *framebuffer = mGLState.getDrawFramebuffer();
 
     switch (pname)
     {
         case GL_SAMPLE_POSITION:
-            handleError(framebuffer->getSamplePosition(index, val));
+            handleError(framebuffer->getSamplePosition(this, index, val));
             break;
         default:
             UNREACHABLE();
