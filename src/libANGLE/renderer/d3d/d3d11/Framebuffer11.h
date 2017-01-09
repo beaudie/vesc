@@ -75,6 +75,10 @@ class Framebuffer11 : public FramebufferD3D, public angle::SignalReceiver
     void updateColorRenderTarget(size_t colorIndex);
     void updateDepthStencilRenderTarget();
 
+    gl::Error SamplePositionImpl(RenderTargetD3D *attachmentRenderTarget,
+                                 size_t index,
+                                 GLfloat *xy) const override;
+
     Renderer11 *const mRenderer;
     RenderTargetArray mCachedColorRenderTargets;
     RenderTarget11 *mCachedDepthStencilRenderTarget;

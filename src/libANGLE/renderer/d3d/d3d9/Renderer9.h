@@ -286,6 +286,14 @@ class Renderer9 : public RendererD3D
                                                 GLsizei depth,
                                                 int levels) override;
 
+    TextureStorage *createTextureStorage2DMultisample(GLenum internalformat,
+                                                      bool renderTarget,
+                                                      GLsizei width,
+                                                      GLsizei height,
+                                                      int levels,
+                                                      int samples,
+                                                      GLboolean fixedSampleLocations) override;
+
     // Buffer creation
     VertexBuffer *createVertexBuffer() override;
     IndexBuffer *createIndexBuffer() override;
@@ -346,6 +354,10 @@ class Renderer9 : public RendererD3D
     DebugAnnotator9 *getAnnotator() { return &mAnnotator; }
 
     gl::Version getMaxSupportedESVersion() const override;
+
+    gl::Error getSamplePosition(RenderTargetD3D *attachmentRenderTarget,
+                                size_t index,
+                                GLfloat *xy) const override;
 
   protected:
     gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) override;

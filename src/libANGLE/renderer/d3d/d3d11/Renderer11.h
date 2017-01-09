@@ -39,6 +39,7 @@ class IndexDataManager;
 struct PackPixelsParams;
 class PixelTransfer11;
 class RenderTarget11;
+class SamplePosition11;
 class StreamingIndexBufferInterface;
 class Trim11;
 class VertexDataManager;
@@ -288,6 +289,13 @@ class Renderer11 : public RendererD3D
                                                 GLsizei height,
                                                 GLsizei depth,
                                                 int levels) override;
+    TextureStorage *createTextureStorage2DMultisample(GLenum internalformat,
+                                                      bool renderTarget,
+                                                      GLsizei width,
+                                                      GLsizei height,
+                                                      int levels,
+                                                      int samples,
+                                                      GLboolean fixedSampleLocations) override;
 
     VertexBuffer *createVertexBuffer() override;
     IndexBuffer *createIndexBuffer() override;
@@ -376,6 +384,10 @@ class Renderer11 : public RendererD3D
     gl::Error getScratchMemoryBuffer(size_t requestedSize, MemoryBuffer **bufferOut);
 
     gl::Version getMaxSupportedESVersion() const override;
+
+    gl::Error getSamplePosition(RenderTargetD3D *attachmentRenderTarget,
+                                size_t index,
+                                GLfloat *xy) const override;
 
   protected:
     gl::Error clearTextures(gl::SamplerType samplerType, size_t rangeStart, size_t rangeEnd) override;
@@ -576,6 +588,8 @@ class Renderer11 : public RendererD3D
     gl::DebugAnnotator *mAnnotator;
 
     mutable Optional<bool> mSupportsShareHandles;
+
+    SamplePosition11 *mSamplePosition;
 };
 
 }  // namespace rx

@@ -116,7 +116,8 @@ class PullGradient : public TIntermTraverser
             {
                 TString name = TFunction::unmangleName(node->getFunctionSymbolInfo()->getName());
 
-                if (name == "texture2D" || name == "texture2DProj" || name == "textureCube")
+                if (name == "texture2D" || name == "texture2DProj" || name == "textureCube" ||
+                    name == "texture2DMS")
                 {
                     onGradient();
                 }

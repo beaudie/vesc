@@ -55,6 +55,12 @@ gl::Error Framebuffer9::invalidateSub(size_t, const GLenum *, const gl::Rectangl
     return gl::NoError();
 }
 
+gl::Error Framebuffer9::getSamplePosition(size_t index, GLfloat *xy) const
+{
+    UNREACHABLE();
+    return gl::InternalError() << "getSamplePosition is unsupported to d3d9.";
+}
+
 gl::Error Framebuffer9::clearImpl(ContextImpl *context, const ClearParameters &clearParams)
 {
     const gl::FramebufferAttachment *colorAttachment        = mState.getColorAttachment(0);
@@ -405,6 +411,14 @@ GLenum Framebuffer9::getRenderTargetImplementationFormat(RenderTargetD3D *render
     RenderTarget9 *renderTarget9 = GetAs<RenderTarget9>(renderTarget);
     const d3d9::D3DFormat &d3dFormatInfo = d3d9::GetD3DFormatInfo(renderTarget9->getD3DFormat());
     return d3dFormatInfo.info().glInternalFormat;
+}
+
+gl::Error Framebuffer9::SamplePositionImpl(RenderTargetD3D *attachmentRenderTarget,
+                                           size_t index,
+                                           GLfloat *xy) const
+{
+    UNREACHABLE();
+    return gl::InternalError() << "Multisample is unsupported in d3d9.";
 }
 
 }  // namespace rx

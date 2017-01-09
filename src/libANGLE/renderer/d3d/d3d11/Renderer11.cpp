@@ -38,6 +38,7 @@
 #include "libANGLE/renderer/d3d/d3d11/Query11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
+#include "libANGLE/renderer/d3d/d3d11/SamplePosition11.h"
 #include "libANGLE/renderer/d3d/d3d11/ShaderExecutable11.h"
 #include "libANGLE/renderer/d3d/d3d11/StreamProducerNV12.h"
 #include "libANGLE/renderer/d3d/d3d11/SwapChain11.h"
@@ -401,6 +402,7 @@ Renderer11::Renderer11(egl::Display *display)
 
     mBlit          = NULL;
     mPixelTransfer = NULL;
+    mSamplePosition = NULL;
 
     mClear = NULL;
 
@@ -805,6 +807,9 @@ void Renderer11::initializeDevice()
 
     ASSERT(!mBlit);
     mBlit = new Blit11(this);
+
+    ASSERT(!mSamplePosition);
+    mSamplePosition = new SamplePosition11(this);
 
     ASSERT(!mClear);
     mClear = new Clear11(this);
@@ -2644,6 +2649,7 @@ void Renderer11::releaseDeviceResources()
     SafeDelete(mClear);
     SafeDelete(mTrim);
     SafeDelete(mPixelTransfer);
+    SafeDelete(mSamplePosition);
 
     SafeRelease(mDriverConstantBufferVS);
     SafeRelease(mDriverConstantBufferPS);
@@ -3842,6 +3848,18 @@ TextureStorage *Renderer11::createTextureStorage2DArray(GLenum internalformat,
                                         levels);
 }
 
+TextureStorage *Renderer11::createTextureStorage2DMultisample(GLenum internalformat,
+                                                              bool renderTarget,
+                                                              GLsizei width,
+                                                              GLsizei height,
+                                                              int levels,
+                                                              int samples,
+                                                              GLboolean fixedSampleLocations)
+{
+    return new TextureStorage11_2DMultisample(this, internalformat, renderTarget, width, height,
+                                              levels, samples, fixedSampleLocations);
+}
+
 gl::Error Renderer11::readFromAttachment(const gl::FramebufferAttachment &srcAttachment,
                                          const gl::Rectangle &sourceArea,
                                          GLenum format,
@@ -4621,6 +4639,15 @@ gl::Version Renderer11::getMaxSupportedESVersion() const
 gl::DebugAnnotator *Renderer11::getAnnotator()
 {
     return mAnnotator;
+}
+
+gl::Error Renderer11::getSamplePosition(RenderTargetD3D *attachmentRenderTarget,
+                                        size_t index,
+                                        GLfloat *xy) const
+{
+    mSamplePosition->getSample(attachmentRenderTarget, index, xy);
+
+    return gl::NoError();
 }
 
 }  // namespace rx

@@ -92,11 +92,13 @@ call:BuildShader BufferToTexture11.hlsl     PS_BufferToTexture_4F    ps_4_0   co
 call:BuildShader BufferToTexture11.hlsl     PS_BufferToTexture_4I    ps_4_0   compiled/buffertotexture11_ps_4i.h   %debug%
 call:BuildShader BufferToTexture11.hlsl     PS_BufferToTexture_4UI   ps_4_0   compiled/buffertotexture11_ps_4ui.h  %debug%
 
+call:BuildShader SamplePosition11.hlsl      VS_SamplePosition        vs_5_0   compiled/sampleposition_vs.h         %debug%
+call:BuildShader SamplePosition11.hlsl      PS_SamplePosition_2F     ps_5_0   compiled/sampleposition_2f_ps.h      %debug%
+
 call:BuildShader ResolveDepthStencil.hlsl   VS_ResolveDepthStencil   vs_4_1   compiled/resolvedepthstencil11_vs.h  %debug%
 call:BuildShader ResolveDepthStencil.hlsl   PS_ResolveDepth          ps_4_1   compiled/resolvedepth11_ps.h         %debug%
 call:BuildShader ResolveDepthStencil.hlsl   PS_ResolveDepthStencil   ps_4_1   compiled/resolvedepthstencil11_ps.h  %debug%
 call:BuildShader ResolveDepthStencil.hlsl   PS_ResolveStencil        ps_4_1   compiled/resolvestencil11_ps.h       %debug%
-
 echo.
 
 if %successCount% GTR 0 (

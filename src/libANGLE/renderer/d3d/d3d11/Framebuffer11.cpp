@@ -374,6 +374,15 @@ void Framebuffer11::updateDepthStencilRenderTarget()
                              &mDepthStencilRenderTargetDirty);
 }
 
+gl::Error Framebuffer11::SamplePositionImpl(RenderTargetD3D *attachmentRenderTarget,
+                                            size_t index,
+                                            GLfloat *xy) const
+{
+    ANGLE_TRY(mRenderer->getSamplePosition(attachmentRenderTarget, index, xy));
+
+    return gl::NoError();
+}
+
 void Framebuffer11::syncState(const gl::Framebuffer::DirtyBits &dirtyBits)
 {
     mRenderer->getStateManager()->invalidateRenderTarget();
@@ -427,8 +436,18 @@ void Framebuffer11::signal(SignalToken token)
 
 gl::Error Framebuffer11::getSamplePosition(size_t index, GLfloat *xy) const
 {
-    UNIMPLEMENTED();
-    return gl::InternalError() << "getSamplePosition is unimplemented.";
+    const gl::FramebufferAttachment *readAttachment = mState.getReadAttachment();
+
+    if (readAttachment == nullptr)
+    {
+        return gl::InternalError() << "no colorAttachment is bind to the context.";
+    }
+
+    RenderTargetD3D *attachmentRenderTarget = NULL;
+    gl::Error error = readAttachment->getRenderTarget(&attachmentRenderTarget);
+
+    ANGLE_TRY(SamplePositionImpl(attachmentRenderTarget, index, xy));
+    return gl::NoError();
 }
 
 bool Framebuffer11::hasAnyInternalDirtyBit() const

@@ -2848,6 +2848,20 @@ TextureStorage *Renderer9::createTextureStorage2DArray(GLenum internalformat, bo
     return NULL;
 }
 
+TextureStorage *Renderer9::createTextureStorage2DMultisample(GLenum internalformat,
+                                                             bool renderTarget,
+                                                             GLsizei width,
+                                                             GLsizei height,
+                                                             int levels,
+                                                             int samples,
+                                                             GLboolean fixedSampleLocations)
+{
+    // 2D multisampled textures are not supported by the D3D9 backend.
+    UNREACHABLE();
+
+    return NULL;
+}
+
 bool Renderer9::getLUID(LUID *adapterLuid) const
 {
     adapterLuid->HighPart = 0;
@@ -3057,6 +3071,14 @@ FramebufferImpl *Renderer9::createDefaultFramebuffer(const gl::FramebufferState 
 gl::Version Renderer9::getMaxSupportedESVersion() const
 {
     return gl::Version(2, 0);
+}
+
+gl::Error Renderer9::getSamplePosition(RenderTargetD3D *attachmentRenderTarget,
+                                       size_t index,
+                                       GLfloat *xy) const
+{
+    UNREACHABLE();
+    return gl::InternalError() << "getSamplePosition is unsupported in d3d9.";
 }
 
 }  // namespace rx
