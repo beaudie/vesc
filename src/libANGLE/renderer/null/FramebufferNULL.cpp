@@ -138,7 +138,9 @@ void FramebufferNULL::syncState(const gl::Context *context,
 {
 }
 
-gl::Error FramebufferNULL::getSamplePosition(size_t index, GLfloat *xy) const
+gl::Error FramebufferNULL::getSamplePosition(const gl::Context *context,
+                                             size_t index,
+                                             GLfloat *xy) const
 {
     return gl::NoError();
 }
