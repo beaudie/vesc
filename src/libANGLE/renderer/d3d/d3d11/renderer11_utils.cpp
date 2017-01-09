@@ -1441,6 +1441,29 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
 #endif
 }
 
+void GetSamplePosition(GLsizei sampleCount, size_t index, GLfloat *xy)
+{
+    // Standard D3D sample positions from
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/ff476218.aspx
+    using SamplePositionsArray = std::array<float, 32>;
+    constexpr std::array<SamplePositionsArray, 5> samplePositions = {
+        {{{0.5f, 0.5f}},
+         {{0.75f, 0.75f, 0.25f, 0.25f}},
+         {{0.375f, 0.125f, 0.875f, 0.375f, 0.125f, 0.625f, 0.625f, 0.875f}},
+         {{0.5625f, 0.3125f, 0.4375f, 0.6875f, 0.8125f, 0.5625f, 0.3125f, 0.1875f, 0.1875f, 0.8125f,
+           0.0625f, 0.4375f, 0.6875f, 0.9375f, 0.9375f, 0.0625f}},
+         {{0.5625f, 0.5625f, 0.4375f, 0.3125f, 0.3125f, 0.625f,  0.75f,   0.4375f,
+           0.1875f, 0.375f,  0.625f,  0.8125f, 0.8125f, 0.6875f, 0.6875f, 0.1875f,
+           0.375f,  0.875f,  0.5f,    0.0625f, 0.25f,   0.125f,  0.125f,  0.75f,
+           0.0f,    0.5f,    0.9375f, 0.25f,   0.875f,  0.9375f, 0.0625f, 0.0f}}}};
+
+    size_t indice = static_cast<size_t>(ceil(log(sampleCount)));
+    ASSERT(indice < samplePositions.size() && (2 * index + 1) < samplePositions[indice].size());
+
+    xy[0] = samplePositions[indice][2 * index];
+    xy[1] = samplePositions[indice][2 * index + 1];
+}
+
 }  // namespace d3d11_gl
 
 namespace gl_d3d11
