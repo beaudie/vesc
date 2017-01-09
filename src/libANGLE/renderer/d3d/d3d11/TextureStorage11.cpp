@@ -3091,7 +3091,6 @@ gl::Error TextureStorage11_2DMultisample::createSRV(const gl::Context *context,
 
     ANGLE_TRY(mRenderer->allocateResource(srvDesc, texture.get(), outSRV));
     outSRV->setDebugName("TexStorage2DMS.SRV");
-
     return gl::NoError();
 }
 

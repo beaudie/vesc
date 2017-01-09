@@ -449,10 +449,22 @@ void Framebuffer11::signal(size_t channelID)
     }
 }
 
-gl::Error Framebuffer11::getSamplePosition(size_t index, GLfloat *xy) const
+gl::Error Framebuffer11::getSamplePosition(const gl::Context *context,
+                                           size_t index,
+                                           GLfloat *xy) const
 {
-    UNIMPLEMENTED();
-    return gl::InternalError() << "getSamplePosition is unimplemented.";
+    const gl::FramebufferAttachment *readAttachment = mState.getReadAttachment();
+
+    if (readAttachment == nullptr)
+    {
+        return gl::InternalError() << "no colorAttachment is bind to the context.";
+    }
+
+    RenderTargetD3D *attachmentRenderTarget = NULL;
+    gl::Error error = readAttachment->getRenderTarget(context, &attachmentRenderTarget);
+
+    ANGLE_TRY(mRenderer->getSamplePosition(context, attachmentRenderTarget, index, xy));
+    return gl::NoError();
 }
 
 bool Framebuffer11::hasAnyInternalDirtyBit() const
