@@ -537,7 +537,9 @@ gl::ErrorOrResult<vk::Framebuffer *> FramebufferVk::getFramebuffer(const gl::Con
     return &mFramebuffer;
 }
 
-gl::Error FramebufferVk::getSamplePosition(size_t index, GLfloat *xy) const
+gl::Error FramebufferVk::getSamplePosition(const gl::Context *context,
+                                           size_t index,
+                                           GLfloat *xy) const
 {
     UNIMPLEMENTED();
     return gl::InternalError() << "getSamplePosition is unimplemented.";

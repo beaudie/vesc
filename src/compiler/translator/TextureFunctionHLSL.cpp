@@ -168,7 +168,10 @@ const char *GetSamplerCoordinateTypeString(
         switch (hlslCoords)
         {
             case 2:
-                return "int3";
+                if (textureFunction.sampler == EbtSampler2DMS)
+                    return "int2";
+                else
+                    return "int3";
             case 3:
                 return "int4";
             default:
@@ -202,6 +205,7 @@ int GetHLSLCoordCount(const TextureFunctionHLSL::TextureFunction &textureFunctio
         {
             case EbtSampler2D:
             case EbtSamplerExternalOES:
+            case EbtSampler2DMS:
                 hlslCoords = 2;
                 break;
             case EbtSamplerCube:
@@ -393,7 +397,10 @@ void OutputTextureFunctionArgumentList(TInfoSinkBase &out,
         case TextureFunctionHLSL::TextureFunction::SIZE:
             break;
         case TextureFunctionHLSL::TextureFunction::FETCH:
-            out << ", int mip";
+            if (textureFunction.sampler == EbtSampler2DMS)
+                out << ", int index";
+            else
+                out << ", int mip";
             break;
         case TextureFunctionHLSL::TextureFunction::GRAD:
             break;
@@ -442,7 +449,8 @@ void GetTextureReference(TInfoSinkBase &out,
     if (outputType == SH_HLSL_4_1_OUTPUT)
     {
         TString suffix = TextureGroupSuffix(textureFunction.sampler);
-        if (TextureGroup(textureFunction.sampler) == HLSL_TEXTURE_2D)
+        if (TextureGroup(textureFunction.sampler) == HLSL_TEXTURE_2D ||
+            TextureGroup(textureFunction.sampler) == HLSL_TEXTURE_2D_MULTISAMPLE)
         {
             *textureReference = TString("textures") + suffix + "[samplerIndex]";
             *samplerReference = TString("samplers") + suffix + "[samplerIndex]";
@@ -942,7 +950,10 @@ void OutputTextureSampleFunctionReturnStatement(
         else if (IsIntegerSampler(textureFunction.sampler) ||
                  textureFunction.method == TextureFunctionHLSL::TextureFunction::FETCH)
         {
-            out << ", mip)";
+            if (textureFunction.sampler == EbtSampler2DMS)
+                out << "), index";
+            else
+                out << ", mip)";
         }
         else if (IsShadowSampler(textureFunction.sampler))
         {
@@ -1141,7 +1152,7 @@ TString TextureFunctionHLSL::useTextureFunction(const TString &name,
     textureFunction.proj    = false;
     textureFunction.offset  = false;
 
-    if (name == "texture2D" || name == "textureCube" || name == "texture")
+    if (name == "texture2D" || name == "textureCube" || name == "texture" || name == "texture2DMS")
     {
         textureFunction.method = TextureFunction::IMPLICIT;
     }
