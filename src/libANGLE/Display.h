@@ -47,6 +47,8 @@ struct DisplayState final : angle::NonCopyable
 class Display final : angle::NonCopyable
 {
   public:
+    using ImplT = rx::DisplayImpl;
+
     ~Display();
 
     Error initialize();
