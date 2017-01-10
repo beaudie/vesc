@@ -396,6 +396,8 @@ class Program final : angle::NonCopyable, public LabeledObject
         return mState.mActiveAttribLocationsMask;
     }
 
+    bool samplesFromTexture(const gl::State &state, GLuint textureID) const;
+
   private:
     class Bindings final : angle::NonCopyable
     {
