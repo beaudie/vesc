@@ -395,7 +395,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
 
 void Context::destroy(egl::Display *display)
 {
-    mGLState.reset();
+    mGLState.reset(this);
 
     for (auto framebuffer : mFramebufferMap)
     {
@@ -428,7 +428,7 @@ void Context::destroy(egl::Display *display)
     {
         if (transformFeedback.second != nullptr)
         {
-            transformFeedback.second->release();
+            WrappedRelease(this, transformFeedback.second);
         }
     }
 
@@ -445,7 +445,7 @@ void Context::destroy(egl::Display *display)
 
     if (mResourceManager)
     {
-        mResourceManager->release();
+        mResourceManager->release(this);
     }
 
     SafeDelete(mCompiler);
@@ -620,7 +620,7 @@ void Context::deleteBuffer(GLuint buffer)
         detachBuffer(buffer);
     }
 
-    mResourceManager->deleteBuffer(buffer);
+    mResourceManager->deleteBuffer(this, buffer);
 }
 
 void Context::deleteShader(GLuint shader)
@@ -630,7 +630,7 @@ void Context::deleteShader(GLuint shader)
 
 void Context::deleteProgram(GLuint program)
 {
-    mResourceManager->deleteProgram(program);
+    mResourceManager->deleteProgram(this, program);
 }
 
 void Context::deleteTexture(GLuint texture)
@@ -788,7 +788,7 @@ void Context::deleteTransformFeedback(GLuint transformFeedback)
         if (transformFeedbackObject != nullptr)
         {
             detachTransformFeedback(transformFeedback);
-            transformFeedbackObject->release();
+            WrappedRelease(this, transformFeedbackObject);
         }
 
         mTransformFeedbackMap.erase(iter);
@@ -805,6 +805,7 @@ void Context::deleteFramebuffer(GLuint framebuffer)
         detachFramebuffer(framebuffer);
 
         mFramebufferHandleAllocator.release(framebufferObject->first);
+        framebufferObject->second->destroy(this);
         delete framebufferObject->second;
         mFramebufferMap.erase(framebufferObject);
     }
@@ -1073,7 +1074,7 @@ void Context::bindPixelUnpackBuffer(GLuint bufferHandle)
 
 void Context::useProgram(GLuint program)
 {
-    mGLState.setProgram(getProgram(program));
+    mGLState.setProgram(this, getProgram(program));
 }
 
 void Context::bindTransformFeedback(GLuint transformFeedbackHandle)
@@ -2408,7 +2409,7 @@ void Context::beginTransformFeedback(GLenum primitiveMode)
     ASSERT(transformFeedback != nullptr);
     ASSERT(!transformFeedback->isPaused());
 
-    transformFeedback->begin(primitiveMode, mGLState.getProgram());
+    transformFeedback->begin(this, primitiveMode, mGLState.getProgram());
 }
 
 bool Context::hasActiveTransformFeedback(GLuint program) const

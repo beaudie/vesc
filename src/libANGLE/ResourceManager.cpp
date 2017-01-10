@@ -27,14 +27,18 @@ ResourceManager::ResourceManager() : mRefCount(1)
 
 ResourceManager::~ResourceManager()
 {
+}
+
+void ResourceManager::reset(const Context *context)
+{
     while (!mBufferMap.empty())
     {
-        deleteBuffer(mBufferMap.begin()->first);
+        deleteBuffer(context, mBufferMap.begin()->first);
     }
 
     while (!mProgramMap.empty())
     {
-        deleteProgram(mProgramMap.begin()->first);
+        deleteProgram(context, mProgramMap.begin()->first);
     }
 
     while (!mShaderMap.empty())
@@ -74,10 +78,11 @@ void ResourceManager::addRef()
     mRefCount++;
 }
 
-void ResourceManager::release()
+void ResourceManager::release(const Context *context)
 {
     if (--mRefCount == 0)
     {
+        reset(context);
         delete this;
     }
 }
@@ -182,14 +187,17 @@ ErrorOrResult<GLuint> ResourceManager::createPaths(rx::GLImplFactory *factory, G
     return client;
 }
 
-void ResourceManager::deleteBuffer(GLuint buffer)
+void ResourceManager::deleteBuffer(const Context *context, GLuint buffer)
 {
     auto bufferObject = mBufferMap.find(buffer);
 
     if (bufferObject != mBufferMap.end())
     {
         mBufferHandleAllocator.release(bufferObject->first);
-        if (bufferObject->second) bufferObject->second->release();
+        if (bufferObject->second)
+        {
+            WrappedRelease(context, bufferObject->second);
+        }
         mBufferMap.erase(bufferObject);
     }
 }
@@ -213,7 +221,7 @@ void ResourceManager::deleteShader(GLuint shader)
     }
 }
 
-void ResourceManager::deleteProgram(GLuint program)
+void ResourceManager::deleteProgram(const Context *context, GLuint program)
 {
     auto programObject = mProgramMap.find(program);
 
@@ -222,6 +230,7 @@ void ResourceManager::deleteProgram(GLuint program)
         if (programObject->second->getRefCount() == 0)
         {
             mProgramShaderHandleAllocator.release(programObject->first);
+            programObject->second->destroy(context);
             delete programObject->second;
             mProgramMap.erase(programObject);
         }

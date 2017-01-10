@@ -25,6 +25,7 @@ class GLImplFactory;
 namespace gl
 {
 class Buffer;
+class Context;
 class FenceSync;
 struct Limitations;
 class Path;
@@ -41,7 +42,7 @@ class ResourceManager : angle::NonCopyable
     ~ResourceManager();
 
     void addRef();
-    void release();
+    void release(const Context *context);
 
     GLuint createBuffer();
     GLuint createShader(rx::GLImplFactory *factory,
@@ -54,9 +55,9 @@ class ResourceManager : angle::NonCopyable
     GLuint createFenceSync(rx::GLImplFactory *factory);
     ErrorOrResult<GLuint> createPaths(rx::GLImplFactory *factory, GLsizei range);
 
-    void deleteBuffer(GLuint buffer);
+    void deleteBuffer(const Context *context, GLuint buffer);
     void deleteShader(GLuint shader);
-    void deleteProgram(GLuint program);
+    void deleteProgram(const Context *context, GLuint program);
     void deleteTexture(GLuint texture);
     void deleteRenderbuffer(GLuint renderbuffer);
     void deleteSampler(GLuint sampler);
@@ -91,6 +92,7 @@ class ResourceManager : angle::NonCopyable
     bool isRenderbufferGenerated(GLuint renderbuffer) const;
 
   private:
+    void reset(const Context *context);
     void createTextureInternal(GLuint handle);
 
     std::size_t mRefCount;
