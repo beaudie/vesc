@@ -372,6 +372,8 @@ class Program final : angle::NonCopyable, public LabeledObject
         return mState.mActiveAttribLocationsMask;
     }
 
+    bool formsFeedbackLoopWith(const gl::State &state, GLuint drawTextureID) const;
+
   private:
     class Bindings final : angle::NonCopyable
     {
@@ -516,6 +518,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     // Cache for sampler validation
     Optional<bool> mCachedValidateSamplersResult;
     std::vector<GLenum> mTextureUnitTypesCache;
+    std::vector<GLuint> mTextureUnitCache;
     RangeUI mSamplerUniformRange;
 };
 }  // namespace gl
