@@ -239,6 +239,7 @@ class Program final : angle::NonCopyable, public LabeledObject
   public:
     Program(rx::GLImplFactory *factory, ResourceManager *manager, GLuint handle);
     ~Program();
+    void destroy(const Context *context);
 
     GLuint id() const { return mHandle; }
 
@@ -358,7 +359,7 @@ class Program final : angle::NonCopyable, public LabeledObject
     static bool linkValidateInterfaceBlockFields(InfoLog &infoLog, const std::string &uniformName, const sh::InterfaceBlockField &vertexUniform, const sh::InterfaceBlockField &fragmentUniform);
 
     void addRef();
-    void release();
+    void release(const Context *context);
     unsigned int getRefCount() const;
     void flagForDeletion();
     bool isFlaggedForDeletion() const;

@@ -32,6 +32,7 @@ class SurfaceImpl;
 
 namespace egl
 {
+class Display;
 class Surface;
 }
 
@@ -101,6 +102,8 @@ class Framebuffer final : public LabeledObject, public angle::SignalReceiver
     Framebuffer(const Caps &caps, rx::GLImplFactory *factory, GLuint id);
     Framebuffer(rx::SurfaceImpl *surface);
     virtual ~Framebuffer();
+    void destroy(const Context *context);
+    void destroyDefault(const egl::Display *display);
 
     void setLabel(const std::string &label) override;
     const std::string &getLabel() const override;
