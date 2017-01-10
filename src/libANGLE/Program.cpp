@@ -246,6 +246,7 @@ ProgramState::ProgramState()
       mAttachedVertexShader(nullptr),
       mAttachedComputeShader(nullptr),
       mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS),
+      mSamplerUniformRange(0, 0),
       mBinaryRetrieveableHint(false)
 {
     mComputeShaderLocalSize.fill(1);
@@ -325,7 +326,7 @@ GLint ProgramState::getUniformLocation(const std::string &name) const
     return -1;
 }
 
-GLuint ProgramState::getUniformIndex(const std::string &name) const
+GLuint ProgramState::getUniformIndexFromName(const std::string &name) const
 {
     size_t subscript     = GL_INVALID_INDEX;
     std::string baseName = ParseUniformName(name, &subscript);
@@ -351,6 +352,28 @@ GLuint ProgramState::getUniformIndex(const std::string &name) const
     return GL_INVALID_INDEX;
 }
 
+GLuint ProgramState::getUniformIndexFromLocation(GLint location) const
+{
+    ASSERT(location >= 0 && static_cast<size_t>(location) < mUniformLocations.size());
+    return mUniformLocations[location].index;
+}
+
+Optional<GLuint> ProgramState::getSamplerIndex(GLint location) const
+{
+    GLuint index = getUniformIndexFromLocation(location);
+    if (!isSamplerUniformIndex(index))
+    {
+        return Optional<GLuint>::Invalid();
+    }
+
+    return index - mSamplerUniformRange.start;
+}
+
+bool ProgramState::isSamplerUniformIndex(GLuint index) const
+{
+    return index >= mSamplerUniformRange.start && index < mSamplerUniformRange.end;
+}
+
 Program::Program(rx::GLImplFactory *factory, ResourceManager *manager, GLuint handle)
     : mProgram(factory->createProgram(mState)),
       mValidated(false),
@@ -358,8 +381,7 @@ Program::Program(rx::GLImplFactory *factory, ResourceManager *manager, GLuint ha
       mDeleteStatus(false),
       mRefCount(0),
       mResourceManager(manager),
-      mHandle(handle),
-      mSamplerUniformRange(0, 0)
+      mHandle(handle)
 {
     ASSERT(mProgram);
 
@@ -723,6 +745,7 @@ void Program::unlink(bool destroy)
     mState.mUniformBlocks.clear();
     mState.mOutputVariables.clear();
     mState.mComputeShaderLocalSize.fill(1);
+    mState.mSamplerBindings.clear();
 
     mValidated = false;
 
@@ -877,8 +900,16 @@ Error Program::loadBinary(const Context *context,
         mState.mOutputVariables[locationIndex] = locationData;
     }
 
-    stream.readInt(&mSamplerUniformRange.start);
-    stream.readInt(&mSamplerUniformRange.end);
+    stream.readInt(&mState.mSamplerUniformRange.start);
+    stream.readInt(&mState.mSamplerUniformRange.end);
+
+    unsigned int samplerCount = stream.readInt<unsigned int>();
+    for (unsigned int samplerIndex = 0; samplerIndex < samplerCount; ++samplerIndex)
+    {
+        GLenum textureType  = stream.readInt<GLenum>();
+        size_t bindingCount = stream.readInt<size_t>();
+        mState.mSamplerBindings.emplace_back(SamplerBinding(textureType, bindingCount));
+    }
 
     ANGLE_TRY_RESULT(mProgram->load(context->getImplementation(), mInfoLog, &stream), mLinked);
 
@@ -992,8 +1023,15 @@ Error Program::saveBinary(const Context *context,
         stream.writeString(outputPair.second.name);
     }
 
-    stream.writeInt(mSamplerUniformRange.start);
-    stream.writeInt(mSamplerUniformRange.end);
+    stream.writeInt(mState.mSamplerUniformRange.start);
+    stream.writeInt(mState.mSamplerUniformRange.end);
+
+    stream.writeInt(mState.mSamplerBindings.size());
+    for (const auto &samplerBinding : mState.mSamplerBindings)
+    {
+        stream.writeInt(samplerBinding.textureType);
+        stream.writeInt(samplerBinding.boundTextureUnits.size());
+    }
 
     ANGLE_TRY(mProgram->save(&stream));
 
@@ -1373,7 +1411,7 @@ bool Program::isIgnoredUniformLocation(GLint location) const
 const LinkedUniform &Program::getUniformByLocation(GLint location) const
 {
     ASSERT(location >= 0 && static_cast<size_t>(location) < mState.mUniformLocations.size());
-    return mState.mUniforms[mState.mUniformLocations[location].index];
+    return mState.mUniforms[mState.getUniformIndexFromLocation(location)];
 }
 
 GLint Program::getUniformLocation(const std::string &name) const
@@ -1383,7 +1421,7 @@ GLint Program::getUniformLocation(const std::string &name) const
 
 GLuint Program::getUniformIndex(const std::string &name) const
 {
-    return mState.getUniformIndex(name);
+    return mState.getUniformIndexFromName(name);
 }
 
 void Program::setUniform1fv(GLint location, GLsizei count, const GLfloat *v)
@@ -1410,9 +1448,54 @@ void Program::setUniform4fv(GLint location, GLsizei count, const GLfloat *v)
     mProgram->setUniform4fv(location, clampedCount, v);
 }
 
-void Program::setUniform1iv(GLint location, GLsizei count, const GLint *v)
+void Program::setUniform1iv(GLint location, GLsizei countIn, const GLint *v)
 {
-    GLsizei clampedCount = setUniformInternal(location, count, 1, v);
+    const VariableLocation &locationInfo = mState.mUniformLocations[location];
+    LinkedUniform *linkedUniform         = &mState.mUniforms[locationInfo.index];
+    uint8_t *destPointer                 = linkedUniform->getDataPtrToElement(locationInfo.element);
+
+    // OpenGL ES 3.0.4 spec pg 67: "Values for any array element that exceeds the highest array
+    // element index used, as reported by GetActiveUniform, will be ignored by the GL."
+    unsigned int remainingElements = linkedUniform->elementCount() - locationInfo.element;
+    GLsizei maxElementCount =
+        static_cast<GLsizei>(remainingElements * linkedUniform->getElementComponents());
+
+    GLsizei count        = countIn;
+    GLsizei clampedCount = count;
+    if (clampedCount > maxElementCount)
+    {
+        clampedCount = maxElementCount;
+        count        = maxElementCount;
+    }
+
+    if (VariableComponentType(linkedUniform->type) == GL_BOOL)
+    {
+        // Do a cast conversion for boolean types. From the spec:
+        // "The uniform is set to FALSE if the input value is 0 or 0.0f, and set to TRUE otherwise."
+        GLint *destAsInt = reinterpret_cast<GLint *>(destPointer);
+        for (GLsizei component = 0; component < clampedCount; ++component)
+        {
+            destAsInt[component] = (v[component] != static_cast<GLint>(0) ? GL_TRUE : GL_FALSE);
+        }
+    }
+    else
+    {
+        // Invalidate the validation cache only if we modify the sampler data.
+        if (mState.isSamplerUniformIndex(locationInfo.index) &&
+            memcmp(destPointer, v, sizeof(GLint) * clampedCount) != 0)
+        {
+            ASSERT(linkedUniform->staticUse);
+            GLuint samplerIndex = locationInfo.index;
+            std::vector<GLuint> &boundTextureUnits =
+                mState.mSamplerBindings[samplerIndex].boundTextureUnits;
+
+            std::copy(v, v + clampedCount, boundTextureUnits.begin() + locationInfo.element);
+            mCachedValidateSamplersResult.reset();
+        }
+
+        memcpy(destPointer, v, sizeof(GLint) * clampedCount);
+    }
+
     mProgram->setUniform1iv(location, clampedCount, v);
 }
 
@@ -1572,22 +1655,12 @@ bool Program::validateSamplers(InfoLog *infoLog, const Caps &caps)
     // if any two active samplers in a program are of different types, but refer to the same
     // texture image unit, and this is the current program, then ValidateProgram will fail, and
     // DrawArrays and DrawElements will issue the INVALID_OPERATION error.
-    for (unsigned int samplerIndex = mSamplerUniformRange.start;
-         samplerIndex < mSamplerUniformRange.end; ++samplerIndex)
+    for (const auto &samplerBinding : mState.mSamplerBindings)
     {
-        const LinkedUniform &uniform = mState.mUniforms[samplerIndex];
-        ASSERT(uniform.isSampler());
+        GLenum textureType = samplerBinding.textureType;
 
-        if (!uniform.staticUse)
-            continue;
-
-        const GLuint *dataPtr = reinterpret_cast<const GLuint *>(uniform.getDataPtrToElement(0));
-        GLenum textureType    = SamplerTypeToTextureType(uniform.type);
-
-        for (unsigned int arrayElement = 0; arrayElement < uniform.elementCount(); ++arrayElement)
+        for (GLuint textureUnit : samplerBinding.boundTextureUnits)
         {
-            GLuint textureUnit = dataPtr[arrayElement];
-
             if (textureUnit >= caps.maxCombinedTextureImageUnits)
             {
                 if (infoLog)
@@ -2677,11 +2750,19 @@ bool Program::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog)
         }
     }
 
-    mSamplerUniformRange.start = static_cast<unsigned int>(mState.mUniforms.size());
-    mSamplerUniformRange.end =
-        mSamplerUniformRange.start + static_cast<unsigned int>(samplerUniforms.size());
+    mState.mSamplerUniformRange.start = static_cast<unsigned int>(mState.mUniforms.size());
+    mState.mSamplerUniformRange.end =
+        mState.mSamplerUniformRange.start + static_cast<unsigned int>(samplerUniforms.size());
 
     mState.mUniforms.insert(mState.mUniforms.end(), samplerUniforms.begin(), samplerUniforms.end());
+
+    // If uniform is a sampler type, insert it into the mSamplerBindings array.
+    for (const auto &samplerUniform : samplerUniforms)
+    {
+        GLenum textureType = SamplerTypeToTextureType(samplerUniform.type);
+        mState.mSamplerBindings.emplace_back(
+            SamplerBinding(textureType, samplerUniform.elementCount()));
+    }
 
     return true;
 }
@@ -2978,12 +3059,6 @@ GLsizei Program::setUniformInternal(GLint location, GLsizei countIn, int vectorS
     }
     else
     {
-        // Invalide the validation cache if we modify the sampler data.
-        if (linkedUniform->isSampler() && memcmp(destPointer, v, sizeof(T) * clampedCount) != 0)
-        {
-            mCachedValidateSamplersResult.reset();
-        }
-
         memcpy(destPointer, v, sizeof(T) * clampedCount);
     }
 
