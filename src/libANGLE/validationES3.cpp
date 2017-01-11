@@ -248,9 +248,9 @@ bool ValidateES3TexImageParametersBase(Context *context,
             return false;
         }
 
-        if (static_cast<int>(xoffset + width) > texture->getWidth(target, level) ||
-            static_cast<int>(yoffset + height) > texture->getHeight(target, level) ||
-            static_cast<int>(zoffset + depth) > texture->getDepth(target, level))
+        if (static_cast<size_t>(xoffset + width) > texture->getWidth(target, level) ||
+            static_cast<size_t>(yoffset + height) > texture->getHeight(target, level) ||
+            static_cast<size_t>(zoffset + depth) > texture->getDepth(target, level))
         {
             context->handleError(Error(GL_INVALID_VALUE));
             return false;

@@ -3089,9 +3089,9 @@ bool ValidateCopyTexImageParametersBase(ValidationContext *context,
 
     if (isSubImage)
     {
-        if (static_cast<int>(xoffset + width) > texture->getWidth(target, level) ||
-            static_cast<int>(yoffset + height) > texture->getHeight(target, level) ||
-            static_cast<int>(zoffset) >= texture->getDepth(target, level))
+        if (static_cast<size_t>(xoffset + width) > texture->getWidth(target, level) ||
+            static_cast<size_t>(yoffset + height) > texture->getHeight(target, level) ||
+            static_cast<size_t>(zoffset) >= texture->getDepth(target, level))
         {
             context->handleError(Error(GL_INVALID_VALUE));
             return false;

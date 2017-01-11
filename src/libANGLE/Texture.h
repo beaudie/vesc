@@ -55,6 +55,8 @@ struct ImageDesc final
 
     Extents size;
     Format format;
+    GLsizei samples;
+    GLboolean mFixedSampleLocations;
 };
 
 struct SwizzleState final
@@ -243,22 +245,16 @@ class Texture final : public egl::ImageSibling,
     void setUsage(GLenum usage);
     GLenum getUsage() const;
 
-    void setSamples(GLsizei samples);
     GLsizei getSamples() const;
 
-    void setFixedSampleLocations(GLboolean fixed);
     GLboolean getFixedSampleLocations() const;
 
     const TextureState &getTextureState() const;
 
-    int getWidth(GLenum target, size_t level) const;
-    int getHeight(GLenum target, size_t level) const;
-    int getDepth(GLenum target, size_t level) const;
+    size_t getWidth(GLenum target, size_t level) const;
+    size_t getHeight(GLenum target, size_t level) const;
+    size_t getDepth(GLenum target, size_t level) const;
     const Format &getFormat(GLenum target, size_t level) const;
-    GLenum getChannelBaseType(GLenum target, size_t level, GLenum pname) const;
-    GLuint getChannelSize(GLenum target, size_t level, GLenum pname) const;
-    GLenum getInternalFormat(GLenum target, size_t level) const;
-    bool isCompressed(GLenum target, size_t level) const;
 
     bool isMipmapComplete() const;
 
@@ -360,8 +356,6 @@ class Texture final : public egl::ImageSibling,
         DIRTY_BIT_SWIZZLE_ALPHA,
         DIRTY_BIT_BASE_LEVEL,
         DIRTY_BIT_MAX_LEVEL,
-        DIRTY_BIT_SAMPLES,
-        DIRTY_BIT_FIXED_SAMPLE_LOCATIONS,
 
         // Misc
         DIRTY_BIT_LABEL,

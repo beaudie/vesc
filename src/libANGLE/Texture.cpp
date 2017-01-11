@@ -766,21 +766,9 @@ GLenum Texture::getUsage() const
     return mState.mUsage;
 }
 
-void Texture::setSamples(GLsizei samples)
-{
-    mState.mSamples = samples;
-    mDirtyBits.set(DIRTY_BIT_SAMPLES);
-}
-
 GLsizei Texture::getSamples() const
 {
     return mState.mSamples;
-}
-
-void Texture::setFixedSampleLocations(GLboolean fixed)
-{
-    mState.mFixedSampleLocations = fixed;
-    mDirtyBits.set(DIRTY_BIT_FIXED_SAMPLE_LOCATIONS);
 }
 
 GLboolean Texture::getFixedSampleLocations() const
@@ -793,21 +781,21 @@ const TextureState &Texture::getTextureState() const
     return mState;
 }
 
-int Texture::getWidth(GLenum target, size_t level) const
+size_t Texture::getWidth(GLenum target, size_t level) const
 {
     ASSERT(target == mState.mTarget ||
            (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
     return mState.getImageDesc(target, level).size.width;
 }
 
-int Texture::getHeight(GLenum target, size_t level) const
+size_t Texture::getHeight(GLenum target, size_t level) const
 {
     ASSERT(target == mState.mTarget ||
            (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
     return mState.getImageDesc(target, level).size.height;
 }
 
-int Texture::getDepth(GLenum target, size_t level) const
+size_t Texture::getDepth(GLenum target, size_t level) const
 {
     ASSERT(target == mState.mTarget ||
            (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
@@ -819,71 +807,6 @@ const Format &Texture::getFormat(GLenum target, size_t level) const
     ASSERT(target == mState.mTarget ||
            (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
     return mState.getImageDesc(target, level).format;
-}
-
-GLenum Texture::getChannelBaseType(GLenum target, size_t level, GLenum pname) const
-{
-    ASSERT(target == mState.mTarget ||
-           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-    const InternalFormat *info = mState.getImageDesc(target, level).format.info;
-    switch (pname)
-    {
-        case GL_TEXTURE_RED_TYPE:
-            return info->redBits ? info->componentType : GL_NONE;
-        case GL_TEXTURE_GREEN_TYPE:
-            return info->greenBits ? info->componentType : GL_NONE;
-        case GL_TEXTURE_BLUE_TYPE:
-            return info->blueBits ? info->componentType : GL_NONE;
-        case GL_TEXTURE_ALPHA_TYPE:
-            return info->alphaBits ? info->componentType : GL_NONE;
-        case GL_TEXTURE_DEPTH_TYPE:
-            return info->depthBits ? info->componentType : GL_NONE;
-        default:
-            UNREACHABLE();
-            return GL_NONE;
-    }
-}
-
-GLuint Texture::getChannelSize(GLenum target, size_t level, GLenum pname) const
-{
-    ASSERT(target == mState.mTarget ||
-           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-    const InternalFormat *info = mState.getImageDesc(target, level).format.info;
-    switch (pname)
-    {
-        case GL_TEXTURE_RED_SIZE:
-            return info->redBits;
-        case GL_TEXTURE_GREEN_SIZE:
-            return info->greenBits;
-        case GL_TEXTURE_BLUE_SIZE:
-            return info->blueBits;
-        case GL_TEXTURE_ALPHA_SIZE:
-            return info->alphaBits;
-        case GL_TEXTURE_DEPTH_SIZE:
-            return info->depthBits;
-        case GL_TEXTURE_STENCIL_SIZE:
-            return info->stencilBits;
-        case GL_TEXTURE_SHARED_SIZE:
-            return info->sharedBits;
-        default:
-            UNREACHABLE();
-            return 0;
-    }
-}
-
-GLenum Texture::getInternalFormat(GLenum target, size_t level) const
-{
-    ASSERT(target == mState.mTarget ||
-           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-    return mState.getImageDesc(target, level).format.info->internalFormat;
-}
-
-bool Texture::isCompressed(GLenum target, size_t level) const
-{
-    ASSERT(target == mState.mTarget ||
-           (mState.mTarget == GL_TEXTURE_CUBE_MAP && IsCubeMapTextureTarget(target)));
-    const InternalFormat *info = mState.getImageDesc(target, level).format.info;
-    return info->compressed;
 }
 
 bool Texture::isMipmapComplete() const

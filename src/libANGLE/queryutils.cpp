@@ -33,29 +33,49 @@ void QueryTexLevelParameterBase(const Texture *texture,
                                 ParamType *params)
 {
     ASSERT(texture != nullptr);
+    const InternalFormat *info = texture->getTextureState().getImageDesc(target, level).format.info;
 
     switch (pname)
     {
         case GL_TEXTURE_RED_TYPE:
+            *params = ConvertFromGLenum<ParamType>(info->redBits ? info->componentType : GL_NONE);
+            break;
         case GL_TEXTURE_GREEN_TYPE:
+            *params = ConvertFromGLenum<ParamType>(info->greenBits ? info->componentType : GL_NONE);
+            break;
         case GL_TEXTURE_BLUE_TYPE:
+            *params = ConvertFromGLenum<ParamType>(info->blueBits ? info->componentType : GL_NONE);
+            break;
         case GL_TEXTURE_ALPHA_TYPE:
+            *params = ConvertFromGLenum<ParamType>(info->alphaBits ? info->componentType : GL_NONE);
+            break;
         case GL_TEXTURE_DEPTH_TYPE:
-            *params =
-                ConvertFromGLenum<ParamType>(texture->getChannelBaseType(target, level, pname));
+            *params = ConvertFromGLenum<ParamType>(info->depthBits ? info->componentType : GL_NONE);
             break;
         case GL_TEXTURE_RED_SIZE:
+            *params = ConvertFromGLuint<ParamType>(info->redBits);
+            break;
         case GL_TEXTURE_GREEN_SIZE:
+            *params = ConvertFromGLuint<ParamType>(info->greenBits);
+            break;
         case GL_TEXTURE_BLUE_SIZE:
+            *params = ConvertFromGLuint<ParamType>(info->blueBits);
+            break;
         case GL_TEXTURE_ALPHA_SIZE:
+            *params = ConvertFromGLuint<ParamType>(info->alphaBits);
+            break;
         case GL_TEXTURE_DEPTH_SIZE:
+            *params = ConvertFromGLuint<ParamType>(info->depthBits);
+            break;
         case GL_TEXTURE_STENCIL_SIZE:
+            *params = ConvertFromGLuint<ParamType>(info->stencilBits);
+            break;
         case GL_TEXTURE_SHARED_SIZE:
-            *params = ConvertFromGLuint<ParamType>(texture->getChannelSize(target, level, pname));
+            *params = ConvertFromGLuint<ParamType>(info->sharedBits);
             break;
         case GL_TEXTURE_INTERNAL_FORMAT:
         {
-            GLenum internalFormat = texture->getInternalFormat(target, level);
+            GLenum internalFormat = info->internalFormat;
             internalFormat        = (internalFormat == 0) ? GL_RGBA : internalFormat;
             *params               = ConvertFromGLenum<ParamType>(internalFormat);
         }
@@ -76,7 +96,7 @@ void QueryTexLevelParameterBase(const Texture *texture,
             *params = ConvertFromGLboolean<ParamType>(texture->getFixedSampleLocations());
             break;
         case GL_TEXTURE_COMPRESSED:
-            *params = ConvertFromGLboolean<ParamType>(texture->isCompressed(target, level));
+            *params = ConvertFromGLboolean<ParamType>(info->compressed);
             break;
         default:
             UNREACHABLE();
