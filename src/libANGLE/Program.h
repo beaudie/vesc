@@ -330,8 +330,9 @@ class Program final : angle::NonCopyable, public LabeledObject
     GLint getActiveUniformMaxLength() const;
     GLint getActiveUniformi(GLuint index, GLenum pname) const;
     bool isValidUniformLocation(GLint location) const;
-    bool isIgnoredUniformLocation(GLint location) const;
     const LinkedUniform &getUniformByLocation(GLint location) const;
+    const VariableLocation &getUniformLocation(GLint location) const;
+    const LinkedUniform &getUniformByIndex(GLuint index) const;
 
     GLint getUniformLocation(const std::string &name) const;
     GLuint getUniformIndex(const std::string &name) const;
@@ -464,8 +465,6 @@ class Program final : angle::NonCopyable, public LabeledObject
                                        const Caps &caps) const;
 
     void gatherTransformFeedbackVaryings(const MergedVaryings &varyings);
-    bool assignUniformBlockRegister(InfoLog &infoLog, UniformBlock *uniformBlock, GLenum shader, unsigned int registerIndex, const Caps &caps);
-    void defineOutputVariables(Shader *fragmentShader);
 
     MergedVaryings getMergedVaryings() const;
     std::vector<PackedVarying> getPackedVaryings(const MergedVaryings &mergedVaryings) const;
