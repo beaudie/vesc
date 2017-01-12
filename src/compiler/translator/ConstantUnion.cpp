@@ -380,7 +380,7 @@ TConstantUnion TConstantUnion::rshift(const TConstantUnion &lhs,
     if ((rhs.type == EbtInt && (rhs.iConst < 0 || rhs.iConst > 31)) ||
         (rhs.type == EbtUInt && rhs.uConst > 31u))
     {
-        diag->error(line, "Undefined shift (operand out of range)", ">>");
+        diag->warning(line, "Undefined shift (operand out of range)", ">>");
         switch (lhs.type)
         {
             case EbtInt:
@@ -487,7 +487,7 @@ TConstantUnion TConstantUnion::lshift(const TConstantUnion &lhs,
     if ((rhs.type == EbtInt && (rhs.iConst < 0 || rhs.iConst > 31)) ||
         (rhs.type == EbtUInt && rhs.uConst > 31u))
     {
-        diag->error(line, "Undefined shift (operand out of range)", "<<");
+        diag->warning(line, "Undefined shift (operand out of range)", "<<");
         switch (lhs.type)
         {
             case EbtInt:

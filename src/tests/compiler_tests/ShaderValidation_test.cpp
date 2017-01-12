@@ -2413,7 +2413,8 @@ TEST_F(FragmentShaderValidationTest, VariableDeclarationWithInvariantAndLayoutQu
     }
 }
 
-// Bit shift with a rhs value > 31 has an undefined result in the GLSL spec. We disallow it.
+// Bit shift with a rhs value > 31 has an undefined result in the GLSL spec. Detecting an undefined
+// result at compile time should not generate an error either way.
 // ESSL 3.00.6 section 5.9.
 TEST_F(FragmentShaderValidationTest, ShiftBy32)
 {
@@ -2425,7 +2426,15 @@ TEST_F(FragmentShaderValidationTest, ShiftBy32)
         "}\n";
     if (compile(shaderString))
     {
-        FAIL() << "Shader compilation succeeded, expecting failure:\n" << mInfoLog;
+        if (!hasWarning())
+        {
+            FAIL() << "Shader compilation succeeded without warnings, expecting warning:\n"
+                   << mInfoLog;
+        }
+    }
+    else
+    {
+        FAIL() << "Shader compilation failed, expecting success with warning:\n" << mInfoLog;
     }
 }
 
