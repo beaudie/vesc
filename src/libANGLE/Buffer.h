@@ -67,6 +67,7 @@ class Buffer final : public RefCountObject, public LabeledObject
 
     Buffer(rx::GLImplFactory *factory, GLuint id);
     ~Buffer() override;
+    void destroy(const Context *context);
 
     void setLabel(const std::string &label) override;
     const std::string &getLabel() const override;
