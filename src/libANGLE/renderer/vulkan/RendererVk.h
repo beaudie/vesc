@@ -70,6 +70,12 @@ class RendererVk : angle::NonCopyable
 
     uint32_t getCurrentCommandSerial() const;
 
+    template <typename T>
+    void enqueueGarbage(uint32_t serial, T &&object)
+    {
+        mGarbage.emplace_back(std::unique_ptr<vk::GarbageObject<T>>(new vk::GarbageObject<T>(serial, std::move(object))));
+    }
+
   private:
     void ensureCapsInitialized() const;
     void generateCaps(gl::Caps *outCaps,
@@ -103,6 +109,7 @@ class RendererVk : angle::NonCopyable
     uint32_t mCurrentCommandSerial;
     uint32_t mLastCompletedCommandSerial;
     std::vector<vk::FenceAndCommandBuffer> mInFlightCommands;
+    std::vector<std::unique_ptr<vk::IGarbageObject>> mGarbage;
 };
 
 }  // namespace rx
