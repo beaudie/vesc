@@ -106,7 +106,10 @@ RendererVk::~RendererVk()
         mGlslangWrapper = nullptr;
     }
 
-    mCommandBuffer.reset(nullptr);
+    if (mCommandBuffer.valid())
+    {
+        mCommandBuffer.destroy(mDevice);
+    }
 
     if (mCommandPool)
     {
@@ -425,7 +428,8 @@ vk::Error RendererVk::initializeDevice(uint32_t queueFamilyIndex)
 
     ANGLE_VK_TRY(vkCreateCommandPool(mDevice, &commandPoolInfo, nullptr, &mCommandPool));
 
-    mCommandBuffer.reset(new vk::CommandBuffer(mDevice, mCommandPool));
+    // FIXME
+    mCommandBuffer.setCommandPool(mCommandPool);
 
     return vk::NoError();
 }
@@ -558,7 +562,7 @@ const gl::Limitations &RendererVk::getNativeLimitations() const
 
 vk::CommandBuffer *RendererVk::getCommandBuffer()
 {
-    return mCommandBuffer.get();
+    return &mCommandBuffer;
 }
 
 vk::Error RendererVk::submitAndFinishCommandBuffer(const vk::CommandBuffer &commandBuffer)
@@ -617,17 +621,17 @@ vk::Error RendererVk::waitThenFinishCommandBuffer(const vk::CommandBuffer &comma
     return vk::NoError();
 }
 
-vk::ErrorOrResult<vk::StagingImage> RendererVk::createStagingImage(TextureDimension dimension,
-                                                                   const vk::Format &format,
-                                                                   const gl::Extents &extent)
+vk::Error RendererVk::createStagingImage(TextureDimension dimension,
+                                         const vk::Format &format,
+                                         const gl::Extents &extent,
+                                         vk::StagingImage *imageOut)
 {
     ASSERT(mHostVisibleMemoryIndex != std::numeric_limits<uint32_t>::max());
 
-    vk::StagingImage stagingImage(mDevice);
-    ANGLE_TRY(stagingImage.init(mCurrentQueueFamilyIndex, mHostVisibleMemoryIndex, dimension,
-                                format.native, extent));
+    ANGLE_TRY(imageOut->init(mDevice, mCurrentQueueFamilyIndex, mHostVisibleMemoryIndex, dimension,
+                             format.native, extent));
 
-    return std::move(stagingImage);
+    return vk::NoError();
 }
 
 GlslangWrapper *RendererVk::getGlslangWrapper()
