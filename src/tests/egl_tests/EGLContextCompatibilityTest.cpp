@@ -99,10 +99,19 @@ class EGLContextCompatibilityTest : public ANGLETest
         eglGetConfigAttrib(mDisplay, c1, EGL_SURFACE_TYPE, &surfaceType1);
         eglGetConfigAttrib(mDisplay, c2, EGL_SURFACE_TYPE, &surfaceType2);
 
-        return colorBufferType1 == colorBufferType2 &&
-               red1 == red2 && green1 == green2 && blue1 == blue2 && alpha1 == alpha2 &&
-               depth1 == depth2 && stencil1 == stencil2 &&
-               (surfaceType1 & surfaceBit) != 0 &&
+        EGLint colorComponentType1 = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
+        EGLint colorComponentType2 = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
+        if (eglDisplayExtensionEnabled(mDisplay, "EGL_EXT_pixel_format_float"))
+        {
+            eglGetConfigAttrib(mDisplay, c1, EGL_COLOR_COMPONENT_TYPE_EXT, &colorComponentType1);
+            eglGetConfigAttrib(mDisplay, c2, EGL_COLOR_COMPONENT_TYPE_EXT, &colorComponentType2);
+        }
+
+        EXPECT_EGL_SUCCESS();
+
+        return colorBufferType1 == colorBufferType2 && red1 == red2 && green1 == green2 &&
+               blue1 == blue2 && alpha1 == alpha2 && colorComponentType1 == colorComponentType2 &&
+               depth1 == depth2 && stencil1 == stencil2 && (surfaceType1 & surfaceBit) != 0 &&
                (surfaceType2 & surfaceBit) != 0;
     }
 

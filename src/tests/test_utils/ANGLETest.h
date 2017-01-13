@@ -191,6 +191,7 @@ class ANGLETest : public ::testing::TestWithParam<angle::PlatformParameters>
     void setConfigAlphaBits(int bits);
     void setConfigDepthBits(int bits);
     void setConfigStencilBits(int bits);
+    void setConfigComponentType(EGLenum componentType);
     void setMultisampleEnabled(bool enabled);
     void setDebugEnabled(bool enabled);
     void setNoErrorEnabled(bool enabled);
