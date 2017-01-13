@@ -63,14 +63,15 @@ gl::Error ContextVk::finish()
 
 gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
 {
-    VkDevice device       = mRenderer->getDevice();
-    const auto &state     = mState.getState();
-    const auto &programGL = state.getProgram();
-    const auto &vao       = state.getVertexArray();
-    const auto &attribs   = vao->getVertexAttributes();
-    const auto &programVk = GetImplAs<ProgramVk>(programGL);
-    const auto *drawFBO   = state.getDrawFramebuffer();
-    FramebufferVk *vkFBO  = GetImplAs<FramebufferVk>(drawFBO);
+    VkDevice device        = mRenderer->getDevice();
+    const auto &state      = mState.getState();
+    const auto &programGL  = state.getProgram();
+    const auto &vao        = state.getVertexArray();
+    const auto &attribs    = vao->getVertexAttributes();
+    const auto &programVk  = GetImplAs<ProgramVk>(programGL);
+    const auto *drawFBO    = state.getDrawFramebuffer();
+    FramebufferVk *vkFBO   = GetImplAs<FramebufferVk>(drawFBO);
+    uint32_t commandSerial = mRenderer->getCurrentCommandSerial();
 
     // { vertex, fragment }
     VkPipelineShaderStageCreateInfo shaderStages[2];
@@ -126,6 +127,8 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
             BufferVk *bufferVk = GetImplAs<BufferVk>(bufferGL);
             vertexHandles.push_back(bufferVk->getVkBuffer().getHandle());
             vertexOffsets.push_back(0);
+
+            bufferVk->setCommandSerial(commandSerial);
         }
         else
         {
@@ -266,7 +269,7 @@ gl::Error ContextVk::drawArrays(GLenum mode, GLint first, GLsizei count)
     mCurrentPipeline.retain(device, std::move(newPipeline));
 
     vk::CommandBuffer *commandBuffer = mRenderer->getCommandBuffer();
-    ANGLE_TRY(vkFBO->beginRenderPass(device, commandBuffer, state));
+    ANGLE_TRY(vkFBO->beginRenderPass(device, commandBuffer, commandSerial, state));
 
     commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline);
     commandBuffer->bindVertexBuffers(0, vertexHandles, vertexOffsets);
