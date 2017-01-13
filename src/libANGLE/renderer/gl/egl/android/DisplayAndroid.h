@@ -64,6 +64,13 @@ class DisplayAndroid : public DisplayEGL
     template <typename T>
     void getConfigAttrib(EGLConfig config, EGLint attribute, T *value) const;
 
+    template <typename T>
+    void getConfigAttribIfExtension(EGLConfig config,
+                                    EGLint attribute,
+                                    T *value,
+                                    const char *extension,
+                                    T defaultValue) const;
+
     std::vector<EGLint> mConfigAttribList;
     std::map<EGLint, EGLint> mConfigIds;
     EGLSurface mDummyPbuffer;
