@@ -543,8 +543,28 @@ gl::Error FramebufferVk::getSamplePosition(size_t index, GLfloat *xy) const
 
 gl::Error FramebufferVk::beginRenderPass(VkDevice device,
                                          vk::CommandBuffer *commandBuffer,
+                                         uint32_t commandSerial,
                                          const gl::State &glState)
 {
+    // TODO(jmadill): Cache render targets.
+    for (const auto &colorAttachment : mState.getColorAttachments())
+    {
+        if (colorAttachment.isAttached())
+        {
+            RenderTargetVk *renderTarget = nullptr;
+            ANGLE_TRY(colorAttachment.getRenderTarget<RenderTargetVk>(&renderTarget));
+            renderTarget->resource->setCommandSerial(commandSerial);
+        }
+    }
+
+    const auto *depthStencilAttachment = mState.getDepthStencilAttachment();
+    if (depthStencilAttachment && depthStencilAttachment->isAttached())
+    {
+        RenderTargetVk *renderTarget = nullptr;
+        ANGLE_TRY(depthStencilAttachment->getRenderTarget<RenderTargetVk>(&renderTarget));
+        renderTarget->resource->setCommandSerial(commandSerial);
+    }
+
     vk::Framebuffer *framebuffer = nullptr;
     ANGLE_TRY_RESULT(getFramebuffer(device), framebuffer);
     ASSERT(framebuffer && framebuffer->valid());
@@ -575,6 +595,13 @@ gl::Error FramebufferVk::beginRenderPass(VkDevice device,
     ANGLE_TRY(commandBuffer->begin(device));
     commandBuffer->beginRenderPass(*renderPass, *framebuffer, glState.getViewport(),
                                    attachmentClearValues);
+
+    setCommandSerial(commandSerial);
+    if (mBackbuffer)
+    {
+        mBackbuffer->setCommandSerial(commandSerial);
+    }
+
     return gl::NoError();
 }
 
