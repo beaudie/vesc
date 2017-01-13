@@ -146,4 +146,19 @@ class OffsetBindingPointer : public BindingPointer<ObjectType>
     GLsizeiptr mSize;
 };
 
+namespace gl
+{
+class Context;
+
+template <typename ObjT>
+void WrappedRelease(const Context *context, ObjT *object)
+{
+    if (object->getRefCount() == 1u)
+    {
+        object->destroy(context);
+    }
+    object->release();
+}
+}  // namespace gl
+
 #endif   // LIBANGLE_REFCOUNTOBJECT_H_
