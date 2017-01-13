@@ -63,6 +63,8 @@ class BufferState final : angle::NonCopyable
 class Buffer final : public RefCountObject, public LabeledObject
 {
   public:
+    using ImplT = rx::BufferImpl;
+
     Buffer(rx::GLImplFactory *factory, GLuint id);
     ~Buffer() override;
 
@@ -79,13 +81,14 @@ class Buffer final : public RefCountObject, public LabeledObject
                         const void *data,
                         GLsizeiptr size,
                         GLintptr offset);
-    Error copyBufferSubData(Buffer *source,
+    Error copyBufferSubData(const Context *context,
+                            Buffer *source,
                             GLintptr sourceOffset,
                             GLintptr destOffset,
                             GLsizeiptr size);
-    Error map(GLenum access);
-    Error mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access);
-    Error unmap(GLboolean *result);
+    Error map(const Context *context, GLenum access);
+    Error mapRange(const Context *context, GLintptr offset, GLsizeiptr length, GLbitfield access);
+    Error unmap(const Context *context, GLboolean *result);
 
     void onTransformFeedback();
     void onPixelUnpack();
