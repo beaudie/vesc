@@ -20,7 +20,6 @@
 #include "common/version.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Compiler.h"
-#include "libANGLE/Display.h"
 #include "libANGLE/Fence.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
@@ -394,7 +393,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
     handleError(mImplementation->initialize());
 }
 
-Context::~Context()
+void Context::destroy(egl::Display *display)
 {
     mGLState.reset();
 
@@ -441,7 +440,7 @@ Context::~Context()
 
     if (mCurrentSurface != nullptr)
     {
-        releaseSurface();
+        releaseSurface(display);
     }
 
     if (mResourceManager)
@@ -452,7 +451,11 @@ Context::~Context()
     SafeDelete(mCompiler);
 }
 
-void Context::makeCurrent(egl::Surface *surface)
+Context::~Context()
+{
+}
+
+void Context::makeCurrent(egl::Display *display, egl::Surface *surface)
 {
     ASSERT(surface != nullptr);
 
@@ -473,9 +476,9 @@ void Context::makeCurrent(egl::Surface *surface)
 
     if (mCurrentSurface)
     {
-        releaseSurface();
+        releaseSurface(display);
     }
-    surface->setIsCurrent(true);
+    surface->setIsCurrent(display, true);
     mCurrentSurface = surface;
 
     // Update default framebuffer, the binding of the previous default
@@ -497,7 +500,7 @@ void Context::makeCurrent(egl::Surface *surface)
     mImplementation->onMakeCurrent(mState);
 }
 
-void Context::releaseSurface()
+void Context::releaseSurface(egl::Display *display)
 {
     ASSERT(mCurrentSurface != nullptr);
 
@@ -515,7 +518,7 @@ void Context::releaseSurface()
         mFramebufferMap.erase(0);
     }
 
-    mCurrentSurface->setIsCurrent(false);
+    mCurrentSurface->setIsCurrent(display, false);
     mCurrentSurface = nullptr;
 }
 
