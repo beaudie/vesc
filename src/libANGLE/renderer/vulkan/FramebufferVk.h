@@ -75,9 +75,22 @@ class FramebufferVk : public FramebufferImpl
 
     void syncState(const gl::Framebuffer::DirtyBits &dirtyBits) override;
 
+    gl::Error beginRenderPass(VkDevice device,
+                              vk::CommandBuffer *commandBuffer,
+                              const gl::State &glState);
+
+    gl::ErrorOrResult<vk::RenderPass *> getRenderPass(VkDevice device);
+
   private:
     FramebufferVk(const gl::FramebufferState &state);
     FramebufferVk(const gl::FramebufferState &state, WindowSurfaceVk *backbuffer);
+
+    gl::ErrorOrResult<vk::Framebuffer *> getFramebuffer(VkDevice device);
+
+    WindowSurfaceVk *mBackbuffer;
+
+    vk::RenderPass mRenderPass;
+    vk::Framebuffer mFramebuffer;
 };
 
 }  // namespace rx
