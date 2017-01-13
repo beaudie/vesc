@@ -52,6 +52,7 @@ class ContextState final : public angle::NonCopyable
     const TextureCapsMap &getTextureCaps() const { return mTextureCaps; }
     const Extensions &getExtensions() const { return mExtensions; }
     const Limitations &getLimitations() const { return mLimitations; }
+    const ResourceMap<Framebuffer> &getFramebufferMap() const { return mFramebufferMap; }
 
     const TextureCaps &getTextureCap(GLenum internalFormat) const;
 
