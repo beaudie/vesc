@@ -52,7 +52,7 @@ class OffscreenSurfaceVk : public SurfaceImpl
     EGLint mHeight;
 };
 
-class WindowSurfaceVk : public SurfaceImpl
+class WindowSurfaceVk : public SurfaceImpl, public ResourceVk
 {
   public:
     WindowSurfaceVk(const egl::SurfaceState &surfaceState,
@@ -85,7 +85,6 @@ class WindowSurfaceVk : public SurfaceImpl
     gl::ErrorOrResult<vk::Framebuffer *> getCurrentFramebuffer(
         VkDevice device,
         const vk::RenderPass &compatibleRenderPass);
-    void onBeginRenderPass();
 
   private:
     vk::Error initializeImpl(RendererVk *renderer);
