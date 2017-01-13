@@ -288,7 +288,11 @@ inline DestT *GetImplAs(SrcT *src)
     return GetAs<DestT>(src->getImplementation());
 }
 
-}
+// In some cases we want to retrieve an Impl object, while handling nullptr cases trivially.
+// Uses a #define so we don't have to manually specify the return type when using the macro.
+#define SAFE_GET_IMPL(OBJ) (OBJ ? OBJ->getImplementation() : nullptr)
+
+}  // namespace rx
 
 #include "angletypes.inl"
 
