@@ -199,6 +199,13 @@ egl::Error ValidateConfigAttribute(const egl::Display *display, EGLAttrib attrib
             }
             break;
 
+        case EGL_COLOR_COMPONENT_TYPE_EXT:
+            if (!display->getExtensions().pixelFormatFloat)
+            {
+                return egl::Error(EGL_BAD_ATTRIBUTE, "EGL_EXT_pixel_format_float is not enabled.");
+            }
+            break;
+
         default:
             return egl::Error(EGL_BAD_ATTRIBUTE, "Unknown attribute.");
     }
