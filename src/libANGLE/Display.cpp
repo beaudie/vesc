@@ -933,6 +933,7 @@ void Display::initDisplayExtensions()
     mDisplayExtensions.createContextNoError = true;
     mDisplayExtensions.createContextWebGLCompatibility = true;
     mDisplayExtensions.createContextBindGeneratesResource = true;
+    mDisplayExtensions.pixelFormatFloat                   = true;
 
     // Force EGL_KHR_get_all_proc_addresses on.
     mDisplayExtensions.getAllProcAddresses = true;

@@ -887,6 +887,9 @@ void QueryConfigAttrib(const Config *config, EGLint attribute, EGLint *value)
         case EGL_OPTIMAL_SURFACE_ORIENTATION_ANGLE:
             *value = config->optimalOrientation;
             break;
+        case EGL_COLOR_COMPONENT_TYPE_EXT:
+            *value = config->colorComponentType;
+            break;
         default:
             UNREACHABLE();
             break;
