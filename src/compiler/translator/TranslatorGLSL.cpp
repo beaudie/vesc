@@ -45,7 +45,7 @@ void TranslatorGLSL::initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu,
     InitBuiltInFunctionEmulatorForGLSLMissingFunctions(emu, getShaderType(), targetGLSLVersion);
 }
 
-void TranslatorGLSL::translate(TIntermNode *root, ShCompileOptions compileOptions)
+void TranslatorGLSL::header(TIntermNode *root, ShCompileOptions compileOptions)
 {
     TInfoSinkBase &sink = getInfoSink().obj;
 
@@ -199,6 +199,13 @@ void TranslatorGLSL::translate(TIntermNode *root, ShCompileOptions compileOption
         sink << "layout (local_size_x=" << localSize[0] << ", local_size_y=" << localSize[1]
              << ", local_size_z=" << localSize[2] << ") in;\n";
     }
+}
+
+void TranslatorGLSL::translate(TIntermNode *root, ShCompileOptions compileOptions)
+{
+    TInfoSinkBase &sink = getInfoSink().obj;
+
+    header(root, compileOptions);
 
     // Write translated shader.
     TOutputGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(),
