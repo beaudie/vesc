@@ -288,15 +288,11 @@ inline DestT *GetImplAs(SrcT *src)
     return GetAs<DestT>(src->getImplementation());
 }
 
-template <typename ImplT, typename ObjT>
-inline ImplT *GetImplMaybeNull(ObjT *obj)
+template <typename ObjT>
+inline typename ObjT::ImplT *SafeGetImpl(ObjT *obj)
 {
     return obj ? obj->getImplementation() : nullptr;
 }
-
-// In some cases we want to retrieve an Impl object, while handling nullptr cases trivially.
-// Uses a #define so we don't have to manually specify the return type when using the macro.
-#define SAFE_GET_IMPL(OBJ) (OBJ ? OBJ->getImplementation() : nullptr)
 
 }  // namespace rx
 

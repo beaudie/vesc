@@ -118,7 +118,7 @@ void Surface::setIsCurrent(Display *display, bool isCurrent)
     {
         if (mImplementation)
         {
-            mImplementation->destroy(SAFE_GET_IMPL(display));
+            mImplementation->destroy(rx::SafeGetImpl(display));
         }
         delete this;
     }
@@ -131,7 +131,7 @@ void Surface::onDestroy(Display *display)
     {
         if (mImplementation)
         {
-            mImplementation->destroy(SAFE_GET_IMPL(display));
+            mImplementation->destroy(rx::SafeGetImpl(display));
         }
         delete this;
     }
