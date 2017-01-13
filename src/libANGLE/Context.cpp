@@ -3087,7 +3087,7 @@ GLvoid *Context::mapBuffer(GLenum target, GLenum access)
     Buffer *buffer = mGLState.getTargetBuffer(target);
     ASSERT(buffer);
 
-    Error error = buffer->map(access);
+    Error error = buffer->map(this, access);
     if (error.isError())
     {
         handleError(error);
@@ -3103,7 +3103,7 @@ GLboolean Context::unmapBuffer(GLenum target)
     ASSERT(buffer);
 
     GLboolean result;
-    Error error = buffer->unmap(&result);
+    Error error = buffer->unmap(this, &result);
     if (error.isError())
     {
         handleError(error);
@@ -3121,7 +3121,7 @@ GLvoid *Context::mapBufferRange(GLenum target,
     Buffer *buffer = mGLState.getTargetBuffer(target);
     ASSERT(buffer);
 
-    Error error = buffer->mapRange(offset, length, access);
+    Error error = buffer->mapRange(this, offset, length, access);
     if (error.isError())
     {
         handleError(error);
@@ -3585,7 +3585,7 @@ void Context::copyBufferSubData(GLenum readTarget,
     Buffer *readBuffer  = mGLState.getTargetBuffer(readTarget);
     Buffer *writeBuffer = mGLState.getTargetBuffer(writeTarget);
 
-    handleError(writeBuffer->copyBufferSubData(readBuffer, readOffset, writeOffset, size));
+    handleError(writeBuffer->copyBufferSubData(this, readBuffer, readOffset, writeOffset, size));
 }
 
 void Context::bindAttribLocation(GLuint program, GLuint index, const GLchar *name)
