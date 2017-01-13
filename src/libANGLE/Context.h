@@ -64,10 +64,11 @@ class Context final : public ValidationContext
             const Context *shareContext,
             const egl::AttributeMap &attribs);
 
-    virtual ~Context();
+    void destroy(egl::Display *display);
+    ~Context() override;
 
-    void makeCurrent(egl::Surface *surface);
-    void releaseSurface();
+    void makeCurrent(egl::Display *display, egl::Surface *surface);
+    void releaseSurface(egl::Display *display);
 
     // These create  and destroy methods are merely pass-throughs to
     // ResourceManager, which owns these object types
