@@ -933,6 +933,12 @@ egl::ConfigSet Renderer11::generateConfigs()
     // 24-bit supported formats
     colorBufferFormats.push_back(GL_RGB8_OES);
 
+    if (mRenderer11DeviceCaps.featureLevel >= D3D_FEATURE_LEVEL_10_0)
+    {
+        // floating point formats
+        colorBufferFormats.push_back(GL_RGBA16F);
+    }
+
     if (!mPresentPathFastEnabled)
     {
         // 16-bit supported formats
@@ -1041,6 +1047,8 @@ egl::ConfigSet Renderer11::generateConfigs()
             config.transparentGreenValue = 0;
             config.transparentBlueValue  = 0;
             config.optimalOrientation    = optimalSurfaceOrientation;
+            config.colorComponentType =
+                gl_egl::GLComponentTypeToEGLColorComponentType(colorBufferFormatInfo.componentType);
 
             configs.add(config);
         }
