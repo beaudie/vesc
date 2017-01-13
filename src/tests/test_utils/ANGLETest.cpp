@@ -637,6 +637,11 @@ void ANGLETest::setConfigStencilBits(int bits)
     mEGLWindow->setConfigStencilBits(bits);
 }
 
+void ANGLETest::setConfigComponentType(EGLenum componentType)
+{
+    mEGLWindow->setConfigComponentType(componentType);
+}
+
 void ANGLETest::setMultisampleEnabled(bool enabled)
 {
     mEGLWindow->setMultisample(enabled);
