@@ -402,6 +402,11 @@ Program::~Program()
     SafeDelete(mProgram);
 }
 
+void Program::destroy(const Context *context)
+{
+    mProgram->destroy(rx::SafeGetImpl(context));
+}
+
 void Program::setLabel(const std::string &label)
 {
     mState.mLabel = label;
@@ -1103,13 +1108,13 @@ bool Program::getBinaryRetrievableHint() const
     return mState.mBinaryRetrieveableHint;
 }
 
-void Program::release()
+void Program::release(const Context *context)
 {
     mRefCount--;
 
     if (mRefCount == 0 && mDeleteStatus)
     {
-        mResourceManager->deleteProgram(mHandle);
+        mResourceManager->deleteProgram(context, mHandle);
     }
 }
 
