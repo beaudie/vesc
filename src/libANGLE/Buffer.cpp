@@ -60,7 +60,7 @@ Error Buffer::bufferData(const Context *context,
                          GLsizeiptr size,
                          GLenum usage)
 {
-    ANGLE_TRY(mImpl->setData(SAFE_GET_IMPL(context), target, data, size, usage));
+    ANGLE_TRY(mImpl->setData(rx::SafeGetImpl(context), target, data, size, usage));
 
     mIndexRangeCache.clear();
     mState.mUsage = usage;
@@ -75,27 +75,32 @@ Error Buffer::bufferSubData(const Context *context,
                             GLsizeiptr size,
                             GLintptr offset)
 {
-    ANGLE_TRY(mImpl->setSubData(SAFE_GET_IMPL(context), target, data, size, offset));
+    ANGLE_TRY(mImpl->setSubData(rx::SafeGetImpl(context), target, data, size, offset));
 
     mIndexRangeCache.invalidateRange(static_cast<unsigned int>(offset), static_cast<unsigned int>(size));
 
     return NoError();
 }
 
-Error Buffer::copyBufferSubData(Buffer* source, GLintptr sourceOffset, GLintptr destOffset, GLsizeiptr size)
+Error Buffer::copyBufferSubData(const Context *context,
+                                Buffer *source,
+                                GLintptr sourceOffset,
+                                GLintptr destOffset,
+                                GLsizeiptr size)
 {
-    ANGLE_TRY(mImpl->copySubData(source->getImplementation(), sourceOffset, destOffset, size));
+    ANGLE_TRY(mImpl->copySubData(rx::SafeGetImpl(context), source->getImplementation(),
+                                 sourceOffset, destOffset, size));
 
     mIndexRangeCache.invalidateRange(static_cast<unsigned int>(destOffset), static_cast<unsigned int>(size));
 
     return NoError();
 }
 
-Error Buffer::map(GLenum access)
+Error Buffer::map(const Context *context, GLenum access)
 {
     ASSERT(!mState.mMapped);
 
-    Error error = mImpl->map(access, &mState.mMapPointer);
+    Error error = mImpl->map(rx::SafeGetImpl(context), access, &mState.mMapPointer);
     if (error.isError())
     {
         mState.mMapPointer = nullptr;
@@ -114,12 +119,16 @@ Error Buffer::map(GLenum access)
     return error;
 }
 
-Error Buffer::mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access)
+Error Buffer::mapRange(const Context *context,
+                       GLintptr offset,
+                       GLsizeiptr length,
+                       GLbitfield access)
 {
     ASSERT(!mState.mMapped);
     ASSERT(offset + length <= mState.mSize);
 
-    Error error = mImpl->mapRange(offset, length, access, &mState.mMapPointer);
+    Error error =
+        mImpl->mapRange(rx::SafeGetImpl(context), offset, length, access, &mState.mMapPointer);
     if (error.isError())
     {
         mState.mMapPointer = nullptr;
@@ -145,11 +154,11 @@ Error Buffer::mapRange(GLintptr offset, GLsizeiptr length, GLbitfield access)
     return error;
 }
 
-Error Buffer::unmap(GLboolean *result)
+Error Buffer::unmap(const Context *context, GLboolean *result)
 {
     ASSERT(mState.mMapped);
 
-    Error error = mImpl->unmap(result);
+    Error error = mImpl->unmap(rx::SafeGetImpl(context), result);
     if (error.isError())
     {
         *result = GL_FALSE;

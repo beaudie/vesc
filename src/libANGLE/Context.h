@@ -59,6 +59,8 @@ class TransformFeedback;
 class Context final : public ValidationContext
 {
   public:
+    using ImplT = rx::ContextImpl;
+
     Context(rx::EGLImplFactory *implFactory,
             const egl::Config *config,
             const Context *shareContext,

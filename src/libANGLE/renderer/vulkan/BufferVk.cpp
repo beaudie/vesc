@@ -99,7 +99,8 @@ gl::Error BufferVk::setSubData(ContextImpl *context,
     return gl::NoError();
 }
 
-gl::Error BufferVk::copySubData(BufferImpl *source,
+gl::Error BufferVk::copySubData(ContextImpl *context,
+                                BufferImpl *source,
                                 GLintptr sourceOffset,
                                 GLintptr destOffset,
                                 GLsizeiptr size)
@@ -108,7 +109,7 @@ gl::Error BufferVk::copySubData(BufferImpl *source,
     return gl::Error(GL_INVALID_OPERATION);
 }
 
-gl::Error BufferVk::map(GLenum access, GLvoid **mapPtr)
+gl::Error BufferVk::map(ContextImpl *context, GLenum access, GLvoid **mapPtr)
 {
     ASSERT(mBuffer.getHandle() != VK_NULL_HANDLE);
     ASSERT(mBuffer.getMemory().getHandle() != VK_NULL_HANDLE);
@@ -119,7 +120,11 @@ gl::Error BufferVk::map(GLenum access, GLvoid **mapPtr)
     return gl::NoError();
 }
 
-gl::Error BufferVk::mapRange(size_t offset, size_t length, GLbitfield access, GLvoid **mapPtr)
+gl::Error BufferVk::mapRange(ContextImpl *context,
+                             size_t offset,
+                             size_t length,
+                             GLbitfield access,
+                             GLvoid **mapPtr)
 {
     ASSERT(mBuffer.getHandle() != VK_NULL_HANDLE);
     ASSERT(mBuffer.getMemory().getHandle() != VK_NULL_HANDLE);
@@ -129,7 +134,7 @@ gl::Error BufferVk::mapRange(size_t offset, size_t length, GLbitfield access, GL
     return gl::NoError();
 }
 
-gl::Error BufferVk::unmap(GLboolean *result)
+gl::Error BufferVk::unmap(ContextImpl *context, GLboolean *result)
 {
     ASSERT(mBuffer.getHandle() != VK_NULL_HANDLE);
     ASSERT(mBuffer.getMemory().getHandle() != VK_NULL_HANDLE);
