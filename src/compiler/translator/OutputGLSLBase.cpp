@@ -835,26 +835,10 @@ bool TOutputGLSLBase::visitBlock(Visit visit, TIntermBlock *node)
 
 bool TOutputGLSLBase::visitFunctionDefinition(Visit visit, TIntermFunctionDefinition *node)
 {
-    TInfoSinkBase &out = objSink();
-
-    ASSERT(visit == PreVisit);
-    {
-        const TType &type = node->getType();
-        writeVariableType(type);
-        if (type.isArray())
-            out << arrayBrackets(type);
-    }
-
-    out << " " << hashFunctionNameIfNeeded(node->getFunctionSymbolInfo()->getNameObj());
+    TIntermFunctionPrototype *prototype = node->getFunctionPrototype();
+    prototype->traverse(this);
 
     incrementDepth(node);
-
-    // Traverse function parameters.
-    TIntermAggregate *params = node->getFunctionParameters()->getAsAggregate();
-    ASSERT(params->getOp() == EOpParameters);
-    params->traverse(this);
-
-    // Traverse function body.
     visitCodeBlock(node->getBody());
     decrementDepth();
 
@@ -904,14 +888,6 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
                 out << ", ";
             else
                 out << ")";
-            break;
-        case EOpParameters:
-            // Function parameters.
-            ASSERT(visit == PreVisit);
-            out << "(";
-            writeFunctionParameters(*(node->getSequence()));
-            out << ")";
-            visitChildren = false;
             break;
         case EOpConstructFloat:
         case EOpConstructVec2:

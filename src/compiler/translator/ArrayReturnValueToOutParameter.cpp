@@ -92,24 +92,22 @@ bool ArrayReturnValueToOutParameterTraverser::visitFunctionDefinition(
     Visit visit,
     TIntermFunctionDefinition *node)
 {
-    if (node->isArray() && visit == PreVisit)
+    if (node->getFunctionPrototype()->isArray() && visit == PreVisit)
     {
-        // Replace the parameters child node of the function definition with another node
-        // that has the out parameter added.
+        // Replace the function prototype with one that has the out parameter added.
         // Also set the function to return void.
 
-        TIntermAggregate *params = node->getFunctionParameters();
-        ASSERT(params != nullptr && params->getOp() == EOpParameters);
+        TIntermFunctionPrototype *prototype = node->getFunctionPrototype();
+        ASSERT(prototype != nullptr);
 
-        TIntermAggregate *replacementParams = new TIntermAggregate;
-        replacementParams->setOp(EOpParameters);
-        CopyAggregateChildren(params, replacementParams);
-        replacementParams->getSequence()->push_back(CreateReturnValueOutSymbol(node->getType()));
-        replacementParams->setLine(params->getLine());
+        TIntermFunctionPrototype *replacementPrototype =
+            new TIntermFunctionPrototype(TType(EbtVoid));
+        CopyAggregateChildren(prototype, replacementPrototype);
+        replacementPrototype->getSequence()->push_back(
+            CreateReturnValueOutSymbol(node->getFunctionPrototype()->getType()));
+        replacementPrototype->setLine(prototype->getLine());
 
-        queueReplacementWithParent(node, params, replacementParams, OriginalNode::IS_DROPPED);
-
-        node->setType(TType(EbtVoid));
+        queueReplacementWithParent(node, prototype, replacementPrototype, OriginalNode::IS_DROPPED);
 
         mInFunctionWithArrayReturnValue = true;
     }

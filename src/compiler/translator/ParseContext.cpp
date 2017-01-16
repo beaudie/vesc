@@ -2448,15 +2448,15 @@ TIntermFunctionPrototype *TParseContext::addFunctionPrototypeDeclaration(
 }
 
 TIntermFunctionDefinition *TParseContext::addFunctionDefinition(
-    const TFunction &function,
-    TIntermAggregate *functionParameters,
+    TIntermFunctionPrototype *functionPrototype,
     TIntermBlock *functionBody,
     const TSourceLoc &location)
 {
     // Check that non-void functions have at least one return statement.
     if (mCurrentFunctionType->getBasicType() != EbtVoid && !mFunctionReturnsValue)
     {
-        error(location, "function does not return a value:", function.getName().c_str());
+        error(location, "function does not return a value:",
+              functionPrototype->getFunctionSymbolInfo()->getName().c_str());
     }
 
     if (functionBody == nullptr)
@@ -2465,10 +2465,8 @@ TIntermFunctionDefinition *TParseContext::addFunctionDefinition(
         functionBody->setLine(location);
     }
     TIntermFunctionDefinition *functionNode =
-        new TIntermFunctionDefinition(function.getReturnType(), functionParameters, functionBody);
+        new TIntermFunctionDefinition(functionPrototype, functionBody);
     functionNode->setLine(location);
-
-    functionNode->getFunctionSymbolInfo()->setFromFunction(function);
 
     symbolTable.pop();
     return functionNode;
@@ -2476,7 +2474,7 @@ TIntermFunctionDefinition *TParseContext::addFunctionDefinition(
 
 void TParseContext::parseFunctionDefinitionHeader(const TSourceLoc &location,
                                                   TFunction **function,
-                                                  TIntermAggregate **aggregateOut)
+                                                  TIntermFunctionPrototype **prototypeOut)
 {
     ASSERT(function);
     ASSERT(*function);
@@ -2542,40 +2540,33 @@ void TParseContext::parseFunctionDefinitionHeader(const TSourceLoc &location,
     // Also, accumulate the list of parameters into the HIL, so lower level code
     // knows where to find parameters.
     //
-    TIntermAggregate *paramNodes = new TIntermAggregate;
+    TIntermFunctionPrototype *prototype = new TIntermFunctionPrototype(*mCurrentFunctionType);
+    prototype->setLine(location);
     for (size_t i = 0; i < (*function)->getParamCount(); i++)
     {
         const TConstParameter &param = (*function)->getParam(i);
         if (param.name != 0)
         {
             TVariable *variable = new TVariable(param.name, *param.type);
-            //
-            // Insert the parameters with name in the symbol table.
-            //
+
+            // Insert the parameter in the symbol table.
             if (!symbolTable.declare(variable))
             {
                 error(location, "redefinition", variable->getName().c_str());
-                paramNodes = intermediate.growAggregate(
-                    paramNodes, intermediate.addSymbol(0, "", *param.type, location), location);
+                prototype->appendParameter(intermediate.addSymbol(0, "", *param.type, location));
                 continue;
             }
-
-            //
-            // Add the parameter to the HIL
-            //
             TIntermSymbol *symbol = intermediate.addSymbol(
                 variable->getUniqueId(), variable->getName(), variable->getType(), location);
-
-            paramNodes = intermediate.growAggregate(paramNodes, symbol, location);
+            prototype->appendParameter(symbol);
         }
         else
         {
-            paramNodes = intermediate.growAggregate(
-                paramNodes, intermediate.addSymbol(0, "", *param.type, location), location);
+            prototype->appendParameter(intermediate.addSymbol(0, "", *param.type, location));
         }
     }
-    intermediate.setAggregateOperator(paramNodes, EOpParameters, location);
-    *aggregateOut = paramNodes;
+    prototype->getFunctionSymbolInfo()->setFromFunction(**function);
+    *prototypeOut = prototype;
     setLoopNestingLevel(0);
 }
 
