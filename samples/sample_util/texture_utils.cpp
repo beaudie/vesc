@@ -22,14 +22,13 @@ GLuint CreateSimpleTexture2D()
     // Load the texture: 2x2 Image, 3 bytes per pixel (R, G, B)
     const size_t width = 2;
     const size_t height = 2;
-    GLubyte pixels[width * height * 3] =
-    {
-        255,   0,   0, // Red
-          0, 255,   0, // Green
-          0,   0, 255, // Blue
-        255, 255,   0, // Yellow
+    GLubyte pixels[width * height * 4] = {
+        255, 0,   0,   255,  // Red
+        0,   255, 0,   255,  // Green
+        0,   0,   255, 255,  // Blue
+        255, 255, 0,   255,  // Yellow
     };
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
     // Set the filtering mode
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

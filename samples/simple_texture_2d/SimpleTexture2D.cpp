@@ -29,9 +29,9 @@ class SimpleTexture2DSample : public SampleApplication
     {
         const std::string vs = SHADER_SOURCE
         (
-            attribute vec4 a_position;
-            attribute vec2 a_texCoord;
-            varying vec2 v_texCoord;
+            in vec4 a_position;
+            in vec2 a_texCoord;
+            out vec2 v_texCoord;
             void main()
             {
                 gl_Position = a_position;
@@ -42,11 +42,12 @@ class SimpleTexture2DSample : public SampleApplication
         const std::string fs = SHADER_SOURCE
         (
             precision mediump float;
-            varying vec2 v_texCoord;
+            in vec2 v_texCoord;
             uniform sampler2D s_texture;
+            layout(location = 0) out vec4 oColor;
             void main()
             {
-                gl_FragColor = texture2D(s_texture, v_texCoord);
+                oColor = texture(s_texture, v_texCoord);
             }
         );
 

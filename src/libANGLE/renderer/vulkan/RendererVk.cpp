@@ -513,9 +513,12 @@ void RendererVk::generateCaps(gl::Caps *outCaps,
                               gl::Limitations * /* outLimitations */) const
 {
     // TODO(jmadill): Caps.
-    outCaps->maxDrawBuffers      = 1;
-    outCaps->maxVertexAttributes = 1024;
-    outCaps->maxElementIndex     = (1ul << 32) - 1;
+    outCaps->maxDrawBuffers               = 1;
+    outCaps->maxVertexAttributes          = 1024;
+    outCaps->maxElementIndex              = (1ul << 32) - 1;
+    outCaps->maxTextureImageUnits         = 32;
+    outCaps->maxCombinedTextureImageUnits = 32;
+    outCaps->max2DTextureSize             = 2048;
 
     // Enable this for simple buffer readback testing, but some functionality is missing.
     // TODO(jmadill): Support full mapBufferRange extension.

@@ -373,7 +373,7 @@ gl::Error ContextVk::preparePipeline(GLenum mode,
     blendState.blendConstants[3] = 0.0f;
 
     vk::PipelineLayout *pipelineLayout = nullptr;
-    ANGLE_TRY_RESULT(programVk->getPipelineLayout(device), pipelineLayout);
+    ANGLE_TRY_RESULT(programVk->getPipelineLayout(), pipelineLayout);
     ASSERT(pipelineLayout && pipelineLayout->valid());
 
     VkGraphicsPipelineCreateInfo pipelineInfo;
@@ -415,10 +415,12 @@ gl::Error ContextVk::drawArraysInstanced(GLenum mode,
                                          GLsizei count,
                                          GLsizei instanceCount)
 {
-    VkDevice device      = mRenderer->getDevice();
-    const auto &state    = mState.getState();
-    const auto *drawFBO  = state.getDrawFramebuffer();
-    FramebufferVk *vkFBO = GetImplAs<FramebufferVk>(drawFBO);
+    VkDevice device       = mRenderer->getDevice();
+    const auto &state     = mState.getState();
+    const auto *drawFBO   = state.getDrawFramebuffer();
+    FramebufferVk *vkFBO  = GetImplAs<FramebufferVk>(drawFBO);
+    const auto &programGL = state.getProgram();
+    const auto &programVk = GetImplAs<ProgramVk>(programGL);
 
     // Process vertex attributes
     // TODO(jmadill): Caching with dirty bits.
@@ -443,6 +445,15 @@ gl::Error ContextVk::drawArraysInstanced(GLenum mode,
     ANGLE_TRY(vkFBO->beginRenderPass(device, commandBuffer, state));
 
     commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline);
+
+    vk::PipelineLayout *pipelineLayout = nullptr;
+    ANGLE_TRY_RESULT(programVk->getPipelineLayout(), pipelineLayout);
+    std::vector<VkDescriptorSet> *sets = nullptr;
+    ANGLE_TRY_RESULT(programVk->getDescriptorSets(mState.getState()), sets);
+    if (sets != nullptr)
+        commandBuffer->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                          pipelineLayout->getHandle(), 0, *sets);
+
     commandBuffer->bindVertexBuffers(0, vertexHandles, vertexOffsets);
     commandBuffer->draw(count, instanceCount, first, 0);
     commandBuffer->endRenderPass();
@@ -473,10 +484,12 @@ gl::Error ContextVk::drawElementsInstanced(GLenum mode,
                                            GLsizei instanceCount,
                                            const gl::IndexRange &indexRange)
 {
-    VkDevice device      = mRenderer->getDevice();
-    const auto &state    = mState.getState();
-    const auto *drawFBO  = state.getDrawFramebuffer();
-    FramebufferVk *vkFBO = GetImplAs<FramebufferVk>(drawFBO);
+    VkDevice device       = mRenderer->getDevice();
+    const auto &state     = mState.getState();
+    const auto *drawFBO   = state.getDrawFramebuffer();
+    FramebufferVk *vkFBO  = GetImplAs<FramebufferVk>(drawFBO);
+    const auto &programGL = state.getProgram();
+    const auto &programVk = GetImplAs<ProgramVk>(programGL);
 
     // Process vertex attributes
     // TODO(jmadill): Caching with dirty bits.
@@ -508,6 +521,15 @@ gl::Error ContextVk::drawElementsInstanced(GLenum mode,
     ANGLE_TRY(vkFBO->beginRenderPass(device, commandBuffer, state));
 
     commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline);
+
+    vk::PipelineLayout *pipelineLayout = nullptr;
+    ANGLE_TRY_RESULT(programVk->getPipelineLayout(), pipelineLayout);
+    std::vector<VkDescriptorSet> *sets = nullptr;
+    ANGLE_TRY_RESULT(programVk->getDescriptorSets(mState.getState()), sets);
+    if (sets != nullptr)
+        commandBuffer->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                          pipelineLayout->getHandle(), 0, *sets);
+
     commandBuffer->bindVertexBuffers(0, vertexHandles, vertexOffsets);
     commandBuffer->bindIndexBuffer(indexBuffer->getVkBuffer().getHandle(), indexOffset, indexType);
     commandBuffer->drawIndexed(count, instanceCount, 0, 0, 0);
@@ -651,7 +673,7 @@ ShaderImpl *ContextVk::createShader(const gl::ShaderState &state)
 
 ProgramImpl *ContextVk::createProgram(const gl::ProgramState &state)
 {
-    return new ProgramVk(state);
+    return new ProgramVk(this, state);
 }
 
 FramebufferImpl *ContextVk::createFramebuffer(const gl::FramebufferState &state)
@@ -661,7 +683,7 @@ FramebufferImpl *ContextVk::createFramebuffer(const gl::FramebufferState &state)
 
 TextureImpl *ContextVk::createTexture(const gl::TextureState &state)
 {
-    return new TextureVk(state);
+    return new TextureVk(this, state);
 }
 
 RenderbufferImpl *ContextVk::createRenderbuffer()

@@ -16,10 +16,22 @@
 namespace rx
 {
 
+class ContextVk;
+
+struct LinkedSampler
+{
+    LinkedSampler(unsigned int idx) : index(idx), set(0), binding(0) {}
+
+    unsigned int index;
+    std::vector<GLuint> elements;
+    uint32_t set;
+    uint32_t binding;
+};
+
 class ProgramVk : public ProgramImpl
 {
   public:
-    ProgramVk(const gl::ProgramState &state);
+    ProgramVk(ContextImpl *context, const gl::ProgramState &state);
     ~ProgramVk() override;
 
     LinkResult load(const ContextImpl *contextImpl,
@@ -99,12 +111,21 @@ class ProgramVk : public ProgramImpl
 
     const vk::ShaderModule &getLinkedVertexModule() const;
     const vk::ShaderModule &getLinkedFragmentModule() const;
-    gl::ErrorOrResult<vk::PipelineLayout *> getPipelineLayout(VkDevice device);
+    gl::ErrorOrResult<vk::PipelineLayout *> getPipelineLayout();
+    gl::ErrorOrResult<std::vector<VkDescriptorSet> *> getDescriptorSets(const gl::State &state);
 
   private:
+    uint32_t getSamplerSet(const gl::LinkedUniform &uniform);
+    uint32_t getSamplerBinding(const gl::LinkedUniform &uniform);
+
+    ContextVk *mContext;
     vk::ShaderModule mLinkedVertexModule;
     vk::ShaderModule mLinkedFragmentModule;
     vk::PipelineLayout mPipelineLayout;
+    std::vector<LinkedSampler> mLinkedSamplers;
+    std::vector<VkDescriptorSet> mDescSets;
+    std::vector<VkDescriptorSetLayout> mDescSetLayouts;
+    VkDescriptorPool mDescPool;
 };
 
 }  // namespace rx

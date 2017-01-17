@@ -11,14 +11,17 @@
 #define LIBANGLE_RENDERER_VULKAN_TEXTUREVK_H_
 
 #include "libANGLE/renderer/TextureImpl.h"
+#include "libANGLE/renderer/vulkan/renderervk_utils.h"
 
 namespace rx
 {
+class ContextVk;
+class ContextImpl;
 
 class TextureVk : public TextureImpl
 {
   public:
-    TextureVk(const gl::TextureState &state);
+    TextureVk(ContextImpl *context, const gl::TextureState &state);
     ~TextureVk() override;
 
     gl::Error setImage(GLenum target,
@@ -85,6 +88,19 @@ class TextureVk : public TextureImpl
                                         FramebufferAttachmentRenderTarget **rtOut) override;
 
     void syncState(const gl::Texture::DirtyBits &dirtyBits) override;
+    gl::ErrorOrResult<VkDescriptorImageInfo *> getDescriptorImageInfo();
+
+  private:
+    ContextVk *mContext;
+    vk::Sampler mSampler;
+    vk::ImageView mImageView;
+    // TODO(Jie): Remove pointer
+    vk::StagingImage *mStagingImage;
+    VkImageLayout mImageLayout;
+    VkDescriptorImageInfo mImageInfo;
+    VkFormat mFormat;
+    bool mSamplerDirty;
+    bool mImageViewDirty;
 };
 
 }  // namespace rx

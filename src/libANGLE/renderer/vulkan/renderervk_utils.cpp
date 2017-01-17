@@ -10,6 +10,7 @@
 #include "renderervk_utils.h"
 
 #include "common/debug.h"
+#include "common/utilities.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
 namespace rx
@@ -403,6 +404,16 @@ void CommandBuffer::bindIndexBuffer(VkBuffer buffer, VkDeviceSize offset, VkInde
     vkCmdBindIndexBuffer(mHandle, buffer, offset, indexType);
 }
 
+void CommandBuffer::bindDescriptorSets(VkPipelineBindPoint pipelineBindPoint,
+                                       VkPipelineLayout layout,
+                                       uint32_t firstBinding,
+                                       const std::vector<VkDescriptorSet> &sets)
+{
+    ASSERT(valid());
+    vkCmdBindDescriptorSets(mHandle, pipelineBindPoint, layout, firstBinding,
+                            static_cast<uint32_t>(sets.size()), sets.data(), 0, nullptr);
+}
+
 // Image implementation.
 Image::Image() : mCurrentLayout(VK_IMAGE_LAYOUT_UNDEFINED)
 {
@@ -560,6 +571,41 @@ Error ImageView::init(const VkImageViewCreateInfo &createInfo)
 {
     ASSERT(validDevice());
     ANGLE_VK_TRY(vkCreateImageView(mDevice, &createInfo, nullptr, &mHandle));
+    return NoError();
+}
+
+// Sampler implementation.
+Sampler::Sampler()
+{
+}
+
+Sampler::Sampler(VkDevice device) : WrappedObject(device)
+{
+}
+
+Sampler::Sampler(Sampler &&other) : WrappedObject(std::move(other))
+{
+}
+
+Sampler &Sampler::operator=(Sampler &&other)
+{
+    assignOpBase(std::move(other));
+    return *this;
+}
+
+Sampler::~Sampler()
+{
+    if (mHandle != VK_NULL_HANDLE)
+    {
+        ASSERT(validDevice());
+        vkDestroySampler(mDevice, mHandle, nullptr);
+    }
+}
+
+Error Sampler::init(const VkSamplerCreateInfo &createInfo)
+{
+    ASSERT(validDevice());
+    ANGLE_VK_TRY(vkCreateSampler(mDevice, &createInfo, nullptr, &mHandle));
     return NoError();
 }
 
@@ -734,6 +780,7 @@ StagingImage::StagingImage() : mSize(0)
 
 StagingImage::StagingImage(VkDevice device) : mImage(device), mDeviceMemory(device), mSize(0)
 {
+    mDevice = device;
 }
 
 StagingImage::StagingImage(StagingImage &&other)
@@ -801,6 +848,87 @@ Error StagingImage::init(uint32_t queueFamilyIndex,
     ANGLE_TRY(mImage.bindMemory(mDeviceMemory));
 
     mSize = memoryRequirements.size;
+
+    return NoError();
+}
+
+Error StagingImage::init(const VkImageCreateInfo &createInfo,
+                         VkFlags requiredProps,
+                         VkPhysicalDevice physicalDevice)
+{
+    ANGLE_TRY(mImage.init(createInfo));
+
+    VkMemoryRequirements memoryRequirements;
+    mImage.getMemoryRequirements(&memoryRequirements);
+
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memoryProperties);
+    auto memoryTypeIndex = FindMemoryType(memoryProperties, memoryRequirements, requiredProps);
+    ANGLE_VK_CHECK(memoryTypeIndex.valid(), VK_ERROR_INCOMPATIBLE_DRIVER);
+
+    VkMemoryAllocateInfo allocateInfo;
+    allocateInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocateInfo.pNext           = nullptr;
+    allocateInfo.allocationSize  = memoryRequirements.size;
+    allocateInfo.memoryTypeIndex = memoryTypeIndex.value();
+
+    ANGLE_TRY(mDeviceMemory.allocate(allocateInfo));
+    ANGLE_TRY(mImage.bindMemory(mDeviceMemory));
+
+    mSize = memoryRequirements.size;
+
+    return NoError();
+}
+
+Error StagingImage::unpackPixels(const VkImageSubresource &subResource,
+                                 const gl::Extents &size,
+                                 const gl::PixelUnpackState &unpack,
+                                 const uint8_t *pixels)
+{
+    VkSubresourceLayout layout;
+
+    uint8_t *dst;
+    vkGetImageSubresourceLayout(mDevice, mImage.getHandle(), &subResource, &layout);
+    ANGLE_TRY(mDeviceMemory.map(0, mSize, 0, &dst));
+
+    int width  = (unpack.rowLength == 0 ? size.width : unpack.rowLength);
+    int height = (unpack.imageHeight == 0 ? size.height : unpack.imageHeight);
+    // TODO(Jie): Figure out this according to format
+    int bytesPerPixel = 4;
+    int padding       = (bytesPerPixel * width) % unpack.alignment;
+    if (padding > 0)
+        padding       = unpack.alignment - padding;
+    int bytesPerRow   = width * bytesPerPixel + padding;
+    int bytesPerImage = bytesPerRow * height;
+    int skipSize      = 0;
+    if (unpack.skipPixels > 0)
+        skipSize += bytesPerPixel * unpack.skipPixels;
+    if (unpack.skipRows > 0)
+        skipSize += bytesPerRow * unpack.skipRows;
+    if (unpack.skipImages > 0)
+        skipSize += bytesPerImage * unpack.skipImages;
+
+    // TODO(Jie): Handle server side data
+    ASSERT(unpack.pixelBuffer.get() == nullptr);
+
+    const uint8_t *src;
+    src = pixels + skipSize;
+    dst += layout.offset;
+    for (int d = 0; d < size.depth; d++)
+    {
+        const uint8_t *imageSrc = src;
+        uint8_t *imageDst       = dst;
+        for (int h = 0; h < size.height; h++)
+        {
+            memcpy(imageDst, imageSrc, bytesPerPixel * size.width);
+            imageSrc += bytesPerRow;
+            imageDst += layout.rowPitch;
+        }
+        src += bytesPerImage;
+        // TODO(Jie): What about arrayPitch?
+        dst += layout.depthPitch;
+    }
+    mDeviceMemory.unmap();
 
     return NoError();
 }

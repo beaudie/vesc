@@ -21,6 +21,7 @@ struct Box;
 struct Extents;
 struct RasterizerState;
 struct Rectangle;
+struct PixelUnpackState;
 }
 
 namespace rx
@@ -161,6 +162,11 @@ class CommandBuffer final : public WrappedObject<VkCommandBuffer>
 
     void bindIndexBuffer(VkBuffer buffer, VkDeviceSize offset, VkIndexType indexType);
 
+    void bindDescriptorSets(VkPipelineBindPoint pipelineBindPoint,
+                            VkPipelineLayout layout,
+                            uint32_t firstBinding,
+                            const std::vector<VkDescriptorSet> &sets);
+
   private:
     VkCommandPool mCommandPool;
 };
@@ -214,6 +220,20 @@ class ImageView final : public WrappedObject<VkImageView>
     ~ImageView() override;
 
     Error init(const VkImageViewCreateInfo &createInfo);
+};
+
+class Sampler final : public WrappedObject<VkSampler>
+{
+  public:
+    Sampler();
+    explicit Sampler(VkDevice device);
+    Sampler(Sampler &&other);
+
+    Sampler &operator=(Sampler &&other);
+
+    ~Sampler() override;
+
+    Error init(const VkSamplerCreateInfo &createInfo);
 };
 
 class Semaphore final : public WrappedObject<VkSemaphore>
@@ -281,6 +301,15 @@ class StagingImage final : angle::NonCopyable
                    VkFormat format,
                    const gl::Extents &extent);
 
+    vk::Error init(const VkImageCreateInfo &createInfo,
+                   VkFlags requiredProps,
+                   VkPhysicalDevice physicalDevice);
+
+    vk::Error unpackPixels(const VkImageSubresource &subResource,
+                           const gl::Extents &size,
+                           const gl::PixelUnpackState &unpack,
+                           const uint8_t *pixels);
+
     Image &getImage() { return mImage; }
     const Image &getImage() const { return mImage; }
     DeviceMemory &getDeviceMemory() { return mDeviceMemory; }
@@ -288,6 +317,7 @@ class StagingImage final : angle::NonCopyable
     VkDeviceSize getSize() const { return mSize; }
 
   private:
+    VkDevice mDevice;
     Image mImage;
     DeviceMemory mDeviceMemory;
     VkDeviceSize mSize;
