@@ -138,6 +138,8 @@
             # This file is manually included in the layer
             # '<(angle_gen_path)/vulkan/vk_safe_struct.cpp',
             '<(angle_gen_path)/vulkan/vk_safe_struct.h',
+            '<(vulkan_layers_path)/layers/buffer_validation.cpp',
+            '<(vulkan_layers_path)/layers/buffer_validation.h',
             '<(vulkan_layers_path)/layers/core_validation.cpp',
             '<(vulkan_layers_path)/layers/core_validation.h',
             '<(vulkan_layers_path)/layers/descriptor_sets.cpp',
