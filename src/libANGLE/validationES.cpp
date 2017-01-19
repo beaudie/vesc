@@ -2810,7 +2810,11 @@ bool ValidateProgramUniformMatrix(gl::Context *context,
     return true;
 }
 
-bool ValidateUniform(gl::Context *context, GLenum uniformType, GLint location, GLsizei count)
+bool ValidateUniform(gl::Context *context,
+                     GLenum uniformType,
+                     GLint location,
+                     GLsizei count,
+                     const GLint *v)
 {
     // Check for ES3 uniform entry points
     if (VariableComponentType(uniformType) == GL_UNSIGNED_INT &&
@@ -2833,6 +2837,20 @@ bool ValidateUniform(gl::Context *context, GLenum uniformType, GLint location, G
     {
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;
+    }
+
+    if (context->getExtensions().webglCompatibility && samplerUniformCheck)
+    {
+        GLint max;
+        context->getIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max);
+        for (GLsizei i = 0; i < count; ++i)
+        {
+            if (v[i] >= max)
+            {
+                context->handleError(Error(GL_INVALID_VALUE));
+                return false;
+            }
+        }
     }
 
     return true;

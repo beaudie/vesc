@@ -2352,7 +2352,7 @@ void GL_APIENTRY Uniform1iv(GLint location, GLsizei count, const GLint* v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        if (!ValidateUniform(context, GL_INT, location, count))
+        if (!ValidateUniform(context, GL_INT, location, count, v))
         {
             return;
         }
