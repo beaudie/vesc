@@ -962,6 +962,7 @@ class TIntermTraverser : angle::NonCopyable
     void useTemporaryIndex(unsigned int *temporaryIndex);
 
   protected:
+    // Should only be called from traverse*() functions
     void incrementDepth(TIntermNode *current)
     {
         mDepth++;
@@ -969,20 +970,21 @@ class TIntermTraverser : angle::NonCopyable
         mPath.push_back(current);
     }
 
+    // Should only be called from traverse*() functions
     void decrementDepth()
     {
         mDepth--;
         mPath.pop_back();
     }
 
-    TIntermNode *getParentNode() { return mPath.size() == 0 ? NULL : mPath.back(); }
+    TIntermNode *getParentNode() { return mPath.size() <= 1 ? nullptr : mPath[mPath.size() - 2u]; }
 
     // Return the nth ancestor of the node being traversed. getAncestorNode(0) == getParentNode()
     TIntermNode *getAncestorNode(unsigned int n)
     {
-        if (mPath.size() > n)
+        if (mPath.size() > n + 1u)
         {
-            return mPath[mPath.size() - n - 1u];
+            return mPath[mPath.size() - n - 2u];
         }
         return nullptr;
     }
@@ -990,11 +992,6 @@ class TIntermTraverser : angle::NonCopyable
     void pushParentBlock(TIntermBlock *node);
     void incrementParentBlockPos();
     void popParentBlock();
-
-    bool parentNodeIsBlock()
-    {
-        return !mParentBlockStack.empty() && getParentNode() == mParentBlockStack.back().node;
-    }
 
     // To replace a single node with multiple nodes on the parent aggregate node
     struct NodeReplaceWithMultipleEntry
@@ -1086,9 +1083,6 @@ class TIntermTraverser : angle::NonCopyable
     int mDepth;
     int mMaxDepth;
 
-    // All the nodes from root to the current node's parent during traversing.
-    TVector<TIntermNode *> mPath;
-
     bool mInGlobalScope;
 
     // During traversing, save all the changes that need to happen into
@@ -1130,6 +1124,9 @@ class TIntermTraverser : angle::NonCopyable
     };
 
     std::vector<NodeUpdateEntry> mReplacements;
+
+    // All the nodes from root to the current node during traversing.
+    TVector<TIntermNode *> mPath;
 
     // All the code blocks from the root to the current node's parent during traversal.
     std::vector<ParentBlock> mParentBlockStack;
