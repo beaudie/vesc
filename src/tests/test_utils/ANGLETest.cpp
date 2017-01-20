@@ -224,6 +224,11 @@ ANGLETest::~ANGLETest()
 
 void ANGLETest::SetUp()
 {
+    if (!InitTestWindow())
+    {
+        FAIL() << "Failed to create ANGLE test window.";
+    }
+
     angle::g_testPlatformInstance.enableMessages();
     angle::g_testPlatformInstance.setCurrentTest(this);
 
@@ -292,6 +297,8 @@ void ANGLETest::TearDown()
             exit(0);
         }
     }
+
+    DestroyTestWindow();
 }
 
 void ANGLETest::swapBuffers()
@@ -891,17 +898,10 @@ void ANGLETestEnvironment::SetUp()
             initFunc(&angle::g_testPlatformInstance);
         }
     }
-
-    if (!ANGLETest::InitTestWindow())
-    {
-        FAIL() << "Failed to create ANGLE test window.";
-    }
 }
 
 void ANGLETestEnvironment::TearDown()
 {
-    ANGLETest::DestroyTestWindow();
-
     if (mGLESLibrary)
     {
         auto shutdownFunc = reinterpret_cast<ANGLEPlatformShutdownFunc>(
