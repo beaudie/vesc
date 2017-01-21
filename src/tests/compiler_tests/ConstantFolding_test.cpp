@@ -1244,3 +1244,86 @@ TEST_F(ConstantFoldingExpressionTest, FoldDivideByInfinity)
     evaluateFloat(floatString);
     ASSERT_TRUE(constantFoundInAST(0.0f));
 }
+
+// Test that bitfieldExtract is folded correctly.
+TEST_F(ConstantFoldingExpressionTest, FoldBitfieldExtract)
+{
+    const std::string &uintString = "bitfieldExtract(0x00110000u, 16, 5)";
+    evaluateUint(uintString);
+    ASSERT_TRUE(constantFoundInAST(0x11u));
+}
+
+// Test that bitfieldInsert is folded correctly.
+TEST_F(ConstantFoldingExpressionTest, FoldBitfieldInsert)
+{
+    const std::string &uintString = "bitfieldInsert(0x04501701u, 0x11u, 8, 5)";
+    evaluateUint(uintString);
+    ASSERT_TRUE(constantFoundInAST(0x04501101u));
+}
+
+// Test that bitfieldReverse is folded correctly.
+TEST_F(ConstantFoldingExpressionTest, FoldBitfieldReverse)
+{
+    const std::string &uintString = "bitfieldReverse((1u << 4u) | (1u << 7u))";
+    evaluateUint(uintString);
+    uint32_t flag1 = 1u << (31u - 4u);
+    uint32_t flag2 = 1u << (31u - 7u);
+    ASSERT_TRUE(constantFoundInAST(flag1 | flag2));
+}
+
+// Test that bitCount is folded correctly.
+TEST_F(ConstantFoldingExpressionTest, FoldBitCount)
+{
+    const std::string &intString = "bitCount(0x17103121u)";
+    evaluateInt(intString);
+    ASSERT_TRUE(constantFoundInAST(10));
+}
+
+// Test that findLSB is folded correctly.
+TEST_F(ConstantFoldingExpressionTest, FoldFindLSB)
+{
+    const std::string &intString = "findLSB(0x80010000u)";
+    evaluateInt(intString);
+    ASSERT_TRUE(constantFoundInAST(16));
+}
+
+// Test that findLSB is folded correctly when the operand is zero.
+TEST_F(ConstantFoldingExpressionTest, FoldFindLSBZero)
+{
+    const std::string &intString = "findLSB(0u)";
+    evaluateInt(intString);
+    ASSERT_TRUE(constantFoundInAST(-1));
+}
+
+// Test that findMSB is folded correctly.
+TEST_F(ConstantFoldingExpressionTest, FoldFindMSB)
+{
+    const std::string &intString = "findMSB(0x01000008u)";
+    evaluateInt(intString);
+    ASSERT_TRUE(constantFoundInAST(24));
+}
+
+// Test that findMSB is folded correctly when the operand is zero.
+TEST_F(ConstantFoldingExpressionTest, FoldFindMSBZero)
+{
+    const std::string &intString = "findMSB(0u)";
+    evaluateInt(intString);
+    ASSERT_TRUE(constantFoundInAST(-1));
+}
+
+// Test that findMSB is folded correctly for a negative integer.
+// It is supposed to return the index of the most significant bit set to 0.
+TEST_F(ConstantFoldingExpressionTest, FoldFindMSBNegativeInt)
+{
+    const std::string &intString = "findMSB(-8)";
+    evaluateInt(intString);
+    ASSERT_TRUE(constantFoundInAST(2));
+}
+
+// Test that findMSB is folded correctly for -1.
+TEST_F(ConstantFoldingExpressionTest, FoldFindMSBMinusOne)
+{
+    const std::string &intString = "findMSB(-1)";
+    evaluateInt(intString);
+    ASSERT_TRUE(constantFoundInAST(-1));
+}
