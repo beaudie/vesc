@@ -74,6 +74,14 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
     TType *float2 = new TType(EbtFloat, 2);
     TType *float3 = new TType(EbtFloat, 3);
     TType *float4 = new TType(EbtFloat, 4);
+    TType *int1   = new TType(EbtInt);
+    TType *int2   = new TType(EbtInt, 2);
+    TType *int3   = new TType(EbtInt, 3);
+    TType *int4   = new TType(EbtInt, 4);
+    TType *uint1  = new TType(EbtUInt);
+    TType *uint2  = new TType(EbtUInt, 2);
+    TType *uint3  = new TType(EbtUInt, 3);
+    TType *uint4  = new TType(EbtUInt, 4);
 
     emu->addEmulatedFunction(EOpMod, float1, float1,
                              "float webgl_mod_emu(float x, float y)\n"
@@ -315,8 +323,6 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
                              "    return (y << 16) | x;\n"
                              "}\n");
 
-    TType *uint1 = new TType(EbtUInt);
-
     emu->addEmulatedFunction(EOpUnpackSnorm2x16, uint1,
                              "float webgl_fromSnorm(in uint x) {\n"
                              "    int xi = asint(x & 0x7fffu) - asint(x & 0x8000u);\n"
@@ -538,6 +544,242 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
                              "{\n"
                              "    return a ? y : x;\n"
                              "}\n");
+
+    emu->addEmulatedFunction(
+        EOpBitfieldExtract, uint1, int1, int1,
+        "uint webgl_bitfieldExtract_emu(uint value, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return 0u;\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint mask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    return (value & mask) >> offset;\n"
+        "}\n");
+    emu->addEmulatedFunction(
+        EOpBitfieldExtract, uint2, int1, int1,
+        "uint2 webgl_bitfieldExtract_emu(uint2 value, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return uint2(0u, 0u);\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint mask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    return (value & mask) >> offset;\n"
+        "}\n");
+    emu->addEmulatedFunction(
+        EOpBitfieldExtract, uint3, int1, int1,
+        "uint3 webgl_bitfieldExtract_emu(uint3 value, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return uint3(0u, 0u, 0u);\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint mask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    return (value & mask) >> offset;\n"
+        "}\n");
+    emu->addEmulatedFunction(
+        EOpBitfieldExtract, uint4, int1, int1,
+        "uint4 webgl_bitfieldExtract_emu(uint4 value, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return uint4(0u, 0u, 0u, 0u);\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint mask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    return (value & mask) >> offset;\n"
+        "}\n");
+
+    emu->addEmulatedFunction(
+        EOpBitfieldExtract, int1, int1, int1,
+        "int webgl_bitfieldExtract_emu(int value, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return 0;\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint mask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    uint resultUnsigned = (asuint(value) & mask) >> offset;\n"
+        "    if (bits != 32 && (resultUnsigned & maskMsb) != 0)\n"
+        "    {\n"
+        "        uint higherBitsMask = ((1u << (32 - bits)) - 1u) << bits;\n"
+        "        resultUnsigned |= higherBitsMask;\n"
+        "    }\n"
+        "    return asint(resultUnsigned);\n"
+        "}\n");
+    emu->addEmulatedFunction(
+        EOpBitfieldExtract, int2, int1, int1,
+        "int2 webgl_bitfieldExtract_emu(int2 value, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return int2(0, 0);\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint mask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    uint2 resultUnsigned = (asuint(value) & mask) >> offset;\n"
+        "    if (bits != 32)\n"
+        "    {\n"
+        "        uint higherBitsMask = ((1u << (32 - bits)) - 1u) << bits;\n"
+        "        resultUnsigned |= ((resultUnsigned & maskMsb) >> (bits - 1)) * higherBitsMask;\n"
+        "    }\n"
+        "    return asint(resultUnsigned);\n"
+        "}\n");
+    emu->addEmulatedFunction(
+        EOpBitfieldExtract, int3, int1, int1,
+        "int3 webgl_bitfieldExtract_emu(int3 value, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return int3(0, 0, 0);\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint mask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    uint3 resultUnsigned = (asuint(value) & mask) >> offset;\n"
+        "    if (bits != 32)\n"
+        "    {\n"
+        "        uint higherBitsMask = ((1u << (32 - bits)) - 1u) << bits;\n"
+        "        resultUnsigned |= ((resultUnsigned & maskMsb) >> (bits - 1)) * higherBitsMask;\n"
+        "    }\n"
+        "    return asint(resultUnsigned);\n"
+        "}\n");
+    emu->addEmulatedFunction(
+        EOpBitfieldExtract, int4, int1, int1,
+        "int4 webgl_bitfieldExtract_emu(int4 value, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return int4(0, 0, 0, 0);\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint mask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    uint4 resultUnsigned = (asuint(value) & mask) >> offset;\n"
+        "    if (bits != 32)\n"
+        "    {\n"
+        "        uint higherBitsMask = ((1u << (32 - bits)) - 1u) << bits;\n"
+        "        resultUnsigned |= ((resultUnsigned & maskMsb) >> (bits - 1)) * higherBitsMask;\n"
+        "    }\n"
+        "    return asint(resultUnsigned);\n"
+        "}\n");
+
+    emu->addEmulatedFunction(
+        EOpBitfieldInsert, uint1, uint1, int1, int1,
+        "uint webgl_bitfieldInsert_emu(uint base, uint insert, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return base;\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint insertMask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    uint baseMask = ~insertMask;\n"
+        "    return (base & baseMask) | ((insert << offset) & insertMask);\n"
+        "}\n");
+    emu->addEmulatedFunction(
+        EOpBitfieldInsert, uint2, uint2, int1, int1,
+        "uint2 webgl_bitfieldInsert_emu(uint2 base, uint2 insert, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return base;\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint insertMask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    uint baseMask = ~insertMask;\n"
+        "    return (base & baseMask) | ((insert << offset) & insertMask);\n"
+        "}\n");
+    emu->addEmulatedFunction(
+        EOpBitfieldInsert, uint3, uint3, int1, int1,
+        "uint3 webgl_bitfieldInsert_emu(uint3 base, uint3 insert, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return base;\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint insertMask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    uint baseMask = ~insertMask;\n"
+        "    return (base & baseMask) | ((insert << offset) & insertMask);\n"
+        "}\n");
+    emu->addEmulatedFunction(
+        EOpBitfieldInsert, uint4, uint4, int1, int1,
+        "uint4 webgl_bitfieldInsert_emu(uint4 base, uint4 insert, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return base;\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint insertMask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    uint baseMask = ~insertMask;\n"
+        "    return (base & baseMask) | ((insert << offset) & insertMask);\n"
+        "}\n");
+
+    emu->addEmulatedFunction(
+        EOpBitfieldInsert, int1, int1, int1, int1,
+        "int webgl_bitfieldInsert_emu(int base, int insert, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return base;\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint insertMask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    uint baseMask = ~insertMask;\n"
+        "    uint resultUnsigned = (asuint(base) & baseMask) | ((asuint(insert) << offset) & "
+        "insertMask);\n"
+        "    return asint(resultUnsigned);\n"
+        "}\n");
+    emu->addEmulatedFunction(
+        EOpBitfieldInsert, int2, int2, int1, int1,
+        "int2 webgl_bitfieldInsert_emu(int2 base, int2 insert, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return base;\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint insertMask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    uint baseMask = ~insertMask;\n"
+        "    uint2 resultUnsigned = (asuint(base) & baseMask) | ((asuint(insert) << offset) & "
+        "insertMask);\n"
+        "    return asint(resultUnsigned);\n"
+        "}\n");
+    emu->addEmulatedFunction(
+        EOpBitfieldInsert, int3, int3, int1, int1,
+        "int3 webgl_bitfieldInsert_emu(int3 base, int3 insert, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return base;\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint insertMask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    uint baseMask = ~insertMask;\n"
+        "    uint3 resultUnsigned = (asuint(base) & baseMask) | ((asuint(insert) << offset) & "
+        "insertMask);\n"
+        "    return asint(resultUnsigned);\n"
+        "}\n");
+    emu->addEmulatedFunction(
+        EOpBitfieldInsert, int4, int4, int1, int1,
+        "int4 webgl_bitfieldInsert_emu(int4 base, int4 insert, int offset, int bits)\n"
+        "{\n"
+        "    if (offset < 0 || bits <= 0 || offset >= 32 || bits > 32 || offset + bits > 32)\n"
+        "    {\n"
+        "        return base;\n"
+        "    }\n"
+        "    uint maskMsb = (1u << (bits - 1));\n"
+        "    uint insertMask = ((maskMsb - 1u) | maskMsb) << offset;\n"
+        "    uint baseMask = ~insertMask;\n"
+        "    uint4 resultUnsigned = (asuint(base) & baseMask) | ((asuint(insert) << offset) & "
+        "insertMask);\n"
+        "    return asint(resultUnsigned);\n"
+        "}\n");
 }
 
 }  // namespace sh
