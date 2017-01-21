@@ -42,6 +42,7 @@ class BuiltInFunctionEmulator
         FunctionId(TOperator op, const TType *param);
         FunctionId(TOperator op, const TType *param1, const TType *param2);
         FunctionId(TOperator op, const TType *param1, const TType *param2, const TType *param3);
+        FunctionId(TOperator op, const TType *param1, const TType *param2, const TType *param3, const TType *param4);
 
         FunctionId(const FunctionId &) = default;
         FunctionId &operator=(const FunctionId &) = default;
@@ -60,6 +61,7 @@ class BuiltInFunctionEmulator
         const TType *mParam1;
         const TType *mParam2;
         const TType *mParam3;
+        const TType *mParam4;
     };
 
     // Add functions that need to be emulated.
@@ -75,6 +77,12 @@ class BuiltInFunctionEmulator
                                    const TType *param2,
                                    const TType *param3,
                                    const char *emulatedFunctionDefinition);
+    FunctionId addEmulatedFunction(TOperator op,
+                                  const TType *param1,
+                                  const TType *param2,
+                                  const TType *param3,
+                                  const TType *param4,
+                                  const char *emulatedFunctionDefinition);
 
     FunctionId addEmulatedFunctionWithDependency(FunctionId dependency,
                                                  TOperator op,
