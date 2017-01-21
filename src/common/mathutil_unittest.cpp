@@ -207,4 +207,51 @@ TEST(MathUtilTest, CheckedRoundUpInvalid)
     ASSERT_FALSE(checkedLimit.IsValid());
 }
 
+TEST(MathUtilTest, BitfieldReverse)
+{
+    ASSERT_EQ(0u, gl::BitfieldReverse(0u));
+    ASSERT_EQ(0x80000000u, gl::BitfieldReverse(1u));
+    ASSERT_EQ(0x1u, gl::BitfieldReverse(0x80000000u));
+    uint32_t bits     = (1u << 4u) | (1u << 7u);
+    uint32_t reversed = (1u << (31u - 4u)) | (1u << (31u - 7u));
+    ASSERT_EQ(reversed, gl::BitfieldReverse(bits));
+}
+
+TEST(MathUtilTest, BitCount)
+{
+    ASSERT_EQ(0, gl::BitCount(0u));
+    ASSERT_EQ(32, gl::BitCount(0xFFFFFFFFu));
+    ASSERT_EQ(10, gl::BitCount(0x17103121u));
+}
+
+TEST(MathUtilTest, ScanForward)
+{
+    ASSERT_EQ(0ul, gl::ScanForward(1ul));
+    ASSERT_EQ(16ul, gl::ScanForward(0x80010000ul));
+    ASSERT_EQ(31ul, gl::ScanForward(0x80000000ul));
+}
+
+TEST(MathUtilTest, ScanReverse)
+{
+    ASSERT_EQ(0ul, gl::ScanReverse(1ul));
+    ASSERT_EQ(16ul, gl::ScanReverse(0x00010030ul));
+    ASSERT_EQ(31ul, gl::ScanReverse(0x80000000ul));
+}
+
+TEST(MathUtilTest, FindLSB)
+{
+    ASSERT_EQ(-1, gl::FindLSB(0u));
+    ASSERT_EQ(0, gl::FindLSB(1u));
+    ASSERT_EQ(16, gl::FindLSB(0x80010000u));
+    ASSERT_EQ(31, gl::FindLSB(0x80000000u));
+}
+
+TEST(MathUtilTest, FindMSB)
+{
+    ASSERT_EQ(-1, gl::FindMSB(0u));
+    ASSERT_EQ(0, gl::FindMSB(1u));
+    ASSERT_EQ(16, gl::FindMSB(0x00010030u));
+    ASSERT_EQ(31, gl::FindMSB(0x80000000u));
+}
+
 }  // anonymous namespace
