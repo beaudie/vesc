@@ -1473,6 +1473,20 @@ bool OutputHLSL::visitUnary(Visit visit, TIntermUnary *node)
         case EOpLogicalNotComponentWise:
             outputTriplet(out, visit, "(!", "", ")");
             break;
+        case EOpBitfieldReverse:
+            outputTriplet(out, visit, "reversebits(", "", ")");
+            break;
+        case EOpBitCount:
+            outputTriplet(out, visit, "countbits(", "", ")");
+            break;
+        case EOpFindLSB:
+            // TODO: Unclear from the docs what this returns for 0.
+            outputTriplet(out, visit, "firstbitlow(", "", ")");
+            break;
+        case EOpFindMSB:
+            // TODO: Unclear from the docs what this returns for 0.
+            outputTriplet(out, visit, "firstbithigh(", "", ")");
+            break;
         default:
             UNREACHABLE();
     }
