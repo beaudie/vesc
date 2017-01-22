@@ -452,8 +452,11 @@ TIntermTyped *TIntermTyped::CreateZero(const TType &type)
                     u[i].setBConst(false);
                     break;
                 default:
-                    UNREACHABLE();
-                    return nullptr;
+                    // CreateZero is called by ParseContext so it is possible it is called with
+                    // non-basic types. It still needs to return something a bit sensible so that
+                    // ParseContext can keep going.
+                    u[i].setIConst(0);
+                    break;
             }
         }
 
