@@ -2076,6 +2076,7 @@ void ProgramD3D::setUniform(GLint location, GLsizei countIn, const T *v, GLenum 
 {
     const int components        = gl::VariableComponentCount(targetUniformType);
     const GLenum targetBoolType = gl::VariableBoolVectorType(targetUniformType);
+    ASSERT(targetBoolType != GL_NONE);
 
     D3DUniform *targetUniform = getD3DUniformFromLocation(location);
 

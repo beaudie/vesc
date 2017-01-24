@@ -205,7 +205,6 @@ GLenum VariableBoolVectorType(GLenum type)
         return GL_BOOL_VEC4;
 
       default:
-        UNREACHABLE();
         return GL_NONE;
     }
 }
