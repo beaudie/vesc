@@ -1358,6 +1358,123 @@ bool ValidateGetInternalFormativBase(Context *context,
     return true;
 }
 
+bool ValidateUniformCommonBase(gl::Context *context,
+                               gl::Program *program,
+                               GLint location,
+                               GLsizei count,
+                               const LinkedUniform **uniformOut)
+{
+    // TODO(Jiajia): Add image uniform check in future.
+    if (count < 0)
+    {
+        context->handleError(Error(GL_INVALID_VALUE));
+        return false;
+    }
+
+    if (!program || !program->isLinked())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    if (location == -1)
+    {
+        // Silently ignore the uniform command
+        return false;
+    }
+
+    const auto &uniformLocations = program->getUniformLocations();
+    size_t castedLocation = static_cast<size_t>(location);
+    if (castedLocation >= uniformLocations.size())
+    {
+        context->handleError(Error(GL_INVALID_OPERATION, "Invalid uniform location"));
+        return false;
+    }
+
+    const auto &uniformLocation = uniformLocations[castedLocation];
+    if (uniformLocation.ignored)
+    {
+        // Silently ignore the uniform command
+        return false;
+    }
+
+    if (!uniformLocation.used)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    const auto &uniform = program->getUniformByIndex(uniformLocation.index);
+
+    // attempting to write an array to a non-array uniform is an INVALID_OPERATION
+    if (!uniform.isArray() && count > 1)
+    {
+        context->handleError(Error(GL_INVALID_OPERATION));
+        return false;
+    }
+
+    *uniformOut = &uniform;
+    return true;
+}
+
+bool ValidateUniform1ivValue(gl::Context *context,
+                             GLenum uniformType,
+                             GLsizei count,
+                             const GLint *value)
+{
+    // Value type is GL_INT, because we only get here from glUniform1i{v}.
+    // It is compatible with INT or BOOL.
+    // We do this cheap test first, for a little extra speed.
+    if (GL_INT == uniformType || GL_BOOL == uniformType)
+    {
+        return true;
+    }
+
+    if (IsSamplerType(uniformType))
+    {
+        // Check that the values are in range.
+        GLint max;
+        context->getIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max);
+        for (GLsizei i = 0; i < count; ++i)
+        {
+            if (value[i] < 0 || value[i] >= max)
+            {
+                context->handleError(Error(GL_INVALID_VALUE, "sampler uniform value out of range"));
+                return false;
+            }
+        }
+        return true;
+    }
+
+    context->handleError(Error(GL_INVALID_OPERATION, "wrong type of value for uniform"));
+    return false;
+}
+
+bool ValidateUniformValue(gl::Context *context, GLenum valueType, GLenum uniformType)
+{
+    // Check that the value type is compatible with uniform type.
+    // We do the cheaper test first, for a little extra speed.
+    if (valueType == uniformType || VariableBoolVectorType(valueType) == uniformType)
+    {
+        return true;
+    }
+
+    context->handleError(Error(GL_INVALID_OPERATION, "wrong type of value for uniform"));
+    return false;
+}
+
+bool ValidateUniformMatrixValue(gl::Context *context, GLenum valueType, GLenum uniformType)
+{
+    // Check that the value type is compatible with uniform type.
+    if (valueType == uniformType)
+    {
+        return true;
+    }
+
+    context->handleError(Error(GL_INVALID_OPERATION, "wrong type of value for uniform"));
+    return false;
+}
+
 }  // anonymous namespace
 
 bool ValidTextureTarget(const ValidationContext *context, GLenum target)
@@ -2689,68 +2806,8 @@ bool ValidateGetQueryObjectui64vRobustANGLE(Context *context,
     return true;
 }
 
-static bool ValidateUniformCommonBase(gl::Context *context,
-                                      gl::Program *program,
-                                      GLenum targetUniformType,
-                                      GLint location,
-                                      GLsizei count,
-                                      const LinkedUniform **uniformOut)
-{
-    // TODO(Jiajia): Add image uniform check in future.
-    if (count < 0)
-    {
-        context->handleError(Error(GL_INVALID_VALUE));
-        return false;
-    }
-
-    if (!program || !program->isLinked())
-    {
-        context->handleError(Error(GL_INVALID_OPERATION));
-        return false;
-    }
-
-    if (location == -1)
-    {
-        // Silently ignore the uniform command
-        return false;
-    }
-
-    const auto &uniformLocations = program->getUniformLocations();
-    size_t castedLocation = static_cast<size_t>(location);
-    if (castedLocation >= uniformLocations.size())
-    {
-        context->handleError(Error(GL_INVALID_OPERATION, "Invalid uniform location"));
-        return false;
-    }
-
-    const auto &uniformLocation = uniformLocations[castedLocation];
-    if (uniformLocation.ignored)
-    {
-        // Silently ignore the uniform command
-        return false;
-    }
-
-    if (!uniformLocation.used)
-    {
-        context->handleError(Error(GL_INVALID_OPERATION));
-        return false;
-    }
-
-    const auto &uniform = program->getUniformByIndex(uniformLocation.index);
-
-    // attempting to write an array to a non-array uniform is an INVALID_OPERATION
-    if (!uniform.isArray() && count > 1)
-    {
-        context->handleError(Error(GL_INVALID_OPERATION));
-        return false;
-    }
-
-    *uniformOut = &uniform;
-    return true;
-}
-
 bool ValidateProgramUniform(gl::Context *context,
-                            GLenum uniformType,
+                            GLenum valueType,
                             GLuint program,
                             GLint location,
                             GLsizei count)
@@ -2764,24 +2821,31 @@ bool ValidateProgramUniform(gl::Context *context,
 
     const LinkedUniform *uniform = nullptr;
     gl::Program *programObject   = GetValidProgram(context, program);
-    if (!ValidateUniformCommonBase(context, programObject, uniformType, location, count, &uniform))
-    {
-        return false;
-    }
+    return ValidateUniformCommonBase(context, programObject, location, count, &uniform) &&
+           ValidateUniformValue(context, valueType, uniform->type);
+}
 
-    GLenum targetBoolType    = VariableBoolVectorType(uniformType);
-    bool samplerUniformCheck = (IsSamplerType(uniform->type) && uniformType == GL_INT);
-    if (!samplerUniformCheck && uniformType != uniform->type && targetBoolType != uniform->type)
+bool ValidateProgramUniform1iv(gl::Context *context,
+                               GLuint program,
+                               GLint location,
+                               GLsizei count,
+                               const GLint *value)
+{
+    // Check for ES31 program uniform entry points
+    if (context->getClientVersion() < Version(3, 1))
     {
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;
     }
 
-    return true;
+    const LinkedUniform *uniform = nullptr;
+    gl::Program *programObject   = GetValidProgram(context, program);
+    return ValidateUniformCommonBase(context, programObject, location, count, &uniform) &&
+           ValidateUniform1ivValue(context, uniform->type, count, value);
 }
 
 bool ValidateProgramUniformMatrix(gl::Context *context,
-                                  GLenum matrixType,
+                                  GLenum valueType,
                                   GLuint program,
                                   GLint location,
                                   GLsizei count,
@@ -2796,57 +2860,42 @@ bool ValidateProgramUniformMatrix(gl::Context *context,
 
     const LinkedUniform *uniform = nullptr;
     gl::Program *programObject   = GetValidProgram(context, program);
-    if (!ValidateUniformCommonBase(context, programObject, matrixType, location, count, &uniform))
-    {
-        return false;
-    }
-
-    if (uniform->type != matrixType)
-    {
-        context->handleError(Error(GL_INVALID_OPERATION));
-        return false;
-    }
-
-    return true;
+    return ValidateUniformCommonBase(context, programObject, location, count, &uniform) &&
+           ValidateUniformMatrixValue(context, valueType, uniform->type);
 }
 
-bool ValidateUniform(gl::Context *context, GLenum uniformType, GLint location, GLsizei count)
+bool ValidateUniform(gl::Context *context, GLenum valueType, GLint location, GLsizei count)
 {
     // Check for ES3 uniform entry points
-    if (VariableComponentType(uniformType) == GL_UNSIGNED_INT &&
-        context->getClientMajorVersion() < 3)
+    if (VariableComponentType(valueType) == GL_UNSIGNED_INT && context->getClientMajorVersion() < 3)
     {
         context->handleError(Error(GL_INVALID_OPERATION));
         return false;
     }
 
     const LinkedUniform *uniform = nullptr;
-    gl::Program *program         = context->getGLState().getProgram();
-    if (!ValidateUniformCommonBase(context, program, uniformType, location, count, &uniform))
-    {
-        return false;
-    }
+    gl::Program *programObject   = context->getGLState().getProgram();
+    return ValidateUniformCommonBase(context, programObject, location, count, &uniform) &&
+           ValidateUniformValue(context, valueType, uniform->type);
+}
 
-    GLenum targetBoolType    = VariableBoolVectorType(uniformType);
-    bool samplerUniformCheck = (IsSamplerType(uniform->type) && uniformType == GL_INT);
-    if (!samplerUniformCheck && uniformType != uniform->type && targetBoolType != uniform->type)
-    {
-        context->handleError(Error(GL_INVALID_OPERATION));
-        return false;
-    }
-
-    return true;
+bool ValidateUniform1iv(gl::Context *context, GLint location, GLsizei count, const GLint *value)
+{
+    const LinkedUniform *uniform = nullptr;
+    gl::Program *programObject   = context->getGLState().getProgram();
+    return ValidateUniformCommonBase(context, programObject, location, count, &uniform) &&
+           ValidateUniform1ivValue(context, uniform->type, count, value);
 }
 
 bool ValidateUniformMatrix(gl::Context *context,
-                           GLenum matrixType,
+                           GLenum valueType,
                            GLint location,
                            GLsizei count,
                            GLboolean transpose)
 {
     // Check for ES3 uniform entry points
-    int rows = VariableRowCount(matrixType);
-    int cols = VariableColumnCount(matrixType);
+    int rows = VariableRowCount(valueType);
+    int cols = VariableColumnCount(valueType);
     if (rows != cols && context->getClientMajorVersion() < 3)
     {
         context->handleError(Error(GL_INVALID_OPERATION));
@@ -2860,19 +2909,9 @@ bool ValidateUniformMatrix(gl::Context *context,
     }
 
     const LinkedUniform *uniform = nullptr;
-    gl::Program *program         = context->getGLState().getProgram();
-    if (!ValidateUniformCommonBase(context, program, matrixType, location, count, &uniform))
-    {
-        return false;
-    }
-
-    if (uniform->type != matrixType)
-    {
-        context->handleError(Error(GL_INVALID_OPERATION));
-        return false;
-    }
-
-    return true;
+    gl::Program *programObject   = context->getGLState().getProgram();
+    return ValidateUniformCommonBase(context, programObject, valueType, count, &uniform) &&
+           ValidateUniformMatrixValue(context, valueType, uniform->type);
 }
 
 bool ValidateStateQuery(ValidationContext *context,
