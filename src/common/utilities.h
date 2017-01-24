@@ -26,6 +26,7 @@ GLenum VariableComponentType(GLenum type);
 size_t VariableComponentSize(GLenum type);
 size_t VariableInternalSize(GLenum type);
 size_t VariableExternalSize(GLenum type);
+GLenum VariableAsBool(GLenum type);
 GLenum VariableBoolVectorType(GLenum type);
 int VariableRowCount(GLenum type);
 int VariableColumnCount(GLenum type);

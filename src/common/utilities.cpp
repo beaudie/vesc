@@ -183,7 +183,7 @@ size_t VariableExternalSize(GLenum type)
     return VariableComponentSize(VariableComponentType(type)) * VariableComponentCount(type);
 }
 
-GLenum VariableBoolVectorType(GLenum type)
+GLenum VariableAsBool(GLenum type)
 {
     switch (type)
     {
@@ -205,9 +205,18 @@ GLenum VariableBoolVectorType(GLenum type)
         return GL_BOOL_VEC4;
 
       default:
-        UNREACHABLE();
         return GL_NONE;
     }
+}
+
+GLenum VariableBoolVectorType(GLenum type)
+{
+    GLenum t = VariableAsBool(type);
+    if (t == GL_NONE)
+    {
+        UNREACHABLE();
+    }
+    return t;
 }
 
 int VariableRowCount(GLenum type)
