@@ -35,10 +35,17 @@ class ANGLE_EXPORT RNG
     float randomFloat();
     float randomFloatBetween(float min, float max);
     float randomNegativeOneToOne();
+    std::vector<uint8_t> randomUByteVector(size_t size);
 
   private:
     std::default_random_engine mGenerator;
 };
+
+inline std::vector<uint8_t> RandomVector(size_t size)
+{
+    RNG rng;
+    return rng.randomUByteVector(size);
+}
 
 }  // namespace angle
 
