@@ -429,7 +429,7 @@ bool canRoundFloat(const TType &type)
 
 TIntermAggregate *createInternalFunctionCallNode(TString name, TIntermNode *child)
 {
-    TIntermAggregate *callNode = new TIntermAggregate(EOpFunctionCall);
+    TIntermAggregate *callNode = new TIntermAggregate(EOpCallInternalFunctionWithRawImplementation);
     TName nameObj(TFunction::mangleName(name));
     nameObj.setInternal(true);
     callNode->getFunctionSymbolInfo()->setNameObj(nameObj);
@@ -638,17 +638,16 @@ bool EmulatePrecision::visitAggregate(Visit visit, TIntermAggregate *node)
     switch (node->getOp())
     {
         case EOpConstructStruct:
+        case EOpCallFunctionInAST:
+            // User-defined function return values are not rounded, this relies on that
+            // calculations producing the value were rounded.
             break;
-        case EOpFunctionCall:
+        case EOpCallBuiltInFunction:
         {
-            // Function call.
             if (visit == PreVisit)
             {
-                // User-defined function return values are not rounded, this relies on that
-                // calculations producing the value were rounded.
                 TIntermNode *parent = getParentNode();
-                if (canRoundFloat(node->getType()) && !isInFunctionMap(node) &&
-                    parentUsesResult(parent, node))
+                if (canRoundFloat(node->getType()) && parentUsesResult(parent, node))
                 {
                     TIntermNode *replacement = createRoundingFunctionCallNode(node);
                     queueReplacement(node, replacement, OriginalNode::BECOMES_CHILD);
