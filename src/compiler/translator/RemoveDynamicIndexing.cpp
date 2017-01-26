@@ -349,9 +349,8 @@ TIntermAggregate *CreateIndexFunctionCall(TIntermBinary *node,
                                           TIntermTyped *index)
 {
     ASSERT(node->getOp() == EOpIndexIndirect);
-    TIntermAggregate *indexingCall = new TIntermAggregate(EOpFunctionCall);
+    TIntermAggregate *indexingCall = new TIntermAggregate(EOpCallFunctionInAST);
     indexingCall->setLine(node->getLine());
-    indexingCall->setUserDefined();
     indexingCall->getFunctionSymbolInfo()->setNameObj(
         GetIndexFunctionName(indexedNode->getType(), false));
     indexingCall->getSequence()->push_back(indexedNode);
