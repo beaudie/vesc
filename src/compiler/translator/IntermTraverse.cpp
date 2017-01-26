@@ -235,7 +235,7 @@ void TLValueTrackingTraverser::addToFunctionMap(const TName &name, TIntermSequen
 
 bool TLValueTrackingTraverser::isInFunctionMap(const TIntermAggregate *callNode) const
 {
-    ASSERT(callNode->getOp() == EOpFunctionCall);
+    ASSERT(callNode->getOp() == EOpCallFunctionInAST);
     return (mFunctionMap.find(callNode->getFunctionSymbolInfo()->getNameObj()) !=
             mFunctionMap.end());
 }
@@ -641,19 +641,7 @@ void TLValueTrackingTraverser::traverseAggregate(TIntermAggregate *node)
 
     if (visit)
     {
-        bool inFunctionMap = false;
-        if (node->getOp() == EOpFunctionCall)
-        {
-            inFunctionMap = isInFunctionMap(node);
-            if (!inFunctionMap)
-            {
-                // The function is not user-defined - it is likely built-in texture function.
-                // Assume that those do not have out parameters.
-                setInFunctionCallOutParameter(false);
-            }
-        }
-
-        if (inFunctionMap)
+        if (node->getOp() == EOpCallFunctionInAST)
         {
             TIntermSequence *params             = getFunctionParameters(node);
             TIntermSequence::iterator paramIter = params->begin();
@@ -680,7 +668,7 @@ void TLValueTrackingTraverser::traverseAggregate(TIntermAggregate *node)
             // Find the built-in function corresponding to this op so that we can determine the
             // in/out qualifiers of its parameters.
             TFunction *builtInFunc = nullptr;
-            if (!node->isConstructor() && node->getOp() != EOpFunctionCall)
+            if (!node->isFunctionCall() && !node->isConstructor())
             {
                 builtInFunc = mSymbolTable.findBuiltInOp(node, mShaderVersion);
             }
@@ -689,6 +677,8 @@ void TLValueTrackingTraverser::traverseAggregate(TIntermAggregate *node)
 
             for (auto *child : *sequence)
             {
+                // This assumes that raw functions called with
+                // EOpCallInternalFunctionWithRawImplementation don't have out parameters.
                 TQualifier qualifier = EvqIn;
                 if (builtInFunc != nullptr)
                     qualifier = builtInFunc->getParam(paramIndex).type->getQualifier();
