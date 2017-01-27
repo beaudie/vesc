@@ -272,6 +272,32 @@ bool TIntermAggregateBase::insertChildNodes(TIntermSequence::size_type position,
     return true;
 }
 
+void TIntermAggregate::setTypePrecisionAndQualifier(const TType &type)
+{
+    setType(type);
+    mType.setQualifier(EvqTemporary);
+    if (!isFunctionCall())
+    {
+        if (isConstructor())
+        {
+            // Structs should not be precision qualified, the individual members may be.
+            // Built-in types on the other hand should be precision qualified.
+            if (mOp != EOpConstructStruct)
+            {
+                setPrecisionFromChildren();
+            }
+        }
+        else
+        {
+            setPrecisionForBuiltInOp();
+        }
+        if (areChildrenConstQualified())
+        {
+            mType.setQualifier(EvqConst);
+        }
+    }
+}
+
 bool TIntermAggregate::areChildrenConstQualified()
 {
     for (TIntermNode *&child : mSequence)
@@ -322,10 +348,12 @@ bool TIntermAggregate::setPrecisionForSpecialBuiltInOp()
     {
         case EOpBitfieldExtract:
             mType.setPrecision(mSequence[0]->getAsTyped()->getPrecision());
+            mGotPrecisionFromChildren = true;
             return true;
         case EOpBitfieldInsert:
             mType.setPrecision(GetHigherPrecision(mSequence[0]->getAsTyped()->getPrecision(),
                                                   mSequence[1]->getAsTyped()->getPrecision()));
+            mGotPrecisionFromChildren = true;
             return true;
         case EOpUaddCarry:
         case EOpUsubBorrow:
@@ -492,8 +520,7 @@ TIntermTyped *TIntermTyped::CreateZero(const TType &type)
         return node;
     }
 
-    TIntermAggregate *constructor = new TIntermAggregate(sh::TypeToConstructorOperator(type));
-    constructor->setType(constType);
+    TIntermSequence *arguments = new TIntermSequence();
 
     if (type.isArray())
     {
@@ -503,7 +530,7 @@ TIntermTyped *TIntermTyped::CreateZero(const TType &type)
         size_t arraySize = type.getArraySize();
         for (size_t i = 0; i < arraySize; ++i)
         {
-            constructor->getSequence()->push_back(CreateZero(elementType));
+            arguments->push_back(CreateZero(elementType));
         }
     }
     else
@@ -513,11 +540,11 @@ TIntermTyped *TIntermTyped::CreateZero(const TType &type)
         TStructure *structure = type.getStruct();
         for (const auto &field : structure->fields())
         {
-            constructor->getSequence()->push_back(CreateZero(*field->type()));
+            arguments->push_back(CreateZero(*field->type()));
         }
     }
 
-    return constructor;
+    return new TIntermAggregate(constType, sh::TypeToConstructorOperator(type), arguments);
 }
 
 // static
@@ -1303,8 +1330,7 @@ TIntermTyped *TIntermAggregate::fold(TDiagnostics *diagnostics)
         constArray = TIntermConstantUnion::FoldAggregateBuiltIn(this, diagnostics);
 
     // Nodes may be constant folded without being qualified as constant.
-    TQualifier resultQualifier = areChildrenConstQualified() ? EvqConst : EvqTemporary;
-    return CreateFoldedNode(constArray, this, resultQualifier);
+    return CreateFoldedNode(constArray, this, getQualifier());
 }
 
 //
