@@ -58,7 +58,7 @@ class TransformFeedback;
 class Context final : public ValidationContext
 {
   public:
-    Context(rx::EGLImplFactory *implFactory,
+    Context(const egl::Display *display,
             const egl::Config *config,
             const Context *shareContext,
             const egl::AttributeMap &attribs);
@@ -641,7 +641,7 @@ class Context final : public ValidationContext
     void initVersionStrings();
     void initExtensionStrings();
 
-    void initCaps(bool webGLContext);
+    void initCaps(bool webGLContext, const egl::DisplayExtensions &displayExtensions);
     void updateCaps();
     void initWorkarounds();
 
