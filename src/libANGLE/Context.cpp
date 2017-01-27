@@ -258,7 +258,8 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mContextLostForced(false),
       mResetStrategy(GetResetStrategy(attribs)),
       mRobustAccess(GetRobustAccess(attribs)),
-      mCurrentSurface(nullptr)
+      mCurrentSurface(nullptr),
+      mSurfacelessFramebuffer(nullptr)
 {
     if (mRobustAccess)
     {
@@ -426,6 +427,8 @@ Context::~Context()
     }
     mZeroTextures.clear();
 
+    SafeDelete(mSurfacelessFramebuffer);
+
     if (mCurrentSurface != nullptr)
     {
         releaseSurface();
@@ -457,13 +460,27 @@ void Context::makeCurrent(egl::Surface *surface)
     {
         releaseSurface();
     }
-    surface->setIsCurrent(true);
-    mCurrentSurface = surface;
+
+    Framebuffer *newDefault = nullptr;
+    if (surface != nullptr)
+    {
+        surface->setIsCurrent(true);
+        mCurrentSurface = surface;
+        newDefault      = surface->getDefaultFramebuffer();
+    }
+    else
+    {
+        if (mSurfacelessFramebuffer == nullptr)
+        {
+            mSurfacelessFramebuffer = new Framebuffer(mImplementation.get());
+        }
+
+        newDefault = mSurfacelessFramebuffer;
+    }
 
     // Update default framebuffer, the binding of the previous default
     // framebuffer (or lack of) will have a nullptr.
     {
-        Framebuffer *newDefault = surface->getDefaultFramebuffer();
         if (mGLState.getReadFramebuffer() == nullptr)
         {
             mGLState.setReadFramebufferBinding(newDefault);
@@ -2428,6 +2445,9 @@ void Context::initCaps(bool webGLContext)
 
     // Enable the no error extension if the context was created with the flag.
     mExtensions.noError = mSkipValidation;
+
+    // Enable surfaceless to advertise we'll have the correct behavior when there is no default FBO
+    mExtensions.surfacelessContext = true;
 
     // Explicitly enable GL_KHR_debug
     mExtensions.debug                   = true;
