@@ -692,7 +692,8 @@ Error Display::createContext(const Config *configuration, gl::Context *shareCont
         ANGLE_TRY(restoreLostDevice());
     }
 
-    gl::Context *context = new gl::Context(mImplementation, configuration, shareContext, attribs);
+    gl::Context *context =
+        new gl::Context(mImplementation, configuration, shareContext, attribs, mDisplayExtensions);
 
     ASSERT(context != nullptr);
     mContextSet.insert(context);
@@ -706,7 +707,7 @@ Error Display::makeCurrent(egl::Surface *drawSurface, egl::Surface *readSurface,
 {
     ANGLE_TRY(mImplementation->makeCurrent(drawSurface, readSurface, context));
 
-    if (context != nullptr && drawSurface != nullptr)
+    if (context != nullptr)
     {
         ASSERT(readSurface == drawSurface);
         context->makeCurrent(drawSurface);
