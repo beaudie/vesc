@@ -272,6 +272,41 @@ bool TIntermAggregateBase::insertChildNodes(TIntermSequence::size_type position,
     return true;
 }
 
+void TIntermAggregate::setOpAndType(TOperator op, const TType &type)
+{
+    ASSERT(mOp == EOpNull);
+    mOp = op;
+    setType(type);
+    mType.setQualifier(EvqTemporary);
+    if (isFunctionCall())
+    {
+        if (mOp == EOpCallBuiltInFunction)
+        {
+            setBuiltInFunctionPrecision();
+        }
+    }
+    else
+    {
+        if (isConstructor())
+        {
+            // Structs should not be precision qualified, the individual members may be.
+            // Built-in types on the other hand should be precision qualified.
+            if (op != EOpConstructStruct)
+            {
+                setPrecisionFromChildren();
+            }
+        }
+        else
+        {
+            setPrecisionForBuiltInOp();
+        }
+        if (areChildrenConstQualified())
+        {
+            mType.setQualifier(EvqConst);
+        }
+    }
+}
+
 bool TIntermAggregate::areChildrenConstQualified()
 {
     for (TIntermNode *&child : mSequence)

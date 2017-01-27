@@ -167,10 +167,6 @@ class TParseContext : angle::NonCopyable
                                const char *value,
                                bool stdgl);
 
-    const TFunction *findFunction(const TSourceLoc &line,
-                                  TFunction *pfnCall,
-                                  int inputShaderVersion,
-                                  bool *builtIn = 0);
     bool executeInitializer(const TSourceLoc &line,
                             const TString &identifier,
                             const TPublicType &pType,
@@ -252,10 +248,6 @@ class TParseContext : angle::NonCopyable
                                    const TString *name,
                                    const TSourceLoc &location);
     TFunction *addConstructorFunc(const TPublicType &publicType);
-    TIntermTyped *addConstructor(TIntermAggregate *arguments,
-                                 TOperator op,
-                                 TType type,
-                                 const TSourceLoc &line);
 
     TIntermTyped *addIndexExpression(TIntermTyped *baseExpression,
                                      const TSourceLoc &location,
@@ -406,9 +398,19 @@ class TParseContext : angle::NonCopyable
                                 TIntermTyped *left,
                                 TIntermTyped *right,
                                 const TSourceLoc &loc);
-    TIntermTyped *createUnaryMath(TOperator op,
-                                  TIntermTyped *child,
-                                  const TSourceLoc &loc);
+    TIntermTyped *createUnaryMath(TOperator op, TIntermTyped *child, const TSourceLoc &loc);
+
+    TIntermTyped *addMethod(TFunction *fnCall,
+                            TIntermAggregate *argumentsNode,
+                            TIntermNode *thisNode,
+                            const TSourceLoc &loc);
+    TIntermTyped *addConstructor(TIntermAggregate *arguments,
+                                 TOperator op,
+                                 TType type,
+                                 const TSourceLoc &line);
+    TIntermTyped *addNonConstructorFunctionCall(TFunction *fnCall,
+                                                TIntermAggregate *argumentsNode,
+                                                const TSourceLoc &loc);
 
     // Return true if the checks pass
     bool binaryOpCommonCheck(TOperator op,
