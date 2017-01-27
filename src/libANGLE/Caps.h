@@ -640,6 +640,9 @@ struct DisplayExtensions
 
     // EGL_EXT_swap_buffers_with_damage
     bool swapBuffersWithDamage;
+
+    // EGL_KHR_surfaceless_context
+    bool surfacelessContext;
 };
 
 struct DeviceExtensions
