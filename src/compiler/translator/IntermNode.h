@@ -604,7 +604,8 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
     // Note: only supported for nodes that can be a part of an expression.
     TIntermTyped *deepCopy() const override { return new TIntermAggregate(*this); }
 
-    void setOp(TOperator op) { mOp = op; }
+    // Change a node where arguments have been gathered to a proper constructor or call.
+    void setOpAndType(TOperator op, const TType &type);
 
     TIntermAggregate *getAsAggregate() override { return this; }
     void traverse(TIntermTraverser *it) override;
