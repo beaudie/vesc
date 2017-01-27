@@ -234,7 +234,8 @@ void GetObjectLabelBase(const std::string &objectLabel,
 namespace gl
 {
 
-Context::Context(rx::EGLImplFactory *implFactory,
+Context::Context(const egl::Display *display,
+                 rx::EGLImplFactory *implFactory,
                  const egl::Config *config,
                  const Context *shareContext,
                  const egl::AttributeMap &attribs)
@@ -249,6 +250,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
                         mFramebufferMap,
                         GetNoError(attribs)),
       mImplementation(implFactory->createContext(mState)),
+      mDisplay(display),
       mCompiler(nullptr),
       mConfig(config),
       mClientType(EGL_OPENGL_ES_API),
@@ -429,10 +431,7 @@ Context::~Context()
 
     SafeDelete(mSurfacelessFramebuffer);
 
-    if (mCurrentSurface != nullptr)
-    {
-        releaseSurface();
-    }
+    releaseSurface();
 
     SafeDelete(mCompiler);
 }
@@ -445,8 +444,16 @@ void Context::makeCurrent(egl::Surface *surface)
         initVersionStrings();
         initExtensionStrings();
 
-        mGLState.setViewportParams(0, 0, surface->getWidth(), surface->getHeight());
-        mGLState.setScissorParams(0, 0, surface->getWidth(), surface->getHeight());
+        int width  = 0;
+        int height = 0;
+        if (surface != nullptr)
+        {
+            width  = surface->getWidth();
+            height = surface->getHeight();
+        }
+
+        mGLState.setViewportParams(0, 0, width, height);
+        mGLState.setScissorParams(0, 0, width, height);
 
         mHasBeenCurrent = true;
     }
@@ -454,10 +461,7 @@ void Context::makeCurrent(egl::Surface *surface)
     // TODO(jmadill): Rework this when we support ContextImpl
     mGLState.setAllDirtyBits();
 
-    if (mCurrentSurface)
-    {
-        releaseSurface();
-    }
+    releaseSurface();
 
     Framebuffer *newDefault = nullptr;
     if (surface != nullptr)
@@ -496,24 +500,32 @@ void Context::makeCurrent(egl::Surface *surface)
 
 void Context::releaseSurface()
 {
-    ASSERT(mCurrentSurface != nullptr);
-
     // Remove the default framebuffer
+    Framebuffer *currentDefault = nullptr;
+    if (mCurrentSurface != nullptr)
     {
-        Framebuffer *currentDefault = mCurrentSurface->getDefaultFramebuffer();
-        if (mGLState.getReadFramebuffer() == currentDefault)
-        {
-            mGLState.setReadFramebufferBinding(nullptr);
-        }
-        if (mGLState.getDrawFramebuffer() == currentDefault)
-        {
-            mGLState.setDrawFramebufferBinding(nullptr);
-        }
-        mFramebufferMap.erase(0);
+        currentDefault = mCurrentSurface->getDefaultFramebuffer();
+    }
+    else if (mSurfacelessFramebuffer != nullptr)
+    {
+        currentDefault = mSurfacelessFramebuffer;
     }
 
-    mCurrentSurface->setIsCurrent(false);
-    mCurrentSurface = nullptr;
+    if (mGLState.getReadFramebuffer() == currentDefault)
+    {
+        mGLState.setReadFramebufferBinding(nullptr);
+    }
+    if (mGLState.getDrawFramebuffer() == currentDefault)
+    {
+        mGLState.setDrawFramebufferBinding(nullptr);
+    }
+    mFramebufferMap.erase(0);
+
+    if (mCurrentSurface)
+    {
+        mCurrentSurface->setIsCurrent(false);
+        mCurrentSurface = nullptr;
+    }
 }
 
 GLuint Context::createBuffer()
@@ -2452,7 +2464,7 @@ void Context::initCaps(bool webGLContext)
     mExtensions.noError = mSkipValidation;
 
     // Enable surfaceless to advertise we'll have the correct behavior when there is no default FBO
-    mExtensions.surfacelessContext = true;
+    mExtensions.surfacelessContext = mDisplay->getExtensions().surfacelessContext;
 
     // Explicitly enable GL_KHR_debug
     mExtensions.debug                   = true;

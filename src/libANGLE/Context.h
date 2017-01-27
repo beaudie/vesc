@@ -58,7 +58,8 @@ class TransformFeedback;
 class Context final : public ValidationContext
 {
   public:
-    Context(rx::EGLImplFactory *implFactory,
+    Context(const egl::Display *display,
+            rx::EGLImplFactory *implFactory,
             const egl::Config *config,
             const Context *shareContext,
             const egl::AttributeMap &attribs);
@@ -650,6 +651,7 @@ class Context final : public ValidationContext
     LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
 
     std::unique_ptr<rx::ContextImpl> mImplementation;
+    const egl::Display *mDisplay;
 
     // Caps to use for validation
     Caps mCaps;
