@@ -61,6 +61,8 @@ class Platform
     // Log an info message within the platform implementation.
     virtual void logInfo(const char *infoMessage) {}
 
+    virtual bool hasLogging() { return false; }
+
     // Tracing --------
 
     // Get a pointer to the enabled state of the given trace category. The

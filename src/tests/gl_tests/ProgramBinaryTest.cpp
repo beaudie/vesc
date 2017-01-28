@@ -39,6 +39,7 @@ class ProgramBinaryTest : public ANGLETest
             void main()
             {
                 gl_Position = inputAttribute;
+                gl_PointSize = 1.0;
             }
         );
 
@@ -396,7 +397,7 @@ TEST_P(ProgramBinaryES31Test, ProgramBinaryWithComputeShader)
     ASSERT_GL_NO_ERROR();
 }
 
-ANGLE_INSTANTIATE_TEST(ProgramBinaryES31Test, ES31_D3D11(), ES31_OPENGL(), ES31_OPENGLES());
+ANGLE_INSTANTIATE_TEST(ProgramBinaryES31Test, ES31_OPENGL(), ES31_OPENGLES());
 
 class ProgramBinaryTransformFeedbackTest : public ANGLETest
 {

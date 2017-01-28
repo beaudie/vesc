@@ -763,6 +763,9 @@ TEST_P(BlitFramebufferANGLETest, BlitPartialDepthStencil)
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER_ANGLE, mOriginalFBO);
     glBindFramebuffer(GL_READ_FRAMEBUFFER_ANGLE, mUserFBO);
 
+    // The test platform will log an error in this negative test.
+    IgnoreANGLEPlatformMessages();
+
     glBlitFramebufferANGLE(0, 0, getWindowWidth() / 2, getWindowHeight() / 2, 0, 0, 
                            getWindowWidth() / 2, getWindowHeight() / 2, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);

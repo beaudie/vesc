@@ -39,6 +39,7 @@ class BuiltinVariableVertexIdTest : public ANGLETest
             "void main()\n"
             "{\n"
             "    gl_Position = position;\n"
+            "    gl_PointSize = 1.0;\n"
             "    color = vec4(gl_VertexID != expectedID, gl_VertexID == expectedID, 0.0, 1.0);"
             "}\n";
 

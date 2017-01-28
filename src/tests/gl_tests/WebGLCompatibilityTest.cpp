@@ -322,6 +322,7 @@ TEST_P(WebGLCompatibilityTest, DrawArraysBufferOutOfBoundsNonInstanced)
         "void main()\n"
         "{\n"
         "    gl_Position = vec4(a_pos, a_pos, a_pos, 1.0);\n"
+        "    gl_PointSize = 1.0;\n"
         "}\n";
 
     const std::string &frag =
@@ -431,6 +432,7 @@ TEST_P(WebGL2CompatibilityTest, DrawArraysBufferOutOfBoundsInstanced)
         "void main()\n"
         "{\n"
         "    gl_Position = vec4(a_pos, a_pos, a_pos, 1.0);\n"
+        "    gl_PointSize = 1.0;\n"
         "}\n";
 
     const std::string &frag =

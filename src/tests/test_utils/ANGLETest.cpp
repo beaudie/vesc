@@ -49,6 +49,7 @@ class TestPlatform : public angle::Platform
     void logError(const char *errorMessage) override;
     void logWarning(const char *warningMessage) override;
     void logInfo(const char *infoMessage) override;
+    bool hasLogging() override;
     void overrideWorkaroundsD3D(WorkaroundsD3D *workaroundsD3D) override;
 
     void ignoreMessages();
@@ -82,6 +83,11 @@ void TestPlatform::logInfo(const char *infoMessage)
         return;
 
     angle::WriteDebugMessage("%s\n", infoMessage);
+}
+
+bool TestPlatform::hasLogging()
+{
+    return true;
 }
 
 void TestPlatform::overrideWorkaroundsD3D(WorkaroundsD3D *workaroundsD3D)
@@ -245,7 +251,7 @@ ANGLETest::~ANGLETest()
 
 void ANGLETest::SetUp()
 {
-    angle::g_testPlatformInstance.enableMessages();
+    EnableANGLEPlatformMessages();
     angle::g_testPlatformInstance.setCurrentTest(this);
 
     // Default vulkan layers to enabled.
@@ -966,4 +972,9 @@ void IgnoreANGLEPlatformMessages()
 {
     // Negative tests may trigger expected errors/warnings in the ANGLE Platform.
     angle::g_testPlatformInstance.ignoreMessages();
+}
+
+void EnableANGLEPlatformMessages()
+{
+    angle::g_testPlatformInstance.enableMessages();
 }
