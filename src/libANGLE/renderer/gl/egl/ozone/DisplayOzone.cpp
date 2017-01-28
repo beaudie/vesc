@@ -584,8 +584,7 @@ GLuint DisplayOzone::makeShader(GLuint type, const char *src)
     gl->getShaderiv(shader, GL_COMPILE_STATUS, &compiled);
     if (compiled != GL_TRUE)
     {
-        ANGLEPlatformCurrent()->logError("DisplayOzone shader compilation error:");
-        ANGLEPlatformCurrent()->logError(buf);
+        ERR() << "DisplayOzone shader compilation error: " << buf;
     }
 
     return shader;

@@ -30,6 +30,11 @@
 #   define ANGLE_APIENTRY
 #endif
 
+namespace gl
+{
+class DebugAnnotator;
+}
+
 namespace angle
 {
 
@@ -49,17 +54,6 @@ class Platform
     // This function is expected to return at least millisecond-precision values. For this reason,
     // it is recommended that the fixed point be no further in the past than the epoch.
     virtual double monotonicallyIncreasingTime() { return 0; }
-
-    // Logging ------------------------------------------------------------
-
-    // Log an error message within the platform implementation.
-    virtual void logError(const char *errorMessage) {}
-
-    // Log a warning message within the platform implementation.
-    virtual void logWarning(const char *warningMessage) {}
-
-    // Log an info message within the platform implementation.
-    virtual void logInfo(const char *infoMessage) {}
 
     // Tracing --------
 
@@ -152,6 +146,21 @@ class Platform
 
   protected:
     virtual ~Platform() { }
+
+    // Logging ------------------------------------------------------------
+
+    // Log an error message within the platform implementation.
+    virtual void logError(const char *errorMessage) {}
+
+    // Log a warning message within the platform implementation.
+    virtual void logWarning(const char *warningMessage) {}
+
+    // Log an info message within the platform implementation.
+    virtual void logInfo(const char *infoMessage) {}
+
+    virtual bool hasLogging() { return false; }
+
+    friend class gl::DebugAnnotator;
 };
 
 }

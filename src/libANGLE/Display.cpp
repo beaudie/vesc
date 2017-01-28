@@ -70,29 +70,9 @@ class DefaultPlatform : public angle::Platform
 public:
     DefaultPlatform() {}
     ~DefaultPlatform() override {}
-
-    void logError(const char *errorMessage) override;
-    void logWarning(const char *warningMessage) override;
-    void logInfo(const char *infoMessage) override;
 };
 
 std::unique_ptr<DefaultPlatform> g_defaultPlatform = nullptr;
-
-void DefaultPlatform::logError(const char *errorMessage)
-{
-    ERR() << errorMessage;
-}
-
-void DefaultPlatform::logWarning(const char *warningMessage)
-{
-    WARN() << warningMessage;
-}
-
-void DefaultPlatform::logInfo(const char *infoMessage)
-{
-    // Uncomment this if you want Vulkan spam.
-    // WARN() << infoMessage;
-}
 
 }  // namespace angle
 
@@ -443,10 +423,7 @@ Error Display::initialize()
     if (error.isError())
     {
         // Log extended error message here
-        std::stringstream errorStream;
-        errorStream << "ANGLE Display::initialize error " << error.getID() << ": "
-                    << error.getMessage();
-        ANGLEPlatformCurrent()->logError(errorStream.str().c_str());
+        ERR() << "ANGLE Display::initialize error " << error.getID() << ": " << error.getMessage();
         return error;
     }
 

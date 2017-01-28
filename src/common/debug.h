@@ -18,6 +18,7 @@
 #include <string>
 
 #include "common/angleutils.h"
+#include <platform/Platform.h>
 
 #if !defined(TRACE_OUTPUT_FILE)
 #define TRACE_OUTPUT_FILE "angle_debug.txt"
@@ -46,7 +47,7 @@ constexpr LogSeverity LOG_NUM_SEVERITIES = 3;
 class DebugAnnotator : angle::NonCopyable
 {
   public:
-    DebugAnnotator() { };
+    DebugAnnotator() : mLogger(nullptr){};
     virtual ~DebugAnnotator() { };
     virtual void beginEvent(const wchar_t *eventName) = 0;
     virtual void endEvent() = 0;
@@ -56,18 +57,21 @@ class DebugAnnotator : angle::NonCopyable
     // it's sent to other log destinations (if any).
     // Returns true to signal that it handled the message and the message
     // should not be sent to other log destinations.
-    virtual bool logMessage(LogSeverity severity,
-                            const char *function,
-                            int line,
-                            size_t message_start,
-                            const std::string &str)
-    {
-        return false;
-    }
+    bool logMessage(LogSeverity severity,
+                    const char *function,
+                    int line,
+                    size_t message_start,
+                    const std::string &str);
+    void setLogger(angle::Platform *logger);
+    angle::Platform *getLogger() const;
+
+  private:
+    angle::Platform *mLogger;
 };
 
 void InitializeDebugAnnotations(DebugAnnotator *debugAnnotator);
 void UninitializeDebugAnnotations();
+void SetDebugAnnotationsLogger(angle::Platform *logger);
 bool DebugAnnotationsActive();
 
 namespace priv
@@ -83,7 +87,7 @@ class LogMessageVoidify
 };
 
 // Used by ANGLE_LOG_IS_ON to lazy-evaluate stream arguments.
-bool ShouldCreateLogMessage(LogSeverity severity);
+bool ShouldCreatePlatformLogMessage(LogSeverity severity);
 
 // This class more or less represents a particular log message.  You
 // create an instance of LogMessage and then stream stuff to it.
@@ -167,7 +171,7 @@ std::ostream &FmtHexInt(std::ostream &os, T value)
 #define COMPACT_ANGLE_LOG_WARN COMPACT_ANGLE_LOG_EX_WARN(LogMessage)
 #define COMPACT_ANGLE_LOG_ERR COMPACT_ANGLE_LOG_EX_ERR(LogMessage)
 
-#define ANGLE_LOG_IS_ON(severity) (::gl::priv::ShouldCreateLogMessage(::gl::LOG_##severity))
+#define ANGLE_LOG_IS_ON(severity) (::gl::priv::ShouldCreatePlatformLogMessage(::gl::LOG_##severity))
 
 // Helper macro which avoids evaluating the arguments to a stream if the condition doesn't hold.
 // Condition is evaluated once and only once.

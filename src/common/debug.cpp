@@ -14,10 +14,10 @@
 #include <cstdio>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <vector>
 
 #include "common/angleutils.h"
-#include "common/platform.h"
 #include "common/Optional.h"
 
 namespace gl
@@ -39,6 +39,48 @@ constexpr const char *LogSeverityName(int severity)
 
 }  // namespace
 
+bool DebugAnnotator::logMessage(LogSeverity severity,
+                                const char *function,
+                                int line,
+                                size_t message_start,
+                                const std::string &str)
+{
+    if (!mLogger)
+    {
+        return false;
+    }
+
+    std::ostringstream stream;
+    stream << function << "(" << line << "): " << str.substr(message_start);
+    std::string message = stream.str();
+
+    switch (severity)
+    {
+        case LOG_EVENT:
+            mLogger->logInfo(message.c_str());
+            break;
+        case LOG_WARN:
+            mLogger->logWarning(message.c_str());
+            break;
+        case LOG_ERR:
+            mLogger->logError(message.c_str());
+            break;
+        default:
+            return false;
+    }
+    return true;
+}
+
+void DebugAnnotator::setLogger(angle::Platform *logger)
+{
+    mLogger = logger;
+}
+
+angle::Platform *DebugAnnotator::getLogger() const
+{
+    return mLogger;
+}
+
 bool DebugAnnotationsActive()
 {
 #if defined(ANGLE_ENABLE_DEBUG_ANNOTATIONS)
@@ -50,14 +92,61 @@ bool DebugAnnotationsActive()
 
 void InitializeDebugAnnotations(DebugAnnotator *debugAnnotator)
 {
+    angle::Platform *logger = g_debugAnnotator ? g_debugAnnotator->getLogger() : nullptr;
+
     UninitializeDebugAnnotations();
     g_debugAnnotator = debugAnnotator;
+
+    if (logger)
+    {
+        SetDebugAnnotationsLogger(logger);
+    }
 }
 
 void UninitializeDebugAnnotations()
 {
+    angle::Platform *logger = g_debugAnnotator ? g_debugAnnotator->getLogger() : nullptr;
+
     // Pointer is not managed.
     g_debugAnnotator = nullptr;
+
+    if (logger)
+    {
+        SetDebugAnnotationsLogger(logger);
+    }
+}
+
+class DefaultDebugAnnotator : public gl::DebugAnnotator
+{
+  public:
+    DefaultDebugAnnotator(){};
+    ~DefaultDebugAnnotator() override {}
+    void beginEvent(const wchar_t *eventName) override {}
+    void endEvent() override {}
+    void setMarker(const wchar_t *markerName) override {}
+    bool getStatus() override { return false; }
+};
+
+std::unique_ptr<DefaultDebugAnnotator> g_defaultDebugAnnotator = nullptr;
+
+void SetDebugAnnotationsLogger(angle::Platform *logger)
+{
+    if (!g_debugAnnotator && !logger)
+    {
+        return;
+    }
+
+    if (!g_debugAnnotator)
+    {
+        if (!g_defaultDebugAnnotator)
+        {
+            g_defaultDebugAnnotator.reset(new DefaultDebugAnnotator());
+        }
+
+        g_debugAnnotator = g_defaultDebugAnnotator.get();
+    }
+
+    g_debugAnnotator->setLogger(logger);
 }
 
 ScopedPerfEventHelper::ScopedPerfEventHelper(const char *format, ...)
@@ -99,6 +188,15 @@ bool ShouldCreateLogMessage(LogSeverity severity)
 #endif
 }
 
+bool ShouldCreatePlatformLogMessage(LogSeverity severity)
+{
+#if defined(ANGLE_TRACE_ENABLED)
+    return true;
+#else
+    return severity != LOG_EVENT;
+#endif
+}
+
 LogMessage::LogMessage(const char *function, int line, LogSeverity severity)
     : mSeverity(severity), mFunction(function), mLine(line)
 {
@@ -109,6 +207,15 @@ LogMessage::~LogMessage()
 {
     mStream << std::endl;
     std::string str(mStream.str());
+
+    // Give any log message handler first dibs on the message.
+    bool handled = g_debugAnnotator != nullptr &&
+                   g_debugAnnotator->logMessage(mSeverity, mFunction, mLine, mMessageStart, str);
+
+    if (!ShouldCreateLogMessage(mSeverity))
+    {
+        return;
+    }
 
     if (DebugAnnotationsActive())
     {
@@ -124,10 +231,6 @@ LogMessage::~LogMessage()
                 break;
         }
     }
-
-    // Give any log message handler first dibs on the message.
-    bool handled = g_debugAnnotator != nullptr &&
-                   g_debugAnnotator->logMessage(mSeverity, mFunction, mLine, mMessageStart, str);
 
     if (!handled && mSeverity == LOG_ERR)
     {
@@ -166,7 +269,11 @@ void LogMessage::init(const char *function, int line)
     else
         mStream << "VERBOSE" << -mSeverity;
 
-    mStream << ": " << function << "(" << line << "): ";
+    // EVENT() don't require additional function(line) info
+    if (mSeverity != LOG_EVENT)
+    {
+        mStream << ": " << function << "(" << line << "): ";
+    }
 
     mMessageStart = mStream.str().length();
 }

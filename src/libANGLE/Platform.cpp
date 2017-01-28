@@ -26,10 +26,12 @@ void ANGLE_APIENTRY ANGLEPlatformInitialize(angle::Platform *platformImpl)
 {
     ASSERT(platformImpl != nullptr);
     currentPlatform = platformImpl;
+    gl::SetDebugAnnotationsLogger(currentPlatform);
 }
 
 // static
 void ANGLE_APIENTRY ANGLEPlatformShutdown()
 {
+    gl::SetDebugAnnotationsLogger(nullptr);
     currentPlatform = nullptr;
 }
