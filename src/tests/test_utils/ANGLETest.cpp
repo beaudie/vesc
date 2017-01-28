@@ -49,6 +49,7 @@ class TestPlatform : public angle::Platform
     void logError(const char *errorMessage) override;
     void logWarning(const char *warningMessage) override;
     void logInfo(const char *infoMessage) override;
+    bool hasLogging() override;
     void overrideWorkaroundsD3D(WorkaroundsD3D *workaroundsD3D) override;
 
     void ignoreMessages();
@@ -82,6 +83,11 @@ void TestPlatform::logInfo(const char *infoMessage)
         return;
 
     angle::WriteDebugMessage("%s\n", infoMessage);
+}
+
+bool TestPlatform::hasLogging()
+{
+    return true;
 }
 
 void TestPlatform::overrideWorkaroundsD3D(WorkaroundsD3D *workaroundsD3D)
