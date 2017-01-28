@@ -14,7 +14,7 @@
 namespace rx
 {
 
-class DebugAnnotator9 : public gl::DebugAnnotator
+class DebugAnnotator9 : public angle::LoggingAnnotator
 {
   public:
     DebugAnnotator9() {}

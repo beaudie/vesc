@@ -50,17 +50,6 @@ class Platform
     // it is recommended that the fixed point be no further in the past than the epoch.
     virtual double monotonicallyIncreasingTime() { return 0; }
 
-    // Logging ------------------------------------------------------------
-
-    // Log an error message within the platform implementation.
-    virtual void logError(const char *errorMessage) {}
-
-    // Log a warning message within the platform implementation.
-    virtual void logWarning(const char *warningMessage) {}
-
-    // Log an info message within the platform implementation.
-    virtual void logInfo(const char *infoMessage) {}
-
     // Tracing --------
 
     // Get a pointer to the enabled state of the given trace category. The
@@ -152,6 +141,21 @@ class Platform
 
   protected:
     virtual ~Platform() { }
+
+    // Logging ------------------------------------------------------------
+
+    // Log an error message within the platform implementation.
+    virtual void logError(const char *errorMessage) {}
+
+    // Log a warning message within the platform implementation.
+    virtual void logWarning(const char *warningMessage) {}
+
+    // Log an info message within the platform implementation.
+    virtual void logInfo(const char *infoMessage) {}
+
+    virtual bool hasLogging() { return false; }
+
+    friend class LoggingAnnotator;
 };
 
 }
