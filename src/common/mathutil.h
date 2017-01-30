@@ -669,6 +669,71 @@ inline void unpackUnorm2x16(uint32_t u, float *f1, float *f2)
     *f2 = static_cast<float>(mostSignificantBits) / 65535.0f;
 }
 
+// Packs 4 normalized unsigned floating-point values to a single 32-bit unsigned integer.
+// Works similarly to packUnorm2x16.
+// The floats are clamped to the range 0.0 to 1.0, and written to the unsigned integer starting from
+// the least significant bits.
+inline uint32_t packUnorm4x8(float f1, float f2, float f3, float f4)
+{
+    uint8_t bits[4];
+    bits[0]         = static_cast<uint8_t>(roundf(clamp(f1, 0.0f, 1.0f) * 255.0f));
+    bits[1]         = static_cast<uint8_t>(roundf(clamp(f2, 0.0f, 1.0f) * 255.0f));
+    bits[2]         = static_cast<uint8_t>(roundf(clamp(f3, 0.0f, 1.0f) * 255.0f));
+    bits[3]         = static_cast<uint8_t>(roundf(clamp(f4, 0.0f, 1.0f) * 255.0f));
+    uint32_t result = 0u;
+    for (int i = 0; i < 4; ++i)
+    {
+        int shift = i * 8;
+        result |= ((static_cast<uint32_t>(bits[i]) & 0xFF) << shift);
+    }
+    return result;
+}
+
+// Unpacks 4 normalized unsigned floating-point values from a single 32-bit unsigned integer.
+// Works similarly to unpackUnorm2x16. The floats are unpacked starting from the least significant
+// bits.
+inline void unpackUnorm4x8(uint32_t u, float *f)
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        int shift    = i * 8;
+        uint8_t bits = static_cast<uint8_t>((u >> shift) & 0xFF);
+        f[i]         = static_cast<float>(bits) / 255.0f;
+    }
+}
+
+// Packs 4 normalized signed floating-point values to a single 32-bit unsigned integer.
+// The floats are clamped to the range -1.0 to 1.0, and written to the unsigned integer starting
+// from the least significant bits.
+inline uint32_t packSnorm4x8(float f1, float f2, float f3, float f4)
+{
+    int8_t bits[4];
+    bits[0]         = static_cast<int8_t>(roundf(clamp(f1, -1.0f, 1.0f) * 127.0f));
+    bits[1]         = static_cast<int8_t>(roundf(clamp(f2, -1.0f, 1.0f) * 127.0f));
+    bits[2]         = static_cast<int8_t>(roundf(clamp(f3, -1.0f, 1.0f) * 127.0f));
+    bits[3]         = static_cast<int8_t>(roundf(clamp(f4, -1.0f, 1.0f) * 127.0f));
+    uint32_t result = 0u;
+    for (int i = 0; i < 4; ++i)
+    {
+        int shift = i * 8;
+        result |= ((static_cast<uint32_t>(bits[i]) & 0xFF) << shift);
+    }
+    return result;
+}
+
+// Unpacks 4 normalized signed floating-point values from a single 32-bit unsigned integer.
+// Works similarly to unpackSnorm2x16. The floats are unpacked starting from the least significant
+// bits, and clamped to the range -1.0 to 1.0.
+inline void unpackSnorm4x8(uint32_t u, float *f)
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        int shift   = i * 8;
+        int8_t bits = static_cast<int8_t>((u >> shift) & 0xFF);
+        f[i]        = clamp(static_cast<float>(bits) / 127.0f, -1.0f, 1.0f);
+    }
+}
+
 // Returns an unsigned integer obtained by converting the two floating-point values to the 16-bit
 // floating-point representation found in the OpenGL ES Specification, and then packing these
 // two 16-bit integers into a 32-bit unsigned integer.
