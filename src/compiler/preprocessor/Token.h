@@ -19,7 +19,8 @@ struct Token
 {
     enum Type
     {
-        LAST = 0,  // EOF.
+        ERROR = -1,
+        LAST  = 0,  // EOF.
 
         IDENTIFIER = 258,
 
