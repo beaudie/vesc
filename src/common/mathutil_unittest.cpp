@@ -310,4 +310,12 @@ TEST(MathUtilTest, FindMSB)
     EXPECT_EQ(31, gl::FindMSB(0x80000000u));
 }
 
+// Test Ldexp, which combines mantissa and exponent into a floating-point number.
+TEST(MathUtilTest, Ldexp)
+{
+    EXPECT_EQ(1.25f, Ldexp(0.625f, 2));
+    EXPECT_EQ(std::numeric_limits<float>::infinity(), Ldexp(0.625f, 129));
+    EXPECT_EQ(0.0f, Ldexp(1.0f, -129));
+}
+
 }  // anonymous namespace
