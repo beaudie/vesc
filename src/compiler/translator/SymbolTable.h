@@ -41,6 +41,8 @@
 namespace sh
 {
 
+class TIntermAggregate;
+
 // Symbol base class. (Can build functions or variables out of these...)
 class TSymbol : angle::NonCopyable
 {
@@ -180,10 +182,6 @@ class TFunction : public TSymbol
         }
         return *mangledName;
     }
-
-    static const TString &GetMangledNameFromCall(const TString &unmangledFunctionName,
-                                                 TIntermSequence &arguments);
-
     const TType &getReturnType() const { return *returnType; }
 
     TOperator getBuiltInOp() const { return op; }

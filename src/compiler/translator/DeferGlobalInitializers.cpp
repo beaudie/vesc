@@ -50,10 +50,10 @@ TIntermFunctionDefinition *CreateFunctionDefinitionNode(const char *name,
 
 TIntermAggregate *CreateFunctionCallNode(const char *name, const int functionId)
 {
-    TType returnType(EbtVoid);
-    TIntermAggregate *functionNode =
-        new TIntermAggregate(returnType, EOpCallFunctionInAST, nullptr);
+    TIntermAggregate *functionNode = new TIntermAggregate(EOpCallFunctionInAST);
     SetInternalFunctionName(functionNode->getFunctionSymbolInfo(), name);
+    TType returnType(EbtVoid);
+    functionNode->setType(returnType);
     functionNode->getFunctionSymbolInfo()->setId(functionId);
     return functionNode;
 }

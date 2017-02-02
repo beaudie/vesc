@@ -58,9 +58,10 @@ TIntermBinary *CopyAssignmentNode(TIntermBinary *node)
 // Performs a shallow copy of a constructor/function call node.
 TIntermAggregate *CopyAggregateNode(TIntermAggregate *node)
 {
-    TIntermSequence *copySeq = new TIntermSequence();
+    TIntermAggregate *copyNode = new TIntermAggregate(node->getOp());
+    TIntermSequence *copySeq   = copyNode->getSequence();
     copySeq->insert(copySeq->begin(), node->getSequence()->begin(), node->getSequence()->end());
-    TIntermAggregate *copyNode = new TIntermAggregate(node->getType(), node->getOp(), copySeq);
+    copyNode->setType(node->getType());
     *copyNode->getFunctionSymbolInfo() = *node->getFunctionSymbolInfo();
     return copyNode;
 }

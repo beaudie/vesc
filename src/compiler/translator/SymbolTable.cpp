@@ -67,17 +67,6 @@ const TString *TFunction::buildMangledName() const
     return NewPoolTString(newName.c_str());
 }
 
-const TString &TFunction::GetMangledNameFromCall(const TString &unmangledFunctionName,
-                                                 TIntermSequence &arguments)
-{
-    std::string newName = mangleName(unmangledFunctionName).c_str();
-    for (TIntermNode *argument : arguments)
-    {
-        newName += argument->getAsTyped()->getType().getMangledName().c_str();
-    }
-    return *NewPoolTString(newName.c_str());
-}
-
 //
 // Symbol table levels are a map of pointers to symbols that have to be deleted.
 //
@@ -171,12 +160,22 @@ TFunction *TSymbolTable::findBuiltInOp(TIntermAggregate *callNode, int shaderVer
     ASSERT(!callNode->isConstructor());
     ASSERT(!callNode->isFunctionCall());
     TString opString = GetOperatorString(callNode->getOp());
-    TSymbol *sym     = findBuiltIn(
-        TFunction::GetMangledNameFromCall(opString, *callNode->getSequence()), shaderVersion);
+    // The return type doesn't affect the mangled name of the function, which is used to look it up.
+    TType dummyReturnType;
+    TFunction call(&opString, &dummyReturnType, callNode->getOp());
+    TIntermSequence *sequence = callNode->getSequence();
+    for (auto *child : *sequence)
+    {
+        TType *paramType = child->getAsTyped()->getTypePointer();
+        TConstParameter p(paramType);
+        call.addParameter(p);
+    }
+
+    TSymbol *sym = findBuiltIn(call.getMangledName(), shaderVersion);
     ASSERT(sym != nullptr && sym->isFunction());
 
     TFunction *builtInFunc = static_cast<TFunction *>(sym);
-    ASSERT(builtInFunc->getParamCount() == callNode->getSequence()->size());
+    ASSERT(builtInFunc->getParamCount() == sequence->size());
     return builtInFunc;
 }
 

@@ -272,48 +272,12 @@ bool TIntermAggregateBase::insertChildNodes(TIntermSequence::size_type position,
     return true;
 }
 
-TIntermAggregate::TIntermAggregate(const TType &type, TOperator op, TIntermSequence *arguments)
-    : TIntermOperator(op), mUseEmulatedFunction(false), mGotPrecisionFromChildren(false)
-{
-    if (arguments != nullptr)
-    {
-        mArguments.swap(*arguments);
-    }
-    setTypePrecisionAndQualifier(type);
-}
-
-void TIntermAggregate::setTypePrecisionAndQualifier(const TType &type)
-{
-    setType(type);
-    mType.setQualifier(EvqTemporary);
-    if (!isFunctionCall())
-    {
-        if (isConstructor())
-        {
-            // Structs should not be precision qualified, the individual members may be.
-            // Built-in types on the other hand should be precision qualified.
-            if (mOp != EOpConstructStruct)
-            {
-                setPrecisionFromChildren();
-            }
-        }
-        else
-        {
-            setPrecisionForBuiltInOp();
-        }
-        if (areChildrenConstQualified())
-        {
-            mType.setQualifier(EvqConst);
-        }
-    }
-}
-
 bool TIntermAggregate::areChildrenConstQualified()
 {
-    for (TIntermNode *&arg : mArguments)
+    for (TIntermNode *&child : mSequence)
     {
-        TIntermTyped *typedArg = arg->getAsTyped();
-        if (typedArg && typedArg->getQualifier() != EvqConst)
+        TIntermTyped *typed = child->getAsTyped();
+        if (typed && typed->getQualifier() != EvqConst)
         {
             return false;
         }
@@ -331,8 +295,8 @@ void TIntermAggregate::setPrecisionFromChildren()
     }
 
     TPrecision precision                = EbpUndefined;
-    TIntermSequence::iterator childIter = mArguments.begin();
-    while (childIter != mArguments.end())
+    TIntermSequence::iterator childIter = mSequence.begin();
+    while (childIter != mSequence.end())
     {
         TIntermTyped *typed = (*childIter)->getAsTyped();
         if (typed)
@@ -357,13 +321,11 @@ bool TIntermAggregate::setPrecisionForSpecialBuiltInOp()
     switch (mOp)
     {
         case EOpBitfieldExtract:
-            mType.setPrecision(mArguments[0]->getAsTyped()->getPrecision());
-            mGotPrecisionFromChildren = true;
+            mType.setPrecision(mSequence[0]->getAsTyped()->getPrecision());
             return true;
         case EOpBitfieldInsert:
-            mType.setPrecision(GetHigherPrecision(mArguments[0]->getAsTyped()->getPrecision(),
-                                                  mArguments[1]->getAsTyped()->getPrecision()));
-            mGotPrecisionFromChildren = true;
+            mType.setPrecision(GetHigherPrecision(mSequence[0]->getAsTyped()->getPrecision(),
+                                                  mSequence[1]->getAsTyped()->getPrecision()));
             return true;
         case EOpUaddCarry:
         case EOpUsubBorrow:
@@ -380,16 +342,18 @@ void TIntermAggregate::setBuiltInFunctionPrecision()
     ASSERT(getBasicType() != EbtBool);
     ASSERT(mOp == EOpCallBuiltInFunction);
 
-    TPrecision precision = EbpUndefined;
-    for (TIntermNode *arg : mArguments)
+    TPrecision precision                = EbpUndefined;
+    TIntermSequence::iterator childIter = mSequence.begin();
+    while (childIter != mSequence.end())
     {
-        TIntermTyped *typed = arg->getAsTyped();
+        TIntermTyped *typed = (*childIter)->getAsTyped();
         // ESSL spec section 8: texture functions get their precision from the sampler.
         if (typed && IsSampler(typed->getBasicType()))
         {
             precision = typed->getPrecision();
             break;
         }
+        ++childIter;
     }
     // ESSL 3.0 spec section 8: textureSize always gets highp precision.
     // All other functions that take a sampler are assumed to be texture functions.
@@ -533,7 +497,8 @@ TIntermTyped *TIntermTyped::CreateZero(const TType &type)
         return node;
     }
 
-    TIntermSequence *arguments = new TIntermSequence();
+    TIntermAggregate *constructor = new TIntermAggregate(sh::TypeToConstructorOperator(type));
+    constructor->setType(constType);
 
     if (type.isArray())
     {
@@ -543,7 +508,7 @@ TIntermTyped *TIntermTyped::CreateZero(const TType &type)
         size_t arraySize = type.getArraySize();
         for (size_t i = 0; i < arraySize; ++i)
         {
-            arguments->push_back(CreateZero(elementType));
+            constructor->getSequence()->push_back(CreateZero(elementType));
         }
     }
     else
@@ -553,11 +518,11 @@ TIntermTyped *TIntermTyped::CreateZero(const TType &type)
         TStructure *structure = type.getStruct();
         for (const auto &field : structure->fields())
         {
-            arguments->push_back(CreateZero(*field->type()));
+            constructor->getSequence()->push_back(CreateZero(*field->type()));
         }
     }
 
-    return new TIntermAggregate(constType, sh::TypeToConstructorOperator(type), arguments);
+    return constructor;
 }
 
 // static
@@ -588,12 +553,12 @@ TIntermAggregate::TIntermAggregate(const TIntermAggregate &node)
       mGotPrecisionFromChildren(node.mGotPrecisionFromChildren),
       mFunctionInfo(node.mFunctionInfo)
 {
-    for (TIntermNode *arg : node.mArguments)
+    for (TIntermNode *child : node.mSequence)
     {
-        TIntermTyped *typedArg = arg->getAsTyped();
-        ASSERT(typedArg != nullptr);
-        TIntermTyped *argCopy = typedArg->deepCopy();
-        mArguments.push_back(argCopy);
+        TIntermTyped *typedChild = child->getAsTyped();
+        ASSERT(typedChild != nullptr);
+        TIntermTyped *childCopy = typedChild->deepCopy();
+        mSequence.push_back(childCopy);
     }
 }
 
@@ -1353,7 +1318,8 @@ TIntermTyped *TIntermAggregate::fold(TDiagnostics *diagnostics)
         constArray = TIntermConstantUnion::FoldAggregateBuiltIn(this, diagnostics);
 
     // Nodes may be constant folded without being qualified as constant.
-    return CreateFoldedNode(constArray, this, getQualifier());
+    TQualifier resultQualifier = areChildrenConstQualified() ? EvqConst : EvqTemporary;
+    return CreateFoldedNode(constArray, this, resultQualifier);
 }
 
 //
@@ -2504,32 +2470,32 @@ TConstantUnion *TIntermConstantUnion::FoldAggregateBuiltIn(TIntermAggregate *agg
                                                            TDiagnostics *diagnostics)
 {
     TOperator op              = aggregate->getOp();
-    TIntermSequence *arguments = aggregate->getSequence();
-    unsigned int argsCount     = static_cast<unsigned int>(arguments->size());
-    std::vector<const TConstantUnion *> unionArrays(argsCount);
-    std::vector<size_t> objectSizes(argsCount);
+    TIntermSequence *sequence = aggregate->getSequence();
+    unsigned int paramsCount  = static_cast<unsigned int>(sequence->size());
+    std::vector<const TConstantUnion *> unionArrays(paramsCount);
+    std::vector<size_t> objectSizes(paramsCount);
     size_t maxObjectSize = 0;
     TBasicType basicType = EbtVoid;
     TSourceLoc loc;
-    for (unsigned int i = 0; i < argsCount; i++)
+    for (unsigned int i = 0; i < paramsCount; i++)
     {
-        TIntermConstantUnion *argConstant = (*arguments)[i]->getAsConstantUnion();
-        ASSERT(argConstant != nullptr);  // Should be checked already.
+        TIntermConstantUnion *paramConstant = (*sequence)[i]->getAsConstantUnion();
+        ASSERT(paramConstant != nullptr);  // Should be checked already.
 
         if (i == 0)
         {
-            basicType = argConstant->getType().getBasicType();
-            loc       = argConstant->getLine();
+            basicType = paramConstant->getType().getBasicType();
+            loc       = paramConstant->getLine();
         }
-        unionArrays[i] = argConstant->getUnionArrayPointer();
-        objectSizes[i] = argConstant->getType().getObjectSize();
+        unionArrays[i] = paramConstant->getUnionArrayPointer();
+        objectSizes[i] = paramConstant->getType().getObjectSize();
         if (objectSizes[i] > maxObjectSize)
             maxObjectSize = objectSizes[i];
     }
 
-    if (!(*arguments)[0]->getAsTyped()->isMatrix() && aggregate->getOp() != EOpOuterProduct)
+    if (!(*sequence)[0]->getAsTyped()->isMatrix() && aggregate->getOp() != EOpOuterProduct)
     {
-        for (unsigned int i = 0; i < argsCount; i++)
+        for (unsigned int i = 0; i < paramsCount; i++)
             if (objectSizes[i] != maxObjectSize)
                 unionArrays[i] = Vectorize(*unionArrays[i], maxObjectSize);
     }
@@ -2878,11 +2844,11 @@ TConstantUnion *TIntermConstantUnion::FoldAggregateBuiltIn(TIntermAggregate *agg
 
         case EOpMulMatrixComponentWise:
         {
-            ASSERT(basicType == EbtFloat && (*arguments)[0]->getAsTyped()->isMatrix() &&
-                   (*arguments)[1]->getAsTyped()->isMatrix());
+            ASSERT(basicType == EbtFloat && (*sequence)[0]->getAsTyped()->isMatrix() &&
+                   (*sequence)[1]->getAsTyped()->isMatrix());
             // Perform component-wise matrix multiplication.
             resultArray = new TConstantUnion[maxObjectSize];
-            int size    = (*arguments)[0]->getAsTyped()->getNominalSize();
+            int size    = (*sequence)[0]->getAsTyped()->getNominalSize();
             angle::Matrix<float> result =
                 GetMatrix(unionArrays[0], size).compMult(GetMatrix(unionArrays[1], size));
             SetUnionArrayFromMatrix(result, resultArray);
@@ -2892,8 +2858,8 @@ TConstantUnion *TIntermConstantUnion::FoldAggregateBuiltIn(TIntermAggregate *agg
         case EOpOuterProduct:
         {
             ASSERT(basicType == EbtFloat);
-            size_t numRows = (*arguments)[0]->getAsTyped()->getType().getObjectSize();
-            size_t numCols = (*arguments)[1]->getAsTyped()->getType().getObjectSize();
+            size_t numRows = (*sequence)[0]->getAsTyped()->getType().getObjectSize();
+            size_t numCols = (*sequence)[1]->getAsTyped()->getType().getObjectSize();
             resultArray    = new TConstantUnion[numRows * numCols];
             angle::Matrix<float> result =
                 GetMatrix(unionArrays[0], static_cast<int>(numRows), 1)
@@ -2965,7 +2931,7 @@ TConstantUnion *TIntermConstantUnion::FoldAggregateBuiltIn(TIntermAggregate *agg
             {
                 float x         = unionArrays[0][i].getFConst();
                 float y         = unionArrays[1][i].getFConst();
-                TBasicType type = (*arguments)[2]->getAsTyped()->getType().getBasicType();
+                TBasicType type = (*sequence)[2]->getAsTyped()->getType().getBasicType();
                 if (type == EbtFloat)
                 {
                     // Returns the linear blend of x and y, i.e., x * (1 - a) + y * a.
