@@ -2434,6 +2434,11 @@ void Context::initCaps(bool webGLContext)
         mExtensions.colorBufferFloat = false;
         mExtensions.eglImageExternalEssl3 = false;
         mExtensions.textureNorm16         = false;
+
+        if (!mExtensions.drawBuffers)
+        {
+            mCaps.maxDrawBuffers = 1;
+        }
     }
 
     if (getClientVersion() > Version(2, 0))
