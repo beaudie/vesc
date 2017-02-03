@@ -1432,7 +1432,17 @@ bool ValidateUniform1ivValue(gl::Context *context,
 
     if (IsSamplerType(uniformType))
     {
-        // TODO(fjhenigman): check values against GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS
+        // Check that the values are in range.
+        GLint max;
+        context->getIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max);
+        for (GLsizei i = 0; i < count; ++i)
+        {
+            if (value[i] < 0 || value[i] >= max)
+            {
+                context->handleError(Error(GL_INVALID_VALUE, "sampler uniform value out of range"));
+                return false;
+            }
+        }
         return true;
     }
 
