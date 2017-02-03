@@ -71,19 +71,21 @@ void LoadA8ToRGBA8(size_t width,
 
         return;
     }
+    else
 #endif
-
-    for (size_t z = 0; z < depth; z++)
     {
-        for (size_t y = 0; y < height; y++)
+        for (size_t z = 0; z < depth; z++)
         {
-            const uint8_t *source =
-                priv::OffsetDataPointer<uint8_t>(input, y, z, inputRowPitch, inputDepthPitch);
-            uint32_t *dest =
-                priv::OffsetDataPointer<uint32_t>(output, y, z, outputRowPitch, outputDepthPitch);
-            for (size_t x = 0; x < width; x++)
+            for (size_t y = 0; y < height; y++)
             {
-                dest[x] = static_cast<uint32_t>(source[x]) << 24;
+                const uint8_t *source =
+                    priv::OffsetDataPointer<uint8_t>(input, y, z, inputRowPitch, inputDepthPitch);
+                uint32_t *dest = priv::OffsetDataPointer<uint32_t>(output, y, z, outputRowPitch,
+                                                                   outputDepthPitch);
+                for (size_t x = 0; x < width; x++)
+                {
+                    dest[x] = static_cast<uint32_t>(source[x]) << 24;
+                }
             }
         }
     }
@@ -644,20 +646,22 @@ void LoadRGBA8ToBGRA8(size_t width,
 
         return;
     }
+    else
 #endif
-
-    for (size_t z = 0; z < depth; z++)
     {
-        for (size_t y = 0; y < height; y++)
+        for (size_t z = 0; z < depth; z++)
         {
-            const uint32_t *source =
-                priv::OffsetDataPointer<uint32_t>(input, y, z, inputRowPitch, inputDepthPitch);
-            uint32_t *dest =
-                priv::OffsetDataPointer<uint32_t>(output, y, z, outputRowPitch, outputDepthPitch);
-            for (size_t x = 0; x < width; x++)
+            for (size_t y = 0; y < height; y++)
             {
-                uint32_t rgba = source[x];
-                dest[x]       = (ANGLE_ROTL(rgba, 16) & 0x00ff00ff) | (rgba & 0xff00ff00);
+                const uint32_t *source =
+                    priv::OffsetDataPointer<uint32_t>(input, y, z, inputRowPitch, inputDepthPitch);
+                uint32_t *dest = priv::OffsetDataPointer<uint32_t>(output, y, z, outputRowPitch,
+                                                                   outputDepthPitch);
+                for (size_t x = 0; x < width; x++)
+                {
+                    uint32_t rgba = source[x];
+                    dest[x]       = (ANGLE_ROTL(rgba, 16) & 0x00ff00ff) | (rgba & 0xff00ff00);
+                }
             }
         }
     }
