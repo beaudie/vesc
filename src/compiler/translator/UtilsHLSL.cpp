@@ -39,89 +39,89 @@ TString SamplerString(HLSLTextureSamplerGroup type)
     }
 }
 
-HLSLTextureSamplerGroup TextureGroup(const TBasicType type)
+HLSLTextureSamplerGroup TextureSamplerGroup(const TBasicType type)
 {
     switch (type)
     {
         case EbtSampler2D:
-            return HLSL_TEXTURE_2D;
+            return HLSL_TEXTURE_2D_SAMPLER;
         case EbtSamplerCube:
-            return HLSL_TEXTURE_CUBE;
+            return HLSL_TEXTURE_CUBE_SAMPLER;
         case EbtSamplerExternalOES:
-            return HLSL_TEXTURE_2D;
+            return HLSL_TEXTURE_2D_SAMPLER;
         case EbtSampler2DArray:
-            return HLSL_TEXTURE_2D_ARRAY;
+            return HLSL_TEXTURE_2D_ARRAY_SAMPLER;
         case EbtSampler3D:
-            return HLSL_TEXTURE_3D;
+            return HLSL_TEXTURE_3D_SAMPLER;
         case EbtSampler2DMS:
-            return HLSL_TEXTURE_2D_MS;
+            return HLSL_TEXTURE_2D_MS_SAMPLER;
         case EbtISampler2D:
-            return HLSL_TEXTURE_2D_INT4;
+            return HLSL_TEXTURE_2D_INT4_SAMPLER;
         case EbtISampler3D:
-            return HLSL_TEXTURE_3D_INT4;
+            return HLSL_TEXTURE_3D_INT4_SAMPLER;
         case EbtISamplerCube:
-            return HLSL_TEXTURE_2D_ARRAY_INT4;
+            return HLSL_TEXTURE_2D_ARRAY_INT4_SAMPLER;
         case EbtISampler2DArray:
-            return HLSL_TEXTURE_2D_ARRAY_INT4;
+            return HLSL_TEXTURE_2D_ARRAY_INT4_SAMPLER;
         case EbtISampler2DMS:
-            return HLSL_TEXTURE_2D_MS_INT4;
+            return HLSL_TEXTURE_2D_MS_INT4_SAMPLER;
         case EbtUSampler2D:
-            return HLSL_TEXTURE_2D_UINT4;
+            return HLSL_TEXTURE_2D_UINT4_SAMPLER;
         case EbtUSampler3D:
-            return HLSL_TEXTURE_3D_UINT4;
+            return HLSL_TEXTURE_3D_UINT4_SAMPLER;
         case EbtUSamplerCube:
-            return HLSL_TEXTURE_2D_ARRAY_UINT4;
+            return HLSL_TEXTURE_2D_ARRAY_UINT4_SAMPLER;
         case EbtUSampler2DArray:
-            return HLSL_TEXTURE_2D_ARRAY_UINT4;
+            return HLSL_TEXTURE_2D_ARRAY_UINT4_SAMPLER;
         case EbtUSampler2DMS:
-            return HLSL_TEXTURE_2D_MS_UINT4;
+            return HLSL_TEXTURE_2D_MS_UINT4_SAMPLER;
         case EbtSampler2DShadow:
-            return HLSL_TEXTURE_2D_COMPARISON;
+            return HLSL_TEXTURE_2D_COMPARISON_SAMPLER;
         case EbtSamplerCubeShadow:
-            return HLSL_TEXTURE_CUBE_COMPARISON;
+            return HLSL_TEXTURE_CUBE_COMPARISON_SAMPLER;
         case EbtSampler2DArrayShadow:
-            return HLSL_TEXTURE_2D_ARRAY_COMPARISON;
+            return HLSL_TEXTURE_2D_ARRAY_COMPARISON_SAMPLER;
         default:
             UNREACHABLE();
     }
-    return HLSL_TEXTURE_UNKNOWN;
+    return HLSL_TEXTURE_SAMPLER_UNKNOWN;
 }
 
-TString TextureString(const HLSLTextureSamplerGroup type)
+TString TextureSamplerString(const HLSLTextureSamplerGroup type)
 {
     switch (type)
     {
-        case HLSL_TEXTURE_2D:
+        case HLSL_TEXTURE_2D_SAMPLER:
             return "Texture2D";
-        case HLSL_TEXTURE_CUBE:
+        case HLSL_TEXTURE_CUBE_SAMPLER:
             return "TextureCube";
-        case HLSL_TEXTURE_2D_ARRAY:
+        case HLSL_TEXTURE_2D_ARRAY_SAMPLER:
             return "Texture2DArray";
-        case HLSL_TEXTURE_3D:
+        case HLSL_TEXTURE_3D_SAMPLER:
             return "Texture3D";
-        case HLSL_TEXTURE_2D_MS:
+        case HLSL_TEXTURE_2D_MS_SAMPLER:
             return "Texture2DMS<float4>";
-        case HLSL_TEXTURE_2D_INT4:
+        case HLSL_TEXTURE_2D_INT4_SAMPLER:
             return "Texture2D<int4>";
-        case HLSL_TEXTURE_3D_INT4:
+        case HLSL_TEXTURE_3D_INT4_SAMPLER:
             return "Texture3D<int4>";
-        case HLSL_TEXTURE_2D_ARRAY_INT4:
+        case HLSL_TEXTURE_2D_ARRAY_INT4_SAMPLER:
             return "Texture2DArray<int4>";
-        case HLSL_TEXTURE_2D_MS_INT4:
+        case HLSL_TEXTURE_2D_MS_INT4_SAMPLER:
             return "Texture2DMS<int4>";
-        case HLSL_TEXTURE_2D_UINT4:
+        case HLSL_TEXTURE_2D_UINT4_SAMPLER:
             return "Texture2D<uint4>";
-        case HLSL_TEXTURE_3D_UINT4:
+        case HLSL_TEXTURE_3D_UINT4_SAMPLER:
             return "Texture3D<uint4>";
-        case HLSL_TEXTURE_2D_ARRAY_UINT4:
+        case HLSL_TEXTURE_2D_ARRAY_UINT4_SAMPLER:
             return "Texture2DArray<uint4>";
-        case HLSL_TEXTURE_2D_MS_UINT4:
+        case HLSL_TEXTURE_2D_MS_UINT4_SAMPLER:
             return "Texture2DMS<uint4>";
-        case HLSL_TEXTURE_2D_COMPARISON:
+        case HLSL_TEXTURE_2D_COMPARISON_SAMPLER:
             return "Texture2D";
-        case HLSL_TEXTURE_CUBE_COMPARISON:
+        case HLSL_TEXTURE_CUBE_COMPARISON_SAMPLER:
             return "TextureCube";
-        case HLSL_TEXTURE_2D_ARRAY_COMPARISON:
+        case HLSL_TEXTURE_2D_ARRAY_COMPARISON_SAMPLER:
             return "Texture2DArray";
         default:
             UNREACHABLE();
@@ -130,46 +130,46 @@ TString TextureString(const HLSLTextureSamplerGroup type)
     return "<unknown texture type>";
 }
 
-TString TextureString(const TBasicType type)
+TString TextureSamplerString(const TBasicType type)
 {
-    return TextureString(TextureGroup(type));
+    return TextureSamplerString(TextureSamplerGroup(type));
 }
 
-TString TextureGroupSuffix(const HLSLTextureSamplerGroup type)
+TString TextureSamplerGroupSuffix(const HLSLTextureSamplerGroup type)
 {
     switch (type)
     {
-        case HLSL_TEXTURE_2D:
+        case HLSL_TEXTURE_2D_SAMPLER:
             return "2D";
-        case HLSL_TEXTURE_CUBE:
+        case HLSL_TEXTURE_CUBE_SAMPLER:
             return "Cube";
-        case HLSL_TEXTURE_2D_ARRAY:
+        case HLSL_TEXTURE_2D_ARRAY_SAMPLER:
             return "2DArray";
-        case HLSL_TEXTURE_3D:
+        case HLSL_TEXTURE_3D_SAMPLER:
             return "3D";
-        case HLSL_TEXTURE_2D_MS:
+        case HLSL_TEXTURE_2D_MS_SAMPLER:
             return "2DMS";
-        case HLSL_TEXTURE_2D_INT4:
+        case HLSL_TEXTURE_2D_INT4_SAMPLER:
             return "2D_int4_";
-        case HLSL_TEXTURE_3D_INT4:
+        case HLSL_TEXTURE_3D_INT4_SAMPLER:
             return "3D_int4_";
-        case HLSL_TEXTURE_2D_ARRAY_INT4:
+        case HLSL_TEXTURE_2D_ARRAY_INT4_SAMPLER:
             return "2DArray_int4_";
-        case HLSL_TEXTURE_2D_MS_INT4:
+        case HLSL_TEXTURE_2D_MS_INT4_SAMPLER:
             return "2DMS_int4_";
-        case HLSL_TEXTURE_2D_UINT4:
+        case HLSL_TEXTURE_2D_UINT4_SAMPLER:
             return "2D_uint4_";
-        case HLSL_TEXTURE_3D_UINT4:
+        case HLSL_TEXTURE_3D_UINT4_SAMPLER:
             return "3D_uint4_";
-        case HLSL_TEXTURE_2D_ARRAY_UINT4:
+        case HLSL_TEXTURE_2D_ARRAY_UINT4_SAMPLER:
             return "2DArray_uint4_";
-        case HLSL_TEXTURE_2D_MS_UINT4:
+        case HLSL_TEXTURE_2D_MS_UINT4_SAMPLER:
             return "2DMS_uint4_";
-        case HLSL_TEXTURE_2D_COMPARISON:
+        case HLSL_TEXTURE_2D_COMPARISON_SAMPLER:
             return "2D_comparison";
-        case HLSL_TEXTURE_CUBE_COMPARISON:
+        case HLSL_TEXTURE_CUBE_COMPARISON_SAMPLER:
             return "Cube_comparison";
-        case HLSL_TEXTURE_2D_ARRAY_COMPARISON:
+        case HLSL_TEXTURE_2D_ARRAY_COMPARISON_SAMPLER:
             return "2DArray_comparison";
         default:
             UNREACHABLE();
@@ -178,12 +178,12 @@ TString TextureGroupSuffix(const HLSLTextureSamplerGroup type)
     return "<unknown texture type>";
 }
 
-TString TextureGroupSuffix(const TBasicType type)
+TString TextureSamplerGroupSuffix(const TBasicType type)
 {
-    return TextureGroupSuffix(TextureGroup(type));
+    return TextureSamplerGroupSuffix(TextureSamplerGroup(type));
 }
 
-TString TextureTypeSuffix(const TBasicType type)
+TString TextureSamplerTypeSuffix(const TBasicType type)
 {
     switch (type)
     {
@@ -195,7 +195,290 @@ TString TextureTypeSuffix(const TBasicType type)
             return "_External";
         default:
             // All other types are identified by their group suffix
-            return TextureGroupSuffix(type);
+            return TextureSamplerGroupSuffix(type);
+    }
+}
+
+HLSLTextureGroup TextureGroup(const TBasicType type,
+                              TLayoutImageInternalFormat imageInternalFormat,
+                              bool readonly)
+
+{
+    switch (type)
+    {
+        case EbtImage2D:
+        {
+            switch (imageInternalFormat)
+            {
+                case EiifRGBA32F:
+                case EiifRGBA16F:
+                case EiifRGBA8:
+                case EiifRGBA8_SNORM:
+                case EiifR32F:
+                    return readonly ? HLSL_TEXTURE_2D_FLOAT4 : HLSL_RWTEXTURE_2D_FLOAT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        case EbtIImage2D:
+        {
+            switch (imageInternalFormat)
+            {
+                case EiifRGBA32I:
+                case EiifRGBA16I:
+                case EiifRGBA8I:
+                case EiifR32I:
+                    return readonly ? HLSL_TEXTURE_2D_INT4 : HLSL_RWTEXTURE_2D_INT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        case EbtUImage2D:
+        {
+            switch (imageInternalFormat)
+            {
+
+                case EiifRGBA32UI:
+                case EiifRGBA16UI:
+                case EiifRGBA8UI:
+                case EiifR32UI:
+                    return readonly ? HLSL_TEXTURE_2D_UINT4 : HLSL_RWTEXTURE_2D_UINT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        case EbtImage3D:
+        {
+            switch (imageInternalFormat)
+            {
+                case EiifRGBA32F:
+                case EiifRGBA16F:
+                case EiifRGBA8:
+                case EiifRGBA8_SNORM:
+                case EiifR32F:
+                    return readonly ? HLSL_TEXTURE_3D_FLOAT4 : HLSL_RWTEXTURE_3D_FLOAT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        case EbtIImage3D:
+        {
+            switch (imageInternalFormat)
+            {
+                case EiifRGBA32I:
+                case EiifRGBA16I:
+                case EiifRGBA8I:
+                case EiifR32I:
+                    return readonly ? HLSL_TEXTURE_3D_INT4 : HLSL_RWTEXTURE_3D_INT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        case EbtUImage3D:
+        {
+            switch (imageInternalFormat)
+            {
+                case EiifRGBA32UI:
+                case EiifRGBA16UI:
+                case EiifRGBA8UI:
+                case EiifR32UI:
+                    return readonly ? HLSL_TEXTURE_3D_UINT4 : HLSL_RWTEXTURE_3D_UINT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        case EbtImage2DArray:
+        case EbtImageCube:
+        {
+            switch (imageInternalFormat)
+            {
+                case EiifRGBA32F:
+                case EiifRGBA16F:
+                case EiifRGBA8:
+                case EiifRGBA8_SNORM:
+                case EiifR32F:
+                    return readonly ? HLSL_TEXTURE_2D_ARRAY_FLOAT4 : HLSL_RWTEXTURE_2D_ARRAY_FLOAT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        case EbtIImage2DArray:
+        case EbtIImageCube:
+        {
+            switch (imageInternalFormat)
+            {
+                case EiifRGBA32I:
+                case EiifRGBA16I:
+                case EiifRGBA8I:
+                case EiifR32I:
+                    return readonly ? HLSL_TEXTURE_2D_ARRAY_INT4 : HLSL_RWTEXTURE_2D_ARRAY_INT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        case EbtUImage2DArray:
+        case EbtUImageCube:
+        {
+            switch (imageInternalFormat)
+            {
+                case EiifRGBA32UI:
+                case EiifRGBA16UI:
+                case EiifRGBA8UI:
+                case EiifR32UI:
+                    return readonly ? HLSL_TEXTURE_2D_ARRAY_UINT4 : HLSL_RWTEXTURE_2D_ARRAY_UINT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        default:
+            UNREACHABLE();
+    }
+    return HLSL_TEXTURE_UNKNOWN;
+}
+
+TString TextureGroupSuffix(const HLSLTextureGroup type)
+{
+    switch (type)
+    {
+        case HLSL_TEXTURE_2D_FLOAT4:
+            return "2D_float4_";
+        case HLSL_TEXTURE_2D_ARRAY_FLOAT4:
+            return "2DArray_float4_";
+        case HLSL_TEXTURE_3D_FLOAT4:
+            return "3D_float4_";
+        case HLSL_TEXTURE_2D_UINT4:
+            return "2D_uint4_";
+        case HLSL_TEXTURE_2D_ARRAY_UINT4:
+            return "2DArray_uint4_";
+        case HLSL_TEXTURE_3D_UINT4:
+            return "3D_uint4_";
+        case HLSL_TEXTURE_2D_INT4:
+            return "2D_int4_";
+        case HLSL_TEXTURE_2D_ARRAY_INT4:
+            return "2DArray_int4_";
+        case HLSL_TEXTURE_3D_INT4:
+            return "3D_int4_";
+        case HLSL_RWTEXTURE_2D_FLOAT4:
+            return "RW2D_float4_";
+        case HLSL_RWTEXTURE_2D_ARRAY_FLOAT4:
+            return "RW2DArray_float4_";
+        case HLSL_RWTEXTURE_3D_FLOAT4:
+            return "RW3D_float4_";
+        case HLSL_RWTEXTURE_2D_UINT4:
+            return "RW2D_uint4_";
+        case HLSL_RWTEXTURE_2D_ARRAY_UINT4:
+            return "RW2DArray_uint4_";
+        case HLSL_RWTEXTURE_3D_UINT4:
+            return "RW3D_uint4_";
+        case HLSL_RWTEXTURE_2D_INT4:
+            return "RW2D_int4_";
+        case HLSL_RWTEXTURE_2D_ARRAY_INT4:
+            return "RW2DArray_int4_";
+        case HLSL_RWTEXTURE_3D_INT4:
+            return "RW3D_int4_";
+        default:
+            UNREACHABLE();
+    }
+
+    return "<unknown texture type>";
+}
+
+TString TextureString(const HLSLTextureGroup textureGroup)
+{
+    switch (textureGroup)
+    {
+        case HLSL_TEXTURE_2D_FLOAT4:
+            return "Texture2D<float4>";
+        case HLSL_TEXTURE_2D_ARRAY_FLOAT4:
+            return "Texture2DArray<float4>";
+        case HLSL_TEXTURE_3D_FLOAT4:
+            return "Texture3D<float4>";
+        case HLSL_TEXTURE_2D_UINT4:
+            return "Texture2D<uint4>";
+        case HLSL_TEXTURE_2D_ARRAY_UINT4:
+            return "Texture2DArray<uint4>";
+        case HLSL_TEXTURE_3D_UINT4:
+            return "Texture3D<uint4>";
+        case HLSL_TEXTURE_2D_INT4:
+            return "Texture2D<int4>";
+        case HLSL_TEXTURE_2D_ARRAY_INT4:
+            return "Texture2DArray<int4>";
+        case HLSL_TEXTURE_3D_INT4:
+            return "Texture3D<int4>";
+        case HLSL_RWTEXTURE_2D_FLOAT4:
+            return "RWTexture2D<float4>";
+        case HLSL_RWTEXTURE_2D_ARRAY_FLOAT4:
+            return "RWTexture2DArray<float4>";
+        case HLSL_RWTEXTURE_3D_FLOAT4:
+            return "RWTexture3D<float4>";
+        case HLSL_RWTEXTURE_2D_UINT4:
+            return "RWTexture2D<uint4>";
+        case HLSL_RWTEXTURE_2D_ARRAY_UINT4:
+            return "RWTexture2DArray<uint4>";
+        case HLSL_RWTEXTURE_3D_UINT4:
+            return "RWTexture3D<uint4>";
+        case HLSL_RWTEXTURE_2D_INT4:
+            return "RWTexture2D<int4>";
+        case HLSL_RWTEXTURE_2D_ARRAY_INT4:
+            return "RWTexture2DArray<int4>";
+        case HLSL_RWTEXTURE_3D_INT4:
+            return "RWTexture3D<int4>";
+        default:
+            UNREACHABLE();
+    }
+
+    return "<unknown texture type>";
+}
+
+TString TextureTypeSuffix(const TBasicType type,
+                          TLayoutImageInternalFormat imageInternalFormat,
+                          bool readonly)
+{
+    switch (type)
+    {
+        case EbtImageCube:
+        {
+            switch (imageInternalFormat)
+            {
+                case EiifRGBA32F:
+                case EiifRGBA16F:
+                case EiifRGBA8:
+                case EiifRGBA8_SNORM:
+                case EiifR32F:
+                    return readonly ? "Cube_float4_" : "RWCube_float4_";
+                default:
+                    UNREACHABLE();
+            }
+        }
+        case EbtIImageCube:
+        {
+            switch (imageInternalFormat)
+            {
+                case EiifRGBA32I:
+                case EiifRGBA16I:
+                case EiifRGBA8I:
+                case EiifR32I:
+                    return readonly ? "Cube_int4_" : "RWCube_int4_";
+                default:
+                    UNREACHABLE();
+            }
+        }
+        case EbtUImageCube:
+        {
+            switch (imageInternalFormat)
+            {
+                case EiifRGBA32UI:
+                case EiifRGBA16UI:
+                case EiifRGBA8UI:
+                case EiifR32UI:
+                    return readonly ? "Cube_uint4_" : "RWCube_uint4_";
+                default:
+                    UNREACHABLE();
+            }
+        }
+        default:
+            // All other types are identified by their group suffix
+            return TextureGroupSuffix(TextureGroup(type, imageInternalFormat, readonly));
     }
 }
 

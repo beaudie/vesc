@@ -25,43 +25,85 @@ namespace sh
 enum HLSLTextureSamplerGroup
 {
     // Regular samplers
-    HLSL_TEXTURE_2D,
-    HLSL_TEXTURE_MIN = HLSL_TEXTURE_2D,
+    HLSL_TEXTURE_2D_SAMPLER,
+    HLSL_TEXTURE_SAMPLER_MIN = HLSL_TEXTURE_2D_SAMPLER,
 
-    HLSL_TEXTURE_CUBE,
-    HLSL_TEXTURE_2D_ARRAY,
-    HLSL_TEXTURE_3D,
-    HLSL_TEXTURE_2D_MS,
-    HLSL_TEXTURE_2D_INT4,
-    HLSL_TEXTURE_3D_INT4,
-    HLSL_TEXTURE_2D_ARRAY_INT4,
-    HLSL_TEXTURE_2D_MS_INT4,
-    HLSL_TEXTURE_2D_UINT4,
-    HLSL_TEXTURE_3D_UINT4,
-    HLSL_TEXTURE_2D_ARRAY_UINT4,
-    HLSL_TEXTURE_2D_MS_UINT4,
+    HLSL_TEXTURE_CUBE_SAMPLER,
+    HLSL_TEXTURE_2D_ARRAY_SAMPLER,
+    HLSL_TEXTURE_3D_SAMPLER,
+    HLSL_TEXTURE_2D_MS_SAMPLER,
+    HLSL_TEXTURE_2D_INT4_SAMPLER,
+    HLSL_TEXTURE_3D_INT4_SAMPLER,
+    HLSL_TEXTURE_2D_ARRAY_INT4_SAMPLER,
+    HLSL_TEXTURE_2D_MS_INT4_SAMPLER,
+    HLSL_TEXTURE_2D_UINT4_SAMPLER,
+    HLSL_TEXTURE_3D_UINT4_SAMPLER,
+    HLSL_TEXTURE_2D_ARRAY_UINT4_SAMPLER,
+    HLSL_TEXTURE_2D_MS_UINT4_SAMPLER,
 
     // Comparison samplers
 
-    HLSL_TEXTURE_2D_COMPARISON,
-    HLSL_TEXTURE_CUBE_COMPARISON,
-    HLSL_TEXTURE_2D_ARRAY_COMPARISON,
+    HLSL_TEXTURE_2D_COMPARISON_SAMPLER,
+    HLSL_TEXTURE_CUBE_COMPARISON_SAMPLER,
+    HLSL_TEXTURE_2D_ARRAY_COMPARISON_SAMPLER,
 
-    HLSL_COMPARISON_SAMPLER_GROUP_BEGIN = HLSL_TEXTURE_2D_COMPARISON,
-    HLSL_COMPARISON_SAMPLER_GROUP_END   = HLSL_TEXTURE_2D_ARRAY_COMPARISON,
+    HLSL_COMPARISON_SAMPLER_GROUP_BEGIN = HLSL_TEXTURE_2D_COMPARISON_SAMPLER,
+    HLSL_COMPARISON_SAMPLER_GROUP_END   = HLSL_TEXTURE_2D_ARRAY_COMPARISON_SAMPLER,
+
+    HLSL_TEXTURE_SAMPLER_UNKNOWN,
+    HLSL_TEXTURE_SAMPLER_MAX = HLSL_TEXTURE_SAMPLER_UNKNOWN
+};
+
+// Unique combinations for HLSL Texture type and GLSL image type.
+enum HLSLTextureGroup
+{
+    HLSL_TEXTURE_2D_FLOAT4,
+    HLSL_TEXTURE_MIN = HLSL_TEXTURE_2D_FLOAT4,
+    HLSL_TEXTURE_2D_ARRAY_FLOAT4,
+    HLSL_TEXTURE_3D_FLOAT4,
+    HLSL_TEXTURE_2D_UINT4,
+    HLSL_TEXTURE_2D_ARRAY_UINT4,
+    HLSL_TEXTURE_3D_UINT4,
+    HLSL_TEXTURE_2D_INT4,
+    HLSL_TEXTURE_2D_ARRAY_INT4,
+    HLSL_TEXTURE_3D_INT4,
+
+    HLSL_RWTEXTURE_2D_FLOAT4,
+    HLSL_RWTEXTURE_2D_ARRAY_FLOAT4,
+    HLSL_RWTEXTURE_3D_FLOAT4,
+    HLSL_RWTEXTURE_2D_UINT4,
+    HLSL_RWTEXTURE_2D_ARRAY_UINT4,
+    HLSL_RWTEXTURE_3D_UINT4,
+    HLSL_RWTEXTURE_2D_INT4,
+    HLSL_RWTEXTURE_2D_ARRAY_INT4,
+    HLSL_RWTEXTURE_3D_INT4,
+
+    HLSL_TEXTURE_SRV_GROUP_BEGIN = HLSL_TEXTURE_2D_FLOAT4,
+    HLSL_TEXTURE_SRV_GROUP_END   = HLSL_TEXTURE_3D_INT4,
+    HLSL_TEXTURE_UAV_GROUP_BEGIN = HLSL_RWTEXTURE_2D_FLOAT4,
+    HLSL_TEXTURE_UAV_GROUP_END   = HLSL_RWTEXTURE_3D_INT4,
 
     HLSL_TEXTURE_UNKNOWN,
     HLSL_TEXTURE_MAX = HLSL_TEXTURE_UNKNOWN
 };
 
-HLSLTextureSamplerGroup TextureGroup(const TBasicType type);
-TString TextureString(const HLSLTextureSamplerGroup type);
-TString TextureString(const TBasicType type);
-TString TextureGroupSuffix(const HLSLTextureSamplerGroup type);
-TString TextureGroupSuffix(const TBasicType type);
-TString TextureTypeSuffix(const TBasicType type);
+HLSLTextureSamplerGroup TextureSamplerGroup(const TBasicType type);
+TString TextureSamplerString(const HLSLTextureSamplerGroup type);
+TString TextureSamplerString(const TBasicType type);
+TString TextureSamplerGroupSuffix(const HLSLTextureSamplerGroup type);
+TString TextureSamplerGroupSuffix(const TBasicType type);
+TString TextureSamplerTypeSuffix(const TBasicType type);
 TString SamplerString(const TBasicType type);
 TString SamplerString(HLSLTextureSamplerGroup type);
+
+HLSLTextureGroup TextureGroup(const TBasicType type,
+                              TLayoutImageInternalFormat imageInternalFormat,
+                              bool readonly);
+TString TextureGroupSuffix(const HLSLTextureGroup type);
+TString TextureTypeSuffix(const TBasicType type,
+                          TLayoutImageInternalFormat imageInternalFormat,
+                          bool readonly);
+TString TextureString(const HLSLTextureGroup textureGroup);
 // Adds a prefix to user-defined names to avoid naming clashes.
 TString Decorate(const TString &string);
 TString DecorateVariableIfNeeded(const TName &name);
