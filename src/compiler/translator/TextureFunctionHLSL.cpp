@@ -297,7 +297,7 @@ void OutputTextureFunctionArgumentList(TInfoSinkBase &out,
     {
         if (outputType == SH_HLSL_4_0_FL9_3_OUTPUT)
         {
-            out << TextureString(textureFunction.sampler) << " x, "
+            out << TextureSamplerString(textureFunction.sampler) << " x, "
                 << SamplerString(textureFunction.sampler) << " s";
         }
         else
@@ -441,8 +441,8 @@ void GetTextureReference(TInfoSinkBase &out,
 {
     if (outputType == SH_HLSL_4_1_OUTPUT)
     {
-        TString suffix = TextureGroupSuffix(textureFunction.sampler);
-        if (TextureGroup(textureFunction.sampler) == HLSL_TEXTURE_2D)
+        TString suffix = TextureSamplerGroupSuffix(textureFunction.sampler);
+        if (TextureSamplerGroup(textureFunction.sampler) == HLSL_TEXTURE_2D_SAMPLER)
         {
             *textureReference = TString("textures") + suffix + "[samplerIndex]";
             *samplerReference = TString("samplers") + suffix + "[samplerIndex]";
@@ -1013,7 +1013,7 @@ TString TextureFunctionHLSL::TextureFunction::name() const
 
     // We need to include full the sampler type in the function name to make the signature unique
     // on D3D11, where samplers are passed to texture functions as indices.
-    name += TextureTypeSuffix(this->sampler);
+    name += TextureSamplerTypeSuffix(this->sampler);
 
     if (proj)
     {
