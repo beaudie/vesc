@@ -142,21 +142,21 @@ GLenum VariableComponentType(GLenum type)
       case GL_SAMPLER_2D_SHADOW:
       case GL_SAMPLER_CUBE_SHADOW:
       case GL_SAMPLER_2D_ARRAY_SHADOW:
+      case GL_IMAGE_2D:
+      case GL_IMAGE_3D:
+      case GL_IMAGE_2D_ARRAY:
+      case GL_IMAGE_CUBE:
+      case GL_INT_IMAGE_2D:
+      case GL_INT_IMAGE_3D:
+      case GL_INT_IMAGE_2D_ARRAY:
+      case GL_INT_IMAGE_CUBE:
+      case GL_UNSIGNED_INT_IMAGE_2D:
+      case GL_UNSIGNED_INT_IMAGE_3D:
+      case GL_UNSIGNED_INT_IMAGE_2D_ARRAY:
+      case GL_UNSIGNED_INT_IMAGE_CUBE:
       case GL_INT_VEC2:
       case GL_INT_VEC3:
       case GL_INT_VEC4:
-      case GL_IMAGE_2D:
-      case GL_INT_IMAGE_2D:
-      case GL_UNSIGNED_INT_IMAGE_2D:
-      case GL_IMAGE_3D:
-      case GL_INT_IMAGE_3D:
-      case GL_UNSIGNED_INT_IMAGE_3D:
-      case GL_IMAGE_2D_ARRAY:
-      case GL_INT_IMAGE_2D_ARRAY:
-      case GL_UNSIGNED_INT_IMAGE_2D_ARRAY:
-      case GL_IMAGE_CUBE:
-      case GL_INT_IMAGE_CUBE:
-      case GL_UNSIGNED_INT_IMAGE_CUBE:
           return GL_INT;
       case GL_UNSIGNED_INT:
       case GL_UNSIGNED_INT_VEC2:

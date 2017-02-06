@@ -67,6 +67,8 @@ UniformHLSL::UniformHLSL(StructureHLSL *structureHLSL,
     : mUniformRegister(0),
       mInterfaceBlockRegister(0),
       mSamplerRegister(0),
+      mSRVRegister(0),
+      mUAVRegister(0),
       mStructureHLSL(structureHLSL),
       mOutputType(outputType),
       mUniforms(uniforms)
@@ -101,7 +103,11 @@ unsigned int UniformHLSL::assignUniformRegister(const TType &type,
                                                 unsigned int *outRegisterCount)
 {
     unsigned int registerIndex =
-        (IsSampler(type.getBasicType()) ? mSamplerRegister : mUniformRegister);
+        (IsSampler(type.getBasicType())
+             ? mSamplerRegister
+             : IsImage(type.getBasicType())
+                   ? (type.getMemoryQualifier().writeonly ? mUAVRegister : mSRVRegister)
+                   : mUniformRegister);
 
     const Uniform *uniform = findUniformByName(name);
     ASSERT(uniform);
@@ -113,6 +119,17 @@ unsigned int UniformHLSL::assignUniformRegister(const TType &type,
     if (gl::IsSamplerType(uniform->type))
     {
         mSamplerRegister += registerCount;
+    }
+    else if (gl::IsImageType(uniform->type))
+    {
+        if (type.getMemoryQualifier().writeonly)
+        {
+            mUAVRegister += registerCount;
+        }
+        else
+        {
+            mSRVRegister += registerCount;
+        }
     }
     else
     {
@@ -212,6 +229,109 @@ void UniformHLSL::outputHLSLSamplerUniformGroup(
     *groupTextureRegisterIndex += groupRegisterCount;
 }
 
+void UniformHLSL::outputHLSLReadOnlyImagesUniformGroup(TInfoSinkBase &out,
+                                               const HLSLSRVTextureGroup SRVTextureGroup,
+                                               const TVector<const TIntermSymbol *> &group,
+                                               unsigned int *groupTextureRegisterIndex)
+{
+    if (group.empty())
+    {
+        return;
+    }
+    unsigned int groupRegisterCount = 0;
+    for (const TIntermSymbol *uniform : group)
+    {
+        const TType &type   = uniform->getType();
+        const TString &name = uniform->getSymbol();
+        unsigned int registerCount;
+
+        unsigned int imageArrayIndex = 0u;
+        imageArrayIndex              = assignUniformRegister(type, name, &registerCount);
+        groupRegisterCount += registerCount;
+
+        if (type.isArray())
+        {
+            out << "static const uint " << DecorateIfNeeded(uniform->getName()) << ArrayString(type)
+                << "= {";
+            for (unsigned int i = 0u; i < type.getArraySize(); ++i)
+            {
+                if (i > 0u)
+                    out << ", ";
+                out << (imageArrayIndex + i);
+            }
+            out << "};\n";
+        }
+        else
+        {
+            out << "static const uint " << DecorateIfNeeded(uniform->getName()) << " = "
+                << imageArrayIndex << ";\n";
+        }
+    }
+
+    TString suffix = SRVTextureGroupSuffix(SRVTextureGroup);
+    if (SRVTextureGroup != HLSL_SRV_TEXTURE_2D_FLOAT4)
+    {
+        out << "static const uint imageIndexOffset" << suffix << " = "
+            << (*groupTextureRegisterIndex - 16) << ";\n";  // the min of groupTextureRegisterIndex is 16.
+    }
+    out << "uniform " << SRVTextureString(SRVTextureGroup) << " images" << suffix << "["
+        << groupRegisterCount << "]"
+        << " : register(t" << (*groupTextureRegisterIndex) << ");\n";
+    *groupTextureRegisterIndex += groupRegisterCount;
+}
+
+void UniformHLSL::outputHLSLWriteOnlyImagesUniformGroup(TInfoSinkBase &out,
+                                               const HLSLUAVTextureGroup UAVTextureGroup,
+                                               const TVector<const TIntermSymbol *> &group,
+                                               unsigned int *groupTextureRegisterIndex)
+{
+    if (group.empty())
+    {
+        return;
+    }
+    unsigned int groupRegisterCount = 0;
+    for (const TIntermSymbol *uniform : group)
+    {
+        const TType &type   = uniform->getType();
+        const TString &name = uniform->getSymbol();
+        unsigned int registerCount;
+
+        unsigned int imageArrayIndex = 0u;
+        imageArrayIndex              = assignUniformRegister(type, name, &registerCount);
+        groupRegisterCount += registerCount;
+
+        if (type.isArray())
+        {
+            out << "static const uint " << DecorateIfNeeded(uniform->getName()) << ArrayString(type)
+                << "= {";
+            for (unsigned int i = 0u; i < type.getArraySize(); ++i)
+            {
+                if (i > 0u)
+                    out << ", ";
+                out << (imageArrayIndex + i);
+            }
+            out << "};\n";
+        }
+        else
+        {
+            out << "static const uint " << DecorateIfNeeded(uniform->getName()) << " = "
+                << imageArrayIndex << ";\n";
+        }
+    }
+
+    TString suffix = UAVTextureGroupSuffix(UAVTextureGroup);
+    if (UAVTextureGroup != HLSL_UAV_TEXTURE_2D_FLOAT4)
+    {
+        out << "static const uint imageIndexOffset" << suffix << " = "
+            << (*groupTextureRegisterIndex) << ";\n";
+    }
+    out << "uniform " << UAVTextureString(UAVTextureGroup) << " images" << suffix << "["
+        << groupRegisterCount << "]"
+        << " : register(u" << (*groupTextureRegisterIndex) << ");\n";
+    *groupTextureRegisterIndex += groupRegisterCount;
+}
+
+
 void UniformHLSL::outputHLSL4_0_FL9_3Sampler(TInfoSinkBase &out,
                                              const TType &type,
                                              const TName &name,
@@ -263,6 +383,10 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
     // HLSL sampler type, enumerated in HLSLTextureSamplerGroup.
     TVector<TVector<const TIntermSymbol *>> groupedSamplerUniforms(HLSL_TEXTURE_MAX + 1);
     TMap<const TIntermSymbol *, TString> samplerInStructSymbolsToAPINames;
+
+    TVector<TVector<const TIntermSymbol *>> groupedReadOnlyImageUniforms(HLSL_SRV_TEXTURE_MAX + 1);
+	TVector<TVector<const TIntermSymbol *>> groupedWriteOnlyImageUniforms(HLSL_UAV_TEXTURE_MAX + 1);
+
     for (auto &uniformIt : referencedUniforms)
     {
         // Output regular uniforms. Group sampler uniforms by type.
@@ -274,6 +398,19 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
         {
             HLSLTextureSamplerGroup group = TextureGroup(type.getBasicType());
             groupedSamplerUniforms[group].push_back(&uniform);
+        }
+        else if (outputType == SH_HLSL_4_1_OUTPUT && IsImage(type.getBasicType()))
+        {
+            if (type.getMemoryQualifier().writeonly)
+            {
+                HLSLUAVTextureGroup group = UAVTextureGroup(type.getBasicType(), type.getLayoutQualifier().imageInternalFormat);
+				groupedWriteOnlyImageUniforms[group].push_back(&uniform);
+            }
+            else
+			{
+                HLSLSRVTextureGroup group = SRVTextureGroup(type.getBasicType(), type.getLayoutQualifier().imageInternalFormat);
+				groupedReadOnlyImageUniforms[group].push_back(&uniform);
+            }
         }
         else if (outputType == SH_HLSL_4_0_FL9_3_OUTPUT && IsSampler(type.getBasicType()))
         {
@@ -333,6 +470,21 @@ void UniformHLSL::uniformsHeader(TInfoSinkBase &out,
             outputHLSLSamplerUniformGroup(
                 out, HLSLTextureSamplerGroup(groupId), groupedSamplerUniforms[groupId],
                 samplerInStructSymbolsToAPINames, &groupTextureRegisterIndex);
+        }
+
+        unsigned int groupSRVRegisterIndex = 16;   //reserved t0~t15 for samplers
+		ASSERT(HLSL_SRV_TEXTURE_MIN == HLSL_SRV_TEXTURE_2D_FLOAT4);
+        for (int groupId = HLSL_SRV_TEXTURE_MIN; groupId < HLSL_SRV_TEXTURE_MAX; ++groupId)
+        {
+            outputHLSLReadOnlyImagesUniformGroup(out, HLSLSRVTextureGroup(groupId),
+                                         groupedReadOnlyImageUniforms[groupId], &groupSRVRegisterIndex);
+        }
+
+        unsigned int groupUAVRegisterIndex = 0;
+        for (int groupId = HLSL_UAV_TEXTURE_MIN; groupId < HLSL_UAV_TEXTURE_MAX; ++groupId)
+        {
+            outputHLSLWriteOnlyImagesUniformGroup(out, HLSLUAVTextureGroup(groupId),
+                                         groupedWriteOnlyImageUniforms[groupId], &groupUAVRegisterIndex);
         }
     }
 }
