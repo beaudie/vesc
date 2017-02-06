@@ -21,10 +21,10 @@ class TName;
 namespace sh
 {
 
-// Unique combinations of HLSL Texture type and HLSL Sampler type.
-enum HLSLTextureSamplerGroup
+// HLSL Texture type for GLSL sampler type and readonly image type.
+enum HLSLTextureGroup
 {
-    // Regular samplers
+    // read resources
     HLSL_TEXTURE_2D,
     HLSL_TEXTURE_MIN = HLSL_TEXTURE_2D,
 
@@ -54,14 +54,46 @@ enum HLSLTextureSamplerGroup
     HLSL_TEXTURE_MAX = HLSL_TEXTURE_UNKNOWN
 };
 
-HLSLTextureSamplerGroup TextureGroup(const TBasicType type);
-TString TextureString(const HLSLTextureSamplerGroup type);
-TString TextureString(const TBasicType type);
-TString TextureGroupSuffix(const HLSLTextureSamplerGroup type);
-TString TextureGroupSuffix(const TBasicType type);
-TString TextureTypeSuffix(const TBasicType type);
+// HLSL RWTexture type for GLSL read and write image type.
+enum HLSLRWTextureGroup
+{
+    // read/write resource
+    HLSL_RWTEXTURE_2D_FLOAT4,
+    HLSL_RWTEXTURE_MIN = HLSL_RWTEXTURE_2D_FLOAT4,
+    HLSL_RWTEXTURE_2D_ARRAY_FLOAT4,
+    HLSL_RWTEXTURE_3D_FLOAT4,
+    HLSL_RWTEXTURE_2D_UINT4,
+    HLSL_RWTEXTURE_2D_ARRAY_UINT4,
+    HLSL_RWTEXTURE_3D_UINT4,
+    HLSL_RWTEXTURE_2D_INT4,
+    HLSL_RWTEXTURE_2D_ARRAY_INT4,
+    HLSL_RWTEXTURE_3D_INT4,
+
+    HLSL_RWTEXTURE_UNKNOWN,
+    HLSL_RWTEXTURE_MAX = HLSL_RWTEXTURE_UNKNOWN
+};
+
+HLSLTextureGroup TextureGroup(const TBasicType type,
+                              TLayoutImageInternalFormat imageInternalFormat = EiifUnspecified);
+TString TextureString(const HLSLTextureGroup textureGroup);
+TString TextureString(const TBasicType type,
+                      TLayoutImageInternalFormat imageInternalFormat = EiifUnspecified);
+TString TextureGroupSuffix(const HLSLTextureGroup type);
+TString TextureGroupSuffix(const TBasicType type,
+                           TLayoutImageInternalFormat imageInternalFormat = EiifUnspecified);
+TString TextureTypeSuffix(const TBasicType type,
+                          TLayoutImageInternalFormat imageInternalFormat = EiifUnspecified);
+HLSLRWTextureGroup RWTextureGroup(const TBasicType type,
+                                  TLayoutImageInternalFormat imageInternalFormat);
+TString RWTextureString(const HLSLRWTextureGroup textureGroup);
+TString RWTextureString(const TBasicType type, TLayoutImageInternalFormat imageInternalFormat);
+TString RWTextureGroupSuffix(const HLSLRWTextureGroup type);
+TString RWTextureGroupSuffix(const TBasicType type, TLayoutImageInternalFormat imageInternalFormat);
+TString RWTextureTypeSuffix(const TBasicType type, TLayoutImageInternalFormat imageInternalFormat);
+
 TString SamplerString(const TBasicType type);
-TString SamplerString(HLSLTextureSamplerGroup type);
+TString SamplerString(HLSLTextureGroup type);
+
 // Adds a prefix to user-defined names to avoid naming clashes.
 TString Decorate(const TString &string);
 TString DecorateVariableIfNeeded(const TName &name);
