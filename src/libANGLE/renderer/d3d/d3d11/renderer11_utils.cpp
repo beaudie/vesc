@@ -1324,6 +1324,15 @@ void GenerateCaps(ID3D11Device *device, ID3D11DeviceContext *deviceContext, cons
         static_cast<GLuint>(GetMaximumComputeUniformBlocks(featureLevel));
     caps->maxComputeTextureImageUnits =
         static_cast<GLuint>(GetMaximumComputeTextureUnits(featureLevel));
+    // TODO(xinghua.cao@intel.com): Get a more accurate limit. For now using the minimum requirement
+    // for GLES 3.1.
+    caps->maxImageUnits           = 4;
+    caps->maxComputeImageUniforms = 4;
+    // TODO(xinghua.cao@intel.com): Get a more accurate limit. Although zero is the minimum
+    // requirement for GLES 3.1, assign non zero to these limits for image test in vertex shader and
+    // fragment shader.
+    caps->maxVertexImageUniforms   = 4;
+    caps->maxFragmentImageUniforms = 4;
 
     // Aggregate shader limits
     caps->maxUniformBufferBindings = caps->maxVertexUniformBlocks + caps->maxFragmentUniformBlocks;

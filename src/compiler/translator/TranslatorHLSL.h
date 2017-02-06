@@ -23,6 +23,8 @@ class TranslatorHLSL : public TCompiler
 
     const std::map<std::string, unsigned int> *getUniformRegisterMap() const;
 
+    unsigned int getSamplerCount() const { return mSamplerCount; }
+
   protected:
     void translate(TIntermBlock *root, ShCompileOptions compileOptions) override;
     bool shouldFlattenPragmaStdglInvariantAll() override;
@@ -35,6 +37,7 @@ class TranslatorHLSL : public TCompiler
 
     std::map<std::string, unsigned int> mUniformBlockRegisterMap;
     std::map<std::string, unsigned int> mUniformRegisterMap;
+    unsigned int mSamplerCount;
 };
 
 }  // namespace sh

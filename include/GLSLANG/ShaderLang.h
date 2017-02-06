@@ -586,6 +586,8 @@ bool GetUniformBlockRegister(const ShHandle handle,
 // Note that the map contains also registers of samplers that have been extracted from structs.
 const std::map<std::string, unsigned int> *GetUniformRegisterMap(const ShHandle handle);
 
+unsigned int GetSamplerCount(const ShHandle handle);
+
 }  // namespace sh
 
 #endif // GLSLANG_SHADERLANG_H_

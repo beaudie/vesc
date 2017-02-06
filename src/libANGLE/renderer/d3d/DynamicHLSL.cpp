@@ -155,8 +155,10 @@ DynamicHLSL::DynamicHLSL(RendererD3D *const renderer) : mRenderer(renderer)
 }
 
 std::string DynamicHLSL::generateVertexShaderForInputLayout(
+    const ProgramD3D *program,
     const std::string &sourceShader,
     const InputLayout &inputLayout,
+    const std::vector<GLenum> &pixelShaderOutputLayout,
     const std::vector<sh::Attribute> &shaderAttributes) const
 {
     std::ostringstream structStream;
@@ -275,10 +277,28 @@ std::string DynamicHLSL::generateVertexShaderForInputLayout(
     size_t copyInsertionPos = vertexHLSL.find(VERTEX_ATTRIBUTE_STUB_STRING);
     vertexHLSL.replace(copyInsertionPos, strlen(VERTEX_ATTRIBUTE_STUB_STRING), structStream.str());
 
+    size_t numPixelOutputs = pixelShaderOutputLayout.size();
+
+    for (const D3DUniform *d3dUniform : program->getD3DUniforms())
+    {
+        if (!(d3dUniform->isReferencedByVertexShader() && d3dUniform->isImage() &&
+              d3dUniform->registerType == U_REGISTER))
+        {
+            continue;
+        }
+
+        std::string vertexRegisterString = "REGISTER" + d3dUniform->name;
+        std::string registerString =
+            "u" + Str(d3dUniform->vsRegisterIndex + static_cast<int>(numPixelOutputs));
+        size_t registerInsertionPos = vertexHLSL.find(vertexRegisterString);
+        vertexHLSL.replace(registerInsertionPos, vertexRegisterString.length(), registerString);
+    }
+
     return vertexHLSL;
 }
 
 std::string DynamicHLSL::generatePixelShaderForOutputSignature(
+    const ProgramD3D *program,
     const std::string &sourceShader,
     const std::vector<PixelShaderOutputVariable> &outputVariables,
     bool usesFragDepth,
@@ -351,6 +371,21 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(
     size_t outputInsertionPos = pixelHLSL.find(PIXEL_OUTPUT_STUB_STRING);
     pixelHLSL.replace(outputInsertionPos, strlen(PIXEL_OUTPUT_STUB_STRING),
                       declarationStream.str());
+
+    for (const D3DUniform *d3dUniform : program->getD3DUniforms())
+    {
+        if (!(d3dUniform->isReferencedByFragmentShader() && d3dUniform->isImage() &&
+              d3dUniform->registerType == U_REGISTER))
+        {
+            continue;
+        }
+
+        std::string pixelRegisterString = "REGISTER" + d3dUniform->name;
+        std::string registerString =
+            "u" + Str(d3dUniform->psRegisterIndex + static_cast<int>(numOutputs));
+        size_t registerInsertionPos = pixelHLSL.find(pixelRegisterString);
+        pixelHLSL.replace(registerInsertionPos, pixelRegisterString.length(), registerString);
+    }
 
     return pixelHLSL;
 }
