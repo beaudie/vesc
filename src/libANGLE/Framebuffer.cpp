@@ -636,7 +636,7 @@ GLenum Framebuffer::checkStatusImpl(const ContextState &state)
         if (depthAttachment.type() == GL_TEXTURE)
         {
             // depth texture attachments require OES/ANGLE_depth_texture
-            if (!state.getExtensions().depthTextures)
+            if (state.getClientMajorVersion() >= 3 || !state.getExtensions().depthTextures)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
