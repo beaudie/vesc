@@ -486,6 +486,9 @@ void Context::makeCurrent(egl::Display *display, egl::Surface *surface)
         mState.mFramebuffers->setDefaultFramebuffer(newDefault);
     }
 
+    // Seamless cubemaps are required for ES3 and higher contexts.
+    mGLState.setCubeMapSeamlessEnabled(mState.getClientMajorVersion() >= 3);
+
     // Notify the renderer of a context switch
     mImplementation->onMakeCurrent(mState);
 }

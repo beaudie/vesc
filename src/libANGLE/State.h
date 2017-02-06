@@ -298,6 +298,10 @@ class State : angle::NonCopyable
     void setFramebufferSRGB(bool sRGB);
     bool getFramebufferSRGB() const;
 
+    // This is not part of GLES state, but depends on GLES version.
+    void setCubeMapSeamlessEnabled(bool cubeMapSeamlessEnabled);
+    bool getCubeMapSeamlessEnabled() const;
+
     // State query functions
     void getBooleanv(GLenum pname, GLboolean *params);
     void getFloatv(GLenum pname, GLfloat *params);
@@ -373,6 +377,7 @@ class State : angle::NonCopyable
         DIRTY_BIT_PATH_RENDERING_MATRIX_PROJ,  // CHROMIUM_path_rendering path projection matrix
         DIRTY_BIT_PATH_RENDERING_STENCIL_STATE,
         DIRTY_BIT_FRAMEBUFFER_SRGB,  // GL_EXT_sRGB_write_control
+        DIRTY_BIT_CUBE_MAP_SEAMLESS_ENABLED,
         DIRTY_BIT_CURRENT_VALUE_0,
         DIRTY_BIT_CURRENT_VALUE_MAX = DIRTY_BIT_CURRENT_VALUE_0 + MAX_VERTEX_ATTRIBS,
         DIRTY_BIT_INVALID           = DIRTY_BIT_CURRENT_VALUE_MAX,
@@ -492,6 +497,8 @@ class State : angle::NonCopyable
 
     // GL_EXT_sRGB_write_control
     bool mFramebufferSRGB;
+
+    bool mCubeMapSeamlessEnabled;
 
     DirtyBits mDirtyBits;
     DirtyObjects mDirtyObjects;

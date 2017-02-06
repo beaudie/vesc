@@ -61,7 +61,8 @@ State::State()
       mPrimitiveRestart(false),
       mMultiSampling(false),
       mSampleAlphaToOne(false),
-      mFramebufferSRGB(true)
+      mFramebufferSRGB(true),
+      mCubeMapSeamlessEnabled(false)
 {
 }
 
@@ -1500,6 +1501,17 @@ void State::setFramebufferSRGB(bool sRGB)
 bool State::getFramebufferSRGB() const
 {
     return mFramebufferSRGB;
+}
+
+void State::setCubeMapSeamlessEnabled(bool cubeMapSeamlessEnabled)
+{
+    mCubeMapSeamlessEnabled = cubeMapSeamlessEnabled;
+    mDirtyBits.set(DIRTY_BIT_CUBE_MAP_SEAMLESS_ENABLED);
+}
+
+bool State::getCubeMapSeamlessEnabled() const
+{
+    return mCubeMapSeamlessEnabled;
 }
 
 void State::getBooleanv(GLenum pname, GLboolean *params)

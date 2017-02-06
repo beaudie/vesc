@@ -758,7 +758,7 @@ gl::Error StateManagerGL::onMakeCurrent(const gl::ContextState &data)
     return gl::NoError();
 }
 
-gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
+void StateManagerGL::setGenericShaderState(const gl::ContextState &data)
 {
     const gl::State &state = data.getState();
 
@@ -832,13 +832,17 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
             }
         }
     }
+}
+
+gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
+{
+    setGenericShaderState(data);
+
+    const gl::State &state = data.getState();
 
     const gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
     const FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
     bindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferGL->getFramebufferID());
-
-    // Seamless cubemaps are required for ES3 and higher contexts.
-    setTextureCubemapSeamlessEnabled(data.getClientMajorVersion() >= 3);
 
     // Set the current transform feedback state
     gl::TransformFeedback *transformFeedback = state.getCurrentTransformFeedback();
@@ -1624,6 +1628,9 @@ void StateManagerGL::syncState(const gl::State &state, const gl::State::DirtyBit
                 setFramebufferSRGBEnabledForFramebuffer(
                     state.getFramebufferSRGB(),
                     GetImplAs<FramebufferGL>(state.getDrawFramebuffer()));
+                break;
+            case gl::State::DIRTY_BIT_CUBE_MAP_SEAMLESS_ENABLED:
+                setTextureCubemapSeamlessEnabled(state.getCubeMapSeamlessEnabled());
                 break;
             default:
             {
