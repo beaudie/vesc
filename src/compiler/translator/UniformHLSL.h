@@ -82,9 +82,16 @@ class UniformHLSL : angle::NonCopyable
         const TMap<const TIntermSymbol *, TString> &samplerInStructSymbolsToAPINames,
         unsigned int *groupTextureRegisterIndex);
 
+    void outputHLSLImagesUniformGroup(TInfoSinkBase &out,
+                                      const HLSLRVTextureGroup RVTextureGroup,
+                                      const TVector<const TIntermSymbol *> &group,
+                                      unsigned int *groupTextureRegisterIndex);
+
     unsigned int mUniformRegister;
     unsigned int mInterfaceBlockRegister;
     unsigned int mSamplerRegister;
+    unsigned int mSRVRegister;
+    unsigned int mUAVRegister;
     StructureHLSL *mStructureHLSL;
     ShShaderOutput mOutputType;
 

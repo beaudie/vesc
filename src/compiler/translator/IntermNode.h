@@ -549,6 +549,13 @@ class TFunctionSymbolInfo
     const TString &getName() const { return mName.getString(); }
     void setName(const TString &name) { mName.setString(name); }
     bool isMain() const { return mName.getString() == "main("; }
+    bool isImageFunction() const
+    {
+        TString unmangleName =
+            TString(mName.getString().c_str(), mName.getString().find_first_of('('));
+        return unmangleName == "imageSize" || unmangleName == "imageLoad" ||
+               unmangleName == "imageStore";
+    }
 
     void setId(int functionId) { mId = functionId; }
     int getId() const { return mId; }

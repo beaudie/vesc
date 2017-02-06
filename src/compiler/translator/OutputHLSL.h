@@ -22,6 +22,7 @@ namespace sh
 {
 class StructureHLSL;
 class TextureFunctionHLSL;
+class ImageFunctionHLSL;
 class UnfoldShortCircuit;
 class UniformHLSL;
 
@@ -162,6 +163,7 @@ class OutputHLSL : public TIntermTraverser
     StructureHLSL *mStructureHLSL;
     UniformHLSL *mUniformHLSL;
     TextureFunctionHLSL *mTextureFunctionHLSL;
+    ImageFunctionHLSL *mImageFunctionHLSL;
 
     // Parameters determining what goes in the header output
     bool mUsesFragColor;
