@@ -35,6 +35,7 @@ class ContextState final : public angle::NonCopyable
   public:
     ContextState(uintptr_t context,
                  const ContextState *shareContextState,
+                 TextureManager* shareTextures,
                  const Version &clientVersion,
                  State *state,
                  const Caps &caps,
@@ -81,6 +82,7 @@ class ValidationContext : angle::NonCopyable
 {
   public:
     ValidationContext(const ValidationContext *shareContext,
+                      TextureManager* shareTextures,
                       const Version &clientVersion,
                       State *state,
                       const Caps &caps,
