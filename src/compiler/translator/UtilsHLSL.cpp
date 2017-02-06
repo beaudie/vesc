@@ -199,6 +199,456 @@ TString TextureTypeSuffix(const TBasicType type)
     }
 }
 
+HLSLSRVTextureGroup SRVTextureGroup(const TBasicType type,
+                                    TLayoutImageInternalFormat imageInternalFormat)
+{
+    switch (imageInternalFormat)
+    {
+        case EiifRGBA32F:
+        case EiifRGBA16F:
+        case EiifRGBA8:
+        case EiifRGBA8_SNORM:
+        {
+            switch (type)
+            {
+                case EbtImage2D:
+                    return HLSL_SRV_TEXTURE_2D_FLOAT4;
+                case EbtImage3D:
+                    return HLSL_SRV_TEXTURE_3D_FLOAT4;
+                case EbtImage2DArray:
+                    return HLSL_SRV_TEXTURE_2D_ARRAY_FLOAT4;
+                case EbtImageCube:
+                    return HLSL_SRV_TEXTURE_CUBE_FLOAT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        break;
+        case EiifR32F:
+        {
+            switch (type)
+            {
+                case EbtImage2D:
+                    return HLSL_SRV_TEXTURE_2D_FLOAT;
+                case EbtImage3D:
+                    return HLSL_SRV_TEXTURE_3D_FLOAT;
+                case EbtImage2DArray:
+                    return HLSL_SRV_TEXTURE_2D_ARRAY_FLOAT;
+                case EbtImageCube:
+                    return HLSL_SRV_TEXTURE_CUBE_FLOAT;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        break;
+        case EiifRGBA32UI:
+        case EiifRGBA16UI:
+        case EiifRGBA8UI:
+        {
+            switch (type)
+            {
+                case EbtUImage2D:
+                    return HLSL_SRV_TEXTURE_2D_UINT4;
+                case EbtUImage3D:
+                    return HLSL_SRV_TEXTURE_3D_UINT4;
+                case EbtUImage2DArray:
+                    return HLSL_SRV_TEXTURE_2D_ARRAY_UINT4;
+                case EbtUImageCube:
+                    return HLSL_SRV_TEXTURE_CUBE_UINT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        break;
+        case EiifR32UI:
+        {
+            switch (type)
+            {
+                case EbtUImage2D:
+                    return HLSL_SRV_TEXTURE_2D_UINT;
+                case EbtUImage3D:
+                    return HLSL_SRV_TEXTURE_3D_UINT;
+                case EbtUImage2DArray:
+                    return HLSL_SRV_TEXTURE_2D_ARRAY_UINT;
+                case EbtUImageCube:
+                    return HLSL_SRV_TEXTURE_CUBE_UINT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        break;
+        case EiifRGBA32I:
+        case EiifRGBA16I:
+        case EiifRGBA8I:
+        {
+            switch (type)
+            {
+                case EbtIImage2D:
+                    return HLSL_SRV_TEXTURE_2D_INT4;
+                case EbtIImage3D:
+                    return HLSL_SRV_TEXTURE_3D_INT4;
+                case EbtIImage2DArray:
+                    return HLSL_SRV_TEXTURE_2D_ARRAY_INT4;
+                case EbtIImageCube:
+                    return HLSL_SRV_TEXTURE_CUBE_INT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        break;
+        case EiifR32I:
+        {
+            switch (type)
+            {
+                case EbtIImage2D:
+                    return HLSL_SRV_TEXTURE_2D_INT;
+                case EbtIImage3D:
+                    return HLSL_SRV_TEXTURE_3D_INT;
+                case EbtIImage2DArray:
+                    return HLSL_SRV_TEXTURE_2D_ARRAY_INT;
+                case EbtIImageCube:
+                    return HLSL_SRV_TEXTURE_CUBE_INT;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        break;
+        default:
+            UNREACHABLE();
+    }
+
+    return HLSL_SRV_TEXTURE_UNKNOWN;
+}
+
+HLSLUAVTextureGroup UAVTextureGroup(const TBasicType type,
+                                    TLayoutImageInternalFormat imageInternalFormat)
+{
+    switch (imageInternalFormat)
+    {
+        case EiifRGBA32F:
+        case EiifRGBA16F:
+        case EiifRGBA8:
+        case EiifRGBA8_SNORM:
+        {
+            switch (type)
+            {
+                case EbtImage2D:
+                    return HLSL_UAV_TEXTURE_2D_FLOAT4;
+                case EbtImage3D:
+                    return HLSL_UAV_TEXTURE_3D_FLOAT4;
+                case EbtImage2DArray:
+                case EbtImageCube:
+                    return HLSL_UAV_TEXTURE_2D_ARRAY_FLOAT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        break;
+        case EiifR32F:
+        {
+            switch (type)
+            {
+                case EbtImage2D:
+                    return HLSL_UAV_TEXTURE_2D_FLOAT;
+                case EbtImage3D:
+                    return HLSL_UAV_TEXTURE_3D_FLOAT;
+                case EbtImage2DArray:
+                case EbtImageCube:
+                    return HLSL_UAV_TEXTURE_2D_ARRAY_FLOAT;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        break;
+        case EiifRGBA32UI:
+        case EiifRGBA16UI:
+        case EiifRGBA8UI:
+        {
+            switch (type)
+            {
+                case EbtUImage2D:
+                    return HLSL_UAV_TEXTURE_2D_UINT4;
+                case EbtUImage3D:
+                    return HLSL_UAV_TEXTURE_3D_UINT4;
+                case EbtUImage2DArray:
+                case EbtUImageCube:
+                    return HLSL_UAV_TEXTURE_2D_ARRAY_UINT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        break;
+        case EiifR32UI:
+        {
+            switch (type)
+            {
+                case EbtUImage2D:
+                    return HLSL_UAV_TEXTURE_2D_UINT;
+                case EbtUImage3D:
+                    return HLSL_UAV_TEXTURE_3D_UINT;
+                case EbtUImage2DArray:
+                case EbtUImageCube:
+                    return HLSL_UAV_TEXTURE_2D_ARRAY_UINT;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        break;
+        case EiifRGBA32I:
+        case EiifRGBA16I:
+        case EiifRGBA8I:
+        {
+            switch (type)
+            {
+                case EbtIImage2D:
+                    return HLSL_UAV_TEXTURE_2D_INT4;
+                case EbtIImage3D:
+                    return HLSL_UAV_TEXTURE_3D_INT4;
+                case EbtIImage2DArray:
+                case EbtIImageCube:
+                    return HLSL_UAV_TEXTURE_2D_ARRAY_INT4;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        break;
+        case EiifR32I:
+        {
+            switch (type)
+            {
+                case EbtIImage2D:
+                    return HLSL_UAV_TEXTURE_2D_INT;
+                case EbtIImage3D:
+                    return HLSL_UAV_TEXTURE_3D_INT;
+                case EbtIImage2DArray:
+                case EbtIImageCube:
+                    return HLSL_UAV_TEXTURE_2D_ARRAY_INT;
+                default:
+                    UNREACHABLE();
+            }
+        }
+        break;
+        default:
+            UNREACHABLE();
+    }
+
+    return HLSL_UAV_TEXTURE_UNKNOWN;
+}
+
+TString SRVTextureGroupSuffix(const HLSLSRVTextureGroup type)
+{
+    switch (type)
+    {
+        case HLSL_SRV_TEXTURE_2D_FLOAT4:
+            return "2D_float4_";
+        case HLSL_SRV_TEXTURE_2D_ARRAY_FLOAT4:
+            return "2DArray_float4_";
+        case HLSL_SRV_TEXTURE_CUBE_FLOAT4:
+            return "cube_float4_";
+        case HLSL_SRV_TEXTURE_3D_FLOAT4:
+            return "3D_float4_";
+        case HLSL_SRV_TEXTURE_2D_FLOAT:
+            return "2D_float_";
+        case HLSL_SRV_TEXTURE_2D_ARRAY_FLOAT:
+            return "2DArray_float_";
+        case HLSL_SRV_TEXTURE_CUBE_FLOAT:
+            return "cube_float_";
+        case HLSL_SRV_TEXTURE_3D_FLOAT:
+            return "3D_float_";
+        case HLSL_SRV_TEXTURE_2D_UINT4:
+            return "2D_uint4_";
+        case HLSL_SRV_TEXTURE_2D_ARRAY_UINT4:
+            return "2DArray_uint4_";
+        case HLSL_SRV_TEXTURE_CUBE_UINT4:
+            return "cube_uint4_";
+        case HLSL_SRV_TEXTURE_3D_UINT4:
+            return "3D_uint4_";
+        case HLSL_SRV_TEXTURE_2D_UINT:
+            return "2D_uint_";
+        case HLSL_SRV_TEXTURE_2D_ARRAY_UINT:
+            return "2DArray_uint_";
+        case HLSL_SRV_TEXTURE_CUBE_UINT:
+            return "cube_uint_";
+        case HLSL_SRV_TEXTURE_3D_UINT:
+            return "3D_uint_";
+        case HLSL_SRV_TEXTURE_2D_INT4:
+            return "2D_int4_";
+        case HLSL_SRV_TEXTURE_2D_ARRAY_INT4:
+            return "2DArray_int4_";
+        case HLSL_SRV_TEXTURE_CUBE_INT4:
+            return "cube_int4";
+        case HLSL_SRV_TEXTURE_3D_INT4:
+            return "3D_int4_";
+        case HLSL_SRV_TEXTURE_2D_INT:
+            return "2D_int_";
+        case HLSL_SRV_TEXTURE_2D_ARRAY_INT:
+            return "2DArray_int_";
+        case HLSL_SRV_TEXTURE_CUBE_INT:
+            return "cube_int";
+        case HLSL_SRV_TEXTURE_3D_INT:
+            return "3D_int_";
+        default:
+            UNREACHABLE();
+    }
+
+    return "<unknown shader resource view type>";
+}
+
+TString UAVTextureGroupSuffix(const HLSLUAVTextureGroup type)
+{
+    switch (type)
+    {
+        case HLSL_UAV_TEXTURE_2D_FLOAT4:
+            return "RW2D_float4_";
+        case HLSL_UAV_TEXTURE_2D_ARRAY_FLOAT4:
+            return "RW2DArray_float4_";
+        case HLSL_UAV_TEXTURE_3D_FLOAT4:
+            return "RW3D_float4_";
+        case HLSL_UAV_TEXTURE_2D_FLOAT:
+            return "RW2D_float_";
+        case HLSL_UAV_TEXTURE_2D_ARRAY_FLOAT:
+            return "RW2DArray_float_";
+        case HLSL_UAV_TEXTURE_3D_FLOAT:
+            return "RW3D_float_";
+        case HLSL_UAV_TEXTURE_2D_UINT4:
+            return "RW2D_uint4_";
+        case HLSL_UAV_TEXTURE_2D_ARRAY_UINT4:
+            return "RW2DArray_uint4_";
+        case HLSL_UAV_TEXTURE_3D_UINT4:
+            return "RW3D_uint4_";
+        case HLSL_UAV_TEXTURE_2D_UINT:
+            return "RW2D_uint_";
+        case HLSL_UAV_TEXTURE_2D_ARRAY_UINT:
+            return "RW2DArray_uint_";
+        case HLSL_UAV_TEXTURE_3D_UINT:
+            return "RW3D_uint_";
+        case HLSL_UAV_TEXTURE_2D_INT4:
+            return "RW2D_int4_";
+        case HLSL_UAV_TEXTURE_2D_ARRAY_INT4:
+            return "RW2DArray_int4_";
+        case HLSL_UAV_TEXTURE_3D_INT4:
+            return "RW3D_int4_";
+        case HLSL_UAV_TEXTURE_2D_INT:
+            return "RW2D_int_";
+        case HLSL_UAV_TEXTURE_2D_ARRAY_INT:
+            return "RW2DArray_int_";
+        case HLSL_UAV_TEXTURE_3D_INT:
+            return "RW3D_int_";
+        default:
+            UNREACHABLE();
+    }
+
+    return "<unknown unordered access view type>";
+}
+
+TString SRVTextureString(const HLSLSRVTextureGroup SRVTextureGroup)
+
+{
+    switch (SRVTextureGroup)
+    {
+        case HLSL_SRV_TEXTURE_2D_FLOAT4:
+            return "Texture2D<float4>";
+        case HLSL_SRV_TEXTURE_2D_ARRAY_FLOAT4:
+            return "Texture2DArray<float4>";
+        case HLSL_SRV_TEXTURE_CUBE_FLOAT4:
+            return "TextureCube<float4>";
+        case HLSL_SRV_TEXTURE_3D_FLOAT4:
+            return "Texture3D<float4>";
+        case HLSL_SRV_TEXTURE_2D_FLOAT:
+            return "Texture2D<float>";
+        case HLSL_SRV_TEXTURE_2D_ARRAY_FLOAT:
+            return "Texture2DArray<float>";
+        case HLSL_SRV_TEXTURE_CUBE_FLOAT:
+            return "TextureCube<float>";
+        case HLSL_SRV_TEXTURE_3D_FLOAT:
+            return "Texture3D<float>";
+        case HLSL_SRV_TEXTURE_2D_UINT4:
+            return "Texture2D<uint4>";
+        case HLSL_SRV_TEXTURE_2D_ARRAY_UINT4:
+            return "Texture2DArray<uint4>";
+        case HLSL_SRV_TEXTURE_CUBE_UINT4:
+            return "TextureCube<uint4>";
+        case HLSL_SRV_TEXTURE_3D_UINT4:
+            return "Texture3D<uint4>";
+        case HLSL_SRV_TEXTURE_2D_UINT:
+            return "Texture2D<uint4>";
+        case HLSL_SRV_TEXTURE_2D_ARRAY_UINT:
+            return "Texture2DArray<int4>";
+        case HLSL_SRV_TEXTURE_CUBE_UINT:
+            return "TextureCube<int>";
+        case HLSL_SRV_TEXTURE_3D_UINT:
+            return "Texture3D<uint>";
+        case HLSL_SRV_TEXTURE_2D_INT4:
+            return "Texture2D<int4>";
+        case HLSL_SRV_TEXTURE_2D_ARRAY_INT4:
+            return "Texture2DArray<int4>";
+        case HLSL_SRV_TEXTURE_CUBE_INT4:
+            return "TextureCube<int4>";
+        case HLSL_SRV_TEXTURE_3D_INT4:
+            return "Texture3D<int4>";
+        case HLSL_SRV_TEXTURE_2D_INT:
+            return "Texture2D<int>";
+        case HLSL_SRV_TEXTURE_2D_ARRAY_INT:
+            return "Texture2DArray<int>";
+        case HLSL_SRV_TEXTURE_CUBE_INT:
+            return "TextureCube<int>";
+        case HLSL_SRV_TEXTURE_3D_INT:
+            return "Texture3D<int>";
+        default:
+            UNREACHABLE();
+    }
+
+    return "<unknown shader resource view type>";
+}
+
+TString UAVTextureString(const HLSLUAVTextureGroup UAVTextureGroup)
+
+{
+    switch (UAVTextureGroup)
+    {
+        case HLSL_UAV_TEXTURE_2D_FLOAT4:
+            return "RWTexture2D<float4>";
+        case HLSL_UAV_TEXTURE_2D_ARRAY_FLOAT4:
+            return "RWTexture2DArray<float4>";
+        case HLSL_UAV_TEXTURE_3D_FLOAT4:
+            return "RWTexture3D<float4>";
+        case HLSL_UAV_TEXTURE_2D_FLOAT:
+            return "RWTexture2D<float>";
+        case HLSL_UAV_TEXTURE_2D_ARRAY_FLOAT:
+            return "RWTexture2DArray<float>";
+        case HLSL_UAV_TEXTURE_3D_FLOAT:
+            return "RWTexture3D<float>";
+        case HLSL_UAV_TEXTURE_2D_UINT4:
+            return "RWTexture2D<uint4>";
+        case HLSL_UAV_TEXTURE_2D_ARRAY_UINT4:
+            return "RWTexture2DArray<uint4>";
+        case HLSL_UAV_TEXTURE_3D_UINT4:
+            return "RWTexture3D<uint4>";
+        case HLSL_UAV_TEXTURE_2D_UINT:
+            return "RWTexture2D<uint>";
+        case HLSL_UAV_TEXTURE_2D_ARRAY_UINT:
+            return "RWTexture2DArray<uint>";
+        case HLSL_UAV_TEXTURE_3D_UINT:
+            return "RWTexture3D<uint>";
+        case HLSL_UAV_TEXTURE_2D_INT4:
+            return "RWTexture2D<int4>";
+        case HLSL_UAV_TEXTURE_2D_ARRAY_INT4:
+            return "RWTexture2DArray<int4>";
+        case HLSL_UAV_TEXTURE_3D_INT4:
+            return "RWTexture3D<int4>";
+        case HLSL_UAV_TEXTURE_2D_INT:
+            return "RWTexture2D<int>";
+        case HLSL_UAV_TEXTURE_2D_ARRAY_INT:
+            return "RWTexture2DArray<int>";
+        case HLSL_UAV_TEXTURE_3D_INT:
+            return "RWTexture3D<int>";
+        default:
+            UNREACHABLE();
+    }
+
+    return "<unknown unordered access view type>";
+}
+
 TString DecorateUniform(const TName &name, const TType &type)
 {
     return DecorateIfNeeded(name);
