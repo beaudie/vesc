@@ -635,8 +635,8 @@ GLenum Framebuffer::checkStatusImpl(const ContextState &state)
         const TextureCaps &formatCaps = state.getTextureCap(format.asSized());
         if (depthAttachment.type() == GL_TEXTURE)
         {
-            // depth texture attachments require OES/ANGLE_depth_texture
-            if (!state.getExtensions().depthTextures)
+            // Depth texture attachments require OES/ANGLE_depth_texture or ES3+.
+            if (state.getClientMajorVersion() < 3 && !state.getExtensions().depthTextures)
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
             }
