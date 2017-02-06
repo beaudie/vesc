@@ -112,10 +112,13 @@ class DynamicHLSL : angle::NonCopyable
     explicit DynamicHLSL(RendererD3D *const renderer);
 
     std::string generateVertexShaderForInputLayout(
+        const ProgramD3D *program,
         const std::string &sourceShader,
         const gl::InputLayout &inputLayout,
+        const std::vector<GLenum> &pixelShaderOutputLayout,
         const std::vector<sh::Attribute> &shaderAttributes) const;
     std::string generatePixelShaderForOutputSignature(
+        const ProgramD3D *program,
         const std::string &sourceShader,
         const std::vector<PixelShaderOutputVariable> &outputVariables,
         bool usesFragDepth,
