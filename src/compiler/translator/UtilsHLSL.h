@@ -54,6 +54,66 @@ enum HLSLTextureSamplerGroup
     HLSL_TEXTURE_MAX = HLSL_TEXTURE_UNKNOWN
 };
 
+// Unique combinations for HLSL Shader Resource View type and HLSL Texture type.
+enum HLSLSRVTextureGroup
+{
+    HLSL_SRV_TEXTURE_2D_FLOAT4,
+    HLSL_SRV_TEXTURE_MIN = HLSL_SRV_TEXTURE_2D_FLOAT4,
+    HLSL_SRV_TEXTURE_2D_ARRAY_FLOAT4,
+    HLSL_SRV_TEXTURE_CUBE_FLOAT4,
+    HLSL_SRV_TEXTURE_3D_FLOAT4,
+    HLSL_SRV_TEXTURE_2D_FLOAT,
+    HLSL_SRV_TEXTURE_2D_ARRAY_FLOAT,
+    HLSL_SRV_TEXTURE_CUBE_FLOAT,
+    HLSL_SRV_TEXTURE_3D_FLOAT,
+    HLSL_SRV_TEXTURE_2D_UINT4,
+    HLSL_SRV_TEXTURE_2D_ARRAY_UINT4,
+    HLSL_SRV_TEXTURE_CUBE_UINT4,
+    HLSL_SRV_TEXTURE_3D_UINT4,
+    HLSL_SRV_TEXTURE_2D_UINT,
+    HLSL_SRV_TEXTURE_2D_ARRAY_UINT,
+    HLSL_SRV_TEXTURE_CUBE_UINT,
+    HLSL_SRV_TEXTURE_3D_UINT,
+    HLSL_SRV_TEXTURE_2D_INT4,
+    HLSL_SRV_TEXTURE_2D_ARRAY_INT4,
+    HLSL_SRV_TEXTURE_CUBE_INT4,
+    HLSL_SRV_TEXTURE_3D_INT4,
+    HLSL_SRV_TEXTURE_2D_INT,
+    HLSL_SRV_TEXTURE_2D_ARRAY_INT,
+    HLSL_SRV_TEXTURE_CUBE_INT,
+    HLSL_SRV_TEXTURE_3D_INT,
+
+    HLSL_SRV_TEXTURE_UNKNOWN,
+    HLSL_SRV_TEXTURE_MAX = HLSL_SRV_TEXTURE_UNKNOWN
+};
+
+// Unique combinations for HLSL Unordered Access View type and HLSL Texture type.
+enum HLSLUAVTextureGroup
+{
+    HLSL_UAV_TEXTURE_2D_FLOAT4,
+    HLSL_UAV_TEXTURE_MIN = HLSL_UAV_TEXTURE_2D_FLOAT4,
+    HLSL_UAV_TEXTURE_2D_ARRAY_FLOAT4,
+    HLSL_UAV_TEXTURE_3D_FLOAT4,
+    HLSL_UAV_TEXTURE_2D_FLOAT,
+    HLSL_UAV_TEXTURE_2D_ARRAY_FLOAT,
+    HLSL_UAV_TEXTURE_3D_FLOAT,
+    HLSL_UAV_TEXTURE_2D_UINT4,
+    HLSL_UAV_TEXTURE_2D_ARRAY_UINT4,
+    HLSL_UAV_TEXTURE_3D_UINT4,
+    HLSL_UAV_TEXTURE_2D_UINT,
+    HLSL_UAV_TEXTURE_2D_ARRAY_UINT,
+    HLSL_UAV_TEXTURE_3D_UINT,
+    HLSL_UAV_TEXTURE_2D_INT4,
+    HLSL_UAV_TEXTURE_2D_ARRAY_INT4,
+    HLSL_UAV_TEXTURE_3D_INT4,
+    HLSL_UAV_TEXTURE_2D_INT,
+    HLSL_UAV_TEXTURE_2D_ARRAY_INT,
+    HLSL_UAV_TEXTURE_3D_INT,
+
+    HLSL_UAV_TEXTURE_UNKNOWN,
+    HLSL_UAV_TEXTURE_MAX = HLSL_UAV_TEXTURE_UNKNOWN
+};
+
 HLSLTextureSamplerGroup TextureGroup(const TBasicType type);
 TString TextureString(const HLSLTextureSamplerGroup type);
 TString TextureString(const TBasicType type);
@@ -62,6 +122,15 @@ TString TextureGroupSuffix(const TBasicType type);
 TString TextureTypeSuffix(const TBasicType type);
 TString SamplerString(const TBasicType type);
 TString SamplerString(HLSLTextureSamplerGroup type);
+HLSLSRVTextureGroup SRVTextureGroup(const TBasicType type,
+                                    TLayoutImageInternalFormat imageInternalFormat);
+HLSLUAVTextureGroup UAVTextureGroup(const TBasicType type,
+                                    TLayoutImageInternalFormat imageInternalFormat);
+TString SRVTextureGroupSuffix(const HLSLSRVTextureGroup type);
+TString UAVTextureGroupSuffix(const HLSLUAVTextureGroup type);
+TString SRVTextureString(const HLSLSRVTextureGroup SRVTextureGroup);
+TString UAVTextureString(const HLSLUAVTextureGroup UAVTextureGroup);
+
 // Prepends an underscore to avoid naming clashes
 TString Decorate(const TString &string);
 TString DecorateIfNeeded(const TName &name);
