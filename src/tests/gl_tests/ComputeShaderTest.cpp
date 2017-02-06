@@ -243,6 +243,63 @@ TEST_P(ComputeShaderTest, DispatchCompute)
     EXPECT_GL_NO_ERROR();
 }
 
+// imageLoad functions
+TEST_P(ComputeShaderTest, ImageLoad)
+{
+    const std::string csSource =
+        "#version 310 es\n"
+        "layout(local_size_x=8) in;\n"
+        "layout(rgba32f) uniform highp readonly image2D my2DImageInput;\n"
+        "layout(rgba32ui) uniform highp readonly uimage3D my3DImageInput;\n"
+        "void main()\n"
+        "{\n"
+        "     vec4 result2d = imageLoad(my2DImageInput, ivec2(gl_LocalInvocationID.xy));\n"
+        "     uvec4 result3d = imageLoad(my3DImageInput, ivec3(gl_LocalInvocationID.xyz));\n"
+        "}\n";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+
+    EXPECT_GL_NO_ERROR();
+}
+
+// imageStore functions
+TEST_P(ComputeShaderTest, ImageStore)
+{
+    const std::string csSource =
+        "#version 310 es\n"
+        "layout(local_size_x=8) in;\n"
+        "layout(rgba16f) uniform highp writeonly image2D my2DImageOutput;\n"
+        "layout(rgba8ui) uniform highp writeonly uimage2DArray my2DArrayImageOutput;\n"
+        "void main()\n"
+        "{\n"
+        "     imageStore(my2DImageOutput, ivec2(gl_LocalInvocationID.xy), vec4(0.0));\n"
+        "     imageStore(my2DArrayImageOutput, ivec3(gl_LocalInvocationID.xyz), uvec4(0));\n"
+        "}\n";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+
+    EXPECT_GL_NO_ERROR();
+}
+
+// imageSize functions
+TEST_P(ComputeShaderTest, ImageSize)
+{
+    const std::string csSource =
+        "#version 310 es\n"
+        "layout(local_size_x=8) in;\n"
+        "layout(rgba8) uniform highp readonly imageCube myCubeImageInput;\n"
+        "layout(r32i) uniform highp readonly iimage2D my2DImageInput;\n"
+        "void main()\n"
+        "{\n"
+        "     ivec2 sizeCube = imageSize(myCubeImageInput);\n"
+        "     ivec2 size2D = imageSize(my2DImageInput);\n"
+        "}\n";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, csSource);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 // Check that it is not possible to create a compute shader when the context does not support ES
 // 3.10
 TEST_P(ComputeShaderTestES3, NotSupported)
