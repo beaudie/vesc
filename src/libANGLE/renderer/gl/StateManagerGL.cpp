@@ -121,6 +121,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions, const gl::Caps &ren
       mFramebufferSRGBEnabled(false),
       mDitherEnabled(true),
       mTextureCubemapSeamlessEnabled(false),
+      mShouldEnableSeamlessCubemaps(false),
       mMultisamplingEnabled(true),
       mSampleAlphaToOneEnabled(false),
       mCoverageModulation(GL_NONE),
@@ -755,10 +756,17 @@ gl::Error StateManagerGL::onMakeCurrent(const gl::ContextState &data)
         }
     }
 
+    // Seamless cubemaps are required for ES3 and higher contexts.
+    mShouldEnableSeamlessCubemaps = (data.getClientMajorVersion() >= 3);
+    if (mTextureCubemapSeamlessEnabled != mShouldEnableSeamlessCubemaps)
+    {
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_CUBE_MAP_SEAMLESS_ENABLED);
+    }
+
     return gl::NoError();
 }
 
-gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
+void StateManagerGL::setGenericShaderState(const gl::ContextState &data)
 {
     const gl::State &state = data.getState();
 
@@ -832,13 +840,17 @@ gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
             }
         }
     }
+}
+
+gl::Error StateManagerGL::setGenericDrawState(const gl::ContextState &data)
+{
+    setGenericShaderState(data);
+
+    const gl::State &state = data.getState();
 
     const gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
     const FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
     bindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferGL->getFramebufferID());
-
-    // Seamless cubemaps are required for ES3 and higher contexts.
-    setTextureCubemapSeamlessEnabled(data.getClientMajorVersion() >= 3);
 
     // Set the current transform feedback state
     gl::TransformFeedback *transformFeedback = state.getCurrentTransformFeedback();
@@ -1625,6 +1637,9 @@ void StateManagerGL::syncState(const gl::State &state, const gl::State::DirtyBit
                     state.getFramebufferSRGB(),
                     GetImplAs<FramebufferGL>(state.getDrawFramebuffer()));
                 break;
+            case gl::State::DIRTY_BIT_CUBE_MAP_SEAMLESS_ENABLED:
+                setTextureCubemapSeamlessEnabled(mShouldEnableSeamlessCubemaps);
+                break;
             default:
             {
                 ASSERT(dirtyBit >= gl::State::DIRTY_BIT_CURRENT_VALUE_0 &&
@@ -1785,6 +1800,8 @@ void StateManagerGL::setTextureCubemapSeamlessEnabled(bool enabled)
         {
             mFunctions->disable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
         }
+
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_CUBE_MAP_SEAMLESS_ENABLED);
     }
 }
 

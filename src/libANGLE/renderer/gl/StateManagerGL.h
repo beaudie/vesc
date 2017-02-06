@@ -163,6 +163,10 @@ class StateManagerGL final : angle::NonCopyable
     GLuint getBoundBuffer(GLenum type);
 
   private:
+    // Set state that's common among draw commands and compute invocations.
+    void setGenericShaderState(const gl::ContextState &data);
+
+    // Set state that's common among draw commands.
     gl::Error setGenericDrawState(const gl::ContextState &data);
 
     void setTextureCubemapSeamlessEnabled(bool enabled);
@@ -275,6 +279,11 @@ class StateManagerGL final : angle::NonCopyable
     bool mFramebufferSRGBEnabled;
     bool mDitherEnabled;
     bool mTextureCubemapSeamlessEnabled;
+
+    // This flag is set according to what the client context version requires on MakeCurrent, so
+    // that the driver state can be updated lazily later. It's not part of the GLES state, so it
+    // isn't handled the same way as other GL state that needs to be set in the driver.
+    bool mShouldEnableSeamlessCubemaps;
 
     bool mMultisamplingEnabled;
     bool mSampleAlphaToOneEnabled;

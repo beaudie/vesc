@@ -372,7 +372,8 @@ class State : angle::NonCopyable
         DIRTY_BIT_PATH_RENDERING_MATRIX_MV,    // CHROMIUM_path_rendering path model view matrix
         DIRTY_BIT_PATH_RENDERING_MATRIX_PROJ,  // CHROMIUM_path_rendering path projection matrix
         DIRTY_BIT_PATH_RENDERING_STENCIL_STATE,
-        DIRTY_BIT_FRAMEBUFFER_SRGB,  // GL_EXT_sRGB_write_control
+        DIRTY_BIT_FRAMEBUFFER_SRGB,           // GL_EXT_sRGB_write_control
+        DIRTY_BIT_CUBE_MAP_SEAMLESS_ENABLED,  // Optimization for managing GL backend specific state
         DIRTY_BIT_CURRENT_VALUE_0,
         DIRTY_BIT_CURRENT_VALUE_MAX = DIRTY_BIT_CURRENT_VALUE_0 + MAX_VERTEX_ATTRIBS,
         DIRTY_BIT_INVALID           = DIRTY_BIT_CURRENT_VALUE_MAX,
