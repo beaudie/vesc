@@ -121,6 +121,7 @@ void TranslatorHLSL::translate(TIntermBlock *root, ShCompileOptions compileOptio
 
     mUniformBlockRegisterMap   = outputHLSL.getUniformBlockRegisterMap();
     mUniformRegisterMap        = outputHLSL.getUniformRegisterMap();
+    mSamplerCount              = outputHLSL.getSamplerCount();
 }
 
 bool TranslatorHLSL::shouldFlattenPragmaStdglInvariantAll()

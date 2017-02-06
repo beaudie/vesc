@@ -899,6 +899,37 @@ TEST_P(UniformTestES31, UnusedUniformArraysConflictingLocation)
     EXPECT_EQ(0u, mProgram);
 }
 
+TEST_P(UniformTestES31, UseImageInVertexAndPixelShader)
+{
+    const std::string &vertShader =
+        "#version 310 es\n"
+        "precision highp float;\n"
+        "in highp vec4 a_position;\n"
+        "layout(r32f) uniform highp writeonly image2D mImage2DOutput;\n"
+        "layout(r32f) uniform highp writeonly image3D mImage3DOutput;\n"
+        "void main()\n"
+        "{\n"
+        "    imageStore(mImage2DOutput, ivec2(0, 0), vec4(0.0));\n"
+        "    imageStore(mImage3DOutput, ivec3(0, 0, 0), vec4(0.0));\n"
+        "    gl_Position = a_position;\n"
+        "}\n";
+
+    const std::string &fragShader =
+        "#version 310 es\n"
+        "precision highp float;\n"
+        "layout(r32f) uniform highp writeonly image3D mImage3DOutput;\n"
+        "out highp vec4 my_color;\n"
+        "void main()\n"
+        "{\n"
+        "    imageStore(mImage3DOutput, ivec3(0, 0, 0), vec4(0.0));\n"
+        "    my_color = vec4(0.0);\n"
+        "}\n";
+
+    mProgram = CompileProgram(vertShader, fragShader);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test a uniform struct containing a non-square matrix and a boolean.
 // Minimal test case for a bug revealed by dEQP tests.
 TEST_P(UniformTestES3, StructWithNonSquareMatrixAndBool)
