@@ -158,6 +158,11 @@ ShShaderOutput ShaderD3D::getCompilerOutputType() const
     return mCompilerOutputType;
 }
 
+unsigned int ShaderD3D::getSamplerCount() const
+{
+    return mSamplerCount;
+}
+
 ShCompileOptions ShaderD3D::prepareSourceAndReturnOptions(std::stringstream *shaderSourceStream,
                                                           std::string *sourcePath)
 {
@@ -222,6 +227,7 @@ bool ShaderD3D::postTranslateCompile(gl::Compiler *compiler, std::string *infoLo
     ShHandle compilerHandle = compiler->getCompilerHandle(mData.getShaderType());
 
     mUniformRegisterMap = GetUniformRegisterMap(sh::GetUniformRegisterMap(compilerHandle));
+    mSamplerCount       = sh::GetSamplerCount(compilerHandle);
 
     for (const sh::InterfaceBlock &interfaceBlock : mData.getUniformBlocks())
     {
