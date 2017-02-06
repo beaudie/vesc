@@ -22,6 +22,7 @@ namespace sh
 {
 class StructureHLSL;
 class TextureFunctionHLSL;
+class ImageFunctionHLSL;
 class UnfoldShortCircuit;
 class UniformHLSL;
 
@@ -45,6 +46,7 @@ class OutputHLSL : public TIntermTraverser
 
     const std::map<std::string, unsigned int> &getUniformBlockRegisterMap() const;
     const std::map<std::string, unsigned int> &getUniformRegisterMap() const;
+    unsigned int getSamplerCount() const;
 
     static TString initializer(const TType &type);
 
@@ -162,6 +164,7 @@ class OutputHLSL : public TIntermTraverser
     StructureHLSL *mStructureHLSL;
     UniformHLSL *mUniformHLSL;
     TextureFunctionHLSL *mTextureFunctionHLSL;
+    ImageFunctionHLSL *mImageFunctionHLSL;
 
     // Parameters determining what goes in the header output
     bool mUsesFragColor;
