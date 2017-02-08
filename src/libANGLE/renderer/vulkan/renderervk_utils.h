@@ -308,6 +308,7 @@ class StagingImage final : angle::NonCopyable
 {
   public:
     StagingImage();
+    StagingImage(StagingImage &&other);
     void destroy(VkDevice device);
     void retain(VkDevice device, StagingImage &&other);
 
@@ -405,6 +406,34 @@ class FenceAndCommandBuffer final : angle::NonCopyable
     uint32_t mSerial;
     Fence mFence;
     CommandBuffer mCommandBuffer;
+};
+
+class IGarbageObject : angle::NonCopyable
+{
+  public:
+    virtual bool destroyIfComplete(VkDevice device, uint32_t completedSerial) = 0;
+};
+
+template <typename T>
+class GarbageObject final : public IGarbageObject
+{
+  public:
+    GarbageObject(uint32_t serial, T &&object) : mSerial(serial), mObject(std::move(object)) {}
+
+    bool destroyIfComplete(VkDevice device, uint32_t completedSerial) override
+    {
+        if (completedSerial >= mSerial)
+        {
+            mObject.destroy(device);
+            return true;
+        }
+
+        return false;
+    }
+
+  private:
+    uint32_t mSerial;
+    T mObject;
 };
 
 }  // namespace vk
