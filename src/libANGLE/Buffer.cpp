@@ -44,6 +44,11 @@ Buffer::~Buffer()
     SafeDelete(mImpl);
 }
 
+void Buffer::destroy(const Context *context)
+{
+    mImpl->destroy(rx::SafeGetImpl(context));
+}
+
 void Buffer::setLabel(const std::string &label)
 {
     mState.mLabel = label;

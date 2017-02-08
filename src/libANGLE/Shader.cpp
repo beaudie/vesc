@@ -351,13 +351,13 @@ void Shader::addRef()
     mRefCount++;
 }
 
-void Shader::release()
+void Shader::release(const Context *context)
 {
     mRefCount--;
 
     if (mRefCount == 0 && mDeleteStatus)
     {
-        mResourceManager->deleteShader(mHandle);
+        mResourceManager->deleteShader(context, mHandle);
     }
 }
 
