@@ -47,7 +47,7 @@ TEST_F(ResourceManagerTest, ReallocateBoundTexture)
 {
     EXPECT_CALL(mMockFactory, createTexture(_)).Times(1).RetiresOnSaturation();
 
-    mTextureManager->checkTextureAllocation(&mMockFactory, 1, GL_TEXTURE_2D);
+    mTextureManager->checkAllocation(&mMockFactory, 1, GL_TEXTURE_2D);
     GLuint newTexture = mTextureManager->createTexture();
     EXPECT_NE(1u, newTexture);
 }
@@ -56,7 +56,7 @@ TEST_F(ResourceManagerTest, ReallocateBoundBuffer)
 {
     EXPECT_CALL(mMockFactory, createBuffer(_)).Times(1).RetiresOnSaturation();
 
-    mBufferManager->checkBufferAllocation(&mMockFactory, 1);
+    mBufferManager->checkAllocation(&mMockFactory, 1);
     GLuint newBuffer = mBufferManager->createBuffer();
     EXPECT_NE(1u, newBuffer);
 }
@@ -65,7 +65,7 @@ TEST_F(ResourceManagerTest, ReallocateBoundRenderbuffer)
 {
     EXPECT_CALL(mMockFactory, createRenderbuffer()).Times(1).RetiresOnSaturation();
 
-    mRenderbuffermanager->checkRenderbufferAllocation(&mMockFactory, 1);
+    mRenderbuffermanager->checkAllocation(&mMockFactory, 1);
     GLuint newRenderbuffer = mRenderbuffermanager->createRenderbuffer();
     EXPECT_NE(1u, newRenderbuffer);
 }
