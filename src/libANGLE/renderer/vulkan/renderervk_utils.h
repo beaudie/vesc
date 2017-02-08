@@ -39,6 +39,37 @@ enum class TextureDimension
     TEX_2D_ARRAY,
 };
 
+enum DeleteSchedule
+{
+    NOW,
+    LATER,
+};
+
+class ResourceVk
+{
+  public:
+    void setCommandSerial(uint32_t commandSerial)
+    {
+        ASSERT(commandSerial >= mStoredCommandSerial);
+        mStoredCommandSerial = commandSerial;
+    }
+
+    DeleteSchedule getDeleteSchedule(uint32_t lastCompletedWorkSerial)
+    {
+        if (mStoredCommandSerial == 0 || lastCompletedWorkSerial >= mStoredCommandSerial)
+        {
+            return DeleteSchedule::NOW;
+        }
+        else
+        {
+            return DeleteSchedule::LATER;
+        }
+    }
+
+  private:
+    uint32_t mStoredCommandSerial = 0;
+};
+
 namespace vk
 {
 class DeviceMemory;
@@ -101,8 +132,7 @@ class WrappedObject : angle::NonCopyable
 
     // Only works to initialize empty objects, since we don't have the device handle.
     WrappedObject(WrappedObject &&other) : mHandle(other.mHandle) { other.mHandle = nullptr; }
-
-    DerivedT &operator=(DerivedT &&other)
+    WrappedObject &operator=(WrappedObject &&other)
     {
         ASSERT(!valid());
         std::swap(mHandle, other.mHandle);
@@ -128,6 +158,7 @@ class CommandBuffer final : public WrappedObject<CommandBuffer, VkCommandBuffer>
     CommandBuffer();
 
     void destroy(VkDevice device);
+    using WrappedObject::operator=;
 
     void setCommandPool(VkCommandPool commandPool);
     Error begin(VkDevice device);
@@ -330,6 +361,36 @@ class PipelineLayout final : public WrappedObject<PipelineLayout, VkPipelineLayo
     using WrappedObject::retain;
 
     Error init(VkDevice device, const VkPipelineLayoutCreateInfo &createInfo);
+};
+
+class Fence final : public WrappedObject<Fence, VkFence>
+{
+  public:
+    Fence();
+    void destroy(VkDevice fence);
+    using WrappedObject::retain;
+    using WrappedObject::operator=;
+
+    Error init(VkDevice device, const VkFenceCreateInfo &createInfo);
+    VkResult getStatus(VkDevice device) const;
+};
+
+class FenceAndCommandBuffer final : angle::NonCopyable
+{
+  public:
+    FenceAndCommandBuffer(uint32_t serial, Fence &&fence, CommandBuffer &&commandBuffer);
+    FenceAndCommandBuffer(FenceAndCommandBuffer &&other);
+    FenceAndCommandBuffer &operator=(FenceAndCommandBuffer &&other);
+
+    void destroy(VkDevice device);
+    vk::ErrorOrResult<bool> finished(VkDevice device) const;
+
+    uint32_t serial() const { return mSerial; }
+
+  private:
+    uint32_t mSerial;
+    Fence mFence;
+    CommandBuffer mCommandBuffer;
 };
 
 }  // namespace vk
