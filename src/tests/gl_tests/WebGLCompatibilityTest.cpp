@@ -535,6 +535,61 @@ void FillTexture2D(GLuint texture,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
+// Test that unset gl_Position defaults to 0,0,0,0.
+TEST_P(WebGLCompatibilityTest, DefaultPosition)
+{
+    // Draw a triangle whose color depends on a varying interpolating these vertex values:
+    //   0,0,0,0
+    //   0,0,0,0
+    //   gl_Position default
+    // If and only if gl_Position defaults to 0,0,0,0 will the varying be 0,0,0,0
+    // and the triangle red.  Otherwise it will be green.
+    const std::string vertexShader =
+        "attribute vec2 apos;\n"
+        "varying vec4 vpos;\n"
+        "void main() {\n"
+        "    if (apos.x < 0.0 && apos.y < 0.0) {\n"
+        "        vpos = gl_Position;\n"
+        "    } else {\n"
+        "        vpos = vec4(0,0,0,0);\n"
+        "    }\n"
+        "    gl_Position = vec4(apos,0,1);\n"
+        "}\n";
+
+    const std::string fragmentShader =
+        "precision mediump float;\n"
+        "varying vec4 vpos;\n"
+        "void main() {\n"
+        "    if (vpos == vec4(0,0,0,0)) {\n"
+        "        gl_FragColor = vec4(1,0,0,1);\n"
+        "    } else {\n"
+        "        gl_FragColor = vec4(0,1,0,1);\n"
+        "    }\n"
+        "}\n";
+
+    GLfloat vertices[] = {
+        -1, 1,
+         1,-1,
+        -1,-1,
+    };
+
+    ANGLE_GL_PROGRAM(program, vertexShader, fragmentShader);
+    glUseProgram(program.get());
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    GLuint vertexBuffer;
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(0);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+}
+
 // Tests that a rendering feedback loop triggers a GL error under WebGL.
 // Based on WebGL test conformance/renderbuffers/feedback-loop.html.
 TEST_P(WebGLCompatibilityTest, RenderingFeedbackLoop)
