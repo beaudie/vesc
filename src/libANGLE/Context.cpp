@@ -614,7 +614,7 @@ void Context::deleteBuffer(GLuint buffer)
         detachBuffer(buffer);
     }
 
-    mState.mBuffers->deleteBuffer(buffer);
+    mState.mBuffers->deleteObject(buffer);
 }
 
 void Context::deleteShader(GLuint shader)
@@ -634,7 +634,7 @@ void Context::deleteTexture(GLuint texture)
         detachTexture(texture);
     }
 
-    mState.mTextures->deleteTexture(texture);
+    mState.mTextures->deleteObject(texture);
 }
 
 void Context::deleteRenderbuffer(GLuint renderbuffer)
@@ -644,7 +644,7 @@ void Context::deleteRenderbuffer(GLuint renderbuffer)
         detachRenderbuffer(renderbuffer);
     }
 
-    mState.mRenderbuffers->deleteRenderbuffer(renderbuffer);
+    mState.mRenderbuffers->deleteObject(renderbuffer);
 }
 
 void Context::deleteFenceSync(GLsync fenceSync)
@@ -653,8 +653,7 @@ void Context::deleteFenceSync(GLsync fenceSync)
     // wait commands finish. However, since the name becomes invalid, we cannot query the fence,
     // and since our API is currently designed for being called from a single thread, we can delete
     // the fence immediately.
-    mState.mFenceSyncs->deleteFenceSync(
-        static_cast<GLuint>(reinterpret_cast<uintptr_t>(fenceSync)));
+    mState.mFenceSyncs->deleteObject(static_cast<GLuint>(reinterpret_cast<uintptr_t>(fenceSync)));
 }
 
 void Context::deletePaths(GLuint first, GLsizei range)
@@ -771,7 +770,7 @@ void Context::deleteSampler(GLuint sampler)
         detachSampler(sampler);
     }
 
-    mState.mSamplers->deleteSampler(sampler);
+    mState.mSamplers->deleteObject(sampler);
 }
 
 void Context::deleteTransformFeedback(GLuint transformFeedback)
@@ -798,7 +797,7 @@ void Context::deleteFramebuffer(GLuint framebuffer)
         detachFramebuffer(framebuffer);
     }
 
-    mState.mFramebuffers->deleteFramebuffer(framebuffer);
+    mState.mFramebuffers->deleteObject(framebuffer);
 }
 
 void Context::deleteFenceNV(GLuint fence)
@@ -986,14 +985,14 @@ void Context::bindTexture(GLenum target, GLuint handle)
 void Context::bindReadFramebuffer(GLuint framebufferHandle)
 {
     Framebuffer *framebuffer = mState.mFramebuffers->checkFramebufferAllocation(
-        mImplementation.get(), mCaps, framebufferHandle);
+        mImplementation.get(), framebufferHandle, mCaps);
     mGLState.setReadFramebufferBinding(framebuffer);
 }
 
 void Context::bindDrawFramebuffer(GLuint framebufferHandle)
 {
     Framebuffer *framebuffer = mState.mFramebuffers->checkFramebufferAllocation(
-        mImplementation.get(), mCaps, framebufferHandle);
+        mImplementation.get(), framebufferHandle, mCaps);
     mGLState.setDrawFramebufferBinding(framebuffer);
 }
 
