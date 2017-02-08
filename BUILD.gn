@@ -180,6 +180,56 @@ static_library("angle_image_util") {
   ]
 }
 
+config("angle_gpu_info_util_config") {
+  include_dirs = [
+    "include",
+    "src",
+  ]
+}
+
+static_library("angle_gpu_info_util") {
+  sources = rebase_path(gles_gypi.libangle_gpu_info_util_sources, ".", "src")
+
+  configs -= angle_undefine_configs
+  configs += [ ":internal_config" ]
+
+  public_configs = [ ":angle_gpu_info_util_config" ]
+
+  public_deps = [
+    ":angle_common",
+  ]
+
+  deps = []
+  libs = []
+
+  if (is_linux) {
+    sources +=
+        rebase_path(gles_gypi.libangle_gpu_info_util_linux_sources, ".", "src")
+
+    if (use_x11) {
+      sources += rebase_path(gles_gypi.libangle_gpu_info_util_linux_sources,
+                             ".",
+                             "src")
+      deps += [ "src/third_party/libXNVCtrl:libXNVCtrl" ]
+      libs += [
+        "X11",
+        "Xi",
+        "Xext",
+      ]
+    }
+  }
+
+  # Taken from gpu/config/BUILD.gn
+  # TODO(cwallez): this should be in a shared location
+  use_libpci = is_linux && (!is_chromecast || is_cast_desktop_build) &&
+               (use_x11 || use_ozone)
+  if (use_libpci) {
+    sources +=
+        rebase_path(gles_gypi.libangle_gpu_info_util_libpci_sources, ".", "src")
+    libs += [ "pci" ]
+  }
+}
+
 static_library("translator") {
   sources = rebase_path(compiler_gypi.angle_translator_sources, ".", "src")
   defines = []
@@ -611,6 +661,7 @@ foreach(is_shared_library,
       if (is_shared_library) {
         configs -= [ "//build/config/android:hide_all_but_jni_onload" ]
       }
+
       # To prevent linux sources filtering on android
       set_sources_assignment_filter([])
       sources += rebase_path(util_gypi.util_linux_sources, ".", "util")
