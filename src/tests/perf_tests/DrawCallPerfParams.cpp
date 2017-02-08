@@ -81,6 +81,6 @@ DrawCallPerfParams DrawCallPerfVulkanParams(bool renderToTexture)
 {
     DrawCallPerfParams params;
     params.eglParameters = VULKAN();
-    params.useFBO = renderToTexture;
+    params.useFBO        = renderToTexture;
     return params;
 }

@@ -105,7 +105,7 @@ GLuint SetupSimpleDrawProgram()
 {
     const std::string vs = SimpleDrawVertexShaderSource();
     const std::string fs = SimpleFragmentShaderSource();
-    GLuint program = CompileProgram(vs, fs);
+    GLuint program       = CompileProgram(vs, fs);
     if (program == 0u)
     {
         return program;
