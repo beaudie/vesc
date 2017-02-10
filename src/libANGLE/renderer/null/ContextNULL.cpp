@@ -31,11 +31,45 @@
 namespace rx
 {
 
-ContextNULL::ContextNULL(const gl::ContextState &state) : ContextImpl(state)
+AllocationTrackerNULL::AllocationTrackerNULL(size_t maxTotalAllocationSize)
+    : mAllocatedBytes(0), mMaxBytes(maxTotalAllocationSize)
 {
+}
+
+AllocationTrackerNULL::~AllocationTrackerNULL()
+{
+    // ASSERT that all objects with the NULL renderer clean up after themselves
+    ASSERT(mAllocatedBytes == 0);
+}
+
+bool AllocationTrackerNULL::updateMemoryAllocation(size_t oldSize, size_t newSize)
+{
+    ASSERT(mAllocatedBytes >= oldSize);
+
+    size_t releasedSize = mAllocatedBytes - oldSize;
+    size_t finalSize    = releasedSize + newSize;
+    if (finalSize < releasedSize || finalSize > mMaxBytes)
+    {
+        // Overflow or allocation would be too large
+        return false;
+    }
+
+    mAllocatedBytes = finalSize;
+    return true;
+}
+
+ContextNULL::ContextNULL(const gl::ContextState &state, AllocationTrackerNULL *allocationTracker)
+    : ContextImpl(state), mAllocationTracker(allocationTracker)
+{
+    ASSERT(mAllocationTracker != nullptr);
+
     const gl::Version maxClientVersion(3, 1);
     mCaps        = GenerateMinimumCaps(maxClientVersion);
+
     mExtensions  = gl::Extensions();
+    mExtensions.copyTexture           = true;
+    mExtensions.copyCompressedTexture = true;
+
     mTextureCaps = GenerateMinimumTextureCapsMap(maxClientVersion, mExtensions);
 }
 
@@ -286,7 +320,7 @@ RenderbufferImpl *ContextNULL::createRenderbuffer()
 
 BufferImpl *ContextNULL::createBuffer(const gl::BufferState &state)
 {
-    return new BufferNULL(state);
+    return new BufferNULL(state, mAllocationTracker);
 }
 
 VertexArrayImpl *ContextNULL::createVertexArray(const gl::VertexArrayState &data)
