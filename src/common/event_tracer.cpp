@@ -11,7 +11,7 @@ namespace angle
 
 const unsigned char *GetTraceCategoryEnabledFlag(const char *name)
 {
-    angle::Platform *platform = ANGLEPlatformCurrent();
+    auto *platform = ANGLEPlatformCurrent();
     ASSERT(platform);
 
     const unsigned char *categoryEnabledFlag = platform->getTraceCategoryEnabledFlag(name);
@@ -28,7 +28,7 @@ Platform::TraceEventHandle AddTraceEvent(char phase, const unsigned char* catego
                                          int numArgs, const char** argNames, const unsigned char* argTypes,
                                          const unsigned long long* argValues, unsigned char flags)
 {
-    angle::Platform *platform = ANGLEPlatformCurrent();
+    auto *platform = ANGLEPlatformCurrent();
     ASSERT(platform);
 
     double timestamp = platform->monotonicallyIncreasingTime();

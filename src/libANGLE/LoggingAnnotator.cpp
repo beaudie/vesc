@@ -15,7 +15,7 @@ namespace angle
 
 void LoggingAnnotator::logMessage(const gl::LogMessage &msg) const
 {
-    angle::Platform *plat = ANGLEPlatformCurrent();
+    auto *plat = ANGLEPlatformCurrent();
     if (plat != nullptr)
     {
         switch (msg.getSeverity())
