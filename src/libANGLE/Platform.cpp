@@ -14,128 +14,17 @@
 
 namespace
 {
-angle::Platform *currentPlatform = nullptr;
-
 // TODO(jmadill): Make methods owned by egl::Display.
 angle::PlatformMethods g_platformMethods;
 
-#define ANGLE_RESET_PLATFORM_METHOD(Name) platformMethods->Name = angle::ANGLE_##Name;
-
 void Reset(angle::PlatformMethods *platformMethods)
 {
-    ANGLE_PLATFORM_OP(ANGLE_RESET_PLATFORM_METHOD);
 }
-
-// TODO(jmadill): Remove all the Class_ methods once we switch Chromium to the new impl.
-double Class_currentTime()
-{
-    return currentPlatform->currentTime();
-}
-
-double Class_monotonicallyIncreasingTime()
-{
-    return currentPlatform->monotonicallyIncreasingTime();
-}
-
-void Class_logError(const char *errorMessage)
-{
-    currentPlatform->logError(errorMessage);
-}
-
-void Class_logWarning(const char *warningMessage)
-{
-    currentPlatform->logWarning(warningMessage);
-}
-
-void Class_logInfo(const char *infoMessage)
-{
-    currentPlatform->logInfo(infoMessage);
-}
-
-const unsigned char *Class_getTraceCategoryEnabledFlag(const char *categoryName)
-{
-    return currentPlatform->getTraceCategoryEnabledFlag(categoryName);
-}
-
-angle::TraceEventHandle Class_addTraceEvent(char phase,
-                                            const unsigned char *categoryEnabledFlag,
-                                            const char *name,
-                                            unsigned long long id,
-                                            double timestamp,
-                                            int numArgs,
-                                            const char **argNames,
-                                            const unsigned char *argTypes,
-                                            const unsigned long long *argValues,
-                                            unsigned char flags)
-{
-    return currentPlatform->addTraceEvent(phase, categoryEnabledFlag, name, id, timestamp, numArgs,
-                                          argNames, argTypes, argValues, flags);
-}
-
-void Class_updateTraceEventDuration(const unsigned char *categoryEnabledFlag,
-                                    const char *name,
-                                    angle::TraceEventHandle eventHandle)
-{
-    currentPlatform->updateTraceEventDuration(categoryEnabledFlag, name, eventHandle);
-}
-
-void Class_histogramCustomCounts(const char *name, int sample, int min, int max, int bucketCount)
-{
-    currentPlatform->histogramCustomCounts(name, sample, min, max, bucketCount);
-}
-
-void Class_histogramEnumeration(const char *name, int sample, int boundaryValue)
-{
-    currentPlatform->histogramEnumeration(name, sample, boundaryValue);
-}
-
-void Class_histogramSparse(const char *name, int sample)
-{
-    currentPlatform->histogramSparse(name, sample);
-}
-
-void Class_histogramBoolean(const char *name, bool sample)
-{
-    currentPlatform->histogramBoolean(name, sample);
-}
-
-void Class_overrideWorkaroundsD3D(angle::WorkaroundsD3D *workaroundsD3D)
-{
-    currentPlatform->overrideWorkaroundsD3D(workaroundsD3D);
-}
-
 }  // anonymous namespace
 
 const angle::PlatformMethods *ANGLEPlatformCurrent()
 {
     return &g_platformMethods;
-}
-
-void ANGLE_APIENTRY ANGLEPlatformInitialize(angle::Platform *platformImpl)
-{
-    ASSERT(platformImpl != nullptr);
-    currentPlatform = platformImpl;
-
-    // TODO(jmadill): Migrate to platform methods.
-    g_platformMethods.addTraceEvent               = Class_addTraceEvent;
-    g_platformMethods.currentTime                 = Class_currentTime;
-    g_platformMethods.getTraceCategoryEnabledFlag = Class_getTraceCategoryEnabledFlag;
-    g_platformMethods.histogramBoolean            = Class_histogramBoolean;
-    g_platformMethods.histogramCustomCounts       = Class_histogramCustomCounts;
-    g_platformMethods.histogramEnumeration        = Class_histogramEnumeration;
-    g_platformMethods.histogramSparse             = Class_histogramSparse;
-    g_platformMethods.logError                    = Class_logError;
-    g_platformMethods.logInfo                     = Class_logInfo;
-    g_platformMethods.logWarning                  = Class_logWarning;
-    g_platformMethods.monotonicallyIncreasingTime = Class_monotonicallyIncreasingTime;
-    g_platformMethods.overrideWorkaroundsD3D      = Class_overrideWorkaroundsD3D;
-    g_platformMethods.updateTraceEventDuration    = Class_updateTraceEventDuration;
-}
-
-void ANGLE_APIENTRY ANGLEPlatformShutdown()
-{
-    currentPlatform = nullptr;
-    Reset(&g_platformMethods);
 }
 
 bool ANGLE_APIENTRY ANGLEGetDisplayPlatform(angle::EGLDisplayType display,
@@ -168,8 +57,12 @@ bool ANGLE_APIENTRY ANGLEGetDisplayPlatform(angle::EGLDisplayType display,
     return true;
 }
 
+#define ANGLE_RESET_PLATFORM_METHOD(Name) g_platformMethods.Name = angle::ANGLE_##Name;
+
 void ANGLE_APIENTRY ANGLEResetDisplayPlatform(angle::EGLDisplayType display)
 {
     // TODO(jmadill): Store platform methods in display.
-    Reset(&g_platformMethods);
+    ANGLE_PLATFORM_OP(ANGLE_RESET_PLATFORM_METHOD);
 }
+
+#undef ANGLE_RESET_PLATFORM_METHOD

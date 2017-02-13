@@ -24,9 +24,15 @@ const unsigned char *GetTraceCategoryEnabledFlag(const char *name)
     return &disabled;
 }
 
-Platform::TraceEventHandle AddTraceEvent(char phase, const unsigned char* categoryGroupEnabled, const char* name, unsigned long long id,
-                                         int numArgs, const char** argNames, const unsigned char* argTypes,
-                                         const unsigned long long* argValues, unsigned char flags)
+angle::TraceEventHandle AddTraceEvent(char phase,
+                                      const unsigned char *categoryGroupEnabled,
+                                      const char *name,
+                                      unsigned long long id,
+                                      int numArgs,
+                                      const char **argNames,
+                                      const unsigned char *argTypes,
+                                      const unsigned long long *argValues,
+                                      unsigned char flags)
 {
     auto *platform = ANGLEPlatformCurrent();
     ASSERT(platform);
@@ -35,22 +41,14 @@ Platform::TraceEventHandle AddTraceEvent(char phase, const unsigned char* catego
 
     if (timestamp != 0)
     {
-        angle::Platform::TraceEventHandle handle =
-            platform->addTraceEvent(phase,
-                                    categoryGroupEnabled,
-                                    name,
-                                    id,
-                                    timestamp,
-                                    numArgs,
-                                    argNames,
-                                    argTypes,
-                                    argValues,
-                                    flags);
+        angle::TraceEventHandle handle =
+            platform->addTraceEvent(phase, categoryGroupEnabled, name, id, timestamp, numArgs,
+                                    argNames, argTypes, argValues, flags);
         ASSERT(handle != 0);
         return handle;
     }
 
-    return static_cast<Platform::TraceEventHandle>(0);
+    return static_cast<angle::TraceEventHandle>(0);
 }
 
 }  // namespace angle

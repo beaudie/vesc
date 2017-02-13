@@ -62,39 +62,11 @@
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #endif  // defined(ANGLE_ENABLE_VULKAN)
 
-// The log messages prepend the class name, so make this part of the angle namespace.
-namespace angle
-{
-
-class DefaultPlatform : public angle::Platform
-{
-public:
-    DefaultPlatform() {}
-    ~DefaultPlatform() override {}
-};
-
-std::unique_ptr<DefaultPlatform> g_defaultPlatform = nullptr;
-
-}  // namespace angle
-
 namespace egl
 {
 
 namespace
 {
-
-void InitDefaultPlatformImpl()
-{
-    if (ANGLEPlatformCurrent() == nullptr)
-    {
-        if (!angle::g_defaultPlatform)
-        {
-            angle::g_defaultPlatform.reset(new angle::DefaultPlatform());
-        }
-
-        ANGLEPlatformInitialize(angle::g_defaultPlatform.get());
-    }
-}
 
 typedef std::map<EGLNativeWindowType, Surface*> WindowSurfaceMap;
 // Get a map of all EGL window surfaces to validate that no window has more than one EGL surface
@@ -256,9 +228,6 @@ rx::DisplayImpl *CreateDisplayFromAttribs(const AttributeMap &attribMap, const D
 Display *Display::GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay,
                                               const AttributeMap &attribMap)
 {
-    // Initialize the global platform if not already
-    InitDefaultPlatformImpl();
-
     Display *display = nullptr;
 
     ANGLEPlatformDisplayMap *displays            = GetANGLEPlatformDisplayMap();
@@ -298,9 +267,6 @@ Display *Display::GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay
 
 Display *Display::GetDisplayFromDevice(Device *device)
 {
-    // Initialize the global platform if not already
-    InitDefaultPlatformImpl();
-
     Display *display = nullptr;
 
     ASSERT(Device::IsValidDevice(device));
@@ -408,9 +374,6 @@ void Display::setAttributes(rx::DisplayImpl *impl, const AttributeMap &attribMap
 
 Error Display::initialize()
 {
-    // Re-initialize default platform if it's needed
-    InitDefaultPlatformImpl();
-
     gl::InitializeDebugAnnotations(&mAnnotator);
 
     SCOPED_ANGLE_HISTOGRAM_TIMER("GPU.ANGLE.DisplayInitializeMS");
