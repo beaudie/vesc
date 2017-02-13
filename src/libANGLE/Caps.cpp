@@ -1033,7 +1033,8 @@ DisplayExtensions::DisplayExtensions()
       swapBuffersWithDamage(false),
       pixelFormatFloat(false),
       surfacelessContext(false),
-      displayTextureShareGroup(false)
+      displayTextureShareGroup(false),
+      createContextClientArrays(false)
 {
 }
 
@@ -1073,7 +1074,8 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_EXT_swap_buffers_with_damage",                    swapBuffersWithDamage,              &extensionStrings);
     InsertExtensionString("EGL_EXT_pixel_format_float",                          pixelFormatFloat,                   &extensionStrings);
     InsertExtensionString("EGL_KHR_surfaceless_context",                         surfacelessContext,                 &extensionStrings);
-    InsertExtensionString("EGL_ANGLE_display_texture_share_group",               displayTextureShareGroup,            &extensionStrings);
+    InsertExtensionString("EGL_ANGLE_display_texture_share_group",               displayTextureShareGroup,           &extensionStrings);
+    InsertExtensionString("EGL_ANGLE_create_context_client_arrays",              createContextClientArrays,          &extensionStrings);
     // TODO(jmadill): Enable this when complete.
     //InsertExtensionString("KHR_create_context_no_error",                       createContextNoError,               &extensionStrings);
     // clang-format on
