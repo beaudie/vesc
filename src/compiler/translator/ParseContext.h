@@ -144,8 +144,10 @@ class TParseContext : angle::NonCopyable
                                        int versionRequired);
     bool checkWorkGroupSizeIsNotSpecified(const TSourceLoc &location,
                                           const TLayoutQualifier &layoutQualifier);
-    bool checkInternalFormatIsNotSpecified(const TSourceLoc &location,
+    void checkInternalFormatIsNotSpecified(const TSourceLoc &location,
                                            TLayoutImageInternalFormat internalFormat);
+    void checkBindingIsNotSpecified(const TSourceLoc &location, int binding);
+    void checkIsImageBindingValid(const TSourceLoc &location, int binding, int arraySize);
     void functionCallLValueErrorCheck(const TFunction *fnCandidate, TIntermAggregate *fnCall);
     void checkInvariantVariableQualifier(bool invariant,
                                          const TQualifier qualifier,
@@ -378,7 +380,7 @@ class TParseContext : angle::NonCopyable
     // Assumes that multiplication op has already been set based on the types.
     bool isMultiplicationTypeCombinationValid(TOperator op, const TType &left, const TType &right);
 
-    bool checkIsMemoryQualifierNotSpecified(const TMemoryQualifier &memoryQualifier,
+    void checkIsMemoryQualifierNotSpecified(const TMemoryQualifier &memoryQualifier,
                                             const TSourceLoc &location);
     void checkOutParameterIsNotImage(const TSourceLoc &line,
                                      TQualifier qualifier,
@@ -462,6 +464,7 @@ class TParseContext : angle::NonCopyable
     // keep track of number of views declared in layout.
     int mNumViews;
     int mMaxNumViews;
+    int mMaxImageUnits;
     // keeps track whether we are declaring / defining a function
     bool mDeclaringFunction;
 };

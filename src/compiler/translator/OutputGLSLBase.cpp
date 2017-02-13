@@ -72,12 +72,40 @@ bool NeedsToWriteLayoutQualifier(const TType &type)
     {
         return true;
     }
+
+    if (IsOpaqueType(type.getBasicType()) && layoutQualifier.binding != -1)
+    {
+        return true;
+    }
+
     if (IsImage(type.getBasicType()) && layoutQualifier.imageInternalFormat != EiifUnspecified)
     {
         return true;
     }
     return false;
 }
+
+class CommaSeparatedListItemPrefixGenerator
+{
+  public:
+    CommaSeparatedListItemPrefixGenerator() : mFirst(true) {}
+
+    TInfoSinkBase &apply(TInfoSinkBase &out)
+    {
+        if (mFirst)
+        {
+            mFirst = false;
+        }
+        else
+        {
+            out << ", ";
+        }
+        return out;
+    }
+
+  private:
+    bool mFirst;
+};
 
 }  // namespace
 
@@ -174,18 +202,32 @@ void TOutputGLSLBase::writeLayoutQualifier(const TType &type)
     const TLayoutQualifier &layoutQualifier = type.getLayoutQualifier();
     out << "layout(";
 
+    CommaSeparatedListItemPrefixGenerator listItemPrefix;
+
     if (type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqVertexIn)
     {
         if (layoutQualifier.location >= 0)
         {
-            out << "location = " << layoutQualifier.location;
+            listItemPrefix.apply(out) << "location = " << layoutQualifier.location;
         }
     }
 
-    if (IsImage(type.getBasicType()) && layoutQualifier.imageInternalFormat != EiifUnspecified)
+    if (IsOpaqueType(type.getBasicType()))
     {
-        ASSERT(type.getQualifier() == EvqTemporary || type.getQualifier() == EvqUniform);
-        out << getImageInternalFormatString(layoutQualifier.imageInternalFormat);
+        if (layoutQualifier.binding >= 0)
+        {
+            listItemPrefix.apply(out) << "binding = " << layoutQualifier.binding;
+        }
+    }
+
+    if (IsImage(type.getBasicType()))
+    {
+        if (layoutQualifier.imageInternalFormat != EiifUnspecified)
+        {
+            ASSERT(type.getQualifier() == EvqTemporary || type.getQualifier() == EvqUniform);
+            listItemPrefix.apply(out)
+                << getImageInternalFormatString(layoutQualifier.imageInternalFormat);
+        }
     }
 
     out << ") ";
